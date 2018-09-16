@@ -1,0 +1,53 @@
+{
+  "name": "prediction-client",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "bsb -make-world",
+    "clean": "bsb -clean-world",
+    "start": "yarn run dev | yarn run bsb-watch",
+    "bsb-watch": "bsb -make-world -w",
+    "dev": "webpack-dev-server",
+    "parcel": "parcel ./src/index.html --public-url /",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "update-gql": "yarn send-introspection-query http://localhost:4000/graphql",
+    "webpack": "webpack -w",
+    "webpack:production": "NODE_ENV=production webpack"
+  },
+  "keywords": [
+    "BuckleScript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@handsontable/react": "^1.1.0",
+    "apollo-cache-inmemory": "^1.2.9",
+    "apollo-client": "^2.4.1",
+    "apollo-link": "^1.2.2",
+    "apollo-link-context": "^1.0.8",
+    "apollo-link-error": "^1.1.0",
+    "apollo-link-http": "^1.5.4",
+    "apollo-link-ws": "^1.0.8",
+    "apollo-utilities": "^1.0.20",
+    "bs-moment": "^0.3.1",
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
+    "handsontable": "^5.0.1",
+    "rationale": "^0.1.6",
+    "react": "^16.2.0",
+    "react-apollo": "^2.1.11",
+    "react-dom": "^16.2.0",
+    "reason-apollo": "^0.13.0",
+    "reason-react": ">=0.4.0",
+    "subscriptions-transport-ws": "^0.9.14",
+    "victory": "^30.3.1"
+  },
+  "devDependencies": {
+    "bs-platform": "^3.1.5",
+    "bsb-js": "^1.1.7",
+    "graphql_ppx": "^0.2.7",
+    "parcel-bundler": "^1.9.7",
+    "webpack": "^4.0.1",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.0.0"
+  }
+}

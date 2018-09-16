@@ -1,0 +1,17 @@
+bs_package_flags = -bs-package-map predictions
+src_root_dir = /Users/ozziegooen/Exercism/reasonml/express-babel
+bsc = /Users/ozziegooen/Exercism/reasonml/express-babel/node_modules/bs-platform/lib/bsc.exe
+bsdep = /Users/ozziegooen/Exercism/reasonml/express-babel/node_modules/bs-platform/lib/bsb_helper.exe
+warnings = -w -30-40+6+7+27+32..39+44+45+101 -warn-error +101
+bsc_flags = -bs-suffix -nostdlib -I '/Users/ozziegooen/Exercism/reasonml/express-babel/node_modules/bs-platform/lib/ocaml' -color always
+ppx_flags = 
+bs_package_includes = 
+bs_package_dev_includes = 
+namespace = -ns Predictions
+bsb_dir_group = 0
+bsc_lib_includes = -I .
+rule build_package
+  command = ${bsc} -w -49 -no-alias-deps -c ${in}
+  description = [34mBuilding[39m [2m${out}[22m
+build Predictions.cmi : build_package Predictions.mlmap
+build build.ninja : phony  ||  Predictions.cmi

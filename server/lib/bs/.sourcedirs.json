@@ -1,1 +1,1 @@
-{ "dirs" : [ "src" , "src/services" , "src/services/measurable" , "src/models" ] , "generated" : [] }
+{ "dirs" : [ "src" , "src/services" , "src/services/measurable" , "src/models" , "src/bots" ] , "generated" : [] }

@@ -1,3 +1,28 @@
+type trio = {
+  p25: float,
+  p50: float,
+  p75: float,
+};
+
+type value = {
+  trio: option(trio),
+  pointEstimate: option(float),
+};
+
+let parseTrio = json =>
+  Json.Decode.{
+    p25: json |> field("p25", float),
+    p50: json |> field("p50", float),
+    p75: json |> field("p75", float),
+  };
+
+let parseValue = json =>
+  Json.Decode.{
+    trio: json |> optional(field("trio", parseTrio)),
+    pointEstimate: json |> optional(field("pointEstimate", float)),
+  };
+
+type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
 type measurement = {
   .
   "agent":
@@ -10,10 +35,10 @@ type measurement = {
               .
               "id": string,
               "name": option(string),
+              "competitorType": option(competitorType),
             },
           ),
         "id": string,
-        "type": [ | `BOT | `USER],
         "user":
           option(
             {
@@ -25,9 +50,6 @@ type measurement = {
       },
     ),
   "createdAt": MomentRe.Moment.t,
-  "percentile25": string,
-  "percentile50": string,
-  "percentile75": string,
+  "value": value,
 };
 type measurements = Js.Array.t(option(measurement));
-/* let agentName = optionInternal(b => b##name); */

@@ -5,6 +5,8 @@ open Rationale.Option;
 open Queries;
 open HandsOnTable;
 open MomentRe;
+open MeasurableTypes;
+
 let component = ReasonReact.statelessComponent("MeasurableTable");
 
 let toUnix = x => x##createdAt |> Moment.toUnix;
@@ -32,11 +34,37 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
                | (_, _, _) => ""
                };
 
+            /* | 'AGGREGATION => "AGG"
+            | 'COMPETITIVE => "COMP"
+            | 'OBJECTIVE => "OBJ" */
+          let foo: option(competitorType) = e##agent >>= (x => x##bot) >>= (x => x##competitorType);
+
+          let botType = switch (foo) {
+            | Some(`AGGREGATION) => "Aggregation" 
+            | Some(`COMPETITIVE) => "Competitive" 
+            | Some(`OBJECTIVE) => "Objective" 
+            | _ => ""
+            };
+
+          let toPercentile = fn => e##value |> (r => r.trio) <$> fn <$> string_of_float |> Option.default("")
            Js.Dict.fromList([
              ("createdAt", e##createdAt |> Moment.format("YYYY-MM-DD-SS")),
-             ("percentile25", e##percentile25),
-             ("percentile50", e##percentile50),
-             ("percentile75", e##percentile75),
+             (
+               "percentile25",
+                toPercentile(r => r.p25)
+             ),
+             (
+               "percentile50",
+                toPercentile(r => r.p50)
+             ),
+             (
+               "percentile75",
+                toPercentile(r => r.p75)
+             ),
+             (
+               "type",
+                botType
+             ),
              ("userLink", link(e##agent)),
            ]);
          });
@@ -46,9 +74,10 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       makeColumn(~data="percentile25", ()),
       makeColumn(~data="percentile50", ()),
       makeColumn(~data="percentile75", ()),
+      makeColumn(~data="type", ()),
       makeColumn(~data="userLink", ~renderer="html", ()),
     |];
-    let colHeaders = [|"Created at", "25th", "50th", "75th", "User"|];
+    let colHeaders = [|"Created at", "25th", "50th", "75th", "Bot Type", "Agent"|];
     <HandsOnTable data columns colHeaders />;
   },
 };

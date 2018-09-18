@@ -56,10 +56,10 @@ module.exports = {
           allowNull: true,
           type: Sequelize.TEXT
         },
-        isNoncompetitive: {
-          allowNull: false,
-          defaultValue: false,
-          type: Sequelize.BOOLEAN
+        competitorType: {
+          type: Sequelize.ENUM(["COMPETITIVE", "AGGREGATION", "OBJECTIVE"]),
+          defaultValue: "COMPETITIVE",
+          allowNull: true,
         },
         userId: referenceTo("Users", false),
         agentId: referenceTo("Agents", false),
@@ -71,25 +71,39 @@ module.exports = {
           allowNull: false,
           type: Sequelize.STRING
         },
+        valueType: {
+          allowNull: false,
+          type: Sequelize.ENUM(["FLOAT", "DATE", "PERCENTAGE"])
+        },
+        isLocked: {
+          allowNull: false,
+          defaultValue: false,
+          type: Sequelize.BOOLEAN
+        },
+        lockedAt: {
+          allowNull: true,
+          type: Sequelize.DATE
+        },
       });
 
       await queryInterface.createTable('Measurements', {
         ...standardColumns,
-        percentile25: {
-          allowNull: true,
-          type: Sequelize.FLOAT
+        value: {
+          type: Sequelize.JSON,
+          allowNull: false
         },
-        percentile50: {
+        competitorType: {
+          type: Sequelize.ENUM(["COMPETITIVE", "AGGREGATION", "OBJECTIVE"]),
+          defaultValue: "COMPETITIVE",
           allowNull: true,
-          type: Sequelize.FLOAT
-        },
-        percentile75: {
-          allowNull: true,
-          type: Sequelize.FLOAT
         },
         agentId: referenceTo("Agents", false),
         measurableId: referenceTo("Measurables", true),
-        derivedById: referenceTo("Measurables", true),
+        taggedMeasurement: referenceTo("Measurables", true),
+        relevantAt: {
+          allowNull: true,
+          type: Sequelize.DATE
+        },
       });
     },
 

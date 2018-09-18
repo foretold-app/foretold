@@ -18,13 +18,10 @@ module GetMeasurable = [%graphql
             name
             createdAt @bsDecoder(fn: "toMoment")
             measurements: Measurements{
-              percentile25 @bsDecoder(fn: "Js.Float.toString")
-              percentile50 @bsDecoder(fn: "Js.Float.toString")
-              percentile75 @bsDecoder(fn: "Js.Float.toString")
               createdAt @bsDecoder(fn: "toMoment")
+              value @bsDecoder(fn: "MeasurableTypes.parseValue")
               agent: Agent {
                 id
-                type
                 user: User {
                   id
                   name
@@ -32,6 +29,7 @@ module GetMeasurable = [%graphql
                 bot: Bot {
                   id
                   name
+                  competitorType
                 }
               }
             }
@@ -62,11 +60,7 @@ let make = (~id: string, _children) => {
               |> filterOptionalResult("Measurable not found" |> ste)
           )
           <$> (
-            e =>
-              <div>
-                <MeasurableChart measurements=e##measurements />
-                <MeasurableTable measurements=e##measurements />
-              </div>
+            e => <div> <MeasurableTable measurements=e##measurements /> </div>
           )
           |> Result.result(idd, idd)
         )
@@ -75,3 +69,5 @@ let make = (~id: string, _children) => {
     </div>;
   },
 };
+/* <MeasurableChart measurements=e##measurements />  */
+/* <MeasurableTable measurements=e##measurements /> */

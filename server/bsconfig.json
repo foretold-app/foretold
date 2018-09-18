@@ -1,20 +1,22 @@
 {
-  "name": "predictions",
-  "version": "0.1.0",
+  "name": "bots",
   "sources": {
-    "dir" : "src",
-    "subdirs" : true
+    "dir": "src",
+    "subdirs": true
   },
-  "package-specs": {
+  "package-specs": [{
     "module": "commonjs",
     "in-source": true
-  },
+  }],
   "suffix": ".bs.js",
-  "bs-dependencies": [
-  ],
+  "namespace": true,
+  "bs-dependencies": [],
   "warnings": {
-    "error" : "+101"
+    "error": "+5"
   },
   "namespace": true,
-  "refmt": 3
+  "refmt": 3,
+  "ppx-flags": [
+    "graphql_ppx/ppx"
+  ]
 }

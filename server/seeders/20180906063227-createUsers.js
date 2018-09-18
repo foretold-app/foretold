@@ -19,32 +19,41 @@ const users = [{
 
 const bots = [{
     name: "FooBot",
+    competitorType: "COMPETITIVE",
   },
   {
     name: "Bot 2",
+    competitorType: "COMPETITIVE",
   },
   {
     name: "Bot 3",
+    competitorType: "COMPETITIVE",
   },
   {
     name: "Bot 4",
+    competitorType: "AGGREGATION",
   }
 ]
 
 const measurables = [{
-    name: "Rating of usefulness of X"
+    name: "Rating of usefulness of X",
+    valueType: "FLOAT"
   },
   {
-    name: "Rating of usefulness of Y"
+    name: "Rating of usefulness of Y",
+    valueType: "FLOAT"
   },
   {
-    name: "Rating of usefulness of Bednets"
+    name: "Rating of usefulness of Bednets",
+    valueType: "DATE"
   },
   {
-    name: "Rating of usefulness of Malaria"
+    name: "Rating of usefulness of Malaria",
+    valueType: "PERCENTAGE"
   },
   {
-    name: "Rating of usefulness of Georgia"
+    name: "Rating of usefulness of Georgia",
+    valueType: "FLOAT"
   }
 ]
 
@@ -77,10 +86,9 @@ module.exports = {
         const u = await models.Measurement.create({
           agentId: agent.id,
           measurableId: measurable.id,
-          percentile25: 2.0,
-          percentile50: 5.0,
-          percentile75: 8.0,
           isAggregation: false,
+          competitorType: "COMPETITIVE",
+          value: {trio: {p25: 10.5, p50: 40.5, p75: 100.5 }}
         })
       }
 
@@ -91,10 +99,9 @@ module.exports = {
         const u = await models.Measurement.create({
           agentId: agent.id,
           measurableId: measurable.id,
-          percentile25: 2.0,
-          percentile50: 5.0,
-          percentile75: 8.0,
           isAggregation: false,
+          competitorType: "COMPETITIVE",
+          value: {trio: {p25: 12.5, p50: 43.5, p75: 130.5 }}
         })
       }
     },

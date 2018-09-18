@@ -13,8 +13,7 @@ let toMeasurableLink = m => {
 };
 
 /* e##createdAt |> Js.Json.decodeString |> Option.default(""), */
-let showQueryList =
-    (~data: ReactTemplate.Queries.measurables, ~urlFn, ~render) => {
+let showQueryList = (~data: Queries.measurables, ~urlFn, ~render) => {
   let ddata =
     Array.map(
       e =>

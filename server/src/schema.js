@@ -1,5 +1,6 @@
 import * as models from "./models/index";
 import * as _ from "lodash";
+const Sequelize = require('sequelize')
 import {
   makeAggregation
 } from "./services/measurable/MakeAggregation"
@@ -11,6 +12,7 @@ import {
   GraphQLObjectType,
   GraphQLNonNull,
   GraphQLFloat,
+  GraphQLEnumType,
   GraphQLList,
   GraphQLSchema,
   GraphQLInt,
@@ -43,13 +45,30 @@ const generateReferences = (model) => {
   return all;
 };
 
+let competitor = GraphQLNonNull(new GraphQLEnumType({
+  name: 'competitorType',
+  values: {
+    COMPETITIVE: {value: "COMPETITIVE"}, // The first ENUM value will be the default order. The direction will be used for `first`, will automatically be inversed for `last` lookups.
+    AGGREGATION: {value:  "AGGREGATION"},
+    OBJECTIVE: {value:  "OBJECTIVE"} // build and return custom order for sequelize orderBy option
+  }
+}))
+
+const filterr = (fields) => {
+  let newFields = {...fields}
+  if (!!newFields.competitorType){
+    newFields.competitorType = {type: competitor}
+  }
+  return newFields
+}
+
 const makeObjectType = (model, references, extraFields = {}) =>
   new GraphQLObjectType({
     name: model.name,
     description: model.name,
     fields: () =>
       _.assign(
-        attributeFields(model),
+        filterr(attributeFields(model)),
         generateReferences(model, references),
         extraFields
       )
@@ -89,6 +108,7 @@ const modelResolvers = (name, plural, type, model) => {
   return fields;
 }
 
+// console.log(attributeFields(models.Measurement))
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
@@ -100,22 +120,18 @@ const schema = new GraphQLSchema({
       ...modelResolvers("agent", "agent", getType.Agents(), models.Agent),
       createMeasurement: {
         type: getType.Measurements(),
-        args: _.pick(attributeFields(models.Measurement), ['percentile25', 'percentile50', 'percentile75', 'measurableId', 'isAggregation']),
+        args: filterr(_.pick(attributeFields(models.Measurement), ['value', 'competitorType', 'measurableId', 'agentId'])),
         resolve: async (__, {
-          percentile25,
-          percentile50,
-          percentile75,
+          value,
+          competitorType,
           measurableId,
           agentId,
-          isAggregation
         }) => {
           const newMeasurement = await models.Measurement.create({
-            percentile25,
-            percentile50,
-            percentile75,
+            value,
+            competitorType,
             measurableId,
-          agentId,
-            isAggregation
+            agentId,
           })
           const measurable = await newMeasurement.getMeasurable();
           return newMeasurement

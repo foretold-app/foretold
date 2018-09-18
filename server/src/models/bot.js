@@ -17,10 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    isNoncompetitive: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
+    competitorType: {
+      type: DataTypes.ENUM(["COMPETITIVE", "AGGREGATION", "OBJECTIVE"]),
+      defaultValue: "COMPETITIVE",
+      allowNull: true,
     },
   },
   {

@@ -4,10 +4,20 @@ open Rationale.Option.Infix;
 open Rationale.Function.Infix;
 open Result.Infix;
 open Queries;
-open HandsOnTable;
 open MomentRe;
 
 let toMoment = jsonToString ||> moment;
+
+/* let toOptionalMoment: option(Js.Json.t) => MomentRe.Moment.t = x => x <$> jsonToString |> Option.default("") |> moment */
+let toOptionalMoment: option(Js.Json.t) => MomentRe.Moment.t =
+  e =>
+    (
+      switch (e) {
+      | Some(f) => f |> jsonToString
+      | None => ""
+      }
+    )
+    |> moment;
 
 module GetMeasurable = [%graphql
   {|
@@ -22,6 +32,7 @@ module GetMeasurable = [%graphql
               value @bsDecoder(fn: "MeasurableTypes.parseValue")
               competitorType
               taggedMeasurementId
+              relevantAt @bsDecoder(fn: "toOptionalMoment")
               agent: Agent {
                 id
                 user: User {
@@ -62,7 +73,11 @@ let make = (~id: string, _children) => {
               |> filterOptionalResult("Measurable not found" |> ste)
           )
           <$> (
-            e => <div> <MeasurableTable measurements=e##measurements /> </div>
+            e =>
+              <div>
+                <MeasurableTable measurements=e##measurements />
+                <MeasurableChart measurements=e##measurements />
+              </div>
           )
           |> Result.result(idd, idd)
         )

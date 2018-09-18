@@ -28,8 +28,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     relevantAt: {
-      allowNull: true,
-      type: Sequelize.DATE
+      allowNull: false,
+      type: Sequelize.DATE,
+      get() {
+        return this.getDataValue('relevantAt') || this.getDataValue('createdAt')
+      }
     },
   });
   Model.associate = function (models) {

@@ -55,7 +55,7 @@ function make(measurements, _) {
                           return "";
                         }
                       };
-                      var foo = Curry._2(Option$Rationale.$great$great$eq, Curry._2(Option$Rationale.$great$great$eq, e.agent, (function (x) {
+                      var foo = Curry._2(Option$Rationale.$less$$great, Curry._2(Option$Rationale.$great$great$eq, e.agent, (function (x) {
                                   return x.bot;
                                 })), (function (x) {
                               return x.competitorType;
@@ -75,7 +75,7 @@ function make(measurements, _) {
                       return Js_dict.fromList(/* :: */[
                                   /* tuple */[
                                     "createdAt",
-                                    e.createdAt.format("YYYY-MM-DD-SS")
+                                    e.relevantAt.format("L, h:mm:ss a")
                                   ],
                                   /* :: */[
                                     /* tuple */[
@@ -132,7 +132,7 @@ function make(measurements, _) {
                 HandsOnTable$Client.makeColumn("userLink", "html", undefined, /* () */0)
               ];
               var colHeaders = /* array */[
-                "Created at",
+                "Relevant at",
                 "25th",
                 "50th",
                 "75th",

@@ -34,10 +34,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
                | (_, _, _) => ""
                };
 
-            /* | 'AGGREGATION => "AGG"
-            | 'COMPETITIVE => "COMP"
-            | 'OBJECTIVE => "OBJ" */
-          let foo: option(competitorType) = e##agent >>= (x => x##bot) >>= (x => x##competitorType);
+          let foo: option(competitorType) = e##agent >>= (x => x##bot) <$> (x => x##competitorType);
 
           let botType = switch (foo) {
             | Some(`AGGREGATION) => "Aggregation" 
@@ -48,7 +45,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
 
           let toPercentile = fn => e##value |> (r => r.trio) <$> fn <$> string_of_float |> Option.default("")
            Js.Dict.fromList([
-             ("createdAt", e##createdAt |> Moment.format("YYYY-MM-DD-SS")),
+             ("createdAt", e##relevantAt |> Moment.format("L, h:mm:ss a")),
              (
                "percentile25",
                 toPercentile(r => r.p25)
@@ -77,7 +74,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       makeColumn(~data="type", ()),
       makeColumn(~data="userLink", ~renderer="html", ()),
     |];
-    let colHeaders = [|"Created at", "25th", "50th", "75th", "Bot Type", "Agent"|];
+    let colHeaders = [|"Relevant at", "25th", "50th", "75th", "Bot Type", "Agent"|];
     <HandsOnTable data columns colHeaders />;
   },
 };

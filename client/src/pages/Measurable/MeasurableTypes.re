@@ -35,7 +35,7 @@ type measurement = {
               .
               "id": string,
               "name": option(string),
-              "competitorType": option(competitorType),
+              "competitorType": competitorType,
             },
           ),
         "id": string,
@@ -49,7 +49,10 @@ type measurement = {
           ),
       },
     ),
+  "relevantAt": MomentRe.Moment.t,
+  "competitorType": [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE],
   "createdAt": MomentRe.Moment.t,
+  "taggedMeasurementId": option(string),
   "value": value,
 };
 type measurements = Js.Array.t(option(measurement));

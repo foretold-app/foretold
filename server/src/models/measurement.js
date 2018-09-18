@@ -39,6 +39,14 @@ module.exports = (sequelize, DataTypes) => {
     Model.Agent = Model.belongsTo(models.Agent, {
       foreignKey: 'agentId'
     })
+    Model.TaggedMeasurement = Model.belongsTo(models.Measurement, {
+      foreignKey: 'taggedMeasurementId',
+      as: 'TaggedMeasurement'
+    })
+    Model.TaggedBy = Model.hasMany(models.Measurement, {
+      foreignKey: 'taggedMeasurementId',
+      as: 'TaggedBy'
+    })
   }
   return Model;
 };

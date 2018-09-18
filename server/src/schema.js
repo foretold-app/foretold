@@ -36,11 +36,13 @@ const generateReferences = (model) => {
   associations.map(r => {
     const hasMany = r.associationType === "HasMany"
     const toMany = r.associationType === "BelongsToMany"
-    const type = (hasMany || toMany) ? getType[r.as]() : getType[maybePluralize(2, r.as)]()
+    const otherTableName = r.target.tableName
+    const type = getType[otherTableName]()
     all[r.as] = {
       type: hasMany ? GraphQLNonNull(new GraphQLList(type)) : type,
       resolve: resolver(model[capitalizeFirstLetter(r.as)])
     };
+    // console.log(model, r.as, otherTableName, type, model[r.as], model[capitalizeFirstLetter(r.as)])
   });
   return all;
 };

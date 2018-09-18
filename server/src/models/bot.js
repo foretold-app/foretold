@@ -26,13 +26,10 @@ module.exports = (sequelize, DataTypes) => {
   {
     hooks: {
       beforeCreate: async (event, options) => {
-        console.log(3)
         let agent = await sequelize.models.Agent.create({
           type: "BOT",
         });
-        console.log(event)
         event.agentId = agent.dataValues.id
-        console.log(8)
       }
     }
   });

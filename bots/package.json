@@ -1,0 +1,33 @@
+{
+  "name": "bots",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "update-gql": "yarn send-introspection-query http://localhost:4000/graphql"
+  },
+  "keywords": [
+    "BuckleScript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "bs-platform": "^3.1.5",
+    "graphql_ppx": "^0.2.7"
+  },
+  "dependencies": {
+    "apollo-cache-inmemory": "^1.2.10",
+    "apollo-client": "^2.4.2",
+    "apollo-link": "^1.2.3",
+    "apollo-link-context": "^1.0.9",
+    "apollo-link-error": "^1.1.1",
+    "apollo-link-http": "^1.5.5",
+    "apollo-link-ws": "^1.0.9",
+    "graphql": "^14.0.2",
+    "graphql-tag": "^2.9.2",
+    "react-apollo": "^2.1.11",
+    "reason-apollo": "^0.13.0",
+    "subscriptions-transport-ws": "^0.9.14"
+  }
+}

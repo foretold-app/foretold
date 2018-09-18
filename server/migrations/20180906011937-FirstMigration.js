@@ -98,8 +98,8 @@ module.exports = {
           allowNull: true,
         },
         agentId: referenceTo("Agents", false),
-        measurableId: referenceTo("Measurables", true),
-        taggedMeasurement: referenceTo("Measurables", true),
+        measurableId: referenceTo("Measurables", false),
+        taggedMeasurementId: referenceTo("Measurements", true),
         relevantAt: {
           allowNull: true,
           type: Sequelize.DATE

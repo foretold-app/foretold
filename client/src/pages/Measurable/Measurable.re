@@ -20,6 +20,8 @@ module GetMeasurable = [%graphql
             measurements: Measurements{
               createdAt @bsDecoder(fn: "toMoment")
               value @bsDecoder(fn: "MeasurableTypes.parseValue")
+              competitorType
+              taggedMeasurementId
               agent: Agent {
                 id
                 user: User {

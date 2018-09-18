@@ -14,7 +14,7 @@
     "prestart": "npm run -s build",
     "start": "node dist/index.js",
     "dev": "nodemon src/index.js --exec \"node -r dotenv/config -r babel-register\"",
-    "thing": "nodemon src/bots/first.bs.js --exec \"node -r dotenv/config -r babel-register\"",
+    "thing": "nodemon src/bots/primary.js --exec \"node -r dotenv/config -r babel-register\"",
     "inspect": "nodemon --inspect src/index.js --exec babel-node",
     "clean": "rimraf dist",
     "build": "npm run clean && mkdir -p dist && babel src -s -D -d dist",

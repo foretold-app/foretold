@@ -4,6 +4,7 @@
 type route =
   | Home
   | Users
+  | Agents
   | User(string)
   | Measurables
   | Measurable(string)
@@ -22,6 +23,7 @@ let mapUrlToRoute = (url: ReasonReact.Router.url) =>
   switch (url.path) {
   | [] => Home
   | ["users"] => Users
+  | ["agents"] => Agents
   | ["measurables"] => Measurables
   | ["users", id] => User(id)
   | ["measurables", id] => Measurable(id)
@@ -36,6 +38,7 @@ let component = ReasonReact.reducerComponent("App");
 let inside = r =>
   switch (r) {
   | Home => <Users />
+  | Agents => <Agents />
   | User(id) => <User id />
   | Users => <Users />
   | Measurables => <Measurables />

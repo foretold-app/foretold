@@ -29,6 +29,53 @@ module GetUsers = [%graphql
 
 module GetUsersQuery = ReasonApollo.CreateQuery(GetUsers);
 
+let stringOfcompetitorType = e =>
+  switch (e) {
+  | `AGGREGATION => "Aggregation"
+  | `COMPETITIVE => "Competitive"
+  | `OBJECTIVE => "Objective"
+  };
+
+type user = {
+  id: string,
+  name: string,
+};
+
+type bot = {
+  competitorType: [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE],
+  description: option(string),
+  id: string,
+  name: option(string),
+};
+
+type agent = {
+  bot: option(bot),
+  user: option(user),
+};
+
+type agents = array(agent);
+
+module GetAgents = [%graphql
+  {|
+    query getAgents {
+      agents @bsRecord {
+        user: User @bsRecord{
+          id
+          name
+        }
+        bot: Bot @bsRecord{
+          id
+          name
+          description
+          competitorType
+        }
+      }
+    }
+  |}
+];
+
+module GetAgentsQuery = ReasonApollo.CreateQuery(GetAgents);
+
 type measurable = {
   id: string,
   name: string,

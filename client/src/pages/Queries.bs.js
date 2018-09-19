@@ -200,13 +200,224 @@ var GetUsersQuery = ReasonApollo.CreateQuery([
       parse$1
     ]);
 
+function stringOfcompetitorType(e) {
+  if (e !== 497422978) {
+    if (e >= 1055622745) {
+      return "Objective";
+    } else {
+      return "Competitive";
+    }
+  } else {
+    return "Aggregation";
+  }
+}
+
+var ppx_printed_query$2 = "query getAgents  {\nagents  {\nuser: User  {\nid  \nname  \n}\n\nbot: Bot  {\nid  \nname  \ndescription  \ncompetitorType  \n}\n\n}\n\n}\n";
+
+function parse$2(value) {
+  var match = Js_json.decodeObject(value);
+  if (match !== undefined) {
+    var match$1 = Js_primitive.valFromOption(match)["agents"];
+    var tmp;
+    if (match$1 !== undefined) {
+      var match$2 = Js_json.decodeArray(match$1);
+      tmp = match$2 !== undefined ? match$2.map((function (value) {
+                var match = Js_json.decodeNull(value);
+                if (match !== undefined) {
+                  return undefined;
+                } else {
+                  var match$1 = Js_json.decodeObject(value);
+                  var tmp;
+                  if (match$1 !== undefined) {
+                    var value$1 = Js_primitive.valFromOption(match$1);
+                    var match$2 = value$1["user"];
+                    var field_user;
+                    if (match$2 !== undefined) {
+                      var match$3 = Js_json.decodeNull(match$2);
+                      if (match$3 !== undefined) {
+                        field_user = undefined;
+                      } else {
+                        var match$4 = Js_json.decodeObject(match$2);
+                        var tmp$1;
+                        if (match$4 !== undefined) {
+                          var value$2 = Js_primitive.valFromOption(match$4);
+                          var match$5 = value$2["id"];
+                          var field_id;
+                          if (match$5 !== undefined) {
+                            var match$6 = Js_json.decodeString(match$5);
+                            field_id = match$6 !== undefined ? match$6 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$5));
+                          } else {
+                            field_id = Js_exn.raiseError("graphql_ppx: Field id on type User is missing");
+                          }
+                          var match$7 = value$2["name"];
+                          var field_name;
+                          if (match$7 !== undefined) {
+                            var match$8 = Js_json.decodeString(match$7);
+                            field_name = match$8 !== undefined ? match$8 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$7));
+                          } else {
+                            field_name = Js_exn.raiseError("graphql_ppx: Field name on type User is missing");
+                          }
+                          tmp$1 = /* record */[
+                            /* id */field_id,
+                            /* name */field_name
+                          ];
+                        } else {
+                          tmp$1 = Js_exn.raiseError("graphql_ppx: Expected object of type User, got " + JSON.stringify(match$2));
+                        }
+                        field_user = tmp$1;
+                      }
+                    } else {
+                      field_user = undefined;
+                    }
+                    var match$9 = value$1["bot"];
+                    var field_bot;
+                    if (match$9 !== undefined) {
+                      var match$10 = Js_json.decodeNull(match$9);
+                      if (match$10 !== undefined) {
+                        field_bot = undefined;
+                      } else {
+                        var match$11 = Js_json.decodeObject(match$9);
+                        var tmp$2;
+                        if (match$11 !== undefined) {
+                          var value$3 = Js_primitive.valFromOption(match$11);
+                          var match$12 = value$3["id"];
+                          var field_id$1;
+                          if (match$12 !== undefined) {
+                            var match$13 = Js_json.decodeString(match$12);
+                            field_id$1 = match$13 !== undefined ? match$13 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$12));
+                          } else {
+                            field_id$1 = Js_exn.raiseError("graphql_ppx: Field id on type Bot is missing");
+                          }
+                          var match$14 = value$3["name"];
+                          var field_name$1;
+                          if (match$14 !== undefined) {
+                            var match$15 = Js_json.decodeNull(match$14);
+                            if (match$15 !== undefined) {
+                              field_name$1 = undefined;
+                            } else {
+                              var match$16 = Js_json.decodeString(match$14);
+                              field_name$1 = match$16 !== undefined ? match$16 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$14));
+                            }
+                          } else {
+                            field_name$1 = undefined;
+                          }
+                          var match$17 = value$3["description"];
+                          var field_description;
+                          if (match$17 !== undefined) {
+                            var match$18 = Js_json.decodeNull(match$17);
+                            if (match$18 !== undefined) {
+                              field_description = undefined;
+                            } else {
+                              var match$19 = Js_json.decodeString(match$17);
+                              field_description = match$19 !== undefined ? match$19 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$17));
+                            }
+                          } else {
+                            field_description = undefined;
+                          }
+                          var match$20 = value$3["competitorType"];
+                          var field_competitorType;
+                          if (match$20 !== undefined) {
+                            var match$21 = Js_json.decodeString(match$20);
+                            if (match$21 !== undefined) {
+                              var value$4 = match$21;
+                              switch (value$4) {
+                                case "AGGREGATION" : 
+                                    field_competitorType = /* AGGREGATION */497422978;
+                                    break;
+                                case "COMPETITIVE" : 
+                                    field_competitorType = /* COMPETITIVE */-288189265;
+                                    break;
+                                case "OBJECTIVE" : 
+                                    field_competitorType = /* OBJECTIVE */1055622745;
+                                    break;
+                                default:
+                                  field_competitorType = Js_exn.raiseError("graphql_ppx: Unknown enum variant for competitorType: " + value$4);
+                              }
+                            } else {
+                              field_competitorType = Js_exn.raiseError("graphql_ppx: Expected enum value for competitorType, got " + JSON.stringify(match$20));
+                            }
+                          } else {
+                            field_competitorType = Js_exn.raiseError("graphql_ppx: Field competitorType on type Bot is missing");
+                          }
+                          tmp$2 = /* record */[
+                            /* competitorType */field_competitorType,
+                            /* description */field_description,
+                            /* id */field_id$1,
+                            /* name */field_name$1
+                          ];
+                        } else {
+                          tmp$2 = Js_exn.raiseError("graphql_ppx: Expected object of type Bot, got " + JSON.stringify(match$9));
+                        }
+                        field_bot = tmp$2;
+                      }
+                    } else {
+                      field_bot = undefined;
+                    }
+                    tmp = /* record */[
+                      /* bot */field_bot,
+                      /* user */field_user
+                    ];
+                  } else {
+                    tmp = Js_exn.raiseError("graphql_ppx: Expected object of type Agent, got " + JSON.stringify(value));
+                  }
+                  return tmp;
+                }
+              })) : Js_exn.raiseError("graphql_ppx: Expected array, got " + JSON.stringify(match$1));
+    } else {
+      tmp = Js_exn.raiseError("graphql_ppx: Field agents on type Query is missing");
+    }
+    return {
+            agents: tmp
+          };
+  } else {
+    return Js_exn.raiseError("graphql_ppx: Object is not a value");
+  }
+}
+
+function make$2() {
+  return {
+          query: ppx_printed_query$2,
+          variables: null,
+          parse: parse$2
+        };
+}
+
+function makeWithVariables$2() {
+  return {
+          query: ppx_printed_query$2,
+          variables: null,
+          parse: parse$2
+        };
+}
+
+function ret_type$2() {
+  return /* module */[];
+}
+
+var MT_Ret$2 = /* module */[];
+
+var GetAgents = /* module */[
+  /* ppx_printed_query */ppx_printed_query$2,
+  /* query */ppx_printed_query$2,
+  /* parse */parse$2,
+  /* make */make$2,
+  /* makeWithVariables */makeWithVariables$2,
+  /* ret_type */ret_type$2,
+  /* MT_Ret */MT_Ret$2
+];
+
+var GetAgentsQuery = ReasonApollo.CreateQuery([
+      ppx_printed_query$2,
+      parse$2
+    ]);
+
 function jsonToString(e) {
   return Option$Rationale.$$default("", Js_json.decodeString(e));
 }
 
-var ppx_printed_query$2 = "query getMeasurables  {\nmeasurables  {\nid  \nname  \ncreatedAt  \nupdatedAt  \n}\n\n}\n";
+var ppx_printed_query$3 = "query getMeasurables  {\nmeasurables  {\nid  \nname  \ncreatedAt  \nupdatedAt  \n}\n\n}\n";
 
-function parse$2(value) {
+function parse$3(value) {
   var match = Js_json.decodeObject(value);
   if (match !== undefined) {
     var match$1 = Js_primitive.valFromOption(match)["measurables"];
@@ -265,47 +476,50 @@ function parse$2(value) {
   }
 }
 
-function make$2() {
+function make$3() {
   return {
-          query: ppx_printed_query$2,
+          query: ppx_printed_query$3,
           variables: null,
-          parse: parse$2
+          parse: parse$3
         };
 }
 
-function makeWithVariables$2() {
+function makeWithVariables$3() {
   return {
-          query: ppx_printed_query$2,
+          query: ppx_printed_query$3,
           variables: null,
-          parse: parse$2
+          parse: parse$3
         };
 }
 
-function ret_type$2() {
+function ret_type$3() {
   return /* module */[];
 }
 
-var MT_Ret$2 = /* module */[];
+var MT_Ret$3 = /* module */[];
 
 var GetMeasurables = /* module */[
-  /* ppx_printed_query */ppx_printed_query$2,
-  /* query */ppx_printed_query$2,
-  /* parse */parse$2,
-  /* make */make$2,
-  /* makeWithVariables */makeWithVariables$2,
-  /* ret_type */ret_type$2,
-  /* MT_Ret */MT_Ret$2
+  /* ppx_printed_query */ppx_printed_query$3,
+  /* query */ppx_printed_query$3,
+  /* parse */parse$3,
+  /* make */make$3,
+  /* makeWithVariables */makeWithVariables$3,
+  /* ret_type */ret_type$3,
+  /* MT_Ret */MT_Ret$3
 ];
 
 var GetMeasurablesQuery = ReasonApollo.CreateQuery([
-      ppx_printed_query$2,
-      parse$2
+      ppx_printed_query$3,
+      parse$3
     ]);
 
 exports.GetUser = GetUser;
 exports.GetUserQuery = GetUserQuery;
 exports.GetUsers = GetUsers;
 exports.GetUsersQuery = GetUsersQuery;
+exports.stringOfcompetitorType = stringOfcompetitorType;
+exports.GetAgents = GetAgents;
+exports.GetAgentsQuery = GetAgentsQuery;
 exports.jsonToString = jsonToString;
 exports.GetMeasurables = GetMeasurables;
 exports.GetMeasurablesQuery = GetMeasurablesQuery;

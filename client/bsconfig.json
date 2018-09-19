@@ -18,12 +18,12 @@
   "suffix": ".bs.js",
   "namespace": true,
   "bs-dependencies": [
-    "reason-react",
-    "reason-apollo",
-    "bs-moment",
-    "rationale",
     "bs-css",
     "bs-ant-design",
+    "bs-moment",
+    "reason-react",
+    "reason-apollo",
+    "rationale",
     "@glennsl/bs-json"
   ],
   "refmt": 3,

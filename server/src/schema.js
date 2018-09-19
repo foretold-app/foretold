@@ -119,7 +119,7 @@ const schema = new GraphQLSchema({
       ...modelResolvers("measurement", "measurements", getType.Measurements(), models.Measurement),
       ...modelResolvers("measurable", "measurables", getType.Measurables(), models.Measurable),
       ...modelResolvers("bot", "bots", getType.Bots(), models.Bot),
-      ...modelResolvers("agent", "agent", getType.Agents(), models.Agent),
+      ...modelResolvers("agent", "agents", getType.Agents(), models.Agent),
     }
   }),
   mutation: new GraphQLObjectType({

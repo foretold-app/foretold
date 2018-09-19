@@ -7,6 +7,7 @@ var Home$Client = require("./pages/Home.bs.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var User$Client = require("./pages/User.bs.js");
 var Users$Client = require("./pages/Users.bs.js");
+var Agents$Client = require("./pages/Agents.bs.js");
 var Measurable$Client = require("./pages/Measurable/Measurable.bs.js");
 var Measurables$Client = require("./pages/Measurables.bs.js");
 var PaddedLayout$Client = require("./utils/PaddedLayout.bs.js");
@@ -22,6 +23,12 @@ function mapUrlToRoute(url) {
   var match = url[/* path */0];
   if (match) {
     switch (match[0]) {
+      case "agents" : 
+          if (match[1]) {
+            return /* Home */0;
+          } else {
+            return /* Agents */2;
+          }
       case "measurables" : 
           var match$1 = match[1];
           if (match$1) {
@@ -31,7 +38,7 @@ function mapUrlToRoute(url) {
               return /* Measurable */Block.__(1, [match$1[0]]);
             }
           } else {
-            return /* Measurables */2;
+            return /* Measurables */3;
           }
       case "users" : 
           var match$2 = match[1];
@@ -65,8 +72,10 @@ function inside(r) {
       case 1 : 
           return ReasonReact.element(undefined, undefined, Users$Client.make(/* array */[]));
       case 2 : 
-          return ReasonReact.element(undefined, undefined, Measurables$Client.make(/* array */[]));
+          return ReasonReact.element(undefined, undefined, Agents$Client.make(/* array */[]));
       case 3 : 
+          return ReasonReact.element(undefined, undefined, Measurables$Client.make(/* array */[]));
+      case 4 : 
           return ReasonReact.element(undefined, undefined, Home$Client.make(/* array */[]));
       
     }

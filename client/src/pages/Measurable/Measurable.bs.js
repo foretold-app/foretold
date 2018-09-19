@@ -32,7 +32,7 @@ function toOptionalMoment(e) {
   return MomentRe.moment(undefined, eta);
 }
 
-var ppx_printed_query = "query getMeasurable($id: String!)  {\nmeasurable: measurable(id: $id)  {\nid  \nname  \ncreatedAt  \nmeasurements: Measurements  {\ncreatedAt  \nvalue  \ncompetitorType  \ntaggedMeasurementId  \nrelevantAt  \nagent: Agent  {\nid  \nuser: User  {\nid  \nname  \n}\n\nbot: Bot  {\nid  \nname  \ncompetitorType  \n}\n\n}\n\n}\n\n}\n\n}\n";
+var ppx_printed_query = "query getMeasurable($id: String!)  {\nmeasurable: measurable(id: $id)  {\nid  \nname  \nvalueType  \nisLocked  \ncreatedAt  \nmeasurements: Measurements  {\ncreatedAt  \nvalue  \ncompetitorType  \ntaggedMeasurementId  \nrelevantAt  \nagent: Agent  {\nid  \nuser: User  {\nid  \nname  \n}\n\nbot: Bot  {\nid  \nname  \ncompetitorType  \n}\n\n}\n\n}\n\n}\n\n}\n";
 
 function parse(value) {
   var match = Js_json.decodeObject(value);
@@ -64,12 +64,45 @@ function parse(value) {
           } else {
             tmp$3 = Js_exn.raiseError("graphql_ppx: Field name on type Measurable is missing");
           }
-          var match$8 = value$1["createdAt"];
-          var match$9 = value$1["measurements"];
+          var match$8 = value$1["valueType"];
           var tmp$4;
-          if (match$9 !== undefined) {
-            var match$10 = Js_json.decodeArray(match$9);
-            tmp$4 = match$10 !== undefined ? match$10.map((function (value) {
+          if (match$8 !== undefined) {
+            var match$9 = Js_json.decodeString(match$8);
+            if (match$9 !== undefined) {
+              var value$2 = match$9;
+              switch (value$2) {
+                case "DATE" : 
+                    tmp$4 = /* DATE */757341742;
+                    break;
+                case "FLOAT" : 
+                    tmp$4 = /* FLOAT */8715644;
+                    break;
+                case "PERCENTAGE" : 
+                    tmp$4 = /* PERCENTAGE */-566884582;
+                    break;
+                default:
+                  tmp$4 = Js_exn.raiseError("graphql_ppx: Unknown enum variant for MeasurablevalueTypeEnumType: " + value$2);
+              }
+            } else {
+              tmp$4 = Js_exn.raiseError("graphql_ppx: Expected enum value for MeasurablevalueTypeEnumType, got " + JSON.stringify(match$8));
+            }
+          } else {
+            tmp$4 = Js_exn.raiseError("graphql_ppx: Field valueType on type Measurable is missing");
+          }
+          var match$10 = value$1["isLocked"];
+          var tmp$5;
+          if (match$10 !== undefined) {
+            var match$11 = Js_json.decodeBoolean(match$10);
+            tmp$5 = match$11 !== undefined ? match$11 : Js_exn.raiseError("graphql_ppx: Expected boolean, got " + JSON.stringify(match$10));
+          } else {
+            tmp$5 = Js_exn.raiseError("graphql_ppx: Field isLocked on type Measurable is missing");
+          }
+          var match$12 = value$1["createdAt"];
+          var match$13 = value$1["measurements"];
+          var tmp$6;
+          if (match$13 !== undefined) {
+            var match$14 = Js_json.decodeArray(match$13);
+            tmp$6 = match$14 !== undefined ? match$14.map((function (value) {
                       var match = Js_json.decodeNull(value);
                       if (match !== undefined) {
                         return undefined;
@@ -280,15 +313,17 @@ function parse(value) {
                         }
                         return Js_primitive.some(tmp);
                       }
-                    })) : Js_exn.raiseError("graphql_ppx: Expected array, got " + JSON.stringify(match$9));
+                    })) : Js_exn.raiseError("graphql_ppx: Expected array, got " + JSON.stringify(match$13));
           } else {
-            tmp$4 = Js_exn.raiseError("graphql_ppx: Field measurements on type Measurable is missing");
+            tmp$6 = Js_exn.raiseError("graphql_ppx: Field measurements on type Measurable is missing");
           }
           tmp$1 = {
             id: tmp$2,
             name: tmp$3,
-            createdAt: match$8 !== undefined ? toMoment(match$8) : Js_exn.raiseError("graphql_ppx: Field createdAt on type Measurable is missing"),
-            measurements: tmp$4
+            valueType: tmp$4,
+            isLocked: tmp$5,
+            createdAt: match$12 !== undefined ? toMoment(match$12) : Js_exn.raiseError("graphql_ppx: Field createdAt on type Measurable is missing"),
+            measurements: tmp$6
           };
         } else {
           tmp$1 = Js_exn.raiseError("graphql_ppx: Object is not a value");
@@ -345,6 +380,124 @@ var GetMeasurable = /* module */[
   /* MT_Ret */MT_Ret
 ];
 
+var ppx_printed_query$1 = "mutation createMeasurement($value: SequelizeJSON!, $competitorType: competitorType!, $measurableId: String!, $agentId: String!)  {\ncreateMeasurement(value: $value, competitorType: $competitorType, measurableId: $measurableId, agentId: $agentId)  {\ncreatedAt  \n}\n\n}\n";
+
+function parse$1(value) {
+  var match = Js_json.decodeObject(value);
+  if (match !== undefined) {
+    var match$1 = Js_primitive.valFromOption(match)["createMeasurement"];
+    var tmp;
+    if (match$1 !== undefined) {
+      var match$2 = Js_json.decodeNull(match$1);
+      if (match$2 !== undefined) {
+        tmp = undefined;
+      } else {
+        var match$3 = Js_json.decodeObject(match$1);
+        var tmp$1;
+        if (match$3 !== undefined) {
+          var match$4 = Js_primitive.valFromOption(match$3)["createdAt"];
+          tmp$1 = {
+            createdAt: match$4 !== undefined ? match$4 : Js_exn.raiseError("graphql_ppx: Field createdAt on type Measurement is missing")
+          };
+        } else {
+          tmp$1 = Js_exn.raiseError("graphql_ppx: Object is not a value");
+        }
+        tmp = Js_primitive.some(tmp$1);
+      }
+    } else {
+      tmp = undefined;
+    }
+    return {
+            createMeasurement: tmp
+          };
+  } else {
+    return Js_exn.raiseError("graphql_ppx: Object is not a value");
+  }
+}
+
+function json_of_competitorType(value) {
+  if (value !== 497422978) {
+    if (value >= 1055622745) {
+      return "OBJECTIVE";
+    } else {
+      return "COMPETITIVE";
+    }
+  } else {
+    return "AGGREGATION";
+  }
+}
+
+function make$1(value, competitorType, measurableId, agentId, _) {
+  return {
+          query: ppx_printed_query$1,
+          variables: Js_dict.fromArray(/* array */[
+                /* tuple */[
+                  "value",
+                  value
+                ],
+                /* tuple */[
+                  "competitorType",
+                  json_of_competitorType(competitorType)
+                ],
+                /* tuple */[
+                  "measurableId",
+                  measurableId
+                ],
+                /* tuple */[
+                  "agentId",
+                  agentId
+                ]
+              ]),
+          parse: parse$1
+        };
+}
+
+function makeWithVariables$1(variables) {
+  var value = variables.value;
+  var competitorType = variables.competitorType;
+  var measurableId = variables.measurableId;
+  var agentId = variables.agentId;
+  return {
+          query: ppx_printed_query$1,
+          variables: Js_dict.fromArray(/* array */[
+                /* tuple */[
+                  "value",
+                  value
+                ],
+                /* tuple */[
+                  "competitorType",
+                  json_of_competitorType(competitorType)
+                ],
+                /* tuple */[
+                  "measurableId",
+                  measurableId
+                ],
+                /* tuple */[
+                  "agentId",
+                  agentId
+                ]
+              ]),
+          parse: parse$1
+        };
+}
+
+function ret_type$1() {
+  return /* module */[];
+}
+
+var MT_Ret$1 = /* module */[];
+
+var CreateMeasurement = /* module */[
+  /* ppx_printed_query */ppx_printed_query$1,
+  /* query */ppx_printed_query$1,
+  /* parse */parse$1,
+  /* json_of_competitorType */json_of_competitorType,
+  /* make */make$1,
+  /* makeWithVariables */makeWithVariables$1,
+  /* ret_type */ret_type$1,
+  /* MT_Ret */MT_Ret$1
+];
+
 var GetMeasurableQuery = ReasonApollo.CreateQuery([
       ppx_printed_query,
       parse
@@ -352,7 +505,19 @@ var GetMeasurableQuery = ReasonApollo.CreateQuery([
 
 var component = ReasonReact.statelessComponent("Measurable");
 
-function make$1(id, _) {
+function valueString(e) {
+  if (e !== 8715644) {
+    if (e >= 757341742) {
+      return "Date";
+    } else {
+      return "Percentage";
+    }
+  } else {
+    return "Float";
+  }
+}
+
+function make$2(id, _) {
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -379,11 +544,12 @@ function make$1(id, _) {
                         return Result$Rationale.result(Utils$Client.idd, Utils$Client.idd, Curry._2(Result$Rationale.Infix[/* <$> */1], Curry._2(Result$Rationale.Infix[/* >>= */0], Utils$Client.apolloResponseToResult(param[/* result */0]), (function (e) {
                                               return Utils$Client.filterOptionalResult(Utils$Client.ste("Measurable not found"), e.measurable);
                                             })), (function (e) {
-                                          return React.createElement("div", undefined, ReasonReact.element(undefined, undefined, MeasurableChart$Client.make(e.measurements, /* array */[])), ReasonReact.element(undefined, undefined, MeasurableTable$Client.make(e.measurements, /* array */[])));
+                                          var match = e.isLocked;
+                                          return React.createElement("div", undefined, React.createElement("h2", undefined, e.name), React.createElement("h3", undefined, match ? "Locked: True" : "Locked: False"), React.createElement("h3", undefined, valueString(e.valueType)), ReasonReact.element(undefined, undefined, MeasurableChart$Client.make(e.measurements, /* array */[])), ReasonReact.element(undefined, undefined, MeasurableTable$Client.make(e.measurements, /* array */[])));
                                         })));
                       })
                   ]);
-              return React.createElement("div", undefined, ReasonReact.element(undefined, undefined, Header$Client.make(/* array */[])), React.createElement("h2", undefined, "Measurable Page"), ReasonReact.element(undefined, undefined, eta));
+              return React.createElement("div", undefined, ReasonReact.element(undefined, undefined, Header$Client.make(/* array */[])), ReasonReact.element(undefined, undefined, eta));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],
@@ -395,7 +561,9 @@ function make$1(id, _) {
 exports.toMoment = toMoment;
 exports.toOptionalMoment = toOptionalMoment;
 exports.GetMeasurable = GetMeasurable;
+exports.CreateMeasurement = CreateMeasurement;
 exports.GetMeasurableQuery = GetMeasurableQuery;
 exports.component = component;
-exports.make = make$1;
+exports.valueString = valueString;
+exports.make = make$2;
 /* GetMeasurableQuery Not a pure module */

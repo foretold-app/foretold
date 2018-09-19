@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     relevantAt: {
-      allowNull: false,
+      allowNull: true,
       type: Sequelize.DATE,
       get() {
         return this.getDataValue('relevantAt') || this.getDataValue('createdAt')

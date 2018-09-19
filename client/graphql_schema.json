@@ -4,33 +4,31 @@
       "queryType": {
         "name": "Query"
       },
-      "mutationType": null,
+      "mutationType": {
+        "name": "Mutation"
+      },
       "subscriptionType": null,
-      "types": [
-        {
+      "types": [{
           "kind": "OBJECT",
           "name": "Query",
           "description": null,
-          "fields": [
-            {
+          "fields": [{
               "name": "user",
               "description": null,
-              "args": [
-                {
-                  "name": "id",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [{
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }],
               "type": {
                 "kind": "OBJECT",
                 "name": "User",
@@ -62,22 +60,20 @@
             {
               "name": "measurement",
               "description": null,
-              "args": [
-                {
-                  "name": "id",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [{
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }],
               "type": {
                 "kind": "OBJECT",
                 "name": "Measurement",
@@ -109,22 +105,20 @@
             {
               "name": "measurable",
               "description": null,
-              "args": [
-                {
-                  "name": "id",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [{
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }],
               "type": {
                 "kind": "OBJECT",
                 "name": "Measurable",
@@ -156,22 +150,20 @@
             {
               "name": "bot",
               "description": null,
-              "args": [
-                {
-                  "name": "id",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [{
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }],
               "type": {
                 "kind": "OBJECT",
                 "name": "Bot",
@@ -219,71 +211,6 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
-            },
-            {
-              "name": "createMeasurement",
-              "description": null,
-              "args": [
-                {
-                  "name": "value",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "SequelizeJSON",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "competitorType",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "ENUM",
-                      "name": "competitorType",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "measurableId",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "agentId",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "OBJECT",
-                "name": "Measurement",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -305,8 +232,7 @@
           "kind": "OBJECT",
           "name": "User",
           "description": "User",
-          "fields": [
-            {
+          "fields": [{
               "name": "id",
               "description": null,
               "args": [],
@@ -434,8 +360,7 @@
           "kind": "OBJECT",
           "name": "Agent",
           "description": "Agent",
-          "fields": [
-            {
+          "fields": [{
               "name": "id",
               "description": null,
               "args": [],
@@ -556,8 +481,7 @@
           "fields": null,
           "inputFields": null,
           "interfaces": null,
-          "enumValues": [
-            {
+          "enumValues": [{
               "name": "USER",
               "description": null,
               "isDeprecated": false,
@@ -576,8 +500,7 @@
           "kind": "OBJECT",
           "name": "Bot",
           "description": "Bot",
-          "fields": [
-            {
+          "fields": [{
               "name": "id",
               "description": null,
               "args": [],
@@ -726,8 +649,7 @@
           "fields": null,
           "inputFields": null,
           "interfaces": null,
-          "enumValues": [
-            {
+          "enumValues": [{
               "name": "COMPETITIVE",
               "description": null,
               "isDeprecated": false,
@@ -752,8 +674,7 @@
           "kind": "OBJECT",
           "name": "Measurement",
           "description": "Measurement",
-          "fields": [
-            {
+          "fields": [{
               "name": "id",
               "description": null,
               "args": [],
@@ -961,8 +882,7 @@
           "kind": "OBJECT",
           "name": "Measurable",
           "description": "Measurable",
-          "fields": [
-            {
+          "fields": [{
               "name": "id",
               "description": null,
               "args": [],
@@ -1103,8 +1023,7 @@
           "fields": null,
           "inputFields": null,
           "interfaces": null,
-          "enumValues": [
-            {
+          "enumValues": [{
               "name": "FLOAT",
               "description": null,
               "isDeprecated": false,
@@ -1137,10 +1056,82 @@
         },
         {
           "kind": "OBJECT",
+          "name": "Mutation",
+          "description": null,
+          "fields": [{
+            "name": "createMeasurement",
+            "description": null,
+            "args": [{
+                "name": "value",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "SequelizeJSON",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "competitorType",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "competitorType",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "measurableId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "agentId",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Measurement",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
           "name": "__Schema",
           "description": "A GraphQL Schema defines the capabilities of a GraphQL server. It exposes all available types and directives on the server, as well as the entry points for query, mutation, and subscription operations.",
-          "fields": [
-            {
+          "fields": [{
               "name": "types",
               "description": "A list of all types supported by this server.",
               "args": [],
@@ -1238,8 +1229,7 @@
           "kind": "OBJECT",
           "name": "__Type",
           "description": "The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.\n\nDepending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name and description, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.",
-          "fields": [
-            {
+          "fields": [{
               "name": "kind",
               "description": null,
               "args": [],
@@ -1282,18 +1272,16 @@
             {
               "name": "fields",
               "description": null,
-              "args": [
-                {
-                  "name": "includeDeprecated",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Boolean",
-                    "ofType": null
-                  },
-                  "defaultValue": "false"
-                }
-              ],
+              "args": [{
+                "name": "includeDeprecated",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": "false"
+              }],
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -1353,18 +1341,16 @@
             {
               "name": "enumValues",
               "description": null,
-              "args": [
-                {
-                  "name": "includeDeprecated",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Boolean",
-                    "ofType": null
-                  },
-                  "defaultValue": "false"
-                }
-              ],
+              "args": [{
+                "name": "includeDeprecated",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": "false"
+              }],
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -1426,8 +1412,7 @@
           "fields": null,
           "inputFields": null,
           "interfaces": null,
-          "enumValues": [
-            {
+          "enumValues": [{
               "name": "SCALAR",
               "description": "Indicates this type is a scalar.",
               "isDeprecated": false,
@@ -1482,8 +1467,7 @@
           "kind": "OBJECT",
           "name": "__Field",
           "description": "Object and Interface types are described by a list of Fields, each of which has a name, potentially a list of arguments, and a return type.",
-          "fields": [
-            {
+          "fields": [{
               "name": "name",
               "description": null,
               "args": [],
@@ -1589,8 +1573,7 @@
           "kind": "OBJECT",
           "name": "__InputValue",
           "description": "Arguments provided to Fields or Directives and the input fields of an InputObject are represented as Input Values which describe their type and optionally a default value.",
-          "fields": [
-            {
+          "fields": [{
               "name": "name",
               "description": null,
               "args": [],
@@ -1656,8 +1639,7 @@
           "kind": "OBJECT",
           "name": "__EnumValue",
           "description": "One possible value for a given Enum. Enum values are unique values, not a placeholder for a string or numeric value. However an Enum value is returned in a JSON response as a string.",
-          "fields": [
-            {
+          "fields": [{
               "name": "name",
               "description": null,
               "args": [],
@@ -1723,8 +1705,7 @@
           "kind": "OBJECT",
           "name": "__Directive",
           "description": "A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.\n\nIn some cases, you need to provide options to alter GraphQL's execution behavior in ways field arguments will not suffice, such as conditionally including or skipping a field. Directives provide this by describing additional information to the executor.",
-          "fields": [
-            {
+          "fields": [{
               "name": "name",
               "description": null,
               "args": [],
@@ -1813,8 +1794,7 @@
           "fields": null,
           "inputFields": null,
           "interfaces": null,
-          "enumValues": [
-            {
+          "enumValues": [{
               "name": "QUERY",
               "description": "Location adjacent to a query operation.",
               "isDeprecated": false,
@@ -1932,8 +1912,7 @@
           "possibleTypes": null
         }
       ],
-      "directives": [
-        {
+      "directives": [{
           "name": "include",
           "description": "Directs the executor to include this field or fragment only when the `if` argument is true.",
           "locations": [
@@ -1941,22 +1920,20 @@
             "FRAGMENT_SPREAD",
             "INLINE_FRAGMENT"
           ],
-          "args": [
-            {
-              "name": "if",
-              "description": "Included when true.",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            }
-          ]
+          "args": [{
+            "name": "if",
+            "description": "Included when true.",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }]
         },
         {
           "name": "skip",
@@ -1966,22 +1943,20 @@
             "FRAGMENT_SPREAD",
             "INLINE_FRAGMENT"
           ],
-          "args": [
-            {
-              "name": "if",
-              "description": "Skipped when true.",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            }
-          ]
+          "args": [{
+            "name": "if",
+            "description": "Skipped when true.",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }]
         },
         {
           "name": "deprecated",
@@ -1990,18 +1965,16 @@
             "FIELD_DEFINITION",
             "ENUM_VALUE"
           ],
-          "args": [
-            {
-              "name": "reason",
-              "description": "Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted using the Markdown syntax (as specified by [CommonMark](https://commonmark.org/).",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": "\"No longer supported\""
-            }
-          ]
+          "args": [{
+            "name": "reason",
+            "description": "Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted using the Markdown syntax (as specified by [CommonMark](https://commonmark.org/).",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": "\"No longer supported\""
+          }]
         }
       ]
     }

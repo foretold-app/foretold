@@ -120,6 +120,11 @@ const schema = new GraphQLSchema({
       ...modelResolvers("measurable", "measurables", getType.Measurables(), models.Measurable),
       ...modelResolvers("bot", "bots", getType.Bots(), models.Bot),
       ...modelResolvers("agent", "agent", getType.Agents(), models.Agent),
+    }
+  }),
+  mutation: new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
       createMeasurement: {
         type: getType.Measurements(),
         args: filterr(_.pick(attributeFields(models.Measurement), ['value', 'competitorType', 'measurableId', 'agentId'])),
@@ -139,8 +144,8 @@ const schema = new GraphQLSchema({
           return newMeasurement
         }
       },
-    },
-  }),
+    }
+    })
 });
 
 export {

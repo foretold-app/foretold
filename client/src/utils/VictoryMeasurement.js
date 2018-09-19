@@ -13,7 +13,8 @@ export class VictoryMeasurement extends React.Component {
         } = this.props.point;
         const xx = scale.x(x);
         return ( <
-            svg >
+            svg 
+            >
             <
             line x1 = {
                 xx

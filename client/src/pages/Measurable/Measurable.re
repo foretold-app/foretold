@@ -75,8 +75,8 @@ let make = (~id: string, _children) => {
           <$> (
             e =>
               <div>
-                <MeasurableTable measurements=e##measurements />
                 <MeasurableChart measurements=e##measurements />
+                <MeasurableTable measurements=e##measurements />
               </div>
           )
           |> Result.result(idd, idd)

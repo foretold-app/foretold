@@ -379,7 +379,7 @@ function make$1(id, _) {
                         return Result$Rationale.result(Utils$Client.idd, Utils$Client.idd, Curry._2(Result$Rationale.Infix[/* <$> */1], Curry._2(Result$Rationale.Infix[/* >>= */0], Utils$Client.apolloResponseToResult(param[/* result */0]), (function (e) {
                                               return Utils$Client.filterOptionalResult(Utils$Client.ste("Measurable not found"), e.measurable);
                                             })), (function (e) {
-                                          return React.createElement("div", undefined, ReasonReact.element(undefined, undefined, MeasurableTable$Client.make(e.measurements, /* array */[])), ReasonReact.element(undefined, undefined, MeasurableChart$Client.make(e.measurements, /* array */[])));
+                                          return React.createElement("div", undefined, ReasonReact.element(undefined, undefined, MeasurableChart$Client.make(e.measurements, /* array */[])), ReasonReact.element(undefined, undefined, MeasurableTable$Client.make(e.measurements, /* array */[])));
                                         })));
                       })
                   ]);

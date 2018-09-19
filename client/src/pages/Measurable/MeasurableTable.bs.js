@@ -55,20 +55,42 @@ function make(measurements, _) {
                           return "";
                         }
                       };
-                      var foo = Curry._2(Option$Rationale.$less$$great, Curry._2(Option$Rationale.$great$great$eq, e.agent, (function (x) {
+                      var agentType = Curry._2(Option$Rationale.$less$$great, Curry._2(Option$Rationale.$great$great$eq, e.agent, (function (x) {
                                   return x.bot;
                                 })), (function (x) {
                               return x.competitorType;
                             }));
-                      var botType;
-                      if (foo !== undefined) {
-                        var match = foo;
-                        botType = match !== 497422978 ? (
-                            match >= 1055622745 ? "Objective" : "Competitive"
-                          ) : "Aggregation";
-                      } else {
-                        botType = "";
-                      }
+                      var botType = function (e) {
+                        if (e !== undefined) {
+                          var match = e;
+                          if (match !== -288189265) {
+                            if (match !== 497422978) {
+                              if (match !== 1055622745) {
+                                return "";
+                              } else {
+                                return "Objective";
+                              }
+                            } else {
+                              return "Aggregation";
+                            }
+                          } else {
+                            return "Competitive";
+                          }
+                        } else {
+                          return "";
+                        }
+                      };
+                      var botCompetitor = function (e) {
+                        if (e !== 497422978) {
+                          if (e >= 1055622745) {
+                            return "Objective";
+                          } else {
+                            return "Competitive";
+                          }
+                        } else {
+                          return "Aggregation";
+                        }
+                      };
                       var toPercentile = function (fn) {
                         return Option$Rationale.$$default("", Curry._2(Option$Rationale.$less$$great, Curry._2(Option$Rationale.$less$$great, e.value[/* trio */0], fn), Pervasives.string_of_float));
                       };
@@ -79,36 +101,42 @@ function make(measurements, _) {
                                   ],
                                   /* :: */[
                                     /* tuple */[
-                                      "percentile25",
-                                      toPercentile((function (r) {
-                                              return r[/* p25 */0];
-                                            }))
+                                      "competitive",
+                                      botCompetitor(e.competitorType)
                                     ],
                                     /* :: */[
                                       /* tuple */[
-                                        "percentile50",
+                                        "percentile25",
                                         toPercentile((function (r) {
-                                                return r[/* p50 */1];
+                                                return r[/* p25 */0];
                                               }))
                                       ],
                                       /* :: */[
                                         /* tuple */[
-                                          "percentile75",
+                                          "percentile50",
                                           toPercentile((function (r) {
-                                                  return r[/* p75 */2];
+                                                  return r[/* p50 */1];
                                                 }))
                                         ],
                                         /* :: */[
                                           /* tuple */[
-                                            "type",
-                                            botType
+                                            "percentile75",
+                                            toPercentile((function (r) {
+                                                    return r[/* p75 */2];
+                                                  }))
                                           ],
                                           /* :: */[
                                             /* tuple */[
-                                              "userLink",
-                                              link(e.agent)
+                                              "type",
+                                              botType(agentType)
                                             ],
-                                            /* [] */0
+                                            /* :: */[
+                                              /* tuple */[
+                                                "userLink",
+                                                link(e.agent)
+                                              ],
+                                              /* [] */0
+                                            ]
                                           ]
                                         ]
                                       ]
@@ -125,6 +153,7 @@ function make(measurements, _) {
                         })));
               var columns = /* array */[
                 HandsOnTable$Client.makeColumn("createdAt", undefined, undefined, /* () */0),
+                HandsOnTable$Client.makeColumn("competitive", undefined, undefined, /* () */0),
                 HandsOnTable$Client.makeColumn("percentile25", undefined, undefined, /* () */0),
                 HandsOnTable$Client.makeColumn("percentile50", undefined, undefined, /* () */0),
                 HandsOnTable$Client.makeColumn("percentile75", undefined, undefined, /* () */0),
@@ -133,6 +162,7 @@ function make(measurements, _) {
               ];
               var colHeaders = /* array */[
                 "Relevant at",
+                "competitive",
                 "25th",
                 "50th",
                 "75th",

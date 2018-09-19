@@ -2,6 +2,7 @@
 'use strict';
 
 var Json_decode = require("@glennsl/bs-json/src/Json_decode.bs.js");
+var Json_encode = require("@glennsl/bs-json/src/Json_encode.bs.js");
 
 function parseTrio(json) {
   return /* record */[
@@ -22,6 +23,45 @@ function parseValue(json) {
         ];
 }
 
+function encodeTrio(trio) {
+  return Json_encode.object_(/* :: */[
+              /* tuple */[
+                "p25",
+                trio[/* p25 */0]
+              ],
+              /* :: */[
+                /* tuple */[
+                  "p50",
+                  trio[/* p50 */1]
+                ],
+                /* :: */[
+                  /* tuple */[
+                    "p75",
+                    trio[/* p75 */2]
+                  ],
+                  /* [] */0
+                ]
+              ]
+            ]);
+}
+
+function encodeValue(value) {
+  var match = value[/* trio */0];
+  if (match !== undefined) {
+    return Json_encode.object_(/* :: */[
+                /* tuple */[
+                  "trio",
+                  encodeTrio(match)
+                ],
+                /* [] */0
+              ]);
+  } else {
+    return "";
+  }
+}
+
 exports.parseTrio = parseTrio;
 exports.parseValue = parseValue;
-/* No side effect */
+exports.encodeTrio = encodeTrio;
+exports.encodeValue = encodeValue;
+/* Json_encode Not a pure module */

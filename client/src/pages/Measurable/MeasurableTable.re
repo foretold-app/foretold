@@ -34,18 +34,25 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
                | (_, _, _) => ""
                };
 
-          let foo: option(competitorType) = e##agent >>= (x => x##bot) <$> (x => x##competitorType);
+          let agentType: option(competitorType) = e##agent >>= (x => x##bot) <$> (x => x##competitorType);
 
-          let botType = switch (foo) {
+          let botType = e => switch (e) {
             | Some(`AGGREGATION) => "Aggregation" 
             | Some(`COMPETITIVE) => "Competitive" 
             | Some(`OBJECTIVE) => "Objective" 
             | _ => ""
             };
 
+          let botCompetitor = e => switch (e) {
+            | `AGGREGATION => "Aggregation" 
+            | `COMPETITIVE => "Competitive" 
+            | `OBJECTIVE => "Objective" 
+            };
+
           let toPercentile = fn => e##value |> (r => r.trio) <$> fn <$> string_of_float |> Option.default("")
            Js.Dict.fromList([
              ("createdAt", e##relevantAt |> Moment.format("L, h:mm:ss a")),
+             ("competitive", e##competitorType |> botCompetitor),
              (
                "percentile25",
                 toPercentile(r => r.p25)
@@ -60,7 +67,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
              ),
              (
                "type",
-                botType
+                agentType |> botType
              ),
              ("userLink", link(e##agent)),
            ]);
@@ -68,13 +75,14 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
 
     let columns = [|
       makeColumn(~data="createdAt", ()),
+      makeColumn(~data="competitive", ()),
       makeColumn(~data="percentile25", ()),
       makeColumn(~data="percentile50", ()),
       makeColumn(~data="percentile75", ()),
       makeColumn(~data="type", ()),
       makeColumn(~data="userLink", ~renderer="html", ()),
     |];
-    let colHeaders = [|"Relevant at", "25th", "50th", "75th", "Bot Type", "Agent"|];
+    let colHeaders = [|"Relevant at", "competitive", "25th", "50th", "75th", "Bot Type", "Agent"|];
     <HandsOnTable data columns colHeaders />;
   },
 };

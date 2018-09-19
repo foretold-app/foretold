@@ -3,6 +3,7 @@
 
 var $$Array = require("bs-platform/lib/js/array.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var MomentRe = require("bs-moment/src/MomentRe.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 var Utils$Client = require("../../utils/Utils.bs.js");
@@ -65,9 +66,19 @@ function make(measurements, _) {
                                         return e[/* p25 */0];
                                       }), e.value[/* trio */0]);
                         }), sorted));
+              var xMax = new Date($$Array.fold_left((function (a, b) {
+                            var match = a.isAfter(b);
+                            if (match) {
+                              return a;
+                            } else {
+                              return b;
+                            }
+                          }), MomentRe.moment(undefined, "Jan 3, 1970"), $$Array.map((function (e) {
+                                return e.createdAt;
+                              }), sorted)).format("MMM DD, YYYY HH:MM:SS"));
               var aggregatePercentiles = $$Array.map((function (e) {
                       return {
-                              x: new Date(e.relevantAt.format("MMM DD, YYYY HH:MM:ss:SSS")),
+                              x: new Date(e.relevantAt.format("MMM DD, YYYY HH:MM:SS")),
                               y: toVal((function (n) {
                                       return n[/* p25 */0];
                                     }), e.value[/* trio */0]),
@@ -80,7 +91,7 @@ function make(measurements, _) {
                         })));
               var competitives = $$Array.map((function (e) {
                       return {
-                              x: new Date(e.relevantAt.format("MMM DD, YYYY HH:MM:ss:SSS")),
+                              x: new Date(e.relevantAt.format("MMM DD, YYYY HH:MM:SS")),
                               y1: toVal((function (n) {
                                       return n[/* p25 */0];
                                     }), e.value[/* trio */0]),
@@ -96,7 +107,7 @@ function make(measurements, _) {
                         })));
               var aggregateMedians = $$Array.map((function (e) {
                       return {
-                              x: new Date(e.relevantAt.format("MMM DD, YYYY HH:MM:ss:SSS")),
+                              x: new Date(e.relevantAt.format("MMM DD, YYYY HH:MM:SS")),
                               y: toVal((function (n) {
                                       return n[/* p50 */1];
                                     }), e.value[/* trio */0])
@@ -104,10 +115,12 @@ function make(measurements, _) {
                     }), sorted.filter((function (e) {
                           return e.competitorType === /* AGGREGATION */497422978;
                         })));
+              console.log(competitives);
               return ReasonReact.element(undefined, undefined, Victory$Client.VictoryChart[/* make */0](undefined, undefined, {
                               x: "time"
                             }, {
-                              y: yMax
+                              y: yMax,
+                              x: xMax
                             }, {
                               y: yMin
                             }, /* array */[

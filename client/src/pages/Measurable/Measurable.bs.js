@@ -503,6 +503,11 @@ var GetMeasurableQuery = ReasonApollo.CreateQuery([
       parse
     ]);
 
+var CreateMeasurementMutation = ReasonApollo.CreateMutation([
+      ppx_printed_query$1,
+      parse$1
+    ]);
+
 var component = ReasonReact.statelessComponent("Measurable");
 
 function valueString(e) {
@@ -532,7 +537,7 @@ function make$2(id, _) {
               var query = make(id, /* () */0);
               var eta = Curry.app(GetMeasurableQuery[/* make */3], [
                     Js_primitive.some(query.variables),
-                    5000,
+                    50000,
                     undefined,
                     undefined,
                     undefined,
@@ -545,7 +550,22 @@ function make$2(id, _) {
                                               return Utils$Client.filterOptionalResult(Utils$Client.ste("Measurable not found"), e.measurable);
                                             })), (function (e) {
                                           var match = e.isLocked;
-                                          return React.createElement("div", undefined, React.createElement("h2", undefined, e.name), React.createElement("h3", undefined, match ? "Locked: True" : "Locked: False"), React.createElement("h3", undefined, valueString(e.valueType)), ReasonReact.element(undefined, undefined, MeasurableChart$Client.make(e.measurements, /* array */[])), ReasonReact.element(undefined, undefined, MeasurableTable$Client.make(e.measurements, /* array */[])));
+                                          return React.createElement("div", undefined, React.createElement("h2", undefined, e.name), React.createElement("h3", undefined, match ? "Locked: True" : "Locked: False"), ReasonReact.element(undefined, undefined, Curry._4(CreateMeasurementMutation[/* make */4], undefined, undefined, undefined, (function (mutation, _) {
+                                                                var mut = make$1(MeasurableTypes$Client.encodeValue(/* record */[
+                                                                          /* trio *//* record */[
+                                                                            /* p25 */110.0,
+                                                                            /* p50 */170.0,
+                                                                            /* p75 */220.0
+                                                                          ],
+                                                                          /* pointEstimate */undefined
+                                                                        ]), /* COMPETITIVE */-288189265, e.id, "c4aefed8-83c1-422d-9364-313071287758", /* () */0);
+                                                                return React.createElement("div", undefined, React.createElement("h3", {
+                                                                                onClick: (function () {
+                                                                                    Curry._3(mutation, Js_primitive.some(mut.variables), /* array */["getMeasurable"], /* () */0);
+                                                                                    return /* () */0;
+                                                                                  })
+                                                                              }, valueString(e.valueType)), ReasonReact.element(undefined, undefined, MeasurableChart$Client.make(e.measurements, /* array */[])), ReasonReact.element(undefined, undefined, MeasurableTable$Client.make(e.measurements, /* array */[])));
+                                                              }))));
                                         })));
                       })
                   ]);
@@ -563,6 +583,7 @@ exports.toOptionalMoment = toOptionalMoment;
 exports.GetMeasurable = GetMeasurable;
 exports.CreateMeasurement = CreateMeasurement;
 exports.GetMeasurableQuery = GetMeasurableQuery;
+exports.CreateMeasurementMutation = CreateMeasurementMutation;
 exports.component = component;
 exports.valueString = valueString;
 exports.make = make$2;

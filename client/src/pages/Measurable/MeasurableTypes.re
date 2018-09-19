@@ -22,6 +22,21 @@ let parseValue = json =>
     pointEstimate: json |> optional(field("pointEstimate", float)),
   };
 
+let encodeTrio = (trio: trio) =>
+  Json.Encode.(
+    object_([
+      ("p25", float(trio.p25)),
+      ("p50", float(trio.p50)),
+      ("p75", float(trio.p75)),
+    ])
+  );
+
+let encodeValue = (value: value) =>
+  switch (value.trio) {
+  | Some(t) => Json.Encode.(object_([("trio", encodeTrio(t))]))
+  | None => Js.Json.string("")
+  };
+
 type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
 type measurement = {
   .
@@ -50,7 +65,7 @@ type measurement = {
       },
     ),
   "relevantAt": MomentRe.Moment.t,
-  "competitorType": [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE],
+  "competitorType": competitorType,
   "createdAt": MomentRe.Moment.t,
   "taggedMeasurementId": option(string),
   "value": value,

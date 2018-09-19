@@ -65,7 +65,8 @@ module CreateMeasurement = [%graphql
 ];
 
 module GetMeasurableQuery = ReasonApollo.CreateQuery(GetMeasurable);
-
+module CreateMeasurementMutation =
+  ReasonApollo.CreateMutation(CreateMeasurement);
 let component = ReasonReact.statelessComponent("Measurable");
 
 let valueString = e =>
@@ -83,7 +84,7 @@ let make = (~id: string, _children) => {
       <Header />
       (
         GetMeasurableQuery.make(
-          ~variables=query##variables, ~pollInterval=5000, ({result}) =>
+          ~variables=query##variables, ~pollInterval=50000, ({result}) =>
           result
           |> apolloResponseToResult
           >>= (
@@ -101,9 +102,43 @@ let make = (~id: string, _children) => {
                     |> ReasonReact.string
                   )
                 </h3>
-                <h3> (e##valueType |> valueString |> ReasonReact.string) </h3>
-                <MeasurableChart measurements=e##measurements />
-                <MeasurableTable measurements=e##measurements />
+                <CreateMeasurementMutation>
+                  ...(
+                       (mutation, _) => {
+                         let mut =
+                           CreateMeasurement.make(
+                             ~measurableId=e##id,
+                             ~agentId="c4aefed8-83c1-422d-9364-313071287758",
+                             ~value=
+                               encodeValue({
+                                 trio:
+                                   Some({p25: 110.0, p50: 170.0, p75: 220.0}),
+                                 pointEstimate: None,
+                               }),
+                             ~competitorType=`COMPETITIVE,
+                             (),
+                           );
+                         <div>
+                           <h3
+                             onClick=(
+                               e =>
+                                 mutation(
+                                   ~variables=mut##variables,
+                                   ~refetchQueries=[|"getMeasurable"|],
+                                   (),
+                                 )
+                                 |> ignore
+                             )>
+                             (
+                               e##valueType |> valueString |> ReasonReact.string
+                             )
+                           </h3>
+                           <MeasurableChart measurements=e##measurements />
+                           <MeasurableTable measurements=e##measurements />
+                         </div>;
+                       }
+                     )
+                </CreateMeasurementMutation>
               </div>
           )
           |> Result.result(idd, idd)
@@ -113,5 +148,3 @@ let make = (~id: string, _children) => {
     </div>;
   },
 };
-/* <MeasurableChart measurements=e##measurements />  */
-/* <MeasurableTable measurements=e##measurements /> */

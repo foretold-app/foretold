@@ -39,15 +39,20 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       |> Array.map(e => e |> toPercentile(e => e.p25))
       |> Array.fold_left((a, b) => a < b ? a : b, max_float);
 
+    let formatDate = Moment.format("MMM DD, YYYY HH:MM:SS");
+
+    let xMax =
+      sorted
+      |> Array.map(e => e##createdAt)
+      |> Array.fold_left((a, b) => Moment.isAfter(a, b) ? a : b, "Jan 3, 1970" |> moment)
+      |> formatDate |> Js.Date.fromString;
+
     let aggregatePercentiles =
       sorted
       |> Js.Array.filter(e => e##competitorType == `AGGREGATION)
       |> Array.map(e =>
            {
-             "x":
-               e##relevantAt
-               |> Moment.format("MMM DD, YYYY HH:MM:ss:SSS")
-               |> Js.Date.fromString,
+             "x": e##relevantAt |> formatDate |> Js.Date.fromString,
              "y": e |> toPercentile(n => n.p25),
              "y0": e |> toPercentile(n => n.p75),
            }
@@ -57,10 +62,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       |> Js.Array.filter(e => e##competitorType == `COMPETITIVE)
       |> Array.map(e =>
            {
-             "x":
-               e##relevantAt
-               |> Moment.format("MMM DD, YYYY HH:MM:ss:SSS")
-               |> Js.Date.fromString,
+             "x": e##relevantAt |> formatDate |> Js.Date.fromString,
              "y1": e |> toPercentile(n => n.p25),
              "y2": e |> toPercentile(n => n.p50),
              "y3": e |> toPercentile(n => n.p75),
@@ -71,16 +73,14 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       |> Js.Array.filter(e => e##competitorType == `AGGREGATION)
       |> Array.map(e =>
            {
-             "x":
-               e##relevantAt
-               |> Moment.format("MMM DD, YYYY HH:MM:ss:SSS")
-               |> Js.Date.fromString,
+             "x": e##relevantAt |> formatDate |> Js.Date.fromString,
              "y": e |> toPercentile(n => n.p50),
            }
          );
+         Js.log(competitives)
     Victory.(
       <VictoryChart
-        scale={"x": "time"} maxDomain={"y": yMax} minDomain={"y": yMin}>
+        scale={"x": "time"} maxDomain={"y": yMax, "x": xMax} minDomain={"y": yMin}>
         <VictoryArea
           data=aggregatePercentiles
           style={

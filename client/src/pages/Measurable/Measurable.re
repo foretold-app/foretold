@@ -81,7 +81,6 @@ let make = (~id: string, _children) => {
   render: _self => {
     let query = GetMeasurable.make(~id, ());
     <div>
-      <Header />
       (
         GetMeasurableQuery.make(
           ~variables=query##variables, ~pollInterval=50000, ({result}) =>

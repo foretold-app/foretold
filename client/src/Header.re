@@ -1,3 +1,6 @@
+open Antd.Grid;
+open Antd.Layout;
+
 let ste = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("User");
@@ -11,10 +14,12 @@ module Styles = {
   open Css;
   let header =
     style([
-      background(hex("dcdcdc")),
-      padding(px(5)),
+      width(`percent(100.0)),
+      backgroundColor(white),
       selector(" h4", [marginTop(px(2))]),
     ]);
+
+  let menu = style([lineHeight(px(64))]);
 };
 
 Css.(global("body", [fontFamily("Lato")]));
@@ -22,9 +27,17 @@ Css.(global("body", [fontFamily("Lato")]));
 let make = _children => {
   ...component,
   render: _ =>
-    <div className=Styles.header>
-      <h4> ("Prediction App" |> ste) </h4>
-      (link("/users", "Users"))
-      (link("/measurables", "Measurables"))
-    </div>,
+    <Row
+      gutter=(Row.ResponsiveBreakpoints(makeGutterBreakpoints(~sm=5, ())))>
+      <Col span=24>
+        <Header className=Styles.header>
+          <Antd_Menu className=Styles.menu mode=`Horizontal theme=`Light>
+            <Antd_Menu.Item> (link("/users", "Users")) </Antd_Menu.Item>
+            <Antd_Menu.Item>
+              (link("/measurables", "Measurables"))
+            </Antd_Menu.Item>
+          </Antd_Menu>
+        </Header>
+      </Col>
+    </Row>,
 };

@@ -23,6 +23,7 @@
     "bs-moment",
     "rationale",
     "bs-css",
+    "bs-ant-design",
     "@glennsl/bs-json"
   ],
   "refmt": 3,

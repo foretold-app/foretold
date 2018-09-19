@@ -9,6 +9,7 @@ var User$Client = require("./pages/User.bs.js");
 var Users$Client = require("./pages/Users.bs.js");
 var Measurable$Client = require("./pages/Measurable/Measurable.bs.js");
 var Measurables$Client = require("./pages/Measurables.bs.js");
+var PaddedLayout$Client = require("./utils/PaddedLayout.bs.js");
 
 require('../node_modules/handsontable/dist/handsontable.full.css');
 ;
@@ -57,6 +58,25 @@ function mapUrlToAction(url) {
 
 var component = ReasonReact.reducerComponent("App");
 
+function inside(r) {
+  if (typeof r === "number") {
+    switch (r) {
+      case 0 : 
+      case 1 : 
+          return ReasonReact.element(undefined, undefined, Users$Client.make(/* array */[]));
+      case 2 : 
+          return ReasonReact.element(undefined, undefined, Measurables$Client.make(/* array */[]));
+      case 3 : 
+          return ReasonReact.element(undefined, undefined, Home$Client.make(/* array */[]));
+      
+    }
+  } else if (r.tag) {
+    return ReasonReact.element(undefined, undefined, Measurable$Client.make(r[0], /* array */[]));
+  } else {
+    return ReasonReact.element(undefined, undefined, User$Client.make(r[0], /* array */[]));
+  }
+}
+
 function make() {
   return /* record */[
           /* debugName */component[/* debugName */0],
@@ -78,23 +98,7 @@ function make() {
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function (self) {
-              var match = self[/* state */1][/* route */0];
-              if (typeof match === "number") {
-                switch (match) {
-                  case 0 : 
-                  case 1 : 
-                      return ReasonReact.element(undefined, undefined, Users$Client.make(/* array */[]));
-                  case 2 : 
-                      return ReasonReact.element(undefined, undefined, Measurables$Client.make(/* array */[]));
-                  case 3 : 
-                      return ReasonReact.element(undefined, undefined, Home$Client.make(/* array */[]));
-                  
-                }
-              } else if (match.tag) {
-                return ReasonReact.element(undefined, undefined, Measurable$Client.make(match[0], /* array */[]));
-              } else {
-                return ReasonReact.element(undefined, undefined, User$Client.make(match[0], /* array */[]));
-              }
+              return ReasonReact.element(undefined, undefined, PaddedLayout$Client.make(/* array */[inside(self[/* state */1][/* route */0])]));
             }),
           /* initialState */(function () {
               return /* record */[/* route : Home */0];
@@ -109,5 +113,6 @@ exports.reducer = reducer;
 exports.mapUrlToRoute = mapUrlToRoute;
 exports.mapUrlToAction = mapUrlToAction;
 exports.component = component;
+exports.inside = inside;
 exports.make = make;
 /*  Not a pure module */

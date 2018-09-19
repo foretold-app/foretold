@@ -33,6 +33,16 @@ let mapUrlToAction = (url: ReasonReact.Router.url) =>
 
 let component = ReasonReact.reducerComponent("App");
 
+let inside = r =>
+  switch (r) {
+  | Home => <Users />
+  | User(id) => <User id />
+  | Users => <Users />
+  | Measurables => <Measurables />
+  | Measurable(id) => <Measurable id />
+  | NotFound => <Home />
+  };
+
 let make = _children => {
   ...component,
   reducer,
@@ -45,13 +55,5 @@ let make = _children => {
       ReasonReact.Router.watchUrl(url => url |> mapUrlToAction |> self.send);
     self.onUnmount(() => ReasonReact.Router.unwatchUrl(watcherID));
   },
-  render: self =>
-    switch (self.state.route) {
-    | Home => <Users />
-    | User(id) => <User id />
-    | Users => <Users />
-    | Measurables => <Measurables />
-    | Measurable(id) => <Measurable id />
-    | NotFound => <Home />
-    },
+  render: self => <PaddedLayout> (self.state.route |> inside) </PaddedLayout>,
 };

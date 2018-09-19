@@ -29,6 +29,7 @@
     "apollo-link-http": "^1.5.4",
     "apollo-link-ws": "^1.0.8",
     "apollo-utilities": "^1.0.20",
+    "bs-ant-design": "^2.0.0",
     "bs-css": "^7.2.0",
     "bs-moment": "^0.3.1",
     "graphql": "^0.13.2",
@@ -44,10 +45,12 @@
     "victory": "^30.3.1"
   },
   "devDependencies": {
+    "babel-plugin-import": "^1.6.3",
+    "parcel-bundler": "^1.9.7",
+    "less": "^2.7.3",
     "bs-platform": "^4.0.2",
     "bsb-js": "^1.1.7",
     "graphql_ppx": "^0.2.7",
-    "parcel-bundler": "^1.9.7",
     "webpack": "^4.0.1",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.0.0"

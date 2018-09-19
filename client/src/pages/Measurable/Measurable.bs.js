@@ -11,7 +11,6 @@ var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 var ReasonApollo = require("reason-apollo/src/ReasonApollo.bs.js");
 var Utils$Client = require("../../utils/Utils.bs.js");
-var Header$Client = require("../../Header.bs.js");
 var Queries$Client = require("../Queries.bs.js");
 var Result$Rationale = require("rationale/src/Result.js");
 var Function$Rationale = require("rationale/src/Function.js");
@@ -569,7 +568,7 @@ function make$2(id, _) {
                                         })));
                       })
                   ]);
-              return React.createElement("div", undefined, ReasonReact.element(undefined, undefined, Header$Client.make(/* array */[])), ReasonReact.element(undefined, undefined, eta));
+              return React.createElement("div", undefined, ReasonReact.element(undefined, undefined, eta));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],

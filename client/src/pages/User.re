@@ -11,7 +11,6 @@ let make = (~id: string, _children) => {
   render: _self => {
     let query = Queries.GetUser.make(~id, ());
     <div>
-      <Header />
       <h2> (ReasonReact.string("User Page")) </h2>
       (
         Queries.GetUserQuery.make(~variables=query##variables, ({result}) =>

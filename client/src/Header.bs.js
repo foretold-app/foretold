@@ -2,7 +2,11 @@
 'use strict';
 
 var Css = require("bs-css/src/Css.js");
+var Block = require("bs-platform/lib/js/block.js");
 var React = require("react");
+var Antd_Grid = require("bs-ant-design/src/Antd_Grid.js");
+var Antd_Menu = require("bs-ant-design/src/Antd_Menu.js");
+var Antd_Layout = require("bs-ant-design/src/Antd_Layout.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 
 function ste(prim) {
@@ -20,9 +24,12 @@ function link(url, name) {
 }
 
 var header = Css.style(/* :: */[
-      Css.background(Css.hex("dcdcdc")),
+      Css.width(/* `percent */[
+            -119887163,
+            100.0
+          ]),
       /* :: */[
-        Css.padding(Css.px(5)),
+        Css.backgroundColor(Css.white),
         /* :: */[
           Css.selector(" h4", /* :: */[
                 Css.marginTop(Css.px(2)),
@@ -33,7 +40,15 @@ var header = Css.style(/* :: */[
       ]
     ]);
 
-var Styles = /* module */[/* header */header];
+var menu = Css.style(/* :: */[
+      Css.lineHeight(Css.px(64)),
+      /* [] */0
+    ]);
+
+var Styles = /* module */[
+  /* header */header,
+  /* menu */menu
+];
 
 Css.$$global("body", /* :: */[
       Css.fontFamily("Lato"),
@@ -52,9 +67,10 @@ function make() {
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function () {
-              return React.createElement("div", {
-                          className: header
-                        }, React.createElement("h4", undefined, "Prediction App"), link("/users", "Users"), link("/measurables", "Measurables"));
+              return ReasonReact.element(undefined, undefined, Antd_Grid.Row[/* make */8](undefined, /* ResponsiveBreakpoints */Block.__(1, [Antd_Grid.makeGutterBreakpoints(undefined, 5, undefined, undefined, undefined, undefined, /* () */0)]), undefined, undefined, undefined, undefined, undefined, /* array */[ReasonReact.element(undefined, undefined, Antd_Grid.Col[/* make */1](undefined, 24, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, /* array */[ReasonReact.element(undefined, undefined, Antd_Layout.Header[/* make */0](undefined, header, undefined, /* array */[ReasonReact.element(undefined, undefined, Antd_Menu.make(/* Light */136970422, /* Horizontal */208994564, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, menu, undefined, undefined, undefined, undefined, undefined, undefined, /* array */[
+                                                            ReasonReact.element(undefined, undefined, Antd_Menu.Item[/* make */0](undefined, undefined, undefined, undefined, undefined, /* array */[link("/users", "Users")])),
+                                                            ReasonReact.element(undefined, undefined, Antd_Menu.Item[/* make */0](undefined, undefined, undefined, undefined, undefined, /* array */[link("/measurables", "Measurables")]))
+                                                          ]))]))]))]));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],

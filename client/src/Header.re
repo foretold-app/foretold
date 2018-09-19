@@ -7,10 +7,22 @@ let link = (url, name) =>
     (name |> ReasonReact.string)
   </a>;
 
+module Styles = {
+  open Css;
+  let header =
+    style([
+      background(hex("dcdcdc")),
+      padding(px(5)),
+      selector(" h4", [marginTop(px(2))]),
+    ]);
+};
+
+Css.(global("body", [fontFamily("Lato")]));
+
 let make = _children => {
   ...component,
   render: _ =>
-    <div>
+    <div className=Styles.header>
       <h4> ("Prediction App" |> ste) </h4>
       (link("/users", "Users"))
       (link("/measurables", "Measurables"))

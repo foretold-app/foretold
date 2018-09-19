@@ -29,6 +29,7 @@
     "apollo-link-http": "^1.5.4",
     "apollo-link-ws": "^1.0.8",
     "apollo-utilities": "^1.0.20",
+    "bs-css": "^7.2.0",
     "bs-moment": "^0.3.1",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",

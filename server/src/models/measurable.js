@@ -26,6 +26,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.DATE
     },
+    measurableCount: {
+      allowNull: false,
+      type: Sequelize.VIRTUAL(DataTypes.INTEGER),
+      get: async function() {
+        const items = await this.getMeasurements()
+        return items.length
+      }
+    },
   });
   Model.associate = function (models) {
     Model.Measurements = Model.hasMany(models.Measurement, {

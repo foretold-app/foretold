@@ -212,7 +212,7 @@ function stringOfcompetitorType(e) {
   }
 }
 
-var ppx_printed_query$2 = "query getAgents  {\nagents  {\nuser: User  {\nid  \nname  \n}\n\nbot: Bot  {\nid  \nname  \ndescription  \ncompetitorType  \n}\n\n}\n\n}\n";
+var ppx_printed_query$2 = "query getAgents  {\nagents  {\nid  \nuser: User  {\nid  \nname  \n}\n\nbot: Bot  {\nid  \nname  \ndescription  \ncompetitorType  \n}\n\n}\n\n}\n";
 
 function parse$2(value) {
   var match = Js_json.decodeObject(value);
@@ -230,96 +230,104 @@ function parse$2(value) {
                   var tmp;
                   if (match$1 !== undefined) {
                     var value$1 = Js_primitive.valFromOption(match$1);
-                    var match$2 = value$1["user"];
-                    var field_user;
+                    var match$2 = value$1["id"];
+                    var field_id;
                     if (match$2 !== undefined) {
-                      var match$3 = Js_json.decodeNull(match$2);
-                      if (match$3 !== undefined) {
+                      var match$3 = Js_json.decodeString(match$2);
+                      field_id = match$3 !== undefined ? match$3 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$2));
+                    } else {
+                      field_id = Js_exn.raiseError("graphql_ppx: Field id on type Agent is missing");
+                    }
+                    var match$4 = value$1["user"];
+                    var field_user;
+                    if (match$4 !== undefined) {
+                      var match$5 = Js_json.decodeNull(match$4);
+                      if (match$5 !== undefined) {
                         field_user = undefined;
                       } else {
-                        var match$4 = Js_json.decodeObject(match$2);
+                        var match$6 = Js_json.decodeObject(match$4);
                         var tmp$1;
-                        if (match$4 !== undefined) {
-                          var value$2 = Js_primitive.valFromOption(match$4);
-                          var match$5 = value$2["id"];
-                          var field_id;
-                          if (match$5 !== undefined) {
-                            var match$6 = Js_json.decodeString(match$5);
-                            field_id = match$6 !== undefined ? match$6 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$5));
-                          } else {
-                            field_id = Js_exn.raiseError("graphql_ppx: Field id on type User is missing");
-                          }
-                          var match$7 = value$2["name"];
-                          var field_name;
+                        if (match$6 !== undefined) {
+                          var value$2 = Js_primitive.valFromOption(match$6);
+                          var match$7 = value$2["id"];
+                          var field_id$1;
                           if (match$7 !== undefined) {
                             var match$8 = Js_json.decodeString(match$7);
-                            field_name = match$8 !== undefined ? match$8 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$7));
+                            field_id$1 = match$8 !== undefined ? match$8 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$7));
+                          } else {
+                            field_id$1 = Js_exn.raiseError("graphql_ppx: Field id on type User is missing");
+                          }
+                          var match$9 = value$2["name"];
+                          var field_name;
+                          if (match$9 !== undefined) {
+                            var match$10 = Js_json.decodeString(match$9);
+                            field_name = match$10 !== undefined ? match$10 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$9));
                           } else {
                             field_name = Js_exn.raiseError("graphql_ppx: Field name on type User is missing");
                           }
                           tmp$1 = /* record */[
-                            /* id */field_id,
+                            /* id */field_id$1,
                             /* name */field_name
                           ];
                         } else {
-                          tmp$1 = Js_exn.raiseError("graphql_ppx: Expected object of type User, got " + JSON.stringify(match$2));
+                          tmp$1 = Js_exn.raiseError("graphql_ppx: Expected object of type User, got " + JSON.stringify(match$4));
                         }
                         field_user = tmp$1;
                       }
                     } else {
                       field_user = undefined;
                     }
-                    var match$9 = value$1["bot"];
+                    var match$11 = value$1["bot"];
                     var field_bot;
-                    if (match$9 !== undefined) {
-                      var match$10 = Js_json.decodeNull(match$9);
-                      if (match$10 !== undefined) {
+                    if (match$11 !== undefined) {
+                      var match$12 = Js_json.decodeNull(match$11);
+                      if (match$12 !== undefined) {
                         field_bot = undefined;
                       } else {
-                        var match$11 = Js_json.decodeObject(match$9);
+                        var match$13 = Js_json.decodeObject(match$11);
                         var tmp$2;
-                        if (match$11 !== undefined) {
-                          var value$3 = Js_primitive.valFromOption(match$11);
-                          var match$12 = value$3["id"];
-                          var field_id$1;
-                          if (match$12 !== undefined) {
-                            var match$13 = Js_json.decodeString(match$12);
-                            field_id$1 = match$13 !== undefined ? match$13 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$12));
-                          } else {
-                            field_id$1 = Js_exn.raiseError("graphql_ppx: Field id on type Bot is missing");
-                          }
-                          var match$14 = value$3["name"];
-                          var field_name$1;
+                        if (match$13 !== undefined) {
+                          var value$3 = Js_primitive.valFromOption(match$13);
+                          var match$14 = value$3["id"];
+                          var field_id$2;
                           if (match$14 !== undefined) {
-                            var match$15 = Js_json.decodeNull(match$14);
-                            if (match$15 !== undefined) {
+                            var match$15 = Js_json.decodeString(match$14);
+                            field_id$2 = match$15 !== undefined ? match$15 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$14));
+                          } else {
+                            field_id$2 = Js_exn.raiseError("graphql_ppx: Field id on type Bot is missing");
+                          }
+                          var match$16 = value$3["name"];
+                          var field_name$1;
+                          if (match$16 !== undefined) {
+                            var match$17 = Js_json.decodeNull(match$16);
+                            if (match$17 !== undefined) {
                               field_name$1 = undefined;
                             } else {
-                              var match$16 = Js_json.decodeString(match$14);
-                              field_name$1 = match$16 !== undefined ? match$16 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$14));
+                              var match$18 = Js_json.decodeString(match$16);
+                              field_name$1 = match$18 !== undefined ? match$18 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$16));
                             }
                           } else {
                             field_name$1 = undefined;
                           }
-                          var match$17 = value$3["description"];
+                          var match$19 = value$3["description"];
                           var field_description;
-                          if (match$17 !== undefined) {
-                            var match$18 = Js_json.decodeNull(match$17);
-                            if (match$18 !== undefined) {
+                          if (match$19 !== undefined) {
+                            var match$20 = Js_json.decodeNull(match$19);
+                            if (match$20 !== undefined) {
                               field_description = undefined;
                             } else {
-                              var match$19 = Js_json.decodeString(match$17);
-                              field_description = match$19 !== undefined ? match$19 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$17));
+                              var match$21 = Js_json.decodeString(match$19);
+                              field_description = match$21 !== undefined ? match$21 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$19));
                             }
                           } else {
                             field_description = undefined;
                           }
-                          var match$20 = value$3["competitorType"];
+                          var match$22 = value$3["competitorType"];
                           var field_competitorType;
-                          if (match$20 !== undefined) {
-                            var match$21 = Js_json.decodeString(match$20);
-                            if (match$21 !== undefined) {
-                              var value$4 = match$21;
+                          if (match$22 !== undefined) {
+                            var match$23 = Js_json.decodeString(match$22);
+                            if (match$23 !== undefined) {
+                              var value$4 = match$23;
                               switch (value$4) {
                                 case "AGGREGATION" : 
                                     field_competitorType = /* AGGREGATION */497422978;
@@ -334,7 +342,7 @@ function parse$2(value) {
                                   field_competitorType = Js_exn.raiseError("graphql_ppx: Unknown enum variant for competitorType: " + value$4);
                               }
                             } else {
-                              field_competitorType = Js_exn.raiseError("graphql_ppx: Expected enum value for competitorType, got " + JSON.stringify(match$20));
+                              field_competitorType = Js_exn.raiseError("graphql_ppx: Expected enum value for competitorType, got " + JSON.stringify(match$22));
                             }
                           } else {
                             field_competitorType = Js_exn.raiseError("graphql_ppx: Field competitorType on type Bot is missing");
@@ -342,11 +350,11 @@ function parse$2(value) {
                           tmp$2 = /* record */[
                             /* competitorType */field_competitorType,
                             /* description */field_description,
-                            /* id */field_id$1,
+                            /* id */field_id$2,
                             /* name */field_name$1
                           ];
                         } else {
-                          tmp$2 = Js_exn.raiseError("graphql_ppx: Expected object of type Bot, got " + JSON.stringify(match$9));
+                          tmp$2 = Js_exn.raiseError("graphql_ppx: Expected object of type Bot, got " + JSON.stringify(match$11));
                         }
                         field_bot = tmp$2;
                       }
@@ -354,6 +362,7 @@ function parse$2(value) {
                       field_bot = undefined;
                     }
                     tmp = /* record */[
+                      /* id */field_id,
                       /* bot */field_bot,
                       /* user */field_user
                     ];

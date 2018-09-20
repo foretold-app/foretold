@@ -9,6 +9,7 @@ var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Utils$Client = require("../../utils/Utils.bs.js");
 var Option$Rationale = require("rationale/src/Option.js");
 var HandsOnTable$Client = require("../../utils/HandsOnTable.bs.js");
+var UseRouterForLinks$Client = require("../../utils/UseRouterForLinks.bs.js");
 
 var component = ReasonReact.statelessComponent("MeasurableTable");
 
@@ -169,7 +170,7 @@ function make(measurements, _) {
                 "Bot Type",
                 "Agent"
               ];
-              return ReasonReact.element(undefined, undefined, HandsOnTable$Client.make(data, columns, colHeaders, /* array */[]));
+              return ReasonReact.element(undefined, undefined, UseRouterForLinks$Client.make(/* array */[ReasonReact.element(undefined, undefined, HandsOnTable$Client.make(data, columns, colHeaders, /* array */[]))]));
             }),
           /* initialState */component[/* initialState */10],
           /* retainedProps */component[/* retainedProps */11],

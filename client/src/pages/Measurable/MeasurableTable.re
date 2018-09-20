@@ -83,6 +83,8 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       makeColumn(~data="userLink", ~renderer="html", ()),
     |];
     let colHeaders = [|"Relevant at", "competitive", "25th", "50th", "75th", "Bot Type", "Agent"|];
-    <HandsOnTable data columns colHeaders />;
+  <UseRouterForLinks>
+    <HandsOnTable data columns colHeaders />
+  </UseRouterForLinks>
   },
 };

@@ -29,7 +29,10 @@ let showQueryList = (~data: Queries.measurables, ~urlFn, ~render) => {
     makeColumn(~data="name", ~renderer="html", ()),
     makeColumn(~data="createdAt", ()),
   |];
-  <HandsOnTable data=ddata columns colHeaders=[|"", "", ""|] />;
+
+  <UseRouterForLinks>
+    <HandsOnTable data=ddata columns colHeaders=[|"", "", ""|] />
+  </UseRouterForLinks>;
 };
 
 let itemList =
@@ -40,16 +43,16 @@ let itemList =
 /* Not sure why this needs optional */
 
 let component = ReasonReact.statelessComponent("Measurables");
-
+/* <div onClick={self.handleClick}> */
 let make = _children => {
   ...component,
-  render: _ =>
+  render: self =>
     Queries.GetMeasurablesQuery.make(o =>
       o.result
       |> apolloResponseToResult
       <$> (d => d##measurables)
       <$> catOptionals
-      <$> (e => itemList(~data=e))
+      <$> (e => <div> (itemList(~data=e)) </div>)
       |> Result.result(idd, idd)
     )
     |> ReasonReact.element

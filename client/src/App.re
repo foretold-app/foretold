@@ -5,6 +5,7 @@ type route =
   | Home
   | Users
   | Agents
+  | Agent(string)
   | User(string)
   | Measurables
   | Measurable(string)
@@ -24,6 +25,7 @@ let mapUrlToRoute = (url: ReasonReact.Router.url) =>
   | [] => Home
   | ["users"] => Users
   | ["agents"] => Agents
+  | ["agents", id] => Agent(id)
   | ["measurables"] => Measurables
   | ["users", id] => User(id)
   | ["measurables", id] => Measurable(id)
@@ -39,6 +41,7 @@ let inside = r =>
   switch (r) {
   | Home => <Users />
   | Agents => <Agents />
+  | Agent(id) => <Agent id />
   | User(id) => <User id />
   | Users => <Users />
   | Measurables => <Measurables />

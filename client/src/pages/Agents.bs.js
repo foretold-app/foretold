@@ -11,6 +11,7 @@ var Queries$Client = require("./Queries.bs.js");
 var Option$Rationale = require("rationale/src/Option.js");
 var Result$Rationale = require("rationale/src/Result.js");
 var HandsOnTable$Client = require("../utils/HandsOnTable.bs.js");
+var UseRouterForLinks$Client = require("../utils/UseRouterForLinks.bs.js");
 
 function toAgentLink(id, name) {
   return "<a href=\"/agents/" + (String(id) + ("\">" + (String(name) + "</a>")));
@@ -19,13 +20,13 @@ function toAgentLink(id, name) {
 var component = ReasonReact.statelessComponent("Measurables");
 
 function perEl(e) {
-  var match = e[/* bot */0];
+  var match = e[/* bot */1];
   if (match !== undefined) {
     var r = match;
     return Js_dict.fromList(/* :: */[
                 /* tuple */[
                   "name",
-                  toAgentLink(r[/* id */2], Option$Rationale.$$default("", r[/* name */3]))
+                  toAgentLink(e[/* id */0], Option$Rationale.$$default("", r[/* name */3]))
                 ],
                 /* :: */[
                   /* tuple */[
@@ -48,13 +49,12 @@ function perEl(e) {
                 ]
               ]);
   } else {
-    var match$1 = e[/* user */1];
+    var match$1 = e[/* user */2];
     if (match$1 !== undefined) {
-      var r$1 = match$1;
       return Js_dict.fromList(/* :: */[
                   /* tuple */[
                     "name",
-                    toAgentLink(r$1[/* id */0], r$1[/* name */1])
+                    toAgentLink(e[/* id */0], match$1[/* name */1])
                   ],
                   /* :: */[
                     /* tuple */[
@@ -109,12 +109,12 @@ function make() {
                                             HandsOnTable$Client.makeColumn("competitorType", undefined, undefined, /* () */0),
                                             HandsOnTable$Client.makeColumn("description", undefined, undefined, /* () */0)
                                           ];
-                                          return React.createElement("div", undefined, ReasonReact.element(undefined, undefined, HandsOnTable$Client.make(data, columns, /* array */[
-                                                              "Name",
-                                                              "Type",
-                                                              "CompetitorType",
-                                                              "Description"
-                                                            ], /* array */[])));
+                                          return React.createElement("div", undefined, ReasonReact.element(undefined, undefined, UseRouterForLinks$Client.make(/* array */[ReasonReact.element(undefined, undefined, HandsOnTable$Client.make(data, columns, /* array */[
+                                                                        "Name",
+                                                                        "Type",
+                                                                        "CompetitorType",
+                                                                        "Description"
+                                                                      ], /* array */[]))])));
                                         })));
                       })
                   ]);

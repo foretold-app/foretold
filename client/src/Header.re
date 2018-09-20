@@ -32,7 +32,7 @@ let make = _children => {
       <Col span=24>
         <Header className=Styles.header>
           <Antd_Menu className=Styles.menu mode=`Horizontal theme=`Light>
-            <Antd_Menu.Item> (link("/users", "Users")) </Antd_Menu.Item>
+            <Antd_Menu.Item> (link("/agents", "Agents")) </Antd_Menu.Item>
             <Antd_Menu.Item>
               (link("/measurables", "Measurables"))
             </Antd_Menu.Item>

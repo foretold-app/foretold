@@ -12,14 +12,14 @@ let perEl = (e: Queries.agent) =>
   switch (e) {
   | {bot: Some(r)} =>
     Js.Dict.fromList([
-      ("name", r.name |> Option.default("") |> toAgentLink(r.id)),
+      ("name", r.name |> Option.default("") |> toAgentLink(e.id)),
       ("type", "Bot"),
       ("description", r.description |> Option.default("")),
       ("competitorType", Queries.stringOfcompetitorType(r.competitorType)),
     ])
   | {user: Some(r)} =>
     Js.Dict.fromList([
-      ("name", r.name |> toAgentLink(r.id)),
+      ("name", r.name |> toAgentLink(e.id)),
       ("type", "User"),
       ("competitorType", "All"),
     ])
@@ -45,16 +45,18 @@ let make = _children => {
                 makeColumn(~data="description", ()),
               |];
               <div>
-                <HandsOnTable
-                  data
-                  columns
-                  colHeaders=[|
-                    "Name",
-                    "Type",
-                    "CompetitorType",
-                    "Description",
-                  |]
-                />
+                <UseRouterForLinks>
+                  <HandsOnTable
+                    data
+                    columns
+                    colHeaders=[|
+                      "Name",
+                      "Type",
+                      "CompetitorType",
+                      "Description",
+                    |]
+                  />
+                </UseRouterForLinks>
               </div>;
             }
           )

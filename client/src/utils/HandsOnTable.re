@@ -13,13 +13,6 @@ let makeColumn =
     : column =>
   column(~data, ~renderer, ~readOnly);
 
-let foo = [|Js.Dict.fromList([("aa", "bar"), ("bb", "charr")])|];
-
-let bar = [|
-  column(~data="aa", ~readOnly=true),
-  column(~data="bb", ~readOnly=true),
-|];
-
 let make =
     (
       ~data: array(Js.Dict.t(string)),

@@ -49,6 +49,7 @@ type bot = {
 };
 
 type agent = {
+  id: string,
   bot: option(bot),
   user: option(user),
 };
@@ -59,6 +60,7 @@ module GetAgents = [%graphql
   {|
     query getAgents {
       agents @bsRecord {
+        id
         user: User @bsRecord{
           id
           name

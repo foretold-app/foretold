@@ -3,6 +3,7 @@
 
 var $$Array = require("bs-platform/lib/js/array.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var React = require("react");
 var Js_dict = require("bs-platform/lib/js/js_dict.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Utils$Client = require("../utils/Utils.bs.js");
@@ -10,6 +11,7 @@ var Queries$Client = require("./Queries.bs.js");
 var Result$Rationale = require("rationale/src/Result.js");
 var HandsOnTable$Client = require("../utils/HandsOnTable.bs.js");
 var NormalLayout$Client = require("../utils/NormalLayout.bs.js");
+var UseRouterForLinks$Client = require("../utils/UseRouterForLinks.bs.js");
 
 function toMeasurableLink(m) {
   var id = m[/* id */0];
@@ -43,11 +45,11 @@ function showQueryList(data, _, _$1) {
     HandsOnTable$Client.makeColumn("name", "html", undefined, /* () */0),
     HandsOnTable$Client.makeColumn("createdAt", undefined, undefined, /* () */0)
   ];
-  return ReasonReact.element(undefined, undefined, HandsOnTable$Client.make(ddata, columns, /* array */[
-                  "",
-                  "",
-                  ""
-                ], /* array */[]));
+  return ReasonReact.element(undefined, undefined, UseRouterForLinks$Client.make(/* array */[ReasonReact.element(undefined, undefined, HandsOnTable$Client.make(ddata, columns, /* array */[
+                            "",
+                            "",
+                            ""
+                          ], /* array */[]))]));
 }
 
 function arg(e) {
@@ -89,7 +91,9 @@ function make() {
                     (function (o) {
                         return Result$Rationale.result(Utils$Client.idd, Utils$Client.idd, Curry._2(Result$Rationale.Infix[/* <$> */1], Curry._2(Result$Rationale.Infix[/* <$> */1], Curry._2(Result$Rationale.Infix[/* <$> */1], Utils$Client.apolloResponseToResult(o[/* result */0]), (function (d) {
                                                   return d.measurables;
-                                                })), Utils$Client.catOptionals), itemList));
+                                                })), Utils$Client.catOptionals), (function (e) {
+                                          return React.createElement("div", undefined, itemList(e));
+                                        })));
                       })
                   ]);
               var eta$1 = NormalLayout$Client.make("Measurables", ReasonReact.element(undefined, undefined, eta));

@@ -6,6 +6,7 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var Home$Client = require("./pages/Home.bs.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var User$Client = require("./pages/User.bs.js");
+var Agent$Client = require("./pages/Agent/Agent.bs.js");
 var Users$Client = require("./pages/Users.bs.js");
 var Agents$Client = require("./pages/Agents.bs.js");
 var Measurable$Client = require("./pages/Measurable/Measurable.bs.js");
@@ -24,29 +25,34 @@ function mapUrlToRoute(url) {
   if (match) {
     switch (match[0]) {
       case "agents" : 
-          if (match[1]) {
-            return /* Home */0;
-          } else {
-            return /* Agents */2;
-          }
-      case "measurables" : 
           var match$1 = match[1];
           if (match$1) {
             if (match$1[1]) {
               return /* Home */0;
             } else {
-              return /* Measurable */Block.__(1, [match$1[0]]);
+              return /* Agent */Block.__(0, [match$1[0]]);
             }
           } else {
-            return /* Measurables */3;
+            return /* Agents */2;
           }
-      case "users" : 
+      case "measurables" : 
           var match$2 = match[1];
           if (match$2) {
             if (match$2[1]) {
               return /* Home */0;
             } else {
-              return /* User */Block.__(0, [match$2[0]]);
+              return /* Measurable */Block.__(2, [match$2[0]]);
+            }
+          } else {
+            return /* Measurables */3;
+          }
+      case "users" : 
+          var match$3 = match[1];
+          if (match$3) {
+            if (match$3[1]) {
+              return /* Home */0;
+            } else {
+              return /* User */Block.__(1, [match$3[0]]);
             }
           } else {
             return /* Users */1;
@@ -79,10 +85,16 @@ function inside(r) {
           return ReasonReact.element(undefined, undefined, Home$Client.make(/* array */[]));
       
     }
-  } else if (r.tag) {
-    return ReasonReact.element(undefined, undefined, Measurable$Client.make(r[0], /* array */[]));
   } else {
-    return ReasonReact.element(undefined, undefined, User$Client.make(r[0], /* array */[]));
+    switch (r.tag | 0) {
+      case 0 : 
+          return ReasonReact.element(undefined, undefined, Agent$Client.make(r[0], /* array */[]));
+      case 1 : 
+          return ReasonReact.element(undefined, undefined, User$Client.make(r[0], /* array */[]));
+      case 2 : 
+          return ReasonReact.element(undefined, undefined, Measurable$Client.make(r[0], /* array */[]));
+      
+    }
   }
 }
 

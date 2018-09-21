@@ -76,74 +76,93 @@ let valueString = e =>
   | `PERCENTAGE => "Percentage"
   };
 
+module Styles = {
+  open Css;
+  let sidebar =
+    style([float(`left), left(px(0)), backgroundColor(hex("eee"))]);
+
+  let body = style([marginLeft(px(200)), padding(px(30))]);
+};
+
 let make = (~id: string, _children) => {
   ...component,
   render: _self => {
     let query = GetMeasurable.make(~id, ());
     <div>
-      (
-        GetMeasurableQuery.make(
-          ~variables=query##variables, ~pollInterval=50000, ({result}) =>
-          result
-          |> apolloResponseToResult
-          >>= (
-            e =>
-              e##measurable
-              |> filterOptionalResult("Measurable not found" |> ste)
+      <Antd_Layout.Sider className=Styles.sidebar>
+        <Sidebar selectedId=id />
+      </Antd_Layout.Sider>
+      <div className=Styles.body>
+        (
+          GetMeasurableQuery.make(
+            ~variables=query##variables, ~pollInterval=50000, ({result}) =>
+            result
+            |> apolloResponseToResult
+            >>= (
+              e =>
+                e##measurable
+                |> filterOptionalResult("Measurable not found" |> ste)
+            )
+            <$> (
+              e =>
+                <div>
+                  <h2> (e##name |> ReasonReact.string) </h2>
+                  <h3>
+                    (
+                      (e##isLocked ? "Locked: True" : "Locked: False")
+                      |> ReasonReact.string
+                    )
+                  </h3>
+                  <CreateMeasurementMutation>
+                    ...(
+                         (mutation, _) => {
+                           let mut =
+                             CreateMeasurement.make(
+                               ~measurableId=e##id,
+                               ~agentId="c4aefed8-83c1-422d-9364-313071287758",
+                               ~value=
+                                 encodeValue({
+                                   trio:
+                                     Some({
+                                       p25: 110.0,
+                                       p50: 170.0,
+                                       p75: 220.0,
+                                     }),
+                                   pointEstimate: None,
+                                 }),
+                               ~competitorType=`COMPETITIVE,
+                               (),
+                             );
+                           <div>
+                             <h3
+                               onClick=(
+                                 e =>
+                                   mutation(
+                                     ~variables=mut##variables,
+                                     ~refetchQueries=[|"getMeasurable"|],
+                                     (),
+                                   )
+                                   |> ignore
+                               )>
+                               (
+                                 e##valueType
+                                 |> valueString
+                                 |> ReasonReact.string
+                               )
+                             </h3>
+                             <MeasurableChart measurements=e##measurements />
+                             <MeasurableTable measurements=e##measurements />
+                           </div>;
+                         }
+                       )
+                  </CreateMeasurementMutation>
+                </div>
+            )
+            |> Result.result(idd, idd)
           )
-          <$> (
-            e =>
-              <div>
-                <h2> (e##name |> ReasonReact.string) </h2>
-                <h3>
-                  (
-                    (e##isLocked ? "Locked: True" : "Locked: False")
-                    |> ReasonReact.string
-                  )
-                </h3>
-                <CreateMeasurementMutation>
-                  ...(
-                       (mutation, _) => {
-                         let mut =
-                           CreateMeasurement.make(
-                             ~measurableId=e##id,
-                             ~agentId="c4aefed8-83c1-422d-9364-313071287758",
-                             ~value=
-                               encodeValue({
-                                 trio:
-                                   Some({p25: 110.0, p50: 170.0, p75: 220.0}),
-                                 pointEstimate: None,
-                               }),
-                             ~competitorType=`COMPETITIVE,
-                             (),
-                           );
-                         <div>
-                           <h3
-                             onClick=(
-                               e =>
-                                 mutation(
-                                   ~variables=mut##variables,
-                                   ~refetchQueries=[|"getMeasurable"|],
-                                   (),
-                                 )
-                                 |> ignore
-                             )>
-                             (
-                               e##valueType |> valueString |> ReasonReact.string
-                             )
-                           </h3>
-                           <MeasurableChart measurements=e##measurements />
-                           <MeasurableTable measurements=e##measurements />
-                         </div>;
-                       }
-                     )
-                </CreateMeasurementMutation>
-              </div>
-          )
-          |> Result.result(idd, idd)
+          |> ReasonReact.element
         )
-        |> ReasonReact.element
-      )
+      </div>
     </div>;
   },
 };

@@ -14,6 +14,19 @@ type trio('a) = {
   p75: 'a,
 };
 
+module FloatMap =
+  Map.Make({
+    type t = float;
+    let compare = compare;
+  });
+
+type scores = FloatMap.t(float);
+
+let isValid = (scores: scores) => true;
+
+let scores = FloatMap.empty;
+let myMap2 = FloatMap.add(0.3, 30.3, scores);
+
 let trioIsValid = (t: trio('a)) =>
   switch (t) {
   | {p25: Percentage(a), p50: Percentage(b), p75: Percentage(c)} =>
@@ -24,6 +37,13 @@ let trioIsValid = (t: trio('a)) =>
   };
 
 type point('a) = 'a;
+
+type percentile = float;
+type byPercentile('a) = array((percentile, 'a));
+
+/* let percentileIsValid = (t: byPercentile('a)) =>
+   switch(t) {
+   } */
 
 type distribution =
   | Trio(trio(pointValue))

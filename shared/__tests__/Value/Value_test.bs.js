@@ -2,26 +2,17 @@
 'use strict';
 
 var Jest = require("@glennsl/bs-jest/src/jest.js");
-var Value$Shared = require("../../src/Value/Value.bs.js");
+var Mapp$Shared = require("../../src/Value/Mapp.bs.js");
 
 describe("Value", (function () {
-        Jest.test("encoding / decoding", (function () {
-                var toJson = Value$Shared.encodeTrio(/* record */[
-                      /* p25 */1.0,
-                      /* p50 */2.0,
-                      /* p75 */4.1
-                    ]);
-                var fromJson = Value$Shared.parseTrio(toJson);
-                return Jest.Expect[/* toEqual */12](4.1, Jest.Expect[/* expect */0](fromJson[/* p75 */2]));
+        Jest.test("DateTimePoint", (function () {
+                var orgVal = "sdf";
+                var fromJson = Mapp$Shared.DateTimePoint[/* decode */4](Mapp$Shared.DateTimePoint[/* encode */5](orgVal));
+                return Jest.Expect[/* toEqual */12](fromJson, Jest.Expect[/* expect */0](orgVal));
               }));
-        return Jest.test("next", (function () {
-                      var toJson = Value$Shared.encodeTrio(/* record */[
-                            /* p25 */1.0,
-                            /* p50 */2.0,
-                            /* p75 */4.1
-                          ]);
-                      var fromJson = Value$Shared.parseTrio(toJson);
-                      return Jest.Expect[/* toEqual */12](4.1, Jest.Expect[/* expect */0](fromJson[/* p75 */2]));
+        return Jest.test("Percentage", (function () {
+                      var fromJson = Mapp$Shared.Percentage[/* decode */2](Mapp$Shared.Percentage[/* encode */3](3.0));
+                      return Jest.Expect[/* toEqual */12](fromJson, Jest.Expect[/* expect */0](3.0));
                     }));
       }));
 

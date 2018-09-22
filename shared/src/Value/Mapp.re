@@ -4,33 +4,55 @@ module type Point = {
   type t;
   let equal: (t, t) => bool;
   let isValid: t => bool;
+  let encodeFn: t => Js.Json.t;
+  let decodeFn: Json.Decode.decoder(t);
 };
 
 type percentile = float;
 let allTrue = e => Array.fold_left((x, y) => x && y, true, e);
 
 module MakeByPercentile = (Item: Point) => {
-  module ByPercentile =
-    Map.Make({
+  module Id =
+    Belt.Id.MakeComparable({
       type t = float;
-      let compare = compare;
+      let cmp: (float, float) => int = Pervasives.compare;
     });
-  type t = ByPercentile.t(Item.t);
 
-  let hasKey = v => ByPercentile.exists((k, _) => k == v);
-  let hasQuartiles = (map: t) =>
-    hasKey(25.0, map) && hasKey(50.0, map) && hasKey(75.0, map);
+  type t = Belt.Map.t(Id.t, Item.t, Id.identity);
 
-  let isValid = (byPercentile: t) => {
-    let itemsValid =
-      byPercentile |> ByPercentile.for_all((_, b) => Item.isValid(b));
-    itemsValid && hasQuartiles(byPercentile);
+  let hasQuartiles = (t: t) : bool =>
+    Belt.Map.has(t, 25.0) && Belt.Map.has(t, 50.0) && Belt.Map.has(t, 75.0);
+  let toDict = (t: t) =>
+    t
+    |> Belt.Map.toArray
+    |> Array.map(((a, b)) => (string_of_float(a), b))
+    |> Js.Dict.fromArray;
+
+  let fromDict = (r: Js.Dict.t(Item.t)) =>
+    r
+    |> Js.Dict.entries
+    |> Array.map(((a, b)) => (float_of_string(a), b))
+    |> Belt.Map.fromArray(~id=(module Id));
+  /* Json.Decode.float */
+  let decode = json =>
+    json
+    |> Json.Decode.field("data", Json.Decode.dict(Item.decodeFn))
+    |> fromDict;
+  let encode = (t: t) => {
+    let dic = t |> toDict;
+    Json.Encode.(
+      object_([
+        ("dataType", Json.Encode.string("MakeByPercentile")),
+        (
+          "data",
+          dic
+          |> Js.Dict.map((. value) => Item.encodeFn(value))
+          |> Json.Encode.dict,
+        ),
+      ])
+    );
   };
 };
-
-/* let decode = json =>
-   json |> Json.Decode.field("data", Json.Decode.dict(Item.decodeType)); */
-type t = Js.Dict.t(int);
 
 module FloatPoint = {
   type t = float;
@@ -47,6 +69,8 @@ module FloatPoint = {
         ("data", Json.Encode.float(i)),
       ])
     );
+  let encodeFn = Json.Encode.float;
+  let decodeFn = Json.Decode.float;
 };
 
 module DateTimePoint = {
@@ -63,6 +87,9 @@ module DateTimePoint = {
         ("data", Json.Encode.string(i)),
       ])
     );
+
+  let encodeFn = Json.Encode.string;
+  let decodeFn = Json.Decode.string;
 };
 
 module FloatPercentiles = MakeByPercentile(FloatPoint);

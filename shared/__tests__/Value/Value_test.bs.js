@@ -2,6 +2,7 @@
 'use strict';
 
 var Jest = require("@glennsl/bs-jest/src/jest.js");
+var Curry = require("bs-platform/lib/js/curry.js");
 var Mapp$Shared = require("../../src/Value/Mapp.bs.js");
 
 describe("Value", (function () {
@@ -10,9 +11,14 @@ describe("Value", (function () {
                 var fromJson = Mapp$Shared.DateTimePoint[/* decode */4](Mapp$Shared.DateTimePoint[/* encode */5](orgVal));
                 return Jest.Expect[/* toEqual */12](fromJson, Jest.Expect[/* expect */0](orgVal));
               }));
-        return Jest.test("Percentage", (function () {
-                      var fromJson = Mapp$Shared.Percentage[/* decode */2](Mapp$Shared.Percentage[/* encode */3](3.0));
-                      return Jest.Expect[/* toEqual */12](fromJson, Jest.Expect[/* expect */0](3.0));
+        Jest.test("Percentage", (function () {
+                var fromJson = Mapp$Shared.Percentage[/* decode */2](Mapp$Shared.Percentage[/* encode */3](3.0));
+                return Jest.Expect[/* toEqual */12](fromJson, Jest.Expect[/* expect */0](3.0));
+              }));
+        return Jest.test("FloatPercentiles", (function () {
+                      var foo = Mapp$Shared.FloatPercentiles[/* ByPercentile */0][/* empty */0];
+                      Curry._3(Mapp$Shared.FloatPercentiles[/* ByPercentile */0][/* add */3], 0.1, 0.2, foo);
+                      return Jest.Expect[/* toEqual */12](1, Jest.Expect[/* expect */0](1));
                     }));
       }));
 

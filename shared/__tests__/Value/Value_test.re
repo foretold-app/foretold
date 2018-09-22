@@ -1,74 +1,83 @@
 open Jest;
 
 open Expect;
-open Mapp;
+open Value;
 
-module MakeByPercentilee = (()) => {
-  module Id =
-    Belt.Id.MakeComparable({
-      type t = float;
-      let cmp: (float, float) => int = Pervasives.compare;
+let () = {
+  describe("FloatPercentiles", () => {
+    test("#hasQuartiles true", () =>
+      FloatPercentiles.fromArray([|
+        (25.0, 1.0),
+        (50.0, 3.0),
+        (75.0, 10.0),
+      |])
+      |> FloatPercentiles.hasQuartiles
+      |> expect
+      |> toEqual(true)
+    );
+    test("#hasQuartiles false", () =>
+      FloatPercentiles.fromArray([|
+        (25.0, 1.0),
+        (50.0, 3.0),
+        (78.0, 10.0),
+      |])
+      |> FloatPercentiles.hasQuartiles
+      |> expect
+      |> toEqual(false)
+    );
+    test("#encode", () => {
+      let json =
+        Json.parseOrRaise(
+          {| {
+        "dataType": "floatByPercentile",
+        "data":   { "25.": 1.0, "50.": 3.0, "78.":10.0 }
+      } |},
+        );
+      FloatPercentiles.fromArray([|
+        (25.0, 1.0),
+        (50.0, 3.0),
+        (78.0, 10.0),
+      |])
+      |> FloatPercentiles.encode
+      |> expect
+      |> toEqual(json);
     });
-
-  type t = Belt.Map.t(Id.t, float, Id.identity);
-
-  let hasQuertiles = (t: t) : bool =>
-    Belt.Map.has(t, 25.0) && Belt.Map.has(t, 50.0) && Belt.Map.has(t, 75.0);
-  let toDict = (t: t) =>
-    t
-    |> Belt.Map.toArray
-    |> Array.map(((a, b)) => (string_of_float(a), b))
-    |> Js.Dict.fromArray;
-
-  let fromDict = (r: Js.Dict.t(float)) => {
-    let foo =
-      r
-      |> Js.Dict.entries
-      |> Array.map(((a, b)) => (float_of_string(a), b))
-      |> Belt.Map.fromArray(~id=(module Id));
-    foo;
-  };
-};
-
-module FltCmp =
-  Belt.Id.MakeComparable({
-    type t = float;
-    let cmp: (float, float) => int = Pervasives.compare;
   });
 
-let aa = Belt.Map.fromArray([|(1.0, 2.0)|]);
-let myMap = Belt.Map.make(~id=(module FltCmp));
-/* let bb = Belt.Map.fromArray([|(1.0, 2.0)|], ~id=(module FltCmp)); */
-let s0 = Belt.Map.fromArray([|(2.3, 4.0)|], ~id=(module FltCmp));
-
-let bar =
-  Belt.Map.toArray(s0) |> Array.map(((a, b)) => (string_of_float(a), b));
-let char = Js.Dict.fromArray(bar);
-let dictToMap =
-    (a: Js.Dict.t(int))
-    : Belt.Map.t(FltCmp.t, int, FltCmp.identity) => s0;
-
-let () =
   describe("Value", () => {
-    test("DateTimePoint", () => {
-      let orgVal = "sdf";
-      let fromJson = orgVal |> DateTimePoint.encode |> DateTimePoint.decode;
-      expect(orgVal) |> toEqual(fromJson);
+    test("#encode DateTimePercentiles", () => {
+      let json =
+        Json.parseOrRaise(
+          {| {
+        "dataType": "floatByPercentile",
+        "data":   { "25.": 1.0, "50.": 3.0, "75.":10.0 }
+      } |},
+        );
+      let floatPercentiles =
+        FloatPercentiles.fromArray([|
+          (25.0, 1.0),
+          (50.0, 3.0),
+          (75.0, 10.0),
+        |]);
+      let value = FloatPercentiles(floatPercentiles);
+      value |> encodee |> expect |> toEqual(json);
     });
-    test("Percentage", () => {
-      let orgVal = 3.0;
-      let fromJson = orgVal |> Percentage.encode |> Percentage.decode;
-      expect(orgVal) |> toEqual(fromJson);
-    });
-    test("FloatPercentiles", () => {
-      let orgVal = 3.0;
-      let foo = FloatPercentiles.ByPercentile.empty;
-      let bar = FloatPercentiles.ByPercentile.add(0.1, 0.2, foo);
-      expect(1) |> toEqual(1);
+    test("#decode DateTimePercentiles", () => {
+      let json =
+        Json.parseOrRaise(
+          {| {
+        "dataType": "floatByPercentile",
+        "data":   { "25.": 1.0, "50.": 3.0, "75.":10.0 }
+      } |},
+        );
+      let floatPercentiles =
+        FloatPercentiles.fromArray([|
+          (25.0, 1.0),
+          (50.0, 3.0),
+          (75.0, 10.0),
+        |]);
+      let value = FloatPercentiles(floatPercentiles);
+      json |> decode |> expect |> toEqual(value);
     });
   });
-/* test("next", () => {
-     let toJson = Value.encodeTrio({p25: 1.0, p50: 2.0, p75: 4.1});
-     let fromJson = Value.parseTrio(toJson);
-     expect(fromJson.p75) |> toEqual(4.1);
-   }); */
+};

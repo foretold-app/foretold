@@ -2,23 +2,100 @@
 'use strict';
 
 var Jest = require("@glennsl/bs-jest/src/jest.js");
-var Curry = require("bs-platform/lib/js/curry.js");
-var Mapp$Shared = require("../../src/Value/Mapp.bs.js");
+var Json = require("@glennsl/bs-json/src/Json.bs.js");
+var Block = require("bs-platform/lib/js/block.js");
+var Value$Shared = require("../../src/Value/Value.bs.js");
+
+describe("FloatPercentiles", (function () {
+        Jest.test("#hasQuartiles true", (function () {
+                return Jest.Expect[/* toEqual */12](true, Jest.Expect[/* expect */0](Value$Shared.FloatPercentiles[/* hasQuartiles */2](Value$Shared.FloatPercentiles[/* fromArray */5](/* array */[
+                                        /* tuple */[
+                                          25.0,
+                                          1.0
+                                        ],
+                                        /* tuple */[
+                                          50.0,
+                                          3.0
+                                        ],
+                                        /* tuple */[
+                                          75.0,
+                                          10.0
+                                        ]
+                                      ]))));
+              }));
+        Jest.test("#hasQuartiles false", (function () {
+                return Jest.Expect[/* toEqual */12](false, Jest.Expect[/* expect */0](Value$Shared.FloatPercentiles[/* hasQuartiles */2](Value$Shared.FloatPercentiles[/* fromArray */5](/* array */[
+                                        /* tuple */[
+                                          25.0,
+                                          1.0
+                                        ],
+                                        /* tuple */[
+                                          50.0,
+                                          3.0
+                                        ],
+                                        /* tuple */[
+                                          78.0,
+                                          10.0
+                                        ]
+                                      ]))));
+              }));
+        return Jest.test("#encode", (function () {
+                      var json = Json.parseOrRaise(" {\n        \"dataType\": \"floatByPercentile\",\n        \"data\":   { \"25.\": 1.0, \"50.\": 3.0, \"78.\":10.0 }\n      } ");
+                      return Jest.Expect[/* toEqual */12](json, Jest.Expect[/* expect */0](Value$Shared.FloatPercentiles[/* encode */8](Value$Shared.FloatPercentiles[/* fromArray */5](/* array */[
+                                              /* tuple */[
+                                                25.0,
+                                                1.0
+                                              ],
+                                              /* tuple */[
+                                                50.0,
+                                                3.0
+                                              ],
+                                              /* tuple */[
+                                                78.0,
+                                                10.0
+                                              ]
+                                            ]))));
+                    }));
+      }));
 
 describe("Value", (function () {
-        Jest.test("DateTimePoint", (function () {
-                var orgVal = "sdf";
-                var fromJson = Mapp$Shared.DateTimePoint[/* decode */4](Mapp$Shared.DateTimePoint[/* encode */5](orgVal));
-                return Jest.Expect[/* toEqual */12](fromJson, Jest.Expect[/* expect */0](orgVal));
+        Jest.test("#encode DateTimePercentiles", (function () {
+                var json = Json.parseOrRaise(" {\n        \"dataType\": \"floatByPercentile\",\n        \"data\":   { \"25.\": 1.0, \"50.\": 3.0, \"75.\":10.0 }\n      } ");
+                var floatPercentiles = Value$Shared.FloatPercentiles[/* fromArray */5](/* array */[
+                      /* tuple */[
+                        25.0,
+                        1.0
+                      ],
+                      /* tuple */[
+                        50.0,
+                        3.0
+                      ],
+                      /* tuple */[
+                        75.0,
+                        10.0
+                      ]
+                    ]);
+                var value = /* FloatPercentiles */Block.__(1, [floatPercentiles]);
+                return Jest.Expect[/* toEqual */12](json, Jest.Expect[/* expect */0](Value$Shared.encodee(value)));
               }));
-        Jest.test("Percentage", (function () {
-                var fromJson = Mapp$Shared.Percentage[/* decode */2](Mapp$Shared.Percentage[/* encode */3](3.0));
-                return Jest.Expect[/* toEqual */12](fromJson, Jest.Expect[/* expect */0](3.0));
-              }));
-        return Jest.test("FloatPercentiles", (function () {
-                      var foo = Mapp$Shared.FloatPercentiles[/* ByPercentile */0][/* empty */0];
-                      Curry._3(Mapp$Shared.FloatPercentiles[/* ByPercentile */0][/* add */3], 0.1, 0.2, foo);
-                      return Jest.Expect[/* toEqual */12](1, Jest.Expect[/* expect */0](1));
+        return Jest.test("#decode DateTimePercentiles", (function () {
+                      var json = Json.parseOrRaise(" {\n        \"dataType\": \"floatByPercentile\",\n        \"data\":   { \"25.\": 1.0, \"50.\": 3.0, \"75.\":10.0 }\n      } ");
+                      var floatPercentiles = Value$Shared.FloatPercentiles[/* fromArray */5](/* array */[
+                            /* tuple */[
+                              25.0,
+                              1.0
+                            ],
+                            /* tuple */[
+                              50.0,
+                              3.0
+                            ],
+                            /* tuple */[
+                              75.0,
+                              10.0
+                            ]
+                          ]);
+                      var value = /* FloatPercentiles */Block.__(1, [floatPercentiles]);
+                      return Jest.Expect[/* toEqual */12](value, Jest.Expect[/* expect */0](Value$Shared.decode(json)));
                     }));
       }));
 

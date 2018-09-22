@@ -4,6 +4,7 @@
 var $$Array = require("bs-platform/lib/js/array.js");
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var Js_exn = require("bs-platform/lib/js/js_exn.js");
 var Belt_Id = require("bs-platform/lib/js/belt_Id.js");
 var Js_dict = require("bs-platform/lib/js/js_dict.js");
 var Belt_Map = require("bs-platform/lib/js/belt_Map.js");
@@ -12,6 +13,8 @@ var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var Caml_format = require("bs-platform/lib/js/caml_format.js");
 var Json_decode = require("@glennsl/bs-json/src/Json_decode.bs.js");
 var Json_encode = require("@glennsl/bs-json/src/Json_encode.bs.js");
+var Result$Rationale = require("rationale/src/Result.js");
+var Function$Rationale = require("rationale/src/Function.js");
 
 function allTrue(e) {
   return $$Array.fold_left((function (x, y) {
@@ -23,6 +26,44 @@ function allTrue(e) {
               }), true, e);
 }
 
+function decodeResult(fn, json) {
+  try {
+    return /* Ok */Block.__(0, [Curry._1(fn, json)]);
+  }
+  catch (raw_exn){
+    var exn = Js_exn.internalToOCamlException(raw_exn);
+    if (exn[0] === Json_decode.DecodeError) {
+      return /* Error */Block.__(1, [exn[1]]);
+    } else {
+      return /* Error */Block.__(1, ["Unknown Error."]);
+    }
+  }
+}
+
+function makeDecode(decodeFn) {
+  return (function (param) {
+      return decodeResult((function (param) {
+                    return Json_decode.field("data", decodeFn, param);
+                  }), param);
+    });
+}
+
+function makeEncode(encodeFn, name, i) {
+  return Json_encode.object_(/* :: */[
+              /* tuple */[
+                "dataType",
+                name
+              ],
+              /* :: */[
+                /* tuple */[
+                  "data",
+                  Curry._1(encodeFn, i)
+                ],
+                /* [] */0
+              ]
+            ]);
+}
+
 function MakeByPercentile(Item) {
   var cmp = Caml_obj.caml_compare;
   var Id = Belt_Id.MakeComparable(/* module */[/* cmp */cmp]);
@@ -30,6 +71,16 @@ function MakeByPercentile(Item) {
   var hasQuartiles = function (t) {
     if (Belt_Map.has(t, 25.0) && Belt_Map.has(t, 50.0)) {
       return Belt_Map.has(t, 75.0);
+    } else {
+      return false;
+    }
+  };
+  var isValid = function (t) {
+    var itemsValid = Belt_Map.every(t, (function (_, v) {
+            return Curry._1(Item[/* isValid */1], v);
+          }));
+    if (itemsValid) {
+      return hasQuartiles(t);
     } else {
       return false;
     }
@@ -58,11 +109,19 @@ function MakeByPercentile(Item) {
                             ];
                     }), Js_dict.entries(r)));
   };
-  var decode = function (json) {
-    var partial_arg = Item[/* decodeFn */5];
-    return fromDict(Json_decode.field("data", (function (param) {
-                      return Json_decode.dict(partial_arg, param);
-                    }), json));
+  var partial_arg = Item[/* decodeFn */5];
+  var partial_arg$1 = function (param) {
+    return Json_decode.dict(partial_arg, param);
+  };
+  var partial_arg$2 = function (param) {
+    return Json_decode.field("data", partial_arg$1, param);
+  };
+  var partial_arg$3 = Function$Rationale.Infix[/* ||> */1];
+  var partial_arg$4 = function (param) {
+    return partial_arg$3(partial_arg$2, fromDict, param);
+  };
+  var decode = function (param) {
+    return decodeResult(partial_arg$4, param);
   };
   var encode = function (t) {
     var dic = toDict(t);
@@ -86,6 +145,7 @@ function MakeByPercentile(Item) {
           /* Id */Id,
           /* name */name,
           /* hasQuartiles */hasQuartiles,
+          /* isValid */isValid,
           /* toArray */toArray,
           /* toDict */toDict,
           /* fromArray */fromArray,
@@ -93,26 +153,6 @@ function MakeByPercentile(Item) {
           /* decode */decode,
           /* encode */encode
         ];
-}
-
-function makeDecode(decodeFn, json) {
-  return Json_decode.field("data", decodeFn, json);
-}
-
-function makeEncode(encodeFn, name, i) {
-  return Json_encode.object_(/* :: */[
-              /* tuple */[
-                "dataType",
-                name
-              ],
-              /* :: */[
-                /* tuple */[
-                  "data",
-                  Curry._1(encodeFn, i)
-                ],
-                /* [] */0
-              ]
-            ]);
 }
 
 var itemName = "float";
@@ -132,7 +172,9 @@ function encodeFn(prim) {
 }
 
 function decode(param) {
-  return Json_decode.field("data", Json_decode.$$float, param);
+  return decodeResult((function (param) {
+                return Json_decode.field("data", Json_decode.$$float, param);
+              }), param);
 }
 
 function encode(param) {
@@ -167,7 +209,9 @@ function encodeFn$1(prim) {
 }
 
 function decode$1(param) {
-  return Json_decode.field("data", Json_decode.string, param);
+  return decodeResult((function (param) {
+                return Json_decode.field("data", Json_decode.string, param);
+              }), param);
 }
 
 function encode$1(param) {
@@ -194,6 +238,17 @@ var name$2 = "floatByPercentile";
 function hasQuartiles(t) {
   if (Belt_Map.has(t, 25.0) && Belt_Map.has(t, 50.0)) {
     return Belt_Map.has(t, 75.0);
+  } else {
+    return false;
+  }
+}
+
+function isValid$2(t) {
+  var itemsValid = Belt_Map.every(t, (function (_, _$1) {
+          return true;
+        }));
+  if (itemsValid) {
+    return hasQuartiles(t);
   } else {
     return false;
   }
@@ -227,10 +282,18 @@ function fromDict(r) {
                   }), Js_dict.entries(r)));
 }
 
-function decode$2(json) {
-  return fromDict(Json_decode.field("data", (function (param) {
-                    return Json_decode.dict(Json_decode.$$float, param);
-                  }), json));
+var partial_arg = Function$Rationale.Infix[/* ||> */1];
+
+function partial_arg$1(param) {
+  return partial_arg((function (param) {
+                return Json_decode.field("data", (function (param) {
+                              return Json_decode.dict(Json_decode.$$float, param);
+                            }), param);
+              }), fromDict, param);
+}
+
+function decode$2(param) {
+  return decodeResult(partial_arg$1, param);
 }
 
 function encode$2(t) {
@@ -256,6 +319,7 @@ var FloatPercentiles = /* module */[
   /* Id */Id,
   /* name */name$2,
   /* hasQuartiles */hasQuartiles,
+  /* isValid */isValid$2,
   /* toArray */toArray,
   /* toDict */toDict,
   /* fromArray */fromArray,
@@ -273,6 +337,17 @@ var name$3 = "dateTimeByPercentile";
 function hasQuartiles$1(t) {
   if (Belt_Map.has(t, 25.0) && Belt_Map.has(t, 50.0)) {
     return Belt_Map.has(t, 75.0);
+  } else {
+    return false;
+  }
+}
+
+function isValid$3(t) {
+  var itemsValid = Belt_Map.every(t, (function (_, _$1) {
+          return true;
+        }));
+  if (itemsValid) {
+    return hasQuartiles$1(t);
   } else {
     return false;
   }
@@ -306,10 +381,18 @@ function fromDict$1(r) {
                   }), Js_dict.entries(r)));
 }
 
-function decode$3(json) {
-  return fromDict$1(Json_decode.field("data", (function (param) {
-                    return Json_decode.dict(Json_decode.string, param);
-                  }), json));
+var partial_arg$2 = Function$Rationale.Infix[/* ||> */1];
+
+function partial_arg$3(param) {
+  return partial_arg$2((function (param) {
+                return Json_decode.field("data", (function (param) {
+                              return Json_decode.dict(Json_decode.string, param);
+                            }), param);
+              }), fromDict$1, param);
+}
+
+function decode$3(param) {
+  return decodeResult(partial_arg$3, param);
 }
 
 function encode$3(t) {
@@ -335,6 +418,7 @@ var DateTimePercentiles = /* module */[
   /* Id */Id$1,
   /* name */name$3,
   /* hasQuartiles */hasQuartiles$1,
+  /* isValid */isValid$3,
   /* toArray */toArray$1,
   /* toDict */toDict$1,
   /* fromArray */fromArray$1,
@@ -345,7 +429,7 @@ var DateTimePercentiles = /* module */[
 
 var name$4 = "percentage";
 
-function isValid$2(i) {
+function isValid$4(i) {
   if (i <= 0.0) {
     return i <= 100.0;
   } else {
@@ -358,7 +442,9 @@ function encodeFn$2(prim) {
 }
 
 function decode$4(param) {
-  return Json_decode.field("data", Json_decode.$$float, param);
+  return decodeResult((function (param) {
+                return Json_decode.field("data", Json_decode.$$float, param);
+              }), param);
 }
 
 function encode$4(param) {
@@ -367,7 +453,7 @@ function encode$4(param) {
 
 var Percentage = /* module */[
   /* name */name$4,
-  /* isValid */isValid$2,
+  /* isValid */isValid$4,
   /* decodeFn */Json_decode.$$float,
   /* encodeFn */encodeFn$2,
   /* decode */decode$4,
@@ -376,7 +462,7 @@ var Percentage = /* module */[
 
 var name$5 = "binary";
 
-function isValid$3(i) {
+function isValid$5(i) {
   if (i === 0) {
     return true;
   } else {
@@ -389,7 +475,9 @@ function encodeFn$3(prim) {
 }
 
 function decode$5(param) {
-  return Json_decode.field("data", Json_decode.$$int, param);
+  return decodeResult((function (param) {
+                return Json_decode.field("data", Json_decode.$$int, param);
+              }), param);
 }
 
 function encode$5(param) {
@@ -398,47 +486,103 @@ function encode$5(param) {
 
 var Binary = /* module */[
   /* name */name$5,
-  /* isValid */isValid$3,
+  /* isValid */isValid$5,
   /* decodeFn */Json_decode.$$int,
   /* encodeFn */encodeFn$3,
   /* decode */decode$5,
   /* encode */encode$5
 ];
 
+function convert(json, decoder, toValue) {
+  return Curry._2(Result$Rationale.Infix[/* <$> */1], Curry._1(decoder, json), toValue);
+}
+
 function decode$6(json) {
   var t = Json_decode.field("dataType", Json_decode.string, json);
   if (t === name) {
-    return /* FloatPoint */Block.__(0, [Json_decode.field("data", Json_decode.$$float, json)]);
+    return convert(json, decode, (function (e) {
+                  return /* `FloatPoint */[
+                          -606499532,
+                          e
+                        ];
+                }));
   } else if (t === name$1) {
-    return /* DateTimePoint */Block.__(2, [Json_decode.field("data", Json_decode.string, json)]);
-  } else if (t === name$4) {
-    return /* Percentage */Block.__(4, [Json_decode.field("data", Json_decode.$$float, json)]);
-  } else if (t === name$5) {
-    return /* Binary */Block.__(5, [Json_decode.field("data", Json_decode.$$int, json)]);
+    return convert(json, decode$1, (function (e) {
+                  return /* `DateTimePoint */[
+                          -802738987,
+                          e
+                        ];
+                }));
   } else if (t === name$3) {
-    return /* DateTimePercentiles */Block.__(3, [decode$3(json)]);
+    return convert(json, decode$3, (function (e) {
+                  return /* `DateTimePercentiles */[
+                          1061801627,
+                          e
+                        ];
+                }));
   } else if (t === name$2) {
-    return /* FloatPercentiles */Block.__(1, [decode$2(json)]);
+    return convert(json, decode$2, (function (e) {
+                  return /* `FloatPercentiles */[
+                          393953338,
+                          e
+                        ];
+                }));
+  } else if (t === name$4) {
+    return convert(json, decode$4, (function (e) {
+                  return /* `Percentage */[
+                          -488794310,
+                          e
+                        ];
+                }));
+  } else if (t === name$5) {
+    return convert(json, decode$5, (function (e) {
+                  return /* `Binary */[
+                          564146209,
+                          e
+                        ];
+                }));
   } else {
-    return /* FloatPoint */Block.__(0, [0.1]);
+    return /* Error */Block.__(1, ["No valid parser found. Check dataType field."]);
   }
 }
 
-function encodee(t) {
-  switch (t.tag | 0) {
-    case 0 : 
-        return makeEncode(encodeFn, name, t[0]);
-    case 1 : 
-        return encode$2(t[0]);
-    case 2 : 
-        return makeEncode(encodeFn$1, name$1, t[0]);
-    case 3 : 
-        return encode$3(t[0]);
-    case 4 : 
-        return makeEncode(encodeFn$2, name$4, t[0]);
-    case 5 : 
-        return makeEncode(encodeFn$3, name$5, t[0]);
-    
+function encode$6(t) {
+  var variant = t[0];
+  if (variant >= -488794310) {
+    if (variant >= 564146209) {
+      if (variant >= 1061801627) {
+        return encode$3(t[1]);
+      } else {
+        return makeEncode(encodeFn$3, name$5, t[1]);
+      }
+    } else if (variant >= 393953338) {
+      return encode$2(t[1]);
+    } else {
+      return makeEncode(encodeFn$2, name$4, t[1]);
+    }
+  } else if (variant >= -606499532) {
+    return makeEncode(encodeFn, name, t[1]);
+  } else {
+    return makeEncode(encodeFn$1, name$1, t[1]);
+  }
+}
+
+function isValid$6(t) {
+  var variant = t[0];
+  if (variant >= -488794310) {
+    if (variant >= 564146209) {
+      if (variant >= 1061801627) {
+        return isValid$3(t[1]);
+      } else {
+        return isValid$5(t[1]);
+      }
+    } else if (variant >= 393953338) {
+      return isValid$2(t[1]);
+    } else {
+      return isValid$4(t[1]);
+    }
+  } else {
+    return true;
   }
 }
 
@@ -449,15 +593,18 @@ var dataType = "dataType";
 exports.allTrue = allTrue;
 exports.data = data;
 exports.dataType = dataType;
-exports.MakeByPercentile = MakeByPercentile;
+exports.decodeResult = decodeResult;
 exports.makeDecode = makeDecode;
 exports.makeEncode = makeEncode;
+exports.MakeByPercentile = MakeByPercentile;
 exports.FloatPoint = FloatPoint;
 exports.DateTimePoint = DateTimePoint;
 exports.FloatPercentiles = FloatPercentiles;
 exports.DateTimePercentiles = DateTimePercentiles;
 exports.Percentage = Percentage;
 exports.Binary = Binary;
+exports.convert = convert;
 exports.decode = decode$6;
-exports.encodee = encodee;
+exports.encode = encode$6;
+exports.isValid = isValid$6;
 /* Id Not a pure module */

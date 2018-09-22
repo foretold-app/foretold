@@ -1,4 +1,7 @@
 open Rationale;
+open Rationale.Function.Infix;
+open Rationale.Result.Infix;
+open Belt.Result;
 
 module type Point = {
   type t;
@@ -16,6 +19,23 @@ let allTrue = e => Array.fold_left((x, y) => x && y, true, e);
 let data = "data";
 let dataType = "dataType";
 
+let decodeResult = (fn, json) =>
+  try (Ok(json |> fn)) {
+  | Json_decode.DecodeError(e) => Error(e)
+  | _ => Error("Unknown Error.")
+  };
+
+let makeDecode = decodeFn =>
+  decodeResult(Json.Decode.field("data", decodeFn));
+
+let makeEncode = (encodeFn, name: string, i: 'a) =>
+  Json.Encode.(
+    object_([
+      ("dataType", Json.Encode.string(name)),
+      ("data", encodeFn(i)),
+    ])
+  );
+
 module MakeByPercentile = (Item: Point) => {
   module Id =
     Belt.Id.MakeComparable({
@@ -29,6 +49,11 @@ module MakeByPercentile = (Item: Point) => {
 
   let hasQuartiles = (t: t) : bool =>
     Belt.Map.has(t, 25.0) && Belt.Map.has(t, 50.0) && Belt.Map.has(t, 75.0);
+
+  let isValid = (t: t) : bool => {
+    let itemsValid = Belt.Map.every(t, (_, v) => Item.isValid(v));
+    itemsValid && hasQuartiles(t);
+  };
 
   let toArray = (t: t) => t |> Belt.Map.toArray;
 
@@ -46,10 +71,10 @@ module MakeByPercentile = (Item: Point) => {
     |> Array.map(((a, b)) => (float_of_string(a), b))
     |> Belt.Map.fromArray(~id=(module Id));
 
-  let decode = json =>
-    json
-    |> Json.Decode.field("data", Json.Decode.dict(Item.decodeFn))
-    |> fromDict;
+  let decode =
+    decodeResult(
+      Json.Decode.field("data", Json.Decode.dict(Item.decodeFn)) ||> fromDict,
+    );
 
   let encode = (t: t) => {
     let dic = t |> toDict;
@@ -66,17 +91,6 @@ module MakeByPercentile = (Item: Point) => {
     );
   };
 };
-
-let makeDecode = (decodeFn, json) =>
-  json |> Json.Decode.field("data", decodeFn);
-
-let makeEncode = (encodeFn, name: string, i: 'a) =>
-  Json.Encode.(
-    object_([
-      ("dataType", Json.Encode.string(name)),
-      ("data", encodeFn(i)),
-    ])
-  );
 
 module FloatPoint = {
   type t = float;
@@ -130,36 +144,51 @@ module Binary = {
   let encode = makeEncode(encodeFn, name);
 };
 
-type t =
-  | FloatPoint(FloatPoint.t)
-  | FloatPercentiles(FloatPercentiles.t)
-  | DateTimePoint(DateTimePoint.t)
-  | DateTimePercentiles(DateTimePercentiles.t)
-  | Percentage(Percentage.t)
-  | Binary(Binary.t);
+type t = [
+  | `FloatPoint(FloatPoint.t)
+  | `FloatPercentiles(FloatPercentiles.t)
+  | `DateTimePoint(DateTimePoint.t)
+  | `DateTimePercentiles(DateTimePercentiles.t)
+  | `Percentage(Percentage.t)
+  | `Binary(Binary.t)
+];
 
-let decode = json => {
+let convert = (json, decoder, toValue) => json |> decoder <$> toValue;
+
+let decode = (json: Js.Json.t) : Belt.Result.t(t, string) => {
   let t = json |> Json.Decode.field("dataType", Json.Decode.string);
   switch (t) {
-  | _ when t == FloatPoint.name => FloatPoint(FloatPoint.decode(json))
+  | _ when t == FloatPoint.name =>
+    convert(json, FloatPoint.decode, e => `FloatPoint(e))
   | _ when t == DateTimePoint.name =>
-    DateTimePoint(DateTimePoint.decode(json))
-  | _ when t == Percentage.name => Percentage(Percentage.decode(json))
-  | _ when t == Binary.name => Binary(Binary.decode(json))
+    convert(json, DateTimePoint.decode, e => `DateTimePoint(e))
   | _ when t == DateTimePercentiles.name =>
-    DateTimePercentiles(DateTimePercentiles.decode(json))
+    convert(json, DateTimePercentiles.decode, e => `DateTimePercentiles(e))
   | _ when t == FloatPercentiles.name =>
-    FloatPercentiles(FloatPercentiles.decode(json))
-  | _ => FloatPoint(0.1)
+    convert(json, FloatPercentiles.decode, e => `FloatPercentiles(e))
+  | _ when t == Percentage.name =>
+    convert(json, Percentage.decode, e => `Percentage(e))
+  | _ when t == Binary.name => convert(json, Binary.decode, e => `Binary(e))
+  | _ => Error("No valid parser found. Check dataType field.")
   };
 };
 
-let encodee = (t: t) =>
+let encode = (t: t) =>
   switch (t) {
-  | FloatPoint(f) => FloatPoint.encode(f)
-  | DateTimePoint(f) => DateTimePoint.encode(f)
-  | DateTimePercentiles(f) => DateTimePercentiles.encode(f)
-  | FloatPercentiles(f) => FloatPercentiles.encode(f)
-  | Percentage(f) => Percentage.encode(f)
-  | Binary(f) => Binary.encode(f)
+  | `FloatPoint(f) => FloatPoint.encode(f)
+  | `DateTimePoint(f) => DateTimePoint.encode(f)
+  | `DateTimePercentiles(f) => DateTimePercentiles.encode(f)
+  | `FloatPercentiles(f) => FloatPercentiles.encode(f)
+  | `Percentage(f) => Percentage.encode(f)
+  | `Binary(f) => Binary.encode(f)
+  };
+
+let isValid = (t: t) =>
+  switch (t) {
+  | `FloatPoint(f) => FloatPoint.isValid(f)
+  | `DateTimePoint(f) => DateTimePoint.isValid(f)
+  | `DateTimePercentiles(f) => DateTimePercentiles.isValid(f)
+  | `FloatPercentiles(f) => FloatPercentiles.isValid(f)
+  | `Percentage(f) => Percentage.isValid(f)
+  | `Binary(f) => Binary.isValid(f)
   };

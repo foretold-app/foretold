@@ -328,7 +328,7 @@ function isValid(t) {
     }
   } else if (variant >= -488794310) {
     var i$1 = t[1];
-    if (i$1 <= 0.0) {
+    if (0.0 <= i$1) {
       return i$1 <= 100.0;
     } else {
       return false;

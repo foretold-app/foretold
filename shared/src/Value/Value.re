@@ -112,7 +112,7 @@ let isValid = (t: t) =>
   | `FloatPoint(_) => true
   | `FloatPercentiles(i) => hasQuartiles(i)
   | `DateTimePercentiles(i) => hasQuartiles(i)
-  | `Percentage(i) => i <= 0.0 && i <= 100.0
+  | `Percentage(i) => 0.0 <= i && i <= 100.0
   | `Binary(i) => i == 0 || i == 1
   | `DateTimePoint(_) => true
   };

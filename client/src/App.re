@@ -3,12 +3,10 @@
 
 type route =
   | Home
-  | Users
-  | Agents
-  | Agent(string)
-  | User(string)
-  | Measurables
-  | Measurable(string)
+  | AgentIndex
+  | AgentShow(string)
+  | MeasurableIndex
+  | MeasurableShow(string)
   | NotFound;
 
 type state = {route};
@@ -23,12 +21,10 @@ let reducer = (action, _state) =>
 let mapUrlToRoute = (url: ReasonReact.Router.url) =>
   switch (url.path) {
   | [] => Home
-  | ["users"] => Users
-  | ["agents"] => Agents
-  | ["agents", id] => Agent(id)
-  | ["measurables"] => Measurables
-  | ["users", id] => User(id)
-  | ["measurables", id] => Measurable(id)
+  | ["agents"] => AgentIndex
+  | ["agents", id] => AgentShow(id)
+  | ["measurables"] => MeasurableIndex
+  | ["measurables", id] => MeasurableShow(id)
   | _ => Home
   };
 
@@ -39,13 +35,11 @@ let component = ReasonReact.reducerComponent("App");
 
 let inside = r =>
   switch (r) {
-  | Home => <Users />
-  | Agents => <Agents />
-  | Agent(id) => <Agent id />
-  | User(id) => <User id />
-  | Users => <Users />
-  | Measurables => <Measurables />
-  | Measurable(id) => <Measurable id />
+  | Home => <AgentIndex />
+  | AgentIndex => <AgentIndex />
+  | AgentShow(id) => <AgentShow id />
+  | MeasurableIndex => <MeasurableIndex />
+  | MeasurableShow(id) => <MeasurableShow id />
   | NotFound => <Home />
   };
 

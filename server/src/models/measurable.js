@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     },
     measurableCount: {
-      allowNull: false,
+      allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
       get: async function() {
         const items = await this.getMeasurements()

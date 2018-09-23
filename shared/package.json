@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "@glennsl/bs-json": "^3.0.0",
-    "rationale": "^0.1.5"
+    "rationale": "^0.1.6"
   },
   "devDependencies": {
     "@glennsl/bs-jest": "^0.4.2",

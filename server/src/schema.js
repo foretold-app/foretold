@@ -56,10 +56,22 @@ let competitor = GraphQLNonNull(new GraphQLEnumType({
   }
 }))
 
+let valueType = GraphQLNonNull(new GraphQLEnumType({
+  name: 'valueType',
+  values: {
+    FLOAT: {value: "FLOAT"}, // The first ENUM value will be the default order. The direction will be used for `first`, will automatically be inversed for `last` lookups.
+    DATE: {value:  "DATE"},
+    PERCENTAGE: {value:  "PERCENTAGE"} // build and return custom order for sequelize orderBy option
+  }
+}))
+
 const filterr = (fields) => {
   let newFields = {...fields}
   if (!!newFields.competitorType){
     newFields.competitorType = {type: competitor}
+  }
+  if (!!newFields.valueType){
+    newFields.valueType = {type: valueType}
   }
   return newFields
 }
@@ -142,6 +154,20 @@ const schema = new GraphQLSchema({
           })
           const measurable = await newMeasurement.getMeasurable();
           return newMeasurement
+        }
+      },
+      createMeasurable: {
+        type: getType.Measurables(),
+        args: filterr(_.pick(attributeFields(models.Measurable), ['name', 'valueType'])),
+        resolve: async (__, {
+          name,
+          valueType
+        }) => {
+          const newMeasurable = await models.Measurable.create({
+          name,
+          valueType
+          })
+          return newMeasurable
         }
       },
     }

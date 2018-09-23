@@ -13,3 +13,4 @@ lib
 build
 package-lock
 yarn-error.log
+*.bs.js

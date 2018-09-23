@@ -5,7 +5,7 @@ var Css = require("bs-css/src/Css.js");
 var React = require("react");
 var ReactDOMRe = require("reason-react/src/ReactDOMRe.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
-var Header$Client = require("../Header.bs.js");
+var Header$Client = require("./Header.bs.js");
 
 var component = ReasonReact.statelessComponent("PaddedLayout");
 

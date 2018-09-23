@@ -5,13 +5,11 @@ var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var Home$Client = require("./pages/Home.bs.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
-var User$Client = require("./pages/User.bs.js");
-var Agent$Client = require("./pages/Agent/Agent.bs.js");
-var Users$Client = require("./pages/Users.bs.js");
-var Agents$Client = require("./pages/Agents.bs.js");
-var Measurable$Client = require("./pages/Measurable/Measurable.bs.js");
-var Measurables$Client = require("./pages/Measurables.bs.js");
+var AgentShow$Client = require("./pages/Agent/AgentShow/AgentShow.bs.js");
+var AgentIndex$Client = require("./pages/Agent/AgentIndex.bs.js");
 var PaddedLayout$Client = require("./utils/PaddedLayout.bs.js");
+var MeasurableShow$Client = require("./pages/Measurable/MeasurableShow/MeasurableShow.bs.js");
+var MeasurableIndex$Client = require("./pages/Measurable/MeasurableIndex.bs.js");
 
 require('../node_modules/handsontable/dist/handsontable.full.css');
 ;
@@ -30,10 +28,10 @@ function mapUrlToRoute(url) {
             if (match$1[1]) {
               return /* Home */0;
             } else {
-              return /* Agent */Block.__(0, [match$1[0]]);
+              return /* AgentShow */Block.__(0, [match$1[0]]);
             }
           } else {
-            return /* Agents */2;
+            return /* AgentIndex */1;
           }
       case "measurables" : 
           var match$2 = match[1];
@@ -41,21 +39,10 @@ function mapUrlToRoute(url) {
             if (match$2[1]) {
               return /* Home */0;
             } else {
-              return /* Measurable */Block.__(2, [match$2[0]]);
+              return /* MeasurableShow */Block.__(1, [match$2[0]]);
             }
           } else {
-            return /* Measurables */3;
-          }
-      case "users" : 
-          var match$3 = match[1];
-          if (match$3) {
-            if (match$3[1]) {
-              return /* Home */0;
-            } else {
-              return /* User */Block.__(1, [match$3[0]]);
-            }
-          } else {
-            return /* Users */1;
+            return /* MeasurableIndex */2;
           }
       default:
         return /* Home */0;
@@ -76,25 +63,17 @@ function inside(r) {
     switch (r) {
       case 0 : 
       case 1 : 
-          return ReasonReact.element(undefined, undefined, Users$Client.make(/* array */[]));
+          return ReasonReact.element(undefined, undefined, AgentIndex$Client.make(/* array */[]));
       case 2 : 
-          return ReasonReact.element(undefined, undefined, Agents$Client.make(/* array */[]));
+          return ReasonReact.element(undefined, undefined, MeasurableIndex$Client.make(/* array */[]));
       case 3 : 
-          return ReasonReact.element(undefined, undefined, Measurables$Client.make(/* array */[]));
-      case 4 : 
           return ReasonReact.element(undefined, undefined, Home$Client.make(/* array */[]));
       
     }
+  } else if (r.tag) {
+    return ReasonReact.element(undefined, undefined, MeasurableShow$Client.make(r[0], /* array */[]));
   } else {
-    switch (r.tag | 0) {
-      case 0 : 
-          return ReasonReact.element(undefined, undefined, Agent$Client.make(r[0], /* array */[]));
-      case 1 : 
-          return ReasonReact.element(undefined, undefined, User$Client.make(r[0], /* array */[]));
-      case 2 : 
-          return ReasonReact.element(undefined, undefined, Measurable$Client.make(r[0], /* array */[]));
-      
-    }
+    return ReasonReact.element(undefined, undefined, AgentShow$Client.make(r[0], /* array */[]));
   }
 }
 

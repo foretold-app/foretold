@@ -4,8 +4,10 @@
 var $$Array = require("bs-platform/lib/js/array.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var Js_dict = require("bs-platform/lib/js/js_dict.js");
+var Belt_Result = require("bs-platform/lib/js/belt_Result.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Utils$Client = require("../../utils/Utils.bs.js");
+var Value$Shared = require("shared/src/Value/Value.bs.js");
 var Option$Rationale = require("rationale/src/Option.js");
 var HandsOnTable$Client = require("../../utils/HandsOnTable.bs.js");
 var UseRouterForLinks$Client = require("../../utils/UseRouterForLinks.bs.js");
@@ -91,6 +93,28 @@ function make(measurements, _) {
                           return "Aggregation";
                         }
                       };
+                      var value = Belt_Result.mapWithDefault(e.value, "", Value$Shared.stringOfValue);
+                      var presentableValueName = function (t) {
+                        var variant = t[0];
+                        if (variant >= -488794310) {
+                          if (variant >= 564146209) {
+                            if (variant >= 1061801627) {
+                              return "Date Percentiles";
+                            } else {
+                              return "Binary";
+                            }
+                          } else if (variant >= 393953338) {
+                            return "Percentiles";
+                          } else {
+                            return "Percentage";
+                          }
+                        } else if (variant >= -606499532) {
+                          return "Point";
+                        } else {
+                          return "TimePoint";
+                        }
+                      };
+                      var valueType = Belt_Result.mapWithDefault(e.value, "", presentableValueName);
                       return Js_dict.fromList(/* :: */[
                                   /* tuple */[
                                     "createdAt",
@@ -104,19 +128,25 @@ function make(measurements, _) {
                                     /* :: */[
                                       /* tuple */[
                                         "value",
-                                        "dsf"
+                                        value
                                       ],
                                       /* :: */[
                                         /* tuple */[
-                                          "type",
-                                          botType(agentType)
+                                          "valueType",
+                                          valueType
                                         ],
                                         /* :: */[
                                           /* tuple */[
-                                            "userLink",
-                                            link(e.agent)
+                                            "type",
+                                            botType(agentType)
                                           ],
-                                          /* [] */0
+                                          /* :: */[
+                                            /* tuple */[
+                                              "userLink",
+                                              link(e.agent)
+                                            ],
+                                            /* [] */0
+                                          ]
                                         ]
                                       ]
                                     ]
@@ -134,6 +164,7 @@ function make(measurements, _) {
                 HandsOnTable$Client.makeColumn("createdAt", undefined, undefined, /* () */0),
                 HandsOnTable$Client.makeColumn("competitive", undefined, undefined, /* () */0),
                 HandsOnTable$Client.makeColumn("value", undefined, undefined, /* () */0),
+                HandsOnTable$Client.makeColumn("valueType", undefined, undefined, /* () */0),
                 HandsOnTable$Client.makeColumn("type", undefined, undefined, /* () */0),
                 HandsOnTable$Client.makeColumn("userLink", "html", undefined, /* () */0)
               ];
@@ -141,6 +172,7 @@ function make(measurements, _) {
                 "Relevant at",
                 "competitive",
                 "Value",
+                "Value Type",
                 "Bot Type",
                 "Agent"
               ];

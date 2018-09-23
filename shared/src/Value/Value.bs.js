@@ -338,8 +338,8 @@ function isValid(t) {
   }
 }
 
-function typeToName(param) {
-  var variant = param[0];
+function typeToName(t) {
+  var variant = t[0];
   if (variant >= -488794310) {
     if (variant >= 564146209) {
       if (variant >= 1061801627) {
@@ -375,6 +375,32 @@ function nameToType(param) {
         return /* Ok */Block.__(0, [/* Percentage */-488794310]);
     default:
       return /* Error */Block.__(1, ["Not found"]);
+  }
+}
+
+function stringOfValue(t) {
+  var variant = t[0];
+  if (variant !== 393953338) {
+    if (variant >= 564146209) {
+      if (variant >= 1061801627) {
+        return "Implement Me";
+      } else {
+        return String(t[1]);
+      }
+    } else if (variant >= -606499532) {
+      return Pervasives.string_of_float(t[1]);
+    } else {
+      return t[1];
+    }
+  } else {
+    var t$1 = t[1];
+    var per = function (perc) {
+      return String(Belt_Map.getWithDefault(t$1, perc, 0.0) | 0);
+    };
+    var p25 = per(25.0);
+    var p50 = per(50.0);
+    var p75 = per(75.0);
+    return "{25: " + (String(p25) + (", 50: " + (String(p50) + (", 75: " + (String(p75) + "} ")))));
   }
 }
 
@@ -500,6 +526,7 @@ exports.hasQuartiles = hasQuartiles;
 exports.isValid = isValid;
 exports.typeToName = typeToName;
 exports.nameToType = nameToType;
+exports.stringOfValue = stringOfValue;
 exports.encode = encode$2;
 exports.convert = convert;
 exports.decoder = decoder;

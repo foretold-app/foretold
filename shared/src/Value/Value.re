@@ -117,14 +117,15 @@ let isValid = (t: t) =>
   | `DateTimePoint(_) => true
   };
 
-let typeToName =
-  fun
+let typeToName = (t: t) =>
+  switch (t) {
   | `FloatPoint(_) => "floatPoint"
   | `FloatPercentiles(_) => "floatPercentiles"
   | `DateTimePercentiles(_) => "dateTimePercentiles"
   | `DateTimePoint(_) => "dateTimePoint"
   | `Percentage(_) => "percentagePoint"
-  | `Binary(_) => "binary";
+  | `Binary(_) => "binary"
+  };
 
 let nameToType =
   fun
@@ -135,6 +136,22 @@ let nameToType =
   | "percentagePoint" => Ok(`Percentage)
   | "binary" => Ok(`Binary)
   | _ => Error("Not found");
+
+let stringOfValue = (t: t) =>
+  switch (t) {
+  | `FloatPoint(k) => string_of_float(k)
+  | `FloatPercentiles(t) =>
+    let per = perc =>
+      Belt.Map.getWithDefault(t, perc, 0.0) |> int_of_float |> string_of_int;
+    let p25 = per(25.0);
+    let p50 = per(50.0);
+    let p75 = per(75.0);
+    {j|{25: $(p25), 50: $(p50), 75: $(p75)} |j};
+  | `DateTimePercentiles(k) => "Implement Me"
+  | `DateTimePoint(k) => k
+  | `Percentage(k) => string_of_float(k)
+  | `Binary(k) => string_of_int(k)
+  };
 
 let encode = (e: t) => {
   let n = typeToName(e);

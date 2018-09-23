@@ -84,7 +84,7 @@ module Styles = {
   let body = style([marginLeft(px(200)), padding(px(30))]);
 };
 
-let v =
+let vvvv =
   `FloatPercentiles(
     Shared.Value.FloatPercentiles.fromArray([|
       (25.0, 50.0),
@@ -130,7 +130,7 @@ let make = (~id: string, _children) => {
                              CreateMeasurement.make(
                                ~measurableId=e##id,
                                ~agentId="c4aefed8-83c1-422d-9364-313071287758",
-                               ~value=v,
+                               ~value=vvvv,
                                ~competitorType=`COMPETITIVE,
                                (),
                              );
@@ -151,7 +151,7 @@ let make = (~id: string, _children) => {
                                  |> ReasonReact.string
                                )
                              </h3>
-                             /* <MeasurableChart measurements=e##measurements /> */
+                             <MeasurableChart measurements=e##measurements />
                              <MeasurableTable measurements=e##measurements />
                            </div>;
                          }

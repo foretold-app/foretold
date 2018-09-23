@@ -2,7 +2,16 @@
 'use strict';
 
 var Css = require("bs-css/src/Css.js");
+var $$Array = require("bs-platform/lib/js/array.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var React = require("react");
+var Belt_Map = require("bs-platform/lib/js/belt_Map.js");
+var MomentRe = require("bs-moment/src/MomentRe.js");
+var Belt_Result = require("bs-platform/lib/js/belt_Result.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
+var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
+var Utils$Client = require("../../utils/Utils.bs.js");
+var Victory$Client = require("../../utils/Victory.bs.js");
 
 var component = ReasonReact.statelessComponent("MeasurableChart");
 
@@ -17,7 +26,235 @@ var plot = Css.style(/* :: */[
 
 var Styles = /* module */[/* plot */plot];
 
+function accumulateIfTrue(fn, accum, elem) {
+  var match = Curry._1(fn, elem);
+  if (match) {
+    return $$Array.concat(/* :: */[
+                accum,
+                /* :: */[
+                  /* array */[elem],
+                  /* [] */0
+                ]
+              ]);
+  } else {
+    return accum;
+  }
+}
+
+function flattenResults(isTrue, items) {
+  return $$Array.fold_left((function (param, param$1) {
+                return accumulateIfTrue(isTrue, param, param$1);
+              }), /* array */[], items);
+}
+
+function filterAndFold(fn) {
+  var partial_arg = /* array */[];
+  return (function (param) {
+      return $$Array.fold_left((function (acc, elem) {
+                    return Curry._3(fn, elem, (function (e) {
+                                  return $$Array.concat(/* :: */[
+                                              acc,
+                                              /* :: */[
+                                                /* array */[e],
+                                                /* [] */0
+                                              ]
+                                            ]);
+                                }), (function () {
+                                  return acc;
+                                }));
+                  }), partial_arg, param);
+    });
+}
+
+var onlyFloatPercentiles = filterAndFold((function (e, fnYes, fnNo) {
+        if (e.tag) {
+          return Curry._1(fnNo, /* () */0);
+        } else {
+          var match = e[0];
+          if (typeof match === "number" || match[0] !== 393953338) {
+            return Curry._1(fnNo, /* () */0);
+          } else {
+            return Curry._1(fnYes, match[1]);
+          }
+        }
+      }));
+
+var onlySomes = filterAndFold((function (e, fnYes, fnNo) {
+        if (e !== undefined) {
+          return Curry._1(fnYes, e);
+        } else {
+          return Curry._1(fnNo, /* () */0);
+        }
+      }));
+
+function make(measurements, _) {
+  return /* record */[
+          /* debugName */component[/* debugName */0],
+          /* reactClassInternal */component[/* reactClassInternal */1],
+          /* handedOffState */component[/* handedOffState */2],
+          /* willReceiveProps */component[/* willReceiveProps */3],
+          /* didMount */component[/* didMount */4],
+          /* didUpdate */component[/* didUpdate */5],
+          /* willUnmount */component[/* willUnmount */6],
+          /* willUpdate */component[/* willUpdate */7],
+          /* shouldUpdate */component[/* shouldUpdate */8],
+          /* render */(function () {
+              var sorted = Utils$Client.catOptionals(measurements).filter((function (e) {
+                        return Belt_Result.isOk(e.value);
+                      })).sort((function (a, b) {
+                      var match = b.createdAt.unix() > a.createdAt.unix();
+                      if (match) {
+                        return -1;
+                      } else {
+                        return 1;
+                      }
+                    }));
+              var yMax = $$Array.fold_left((function (a, b) {
+                      var match = a > b;
+                      if (match) {
+                        return a;
+                      } else {
+                        return b;
+                      }
+                    }), Number.MIN_VALUE, onlySomes($$Array.map((function (e) {
+                              return Belt_Map.get(e, 75.0);
+                            }), onlyFloatPercentiles($$Array.map((function (e) {
+                                      return e.value;
+                                    }), sorted)))));
+              var yMin = $$Array.fold_left((function (a, b) {
+                      var match = a < b;
+                      if (match) {
+                        return a;
+                      } else {
+                        return b;
+                      }
+                    }), Number.MAX_VALUE, onlySomes($$Array.map((function (e) {
+                              return Belt_Map.get(e, 25.0);
+                            }), onlyFloatPercentiles($$Array.map((function (e) {
+                                      return e.value;
+                                    }), sorted)))));
+              var toPercentage = function (perc, m) {
+                var match = m.value;
+                if (match.tag) {
+                  return 0.1;
+                } else {
+                  var match$1 = match[0];
+                  if (typeof match$1 === "number") {
+                    return 0.1;
+                  } else if (match$1[0] !== 393953338) {
+                    return 0.1;
+                  } else {
+                    var match$2 = Belt_Map.get(match$1[1], perc);
+                    if (match$2 !== undefined) {
+                      return match$2;
+                    } else {
+                      return 0.1;
+                    }
+                  }
+                }
+              };
+              var xMax = new Date($$Array.fold_left((function (a, b) {
+                            var match = a.isAfter(b);
+                            if (match) {
+                              return a;
+                            } else {
+                              return b;
+                            }
+                          }), MomentRe.moment(undefined, "Jan 3, 1970"), $$Array.map((function (e) {
+                                return e.createdAt;
+                              }), sorted)).format("MMM DD, YYYY HH:MM:SS"));
+              var xMin = new Date($$Array.fold_left((function (a, b) {
+                            var match = a.isBefore(b);
+                            if (match) {
+                              return a;
+                            } else {
+                              return b;
+                            }
+                          }), MomentRe.moment(undefined, "Jan 3, 2070"), $$Array.map((function (e) {
+                                return e.createdAt;
+                              }), sorted)).format("MMM DD, YYYY HH:MM:SS"));
+              var aggregatePercentiles = $$Array.map((function (e) {
+                      return {
+                              y0: toPercentage(25.0, e),
+                              y: toPercentage(75.0, e),
+                              x: new Date(e.relevantAt.format("MMM DD, YYYY HH:MM:SS"))
+                            };
+                    }), sorted.filter((function (e) {
+                            return e.competitorType === /* AGGREGATION */497422978;
+                          })).filter((function (e) {
+                          var match = e.value;
+                          if (match.tag) {
+                            return false;
+                          } else {
+                            var match$1 = match[0];
+                            if (typeof match$1 === "number") {
+                              return false;
+                            } else {
+                              return match$1[0] === 393953338;
+                            }
+                          }
+                        })));
+              var competitives = $$Array.map((function (e) {
+                      return {
+                              x: new Date(e.relevantAt.format("MMM DD, YYYY HH:MM:SS")),
+                              y1: toPercentage(25.0, e),
+                              y2: toPercentage(50.0, e),
+                              y3: toPercentage(75.0, e)
+                            };
+                    }), sorted.filter((function (e) {
+                          return e.competitorType === /* COMPETITIVE */-288189265;
+                        })));
+              console.log(competitives);
+              var aggregateMedians = $$Array.map((function (e) {
+                      return {
+                              x: new Date(e.relevantAt.format("MMM DD, YYYY HH:MM:SS")),
+                              y: toPercentage(50.0, e)
+                            };
+                    }), sorted.filter((function (e) {
+                          return e.competitorType === /* AGGREGATION */497422978;
+                        })));
+              return React.createElement("div", {
+                          className: plot
+                        }, ReasonReact.element(undefined, undefined, Victory$Client.VictoryChart[/* make */0](undefined, undefined, {
+                                  x: "time"
+                                }, {
+                                  y: yMax,
+                                  x: xMax
+                                }, {
+                                  y: yMin,
+                                  x: xMin
+                                }, /* array */[
+                                  ReasonReact.element(undefined, undefined, Victory$Client.VictoryArea[/* make */0](undefined, aggregatePercentiles, undefined, {
+                                            data: {
+                                              fill: "f6f6f6"
+                                            }
+                                          }, /* array */[])),
+                                  ReasonReact.element(undefined, undefined, Victory$Client.VictoryLine[/* make */0](aggregateMedians, {
+                                            data: {
+                                              stroke: "#ddd",
+                                              strokeWidth: "1",
+                                              strokeDasharray: "4 4 4 4"
+                                            }
+                                          }, /* array */[])),
+                                  $$Array.mapi((function (i, e) {
+                                          return ReasonReact.element(String(i), undefined, Victory$Client.VictoryMeasurement[/* make */0](Js_primitive.some(e), undefined, /* array */[]));
+                                        }), competitives)
+                                ])));
+            }),
+          /* initialState */component[/* initialState */10],
+          /* retainedProps */component[/* retainedProps */11],
+          /* reducer */component[/* reducer */12],
+          /* jsElementWrapped */component[/* jsElementWrapped */13]
+        ];
+}
+
 exports.component = component;
 exports.toUnix = toUnix;
 exports.Styles = Styles;
+exports.accumulateIfTrue = accumulateIfTrue;
+exports.flattenResults = flattenResults;
+exports.filterAndFold = filterAndFold;
+exports.onlyFloatPercentiles = onlyFloatPercentiles;
+exports.onlySomes = onlySomes;
+exports.make = make;
 /* component Not a pure module */

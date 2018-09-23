@@ -2,6 +2,7 @@ open Utils;
 open Rationale;
 open Rationale.Option.Infix;
 open Rationale.Option;
+open Rationale;
 open Queries;
 open HandsOnTable;
 open MomentRe;
@@ -52,13 +53,31 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
              | `OBJECTIVE => "Objective"
              };
 
-           /* let toPercentile = fn => e##value |> (r => r.trio) <$> fn <$> string_of_float |> Option.default("") */
-           /* let v = e##value |> Value.decode <$> (Value.ofString) |> Belt.Result.mapWithDefault("foobar") */
+           let value =
+             Belt.Result.mapWithDefault(
+               e##value,
+               "",
+               Shared.Value.stringOfValue,
+             );
+
+           let presentableValueName = (t: Shared.Value.t) =>
+             switch (t) {
+             | `FloatPoint(_) => "Point"
+             | `FloatPercentiles(_) => "Percentiles"
+             | `DateTimePercentiles(_) => "Date Percentiles"
+             | `DateTimePoint(_) => "TimePoint"
+             | `Percentage(_) => "Percentage"
+             | `Binary(_) => "Binary"
+             };
+
+           let valueType =
+             Belt.Result.mapWithDefault(e##value, "", presentableValueName);
 
            Js.Dict.fromList([
              ("createdAt", e##relevantAt |> Moment.format("L, h:mm:ss a")),
              ("competitive", e##competitorType |> botCompetitor),
-             ("value", "dsf"),
+             ("value", value),
+             ("valueType", valueType),
              ("type", agentType |> botType),
              ("userLink", link(e##agent)),
            ]);
@@ -68,6 +87,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       makeColumn(~data="createdAt", ()),
       makeColumn(~data="competitive", ()),
       makeColumn(~data="value", ()),
+      makeColumn(~data="valueType", ()),
       makeColumn(~data="type", ()),
       makeColumn(~data="userLink", ~renderer="html", ()),
     |];
@@ -75,6 +95,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       "Relevant at",
       "competitive",
       "Value",
+      "Value Type",
       "Bot Type",
       "Agent",
     |];

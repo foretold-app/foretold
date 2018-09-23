@@ -18,6 +18,7 @@ var Queries$Client = require("../Queries.bs.js");
 var Sidebar$Client = require("./Sidebar.bs.js");
 var Result$Rationale = require("rationale/src/Result.js");
 var Function$Rationale = require("rationale/src/Function.js");
+var MeasurableChart$Client = require("./MeasurableChart.bs.js");
 var MeasurableTable$Client = require("./MeasurableTable.bs.js");
 
 var partial_arg = Function$Rationale.Infix[/* ||> */1];
@@ -547,9 +548,9 @@ var Styles = /* module */[
   /* body */body
 ];
 
-var v = Value$Shared.encode(/* `FloatPercentiles */[
+var vvvv = Value$Shared.encode(/* `FloatPercentiles */[
       393953338,
-      Value$Shared.FloatPercentiles[/* fromArray */6](/* array */[
+      Value$Shared.FloatPercentiles[/* fromArray */3](/* array */[
             /* tuple */[
               25.0,
               50.0
@@ -594,13 +595,13 @@ function make$2(id, _) {
                                             })), (function (e) {
                                           var match = e.isLocked;
                                           return React.createElement("div", undefined, React.createElement("h2", undefined, e.name), React.createElement("h3", undefined, match ? "Locked: True" : "Locked: False"), ReasonReact.element(undefined, undefined, Curry._4(CreateMeasurementMutation[/* make */4], undefined, undefined, undefined, (function (mutation, _) {
-                                                                var mut = make$1(v, /* COMPETITIVE */-288189265, e.id, "c4aefed8-83c1-422d-9364-313071287758", /* () */0);
+                                                                var mut = make$1(vvvv, /* COMPETITIVE */-288189265, e.id, "c4aefed8-83c1-422d-9364-313071287758", /* () */0);
                                                                 return React.createElement("div", undefined, React.createElement("h3", {
                                                                                 onClick: (function () {
                                                                                     Curry._3(mutation, Js_primitive.some(mut.variables), /* array */["getMeasurable"], /* () */0);
                                                                                     return /* () */0;
                                                                                   })
-                                                                              }, valueString(e.valueType)), ReasonReact.element(undefined, undefined, MeasurableTable$Client.make(e.measurements, /* array */[])));
+                                                                              }, valueString(e.valueType)), ReasonReact.element(undefined, undefined, MeasurableChart$Client.make(e.measurements, /* array */[])), ReasonReact.element(undefined, undefined, MeasurableTable$Client.make(e.measurements, /* array */[])));
                                                               }))));
                                         })));
                       })
@@ -625,6 +626,6 @@ exports.CreateMeasurementMutation = CreateMeasurementMutation;
 exports.component = component;
 exports.valueString = valueString;
 exports.Styles = Styles;
-exports.v = v;
+exports.vvvv = vvvv;
 exports.make = make$2;
 /* GetMeasurableQuery Not a pure module */

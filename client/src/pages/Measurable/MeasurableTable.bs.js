@@ -4,7 +4,6 @@
 var $$Array = require("bs-platform/lib/js/array.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var Js_dict = require("bs-platform/lib/js/js_dict.js");
-var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Utils$Client = require("../../utils/Utils.bs.js");
 var Option$Rationale = require("rationale/src/Option.js");
@@ -92,9 +91,6 @@ function make(measurements, _) {
                           return "Aggregation";
                         }
                       };
-                      var toPercentile = function (fn) {
-                        return Option$Rationale.$$default("", Curry._2(Option$Rationale.$less$$great, Curry._2(Option$Rationale.$less$$great, e.value[/* trio */0], fn), Pervasives.string_of_float));
-                      };
                       return Js_dict.fromList(/* :: */[
                                   /* tuple */[
                                     "createdAt",
@@ -107,38 +103,20 @@ function make(measurements, _) {
                                     ],
                                     /* :: */[
                                       /* tuple */[
-                                        "percentile25",
-                                        toPercentile((function (r) {
-                                                return r[/* p25 */0];
-                                              }))
+                                        "value",
+                                        "dsf"
                                       ],
                                       /* :: */[
                                         /* tuple */[
-                                          "percentile50",
-                                          toPercentile((function (r) {
-                                                  return r[/* p50 */1];
-                                                }))
+                                          "type",
+                                          botType(agentType)
                                         ],
                                         /* :: */[
                                           /* tuple */[
-                                            "percentile75",
-                                            toPercentile((function (r) {
-                                                    return r[/* p75 */2];
-                                                  }))
+                                            "userLink",
+                                            link(e.agent)
                                           ],
-                                          /* :: */[
-                                            /* tuple */[
-                                              "type",
-                                              botType(agentType)
-                                            ],
-                                            /* :: */[
-                                              /* tuple */[
-                                                "userLink",
-                                                link(e.agent)
-                                              ],
-                                              /* [] */0
-                                            ]
-                                          ]
+                                          /* [] */0
                                         ]
                                       ]
                                     ]
@@ -155,18 +133,14 @@ function make(measurements, _) {
               var columns = /* array */[
                 HandsOnTable$Client.makeColumn("createdAt", undefined, undefined, /* () */0),
                 HandsOnTable$Client.makeColumn("competitive", undefined, undefined, /* () */0),
-                HandsOnTable$Client.makeColumn("percentile25", undefined, undefined, /* () */0),
-                HandsOnTable$Client.makeColumn("percentile50", undefined, undefined, /* () */0),
-                HandsOnTable$Client.makeColumn("percentile75", undefined, undefined, /* () */0),
+                HandsOnTable$Client.makeColumn("value", undefined, undefined, /* () */0),
                 HandsOnTable$Client.makeColumn("type", undefined, undefined, /* () */0),
                 HandsOnTable$Client.makeColumn("userLink", "html", undefined, /* () */0)
               ];
               var colHeaders = /* array */[
                 "Relevant at",
                 "competitive",
-                "25th",
-                "50th",
-                "75th",
+                "Value",
                 "Bot Type",
                 "Agent"
               ];

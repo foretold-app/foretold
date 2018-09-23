@@ -24,6 +24,7 @@
     "reason-react",
     "reason-apollo",
     "rationale",
+    "shared",
     "@glennsl/bs-json"
   ],
   "refmt": 3,

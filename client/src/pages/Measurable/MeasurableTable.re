@@ -34,41 +34,32 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
                | (_, _, _) => ""
                };
 
-          let agentType: option(competitorType) = e##agent >>= (x => x##bot) <$> (x => x##competitorType);
+           let agentType: option(competitorType) =
+             e##agent >>= (x => x##bot) <$> (x => x##competitorType);
 
-          let botType = e => switch (e) {
-            | Some(`AGGREGATION) => "Aggregation" 
-            | Some(`COMPETITIVE) => "Competitive" 
-            | Some(`OBJECTIVE) => "Objective" 
-            | _ => ""
-            };
+           let botType = e =>
+             switch (e) {
+             | Some(`AGGREGATION) => "Aggregation"
+             | Some(`COMPETITIVE) => "Competitive"
+             | Some(`OBJECTIVE) => "Objective"
+             | _ => ""
+             };
 
-          let botCompetitor = e => switch (e) {
-            | `AGGREGATION => "Aggregation" 
-            | `COMPETITIVE => "Competitive" 
-            | `OBJECTIVE => "Objective" 
-            };
+           let botCompetitor = e =>
+             switch (e) {
+             | `AGGREGATION => "Aggregation"
+             | `COMPETITIVE => "Competitive"
+             | `OBJECTIVE => "Objective"
+             };
 
-          let toPercentile = fn => e##value |> (r => r.trio) <$> fn <$> string_of_float |> Option.default("")
+           /* let toPercentile = fn => e##value |> (r => r.trio) <$> fn <$> string_of_float |> Option.default("") */
+           /* let v = e##value |> Value.decode <$> (Value.ofString) |> Belt.Result.mapWithDefault("foobar") */
+
            Js.Dict.fromList([
              ("createdAt", e##relevantAt |> Moment.format("L, h:mm:ss a")),
              ("competitive", e##competitorType |> botCompetitor),
-             (
-               "percentile25",
-                toPercentile(r => r.p25)
-             ),
-             (
-               "percentile50",
-                toPercentile(r => r.p50)
-             ),
-             (
-               "percentile75",
-                toPercentile(r => r.p75)
-             ),
-             (
-               "type",
-                agentType |> botType
-             ),
+             ("value", "dsf"),
+             ("type", agentType |> botType),
              ("userLink", link(e##agent)),
            ]);
          });
@@ -76,15 +67,19 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
     let columns = [|
       makeColumn(~data="createdAt", ()),
       makeColumn(~data="competitive", ()),
-      makeColumn(~data="percentile25", ()),
-      makeColumn(~data="percentile50", ()),
-      makeColumn(~data="percentile75", ()),
+      makeColumn(~data="value", ()),
       makeColumn(~data="type", ()),
       makeColumn(~data="userLink", ~renderer="html", ()),
     |];
-    let colHeaders = [|"Relevant at", "competitive", "25th", "50th", "75th", "Bot Type", "Agent"|];
-  <UseRouterForLinks>
-    <HandsOnTable data columns colHeaders />
-  </UseRouterForLinks>
+    let colHeaders = [|
+      "Relevant at",
+      "competitive",
+      "Value",
+      "Bot Type",
+      "Agent",
+    |];
+    <UseRouterForLinks>
+      <HandsOnTable data columns colHeaders />
+    </UseRouterForLinks>;
   },
 };

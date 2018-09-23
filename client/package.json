@@ -42,6 +42,7 @@
     "reason-apollo": "^0.13.0",
     "reason-react": ">=0.4.0",
     "subscriptions-transport-ws": "^0.9.14",
+    "shared": "../shared/",
     "victory": "^30.3.1"
   },
   "devDependencies": {

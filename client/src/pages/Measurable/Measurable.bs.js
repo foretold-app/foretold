@@ -13,13 +13,12 @@ var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 var ReasonApollo = require("reason-apollo/src/ReasonApollo.bs.js");
 var Utils$Client = require("../../utils/Utils.bs.js");
+var Value$Shared = require("shared/src/Value/Value.bs.js");
 var Queries$Client = require("../Queries.bs.js");
 var Sidebar$Client = require("./Sidebar.bs.js");
 var Result$Rationale = require("rationale/src/Result.js");
 var Function$Rationale = require("rationale/src/Function.js");
-var MeasurableChart$Client = require("./MeasurableChart.bs.js");
 var MeasurableTable$Client = require("./MeasurableTable.bs.js");
-var MeasurableTypes$Client = require("./MeasurableTypes.bs.js");
 
 var partial_arg = Function$Rationale.Infix[/* ||> */1];
 
@@ -304,7 +303,7 @@ function parse(value) {
                           }
                           tmp = {
                             createdAt: match$2 !== undefined ? toMoment(match$2) : Js_exn.raiseError("graphql_ppx: Field createdAt on type Measurement is missing"),
-                            value: match$3 !== undefined ? MeasurableTypes$Client.parseValue(match$3) : Js_exn.raiseError("graphql_ppx: Field value on type Measurement is missing"),
+                            value: match$3 !== undefined ? Value$Shared.decode(match$3) : Js_exn.raiseError("graphql_ppx: Field value on type Measurement is missing"),
                             competitorType: tmp$1,
                             taggedMeasurementId: tmp$2,
                             relevantAt: tmp$3,
@@ -548,6 +547,24 @@ var Styles = /* module */[
   /* body */body
 ];
 
+var v = Value$Shared.encode(/* `FloatPercentiles */[
+      393953338,
+      Value$Shared.FloatPercentiles[/* fromArray */6](/* array */[
+            /* tuple */[
+              25.0,
+              50.0
+            ],
+            /* tuple */[
+              50.0,
+              150.0
+            ],
+            /* tuple */[
+              75.0,
+              250.0
+            ]
+          ])
+    ]);
+
 function make$2(id, _) {
   return /* record */[
           /* debugName */component[/* debugName */0],
@@ -577,20 +594,13 @@ function make$2(id, _) {
                                             })), (function (e) {
                                           var match = e.isLocked;
                                           return React.createElement("div", undefined, React.createElement("h2", undefined, e.name), React.createElement("h3", undefined, match ? "Locked: True" : "Locked: False"), ReasonReact.element(undefined, undefined, Curry._4(CreateMeasurementMutation[/* make */4], undefined, undefined, undefined, (function (mutation, _) {
-                                                                var mut = make$1(MeasurableTypes$Client.encodeValue(/* record */[
-                                                                          /* trio *//* record */[
-                                                                            /* p25 */110.0,
-                                                                            /* p50 */170.0,
-                                                                            /* p75 */220.0
-                                                                          ],
-                                                                          /* pointEstimate */undefined
-                                                                        ]), /* COMPETITIVE */-288189265, e.id, "c4aefed8-83c1-422d-9364-313071287758", /* () */0);
+                                                                var mut = make$1(v, /* COMPETITIVE */-288189265, e.id, "c4aefed8-83c1-422d-9364-313071287758", /* () */0);
                                                                 return React.createElement("div", undefined, React.createElement("h3", {
                                                                                 onClick: (function () {
                                                                                     Curry._3(mutation, Js_primitive.some(mut.variables), /* array */["getMeasurable"], /* () */0);
                                                                                     return /* () */0;
                                                                                   })
-                                                                              }, valueString(e.valueType)), ReasonReact.element(undefined, undefined, MeasurableChart$Client.make(e.measurements, /* array */[])), ReasonReact.element(undefined, undefined, MeasurableTable$Client.make(e.measurements, /* array */[])));
+                                                                              }, valueString(e.valueType)), ReasonReact.element(undefined, undefined, MeasurableTable$Client.make(e.measurements, /* array */[])));
                                                               }))));
                                         })));
                       })
@@ -615,5 +625,6 @@ exports.CreateMeasurementMutation = CreateMeasurementMutation;
 exports.component = component;
 exports.valueString = valueString;
 exports.Styles = Styles;
+exports.v = v;
 exports.make = make$2;
 /* GetMeasurableQuery Not a pure module */

@@ -32,7 +32,7 @@ module GetMeasurable = [%graphql
             createdAt @bsDecoder(fn: "toMoment")
             measurements: Measurements{
               createdAt @bsDecoder(fn: "toMoment")
-              value @bsDecoder(fn: "MeasurableTypes.parseValue")
+              value @bsDecoder(fn: "Shared.Value.decode")
               competitorType
               taggedMeasurementId
               relevantAt @bsDecoder(fn: "toOptionalMoment")
@@ -84,6 +84,16 @@ module Styles = {
   let body = style([marginLeft(px(200)), padding(px(30))]);
 };
 
+let v =
+  `FloatPercentiles(
+    Shared.Value.FloatPercentiles.fromArray([|
+      (25.0, 50.0),
+      (50.0, 150.0),
+      (75.0, 250.0),
+    |]),
+  )
+  |> Shared.Value.encode;
+
 let make = (~id: string, _children) => {
   ...component,
   render: _self => {
@@ -120,16 +130,7 @@ let make = (~id: string, _children) => {
                              CreateMeasurement.make(
                                ~measurableId=e##id,
                                ~agentId="c4aefed8-83c1-422d-9364-313071287758",
-                               ~value=
-                                 encodeValue({
-                                   trio:
-                                     Some({
-                                       p25: 110.0,
-                                       p50: 170.0,
-                                       p75: 220.0,
-                                     }),
-                                   pointEstimate: None,
-                                 }),
+                               ~value=v,
                                ~competitorType=`COMPETITIVE,
                                (),
                              );
@@ -150,7 +151,7 @@ let make = (~id: string, _children) => {
                                  |> ReasonReact.string
                                )
                              </h3>
-                             <MeasurableChart measurements=e##measurements />
+                             /* <MeasurableChart measurements=e##measurements /> */
                              <MeasurableTable measurements=e##measurements />
                            </div>;
                          }

@@ -3,22 +3,6 @@ open Rationale.Function.Infix;
 open Rationale.Result.Infix;
 open Belt.Result;
 
-module type Point = {
-  type t;
-  let equal: (t, t) => bool;
-  let isValid: t => bool;
-  let name: string;
-  let itemName: string;
-  let encodeFn: t => Js.Json.t;
-  let decodeFn: Json.Decode.decoder(t);
-};
-
-type percentile = float;
-let allTrue = e => Array.fold_left((x, y) => x && y, true, e);
-
-let data = "data";
-let dataType = "dataType";
-
 let decodeResult = (fn, json) =>
   try (Ok(json |> fn)) {
   | Json_decode.DecodeError(e) => Error(e)
@@ -36,6 +20,13 @@ let makeEncode = (encodeFn, name: string, i: 'a) =>
     ])
   );
 
+module type Point = {
+  type t;
+  let equal: (t, t) => bool;
+  let encodeFn: t => Js.Json.t;
+  let decodeFn: Json.Decode.decoder(t);
+};
+
 module MakeByPercentile = (Item: Point) => {
   module Id =
     Belt.Id.MakeComparable({
@@ -45,15 +36,7 @@ module MakeByPercentile = (Item: Point) => {
 
   type t = Belt.Map.t(Id.t, Item.t, Id.identity);
 
-  let name = Item.itemName ++ "ByPercentile";
-
-  let hasQuartiles = (t: t) : bool =>
-    Belt.Map.has(t, 25.0) && Belt.Map.has(t, 50.0) && Belt.Map.has(t, 75.0);
-
-  let isValid = (t: t) : bool => {
-    let itemsValid = Belt.Map.every(t, (_, v) => Item.isValid(v));
-    itemsValid && hasQuartiles(t);
-  };
+  type itemT = Item.t;
 
   let toArray = (t: t) => t |> Belt.Map.toArray;
 
@@ -65,6 +48,7 @@ module MakeByPercentile = (Item: Point) => {
 
   let fromArray = a => a |> Belt.Map.fromArray(~id=(module Id));
 
+  let of_string = "stuff here";
   let fromDict = (r: Js.Dict.t(Item.t)) =>
     r
     |> Js.Dict.entries
@@ -76,7 +60,7 @@ module MakeByPercentile = (Item: Point) => {
       Json.Decode.field("data", Json.Decode.dict(Item.decodeFn)) ||> fromDict,
     );
 
-  let encode = (t: t) => {
+  let encode = (name: string, t: t) => {
     let dic = t |> toDict;
     Json.Encode.(
       object_([
@@ -94,101 +78,98 @@ module MakeByPercentile = (Item: Point) => {
 
 module FloatPoint = {
   type t = float;
-  let itemName = "float";
-  let name = itemName ++ "Point";
   let equal = (a: t, b: t) => a == b;
-  let isValid = _ => true;
 
   let decodeFn = Json.Decode.float;
   let encodeFn = Json.Encode.float;
-  let decode = makeDecode(decodeFn);
-  let encode = makeEncode(encodeFn, name);
 };
 
 module DateTimePoint = {
   type t = string;
-  let itemName = "dateTime";
-  let name = itemName ++ "Point";
   let equal = (a: t, b: t) => a == b;
-  let isValid = (_: t) => true;
 
   let encodeFn = Json.Encode.string;
   let decodeFn = Json.Decode.string;
-  let decode = makeDecode(decodeFn);
-  let encode = makeEncode(encodeFn, name);
 };
 
 module FloatPercentiles = MakeByPercentile(FloatPoint);
-
 module DateTimePercentiles = MakeByPercentile(DateTimePoint);
 
-module Percentage = {
-  type t = float;
-  let name = "percentage";
-  let isValid = (i: t) => i <= 0.0 && i <= 100.0;
-
-  let decodeFn = Json.Decode.float;
-  let encodeFn = Json.Encode.float;
-  let decode = makeDecode(decodeFn);
-  let encode = makeEncode(encodeFn, name);
-};
-
-module Binary = {
-  type t = int;
-  let name = "binary";
-  let isValid = (i: t) => i == 0 || i == 1;
-
-  let decodeFn = Json.Decode.int;
-  let encodeFn = Json.Encode.int;
-  let decode = makeDecode(decodeFn);
-  let encode = makeEncode(encodeFn, name);
-};
-
 type t = [
-  | `FloatPoint(FloatPoint.t)
+  | `FloatPoint(float)
+  | `Percentage(float)
+  | `Binary(int)
+  | `DateTimePoint(string)
   | `FloatPercentiles(FloatPercentiles.t)
-  | `DateTimePoint(DateTimePoint.t)
   | `DateTimePercentiles(DateTimePercentiles.t)
-  | `Percentage(Percentage.t)
-  | `Binary(Binary.t)
 ];
 
-let convert = (json, decoder, toValue) => json |> decoder <$> toValue;
-
-let decode = (json: Js.Json.t) : Belt.Result.t(t, string) => {
-  let t = json |> Json.Decode.field("dataType", Json.Decode.string);
-  switch (t) {
-  | _ when t == FloatPoint.name =>
-    convert(json, FloatPoint.decode, e => `FloatPoint(e))
-  | _ when t == DateTimePoint.name =>
-    convert(json, DateTimePoint.decode, e => `DateTimePoint(e))
-  | _ when t == DateTimePercentiles.name =>
-    convert(json, DateTimePercentiles.decode, e => `DateTimePercentiles(e))
-  | _ when t == FloatPercentiles.name =>
-    convert(json, FloatPercentiles.decode, e => `FloatPercentiles(e))
-  | _ when t == Percentage.name =>
-    convert(json, Percentage.decode, e => `Percentage(e))
-  | _ when t == Binary.name => convert(json, Binary.decode, e => `Binary(e))
-  | _ => Error("No valid parser found. Check dataType field.")
-  };
-};
-
-let encode = (t: t) =>
-  switch (t) {
-  | `FloatPoint(f) => FloatPoint.encode(f)
-  | `DateTimePoint(f) => DateTimePoint.encode(f)
-  | `DateTimePercentiles(f) => DateTimePercentiles.encode(f)
-  | `FloatPercentiles(f) => FloatPercentiles.encode(f)
-  | `Percentage(f) => Percentage.encode(f)
-  | `Binary(f) => Binary.encode(f)
-  };
+let hasQuartiles = (t: 'a) : bool =>
+  Belt.Map.has(t, 25.0) && Belt.Map.has(t, 50.0) && Belt.Map.has(t, 75.0);
 
 let isValid = (t: t) =>
   switch (t) {
-  | `FloatPoint(f) => FloatPoint.isValid(f)
-  | `DateTimePoint(f) => DateTimePoint.isValid(f)
-  | `DateTimePercentiles(f) => DateTimePercentiles.isValid(f)
-  | `FloatPercentiles(f) => FloatPercentiles.isValid(f)
-  | `Percentage(f) => Percentage.isValid(f)
-  | `Binary(f) => Binary.isValid(f)
+  | `FloatPoint(_) => true
+  | `FloatPercentiles(i) => hasQuartiles(i)
+  | `DateTimePercentiles(i) => hasQuartiles(i)
+  | `Percentage(i) => i <= 0.0 && i <= 100.0
+  | `Binary(i) => i == 0 || i == 1
+  | `DateTimePoint(_) => true
   };
+
+let typeToName =
+  fun
+  | `FloatPoint(_) => "floatPoint"
+  | `FloatPercentiles(_) => "floatPercentiles"
+  | `DateTimePercentiles(_) => "dateTimePercentiles"
+  | `DateTimePoint(_) => "dateTimePoint"
+  | `Percentage(_) => "percentagePoint"
+  | `Binary(_) => "binary";
+
+let nameToType =
+  fun
+  | "floatPoint" => Ok(`FloatPoint)
+  | "floatPercentiles" => Ok(`FloatPercentiles)
+  | "dateTimePoint" => Ok(`DateTimePoint)
+  | "dateTimePercentiles" => Ok(`DateTimePercentiles)
+  | "percentagePoint" => Ok(`Percentage)
+  | "binary" => Ok(`Binary)
+  | _ => Error("Not found");
+
+let encode = (e: t) => {
+  let n = typeToName(e);
+  switch (e) {
+  | `FloatPoint(k) => makeEncode(Json.Encode.float, n, k)
+  | `FloatPercentiles(k) => FloatPercentiles.encode(n, k)
+  | `DateTimePercentiles(k) => DateTimePercentiles.encode(n, k)
+  | `DateTimePoint(k) => makeEncode(Json.Encode.string, n, k)
+  | `Percentage(k) => makeEncode(Json.Encode.float, n, k)
+  | `Binary(k) => makeEncode(Json.Encode.int, n, k)
+  };
+};
+
+let convert = (decoder, toValue, json) => json |> decoder <$> toValue;
+
+let decoder = (a, j: Js.Json.t) : Belt.Result.t(t, string) =>
+  switch (a) {
+  | `FloatPoint =>
+    j |> convert(makeDecode(Json.Decode.float), e => `FloatPoint(e))
+  | `FloatPercentiles =>
+    j |> convert(FloatPercentiles.decode, e => `FloatPercentiles(e))
+  | `DateTimePoint =>
+    j |> convert(makeDecode(Json.Decode.string), e => `DateTimePoint(e))
+  | `DateTimePercentiles =>
+    j |> convert(DateTimePercentiles.decode, e => `DateTimePercentiles(e))
+  | `Percentage =>
+    j |> convert(makeDecode(Json.Decode.float), e => `Percentage(e))
+  | `Binary => j |> convert(makeDecode(Json.Decode.int), e => `Binary(e))
+  };
+
+let decode = (j: Js.Json.t) : Belt.Result.t(t, string) => {
+  let t = j |> Json.Decode.field("dataType", Json.Decode.string);
+  let decodingType = nameToType(t);
+  switch (decodingType) {
+  | Ok(e) => j |> decoder(e)
+  | Error(n) => Error(n)
+  };
+};

@@ -13,9 +13,9 @@ let () = {
         "data": 0.3
       } |},
       )
-      |> FloatPoint.decode
+      |> Value.decode
       |> expect
-      |> toEqual(Ok(0.3))
+      |> toEqual(Ok(`FloatPoint(0.3)))
     );
 
     test("#decode FloatPoint", () => {
@@ -26,28 +26,32 @@ let () = {
         "data": 0.3
       } |},
       )
-      |> decode
+      |> Value.decode
       |> expect
       |> toEqual(Ok(value));
     });
 
-    test("#hasQuartiles true", () =>
-      FloatPercentiles.fromArray([|
-        (25.0, 1.0),
-        (50.0, 3.0),
-        (75.0, 10.0),
-      |])
-      |> FloatPercentiles.hasQuartiles
+    test("#isValid true", () =>
+      `FloatPercentiles(
+        FloatPercentiles.fromArray([|
+          (25.0, 1.0),
+          (50.0, 3.0),
+          (75.0, 10.0),
+        |]),
+      )
+      |> isValid
       |> expect
       |> toEqual(true)
     );
-    test("#hasQuartiles false", () =>
-      FloatPercentiles.fromArray([|
-        (25.0, 1.0),
-        (50.0, 3.0),
-        (78.0, 10.0),
-      |])
-      |> FloatPercentiles.hasQuartiles
+    test("#isValid false", () =>
+      `FloatPercentiles(
+        FloatPercentiles.fromArray([|
+          (25.0, 1.0),
+          (50.0, 3.0),
+          (78.0, 10.0),
+        |]),
+      )
+      |> isValid
       |> expect
       |> toEqual(false)
     );
@@ -55,16 +59,18 @@ let () = {
       let json =
         Json.parseOrRaise(
           {| {
-        "dataType": "floatByPercentile",
-        "data":   { "25.": 1.0, "50.": 3.0, "78.":10.0 }
+        "dataType": "floatPercentiles",
+        "data":   { "25.": 1.0, "50.": 3.0, "75.":10.0 }
       } |},
         );
-      FloatPercentiles.fromArray([|
-        (25.0, 1.0),
-        (50.0, 3.0),
-        (78.0, 10.0),
-      |])
-      |> FloatPercentiles.encode
+      `FloatPercentiles(
+        FloatPercentiles.fromArray([|
+          (25.0, 1.0),
+          (50.0, 3.0),
+          (75.0, 10.0),
+        |]),
+      )
+      |> encode
       |> expect
       |> toEqual(json);
     });
@@ -75,7 +81,7 @@ let () = {
       let json =
         Json.parseOrRaise(
           {| {
-        "dataType": "floatByPercentile",
+        "dataType": "floatPercentiles",
         "data":   { "25.": 1.0, "50.": 3.0, "75.":10.0 }
       } |},
         );
@@ -94,7 +100,7 @@ let () = {
     let json =
       Json.parseOrRaise(
         {| {
-         "dataType": "floatByPercentile",
+         "dataType": "floatPercentiles",
          "data":   { "25.": 1.0, "50.": 3.0, "75.":10.0 }
        } |},
       );
@@ -111,7 +117,7 @@ let () = {
     let json =
       Json.parseOrRaise(
         {| {
-         "dataType": "floatByPercentile",
+         "dataType": "floatPercentiles",
          "data":   { "25.": "sdf", "50.": 3.0, "75.":10.0 }
        } |},
       );

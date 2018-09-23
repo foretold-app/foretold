@@ -15,7 +15,7 @@ module Styles = {
   open Css;
   let plot = style([maxWidth(px(800))]);
 };
-
+/* 
 let make = (~measurements: MeasurableTypes.measurements, _children) => {
   ...component,
   render: _ => {
@@ -121,4 +121,4 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       </div>
     );
   },
-};
+}; */

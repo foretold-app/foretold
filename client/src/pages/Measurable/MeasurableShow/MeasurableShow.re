@@ -99,10 +99,7 @@ let make = (~id: string, _children) => {
   render: _self => {
     let query = GetMeasurable.make(~id, ());
     <div>
-      <Antd_Layout.Sider className=Styles.sidebar>
-        <Sidebar selectedId=id />
-      </Antd_Layout.Sider>
-      <div className=Styles.body>
+      <div>
         (
           GetMeasurableQuery.make(
             ~variables=query##variables, ~pollInterval=50000, ({result}) =>
@@ -116,6 +113,7 @@ let make = (~id: string, _children) => {
             <$> (
               e =>
                 <div>
+                  <MeasurableShowForm measurableId=id />
                   <h2> (e##name |> ReasonReact.string) </h2>
                   <h3>
                     (

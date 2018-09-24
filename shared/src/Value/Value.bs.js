@@ -313,29 +313,55 @@ function hasQuartiles(t) {
   }
 }
 
-function isValid(t) {
-  var variant = t[0];
-  if (variant >= 393953338) {
-    if (variant !== 564146209) {
-      return hasQuartiles(t[1]);
-    } else {
-      var i = t[1];
-      if (i === 0) {
-        return true;
+function error(t) {
+  if (typeof t === "number") {
+    return undefined;
+  } else {
+    var variant = t[0];
+    var exit = 0;
+    if (variant >= 393953339) {
+      if (variant !== 564146209) {
+        if (variant !== 1061801627) {
+          return undefined;
+        } else {
+          exit = 1;
+        }
       } else {
-        return i === 1;
+        var i = t[1];
+        if (i === 0 || i === 1) {
+          return undefined;
+        } else {
+          return "Must be 0 or 1";
+        }
+      }
+    } else if (variant !== -488794310) {
+      if (variant >= 393953338) {
+        exit = 1;
+      } else {
+        return undefined;
+      }
+    } else {
+      var i$1 = t[1];
+      if (0.0 <= i$1 && i$1 <= 100.0) {
+        return undefined;
+      } else {
+        return "Must be between 0 and 100";
       }
     }
-  } else if (variant >= -488794310) {
-    var i$1 = t[1];
-    if (0.0 <= i$1) {
-      return i$1 <= 100.0;
-    } else {
-      return false;
+    if (exit === 1) {
+      if (hasQuartiles(t[1])) {
+        return undefined;
+      } else {
+        return "Missing quartiles";
+      }
     }
-  } else {
-    return true;
+    
   }
+}
+
+function isValid(t) {
+  var match = error(t);
+  return match === undefined;
 }
 
 function typeToName(t) {
@@ -523,6 +549,7 @@ exports.DateTimePoint = DateTimePoint;
 exports.FloatPercentiles = FloatPercentiles;
 exports.DateTimePercentiles = DateTimePercentiles;
 exports.hasQuartiles = hasQuartiles;
+exports.error = error;
 exports.isValid = isValid;
 exports.typeToName = typeToName;
 exports.nameToType = nameToType;

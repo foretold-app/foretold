@@ -107,14 +107,21 @@ type t = [
 let hasQuartiles = (t: 'a) : bool =>
   Belt.Map.has(t, 25.0) && Belt.Map.has(t, 50.0) && Belt.Map.has(t, 75.0);
 
-let isValid = (t: t) =>
+let error = (t: t) : option(string) =>
   switch (t) {
-  | `FloatPoint(_) => true
-  | `FloatPercentiles(i) => hasQuartiles(i)
-  | `DateTimePercentiles(i) => hasQuartiles(i)
-  | `Percentage(i) => 0.0 <= i && i <= 100.0
-  | `Binary(i) => i == 0 || i == 1
-  | `DateTimePoint(_) => true
+  | `FloatPercentiles(i) when ! hasQuartiles(i) => Some("Missing quartiles")
+  | `DateTimePercentiles(i) when ! hasQuartiles(i) =>
+    Some("Missing quartiles")
+  | `Percentage(i) when ! (0.0 <= i && i <= 100.0) =>
+    Some("Must be between 0 and 100")
+  | `Binary(i) when ! (i == 0 || i == 1) => Some("Must be 0 or 1")
+  | _ => None
+  };
+
+let isValid = (t: t) =>
+  switch (error(t)) {
+  | Some(_) => false
+  | None => true
   };
 
 let typeToName = (t: t) =>

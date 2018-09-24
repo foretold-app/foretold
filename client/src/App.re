@@ -37,10 +37,11 @@ let inside = r =>
   switch (r) {
   | Home => <AgentIndex />
   | AgentIndex => <AgentIndex />
+  | NotFound => <AgentIndex />
   | AgentShow(id) => <AgentShow id />
   | MeasurableIndex => <MeasurableIndex />
+  | MeasurableShow("new") => <MeasurableNew />
   | MeasurableShow(id) => <MeasurableShow id />
-  | NotFound => <Home />
   };
 
 let make = _children => {

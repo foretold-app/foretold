@@ -18,6 +18,7 @@
   "suffix": ".bs.js",
   "namespace": true,
   "bs-dependencies": [
+    "bs-reform",
     "bs-css",
     "bs-ant-design",
     "bs-moment",

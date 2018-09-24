@@ -967,7 +967,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "ENUM",
-                  "name": "MeasurablevalueTypeEnumType",
+                  "name": "valueType",
                   "ofType": null
                 }
               },
@@ -1007,13 +1007,9 @@
               "description": null,
               "args": [],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -1078,7 +1074,7 @@
         },
         {
           "kind": "ENUM",
-          "name": "MeasurablevalueTypeEnumType",
+          "name": "valueType",
           "description": null,
           "fields": null,
           "inputFields": null,
@@ -1190,6 +1186,47 @@
               "type": {
                 "kind": "OBJECT",
                 "name": "Measurement",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "createMeasurable",
+              "description": null,
+              "args": [
+                {
+                  "name": "name",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "valueType",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "valueType",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Measurable",
                 "ofType": null
               },
               "isDeprecated": false,

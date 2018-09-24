@@ -3,11 +3,11 @@
 
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
-var Home$Client = require("./pages/Home.bs.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var AgentShow$Client = require("./pages/Agent/AgentShow/AgentShow.bs.js");
 var AgentIndex$Client = require("./pages/Agent/AgentIndex.bs.js");
 var PaddedLayout$Client = require("./utils/PaddedLayout.bs.js");
+var MeasurableNew$Client = require("./pages/Measurable/MeasurableNew.bs.js");
 var MeasurableShow$Client = require("./pages/Measurable/MeasurableShow/MeasurableShow.bs.js");
 var MeasurableIndex$Client = require("./pages/Measurable/MeasurableIndex.bs.js");
 
@@ -60,18 +60,18 @@ var component = ReasonReact.reducerComponent("App");
 
 function inside(r) {
   if (typeof r === "number") {
-    switch (r) {
-      case 0 : 
-      case 1 : 
-          return ReasonReact.element(undefined, undefined, AgentIndex$Client.make(/* array */[]));
-      case 2 : 
-          return ReasonReact.element(undefined, undefined, MeasurableIndex$Client.make(/* array */[]));
-      case 3 : 
-          return ReasonReact.element(undefined, undefined, Home$Client.make(/* array */[]));
-      
+    if (r === 2) {
+      return ReasonReact.element(undefined, undefined, MeasurableIndex$Client.make(/* array */[]));
+    } else {
+      return ReasonReact.element(undefined, undefined, AgentIndex$Client.make(/* array */[]));
     }
   } else if (r.tag) {
-    return ReasonReact.element(undefined, undefined, MeasurableShow$Client.make(r[0], /* array */[]));
+    var id = r[0];
+    if (id === "new") {
+      return ReasonReact.element(undefined, undefined, MeasurableNew$Client.make(/* array */[]));
+    } else {
+      return ReasonReact.element(undefined, undefined, MeasurableShow$Client.make(id, /* array */[]));
+    }
   } else {
     return ReasonReact.element(undefined, undefined, AgentShow$Client.make(r[0], /* array */[]));
   }

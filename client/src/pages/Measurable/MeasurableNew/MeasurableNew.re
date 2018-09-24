@@ -67,30 +67,37 @@ let make = _children => {
           ~schema=[(`name, Custom(_ => None))],
           ({handleSubmit, handleChange, form, _}) =>
             <form onSubmit=(ReForm.Helpers.handleDomFormSubmit(handleSubmit))>
-              <label>
-                <Antd.Input
-                  value=form.values.name
-                  onChange=(
-                    ReForm.Helpers.handleDomFormChange(handleChange(`name))
-                  )
-                />
-                <Antd.Select
-                  value=form.values.valueType
-                  onChange=(e => handleChange(`valueType, e) |> ignore)>
-                  <Antd.Select.Option value="float">
-                    ("Float" |> ste)
-                  </Antd.Select.Option>
-                  <Antd.Select.Option value="percentage">
-                    ("Percentage" |> ste)
-                  </Antd.Select.Option>
-                  <Antd.Select.Option value="date">
-                    ("Date" |> ste)
-                  </Antd.Select.Option>
-                </Antd.Select>
-              </label>
-              <Antd.Button _type=`primary onClick=(_ => handleSubmit())>
-                ("Submit" |> ste)
-              </Antd.Button>
+              <h2> ("Create a new Measurable" |> ste) </h2>
+              <Form>
+                <Form.Item>
+                  <Input
+                    value=form.values.name
+                    onChange=(
+                      ReForm.Helpers.handleDomFormChange(handleChange(`name))
+                    )
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Select
+                    value=form.values.valueType
+                    onChange=(e => handleChange(`valueType, e) |> ignore)>
+                    <Select.Option value="float">
+                      ("Float" |> ste)
+                    </Select.Option>
+                    <Select.Option value="percentage">
+                      ("Percentage" |> ste)
+                    </Select.Option>
+                    <Select.Option value="date">
+                      ("Date" |> ste)
+                    </Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item>
+                  <Button _type=`primary onClick=(_ => handleSubmit())>
+                    ("Submit" |> ste)
+                  </Button>
+                </Form.Item>
+              </Form>
             </form>,
         )
         |> ReasonReact.element,

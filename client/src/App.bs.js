@@ -7,7 +7,7 @@ var ReasonReact = require("reason-react/src/ReasonReact.js");
 var AgentShow$Client = require("./pages/Agent/AgentShow/AgentShow.bs.js");
 var AgentIndex$Client = require("./pages/Agent/AgentIndex.bs.js");
 var PaddedLayout$Client = require("./utils/PaddedLayout.bs.js");
-var MeasurableNew$Client = require("./pages/Measurable/MeasurableNew.bs.js");
+var MeasurableNew$Client = require("./pages/Measurable/MeasurableNew/MeasurableNew.bs.js");
 var MeasurableShow$Client = require("./pages/Measurable/MeasurableShow/MeasurableShow.bs.js");
 var MeasurableIndex$Client = require("./pages/Measurable/MeasurableIndex.bs.js");
 

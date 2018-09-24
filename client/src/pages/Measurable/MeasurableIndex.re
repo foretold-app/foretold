@@ -13,7 +13,6 @@ let toMeasurableLink = m => {
   {j|<a href="/measurables/$id">$name</a>|j};
 };
 
-/* e##createdAt |> Js.Json.decodeString |> Option.default(""), */
 let showQueryList = (~data, ~urlFn, ~render) => {
   let ddata =
     Array.map(

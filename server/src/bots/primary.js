@@ -89,11 +89,15 @@ class Bot {
 }
 
 let evaluate = function (vs) {
+  let foo = vs.filter(v => v.value.dataType == "floatPercentiles");
+  console.log("HI", vs)
+  console.log("BAR", vs)
   return {
-    trio: {
-      p25: _.mean(vs.map(e => e.value.trio.p25)) * 0.7,
-      p50: _.mean(vs.map(e => e.value.trio.p50)),
-      p75: _.mean(vs.map(e => e.value.trio.p75)) * 1.3
+    dataType: "floatPercentiles",
+    data: {
+      "25.": _.mean(foo.map(e => e.value.data["25."])) * 0.7,
+      "50.": _.mean(foo.map(e => e.value.data["50."])),
+      "75.": _.mean(foo.map(e => e.value.data["75."])) * 1.3
     }
   }
 }

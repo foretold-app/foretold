@@ -36,6 +36,9 @@ let make = _children => {
             <Antd_Menu.Item>
               (link("/measurables", "Measurables"))
             </Antd_Menu.Item>
+            <Antd_Menu.Item>
+              (link("/measurables/new", "New Measurable"))
+            </Antd_Menu.Item>
           </Antd_Menu>
         </Header>
       </Col>

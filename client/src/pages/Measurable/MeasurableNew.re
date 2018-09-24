@@ -3,6 +3,7 @@ open Rationale;
 open Rationale.Option;
 open Result.Infix;
 open Rationale.Function.Infix;
+open Antd;
 
 let ste = ReasonReact.string;
 
@@ -20,74 +21,79 @@ module CreateMeasurableMutation =
   ReasonApollo.CreateMutation(CreateMeasurable);
 
 module SignUpParams = {
-  type state = {name: string};
-  type fields = [ | `name];
-  let lens = [(`name, s => s.name, (_s, name) => {name: name})];
+  type state = {
+    name: string,
+    valueType: string,
+  };
+  type fields = [ | `name | `valueType];
+  let lens = [
+    (`name, s => s.name, (s, name) => {...s, name}),
+    (`valueType, s => s.valueType, (s, valueType) => {...s, valueType}),
+  ];
 };
 
 module SignUpForm = ReForm.Create(SignUpParams);
 
+let mutate =
+    (
+      mutation: CreateMeasurableMutation.apolloMutation,
+      values: SignUpForm.values,
+    ) => {
+  let mutate =
+    CreateMeasurable.make(
+      ~name=values.name,
+      ~valueType=
+        switch (values.valueType) {
+        | "float" => `FLOAT
+        | "percentage" => `PERCENTAGE
+        | "date" => `DATE
+        | _ => `FLOAT
+        },
+      (),
+    );
+  mutation(~variables=mutate##variables, ()) |> ignore;
+};
+
 let component = ReasonReact.statelessComponent("Measurables");
 let make = _children => {
   ...component,
-  render: self =>
-    CreateMeasurableMutation.make((mutation, _) =>
-      SignUpForm.make(
-        ~onSubmit=e => e |> Js.log |> ignore,
-        ~initialState={name: ""},
-        ~schema=[(`name, Custom(_ => None))],
-        ({handleSubmit, handleChange, form, _}) =>
-          <form onSubmit=(ReForm.Helpers.handleDomFormSubmit(handleSubmit))>
-            <label>
-              <input
-                value=form.values.name
-                onChange=(
-                  ReForm.Helpers.handleDomFormChange(handleChange(`name))
-                )
-              />
-            </label>
-            <button> ("Submit" |> ste) </button>
-          </form>,
-      )
-      |> ReasonReact.element
+  render: _ =>
+    CreateMeasurableMutation.make(
+      ~onCompleted=e => Js.log("HI"),
+      (mutation, _) =>
+        SignUpForm.make(
+          ~onSubmit=({values}) => mutate(mutation, values),
+          ~initialState={name: "", valueType: "float"},
+          ~schema=[(`name, Custom(_ => None))],
+          ({handleSubmit, handleChange, form, _}) =>
+            <form onSubmit=(ReForm.Helpers.handleDomFormSubmit(handleSubmit))>
+              <label>
+                <Antd.Input
+                  value=form.values.name
+                  onChange=(
+                    ReForm.Helpers.handleDomFormChange(handleChange(`name))
+                  )
+                />
+                <Antd.Select
+                  value=form.values.valueType
+                  onChange=(e => handleChange(`valueType, e) |> ignore)>
+                  <Antd.Select.Option value="float">
+                    ("Float" |> ste)
+                  </Antd.Select.Option>
+                  <Antd.Select.Option value="percentage">
+                    ("Percentage" |> ste)
+                  </Antd.Select.Option>
+                  <Antd.Select.Option value="date">
+                    ("Date" |> ste)
+                  </Antd.Select.Option>
+                </Antd.Select>
+              </label>
+              <Antd.Button _type=`primary onClick=(_ => handleSubmit())>
+                ("Submit" |> ste)
+              </Antd.Button>
+            </form>,
+        )
+        |> ReasonReact.element,
     )
     |> ReasonReact.element,
 };
-
-/* CreateMeasurableMutation.make((mutation, _) =>
-     SignUpForm.make(_ => <div />) |> ReasonReact.element
-   )
-   |> ReasonReact.element, */
-/* <SignUpForm
-     onSubmit=(
-       ({values}) => {
-         let mut =
-           CreateMeasurable.make(~name=values.name, ~valueType=`FLOAT, ());
-         mutation(
-           ~variables=mut##variables,
-           ~refetchQueries=[|"getMeasurable"|],
-           (),
-         )
-         |> ignore;
-       }
-     )
-     initialState={name: ""}
-     schema=[(`name, Custom(e => None))]>
-     ...(
-          ({handleSubmit, handleChange, form, _}) =>
-            <form
-              onSubmit=(ReForm.Helpers.handleDomFormSubmit(handleSubmit))>
-              <label>
-                <input
-                  value=form.values.name
-                  onChange=(
-                    ReForm.Helpers.handleDomFormChange(
-                      handleChange(`name),
-                    )
-                  )
-                />
-              </label>
-              <button> ("Submit" |> ste) </button>
-            </form>
-        )
-   </SignUpForm> */

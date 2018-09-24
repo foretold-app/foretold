@@ -18,6 +18,30 @@ let () = {
       |> toEqual(Ok(`FloatPoint(0.3)))
     );
 
+    test("#decode FloatPoint with large int", () =>
+      Json.parseOrRaise(
+        {| {
+        "dataType": "floatPoint",
+        "data": 3333
+      } |},
+      )
+      |> Value.decode
+      |> expect
+      |> toEqual(Ok(`FloatPoint(3333.0)))
+    );
+
+    test("#decode percentage with int", () =>
+      Json.parseOrRaise(
+        {| {
+        "dataType": "percentagePoint",
+        "data": 1
+      } |},
+      )
+      |> Value.decode
+      |> expect
+      |> toEqual(Ok(`Percentage(1.0)))
+    );
+
     test("#decode FloatPoint", () => {
       let value = `FloatPoint(0.3);
       Json.parseOrRaise(

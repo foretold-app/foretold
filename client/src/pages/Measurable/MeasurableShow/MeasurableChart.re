@@ -36,6 +36,14 @@ let onlyFloatPercentiles =
     }
   );
 
+let onlyWithFloatPercentiles =
+  filterAndFold((e, fnYes, fnNo) =>
+    switch (e##value) {
+    | Belt.Result.Ok(`FloatPercentiles(r)) => fnYes(e)
+    | _ => fnNo()
+    }
+  );
+
 let onlySomes =
   filterAndFold((e, fnYes, fnNo) =>
     switch (e) {
@@ -61,7 +69,6 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       | None => 0.0
       };
 
-    /* let toPercentile = (f, e) => e |> toTrio ;> toVal(f) */
     let yMax =
       sorted
       |> Array.map(e => e##value)
@@ -79,15 +86,20 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       |> Array.fold_left((a, b) => a < b ? a : b, max_float);
 
     let formatDate = Moment.format("MMM DD, YYYY HH:MM:SS");
-
     let toPercentage = (perc, m: measurement) =>
       switch (m##value) {
-      | Belt.Result.Ok(`FloatPercentiles(v)) =>
-        switch (Belt.Map.get(v, perc)) {
-        | Some(e) => e
-        | _ => 0.1
+      | Belt.Result.Ok(e) =>
+        switch (e) {
+        | `FloatPoint(r) => r
+        | `Percentage(r) => r
+        | `FloatPercentiles(v) =>
+          switch (Belt.Map.get(v, perc)) {
+          | Some(e) => e
+          | _ => 3.0
+          }
+        | _ => 5.0
         }
-      | _ => 0.1
+      | _ => 2.0
       };
 
     let xMax =
@@ -102,6 +114,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
 
     let xMin =
       sorted
+      |> onlyWithFloatPercentiles
       |> Array.map(e => e##createdAt)
       |> Array.fold_left(
            (a, b) => Moment.isBefore(a, b) ? a : b,
@@ -112,6 +125,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
 
     let aggregatePercentiles =
       sorted
+      |> onlyWithFloatPercentiles
       |> Js.Array.filter(e => e##competitorType == `AGGREGATION)
       |> Js.Array.filter(e =>
            switch (e##value) {
@@ -128,6 +142,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
          );
     let competitives =
       sorted
+      |> onlyWithFloatPercentiles
       |> Js.Array.filter(e => e##competitorType == `COMPETITIVE)
       |> Array.map(e =>
            {
@@ -137,9 +152,10 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
              "y3": e |> toPercentage(75.0),
            }
          );
-    Js.log(competitives);
+
     let aggregateMedians =
       sorted
+      |> onlyWithFloatPercentiles
       |> Js.Array.filter(e => e##competitorType == `AGGREGATION)
       |> Array.map(e =>
            {
@@ -147,6 +163,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
              "y": e |> toPercentage(50.0),
            }
          );
+
     Victory.(
       <div className=Styles.plot>
         <VictoryChart

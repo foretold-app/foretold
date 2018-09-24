@@ -1003,7 +1003,7 @@
               "deprecationReason": null
             },
             {
-              "name": "measurableCount",
+              "name": "measurementCount",
               "description": null,
               "args": [],
               "type": {

@@ -137,8 +137,11 @@ let mutate =
 };
 
 let valueList =
-  Array.map(
-    e => <Select.Option value=e> (e |> ste) </Select.Option>,
+  Array.mapi(
+    (i, e) =>
+      <Select.Option value=e key=(string_of_int(i))>
+        (e |> ste)
+      </Select.Option>,
     [|"FloatPercentiles", "FloatPoint", "Percentage", "Binary"|],
   );
 
@@ -151,8 +154,8 @@ let errorOfFloat = (fn1, fn2, e) => {
   };
 };
 
-let input = (handleChange, value, b) =>
-  <Form.Item>
+let input = (handleChange, value, b, key) =>
+  <Form.Item key>
     <Input
       value
       onChange=(ReForm.Helpers.handleDomFormChange(handleChange(b)))
@@ -172,43 +175,52 @@ let make = (~measurableId: string, _children) => {
           ({handleSubmit, handleChange, form, _}) =>
             <form onSubmit=(ReForm.Helpers.handleDomFormSubmit(handleSubmit))>
               <h2> ("Create a new Measurement" |> ste) </h2>
-              <Form>
-                <Form.Item>
-                  <Select
-                    value=form.values.dataType
-                    onChange=(e => handleChange(`dataType, e) |> ignore)>
-                    valueList
-                  </Select>
-                </Form.Item>
-                (
-                  form.values.dataType != "FloatPercentiles" ?
-                    <div /> :
-                    <div>
-                      (input(handleChange, form.values.p25, `p25))
-                      (input(handleChange, form.values.p50, `p50))
-                      (input(handleChange, form.values.p75, `p75))
-                    </div>
-                )
-                (
-                  form.values.dataType != "FloatPoint" ?
-                    <div /> :
-                    input(handleChange, form.values.pointFloat, `pointFloat)
-                )
-                (
-                  form.values.dataType != "Percentage" ?
-                    <div /> :
-                    input(handleChange, form.values.percentage, `percentage)
-                )
-                (
-                  form.values.dataType != "Binary" ?
-                    <div /> : input(handleChange, form.values.binary, `binary)
-                )
-                <Form.Item>
-                  <Button _type=`primary onClick=(_ => handleSubmit())>
-                    ("Submit" |> ste)
-                  </Button>
-                </Form.Item>
-              </Form>
+              <Form.Item key="ee">
+                <Select
+                  value=form.values.dataType
+                  onChange=(e => handleChange(`dataType, e) |> ignore)>
+                  valueList
+                </Select>
+              </Form.Item>
+              (
+                form.values.dataType != "FloatPercentiles" ?
+                  <div /> :
+                  <div>
+                    (input(handleChange, form.values.p25, `p25, "1"))
+                    (input(handleChange, form.values.p50, `p50, "2"))
+                    (input(handleChange, form.values.p75, `p75, "3"))
+                  </div>
+              )
+              (
+                form.values.dataType != "FloatPoint" ?
+                  <div /> :
+                  input(
+                    handleChange,
+                    form.values.pointFloat,
+                    `pointFloat,
+                    "4",
+                  )
+              )
+              (
+                form.values.dataType != "Percentage" ?
+                  <div /> :
+                  input(
+                    handleChange,
+                    form.values.percentage,
+                    `percentage,
+                    "5",
+                  )
+              )
+              (
+                form.values.dataType != "Binary" ?
+                  <div /> :
+                  input(handleChange, form.values.binary, `binary, "6")
+              )
+              <Form.Item>
+                <Button _type=`primary onClick=(_ => handleSubmit())>
+                  ("Submit" |> ste)
+                </Button>
+              </Form.Item>
             </form>,
         )
         |> ReasonReact.element,

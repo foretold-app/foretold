@@ -1,6 +1,7 @@
 type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
 type measurement = {
   .
+  "id": string,
   "agent":
     option(
       {

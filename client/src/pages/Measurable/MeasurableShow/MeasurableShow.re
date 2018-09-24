@@ -31,6 +31,7 @@ module GetMeasurable = [%graphql
             isLocked
             createdAt @bsDecoder(fn: "toMoment")
             measurements: Measurements{
+              id
               createdAt @bsDecoder(fn: "toMoment")
               value @bsDecoder(fn: "Shared.Value.decode")
               competitorType
@@ -54,19 +55,8 @@ module GetMeasurable = [%graphql
   |}
 ];
 
-module CreateMeasurement = [%graphql
-  {|
-            mutation createMeasurement($value: SequelizeJSON!, $competitorType:competitorType!, $measurableId:String!, $agentId:String!) {
-                createMeasurement(value: $value, competitorType: $competitorType, measurableId:$measurableId, agentId:$agentId) {
-                  createdAt
-                }
-            }
-    |}
-];
-
 module GetMeasurableQuery = ReasonApollo.CreateQuery(GetMeasurable);
-module CreateMeasurementMutation =
-  ReasonApollo.CreateMutation(CreateMeasurement);
+
 let component = ReasonReact.statelessComponent("Measurable");
 
 let valueString = e =>
@@ -83,16 +73,6 @@ module Styles = {
 
   let body = style([marginLeft(px(200)), padding(px(30))]);
 };
-
-let vvvv =
-  `FloatPercentiles(
-    Shared.Value.FloatPercentiles.fromArray([|
-      (25.0, 50.0),
-      (50.0, 150.0),
-      (75.0, 250.0),
-    |]),
-  )
-  |> Shared.Value.encode;
 
 let make = (~id: string, _children) => {
   ...component,
@@ -113,7 +93,6 @@ let make = (~id: string, _children) => {
             <$> (
               e =>
                 <div>
-                  <MeasurableShowForm measurableId=id />
                   <h2> (e##name |> ReasonReact.string) </h2>
                   <h3>
                     (
@@ -121,40 +100,14 @@ let make = (~id: string, _children) => {
                       |> ReasonReact.string
                     )
                   </h3>
-                  <CreateMeasurementMutation>
-                    ...(
-                         (mutation, _) => {
-                           let mut =
-                             CreateMeasurement.make(
-                               ~measurableId=e##id,
-                               ~agentId="c4aefed8-83c1-422d-9364-313071287758",
-                               ~value=vvvv,
-                               ~competitorType=`COMPETITIVE,
-                               (),
-                             );
-                           <div>
-                             <h3
-                               onClick=(
-                                 e =>
-                                   mutation(
-                                     ~variables=mut##variables,
-                                     ~refetchQueries=[|"getMeasurable"|],
-                                     (),
-                                   )
-                                   |> ignore
-                               )>
-                               (
-                                 e##valueType
-                                 |> valueString
-                                 |> ReasonReact.string
-                               )
-                             </h3>
-                             <MeasurableChart measurements=e##measurements />
-                             <MeasurableTable measurements=e##measurements />
-                           </div>;
-                         }
-                       )
-                  </CreateMeasurementMutation>
+                  <div>
+                    <h3>
+                      (e##valueType |> valueString |> ReasonReact.string)
+                    </h3>
+                    <MeasurableChart measurements=e##measurements />
+                    <MeasurableShowForm measurableId=id />
+                    <MeasurableTable measurements=e##measurements />
+                  </div>
                 </div>
             )
             |> Result.result(idd, idd)

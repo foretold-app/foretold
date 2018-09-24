@@ -14,6 +14,18 @@ describe("FloatPercentiles", (function () {
                                 0.3
                               ]]), Jest.Expect[/* expect */0](Value$Shared.decode(Json.parseOrRaise(" {\n        \"dataType\": \"floatPoint\",\n        \"data\": 0.3\n      } "))));
               }));
+        Jest.test("#decode FloatPoint with large int", (function () {
+                return Jest.Expect[/* toEqual */12](/* Ok */Block.__(0, [/* `FloatPoint */[
+                                -606499532,
+                                3333.0
+                              ]]), Jest.Expect[/* expect */0](Value$Shared.decode(Json.parseOrRaise(" {\n        \"dataType\": \"floatPoint\",\n        \"data\": 3333\n      } "))));
+              }));
+        Jest.test("#decode percentage with int", (function () {
+                return Jest.Expect[/* toEqual */12](/* Ok */Block.__(0, [/* `Percentage */[
+                                -488794310,
+                                1.0
+                              ]]), Jest.Expect[/* expect */0](Value$Shared.decode(Json.parseOrRaise(" {\n        \"dataType\": \"percentagePoint\",\n        \"data\": 1\n      } "))));
+              }));
         Jest.test("#decode FloatPoint", (function () {
                 return Jest.Expect[/* toEqual */12](/* Ok */Block.__(0, [/* `FloatPoint */[
                                 -606499532,

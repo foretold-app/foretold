@@ -5,6 +5,7 @@ open Result.Infix;
 open Rationale.Function.Infix;
 open Queries;
 open HandsOnTable;
+open MomentRe;
 
 let toMeasurableLink = m => {
   let id = m.id;
@@ -13,25 +14,43 @@ let toMeasurableLink = m => {
 };
 
 /* e##createdAt |> Js.Json.decodeString |> Option.default(""), */
-let showQueryList = (~data: Queries.measurables, ~urlFn, ~render) => {
+let showQueryList = (~data, ~urlFn, ~render) => {
   let ddata =
     Array.map(
       e =>
         Js.Dict.fromList([
           ("name", toMeasurableLink(e)),
           ("id", e.id),
-          ("createdAt", e.createdAt),
+          (
+            "type",
+            switch (e.valueType) {
+            | `DATE => "Date"
+            | `FLOAT => "Float"
+            | `PERCENTAGE => "Percentage"
+            },
+          ),
+          (
+            "measurementCount",
+            e.measurementCount |> Option.default(0) |> string_of_int,
+          ),
+          ("createdAt", e.createdAt |> Moment.format("L, h:mm:ss a")),
         ]),
       data,
     );
 
   let columns = [|
     makeColumn(~data="name", ~renderer="html", ()),
+    makeColumn(~data="type", ()),
+    makeColumn(~data="measurementCount", ()),
     makeColumn(~data="createdAt", ()),
   |];
 
   <UseRouterForLinks>
-    <HandsOnTable data=ddata columns colHeaders=[|"", "", ""|] />
+    <HandsOnTable
+      data=ddata
+      columns
+      colHeaders=[|"Name", "Type", "Measurement Count", "Created At"|]
+    />
   </UseRouterForLinks>;
 };
 

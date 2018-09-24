@@ -1,33 +1,7 @@
 open Rationale;
 open Rationale.Option;
-
-module GetUser = [%graphql
-  {|
-    query getUser ($id: String!) {
-        user:
-          user(id: $id){
-            id
-            name
-        }
-    }
-  |}
-];
-module GetUserQuery = ReasonApollo.CreateQuery(GetUser);
-
-module GetUsers = [%graphql
-  {|
-    query getUsers {
-        users {
-           id
-           name
-           createdAt
-           updatedAt
-        }
-    }
-  |}
-];
-
-module GetUsersQuery = ReasonApollo.CreateQuery(GetUsers);
+open Rationale.Function.Infix;
+open MomentRe;
 
 let stringOfcompetitorType = e =>
   switch (e) {
@@ -78,16 +52,23 @@ module GetAgents = [%graphql
 
 module GetAgentsQuery = ReasonApollo.CreateQuery(GetAgents);
 
+type valueType = [ | `DATE | `FLOAT | `PERCENTAGE];
+
 type measurable = {
   id: string,
   name: string,
-  createdAt: string,
-  updatedAt: string,
+  valueType,
+  isLocked: bool,
+  measurementCount: option(int),
+  createdAt: MomentRe.Moment.t,
+  updatedAt: MomentRe.Moment.t,
 };
 
 type measurables = array(measurable);
 
 let jsonToString = e => e |> Js.Json.decodeString |> Option.default("");
+
+let toMoment = jsonToString ||> moment;
 
 module GetMeasurables = [%graphql
   {|
@@ -95,8 +76,11 @@ module GetMeasurables = [%graphql
         measurables @bsRecord {
            id
            name
-           createdAt @bsDecoder(fn: "jsonToString")
-           updatedAt @bsDecoder(fn: "jsonToString")
+           valueType
+           isLocked
+           measurementCount
+           createdAt @bsDecoder(fn: "toMoment")
+           updatedAt @bsDecoder(fn: "toMoment")
         }
     }
   |}

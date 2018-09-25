@@ -4,6 +4,7 @@
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
+var Auth0$Client = require("./utils/Auth0.bs.js");
 var AgentShow$Client = require("./pages/Agent/AgentShow/AgentShow.bs.js");
 var AgentIndex$Client = require("./pages/Agent/AgentIndex.bs.js");
 var PaddedLayout$Client = require("./utils/PaddedLayout.bs.js");
@@ -32,6 +33,13 @@ function mapUrlToRoute(url) {
             }
           } else {
             return /* AgentIndex */1;
+          }
+      case "callback" : 
+          if (match[1]) {
+            return /* Home */0;
+          } else {
+            Auth0$Client.handleAuth(url);
+            return /* Home */0;
           }
       case "measurables" : 
           var match$2 = match[1];

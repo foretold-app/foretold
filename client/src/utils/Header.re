@@ -24,6 +24,16 @@ module Styles = {
 
 Css.(global("body", [fontFamily("Lato")]));
 
+let authOptions = {
+  "domain": "guesstimate.auth0.com",
+  "clientID": "WYfDFWDK5l9dRq13gtKhXs82AjwbRnm5",
+  "redirectUri": "http://localhost:1234/callback",
+  "responseType": "token id_token",
+  "scope": "openid",
+};
+
+let authClient = Auth0.createClient(authOptions);
+
 let make = _children => {
   ...component,
   render: _ =>
@@ -38,6 +48,11 @@ let make = _children => {
             </Antd_Menu.Item>
             <Antd_Menu.Item>
               (link("/measurables/new", "New Measurable"))
+            </Antd_Menu.Item>
+            <Antd_Menu.Item>
+              <span onClick=(e => authClient##authorize())>
+                ("login" |> ste)
+              </span>
             </Antd_Menu.Item>
           </Antd_Menu>
         </Header>

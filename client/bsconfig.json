@@ -28,6 +28,9 @@
     "shared",
     "@glennsl/bs-json"
   ],
+  "dev-dependencies": [
+    "@glennsl/bs-jest"
+  ],
   "refmt": 3,
   "warnings": {
     "error": "+5"

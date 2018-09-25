@@ -21,6 +21,9 @@ let reducer = (action, _state) =>
 let mapUrlToRoute = (url: ReasonReact.Router.url) =>
   switch (url.path) {
   | [] => Home
+  | ["callback"] =>
+    Auth0.handleAuth(url);
+    Home;
   | ["agents"] => AgentIndex
   | ["agents", id] => AgentShow(id)
   | ["measurables"] => MeasurableIndex

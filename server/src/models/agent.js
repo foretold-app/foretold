@@ -12,7 +12,15 @@ module.exports = (sequelize, DataTypes) => {
     type: {
       type: DataTypes.ENUM(["USER", "BOT"]),
       allowNull: false,
-    }
+    },
+    measurementCount: {
+      allowNull: true,
+      type: Sequelize.VIRTUAL(DataTypes.INTEGER),
+      get: async function() {
+        const items = await this.getMeasurements()
+        return items.length
+      }
+    },
   });
   Model.associate = function (models) {
     Model.User = Model.hasOne(models.User, {

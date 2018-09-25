@@ -8,7 +8,12 @@ open HandsOnTable;
 let toAgentLink = (id, name) => {j|<a href="/agents/$id">$name</a>|j};
 
 let component = ReasonReact.statelessComponent("Measurables");
-let perEl = (e: Queries.agent) =>
+let perEl = (e: Queries.agent) => {
+  let count =
+    switch (e) {
+    | {measurementCount: Some(m)} => string_of_int(m)
+    | _ => ""
+    };
   switch (e) {
   | {bot: Some(r)} =>
     Js.Dict.fromList([
@@ -16,15 +21,18 @@ let perEl = (e: Queries.agent) =>
       ("type", "Bot"),
       ("description", r.description |> Option.default("")),
       ("competitorType", Queries.stringOfcompetitorType(r.competitorType)),
+      ("measurementCount", count),
     ])
   | {user: Some(r)} =>
     Js.Dict.fromList([
       ("name", r.name |> toAgentLink(e.id)),
       ("type", "User"),
       ("competitorType", "All"),
+      ("measurementCount", count),
     ])
   | _ => Js.Dict.fromList([])
   };
+};
 
 let make = _children => {
   ...component,
@@ -43,6 +51,7 @@ let make = _children => {
                 makeColumn(~data="type", ()),
                 makeColumn(~data="competitorType", ()),
                 makeColumn(~data="description", ()),
+                makeColumn(~data="measurementCount", ()),
               |];
               <div>
                 <UseRouterForLinks>
@@ -54,6 +63,7 @@ let make = _children => {
                       "Type",
                       "CompetitorType",
                       "Description",
+                      "Measurements",
                     |]
                   />
                 </UseRouterForLinks>

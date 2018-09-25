@@ -24,6 +24,7 @@ type bot = {
 
 type agent = {
   id: string,
+  measurementCount: option(int),
   bot: option(bot),
   user: option(user),
 };
@@ -35,6 +36,7 @@ module GetAgents = [%graphql
     query getAgents {
       agents @bsRecord {
         id
+        measurementCount
         user: User @bsRecord{
           id
           name

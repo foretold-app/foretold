@@ -32,12 +32,13 @@ type measurable = {
   id: string,
   name: string,
   isLocked: bool,
-}
+};
 
 type measurement = {
   id: string,
   relevantAt: MomentRe.Moment.t,
   competitorType,
+  value: Belt.Result.t(Shared.Value.t, string),
   createdAt: MomentRe.Moment.t,
   taggedMeasurementId: option(string),
   measurable: option(measurable),
@@ -68,6 +69,7 @@ module GetAgent = [%graphql
             id
             createdAt @bsDecoder(fn: "toMoment")
             relevantAt @bsDecoder(fn: "toOptionalMoment")
+            value @bsDecoder(fn: "Shared.Value.decode")
             competitorType
             taggedMeasurementId
             measurable: Measurable @bsRecord{

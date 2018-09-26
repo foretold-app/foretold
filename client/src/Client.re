@@ -18,7 +18,9 @@ let headers =
     object_([
       (
         "authorization",
-        Json.Encode.string(Auth0.authToken() |> Option.default("")),
+        Json.Encode.string(
+          "Bearer " ++ (Auth0.authToken() |> Option.default("")),
+        ),
       ),
     ])
   );

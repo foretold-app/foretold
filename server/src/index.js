@@ -1,7 +1,14 @@
 import express from 'express';
 import path from 'path';
+import * as auth0 from "auth0-js";
 import logger from 'morgan';
 import bodyParser from 'body-parser';
+
+const models = require("./models")
+const Sequelize = require('sequelize')
+
+const jwt = require('express-jwt')
+var jwks = require('jwks-rsa')
 const { ApolloServer, gql } = require('apollo-server-express');
 
 import {schema} from './schema';
@@ -20,18 +27,32 @@ const resolvers = {
   },
 };
 
-const server = new ApolloServer({schema,   formatError: error => {
-  console.log(error);
-  return error;
-},
-formatResponse: response => {
-  console.log(response);
-  return response;
-},});
+const server = new ApolloServer({
+  schema,
+  formatError: error => {
+    return error;
+  },
+  formatResponse: response => {
+    return response;
+  },
+  context: ({req}) => {
+    return {userSub: req.user.sub}
+}
+});
 
+
+function getToken(req) {
+  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+      return req.headers.authorization.split(' ')[1];
+  } else if (req.query && req.query.token) {
+    return req.query.token;
+  }
+  return null;
+}
 const app = express();
 var cors = require("cors");
 app.use(cors());
+app.use(jwt({secret: "", credentialsRequired: false, getToken}))
 server.applyMiddleware({ app });
 
 app.listen({ port: 4000 }, () =>

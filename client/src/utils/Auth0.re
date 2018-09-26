@@ -1,6 +1,5 @@
 open Belt;
-
-/* [%bs.raw {|require('../node_modules/auth0-js/build/auth0.js')|}]; */
+open Rationale.Option;
 
 type generatedAuth0Client = {. "authorize": [@bs.meth] (unit => unit)};
 
@@ -58,7 +57,22 @@ let logout = () => {
   ();
 };
 
-let authToken = () => Dom.Storage.(localStorage |> getItem("access_token"));
+let authToken = () => Dom.Storage.(localStorage |> getItem("id_token"));
+
+let isLoggedIn = () =>
+  Dom.Storage.(localStorage |> getItem("id_token")) |> Rationale.Option.isSome;
 
 let getIdToken = () =>
   Dom.Storage.(localStorage |> getItem("id_token") |> resolveOption);
+
+let authOptions = {
+  "domain": "guesstimate.auth0.com",
+  "clientID": "gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT",
+  "redirectUri": "http://localhost:1234/callback",
+  "responseType": "token id_token",
+  "scope": "openid",
+};
+
+let authClient = createClient(authOptions);
+
+let logIn = () => authClient##authorize();

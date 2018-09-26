@@ -90,8 +90,6 @@ class Bot {
 
 let evaluate = function (vs) {
   let foo = vs.filter(v => v.value.dataType == "floatPercentiles");
-  console.log("HI", vs)
-  console.log("BAR", vs)
   return {
     dataType: "floatPercentiles",
     data: {

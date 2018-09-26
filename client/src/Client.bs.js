@@ -14,7 +14,7 @@ var inMemoryCache = ApolloInMemoryCache.createInMemoryCache(undefined, undefined
 var headers = Json_encode.object_(/* :: */[
       /* tuple */[
         "authorization",
-        Option$Rationale.$$default("", Auth0$Client.authToken(/* () */0))
+        "Bearer " + Option$Rationale.$$default("", Auth0$Client.authToken(/* () */0))
       ],
       /* [] */0
     ]);

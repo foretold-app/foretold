@@ -36,7 +36,7 @@ const server = new ApolloServer({
     return response;
   },
   context: ({req}) => {
-    return {userSub: req.user.sub}
+    return {userSub: req.user && req.user.sub}
 }
 });
 
@@ -52,7 +52,7 @@ function getToken(req) {
 const app = express();
 var cors = require("cors");
 app.use(cors());
-app.use(jwt({secret: "", credentialsRequired: false, getToken}))
+app.use(jwt({secret: "bhz9XiFVqoowf_cSicdItfmExxWrAoeyhKEjGNQKjpX08E0NKuLNQ3uF5XL-wdy_", credentialsRequired: false, getToken}))
 server.applyMiddleware({ app });
 
 app.listen({ port: 4000 }, () =>

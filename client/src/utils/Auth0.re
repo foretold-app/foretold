@@ -17,17 +17,17 @@ external createClient : clientOptions => generatedAuth0Client = "WebAuth";
 
 [@bs.module] external jwt_decode : string => Js.Json.t = "jwt-decode";
 
-let getSub = (idToken: string) : option(string) => {
-  let decoded = jwt_decode(idToken);
-  switch (Js.Json.decodeObject(decoded)) {
-  | Some(dict) =>
-    switch (Js.Dict.get(dict, "sub")) {
-    | Some(answer) => Js.Json.decodeString(answer)
-    | _ => None
-    }
+let safe_jwt_decode = (s: string) : option('a) =>
+  try (Some(jwt_decode(s))) {
   | _ => None
   };
-};
+
+let getSub = (idToken: string) : option(string) =>
+  idToken
+  |> safe_jwt_decode
+  >>= Js.Json.decodeObject
+  >>= (e => Js.Dict.get(e, "sub"))
+  >>= Js.Json.decodeString;
 
 let matchAccessToken = [%re "/access_token=([^\$&]+)/g"];
 let matchExpiresIn = [%re "/expires_in=([^\$&]+)/g"];
@@ -76,8 +76,7 @@ let authToken = () => Dom.Storage.(localStorage |> getItem("id_token"));
 let isLoggedIn = () =>
   Dom.Storage.(localStorage |> getItem("id_token")) |> Rationale.Option.isSome;
 
-let getIdToken = () =>
-  Dom.Storage.(localStorage |> getItem("id_token") |> resolveOption);
+let getIdToken = () => Dom.Storage.(localStorage |> getItem("id_token"));
 
 let authOptions = {
   "domain": "guesstimate.auth0.com",
@@ -90,5 +89,4 @@ let authOptions = {
 let authClient = createClient(authOptions);
 
 let logIn = () => authClient##authorize();
-
-let userId = getSub(getIdToken());
+let userId = Rationale.Option.bind(getIdToken(), getSub);

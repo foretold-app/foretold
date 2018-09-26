@@ -12,7 +12,7 @@ function apolloResponseToResult(result) {
   } else if (result.tag) {
     return /* Ok */Block.__(0, [result[0]]);
   } else {
-    return /* Error */Block.__(1, [React.createElement("div", undefined, result[0].message)]);
+    return /* Error */Block.__(1, [React.createElement("div", undefined, "WHAT?")]);
   }
 }
 

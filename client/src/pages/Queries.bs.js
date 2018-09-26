@@ -2,6 +2,7 @@
 'use strict';
 
 var Js_exn = require("bs-platform/lib/js/js_exn.js");
+var Js_dict = require("bs-platform/lib/js/js_dict.js");
 var Js_json = require("bs-platform/lib/js/js_json.js");
 var MomentRe = require("bs-moment/src/MomentRe.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
@@ -402,6 +403,116 @@ var GetMeasurablesQuery = ReasonApollo.CreateQuery([
       parse$1
     ]);
 
+var ppx_printed_query$2 = "query user($auth0Id: String)  {\nuser: user(auth0Id: $auth0Id)  {\nid  \nauth0Id  \nname  \n}\n\n}\n";
+
+function parse$2(value) {
+  var match = Js_json.decodeObject(value);
+  if (match !== undefined) {
+    var match$1 = Js_primitive.valFromOption(match)["user"];
+    var tmp;
+    if (match$1 !== undefined) {
+      var match$2 = Js_json.decodeNull(match$1);
+      if (match$2 !== undefined) {
+        tmp = undefined;
+      } else {
+        var match$3 = Js_json.decodeObject(match$1);
+        var tmp$1;
+        if (match$3 !== undefined) {
+          var value$1 = Js_primitive.valFromOption(match$3);
+          var match$4 = value$1["id"];
+          var tmp$2;
+          if (match$4 !== undefined) {
+            var match$5 = Js_json.decodeString(match$4);
+            tmp$2 = match$5 !== undefined ? match$5 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$4));
+          } else {
+            tmp$2 = Js_exn.raiseError("graphql_ppx: Field id on type User is missing");
+          }
+          var match$6 = value$1["auth0Id"];
+          var tmp$3;
+          if (match$6 !== undefined) {
+            var match$7 = Js_json.decodeNull(match$6);
+            if (match$7 !== undefined) {
+              tmp$3 = undefined;
+            } else {
+              var match$8 = Js_json.decodeString(match$6);
+              tmp$3 = match$8 !== undefined ? match$8 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$6));
+            }
+          } else {
+            tmp$3 = undefined;
+          }
+          var match$9 = value$1["name"];
+          var tmp$4;
+          if (match$9 !== undefined) {
+            var match$10 = Js_json.decodeString(match$9);
+            tmp$4 = match$10 !== undefined ? match$10 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$9));
+          } else {
+            tmp$4 = Js_exn.raiseError("graphql_ppx: Field name on type User is missing");
+          }
+          tmp$1 = {
+            id: tmp$2,
+            auth0Id: tmp$3,
+            name: tmp$4
+          };
+        } else {
+          tmp$1 = Js_exn.raiseError("graphql_ppx: Object is not a value");
+        }
+        tmp = Js_primitive.some(tmp$1);
+      }
+    } else {
+      tmp = undefined;
+    }
+    return {
+            user: tmp
+          };
+  } else {
+    return Js_exn.raiseError("graphql_ppx: Object is not a value");
+  }
+}
+
+function make$2(auth0Id, _) {
+  return {
+          query: ppx_printed_query$2,
+          variables: Js_dict.fromArray(/* array */[/* tuple */[
+                  "auth0Id",
+                  auth0Id !== undefined ? auth0Id : null
+                ]]),
+          parse: parse$2
+        };
+}
+
+function makeWithVariables$2(variables) {
+  var auth0Id = variables.auth0Id;
+  return {
+          query: ppx_printed_query$2,
+          variables: Js_dict.fromArray(/* array */[/* tuple */[
+                  "auth0Id",
+                  auth0Id !== undefined ? auth0Id : null
+                ]]),
+          parse: parse$2
+        };
+}
+
+function ret_type$2() {
+  return /* module */[];
+}
+
+var MT_Ret$2 = /* module */[];
+
+var GetUser = /* module */[
+  /* ppx_printed_query */ppx_printed_query$2,
+  /* query */ppx_printed_query$2,
+  /* parse */parse$2,
+  /* make */make$2,
+  /* makeWithVariables */makeWithVariables$2,
+  /* ret_type */ret_type$2,
+  /* MT_Ret */MT_Ret$2
+];
+
+var GetUserQuery = ReasonApollo.CreateQuery([
+      ppx_printed_query$2,
+      parse$2
+    ]);
+
 exports.stringOfcompetitorType = stringOfcompetitorType;
 exports.GetAgents = GetAgents;
 exports.GetAgentsQuery = GetAgentsQuery;
@@ -409,4 +520,6 @@ exports.jsonToString = jsonToString;
 exports.toMoment = toMoment;
 exports.GetMeasurables = GetMeasurables;
 exports.GetMeasurablesQuery = GetMeasurablesQuery;
+exports.GetUser = GetUser;
+exports.GetUserQuery = GetUserQuery;
 /* GetAgentsQuery Not a pure module */

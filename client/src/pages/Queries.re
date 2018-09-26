@@ -88,3 +88,17 @@ module GetMeasurables = [%graphql
   |}
 ];
 module GetMeasurablesQuery = ReasonApollo.CreateQuery(GetMeasurables);
+
+module GetUser = [%graphql
+  {|
+    query user ($auth0Id: String) {
+        user:
+          user(auth0Id: $auth0Id) {
+            id
+            auth0Id
+            name
+        }
+    }
+  |}
+];
+module GetUserQuery = ReasonApollo.CreateQuery(GetUser);

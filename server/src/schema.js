@@ -122,12 +122,32 @@ const modelResolvers = (name, plural, type, model) => {
   return fields;
 }
 
-// console.log(attributeFields(models.Measurement))
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
       ...modelResolvers("user", "users", getType.Users(), models.User),
+      user: {
+        type: getType.Users(),
+        args: {id: {type: GraphQLString}, auth0Id: {type: GraphQLString}},
+        resolve: async (ops, {
+          id,
+          auth0Id
+        }) => {
+          console.log("HI", ops)
+          if (id){
+            user = await models.User.findById(id);
+            return user
+          } else if (auth0Id){
+            let user = await models.User.findAll({
+              where: {
+                auth0Id: auth0Id,
+              }
+            })
+            return user[0]
+          }
+        }
+      },
       ...modelResolvers("measurement", "measurements", getType.Measurements(), models.Measurement),
       ...modelResolvers("measurable", "measurables", getType.Measurables(), models.Measurable),
       ...modelResolvers("bot", "bots", getType.Bots(), models.Bot),

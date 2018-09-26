@@ -6,7 +6,7 @@ let ste = ReasonReact.string;
 let apolloResponseToResult = (result: ReasonApolloTypes.queryResponse('a)) =>
   switch (result) {
   | Loading => Error(<div> ("Loading" |> ste) </div>)
-  | Error(error) => Error(<div> (error##message |> ste) </div>)
+  | Error(error) => Error(<div> ("WHAT?" |> ste) </div>)
   | Data(response) => Ok(response)
   };
 

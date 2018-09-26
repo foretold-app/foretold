@@ -1,5 +1,7 @@
 open Antd.Grid;
 open Antd.Layout;
+open Utils;
+open Rationale.Result.Infix;
 
 let ste = ReasonReact.string;
 
@@ -24,32 +26,61 @@ module Styles = {
 
 Css.(global("body", [fontFamily("Lato")]));
 
-/* "clientID": "WYfDFWDK5l9dRq13gtKhXs82AjwbRnm5", */
-
 let make = _children => {
   ...component,
-  render: _ =>
-    <Row
-      gutter=(Row.ResponsiveBreakpoints(makeGutterBreakpoints(~sm=5, ())))>
-      <Col span=24>
-        <Header className=Styles.header>
-          <Antd_Menu className=Styles.menu mode=`Horizontal theme=`Light>
-            <Antd_Menu.Item> (link("/agents", "Agents")) </Antd_Menu.Item>
-            <Antd_Menu.Item>
-              (link("/measurables", "Measurables"))
-            </Antd_Menu.Item>
-            <Antd_Menu.Item>
-              (link("/measurables/new", "New Measurable"))
-            </Antd_Menu.Item>
-            <Antd_Menu.Item>
-              (
-                Auth0.isLoggedIn() ?
-                  <div /> :
-                  <span onClick=(_ => Auth0.logIn())> ("login" |> ste) </span>
-              )
-            </Antd_Menu.Item>
-          </Antd_Menu>
-        </Header>
-      </Col>
-    </Row>,
+  render: _ => {
+    let query = Queries.GetUser.make(~auth0Id="foobar", ());
+    Js.log(query);
+    Queries.GetUserQuery.make(
+      ~variables=query##variables,
+      ({result}) => {
+        Js.log(result);
+        result
+        |> apolloResponseToResult
+        <$> (
+          e =>
+            <Row
+              gutter=(
+                Row.ResponsiveBreakpoints(makeGutterBreakpoints(~sm=5, ()))
+              )>
+              <Col span=24>
+                <Header className=Styles.header>
+                  <Antd_Menu
+                    className=Styles.menu mode=`Horizontal theme=`Light>
+                    <Antd_Menu.Item>
+                      (link("/agents", "Agents"))
+                    </Antd_Menu.Item>
+                    <Antd_Menu.Item>
+                      (link("/measurables", "Measurables"))
+                    </Antd_Menu.Item>
+                    <Antd_Menu.Item>
+                      (link("/measurables/new", "New Measurable"))
+                    </Antd_Menu.Item>
+                    <Antd_Menu.Item>
+                      (
+                        Auth0.isLoggedIn() ?
+                          <Antd_Menu.Item>
+                            (
+                              link(
+                                "/measurables/new",
+                                Belt.Option.map(e##user, r => r##name)
+                                |> Rationale.Option.default("profile"),
+                              )
+                            )
+                          </Antd_Menu.Item> :
+                          <span onClick=(_ => Auth0.logIn())>
+                            ("login" |> ste)
+                          </span>
+                      )
+                    </Antd_Menu.Item>
+                  </Antd_Menu>
+                </Header>
+              </Col>
+            </Row>
+        )
+        |> Rationale.Result.result(idd, idd);
+      },
+    )
+    |> ReasonReact.element;
+  },
 };

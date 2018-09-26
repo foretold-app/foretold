@@ -38,7 +38,12 @@ module.exports = {
       });
 
       await queryInterface.createTable('Users', {
-        ...standardColumns,
+        createdAt: {
+          type: Sequelize.DATE
+        },
+        updatedAt: {
+          type: Sequelize.DATE
+        },
         name: {
           allowNull: false,
           type: Sequelize.STRING

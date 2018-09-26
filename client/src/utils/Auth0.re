@@ -15,6 +15,20 @@ type clientOptions = {
 [@bs.module "auth0-js"] [@bs.new]
 external createClient : clientOptions => generatedAuth0Client = "WebAuth";
 
+[@bs.module] external jwt_decode : string => Js.Json.t = "jwt-decode";
+
+let getSub = (idToken: string) : option(string) => {
+  let decoded = jwt_decode(idToken);
+  switch (Js.Json.decodeObject(decoded)) {
+  | Some(dict) =>
+    switch (Js.Dict.get(dict, "sub")) {
+    | Some(answer) => Js.Json.decodeString(answer)
+    | _ => None
+    }
+  | _ => None
+  };
+};
+
 let matchAccessToken = [%re "/access_token=([^\$&]+)/g"];
 let matchExpiresIn = [%re "/expires_in=([^\$&]+)/g"];
 let matchIdToken = [%re "/id_token=([^\$&]+)/g"];
@@ -76,3 +90,5 @@ let authOptions = {
 let authClient = createClient(authOptions);
 
 let logIn = () => authClient##authorize();
+
+let userId = getSub(getIdToken());

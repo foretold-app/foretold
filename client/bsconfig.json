@@ -18,6 +18,7 @@
   "suffix": ".bs.js",
   "namespace": true,
   "bs-dependencies": [
+    "@glennsl/bs-json",
     "bs-reform",
     "bs-css",
     "bs-ant-design",
@@ -25,8 +26,7 @@
     "reason-react",
     "reason-apollo",
     "rationale",
-    "shared",
-    "@glennsl/bs-json"
+    "shared"
   ],
   "dev-dependencies": [
     "@glennsl/bs-jest"

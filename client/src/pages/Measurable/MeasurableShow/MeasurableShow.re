@@ -10,42 +10,62 @@ let toOptionalMoment: option(Js.Json.t) => MomentRe.Moment.t =
     e => e <$> jsonToString <$> (r => r) |> Option.default("") |> moment
   );
 
-module GetMeasurable = [%graphql
-  {|
-    query getMeasurable ($id: String!) {
-        measurable:
-          measurable(id: $id){
-            id
-            name
-            valueType
-            isLocked
-            createdAt @bsDecoder(fn: "toMoment")
-            measurements: Measurements{
+module GetMeasurable = {
+  module Query = [%graphql
+    {|
+      query getMeasurable ($id: String!) {
+          measurable:
+            measurable(id: $id){
               id
+              name
+              valueType
+              isLocked
               createdAt @bsDecoder(fn: "toMoment")
-              value @bsDecoder(fn: "Shared.Value.decode")
-              competitorType
-              taggedMeasurementId
-              relevantAt @bsDecoder(fn: "toOptionalMoment")
-              agent: Agent {
+              measurements: Measurements{
                 id
-                user: User {
+                createdAt @bsDecoder(fn: "toMoment")
+                value @bsDecoder(fn: "Shared.Value.decode")
+                competitorType
+                taggedMeasurementId
+                relevantAt @bsDecoder(fn: "toOptionalMoment")
+                agent: Agent {
                   id
-                  name
-                }
-                bot: Bot {
-                  id
-                  name
-                  competitorType
+                  user: User {
+                    id
+                    name
+                  }
+                  bot: Bot {
+                    id
+                    name
+                    competitorType
+                  }
                 }
               }
-            }
-        }
-    }
-  |}
-];
+          }
+      }
+    |}
+  ];
 
-module GetMeasurableQuery = ReasonApollo.CreateQuery(GetMeasurable);
+  module QueryComponent = ReasonApollo.CreateQuery(Query);
+
+  let withQuery = (~id, fn) => {
+    let query = Query.make(~id, ());
+    Result.Infix.(
+      QueryComponent.make(~variables=query##variables, ({result}) =>
+        result
+        |> apolloResponseToResult
+        >>= (
+          e =>
+            e##measurable
+            |> filterOptionalResult("Measurable not found" |> ste)
+        )
+        <$> fn
+        |> Result.result(idd, idd)
+      )
+      |> ReasonReact.element
+    );
+  };
+};
 
 let component = ReasonReact.statelessComponent("Measurable");
 
@@ -64,44 +84,26 @@ module Styles = {
   let body = style([marginLeft(px(200)), padding(px(30))]);
 };
 
-let withMeasurableQuery = (~id, fn) => {
-  let query = GetMeasurable.make(~id, ());
-  Result.Infix.(
-    GetMeasurableQuery.make(
-      ~variables=query##variables, ~pollInterval=50000, ({result}) =>
-      result
-      |> apolloResponseToResult
-      >>= (
-        e =>
-          e##measurable |> filterOptionalResult("Measurable not found" |> ste)
-      )
-      <$> fn
-      |> Result.result(idd, idd)
-    )
-    |> ReasonReact.element
-  );
-};
-
 let make = (~id: string, _children) => {
   ...component,
   render: _self =>
     <div>
       <div>
         (
-          withMeasurableQuery(~id, e =>
+          GetMeasurable.withQuery(~id, measurable =>
             <div>
-              <h2> (e##name |> ReasonReact.string) </h2>
+              <h2> (measurable##name |> ste) </h2>
               <h3>
                 (
-                  (e##isLocked ? "Locked: True" : "Locked: False")
-                  |> ReasonReact.string
+                  (measurable##isLocked ? "Locked: True" : "Locked: False")
+                  |> ste
                 )
               </h3>
               <div>
-                <h3> (e##valueType |> valueString |> ReasonReact.string) </h3>
-                <MeasurableChart measurements=e##measurements />
+                <h3> (measurable##valueType |> valueString |> ste) </h3>
+                <MeasurableChart measurements=measurable##measurements />
                 <MeasurableShowForm measurableId=id />
-                <MeasurableTable measurements=e##measurements />
+                <MeasurableTable measurements=measurable##measurements />
               </div>
             </div>
           )

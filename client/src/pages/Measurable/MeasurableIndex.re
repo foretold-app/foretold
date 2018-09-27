@@ -60,7 +60,6 @@ let itemList =
   );
 
 let component = ReasonReact.statelessComponent("Measurables");
-/* <div onClick={self.handleClick}> */
 let make = _children => {
   ...component,
   render: self =>

@@ -36,7 +36,7 @@ const server = new ApolloServer({
     return response;
   },
   context: ({req}) => {
-    return {userSub: req.user && req.user.sub}
+    return {userAuth0Id: req.user && req.user.sub}
 }
 });
 

@@ -122,6 +122,15 @@ const modelResolvers = (name, plural, type, model) => {
   return fields;
 }
 
+async function auth0User(auth0Id){
+  let user = await models.User.findAll({
+    where: {
+      auth0Id: auth0Id,
+    }
+  })
+  return user[0]
+}
+
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
@@ -134,17 +143,12 @@ const schema = new GraphQLSchema({
           id,
           auth0Id
         }) => {
-          console.log("HI", ops)
           if (id){
-            user = await models.User.findById(id);
-            return user
+            const user = await models.User.findById(id);
+            return user;
           } else if (auth0Id){
-            let user = await models.User.findAll({
-              where: {
-                auth0Id: auth0Id,
-              }
-            })
-            return user[0]
+            const user = await auth0User(auth0Id)
+            return user;
           }
         }
       },
@@ -165,12 +169,13 @@ const schema = new GraphQLSchema({
           competitorType,
           measurableId,
           agentId,
-        }) => {
+        }, {userAuth0Id}) => {
+          const user = await auth0User(userAuth0Id);
           const newMeasurement = await models.Measurement.create({
             value,
             competitorType,
             measurableId,
-            agentId,
+            agentId: user.agentId,
           })
           const measurable = await newMeasurement.getMeasurable();
           return newMeasurement
@@ -182,7 +187,7 @@ const schema = new GraphQLSchema({
         resolve: async (__, {
           name,
           valueType
-        }) => {
+        }, {userAuth0Id}) => {
           const newMeasurable = await models.Measurable.create({
           name,
           valueType
@@ -193,12 +198,12 @@ const schema = new GraphQLSchema({
       editUser: {
         type: getType.Users(),
         args: filterr(_.pick(attributeFields(models.User), ["id", "name"])),
-        resolve: async (__, {
+        resolve: async (_, {
           id,
           name
-        }) => {
+        }, {userAuth0Id}) => {
           let user = await models.User.findById(id);
-          if (user) {
+          if (user && (user.auth0Id == userAuth0Id)) {
             user.update({name})
           }
           return user

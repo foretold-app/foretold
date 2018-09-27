@@ -52,7 +52,11 @@ let make = _children => {
         gutter=(Row.ResponsiveBreakpoints(makeGutterBreakpoints(~sm=5, ())))>
         <Col span=24>
           <Header className=Styles.header>
-            <Antd_Menu className=Styles.menu mode=`Horizontal theme=`Light>
+            <Antd_Menu
+              className=Styles.menu
+              mode=`Horizontal
+              theme=`Light
+              onClick=(e => Js.log(e))>
               <Antd_Menu.Item> (link("/agents", "Agents")) </Antd_Menu.Item>
               <Antd_Menu.Item>
                 (link("/measurables", "Measurables"))
@@ -60,22 +64,39 @@ let make = _children => {
               <Antd_Menu.Item>
                 (link("/measurables/new", "New Measurable"))
               </Antd_Menu.Item>
-              <Antd_Menu.Item>
-                (
-                  switch (userQuery) {
-                  | Some(e) =>
-                    link(
-                      "/profile",
-                      Belt.Option.map(e##user, r => r##name)
-                      |> Rationale.Option.default("Profile"),
+              (
+                switch (userQuery) {
+                | Some(e) =>
+                  <Antd_Menu.Item>
+                    (
+                      link(
+                        "/profile",
+                        Belt.Option.map(e##user, r => r##name)
+                        |> Rationale.Option.default("Profile"),
+                      )
                     )
-                  | None =>
-                    <span onClick=(_ => Auth0.logIn())>
-                      ("Login" |> ste)
-                    </span>
-                  }
-                )
-              </Antd_Menu.Item>
+                  </Antd_Menu.Item>
+                | None =>
+                  <Antd_Menu.Item>
+                    <a onClick=(_ => Auth0.logIn())> ("Login" |> ste) </a>
+                  </Antd_Menu.Item>
+                }
+              )
+              (
+                userQuery |> Rationale.Option.isSome ?
+                  <Antd_Menu.Item>
+                    <a
+                      onClick=(
+                        _e => {
+                          Auth0.logout();
+                          ReasonReact.Router.push("/");
+                        }
+                      )>
+                      ("Log Out" |> ste)
+                    </a>
+                  </Antd_Menu.Item> :
+                  <span />
+              )
             </Antd_Menu>
           </Header>
         </Col>

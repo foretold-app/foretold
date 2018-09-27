@@ -45,7 +45,7 @@ let make = _children => {
           <$> (d => d##agents)
           <$> (
             e => {
-              let data = Array.map(perEl, e |> catOptionals);
+              let data = Array.map(perEl, e |> ArrayOptional.concatSomes);
               let columns = [|
                 makeColumn(~data="name", ~renderer="html", ()),
                 makeColumn(~data="type", ()),

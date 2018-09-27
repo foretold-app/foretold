@@ -1,24 +1,14 @@
 open Utils;
 open Rationale;
-open Rationale.Option.Infix;
-open Rationale.Function.Infix;
-open Result.Infix;
 open Queries;
 open MomentRe;
-open MeasurableTypes;
 
-let toMoment = jsonToString ||> moment;
+let toMoment = Function.Infix.(jsonToString ||> moment);
 
-/* let toOptionalMoment: option(Js.Json.t) => MomentRe.Moment.t = x => x <$> jsonToString |> Option.default("") |> moment */
 let toOptionalMoment: option(Js.Json.t) => MomentRe.Moment.t =
-  e =>
-    (
-      switch (e) {
-      | Some(f) => f |> jsonToString
-      | None => ""
-      }
-    )
-    |> moment;
+  Option.Infix.(
+    e => e <$> jsonToString <$> (r => r) |> Option.default("") |> moment
+  );
 
 module GetMeasurable = [%graphql
   {|
@@ -74,47 +64,48 @@ module Styles = {
   let body = style([marginLeft(px(200)), padding(px(30))]);
 };
 
+let withMeasurableQuery = (~id, fn) => {
+  let query = GetMeasurable.make(~id, ());
+  Result.Infix.(
+    GetMeasurableQuery.make(
+      ~variables=query##variables, ~pollInterval=50000, ({result}) =>
+      result
+      |> apolloResponseToResult
+      >>= (
+        e =>
+          e##measurable |> filterOptionalResult("Measurable not found" |> ste)
+      )
+      <$> fn
+      |> Result.result(idd, idd)
+    )
+    |> ReasonReact.element
+  );
+};
+
 let make = (~id: string, _children) => {
   ...component,
-  render: _self => {
-    let query = GetMeasurable.make(~id, ());
+  render: _self =>
     <div>
       <div>
         (
-          GetMeasurableQuery.make(
-            ~variables=query##variables, ~pollInterval=50000, ({result}) =>
-            result
-            |> apolloResponseToResult
-            >>= (
-              e =>
-                e##measurable
-                |> filterOptionalResult("Measurable not found" |> ste)
-            )
-            <$> (
-              e =>
-                <div>
-                  <h2> (e##name |> ReasonReact.string) </h2>
-                  <h3>
-                    (
-                      (e##isLocked ? "Locked: True" : "Locked: False")
-                      |> ReasonReact.string
-                    )
-                  </h3>
-                  <div>
-                    <h3>
-                      (e##valueType |> valueString |> ReasonReact.string)
-                    </h3>
-                    <MeasurableChart measurements=e##measurements />
-                    <MeasurableShowForm measurableId=id />
-                    <MeasurableTable measurements=e##measurements />
-                  </div>
-                </div>
-            )
-            |> Result.result(idd, idd)
+          withMeasurableQuery(~id, e =>
+            <div>
+              <h2> (e##name |> ReasonReact.string) </h2>
+              <h3>
+                (
+                  (e##isLocked ? "Locked: True" : "Locked: False")
+                  |> ReasonReact.string
+                )
+              </h3>
+              <div>
+                <h3> (e##valueType |> valueString |> ReasonReact.string) </h3>
+                <MeasurableChart measurements=e##measurements />
+                <MeasurableShowForm measurableId=id />
+                <MeasurableTable measurements=e##measurements />
+              </div>
+            </div>
           )
-          |> ReasonReact.element
         )
       </div>
-    </div>;
-  },
+    </div>,
 };

@@ -22,7 +22,7 @@ let safe_jwt_decode = (s: string) : option('a) =>
   | _ => None
   };
 
-let getSub = (idToken: string) : option(string) =>
+let getAuth0Id = (idToken: string) : option(string) =>
   idToken
   |> safe_jwt_decode
   >>= Js.Json.decodeObject
@@ -68,6 +68,7 @@ let logout = () => {
   localStorage |> removeItem("access_token");
   localStorage |> removeItem("id_token");
   localStorage |> removeItem("expires_at");
+  ReasonReact.Router.push("/");
   ();
 };
 
@@ -96,4 +97,4 @@ let authOptions = {
 let authClient = createClient(authOptions);
 
 let logIn = () => authClient##authorize();
-let userId = Rationale.Option.bind(getIdToken(), getSub);
+let userId = Rationale.Option.bind(getIdToken(), getAuth0Id);

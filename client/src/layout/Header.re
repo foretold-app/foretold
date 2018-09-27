@@ -1,7 +1,7 @@
 open Antd.Grid;
-open Antd.Layout;
 open Utils;
 open Rationale.Result.Infix;
+open Antd;
 
 let ste = ReasonReact.string;
 
@@ -51,12 +51,8 @@ let make = _children => {
       <Row
         gutter=(Row.ResponsiveBreakpoints(makeGutterBreakpoints(~sm=5, ())))>
         <Col span=24>
-          <Header className=Styles.header>
-            <Antd_Menu
-              className=Styles.menu
-              mode=`Horizontal
-              theme=`Light
-              onClick=(e => Js.log(e))>
+          <Layout.Header className=Styles.header>
+            <Antd_Menu className=Styles.menu mode=`Horizontal theme=`Light>
               <Antd_Menu.Item> (link("/agents", "Agents")) </Antd_Menu.Item>
               <Antd_Menu.Item>
                 (link("/measurables", "Measurables"))
@@ -85,20 +81,12 @@ let make = _children => {
               (
                 userQuery |> Rationale.Option.isSome ?
                   <Antd_Menu.Item>
-                    <a
-                      onClick=(
-                        _e => {
-                          Auth0.logout();
-                          ReasonReact.Router.push("/");
-                        }
-                      )>
-                      ("Log Out" |> ste)
-                    </a>
+                    <a onClick=(_e => Auth0.logout())> ("Log Out" |> ste) </a>
                   </Antd_Menu.Item> :
                   <span />
               )
             </Antd_Menu>
-          </Header>
+          </Layout.Header>
         </Col>
       </Row>
     ),

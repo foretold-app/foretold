@@ -10,49 +10,55 @@ let botCompetitor = e =>
   | `OBJECTIVE => "Objective"
   };
 
-let agentSection = (e: option(AgentTypes.agent)) =>
+let notFound = <h3> ("User not found" |> ste) </h3>;
+
+let agentSection = (e: AgentTypes.agent) =>
   switch (e) {
-  | Some({bot: Some(r)}) =>
+  | {bot: Some(r)} =>
     <div>
       <h2> (r.name |> Option.default("") |> ste) </h2>
       <h3> (r.description |> Option.default("") |> ste) </h3>
       <h3> (r.competitorType |> botCompetitor |> ste) </h3>
     </div>
-  | Some({user: Some(r)}) => <div> <h2> (r.name |> ste) </h2> </div>
-  | _ => <div />
+  | {user: Some(r)} => <div> <h2> (r.name |> ste) </h2> </div>
+  | _ => notFound
   };
 
-let component = ReasonReact.statelessComponent("User");
+let component = ReasonReact.statelessComponent("AgentShow");
+
+let withAgentQuery = (~id, innerFn) => {
+  let query = AgentTypes.GetAgent.make(~id, ());
+  AgentTypes.GetAgentQuery.make(~variables=query##variables, ({result}) =>
+    result
+    |> apolloResponseToResult
+    <$> (e => e##agent)
+    >>= (
+      e =>
+        switch (e) {
+        | Some(a) => Ok(a)
+        | None => Error(notFound)
+        }
+    )
+    <$> innerFn
+    |> Result.result(idd, idd)
+  )
+  |> ReasonReact.element;
+};
 
 let make = (~id: string, _children) => {
   ...component,
-  render: _ => {
-    let query = AgentTypes.GetAgent.make(~id, ());
+  render: _ =>
     <div>
-      <h2> (ReasonReact.string("Agent Page")) </h2>
+      <h2> ("Agent Page" |> ste) </h2>
       (
-        AgentTypes.GetAgentQuery.make(~variables=query##variables, ({result}) =>
-          result
-          |> apolloResponseToResult
-          <$> (
-            e =>
-              <div>
-                (agentSection(e##agent))
-                (
-                  switch (e##agent) {
-                  | Some(agent) =>
-                    <AgentTable
-                      measurements=(agent.measurements |> catOptionals)
-                    />
-                  | None => <div />
-                  }
-                )
-              </div>
-          )
-          |> Result.result(idd, idd)
+        withAgentQuery(~id, agent =>
+          <div>
+            (agentSection(agent))
+            <AgentTable
+              measurements=(agent.measurements |> ArrayOptional.concatSomes)
+            />
+          </div>
         )
-        |> ReasonReact.element
       )
-    </div>;
-  },
+    </div>,
 };

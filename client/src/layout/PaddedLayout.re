@@ -1,5 +1,3 @@
-open Utils;
-open HandsOnTable;
 let component = ReasonReact.statelessComponent("PaddedLayout");
 
 module Styles = {

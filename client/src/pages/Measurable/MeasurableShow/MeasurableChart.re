@@ -16,18 +16,6 @@ module Styles = {
   let plot = style([maxWidth(px(800))]);
 };
 
-let accumulateIfTrue = (fn, accum, elem) =>
-  fn(elem) ? Array.concat([accum, [|elem|]]) : accum;
-
-let flattenResults = (isTrue, items: array('b)) : array('a) =>
-  Array.fold_left(accumulateIfTrue(isTrue), [||], items);
-
-let filterAndFold = fn =>
-  Array.fold_left(
-    (acc, elem) => fn(elem, e => Array.concat([acc, [|e|]]), () => acc),
-    [||],
-  );
-
 let onlyFloatPercentiles =
   filterAndFold((e, fnYes, fnNo) =>
     switch (e) {
@@ -44,37 +32,23 @@ let onlyWithFloatPercentiles =
     }
   );
 
-let onlySomes =
-  filterAndFold((e, fnYes, fnNo) =>
-    switch (e) {
-    | Some(r) => fnYes(r)
-    | _ => fnNo()
-    }
-  );
-
 let make = (~measurements: MeasurableTypes.measurements, _children) => {
   ...component,
   render: _ => {
     let sorted =
       measurements
-      |> catOptionals
+      |> Extensions.Array.concatSomes
       |> Js.Array.filter(e => e##value |> Belt.Result.isOk)
       |> Js_array.sortInPlaceWith((a, b) =>
            toUnix(b) > toUnix(a) ? (-1) : 1
          );
-
-    let toVal = (f, e) =>
-      switch (e) {
-      | Some(e) => f(e)
-      | None => 0.0
-      };
 
     let yMax =
       sorted
       |> Array.map(e => e##value)
       |> onlyFloatPercentiles
       |> Array.map(e => Belt.Map.get(e, 75.0))
-      |> onlySomes
+      |> Extensions.Array.concatSomes
       |> Array.fold_left((a, b) => a > b ? a : b, min_float);
 
     let yMin =
@@ -82,7 +56,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       |> Array.map(e => e##value)
       |> onlyFloatPercentiles
       |> Array.map(e => Belt.Map.get(e, 25.0))
-      |> onlySomes
+      |> Extensions.Array.concatSomes
       |> Array.fold_left((a, b) => a < b ? a : b, max_float);
 
     let formatDate = Moment.format("MMM DD, YYYY HH:MM:SS");

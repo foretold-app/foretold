@@ -20,7 +20,8 @@ let ste = ReasonReact.string;
 
 let idd = e => e;
 
-let catOptionals = (optionals: Js.Array.t(option('a))) : Js.Array.t('a) =>
-  optionals
-  |> Js.Array.filter(Option.isSome)
-  |> Js.Array.map(Option.toExn(""));
+let filterAndFold = fn =>
+  Array.fold_left(
+    (acc, elem) => fn(elem, e => Array.concat([acc, [|e|]]), () => acc),
+    [||],
+  );

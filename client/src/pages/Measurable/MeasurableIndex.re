@@ -58,7 +58,6 @@ let itemList =
     ~urlFn=e => "/measurables/" ++ e##id,
     ~render=e => e##name |> ste,
   );
-/* Not sure why this needs optional */
 
 let component = ReasonReact.statelessComponent("Measurables");
 /* <div onClick={self.handleClick}> */
@@ -69,7 +68,7 @@ let make = _children => {
       o.result
       |> apolloResponseToResult
       <$> (d => d##measurables)
-      <$> catOptionals
+      <$> Extensions.Array.concatSomes
       <$> (e => <div> (itemList(~data=e)) </div>)
       |> Result.result(idd, idd)
     )

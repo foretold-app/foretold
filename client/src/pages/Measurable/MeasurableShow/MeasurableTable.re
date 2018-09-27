@@ -17,7 +17,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
   render: _ => {
     let data =
       measurements
-      |> catOptionals
+      |> ArrayOptional.concatSomes
       |> Js_array.sortInPlaceWith((a, b) =>
            toUnix(b) > toUnix(a) ? (-1) : 1
          )

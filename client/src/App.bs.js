@@ -5,6 +5,7 @@ var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Auth0$Client = require("./utils/Auth0.bs.js");
+var Profile$Client = require("./pages/Profile.bs.js");
 var AgentShow$Client = require("./pages/Agent/AgentShow/AgentShow.bs.js");
 var AgentIndex$Client = require("./pages/Agent/AgentIndex.bs.js");
 var PaddedLayout$Client = require("./utils/PaddedLayout.bs.js");
@@ -29,7 +30,7 @@ function mapUrlToRoute(url) {
             if (match$1[1]) {
               return /* Home */0;
             } else {
-              return /* AgentShow */Block.__(0, [match$1[0]]);
+              return /* AgentShow */Block.__(1, [match$1[0]]);
             }
           } else {
             return /* AgentIndex */1;
@@ -47,10 +48,16 @@ function mapUrlToRoute(url) {
             if (match$2[1]) {
               return /* Home */0;
             } else {
-              return /* MeasurableShow */Block.__(1, [match$2[0]]);
+              return /* MeasurableShow */Block.__(2, [match$2[0]]);
             }
           } else {
             return /* MeasurableIndex */2;
+          }
+      case "profile" : 
+          if (match[1] || Auth0$Client.userId === undefined) {
+            return /* Home */0;
+          } else {
+            return /* Profile */Block.__(0, [Auth0$Client.userId]);
           }
       default:
         return /* Home */0;
@@ -73,15 +80,21 @@ function inside(r) {
     } else {
       return ReasonReact.element(undefined, undefined, AgentIndex$Client.make(/* array */[]));
     }
-  } else if (r.tag) {
-    var id = r[0];
-    if (id === "new") {
-      return ReasonReact.element(undefined, undefined, MeasurableNew$Client.make(/* array */[]));
-    } else {
-      return ReasonReact.element(undefined, undefined, MeasurableShow$Client.make(id, /* array */[]));
-    }
   } else {
-    return ReasonReact.element(undefined, undefined, AgentShow$Client.make(r[0], /* array */[]));
+    switch (r.tag | 0) {
+      case 0 : 
+          return ReasonReact.element(undefined, undefined, Profile$Client.make(r[0], /* array */[]));
+      case 1 : 
+          return ReasonReact.element(undefined, undefined, AgentShow$Client.make(r[0], /* array */[]));
+      case 2 : 
+          var id = r[0];
+          if (id === "new") {
+            return ReasonReact.element(undefined, undefined, MeasurableNew$Client.make(/* array */[]));
+          } else {
+            return ReasonReact.element(undefined, undefined, MeasurableShow$Client.make(id, /* array */[]));
+          }
+      
+    }
   }
 }
 

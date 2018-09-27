@@ -74,7 +74,14 @@ let logout = () => {
 let authToken = () => Dom.Storage.(localStorage |> getItem("id_token"));
 
 let isLoggedIn = () =>
-  Dom.Storage.(localStorage |> getItem("id_token")) |> Rationale.Option.isSome;
+  Dom.Storage.(localStorage |> getItem("id_token"))
+  |> (
+    e =>
+      switch (e) {
+      | Some(r) => r != ""
+      | None => false
+      }
+  );
 
 let getIdToken = () => Dom.Storage.(localStorage |> getItem("id_token"));
 

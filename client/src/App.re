@@ -4,6 +4,7 @@
 type route =
   | Home
   | AgentIndex
+  | Profile(string)
   | AgentShow(string)
   | MeasurableIndex
   | MeasurableShow(string)
@@ -25,6 +26,11 @@ let mapUrlToRoute = (url: ReasonReact.Router.url) =>
     Auth0.handleAuth(url);
     Home;
   | ["agents"] => AgentIndex
+  | ["profile"] =>
+    switch (Auth0.userId) {
+    | Some(auth0Id) => Profile(auth0Id)
+    | None => Home
+    }
   | ["agents", id] => AgentShow(id)
   | ["measurables"] => MeasurableIndex
   | ["measurables", id] => MeasurableShow(id)
@@ -41,6 +47,7 @@ let inside = r =>
   | Home => <AgentIndex />
   | AgentIndex => <AgentIndex />
   | NotFound => <AgentIndex />
+  | Profile(auth0Id) => <Profile auth0Id />
   | AgentShow(id) => <AgentShow id />
   | MeasurableIndex => <MeasurableIndex />
   | MeasurableShow("new") => <MeasurableNew />

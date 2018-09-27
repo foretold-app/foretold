@@ -190,6 +190,20 @@ const schema = new GraphQLSchema({
           return newMeasurable
         }
       },
+      editUser: {
+        type: getType.Users(),
+        args: filterr(_.pick(attributeFields(models.User), ["id", "name"])),
+        resolve: async (__, {
+          id,
+          name
+        }) => {
+          let user = await models.User.findById(id);
+          if (user) {
+            user.update({name})
+          }
+          return user
+        }
+      },
     }
     })
 });

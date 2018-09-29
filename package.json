@@ -1,0 +1,16 @@
+{
+    "name": "sps",
+    "version": "1.0.0",
+    "description": "Simple prediction service",
+    "main": "index.js",
+    "scripts": {
+        "server/install": "cd server && npm install && cd ..",
+        "server/build": "cd server && npm run build && cd ..",
+        "server/serve": "cd server && npm run serve && cd ..",
+        "server/db:reset": "cd server && npm run db:reset && cd ..",
+        "server/db:seed": "cd server && npm run db:seed && cd ..",
+        "postinstall": "npm run server/install"
+    },
+    "author": "",
+    "license": "MIT"
+}

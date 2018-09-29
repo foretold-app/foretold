@@ -19,7 +19,13 @@
     "clean": "rimraf dist",
     "build": "npm run clean && mkdir -p dist && babel src -s -D -d dist",
     "test": "jest --watch",
-    "lint": "esw -w src test"
+    "lint": "esw -w src test",
+    "serve": "node ./dist/index.js",
+    "db:create": "node_modules/.bin/create_database",
+    "db:drop": "node_modules/.bin/drop_database",
+    "db:migrate": "node_modules/.bin/sequelize db:migrate",
+    "db:seed": "node_modules/.bin/sequelize db:seed:all",
+    "db:reset": "npm run db:drop; npm run db:create; npm run db:migrate"
   },
   "keywords": [
     "express",

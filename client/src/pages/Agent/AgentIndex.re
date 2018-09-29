@@ -54,6 +54,7 @@ let make = _children => {
                 makeColumn(~data="measurementCount", ()),
               |];
               <div>
+                <Cell />
                 <UseRouterForLinks>
                   <HandsOnTable
                     data

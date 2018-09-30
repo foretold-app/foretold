@@ -30,6 +30,6 @@ type measurement = {
   "competitorType": competitorType,
   "createdAt": MomentRe.Moment.t,
   "taggedMeasurementId": option(string),
-  "value": Belt.Result.t(Shared.Value.t, string),
+  "value": Belt.Result.t(Value.t, string),
 };
 type measurements = Js.Array.t(option(measurement));

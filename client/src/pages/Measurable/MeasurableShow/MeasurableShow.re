@@ -24,7 +24,7 @@ module GetMeasurable = {
               measurements: Measurements{
                 id
                 createdAt @bsDecoder(fn: "toMoment")
-                value @bsDecoder(fn: "Shared.Value.decode")
+                value @bsDecoder(fn: "Value.decode")
                 competitorType
                 taggedMeasurementId
                 relevantAt @bsDecoder(fn: "toOptionalMoment")

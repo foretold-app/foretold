@@ -23,11 +23,7 @@ let make = (~measurements: array(AgentTypes.measurement), _children) => {
       measurements
       |> Array.map(e => {
            let value =
-             Belt.Result.mapWithDefault(
-               e.value,
-               "",
-               Shared.Value.stringOfValue,
-             );
+             Belt.Result.mapWithDefault(e.value, "", Value.stringOfValue);
            Js.Dict.fromList([
              ("createdAt", e.createdAt |> Moment.format("L, h:mm:ss a")),
              ("value", value),

@@ -54,13 +54,9 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
              };
 
            let value =
-             Belt.Result.mapWithDefault(
-               e##value,
-               "",
-               Shared.Value.stringOfValue,
-             );
+             Belt.Result.mapWithDefault(e##value, "", Value.stringOfValue);
 
-           let presentableValueName = (t: Shared.Value.t) =>
+           let presentableValueName = (t: Value.t) =>
              switch (t) {
              | `FloatPoint(_) => "Point"
              | `FloatPercentiles(_) => "Percentiles"

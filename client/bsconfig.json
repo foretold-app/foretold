@@ -26,7 +26,6 @@
     "reason-react",
     "reason-apollo",
     "rationale",
-    "shared"
   ],
   "dev-dependencies": [
     "@glennsl/bs-jest"

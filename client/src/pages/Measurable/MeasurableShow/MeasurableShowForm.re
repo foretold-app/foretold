@@ -69,7 +69,7 @@ let safe_a_of_string = (fn, s: string) : option('a) =>
 let safe_float_of_string = safe_a_of_string(float_of_string);
 let safe_int_of_string = safe_a_of_string(int_of_string);
 
-let keepIfValid = n => Shared.Value.isValid(n) ? Some(n) : None;
+let keepIfValid = n => Value.isValid(n) ? Some(n) : None;
 let mutate =
     (
       mutation: CreateMeasurementMutation.apolloMutation,
@@ -88,7 +88,7 @@ let mutate =
         | (Some(a), Some(b), Some(c)) =>
           Some(
             `FloatPercentiles(
-              Shared.Value.FloatPercentiles.fromArray([|
+              Value.FloatPercentiles.fromArray([|
                 (25.0, a),
                 (50.0, b),
                 (75.0, c),
@@ -122,7 +122,7 @@ let mutate =
       CreateMeasurement.make(
         ~measurableId,
         ~agentId="c4aefed8-83c1-422d-9364-313071287758",
-        ~value=v |> Shared.Value.encode,
+        ~value=v |> Value.encode,
         ~competitorType=`COMPETITIVE,
         (),
       );
@@ -150,7 +150,7 @@ let errorOfFloat = (fn1, fn2, e) => {
   let asNumber = fn1(e);
   switch (asNumber) {
   | None => Some("Couldn't parse Number")
-  | Some(r) => Shared.Value.error(fn2(r))
+  | Some(r) => Value.error(fn2(r))
   };
 };
 

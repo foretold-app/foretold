@@ -14,6 +14,8 @@ const { ApolloServer, gql } = require('apollo-server-express');
 import {schema} from './schema';
 import { makeExecutableSchema } from 'graphql-tools';
 
+const PORT = process.env.PORT || 4000;
+
 const typeDefs = gql`
   type Query {
     hello: String
@@ -55,6 +57,6 @@ app.use(cors());
 app.use(jwt({secret: "bhz9XiFVqoowf_cSicdItfmExxWrAoeyhKEjGNQKjpX08E0NKuLNQ3uF5XL-wdy_", credentialsRequired: false, getToken}))
 server.applyMiddleware({ app });
 
-app.listen({ port: 4000 }, () =>
+app.listen({ port: PORT }, () =>
   console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
 );

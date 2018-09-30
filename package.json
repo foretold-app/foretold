@@ -3,6 +3,10 @@
     "version": "1.0.0",
     "description": "Simple prediction service",
     "main": "index.js",
+    "engines": {
+        "node": "~9.7.1",
+        "npm": ">=6.4.0"
+    },
     "scripts": {
         "server/install": "cd server && npm install && cd ..",
         "server/build": "cd server && npm run build && cd ..",

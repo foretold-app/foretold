@@ -7,6 +7,8 @@
         "server/install": "cd server && npm install && cd ..",
         "server/build": "cd server && npm run build && cd ..",
         "server/serve": "cd server && npm run serve && cd ..",
+        "server/db:create": "cd server && npm run db:create && cd ..",
+        "server/db:migrate": "cd server && npm run db:migrate cd ..",
         "server/db:reset": "cd server && npm run db:reset && cd ..",
         "server/db:seed": "cd server && npm run db:seed && cd ..",
         "postinstall": "npm run server/install"

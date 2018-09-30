@@ -77,5 +77,7 @@ app.use(cors());
 app.use(jwt({ secret: "bhz9XiFVqoowf_cSicdItfmExxWrAoeyhKEjGNQKjpX08E0NKuLNQ3uF5XL-wdy_", credentialsRequired: false, getToken }));
 server.applyMiddleware({ app });
 
-app.listen({ port: PORT }, () => console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`));
+app.listen({ port: PORT }, () => {
+  console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`);
+});
 //# sourceMappingURL=index.js.map

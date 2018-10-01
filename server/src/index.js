@@ -29,6 +29,15 @@ const resolvers = {
   },
 };
 
+function getToken(req) {
+  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+      return req.headers.authorization.split(' ')[1];
+  } else if (req.query && req.query.token) {
+    return req.query.token;
+  }
+  return null;
+}
+
 const server = new ApolloServer({
   schema,
   formatError: error => {
@@ -38,23 +47,16 @@ const server = new ApolloServer({
     return response;
   },
   context: ({req}) => {
-    return {userAuth0Id: req.user && req.user.sub}
+    jwt({secret: "bhz9XiFVqoowf_cSicdItfmExxWrAoeyhKEjGNQKjpX08E0NKuLNQ3uF5XL-wdy_", credentialsRequired: false, getToken})(req, {}, (e) => {
+      return {userAuth0Id: req.user && req.user.sub}
+    })
 }
 });
 
 
-function getToken(req) {
-  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-      return req.headers.authorization.split(' ')[1];
-  } else if (req.query && req.query.token) {
-    return req.query.token;
-  }
-  return null;
-}
 const app = express();
 var cors = require("cors");
 app.use(cors());
-app.use(jwt({secret: "bhz9XiFVqoowf_cSicdItfmExxWrAoeyhKEjGNQKjpX08E0NKuLNQ3uF5XL-wdy_", credentialsRequired: false, getToken}))
 server.applyMiddleware({ app });
 
 models.sequelize.sync().then(() => {

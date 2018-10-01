@@ -9,6 +9,10 @@ export class Cell extends React.Component {
     }
     handleChange(event) {
         this.setState({value: event.target.value});
+        let [error, item] = Guesstimator.parse({text: event.target.value})
+        let parsedInput = item.parsedInput;
+        let what = new Guesstimator({parsedInput: parsedInput})
+        console.log('HERE', what.sample(100))
       }
 
     render() {

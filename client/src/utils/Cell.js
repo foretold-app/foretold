@@ -52,7 +52,7 @@ export class Cell extends React.Component {
       data: { stroke: "#888" },
       parent: { border: "1px solid #ccc"}
     }}
-    data={pdf(this.state.items, 100)}
+    data={pdf(this.state.items, 250)}
   />
 </VictoryChart>
         </div>)

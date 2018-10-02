@@ -50,7 +50,7 @@ module SignUpParams = {
 };
 
 let initialState: SignUpParams.state = {
-  dataType: "FloatPercentiles",
+  dataType: "FloatCdf",
   p25: "",
   p50: "",
   p75: "",
@@ -60,6 +60,11 @@ let initialState: SignUpParams.state = {
 };
 
 module SignUpForm = ReForm.Create(SignUpParams);
+
+type action =
+  | UpdateFloatPdf((array(float), array(float)));
+
+type state = {floatPdf: (array(float), array(float))};
 
 let safe_a_of_string = (fn, s: string) : option('a) =>
   try (Some(fn(s))) {
@@ -75,29 +80,12 @@ let mutate =
       mutation: CreateMeasurementMutation.apolloMutation,
       measurableId: string,
       values: SignUpForm.values,
+      state: state,
     ) => {
   let value =
     switch (values.dataType) {
-    | "FloatPercentiles" =>
-      (
-        switch (
-          safe_float_of_string(values.p25),
-          safe_float_of_string(values.p50),
-          safe_float_of_string(values.p75),
-        ) {
-        | (Some(a), Some(b), Some(c)) =>
-          Some(
-            `FloatCdf(
-              Value.FloatCdf.fromArray([|
-                (25.0, a),
-                (50.0, b),
-                (75.0, c),
-              |]),
-            ),
-          )
-        | (_, _, _) => None
-        }
-      )
+    | "FloatCdf" =>
+      Some(`FloatCdf(Value.FloatCdf.fromArrays(state.floatPdf)))
       >>= keepIfValid
     | "FloatPoint" =>
       values.pointFloat
@@ -118,6 +106,7 @@ let mutate =
     };
   switch (value) {
   | Some(v) =>
+    Js.log(Value.encode(v));
     let m =
       CreateMeasurement.make(
         ~measurableId,
@@ -145,7 +134,6 @@ let valueList =
     [|"FloatPercentiles", "FloatPoint", "Percentage", "Binary"|],
   );
 
-let component = ReasonReact.statelessComponent("Measurables");
 let errorOfFloat = (fn1, fn2, e) => {
   let asNumber = fn1(e);
   switch (asNumber) {
@@ -162,19 +150,33 @@ let input = (handleChange, value, b, key) =>
     />
   </Form.Item>;
 
+let component = ReasonReact.reducerComponent("Measurables");
+
 let make = (~measurableId: string, _children) => {
   ...component,
-  render: _ =>
+  initialState: () => {floatPdf: ([||], [||])},
+  reducer: (action, _) =>
+    switch (action) {
+    | UpdateFloatPdf(e) => ReasonReact.Update({floatPdf: e})
+    },
+  render: ({state, send}) => {
+    Js.log2("STATE", state.floatPdf);
     CreateMeasurementMutation.make(
       ~onCompleted=e => Js.log("Request submitted"),
       (mutation, _) =>
         SignUpForm.make(
-          ~onSubmit=({values}) => mutate(mutation, measurableId, values),
+          ~onSubmit=
+            ({values}) => mutate(mutation, measurableId, values, state),
           ~initialState,
           ~schema=[],
           ({handleSubmit, handleChange, form, _}) =>
             <form onSubmit=(ReForm.Helpers.handleDomFormSubmit(handleSubmit))>
               <h2> ("Create a new Measurement" |> ste) </h2>
+              <Cell
+                sampleCount=1000
+                cdfCount=100
+                onUpdate=(e => send(UpdateFloatPdf(e)) |> ignore)
+              />
               <Form.Item key="ee">
                 <Select
                   value=form.values.dataType
@@ -225,5 +227,6 @@ let make = (~measurableId: string, _children) => {
         )
         |> ReasonReact.element,
     )
-    |> ReasonReact.element,
+    |> ReasonReact.element;
+  },
 };

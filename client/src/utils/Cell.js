@@ -24,6 +24,12 @@ const pdf = (values, chunkSize) => {
     })
 }
 
+const ccdf = (values) => {
+    const sorted = _.sortBy(values)
+    const length = values.length
+    return [sorted, _.map(sorted, (o,i) => (i / length))]
+}
+
 export class Cell extends React.Component {
     constructor(props) {
         super(props);
@@ -34,14 +40,20 @@ export class Cell extends React.Component {
         let [error, item] = Guesstimator.parse({text: event.target.value})
         let parsedInput = item.parsedInput;
         let what = new Guesstimator({parsedInput: parsedInput})
-        let foo = what.sample(3000)
+        let foo = what.sample(this.props.sampleCount)
         let values = foo.values;
         if (!!values) {
             this.setState({value: event.target.value, items: values});
         } else {
             this.setState({value: event.target.value, items: []});
         }
+        this.props.onUpdate(!!values ? ccdf(values): [])
       }
+    
+    chunkSize(){
+        return this.props.sampleCount / this.props.cdfCount
+    }
+    
 
     render() {
         return (<div><input type="text" value={this.state.value} onChange={this.handleChange}/>
@@ -52,7 +64,7 @@ export class Cell extends React.Component {
       data: { stroke: "#888" },
       parent: { border: "1px solid #ccc"}
     }}
-    data={pdf(this.state.items, 250)}
+    data={pdf(this.state.items, this.chunkSize())}
   />
 </VictoryChart>
         </div>)

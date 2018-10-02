@@ -19,6 +19,7 @@
   "namespace": true,
   "bs-dependencies": [
     "@glennsl/bs-json",
+    "@glennsl/bs-jest",
     "bs-reform",
     "bs-css",
     "bs-ant-design",
@@ -27,9 +28,7 @@
     "reason-apollo",
     "rationale",
   ],
-  "dev-dependencies": [
-    "@glennsl/bs-jest"
-  ],
+  "dev-dependencies": [],
   "refmt": 3,
   "warnings": {
     "error": "+5"

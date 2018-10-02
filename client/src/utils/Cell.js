@@ -34,7 +34,7 @@ export class Cell extends React.Component {
         let [error, item] = Guesstimator.parse({text: event.target.value})
         let parsedInput = item.parsedInput;
         let what = new Guesstimator({parsedInput: parsedInput})
-        let foo = what.sample(10000)
+        let foo = what.sample(3000)
         let values = foo.values;
         if (!!values) {
             this.setState({value: event.target.value, items: values});

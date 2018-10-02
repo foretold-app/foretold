@@ -16,18 +16,18 @@ module Styles = {
   let plot = style([maxWidth(px(800))]);
 };
 
-let onlyFloatPercentiles =
+let onlyFloatCdf =
   filterAndFold((e, fnYes, fnNo) =>
     switch (e) {
-    | Belt.Result.Ok(`FloatPercentiles(r)) => fnYes(r)
+    | Belt.Result.Ok(`FloatCdf(r)) => fnYes(r)
     | _ => fnNo()
     }
   );
 
-let onlyWithFloatPercentiles =
+let onlyWithFloatCdf =
   filterAndFold((e, fnYes, fnNo) =>
     switch (e##value) {
-    | Belt.Result.Ok(`FloatPercentiles(r)) => fnYes(e)
+    | Belt.Result.Ok(`FloatCdf(r)) => fnYes(e)
     | _ => fnNo()
     }
   );
@@ -46,7 +46,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
     let yMax =
       sorted
       |> Array.map(e => e##value)
-      |> onlyFloatPercentiles
+      |> onlyFloatCdf
       |> Array.map(e => Belt.Map.get(e, 75.0))
       |> Extensions.Array.concatSomes
       |> Array.fold_left((a, b) => a > b ? a : b, min_float);
@@ -54,7 +54,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
     let yMin =
       sorted
       |> Array.map(e => e##value)
-      |> onlyFloatPercentiles
+      |> onlyFloatCdf
       |> Array.map(e => Belt.Map.get(e, 25.0))
       |> Extensions.Array.concatSomes
       |> Array.fold_left((a, b) => a < b ? a : b, max_float);
@@ -66,7 +66,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
         switch (e) {
         | `FloatPoint(r) => r
         | `Percentage(r) => r
-        | `FloatPercentiles(v) =>
+        | `FloatCdf(v) =>
           switch (Belt.Map.get(v, perc)) {
           | Some(e) => e
           | _ => 3.0
@@ -88,7 +88,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
 
     let xMin =
       sorted
-      |> onlyWithFloatPercentiles
+      |> onlyWithFloatCdf
       |> Array.map(e => e##createdAt)
       |> Array.fold_left(
            (a, b) => Moment.isBefore(a, b) ? a : b,
@@ -99,11 +99,11 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
 
     let aggregatePercentiles =
       sorted
-      |> onlyWithFloatPercentiles
+      |> onlyWithFloatCdf
       |> Js.Array.filter(e => e##competitorType == `AGGREGATION)
       |> Js.Array.filter(e =>
            switch (e##value) {
-           | Belt.Result.Ok(`FloatPercentiles(_)) => true
+           | Belt.Result.Ok(`FloatCdf(_)) => true
            | _ => false
            }
          )
@@ -116,7 +116,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
          );
     let competitives =
       sorted
-      |> onlyWithFloatPercentiles
+      |> onlyWithFloatCdf
       |> Js.Array.filter(e => e##competitorType == `COMPETITIVE)
       |> Array.map(e =>
            {
@@ -129,7 +129,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
 
     let aggregateMedians =
       sorted
-      |> onlyWithFloatPercentiles
+      |> onlyWithFloatCdf
       |> Js.Array.filter(e => e##competitorType == `AGGREGATION)
       |> Array.map(e =>
            {

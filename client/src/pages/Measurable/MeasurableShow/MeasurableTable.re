@@ -59,8 +59,8 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
            let presentableValueName = (t: Value.t) =>
              switch (t) {
              | `FloatPoint(_) => "Point"
-             | `FloatPercentiles(_) => "Percentiles"
-             | `DateTimePercentiles(_) => "Date Percentiles"
+             | `FloatCdf(_) => "Cdf"
+             | `DateTimeCdf(_) => "Date Cdf"
              | `DateTimePoint(_) => "TimePoint"
              | `Percentage(_) => "Percentage"
              | `Binary(_) => "Binary"

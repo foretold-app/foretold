@@ -87,8 +87,8 @@ let mutate =
         ) {
         | (Some(a), Some(b), Some(c)) =>
           Some(
-            `FloatPercentiles(
-              Value.FloatPercentiles.fromArray([|
+            `FloatCdf(
+              Value.FloatCdf.fromArray([|
                 (25.0, a),
                 (50.0, b),
                 (75.0, c),

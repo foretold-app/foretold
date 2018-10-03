@@ -7,10 +7,13 @@
   "reason": {
     "react-jsx": 2
   },
-  "sources": {
+  "sources": [{
     "dir": "src",
     "subdirs": true
-  },
+  }, {
+    "dir": "stories",
+    "subdirs": true
+  }],
   "package-specs": [{
     "module": "commonjs",
     "in-source": true
@@ -24,9 +27,10 @@
     "bs-css",
     "bs-ant-design",
     "bs-moment",
+    "bs-storybook",
     "reason-react",
     "reason-apollo",
-    "rationale",
+    "rationale"
   ],
   "dev-dependencies": [],
   "refmt": 3,

@@ -12,6 +12,9 @@ let component = ReasonReact.statelessComponent("MeasurableTable");
 
 let toUnix = x => x##createdAt |> Moment.toUnix;
 
+let victory = data =>
+  <Victory.VictoryChart> <Victory.VictoryLine data /> </Victory.VictoryChart>;
+
 let make = (~measurements: MeasurableTypes.measurements, _children) => {
   ...component,
   render: _ => {
@@ -69,6 +72,25 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
            let valueType =
              Belt.Result.mapWithDefault(e##value, "", presentableValueName);
 
+           let data =
+             switch (e##value) {
+             | Belt.Result.Ok(`FloatCdf(r)) =>
+               Some(Value.FloatCdf.toPoints(r))
+             | _ => None
+             };
+
+           let cdfGraph =
+             ReactDOMServerRe.renderToStaticMarkup(
+               <div>
+                 (
+                   switch (data) {
+                   | Some(n) => victory(n)
+                   | None => "" |> ste
+                   }
+                 )
+               </div>,
+             );
+
            Js.Dict.fromList([
              ("createdAt", e##relevantAt |> Moment.format("L, h:mm:ss a")),
              ("competitive", e##competitorType |> botCompetitor),
@@ -76,6 +98,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
              ("valueType", valueType),
              ("type", agentType |> botType),
              ("userLink", link(e##agent)),
+             ("cdfGraph", cdfGraph),
            ]);
          });
 
@@ -86,6 +109,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       makeColumn(~data="valueType", ()),
       makeColumn(~data="type", ()),
       makeColumn(~data="userLink", ~renderer="html", ()),
+      makeColumn(~data="cdfGraph", ~renderer="html", ()),
     |];
     let colHeaders = [|
       "Relevant at",
@@ -94,6 +118,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       "Value Type",
       "Bot Type",
       "Agent",
+      "Cdf",
     |];
     <UseRouterForLinks>
       <HandsOnTable data columns colHeaders />

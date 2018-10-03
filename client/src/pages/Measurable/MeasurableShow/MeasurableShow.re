@@ -101,6 +101,7 @@ let make = (~id: string, _children) => {
               </h3>
               <div>
                 <h3> (measurable##valueType |> valueString |> ste) </h3>
+                <CdfInput />
                 <MeasurableChart measurements=measurable##measurements />
                 <MeasurableShowForm measurableId=id />
                 <MeasurableTable measurements=measurable##measurements />

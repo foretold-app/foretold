@@ -6,7 +6,7 @@ npm-debug.log
 .cache
 .cache/*
 dist
-lib
+lib/*
 .graphql_ppx_cache/
 *.graphql_ppx_cache
 *.cache

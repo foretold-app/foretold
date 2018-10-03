@@ -72,6 +72,7 @@
     "babel-runtime": "^6.26.0",
     "bs-platform": "^4.0.2",
     "bsb-js": "^1.1.7",
+    "file-loader": "^2.0.0",
     "graphql_ppx": "^0.2.7",
     "less": "^2.7.3",
     "parcel-bundler": "^1.9.7",

@@ -16,14 +16,6 @@ module Styles = {
   let plot = style([maxWidth(px(800))]);
 };
 
-let onlyFloatCdf =
-  filterAndFold((e, fnYes, fnNo) =>
-    switch (e) {
-    | Belt.Result.Ok(`FloatCdf(r)) => fnYes(r)
-    | _ => fnNo()
-    }
-  );
-
 let onlyWithFloatCdf =
   filterAndFold((e, fnYes, fnNo) =>
     switch (e##value) {
@@ -31,6 +23,14 @@ let onlyWithFloatCdf =
     | _ => fnNo()
     }
   );
+
+let firstAbove = (t: Value.FloatCdf.t, min: float) =>
+  Belt.Map.findFirstBy(t, (_, v) => v > min);
+
+let firstAboveValue = (t: Value.FloatCdf.t, min: float) =>
+  Rationale.Option.fmap(((x, _)) => x, firstAbove(t, min));
+
+let firstA = (_, n) => Some(n);
 
 let make = (~measurements: MeasurableTypes.measurements, _children) => {
   ...component,
@@ -43,134 +43,35 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
            toUnix(b) > toUnix(a) ? (-1) : 1
          );
 
-    let yMax =
-      sorted
-      |> Array.map(e => e##value)
-      |> onlyFloatCdf
-      |> Array.map(e => Belt.Map.get(e, 75.0))
-      |> Extensions.Array.concatSomes
-      |> Array.fold_left((a, b) => a > b ? a : b, min_float);
-
-    let yMin =
-      sorted
-      |> Array.map(e => e##value)
-      |> onlyFloatCdf
-      |> Array.map(e => Belt.Map.get(e, 25.0))
-      |> Extensions.Array.concatSomes
-      |> Array.fold_left((a, b) => a < b ? a : b, max_float);
-
-    let formatDate = Moment.format("MMM DD, YYYY HH:MM:SS");
-    let toPercentage = (perc, m: measurement) =>
+    let toChartMeasurement =
+        (m: MeasurableTypes.measurement)
+        : option(InnerChart.measurement) =>
       switch (m##value) {
-      | Belt.Result.Ok(e) =>
-        switch (e) {
-        | `FloatPoint(r) => r
-        | `Percentage(r) => r
-        | `FloatCdf(v) =>
-          switch (Belt.Map.get(v, perc)) {
-          | Some(e) => e
-          | _ => 3.0
-          }
-        | _ => 5.0
+      | Belt.Result.Ok(`FloatCdf(r)) =>
+        switch (
+          firstAboveValue(r, 0.05),
+          firstAboveValue(r, 0.50),
+          firstAboveValue(r, 0.95),
+        ) {
+        | (Some(low), Some(median), Some(high)) =>
+          Some({
+            createdAt: m##createdAt,
+            competitorType: m##competitorType,
+            low,
+            median,
+            high,
+          })
+        | _ => None
         }
-      | _ => 2.0
+      | _ => None
       };
 
-    let xMax =
-      sorted
-      |> Array.map(e => e##createdAt)
-      |> Array.fold_left(
-           (a, b) => Moment.isAfter(a, b) ? a : b,
-           "Jan 3, 1970" |> moment,
-         )
-      |> formatDate
-      |> Js.Date.fromString;
-
-    let xMin =
+    let values: array(InnerChart.measurement) =
       sorted
       |> onlyWithFloatCdf
-      |> Array.map(e => e##createdAt)
-      |> Array.fold_left(
-           (a, b) => Moment.isBefore(a, b) ? a : b,
-           "Jan 3, 2070" |> moment,
-         )
-      |> formatDate
-      |> Js.Date.fromString;
+      |> Array.map(toChartMeasurement)
+      |> Extensions.Array.concatSomes;
 
-    let aggregatePercentiles =
-      sorted
-      |> onlyWithFloatCdf
-      |> Js.Array.filter(e => e##competitorType == `AGGREGATION)
-      |> Js.Array.filter(e =>
-           switch (e##value) {
-           | Belt.Result.Ok(`FloatCdf(_)) => true
-           | _ => false
-           }
-         )
-      |> Array.map(e =>
-           {
-             "y0": e |> toPercentage(25.0),
-             "y": e |> toPercentage(75.0),
-             "x": e##relevantAt |> formatDate |> Js.Date.fromString,
-           }
-         );
-    let competitives =
-      sorted
-      |> onlyWithFloatCdf
-      |> Js.Array.filter(e => e##competitorType == `COMPETITIVE)
-      |> Array.map(e =>
-           {
-             "x": e##relevantAt |> formatDate |> Js.Date.fromString,
-             "y1": e |> toPercentage(25.0),
-             "y2": e |> toPercentage(50.0),
-             "y3": e |> toPercentage(75.0),
-           }
-         );
-
-    let aggregateMedians =
-      sorted
-      |> onlyWithFloatCdf
-      |> Js.Array.filter(e => e##competitorType == `AGGREGATION)
-      |> Array.map(e =>
-           {
-             "x": e##relevantAt |> formatDate |> Js.Date.fromString,
-             "y": e |> toPercentage(50.0),
-           }
-         );
-
-    Victory.(
-      <div className=Styles.plot>
-        <VictoryChart
-          scale={"x": "time"}
-          maxDomain={"y": yMax, "x": xMax}
-          minDomain={"y": yMin, "x": xMin}>
-          <VictoryArea
-            data=aggregatePercentiles
-            style={
-              "data": {
-                "fill": "f6f6f6",
-              },
-            }
-          />
-          <VictoryLine
-            data=aggregateMedians
-            style={
-              "data": {
-                "stroke": "#ddd",
-                "strokeWidth": "1",
-                "strokeDasharray": "4 4 4 4",
-              },
-            }
-          />
-          (
-            competitives
-            |> Array.mapi((i, e) =>
-                 <VictoryMeasurement point=e key=(string_of_int(i)) />
-               )
-            |> ReasonReact.array
-          )
-        </VictoryChart>
-      </div>
-    );
+    <InnerChart measurements=values />;
   },
 };

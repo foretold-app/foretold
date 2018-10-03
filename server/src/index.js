@@ -7,7 +7,7 @@ import bodyParser from 'body-parser';
 const models = require("./models")
 const Sequelize = require('sequelize')
 
-const jwt = require('express-jwt')
+const jwt = require('jsonwebtoken')
 var jwks = require('jwks-rsa')
 const { ApolloServer, gql } = require('apollo-server-express');
 
@@ -46,11 +46,27 @@ const server = new ApolloServer({
   formatResponse: response => {
     return response;
   },
-  context: ({req}) => {
-    jwt({secret: "bhz9XiFVqoowf_cSicdItfmExxWrAoeyhKEjGNQKjpX08E0NKuLNQ3uF5XL-wdy_", credentialsRequired: false, getToken})(req, {}, (e) => {
-      return {userAuth0Id: req.user && req.user.sub}
-    })
-}
+  context: async ({req}) => {
+    const token = getToken(req);
+
+    const user =new Promise(resolve =>
+      jwt.verify(token, "bhz9XiFVqoowf_cSicdItfmExxWrAoeyhKEjGNQKjpX08E0NKuLNQ3uF5XL-wdy_", (err, result) => {
+        if (err) {
+          resolve({
+            ok: false,
+            result: err
+          });
+        } else {
+          resolve({
+            ok: true,
+            result
+          });
+        }
+      })
+    );
+
+    return {user}
+  }
 });
 
 

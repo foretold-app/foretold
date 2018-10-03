@@ -1,6 +1,7 @@
 import * as models from "./models/index";
 import * as _ from "lodash";
 const Sequelize = require('sequelize')
+const jwt = require('express-jwt')
 import {
   makeAggregation
 } from "./services/measurable/MakeAggregation"
@@ -131,6 +132,17 @@ async function auth0User(auth0Id){
   return user[0]
 }
 
+let foo = e => {
+  console.log("HIHIHI", e);
+  e.userToken
+};
+
+// let getJwt = jwt({secret: "bhz9XiFVqoowf_cSicdItfmExxWrAoeyhKEjGNQKjpX08E0NKuLNQ3uF5XL-wdy_", credentialsRequired: false, getToken: foo})
+
+// const foobar = async (b) => {
+//   const foo =  await b
+// }
+
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
@@ -164,13 +176,14 @@ const schema = new GraphQLSchema({
       createMeasurement: {
         type: getType.Measurements(),
         args: filterr(_.pick(attributeFields(models.Measurement), ['value', 'competitorType', 'measurableId', 'agentId'])),
-        resolve: async (__, {
+        resolve: async (a, {
           value,
           competitorType,
           measurableId,
-          agentId,
-        }, {userAuth0Id}) => {
-          const user = await auth0User(userAuth0Id);
+        }, b, params) => {
+          let {ok, result} = await b.user;
+          let {sub} = result;
+          const user = await auth0User(sub);
           const newMeasurement = await models.Measurement.create({
             value,
             competitorType,

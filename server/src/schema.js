@@ -132,17 +132,6 @@ async function auth0User(auth0Id){
   return user[0]
 }
 
-let foo = e => {
-  console.log("HIHIHI", e);
-  e.userToken
-};
-
-// let getJwt = jwt({secret: "bhz9XiFVqoowf_cSicdItfmExxWrAoeyhKEjGNQKjpX08E0NKuLNQ3uF5XL-wdy_", credentialsRequired: false, getToken: foo})
-
-// const foobar = async (b) => {
-//   const foo =  await b
-// }
-
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',

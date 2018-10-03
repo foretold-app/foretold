@@ -60,12 +60,9 @@ const measurables = [{
 module.exports = {
   up: async (queryInterface, Sequelize) => {
 
-      // console.log(1)
       const xxx = await models.User.create({id: "1010a04d-5307-4bd0-9246-000000000000", name: "initial"})
-      // console.log(1)
       const yyy = await models.Bot.create({id: "1010a04d-5307-4bd0-9246-000000000000", userId: "1010a04d-5307-4bd0-9246-000000000000", name: "aggbot1"});
 
-      console.log(1)
       let allUsers = []
       for (let user of users) {
         const u = await models.User.create(user)

@@ -21,7 +21,6 @@ async function makeAggregation(measurable) {
   const percentile25 = average(measurements.map(m => m.dataValues.percentile25));
   const percentile50 = average(measurements.map(m => m.dataValues.percentile50));
   const percentile75 = average(measurements.map(m => m.dataValues.percentile75));
-  console.log("Found first values", measurements.map(m => m.dataValues));
   const newMeasurement = await models.Measurement.create({
     percentile25,
     percentile50,

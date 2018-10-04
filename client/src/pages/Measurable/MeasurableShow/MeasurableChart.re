@@ -24,12 +24,6 @@ let onlyWithFloatCdf =
     }
   );
 
-let firstAbove = (t: Value.FloatCdf.t, min: float) =>
-  Belt.Map.findFirstBy(t, (k, v) => k > min);
-
-let firstAboveValue = (t: Value.FloatCdf.t, min: float) =>
-  Rationale.Option.fmap(((_, x)) => x, firstAbove(t, min));
-
 let firstA = (_, n) => Some(n);
 
 let make = (~measurements: MeasurableTypes.measurements, _children) => {
@@ -49,9 +43,9 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       switch (m##value) {
       | Belt.Result.Ok(`FloatCdf(r)) =>
         switch (
-          firstAboveValue(r, 0.05),
-          firstAboveValue(r, 0.50),
-          firstAboveValue(r, 0.95),
+          FloatCdf_F.firstAboveValue(0.05, r),
+          FloatCdf_F.firstAboveValue(0.50, r),
+          FloatCdf_F.firstAboveValue(0.95, r),
         ) {
         | (Some(low), Some(median), Some(high)) =>
           Some({

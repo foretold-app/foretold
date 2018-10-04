@@ -71,10 +71,9 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
            let valueType =
              Belt.Result.mapWithDefault(e##value, "", presentableValueName);
 
-           let data_ =
+           let floatCdf =
              switch (e##value) {
-             | Belt.Result.Ok(`FloatCdf(r)) =>
-               Some(r |> Value.FloatCdf.toPoints)
+             | Belt.Result.Ok(`FloatCdf(r)) => Some(r)
              | _ => None
              };
 
@@ -82,7 +81,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
              ReactDOMServerRe.renderToStaticMarkup(
                <div>
                  (
-                   switch (data_) {
+                   switch (floatCdf <$> Value.FloatCdf.toPoints) {
                    | Some(data) => <SmallChart data />
                    | None => "" |> ste
                    }
@@ -90,13 +89,22 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
                </div>,
              );
 
+           let percentile = n =>
+             floatCdf
+             >>= FloatCdf_F.firstAboveValue(n)
+             <$> Js.Float.toPrecisionWithPrecision(_, ~digits=3)
+             |> Option.default("");
+
            Js.Dict.fromList([
              ("createdAt", e##relevantAt |> Moment.format("L, h:mm:ss a")),
              ("competitive", e##competitorType |> botCompetitor),
              ("value", value),
              ("valueType", valueType),
-             ("type", agentType |> botType),
+             ("botType", agentType |> botType),
              ("userLink", link(e##agent)),
+             ("5th", percentile(0.05)),
+             ("50th", percentile(0.50)),
+             ("95th", percentile(0.95)),
              ("cdfGraph", cdfGraph),
            ]);
          });
@@ -104,19 +112,23 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
     let columns = [|
       makeColumn(~data="createdAt", ()),
       makeColumn(~data="competitive", ()),
-      makeColumn(~data="value", ()),
       makeColumn(~data="valueType", ()),
-      makeColumn(~data="type", ()),
+      makeColumn(~data="botType", ()),
       makeColumn(~data="userLink", ~renderer="html", ()),
+      makeColumn(~data="5th", ()),
+      makeColumn(~data="50th", ()),
+      makeColumn(~data="95th", ()),
       makeColumn(~data="cdfGraph", ~renderer="html", ()),
     |];
     let colHeaders = [|
       "Relevant at",
       "competitive",
-      "Value",
       "Value Type",
       "Bot Type",
       "Agent",
+      "5th",
+      "50th",
+      "95th",
       "Cdf",
     |];
     <UseRouterForLinks>

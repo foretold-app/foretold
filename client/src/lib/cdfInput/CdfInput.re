@@ -49,7 +49,7 @@ let make = (~onUpdate=e => (), ~onSubmit=e => (), _children) => {
         <div className=Styles.inputSection>
           <div className=Styles.inputBox>
             <GuesstimateInput
-              sampleCount=5000
+              sampleCount=1000
               onUpdate=(
                 e =>
                   {

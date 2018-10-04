@@ -1,26 +1,39 @@
-type action =
-  | UpdateFloatPdf((array(float), array(float)));
+open Types;
 
-type state = {floatPdf: (array(float), array(float))};
+type action =
+  | UpdateFloatPdf(floatCdf);
+
+type state = {floatCdf};
 
 let component = ReasonReact.reducerComponent("CdfInput");
 
-let make = _children => {
+let make = (~onUpdate=e => (), _children) => {
   ...component,
-  initialState: () => {floatPdf: ([||], [||])},
+  initialState: () => {floatCdf: floatCdfEmpty},
   reducer: (action, _) =>
     switch (action) {
-    | UpdateFloatPdf(e) => ReasonReact.Update({floatPdf: e})
+    | UpdateFloatPdf((e: floatCdf)) =>
+      onUpdate(e);
+      ReasonReact.Update({floatCdf: e});
     },
   render: ({state, send}) =>
     <div>
-      <DynamicForm
-        sampleCount=10000
-        onUpdate=(e => send(UpdateFloatPdf(e)) |> ignore)
+      <GuesstimateInput
+        sampleCount=1000
+        onUpdate=(
+          e =>
+            {
+              let (ys, xs) = e;
+              let asGroup: floatCdf = {xs, ys};
+              send(UpdateFloatPdf(asGroup));
+            }
+            |> ignore
+        )
       />
-      <CellInputChart
+      <InputChart
         data=(
-          state.floatPdf
+          state.floatCdf
+          |> (e => (e.xs, e.ys))
           |> Value.FloatCdf.fromArrays
           |> Value.FloatCdf.toPoints
         )

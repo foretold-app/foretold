@@ -1,11 +1,11 @@
 let fn = (a: (array(float), array(float))) => ();
 
-[@bs.module "./DynamicForm.js"]
-external dynamicForm : ReasonReact.reactClass = "DynamicForm";
+[@bs.module "./GuesstimateInput.js"]
+external guesstimateInput : ReasonReact.reactClass = "GuesstimateInput";
 
 let make = (~sampleCount=1000, ~onUpdate=fn, children) =>
   ReasonReact.wrapJsForReason(
-    ~reactClass=dynamicForm,
+    ~reactClass=guesstimateInput,
     ~props={"sampleCount": sampleCount, "onUpdate": onUpdate},
     children,
   );

@@ -55,11 +55,11 @@ module MakeCdf = (Item: Point) => {
   let toDict = (t: t) =>
     t
     |> toArray
-    |> Array.map(((a, b)) => (string_of_float(a), b))
+    |> Array.map(((y, x)) => (string_of_float(y), x))
     |> Js.Dict.fromArray;
 
   let toPoints = (t: t) =>
-    t |> toArray |> Array.map(((a, b)) => point(~x=b, ~y=a));
+    t |> toArray |> Array.map(((y, x)) => point(~x, ~y));
 
   let fromArray = a => a |> Belt.Map.fromArray(~id=(module Id));
 
@@ -69,10 +69,11 @@ module MakeCdf = (Item: Point) => {
     |> Array.map(((a, b)) => (float_of_string(a), b))
     |> Belt.Map.fromArray(~id=(module Id));
 
-  let fromArrays = (a: (array(float), array(Item.t))) : t => {
+  /* There's some bug here but I'm not sure what it is. */
+  let fromArrays = (a: (array(Item.t), array(float))) : t => {
     let (xs, ys) = a;
     Belt.Array.zip(xs, ys)
-    |> Array.map(((a, b)) => (string_of_float(a), b))
+    |> Array.map(((x, y)) => (string_of_float(y), x))
     |> Js.Dict.fromArray
     |> fromDict;
   };

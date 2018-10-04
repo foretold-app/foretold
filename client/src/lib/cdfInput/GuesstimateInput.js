@@ -9,7 +9,7 @@ const toCdf = (values) => {
     return [_.map(sorted, (o,i) => (i / length)), sorted]
 }
 
-export class DynamicForm extends React.Component {
+export class GuesstimateInput extends React.Component {
     constructor(props) {
         super(props);
         this.state = {value: '', items:[]};

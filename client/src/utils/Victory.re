@@ -44,6 +44,9 @@ module VictoryChart = {
         ~scale=?,
         ~maxDomain=?,
         ~minDomain=?,
+        ~padding=?,
+        ~height=?,
+        ~width=?,
         children,
       ) =>
     ReasonReact.wrapJsForReason(
@@ -54,6 +57,9 @@ module VictoryChart = {
         "scale": Js.Undefined.fromOption(scale),
         "maxDomain": Js.Undefined.fromOption(maxDomain),
         "minDomain": Js.Undefined.fromOption(minDomain),
+        "padding": Js.Undefined.fromOption(padding),
+        "height": Js.Undefined.fromOption(height),
+        "width": Js.Undefined.fromOption(width),
       },
       children,
     );
@@ -65,6 +71,8 @@ module VictoryAxis = {
   let make =
       (
         ~tickValues=?,
+        ~height=?,
+        ~style=?,
         ~tickFormat: option('a => string)=?,
         ~dependentAxis: option(bool)=?,
         children,
@@ -72,9 +80,11 @@ module VictoryAxis = {
     ReasonReact.wrapJsForReason(
       ~reactClass=victoryAxis,
       ~props={
+        "height": Js.Undefined.fromOption(height),
         "tickValues": Js.Undefined.fromOption(tickValues),
         "tickFormat": Js.Undefined.fromOption(tickFormat),
         "dependentAxis": Js.Undefined.fromOption(dependentAxis),
+        "style": Js.Undefined.fromOption(style),
       },
       children,
     );

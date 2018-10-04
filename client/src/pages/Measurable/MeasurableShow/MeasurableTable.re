@@ -12,7 +12,7 @@ let component = ReasonReact.statelessComponent("MeasurableTable");
 
 let toUnix = x => x##createdAt |> Moment.toUnix;
 
-let victory = data => <CellInputChart data />;
+let victory = data => <SmallChart data />;
 
 let make = (~measurements: MeasurableTypes.measurements, _children) => {
   ...component,
@@ -71,7 +71,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
            let valueType =
              Belt.Result.mapWithDefault(e##value, "", presentableValueName);
 
-           let data =
+           let data_ =
              switch (e##value) {
              | Belt.Result.Ok(`FloatCdf(r)) =>
                Some(r |> Value.FloatCdf.toPoints)
@@ -82,8 +82,8 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
              ReactDOMServerRe.renderToStaticMarkup(
                <div>
                  (
-                   switch (data) {
-                   | Some(n) => victory(n)
+                   switch (data_) {
+                   | Some(data) => <SmallChart data />
                    | None => "" |> ste
                    }
                  )

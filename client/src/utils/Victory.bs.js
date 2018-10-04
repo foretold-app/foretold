@@ -24,23 +24,28 @@ function make$1(colorScale, children) {
 
 var VictoryStack = /* module */[/* make */make$1];
 
-function make$2(domainPadding, theme, scale, maxDomain, minDomain, children) {
+function make$2(domainPadding, theme, scale, maxDomain, minDomain, padding, height, width, children) {
   return ReasonReact.wrapJsForReason(Victory.VictoryChart, {
               domainPadding: Js_undefined.fromOption(domainPadding),
               theme: Js_undefined.fromOption(theme),
               scale: Js_undefined.fromOption(scale),
               maxDomain: Js_undefined.fromOption(maxDomain),
-              minDomain: Js_undefined.fromOption(minDomain)
+              minDomain: Js_undefined.fromOption(minDomain),
+              padding: Js_undefined.fromOption(padding),
+              height: Js_undefined.fromOption(height),
+              width: Js_undefined.fromOption(width)
             }, children);
 }
 
 var VictoryChart = /* module */[/* make */make$2];
 
-function make$3(tickValues, tickFormat, dependentAxis, children) {
+function make$3(tickValues, height, style, tickFormat, dependentAxis, children) {
   return ReasonReact.wrapJsForReason(Victory.VictoryAxis, {
+              height: Js_undefined.fromOption(height),
               tickValues: Js_undefined.fromOption(tickValues),
               tickFormat: Js_undefined.fromOption(tickFormat),
-              dependentAxis: Js_undefined.fromOption(dependentAxis)
+              dependentAxis: Js_undefined.fromOption(dependentAxis),
+              style: Js_undefined.fromOption(style)
             }, children);
 }
 

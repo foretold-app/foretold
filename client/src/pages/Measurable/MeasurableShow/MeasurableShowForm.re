@@ -3,6 +3,7 @@ open Rationale;
 open Rationale.Option.Infix;
 open Rationale.Function.Infix;
 open Antd;
+open Types;
 
 let ste = ReasonReact.string;
 
@@ -62,9 +63,9 @@ let initialState: SignUpParams.state = {
 module SignUpForm = ReForm.Create(SignUpParams);
 
 type action =
-  | UpdateFloatPdf((array(float), array(float)));
+  | UpdateFloatPdf(floatCdf);
 
-type state = {floatPdf: (array(float), array(float))};
+type state = {floatCdf};
 
 let safe_a_of_string = (fn, s: string) : option('a) =>
   try (Some(fn(s))) {
@@ -85,7 +86,11 @@ let mutate =
   let value =
     switch (values.dataType) {
     | "FloatCdf" =>
-      Some(`FloatCdf(Value.FloatCdf.fromArrays(state.floatPdf)))
+      Some(
+        `FloatCdf(
+          Value.FloatCdf.fromArrays(state.floatCdf |> (e => (e.ys, e.xs))),
+        ),
+      )
       >>= keepIfValid
     | "FloatPoint" =>
       values.pointFloat
@@ -153,10 +158,10 @@ let component = ReasonReact.reducerComponent("Measurables");
 
 let make = (~measurableId: string, _children) => {
   ...component,
-  initialState: () => {floatPdf: ([||], [||])},
+  initialState: () => {floatCdf: floatCdfEmpty},
   reducer: (action, _) =>
     switch (action) {
-    | UpdateFloatPdf(e) => ReasonReact.Update({floatPdf: e})
+    | UpdateFloatPdf(e) => ReasonReact.Update({floatCdf: e})
     },
   render: ({state, send}) =>
     CreateMeasurementMutation.make(
@@ -170,12 +175,7 @@ let make = (~measurableId: string, _children) => {
           ({handleSubmit, handleChange, form, _}) =>
             <form onSubmit=(ReForm.Helpers.handleDomFormSubmit(handleSubmit))>
               <h2> ("Create a new Measurement" |> ste) </h2>
-              <CdfInput />
-              <Cell
-                sampleCount=1000
-                cdfCount=10
-                onUpdate=(e => send(UpdateFloatPdf(e)) |> ignore)
-              />
+              <CdfInput onUpdate=(e => send(UpdateFloatPdf(e)) |> ignore) />
               <Form.Item key="ee">
                 <Select
                   value=form.values.dataType

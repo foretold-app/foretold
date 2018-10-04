@@ -130,7 +130,8 @@ let toPdf = (~bucketSize=10, t: FloatCdf.t) : FloatCdf.t => {
     t
     |> FloatCdf.toArray
     |> Array.to_list
-    |> Belt.List.keepWithIndex(_, (_, i) => i mod bucketSize == 0);
+    |> Belt.List.keepWithIndex(_, (_, i) => i mod bucketSize == 0)
+    |> Belt.List.keepWithIndex(_, (_, i) => i != 0);
   inChunks
   |> List.mapi((i, e) => {
        let (y, x) = e;

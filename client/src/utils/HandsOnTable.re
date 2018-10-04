@@ -29,8 +29,6 @@ let make =
       "rowHeaders": true,
       "columnSorting": true,
       "sortIndicator": true,
-      "width": "1000",
-      "height": "800",
       "stretchH": "all",
     },
     children,

@@ -11,16 +11,12 @@ let component = ReasonReact.reducerComponent("CdfInput");
 module Styles = {
   open Css;
   let form =
-    style([
-      maxWidth(px(1500)),
-      display(`flex),
-      flexDirection(`row),
-      padding(px(3)),
-      backgroundColor(hex("f6f6f6")),
-      borderRadius(px(2)),
-    ]);
-  let chart = style([flex(2)]);
-  let input = style([flex(1), marginTop(px(10)), marginRight(px(5))]);
+    style([display(`flex), flexDirection(`row), width(`percent(100.))]);
+  let chartSection = style([flex(2)]);
+  let inputSection =
+    style([flex(1), marginTop(px(10)), marginRight(px(5))]);
+  let inputBox = style([]);
+  let submitButton = style([marginTop(px(20))]);
 };
 
 let make = (~onUpdate=e => (), ~onSubmit=e => (), _children) => {
@@ -33,33 +29,45 @@ let make = (~onUpdate=e => (), ~onSubmit=e => (), _children) => {
       ReasonReact.Update({floatCdf: e});
     },
   render: ({state, send}) =>
-    <div className=Styles.form>
-      <div className=Styles.chart>
-        <InputChart
-          data=(
-            state.floatCdf
-            |> (e => (e.xs, e.ys))
-            |> Value.FloatCdf.fromArrays
-            |> Value.FloatCdf.toPoints
+    <Style.BorderedBox>
+      <div className=Styles.form>
+        <div className=Styles.chartSection>
+          (
+            Array.length(state.floatCdf.xs) > 1 ?
+              <InputChart
+                data=(
+                  state.floatCdf
+                  |> (e => (e.xs, e.ys))
+                  |> Value.FloatCdf.fromArrays
+                  |> Value.toPdf(~bucketSize=20)
+                  |> Value.FloatCdf.toPoints
+                )
+              /> :
+              <div />
           )
-        />
+        </div>
+        <div className=Styles.inputSection>
+          <div className=Styles.inputBox>
+            <GuesstimateInput
+              sampleCount=5000
+              onUpdate=(
+                e =>
+                  {
+                    let (ys, xs) = e;
+                    let asGroup: floatCdf = {xs, ys};
+                    send(UpdateFloatPdf(asGroup));
+                  }
+                  |> ignore
+              )
+            />
+          </div>
+          <div className=Styles.submitButton>
+            <Antd.Button
+              _type=`primary onClick=(_ => onSubmit(state.floatCdf))>
+              ("Submit" |> ste)
+            </Antd.Button>
+          </div>
+        </div>
       </div>
-      <div className=Styles.input>
-        <GuesstimateInput
-          sampleCount=1000
-          onUpdate=(
-            e =>
-              {
-                let (ys, xs) = e;
-                let asGroup: floatCdf = {xs, ys};
-                send(UpdateFloatPdf(asGroup));
-              }
-              |> ignore
-          )
-        />
-        <Antd.Button _type=`primary onClick=(_ => onSubmit(state.floatCdf))>
-          ("Submit" |> ste)
-        </Antd.Button>
-      </div>
-    </div>,
+    </Style.BorderedBox>,
 };

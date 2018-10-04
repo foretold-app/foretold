@@ -96,6 +96,7 @@ let make = (~measurements: array(measurement), _children) => {
       <div className=Styles.plot>
         <VictoryChart
           scale={"x": "time"}
+          padding={"top": 10, "bottom": 25, "right": 10, "left": 30}
           maxDomain={"y": yMax, "x": xMax}
           minDomain={"y": yMin, "x": xMin}>
           <VictoryArea

@@ -13,7 +13,7 @@ let toUnix = x => x##createdAt |> Moment.toUnix;
 
 module Styles = {
   open Css;
-  let plot = style([maxWidth(px(800))]);
+  let plot = style([maxWidth(px(500))]);
 };
 
 let onlyWithFloatCdf =
@@ -45,7 +45,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
 
     let toChartMeasurement =
         (m: MeasurableTypes.measurement)
-        : option(InnerChart.measurement) =>
+        : option(TimeCdfChart.measurement) =>
       switch (m##value) {
       | Belt.Result.Ok(`FloatCdf(r)) =>
         switch (
@@ -66,12 +66,12 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       | _ => None
       };
 
-    let values: array(InnerChart.measurement) =
+    let values: array(TimeCdfChart.measurement) =
       sorted
       |> onlyWithFloatCdf
       |> Array.map(toChartMeasurement)
       |> Extensions.Array.concatSomes;
 
-    <InnerChart measurements=values />;
+    <div className=Styles.plot> <TimeCdfChart measurements=values /> </div>;
   },
 };

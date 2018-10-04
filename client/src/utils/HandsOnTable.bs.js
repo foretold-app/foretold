@@ -22,8 +22,6 @@ function make(data, columns, colHeaders, children) {
               rowHeaders: true,
               columnSorting: true,
               sortIndicator: true,
-              width: "1000",
-              height: "800",
               stretchH: "all"
             }, children);
 }

@@ -92,17 +92,15 @@ let make = (~id: string, _children) => {
         (
           GetMeasurable.withQuery(~id, measurable =>
             <div>
-              <h2> (measurable##name |> ste) </h2>
-              <h3>
-                (
-                  (measurable##isLocked ? "Locked: True" : "Locked: False")
-                  |> ste
-                )
-              </h3>
+              <h1> (measurable##name |> ste) </h1>
               <div>
-                <h3> (measurable##valueType |> valueString |> ste) </h3>
-                <MeasurableChart measurements=measurable##measurements />
+                <h2> ("Aggregate" |> ste) </h2>
+                <Style.BorderedBox>
+                  <MeasurableChart measurements=measurable##measurements />
+                </Style.BorderedBox>
+                <h2> ("Add a Measurement" |> ste) </h2>
                 <MeasurableShowForm measurableId=id />
+                <h2> ("Previous Measurements" |> ste) </h2>
                 <MeasurableTable measurements=measurable##measurements />
               </div>
             </div>

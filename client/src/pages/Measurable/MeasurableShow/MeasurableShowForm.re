@@ -106,7 +106,6 @@ let mutate =
     };
   switch (value) {
   | Some(v) =>
-    Js.log(Value.encode(v));
     let m =
       CreateMeasurement.make(
         ~measurableId,
@@ -159,8 +158,7 @@ let make = (~measurableId: string, _children) => {
     switch (action) {
     | UpdateFloatPdf(e) => ReasonReact.Update({floatPdf: e})
     },
-  render: ({state, send}) => {
-    Js.log2("STATE", state.floatPdf);
+  render: ({state, send}) =>
     CreateMeasurementMutation.make(
       ~onCompleted=e => Js.log("Request submitted"),
       (mutation, _) =>
@@ -172,9 +170,10 @@ let make = (~measurableId: string, _children) => {
           ({handleSubmit, handleChange, form, _}) =>
             <form onSubmit=(ReForm.Helpers.handleDomFormSubmit(handleSubmit))>
               <h2> ("Create a new Measurement" |> ste) </h2>
+              <CdfInput />
               <Cell
                 sampleCount=1000
-                cdfCount=100
+                cdfCount=10
                 onUpdate=(e => send(UpdateFloatPdf(e)) |> ignore)
               />
               <Form.Item key="ee">
@@ -227,6 +226,5 @@ let make = (~measurableId: string, _children) => {
         )
         |> ReasonReact.element,
     )
-    |> ReasonReact.element;
-  },
+    |> ReasonReact.element,
 };

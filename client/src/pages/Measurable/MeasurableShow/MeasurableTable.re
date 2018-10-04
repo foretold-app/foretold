@@ -12,8 +12,7 @@ let component = ReasonReact.statelessComponent("MeasurableTable");
 
 let toUnix = x => x##createdAt |> Moment.toUnix;
 
-let victory = data =>
-  <Victory.VictoryChart> <Victory.VictoryLine data /> </Victory.VictoryChart>;
+let victory = data => <CellInputChart data />;
 
 let make = (~measurements: MeasurableTypes.measurements, _children) => {
   ...component,
@@ -75,7 +74,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
            let data =
              switch (e##value) {
              | Belt.Result.Ok(`FloatCdf(r)) =>
-               Some(Value.FloatCdf.toPoints(r))
+               Some(r |> Value.FloatCdf.toPoints)
              | _ => None
              };
 

@@ -3,28 +3,7 @@ import {Guesstimator} from '../guesstimator/index';
 import {VictoryChart, VictoryLine} from "victory";
 import _ from "lodash";
 
-const cdf = (values) => {
-    const sorted = _.sortBy(values)
-    const length = values.length
-    return _.map(sorted, (o,i) => ({x: o, y: i / length}))
-}
-
-const pdf = (values, chunkSize) => {
-    let _cdf = cdf(values);
-    let inChunks = _cdf.filter(function(value, index, Arr) {
-        return index % chunkSize == 0;
-    });
-    return _.map(inChunks, (o,i) => {
-        if (i == 0 ){
-            return ({x: o.x, y: 0})
-        } else {
-            let derivative = (o.y - (_cdf[i - 1].y)) / (o.x - (_cdf[i - 1].x))
-            return ({x: o.x, y: derivative})
-        }
-    })
-}
-
-const ccdf = (values) => {
+const toCdf = (values) => {
     const sorted = _.sortBy(values)
     const length = values.length
     return [_.map(sorted, (o,i) => (i / length)), sorted]
@@ -47,10 +26,12 @@ export class DynamicForm extends React.Component {
         } else {
             this.setState({value: event.target.value, items: []});
         }
-        this.props.onUpdate(!!values ? ccdf(values): [[], []])
+        this.props.onUpdate(!!values ? toCdf(values): [[], []])
       }
     
     render() {
-        return (<input type="text" value={this.state.value} onChange={this.handleChange}/>)
+        return (<div><input type="text" value={this.state.value} onChange={this.handleChange}/>
+    </div>
+        )
     }
 }

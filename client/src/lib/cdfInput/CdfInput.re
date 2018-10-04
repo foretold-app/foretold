@@ -14,20 +14,16 @@ let make = _children => {
     },
   render: ({state, send}) =>
     <div>
-      <Victory.VictoryChart>
-        <Victory.VictoryLine
-          data=(
-            state.floatPdf
-            |> Value.FloatCdf.fromArrays
-            /* |> Value.toPdf(~bucketSize=100) */
-            |> Value.FloatCdf.toPoints
-          )
-        />
-      </Victory.VictoryChart>
       <DynamicForm
         sampleCount=1000
-        cdfCount=1
         onUpdate=(e => send(UpdateFloatPdf(e)) |> ignore)
+      />
+      <CellInputChart
+        data=(
+          state.floatPdf
+          |> Value.FloatCdf.fromArrays
+          |> Value.FloatCdf.toPoints
+        )
       />
     </div>,
 };

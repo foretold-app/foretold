@@ -34,6 +34,7 @@ module MakeCdf = (Item: Point) => {
       let cmp: (float, float) => int = Pervasives.compare;
     });
 
+  /* type t = { */
   type t = Belt.Map.t(Id.t, Item.t, Id.identity);
 
   [@bs.deriving abstract]
@@ -123,7 +124,26 @@ module DateTimePoint = {
 
 module FloatCdf = MakeCdf(FloatPoint);
 
-let toPdf = (~bucketSize=10, t: FloatCdf.t) : FloatCdf.t => t;
+let toPdf = (~bucketSize=10, t: FloatCdf.t) : FloatCdf.t => {
+  let inChunks =
+    t
+    |> FloatCdf.toArray
+    |> Array.to_list
+    |> Belt.List.keepWithIndex(_, (_, i) => i mod bucketSize == 0);
+  inChunks
+  |> List.mapi((i, e) => {
+       let (y, x) = e;
+       if (i == 0) {
+         e;
+       } else {
+         let (oy, ox) = inChunks |> List.nth(_, i - 1);
+         let derivative = (y -. oy) /. (x -. ox);
+         (derivative, x);
+       };
+     })
+  |> Array.of_list
+  |> FloatCdf.fromArray;
+};
 
 module DateTimeCdf = MakeCdf(DateTimePoint);
 

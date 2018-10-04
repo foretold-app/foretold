@@ -62,7 +62,6 @@ export class Cell extends React.Component {
   <VictoryLine
     style={{
       data: { stroke: "#888" },
-      parent: { border: "1px solid #ccc"}
     }}
     data={pdf(this.state.items, this.chunkSize())}
   />

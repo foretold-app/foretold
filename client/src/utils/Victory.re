@@ -73,6 +73,7 @@ module VictoryAxis = {
         ~tickValues=?,
         ~height=?,
         ~style=?,
+        ~scale=?,
         ~tickFormat: option('a => string)=?,
         ~dependentAxis: option(bool)=?,
         children,
@@ -85,6 +86,7 @@ module VictoryAxis = {
         "tickFormat": Js.Undefined.fromOption(tickFormat),
         "dependentAxis": Js.Undefined.fromOption(dependentAxis),
         "style": Js.Undefined.fromOption(style),
+        "scale": Js.Undefined.fromOption(scale),
       },
       children,
     );

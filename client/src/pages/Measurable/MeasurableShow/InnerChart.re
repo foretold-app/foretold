@@ -14,9 +14,6 @@ module Styles = {
   let plot = style([maxWidth(px(800))]);
 };
 
-let firstAbove = (t: Value.FloatCdf.t, min: float) =>
-  Belt.Map.findFirstBy(t, (k, _) => k > min);
-
 type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
 
 type measurement = {

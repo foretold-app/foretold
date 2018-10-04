@@ -25,10 +25,10 @@ let onlyWithFloatCdf =
   );
 
 let firstAbove = (t: Value.FloatCdf.t, min: float) =>
-  Belt.Map.findFirstBy(t, (_, v) => v > min);
+  Belt.Map.findFirstBy(t, (k, v) => k > min);
 
 let firstAboveValue = (t: Value.FloatCdf.t, min: float) =>
-  Rationale.Option.fmap(((x, _)) => x, firstAbove(t, min));
+  Rationale.Option.fmap(((_, x)) => x, firstAbove(t, min));
 
 let firstA = (_, n) => Some(n);
 

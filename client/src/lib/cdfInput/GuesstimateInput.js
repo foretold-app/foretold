@@ -31,8 +31,8 @@ export class GuesstimateInput extends React.Component {
       }
     
     render() {
-        return (<div><Input type="text" value={this.state.value} onChange={this.handleChange}/>
-    </div>
+        return (<Input type="text" value={this.state.value} onChange={this.handleChange}/>
+    
         )
     }
 }

@@ -39,13 +39,14 @@ function make$2(domainPadding, theme, scale, maxDomain, minDomain, padding, heig
 
 var VictoryChart = /* module */[/* make */make$2];
 
-function make$3(tickValues, height, style, tickFormat, dependentAxis, children) {
+function make$3(tickValues, height, style, scale, tickFormat, dependentAxis, children) {
   return ReasonReact.wrapJsForReason(Victory.VictoryAxis, {
               height: Js_undefined.fromOption(height),
               tickValues: Js_undefined.fromOption(tickValues),
               tickFormat: Js_undefined.fromOption(tickFormat),
               dependentAxis: Js_undefined.fromOption(dependentAxis),
-              style: Js_undefined.fromOption(style)
+              style: Js_undefined.fromOption(style),
+              scale: Js_undefined.fromOption(scale)
             }, children);
 }
 

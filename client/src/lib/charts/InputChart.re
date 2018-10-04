@@ -8,7 +8,9 @@ let make = (~data, _children) => {
     <div>
       Victory.(
         <div>
-          <VictoryChart>
+          <VictoryChart
+            padding={"top": 10, "bottom": 20, "right": 10, "left": 10}
+            height=100>
             <VictoryAxis
               style={
                 "axis": {

@@ -14,6 +14,7 @@ let make = (~data, _children) => {
             width=150>
             <VictoryAxis
               height=200
+              scale={"x": "linear", "y": "log"}
               style={
                 "axis": {
                   "stroke": "#aaa",

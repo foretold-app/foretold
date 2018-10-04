@@ -15,7 +15,7 @@ let make = _children => {
   render: ({state, send}) =>
     <div>
       <DynamicForm
-        sampleCount=1000
+        sampleCount=10000
         onUpdate=(e => send(UpdateFloatPdf(e)) |> ignore)
       />
       <CellInputChart

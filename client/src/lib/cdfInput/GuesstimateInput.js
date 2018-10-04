@@ -1,6 +1,7 @@
 import React from "react";
 import {Guesstimator} from '../guesstimator/index';
 import {VictoryChart, VictoryLine} from "victory";
+import {Input} from "antd";
 import _ from "lodash";
 
 const toCdf = (values) => {
@@ -30,7 +31,7 @@ export class GuesstimateInput extends React.Component {
       }
     
     render() {
-        return (<div><input type="text" value={this.state.value} onChange={this.handleChange}/>
+        return (<div><Input type="text" value={this.state.value} onChange={this.handleChange}/>
     </div>
         )
     }

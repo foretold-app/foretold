@@ -6,6 +6,7 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Auth0$Client = require("./utils/Auth0.bs.js");
 var Profile$Client = require("./pages/Profile.bs.js");
+var Redirect$Client = require("./pages/Redirect.bs.js");
 var AgentShow$Client = require("./pages/Agent/AgentShow/AgentShow.bs.js");
 var AgentIndex$Client = require("./pages/Agent/AgentIndex.bs.js");
 var PaddedLayout$Client = require("./layout/PaddedLayout.bs.js");
@@ -40,7 +41,7 @@ function mapUrlToRoute(url) {
             return /* Home */0;
           } else {
             Auth0$Client.handleAuth(url);
-            return /* Home */0;
+            return /* Redirect */2;
           }
       case "measurables" : 
           var match$2 = match[1];
@@ -51,13 +52,24 @@ function mapUrlToRoute(url) {
               return /* MeasurableShow */Block.__(2, [match$2[0]]);
             }
           } else {
-            return /* MeasurableIndex */2;
+            return /* MeasurableIndex */3;
           }
       case "profile" : 
-          if (match[1] || Auth0$Client.userId === undefined) {
+          if (match[1]) {
             return /* Home */0;
           } else {
-            return /* Profile */Block.__(0, [Auth0$Client.userId]);
+            var match$3 = Auth0$Client.userId(/* () */0);
+            if (match$3 !== undefined) {
+              return /* Profile */Block.__(0, [match$3]);
+            } else {
+              return /* Home */0;
+            }
+          }
+      case "redirect" : 
+          if (match[1]) {
+            return /* Home */0;
+          } else {
+            return /* Redirect */2;
           }
       default:
         return /* Home */0;
@@ -75,10 +87,13 @@ var component = ReasonReact.reducerComponent("App");
 
 function inside(r) {
   if (typeof r === "number") {
-    if (r === 2) {
-      return ReasonReact.element(undefined, undefined, MeasurableIndex$Client.make(/* array */[]));
-    } else {
-      return ReasonReact.element(undefined, undefined, AgentIndex$Client.make(/* array */[]));
+    switch (r) {
+      case 2 : 
+          return ReasonReact.element(undefined, undefined, Redirect$Client.make(/* array */[]));
+      case 3 : 
+          return ReasonReact.element(undefined, undefined, MeasurableIndex$Client.make(/* array */[]));
+      default:
+        return ReasonReact.element(undefined, undefined, AgentIndex$Client.make(/* array */[]));
     }
   } else {
     switch (r.tag | 0) {

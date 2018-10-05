@@ -49,7 +49,7 @@ const server = new ApolloServer({
   context: async ({req}) => {
     const token = getToken(req);
 
-    const user =new Promise(resolve =>
+    const user = new Promise(resolve =>
       jwt.verify(token, "bhz9XiFVqoowf_cSicdItfmExxWrAoeyhKEjGNQKjpX08E0NKuLNQ3uF5XL-wdy_", (err, result) => {
         if (err) {
           resolve({

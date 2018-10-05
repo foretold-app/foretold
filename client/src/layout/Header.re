@@ -46,50 +46,51 @@ let withUserQuery =
 
 let make = _children => {
   ...component,
-  render: _ => {
-    Js.log("Rendering");
-    withUserQuery(Auth0.userId, userQuery =>
+  render: _ =>
+    withUserQuery(Auth0.userId(), userQuery =>
       <Row
         gutter=(Row.ResponsiveBreakpoints(makeGutterBreakpoints(~sm=5, ())))>
         <Col span=24>
           <Layout.Header className=Styles.header>
             <Antd_Menu className=Styles.menu mode=`Horizontal theme=`Light>
-              <Antd_Menu.Item> (link("/agents", "Agents")) </Antd_Menu.Item>
-              <Antd_Menu.Item>
+              <Antd_Menu.Item key="1">
+                (link("/agents", "Agents"))
+              </Antd_Menu.Item>
+              <Antd_Menu.Item key="2">
                 (link("/measurables", "Measurables"))
               </Antd_Menu.Item>
-              <Antd_Menu.Item>
+              <Antd_Menu.Item key="3">
                 (link("/measurables/new", "New Measurable"))
               </Antd_Menu.Item>
               (
                 switch (userQuery, Auth0.isLoggedIn()) {
                 | (Some(e), true) =>
-                  <Antd_Menu.Item>
-                    (
-                      link(
-                        "/profile",
-                        Belt.Option.map(e##user, r => r##name)
-                        |> Rationale.Option.default("Profile"),
+                  [|
+                    <Antd_Menu.Item key="4">
+                      (
+                        link(
+                          "/profile",
+                          Belt.Option.map(e##user, r => r##name)
+                          |> Rationale.Option.default("Profile"),
+                        )
                       )
-                    )
-                  </Antd_Menu.Item>
+                    </Antd_Menu.Item>,
+                    <Antd_Menu.Item key="5">
+                      <a onClick=(_e => Auth0.logout())>
+                        ("Log Out" |> ste)
+                      </a>
+                    </Antd_Menu.Item>,
+                  |]
+                  |> ReasonReact.array
                 | _ =>
-                  <Antd_Menu.Item>
+                  <Antd_Menu.Item key="6">
                     <a onClick=(_ => Auth0.logIn())> ("Login" |> ste) </a>
                   </Antd_Menu.Item>
                 }
-              )
-              (
-                userQuery |> Rationale.Option.isSome && Auth0.isLoggedIn() ?
-                  <Antd_Menu.Item>
-                    <a onClick=(_e => Auth0.logout())> ("Log Out" |> ste) </a>
-                  </Antd_Menu.Item> :
-                  <span />
               )
             </Antd_Menu>
           </Layout.Header>
         </Col>
       </Row>
-    );
-  },
+    ),
 };

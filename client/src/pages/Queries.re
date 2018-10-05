@@ -97,6 +97,9 @@ module GetUser = [%graphql
             id
             auth0Id
             name
+            agent: Agent{
+              id
+            }
         }
     }
   |}

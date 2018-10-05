@@ -124,12 +124,12 @@ const modelResolvers = (name, plural, type, model) => {
 }
 
 async function auth0User(auth0Id){
-  let user = await models.User.findAll({
+  let users = await models.User.findAll({
     where: {
       auth0Id: auth0Id,
     }
   })
-  return user[0]
+  return users && users[0]
 }
 
 const schema = new GraphQLSchema({
@@ -143,10 +143,21 @@ const schema = new GraphQLSchema({
         resolve: async (ops, {
           id,
           auth0Id
-        }) => {
-          if (id){
-            const user = await models.User.findById(id);
+        }, b) => {
+          let {ok, result} = await b.user;
+          let _auth0Id = result.sub;
+          const _auth0User = await auth0User(_auth0Id);
+          let user;
+          if (_auth0Id && !_auth0User) {
+            try {
+            user = await models.User.create({auth0Id: _auth0Id, name: ""})
+            } catch (e) { console.log("E", e)}
+          }
+          if (user){
             return user;
+          } else if (id){
+            user = await models.User.findById(id);
+            return user
           } else if (auth0Id){
             const user = await auth0User(auth0Id)
             return user;
@@ -203,7 +214,10 @@ const schema = new GraphQLSchema({
         resolve: async (_, {
           id,
           name
-        }, {userAuth0Id}) => {
+        }, b) => {
+          let {ok, result} = await b.user;
+          let {sub} = result;
+          let userAuth0Id = sub;
           let user = await models.User.findById(id);
           if (user && (user.auth0Id == userAuth0Id)) {
             user.update({name})

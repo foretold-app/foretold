@@ -403,7 +403,7 @@ var GetMeasurablesQuery = ReasonApollo.CreateQuery([
       parse$1
     ]);
 
-var ppx_printed_query$2 = "query user($auth0Id: String)  {\nuser: user(auth0Id: $auth0Id)  {\nid  \nauth0Id  \nname  \n}\n\n}\n";
+var ppx_printed_query$2 = "query user($auth0Id: String)  {\nuser: user(auth0Id: $auth0Id)  {\nid  \nauth0Id  \nname  \nagent: Agent  {\nid  \n}\n\n}\n\n}\n";
 
 function parse$2(value) {
   var match = Js_json.decodeObject(value);
@@ -448,10 +448,40 @@ function parse$2(value) {
           } else {
             tmp$4 = Js_exn.raiseError("graphql_ppx: Field name on type User is missing");
           }
+          var match$11 = value$1["agent"];
+          var tmp$5;
+          if (match$11 !== undefined) {
+            var match$12 = Js_json.decodeNull(match$11);
+            if (match$12 !== undefined) {
+              tmp$5 = undefined;
+            } else {
+              var match$13 = Js_json.decodeObject(match$11);
+              var tmp$6;
+              if (match$13 !== undefined) {
+                var match$14 = Js_primitive.valFromOption(match$13)["id"];
+                var tmp$7;
+                if (match$14 !== undefined) {
+                  var match$15 = Js_json.decodeString(match$14);
+                  tmp$7 = match$15 !== undefined ? match$15 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$14));
+                } else {
+                  tmp$7 = Js_exn.raiseError("graphql_ppx: Field id on type Agent is missing");
+                }
+                tmp$6 = {
+                  id: tmp$7
+                };
+              } else {
+                tmp$6 = Js_exn.raiseError("graphql_ppx: Object is not a value");
+              }
+              tmp$5 = Js_primitive.some(tmp$6);
+            }
+          } else {
+            tmp$5 = undefined;
+          }
           tmp$1 = {
             id: tmp$2,
             auth0Id: tmp$3,
-            name: tmp$4
+            name: tmp$4,
+            agent: tmp$5
           };
         } else {
           tmp$1 = Js_exn.raiseError("graphql_ppx: Object is not a value");

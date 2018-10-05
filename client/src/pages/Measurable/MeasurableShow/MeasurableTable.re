@@ -112,8 +112,6 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
     let columns = [|
       makeColumn(~data="createdAt", ()),
       makeColumn(~data="competitive", ()),
-      makeColumn(~data="valueType", ()),
-      makeColumn(~data="botType", ()),
       makeColumn(~data="userLink", ~renderer="html", ()),
       makeColumn(~data="5th", ()),
       makeColumn(~data="50th", ()),
@@ -123,8 +121,6 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
     let colHeaders = [|
       "Relevant at",
       "competitive",
-      "Value Type",
-      "Bot Type",
       "Agent",
       "5th",
       "50th",

@@ -46,7 +46,8 @@ let withUserQuery =
 
 let make = _children => {
   ...component,
-  render: _ =>
+  render: _ => {
+    Js.log("Rendering");
     withUserQuery(Auth0.userId, userQuery =>
       <Row
         gutter=(Row.ResponsiveBreakpoints(makeGutterBreakpoints(~sm=5, ())))>
@@ -61,8 +62,8 @@ let make = _children => {
                 (link("/measurables/new", "New Measurable"))
               </Antd_Menu.Item>
               (
-                switch (userQuery) {
-                | Some(e) =>
+                switch (userQuery, Auth0.isLoggedIn()) {
+                | (Some(e), true) =>
                   <Antd_Menu.Item>
                     (
                       link(
@@ -72,14 +73,14 @@ let make = _children => {
                       )
                     )
                   </Antd_Menu.Item>
-                | None =>
+                | _ =>
                   <Antd_Menu.Item>
                     <a onClick=(_ => Auth0.logIn())> ("Login" |> ste) </a>
                   </Antd_Menu.Item>
                 }
               )
               (
-                userQuery |> Rationale.Option.isSome ?
+                userQuery |> Rationale.Option.isSome && Auth0.isLoggedIn() ?
                   <Antd_Menu.Item>
                     <a onClick=(_e => Auth0.logout())> ("Log Out" |> ste) </a>
                   </Antd_Menu.Item> :
@@ -89,5 +90,6 @@ let make = _children => {
           </Layout.Header>
         </Col>
       </Row>
-    ),
+    );
+  },
 };

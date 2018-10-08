@@ -11,8 +11,6 @@ type data = {name: string};
 [@bs.scope "JSON"] [@bs.val]
 external parseIntoMyData : string => data = "parse";
 
-/* let result = parseIntoMyData("{\"authorization\": \"sdlkfjsdklfjskldfj\"}"); */
-
 let headers =
   Json.Encode.(
     object_([

@@ -46,8 +46,10 @@ let withUserQuery =
 
 let make = _children => {
   ...component,
-  render: _ =>
-    withUserQuery(Auth0.userId(), userQuery =>
+  render: _ => {
+    let isLoggedIn = Auth0.isLoggedIn();
+    Js.log(Auth0.userId());
+    let input = userQuery =>
       <Row
         gutter=(Row.ResponsiveBreakpoints(makeGutterBreakpoints(~sm=5, ())))>
         <Col span=24>
@@ -63,8 +65,8 @@ let make = _children => {
                 (link("/measurables/new", "New Measurable"))
               </Antd_Menu.Item>
               (
-                switch (userQuery, Auth0.isLoggedIn()) {
-                | (Some(e), true) =>
+                switch (userQuery) {
+                | Some(e) =>
                   [|
                     <Antd_Menu.Item key="4">
                       (
@@ -91,6 +93,7 @@ let make = _children => {
             </Antd_Menu>
           </Layout.Header>
         </Col>
-      </Row>
-    ),
+      </Row>;
+    isLoggedIn ? withUserQuery(Auth0.userId(), input) : input(None);
+  },
 };

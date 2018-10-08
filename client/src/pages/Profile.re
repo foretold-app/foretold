@@ -34,7 +34,8 @@ let mutate =
       id: string,
     ) => {
   let mutate = EditUser.make(~id, ~name=values.name, ());
-  mutation(~variables=mutate##variables, ()) |> ignore;
+  mutation(~variables=mutate##variables, ~refetchQueries=[|"user"|], ())
+  |> ignore;
 };
 
 let component = ReasonReact.statelessComponent("Measurables");
@@ -71,6 +72,7 @@ let withUserForm = (id, name, mutation, innerComponentFn) =>
 let formFields = (form: Form.state, handleChange, handleSubmit: unit => unit) =>
   <div>
     <h2> ("Edit Profile" |> ste) </h2>
+    <h3> ("UserName" |> ste) </h3>
     <Input
       value=form.values.name
       onChange=(ReForm.Helpers.handleDomFormChange(handleChange(`name)))

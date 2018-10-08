@@ -11,7 +11,7 @@ type data = {name: string};
 [@bs.scope "JSON"] [@bs.val]
 external parseIntoMyData : string => data = "parse";
 
-let headers =
+let headers = () =>
   Json.Encode.(
     object_([
       (
@@ -24,15 +24,14 @@ let headers =
   );
 
 let httpLink =
-  ApolloLinks.createHttpLink(
-    ~uri="http://localhost:4000/graphql",
-    ~headers,
-    (),
-  );
+  ApolloLinks.createHttpLink(~uri="http://localhost:4000/graphql", ());
+
+let contextLink = ApolloLinks.createContextLink(() => {"headers": headers()});
 
 let errorLink =
   ApolloLinks.apolloLinkOnError(error => Js.log2("GraphQL Error!", error));
-let link = ApolloLinks.from([|httpLink, errorLink|]);
+
+let link = ApolloLinks.from([|contextLink, errorLink, httpLink|]);
 
 let instance =
   ReasonApollo.createApolloClient(~link, ~cache=inMemoryCache, ());

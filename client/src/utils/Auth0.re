@@ -1,5 +1,6 @@
 open Belt;
 open Rationale.Option;
+open Utils;
 
 type generatedAuth0Client = {. "authorize": [@bs.meth] (unit => unit)};
 
@@ -52,14 +53,20 @@ let resolveRegex = (exp, str) => {
   };
 };
 
+let omap = Rationale.Option.fmap;
+
 let handleAuth = (url: ReasonReact.Router.url) => {
   let accessToken = url.hash |> resolveRegex(matchAccessToken);
   let idToken = url.hash |> resolveRegex(matchIdToken);
   let expiresIn = url.hash |> resolveRegex(matchExpiresIn);
+  let addedMs = expiresIn |> float_of_string |> (e => e *. 1000.);
+  let currentTimeMs = Js.Date.make() |> Js.Date.valueOf;
+  let expiresAtInMs = currentTimeMs +. addedMs;
+  let expiresAt = expiresAtInMs |> Int64.of_float |> Int64.to_string;
   open Dom.Storage;
   localStorage |> setItem("access_token", accessToken);
   localStorage |> setItem("id_token", idToken);
-  localStorage |> setItem("expires_at", expiresIn);
+  localStorage |> setItem("expires_at", expiresAt);
   ();
 };
 
@@ -72,9 +79,32 @@ let logout = () => {
   ();
 };
 
+let expiresAt = () => Dom.Storage.(localStorage |> getItem("expires_at"));
+
+let oDimap = (sFn, rFn, e) =>
+  switch (e) {
+  | Some(r) => sFn(r)
+  | None => rFn()
+  };
+
+let authIsObsolete = () => {
+  let exp = expiresAt();
+  exp
+  |> omap(Int64.of_string)
+  |> omap(Int64.to_float)
+  |> omap(e => e < Js.Date.now())
+  |> oDimap(idd, () => false);
+};
+
 let authToken = () => Dom.Storage.(localStorage |> getItem("id_token"));
 
-let isLoggedIn = () =>
+let logoutIfTokenIsObsolete = () =>
+  if (authIsObsolete()) {
+    logout();
+  };
+
+let isLoggedIn = () => {
+  logoutIfTokenIsObsolete();
   Dom.Storage.(localStorage |> getItem("id_token"))
   |> (
     e =>
@@ -83,6 +113,7 @@ let isLoggedIn = () =>
       | None => false
       }
   );
+};
 
 let getIdToken = () => Dom.Storage.(localStorage |> getItem("id_token"));
 

@@ -132,6 +132,8 @@ async function auth0User(auth0Id){
   return users && users[0]
 }
 
+//todo: clean up user login code.
+
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
@@ -216,6 +218,11 @@ const schema = new GraphQLSchema({
           name
         }, b) => {
           let {ok, result} = await b.user;
+          if (!ok){
+            throw new Error(
+              result.name
+            );
+          }
           let {sub} = result;
           let userAuth0Id = sub;
           let user = await models.User.findById(id);

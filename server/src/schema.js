@@ -2,6 +2,10 @@ import * as models from "./models/index";
 import * as _ from "lodash";
 const Sequelize = require('sequelize')
 const jwt = require('express-jwt')
+const { 
+  AuthenticationError, 
+} = require('apollo-server');
+
 import {
   makeAggregation
 } from "./services/measurable/MakeAggregation"
@@ -134,6 +138,23 @@ async function auth0User(auth0Id){
 
 //todo: clean up user login code.
 
+const getAuth0Id = async (options) => {
+  let {ok, result} = await options.user;
+  if (!ok){
+    throw new Error(
+      result.name
+    );
+  }
+  let {sub} = result;
+  if (!sub){
+    throw new Error(
+      "No User Id"
+    );
+  }
+  let userAuth0Id = sub;
+  return userAuth0Id
+}
+
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
@@ -145,9 +166,8 @@ const schema = new GraphQLSchema({
         resolve: async (ops, {
           id,
           auth0Id
-        }, b) => {
-          let {ok, result} = await b.user;
-          let _auth0Id = result.sub;
+        }, options) => {
+          let _auth0Id = await getAuth0Id(options)
           const _auth0User = await auth0User(_auth0Id);
           let user;
           if (_auth0Id && !_auth0User) {
@@ -182,10 +202,9 @@ const schema = new GraphQLSchema({
           value,
           competitorType,
           measurableId,
-        }, b, params) => {
-          let {ok, result} = await b.user;
-          let {sub} = result;
-          const user = await auth0User(sub);
+        }, options) => {
+          let _auth0Id = await getAuth0Id(options)
+          const user = await auth0User(_auth0Id);
           const newMeasurement = await models.Measurement.create({
             value,
             competitorType,
@@ -216,17 +235,11 @@ const schema = new GraphQLSchema({
         resolve: async (_, {
           id,
           name
-        }, b) => {
-          let {ok, result} = await b.user;
-          if (!ok){
-            throw new Error(
-              result.name
-            );
-          }
-          let {sub} = result;
-          let userAuth0Id = sub;
+        }, options) => {
+          let _auth0Id = await getAuth0Id(options);
+          // throw new AuthenticationError("HI!!!");
           let user = await models.User.findById(id);
-          if (user && (user.auth0Id == userAuth0Id)) {
+          if (user && (user.auth0Id == _auth0Id)) {
             user.update({name})
           }
           return user

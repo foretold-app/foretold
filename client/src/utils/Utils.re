@@ -3,12 +3,14 @@ open Rationale;
 
 let ste = ReasonReact.string;
 
-let apolloResponseToResult = (result: ReasonApolloTypes.queryResponse('a)) =>
+let apolloResponseToResult = (result: ReasonApolloTypes.queryResponse('a)) => {
+  Js.log2("MADE IT HERE", result);
   switch (result) {
   | Loading => Error(<div> ("Loading" |> ste) </div>)
   | Error(error) => Error(<div> ("WHAT?" |> ste) </div>)
   | Data(response) => Ok(response)
   };
+};
 
 let filterOptionalResult = (errorMessage, result: option('a)) =>
   switch (result) {

@@ -41,6 +41,7 @@ function getToken(req) {
 const server = new ApolloServer({
   schema,
   formatError: error => {
+    console.log("Error!", error);
     return error;
   },
   formatResponse: response => {

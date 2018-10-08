@@ -40,6 +40,7 @@
     "eslint"
   ],
   "dependencies": {
+    "apollo-server": "^2.1.0",
     "apollo-server-express": "^2.1.0",
     "auth0-js": "^9.7.3",
     "babel-cli": "^6.26.0",

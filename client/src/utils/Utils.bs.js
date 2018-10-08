@@ -8,6 +8,7 @@ var React = require("react");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 
 function apolloResponseToResult(result) {
+  console.log("MADE IT HERE", result);
   if (typeof result === "number") {
     return /* Error */Block.__(1, [React.createElement("div", undefined, "Loading")]);
   } else if (result.tag) {

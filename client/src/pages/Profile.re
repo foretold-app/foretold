@@ -34,8 +34,7 @@ let mutate =
       id: string,
     ) => {
   let mutate = EditUser.make(~id, ~name=values.name, ());
-  mutation(~variables=mutate##variables, ~refetchQueries=[|"user"|], ())
-  |> ignore;
+  mutation(~variables=mutate##variables, ()) |> ignore;
 };
 
 let component = ReasonReact.statelessComponent("Measurables");
@@ -53,9 +52,13 @@ let withUserQuery =
 };
 
 let withUserMutation = innerComponentFn =>
-  EditUserMutation.make(~onCompleted=e => Js.log("HI"), innerComponentFn)
+  EditUserMutation.make(
+    ~onError=e => Js.log2("Graphql Error:", e),
+    innerComponentFn,
+  )
   |> ReasonReact.element;
 
+/* EditUserMutation.make(~onCompleted=e => Js.log("HI"),  |> ReasonReact.element; */
 let withUserForm = (id, name, mutation, innerComponentFn) =>
   Form.make(
     ~onSubmit=({values}) => mutate(mutation, values, id),
@@ -65,12 +68,23 @@ let withUserForm = (id, name, mutation, innerComponentFn) =>
   )
   |> ReasonReact.element;
 
-/* Belt.Option.map(e##user, r => r##name) */
+let formFields = (form: Form.state, handleChange, handleSubmit: unit => unit) =>
+  <div>
+    <h2> ("Edit Profile" |> ste) </h2>
+    <Input
+      value=form.values.name
+      onChange=(ReForm.Helpers.handleDomFormChange(handleChange(`name)))
+    />
+    <Button _type=`primary onClick=(_ => handleSubmit())>
+      ("Submit" |> ste)
+    </Button>
+  </div>;
+
 let make = (~auth0Id, _children) => {
   ...component,
   render: _ =>
     withUserQuery(auth0Id, userQuery =>
-      withUserMutation((mutation, _) => {
+      withUserMutation((mutation, data) => {
         let id =
           Belt.Option.map(userQuery##user, r => r##id) |> Option.default("");
         let name =
@@ -78,16 +92,22 @@ let make = (~auth0Id, _children) => {
         withUserForm(
           id, name, mutation, ({handleSubmit, handleChange, form, _}) =>
           <form onSubmit=(ReForm.Helpers.handleDomFormSubmit(handleSubmit))>
-            <h2> ("Edit Profile" |> ste) </h2>
-            <Input
-              value=form.values.name
-              onChange=(
-                ReForm.Helpers.handleDomFormChange(handleChange(`name))
-              )
-            />
-            <Button _type=`primary onClick=(_ => handleSubmit())>
-              ("Submit" |> ste)
-            </Button>
+            (
+              switch (data.result) {
+              | Loading => <div> ("Loading" |> ste) </div>
+              | Error(e) =>
+                <div>
+                  ("Error: " ++ e##message |> ste)
+                  (formFields(form, handleChange, handleSubmit))
+                </div>
+              | Data(d) =>
+                <div>
+                  ("Changes made successfully!" |> ste)
+                  (formFields(form, handleChange, handleSubmit))
+                </div>
+              | NotCalled => formFields(form, handleChange, handleSubmit)
+              }
+            )
           </form>
         );
       })

@@ -32,5 +32,9 @@ let httpLink =
     (),
   );
 
+let errorLink =
+  ApolloLinks.apolloLinkOnError(error => Js.log2("GraphQL Error!", error));
+let link = ApolloLinks.from([|httpLink, errorLink|]);
+
 let instance =
-  ReasonApollo.createApolloClient(~link=httpLink, ~cache=inMemoryCache, ());
+  ReasonApollo.createApolloClient(~link, ~cache=inMemoryCache, ());

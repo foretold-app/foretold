@@ -3,10 +3,12 @@
 
 var ApolloLinks = require("reason-apollo/src/ApolloLinks.bs.js");
 var Json_encode = require("@glennsl/bs-json/src/Json_encode.bs.js");
+var ApolloLink = require("apollo-link");
 var Auth0$Client = require("./utils/Auth0.bs.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 var ReasonApollo = require("reason-apollo/src/ReasonApollo.bs.js");
 var Option$Rationale = require("rationale/src/Option.js");
+var ApolloLinkError = require("apollo-link-error");
 var ApolloInMemoryCache = require("reason-apollo/src/ApolloInMemoryCache.bs.js");
 
 var inMemoryCache = ApolloInMemoryCache.createInMemoryCache(undefined, undefined, /* () */0);
@@ -21,10 +23,22 @@ var headers = Json_encode.object_(/* :: */[
 
 var httpLink = ApolloLinks.createHttpLink("http://localhost:4000/graphql", undefined, undefined, Js_primitive.some(headers), undefined, undefined, /* () */0);
 
-var instance = ReasonApollo.createApolloClient(httpLink, inMemoryCache, undefined, undefined, undefined, undefined, /* () */0);
+var errorLink = ApolloLinkError.onError((function (error) {
+        console.log("GraphQL Error!", error);
+        return /* () */0;
+      }));
+
+var link = ApolloLink.from(/* array */[
+      httpLink,
+      errorLink
+    ]);
+
+var instance = ReasonApollo.createApolloClient(link, inMemoryCache, undefined, undefined, undefined, undefined, /* () */0);
 
 exports.inMemoryCache = inMemoryCache;
 exports.headers = headers;
 exports.httpLink = httpLink;
+exports.errorLink = errorLink;
+exports.link = link;
 exports.instance = instance;
 /* inMemoryCache Not a pure module */

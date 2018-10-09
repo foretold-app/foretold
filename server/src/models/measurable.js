@@ -30,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.DATE
     },
+    expectedResolutionDate: {
+      allowNull: true,
+      type: DataTypes.DATE
+    },
     measurementCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),

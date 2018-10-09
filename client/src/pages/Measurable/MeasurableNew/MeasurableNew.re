@@ -9,8 +9,8 @@ let ste = ReasonReact.string;
 
 module CreateMeasurable = [%graphql
   {|
-             mutation createMeasurable($name: String!, $valueType:valueType!) {
-                 createMeasurable(name: $name, valueType: $valueType) {
+             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!) {
+                 createMeasurable(name: $name, description: $description, valueType: $valueType) {
                    id
                  }
              }
@@ -23,11 +23,17 @@ module CreateMeasurableMutation =
 module SignUpParams = {
   type state = {
     name: string,
+    description: string,
     valueType: string,
   };
-  type fields = [ | `name | `valueType];
+  type fields = [ | `name | `valueType | `description];
   let lens = [
     (`name, s => s.name, (s, name) => {...s, name}),
+    (
+      `description,
+      s => s.description,
+      (s, description) => {...s, description},
+    ),
     (`valueType, s => s.valueType, (s, valueType) => {...s, valueType}),
   ];
 };
@@ -42,6 +48,7 @@ let mutate =
   let mutate =
     CreateMeasurable.make(
       ~name=values.name,
+      ~description=values.description,
       ~valueType=
         switch (values.valueType) {
         | "float" => `FLOAT
@@ -63,13 +70,14 @@ let make = _children => {
       (mutation, _) =>
         SignUpForm.make(
           ~onSubmit=({values}) => mutate(mutation, values),
-          ~initialState={name: "", valueType: "float"},
+          ~initialState={name: "", description: "", valueType: "float"},
           ~schema=[(`name, Custom(_ => None))],
           ({handleSubmit, handleChange, form, _}) =>
             <form onSubmit=(ReForm.Helpers.handleDomFormSubmit(handleSubmit))>
               <h2> ("Create a new Measurable" |> ste) </h2>
               <Form>
                 <Form.Item>
+                  <h3> ("Name" |> ste) </h3>
                   <Input
                     value=form.values.name
                     onChange=(
@@ -77,7 +85,20 @@ let make = _children => {
                     )
                   />
                 </Form.Item>
+                <Form.Item> <DatePicker /> </Form.Item>
                 <Form.Item>
+                  <h3> ("Description" |> ste) </h3>
+                  <Input
+                    value=form.values.description
+                    onChange=(
+                      ReForm.Helpers.handleDomFormChange(
+                        handleChange(`description),
+                      )
+                    )
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <h3> ("Value Type" |> ste) </h3>
                   <Select
                     value=form.values.valueType
                     onChange=(e => handleChange(`valueType, e) |> ignore)>

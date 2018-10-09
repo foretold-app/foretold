@@ -999,6 +999,18 @@
               "deprecationReason": null
             },
             {
+              "name": "description",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "valueType",
               "description": null,
               "args": [],
@@ -1032,6 +1044,18 @@
             },
             {
               "name": "lockedAt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "expectedResolutionDate",
               "description": null,
               "args": [],
               "type": {
@@ -1087,6 +1111,18 @@
               "deprecationReason": null
             },
             {
+              "name": "creatorId",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "Measurements",
               "description": null,
               "args": [],
@@ -1102,6 +1138,18 @@
                     "ofType": null
                   }
                 }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "creator",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Agent",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -1236,6 +1284,16 @@
                       "name": "String",
                       "ofType": null
                     }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "description",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
                   },
                   "defaultValue": null
                 },

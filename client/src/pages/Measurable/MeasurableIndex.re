@@ -1,8 +1,5 @@
 open Utils;
 open Rationale;
-open Rationale.Option;
-open Result.Infix;
-open Rationale.Function.Infix;
 open Queries;
 open HandsOnTable;
 open MomentRe;
@@ -13,10 +10,19 @@ let toMeasurableLink = m => {
   {j|<a href="/measurables/$id">$name</a>|j};
 };
 
+let toCreatorLink = (c: Queries.creator) => {
+  let id = c.id;
+  let name = c.name;
+  {j|<a href="/agents/$id">$name</a>|j};
+};
+
 let showQueryList = (~data, ~urlFn, ~render) => {
   let ddata =
     Array.map(
-      e =>
+      e => {
+        open Option.Infix;
+        let creator = e.creator;
+        let creatorName = creator <$> toCreatorLink |> Option.default("");
         Js.Dict.fromList([
           ("name", toMeasurableLink(e)),
           ("id", e.id),
@@ -33,7 +39,9 @@ let showQueryList = (~data, ~urlFn, ~render) => {
             e.measurementCount |> Option.default(0) |> string_of_int,
           ),
           ("createdAt", e.createdAt |> Moment.format("L, h:mm:ss a")),
-        ]),
+          ("creator", creatorName),
+        ]);
+      },
       data,
     );
 
@@ -42,13 +50,20 @@ let showQueryList = (~data, ~urlFn, ~render) => {
     makeColumn(~data="type", ()),
     makeColumn(~data="measurementCount", ()),
     makeColumn(~data="createdAt", ()),
+    makeColumn(~data="creator", ~renderer="html", ()),
   |];
 
   <UseRouterForLinks>
     <HandsOnTable
       data=ddata
       columns
-      colHeaders=[|"Name", "Type", "Measurement Count", "Created At"|]
+      colHeaders=[|
+        "Name",
+        "Type",
+        "Measurement Count",
+        "Created At",
+        "Creator",
+      |]
     />
   </UseRouterForLinks>;
 };
@@ -63,15 +78,17 @@ let component = ReasonReact.statelessComponent("Measurables");
 let make = _children => {
   ...component,
   render: self =>
-    Queries.GetMeasurablesQuery.make(o =>
-      o.result
-      |> apolloResponseToResult
-      <$> (d => d##measurables)
-      <$> Extensions.Array.concatSomes
-      <$> (e => <div> (itemList(~data=e)) </div>)
-      |> Result.result(idd, idd)
-    )
-    |> ReasonReact.element
-    |> NormalLayout.make(~name="Measurables")
-    |> ReasonReact.element,
+    Result.Infix.(
+      Queries.GetMeasurablesQuery.make(o =>
+        o.result
+        |> apolloResponseToResult
+        <$> (d => d##measurables)
+        <$> Extensions.Array.concatSomes
+        <$> (e => <div> (itemList(~data=e)) </div>)
+        |> Result.result(idd, idd)
+      )
+      |> ReasonReact.element
+      |> NormalLayout.make(~name="Measurables")
+      |> ReasonReact.element
+    ),
 };

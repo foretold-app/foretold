@@ -56,6 +56,11 @@ module GetAgentsQuery = ReasonApollo.CreateQuery(GetAgents);
 
 type valueType = [ | `DATE | `FLOAT | `PERCENTAGE];
 
+type creator = {
+  id: string,
+  name: string,
+};
+
 type measurable = {
   id: string,
   name: string,
@@ -64,6 +69,7 @@ type measurable = {
   measurementCount: option(int),
   createdAt: MomentRe.Moment.t,
   updatedAt: MomentRe.Moment.t,
+  creator: option(creator),
 };
 
 type measurables = array(measurable);
@@ -83,6 +89,10 @@ module GetMeasurables = [%graphql
            measurementCount
            createdAt @bsDecoder(fn: "toMoment")
            updatedAt @bsDecoder(fn: "toMoment")
+           creator @bsRecord{
+             id
+             name
+           }
         }
     }
   |}

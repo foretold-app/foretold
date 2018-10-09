@@ -48,7 +48,6 @@ let make = _children => {
   ...component,
   render: _ => {
     let isLoggedIn = Auth0.isLoggedIn();
-    Js.log(Auth0.userId());
     let input = userQuery =>
       <Row
         gutter=(Row.ResponsiveBreakpoints(makeGutterBreakpoints(~sm=5, ())))>
@@ -69,13 +68,7 @@ let make = _children => {
                 | Some(e) =>
                   [|
                     <Antd_Menu.Item key="4">
-                      (
-                        link(
-                          "/profile",
-                          Belt.Option.map(e##user, r => r##name)
-                          |> Rationale.Option.default("Profile"),
-                        )
-                      )
+                      (link("/profile", "Profile"))
                     </Antd_Menu.Item>,
                     <Antd_Menu.Item key="5">
                       <a onClick=(_e => Auth0.logout())>

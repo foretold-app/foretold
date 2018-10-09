@@ -4,13 +4,14 @@ open Rationale.Option;
 open Result.Infix;
 open Rationale.Function.Infix;
 open Antd;
+open MomentRe;
 
 let ste = ReasonReact.string;
 
 module CreateMeasurable = [%graphql
   {|
-             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!) {
-                 createMeasurable(name: $name, description: $description, valueType: $valueType) {
+             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date) {
+                 createMeasurable(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate) {
                    id
                  }
              }
@@ -25,8 +26,14 @@ module SignUpParams = {
     name: string,
     description: string,
     valueType: string,
+    expectedResolutionDate: string,
   };
-  type fields = [ | `name | `valueType | `description];
+  type fields = [
+    | `name
+    | `valueType
+    | `description
+    | `expectedResolutionDate
+  ];
   let lens = [
     (`name, s => s.name, (s, name) => {...s, name}),
     (
@@ -35,6 +42,11 @@ module SignUpParams = {
       (s, description) => {...s, description},
     ),
     (`valueType, s => s.valueType, (s, valueType) => {...s, valueType}),
+    (
+      `expectedResolutionDate,
+      s => s.expectedResolutionDate,
+      (s, expectedResolutionDate) => {...s, expectedResolutionDate},
+    ),
   ];
 };
 
@@ -49,6 +61,7 @@ let mutate =
     CreateMeasurable.make(
       ~name=values.name,
       ~description=values.description,
+      ~expectedResolutionDate=values.expectedResolutionDate |> Js.Json.string,
       ~valueType=
         switch (values.valueType) {
         | "float" => `FLOAT
@@ -61,6 +74,7 @@ let mutate =
   mutation(~variables=mutate##variables, ()) |> ignore;
 };
 
+let formatDate = Moment.format("MMM DD, YYYY HH:MM:SS");
 let component = ReasonReact.statelessComponent("Measurables");
 let make = _children => {
   ...component,
@@ -70,7 +84,12 @@ let make = _children => {
       (mutation, _) =>
         SignUpForm.make(
           ~onSubmit=({values}) => mutate(mutation, values),
-          ~initialState={name: "", description: "", valueType: "float"},
+          ~initialState={
+            name: "",
+            description: "",
+            valueType: "float",
+            expectedResolutionDate: MomentRe.momentNow() |> formatDate,
+          },
           ~schema=[(`name, Custom(_ => None))],
           ({handleSubmit, handleChange, form, _}) =>
             <form onSubmit=(ReForm.Helpers.handleDomFormSubmit(handleSubmit))>
@@ -85,7 +104,6 @@ let make = _children => {
                     )
                   />
                 </Form.Item>
-                <Form.Item> <DatePicker /> </Form.Item>
                 <Form.Item>
                   <h3> ("Description" |> ste) </h3>
                   <Input
@@ -94,6 +112,19 @@ let make = _children => {
                       ReForm.Helpers.handleDomFormChange(
                         handleChange(`description),
                       )
+                    )
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <h3> ("Expected Resolution Date" |> ste) </h3>
+                  <DatePicker
+                    value=(
+                      form.values.expectedResolutionDate
+                      |> MomentRe.momentDefaultFormat
+                    )
+                    onChange=(
+                      e =>
+                        handleChange(`expectedResolutionDate, e |> formatDate)
                     )
                   />
                 </Form.Item>

@@ -5,12 +5,19 @@ external reactClass : ReasonReact.reactClass = "antd/lib/date-picker/index";
 
 [@bs.obj]
 external makeProps :
-  (~className: string=?, ~style: ReactDOMRe.Style.t=?, unit) => _ =
+  (
+    ~className: string=?,
+    ~style: ReactDOMRe.Style.t=?,
+    ~value: MomentRe.Moment.t=?,
+    ~onChange: MomentRe.Moment.t => unit=?,
+    unit
+  ) =>
+  _ =
   "";
 
-let make = (~className=?, ~style=?, children) =>
+let make = (~className=?, ~style=?, ~onChange=?, ~value=?, children) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,
-    ~props=makeProps(~className?, ~style?, ()),
+    ~props=makeProps(~className?, ~style?, ~onChange?, ~value?, ()),
     children,
   );

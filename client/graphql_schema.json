@@ -1310,6 +1310,16 @@
                     }
                   },
                   "defaultValue": null
+                },
+                {
+                  "name": "expectedResolutionDate",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Date",
+                    "ofType": null
+                  },
+                  "defaultValue": null
                 }
               ],
               "type": {

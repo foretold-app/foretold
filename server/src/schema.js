@@ -221,10 +221,13 @@ const schema = new GraphQLSchema({
         resolve: async (__, {
           name,
           valueType
-        }, {userAuth0Id}) => {
+        }, options) => {
+          let _auth0Id = await getAuth0Id(options)
+          const user = await auth0User(_auth0Id);
           const newMeasurable = await models.Measurable.create({
           name,
-          valueType
+          valueType,
+          creatorId: user.agentId
           })
           return newMeasurable
         }
@@ -237,7 +240,6 @@ const schema = new GraphQLSchema({
           name
         }, options) => {
           let _auth0Id = await getAuth0Id(options);
-          // throw new AuthenticationError("HI!!!");
           let user = await models.User.findById(id);
           if (user && (user.auth0Id == _auth0Id)) {
             user.update({name})

@@ -38,6 +38,7 @@ module.exports = {
       });
 
       await queryInterface.createTable('Users', {
+        ...standardColumns,
         createdAt: {
           type: Sequelize.DATE
         },
@@ -45,6 +46,10 @@ module.exports = {
           type: Sequelize.DATE
         },
         name: {
+          allowNull: false,
+          type: Sequelize.STRING
+        },
+        auth0Id: {
           allowNull: false,
           type: Sequelize.STRING
         },
@@ -66,8 +71,8 @@ module.exports = {
           defaultValue: "COMPETITIVE",
           allowNull: true,
         },
-        userId: referenceTo("Users", false),
-        agentId: referenceTo("Agents", false),
+        userId: referenceTo("Users", true),
+        agentId: referenceTo("Agents", false)
       });
 
       await queryInterface.createTable('Measurables', {
@@ -75,6 +80,10 @@ module.exports = {
         name: {
           allowNull: false,
           type: Sequelize.STRING
+        },
+        description: {
+          allowNull: true,
+          type: Sequelize.TEXT
         },
         valueType: {
           allowNull: false,
@@ -89,6 +98,11 @@ module.exports = {
           allowNull: true,
           type: Sequelize.DATE
         },
+        creatorId: referenceTo("Agents", false),
+        expectedResolutionDate: {
+          allowNull: true,
+          type: Sequelize.DATE
+        }
       });
 
       await queryInterface.createTable('Measurements', {
@@ -110,7 +124,7 @@ module.exports = {
           type: Sequelize.DATE
         },
       });
-    },
+      },
 
     down: async function (queryInterface, Sequelize) {
       await queryInterface.dropTable('Measurements');

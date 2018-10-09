@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     valueType: {
       type: DataTypes.ENUM(["FLOAT", "DATE", "PERCENTAGE"]),
       allowNull: false,
@@ -39,6 +43,10 @@ module.exports = (sequelize, DataTypes) => {
     Model.Measurements = Model.hasMany(models.Measurement, {
       foreignKey: 'measurableId',
       as: 'Measurements'
+    })
+    Model.Creator = Model.belongsTo(models.Agent, {
+      foreignKey: 'creatorId',
+      as: 'creator'
     })
   }
   return Model;

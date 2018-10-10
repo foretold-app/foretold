@@ -38,7 +38,18 @@ let showQueryList = (~data, ~urlFn, ~render) => {
             "measurementCount",
             e.measurementCount |> Option.default(0) |> string_of_int,
           ),
-          ("createdAt", e.createdAt |> Moment.format("L, h:mm:ss a")),
+          (
+            "measurerCount",
+            e.measurerCount |> Option.default(0) |> string_of_int,
+          ),
+          ("isLocked", e.isLocked |> (e => e ? "True" : "False")),
+          ("createdAt", e.createdAt |> Moment.format("L")),
+          (
+            "expectedResolutionDate",
+            e.expectedResolutionDate
+            <$> Moment.format("L")
+            |> Option.default(""),
+          ),
           ("creator", creatorName),
         ]);
       },
@@ -47,10 +58,12 @@ let showQueryList = (~data, ~urlFn, ~render) => {
 
   let columns = [|
     makeColumn(~data="name", ~renderer="html", ()),
-    makeColumn(~data="type", ()),
     makeColumn(~data="measurementCount", ()),
+    makeColumn(~data="measurerCount", ()),
     makeColumn(~data="createdAt", ()),
     makeColumn(~data="creator", ~renderer="html", ()),
+    makeColumn(~data="expectedResolutionDate", ()),
+    makeColumn(~data="isLocked", ()),
   |];
 
   <UseRouterForLinks>
@@ -59,10 +72,12 @@ let showQueryList = (~data, ~urlFn, ~render) => {
       columns
       colHeaders=[|
         "Name",
-        "Type",
-        "Measurement Count",
+        "Measurements",
+        "Measurers",
         "Created At",
-        "Creator",
+        "Creator / Judge",
+        "Resolves At",
+        "Is Locked",
       |]
     />
   </UseRouterForLinks>;

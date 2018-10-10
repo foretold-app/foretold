@@ -98,8 +98,18 @@ let make = (~id: string, _children) => {
                 <Style.BorderedBox>
                   <MeasurableChart measurements=measurable##measurements />
                 </Style.BorderedBox>
-                <h2> ("Add a Measurement" |> ste) </h2>
-                <MeasurableShowForm measurableId=id />
+                (
+                  SharedQueries.withLoggedInUserQuery(userQuery =>
+                    switch (userQuery) {
+                    | Some(_) =>
+                      <div>
+                        <h2> ("Add a Measurement" |> ste) </h2>
+                        <MeasurableShowForm measurableId=id />
+                      </div>
+                    | _ => <div />
+                    }
+                  )
+                )
                 <h2> ("Previous Measurements" |> ste) </h2>
                 <MeasurableTable measurements=measurable##measurements />
               </div>

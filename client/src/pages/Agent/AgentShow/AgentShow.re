@@ -20,7 +20,7 @@ let agentSection = (e: AgentTypes.agent) =>
       <h3> (r.description |> Option.default("") |> ste) </h3>
       <h3> (r.competitorType |> botCompetitor |> ste) </h3>
     </div>
-  | {user: Some(r)} => <div> <h2> (r.name |> ste) </h2> </div>
+  | {user: Some(r)} => <div> <h1> (r.name |> ste) </h1> </div>
   | _ => notFound
   };
 
@@ -49,11 +49,11 @@ let make = (~id: string, _children) => {
   ...component,
   render: _ =>
     <div>
-      <h2> ("Agent Page" |> ste) </h2>
       (
         withAgentQuery(~id, agent =>
           <div>
             (agentSection(agent))
+            <h3> ("Recent Measurements" |> ste) </h3>
             <AgentTable
               measurements=(agent.measurements |> ArrayOptional.concatSomes)
             />

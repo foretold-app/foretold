@@ -1,5 +1,6 @@
 'use strict';
 const Sequelize = require('sequelize')
+import _ from "lodash";
 
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Measurable', {
@@ -40,6 +41,14 @@ module.exports = (sequelize, DataTypes) => {
       get: async function() {
         const items = await this.getMeasurements()
         return items.length
+      }
+    },
+    measurerCount: {
+      allowNull: true,
+      type: Sequelize.VIRTUAL(DataTypes.INTEGER),
+      get: async function() {
+        const items = await this.getMeasurements()
+        return _.uniq(items.map(i => i.agentId)).length
       }
     },
   });

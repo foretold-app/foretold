@@ -26,47 +26,28 @@ module Styles = {
 
 Css.(global("body", [fontFamily("Lato")]));
 
-let withUserQuery =
-    (
-      auth0Id: option(string),
-      innerComponentFn: 'a => ReasonReact.reactElement,
-    ) =>
-  switch (auth0Id) {
-  | Some(auth) =>
-    let query = Queries.GetUser.make(~auth0Id=auth, ());
-    Queries.GetUserQuery.make(~variables=query##variables, ({result}) =>
-      result
-      |> apolloResponseToResult
-      <$> (e => innerComponentFn(Some(e)))
-      |> Rationale.Result.result(idd, idd)
-    )
-    |> ReasonReact.element;
-  | None => innerComponentFn(None)
-  };
-
 let make = _children => {
   ...component,
   render: _ => {
-    let isLoggedIn = Auth0.isLoggedIn();
     let input = userQuery =>
       <Row
         gutter=(Row.ResponsiveBreakpoints(makeGutterBreakpoints(~sm=5, ())))>
         <Col span=24>
           <Layout.Header className=Styles.header>
             <Antd_Menu className=Styles.menu mode=`Horizontal theme=`Light>
-              <Antd_Menu.Item key="1">
-                (link("/agents", "Agents"))
-              </Antd_Menu.Item>
               <Antd_Menu.Item key="2">
                 (link("/measurables", "Measurables"))
               </Antd_Menu.Item>
-              <Antd_Menu.Item key="3">
-                (link("/measurables/new", "New Measurable"))
+              <Antd_Menu.Item key="1">
+                (link("/agents", "Agents"))
               </Antd_Menu.Item>
               (
                 switch (userQuery) {
-                | Some(e) =>
+                | Some(_) =>
                   [|
+                    <Antd_Menu.Item key="3">
+                      (link("/measurables/new", "New Measurable"))
+                    </Antd_Menu.Item>,
                     <Antd_Menu.Item key="4">
                       (link("/profile", "Profile"))
                     </Antd_Menu.Item>,
@@ -87,6 +68,6 @@ let make = _children => {
           </Layout.Header>
         </Col>
       </Row>;
-    isLoggedIn ? withUserQuery(Auth0.userId(), input) : input(None);
+    SharedQueries.withLoggedInUserQuery(input);
   },
 };

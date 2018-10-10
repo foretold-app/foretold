@@ -67,8 +67,10 @@ type measurable = {
   valueType,
   isLocked: bool,
   measurementCount: option(int),
+  measurerCount: option(int),
   createdAt: MomentRe.Moment.t,
   updatedAt: MomentRe.Moment.t,
+  expectedResolutionDate: option(MomentRe.Moment.t),
   creator: option(creator),
 };
 
@@ -77,6 +79,8 @@ type measurables = array(measurable);
 let jsonToString = e => e |> Js.Json.decodeString |> Option.default("");
 
 let toMoment = jsonToString ||> moment;
+
+let optionalMoment = Option.Infix.(e => e <$> (jsonToString ||> moment));
 
 module GetMeasurables = [%graphql
   {|
@@ -87,6 +91,8 @@ module GetMeasurables = [%graphql
            valueType
            isLocked
            measurementCount
+           measurerCount
+           expectedResolutionDate @bsDecoder(fn: "optionalMoment")
            createdAt @bsDecoder(fn: "toMoment")
            updatedAt @bsDecoder(fn: "toMoment")
            creator @bsRecord{

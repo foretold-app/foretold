@@ -1095,6 +1095,18 @@
               "deprecationReason": null
             },
             {
+              "name": "measurerCount",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "createdAt",
               "description": null,
               "args": [],

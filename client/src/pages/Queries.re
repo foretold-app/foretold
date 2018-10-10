@@ -58,7 +58,7 @@ type valueType = [ | `DATE | `FLOAT | `PERCENTAGE];
 
 type creator = {
   id: string,
-  name: string,
+  name: option(string),
 };
 
 type measurable = {

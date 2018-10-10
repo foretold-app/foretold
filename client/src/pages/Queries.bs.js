@@ -393,10 +393,15 @@ function parse$1(value) {
                           var match$25 = value$3["name"];
                           var field_name$1;
                           if (match$25 !== undefined) {
-                            var match$26 = Js_json.decodeString(match$25);
-                            field_name$1 = match$26 !== undefined ? match$26 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$25));
+                            var match$26 = Js_json.decodeNull(match$25);
+                            if (match$26 !== undefined) {
+                              field_name$1 = undefined;
+                            } else {
+                              var match$27 = Js_json.decodeString(match$25);
+                              field_name$1 = match$27 !== undefined ? match$27 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$25));
+                            }
                           } else {
-                            field_name$1 = Js_exn.raiseError("graphql_ppx: Field name on type Agent is missing");
+                            field_name$1 = undefined;
                           }
                           tmp$1 = /* record */[
                             /* id */field_id$1,

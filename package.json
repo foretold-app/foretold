@@ -8,6 +8,7 @@
         "npm": ">=6.4.0"
     },
     "scripts": {
+        "client/build": "cd client && yarn && yarn build",
         "server/install": "cd server && npm install && cd ..",
         "server/build": "cd server && npm run build && cd ..",
         "server/serve": "cd server && npm run serve && cd ..",

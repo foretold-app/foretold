@@ -21,6 +21,10 @@ module GetMeasurable = {
               valueType
               isLocked
               createdAt @bsDecoder(fn: "toMoment")
+              creatorId
+              creator {
+                id
+              }
               measurements: Measurements{
                 id
                 createdAt @bsDecoder(fn: "toMoment")
@@ -101,11 +105,17 @@ let make = (~id: string, _children) => {
                 (
                   SharedQueries.withLoggedInUserQuery(userQuery =>
                     switch (userQuery) {
-                    | Some(_) =>
+                    | Some(query) =>
+                      open Rationale.Option.Infix;
+                      let userAgentId = query##user >>= (e => e##agentId);
+                      let creatorId = measurable##creatorId;
                       <div>
                         <h2> ("Add a Measurement" |> ste) </h2>
-                        <MeasurableShowForm measurableId=id />
-                      </div>
+                        <MeasurableShowForm
+                          measurableId=id
+                          isCreator=(userAgentId == creatorId)
+                        />
+                      </div>;
                     | _ => <div />
                     }
                   )

@@ -65,7 +65,9 @@ let getCompetitorType =
   | "OBJECTIVE" => `OBJECTIVE
   | _ => `OBJECTIVE;
 
-let make = (~onUpdate=e => (), ~onSubmit=e => (), _children) => {
+let showIf = (cond, comp) => cond ? comp : ReasonReact.null;
+
+let make = (~onUpdate=e => (), ~isCreator=false, ~onSubmit=e => (), _children) => {
   ...component,
   initialState: () => {
     floatCdf: floatCdfEmpty,
@@ -106,7 +108,14 @@ let make = (~onUpdate=e => (), ~onSubmit=e => (), _children) => {
           )
         </div>
         <div className=Styles.inputSection>
-          <div className=Styles.select> (competitorType(~state, ~send)) </div>
+          (
+            showIf(
+              isCreator,
+              <div className=Styles.select>
+                (competitorType(~state, ~send))
+              </div>,
+            )
+          )
           (
             state.competitorType != "OBJECTIVE" ?
               ReasonReact.null :

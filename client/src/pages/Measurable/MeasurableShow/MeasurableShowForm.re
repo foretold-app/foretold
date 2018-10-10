@@ -40,7 +40,7 @@ let mutate =
 
 let component = ReasonReact.statelessComponent("MeasurableShowForm");
 
-let make = (~measurableId: string, _children) => {
+let make = (~measurableId: string, ~isCreator: bool, _children) => {
   ...component,
   render: _ =>
     CreateMeasurementMutation.make(
@@ -51,6 +51,7 @@ let make = (~measurableId: string, _children) => {
             ((value, competitorType)) =>
               mutate(mutation, measurableId, value, competitorType)
           )
+          isCreator
         />,
     )
     |> ReasonReact.element,

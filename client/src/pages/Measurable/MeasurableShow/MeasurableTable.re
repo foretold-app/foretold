@@ -89,11 +89,21 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
                </div>,
              );
 
+           let stringOfFloat =
+             Js.Float.toPrecisionWithPrecision(_, ~digits=3);
+
            let percentile = n =>
              floatCdf
              >>= FloatCdf_F.firstAboveValue(n)
-             <$> Js.Float.toPrecisionWithPrecision(_, ~digits=3)
+             <$> stringOfFloat
              |> Option.default("");
+
+           let middle =
+             switch (e##value) {
+             | Belt.Result.Ok(`FloatCdf(r)) => percentile(0.50)
+             | Belt.Result.Ok(`FloatPoint(r)) => stringOfFloat(r)
+             | _ => ""
+             };
 
            Js.Dict.fromList([
              ("createdAt", e##relevantAt |> Moment.format("L, h:mm:ss a")),
@@ -103,7 +113,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
              ("botType", agentType |> botType),
              ("userLink", link(e##agent)),
              ("5th", percentile(0.05)),
-             ("50th", percentile(0.50)),
+             ("50th", middle),
              ("95th", percentile(0.95)),
              ("cdfGraph", cdfGraph),
            ]);

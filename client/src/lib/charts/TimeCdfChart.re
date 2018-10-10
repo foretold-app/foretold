@@ -82,6 +82,18 @@ let make = (~measurements: array(measurement), _children) => {
            }
          );
 
+    let objectives =
+      sorted
+      |> Js.Array.filter(e => e.competitorType == `OBJECTIVE)
+      |> Array.map(e =>
+           {
+             "x": e.createdAt |> formatDate |> Js.Date.fromString,
+             "y1": e.low,
+             "y2": e.median,
+             "y3": e.high,
+           }
+         );
+
     let aggregateMedians =
       sorted
       |> Js.Array.filter(e => e.competitorType == `AGGREGATION)
@@ -120,7 +132,22 @@ let make = (~measurements: array(measurement), _children) => {
           (
             competitives
             |> Array.mapi((i, e) =>
-                 <VictoryMeasurement point=e key=(string_of_int(i)) />
+                 <VictoryMeasurement
+                   point=e
+                   key=(string_of_int(i))
+                   color="GRAY"
+                 />
+               )
+            |> ReasonReact.array
+          )
+          (
+            objectives
+            |> Array.mapi((i, e) =>
+                 <VictoryMeasurement
+                   point=e
+                   key=(string_of_int(i))
+                   color="BLUE"
+                 />
                )
             |> ReasonReact.array
           )

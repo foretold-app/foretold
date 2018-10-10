@@ -1,9 +1,25 @@
 import React from "react";
 
+const colors = {
+    GRAY: {
+        light: "#bbb",
+        medium: "#888",
+        dark: "#111",
+        r: "2"
+    }, 
+    BLUE: {
+        light: "#94b9e6",
+        medium: "#489ece",
+        dark: "#007fc5",
+        r: "3"
+    } 
+}
+
 export class VictoryMeasurement extends React.Component {
     render() {
         const {
-            scale
+            scale,
+            color
         } = this.props;
         const {
             x,
@@ -12,6 +28,7 @@ export class VictoryMeasurement extends React.Component {
             y3
         } = this.props.point;
         const xx = scale.x(x);
+        const col = colors[color];
         return ( <
             svg 
             >
@@ -28,7 +45,7 @@ export class VictoryMeasurement extends React.Component {
             y2 = {
                 scale.y(y3)
             }
-            stroke = "#bbb" / >
+            stroke = {col.light} / >
             <
             circle cx = {
                 xx
@@ -36,9 +53,9 @@ export class VictoryMeasurement extends React.Component {
             cy = {
                 scale.y(y1)
             }
-            r = "2"
+            r = {col.r}
             x = "10"
-            fill = "#888" / >
+            fill = {col.medium} / >
             <
             circle cx = {
                 xx
@@ -46,9 +63,9 @@ export class VictoryMeasurement extends React.Component {
             cy = {
                 scale.y(y2)
             }
-            r = "2"
+            r = {col.r}
             x = "10"
-            fill = "#111" / >
+            fill = {col.dark} / >
             <
             circle cx = {
                 xx
@@ -56,9 +73,9 @@ export class VictoryMeasurement extends React.Component {
             cy = {
                 scale.y(y3)
             }
-            r = "2"
+            r = {col.r}
             x = "10"
-            fill = "#888" / >
+            fill = {col.medium} / >
             <
             /svg>
         );

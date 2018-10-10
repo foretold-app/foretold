@@ -73,14 +73,24 @@ function make$5(data, style, children) {
 
 var VictoryLine = /* module */[/* make */make$5];
 
-function make$6(point, scale, children) {
-  return ReasonReact.wrapJsForReason(VictoryMeasurementJs.VictoryMeasurement, {
-              point: Js_undefined.fromOption(point),
-              scale: Js_undefined.fromOption(scale)
+function make$6(data, style, children) {
+  return ReasonReact.wrapJsForReason(Victory.victoryScatter, {
+              data: Js_undefined.fromOption(data),
+              style: Js_undefined.fromOption(style)
             }, children);
 }
 
-var VictoryMeasurement = /* module */[/* make */make$6];
+var VictoryScatter = /* module */[/* make */make$6];
+
+function make$7(point, scale, color, children) {
+  return ReasonReact.wrapJsForReason(VictoryMeasurementJs.VictoryMeasurement, {
+              point: Js_undefined.fromOption(point),
+              scale: Js_undefined.fromOption(scale),
+              color: Js_undefined.fromOption(color)
+            }, children);
+}
+
+var VictoryMeasurement = /* module */[/* make */make$7];
 
 exports.VictoryTheme = VictoryTheme;
 exports.VictoryBar = VictoryBar;
@@ -89,5 +99,6 @@ exports.VictoryChart = VictoryChart;
 exports.VictoryAxis = VictoryAxis;
 exports.VictoryArea = VictoryArea;
 exports.VictoryLine = VictoryLine;
+exports.VictoryScatter = VictoryScatter;
 exports.VictoryMeasurement = VictoryMeasurement;
 /* victory Not a pure module */

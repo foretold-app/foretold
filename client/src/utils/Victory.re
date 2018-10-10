@@ -123,15 +123,30 @@ module VictoryLine = {
     );
 };
 
+module VictoryScatter = {
+  [@bs.module "victory"]
+  external victoryScatter : ReasonReact.reactClass = "victoryScatter";
+  let make = (~data=?, ~style=?, children) =>
+    ReasonReact.wrapJsForReason(
+      ~reactClass=victoryScatter,
+      ~props={
+        "data": Js.Undefined.fromOption(data),
+        "style": Js.Undefined.fromOption(style),
+      },
+      children,
+    );
+};
+
 module VictoryMeasurement = {
   [@bs.module "./VictoryMeasurement.js"]
   external victoryMeasurement : ReasonReact.reactClass = "VictoryMeasurement";
-  let make = (~point=?, ~scale=?, children) =>
+  let make = (~point=?, ~scale=?, ~color=?, children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=victoryMeasurement,
       ~props={
         "point": Js.Undefined.fromOption(point),
         "scale": Js.Undefined.fromOption(scale),
+        "color": Js.Undefined.fromOption(color),
       },
       children,
     );

@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     name: {
-      allowNull: false,
+      allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.STRING),
       get: async function() {
         if (this.type == "USER"){

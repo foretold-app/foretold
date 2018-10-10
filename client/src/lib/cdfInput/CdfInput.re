@@ -2,21 +2,18 @@ open Types;
 open Utils;
 open Antd;
 
-/* type competitorType = [ | `COMPETITIVE | `OBJECTIVE];
-   type dataType = [ | `FLOAT_CDF | `FLOAT]; */
-type competitorType = string;
-type dataType = string;
+type competitorType = [ | `COMPETITIVE | `OBJECTIVE];
 
 type state = {
   floatCdf,
-  competitorType,
-  dataType,
+  competitorType: string,
+  dataType: string,
 };
 
 type action =
   | UpdateFloatPdf(floatCdf)
-  | UpdateCompetitorType(competitorType)
-  | UpdateDataType(dataType);
+  | UpdateCompetitorType(string)
+  | UpdateDataType(string);
 
 let component = ReasonReact.reducerComponent("CdfInput");
 
@@ -45,6 +42,29 @@ let dataType = (~state, ~send) =>
     <Select.Option value="FLOAT"> ("Point" |> ste) </Select.Option>
   </Select>;
 
+let getIsValid = state =>
+  switch (state.dataType) {
+  | "FLOAT_CDF" => Array.length(state.floatCdf.xs) > 1
+  | _ => Array.length(state.floatCdf.xs) == 1
+  };
+
+let getValue = state =>
+  switch (state.dataType) {
+  | "FLOAT_CDF" =>
+    `FloatCdf(
+      Value.FloatCdf.fromArrays(state.floatCdf |> (e => (e.ys, e.xs))),
+    )
+  | _ =>
+    let point = Array.unsafe_get(state.floatCdf.xs, 0);
+    `FloatPoint(point);
+  };
+
+let getCompetitorType =
+  fun
+  | "COMPETITIVE" => `COMPETITIVE
+  | "OBJECTIVE" => `OBJECTIVE
+  | _ => `OBJECTIVE;
+
 let make = (~onUpdate=e => (), ~onSubmit=e => (), _children) => {
   ...component,
   initialState: () => {
@@ -57,13 +77,17 @@ let make = (~onUpdate=e => (), ~onSubmit=e => (), _children) => {
     | UpdateFloatPdf((e: floatCdf)) =>
       onUpdate(e);
       ReasonReact.Update({...state, floatCdf: e});
-    | UpdateCompetitorType((e: competitorType)) =>
+    | UpdateCompetitorType(e) =>
       ReasonReact.Update({...state, competitorType: e})
-    | UpdateDataType((e: dataType)) =>
-      ReasonReact.Update({...state, dataType: e})
+    | UpdateDataType(e) => ReasonReact.Update({...state, dataType: e})
     },
   render: ({state, send}) => {
-    let onSubmit = () => onSubmit(state.floatCdf);
+    let onSubmit = () => {
+      let value = getValue(state);
+      onSubmit((value, getCompetitorType(state.competitorType)));
+      ();
+    };
+    let isValid = getIsValid(state);
     <Style.BorderedBox>
       <div className=Styles.form>
         <div className=Styles.chartSection>
@@ -88,26 +112,23 @@ let make = (~onUpdate=e => (), ~onSubmit=e => (), _children) => {
               ReasonReact.null :
               <div className=Styles.select> (dataType(~state, ~send)) </div>
           )
-          (
-            state.dataType != "FLOAT_CDF" ?
-              ReasonReact.null :
-              <div className=Styles.inputBox>
-                <GuesstimateInput
-                  sampleCount=1000
-                  onUpdate=(
-                    e =>
-                      {
-                        let (ys, xs) = e;
-                        let asGroup: floatCdf = {xs, ys};
-                        send(UpdateFloatPdf(asGroup));
-                      }
-                      |> ignore
-                  )
-                />
-              </div>
-          )
+          <div className=Styles.inputBox>
+            <GuesstimateInput
+              sampleCount=1000
+              onUpdate=(
+                e =>
+                  {
+                    let (ys, xs) = e;
+                    let asGroup: floatCdf = {xs, ys};
+                    send(UpdateFloatPdf(asGroup));
+                  }
+                  |> ignore
+              )
+            />
+          </div>
           <div className=Styles.submitButton>
-            <Antd.Button _type=`primary onClick=(_ => onSubmit())>
+            <Antd.Button
+              _type=`primary onClick=(_ => onSubmit()) disabled=(! isValid)>
               ("Submit" |> ste)
             </Antd.Button>
           </div>

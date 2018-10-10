@@ -9,6 +9,7 @@
     "dev": "webpack-dev-server",
     "parcel": "parcel ./src/index.html --public-url /",
     "build": "parcel build ./src/index.html",
+    "build-t": "npm run clean; npm run build-bsb; npm run build;",
     "test": "jest --ci --bail --no-cache",
     "update-gql": "yarn send-introspection-query http://localhost:4000/graphql",
     "webpack": "webpack -w",

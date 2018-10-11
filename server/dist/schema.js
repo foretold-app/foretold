@@ -28,7 +28,10 @@ var GraphQLJSON = _interopRequireWildcard(_graphqlTypeJson);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 const Sequelize = require('sequelize');
-
+const jwt = require('express-jwt');
+const {
+  AuthenticationError
+} = require('apollo-server');
 
 function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -125,13 +128,28 @@ const modelResolvers = (name, plural, type, model) => {
 };
 
 async function auth0User(auth0Id) {
-  let user = await models.User.findAll({
+  let users = await models.User.findAll({
     where: {
       auth0Id: auth0Id
     }
   });
-  return user[0];
+  return users && users[0];
 }
+
+//todo: clean up user login code.
+
+const getAuth0Id = async options => {
+  let { ok, result } = await options.user;
+  if (!ok) {
+    throw new Error(result.name);
+  }
+  let { sub } = result;
+  if (!sub) {
+    throw new Error("No User Id");
+  }
+  let userAuth0Id = sub;
+  return userAuth0Id;
+};
 
 const schema = new _graphql.GraphQLSchema({
   query: new _graphql.GraphQLObjectType({
@@ -143,9 +161,21 @@ const schema = new _graphql.GraphQLSchema({
         resolve: async (ops, {
           id,
           auth0Id
-        }) => {
-          if (id) {
-            const user = await models.User.findById(id);
+        }, options) => {
+          let _auth0Id = await getAuth0Id(options);
+          const _auth0User = await auth0User(_auth0Id);
+          let user;
+          if (_auth0Id && !_auth0User) {
+            try {
+              user = await models.User.create({ auth0Id: _auth0Id, name: "" });
+            } catch (e) {
+              console.log("E", e);
+            }
+          }
+          if (user) {
+            return user;
+          } else if (id) {
+            user = await models.User.findById(id);
             return user;
           } else if (auth0Id) {
             const user = await auth0User(auth0Id);
@@ -161,13 +191,13 @@ const schema = new _graphql.GraphQLSchema({
       createMeasurement: {
         type: getType.Measurements(),
         args: filterr(_.pick((0, _graphqlSequelize.attributeFields)(models.Measurement), ['value', 'competitorType', 'measurableId', 'agentId'])),
-        resolve: async (__, {
+        resolve: async (a, {
           value,
           competitorType,
-          measurableId,
-          agentId
-        }, { userAuth0Id }) => {
-          const user = await auth0User(userAuth0Id);
+          measurableId
+        }, options) => {
+          let _auth0Id = await getAuth0Id(options);
+          const user = await auth0User(_auth0Id);
           const newMeasurement = await models.Measurement.create({
             value,
             competitorType,
@@ -180,14 +210,21 @@ const schema = new _graphql.GraphQLSchema({
       },
       createMeasurable: {
         type: getType.Measurables(),
-        args: filterr(_.pick((0, _graphqlSequelize.attributeFields)(models.Measurable), ['name', 'valueType'])),
+        args: filterr(_.pick((0, _graphqlSequelize.attributeFields)(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate'])),
         resolve: async (__, {
           name,
-          valueType
-        }, { userAuth0Id }) => {
+          description,
+          valueType,
+          expectedResolutionDate
+        }, options) => {
+          let _auth0Id = await getAuth0Id(options);
+          const user = await auth0User(_auth0Id);
           const newMeasurable = await models.Measurable.create({
             name,
-            valueType
+            valueType,
+            description,
+            expectedResolutionDate,
+            creatorId: user.agentId
           });
           return newMeasurable;
         }
@@ -198,9 +235,10 @@ const schema = new _graphql.GraphQLSchema({
         resolve: async (_, {
           id,
           name
-        }, { userAuth0Id }) => {
+        }, options) => {
+          let _auth0Id = await getAuth0Id(options);
           let user = await models.User.findById(id);
-          if (user && user.auth0Id == userAuth0Id) {
+          if (user && user.auth0Id == _auth0Id) {
             user.update({ name });
           }
           return user;

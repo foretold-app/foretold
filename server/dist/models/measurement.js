@@ -2,7 +2,6 @@
 
 const Sequelize = require('sequelize');
 
-console.log("LOADING");
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Measurement', {
     id: {

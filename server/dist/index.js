@@ -31,7 +31,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const models = require("./models");
 const Sequelize = require('sequelize');
 
-const jwt = require('express-jwt');
+const jwt = require('jsonwebtoken');
 var jwks = require('jwks-rsa');
 const { ApolloServer, gql } = require('apollo-server-express');
 
@@ -50,19 +50,6 @@ const resolvers = {
   }
 };
 
-const server = new ApolloServer({
-  schema: _schema.schema,
-  formatError: error => {
-    return error;
-  },
-  formatResponse: response => {
-    return response;
-  },
-  context: ({ req }) => {
-    return { userAuth0Id: req.user && req.user.sub };
-  }
-});
-
 function getToken(req) {
   if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
     return req.headers.authorization.split(' ')[1];
@@ -71,10 +58,42 @@ function getToken(req) {
   }
   return null;
 }
+
+const server = new ApolloServer({
+  schema: _schema.schema,
+  formatError: error => {
+    console.log("Error!", error);
+    return error;
+  },
+  formatResponse: response => {
+    return response;
+  },
+  context: async ({ req }) => {
+    const token = getToken(req);
+    console.log("GOT TOKEN", token);
+
+    const user = new Promise(resolve => jwt.verify(token, "bhz9XiFVqoowf_cSicdItfmExxWrAoeyhKEjGNQKjpX08E0NKuLNQ3uF5XL-wdy_", (err, result) => {
+      console.log("Verify?", err, result);
+      if (err) {
+        resolve({
+          ok: false,
+          result: err
+        });
+      } else {
+        resolve({
+          ok: true,
+          result
+        });
+      }
+    }));
+
+    return { user };
+  }
+});
+
 const app = (0, _express2.default)();
 var cors = require("cors");
 app.use(cors());
-app.use(jwt({ secret: "bhz9XiFVqoowf_cSicdItfmExxWrAoeyhKEjGNQKjpX08E0NKuLNQ3uF5XL-wdy_", credentialsRequired: false, getToken }));
 server.applyMiddleware({ app });
 
 models.sequelize.sync().then(() => {

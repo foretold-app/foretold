@@ -7,7 +7,7 @@
     "start": "yarn run dev | yarn run bsb-watch",
     "bsb-watch": "bsb -make-world -w",
     "dev": "webpack-dev-server",
-    "parcel": "ENV=PRODUCTION parcel ./src/index.html --public-url /",
+    "parcel": "ENV=DEVELOPMENT parcel ./src/index.html --public-url /",
     "build": "ENV=PRODUCTION parcel build ./src/index.html",
     "build-t": "npm run clean; npm run build-bsb; npm run build;",
     "test": "jest --ci --bail --no-cache",

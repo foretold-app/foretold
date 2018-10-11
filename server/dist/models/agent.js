@@ -14,6 +14,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM(["USER", "BOT"]),
       allowNull: false
     },
+    name: {
+      allowNull: true,
+      type: Sequelize.VIRTUAL(DataTypes.STRING),
+      get: async function () {
+        if (this.type == "USER") {
+          const user = await this.getUser();
+          return user.name;
+        } else {
+          const bot = await this.getBot();
+          return bot.name;
+        }
+      }
+    },
     measurementCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),

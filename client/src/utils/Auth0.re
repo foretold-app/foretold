@@ -118,8 +118,8 @@ let isLoggedIn = () => {
 let getIdToken = () => Dom.Storage.(localStorage |> getItem("id_token"));
 
 let authOptions = {
-  "domain": "guesstimate.auth0.com",
-  "clientID": "gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT",
+  "domain": Env.auth0Domain,
+  "clientID": Env.auth0ClientId,
   "redirectUri": Env.redirectUrl,
   "responseType": "token id_token",
   "scope": "openid",

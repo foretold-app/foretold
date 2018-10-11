@@ -1,5 +1,4 @@
 [@bs.val] external environment : string = "process.env.ENV";
-Js.log(environment);
 
 let auth0Domain =
   switch (environment) {
@@ -10,7 +9,7 @@ let auth0Domain =
 let auth0ClientId =
   switch (environment) {
   | "DEVELOPMENT" => "WYfDFWDK5l9dRq13gtKhXs82AjwbRnm5"
-  | "PRODUCTION" => "UjTAICaqODLbSXjmgClkSYbasgll7To8"
+  | "PRODUCTION" => "oIh53ohBnA4xqhaO8vZXa7PiW6TCXjMV"
   };
 
 let redirectUrl =
@@ -24,3 +23,8 @@ let serverUrl =
   | "DEVELOPMENT" => "http://localhost:4000/graphql"
   | "PRODUCTION" => "https://prediction-backend.herokuapp.com/graphql"
   };
+
+Js.log(environment);
+Js.log(serverUrl);
+Js.log(auth0Domain);
+Js.log(auth0ClientId);

@@ -15,9 +15,10 @@
         "server/db:create": "cd server && npm run db:create && cd ..",
         "db:create": "cd server && npm run db:create && cd ..",
         "server/db:migrate": "cd server && npm run db:migrate cd ..",
+        "server/db:migrate:undo": "cd server && npm run db:migrate:undo cd ..",
         "server/db:reset": "cd server && npm run db:reset && cd ..",
         "server/db:seed": "cd server && npm run db:seed && cd ..",
-        "postinstall": "npm run server/install"
+        "postinstall": "npm run server/db:reset && npm run server/install"
     },
     "author": "",
     "license": "MIT"

@@ -50,7 +50,6 @@ const server = new ApolloServer({
   context: async ({req}) => {
     const token = getToken(req);
     console.log("GOT TOKEN", token)
-
     const user = new Promise(resolve =>
       jwt.verify(token, process.env.AUTH0_SECRET, (err, result) => {
         console.log("Verify?", err, result)

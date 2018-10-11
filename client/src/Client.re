@@ -23,8 +23,7 @@ let headers = () =>
     ])
   );
 
-let httpLink =
-  ApolloLinks.createHttpLink(~uri="http://localhost:4000/graphql", ());
+let httpLink = ApolloLinks.createHttpLink(~uri=Env.serverUrl, ());
 
 let contextLink = ApolloLinks.createContextLink(() => {"headers": headers()});
 

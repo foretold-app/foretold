@@ -16,6 +16,7 @@ type measurement = {
             },
           ),
         "id": string,
+        "name": option(string),
         "user":
           option(
             {

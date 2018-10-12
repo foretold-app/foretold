@@ -34,6 +34,7 @@ module GetMeasurable = {
                 relevantAt @bsDecoder(fn: "toOptionalMoment")
                 agent: Agent {
                   id
+                  name
                   user: User {
                     id
                     name
@@ -121,8 +122,8 @@ let make = (~id: string, _children) => {
                   )
                 )
                 <h2> ("Previous Measurements" |> ste) </h2>
-                <MeasurableTable measurements=measurable##measurements />
               </div>
+              <MeasurableTable measurements=measurable##measurements />
             </div>
           )
         )

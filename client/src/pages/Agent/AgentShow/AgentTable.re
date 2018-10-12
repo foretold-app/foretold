@@ -5,10 +5,7 @@ open Rationale.Option;
 open HandsOnTable;
 open MomentRe;
 open AgentTypes;
-
-let component = ReasonReact.statelessComponent("MeasurableTable");
-
-let toUnix = x => x##createdAt |> Moment.toUnix;
+open Table;
 
 let toMeasurableLink = (m: AgentTypes.measurable) => {
   let id = m.id;
@@ -16,32 +13,34 @@ let toMeasurableLink = (m: AgentTypes.measurable) => {
   {j|<a href="/measurables/$id">$name</a>|j};
 };
 
+let createdAt =
+  ColumnBundle.make(
+    ~headerName="Created At",
+    ~get=e => e.createdAt |> Moment.format("L, h:mm:ss a"),
+    (),
+  );
+
+let value =
+  ColumnBundle.make(
+    ~headerName="Created At",
+    ~get=e => Belt.Result.mapWithDefault(e.value, "", Value.stringOfValue),
+    (),
+  );
+
+let measurable =
+  ColumnBundle.make(
+    ~headerName="Measurable",
+    ~get=e => e.measurable <$> toMeasurableLink |> Option.default(""),
+    ~column=Columns.html,
+    (),
+  );
+
+let component = ReasonReact.statelessComponent("MeasurableTable");
 let make = (~measurements: array(AgentTypes.measurement), _children) => {
   ...component,
-  render: _ => {
-    let data =
-      measurements
-      |> Array.map(e => {
-           let value =
-             Belt.Result.mapWithDefault(e.value, "", Value.stringOfValue);
-           Js.Dict.fromList([
-             ("createdAt", e.createdAt |> Moment.format("L, h:mm:ss a")),
-             ("value", value),
-             (
-               "measurable",
-               e.measurable <$> toMeasurableLink |> Option.default(""),
-             ),
-           ]);
-         });
-
-    let columns = [|
-      makeColumn(~name="createdAt", ()),
-      makeColumn(~name="value", ()),
-      makeColumn(~name="measurable", ~renderer="html", ()),
-    |];
-    let colHeaders = [|"Created at", "competitive", "Measurable"|];
-    <UseRouterForLinks>
-      <HandsOnTable data columns colHeaders />
-    </UseRouterForLinks>;
-  },
+  render: _ =>
+    Table.ColumnBundle.toHOT(
+      ~data=measurements,
+      ~transformations=[createdAt, value, measurable],
+    ),
 };

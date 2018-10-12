@@ -46,7 +46,7 @@ let component = ReasonReact.reducerComponent("App");
 
 let inside = r =>
   switch (r) {
-  | Home => <AgentIndex />
+  | Home => <MeasurableIndex />
   | AgentIndex => <AgentIndex />
   | NotFound => <AgentIndex />
   | Redirect => <Redirect />

@@ -120,13 +120,13 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
          });
 
     let columns = [|
-      makeColumn(~data="createdAt", ()),
-      makeColumn(~data="competitive", ()),
-      makeColumn(~data="userLink", ~renderer="html", ()),
-      makeColumn(~data="5th", ()),
-      makeColumn(~data="50th", ()),
-      makeColumn(~data="95th", ()),
-      makeColumn(~data="cdfGraph", ~renderer="html", ()),
+      makeColumn(~name="createdAt", ()),
+      makeColumn(~name="competitive", ()),
+      makeColumn(~name="userLink", ~renderer="html", ()),
+      makeColumn(~name="5th", ()),
+      makeColumn(~name="50th", ()),
+      makeColumn(~name="95th", ()),
+      makeColumn(~name="cdfGraph", ~renderer="html", ()),
     |];
     let colHeaders = [|
       "Relevant at",

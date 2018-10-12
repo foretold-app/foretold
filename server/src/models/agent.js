@@ -46,6 +46,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'agentId',
       as: 'Measurements'
     })
+    Model.Measurables = Model.hasMany(models.Measurable, 
+      {
+        foreignKey: 'creatorId',
+    }
+    )
   }
   return Model;
 };

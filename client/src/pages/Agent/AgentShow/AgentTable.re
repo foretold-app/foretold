@@ -35,9 +35,9 @@ let make = (~measurements: array(AgentTypes.measurement), _children) => {
          });
 
     let columns = [|
-      makeColumn(~data="createdAt", ()),
-      makeColumn(~data="value", ()),
-      makeColumn(~data="measurable", ~renderer="html", ()),
+      makeColumn(~name="createdAt", ()),
+      makeColumn(~name="value", ()),
+      makeColumn(~name="measurable", ~renderer="html", ()),
     |];
     let colHeaders = [|"Created at", "competitive", "Measurable"|];
     <UseRouterForLinks>

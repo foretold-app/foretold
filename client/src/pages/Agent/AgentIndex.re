@@ -47,11 +47,11 @@ let make = _children => {
             e => {
               let data = Array.map(perEl, e |> ArrayOptional.concatSomes);
               let columns = [|
-                makeColumn(~data="name", ~renderer="html", ()),
-                makeColumn(~data="type", ()),
-                makeColumn(~data="competitorType", ()),
-                makeColumn(~data="description", ()),
-                makeColumn(~data="measurementCount", ()),
+                makeColumn(~name="name", ~renderer="html", ()),
+                makeColumn(~name="type", ()),
+                makeColumn(~name="competitorType", ()),
+                makeColumn(~name="description", ()),
+                makeColumn(~name="measurementCount", ()),
               |];
               <div>
                 <UseRouterForLinks>

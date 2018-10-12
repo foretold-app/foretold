@@ -90,10 +90,13 @@ function inside(r) {
     switch (r) {
       case 2 : 
           return ReasonReact.element(undefined, undefined, Redirect$Client.make(/* array */[]));
+      case 0 : 
       case 3 : 
           return ReasonReact.element(undefined, undefined, MeasurableIndex$Client.make(/* array */[]));
-      default:
-        return ReasonReact.element(undefined, undefined, AgentIndex$Client.make(/* array */[]));
+      case 1 : 
+      case 4 : 
+          return ReasonReact.element(undefined, undefined, AgentIndex$Client.make(/* array */[]));
+      
     }
   } else {
     switch (r.tag | 0) {

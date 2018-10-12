@@ -8,7 +8,7 @@ let auth0Domain =
 
 let auth0ClientId =
   switch (environment) {
-  | "DEVELOPMENT" => "WYfDFWDK5l9dRq13gtKhXs82AjwbRnm5"
+  | "DEVELOPMENT" => "gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT"
   | "PRODUCTION" => "oIh53ohBnA4xqhaO8vZXa7PiW6TCXjMV"
   };
 

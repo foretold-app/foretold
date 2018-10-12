@@ -9,9 +9,9 @@ type column = {
 };
 
 let makeColumn =
-    (~data: string, ~renderer: string="text", ~readOnly: bool=true, ())
+    (~name: string, ~renderer: string="text", ~readOnly: bool=true, ())
     : column =>
-  column(~data, ~renderer, ~readOnly);
+  column(~data=name, ~renderer, ~readOnly);
 
 let make =
     (

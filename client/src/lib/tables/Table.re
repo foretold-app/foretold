@@ -32,13 +32,21 @@ module ColumnBundle = {
   let toHeaders = (items: l('a)) =>
     items |> List.map((r: t('a)) => r.headerName) |> Array.of_list;
 
-  let toHOT = (~data: array('a), ~transformations: l('a)) => {
+  let toHOT =
+      (
+        ~data: array('a),
+        ~transformations: l('a),
+        ~ref=_ => (),
+        ~onClickData=_ => (),
+        (),
+      ) => {
     let data = data |> Array.map(e => e |> (transformations |> toDict));
-    <UseRouterForLinks>
+    <UseRouterForLinks onClickData>
       <HandsOnTable
         data
         columns=(transformations |> toColumns)
         colHeaders=(transformations |> toHeaders)
+        ref
       />
     </UseRouterForLinks>;
   };

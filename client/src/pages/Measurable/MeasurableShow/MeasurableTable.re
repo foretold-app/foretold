@@ -105,6 +105,6 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       |> Js_array.sortInPlaceWith((a, b) =>
            toUnix(b) > toUnix(a) ? (-1) : 1
          );
-    Table.ColumnBundle.toHOT(~data, ~transformations);
+    Table.ColumnBundle.toHOT(~data, ~transformations, ());
   },
 };

@@ -7,6 +7,24 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 
+function resolveOption(opt) {
+  if (opt !== undefined) {
+    return opt;
+  } else {
+    return "";
+  }
+}
+
+function resolveRegex(exp, str) {
+  var res = exp.exec(str);
+  if (res !== null && res.length === 2) {
+    var token = res[1];
+    return resolveOption((token == null) ? undefined : Js_primitive.some(token));
+  } else {
+    return "";
+  }
+}
+
 function apolloResponseToResult(result) {
   if (typeof result === "number") {
     return /* Error */Block.__(1, [React.createElement("div", undefined, "Loading")]);
@@ -54,6 +72,8 @@ function filterAndFold(fn) {
     });
 }
 
+exports.resolveOption = resolveOption;
+exports.resolveRegex = resolveRegex;
 exports.apolloResponseToResult = apolloResponseToResult;
 exports.filterOptionalResult = filterOptionalResult;
 exports.ste = ste;

@@ -8,18 +8,19 @@ open MomentRe;
 
 let ste = ReasonReact.string;
 
-module CreateMeasurable = [%graphql
-  {|
+module CreateMeasurableMutation = {
+  module GraphQL = [%graphql
+    {|
              mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date) {
                  createMeasurable(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate) {
                    id
                  }
              }
      |}
-];
+  ];
 
-module CreateMeasurableMutation =
-  ReasonApollo.CreateMutation(CreateMeasurable);
+  module Mutation = ReasonApollo.CreateMutation(GraphQL);
+};
 
 module SignUpParams = {
   type state = {
@@ -54,11 +55,11 @@ module SignUpForm = ReForm.Create(SignUpParams);
 
 let mutate =
     (
-      mutation: CreateMeasurableMutation.apolloMutation,
+      mutation: CreateMeasurableMutation.Mutation.apolloMutation,
       values: SignUpForm.values,
     ) => {
   let mutate =
-    CreateMeasurable.make(
+    CreateMeasurableMutation.GraphQL.make(
       ~name=values.name,
       ~description=values.description,
       ~expectedResolutionDate=values.expectedResolutionDate |> Js.Json.string,
@@ -79,7 +80,7 @@ let component = ReasonReact.statelessComponent("Measurables");
 let make = _children => {
   ...component,
   render: _ =>
-    CreateMeasurableMutation.make(
+    CreateMeasurableMutation.Mutation.make(
       ~onCompleted=e => Js.log("HI"),
       (mutation, _) =>
         SignUpForm.make(

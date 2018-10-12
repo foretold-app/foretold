@@ -23,7 +23,7 @@ let make = _children => {
         |> apolloResponseToResult
         <$> (d => d##measurables)
         <$> Extensions.Array.concatSomes
-        <$> Table.ColumnBundle.toHOT(~data=_, ~transformations)
+        <$> Table.ColumnBundle.toHOT(~data=_, ~transformations, ())
         |> Result.result(idd, idd)
       )
       |> ReasonReact.element

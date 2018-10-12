@@ -42,5 +42,6 @@ let make = (~measurements: array(AgentTypes.measurement), _children) => {
     Table.ColumnBundle.toHOT(
       ~data=measurements,
       ~transformations=[createdAt, value, measurable],
+      (),
     ),
 };

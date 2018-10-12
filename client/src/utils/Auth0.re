@@ -34,25 +34,6 @@ let matchAccessToken = [%re "/access_token=([^\$&]+)/g"];
 let matchExpiresIn = [%re "/expires_in=([^\$&]+)/g"];
 let matchIdToken = [%re "/id_token=([^\$&]+)/g"];
 
-let resolveOption = opt =>
-  switch (opt) {
-  | None => ""
-  | Some(s) => s
-  };
-
-let resolveRegex = (exp, str) => {
-  let res = exp |> Js.Re.exec(str);
-  switch (res) {
-  | None => ""
-  | Some(result) =>
-    let captures = result |> Js.Re.captures;
-    switch (captures) {
-    | [|_, token|] => token |> Js.Nullable.to_opt |> resolveOption
-    | _ => ""
-    };
-  };
-};
-
 let omap = Rationale.Option.fmap;
 
 let handleAuth = (url: ReasonReact.Router.url) => {

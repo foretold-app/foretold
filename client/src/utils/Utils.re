@@ -1,6 +1,25 @@
 open Belt.Result;
 open Rationale;
 
+let resolveOption = opt =>
+  switch (opt) {
+  | None => ""
+  | Some(s) => s
+  };
+
+let resolveRegex = (exp, str) => {
+  let res = exp |> Js.Re.exec(str);
+  switch (res) {
+  | None => ""
+  | Some(result) =>
+    let captures = result |> Js.Re.captures;
+    switch (captures) {
+    | [|_, token|] => token |> Js.Nullable.to_opt |> resolveOption
+    | _ => ""
+    };
+  };
+};
+
 let ste = ReasonReact.string;
 
 let apolloResponseToResult = (result: ReasonApolloTypes.queryResponse('a)) =>

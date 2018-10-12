@@ -7,6 +7,7 @@ type route =
   | Redirect
   | Profile(string)
   | AgentShow(string)
+  | AgentMeasurables(string)
   | MeasurableIndex
   | MeasurableShow(string)
   | NotFound;
@@ -34,6 +35,7 @@ let mapUrlToRoute = (url: ReasonReact.Router.url) =>
     | None => Home
     }
   | ["agents", id] => AgentShow(id)
+  | ["agents", id, "measurables"] => AgentMeasurables(id)
   | ["measurables"] => MeasurableIndex
   | ["measurables", id] => MeasurableShow(id)
   | _ => Home
@@ -47,6 +49,7 @@ let component = ReasonReact.reducerComponent("App");
 let inside = r =>
   switch (r) {
   | Home => <MeasurableIndex />
+  | AgentMeasurables(id) => <MeMeasurables id />
   | AgentIndex => <AgentIndex />
   | NotFound => <AgentIndex />
   | Redirect => <Redirect />

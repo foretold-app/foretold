@@ -10,6 +10,7 @@ var Redirect$Client = require("./pages/Redirect.bs.js");
 var AgentShow$Client = require("./pages/Agent/AgentShow/AgentShow.bs.js");
 var AgentIndex$Client = require("./pages/Agent/AgentIndex.bs.js");
 var PaddedLayout$Client = require("./layout/PaddedLayout.bs.js");
+var MeMeasurables$Client = require("./pages/Me/MeMeasurables.bs.js");
 var MeasurableNew$Client = require("./pages/Measurable/MeasurableNew/MeasurableNew.bs.js");
 var MeasurableShow$Client = require("./pages/Measurable/MeasurableShow/MeasurableShow.bs.js");
 var MeasurableIndex$Client = require("./pages/Measurable/MeasurableIndex.bs.js");
@@ -28,10 +29,16 @@ function mapUrlToRoute(url) {
       case "agents" : 
           var match$1 = match[1];
           if (match$1) {
-            if (match$1[1]) {
-              return /* Home */0;
+            var match$2 = match$1[1];
+            var id = match$1[0];
+            if (match$2) {
+              if (match$2[0] === "measurables" && !match$2[1]) {
+                return /* AgentMeasurables */Block.__(2, [id]);
+              } else {
+                return /* Home */0;
+              }
             } else {
-              return /* AgentShow */Block.__(1, [match$1[0]]);
+              return /* AgentShow */Block.__(1, [id]);
             }
           } else {
             return /* AgentIndex */1;
@@ -44,12 +51,12 @@ function mapUrlToRoute(url) {
             return /* Redirect */2;
           }
       case "measurables" : 
-          var match$2 = match[1];
-          if (match$2) {
-            if (match$2[1]) {
+          var match$3 = match[1];
+          if (match$3) {
+            if (match$3[1]) {
               return /* Home */0;
             } else {
-              return /* MeasurableShow */Block.__(2, [match$2[0]]);
+              return /* MeasurableShow */Block.__(3, [match$3[0]]);
             }
           } else {
             return /* MeasurableIndex */3;
@@ -58,9 +65,9 @@ function mapUrlToRoute(url) {
           if (match[1]) {
             return /* Home */0;
           } else {
-            var match$3 = Auth0$Client.userId(/* () */0);
-            if (match$3 !== undefined) {
-              return /* Profile */Block.__(0, [match$3]);
+            var match$4 = Auth0$Client.userId(/* () */0);
+            if (match$4 !== undefined) {
+              return /* Profile */Block.__(0, [match$4]);
             } else {
               return /* Home */0;
             }
@@ -105,6 +112,8 @@ function inside(r) {
       case 1 : 
           return ReasonReact.element(undefined, undefined, AgentShow$Client.make(r[0], /* array */[]));
       case 2 : 
+          return ReasonReact.element(undefined, undefined, MeMeasurables$Client.make(r[0], /* array */[]));
+      case 3 : 
           var id = r[0];
           if (id === "new") {
             return ReasonReact.element(undefined, undefined, MeasurableNew$Client.make(/* array */[]));

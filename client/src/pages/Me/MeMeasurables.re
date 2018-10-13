@@ -137,13 +137,14 @@ let make = (~id: string, _children) => {
       ReasonReact.NoUpdate;
     },
   initialState: () => {hotTableRef: ref(None)},
+  shouldUpdate: a => false,
   render: self =>
     WithEditMutation.Mutation.make((mutation, _) =>
       WithAgent.query(
         ~id,
         agent => {
           let m = agent##measurables |> ArrayOptional.concatSomes;
-          <div>
+          <StopComponentUpdate>
             (
               Table.ColumnBundle.toHOT(
                 ~onClickData=
@@ -222,7 +223,7 @@ let make = (~id: string, _children) => {
                 (),
               )
             )
-          </div>;
+          </StopComponentUpdate>;
         },
       )
     )

@@ -35,6 +35,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.DATE
     },
+    measurableTableId: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
+    measurableTableAttributes: {
+      allowNull: true,
+      type: DataTypes.JSON
+    },
     measurementCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),

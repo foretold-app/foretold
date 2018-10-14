@@ -68,6 +68,8 @@ type measurable = {
   isLocked: bool,
   measurementCount: option(int),
   measurerCount: option(int),
+  measurableTableId: option(string),
+  measurableTableAttributes: option(Js.Dict.t(string)),
   createdAt: MomentRe.Moment.t,
   updatedAt: MomentRe.Moment.t,
   expectedResolutionDate: option(MomentRe.Moment.t),
@@ -82,6 +84,11 @@ let toMoment = jsonToString ||> moment;
 
 let optionalMoment = Option.Infix.(e => e <$> (jsonToString ||> moment));
 
+let decodeDict = (ojson: option(Js.Json.t)):option(Js.Dict.t(string)) => switch(ojson){
+| Some(e) => Some(Json.Decode.dict(Json.Decode.string, e));
+| None => None
+}
+
 module GetMeasurables = [%graphql
   {|
     query getMeasurables {
@@ -92,6 +99,8 @@ module GetMeasurables = [%graphql
            isLocked
            measurementCount
            measurerCount
+           measurableTableId
+           measurableTableAttributes @bsDecoder(fn: "decodeDict")
            expectedResolutionDate @bsDecoder(fn: "optionalMoment")
            createdAt @bsDecoder(fn: "toMoment")
            updatedAt @bsDecoder(fn: "toMoment")

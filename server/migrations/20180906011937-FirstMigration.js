@@ -130,5 +130,7 @@ module.exports = {
       await queryInterface.dropTable('Measurements');
       await queryInterface.dropTable('Measureables');
       await queryInterface.dropTable('Users');
+      await queryInterface.dropTable('Bots');
+      await queryInterface.dropTable('Agents');
     }
 };

@@ -10,6 +10,7 @@ type route =
   | AgentMeasurables(string)
   | MeasurableIndex
   | MeasurableShow(string)
+  | MeasurableTableShow(string)
   | NotFound;
 
 type state = {route};
@@ -38,6 +39,7 @@ let mapUrlToRoute = (url: ReasonReact.Router.url) =>
   | ["agents", id, "measurables"] => AgentMeasurables(id)
   | ["measurables"] => MeasurableIndex
   | ["measurables", id] => MeasurableShow(id)
+  | ["measurable-tables", id] => MeasurableTableShow(id)
   | _ => Home
   };
 
@@ -58,6 +60,7 @@ let inside = r =>
   | MeasurableIndex => <MeasurableIndex />
   | MeasurableShow("new") => <MeasurableNew />
   | MeasurableShow(id) => <MeasurableShow id />
+  | MeasurableTableShow(id) => <MeasurableTableShow id />
   };
 
 let make = _children => {

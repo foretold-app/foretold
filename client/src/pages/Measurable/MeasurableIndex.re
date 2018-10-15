@@ -5,7 +5,7 @@ open HandsOnTable;
 open MeasurableColumns;
 
 let transformations = [
-  name,
+  nameColumn,
   measurementCount,
   measurerCount,
   expectedResolutionDate,

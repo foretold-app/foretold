@@ -14,32 +14,58 @@ type action('a) = {
   metaTypes: array((string, metaTypes)),
 };
 
-module type MeasurableTypeModule = {
-  type t;
-  let name: string;
-  let id: string;
-  let description: string;
-  let metaTypes: array((string, metaTypes));
+type metaType = {
+  t: metaTypes,
+  id: string,
+  name: string,
+  description: option(string),
+  default: string,
 };
+
+module Id =
+  Belt.Id.MakeComparable({
+    type t = string;
+    let cmp: (string, string) => int = Pervasives.compare;
+  });
+
+type map = Belt.Map.t(Id.t, string, Id.identity);
+
+let toMap = e => e |> Js.Dict.entries |> Belt.Map.fromArray(~id=(module Id));
 
 type measurableType = {
-  name: string,
   id: string,
+  name: string,
   description: string,
-  metaTypes: array((string, metaTypes)),
+  schema: list(metaType),
   form: ReasonReact.reactElement,
+  nameFn: map => string,
+  descriptionFn: map => string,
 };
 
-module MakeMeasurableType = (Item: MeasurableTypeModule) => {
-  let make = {
-    id: Item.id,
-    name: Item.name,
-    description: Item.description,
-    metaTypes: Item.metaTypes,
-    form:
-      <MetaTypeForm
-        key=Item.id
-        fields=(Array.map(((a, b)) => a, Item.metaTypes))
-      />,
-  };
+let makeMetaType = (~t, ~id, ~name, ~description=None, ~default="", ()) => {
+  t,
+  id,
+  name,
+  description,
+  default,
+};
+
+let makeMeasurableType =
+    (
+      ~id,
+      ~name="",
+      ~description="",
+      ~schema,
+      ~nameFn=(e: list(metaType), a: map) => "",
+      ~descriptionFn=(e: list(metaType), a: map) => "",
+      ~form=<div />,
+      (),
+    ) => {
+  id,
+  name,
+  description,
+  schema,
+  form,
+  nameFn: nameFn(schema),
+  descriptionFn: descriptionFn(schema),
 };

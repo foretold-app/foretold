@@ -4,42 +4,44 @@ open Queries;
 open HandsOnTable;
 open MeasurableColumns;
 open Table;
+open MetaTypeBase;
 
-let foo = str =>
+let schemaTypeColumn = (id, name) =>
   Rationale.Option.Infix.(
     ColumnBundle.make(
-      ~headerName=str,
+      ~headerName=name,
       ~get=
         e =>
           e.measurableTableAttributes
-          >>= (r => Js.Dict.get(r, str))
+          >>= (r => Js.Dict.get(r, id))
           |> Option.default(""),
       (),
     )
   );
 
-let bar = (ii: MetaTypeBase.measurableType) =>
-  Array.map(((a, _)) => foo(a), ii.metaTypes);
+let generateSchemaTypeColumn = (ii: MetaTypeBase.measurableType) =>
+  Belt.List.map(ii.schema, r => schemaTypeColumn(r.id, r.name));
 
 let component = ReasonReact.statelessComponent("Measurables");
+let ys = [
+  measurementCount,
+  measurerCount,
+  expectedResolutionDate,
+  creator,
+  isLocked,
+];
 let make = (~id: string, _children) => {
   ...component,
   render: _self => {
     let item: option(MetaTypeBase.measurableType) =
-      MetaTypeCollection.all
+      MetaTypeItems.all
       |> Array.to_list
       |> Rationale.RList.find((e: MetaTypeBase.measurableType) => e.id == id);
     let xs =
-      item |> Option.fmap(bar) |> Option.default([||]) |> Array.to_list;
-    let transformations = [
-      name,
-      measurementCount,
-      measurerCount,
-      expectedResolutionDate,
-      creator,
-      isLocked,
-      ...xs,
-    ];
+      item |> Option.fmap(generateSchemaTypeColumn) |> Option.default([]);
+    let transformations =
+      List.concat([[nameColumn, descriptionColumn], xs, ys]);
+    let query = Queries.GetMeasurables2.make(~measurableTableId=id, ());
     <div>
       <div>
         (
@@ -50,7 +52,7 @@ let make = (~id: string, _children) => {
         )
       </div>
       Result.Infix.(
-        Queries.GetMeasurablesQuery.make(o =>
+        Queries.GetMeasurablesQuery2.make(~variables=query##variables, o =>
           o.result
           |> apolloResponseToResult
           <$> (d => d##measurables)

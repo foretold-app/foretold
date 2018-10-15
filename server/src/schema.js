@@ -115,6 +115,7 @@ const simpleResolver = (type, model) => ({
 
 const modelResolvers = (name, plural, type, model) => {
   let fields = {};
+  let args =filterr(attributeFields(model));
   fields[name] = {
     type: type,
     args: _.pick(attributeFields(model), ['id']),
@@ -190,6 +191,19 @@ const schema = new GraphQLSchema({
       ...modelResolvers("measurable", "measurables", getType.Measurables(), models.Measurable),
       ...modelResolvers("bot", "bots", getType.Bots(), models.Bot),
       ...modelResolvers("agent", "agents", getType.Agents(), models.Agent),
+      measurables: {
+        type: new GraphQLNonNull(GraphQLList(getType.Measurables())),
+        args: filterr(_.pick(attributeFields(models.Measurable), ['measurableTableId'])),
+        resolve: async (ops, {
+          measurableTableId
+        }, options) => {
+          if (measurableTableId){
+            return await models.Measurable.findAll({where: {measurableTableId}})
+          } else {
+            return await models.Measurable.findAll()
+          }
+        }
+      }
     }
   }),
   mutation: new GraphQLObjectType({
@@ -212,7 +226,7 @@ const schema = new GraphQLSchema({
             agentId: user.agentId,
           })
           const measurable = await newMeasurement.getMeasurable();
-          return newMeasurement
+          return newMeasurement.map(e => e.dataValues)
         }
       },
       createMeasurable: {

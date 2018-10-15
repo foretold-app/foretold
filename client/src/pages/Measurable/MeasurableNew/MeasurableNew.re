@@ -119,14 +119,14 @@ let make = _children => {
                             <Select.Option value=r.name>
                               (r.name |> ste)
                             </Select.Option>,
-                          MetaTypeCollection.all,
+                          MetaTypeItems.all,
                         )
                         |> ReasonReact.array
                       )
                     </Select>
                   </Form.Item>
                   (
-                    MetaTypeCollection.all
+                    MetaTypeItems.all
                     |> Array.to_list
                     |> Rationale.RList.find((x: MetaTypeBase.measurableType) =>
                          x.name == form.values.measurableType

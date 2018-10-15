@@ -2,6 +2,7 @@ open Table;
 open Queries;
 open Rationale;
 open MomentRe;
+open MetaTypeBase;
 
 let toCreatorLink = (c: Queries.creator) => {
   let id = c.id;
@@ -20,6 +21,25 @@ let name =
     ~headerName="Name",
     ~get=toMeasurableLink,
     ~column=Columns.html,
+    (),
+  );
+
+let nameColumn = {
+  let toMeasurableLink = (id, name) => {j|<a href="/measurables/$id">$name</a>|j};
+  ColumnBundle.make(
+    ~headerName="Name",
+    ~get=
+      (e: Queries.measurable) =>
+        toMeasurableLink(e.id, Queries.getFn(e, x => x.nameFn)),
+    ~column=Columns.html,
+    (),
+  );
+};
+
+let descriptionColumn =
+  ColumnBundle.make(
+    ~headerName="Description",
+    ~get=(e: Queries.measurable) => Queries.getFn(e, x => x.descriptionFn),
     (),
   );
 

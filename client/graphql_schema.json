@@ -144,7 +144,18 @@
             {
               "name": "measurables",
               "description": null,
-              "args": [],
+              "args": [
+                {
+                  "name": "measurableTableId",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,

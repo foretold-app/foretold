@@ -93,40 +93,42 @@ let make = (~id: string, _children) => {
   ...component,
   render: _self =>
     <div>
-      <div>
-        (
-          GetMeasurable.withQuery(~id, measurable =>
-            <div>
-              <h1> (measurable##name |> ste) </h1>
-              <div>
-                <h2> ("Aggregate" |> ste) </h2>
-                <Style.BorderedBox>
-                  <MeasurableChart measurements=measurable##measurements />
-                </Style.BorderedBox>
-                (
-                  SharedQueries.withLoggedInUserQuery(userQuery =>
-                    switch (userQuery) {
-                    | Some(query) =>
-                      open Rationale.Option.Infix;
-                      let userAgentId = query##user >>= (e => e##agentId);
-                      let creatorId = measurable##creatorId;
-                      <div>
-                        <h2> ("Add a Measurement" |> ste) </h2>
-                        <MeasurableShowForm
-                          measurableId=id
-                          isCreator=(userAgentId == creatorId)
-                        />
-                      </div>;
-                    | _ => <div />
-                    }
-                  )
-                )
-                <h2> ("Previous Measurements" |> ste) </h2>
-              </div>
-              <MeasurableTable measurements=measurable##measurements />
-            </div>
-          )
+      (
+        Queries.GetMeasurable.withQuery(~id, meas =>
+          <h1> (Queries.getFn(meas, x => x.nameFn) |> ste) </h1>
         )
-      </div>
+      )
+      (
+        GetMeasurable.withQuery(~id, measurable =>
+          <div>
+            <div>
+              <h2> ("Aggregate" |> ste) </h2>
+              <Style.BorderedBox>
+                <MeasurableChart measurements=measurable##measurements />
+              </Style.BorderedBox>
+              (
+                SharedQueries.withLoggedInUserQuery(userQuery =>
+                  switch (userQuery) {
+                  | Some(query) =>
+                    open Rationale.Option.Infix;
+                    let userAgentId = query##user >>= (e => e##agentId);
+                    let creatorId = measurable##creatorId;
+                    <div>
+                      <h2> ("Add a Measurement" |> ste) </h2>
+                      <MeasurableShowForm
+                        measurableId=id
+                        isCreator=(userAgentId == creatorId)
+                      />
+                    </div>;
+                  | _ => <div />
+                  }
+                )
+              )
+              <h2> ("Previous Measurements" |> ste) </h2>
+            </div>
+            <MeasurableTable measurements=measurable##measurements />
+          </div>
+        )
+      )
     </div>,
 };

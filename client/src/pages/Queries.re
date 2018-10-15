@@ -1,7 +1,7 @@
 open Rationale;
 open Rationale.Option;
-open Rationale.Function.Infix;
 open MomentRe;
+open Utils;
 
 let stringOfcompetitorType = e =>
   switch (e) {
@@ -76,18 +76,37 @@ type measurable = {
   creator: option(creator),
 };
 
+let getFn = (e: 'a, fn) => {
+  let item = MetaTypeItems.find(e.measurableTableId);
+
+  e.measurableTableAttributes
+  <$> (
+    x =>
+      x
+      |> MetaTypeBase.toMap
+      |> (
+        item
+        |> Option.toExn("Item not found. Perhaps record doesn't have Id")
+        |> fn
+      )
+  )
+  |> Option.default("");
+};
+
 type measurables = array(measurable);
 
 let jsonToString = e => e |> Js.Json.decodeString |> Option.default("");
 
-let toMoment = jsonToString ||> moment;
+let toMoment = Rationale.Function.Infix.(jsonToString ||> moment);
 
-let optionalMoment = Option.Infix.(e => e <$> (jsonToString ||> moment));
+let optionalMoment =
+  Rationale.Function.Infix.(e => e <$> (jsonToString ||> moment));
 
-let decodeDict = (ojson: option(Js.Json.t)):option(Js.Dict.t(string)) => switch(ojson){
-| Some(e) => Some(Json.Decode.dict(Json.Decode.string, e));
-| None => None
-}
+let decodeDict = (ojson: option(Js.Json.t)) : option(Js.Dict.t(string)) =>
+  switch (ojson) {
+  | Some(e) => Some(Json.Decode.dict(Json.Decode.string, e))
+  | None => None
+  };
 
 module GetMeasurables = [%graphql
   {|
@@ -114,6 +133,31 @@ module GetMeasurables = [%graphql
 ];
 module GetMeasurablesQuery = ReasonApollo.CreateQuery(GetMeasurables);
 
+module GetMeasurables2 = [%graphql
+  {|
+    query getMeasurables($measurableTableId: String) {
+        measurables(measurableTableId: $measurableTableId) @bsRecord {
+           id
+           name
+           valueType
+           isLocked
+           measurementCount
+           measurerCount
+           measurableTableId
+           measurableTableAttributes @bsDecoder(fn: "decodeDict")
+           expectedResolutionDate @bsDecoder(fn: "optionalMoment")
+           createdAt @bsDecoder(fn: "toMoment")
+           updatedAt @bsDecoder(fn: "toMoment")
+           creator @bsRecord{
+             id
+             name
+           }
+        }
+    }
+  |}
+];
+module GetMeasurablesQuery2 = ReasonApollo.CreateQuery(GetMeasurables2);
+
 module GetUser = [%graphql
   {|
     query user ($auth0Id: String) {
@@ -131,3 +175,48 @@ module GetUser = [%graphql
   |}
 ];
 module GetUserQuery = ReasonApollo.CreateQuery(GetUser);
+
+module GetMeasurable = {
+  module GraphQL = [%graphql
+    {|
+    query getMeasurable ($id: String!){
+        measurable(id: $id) @bsRecord {
+           id
+           name
+           valueType
+           isLocked
+           measurementCount
+           measurerCount
+           measurableTableId
+           measurableTableAttributes @bsDecoder(fn: "decodeDict")
+           expectedResolutionDate @bsDecoder(fn: "optionalMoment")
+           createdAt @bsDecoder(fn: "toMoment")
+           updatedAt @bsDecoder(fn: "toMoment")
+           creator @bsRecord{
+             id
+             name
+           }
+        }
+    }
+  |}
+  ];
+  module QueryComponent = ReasonApollo.CreateQuery(GraphQL);
+
+  let withQuery = (~id, fn) => {
+    let query = GraphQL.make(~id, ());
+    Result.Infix.(
+      QueryComponent.make(~variables=query##variables, ({result}) =>
+        result
+        |> apolloResponseToResult
+        >>= (
+          e =>
+            e##measurable
+            |> filterOptionalResult("Measurable not found" |> ste)
+        )
+        <$> fn
+        |> Result.result(idd, idd)
+      )
+      |> ReasonReact.element
+    );
+  };
+};

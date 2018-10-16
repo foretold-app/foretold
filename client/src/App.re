@@ -25,7 +25,7 @@ let reducer = (action, _state) =>
 
 let mapUrlToRoute = (url: ReasonReact.Router.url) =>
   switch (url.path) {
-  | [] => Home
+  | [] => MeasurableIndex
   | ["callback"] =>
     Auth0.handleAuth(url);
     Redirect;

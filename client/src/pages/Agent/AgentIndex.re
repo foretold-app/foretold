@@ -38,6 +38,7 @@ let make = _children => {
   ...component,
   render: _ =>
     <div>
+      <h2> ("Agents" |> ste) </h2>
       (
         Queries.GetAgentsQuery.make(({result}) =>
           result

@@ -95,7 +95,7 @@ function mapUrlToRoute(url) {
         return /* Home */0;
     }
   } else {
-    return /* Home */0;
+    return /* MeasurableIndex */3;
   }
 }
 

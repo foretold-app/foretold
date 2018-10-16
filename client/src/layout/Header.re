@@ -35,10 +35,13 @@ let make = _children => {
         <Col span=24>
           <Layout.Header className=Styles.header>
             <Antd_Menu className=Styles.menu mode=`Horizontal theme=`Light>
-              <Antd_Menu.Item key="2">
+              <Antd_Menu.Item key="1">
                 (link("/measurables", "Measurables"))
               </Antd_Menu.Item>
-              <Antd_Menu.Item key="1">
+              <Antd_Menu.Item key="6">
+                (link("/measurable-tables", "Measurable Tables"))
+              </Antd_Menu.Item>
+              <Antd_Menu.Item key="2">
                 (link("/agents", "Agents"))
               </Antd_Menu.Item>
               (

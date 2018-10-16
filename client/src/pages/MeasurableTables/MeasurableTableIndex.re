@@ -1,4 +1,5 @@
 open MeasurableTables;
+open Utils;
 
 let component = ReasonReact.statelessComponent("MeasurableTableIndex");
 
@@ -16,6 +17,11 @@ let transformations = [
 let make = _children => {
   ...component,
   render: _ =>
-    MeasurableTables.all
-    |> Table.ColumnBundle.toHOT(~data=_, ~transformations, ()),
+    <div>
+      <h2> ("Measurable Tables" |> ste) </h2>
+      (
+        MeasurableTables.all
+        |> Table.ColumnBundle.toHOT(~data=_, ~transformations, ())
+      )
+    </div>,
 };

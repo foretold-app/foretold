@@ -1,22 +1,21 @@
-open MetaTypeBase;
+open MeasurableTableBase;
 open Rationale;
 
 type dict = Js.Dict.t(string);
 
-let findType = (types: list(metaType), id) : metaType =>
-  Rationale.RList.find((e: metaType) => e.id == id, types)
-  |> Option.toExn("Fail");
+let findType = (types: list(metaType), id) : option(metaType) =>
+  Rationale.RList.find((e: metaType) => e.id == id, types);
 
 let findItem = (types, r: map, id) => {
-  let ttype: metaType = findType(types, id);
+  let ttype: metaType = findType(types, id) |> Option.toExn("Fail");
   Belt.Map.get(r, ttype.id) |> Option.default(ttype.default);
 };
 
 let all = [|
   makeMeasurableType(
     ~id="1",
-    ~name="Generic",
-    ~description="Generic",
+    ~name="Custom",
+    ~description="All Measurables without any other specific table.",
     ~schema=[
       makeMetaType(~t=`String, ~id="name", ~name="Name", ~default="", ()),
       makeMetaType(
@@ -33,7 +32,7 @@ let all = [|
   ),
   makeMeasurableType(
     ~id="2",
-    ~name="TotalRepoCommits",
+    ~name="Total Repo Commits at a Point in Time",
     ~description="The total commits for a repo at a specific time.",
     ~schema=[
       makeMetaType(
@@ -53,21 +52,6 @@ let all = [|
     (),
   ),
 |];
-/* let toName = (m: map) => {
-   (); */
-
-/* module TotalRepoCommits = {
-     module In = {
-       let id = "2";
-       let name = "TotalRepoCommits";
-       let description = "The total commits for a repo at a specific time.";
-       let schema = [
-         {name: "byDate", t: `String, default: ""},
-         {name: "repo", t: `String, default: ""},
-       ];
-     };
-     module Out = MakeMeasurableType(In);
-   }; */
 
 /* //Type is float */
 /* module HumanTaskTime = {
@@ -140,10 +124,3 @@ let all = [|
      };
      module Out = MakeMeasurableType(In);
    }; */
-
-let find = (id: option(string)) =>
-  all
-  |> Array.to_list
-  |> Rationale.RList.find((r: MetaTypeBase.measurableType) =>
-       Some(r.id) == id
-     );

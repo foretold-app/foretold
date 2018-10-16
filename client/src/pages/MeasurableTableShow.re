@@ -4,7 +4,7 @@ open Queries;
 open HandsOnTable;
 open MeasurableColumns;
 open Table;
-open MetaTypeBase;
+open MeasurableTableBase;
 
 let schemaTypeColumn = (id, name) =>
   Rationale.Option.Infix.(
@@ -19,7 +19,7 @@ let schemaTypeColumn = (id, name) =>
     )
   );
 
-let generateSchemaTypeColumn = (ii: MetaTypeBase.measurableType) =>
+let generateSchemaTypeColumn = (ii: measurableType) =>
   Belt.List.map(ii.schema, r => schemaTypeColumn(r.id, r.name));
 
 let component = ReasonReact.statelessComponent("Measurables");
@@ -33,10 +33,10 @@ let ys = [
 let make = (~id: string, _children) => {
   ...component,
   render: _self => {
-    let item: option(MetaTypeBase.measurableType) =
-      MetaTypeItems.all
+    let item: option(measurableType) =
+      MeasurableTableItems.all
       |> Array.to_list
-      |> Rationale.RList.find((e: MetaTypeBase.measurableType) => e.id == id);
+      |> Rationale.RList.find((e: measurableType) => e.id == id);
     let xs =
       item |> Option.fmap(generateSchemaTypeColumn) |> Option.default([]);
     let transformations =
@@ -46,7 +46,7 @@ let make = (~id: string, _children) => {
       <div>
         (
           item
-          |> Option.fmap((e: MetaTypeBase.measurableType) => e.name)
+          |> Option.fmap((e: measurableType) => e.name)
           |> Option.default("")
           |> ste
         )

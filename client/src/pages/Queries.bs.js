@@ -14,8 +14,8 @@ var Utils$Client = require("../utils/Utils.bs.js");
 var Option$Rationale = require("rationale/src/Option.js");
 var Result$Rationale = require("rationale/src/Result.js");
 var Function$Rationale = require("rationale/src/Function.js");
-var MetaTypeBase$Client = require("../lib/metaTypes/MetaTypeBase.bs.js");
-var MetaTypeItems$Client = require("../lib/metaTypes/MetaTypeItems.bs.js");
+var MeasurableTables$Client = require("../lib/measurableTables/MeasurableTables.bs.js");
+var MeasurableTableBase$Client = require("../lib/measurableTables/MeasurableTableBase.bs.js");
 
 function stringOfcompetitorType(e) {
   if (e !== 497422978) {
@@ -252,9 +252,9 @@ var GetAgentsQuery = ReasonApollo.CreateQuery([
     ]);
 
 function getFn(e, fn) {
-  var item = MetaTypeItems$Client.find(e[/* measurableTableId */6]);
+  var item = MeasurableTables$Client.Queries[/* find */0](Option$Rationale.$$default("", e[/* measurableTableId */6]));
   return Option$Rationale.$$default("", Curry._2(Option$Rationale.$less$$great, e[/* measurableTableAttributes */7], (function (x) {
-                    return Curry._2(fn, Option$Rationale.toExn("Item not found. Perhaps record doesn't have Id", item), MetaTypeBase$Client.toMap(x));
+                    return Curry._2(fn, Option$Rationale.toExn("Item not found. Perhaps record doesn't have Id", item), MeasurableTableBase$Client.toMap(x));
                   })));
 }
 

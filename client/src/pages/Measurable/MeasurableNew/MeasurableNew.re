@@ -115,20 +115,21 @@ let make = _children => {
                       )>
                       (
                         Array.map(
-                          (r: MetaTypeBase.measurableType) =>
+                          (r: MeasurableTableBase.measurableType) =>
                             <Select.Option value=r.name>
                               (r.name |> ste)
                             </Select.Option>,
-                          MetaTypeItems.all,
+                          MeasurableTableItems.all,
                         )
                         |> ReasonReact.array
                       )
                     </Select>
                   </Form.Item>
                   (
-                    MetaTypeItems.all
+                    MeasurableTableItems.all
                     |> Array.to_list
-                    |> Rationale.RList.find((x: MetaTypeBase.measurableType) =>
+                    |> Rationale.RList.find(
+                         (x: MeasurableTableBase.measurableType) =>
                          x.name == form.values.measurableType
                        )
                     |> (

@@ -126,7 +126,7 @@ let make = (~id: string, _children) => {
               )
               <h2> ("Previous Measurements" |> ste) </h2>
             </div>
-            <MeasurableTable measurements=measurable##measurements />
+            <MeasurableShowTable measurements=measurable##measurements />
           </div>
         )
       )

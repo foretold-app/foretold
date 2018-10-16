@@ -77,13 +77,14 @@ type measurable = {
 };
 
 let getFn = (e: 'a, fn) => {
-  let item = MetaTypeItems.find(e.measurableTableId);
+  let item =
+    MeasurableTables.Queries.find(e.measurableTableId |> Option.default(""));
 
   e.measurableTableAttributes
   <$> (
     x =>
       x
-      |> MetaTypeBase.toMap
+      |> MeasurableTableBase.toMap
       |> (
         item
         |> Option.toExn("Item not found. Perhaps record doesn't have Id")
@@ -92,6 +93,8 @@ let getFn = (e: 'a, fn) => {
   )
   |> Option.default("");
 };
+
+/* let foo = MeasurableTable.Base.findType; */
 
 type measurables = array(measurable);
 

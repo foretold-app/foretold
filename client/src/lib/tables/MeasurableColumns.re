@@ -2,7 +2,7 @@ open Table;
 open Queries;
 open Rationale;
 open MomentRe;
-open MetaTypeBase;
+open MeasurableTableBase;
 
 let toCreatorLink = (c: Queries.creator) => {
   let id = c.id;

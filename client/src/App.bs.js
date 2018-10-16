@@ -14,7 +14,8 @@ var MeMeasurables$Client = require("./pages/Me/MeMeasurables.bs.js");
 var MeasurableNew$Client = require("./pages/Measurable/MeasurableNew/MeasurableNew.bs.js");
 var MeasurableShow$Client = require("./pages/Measurable/MeasurableShow/MeasurableShow.bs.js");
 var MeasurableIndex$Client = require("./pages/Measurable/MeasurableIndex.bs.js");
-var MeasurableTableShow$Client = require("./pages/MeasurableTableShow.bs.js");
+var MeasurableTableShow$Client = require("./pages/MeasurableTables/MeasurableTableShow.bs.js");
+var MeasurableTableIndex$Client = require("./pages/MeasurableTables/MeasurableTableIndex.bs.js");
 
 require('../node_modules/handsontable/dist/handsontable.full.css');
 ;
@@ -53,10 +54,14 @@ function mapUrlToRoute(url) {
           }
       case "measurable-tables" : 
           var match$3 = match[1];
-          if (match$3 && !match$3[1]) {
-            return /* MeasurableTableShow */Block.__(4, [match$3[0]]);
+          if (match$3) {
+            if (match$3[1]) {
+              return /* Home */0;
+            } else {
+              return /* MeasurableTableShow */Block.__(4, [match$3[0]]);
+            }
           } else {
-            return /* Home */0;
+            return /* MeasurableTableIndex */4;
           }
       case "measurables" : 
           var match$4 = match[1];
@@ -108,8 +113,10 @@ function inside(r) {
       case 0 : 
       case 3 : 
           return ReasonReact.element(undefined, undefined, MeasurableIndex$Client.make(/* array */[]));
-      case 1 : 
       case 4 : 
+          return ReasonReact.element(undefined, undefined, MeasurableTableIndex$Client.make(/* array */[]));
+      case 1 : 
+      case 5 : 
           return ReasonReact.element(undefined, undefined, AgentIndex$Client.make(/* array */[]));
       
     }

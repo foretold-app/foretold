@@ -6,6 +6,7 @@ open MeasurableColumns;
 
 let transformations = [
   nameColumn,
+  tableNameColumn,
   measurementCount,
   measurerCount,
   expectedResolutionDate,

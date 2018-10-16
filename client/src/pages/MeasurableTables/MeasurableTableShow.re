@@ -39,8 +39,7 @@ let make = (~id: string, _children) => {
       |> Rationale.RList.find((e: measurableType) => e.id == id);
     let xs =
       item |> Option.fmap(generateSchemaTypeColumn) |> Option.default([]);
-    let transformations =
-      List.concat([[nameColumn, descriptionColumn], xs, ys]);
+    let transformations = List.concat([[nameColumn], xs, ys]);
     let query = Queries.GetMeasurables2.make(~measurableTableId=id, ());
     <div>
       <div>

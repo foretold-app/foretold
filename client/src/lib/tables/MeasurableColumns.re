@@ -16,6 +16,18 @@ let toMeasurableLink = m => {
   {j|<a href="/measurables/$id">$name</a>|j};
 };
 
+let toTableLink = (m: Queries.measurable) => {
+  let item =
+    MeasurableTables.Queries.find(m.measurableTableId |> Option.default(""));
+  switch (item) {
+  | Some(r) =>
+    let id = r.id;
+    let name = r.name;
+    {j|<a href="/measurable-tables/$id">$name</a>|j};
+  | None => ""
+  };
+};
+
 let name =
   ColumnBundle.make(
     ~headerName="Name",
@@ -40,6 +52,14 @@ let descriptionColumn =
   ColumnBundle.make(
     ~headerName="Description",
     ~get=(e: Queries.measurable) => Queries.getFn(e, x => x.descriptionFn),
+    (),
+  );
+
+let tableNameColumn =
+  ColumnBundle.make(
+    ~headerName="Table",
+    ~get=(e: Queries.measurable) => toTableLink(e),
+    ~column=Columns.html,
     (),
   );
 

@@ -134,16 +134,17 @@ let make = _children => {
                   <Select
                     value=form.values.valueType
                     onChange=(e => handleChange(`valueType, e) |> ignore)>
-                    <Select.Option value="float">
-                      ("Float" |> ste)
-                    </Select.Option>
-                    <Select.Option value="percentage">
-                      ("Percentage" |> ste)
-                    </Select.Option>
-                    <Select.Option value="date">
-                      ("Date" |> ste)
-                    </Select.Option>
-                  </Select>
+
+                      <Select.Option value="float">
+                        ("Float" |> ste)
+                      </Select.Option>
+                    </Select>
+                    /* <Select.Option value="percentage">
+                         ("Percentage" |> ste)
+                       </Select.Option>
+                       <Select.Option value="date">
+                         ("Date" |> ste)
+                       </Select.Option> */
                 </Form.Item>
                 <Form.Item>
                   <Button _type=`primary onClick=(_ => handleSubmit())>

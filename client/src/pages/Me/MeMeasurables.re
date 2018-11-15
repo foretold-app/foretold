@@ -145,84 +145,87 @@ let make = (~id: string, _children) => {
         agent => {
           let m = agent##measurables |> ArrayOptional.concatSomes;
           <StopComponentUpdate>
-            (
-              Table.ColumnBundle.toHOT(
-                ~onClickData=
-                  e => {
-                    let id = resolveRegex(matchId, e);
-                    let index =
-                      m
-                      |> Array.to_list
-                      |> Rationale.RList.findIndex(r => r##id == id)
-                      |> Option.default(0);
+            <div>
+              <h2> ("Edit Your Judging Measurables" |> ste) </h2>
+              (
+                Table.ColumnBundle.toHOT(
+                  ~onClickData=
+                    e => {
+                      let id = resolveRegex(matchId, e);
+                      let index =
+                        m
+                        |> Array.to_list
+                        |> Rationale.RList.findIndex(r => r##id == id)
+                        |> Option.default(0);
 
-                    let update = toItems(self.state.hotTableRef)[index];
-                    WithEditMutation.mutate(
-                      mutation,
-                      id,
-                      update.name,
-                      update.description,
-                      update.isLocked,
-                      update.expectedResolutionDate |> Js.Json.string,
-                    );
-                    Js.log2("Submitted new data!", update);
-                    ();
-                  },
-                ~data=m,
-                ~transformations=[
-                  ColumnBundle.make(
-                    ~headerName="Name",
-                    ~get=e => e##name,
-                    ~column=makeColumn(~name=_, ~readOnly=false, ()),
-                    (),
-                  ),
-                  ColumnBundle.make(
-                    ~headerName="Description",
-                    ~get=e => e##description |> Option.default(""),
-                    ~column=makeColumn(~name=_, ~readOnly=false, ()),
-                    (),
-                  ),
-                  ColumnBundle.make(
-                    ~headerName="Is Locked",
-                    ~get=e => e##isLocked ? "True" : "False",
-                    ~column=
-                      makeColumn(
-                        ~name=_,
-                        ~renderer="checkbox",
-                        ~readOnly=false,
-                        (),
-                      ),
-                    (),
-                  ),
-                  ColumnBundle.make(
-                    ~headerName="Resolution Date",
-                    ~get=
-                      Option.Infix.(
-                        e =>
-                          e##expectedResolutionDate
-                          <$> Moment.format("L")
-                          |> Option.default("")
-                      ),
-                    ~column=makeColumn(~name=_, ~readOnly=false, ()),
-                    (),
-                  ),
-                  ColumnBundle.make(
-                    ~headerName="Cdf",
-                    ~column=Columns.html,
-                    ~get=
-                      e =>
-                        ReactDOMServerRe.renderToStaticMarkup(
-                          <a data=("clickFn:id:" ++ e##id) href="/">
-                            ("Submit" |> ste)
-                          </a>,
+                      let update = toItems(self.state.hotTableRef)[index];
+                      WithEditMutation.mutate(
+                        mutation,
+                        id,
+                        update.name,
+                        update.description,
+                        update.isLocked,
+                        update.expectedResolutionDate |> Js.Json.string,
+                      );
+                      Js.log2("Submitted new data!", update);
+                      ();
+                    },
+                  ~data=m,
+                  ~transformations=[
+                    ColumnBundle.make(
+                      ~headerName="Name",
+                      ~get=e => e##name,
+                      ~column=makeColumn(~name=_, ~readOnly=false, ()),
+                      (),
+                    ),
+                    ColumnBundle.make(
+                      ~headerName="Description",
+                      ~get=e => e##description |> Option.default(""),
+                      ~column=makeColumn(~name=_, ~readOnly=false, ()),
+                      (),
+                    ),
+                    ColumnBundle.make(
+                      ~headerName="Is Locked",
+                      ~get=e => e##isLocked ? "True" : "False",
+                      ~column=
+                        makeColumn(
+                          ~name=_,
+                          ~renderer="checkbox",
+                          ~readOnly=false,
+                          (),
                         ),
-                    (),
-                  ),
-                ],
-                ~ref=self.handle(setSectionRef),
-                (),
+                      (),
+                    ),
+                    ColumnBundle.make(
+                      ~headerName="Resolution Date",
+                      ~get=
+                        Option.Infix.(
+                          e =>
+                            e##expectedResolutionDate
+                            <$> Moment.format("L")
+                            |> Option.default("")
+                        ),
+                      ~column=makeColumn(~name=_, ~readOnly=false, ()),
+                      (),
+                    ),
+                    ColumnBundle.make(
+                      ~headerName="Cdf",
+                      ~column=Columns.html,
+                      ~get=
+                        e =>
+                          ReactDOMServerRe.renderToStaticMarkup(
+                            <a data=("clickFn:id:" ++ e##id) href="/">
+                              ("Submit" |> ste)
+                            </a>,
+                          ),
+                      (),
+                    ),
+                  ],
+                  ~ref=self.handle(setSectionRef),
+                  (),
+                )
               )
-            )
+            </div>
           </StopComponentUpdate>;
         },
       )

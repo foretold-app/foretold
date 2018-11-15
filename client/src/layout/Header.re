@@ -43,6 +43,12 @@ let make = _children => {
                 <Antd_Menu.Item key="1">
                   (link("/agents", "Agents"))
                 </Antd_Menu.Item>
+                <Antd_Menu.Item key="10">
+                  <a
+                    href="https://www.notion.so/Foretold-io-Wiki-c64b3b424c56485c8f40dbb77cbbb7de">
+                    ("Wiki" |> ReasonReact.string)
+                  </a>
+                </Antd_Menu.Item>
                 (
                   switch (userQuery) {
                   | Some(query) =>

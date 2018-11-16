@@ -155,6 +155,42 @@ const getAuth0Id = async (options) => {
   return userAuth0Id
 }
 
+const stats = new GraphQLObjectType({
+  name: "Stats",
+  fields: {
+    agentCount: {
+      type: GraphQLInt,
+      resolve: async () => {
+        return await models.Agent.count();
+      }
+    },
+    userCount: {
+      type: GraphQLInt,
+      resolve: async () => {
+        return await models.User.count();
+      }
+    },
+    botCount: {
+      type: GraphQLInt,
+      resolve: async () => {
+        return await models.Bot.count();
+      }
+    },
+    measurementCount: {
+      type: GraphQLInt,
+      resolve: async () => {
+        return await models.Measurement.count();
+      }
+    },
+    measurableCount: {
+      type: GraphQLInt,
+      resolve: async () => {
+        return await models.Measurable.count();
+      }
+    }
+  }
+})
+
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
@@ -190,6 +226,13 @@ const schema = new GraphQLSchema({
       ...modelResolvers("measurable", "measurables", getType.Measurables(), models.Measurable),
       ...modelResolvers("bot", "bots", getType.Bots(), models.Bot),
       ...modelResolvers("agent", "agents", getType.Agents(), models.Agent),
+      stats: {
+        type: new GraphQLNonNull(stats),
+        args: {},
+        resolve: async (ops, {}, options) => {
+          return "sdf"
+        }
+      },
     }
   }),
   mutation: new GraphQLObjectType({

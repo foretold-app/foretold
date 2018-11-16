@@ -15,6 +15,21 @@ let toMeasurableLink = m => {
   {j|<a href="/measurables/$id">$name</a>|j};
 };
 
+let toSimpleLink = m => {
+  let id = m.id;
+  {j|<a href="/measurables/$id">Link</a>|j};
+};
+
+let link =
+  ColumnBundle.make(
+    ~headerName="Link",
+    ~get=toSimpleLink,
+    ~column=Columns.html,
+    (),
+  );
+
+let nameAsText = ColumnBundle.make(~headerName="Name", ~get=e => e.name, ());
+
 let name =
   ColumnBundle.make(
     ~headerName="Name",

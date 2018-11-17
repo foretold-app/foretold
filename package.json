@@ -18,7 +18,7 @@
         "server/db:migrate:undo": "cd server && npm run db:migrate:undo cd ..",
         "server/db:reset": "cd server && npm run db:reset && cd ..",
         "server/db:seed": "cd server && npm run db:seed && cd ..",
-        "postinstall": "npm run server/install"
+        "postinstall": "npm run server/install && npm run server/db:migrate"
     },
     "author": "",
     "license": "MIT"

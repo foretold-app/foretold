@@ -21,6 +21,7 @@ let redirectUrl =
 let serverUrl =
   switch (environment) {
   | "DEVELOPMENT" => "http://localhost:4000/graphql"
+  /* | "DEVELOPMENT" => "https://prediction-backend.herokuapp.com/graphql" */
   | "PRODUCTION" => "https://prediction-backend.herokuapp.com/graphql"
   };
 

@@ -13,7 +13,7 @@ var PaddedLayout$Client = require("./layout/PaddedLayout.bs.js");
 var MeMeasurables$Client = require("./pages/Me/MeMeasurables.bs.js");
 var MeasurableNew$Client = require("./pages/Measurable/MeasurableNew/MeasurableNew.bs.js");
 var MeasurableShow$Client = require("./pages/Measurable/MeasurableShow/MeasurableShow.bs.js");
-var MeasurableIndex$Client = require("./pages/Measurable/MeasurableIndex.bs.js");
+var MeasurableIndex$Client = require("./pages/Measurable/MeasurableIndex/MeasurableIndex.bs.js");
 
 require('../node_modules/handsontable/dist/handsontable.full.css');
 ;

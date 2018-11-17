@@ -266,7 +266,7 @@ function optionalMoment(e) {
               }));
 }
 
-var ppx_printed_query$1 = "query getMeasurables  {\nmeasurables  {\nid  \nname  \nvalueType  \nisLocked  \nmeasurementCount  \nmeasurerCount  \nexpectedResolutionDate  \ncreatedAt  \nupdatedAt  \ncreator  {\nid  \nname  \n}\n\n}\n\n}\n";
+var ppx_printed_query$1 = "query getMeasurables  {\nmeasurables  {\nid  \nname  \nvalueType  \nisLocked  \nmeasurementCount  \nmeasurerCount  \nexpectedResolutionDate  \ncreatedAt  \nupdatedAt  \nlockedAt  \ncreator  {\nid  \nname  \n}\n\n}\n\n}\n";
 
 function parse$1(value) {
   var match = Js_json.decodeObject(value);
@@ -371,34 +371,42 @@ function parse$1(value) {
                     var field_createdAt = match$18 !== undefined ? toMoment(match$18) : Js_exn.raiseError("graphql_ppx: Field createdAt on type Measurable is missing");
                     var match$19 = value$1["updatedAt"];
                     var field_updatedAt = match$19 !== undefined ? toMoment(match$19) : Js_exn.raiseError("graphql_ppx: Field updatedAt on type Measurable is missing");
-                    var match$20 = value$1["creator"];
-                    var field_creator;
+                    var match$20 = value$1["lockedAt"];
+                    var field_lockedAt;
                     if (match$20 !== undefined) {
                       var match$21 = Js_json.decodeNull(match$20);
-                      if (match$21 !== undefined) {
+                      field_lockedAt = optionalMoment(match$21 !== undefined ? undefined : Js_primitive.some(match$20));
+                    } else {
+                      field_lockedAt = Js_exn.raiseError("graphql_ppx: Field lockedAt on type Measurable is missing");
+                    }
+                    var match$22 = value$1["creator"];
+                    var field_creator;
+                    if (match$22 !== undefined) {
+                      var match$23 = Js_json.decodeNull(match$22);
+                      if (match$23 !== undefined) {
                         field_creator = undefined;
                       } else {
-                        var match$22 = Js_json.decodeObject(match$20);
+                        var match$24 = Js_json.decodeObject(match$22);
                         var tmp$1;
-                        if (match$22 !== undefined) {
-                          var value$3 = Js_primitive.valFromOption(match$22);
-                          var match$23 = value$3["id"];
+                        if (match$24 !== undefined) {
+                          var value$3 = Js_primitive.valFromOption(match$24);
+                          var match$25 = value$3["id"];
                           var field_id$1;
-                          if (match$23 !== undefined) {
-                            var match$24 = Js_json.decodeString(match$23);
-                            field_id$1 = match$24 !== undefined ? match$24 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$23));
+                          if (match$25 !== undefined) {
+                            var match$26 = Js_json.decodeString(match$25);
+                            field_id$1 = match$26 !== undefined ? match$26 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$25));
                           } else {
                             field_id$1 = Js_exn.raiseError("graphql_ppx: Field id on type Agent is missing");
                           }
-                          var match$25 = value$3["name"];
+                          var match$27 = value$3["name"];
                           var field_name$1;
-                          if (match$25 !== undefined) {
-                            var match$26 = Js_json.decodeNull(match$25);
-                            if (match$26 !== undefined) {
+                          if (match$27 !== undefined) {
+                            var match$28 = Js_json.decodeNull(match$27);
+                            if (match$28 !== undefined) {
                               field_name$1 = undefined;
                             } else {
-                              var match$27 = Js_json.decodeString(match$25);
-                              field_name$1 = match$27 !== undefined ? match$27 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$25));
+                              var match$29 = Js_json.decodeString(match$27);
+                              field_name$1 = match$29 !== undefined ? match$29 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(match$27));
                             }
                           } else {
                             field_name$1 = undefined;
@@ -408,7 +416,7 @@ function parse$1(value) {
                             /* name */field_name$1
                           ];
                         } else {
-                          tmp$1 = Js_exn.raiseError("graphql_ppx: Expected object of type Agent, got " + JSON.stringify(match$20));
+                          tmp$1 = Js_exn.raiseError("graphql_ppx: Expected object of type Agent, got " + JSON.stringify(match$22));
                         }
                         field_creator = tmp$1;
                       }
@@ -425,6 +433,7 @@ function parse$1(value) {
                       /* createdAt */field_createdAt,
                       /* updatedAt */field_updatedAt,
                       /* expectedResolutionDate */field_expectedResolutionDate,
+                      /* lockedAt */field_lockedAt,
                       /* creator */field_creator
                     ];
                   } else {

@@ -24,7 +24,7 @@ let make = _children => {
         |> apolloResponseToResult
         <$> (d => d##measurables)
         <$> Extensions.Array.concatSomes
-        <$> Table.ColumnBundle.toHOT(~data=_, ~transformations, ())
+        <$> (measurables => <MeasurableIndexTable measurables />)
         |> Result.result(idd, idd)
       )
       |> ReasonReact.element

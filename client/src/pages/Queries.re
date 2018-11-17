@@ -71,6 +71,7 @@ type measurable = {
   createdAt: MomentRe.Moment.t,
   updatedAt: MomentRe.Moment.t,
   expectedResolutionDate: option(MomentRe.Moment.t),
+  lockedAt: option(MomentRe.Moment.t),
   creator: option(creator),
 };
 
@@ -95,6 +96,7 @@ module GetMeasurables = [%graphql
            expectedResolutionDate @bsDecoder(fn: "optionalMoment")
            createdAt @bsDecoder(fn: "toMoment")
            updatedAt @bsDecoder(fn: "toMoment")
+           lockedAt @bsDecoder(fn: "optionalMoment")
            creator @bsRecord{
              id
              name

@@ -9,8 +9,8 @@ let ste = ReasonReact.string;
 
 module CreateMeasurement = [%graphql
   {|
-            mutation createMeasurement($value: SequelizeJSON!, $competitorType:competitorType!, $measurableId:String!) {
-                createMeasurement(value: $value, competitorType: $competitorType, measurableId:$measurableId) {
+            mutation createMeasurement($value: SequelizeJSON!, $description: String!, $competitorType:competitorType!, $measurableId:String!) {
+                createMeasurement(value: $value, description: $description, competitorType: $competitorType, measurableId:$measurableId) {
                   createdAt
                 }
             }
@@ -26,11 +26,13 @@ let mutate =
       measurableId: string,
       value: Value.t,
       competitorType: CdfInput.competitorType,
+      description: string,
     ) => {
   let m =
     CreateMeasurement.make(
       ~measurableId,
       ~value=value |> Value.encode,
+      ~description,
       ~competitorType,
       (),
     );
@@ -48,8 +50,14 @@ let make = (~measurableId: string, ~isCreator: bool, _children) => {
       (mutation, _) =>
         <CdfInput
           onSubmit=(
-            ((value, competitorType)) =>
-              mutate(mutation, measurableId, value, competitorType)
+            ((value, competitorType, description)) =>
+              mutate(
+                mutation,
+                measurableId,
+                value,
+                competitorType,
+                description,
+              )
           )
           isCreator
         />,

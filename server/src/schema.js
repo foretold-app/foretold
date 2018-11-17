@@ -240,11 +240,12 @@ const schema = new GraphQLSchema({
     fields: {
       createMeasurement: {
         type: getType.Measurements(),
-        args: filterr(_.pick(attributeFields(models.Measurement), ['value', 'competitorType', 'measurableId', 'agentId'])),
+        args: filterr(_.pick(attributeFields(models.Measurement), ['value', 'competitorType', 'measurableId', 'agentId', 'description'])),
         resolve: async (a, {
           value,
           competitorType,
           measurableId,
+          description,
         }, options) => {
           let _auth0Id = await getAuth0Id(options)
           const user = await auth0User(_auth0Id);
@@ -252,6 +253,7 @@ const schema = new GraphQLSchema({
             value,
             competitorType,
             measurableId,
+            description,
             agentId: user.agentId,
           })
           const measurable = await newMeasurement.getMeasurable();

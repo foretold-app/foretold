@@ -41,16 +41,6 @@ let percentile = (n, e) =>
 
 let transformations = [
   ColumnBundle.make(
-    ~headerName="Relevant at",
-    ~get=(e: tt) => e##relevantAt |> Moment.format("L, h:mm:ss a"),
-    (),
-  ),
-  ColumnBundle.make(
-    ~headerName="Competitive",
-    ~get=e => e##competitorType |> botCompetitor,
-    (),
-  ),
-  ColumnBundle.make(
     ~headerName="Agent",
     ~column=Columns.html,
     ~get=
@@ -62,6 +52,16 @@ let transformations = [
           };
         link(e##agent);
       },
+    (),
+  ),
+  ColumnBundle.make(
+    ~headerName="Description",
+    ~get=e => e##description |> Rationale.Option.default(""),
+    (),
+  ),
+  ColumnBundle.make(
+    ~headerName="Competitive",
+    ~get=e => e##competitorType |> botCompetitor,
     (),
   ),
   ColumnBundle.make(~headerName="5th", ~get=percentile(0.05), ()),
@@ -92,6 +92,11 @@ let transformations = [
             )
           </div>,
         ),
+    (),
+  ),
+  ColumnBundle.make(
+    ~headerName="Relevant at",
+    ~get=(e: tt) => e##relevantAt |> Moment.format("L, h:mm:ss a"),
     (),
   ),
 ];

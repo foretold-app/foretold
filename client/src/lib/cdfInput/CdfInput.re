@@ -1,6 +1,7 @@
 open Types;
 open Utils;
 open Antd;
+open ReactEvent;
 
 type competitorType = [ | `COMPETITIVE | `OBJECTIVE];
 
@@ -8,12 +9,14 @@ type state = {
   floatCdf,
   competitorType: string,
   dataType: string,
+  description: string,
 };
 
 type action =
   | UpdateFloatPdf(floatCdf)
   | UpdateCompetitorType(string)
-  | UpdateDataType(string);
+  | UpdateDataType(string)
+  | UpdateDescription(string);
 
 let component = ReasonReact.reducerComponent("CdfInput");
 
@@ -26,7 +29,8 @@ module Styles = {
     style([flex(1), marginTop(px(10)), marginRight(px(5))]);
   let inputBox = style([]);
   let submitButton = style([marginTop(px(20))]);
-  let select = style([marginBottom(px(20))]);
+  let select = style([marginBottom(px(7))]);
+  let label = style([color(hex("888"))]);
 };
 
 let competitorType = (~state, ~send) =>
@@ -73,6 +77,7 @@ let make = (~onUpdate=e => (), ~isCreator=false, ~onSubmit=e => (), _children) =
     floatCdf: floatCdfEmpty,
     competitorType: "COMPETITIVE",
     dataType: "FLOAT_CDF",
+    description: "",
   },
   reducer: (action, state) =>
     switch (action) {
@@ -82,11 +87,16 @@ let make = (~onUpdate=e => (), ~isCreator=false, ~onSubmit=e => (), _children) =
     | UpdateCompetitorType(e) =>
       ReasonReact.Update({...state, competitorType: e})
     | UpdateDataType(e) => ReasonReact.Update({...state, dataType: e})
+    | UpdateDescription(e) => ReasonReact.Update({...state, description: e})
     },
   render: ({state, send}) => {
     let onSubmit = () => {
       let value = getValue(state);
-      onSubmit((value, getCompetitorType(state.competitorType)));
+      onSubmit((
+        value,
+        getCompetitorType(state.competitorType),
+        state.description,
+      ));
       ();
     };
     let isValid = getIsValid(state);
@@ -122,6 +132,7 @@ let make = (~onUpdate=e => (), ~isCreator=false, ~onSubmit=e => (), _children) =
               <div className=Styles.select> (dataType(~state, ~send)) </div>
           )
           <div className=Styles.inputBox>
+            <h4 className=Styles.label> ("Value" |> ste) </h4>
             <GuesstimateInput
               sampleCount=1000
               onUpdate=(
@@ -132,6 +143,20 @@ let make = (~onUpdate=e => (), ~isCreator=false, ~onSubmit=e => (), _children) =
                     send(UpdateFloatPdf(asGroup));
                   }
                   |> ignore
+              )
+            />
+          </div>
+          <div className=Styles.inputBox>
+            <h4 className=Styles.label> ("Reasoning" |> ste) </h4>
+            <Input.TextArea
+              value=state.description
+              onChange=(
+                event => {
+                  let value = ReactDOMRe.domElementToObj(
+                                ReactEventRe.Form.target(event),
+                              )##value;
+                  send(UpdateDescription(value));
+                }
               )
             />
           </div>

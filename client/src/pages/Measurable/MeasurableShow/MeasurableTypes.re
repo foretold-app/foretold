@@ -27,6 +27,7 @@ type measurement = {
           ),
       },
     ),
+  "description": option(string),
   "relevantAt": MomentRe.Moment.t,
   "competitorType": competitorType,
   "createdAt": MomentRe.Moment.t,

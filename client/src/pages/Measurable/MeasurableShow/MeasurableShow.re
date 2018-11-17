@@ -30,6 +30,7 @@ module GetMeasurable = {
                 createdAt @bsDecoder(fn: "toMoment")
                 value @bsDecoder(fn: "Value.decode")
                 competitorType
+                description
                 taggedMeasurementId
                 relevantAt @bsDecoder(fn: "toOptionalMoment")
                 agent: Agent {

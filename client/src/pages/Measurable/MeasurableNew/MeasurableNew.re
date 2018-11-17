@@ -11,8 +11,8 @@ let ste = ReasonReact.string;
 module CreateMeasurableMutation = {
   module GraphQL = [%graphql
     {|
-             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date) {
-                 createMeasurable(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate) {
+             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!) {
+                 createMeasurable(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint) {
                    id
                  }
              }
@@ -28,12 +28,14 @@ module SignUpParams = {
     description: string,
     valueType: string,
     expectedResolutionDate: string,
+    resolutionEndpoint: string,
   };
   type fields = [
     | `name
     | `valueType
     | `description
     | `expectedResolutionDate
+    | `resolutionEndpoint
   ];
   let lens = [
     (`name, s => s.name, (s, name) => {...s, name}),
@@ -47,6 +49,11 @@ module SignUpParams = {
       `expectedResolutionDate,
       s => s.expectedResolutionDate,
       (s, expectedResolutionDate) => {...s, expectedResolutionDate},
+    ),
+    (
+      `resolutionEndpoint,
+      s => s.resolutionEndpoint,
+      (s, resolutionEndpoint) => {...s, resolutionEndpoint},
     ),
   ];
 };
@@ -63,6 +70,7 @@ let mutate =
       ~name=values.name,
       ~description=values.description,
       ~expectedResolutionDate=values.expectedResolutionDate |> Js.Json.string,
+      ~resolutionEndpoint=values.resolutionEndpoint,
       ~valueType=
         switch (values.valueType) {
         | "float" => `FLOAT
@@ -90,6 +98,7 @@ let make = _children => {
             description: "",
             valueType: "float",
             expectedResolutionDate: MomentRe.momentNow() |> formatDate,
+            resolutionEndpoint: "",
           },
           ~schema=[(`name, Custom(_ => None))],
           ({handleSubmit, handleChange, form, _}) =>
@@ -117,6 +126,23 @@ let make = _children => {
                   />
                 </Form.Item>
                 <Form.Item>
+                  <h3> ("Resolution Endpoint (Optional)" |> ste) </h3>
+                  <p>
+                    (
+                      "If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value."
+                      |> ste
+                    )
+                  </p>
+                  <Input
+                    value=form.values.resolutionEndpoint
+                    onChange=(
+                      ReForm.Helpers.handleDomFormChange(
+                        handleChange(`resolutionEndpoint),
+                      )
+                    )
+                  />
+                </Form.Item>
+                <Form.Item>
                   <h3> ("Expected Resolution Date" |> ste) </h3>
                   <DatePicker
                     value=(
@@ -134,18 +160,17 @@ let make = _children => {
                   <Select
                     value=form.values.valueType
                     onChange=(e => handleChange(`valueType, e) |> ignore)>
-
-                      <Select.Option value="float">
-                        ("Float" |> ste)
-                      </Select.Option>
-                    </Select>
-                    /* <Select.Option value="percentage">
-                         ("Percentage" |> ste)
-                       </Select.Option>
-                       <Select.Option value="date">
-                         ("Date" |> ste)
-                       </Select.Option> */
+                    <Select.Option value="float">
+                      ("Float" |> ste)
+                    </Select.Option>
+                  </Select>
                 </Form.Item>
+                /* <Select.Option value="percentage">
+                     ("Percentage" |> ste)
+                   </Select.Option>
+                   <Select.Option value="date">
+                     ("Date" |> ste)
+                   </Select.Option> */
                 <Form.Item>
                   <Button _type=`primary onClick=(_ => handleSubmit())>
                     ("Submit" |> ste)

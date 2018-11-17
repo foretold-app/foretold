@@ -260,12 +260,13 @@ const schema = new GraphQLSchema({
       },
       createMeasurable: {
         type: getType.Measurables(),
-        args: filterr(_.pick(attributeFields(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate'])),
+        args: filterr(_.pick(attributeFields(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint'])),
         resolve: async (__, {
           name,
           description,
           valueType,
-          expectedResolutionDate
+          expectedResolutionDate,
+          resolutionEndpoint
         }, options) => {
           let _auth0Id = await getAuth0Id(options)
           const user = await auth0User(_auth0Id);
@@ -274,20 +275,22 @@ const schema = new GraphQLSchema({
           valueType,
           description,
           expectedResolutionDate,
-          creatorId: user.agentId
+          creatorId: user.agentId,
+          resolutionEndpoint
           })
           return newMeasurable
         }
       },
       editMeasurable: {
         type: getType.Measurables(),
-        args: filterr(_.pick(attributeFields(models.Measurable), ['id','name', 'isLocked', 'description', 'expectedResolutionDate'])),
+        args: filterr(_.pick(attributeFields(models.Measurable), ['id','name', 'isLocked', 'description', 'expectedResolutionDate', 'resolutionEndpoint'])),
         resolve: async (__, {
           id,
           name,
           description,
           isLocked,
-          expectedResolutionDate
+          expectedResolutionDate,
+          resolutionEndpoint
         }, options) => {
           let _auth0Id = await getAuth0Id(options)
           const user = await auth0User(_auth0Id);
@@ -296,7 +299,7 @@ const schema = new GraphQLSchema({
             throw new Error("User does not have permission")
           }
 
-          return measurable.update({id, name, description, expectedResolutionDate, isLocked})
+          return measurable.update({id, name, description, expectedResolutionDate, isLocked, resolutionEndpoint})
         }
       },
       editUser: {

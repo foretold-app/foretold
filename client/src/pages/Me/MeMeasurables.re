@@ -59,6 +59,7 @@ module WithAgent = {
                 id
                 name
                 description
+                resolutionEndpoint
                 isLocked
                 expectedResolutionDate @bsDecoder(fn: "optionalMoment")
             }
@@ -181,6 +182,12 @@ let make = (~id: string, _children) => {
                     ColumnBundle.make(
                       ~headerName="Description",
                       ~get=e => e##description |> Option.default(""),
+                      ~column=makeColumn(~name=_, ~readOnly=false, ()),
+                      (),
+                    ),
+                    ColumnBundle.make(
+                      ~headerName="Resolution Endpoint",
+                      ~get=e => e##resolutionEndpoint |> Option.default(""),
                       ~column=makeColumn(~name=_, ~readOnly=false, ()),
                       (),
                     ),

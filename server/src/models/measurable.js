@@ -1,6 +1,7 @@
 'use strict';
 const Sequelize = require('sequelize')
 import _ from "lodash";
+const fetch = require("node-fetch");
 
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Measurable', {
@@ -17,6 +18,15 @@ module.exports = (sequelize, DataTypes) => {
     description: {
       type: DataTypes.TEXT,
       allowNull: true,
+    },
+    resolutionEndpoint: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    hasResolutionEndpointResolved: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
     valueType: {
       type: DataTypes.ENUM(["FLOAT", "DATE", "PERCENTAGE"]),
@@ -51,7 +61,57 @@ module.exports = (sequelize, DataTypes) => {
         return _.uniq(items.map(i => i.agentId)).length
       }
     },
+    resolutionEndpointResponse: {
+      allowNull: true,
+      type: Sequelize.VIRTUAL(DataTypes.FLOAT),
+      get: async function() {
+        const endpoint = await this.dataValues.resolutionEndpoint;
+        if (endpoint.length == 0 || !endpoint) {
+          return null
+        }
+        try {
+        const response = await fetch(endpoint);
+        const json = await response.json();
+        const match = JSON.stringify(json).match(/[-+]?[0-9]*\.?[0-9]+/);
+        const asFloat = parseFloat(match[0]);
+        console.log(`got response from endpoint. Url: ${endpoint}, Response: ${JSON.stringify(json)}, Float: ${asFloat}`);
+        return asFloat;
+        }
+        catch(e) {
+          console.error(`Error getting response from endpoint. Url: ${endpoint}, error: ${e}`)
+          return null
+        }
+      }
+    },
   });
+
+  Model.needsResolutionResponse = async function(){
+    return await Model.findAll({
+      where: {
+        hasResolutionEndpointResolved: false,
+        resolutionEndpoint: {
+          [Sequelize.Op.ne]: ""
+        },
+        expectedResolutionDate: {
+          [Sequelize.Op.lt]: new Date()
+        }
+      }
+    })
+  }
+
+  Model.prototype.processResolution = async function(agentId){
+    const asFloat = await this.resolutionEndpointResponse;
+    if (asFloat){
+      await sequelize.models.Measurement.create({
+          agentId,
+          competitorType: "OBJECTIVE",
+          measurableId: this.dataValues.id,
+          value: {"dataType":"floatPoint","data":asFloat}
+      });
+      await this.update({hasResolutionEndpointResolved: true, isLocked: true})
+    }
+  }
+
   Model.associate = function (models) {
     Model.Measurements = Model.hasMany(models.Measurement, {
       foreignKey: 'measurableId',

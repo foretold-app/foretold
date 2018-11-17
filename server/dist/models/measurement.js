@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: "COMPETITIVE",
       allowNull: true
     },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
     measurableId: {
       type: DataTypes.UUID,
       allowNull: false

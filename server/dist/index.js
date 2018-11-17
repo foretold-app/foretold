@@ -61,8 +61,6 @@ function getToken(req) {
 
 const server = new ApolloServer({
   schema: _schema.schema,
-  introspection: true,
-  playground: true,
   formatError: error => {
     console.log("Error!", error);
     return error;
@@ -72,11 +70,7 @@ const server = new ApolloServer({
   },
   context: async ({ req }) => {
     const token = getToken(req);
-    console.log("GOT TOKEN", token, process.env.AUTH0_SECRET);
-    console.log("AUTH", process.env.AUTH0_SECRET);
     const user = new Promise(resolve => jwt.verify(token, process.env.AUTH0_SECRET, (err, result) => {
-      console.log("HI", process.env.AUTH0_SECRET, err, result);
-      console.log("Verify?", err, result);
       if (err) {
         resolve({
           ok: false,

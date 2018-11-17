@@ -151,6 +151,42 @@ const getAuth0Id = async options => {
   return userAuth0Id;
 };
 
+const stats = new _graphql.GraphQLObjectType({
+  name: "Stats",
+  fields: {
+    agentCount: {
+      type: _graphql.GraphQLInt,
+      resolve: async () => {
+        return await models.Agent.count();
+      }
+    },
+    userCount: {
+      type: _graphql.GraphQLInt,
+      resolve: async () => {
+        return await models.User.count();
+      }
+    },
+    botCount: {
+      type: _graphql.GraphQLInt,
+      resolve: async () => {
+        return await models.Bot.count();
+      }
+    },
+    measurementCount: {
+      type: _graphql.GraphQLInt,
+      resolve: async () => {
+        return await models.Measurement.count();
+      }
+    },
+    measurableCount: {
+      type: _graphql.GraphQLInt,
+      resolve: async () => {
+        return await models.Measurable.count();
+      }
+    }
+  }
+});
+
 const schema = new _graphql.GraphQLSchema({
   query: new _graphql.GraphQLObjectType({
     name: 'Query',
@@ -183,18 +219,27 @@ const schema = new _graphql.GraphQLSchema({
           }
         }
       }
-    }, modelResolvers("measurement", "measurements", getType.Measurements(), models.Measurement), modelResolvers("measurable", "measurables", getType.Measurables(), models.Measurable), modelResolvers("bot", "bots", getType.Bots(), models.Bot), modelResolvers("agent", "agents", getType.Agents(), models.Agent))
+    }, modelResolvers("measurement", "measurements", getType.Measurements(), models.Measurement), modelResolvers("measurable", "measurables", getType.Measurables(), models.Measurable), modelResolvers("bot", "bots", getType.Bots(), models.Bot), modelResolvers("agent", "agents", getType.Agents(), models.Agent), {
+      stats: {
+        type: new _graphql.GraphQLNonNull(stats),
+        args: {},
+        resolve: async (ops, {}, options) => {
+          return "sdf";
+        }
+      }
+    })
   }),
   mutation: new _graphql.GraphQLObjectType({
     name: 'Mutation',
     fields: {
       createMeasurement: {
         type: getType.Measurements(),
-        args: filterr(_.pick((0, _graphqlSequelize.attributeFields)(models.Measurement), ['value', 'competitorType', 'measurableId', 'agentId'])),
+        args: filterr(_.pick((0, _graphqlSequelize.attributeFields)(models.Measurement), ['value', 'competitorType', 'measurableId', 'agentId', 'description'])),
         resolve: async (a, {
           value,
           competitorType,
-          measurableId
+          measurableId,
+          description
         }, options) => {
           let _auth0Id = await getAuth0Id(options);
           const user = await auth0User(_auth0Id);
@@ -202,6 +247,7 @@ const schema = new _graphql.GraphQLSchema({
             value,
             competitorType,
             measurableId,
+            description,
             agentId: user.agentId
           });
           const measurable = await newMeasurement.getMeasurable();
@@ -210,12 +256,13 @@ const schema = new _graphql.GraphQLSchema({
       },
       createMeasurable: {
         type: getType.Measurables(),
-        args: filterr(_.pick((0, _graphqlSequelize.attributeFields)(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate'])),
+        args: filterr(_.pick((0, _graphqlSequelize.attributeFields)(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint'])),
         resolve: async (__, {
           name,
           description,
           valueType,
-          expectedResolutionDate
+          expectedResolutionDate,
+          resolutionEndpoint
         }, options) => {
           let _auth0Id = await getAuth0Id(options);
           const user = await auth0User(_auth0Id);
@@ -224,9 +271,31 @@ const schema = new _graphql.GraphQLSchema({
             valueType,
             description,
             expectedResolutionDate,
-            creatorId: user.agentId
+            creatorId: user.agentId,
+            resolutionEndpoint
           });
           return newMeasurable;
+        }
+      },
+      editMeasurable: {
+        type: getType.Measurables(),
+        args: filterr(_.pick((0, _graphqlSequelize.attributeFields)(models.Measurable), ['id', 'name', 'isLocked', 'description', 'expectedResolutionDate', 'resolutionEndpoint'])),
+        resolve: async (__, {
+          id,
+          name,
+          description,
+          isLocked,
+          expectedResolutionDate,
+          resolutionEndpoint
+        }, options) => {
+          let _auth0Id = await getAuth0Id(options);
+          const user = await auth0User(_auth0Id);
+          let measurable = await models.Measurable.findById(id);
+          if (measurable.creatorId !== user.agentId) {
+            throw new Error("User does not have permission");
+          }
+
+          return measurable.update({ id, name, description, expectedResolutionDate, isLocked, resolutionEndpoint });
         }
       },
       editUser: {

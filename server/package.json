@@ -48,7 +48,6 @@
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-bucklescript": "^0.4.0",
     "babel-preset-env": "^1.6.1",
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
@@ -102,12 +101,6 @@
       ]
     ],
     "plugins": [
-      [
-        "babel-plugin-bucklescript",
-        {
-          "module": "es6"
-        }
-      ],
       "transform-object-rest-spread",
       "transform-class-properties"
     ]

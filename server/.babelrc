@@ -1,22 +1,16 @@
 {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": "current"
-          }
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "node": "current"
         }
-      ]
-    ],
-    "plugins": [
-      [
-        "babel-plugin-bucklescript",
-        {
-          "module": "es6"
-        }
-      ],
-      "transform-object-rest-spread",
-      "transform-class-properties"
+      }
     ]
+  ],
+  "plugins": [
+    "transform-object-rest-spread",
+    "transform-class-properties"
+  ]
 }

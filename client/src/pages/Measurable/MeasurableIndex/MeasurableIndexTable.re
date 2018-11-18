@@ -3,6 +3,7 @@ open Rationale;
 open Queries;
 open HandsOnTable;
 open MeasurableColumns;
+open Table;
 
 let transformations = [
   link,
@@ -37,6 +38,8 @@ module Styles = {
       selector(" a", [color(`hex("333")), fontSize(px(14))]),
     ]);
   let ownerRow = style([flex(1), padding(px(2))]);
+  let statsRow = style([flex(1), padding(px(2))]);
+  let columnHeader = style([color(hex("222"))]);
   let statusRow =
     style([
       flex(1),
@@ -106,12 +109,21 @@ let compareMeasurables =
       (-1) : 1
   };
 
+let fileExcel = Antd_IconName.fileExcel;
 let make = (~measurables: array(Queries.measurable), _children) => {
   ...component,
   render: _self => {
     let bar = Belt.SortArray.stableSortBy(measurables, compareMeasurables);
     <UseRouterForLinks>
       <div>
+        <div className=(Styles.row ++ " " ++ Styles.columnHeader)>
+          <div className=Styles.nameRow> ("Name" |> ste) </div>
+          <div className=Styles.ownerRow> ("Owner" |> ste) </div>
+          <div className=Styles.statsRow>
+            ("Measurements/Measurers" |> ste)
+          </div>
+          <div className=Styles.statusRow> ("Status" |> ste) </div>
+        </div>
         (
           bar
           |> Array.map(m =>
@@ -124,12 +136,33 @@ let make = (~measurables: array(Queries.measurable), _children) => {
                      m.creator
                      <$> (
                        c =>
-                         <a href=("/agents" ++ c.id)>
+                         <a href=("/agents/" ++ c.id)>
                            (c.name |> Option.default("") |> ste)
                          </a>
                      )
                      |> Option.default("" |> ste)
                    )
+                 </div>
+                 <div className=Styles.statsRow>
+                   <div>
+                     <span>
+                       (
+                         m.measurementCount
+                         |> Option.default(0)
+                         |> string_of_int
+                         |> ste
+                       )
+                     </span>
+                     <span> ("/" |> ste) </span>
+                     <span>
+                       (
+                         m.measurerCount
+                         |> Option.default(0)
+                         |> string_of_int
+                         |> ste
+                       )
+                     </span>
+                   </div>
                  </div>
                  (
                    switch (status(m)) {

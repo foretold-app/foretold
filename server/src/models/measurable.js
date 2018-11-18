@@ -99,6 +99,10 @@ module.exports = (sequelize, DataTypes) => {
     })
   }
 
+  Model.prototype.lock = async function(){
+      await this.update({isLocked: true, lockedAt: new Date()})
+  }
+
   Model.prototype.processResolution = async function(agentId){
     const asFloat = await this.resolutionEndpointResponse;
     if (asFloat){

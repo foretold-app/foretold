@@ -38,6 +38,17 @@ module.exports = (sequelize, DataTypes) => {
         return this.getDataValue('relevantAt') || this.getDataValue('createdAt');
       }
     }
+  }, {
+    hooks: {
+      afterCreate: async (measurement, options) => {
+        if (measurement.dataValues.competitorType == "OBJECTIVE") {
+          const measurable = await measurement.getMeasurable();
+          if (!measurable.dataValues.isLocked) {
+            await measurable.lock();
+          }
+        }
+      }
+    }
   });
   Model.associate = function (models) {
     Model.Measurable = Model.belongsTo(models.Measurable, {

@@ -33,9 +33,16 @@ module Styles = {
 
   let nameRow =
     style([
-      flex(5),
+      flex(4),
       padding(px(2)),
-      selector(" a", [color(`hex("333")), fontSize(px(14))]),
+      selector(
+        " a",
+        [
+          color(`hex("666")),
+          fontSize(px(14)),
+          selector(":hover", [backgroundColor(hex("ddd"))]),
+        ],
+      ),
     ]);
   let ownerRow = style([flex(1), padding(px(2))]);
   let statsRow = style([flex(1), padding(px(2))]);

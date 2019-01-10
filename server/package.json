@@ -13,7 +13,8 @@
   "scripts": {
     "prestart": "npm run -s build",
     "start": "node dist/index.js",
-    "dev": "nodemon src/index.js --exec \"node -r dotenv/config -r babel-register\"",
+    "dev": "NODE_ENV=production nodemon src/index.js --exec \"node -r dotenv/config -r babel-register\"",
+    "dev:production": "DATABASE_URL=postgres://ozziegooen@127.0.0.1:5432/predictions NODE_ENV=production npm run dev",
     "thing": "nodemon src/bots/primary.js --exec \"node -r dotenv/config -r babel-register\"",
     "resolutions": "nodemon src/bots/resolution.js --exec \"node -r dotenv/config -r babel-register\"",
     "inspect": "nodemon --inspect src/index.js --exec babel-node",

@@ -60,6 +60,7 @@ function getToken(req) {
 }
 
 const server = new ApolloServer({
+  introspection: true,
   schema: _schema.schema,
   formatError: error => {
     console.log("Error!", error);
@@ -83,7 +84,6 @@ const server = new ApolloServer({
         });
       }
     }));
-
     return { user };
   }
 });

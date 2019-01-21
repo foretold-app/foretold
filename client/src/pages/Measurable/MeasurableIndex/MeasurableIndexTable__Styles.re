@@ -16,6 +16,7 @@ module Styles = {
       paddingRight(px(5)),
       paddingTop(px(5)),
       paddingBottom(px(5)),
+      selector(":last-child", [borderBottom(`px(0), `solid, hex("eee"))]),
     ]);
 
   let mainColumn =
@@ -30,7 +31,7 @@ module Styles = {
       background(hex("e6e6e6")),
       float(`left),
       marginRight(`px(4)),
-      padding2(~v=`px(0), ~h=`px(1)),
+      padding2(~v=`px(0), ~h=`px(4)),
       borderRadius(`px(1)),
     ]);
   let mainColumnTop =

@@ -81,7 +81,8 @@ let dateStatus = (~measurable: Queries.measurable) => {
   };
 };
 
-let fileExcel = Antd_IconName.fileExcel;
+/* let fileExcel = Antd_IconName.fileExcel;
+   <Antd.Icon type_=fileExcel /> */
 let make = (~measurables: array(Queries.measurable), _children) => {
   ...component,
   render: _self => {

@@ -81,8 +81,6 @@ let dateStatus = (~measurable: Queries.measurable) => {
   };
 };
 
-/* let fileExcel = Antd_IconName.fileExcel;
-   <Antd.Icon type_=fileExcel /> */
 let make = (~measurables: array(Queries.measurable), _children) => {
   ...component,
   render: _self => {
@@ -100,6 +98,7 @@ let make = (~measurables: array(Queries.measurable), _children) => {
                    </div>
                    <div className=Styles.mainColumnBottom>
                      <div className=Styles.item>
+                       <Icon.Icon icon="USER" size="1em" />
                        Option.Infix.(
                          m.creator
                          <$> (

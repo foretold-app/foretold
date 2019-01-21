@@ -70,6 +70,7 @@
     "node-fetch": "^2.3.0",
     "pg": "^7.4.3",
     "ramda": "^0.25.0",
+    "react-icons-kit": "^1.2.1",
     "reason-apollo": "^0.13.0",
     "rimraf": "^2.6.2",
     "sequelize": "^4.38.0",

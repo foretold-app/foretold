@@ -3,8 +3,6 @@ open Utils;
 open Antd;
 open ReactEvent;
 
-type competitorType = [ | `COMPETITIVE | `OBJECTIVE];
-
 type state = {
   floatCdf,
   competitorType: string,
@@ -35,15 +33,16 @@ module Styles = {
 
 let competitorType = (~state, ~send) =>
   <Select
-    value=state.competitorType onChange=(e => send(UpdateCompetitorType(e)))>
-    <Select.Option value="COMPETITIVE"> ("Competitive" |> ste) </Select.Option>
-    <Select.Option value="OBJECTIVE"> ("Objective" |> ste) </Select.Option>
+    value={state.competitorType}
+    onChange={e => send(UpdateCompetitorType(e))}>
+    <Select.Option value="COMPETITIVE"> {"Competitive" |> ste} </Select.Option>
+    <Select.Option value="OBJECTIVE"> {"Objective" |> ste} </Select.Option>
   </Select>;
 
 let dataType = (~state, ~send) =>
-  <Select value=state.dataType onChange=(e => send(UpdateDataType(e)))>
-    <Select.Option value="FLOAT_CDF"> ("Distribution" |> ste) </Select.Option>
-    <Select.Option value="FLOAT"> ("Point" |> ste) </Select.Option>
+  <Select value={state.dataType} onChange={e => send(UpdateDataType(e))}>
+    <Select.Option value="FLOAT_CDF"> {"Distribution" |> ste} </Select.Option>
+    <Select.Option value="FLOAT"> {"Point" |> ste} </Select.Option>
   </Select>;
 
 let getIsValid = state =>
@@ -69,9 +68,85 @@ let getCompetitorType =
   | "OBJECTIVE" => `OBJECTIVE
   | _ => `OBJECTIVE;
 
-let showIf = (cond, comp) => cond ? comp : ReasonReact.null;
+let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
+  let showIf = (cond, comp) => cond ? comp : ReasonReact.null;
+  let isValid = getIsValid(state);
+  <div className=Styles.form>
+    <div className=Styles.chartSection>
+      {
+        Array.length(state.floatCdf.xs) > 1 ?
+          <InputChart
+            data={
+              state.floatCdf
+              |> (e => (e.xs, e.ys))
+              |> Value.FloatCdf.fromArrays
+              |> Value.toPdf(~bucketSize=20)
+              |> Value.FloatCdf.toPoints
+            }
+          /> :
+          <div />
+      }
+    </div>
+    <div className=Styles.inputSection>
+      {
+        showIf(
+          isCreator,
+          <div className=Styles.select>
+            {competitorType(~state, ~send)}
+          </div>,
+        )
+      }
+      {
+        state.competitorType != "OBJECTIVE" ?
+          ReasonReact.null :
+          <div className=Styles.select> {dataType(~state, ~send)} </div>
+      }
+      <div className=Styles.inputBox>
+        <h4 className=Styles.label> {"Value" |> ste} </h4>
+        <GuesstimateInput
+          sampleCount=1000
+          onUpdate={
+            e =>
+              {
+                let (ys, xs) = e;
+                let asGroup: floatCdf = {xs, ys};
+                send(UpdateFloatPdf(asGroup));
+              }
+              |> ignore
+          }
+        />
+      </div>
+      <div className=Styles.inputBox>
+        <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
+        <Input.TextArea
+          value={state.description}
+          onChange={
+            event => {
+              let value =
+                ReactDOMRe.domElementToObj(ReactEventRe.Form.target(event))##value;
+              send(UpdateDescription(value));
+            }
+          }
+        />
+      </div>
+      <div className=Styles.submitButton>
+        <Antd.Button
+          _type=`primary onClick={_ => onSubmit()} disabled={!isValid}>
+          {"Submit" |> ste}
+        </Antd.Button>
+      </div>
+    </div>
+  </div>;
+};
 
-let make = (~onUpdate=e => (), ~isCreator=false, ~onSubmit=e => (), _children) => {
+let make =
+    (
+      ~data: CreateMeasurementMutation.Mutation.renderPropObj,
+      ~onUpdate=e => (),
+      ~isCreator=false,
+      ~onSubmit=e => (),
+      _children,
+    ) => {
   ...component,
   initialState: () => {
     floatCdf: floatCdfEmpty,
@@ -99,75 +174,19 @@ let make = (~onUpdate=e => (), ~isCreator=false, ~onSubmit=e => (), _children) =
       ));
       ();
     };
-    let isValid = getIsValid(state);
     <Style.BorderedBox>
-      <div className=Styles.form>
-        <div className=Styles.chartSection>
-          (
-            Array.length(state.floatCdf.xs) > 1 ?
-              <InputChart
-                data=(
-                  state.floatCdf
-                  |> (e => (e.xs, e.ys))
-                  |> Value.FloatCdf.fromArrays
-                  |> Value.toPdf(~bucketSize=20)
-                  |> Value.FloatCdf.toPoints
-                )
-              /> :
-              <div />
-          )
-        </div>
-        <div className=Styles.inputSection>
-          (
-            showIf(
-              isCreator,
-              <div className=Styles.select>
-                (competitorType(~state, ~send))
-              </div>,
-            )
-          )
-          (
-            state.competitorType != "OBJECTIVE" ?
-              ReasonReact.null :
-              <div className=Styles.select> (dataType(~state, ~send)) </div>
-          )
-          <div className=Styles.inputBox>
-            <h4 className=Styles.label> ("Value" |> ste) </h4>
-            <GuesstimateInput
-              sampleCount=1000
-              onUpdate=(
-                e =>
-                  {
-                    let (ys, xs) = e;
-                    let asGroup: floatCdf = {xs, ys};
-                    send(UpdateFloatPdf(asGroup));
-                  }
-                  |> ignore
-              )
-            />
+      {
+        switch (data.result) {
+        | Loading => <div> {"Loading" |> ste} </div>
+        | Error(e) =>
+          <div>
+            {"Error: " ++ e##message |> ste}
+            {mainn(~state, ~isCreator, ~send, ~onSubmit)}
           </div>
-          <div className=Styles.inputBox>
-            <h4 className=Styles.label> ("Reasoning" |> ste) </h4>
-            <Input.TextArea
-              value=state.description
-              onChange=(
-                event => {
-                  let value = ReactDOMRe.domElementToObj(
-                                ReactEventRe.Form.target(event),
-                              )##value;
-                  send(UpdateDescription(value));
-                }
-              )
-            />
-          </div>
-          <div className=Styles.submitButton>
-            <Antd.Button
-              _type=`primary onClick=(_ => onSubmit()) disabled=(! isValid)>
-              ("Submit" |> ste)
-            </Antd.Button>
-          </div>
-        </div>
-      </div>
+        | Data(_) => <h2> {"Form submitted successfully!" |> ste} </h2>
+        | NotCalled => mainn(~state, ~isCreator, ~send, ~onSubmit)
+        }
+      }
     </Style.BorderedBox>;
   },
 };

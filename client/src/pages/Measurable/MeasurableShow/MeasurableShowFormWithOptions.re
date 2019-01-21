@@ -67,7 +67,7 @@ type action =
 
 type state = {floatCdf};
 
-let safe_a_of_string = (fn, s: string) : option('a) =>
+let safe_a_of_string = (fn, s: string): option('a) =>
   try (Some(fn(s))) {
   | _ => None
   };
@@ -132,8 +132,8 @@ let mutate =
 let valueList =
   Array.mapi(
     (i, e) =>
-      <Select.Option value=e key=(string_of_int(i))>
-        (e |> ste)
+      <Select.Option value=e key={string_of_int(i)}>
+        {e |> ste}
       </Select.Option>,
     [|"FloatPercentiles", "FloatPoint", "Percentage", "Binary"|],
   );
@@ -150,7 +150,7 @@ let input = (handleChange, value, b, key) =>
   <Form.Item key>
     <Input
       value
-      onChange=(ReForm.Helpers.handleDomFormChange(handleChange(b)))
+      onChange={ReForm.Helpers.handleDomFormChange(handleChange(b))}
     />
   </Form.Item>;
 
@@ -173,29 +173,29 @@ let make = (~measurableId: string, _children) => {
           ~initialState,
           ~schema=[],
           ({handleSubmit, handleChange, form, _}) =>
-            <form onSubmit=(ReForm.Helpers.handleDomFormSubmit(handleSubmit))>
-              <h2> ("Create a new Measurement" |> ste) </h2>
-              <CdfInput
-                onUpdate=(e => send(UpdateFloatPdf(e)) |> ignore)
-                onSubmit=(_ => handleSubmit())
-              />
+            <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
+              <h2> {"Create a new Measurement" |> ste} </h2>
+              /* <CdfInput
+                   onUpdate=(e => send(UpdateFloatPdf(e)) |> ignore)
+                   onSubmit=(_ => handleSubmit())
+                 /> */
               <Form.Item key="ee">
                 <Select
-                  value=form.values.dataType
-                  onChange=(e => handleChange(`dataType, e) |> ignore)>
+                  value={form.values.dataType}
+                  onChange={e => handleChange(`dataType, e) |> ignore}>
                   valueList
                 </Select>
               </Form.Item>
-              (
+              {
                 form.values.dataType != "FloatPercentiles" ?
                   <div /> :
                   <div>
-                    (input(handleChange, form.values.p25, `p25, "1"))
-                    (input(handleChange, form.values.p50, `p50, "2"))
-                    (input(handleChange, form.values.p75, `p75, "3"))
+                    {input(handleChange, form.values.p25, `p25, "1")}
+                    {input(handleChange, form.values.p50, `p50, "2")}
+                    {input(handleChange, form.values.p75, `p75, "3")}
                   </div>
-              )
-              (
+              }
+              {
                 form.values.dataType != "FloatPoint" ?
                   <div /> :
                   input(
@@ -204,8 +204,8 @@ let make = (~measurableId: string, _children) => {
                     `pointFloat,
                     "4",
                   )
-              )
-              (
+              }
+              {
                 form.values.dataType != "Percentage" ?
                   <div /> :
                   input(
@@ -214,15 +214,15 @@ let make = (~measurableId: string, _children) => {
                     `percentage,
                     "5",
                   )
-              )
-              (
+              }
+              {
                 form.values.dataType != "Binary" ?
                   <div /> :
                   input(handleChange, form.values.binary, `binary, "6")
-              )
+              }
               <Form.Item>
-                <Button _type=`primary onClick=(_ => handleSubmit())>
-                  ("Submit" |> ste)
+                <Button _type=`primary onClick={_ => handleSubmit()}>
+                  {"Submit" |> ste}
                 </Button>
               </Form.Item>
             </form>,

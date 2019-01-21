@@ -30,7 +30,7 @@ module Styles = {
     style([
       float(`left),
       fontSize(`px(14)),
-      marginRight(`px(6)),
+      marginRight(`px(18)),
       color(`hex("999")),
       /* padding2(~v=`px(0), ~h=`px(4)), */
       /* borderRadius(`px(1)), */

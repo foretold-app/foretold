@@ -73,7 +73,7 @@ let dateStatus = (~measurable: Queries.measurable) => {
       e.expectedResolutionDate
     )
   | PENDING_REVIEW =>
-    dateFinder(~measurable=m, "Judgement Pending", "Pending since", e =>
+    dateFinder(~measurable=m, "Judgement Pending", "Pending since ", e =>
       e.expectedResolutionDate
     )
   | CLOSED =>
@@ -88,56 +88,52 @@ let make = (~measurables: array(Queries.measurable), _children) => {
     let _measurables =
       Belt.SortArray.stableSortBy(measurables, compareMeasurables);
     <UseRouterForLinks>
-      <div>
-        <div className={Styles.row ++ " " ++ Styles.columnHeader}>
-          <div className=Styles.nameRow> {"Name" |> ste} </div>
-          <div className=Styles.ownerRow> {"Owner" |> ste} </div>
-          <div className=Styles.statsRow>
-            {"Measurements/Measurers" |> ste}
-          </div>
-          <div className=Styles.statusRow> {"Status" |> ste} </div>
-        </div>
+      <div className=Styles.group>
         {
           _measurables
           |> Array.map(m =>
                <div className=Styles.row>
-                 <div className=Styles.nameRow>
-                   <a href={"/measurables/" ++ m.id}> {m.name |> ste} </a>
-                 </div>
-                 <div className=Styles.ownerRow>
-                   Option.Infix.(
-                     m.creator
-                     <$> (
-                       c =>
-                         <a href={"/agents/" ++ c.id}>
-                           {c.name |> Option.default("") |> ste}
-                         </a>
-                     )
-                     |> Option.default("" |> ste)
-                   )
-                 </div>
-                 <div className=Styles.statsRow>
-                   <div>
-                     <span>
-                       {
-                         m.measurementCount
-                         |> Option.default(0)
-                         |> string_of_int
-                         |> ste
-                       }
-                     </span>
-                     <span> {"/" |> ste} </span>
-                     <span>
-                       {
-                         m.measurerCount
-                         |> Option.default(0)
-                         |> string_of_int
-                         |> ste
-                       }
-                     </span>
+                 <div className=Styles.mainColumn>
+                   <div className=Styles.mainColumnTop>
+                     <a href={"/measurables/" ++ m.id}> {m.name |> ste} </a>
+                   </div>
+                   <div className=Styles.mainColumnBottom>
+                     <div className=Styles.item>
+                       Option.Infix.(
+                         m.creator
+                         <$> (
+                           c =>
+                             <a href={"/agents/" ++ c.id}>
+                               {c.name |> Option.default("") |> ste}
+                             </a>
+                         )
+                         |> Option.default("" |> ste)
+                       )
+                     </div>
+                     <div className=Styles.item>
+                       <span>
+                         {
+                           m.measurementCount
+                           |> Option.default(0)
+                           |> string_of_int
+                           |> ste
+                         }
+                       </span>
+                       <span> {"/" |> ste} </span>
+                       <span>
+                         {
+                           m.measurerCount
+                           |> Option.default(0)
+                           |> string_of_int
+                           |> ste
+                         }
+                       </span>
+                     </div>
                    </div>
                  </div>
-                 {dateStatus(~measurable=m)}
+                 <div className=Styles.rightColumn>
+                   {dateStatus(~measurable=m)}
+                 </div>
                </div>
              )
           |> ReasonReact.array

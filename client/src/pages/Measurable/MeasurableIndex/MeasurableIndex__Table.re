@@ -98,7 +98,6 @@ let make = (~measurables: array(Queries.measurable), _children) => {
                    </div>
                    <div className=Styles.mainColumnBottom>
                      <div className=Styles.item>
-                       <Icon.Icon icon="USER" size="1em" />
                        Option.Infix.(
                          m.creator
                          <$> (
@@ -119,7 +118,9 @@ let make = (~measurables: array(Queries.measurable), _children) => {
                            |> ste
                          }
                        </span>
-                       <span> {"/" |> ste} </span>
+                       <span> {" measurements" |> ste} </span>
+                     </div>
+                     <div className=Styles.item>
                        <span>
                          {
                            m.measurerCount
@@ -127,6 +128,7 @@ let make = (~measurables: array(Queries.measurable), _children) => {
                            |> string_of_int
                            |> ste
                          }
+                         <span> {" measurers" |> ste} </span>
                        </span>
                      </div>
                    </div>

@@ -12,10 +12,10 @@ module Styles = {
       selector(" h2", [marginTop(px(2))]),
       display(`flex),
       flexDirection(`row),
-      paddingLeft(px(5)),
-      paddingRight(px(5)),
-      paddingTop(px(5)),
-      paddingBottom(px(5)),
+      paddingLeft(px(8)),
+      paddingRight(px(8)),
+      paddingTop(px(8)),
+      paddingBottom(px(7)),
       selector(":last-child", [borderBottom(`px(0), `solid, hex("eee"))]),
     ]);
 
@@ -28,22 +28,29 @@ module Styles = {
     ]);
   let item =
     style([
-      background(hex("e6e6e6")),
       float(`left),
-      marginRight(`px(4)),
-      padding2(~v=`px(0), ~h=`px(4)),
-      borderRadius(`px(1)),
+      fontSize(`px(14)),
+      marginRight(`px(6)),
+      color(`hex("999")),
+      /* padding2(~v=`px(0), ~h=`px(4)), */
+      /* borderRadius(`px(1)), */
+      selector(
+        " a",
+        [
+          color(`hex("999")),
+          selector(":hover", [backgroundColor(hex("ddd"))]),
+        ],
+      ),
     ]);
   let mainColumnTop =
     style([
       flex(1),
       paddingLeft(px(2)),
-      paddingBottom(px(4)),
       selector(
         " a",
         [
-          color(`hex("666")),
-          fontSize(px(16)),
+          color(`hex("333")),
+          fontSize(px(18)),
           selector(":hover", [backgroundColor(hex("ddd"))]),
         ],
       ),
@@ -57,11 +64,14 @@ module Styles = {
         " h3",
         [
           marginTop(px(2)),
-          marginBottom(px(0)),
-          fontSize(px(14)),
+          marginBottom(px(-1)),
+          fontSize(px(16)),
           color(`hex("666")),
         ],
       ),
-      selector(" p", [marginBottom(px(2)), fontSize(px(12))]),
+      selector(
+        " p",
+        [marginBottom(px(2)), fontSize(px(14)), color(`hex("aaa"))],
+      ),
     ]);
 };

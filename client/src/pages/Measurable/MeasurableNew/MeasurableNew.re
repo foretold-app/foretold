@@ -85,12 +85,69 @@ let mutate =
 
 let formatDate = Moment.format("MMM DD, YYYY HH:MM:SS");
 let component = ReasonReact.statelessComponent("Measurables");
+
+let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
+  <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
+    <h2> {"Create a new Measurable" |> ste} </h2>
+    <Form>
+      <Form.Item>
+        <h3> {"Name" |> ste} </h3>
+        <Input
+          value={form.values.name}
+          onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
+        />
+      </Form.Item>
+      <Form.Item>
+        <h3> {"Description" |> ste} </h3>
+        <Input
+          value={form.values.description}
+          onChange={
+            ReForm.Helpers.handleDomFormChange(handleChange(`description))
+          }
+        />
+      </Form.Item>
+      <Form.Item>
+        <h3> {"Resolution Endpoint (Optional)" |> ste} </h3>
+        <p>
+          {
+            "If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value."
+            |> ste
+          }
+        </p>
+        <Input
+          value={form.values.resolutionEndpoint}
+          onChange={
+            ReForm.Helpers.handleDomFormChange(
+              handleChange(`resolutionEndpoint),
+            )
+          }
+        />
+      </Form.Item>
+      <Form.Item>
+        <h3> {"Expected Resolution Date" |> ste} </h3>
+        <DatePicker
+          value={
+            form.values.expectedResolutionDate |> MomentRe.momentDefaultFormat
+          }
+          onChange={
+            e => handleChange(`expectedResolutionDate, e |> formatDate)
+          }
+        />
+      </Form.Item>
+      <Form.Item>
+        <Button _type=`primary onClick={_ => handleSubmit()}>
+          {"Submit" |> ste}
+        </Button>
+      </Form.Item>
+    </Form>
+  </form>;
+
 let make = _children => {
   ...component,
   render: _ =>
     CreateMeasurableMutation.Mutation.make(
       ~onCompleted=e => Js.log("HI"),
-      (mutation, _) =>
+      (mutation, data) =>
         SignUpForm.make(
           ~onSubmit=({values}) => mutate(mutation, values),
           ~initialState={
@@ -102,82 +159,16 @@ let make = _children => {
           },
           ~schema=[(`name, Custom(_ => None))],
           ({handleSubmit, handleChange, form, _}) =>
-            <form onSubmit=(ReForm.Helpers.handleDomFormSubmit(handleSubmit))>
-              <h2> ("Create a new Measurable" |> ste) </h2>
-              <Form>
-                <Form.Item>
-                  <h3> ("Name" |> ste) </h3>
-                  <Input
-                    value=form.values.name
-                    onChange=(
-                      ReForm.Helpers.handleDomFormChange(handleChange(`name))
-                    )
-                  />
-                </Form.Item>
-                <Form.Item>
-                  <h3> ("Description" |> ste) </h3>
-                  <Input
-                    value=form.values.description
-                    onChange=(
-                      ReForm.Helpers.handleDomFormChange(
-                        handleChange(`description),
-                      )
-                    )
-                  />
-                </Form.Item>
-                <Form.Item>
-                  <h3> ("Resolution Endpoint (Optional)" |> ste) </h3>
-                  <p>
-                    (
-                      "If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value."
-                      |> ste
-                    )
-                  </p>
-                  <Input
-                    value=form.values.resolutionEndpoint
-                    onChange=(
-                      ReForm.Helpers.handleDomFormChange(
-                        handleChange(`resolutionEndpoint),
-                      )
-                    )
-                  />
-                </Form.Item>
-                <Form.Item>
-                  <h3> ("Expected Resolution Date" |> ste) </h3>
-                  <DatePicker
-                    value=(
-                      form.values.expectedResolutionDate
-                      |> MomentRe.momentDefaultFormat
-                    )
-                    onChange=(
-                      e =>
-                        handleChange(`expectedResolutionDate, e |> formatDate)
-                    )
-                  />
-                </Form.Item>
-                <Form.Item>
-                  <h3> ("Value Type" |> ste) </h3>
-                  <Select
-                    value=form.values.valueType
-                    onChange=(e => handleChange(`valueType, e) |> ignore)>
-                    <Select.Option value="float">
-                      ("Float" |> ste)
-                    </Select.Option>
-                  </Select>
-                </Form.Item>
-                /* <Select.Option value="percentage">
-                     ("Percentage" |> ste)
-                   </Select.Option>
-                   <Select.Option value="date">
-                     ("Date" |> ste)
-                   </Select.Option> */
-                <Form.Item>
-                  <Button _type=`primary onClick=(_ => handleSubmit())>
-                    ("Submit" |> ste)
-                  </Button>
-                </Form.Item>
-              </Form>
-            </form>,
+            switch (data.result) {
+            | Loading => <div> {"Loading" |> ste} </div>
+            | Error(e) =>
+              <div>
+                {"Error: " ++ e##message |> ste}
+                {showForm(~form, ~handleSubmit, ~handleChange)}
+              </div>
+            | Data(_) => <h2> {"Measurable successfully created" |> ste} </h2>
+            | NotCalled => showForm(~form, ~handleSubmit, ~handleChange)
+            },
         )
         |> ReasonReact.element,
     )

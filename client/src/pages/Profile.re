@@ -59,7 +59,6 @@ let withUserMutation = innerComponentFn =>
   )
   |> ReasonReact.element;
 
-/* EditUserMutation.make(~onCompleted=e => Js.log("HI"),  |> ReasonReact.element; */
 let withUserForm = (id, name, mutation, innerComponentFn) =>
   Form.make(
     ~onSubmit=({values}) => mutate(mutation, values, id),
@@ -71,14 +70,14 @@ let withUserForm = (id, name, mutation, innerComponentFn) =>
 
 let formFields = (form: Form.state, handleChange, handleSubmit: unit => unit) =>
   <div>
-    <h2> ("Edit Profile" |> ste) </h2>
-    <h3> ("UserName" |> ste) </h3>
+    <h2> {"Edit Profile" |> ste} </h2>
+    <h3> {"Username" |> ste} </h3>
     <Input
-      value=form.values.name
-      onChange=(ReForm.Helpers.handleDomFormChange(handleChange(`name)))
+      value={form.values.name}
+      onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
     />
-    <Button _type=`primary onClick=(_ => handleSubmit())>
-      ("Submit" |> ste)
+    <Button _type=`primary onClick={_ => handleSubmit()}>
+      {"Submit" |> ste}
     </Button>
   </div>;
 
@@ -93,23 +92,23 @@ let make = (~auth0Id, _children) => {
           Belt.Option.map(userQuery##user, r => r##name) |> Option.default("");
         withUserForm(
           id, name, mutation, ({handleSubmit, handleChange, form, _}) =>
-          <form onSubmit=(ReForm.Helpers.handleDomFormSubmit(handleSubmit))>
-            (
+          <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
+            {
               switch (data.result) {
-              | Loading => <div> ("Loading" |> ste) </div>
+              | Loading => <div> {"Loading" |> ste} </div>
               | Error(e) =>
                 <div>
-                  ("Error: " ++ e##message |> ste)
-                  (formFields(form, handleChange, handleSubmit))
+                  {"Error: " ++ e##message |> ste}
+                  {formFields(form, handleChange, handleSubmit)}
                 </div>
-              | Data(d) =>
+              | Data(_) =>
                 <div>
-                  ("Changes made successfully!" |> ste)
-                  (formFields(form, handleChange, handleSubmit))
+                  {"Changes made successfully." |> ste}
+                  {formFields(form, handleChange, handleSubmit)}
                 </div>
               | NotCalled => formFields(form, handleChange, handleSubmit)
               }
-            )
+            }
           </form>
         );
       })

@@ -66,6 +66,8 @@ type measurable = {
   name: string,
   valueType,
   isLocked: bool,
+  description: option(string),
+  resolutionEndpoint: option(string),
   measurementCount: option(int),
   measurerCount: option(int),
   createdAt: MomentRe.Moment.t,
@@ -89,6 +91,8 @@ module GetMeasurables = [%graphql
         measurables @bsRecord {
            id
            name
+           description
+           resolutionEndpoint
            valueType
            isLocked
            measurementCount
@@ -123,4 +127,36 @@ module GetUser = [%graphql
     }
   |}
 ];
+
 module GetUserQuery = ReasonApollo.CreateQuery(GetUser);
+
+module GetUserMeasurables = [%graphql
+  {|
+      query getAgent ($id: String!) {
+          agent:
+          agent(id: $id) {
+              id
+              measurables: Measurables @bsRecord{
+            id
+            name
+            description
+            resolutionEndpoint
+            valueType
+            isLocked
+            measurementCount
+            measurerCount
+            expectedResolutionDate @bsDecoder(fn: "optionalMoment")
+            createdAt @bsDecoder(fn: "toMoment")
+            updatedAt @bsDecoder(fn: "toMoment")
+            lockedAt @bsDecoder(fn: "optionalMoment")
+            creator @bsRecord{
+              id
+              name
+            }
+              }
+          }
+      }
+    |}
+];
+
+module GetUserMeasurablesQuery = ReasonApollo.CreateQuery(GetUserMeasurables);

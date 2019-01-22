@@ -46,7 +46,7 @@ module WithEditMutation = {
   };
 };
 
-let notFound = <h3> ("Agent not found" |> ste) </h3>;
+let notFound = <h3> {"Agent not found" |> ste} </h3>;
 
 module WithAgent = {
   module GraphQL = [%graphql
@@ -73,7 +73,8 @@ module WithAgent = {
   let query = (~id, innerFn) => {
     open Result.Infix;
     let query = GraphQL.make(~id, ());
-    Query.make(~variables=query##variables, ({result}) =>
+    Queries.GetUserMeasurablesQuery.make(
+      ~variables=query##variables, ({result}) =>
       result
       |> apolloResponseToResult
       <$> (e => e##agent)
@@ -102,7 +103,7 @@ type item = {
   expectedResolutionDate: string,
 };
 
-let toItem = (r: array(string)) : item => {
+let toItem = (r: array(string)): item => {
   name: r[0],
   description: r[1],
   isLocked: r[2] == "true" ? true : false,
@@ -120,7 +121,7 @@ let component = ReasonReact.reducerComponent("MeMeasurables");
 let setSectionRef = (theRef, {ReasonReact.state}) =>
   state.hotTableRef := Js.Nullable.toOption(theRef);
 
-let toItems = (hotTableRef: reactRef) : array(item) =>
+let toItems = (hotTableRef: reactRef): array(item) =>
   switch (hotTableRef^) {
   | None => [||]
   | Some(r) =>
@@ -146,9 +147,11 @@ let make = (~id: string, _children) => {
         agent => {
           let m = agent##measurables |> ArrayOptional.concatSomes;
           <StopComponentUpdate>
-            <div>
-              <h2> ("Edit Your Judging Measurables" |> ste) </h2>
-              (
+            {EditMe.make(~measurables=m, ())}
+          </StopComponentUpdate>;
+          /*<div>
+              <h2> {"Edit Your Judging Measurables" |> ste} </h2>
+              {
                 Table.ColumnBundle.toHOT(
                   ~onClickData=
                     e => {
@@ -221,8 +224,8 @@ let make = (~id: string, _children) => {
                       ~get=
                         e =>
                           ReactDOMServerRe.renderToStaticMarkup(
-                            <a data=("clickFn:id:" ++ e##id) href="/">
-                              ("Submit" |> ste)
+                            <a data={"clickFn:id:" ++ e##id} href="/">
+                              {"Submit" |> ste}
                             </a>,
                           ),
                       (),
@@ -231,9 +234,8 @@ let make = (~id: string, _children) => {
                   ~ref=self.handle(setSectionRef),
                   (),
                 )
-              )
-            </div>
-          </StopComponentUpdate>;
+              }
+            </div>*/
         },
       )
     )

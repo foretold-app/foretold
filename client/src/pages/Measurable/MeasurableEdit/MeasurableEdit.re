@@ -41,6 +41,7 @@ module WithEditMutation = {
         mutation: Mutation.apolloMutation,
         id: string,
         name: string,
+        isLocked: string,
         description: string,
         expectedResolutionDate: string,
         resolutionEndpoint: string,
@@ -49,7 +50,7 @@ module WithEditMutation = {
       GraphQL.make(
         ~id,
         ~name,
-        ~isLocked=true,
+        ~isLocked=isLocked == "true" ? true : false,
         ~description,
         ~expectedResolutionDate=expectedResolutionDate |> Js.Json.string,
         ~resolutionEndpoint,
@@ -117,7 +118,13 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
           }
         />
       </Form.Item>
-      /* <Form.Item> <h3> {"Locked?" |> ste} </h3> <Antd.Switch_ /> </Form.Item> */
+      <Form.Item>
+        <h3> {"Locked?" |> ste} </h3>
+        <AntdSwitch
+          checked={form.values.isLocked == "true" ? true : false}
+          onChange={e => handleChange(`isLocked, e ? "true" : "false")}
+        />
+      </Form.Item>
       <Form.Item>
         <h3> {"Resolution Endpoint (Optional)" |> ste} </h3>
         <p>
@@ -170,6 +177,7 @@ let make = (~id: string, _children) => {
                       mutation,
                       id,
                       values.name,
+                      values.isLocked,
                       values.description,
                       values.expectedResolutionDate,
                       values.resolutionEndpoint,
@@ -188,7 +196,7 @@ let make = (~id: string, _children) => {
                 ~schema=[(`name, Custom(_ => None))],
                 ({handleSubmit, handleChange, form, _}) =>
                   <div>
-                    <h2> {"Edit this Measurable" |> ste} </h2>
+                    <h2> {"Edit Measurable" |> ste} </h2>
                     {
                       switch (data.result) {
                       | Loading => <div> {"Loading" |> ste} </div>

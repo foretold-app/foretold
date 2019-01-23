@@ -107,6 +107,11 @@ let creatorLink = (~m: Queries.measurable) =>
     )
   </div>;
 
+let editLink = (~m: Queries.measurable) =>
+  <div className=PrimaryTableStyles.item>
+    <a href={"/measurables/" ++ m.id ++ "/edit"}> {"Edit" |> ste} </a>
+  </div>;
+
 let measurements = (~m: Queries.measurable) =>
   <div className=PrimaryTableStyles.item>
     <span>

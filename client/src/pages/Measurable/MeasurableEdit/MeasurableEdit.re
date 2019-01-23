@@ -120,6 +120,12 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
       </Form.Item>
       <Form.Item>
         <h3> {"Locked?" |> ste} </h3>
+        <p>
+          {
+            "Lock this measurable if you do not want others to add measurements to it."
+            |> ste
+          }
+        </p>
         <AntdSwitch
           checked={form.values.isLocked == "true" ? true : false}
           onChange={e => handleChange(`isLocked, e ? "true" : "false")}

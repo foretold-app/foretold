@@ -12,6 +12,7 @@ var AgentIndex$Client = require("./pages/Agent/AgentIndex.bs.js");
 var PaddedLayout$Client = require("./layout/PaddedLayout.bs.js");
 var MeMeasurables$Client = require("./pages/Me/MeMeasurables.bs.js");
 var MeasurableNew$Client = require("./pages/Measurable/MeasurableNew/MeasurableNew.bs.js");
+var MeasurableEdit$Client = require("./pages/Measurable/MeasurableEdit/MeasurableEdit.bs.js");
 var MeasurableShow$Client = require("./pages/Measurable/MeasurableShow/MeasurableShow.bs.js");
 var MeasurableIndex$Client = require("./pages/Measurable/MeasurableIndex/MeasurableIndex.bs.js");
 
@@ -53,10 +54,16 @@ function mapUrlToRoute(url) {
       case "measurables" : 
           var match$3 = match[1];
           if (match$3) {
-            if (match$3[1]) {
-              return /* Home */0;
+            var match$4 = match$3[1];
+            var id$1 = match$3[0];
+            if (match$4) {
+              if (match$4[0] === "edit" && !match$4[1]) {
+                return /* MeasurableEdit */Block.__(4, [id$1]);
+              } else {
+                return /* Home */0;
+              }
             } else {
-              return /* MeasurableShow */Block.__(3, [match$3[0]]);
+              return /* MeasurableShow */Block.__(3, [id$1]);
             }
           } else {
             return /* MeasurableIndex */3;
@@ -65,9 +72,9 @@ function mapUrlToRoute(url) {
           if (match[1]) {
             return /* Home */0;
           } else {
-            var match$4 = Auth0$Client.userId(/* () */0);
-            if (match$4 !== undefined) {
-              return /* Profile */Block.__(0, [match$4]);
+            var match$5 = Auth0$Client.userId(/* () */0);
+            if (match$5 !== undefined) {
+              return /* Profile */Block.__(0, [match$5]);
             } else {
               return /* Home */0;
             }
@@ -120,6 +127,8 @@ function inside(r) {
           } else {
             return ReasonReact.element(undefined, undefined, MeasurableShow$Client.make(id, /* array */[]));
           }
+      case 4 : 
+          return ReasonReact.element(undefined, undefined, MeasurableEdit$Client.make(r[0], /* array */[]));
       
     }
   }

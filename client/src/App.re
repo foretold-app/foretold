@@ -10,6 +10,7 @@ type route =
   | AgentMeasurables(string)
   | MeasurableIndex
   | MeasurableShow(string)
+  | MeasurableEdit(string)
   | NotFound;
 
 type state = {route};
@@ -38,6 +39,7 @@ let mapUrlToRoute = (url: ReasonReact.Router.url) =>
   | ["agents", id, "measurables"] => AgentMeasurables(id)
   | ["measurables"] => MeasurableIndex
   | ["measurables", id] => MeasurableShow(id)
+  | ["measurables", id, "edit"] => MeasurableEdit(id)
   | _ => Home
   };
 
@@ -58,6 +60,7 @@ let inside = r =>
   | MeasurableIndex => <MeasurableIndex />
   | MeasurableShow("new") => <MeasurableNew />
   | MeasurableShow(id) => <MeasurableShow id />
+  | MeasurableEdit(id) => <MeasurableEdit id />
   };
 
 let make = _children => {
@@ -72,5 +75,5 @@ let make = _children => {
       ReasonReact.Router.watchUrl(url => url |> mapUrlToAction |> self.send);
     self.onUnmount(() => ReasonReact.Router.unwatchUrl(watcherID));
   },
-  render: self => <PaddedLayout> (self.state.route |> inside) </PaddedLayout>,
+  render: self => <PaddedLayout> {self.state.route |> inside} </PaddedLayout>,
 };

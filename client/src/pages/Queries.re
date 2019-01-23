@@ -111,6 +111,36 @@ module GetMeasurables = [%graphql
 ];
 module GetMeasurablesQuery = ReasonApollo.CreateQuery(GetMeasurables);
 
+module GetMeasurable = {
+  module Query = [%graphql
+    {|
+      query getMeasurable ($id: String!) {
+          measurable:
+            measurable(id: $id) @bsRecord{
+           id
+           name
+           description
+           resolutionEndpoint
+           valueType
+           isLocked
+           measurementCount
+           measurerCount
+           expectedResolutionDate @bsDecoder(fn: "optionalMoment")
+           createdAt @bsDecoder(fn: "toMoment")
+           updatedAt @bsDecoder(fn: "toMoment")
+           lockedAt @bsDecoder(fn: "optionalMoment")
+           creator @bsRecord{
+             id
+             name
+           }
+          }
+      }
+    |}
+  ];
+
+  module QueryComponent = ReasonApollo.CreateQuery(Query);
+};
+
 module GetUser = [%graphql
   {|
     query user ($auth0Id: String) {

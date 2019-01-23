@@ -3103,13 +3103,13 @@ browserslist@^4.0.0, browserslist@^4.1.0:
     electron-to-chromium "^1.3.73"
     node-releases "^1.0.0-alpha.12"
 
-bs-ant-design@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/bs-ant-design/-/bs-ant-design-2.0.0.tgz#2e810eaa880488494e8ade883e79a93aa7163263"
-  integrity sha512-KpYIvZ5UXhZOT0wDGYvjIsFqfRDgLgy4kB06zfhQ++2zDjmgbbYS7zKFxL6mCpN6SWHR9ySolrEPFWYKyUen1g==
+bs-ant-design@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/bs-ant-design/-/bs-ant-design-2.1.0.tgz#f054cba5ebe02bca35ed531c5a991e7c0978348d"
+  integrity sha512-DgxM4kn+InJ2gHmamNQDAUO1xG9T++PZLBbojYL8RU+1CDuKcV3Vtg6xR4usQwCYE+6DXlCbOdCQaUS8m/Hayw==
   dependencies:
     antd "^3.8.2"
-    re-classnames "^2.1.0"
+    re-classnames "^3.0.0"
 
 bs-css@^7.2.0:
   version "7.2.0"
@@ -10239,10 +10239,10 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-re-classnames@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/re-classnames/-/re-classnames-2.1.0.tgz#7c15f1de50e2192713d26c4f179b22af75cf8843"
-  integrity sha512-DNYM9pYM05Eyxn+ShvHwvrt4FVA2fZ83BelVkvav2mw1HQcRRMIY1v9uEWuOhkogq38SJthw6yU3YIl9m59OEw==
+re-classnames@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/re-classnames/-/re-classnames-3.0.0.tgz#34ae947bfbd57eadd29f855256336d628a242d1e"
+  integrity sha512-gErGogzPy9LuJBYx9pNtWXjvFPrSnjk3R8d+TNa1PHpMoPcJKBITaCvVi9wLFtYTBiFW5KaHEvZhKx61DSW40A==
 
 react-apollo@^2.1.11:
   version "2.2.4"

@@ -1,12 +1,4 @@
-open Utils;
-open Rationale;
-open Rationale.Option.Infix;
-open Rationale.Function.Infix;
-open Result.Infix;
-open Queries;
-open HandsOnTable;
 open MomentRe;
-open MeasurableTypes;
 let component = ReasonReact.statelessComponent("MeasurableChart");
 
 module Styles = {
@@ -129,28 +121,28 @@ let make = (~measurements: array(measurement), _children) => {
               },
             }
           />
-          (
+          {
             competitives
             |> Array.mapi((i, e) =>
                  <VictoryMeasurement
                    point=e
-                   key=(string_of_int(i))
+                   key={string_of_int(i)}
                    color="GRAY"
                  />
                )
             |> ReasonReact.array
-          )
-          (
+          }
+          {
             objectives
             |> Array.mapi((i, e) =>
                  <VictoryMeasurement
                    point=e
-                   key=(string_of_int(i))
+                   key={string_of_int(i)}
                    color="BLUE"
                  />
                )
             |> ReasonReact.array
-          )
+          }
         </VictoryChart>
       </div>
     );

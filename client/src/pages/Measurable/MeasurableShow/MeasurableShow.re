@@ -92,7 +92,7 @@ let valueString = e =>
 module Styles = {
   open Css;
   let sidebar =
-    style([float(`left), left(px(0)), backgroundColor(hex("eee"))]);
+    style([Css.float(`left), left(px(0)), backgroundColor(hex("eee"))]);
 
   let body = style([marginLeft(px(200)), padding(px(30))]);
 

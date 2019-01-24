@@ -1,12 +1,7 @@
 open Utils;
 open Rationale;
 open Rationale.Option.Infix;
-open Rationale.Option;
-open Rationale;
-open Queries;
-open HandsOnTable;
 open MomentRe;
-open MeasurableTypes;
 open Table;
 
 let component = ReasonReact.statelessComponent("MeasurableTable");
@@ -16,7 +11,7 @@ let toUnix = x => x##createdAt |> Moment.toUnix;
 let victory = data => <SmallChart data />;
 
 type tt = MeasurableTypes.measurement;
-let foo = ColumnBundle.make(~headerName="Agent", ~get=(e: tt) => "sdf", ());
+let foo = ColumnBundle.make(~headerName="Agent", ~get=(_: tt) => "sdf", ());
 
 let botCompetitor = e =>
   switch (e) {
@@ -84,12 +79,12 @@ let transformations = [
       e =>
         ReactDOMServerRe.renderToStaticMarkup(
           <div>
-            (
+            {
               switch (floatCdf(e) <$> Value.FloatCdf.toPoints) {
               | Some(data) => <SmallChart data />
               | None => "" |> ste
               }
-            )
+            }
           </div>,
         ),
     (),

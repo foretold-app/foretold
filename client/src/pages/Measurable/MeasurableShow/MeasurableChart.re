@@ -1,12 +1,5 @@
 open Utils;
-open Rationale;
-open Rationale.Option.Infix;
-open Rationale.Function.Infix;
-open Result.Infix;
-open Queries;
-open HandsOnTable;
 open MomentRe;
-open MeasurableTypes;
 let component = ReasonReact.statelessComponent("MeasurableChart");
 
 let toUnix = x => x##createdAt |> Moment.toUnix;
@@ -19,7 +12,7 @@ module Styles = {
 let onlyWithFloatCdf =
   filterAndFold((e, fnYes, fnNo) =>
     switch (e##value) {
-    | Belt.Result.Ok(`FloatCdf(r)) => fnYes(e)
+    | Belt.Result.Ok(`FloatCdf(_)) => fnYes(e)
     | _ => fnNo()
     }
   );
@@ -38,8 +31,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
          );
 
     let toChartMeasurement =
-        (m: MeasurableTypes.measurement)
-        : option(TimeCdfChart.measurement) =>
+        (m: MeasurableTypes.measurement): option(TimeCdfChart.measurement) =>
       switch (m##value) {
       | Belt.Result.Ok(`FloatCdf(r)) =>
         switch (

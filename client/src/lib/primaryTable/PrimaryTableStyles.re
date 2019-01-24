@@ -1,4 +1,5 @@
 open Css;
+open PrimaryTableBase;
 let group =
   style([
     border(`px(1), `solid, hex("eee")),
@@ -68,3 +69,14 @@ let statusRow =
       [marginBottom(px(2)), fontSize(px(14)), color(`hex("aaa"))],
     ),
   ]);
+
+let statusColor = (~measurable: Queries.measurable) => {
+  let main = [padding2(~v=`px(1), ~h=`px(8)), borderRadius(`px(4))];
+  let statusSpecific =
+    switch (status(measurable)) {
+    | OPEN => [background(`hex("bff5bd"))]
+    | PENDING_REVIEW => [background(`hex("fff8da"))]
+    | CLOSED => [background(`hex("f3cccc"))]
+    };
+  style([main, statusSpecific] |> List.concat);
+};

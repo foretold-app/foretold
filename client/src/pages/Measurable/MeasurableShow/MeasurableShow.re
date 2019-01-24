@@ -22,11 +22,12 @@ module GetMeasurable = {
               description
               valueType
               isLocked
-              lockedAt
               creatorId
+              resolutionEndpoint
               expectedResolutionDate @bsDecoder(fn: "optionalMoment")
               createdAt @bsDecoder(fn: "toMoment")
               updatedAt @bsDecoder(fn: "toMoment")
+              lockedAt @bsDecoder(fn: "optionalMoment")
               creator {
                 id
                 name
@@ -115,13 +116,13 @@ let queryMeasurable = m => {
     isLocked: m##isLocked,
     valueType: m##valueType,
     description: m##description,
-    resolutionEndpoint: None,
+    resolutionEndpoint: m##resolutionEndpoint,
     measurementCount: None,
     measurerCount: None,
     createdAt: m##createdAt,
     updatedAt: m##updatedAt,
     expectedResolutionDate: m##expectedResolutionDate,
-    lockedAt: None,
+    lockedAt: m##lockedAt,
     creator,
   };
   measurable;
@@ -158,6 +159,7 @@ let make = (~id: string, _children) => {
                     {MeasurableTableStyles.creatorLink(~m)}
                     {MeasurableTableStyles.expectedResolutionDate(~m)}
                     {MeasurableTableStyles.isLocked(~m)}
+                    {MeasurableTableStyles.resolutionEndpoint(~m)}
                   </Div>
                 </Div>
                 <div>

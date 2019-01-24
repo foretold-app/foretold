@@ -73,7 +73,7 @@ module WithAgent = {
   let query = (~id, innerFn) => {
     open Result.Infix;
     let query = GraphQL.make(~id, ());
-    Queries.GetUserMeasurablesQuery.make(
+    Queries2.GetUserMeasurables.QueryComponent.make(
       ~variables=query##variables, ({result}) =>
       result
       |> apolloResponseToResult
@@ -145,7 +145,10 @@ let make = (~id: string, _children) => {
       WithAgent.query(
         ~id,
         agent => {
-          let m = agent##measurables |> ArrayOptional.concatSomes;
+          let m =
+            agent##measurables
+            |> ArrayOptional.concatSomes
+            |> Array.map(Queries2.GetUserMeasurables.toMeasurable);
           <StopComponentUpdate>
             {EditMe.make(~measurables=m, ())}
           </StopComponentUpdate>;

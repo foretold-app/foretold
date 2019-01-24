@@ -7,7 +7,7 @@ open Table;
 
 let component = ReasonReact.statelessComponent("MeasurableIndexTable");
 
-let make = (~measurables: array(Queries.measurable), _children) => {
+let make = (~measurables: array(DataModel.measurable), _children) => {
   ...component,
   render: _self => {
     let _measurables = MeasurableTableStyles.sortMeasurables(measurables);

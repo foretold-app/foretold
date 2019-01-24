@@ -2,14 +2,14 @@ open Rationale.Option.Infix;
 open Rationale.Function.Infix;
 open MomentRe;
 
-let toMoment = Queries.jsonToString ||> moment;
+let toMoment = QueriesHelper.jsonToString ||> moment;
 
 /* let toOptionalMoment: option(Js.Json.t) => MomentRe.Moment.t = x => x <$> jsonToString |> Option.default("") |> moment */
 let toOptionalMoment: option(Js.Json.t) => MomentRe.Moment.t =
   e =>
     (
       switch (e) {
-      | Some(f) => f |> Queries.jsonToString
+      | Some(f) => f |> QueriesHelper.jsonToString
       | None => ""
       }
     )

@@ -33,7 +33,7 @@
    /* className=(Styles.item(~isSelected=selectedId == e.id)) */
 
    let urlFn = e => "/measurables/" ++ e.id;
-   let showQueryList = (~data: Queries.measurables, ~selectedId: string) =>
+   let showQueryList = (~data: DataModel.measurables, ~selectedId: string) =>
      Array.mapi(
        (index, e) =>
          <div

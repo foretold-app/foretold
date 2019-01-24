@@ -19,11 +19,12 @@ let make = _children => {
   ...component,
   render: _self =>
     Result.Infix.(
-      Queries.GetMeasurablesQuery.make(o =>
+      Queries.GetMeasurables.QueryComponent.make(o =>
         o.result
         |> apolloResponseToResult
         <$> (d => d##measurables)
         <$> Extensions.Array.concatSomes
+        <$> (d => d |> Array.map(Queries.GetMeasurables.toMeasurable))
         <$> (measurables => <MeasurableIndex__Table measurables />)
         |> Result.result(idd, idd)
       )

@@ -1,6 +1,6 @@
 open Utils;
 open Rationale;
-open Queries;
+open QueriesHelper;
 open MomentRe;
 open Style.Grid;
 
@@ -107,10 +107,11 @@ module Styles = {
 };
 
 let queryMeasurable = m => {
-  let creator: option(creator) =
+  open DataModel;
+  let creator: option(DataModel.creator) =
     m##creator |> Option.fmap(r => {id: r##id, name: r##name});
 
-  let measurable: measurable = {
+  let measurable: DataModel.measurable = {
     id: m##id,
     name: m##name,
     isLocked: m##isLocked,

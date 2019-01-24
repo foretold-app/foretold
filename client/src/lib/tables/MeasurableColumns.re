@@ -1,9 +1,9 @@
 open Table;
-open Queries;
+open DataModel;
 open Rationale;
 open MomentRe;
 
-let toCreatorLink = (c: Queries.creator) => {
+let toCreatorLink = (c: DataModel.creator) => {
   let id = c.id;
   let name = c.name;
   {j|<a href="/agents/$id">$name</a>|j};

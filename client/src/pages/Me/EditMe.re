@@ -2,13 +2,13 @@ open Utils;
 
 let component = ReasonReact.statelessComponent("EditMe");
 
-let make = (~measurables: Js.Array.t(Queries.measurable), _children) =>
+let make = (~measurables: Js.Array.t(DataModel.measurable), _children) =>
   <UseRouterForLinks>
     <div className=PrimaryTableStyles.group>
       {
         measurables
         |> MeasurableTableStyles.sortMeasurables
-        |> Array.map((m: Queries.measurable) =>
+        |> Array.map((m: DataModel.measurable) =>
              <div className=PrimaryTableStyles.row>
                <div className=PrimaryTableStyles.mainColumn>
                  <div className=PrimaryTableStyles.mainColumnTop>

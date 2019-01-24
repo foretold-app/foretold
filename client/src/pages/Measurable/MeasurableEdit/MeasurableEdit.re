@@ -174,61 +174,65 @@ let make = (~id: string, _children) => {
     <div>
       <div>
         {
-          withQuery(~id, measurable =>
-            WithEditMutation.Mutation.make((mutation, data) =>
-              SignUpForm.make(
-                ~onSubmit=
-                  ({values}) =>
-                    WithEditMutation.mutate(
-                      mutation,
-                      id,
-                      values.name,
-                      values.isLocked,
-                      values.description,
-                      values.expectedResolutionDate,
-                      values.resolutionEndpoint,
-                    ),
-                ~initialState={
-                  name: measurable.name,
-                  description: measurable.description |> Option.default(""),
-                  expectedResolutionDate:
-                    measurable.expectedResolutionDate
-                    |> Option.default(MomentRe.momentNow())
-                    |> formatDate,
-                  resolutionEndpoint:
-                    measurable.resolutionEndpoint |> Option.default(""),
-                  isLocked: measurable.isLocked ? "true" : "false",
-                },
-                ~schema=[(`name, Custom(_ => None))],
-                ({handleSubmit, handleChange, form, _}) =>
-                  <div>
-                    <h2> {"Edit Measurable" |> ste} </h2>
-                    {
-                      switch (data.result) {
-                      | Loading => <div> {"Loading" |> ste} </div>
-                      | Error(e) =>
-                        <div>
-                          {"Error: " ++ e##message |> ste}
-                          {showForm(~form, ~handleSubmit, ~handleChange)}
-                        </div>
-                      | Data(_) =>
-                        <div>
-                          <h3>
-                            {"Measurable successfully updated." |> ste}
-                          </h3>
+          withQuery(
+            ~id,
+            m => {
+              let measurable = Queries.GetMeasurable.toMeasurable(m);
+              WithEditMutation.Mutation.make((mutation, data) =>
+                SignUpForm.make(
+                  ~onSubmit=
+                    ({values}) =>
+                      WithEditMutation.mutate(
+                        mutation,
+                        id,
+                        values.name,
+                        values.isLocked,
+                        values.description,
+                        values.expectedResolutionDate,
+                        values.resolutionEndpoint,
+                      ),
+                  ~initialState={
+                    name: measurable.name,
+                    description: measurable.description |> Option.default(""),
+                    expectedResolutionDate:
+                      measurable.expectedResolutionDate
+                      |> Option.default(MomentRe.momentNow())
+                      |> formatDate,
+                    resolutionEndpoint:
+                      measurable.resolutionEndpoint |> Option.default(""),
+                    isLocked: measurable.isLocked ? "true" : "false",
+                  },
+                  ~schema=[(`name, Custom(_ => None))],
+                  ({handleSubmit, handleChange, form, _}) =>
+                    <div>
+                      <h2> {"Edit Measurable" |> ste} </h2>
+                      {
+                        switch (data.result) {
+                        | Loading => <div> {"Loading" |> ste} </div>
+                        | Error(e) =>
                           <div>
+                            {"Error: " ++ e##message |> ste}
                             {showForm(~form, ~handleSubmit, ~handleChange)}
                           </div>
-                        </div>
-                      | NotCalled =>
-                        showForm(~form, ~handleSubmit, ~handleChange)
+                        | Data(_) =>
+                          <div>
+                            <h3>
+                              {"Measurable successfully updated." |> ste}
+                            </h3>
+                            <div>
+                              {showForm(~form, ~handleSubmit, ~handleChange)}
+                            </div>
+                          </div>
+                        | NotCalled =>
+                          showForm(~form, ~handleSubmit, ~handleChange)
+                        }
                       }
-                    }
-                  </div>,
+                    </div>,
+                )
+                |> ReasonReact.element
               )
-              |> ReasonReact.element
-            )
-            |> ReasonReact.element
+              |> ReasonReact.element;
+            },
           )
         }
       </div>

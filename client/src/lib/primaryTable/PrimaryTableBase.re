@@ -10,7 +10,7 @@ let statusInt = (status: status) =>
   | CLOSED => 0
   };
 
-let status = (measurable: Queries.measurable) => {
+let status = (measurable: DataModel.measurable) => {
   let pastExpectedResolutionDate =
     switch (measurable.expectedResolutionDate) {
     | None => false

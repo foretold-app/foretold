@@ -13,8 +13,8 @@ let withUserQuery =
     ) =>
   switch (auth0Id) {
   | Some(auth) =>
-    let query = Queries.GetUser.make(~auth0Id=auth, ());
-    Queries.GetUserQuery.make(
+    let query = Queries.GetUser.Query.make(~auth0Id=auth, ());
+    Queries.GetUser.QueryComponent.make(
       ~variables=query##variables, ~pollInterval=5000, ({result}) =>
       result
       |> apolloResponseToResult
@@ -50,12 +50,12 @@ let make = _children => {
           };
         };
         <div>
-          <h1> ("Redirecting..." |> ste) </h1>
+          <h1> {"Redirecting..." |> ste} </h1>
           <p>
-            (
+            {
               "If you are not redirected shortly, try refreshing the page or contacting Ozzie."
               |> ste
-            )
+            }
           </p>
         </div>;
       },

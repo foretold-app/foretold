@@ -3,7 +3,7 @@ open Rationale;
 open PrimaryTableBase;
 
 let compareSimilarMeasurables =
-    (measurableA: Queries.measurable, measurableB: Queries.measurable) =>
+    (measurableA: DataModel.measurable, measurableB: DataModel.measurable) =>
   switch (
     measurableA.expectedResolutionDate,
     measurableB.expectedResolutionDate,
@@ -13,7 +13,7 @@ let compareSimilarMeasurables =
   };
 
 let compareMeasurables =
-    (measurableA: Queries.measurable, measurableB: Queries.measurable) =>
+    (measurableA: DataModel.measurable, measurableB: DataModel.measurable) =>
   switch (status(measurableA), status(measurableB)) {
   | (a, b) when a == b => compareSimilarMeasurables(measurableA, measurableB)
   | (a, b) => statusInt(a) > statusInt(b) ? (-1) : 1
@@ -22,7 +22,7 @@ let compareMeasurables =
 let formatDate = e =>
   Option.Infix.(e <$> MomentRe.Moment.format("L") |> Option.default(""));
 
-let dateFinder = (~measurable: Queries.measurable, head, p, date) => {
+let dateFinder = (~measurable: DataModel.measurable, head, p, date) => {
   let date = formatDate(date);
   <div className=PrimaryTableStyles.statusRow>
     <h3> {head |> ste} </h3>
@@ -30,7 +30,7 @@ let dateFinder = (~measurable: Queries.measurable, head, p, date) => {
   </div>;
 };
 
-let dateStatus = (~measurable: Queries.measurable) => {
+let dateStatus = (~measurable: DataModel.measurable) => {
   let m = measurable;
   switch (status(m)) {
   | OPEN =>
@@ -46,23 +46,23 @@ let dateStatus = (~measurable: Queries.measurable) => {
   };
 };
 
-let dateStatusWrapper = (~measurable: Queries.measurable) =>
+let dateStatusWrapper = (~measurable: DataModel.measurable) =>
   <div className={PrimaryTableStyles.statusColor(~measurable)}>
     {dateStatus(~measurable)}
   </div>;
 
 let sortMeasurables = m => Belt.SortArray.stableSortBy(m, compareMeasurables);
 
-let link = (~m: Queries.measurable) =>
+let link = (~m: DataModel.measurable) =>
   <a href={"/measurables/" ++ m.id}> {m.name |> ste} </a>;
 
-let description = (~m: Queries.measurable) =>
+let description = (~m: DataModel.measurable) =>
   switch (m.description |> Option.default("")) {
   | "" => <div />
   | text => <p> {text |> ste} </p>
   };
 
-let isLocked = (~m: Queries.measurable) =>
+let isLocked = (~m: DataModel.measurable) =>
   switch (m.isLocked) {
   | true =>
     <div className=PrimaryTableStyles.item>
@@ -72,7 +72,7 @@ let isLocked = (~m: Queries.measurable) =>
   | _ => <div />
   };
 
-let creatorLink = (~m: Queries.measurable) =>
+let creatorLink = (~m: DataModel.measurable) =>
   <div className=PrimaryTableStyles.item>
     Option.Infix.(
       m.creator
@@ -86,12 +86,12 @@ let creatorLink = (~m: Queries.measurable) =>
     )
   </div>;
 
-let editLink = (~m: Queries.measurable) =>
+let editLink = (~m: DataModel.measurable) =>
   <div className=PrimaryTableStyles.item>
     <a href={"/measurables/" ++ m.id ++ "/edit"}> {"Edit" |> ste} </a>
   </div>;
 
-let measurements = (~m: Queries.measurable) =>
+let measurements = (~m: DataModel.measurable) =>
   <div className=PrimaryTableStyles.item>
     <span>
       {m.measurementCount |> Option.default(0) |> string_of_int |> ste}
@@ -99,7 +99,7 @@ let measurements = (~m: Queries.measurable) =>
     <span> {" measurements" |> ste} </span>
   </div>;
 
-let measurers = (~m: Queries.measurable) =>
+let measurers = (~m: DataModel.measurable) =>
   <div className=PrimaryTableStyles.item>
     <span>
       {m.measurerCount |> Option.default(0) |> string_of_int |> ste}
@@ -107,13 +107,13 @@ let measurers = (~m: Queries.measurable) =>
     </span>
   </div>;
 
-let expectedResolutionDate = (~m: Queries.measurable) =>
+let expectedResolutionDate = (~m: DataModel.measurable) =>
   <div className=PrimaryTableStyles.item>
     <span> {"Resolves on " |> ste} </span>
     <span> {m.expectedResolutionDate |> formatDate |> ste} </span>
   </div>;
 
-let resolutionEndpoint = (~m: Queries.measurable) =>
+let resolutionEndpoint = (~m: DataModel.measurable) =>
   switch (m.resolutionEndpoint |> Option.default("")) {
   | "" => <div />
   | text =>

@@ -70,7 +70,7 @@ let statusRow =
     ),
   ]);
 
-let statusColor = (~measurable: Queries.measurable) => {
+let statusColor = (~measurable: DataModel.measurable) => {
   let main = [padding2(~v=`px(1), ~h=`px(8)), borderRadius(`px(4))];
   let statusSpecific =
     switch (status(measurable)) {

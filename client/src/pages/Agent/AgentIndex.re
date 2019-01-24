@@ -8,7 +8,7 @@ open HandsOnTable;
 let toAgentLink = (id, name) => {j|<a href="/agents/$id">$name</a>|j};
 
 let component = ReasonReact.statelessComponent("Measurables");
-let perEl = (e: Queries.agent) => {
+let perEl = (e: DataModel.agent) => {
   let count =
     switch (e) {
     | {measurementCount: Some(m)} => string_of_int(m)
@@ -17,10 +17,10 @@ let perEl = (e: Queries.agent) => {
   switch (e) {
   | {bot: Some(r)} =>
     Js.Dict.fromList([
-      ("name", r.name |> Option.default("") |> toAgentLink(e.id)),
+      ("name", r.name |> toAgentLink(e.id)),
       ("type", "Bot"),
       ("description", r.description |> Option.default("")),
-      ("competitorType", Queries.stringOfcompetitorType(r.competitorType)),
+      ("competitorType", DataModel.stringOfcompetitorType(r.competitorType)),
       ("measurementCount", count),
     ])
   | {user: Some(r)} =>
@@ -38,14 +38,20 @@ let make = _children => {
   ...component,
   render: _ =>
     <div>
-      (
-        Queries.GetAgentsQuery.make(({result}) =>
+      {
+        Queries.GetAgents.QueryComponent.make(({result}) =>
           result
           |> apolloResponseToResult
           <$> (d => d##agents)
           <$> (
             e => {
-              let data = Array.map(perEl, e |> ArrayOptional.concatSomes);
+              let data =
+                Array.map(
+                  perEl,
+                  e
+                  |> ArrayOptional.concatSomes
+                  |> Array.map(Queries.GetAgents.toAgent),
+                );
               let columns = [|
                 makeColumn(~name="name", ~renderer="html", ()),
                 makeColumn(~name="type", ()),
@@ -73,6 +79,6 @@ let make = _children => {
           |> Result.result(idd, idd)
         )
         |> ReasonReact.element
-      )
+      }
     </div>,
 };

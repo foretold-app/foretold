@@ -25,7 +25,6 @@ type agent = {
 };
 
 type agents = array(agent);
-
 type valueType = [ | `DATE | `FLOAT | `PERCENTAGE];
 
 type creator = {

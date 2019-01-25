@@ -1,6 +1,7 @@
 const { IncomingWebhook } = require('@slack/client');
 const url = process.env.SLACK_WEBHOOK_URL;
 const webhook = new IncomingWebhook(url);
+console.log(`SET UP WITH SLACK with webhook url: ${url}`)
 
 // Send simple text to the webhook channel
 function notify(message) {

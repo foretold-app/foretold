@@ -1,26 +1,32 @@
 type status =
   | OPEN
   | PENDING_REVIEW
-  | CLOSED;
+  | ARCHIVED
+  | JUDGED;
+
+/* TODO: CHange closed to judged */
 
 let statusInt = (status: status) =>
   switch (status) {
-  | OPEN => 2
-  | PENDING_REVIEW => 1
-  | CLOSED => 0
+  | OPEN => 3
+  | PENDING_REVIEW => 2
+  | JUDGED => 1
+  | ARCHIVED => 0
   };
 
 let status = (measurable: DataModel.measurable) => {
-  let pastExpectedResolutionDate =
-    switch (measurable.expectedResolutionDate) {
-    | None => false
-    | Some(e) => MomentRe.Moment.isAfter(MomentRe.momentNow(), e)
-    };
-  if (!measurable.isLocked && pastExpectedResolutionDate) {
-    PENDING_REVIEW;
-  } else if (measurable.isLocked) {
-    CLOSED;
+  let state =
+    measurable.state |> Rationale.Option.toExn("Needs state from GraphQL");
+  if (state === `ARCHIVED) {
+    ARCHIVED;
+  } else if (state === `JUDGED) {
+    JUDGED;
   } else {
-    OPEN;
+    let pastExpectedResolutionDate =
+      switch (measurable.expectedResolutionDate) {
+      | None => false
+      | Some(e) => MomentRe.Moment.isAfter(MomentRe.momentNow(), e)
+      };
+    if (pastExpectedResolutionDate) {PENDING_REVIEW} else {OPEN};
   };
 };

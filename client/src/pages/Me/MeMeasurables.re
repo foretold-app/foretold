@@ -13,8 +13,8 @@ let optionalMoment = Option.Infix.(e => e <$> (jsonToString ||> moment));
 module WithEditMutation = {
   module GraphQL = [%graphql
     {|
-             mutation editMeasurable($id: String!, $name: String!, $description: String!, $isLocked: Boolean!, $expectedResolutionDate:Date) {
-                 editMeasurable(id: $id, name: $name, description: $description, isLocked: $isLocked, expectedResolutionDate: $expectedResolutionDate) {
+             mutation editMeasurable($id: String!, $name: String!, $description: String!, $expectedResolutionDate:Date) {
+                 editMeasurable(id: $id, name: $name, description: $description, expectedResolutionDate: $expectedResolutionDate) {
                    id
                  }
              }
@@ -29,18 +29,10 @@ module WithEditMutation = {
         id: string,
         name: string,
         description: string,
-        isLocked: bool,
         expectedResolutionDate: Js.Json.t,
       ) => {
     let m =
-      GraphQL.make(
-        ~id,
-        ~name,
-        ~description,
-        ~isLocked,
-        ~expectedResolutionDate,
-        (),
-      );
+      GraphQL.make(~id, ~name, ~description, ~expectedResolutionDate, ());
     mutation(~variables=m##variables, ~refetchQueries=[|"getAgent"|], ())
     |> ignore;
   };
@@ -49,30 +41,9 @@ module WithEditMutation = {
 let notFound = <h3> {"Agent not found" |> ste} </h3>;
 
 module WithAgent = {
-  module GraphQL = [%graphql
-    {|
-    query getAgent ($id: String!) {
-        agent:
-        agent(id: $id) {
-            id
-            measurables: Measurables{
-                id
-                name
-                description
-                resolutionEndpoint
-                isLocked
-                expectedResolutionDate @bsDecoder(fn: "optionalMoment")
-            }
-        }
-    }
-  |}
-  ];
-
-  module Query = ReasonApollo.CreateQuery(GraphQL);
-
   let query = (~id, innerFn) => {
     open Result.Infix;
-    let query = GraphQL.make(~id, ());
+    let query = Queries.GetUserMeasurables.Query.make(~id, ());
     Queries.GetUserMeasurables.QueryComponent.make(
       ~variables=query##variables, ({result}) =>
       result

@@ -20,7 +20,6 @@ let make = (~measurables: Js.Array.t(DataModel.measurable), _children) =>
                    {MeasurableTableStyles.measurers(~m)}
                    {MeasurableTableStyles.expectedResolutionDate(~m)}
                    {MeasurableTableStyles.resolutionEndpoint(~m)}
-                   {MeasurableTableStyles.isLocked(~m)}
                    {MeasurableTableStyles.editLink(~m)}
                  </div>
                </div>

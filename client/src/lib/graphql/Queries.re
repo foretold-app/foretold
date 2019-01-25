@@ -72,20 +72,17 @@ module GetUserMeasurables = {
     id: string,
     name: string,
     valueType: DataModel.valueType,
-    isLocked: bool,
-    isArchived: bool,
     description: option(string),
     resolutionEndpoint: option(string),
     createdAt: MomentRe.Moment.t,
     updatedAt: MomentRe.Moment.t,
+    state: DataModel.measurableState,
+    stateUpdatedAt: option(MomentRe.Moment.t),
     expectedResolutionDate: option(MomentRe.Moment.t),
-    lockedAt: option(MomentRe.Moment.t),
   };
   let toMeasurable = (m: measurable): DataModel.measurable => {
     id: m.id,
     name: m.name,
-    isLocked: m.isLocked,
-    isArchived: m.isArchived,
     valueType: m.valueType,
     description: m.description,
     resolutionEndpoint: m.resolutionEndpoint,
@@ -94,8 +91,8 @@ module GetUserMeasurables = {
     createdAt: m.createdAt,
     updatedAt: m.updatedAt,
     expectedResolutionDate: m.expectedResolutionDate,
-    lockedAt: m.lockedAt,
-    archivedAt: None,
+    state: Some(m.state),
+    stateUpdatedAt: None,
     creator: None,
   };
 
@@ -113,12 +110,11 @@ module GetUserMeasurables = {
             description
             resolutionEndpoint
             valueType
-            isLocked
-            isArchived
+            state @bsDecoder(fn: "string_to_measurableState")
+            stateUpdatedAt @bsDecoder(fn: "optionalMoment")
             expectedResolutionDate @bsDecoder(fn: "optionalMoment")
             createdAt @bsDecoder(fn: "toMoment")
             updatedAt @bsDecoder(fn: "toMoment")
-            lockedAt @bsDecoder(fn: "optionalMoment")
               }
           }
       }
@@ -137,8 +133,6 @@ module GetMeasurable = {
     id: string,
     name: string,
     valueType: DataModel.valueType,
-    isLocked: bool,
-    isArchived: bool,
     description: option(string),
     resolutionEndpoint: option(string),
     measurementCount: option(int),
@@ -146,14 +140,13 @@ module GetMeasurable = {
     createdAt: MomentRe.Moment.t,
     updatedAt: MomentRe.Moment.t,
     expectedResolutionDate: option(MomentRe.Moment.t),
-    lockedAt: option(MomentRe.Moment.t),
+    state: DataModel.measurableState,
+    stateUpdatedAt: option(MomentRe.Moment.t),
     creator: option(creator),
   };
   let toMeasurable = (m: measurable): DataModel.measurable => {
     id: m.id,
     name: m.name,
-    isLocked: m.isLocked,
-    isArchived: m.isArchived,
     valueType: m.valueType,
     description: m.description,
     resolutionEndpoint: m.resolutionEndpoint,
@@ -162,8 +155,8 @@ module GetMeasurable = {
     createdAt: m.createdAt,
     updatedAt: m.updatedAt,
     expectedResolutionDate: m.expectedResolutionDate,
-    lockedAt: m.lockedAt,
-    archivedAt: None,
+    state: Some(m.state),
+    stateUpdatedAt: None,
     creator: None,
   };
   module Query = [%graphql
@@ -176,14 +169,13 @@ module GetMeasurable = {
            description
            resolutionEndpoint
            valueType
-           isLocked
-           isArchived
            measurementCount
            measurerCount
+           state @bsDecoder(fn: "string_to_measurableState")
+           stateUpdatedAt @bsDecoder(fn: "optionalMoment")
            expectedResolutionDate @bsDecoder(fn: "optionalMoment")
            createdAt @bsDecoder(fn: "toMoment")
            updatedAt @bsDecoder(fn: "toMoment")
-           lockedAt @bsDecoder(fn: "optionalMoment")
            creator @bsRecord{
              id
              name
@@ -204,8 +196,6 @@ module GetMeasurables = {
     id: string,
     name: string,
     valueType: DataModel.valueType,
-    isLocked: bool,
-    isArchived: bool,
     description: option(string),
     resolutionEndpoint: option(string),
     measurementCount: option(int),
@@ -213,15 +203,14 @@ module GetMeasurables = {
     createdAt: MomentRe.Moment.t,
     updatedAt: MomentRe.Moment.t,
     expectedResolutionDate: option(MomentRe.Moment.t),
-    lockedAt: option(MomentRe.Moment.t),
+    state: DataModel.measurableState,
+    stateUpdatedAt: option(MomentRe.Moment.t),
     creator: option(creator),
   };
 
   let toMeasurable = (m: measurable): DataModel.measurable => {
     id: m.id,
     name: m.name,
-    isLocked: m.isLocked,
-    isArchived: m.isArchived,
     valueType: m.valueType,
     description: m.description,
     resolutionEndpoint: m.resolutionEndpoint,
@@ -230,8 +219,8 @@ module GetMeasurables = {
     createdAt: m.createdAt,
     updatedAt: m.updatedAt,
     expectedResolutionDate: m.expectedResolutionDate,
-    lockedAt: m.lockedAt,
-    archivedAt: None,
+    state: Some(m.state),
+    stateUpdatedAt: None,
     creator: None,
   };
 
@@ -244,14 +233,13 @@ module GetMeasurables = {
            description
            resolutionEndpoint
            valueType
-           isLocked
-           isArchived
            measurementCount
            measurerCount
+           state @bsDecoder(fn: "string_to_measurableState")
+           stateUpdatedAt @bsDecoder(fn: "optionalMoment")
            expectedResolutionDate @bsDecoder(fn: "optionalMoment")
            createdAt @bsDecoder(fn: "toMoment")
            updatedAt @bsDecoder(fn: "toMoment")
-           lockedAt @bsDecoder(fn: "optionalMoment")
            creator @bsRecord{
              id
              name

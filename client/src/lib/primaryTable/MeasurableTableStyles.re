@@ -22,7 +22,7 @@ let compareMeasurables =
 let formatDate = e =>
   Option.Infix.(e <$> MomentRe.Moment.format("L") |> Option.default(""));
 
-let dateFinder = (~measurable: DataModel.measurable, head, p, date) => {
+let dateFinder = (head, p, date) => {
   let date = formatDate(date);
   <div className=PrimaryTableStyles.statusRow>
     <h3> {head |> ste} </h3>
@@ -33,16 +33,15 @@ let dateFinder = (~measurable: DataModel.measurable, head, p, date) => {
 let dateStatus = (~measurable: DataModel.measurable) => {
   let m = measurable;
   switch (status(m)) {
-  | OPEN =>
-    dateFinder(~measurable=m, "Open", "Closes ~", m.expectedResolutionDate)
+  | OPEN => dateFinder("Open", "Closes ~", m.expectedResolutionDate)
   | PENDING_REVIEW =>
     dateFinder(
-      ~measurable=m,
       "Judgement Pending",
       "Pending since ",
       m.expectedResolutionDate,
     )
-  | CLOSED => dateFinder(~measurable=m, "Closed", "Closed on ", m.lockedAt)
+  | ARCHIVED => dateFinder("Archived", "Archived on ", m.stateUpdatedAt)
+  | JUDGED => dateFinder("Closed", "Closed on ", m.stateUpdatedAt)
   };
 };
 
@@ -60,16 +59,6 @@ let description = (~m: DataModel.measurable) =>
   switch (m.description |> Option.default("")) {
   | "" => <div />
   | text => <p> {text |> ste} </p>
-  };
-
-let isLocked = (~m: DataModel.measurable) =>
-  switch (m.isLocked) {
-  | true =>
-    <div className=PrimaryTableStyles.item>
-      <span> {"Locked on " |> ste} </span>
-      <span> {m.lockedAt |> formatDate |> ste} </span>
-    </div>
-  | _ => <div />
   };
 
 let creatorLink = (~m: DataModel.measurable) =>

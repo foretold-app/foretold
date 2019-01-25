@@ -288,15 +288,43 @@ const schema = new GraphQLSchema({
           return newMeasurable
         }
       },
+      archiveMeasurable: {
+        type: getType.Measurables(),
+        args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
+        resolve: async (__, {
+          id,
+        }, options) => {
+          let _auth0Id = await getAuth0Id(options)
+          const user = await auth0User(_auth0Id);
+          let measurable = await models.Measurable.findById(id);
+          if (measurable.creatorId !== user.agentId){
+            throw new Error("User does not have permission")
+          }
+          return measurable.archive()
+        }
+      },
+      unArchiveMeasurable: {
+        type: getType.Measurables(),
+        args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
+        resolve: async (__, {
+          id,
+        }, options) => {
+          let _auth0Id = await getAuth0Id(options)
+          const user = await auth0User(_auth0Id);
+          let measurable = await models.Measurable.findById(id);
+          if (measurable.creatorId !== user.agentId){
+            throw new Error("User does not have permission")
+          }
+          return measurable.unarchive()
+        }
+      },
       editMeasurable: {
         type: getType.Measurables(),
-        args: filterr(_.pick(attributeFields(models.Measurable), ['id','name', 'isLocked', 'isArchived', 'description', 'expectedResolutionDate', 'resolutionEndpoint'])),
+        args: filterr(_.pick(attributeFields(models.Measurable), ['id','name', 'description', 'expectedResolutionDate', 'resolutionEndpoint'])),
         resolve: async (__, {
           id,
           name,
           description,
-          isLocked,
-          isArchived,
           expectedResolutionDate,
           resolutionEndpoint
         }, options) => {
@@ -306,9 +334,9 @@ const schema = new GraphQLSchema({
           if (measurable.creatorId !== user.agentId){
             throw new Error("User does not have permission")
           }
-          let notification = await measurable.updateNotifications(user, {name, description, expectedResolutionDate, isLocked, isArchived, resolutionEndpoint});
+          let notification = await measurable.updateNotifications(user, {name, description, expectedResolutionDate,resolutionEndpoint});
           notify(notification);
-          return measurable.update({name, description, expectedResolutionDate, isLocked, isArchived, resolutionEndpoint})
+          return measurable.update({name, description, expectedResolutionDate, resolutionEndpoint})
         }
       },
       editUser: {

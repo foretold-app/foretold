@@ -21,14 +21,11 @@ module GetMeasurable = {
               name
               description
               valueType
-              isLocked
-              isArchived
               creatorId
               resolutionEndpoint
               expectedResolutionDate @bsDecoder(fn: "optionalMoment")
               createdAt @bsDecoder(fn: "toMoment")
               updatedAt @bsDecoder(fn: "toMoment")
-              lockedAt @bsDecoder(fn: "optionalMoment")
               creator {
                 id
                 name
@@ -115,8 +112,6 @@ let queryMeasurable = m => {
   let measurable: DataModel.measurable = {
     id: m##id,
     name: m##name,
-    isLocked: m##isLocked,
-    isArchived: m##isArchived,
     valueType: m##valueType,
     description: m##description,
     resolutionEndpoint: m##resolutionEndpoint,
@@ -125,8 +120,8 @@ let queryMeasurable = m => {
     createdAt: m##createdAt,
     updatedAt: m##updatedAt,
     expectedResolutionDate: m##expectedResolutionDate,
-    archivedAt: None,
-    lockedAt: m##lockedAt,
+    state: None,
+    stateUpdatedAt: None,
     creator,
   };
   measurable;
@@ -162,7 +157,6 @@ let make = (~id: string, _children) => {
                   <Div styles=[Style.Grid.Styles.flex(1)]>
                     {MeasurableTableStyles.creatorLink(~m)}
                     {MeasurableTableStyles.expectedResolutionDate(~m)}
-                    {MeasurableTableStyles.isLocked(~m)}
                     {MeasurableTableStyles.resolutionEndpoint(~m)}
                   </Div>
                 </Div>

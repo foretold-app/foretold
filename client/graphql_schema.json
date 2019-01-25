@@ -1115,7 +1115,7 @@
               "deprecationReason": null
             },
             {
-              "name": "isLocked",
+              "name": "isJudged",
               "description": null,
               "args": [],
               "type": {
@@ -1131,19 +1131,7 @@
               "deprecationReason": null
             },
             {
-              "name": "lockedAt",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Date",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "isArchived",
+              "name": "state",
               "description": null,
               "args": [],
               "type": {
@@ -1151,7 +1139,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "Boolean",
+                  "name": "String",
                   "ofType": null
                 }
               },
@@ -1159,7 +1147,7 @@
               "deprecationReason": null
             },
             {
-              "name": "archivedAt",
+              "name": "stateUpdatedAt",
               "description": null,
               "args": [],
               "type": {
@@ -1572,6 +1560,60 @@
               "deprecationReason": null
             },
             {
+              "name": "archiveMeasurable",
+              "description": null,
+              "args": [
+                {
+                  "name": "id",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Measurable",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "unArchiveMeasurable",
+              "description": null,
+              "args": [
+                {
+                  "name": "id",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Measurable",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "editMeasurable",
               "description": null,
               "args": [
@@ -1598,34 +1640,6 @@
                     "ofType": {
                       "kind": "SCALAR",
                       "name": "String",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "isLocked",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "Boolean",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "isArchived",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "Boolean",
                       "ofType": null
                     }
                   },

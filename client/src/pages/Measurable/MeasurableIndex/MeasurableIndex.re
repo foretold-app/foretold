@@ -11,7 +11,6 @@ let transformations = [
   measurerCount,
   expectedResolutionDate,
   creator,
-  isLocked,
 ];
 
 let component = ReasonReact.statelessComponent("Measurables");

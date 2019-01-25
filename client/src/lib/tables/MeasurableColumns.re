@@ -66,14 +66,6 @@ let measurerCount =
     (),
   );
 
-let isLocked =
-  ColumnBundle.make(
-    ~headerName="Is Locked",
-    ~get=e => e.isLocked |> (r => r ? "True" : "False"),
-    ~column=Columns.checkbox,
-    (),
-  );
-
 let expectedResolutionDate =
   ColumnBundle.make(
     ~headerName="Expected Resolution Date",

@@ -26,8 +26,6 @@ let item =
     fontSize(`px(14)),
     marginRight(`px(18)),
     color(`hex("999")),
-    /* padding2(~v=`px(0), ~h=`px(4)), */
-    /* borderRadius(`px(1)), */
     selector(
       " a",
       [
@@ -76,7 +74,8 @@ let statusColor = (~measurable: DataModel.measurable) => {
     switch (status(measurable)) {
     | OPEN => [background(`hex("bff5bd"))]
     | PENDING_REVIEW => [background(`hex("fff8da"))]
-    | CLOSED => [background(`hex("f3cccc"))]
+    | JUDGED => [background(`hex("f3cccc"))]
+    | ARCHIVED => [background(`hex("cccccc"))]
     };
   style([main, statusSpecific] |> List.concat);
 };

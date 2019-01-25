@@ -120,7 +120,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Model.prototype.creationNotification= async function(creator){
     let agent = await creator.getAgent();
-    let notification = await {
+    let notification = {
       "attachments": [{
         "pretext": "New Measurable Created",
         "title": this.name,
@@ -136,6 +136,30 @@ module.exports = (sequelize, DataTypes) => {
             }
         ],
         "color": "#4a8ed8"
+    }]};
+    return notification;
+  }
+
+  Model.prototype.changedFields = function(ops){
+    return Object.keys(ops).filter(r => r !== "expectedResolutionDate").filter(r => this[r] !== ops[r]);
+  }
+
+  Model.prototype.updateNotifications = async function(creator, newData){
+    let changed = this.changedFields(newData);
+    let agent = await creator.getAgent();
+    let notification = {
+      "attachments": [{
+        "pretext": "Measurable Updated",
+        "title": this.name,
+        "title_link": `${clientUrl}/measurables/${this.id}`,
+        "author_name": creator.name,
+        "author_link": `${clientUrl}/agents/${agent.id}`,
+        "fields": changed.map(c => ({
+          "title": c,
+          "short": false,
+          "value": `*From*: ${this[c]} \n*To*:  ${newData[c]}`
+        })),
+        "color": "#ffe75e"
     }]};
     return notification;
   }

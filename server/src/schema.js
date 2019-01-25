@@ -305,8 +305,9 @@ const schema = new GraphQLSchema({
           if (measurable.creatorId !== user.agentId){
             throw new Error("User does not have permission")
           }
-
-          return measurable.update({id, name, description, expectedResolutionDate, isLocked, resolutionEndpoint})
+          let notification = await measurable.updateNotifications(user, {name, description, expectedResolutionDate, isLocked, resolutionEndpoint});
+          notify(notification);
+          return measurable.update({name, description, expectedResolutionDate, isLocked, resolutionEndpoint})
         }
       },
       editUser: {

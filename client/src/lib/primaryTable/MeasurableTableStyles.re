@@ -41,7 +41,7 @@ let dateStatus = (~measurable: DataModel.measurable) => {
       m.expectedResolutionDate,
     )
   | ARCHIVED => dateFinder("Archived", "Archived on ", m.stateUpdatedAt)
-  | JUDGED => dateFinder("Closed", "Closed on ", m.stateUpdatedAt)
+  | JUDGED => dateFinder("Judged", "Judged on ", m.stateUpdatedAt)
   };
 };
 

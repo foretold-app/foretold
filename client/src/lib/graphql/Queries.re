@@ -4,6 +4,7 @@ open Rationale.Option;
 open Rationale.Function.Infix;
 open MomentRe;
 open QueriesHelper;
+open Utils;
 
 module GetAgents = {
   type user = {
@@ -92,7 +93,7 @@ module GetUserMeasurables = {
     updatedAt: m.updatedAt,
     expectedResolutionDate: m.expectedResolutionDate,
     state: Some(m.state),
-    stateUpdatedAt: None,
+    stateUpdatedAt: m.stateUpdatedAt,
     creator: None,
   };
 
@@ -270,4 +271,95 @@ module GetUser = {
   ];
 
   module QueryComponent = ReasonApollo.CreateQuery(Query);
+};
+
+module GetMeasurableWithMeasurements = {
+  module Query = [%graphql
+    {|
+      query getMeasurable ($id: String!) {
+          measurable:
+            measurable(id: $id){
+              id
+              name
+              description
+              valueType
+              creatorId
+              resolutionEndpoint
+              state @bsDecoder(fn: "string_to_measurableState")
+              stateUpdatedAt @bsDecoder(fn: "optionalMoment")
+              expectedResolutionDate @bsDecoder(fn: "optionalMoment")
+              createdAt @bsDecoder(fn: "toMoment")
+              updatedAt @bsDecoder(fn: "toMoment")
+              creator {
+                id
+                name
+              }
+              measurements: Measurements{
+                id
+                createdAt @bsDecoder(fn: "toMoment")
+                value @bsDecoder(fn: "Value.decode")
+                competitorType
+                description
+                taggedMeasurementId
+                agent: Agent {
+                  id
+                  name
+                  user: User {
+                    id
+                    name
+                  }
+                  bot: Bot {
+                    id
+                    name
+                    competitorType
+                  }
+                }
+              }
+          }
+      }
+    |}
+  ];
+
+  module QueryComponent = ReasonApollo.CreateQuery(Query);
+
+  let withQuery = (~id, fn) => {
+    let query = Query.make(~id, ());
+    Result.Infix.(
+      QueryComponent.make(~variables=query##variables, ({result}) =>
+        result
+        |> apolloResponseToResult
+        >>= (
+          e =>
+            e##measurable
+            |> filterOptionalResult("Measurable not found" |> ste)
+        )
+        <$> fn
+        |> Result.result(idd, idd)
+      )
+      |> ReasonReact.element
+    );
+  };
+
+  let queryMeasurable = m => {
+    open DataModel;
+    let creator: option(DataModel.creator) =
+      m##creator |> Option.fmap(r => {id: r##id, name: r##name});
+
+    let measurable: DataModel.measurable = {
+      id: m##id,
+      name: m##name,
+      valueType: m##valueType,
+      description: m##description,
+      resolutionEndpoint: m##resolutionEndpoint,
+      measurementCount: None,
+      measurerCount: None,
+      createdAt: m##createdAt,
+      updatedAt: m##updatedAt,
+      expectedResolutionDate: m##expectedResolutionDate,
+      state: Some(m##state),
+      stateUpdatedAt: m##stateUpdatedAt,
+      creator,
+    };
+    measurable;
+  };
 };

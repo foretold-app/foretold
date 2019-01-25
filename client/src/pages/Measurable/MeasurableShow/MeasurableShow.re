@@ -11,73 +11,6 @@ let toOptionalMoment: option(Js.Json.t) => MomentRe.Moment.t =
     e => e <$> jsonToString <$> (r => r) |> Option.default("") |> moment
   );
 
-module GetMeasurable = {
-  module Query = [%graphql
-    {|
-      query getMeasurable ($id: String!) {
-          measurable:
-            measurable(id: $id){
-              id
-              name
-              description
-              valueType
-              creatorId
-              resolutionEndpoint
-              expectedResolutionDate @bsDecoder(fn: "optionalMoment")
-              createdAt @bsDecoder(fn: "toMoment")
-              updatedAt @bsDecoder(fn: "toMoment")
-              creator {
-                id
-                name
-              }
-              measurements: Measurements{
-                id
-                createdAt @bsDecoder(fn: "toMoment")
-                value @bsDecoder(fn: "Value.decode")
-                competitorType
-                description
-                taggedMeasurementId
-                relevantAt @bsDecoder(fn: "toOptionalMoment")
-                agent: Agent {
-                  id
-                  name
-                  user: User {
-                    id
-                    name
-                  }
-                  bot: Bot {
-                    id
-                    name
-                    competitorType
-                  }
-                }
-              }
-          }
-      }
-    |}
-  ];
-
-  module QueryComponent = ReasonApollo.CreateQuery(Query);
-
-  let withQuery = (~id, fn) => {
-    let query = Query.make(~id, ());
-    Result.Infix.(
-      QueryComponent.make(~variables=query##variables, ({result}) =>
-        result
-        |> apolloResponseToResult
-        >>= (
-          e =>
-            e##measurable
-            |> filterOptionalResult("Measurable not found" |> ste)
-        )
-        <$> fn
-        |> Result.result(idd, idd)
-      )
-      |> ReasonReact.element
-    );
-  };
-};
-
 let component = ReasonReact.statelessComponent("Measurable");
 
 let valueString = e =>
@@ -103,90 +36,70 @@ module Styles = {
       marginBottom(`px(10)),
     ]);
 };
-
-let queryMeasurable = m => {
-  open DataModel;
-  let creator: option(DataModel.creator) =
-    m##creator |> Option.fmap(r => {id: r##id, name: r##name});
-
-  let measurable: DataModel.measurable = {
-    id: m##id,
-    name: m##name,
-    valueType: m##valueType,
-    description: m##description,
-    resolutionEndpoint: m##resolutionEndpoint,
-    measurementCount: None,
-    measurerCount: None,
-    createdAt: m##createdAt,
-    updatedAt: m##updatedAt,
-    expectedResolutionDate: m##expectedResolutionDate,
-    state: None,
-    stateUpdatedAt: None,
-    creator,
-  };
-  measurable;
-};
-
 let make = (~id: string, _children) => {
   ...component,
   render: _self =>
     <div>
       <div>
         {
-          GetMeasurable.withQuery(
+          Queries.GetMeasurableWithMeasurements.withQuery(
             ~id,
             measurable => {
-              let m = queryMeasurable(measurable);
+              let m =
+                Queries.GetMeasurableWithMeasurements.queryMeasurable(
+                  measurable,
+                );
               <div>
-                <Div styles=[Style.Grid.Styles.flexColumn, Styles.header]>
-                  <Div styles=[Style.Grid.Styles.flex(1)]>
-                    <Div styles=[Style.Grid.Styles.flexRow]>
-                      <Div styles=[Style.Grid.Styles.flex(6)]>
-                        <h1> {m.name |> ste} </h1>
-                        {MeasurableTableStyles.description(~m)}
-                      </Div>
-                      <Div styles=[Style.Grid.Styles.flex(1)]>
-                        {
-                          MeasurableTableStyles.dateStatusWrapper(
-                            ~measurable=m,
-                          )
-                        }
+
+                  <Div styles=[Style.Grid.Styles.flexColumn, Styles.header]>
+                    <Div styles=[Style.Grid.Styles.flex(1)]>
+                      <Div styles=[Style.Grid.Styles.flexRow]>
+                        <Div styles=[Style.Grid.Styles.flex(6)]>
+                          <h1> {m.name |> ste} </h1>
+                          {MeasurableTableStyles.description(~m)}
+                        </Div>
+                        <Div styles=[Style.Grid.Styles.flex(1)]>
+                          {
+                            MeasurableTableStyles.dateStatusWrapper(
+                              ~measurable=m,
+                            )
+                          }
+                        </Div>
                       </Div>
                     </Div>
+                    <Div styles=[Style.Grid.Styles.flex(1)]>
+                      {MeasurableTableStyles.creatorLink(~m)}
+                      {MeasurableTableStyles.expectedResolutionDate(~m)}
+                      {MeasurableTableStyles.resolutionEndpoint(~m)}
+                    </Div>
                   </Div>
-                  <Div styles=[Style.Grid.Styles.flex(1)]>
-                    {MeasurableTableStyles.creatorLink(~m)}
-                    {MeasurableTableStyles.expectedResolutionDate(~m)}
-                    {MeasurableTableStyles.resolutionEndpoint(~m)}
-                  </Div>
-                </Div>
-                <div>
-                  <h2> {"Aggregate" |> ste} </h2>
-                  <Style.BorderedBox>
-                    <MeasurableChart measurements=measurable##measurements />
-                  </Style.BorderedBox>
-                  {
-                    SharedQueries.withLoggedInUserQuery(userQuery =>
-                      switch (userQuery) {
-                      | Some(query) =>
-                        open Rationale.Option.Infix;
-                        let userAgentId = query##user >>= (e => e##agentId);
-                        let creatorId = measurable##creatorId;
-                        <div>
-                          <h2> {"Add a Measurement" |> ste} </h2>
-                          <MeasurableShowForm
-                            measurableId=id
-                            isCreator={userAgentId == creatorId}
-                          />
-                        </div>;
-                      | _ => <div />
-                      }
-                    )
-                  }
-                  <h2> {"Previous Measurements" |> ste} </h2>
-                </div>
-                <MeasurableTable measurements=measurable##measurements />
-              </div>;
+                  <div>
+                    <h2> {"Aggregate" |> ste} </h2>
+                    <Style.BorderedBox
+                      /* <MeasurableChart measurements=measurable##measurements /> */
+                    />
+                    {
+                      SharedQueries.withLoggedInUserQuery(userQuery =>
+                        switch (userQuery) {
+                        | Some(query) =>
+                          open Rationale.Option.Infix;
+                          let userAgentId = query##user >>= (e => e##agentId);
+                          let creatorId = measurable##creatorId;
+                          <div>
+                            <h2> {"Add a Measurement" |> ste} </h2>
+                            <MeasurableShowForm
+                              measurableId=id
+                              isCreator={userAgentId == creatorId}
+                            />
+                          </div>;
+                        | _ => <div />
+                        }
+                      )
+                    }
+                    <h2> {"Previous Measurements" |> ste} </h2>
+                  </div>
+                </div>;
+                /* <MeasurableTable measurements=measurable##measurements /> */
             },
           )
         }

@@ -43,9 +43,7 @@ module.exports = (sequelize, DataTypes) => {
       afterCreate: async (measurement, options) => {
         if (measurement.dataValues.competitorType == "OBJECTIVE"){
           const measurable = await measurement.getMeasurable();
-          if (!measurable.dataValues.isLocked){
-            await measurable.lock();
-          }
+          await measurable.judged();
         }
       }
     }

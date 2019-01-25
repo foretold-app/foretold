@@ -9,6 +9,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const Sequelize = require('sequelize');
 
 const fetch = require("node-fetch");
+const moment = require('moment');
+const { clientUrl } = require('../lib/urls');
 
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Measurable', {
@@ -120,6 +122,50 @@ module.exports = (sequelize, DataTypes) => {
       });
       await this.update({ hasResolutionEndpointResolved: true, isLocked: true });
     }
+  };
+
+  Model.prototype.creationNotification = async function (creator) {
+    let agent = await creator.getAgent();
+    let notification = {
+      "attachments": [{
+        "pretext": "New Measurable Created",
+        "title": this.name,
+        "title_link": `${clientUrl}/measurables/${this.id}`,
+        "author_name": creator.name,
+        "author_link": `${clientUrl}/agents/${agent.id}`,
+        "text": this.description,
+        "fields": [{
+          "title": "Resolution Date",
+          "value": moment(this.expectedResolutionDate).format("MMM DD, YYYY"),
+          "short": true
+        }],
+        "color": "#4a8ed8"
+      }] };
+    return notification;
+  };
+
+  Model.prototype.changedFields = function (ops) {
+    return Object.keys(ops).filter(r => r !== "expectedResolutionDate").filter(r => this[r] !== ops[r]);
+  };
+
+  Model.prototype.updateNotifications = async function (creator, newData) {
+    let changed = this.changedFields(newData);
+    let agent = await creator.getAgent();
+    let notification = {
+      "attachments": [{
+        "pretext": "Measurable Updated",
+        "title": this.name,
+        "title_link": `${clientUrl}/measurables/${this.id}`,
+        "author_name": creator.name,
+        "author_link": `${clientUrl}/agents/${agent.id}`,
+        "fields": changed.map(c => ({
+          "title": c,
+          "short": false,
+          "value": `*From*: ${this[c]} \n*To*:  ${newData[c]}`
+        })),
+        "color": "#ffe75e"
+      }] };
+    return notification;
   };
 
   Model.associate = function (models) {

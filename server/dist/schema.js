@@ -25,6 +25,8 @@ var _graphqlTypeJson = require("graphql-type-json");
 
 var GraphQLJSON = _interopRequireWildcard(_graphqlTypeJson);
 
+var _notifications = require("./lib/notifications");
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 const Sequelize = require('sequelize');
@@ -250,6 +252,8 @@ const schema = new _graphql.GraphQLSchema({
             description,
             agentId: user.agentId
           });
+          let notification = await newMeasurement.creationNotification(user);
+          (0, _notifications.notify)(notification);
           const measurable = await newMeasurement.getMeasurable();
           return newMeasurement;
         }
@@ -274,6 +278,8 @@ const schema = new _graphql.GraphQLSchema({
             creatorId: user.agentId,
             resolutionEndpoint
           });
+          let notification = await newMeasurable.creationNotification(user);
+          (0, _notifications.notify)(notification);
           return newMeasurable;
         }
       },
@@ -294,8 +300,9 @@ const schema = new _graphql.GraphQLSchema({
           if (measurable.creatorId !== user.agentId) {
             throw new Error("User does not have permission");
           }
-
-          return measurable.update({ id, name, description, expectedResolutionDate, isLocked, resolutionEndpoint });
+          let notification = await measurable.updateNotifications(user, { name, description, expectedResolutionDate, isLocked, resolutionEndpoint });
+          (0, _notifications.notify)(notification);
+          return measurable.update({ name, description, expectedResolutionDate, isLocked, resolutionEndpoint });
         }
       },
       editUser: {

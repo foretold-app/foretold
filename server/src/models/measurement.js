@@ -1,5 +1,6 @@
 'use strict';
 const Sequelize = require('sequelize')
+const {clientUrl} = require('../lib/urls');
 
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Measurement', {
@@ -49,6 +50,29 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
+
+  Model.prototype.creationNotification= async function(creator){
+    let agent = await creator.getAgent();
+    let measurable = await this.getMeasurable();
+    let notification = await {
+      "attachments": [{
+        "pretext": "New Measurement Created",
+        "title": measurable.name,
+        "title_link": `${clientUrl}/measurables/${measurable.id}`,
+        "author_name": creator.name,
+        "author_link": `${clientUrl}/agents/${agent.id}`,
+        "text": this.description,
+        "fields": [
+            {
+                "title": "Type",
+                "value": this.competitorType,
+                "short": true
+            }
+        ],
+        "color": "#d2ebff"
+    }]};
+    return notification;
+  }
   Model.associate = function (models) {
     Model.Measurable = Model.belongsTo(models.Measurable, {
       foreignKey: 'measurableId'

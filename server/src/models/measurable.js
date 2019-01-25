@@ -2,6 +2,8 @@
 const Sequelize = require('sequelize')
 import _ from "lodash";
 const fetch = require("node-fetch");
+const moment = require('moment');
+const {clientUrl} = require('../lib/urls');
 
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Measurable', {
@@ -114,6 +116,28 @@ module.exports = (sequelize, DataTypes) => {
       });
       await this.update({hasResolutionEndpointResolved: true, isLocked: true})
     }
+  }
+
+  Model.prototype.creationNotification= async function(creator){
+    let agent = await creator.getAgent();
+    let notification = await {
+      "attachments": [{
+        "pretext": "New Measurable Created",
+        "title": this.name,
+        "title_link": `${clientUrl}/measurables/${this.id}`,
+        "author_name": creator.name,
+        "author_link": `${clientUrl}/agents/${agent.id}`,
+        "text": this.description,
+        "fields": [
+            {
+                "title": "Resolution Date",
+                "value": moment(this.expectedResolutionDate).format("MMM DD, YYYY"),
+                "short": true
+            }
+        ],
+        "color": "#4a8ed8"
+    }]};
+    return notification;
   }
 
   Model.associate = function (models) {

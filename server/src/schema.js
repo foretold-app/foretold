@@ -25,6 +25,7 @@ import {
   GraphQLInputObjectType
 } from "graphql";
 import * as GraphQLJSON from "graphql-type-json";
+import {notify} from "./lib/notifications";
 
 function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -256,6 +257,8 @@ const schema = new GraphQLSchema({
             description,
             agentId: user.agentId,
           })
+          let notification = await newMeasurement.creationNotification(user);
+          notify(notification);
           const measurable = await newMeasurement.getMeasurable();
           return newMeasurement
         }
@@ -280,6 +283,8 @@ const schema = new GraphQLSchema({
           creatorId: user.agentId,
           resolutionEndpoint
           })
+          let notification = await newMeasurable.creationNotification(user);
+          notify(notification)
           return newMeasurable
         }
       },

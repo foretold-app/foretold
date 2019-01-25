@@ -43,6 +43,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.DATE
     },
+    isArchived: {
+      allowNull: false,
+      defaultValue: false,
+      type: DataTypes.BOOLEAN
+    },
+    archivedAt: {
+      allowNull: true,
+      type: DataTypes.DATE
+    },
     expectedResolutionDate: {
       allowNull: true,
       type: DataTypes.DATE

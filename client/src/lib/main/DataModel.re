@@ -37,6 +37,7 @@ type measurable = {
   name: string,
   valueType,
   isLocked: bool,
+  isArchived: bool,
   description: option(string),
   resolutionEndpoint: option(string),
   measurementCount: option(int),
@@ -45,6 +46,7 @@ type measurable = {
   updatedAt: MomentRe.Moment.t,
   expectedResolutionDate: option(MomentRe.Moment.t),
   lockedAt: option(MomentRe.Moment.t),
+  archivedAt: option(MomentRe.Moment.t),
   creator: option(creator),
 };
 

@@ -22,6 +22,7 @@ module GetMeasurable = {
               description
               valueType
               isLocked
+              isArchived
               creatorId
               resolutionEndpoint
               expectedResolutionDate @bsDecoder(fn: "optionalMoment")
@@ -115,6 +116,7 @@ let queryMeasurable = m => {
     id: m##id,
     name: m##name,
     isLocked: m##isLocked,
+    isArchived: m##isArchived,
     valueType: m##valueType,
     description: m##description,
     resolutionEndpoint: m##resolutionEndpoint,
@@ -123,6 +125,7 @@ let queryMeasurable = m => {
     createdAt: m##createdAt,
     updatedAt: m##updatedAt,
     expectedResolutionDate: m##expectedResolutionDate,
+    archivedAt: None,
     lockedAt: m##lockedAt,
     creator,
   };

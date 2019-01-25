@@ -26,8 +26,8 @@ let withQuery = (~id, fn) => {
 module WithEditMutation = {
   module GraphQL = [%graphql
     {|
-             mutation editMeasurable($id: String!, $name: String!, $description: String!, $isLocked: Boolean!,$expectedResolutionDate:Date, $resolutionEndpoint: String!) {
-                 editMeasurable(id: $id, name: $name, description: $description, isLocked: $isLocked, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint) {
+             mutation editMeasurable($id: String!, $name: String!, $description: String!, $isLocked: Boolean!, $isArchived: Boolean!, $expectedResolutionDate:Date, $resolutionEndpoint: String!) {
+                 editMeasurable(id: $id, name: $name, description: $description, isLocked: $isLocked, isArchived: $isArchived, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint) {
                    id
                  }
              }
@@ -42,6 +42,7 @@ module WithEditMutation = {
         id: string,
         name: string,
         isLocked: string,
+        isArchived: string,
         description: string,
         expectedResolutionDate: string,
         resolutionEndpoint: string,
@@ -51,6 +52,7 @@ module WithEditMutation = {
         ~id,
         ~name,
         ~isLocked=isLocked == "true" ? true : false,
+        ~isArchived=isArchived == "true" ? true : false,
         ~description,
         ~expectedResolutionDate=expectedResolutionDate |> Js.Json.string,
         ~resolutionEndpoint,
@@ -68,17 +70,20 @@ module SignUpParams = {
     expectedResolutionDate: string,
     resolutionEndpoint: string,
     isLocked: string,
+    isArchived: string,
   };
   type fields = [
     | `name
     | `description
     | `isLocked
+    | `isArchived
     | `expectedResolutionDate
     | `resolutionEndpoint
   ];
   let lens = [
     (`name, s => s.name, (s, name) => {...s, name}),
     (`isLocked, s => s.isLocked, (s, isLocked) => {...s, isLocked}),
+    (`isArchived, s => s.isArchived, (s, isArchived) => {...s, isArchived}),
     (
       `description,
       s => s.description,
@@ -129,6 +134,16 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
         <AntdSwitch
           checked={form.values.isLocked == "true" ? true : false}
           onChange={e => handleChange(`isLocked, e ? "true" : "false")}
+        />
+      </Form.Item>
+      <Form.Item>
+        <h3> {"Archived?" |> ste} </h3>
+        <p>
+          {"Lock this measurable if you do be hidden from main views.." |> ste}
+        </p>
+        <AntdSwitch
+          checked={form.values.isArchived == "true" ? true : false}
+          onChange={e => handleChange(`isArchived, e ? "true" : "false")}
         />
       </Form.Item>
       <Form.Item>
@@ -187,6 +202,7 @@ let make = (~id: string, _children) => {
                         id,
                         values.name,
                         values.isLocked,
+                        values.isArchived,
                         values.description,
                         values.expectedResolutionDate,
                         values.resolutionEndpoint,
@@ -201,6 +217,7 @@ let make = (~id: string, _children) => {
                     resolutionEndpoint:
                       measurable.resolutionEndpoint |> Option.default(""),
                     isLocked: measurable.isLocked ? "true" : "false",
+                    isArchived: measurable.isArchived ? "true" : "false",
                   },
                   ~schema=[(`name, Custom(_ => None))],
                   ({handleSubmit, handleChange, form, _}) =>

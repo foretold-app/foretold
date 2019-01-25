@@ -50,56 +50,55 @@ let make = (~id: string, _children) => {
                   measurable,
                 );
               <div>
-
-                  <Div styles=[Style.Grid.Styles.flexColumn, Styles.header]>
-                    <Div styles=[Style.Grid.Styles.flex(1)]>
-                      <Div styles=[Style.Grid.Styles.flexRow]>
-                        <Div styles=[Style.Grid.Styles.flex(6)]>
-                          <h1> {m.name |> ste} </h1>
-                          {MeasurableTableStyles.description(~m)}
-                        </Div>
-                        <Div styles=[Style.Grid.Styles.flex(1)]>
-                          {
-                            MeasurableTableStyles.dateStatusWrapper(
-                              ~measurable=m,
-                            )
-                          }
-                        </Div>
+                <Div styles=[Style.Grid.Styles.flexColumn, Styles.header]>
+                  <Div styles=[Style.Grid.Styles.flex(1)]>
+                    <Div styles=[Style.Grid.Styles.flexRow]>
+                      <Div styles=[Style.Grid.Styles.flex(6)]>
+                        <h1> {m.name |> ste} </h1>
+                        {MeasurableTableStyles.description(~m)}
+                      </Div>
+                      <Div styles=[Style.Grid.Styles.flex(1)]>
+                        {
+                          MeasurableTableStyles.dateStatusWrapper(
+                            ~measurable=m,
+                          )
+                        }
                       </Div>
                     </Div>
-                    <Div styles=[Style.Grid.Styles.flex(1)]>
-                      {MeasurableTableStyles.creatorLink(~m)}
-                      {MeasurableTableStyles.expectedResolutionDate(~m)}
-                      {MeasurableTableStyles.resolutionEndpoint(~m)}
-                    </Div>
                   </Div>
-                  <div>
-                    <h2> {"Aggregate" |> ste} </h2>
-                    <Style.BorderedBox
-                      /* <MeasurableChart measurements=measurable##measurements /> */
-                    />
-                    {
-                      SharedQueries.withLoggedInUserQuery(userQuery =>
-                        switch (userQuery) {
-                        | Some(query) =>
-                          open Rationale.Option.Infix;
-                          let userAgentId = query##user >>= (e => e##agentId);
-                          let creatorId = measurable##creatorId;
-                          <div>
-                            <h2> {"Add a Measurement" |> ste} </h2>
-                            <MeasurableShowForm
-                              measurableId=id
-                              isCreator={userAgentId == creatorId}
-                            />
-                          </div>;
-                        | _ => <div />
-                        }
-                      )
-                    }
-                    <h2> {"Previous Measurements" |> ste} </h2>
-                  </div>
-                </div>;
-                /* <MeasurableTable measurements=measurable##measurements /> */
+                  <Div styles=[Style.Grid.Styles.flex(1)]>
+                    {MeasurableTableStyles.creatorLink(~m)}
+                    {MeasurableTableStyles.expectedResolutionDate(~m)}
+                    {MeasurableTableStyles.resolutionEndpoint(~m)}
+                  </Div>
+                </Div>
+                <div>
+                  <h2> {"Aggregate" |> ste} </h2>
+                  <Style.BorderedBox>
+                    <MeasurableChart measurements=measurable##measurements />
+                  </Style.BorderedBox>
+                  {
+                    SharedQueries.withLoggedInUserQuery(userQuery =>
+                      switch (userQuery) {
+                      | Some(query) =>
+                        open Rationale.Option.Infix;
+                        let userAgentId = query##user >>= (e => e##agentId);
+                        let creatorId = measurable##creatorId;
+                        <div>
+                          <h2> {"Add a Measurement" |> ste} </h2>
+                          <MeasurableShowForm
+                            measurableId=id
+                            isCreator={userAgentId == creatorId}
+                          />
+                        </div>;
+                      | _ => <div />
+                      }
+                    )
+                  }
+                  <h2> {"Previous Measurements" |> ste} </h2>
+                  <MeasurableTable measurements=measurable##measurements />
+                </div>
+              </div>;
             },
           )
         }

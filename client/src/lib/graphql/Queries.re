@@ -1,8 +1,5 @@
 /* I'm really not sure why I needed to do the converters, and couldn't just import the files from DataModel.re */
 open Rationale;
-open Rationale.Option;
-open Rationale.Function.Infix;
-open MomentRe;
 open QueriesHelper;
 open Utils;
 
@@ -157,7 +154,7 @@ module GetMeasurable = {
     updatedAt: m.updatedAt,
     expectedResolutionDate: m.expectedResolutionDate,
     state: Some(m.state),
-    stateUpdatedAt: None,
+    stateUpdatedAt: m.stateUpdatedAt,
     creator: None,
   };
   module Query = [%graphql
@@ -221,7 +218,7 @@ module GetMeasurables = {
     updatedAt: m.updatedAt,
     expectedResolutionDate: m.expectedResolutionDate,
     state: Some(m.state),
-    stateUpdatedAt: None,
+    stateUpdatedAt: m.stateUpdatedAt,
     creator: None,
   };
 
@@ -298,6 +295,7 @@ module GetMeasurableWithMeasurements = {
                 id
                 createdAt @bsDecoder(fn: "toMoment")
                 value @bsDecoder(fn: "Value.decode")
+                relevantAt @bsDecoder(fn: "optionalMoment")
                 competitorType
                 description
                 taggedMeasurementId
@@ -333,7 +331,7 @@ module GetMeasurableWithMeasurements = {
             e##measurable
             |> filterOptionalResult("Measurable not found" |> ste)
         )
-        <$> fn
+        |> Rationale.Result.fmap(fn)
         |> Result.result(idd, idd)
       )
       |> ReasonReact.element

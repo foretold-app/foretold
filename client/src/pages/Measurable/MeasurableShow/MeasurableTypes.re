@@ -3,32 +3,26 @@ type measurement = {
   .
   "id": string,
   "agent":
-    option(
-      {
-        .
-        "bot":
-          option(
-            {
-              .
-              "id": string,
-              "name": option(string),
-              "competitorType": competitorType,
-            },
-          ),
-        "id": string,
-        "name": option(string),
-        "user":
-          option(
-            {
-              .
-              "id": string,
-              "name": string,
-            },
-          ),
-      },
-    ),
+    option({
+      .
+      "bot":
+        option({
+          .
+          "id": string,
+          "name": option(string),
+          "competitorType": competitorType,
+        }),
+      "id": string,
+      "name": option(string),
+      "user":
+        option({
+          .
+          "id": string,
+          "name": string,
+        }),
+    }),
   "description": option(string),
-  "relevantAt": MomentRe.Moment.t,
+  "relevantAt": option(MomentRe.Moment.t),
   "competitorType": competitorType,
   "createdAt": MomentRe.Moment.t,
   "taggedMeasurementId": option(string),

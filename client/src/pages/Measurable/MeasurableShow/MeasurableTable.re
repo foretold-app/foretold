@@ -91,7 +91,11 @@ let transformations = [
   ),
   ColumnBundle.make(
     ~headerName="Relevant at",
-    ~get=(e: tt) => e##relevantAt |> Moment.format("L, h:mm:ss a"),
+    ~get=
+      (e: tt) =>
+        e##relevantAt
+        |> Rationale.Option.fmap(Moment.format("L, h:mm:ss a"))
+        |> Rationale.Option.default(""),
     (),
   ),
 ];

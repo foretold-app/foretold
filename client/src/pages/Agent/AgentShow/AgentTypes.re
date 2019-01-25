@@ -1,8 +1,7 @@
 open Rationale.Option.Infix;
 open Rationale.Function.Infix;
 open MomentRe;
-
-let toMoment = QueriesHelper.jsonToString ||> moment;
+open QueriesHelper;
 
 /* let toOptionalMoment: option(Js.Json.t) => MomentRe.Moment.t = x => x <$> jsonToString |> Option.default("") |> moment */
 let toOptionalMoment: option(Js.Json.t) => MomentRe.Moment.t =
@@ -31,12 +30,12 @@ type bot = {
 type measurable = {
   id: string,
   name: string,
-  isLocked: bool,
+  description: option(string),
 };
 
 type measurement = {
   id: string,
-  relevantAt: MomentRe.Moment.t,
+  relevantAt: option(MomentRe.Moment.t),
   competitorType,
   description: option(string),
   value: Belt.Result.t(Value.t, string),
@@ -67,18 +66,18 @@ module GetAgent = [%graphql
           competitorType
         }
         measurements: Measurements @bsRecord{
-            id
-            createdAt @bsDecoder(fn: "toMoment")
-            relevantAt @bsDecoder(fn: "toOptionalMoment")
-            value @bsDecoder(fn: "Value.decode")
-            description
-            competitorType
-            taggedMeasurementId
-            measurable: Measurable @bsRecord{
-              id
-              name
-              isLocked
-            }
+           id
+           createdAt @bsDecoder(fn: "toMoment")
+           relevantAt @bsDecoder(fn: "optionalMoment")
+           value @bsDecoder(fn: "Value.decode")
+           description
+           competitorType
+           taggedMeasurementId
+           measurable: Measurable @bsRecord{
+             id
+             name
+             description
+          }
         }
         }
     }

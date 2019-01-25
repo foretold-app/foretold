@@ -70,14 +70,12 @@ type resultData = array(array(string));
 type item = {
   name: string,
   description: string,
-  isLocked: bool,
   expectedResolutionDate: string,
 };
 
 let toItem = (r: array(string)): item => {
   name: r[0],
   description: r[1],
-  isLocked: r[2] == "true" ? true : false,
   expectedResolutionDate: r[3],
 };
 

@@ -12,6 +12,12 @@ const fetch = require("node-fetch");
 const moment = require('moment');
 const { clientUrl } = require('../lib/urls');
 
+const states = {
+  ARCHIVED: "ARCHIVED",
+  OPEN: "OPEN",
+  JUDGED: "JUDGED"
+};
+
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Measurable', {
     id: {
@@ -41,12 +47,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM(["FLOAT", "DATE", "PERCENTAGE"]),
       allowNull: false
     },
-    isLocked: {
+    isJudged: {
       allowNull: false,
       defaultValue: false,
       type: DataTypes.BOOLEAN
     },
-    lockedAt: {
+    state: {
+      type: DataTypes.STRING,
+      defaultValue: "OPEN",
+      allowNull: false
+    },
+    stateUpdatedAt: {
       allowNull: true,
       type: DataTypes.DATE
     },
@@ -107,8 +118,23 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  Model.prototype.lock = async function () {
-    await this.update({ isLocked: true, lockedAt: new Date() });
+  Model.prototype.updateState = async function (state) {
+    await this.update({ state, stateUpdatedAt: new Date() });
+  };
+
+  Model.prototype.archive = async function () {
+    await this.updateState(states.ARCHIVED);
+  };
+
+  Model.prototype.unarchive = async function () {
+    await this.updateState(this.isJudged ? states.JUDGED : states.OPEN);
+  };
+
+  Model.prototype.judged = async function () {
+    if (!this.isJudged || this.state !== states.JUDGED) {
+      await this.update({ isJudged: true });
+      await this.updateState(states.JUDGED);
+    }
   };
 
   Model.prototype.processResolution = async function (agentId) {
@@ -120,7 +146,8 @@ module.exports = (sequelize, DataTypes) => {
         measurableId: this.dataValues.id,
         value: { "dataType": "floatPoint", "data": asFloat }
       });
-      await this.update({ hasResolutionEndpointResolved: true, isLocked: true });
+      await this.update({ hasResolutionEndpointResolved: true });
+      await this.judged();
     }
   };
 

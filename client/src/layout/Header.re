@@ -1,5 +1,4 @@
 open Antd.Grid;
-open Utils;
 open Antd;
 
 let ste = ReasonReact.string;

@@ -30,7 +30,7 @@ let withAgentQuery = (~id, innerFn) => {
   let query = AgentTypes.GetAgent.make(~id, ());
   AgentTypes.GetAgentQuery.make(~variables=query##variables, ({result}) =>
     result
-    |> apolloResponseToResult
+    |> ApolloUtils.apolloResponseToResult
     <$> (e => e##agent)
     >>= (
       e =>

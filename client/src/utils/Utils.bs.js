@@ -4,7 +4,6 @@
 var $$Array = require("bs-platform/lib/js/array.js");
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
-var React = require("react");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 
 function resolveOption(opt) {
@@ -25,16 +24,8 @@ function resolveRegex(exp, str) {
   }
 }
 
-function apolloResponseToResult(result) {
-  if (typeof result === "number") {
-    return /* Error */Block.__(1, [React.createElement("div", undefined, "Loading")]);
-  } else if (result.tag) {
-    return /* Ok */Block.__(0, [result[0]]);
-  } else {
-    var error = result[0];
-    console.log(error);
-    return /* Error */Block.__(1, [React.createElement("div", undefined, "Error: " + error.message)]);
-  }
+function ste(prim) {
+  return prim;
 }
 
 function filterOptionalResult(errorMessage, result) {
@@ -43,10 +34,6 @@ function filterOptionalResult(errorMessage, result) {
   } else {
     return /* Error */Block.__(1, [errorMessage]);
   }
-}
-
-function ste(prim) {
-  return prim;
 }
 
 function idd(e) {
@@ -74,9 +61,8 @@ function filterAndFold(fn) {
 
 exports.resolveOption = resolveOption;
 exports.resolveRegex = resolveRegex;
-exports.apolloResponseToResult = apolloResponseToResult;
-exports.filterOptionalResult = filterOptionalResult;
 exports.ste = ste;
+exports.filterOptionalResult = filterOptionalResult;
 exports.idd = idd;
 exports.filterAndFold = filterAndFold;
-/* react Not a pure module */
+/* No side effect */

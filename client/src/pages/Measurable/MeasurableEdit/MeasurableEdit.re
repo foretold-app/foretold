@@ -11,7 +11,7 @@ let withQuery = (~id, fn) => {
     Queries.GetMeasurable.QueryComponent.make(
       ~variables=query##variables, ({result}) =>
       result
-      |> apolloResponseToResult
+      |> ApolloUtils.apolloResponseToResult
       >>= (
         e =>
           e##measurable |> filterOptionalResult("Measurable not found" |> ste)

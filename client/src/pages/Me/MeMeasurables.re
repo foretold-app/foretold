@@ -47,7 +47,7 @@ module WithAgent = {
     Queries.GetUserMeasurables.QueryComponent.make(
       ~variables=query##variables, ({result}) =>
       result
-      |> apolloResponseToResult
+      |> ApolloUtils.apolloResponseToResult
       <$> (e => e##agent)
       >>= (
         e =>

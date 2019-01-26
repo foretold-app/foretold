@@ -20,7 +20,7 @@ let make = _children => {
     Result.Infix.(
       Queries.GetMeasurables.QueryComponent.make(o =>
         o.result
-        |> apolloResponseToResult
+        |> ApolloUtils.apolloResponseToResult
         <$> (d => d##measurables)
         <$> Extensions.Array.concatSomes
         <$> (d => d |> Array.map(Queries.GetMeasurables.toMeasurable))

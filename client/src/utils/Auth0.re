@@ -14,16 +14,16 @@ type clientOptions = {
 };
 
 [@bs.module "auth0-js"] [@bs.new]
-external createClient : clientOptions => generatedAuth0Client = "WebAuth";
+external createClient: clientOptions => generatedAuth0Client = "WebAuth";
 
-[@bs.module] external jwt_decode : string => Js.Json.t = "jwt-decode";
+[@bs.module] external jwt_decode: string => Js.Json.t = "jwt-decode";
 
-let safe_jwt_decode = (s: string) : option('a) =>
+let safe_jwt_decode = (s: string): option('a) =>
   try (Some(jwt_decode(s))) {
   | _ => None
   };
 
-let getAuth0Id = (idToken: string) : option(string) =>
+let getAuth0Id = (idToken: string): option(string) =>
   idToken
   |> safe_jwt_decode
   >>= Js.Json.decodeObject
@@ -51,7 +51,13 @@ let handleAuth = (url: ReasonReact.Router.url) => {
   ();
 };
 
+let foobar = () => {
+  Js.log("LOGGING OUT!");
+  3;
+};
+
 let logout = () => {
+  Js.log("LOGGING OUT!");
   open Dom.Storage;
   localStorage |> removeItem("access_token");
   localStorage |> removeItem("id_token");

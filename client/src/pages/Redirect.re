@@ -17,7 +17,7 @@ let withUserQuery =
     Queries.GetUser.QueryComponent.make(
       ~variables=query##variables, ~pollInterval=5000, ({result}) =>
       result
-      |> apolloResponseToResult
+      |> ApolloUtils.apolloResponseToResult
       <$> (e => innerComponentFn(Some(e)))
       |> Rationale.Result.result(idd, idd)
     )

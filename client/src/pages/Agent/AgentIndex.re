@@ -41,7 +41,7 @@ let make = _children => {
       {
         Queries.GetAgents.QueryComponent.make(({result}) =>
           result
-          |> apolloResponseToResult
+          |> ApolloUtils.apolloResponseToResult
           <$> (d => d##agents)
           <$> (
             e => {

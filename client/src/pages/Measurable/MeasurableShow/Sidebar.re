@@ -55,7 +55,7 @@
      render: self =>
        Queries.GetMeasurablesQuery.make(o =>
          o.result
-         |> apolloResponseToResult
+         |> ApolloUtils.apolloResponseToResult
          <$> (d => d##measurables)
          <$> catOptionals
          <$> (e => <div> (showQueryList(~data=e, ~selectedId)) </div>)

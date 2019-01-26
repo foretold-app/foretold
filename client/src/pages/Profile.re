@@ -46,7 +46,7 @@ let withUserQuery =
   Queries.GetUser.QueryComponent.make(
     ~variables=query##variables, ({result}) =>
     result
-    |> apolloResponseToResult
+    |> ApolloUtils.apolloResponseToResult
     <$> innerComponentFn
     |> Rationale.Result.result(idd, idd)
   )

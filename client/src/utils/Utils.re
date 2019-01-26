@@ -22,22 +22,11 @@ let resolveRegex = (exp, str) => {
 
 let ste = ReasonReact.string;
 
-let apolloResponseToResult = (result: ReasonApolloTypes.queryResponse('a)) =>
-  switch (result) {
-  | Loading => Error(<div> ("Loading" |> ste) </div>)
-  | Error(error) =>
-    Js.log(error);
-    Error(<div> ("Error: " ++ error##message |> ste) </div>);
-  | Data(response) => Ok(response)
-  };
-
 let filterOptionalResult = (errorMessage, result: option('a)) =>
   switch (result) {
   | Some(v) => Ok(v)
   | None => Error(errorMessage)
   };
-
-let ste = ReasonReact.string;
 
 let idd = e => e;
 

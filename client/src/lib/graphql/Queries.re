@@ -325,7 +325,7 @@ module GetMeasurableWithMeasurements = {
     Result.Infix.(
       QueryComponent.make(~variables=query##variables, ({result}) =>
         result
-        |> apolloResponseToResult
+        |> ApolloUtils.apolloResponseToResult
         >>= (
           e =>
             e##measurable

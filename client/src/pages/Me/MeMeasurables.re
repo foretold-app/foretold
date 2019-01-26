@@ -63,66 +63,19 @@ module WithAgent = {
   };
 };
 
-let logThis = (ref, _) => Js.log(ref);
-
-type resultData = array(array(string));
-
-type item = {
-  name: string,
-  description: string,
-  expectedResolutionDate: string,
-};
-
-let toItem = (r: array(string)): item => {
-  name: r[0],
-  description: r[1],
-  expectedResolutionDate: r[3],
-};
-
-type reactRef = ref(option(ReasonReact.reactRef));
-type state = {hotTableRef: reactRef};
-
-type action =
-  | Save;
-
-let component = ReasonReact.reducerComponent("MeMeasurables");
-
-let setSectionRef = (theRef, {ReasonReact.state}) =>
-  state.hotTableRef := Js.Nullable.toOption(theRef);
-
-let toItems = (hotTableRef: reactRef): array(item) =>
-  switch (hotTableRef^) {
-  | None => [||]
-  | Some(r) =>
-    let data: resultData = ReasonReact.refToJsObj(r)##hotInstance##getData();
-    Js.log2("HIHI", data);
-    Array.map(toItem, data);
-  };
+let component = ReasonReact.statelessComponent("MeMeasurables");
 
 let make = (~id: string, _children) => {
   ...component,
-  reducer: (action: action, state: state) =>
-    switch (action) {
-    | Save =>
-      Js.log(toItems(state.hotTableRef));
-      ReasonReact.NoUpdate;
-    },
-  initialState: () => {hotTableRef: ref(None)},
-  shouldUpdate: a => false,
-  render: self =>
-    WithEditMutation.Mutation.make((mutation, _) =>
-      WithAgent.query(
-        ~id,
-        agent => {
-          let m =
-            agent##measurables
-            |> ArrayOptional.concatSomes
-            |> Array.map(Queries.GetUserMeasurables.toMeasurable);
-          <StopComponentUpdate>
-            {EditMe.make(~measurables=m, ())}
-          </StopComponentUpdate>;
-        },
-      )
-    )
-    |> ReasonReact.element,
+  render: _ =>
+    WithAgent.query(
+      ~id,
+      agent => {
+        let m =
+          agent##measurables
+          |> ArrayOptional.concatSomes
+          |> Array.map(Queries.GetUserMeasurables.toMeasurable);
+        EditMe.make(~measurables=m, ());
+      },
+    ),
 };

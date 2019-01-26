@@ -77,7 +77,11 @@ let creatorLink = (~m: DataModel.measurable) =>
 
 let editLink = (~m: DataModel.measurable) =>
   <div className=PrimaryTableStyles.item>
-    <a href={"/measurables/" ++ m.id ++ "/edit"}> {"Edit" |> ste} </a>
+    <a
+      href={"/measurables/" ++ m.id ++ "/edit"}
+      className={PrimaryTableStyles.itemButton(NORMAL)}>
+      {"Edit" |> ste}
+    </a>
   </div>;
 
 let measurements = (~m: DataModel.measurable) =>
@@ -110,3 +114,78 @@ let resolutionEndpoint = (~m: DataModel.measurable) =>
       <span> <span> {"Endpoint: " |> ste} </span> {text |> ste} </span>
     </div>
   };
+
+module WithArchiveMutation = {
+  module GraphQL = [%graphql
+    {|
+             mutation archiveMeasurable($id: String!) {
+                 archiveMeasurable(id: $id) {
+                   id
+                 }
+             }
+     |}
+  ];
+
+  module Mutation = ReasonApollo.CreateMutation(GraphQL);
+
+  let mutate = (mutation: Mutation.apolloMutation, id: string) => {
+    let m = GraphQL.make(~id, ());
+    mutation(
+      ~variables=m##variables,
+      ~refetchQueries=[|"getAgent", "getMeasurables"|],
+      (),
+    )
+    |> ignore;
+  };
+};
+
+module WithUnarchiveMutation = {
+  module GraphQL = [%graphql
+    {|
+             mutation unArchiveMeasurable($id: String!) {
+                 unArchiveMeasurable(id: $id) {
+                   id
+                 }
+             }
+     |}
+  ];
+
+  module Mutation = ReasonApollo.CreateMutation(GraphQL);
+
+  let mutate = (mutation: Mutation.apolloMutation, id: string) => {
+    let m = GraphQL.make(~id, ());
+    mutation(
+      ~variables=m##variables,
+      ~refetchQueries=[|"getAgent", "getMeasurables"|],
+      (),
+    )
+    |> ignore;
+  };
+};
+
+let archiveButton = (~m: DataModel.measurable) =>
+  WithArchiveMutation.Mutation.make((mutation, _) =>
+    <div className=PrimaryTableStyles.item>
+      <div
+        className={PrimaryTableStyles.itemButton(DANGER)}
+        onClick={_ => WithArchiveMutation.mutate(mutation, m.id)}>
+        {"Archive" |> ste}
+      </div>
+    </div>
+  )
+  |> ReasonReact.element;
+
+let unArchiveButton = (~m: DataModel.measurable) =>
+  WithUnarchiveMutation.Mutation.make((mutation, _) =>
+    <div className=PrimaryTableStyles.item>
+      <div
+        className={PrimaryTableStyles.itemButton(DANGER)}
+        onClick={_ => WithUnarchiveMutation.mutate(mutation, m.id)}>
+        {"Unarchive" |> ste}
+      </div>
+    </div>
+  )
+  |> ReasonReact.element;
+
+let archiveOption = (~m: DataModel.measurable) =>
+  status(m) !== ARCHIVED ? archiveButton(~m) : unArchiveButton(~m);

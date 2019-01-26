@@ -85,20 +85,28 @@ let editLink = (~m: DataModel.measurable) =>
   </div>;
 
 let measurements = (~m: DataModel.measurable) =>
-  <div className=PrimaryTableStyles.item>
-    <span>
-      {m.measurementCount |> Option.default(0) |> string_of_int |> ste}
-    </span>
-    <span> {" measurements" |> ste} </span>
-  </div>;
+  switch (m.measurementCount) {
+  | Some(0) => <div />
+  | None => <div />
+  | Some(count) =>
+    <div className=PrimaryTableStyles.item>
+      <span> {count |> string_of_int |> ste} </span>
+      <span> {" measurements" |> ste} </span>
+    </div>
+  };
 
 let measurers = (~m: DataModel.measurable) =>
-  <div className=PrimaryTableStyles.item>
-    <span>
-      {m.measurerCount |> Option.default(0) |> string_of_int |> ste}
-      <span> {" measurers" |> ste} </span>
-    </span>
-  </div>;
+  switch (m.measurerCount) {
+  | Some(0) => <div />
+  | None => <div />
+  | Some(count) =>
+    <div className=PrimaryTableStyles.item>
+      <span>
+        {count |> string_of_int |> ste}
+        <span> {" measurers" |> ste} </span>
+      </span>
+    </div>
+  };
 
 let expectedResolutionDate = (~m: DataModel.measurable) =>
   <div className=PrimaryTableStyles.item>

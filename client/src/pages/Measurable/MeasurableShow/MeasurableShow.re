@@ -68,7 +68,6 @@ let make = (~id: string, _children) => {
                   </Div>
                   <Div styles=[Style.Grid.Styles.flex(1)]>
                     {MeasurableTableStyles.creatorLink(~m)}
-                    {MeasurableTableStyles.expectedResolutionDate(~m)}
                     {MeasurableTableStyles.resolutionEndpoint(~m)}
                   </Div>
                 </Div>

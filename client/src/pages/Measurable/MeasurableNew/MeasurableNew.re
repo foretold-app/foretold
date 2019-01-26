@@ -166,7 +166,11 @@ let make = _children => {
                 {"Error: " ++ e##message |> ste}
                 {showForm(~form, ~handleSubmit, ~handleChange)}
               </div>
-            | Data(_) => <h2> {"Measurable successfully created" |> ste} </h2>
+            | Data(data) =>
+              data##createMeasurable
+              |> Option.fmap(e => e##id)
+              |> doIfSome(i => ReasonReact.Router.push("/measurables/" ++ i));
+              <h2> {"Measurable successfully created" |> ste} </h2>;
             | NotCalled => showForm(~form, ~handleSubmit, ~handleChange)
             },
         )

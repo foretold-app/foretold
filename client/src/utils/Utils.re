@@ -35,3 +35,9 @@ let filterAndFold = fn =>
     (acc, elem) => fn(elem, e => Array.concat([acc, [|e|]]), () => acc),
     [||],
   );
+
+let doIfSome = (fn, s: option('a)) =>
+  switch (s) {
+  | Some(r) => fn(r)
+  | _ => ()
+  };

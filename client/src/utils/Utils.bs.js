@@ -59,10 +59,19 @@ function filterAndFold(fn) {
     });
 }
 
+function doIfSome(fn, s) {
+  if (s !== undefined) {
+    return Curry._1(fn, Js_primitive.valFromOption(s));
+  } else {
+    return /* () */0;
+  }
+}
+
 exports.resolveOption = resolveOption;
 exports.resolveRegex = resolveRegex;
 exports.ste = ste;
 exports.filterOptionalResult = filterOptionalResult;
 exports.idd = idd;
 exports.filterAndFold = filterAndFold;
+exports.doIfSome = doIfSome;
 /* No side effect */

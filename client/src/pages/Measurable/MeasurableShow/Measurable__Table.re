@@ -135,7 +135,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       measurements
       |> ArrayOptional.concatSomes
       |> Js_array.sortInPlaceWith((a, b) =>
-           toUnix(b) > toUnix(a) ? (-1) : 1
+           toUnix(b) > toUnix(a) ? 1 : (-1)
          );
 
     let bb = bounds(data);

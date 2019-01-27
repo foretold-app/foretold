@@ -8,8 +8,8 @@ let make = (~data, ~bounds, _children) => {
     let (low, high) = bounds;
     Victory.(
       <VictoryChart
-        padding={"top": 0, "bottom": 0, "right": 0, "left": 0}
-        height=25
+        padding={"top": 5, "bottom": 0, "right": 0, "left": 0}
+        height=20
         maxDomain={"x": high}
         minDomain={"x": low}>
         <VictoryAxis
@@ -29,7 +29,7 @@ let make = (~data, ~bounds, _children) => {
           data
           style={
             "data": {
-              "fill": "rgb(219, 223, 229)",
+              "fill": "rgb(188, 204, 212)",
               "strokeWidth": "1",
               "width": "10px",
             },

@@ -118,7 +118,7 @@ let statusColor = (~measurable: DataModel.measurable) => {
     switch (status(measurable)) {
     | OPEN => [background(`hex("bff5bd"))]
     | PENDING_REVIEW => [background(`hex("fff8da"))]
-    | JUDGED => [background(`hex("f3cccc"))]
+    | JUDGED => [background(`hex("ead7f3"))]
     | ARCHIVED => [background(`hex("cccccc"))]
     };
   style([main, statusSpecific] |> List.concat);

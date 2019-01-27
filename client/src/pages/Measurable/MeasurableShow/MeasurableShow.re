@@ -73,10 +73,6 @@ let make = (~id: string, _children) => {
                   </Div>
                 </Div>
                 <div>
-                  <h2> {"Aggregate" |> ste} </h2>
-                  <Style.BorderedBox>
-                    <MeasurableChart measurements=measurable##measurements />
-                  </Style.BorderedBox>
                   {
                     SharedQueries.withLoggedInUserQuery(userQuery =>
                       switch (userQuery) {
@@ -95,8 +91,7 @@ let make = (~id: string, _children) => {
                       }
                     )
                   }
-                  <h2> {"Previous Measurements" |> ste} </h2>
-                  /* <MeasurableTable measurements=measurable##measurements /> */
+                  <h2> {"Measurements" |> ste} </h2>
                   <Measurable__Table measurements=measurable##measurements />
                 </div>
               </div>;

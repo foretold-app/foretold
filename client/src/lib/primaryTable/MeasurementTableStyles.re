@@ -3,25 +3,34 @@ open Rationale;
 open Css;
 let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
 
-let middle = style([textAlign(`center), fontSize(`em(1.2))]);
+let middle =
+  style([
+    textAlign(`center),
+    fontSize(`em(1.4)),
+    fontWeight(800),
+    color(`hex("7d7ea2")),
+    marginTop(`px(6)),
+  ]);
 let area = style([maxHeight(`px(50))]);
 
-let group = style([]);
+let isJudgement = (m: MeasurableTypes.measurement) =>
+  m##competitorType == `OBJECTIVE;
+
+let group =
+  style([borderRadius(`px(2)), border(`px(1), `solid, `hex("e1eaf1"))]);
 let row = (~m: MeasurableTypes.measurement) => {
   let isJudge = m##competitorType == `OBJECTIVE;
   style([
     width(`percent(100.0)),
-    borderRadius(`px(2)),
     selector(" h2", [marginTop(px(2))]),
     display(`flex),
     flexDirection(`row),
-    backgroundColor(`hex(isJudge ? "f7f6f1" : "f5f7f9")),
-    borderBottom(`px(1), `solid, hex("fff")),
+    backgroundColor(`hex(isJudge ? "eaf0f5" : "eaf0f5")),
     selector(":last-child", [borderBottom(`px(0), `solid, hex("fff"))]),
   ]);
 };
-
-let mainColumn = style([flex(3), display(`flex), flexDirection(`column)]);
+/* e3e7f5 */
+let mainColumn = style([flex(1), display(`flex), flexDirection(`column)]);
 
 let item =
   style([
@@ -32,11 +41,12 @@ let item =
   ]);
 
 let rightColumn = (~m: MeasurableTypes.measurement) => {
-  let isJudge = m##competitorType == `OBJECTIVE;
+  let isJudge = isJudgement(m);
   style([
-    flex(2),
+    flex(3),
     display(`flex),
-    backgroundColor(`hex(!isJudge ? "eaf0f5" : "f9efc9")),
+    backgroundColor(`hex(isJudge ? "f3f1f5" : "f3f5f7")),
+    borderBottom(`px(1), `solid, `hex(isJudge ? "e5dfec" : "e8eef3")),
     borderTopRightRadius(`px(2)),
     borderBottomRightRadius(`px(2)),
   ]);
@@ -65,6 +75,20 @@ let smallDistribution = (m: MeasurableTypes.measurement, g: (float, float)) =>
 let agentStyle =
   style([color(`rgb((102, 121, 134))), fontSize(`em(1.1))]);
 
+let judgementStyle =
+  style([
+    selector(
+      " h3",
+      [
+        color(`rgba((55, 47, 68, 0.85))),
+        marginBottom(`px(0)),
+        fontSize(`em(1.15)),
+        fontWeight(800),
+      ],
+    ),
+    selector(" a", [fontSize(`em(0.9))]),
+  ]);
+
 let agentLink = (~m: MeasurableTypes.measurement) => {
   open Rationale.Option.Infix;
   let agent = m##agent;
@@ -74,7 +98,16 @@ let agentLink = (~m: MeasurableTypes.measurement) => {
       <a href={"/agents/" ++ id} className=agentStyle> {name |> ste} </a>
     | (_, _) => "" |> ste
     };
-  aLink;
+  let isJudge = isJudgement(m);
+  if (isJudge) {
+    <div className=judgementStyle>
+      <h3> {"Judgement" |> ste} </h3>
+      <span> {"by " |> ste} </span>
+      aLink
+    </div>;
+  } else {
+    aLink;
+  };
 };
 
 let descriptionStyle =

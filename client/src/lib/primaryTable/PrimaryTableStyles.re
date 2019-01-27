@@ -28,10 +28,7 @@ let item =
     color(`hex("red")),
     selector(
       " a",
-      [
-        color(`hex("999")),
-        selector(":hover", [backgroundColor(hex("ddd"))]),
-      ],
+      [color(`hex("777")), selector(":hover", [color(hex("333"))])],
     ),
   ]);
 

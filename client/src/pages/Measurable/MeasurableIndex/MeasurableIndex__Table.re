@@ -10,7 +10,11 @@ let component = ReasonReact.statelessComponent("MeasurableIndexTable");
 let make = (~measurables: array(DataModel.measurable), _children) => {
   ...component,
   render: _self => {
-    let _measurables = MeasurableTableStyles.sortMeasurables(measurables);
+    let _measurables =
+      MeasurableTableStyles.sortMeasurables(measurables)
+      |> Js.Array.filter((e: DataModel.measurable) =>
+           PrimaryTableBase.status(e) != ARCHIVED
+         );
     <UseRouterForLinks>
       <div className=PrimaryTableStyles.group>
         {

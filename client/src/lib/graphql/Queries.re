@@ -190,6 +190,12 @@ module GetMeasurables = {
     id: string,
     name: option(string),
   };
+
+  let toCreator = (c: creator): DataModel.creator => {
+    id: c.id,
+    name: c.name,
+  };
+
   type measurable = {
     id: string,
     name: string,
@@ -219,7 +225,7 @@ module GetMeasurables = {
     expectedResolutionDate: m.expectedResolutionDate,
     state: Some(m.state),
     stateUpdatedAt: m.stateUpdatedAt,
-    creator: None,
+    creator: Rationale.Option.fmap(toCreator, m.creator),
   };
 
   module Query = [%graphql

@@ -25,7 +25,14 @@ let item =
     float(`left),
     fontSize(`px(14)),
     marginRight(`px(18)),
-    color(`hex("999")),
+    color(`hex("red")),
+    selector(
+      " a",
+      [
+        color(`hex("999")),
+        selector(":hover", [backgroundColor(hex("ddd"))]),
+      ],
+    ),
   ]);
 
 type buttonStyle =

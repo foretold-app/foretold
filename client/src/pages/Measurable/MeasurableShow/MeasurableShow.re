@@ -36,6 +36,7 @@ module Styles = {
       marginBottom(`px(10)),
     ]);
 };
+
 let make = (~id: string, _children) => {
   ...component,
   render: _self =>
@@ -95,7 +96,8 @@ let make = (~id: string, _children) => {
                     )
                   }
                   <h2> {"Previous Measurements" |> ste} </h2>
-                  <MeasurableTable measurements=measurable##measurements />
+                  /* <MeasurableTable measurements=measurable##measurements /> */
+                  <Measurable__Table measurements=measurable##measurements />
                 </div>
               </div>;
             },

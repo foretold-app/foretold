@@ -22,11 +22,14 @@ let make = (~data, _children) => {
                 },
               }
             />
-            <VictoryLine data style={
-                                "data": {
-                                  "stroke": "#aaa",
-                                },
-                              } />
+            <VictoryArea
+              data
+              style={
+                "data": {
+                  "fill": "rgb(133, 167, 179)",
+                },
+              }
+            />
           </VictoryChart>
         </div>
       )

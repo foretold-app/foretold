@@ -64,9 +64,13 @@ let description = (~m: DataModel.measurable) =>
 let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
 
 let endpointResponse = (~m: DataModel.measurable) =>
-  switch (m.resolutionEndpointResponse) {
-  | Some(r) => "Current Endpoint Value: " ++ stringOfFloat(r) |> ste
-  | None => <div />
+  switch (
+    m.resolutionEndpoint |> Option.default(""),
+    m.resolutionEndpointResponse,
+  ) {
+  | ("", _) => <div />
+  | (_, Some(r)) => "Current Endpoint Value: " ++ stringOfFloat(r) |> ste
+  | _ => <div />
   };
 
 let creatorLink = (~m: DataModel.measurable) =>

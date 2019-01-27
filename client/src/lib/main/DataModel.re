@@ -48,6 +48,7 @@ type measurable = {
   valueType,
   description: option(string),
   resolutionEndpoint: option(string),
+  resolutionEndpointResponse: option(float),
   measurementCount: option(int),
   measurerCount: option(int),
   state: option(measurableState),
@@ -56,6 +57,40 @@ type measurable = {
   expectedResolutionDate: option(MomentRe.Moment.t),
   stateUpdatedAt: option(MomentRe.Moment.t),
   creator: option(creator),
+};
+
+let toMeasurable =
+    (
+      ~id,
+      ~name,
+      ~valueType=`FLOAT,
+      ~description=None,
+      ~resolutionEndpoint=None,
+      ~resolutionEndpointResponse=None,
+      ~measurementCount=None,
+      ~measurerCount=None,
+      ~state=None,
+      ~createdAt,
+      ~updatedAt,
+      ~expectedResolutionDate=None,
+      ~stateUpdatedAt=None,
+      ~creator=None,
+      (),
+    ) => {
+  id,
+  name,
+  valueType,
+  description,
+  resolutionEndpoint,
+  resolutionEndpointResponse,
+  measurementCount,
+  measurerCount,
+  state,
+  createdAt,
+  updatedAt,
+  expectedResolutionDate,
+  stateUpdatedAt,
+  creator,
 };
 
 type measurables = array(measurable);

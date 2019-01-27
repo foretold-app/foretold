@@ -61,6 +61,14 @@ let description = (~m: DataModel.measurable) =>
   | text => <p> {text |> ste} </p>
   };
 
+let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
+
+let endpointResponse = (~m: DataModel.measurable) =>
+  switch (m.resolutionEndpointResponse) {
+  | Some(r) => "Current Endpoint Value: " ++ stringOfFloat(r) |> ste
+  | None => <div />
+  };
+
 let creatorLink = (~m: DataModel.measurable) =>
   <div className=PrimaryTableStyles.item>
     Option.Infix.(

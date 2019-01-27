@@ -78,21 +78,20 @@ module GetUserMeasurables = {
     stateUpdatedAt: option(MomentRe.Moment.t),
     expectedResolutionDate: option(MomentRe.Moment.t),
   };
-  let toMeasurable = (m: measurable): DataModel.measurable => {
-    id: m.id,
-    name: m.name,
-    valueType: m.valueType,
-    description: m.description,
-    resolutionEndpoint: m.resolutionEndpoint,
-    measurementCount: None,
-    measurerCount: None,
-    createdAt: m.createdAt,
-    updatedAt: m.updatedAt,
-    expectedResolutionDate: m.expectedResolutionDate,
-    state: Some(m.state),
-    stateUpdatedAt: m.stateUpdatedAt,
-    creator: None,
-  };
+  let toMeasurable = (m: measurable): DataModel.measurable =>
+    DataModel.toMeasurable(
+      ~id=m.id,
+      ~name=m.name,
+      ~valueType=m.valueType,
+      ~description=m.description,
+      ~resolutionEndpoint=m.resolutionEndpoint,
+      ~createdAt=m.createdAt,
+      ~updatedAt=m.updatedAt,
+      ~expectedResolutionDate=m.expectedResolutionDate,
+      ~state=Some(m.state),
+      ~stateUpdatedAt=m.stateUpdatedAt,
+      (),
+    );
 
   type measurables = array(measurable);
 
@@ -142,21 +141,24 @@ module GetMeasurable = {
     stateUpdatedAt: option(MomentRe.Moment.t),
     creator: option(creator),
   };
-  let toMeasurable = (m: measurable): DataModel.measurable => {
-    id: m.id,
-    name: m.name,
-    valueType: m.valueType,
-    description: m.description,
-    resolutionEndpoint: m.resolutionEndpoint,
-    measurementCount: m.measurementCount,
-    measurerCount: m.measurerCount,
-    createdAt: m.createdAt,
-    updatedAt: m.updatedAt,
-    expectedResolutionDate: m.expectedResolutionDate,
-    state: Some(m.state),
-    stateUpdatedAt: m.stateUpdatedAt,
-    creator: None,
-  };
+
+  let toMeasurable = (m: measurable): DataModel.measurable =>
+    DataModel.toMeasurable(
+      ~id=m.id,
+      ~name=m.name,
+      ~valueType=m.valueType,
+      ~description=m.description,
+      ~resolutionEndpoint=m.resolutionEndpoint,
+      ~measurementCount=m.measurementCount,
+      ~measurerCount=m.measurerCount,
+      ~createdAt=m.createdAt,
+      ~updatedAt=m.updatedAt,
+      ~expectedResolutionDate=m.expectedResolutionDate,
+      ~state=Some(m.state),
+      ~stateUpdatedAt=m.stateUpdatedAt,
+      (),
+    );
+
   module Query = [%graphql
     {|
       query getMeasurable ($id: String!) {
@@ -212,21 +214,23 @@ module GetMeasurables = {
     creator: option(creator),
   };
 
-  let toMeasurable = (m: measurable): DataModel.measurable => {
-    id: m.id,
-    name: m.name,
-    valueType: m.valueType,
-    description: m.description,
-    resolutionEndpoint: m.resolutionEndpoint,
-    measurementCount: m.measurementCount,
-    measurerCount: m.measurerCount,
-    createdAt: m.createdAt,
-    updatedAt: m.updatedAt,
-    expectedResolutionDate: m.expectedResolutionDate,
-    state: Some(m.state),
-    stateUpdatedAt: m.stateUpdatedAt,
-    creator: Rationale.Option.fmap(toCreator, m.creator),
-  };
+  let toMeasurable = (m: measurable): DataModel.measurable =>
+    DataModel.toMeasurable(
+      ~id=m.id,
+      ~name=m.name,
+      ~valueType=m.valueType,
+      ~description=m.description,
+      ~resolutionEndpoint=m.resolutionEndpoint,
+      ~measurementCount=m.measurementCount,
+      ~measurerCount=m.measurerCount,
+      ~createdAt=m.createdAt,
+      ~updatedAt=m.updatedAt,
+      ~expectedResolutionDate=m.expectedResolutionDate,
+      ~state=Some(m.state),
+      ~stateUpdatedAt=m.stateUpdatedAt,
+      ~creator=Rationale.Option.fmap(toCreator, m.creator),
+      (),
+    );
 
   module Query = [%graphql
     {|
@@ -288,6 +292,7 @@ module GetMeasurableWithMeasurements = {
               valueType
               creatorId
               resolutionEndpoint
+              resolutionEndpointResponse
               state @bsDecoder(fn: "string_to_measurableState")
               stateUpdatedAt @bsDecoder(fn: "optionalMoment")
               expectedResolutionDate @bsDecoder(fn: "optionalMoment")
@@ -349,21 +354,21 @@ module GetMeasurableWithMeasurements = {
     let creator: option(DataModel.creator) =
       m##creator |> Option.fmap(r => {id: r##id, name: r##name});
 
-    let measurable: DataModel.measurable = {
-      id: m##id,
-      name: m##name,
-      valueType: m##valueType,
-      description: m##description,
-      resolutionEndpoint: m##resolutionEndpoint,
-      measurementCount: None,
-      measurerCount: None,
-      createdAt: m##createdAt,
-      updatedAt: m##updatedAt,
-      expectedResolutionDate: m##expectedResolutionDate,
-      state: Some(m##state),
-      stateUpdatedAt: m##stateUpdatedAt,
-      creator,
-    };
+    let measurable: DataModel.measurable =
+      DataModel.toMeasurable(
+        ~id=m##id,
+        ~name=m##name,
+        ~description=m##description,
+        ~resolutionEndpoint=m##resolutionEndpoint,
+        ~resolutionEndpointResponse=m##resolutionEndpointResponse,
+        ~createdAt=m##createdAt,
+        ~updatedAt=m##updatedAt,
+        ~expectedResolutionDate=m##expectedResolutionDate,
+        ~state=Some(m##state),
+        ~stateUpdatedAt=m##stateUpdatedAt,
+        ~creator,
+        (),
+      );
     measurable;
   };
 };

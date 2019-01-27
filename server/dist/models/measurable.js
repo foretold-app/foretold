@@ -86,8 +86,8 @@ module.exports = (sequelize, DataTypes) => {
       type: Sequelize.VIRTUAL(DataTypes.FLOAT),
       get: async function () {
         const endpoint = await this.dataValues.resolutionEndpoint;
-        if (endpoint.length == 0 || !endpoint) {
-          return null;
+        if (!endpoint || endpoint.length == 0 || endpoint == "") {
+          return false;
         }
         try {
           const response = await fetch(endpoint);

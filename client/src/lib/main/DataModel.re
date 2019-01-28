@@ -17,11 +17,14 @@ type bot = {
   name: option(string),
 };
 
+type agentType =
+  | Bot(bot)
+  | User(user);
+
 type agent = {
   id: string,
   measurementCount: option(int),
-  bot: option(bot),
-  user: option(user),
+  agentType: option(agentType),
 };
 
 type agents = array(agent);
@@ -94,3 +97,38 @@ let toMeasurable =
 };
 
 type measurables = array(measurable);
+
+type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
+
+type measurement = {
+  id: string,
+  description: option(string),
+  value: Belt.Result.t(Value.t, string),
+  competitorType,
+  taggedMeasurementId: option(string),
+  createdAt: option(MomentRe.Moment.t),
+  relevantAt: option(MomentRe.Moment.t),
+  agent: option(agent),
+};
+
+let toMeasurement =
+    (
+      ~id,
+      ~value,
+      ~description=None,
+      ~competitorType=`COMPETITIVE,
+      ~taggedMeasurementId=None,
+      ~createdAt=None,
+      ~relevantAt=None,
+      ~agent=None,
+      (),
+    ) => {
+  id,
+  value,
+  description,
+  competitorType,
+  taggedMeasurementId,
+  createdAt,
+  relevantAt,
+  agent,
+};

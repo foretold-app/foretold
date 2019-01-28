@@ -33,10 +33,13 @@ module GetAgents = {
   };
 
   let toAgent = (a: agent): DataModel.agent => {
-    id: a.id,
-    measurementCount: a.measurementCount,
-    bot: a.bot |> Rationale.Option.fmap(toBot),
-    user: a.user |> Rationale.Option.fmap(toUser),
+    let agentType: option(DataModel.agentType) =
+      switch (a.bot, a.user) {
+      | (Some(bot), None) => Some(Bot(toBot(bot)))
+      | (None, Some(user)) => Some(User(toUser(user)))
+      | _ => None
+      };
+    {id: a.id, measurementCount: a.measurementCount, agentType};
   };
 
   type agents = array(agent);
@@ -370,5 +373,45 @@ module GetMeasurableWithMeasurements = {
         (),
       );
     measurable;
+  };
+
+  let toMeasurement = (m: MeasurableTypes.measurement): DataModel.measurement => {
+    open DataModel;
+    let agentType: option(DataModel.agentType) =
+      m##agent
+      |> Rationale.Option.bind(_, k =>
+           switch (k##bot, k##user) {
+           | (Some(bot), None) =>
+             Some(
+               Bot({
+                 id: bot##id,
+                 name: bot##name,
+                 competitorType: bot##competitorType,
+                 description: None,
+               }),
+             )
+           | (None, Some(user)) =>
+             Some(User({id: user##id, name: user##name}))
+           | (_, _) => None
+           }
+         );
+
+    let agent: option(DataModel.agent) =
+      m##agent
+      |> Rationale.Option.fmap(k =>
+           {id: k##id, measurementCount: None, agentType}
+         );
+
+    DataModel.toMeasurement(
+      ~id=m##id,
+      ~description=m##description,
+      ~value=m##value,
+      ~competitorType=m##competitorType,
+      ~taggedMeasurementId=m##taggedMeasurementId,
+      ~createdAt=Some(m##createdAt),
+      ~relevantAt=m##relevantAt,
+      ~agent,
+      (),
+    );
   };
 };

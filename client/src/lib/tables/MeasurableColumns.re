@@ -9,13 +9,13 @@ let toCreatorLink = (c: DataModel.creator) => {
   {j|<a href="/agents/$id">$name</a>|j};
 };
 
-let toMeasurableLink = m => {
+let toMeasurableLink = (m: DataModel.measurable) => {
   let id = m.id;
   let name = m.name;
   {j|<a href="/measurables/$id">$name</a>|j};
 };
 
-let toSimpleLink = m => {
+let toSimpleLink = (m: DataModel.measurable) => {
   let id = m.id;
   {j|<a href="/measurables/$id">Link</a>|j};
 };

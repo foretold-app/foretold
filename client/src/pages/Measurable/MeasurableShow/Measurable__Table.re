@@ -107,10 +107,10 @@ let getFloatCdf = (e: Belt.Result.t(Value.t, string)) =>
   };
 
 /* Js.Exn.raiseError("Invalid GraphQL State") */
-let bounds = (m: Js_array.t(MeasurableTypes.measurement)) => {
+let bounds = (m: Js_array.t(DataModel.measurement)) => {
   let itemBounds =
     m
-    |> Belt.Array.keepMap(_, r => getFloatCdf(r##value))
+    |> Belt.Array.keepMap(_, r => getFloatCdf(r.value))
     |> Array.map(r =>
          (
            FloatCdf_F.firstAboveValue(0.05, r),
@@ -136,15 +136,16 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       |> ArrayOptional.concatSomes
       |> Js_array.sortInPlaceWith((a, b) =>
            toUnix(b) > toUnix(a) ? 1 : (-1)
-         );
+         )
+      |> Array.map(Queries.GetMeasurableWithMeasurements.toMeasurement);
 
     let bb = bounds(data);
     <UseRouterForLinks>
       <div className=MeasurementTableStyles.group>
         {
           data
-          |> Array.map(m =>
-               <div className={MeasurementTableStyles.row(~m)} key=m##id>
+          |> Array.map((m: DataModel.measurement) =>
+               <div className={MeasurementTableStyles.row(~m)} key={m.id}>
                  <div className=MeasurementTableStyles.mainColumn>
                    <div className=MeasurementTableStyles.mainColumnTop>
                      {MeasurementTableStyles.smallDistribution(m, bb)}

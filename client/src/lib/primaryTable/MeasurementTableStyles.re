@@ -13,13 +13,13 @@ let middle =
   ]);
 let area = style([maxHeight(`px(50))]);
 
-let isJudgement = (m: MeasurableTypes.measurement) =>
-  m##competitorType == `OBJECTIVE;
+let isJudgement = (m: DataModel.measurement) =>
+  m.competitorType == `OBJECTIVE;
 
 let group =
   style([borderRadius(`px(2)), border(`px(1), `solid, `hex("e1eaf1"))]);
-let row = (~m: MeasurableTypes.measurement) => {
-  let isJudge = m##competitorType == `OBJECTIVE;
+let row = (~m: DataModel.measurement) => {
+  let isJudge = m.competitorType == `OBJECTIVE;
   style([
     width(`percent(100.0)),
     selector(" h2", [marginTop(px(2))]),
@@ -40,7 +40,7 @@ let item =
     color(`hex("red")),
   ]);
 
-let rightColumn = (~m: MeasurableTypes.measurement) => {
+let rightColumn = (~m: DataModel.measurement) => {
   let isJudge = isJudgement(m);
   style([
     flex(3),
@@ -60,8 +60,8 @@ let rightColumnTop = style([flex(1), paddingLeft(px(2))]);
 
 let mainColumnBottom = style([flex(1), padding(px(2))]);
 
-let smallDistribution = (m: MeasurableTypes.measurement, g: (float, float)) =>
-  switch (m##value) {
+let smallDistribution = (m: DataModel.measurement, g: (float, float)) =>
+  switch (m.value) {
   | Belt.Result.Ok(`FloatCdf(r)) =>
     r
     |> Value.toPdf(~bucketSize=20)
@@ -89,13 +89,13 @@ let judgementStyle =
     selector(" a", [fontSize(`em(0.9))]),
   ]);
 
-let agentLink = (~m: MeasurableTypes.measurement) => {
+let agentLink = (~m: DataModel.measurement) => {
   open Rationale.Option.Infix;
-  let agent = m##agent;
+  let agent = m.agent;
   let aLink =
-    switch (agent <$> (x => x##id), agent >>= (x => x##name)) {
-    | (Some(id), Some(name)) =>
-      <a href={"/agents/" ++ id} className=agentStyle> {name |> ste} </a>
+    switch (agent, agent |> Rationale.Option.bind(_, DataModel.agentName)) {
+    | (Some(agent), Some(name)) =>
+      <a href={"/agents/" ++ agent.id} className=agentStyle> {name |> ste} </a>
     | (_, _) => "" |> ste
     };
   let isJudge = isJudgement(m);
@@ -119,8 +119,8 @@ let descriptionStyle =
     ),
   ]);
 
-let description = (~m: MeasurableTypes.measurement) =>
-  switch (m##description |> Option.default("")) {
+let description = (~m: DataModel.measurement) =>
+  switch (m.description |> Option.default("")) {
   | "" => <div />
   | text => <div className=descriptionStyle> <p> {text |> ste} </p> </div>
   };
@@ -135,5 +135,5 @@ let dateStyle =
     marginTop(`px(1)),
   ]);
 
-let relevantAt = (~m: MeasurableTypes.measurement) =>
-  <div className=dateStyle> {m##relevantAt |> formatDate |> ste} </div>;
+let relevantAt = (~m: DataModel.measurement) =>
+  <div className=dateStyle> {m.relevantAt |> formatDate |> ste} </div>;

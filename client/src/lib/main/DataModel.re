@@ -27,6 +27,13 @@ type agent = {
   agentType: option(agentType),
 };
 
+let agentName = (a: agent): option(string) =>
+  switch (a.agentType) {
+  | Some(Bot(b)) => b.name
+  | Some(User(u)) => Some(u.name)
+  | None => None
+  };
+
 type agents = array(agent);
 type valueType = [ | `DATE | `FLOAT | `PERCENTAGE];
 

@@ -4,13 +4,6 @@ open QueriesHelper;
 open MomentRe;
 open Style.Grid;
 
-let toMoment = Function.Infix.(jsonToString ||> moment);
-
-let toOptionalMoment: option(Js.Json.t) => MomentRe.Moment.t =
-  Option.Infix.(
-    e => e <$> jsonToString <$> (r => r) |> Option.default("") |> moment
-  );
-
 let component = ReasonReact.statelessComponent("Measurable");
 
 let valueString = e =>

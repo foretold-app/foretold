@@ -16,6 +16,17 @@ let area = style([maxHeight(`px(50))]);
 let isJudgement = (m: DataModel.measurement) =>
   m.competitorType == `OBJECTIVE;
 
+let percentiles =
+  style([
+    top(`em(0.2)),
+    right(`em(0.5)),
+    fontSize(`em(1.1)),
+    position(`absolute),
+    marginRight(`px(6)),
+    color(`hex("5d7682")),
+    display(`none),
+  ]);
+
 let group =
   style([borderRadius(`px(2)), border(`px(1), `solid, `hex("e1eaf1"))]);
 let row = (~m: DataModel.measurement) => {
@@ -25,12 +36,30 @@ let row = (~m: DataModel.measurement) => {
     selector(" h2", [marginTop(px(2))]),
     display(`flex),
     flexDirection(`row),
-    backgroundColor(`hex(isJudge ? "eaf0f5" : "eaf0f5")),
+    backgroundColor(`hex("eaf0f5")),
     selector(":last-child", [borderBottom(`px(0), `solid, hex("fff"))]),
+    selector(":hover", [selector(" .foo", [display(`inline)])]),
   ]);
 };
+
+let axisRow =
+  style([
+    width(`percent(100.0)),
+    selector(" h2", [marginTop(px(2))]),
+    display(`flex),
+    flexDirection(`row),
+    backgroundColor(`hex("e2eaef")),
+    selector(":last-child", [borderBottom(`px(0), `solid, hex("fff"))]),
+  ]);
+let axisRightColumn = style([flex(3), display(`flex)]);
 /* e3e7f5 */
-let mainColumn = style([flex(1), display(`flex), flexDirection(`column)]);
+let mainColumn =
+  style([
+    flex(1),
+    display(`flex),
+    flexDirection(`column),
+    position(`relative),
+  ]);
 
 let item =
   style([
@@ -45,8 +74,8 @@ let rightColumn = (~m: DataModel.measurement) => {
   style([
     flex(3),
     display(`flex),
-    backgroundColor(`hex(isJudge ? "f3f1f5" : "f3f5f7")),
-    borderBottom(`px(1), `solid, `hex(isJudge ? "e5dfec" : "e8eef3")),
+    backgroundColor(`hex("f3f5f7")),
+    borderBottom(`px(1), `solid, `hex("e8eef3")),
     borderTopRightRadius(`px(2)),
     borderBottomRightRadius(`px(2)),
   ]);

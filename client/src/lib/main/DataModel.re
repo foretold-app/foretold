@@ -52,6 +52,44 @@ type creator = {
   name: option(string),
 };
 
+type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
+
+type measurement = {
+  id: string,
+  description: option(string),
+  value: Belt.Result.t(Value.t, string),
+  competitorType,
+  taggedMeasurementId: option(string),
+  createdAt: option(MomentRe.Moment.t),
+  relevantAt: option(MomentRe.Moment.t),
+  measurableId: option(string),
+  agent: option(agent),
+};
+
+let toMeasurement =
+    (
+      ~id,
+      ~value,
+      ~description=None,
+      ~competitorType=`COMPETITIVE,
+      ~taggedMeasurementId=None,
+      ~createdAt=None,
+      ~relevantAt=None,
+      ~agent=None,
+      ~measurableId=None,
+      (),
+    ) => {
+  id,
+  value,
+  description,
+  competitorType,
+  taggedMeasurementId,
+  createdAt,
+  relevantAt,
+  agent,
+  measurableId,
+};
+
 type measurable = {
   id: string,
   name: string,
@@ -62,11 +100,12 @@ type measurable = {
   measurementCount: option(int),
   measurerCount: option(int),
   state: option(measurableState),
-  createdAt: MomentRe.Moment.t,
-  updatedAt: MomentRe.Moment.t,
+  createdAt: option(MomentRe.Moment.t),
+  updatedAt: option(MomentRe.Moment.t),
   expectedResolutionDate: option(MomentRe.Moment.t),
   stateUpdatedAt: option(MomentRe.Moment.t),
   creator: option(creator),
+  measurements: option(list(measurement)),
 };
 
 let toMeasurable =
@@ -80,11 +119,12 @@ let toMeasurable =
       ~measurementCount=None,
       ~measurerCount=None,
       ~state=None,
-      ~createdAt,
-      ~updatedAt,
+      ~createdAt=None,
+      ~updatedAt=None,
       ~expectedResolutionDate=None,
       ~stateUpdatedAt=None,
       ~creator=None,
+      ~measurements=None,
       (),
     ) => {
   id,
@@ -101,41 +141,7 @@ let toMeasurable =
   expectedResolutionDate,
   stateUpdatedAt,
   creator,
+  measurements,
 };
 
 type measurables = array(measurable);
-
-type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
-
-type measurement = {
-  id: string,
-  description: option(string),
-  value: Belt.Result.t(Value.t, string),
-  competitorType,
-  taggedMeasurementId: option(string),
-  createdAt: option(MomentRe.Moment.t),
-  relevantAt: option(MomentRe.Moment.t),
-  agent: option(agent),
-};
-
-let toMeasurement =
-    (
-      ~id,
-      ~value,
-      ~description=None,
-      ~competitorType=`COMPETITIVE,
-      ~taggedMeasurementId=None,
-      ~createdAt=None,
-      ~relevantAt=None,
-      ~agent=None,
-      (),
-    ) => {
-  id,
-  value,
-  description,
-  competitorType,
-  taggedMeasurementId,
-  createdAt,
-  relevantAt,
-  agent,
-};

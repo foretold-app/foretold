@@ -30,7 +30,9 @@ type bot = {
 type measurable = {
   id: string,
   name: string,
-  description: option(string),
+  state: DataModel.measurableState,
+  stateUpdatedAt: option(MomentRe.Moment.t),
+  expectedResolutionDate: option(MomentRe.Moment.t),
 };
 
 type measurement = {
@@ -76,7 +78,9 @@ module GetAgent = [%graphql
            measurable: Measurable @bsRecord{
              id
              name
-             description
+             expectedResolutionDate @bsDecoder(fn: "optionalMoment")
+             state @bsDecoder(fn: "string_to_measurableState")
+             stateUpdatedAt @bsDecoder(fn: "optionalMoment")
           }
         }
         }
@@ -84,4 +88,51 @@ module GetAgent = [%graphql
   |}
 ];
 
+let toMeasurables = (measurements: array(measurement)) => {
+  let r = measurements;
+  let standardMeasurements =
+    r
+    |> Array.map(n =>
+         DataModel.toMeasurement(
+           ~id=n.id,
+           ~value=n.value,
+           ~description=n.description,
+           ~createdAt=Some(n.createdAt),
+           ~competitorType=n.competitorType,
+           ~relevantAt=n.relevantAt,
+           ~measurableId=
+             switch (n.measurable) {
+             | Some(n) => Some(n.id)
+             | None => None
+             },
+           (),
+         )
+       )
+    |> Array.to_list;
+
+  let measurables =
+    r
+    |> Array.map((t: measurement) => (t.measurable: option(measurable)))
+    |> Array.to_list
+    |> Rationale.RList.filter_opt
+    |> Rationale.RList.uniqBy((t: measurable) => t.id)
+    |> List.map((e: measurable) =>
+         DataModel.toMeasurable(
+           ~id=e.id,
+           ~name=e.name,
+           ~expectedResolutionDate=e.expectedResolutionDate,
+           ~state=Some(e.state),
+           ~stateUpdatedAt=e.stateUpdatedAt,
+           ~measurements=
+             Some(
+               standardMeasurements
+               |> List.filter((s: DataModel.measurement) =>
+                    s.measurableId == Some(e.id)
+                  ),
+             ),
+           (),
+         )
+       );
+  measurables;
+};
 module GetAgentQuery = ReasonApollo.CreateQuery(GetAgent);

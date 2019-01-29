@@ -102,7 +102,7 @@ let agentLink = (~m: DataModel.measurement) => {
   if (isJudge) {
     <div className=judgementStyle>
       <h3> {"Judgement" |> ste} </h3>
-      <span> {"by " |> ste} </span>
+      {aLink !== ("" |> ste) ? <span> {"by " |> ste} </span> : <span />}
       aLink
     </div>;
   } else {

@@ -2,6 +2,7 @@ open Utils;
 open Rationale;
 open Rationale.Function.Infix;
 open Result.Infix;
+open MomentRe;
 
 let botCompetitor = e =>
   switch (e) {
@@ -10,17 +11,17 @@ let botCompetitor = e =>
   | `OBJECTIVE => "Objective"
   };
 
-let notFound = <h3> ("User not found" |> ste) </h3>;
+let notFound = <h3> {"Agent not found" |> ste} </h3>;
 
 let agentSection = (e: AgentTypes.agent) =>
   switch (e) {
   | {bot: Some(r)} =>
     <div>
-      <h2> (r.name |> Option.default("") |> ste) </h2>
-      <h3> (r.description |> Option.default("") |> ste) </h3>
-      <h3> (r.competitorType |> botCompetitor |> ste) </h3>
+      <h2> {r.name |> Option.default("") |> ste} </h2>
+      <h3> {r.description |> Option.default("") |> ste} </h3>
+      <h3> {r.competitorType |> botCompetitor |> ste} </h3>
     </div>
-  | {user: Some(r)} => <div> <h1> (r.name |> ste) </h1> </div>
+  | {user: Some(r)} => <div> <h1> {r.name |> ste} </h1> </div>
   | _ => notFound
   };
 
@@ -44,21 +45,43 @@ let withAgentQuery = (~id, innerFn) => {
   )
   |> ReasonReact.element;
 };
-
 let make = (~id: string, _children) => {
   ...component,
   render: _ =>
     <div>
-      (
-        withAgentQuery(~id, agent =>
-          <div>
-            (agentSection(agent))
-            <h3> ("Recent Measurements" |> ste) </h3>
-            <AgentTable
-              measurements=(agent.measurements |> ArrayOptional.concatSomes)
-            />
-          </div>
+      {
+        withAgentQuery(
+          ~id,
+          agent => {
+            let mm =
+              AgentTypes.toMeasurables(
+                agent.measurements |> ArrayOptional.concatSomes,
+              );
+            <div>
+              {agentSection(agent)}
+              <UseRouterForLinks>
+                {
+                  mm
+                  |> List.map((m: DataModel.measurable) => {
+                       let measurements =
+                         m.measurements |> Rationale.Option.default([]);
+                       <div>
+                         <div className=AgentShowStyles.block>
+                           {MeasurableTableStyles.link(~m)}
+                           {MeasurableTableStyles.dateStatus(~measurable=m)}
+                         </div>
+                         <div className=MeasurementTableStyles.group>
+                           {measurements |> MeasurementsBlock.make}
+                         </div>
+                       </div>;
+                     })
+                  |> Array.of_list
+                  |> ReasonReact.array
+                }
+              </UseRouterForLinks>
+            </div>;
+          },
         )
-      )
+      }
     </div>,
 };

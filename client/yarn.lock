@@ -706,6 +706,13 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
+"@ncthbrt/re-secure-random-string@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@ncthbrt/re-secure-random-string/-/re-secure-random-string-2.0.0.tgz#ff2b5a875dfe672d39039e6df703527af7e02551"
+  integrity sha512-6vZoC161ByWX4q0vYiaC/QZa4F3a8DGPhwoNss9/+C7xgLyKvI0ojEBvP8PN8c+8V2VOieVPAvChE2WS7TvRwQ==
+  dependencies:
+    secure-random-string "^1.1.0"
+
 "@nodelib/fs.stat@^1.0.1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.2.tgz#54c5a964462be3d4d78af631363c18d6fa91ac26"
@@ -3117,6 +3124,17 @@ bs-css@^7.2.0:
   integrity sha512-FhK5YR+zIsNFUFjCZkQs0p/nzaBi8roNYmJecX5PmycVG2Ii2IHZyUKgI2TRkD2HuhyPW8FulsqIi4DeyjJD9g==
   dependencies:
     glamor "^2.0.0"
+
+bs-ken@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/bs-ken/-/bs-ken-0.0.5.tgz#e1c2345917ff0001f182dfa636d2ff0082e19020"
+  integrity sha512-VaqeoDkfesxk6FqRUYpz2mh3mOJixCXbBUMXUTOPtrxassJU+gYbqhcifZI8o2jRp1kP9wMttQqYDzoYWwKIUQ==
+  dependencies:
+    "@glennsl/bs-json" "^3.0.0"
+    "@ncthbrt/re-secure-random-string" "^2.0.0"
+    lodash "^4.17.11"
+    ramda "^0.26.1"
+    rationale "^0.1.10"
 
 bs-moment@^0.3.1:
   version "0.3.1"
@@ -9788,6 +9806,11 @@ raf@^3.4.0:
   dependencies:
     performance-now "^2.1.0"
 
+ramda@^0.26.1:
+  version "0.26.1"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.26.1.tgz#8d41351eb8111c55353617fc3bbffad8e4d35d06"
+  integrity sha512-hLWjpy7EnsDBb0p+Z3B7rPi3GDeRG5ZtiI33kJhTt+ORCd38AbAIjB/9zRIUoeTbE/AVX5ZkU7m6bznsvrf8eQ==
+
 randomatic@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/randomatic/-/randomatic-3.1.0.tgz#36f2ca708e9e567f5ed2ec01949026d50aa10116"
@@ -9816,6 +9839,11 @@ range-parser@^1.0.3, range-parser@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.0.tgz#f49be6b487894ddc40dcc94a322f611092e00d5e"
   integrity sha1-9JvmtIeJTdxA3MlKMi9hEJLgDV4=
+
+rationale@^0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/rationale/-/rationale-0.1.10.tgz#a14567d3eea7facaba0ed35d68ef2127fdd861d7"
+  integrity sha512-WMBpRHHjhY4AA8BtboQsA5voL2dQXhbtX0C/F4HYOGFZDZz5gbUfZVs22Sc4FqyvpJoT/1A+PhcpOvefnKKxJQ==
 
 rationale@^0.1.6:
   version "0.1.8"
@@ -11076,6 +11104,11 @@ schema-utils@^1.0.0:
     ajv "^6.1.0"
     ajv-errors "^1.0.0"
     ajv-keywords "^3.1.0"
+
+secure-random-string@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/secure-random-string/-/secure-random-string-1.1.0.tgz#c47d2f20b6d93db1255edb4dadf5e03188ab978e"
+  integrity sha512-V/h8jqoz58zklNGybVhP++cWrxEPXlLM/6BeJ4e0a8zlb4BsbYRzFs16snrxByPa5LUxCVTD3M6EYIVIHR1fAg==
 
 seed-random@2.2.0:
   version "2.2.0"

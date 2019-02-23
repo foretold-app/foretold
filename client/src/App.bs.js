@@ -3,9 +3,11 @@
 
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var $$String = require("bs-platform/lib/js/string.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Auth0$Client = require("./utils/Auth0.bs.js");
 var Profile$Client = require("./pages/Profile.bs.js");
+var ItemShow$Client = require("./pages/Item/ItemShow.bs.js");
 var Redirect$Client = require("./pages/Redirect.bs.js");
 var AgentShow$Client = require("./pages/Agent/AgentShow/AgentShow.bs.js");
 var AgentIndex$Client = require("./pages/Agent/AgentIndex.bs.js");
@@ -34,12 +36,12 @@ function mapUrlToRoute(url) {
             var id = match$1[0];
             if (match$2) {
               if (match$2[0] === "measurables" && !match$2[1]) {
-                return /* AgentMeasurables */Block.__(2, [id]);
+                return /* AgentMeasurables */Block.__(3, [id]);
               } else {
                 return /* Home */0;
               }
             } else {
-              return /* AgentShow */Block.__(1, [id]);
+              return /* AgentShow */Block.__(2, [id]);
             }
           } else {
             return /* AgentIndex */1;
@@ -51,6 +53,8 @@ function mapUrlToRoute(url) {
             Auth0$Client.handleAuth(url);
             return /* Redirect */2;
           }
+      case "items" : 
+          return /* ItemShow */Block.__(1, [$$String.concat("/", match[1])]);
       case "measurables" : 
           var match$3 = match[1];
           if (match$3) {
@@ -58,12 +62,12 @@ function mapUrlToRoute(url) {
             var id$1 = match$3[0];
             if (match$4) {
               if (match$4[0] === "edit" && !match$4[1]) {
-                return /* MeasurableEdit */Block.__(4, [id$1]);
+                return /* MeasurableEdit */Block.__(5, [id$1]);
               } else {
                 return /* Home */0;
               }
             } else {
-              return /* MeasurableShow */Block.__(3, [id$1]);
+              return /* MeasurableShow */Block.__(4, [id$1]);
             }
           } else {
             return /* MeasurableIndex */3;
@@ -117,17 +121,19 @@ function inside(r) {
       case 0 : 
           return ReasonReact.element(undefined, undefined, Profile$Client.make(r[0], /* array */[]));
       case 1 : 
-          return ReasonReact.element(undefined, undefined, AgentShow$Client.make(r[0], /* array */[]));
+          return ReasonReact.element(undefined, undefined, ItemShow$Client.make(r[0], /* array */[]));
       case 2 : 
-          return ReasonReact.element(undefined, undefined, MeMeasurables$Client.make(r[0], /* array */[]));
+          return ReasonReact.element(undefined, undefined, AgentShow$Client.make(r[0], /* array */[]));
       case 3 : 
+          return ReasonReact.element(undefined, undefined, MeMeasurables$Client.make(r[0], /* array */[]));
+      case 4 : 
           var id = r[0];
           if (id === "new") {
             return ReasonReact.element(undefined, undefined, MeasurableNew$Client.make(/* array */[]));
           } else {
             return ReasonReact.element(undefined, undefined, MeasurableShow$Client.make(id, /* array */[]));
           }
-      case 4 : 
+      case 5 : 
           return ReasonReact.element(undefined, undefined, MeasurableEdit$Client.make(r[0], /* array */[]));
       
     }

@@ -6,6 +6,7 @@ type route =
   | AgentIndex
   | Redirect
   | Profile(string)
+  | ItemShow(string)
   | AgentShow(string)
   | AgentMeasurables(string)
   | MeasurableIndex
@@ -36,6 +37,7 @@ let mapUrlToRoute = (url: ReasonReact.Router.url) =>
     | None => Home
     }
   | ["agents", id] => AgentShow(id)
+  | ["items", ...id] => ItemShow(String.concat("/", id))
   | ["agents", id, "measurables"] => AgentMeasurables(id)
   | ["measurables"] => MeasurableIndex
   | ["measurables", id] => MeasurableShow(id)
@@ -54,6 +56,7 @@ let inside = r =>
   | AgentMeasurables(id) => <MeMeasurables id />
   | AgentIndex => <AgentIndex />
   | NotFound => <AgentIndex />
+  | ItemShow(id) => <ItemShow id />
   | Redirect => <Redirect />
   | Profile(auth0Id) => <Profile auth0Id />
   | AgentShow(id) => <AgentShow id />

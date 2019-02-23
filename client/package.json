@@ -23,6 +23,7 @@
   "dependencies": {
     "@glennsl/bs-json": "^3.0.0",
     "@handsontable/react": "^1.1.0",
+    "@ncthbrt/re-secure-random-string": "^2.0.0",
     "apollo-cache-inmemory": "^1.2.9",
     "apollo-client": "^2.4.1",
     "apollo-link": "^1.2.2",

@@ -29,6 +29,7 @@
     "bs-moment",
     "bs-storybook",
     "reason-react",
+    "@ncthbrt/re-secure-random-string",
     "reason-apollo",
     "rationale"
   ],

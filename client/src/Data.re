@@ -3,16 +3,28 @@ let data: Js.Json.t =
     {|[{
         "config": {
             "baseId": "base",
-            "resourceId": "data-types",
+            "resourceId": "properties",
             "aliases": {
-              "name": "@base/properties/p-name",
-              "instance-of": "@base/properties/p-instance-of",
               "subclass-of": "@base/properties/p-subclass-of"
             }
           },
+          "p-instance-of": {
+            "p-name": "Instance of"
+          },
+          "p-name": {
+            "p-name": "Name",
+            "p-instance-of": "p-data-type"
+          },
           "d-thing": {
-            "name": "Thing (Data Type)",
-            "instance-of": "p-data-type"
+            "p-name": "Thing (Data Type)",
+            "p-instance-of": "p-data-type"
+          },
+          "n-organization": {
+            "p-name": "Organization"
+          },
+          "n-fhi": {
+            "p-name": "FHI",
+            "p-instance-of": "n-organization"
           }
     }
 ]|},

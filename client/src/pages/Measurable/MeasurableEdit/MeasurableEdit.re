@@ -25,8 +25,8 @@ let withQuery = (~id, fn) => {
 module WithEditMutation = {
   module GraphQL = [%graphql
     {|
-             mutation editMeasurable($id: String!, $name: String!, $description: String!, $expectedResolutionDate:Date, $resolutionEndpoint: String!) {
-                 editMeasurable(id: $id, name: $name, description: $description, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint) {
+             mutation editMeasurable($id: String!, $name: String!, $description: String!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!) {
+                 editMeasurable(id: $id, name: $name, description: $description, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity) {
                    id
                  }
              }
@@ -43,6 +43,7 @@ module WithEditMutation = {
         description: string,
         expectedResolutionDate: string,
         resolutionEndpoint: string,
+        descriptionEntity: string,
       ) => {
     let m =
       GraphQL.make(
@@ -51,6 +52,7 @@ module WithEditMutation = {
         ~description,
         ~expectedResolutionDate=expectedResolutionDate |> Js.Json.string,
         ~resolutionEndpoint,
+        ~descriptionEntity,
         (),
       );
     mutation(~variables=m##variables, ~refetchQueries=[|"getAgent"|], ())
@@ -62,12 +64,14 @@ module SignUpParams = {
   type state = {
     name: string,
     description: string,
+    descriptionEntity: string,
     expectedResolutionDate: string,
     resolutionEndpoint: string,
   };
   type fields = [
     | `name
     | `description
+    | `descriptionEntity
     | `expectedResolutionDate
     | `resolutionEndpoint
   ];
@@ -77,6 +81,11 @@ module SignUpParams = {
       `description,
       s => s.description,
       (s, description) => {...s, description},
+    ),
+    (
+      `descriptionEntity,
+      s => s.descriptionEntity,
+      (s, descriptionEntity) => {...s, descriptionEntity},
     ),
     (
       `expectedResolutionDate,
@@ -101,6 +110,17 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
         <Input
           value={form.values.name}
           onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
+        />
+      </Form.Item>
+      <Form.Item>
+        <h3> {"Entity" |> ste} </h3>
+        <Input
+          value={form.values.descriptionEntity}
+          onChange={
+            ReForm.Helpers.handleDomFormChange(
+              handleChange(`descriptionEntity),
+            )
+          }
         />
       </Form.Item>
       <Form.Item>
@@ -170,9 +190,12 @@ let make = (~id: string, _children) => {
                         values.description,
                         values.expectedResolutionDate,
                         values.resolutionEndpoint,
+                        values.descriptionEntity,
                       ),
                   ~initialState={
                     name: measurable.name,
+                    descriptionEntity:
+                      measurable.descriptionEntity |> Option.default(""),
                     description: measurable.description |> Option.default(""),
                     expectedResolutionDate:
                       measurable.expectedResolutionDate

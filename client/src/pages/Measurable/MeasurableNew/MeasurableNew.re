@@ -11,8 +11,8 @@ let ste = ReasonReact.string;
 module CreateMeasurableMutation = {
   module GraphQL = [%graphql
     {|
-             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!) {
-                 createMeasurable(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint) {
+             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!) {
+                 createMeasurable(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity) {
                    id
                  }
              }
@@ -26,6 +26,7 @@ module SignUpParams = {
   type state = {
     name: string,
     description: string,
+    descriptionEntity: string,
     valueType: string,
     expectedResolutionDate: string,
     resolutionEndpoint: string,
@@ -34,6 +35,7 @@ module SignUpParams = {
     | `name
     | `valueType
     | `description
+    | `descriptionEntity
     | `expectedResolutionDate
     | `resolutionEndpoint
   ];
@@ -43,6 +45,11 @@ module SignUpParams = {
       `description,
       s => s.description,
       (s, description) => {...s, description},
+    ),
+    (
+      `descriptionEntity,
+      s => s.descriptionEntity,
+      (s, descriptionEntity) => {...s, descriptionEntity},
     ),
     (`valueType, s => s.valueType, (s, valueType) => {...s, valueType}),
     (
@@ -71,6 +78,7 @@ let mutate =
       ~description=values.description,
       ~expectedResolutionDate=values.expectedResolutionDate |> Js.Json.string,
       ~resolutionEndpoint=values.resolutionEndpoint,
+      ~descriptionEntity=values.descriptionEntity,
       ~valueType=
         switch (values.valueType) {
         | "float" => `FLOAT
@@ -95,6 +103,17 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
         <Input
           value={form.values.name}
           onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
+        />
+      </Form.Item>
+      <Form.Item>
+        <h3> {"Entity" |> ste} </h3>
+        <Input
+          value={form.values.descriptionEntity}
+          onChange={
+            ReForm.Helpers.handleDomFormChange(
+              handleChange(`descriptionEntity),
+            )
+          }
         />
       </Form.Item>
       <Form.Item>
@@ -154,6 +173,7 @@ let make = _children => {
             name: "",
             description: "",
             valueType: "float",
+            descriptionEntity: "",
             expectedResolutionDate: MomentRe.momentNow() |> formatDate,
             resolutionEndpoint: "",
           },

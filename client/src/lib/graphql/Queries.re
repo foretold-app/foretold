@@ -209,12 +209,14 @@ module GetMeasurables = {
     resolutionEndpoint: option(string),
     measurementCount: option(int),
     measurerCount: option(int),
+    descriptionEntity: option(string),
     createdAt: MomentRe.Moment.t,
     updatedAt: MomentRe.Moment.t,
     expectedResolutionDate: option(MomentRe.Moment.t),
     state: DataModel.measurableState,
     stateUpdatedAt: option(MomentRe.Moment.t),
     creator: option(creator),
+    descriptionDate: option(MomentRe.Moment.t),
   };
 
   let toMeasurable = (m: measurable): DataModel.measurable =>
@@ -226,6 +228,8 @@ module GetMeasurables = {
       ~resolutionEndpoint=m.resolutionEndpoint,
       ~measurementCount=m.measurementCount,
       ~measurerCount=m.measurerCount,
+      ~descriptionEntity=m.descriptionEntity,
+      ~descriptionDate=m.descriptionDate,
       ~createdAt=Some(m.createdAt),
       ~updatedAt=Some(m.updatedAt),
       ~expectedResolutionDate=m.expectedResolutionDate,
@@ -246,6 +250,8 @@ module GetMeasurables = {
            valueType
            measurementCount
            measurerCount
+           descriptionEntity
+           descriptionDate @bsDecoder(fn: "optionalMoment")
            state @bsDecoder(fn: "string_to_measurableState")
            stateUpdatedAt @bsDecoder(fn: "optionalMoment")
            expectedResolutionDate @bsDecoder(fn: "optionalMoment")

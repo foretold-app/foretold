@@ -23,6 +23,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    descriptionEntity: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    descriptionDate: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
     description: {
       type: DataTypes.TEXT,
       allowNull: true,

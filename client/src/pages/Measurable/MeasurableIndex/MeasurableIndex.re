@@ -24,6 +24,12 @@ let make = _children => {
         <$> (d => d##measurables)
         <$> Extensions.Array.concatSomes
         <$> (d => d |> Array.map(Queries.GetMeasurables.toMeasurable))
+        <$> (
+          d => {
+            Js.log(d);
+            d;
+          }
+        )
         <$> (measurables => <MeasurableIndex__Table measurables />)
         |> Result.result(idd, idd)
       )

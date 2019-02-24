@@ -52,8 +52,30 @@ let dateStatusWrapper = (~measurable: DataModel.measurable) =>
 
 let sortMeasurables = m => Belt.SortArray.stableSortBy(m, compareMeasurables);
 
+let graph = Data.make;
+
+let description = (description: string) =>
+  ItemShow.findName(graph, description);
+
 let link = (~m: DataModel.measurable) =>
-  <a href={"/measurables/" ++ m.id}> {m.name |> ste} </a>;
+  <div>
+    {
+      m.descriptionEntity
+      |> Option.bind(_, m => ItemShow.findName(graph, m))
+      |> Option.bind(_, r =>
+           m.descriptionEntity
+           |> Option.fmap(d =>
+                <a href={"/items/" ++ d} className=PrimaryTableStyles.itemLink>
+                  {r |> ste}
+                </a>
+              )
+         )
+      |> Option.default("" |> ste)
+    }
+    <a href={"/measurables/" ++ m.id} className=PrimaryTableStyles.mainLink>
+      {m.name |> ste}
+    </a>
+  </div>;
 
 let description = (~m: DataModel.measurable) =>
   switch (m.description |> Option.default("")) {

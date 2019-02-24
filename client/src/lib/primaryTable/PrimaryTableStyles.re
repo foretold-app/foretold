@@ -82,14 +82,14 @@ let mainColumnTop =
   style([
     flex(1),
     paddingLeft(px(2)),
-    selector(
-      " a",
-      [
-        color(`hex("333")),
-        fontSize(`px(18)),
-        selector(":hover", [backgroundColor(hex("ddd"))]),
-      ],
-    ),
+    /* selector(
+         " a",
+         [
+           color(`hex("333")),
+           fontSize(`px(18)),
+           selector(":hover", [backgroundColor(hex("ddd"))]),
+         ],
+       ), */
     selector(" p", [marginTop(`px(3)), marginBottom(`px(8))]),
   ]);
 let mainColumnBottom = style([flex(1), padding(px(2))]);
@@ -123,3 +123,30 @@ let statusColor = (~measurable: DataModel.measurable) => {
     };
   style([main, statusSpecific] |> List.concat);
 };
+
+let itemLink =
+  style([
+    color(`hex("0e2b68")),
+    backgroundColor(`hex("dbdbe5")),
+    selector(
+      ":hover",
+      [backgroundColor(`hex("c7defe")), color(`hex("0e2b68"))],
+    ),
+    padding2(~v=`px(1), ~h=`px(4)),
+    borderRadius(`px(2)),
+    marginRight(`px(2)),
+    fontSize(`px(14)),
+    fontWeight(800),
+  ]);
+
+let mainLink =
+  style([
+    borderRadius(`px(2)),
+    padding2(~v=`px(0), ~h=`px(5)),
+    color(`hex("333")),
+    fontSize(`px(18)),
+    selector(
+      ":hover",
+      [backgroundColor(`hex("ddd")), color(`hex("333"))],
+    ),
+  ]);

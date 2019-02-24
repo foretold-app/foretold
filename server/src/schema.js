@@ -320,12 +320,14 @@ const schema = new GraphQLSchema({
       },
       editMeasurable: {
         type: getType.Measurables(),
-        args: filterr(_.pick(attributeFields(models.Measurable), ['id','name', 'description', 'expectedResolutionDate', 'resolutionEndpoint'])),
+        args: filterr(_.pick(attributeFields(models.Measurable), ['id','name', 'description', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate'])),
         resolve: async (__, {
           id,
           name,
           description,
           expectedResolutionDate,
+          descriptionEntity,
+          descriptionDate,
           resolutionEndpoint
         }, options) => {
           let _auth0Id = await getAuth0Id(options)
@@ -334,9 +336,9 @@ const schema = new GraphQLSchema({
           if (measurable.creatorId !== user.agentId){
             throw new Error("User does not have permission")
           }
-          let notification = await measurable.updateNotifications(user, {name, description, expectedResolutionDate,resolutionEndpoint});
+          let notification = await measurable.updateNotifications(user, {name, description, expectedResolutionDate,resolutionEndpoint, descriptionEntity, descriptionDate});
           notify(notification);
-          return measurable.update({name, description, expectedResolutionDate, resolutionEndpoint})
+          return measurable.update({name, description, expectedResolutionDate, resolutionEndpoint, descriptionEntity, descriptionDate})
         }
       },
       editUser: {

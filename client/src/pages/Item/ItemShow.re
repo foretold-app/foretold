@@ -6,6 +6,20 @@ let ste = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("ItemShow");
 
+let findName = (graph, propertyId) =>
+  graph
+  |> Graph_T.F.factList
+  |> Graph_Fact_Filters.withSubject(propertyId)
+  |> Graph_Fact_Filters.withProperty("@base/properties/p-name")
+  |> Rationale.RList.head
+  |> Option.bind(_, (k: Graph_T.T.fact) =>
+       switch (k.value.valueType) {
+       | String(s) => Some(s)
+       | ThingId(s) => Some(s)
+       | _ => None
+       }
+     );
+
 let make = (~id: string, _children) => {
   ...component,
   render: _ => {
@@ -25,22 +39,9 @@ let make = (~id: string, _children) => {
                <div>
                  <h3>
                    {
-                     graph
-                     |> Graph_T.F.factList
-                     |> Graph_Fact_Filters.withSubject(r.propertyId)
-                     |> Graph_Fact_Filters.withProperty(
-                          "@base/properties/p-name",
-                        )
-                     |> Array.of_list
-                     |> Array.map(k =>
-                          Graph_T.T.(
-                            switch (k.value.valueType) {
-                            | String(l) => l |> ste
-                            | _ => "no-name" |> ste
-                            }
-                          )
-                        )
-                     |> ReasonReact.array
+                     findName(graph, r.propertyId)
+                     |> Option.default("no-name")
+                     |> ste
                    }
                  </h3>
                  Graph_T.T.(

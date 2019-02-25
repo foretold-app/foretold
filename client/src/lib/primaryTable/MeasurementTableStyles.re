@@ -7,7 +7,7 @@ let middle =
   style([
     textAlign(`center),
     fontSize(`em(1.4)),
-    fontWeight(800),
+    fontWeight(`num(800)),
     color(`hex("7d7ea2")),
     marginTop(`px(6)),
   ]);
@@ -112,7 +112,7 @@ let judgementStyle =
         color(`rgba((55, 47, 68, 0.85))),
         marginBottom(`px(0)),
         fontSize(`em(1.15)),
-        fontWeight(800),
+        fontWeight(`num(800)),
       ],
     ),
     selector(" a", [fontSize(`em(0.9))]),

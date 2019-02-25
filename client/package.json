@@ -34,7 +34,7 @@
     "apollo-utilities": "^1.0.20",
     "auth0-js": "^9.7.3",
     "bs-ant-design": "^2.1.0",
-    "bs-css": "^7.2.0",
+    "bs-css": "^8.0.2",
     "bs-moment": "^0.3.1",
     "bs-reform": "^5.1.1",
     "bs-storybook": "^0.2.0",

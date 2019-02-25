@@ -65,9 +65,14 @@ let link = (~m: DataModel.measurable) =>
       |> Option.bind(_, r =>
            m.descriptionEntity
            |> Option.fmap(d =>
-                <a href={"/items/" ++ d} className=PrimaryTableStyles.itemLink>
-                  {r |> ste}
-                </a>
+                <span>
+                  <span className=PrimaryTableStyles.creatorLinkLeftMargin />
+                  <a
+                    href={"/items/" ++ d}
+                    className=PrimaryTableStyles.itemLink>
+                    {r |> ste}
+                  </a>
+                </span>
               )
          )
       |> Option.default("" |> ste)

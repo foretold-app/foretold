@@ -135,8 +135,9 @@ let itemLink =
     padding2(~v=`px(1), ~h=`px(4)),
     borderRadius(`px(2)),
     marginRight(`px(2)),
+    marginLeft(`px(5)),
     fontSize(`px(14)),
-    fontWeight(800),
+    fontWeight(`num(800)),
   ]);
 
 let mainLink =
@@ -162,3 +163,6 @@ let date =
       [backgroundColor(`hex("ddd")), color(`hex("333"))],
     ),
   ]);
+
+let creatorLinkLeftMargin =
+  style([float(`left), marginLeft(`px(5)), height(`percent(100.0))]);

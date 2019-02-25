@@ -11,8 +11,8 @@ let ste = ReasonReact.string;
 module CreateMeasurableMutation = {
   module GraphQL = [%graphql
     {|
-             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!) {
-                 createMeasurable(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity) {
+             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!, $descriptionDate: Date) {
+                 createMeasurable(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity, descriptionDate: $descriptionDate) {
                    id
                  }
              }
@@ -27,17 +27,21 @@ module SignUpParams = {
     name: string,
     description: string,
     descriptionEntity: string,
+    descriptionDate: string,
     valueType: string,
     expectedResolutionDate: string,
     resolutionEndpoint: string,
+    showDescriptionDate: string,
   };
   type fields = [
     | `name
     | `valueType
     | `description
     | `descriptionEntity
+    | `descriptionDate
     | `expectedResolutionDate
     | `resolutionEndpoint
+    | `showDescriptionDate
   ];
   let lens = [
     (`name, s => s.name, (s, name) => {...s, name}),
@@ -51,7 +55,17 @@ module SignUpParams = {
       s => s.descriptionEntity,
       (s, descriptionEntity) => {...s, descriptionEntity},
     ),
+    (
+      `showDescriptionDate,
+      s => s.showDescriptionDate,
+      (s, showDescriptionDate) => {...s, showDescriptionDate},
+    ),
     (`valueType, s => s.valueType, (s, valueType) => {...s, valueType}),
+    (
+      `descriptionDate,
+      s => s.descriptionDate,
+      (s, descriptionDate) => {...s, descriptionDate},
+    ),
     (
       `expectedResolutionDate,
       s => s.expectedResolutionDate,
@@ -73,21 +87,41 @@ let mutate =
       values: SignUpForm.values,
     ) => {
   let mutate =
-    CreateMeasurableMutation.GraphQL.make(
-      ~name=values.name,
-      ~description=values.description,
-      ~expectedResolutionDate=values.expectedResolutionDate |> Js.Json.string,
-      ~resolutionEndpoint=values.resolutionEndpoint,
-      ~descriptionEntity=values.descriptionEntity,
-      ~valueType=
-        switch (values.valueType) {
-        | "float" => `FLOAT
-        | "percentage" => `PERCENTAGE
-        | "date" => `DATE
-        | _ => `FLOAT
-        },
-      (),
-    );
+    values.showDescriptionDate == "TRUE" ?
+      CreateMeasurableMutation.GraphQL.make(
+        ~name=values.name,
+        ~description=values.description,
+        ~expectedResolutionDate=
+          values.expectedResolutionDate |> Js.Json.string,
+        ~resolutionEndpoint=values.resolutionEndpoint,
+        ~descriptionEntity=values.descriptionEntity,
+        ~descriptionDate=values.descriptionDate |> Js.Json.string,
+        ~valueType=
+          switch (values.valueType) {
+          | "float" => `FLOAT
+          | "percentage" => `PERCENTAGE
+          | "date" => `DATE
+          | _ => `FLOAT
+          },
+        (),
+      ) :
+      CreateMeasurableMutation.GraphQL.make(
+        ~name=values.name,
+        ~description=values.description,
+        ~expectedResolutionDate=
+          values.expectedResolutionDate |> Js.Json.string,
+        ~resolutionEndpoint=values.resolutionEndpoint,
+        ~descriptionEntity=values.descriptionEntity,
+        ~descriptionDate=values.descriptionDate |> Js.Json.string,
+        ~valueType=
+          switch (values.valueType) {
+          | "float" => `FLOAT
+          | "percentage" => `PERCENTAGE
+          | "date" => `DATE
+          | _ => `FLOAT
+          },
+        (),
+      );
   mutation(~variables=mutate##variables, ()) |> ignore;
 };
 
@@ -99,14 +133,7 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
     <h2> {"Create a new Measurable" |> ste} </h2>
     <Form>
       <Form.Item>
-        <h3> {"Name" |> ste} </h3>
-        <Input
-          value={form.values.name}
-          onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
-        />
-      </Form.Item>
-      <Form.Item>
-        <h3> {"Entity" |> ste} </h3>
+        <h3> {"Relevant Entity (optional)" |> ste} </h3>
         <Input
           value={form.values.descriptionEntity}
           onChange={
@@ -116,6 +143,35 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
           }
         />
       </Form.Item>
+      <Form.Item>
+        <h3> {"Measurable Name" |> ste} </h3>
+        <Input
+          value={form.values.name}
+          onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
+        />
+      </Form.Item>
+      <Form.Item>
+        <h3> {"Include a Specific Date in Name" |> ste} </h3>
+        <AntdSwitch
+          checked={form.values.showDescriptionDate == "TRUE"}
+          onChange={
+            e => handleChange(`showDescriptionDate, e ? "TRUE" : "FALSE")
+          }
+        />
+      </Form.Item>
+      {
+        form.values.showDescriptionDate == "TRUE" ?
+          <Form.Item>
+            <h3> {"'On' Date" |> ste} </h3>
+            <DatePicker
+              value={
+                form.values.descriptionDate |> MomentRe.momentDefaultFormat
+              }
+              onChange={e => handleChange(`descriptionDate, e |> formatDate)}
+            />
+          </Form.Item> :
+          <div />
+      }
       <Form.Item>
         <h3> {"Description" |> ste} </h3>
         <Input
@@ -175,7 +231,9 @@ let make = _children => {
             valueType: "float",
             descriptionEntity: "",
             expectedResolutionDate: MomentRe.momentNow() |> formatDate,
+            descriptionDate: MomentRe.momentNow() |> formatDate,
             resolutionEndpoint: "",
+            showDescriptionDate: "FALSE",
           },
           ~schema=[(`name, Custom(_ => None))],
           ({handleSubmit, handleChange, form, _}) =>

@@ -74,6 +74,15 @@ let link = (~m: DataModel.measurable) =>
     }
     <a href={"/measurables/" ++ m.id} className=PrimaryTableStyles.mainLink>
       {m.name |> ste}
+      {
+        (
+          switch (formatDate(m.descriptionDate)) {
+          | "" => ""
+          | e => " on " ++ e
+          }
+        )
+        |> ste
+      }
     </a>
   </div>;
 

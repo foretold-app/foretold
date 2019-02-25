@@ -150,3 +150,15 @@ let mainLink =
       [backgroundColor(`hex("ddd")), color(`hex("333"))],
     ),
   ]);
+
+let date =
+  style([
+    borderRadius(`px(2)),
+    padding2(~v=`px(0), ~h=`px(5)),
+    color(`hex("333")),
+    fontSize(`px(18)),
+    selector(
+      ":hover",
+      [backgroundColor(`hex("ddd")), color(`hex("333"))],
+    ),
+  ]);

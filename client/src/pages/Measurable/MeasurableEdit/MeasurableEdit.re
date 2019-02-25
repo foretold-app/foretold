@@ -25,8 +25,8 @@ let withQuery = (~id, fn) => {
 module WithEditMutation = {
   module GraphQL = [%graphql
     {|
-             mutation editMeasurable($id: String!, $name: String!, $description: String!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!) {
-                 editMeasurable(id: $id, name: $name, description: $description, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity) {
+             mutation editMeasurable($id: String!, $name: String!, $description: String!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!, $descriptionDate: Date) {
+                 editMeasurable(id: $id, name: $name, description: $description, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity, descriptionDate: $descriptionDate) {
                    id
                  }
              }
@@ -44,17 +44,31 @@ module WithEditMutation = {
         expectedResolutionDate: string,
         resolutionEndpoint: string,
         descriptionEntity: string,
+        descriptionDate: string,
+        showDescriptionDate: string,
       ) => {
     let m =
-      GraphQL.make(
-        ~id,
-        ~name,
-        ~description,
-        ~expectedResolutionDate=expectedResolutionDate |> Js.Json.string,
-        ~resolutionEndpoint,
-        ~descriptionEntity,
-        (),
-      );
+      showDescriptionDate == "TRUE" ?
+        GraphQL.make(
+          ~id,
+          ~name,
+          ~description,
+          ~descriptionDate=descriptionDate |> Js.Json.string,
+          ~expectedResolutionDate=expectedResolutionDate |> Js.Json.string,
+          ~resolutionEndpoint,
+          ~descriptionEntity,
+          (),
+        ) :
+        GraphQL.make(
+          ~id,
+          ~name,
+          ~description,
+          ~descriptionDate="" |> Js.Json.string,
+          ~expectedResolutionDate=expectedResolutionDate |> Js.Json.string,
+          ~resolutionEndpoint,
+          ~descriptionEntity,
+          (),
+        );
     mutation(~variables=m##variables, ~refetchQueries=[|"getAgent"|], ())
     |> ignore;
   };
@@ -65,15 +79,19 @@ module SignUpParams = {
     name: string,
     description: string,
     descriptionEntity: string,
+    descriptionDate: string,
     expectedResolutionDate: string,
     resolutionEndpoint: string,
+    showDescriptionDate: string,
   };
   type fields = [
     | `name
     | `description
     | `descriptionEntity
     | `expectedResolutionDate
+    | `descriptionDate
     | `resolutionEndpoint
+    | `showDescriptionDate
   ];
   let lens = [
     (`name, s => s.name, (s, name) => {...s, name}),
@@ -81,6 +99,16 @@ module SignUpParams = {
       `description,
       s => s.description,
       (s, description) => {...s, description},
+    ),
+    (
+      `descriptionDate,
+      s => s.descriptionDate,
+      (s, descriptionDate) => {...s, descriptionDate},
+    ),
+    (
+      `showDescriptionDate,
+      s => s.showDescriptionDate,
+      (s, showDescriptionDate) => {...s, showDescriptionDate},
     ),
     (
       `descriptionEntity,
@@ -106,14 +134,7 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
   <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
     <Form>
       <Form.Item>
-        <h3> {"Name" |> ste} </h3>
-        <Input
-          value={form.values.name}
-          onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
-        />
-      </Form.Item>
-      <Form.Item>
-        <h3> {"Entity" |> ste} </h3>
+        <h3> {"Relevant Entity (optional)" |> ste} </h3>
         <Input
           value={form.values.descriptionEntity}
           onChange={
@@ -123,6 +144,35 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
           }
         />
       </Form.Item>
+      <Form.Item>
+        <h3> {"Measurable Name" |> ste} </h3>
+        <Input
+          value={form.values.name}
+          onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
+        />
+      </Form.Item>
+      <Form.Item>
+        <h3> {"Include a Specific Date in Name" |> ste} </h3>
+        <AntdSwitch
+          checked={form.values.showDescriptionDate == "TRUE"}
+          onChange={
+            e => handleChange(`showDescriptionDate, e ? "TRUE" : "FALSE")
+          }
+        />
+      </Form.Item>
+      {
+        form.values.showDescriptionDate == "TRUE" ?
+          <Form.Item>
+            <h3> {"'On' Date" |> ste} </h3>
+            <DatePicker
+              value={
+                form.values.descriptionDate |> MomentRe.momentDefaultFormat
+              }
+              onChange={e => handleChange(`descriptionDate, e |> formatDate)}
+            />
+          </Form.Item> :
+          <div />
+      }
       <Form.Item>
         <h3> {"Description" |> ste} </h3>
         <Input
@@ -191,9 +241,19 @@ let make = (~id: string, _children) => {
                         values.expectedResolutionDate,
                         values.resolutionEndpoint,
                         values.descriptionEntity,
+                        values.descriptionDate,
+                        values.showDescriptionDate,
                       ),
                   ~initialState={
                     name: measurable.name,
+                    descriptionDate:
+                      measurable.descriptionDate
+                      |> Option.default(MomentRe.momentNow())
+                      |> formatDate,
+                    showDescriptionDate:
+                      measurable.descriptionDate
+                      |> Rationale.Option.isSome
+                      |> (e => e ? "TRUE" : "FALSE"),
                     descriptionEntity:
                       measurable.descriptionEntity |> Option.default(""),
                     description: measurable.description |> Option.default(""),

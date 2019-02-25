@@ -260,13 +260,15 @@ const schema = new _graphql.GraphQLSchema({
       },
       createMeasurable: {
         type: getType.Measurables(),
-        args: filterr(_.pick((0, _graphqlSequelize.attributeFields)(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint'])),
+        args: filterr(_.pick((0, _graphqlSequelize.attributeFields)(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate'])),
         resolve: async (__, {
           name,
           description,
           valueType,
           expectedResolutionDate,
-          resolutionEndpoint
+          resolutionEndpoint,
+          descriptionDate,
+          descriptionEntity
         }, options) => {
           let _auth0Id = await getAuth0Id(options);
           const user = await auth0User(_auth0Id);
@@ -276,6 +278,8 @@ const schema = new _graphql.GraphQLSchema({
             description,
             expectedResolutionDate,
             creatorId: user.agentId,
+            descriptionEntity,
+            descriptionDate,
             resolutionEndpoint
           });
           let notification = await newMeasurable.creationNotification(user);
@@ -315,12 +319,14 @@ const schema = new _graphql.GraphQLSchema({
       },
       editMeasurable: {
         type: getType.Measurables(),
-        args: filterr(_.pick((0, _graphqlSequelize.attributeFields)(models.Measurable), ['id', 'name', 'description', 'expectedResolutionDate', 'resolutionEndpoint'])),
+        args: filterr(_.pick((0, _graphqlSequelize.attributeFields)(models.Measurable), ['id', 'name', 'description', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate'])),
         resolve: async (__, {
           id,
           name,
           description,
           expectedResolutionDate,
+          descriptionEntity,
+          descriptionDate,
           resolutionEndpoint
         }, options) => {
           let _auth0Id = await getAuth0Id(options);
@@ -329,9 +335,9 @@ const schema = new _graphql.GraphQLSchema({
           if (measurable.creatorId !== user.agentId) {
             throw new Error("User does not have permission");
           }
-          let notification = await measurable.updateNotifications(user, { name, description, expectedResolutionDate, resolutionEndpoint });
+          let notification = await measurable.updateNotifications(user, { name, description, expectedResolutionDate, resolutionEndpoint, descriptionEntity, descriptionDate });
           (0, _notifications.notify)(notification);
-          return measurable.update({ name, description, expectedResolutionDate, resolutionEndpoint });
+          return measurable.update({ name, description, expectedResolutionDate, resolutionEndpoint, descriptionEntity, descriptionDate });
         }
       },
       editUser: {

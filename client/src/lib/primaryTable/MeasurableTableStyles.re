@@ -57,37 +57,28 @@ let graph = Data.make;
 let description = (description: string) =>
   ItemShow.findName(graph, description);
 
+let nameWithDate = (~m: DataModel.measurable) =>
+  switch (formatDate(m.descriptionDate)) {
+  | "" => m.name
+  | e => m.name ++ " on " ++ e
+  };
+
+let nameEntityLink = (~m: DataModel.measurable, ~className: string) =>
+  m.descriptionEntity
+  |> Option.bind(_, ItemShow.findName(graph))
+  |> Option.bind(_, r =>
+       m.descriptionEntity
+       |> Option.fmap(d => <a href={"/items/" ++ d} className> {r |> ste} </a>)
+     );
+
 let link = (~m: DataModel.measurable) =>
   <div>
     {
-      m.descriptionEntity
-      |> Option.bind(_, m => ItemShow.findName(graph, m))
-      |> Option.bind(_, r =>
-           m.descriptionEntity
-           |> Option.fmap(d =>
-                <span>
-                  <span className=PrimaryTableStyles.creatorLinkLeftMargin />
-                  <a
-                    href={"/items/" ++ d}
-                    className=PrimaryTableStyles.itemLink>
-                    {r |> ste}
-                  </a>
-                </span>
-              )
-         )
+      nameEntityLink(~m, ~className=PrimaryTableStyles.itemLink)
       |> Option.default("" |> ste)
     }
     <a href={"/measurables/" ++ m.id} className=PrimaryTableStyles.mainLink>
-      {m.name |> ste}
-      {
-        (
-          switch (formatDate(m.descriptionDate)) {
-          | "" => ""
-          | e => " on " ++ e
-          }
-        )
-        |> ste
-      }
+      {nameWithDate(~m) |> ste}
     </a>
   </div>;
 

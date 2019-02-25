@@ -140,6 +140,21 @@ let itemLink =
     fontWeight(`num(800)),
   ]);
 
+let largeItemLink =
+  style([
+    color(`hex("0e2b68")),
+    backgroundColor(`hex("dbdbe5")),
+    selector(
+      ":hover",
+      [backgroundColor(`hex("c7defe")), color(`hex("0e2b68"))],
+    ),
+    padding2(~v=`px(1), ~h=`px(4)),
+    borderRadius(`px(2)),
+    marginRight(`px(8)),
+    fontSize(`px(16)),
+    fontWeight(`num(800)),
+  ]);
+
 let mainLink =
   style([
     borderRadius(`px(2)),

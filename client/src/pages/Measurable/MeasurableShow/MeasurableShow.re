@@ -48,7 +48,18 @@ let make = (~id: string, _children) => {
                   <Div styles=[Style.Grid.Styles.flex(1)]>
                     <Div styles=[Style.Grid.Styles.flexRow]>
                       <Div styles=[Style.Grid.Styles.flex(6)]>
-                        <h1> {m.name |> ste} </h1>
+                        <h1>
+                          <UseRouterForLinks>
+                            {
+                              MeasurableTableStyles.nameEntityLink(
+                                ~m,
+                                ~className=PrimaryTableStyles.largeItemLink,
+                              )
+                              |> Option.default("" |> ste)
+                            }
+                            {MeasurableTableStyles.nameWithDate(~m) |> ste}
+                          </UseRouterForLinks>
+                        </h1>
                         {MeasurableTableStyles.description(~m)}
                       </Div>
                       <Div styles=[Style.Grid.Styles.flex(1)]>

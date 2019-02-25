@@ -314,6 +314,8 @@ module GetMeasurableWithMeasurements = {
               creatorId
               resolutionEndpoint
               resolutionEndpointResponse
+              descriptionEntity
+              descriptionDate @bsDecoder(fn: "optionalMoment")
               state @bsDecoder(fn: "string_to_measurableState")
               stateUpdatedAt @bsDecoder(fn: "optionalMoment")
               expectedResolutionDate @bsDecoder(fn: "optionalMoment")
@@ -387,6 +389,8 @@ module GetMeasurableWithMeasurements = {
         ~expectedResolutionDate=m##expectedResolutionDate,
         ~state=Some(m##state),
         ~stateUpdatedAt=m##stateUpdatedAt,
+        ~descriptionEntity=m##descriptionEntity,
+        ~descriptionDate=m##descriptionDate,
         ~creator,
         (),
       );

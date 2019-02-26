@@ -5,26 +5,68 @@ let data: Js.Json.t =
             "baseId": "base",
             "resourceId": "properties",
             "aliases": {
-              "subclass-of": "@base/properties/p-subclass-of"
             }
           },
           "p-instance-of": {
             "p-name": "Instance of"
           },
           "p-name": {
-            "p-name": "Name",
-            "p-instance-of": "p-data-type"
+            "p-name": "Name"
           },
-          "d-thing": {
-            "p-name": "Thing (Data Type)",
-            "p-instance-of": "p-data-type"
+          "p-description": {
+            "p-name": "Description"
+          },
+          "p-url": {
+            "p-name": "Web URL"
           },
           "n-organization": {
             "p-name": "Organization"
+          }
+    },
+    {
+        "config": {
+            "baseId": "foretold",
+            "resourceId": "main",
+            "aliases": {
+              "name": "@base/properties/p-name",
+              "description": "@base/properties/p-description",
+              "url": "@base/properties/p-url"
+            }
           },
           "n-fhi": {
-            "p-name": "FHI",
-            "p-instance-of": "n-organization"
+            "name": "FHI"
+          },
+          "n-foretold": {
+            "name": "Foretold",
+            "description": "This website, to hold predictions",
+            "url": "foretold.io"
+          },
+          "n-ozzie-gooen": {
+            "name": "Ozzie Gooen"
+          },
+          "n-jacob-lagerros": {
+            "name": "Jacob Lagerros"
+          }
+    },
+    {
+        "config": {
+            "baseId": "lesswrong",
+            "resourceId": "ozziegooen",
+            "aliases": {
+              "name": "@base/properties/p-name",
+              "description": "@base/properties/p-description",
+              "url": "@base/properties/p-url"
+            }
+          },
+          "prediction-pyramid": {
+            "name": "The Prediction Pyramid",
+            "description": "The Prediction Pyramid: Why Fundamental Work is Needed for Prediction Work",
+            "url": "https://www.lesswrong.com/posts/zuAj86jcB5JB4dgqm/the-prediction-pyramid-why-fundamental-work-is-needed-for"
+          },
+          "rain": {
+            "name": "RAIN Framework",
+            "description": "The RAIN Framework for Informational Effectiveness",
+            "url": "https://www.lesswrong.com/posts/s4TrCbCXvvWfkT2o6/the-rain-framework-for-informational-effectiveness"
           }
     }
 ]|},

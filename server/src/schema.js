@@ -229,9 +229,24 @@ const schema = new GraphQLSchema({
       ...modelResolvers("agent", "agents", getType.Agents(), models.Agent),
       stats: {
         type: new GraphQLNonNull(stats),
-        args: {},
         resolve: async (ops, {}, options) => {
-          return "sdf"
+        }
+      },
+      measurables: {
+        type: new GraphQLNonNull(new GraphQLList(getType.Measurables())),
+        args: {offset: {type: GraphQLInt}, limit: {type: GraphQLInt}},
+        resolve: async (ops, {offset, limit}, options) => {
+          const mms = await models.Measurable.findAll({
+            limit: limit,
+            offset: offset,
+            order: [['createdAt', 'DESC']],
+            where: {
+              state: {
+                [Sequelize.Op.ne]: "ARCHIVED"
+              }
+            }
+          })
+          return mms
         }
       },
     }

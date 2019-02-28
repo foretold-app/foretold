@@ -65,6 +65,11 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: "OPEN",
       allowNull: false
     },
+    channel: {
+      type: DataTypes.STRING,
+      defaultValue: "general",
+      allowNull: true
+    },
     stateUpdatedAt: {
       allowNull: true,
       type: DataTypes.DATE

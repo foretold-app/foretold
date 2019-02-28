@@ -224,9 +224,26 @@ const schema = new _graphql.GraphQLSchema({
     }, modelResolvers("measurement", "measurements", getType.Measurements(), models.Measurement), modelResolvers("measurable", "measurables", getType.Measurables(), models.Measurable), modelResolvers("bot", "bots", getType.Bots(), models.Bot), modelResolvers("agent", "agents", getType.Agents(), models.Agent), {
       stats: {
         type: new _graphql.GraphQLNonNull(stats),
-        args: {},
-        resolve: async (ops, {}, options) => {
-          return "sdf";
+        resolve: async (ops, {}, options) => {}
+      },
+      measurables: {
+        type: new _graphql.GraphQLNonNull(new _graphql.GraphQLList(getType.Measurables())),
+        args: { offset: { type: _graphql.GraphQLInt }, limit: { type: _graphql.GraphQLInt }, channel: { type: _graphql.GraphQLString } },
+        resolve: async (ops, { offset, limit, channel }, options) => {
+          const mms = await models.Measurable.findAll({
+            limit: limit,
+            offset: offset,
+            order: [['createdAt', 'DESC']],
+            where: {
+              channel: {
+                [Sequelize.Op.eq]: channel
+              },
+              state: {
+                [Sequelize.Op.ne]: "ARCHIVED"
+              }
+            }
+          });
+          return mms;
         }
       }
     })
@@ -260,7 +277,7 @@ const schema = new _graphql.GraphQLSchema({
       },
       createMeasurable: {
         type: getType.Measurables(),
-        args: filterr(_.pick((0, _graphqlSequelize.attributeFields)(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate'])),
+        args: filterr(_.pick((0, _graphqlSequelize.attributeFields)(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'channel'])),
         resolve: async (__, {
           name,
           description,
@@ -268,7 +285,8 @@ const schema = new _graphql.GraphQLSchema({
           expectedResolutionDate,
           resolutionEndpoint,
           descriptionDate,
-          descriptionEntity
+          descriptionEntity,
+          channel
         }, options) => {
           let _auth0Id = await getAuth0Id(options);
           const user = await auth0User(_auth0Id);
@@ -280,7 +298,8 @@ const schema = new _graphql.GraphQLSchema({
             creatorId: user.agentId,
             descriptionEntity,
             descriptionDate,
-            resolutionEndpoint
+            resolutionEndpoint,
+            channel
           });
           let notification = await newMeasurable.creationNotification(user);
           (0, _notifications.notify)(notification);

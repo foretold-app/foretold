@@ -5,12 +5,24 @@ let group =
     border(`px(1), `solid, hex("eee")),
     backgroundColor(hex("fafafa")),
   ]);
-let row =
+let statusOpacity = (measurable: DataModel.measurable) => {
+  let state =
+    measurable.state |> Rationale.Option.toExn("Needs state from GraphQL");
+  if (state === `ARCHIVED) {
+    0.8;
+  } else if (state === `JUDGED) {
+    0.55;
+  } else {
+    1.0;
+  };
+};
+let row = m =>
   style([
     width(`percent(100.0)),
     borderBottom(`px(1), `solid, hex("eee")),
     selector(" h2", [marginTop(px(2))]),
     display(`flex),
+    opacity(statusOpacity(m)),
     flexDirection(`row),
     paddingLeft(px(8)),
     paddingRight(px(8)),
@@ -154,6 +166,8 @@ let largeItemLink =
     fontSize(`px(16)),
     fontWeight(`num(800)),
   ]);
+
+let calDate = style([color(`hex("666"))]);
 
 let mainLink =
   style([

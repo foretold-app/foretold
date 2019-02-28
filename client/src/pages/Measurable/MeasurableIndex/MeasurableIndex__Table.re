@@ -20,7 +20,7 @@ let make = (~measurables: array(DataModel.measurable), _children) => {
         {
           _measurables
           |> Array.map(m =>
-               <div className=PrimaryTableStyles.row>
+               <div className={PrimaryTableStyles.row(m)}>
                  <div className=PrimaryTableStyles.mainColumn>
                    <div className=PrimaryTableStyles.mainColumnTop>
                      {MeasurableTableStyles.link(~m)}

@@ -82,7 +82,18 @@ let link = (~m: DataModel.measurable) =>
         "/c/" ++ (m.channel |> Option.default("general")) ++ "/m/" ++ m.id
       }
       className=PrimaryTableStyles.mainLink>
-      {nameWithDate(~m) |> ste}
+      {
+        switch (formatDate(m.descriptionDate)) {
+        | "" => m.name |> ste
+        | e =>
+          <span>
+            {m.name |> ste}
+            <span className=PrimaryTableStyles.calDate>
+              {" on " ++ e |> ste}
+            </span>
+          </span>
+        }
+      }
     </a>
   </div>;
 

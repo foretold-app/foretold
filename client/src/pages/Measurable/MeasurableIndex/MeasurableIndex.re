@@ -14,11 +14,12 @@ let transformations = [
 ];
 
 let component = ReasonReact.statelessComponent("Measurables");
-let make = _children => {
+let make = (~channel: string, _children) => {
   ...component,
   render: _self => {
     open Result.Infix;
-    let query = Queries.GetMeasurables.Query.make(~offset=0, ~limit=200, ());
+    let query =
+      Queries.GetMeasurables.Query.make(~offset=0, ~limit=200, ~channel, ());
     Queries.GetMeasurables.QueryComponent.make(~variables=query##variables, o =>
       o.result
       |> ApolloUtils.apolloResponseToResult
@@ -29,7 +30,7 @@ let make = _children => {
       |> Result.result(idd, idd)
     )
     |> ReasonReact.element
-    |> NormalLayout.make(~name="Measurables")
+    |> FillWithSidebar.make(~channel)
     |> ReasonReact.element;
   },
 };

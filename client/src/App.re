@@ -9,9 +9,10 @@ type route =
   | ItemShow(string)
   | AgentShow(string)
   | AgentMeasurables(string)
-  | MeasurableIndex
+  | Channel(string)
   | MeasurableShow(string)
   | MeasurableEdit(string)
+  | MeasurableNew(string)
   | NotFound;
 
 type state = {route};
@@ -39,7 +40,8 @@ let mapUrlToRoute = (url: ReasonReact.Router.url) =>
   | ["agents", id] => AgentShow(id)
   | ["items", ...id] => ItemShow(String.concat("/", id))
   | ["agents", id, "measurables"] => AgentMeasurables(id)
-  | ["measurables"] => MeasurableIndex
+  | ["c", id] => Channel(id)
+  | ["c", id, "new"] => MeasurableNew(id)
   | ["measurables", id] => MeasurableShow(id)
   | ["measurables", id, "edit"] => MeasurableEdit(id)
   | _ => Home
@@ -52,7 +54,7 @@ let component = ReasonReact.reducerComponent("App");
 
 let inside = r =>
   switch (r) {
-  | Home => <MeasurableIndex />
+  | Home => <MeasurableIndex channel="general" />
   | AgentMeasurables(id) => <MeMeasurables id />
   | AgentIndex => <AgentIndex />
   | NotFound => <AgentIndex />
@@ -60,8 +62,8 @@ let inside = r =>
   | Redirect => <Redirect />
   | Profile(auth0Id) => <Profile auth0Id />
   | AgentShow(id) => <AgentShow id />
-  | MeasurableIndex => <MeasurableIndex />
-  | MeasurableShow("new") => <MeasurableNew />
+  | Channel(channel) => <MeasurableIndex channel />
+  | MeasurableNew(channel) => <MeasurableNew channel />
   | MeasurableShow(id) => <MeasurableShow id />
   | MeasurableEdit(id) => <MeasurableEdit id />
   };
@@ -78,5 +80,5 @@ let make = _children => {
       ReasonReact.Router.watchUrl(url => url |> mapUrlToAction |> self.send);
     self.onUnmount(() => ReasonReact.Router.unwatchUrl(watcherID));
   },
-  render: self => <PaddedLayout> {self.state.route |> inside} </PaddedLayout>,
+  render: self => self.state.route |> inside,
 };

@@ -2,6 +2,11 @@ open ReactEvent;
 
 let component = ReasonReact.statelessComponent("UseRouterForLinks");
 
+module Styles = {
+  open Css;
+  let outer = style([height(`percent(100.0))]);
+};
+
 let make = (~onClickData=e => (), children) => {
   let click = event =>
     if (Synthetic.target(event)##localName == "a") {
@@ -17,5 +22,8 @@ let make = (~onClickData=e => (), children) => {
         ReasonReact.Router.push(url);
       };
     };
-  {...component, render: _ => <div onClick=click> ...children </div>};
+  {
+    ...component,
+    render: _ => <div onClick=click className=Styles.outer> ...children </div>,
+  };
 };

@@ -253,8 +253,8 @@ module GetMeasurables = {
 
   module Query = [%graphql
     {|
-    query getMeasurables ($offset: Int, $limit: Int) {
-        measurables(offset: $offset, limit: $limit) @bsRecord {
+    query getMeasurables ($offset: Int, $limit: Int, $channel: String) {
+        measurables(offset: $offset, limit: $limit, channel: $channel) @bsRecord {
            id
            name
            description

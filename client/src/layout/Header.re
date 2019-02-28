@@ -36,12 +36,6 @@ let make = _children => {
           <Col span=24>
             <Layout.Header className=Styles.header>
               <Antd_Menu className=Styles.menu mode=`Horizontal theme=`Light>
-                <Antd_Menu.Item key="2">
-                  {link("/measurables", "Measurables")}
-                </Antd_Menu.Item>
-                <Antd_Menu.Item key="1">
-                  {link("/agents", "Agents")}
-                </Antd_Menu.Item>
                 {
                   switch (userQuery) {
                   | Some(query) =>
@@ -54,9 +48,6 @@ let make = _children => {
                       };
                     ();
                     [|
-                      <Antd_Menu.Item key="3">
-                        {link("/measurables/new", "New Measurable")}
-                      </Antd_Menu.Item>,
                       <Antd_Menu.Item key="6">
                         {
                           link(

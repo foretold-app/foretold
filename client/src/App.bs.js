@@ -11,7 +11,6 @@ var ItemShow$Client = require("./pages/Item/ItemShow.bs.js");
 var Redirect$Client = require("./pages/Redirect.bs.js");
 var AgentShow$Client = require("./pages/Agent/AgentShow/AgentShow.bs.js");
 var AgentIndex$Client = require("./pages/Agent/AgentIndex.bs.js");
-var PaddedLayout$Client = require("./layout/PaddedLayout.bs.js");
 var MeMeasurables$Client = require("./pages/Me/MeMeasurables.bs.js");
 var MeasurableNew$Client = require("./pages/Measurable/MeasurableNew/MeasurableNew.bs.js");
 var MeasurableEdit$Client = require("./pages/Measurable/MeasurableEdit/MeasurableEdit.bs.js");
@@ -46,6 +45,23 @@ function mapUrlToRoute(url) {
           } else {
             return /* AgentIndex */1;
           }
+      case "c" : 
+          var match$3 = match[1];
+          if (match$3) {
+            var match$4 = match$3[1];
+            var id$1 = match$3[0];
+            if (match$4) {
+              if (match$4[0] === "new" && !match$4[1]) {
+                return /* MeasurableNew */Block.__(7, [id$1]);
+              } else {
+                return /* Home */0;
+              }
+            } else {
+              return /* Channel */Block.__(4, [id$1]);
+            }
+          } else {
+            return /* Home */0;
+          }
       case "callback" : 
           if (match[1]) {
             return /* Home */0;
@@ -56,29 +72,29 @@ function mapUrlToRoute(url) {
       case "items" : 
           return /* ItemShow */Block.__(1, [$$String.concat("/", match[1])]);
       case "measurables" : 
-          var match$3 = match[1];
-          if (match$3) {
-            var match$4 = match$3[1];
-            var id$1 = match$3[0];
-            if (match$4) {
-              if (match$4[0] === "edit" && !match$4[1]) {
-                return /* MeasurableEdit */Block.__(5, [id$1]);
+          var match$5 = match[1];
+          if (match$5) {
+            var match$6 = match$5[1];
+            var id$2 = match$5[0];
+            if (match$6) {
+              if (match$6[0] === "edit" && !match$6[1]) {
+                return /* MeasurableEdit */Block.__(6, [id$2]);
               } else {
                 return /* Home */0;
               }
             } else {
-              return /* MeasurableShow */Block.__(4, [id$1]);
+              return /* MeasurableShow */Block.__(5, [id$2]);
             }
           } else {
-            return /* MeasurableIndex */3;
+            return /* Home */0;
           }
       case "profile" : 
           if (match[1]) {
             return /* Home */0;
           } else {
-            var match$5 = Auth0$Client.userId(/* () */0);
-            if (match$5 !== undefined) {
-              return /* Profile */Block.__(0, [match$5]);
+            var match$7 = Auth0$Client.userId(/* () */0);
+            if (match$7 !== undefined) {
+              return /* Profile */Block.__(0, [match$7]);
             } else {
               return /* Home */0;
             }
@@ -106,13 +122,12 @@ var component = ReasonReact.reducerComponent("App");
 function inside(r) {
   if (typeof r === "number") {
     switch (r) {
+      case 0 : 
+          return ReasonReact.element(undefined, undefined, MeasurableIndex$Client.make("general", /* array */[]));
       case 2 : 
           return ReasonReact.element(undefined, undefined, Redirect$Client.make(/* array */[]));
-      case 0 : 
-      case 3 : 
-          return ReasonReact.element(undefined, undefined, MeasurableIndex$Client.make(/* array */[]));
       case 1 : 
-      case 4 : 
+      case 3 : 
           return ReasonReact.element(undefined, undefined, AgentIndex$Client.make(/* array */[]));
       
     }
@@ -127,14 +142,13 @@ function inside(r) {
       case 3 : 
           return ReasonReact.element(undefined, undefined, MeMeasurables$Client.make(r[0], /* array */[]));
       case 4 : 
-          var id = r[0];
-          if (id === "new") {
-            return ReasonReact.element(undefined, undefined, MeasurableNew$Client.make(/* array */[]));
-          } else {
-            return ReasonReact.element(undefined, undefined, MeasurableShow$Client.make(id, /* array */[]));
-          }
+          return ReasonReact.element(undefined, undefined, MeasurableIndex$Client.make(r[0], /* array */[]));
       case 5 : 
+          return ReasonReact.element(undefined, undefined, MeasurableShow$Client.make(r[0], /* array */[]));
+      case 6 : 
           return ReasonReact.element(undefined, undefined, MeasurableEdit$Client.make(r[0], /* array */[]));
+      case 7 : 
+          return ReasonReact.element(undefined, undefined, MeasurableNew$Client.make(r[0], /* array */[]));
       
     }
   }
@@ -161,7 +175,7 @@ function make() {
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function (self) {
-              return ReasonReact.element(undefined, undefined, PaddedLayout$Client.make(/* array */[inside(self[/* state */1][/* route */0])]));
+              return inside(self[/* state */1][/* route */0]);
             }),
           /* initialState */(function () {
               return /* record */[/* route : Home */0];

@@ -234,13 +234,16 @@ const schema = new GraphQLSchema({
       },
       measurables: {
         type: new GraphQLNonNull(new GraphQLList(getType.Measurables())),
-        args: {offset: {type: GraphQLInt}, limit: {type: GraphQLInt}},
-        resolve: async (ops, {offset, limit}, options) => {
+        args: {offset: {type: GraphQLInt}, limit: {type: GraphQLInt}, channel: {type: GraphQLString}},
+        resolve: async (ops, {offset, limit, channel}, options) => {
           const mms = await models.Measurable.findAll({
             limit: limit,
             offset: offset,
             order: [['createdAt', 'DESC']],
             where: {
+              channel: {
+                [Sequelize.Op.eq]: channel
+              },
               state: {
                 [Sequelize.Op.ne]: "ARCHIVED"
               }
@@ -280,7 +283,7 @@ const schema = new GraphQLSchema({
       },
       createMeasurable: {
         type: getType.Measurables(),
-        args: filterr(_.pick(attributeFields(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate'])),
+        args: filterr(_.pick(attributeFields(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'channel'])),
         resolve: async (__, {
           name,
           description,
@@ -288,7 +291,8 @@ const schema = new GraphQLSchema({
           expectedResolutionDate,
           resolutionEndpoint,
           descriptionDate,
-          descriptionEntity
+          descriptionEntity,
+          channel
         }, options) => {
           let _auth0Id = await getAuth0Id(options)
           const user = await auth0User(_auth0Id);
@@ -300,7 +304,8 @@ const schema = new GraphQLSchema({
           creatorId: user.agentId,
           descriptionEntity,
           descriptionDate,
-          resolutionEndpoint
+          resolutionEndpoint,
+          channel
           })
           let notification = await newMeasurable.creationNotification(user);
           notify(notification)

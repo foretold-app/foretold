@@ -11,8 +11,8 @@ let ste = ReasonReact.string;
 module CreateMeasurableMutation = {
   module GraphQL = [%graphql
     {|
-             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!, $descriptionDate: Date) {
-                 createMeasurable(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity, descriptionDate: $descriptionDate) {
+             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!, $descriptionDate: Date, $channel: String) {
+                 createMeasurable(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity, descriptionDate: $descriptionDate, channel: $channel) {
                    id
                  }
              }
@@ -85,6 +85,7 @@ let mutate =
     (
       mutation: CreateMeasurableMutation.Mutation.apolloMutation,
       values: SignUpForm.values,
+      channel: string,
     ) => {
   let mutate =
     values.showDescriptionDate == "TRUE" ?
@@ -96,6 +97,7 @@ let mutate =
         ~resolutionEndpoint=values.resolutionEndpoint,
         ~descriptionEntity=values.descriptionEntity,
         ~descriptionDate=values.descriptionDate |> Js.Json.string,
+        ~channel,
         ~valueType=
           switch (values.valueType) {
           | "float" => `FLOAT
@@ -113,6 +115,7 @@ let mutate =
         ~resolutionEndpoint=values.resolutionEndpoint,
         ~descriptionEntity=values.descriptionEntity,
         ~descriptionDate=values.descriptionDate |> Js.Json.string,
+        ~channel,
         ~valueType=
           switch (values.valueType) {
           | "float" => `FLOAT
@@ -217,14 +220,14 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
     </Form>
   </form>;
 
-let make = _children => {
+let make = (~channel, _children) => {
   ...component,
   render: _ =>
     CreateMeasurableMutation.Mutation.make(
       ~onCompleted=e => Js.log("HI"),
       (mutation, data) =>
         SignUpForm.make(
-          ~onSubmit=({values}) => mutate(mutation, values),
+          ~onSubmit=({values}) => mutate(mutation, values, channel),
           ~initialState={
             name: "",
             description: "",
@@ -247,12 +250,14 @@ let make = _children => {
             | Data(data) =>
               data##createMeasurable
               |> Option.fmap(e => e##id)
-              |> doIfSome(i => ReasonReact.Router.push("/measurables/" ++ i));
+              |> doIfSome(i => ReasonReact.Router.push("/c/" ++ channel));
               <h2> {"Measurable successfully created" |> ste} </h2>;
             | NotCalled => showForm(~form, ~handleSubmit, ~handleChange)
             },
         )
         |> ReasonReact.element,
     )
+    |> ReasonReact.element
+    |> FillWithSidebar.make(~channel)
     |> ReasonReact.element,
 };

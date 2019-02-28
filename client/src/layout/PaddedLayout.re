@@ -7,6 +7,5 @@ module Styles = {
 
 let make = children => {
   ...component,
-  render: _ =>
-    <div> <Header /> <div className=Styles.body> ...children </div> </div>,
+  render: _ => <div> <div className=Styles.body> ...children </div> </div>,
 };

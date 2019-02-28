@@ -105,6 +105,6 @@ let make = (~id: string, _children) => {
         }
       </div>
     </div>
-    |> FillWithSidebar.make(~channel="general")
+    |> FillWithSidebar.make(~channel=Some("general"))
     |> ReasonReact.element,
 };

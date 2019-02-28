@@ -114,7 +114,6 @@ let mutate =
           values.expectedResolutionDate |> Js.Json.string,
         ~resolutionEndpoint=values.resolutionEndpoint,
         ~descriptionEntity=values.descriptionEntity,
-        ~descriptionDate=values.descriptionDate |> Js.Json.string,
         ~channel,
         ~valueType=
           switch (values.valueType) {
@@ -125,7 +124,12 @@ let mutate =
           },
         (),
       );
-  mutation(~variables=mutate##variables, ()) |> ignore;
+  mutation(
+    ~variables=mutate##variables,
+    ~refetchQueries=[|"getMeasurables"|],
+    (),
+  )
+  |> ignore;
 };
 
 let formatDate = Moment.format("MMM DD, YYYY HH:MM:SS");
@@ -258,6 +262,6 @@ let make = (~channel, _children) => {
         |> ReasonReact.element,
     )
     |> ReasonReact.element
-    |> FillWithSidebar.make(~channel)
+    |> FillWithSidebar.make(~channel=Some(channel))
     |> ReasonReact.element,
 };

@@ -111,6 +111,8 @@ let make = (~auth0Id, _children) => {
               }
             }
           </form>
+          |> FillWithSidebar.make(~channel=None)
+          |> ReasonReact.element
         );
       })
     ),

@@ -30,7 +30,7 @@ let make = (~channel: string, _children) => {
       |> Result.result(idd, idd)
     )
     |> ReasonReact.element
-    |> FillWithSidebar.make(~channel)
+    |> FillWithSidebar.make(~channel=Some(channel))
     |> ReasonReact.element;
   },
 };

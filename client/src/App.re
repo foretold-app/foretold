@@ -10,7 +10,7 @@ type route =
   | AgentShow(string)
   | AgentMeasurables(string)
   | Channel(string)
-  | MeasurableShow(string)
+  | MeasurableShow(string, string)
   | MeasurableEdit(string)
   | MeasurableNew(string)
   | NotFound;
@@ -42,7 +42,7 @@ let mapUrlToRoute = (url: ReasonReact.Router.url) =>
   | ["agents", id, "measurables"] => AgentMeasurables(id)
   | ["c", id] => Channel(id)
   | ["c", id, "new"] => MeasurableNew(id)
-  | ["measurables", id] => MeasurableShow(id)
+  | ["c", channel, "m", id] => MeasurableShow(channel, id)
   | ["measurables", id, "edit"] => MeasurableEdit(id)
   | _ => Home
   };
@@ -64,7 +64,7 @@ let inside = r =>
   | AgentShow(id) => <AgentShow id />
   | Channel(channel) => <MeasurableIndex channel />
   | MeasurableNew(channel) => <MeasurableNew channel />
-  | MeasurableShow(id) => <MeasurableShow id />
+  | MeasurableShow(channel, id) => <MeasurableShow channel id />
   | MeasurableEdit(id) => <MeasurableEdit id />
   };
 

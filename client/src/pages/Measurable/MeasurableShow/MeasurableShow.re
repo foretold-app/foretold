@@ -30,81 +30,69 @@ module Styles = {
     ]);
 };
 
-let make = (~id: string, _children) => {
+let make = (~channel, ~id: string, _children) => {
   ...component,
   render: _self =>
-    <div>
-      <div>
-        {
-          Queries.GetMeasurableWithMeasurements.withQuery(
-            ~id,
-            measurable => {
-              let m =
-                Queries.GetMeasurableWithMeasurements.queryMeasurable(
-                  measurable,
-                );
-              <div>
-                <Div styles=[Style.Grid.Styles.flexColumn, Styles.header]>
-                  <Div styles=[Style.Grid.Styles.flex(1)]>
-                    <Div styles=[Style.Grid.Styles.flexRow]>
-                      <Div styles=[Style.Grid.Styles.flex(6)]>
-                        <h1>
-                          <UseRouterForLinks>
-                            {
-                              MeasurableTableStyles.nameEntityLink(
-                                ~m,
-                                ~className=PrimaryTableStyles.largeItemLink,
-                              )
-                              |> Option.default("" |> ste)
-                            }
-                            {MeasurableTableStyles.nameWithDate(~m) |> ste}
-                          </UseRouterForLinks>
-                        </h1>
-                        {MeasurableTableStyles.description(~m)}
-                      </Div>
-                      <Div styles=[Style.Grid.Styles.flex(1)]>
-                        {
-                          MeasurableTableStyles.dateStatusWrapper(
-                            ~measurable=m,
-                          )
-                        }
-                      </Div>
-                    </Div>
-                  </Div>
-                  <Div styles=[Style.Grid.Styles.flex(1)]>
-                    {MeasurableTableStyles.creatorLink(~m)}
-                    {MeasurableTableStyles.resolutionEndpoint(~m)}
-                    {MeasurableTableStyles.endpointResponse(~m)}
-                  </Div>
-                </Div>
-                <div>
-                  {
-                    SharedQueries.withLoggedInUserQuery(userQuery =>
-                      switch (userQuery) {
-                      | Some(query) =>
-                        open Rationale.Option.Infix;
-                        let userAgentId = query##user >>= (e => e##agentId);
-                        let creatorId = measurable##creatorId;
-                        <div>
-                          <h2> {"Add a Measurement" |> ste} </h2>
-                          <MeasurableShowForm
-                            measurableId=id
-                            isCreator={userAgentId == creatorId}
-                          />
-                        </div>;
-                      | _ => <div />
+    Queries.GetMeasurableWithMeasurements.withQuery(
+      ~id,
+      measurable => {
+        let m =
+          Queries.GetMeasurableWithMeasurements.queryMeasurable(measurable);
+        <div>
+          <Div styles=[Style.Grid.Styles.flexColumn, Styles.header]>
+            <Div styles=[Style.Grid.Styles.flex(1)]>
+              <Div styles=[Style.Grid.Styles.flexRow]>
+                <Div styles=[Style.Grid.Styles.flex(6)]>
+                  <h1>
+                    <UseRouterForLinks>
+                      {
+                        MeasurableTableStyles.nameEntityLink(
+                          ~m,
+                          ~className=PrimaryTableStyles.largeItemLink,
+                        )
+                        |> Option.default("" |> ste)
                       }
-                    )
-                  }
-                  <h2> {"Measurements" |> ste} </h2>
-                  <Measurable__Table measurements=measurable##measurements />
-                </div>
-              </div>;
-            },
-          )
-        }
-      </div>
-    </div>
-    |> FillWithSidebar.make(~channel=Some("general"))
+                      {MeasurableTableStyles.nameWithDate(~m) |> ste}
+                    </UseRouterForLinks>
+                  </h1>
+                  {MeasurableTableStyles.description(~m)}
+                </Div>
+                <Div styles=[Style.Grid.Styles.flex(1)]>
+                  {MeasurableTableStyles.dateStatusWrapper(~measurable=m)}
+                </Div>
+              </Div>
+            </Div>
+            <Div styles=[Style.Grid.Styles.flex(1)]>
+              {MeasurableTableStyles.creatorLink(~m)}
+              {MeasurableTableStyles.resolutionEndpoint(~m)}
+              {MeasurableTableStyles.endpointResponse(~m)}
+            </Div>
+          </Div>
+          <div>
+            {
+              SharedQueries.withLoggedInUserQuery(userQuery =>
+                switch (userQuery) {
+                | Some(query) =>
+                  open Rationale.Option.Infix;
+                  let userAgentId = query##user >>= (e => e##agentId);
+                  let creatorId = measurable##creatorId;
+                  <div>
+                    <h2> {"Add a Measurement" |> ste} </h2>
+                    <MeasurableShowForm
+                      measurableId=id
+                      isCreator={userAgentId == creatorId}
+                    />
+                  </div>;
+                | _ => <div />
+                }
+              )
+            }
+            <h2> {"Measurements" |> ste} </h2>
+            <Measurable__Table measurements=measurable##measurements />
+          </div>
+        </div>;
+      },
+    )
+    |> FillWithSidebar.make(~channel=Some(channel))
     |> ReasonReact.element,
 };

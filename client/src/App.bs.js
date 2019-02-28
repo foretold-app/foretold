@@ -51,10 +51,25 @@ function mapUrlToRoute(url) {
             var match$4 = match$3[1];
             var id$1 = match$3[0];
             if (match$4) {
-              if (match$4[0] === "new" && !match$4[1]) {
-                return /* MeasurableNew */Block.__(7, [id$1]);
-              } else {
-                return /* Home */0;
+              switch (match$4[0]) {
+                case "m" : 
+                    var match$5 = match$4[1];
+                    if (match$5 && !match$5[1]) {
+                      return /* MeasurableShow */Block.__(5, [
+                                id$1,
+                                match$5[0]
+                              ]);
+                    } else {
+                      return /* Home */0;
+                    }
+                case "new" : 
+                    if (match$4[1]) {
+                      return /* Home */0;
+                    } else {
+                      return /* MeasurableNew */Block.__(7, [id$1]);
+                    }
+                default:
+                  return /* Home */0;
               }
             } else {
               return /* Channel */Block.__(4, [id$1]);
@@ -72,18 +87,13 @@ function mapUrlToRoute(url) {
       case "items" : 
           return /* ItemShow */Block.__(1, [$$String.concat("/", match[1])]);
       case "measurables" : 
-          var match$5 = match[1];
-          if (match$5) {
-            var match$6 = match$5[1];
-            var id$2 = match$5[0];
-            if (match$6) {
-              if (match$6[0] === "edit" && !match$6[1]) {
-                return /* MeasurableEdit */Block.__(6, [id$2]);
-              } else {
-                return /* Home */0;
-              }
+          var match$6 = match[1];
+          if (match$6) {
+            var match$7 = match$6[1];
+            if (match$7 && match$7[0] === "edit" && !match$7[1]) {
+              return /* MeasurableEdit */Block.__(6, [match$6[0]]);
             } else {
-              return /* MeasurableShow */Block.__(5, [id$2]);
+              return /* Home */0;
             }
           } else {
             return /* Home */0;
@@ -92,9 +102,9 @@ function mapUrlToRoute(url) {
           if (match[1]) {
             return /* Home */0;
           } else {
-            var match$7 = Auth0$Client.userId(/* () */0);
-            if (match$7 !== undefined) {
-              return /* Profile */Block.__(0, [match$7]);
+            var match$8 = Auth0$Client.userId(/* () */0);
+            if (match$8 !== undefined) {
+              return /* Profile */Block.__(0, [match$8]);
             } else {
               return /* Home */0;
             }
@@ -144,7 +154,7 @@ function inside(r) {
       case 4 : 
           return ReasonReact.element(undefined, undefined, MeasurableIndex$Client.make(r[0], /* array */[]));
       case 5 : 
-          return ReasonReact.element(undefined, undefined, MeasurableShow$Client.make(r[0], /* array */[]));
+          return ReasonReact.element(undefined, undefined, MeasurableShow$Client.make(r[0], r[1], /* array */[]));
       case 6 : 
           return ReasonReact.element(undefined, undefined, MeasurableEdit$Client.make(r[0], /* array */[]));
       case 7 : 

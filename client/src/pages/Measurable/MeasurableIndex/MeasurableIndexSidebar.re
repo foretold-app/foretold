@@ -90,7 +90,7 @@ let make = (~channel, _children) => {
           <div className=Styles.minorHeader> {"Channels" |> ste} </div>
           <div className=Styles.over>
             {
-              ["general", "random", "foretold", "ozziegooen", "lesswrong"]
+              ["general", "foretold", "ozziegooen", "lesswrong"]
               |> List.map(e =>
                    <div
                      onClick={_e => ReasonReact.Router.push("/c/" ++ e)}

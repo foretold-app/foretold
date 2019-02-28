@@ -77,7 +77,11 @@ let link = (~m: DataModel.measurable) =>
       nameEntityLink(~m, ~className=PrimaryTableStyles.itemLink)
       |> Option.default("" |> ste)
     }
-    <a href={"/measurables/" ++ m.id} className=PrimaryTableStyles.mainLink>
+    <a
+      href={
+        "/c/" ++ (m.channel |> Option.default("general")) ++ "/m/" ++ m.id
+      }
+      className=PrimaryTableStyles.mainLink>
       {nameWithDate(~m) |> ste}
     </a>
   </div>;

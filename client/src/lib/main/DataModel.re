@@ -94,6 +94,7 @@ type measurable = {
   id: string,
   name: string,
   valueType,
+  channel: option(string),
   description: option(string),
   resolutionEndpoint: option(string),
   resolutionEndpointResponse: option(float),
@@ -115,6 +116,7 @@ let toMeasurable =
       ~id,
       ~name,
       ~valueType=`FLOAT,
+      ~channel=None,
       ~description=None,
       ~resolutionEndpoint=None,
       ~resolutionEndpointResponse=None,
@@ -133,6 +135,7 @@ let toMeasurable =
     ) => {
   id,
   name,
+  channel,
   valueType,
   description,
   resolutionEndpoint,

@@ -140,6 +140,7 @@ module GetMeasurable = {
     name: string,
     valueType: DataModel.valueType,
     description: option(string),
+    channel: option(string),
     resolutionEndpoint: option(string),
     measurementCount: option(int),
     measurerCount: option(int),
@@ -158,6 +159,7 @@ module GetMeasurable = {
       ~id=m.id,
       ~name=m.name,
       ~valueType=m.valueType,
+      ~channel=m.channel,
       ~description=m.description,
       ~resolutionEndpoint=m.resolutionEndpoint,
       ~measurementCount=m.measurementCount,
@@ -185,6 +187,7 @@ module GetMeasurable = {
            measurementCount
            measurerCount
            descriptionEntity
+           channel
            descriptionDate @bsDecoder(fn: "optionalMoment")
            state @bsDecoder(fn: "string_to_measurableState")
            stateUpdatedAt @bsDecoder(fn: "optionalMoment")
@@ -216,6 +219,7 @@ module GetMeasurables = {
   type measurable = {
     id: string,
     name: string,
+    channel: option(string),
     valueType: DataModel.valueType,
     description: option(string),
     resolutionEndpoint: option(string),
@@ -235,6 +239,7 @@ module GetMeasurables = {
     DataModel.toMeasurable(
       ~id=m.id,
       ~name=m.name,
+      ~channel=m.channel,
       ~valueType=m.valueType,
       ~description=m.description,
       ~resolutionEndpoint=m.resolutionEndpoint,
@@ -257,6 +262,7 @@ module GetMeasurables = {
         measurables(offset: $offset, limit: $limit, channel: $channel) @bsRecord {
            id
            name
+           channel
            description
            resolutionEndpoint
            valueType
@@ -312,6 +318,7 @@ module GetMeasurableWithMeasurements = {
               description
               valueType
               creatorId
+              channel
               resolutionEndpoint
               resolutionEndpointResponse
               descriptionEntity
@@ -381,6 +388,7 @@ module GetMeasurableWithMeasurements = {
       DataModel.toMeasurable(
         ~id=m##id,
         ~name=m##name,
+        ~channel=m##channel,
         ~description=m##description,
         ~resolutionEndpoint=m##resolutionEndpoint,
         ~resolutionEndpointResponse=m##resolutionEndpointResponse,

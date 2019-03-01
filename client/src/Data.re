@@ -21,6 +21,9 @@ let data: Js.Json.t =
           },
           "n-organization": {
             "p-name": "Organization"
+          },
+          "n-movie": {
+            "p-name": "Movie"
           }
     },
     {
@@ -50,6 +53,49 @@ let data: Js.Json.t =
     },
     {
         "config": {
+            "baseId": "media",
+            "resourceId": "movies",
+            "aliases": {
+              "name": "@base/properties/p-name",
+              "description": "@base/properties/p-description",
+              "instance-of": "@base/properties/p-instance-of",
+              "url": "@base/properties/p-url",
+              "movie": "@base/properties/n-movie"
+            }
+          },
+          "captain-marvel": {
+            "name": "Captain Marvel",
+            "url": "https://www.rottentomatoes.com/m/captain_marvel",
+            "instance-of": "movie"
+          },
+          "dumbo": {
+            "name": "Dumbo",
+            "url": "https://www.rottentomatoes.com/m/dumbo",
+            "instance-of": "movie"
+          },
+          "avengers-endgame": {
+            "name": "Avengers: Endgame",
+            "url": "https://www.rottentomatoes.com/m/avengers_endgame",
+            "instance-of": "movie"
+          },
+          "john-wick-three": {
+            "name": "John Wick: Chapter Three",
+            "url": "https://www.rottentomatoes.com/m/avengers_endgame",
+            "instance-of": "movie"
+          },
+          "detective-pikachu": {
+            "name": "Detective Pikachu",
+            "url": "https://www.rottentomatoes.com/m/pokemon_detective-pikachu",
+            "instance-of": "movie"
+          },
+          "aladdin": {
+            "name": "Aladdin",
+            "url": "https://www.rottentomatoes.com/m/aladdin",
+            "instance-of": "movie"
+          }
+    },
+    {
+        "config": {
             "baseId": "lesswrong",
             "resourceId": "ozziegooen",
             "aliases": {
@@ -64,7 +110,7 @@ let data: Js.Json.t =
             "url": "https://www.lesswrong.com/posts/zuAj86jcB5JB4dgqm/the-prediction-pyramid-why-fundamental-work-is-needed-for"
           },
           "rain": {
-            "name": "RAIN Framework",
+            "name": "RAIN Framework!",
             "description": "The RAIN Framework for Informational Effectiveness",
             "url": "https://www.lesswrong.com/posts/s4TrCbCXvvWfkT2o6/the-rain-framework-for-informational-effectiveness"
           }

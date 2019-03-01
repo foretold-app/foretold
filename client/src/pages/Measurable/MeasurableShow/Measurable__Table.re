@@ -14,10 +14,8 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       |> ArrayOptional.concatSomes
       |> Array.map(Queries.GetMeasurableWithMeasurements.toMeasurement);
 
-    <UseRouterForLinks>
-      <div className=MeasurementTableStyles.group>
-        {data |> Array.to_list |> MeasurementsBlock.make}
-      </div>
-    </UseRouterForLinks>;
+    <div className=MeasurementTableStyles.group>
+      {data |> Array.to_list |> MeasurementsBlock.make}
+    </div>;
   },
 };

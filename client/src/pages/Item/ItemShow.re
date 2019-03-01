@@ -29,33 +29,31 @@ let make = (~id: string, _children) => {
       |> Graph_T.F.factList
       |> Graph_Fact_Filters.withSubject(id)
       |> List.map((f: Graph_T.T.fact) => f);
-    <UseRouterForLinks>
-      <div>
-        <h2> {id |> ste} </h2>
-        {
-          names
-          |> Array.of_list
-          |> Array.map((r: Graph_T.T.fact) =>
-               <div>
-                 <h3>
-                   {
-                     findName(graph, r.propertyId)
-                     |> Option.default("no-name")
-                     |> ste
-                   }
-                 </h3>
-                 Graph_T.T.(
-                   switch (r.value.valueType) {
-                   | String(s) => s |> ste
-                   | ThingId(s) => <a href={"/items/" ++ s}> {s |> ste} </a>
-                   | _ => "no-name" |> ste
-                   }
-                 )
-               </div>
-             )
-          |> ReasonReact.array
-        }
-      </div>
-    </UseRouterForLinks>;
+    <div>
+      <h2> {id |> ste} </h2>
+      {
+        names
+        |> Array.of_list
+        |> Array.map((r: Graph_T.T.fact) =>
+             <div>
+               <h3>
+                 {
+                   findName(graph, r.propertyId)
+                   |> Option.default("no-name")
+                   |> ste
+                 }
+               </h3>
+               Graph_T.T.(
+                 switch (r.value.valueType) {
+                 | String(s) => s |> ste
+                 | ThingId(s) => <a href={"/items/" ++ s}> {s |> ste} </a>
+                 | _ => "no-name" |> ste
+                 }
+               )
+             </div>
+           )
+        |> ReasonReact.array
+      }
+    </div>;
   },
 };

@@ -16,6 +16,7 @@ let statusOpacity = (measurable: DataModel.measurable) => {
     1.0;
   };
 };
+
 let row = m =>
   style([
     width(`percent(100.0)),
@@ -28,7 +29,9 @@ let row = m =>
     paddingRight(px(8)),
     paddingTop(px(8)),
     paddingBottom(px(7)),
+    cursor(`pointer),
     selector(":last-child", [borderBottom(`px(0), `solid, hex("eee"))]),
+    selector(":hover", [backgroundColor(`hex("eef0f3"))]),
   ]);
 
 let mainColumn = style([flex(5), display(`flex), flexDirection(`column)]);
@@ -136,6 +139,13 @@ let statusColor = (~measurable: DataModel.measurable) => {
   style([main, statusSpecific] |> List.concat);
 };
 
+let linkS = [
+  padding2(~v=`px(1), ~h=`px(4)),
+  borderRadius(`px(2)),
+  fontSize(`em(0.95)),
+  fontWeight(`num(800)),
+];
+
 let itemLink =
   style([
     color(`hex("0e2b68")),
@@ -144,12 +154,20 @@ let itemLink =
       ":hover",
       [backgroundColor(`hex("c7defe")), color(`hex("0e2b68"))],
     ),
-    padding2(~v=`px(1), ~h=`px(4)),
-    borderRadius(`px(2)),
-    marginRight(`px(2)),
-    marginLeft(`px(5)),
-    fontSize(`px(14)),
-    fontWeight(`num(800)),
+    marginRight(`em(0.4)),
+    ...linkS,
+  ]);
+
+let propertyLink =
+  style([
+    color(`hex("0e2b68")),
+    backgroundColor(`hex("dbdbe5")),
+    selector(
+      ":hover",
+      [backgroundColor(`hex("c7defe")), color(`hex("0e2b68"))],
+    ),
+    marginRight(`em(0.1)),
+    ...linkS,
   ]);
 
 let largeItemLink =
@@ -167,19 +185,25 @@ let largeItemLink =
     fontWeight(`num(800)),
   ]);
 
-let calDate = style([color(`hex("666"))]);
-
-let mainLink =
+let calDate =
   style([
-    borderRadius(`px(2)),
-    padding2(~v=`px(0), ~h=`px(5)),
-    color(`hex("333")),
-    fontSize(`px(18)),
-    selector(
-      ":hover",
-      [backgroundColor(`hex("ddd")), color(`hex("333"))],
-    ),
+    marginLeft(`em(0.3)),
+    lineHeight(`em(1.56)),
+    fontSize(`em(1.1)),
   ]);
+
+let namme = style([fontSize(`em(1.2)), color(`hex("333"))]);
+
+let calDateO =
+  style([
+    color(`hex("505050")),
+    backgroundColor(`hex("ececec")),
+    marginRight(`px(2)),
+    ...linkS,
+  ]);
+
+let bigLink = style([fontSize(`px(24))]);
+let mainLink = style([fontSize(`px(14))]);
 
 let date =
   style([

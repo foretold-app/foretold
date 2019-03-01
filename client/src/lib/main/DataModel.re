@@ -103,6 +103,7 @@ type measurable = {
   state: option(measurableState),
   descriptionEntity: option(string),
   descriptionDate: option(MomentRe.Moment.t),
+  descriptionProperty: option(string),
   createdAt: option(MomentRe.Moment.t),
   updatedAt: option(MomentRe.Moment.t),
   expectedResolutionDate: option(MomentRe.Moment.t),
@@ -131,6 +132,7 @@ let toMeasurable =
       ~measurements=None,
       ~descriptionEntity=None,
       ~descriptionDate=None,
+      ~descriptionProperty=None,
       (),
     ) => {
   id,
@@ -151,6 +153,7 @@ let toMeasurable =
   measurements,
   descriptionEntity,
   descriptionDate,
+  descriptionProperty,
 };
 
 type measurables = array(measurable);

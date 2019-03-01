@@ -1114,6 +1114,18 @@
               "deprecationReason": null
             },
             {
+              "name": "descriptionProperty",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "description",
               "description": null,
               "args": [],
@@ -1638,6 +1650,16 @@
                   "defaultValue": null
                 },
                 {
+                  "name": "descriptionProperty",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
                   "name": "channel",
                   "description": null,
                   "type": {
@@ -1788,6 +1810,16 @@
                   "type": {
                     "kind": "SCALAR",
                     "name": "Date",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "descriptionProperty",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
                     "ofType": null
                   },
                   "defaultValue": null

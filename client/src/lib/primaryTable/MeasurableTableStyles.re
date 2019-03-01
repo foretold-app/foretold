@@ -63,38 +63,40 @@ let nameWithDate = (~m: DataModel.measurable) =>
   | e => m.name ++ " on " ++ e
   };
 
-let nameEntityLink = (~m: DataModel.measurable, ~className: string) =>
-  m.descriptionEntity
+let xEntityLink = (attribute, ~m: DataModel.measurable, ~className: string) =>
+  m
+  |> attribute
   |> Option.bind(_, ItemShow.findName(graph))
   |> Option.bind(_, r =>
        m.descriptionEntity
        |> Option.fmap(d => <a href={"/items/" ++ d} className> {r |> ste} </a>)
      );
 
+let nameEntityLink = xEntityLink(r => r.descriptionEntity);
+let propertyEntityLink = xEntityLink(r => r.descriptionProperty);
+
 let link = (~m: DataModel.measurable) =>
   <div>
     {
       nameEntityLink(~m, ~className=PrimaryTableStyles.itemLink)
-      |> Option.default("" |> ste)
+      |> Option.default(ReasonReact.null)
     }
-    <a
-      href={
-        "/c/" ++ (m.channel |> Option.default("general")) ++ "/m/" ++ m.id
+    {
+      propertyEntityLink(~m, ~className=PrimaryTableStyles.propertyLink)
+      |> Option.default(ReasonReact.null)
+    }
+    <span className=PrimaryTableStyles.namme> {m.name |> ste} </span>
+    {
+      switch (formatDate(m.descriptionDate)) {
+      | "" => ReasonReact.null
+      | e =>
+        [|
+          <span className=PrimaryTableStyles.calDate> {"on " |> ste} </span>,
+          <span className=PrimaryTableStyles.calDateO> {e |> ste} </span>,
+        |]
+        |> ReasonReact.array
       }
-      className=PrimaryTableStyles.mainLink>
-      {
-        switch (formatDate(m.descriptionDate)) {
-        | "" => m.name |> ste
-        | e =>
-          <span>
-            {m.name |> ste}
-            <span className=PrimaryTableStyles.calDate>
-              {" on " ++ e |> ste}
-            </span>
-          </span>
-        }
-      }
-    </a>
+    }
   </div>;
 
 let description = (~m: DataModel.measurable) =>

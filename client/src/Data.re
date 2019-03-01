@@ -63,6 +63,12 @@ let data: Js.Json.t =
               "movie": "@base/properties/n-movie"
             }
           },
+          "imdb-rating": {
+            "name": "IMDB Rating"
+          },
+          "rt-rating": {
+            "name": "Rotten Tomatoes Rating"
+          },
           "captain-marvel": {
             "name": "Captain Marvel",
             "url": "https://www.rottentomatoes.com/m/captain_marvel",

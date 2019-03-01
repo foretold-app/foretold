@@ -15,33 +15,38 @@ let make = (~measurables: array(DataModel.measurable), _children) => {
       |> Js.Array.filter((e: DataModel.measurable) =>
            PrimaryTableBase.status(e) != ARCHIVED
          );
-    <UseRouterForLinks>
-      <div className=PrimaryTableStyles.group>
-        {
-          _measurables
-          |> Array.map(m =>
-               <div className={PrimaryTableStyles.row(m)}>
-                 <div className=PrimaryTableStyles.mainColumn>
-                   <div className=PrimaryTableStyles.mainColumnTop>
-                     {MeasurableTableStyles.link(~m)}
-                   </div>
-                   <div className=PrimaryTableStyles.mainColumnBottom>
-                     <span
-                       className=PrimaryTableStyles.creatorLinkLeftMargin
-                     />
-                     {MeasurableTableStyles.creatorLink(~m)}
-                     {MeasurableTableStyles.measurements(~m)}
-                     {MeasurableTableStyles.measurers(~m)}
-                   </div>
+    <div className=PrimaryTableStyles.group>
+      {
+        _measurables
+        |> Array.map(m =>
+             <div
+               className={PrimaryTableStyles.row(m)}
+               onClick={
+                 _e =>
+                   ReasonReact.Router.push(
+                     "/c/"
+                     ++ (m.channel |> Option.default("general"))
+                     ++ "/m/"
+                     ++ m.id,
+                   )
+               }>
+               <div className=PrimaryTableStyles.mainColumn>
+                 <div className=PrimaryTableStyles.mainColumnTop>
+                   {MeasurableTableStyles.link(~m)}
                  </div>
-                 <div className=PrimaryTableStyles.rightColumn>
-                   {MeasurableTableStyles.dateStatus(~measurable=m)}
+                 <div className=PrimaryTableStyles.mainColumnBottom>
+                   {MeasurableTableStyles.creatorLink(~m)}
+                   {MeasurableTableStyles.measurements(~m)}
+                   {MeasurableTableStyles.measurers(~m)}
                  </div>
                </div>
-             )
-          |> ReasonReact.array
-        }
-      </div>
-    </UseRouterForLinks>;
+               <div className=PrimaryTableStyles.rightColumn>
+                 {MeasurableTableStyles.dateStatus(~measurable=m)}
+               </div>
+             </div>
+           )
+        |> ReasonReact.array
+      }
+    </div>;
   },
 };

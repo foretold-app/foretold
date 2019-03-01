@@ -59,26 +59,24 @@ let make = (~id: string, _children) => {
               );
             <div>
               {agentSection(agent)}
-              <UseRouterForLinks>
-                {
-                  mm
-                  |> List.map((m: DataModel.measurable) => {
-                       let measurements =
-                         m.measurements |> Rationale.Option.default([]);
-                       <div>
-                         <div className=AgentShowStyles.block>
-                           {MeasurableTableStyles.link(~m)}
-                           {MeasurableTableStyles.dateStatus(~measurable=m)}
-                         </div>
-                         <div className=MeasurementTableStyles.group>
-                           {measurements |> MeasurementsBlock.make}
-                         </div>
-                       </div>;
-                     })
-                  |> Array.of_list
-                  |> ReasonReact.array
-                }
-              </UseRouterForLinks>
+              {
+                mm
+                |> List.map((m: DataModel.measurable) => {
+                     let measurements =
+                       m.measurements |> Rationale.Option.default([]);
+                     <div>
+                       <div className=AgentShowStyles.block>
+                         {MeasurableTableStyles.link(~m)}
+                         {MeasurableTableStyles.dateStatus(~measurable=m)}
+                       </div>
+                       <div className=MeasurementTableStyles.group>
+                         {measurements |> MeasurementsBlock.make}
+                       </div>
+                     </div>;
+                   })
+                |> Array.of_list
+                |> ReasonReact.array
+              }
             </div>;
           },
         )

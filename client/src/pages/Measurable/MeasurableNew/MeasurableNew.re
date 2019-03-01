@@ -11,8 +11,8 @@ let ste = ReasonReact.string;
 module CreateMeasurableMutation = {
   module GraphQL = [%graphql
     {|
-             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!, $descriptionDate: Date, $channel: String) {
-                 createMeasurable(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity, descriptionDate: $descriptionDate, channel: $channel) {
+             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!, $descriptionDate: Date, $descriptionProperty: String, $channel: String) {
+                 createMeasurable(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity, descriptionDate: $descriptionDate, descriptionProperty: $descriptionProperty, channel: $channel) {
                    id
                  }
              }
@@ -28,20 +28,22 @@ module SignUpParams = {
     description: string,
     descriptionEntity: string,
     descriptionDate: string,
-    valueType: string,
+    descriptionProperty: string,
     expectedResolutionDate: string,
     resolutionEndpoint: string,
     showDescriptionDate: string,
+    showDescriptionProperty: string,
   };
   type fields = [
     | `name
-    | `valueType
     | `description
     | `descriptionEntity
+    | `descriptionProperty
     | `descriptionDate
     | `expectedResolutionDate
     | `resolutionEndpoint
     | `showDescriptionDate
+    | `showDescriptionProperty
   ];
   let lens = [
     (`name, s => s.name, (s, name) => {...s, name}),
@@ -56,11 +58,20 @@ module SignUpParams = {
       (s, descriptionEntity) => {...s, descriptionEntity},
     ),
     (
+      `descriptionProperty,
+      s => s.descriptionProperty,
+      (s, descriptionProperty) => {...s, descriptionProperty},
+    ),
+    (
       `showDescriptionDate,
       s => s.showDescriptionDate,
       (s, showDescriptionDate) => {...s, showDescriptionDate},
     ),
-    (`valueType, s => s.valueType, (s, valueType) => {...s, valueType}),
+    (
+      `showDescriptionProperty,
+      s => s.showDescriptionProperty,
+      (s, showDescriptionProperty) => {...s, showDescriptionProperty},
+    ),
     (
       `descriptionDate,
       s => s.descriptionDate,
@@ -92,36 +103,26 @@ let mutate =
       CreateMeasurableMutation.GraphQL.make(
         ~name=values.name,
         ~description=values.description,
+        ~descriptionProperty=values.descriptionProperty,
         ~expectedResolutionDate=
           values.expectedResolutionDate |> Js.Json.string,
         ~resolutionEndpoint=values.resolutionEndpoint,
         ~descriptionEntity=values.descriptionEntity,
         ~descriptionDate=values.descriptionDate |> Js.Json.string,
         ~channel,
-        ~valueType=
-          switch (values.valueType) {
-          | "float" => `FLOAT
-          | "percentage" => `PERCENTAGE
-          | "date" => `DATE
-          | _ => `FLOAT
-          },
+        ~valueType=`FLOAT,
         (),
       ) :
       CreateMeasurableMutation.GraphQL.make(
         ~name=values.name,
         ~description=values.description,
+        ~descriptionProperty=values.descriptionProperty,
         ~expectedResolutionDate=
           values.expectedResolutionDate |> Js.Json.string,
         ~resolutionEndpoint=values.resolutionEndpoint,
         ~descriptionEntity=values.descriptionEntity,
         ~channel,
-        ~valueType=
-          switch (values.valueType) {
-          | "float" => `FLOAT
-          | "percentage" => `PERCENTAGE
-          | "date" => `DATE
-          | _ => `FLOAT
-          },
+        ~valueType=`FLOAT,
         (),
       );
   mutation(
@@ -151,12 +152,47 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
         />
       </Form.Item>
       <Form.Item>
-        <h3> {"Measurable Name" |> ste} </h3>
-        <Input
-          value={form.values.name}
-          onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
-        />
+        <h3> {"Property Type" |> ste} </h3>
+        <Antd.Radio.Group
+          value={form.values.showDescriptionProperty}
+          defaultValue={form.values.showDescriptionProperty}
+          onChange={
+            ReForm.Helpers.handleDomFormChange(
+              handleChange(`showDescriptionProperty),
+            )
+          }>
+          <Antd.Radio value="FALSE"> {"Custom Name" |> ste} </Antd.Radio>
+          <Antd.Radio value="TRUE"> {"Property Entity" |> ste} </Antd.Radio>
+        </Antd.Radio.Group>
       </Form.Item>
+      {
+        form.values.showDescriptionProperty == "TRUE" ?
+          <Form.Item>
+            <h3> {"Property Entity Name" |> ste} </h3>
+            <Input
+              value={form.values.descriptionProperty}
+              onChange={
+                ReForm.Helpers.handleDomFormChange(
+                  handleChange(`descriptionProperty),
+                )
+              }
+            />
+          </Form.Item> :
+          <div />
+      }
+      {
+        form.values.showDescriptionProperty == "FALSE" ?
+          <Form.Item>
+            <h3> {"Custom Name" |> ste} </h3>
+            <Input
+              value={form.values.name}
+              onChange={
+                ReForm.Helpers.handleDomFormChange(handleChange(`name))
+              }
+            />
+          </Form.Item> :
+          <div />
+      }
       <Form.Item>
         <h3> {"Include a Specific Date in Name" |> ste} </h3>
         <AntdSwitch
@@ -235,12 +271,13 @@ let make = (~channel, _children) => {
           ~initialState={
             name: "",
             description: "",
-            valueType: "float",
+            descriptionProperty: "",
             descriptionEntity: "",
             expectedResolutionDate: MomentRe.momentNow() |> formatDate,
             descriptionDate: MomentRe.momentNow() |> formatDate,
             resolutionEndpoint: "",
             showDescriptionDate: "FALSE",
+            showDescriptionProperty: "FALSE",
           },
           ~schema=[(`name, Custom(_ => None))],
           ({handleSubmit, handleChange, form, _}) =>

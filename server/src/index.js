@@ -15,6 +15,7 @@ import {schema} from './schema';
 import { makeExecutableSchema } from 'graphql-tools';
 
 const PORT = process.env.PORT || 4000;
+const {clientUrl} = require('./lib/urls');
 
 const typeDefs = gql`
   type Query {
@@ -69,6 +70,11 @@ const server = new ApolloServer({
   }
 });
 
+
+var corsOptions = {
+  origin: clientUrl,
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
 
 const app = express();
 var cors = require("cors");

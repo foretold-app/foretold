@@ -36,6 +36,7 @@ var jwks = require('jwks-rsa');
 const { ApolloServer, gql } = require('apollo-server-express');
 
 const PORT = process.env.PORT || 4000;
+const { clientUrl } = require('./lib/urls');
 
 const typeDefs = gql`
   type Query {
@@ -87,6 +88,11 @@ const server = new ApolloServer({
     return { user };
   }
 });
+
+var corsOptions = {
+  origin: clientUrl,
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
 const app = (0, _express2.default)();
 var cors = require("cors");

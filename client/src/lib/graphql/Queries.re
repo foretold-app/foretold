@@ -133,6 +133,30 @@ module GetUserMeasurables = {
   module QueryComponent = ReasonApollo.CreateQuery(Query);
 };
 
+module GetSeries = {
+  type series = {
+    id: string,
+    name: option(string),
+    description: option(string),
+  };
+
+  let toSeries = (m: series): DataModel.series =>
+    DataModel.toSeries(~id=m.id, ~name=m.name, ());
+
+  module Query = [%graphql
+    {|
+      query getSeries ($id: String!) {
+          series: series(id: $id) @bsRecord{
+           id
+           name
+           description
+          }
+      }
+    |}
+  ];
+  module QueryComponent = ReasonApollo.CreateQuery(Query);
+};
+
 module GetMeasurable = {
   type creator = {
     id: string,
@@ -280,8 +304,8 @@ module GetMeasurables = {
 
   module Query = [%graphql
     {|
-    query getMeasurables ($offset: Int, $limit: Int, $channel: String) {
-        measurables(offset: $offset, limit: $limit, channel: $channel) @bsRecord {
+    query getMeasurables ($offset: Int, $limit: Int, $channel: String, $seriesId: String) {
+        measurables(offset: $offset, limit: $limit, channel: $channel, seriesId: $seriesId) @bsRecord {
            id
            name
            channel
@@ -314,6 +338,7 @@ module GetMeasurables = {
 
   module QueryComponent = ReasonApollo.CreateQuery(Query);
 };
+
 module GetUser = {
   module Query = [%graphql
     {|

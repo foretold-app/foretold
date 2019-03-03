@@ -23,6 +23,12 @@ type series = {
   name: option(string),
 };
 
+let toSeries = (~id, ~name=None, ~description=None, ()) => {
+  id,
+  name,
+  description,
+};
+
 type agentType =
   | Bot(bot)
   | User(user);

@@ -7,7 +7,12 @@ open Table;
 
 let component = ReasonReact.statelessComponent("MeasurableIndexTable");
 
-let make = (~measurables: array(DataModel.measurable), _children) => {
+let make =
+    (
+      ~measurables: array(DataModel.measurable),
+      ~showExtraData: bool,
+      _children,
+    ) => {
   ...component,
   render: _self => {
     let _measurables =
@@ -35,8 +40,15 @@ let make = (~measurables: array(DataModel.measurable), _children) => {
                    {MeasurableTableStyles.link(~m)}
                  </div>
                  <div className=PrimaryTableStyles.mainColumnBottom>
-                   {MeasurableTableStyles.series(~m)}
-                   {MeasurableTableStyles.creatorLink(~m)}
+                   {
+                     showExtraData ?
+                       MeasurableTableStyles.series(~m) : ReasonReact.null
+                   }
+                   {
+                     showExtraData ?
+                       MeasurableTableStyles.creatorLink(~m) :
+                       ReasonReact.null
+                   }
                    {MeasurableTableStyles.measurements(~m)}
                    {MeasurableTableStyles.measurers(~m)}
                  </div>

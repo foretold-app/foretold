@@ -22,7 +22,8 @@ import {
   GraphQLSchema,
   GraphQLInt,
   GraphQLString,
-  GraphQLInputObjectType
+  GraphQLInputObjectType,
+  GraphQLScalarType
 } from "graphql";
 import * as GraphQLJSON from "graphql-type-json";
 import {notify} from "./lib/notifications";
@@ -227,7 +228,7 @@ const schema = new GraphQLSchema({
       },
       ...modelResolvers("measurement", "measurements", getType.Measurements(), models.Measurement),
       ...modelResolvers("measurable", "measurables", getType.Measurables(), models.Measurable),
-      ...modelResolvers("series", "series", getType.Series(), models.Series),
+      ...modelResolvers("series", "seriesCollection", getType.Series(), models.Series),
       ...modelResolvers("bot", "bots", getType.Bots(), models.Bot),
       ...modelResolvers("agent", "agents", getType.Agents(), models.Agent),
       stats: {
@@ -237,21 +238,41 @@ const schema = new GraphQLSchema({
       },
       measurables: {
         type: new GraphQLNonNull(new GraphQLList(getType.Measurables())),
-        args: {offset: {type: GraphQLInt}, limit: {type: GraphQLInt}, channel: {type: GraphQLString}},
-        resolve: async (ops, {offset, limit, channel}, options) => {
-          const mms = await models.Measurable.findAll({
-            limit: limit,
-            offset: offset,
-            order: [['createdAt', 'DESC']],
-            where: {
-              channel: {
-                [Sequelize.Op.eq]: channel
-              },
-              state: {
-                [Sequelize.Op.ne]: "ARCHIVED"
+        args: {offset: {type: GraphQLInt}, limit: {type: GraphQLInt}, channel: {type: GraphQLString}, seriesId: {type: GraphQLString}},
+        resolve: async (ops, {offset, limit, channel, seriesId}, options) => {
+          let mms
+          if (seriesId){
+            mms = await models.Measurable.findAll({
+              limit: limit,
+              offset: offset,
+              order: [['createdAt', 'DESC']],
+              where: {
+                channel: {
+                  [Sequelize.Op.eq]: channel
+                },
+                state: {
+                  [Sequelize.Op.ne]: "ARCHIVED"
+                },
+                seriesId: {
+                  [Sequelize.Op.eq]: seriesId
+                }
               }
-            }
-          })
+            })
+          } else {
+            mms = await models.Measurable.findAll({
+              limit: limit,
+              offset: offset,
+              order: [['createdAt', 'DESC']],
+              where: {
+                channel: {
+                  [Sequelize.Op.eq]: channel
+                },
+                state: {
+                  [Sequelize.Op.ne]: "ARCHIVED"
+                }
+              }
+            })
+          }
           return mms
         }
       },

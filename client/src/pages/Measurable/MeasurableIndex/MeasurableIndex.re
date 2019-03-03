@@ -26,7 +26,10 @@ let make = (~channel: string, _children) => {
       <$> (d => d##measurables)
       <$> Extensions.Array.concatSomes
       <$> (d => d |> Array.map(Queries.GetMeasurables.toMeasurable))
-      <$> (measurables => <MeasurableIndex__Table measurables />)
+      <$> (
+        measurables =>
+          <MeasurableIndex__Table measurables showExtraData=true />
+      )
       |> Result.result(idd, idd)
     )
     |> ReasonReact.element

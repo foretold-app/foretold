@@ -11,6 +11,7 @@ var ItemShow$Client = require("./pages/Item/ItemShow.bs.js");
 var Redirect$Client = require("./pages/Redirect.bs.js");
 var AgentShow$Client = require("./pages/Agent/AgentShow/AgentShow.bs.js");
 var AgentIndex$Client = require("./pages/Agent/AgentIndex.bs.js");
+var SeriesShow$Client = require("./pages/Series/SeriesShow.bs.js");
 var MeMeasurables$Client = require("./pages/Me/MeMeasurables.bs.js");
 var MeasurableNew$Client = require("./pages/Measurable/MeasurableNew/MeasurableNew.bs.js");
 var MeasurableEdit$Client = require("./pages/Measurable/MeasurableEdit/MeasurableEdit.bs.js");
@@ -55,7 +56,7 @@ function mapUrlToRoute(url) {
                 case "m" : 
                     var match$5 = match$4[1];
                     if (match$5 && !match$5[1]) {
-                      return /* MeasurableShow */Block.__(5, [
+                      return /* MeasurableShow */Block.__(6, [
                                 id$1,
                                 match$5[0]
                               ]);
@@ -66,7 +67,17 @@ function mapUrlToRoute(url) {
                     if (match$4[1]) {
                       return /* Home */0;
                     } else {
-                      return /* MeasurableNew */Block.__(7, [id$1]);
+                      return /* MeasurableNew */Block.__(8, [id$1]);
+                    }
+                case "s" : 
+                    var match$6 = match$4[1];
+                    if (match$6 && !match$6[1]) {
+                      return /* Series */Block.__(5, [
+                                id$1,
+                                match$6[0]
+                              ]);
+                    } else {
+                      return /* Home */0;
                     }
                 default:
                   return /* Home */0;
@@ -87,11 +98,11 @@ function mapUrlToRoute(url) {
       case "items" : 
           return /* ItemShow */Block.__(1, [$$String.concat("/", match[1])]);
       case "measurables" : 
-          var match$6 = match[1];
-          if (match$6) {
-            var match$7 = match$6[1];
-            if (match$7 && match$7[0] === "edit" && !match$7[1]) {
-              return /* MeasurableEdit */Block.__(6, [match$6[0]]);
+          var match$7 = match[1];
+          if (match$7) {
+            var match$8 = match$7[1];
+            if (match$8 && match$8[0] === "edit" && !match$8[1]) {
+              return /* MeasurableEdit */Block.__(7, [match$7[0]]);
             } else {
               return /* Home */0;
             }
@@ -102,9 +113,9 @@ function mapUrlToRoute(url) {
           if (match[1]) {
             return /* Home */0;
           } else {
-            var match$8 = Auth0$Client.userId(/* () */0);
-            if (match$8 !== undefined) {
-              return /* Profile */Block.__(0, [match$8]);
+            var match$9 = Auth0$Client.userId(/* () */0);
+            if (match$9 !== undefined) {
+              return /* Profile */Block.__(0, [match$9]);
             } else {
               return /* Home */0;
             }
@@ -154,10 +165,12 @@ function inside(r) {
       case 4 : 
           return ReasonReact.element(undefined, undefined, MeasurableIndex$Client.make(r[0], /* array */[]));
       case 5 : 
-          return ReasonReact.element(undefined, undefined, MeasurableShow$Client.make(r[0], r[1], /* array */[]));
+          return ReasonReact.element(undefined, undefined, SeriesShow$Client.make(r[0], r[1], /* array */[]));
       case 6 : 
-          return ReasonReact.element(undefined, undefined, MeasurableEdit$Client.make(r[0], /* array */[]));
+          return ReasonReact.element(undefined, undefined, MeasurableShow$Client.make(r[0], r[1], /* array */[]));
       case 7 : 
+          return ReasonReact.element(undefined, undefined, MeasurableEdit$Client.make(r[0], /* array */[]));
+      case 8 : 
           return ReasonReact.element(undefined, undefined, MeasurableNew$Client.make(r[0], /* array */[]));
       
     }

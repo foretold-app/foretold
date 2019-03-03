@@ -146,8 +146,8 @@ let measurements = (~m: DataModel.measurable) =>
   | None => <div />
   | Some(count) =>
     <div className=PrimaryTableStyles.item>
+      <Icon.Icon icon="BULB" />
       <span> {count |> string_of_int |> ste} </span>
-      <span> {" measurements" |> ste} </span>
     </div>
   };
 
@@ -158,8 +158,8 @@ let measurers = (~m: DataModel.measurable) =>
   | Some(count) =>
     <div className=PrimaryTableStyles.item>
       <span>
+        <Icon.Icon icon="PEOPLE" />
         {count |> string_of_int |> ste}
-        <span> {" measurers" |> ste} </span>
       </span>
     </div>
   };
@@ -171,7 +171,13 @@ let series = (~m: DataModel.measurable) =>
        | Some(name) =>
          Some(
            <div className=PrimaryTableStyles.item>
-             <a href={r.id}> {name |> ste} </a>
+             <Icon.Icon icon="LAYERS" />
+             <a
+               href={
+                 "/c/" ++ (m.channel |> Option.default("")) ++ "/s/" ++ r.id
+               }>
+               {name |> ste}
+             </a>
            </div>,
          )
        | None => None

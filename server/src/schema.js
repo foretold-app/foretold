@@ -99,6 +99,7 @@ const measurableType = makeObjectType(models.Measurable);
 const measurementType = makeObjectType(models.Measurement);
 const botType = makeObjectType(models.Bot);
 const agentType = makeObjectType(models.Agent);
+const seriesType = makeObjectType(models.Series);
 
 const getType = {
   Users: () => userType,
@@ -107,6 +108,7 @@ const getType = {
   Measurables: () => measurableType,
   measurables: () => measurableType,
   Measurements: () => measurementType,
+  Series: () => seriesType,
 }
 
 const simpleResolver = (type, model) => ({
@@ -225,6 +227,7 @@ const schema = new GraphQLSchema({
       },
       ...modelResolvers("measurement", "measurements", getType.Measurements(), models.Measurement),
       ...modelResolvers("measurable", "measurables", getType.Measurables(), models.Measurable),
+      ...modelResolvers("series", "series", getType.Series(), models.Series),
       ...modelResolvers("bot", "bots", getType.Bots(), models.Bot),
       ...modelResolvers("agent", "agents", getType.Agents(), models.Agent),
       stats: {
@@ -295,6 +298,7 @@ const schema = new GraphQLSchema({
           descriptionProperty,
           channel
         }, options) => {
+          console.log("HIHIHIHIHIH", descriptionDate);
           let _auth0Id = await getAuth0Id(options)
           const user = await auth0User(_auth0Id);
           const newMeasurable = await models.Measurable.create({
@@ -311,6 +315,30 @@ const schema = new GraphQLSchema({
           })
           let notification = await newMeasurable.creationNotification(user);
           notify(notification)
+          return newMeasurable
+        }
+      },
+      createSeries: {
+        type: getType.Series(),
+        args: filterr(_.pick(attributeFields(models.Series), ['name', 'description', 'channel', 'subjects', 'properties', 'dates'])),
+        resolve: async (__, {
+          name,
+          description,
+          channel,
+          subjects,
+          properties,
+          dates,
+        }, options) => {
+          const newMeasurable = await models.Series.create({
+          name,
+          valueType,
+          description,
+          channel,
+          subjects,
+          properties,
+          dates,
+          creatorId: "51be4b31-b372-400e-8e58-c1f164ed9c63",
+          })
           return newMeasurable
         }
       },

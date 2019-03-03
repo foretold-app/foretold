@@ -213,6 +213,9 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'measurableId',
       as: 'Measurements'
     })
+    Model.Series = Model.belongsTo(models.Series, {
+      foreignKey: 'seriesId'
+    })
     Model.Creator = Model.belongsTo(models.Agent, {
       foreignKey: 'creatorId',
       as: 'creator'

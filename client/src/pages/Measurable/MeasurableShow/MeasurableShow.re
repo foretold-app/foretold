@@ -43,7 +43,7 @@ let make = (~channel, ~id: string, _children) => {
             <Div styles=[Style.Grid.Styles.flex(1)]>
               <Div styles=[Style.Grid.Styles.flexRow]>
                 <Div styles=[Style.Grid.Styles.flex(6)]>
-                  <h1> {MeasurableTableStyles.link(~m)} </h1>
+                  <h2> {MeasurableTableStyles.link(~m)} </h2>
                   {MeasurableTableStyles.description(~m)}
                 </Div>
                 <Div styles=[Style.Grid.Styles.flex(1)]>

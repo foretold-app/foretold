@@ -36,6 +36,15 @@ let data: Js.Json.t =
               "url": "@base/properties/p-url"
             }
           },
+          "commits": {
+            "name": "# of Commits"
+          },
+          "agents": {
+            "name": "# of Agents"
+          },
+          "measurables": {
+            "name": "# of Measurables"
+          },
           "n-fhi": {
             "name": "FHI"
           },
@@ -69,6 +78,10 @@ let data: Js.Json.t =
           "rt-rating": {
             "name": "Rotten Tomatoes Rating"
           },
+          "box-office-wikipedia": {
+            "name": "Box Office Returns",
+            "description": "Information gathered from wikipedia"
+          },
           "captain-marvel": {
             "name": "Captain Marvel",
             "url": "https://www.rottentomatoes.com/m/captain_marvel",
@@ -98,6 +111,22 @@ let data: Js.Json.t =
             "name": "Aladdin",
             "url": "https://www.rottentomatoes.com/m/aladdin",
             "instance-of": "movie"
+          }
+    },
+    {
+        "config": {
+            "baseId": "lesswrong",
+            "resourceId": "properties",
+            "aliases": {
+              "name": "@base/properties/p-name"
+            }
+          },
+          "karma": {
+            "name": "Karma"
+          },
+          "Comments": {
+            "name": "Comments(Non-Author)",
+            "description": "Comments, minus those from the author"
           }
     },
     {

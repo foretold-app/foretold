@@ -84,8 +84,7 @@ let make = (~channel: string, ~id: string, _children) => {
         <$> Extensions.Array.concatSomes
         <$> (d => d |> Array.map(Queries.GetMeasurables.toMeasurable))
         <$> (
-          measurables =>
-            <MeasurableIndex__Table measurables showExtraData=false />
+          measurables => <SeriesShowTable measurables showExtraData=false />
         )
         |> Result.result(idd, idd)
       );

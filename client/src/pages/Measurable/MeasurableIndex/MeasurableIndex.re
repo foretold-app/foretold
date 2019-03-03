@@ -19,7 +19,7 @@ let make = (~channel: string, _children) => {
   render: _self => {
     open Result.Infix;
     let query =
-      Queries.GetMeasurables.Query.make(~offset=0, ~limit=200, ~channel, ());
+      Queries.GetMeasurables.Query.make(~offset=0, ~limit=40, ~channel, ());
     Queries.GetMeasurables.QueryComponent.make(~variables=query##variables, o =>
       o.result
       |> ApolloUtils.apolloResponseToResult

@@ -82,6 +82,10 @@ let data: Js.Json.t =
             "name": "Box Office Returns",
             "description": "Information gathered from wikipedia"
           },
+          "metacritic": {
+            "name": "Metacritic Rating",
+            "description": "Information gathered from wikipedia"
+          },
           "captain-marvel": {
             "name": "Captain Marvel",
             "url": "https://www.rottentomatoes.com/m/captain_marvel",
@@ -90,6 +94,26 @@ let data: Js.Json.t =
           "dumbo": {
             "name": "Dumbo",
             "url": "https://www.rottentomatoes.com/m/dumbo",
+            "instance-of": "movie"
+          },
+          "us": {
+            "name": "Us",
+            "url": "https://www.rottentomatoes.com/m/us",
+            "instance-of": "movie"
+          },
+          "pet-semetary": {
+            "name": "Pet Semetary",
+            "url": "https://www.rottentomatoes.com/m/us",
+            "instance-of": "movie"
+          },
+          "missing-link": {
+            "name": "Missing Link",
+            "url": "https://www.rottentomatoes.com/m/us",
+            "instance-of": "movie"
+          },
+          "hellboy": {
+            "name": "Hellboy",
+            "url": "https://www.rottentomatoes.com/m/us",
             "instance-of": "movie"
           },
           "avengers-endgame": {
@@ -109,6 +133,16 @@ let data: Js.Json.t =
           },
           "aladdin": {
             "name": "Aladdin",
+            "url": "https://www.rottentomatoes.com/m/aladdin",
+            "instance-of": "movie"
+          },
+          "the-hustle": {
+            "name": "The Hustle",
+            "url": "https://www.rottentomatoes.com/m/aladdin",
+            "instance-of": "movie"
+          },
+          "rocketman": {
+            "name": "Rocketman",
             "url": "https://www.rottentomatoes.com/m/aladdin",
             "instance-of": "movie"
           }

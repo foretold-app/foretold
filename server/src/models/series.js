@@ -54,6 +54,7 @@ module.exports = (sequelize, DataTypes) => {
                     expectedResolutionDate: date,
                     seriesId: this.id,
                     creatorId: this.creatorId,
+                    channel: this.channel,
                     valueType: "FLOAT"
                 });
             }

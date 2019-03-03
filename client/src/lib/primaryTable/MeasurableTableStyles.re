@@ -22,28 +22,45 @@ let compareMeasurables =
 let formatDate = e =>
   Option.Infix.(e <$> MomentRe.Moment.format("L") |> Option.default(""));
 
-let dateFinder = (head, p, date) => {
+type dateDisplay =
+  | TOP
+  | BOTTOM
+  | WHOLE;
+
+let dateFinder = (head, p, date, dateDisplay) => {
   let date = formatDate(date);
-  <div className=PrimaryTableStyles.statusRow>
-    <h3> {head |> ste} </h3>
-    <p> {p ++ date |> ste} </p>
-  </div>;
+  switch (dateDisplay) {
+  | TOP => head |> ste
+  | BOTTOM => p ++ date |> ste
+  | WHOLE =>
+    <div className=PrimaryTableStyles.statusRow>
+      <h3> {head |> ste} </h3>
+      <p> {p ++ date |> ste} </p>
+    </div>
+  };
 };
 
-let dateStatus = (~measurable: DataModel.measurable) => {
+let dateStatusI = (~measurable: DataModel.measurable, ~dateDisplay) => {
   let m = measurable;
   switch (status(m)) {
-  | OPEN => dateFinder("Open", "Closes ~", m.expectedResolutionDate)
+  | OPEN =>
+    dateFinder("Open", "Closes ~", m.expectedResolutionDate, dateDisplay)
   | PENDING_REVIEW =>
     dateFinder(
       "Judgement Pending",
       "Pending since ",
       m.expectedResolutionDate,
+      dateDisplay,
     )
-  | ARCHIVED => dateFinder("Archived", "Archived on ", m.stateUpdatedAt)
-  | JUDGED => dateFinder("Judged", "Judged on ", m.stateUpdatedAt)
+  | ARCHIVED =>
+    dateFinder("Archived", "Archived on ", m.stateUpdatedAt, dateDisplay)
+  | JUDGED =>
+    dateFinder("Judged", "Judged on ", m.stateUpdatedAt, dateDisplay)
   };
 };
+
+let dateStatus = (~measurable: DataModel.measurable) =>
+  dateStatusI(~measurable, ~dateDisplay=WHOLE);
 
 let dateStatusWrapper = (~measurable: DataModel.measurable) =>
   <div className={PrimaryTableStyles.statusColor(~measurable)}>

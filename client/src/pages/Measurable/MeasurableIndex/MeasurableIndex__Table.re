@@ -35,6 +35,7 @@ let make = (~measurables: array(DataModel.measurable), _children) => {
                    {MeasurableTableStyles.link(~m)}
                  </div>
                  <div className=PrimaryTableStyles.mainColumnBottom>
+                   {MeasurableTableStyles.series(~m)}
                    {MeasurableTableStyles.creatorLink(~m)}
                    {MeasurableTableStyles.measurements(~m)}
                    {MeasurableTableStyles.measurers(~m)}

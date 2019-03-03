@@ -164,6 +164,21 @@ let measurers = (~m: DataModel.measurable) =>
     </div>
   };
 
+let series = (~m: DataModel.measurable) =>
+  m.series
+  |> Option.bind(_, r =>
+       switch (r.name) {
+       | Some(name) =>
+         Some(
+           <div className=PrimaryTableStyles.item>
+             <a href={r.id}> {name |> ste} </a>
+           </div>,
+         )
+       | None => None
+       }
+     )
+  |> Option.default(ReasonReact.null);
+
 let expectedResolutionDate = (~m: DataModel.measurable) =>
   <div className=PrimaryTableStyles.item>
     <span> {"Resolves on " |> ste} </span>

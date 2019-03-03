@@ -212,6 +212,18 @@ module GetMeasurable = {
 };
 
 module GetMeasurables = {
+  type series = {
+    id: string,
+    description: option(string),
+    name: option(string),
+  };
+
+  let toSeries = (c: series): DataModel.series => {
+    id: c.id,
+    description: c.description,
+    name: c.name,
+  };
+
   type creator = {
     id: string,
     name: option(string),
@@ -238,6 +250,7 @@ module GetMeasurables = {
     state: DataModel.measurableState,
     stateUpdatedAt: option(MomentRe.Moment.t),
     creator: option(creator),
+    series: option(series),
     descriptionDate: option(MomentRe.Moment.t),
     descriptionProperty: option(string),
   };
@@ -261,6 +274,7 @@ module GetMeasurables = {
       ~state=Some(m.state),
       ~stateUpdatedAt=m.stateUpdatedAt,
       ~creator=Rationale.Option.fmap(toCreator, m.creator),
+      ~series=Rationale.Option.fmap(toSeries, m.series),
       (),
     );
 
@@ -287,6 +301,11 @@ module GetMeasurables = {
            creator @bsRecord{
              id
              name
+           }
+           series @bsRecord{
+             id
+             name
+             description
            }
         }
     }

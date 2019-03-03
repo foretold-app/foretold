@@ -17,6 +17,12 @@ type bot = {
   name: option(string),
 };
 
+type series = {
+  id: string,
+  description: option(string),
+  name: option(string),
+};
+
 type agentType =
   | Bot(bot)
   | User(user);
@@ -110,6 +116,7 @@ type measurable = {
   stateUpdatedAt: option(MomentRe.Moment.t),
   creator: option(creator),
   measurements: option(list(measurement)),
+  series: option(series),
 };
 
 let toMeasurable =
@@ -133,6 +140,7 @@ let toMeasurable =
       ~descriptionEntity=None,
       ~descriptionDate=None,
       ~descriptionProperty=None,
+      ~series=None,
       (),
     ) => {
   id,
@@ -154,6 +162,7 @@ let toMeasurable =
   descriptionEntity,
   descriptionDate,
   descriptionProperty,
+  series,
 };
 
 type measurables = array(measurable);

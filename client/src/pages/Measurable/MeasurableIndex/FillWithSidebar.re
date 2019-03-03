@@ -5,7 +5,11 @@ open Queries;
 module Styles = {
   open Css;
   let outer =
-    style([display(`flex), flexDirection(`row), height(`percent(100.0))]);
+    style([
+      display(`flex),
+      flexDirection(`row),
+      minHeight(`percent(100.0)),
+    ]);
   let left =
     style([
       flex(1),

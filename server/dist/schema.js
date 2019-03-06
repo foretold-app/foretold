@@ -224,7 +224,9 @@ const schema = new _graphql.GraphQLSchema({
     }, modelResolvers("measurement", "measurements", getType.Measurements(), models.Measurement), modelResolvers("measurable", "measurables", getType.Measurables(), models.Measurable), modelResolvers("bot", "bots", getType.Bots(), models.Bot), modelResolvers("agent", "agents", getType.Agents(), models.Agent), {
       stats: {
         type: new _graphql.GraphQLNonNull(stats),
-        resolve: async (ops, {}, options) => {}
+        resolve: async (ops, {}, options) => {
+          return stats;
+        }
       },
       measurables: {
         type: new _graphql.GraphQLNonNull(new _graphql.GraphQLList(getType.Measurables())),

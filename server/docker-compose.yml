@@ -1,0 +1,24 @@
+version: "2"
+
+services:
+
+  app:
+    build: ./
+    ports:
+      - 28750:80
+    volumes:
+      - ./src:/opt/app/lib/src
+      - ./migrations:/opt/app/lib/migrations
+      - ./seeders:/opt/app/lib/seeders
+    environment:
+      - AUTH0_SECRET=<change-me>
+      - SLACK_WEBHOOK_URL=<change-me>
+      - PORT=80
+      - NODE_PATH=/opt/app/lib
+    command: >
+      node_modules/.bin/nodemon lib/src/index.js --exec "node -r dotenv/config -r babel-register"
+
+  database:
+    image: postgres:11
+    environment:
+      - POSTGRES_PASSWORD=<change-me>

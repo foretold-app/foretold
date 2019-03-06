@@ -4,12 +4,11 @@ services:
 
   app:
     build: ./
-    ports:
-      - 28750:80
     volumes:
       - ./src:/opt/app/lib/src
       - ./migrations:/opt/app/lib/migrations
       - ./seeders:/opt/app/lib/seeders
+      - ./config:/opt/app/lib/config
     environment:
       - AUTH0_SECRET=<change-me>
       - SLACK_WEBHOOK_URL=<change-me>

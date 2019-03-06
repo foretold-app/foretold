@@ -230,6 +230,7 @@ const schema = new GraphQLSchema({
       stats: {
         type: new GraphQLNonNull(stats),
         resolve: async (ops, {}, options) => {
+          return stats
         }
       },
       measurables: {

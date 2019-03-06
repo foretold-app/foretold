@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: Sequelize.UUIDV4,
       allowNull: false,
     },
+    creatorId: {
+      type: DataTypes.UUID(),
+      allowNull: true,
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -97,7 +101,7 @@ module.exports = (sequelize, DataTypes) => {
       get: async function() {
         const endpoint = await this.dataValues.resolutionEndpoint;
         if ( !endpoint ||endpoint.length == 0|| endpoint == "") {
-          return false 
+          return false
         }
         try {
         const response = await fetch(endpoint);

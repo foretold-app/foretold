@@ -31,10 +31,21 @@ module Styles = {
     ]);
 };
 
-let component = ReasonReact.statelessComponent("Measurables");
+type state = {selected: option(string)};
+
+type action =
+  | UpdateSelected(string);
+
+let component = ReasonReact.reducerComponent("Measurables");
+
 let make = (~channel: string, ~id: string, _children) => {
   ...component,
-  render: _self => {
+  initialState: () => {selected: None},
+  reducer: (action, state) =>
+    switch (action) {
+    | UpdateSelected(str) => ReasonReact.Update({selected: Some(str)})
+    },
+  render: ({state, send}) => {
     open Result.Infix;
     let seriesQuery = Queries.GetSeries.Query.make(~id, ());
     let query =
@@ -84,11 +95,83 @@ let make = (~channel: string, ~id: string, _children) => {
         <$> Extensions.Array.concatSomes
         <$> (d => d |> Array.map(Queries.GetMeasurables.toMeasurable))
         <$> (
-          measurables => <SeriesShowTable measurables showExtraData=false />
+          measurables =>
+            <SeriesShowTable
+              measurables
+              selected={state.selected}
+              onClick={id => send(UpdateSelected(id))}
+            />
         )
         |> Result.result(idd, idd)
       );
-    <div> {top |> ReasonReact.element} {bottom |> ReasonReact.element} </div>
+
+    let lower =
+      state.selected
+      |> Rationale.Option.fmap(idd =>
+           Queries.GetMeasurableWithMeasurements.withQuery(
+             ~id=idd,
+             measurable => {
+               let m =
+                 Queries.GetMeasurableWithMeasurements.queryMeasurable(
+                   measurable,
+                 );
+               <div>
+                 <Div styles=[Style.Grid.Styles.flexColumn, Styles.header]>
+                   <Div styles=[Style.Grid.Styles.flex(1)]>
+                     <Div styles=[Style.Grid.Styles.flexRow]>
+                       <Div styles=[Style.Grid.Styles.flex(6)]>
+                         <h2> {MeasurableTableStyles.link(~m)} </h2>
+                         {MeasurableTableStyles.description(~m)}
+                       </Div>
+                       <Div styles=[Style.Grid.Styles.flex(1)]>
+                         {
+                           MeasurableTableStyles.dateStatusWrapper(
+                             ~measurable=m,
+                           )
+                         }
+                       </Div>
+                     </Div>
+                   </Div>
+                   <Div styles=[Style.Grid.Styles.flex(1)]>
+                     {MeasurableTableStyles.creatorLink(~m)}
+                     {MeasurableTableStyles.resolutionEndpoint(~m)}
+                     {MeasurableTableStyles.endpointResponse(~m)}
+                   </Div>
+                 </Div>
+                 <div>
+                   {
+                     SharedQueries.withLoggedInUserQuery(userQuery =>
+                       switch (userQuery) {
+                       | Some(query) =>
+                         open Rationale.Option.Infix;
+                         let userAgentId = query##user >>= (e => e##agentId);
+                         let creatorId = measurable##creatorId;
+                         <div>
+                           <h2> {"Add a Measurement" |> ste} </h2>
+                           <MeasurableShowForm
+                             measurableId=idd
+                             isCreator={userAgentId == creatorId}
+                           />
+                         </div>;
+                       | _ => <div />
+                       }
+                     )
+                   }
+                   <h2> {"Measurements" |> ste} </h2>
+                   <Measurable__Table measurements=measurable##measurements />
+                 </div>
+               </div>;
+             },
+           )
+         )
+      |> Option.default(ReasonReact.null);
+    <div>
+      {top |> ReasonReact.element}
+      <div className=SeriesShowTableStyles.topPart>
+        {bottom |> ReasonReact.element}
+      </div>
+      lower
+    </div>
     |> FillWithSidebar.make(~channel=Some(channel))
     |> ReasonReact.element;
   },

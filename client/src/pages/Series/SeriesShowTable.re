@@ -10,7 +10,8 @@ let component = ReasonReact.statelessComponent("MeasurableIndexTable");
 let make =
     (
       ~measurables: array(DataModel.measurable),
-      ~showExtraData: bool,
+      ~selected: option(string),
+      ~onClick,
       _children,
     ) => {
   ...component,
@@ -32,16 +33,8 @@ let make =
            )
         |> Array.map((m: DataModel.measurable) =>
              <div
-               className={SeriesShowTableStyles.row(m)}
-               onClick={
-                 _e =>
-                   ReasonReact.Router.push(
-                     "/c/"
-                     ++ (m.channel |> Option.default("general"))
-                     ++ "/m/"
-                     ++ m.id,
-                   )
-               }>
+               className={SeriesShowTableStyles.row(Some(m.id) == selected)}
+               onClick={_e => onClick(m.id)}>
                <div className=SeriesShowTableStyles.column>
                  {
                    MeasurableTableStyles.nameEntityLink(

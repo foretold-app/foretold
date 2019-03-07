@@ -1,10 +1,11 @@
 const models = require("../models");
 const { notify } = require("../lib/notifications");
-const { usersData } = require('./');
+
+const { UsersData } = require('./users-data');
 
 class MeasurementData {
   constructor() {
-    this.usersData = usersData;
+    this.usersData = new UsersData();
   }
 
   /**

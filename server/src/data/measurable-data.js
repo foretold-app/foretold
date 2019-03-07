@@ -2,12 +2,13 @@ const Sequelize = require('sequelize');
 
 const models = require("../models");
 const { notify } = require("../lib/notifications");
-const { usersData } = require('./');
+
+const { UsersData } = require('./users-data');
 
 class MeasurableData {
 
   constructor() {
-
+    this.usersData = new UsersData();
   }
 
   /**
@@ -28,8 +29,8 @@ class MeasurableData {
       descriptionProperty,
       channel
     } = values;
-    let _auth0Id = await usersData.getAuth0Id(options);
-    const user = await usersData.auth0User(_auth0Id);
+    let _auth0Id = await this.usersData.getAuth0Id(options);
+    const user = await this.usersData.auth0User(_auth0Id);
     const newMeasurable = await models.Measurable.create({
       name,
       valueType,

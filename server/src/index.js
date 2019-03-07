@@ -1,38 +1,16 @@
 import express from 'express';
-import path from 'path';
-import * as auth0 from "auth0-js";
-import logger from 'morgan';
-import bodyParser from 'body-parser';
+import { schema } from './schema';
 
-const models = require("./models")
-const Sequelize = require('sequelize')
+const jwt = require('jsonwebtoken');
+const { ApolloServer } = require('apollo-server-express');
 
-const jwt = require('jsonwebtoken')
-var jwks = require('jwks-rsa')
-const { ApolloServer, gql } = require('apollo-server-express');
-
-import {schema} from './schema';
-import { makeExecutableSchema } from 'graphql-tools';
+const models = require("./models");
 
 const PORT = process.env.PORT || 4000;
-const {clientUrl} = require('./lib/urls');
-
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`;
- 
-// Provide resolver functions for your schema fields
-const resolvers = {
-  Query: {
-    hello: () => 'Hello world!',
-  },
-};
 
 function getToken(req) {
   if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-      return req.headers.authorization.split(' ')[1];
+    return req.headers.authorization.split(' ')[1];
   } else if (req.query && req.query.token) {
     return req.query.token;
   }
@@ -49,7 +27,7 @@ const server = new ApolloServer({
   formatResponse: response => {
     return response;
   },
-  context: async ({req}) => {
+  context: async ({ req }) => {
     const token = getToken(req);
     const user = new Promise(resolve =>
       jwt.verify(token, process.env.AUTH0_SECRET,(err, result) => {
@@ -66,23 +44,17 @@ const server = new ApolloServer({
         }
       })
     );
-    return {user}
+    return { user };
   }
 });
 
-
-var corsOptions = {
-  origin: clientUrl,
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
-
 const app = express();
-var cors = require("cors");
+const cors = require("cors");
 app.use(cors());
 server.applyMiddleware({ app });
 
 models.sequelize.sync().then(() => {
-  app.listen({ port: PORT }, () =>{
+  app.listen({ port: PORT }, () => {
     console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
   });
 })

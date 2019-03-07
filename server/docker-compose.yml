@@ -5,10 +5,10 @@ services:
   app:
     build: ./
     volumes:
-      - ./src:/opt/app/lib/src
-      - ./migrations:/opt/app/lib/migrations
-      - ./seeders:/opt/app/lib/seeders
-      - ./config:/opt/app/lib/config
+      - ./src:/opt/app/src
+      - ./migrations:/opt/app/migrations
+      - ./seeders:/opt/app/seeders
+      - ./config:/opt/app/config
     environment:
       - AUTH0_SECRET=<change-me>
       - SLACK_WEBHOOK_URL=<change-me>

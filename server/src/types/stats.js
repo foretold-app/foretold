@@ -1,6 +1,6 @@
 const graphql = require("graphql");
 
-const models = require("./models");
+const models = require("../models");
 
 const stats = new graphql.GraphQLObjectType({
   name: "Stats",

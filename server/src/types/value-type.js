@@ -9,6 +9,6 @@ let valueType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
   }
 }));
 
-modules.exports = {
+module.exports = {
   valueType,
 };

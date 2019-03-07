@@ -18,6 +18,26 @@ const { valueType } = require('./types/value-type');
 const { stats } = require('./types/stats');
 
 /**
+ * @param name
+ * @param plural
+ * @param type
+ * @param model
+ */
+function modelResolvers(name, plural, type, model) {
+  let fields = {};
+  fields[name] = {
+    type: type,
+    args: _.pick(attributeFields(model), ['id']),
+    resolve: resolver(model)
+  };
+  fields[plural] = {
+    type: new GraphQLNonNull(GraphQLList(type)),
+    resolve: resolver(model)
+  };
+  return fields;
+}
+
+/**
  * @param model
  */
 function generateReferences(model) {
@@ -83,26 +103,6 @@ const getType = {
   measurables: measurableType,
   Measurements: measurementType,
 };
-
-/**
- * @param name
- * @param plural
- * @param type
- * @param model
- */
-function modelResolver(name, plural, type, model) {
-  let fields = {};
-  fields[name] = {
-    type: type,
-    args: _.pick(attributeFields(model), ['id']),
-    resolve: resolver(model)
-  };
-  fields[plural] = {
-    type: new GraphQLNonNull(GraphQLList(type)),
-    resolve: resolver(model)
-  };
-  return fields;
-}
 
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({

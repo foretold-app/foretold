@@ -9,6 +9,6 @@ let competitor = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
   }
 }));
 
-modules.exports = {
+module.exports = {
   competitor,
 };

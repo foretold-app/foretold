@@ -196,7 +196,7 @@ const schema = new GraphQLSchema({
       ...modelResolvers("agent", "agents", getType.Agents(), models.Agent),
       stats: {
         type: new GraphQLNonNull(stats),
-        resolve: async (ops, {}, options) => {
+        resolve: async (ops, values, options) => {
           // @todo:
           return 11;
         }
@@ -254,71 +254,22 @@ const schema = new GraphQLSchema({
       unArchiveMeasurable: {
         type: getType.Measurables(),
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
-        resolve: async (__, {
-          id,
-        }, options) => {
-          let _auth0Id = await usersData.getAuth0Id(options);
-          const user = await usersData.auth0User(_auth0Id);
-          let measurable = await models.Measurable.findById(id);
-          if (measurable.creatorId !== user.agentId) {
-            throw new Error("User does not have permission")
-          }
-          return measurable.unarchive()
+        resolve: async (root, values, options) => {
+          return measurableData.unArchiveMeasurable(root, values, options);
         }
       },
       editMeasurable: {
         type: getType.Measurables(),
         args: filterr(_.pick(attributeFields(models.Measurable), ['id', 'name', 'description', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty'])),
-        resolve: async (__, {
-          id,
-          name,
-          description,
-          expectedResolutionDate,
-          descriptionEntity,
-          descriptionDate,
-          resolutionEndpoint,
-          descriptionProperty
-        }, options) => {
-          let _auth0Id = await usersData.getAuth0Id(options);
-          const user = await usersData.auth0User(_auth0Id);
-          let measurable = await models.Measurable.findById(id);
-          if (measurable.creatorId !== user.agentId) {
-            throw new Error("User does not have permission")
-          }
-          let notification = await measurable.updateNotifications(user, {
-            name,
-            description,
-            expectedResolutionDate,
-            resolutionEndpoint,
-            descriptionEntity,
-            descriptionDate,
-            descriptionProperty
-          });
-          notify(notification);
-          return measurable.update({
-            name,
-            description,
-            expectedResolutionDate,
-            resolutionEndpoint,
-            descriptionEntity,
-            descriptionDate,
-            descriptionProperty
-          })
+        resolve: async (root, values, options) => {
+          return measurableData.editMeasurable(root, values, options);
         }
       },
       editUser: {
         type: getType.Users(),
         args: filterr(_.pick(attributeFields(models.User), ["id", "name"])),
-        resolve: async (_, {
-          id,
-          name
-        }, options) => {
-          let _auth0Id = await usersData.getAuth0Id(options);
-          let user = await models.User.findById(id);
-          if (user && user.auth0Id === _auth0Id) {
-            user.update({ name });
-          }
-          return user;
+        resolve: async (root, values, options) => {
+          return usersData.editUser(root, values, options);
         }
       },
     }

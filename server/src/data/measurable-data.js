@@ -62,6 +62,67 @@ class MeasurableData {
     return measurable.archive();
   }
 
+  /**
+   * @param root
+   * @param values
+   * @param options
+   * @return {Promise<Promise<WebAPICallResult> | Promise<void>>}
+   */
+  async unArchiveMeasurable(root, values, options) {
+    const { id } = values;
+    let _auth0Id = await usersData.getAuth0Id(options);
+    const user = await usersData.auth0User(_auth0Id);
+    let measurable = await models.Measurable.findById(id);
+    if (measurable.creatorId !== user.agentId) {
+      throw new Error("User does not have permission")
+    }
+    return measurable.unarchive();
+  }
+
+  /**
+   * @param root
+   * @param values
+   * @param options
+   * @return {Promise<Promise<WebAPICallResult> | Promise<void>>}
+   */
+  async editMeasurable(root, values, options) {
+    const {
+      id,
+      name,
+      description,
+      expectedResolutionDate,
+      descriptionEntity,
+      descriptionDate,
+      resolutionEndpoint,
+      descriptionProperty
+    } = values;
+    let _auth0Id = await usersData.getAuth0Id(options);
+    const user = await usersData.auth0User(_auth0Id);
+    let measurable = await models.Measurable.findById(id);
+    if (measurable.creatorId !== user.agentId) {
+      throw new Error("User does not have permission");
+    }
+    let notification = await measurable.updateNotifications(user, {
+      name,
+      description,
+      expectedResolutionDate,
+      resolutionEndpoint,
+      descriptionEntity,
+      descriptionDate,
+      descriptionProperty
+    });
+    notify(notification);
+    return measurable.update({
+      name,
+      description,
+      expectedResolutionDate,
+      resolutionEndpoint,
+      descriptionEntity,
+      descriptionDate,
+      descriptionProperty
+    });
+  }
+
 }
 
 module.exports = {

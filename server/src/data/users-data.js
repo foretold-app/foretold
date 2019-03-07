@@ -26,6 +26,22 @@ class UsersData {
     if (!sub) throw new Error("No User Id");
     return sub;
   }
+
+  /**
+   * @param root
+   * @param values
+   * @param options
+   * @return {Promise<Model>}
+   */
+  async editUser(root, values, options) {
+    const { id, name } = values;
+    let _auth0Id = await this.getAuth0Id(options);
+    let user = await models.User.findById(id);
+    if (user && user.auth0Id === _auth0Id) {
+      user.update({ name });
+    }
+    return user;
+  }
 }
 
 module.exports = {

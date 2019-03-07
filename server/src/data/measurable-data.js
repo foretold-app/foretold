@@ -56,8 +56,8 @@ class MeasurableData {
    */
   async archiveMeasurable(root, values, options) {
     const { id } = values;
-    const _auth0Id = await usersData.getAuth0Id(options);
-    const user = await usersData.auth0User(_auth0Id);
+    const _auth0Id = await this.usersData.getAuth0Id(options);
+    const user = await this.usersData.auth0User(_auth0Id);
     let measurable = await models.Measurable.findById(id);
     if (measurable.creatorId !== user.agentId) {
       throw new Error("User does not have permission");
@@ -73,8 +73,8 @@ class MeasurableData {
    */
   async unArchiveMeasurable(root, values, options) {
     const { id } = values;
-    let _auth0Id = await usersData.getAuth0Id(options);
-    const user = await usersData.auth0User(_auth0Id);
+    let _auth0Id = await this.usersData.getAuth0Id(options);
+    const user = await this.usersData.auth0User(_auth0Id);
     let measurable = await models.Measurable.findById(id);
     if (measurable.creatorId !== user.agentId) {
       throw new Error("User does not have permission")
@@ -99,8 +99,8 @@ class MeasurableData {
       resolutionEndpoint,
       descriptionProperty
     } = values;
-    let _auth0Id = await usersData.getAuth0Id(options);
-    const user = await usersData.auth0User(_auth0Id);
+    let _auth0Id = await this.usersData.getAuth0Id(options);
+    const user = await this.usersData.auth0User(_auth0Id);
     let measurable = await models.Measurable.findById(id);
     if (measurable.creatorId !== user.agentId) {
       throw new Error("User does not have permission");

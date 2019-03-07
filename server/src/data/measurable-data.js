@@ -1,3 +1,5 @@
+const Sequelize = require('sequelize');
+
 const models = require("../models");
 const { notify } = require("../lib/notifications");
 const { usersData } = require('./');

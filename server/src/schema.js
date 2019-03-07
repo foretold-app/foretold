@@ -1,5 +1,4 @@
 const {
-  GraphQLEnumType,
   GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
@@ -9,11 +8,13 @@ const {
 } = require("graphql");
 const _ = require('lodash');
 const { attributeFields, resolver } = require("graphql-sequelize");
-const Sequelize = require('sequelize');
 
 const models = require("./models");
 const { measurementData, usersData, measurableData } = require('./data');
 const { capitalizeFirstLetter } = require('./helpers');
+
+const { competitor } = require('./types/competitor');
+const { valueType } = require('./types/value-type');
 
 /**
  * @param model
@@ -36,24 +37,6 @@ function generateReferences(model) {
   });
   return all;
 }
-
-let competitor = GraphQLNonNull(new GraphQLEnumType({
-  name: 'competitorType',
-  values: {
-    COMPETITIVE: { value: "COMPETITIVE" },
-    AGGREGATION: { value: "AGGREGATION" },
-    OBJECTIVE: { value: "OBJECTIVE" }
-  }
-}));
-
-let valueType = GraphQLNonNull(new GraphQLEnumType({
-  name: 'valueType',
-  values: {
-    FLOAT: { value: "FLOAT" },
-    DATE: { value: "DATE" },
-    PERCENTAGE: { value: "PERCENTAGE" }
-  }
-}));
 
 const filterr = (fields) => {
   let newFields = { ...fields };
@@ -163,7 +146,10 @@ const schema = new GraphQLSchema({
       ...modelResolvers("user", "users", getType.Users(), models.User),
       user: {
         type: getType.Users(),
-        args: { id: { type: GraphQLString }, auth0Id: { type: GraphQLString } },
+        args: {
+          id: { type: GraphQLString },
+          auth0Id: { type: GraphQLString },
+        },
         resolve: async (ops, values, options) => {
           return usersData.getUser(ops, values, options);
         }

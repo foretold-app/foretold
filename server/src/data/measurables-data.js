@@ -5,7 +5,7 @@ const { notify } = require("../lib/notifications");
 
 const { UsersData } = require('./users-data');
 
-class MeasurableData {
+class MeasurablesData {
 
   constructor() {
     this.usersData = new UsersData();
@@ -132,7 +132,7 @@ class MeasurableData {
    * @param options
    * @return {Promise<*|Array<Model>>}
    */
-  async findAll(root, values, options) {
+  async getAll(root, values, options) {
     const { offset, limit, channel } = values;
     return await models.Measurable.findAll({
       limit: limit,
@@ -152,5 +152,5 @@ class MeasurableData {
 }
 
 module.exports = {
-  MeasurableData,
+  MeasurablesData,
 };

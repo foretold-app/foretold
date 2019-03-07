@@ -1,9 +1,9 @@
-const { MeasurableData } = require('./measurable-data');
+const { MeasurablesData } = require('./measurables-data');
 const { MeasurementData } = require('./measurement-data');
 const { UsersData } = require('./users-data');
 
 module.exports = {
-  measurableData: new MeasurableData(),
+  measurablesData: new MeasurablesData(),
   measurementData: new MeasurementData(),
   usersData: new UsersData(),
 };

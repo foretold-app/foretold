@@ -10,7 +10,7 @@ const _ = require('lodash');
 const { attributeFields, resolver } = require("graphql-sequelize");
 
 const models = require("./models");
-const { measurementData, usersData, measurableData } = require('./data');
+const { measurementData, usersData, measurablesData } = require('./data');
 const { capitalizeFirstLetter } = require('./helpers');
 
 const { competitor } = require('./types/competitor');
@@ -150,7 +150,7 @@ const schema = new GraphQLSchema({
           channel: { type: GraphQLString }
         },
         resolve: async (ops, values, options) => {
-          return measurableData.findAll(ops, values, options);
+          return measurablesData.getAll(ops, values, options);
         }
       },
     }
@@ -169,28 +169,28 @@ const schema = new GraphQLSchema({
         type: measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty', 'channel'])),
         resolve: async (root, values, options) => {
-          return measurableData.createMeasurable(root, values, options);
+          return measurablesData.createMeasurable(root, values, options);
         }
       },
       archiveMeasurable: {
         type: measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
         resolve: async (root, values, options) => {
-          return measurableData.archiveMeasurable(root, values, options);
+          return measurablesData.archiveMeasurable(root, values, options);
         }
       },
       unArchiveMeasurable: {
         type: measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
         resolve: async (root, values, options) => {
-          return measurableData.unArchiveMeasurable(root, values, options);
+          return measurablesData.unArchiveMeasurable(root, values, options);
         }
       },
       editMeasurable: {
         type: measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id', 'name', 'description', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty'])),
         resolve: async (root, values, options) => {
-          return measurableData.editMeasurable(root, values, options);
+          return measurablesData.editMeasurable(root, values, options);
         }
       },
       editUser: {

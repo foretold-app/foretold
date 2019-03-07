@@ -1,8 +1,6 @@
 const models = require("../src/models");
 import _ from "lodash";
 
-const uuid = require('uuid/v4');
-
 const users = [
   {
     name: "Goe Roggins"
@@ -35,7 +33,7 @@ const bots = [
     name: "Bot 4",
     competitorType: "AGGREGATION",
   }
-]:
+];
 
 const measurables = [
   {
@@ -60,43 +58,46 @@ const measurables = [
   }
 ]
 
+let uuid = 1000000;
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
 
     try {
+      return;
       const xxx = await models.User.create({
-        id: "1010a04d-5307-4bd0-9246-000000000000",
+        id: "1010a04d-5307-4bd0-9246-00000000",
         name: "initial",
       });
-
+      return;
       const yyy = await models.Bot.create({
         id: "1010a04d-5307-4bd0-9246-000000000000",
         userId: "1010a04d-5307-4bd0-9246-000000000000",
         name: "aggbot1"
       });
-
+      return;
       const zzz = await models.Agent.create({
-        id: "1010a04d-5307-4bd0-9256-000000000000",
+        id: "1010a04d-5307-4bd0-9256-00000000",
         type: 'USER',
       });
-
+      return;
       let allUsers = [];
       for (let user of users) {
         const u = await models.User.create({
           ...user,
-          id: uuid(),
+          id: uuid++,
         });
         allUsers = [...allUsers, u];
       }
 
-      let allBots = []
+      let allBots = [];
       for (let bot of bots) {
-        let bb = {...bot, userId: allUsers[0].dataValues.id, description: "sdf"}
-        const b = await models.Bot.create(bb)
+        let bb = {...bot, userId: allUsers[0].dataValues.id, description: "sdf"};
+        const b = await models.Bot.create(bb);
         allBots = [...allBots, b]
       }
 
-      let allMeasurables = []
+      let allMeasurables = [];
       for (let m of measurables) {
         const u = await models.Measurable.create({ ...m, creatorId: zzz.id });
         allMeasurables = [...allMeasurables, u];

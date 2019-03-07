@@ -1,6 +1,5 @@
 const models = require("../models");
 const { notify } = require("../lib/notifications");
-const { getAuth0Id } = require('../helpers');
 const { usersData } = require('./');
 
 class MeasurementData {

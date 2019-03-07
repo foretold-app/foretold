@@ -13,7 +13,7 @@ const Sequelize = require('sequelize');
 
 const models = require("./models");
 const { notify } = require("./lib/notifications");
-const { measurementData, usersData } = require('./data');
+const { measurementData, usersData, measurableData } = require('./data');
 const { capitalizeFirstLetter } = require('./helpers');
 
 /**
@@ -240,34 +240,8 @@ const schema = new GraphQLSchema({
       createMeasurable: {
         type: getType.Measurables(),
         args: filterr(_.pick(attributeFields(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty', 'channel'])),
-        resolve: async (__, {
-          name,
-          description,
-          valueType,
-          expectedResolutionDate,
-          resolutionEndpoint,
-          descriptionDate,
-          descriptionEntity,
-          descriptionProperty,
-          channel
-        }, options) => {
-          let _auth0Id = await usersData.getAuth0Id(options);
-          const user = await usersData.auth0User(_auth0Id);
-          const newMeasurable = await models.Measurable.create({
-            name,
-            valueType,
-            description,
-            expectedResolutionDate,
-            creatorId: user.agentId,
-            descriptionEntity,
-            descriptionDate,
-            resolutionEndpoint,
-            descriptionProperty,
-            channel
-          });
-          let notification = await newMeasurable.creationNotification(user);
-          notify(notification);
-          return newMeasurable;
+        resolve: async (root, values, options) => {
+          return measurableData.createMeasurable(root, values, options);
         }
       },
       archiveMeasurable: {

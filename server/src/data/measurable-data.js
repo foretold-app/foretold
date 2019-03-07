@@ -45,6 +45,23 @@ class MeasurableData {
     return newMeasurable;
   }
 
+  /**
+   * @param root
+   * @param values
+   * @param options
+   * @return {Promise<Promise<void>|Promise<WebAPICallResult>|never>}
+   */
+  async archiveMeasurable(root, values, options) {
+    const { id } = values;
+    const _auth0Id = await usersData.getAuth0Id(options);
+    const user = await usersData.auth0User(_auth0Id);
+    let measurable = await models.Measurable.findById(id);
+    if (measurable.creatorId !== user.agentId) {
+      throw new Error("User does not have permission");
+    }
+    return measurable.archive();
+  }
+
 }
 
 module.exports = {

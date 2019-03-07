@@ -247,16 +247,8 @@ const schema = new GraphQLSchema({
       archiveMeasurable: {
         type: getType.Measurables(),
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
-        resolve: async (__, {
-          id,
-        }, options) => {
-          let _auth0Id = await usersData.getAuth0Id(options);
-          const user = await usersData.auth0User(_auth0Id);
-          let measurable = await models.Measurable.findById(id);
-          if (measurable.creatorId !== user.agentId) {
-            throw new Error("User does not have permission")
-          }
-          return measurable.archive()
+        resolve: async (root, values, options) => {
+          return measurableData.archiveMeasurable(root, values, options);
         }
       },
       unArchiveMeasurable: {

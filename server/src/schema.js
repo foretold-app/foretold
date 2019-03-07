@@ -15,6 +15,7 @@ const { capitalizeFirstLetter } = require('./helpers');
 
 const { competitor } = require('./types/competitor');
 const { valueType } = require('./types/value-type');
+const { stats } = require('./types/stats');
 
 /**
  * @param model
@@ -102,42 +103,6 @@ const modelResolvers = (name, plural, type, model) => {
   };
   return fields;
 };
-
-const stats = new GraphQLObjectType({
-  name: "Stats",
-  fields: {
-    agentCount: {
-      type: GraphQLInt,
-      resolve: async () => {
-        return await models.Agent.count();
-      }
-    },
-    userCount: {
-      type: GraphQLInt,
-      resolve: async () => {
-        return await models.User.count();
-      }
-    },
-    botCount: {
-      type: GraphQLInt,
-      resolve: async () => {
-        return await models.Bot.count();
-      }
-    },
-    measurementCount: {
-      type: GraphQLInt,
-      resolve: async () => {
-        return await models.Measurement.count();
-      }
-    },
-    measurableCount: {
-      type: GraphQLInt,
-      resolve: async () => {
-        return await models.Measurable.count();
-      }
-    }
-  }
-});
 
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({

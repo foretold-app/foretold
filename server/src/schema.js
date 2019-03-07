@@ -186,21 +186,8 @@ const schema = new GraphQLSchema({
           limit: { type: GraphQLInt },
           channel: { type: GraphQLString }
         },
-        resolve: async (ops, { offset, limit, channel }, options) => {
-          const mms = await models.Measurable.findAll({
-            limit: limit,
-            offset: offset,
-            order: [['createdAt', 'DESC']],
-            where: {
-              channel: {
-                [Sequelize.Op.eq]: channel
-              },
-              state: {
-                [Sequelize.Op.ne]: "ARCHIVED"
-              }
-            }
-          });
-          return mms;
+        resolve: async (ops, values, options) => {
+          return measurableData.findAll(ops, values, options);
         }
       },
     }

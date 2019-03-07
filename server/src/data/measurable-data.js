@@ -123,6 +123,29 @@ class MeasurableData {
     });
   }
 
+  /**
+   * @param root
+   * @param values
+   * @param options
+   * @return {Promise<*|Array<Model>>}
+   */
+  async findAll(root, values, options) {
+    const { offset, limit, channel } = values;
+    return await models.Measurable.findAll({
+      limit: limit,
+      offset: offset,
+      order: [['createdAt', 'DESC']],
+      where: {
+        channel: {
+          [Sequelize.Op.eq]: channel
+        },
+        state: {
+          [Sequelize.Op.ne]: "ARCHIVED"
+        }
+      }
+    });
+  }
+
 }
 
 module.exports = {

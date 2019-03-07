@@ -54,8 +54,10 @@ class UsersData {
    */
   async getUser(ops, values, options){
     const { id, auth0Id } = values;
+
     let _auth0Id = await this.getAuth0Id(options);
     const _auth0User = await this.auth0User(_auth0Id);
+
     let user;
     if (_auth0Id && !_auth0User) {
       try {
@@ -64,14 +66,13 @@ class UsersData {
         console.log("E", e);
       }
     }
+
     if (user) {
       return user;
     } else if (id) {
-      user = await models.User.findById(id);
-      return user;
+      return await models.User.findById(id);
     } else if (auth0Id) {
-      const user = await this.auth0User(auth0Id);
-      return user;
+      return await this.auth0User(auth0Id);
     }
   }
 }

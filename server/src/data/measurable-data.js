@@ -77,7 +77,7 @@ class MeasurableData {
     const user = await this.usersData.auth0User(_auth0Id);
     let measurable = await models.Measurable.findById(id);
     if (measurable.creatorId !== user.agentId) {
-      throw new Error("User does not have permission")
+      throw new Error("User does not have permission");
     }
     return measurable.unarchive();
   }

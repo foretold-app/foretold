@@ -1,49 +1,34 @@
-import * as models from "./models/index";
-import * as _ from "lodash";
-const Sequelize = require('sequelize')
-const jwt = require('express-jwt')
-const { 
-  AuthenticationError, 
-} = require('apollo-server');
-
-import {
-  makeAggregation
-} from "./services/measurable/MakeAggregation"
-import {
-  resolver,
-  attributeFields
-} from "graphql-sequelize";
-import {
-  GraphQLObjectType,
-  GraphQLNonNull,
-  GraphQLFloat,
+const {
   GraphQLEnumType,
-  GraphQLList,
-  GraphQLSchema,
   GraphQLInt,
-  GraphQLString,
-  GraphQLInputObjectType
-} from "graphql";
-import * as GraphQLJSON from "graphql-type-json";
-import {notify} from "./lib/notifications";
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLSchema,
+  GraphQLString
+} = require("graphql");
+const _ = require('lodash');
+const { attributeFields, resolver } = require("graphql-sequelize");
+const Sequelize = require('sequelize');
 
-function capitalizeFirstLetter(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
+const models = require("./models");
+const { notify } = require("./lib/notifications");
+const { measurementData, usersData } = require('./data');
+const { capitalizeFirstLetter } = require('./helpers');
 
-const maybePluralize = (count, noun, suffix = 's') =>
-  `${noun}${count !== 1 ? suffix : ''}`;
-
-const generateReferences = (model) => {
+/**
+ * @param model
+ */
+function generateReferences(model) {
   let all = {};
   //Was trying to figure this bit out.
   // const references = model.associations.
   const associations = _.toArray(model.associations);
   associations.map(r => {
-    const hasMany = r.associationType === "HasMany"
-    const toMany = r.associationType === "BelongsToMany"
-    const otherTableName = r.target.tableName
-    const type = getType[otherTableName]()
+    const hasMany = r.associationType === "HasMany";
+    const toMany = r.associationType === "BelongsToMany";
+    const otherTableName = r.target.tableName;
+    const type = getType[otherTableName]();
     all[r.as] = {
       type: hasMany ? GraphQLNonNull(new GraphQLList(type)) : type,
       resolve: resolver(model[capitalizeFirstLetter(r.as)])
@@ -51,39 +36,45 @@ const generateReferences = (model) => {
     // console.log(model, r.as, otherTableName, type, model[r.as], model[capitalizeFirstLetter(r.as)])
   });
   return all;
-};
+}
 
 let competitor = GraphQLNonNull(new GraphQLEnumType({
   name: 'competitorType',
   values: {
-    COMPETITIVE: {value: "COMPETITIVE"}, // The first ENUM value will be the default order. The direction will be used for `first`, will automatically be inversed for `last` lookups.
-    AGGREGATION: {value:  "AGGREGATION"},
-    OBJECTIVE: {value:  "OBJECTIVE"} // build and return custom order for sequelize orderBy option
+    COMPETITIVE: { value: "COMPETITIVE" },
+    AGGREGATION: { value: "AGGREGATION" },
+    OBJECTIVE: { value: "OBJECTIVE" }
   }
-}))
+}));
 
 let valueType = GraphQLNonNull(new GraphQLEnumType({
   name: 'valueType',
   values: {
-    FLOAT: {value: "FLOAT"}, // The first ENUM value will be the default order. The direction will be used for `first`, will automatically be inversed for `last` lookups.
-    DATE: {value:  "DATE"},
-    PERCENTAGE: {value:  "PERCENTAGE"} // build and return custom order for sequelize orderBy option
+    FLOAT: { value: "FLOAT" },
+    DATE: { value: "DATE" },
+    PERCENTAGE: { value: "PERCENTAGE" }
   }
-}))
+}));
 
 const filterr = (fields) => {
-  let newFields = {...fields}
-  if (!!newFields.competitorType){
-    newFields.competitorType = {type: competitor}
+  let newFields = { ...fields };
+  if (!!newFields.competitorType) {
+    newFields.competitorType = { type: competitor }
   }
-  if (!!newFields.valueType){
-    newFields.valueType = {type: valueType}
+  if (!!newFields.valueType) {
+    newFields.valueType = { type: valueType }
   }
   return newFields
-}
+};
 
-const makeObjectType = (model, references, extraFields = {}) =>
-  new GraphQLObjectType({
+/**
+ * @param model
+ * @param references
+ * @param extraFields
+ * @return {GraphQLObjectType}
+ */
+const makeObjectType = (model, references, extraFields = {}) => {
+  return new GraphQLObjectType({
     name: model.name,
     description: model.name,
     fields: () =>
@@ -93,6 +84,7 @@ const makeObjectType = (model, references, extraFields = {}) =>
         extraFields
       )
   });
+};
 
 const userType = makeObjectType(models.User);
 const measurableType = makeObjectType(models.Measurable);
@@ -107,13 +99,14 @@ const getType = {
   Measurables: () => measurableType,
   measurables: () => measurableType,
   Measurements: () => measurementType,
-}
+};
 
-const simpleResolver = (type, model) => ({
-  type: new GraphQLNonNull(GraphQLList(type)),
-  resolve: resolver(model)
-})
-
+/**
+ * @param name
+ * @param plural
+ * @param type
+ * @param model
+ */
 const modelResolvers = (name, plural, type, model) => {
   let fields = {};
   fields[name] = {
@@ -124,37 +117,9 @@ const modelResolvers = (name, plural, type, model) => {
   fields[plural] = {
     type: new GraphQLNonNull(GraphQLList(type)),
     resolve: resolver(model)
-  }
+  };
   return fields;
-}
-
-async function auth0User(auth0Id){
-  let users = await models.User.findAll({
-    where: {
-      auth0Id: auth0Id,
-    }
-  })
-  return users && users[0]
-}
-
-//todo: clean up user login code.
-
-const getAuth0Id = async (options) => {
-  let {ok, result} = await options.user;
-  if (!ok){
-    throw new Error(
-      result.name
-    );
-  }
-  let {sub} = result;
-  if (!sub){
-    throw new Error(
-      "No User Id"
-    );
-  }
-  let userAuth0Id = sub;
-  return userAuth0Id
-}
+};
 
 const stats = new GraphQLObjectType({
   name: "Stats",
@@ -190,7 +155,7 @@ const stats = new GraphQLObjectType({
       }
     }
   }
-})
+});
 
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -199,26 +164,28 @@ const schema = new GraphQLSchema({
       ...modelResolvers("user", "users", getType.Users(), models.User),
       user: {
         type: getType.Users(),
-        args: {id: {type: GraphQLString}, auth0Id: {type: GraphQLString}},
+        args: { id: { type: GraphQLString }, auth0Id: { type: GraphQLString } },
         resolve: async (ops, {
           id,
           auth0Id
         }, options) => {
-          let _auth0Id = await getAuth0Id(options)
-          const _auth0User = await auth0User(_auth0Id);
+          let _auth0Id = await usersData.getAuth0Id(options)
+          const _auth0User = await usersData.auth0User(_auth0Id);
           let user;
           if (_auth0Id && !_auth0User) {
             try {
-            user = await models.User.create({auth0Id: _auth0Id, name: ""})
-            } catch (e) { console.log("E", e)}
+              user = await models.User.create({ auth0Id: _auth0Id, name: "" })
+            } catch (e) {
+              console.log("E", e)
+            }
           }
-          if (user){
+          if (user) {
             return user;
-          } else if (id){
+          } else if (id) {
             user = await models.User.findById(id);
             return user
-          } else if (auth0Id){
-            const user = await auth0User(auth0Id)
+          } else if (auth0Id) {
+            const user = await usersData.auth0User(auth0Id);
             return user;
           }
         }
@@ -230,13 +197,18 @@ const schema = new GraphQLSchema({
       stats: {
         type: new GraphQLNonNull(stats),
         resolve: async (ops, {}, options) => {
-          return stats
+          // @todo:
+          return 11;
         }
       },
       measurables: {
         type: new GraphQLNonNull(new GraphQLList(getType.Measurables())),
-        args: {offset: {type: GraphQLInt}, limit: {type: GraphQLInt}, channel: {type: GraphQLString}},
-        resolve: async (ops, {offset, limit, channel}, options) => {
+        args: {
+          offset: { type: GraphQLInt },
+          limit: { type: GraphQLInt },
+          channel: { type: GraphQLString }
+        },
+        resolve: async (ops, { offset, limit, channel }, options) => {
           const mms = await models.Measurable.findAll({
             limit: limit,
             offset: offset,
@@ -249,8 +221,8 @@ const schema = new GraphQLSchema({
                 [Sequelize.Op.ne]: "ARCHIVED"
               }
             }
-          })
-          return mms
+          });
+          return mms;
         }
       },
     }
@@ -261,26 +233,9 @@ const schema = new GraphQLSchema({
       createMeasurement: {
         type: getType.Measurements(),
         args: filterr(_.pick(attributeFields(models.Measurement), ['value', 'competitorType', 'measurableId', 'agentId', 'description'])),
-        resolve: async (a, {
-          value,
-          competitorType,
-          measurableId,
-          description,
-        }, options) => {
-          let _auth0Id = await getAuth0Id(options)
-          const user = await auth0User(_auth0Id);
-          const newMeasurement = await models.Measurement.create({
-            value,
-            competitorType,
-            measurableId,
-            description,
-            agentId: user.agentId,
-          })
-          let notification = await newMeasurement.creationNotification(user);
-          notify(notification);
-          const measurable = await newMeasurement.getMeasurable();
-          return newMeasurement
-        }
+        resolve: async (root, values, options) => {
+          return measurementData.createMeasurement(root, values, options);
+        },
       },
       createMeasurable: {
         type: getType.Measurables(),
@@ -296,23 +251,23 @@ const schema = new GraphQLSchema({
           descriptionProperty,
           channel
         }, options) => {
-          let _auth0Id = await getAuth0Id(options)
-          const user = await auth0User(_auth0Id);
+          let _auth0Id = await usersData.getAuth0Id(options);
+          const user = await usersData.auth0User(_auth0Id);
           const newMeasurable = await models.Measurable.create({
-          name,
-          valueType,
-          description,
-          expectedResolutionDate,
-          creatorId: user.agentId,
-          descriptionEntity,
-          descriptionDate,
-          resolutionEndpoint,
-          descriptionProperty,
-          channel
-          })
+            name,
+            valueType,
+            description,
+            expectedResolutionDate,
+            creatorId: user.agentId,
+            descriptionEntity,
+            descriptionDate,
+            resolutionEndpoint,
+            descriptionProperty,
+            channel
+          });
           let notification = await newMeasurable.creationNotification(user);
-          notify(notification)
-          return newMeasurable
+          notify(notification);
+          return newMeasurable;
         }
       },
       archiveMeasurable: {
@@ -321,10 +276,10 @@ const schema = new GraphQLSchema({
         resolve: async (__, {
           id,
         }, options) => {
-          let _auth0Id = await getAuth0Id(options)
-          const user = await auth0User(_auth0Id);
+          let _auth0Id = await usersData.getAuth0Id(options);
+          const user = await usersData.auth0User(_auth0Id);
           let measurable = await models.Measurable.findById(id);
-          if (measurable.creatorId !== user.agentId){
+          if (measurable.creatorId !== user.agentId) {
             throw new Error("User does not have permission")
           }
           return measurable.archive()
@@ -336,10 +291,10 @@ const schema = new GraphQLSchema({
         resolve: async (__, {
           id,
         }, options) => {
-          let _auth0Id = await getAuth0Id(options)
-          const user = await auth0User(_auth0Id);
+          let _auth0Id = await usersData.getAuth0Id(options);
+          const user = await usersData.auth0User(_auth0Id);
           let measurable = await models.Measurable.findById(id);
-          if (measurable.creatorId !== user.agentId){
+          if (measurable.creatorId !== user.agentId) {
             throw new Error("User does not have permission")
           }
           return measurable.unarchive()
@@ -347,7 +302,7 @@ const schema = new GraphQLSchema({
       },
       editMeasurable: {
         type: getType.Measurables(),
-        args: filterr(_.pick(attributeFields(models.Measurable), ['id','name', 'description', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty'])),
+        args: filterr(_.pick(attributeFields(models.Measurable), ['id', 'name', 'description', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty'])),
         resolve: async (__, {
           id,
           name,
@@ -358,15 +313,31 @@ const schema = new GraphQLSchema({
           resolutionEndpoint,
           descriptionProperty
         }, options) => {
-          let _auth0Id = await getAuth0Id(options)
-          const user = await auth0User(_auth0Id);
+          let _auth0Id = await usersData.getAuth0Id(options);
+          const user = await usersData.auth0User(_auth0Id);
           let measurable = await models.Measurable.findById(id);
-          if (measurable.creatorId !== user.agentId){
+          if (measurable.creatorId !== user.agentId) {
             throw new Error("User does not have permission")
           }
-          let notification = await measurable.updateNotifications(user, {name, description, expectedResolutionDate,resolutionEndpoint, descriptionEntity, descriptionDate, descriptionProperty});
+          let notification = await measurable.updateNotifications(user, {
+            name,
+            description,
+            expectedResolutionDate,
+            resolutionEndpoint,
+            descriptionEntity,
+            descriptionDate,
+            descriptionProperty
+          });
           notify(notification);
-          return measurable.update({name, description, expectedResolutionDate, resolutionEndpoint, descriptionEntity, descriptionDate, descriptionProperty})
+          return measurable.update({
+            name,
+            description,
+            expectedResolutionDate,
+            resolutionEndpoint,
+            descriptionEntity,
+            descriptionDate,
+            descriptionProperty
+          })
         }
       },
       editUser: {
@@ -376,16 +347,16 @@ const schema = new GraphQLSchema({
           id,
           name
         }, options) => {
-          let _auth0Id = await getAuth0Id(options);
+          let _auth0Id = await usersData.getAuth0Id(options);
           let user = await models.User.findById(id);
-          if (user && (user.auth0Id == _auth0Id)) {
-            user.update({name})
+          if (user && user.auth0Id === _auth0Id) {
+            user.update({ name });
           }
-          return user
+          return user;
         }
       },
     }
-    })
+  })
 });
 
 export {

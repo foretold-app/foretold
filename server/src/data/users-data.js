@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const models = require("../models");
 
 class UsersData {
@@ -20,9 +21,11 @@ class UsersData {
    * @return {Promise<*>}
    */
   async getAuth0Id(options) {
-    let { ok, result } = await options.user;
-    if (!ok) throw new Error(result.name);
-    let { sub } = result;
+    const res = await options.user;
+    const ok = _.get(res, 'ok');
+    const name = _.get(res, 'result.name');
+    const sub = _.get(res, 'result.sub');
+    if (!ok) throw new Error(name);
     if (!sub) throw new Error("No User Id");
     return sub;
   }

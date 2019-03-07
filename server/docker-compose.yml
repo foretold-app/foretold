@@ -15,7 +15,7 @@ services:
       - PORT=80
       - NODE_PATH=/opt/app/lib
     command: >
-      node_modules/.bin/nodemon lib/src/index.js --exec "node -r dotenv/config -r babel-register"
+      node_modules/.bin/nodemon src/index.js --exec "node -r dotenv/config -r babel-register"
 
   database:
     image: postgres:11

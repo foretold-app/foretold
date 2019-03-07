@@ -68,7 +68,7 @@ class UsersData {
       return user;
     } else if (id) {
       user = await models.User.findById(id);
-      return user
+      return user;
     } else if (auth0Id) {
       const user = await this.auth0User(auth0Id);
       return user;

@@ -39,26 +39,24 @@ function modelResolvers(name, plural, type, model) {
 
 /**
  * @param model
+ * @return {GraphQLObjectType}
  */
-function generateReferences(model) {
-  let all = {};
-  //Was trying to figure this bit out.
-  // const references = model.associations.
-  const associations = _.toArray(model.associations);
-  associations.map(r => {
-    const hasMany = r.associationType === "HasMany";
-    const toMany = r.associationType === "BelongsToMany";
-    const otherTableName = r.target.tableName;
-    const type = getType[otherTableName];
-    all[r.as] = {
-      type: hasMany ? GraphQLNonNull(new GraphQLList(type)) : type,
-      resolve: resolver(model[capitalizeFirstLetter(r.as)])
-    };
-    // console.log(model, r.as, otherTableName, type, model[r.as], model[capitalizeFirstLetter(r.as)])
+function makeObjectType(model) {
+  return new GraphQLObjectType({
+    name: model.name,
+    description: model.name,
+    fields: () =>
+      _.assign(
+        filterr(attributeFields(model)),
+        generateReferences(model),
+      )
   });
-  return all;
 }
 
+/**
+ * @param fields
+ * @return {{[p: string]: *}}
+ */
 function filterr(fields) {
   let newFields = { ...fields };
   if (!!newFields.competitorType) {
@@ -72,21 +70,24 @@ function filterr(fields) {
 
 /**
  * @param model
- * @param references
- * @param extraFields
- * @return {GraphQLObjectType}
  */
-function makeObjectType(model, references, extraFields = {}) {
-  return new GraphQLObjectType({
-    name: model.name,
-    description: model.name,
-    fields: () =>
-      _.assign(
-        filterr(attributeFields(model)),
-        generateReferences(model, references),
-        extraFields
-      )
+function generateReferences(model) {
+  let all = {};
+  const associations = _.toArray(model.associations);
+
+  associations.map(r => {
+    const hasMany = r.associationType === "HasMany";
+    const toMany = r.associationType === "BelongsToMany";
+    const otherTableName = r.target.tableName;
+    const type = getType[otherTableName];
+
+    all[r.as] = {
+      type: hasMany ? GraphQLNonNull(new GraphQLList(type)) : type,
+      resolve: resolver(model[capitalizeFirstLetter(r.as)])
+    };
   });
+
+  return all;
 }
 
 const userType = makeObjectType(models.User);
@@ -108,7 +109,10 @@ const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
-      ...modelResolvers("user", "users", userType, models.User),
+      users: {
+        type: new GraphQLNonNull(GraphQLList(userType)),
+        resolve: resolver(models.User),
+      },
       user: {
         type: userType,
         args: {
@@ -119,7 +123,15 @@ const schema = new GraphQLSchema({
           return usersData.getUser(ops, values, options);
         }
       },
-      ...modelResolvers("measurement", "measurements", measurementType, models.Measurement),
+      measurement: {
+        type: measurementType,
+        args: _.pick(attributeFields(models.Measurement), ['id']),
+        resolve: resolver(models.Measurement),
+      },
+      measurements: {
+        type: new GraphQLNonNull(GraphQLList(measurementType)),
+        resolve: resolver(models.Measurement),
+      },
       ...modelResolvers("measurable", "measurables", measurableType, models.Measurable),
       ...modelResolvers("bot", "bots", botType, models.Bot),
       ...modelResolvers("agent", "agents", agentType, models.Agent),

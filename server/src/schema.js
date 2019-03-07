@@ -12,7 +12,6 @@ const { attributeFields, resolver } = require("graphql-sequelize");
 const Sequelize = require('sequelize');
 
 const models = require("./models");
-const { notify } = require("./lib/notifications");
 const { measurementData, usersData, measurableData } = require('./data');
 const { capitalizeFirstLetter } = require('./helpers');
 
@@ -165,29 +164,8 @@ const schema = new GraphQLSchema({
       user: {
         type: getType.Users(),
         args: { id: { type: GraphQLString }, auth0Id: { type: GraphQLString } },
-        resolve: async (ops, {
-          id,
-          auth0Id
-        }, options) => {
-          let _auth0Id = await usersData.getAuth0Id(options)
-          const _auth0User = await usersData.auth0User(_auth0Id);
-          let user;
-          if (_auth0Id && !_auth0User) {
-            try {
-              user = await models.User.create({ auth0Id: _auth0Id, name: "" })
-            } catch (e) {
-              console.log("E", e)
-            }
-          }
-          if (user) {
-            return user;
-          } else if (id) {
-            user = await models.User.findById(id);
-            return user
-          } else if (auth0Id) {
-            const user = await usersData.auth0User(auth0Id);
-            return user;
-          }
+        resolve: async (ops, values, options) => {
+          return usersData.getUser(ops, values, options);
         }
       },
       ...modelResolvers("measurement", "measurements", getType.Measurements(), models.Measurement),

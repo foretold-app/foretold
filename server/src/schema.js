@@ -29,7 +29,7 @@ function generateReferences(model) {
     const hasMany = r.associationType === "HasMany";
     const toMany = r.associationType === "BelongsToMany";
     const otherTableName = r.target.tableName;
-    const type = getType[otherTableName]();
+    const type = getType[otherTableName];
     all[r.as] = {
       type: hasMany ? GraphQLNonNull(new GraphQLList(type)) : type,
       resolve: resolver(model[capitalizeFirstLetter(r.as)])
@@ -39,7 +39,7 @@ function generateReferences(model) {
   return all;
 }
 
-const filterr = (fields) => {
+function filterr(fields) {
   let newFields = { ...fields };
   if (!!newFields.competitorType) {
     newFields.competitorType = { type: competitor }
@@ -47,8 +47,8 @@ const filterr = (fields) => {
   if (!!newFields.valueType) {
     newFields.valueType = { type: valueType }
   }
-  return newFields
-};
+  return newFields;
+}
 
 /**
  * @param model
@@ -56,7 +56,7 @@ const filterr = (fields) => {
  * @param extraFields
  * @return {GraphQLObjectType}
  */
-const makeObjectType = (model, references, extraFields = {}) => {
+function makeObjectType(model, references, extraFields = {}) {
   return new GraphQLObjectType({
     name: model.name,
     description: model.name,
@@ -67,7 +67,7 @@ const makeObjectType = (model, references, extraFields = {}) => {
         extraFields
       )
   });
-};
+}
 
 const userType = makeObjectType(models.User);
 const measurableType = makeObjectType(models.Measurable);
@@ -76,12 +76,12 @@ const botType = makeObjectType(models.Bot);
 const agentType = makeObjectType(models.Agent);
 
 const getType = {
-  Users: () => userType,
-  Agents: () => agentType,
-  Bots: () => botType,
-  Measurables: () => measurableType,
-  measurables: () => measurableType,
-  Measurements: () => measurementType,
+  Users: userType,
+  Agents: agentType,
+  Bots: botType,
+  Measurables: measurableType,
+  measurables: measurableType,
+  Measurements: measurementType,
 };
 
 /**
@@ -90,7 +90,7 @@ const getType = {
  * @param type
  * @param model
  */
-const modelResolvers = (name, plural, type, model) => {
+function modelResolver(name, plural, type, model) {
   let fields = {};
   fields[name] = {
     type: type,
@@ -102,15 +102,15 @@ const modelResolvers = (name, plural, type, model) => {
     resolve: resolver(model)
   };
   return fields;
-};
+}
 
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
-      ...modelResolvers("user", "users", getType.Users(), models.User),
+      ...modelResolvers("user", "users", userType, models.User),
       user: {
-        type: getType.Users(),
+        type: userType,
         args: {
           id: { type: GraphQLString },
           auth0Id: { type: GraphQLString },
@@ -119,10 +119,10 @@ const schema = new GraphQLSchema({
           return usersData.getUser(ops, values, options);
         }
       },
-      ...modelResolvers("measurement", "measurements", getType.Measurements(), models.Measurement),
-      ...modelResolvers("measurable", "measurables", getType.Measurables(), models.Measurable),
-      ...modelResolvers("bot", "bots", getType.Bots(), models.Bot),
-      ...modelResolvers("agent", "agents", getType.Agents(), models.Agent),
+      ...modelResolvers("measurement", "measurements", measurementType, models.Measurement),
+      ...modelResolvers("measurable", "measurables", measurableType, models.Measurable),
+      ...modelResolvers("bot", "bots", botType, models.Bot),
+      ...modelResolvers("agent", "agents", agentType, models.Agent),
       stats: {
         type: new GraphQLNonNull(stats),
         resolve: async (ops, values, options) => {
@@ -131,7 +131,7 @@ const schema = new GraphQLSchema({
         }
       },
       measurables: {
-        type: new GraphQLNonNull(new GraphQLList(getType.Measurables())),
+        type: new GraphQLNonNull(new GraphQLList(measurableType)),
         args: {
           offset: { type: GraphQLInt },
           limit: { type: GraphQLInt },
@@ -147,42 +147,42 @@ const schema = new GraphQLSchema({
     name: 'Mutation',
     fields: {
       createMeasurement: {
-        type: getType.Measurements(),
+        type: measurementType,
         args: filterr(_.pick(attributeFields(models.Measurement), ['value', 'competitorType', 'measurableId', 'agentId', 'description'])),
         resolve: async (root, values, options) => {
           return measurementData.createMeasurement(root, values, options);
         },
       },
       createMeasurable: {
-        type: getType.Measurables(),
+        type: measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty', 'channel'])),
         resolve: async (root, values, options) => {
           return measurableData.createMeasurable(root, values, options);
         }
       },
       archiveMeasurable: {
-        type: getType.Measurables(),
+        type: measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
         resolve: async (root, values, options) => {
           return measurableData.archiveMeasurable(root, values, options);
         }
       },
       unArchiveMeasurable: {
-        type: getType.Measurables(),
+        type: measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
         resolve: async (root, values, options) => {
           return measurableData.unArchiveMeasurable(root, values, options);
         }
       },
       editMeasurable: {
-        type: getType.Measurables(),
+        type: measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id', 'name', 'description', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty'])),
         resolve: async (root, values, options) => {
           return measurableData.editMeasurable(root, values, options);
         }
       },
       editUser: {
-        type: getType.Users(),
+        type: userType,
         args: filterr(_.pick(attributeFields(models.User), ["id", "name"])),
         resolve: async (root, values, options) => {
           return usersData.editUser(root, values, options);

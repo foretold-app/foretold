@@ -1,6 +1,3 @@
-%bs.raw
-"require('../node_modules/handsontable/dist/handsontable.full.css');";
-
 type route =
   | Home
   | AgentIndex
@@ -57,7 +54,7 @@ let inside = r =>
   | Home => <MeasurableIndex channel="general" />
   | AgentMeasurables(id) => <MeMeasurables id />
   | AgentIndex => <AgentIndex />
-  | NotFound => <AgentIndex />
+  | NotFound => <MeasurableIndex channel="general" />
   | ItemShow(id) => <ItemShow id />
   | Redirect => <Redirect />
   | Profile(auth0Id) => <Profile auth0Id />

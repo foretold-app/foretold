@@ -1,9 +1,6 @@
 open Utils;
 open Rationale;
 open Queries;
-open HandsOnTable;
-open MeasurableColumns;
-open Table;
 
 let component = ReasonReact.statelessComponent("MeasurableIndexTable");
 

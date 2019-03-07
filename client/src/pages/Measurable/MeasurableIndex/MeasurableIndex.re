@@ -1,17 +1,6 @@
 open Utils;
 open Rationale;
 open Queries;
-open HandsOnTable;
-open MeasurableColumns;
-
-let transformations = [
-  link,
-  nameAsText,
-  measurementCount,
-  measurerCount,
-  expectedResolutionDate,
-  creator,
-];
 
 let component = ReasonReact.statelessComponent("Measurables");
 let make = (~channel: string, _children) => {

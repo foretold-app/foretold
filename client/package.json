@@ -42,7 +42,6 @@
     "financejs": "^4.1.0",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
-    "handsontable": "^5.0.1",
     "jstat": "^1.7.1",
     "jwt-decode": "^2.2.0",
     "lib": "^3.0.2",

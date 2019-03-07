@@ -17,9 +17,6 @@ var MeasurableEdit$Client = require("./pages/Measurable/MeasurableEdit/Measurabl
 var MeasurableShow$Client = require("./pages/Measurable/MeasurableShow/MeasurableShow.bs.js");
 var MeasurableIndex$Client = require("./pages/Measurable/MeasurableIndex/MeasurableIndex.bs.js");
 
-require('../node_modules/handsontable/dist/handsontable.full.css');
-;
-
 function reducer(action, _state) {
   return /* Update */Block.__(0, [/* record */[/* route */action[0]]]);
 }
@@ -132,13 +129,13 @@ var component = ReasonReact.reducerComponent("App");
 function inside(r) {
   if (typeof r === "number") {
     switch (r) {
-      case 0 : 
-          return ReasonReact.element(undefined, undefined, MeasurableIndex$Client.make("general", /* array */[]));
+      case 1 : 
+          return ReasonReact.element(undefined, undefined, AgentIndex$Client.make(/* array */[]));
       case 2 : 
           return ReasonReact.element(undefined, undefined, Redirect$Client.make(/* array */[]));
-      case 1 : 
+      case 0 : 
       case 3 : 
-          return ReasonReact.element(undefined, undefined, AgentIndex$Client.make(/* array */[]));
+          return ReasonReact.element(undefined, undefined, MeasurableIndex$Client.make("general", /* array */[]));
       
     }
   } else {
@@ -202,4 +199,4 @@ exports.mapUrlToAction = mapUrlToAction;
 exports.component = component;
 exports.inside = inside;
 exports.make = make;
-/*  Not a pure module */
+/* component Not a pure module */

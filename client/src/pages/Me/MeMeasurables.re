@@ -1,8 +1,6 @@
 open Utils;
 open Rationale;
-open Table;
 open Rationale.Function.Infix;
-open HandsOnTable;
 open MomentRe;
 
 let matchId = [%re "/clickFn:id:(.*)/"];

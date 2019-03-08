@@ -15,7 +15,7 @@ let make = (~measurables: array(DataModel.measurable), _children) => {
     <div className=PrimaryTableStyles.group>
       {
         _measurables
-        |> Array.map(m =>
+        |> E.A.fmap(m =>
              <div
                className={PrimaryTableStyles.row(m)}
                onClick={

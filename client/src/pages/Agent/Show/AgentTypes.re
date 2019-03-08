@@ -50,8 +50,9 @@ type agent = {
   measurements: array(option(measurement)),
 };
 
-module GetAgent = [%graphql
-  {|
+module GetAgent = {
+  module Query = [%graphql
+    {|
     query getAgent ($id: String!) {
         agent:
         agent(id: $id) @bsRecord{
@@ -84,7 +85,33 @@ module GetAgent = [%graphql
         }
     }
   |}
-];
+  ];
+
+  module QueryComponent = ReasonApollo.CreateQuery(Query);
+
+  let component = (~id, innerFn) => {
+    open Rationale.Result.Infix;
+    open Utils;
+    open Rationale;
+    let notFound = <h3> {"Agent not found" |> ste} </h3>;
+    let query = Query.make(~id, ());
+    QueryComponent.make(~variables=query##variables, ({result}) =>
+      result
+      |> ApolloUtils.apolloResponseToResult
+      <$> (e => e##agent)
+      >>= (
+        e =>
+          switch (e) {
+          | Some(a) => Ok(a)
+          | None => Error(notFound)
+          }
+      )
+      <$> innerFn
+      |> Result.result(idd, idd)
+    )
+    |> ReasonReact.element;
+  };
+};
 
 let toMeasurables = (measurements: array(measurement)) => {
   let r = measurements;
@@ -133,4 +160,3 @@ let toMeasurables = (measurements: array(measurement)) => {
        );
   measurables;
 };
-module GetAgentQuery = ReasonApollo.CreateQuery(GetAgent);

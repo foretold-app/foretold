@@ -2,8 +2,6 @@ open Utils;
 open Rationale.Result.Infix;
 open Rationale;
 
-let ste = ReasonReact.string;
-
 let component = ReasonReact.statelessComponent("ItemShow");
 
 let findName = (graph, propertyId) =>

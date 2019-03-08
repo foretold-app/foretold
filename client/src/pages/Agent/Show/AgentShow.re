@@ -25,30 +25,12 @@ let agentSection = (e: AgentTypes.agent) =>
 
 let component = ReasonReact.statelessComponent("AgentShow");
 
-let withAgentQuery = (~id, innerFn) => {
-  let query = AgentTypes.GetAgent.make(~id, ());
-  AgentTypes.GetAgentQuery.make(~variables=query##variables, ({result}) =>
-    result
-    |> ApolloUtils.apolloResponseToResult
-    <$> (e => e##agent)
-    >>= (
-      e =>
-        switch (e) {
-        | Some(a) => Ok(a)
-        | None => Error(notFound)
-        }
-    )
-    <$> innerFn
-    |> Result.result(idd, idd)
-  )
-  |> ReasonReact.element;
-};
 let make = (~id: string, _children) => {
   ...component,
   render: _ =>
     <div>
       {
-        withAgentQuery(
+        AgentTypes.GetAgent.component(
           ~id,
           agent => {
             let mm =

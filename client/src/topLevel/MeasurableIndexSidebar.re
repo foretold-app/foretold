@@ -40,63 +40,58 @@ module Styles = {
 };
 
 let component = ReasonReact.statelessComponent("MeasurableIndexSidebar");
-let make = (~channel, _children) => {
+let make = (~channel, ~userQuery, _children) => {
   ...component,
-  render: _self => {
-    let input: option(Queries.GetUser.Query.t) => ReasonReact.reactElement =
-      userQuery =>
-        <UseRouterForLinks>
-          <div className=Styles.minorHeader> {"User" |> ste} </div>
-          {
-            switch (userQuery) {
-            | Some(query) =>
-              open Rationale.Option.Infix;
-              let userAgentId = query##user >>= (e => e##agentId);
-              let idd = userAgentId |> E.O.default("");
-              <div>
-                <div
-                  onClick=(_e => Urls.pushToLink(Profile))
-                  className=Styles.item>
-                  {"Profile" |> ste}
-                </div>
-                <div
-                  onClick=(_e => Urls.pushToLink(AgentShow(idd)))
-                  className=Styles.item>
-                  {"Edit Measurables" |> ste}
-                </div>
-                <div onClick=(_e => Auth0.logout()) className=Styles.item>
-                  {"Log Out" |> ste}
-                </div>
-              </div>;
-            | None =>
-              <div onClick=(_e => Auth0.logIn()) className=Styles.item>
-                {"Log In" |> ste}
-              </div>
-            }
-          }
-          <div className=Styles.over />
-          <div className=Styles.sectionPadding />
-          <div className=Styles.minorHeader> {"Channels" |> ste} </div>
-          <div className=Styles.over>
-            {
-              ["general", "foretold", "ozziegooen", "lesswrong", "movies"]
-              |> List.map(e =>
-                   <div
-                     onClick={_e => Urls.pushToLink(Channel(e))}
-                     className={
-                       Some(e) == channel ? Styles.selectedItem : Styles.item
-                     }>
-                     <span>
-                       <span className=Styles.hash> {"#" |> ste} </span>
-                       <span> {e |> ste} </span>
-                     </span>
-                   </div>
-                 )
-              |> Array.of_list
-              |> ReasonReact.array
-            }
+  render: _self =>
+    <div>
+      <div className=Styles.minorHeader> {"User" |> ste} </div>
+      {
+        switch (userQuery) {
+        | Some(query) =>
+          open Rationale.Option.Infix;
+          let userAgentId = query##user >>= (e => e##agentId);
+          let idd = userAgentId |> E.O.default("");
+          <div>
+            <div
+              onClick=(_e => Urls.pushToLink(Profile)) className=Styles.item>
+              {"Profile" |> ste}
+            </div>
+            <div
+              onClick=(_e => Urls.pushToLink(AgentShow(idd)))
+              className=Styles.item>
+              {"Edit Measurables" |> ste}
+            </div>
+            <div onClick=(_e => Auth0.logout()) className=Styles.item>
+              {"Log Out" |> ste}
+            </div>
+          </div>;
+        | None =>
+          <div onClick=(_e => Auth0.logIn()) className=Styles.item>
+            {"Log In" |> ste}
           </div>
-        </UseRouterForLinks>;
-    SharedQueries.withLoggedInUserQuery(input);
-  },
+        }
+      }
+      <div className=Styles.over />
+      <div className=Styles.sectionPadding />
+      <div className=Styles.minorHeader> {"Channels" |> ste} </div>
+      <div className=Styles.over>
+        {
+          ["general", "foretold", "ozziegooen", "lesswrong", "movies"]
+          |> List.map(e =>
+               <div
+                 onClick={_e => Urls.pushToLink(Channel(e))}
+                 className={
+                   Some(e) == channel ? Styles.selectedItem : Styles.item
+                 }>
+                 <span>
+                   <span className=Styles.hash> {"#" |> ste} </span>
+                   <span> {e |> ste} </span>
+                 </span>
+               </div>
+             )
+          |> Array.of_list
+          |> ReasonReact.array
+        }
+      </div>
+    </div>,
 };

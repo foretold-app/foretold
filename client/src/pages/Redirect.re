@@ -7,29 +7,10 @@ let ste = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("Redirecting...");
 
-let withUserQuery =
-    (
-      auth0Id: option(string),
-      innerComponentFn: 'a => ReasonReact.reactElement,
-    ) =>
-  switch (auth0Id) {
-  | Some(auth) =>
-    let query = Queries.GetUser.Query.make(~auth0Id=auth, ());
-    Queries.GetUser.QueryComponent.make(
-      ~variables=query##variables, ~pollInterval=5000, ({result}) =>
-      result
-      |> ApolloUtils.apolloResponseToResult
-      <$> (e => innerComponentFn(Some(e)))
-      |> E.R.id
-    )
-    |> ReasonReact.element;
-  | None => innerComponentFn(None)
-  };
-
 let make = _children => {
   ...component,
   render: _ =>
-    withUserQuery(
+    Queries.GetUser.component(
       Auth0.userId(),
       userQuery => {
         let agentId =

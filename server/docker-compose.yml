@@ -13,7 +13,7 @@ services:
       - AUTH0_SECRET=<change-me>
       - SLACK_WEBHOOK_URL=<change-me>
       - PORT=80
-      - NODE_PATH=/opt/app/lib
+      - NODE_PATH=/opt/app
     command: >
       node_modules/.bin/nodemon src/index.js --exec "node -r dotenv/config -r babel-register"
 

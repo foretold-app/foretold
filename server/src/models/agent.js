@@ -1,4 +1,4 @@
-'use strict';
+const _ = require('lodash');
 const Sequelize = require('sequelize')
 
 module.exports = (sequelize, DataTypes) => {
@@ -19,10 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       get: async function() {
         if (this.type == "USER"){
           const user = await this.getUser();
-          return user.name
+          return _.get(user, 'name');
         } else {
           const bot = await this.getBot();
-          return bot.name
+          return _.get(bot, 'name');
         }
       }
     },

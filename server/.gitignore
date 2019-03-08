@@ -63,3 +63,6 @@ typings/
 # Custom
 .idea
 lib/*
+
+config/config.json
+dist

@@ -10,6 +10,7 @@ module O = {
   let fmap = Rationale.Option.fmap;
   let bind = Rationale.Option.bind;
   let default = Rationale.Option.default;
+  let isSome = Rationale.Option.isSome;
 };
 
 /* R for Result */

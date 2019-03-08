@@ -231,6 +231,23 @@ module GetMeasurable = {
     |}
   ];
   module QueryComponent = ReasonApollo.CreateQuery(Query);
+  let component = (~id, fn) => {
+    let query = Query.make(~id, ());
+    Result.Infix.(
+      QueryComponent.make(~variables=query##variables, ({result}) =>
+        result
+        |> ApolloUtils.apolloResponseToResult
+        >>= (
+          e =>
+            e##measurable
+            |> filterOptionalResult("Measurable not found" |> ste)
+        )
+        <$> fn
+        |> Result.result(idd, idd)
+      )
+      |> ReasonReact.element
+    );
+  };
 };
 
 module GetMeasurables = {

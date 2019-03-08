@@ -60,7 +60,7 @@ module T = {
 };
 
 let listCombinations: list('a) => list(list('a)) =
-  Utility.accumulator(~accum=[], ~history=[], (accum, head) =>
+  Ken_Utility.accumulator(~accum=[], ~history=[], (accum, head) =>
     List.append(accum, [head])
   );
 

@@ -34,8 +34,6 @@ let matchAccessToken = [%re "/access_token=([^\$&]+)/g"];
 let matchExpiresIn = [%re "/expires_in=([^\$&]+)/g"];
 let matchIdToken = [%re "/id_token=([^\$&]+)/g"];
 
-let omap = Rationale.Option.fmap;
-
 let handleAuth = (url: ReasonReact.Router.url) => {
   let accessToken = url.hash |> resolveRegex(matchAccessToken);
   let idToken = url.hash |> resolveRegex(matchIdToken);
@@ -51,13 +49,7 @@ let handleAuth = (url: ReasonReact.Router.url) => {
   ();
 };
 
-let foobar = () => {
-  Js.log("LOGGING OUT!");
-  3;
-};
-
 let logout = () => {
-  Js.log("LOGGING OUT!");
   open Dom.Storage;
   localStorage |> removeItem("access_token");
   localStorage |> removeItem("id_token");
@@ -68,19 +60,13 @@ let logout = () => {
 
 let expiresAt = () => Dom.Storage.(localStorage |> getItem("expires_at"));
 
-let oDimap = (sFn, rFn, e) =>
-  switch (e) {
-  | Some(r) => sFn(r)
-  | None => rFn()
-  };
-
 let authIsObsolete = () => {
   let exp = expiresAt();
   exp
-  |> omap(Int64.of_string)
-  |> omap(Int64.to_float)
-  |> omap(e => e < Js.Date.now())
-  |> oDimap(idd, () => false);
+  |> E.Option.fmap(Int64.of_string)
+  |> E.Option.fmap(Int64.to_float)
+  |> E.Option.fmap(e => e < Js.Date.now())
+  |> E.Option.dimap(idd, () => false);
 };
 
 let authToken = () => Dom.Storage.(localStorage |> getItem("id_token"));

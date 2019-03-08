@@ -23,19 +23,19 @@ let make = (~measurements: array(measurement), _children) => {
 
     let yMax =
       sorted
-      |> Array.map(e => e.high)
-      |> Array.fold_left((a, b) => a > b ? a : b, min_float);
+      |> E.A.fmap(e => e.high)
+      |> E.A.fold_left((a, b) => a > b ? a : b, min_float);
 
     let yMin =
       sorted
-      |> Array.map(e => e.low)
-      |> Array.fold_left((a, b) => a < b ? a : b, max_float);
+      |> E.A.fmap(e => e.low)
+      |> E.A.fold_left((a, b) => a < b ? a : b, max_float);
 
     let formatDate = Moment.format("MMM DD, YYYY HH:MM:SS");
     let xMax =
       sorted
-      |> Array.map(e => e.createdAt)
-      |> Array.fold_left(
+      |> E.A.fmap(e => e.createdAt)
+      |> E.A.fold_left(
            (a, b) => Moment.isAfter(a, b) ? a : b,
            "Jan 3, 1970" |> moment,
          )
@@ -44,8 +44,8 @@ let make = (~measurements: array(measurement), _children) => {
 
     let xMin =
       sorted
-      |> Array.map(e => e.createdAt)
-      |> Array.fold_left(
+      |> E.A.fmap(e => e.createdAt)
+      |> E.A.fold_left(
            (a, b) => Moment.isBefore(a, b) ? a : b,
            "Jan 3, 2070" |> moment,
          )
@@ -55,7 +55,7 @@ let make = (~measurements: array(measurement), _children) => {
     let aggregatePercentiles =
       sorted
       |> Js.Array.filter(e => e.competitorType == `AGGREGATION)
-      |> Array.map(e =>
+      |> E.A.fmap(e =>
            {
              "y0": e.low,
              "y": e.high,
@@ -65,7 +65,7 @@ let make = (~measurements: array(measurement), _children) => {
     let competitives =
       sorted
       |> Js.Array.filter(e => e.competitorType == `COMPETITIVE)
-      |> Array.map(e =>
+      |> E.A.fmap(e =>
            {
              "x": e.createdAt |> formatDate |> Js.Date.fromString,
              "y1": e.low,
@@ -77,7 +77,7 @@ let make = (~measurements: array(measurement), _children) => {
     let objectives =
       sorted
       |> Js.Array.filter(e => e.competitorType == `OBJECTIVE)
-      |> Array.map(e =>
+      |> E.A.fmap(e =>
            {
              "x": e.createdAt |> formatDate |> Js.Date.fromString,
              "y1": e.low,
@@ -89,7 +89,7 @@ let make = (~measurements: array(measurement), _children) => {
     let aggregateMedians =
       sorted
       |> Js.Array.filter(e => e.competitorType == `AGGREGATION)
-      |> Array.map(e =>
+      |> E.A.fmap(e =>
            {
              "x": e.createdAt |> formatDate |> Js.Date.fromString,
              "y": e.median,
@@ -123,7 +123,7 @@ let make = (~measurements: array(measurement), _children) => {
           />
           {
             competitives
-            |> Array.mapi((i, e) =>
+            |> E.A.fmapi((i, e) =>
                  <VictoryMeasurement
                    point=e
                    key={string_of_int(i)}
@@ -134,7 +134,7 @@ let make = (~measurements: array(measurement), _children) => {
           }
           {
             objectives
-            |> Array.mapi((i, e) =>
+            |> E.A.fmapi((i, e) =>
                  <VictoryMeasurement
                    point=e
                    key={string_of_int(i)}

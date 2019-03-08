@@ -12,21 +12,21 @@ let getFloatCdf = (e: Belt.Result.t(Value.t, string)) =>
 let bounds = (m: Js_array.t(DataModel.measurement)) => {
   let itemBounds =
     m
-    |> Belt.Array.keepMap(_, r => getFloatCdf(r.value))
-    |> Array.map(r =>
+    |> E.A.keepMap(_, r => getFloatCdf(r.value))
+    |> E.A.fmap(r =>
          (
-           FloatCdf_F.firstAboveValue(0.05, r),
-           FloatCdf_F.firstAboveValue(0.95, r),
+           E.FloatCdf.firstAboveValue(0.05, r),
+           E.FloatCdf.firstAboveValue(0.95, r),
          )
        );
   let min =
     itemBounds
-    |> Belt.Array.keepMap(_, ((min, _)) => min)
-    |> Array.fold_left((a, b) => a < b ? a : b, max_float);
+    |> E.A.keepMap(_, ((min, _)) => min)
+    |> E.A.fold_left((a, b) => a < b ? a : b, max_float);
   let max =
     itemBounds
-    |> Belt.Array.keepMap(_, ((_, max)) => max)
-    |> Array.fold_left((a, b) => a > b ? a : b, min_float);
+    |> E.A.keepMap(_, ((_, max)) => max)
+    |> E.A.fold_left((a, b) => a > b ? a : b, min_float);
   (min, max);
 };
 
@@ -39,17 +39,17 @@ let floatCdf = e =>
 let percentile = (n, e) =>
   Rationale.Option.Infix.(
     floatCdf(e)
-    >>= FloatCdf_F.firstAboveValue(n)
+    >>= E.FloatCdf.firstAboveValue(n)
     <$> stringOfFloat
-    |> Rationale.Option.default("")
+    |> E.O.default("")
   );
 
 let toChartMeasurement = (m: DataModel.measurement) =>
   switch (m.value) {
   | Belt.Result.Ok(`FloatCdf(r)) =>
     switch (
-      FloatCdf_F.firstAboveValue(0.05, r),
-      FloatCdf_F.firstAboveValue(0.95, r),
+      E.FloatCdf.firstAboveValue(0.05, r),
+      E.FloatCdf.firstAboveValue(0.95, r),
     ) {
     | (Some(low), Some(high)) => Some((low, high))
     | _ => None
@@ -61,8 +61,8 @@ let toPercentiles = (m: DataModel.measurement) =>
   switch (m.value) {
   | Belt.Result.Ok(`FloatCdf(r)) =>
     switch (
-      FloatCdf_F.firstAboveValue(0.05, r),
-      FloatCdf_F.firstAboveValue(0.95, r),
+      E.FloatCdf.firstAboveValue(0.05, r),
+      E.FloatCdf.firstAboveValue(0.95, r),
     ) {
     | (Some(low), Some(high)) =>
       let foo = stringOfFloat(low) ++ " to " ++ stringOfFloat(high);
@@ -75,7 +75,7 @@ let toPercentiles = (m: DataModel.measurement) =>
 let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
 
 let make = (ms: list(DataModel.measurement)) => {
-  let bb = bounds(ms |> Array.of_list);
+  let bb = bounds(ms |> E.A.of_list);
   let foo =
     ms
     |> List.sort((a: DataModel.measurement, b: DataModel.measurement) =>
@@ -91,7 +91,6 @@ let make = (ms: list(DataModel.measurement)) => {
              <div className=MeasurementTableStyles.mainColumnTop>
                {MeasurementTableStyles.smallDistribution(m, bb)}
              </div>
-             /* {percentile(50.0, m.value) |> ste} */
              {
                switch (toPercentiles(m)) {
                | Some(a) =>
@@ -126,7 +125,7 @@ let make = (ms: list(DataModel.measurement)) => {
            </div>
          </div>
        )
-    |> Array.of_list
+    |> E.A.of_list
     |> ReasonReact.array;
   <div>
     foo

@@ -1,5 +1,4 @@
 open Rationale.Option.Infix;
-open Types;
 
 let ste = ReasonReact.string;
 
@@ -59,9 +58,9 @@ let initialState: SignUpParams.state = {
 module SignUpForm = ReForm.Create(SignUpParams);
 
 type action =
-  | UpdateFloatPdf(floatCdf);
+  | UpdateFloatPdf(E.FloatCdf.t);
 
-type state = {floatCdf};
+type state = {floatCdf: E.FloatCdf.t};
 
 let safe_a_of_string = (fn, s: string): option('a) =>
   try (Some(fn(s))) {
@@ -126,7 +125,7 @@ let mutate =
 };
 
 let valueList =
-  Array.mapi(
+  E.A.fmapi(
     (i, e) =>
       <Antd.Select.Option value=e key={string_of_int(i)}>
         {e |> ste}
@@ -154,7 +153,7 @@ let component = ReasonReact.reducerComponent("Measurables");
 
 let make = (~measurableId: string, _children) => {
   ...component,
-  initialState: () => {floatCdf: floatCdfEmpty},
+  initialState: () => {floatCdf: E.FloatCdf.empty},
   reducer: (action, _) =>
     switch (action) {
     | UpdateFloatPdf(e) => ReasonReact.Update({floatCdf: e})

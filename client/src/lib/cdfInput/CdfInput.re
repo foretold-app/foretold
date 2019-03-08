@@ -1,16 +1,16 @@
-open Types;
+open E;
 open Utils;
 open Antd;
 
 type state = {
-  floatCdf,
+  floatCdf: FloatCdf.t,
   competitorType: string,
   dataType: string,
   description: string,
 };
 
 type action =
-  | UpdateFloatPdf(floatCdf)
+  | UpdateFloatPdf(FloatCdf.t)
   | UpdateCompetitorType(string)
   | UpdateDataType(string)
   | UpdateDescription(string);
@@ -46,8 +46,8 @@ let dataType = (~state, ~send) =>
 
 let getIsValid = state =>
   switch (state.dataType) {
-  | "FLOAT_CDF" => Array.length(state.floatCdf.xs) > 1
-  | _ => Array.length(state.floatCdf.xs) == 1
+  | "FLOAT_CDF" => E.A.length(state.floatCdf.xs) > 1
+  | _ => E.A.length(state.floatCdf.xs) == 1
   };
 
 let getValue = state =>
@@ -73,7 +73,7 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
   <div className=Styles.form>
     <div className=Styles.chartSection>
       {
-        Array.length(state.floatCdf.xs) > 1 ?
+        E.A.length(state.floatCdf.xs) > 1 ?
           <InputChart
             data={
               state.floatCdf
@@ -108,7 +108,7 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
             e =>
               {
                 let (ys, xs) = e;
-                let asGroup: floatCdf = {xs, ys};
+                let asGroup: FloatCdf.t = {xs, ys};
                 send(UpdateFloatPdf(asGroup));
               }
               |> ignore
@@ -148,14 +148,14 @@ let make =
     ) => {
   ...component,
   initialState: () => {
-    floatCdf: floatCdfEmpty,
+    floatCdf: FloatCdf.empty,
     competitorType: "COMPETITIVE",
     dataType: "FLOAT_CDF",
     description: "",
   },
   reducer: (action, state) =>
     switch (action) {
-    | UpdateFloatPdf((e: floatCdf)) =>
+    | UpdateFloatPdf((e: FloatCdf.t)) =>
       onUpdate(e);
       ReasonReact.Update({...state, floatCdf: e});
     | UpdateCompetitorType(e) =>

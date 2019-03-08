@@ -98,7 +98,7 @@ let make = (~channel, _children) => {
               </div>
             | Data(data) =>
               data##createMeasurable
-              |> Option.fmap(e => e##id)
+              |> E.O.fmap(e => e##id)
               |> doIfSome(_ => Urls.pushToLink(Channel(channel)));
               <h2> {"Measurable successfully created" |> ste} </h2>;
             | NotCalled =>

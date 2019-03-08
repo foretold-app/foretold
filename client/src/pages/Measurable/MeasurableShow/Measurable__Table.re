@@ -7,11 +7,11 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
   render: _ => {
     let data =
       measurements
-      |> ArrayOptional.concatSomes
-      |> Array.map(Queries.GetMeasurableWithMeasurements.toMeasurement);
+      |> E.A.Optional.concatSomes
+      |> E.A.fmap(Queries.GetMeasurableWithMeasurements.toMeasurement);
 
     <div className=MeasurementTableStyles.group>
-      {data |> Array.to_list |> MeasurementsBlock.make}
+      {data |> E.A.to_list |> MeasurementsBlock.make}
     </div>;
   },
 };

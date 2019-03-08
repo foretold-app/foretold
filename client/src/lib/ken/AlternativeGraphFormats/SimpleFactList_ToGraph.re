@@ -34,7 +34,7 @@ let possiblyConvertValueTypesToThing =
     (graph: Graph_T.T.t, value: Graph_T.T.value) =>
   switch (value.valueType) {
   | String(s) =>
-    graph.things |> Js.Dict.get(_, s) |> Rationale.Option.isSome ?
+    graph.things |> Js.Dict.get(_, s) |> E.O.isSome ?
       Graph_T.T.ThingId(s) : Graph_T.T.String(s)
   | _ => value.valueType
   };

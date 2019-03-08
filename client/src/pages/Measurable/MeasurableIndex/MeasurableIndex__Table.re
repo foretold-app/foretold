@@ -22,7 +22,7 @@ let make = (~measurables: array(DataModel.measurable), _children) => {
                  _e =>
                    Urls.pushToLink(
                      MeasurableShow(
-                       m.channel |> Option.default("general"),
+                       m.channel |> E.O.default("general"),
                        m.id,
                      ),
                    )

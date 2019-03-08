@@ -89,7 +89,7 @@ let make = (~channel, ~userQuery, _children) => {
                  </span>
                </div>
              )
-          |> Array.of_list
+          |> E.A.of_list
           |> ReasonReact.array
         }
       </div>

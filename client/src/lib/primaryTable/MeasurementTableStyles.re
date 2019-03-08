@@ -120,7 +120,7 @@ let agentLink = (~m: DataModel.measurement) => {
   open Rationale.Option.Infix;
   let agent = m.agent;
   let aLink =
-    switch (agent, agent |> Rationale.Option.bind(_, DataModel.agentName)) {
+    switch (agent, agent |> E.O.bind(_, DataModel.agentName)) {
     | (Some(agent), Some(name)) =>
       <a href={Urls.mapLinkToUrl(AgentShow(agent.id))} className=agentStyle>
         {name |> ste}
@@ -149,13 +149,13 @@ let descriptionStyle =
   ]);
 
 let description = (~m: DataModel.measurement) =>
-  switch (m.description |> Option.default("")) {
+  switch (m.description |> E.O.default("")) {
   | "" => <div />
   | text => <div className=descriptionStyle> <p> {text |> ste} </p> </div>
   };
 
 let formatDate = e =>
-  Option.Infix.(e <$> MomentRe.Moment.format("L") |> Option.default(""));
+  Option.Infix.(e <$> MomentRe.Moment.format("L") |> E.O.default(""));
 
 let dateStyle =
   style([

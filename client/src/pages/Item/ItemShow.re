@@ -10,7 +10,7 @@ let findName = (graph, propertyId) =>
   |> Graph_Fact_Filters.withSubject(propertyId)
   |> Graph_Fact_Filters.withProperty("@base/properties/p-name")
   |> Rationale.RList.head
-  |> Option.bind(_, (k: Graph_T.T.fact) =>
+  |> E.O.bind(_, (k: Graph_T.T.fact) =>
        switch (k.value.valueType) {
        | String(s) => Some(s)
        | ThingId(s) => Some(s)
@@ -31,13 +31,13 @@ let make = (~id: string, _children) => {
       <h2> {id |> ste} </h2>
       {
         names
-        |> Array.of_list
-        |> Array.map((r: Graph_T.T.fact) =>
+        |> E.A.of_list
+        |> E.A.fmap((r: Graph_T.T.fact) =>
              <div>
                <h3>
                  {
                    findName(graph, r.propertyId)
-                   |> Option.default("no-name")
+                   |> E.O.default("no-name")
                    |> ste
                  }
                </h3>

@@ -299,7 +299,7 @@ module GetMeasurables = {
       ~expectedResolutionDate=m.expectedResolutionDate,
       ~state=Some(m.state),
       ~stateUpdatedAt=m.stateUpdatedAt,
-      ~creator=Rationale.Option.fmap(toCreator, m.creator),
+      ~creator=E.O.fmap(toCreator, m.creator),
       (),
     );
 
@@ -342,7 +342,7 @@ module GetMeasurables = {
       |> ApolloUtils.apolloResponseToResult
       <$> (d => d##measurables)
       <$> E.A.Optional.concatSomes
-      <$> (d => d |> Array.map(toMeasurable))
+      <$> (d => d |> E.A.fmap(toMeasurable))
       <$> (e => innerComponentFn(e))
       |> Result.result(idd, idd)
     )
@@ -468,7 +468,7 @@ module GetMeasurableWithMeasurements = {
   let queryMeasurable = m => {
     open DataModel;
     let creator: option(DataModel.creator) =
-      m##creator |> Option.fmap(r => {id: r##id, name: r##name});
+      m##creator |> E.O.fmap(r => {id: r##id, name: r##name});
 
     let measurable: DataModel.measurable =
       DataModel.toMeasurable(
@@ -496,7 +496,7 @@ module GetMeasurableWithMeasurements = {
     open DataModel;
     let agentType: option(DataModel.agentType) =
       m##agent
-      |> Rationale.Option.bind(_, k =>
+      |> E.O.bind(_, k =>
            switch (k##bot, k##user) {
            | (Some(bot), None) =>
              Some(
@@ -515,9 +515,7 @@ module GetMeasurableWithMeasurements = {
 
     let agent: option(DataModel.agent) =
       m##agent
-      |> Rationale.Option.fmap(k =>
-           {id: k##id, measurementCount: None, agentType}
-         );
+      |> E.O.fmap(k => {id: k##id, measurementCount: None, agentType});
 
     DataModel.toMeasurement(
       ~id=m##id,

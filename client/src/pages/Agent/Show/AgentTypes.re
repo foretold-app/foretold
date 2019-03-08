@@ -117,7 +117,7 @@ let toMeasurables = (measurements: array(measurement)) => {
   let r = measurements;
   let standardMeasurements =
     r
-    |> Array.map(n =>
+    |> E.A.fmap(n =>
          DataModel.toMeasurement(
            ~id=n.id,
            ~value=n.value,
@@ -133,12 +133,12 @@ let toMeasurables = (measurements: array(measurement)) => {
            (),
          )
        )
-    |> Array.to_list;
+    |> E.A.to_list;
 
   let measurables =
     r
-    |> Array.map((t: measurement) => (t.measurable: option(measurable)))
-    |> Array.to_list
+    |> E.A.fmap((t: measurement) => (t.measurable: option(measurable)))
+    |> E.A.to_list
     |> Rationale.RList.filter_opt
     |> Rationale.RList.uniqBy((t: measurable) => t.id)
     |> List.map((e: measurable) =>

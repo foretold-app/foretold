@@ -16,7 +16,7 @@ let statusInt = (status: status) =>
 
 let status = (measurable: DataModel.measurable) => {
   let state =
-    measurable.state |> Rationale.Option.toExn("Needs state from GraphQL");
+    measurable.state |> E.O.toExn("Needs state from GraphQL");
   if (state === `ARCHIVED) {
     ARCHIVED;
   } else if (state === `JUDGED) {

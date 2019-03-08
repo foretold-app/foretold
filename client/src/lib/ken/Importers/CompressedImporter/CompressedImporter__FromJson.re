@@ -36,16 +36,16 @@ let factDecoder = (propertyId, json) => {
 };
 
 let filterArray = (filter, ar) =>
-  ar |> Array.to_list |> filter |> Array.of_list;
+  ar |> Array.to_list |> filter |> E.A.of_list;
 
 let filteredFactKeys = ["config"];
 let propertyDecoder = json => {
   let thing0 =
-    Js.Json.decodeObject(json) |> Rationale.Option.toExn("Parse Error");
+    Js.Json.decodeObject(json) |> E.O.toExn("Parse Error");
 
   let toFact = id => {
     let _value =
-      Js.Dict.get(thing0, id) |> Rationale.Option.toExn("Parse Error");
+      Js.Dict.get(thing0, id) |> E.O.toExn("Parse Error");
     factDecoder(id, _value);
   };
 
@@ -65,7 +65,7 @@ let decodeBase = json => {
   let entries =
     json
     |> Js.Json.decodeObject
-    |> Rationale.Option.toExn("Parse Error")
+    |> E.O.toExn("Parse Error")
     |> Js.Dict.entries
     |> Array.to_list;
   open Json.Decode;
@@ -77,7 +77,7 @@ let decodeBase = json => {
     entries
     |> removeIfInList(filteredFactKeys, ((k, _)) => k)
     |> List.map(((key, value)) => {id: key, facts: propertyDecoder(value)});
-  {things: things |> Array.of_list, baseId, resourceId, aliases};
+  {things: things |> E.A.of_list, baseId, resourceId, aliases};
 };
 
 let run = json: graph => json |> Json.Decode.array(decodeBase);

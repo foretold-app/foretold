@@ -101,4 +101,4 @@ let authOptions = {
 let authClient = createClient(authOptions);
 
 let logIn = () => authClient##authorize();
-let userId = () => Rationale.Option.bind(getIdToken(), getAuth0Id);
+let userId = () => E.O.bind(getIdToken(), getAuth0Id);

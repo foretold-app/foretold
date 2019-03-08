@@ -4,6 +4,7 @@
 var $$Array = require("bs-platform/lib/js/array.js");
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var E$Client = require("../types/E.bs.js");
 var Caml_option = require("bs-platform/lib/js/caml_option.js");
 
 function resolveOption(opt) {
@@ -41,22 +42,19 @@ function idd(e) {
 }
 
 function filterAndFold(fn) {
-  var partial_arg = /* array */[];
-  return (function (param) {
-      return $$Array.fold_left((function (acc, elem) {
-                    return Curry._3(fn, elem, (function (e) {
-                                  return $$Array.concat(/* :: */[
-                                              acc,
-                                              /* :: */[
-                                                /* array */[e],
-                                                /* [] */0
-                                              ]
-                                            ]);
-                                }), (function (param) {
-                                  return acc;
-                                }));
-                  }), partial_arg, param);
-    });
+  return Curry._2(E$Client.A[/* fold_left */6], (function (acc, elem) {
+                return Curry._3(fn, elem, (function (e) {
+                              return $$Array.concat(/* :: */[
+                                          acc,
+                                          /* :: */[
+                                            /* array */[e],
+                                            /* [] */0
+                                          ]
+                                        ]);
+                            }), (function (param) {
+                              return acc;
+                            }));
+              }), /* array */[]);
 }
 
 function doIfSome(fn, s) {
@@ -74,4 +72,4 @@ exports.filterOptionalResult = filterOptionalResult;
 exports.idd = idd;
 exports.filterAndFold = filterAndFold;
 exports.doIfSome = doIfSome;
-/* No side effect */
+/* E-Client Not a pure module */

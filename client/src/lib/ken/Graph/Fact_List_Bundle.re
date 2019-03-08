@@ -21,7 +21,7 @@ module Internal = {
     t |> List.find(e => e.thingId.thingIdString == id);
 
   let unpackOptionList = (e: list(option('a))) =>
-    e |> List.filter(Option.isSome) |> List.map(Option.toExn("mistake"));
+    e |> List.filter(E.O.isSome) |> List.map(E.O.toExn("mistake"));
 
   let filterFacts = (filter: (string, factList) => factList, t: t) => {
     ...t,

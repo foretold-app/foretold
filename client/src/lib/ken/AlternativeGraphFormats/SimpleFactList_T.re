@@ -17,6 +17,6 @@ type fact = {
 
 type graph = list(fact);
 
-let showFacts = (g: graph) => g |> Array.of_list |> Array.map(factToJs);
+let showFacts = (g: graph) => g |> E.A.of_list |> E.A.fmap(factToJs);
 
 let combine = (l: list(graph)): graph => l |> List.concat;

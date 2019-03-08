@@ -5,8 +5,8 @@ module Icon = {
     ReasonReact.wrapJsForReason(
       ~reactClass,
       ~props={
-        "iconType": icon |> Rationale.Option.default(""),
-        "size": size |> Rationale.Option.default("1em"),
+        "iconType": icon |> E.O.default(""),
+        "size": size |> E.O.default("1em"),
       },
       children,
     );

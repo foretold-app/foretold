@@ -94,7 +94,7 @@ let _convertValue = (package, uniqueIds, fact) =>
     | Some(s) => Id(s)
     | _ =>
       uniqueIds
-      |> Belt.List.getBy(_, e => thingIdKey(e) == (Some(str), None))
+      |> E.L.getBy(_, e => thingIdKey(e) == (Some(str), None))
       |> (
         e =>
           switch (e) {
@@ -162,9 +162,9 @@ let handleUpdatedIds = p: package => {
 };
 
 let showFacts = (g: package) =>
-  g.facts |> Array.of_list |> Array.map(factToJs);
+  g.facts |> E.A.of_list |> Array.map(factToJs);
 let showIds = (g: package) =>
-  g |> findUniqueIds |> Array.of_list |> Array.map(thingIdToJs);
+  g |> findUniqueIds |> E.A.of_list |> Array.map(thingIdToJs);
 
 let inverseFact = fact => {
   let inversed =
@@ -225,9 +225,9 @@ let toSimple = (g: Compiler_AST.package): SimpleFactList_T.graph =>
                | Id(id) =>
                  Graph_T.T.ThingId(
                    id.updatedId
-                   |> Rationale.Option.toExn(
+                   |> E.O.toExn(
                         "Error: thingId does not have #updatedId when needed: "
-                        ++ (id.rawId |> Rationale.Option.default("")),
+                        ++ (id.rawId |> E.O.default("")),
                       ),
                  )
                },

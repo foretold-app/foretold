@@ -69,7 +69,7 @@ module Directory = {
   let from_array = Js.Array.joinWith("/");
   let to_array = Js.String.split("/");
   let to_list = to_array ||> Array.to_list;
-  let from_list = Array.of_list ||> from_array;
+  let from_list = E.A.of_list ||> from_array;
   let isRoot = e => e |> to_array |> Array.length == 1;
   let root = e => e |> to_array |> Array.get(_, 0);
   let isFactDirectory = e =>

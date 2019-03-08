@@ -27,7 +27,7 @@ let flattenValues = (g: unprocessedGraph): unprocessedGraph =>
                                 {...f, value: String(value)}
                               )
                          )
-                      |> Belt.Array.concatMany,
+                      |> E.A.concatMany,
                   }
                 ),
          }
@@ -57,7 +57,7 @@ let allPackageFacts = (p: CompressedImporter__T.package) =>
             );
           })
      )
-  |> Belt.Array.concatMany
+  |> E.A.concatMany
   |> Array.to_list;
 
 let formattedAliases =

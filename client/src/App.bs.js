@@ -6,16 +6,7 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var $$String = require("bs-platform/lib/js/string.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Auth0$Client = require("./utils/Auth0.bs.js");
-var Profile$Client = require("./pages/Profile.bs.js");
-var ItemShow$Client = require("./pages/Item/ItemShow.bs.js");
-var Redirect$Client = require("./pages/Redirect.bs.js");
-var AgentShow$Client = require("./pages/Agent/AgentShow/AgentShow.bs.js");
-var AgentIndex$Client = require("./pages/Agent/AgentIndex.bs.js");
-var MeMeasurables$Client = require("./pages/Me/MeMeasurables.bs.js");
-var MeasurableNew$Client = require("./pages/Measurable/MeasurableNew/MeasurableNew.bs.js");
-var MeasurableEdit$Client = require("./pages/Measurable/MeasurableEdit/MeasurableEdit.bs.js");
-var MeasurableShow$Client = require("./pages/Measurable/MeasurableShow/MeasurableShow.bs.js");
-var MeasurableIndex$Client = require("./pages/Measurable/MeasurableIndex/MeasurableIndex.bs.js");
+var TopLevel$Client = require("./TopLevel.bs.js");
 
 function reducer(action, _state) {
   return /* Update */Block.__(0, [/* record */[/* route */action[0]]]);
@@ -126,41 +117,6 @@ function mapUrlToAction(url) {
 
 var component = ReasonReact.reducerComponent("App");
 
-function inside(r) {
-  if (typeof r === "number") {
-    switch (r) {
-      case 1 : 
-          return ReasonReact.element(undefined, undefined, AgentIndex$Client.make(/* array */[]));
-      case 2 : 
-          return ReasonReact.element(undefined, undefined, Redirect$Client.make(/* array */[]));
-      case 0 : 
-      case 3 : 
-          return ReasonReact.element(undefined, undefined, MeasurableIndex$Client.make("general", /* array */[]));
-      
-    }
-  } else {
-    switch (r.tag | 0) {
-      case 0 : 
-          return ReasonReact.element(undefined, undefined, Profile$Client.make(r[0], /* array */[]));
-      case 1 : 
-          return ReasonReact.element(undefined, undefined, ItemShow$Client.make(r[0], /* array */[]));
-      case 2 : 
-          return ReasonReact.element(undefined, undefined, AgentShow$Client.make(r[0], /* array */[]));
-      case 3 : 
-          return ReasonReact.element(undefined, undefined, MeMeasurables$Client.make(r[0], /* array */[]));
-      case 4 : 
-          return ReasonReact.element(undefined, undefined, MeasurableIndex$Client.make(r[0], /* array */[]));
-      case 5 : 
-          return ReasonReact.element(undefined, undefined, MeasurableShow$Client.make(r[0], r[1], /* array */[]));
-      case 6 : 
-          return ReasonReact.element(undefined, undefined, MeasurableEdit$Client.make(r[0], /* array */[]));
-      case 7 : 
-          return ReasonReact.element(undefined, undefined, MeasurableNew$Client.make(r[0], /* array */[]));
-      
-    }
-  }
-}
-
 function make(_children) {
   return /* record */[
           /* debugName */component[/* debugName */0],
@@ -182,7 +138,7 @@ function make(_children) {
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function (self) {
-              return inside(self[/* state */1][/* route */0]);
+              return ReasonReact.element(undefined, undefined, TopLevel$Client.make(self[/* state */1][/* route */0], /* array */[]));
             }),
           /* initialState */(function (param) {
               return /* record */[/* route : Home */0];
@@ -197,6 +153,5 @@ exports.reducer = reducer;
 exports.mapUrlToRoute = mapUrlToRoute;
 exports.mapUrlToAction = mapUrlToAction;
 exports.component = component;
-exports.inside = inside;
 exports.make = make;
 /* component Not a pure module */

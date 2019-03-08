@@ -75,7 +75,5 @@ let make = (~id: string, _children) => {
           |> Array.map(Queries.GetUserMeasurables.toMeasurable);
         EditMe.make(~measurables=m, ());
       },
-    )
-    |> FillWithSidebar.make(~channel=None)
-    |> ReasonReact.element,
+    ),
 };

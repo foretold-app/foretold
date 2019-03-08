@@ -18,8 +18,6 @@ let make = (~channel: string, _children) => {
       <$> (measurables => <MeasurableIndex__Table measurables />)
       |> Result.result(idd, idd)
     )
-    |> ReasonReact.element
-    |> FillWithSidebar.make(~channel=Some(channel))
     |> ReasonReact.element;
   },
 };

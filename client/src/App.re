@@ -1,16 +1,4 @@
-type route =
-  | Home
-  | AgentIndex
-  | Redirect
-  | Profile(string)
-  | ItemShow(string)
-  | AgentShow(string)
-  | AgentMeasurables(string)
-  | Channel(string)
-  | MeasurableShow(string, string)
-  | MeasurableEdit(string)
-  | MeasurableNew(string)
-  | NotFound;
+open Routes;
 
 type state = {route};
 type action =
@@ -49,22 +37,6 @@ let mapUrlToAction = (url: ReasonReact.Router.url) =>
 
 let component = ReasonReact.reducerComponent("App");
 
-let inside = r =>
-  switch (r) {
-  | Home => <MeasurableIndex channel="general" />
-  | AgentMeasurables(id) => <MeMeasurables id />
-  | AgentIndex => <AgentIndex />
-  | NotFound => <MeasurableIndex channel="general" />
-  | ItemShow(id) => <ItemShow id />
-  | Redirect => <Redirect />
-  | Profile(auth0Id) => <Profile auth0Id />
-  | AgentShow(id) => <AgentShow id />
-  | Channel(channel) => <MeasurableIndex channel />
-  | MeasurableNew(channel) => <MeasurableNew channel />
-  | MeasurableShow(channel, id) => <MeasurableShow channel id />
-  | MeasurableEdit(id) => <MeasurableEdit id />
-  };
-
 let make = _children => {
   ...component,
   reducer,
@@ -77,5 +49,5 @@ let make = _children => {
       ReasonReact.Router.watchUrl(url => url |> mapUrlToAction |> self.send);
     self.onUnmount(() => ReasonReact.Router.unwatchUrl(watcherID));
   },
-  render: self => self.state.route |> inside,
+  render: self => <TopLevel route={self.state.route} />,
 };

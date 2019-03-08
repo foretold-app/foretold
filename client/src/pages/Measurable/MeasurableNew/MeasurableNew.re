@@ -298,7 +298,5 @@ let make = (~channel, _children) => {
         )
         |> ReasonReact.element,
     )
-    |> ReasonReact.element
-    |> FillWithSidebar.make(~channel=Some(channel))
     |> ReasonReact.element,
 };

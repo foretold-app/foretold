@@ -81,7 +81,5 @@ let make = (~id: string, _children) => {
           },
         )
       }
-    </div>
-    |> FillWithSidebar.make(~channel=None)
-    |> ReasonReact.element,
+    </div>,
 };

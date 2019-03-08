@@ -20,11 +20,11 @@ let make = (~measurables: array(DataModel.measurable), _children) => {
                className={PrimaryTableStyles.row(m)}
                onClick={
                  _e =>
-                   ReasonReact.Router.push(
-                     "/c/"
-                     ++ (m.channel |> Option.default("general"))
-                     ++ "/m/"
-                     ++ m.id,
+                   Urls.pushToLink(
+                     MeasurableShow(
+                       m.channel |> Option.default("general"),
+                       m.id,
+                     ),
                    )
                }>
                <div className=PrimaryTableStyles.mainColumn>

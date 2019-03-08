@@ -36,6 +36,7 @@ let filterAndFold = fn =>
     [||],
   );
 
+/* TODO: Move */
 let doIfSome = (fn, s: option('a)) =>
   switch (s) {
   | Some(r) => fn(r)

@@ -295,6 +295,7 @@ module GetMeasurables = {
 
   module QueryComponent = ReasonApollo.CreateQuery(Query);
 };
+
 module GetUser = {
   module Query = [%graphql
     {|

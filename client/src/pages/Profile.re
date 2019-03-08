@@ -45,10 +45,7 @@ let withUserQuery =
   let query = Queries.GetUser.Query.make(~auth0Id, ());
   Queries.GetUser.QueryComponent.make(
     ~variables=query##variables, ({result}) =>
-    result
-    |> ApolloUtils.apolloResponseToResult
-    <$> innerComponentFn
-    |> Rationale.Result.result(idd, idd)
+    result |> ApolloUtils.apolloResponseToResult <$> innerComponentFn |> E.R.id
   )
   |> ReasonReact.element;
 };
@@ -87,10 +84,9 @@ let make = (~auth0Id, _children) => {
   render: _ =>
     withUserQuery(auth0Id, userQuery =>
       withUserMutation((mutation, data) => {
-        let id =
-          Belt.Option.map(userQuery##user, r => r##id) |> Option.default("");
+        let id = E.O.fmap(r => r##id, userQuery##user) |> E.O.default("");
         let name =
-          Belt.Option.map(userQuery##user, r => r##name) |> Option.default("");
+          E.O.fmap(r => r##name, userQuery##user) |> E.O.default("");
         withUserForm(
           id, name, mutation, ({handleSubmit, handleChange, form, _}) =>
           <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>

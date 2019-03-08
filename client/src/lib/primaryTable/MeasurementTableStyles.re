@@ -122,7 +122,9 @@ let agentLink = (~m: DataModel.measurement) => {
   let aLink =
     switch (agent, agent |> Rationale.Option.bind(_, DataModel.agentName)) {
     | (Some(agent), Some(name)) =>
-      <a href={"/agents/" ++ agent.id} className=agentStyle> {name |> ste} </a>
+      <a href={Urls.mapLinkToUrl(AgentShow(agent.id))} className=agentStyle>
+        {name |> ste}
+      </a>
     | (_, _) => "" |> ste
     };
   let isJudge = isJudgement(m);

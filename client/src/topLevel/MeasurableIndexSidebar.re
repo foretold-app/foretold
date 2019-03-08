@@ -52,25 +52,15 @@ let make = (~channel, _children) => {
             | Some(query) =>
               open Rationale.Option.Infix;
               let userAgentId = query##user >>= (e => e##agentId);
-              let idd =
-                switch (userAgentId) {
-                | Some(id) => id
-                | _ => ""
-                };
-              ();
+              let idd = userAgentId |> E.O.default("");
               <div>
                 <div
-                  onClick=(_e => ReasonReact.Router.push("/profile"))
+                  onClick=(_e => Urls.pushToLink(Profile))
                   className=Styles.item>
                   {"Profile" |> ste}
                 </div>
                 <div
-                  onClick=(
-                    _e =>
-                      ReasonReact.Router.push(
-                        "/agents/" ++ idd ++ "/measurables",
-                      )
-                  )
+                  onClick=(_e => Urls.pushToLink(AgentShow(idd)))
                   className=Styles.item>
                   {"Edit Measurables" |> ste}
                 </div>
@@ -78,7 +68,7 @@ let make = (~channel, _children) => {
                   {"Log Out" |> ste}
                 </div>
               </div>;
-            | _ =>
+            | None =>
               <div onClick=(_e => Auth0.logIn()) className=Styles.item>
                 {"Log In" |> ste}
               </div>
@@ -92,7 +82,7 @@ let make = (~channel, _children) => {
               ["general", "foretold", "ozziegooen", "lesswrong", "movies"]
               |> List.map(e =>
                    <div
-                     onClick={_e => ReasonReact.Router.push("/c/" ++ e)}
+                     onClick={_e => Urls.pushToLink(Channel(e))}
                      className={
                        Some(e) == channel ? Styles.selectedItem : Styles.item
                      }>

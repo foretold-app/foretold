@@ -63,13 +63,15 @@ let nameWithDate = (~m: DataModel.measurable) =>
   | e => m.name ++ " on " ++ e
   };
 
+let itemUrl = id => {j|/items/$id|j};
+
 let xEntityLink = (attribute, ~m: DataModel.measurable, ~className: string) =>
   m
   |> attribute
   |> Option.bind(_, ItemShow.findName(graph))
   |> Option.bind(_, r =>
        m.descriptionEntity
-       |> Option.fmap(d => <a href={"/items/" ++ d} className> {r |> ste} </a>)
+       |> Option.fmap(d => <a href={d |> itemUrl} className> {r |> ste} </a>)
      );
 
 let nameEntityLink = xEntityLink(r => r.descriptionEntity);
@@ -100,11 +102,13 @@ let link = (~m: DataModel.measurable) =>
   </div>;
 
 let description = (~m: DataModel.measurable) =>
-  switch (m.description |> Option.default("")) {
-  | "" => <div />
-  | text => <p> {text |> ste} </p>
+  switch (m.description) {
+  | Some("")
+  | None => ReasonReact.null
+  | Some(text) => <p> {text |> ste} </p>
   };
 
+/* TODO: Move */
 let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
 
 let endpointResponse = (~m: DataModel.measurable) =>
@@ -112,9 +116,9 @@ let endpointResponse = (~m: DataModel.measurable) =>
     m.resolutionEndpoint |> Option.default(""),
     m.resolutionEndpointResponse,
   ) {
-  | ("", _) => <div />
+  | ("", _) => ReasonReact.null
   | (_, Some(r)) => "Current Endpoint Value: " ++ stringOfFloat(r) |> ste
-  | _ => <div />
+  | _ => ReasonReact.null
   };
 
 let creatorLink = (~m: DataModel.measurable) =>
@@ -123,7 +127,7 @@ let creatorLink = (~m: DataModel.measurable) =>
       m.creator
       <$> (
         c =>
-          <a href={"/agents/" ++ c.id}>
+          <a href={Urls.mapLinkToUrl(AgentShow(c.id))}>
             {c.name |> Option.default("") |> ste}
           </a>
       )
@@ -134,7 +138,7 @@ let creatorLink = (~m: DataModel.measurable) =>
 let editLink = (~m: DataModel.measurable) =>
   <div className=PrimaryTableStyles.item>
     <a
-      href={"/measurables/" ++ m.id ++ "/edit"}
+      href={Urls.mapLinkToUrl(MeasurableEdit(m.id))}
       className={PrimaryTableStyles.itemButton(NORMAL)}>
       {"Edit" |> ste}
     </a>

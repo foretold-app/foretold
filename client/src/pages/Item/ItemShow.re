@@ -46,7 +46,8 @@ let make = (~id: string, _children) => {
                Graph_T.T.(
                  switch (r.value.valueType) {
                  | String(s) => s |> ste
-                 | ThingId(s) => <a href={"/items/" ++ s}> {s |> ste} </a>
+                 | ThingId(s) =>
+                   <a href={Urls.mapLinkToUrl(ItemShow(s))}> {s |> ste} </a>
                  | _ => "no-name" |> ste
                  }
                )

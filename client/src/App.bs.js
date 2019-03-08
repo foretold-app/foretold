@@ -3,116 +3,16 @@
 
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
-var $$String = require("bs-platform/lib/js/string.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
-var Auth0$Client = require("./utils/Auth0.bs.js");
+var Routes$Client = require("./topLevel/Routes.bs.js");
 var TopLevel$Client = require("./TopLevel.bs.js");
 
 function reducer(action, _state) {
   return /* Update */Block.__(0, [/* record */[/* route */action[0]]]);
 }
 
-function mapUrlToRoute(url) {
-  var match = url[/* path */0];
-  if (match) {
-    switch (match[0]) {
-      case "agents" : 
-          var match$1 = match[1];
-          if (match$1) {
-            var match$2 = match$1[1];
-            var id = match$1[0];
-            if (match$2) {
-              if (match$2[0] === "measurables" && !match$2[1]) {
-                return /* AgentMeasurables */Block.__(3, [id]);
-              } else {
-                return /* Home */0;
-              }
-            } else {
-              return /* AgentShow */Block.__(2, [id]);
-            }
-          } else {
-            return /* AgentIndex */1;
-          }
-      case "c" : 
-          var match$3 = match[1];
-          if (match$3) {
-            var match$4 = match$3[1];
-            var id$1 = match$3[0];
-            if (match$4) {
-              switch (match$4[0]) {
-                case "m" : 
-                    var match$5 = match$4[1];
-                    if (match$5 && !match$5[1]) {
-                      return /* MeasurableShow */Block.__(5, [
-                                id$1,
-                                match$5[0]
-                              ]);
-                    } else {
-                      return /* Home */0;
-                    }
-                case "new" : 
-                    if (match$4[1]) {
-                      return /* Home */0;
-                    } else {
-                      return /* MeasurableNew */Block.__(7, [id$1]);
-                    }
-                default:
-                  return /* Home */0;
-              }
-            } else {
-              return /* Channel */Block.__(4, [id$1]);
-            }
-          } else {
-            return /* Home */0;
-          }
-      case "callback" : 
-          if (match[1]) {
-            return /* Home */0;
-          } else {
-            Auth0$Client.handleAuth(url);
-            return /* Redirect */2;
-          }
-      case "items" : 
-          return /* ItemShow */Block.__(1, [$$String.concat("/", match[1])]);
-      case "measurables" : 
-          var match$6 = match[1];
-          if (match$6) {
-            var match$7 = match$6[1];
-            if (match$7 && match$7[0] === "edit" && !match$7[1]) {
-              return /* MeasurableEdit */Block.__(6, [match$6[0]]);
-            } else {
-              return /* Home */0;
-            }
-          } else {
-            return /* Home */0;
-          }
-      case "profile" : 
-          if (match[1]) {
-            return /* Home */0;
-          } else {
-            var match$8 = Auth0$Client.userId(/* () */0);
-            if (match$8 !== undefined) {
-              return /* Profile */Block.__(0, [match$8]);
-            } else {
-              return /* Home */0;
-            }
-          }
-      case "redirect" : 
-          if (match[1]) {
-            return /* Home */0;
-          } else {
-            return /* Redirect */2;
-          }
-      default:
-        return /* Home */0;
-    }
-  } else {
-    return /* Home */0;
-  }
-}
-
 function mapUrlToAction(url) {
-  return /* ChangeRoute */[mapUrlToRoute(url)];
+  return /* ChangeRoute */[Routes$Client.mapUrlToRoute(url)];
 }
 
 var component = ReasonReact.reducerComponent("App");
@@ -125,9 +25,9 @@ function make(_children) {
           /* willReceiveProps */component[/* willReceiveProps */3],
           /* didMount */(function (self) {
               var url = ReasonReact.Router[/* dangerouslyGetInitialUrl */3](/* () */0);
-              Curry._1(self[/* send */3], /* ChangeRoute */[mapUrlToRoute(url)]);
+              Curry._1(self[/* send */3], /* ChangeRoute */[Routes$Client.mapUrlToRoute(url)]);
               var watcherID = ReasonReact.Router[/* watchUrl */1]((function (url) {
-                      return Curry._1(self[/* send */3], /* ChangeRoute */[mapUrlToRoute(url)]);
+                      return Curry._1(self[/* send */3], /* ChangeRoute */[Routes$Client.mapUrlToRoute(url)]);
                     }));
               return Curry._1(self[/* onUnmount */4], (function (param) {
                             return ReasonReact.Router[/* unwatchUrl */2](watcherID);
@@ -150,7 +50,6 @@ function make(_children) {
 }
 
 exports.reducer = reducer;
-exports.mapUrlToRoute = mapUrlToRoute;
 exports.mapUrlToAction = mapUrlToAction;
 exports.component = component;
 exports.make = make;

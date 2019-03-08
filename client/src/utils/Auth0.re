@@ -63,10 +63,10 @@ let expiresAt = () => Dom.Storage.(localStorage |> getItem("expires_at"));
 let authIsObsolete = () => {
   let exp = expiresAt();
   exp
-  |> E.Option.fmap(Int64.of_string)
-  |> E.Option.fmap(Int64.to_float)
-  |> E.Option.fmap(e => e < Js.Date.now())
-  |> E.Option.dimap(idd, () => false);
+  |> E.O.fmap(Int64.of_string)
+  |> E.O.fmap(Int64.to_float)
+  |> E.O.fmap(e => e < Js.Date.now())
+  |> E.O.dimap(idd, () => false);
 };
 
 let authToken = () => Dom.Storage.(localStorage |> getItem("id_token"));

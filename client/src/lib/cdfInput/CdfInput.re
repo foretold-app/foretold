@@ -1,7 +1,6 @@
 open Types;
 open Utils;
 open Antd;
-open ReactEvent;
 
 type state = {
   floatCdf,

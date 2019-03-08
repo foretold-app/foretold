@@ -1,5 +1,4 @@
 open MomentRe;
-open Rationale.Option;
 open Rationale.Function.Infix;
 open Rationale;
 

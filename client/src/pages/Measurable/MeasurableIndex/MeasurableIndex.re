@@ -1,6 +1,5 @@
 open Utils;
 open Rationale;
-open Queries;
 
 let component = ReasonReact.statelessComponent("Measurables");
 let make = (~channel: string, _children) => {

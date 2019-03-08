@@ -1,5 +1,3 @@
-open Utils;
-
 let component = ReasonReact.statelessComponent("EditMe");
 
 let make = (~measurables: Js.Array.t(DataModel.measurable), _children) =>

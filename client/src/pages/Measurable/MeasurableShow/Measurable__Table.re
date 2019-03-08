@@ -1,7 +1,4 @@
 open Utils;
-open Rationale;
-open Rationale.Option.Infix;
-open MomentRe;
 
 let component = ReasonReact.statelessComponent("Measurable__Table");
 

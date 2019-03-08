@@ -1,8 +1,4 @@
-open Utils;
-open Rationale;
 open Rationale.Option.Infix;
-open Rationale.Function.Infix;
-open Antd;
 open Types;
 
 let ste = ReasonReact.string;
@@ -132,9 +128,9 @@ let mutate =
 let valueList =
   Array.mapi(
     (i, e) =>
-      <Select.Option value=e key={string_of_int(i)}>
+      <Antd.Select.Option value=e key={string_of_int(i)}>
         {e |> ste}
-      </Select.Option>,
+      </Antd.Select.Option>,
     [|"FloatPercentiles", "FloatPoint", "Percentage", "Binary"|],
   );
 
@@ -148,7 +144,7 @@ let errorOfFloat = (fn1, fn2, e) => {
 
 let input = (handleChange, value, b, key) =>
   <Form.Item key>
-    <Input
+    <Antd.Input
       value
       onChange={ReForm.Helpers.handleDomFormChange(handleChange(b))}
     />
@@ -163,9 +159,9 @@ let make = (~measurableId: string, _children) => {
     switch (action) {
     | UpdateFloatPdf(e) => ReasonReact.Update({floatCdf: e})
     },
-  render: ({state, send}) =>
+  render: ({state, _}) =>
     CreateMeasurementMutation.make(
-      ~onCompleted=e => Js.log("Request submitted"),
+      ~onCompleted=_ => Js.log("Request submitted"),
       (mutation, _) =>
         SignUpForm.make(
           ~onSubmit=
@@ -179,13 +175,13 @@ let make = (~measurableId: string, _children) => {
                    onUpdate=(e => send(UpdateFloatPdf(e)) |> ignore)
                    onSubmit=(_ => handleSubmit())
                  /> */
-              <Form.Item key="ee">
-                <Select
+              <Antd.Form.Item key="ee">
+                <Antd.Select
                   value={form.values.dataType}
                   onChange={e => handleChange(`dataType, e) |> ignore}>
                   valueList
-                </Select>
-              </Form.Item>
+                </Antd.Select>
+              </Antd.Form.Item>
               {
                 form.values.dataType != "FloatPercentiles" ?
                   <div /> :
@@ -221,9 +217,9 @@ let make = (~measurableId: string, _children) => {
                   input(handleChange, form.values.binary, `binary, "6")
               }
               <Form.Item>
-                <Button _type=`primary onClick={_ => handleSubmit()}>
+                <Antd.Button _type=`primary onClick={_ => handleSubmit()}>
                   {"Submit" |> ste}
-                </Button>
+                </Antd.Button>
               </Form.Item>
             </form>,
         )

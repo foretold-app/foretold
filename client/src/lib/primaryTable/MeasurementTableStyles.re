@@ -29,8 +29,7 @@ let percentiles =
 
 let group =
   style([borderRadius(`px(2)), border(`px(1), `solid, `hex("e1eaf1"))]);
-let row = (~m: DataModel.measurement) => {
-  let isJudge = m.competitorType == `OBJECTIVE;
+let row = (~m: DataModel.measurement) =>
   style([
     width(`percent(100.0)),
     selector(" h2", [marginTop(px(2))]),
@@ -40,7 +39,6 @@ let row = (~m: DataModel.measurement) => {
     selector(":last-child", [borderBottom(`px(0), `solid, hex("fff"))]),
     selector(":hover", [selector(" .foo", [display(`inline)])]),
   ]);
-};
 
 let axisRow =
   style([

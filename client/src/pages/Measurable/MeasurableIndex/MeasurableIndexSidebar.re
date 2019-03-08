@@ -1,6 +1,5 @@
 open Utils;
 open Rationale;
-open Queries;
 
 module Styles = {
   open Css;

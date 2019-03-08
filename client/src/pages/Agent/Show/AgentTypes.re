@@ -1,5 +1,3 @@
-open Rationale.Option.Infix;
-open Rationale.Function.Infix;
 open MomentRe;
 open QueriesHelper;
 

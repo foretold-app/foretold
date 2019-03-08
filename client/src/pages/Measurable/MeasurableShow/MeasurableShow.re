@@ -1,7 +1,4 @@
 open Utils;
-open Rationale;
-open QueriesHelper;
-open MomentRe;
 open Style.Grid;
 
 let component = ReasonReact.statelessComponent("Measurable");

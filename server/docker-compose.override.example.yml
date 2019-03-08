@@ -1,0 +1,13 @@
+version: "2"
+
+services:
+
+  app:
+    environment:
+      - AUTH0_SECRET=<change-me>
+      - SLACK_WEBHOOK_URL=<change-me>
+      - PORT=80
+
+  database:
+    environment:
+      - POSTGRES_PASSWORD=<change-me>

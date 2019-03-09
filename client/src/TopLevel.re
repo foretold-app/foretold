@@ -9,6 +9,7 @@ let make = (~route: route, _children) => {
       | Channel(c) => Some(c)
       | MeasurableNew(c) => Some(c)
       | MeasurableShow(c, _) => Some(c)
+      | Series(c, _) => Some(c)
       | Home => Some("general")
       | _ => None
       };
@@ -28,9 +29,9 @@ let make = (~route: route, _children) => {
             | AgentShow(id) => <AgentShow id />
             | Channel(channel) => <MeasurableIndex channel />
             | MeasurableNew(channel) => <MeasurableNew channel />
-            | MeasurableShow(_, id) => <MeasurableShow id />
+            | MeasurableShow(_, id) => <MeasurableShow id userQuery />
             | MeasurableEdit(id) => <MeasurableEdit id />
-            | Series(channel, id) => <SeriesShow channel id />
+            | Series(channel, id) => <SeriesShow channel id userQuery />
             }
           }
         </div>

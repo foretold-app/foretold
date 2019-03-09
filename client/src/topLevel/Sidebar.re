@@ -39,7 +39,7 @@ module Styles = {
     ]);
 };
 
-let component = ReasonReact.statelessComponent("MeasurableIndexSidebar");
+let component = ReasonReact.statelessComponent("Sidebar");
 let make = (~channel, ~userQuery, _children) => {
   ...component,
   render: _self =>

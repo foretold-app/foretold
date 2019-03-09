@@ -76,6 +76,7 @@ module JsArray = {
     optionals
     |> Js.Array.filter(Option.isSome)
     |> Js.Array.map(Option.toExn("Warning: This should not have happened"));
+  let filter = Js.Array.filter;
 };
 
 module FloatCdf = {

@@ -166,6 +166,16 @@
                   "defaultValue": null
                 },
                 {
+                  "name": "seriesId",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
                   "name": "channel",
                   "description": null,
                   "type": {

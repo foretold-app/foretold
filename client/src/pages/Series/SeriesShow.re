@@ -27,7 +27,24 @@ type action =
 
 let component = ReasonReact.reducerComponent("Measurables");
 
-let make = (~channel: string, ~id: string, _children) => {
+let seriesTop = (series: Queries.GetSeries.series) =>
+  <Div styles=[Style.Grid.Styles.flexColumn, Styles.header]>
+    <Div styles=[Style.Grid.Styles.flex(1)]>
+      <Div styles=[Style.Grid.Styles.flexRow]>
+        <Div styles=[Style.Grid.Styles.flex(6)]>
+          <h2>
+            <Icon.Icon icon="LAYERS" />
+            {series.name |> Option.default("") |> ste}
+          </h2>
+          <p> {series.description |> Option.default("") |> ste} </p>
+        </Div>
+        <Div styles=[Style.Grid.Styles.flex(1)] />
+      </Div>
+    </Div>
+    <Div styles=[Style.Grid.Styles.flex(1)] />
+  </Div>;
+
+let make = (~channel: string, ~id: string, ~userQuery, _children) => {
   ...component,
   initialState: () => {selected: None},
   reducer: (action, state) =>
@@ -36,67 +53,26 @@ let make = (~channel: string, ~id: string, _children) => {
     },
   render: ({state, send}) => {
     open Result.Infix;
-    let seriesQuery = Queries.GetSeries.Query.make(~id, ());
-    let query =
-      Queries.GetMeasurables.Query.make(
-        ~offset=0,
-        ~limit=200,
-        ~channel,
-        ~seriesId=id,
-        (),
-      );
     let top =
-      Queries.GetSeries.QueryComponent.make(
-        ~variables=seriesQuery##variables, series =>
-        series.result
-        |> ApolloUtils.apolloResponseToResult
-        <$> (d => d##series)
-        <$> (
-          r =>
-            switch (r) {
-            | Some(k) =>
-              <Div styles=[Style.Grid.Styles.flexColumn, Styles.header]>
-                <Div styles=[Style.Grid.Styles.flex(1)]>
-                  <Div styles=[Style.Grid.Styles.flexRow]>
-                    <Div styles=[Style.Grid.Styles.flex(6)]>
-                      <h2>
-                        <Icon.Icon icon="LAYERS" />
-                        {k.name |> Option.default("") |> ste}
-                      </h2>
-                      <p> {k.description |> Option.default("") |> ste} </p>
-                    </Div>
-                    <Div styles=[Style.Grid.Styles.flex(1)] />
-                  </Div>
-                </Div>
-                <Div styles=[Style.Grid.Styles.flex(1)] />
-              </Div>
-            | None => <div />
-            }
-        )
-        |> Result.result(idd, idd)
+      Queries.GetSeries.component(~id, series =>
+        switch (series) {
+        | Some(k) => seriesTop(k)
+        | None => ReasonReact.null
+        }
       );
+
     let bottom =
-      Queries.GetMeasurables.QueryComponent.make(
-        ~variables=query##variables, o =>
-        o.result
-        |> ApolloUtils.apolloResponseToResult
-        <$> (d => d##measurables)
-        <$> E.A.Optional.concatSomes
-        <$> (d => d |> Array.map(Queries.GetMeasurables.toMeasurable))
-        <$> (
-          measurables =>
-            <SeriesShowTable
-              measurables
-              selected={state.selected}
-              onClick={id => send(UpdateSelected(id))}
-            />
-        )
-        |> Result.result(idd, idd)
+      Queries.GetMeasurables.componentWithSeries(channel, id, measurables =>
+        <SeriesShowTable
+          measurables
+          selected={state.selected}
+          onClick={id => send(UpdateSelected(id))}
+        />
       );
 
     let lower =
       state.selected
-      |> Rationale.Option.fmap(idd =>
+      |> E.O.fmap(idd =>
            Queries.GetMeasurableWithMeasurements.withQuery(
              ~id=idd,
              measurable => {
@@ -129,22 +105,20 @@ let make = (~channel: string, ~id: string, _children) => {
                  </Div>
                  <div>
                    {
-                     SharedQueries.withLoggedInUserQuery(userQuery =>
-                       switch (userQuery) {
-                       | Some(query) =>
-                         open Rationale.Option.Infix;
-                         let userAgentId = query##user >>= (e => e##agentId);
-                         let creatorId = measurable##creatorId;
-                         <div>
-                           <h2> {"Add a Measurement" |> ste} </h2>
-                           <MeasurableShowForm
-                             measurableId=idd
-                             isCreator={userAgentId == creatorId}
-                           />
-                         </div>;
-                       | _ => <div />
-                       }
-                     )
+                     switch (userQuery) {
+                     | Some(query) =>
+                       let userAgentId =
+                         query##user |> E.O.bind(_, e => e##agentId);
+                       let creatorId = measurable##creatorId;
+                       <div>
+                         <h2> {"Add a Measurement" |> ste} </h2>
+                         <MeasurableShowForm
+                           measurableId=idd
+                           isCreator={userAgentId == creatorId}
+                         />
+                       </div>;
+                     | _ => <div />
+                     }
                    }
                    <h2> {"Measurements" |> ste} </h2>
                    <Measurable__Table measurements=measurable##measurements />
@@ -155,10 +129,8 @@ let make = (~channel: string, ~id: string, _children) => {
          )
       |> Option.default(ReasonReact.null);
     <div>
-      {top |> ReasonReact.element}
-      <div className=SeriesShowTableStyles.topPart>
-        {bottom |> ReasonReact.element}
-      </div>
+      top
+      <div className=SeriesShowTableStyles.topPart> bottom </div>
       lower
     </div>;
   },

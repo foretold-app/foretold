@@ -4,6 +4,8 @@ open Queries;
 
 let component = ReasonReact.statelessComponent("MeasurableIndexTable");
 
+module TableS = MeasurableTableStyles;
+
 let make =
     (
       ~measurables: array(DataModel.measurable),
@@ -14,8 +16,8 @@ let make =
   ...component,
   render: _self => {
     let _measurables =
-      MeasurableTableStyles.sortMeasurables(measurables)
-      |> Js.Array.filter((e: DataModel.measurable) =>
+      TableS.sortMeasurables(measurables)
+      |> E.JsArray.filter((e: DataModel.measurable) =>
            PrimaryTableBase.status(e) != ARCHIVED
          );
     <div className=PrimaryTableStyles.group>
@@ -34,25 +36,25 @@ let make =
                onClick={_e => onClick(m.id)}>
                <div className=SeriesShowTableStyles.column>
                  {
-                   MeasurableTableStyles.nameEntityLink(
+                   TableS.nameEntityLink(
                      ~m,
                      ~className=PrimaryTableStyles.itemLink,
                    )
-                   |> Option.default(ReasonReact.null)
+                   |> E.O.default(ReasonReact.null)
                  }
                </div>
                <div className=SeriesShowTableStyles.column>
                  {
-                   MeasurableTableStyles.propertyEntityLink(
+                   TableS.propertyEntityLink(
                      ~m,
                      ~className=PrimaryTableStyles.propertyLink,
                    )
-                   |> Option.default(ReasonReact.null)
+                   |> E.O.default(ReasonReact.null)
                  }
                </div>
                <div className=SeriesShowTableStyles.column>
                  {
-                   switch (MeasurableTableStyles.formatDate(m.descriptionDate)) {
+                   switch (TableS.formatDate(m.descriptionDate)) {
                    | "" => ReasonReact.null
                    | e =>
                      <span className=PrimaryTableStyles.calDateO>
@@ -62,23 +64,15 @@ let make =
                  }
                </div>
                <div className=SeriesShowTableStyles.column>
-                 {MeasurableTableStyles.measurements(~m)}
-                 {MeasurableTableStyles.measurers(~m)}
+                 {TableS.measurements(~m)}
+                 {TableS.measurers(~m)}
                </div>
                <div className=SeriesShowTableStyles.column>
-                 MeasurableTableStyles.(
-                   MeasurableTableStyles.dateStatusI(
-                     ~measurable=m,
-                     ~dateDisplay=TOP,
-                   )
-                 )
+                 TableS.(TableS.dateStatusI(~measurable=m, ~dateDisplay=TOP))
                </div>
                <div className=SeriesShowTableStyles.column>
-                 MeasurableTableStyles.(
-                   MeasurableTableStyles.dateStatusI(
-                     ~measurable=m,
-                     ~dateDisplay=BOTTOM,
-                   )
+                 TableS.(
+                   TableS.dateStatusI(~measurable=m, ~dateDisplay=BOTTOM)
                  )
                </div>
              </div>

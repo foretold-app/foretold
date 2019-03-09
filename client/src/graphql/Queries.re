@@ -177,6 +177,19 @@ module GetSeries = {
     |}
   ];
   module QueryComponent = ReasonApollo.CreateQuery(Query);
+
+  let component = (~id, innerFn) => {
+    open Result.Infix;
+    let query = Query.make(~id, ());
+    QueryComponent.make(~variables=query##variables, ({result}) =>
+      result
+      |> ApolloUtils.apolloResponseToResult
+      <$> (e => e##series)
+      <$> innerFn
+      |> E.R.id
+    )
+    |> ReasonReact.element;
+  };
 };
 
 module GetMeasurable = {
@@ -380,6 +393,22 @@ module GetMeasurables = {
   let component = (channel, innerComponentFn: 'a => ReasonReact.reactElement) => {
     open Result.Infix;
     let query = Query.make(~offset=0, ~limit=200, ~channel, ());
+    QueryComponent.make(~variables=query##variables, o =>
+      o.result
+      |> ApolloUtils.apolloResponseToResult
+      <$> (d => d##measurables)
+      <$> E.A.Optional.concatSomes
+      <$> (d => d |> E.A.fmap(toMeasurable))
+      <$> (e => innerComponentFn(e))
+      |> Result.result(idd, idd)
+    )
+    |> ReasonReact.element;
+  };
+
+  let componentWithSeries =
+      (channel, seriesId, innerComponentFn: 'a => ReasonReact.reactElement) => {
+    open Result.Infix;
+    let query = Query.make(~offset=0, ~limit=200, ~channel, ~seriesId, ());
     QueryComponent.make(~variables=query##variables, o =>
       o.result
       |> ApolloUtils.apolloResponseToResult

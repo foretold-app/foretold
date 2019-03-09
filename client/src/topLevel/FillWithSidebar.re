@@ -61,9 +61,7 @@ let make = (~channel: option(string), ~userQuery, children) => {
   render: _self =>
     <UseRouterForLinks>
       <div className=Styles.outer>
-        <div className=Styles.left>
-          <MeasurableIndexSidebar channel userQuery />
-        </div>
+        <div className=Styles.left> <Sidebar channel userQuery /> </div>
         <div className=Styles.right>
           {
             switch (channel) {

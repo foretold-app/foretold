@@ -27,7 +27,7 @@ module Styles = {
     ]);
 };
 
-let make = (~id: string, _children) => {
+let make = (~id: string, ~userQuery, _children) => {
   ...component,
   render: _self =>
     Queries.GetMeasurableWithMeasurements.withQuery(
@@ -56,22 +56,20 @@ let make = (~id: string, _children) => {
           </Div>
           <div>
             {
-              SharedQueries.withLoggedInUserQuery(userQuery =>
-                switch (userQuery) {
-                | Some(query) =>
-                  open Rationale.Option.Infix;
-                  let userAgentId = query##user >>= (e => e##agentId);
-                  let creatorId = measurable##creatorId;
-                  <div>
-                    <h2> {"Add a Measurement" |> ste} </h2>
-                    <MeasurableShowForm
-                      measurableId=id
-                      isCreator={userAgentId == creatorId}
-                    />
-                  </div>;
-                | _ => <div />
-                }
-              )
+              switch (userQuery) {
+              | Some(query) =>
+                open Rationale.Option.Infix;
+                let userAgentId = query##user >>= (e => e##agentId);
+                let creatorId = m.creator <$> (r => r.id);
+                <div>
+                  <h2> {"Add a Measurement" |> ste} </h2>
+                  <MeasurableShowForm
+                    measurableId=id
+                    isCreator={userAgentId == creatorId}
+                  />
+                </div>;
+              | _ => <div />
+              }
             }
             <h2> {"Measurements" |> ste} </h2>
             <Measurable__Table measurements=measurable##measurements />

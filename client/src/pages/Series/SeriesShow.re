@@ -1,18 +1,7 @@
 open Utils;
 open Rationale;
 open Queries;
-open HandsOnTable;
-open MeasurableColumns;
 open Style.Grid;
-
-let transformations = [
-  link,
-  nameAsText,
-  measurementCount,
-  measurerCount,
-  expectedResolutionDate,
-  creator,
-];
 
 module Styles = {
   open Css;
@@ -92,7 +81,7 @@ let make = (~channel: string, ~id: string, _children) => {
         o.result
         |> ApolloUtils.apolloResponseToResult
         <$> (d => d##measurables)
-        <$> Extensions.Array.concatSomes
+        <$> E.A.Optional.concatSomes
         <$> (d => d |> Array.map(Queries.GetMeasurables.toMeasurable))
         <$> (
           measurables =>
@@ -171,8 +160,6 @@ let make = (~channel: string, ~id: string, _children) => {
         {bottom |> ReasonReact.element}
       </div>
       lower
-    </div>
-    |> FillWithSidebar.make(~channel=Some(channel))
-    |> ReasonReact.element;
+    </div>;
   },
 };

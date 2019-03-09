@@ -9,7 +9,7 @@ type headers = Js.t({. "authorization": string});
 type data = {name: string};
 
 [@bs.scope "JSON"] [@bs.val]
-external parseIntoMyData : string => data = "parse";
+external parseIntoMyData: string => data = "parse";
 
 let headers = () =>
   Json.Encode.(
@@ -17,7 +17,7 @@ let headers = () =>
       (
         "authorization",
         Json.Encode.string(
-          "Bearer " ++ (Auth0.authToken() |> Option.default("")),
+          "Bearer " ++ (Auth0.authToken() |> E.O.default("")),
         ),
       ),
     ])

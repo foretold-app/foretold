@@ -14,8 +14,8 @@ let to_json = (t: t) => {
   let things = t.things |> Js.Dict.values |> Array.map(Graph_T.Thing.to_json);
   Json.Encode.(
     object_([
-      (Config.JsonKeys.facts, jsonArray(facts)),
-      (Config.JsonKeys.things, jsonArray(things)),
+      (Ken_Config.JsonKeys.facts, jsonArray(facts)),
+      (Ken_Config.JsonKeys.things, jsonArray(things)),
     ])
   );
 };

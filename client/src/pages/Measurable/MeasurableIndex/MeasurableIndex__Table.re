@@ -1,9 +1,6 @@
 open Utils;
 open Rationale;
 open Queries;
-open HandsOnTable;
-open MeasurableColumns;
-open Table;
 
 let component = ReasonReact.statelessComponent("MeasurableIndexTable");
 
@@ -23,16 +20,16 @@ let make =
     <div className=PrimaryTableStyles.group>
       {
         _measurables
-        |> Array.map(m =>
+        |> E.A.fmap(m =>
              <div
                className={PrimaryTableStyles.row(m)}
                onClick={
                  _e =>
-                   ReasonReact.Router.push(
-                     "/c/"
-                     ++ (m.channel |> Option.default("general"))
-                     ++ "/m/"
-                     ++ m.id,
+                   Urls.pushToLink(
+                     MeasurableShow(
+                       m.channel |> E.O.default("general"),
+                       m.id,
+                     ),
                    )
                }>
                <div className=PrimaryTableStyles.mainColumn>

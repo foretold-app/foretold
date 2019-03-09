@@ -12,14 +12,14 @@ let makeDirs = (t: t): t => {
     t.things
     |> Js.Dict.values
     |> Array.to_list
-    |> List.map(e => e.thingId.thingIdString);
+    |> E.L.fmap(e => e.thingId.thingIdString);
 
   let possibleUniqueIds =
-    List.map(Directory.parent)
-    ||> List.filter(e => !Directory.isFactDirectory(e))
-    ||> List.map(Directory.allSubdirectories)
-    ||> List.concat
-    ||> RList.uniq;
+    E.L.fmap(Directory.parent)
+    ||> E.L.filter(e => !Directory.isFactDirectory(e))
+    ||> E.L.fmap(Directory.allSubdirectories)
+    ||> E.L.concat
+    ||> E.L.uniq;
 
   let directories = allThingIdStrings |> possibleUniqueIds;
 

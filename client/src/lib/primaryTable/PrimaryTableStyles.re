@@ -7,7 +7,7 @@ let group =
   ]);
 let statusOpacity = (measurable: DataModel.measurable) => {
   let state =
-    measurable.state |> Rationale.Option.toExn("Needs state from GraphQL");
+    measurable.state |> E.O.toExn("Needs state from GraphQL");
   if (state === `ARCHIVED) {
     0.8;
   } else if (state === `JUDGED) {
@@ -137,7 +137,7 @@ let statusColor = (~measurable: DataModel.measurable) => {
     | JUDGED => [background(`hex("ead7f3"))]
     | ARCHIVED => [background(`hex("cccccc"))]
     };
-  style([main, statusSpecific] |> List.concat);
+  style([main, statusSpecific] |> E.L.concat);
 };
 
 let linkS = [

@@ -27,7 +27,7 @@ let flattenValues = (g: unprocessedGraph): unprocessedGraph =>
                                 {...f, value: String(value)}
                               )
                          )
-                      |> Belt.Array.concatMany,
+                      |> E.A.concatMany,
                   }
                 ),
          }
@@ -57,7 +57,7 @@ let allPackageFacts = (p: CompressedImporter__T.package) =>
             );
           })
      )
-  |> Belt.Array.concatMany
+  |> E.A.concatMany
   |> Array.to_list;
 
 let formattedAliases =
@@ -115,7 +115,7 @@ let combinePackages =
     (packages: list(Compiler_AST.package)): SimpleFactList_T.graph =>
   Rationale.Function.Infix.(
     packages
-    |> List.map(Compiler_Run.run ||> Compiler_Run.toSimple)
+    |> E.L.fmap(Compiler_Run.run ||> Compiler_Run.toSimple)
     |> SimpleFactList_T.combine
   );
 

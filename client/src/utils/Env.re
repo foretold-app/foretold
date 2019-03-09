@@ -1,6 +1,5 @@
 /* [@bs.val] external environment: string = "DEVELOPMENT"; */
-/* [@bs.val] external environment: string = "process.env.ENV"; */
-let environment = "DEVELOPMENT";
+[@bs.val] external environment: string = "process.env.ENV";
 
 let auth0Domain =
   switch (environment) {

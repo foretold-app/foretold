@@ -41,7 +41,7 @@ let make = (~id: string, _children) => {
               {agentSection(agent)}
               {
                 mm
-                |> List.map((m: DataModel.measurable) => {
+                |> E.L.fmap((m: DataModel.measurable) => {
                      let measurements = m.measurements |> E.O.default([]);
                      <div>
                        <div className=AgentShowStyles.block>

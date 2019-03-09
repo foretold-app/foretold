@@ -1,6 +1,5 @@
 open Utils;
 open Rationale;
-open Rationale.Option;
 open Result.Infix;
 open Rationale.Function.Infix;
 open Antd;

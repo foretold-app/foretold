@@ -9,7 +9,7 @@ let findName = (graph, propertyId) =>
   |> Graph_T.F.factList
   |> Graph_Fact_Filters.withSubject(propertyId)
   |> Graph_Fact_Filters.withProperty("@base/properties/p-name")
-  |> Rationale.RList.head
+  |> E.L.head
   |> E.O.bind(_, (k: Graph_T.T.fact) =>
        switch (k.value.valueType) {
        | String(s) => Some(s)
@@ -26,7 +26,7 @@ let make = (~id: string, _children) => {
       graph
       |> Graph_T.F.factList
       |> Graph_Fact_Filters.withSubject(id)
-      |> List.map((f: Graph_T.T.fact) => f);
+      |> E.L.fmap((f: Graph_T.T.fact) => f);
     <div>
       <h2> {id |> ste} </h2>
       {

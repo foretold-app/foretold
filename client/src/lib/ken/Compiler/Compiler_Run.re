@@ -12,21 +12,21 @@ let thingIdKey = (e: thingId) => (e.rawId, e.tag);
 let allPrimaryIds = (g: package): list(thingId) => {
   let factIds =
     g.facts
-    |> List.map(r => [r.thingId, r.subjectId, r.propertyId])
-    |> List.flatten;
+    |> E.L.fmap(r => [r.thingId, r.subjectId, r.propertyId])
+    |> E.L.flatten;
   let aliasIds = g.aliases |> Js.Dict.values |> Array.to_list;
-  let all = factIds |> List.append(aliasIds);
+  let all = factIds |> E.L.append(aliasIds);
   all;
 };
 
 let findUniqueIds = (g: package): list(thingId) =>
-  g |> allPrimaryIds |> Rationale.RList.uniqBy(thingIdKey);
+  g |> allPrimaryIds |> E.L.uniqBy(thingIdKey);
 
 /* Make sure that all thing Ids are only represented once. */
 /* Don't do this for facts! */
 let tagFacts = g: package => {
   g.facts
-  |> List.iter(fact =>
+  |> E.L.iter(fact =>
        fact.thingId.tag =
          Some(SecureRandomString.genSync(~length=12, ~alphaNumeric=true, ()))
      );
@@ -36,10 +36,10 @@ let tagFacts = g: package => {
 let useUniqueThingIds = g: package => {
   let uniqueIds = findUniqueIds(g);
   let findId = thingId =>
-    uniqueIds |> List.find(e => thingIdKey(e) == thingIdKey(thingId));
+    uniqueIds |> E.L.find(e => thingIdKey(e) == thingIdKey(thingId));
   let facts =
     g.facts
-    |> List.map(r =>
+    |> E.L.fmap(r =>
          {
            ...r,
            thingId: findId(r.thingId),
@@ -68,12 +68,12 @@ let handleThingTypes = (g: package) => {
     | _ => Some(NONFACT)
     };
   g.facts
-  |> List.iter(r => {
+  |> E.L.iter(r => {
        let id = r.thingId;
        id.thingIdType = Some(FACT);
      });
   g.facts
-  |> List.iter(r => {
+  |> E.L.iter(r => {
        let propertyId = r.propertyId;
        propertyId.thingIdType = propertyOrSubjectType(propertyId);
        let subjectId = r.subjectId;
@@ -83,7 +83,7 @@ let handleThingTypes = (g: package) => {
 };
 
 let findId = (uniqueIds, thingId) =>
-  uniqueIds |> List.find(e => thingIdKey(e) == thingIdKey(thingId));
+  uniqueIds |> E.L.find(e => thingIdKey(e) == thingIdKey(thingId));
 
 let _convertValue = (package, uniqueIds, fact) =>
   switch (fact.value) {
@@ -107,7 +107,7 @@ let _convertValue = (package, uniqueIds, fact) =>
 
 let linkValues = p: package => {
   let uniqueIds = findUniqueIds(p);
-  p.facts |> List.iter(fact => fact.value = _convertValue(p, uniqueIds, fact));
+  p.facts |> E.L.iter(fact => fact.value = _convertValue(p, uniqueIds, fact));
   p;
 };
 
@@ -146,7 +146,7 @@ let generateFactId = (thingId, subjectId, package: package) => {
 let handleUpdatedIds = p: package => {
   let uniqueIds = findUniqueIds(p);
   uniqueIds
-  |> List.iter(id =>
+  |> E.L.iter(id =>
        switch (id.thingIdType) {
        | Some(NONFACT) => id.updatedId = convertIdd(p, id)
        | _ => ()
@@ -154,7 +154,7 @@ let handleUpdatedIds = p: package => {
      );
 
   p.facts
-  |> List.iter(fact =>
+  |> E.L.iter(fact =>
        fact.thingId.updatedId =
          Some(generateFactId(fact.thingId, fact.subjectId, p))
      );
@@ -192,7 +192,7 @@ let inverseFact = fact => {
 
 let handleInverseFacts = (package: package) => {
   ...package,
-  facts: package.facts |> List.map(f => f.isInversed ? inverseFact(f) : f),
+  facts: package.facts |> E.L.fmap(f => f.isInversed ? inverseFact(f) : f),
 };
 
 let run =
@@ -206,13 +206,13 @@ let run =
   );
 
 let convertId = (f: Compiler_AST.thingId): SimpleFactList_T.id => {
-  id: f.updatedId |> Rationale.Option.toExn(""),
+  id: f.updatedId |> E.O.toExn(""),
   isPublic: false,
 };
 
 let toSimple = (g: Compiler_AST.package): SimpleFactList_T.graph =>
   g.facts
-  |> List.map((f: Compiler_AST.fact) =>
+  |> E.L.fmap((f: Compiler_AST.fact) =>
        (
          {
            id: convertId(f.thingId),

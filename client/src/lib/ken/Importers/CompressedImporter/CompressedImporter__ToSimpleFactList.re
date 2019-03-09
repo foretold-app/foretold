@@ -115,7 +115,7 @@ let combinePackages =
     (packages: list(Compiler_AST.package)): SimpleFactList_T.graph =>
   Rationale.Function.Infix.(
     packages
-    |> List.map(Compiler_Run.run ||> Compiler_Run.toSimple)
+    |> E.L.fmap(Compiler_Run.run ||> Compiler_Run.toSimple)
     |> SimpleFactList_T.combine
   );
 

@@ -78,14 +78,14 @@ let make = (ms: list(DataModel.measurement)) => {
   let bb = bounds(ms |> E.A.of_list);
   let foo =
     ms
-    |> List.sort((a: DataModel.measurement, b: DataModel.measurement) =>
+    |> E.L.sort((a: DataModel.measurement, b: DataModel.measurement) =>
          switch (a.createdAt, b.createdAt) {
          | (Some(c), Some(d)) =>
            Moment.toUnix(c) < Moment.toUnix(d) ? 1 : (-1)
          | (_, _) => 0
          }
        )
-    |> List.map((m: DataModel.measurement) =>
+    |> E.L.fmap((m: DataModel.measurement) =>
          <div className={MeasurementTableStyles.row(~m)} key={m.id}>
            <div className=MeasurementTableStyles.mainColumn>
              <div className=MeasurementTableStyles.mainColumnTop>

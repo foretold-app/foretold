@@ -17,7 +17,7 @@ let rec accumulator =
     let newel = f(accum, head);
     accumulator(
       ~accum=newel,
-      ~history=List.append(history, [newel]),
+      ~history=E.L.append(history, [newel]),
       f,
       tail,
     );

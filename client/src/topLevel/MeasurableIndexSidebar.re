@@ -77,7 +77,7 @@ let make = (~channel, ~userQuery, _children) => {
       <div className=Styles.over>
         {
           ["general", "foretold", "ozziegooen", "lesswrong", "movies"]
-          |> List.map(e =>
+          |> E.L.fmap(e =>
                <div
                  onClick={_e => Urls.pushToLink(Channel(e))}
                  className={

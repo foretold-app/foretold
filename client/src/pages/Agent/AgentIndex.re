@@ -1,6 +1,5 @@
 open Utils;
 open Rationale;
-open Rationale.Option;
 open Result.Infix;
 open Queries;
 
@@ -16,7 +15,7 @@ let make = _children => {
           result
           |> ApolloUtils.apolloResponseToResult
           <$> (d => d##agents)
-          <$> (e => <div />)
+          <$> (_ => <div />)
           |> Result.result(idd, idd)
         )
         |> ReasonReact.element

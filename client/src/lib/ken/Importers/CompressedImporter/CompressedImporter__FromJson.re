@@ -40,26 +40,22 @@ let filterArray = (filter, ar) =>
 
 let filteredFactKeys = ["config"];
 let propertyDecoder = json => {
-  let thing0 =
-    Js.Json.decodeObject(json) |> E.O.toExn("Parse Error");
+  let thing0 = Js.Json.decodeObject(json) |> E.O.toExn("Parse Error");
 
   let toFact = id => {
-    let _value =
-      Js.Dict.get(thing0, id) |> E.O.toExn("Parse Error");
+    let _value = Js.Dict.get(thing0, id) |> E.O.toExn("Parse Error");
     factDecoder(id, _value);
   };
 
   let nonTemplateKeys =
-    thing0
-    |> Js.Dict.keys
-    |> filterArray(Rationale.RList.without(filteredFactKeys));
+    thing0 |> Js.Dict.keys |> filterArray(E.L.without(filteredFactKeys));
 
   let facts = nonTemplateKeys |> Array.map(toFact);
   facts;
 };
 
 let removeIfInList = (list, fn) =>
-  List.filter(e => e |> fn |> Rationale.RList.contains(_, list) |> (e => !e));
+  E.L.filter(e => e |> fn |> E.L.contains(_, list) |> (e => !e));
 
 let decodeBase = json => {
   let entries =
@@ -76,7 +72,7 @@ let decodeBase = json => {
   let things =
     entries
     |> removeIfInList(filteredFactKeys, ((k, _)) => k)
-    |> List.map(((key, value)) => {id: key, facts: propertyDecoder(value)});
+    |> E.L.fmap(((key, value)) => {id: key, facts: propertyDecoder(value)});
   {things: things |> E.A.of_list, baseId, resourceId, aliases};
 };
 

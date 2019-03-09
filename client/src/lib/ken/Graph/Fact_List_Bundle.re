@@ -18,10 +18,10 @@ let init = (g: Graph_T.T.t, t: Graph_T.T.thing): t => {
 
 module Internal = {
   let findFromList = (id, t) =>
-    t |> List.find(e => e.thingId.thingIdString == id);
+    t |> E.L.find(e => e.thingId.thingIdString == id);
 
   let unpackOptionList = (e: list(option('a))) =>
-    e |> List.filter(E.O.isSome) |> List.map(E.O.toExn("mistake"));
+    e |> E.L.filter(E.O.isSome) |> E.L.fmap(E.O.toExn("mistake"));
 
   let filterFacts = (filter: (string, factList) => factList, t: t) => {
     ...t,
@@ -37,7 +37,7 @@ module Internal = {
     t
     |> filterFacts(Graph_Fact_Filters.withEdge(fromEdge))
     |> (e => e.list)
-    |> List.map(Graph_Graph.findThingFromFact(t.graph, toEdge))
+    |> E.L.fmap(Graph_Graph.findThingFromFact(t.graph, toEdge))
     |> unpackOptionList;
 
   let connectedPropertyThings = filterFactsAndSelectThings(SUBJECT, PROPERTY);

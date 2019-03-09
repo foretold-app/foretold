@@ -19,4 +19,4 @@ type graph = list(fact);
 
 let showFacts = (g: graph) => g |> E.A.of_list |> E.A.fmap(factToJs);
 
-let combine = (l: list(graph)): graph => l |> List.concat;
+let combine = (l: list(graph)): graph => l |> E.L.concat;

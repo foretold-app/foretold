@@ -136,7 +136,7 @@ let statusColor = (~measurable: DataModel.measurable) => {
     | JUDGED => [background(`hex("ead7f3"))]
     | ARCHIVED => [background(`hex("cccccc"))]
     };
-  style([main, statusSpecific] |> List.concat);
+  style([main, statusSpecific] |> E.L.concat);
 };
 
 let linkS = [

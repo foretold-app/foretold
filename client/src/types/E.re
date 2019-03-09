@@ -35,9 +35,14 @@ module L = {
   let join = RList.join;
   let head = RList.head;
   let uniq = RList.uniq;
+  let flatten = List.flatten;
   let last = RList.last;
-  let append = RList.append;
+  let append = List.append;
   let getBy = Belt.List.getBy;
+  let dropLast = RList.dropLast;
+  let contains = RList.contains;
+  let without = RList.without;
+  let iter = List.iter;
 };
 
 /* A for Array */

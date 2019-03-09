@@ -30,9 +30,19 @@ module Grid = {
 
   module Div = {
     let component = ReasonReact.statelessComponent("divWithStyles");
-    let make = (~styles=[], children) => {
+    let make = (~styles=[], ~flex=?, ~flexDirection=?, children) => {
       ...component,
-      render: _ => <div className={E.L.join(" ", styles)}> ...children </div>,
+      render: _ => {
+        let allStyles = [
+          flex |> E.O.fmap(string_of_int) |> E.O.default(""),
+          flexDirection
+          |> E.O.fmap(Css.flexDirection)
+          |> E.O.fmap(e => Css.style([e]))
+          |> E.O.default(""),
+          ...styles,
+        ];
+        <div className={E.L.join(" ", allStyles)}> ...children </div>;
+      },
     };
   };
 };

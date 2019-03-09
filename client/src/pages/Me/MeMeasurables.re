@@ -12,7 +12,7 @@ let make = (~id: string, _children) => {
         let measurables =
           agent##measurables
           |> E.A.Optional.concatSomes
-          |> E.A.fmap(Queries.GetUserMeasurables.toMeasurable);
+          |> E.A.fmap(GetUserMeasurables.toMeasurable);
         <div className=PrimaryTableStyles.group>
           {
             measurables
@@ -49,5 +49,5 @@ let make = (~id: string, _children) => {
         </div>;
       }
     )
-    |> Queries.GetUserMeasurables.component(~id),
+    |> GetUserMeasurables.component(~id),
 };

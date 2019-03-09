@@ -1,6 +1,5 @@
 open Utils;
 open Rationale;
-open Queries;
 open Style.Grid;
 
 module Styles = {
@@ -27,7 +26,7 @@ type action =
 
 let component = ReasonReact.reducerComponent("Measurables");
 
-let seriesTop = (series: Queries.GetSeries.series) =>
+let seriesTop = (series: GetSeries.series) =>
   <Div styles=[Style.Grid.Styles.flexColumn, Styles.header]>
     <Div styles=[Style.Grid.Styles.flex(1)]>
       <Div styles=[Style.Grid.Styles.flexRow]>
@@ -47,22 +46,18 @@ let seriesTop = (series: Queries.GetSeries.series) =>
 let make = (~channel: string, ~id: string, ~userQuery, _children) => {
   ...component,
   initialState: () => {selected: None},
-  reducer: (action, state) =>
+  reducer: (action, _state) =>
     switch (action) {
     | UpdateSelected(str) => ReasonReact.Update({selected: Some(str)})
     },
   render: ({state, send}) => {
-    open Result.Infix;
     let top =
-      Queries.GetSeries.component(~id, series =>
-        switch (series) {
-        | Some(k) => seriesTop(k)
-        | None => ReasonReact.null
-        }
+      GetSeries.component(~id, series =>
+        series |> E.O.fmap(seriesTop) |> E.O.default(ReasonReact.null)
       );
 
-    let bottom =
-      Queries.GetMeasurables.componentWithSeries(channel, id, measurables =>
+    let medium =
+      GetMeasurables.componentWithSeries(channel, id, measurables =>
         <SeriesShowTable
           measurables
           selected={state.selected}
@@ -70,68 +65,15 @@ let make = (~channel: string, ~id: string, ~userQuery, _children) => {
         />
       );
 
-    let lower =
+    let bottom =
       state.selected
-      |> E.O.fmap(idd =>
-           Queries.GetMeasurableWithMeasurements.withQuery(
-             ~id=idd,
-             measurable => {
-               let m =
-                 Queries.GetMeasurableWithMeasurements.queryMeasurable(
-                   measurable,
-                 );
-               <div>
-                 <Div styles=[Style.Grid.Styles.flexColumn, Styles.header]>
-                   <Div styles=[Style.Grid.Styles.flex(1)]>
-                     <Div styles=[Style.Grid.Styles.flexRow]>
-                       <Div styles=[Style.Grid.Styles.flex(6)]>
-                         <h2> {MeasurableTableStyles.link(~m)} </h2>
-                         {MeasurableTableStyles.description(~m)}
-                       </Div>
-                       <Div styles=[Style.Grid.Styles.flex(1)]>
-                         {
-                           MeasurableTableStyles.dateStatusWrapper(
-                             ~measurable=m,
-                           )
-                         }
-                       </Div>
-                     </Div>
-                   </Div>
-                   <Div styles=[Style.Grid.Styles.flex(1)]>
-                     {MeasurableTableStyles.creatorLink(~m)}
-                     {MeasurableTableStyles.resolutionEndpoint(~m)}
-                     {MeasurableTableStyles.endpointResponse(~m)}
-                   </Div>
-                 </Div>
-                 <div>
-                   {
-                     switch (userQuery) {
-                     | Some(query) =>
-                       let userAgentId =
-                         query##user |> E.O.bind(_, e => e##agentId);
-                       let creatorId = measurable##creatorId;
-                       <div>
-                         <h2> {"Add a Measurement" |> ste} </h2>
-                         <MeasurableShowForm
-                           measurableId=idd
-                           isCreator={userAgentId == creatorId}
-                         />
-                       </div>;
-                     | _ => <div />
-                     }
-                   }
-                   <h2> {"Measurements" |> ste} </h2>
-                   <Measurable__Table measurements=measurable##measurements />
-                 </div>
-               </div>;
-             },
-           )
-         )
+      |> E.O.fmap(elId => <MeasurableShow__Component id=elId userQuery />)
       |> Option.default(ReasonReact.null);
+
     <div>
       top
-      <div className=SeriesShowTableStyles.topPart> bottom </div>
-      lower
+      <div className=SeriesShowTableStyles.topPart> medium </div>
+      bottom
     </div>;
   },
 };

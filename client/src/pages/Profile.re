@@ -41,9 +41,8 @@ let component = ReasonReact.statelessComponent("Measurables");
 
 let withUserQuery =
     (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = Queries.GetUser.Query.make(~auth0Id, ());
-  Queries.GetUser.QueryComponent.make(
-    ~variables=query##variables, ({result}) =>
+  let query = GetUser.Query.make(~auth0Id, ());
+  GetUser.QueryComponent.make(~variables=query##variables, ({result}) =>
     result |> ApolloUtils.apolloResponseToResult <$> innerComponentFn |> E.R.id
   )
   |> ReasonReact.element;

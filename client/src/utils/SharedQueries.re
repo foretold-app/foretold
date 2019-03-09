@@ -7,9 +7,8 @@ let withUserQuery =
     ) =>
   switch (auth0Id) {
   | Some(auth) =>
-    let query = Queries.GetUser.Query.make(~auth0Id=auth, ());
-    Queries.GetUser.QueryComponent.make(
-      ~variables=query##variables, ({result}) =>
+    let query = GetUser.Query.make(~auth0Id=auth, ());
+    GetUser.QueryComponent.make(~variables=query##variables, ({result}) =>
       result
       |> ApolloUtils.apolloResponseToResult
       <$> (e => innerComponentFn(Some(e)))

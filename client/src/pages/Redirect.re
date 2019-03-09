@@ -10,7 +10,7 @@ let component = ReasonReact.statelessComponent("Redirecting...");
 let make = _children => {
   ...component,
   render: _ =>
-    Queries.GetUser.component(
+    GetUser.component(
       Auth0.userId(),
       userQuery => {
         let agentId =

@@ -6,5 +6,5 @@ let make = (~channel: string, _children) => {
   ...component,
   render: _self =>
     (measurables => <MeasurableIndex__Table measurables showExtraData=true />)
-    |> Queries.GetMeasurables.component(channel),
+    |> GetMeasurables.component(channel),
 };

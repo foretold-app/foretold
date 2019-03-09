@@ -188,5 +188,3 @@ let data: Js.Json.t =
   );
 
 let make = Ken_Interface.Graph.fromJson(data);
-
-let run = () => Js.log(make |> Graph_T.F.thingArray);

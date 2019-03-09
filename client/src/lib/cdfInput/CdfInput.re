@@ -140,10 +140,10 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
 
 let make =
     (
-      ~data: Queries.CreateMeasurementMutation.Mutation.renderPropObj,
-      ~onUpdate=e => (),
+      ~data: CreateMeasurementMutation.Mutation.renderPropObj,
+      ~onUpdate=_ => (),
       ~isCreator=false,
-      ~onSubmit=e => (),
+      ~onSubmit=_ => (),
       _children,
     ) => {
   ...component,

@@ -19,6 +19,8 @@ module O = {
 /* R for Result */
 module R = {
   let id = e => e |> Rationale.Result.result(idd, idd);
+  let fmap = Rationale.Result.fmap;
+  let bind = Rationale.Result.bind;
 };
 
 /* List */

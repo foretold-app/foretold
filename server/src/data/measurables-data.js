@@ -147,7 +147,7 @@ class MeasurablesData {
             [Sequelize.Op.ne]: "ARCHIVED"
           },
           seriesId: {
-            [Sequelize.Op.ne]: seriesId
+            [Sequelize.Op.eq]: seriesId
           }
         }
       });

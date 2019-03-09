@@ -39,7 +39,7 @@ module Styles = {
       backgroundColor(hex("1890ff")),
       selector(
         ":hover",
-        [backgroundColor(hex("60b2ff")), color(`hex("fff"))],
+        [backgroundColor(`hex("60b2ff")), color(`hex("fff"))],
       ),
     ]);
 };

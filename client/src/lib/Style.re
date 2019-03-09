@@ -22,25 +22,24 @@ module BorderedBox = {
 
 module Grid = {
   open Css;
-  module Styles = {
-    let flexRow = style([display(`flex), flexDirection(`row)]);
-    let flexColumn = style([display(`flex), flexDirection(`column)]);
-    let flex = n => style([flex(n)]);
-  };
 
   module Div = {
     let component = ReasonReact.statelessComponent("divWithStyles");
     let make = (~styles=[], ~flex=?, ~flexDirection=?, children) => {
       ...component,
       render: _ => {
-        let allStyles = [
-          flex |> E.O.fmap(string_of_int) |> E.O.default(""),
+        let flexStyle =
+          flex
+          |> E.O.fmap(e => Css.style([Css.flex(e)]))
+          |> E.O.default("bbb");
+        let directionStyle =
           flexDirection
-          |> E.O.fmap(Css.flexDirection)
-          |> E.O.fmap(e => Css.style([e]))
-          |> E.O.default(""),
-          ...styles,
-        ];
+          |> E.O.fmap(e =>
+               Css.style([display(`flex), Css.flexDirection(e)])
+             )
+          |> E.O.default("yoyyoyo");
+        let allStyles = [flexStyle, directionStyle, ...styles];
+        Js.log4(flexStyle, directionStyle, styles, allStyles);
         <div className={E.L.join(" ", allStyles)}> ...children </div>;
       },
     };

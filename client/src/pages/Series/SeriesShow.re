@@ -27,20 +27,20 @@ type action =
 let component = ReasonReact.reducerComponent("Measurables");
 
 let seriesTop = (series: GetSeries.series) =>
-  <Div styles=[Style.Grid.Styles.flexColumn, Styles.header]>
-    <Div styles=[Style.Grid.Styles.flex(1)]>
-      <Div styles=[Style.Grid.Styles.flexRow]>
-        <Div styles=[Style.Grid.Styles.flex(6)]>
+  <Div flexDirection=`column styles=[Styles.header]>
+    <Div flex=1>
+      <Div flexDirection=`row>
+        <Div flex=6>
           <h2>
             <Icon.Icon icon="LAYERS" />
             {series.name |> Option.default("") |> ste}
           </h2>
           <p> {series.description |> Option.default("") |> ste} </p>
         </Div>
-        <Div styles=[Style.Grid.Styles.flex(1)] />
+        <Div flex=1 />
       </Div>
     </Div>
-    <Div styles=[Style.Grid.Styles.flex(1)] />
+    <Div flex=1 />
   </Div>;
 
 let make = (~channel: string, ~id: string, ~userQuery, _children) => {

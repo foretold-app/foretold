@@ -21,7 +21,15 @@ let make =
     <div className=PrimaryTableStyles.group>
       {
         _measurables
-        |> E.A.fmap((m: DataModel.measurable) =>
+        |> E.A.fmap((m: DataModel.measurable) => {
+             let userAgentId =
+               loggedInUser
+               |> E.O.bind(_, (r: GetUser.user) => r.agent)
+               |> E.O.fmap((r: GetUser.agent) => r.id);
+             let measurableAgentId =
+               m.creator |> E.O.fmap((r: DataModel.agent) => r.id);
+             let isSame =
+               userAgentId == measurableAgentId && E.O.isSome(userAgentId);
              <div
                className={PrimaryTableStyles.row(m)}
                onClick={
@@ -38,24 +46,24 @@ let make =
                    {MeasurableTableStyles.link(~m)}
                  </div>
                  <div className=PrimaryTableStyles.mainColumnBottom>
+                   {showIf(showExtraData, MeasurableTableStyles.series(~m))}
                    {
-                     showExtraData ?
-                       MeasurableTableStyles.series(~m) : ReasonReact.null
-                   }
-                   {
-                     showExtraData ?
-                       MeasurableTableStyles.creatorLink(~m) :
-                       ReasonReact.null
+                     showIf(
+                       showExtraData,
+                       MeasurableTableStyles.creatorLink(~m),
+                     )
                    }
                    {MeasurableTableStyles.measurements(~m)}
                    {MeasurableTableStyles.measurers(~m)}
+                   {showIf(isSame, MeasurableTableStyles.editLink(~m))}
+                   {showIf(isSame, MeasurableTableStyles.archiveOption(~m))}
                  </div>
                </div>
                <div className=PrimaryTableStyles.rightColumn>
                  {MeasurableTableStyles.dateStatus(~measurable=m)}
                </div>
-             </div>
-           )
+             </div>;
+           })
         |> ReasonReact.array
       }
     </div>;

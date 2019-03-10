@@ -61,7 +61,7 @@ let make = (~id: string, ~loggedInUser: GetUser.t, _children) => {
                      />
                    </div>;
                  })
-              |> E.O.default(ReasonReact.null)
+              |> E.O.React.defaultNull
             }
             <h2> {"Measurements" |> ste} </h2>
             <Measurable__Table measurements=measurable##measurements />

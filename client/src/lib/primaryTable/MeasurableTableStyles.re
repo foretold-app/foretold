@@ -98,11 +98,11 @@ let link = (~m: DataModel.measurable) =>
   <div>
     {
       nameEntityLink(~m, ~className=PrimaryTableStyles.itemLink)
-      |> E.O.default(ReasonReact.null)
+      |> E.O.React.defaultNull
     }
     {
       propertyEntityLink(~m, ~className=PrimaryTableStyles.propertyLink)
-      |> E.O.default(ReasonReact.null)
+      |> E.O.React.defaultNull
     }
     <span className=PrimaryTableStyles.namme> {m.name |> ste} </span>
     {
@@ -204,7 +204,7 @@ let series = (~m: DataModel.measurable) =>
        | None => None
        }
      )
-  |> Option.default(ReasonReact.null);
+  |> E.O.React.defaultNull;
 
 let expectedResolutionDate = (~m: DataModel.measurable) =>
   <div className=PrimaryTableStyles.item>

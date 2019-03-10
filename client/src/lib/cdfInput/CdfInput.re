@@ -71,7 +71,6 @@ let getCompetitorType =
   | _ => `OBJECTIVE;
 
 let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
-  let showIf = (cond, comp) => cond ? comp : ReasonReact.null;
   let isValid = getIsValid(state);
   <div className=Styles.form>
     <div className=Styles.chartSection>
@@ -99,9 +98,10 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
         )
       }
       {
-        state.competitorType != "OBJECTIVE" ?
-          ReasonReact.null :
-          <div className=Styles.select> {dataType(~state, ~send)} </div>
+        showIf(
+          state.competitorType == "OBJECTIVE",
+          <div className=Styles.select> {dataType(~state, ~send)} </div>,
+        )
       }
       <div className=Styles.inputBox>
         <h4 className=Styles.label> {"Value" |> ste} </h4>

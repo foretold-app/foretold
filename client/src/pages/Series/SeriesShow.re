@@ -54,7 +54,7 @@ let make =
   render: ({state, send}) => {
     let top =
       GetSeries.component(~id, series =>
-        series |> E.O.fmap(seriesTop) |> E.O.default(ReasonReact.null)
+        series |> E.O.fmap(seriesTop) |> E.O.React.defaultNull
       );
 
     let medium =
@@ -69,7 +69,7 @@ let make =
     let bottom =
       state.selected
       |> E.O.fmap(elId => <MeasurableShow__Component id=elId loggedInUser />)
-      |> Option.default(ReasonReact.null);
+      |> E.O.React.defaultNull;
 
     <div>
       top

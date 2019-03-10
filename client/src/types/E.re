@@ -14,6 +14,14 @@ module O = {
   let default = Rationale.Option.default;
   let isSome = Rationale.Option.isSome;
   let toExn = Option.toExn;
+
+  module React = {
+    let defaultNull = (e: option(ReasonReact.reactElement)) =>
+      switch (e) {
+      | Some(r) => r
+      | None => ReasonReact.null
+      };
+  };
 };
 
 /* R for Result */
@@ -61,7 +69,6 @@ module A = {
   let keepMap = Belt.Array.keepMap;
   let stableSortBy = Belt.SortArray.stableSortBy;
   module Optional = {
-    open Rationale;
     let concatSomes = (optionals: Js.Array.t(option('a))): Js.Array.t('a) =>
       optionals
       |> Js.Array.filter(Option.isSome)

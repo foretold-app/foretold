@@ -39,7 +39,7 @@ let make =
                      ~m,
                      ~className=PrimaryTableStyles.itemLink,
                    )
-                   |> E.O.default(ReasonReact.null)
+                   |> E.O.React.defaultNull
                  }
                </div>
                <div className=SeriesShowTableStyles.column>
@@ -48,7 +48,7 @@ let make =
                      ~m,
                      ~className=PrimaryTableStyles.propertyLink,
                    )
-                   |> E.O.default(ReasonReact.null)
+                   |> E.O.React.defaultNull
                  }
                </div>
                <div className=SeriesShowTableStyles.column>

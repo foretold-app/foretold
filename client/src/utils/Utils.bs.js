@@ -65,6 +65,14 @@ function doIfSome(fn, s) {
   }
 }
 
+function showIf(cond, comp) {
+  if (cond) {
+    return comp;
+  } else {
+    return null;
+  }
+}
+
 exports.resolveOption = resolveOption;
 exports.resolveRegex = resolveRegex;
 exports.ste = ste;
@@ -72,4 +80,5 @@ exports.filterOptionalResult = filterOptionalResult;
 exports.idd = idd;
 exports.filterAndFold = filterAndFold;
 exports.doIfSome = doIfSome;
+exports.showIf = showIf;
 /* E-Client Not a pure module */

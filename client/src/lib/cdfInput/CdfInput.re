@@ -33,16 +33,21 @@ module Styles = {
 let competitorType = (~state, ~send) =>
   <Select
     value={state.competitorType}
-    onChange={e => send(UpdateCompetitorType(e))}>
-    <Select.Option value="COMPETITIVE"> {"Competitive" |> ste} </Select.Option>
-    <Select.Option value="OBJECTIVE"> {"Objective" |> ste} </Select.Option>
-  </Select>;
+    onChange={e => send(UpdateCompetitorType(e))}
+    /* TODO: ADD BACK */
+    /* See this issue: https://github.com/thangngoc89/bs-ant-design/issues/25*/
+    /* <Select.Option value="COMPETITIVE"> {"Competitive" |> ste} </Select.Option>
+       <Select.Option value="OBJECTIVE"> {"Objective" |> ste} </Select.Option> */
+  />;
 
 let dataType = (~state, ~send) =>
-  <Select value={state.dataType} onChange={e => send(UpdateDataType(e))}>
-    <Select.Option value="FLOAT_CDF"> {"Distribution" |> ste} </Select.Option>
-    <Select.Option value="FLOAT"> {"Point" |> ste} </Select.Option>
-  </Select>;
+  <Select
+    value={state.dataType}
+    onChange={e => send(UpdateDataType(e))}
+    /* TODO: ADD BACK */
+    /* <Select.Option value="FLOAT_CDF"> {"Distribution" |> ste} </Select.Option>
+       <Select.Option value="FLOAT"> {"Point" |> ste} </Select.Option> */
+  />;
 
 let getIsValid = state =>
   switch (state.dataType) {
@@ -117,17 +122,17 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
       </div>
       <div className=Styles.inputBox>
         <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
-        <Input.TextArea
-          value={state.description}
-          onChange={
-            event => {
-              let value =
-                ReactDOMRe.domElementToObj(ReactEventRe.Form.target(event))##value;
-              send(UpdateDescription(value));
-            }
-          }
-        />
       </div>
+      <Input.TextArea
+        value={state.description}
+        onChange={
+          event => {
+            let value =
+              ReactDOMRe.domElementToObj(ReactEventRe.Form.target(event))##value;
+            send(UpdateDescription(value));
+          }
+        }
+      />
       <div className=Styles.submitButton>
         <Antd.Button
           _type=`primary onClick={_ => onSubmit()} disabled={!isValid}>

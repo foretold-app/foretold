@@ -1,11 +1,16 @@
 const Sequelize = require('sequelize');
 
+/**
+ * @param {Sequelize} sequelize
+ * @param {sequelize.DataTypes} DataTypes
+ * @return {*|Model<any, any>|void|Model}
+ */
 module.exports = (sequelize, DataTypes) => {
-  var Model = sequelize.define('User', {
+  const Model = sequelize.define('User', {
       id: {
-        type: DataTypes.UUID(),
+        type: DataTypes.STRING(32),
         primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
+        defaultValue: sequelize.fn('generate_object_id'),
         allowNull: false,
       },
       name: {

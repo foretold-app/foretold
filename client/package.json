@@ -32,7 +32,7 @@
     "apollo-link-ws": "^1.0.8",
     "apollo-utilities": "^1.0.20",
     "auth0-js": "^9.7.3",
-    "bs-ant-design": "^2.1.0",
+    "bs-ant-design": "git+ssh://git@github.com:OAGr/bs-ant-design.git",
     "bs-css": "^8.0.2",
     "bs-moment": "^0.4.4",
     "bs-reform": "^5.1.1",

@@ -39,7 +39,6 @@ module Grid = {
              )
           |> E.O.default("yoyyoyo");
         let allStyles = [flexStyle, directionStyle, ...styles];
-        Js.log4(flexStyle, directionStyle, styles, allStyles);
         <div className={E.L.join(" ", allStyles)}> ...children </div>;
       },
     };

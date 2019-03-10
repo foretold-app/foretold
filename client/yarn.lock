@@ -3430,7 +3430,7 @@ browserslist@^4.0.0, browserslist@^4.1.0, browserslist@^4.3.4:
 
 "bs-ant-design@git+ssh://git@github.com:OAGr/bs-ant-design.git":
   version "2.1.0"
-  resolved "git+ssh://git@github.com:OAGr/bs-ant-design.git#d8c2f87cdebee0859fa20f75ec41d93ed7cfa674"
+  resolved "git+ssh://git@github.com:OAGr/bs-ant-design.git#5d6e8ff6ff7e8e353338493dfc9b93f830b41780"
   dependencies:
     antd "^3.8.2"
     re-classnames "^3.0.0"

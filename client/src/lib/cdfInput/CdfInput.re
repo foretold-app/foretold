@@ -33,12 +33,10 @@ module Styles = {
 let competitorType = (~state, ~send) =>
   <Select
     value={state.competitorType}
-    onChange={e => send(UpdateCompetitorType(e))}
-    /* TODO: ADD BACK */
-    /* See this issue: https://github.com/thangngoc89/bs-ant-design/issues/25*/
-    /* <Select.Option value="COMPETITIVE"> {"Competitive" |> ste} </Select.Option>
-       <Select.Option value="OBJECTIVE"> {"Objective" |> ste} </Select.Option> */
-  />;
+    onChange={e => send(UpdateCompetitorType(e))}>
+    <Select.Option value="COMPETITIVE"> {"Competitive" |> ste} </Select.Option>
+    <Select.Option value="OBJECTIVE"> {"Objective" |> ste} </Select.Option>
+  </Select>;
 
 let dataType = (~state, ~send) =>
   <Select

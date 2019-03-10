@@ -78,30 +78,34 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
   <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
     <h2> {"Create a new Measurable" |> ste} </h2>
     <Form>
-      <h3> {"Relevant Entity (optional)" |> ste} </h3>
-      <Input
-        value={form.values.descriptionEntity}
-        onChange={
-          ReForm.Helpers.handleDomFormChange(
-            handleChange(`descriptionEntity),
-          )
-        }
-      />
-      <h3> {"Property Type" |> ste} </h3>
-      <Antd.Radio.Group
-        value={form.values.showDescriptionProperty}
-        defaultValue={form.values.showDescriptionProperty}
-        onChange={
-          ReForm.Helpers.handleDomFormChange(
-            handleChange(`showDescriptionProperty),
-          )
-        }>
-        <Antd.Radio value="FALSE"> {"Custom Name" |> ste} </Antd.Radio>
-        <Antd.Radio value="TRUE"> {"Property Entity" |> ste} </Antd.Radio>
-      </Antd.Radio.Group>
+      <Form.Item>
+        <h3> {"Relevant Entity (optional)" |> ste} </h3>
+        <Input
+          value={form.values.descriptionEntity}
+          onChange={
+            ReForm.Helpers.handleDomFormChange(
+              handleChange(`descriptionEntity),
+            )
+          }
+        />
+      </Form.Item>
+      <Form.Item>
+        <h3> {"Property Type" |> ste} </h3>
+        <Antd.Radio.Group
+          value={form.values.showDescriptionProperty}
+          defaultValue={form.values.showDescriptionProperty}
+          onChange={
+            ReForm.Helpers.handleDomFormChange(
+              handleChange(`showDescriptionProperty),
+            )
+          }>
+          <Antd.Radio value="FALSE"> {"Custom Name" |> ste} </Antd.Radio>
+          <Antd.Radio value="TRUE"> {"Property Entity" |> ste} </Antd.Radio>
+        </Antd.Radio.Group>
+      </Form.Item>
       {
         form.values.showDescriptionProperty == "TRUE" ?
-          <div>
+          <Form.Item>
             <h3> {"Property Entity Name" |> ste} </h3>
             <Input
               value={form.values.descriptionProperty}
@@ -111,12 +115,12 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
                 )
               }
             />
-          </div> :
+          </Form.Item> :
           <div />
       }
       {
         form.values.showDescriptionProperty == "FALSE" ?
-          <div>
+          <Form.Item>
             <h3> {"Custom Name" |> ste} </h3>
             <Input
               value={form.values.name}
@@ -124,10 +128,10 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
                 ReForm.Helpers.handleDomFormChange(handleChange(`name))
               }
             />
-          </div> :
+          </Form.Item> :
           <div />
       }
-      <div>
+      <Form.Item>
         <h3> {"Include a Specific Date in Name" |> ste} </h3>
         <AntdSwitch
           checked={form.values.showDescriptionDate == "TRUE"}
@@ -135,10 +139,10 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
             e => handleChange(`showDescriptionDate, e ? "TRUE" : "FALSE")
           }
         />
-      </div>
+      </Form.Item>
       {
         form.values.showDescriptionDate == "TRUE" ?
-          <div>
+          <Form.Item>
             <h3> {"'On' Date" |> ste} </h3>
             <DatePicker
               value={
@@ -146,10 +150,10 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
               }
               onChange={e => handleChange(`descriptionDate, e |> formatDate)}
             />
-          </div> :
+          </Form.Item> :
           <div />
       }
-      <div>
+      <Form.Item>
         <h3> {"Description" |> ste} </h3>
         <Input
           value={form.values.description}
@@ -157,8 +161,8 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
             ReForm.Helpers.handleDomFormChange(handleChange(`description))
           }
         />
-      </div>
-      <div>
+      </Form.Item>
+      <Form.Item>
         <h3> {"Resolution Endpoint (Optional)" |> ste} </h3>
         <p>
           {
@@ -174,8 +178,8 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
             )
           }
         />
-      </div>
-      <div>
+      </Form.Item>
+      <Form.Item>
         <h3> {"Expected Resolution Date" |> ste} </h3>
         <DatePicker
           value={
@@ -185,11 +189,11 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
             e => handleChange(`expectedResolutionDate, e |> formatDate)
           }
         />
-      </div>
-      <div>
+      </Form.Item>
+      <Form.Item>
         <Button _type=`primary onClick={_ => handleSubmit()}>
           {"Submit" |> ste}
         </Button>
-      </div>
+      </Form.Item>
     </Form>
   </form>;

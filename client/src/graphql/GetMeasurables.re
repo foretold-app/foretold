@@ -19,7 +19,8 @@ type creator = {
   name: option(string),
 };
 
-let toCreator = (c: creator): DataModel.creator => {id: c.id, name: c.name};
+let toAgent = (c: creator): DataModel.agent =>
+  DataModel.toAgent(~id=c.id, ~name=c.name, ());
 
 type measurable = {
   id: string,
@@ -60,7 +61,7 @@ let toMeasurable = (m: measurable): DataModel.measurable =>
     ~expectedResolutionDate=m.expectedResolutionDate,
     ~state=Some(m.state),
     ~stateUpdatedAt=m.stateUpdatedAt,
-    ~creator=E.O.fmap(toCreator, m.creator),
+    ~creator=E.O.fmap(toAgent, m.creator),
     ~series=E.O.fmap(toSeries, m.series),
     (),
   );

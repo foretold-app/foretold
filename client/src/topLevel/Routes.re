@@ -2,7 +2,7 @@ type route =
   | Home
   | AgentIndex
   | Redirect
-  | Profile(string)
+  | Profile
   | ItemShow(string)
   | AgentShow(string)
   | AgentMeasurables(string)
@@ -23,7 +23,7 @@ let mapUrlToRoute = (url: ReasonReact.Router.url) =>
   | ["agents"] => AgentIndex
   | ["profile"] =>
     switch (Auth0.userId()) {
-    | Some(auth0Id) => Profile(auth0Id)
+    | Some(_) => Profile
     | None => Home
     }
   | ["agents", id] => AgentShow(id)

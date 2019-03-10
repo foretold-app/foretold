@@ -35,8 +35,16 @@ type agentType =
 
 type agent = {
   id: string,
+  name: option(string),
   measurementCount: option(int),
   agentType: option(agentType),
+};
+
+let toAgent = (~id, ~name=None, ~measurementCount=None, ~agentType=None, ()) => {
+  id,
+  name,
+  measurementCount,
+  agentType,
 };
 
 let agentName = (a: agent): option(string) =>
@@ -58,11 +66,6 @@ let string_to_measurableState = e: measurableState =>
   | "ARCHIVED" => `ARCHIVED
   | _ => Js.Exn.raiseError("Invalid GraphQL State")
   };
-
-type creator = {
-  id: string,
-  name: option(string),
-};
 
 type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
 
@@ -120,7 +123,7 @@ type measurable = {
   updatedAt: option(MomentRe.Moment.t),
   expectedResolutionDate: option(MomentRe.Moment.t),
   stateUpdatedAt: option(MomentRe.Moment.t),
-  creator: option(creator),
+  creator: option(agent),
   measurements: option(list(measurement)),
   series: option(series),
 };

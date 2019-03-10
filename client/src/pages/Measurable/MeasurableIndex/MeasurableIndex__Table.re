@@ -7,6 +7,7 @@ let make =
     (
       ~measurables: array(DataModel.measurable),
       ~showExtraData: bool,
+      ~loggedInUser: GetUser.t,
       _children,
     ) => {
   ...component,
@@ -16,10 +17,11 @@ let make =
       |> Js.Array.filter((e: DataModel.measurable) =>
            PrimaryTableBase.status(e) != ARCHIVED
          );
+    let isLoggedOn = loggedInUser |> E.O.isSome;
     <div className=PrimaryTableStyles.group>
       {
         _measurables
-        |> E.A.fmap(m =>
+        |> E.A.fmap((m: DataModel.measurable) =>
              <div
                className={PrimaryTableStyles.row(m)}
                onClick={

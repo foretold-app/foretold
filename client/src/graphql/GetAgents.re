@@ -35,7 +35,7 @@ let toAgent = (a: agent): DataModel.agent => {
     | (None, Some(user)) => Some(User(toUser(user)))
     | _ => None
     };
-  {id: a.id, measurementCount: a.measurementCount, agentType};
+  {id: a.id, measurementCount: a.measurementCount, agentType, name: None};
 };
 
 type agents = array(agent);

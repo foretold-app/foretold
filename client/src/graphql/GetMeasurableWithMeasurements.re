@@ -57,8 +57,9 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let queryMeasurable = m => {
   open DataModel;
-  let creator: option(DataModel.creator) =
-    m##creator |> E.O.fmap(r => {id: r##id, name: r##name});
+  let agent: option(DataModel.agent) =
+    m##creator
+    |> E.O.fmap(r => DataModel.toAgent(~id=r##id, ~name=r##name, ()));
 
   let measurable: DataModel.measurable =
     DataModel.toMeasurable(
@@ -76,7 +77,7 @@ let queryMeasurable = m => {
       ~descriptionEntity=m##descriptionEntity,
       ~descriptionDate=m##descriptionDate,
       ~descriptionProperty=m##descriptionProperty,
-      ~creator,
+      ~creator=agent,
       (),
     );
   measurable;
@@ -118,7 +119,7 @@ let toMeasurement = (m: MeasurableTypes.measurement): DataModel.measurement => {
        );
 
   let agent: option(DataModel.agent) =
-    m##agent |> E.O.fmap(k => {id: k##id, measurementCount: None, agentType});
+    m##agent |> E.O.fmap(k => DataModel.toAgent(~id=k##id, ~agentType, ()));
 
   DataModel.toMeasurement(
     ~id=m##id,

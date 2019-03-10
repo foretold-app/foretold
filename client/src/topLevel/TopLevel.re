@@ -19,19 +19,19 @@ let make = (~route: route, _children) => {
         <div>
           {
             switch (route) {
-            | Home => <MeasurableIndex channel="general" />
             | AgentMeasurables(id) => <MeMeasurables id />
             | AgentIndex => <AgentIndex />
-            | NotFound => <MeasurableIndex channel="general" />
             | ItemShow(id) => <ItemShow id />
             | Redirect => <Redirect />
-            | Profile(_auth0Id) => <Profile loggedInUser />
+            | Profile => <Profile loggedInUser />
             | AgentShow(id) => <AgentShow id />
-            | Channel(channel) => <MeasurableIndex channel />
+            | Channel(channel) => <MeasurableIndex channel loggedInUser />
             | MeasurableNew(channel) => <MeasurableNew channel />
             | MeasurableShow(_, id) => <MeasurableShow id loggedInUser />
             | MeasurableEdit(id) => <MeasurableEdit id />
             | Series(channel, id) => <SeriesShow channel id loggedInUser />
+            | Home
+            | NotFound => <MeasurableIndex channel="general" loggedInUser />
             }
           }
         </div>

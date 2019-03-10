@@ -56,7 +56,7 @@ let make = (~channel, ~loggedInUser: GetUser.t, _children) => {
               {"Profile" |> ste}
             </div>
             <div
-              onClick=(_e => Urls.pushToLink(AgentShow(idd)))
+              onClick=(_e => Urls.pushToLink(AgentMeasurables(idd)))
               className=Styles.item>
               {"Edit Measurables" |> ste}
             </div>

@@ -43,7 +43,8 @@ let seriesTop = (series: GetSeries.series) =>
     <Div flex=1 />
   </Div>;
 
-let make = (~channel: string, ~id: string, ~userQuery, _children) => {
+let make =
+    (~channel: string, ~id: string, ~loggedInUser: GetUser.t, _children) => {
   ...component,
   initialState: () => {selected: None},
   reducer: (action, _state) =>
@@ -67,7 +68,7 @@ let make = (~channel: string, ~id: string, ~userQuery, _children) => {
 
     let bottom =
       state.selected
-      |> E.O.fmap(elId => <MeasurableShow__Component id=elId userQuery />)
+      |> E.O.fmap(elId => <MeasurableShow__Component id=elId loggedInUser />)
       |> Option.default(ReasonReact.null);
 
     <div>

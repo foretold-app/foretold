@@ -20,7 +20,7 @@ module Styles = {
     ]);
 };
 
-let make = (~id: string, ~userQuery, _children) => {
+let make = (~id: string, ~loggedInUser: GetUser.t, _children) => {
   ...component,
   render: _self =>
     GetMeasurableWithMeasurements.component(
@@ -48,10 +48,10 @@ let make = (~id: string, ~userQuery, _children) => {
           </Div>
           <div>
             {
-              userQuery
-              |> E.O.fmap(query => {
+              loggedInUser
+              |> E.O.fmap((user: GetUser.user) => {
                    open Rationale.Option.Infix;
-                   let userAgentId = query##user >>= (e => e##agentId);
+                   let userAgentId = user.agentId;
                    let creatorId = m.creator <$> (r => r.id);
                    <div>
                      <h2> {"Add a Measurement" |> ste} </h2>

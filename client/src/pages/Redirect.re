@@ -12,14 +12,12 @@ let make = _children => {
   render: _ =>
     GetUser.component(
       Auth0.userId(),
-      userQuery => {
+      user => {
         let agentId =
-          userQuery
-          |> O.bind(_, e => e##user)
-          |> O.bind(_, e => e##agent)
-          |> O.fmap(e => e##id);
-        let name =
-          userQuery |> O.bind(_, e => e##user) |> O.fmap(e => e##name);
+          user
+          |> O.bind(_, r => r.agent)
+          |> O.fmap((e: GetUser.agent) => e.id);
+        let name = user |> O.fmap((e: GetUser.user) => e.name);
         switch (name, agentId) {
         | (Some(""), _) => Urls.pushToLink(Profile)
         | (_, Some(id)) => Urls.pushToLink(AgentShow(id))

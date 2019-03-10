@@ -15,7 +15,7 @@ let make = (~route: route, _children) => {
       };
 
     (
-      userQuery =>
+      (loggedInUser: GetUser.t) =>
         <div>
           {
             switch (route) {
@@ -25,19 +25,19 @@ let make = (~route: route, _children) => {
             | NotFound => <MeasurableIndex channel="general" />
             | ItemShow(id) => <ItemShow id />
             | Redirect => <Redirect />
-            | Profile(auth0Id) => <Profile auth0Id />
+            | Profile(_auth0Id) => <Profile loggedInUser />
             | AgentShow(id) => <AgentShow id />
             | Channel(channel) => <MeasurableIndex channel />
             | MeasurableNew(channel) => <MeasurableNew channel />
-            | MeasurableShow(_, id) => <MeasurableShow id userQuery />
+            | MeasurableShow(_, id) => <MeasurableShow id loggedInUser />
             | MeasurableEdit(id) => <MeasurableEdit id />
-            | Series(channel, id) => <SeriesShow channel id userQuery />
+            | Series(channel, id) => <SeriesShow channel id loggedInUser />
             }
           }
         </div>
-        |> FillWithSidebar.make(~channel, ~userQuery)
+        |> FillWithSidebar.make(~channel, ~loggedInUser)
         |> ReasonReact.element
     )
-    |> SharedQueries.withLoggedInUserQuery;
+    |> GetUser.withLoggedInUserQuery;
   },
 };

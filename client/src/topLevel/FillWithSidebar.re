@@ -56,12 +56,12 @@ let button = channel =>
     {"New Measurable" |> ste}
   </a>;
 
-let make = (~channel: option(string), ~userQuery, children) => {
+let make = (~channel: option(string), ~loggedInUser: GetUser.t, children) => {
   ...component,
   render: _self =>
     <UseRouterForLinks>
       <div className=Styles.outer>
-        <div className=Styles.left> <Sidebar channel userQuery /> </div>
+        <div className=Styles.left> <Sidebar channel loggedInUser /> </div>
         <div className=Styles.right>
           {
             switch (channel) {

@@ -24,11 +24,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     measurableId: {
-      type: DataTypes.UUID,
+      type: DataTypes.STRING(32),
       allowNull: false
     },
     agentId: {
-      type: DataTypes.UUID,
+      type: DataTypes.STRING(32),
       allowNull: true
     },
     relevantAt: {

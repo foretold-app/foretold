@@ -70,7 +70,7 @@ module MakeCdf = (Item: Point) => {
     |> Belt.Map.fromArray(~id=(module Id));
 
   /* There's some bug here but I'm not sure what it is. */
-  let fromArrays = (a: (array(Item.t), array(float))) : t => {
+  let fromArrays = (a: (array(Item.t), array(float))): t => {
     let (xs, ys) = a;
     Belt.Array.zip(xs, ys)
     |> Array.map(((x, y)) => (string_of_float(y), x))
@@ -78,7 +78,7 @@ module MakeCdf = (Item: Point) => {
     |> fromDict;
   };
 
-  let dataDecoder = (j: Js.Json.t) : Js.Dict.t(Item.t) => {
+  let dataDecoder = (j: Js.Json.t): Js.Dict.t(Item.t) => {
     let xs = j |> Json.Decode.field("xs", Json.Decode.array(Item.decodeFn));
     let ys =
       j |> Json.Decode.field("ys", Json.Decode.array(Json.Decode.float));
@@ -125,7 +125,7 @@ module DateTimePoint = {
 
 module FloatCdf = MakeCdf(FloatPoint);
 
-let toPdf = (~bucketSize=10, t: FloatCdf.t) : FloatCdf.t => {
+let toPdf = (~bucketSize=10, t: FloatCdf.t): FloatCdf.t => {
   let inChunks =
     t
     |> FloatCdf.toArray
@@ -158,14 +158,14 @@ type t = [
   | `DateTimeCdf(DateTimeCdf.t)
 ];
 
-let hasQuartiles = (t: 'a) : bool =>
+let hasQuartiles = (t: 'a): bool =>
   Belt.Map.has(t, 25.0) && Belt.Map.has(t, 50.0) && Belt.Map.has(t, 75.0);
 /* when ! hasQuartiles(i) => Some("Missing quartiles") */
-let error = (t: t) : option(string) =>
+let error = (t: t): option(string) =>
   switch (t) {
-  | `Percentage(i) when ! (0.0 <= i && i <= 100.0) =>
+  | `Percentage(i) when !(0.0 <= i && i <= 100.0) =>
     Some("Must be between 0 and 100")
-  | `Binary(i) when ! (i == 0 || i == 1) => Some("Must be 0 or 1")
+  | `Binary(i) when !(i == 0 || i == 1) => Some("Must be 0 or 1")
   | _ => None
   };
 
@@ -225,7 +225,7 @@ let encode = (e: t) => {
 
 let convert = (decoder, toValue, json) => json |> decoder <$> toValue;
 
-let decoder = (a, j: Js.Json.t) : Belt.Result.t(t, string) =>
+let decoder = (a, j: Js.Json.t): Belt.Result.t(t, string) =>
   switch (a) {
   | `FloatPoint =>
     j |> convert(makeDecode(Json.Decode.float), e => `FloatPoint(e))
@@ -238,7 +238,7 @@ let decoder = (a, j: Js.Json.t) : Belt.Result.t(t, string) =>
   | `Binary => j |> convert(makeDecode(Json.Decode.int), e => `Binary(e))
   };
 
-let decode = (j: Js.Json.t) : Belt.Result.t(t, string) => {
+let decode = (j: Js.Json.t): Belt.Result.t(t, string) => {
   let t = j |> Json.Decode.field("dataType", Json.Decode.string);
   let decodingType = nameToType(t);
   switch (decodingType) {

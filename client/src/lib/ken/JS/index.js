@@ -1,5 +1,5 @@
 let foo = "bar";
-import * as gitNet from "./Interface.gen"
+import * as gitNet from "./Ken_Interface.gen"
 import * as R from "ramda";
 
 export class Value {

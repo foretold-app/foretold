@@ -1,5 +1,3 @@
-open Rationale.Option.Infix;
-open Rationale.Function.Infix;
 open MomentRe;
 open QueriesHelper;
 
@@ -52,8 +50,9 @@ type agent = {
   measurements: array(option(measurement)),
 };
 
-module GetAgent = [%graphql
-  {|
+module GetAgent = {
+  module Query = [%graphql
+    {|
     query getAgent ($id: String!) {
         agent:
         agent(id: $id) @bsRecord{
@@ -86,13 +85,39 @@ module GetAgent = [%graphql
         }
     }
   |}
-];
+  ];
+
+  module QueryComponent = ReasonApollo.CreateQuery(Query);
+
+  let component = (~id, innerFn) => {
+    open Rationale.Result.Infix;
+    open Utils;
+    open Rationale;
+    let notFound = <h3> {"Agent not found" |> ste} </h3>;
+    let query = Query.make(~id, ());
+    QueryComponent.make(~variables=query##variables, ({result}) =>
+      result
+      |> ApolloUtils.apolloResponseToResult
+      <$> (e => e##agent)
+      >>= (
+        e =>
+          switch (e) {
+          | Some(a) => Ok(a)
+          | None => Error(notFound)
+          }
+      )
+      <$> innerFn
+      |> Result.result(idd, idd)
+    )
+    |> ReasonReact.element;
+  };
+};
 
 let toMeasurables = (measurements: array(measurement)) => {
   let r = measurements;
   let standardMeasurements =
     r
-    |> Array.map(n =>
+    |> E.A.fmap(n =>
          DataModel.toMeasurement(
            ~id=n.id,
            ~value=n.value,
@@ -108,15 +133,15 @@ let toMeasurables = (measurements: array(measurement)) => {
            (),
          )
        )
-    |> Array.to_list;
+    |> E.A.to_list;
 
   let measurables =
     r
-    |> Array.map((t: measurement) => (t.measurable: option(measurable)))
-    |> Array.to_list
-    |> Rationale.RList.filter_opt
-    |> Rationale.RList.uniqBy((t: measurable) => t.id)
-    |> List.map((e: measurable) =>
+    |> E.A.fmap((t: measurement) => (t.measurable: option(measurable)))
+    |> E.A.to_list
+    |> E.L.filter_opt
+    |> E.L.uniqBy((t: measurable) => t.id)
+    |> E.L.fmap((e: measurable) =>
          DataModel.toMeasurable(
            ~id=e.id,
            ~name=e.name,
@@ -126,7 +151,7 @@ let toMeasurables = (measurements: array(measurement)) => {
            ~measurements=
              Some(
                standardMeasurements
-               |> List.filter((s: DataModel.measurement) =>
+               |> E.L.filter((s: DataModel.measurement) =>
                     s.measurableId == Some(e.id)
                   ),
              ),
@@ -135,4 +160,3 @@ let toMeasurables = (measurements: array(measurement)) => {
        );
   measurables;
 };
-module GetAgentQuery = ReasonApollo.CreateQuery(GetAgent);

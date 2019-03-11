@@ -1,53 +1,29 @@
 open Utils;
 open Rationale.Result.Infix;
 open Rationale;
+open E;
 
 let ste = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("Redirecting...");
 
-let withUserQuery =
-    (
-      auth0Id: option(string),
-      innerComponentFn: 'a => ReasonReact.reactElement,
-    ) =>
-  switch (auth0Id) {
-  | Some(auth) =>
-    let query = Queries.GetUser.Query.make(~auth0Id=auth, ());
-    Queries.GetUser.QueryComponent.make(
-      ~variables=query##variables, ~pollInterval=5000, ({result}) =>
-      result
-      |> ApolloUtils.apolloResponseToResult
-      <$> (e => innerComponentFn(Some(e)))
-      |> Rationale.Result.result(idd, idd)
-    )
-    |> ReasonReact.element;
-  | None => innerComponentFn(None)
-  };
-
-let omap = Rationale.Option.fmap;
 let make = _children => {
   ...component,
   render: _ =>
-    withUserQuery(
+    Queries.GetUser.component(
       Auth0.userId(),
       userQuery => {
         let agentId =
           userQuery
-          |> Rationale.Option.bind(_, e => e##user)
-          |> Rationale.Option.bind(_, e => e##agent)
-          |> omap(e => e##id);
+          |> O.bind(_, e => e##user)
+          |> O.bind(_, e => e##agent)
+          |> O.fmap(e => e##id);
         let name =
-          userQuery
-          |> Rationale.Option.bind(_, e => e##user)
-          |> omap(e => e##name);
-        if (name == Some("")) {
-          ReasonReact.Router.push("/profile");
-        } else {
-          switch (agentId) {
-          | Some(i) => ReasonReact.Router.push("/agents/" ++ i)
-          | _ => ()
-          };
+          userQuery |> O.bind(_, e => e##user) |> O.fmap(e => e##name);
+        switch (name, agentId) {
+        | (Some(""), _) => Urls.pushToLink(Profile)
+        | (_, Some(id)) => Urls.pushToLink(AgentShow(id))
+        | _ => ()
         };
         <div>
           <h1> {"Redirecting..." |> ste} </h1>

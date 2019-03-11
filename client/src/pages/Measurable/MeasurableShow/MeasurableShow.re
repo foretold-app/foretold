@@ -1,7 +1,4 @@
 open Utils;
-open Rationale;
-open QueriesHelper;
-open MomentRe;
 open Style.Grid;
 
 let component = ReasonReact.statelessComponent("Measurable");
@@ -30,7 +27,7 @@ module Styles = {
     ]);
 };
 
-let make = (~channel, ~id: string, _children) => {
+let make = (~id: string, _children) => {
   ...component,
   render: _self =>
     Queries.GetMeasurableWithMeasurements.withQuery(
@@ -81,7 +78,5 @@ let make = (~channel, ~id: string, _children) => {
           </div>
         </div>;
       },
-    )
-    |> FillWithSidebar.make(~channel=Some(channel))
-    |> ReasonReact.element,
+    ),
 };

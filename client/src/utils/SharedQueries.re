@@ -1,4 +1,3 @@
-open Utils;
 open Rationale.Result.Infix;
 
 let withUserQuery =
@@ -14,7 +13,7 @@ let withUserQuery =
       result
       |> ApolloUtils.apolloResponseToResult
       <$> (e => innerComponentFn(Some(e)))
-      |> Rationale.Result.result(idd, idd)
+      |> E.R.id
     )
     |> ReasonReact.element;
   | None => innerComponentFn(None)

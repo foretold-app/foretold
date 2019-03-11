@@ -1,5 +1,5 @@
 open Graph_T.T;
-open Config;
+open Ken_Config;
 
 open FactJson.Value;
 let to_json = (v: value) =>

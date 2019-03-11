@@ -32,10 +32,7 @@ module Grid = {
     let component = ReasonReact.statelessComponent("divWithStyles");
     let make = (~styles=[], children) => {
       ...component,
-      render: _ =>
-        <div className={Rationale.RList.join(" ", styles)}>
-          ...children
-        </div>,
+      render: _ => <div className={E.L.join(" ", styles)}> ...children </div>,
     };
   };
 };

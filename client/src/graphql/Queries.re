@@ -131,6 +131,28 @@ module GetUserMeasurables = {
   ];
 
   module QueryComponent = ReasonApollo.CreateQuery(Query);
+
+  let notFound = <h3> {"Agent not found" |> ste} </h3>;
+
+  let component = (~id, innerFn) => {
+    open Result.Infix;
+    let query = Query.make(~id, ());
+    QueryComponent.make(~variables=query##variables, ({result}) =>
+      result
+      |> ApolloUtils.apolloResponseToResult
+      <$> (e => e##agent)
+      >>= (
+        e =>
+          switch (e) {
+          | Some(a) => Ok(a)
+          | None => Error(notFound)
+          }
+      )
+      <$> innerFn
+      |> E.R.id
+    )
+    |> ReasonReact.element;
+  };
 };
 
 module GetMeasurable = {
@@ -209,6 +231,23 @@ module GetMeasurable = {
     |}
   ];
   module QueryComponent = ReasonApollo.CreateQuery(Query);
+  let component = (~id, fn) => {
+    let query = Query.make(~id, ());
+    Result.Infix.(
+      QueryComponent.make(~variables=query##variables, ({result}) =>
+        result
+        |> ApolloUtils.apolloResponseToResult
+        >>= (
+          e =>
+            e##measurable
+            |> filterOptionalResult("Measurable not found" |> ste)
+        )
+        <$> fn
+        |> Result.result(idd, idd)
+      )
+      |> ReasonReact.element
+    );
+  };
 };
 
 module GetMeasurables = {
@@ -260,7 +299,7 @@ module GetMeasurables = {
       ~expectedResolutionDate=m.expectedResolutionDate,
       ~state=Some(m.state),
       ~stateUpdatedAt=m.stateUpdatedAt,
-      ~creator=Rationale.Option.fmap(toCreator, m.creator),
+      ~creator=E.O.fmap(toCreator, m.creator),
       (),
     );
 
@@ -294,7 +333,23 @@ module GetMeasurables = {
   ];
 
   module QueryComponent = ReasonApollo.CreateQuery(Query);
+
+  let component = (channel, innerComponentFn: 'a => ReasonReact.reactElement) => {
+    open Result.Infix;
+    let query = Query.make(~offset=0, ~limit=200, ~channel, ());
+    QueryComponent.make(~variables=query##variables, o =>
+      o.result
+      |> ApolloUtils.apolloResponseToResult
+      <$> (d => d##measurables)
+      <$> E.A.Optional.concatSomes
+      <$> (d => d |> E.A.fmap(toMeasurable))
+      <$> (e => innerComponentFn(e))
+      |> Result.result(idd, idd)
+    )
+    |> ReasonReact.element;
+  };
 };
+
 module GetUser = {
   module Query = [%graphql
     {|
@@ -314,6 +369,27 @@ module GetUser = {
   ];
 
   module QueryComponent = ReasonApollo.CreateQuery(Query);
+
+  let component =
+      (
+        auth0Id: option(string),
+        innerComponentFn: 'a => ReasonReact.reactElement,
+      ) =>
+    switch (auth0Id) {
+    | Some(auth) =>
+      let query = Query.make(~auth0Id=auth, ());
+      Rationale.Result.Infix.(
+        QueryComponent.make(
+          ~variables=query##variables, ~pollInterval=5000, ({result}) =>
+          result
+          |> ApolloUtils.apolloResponseToResult
+          <$> (e => innerComponentFn(Some(e)))
+          |> E.R.id
+        )
+        |> ReasonReact.element
+      );
+    | None => innerComponentFn(None)
+    };
 };
 
 module GetMeasurableWithMeasurements = {
@@ -392,7 +468,7 @@ module GetMeasurableWithMeasurements = {
   let queryMeasurable = m => {
     open DataModel;
     let creator: option(DataModel.creator) =
-      m##creator |> Option.fmap(r => {id: r##id, name: r##name});
+      m##creator |> E.O.fmap(r => {id: r##id, name: r##name});
 
     let measurable: DataModel.measurable =
       DataModel.toMeasurable(
@@ -420,7 +496,7 @@ module GetMeasurableWithMeasurements = {
     open DataModel;
     let agentType: option(DataModel.agentType) =
       m##agent
-      |> Rationale.Option.bind(_, k =>
+      |> E.O.bind(_, k =>
            switch (k##bot, k##user) {
            | (Some(bot), None) =>
              Some(
@@ -439,9 +515,7 @@ module GetMeasurableWithMeasurements = {
 
     let agent: option(DataModel.agent) =
       m##agent
-      |> Rationale.Option.fmap(k =>
-           {id: k##id, measurementCount: None, agentType}
-         );
+      |> E.O.fmap(k => {id: k##id, measurementCount: None, agentType});
 
     DataModel.toMeasurement(
       ~id=m##id,
@@ -454,5 +528,45 @@ module GetMeasurableWithMeasurements = {
       ~agent,
       (),
     );
+  };
+};
+
+module CreateMeasurementMutation = {
+  module Query = [%graphql
+    {|
+            mutation createMeasurement($value: SequelizeJSON!, $description: String!, $competitorType:competitorType!, $measurableId:String!) {
+                createMeasurement(value: $value, description: $description, competitorType: $competitorType, measurableId:$measurableId) {
+                  createdAt
+                }
+            }
+    |}
+  ];
+
+  module Mutation = ReasonApollo.CreateMutation(Query);
+
+  type competitorType = [ | `COMPETITIVE | `OBJECTIVE];
+
+  let mutate =
+      (
+        mutation: Mutation.apolloMutation,
+        measurableId: string,
+        value: Value.t,
+        competitorType: competitorType,
+        description: string,
+      ) => {
+    let m =
+      Query.make(
+        ~measurableId,
+        ~value=value |> Value.encode,
+        ~description,
+        ~competitorType,
+        (),
+      );
+    mutation(
+      ~variables=m##variables,
+      ~refetchQueries=[|"getMeasurable"|],
+      (),
+    )
+    |> ignore;
   };
 };

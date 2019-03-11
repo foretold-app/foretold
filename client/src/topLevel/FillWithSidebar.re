@@ -1,6 +1,4 @@
 open Utils;
-open Rationale;
-open Queries;
 
 module Styles = {
   open Css;
@@ -41,34 +39,40 @@ module Styles = {
       backgroundColor(hex("1890ff")),
       selector(
         ":hover",
-        [backgroundColor(hex("60b2ff")), color(`hex("fff"))],
+        [backgroundColor(`hex("60b2ff")), color(`hex("fff"))],
       ),
     ]);
 };
 
 let component = ReasonReact.statelessComponent("MeOverlay");
 let button = channel =>
-  <a href={"/c/" ++ channel ++ "/new"} className=Styles.newButton>
+  <a
+    href={Urls.mapLinkToUrl(MeasurableNew(channel))}
+    className=Styles.newButton>
     {"New Measurable" |> ste}
   </a>;
 
-let make = (~channel: option(string), children) => {
+let make = (~channel: option(string), ~userQuery, children) => {
   ...component,
   render: _self =>
     <UseRouterForLinks>
       <div className=Styles.outer>
-        <div className=Styles.left> <MeasurableIndexSidebar channel /> </div>
+        <div className=Styles.left>
+          <MeasurableIndexSidebar channel userQuery />
+        </div>
         <div className=Styles.right>
           {
             switch (channel) {
             | Some(c) =>
               <div className=Styles.rightTop>
-                <a href={"/c/" ++ c} className=Styles.header>
+                <a
+                  href={Urls.mapLinkToUrl(Channel(c))}
+                  className=Styles.header>
                   {"#" ++ c |> ste}
                 </a>
                 {button(c)}
               </div>
-            | None => <div />
+            | None => ReasonReact.null
             }
           }
           <div className=Styles.rightBottom> children </div>

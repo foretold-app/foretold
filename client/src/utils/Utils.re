@@ -31,11 +31,12 @@ let filterOptionalResult = (errorMessage, result: option('a)) =>
 let idd = e => e;
 
 let filterAndFold = fn =>
-  Array.fold_left(
+  E.A.fold_left(
     (acc, elem) => fn(elem, e => Array.concat([acc, [|e|]]), () => acc),
     [||],
   );
 
+/* TODO: Move */
 let doIfSome = (fn, s: option('a)) =>
   switch (s) {
   | Some(r) => fn(r)

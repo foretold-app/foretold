@@ -73,7 +73,7 @@ module.exports = {
       ALTER TABLE "Users" ALTER COLUMN "agentId" SET DATA TYPE uuid USING "agentId"::uuid;
       
       ALTER TABLE "Measurables" DROP CONSTRAINT "Measurables_creatorId_fkey";
-      ALTER TABLE "Measurables" ALTER COLUMN "creatorId" SET DATA TYPE uuid USING "agentId"::uuid;
+      ALTER TABLE "Measurables" ALTER COLUMN "creatorId" SET DATA TYPE uuid USING "creatorId"::uuid;
       
       
       
@@ -97,8 +97,8 @@ module.exports = {
       DELETE FROM "Measurements" WHERE length(id) = 24;
       ALTER TABLE "Measurements" ALTER COLUMN id TYPE uuid USING "id"::uuid;
         
-      ALTER TABLE "Measurements" ALTER COLUMN measurableId TYPE uuid USING "id"::uuid;
-      ALTER TABLE "Measurements" ALTER COLUMN agentId TYPE uuid USING "id"::uuid;
+      ALTER TABLE "Measurements" ALTER COLUMN measurableId TYPE uuid USING "measurableId"::uuid;
+      ALTER TABLE "Measurements" ALTER COLUMN agentId TYPE uuid USING "agentId"::uuid;
       
       
       

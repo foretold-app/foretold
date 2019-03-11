@@ -62,6 +62,22 @@ module.exports = {
       DELETE FROM "Users" WHERE length(id) = 24;
       ALTER TABLE "Users" ALTER COLUMN id TYPE uuid USING "id"::uuid;
       
+      ALTER TABLE "Agents" ALTER COLUMN id drop default;
+      DELETE FROM "Agents" WHERE length(id) = 24;
+      ALTER TABLE "Agents" ALTER COLUMN id TYPE uuid USING "id"::uuid;
+      
+      ALTER TABLE "Measurables" ALTER COLUMN id drop default;
+      DELETE FROM "Measurables" WHERE length(id) = 24;
+      ALTER TABLE "Measurables" ALTER COLUMN id TYPE uuid USING "id"::uuid;
+      
+      ALTER TABLE "Bots" ALTER COLUMN id drop default;
+      DELETE FROM "Bots" WHERE length(id) = 24;
+      ALTER TABLE "Bots" ALTER COLUMN id TYPE uuid USING "id"::uuid;
+      
+      ALTER TABLE "Measurements" ALTER COLUMN id drop default;
+      DELETE FROM "Measurements" WHERE length(id) = 24;
+      ALTER TABLE "Measurements" ALTER COLUMN id TYPE uuid USING "id"::uuid;
+      
       ALTER TABLE "Bots" ADD CONSTRAINT "Bots_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users" ("id") on update cascade on delete set null;
       
       DROP EXTENSION IF EXISTS pgcrypto;

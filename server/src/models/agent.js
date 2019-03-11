@@ -4,7 +4,7 @@ const Sequelize = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Agent', {
     id: {
-      type: DataTypes.STRING(32),
+      type: DataTypes.STRING(36),
       primaryKey: true,
       defaultValue: sequelize.fn('generate_object_id'),
       allowNull: false,

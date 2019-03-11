@@ -5,7 +5,7 @@ const {clientUrl} = require('../lib/urls');
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Measurement', {
     id: {
-      type: DataTypes.STRING(32),
+      type: DataTypes.STRING(36),
       primaryKey: true,
       defaultValue: sequelize.fn('generate_object_id'),
       allowNull: false,
@@ -24,11 +24,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     measurableId: {
-      type: DataTypes.STRING(32),
+      type: DataTypes.STRING(36),
       allowNull: false
     },
     agentId: {
-      type: DataTypes.STRING(32),
+      type: DataTypes.STRING(36),
       allowNull: true
     },
     relevantAt: {

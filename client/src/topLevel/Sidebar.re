@@ -39,25 +39,24 @@ module Styles = {
     ]);
 };
 
-let component = ReasonReact.statelessComponent("MeasurableIndexSidebar");
-let make = (~channel, ~userQuery, _children) => {
+let component = ReasonReact.statelessComponent("Sidebar");
+let make = (~channel, ~loggedInUser: GetUser.t, _children) => {
   ...component,
   render: _self =>
     <div>
       <div className=Styles.minorHeader> {"User" |> ste} </div>
       {
-        switch (userQuery) {
-        | Some(query) =>
+        switch (loggedInUser) {
+        | Some(user) =>
           open Rationale.Option.Infix;
-          let userAgentId = query##user >>= (e => e##agentId);
-          let idd = userAgentId |> E.O.default("");
+          let idd = user.agentId |> E.O.default("");
           <div>
             <div
               onClick=(_e => Urls.pushToLink(Profile)) className=Styles.item>
               {"Profile" |> ste}
             </div>
             <div
-              onClick=(_e => Urls.pushToLink(AgentShow(idd)))
+              onClick=(_e => Urls.pushToLink(AgentMeasurables(idd)))
               className=Styles.item>
               {"Edit Measurables" |> ste}
             </div>

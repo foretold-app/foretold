@@ -10,7 +10,7 @@ const _ = require('lodash');
 const { attributeFields, resolver } = require("graphql-sequelize");
 
 const models = require("./models");
-const { measurementData, usersData, measurablesData } = require('./data');
+const { measurementData, usersData, measurablesData, seriesData } = require('./data');
 const { capitalizeFirstLetter } = require('./helpers');
 
 const { competitor } = require('./types/competitor');
@@ -95,6 +95,7 @@ const measurableType = makeObjectType(models.Measurable);
 const measurementType = makeObjectType(models.Measurement);
 const botType = makeObjectType(models.Bot);
 const agentType = makeObjectType(models.Agent);
+const seriesType = makeObjectType(models.Series);
 
 const getType = {
   Users: userType,
@@ -102,6 +103,7 @@ const getType = {
   Bots: botType,
   Measurables: measurableType,
   measurables: measurableType,
+  Series: seriesType,
   Measurements: measurementType,
 };
 
@@ -135,6 +137,7 @@ const schema = new GraphQLSchema({
       ...modelResolvers("measurable", "measurables", measurableType, models.Measurable),
       ...modelResolvers("bot", "bots", botType, models.Bot),
       ...modelResolvers("agent", "agents", agentType, models.Agent),
+      ...modelResolvers("series", "seriesCollection", seriesType, models.Series),
       stats: {
         type: new GraphQLNonNull(stats),
         resolve: async (ops, values, options) => {
@@ -147,6 +150,8 @@ const schema = new GraphQLSchema({
         args: {
           offset: { type: GraphQLInt },
           limit: { type: GraphQLInt },
+          creatorId: { type: GraphQLString },
+          seriesId: { type: GraphQLString },
           channel: { type: GraphQLString }
         },
         resolve: async (ops, values, options) => {
@@ -170,6 +175,13 @@ const schema = new GraphQLSchema({
         args: filterr(_.pick(attributeFields(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty', 'channel'])),
         resolve: async (root, values, options) => {
           return measurablesData.createMeasurable(root, values, options);
+        }
+      },
+      createSeries: {
+        type: seriesType,
+        args: filterr(_.pick(attributeFields(models.Series), ['name', 'description', 'channel', 'subjects', 'properties', 'dates'])),
+        resolve: async (root, values, options) => {
+          return seriesData.createSeries(root, values, options);
         }
       },
       archiveMeasurable: {

@@ -54,10 +54,10 @@ let make = (~id: string, _children) => {
     <div>
       <div>
         {
-          Queries.GetMeasurable.component(
+          GetMeasurable.component(
             ~id,
             m => {
-              let measurable = Queries.GetMeasurable.toMeasurable(m);
+              let measurable = GetMeasurable.toMeasurable(m);
               WithEditMutation.Mutation.make((mutation, data) =>
                 MeasurableForm.SignUpForm.make(
                   ~onSubmit=

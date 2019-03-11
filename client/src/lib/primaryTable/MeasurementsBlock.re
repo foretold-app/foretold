@@ -1,5 +1,6 @@
 open Utils;
 open MomentRe;
+open Style.Grid;
 
 let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
 
@@ -106,21 +107,19 @@ let make = (ms: list(DataModel.measurement)) => {
            </div>
            <div className={MeasurementTableStyles.rightColumn(~m)}>
              <div className=MeasurementTableStyles.rightColumnInner>
-               <div className=Style.Grid.Styles.flexColumn>
-                 <div className={Style.Grid.Styles.flex(1)}>
-                   <div className=Style.Grid.Styles.flexRow>
-                     <div className={Style.Grid.Styles.flex(4)}>
+               <Div flexDirection=`column>
+                 <Div flex=1>
+                   <Div flexDirection=`row>
+                     <Div flex=4>
                        {MeasurementTableStyles.agentLink(~m)}
-                     </div>
-                     <div className={Style.Grid.Styles.flex(1)}>
+                     </Div>
+                     <Div flex=1>
                        {MeasurementTableStyles.relevantAt(~m)}
-                     </div>
-                   </div>
-                 </div>
-                 <div className={Style.Grid.Styles.flex(1)}>
-                   {MeasurementTableStyles.description(~m)}
-                 </div>
-               </div>
+                     </Div>
+                   </Div>
+                 </Div>
+                 <Div flex=1> {MeasurementTableStyles.description(~m)} </Div>
+               </Div>
              </div>
            </div>
          </div>

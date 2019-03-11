@@ -42,3 +42,5 @@ let doIfSome = (fn, s: option('a)) =>
   | Some(r) => fn(r)
   | _ => ()
   };
+
+let showIf = (cond, comp) => cond ? comp : ReasonReact.null;

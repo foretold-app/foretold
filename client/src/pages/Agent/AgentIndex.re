@@ -1,7 +1,6 @@
 open Utils;
 open Rationale;
 open Result.Infix;
-open Queries;
 
 let toAgentLink = (id, name) => {j|<a href="/agents/$id">$name</a>|j};
 
@@ -11,7 +10,7 @@ let make = _children => {
   render: _ =>
     <div>
       {
-        Queries.GetAgents.QueryComponent.make(({result}) =>
+        GetAgents.QueryComponent.make(({result}) =>
           result
           |> ApolloUtils.apolloResponseToResult
           <$> (d => d##agents)

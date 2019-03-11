@@ -1,10 +1,10 @@
-[@bs.module]
-external reactClass : ReasonReact.reactClass = "antd/lib/date-picker/index";
+[@bs.module "antd/lib/date-picker/index"]
+external reactClass: ReasonReact.reactClass = "default";
 
 [%bs.raw {|require("antd/lib/date-picker/style")|}];
 
 [@bs.obj]
-external makeProps :
+external makeProps:
   (
     ~className: string=?,
     ~style: ReactDOMRe.Style.t=?,

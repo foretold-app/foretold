@@ -97,10 +97,7 @@ module.exports = {
       DELETE FROM "Measurements" WHERE length(id) = 24;
       ALTER TABLE "Measurements" ALTER COLUMN id TYPE uuid USING "id"::uuid;
         
-      ALTER TABLE "Measurements" ALTER COLUMN measurableId TYPE uuid USING "measurableId"::uuid;
-      ALTER TABLE "Measurements" ALTER COLUMN agentId TYPE uuid USING "agentId"::uuid;
-      
-      
+
       
       ALTER TABLE "Bots" ADD CONSTRAINT "Bots_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users" ("id") on update cascade on delete set null;
       ALTER TABLE "Bots" ADD CONSTRAINT "Bots_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "Agents" ("id") on update cascade on delete set null;

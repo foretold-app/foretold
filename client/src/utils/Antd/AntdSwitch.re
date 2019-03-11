@@ -7,9 +7,8 @@ let optBoolToOptJsBoolean =
 
 let unwrapBool = v => Js.Undefined.from_opt @@ optBoolToOptJsBoolean(v);
 
-[@bs.module]
-external switch_: ReasonReact.reactClass =
-  "../../../node_modules/antd/lib/switch";
+[@bs.module "../../../node_modules/antd/lib/switch"]
+external switch_: ReasonReact.reactClass = "default";
 %bs.raw
 "require('../../../node_modules/antd/lib/switch/style/index.css')";
 

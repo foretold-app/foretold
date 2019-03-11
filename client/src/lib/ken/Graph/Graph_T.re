@@ -73,14 +73,7 @@ module Directory = {
   let isRoot = e => e |> to_array |> Array.length == 1;
   let root = e => e |> to_array |> Array.get(_, 0);
   let isFactDirectory = e =>
-    e
-    |> to_list
-    |> (
-      e => {
-        Js.log(E.L.last(e));
-        E.L.last(e) == Some("_f");
-      }
-    );
+    e |> to_list |> (e => E.L.last(e) == Some("_f"));
   let allSubdirectories =
     to_list ||> listCombinations ||> E.L.fmap(from_list);
 

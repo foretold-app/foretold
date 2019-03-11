@@ -5,7 +5,7 @@ var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Routes$Client = require("./topLevel/Routes.bs.js");
-var TopLevel$Client = require("./TopLevel.bs.js");
+var TopLevel$Client = require("./topLevel/TopLevel.bs.js");
 
 function reducer(action, _state) {
   return /* Update */Block.__(0, [/* record */[/* route */action[0]]]);

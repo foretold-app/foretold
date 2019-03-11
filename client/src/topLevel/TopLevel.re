@@ -1,4 +1,5 @@
 open Routes;
+
 let component = ReasonReact.statelessComponent("TopLevel");
 let make = (~route: route, _children) => {
   ...component,
@@ -8,33 +9,35 @@ let make = (~route: route, _children) => {
       | Channel(c) => Some(c)
       | MeasurableNew(c) => Some(c)
       | MeasurableShow(c, _) => Some(c)
+      | Series(c, _) => Some(c)
       | Home => Some("general")
       | _ => None
       };
 
     (
-      userQuery =>
+      (loggedInUser: GetUser.t) =>
         <div>
           {
             switch (route) {
-            | Home => <MeasurableIndex channel="general" />
-            | AgentMeasurables(id) => <MeMeasurables id />
+            | AgentMeasurables(id) => <AgentMeasurables id loggedInUser />
             | AgentIndex => <AgentIndex />
-            | NotFound => <MeasurableIndex channel="general" />
             | ItemShow(id) => <ItemShow id />
             | Redirect => <Redirect />
-            | Profile(auth0Id) => <Profile auth0Id />
+            | Profile => <Profile loggedInUser />
             | AgentShow(id) => <AgentShow id />
-            | Channel(channel) => <MeasurableIndex channel />
+            | Channel(channel) => <MeasurableIndex channel loggedInUser />
             | MeasurableNew(channel) => <MeasurableNew channel />
-            | MeasurableShow(_, id) => <MeasurableShow id />
+            | MeasurableShow(_, id) => <MeasurableShow id loggedInUser />
             | MeasurableEdit(id) => <MeasurableEdit id />
+            | Series(channel, id) => <SeriesShow channel id loggedInUser />
+            | Home
+            | NotFound => <MeasurableIndex channel="general" loggedInUser />
             }
           }
         </div>
-        |> FillWithSidebar.make(~channel, ~userQuery)
+        |> FillWithSidebar.make(~channel, ~loggedInUser)
         |> ReasonReact.element
     )
-    |> SharedQueries.withLoggedInUserQuery;
+    |> GetUser.withLoggedInUserQuery;
   },
 };

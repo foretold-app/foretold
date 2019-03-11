@@ -14,11 +14,21 @@ module O = {
   let default = Rationale.Option.default;
   let isSome = Rationale.Option.isSome;
   let toExn = Option.toExn;
+
+  module React = {
+    let defaultNull = (e: option(ReasonReact.reactElement)) =>
+      switch (e) {
+      | Some(r) => r
+      | None => ReasonReact.null
+      };
+  };
 };
 
 /* R for Result */
 module R = {
   let id = e => e |> Rationale.Result.result(idd, idd);
+  let fmap = Rationale.Result.fmap;
+  let bind = Rationale.Result.bind;
 };
 
 /* List */
@@ -59,7 +69,6 @@ module A = {
   let keepMap = Belt.Array.keepMap;
   let stableSortBy = Belt.SortArray.stableSortBy;
   module Optional = {
-    open Rationale;
     let concatSomes = (optionals: Js.Array.t(option('a))): Js.Array.t('a) =>
       optionals
       |> Js.Array.filter(Option.isSome)
@@ -76,6 +85,7 @@ module JsArray = {
     optionals
     |> Js.Array.filter(Option.isSome)
     |> Js.Array.map(Option.toExn("Warning: This should not have happened"));
+  let filter = Js.Array.filter;
 };
 
 module FloatCdf = {

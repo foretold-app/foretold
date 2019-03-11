@@ -3,7 +3,11 @@ open Utils;
 module Styles = {
   open Css;
   let outer =
-    style([display(`flex), flexDirection(`row), height(`percent(100.0))]);
+    style([
+      display(`flex),
+      flexDirection(`row),
+      minHeight(`percent(100.0)),
+    ]);
   let left =
     style([
       flex(1),
@@ -52,28 +56,26 @@ let button = channel =>
     {"New Measurable" |> ste}
   </a>;
 
-let make = (~channel: option(string), ~userQuery, children) => {
+let make = (~channel: option(string), ~loggedInUser: GetUser.t, children) => {
   ...component,
   render: _self =>
     <UseRouterForLinks>
       <div className=Styles.outer>
-        <div className=Styles.left>
-          <MeasurableIndexSidebar channel userQuery />
-        </div>
+        <div className=Styles.left> <Sidebar channel loggedInUser /> </div>
         <div className=Styles.right>
           {
-            switch (channel) {
-            | Some(c) =>
-              <div className=Styles.rightTop>
-                <a
-                  href={Urls.mapLinkToUrl(Channel(c))}
-                  className=Styles.header>
-                  {"#" ++ c |> ste}
-                </a>
-                {button(c)}
-              </div>
-            | None => ReasonReact.null
-            }
+            channel
+            |> E.O.fmap(c =>
+                 <div className=Styles.rightTop>
+                   <a
+                     href={Urls.mapLinkToUrl(Channel(c))}
+                     className=Styles.header>
+                     {"#" ++ c |> ste}
+                   </a>
+                   {button(c)}
+                 </div>
+               )
+            |> E.O.React.defaultNull
           }
           <div className=Styles.rightBottom> children </div>
         </div>

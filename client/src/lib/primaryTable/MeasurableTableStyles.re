@@ -22,28 +22,45 @@ let compareMeasurables =
 let formatDate = e =>
   Option.Infix.(e <$> MomentRe.Moment.format("L") |> E.O.default(""));
 
-let dateFinder = (head, p, date) => {
+type dateDisplay =
+  | TOP
+  | BOTTOM
+  | WHOLE;
+
+let dateFinder = (head, p, date, dateDisplay) => {
   let date = formatDate(date);
-  <div className=PrimaryTableStyles.statusRow>
-    <h3> {head |> ste} </h3>
-    <p> {p ++ date |> ste} </p>
-  </div>;
+  switch (dateDisplay) {
+  | TOP => head |> ste
+  | BOTTOM => p ++ date |> ste
+  | WHOLE =>
+    <div className=PrimaryTableStyles.statusRow>
+      <h3> {head |> ste} </h3>
+      <p> {p ++ date |> ste} </p>
+    </div>
+  };
 };
 
-let dateStatus = (~measurable: DataModel.measurable) => {
+let dateStatusI = (~measurable: DataModel.measurable, ~dateDisplay) => {
   let m = measurable;
   switch (status(m)) {
-  | OPEN => dateFinder("Open", "Closes ~", m.expectedResolutionDate)
+  | OPEN =>
+    dateFinder("Open", "Closes ~", m.expectedResolutionDate, dateDisplay)
   | PENDING_REVIEW =>
     dateFinder(
       "Judgement Pending",
       "Pending since ",
       m.expectedResolutionDate,
+      dateDisplay,
     )
-  | ARCHIVED => dateFinder("Archived", "Archived on ", m.stateUpdatedAt)
-  | JUDGED => dateFinder("Judged", "Judged on ", m.stateUpdatedAt)
+  | ARCHIVED =>
+    dateFinder("Archived", "Archived on ", m.stateUpdatedAt, dateDisplay)
+  | JUDGED =>
+    dateFinder("Judged", "Judged on ", m.stateUpdatedAt, dateDisplay)
   };
 };
+
+let dateStatus = (~measurable: DataModel.measurable) =>
+  dateStatusI(~measurable, ~dateDisplay=WHOLE);
 
 let dateStatusWrapper = (~measurable: DataModel.measurable) =>
   <div className={PrimaryTableStyles.statusColor(~measurable)}>
@@ -70,7 +87,8 @@ let xEntityLink = (attribute, ~m: DataModel.measurable, ~className: string) =>
   |> attribute
   |> E.O.bind(_, ItemShow.findName(graph))
   |> E.O.bind(_, r =>
-       m.descriptionEntity
+       m
+       |> attribute
        |> E.O.fmap(d => <a href={d |> itemUrl} className> {r |> ste} </a>)
      );
 
@@ -81,11 +99,11 @@ let link = (~m: DataModel.measurable) =>
   <div>
     {
       nameEntityLink(~m, ~className=PrimaryTableStyles.itemLink)
-      |> E.O.default(ReasonReact.null)
+      |> E.O.React.defaultNull
     }
     {
       propertyEntityLink(~m, ~className=PrimaryTableStyles.propertyLink)
-      |> E.O.default(ReasonReact.null)
+      |> E.O.React.defaultNull
     }
     <span className=PrimaryTableStyles.namme> {m.name |> ste} </span>
     {
@@ -150,8 +168,8 @@ let measurements = (~m: DataModel.measurable) =>
   | None => <div />
   | Some(count) =>
     <div className=PrimaryTableStyles.item>
+      <Icon.Icon icon="BULB" />
       <span> {count |> string_of_int |> ste} </span>
-      <span> {" measurements" |> ste} </span>
     </div>
   };
 
@@ -162,11 +180,32 @@ let measurers = (~m: DataModel.measurable) =>
   | Some(count) =>
     <div className=PrimaryTableStyles.item>
       <span>
+        <Icon.Icon icon="PEOPLE" />
         {count |> string_of_int |> ste}
-        <span> {" measurers" |> ste} </span>
       </span>
     </div>
   };
+
+let series = (~m: DataModel.measurable) =>
+  m.series
+  |> Option.bind(_, r =>
+       switch (r.name) {
+       | Some(name) =>
+         Some(
+           <div className=PrimaryTableStyles.item>
+             <Icon.Icon icon="LAYERS" />
+             <a
+               href={
+                 "/c/" ++ (m.channel |> Option.default("")) ++ "/s/" ++ r.id
+               }>
+               {name |> ste}
+             </a>
+           </div>,
+         )
+       | None => None
+       }
+     )
+  |> E.O.React.defaultNull;
 
 let expectedResolutionDate = (~m: DataModel.measurable) =>
   <div className=PrimaryTableStyles.item>

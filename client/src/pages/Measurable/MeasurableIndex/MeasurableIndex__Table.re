@@ -1,10 +1,15 @@
 open Utils;
 open Rationale;
-open Queries;
 
 let component = ReasonReact.statelessComponent("MeasurableIndexTable");
 
-let make = (~measurables: array(DataModel.measurable), _children) => {
+let make =
+    (
+      ~measurables: array(DataModel.measurable),
+      ~showExtraData: bool,
+      ~loggedInUser: GetUser.t,
+      _children,
+    ) => {
   ...component,
   render: _self => {
     let _measurables =
@@ -12,10 +17,19 @@ let make = (~measurables: array(DataModel.measurable), _children) => {
       |> Js.Array.filter((e: DataModel.measurable) =>
            PrimaryTableBase.status(e) != ARCHIVED
          );
+    let isLoggedOn = loggedInUser |> E.O.isSome;
     <div className=PrimaryTableStyles.group>
       {
         _measurables
-        |> E.A.fmap(m =>
+        |> E.A.fmap((m: DataModel.measurable) => {
+             let userAgentId =
+               loggedInUser
+               |> E.O.bind(_, (r: GetUser.user) => r.agent)
+               |> E.O.fmap((r: GetUser.agent) => r.id);
+             let measurableAgentId =
+               m.creator |> E.O.fmap((r: DataModel.agent) => r.id);
+             let isSame =
+               userAgentId == measurableAgentId && E.O.isSome(userAgentId);
              <div
                className={PrimaryTableStyles.row(m)}
                onClick={
@@ -32,16 +46,24 @@ let make = (~measurables: array(DataModel.measurable), _children) => {
                    {MeasurableTableStyles.link(~m)}
                  </div>
                  <div className=PrimaryTableStyles.mainColumnBottom>
-                   {MeasurableTableStyles.creatorLink(~m)}
+                   {showIf(showExtraData, MeasurableTableStyles.series(~m))}
+                   {
+                     showIf(
+                       showExtraData,
+                       MeasurableTableStyles.creatorLink(~m),
+                     )
+                   }
                    {MeasurableTableStyles.measurements(~m)}
                    {MeasurableTableStyles.measurers(~m)}
+                   {showIf(isSame, MeasurableTableStyles.editLink(~m))}
+                   {showIf(isSame, MeasurableTableStyles.archiveOption(~m))}
                  </div>
                </div>
                <div className=PrimaryTableStyles.rightColumn>
                  {MeasurableTableStyles.dateStatus(~measurable=m)}
                </div>
-             </div>
-           )
+             </div>;
+           })
         |> ReasonReact.array
       }
     </div>;

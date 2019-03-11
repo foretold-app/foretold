@@ -8,7 +8,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
     let data =
       measurements
       |> E.A.Optional.concatSomes
-      |> E.A.fmap(Queries.GetMeasurableWithMeasurements.toMeasurement);
+      |> E.A.fmap(GetMeasurableWithMeasurements.toMeasurement);
 
     <div className=MeasurementTableStyles.group>
       {data |> E.A.to_list |> MeasurementsBlock.make}

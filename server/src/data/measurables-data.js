@@ -133,24 +133,25 @@ class MeasurablesData {
    * @return {Promise<*|Array<Model>>}
    */
   async getAll(root, values, options) {
-    const { offset, limit, channel, seriesId } = values;
+    const { offset, limit, channel, seriesId, creatorId } = values;
     let where = {
-          channel: {
-            [Sequelize.Op.eq]: channel
-          },
           state: {
             [Sequelize.Op.ne]: "ARCHIVED"
           }
         }
 
     if (seriesId){ where.seriesId = {[Sequelize.Op.eq]: seriesId}}
+    if (creatorId){ where.creatorId = {[Sequelize.Op.eq]: creatorId}}
+    if (channel){ where.channel = {[Sequelize.Op.eq]: channel}}
 
-    return await models.Measurable.findAll({
+    let items =  await models.Measurable.findAll({
       limit: limit,
       offset: offset,
       order: [['createdAt', 'DESC']],
       where
     });
+
+    return items
   }
 
 }

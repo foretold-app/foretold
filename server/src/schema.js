@@ -150,6 +150,7 @@ const schema = new GraphQLSchema({
         args: {
           offset: { type: GraphQLInt },
           limit: { type: GraphQLInt },
+          creatorId: { type: GraphQLString },
           seriesId: { type: GraphQLString },
           channel: { type: GraphQLString }
         },

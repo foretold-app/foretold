@@ -19,7 +19,7 @@ let make = (~route: route, _children) => {
         <div>
           {
             switch (route) {
-            | AgentMeasurables(id) => <MeMeasurables id />
+            | AgentMeasurables(id) => <AgentMeasurables id loggedInUser />
             | AgentIndex => <AgentIndex />
             | ItemShow(id) => <ItemShow id />
             | Redirect => <Redirect />

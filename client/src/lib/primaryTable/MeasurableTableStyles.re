@@ -87,7 +87,8 @@ let xEntityLink = (attribute, ~m: DataModel.measurable, ~className: string) =>
   |> attribute
   |> E.O.bind(_, ItemShow.findName(graph))
   |> E.O.bind(_, r =>
-       m.descriptionEntity
+       m
+       |> attribute
        |> E.O.fmap(d => <a href={d |> itemUrl} className> {r |> ste} </a>)
      );
 

@@ -68,8 +68,8 @@ let toMeasurable = (m: measurable): DataModel.measurable =>
 
 module Query = [%graphql
   {|
-    query getMeasurables ($offset: Int, $limit: Int, $channel: String, $seriesId: String) {
-        measurables(offset: $offset, limit: $limit, channel: $channel, seriesId: $seriesId) @bsRecord {
+    query getMeasurables ($offset: Int, $limit: Int, $channel: String, $seriesId: String, $creatorId: String) {
+        measurables(offset: $offset, limit: $limit, channel: $channel, seriesId: $seriesId, creatorId: $creatorId) @bsRecord {
            id
            name
            channel
@@ -102,33 +102,33 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
+let queryToComponent = (query, innerComponentFn) =>
+  Result.Infix.(
+    QueryComponent.make(~variables=query##variables, o =>
+      o.result
+      |> ApolloUtils.apolloResponseToResult
+      <$> (d => d##measurables)
+      <$> E.A.Optional.concatSomes
+      <$> (d => d |> E.A.fmap(toMeasurable))
+      <$> (e => innerComponentFn(e))
+      |> Result.result(idd, idd)
+    )
+    |> ReasonReact.element
+  );
+
 let component = (channel, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  open Result.Infix;
   let query = Query.make(~offset=0, ~limit=200, ~channel, ());
-  QueryComponent.make(~variables=query##variables, o =>
-    o.result
-    |> ApolloUtils.apolloResponseToResult
-    <$> (d => d##measurables)
-    <$> E.A.Optional.concatSomes
-    <$> (d => d |> E.A.fmap(toMeasurable))
-    <$> (e => innerComponentFn(e))
-    |> Result.result(idd, idd)
-  )
-  |> ReasonReact.element;
+  queryToComponent(query, innerComponentFn);
 };
 
 let componentWithSeries =
     (channel, seriesId, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  open Result.Infix;
   let query = Query.make(~offset=0, ~limit=200, ~channel, ~seriesId, ());
-  QueryComponent.make(~variables=query##variables, o =>
-    o.result
-    |> ApolloUtils.apolloResponseToResult
-    <$> (d => d##measurables)
-    <$> E.A.Optional.concatSomes
-    <$> (d => d |> E.A.fmap(toMeasurable))
-    <$> (e => innerComponentFn(e))
-    |> Result.result(idd, idd)
-  )
-  |> ReasonReact.element;
+  queryToComponent(query, innerComponentFn);
+};
+
+let componentWithCreator =
+    (creatorId, innerComponentFn: 'a => ReasonReact.reactElement) => {
+  let query = Query.make(~offset=0, ~limit=200, ~creatorId, ());
+  queryToComponent(query, innerComponentFn);
 };

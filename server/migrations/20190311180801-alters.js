@@ -14,6 +14,8 @@ module.exports = {
         
         ALTER TABLE "Users" DROP CONSTRAINT "Users_agentId_fkey";
         
+        ALTER TABLE "Measurables" DROP CONSTRAINT "Measurables_creatorId_fkey";
+        
         
         
         ALTER TABLE "Users" ALTER COLUMN id TYPE varchar(36);
@@ -30,11 +32,8 @@ module.exports = {
         
         ALTER TABLE "Measurements" ALTER COLUMN id TYPE varchar(36);
         ALTER TABLE "Measurements" ALTER COLUMN id SET DEFAULT generate_object_id()::VARCHAR(24);
-        
-        ALTER TABLE "Measurements" ALTER COLUMN measurableId TYPE varchar(36);
-        ALTER TABLE "Measurements" ALTER COLUMN agentId TYPE varchar(36);
-        
-        
+
+
         
         ALTER TABLE "Bots" ALTER COLUMN "userId" TYPE varchar(36);
         ALTER TABLE "Bots" ADD CONSTRAINT "Bots_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users" ("id") on update cascade on delete set null;
@@ -50,7 +49,10 @@ module.exports = {
         
         ALTER TABLE "Users" ALTER COLUMN "agentId" TYPE varchar(36);
         ALTER TABLE "Users" ADD CONSTRAINT "Users_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "Agents" ("id") on update cascade on delete set null;
-      `));
+        
+        ALTER TABLE "Measurables" ALTER COLUMN "creatorId" TYPE varchar(36);
+        ALTER TABLE "Measurables" ADD CONSTRAINT "Measurables_creatorId_fkey" FOREIGN KEY ("creatorId") REFERENCES "Agents" ("id") on update cascade on delete set null;
+      `);
   },
 
   down: async function (migration) {
@@ -69,6 +71,9 @@ module.exports = {
             
       ALTER TABLE "Users" DROP CONSTRAINT "Users_agentId_fkey";
       ALTER TABLE "Users" ALTER COLUMN "agentId" SET DATA TYPE uuid USING "agentId"::uuid;
+      
+      ALTER TABLE "Measurables" DROP CONSTRAINT "Measurables_creatorId_fkey";
+      ALTER TABLE "Measurables" ALTER COLUMN "creatorId" SET DATA TYPE uuid USING "agentId"::uuid;
       
       
       
@@ -105,6 +110,8 @@ module.exports = {
       ALTER TABLE "Measurements" ADD CONSTRAINT "Measurements_taggedMeasurementId_fkey" FOREIGN KEY ("taggedMeasurementId") REFERENCES "Measurements" ("id") on update cascade on delete set null;
       
       ALTER TABLE "Users" ADD CONSTRAINT "Users_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "Agents" ("id") on update cascade on delete set null;
+      
+      ALTER TABLE "Measurables" ADD CONSTRAINT "Measurables_creatorId_fkey" FOREIGN KEY ("creatorId") REFERENCES "Agents" ("id") on update cascade on delete set null;
     `);
   }
 };

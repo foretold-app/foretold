@@ -14,9 +14,9 @@ const states = {
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Measurable', {
     id: {
-      type: DataTypes.UUID(),
+      type: DataTypes.STRING(32),
       primaryKey: true,
-      defaultValue: Sequelize.UUIDV4,
+      defaultValue: sequelize.fn('generate_object_id'),
       allowNull: false,
     },
     name: {

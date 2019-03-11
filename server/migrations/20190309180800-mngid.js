@@ -3,8 +3,7 @@ module.exports = {
    * @param {QueryInterface} queryInterface
    * @param {sequelize.DataTypes} Sequelize
    */
-  up: function (queryInterface, DataTypes) {
-
+  up: function (queryInterface) {
     return queryInterface.sequelize.query(
         '-- This adaptation is released under the MIT License.\n' +
         'CREATE EXTENSION IF NOT EXISTS pgcrypto;\n' +
@@ -32,22 +31,38 @@ module.exports = {
         '$$ LANGUAGE PLPGSQL;'
       )
       .then(() => queryInterface.sequelize.query(`
-        alter table "Bots" drop CONSTRAINT "Bots_userId_fkey";
-        alter TABLE "Users" ALTER COLUMN id TYPE varchar(36);
-        alter TABLE "Users" ALTER COLUMN id SET DEFAULT generate_object_id()::VARCHAR(24);
-        alter TABLE "Bots" ALTER COLUMN "userId" TYPE varchar(36);
-        ALTER TABLE "Bots" add CONSTRAINT "Bots_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users" ("id") on update cascade on delete set null;
+        ALTER TABLE "Bots" DROP CONSTRAINT "Bots_userId_fkey";
+        
+        ALTER TABLE "Users" ALTER COLUMN id TYPE varchar(36);
+        ALTER TABLE "Users" ALTER COLUMN id SET DEFAULT generate_object_id()::VARCHAR(24);
+        
+        ALTER TABLE "Agents" ALTER COLUMN id TYPE varchar(36);
+        ALTER TABLE "Agents" ALTER COLUMN id SET DEFAULT generate_object_id()::VARCHAR(24);
+        
+        ALTER TABLE "Measurables" ALTER COLUMN id TYPE varchar(36);
+        ALTER TABLE "Measurables" ALTER COLUMN id SET DEFAULT generate_object_id()::VARCHAR(24);
+        
+        ALTER TABLE "Bots" ALTER COLUMN id TYPE varchar(36);
+        ALTER TABLE "Bots" ALTER COLUMN id SET DEFAULT generate_object_id()::VARCHAR(24);
+        
+        ALTER TABLE "Measurements" ALTER COLUMN id TYPE varchar(36);
+        ALTER TABLE "Measurements" ALTER COLUMN id SET DEFAULT generate_object_id()::VARCHAR(24);
+        
+        ALTER TABLE "Bots" ALTER COLUMN "userId" TYPE varchar(36);
+        ALTER TABLE "Bots" ADD CONSTRAINT "Bots_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users" ("id") on update cascade on delete set null;
       `));
   },
 
   down: async function (migration) {
     return migration.sequelize.query(`      
-      alter table "Bots" drop CONSTRAINT "Bots_userId_fkey";
-      alter TABLE "Bots" ALTER COLUMN "userId" SET DATA TYPE uuid USING "userId"::uuid;
-      alter TABLE "Users" ALTER COLUMN id drop default;
-      delete from "Users" where length(id) = 24;
-      alter TABLE "Users" ALTER COLUMN id TYPE uuid USING "id"::uuid;
-      ALTER TABLE "Bots" add CONSTRAINT "Bots_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users" ("id") on update cascade on delete set null;
+      ALTER TABLE "Bots" DROP CONSTRAINT "Bots_userId_fkey";
+      ALTER TABLE "Bots" ALTER COLUMN "userId" SET DATA TYPE uuid USING "userId"::uuid;
+      
+      ALTER TABLE "Users" ALTER COLUMN id drop default;
+      DELETE FROM "Users" WHERE length(id) = 24;
+      ALTER TABLE "Users" ALTER COLUMN id TYPE uuid USING "id"::uuid;
+      
+      ALTER TABLE "Bots" ADD CONSTRAINT "Bots_userId_fkey" FOREIGN KEY ("userId") REFERENCES "Users" ("id") on update cascade on delete set null;
       
       DROP EXTENSION IF EXISTS pgcrypto;
       DROP SEQUENCE IF EXISTS epoch_seq;

@@ -4,9 +4,9 @@ const Sequelize = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Bot', {
     id: {
-      type: DataTypes.UUID(),
+      type: DataTypes.STRING(32),
       primaryKey: true,
-      defaultValue: Sequelize.UUIDV4,
+      defaultValue: sequelize.fn('generate_object_id'),
       allowNull: false,
     },
     name: {

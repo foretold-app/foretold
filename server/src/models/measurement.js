@@ -5,9 +5,9 @@ const {clientUrl} = require('../lib/urls');
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Measurement', {
     id: {
-      type: DataTypes.UUID(),
+      type: DataTypes.STRING(32),
       primaryKey: true,
-      defaultValue: Sequelize.UUIDV4,
+      defaultValue: sequelize.fn('generate_object_id'),
       allowNull: false,
     },
     value: {
@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.TEXT,
-      allowNull: true 
+      allowNull: true
     },
     measurableId: {
       type: DataTypes.UUID,

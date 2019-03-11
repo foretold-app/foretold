@@ -4,9 +4,9 @@ const Sequelize = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Agent', {
     id: {
-      type: DataTypes.UUID(),
+      type: DataTypes.STRING(32),
       primaryKey: true,
-      defaultValue: Sequelize.UUIDV4,
+      defaultValue: sequelize.fn('generate_object_id'),
       allowNull: false,
     },
     type: {
@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'agentId',
       as: 'Measurements'
     })
-    Model.Measurables = Model.hasMany(models.Measurable, 
+    Model.Measurables = Model.hasMany(models.Measurable,
       {
         foreignKey: 'creatorId',
     }

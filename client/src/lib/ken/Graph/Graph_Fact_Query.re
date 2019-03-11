@@ -1,4 +1,4 @@
-open Utility;
+open Ken_Utility;
 open Graph_T.T;
 
 module Query = {

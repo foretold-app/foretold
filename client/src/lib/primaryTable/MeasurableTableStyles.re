@@ -20,37 +20,54 @@ let compareMeasurables =
   };
 
 let formatDate = e =>
-  Option.Infix.(e <$> MomentRe.Moment.format("L") |> Option.default(""));
+  Option.Infix.(e <$> MomentRe.Moment.format("L") |> E.O.default(""));
 
-let dateFinder = (head, p, date) => {
+type dateDisplay =
+  | TOP
+  | BOTTOM
+  | WHOLE;
+
+let dateFinder = (head, p, date, dateDisplay) => {
   let date = formatDate(date);
-  <div className=PrimaryTableStyles.statusRow>
-    <h3> {head |> ste} </h3>
-    <p> {p ++ date |> ste} </p>
-  </div>;
+  switch (dateDisplay) {
+  | TOP => head |> ste
+  | BOTTOM => p ++ date |> ste
+  | WHOLE =>
+    <div className=PrimaryTableStyles.statusRow>
+      <h3> {head |> ste} </h3>
+      <p> {p ++ date |> ste} </p>
+    </div>
+  };
 };
 
-let dateStatus = (~measurable: DataModel.measurable) => {
+let dateStatusI = (~measurable: DataModel.measurable, ~dateDisplay) => {
   let m = measurable;
   switch (status(m)) {
-  | OPEN => dateFinder("Open", "Closes ~", m.expectedResolutionDate)
+  | OPEN =>
+    dateFinder("Open", "Closes ~", m.expectedResolutionDate, dateDisplay)
   | PENDING_REVIEW =>
     dateFinder(
       "Judgement Pending",
       "Pending since ",
       m.expectedResolutionDate,
+      dateDisplay,
     )
-  | ARCHIVED => dateFinder("Archived", "Archived on ", m.stateUpdatedAt)
-  | JUDGED => dateFinder("Judged", "Judged on ", m.stateUpdatedAt)
+  | ARCHIVED =>
+    dateFinder("Archived", "Archived on ", m.stateUpdatedAt, dateDisplay)
+  | JUDGED =>
+    dateFinder("Judged", "Judged on ", m.stateUpdatedAt, dateDisplay)
   };
 };
+
+let dateStatus = (~measurable: DataModel.measurable) =>
+  dateStatusI(~measurable, ~dateDisplay=WHOLE);
 
 let dateStatusWrapper = (~measurable: DataModel.measurable) =>
   <div className={PrimaryTableStyles.statusColor(~measurable)}>
     {dateStatus(~measurable)}
   </div>;
 
-let sortMeasurables = m => Belt.SortArray.stableSortBy(m, compareMeasurables);
+let sortMeasurables = m => E.A.stableSortBy(m, compareMeasurables);
 
 let graph = Data.make;
 
@@ -63,13 +80,16 @@ let nameWithDate = (~m: DataModel.measurable) =>
   | e => m.name ++ " on " ++ e
   };
 
+let itemUrl = id => {j|/items/$id|j};
+
 let xEntityLink = (attribute, ~m: DataModel.measurable, ~className: string) =>
   m
   |> attribute
-  |> Option.bind(_, ItemShow.findName(graph))
-  |> Option.bind(_, r =>
-       m.descriptionEntity
-       |> Option.fmap(d => <a href={"/items/" ++ d} className> {r |> ste} </a>)
+  |> E.O.bind(_, ItemShow.findName(graph))
+  |> E.O.bind(_, r =>
+       m
+       |> attribute
+       |> E.O.fmap(d => <a href={d |> itemUrl} className> {r |> ste} </a>)
      );
 
 let nameEntityLink = xEntityLink(r => r.descriptionEntity);
@@ -79,11 +99,11 @@ let link = (~m: DataModel.measurable) =>
   <div>
     {
       nameEntityLink(~m, ~className=PrimaryTableStyles.itemLink)
-      |> Option.default(ReasonReact.null)
+      |> E.O.React.defaultNull
     }
     {
       propertyEntityLink(~m, ~className=PrimaryTableStyles.propertyLink)
-      |> Option.default(ReasonReact.null)
+      |> E.O.React.defaultNull
     }
     <span className=PrimaryTableStyles.namme> {m.name |> ste} </span>
     {
@@ -100,21 +120,23 @@ let link = (~m: DataModel.measurable) =>
   </div>;
 
 let description = (~m: DataModel.measurable) =>
-  switch (m.description |> Option.default("")) {
-  | "" => <div />
-  | text => <p> {text |> ste} </p>
+  switch (m.description) {
+  | Some("")
+  | None => ReasonReact.null
+  | Some(text) => <p> {text |> ste} </p>
   };
 
+/* TODO: Move */
 let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
 
 let endpointResponse = (~m: DataModel.measurable) =>
   switch (
-    m.resolutionEndpoint |> Option.default(""),
+    m.resolutionEndpoint |> E.O.default(""),
     m.resolutionEndpointResponse,
   ) {
-  | ("", _) => <div />
+  | ("", _) => ReasonReact.null
   | (_, Some(r)) => "Current Endpoint Value: " ++ stringOfFloat(r) |> ste
-  | _ => <div />
+  | _ => ReasonReact.null
   };
 
 let creatorLink = (~m: DataModel.measurable) =>
@@ -123,18 +145,18 @@ let creatorLink = (~m: DataModel.measurable) =>
       m.creator
       <$> (
         c =>
-          <a href={"/agents/" ++ c.id}>
-            {c.name |> Option.default("") |> ste}
+          <a href={Urls.mapLinkToUrl(AgentShow(c.id))}>
+            {c.name |> E.O.default("") |> ste}
           </a>
       )
-      |> Option.default("" |> ste)
+      |> E.O.default("" |> ste)
     )
   </div>;
 
 let editLink = (~m: DataModel.measurable) =>
   <div className=PrimaryTableStyles.item>
     <a
-      href={"/measurables/" ++ m.id ++ "/edit"}
+      href={Urls.mapLinkToUrl(MeasurableEdit(m.id))}
       className={PrimaryTableStyles.itemButton(NORMAL)}>
       {"Edit" |> ste}
     </a>
@@ -146,8 +168,8 @@ let measurements = (~m: DataModel.measurable) =>
   | None => <div />
   | Some(count) =>
     <div className=PrimaryTableStyles.item>
+      <Icon.Icon icon="BULB" />
       <span> {count |> string_of_int |> ste} </span>
-      <span> {" measurements" |> ste} </span>
     </div>
   };
 
@@ -158,11 +180,32 @@ let measurers = (~m: DataModel.measurable) =>
   | Some(count) =>
     <div className=PrimaryTableStyles.item>
       <span>
+        <Icon.Icon icon="PEOPLE" />
         {count |> string_of_int |> ste}
-        <span> {" measurers" |> ste} </span>
       </span>
     </div>
   };
+
+let series = (~m: DataModel.measurable) =>
+  m.series
+  |> Option.bind(_, r =>
+       switch (r.name) {
+       | Some(name) =>
+         Some(
+           <div className=PrimaryTableStyles.item>
+             <Icon.Icon icon="LAYERS" />
+             <a
+               href={
+                 "/c/" ++ (m.channel |> Option.default("")) ++ "/s/" ++ r.id
+               }>
+               {name |> ste}
+             </a>
+           </div>,
+         )
+       | None => None
+       }
+     )
+  |> E.O.React.defaultNull;
 
 let expectedResolutionDate = (~m: DataModel.measurable) =>
   <div className=PrimaryTableStyles.item>
@@ -171,7 +214,7 @@ let expectedResolutionDate = (~m: DataModel.measurable) =>
   </div>;
 
 let resolutionEndpoint = (~m: DataModel.measurable) =>
-  switch (m.resolutionEndpoint |> Option.default("")) {
+  switch (m.resolutionEndpoint |> E.O.default("")) {
   | "" => <div />
   | text =>
     <div className=PrimaryTableStyles.item>

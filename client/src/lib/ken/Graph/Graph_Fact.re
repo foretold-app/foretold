@@ -1,5 +1,5 @@
 open Graph_T.T;
-open Config;
+open Ken_Config;
 
 type t = fact;
 let subjectId = t => t.subjectId;

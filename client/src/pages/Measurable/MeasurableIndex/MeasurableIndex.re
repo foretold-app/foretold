@@ -1,36 +1,13 @@
 open Utils;
 open Rationale;
-open Queries;
-open HandsOnTable;
-open MeasurableColumns;
-
-let transformations = [
-  link,
-  nameAsText,
-  measurementCount,
-  measurerCount,
-  expectedResolutionDate,
-  creator,
-];
-
+open Result.Infix;
 let component = ReasonReact.statelessComponent("Measurables");
-let make = (~channel: string, _children) => {
+let make = (~channel: string, ~loggedInUser: GetUser.t, _children) => {
   ...component,
-  render: _self => {
-    open Result.Infix;
-    let query =
-      Queries.GetMeasurables.Query.make(~offset=0, ~limit=200, ~channel, ());
-    Queries.GetMeasurables.QueryComponent.make(~variables=query##variables, o =>
-      o.result
-      |> ApolloUtils.apolloResponseToResult
-      <$> (d => d##measurables)
-      <$> Extensions.Array.concatSomes
-      <$> (d => d |> Array.map(Queries.GetMeasurables.toMeasurable))
-      <$> (measurables => <MeasurableIndex__Table measurables />)
-      |> Result.result(idd, idd)
+  render: _self =>
+    (
+      measurables =>
+        <MeasurableIndex__Table measurables loggedInUser showExtraData=true />
     )
-    |> ReasonReact.element
-    |> FillWithSidebar.make(~channel=Some(channel))
-    |> ReasonReact.element;
-  },
+    |> GetMeasurables.component(channel),
 };

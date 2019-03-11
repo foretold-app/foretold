@@ -1,17 +1,16 @@
-open Types;
+open E;
 open Utils;
 open Antd;
-open ReactEvent;
 
 type state = {
-  floatCdf,
+  floatCdf: FloatCdf.t,
   competitorType: string,
   dataType: string,
   description: string,
 };
 
 type action =
-  | UpdateFloatPdf(floatCdf)
+  | UpdateFloatPdf(FloatCdf.t)
   | UpdateCompetitorType(string)
   | UpdateDataType(string)
   | UpdateDescription(string);
@@ -40,15 +39,18 @@ let competitorType = (~state, ~send) =>
   </Select>;
 
 let dataType = (~state, ~send) =>
-  <Select value={state.dataType} onChange={e => send(UpdateDataType(e))}>
-    <Select.Option value="FLOAT_CDF"> {"Distribution" |> ste} </Select.Option>
-    <Select.Option value="FLOAT"> {"Point" |> ste} </Select.Option>
-  </Select>;
+  <Select
+    value={state.dataType}
+    onChange={e => send(UpdateDataType(e))}
+    /* TODO: ADD BACK */
+    /* <Select.Option value="FLOAT_CDF"> {"Distribution" |> ste} </Select.Option>
+       <Select.Option value="FLOAT"> {"Point" |> ste} </Select.Option> */
+  />;
 
 let getIsValid = state =>
   switch (state.dataType) {
-  | "FLOAT_CDF" => Array.length(state.floatCdf.xs) > 1
-  | _ => Array.length(state.floatCdf.xs) == 1
+  | "FLOAT_CDF" => E.A.length(state.floatCdf.xs) > 1
+  | _ => E.A.length(state.floatCdf.xs) == 1
   };
 
 let getValue = state =>
@@ -69,12 +71,11 @@ let getCompetitorType =
   | _ => `OBJECTIVE;
 
 let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
-  let showIf = (cond, comp) => cond ? comp : ReasonReact.null;
   let isValid = getIsValid(state);
   <div className=Styles.form>
     <div className=Styles.chartSection>
       {
-        Array.length(state.floatCdf.xs) > 1 ?
+        E.A.length(state.floatCdf.xs) > 1 ?
           <InputChart
             data={
               state.floatCdf
@@ -97,9 +98,10 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
         )
       }
       {
-        state.competitorType != "OBJECTIVE" ?
-          ReasonReact.null :
-          <div className=Styles.select> {dataType(~state, ~send)} </div>
+        showIf(
+          state.competitorType == "OBJECTIVE",
+          <div className=Styles.select> {dataType(~state, ~send)} </div>,
+        )
       }
       <div className=Styles.inputBox>
         <h4 className=Styles.label> {"Value" |> ste} </h4>
@@ -109,7 +111,7 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
             e =>
               {
                 let (ys, xs) = e;
-                let asGroup: floatCdf = {xs, ys};
+                let asGroup: FloatCdf.t = {xs, ys};
                 send(UpdateFloatPdf(asGroup));
               }
               |> ignore
@@ -118,17 +120,17 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
       </div>
       <div className=Styles.inputBox>
         <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
-        <Input.TextArea
-          value={state.description}
-          onChange={
-            event => {
-              let value =
-                ReactDOMRe.domElementToObj(ReactEventRe.Form.target(event))##value;
-              send(UpdateDescription(value));
-            }
-          }
-        />
       </div>
+      <Input.TextArea
+        value={state.description}
+        onChange={
+          event => {
+            let value =
+              ReactDOMRe.domElementToObj(ReactEventRe.Form.target(event))##value;
+            send(UpdateDescription(value));
+          }
+        }
+      />
       <div className=Styles.submitButton>
         <Antd.Button
           _type=`primary onClick={_ => onSubmit()} disabled={!isValid}>
@@ -142,21 +144,21 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
 let make =
     (
       ~data: CreateMeasurementMutation.Mutation.renderPropObj,
-      ~onUpdate=e => (),
+      ~onUpdate=_ => (),
       ~isCreator=false,
-      ~onSubmit=e => (),
+      ~onSubmit=_ => (),
       _children,
     ) => {
   ...component,
   initialState: () => {
-    floatCdf: floatCdfEmpty,
+    floatCdf: FloatCdf.empty,
     competitorType: "COMPETITIVE",
     dataType: "FLOAT_CDF",
     description: "",
   },
   reducer: (action, state) =>
     switch (action) {
-    | UpdateFloatPdf((e: floatCdf)) =>
+    | UpdateFloatPdf((e: FloatCdf.t)) =>
       onUpdate(e);
       ReasonReact.Update({...state, floatCdf: e});
     | UpdateCompetitorType(e) =>

@@ -1,6 +1,5 @@
 open Utils;
 open Rationale;
-open Rationale.Option;
 open Result.Infix;
 open Rationale.Function.Infix;
 open Antd;
@@ -42,13 +41,9 @@ let component = ReasonReact.statelessComponent("Measurables");
 
 let withUserQuery =
     (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = Queries.GetUser.Query.make(~auth0Id, ());
-  Queries.GetUser.QueryComponent.make(
-    ~variables=query##variables, ({result}) =>
-    result
-    |> ApolloUtils.apolloResponseToResult
-    <$> innerComponentFn
-    |> Rationale.Result.result(idd, idd)
+  let query = GetUser.Query.make(~auth0Id, ());
+  GetUser.QueryComponent.make(~variables=query##variables, ({result}) =>
+    result |> ApolloUtils.apolloResponseToResult <$> innerComponentFn |> E.R.id
   )
   |> ReasonReact.element;
 };
@@ -82,38 +77,38 @@ let formFields = (form: Form.state, handleChange, handleSubmit: unit => unit) =>
     </Button>
   </div>;
 
-let make = (~auth0Id, _children) => {
+let make = (~loggedInUser, _children) => {
   ...component,
   render: _ =>
-    withUserQuery(auth0Id, userQuery =>
-      withUserMutation((mutation, data) => {
-        let id =
-          Belt.Option.map(userQuery##user, r => r##id) |> Option.default("");
-        let name =
-          Belt.Option.map(userQuery##user, r => r##name) |> Option.default("");
-        withUserForm(
-          id, name, mutation, ({handleSubmit, handleChange, form, _}) =>
-          <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
-            {
-              switch (data.result) {
-              | Loading => <div> {"Loading" |> ste} </div>
-              | Error(e) =>
-                <div>
-                  {"Error: " ++ e##message |> ste}
-                  {formFields(form, handleChange, handleSubmit)}
-                </div>
-              | Data(_) =>
-                <div>
-                  {"Changes made successfully." |> ste}
-                  {formFields(form, handleChange, handleSubmit)}
-                </div>
-              | NotCalled => formFields(form, handleChange, handleSubmit)
-              }
+    withUserMutation((mutation, data) => {
+      let id =
+        loggedInUser
+        |> E.O.fmap((r: GetUser.user) => r.id)
+        |> E.O.default("");
+      let name =
+        loggedInUser
+        |> E.O.fmap((r: GetUser.user) => r.name)
+        |> E.O.default("");
+      withUserForm(
+        id, name, mutation, ({handleSubmit, handleChange, form, _}) =>
+        <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
+          {
+            switch (data.result) {
+            | Loading => <div> {"Loading" |> ste} </div>
+            | Error(e) =>
+              <div>
+                {"Error: " ++ e##message |> ste}
+                {formFields(form, handleChange, handleSubmit)}
+              </div>
+            | Data(_) =>
+              <div>
+                {"Changes made successfully." |> ste}
+                {formFields(form, handleChange, handleSubmit)}
+              </div>
+            | NotCalled => formFields(form, handleChange, handleSubmit)
             }
-          </form>
-          |> FillWithSidebar.make(~channel=None)
-          |> ReasonReact.element
-        );
-      })
-    ),
+          }
+        </form>
+      );
+    }),
 };

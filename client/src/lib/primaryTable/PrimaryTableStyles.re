@@ -7,7 +7,7 @@ let group =
   ]);
 let statusOpacity = (measurable: DataModel.measurable) => {
   let state =
-    measurable.state |> Rationale.Option.toExn("Needs state from GraphQL");
+    measurable.state |> E.O.toExn("Needs state from GraphQL");
   if (state === `ARCHIVED) {
     0.8;
   } else if (state === `JUDGED) {
@@ -38,9 +38,9 @@ let mainColumn = style([flex(5), display(`flex), flexDirection(`column)]);
 let item =
   style([
     float(`left),
-    fontSize(`px(14)),
+    fontSize(`px(12)),
     marginRight(`px(18)),
-    color(`hex("red")),
+    color(`hex("bbb")),
     selector(
       " a",
       [color(`hex("777")), selector(":hover", [color(hex("333"))])],
@@ -107,7 +107,8 @@ let mainColumnTop =
        ), */
     selector(" p", [marginTop(`px(3)), marginBottom(`px(8))]),
   ]);
-let mainColumnBottom = style([flex(1), padding(px(2))]);
+let mainColumnBottom =
+  style([flex(1), padding(`px(2)), marginTop(`px(2))]);
 let rightColumn = style([flex(1)]);
 let statusRow =
   style([
@@ -123,7 +124,7 @@ let statusRow =
     ),
     selector(
       " p",
-      [marginBottom(px(2)), fontSize(px(14)), color(`hex("aaa"))],
+      [marginBottom(px(2)), fontSize(`px(12)), color(`hex("aaa"))],
     ),
   ]);
 
@@ -136,7 +137,7 @@ let statusColor = (~measurable: DataModel.measurable) => {
     | JUDGED => [background(`hex("ead7f3"))]
     | ARCHIVED => [background(`hex("cccccc"))]
     };
-  style([main, statusSpecific] |> List.concat);
+  style([main, statusSpecific] |> E.L.concat);
 };
 
 let linkS = [

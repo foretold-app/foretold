@@ -60,8 +60,8 @@ module T = {
 };
 
 let listCombinations: list('a) => list(list('a)) =
-  Utility.accumulator(~accum=[], ~history=[], (accum, head) =>
-    List.append(accum, [head])
+  Ken_Utility.accumulator(~accum=[], ~history=[], (accum, head) =>
+    E.L.append(accum, [head])
   );
 
 module Directory = {
@@ -69,23 +69,15 @@ module Directory = {
   let from_array = Js.Array.joinWith("/");
   let to_array = Js.String.split("/");
   let to_list = to_array ||> Array.to_list;
-  let from_list = Array.of_list ||> from_array;
+  let from_list = E.A.of_list ||> from_array;
   let isRoot = e => e |> to_array |> Array.length == 1;
   let root = e => e |> to_array |> Array.get(_, 0);
   let isFactDirectory = e =>
-    e
-    |> to_list
-    |> (
-      e => {
-        Js.log(Rationale.RList.last(e));
-        Rationale.RList.last(e) == Some("_f");
-      }
-    );
+    e |> to_list |> (e => E.L.last(e) == Some("_f"));
   let allSubdirectories =
-    to_list ||> listCombinations ||> List.map(from_list);
+    to_list ||> listCombinations ||> E.L.fmap(from_list);
 
-  let removeLastNDirs = n =>
-    to_list ||> Rationale.RList.dropLast(n) ||> from_list;
+  let removeLastNDirs = n => to_list ||> E.L.dropLast(n) ||> from_list;
 
   let parent = removeLastNDirs(1);
 };
@@ -103,10 +95,10 @@ module F = {
   let directories = (g: T.t) => g.directories;
 
   let rootDirectories = (g: T.t) =>
-    g.directories |> List.filter(Directory.isRoot);
+    g.directories |> E.L.filter(Directory.isRoot);
 
   let childDirectories = (g: T.t, s: string) =>
-    g.directories |> List.filter(e => Directory.parent(e) == s);
+    g.directories |> E.L.filter(e => Directory.parent(e) == s);
 
   let factsJs = (g: T.t) =>
     g.facts |> Js.Dict.values |> Array.map(T.factToJs);

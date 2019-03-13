@@ -7,7 +7,16 @@ let make = (~channel: string, ~loggedInUser: GetUser.t, _children) => {
   render: _self =>
     (
       measurables =>
-        <MeasurableIndex__Table measurables loggedInUser showExtraData=true />
+        <div>
+          {SLayout.channelHeader(Some(channel))}
+          <div className=SLayout.Styles.mainSection>
+            <MeasurableIndex__Table
+              measurables
+              loggedInUser
+              showExtraData=true
+            />
+          </div>
+        </div>
     )
     |> GetMeasurables.component(channel),
 };

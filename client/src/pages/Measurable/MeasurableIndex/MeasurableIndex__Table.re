@@ -17,7 +17,6 @@ let make =
       |> Js.Array.filter((e: DataModel.measurable) =>
            PrimaryTableBase.status(e) != ARCHIVED
          );
-    let isLoggedOn = loggedInUser |> E.O.isSome;
     <div className=PrimaryTableStyles.group>
       {
         _measurables

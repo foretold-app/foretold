@@ -50,13 +50,6 @@ module Styles = {
 };
 
 let component = ReasonReact.statelessComponent("SidebarFill");
-let button = channel =>
-  <Div float=`right>
-    <Antd.Button onClick={_ => Urls.pushToLink(MeasurableNew(channel))}>
-      {"New Measurable" |> ste}
-    </Antd.Button>
-  </Div>;
-
 let make = (~channel: option(string), ~loggedInUser: GetUser.t, children) => {
   ...component,
   render: _self =>
@@ -64,20 +57,6 @@ let make = (~channel: option(string), ~loggedInUser: GetUser.t, children) => {
       <div className=Styles.outer>
         <div className=Styles.left> <Sidebar channel loggedInUser /> </div>
         <div className=Styles.right>
-          {
-            channel
-            |> E.O.fmap(c =>
-                 <div className=Styles.rightTop>
-                   <a
-                     href={Urls.mapLinkToUrl(ChannelShow(c))}
-                     className=Styles.header>
-                     {"#" ++ c |> ste}
-                   </a>
-                   {button(c)}
-                 </div>
-               )
-            |> E.O.React.defaultNull
-          }
           <div className=Styles.rightBottom> children </div>
         </div>
       </div>

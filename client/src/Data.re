@@ -183,6 +183,30 @@ let data: Js.Json.t =
             "description": "The RAIN Framework for Informational Effectiveness",
             "url": "https://www.lesswrong.com/posts/s4TrCbCXvvWfkT2o6/the-rain-framework-for-informational-effectiveness"
           }
+    },
+    {
+        "config": {
+            "baseId": "orgs",
+            "resourceId": "companies",
+            "aliases": {
+              "name": "@base/properties/p-name"
+            }
+          },
+          "tesla": {
+            "name": "Tesla"
+          },
+          "spacex": {
+            "name": "SpaceX"
+          },
+          "employee-count": {
+            "name": "Employee Count"
+          },
+          "revenue": {
+            "name": "Revenue"
+          },
+          "market-cap": {
+            "name": "Market Cap"
+          }
     }
 ]|},
   );

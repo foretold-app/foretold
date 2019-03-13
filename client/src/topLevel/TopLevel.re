@@ -14,29 +14,56 @@ let make = (~route: route, _children) => {
       | _ => None
       };
 
+    let isLoggedInPage =
+      switch (route) {
+      | AgentMeasurables(_) => true
+      | AgentIndex => true
+      | ItemShow(_) => true
+      | Redirect => false
+      | Profile => true
+      | AgentShow(_) => true
+      | Channel(_) => true
+      | MeasurableNew(_) => true
+      | MeasurableShow(_) => true
+      | MeasurableEdit(_) => true
+      | Series(_) => true
+      | Home => false
+      | NotFound => false
+      };
+
+    let fr = ReasonReact.fragment;
+
     (
-      (loggedInUser: GetUser.t) =>
-        <div>
-          {
-            switch (route) {
-            | AgentMeasurables(id) => <AgentMeasurables id loggedInUser />
-            | AgentIndex => <AgentIndex />
-            | ItemShow(id) => <ItemShow id />
-            | Redirect => <Redirect />
-            | Profile => <Profile loggedInUser />
-            | AgentShow(id) => <AgentShow id />
-            | Channel(channel) => <MeasurableIndex channel loggedInUser />
-            | MeasurableNew(channel) => <MeasurableNew channel />
-            | MeasurableShow(_, id) => <MeasurableShow id loggedInUser />
-            | MeasurableEdit(id) => <MeasurableEdit id />
-            | Series(channel, id) => <SeriesShow channel id loggedInUser />
-            | Home
-            | NotFound => <MeasurableIndex channel="general" loggedInUser />
-            }
-          }
-        </div>
-        |> FillWithSidebar.make(~channel, ~loggedInUser)
-        |> ReasonReact.element
+      (loggedInUser: GetUser.t) => {
+        let withSidebar = e =>
+          e
+          |> ReasonReact.element
+          |> FillWithSidebar.make(~channel, ~loggedInUser)
+          |> ReasonReact.element;
+
+        switch (route) {
+        | AgentMeasurables(id) =>
+          AgentMeasurables.make(~id, ~loggedInUser, fr) |> withSidebar
+        | AgentIndex => AgentIndex.make(fr) |> withSidebar
+        | ItemShow(id) => ItemShow.make(~id, fr) |> withSidebar
+        | Redirect => Redirect.make(fr) |> withSidebar
+        | Profile => Profile.make(~loggedInUser, fr) |> withSidebar
+        | AgentShow(id) => AgentShow.make(~id, fr) |> withSidebar
+        | Channel(channel) =>
+          MeasurableIndex.make(~channel, ~loggedInUser, fr) |> withSidebar
+        | MeasurableNew(channel) =>
+          MeasurableNew.make(~channel, fr) |> withSidebar
+        | MeasurableShow(_, id) =>
+          MeasurableShow.make(~id, ~loggedInUser, fr) |> withSidebar
+        | MeasurableEdit(id) => MeasurableEdit.make(~id, fr) |> withSidebar
+        | Series(channel, id) =>
+          SeriesShow.make(~id, ~channel, ~loggedInUser, fr) |> withSidebar
+        | Home => Home.make(fr) |> ReasonReact.element
+        | NotFound =>
+          MeasurableIndex.make(~channel="general", ~loggedInUser, fr)
+          |> withSidebar
+        };
+      }
     )
     |> GetUser.withLoggedInUserQuery;
   },

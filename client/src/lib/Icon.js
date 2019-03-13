@@ -2,6 +2,8 @@ import React from "react";
 import { Icon as Iconn } from 'react-icons-kit'
 import { home } from 'react-icons-kit/icomoon/home'
 import {user} from 'react-icons-kit/ikons/user'
+import {arrowLeft} from 'react-icons-kit/fa/arrowLeft'
+import {arrowRight} from 'react-icons-kit/fa/arrowRight'
 import {columns} from 'react-icons-kit/ikons/columns'
 import {layers} from 'react-icons-kit/feather/layers'
 import {ic_people} from 'react-icons-kit/md/ic_people'
@@ -21,7 +23,9 @@ let types = {
     "PEOPLE": ic_people,
     "FLASH": flash,
     "GAVEL": gavel,
-    "BULB": bulb
+    "BULB": bulb,
+    "ARROW_RIGHT": arrowRight,
+    "ARROW_LEFT": arrowLeft
 }
 
 export class Icon extends React.Component {

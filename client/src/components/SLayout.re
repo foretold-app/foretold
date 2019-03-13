@@ -52,3 +52,28 @@ let channelHeader = channel =>
       |> E.O.React.defaultNull
     }
   </div>;
+
+let indexChannelHeader =
+    (channel: option(string), page: int, onForward, onBackward, isAtEnd) =>
+  <div className=Styles.header>
+    {
+      channel
+      |> E.O.fmap(c =>
+           <div>
+             <a
+               href={Urls.mapLinkToUrl(ChannelShow(c))}
+               className=Styles.headerText>
+               {"#" ++ c |> ste}
+             </a>
+             <Antd.Button onClick={_ => onBackward()} disabled={page == 0}>
+               <Icon.Icon icon="ARROW_LEFT" />
+             </Antd.Button>
+             <Antd.Button onClick={_ => onForward()} disabled=isAtEnd>
+               <Icon.Icon icon="ARROW_RIGHT" />
+             </Antd.Button>
+             {button(c)}
+           </div>
+         )
+      |> E.O.React.defaultNull
+    }
+  </div>;

@@ -56,9 +56,7 @@ let make = (~channel: option(string), ~loggedInUser: GetUser.t, children) => {
     <UseRouterForLinks>
       <div className=Styles.outer>
         <div className=Styles.left> <Sidebar channel loggedInUser /> </div>
-        <div className=Styles.right>
-          <div className=Styles.rightBottom> children </div>
-        </div>
+        <div className=Styles.right> children </div>
       </div>
     </UseRouterForLinks>,
 };

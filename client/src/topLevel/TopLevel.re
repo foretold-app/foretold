@@ -6,7 +6,7 @@ let make = (~route: route, _children) => {
   render: _ => {
     let channel =
       switch (route) {
-      | Channel(c) => Some(c)
+      | ChannelShow(c) => Some(c)
       | MeasurableNew(c) => Some(c)
       | MeasurableShow(c, _) => Some(c)
       | Series(c, _) => Some(c)
@@ -32,8 +32,9 @@ let make = (~route: route, _children) => {
           | Redirect => Redirect.make |> inApp
           | Profile => Profile.make(~loggedInUser) |> inApp
           | AgentShow(id) => AgentShow.make(~id) |> inApp
-          | Channel(channel) =>
+          | ChannelShow(channel) =>
             MeasurableIndex.make(~channel, ~loggedInUser) |> inApp
+          | ChannelIndex => ChannelIndex.make |> inApp
           | MeasurableNew(channel) => MeasurableNew.make(~channel) |> inApp
           | MeasurableShow(_, id) =>
             MeasurableShow.make(~id, ~loggedInUser) |> inApp

@@ -1,4 +1,5 @@
 open Utils;
+open Style.Grid;
 
 module Styles = {
   open Css;
@@ -48,13 +49,13 @@ module Styles = {
     ]);
 };
 
-let component = ReasonReact.statelessComponent("MeOverlay");
+let component = ReasonReact.statelessComponent("SidebarFill");
 let button = channel =>
-  <a
-    href={Urls.mapLinkToUrl(MeasurableNew(channel))}
-    className=Styles.newButton>
-    {"New Measurable" |> ste}
-  </a>;
+  <Div float=`right>
+    <Antd.Button onClick={_ => Urls.pushToLink(MeasurableNew(channel))}>
+      {"New Measurable" |> ste}
+    </Antd.Button>
+  </Div>;
 
 let make = (~channel: option(string), ~loggedInUser: GetUser.t, children) => {
   ...component,

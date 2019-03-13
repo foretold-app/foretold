@@ -11,3 +11,8 @@ yarn run bsb-watch
 # in another tab
 npm run parcel
 ```
+
+Optionally, you can run parcel on the staging server, if you don't want to run the server locally.
+```
+yarn run parcel-staging
+```

@@ -7,6 +7,9 @@
     },
     "SLACK_WEBHOOK_URL": {
       "required": true
+    },
+    "TIER": {
+      "required": true
     }
   },
   "formation": {

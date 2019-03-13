@@ -2,13 +2,13 @@
   "name": "prediction-client",
   "version": "0.1.0",
   "scripts": {
-    "build-bsb": "node_modules/.bin/bsb -make-world",
-    "clean": "node_modules/.bin/bsb -clean-world",
-    "bsb-watch": "node_modules/.bin/bsb -make-world -w",
-    "parcel": "ENV=DEVELOPMENT node_modules/.bin/parcel ./src/index.html --public-url /",
-    "build": "ENV=PRODUCTION node_modules/.bin/parcel build ./src/index.html",
-    "serve": "ENV=PRODUCTION node_modules/.bin/static-server ./dist -p ${PORT} -d",
-    "build-t": "ls -lsa && ls -lsa node_modules/.bin && npm run clean && npm run build-bsb && npm run build",
+    "build-bsb": "bsb -make-world",
+    "clean": "bsb -clean-world",
+    "bsb-watch": "bsb -make-world -w",
+    "parcel": "ENV=DEVELOPMENT parcel ./src/index.html --public-url /",
+    "build": "ENV=PRODUCTION parcel build ./src/index.html",
+    "serve": "ENV=PRODUCTION static-server ./dist -p ${PORT} -d",
+    "build-t": "npm run clean && npm run build-bsb && npm run build",
     "test": "jest --ci --bail --no-cache",
     "update-gql": "yarn send-introspection-query http://localhost:4000/graphql",
     "webpack": "webpack -w",
@@ -57,9 +57,7 @@
     "reason-react": ">=0.4.0",
     "static-server": "^2.2.1",
     "subscriptions-transport-ws": "^0.9.14",
-    "victory": "^32.0.0"
-  },
-  "devDependencies": {
+    "victory": "^32.0.0",
     "@babel/preset-react": "^7.0.0",
     "@glennsl/bs-jest": "^0.4.7",
     "@storybook/addon-actions": "^3.4.11",
@@ -83,5 +81,6 @@
     "webpack": "^4.0.1",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.2.1"
-  }
+  },
+  "devDependencies": {}
 }

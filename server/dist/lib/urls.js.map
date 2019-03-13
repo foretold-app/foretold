@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../src/lib/urls.js"],"names":["clientUrl","process","env","NODE_ENV"],"mappings":";;;;;AAAO,MAAMA,gCAAYC,QAAQC,GAAR,CAAYC,QAAZ,KAAyB,aAAzB,GAAyC,uBAAzC,GAAmE,yBAArF","file":"urls.js","sourcesContent":["export const clientUrl = process.env.NODE_ENV === \"development\" ? \"http://localhost:1234\" : \"https://www.foretold.io\""]}

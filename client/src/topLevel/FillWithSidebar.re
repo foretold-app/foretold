@@ -68,7 +68,7 @@ let make = (~channel: option(string), ~loggedInUser: GetUser.t, children) => {
             |> E.O.fmap(c =>
                  <div className=Styles.rightTop>
                    <a
-                     href={Urls.mapLinkToUrl(Channel(c))}
+                     href={Urls.mapLinkToUrl(ChannelShow(c))}
                      className=Styles.header>
                      {"#" ++ c |> ste}
                    </a>

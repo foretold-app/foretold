@@ -35,6 +35,7 @@ let make = (~route: route, _children) => {
           | ChannelShow(channel) =>
             MeasurableIndex.make(~channel, ~loggedInUser) |> inApp
           | ChannelIndex => ChannelIndex.make |> inApp
+          | ChannelNew => ChannelNew.make(~channel="general") |> inApp
           | MeasurableNew(channel) => MeasurableNew.make(~channel) |> inApp
           | MeasurableShow(_, id) =>
             MeasurableShow.make(~id, ~loggedInUser) |> inApp

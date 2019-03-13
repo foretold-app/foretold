@@ -85,7 +85,7 @@ let make = (~channel, ~loggedInUser: GetUser.t, _children) => {
           ]
           |> E.L.fmap(e =>
                <div
-                 onClick={_e => Urls.pushToLink(Channel(e))}
+                 onClick={_e => Urls.pushToLink(ChannelShow(e))}
                  className={
                    Some(e) == channel ? Styles.selectedItem : Styles.item
                  }>

@@ -7,7 +7,9 @@ type link =
   | ItemShow(string)
   | AgentShow(string)
   | AgentMeasurables(string)
-  | Channel(string)
+  | ChannelShow(string)
+  | ChannelNew
+  | ChannelIndex
   | MeasurableShow(string, string)
   | MeasurableEdit(string)
   | MeasurableNew(string)
@@ -21,7 +23,9 @@ let mapLinkToUrl = (r: link) =>
   | ItemShow(id) => "/items/" ++ id
   | AgentShow(id) => "/agents/" ++ id
   | AgentMeasurables(id) => "/agents/" ++ id ++ "/measurables"
-  | Channel(id) => "/c/" ++ id
+  | ChannelNew => "/channels/" ++ "new"
+  | ChannelShow(id) => "/c/" ++ id
+  | ChannelIndex => "/channels"
   | MeasurableShow(channel, id) => "/c/" ++ channel ++ "/m/" ++ id
   | MeasurableEdit(id) => "/measurables/" ++ id ++ "/edit"
   | MeasurableNew(channel) => "/c/" ++ channel ++ "/new"

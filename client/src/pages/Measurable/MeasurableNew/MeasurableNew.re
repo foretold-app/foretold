@@ -98,7 +98,7 @@ let make = (~channel, _children) => {
             | Data(data) =>
               data##createMeasurable
               |> E.O.fmap(e => e##id)
-              |> doIfSome(_ => Urls.pushToLink(Channel(channel)));
+              |> doIfSome(_ => Urls.pushToLink(ChannelShow(channel)));
               <h2> {"Measurable successfully created" |> ste} </h2>;
             | NotCalled =>
               MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange)

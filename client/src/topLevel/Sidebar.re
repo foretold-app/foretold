@@ -75,7 +75,14 @@ let make = (~channel, ~loggedInUser: GetUser.t, _children) => {
       <div className=Styles.minorHeader> {"Channels" |> ste} </div>
       <div className=Styles.over>
         {
-          ["general", "foretold", "ozziegooen", "lesswrong", "movies"]
+          [
+            "general",
+            "foretold",
+            "ozziegooen",
+            "lesswrong",
+            "movies",
+            "companies",
+          ]
           |> E.L.fmap(e =>
                <div
                  onClick={_e => Urls.pushToLink(Channel(e))}

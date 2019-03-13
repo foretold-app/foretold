@@ -8,7 +8,7 @@
     "parcel": "ENV=DEVELOPMENT node_modules/.bin/parcel ./src/index.html --public-url /",
     "build": "ENV=PRODUCTION node_modules/.bin/parcel build ./src/index.html",
     "serve": "ENV=PRODUCTION node_modules/.bin/static-server ./dist -p ${PORT} -d",
-    "build-t": "npm run clean; npm run build-bsb; npm run build;",
+    "build-t": "ls -lsa && ls -lsa node_modules/.bin && npm run clean && npm run build-bsb && npm run build",
     "test": "jest --ci --bail --no-cache",
     "update-gql": "yarn send-introspection-query http://localhost:4000/graphql",
     "webpack": "webpack -w",

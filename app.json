@@ -13,7 +13,7 @@
     "web": {
       "quantity": 1
     },
-    "api": {
+    "client": {
       "quantity": 1
     }
   },

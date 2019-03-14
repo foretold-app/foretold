@@ -20,6 +20,13 @@ module Styles = {
       fontWeight(`bold),
       float(`left),
     ]);
+  let seriesText =
+    style([
+      color(`hex("3d547b")),
+      fontSize(`em(2.0)),
+      float(`left),
+      fontWeight(`medium),
+    ]);
   let backHover =
     style([
       color(`hex("8b949e")),
@@ -98,7 +105,7 @@ let seriesHead = (channelName, seriesName) =>
     {channelBack(~channelName, ())}
     <div className=Styles.headerText> {"#" ++ channelName |> ste} </div>
     <div className=Styles.dash> <Icon.Icon icon="THIN_RIGHT" /> </div>
-    <div className=Styles.headerText>
+    <div className=Styles.seriesText>
       <Icon.Icon icon="LAYERS" />
       {seriesName |> ste}
     </div>

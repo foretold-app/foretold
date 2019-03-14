@@ -6,6 +6,7 @@
     "clean": "bsb -clean-world",
     "bsb-watch": "bsb -make-world -w",
     "parcel": "ENV=DEVELOPMENT parcel ./src/index.html --public-url /",
+    "parcel-production": "ENV=PRODUCTION parcel ./src/index.html --public-url /",
     "build": "ENV=PRODUCTION parcel build ./src/index.html",
     "build-t": "npm run clean; npm run build-bsb; npm run build;",
     "test": "jest --ci --bail --no-cache",

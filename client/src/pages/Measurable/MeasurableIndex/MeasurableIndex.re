@@ -56,7 +56,7 @@ let itemHeader =
       channel
       |> E.O.fmap(c =>
            <div>
-             <Antd.Button onClick={_ => onBack()} disabled=isAtStart>
+             <Antd.Button onClick={_ => onBack()}>
                <Icon.Icon icon="ARROW_LEFT" />
              </Antd.Button>
              <a
@@ -104,6 +104,8 @@ let make = (~channel: string, ~loggedInUser: GetUser.t, _children) => {
           {
             switch (state.selected) {
             | Some(index) =>
+              let measurable = E.A.get(measurables, index);
+              let itemsOnPage = measurables |> Array.length;
               <div>
                 {
                   itemHeader(
@@ -112,16 +114,19 @@ let make = (~channel: string, ~loggedInUser: GetUser.t, _children) => {
                     () => send(SelectDecrement),
                     () => send(Select(None)),
                     index == 0,
-                    index == itemsPerPage - 1,
+                    index == itemsOnPage - 1,
                   )
                 }
                 <div className=SLayout.Styles.mainSection>
-                  <MeasurableShow__Component
-                    id={E.A.unsafe_get(measurables, index) |> (r => r.id)}
-                    loggedInUser
-                  />
+                  {
+                    switch (measurable) {
+                    | Some(m) =>
+                      <MeasurableShow__Component id={m.id} loggedInUser />
+                    | None => "Item not found" |> ste
+                    }
+                  }
                 </div>
-              </div>
+              </div>;
             | _ =>
               <div>
                 {

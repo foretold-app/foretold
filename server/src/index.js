@@ -1,3 +1,4 @@
+const path = require('path');
 import express from 'express';
 import { schema } from './schema';
 
@@ -52,7 +53,11 @@ const server = new ApolloServer({
 const app = express();
 const cors = require("cors");
 app.use(cors());
-app.use('/', express.static('../client/dist'));
+app.get(/^((?!graphql).)*$/,
+  express.static('../client/dist'),
+  // Fallback
+  (req, res) => res.sendFile(path.resolve(__dirname, '../../client/dist/index.html'))
+);
 server.applyMiddleware({ app });
 
 models.sequelize.sync().then(() => {

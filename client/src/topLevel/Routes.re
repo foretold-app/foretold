@@ -2,11 +2,13 @@ type route =
   | Home
   | AgentIndex
   | Redirect
+  | Login
   | Profile
   | ItemShow(string)
   | AgentShow(string)
   | AgentMeasurables(string)
-  | Channel(string)
+  | ChannelShow(string)
+  | ChannelIndex
   | MeasurableShow(string, string)
   | MeasurableEdit(string)
   | MeasurableNew(string)
@@ -16,6 +18,7 @@ type route =
 let mapUrlToRoute = (url: ReasonReact.Router.url) =>
   switch (url.path) {
   | [] => Home
+  | ["login"] => Login
   | ["callback"] =>
     Auth0.handleAuth(url);
     Redirect;
@@ -29,10 +32,11 @@ let mapUrlToRoute = (url: ReasonReact.Router.url) =>
   | ["agents", id] => AgentShow(id)
   | ["items", ...id] => ItemShow(String.concat("/", id))
   | ["agents", id, "measurables"] => AgentMeasurables(id)
-  | ["c", id] => Channel(id)
+  | ["channels"] => ChannelIndex
+  | ["c", id] => ChannelShow(id)
   | ["c", id, "new"] => MeasurableNew(id)
   | ["c", channel, "m", id] => MeasurableShow(channel, id)
   | ["measurables", id, "edit"] => MeasurableEdit(id)
   | ["c", channel, "s", id] => Series(channel, id)
-  | _ => Home
+  | _ => NotFound
   };

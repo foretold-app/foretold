@@ -19,16 +19,16 @@ class SeriesData {
           properties,
           dates,
     } = values;
-    const _auth0Id = await this.usersData.getAuth0Id(options);
-    const user = await this.usersData.auth0User(_auth0Id);
-    const newSeries = await models.Sereies.create({
+    // const _auth0Id = await this.usersData.getAuth0Id(options);
+    // const user = await this.usersData.auth0User(_auth0Id);
+    const newSeries = await models.Series.create({
           name,
           description,
           channel,
           subjects,
           properties,
           dates,
-          creatorId: user.agentId,
+          creatorId: "51be4b31-b372-400e-8e58-c1f164ed9c63",
     });
     return newSeries;
   }

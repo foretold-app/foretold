@@ -7,16 +7,10 @@
     },
     "SLACK_WEBHOOK_URL": {
       "required": true
-    },
-    "TIER": {
-      "required": true
     }
   },
   "formation": {
     "web": {
-      "quantity": 1
-    },
-    "client": {
       "quantity": 1
     }
   },

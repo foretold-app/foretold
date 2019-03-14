@@ -13,6 +13,7 @@ import {flag} from 'react-icons-kit/entypo/flag'
 import {cap} from 'react-icons-kit/entypo/cap'
 import {flash} from 'react-icons-kit/entypo/flash'
 import {gavel} from 'react-icons-kit/fa/gavel'
+import {plus as circlePlus} from 'react-icons-kit/metrize/plus'
 
 
 let types = {
@@ -24,6 +25,7 @@ let types = {
     "FLASH": flash,
     "GAVEL": gavel,
     "BULB": bulb,
+    "CIRCLE_PLUS": circlePlus,
     "ARROW_RIGHT": arrowRight,
     "ARROW_LEFT": arrowLeft
 }

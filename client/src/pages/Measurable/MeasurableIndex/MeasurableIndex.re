@@ -19,28 +19,20 @@ let itemsPerPage = 20;
 
 let indexChannelHeader =
     (channel: option(string), onForward, onBackward, isAtStart, isAtEnd) =>
-  <SLayout.Header>
-    {
-      channel
-      |> E.O.fmap(c =>
-           <div>
-             <h1>
-               <a href={Urls.mapLinkToUrl(ChannelShow(c))}>
-                 {"#" ++ c |> ste}
-               </a>
-             </h1>
-             <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
-               <Icon.Icon icon="ARROW_LEFT" />
-             </Antd.Button>
-             <Antd.Button onClick={_ => onForward()} disabled=isAtEnd>
-               <Icon.Icon icon="ARROW_RIGHT" />
-             </Antd.Button>
-             {SLayout.button(c)}
-           </div>
-         )
-      |> E.O.React.defaultNull
-    }
-  </SLayout.Header>;
+  channel
+  |> E.O.fmap(c =>
+       <div>
+         {SLayout.channelLink(c)}
+         <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
+           <Icon.Icon icon="ARROW_LEFT" />
+         </Antd.Button>
+         <Antd.Button onClick={_ => onForward()} disabled=isAtEnd>
+           <Icon.Icon icon="ARROW_RIGHT" />
+         </Antd.Button>
+         {SLayout.button(c)}
+       </div>
+     )
+  |> E.O.React.defaultNull;
 
 let itemHeader =
     (
@@ -51,31 +43,21 @@ let itemHeader =
       isAtStart,
       isAtEnd,
     ) =>
-  <SLayout.Header>
-    {
-      channel
-      |> E.O.fmap(c =>
-           <div>
-             <Antd.Button onClick={_ => onBack()}>
-               <Icon.Icon icon="ARROW_LEFT" />
-             </Antd.Button>
-             <h1>
-               <a href={Urls.mapLinkToUrl(ChannelShow(c))}>
-                 {"#" ++ c |> ste}
-               </a>
-             </h1>
-             <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
-               <Icon.Icon icon="ARROW_LEFT" />
-             </Antd.Button>
-             <Antd.Button onClick={_ => onForward()} disabled=isAtEnd>
-               <Icon.Icon icon="ARROW_RIGHT" />
-             </Antd.Button>
-             {SLayout.button(c)}
-           </div>
-         )
-      |> E.O.React.defaultNull
-    }
-  </SLayout.Header>;
+  channel
+  |> E.O.fmap(c =>
+       <div>
+         {SLayout.channelBack(~channelName=c, ~onClick=_ => onBack(), ())}
+         {SLayout.channelLink(c)}
+         <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
+           <Icon.Icon icon="ARROW_LEFT" />
+         </Antd.Button>
+         <Antd.Button onClick={_ => onForward()} disabled=isAtEnd>
+           <Icon.Icon icon="ARROW_RIGHT" />
+         </Antd.Button>
+         {SLayout.button(c)}
+       </div>
+     )
+  |> E.O.React.defaultNull;
 
 let make = (~channel: string, ~loggedInUser: GetUser.t, _children) => {
   ...component,
@@ -107,17 +89,19 @@ let make = (~channel: string, ~loggedInUser: GetUser.t, _children) => {
               let measurable = E.A.get(measurables, index);
               let itemsOnPage = measurables |> Array.length;
               <div>
-                {
-                  itemHeader(
-                    Some(channel),
-                    () => send(SelectIncrement),
-                    () => send(SelectDecrement),
-                    () => send(Select(None)),
-                    index == 0,
-                    index == itemsOnPage - 1,
-                  )
-                }
-                <div className=SLayout.Styles.mainSection>
+                <SLayout.Header>
+                  {
+                    itemHeader(
+                      Some(channel),
+                      () => send(SelectIncrement),
+                      () => send(SelectDecrement),
+                      () => send(Select(None)),
+                      index == 0,
+                      index == itemsOnPage - 1,
+                    )
+                  }
+                </SLayout.Header>
+                <SLayout.MainSection>
                   {
                     switch (measurable) {
                     | Some(m) =>
@@ -125,20 +109,22 @@ let make = (~channel: string, ~loggedInUser: GetUser.t, _children) => {
                     | None => "Item not found" |> ste
                     }
                   }
-                </div>
+                </SLayout.MainSection>
               </div>;
             | _ =>
               <div>
-                {
-                  indexChannelHeader(
-                    Some(channel),
-                    () => send(NextPage),
-                    () => send(LastPage),
-                    state.page == 0,
-                    measurables |> Array.length < itemsPerPage,
-                  )
-                }
-                <div className=SLayout.Styles.mainSection>
+                <SLayout.Header>
+                  {
+                    indexChannelHeader(
+                      Some(channel),
+                      () => send(NextPage),
+                      () => send(LastPage),
+                      state.page == 0,
+                      measurables |> Array.length < itemsPerPage,
+                    )
+                  }
+                </SLayout.Header>
+                <SLayout.MainSection>
                   <MeasurableIndex__Table
                     measurables
                     loggedInUser
@@ -160,7 +146,7 @@ let make = (~channel: string, ~loggedInUser: GetUser.t, _children) => {
                         )
                     )
                   />
-                </div>
+                </SLayout.MainSection>
               </div>
             }
           }

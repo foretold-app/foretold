@@ -1,6 +1,8 @@
 {
   "name": "foretold",
-  "scripts": {},
+  "scripts": {
+    "postdeploy":"npm run client/build"
+  },
   "env": {
     "AUTH0_SECRET": {
       "required": true

@@ -1,5 +1,8 @@
 open Routes;
 
+/* <MeasurableIndex channel loggedInUser key=channel />
+   |> FillWithSidebar.make(~channel=Some(channel), ~loggedInUser)
+   |> ReasonReact.element */
 let component = ReasonReact.statelessComponent("TopLevel");
 let make = (~route: route, _children) => {
   ...component,
@@ -18,12 +21,12 @@ let make = (~route: route, _children) => {
       (loggedInUser: GetUser.t) =>
         switch (loggedInUser) {
         | Some(_userIsLoggedIn) =>
-          let inApp = e =>
+          let inApp = (~key="", e) =>
             e
-            |> (r => ReasonReact.fragment |> r)
+            |> (r => [||] |> r)
             |> ReasonReact.element
             |> FillWithSidebar.make(~channel, ~loggedInUser)
-            |> ReasonReact.element;
+            |> ReasonReact.element(~key);
           switch (route) {
           | AgentMeasurables(id) =>
             AgentMeasurables.make(~id, ~loggedInUser) |> inApp
@@ -33,7 +36,8 @@ let make = (~route: route, _children) => {
           | Profile => Profile.make(~loggedInUser) |> inApp
           | AgentShow(id) => AgentShow.make(~id) |> inApp
           | ChannelShow(channel) =>
-            MeasurableIndex.make(~channel, ~loggedInUser) |> inApp
+            MeasurableIndex.make(~channel, ~loggedInUser)
+            |> inApp(~key=channel)
           | ChannelIndex => ChannelIndex.make |> inApp
           | ChannelNew => ChannelNew.make(~channel="general") |> inApp
           | MeasurableNew(channel) => MeasurableNew.make(~channel) |> inApp

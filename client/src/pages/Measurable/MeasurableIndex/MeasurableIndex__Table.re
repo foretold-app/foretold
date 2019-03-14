@@ -33,7 +33,8 @@ let make =
                userAgentId == measurableAgentId && E.O.isSome(userAgentId);
              <div
                className={PrimaryTableStyles.row(m)}
-               onClick={_e => onSelect(m)}>
+               onClick={_e => onSelect(m)}
+               key={m.id}>
                <div className=PrimaryTableStyles.mainColumn>
                  <div className=PrimaryTableStyles.mainColumnTop>
                    {MeasurableTableStyles.link(~m)}

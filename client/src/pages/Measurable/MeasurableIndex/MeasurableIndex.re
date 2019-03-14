@@ -13,7 +13,7 @@ type action =
   | SelectIncrement
   | SelectDecrement;
 
-let component = ReasonReact.reducerComponent("Measurables");
+let component = ReasonReact.reducerComponent("MeasurableIndex");
 
 let itemsPerPage = 20;
 

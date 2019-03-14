@@ -8,6 +8,13 @@ let make =
       ~measurables: array(DataModel.measurable),
       ~showExtraData: bool,
       ~loggedInUser: GetUser.t,
+      ~onSelect=(m: DataModel.measurable) =>
+                  Urls.pushToLink(
+                    MeasurableShow(
+                      m.channel |> E.O.default("general"),
+                      m.id,
+                    ),
+                  ),
       _children,
     ) => {
   ...component,
@@ -31,15 +38,7 @@ let make =
                userAgentId == measurableAgentId && E.O.isSome(userAgentId);
              <div
                className={PrimaryTableStyles.row(m)}
-               onClick={
-                 _e =>
-                   Urls.pushToLink(
-                     MeasurableShow(
-                       m.channel |> E.O.default("general"),
-                       m.id,
-                     ),
-                   )
-               }>
+               onClick={_e => onSelect(m)}>
                <div className=PrimaryTableStyles.mainColumn>
                  <div className=PrimaryTableStyles.mainColumnTop>
                    {MeasurableTableStyles.link(~m)}

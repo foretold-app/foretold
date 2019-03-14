@@ -63,6 +63,7 @@ module A = {
   let of_list = Array.of_list;
   let length = Array.length;
   let unsafe_get = Array.unsafe_get;
+  let get = Belt.Array.get;
   let fold_left = Array.fold_left;
   let fold_right = Array.fold_right;
   let concatMany = Belt.Array.concatMany;

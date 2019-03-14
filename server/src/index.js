@@ -52,6 +52,7 @@ const server = new ApolloServer({
 const app = express();
 const cors = require("cors");
 app.use(cors());
+app.use('/', express.static('../client'));
 server.applyMiddleware({ app });
 
 models.sequelize.sync().then(() => {

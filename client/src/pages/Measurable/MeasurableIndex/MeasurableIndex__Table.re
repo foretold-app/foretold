@@ -18,15 +18,10 @@ let make =
       _children,
     ) => {
   ...component,
-  render: _self => {
-    let _measurables =
-      MeasurableTableStyles.sortMeasurables(measurables)
-      |> Js.Array.filter((e: DataModel.measurable) =>
-           PrimaryTableBase.status(e) != ARCHIVED
-         );
+  render: _self =>
     <div className=PrimaryTableStyles.group>
       {
-        _measurables
+        measurables
         |> E.A.fmap((m: DataModel.measurable) => {
              let userAgentId =
                loggedInUser
@@ -64,6 +59,5 @@ let make =
            })
         |> ReasonReact.array
       }
-    </div>;
-  },
+    </div>,
 };

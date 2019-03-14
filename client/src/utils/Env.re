@@ -1,5 +1,6 @@
 /* [@bs.val] external environment: string = "DEVELOPMENT"; */
 [@bs.val] external environment: string = "process.env.ENV";
+[@bs.val] external apiUrl: string = "process.env.ENV.API_URL";
 
 let auth0Domain =
   switch (environment) {
@@ -25,8 +26,8 @@ let redirectUrl =
 let serverUrl =
   switch (environment) {
   | "DEVELOPMENT" => "http://localhost:4000/graphql"
-  | "STAGING" => "https://prediction-backend-staging.herokuapp.com/graphql"
-  | "PRODUCTION" => "https://prediction-backend.herokuapp.com/graphql"
+  | "STAGING" => apiUrl
+  | "PRODUCTION" => apiUrl
   };
 
 Js.log(environment);

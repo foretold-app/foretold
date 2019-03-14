@@ -24,13 +24,13 @@ function make(_children) {
           /* handedOffState */component[/* handedOffState */2],
           /* willReceiveProps */component[/* willReceiveProps */3],
           /* didMount */(function (self) {
-              var url = ReasonReact.Router[/* dangerouslyGetInitialUrl */4](/* () */0);
+              var url = ReasonReact.Router[/* dangerouslyGetInitialUrl */3](/* () */0);
               Curry._1(self[/* send */3], /* ChangeRoute */[Routes$Client.mapUrlToRoute(url)]);
-              var watcherID = ReasonReact.Router[/* watchUrl */2]((function (url) {
+              var watcherID = ReasonReact.Router[/* watchUrl */1]((function (url) {
                       return Curry._1(self[/* send */3], /* ChangeRoute */[Routes$Client.mapUrlToRoute(url)]);
                     }));
               return Curry._1(self[/* onUnmount */4], (function (param) {
-                            return ReasonReact.Router[/* unwatchUrl */3](watcherID);
+                            return ReasonReact.Router[/* unwatchUrl */2](watcherID);
                           }));
             }),
           /* didUpdate */component[/* didUpdate */5],

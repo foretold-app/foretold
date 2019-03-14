@@ -5,7 +5,7 @@
     "build-bsb": "bsb -make-world",
     "clean": "bsb -clean-world",
     "bsb-watch": "bsb -make-world -w",
-    "parcel": "ENV=DEVELOPMENT parcel ./src/index.html --public-url /",
+    "parcel": "ENV=DEVELOPMENT API_URL=http://localhost:4000/graphql parcel ./src/index.html --public-url /",
     "parcel-staging": "ENV=STAGING API_URL=https://${HEROKU_APP_NAME}.herokuapp.com/graphql parcel ./src/index.html --public-url /",
     "parcel-production": "ENV=PRODUCTION API_URL=https://${HEROKU_APP_NAME}.herokuapp.com/graphql parcel ./src/index.html --public-url /",
     "build": "ENV=PRODUCTION API_URL=https://${HEROKU_APP_NAME}.herokuapp.com/graphql parcel build ./src/index.html",

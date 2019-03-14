@@ -25,7 +25,7 @@ let redirectUrl =
 
 let serverUrl =
   switch (environment) {
-  | "DEVELOPMENT" => "http://localhost:4000/graphql"
+  | "DEVELOPMENT" => apiUrl
   | "STAGING" => apiUrl
   | "PRODUCTION" => apiUrl
   };

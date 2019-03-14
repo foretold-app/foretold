@@ -18,9 +18,15 @@ let auth0ClientId =
 
 let redirectUrl =
   switch (environment) {
-  | "DEVELOPMENT" => "http://localhost:1234/callback"
-  | "STAGING" => "http://localhost:1234/callback"
-  | "PRODUCTION" => "http://foretold.io/callback"
+  | "DEVELOPMENT" =>
+    %raw
+    "window.location.origin + '/callback'"
+  | "STAGING" =>
+    %raw
+    "window.location.origin + '/callback'"
+  | "PRODUCTION" =>
+    %raw
+    "window.location.origin + '/callback'"
   };
 
 let serverUrl =
@@ -34,3 +40,4 @@ Js.log(environment);
 Js.log(serverUrl);
 Js.log(auth0Domain);
 Js.log(auth0ClientId);
+Js.log(redirectUrl);

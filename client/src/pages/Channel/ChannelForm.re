@@ -26,7 +26,6 @@ module SignUpForm = ReForm.Create(SignUpParams);
 
 let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
   <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
-    <h2> {"Create a new Channel" |> ste} </h2>
     <Form>
       <Form.Item>
         <h3> {"Channel Name" |> ste} </h3>

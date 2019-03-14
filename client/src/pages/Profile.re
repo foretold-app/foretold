@@ -65,17 +65,20 @@ let withUserForm = (id, name, mutation, innerComponentFn) =>
   |> ReasonReact.element;
 
 let formFields = (form: Form.state, handleChange, handleSubmit: unit => unit) =>
-  <div>
-    <h2> {"Edit Profile" |> ste} </h2>
-    <h3> {"Username" |> ste} </h3>
-    <Input
-      value={form.values.name}
-      onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
-    />
-    <Button _type=`primary onClick={_ => handleSubmit()}>
-      {"Submit" |> ste}
-    </Button>
-  </div>;
+  <Antd.Form>
+    <Antd.Form.Item>
+      <h3> {"Username" |> ste} </h3>
+      <Input
+        value={form.values.name}
+        onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
+      />
+    </Antd.Form.Item>
+    <Antd.Form.Item>
+      <Button _type=`primary onClick={_ => handleSubmit()}>
+        {"Submit" |> ste}
+      </Button>
+    </Antd.Form.Item>
+  </Antd.Form>;
 
 let make = (~loggedInUser, _children) => {
   ...component,
@@ -91,24 +94,31 @@ let make = (~loggedInUser, _children) => {
         |> E.O.default("");
       withUserForm(
         id, name, mutation, ({handleSubmit, handleChange, form, _}) =>
-        <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
-          {
-            switch (data.result) {
-            | Loading => <div> {"Loading" |> ste} </div>
-            | Error(e) =>
-              <div>
-                {"Error: " ++ e##message |> ste}
-                {formFields(form, handleChange, handleSubmit)}
-              </div>
-            | Data(_) =>
-              <div>
-                {"Changes made successfully." |> ste}
-                {formFields(form, handleChange, handleSubmit)}
-              </div>
-            | NotCalled => formFields(form, handleChange, handleSubmit)
-            }
-          }
-        </form>
+        <div>
+          <SLayout.Header>
+            <h1> {"Edit Profile Information" |> ste} </h1>
+          </SLayout.Header>
+          <SLayout.MainSection>
+            <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
+              {
+                switch (data.result) {
+                | Loading => <div> {"Loading" |> ste} </div>
+                | Error(e) =>
+                  <div>
+                    {"Error: " ++ e##message |> ste}
+                    {formFields(form, handleChange, handleSubmit)}
+                  </div>
+                | Data(_) =>
+                  <div>
+                    {"Changes made successfully." |> ste}
+                    {formFields(form, handleChange, handleSubmit)}
+                  </div>
+                | NotCalled => formFields(form, handleChange, handleSubmit)
+                }
+              }
+            </form>
+          </SLayout.MainSection>
+        </div>
       );
     }),
 };

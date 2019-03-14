@@ -76,7 +76,6 @@ module SignUpForm = ReForm.Create(SignUpParams);
 
 let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
   <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
-    <h2> {"Create a new Measurable" |> ste} </h2>
     <Form>
       <Form.Item>
         <h3> {"Relevant Entity (optional)" |> ste} </h3>

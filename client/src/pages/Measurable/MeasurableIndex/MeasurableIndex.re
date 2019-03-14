@@ -19,16 +19,16 @@ let itemsPerPage = 20;
 
 let indexChannelHeader =
     (channel: option(string), onForward, onBackward, isAtStart, isAtEnd) =>
-  <div className=SLayout.Styles.header>
+  <SLayout.Header>
     {
       channel
       |> E.O.fmap(c =>
            <div>
-             <a
-               href={Urls.mapLinkToUrl(ChannelShow(c))}
-               className=SLayout.Styles.headerText>
-               {"#" ++ c |> ste}
-             </a>
+             <h1>
+               <a href={Urls.mapLinkToUrl(ChannelShow(c))}>
+                 {"#" ++ c |> ste}
+               </a>
+             </h1>
              <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
                <Icon.Icon icon="ARROW_LEFT" />
              </Antd.Button>
@@ -40,7 +40,7 @@ let indexChannelHeader =
          )
       |> E.O.React.defaultNull
     }
-  </div>;
+  </SLayout.Header>;
 
 let itemHeader =
     (
@@ -51,7 +51,7 @@ let itemHeader =
       isAtStart,
       isAtEnd,
     ) =>
-  <div className=SLayout.Styles.header>
+  <SLayout.Header>
     {
       channel
       |> E.O.fmap(c =>
@@ -59,11 +59,11 @@ let itemHeader =
              <Antd.Button onClick={_ => onBack()}>
                <Icon.Icon icon="ARROW_LEFT" />
              </Antd.Button>
-             <a
-               href={Urls.mapLinkToUrl(ChannelShow(c))}
-               className=SLayout.Styles.headerText>
-               {"#" ++ c |> ste}
-             </a>
+             <h1>
+               <a href={Urls.mapLinkToUrl(ChannelShow(c))}>
+                 {"#" ++ c |> ste}
+               </a>
+             </h1>
              <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
                <Icon.Icon icon="ARROW_LEFT" />
              </Antd.Button>
@@ -75,7 +75,7 @@ let itemHeader =
          )
       |> E.O.React.defaultNull
     }
-  </div>;
+  </SLayout.Header>;
 
 let make = (~channel: string, ~loggedInUser: GetUser.t, _children) => {
   ...component,

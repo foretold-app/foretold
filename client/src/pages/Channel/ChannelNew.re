@@ -38,28 +38,43 @@ let make = (~channel="general", _children) => {
     CreateMeasurableMutation.Mutation.make(
       ~onCompleted=e => Js.log("HI"),
       (mutation, data) =>
-        ChannelFormShower.make(
-          ~onSubmit=({values}) => (),
-          ~initialState={name: "", description: "", isPublic: "TRUE"},
-          ~schema=[(`name, Custom(_ => None))],
-          ({handleSubmit, handleChange, form, _}) =>
-            switch (data.result) {
-            | Loading => <div> {"Loading" |> ste} </div>
-            | Error(e) =>
-              <div>
-                {"Error: " ++ e##message |> ste}
-                {ChannelForm.showForm(~form, ~handleSubmit, ~handleChange)}
-              </div>
-            | Data(data) =>
-              data##createMeasurable
-              |> E.O.fmap(e => e##id)
-              |> doIfSome(_ => Urls.pushToLink(ChannelShow(channel)));
-              <h2> {"Measurable successfully created" |> ste} </h2>;
-            | NotCalled =>
-              ChannelForm.showForm(~form, ~handleSubmit, ~handleChange)
-            },
-        )
-        |> ReasonReact.element,
+        <div>
+          <SLayout.Header>
+            {SLayout.Header.textDiv("NewChannel")}
+          </SLayout.Header>
+          <SLayout.MainSection>
+            {
+              ChannelFormShower.make(
+                ~onSubmit=({values}) => (),
+                ~initialState={name: "", description: "", isPublic: "TRUE"},
+                ~schema=[(`name, Custom(_ => None))],
+                ({handleSubmit, handleChange, form, _}) =>
+                  switch (data.result) {
+                  | Loading => <div> {"Loading" |> ste} </div>
+                  | Error(e) =>
+                    <div>
+                      {"Error: " ++ e##message |> ste}
+                      {
+                        ChannelForm.showForm(
+                          ~form,
+                          ~handleSubmit,
+                          ~handleChange,
+                        )
+                      }
+                    </div>
+                  | Data(data) =>
+                    data##createMeasurable
+                    |> E.O.fmap(e => e##id)
+                    |> doIfSome(_ => Urls.pushToLink(ChannelShow(channel)));
+                    <h2> {"Measurable successfully created" |> ste} </h2>;
+                  | NotCalled =>
+                    ChannelForm.showForm(~form, ~handleSubmit, ~handleChange)
+                  },
+              )
+              |> ReasonReact.element
+            }
+          </SLayout.MainSection>
+        </div>,
     )
     |> ReasonReact.element,
 };

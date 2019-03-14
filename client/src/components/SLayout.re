@@ -1,8 +1,6 @@
 open Utils;
 open Style.Grid;
 
-let component = ReasonReact.statelessComponent("Measurable");
-
 module Styles = {
   open Css;
   let header =
@@ -12,6 +10,10 @@ module Styles = {
       paddingBottom(`em(0.8)),
       paddingRight(`em(0.4)),
       paddingTop(`px(10)),
+      selector(
+        "h1",
+        [color(`hex("333")), fontSize(`em(2.0)), fontWeight(`bold)],
+      ),
     ]);
   let headerText =
     style([color(`hex("333")), fontSize(`em(2.0)), fontWeight(`bold)]);
@@ -23,9 +25,21 @@ module Styles = {
     ]);
 };
 
-let make = (~id: string, ~loggedInUser, _children) => {
-  ...component,
-  render: _self => <MeasurableShow__Component id loggedInUser />,
+module Header = {
+  let component = ReasonReact.statelessComponent("Header");
+  let textDiv = text => <div className=Styles.headerText> {text |> ste} </div>;
+  let make = children => {
+    ...component,
+    render: _ => <div className=Styles.header> ...children </div>,
+  };
+};
+
+module MainSection = {
+  let component = ReasonReact.statelessComponent("MainSection");
+  let make = children => {
+    ...component,
+    render: _ => <div className=Styles.mainSection> ...children </div>,
+  };
 };
 
 let button = channel =>
@@ -41,11 +55,11 @@ let channelHeader = channel =>
       channel
       |> E.O.fmap(c =>
            <div>
-             <a
-               href={Urls.mapLinkToUrl(ChannelShow(c))}
-               className=Styles.headerText>
-               {"#" ++ c |> ste}
-             </a>
+             <h1>
+               <a href={Urls.mapLinkToUrl(ChannelShow(c))}>
+                 {"#" ++ c |> ste}
+               </a>
+             </h1>
              {button(c)}
            </div>
          )

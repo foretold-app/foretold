@@ -36,6 +36,17 @@ let seriesTop = (series: GetSeries.series) =>
             {series.name |> Option.default("") |> ste}
           </h2>
           <p> {series.description |> Option.default("") |> ste} </p>
+          {
+            switch (series.creator) {
+            | Some({name: Some(name), id}) =>
+              <div className=PrimaryTableStyles.item>
+                <a href={Urls.mapLinkToUrl(AgentShow(id))}>
+                  {name |> ste}
+                </a>
+              </div>
+            | _ => ReasonReact.null
+            }
+          }
         </Div>
         <Div flex=1 />
       </Div>

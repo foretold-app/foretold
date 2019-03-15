@@ -26,6 +26,11 @@ module Query = [%graphql
                 id
                 name
               }
+              series {
+                id
+                name
+                description
+              }
               measurements: Measurements{
                 id
                 createdAt @bsDecoder(fn: "toMoment")
@@ -61,6 +66,10 @@ let queryMeasurable = m => {
     m##creator
     |> E.O.fmap(r => DataModel.toAgent(~id=r##id, ~name=r##name, ()));
 
+  let series: option(DataModel.series) =
+    m##series
+    |> E.O.fmap(r => DataModel.toSeries(~id=r##id, ~name=r##name, ()));
+
   let measurable: DataModel.measurable =
     DataModel.toMeasurable(
       ~id=m##id,
@@ -78,6 +87,7 @@ let queryMeasurable = m => {
       ~descriptionDate=m##descriptionDate,
       ~descriptionProperty=m##descriptionProperty,
       ~creator=agent,
+      ~series,
       (),
     );
   measurable;

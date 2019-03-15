@@ -9,7 +9,6 @@ let auth0ClientId = auth0ClientIdEnv;
 let redirectUrl = origin ++ "/callback";
 let serverUrl = apiUrlEnv;
 
-Js.log(auth0DomainEnv);
 Js.log(serverUrl);
 Js.log(auth0Domain);
 Js.log(auth0ClientId);

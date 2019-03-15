@@ -178,21 +178,23 @@ let deselectedView =
                          {x.name |> E.O.default("") |> ste}
                        </span>
                        {
-                         switch (x.description) {
-                         | Some(d) => <p> {d |> ste} </p>
-                         | None => ReasonReact.null
-                         }
+                         x.description
+                         |> E.O.fmap(d => <p> {d |> ste} </p>)
+                         |> E.O.React.defaultNull
                        }
                        {
-                         switch (x.measurableCount) {
-                         | Some(d) =>
-                           <p>
-                             {
-                               d |> string_of_int |> (e => e ++ " items") |> ste
-                             }
-                           </p>
-                         | None => ReasonReact.null
-                         }
+                         x.measurableCount
+                         |> E.O.fmap(d =>
+                              <p>
+                                {
+                                  d
+                                  |> string_of_int
+                                  |> (e => e ++ " items")
+                                  |> ste
+                                }
+                              </p>
+                            )
+                         |> E.O.React.defaultNull
                        }
                      </div>
                    )
@@ -210,14 +212,11 @@ let deselectedView =
           e =>
             send(
               Select(
-                Some(
-                  measurables
-                  |> Array.to_list
-                  |> Rationale.RList.findIndex((r: DataModel.measurable) =>
-                       r.id == e.id
-                     )
-                  |> E.O.toExn(""),
-                ),
+                measurables
+                |> Array.to_list
+                |> Rationale.RList.findIndex((r: DataModel.measurable) =>
+                     r.id == e.id
+                   ),
               ),
             )
         }

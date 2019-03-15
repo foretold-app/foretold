@@ -197,7 +197,7 @@ let series = (~m: DataModel.measurable) =>
              <a
                href={
                  Urls.mapLinkToUrl(
-                   SeriesShow(m.channel |> E.O.default(""), m.id),
+                   SeriesShow(m.channel |> E.O.default(""), r.id),
                  )
                }>
                {name |> ste}

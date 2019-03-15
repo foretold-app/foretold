@@ -25,7 +25,7 @@ install:
 
 script:
   - printenv
-  - docker run main npm run test
+  - docker run main npm run test:ci
 
 notifications:
   email: never

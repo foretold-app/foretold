@@ -16,9 +16,6 @@
     },
     "AUTH0_CLIENT_ID": {
       "required": true
-    },
-    "ENV": {
-      "required": true
     }
   },
   "formation": {

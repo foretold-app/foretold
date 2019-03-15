@@ -1,41 +1,16 @@
 /* [@bs.val] external environment: string = "DEVELOPMENT"; */
 [@bs.val] external environment: string = "process.env.ENV";
-[@bs.val] external apiUrl: string = "process.env.API_URL";
+[@bs.val] external apiUrlEnv: string = "process.env.API_URL";
+[@bs.val] external auth0DomainEnv: string = "process.env.AUTH0_DOMAIN";
+[@bs.val] external auth0ClientIdEnv: string = "process.env.AUTH0_CLIENT_ID";
+[@bs.val] external origin: string = "window.location.origin";
 
-let auth0Domain =
-  switch (environment) {
-  | "DEVELOPMENT" => "guesstimate.auth0.com"
-  | "STAGING" => "guesstimate.auth0.com"
-  | "PRODUCTION" => "foretold.auth0.com"
-  };
+let auth0Domain = auth0DomainEnv;
+let auth0ClientId = auth0ClientIdEnv;
+let redirectUrl = origin ++ "/callback";
+let serverUrl = apiUrlEnv;
 
-let auth0ClientId =
-  switch (environment) {
-  | "DEVELOPMENT" => "gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT"
-  | "STAGING" => "gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT"
-  | "PRODUCTION" => "oIh53ohBnA4xqhaO8vZXa7PiW6TCXjMV"
-  };
-
-let redirectUrl =
-  switch (environment) {
-  | "DEVELOPMENT" =>
-    %raw
-    "window.location.origin + '/callback'"
-  | "STAGING" =>
-    %raw
-    "window.location.origin + '/callback'"
-  | "PRODUCTION" =>
-    %raw
-    "window.location.origin + '/callback'"
-  };
-
-let serverUrl =
-  switch (environment) {
-  | "DEVELOPMENT" => apiUrl
-  | "STAGING" => apiUrl
-  | "PRODUCTION" => apiUrl
-  };
-
+Js.log(auth0DomainEnv);
 Js.log(environment);
 Js.log(serverUrl);
 Js.log(auth0Domain);

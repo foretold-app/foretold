@@ -20,6 +20,7 @@
         "server/db:migrate:undo": "cd server && npm run db:migrate:undo cd ..",
         "server/db:reset": "cd server && npm run db:reset && cd ..",
         "server/db:seed": "cd server && npm run db:seed && cd ..",
+        "preinstall": "printenv",
         "postinstall": "npm run server/install && npm run server/build && npm run server/db:migrate; npm run client/install && npm run client/build"
     },
     "author": "",

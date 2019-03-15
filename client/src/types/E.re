@@ -69,6 +69,7 @@ module A = {
   let concatMany = Belt.Array.concatMany;
   let keepMap = Belt.Array.keepMap;
   let stableSortBy = Belt.SortArray.stableSortBy;
+  let filter = (o, e) => e |> to_list |> L.filter(o) |> of_list;
   module Optional = {
     let concatSomes = (optionals: Js.Array.t(option('a))): Js.Array.t('a) =>
       optionals

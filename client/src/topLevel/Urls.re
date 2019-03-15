@@ -10,6 +10,7 @@ type link =
   | ChannelShow(string)
   | ChannelNew
   | ChannelIndex
+  | SeriesShow(string, string)
   | MeasurableShow(string, string)
   | MeasurableEdit(string)
   | MeasurableNew(string)
@@ -29,6 +30,7 @@ let mapLinkToUrl = (r: link) =>
   | MeasurableShow(channel, id) => "/c/" ++ channel ++ "/m/" ++ id
   | MeasurableEdit(id) => "/measurables/" ++ id ++ "/edit"
   | MeasurableNew(channel) => "/c/" ++ channel ++ "/new"
+  | SeriesShow(channel, id) => "/c/" ++ channel ++ "/s/" ++ id
   | _ => ""
   };
 

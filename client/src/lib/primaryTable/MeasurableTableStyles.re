@@ -196,7 +196,9 @@ let series = (~m: DataModel.measurable) =>
              <Icon.Icon icon="LAYERS" />
              <a
                href={
-                 "/c/" ++ (m.channel |> Option.default("")) ++ "/s/" ++ r.id
+                 Urls.mapLinkToUrl(
+                   SeriesShow(m.channel |> E.O.default(""), m.id),
+                 )
                }>
                {name |> ste}
              </a>

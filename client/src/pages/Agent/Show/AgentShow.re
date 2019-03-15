@@ -38,24 +38,26 @@ let make = (~id: string, _children) => {
                 agent.measurements |> E.A.Optional.concatSomes,
               );
             <div>
-              {agentSection(agent)}
-              {
-                mm
-                |> E.L.fmap((m: DataModel.measurable) => {
-                     let measurements = m.measurements |> E.O.default([]);
-                     <div>
-                       <div className=AgentShowStyles.block>
-                         {MeasurableTableStyles.link(~m)}
-                         {MeasurableTableStyles.dateStatus(~measurable=m)}
-                       </div>
-                       <div className=MeasurementTableStyles.group>
-                         {measurements |> MeasurementsBlock.make}
-                       </div>
-                     </div>;
-                   })
-                |> E.A.of_list
-                |> ReasonReact.array
-              }
+              <SLayout.Header> {agentSection(agent)} </SLayout.Header>
+              <SLayout.MainSection>
+                {
+                  mm
+                  |> E.L.fmap((m: DataModel.measurable) => {
+                       let measurements = m.measurements |> E.O.default([]);
+                       <div>
+                         <div className=AgentShowStyles.block>
+                           {MeasurableTableStyles.link(~m)}
+                           {MeasurableTableStyles.dateStatus(~measurable=m)}
+                         </div>
+                         <div className=MeasurementTableStyles.group>
+                           {measurements |> MeasurementsBlock.make}
+                         </div>
+                       </div>;
+                     })
+                  |> E.A.of_list
+                  |> ReasonReact.array
+                }
+              </SLayout.MainSection>
             </div>;
           },
         )

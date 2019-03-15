@@ -20,7 +20,7 @@ let column = style([flex(1)]);
 
 let topPart =
   style([
-    height(`px(300)),
+    maxHeight(`px(300)),
     overflowY(`auto),
     borderRadius(`px(2)),
     border(`px(1), `solid, `hex("ddd")),

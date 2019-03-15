@@ -3,6 +3,7 @@ open Rationale.Result.Infix;
 open Rationale;
 open E;
 open Css;
+open SLayout;
 
 let ste = ReasonReact.string;
 
@@ -54,8 +55,10 @@ let make = _children => {
         </div>
       </div>;
     <div>
-      <h1> {"Channels" |> ste} </h1>
-      <div className=table> row row row row row row </div>
+      <SLayout.Header> {SLayout.Header.textDiv("Channels")} </SLayout.Header>
+      <SLayout.MainSection>
+        <div className=table> row row row row row row </div>
+      </SLayout.MainSection>
     </div>;
   },
 };

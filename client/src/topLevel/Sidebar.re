@@ -3,6 +3,7 @@ open Rationale;
 
 module Styles = {
   open Css;
+  let sidebar = style([display(`flex), flexDirection(`column)]);
   let over = style([display(`flex), flexDirection(`column)]);
   let hash =
     style([marginRight(`px(5)), color(`rgba((255, 255, 255, 0.3)))]);
@@ -10,7 +11,24 @@ module Styles = {
     style([
       color(`rgba((255, 255, 255, 0.6))),
       fontSize(`em(1.4)),
+      width(`percent(100.)),
       padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
+    ]);
+  let minorHeaderLink =
+    style([
+      float(`left),
+      color(`rgba((255, 255, 255, 0.6))),
+      cursor(`pointer),
+      selector(":hover", [color(`rgba((255, 255, 255, 0.9)))]),
+    ]);
+  let minorHeaderLinkPlus =
+    style([
+      float(`right),
+      color(`rgba((255, 255, 255, 0.6))),
+      cursor(`pointer),
+      paddingRight(`em(0.3)),
+      marginTop(`em(-0.2)),
+      selector(":hover", [color(`rgba((255, 255, 255, 0.9)))]),
     ]);
   let sectionPadding = style([height(`em(3.0)), width(`percent(100.0))]);
   let item =
@@ -43,7 +61,7 @@ let component = ReasonReact.statelessComponent("Sidebar");
 let make = (~channel, ~loggedInUser: GetUser.t, _children) => {
   ...component,
   render: _self =>
-    <div>
+    <div className=Styles.sidebar>
       <div className=Styles.minorHeader> {"User" |> ste} </div>
       {
         switch (loggedInUser) {
@@ -72,7 +90,18 @@ let make = (~channel, ~loggedInUser: GetUser.t, _children) => {
       }
       <div className=Styles.over />
       <div className=Styles.sectionPadding />
-      <div className=Styles.minorHeader> {"Channels" |> ste} </div>
+      <div className=Styles.minorHeader>
+        <div
+          className=Styles.minorHeaderLink
+          onClick={_e => Urls.pushToLink(ChannelIndex)}>
+          {"Channels" |> ste}
+        </div>
+        <div
+          className=Styles.minorHeaderLinkPlus
+          onClick={_e => Urls.pushToLink(ChannelNew)}>
+          <Icon.Icon icon="CIRCLE_PLUS" />
+        </div>
+      </div>
       <div className=Styles.over>
         {
           [
@@ -85,7 +114,7 @@ let make = (~channel, ~loggedInUser: GetUser.t, _children) => {
           ]
           |> E.L.fmap(e =>
                <div
-                 onClick={_e => Urls.pushToLink(Channel(e))}
+                 onClick={_e => Urls.pushToLink(ChannelShow(e))}
                  className={
                    Some(e) == channel ? Styles.selectedItem : Styles.item
                  }>

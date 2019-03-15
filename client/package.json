@@ -5,11 +5,12 @@
     "build-bsb": "bsb -make-world",
     "clean": "bsb -clean-world",
     "bsb-watch": "bsb -make-world -w",
-    "parcel": "ENV=DEVELOPMENT parcel ./src/index.html --public-url /",
-    "parcel-staging": "ENV=STAGING parcel ./src/index.html --public-url /",
-    "parcel-production": "ENV=PRODUCTION parcel ./src/index.html --public-url /",
-    "build": "ENV=PRODUCTION parcel build ./src/index.html",
-    "build-t": "npm run clean; npm run build-bsb; npm run build;",
+    "parcel": "API_URL=${API_URL:-http://localhost:4000/graphql} AUTH0_DOMAIN=${AUTH0_DOMAIN:-guesstimate.auth0.com} AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID:-gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT} parcel ./src/index.html --public-url /",
+    "parcel-staging": "parcel ./src/index.html --public-url /",
+    "parcel-production": "parcel ./src/index.html --public-url /",
+    "build": "parcel build ./src/index.html",
+    "serve": "static-server ./dist -p ${PORT} -d",
+    "build-t": "npm run clean && npm run build-bsb && npm run build",
     "test": "jest --ci --bail --no-cache",
     "update-gql": "yarn send-introspection-query http://localhost:4000/graphql",
     "webpack": "webpack -w",
@@ -34,7 +35,7 @@
     "apollo-link-ws": "^1.0.8",
     "apollo-utilities": "^1.0.20",
     "auth0-js": "^9.7.3",
-    "bs-ant-design": "git+ssh://git@github.com:OAGr/bs-ant-design.git",
+    "bs-ant-design": "git+https://git@github.com/OAGr/bs-ant-design.git",
     "bs-css": "^8.0.2",
     "bs-moment": "^0.4.4",
     "bs-reform": "^5.1.1",
@@ -56,10 +57,9 @@
     "react-icons-kit": "^1.2.1",
     "reason-apollo": "^0.13.0",
     "reason-react": ">=0.4.0",
+    "static-server": "^2.2.1",
     "subscriptions-transport-ws": "^0.9.14",
-    "victory": "^32.0.0"
-  },
-  "devDependencies": {
+    "victory": "^32.0.0",
     "@babel/preset-react": "^7.0.0",
     "@glennsl/bs-jest": "^0.4.7",
     "@storybook/addon-actions": "^3.4.11",
@@ -83,5 +83,6 @@
     "webpack": "^4.0.1",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.2.1"
-  }
+  },
+  "devDependencies": {}
 }

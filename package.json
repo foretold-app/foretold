@@ -8,7 +8,9 @@
         "npm": ">=6.4.0"
     },
     "scripts": {
-        "client/build": "cd client && yarn && yarn run build-t",
+        "client/install": "cd client && npm install && cd ..",
+        "client/build": "cd client && npm run build-t && cd ..",
+        "client/serve": "cd client && npm run serve && cd ..",
         "server/install": "cd server && npm install && cd ..",
         "server/build": "cd server && npm run build && cd ..",
         "server/serve": "cd server && npm run serve && cd ..",
@@ -18,7 +20,8 @@
         "server/db:migrate:undo": "cd server && npm run db:migrate:undo cd ..",
         "server/db:reset": "cd server && npm run db:reset && cd ..",
         "server/db:seed": "cd server && npm run db:seed && cd ..",
-        "postinstall": "npm run server/install && npm run server/build && npm run server/db:migrate"
+        "preinstall": "printenv",
+        "postinstall": "npm run server/install && npm run server/build && npm run server/db:migrate; npm run client/install && npm run client/build"
     },
     "author": "",
     "license": "MIT"

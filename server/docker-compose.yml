@@ -9,6 +9,7 @@ services:
       - ./migrations:/opt/app/migrations
       - ./seeders:/opt/app/seeders
       - ./config:/opt/app/config
+      - ../client/dist:/opt/client/dist
     environment:
       - AUTH0_SECRET=<change-me>
       - SLACK_WEBHOOK_URL=<change-me>
@@ -16,6 +17,8 @@ services:
       - NODE_PATH=/opt/app
     command: >
       node_modules/.bin/nodemon src/index.js --exec "node -r dotenv/config -r babel-register"
+    links:
+      - database
 
   database:
     image: postgres:11

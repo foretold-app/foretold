@@ -7,6 +7,15 @@
     },
     "SLACK_WEBHOOK_URL": {
       "required": true
+    },
+    "API_URL": {
+      "required": true
+    },
+    "AUTH0_DOMAIN": {
+      "required": true
+    },
+    "AUTH0_CLIENT_ID": {
+      "required": true
     }
   },
   "formation": {

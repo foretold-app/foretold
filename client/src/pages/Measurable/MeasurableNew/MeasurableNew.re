@@ -69,42 +69,62 @@ let component = ReasonReact.statelessComponent("Measurables");
 let make = (~channel, _children) => {
   ...component,
   render: _ =>
-    CreateMeasurableMutation.Mutation.make(
-      ~onCompleted=e => Js.log("HI"),
-      (mutation, data) =>
-        SignUpForm.make(
-          ~onSubmit=({values}) => mutate(mutation, values, channel),
-          ~initialState={
-            name: "",
-            description: "",
-            descriptionProperty: "",
-            descriptionEntity: "",
-            expectedResolutionDate:
-              MomentRe.momentNow() |> MeasurableForm.formatDate,
-            descriptionDate: MomentRe.momentNow() |> MeasurableForm.formatDate,
-            resolutionEndpoint: "",
-            showDescriptionDate: "FALSE",
-            showDescriptionProperty: "FALSE",
-          },
-          ~schema=[(`name, Custom(_ => None))],
-          ({handleSubmit, handleChange, form, _}) =>
-            switch (data.result) {
-            | Loading => <div> {"Loading" |> ste} </div>
-            | Error(e) =>
-              <div>
-                {"Error: " ++ e##message |> ste}
-                {MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange)}
-              </div>
-            | Data(data) =>
-              data##createMeasurable
-              |> E.O.fmap(e => e##id)
-              |> doIfSome(_ => Urls.pushToLink(Channel(channel)));
-              <h2> {"Measurable successfully created" |> ste} </h2>;
-            | NotCalled =>
-              MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange)
-            },
-        )
-        |> ReasonReact.element,
-    )
-    |> ReasonReact.element,
+    <div>
+      <SLayout.Header>
+        {SLayout.Header.textDiv("New Measurable")}
+      </SLayout.Header>
+      <SLayout.MainSection>
+        {
+          CreateMeasurableMutation.Mutation.make(
+            ~onCompleted=e => Js.log("HI"),
+            (mutation, data) =>
+              SignUpForm.make(
+                ~onSubmit=({values}) => mutate(mutation, values, channel),
+                ~initialState={
+                  name: "",
+                  description: "",
+                  descriptionProperty: "",
+                  descriptionEntity: "",
+                  expectedResolutionDate:
+                    MomentRe.momentNow() |> MeasurableForm.formatDate,
+                  descriptionDate:
+                    MomentRe.momentNow() |> MeasurableForm.formatDate,
+                  resolutionEndpoint: "",
+                  showDescriptionDate: "FALSE",
+                  showDescriptionProperty: "FALSE",
+                },
+                ~schema=[(`name, Custom(_ => None))],
+                ({handleSubmit, handleChange, form, _}) =>
+                  switch (data.result) {
+                  | Loading => <div> {"Loading" |> ste} </div>
+                  | Error(e) =>
+                    <div>
+                      {"Error: " ++ e##message |> ste}
+                      {
+                        MeasurableForm.showForm(
+                          ~form,
+                          ~handleSubmit,
+                          ~handleChange,
+                        )
+                      }
+                    </div>
+                  | Data(data) =>
+                    data##createMeasurable
+                    |> E.O.fmap(e => e##id)
+                    |> doIfSome(_ => Urls.pushToLink(ChannelShow(channel)));
+                    <h2> {"Measurable successfully created" |> ste} </h2>;
+                  | NotCalled =>
+                    MeasurableForm.showForm(
+                      ~form,
+                      ~handleSubmit,
+                      ~handleChange,
+                    )
+                  },
+              )
+              |> ReasonReact.element,
+          )
+          |> ReasonReact.element
+        }
+      </SLayout.MainSection>
+    </div>,
 };

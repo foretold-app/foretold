@@ -8,19 +8,20 @@ let make =
       ~measurables: array(DataModel.measurable),
       ~showExtraData: bool,
       ~loggedInUser: GetUser.t,
+      ~onSelect=(m: DataModel.measurable) =>
+                  Urls.pushToLink(
+                    MeasurableShow(
+                      m.channel |> E.O.default("general"),
+                      m.id,
+                    ),
+                  ),
       _children,
     ) => {
   ...component,
-  render: _self => {
-    let _measurables =
-      MeasurableTableStyles.sortMeasurables(measurables)
-      |> Js.Array.filter((e: DataModel.measurable) =>
-           PrimaryTableBase.status(e) != ARCHIVED
-         );
-    let isLoggedOn = loggedInUser |> E.O.isSome;
+  render: _self =>
     <div className=PrimaryTableStyles.group>
       {
-        _measurables
+        measurables
         |> E.A.fmap((m: DataModel.measurable) => {
              let userAgentId =
                loggedInUser
@@ -32,15 +33,8 @@ let make =
                userAgentId == measurableAgentId && E.O.isSome(userAgentId);
              <div
                className={PrimaryTableStyles.row(m)}
-               onClick={
-                 _e =>
-                   Urls.pushToLink(
-                     MeasurableShow(
-                       m.channel |> E.O.default("general"),
-                       m.id,
-                     ),
-                   )
-               }>
+               onClick={_e => onSelect(m)}
+               key={m.id}>
                <div className=PrimaryTableStyles.mainColumn>
                  <div className=PrimaryTableStyles.mainColumnTop>
                    {MeasurableTableStyles.link(~m)}
@@ -66,6 +60,5 @@ let make =
            })
         |> ReasonReact.array
       }
-    </div>;
-  },
+    </div>,
 };

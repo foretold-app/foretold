@@ -42,7 +42,7 @@ function idd(e) {
 }
 
 function filterAndFold(fn) {
-  return Curry._2(E$Client.A[/* fold_left */6], (function (acc, elem) {
+  return Curry._2(E$Client.A[/* fold_left */7], (function (acc, elem) {
                 return Curry._3(fn, elem, (function (e) {
                               return $$Array.concat(/* :: */[
                                           acc,

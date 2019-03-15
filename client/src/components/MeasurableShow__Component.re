@@ -41,6 +41,7 @@ let make = (~id: string, ~loggedInUser: GetUser.t, _children) => {
               </Div>
             </Div>
             <Div flex=1>
+              {MeasurableTableStyles.series(~m)}
               {MeasurableTableStyles.creatorLink(~m)}
               {MeasurableTableStyles.resolutionEndpoint(~m)}
               {MeasurableTableStyles.endpointResponse(~m)}

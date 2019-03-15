@@ -36,6 +36,17 @@ let seriesTop = (series: GetSeries.series) =>
             {series.name |> Option.default("") |> ste}
           </h2>
           <p> {series.description |> Option.default("") |> ste} </p>
+          {
+            switch (series.creator) {
+            | Some({name: Some(name), id}) =>
+              <div className=PrimaryTableStyles.item>
+                <a href={Urls.mapLinkToUrl(AgentShow(id))}>
+                  {name |> ste}
+                </a>
+              </div>
+            | _ => ReasonReact.null
+            }
+          }
         </Div>
         <Div flex=1 />
       </Div>
@@ -52,11 +63,6 @@ let make =
     | UpdateSelected(str) => ReasonReact.Update({selected: Some(str)})
     },
   render: ({state, send}) => {
-    let top =
-      GetSeries.component(~id, series =>
-        series |> E.O.fmap(seriesTop) |> E.O.React.defaultNull
-      );
-
     let medium =
       GetMeasurables.componentWithSeries(channel, id, measurables =>
         <SeriesShowTable
@@ -71,10 +77,29 @@ let make =
       |> E.O.fmap(elId => <MeasurableShow__Component id=elId loggedInUser />)
       |> E.O.React.defaultNull;
 
-    <div>
-      top
-      <div className=SeriesShowTableStyles.topPart> medium </div>
-      bottom
-    </div>;
+    GetSeries.component(~id, series =>
+      <div>
+        <SLayout.Header>
+          {
+            SLayout.seriesHead(
+              channel,
+              series
+              |> E.O.bind(_, (s: GetSeries.series) => s.name)
+              |> E.O.default(""),
+            )
+          }
+        </SLayout.Header>
+        <SLayout.MainSection>
+          {
+            switch (series) {
+            | Some(s) => seriesTop(s)
+            | None => ReasonReact.null
+            }
+          }
+          <div className=SeriesShowTableStyles.topPart> medium </div>
+          bottom
+        </SLayout.MainSection>
+      </div>
+    );
   },
 };

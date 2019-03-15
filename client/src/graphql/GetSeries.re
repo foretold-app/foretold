@@ -1,8 +1,14 @@
 open Rationale;
+type creator = {
+  id: string,
+  name: option(string),
+};
+
 type series = {
   id: string,
   name: option(string),
   description: option(string),
+  creator: option(creator),
 };
 
 let toSeries = (m: series): DataModel.series =>
@@ -15,6 +21,10 @@ module Query = [%graphql
            id
            name
            description
+           creator @bsRecord {
+             id
+             name
+           }
           }
       }
     |}

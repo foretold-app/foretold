@@ -116,8 +116,15 @@ let queryToComponent = (query, innerComponentFn) =>
     |> ReasonReact.element
   );
 
-let component = (channel, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = Query.make(~offset=0, ~limit=200, ~channel, ());
+let component =
+    (
+      channel,
+      page,
+      pageLimit,
+      innerComponentFn: 'a => ReasonReact.reactElement,
+    ) => {
+  let query =
+    Query.make(~offset=page * pageLimit, ~limit=pageLimit, ~channel, ());
   queryToComponent(query, innerComponentFn);
 };
 

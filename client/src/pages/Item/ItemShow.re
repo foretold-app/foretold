@@ -28,31 +28,35 @@ let make = (~id: string, _children) => {
       |> Graph_Fact_Filters.withSubject(id)
       |> E.L.fmap((f: Graph_T.T.fact) => f);
     <div>
-      <h2> {id |> ste} </h2>
-      {
-        names
-        |> E.A.of_list
-        |> E.A.fmap((r: Graph_T.T.fact) =>
-             <div>
-               <h3>
-                 {
-                   findName(graph, r.propertyId)
-                   |> E.O.default("no-name")
-                   |> ste
-                 }
-               </h3>
-               Graph_T.T.(
-                 switch (r.value.valueType) {
-                 | String(s) => s |> ste
-                 | ThingId(s) =>
-                   <a href={Urls.mapLinkToUrl(ItemShow(s))}> {s |> ste} </a>
-                 | _ => "no-name" |> ste
-                 }
-               )
-             </div>
-           )
-        |> ReasonReact.array
-      }
+      <SLayout.Header> {SLayout.Header.textDiv(id)} </SLayout.Header>
+      <SLayout.MainSection>
+        {
+          names
+          |> E.A.of_list
+          |> E.A.fmap((r: Graph_T.T.fact) =>
+               <div>
+                 <h3>
+                   {
+                     findName(graph, r.propertyId)
+                     |> E.O.default("no-name")
+                     |> ste
+                   }
+                 </h3>
+                 Graph_T.T.(
+                   switch (r.value.valueType) {
+                   | String(s) => s |> ste
+                   | ThingId(s) =>
+                     <a href={Urls.mapLinkToUrl(ItemShow(s))}>
+                       {s |> ste}
+                     </a>
+                   | _ => "no-name" |> ste
+                   }
+                 )
+               </div>
+             )
+          |> ReasonReact.array
+        }
+      </SLayout.MainSection>
     </div>;
   },
 };

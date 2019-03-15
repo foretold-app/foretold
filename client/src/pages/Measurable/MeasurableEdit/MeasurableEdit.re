@@ -47,106 +47,80 @@ module WithEditMutation = {
   };
 };
 
+let formCreation = (id, m) => {
+  let measurable = GetMeasurable.toMeasurable(m);
+  WithEditMutation.Mutation.make((mutation, data) =>
+    MeasurableForm.SignUpForm.make(
+      ~onSubmit=
+        ({values}) =>
+          WithEditMutation.mutate(
+            mutation,
+            id,
+            values.name,
+            values.description,
+            values.expectedResolutionDate,
+            values.resolutionEndpoint,
+            values.descriptionEntity,
+            values.descriptionDate,
+            values.showDescriptionDate,
+            values.descriptionProperty,
+          ),
+      ~initialState={
+        name: measurable.name,
+        descriptionDate:
+          measurable.descriptionDate
+          |> E.O.default(MomentRe.momentNow())
+          |> MeasurableForm.formatDate,
+        showDescriptionDate:
+          measurable.descriptionDate
+          |> E.O.isSome
+          |> (e => e ? "TRUE" : "FALSE"),
+        descriptionEntity: measurable.descriptionEntity |> E.O.default(""),
+        description: measurable.description |> E.O.default(""),
+        expectedResolutionDate:
+          measurable.expectedResolutionDate
+          |> E.O.default(MomentRe.momentNow())
+          |> MeasurableForm.formatDate,
+        resolutionEndpoint: measurable.resolutionEndpoint |> E.O.default(""),
+        showDescriptionProperty: measurable.name == "" ? "TRUE" : "FALSE",
+        descriptionProperty:
+          measurable.descriptionProperty |> E.O.default(""),
+      },
+      ~schema=[(`name, Custom(_ => None))],
+      ({handleSubmit, handleChange, form, _}) =>
+        switch (data.result) {
+        | Loading => "Loading" |> ste
+        | Error(e) =>
+          <div>
+            {"Error: " ++ e##message |> ste}
+            {MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange)}
+          </div>
+        | Data(_) =>
+          <div>
+            <h3> {"Measurable successfully updated." |> ste} </h3>
+            <div>
+              {MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange)}
+            </div>
+          </div>
+        | NotCalled =>
+          MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange)
+        },
+    )
+    |> ReasonReact.element
+  )
+  |> ReasonReact.element;
+};
+
 let component = ReasonReact.statelessComponent("MeasurableEdit");
 let make = (~id: string, _children) => {
   ...component,
   render: _self =>
     <div>
-      <div>
-        {
-          GetMeasurable.component(
-            ~id,
-            m => {
-              let measurable = GetMeasurable.toMeasurable(m);
-              WithEditMutation.Mutation.make((mutation, data) =>
-                MeasurableForm.SignUpForm.make(
-                  ~onSubmit=
-                    ({values}) =>
-                      WithEditMutation.mutate(
-                        mutation,
-                        id,
-                        values.name,
-                        values.description,
-                        values.expectedResolutionDate,
-                        values.resolutionEndpoint,
-                        values.descriptionEntity,
-                        values.descriptionDate,
-                        values.showDescriptionDate,
-                        values.descriptionProperty,
-                      ),
-                  ~initialState={
-                    name: measurable.name,
-                    descriptionDate:
-                      measurable.descriptionDate
-                      |> E.O.default(MomentRe.momentNow())
-                      |> MeasurableForm.formatDate,
-                    showDescriptionDate:
-                      measurable.descriptionDate
-                      |> E.O.isSome
-                      |> (e => e ? "TRUE" : "FALSE"),
-                    descriptionEntity:
-                      measurable.descriptionEntity |> E.O.default(""),
-                    description: measurable.description |> E.O.default(""),
-                    expectedResolutionDate:
-                      measurable.expectedResolutionDate
-                      |> E.O.default(MomentRe.momentNow())
-                      |> MeasurableForm.formatDate,
-                    resolutionEndpoint:
-                      measurable.resolutionEndpoint |> E.O.default(""),
-                    showDescriptionProperty:
-                      measurable.name == "" ? "TRUE" : "FALSE",
-                    descriptionProperty:
-                      measurable.descriptionProperty |> E.O.default(""),
-                  },
-                  ~schema=[(`name, Custom(_ => None))],
-                  ({handleSubmit, handleChange, form, _}) =>
-                    <div>
-                      <h2> {"Edit Measurable" |> ste} </h2>
-                      {
-                        switch (data.result) {
-                        | Loading => <div> {"Loading" |> ste} </div>
-                        | Error(e) =>
-                          <div>
-                            {"Error: " ++ e##message |> ste}
-                            {
-                              MeasurableForm.showForm(
-                                ~form,
-                                ~handleSubmit,
-                                ~handleChange,
-                              )
-                            }
-                          </div>
-                        | Data(_) =>
-                          <div>
-                            <h3>
-                              {"Measurable successfully updated." |> ste}
-                            </h3>
-                            <div>
-                              {
-                                MeasurableForm.showForm(
-                                  ~form,
-                                  ~handleSubmit,
-                                  ~handleChange,
-                                )
-                              }
-                            </div>
-                          </div>
-                        | NotCalled =>
-                          MeasurableForm.showForm(
-                            ~form,
-                            ~handleSubmit,
-                            ~handleChange,
-                          )
-                        }
-                      }
-                    </div>,
-                )
-                |> ReasonReact.element
-              )
-              |> ReasonReact.element;
-            },
-          )
-        }
-      </div>
+      <SLayout.Header>
+        {SLayout.Header.textDiv("Edit Measurable")}
+      </SLayout.Header>
+      <SLayout.MainSection>
+        {GetMeasurable.component(~id, m => formCreation(id, m))}
+      </SLayout.MainSection>
     </div>,
 };

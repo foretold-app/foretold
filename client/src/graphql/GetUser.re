@@ -37,8 +37,8 @@ let component =
       innerComponentFn: 'a => ReasonReact.reactElement,
     ) =>
   switch (auth0Id) {
-  | Some(auth) =>
-    let query = Query.make(~auth0Id=auth, ());
+  | Some(auth0Id) =>
+    let query = Query.make(~auth0Id, ());
     QueryComponent.make(
       ~variables=query##variables, ~pollInterval=5000, ({result}) =>
       result

@@ -20,7 +20,7 @@ let compareMeasurables =
   };
 
 let formatDate = e =>
-  Option.Infix.(e <$> MomentRe.Moment.format("L") |> E.O.default(""));
+  e |> E.O.fmap(MomentRe.Moment.format("L")) |> E.O.default("");
 
 type dateDisplay =
   | TOP
@@ -188,7 +188,7 @@ let measurers = (~m: DataModel.measurable) =>
 
 let series = (~m: DataModel.measurable) =>
   m.series
-  |> Option.bind(_, r =>
+  |> E.O.bind(_, r =>
        switch (r.name) {
        | Some(name) =>
          Some(

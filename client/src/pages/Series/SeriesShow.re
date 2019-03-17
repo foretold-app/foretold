@@ -90,12 +90,7 @@ let make =
           }
         </SLayout.Header>
         <SLayout.MainSection>
-          {
-            switch (series) {
-            | Some(s) => seriesTop(s)
-            | None => ReasonReact.null
-            }
-          }
+          {series |> E.O.fmap(seriesTop) |> E.O.React.defaultNull}
           <div className=SeriesShowTableStyles.topPart> medium </div>
           bottom
         </SLayout.MainSection>

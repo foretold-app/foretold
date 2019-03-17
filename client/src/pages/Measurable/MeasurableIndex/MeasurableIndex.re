@@ -59,7 +59,7 @@ let indexChannelHeader =
     (channel: option(string), onForward, onBackward, isAtStart, isAtEnd) =>
   channel
   |> E.O.fmap(c =>
-       <div>
+       <>
          {SLayout.channelLink(c)}
          <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
            <Icon.Icon icon="ARROW_LEFT" />
@@ -68,7 +68,7 @@ let indexChannelHeader =
            <Icon.Icon icon="ARROW_RIGHT" />
          </Antd.Button>
          {SLayout.button(c)}
-       </div>
+       </>
      )
   |> E.O.React.defaultNull;
 
@@ -83,7 +83,7 @@ let itemHeader =
     ) =>
   channel
   |> E.O.fmap(c =>
-       <div>
+       <>
          {SLayout.channelBack(~channelName=c, ~onClick=_ => onBack(), ())}
          {SLayout.channelLink(c)}
          <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
@@ -93,7 +93,7 @@ let itemHeader =
            <Icon.Icon icon="ARROW_RIGHT" />
          </Antd.Button>
          {SLayout.button(c)}
-       </div>
+       </>
      )
   |> E.O.React.defaultNull;
 
@@ -107,7 +107,7 @@ let selectedView =
     ) => {
   let measurable = E.A.get(measurables, index);
   let itemsOnPage = measurables |> Array.length;
-  <div>
+  <>
     <SLayout.Header>
       {
         itemHeader(
@@ -128,7 +128,7 @@ let selectedView =
         }
       }
     </SLayout.MainSection>
-  </div>;
+  </>;
 };
 
 let deselectedView =
@@ -145,7 +145,7 @@ let deselectedView =
     |> E.A.filter((x: GetSeriesCollection.series) =>
          x.channel == channel && x.measurableCount !== Some(0)
        );
-  <div>
+  <>
     <SLayout.Header>
       {
         indexChannelHeader(
@@ -161,7 +161,7 @@ let deselectedView =
       {
         showIf(
           state.page == 0 && seriesList |> E.A.length > 0,
-          <div>
+          <>
             <h2> {"Series List" |> ste} </h2>
             <div className=SeriesItems.items>
               {
@@ -201,7 +201,7 @@ let deselectedView =
                 |> ReasonReact.array
               }
             </div>
-          </div>,
+          </>,
         )
       }
       <MeasurableIndex__Table
@@ -222,7 +222,7 @@ let deselectedView =
         }
       />
     </SLayout.MainSection>
-  </div>;
+  </>;
 };
 
 let make = (~channel: string, ~loggedInUser: GetUser.t, _children) => {

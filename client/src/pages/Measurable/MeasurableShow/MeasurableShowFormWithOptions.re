@@ -1,4 +1,5 @@
 open Rationale.Option.Infix;
+open Utils;
 
 let ste = ReasonReact.string;
 
@@ -182,38 +183,31 @@ let make = (~measurableId: string, _children) => {
                 </Antd.Select>
               </Antd.Form.Item>
               {
-                form.values.dataType != "FloatPercentiles" ?
-                  <div /> :
-                  <div>
+                switch (form.values.dataType) {
+                | "FloatPercentiles" =>
+                  <>
                     {input(handleChange, form.values.p25, `p25, "1")}
                     {input(handleChange, form.values.p50, `p50, "2")}
                     {input(handleChange, form.values.p75, `p75, "3")}
-                  </div>
-              }
-              {
-                form.values.dataType != "FloatPoint" ?
-                  <div /> :
+                  </>
+                | "FloatPoint" =>
                   input(
                     handleChange,
                     form.values.pointFloat,
                     `pointFloat,
                     "4",
                   )
-              }
-              {
-                form.values.dataType != "Percentage" ?
-                  <div /> :
+                | "Percentage" =>
                   input(
                     handleChange,
                     form.values.percentage,
                     `percentage,
                     "5",
                   )
-              }
-              {
-                form.values.dataType != "Binary" ?
-                  <div /> :
+                | "Binary" =>
                   input(handleChange, form.values.binary, `binary, "6")
+                | _ => ReasonReact.null
+                }
               }
               <Form.Item>
                 <Antd.Button _type=`primary onClick={_ => handleSubmit()}>

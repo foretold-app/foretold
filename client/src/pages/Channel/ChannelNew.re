@@ -38,7 +38,7 @@ let make = (~channel="general", _children) => {
     CreateMeasurableMutation.Mutation.make(
       ~onCompleted=e => Js.log("HI"),
       (mutation, data) =>
-        <div>
+        <>
           <SLayout.Header>
             {SLayout.Header.textDiv("NewChannel")}
           </SLayout.Header>
@@ -50,9 +50,9 @@ let make = (~channel="general", _children) => {
                 ~schema=[(`name, Custom(_ => None))],
                 ({handleSubmit, handleChange, form, _}) =>
                   switch (data.result) {
-                  | Loading => <div> {"Loading" |> ste} </div>
+                  | Loading => "Loading" |> ste
                   | Error(e) =>
-                    <div>
+                    <>
                       {"Error: " ++ e##message |> ste}
                       {
                         ChannelForm.showForm(
@@ -61,7 +61,7 @@ let make = (~channel="general", _children) => {
                           ~handleChange,
                         )
                       }
-                    </div>
+                    </>
                   | Data(data) =>
                     data##createMeasurable
                     |> E.O.fmap(e => e##id)
@@ -74,7 +74,7 @@ let make = (~channel="general", _children) => {
               |> ReasonReact.element
             }
           </SLayout.MainSection>
-        </div>,
+        </>,
     )
     |> ReasonReact.element,
 };

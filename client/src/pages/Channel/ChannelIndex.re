@@ -54,11 +54,11 @@ let make = _children => {
           <Antd.Button _type=`primary> {"Join" |> ste} </Antd.Button>
         </div>
       </div>;
-    <div>
+    <>
       <SLayout.Header> {SLayout.Header.textDiv("Channels")} </SLayout.Header>
       <SLayout.MainSection>
         <div className=table> row row row row row row </div>
       </SLayout.MainSection>
-    </div>;
+    </>;
   },
 };

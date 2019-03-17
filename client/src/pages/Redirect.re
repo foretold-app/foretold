@@ -23,7 +23,7 @@ let make = _children => {
         | (_, Some(id)) => Urls.pushToLink(AgentShow(id))
         | _ => ()
         };
-        <div>
+        <>
           <h1> {"Redirecting..." |> ste} </h1>
           <p>
             {
@@ -31,7 +31,7 @@ let make = _children => {
               |> ste
             }
           </p>
-        </div>;
+        </>;
       },
     ),
 };

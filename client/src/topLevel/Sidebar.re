@@ -68,7 +68,7 @@ let make = (~channel, ~loggedInUser: GetUser.t, _children) => {
         | Some(user) =>
           open Rationale.Option.Infix;
           let idd = user.agentId |> E.O.default("");
-          <div>
+          <>
             <div
               onClick=(_e => Urls.pushToLink(Profile)) className=Styles.item>
               {"Profile" |> ste}
@@ -81,7 +81,7 @@ let make = (~channel, ~loggedInUser: GetUser.t, _children) => {
             <div onClick=(_e => Auth0.logout()) className=Styles.item>
               {"Log Out" |> ste}
             </div>
-          </div>;
+          </>;
         | None =>
           <div onClick=(_e => Auth0.logIn()) className=Styles.item>
             {"Log In" |> ste}

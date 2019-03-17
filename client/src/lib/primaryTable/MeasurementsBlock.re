@@ -126,7 +126,7 @@ let make = (ms: list(DataModel.measurement)) => {
        )
     |> E.A.of_list
     |> ReasonReact.array;
-  <div>
+  <>
     foo
     <div className=MeasurementTableStyles.axisRow>
       <div className=MeasurementTableStyles.mainColumn>
@@ -136,5 +136,5 @@ let make = (ms: list(DataModel.measurement)) => {
       </div>
       <div className=MeasurementTableStyles.axisRightColumn />
     </div>
-  </div>;
+  </>;
 };

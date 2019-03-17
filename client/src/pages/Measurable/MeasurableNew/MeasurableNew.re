@@ -69,7 +69,7 @@ let component = ReasonReact.statelessComponent("Measurables");
 let make = (~channel, _children) => {
   ...component,
   render: _ =>
-    <div>
+    <>
       <SLayout.Header>
         {SLayout.Header.textDiv("New Measurable")}
       </SLayout.Header>
@@ -96,9 +96,9 @@ let make = (~channel, _children) => {
                 ~schema=[(`name, Custom(_ => None))],
                 ({handleSubmit, handleChange, form, _}) =>
                   switch (data.result) {
-                  | Loading => <div> {"Loading" |> ste} </div>
+                  | Loading => "Loading" |> ste
                   | Error(e) =>
-                    <div>
+                    <>
                       {"Error: " ++ e##message |> ste}
                       {
                         MeasurableForm.showForm(
@@ -107,7 +107,7 @@ let make = (~channel, _children) => {
                           ~handleChange,
                         )
                       }
-                    </div>
+                    </>
                   | Data(data) =>
                     data##createMeasurable
                     |> E.O.fmap(e => e##id)
@@ -126,5 +126,5 @@ let make = (~channel, _children) => {
           |> ReasonReact.element
         }
       </SLayout.MainSection>
-    </div>,
+    </>,
 };

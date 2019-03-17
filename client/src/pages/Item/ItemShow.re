@@ -27,14 +27,14 @@ let make = (~id: string, _children) => {
       |> Graph_T.F.factList
       |> Graph_Fact_Filters.withSubject(id)
       |> E.L.fmap((f: Graph_T.T.fact) => f);
-    <div>
+    <>
       <SLayout.Header> {SLayout.Header.textDiv(id)} </SLayout.Header>
       <SLayout.MainSection>
         {
           names
           |> E.A.of_list
           |> E.A.fmap((r: Graph_T.T.fact) =>
-               <div>
+               <>
                  <h3>
                    {
                      findName(graph, r.propertyId)
@@ -52,11 +52,11 @@ let make = (~id: string, _children) => {
                    | _ => "no-name" |> ste
                    }
                  )
-               </div>
+               </>
              )
           |> ReasonReact.array
         }
       </SLayout.MainSection>
-    </div>;
+    </>;
   },
 };

@@ -96,7 +96,7 @@ let nameEntityLink = xEntityLink(r => r.descriptionEntity);
 let propertyEntityLink = xEntityLink(r => r.descriptionProperty);
 
 let link = (~m: DataModel.measurable) =>
-  <div>
+  <>
     {
       nameEntityLink(~m, ~className=PrimaryTableStyles.itemLink)
       |> E.O.React.defaultNull
@@ -117,7 +117,7 @@ let link = (~m: DataModel.measurable) =>
         |> ReasonReact.array
       }
     }
-  </div>;
+  </>;
 
 let description = (~m: DataModel.measurable) =>
   switch (m.description) {

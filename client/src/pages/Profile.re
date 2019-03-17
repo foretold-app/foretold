@@ -94,7 +94,7 @@ let make = (~loggedInUser, _children) => {
         |> E.O.default("");
       withUserForm(
         id, name, mutation, ({handleSubmit, handleChange, form, _}) =>
-        <div>
+        <>
           <SLayout.Header>
             <h1> {"Edit Profile Information" |> ste} </h1>
           </SLayout.Header>
@@ -102,23 +102,23 @@ let make = (~loggedInUser, _children) => {
             <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
               {
                 switch (data.result) {
-                | Loading => <div> {"Loading" |> ste} </div>
+                | Loading => "Loading" |> ste
                 | Error(e) =>
-                  <div>
+                  <>
                     {"Error: " ++ e##message |> ste}
                     {formFields(form, handleChange, handleSubmit)}
-                  </div>
+                  </>
                 | Data(_) =>
-                  <div>
+                  <>
                     {"Changes made successfully." |> ste}
                     {formFields(form, handleChange, handleSubmit)}
-                  </div>
+                  </>
                 | NotCalled => formFields(form, handleChange, handleSubmit)
                 }
               }
             </form>
           </SLayout.MainSection>
-        </div>
+        </>
       );
     }),
 };

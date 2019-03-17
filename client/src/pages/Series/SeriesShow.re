@@ -78,7 +78,7 @@ let make =
       |> E.O.React.defaultNull;
 
     GetSeries.component(~id, series =>
-      <div>
+      <>
         <SLayout.Header>
           {
             SLayout.seriesHead(
@@ -99,7 +99,7 @@ let make =
           <div className=SeriesShowTableStyles.topPart> medium </div>
           bottom
         </SLayout.MainSection>
-      </div>
+      </>
     );
   },
 };

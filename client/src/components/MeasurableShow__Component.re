@@ -27,7 +27,7 @@ let make = (~id: string, ~loggedInUser: GetUser.t, _children) => {
       ~id,
       measurable => {
         let m = GetMeasurableWithMeasurements.queryMeasurable(measurable);
-        <div>
+        <>
           <Div flexDirection=`column styles=[Styles.header]>
             <Div flex=1>
               <Div flexDirection=`row>
@@ -47,27 +47,27 @@ let make = (~id: string, ~loggedInUser: GetUser.t, _children) => {
               {MeasurableTableStyles.endpointResponse(~m)}
             </Div>
           </Div>
-          <div>
+          <>
             {
               loggedInUser
               |> E.O.fmap((user: GetUser.user) => {
                    open Rationale.Option.Infix;
                    let userAgentId = user.agentId;
                    let creatorId = m.creator <$> (r => r.id);
-                   <div>
+                   <>
                      <h2> {"Add a Measurement" |> ste} </h2>
                      <MeasurableShowForm
                        measurableId=id
                        isCreator={userAgentId == creatorId}
                      />
-                   </div>;
+                   </>;
                  })
               |> E.O.React.defaultNull
             }
             <h2> {"Measurements" |> ste} </h2>
             <Measurable__Table measurements=measurable##measurements />
-          </div>
-        </div>;
+          </>
+        </>;
       },
     ),
 };

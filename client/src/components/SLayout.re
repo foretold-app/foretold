@@ -101,7 +101,7 @@ let channelLink = (c: string) =>
   <div className=Styles.headerText> {"#" ++ c |> ste} </div>;
 
 let seriesHead = (channelName, seriesName) =>
-  <div>
+  <>
     {channelBack(~channelName, ())}
     <div className=Styles.headerText> {"#" ++ channelName |> ste} </div>
     <div className=Styles.dash> <Icon.Icon icon="THIN_RIGHT" /> </div>
@@ -109,7 +109,7 @@ let seriesHead = (channelName, seriesName) =>
       <Icon.Icon icon="LAYERS" />
       {seriesName |> ste}
     </div>
-  </div>;
+  </>;
 
 let button = channel =>
   <Div float=`right>
@@ -123,14 +123,14 @@ let channelHeader = channel =>
     {
       channel
       |> E.O.fmap(c =>
-           <div>
+           <>
              <h1>
                <a href={Urls.mapLinkToUrl(ChannelShow(c))}>
                  {"#" ++ c |> ste}
                </a>
              </h1>
              {button(c)}
-           </div>
+           </>
          )
       |> E.O.React.defaultNull
     }

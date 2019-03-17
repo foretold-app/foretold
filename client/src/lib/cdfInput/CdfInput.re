@@ -179,12 +179,12 @@ let make =
     <Style.BorderedBox>
       {
         switch (data.result) {
-        | Loading => <div> {"Loading" |> ste} </div>
+        | Loading => "Loading" |> ste
         | Error(e) =>
-          <div>
+          <>
             {"Error: " ++ e##message |> ste}
             {mainn(~state, ~isCreator, ~send, ~onSubmit)}
-          </div>
+          </>
         | Data(_) => <h2> {"Form submitted successfully!" |> ste} </h2>
         | NotCalled => mainn(~state, ~isCreator, ~send, ~onSubmit)
         }

@@ -1,5 +1,4 @@
 /**
- * No migrations needed.
  * @param sequelize
  * @param DataTypes
  * @return {*}

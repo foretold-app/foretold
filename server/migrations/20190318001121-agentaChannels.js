@@ -1,7 +1,7 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
-    await queryInterface.createTable('AgentChannels', {
-      AgentId: {
+    await queryInterface.createTable('AgentsChannels', {
+      agentId: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -9,7 +9,7 @@ module.exports = {
           key: 'id',
         }
       },
-      ChannelId: {
+      channelId: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -17,17 +17,11 @@ module.exports = {
           key: 'id',
         }
       },
-      createdAt: {
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        type: Sequelize.DATE
-      },
     });
   },
 
   down: async function (queryInterface) {
-    await queryInterface.dropTable('AgentChannels');
+    await queryInterface.dropTable('AgentsChannels');
   }
 };
 

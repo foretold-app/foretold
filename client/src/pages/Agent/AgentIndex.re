@@ -13,7 +13,7 @@ let make = _children => {
       |> ApolloUtils.apolloResponseToResult
       <$> (d => d##agents)
       <$> (_ => <div />)
-      |> Result.result(idd, idd)
+      |> E.R.id
     )
-    |> ReasonReact.element,
+    |> E.React.el,
 };

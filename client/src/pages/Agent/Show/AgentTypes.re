@@ -107,9 +107,9 @@ module GetAgent = {
           }
       )
       <$> innerFn
-      |> Result.result(idd, idd)
+      |> E.R.id
     )
-    |> ReasonReact.element;
+    |> E.React.el;
   };
 };
 

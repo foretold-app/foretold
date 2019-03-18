@@ -1,7 +1,14 @@
 /* O for option */
 open Rationale;
+open Rationale.Function.Infix;
 
-let idd = e => e;
+/* Utils */
+module U = {
+  let isEqual = (a, b) => a == b;
+  let toA = a => [|a|];
+  let id = e => e;
+};
+
 module O = {
   let dimap = (sFn, rFn, e) =>
     switch (e) {
@@ -26,9 +33,13 @@ module O = {
 
 /* R for Result */
 module R = {
-  let id = e => e |> Rationale.Result.result(idd, idd);
+  let id = e => e |> Rationale.Result.result(U.id, U.id);
   let fmap = Rationale.Result.fmap;
   let bind = Rationale.Result.bind;
+};
+
+module S = {
+  let toReact = ReasonReact.string;
 };
 
 /* List */
@@ -53,6 +64,7 @@ module L = {
   let contains = RList.contains;
   let without = RList.without;
   let iter = List.iter;
+  let findIndex = RList.findIndex;
 };
 
 /* A for Array */
@@ -62,6 +74,7 @@ module A = {
   let to_list = Array.to_list;
   let of_list = Array.of_list;
   let length = Array.length;
+  let empty = [||];
   let unsafe_get = Array.unsafe_get;
   let get = Belt.Array.get;
   let fold_left = Array.fold_left;
@@ -69,7 +82,19 @@ module A = {
   let concatMany = Belt.Array.concatMany;
   let keepMap = Belt.Array.keepMap;
   let stableSortBy = Belt.SortArray.stableSortBy;
-  let filter = (o, e) => e |> to_list |> L.filter(o) |> of_list;
+  /* TODO: Is there a better way of doing this? */
+
+  /* TODO: Is -1 still the indicator that this is false (as is true with js findIndex)? Wasn't sure. */
+  let findIndex = (e, i) =>
+    Js.Array.findIndex(e, i)
+    |> (
+      r =>
+        switch (r) {
+        | (-1) => None
+        | r => Some(r)
+        }
+    );
+  let filter = (o, e) => Js.Array.filter(o, e);
   module Optional = {
     let concatSomes = (optionals: Js.Array.t(option('a))): Js.Array.t('a) =>
       optionals
@@ -102,4 +127,11 @@ module FloatCdf = {
 
   let firstAboveValue = (min: float, t: Value.FloatCdf.t) =>
     Rationale.Option.fmap(((_, x)) => x, firstAbove(min, t));
+};
+
+module React = {
+  let el = ReasonReact.element;
+  let makeToEl = (~key="", ~children=<div />, e) =>
+    children |> e |> el(~key);
+  let showIf = (cond, comp) => cond ? comp : ReasonReact.null;
 };

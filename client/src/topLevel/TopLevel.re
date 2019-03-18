@@ -22,11 +22,8 @@ let make = (~route: route, _children) => {
         switch (loggedInUser) {
         | Some(_userIsLoggedIn) =>
           let inApp = (~key="", e) =>
-            e
-            |> (r => [||] |> r)
-            |> ReasonReact.element
-            |> FillWithSidebar.make(~channel, ~loggedInUser)
-            |> ReasonReact.element(~key);
+            FillWithSidebar.make(~channel, ~loggedInUser)
+            |> E.React.makeToEl(~children=E.React.makeToEl(e), ~key);
           switch (route) {
           | AgentMeasurables(id) =>
             AgentMeasurables.make(~id, ~loggedInUser) |> inApp

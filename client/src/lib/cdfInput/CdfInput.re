@@ -90,7 +90,7 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
     </div>
     <div className=Styles.inputSection>
       {
-        showIf(
+        E.React.showIf(
           isCreator,
           <div className=Styles.select>
             {competitorType(~state, ~send)}
@@ -98,7 +98,7 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
         )
       }
       {
-        showIf(
+        E.React.showIf(
           state.competitorType == "OBJECTIVE",
           <div className=Styles.select> {dataType(~state, ~send)} </div>,
         )

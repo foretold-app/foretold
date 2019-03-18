@@ -47,5 +47,5 @@ let component = innerFn => {
     <$> innerFn
     |> E.R.id
   )
-  |> ReasonReact.element;
+  |> E.React.el;
 };

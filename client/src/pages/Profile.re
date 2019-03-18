@@ -45,7 +45,7 @@ let withUserQuery =
   GetUser.QueryComponent.make(~variables=query##variables, ({result}) =>
     result |> ApolloUtils.apolloResponseToResult <$> innerComponentFn |> E.R.id
   )
-  |> ReasonReact.element;
+  |> E.React.el;
 };
 
 let withUserMutation = innerComponentFn =>
@@ -53,7 +53,7 @@ let withUserMutation = innerComponentFn =>
     ~onError=e => Js.log2("Graphql Error:", e),
     innerComponentFn,
   )
-  |> ReasonReact.element;
+  |> E.React.el;
 
 let withUserForm = (id, name, mutation, innerComponentFn) =>
   Form.make(
@@ -62,7 +62,7 @@ let withUserForm = (id, name, mutation, innerComponentFn) =>
     ~schema=[(`name, Custom(_ => None))],
     innerComponentFn,
   )
-  |> ReasonReact.element;
+  |> E.React.el;
 
 let formFields = (form: Form.state, handleChange, handleSubmit: unit => unit) =>
   <Antd.Form>

@@ -216,7 +216,7 @@ let make = (~measurableId: string, _children) => {
               </Form.Item>
             </form>,
         )
-        |> ReasonReact.element,
+        |> E.React.el,
     )
-    |> ReasonReact.element,
+    |> E.React.el,
 };

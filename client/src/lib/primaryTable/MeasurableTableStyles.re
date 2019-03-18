@@ -282,7 +282,7 @@ let archiveButton = (~m: DataModel.measurable) =>
       </div>
     </div>
   )
-  |> ReasonReact.element;
+  |> E.React.el;
 
 let unArchiveButton = (~m: DataModel.measurable) =>
   WithUnarchiveMutation.Mutation.make((mutation, _) =>
@@ -294,7 +294,7 @@ let unArchiveButton = (~m: DataModel.measurable) =>
       </div>
     </div>
   )
-  |> ReasonReact.element;
+  |> E.React.el;
 
 let archiveOption = (~m: DataModel.measurable) =>
   status(m) !== ARCHIVED ? archiveButton(~m) : unArchiveButton(~m);

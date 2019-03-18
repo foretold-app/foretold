@@ -14,29 +14,12 @@ module SeriesItems = {
   let item =
     style([
       Css.float(`left),
-      backgroundColor(hex("eee")),
-      padding2(~v=`em(0.2), ~h=`em(0.7)),
-      borderRadius(`px(4)),
       margin4(
         ~top=`em(0.0),
         ~left=`em(0.0),
         ~right=`em(0.5),
         ~bottom=`em(0.5),
       ),
-      backgroundColor(`hex("ebe9f3")),
-      border(`px(1), `solid, `hex("dadae4")),
-      color(`hex("0b2d67")),
-      cursor(`pointer),
-      minWidth(`em(23.)),
-      selector(":hover", [backgroundColor(`hex("dad7e8"))]),
-      selector("p", [marginBottom(`px(0))]),
-    ]);
-
-  let heading =
-    style([
-      color(`hex("0b2d67")),
-      fontWeight(`bold),
-      fontSize(`em(1.2)),
     ]);
 };
 
@@ -55,47 +38,17 @@ let component = ReasonReact.reducerComponent("MeasurableIndex");
 
 let itemsPerPage = 20;
 
-let indexChannelHeader =
-    (channel: option(string), onForward, onBackward, isAtStart, isAtEnd) =>
-  channel
-  |> E.O.fmap(c =>
-       <>
-         {SLayout.channelLink(c)}
-         <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
-           <Icon.Icon icon="ARROW_LEFT" />
-         </Antd.Button>
-         <Antd.Button onClick={_ => onForward()} disabled=isAtEnd>
-           <Icon.Icon icon="ARROW_RIGHT" />
-         </Antd.Button>
-         {SLayout.button(c)}
-       </>
-     )
-  |> E.O.React.defaultNull;
-
-let itemHeader =
-    (
-      channel: option(string),
-      onForward,
-      onBackward,
-      onBack,
-      isAtStart,
-      isAtEnd,
-    ) =>
-  channel
-  |> E.O.fmap(c =>
-       <>
-         {SLayout.channelBack(~channelName=c, ~onClick=_ => onBack(), ())}
-         {SLayout.channelLink(c)}
-         <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
-           <Icon.Icon icon="ARROW_LEFT" />
-         </Antd.Button>
-         <Antd.Button onClick={_ => onForward()} disabled=isAtEnd>
-           <Icon.Icon icon="ARROW_RIGHT" />
-         </Antd.Button>
-         {SLayout.button(c)}
-       </>
-     )
-  |> E.O.React.defaultNull;
+let itemHeader = (channel: string, onForward, onBackward, isAtStart, isAtEnd) =>
+  <>
+    {SLayout.channelLink(channel)}
+    <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
+      <Icon.Icon icon="ARROW_LEFT" />
+    </Antd.Button>
+    <Antd.Button onClick={_ => onForward()} disabled=isAtEnd>
+      <Icon.Icon icon="ARROW_RIGHT" />
+    </Antd.Button>
+    {SLayout.button(channel)}
+  </>;
 
 let selectedView =
     (
@@ -110,11 +63,17 @@ let selectedView =
   <>
     <SLayout.Header>
       {
+        SLayout.channelBack(
+          ~channelName=channel,
+          ~onClick=_ => send(Select(None)),
+          (),
+        )
+      }
+      {
         itemHeader(
-          Some(channel),
+          channel,
           () => send(SelectIncrement),
           () => send(SelectDecrement),
-          () => send(Select(None)),
           index == 0,
           index == itemsOnPage - 1,
         )
@@ -146,56 +105,34 @@ let deselectedView =
          x.channel == channel && x.measurableCount !== Some(0)
        );
   <>
-    <SLayout.Header>
-      {
-        indexChannelHeader(
-          Some(channel),
-          () => send(NextPage),
-          () => send(LastPage),
-          state.page == 0,
-          measurables |> Array.length < itemsPerPage,
-        )
-      }
-    </SLayout.Header>
+    {
+      itemHeader(
+        channel,
+        () => send(NextPage),
+        () => send(LastPage),
+        state.page == 0,
+        measurables->E.A.length < itemsPerPage,
+      )
+      ->E.U.toA
+      ->SLayout.Header.make
+      |> E.React.el
+    }
     <SLayout.MainSection>
       {
-        showIf(
+        E.React.showIf(
           state.page == 0 && seriesList |> E.A.length > 0,
           <>
             <h2> {"Series List" |> ste} </h2>
             <div className=SeriesItems.items>
               {
                 seriesList
-                /* TODO: This should only query to get the series, it shouldn't do filtering here. */
                 |> Array.map((x: GetSeriesCollection.series) =>
                      <div
                        className=SeriesItems.item
                        onClick={
                          _e => Urls.pushToLink(SeriesShow(x.channel, x.id))
                        }>
-                       <span className=SeriesItems.heading>
-                         <Icon.Icon icon="LAYERS" />
-                         {x.name |> E.O.default("") |> ste}
-                       </span>
-                       {
-                         x.description
-                         |> E.O.fmap(d => <p> {d |> ste} </p>)
-                         |> E.O.React.defaultNull
-                       }
-                       {
-                         x.measurableCount
-                         |> E.O.fmap(d =>
-                              <p>
-                                {
-                                  d
-                                  |> string_of_int
-                                  |> (e => e ++ " items")
-                                  |> ste
-                                }
-                              </p>
-                            )
-                         |> E.O.React.defaultNull
-                       }
+                       <SeriesCard series=x />
                      </div>
                    )
                 |> ReasonReact.array
@@ -213,10 +150,7 @@ let deselectedView =
             send(
               Select(
                 measurables
-                |> Array.to_list
-                |> Rationale.RList.findIndex((r: DataModel.measurable) =>
-                     r.id == e.id
-                   ),
+                |> E.A.findIndex((r: DataModel.measurable) => r.id == e.id),
               ),
             )
         }

@@ -7,19 +7,16 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var E$Client = require("../types/E.bs.js");
 var Caml_option = require("bs-platform/lib/js/caml_option.js");
 
-function resolveOption(opt) {
-  if (opt !== undefined) {
-    return opt;
-  } else {
-    return "";
-  }
-}
-
 function resolveRegex(exp, str) {
   var res = exp.exec(str);
   if (res !== null && res.length === 2) {
     var token = res[1];
-    return resolveOption((token == null) ? undefined : Caml_option.some(token));
+    var opt = (token == null) ? undefined : Caml_option.some(token);
+    if (opt !== undefined) {
+      return opt;
+    } else {
+      return "";
+    }
   } else {
     return "";
   }
@@ -42,7 +39,7 @@ function idd(e) {
 }
 
 function filterAndFold(fn) {
-  return Curry._2(E$Client.A[/* fold_left */7], (function (acc, elem) {
+  return Curry._2(E$Client.A[/* fold_left */8], (function (acc, elem) {
                 return Curry._3(fn, elem, (function (e) {
                               return $$Array.concat(/* :: */[
                                           acc,
@@ -65,20 +62,10 @@ function doIfSome(fn, s) {
   }
 }
 
-function showIf(cond, comp) {
-  if (cond) {
-    return comp;
-  } else {
-    return null;
-  }
-}
-
-exports.resolveOption = resolveOption;
 exports.resolveRegex = resolveRegex;
 exports.ste = ste;
 exports.filterOptionalResult = filterOptionalResult;
 exports.idd = idd;
 exports.filterAndFold = filterAndFold;
 exports.doIfSome = doIfSome;
-exports.showIf = showIf;
 /* E-Client Not a pure module */

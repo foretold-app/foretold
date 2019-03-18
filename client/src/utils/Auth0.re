@@ -66,7 +66,7 @@ let authIsObsolete = () => {
   |> E.O.fmap(Int64.of_string)
   |> E.O.fmap(Int64.to_float)
   |> E.O.fmap(e => e < Js.Date.now())
-  |> E.O.dimap(idd, () => false);
+  |> E.O.dimap(E.U.id, () => false);
 };
 
 let authToken = () => Dom.Storage.(localStorage |> getItem("id_token"));

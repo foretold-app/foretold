@@ -121,9 +121,9 @@ let make = (~channel, _children) => {
                     )
                   },
               )
-              |> ReasonReact.element,
+              |> E.React.el,
           )
-          |> ReasonReact.element
+          |> E.React.el
         }
       </SLayout.MainSection>
     </>,

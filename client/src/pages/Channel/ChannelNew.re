@@ -71,10 +71,10 @@ let make = (~channel="general", _children) => {
                     ChannelForm.showForm(~form, ~handleSubmit, ~handleChange)
                   },
               )
-              |> ReasonReact.element
+              |> E.React.el
             }
           </SLayout.MainSection>
         </>,
     )
-    |> ReasonReact.element,
+    |> E.React.el,
 };

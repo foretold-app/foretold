@@ -47,7 +47,7 @@ let component =
       |> E.R.fmap(e => innerComponentFn(e))
       |> E.R.id
     )
-    |> ReasonReact.element;
+    |> E.React.el;
   | None => innerComponentFn(None)
   };
 

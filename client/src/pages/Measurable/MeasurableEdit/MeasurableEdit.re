@@ -106,9 +106,9 @@ let formCreation = (id, m) => {
           MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange)
         },
     )
-    |> ReasonReact.element
+    |> E.React.el
   )
-  |> ReasonReact.element;
+  |> E.React.el;
 };
 
 let component = ReasonReact.statelessComponent("MeasurableEdit");

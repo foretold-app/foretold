@@ -86,7 +86,7 @@ let component = (~id, fn) => {
          e##measurable |> filterOptionalResult("Measurable not found" |> ste)
        )
     |> E.R.fmap(fn)
-    |> Result.result(idd, idd)
+    |> E.R.id
   )
-  |> ReasonReact.element;
+  |> E.React.el;
 };

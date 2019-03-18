@@ -111,9 +111,9 @@ let queryToComponent = (query, innerComponentFn) =>
       <$> E.A.Optional.concatSomes
       <$> (d => d |> E.A.fmap(toMeasurable))
       <$> (e => innerComponentFn(e))
-      |> Result.result(idd, idd)
+      |> E.R.id
     )
-    |> ReasonReact.element
+    |> E.React.el
   );
 
 let component =

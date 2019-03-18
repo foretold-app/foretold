@@ -40,17 +40,17 @@ let make =
                    {MeasurableTableStyles.link(~m)}
                  </div>
                  <div className=PrimaryTableStyles.mainColumnBottom>
-                   {showIf(showExtraData, MeasurableTableStyles.series(~m))}
+                   {E.React.showIf(showExtraData, MeasurableTableStyles.series(~m))}
                    {
-                     showIf(
+                     E.React.showIf(
                        showExtraData,
                        MeasurableTableStyles.creatorLink(~m),
                      )
                    }
                    {MeasurableTableStyles.measurements(~m)}
                    {MeasurableTableStyles.measurers(~m)}
-                   {showIf(isSame, MeasurableTableStyles.editLink(~m))}
-                   {showIf(isSame, MeasurableTableStyles.archiveOption(~m))}
+                   {E.React.showIf(isSame, MeasurableTableStyles.editLink(~m))}
+                   {E.React.showIf(isSame, MeasurableTableStyles.archiveOption(~m))}
                  </div>
                </div>
                <div className=PrimaryTableStyles.rightColumn>

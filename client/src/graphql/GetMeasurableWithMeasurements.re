@@ -104,7 +104,7 @@ let component = (~id, fn) => {
     |> E.R.fmap(fn)
     |> E.R.id
   )
-  |> ReasonReact.element;
+  |> E.React.el;
 };
 
 let toMeasurement = (m: MeasurableTypes.measurement): DataModel.measurement => {

@@ -21,5 +21,5 @@ let make = (~measurableId: string, ~isCreator: bool, _children) => {
           isCreator
         />,
     )
-    |> ReasonReact.element,
+    |> E.React.el,
 };

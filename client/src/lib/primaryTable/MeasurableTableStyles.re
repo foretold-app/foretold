@@ -140,7 +140,7 @@ let endpointResponse = (~m: DataModel.measurable) =>
 
 let creatorLink = (~m: DataModel.measurable) =>
   m.creator
-  |> E.O.fmap((c: DataModel.agent) =>
+  |> E.O.fmap((c: DataModel.Agent.t) =>
        <div className=PrimaryTableStyles.item>
          <a href={Urls.mapLinkToUrl(AgentShow(c.id))}>
            {c.name |> E.O.default("") |> ste}

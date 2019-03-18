@@ -10,8 +10,8 @@ type series = {
   creator: option(creator),
 };
 
-let toSeries = (m: series): DataModel.series =>
-  DataModel.toSeries(~id=m.id, ~name=m.name, ());
+let toSeries = (m: series): DataModel.Series.t =>
+  DataModel.Series.make(~id=m.id, ~name=m.name, ());
 
 module Query = [%graphql
   {|

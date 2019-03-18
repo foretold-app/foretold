@@ -7,7 +7,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
   render: _ => {
     let data =
       measurements
-      |> E.A.Optional.concatSomes
+      |> E.A.O.concatSomes
       |> E.A.fmap(GetMeasurableWithMeasurements.toMeasurement);
 
     <div className=MeasurementTableStyles.group>

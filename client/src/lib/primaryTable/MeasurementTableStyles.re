@@ -118,7 +118,7 @@ let judgementStyle =
 let agentLink = (~m: DataModel.measurement) => {
   let agent = m.agent;
   let aLink =
-    switch (agent, agent |> E.O.bind(_, DataModel.agentName)) {
+    switch (agent, agent |> E.O.bind(_, DataModel.Agent.name)) {
     | (Some(agent), Some(name)) =>
       <a href={Urls.mapLinkToUrl(AgentShow(agent.id))} className=agentStyle>
         {name |> ste}

@@ -6,7 +6,7 @@ type series = {
   name: option(string),
 };
 
-let toSeries = (c: series): DataModel.series => {
+let toSeries = (c: series): DataModel.Series.t => {
   id: c.id,
   description: c.description,
   name: c.name,
@@ -17,8 +17,8 @@ type creator = {
   name: option(string),
 };
 
-let toAgent = (c: creator): DataModel.agent =>
-  DataModel.toAgent(~id=c.id, ~name=c.name, ());
+let toAgent = (c: creator): DataModel.Agent.t =>
+  DataModel.Agent.make(~id=c.id, ~name=c.name, ());
 
 type measurable = {
   id: string,
@@ -106,7 +106,7 @@ let queryToComponent = (query, innerComponentFn) =>
     |> ApolloUtils.apolloResponseToResult
     |> E.R.fmap(
          (d => d##measurables)
-         ||> E.A.Optional.concatSomes
+         ||> E.A.O.concatSomes
          ||> E.A.fmap(toMeasurable)
          ||> innerComponentFn,
        )

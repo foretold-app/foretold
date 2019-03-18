@@ -30,9 +30,7 @@ let make = (~id: string, _children) => {
       ~id,
       agent => {
         let mm =
-          AgentTypes.toMeasurables(
-            agent.measurements |> E.A.Optional.concatSomes,
-          );
+          AgentTypes.toMeasurables(agent.measurements |> E.A.O.concatSomes);
         <>
           <SLayout.Header> {agentSection(agent)} </SLayout.Header>
           <SLayout.MainSection>

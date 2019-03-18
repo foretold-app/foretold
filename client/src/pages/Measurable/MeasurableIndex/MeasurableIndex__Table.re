@@ -27,7 +27,7 @@ let make =
                |> E.O.bind(_, (r: GetUser.user) => r.agent)
                |> E.O.fmap((r: GetUser.agent) => r.id);
              let measurableAgentId =
-               m.creator |> E.O.fmap((r: DataModel.agent) => r.id);
+               m.creator |> E.O.fmap((r: DataModel.Agent.t) => r.id);
              let isSame =
                userAgentId == measurableAgentId && E.O.isSome(userAgentId);
              <div

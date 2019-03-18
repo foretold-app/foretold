@@ -24,7 +24,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
   render: _ => {
     let sorted =
       measurements
-      |> E.A.Optional.concatSomes
+      |> E.A.O.concatSomes
       |> Js.Array.filter(e => e##value |> Belt.Result.isOk)
       |> Js_array.sortInPlaceWith((a, b) =>
            toUnix(b) > toUnix(a) ? (-1) : 1
@@ -56,7 +56,7 @@ let make = (~measurements: MeasurableTypes.measurements, _children) => {
       sorted
       |> onlyWithFloatCdf
       |> E.A.fmap(toChartMeasurement)
-      |> E.A.Optional.concatSomes;
+      |> E.A.O.concatSomes;
 
     <div className=Styles.plot> <TimeCdfChart measurements=values /> </div>;
   },

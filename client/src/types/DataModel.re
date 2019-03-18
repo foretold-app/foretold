@@ -17,21 +17,45 @@ type bot = {
   name: option(string),
 };
 
-type series = {
-  id: string,
-  description: option(string),
-  name: option(string),
-};
+module Series = {
+  type t = {
+    id: string,
+    description: option(string),
+    name: option(string),
+  };
 
-let toSeries = (~id, ~name=None, ~description=None, ()) => {
-  id,
-  name,
-  description,
+  let make = (~id, ~name=None, ~description=None, ()) => {
+    id,
+    name,
+    description,
+  };
 };
 
 type agentType =
   | Bot(bot)
   | User(user);
+
+module Agent = {
+  type t = {
+    id: string,
+    name: option(string),
+    measurementCount: option(int),
+    agentType: option(agentType),
+  };
+  type ts = array(t);
+  let name = (a: t): option(string) =>
+    switch (a.agentType) {
+    | Some(Bot(b)) => b.name
+    | Some(User(u)) => Some(u.name)
+    | None => None
+    };
+  let make = (~id, ~name=None, ~measurementCount=None, ~agentType=None, ()) => {
+    id,
+    name,
+    measurementCount,
+    agentType,
+  };
+};
 
 type agent = {
   id: string,
@@ -78,7 +102,7 @@ type measurement = {
   createdAt: option(MomentRe.Moment.t),
   relevantAt: option(MomentRe.Moment.t),
   measurableId: option(string),
-  agent: option(agent),
+  agent: option(Agent.t),
 };
 
 let toMeasurement =
@@ -123,9 +147,9 @@ type measurable = {
   updatedAt: option(MomentRe.Moment.t),
   expectedResolutionDate: option(MomentRe.Moment.t),
   stateUpdatedAt: option(MomentRe.Moment.t),
-  creator: option(agent),
+  creator: option(Agent.t),
   measurements: option(list(measurement)),
-  series: option(series),
+  series: option(Series.t),
 };
 
 let toMeasurable =

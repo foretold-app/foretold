@@ -13,8 +13,6 @@ type series = {
 };
 
 type seriesCollection = array(series);
-let toSeries = (m: series): DataModel.series =>
-  DataModel.toSeries(~id=m.id, ~name=m.name, ());
 
 module Query = [%graphql
   {|

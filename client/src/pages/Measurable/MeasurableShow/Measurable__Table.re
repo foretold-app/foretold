@@ -1,5 +1,3 @@
-open Utils;
-
 let component = ReasonReact.statelessComponent("Measurable__Table");
 
 let make = (~measurements: MeasurableTypes.measurements, _children) => {

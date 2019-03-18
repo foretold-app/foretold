@@ -28,6 +28,10 @@ module O = {
   };
 };
 
+module F = {
+  let apply = (a, e) => a |> e;
+};
+
 /* R for Result */
 module R = {
   let result = Rationale.Result.result;

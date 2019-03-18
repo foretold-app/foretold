@@ -77,24 +77,25 @@ let make =
       |> E.O.fmap(elId => <MeasurableShow__Component id=elId loggedInUser />)
       |> E.O.React.defaultNull;
 
-    GetSeries.component(~id, series =>
-      <>
-        <SLayout.Header>
-          {
-            SLayout.seriesHead(
-              channel,
-              series
-              |> E.O.bind(_, (s: GetSeries.series) => s.name)
-              |> E.O.default(""),
-            )
-          }
-        </SLayout.Header>
-        <SLayout.MainSection>
-          {series |> E.O.fmap(seriesTop) |> E.O.React.defaultNull}
-          <div className=SeriesShowTableStyles.topPart> medium </div>
-          bottom
-        </SLayout.MainSection>
-      </>
-    );
+    GetSeries.component(~id)
+    |> E.F.apply(series =>
+         <>
+           <SLayout.Header>
+             {
+               SLayout.seriesHead(
+                 channel,
+                 series
+                 |> E.O.bind(_, (s: GetSeries.series) => s.name)
+                 |> E.O.default(""),
+               )
+             }
+           </SLayout.Header>
+           <SLayout.MainSection>
+             {series |> E.O.fmap(seriesTop) |> E.O.React.defaultNull}
+             <div className=SeriesShowTableStyles.topPart> medium </div>
+             bottom
+           </SLayout.MainSection>
+         </>
+       );
   },
 };

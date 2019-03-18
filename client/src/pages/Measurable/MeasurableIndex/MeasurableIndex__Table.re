@@ -40,30 +40,27 @@ let make =
                  </div>
                  <div className=PrimaryTableStyles.mainColumnBottom>
                    {
-                     E.React.showIf(
-                       showExtraData,
-                       MeasurableTableStyles.series(~m),
-                     )
-                   }
-                   {
-                     E.React.showIf(
-                       showExtraData,
-                       MeasurableTableStyles.creatorLink(~m),
-                     )
-                   }
-                   {MeasurableTableStyles.measurements(~m)}
-                   {MeasurableTableStyles.measurers(~m)}
-                   {
-                     E.React.showIf(
-                       isSame,
-                       MeasurableTableStyles.editLink(~m),
-                     )
-                   }
-                   {
-                     E.React.showIf(
-                       isSame,
-                       MeasurableTableStyles.archiveOption(~m),
-                     )
+                     [|
+                       E.React.showIf(
+                         showExtraData,
+                         MeasurableTableStyles.series(~m),
+                       ),
+                       E.React.showIf(
+                         showExtraData,
+                         MeasurableTableStyles.creatorLink(~m),
+                       ),
+                       MeasurableTableStyles.measurements(~m),
+                       MeasurableTableStyles.measurers(~m),
+                       E.React.showIf(
+                         isSame,
+                         MeasurableTableStyles.editLink(~m),
+                       ),
+                       E.React.showIf(
+                         isSame,
+                         MeasurableTableStyles.archiveOption(~m),
+                       ),
+                     |]
+                     |> ReasonReact.array
                    }
                  </div>
                </div>

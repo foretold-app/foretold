@@ -27,7 +27,7 @@ type agent = {
 };
 
 let toAgent = (a: agent): DataModel.Agent.t => {
-  let agentType: option(DataModel.agentType) =
+  let agentType: option(DataModel.Agent.agentType) =
     switch (a.bot, a.user) {
     | (Some(bot), None) => Some(Bot(toBot(bot)))
     | (None, Some(user)) => Some(User(toUser(user)))

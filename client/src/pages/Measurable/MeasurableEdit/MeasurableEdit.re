@@ -1,6 +1,4 @@
 open Utils;
-open MomentRe;
-open Antd;
 
 module WithEditMutation = {
   module GraphQL = [%graphql

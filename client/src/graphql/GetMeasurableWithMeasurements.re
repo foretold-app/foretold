@@ -15,8 +15,8 @@ module Query = [%graphql
               resolutionEndpointResponse
               descriptionEntity
               descriptionProperty
+              state
               descriptionDate @bsDecoder(fn: "E.J.O.toMoment")
-              state @bsDecoder(fn: "QueriesHelper.string_to_measurableState")
               stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
               expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
               createdAt @bsDecoder(fn: "E.J.toMoment")
@@ -78,7 +78,7 @@ let queryMeasurable = m => {
       ~createdAt=Some(m##createdAt),
       ~updatedAt=Some(m##updatedAt),
       ~expectedResolutionDate=m##expectedResolutionDate,
-      ~state=Some(m##state),
+      ~state=Some(m##state |> DataModel.MeasurableState.fromString),
       ~stateUpdatedAt=m##stateUpdatedAt,
       ~descriptionEntity=m##descriptionEntity,
       ~descriptionDate=m##descriptionDate,
@@ -104,9 +104,9 @@ let component = (~id, fn) => {
   |> E.React.el;
 };
 
-let toMeasurement = (m: MeasurableTypes.measurement): DataModel.measurement => {
-  open DataModel;
-  let agentType: option(DataModel.agentType) =
+let toMeasurement = (m: MeasurableTypes.measurement): DataModel.Measurement.t => {
+  open DataModel.Agent;
+  let agentType: option(DataModel.Agent.agentType) =
     m##agent
     |> E.O.bind(_, k =>
          switch (k##bot, k##user) {
@@ -128,7 +128,7 @@ let toMeasurement = (m: MeasurableTypes.measurement): DataModel.measurement => {
   let agent: option(DataModel.Agent.t) =
     m##agent |> E.O.fmap(k => DataModel.Agent.make(~id=k##id, ~agentType, ()));
 
-  DataModel.toMeasurement(
+  DataModel.Measurement.make(
     ~id=m##id,
     ~description=m##description,
     ~value=m##value,

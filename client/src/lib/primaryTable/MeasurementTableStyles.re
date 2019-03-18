@@ -12,7 +12,7 @@ let middle =
   ]);
 let area = style([maxHeight(`px(50))]);
 
-let isJudgement = (m: DataModel.measurement) =>
+let isJudgement = (m: DataModel.Measurement.t) =>
   m.competitorType == `OBJECTIVE;
 
 let percentiles =
@@ -28,7 +28,7 @@ let percentiles =
 
 let group =
   style([borderRadius(`px(2)), border(`px(1), `solid, `hex("e1eaf1"))]);
-let row = (~m: DataModel.measurement) =>
+let row = (~m: DataModel.Measurement.t) =>
   style([
     width(`percent(100.0)),
     selector(" h2", [marginTop(px(2))]),
@@ -66,7 +66,7 @@ let item =
     color(`hex("red")),
   ]);
 
-let rightColumn = (~m: DataModel.measurement) => {
+let rightColumn = (~m: DataModel.Measurement.t) => {
   let isJudge = isJudgement(m);
   style([
     flex(3),
@@ -86,7 +86,7 @@ let rightColumnTop = style([flex(1), paddingLeft(px(2))]);
 
 let mainColumnBottom = style([flex(1), padding(px(2))]);
 
-let smallDistribution = (m: DataModel.measurement, g: (float, float)) =>
+let smallDistribution = (m: DataModel.Measurement.t, g: (float, float)) =>
   switch (m.value) {
   | Belt.Result.Ok(`FloatCdf(r)) =>
     r
@@ -115,7 +115,7 @@ let judgementStyle =
     selector(" a", [fontSize(`em(0.9))]),
   ]);
 
-let agentLink = (~m: DataModel.measurement) => {
+let agentLink = (~m: DataModel.Measurement.t) => {
   let agent = m.agent;
   let aLink =
     switch (agent, agent |> E.O.bind(_, DataModel.Agent.name)) {
@@ -146,7 +146,7 @@ let descriptionStyle =
     ),
   ]);
 
-let description = (~m: DataModel.measurement) =>
+let description = (~m: DataModel.Measurement.t) =>
   switch (m.description |> E.O.default("")) {
   | "" => <div />
   | text => <div className=descriptionStyle> <p> {text |> ste} </p> </div>
@@ -164,5 +164,5 @@ let dateStyle =
     marginTop(`px(1)),
   ]);
 
-let relevantAt = (~m: DataModel.measurement) =>
+let relevantAt = (~m: DataModel.Measurement.t) =>
   <div className=dateStyle> {m.relevantAt |> formatDate |> ste} </div>;

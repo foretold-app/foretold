@@ -27,7 +27,7 @@ type bot = {
 type measurable = {
   id: string,
   name: string,
-  state: DataModel.measurableState,
+  state: DataModel.MeasurableState.t,
   stateUpdatedAt: option(MomentRe.Moment.t),
   expectedResolutionDate: option(MomentRe.Moment.t),
 };
@@ -117,7 +117,7 @@ let toMeasurables = (measurements: array(measurement)) => {
   let standardMeasurements =
     r
     |> E.A.fmap(n =>
-         DataModel.toMeasurement(
+         DataModel.Measurement.make(
            ~id=n.id,
            ~value=n.value,
            ~description=n.description,
@@ -150,7 +150,7 @@ let toMeasurables = (measurements: array(measurement)) => {
            ~measurements=
              Some(
                standardMeasurements
-               |> E.L.filter((s: DataModel.measurement) =>
+               |> E.L.filter((s: DataModel.Measurement.t) =>
                     s.measurableId == Some(e.id)
                   ),
              ),

@@ -1,6 +1,6 @@
 type agent = {id: string};
 
-let convertAgent = agent => DataModel.toAgent(~id=agent.id);
+let convertAgent = agent => DataModel.Agent.make(~id=agent.id);
 
 type user = {
   id: string,

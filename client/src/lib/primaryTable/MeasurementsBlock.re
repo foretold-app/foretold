@@ -10,7 +10,7 @@ let getFloatCdf = (e: Belt.Result.t(Value.t, string)) =>
   | _ => None
   };
 
-let bounds = (m: Js_array.t(DataModel.measurement)) => {
+let bounds = (m: Js_array.t(DataModel.Measurement.t)) => {
   let itemBounds =
     m
     |> E.A.keepMap(_, r => getFloatCdf(r.value))
@@ -45,7 +45,7 @@ let percentile = (n, e) =>
     |> E.O.default("")
   );
 
-let toChartMeasurement = (m: DataModel.measurement) =>
+let toChartMeasurement = (m: DataModel.Measurement.t) =>
   switch (m.value) {
   | Belt.Result.Ok(`FloatCdf(r)) =>
     switch (
@@ -58,7 +58,7 @@ let toChartMeasurement = (m: DataModel.measurement) =>
   | _ => None
   };
 
-let toPercentiles = (m: DataModel.measurement) =>
+let toPercentiles = (m: DataModel.Measurement.t) =>
   switch (m.value) {
   | Belt.Result.Ok(`FloatCdf(r)) =>
     switch (
@@ -75,18 +75,18 @@ let toPercentiles = (m: DataModel.measurement) =>
 
 let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
 
-let make = (ms: list(DataModel.measurement)) => {
+let make = (ms: list(DataModel.Measurement.t)) => {
   let bb = bounds(ms |> E.A.of_list);
   let foo =
     ms
-    |> E.L.sort((a: DataModel.measurement, b: DataModel.measurement) =>
+    |> E.L.sort((a: DataModel.Measurement.t, b: DataModel.Measurement.t) =>
          switch (a.createdAt, b.createdAt) {
          | (Some(c), Some(d)) =>
            Moment.toUnix(c) < Moment.toUnix(d) ? 1 : (-1)
          | (_, _) => 0
          }
        )
-    |> E.L.fmap((m: DataModel.measurement) =>
+    |> E.L.fmap((m: DataModel.Measurement.t) =>
          <div className={MeasurementTableStyles.row(~m)} key={m.id}>
            <div className=MeasurementTableStyles.mainColumn>
              <div className=MeasurementTableStyles.mainColumnTop>

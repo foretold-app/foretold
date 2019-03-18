@@ -1,10 +1,10 @@
 module.exports = {
-  up: async function (queryInterface) {
+  up: async function (queryInterface, Sequelize) {
     await queryInterface.addColumn('Measurables', 'channelId', {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'Channel',
+          model: 'Channels',
           key: 'id',
         }
       },
@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'Channel',
+          model: 'Channels',
           key: 'id',
         }
       },

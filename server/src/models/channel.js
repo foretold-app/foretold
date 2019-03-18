@@ -21,11 +21,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    // Explicit Link
-    creatorId: {
-      type: DataTypes.UUID(),
-      allowNull: false,
-    },
     // Booleans
     isArchived: {
       type: DataTypes.BOOLEAN,

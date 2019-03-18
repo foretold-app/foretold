@@ -29,15 +29,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ARRAY(DataTypes.DATE),
       allowNull: true,
     },
-    // @deprecated
-    channel: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    channelId: {
-      type: DataTypes.UUID(),
-      allowNull: false,
-    },
   },
     {
     hooks: {

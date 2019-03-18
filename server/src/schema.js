@@ -18,26 +18,6 @@ const { valueType } = require('./types/value-type');
 const { stats } = require('./types/stats');
 
 /**
- * @param name
- * @param plural
- * @param type
- * @param model
- */
-function modelResolvers(name, plural, type, model) {
-  let fields = {};
-  fields[name] = {
-    type: type,
-    args: _.pick(attributeFields(model), ['id']),
-    resolve: resolver(model)
-  };
-  fields[plural] = {
-    type: new GraphQLNonNull(GraphQLList(type)),
-    resolve: resolver(model)
-  };
-  return fields;
-}
-
-/**
  * @param model
  * @return {GraphQLObjectType}
  */
@@ -113,10 +93,6 @@ const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
-      users: {
-        type: new GraphQLNonNull(GraphQLList(userType)),
-        resolve: resolver(models.User),
-      },
       user: {
         type: userType,
         args: {
@@ -127,6 +103,11 @@ const schema = new GraphQLSchema({
           return usersData.getUser(ops, values, options);
         }
       },
+      users: {
+        type: new GraphQLNonNull(GraphQLList(userType)),
+        resolve: resolver(models.User),
+      },
+
       measurement: {
         type: measurementType,
         args: _.pick(attributeFields(models.Measurement), ['id']),
@@ -136,16 +117,11 @@ const schema = new GraphQLSchema({
         type: new GraphQLNonNull(GraphQLList(measurementType)),
         resolve: resolver(models.Measurement),
       },
-      ...modelResolvers("measurable", "measurables", measurableType, models.Measurable),
-      ...modelResolvers("bot", "bots", botType, models.Bot),
-      ...modelResolvers("agent", "agents", agentType, models.Agent),
-      ...modelResolvers("series", "seriesCollection", seriesType, models.Series),
-      stats: {
-        type: new GraphQLNonNull(stats),
-        resolve: async (ops, values, options) => {
-          // @todo:
-          return 11;
-        }
+
+      measurable: {
+        type: measurableType,
+        args: _.pick(attributeFields(models.Measurable), ['id']),
+        resolve: resolver(models.Measurable),
       },
       measurables: {
         type: new GraphQLNonNull(new GraphQLList(measurableType)),
@@ -158,6 +134,44 @@ const schema = new GraphQLSchema({
         },
         resolve: async (ops, values, options) => {
           return measurablesData.getAll(ops, values, options);
+        }
+      },
+
+      bot: {
+        type: botType,
+        args: _.pick(attributeFields(models.Bot), ['id']),
+        resolve: resolver(models.Bot),
+      },
+      bots: {
+        type: new GraphQLNonNull(GraphQLList(botType)),
+        resolve: resolver(models.Bot),
+      },
+
+      agent: {
+        type: agentType,
+        args: _.pick(attributeFields(models.Agent), ['id']),
+        resolve: resolver(models.Agent),
+      },
+      agents: {
+        type: new GraphQLNonNull(GraphQLList(agentType)),
+        resolve: resolver(models.Agent),
+      },
+
+      series: {
+        type: seriesType,
+        args: _.pick(attributeFields(models.Series), ['id']),
+        resolve: resolver(models.Series),
+      },
+      seriesCollection: {
+        type: new GraphQLNonNull(GraphQLList(seriesType)),
+        resolve: resolver(models.Series),
+      },
+
+      stats: {
+        type: new GraphQLNonNull(stats),
+        resolve: async (ops, values, options) => {
+          // @todo:
+          return 11;
         }
       },
     }

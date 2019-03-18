@@ -1,5 +1,3 @@
-open Rationale;
-open QueriesHelper;
 open Utils;
 
 type creator = {
@@ -62,12 +60,12 @@ module Query = [%graphql
            descriptionEntity
            channel
            descriptionProperty
-           descriptionDate @bsDecoder(fn: "optionalMoment")
-           state @bsDecoder(fn: "string_to_measurableState")
-           stateUpdatedAt @bsDecoder(fn: "optionalMoment")
-           expectedResolutionDate @bsDecoder(fn: "optionalMoment")
-           createdAt @bsDecoder(fn: "toMoment")
-           updatedAt @bsDecoder(fn: "toMoment")
+           descriptionDate @bsDecoder(fn: "E.J.O.toMoment")
+           state @bsDecoder(fn: "QueriesHelper.string_to_measurableState")
+           stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
+           expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
+           createdAt @bsDecoder(fn: "E.J.toMoment")
+           updatedAt @bsDecoder(fn: "E.J.toMoment")
            creator @bsRecord{
              id
              name

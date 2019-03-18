@@ -1,6 +1,4 @@
-open Rationale;
-open QueriesHelper;
-open Utils;
+open Rationale.Function.Infix;
 
 type series = {
   id: string,
@@ -80,12 +78,12 @@ module Query = [%graphql
            measurerCount
            descriptionEntity
            descriptionProperty
-           descriptionDate @bsDecoder(fn: "optionalMoment")
-           state @bsDecoder(fn: "string_to_measurableState")
-           stateUpdatedAt @bsDecoder(fn: "optionalMoment")
-           expectedResolutionDate @bsDecoder(fn: "optionalMoment")
-           createdAt @bsDecoder(fn: "toMoment")
-           updatedAt @bsDecoder(fn: "toMoment")
+           descriptionDate @bsDecoder(fn: "E.J.O.toMoment")
+           state @bsDecoder(fn: "QueriesHelper.string_to_measurableState")
+           stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
+           expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
+           createdAt @bsDecoder(fn: "E.J.toMoment")
+           updatedAt @bsDecoder(fn: "E.J.toMoment")
            creator @bsRecord{
              id
              name
@@ -103,18 +101,18 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let queryToComponent = (query, innerComponentFn) =>
-  Result.Infix.(
-    QueryComponent.make(~variables=query##variables, o =>
-      o.result
-      |> ApolloUtils.apolloResponseToResult
-      <$> (d => d##measurables)
-      <$> E.A.Optional.concatSomes
-      <$> (d => d |> E.A.fmap(toMeasurable))
-      <$> (e => innerComponentFn(e))
-      |> E.R.id
-    )
-    |> E.React.el
-  );
+  QueryComponent.make(~variables=query##variables, o =>
+    o.result
+    |> ApolloUtils.apolloResponseToResult
+    |> E.R.fmap(
+         (d => d##measurables)
+         ||> E.A.Optional.concatSomes
+         ||> E.A.fmap(toMeasurable)
+         ||> innerComponentFn,
+       )
+    |> E.R.id
+  )
+  |> E.React.el;
 
 let component =
     (

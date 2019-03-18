@@ -1,6 +1,4 @@
 open Utils;
-open Rationale;
-open Result.Infix;
 let component = ReasonReact.statelessComponent("Measurables");
 let make = (~id: string, ~loggedInUser: GetUser.t, _children) => {
   ...component,

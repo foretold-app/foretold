@@ -1,6 +1,4 @@
 open Utils;
-open Rationale;
-open Result.Infix;
 
 let toAgentLink = (id, name) => {j|<a href="/agents/$id">$name</a>|j};
 
@@ -11,8 +9,8 @@ let make = _children => {
     GetAgents.QueryComponent.make(({result}) =>
       result
       |> ApolloUtils.apolloResponseToResult
-      <$> (d => d##agents)
-      <$> (_ => <div />)
+      |> E.R.fmap(d => d##agents)
+      |> E.R.fmap(_ => E.React.null)
       |> E.R.id
     )
     |> E.React.el,

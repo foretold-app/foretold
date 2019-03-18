@@ -23,23 +23,36 @@ module O = {
   let toExn = Option.toExn;
 
   module React = {
-    let defaultNull = (e: option(ReasonReact.reactElement)) =>
-      switch (e) {
-      | Some(r) => r
-      | None => ReasonReact.null
-      };
+    let defaultNull = default(ReasonReact.null);
+    let flatten = default(ReasonReact.null);
   };
 };
 
 /* R for Result */
 module R = {
-  let id = e => e |> Rationale.Result.result(U.id, U.id);
+  let result = Rationale.Result.result;
+  let id = e => e |> result(U.id, U.id);
   let fmap = Rationale.Result.fmap;
   let bind = Rationale.Result.bind;
 };
 
+let safe_a_of_string = (fn, s: string): option('a) =>
+  try (Some(fn(s))) {
+  | _ => None
+  };
+
 module S = {
   let toReact = ReasonReact.string;
+  let safe_float = safe_a_of_string(float_of_string);
+  let safe_int = safe_a_of_string(int_of_string);
+};
+
+module J = {
+  let toString = Js.Json.decodeString ||> O.default("");
+  let toMoment = toString ||> MomentRe.moment;
+  module O = {
+    let toMoment = O.fmap(toMoment);
+  };
 };
 
 /* List */
@@ -131,6 +144,7 @@ module FloatCdf = {
 
 module React = {
   let el = ReasonReact.element;
+  let null = ReasonReact.null;
   let makeToEl = (~key="", ~children=<div />, e) =>
     children |> e |> el(~key);
   let showIf = (cond, comp) => cond ? comp : ReasonReact.null;

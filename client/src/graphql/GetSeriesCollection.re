@@ -1,4 +1,3 @@
-open Rationale;
 type creator = {
   id: string,
   name: option(string),
@@ -37,14 +36,14 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let component = innerFn => {
-  open Result.Infix;
+  open Rationale.Result.Infix;
   let query = Query.make();
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
     |> ApolloUtils.apolloResponseToResult
-    <$> (e => e##seriesCollection)
-    <$> (e => e |> E.JsArray.concatSomes)
-    <$> innerFn
+    |> E.R.fmap(e => e##seriesCollection)
+    |> E.R.fmap(E.JsArray.concatSomes)
+    |> E.R.fmap(innerFn)
     |> E.R.id
   )
   |> E.React.el;

@@ -1,5 +1,3 @@
-open Rationale;
-
 type user = {
   id: string,
   name: string,

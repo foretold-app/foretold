@@ -53,7 +53,8 @@ let make = (~id: string, ~loggedInUser: GetUser.t, _children) => {
               |> E.O.fmap((user: GetUser.user) => {
                    open Rationale.Option.Infix;
                    let userAgentId = user.agentId;
-                   let creatorId = m.creator <$> (r => r.id);
+                   let creatorId =
+                     m.creator |> E.O.fmap((r: DataModel.agent) => r.id);
                    <>
                      <h2> {"Add a Measurement" |> ste} </h2>
                      <MeasurableShowForm

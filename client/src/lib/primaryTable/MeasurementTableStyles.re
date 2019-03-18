@@ -1,5 +1,4 @@
 open Utils;
-open Rationale;
 open Css;
 let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
 
@@ -117,7 +116,6 @@ let judgementStyle =
   ]);
 
 let agentLink = (~m: DataModel.measurement) => {
-  open Rationale.Option.Infix;
   let agent = m.agent;
   let aLink =
     switch (agent, agent |> E.O.bind(_, DataModel.agentName)) {
@@ -155,7 +153,9 @@ let description = (~m: DataModel.measurement) =>
   };
 
 let formatDate = e =>
-  Option.Infix.(e <$> MomentRe.Moment.format("L") |> E.O.default(""));
+  Rationale.Option.Infix.(
+    e <$> MomentRe.Moment.format("L") |> E.O.default("")
+  );
 
 let dateStyle =
   style([

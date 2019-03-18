@@ -1,12 +1,11 @@
 open MomentRe;
 open QueriesHelper;
 
-/* let toOptionalMoment: option(Js.Json.t) => MomentRe.Moment.t = x => x <$> jsonToString |> Option.default("") |> moment */
 let toOptionalMoment: option(Js.Json.t) => MomentRe.Moment.t =
   e =>
     (
       switch (e) {
-      | Some(f) => f |> QueriesHelper.jsonToString
+      | Some(f) => f |> E.J.toString
       | None => ""
       }
     )
@@ -50,6 +49,8 @@ type agent = {
   measurements: array(option(measurement)),
 };
 
+let optionalMoment = E.J.O.toMoment;
+
 module GetAgent = {
   module Query = [%graphql
     {|
@@ -68,8 +69,8 @@ module GetAgent = {
         }
         measurements: Measurements @bsRecord{
            id
-           createdAt @bsDecoder(fn: "toMoment")
-           relevantAt @bsDecoder(fn: "optionalMoment")
+           createdAt @bsDecoder(fn: "E.J.toMoment")
+           relevantAt @bsDecoder(fn: "E.J.O.toMoment")
            value @bsDecoder(fn: "Value.decode")
            description
            competitorType
@@ -77,7 +78,7 @@ module GetAgent = {
            measurable: Measurable @bsRecord{
              id
              name
-             expectedResolutionDate @bsDecoder(fn: "optionalMoment")
+             expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
              state @bsDecoder(fn: "string_to_measurableState")
              stateUpdatedAt @bsDecoder(fn: "optionalMoment")
           }
@@ -92,21 +93,19 @@ module GetAgent = {
   let component = (~id, innerFn) => {
     open Rationale.Result.Infix;
     open Utils;
-    open Rationale;
     let notFound = <h3> {"Agent not found" |> ste} </h3>;
     let query = Query.make(~id, ());
     QueryComponent.make(~variables=query##variables, ({result}) =>
       result
       |> ApolloUtils.apolloResponseToResult
-      <$> (e => e##agent)
-      >>= (
-        e =>
-          switch (e) {
-          | Some(a) => Ok(a)
-          | None => Error(notFound)
-          }
-      )
-      <$> innerFn
+      |> E.R.fmap(e => e##agent)
+      |> E.R.bind(_, e =>
+           switch (e) {
+           | Some(a) => Ok(a)
+           | None => Error(notFound)
+           }
+         )
+      |> E.R.fmap(innerFn)
       |> E.R.id
     )
     |> E.React.el;

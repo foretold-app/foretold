@@ -1,4 +1,3 @@
-open QueriesHelper;
 open Utils;
 
 module Query = [%graphql
@@ -16,12 +15,12 @@ module Query = [%graphql
               resolutionEndpointResponse
               descriptionEntity
               descriptionProperty
-              descriptionDate @bsDecoder(fn: "optionalMoment")
-              state @bsDecoder(fn: "string_to_measurableState")
-              stateUpdatedAt @bsDecoder(fn: "optionalMoment")
-              expectedResolutionDate @bsDecoder(fn: "optionalMoment")
-              createdAt @bsDecoder(fn: "toMoment")
-              updatedAt @bsDecoder(fn: "toMoment")
+              descriptionDate @bsDecoder(fn: "E.J.O.toMoment")
+              state @bsDecoder(fn: "QueriesHelper.string_to_measurableState")
+              stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
+              expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
+              createdAt @bsDecoder(fn: "E.J.toMoment")
+              updatedAt @bsDecoder(fn: "E.J.toMoment")
               creator {
                 id
                 name
@@ -33,9 +32,9 @@ module Query = [%graphql
               }
               measurements: Measurements{
                 id
-                createdAt @bsDecoder(fn: "toMoment")
+                createdAt @bsDecoder(fn: "E.J.toMoment")
                 value @bsDecoder(fn: "Value.decode")
-                relevantAt @bsDecoder(fn: "optionalMoment")
+                relevantAt @bsDecoder(fn: "E.J.O.toMoment")
                 competitorType
                 description
                 taggedMeasurementId

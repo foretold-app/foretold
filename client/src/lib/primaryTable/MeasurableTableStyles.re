@@ -1,5 +1,4 @@
 open Utils;
-open Rationale;
 open PrimaryTableBase;
 
 let compareSimilarMeasurables =
@@ -140,18 +139,15 @@ let endpointResponse = (~m: DataModel.measurable) =>
   };
 
 let creatorLink = (~m: DataModel.measurable) =>
-  <div className=PrimaryTableStyles.item>
-    Option.Infix.(
-      m.creator
-      <$> (
-        c =>
-          <a href={Urls.mapLinkToUrl(AgentShow(c.id))}>
-            {c.name |> E.O.default("") |> ste}
-          </a>
-      )
-      |> E.O.default("" |> ste)
-    )
-  </div>;
+  m.creator
+  |> E.O.fmap((c: DataModel.agent) =>
+       <div className=PrimaryTableStyles.item>
+         <a href={Urls.mapLinkToUrl(AgentShow(c.id))}>
+           {c.name |> E.O.default("") |> ste}
+         </a>
+       </div>
+     )
+  |> E.O.React.defaultNull;
 
 let editLink = (~m: DataModel.measurable) =>
   <div className=PrimaryTableStyles.item>

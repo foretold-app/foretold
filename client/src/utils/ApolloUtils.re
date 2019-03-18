@@ -1,6 +1,5 @@
 open Utils;
 open Belt.Result;
-open Rationale;
 
 let apolloResponseToResult = (result: ReasonApolloTypes.queryResponse('a)) =>
   switch (result) {

@@ -1,6 +1,4 @@
 open Utils;
-open Rationale.Result.Infix;
-open Rationale;
 
 let component = ReasonReact.statelessComponent("ItemShow");
 

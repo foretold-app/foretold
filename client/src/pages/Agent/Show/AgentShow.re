@@ -1,6 +1,4 @@
 open Utils;
-open Rationale;
-open Result.Infix;
 
 let botCompetitor = e =>
   switch (e) {

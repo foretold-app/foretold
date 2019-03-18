@@ -1,6 +1,4 @@
 open Utils;
-open Rationale.Result.Infix;
-open Rationale;
 open E;
 
 let ste = ReasonReact.string;

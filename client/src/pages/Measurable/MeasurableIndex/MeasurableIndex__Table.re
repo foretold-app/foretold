@@ -1,5 +1,4 @@
 open Utils;
-open Rationale;
 
 let component = ReasonReact.statelessComponent("MeasurableIndexTable");
 
@@ -40,7 +39,12 @@ let make =
                    {MeasurableTableStyles.link(~m)}
                  </div>
                  <div className=PrimaryTableStyles.mainColumnBottom>
-                   {E.React.showIf(showExtraData, MeasurableTableStyles.series(~m))}
+                   {
+                     E.React.showIf(
+                       showExtraData,
+                       MeasurableTableStyles.series(~m),
+                     )
+                   }
                    {
                      E.React.showIf(
                        showExtraData,
@@ -49,8 +53,18 @@ let make =
                    }
                    {MeasurableTableStyles.measurements(~m)}
                    {MeasurableTableStyles.measurers(~m)}
-                   {E.React.showIf(isSame, MeasurableTableStyles.editLink(~m))}
-                   {E.React.showIf(isSame, MeasurableTableStyles.archiveOption(~m))}
+                   {
+                     E.React.showIf(
+                       isSame,
+                       MeasurableTableStyles.editLink(~m),
+                     )
+                   }
+                   {
+                     E.React.showIf(
+                       isSame,
+                       MeasurableTableStyles.archiveOption(~m),
+                     )
+                   }
                  </div>
                </div>
                <div className=PrimaryTableStyles.rightColumn>

@@ -1,5 +1,4 @@
 open Rationale.Option.Infix;
-open Utils;
 
 let ste = ReasonReact.string;
 
@@ -63,14 +62,6 @@ type action =
 
 type state = {floatCdf: E.FloatCdf.t};
 
-let safe_a_of_string = (fn, s: string): option('a) =>
-  try (Some(fn(s))) {
-  | _ => None
-  };
-
-let safe_float_of_string = safe_a_of_string(float_of_string);
-let safe_int_of_string = safe_a_of_string(int_of_string);
-
 let keepIfValid = n => Value.isValid(n) ? Some(n) : None;
 let mutate =
     (
@@ -90,19 +81,16 @@ let mutate =
       >>= keepIfValid
     | "FloatPoint" =>
       values.pointFloat
-      |> safe_float_of_string
+      |> E.S.safe_float
       <$> (n => `FloatPoint(n))
       >>= keepIfValid
     | "Percentage" =>
       values.percentage
-      |> safe_float_of_string
+      |> E.S.safe_float
       <$> (n => `Percentage(n))
       >>= keepIfValid
     | "Binary" =>
-      values.binary
-      |> safe_int_of_string
-      <$> (n => `Binary(n))
-      >>= keepIfValid
+      values.binary |> E.S.safe_int <$> (n => `Binary(n)) >>= keepIfValid
     | _ => None
     };
   switch (value) {

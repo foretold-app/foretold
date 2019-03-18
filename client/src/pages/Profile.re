@@ -1,7 +1,4 @@
 open Utils;
-open Rationale;
-open Result.Infix;
-open Rationale.Function.Infix;
 open Antd;
 
 let ste = ReasonReact.string;
@@ -43,7 +40,10 @@ let withUserQuery =
     (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
   let query = GetUser.Query.make(~auth0Id, ());
   GetUser.QueryComponent.make(~variables=query##variables, ({result}) =>
-    result |> ApolloUtils.apolloResponseToResult <$> innerComponentFn |> E.R.id
+    result
+    |> ApolloUtils.apolloResponseToResult
+    |> E.R.fmap(innerComponentFn)
+    |> E.R.id
   )
   |> E.React.el;
 };

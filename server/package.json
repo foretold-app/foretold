@@ -21,6 +21,7 @@
     "clean": "rimraf dist",
     "build": "npm run clean && mkdir -p dist && babel src -s -D -d dist",
     "test": "jest --watch",
+    "test:ci": "jest  --forceExit",
     "lint": "esw -w src test",
     "serve": "node ./dist/index.js",
     "db:create": "node_modules/.bin/sequelize db:create",

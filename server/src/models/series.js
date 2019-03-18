@@ -29,8 +29,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ARRAY(DataTypes.DATE),
       allowNull: true,
     },
+    // @deprecated
     channel: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    channelId: {
+      type: DataTypes.UUID(),
       allowNull: false,
     },
   },
@@ -71,6 +76,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'seriesId',
       as: "Measurables"
     })
+    Model.Channel = Model.belongsTo(models.Channel, {
+      foreignKey: 'channelId',
+      as: 'channel'
+    });
   }
   return Model;
 };

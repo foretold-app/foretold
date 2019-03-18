@@ -62,10 +62,15 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: "OPEN",
       allowNull: false,
     },
+    // @deprecated
     channel: {
       type: DataTypes.STRING,
       defaultValue: "general",
       allowNull: true,
+    },
+    channelId: {
+      type: DataTypes.UUID(),
+      allowNull: false,
     },
     stateUpdatedAt: {
       allowNull: true,
@@ -221,6 +226,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'creatorId',
       as: 'creator'
     })
+    Model.Channel = Model.belongsTo(models.Channel, {
+      foreignKey: 'channelId',
+      as: 'channel'
+    });
   }
   return Model;
 };

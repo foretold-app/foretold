@@ -4,10 +4,10 @@ let component = ReasonReact.statelessComponent("MeasurableIndexTable");
 
 let make =
     (
-      ~measurables: array(DataModel.measurable),
+      ~measurables: array(DataModel.Measurable.t),
       ~showExtraData: bool,
       ~loggedInUser: GetUser.t,
-      ~onSelect=(m: DataModel.measurable) =>
+      ~onSelect=(m: DataModel.Measurable.t) =>
                   Urls.pushToLink(
                     MeasurableShow(
                       m.channel |> E.O.default("general"),
@@ -21,7 +21,7 @@ let make =
     <div className=PrimaryTableStyles.group>
       {
         measurables
-        |> E.A.fmap((m: DataModel.measurable) => {
+        |> E.A.fmap((m: DataModel.Measurable.t) => {
              let userAgentId =
                loggedInUser
                |> E.O.bind(_, (r: GetUser.user) => r.agent)

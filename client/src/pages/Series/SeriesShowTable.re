@@ -7,7 +7,7 @@ module TableS = MeasurableTableStyles;
 
 let make =
     (
-      ~measurables: array(DataModel.measurable),
+      ~measurables: array(DataModel.Measurable.t),
       ~selected: option(string),
       ~onClick,
       _children,
@@ -16,20 +16,20 @@ let make =
   render: _self => {
     let _measurables =
       TableS.sortMeasurables(measurables)
-      |> E.JsArray.filter((e: DataModel.measurable) =>
+      |> E.JsArray.filter((e: DataModel.Measurable.t) =>
            PrimaryTableBase.status(e) != ARCHIVED
          );
     <div className=PrimaryTableStyles.group>
       {
         _measurables
         |> Js_array.sortInPlaceWith(
-             (a: DataModel.measurable, b: DataModel.measurable) =>
+             (a: DataModel.Measurable.t, b: DataModel.Measurable.t) =>
              switch (a.descriptionEntity, b.descriptionEntity) {
              | (Some(aa), Some(bb)) => bb > aa ? (-1) : 1
              | _ => 1
              }
            )
-        |> Array.map((m: DataModel.measurable) =>
+        |> Array.map((m: DataModel.Measurable.t) =>
              <div
                className={SeriesShowTableStyles.row(Some(m.id) == selected)}
                onClick={_e => onClick(m.id)}>

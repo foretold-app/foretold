@@ -55,7 +55,7 @@ let selectedView =
       ~channel: string,
       ~loggedInUser: GetUser.t,
       ~send,
-      ~measurables: array(DataModel.measurable),
+      ~measurables: array(DataModel.Measurable.t),
       ~index: int,
     ) => {
   let measurable = E.A.get(measurables, index);
@@ -96,7 +96,7 @@ let deselectedView =
       ~loggedInUser: GetUser.t,
       ~send,
       ~state,
-      ~measurables: array(DataModel.measurable),
+      ~measurables: array(DataModel.Measurable.t),
       ~seriesCollection: array(GetSeriesCollection.series),
     ) => {
   let seriesList =
@@ -150,7 +150,7 @@ let deselectedView =
             send(
               Select(
                 measurables
-                |> E.A.findIndex((r: DataModel.measurable) => r.id == e.id),
+                |> E.A.findIndex((r: DataModel.Measurable.t) => r.id == e.id),
               ),
             )
         }
@@ -186,7 +186,7 @@ let make = (~channel: string, ~loggedInUser: GetUser.t, _children) => {
         channel,
         state.page,
         itemsPerPage,
-        (measurables: array(DataModel.measurable)) =>
+        (measurables: array(DataModel.Measurable.t)) =>
         switch (state.selected) {
         | Some(index) =>
           selectedView(~channel, ~loggedInUser, ~send, ~measurables, ~index)

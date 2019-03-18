@@ -67,8 +67,8 @@ let queryMeasurable = m => {
   let series: option(Series.t) =
     m##series |> E.O.fmap(r => Series.make(~id=r##id, ~name=r##name, ()));
 
-  let measurable: measurable =
-    toMeasurable(
+  let measurable: Measurable.t =
+    Measurable.make(
       ~id=m##id,
       ~name=m##name,
       ~channel=m##channel,

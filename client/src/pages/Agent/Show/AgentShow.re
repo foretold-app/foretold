@@ -36,7 +36,7 @@ let make = (~id: string, _children) => {
           <SLayout.MainSection>
             {
               mm
-              |> E.L.fmap((m: DataModel.measurable) => {
+              |> E.L.fmap((m: DataModel.Measurable.t) => {
                    let measurements = m.measurements |> E.O.default([]);
                    <>
                      <div className=AgentShowStyles.block>

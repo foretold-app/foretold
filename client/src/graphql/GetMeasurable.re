@@ -24,8 +24,8 @@ type measurable = {
   descriptionProperty: option(string),
 };
 
-let toMeasurable = (m: measurable): DataModel.measurable =>
-  DataModel.toMeasurable(
+let toMeasurable = (m: measurable): DataModel.Measurable.t =>
+  DataModel.Measurable.make(
     ~id=m.id,
     ~name=m.name,
     ~valueType=m.valueType,

@@ -12,7 +12,7 @@ type bot = {
   name: option(string),
 };
 
-let toBot = (a: bot): DataModel.bot => {
+let toBot = (a: bot): DataModel.Bot.t => {
   competitorType: a.competitorType,
   description: a.description,
   id: a.id,

@@ -3,11 +3,13 @@ type user = {
   name: string,
 };
 
-type bot = {
-  competitorType: [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE],
-  description: option(string),
-  id: string,
-  name: option(string),
+module Bot = {
+  type t = {
+    competitorType: [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE],
+    description: option(string),
+    id: string,
+    name: option(string),
+  };
 };
 
 module Series = {
@@ -26,7 +28,7 @@ module Series = {
 
 module Agent = {
   type agentType =
-    | Bot(bot)
+    | Bot(Bot.t)
     | User(user);
 
   type t = {
@@ -113,73 +115,73 @@ module Measurement = {
   };
 };
 
-type measurable = {
-  id: string,
-  name: string,
-  valueType,
-  channel: option(string),
-  description: option(string),
-  resolutionEndpoint: option(string),
-  resolutionEndpointResponse: option(float),
-  measurementCount: option(int),
-  measurerCount: option(int),
-  state: option(MeasurableState.t),
-  descriptionEntity: option(string),
-  descriptionDate: option(MomentRe.Moment.t),
-  descriptionProperty: option(string),
-  createdAt: option(MomentRe.Moment.t),
-  updatedAt: option(MomentRe.Moment.t),
-  expectedResolutionDate: option(MomentRe.Moment.t),
-  stateUpdatedAt: option(MomentRe.Moment.t),
-  creator: option(Agent.t),
-  measurements: option(list(Measurement.t)),
-  series: option(Series.t),
-};
+module Measurable = {
+  type t = {
+    id: string,
+    name: string,
+    valueType,
+    channel: option(string),
+    description: option(string),
+    resolutionEndpoint: option(string),
+    resolutionEndpointResponse: option(float),
+    measurementCount: option(int),
+    measurerCount: option(int),
+    state: option(MeasurableState.t),
+    descriptionEntity: option(string),
+    descriptionDate: option(MomentRe.Moment.t),
+    descriptionProperty: option(string),
+    createdAt: option(MomentRe.Moment.t),
+    updatedAt: option(MomentRe.Moment.t),
+    expectedResolutionDate: option(MomentRe.Moment.t),
+    stateUpdatedAt: option(MomentRe.Moment.t),
+    creator: option(Agent.t),
+    measurements: option(list(Measurement.t)),
+    series: option(Series.t),
+  };
 
-let toMeasurable =
-    (
-      ~id,
-      ~name,
-      ~valueType=`FLOAT,
-      ~channel=None,
-      ~description=None,
-      ~resolutionEndpoint=None,
-      ~resolutionEndpointResponse=None,
-      ~measurementCount=None,
-      ~measurerCount=None,
-      ~state=None,
-      ~createdAt=None,
-      ~updatedAt=None,
-      ~expectedResolutionDate=None,
-      ~stateUpdatedAt=None,
-      ~creator=None,
-      ~measurements=None,
-      ~descriptionEntity=None,
-      ~descriptionDate=None,
-      ~descriptionProperty=None,
-      ~series=None,
-      (),
-    ) => {
-  id,
-  name,
-  channel,
-  valueType,
-  description,
-  resolutionEndpoint,
-  resolutionEndpointResponse,
-  measurementCount,
-  measurerCount,
-  state,
-  createdAt,
-  updatedAt,
-  expectedResolutionDate,
-  stateUpdatedAt,
-  creator,
-  measurements,
-  descriptionEntity,
-  descriptionDate,
-  descriptionProperty,
-  series,
+  let make =
+      (
+        ~id,
+        ~name,
+        ~valueType=`FLOAT,
+        ~channel=None,
+        ~description=None,
+        ~resolutionEndpoint=None,
+        ~resolutionEndpointResponse=None,
+        ~measurementCount=None,
+        ~measurerCount=None,
+        ~state=None,
+        ~createdAt=None,
+        ~updatedAt=None,
+        ~expectedResolutionDate=None,
+        ~stateUpdatedAt=None,
+        ~creator=None,
+        ~measurements=None,
+        ~descriptionEntity=None,
+        ~descriptionDate=None,
+        ~descriptionProperty=None,
+        ~series=None,
+        (),
+      ) => {
+    id,
+    name,
+    channel,
+    valueType,
+    description,
+    resolutionEndpoint,
+    resolutionEndpointResponse,
+    measurementCount,
+    measurerCount,
+    state,
+    createdAt,
+    updatedAt,
+    expectedResolutionDate,
+    stateUpdatedAt,
+    creator,
+    measurements,
+    descriptionEntity,
+    descriptionDate,
+    descriptionProperty,
+    series,
+  };
 };
-
-type measurables = array(measurable);

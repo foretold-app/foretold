@@ -141,7 +141,7 @@ let toMeasurables = (measurements: array(measurement)) => {
     |> E.L.filter_opt
     |> E.L.uniqBy((t: measurable) => t.id)
     |> E.L.fmap((e: measurable) =>
-         DataModel.toMeasurable(
+         DataModel.Measurable.make(
            ~id=e.id,
            ~name=e.name,
            ~expectedResolutionDate=e.expectedResolutionDate,

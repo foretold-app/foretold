@@ -5,9 +5,8 @@ let group =
     border(`px(1), `solid, hex("eee")),
     backgroundColor(hex("fafafa")),
   ]);
-let statusOpacity = (measurable: DataModel.measurable) => {
-  let state =
-    measurable.state |> E.O.toExn("Needs state from GraphQL");
+let statusOpacity = (measurable: DataModel.Measurable.t) => {
+  let state = measurable.state |> E.O.toExn("Needs state from GraphQL");
   if (state === `ARCHIVED) {
     0.8;
   } else if (state === `JUDGED) {
@@ -128,7 +127,7 @@ let statusRow =
     ),
   ]);
 
-let statusColor = (~measurable: DataModel.measurable) => {
+let statusColor = (~measurable: DataModel.Measurable.t) => {
   let main = [padding2(~v=`px(1), ~h=`px(8)), borderRadius(`px(4))];
   let statusSpecific =
     switch (status(measurable)) {

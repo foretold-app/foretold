@@ -24,4 +24,3 @@ module.exports = {
     await queryInterface.dropTable('AgentsChannels');
   }
 };
-

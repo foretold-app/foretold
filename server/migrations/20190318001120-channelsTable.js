@@ -24,7 +24,7 @@ module.exports = {
       isPublic: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        default: false,
+        default: true,
       },
       creatorId: {
         type: Sequelize.UUID,

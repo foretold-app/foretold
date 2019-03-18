@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     isPublic: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      default: false,
+      default: true,
     },
   });
 

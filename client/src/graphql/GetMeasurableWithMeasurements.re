@@ -1,5 +1,39 @@
 open Utils;
 
+module Types = {
+  type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
+  type measurement = {
+    .
+    "id": string,
+    "agent":
+      option({
+        .
+        "bot":
+          option({
+            .
+            "id": string,
+            "name": option(string),
+            "competitorType": competitorType,
+          }),
+        "id": string,
+        "name": option(string),
+        "user":
+          option({
+            .
+            "id": string,
+            "name": string,
+          }),
+      }),
+    "description": option(string),
+    "relevantAt": option(MomentRe.Moment.t),
+    "competitorType": competitorType,
+    "createdAt": MomentRe.Moment.t,
+    "taggedMeasurementId": option(string),
+    "value": Belt.Result.t(Value.t, string),
+  };
+  type measurements = Js.Array.t(option(measurement));
+};
+
 module Query = [%graphql
   {|
       query getMeasurable ($id: String!) {
@@ -59,52 +93,7 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let queryMeasurable = m => {
-  open DataModel;
-  let agent: option(Agent.t) =
-    m##creator |> E.O.fmap(r => Agent.make(~id=r##id, ~name=r##name, ()));
-
-  let series: option(Series.t) =
-    m##series |> E.O.fmap(r => Series.make(~id=r##id, ~name=r##name, ()));
-
-  let measurable: Measurable.t =
-    Measurable.make(
-      ~id=m##id,
-      ~name=m##name,
-      ~channel=m##channel,
-      ~description=m##description,
-      ~resolutionEndpoint=m##resolutionEndpoint,
-      ~resolutionEndpointResponse=m##resolutionEndpointResponse,
-      ~createdAt=Some(m##createdAt),
-      ~updatedAt=Some(m##updatedAt),
-      ~expectedResolutionDate=m##expectedResolutionDate,
-      ~state=Some(m##state |> DataModel.MeasurableState.fromString),
-      ~stateUpdatedAt=m##stateUpdatedAt,
-      ~descriptionEntity=m##descriptionEntity,
-      ~descriptionDate=m##descriptionDate,
-      ~descriptionProperty=m##descriptionProperty,
-      ~creator=agent,
-      ~series,
-      (),
-    );
-  measurable;
-};
-
-let component = (~id, fn) => {
-  let query = Query.make(~id, ());
-  QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> ApolloUtils.apolloResponseToResult
-    |> E.R.bind(_, e =>
-         e##measurable |> filterOptionalResult("Measurable not found" |> ste)
-       )
-    |> E.R.fmap(fn)
-    |> E.R.id
-  )
-  |> E.React.el;
-};
-
-let toMeasurement = (m: MeasurableTypes.measurement): DataModel.Measurement.t => {
+let toMeasurement = (m: Types.measurement): DataModel.Measurement.t => {
   open DataModel.Agent;
   let agentType: option(DataModel.Agent.agentType) =
     m##agent
@@ -139,4 +128,57 @@ let toMeasurement = (m: MeasurableTypes.measurement): DataModel.Measurement.t =>
     ~agent,
     (),
   );
+};
+
+let queryMeasurable = m => {
+  open DataModel;
+  let agent: option(Agent.t) =
+    m##creator |> E.O.fmap(r => Agent.make(~id=r##id, ~name=r##name, ()));
+
+  let series: option(Series.t) =
+    m##series |> E.O.fmap(r => Series.make(~id=r##id, ~name=r##name, ()));
+
+  let measurements: list(Measurement.t) =
+    m##measurements
+    |> E.A.O.concatSomes
+    |> E.A.fmap(toMeasurement)
+    |> Array.to_list;
+
+  let measurable: Measurable.t =
+    Measurable.make(
+      ~id=m##id,
+      ~name=m##name,
+      ~channel=m##channel,
+      ~description=m##description,
+      ~resolutionEndpoint=m##resolutionEndpoint,
+      ~resolutionEndpointResponse=m##resolutionEndpointResponse,
+      ~createdAt=Some(m##createdAt),
+      ~updatedAt=Some(m##updatedAt),
+      ~expectedResolutionDate=m##expectedResolutionDate,
+      ~state=Some(m##state |> DataModel.MeasurableState.fromString),
+      ~stateUpdatedAt=m##stateUpdatedAt,
+      ~descriptionEntity=m##descriptionEntity,
+      ~descriptionDate=m##descriptionDate,
+      ~descriptionProperty=m##descriptionProperty,
+      ~measurements=Some(measurements),
+      ~creator=agent,
+      ~series,
+      (),
+    );
+  measurable;
+};
+
+let component = (~id, fn) => {
+  let query = Query.make(~id, ());
+  QueryComponent.make(~variables=query##variables, ({result}) =>
+    result
+    |> ApolloUtils.apolloResponseToResult
+    |> E.R.bind(_, e =>
+         e##measurable |> filterOptionalResult("Measurable not found" |> ste)
+       )
+    |> E.R.fmap(queryMeasurable)
+    |> E.R.fmap(fn)
+    |> E.R.id
+  )
+  |> E.React.el;
 };

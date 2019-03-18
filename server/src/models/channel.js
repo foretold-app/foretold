@@ -22,7 +22,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    // Booleans
     isArchived: {
       type: DataTypes.BOOLEAN,
       allowNull: false,

@@ -1,5 +1,6 @@
 /**
  * No migrations needed.
+ * @todo: Rename table to "channels".
  * @param sequelize
  * @param DataTypes
  * @return {*}

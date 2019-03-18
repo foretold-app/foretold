@@ -167,6 +167,18 @@ const schema = new GraphQLSchema({
         resolve: resolver(models.Series),
       },
 
+      channel: {
+        type: channelType,
+        args: {
+          id: { type: GraphQLString },
+        },
+        resolve: resolver(models.Channel),
+      },
+      channels: {
+        type: new GraphQLNonNull(GraphQLList(channelType)),
+        resolve: resolver(models.Channel),
+      },
+
       stats: {
         type: new GraphQLNonNull(stats),
         resolve: async (ops, values, options) => {

@@ -1,0 +1,33 @@
+sudo: required
+
+services:
+  - docker
+
+branches:
+  only:
+    - master
+    - develop
+
+env:
+  global:
+    - COMMIT=${TRAVIS_COMMIT::8}
+    - REPO=OAGr/foretold
+    - DOCKER_COMPOSE_VERSION=1.8.1
+
+before_install:
+  - echo Before-Install-OK
+
+before_script:
+  - echo Before-Script-OK
+
+install:
+  - docker build -t main ./server
+
+script:
+  - printenv
+  - docker run main npm run test:ci
+
+notifications:
+  email: never
+  slack:
+    secure: <secret>

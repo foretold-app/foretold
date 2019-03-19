@@ -3,7 +3,7 @@ open Rationale;
 
 let component = ReasonReact.statelessComponent("MeasurableIndexTable");
 
-module TableS = MeasurableTableStyles;
+module TableS = C.Measurable.Items;
 
 let make =
     (
@@ -35,7 +35,7 @@ let make =
                onClick={_e => onClick(m.id)}>
                <div className=SeriesShowTableStyles.column>
                  {
-                   TableS.nameEntityLink(
+                   TableS.Entities.nameEntityLink(
                      ~m,
                      ~className=PrimaryTableStyles.itemLink,
                    )
@@ -44,7 +44,7 @@ let make =
                </div>
                <div className=SeriesShowTableStyles.column>
                  {
-                   TableS.propertyEntityLink(
+                   TableS.Entities.propertyEntityLink(
                      ~m,
                      ~className=PrimaryTableStyles.propertyLink,
                    )

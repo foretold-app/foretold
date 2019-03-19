@@ -2,6 +2,8 @@ open Utils;
 open Style.Grid;
 open Foretold__GraphQL;
 
+module Items = Foretold__Components__Measurable__Items;
+
 module StatusDisplay = {
   let formatDate = e =>
     e |> E.O.fmap(E.M.format(E.M.format_simple)) |> E.O.default("");
@@ -108,8 +110,8 @@ module FullPresentation = {
                <Div flex=1>
                  <Div flexDirection=`row>
                    <Div flex=6>
-                     <h2> {MeasurableTableStyles.link(~m)} </h2>
-                     {MeasurableTableStyles.description(~m)}
+                     <h2> {Items.link(~m)} </h2>
+                     {Items.description(~m)}
                    </Div>
                    <Div flex=1>
                      <StatusDisplay
@@ -123,10 +125,10 @@ module FullPresentation = {
                <Div flex=1>
                  {
                    [|
-                     MeasurableTableStyles.series(~m),
-                     MeasurableTableStyles.creatorLink(~m),
-                     MeasurableTableStyles.resolutionEndpoint(~m),
-                     MeasurableTableStyles.endpointResponse(~m),
+                     Items.series(~m),
+                     Items.creatorLink(~m),
+                     Items.resolutionEndpoint(~m),
+                     Items.endpointResponse(~m),
                    |]
                    |> ReasonReact.array
                  }
@@ -153,9 +155,8 @@ module FullPresentation = {
                {
                  m.measurements
                  |> E.O.fmap(measurements =>
-                      <div className=MeasurementTableStyles.group>
-                        {measurements |> MeasurementsBlock.make}
-                      </div>
+                      measurements
+                      |> Foretold__Components__Measurements__Table.make
                     )
                  |> E.O.React.defaultNull
                }

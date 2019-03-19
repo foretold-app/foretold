@@ -87,6 +87,7 @@ module L = {
   let for_all = List.for_all;
   let exists = List.exists;
   let sort = List.sort;
+  let length = List.length;
   let filter_opt = RList.filter_opt;
   let uniqBy = RList.uniqBy;
   let join = RList.join;

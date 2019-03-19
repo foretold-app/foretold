@@ -1,6 +1,8 @@
 open Utils;
 open Foretold__GraphQL;
+open Css;
 
+let block = style([marginBottom(`em(1.0))]);
 let notFound = <h3> {"Agent not found" |> ste} </h3>;
 
 let agentSection = (e: Queries.Agent.agent) =>
@@ -35,16 +37,14 @@ let make = (~id: string, _children) => {
               |> E.L.fmap((m: DataModel.Measurable.t) => {
                    let measurements = m.measurements |> E.O.default([]);
                    <>
-                     <div className=AgentShowStyles.block>
-                       {MeasurableTableStyles.link(~m)}
+                     <div className=block>
+                       {C.Measurable.Items.link(~m)}
                        <C.Measurable.StatusDisplay
                          measurable=m
                          dateDisplay=WHOLE
                        />
                      </div>
-                     <div className=MeasurementTableStyles.group>
-                       {measurements |> MeasurementsBlock.make}
-                     </div>
+                     {measurements |> C.Measurements.Table.make}
                    </>;
                  })
               |> E.A.of_list

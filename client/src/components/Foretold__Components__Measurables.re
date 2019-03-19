@@ -1,5 +1,6 @@
 open Utils;
 open Foretold__GraphQL;
+module Items = Foretold__Components__Measurable__Items;
 
 module BasicTable = {
   let component = ReasonReact.statelessComponent("MeasurableIndexTable");
@@ -38,29 +39,20 @@ module BasicTable = {
                  key={m.id}>
                  <div className=PrimaryTableStyles.mainColumn>
                    <div className=PrimaryTableStyles.mainColumnTop>
-                     {MeasurableTableStyles.link(~m)}
+                     {Items.link(~m)}
                    </div>
                    <div className=PrimaryTableStyles.mainColumnBottom>
                      {
                        [|
+                         E.React.showIf(showExtraData, Items.series(~m)),
                          E.React.showIf(
                            showExtraData,
-                           MeasurableTableStyles.series(~m),
+                           Items.creatorLink(~m),
                          ),
-                         E.React.showIf(
-                           showExtraData,
-                           MeasurableTableStyles.creatorLink(~m),
-                         ),
-                         MeasurableTableStyles.measurements(~m),
-                         MeasurableTableStyles.measurers(~m),
-                         E.React.showIf(
-                           isSame,
-                           MeasurableTableStyles.editLink(~m),
-                         ),
-                         E.React.showIf(
-                           isSame,
-                           MeasurableTableStyles.archiveOption(~m),
-                         ),
+                         Items.measurements(~m),
+                         Items.measurers(~m),
+                         E.React.showIf(isSame, Items.editLink(~m)),
+                         E.React.showIf(isSame, Items.archiveOption(~m)),
                        |]
                        |> ReasonReact.array
                      }

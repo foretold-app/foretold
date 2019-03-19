@@ -73,52 +73,47 @@ let toPercentiles = (m: DataModel.Measurement.t) =>
   | _ => None
   };
 
+module Styles = MeasurementTableStyles;
+
 let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
 
 let make = (ms: list(DataModel.Measurement.t)) => {
-  let bb = bounds(ms |> E.A.of_list);
-  let foo =
+  let _bounds = bounds(ms |> E.A.of_list);
+  let items =
     ms
     |> E.L.sort((a: DataModel.Measurement.t, b: DataModel.Measurement.t) =>
          switch (a.createdAt, b.createdAt) {
          | (Some(c), Some(d)) =>
            Moment.toUnix(c) < Moment.toUnix(d) ? 1 : (-1)
-         | (_, _) => 0
+         | _ => 0
          }
        )
     |> E.L.fmap((m: DataModel.Measurement.t) =>
-         <div className={MeasurementTableStyles.row(~m)} key={m.id}>
-           <div className=MeasurementTableStyles.mainColumn>
-             <div className=MeasurementTableStyles.mainColumnTop>
-               {MeasurementTableStyles.smallDistribution(m, bb)}
+         <div className={Styles.row(~m)} key={m.id}>
+           <div className=Styles.mainColumn>
+             <div className=Styles.mainColumnTop>
+               {Styles.smallDistribution(m, _bounds)}
              </div>
              {
                switch (toPercentiles(m)) {
                | Some(a) =>
-                 <div
-                   className={
-                     MeasurementTableStyles.percentiles ++ " " ++ "foo"
-                   }>
+                 <div className={Styles.percentiles ++ " " ++ "foo"}>
                    {a |> ste}
                  </div>
                | _ => <span />
                }
              }
            </div>
-           <div className={MeasurementTableStyles.rightColumn(~m)}>
-             <div className=MeasurementTableStyles.rightColumnInner>
+           <div className={Styles.rightColumn(~m)}>
+             <div className=Styles.rightColumnInner>
                <Div flexDirection=`column>
                  <Div flex=1>
                    <Div flexDirection=`row>
-                     <Div flex=4>
-                       {MeasurementTableStyles.agentLink(~m)}
-                     </Div>
-                     <Div flex=1>
-                       {MeasurementTableStyles.relevantAt(~m)}
-                     </Div>
+                     <Div flex=4> {Styles.agentLink(~m)} </Div>
+                     <Div flex=1> {Styles.relevantAt(~m)} </Div>
                    </Div>
                  </Div>
-                 <Div flex=1> {MeasurementTableStyles.description(~m)} </Div>
+                 <Div flex=1> {Styles.description(~m)} </Div>
                </Div>
              </div>
            </div>
@@ -126,15 +121,16 @@ let make = (ms: list(DataModel.Measurement.t)) => {
        )
     |> E.A.of_list
     |> ReasonReact.array;
-  <>
-    foo
-    <div className=MeasurementTableStyles.axisRow>
-      <div className=MeasurementTableStyles.mainColumn>
-        <div className=MeasurementTableStyles.mainColumnTop>
-          <XAxis bounds=bb />
+  E.React.showIf(
+    ms |> E.L.length > 0,
+    <div className=Styles.group>
+      items
+      <div className=Styles.axisRow>
+        <div className=Styles.mainColumn>
+          <div className=Styles.mainColumnTop> <XAxis bounds=_bounds /> </div>
         </div>
+        <div className=Styles.axisRightColumn />
       </div>
-      <div className=MeasurementTableStyles.axisRightColumn />
-    </div>
-  </>;
+    </div>,
+  );
 };

@@ -42,13 +42,47 @@ class ChannelsData {
    * @return {Promise<Model>}
    */
   async createOne(user, input) {
-    return await models.Channel.findOne({
+    let channel = await models.Channel.findOne({
       where: { name: input.name },
-    }) || await models.Channel.create({
-      ...input,
-      creatorId: user.agentId,
-      agents: [{ id: user.agent_id }]
     });
+
+    if (!channel) {
+      channel = await models.Channel.create({
+        ...input,
+        creatorId: user.agentId,
+      });
+
+      await models.AgentsChannels.create({
+        channelId: channel.id,
+        agentId: user.agentId,
+      });
+    }
+
+    return channel;
+  }
+
+  /**
+   * @param {string} id
+   * @return {Promise<Model>}
+   */
+  async getAgentsByChannelId(id) {
+    const channel = await models.Channel.findOne({
+      where: { id },
+      include: [{model: models.Agent, as: 'agents'}],
+    });
+    return channel.agents;
+  }
+
+  /**
+   * @param {string} id
+   * @return {Promise<Model>}
+   */
+  async getCreatorByChannelId(id) {
+    const channel = await models.Channel.findOne({
+      where: { id },
+      include: [{model: models.Agent, as: 'creator'}],
+    });
+    return channel.creator;
   }
 
 }

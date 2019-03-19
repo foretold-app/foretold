@@ -6,9 +6,9 @@ const { attributeFields, resolver } = require("graphql-sequelize");
 const models = require("../models");
 const { capitalizeFirstLetter } = require('../helpers');
 
-const { competitor } = require('./competitor');
-const { valueType } = require('./value-type');
+const { filterr } = require('./filterr');
 const { channelInput } = require('./channel-input');
+const { channel } = require('./channel');
 
 /**
  * @deprecated
@@ -25,22 +25,6 @@ function makeObjectType(model) {
         generateReferences(model),
       )
   });
-}
-
-/**
- * @deprecated
- * @param fields
- * @return {{[p: string]: *}}
- */
-function filterr(fields) {
-  let newFields = { ...fields };
-  if (!!newFields.competitorType) {
-    newFields.competitorType = { type: competitor }
-  }
-  if (!!newFields.valueType) {
-    newFields.valueType = { type: valueType }
-  }
-  return newFields;
 }
 
 /**
@@ -73,26 +57,6 @@ const botType = makeObjectType(models.Bot);
 const agentType = makeObjectType(models.Agent);
 const seriesType = makeObjectType(models.Series);
 
-// @todo: move in separate file
-const channel = new graphql.GraphQLObjectType({
-  name: 'Channel',
-  fields: {
-    id: { type: graphql.GraphQLString },
-    name: { type: graphql.GraphQLString },
-    description: { type: graphql.GraphQLString },
-    isArchived: { type: graphql.GraphQLBoolean },
-    isPublic: { type: graphql.GraphQLBoolean },
-    creator: {
-      type: agentType,
-      resolve: resolver(models.Agent),
-    },
-    agents: {
-      type: graphql.GraphQLList(agentType),
-      resolve: resolver(models.Agent),
-    },
-  }
-});
-
 const index = {
   Users: userType,
   Agents: agentType,
@@ -117,7 +81,4 @@ module.exports = {
 
   channel,
   channelInput,
-
-  // @todo: tmp
-  filterr,
 };

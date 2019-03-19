@@ -8,7 +8,7 @@ const { measurementData, usersData, measurablesData, seriesData } = require('./d
 const data = require('./data');
 
 const types = require('./types');
-const { filterr } = require('./types');
+const { filterr } = require('./types/filterr');
 const { stats } = require('./types/stats');
 
 const schema = new graphql.GraphQLSchema({

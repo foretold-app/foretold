@@ -1,7 +1,5 @@
-const { channelAgents } = require('./channel-agents');
-const { channelCreator } = require('./channel-creator');
+const channels  = require('./channels');
 
 module.exports = {
-  channelAgents,
-  channelCreator,
+  channels,
 };

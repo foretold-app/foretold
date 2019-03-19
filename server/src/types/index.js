@@ -7,8 +7,9 @@ const models = require("../models");
 const { capitalizeFirstLetter } = require('../helpers');
 
 const { filterr } = require('./filterr');
-const { channelInput } = require('./channel-input');
-const { channel } = require('./channel');
+
+const agents = require('./agents');
+const channels = require('./channels');
 
 /**
  * @deprecated
@@ -65,7 +66,7 @@ const index = {
   measurables: measurableType,
   Series: seriesType,
   Measurements: measurementType,
-  Channels: channel,
+  Channels: channels.channel,
 };
 
 module.exports = {
@@ -79,6 +80,6 @@ module.exports = {
   seriesType,
   measurementType,
 
-  channel,
-  channelInput,
+  agents,
+  channels
 };

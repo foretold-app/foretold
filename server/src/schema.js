@@ -4,12 +4,11 @@ const graphql = require("graphql");
 const { attributeFields, resolver } = require("graphql-sequelize");
 
 const models = require("./models");
-const { measurementData, usersData, measurablesData, seriesData } = require('./data');
 const data = require('./data');
 
 const types = require('./types');
-const { filterr } = require('./types/filterr');
 const { stats } = require('./types/stats');
+const { filterr } = require('./types/filterr');
 
 const schema = new graphql.GraphQLSchema({
   query: new graphql.GraphQLObjectType({
@@ -22,7 +21,7 @@ const schema = new graphql.GraphQLSchema({
           auth0Id: { type: graphql.GraphQLString },
         },
         resolve: async (ops, values, options) => {
-          return usersData.getUser(ops, values, options);
+          return data.usersData.getUser(ops, values, options);
         }
       },
       users: {
@@ -52,10 +51,9 @@ const schema = new graphql.GraphQLSchema({
           limit: { type: graphql.GraphQLInt },
           creatorId: { type: graphql.GraphQLString },
           seriesId: { type: graphql.GraphQLString },
-          channel: { type: graphql.GraphQLString }
         },
         resolve: async (ops, values, options) => {
-          return measurablesData.getAll(ops, values, options);
+          return data.measurablesData.getAll(ops, values, options);
         }
       },
 
@@ -90,12 +88,12 @@ const schema = new graphql.GraphQLSchema({
       },
 
       channel: {
-        type: types.channel,
+        type: types.channels.channel,
         args: { id: { type: graphql.GraphQLString } },
         resolve: resolver(models.Channel),
       },
       channels: {
-        type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.channel)),
+        type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.channels.channel)),
         resolve: resolver(models.Channel),
       },
 
@@ -115,55 +113,55 @@ const schema = new graphql.GraphQLSchema({
         type: types.measurementType,
         args: filterr(_.pick(attributeFields(models.Measurement), ['value', 'competitorType', 'measurableId', 'agentId', 'description'])),
         resolve: async (root, values, options) => {
-          return measurementData.createMeasurement(root, values, options);
+          return data.measurementData.createMeasurement(root, values, options);
         },
       },
       createMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty', 'channel'])),
         resolve: async (root, values, options) => {
-          return measurablesData.createMeasurable(root, values, options);
+          return data.measurablesData.createMeasurable(root, values, options);
         }
       },
       createSeries: {
         type: types.seriesType,
         args: filterr(_.pick(attributeFields(models.Series), ['name', 'description', 'channel', 'subjects', 'properties', 'dates'])),
         resolve: async (root, values, options) => {
-          return seriesData.createSeries(root, values, options);
+          return data.seriesData.createSeries(root, values, options);
         }
       },
       archiveMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
         resolve: async (root, values, options) => {
-          return measurablesData.archiveMeasurable(root, values, options);
+          return data.measurablesData.archiveMeasurable(root, values, options);
         }
       },
       unArchiveMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
         resolve: async (root, values, options) => {
-          return measurablesData.unArchiveMeasurable(root, values, options);
+          return data.measurablesData.unArchiveMeasurable(root, values, options);
         }
       },
       editMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id', 'name', 'description', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty'])),
         resolve: async (root, values, options) => {
-          return measurablesData.editMeasurable(root, values, options);
+          return data.measurablesData.editMeasurable(root, values, options);
         }
       },
       editUser: {
         type: types.userType,
         args: filterr(_.pick(attributeFields(models.User), ["id", "name"])),
         resolve: async (root, values, options) => {
-          return usersData.editUser(root, values, options);
+          return data.usersData.editUser(root, values, options);
         }
       },
 
       // @done
       channelUpdate: {
-        type: types.channel,
+        type: types.channels.channel,
         args: {
           id: { type: graphql.GraphQLString },
           input: { type: new graphql.GraphQLNonNull(types.channelInput) },
@@ -175,9 +173,9 @@ const schema = new graphql.GraphQLSchema({
 
       // @done
       channelCreate: {
-        type: types.channel,
+        type: types.channels.channel,
         args: {
-          input: { type: new graphql.GraphQLNonNull(types.channelInput) },
+          input: { type: new graphql.GraphQLNonNull(types.channels.channelInput) },
         },
         resolve: async (root, values, options) => {
           return data.channelsData.channelCreate(root, values, options);
@@ -185,7 +183,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       AddPersonToChannel: {
-        type: types.channel,
+        type: types.channels.channel,
         args: { id: { type: graphql.GraphQLString } },
         resolve: async (root, values, options) => {
           return data.channelsData.addPersonToChannel(root, values, options);
@@ -193,7 +191,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       RemovePersonFromChannel: {
-        type: types.channel,
+        type: types.channels.channel,
         args: { id: { type: graphql.GraphQLString } },
         resolve: async (root, values, options) => {
           return data.channelsData.removePersonFromChannel(root, values, options);

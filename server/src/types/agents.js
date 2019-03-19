@@ -1,6 +1,16 @@
 const graphql = require("graphql");
 
-const { agentType } = require('./agent-type');
+const agentType = new graphql.GraphQLEnumType({
+  name: 'AgentType',
+  values: {
+    USER: {
+      value: 'USER',
+    },
+    BOT: {
+      value: 'BOT',
+    },
+  },
+});
 
 const agent2 = new graphql.GraphQLObjectType({
   name: 'Agent2',
@@ -14,4 +24,5 @@ const agent2 = new graphql.GraphQLObjectType({
 
 module.exports = {
   agent2,
+  agentType,
 };

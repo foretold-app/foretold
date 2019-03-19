@@ -10,13 +10,22 @@ class ChannelsData {
     this.usersData = new UsersData();
   }
 
-  async channelUpdate(root, values) {
+  /**
+   * @param values
+   * @returns {Promise<Model>}
+   */
+  async channelUpdate(values) {
     const id = _.get(values, 'id');
     const input = _.get(values, 'input');
     return await this.updateOne(id, input);
   }
 
-  async channelCreate(root, values, options) {
+  /**
+   * @param values
+   * @param options
+   * @returns {Promise<Model>}
+   */
+  async channelCreate(values, options) {
     // @todo:
     const auth0Id = await this.usersData.getAuth0Id(options);
     const user = await this.usersData.auth0User(auth0Id);
@@ -25,11 +34,23 @@ class ChannelsData {
     return await this.createOne(user, input);
   }
 
+  /**
+   * @param root
+   * @param values
+   * @param options
+   * @returns {Promise<boolean>}
+   */
   async addPersonToChannel(root, values, options) {
     console.log(root, values, options);
     return true;
   }
 
+  /**
+   * @param root
+   * @param values
+   * @param options
+   * @returns {Promise<boolean>}
+   */
   async removePersonFromChannel(root, values, options) {
     console.log(root, values, options);
     return true;

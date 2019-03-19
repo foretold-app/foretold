@@ -167,7 +167,7 @@ const schema = new graphql.GraphQLSchema({
           input: { type: new graphql.GraphQLNonNull(types.channelInput) },
         },
         resolve: async (root, values) => {
-          return data.channelsData.channelUpdate(root, values);
+          return data.channelsData.channelUpdate(values);
         },
       },
 
@@ -178,7 +178,7 @@ const schema = new graphql.GraphQLSchema({
           input: { type: new graphql.GraphQLNonNull(types.channels.channelInput) },
         },
         resolve: async (root, values, options) => {
-          return data.channelsData.channelCreate(root, values, options);
+          return data.channelsData.channelCreate(values, options);
         },
       },
 

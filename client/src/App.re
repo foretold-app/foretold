@@ -1,4 +1,4 @@
-open Routes;
+open DataModel;
 
 type state = {route: Route.t};
 type action =
@@ -10,7 +10,7 @@ let reducer = (action, _state) =>
   };
 
 let mapUrlToAction = (url: ReasonReact.Router.url) =>
-  ChangeRoute(url |> Routes.Route.fromUrl);
+  ChangeRoute(url |> Route.fromUrl);
 
 let component = ReasonReact.reducerComponent("App");
 

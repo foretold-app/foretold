@@ -142,7 +142,7 @@ let creatorLink = (~m: DataModel.Measurable.t) =>
   m.creator
   |> E.O.fmap((c: DataModel.Agent.t) =>
        <div className=PrimaryTableStyles.item>
-         <a href={Urls.mapLinkToUrl(AgentShow(c.id))}>
+         <a href={DataModel.Url.mapLinkToUrl(AgentShow(c.id))}>
            {c.name |> E.O.default("") |> ste}
          </a>
        </div>
@@ -152,7 +152,7 @@ let creatorLink = (~m: DataModel.Measurable.t) =>
 let editLink = (~m: DataModel.Measurable.t) =>
   <div className=PrimaryTableStyles.item>
     <a
-      href={Urls.mapLinkToUrl(MeasurableEdit(m.id))}
+      href={DataModel.Url.mapLinkToUrl(MeasurableEdit(m.id))}
       className={PrimaryTableStyles.itemButton(NORMAL)}>
       {"Edit" |> ste}
     </a>
@@ -192,7 +192,7 @@ let series = (~m: DataModel.Measurable.t) =>
              <Icon.Icon icon="LAYERS" />
              <a
                href={
-                 Urls.mapLinkToUrl(
+                 DataModel.Url.mapLinkToUrl(
                    SeriesShow(m.channel |> E.O.default(""), r.id),
                  )
                }>

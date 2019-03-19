@@ -18,8 +18,8 @@ let make = _children => {
           |> O.fmap((e: Queries.User.agent) => e.id);
         let name = user |> O.fmap((e: Queries.User.user) => e.name);
         switch (name, agentId) {
-        | (Some(""), _) => Urls.pushToLink(Profile)
-        | (_, Some(id)) => Urls.pushToLink(AgentShow(id))
+        | (Some(""), _) => DataModel.Url.push(Profile)
+        | (_, Some(id)) => DataModel.Url.push(AgentShow(id))
         | _ => ()
         };
         <>

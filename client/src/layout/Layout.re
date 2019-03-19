@@ -1,4 +1,4 @@
-open Routes;
+open DataModel;
 open Foretold__GraphQL;
 
 let defaultChannel = "general";

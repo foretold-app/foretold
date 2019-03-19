@@ -23,7 +23,7 @@ module SimpleHeader = {
 
   let button = channel =>
     <Div float=`right>
-      <Antd.Button onClick={_ => Urls.pushToLink(MeasurableNew(channel))}>
+      <Antd.Button onClick={_ => DataModel.Url.push(MeasurableNew(channel))}>
         {"New Measurable" |> ste}
       </Antd.Button>
     </Div>;

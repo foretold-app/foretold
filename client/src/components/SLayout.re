@@ -90,7 +90,7 @@ module MainSection = {
 let channelBack =
     (
       ~channelName: string,
-      ~onClick=_ => Urls.pushToLink(ChannelShow(channelName)),
+      ~onClick=_ => DataModel.Url.push(ChannelShow(channelName)),
       (),
     ) =>
   <div className=Styles.backHover onClick>

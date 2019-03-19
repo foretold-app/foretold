@@ -109,7 +109,9 @@ let make = (~channel, _children) => {
                   | Data(data) =>
                     data##createMeasurable
                     |> E.O.fmap(e => e##id)
-                    |> doIfSome(_ => Urls.pushToLink(ChannelShow(channel)));
+                    |> doIfSome(_ =>
+                         DataModel.Url.push(ChannelShow(channel))
+                       );
                     ReasonReact.null;
                   | NotCalled => showForm
                   };

@@ -120,7 +120,9 @@ let agentLink = (~m: DataModel.Measurement.t) => {
   let aLink =
     switch (agent, agent |> E.O.bind(_, DataModel.Agent.name)) {
     | (Some(agent), Some(name)) =>
-      <a href={Urls.mapLinkToUrl(AgentShow(agent.id))} className=agentStyle>
+      <a
+        href={DataModel.Url.mapLinkToUrl(AgentShow(agent.id))}
+        className=agentStyle>
         {name |> ste}
       </a>
     | (_, _) => "" |> ste

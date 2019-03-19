@@ -71,11 +71,12 @@ let make = (~channel, ~loggedInUser: Queries.User.t, _children) => {
           let idd = user.agentId |> E.O.default("");
           <>
             <div
-              onClick=(_e => Urls.pushToLink(Profile)) className=Styles.item>
+              onClick=(_e => DataModel.Url.push(Profile))
+              className=Styles.item>
               {"Profile" |> ste}
             </div>
             <div
-              onClick=(_e => Urls.pushToLink(AgentMeasurables(idd)))
+              onClick=(_e => DataModel.Url.push(AgentMeasurables(idd)))
               className=Styles.item>
               {"Edit Measurables" |> ste}
             </div>
@@ -94,12 +95,12 @@ let make = (~channel, ~loggedInUser: Queries.User.t, _children) => {
       <div className=Styles.minorHeader>
         <div
           className=Styles.minorHeaderLink
-          onClick={_e => Urls.pushToLink(ChannelIndex)}>
+          onClick={_e => DataModel.Url.push(ChannelIndex)}>
           {"Channels" |> ste}
         </div>
         <div
           className=Styles.minorHeaderLinkPlus
-          onClick={_e => Urls.pushToLink(ChannelNew)}>
+          onClick={_e => DataModel.Url.push(ChannelNew)}>
           <Icon.Icon icon="CIRCLE_PLUS" />
         </div>
       </div>

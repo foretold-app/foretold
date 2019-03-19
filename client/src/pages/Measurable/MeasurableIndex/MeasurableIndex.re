@@ -130,7 +130,8 @@ let deselectedView =
                      <div
                        className=SeriesItems.item
                        onClick={
-                         _e => Urls.pushToLink(SeriesShow(x.channel, x.id))
+                         _e =>
+                           DataModel.Url.push(SeriesShow(x.channel, x.id))
                        }>
                        <C.Series.Card series=x />
                      </div>

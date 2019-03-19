@@ -9,7 +9,7 @@ let make =
       ~showExtraData: bool,
       ~loggedInUser: Queries.User.t,
       ~onSelect=(m: DataModel.Measurable.t) =>
-                  Urls.pushToLink(
+                  DataModel.Url.push(
                     MeasurableShow(
                       m.channel |> E.O.default("general"),
                       m.id,

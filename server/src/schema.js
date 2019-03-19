@@ -1,14 +1,15 @@
-const graphql = require("graphql");
 const _ = require('lodash');
+
+const graphql = require("graphql");
 const { attributeFields, resolver } = require("graphql-sequelize");
 
 const models = require("./models");
 const { measurementData, usersData, measurablesData, seriesData } = require('./data');
+const data = require('./data');
 
 const types = require('./types');
 const { filterr } = require('./types');
 const { stats } = require('./types/stats');
-
 
 const schema = new graphql.GraphQLSchema({
   query: new graphql.GraphQLObjectType({
@@ -89,14 +90,12 @@ const schema = new graphql.GraphQLSchema({
       },
 
       channel: {
-        type: types.channelType,
-        args: {
-          id: { type: graphql.GraphQLString },
-        },
+        type: types.channel,
+        args: { id: { type: graphql.GraphQLString } },
         resolve: resolver(models.Channel),
       },
       channels: {
-        type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.channelType)),
+        type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.channel)),
         resolve: resolver(models.Channel),
       },
 
@@ -163,35 +162,35 @@ const schema = new graphql.GraphQLSchema({
       },
 
       channelUpdate: {
-        type: types.channelType,
-        args: _.pick(attributeFields(models.Channel), ["id"]),
-        resolve: async (...args) => {
-          return Promise.resolve(...args);
-        }
+        type: types.channel,
+        args: { id: { type: graphql.GraphQLString } },
+        resolve: async (root, values, options) => {
+          return data.channelsData.channelUpdate(root, values, options);
+        },
       },
 
       channelCreate: {
-        type: types.channelType,
-        args: _.pick(attributeFields(models.Channel), ["id"]),
-        resolve: async (...args) => {
-          return Promise.resolve(...args);
-        }
+        type: types.channel,
+        args: { id: { type: graphql.GraphQLString } },
+        resolve: async (root, values, options) => {
+          return data.channelsData.channelCreate(root, values, options);
+        },
       },
 
       AddPersonToChannel: {
-        type: types.channelType,
-        args: _.pick(attributeFields(models.Channel), ["id"]),
-        resolve: async (...args) => {
-          return Promise.resolve(...args);
-        }
+        type: types.channel,
+        args: { id: { type: graphql.GraphQLString } },
+        resolve: async (root, values, options) => {
+          return data.channelsData.addPersonToChannel(root, values, options);
+        },
       },
 
       RemovePersonFromChannel: {
-        type: types.channelType,
-        args: _.pick(attributeFields(models.Channel), ["id"]),
-        resolve: async (...args) => {
-          return Promise.resolve(...args);
-        }
+        type: types.channel,
+        args: { id: { type: graphql.GraphQLString } },
+        resolve: async (root, values, options) => {
+          return data.channelsData.removePersonFromChannel(root, values, options);
+        },
       },
 
     }

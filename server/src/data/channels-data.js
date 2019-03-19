@@ -7,18 +7,22 @@ class ChannelsData {
   }
 
   async channelUpdate(root, values, options) {
+    console.log(root, values, options);
     return true;
   }
 
   async channelCreate(root, values, options) {
+    console.log(root, values, options);
     return true;
   }
 
-  async AddPersonToChannel(root, values, options) {
+  async addPersonToChannel(root, values, options) {
+    console.log(root, values, options);
     return true;
   }
 
-  async RemovePersonFromChannel(root, values, options) {
+  async removePersonFromChannel(root, values, options) {
+    console.log(root, values, options);
     return true;
   }
 

@@ -72,20 +72,21 @@ const botType = makeObjectType(models.Bot);
 const agentType = makeObjectType(models.Agent);
 const seriesType = makeObjectType(models.Series);
 
-const channelType = new graphql.GraphQLObjectType({
+// @todo: move in separate file
+const channel = new graphql.GraphQLObjectType({
   name: 'Channel',
   fields: {
-    id: {  type: graphql.GraphQLString },
+    id: { type: graphql.GraphQLString },
     name: { type: graphql.GraphQLString },
     description: { type: graphql.GraphQLString },
     isArchived: { type: graphql.GraphQLString },
     isPublic: { type: graphql.GraphQLString },
-    Creator: {
+    creator: {
       type: agentType,
       resolve: resolver(models.Agent),
     },
-    Agents: {
-      type: agentType,
+    agents: {
+      type: graphql.GraphQLList(agentType),
       resolve: resolver(models.Agent),
     },
   }
@@ -99,7 +100,7 @@ const index = {
   measurables: measurableType,
   Series: seriesType,
   Measurements: measurementType,
-  Channels: channelType,
+  Channels: channel,
 };
 
 module.exports = {
@@ -112,7 +113,8 @@ module.exports = {
   measurableType,
   seriesType,
   measurementType,
-  channelType,
+
+  channel,
 
   // @todo: tmp
   filterr,

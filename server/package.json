@@ -53,6 +53,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "body-parser": "^1.18.2",
+    "body-parser-graphql": "^1.1.0",
     "cors": "^2.8.4",
     "dataloader-sequelize": "^1.7.2",
     "enforce": "^0.1.7",

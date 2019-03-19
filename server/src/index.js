@@ -1,11 +1,12 @@
 const path = require('path');
-import express from 'express';
-import { schema } from './schema';
+const express = require('express');
+const bodyParser = require('body-parser-graphql');
 
 const jwt = require('jsonwebtoken');
 const { ApolloServer } = require('apollo-server-express');
 
 const models = require("./models");
+const { schema } = require('./schema');
 
 const PORT = process.env.PORT || 4000;
 
@@ -64,10 +65,11 @@ app.get(/^((?!graphql).)*$/,
   }
 );
 
+app.use(bodyParser.graphql());
 server.applyMiddleware({ app });
 
 models.sequelize.sync().then(() => {
   app.listen({ port: PORT }, () => {
     console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
   });
-})
+});

@@ -1,5 +1,6 @@
 open Utils;
 open Rationale;
+open Foretold__GraphQL;
 
 module Styles = {
   open Css;
@@ -58,7 +59,7 @@ module Styles = {
 };
 
 let component = ReasonReact.statelessComponent("Sidebar");
-let make = (~channel, ~loggedInUser: GetUser.t, _children) => {
+let make = (~channel, ~loggedInUser: UserGet.t, _children) => {
   ...component,
   render: _self =>
     <div className=Styles.sidebar>

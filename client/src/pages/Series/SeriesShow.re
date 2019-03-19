@@ -1,6 +1,7 @@
 open Utils;
 open Rationale;
 open Style.Grid;
+open Foretold__GraphQL;
 
 module Styles = {
   open Css;
@@ -26,7 +27,7 @@ type action =
 
 let component = ReasonReact.reducerComponent("Measurables");
 
-let seriesTop = (series: GetSeries.series) =>
+let seriesTop = (series: SeriesGet.series) =>
   <Div flexDirection=`column styles=[Styles.header]>
     <Div flex=1>
       <Div flexDirection=`row>
@@ -55,7 +56,7 @@ let seriesTop = (series: GetSeries.series) =>
   </Div>;
 
 let make =
-    (~channel: string, ~id: string, ~loggedInUser: GetUser.t, _children) => {
+    (~channel: string, ~id: string, ~loggedInUser: UserGet.t, _children) => {
   ...component,
   initialState: () => {selected: None},
   reducer: (action, _state) =>
@@ -64,7 +65,7 @@ let make =
     },
   render: ({state, send}) => {
     let medium =
-      GetMeasurables.componentWithSeries(channel, id, measurables =>
+      MeasurablesGet.componentWithSeries(channel, id, measurables =>
         <SeriesShowTable
           measurables
           selected={state.selected}
@@ -77,7 +78,7 @@ let make =
       |> E.O.fmap(elId => <MeasurableShow__Component id=elId loggedInUser />)
       |> E.O.React.defaultNull;
 
-    GetSeries.component(~id)
+    SeriesGet.component(~id)
     |> E.F.apply(series =>
          <>
            <SLayout.Header>
@@ -85,7 +86,7 @@ let make =
                SLayout.seriesHead(
                  channel,
                  series
-                 |> E.O.bind(_, (s: GetSeries.series) => s.name)
+                 |> E.O.bind(_, (s: SeriesGet.series) => s.name)
                  |> E.O.default(""),
                )
              }

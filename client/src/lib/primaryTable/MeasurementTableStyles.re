@@ -153,9 +153,7 @@ let description = (~m: DataModel.Measurement.t) =>
   };
 
 let formatDate = e =>
-  Rationale.Option.Infix.(
-    e <$> MomentRe.Moment.format("L") |> E.O.default("")
-  );
+  e |> E.O.fmap(E.M.format(E.M.format_simple)) |> E.O.default("");
 
 let dateStyle =
   style([

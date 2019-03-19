@@ -1,4 +1,5 @@
 open Utils;
+open Foretold__GraphQL;
 
 module WithEditMutation = {
   module GraphQL = [%graphql
@@ -45,7 +46,7 @@ module WithEditMutation = {
 };
 
 let formCreation = (id, m) => {
-  let measurable = GetMeasurable.toMeasurable(m);
+  let measurable = MeasurableGet.toMeasurable(m);
   WithEditMutation.Mutation.make((mutation, data) =>
     MeasurableForm.SignUpForm.make(
       ~onSubmit=
@@ -117,7 +118,7 @@ let make = (~id: string, _children) => {
         {SLayout.Header.textDiv("Edit Measurable")}
       </SLayout.Header>
       <SLayout.MainSection>
-        {GetMeasurable.component(~id, m => formCreation(id, m))}
+        {MeasurableGet.component(~id, m => formCreation(id, m))}
       </SLayout.MainSection>
     </>,
 };

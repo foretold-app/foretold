@@ -40,15 +40,15 @@ module R = {
   let bind = Rationale.Result.bind;
 };
 
-let safe_a_of_string = (fn, s: string): option('a) =>
+let safe_fn_of_string = (fn, s: string): option('a) =>
   try (Some(fn(s))) {
   | _ => None
   };
 
 module S = {
   let toReact = ReasonReact.string;
-  let safe_float = safe_a_of_string(float_of_string);
-  let safe_int = safe_a_of_string(int_of_string);
+  let safe_float = float_of_string->safe_fn_of_string;
+  let safe_int = int_of_string->safe_fn_of_string;
 };
 
 module J = {
@@ -57,6 +57,20 @@ module J = {
   module O = {
     let toMoment = O.fmap(toMoment);
   };
+};
+
+module M = {
+  open MomentRe;
+  let format = Moment.format;
+  let format_standard = "MMM DD, YYYY HH:MM:SS";
+  let format_simple = "L";
+};
+
+module JsDate = {
+  let fromString = Js.Date.fromString;
+  let now = Js.Date.now;
+  let make = Js.Date.make;
+  let valueOf = Js.Date.valueOf;
 };
 
 /* List */

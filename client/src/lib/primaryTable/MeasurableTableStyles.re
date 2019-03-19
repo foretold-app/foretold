@@ -19,7 +19,7 @@ let compareMeasurables =
   };
 
 let formatDate = e =>
-  e |> E.O.fmap(MomentRe.Moment.format("L")) |> E.O.default("");
+  e |> E.O.fmap(E.M.format(E.M.format_simple)) |> E.O.default("");
 
 type dateDisplay =
   | TOP

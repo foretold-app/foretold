@@ -1,5 +1,6 @@
 open Utils;
 open Style.Grid;
+open Foretold__GraphQL;
 
 let component = ReasonReact.statelessComponent("SeriesCard");
 
@@ -27,7 +28,7 @@ module Styles = {
     ]);
 };
 
-let make = (~series: GetSeriesCollection.series, _children) => {
+let make = (~series: SeriesCollectionGet.series, _children) => {
   ...component,
   render: _self =>
     <div

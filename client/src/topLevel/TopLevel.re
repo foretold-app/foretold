@@ -1,4 +1,5 @@
 open Routes;
+open Foretold__GraphQL;
 
 let defaultChannel = "general";
 let component = ReasonReact.statelessComponent("TopLevel");
@@ -15,8 +16,8 @@ let make = (~route: route, _children) => {
       | _ => None
       };
 
-    GetUser.withLoggedInUserQuery
-    |> E.F.apply((loggedInUser: GetUser.t) =>
+    UserGet.withLoggedInUserQuery
+    |> E.F.apply((loggedInUser: UserGet.t) =>
          switch (loggedInUser) {
          | Some(_userIsLoggedIn) =>
            let inApp = (~key="", e) =>

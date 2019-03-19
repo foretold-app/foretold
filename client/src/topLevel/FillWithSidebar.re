@@ -1,5 +1,6 @@
 open Utils;
 open Style.Grid;
+open Foretold__GraphQL;
 
 module Styles = {
   open Css;
@@ -50,7 +51,7 @@ module Styles = {
 };
 
 let component = ReasonReact.statelessComponent("SidebarFill");
-let make = (~channel: option(string), ~loggedInUser: GetUser.t, children) => {
+let make = (~channel: option(string), ~loggedInUser: UserGet.t, children) => {
   ...component,
   render: _self =>
     <UseRouterForLinks>

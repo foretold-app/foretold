@@ -2,7 +2,6 @@ open Utils;
 open MomentRe;
 open Antd;
 
-let formatDate = Moment.format("MMM DD, YYYY HH:MM:SS");
 module SignUpParams = {
   type state = {
     name: string,

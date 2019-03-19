@@ -1,5 +1,6 @@
 open Utils;
 open Antd;
+open Foretold__GraphQL;
 
 let ste = ReasonReact.string;
 
@@ -38,8 +39,8 @@ let component = ReasonReact.statelessComponent("Measurables");
 
 let withUserQuery =
     (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = GetUser.Query.make(~auth0Id, ());
-  GetUser.QueryComponent.make(~variables=query##variables, ({result}) =>
+  let query = UserGet.Query.make(~auth0Id, ());
+  UserGet.QueryComponent.make(~variables=query##variables, ({result}) =>
     result
     |> ApolloUtils.apolloResponseToResult
     |> E.R.fmap(innerComponentFn)
@@ -86,11 +87,11 @@ let make = (~loggedInUser, _children) => {
     withUserMutation((mutation, data) => {
       let id =
         loggedInUser
-        |> E.O.fmap((r: GetUser.user) => r.id)
+        |> E.O.fmap((r: UserGet.user) => r.id)
         |> E.O.default("");
       let name =
         loggedInUser
-        |> E.O.fmap((r: GetUser.user) => r.name)
+        |> E.O.fmap((r: UserGet.user) => r.name)
         |> E.O.default("");
       withUserForm(
         id, name, mutation, ({handleSubmit, handleChange, form, _}) =>

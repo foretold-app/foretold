@@ -1,5 +1,6 @@
 open Utils;
 open E;
+open Foretold__GraphQL;
 
 let ste = ReasonReact.string;
 
@@ -8,14 +9,14 @@ let component = ReasonReact.statelessComponent("Redirecting...");
 let make = _children => {
   ...component,
   render: _ =>
-    GetUser.component(
+    UserGet.component(
       Auth0.userId(),
       user => {
         let agentId =
           user
           |> O.bind(_, r => r.agent)
-          |> O.fmap((e: GetUser.agent) => e.id);
-        let name = user |> O.fmap((e: GetUser.user) => e.name);
+          |> O.fmap((e: UserGet.agent) => e.id);
+        let name = user |> O.fmap((e: UserGet.user) => e.name);
         switch (name, agentId) {
         | (Some(""), _) => Urls.pushToLink(Profile)
         | (_, Some(id)) => Urls.pushToLink(AgentShow(id))

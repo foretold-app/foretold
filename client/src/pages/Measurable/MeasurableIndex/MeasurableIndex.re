@@ -1,6 +1,6 @@
 open Utils;
 open Rationale;
-open Result.Infix;
+open Foretold__GraphQL;
 
 module SeriesItems = {
   open Css;
@@ -53,7 +53,7 @@ let itemHeader = (channel: string, onForward, onBackward, isAtStart, isAtEnd) =>
 let selectedView =
     (
       ~channel: string,
-      ~loggedInUser: GetUser.t,
+      ~loggedInUser: UserGet.t,
       ~send,
       ~measurables: array(DataModel.Measurable.t),
       ~index: int,
@@ -93,15 +93,15 @@ let selectedView =
 let deselectedView =
     (
       ~channel: string,
-      ~loggedInUser: GetUser.t,
+      ~loggedInUser: UserGet.t,
       ~send,
       ~state,
       ~measurables: array(DataModel.Measurable.t),
-      ~seriesCollection: array(GetSeriesCollection.series),
+      ~seriesCollection: array(SeriesCollectionGet.series),
     ) => {
   let seriesList =
     seriesCollection
-    |> E.A.filter((x: GetSeriesCollection.series) =>
+    |> E.A.filter((x: SeriesCollectionGet.series) =>
          x.channel == channel && x.measurableCount !== Some(0)
        );
   <>
@@ -126,7 +126,7 @@ let deselectedView =
             <div className=SeriesItems.items>
               {
                 seriesList
-                |> Array.map((x: GetSeriesCollection.series) =>
+                |> Array.map((x: SeriesCollectionGet.series) =>
                      <div
                        className=SeriesItems.item
                        onClick={
@@ -159,7 +159,7 @@ let deselectedView =
   </>;
 };
 
-let make = (~channel: string, ~loggedInUser: GetUser.t, _children) => {
+let make = (~channel: string, ~loggedInUser: UserGet.t, _children) => {
   ...component,
   initialState: () => {page: 0, selected: None},
   reducer: (action, state) =>
@@ -180,9 +180,9 @@ let make = (~channel: string, ~loggedInUser: GetUser.t, _children) => {
       })
     },
   render: ({state, send}) =>
-    GetSeriesCollection.component(
-      (seriesCollection: array(GetSeriesCollection.series)) =>
-      GetMeasurables.component(
+    SeriesCollectionGet.component(
+      (seriesCollection: array(SeriesCollectionGet.series)) =>
+      MeasurablesGet.component(
         channel,
         state.page,
         itemsPerPage,

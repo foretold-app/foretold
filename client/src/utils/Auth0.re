@@ -38,7 +38,7 @@ let handleAuth = (url: ReasonReact.Router.url) => {
   let idToken = url.hash |> resolveRegex(matchIdToken);
   let expiresIn = url.hash |> resolveRegex(matchExpiresIn);
   let addedMs = expiresIn |> float_of_string |> (e => e *. 1000.);
-  let currentTimeMs = Js.Date.make() |> Js.Date.valueOf;
+  let currentTimeMs = E.JsDate.make() |> E.JsDate.valueOf;
   let expiresAtInMs = currentTimeMs +. addedMs;
   let expiresAt = expiresAtInMs |> Int64.of_float |> Int64.to_string;
   open Dom.Storage;
@@ -64,7 +64,7 @@ let authIsObsolete = () => {
   exp
   |> E.O.fmap(Int64.of_string)
   |> E.O.fmap(Int64.to_float)
-  |> E.O.fmap(e => e < Js.Date.now())
+  |> E.O.fmap(e => e < E.JsDate.now())
   |> E.O.dimap(E.U.id, () => false);
 };
 

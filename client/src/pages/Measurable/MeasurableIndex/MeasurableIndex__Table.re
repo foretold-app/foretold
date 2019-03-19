@@ -1,4 +1,5 @@
 open Utils;
+open Foretold__GraphQL;
 
 let component = ReasonReact.statelessComponent("MeasurableIndexTable");
 
@@ -6,7 +7,7 @@ let make =
     (
       ~measurables: array(DataModel.Measurable.t),
       ~showExtraData: bool,
-      ~loggedInUser: GetUser.t,
+      ~loggedInUser: UserGet.t,
       ~onSelect=(m: DataModel.Measurable.t) =>
                   Urls.pushToLink(
                     MeasurableShow(
@@ -24,8 +25,8 @@ let make =
         |> E.A.fmap((m: DataModel.Measurable.t) => {
              let userAgentId =
                loggedInUser
-               |> E.O.bind(_, (r: GetUser.user) => r.agent)
-               |> E.O.fmap((r: GetUser.agent) => r.id);
+               |> E.O.bind(_, (r: UserGet.user) => r.agent)
+               |> E.O.fmap((r: UserGet.agent) => r.id);
              let measurableAgentId =
                m.creator |> E.O.fmap((r: DataModel.Agent.t) => r.id);
              let isSame =

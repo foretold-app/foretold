@@ -1,21 +1,15 @@
 open Utils;
-
-let botCompetitor = e =>
-  switch (e) {
-  | `AGGREGATION => "Aggregation"
-  | `COMPETITIVE => "Competitive"
-  | `OBJECTIVE => "Objective"
-  };
+open Foretold__GraphQL;
 
 let notFound = <h3> {"Agent not found" |> ste} </h3>;
 
-let agentSection = (e: AgentTypes.agent) =>
+let agentSection = (e: AgentGet.agent) =>
   switch (e) {
   | {bot: Some(r)} =>
     <>
       <h2> {r.name |> E.O.default("") |> ste} </h2>
       <h3> {r.description |> E.O.default("") |> ste} </h3>
-      <h3> {r.competitorType |> botCompetitor |> ste} </h3>
+      <h3> {r.competitorType |> DataModel.CompetitorType.toString |> ste} </h3>
     </>
   | {user: Some(r)} => <h1> {r.name |> ste} </h1>
   | _ => notFound
@@ -26,11 +20,11 @@ let component = ReasonReact.statelessComponent("AgentShow");
 let make = (~id: string, _children) => {
   ...component,
   render: _ =>
-    AgentTypes.GetAgent.component(
+    AgentGet.component(
       ~id,
       agent => {
         let mm =
-          AgentTypes.toMeasurables(agent.measurements |> E.A.O.concatSomes);
+          AgentGet.toMeasurables(agent.measurements |> E.A.O.concatSomes);
         <>
           <SLayout.Header> {agentSection(agent)} </SLayout.Header>
           <SLayout.MainSection>

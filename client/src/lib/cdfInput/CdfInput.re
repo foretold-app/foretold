@@ -1,6 +1,7 @@
 open E;
 open Utils;
 open Antd;
+open Foretold__GraphQL;
 
 type state = {
   floatCdf: FloatCdf.t,
@@ -143,7 +144,7 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
 
 let make =
     (
-      ~data: CreateMeasurementMutation.Mutation.renderPropObj,
+      ~data: Mutations.MeasurementCreate.Mutation.renderPropObj,
       ~onUpdate=_ => (),
       ~isCreator=false,
       ~onSubmit=_ => (),

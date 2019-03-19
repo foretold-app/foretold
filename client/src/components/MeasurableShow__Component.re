@@ -16,10 +16,10 @@ module Styles = {
     ]);
 };
 
-let make = (~id: string, ~loggedInUser: UserGet.t, _children) => {
+let make = (~id: string, ~loggedInUser: Queries.User.t, _children) => {
   ...component,
   render: _self =>
-    MeasurableWithMeasurementsGet.component(~id)
+    Queries.MeasurableWithMeasurements.component(~id)
     |> E.F.apply(m =>
          <>
            <Div flexDirection=`column styles=[Styles.header]>
@@ -49,7 +49,7 @@ let make = (~id: string, ~loggedInUser: UserGet.t, _children) => {
            <>
              {
                loggedInUser
-               |> E.O.fmap((user: UserGet.user) => {
+               |> E.O.fmap((user: Queries.User.user) => {
                     let userAgentId = user.agentId;
                     let creatorId =
                       m.creator |> E.O.fmap((r: DataModel.Agent.t) => r.id);

@@ -1,5 +1,4 @@
 open MomentRe;
-open QueriesHelper;
 
 type user = {
   id: string,
@@ -66,7 +65,7 @@ module Query = [%graphql
              id
              name
              expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
-             state @bsDecoder(fn: "string_to_measurableState")
+             state @bsDecoder(fn: "DataModel.MeasurableState.fromString")
              stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
           }
         }

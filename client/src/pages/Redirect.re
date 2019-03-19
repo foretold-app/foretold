@@ -9,14 +9,14 @@ let component = ReasonReact.statelessComponent("Redirecting...");
 let make = _children => {
   ...component,
   render: _ =>
-    UserGet.component(
+    Queries.User.component(
       Auth0.userId(),
       user => {
         let agentId =
           user
           |> O.bind(_, r => r.agent)
-          |> O.fmap((e: UserGet.agent) => e.id);
-        let name = user |> O.fmap((e: UserGet.user) => e.name);
+          |> O.fmap((e: Queries.User.agent) => e.id);
+        let name = user |> O.fmap((e: Queries.User.user) => e.name);
         switch (name, agentId) {
         | (Some(""), _) => Urls.pushToLink(Profile)
         | (_, Some(id)) => Urls.pushToLink(AgentShow(id))

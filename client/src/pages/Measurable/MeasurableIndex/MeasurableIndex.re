@@ -53,7 +53,7 @@ let itemHeader = (channel: string, onForward, onBackward, isAtStart, isAtEnd) =>
 let selectedView =
     (
       ~channel: string,
-      ~loggedInUser: UserGet.t,
+      ~loggedInUser: Queries.User.t,
       ~send,
       ~measurables: array(DataModel.Measurable.t),
       ~index: int,
@@ -93,15 +93,15 @@ let selectedView =
 let deselectedView =
     (
       ~channel: string,
-      ~loggedInUser: UserGet.t,
+      ~loggedInUser: Queries.User.t,
       ~send,
       ~state,
       ~measurables: array(DataModel.Measurable.t),
-      ~seriesCollection: array(SeriesCollectionGet.series),
+      ~seriesCollection: array(Queries.SeriesCollection.series),
     ) => {
   let seriesList =
     seriesCollection
-    |> E.A.filter((x: SeriesCollectionGet.series) =>
+    |> E.A.filter((x: Queries.SeriesCollection.series) =>
          x.channel == channel && x.measurableCount !== Some(0)
        );
   <>
@@ -126,7 +126,7 @@ let deselectedView =
             <div className=SeriesItems.items>
               {
                 seriesList
-                |> Array.map((x: SeriesCollectionGet.series) =>
+                |> Array.map((x: Queries.SeriesCollection.series) =>
                      <div
                        className=SeriesItems.item
                        onClick={
@@ -159,7 +159,7 @@ let deselectedView =
   </>;
 };
 
-let make = (~channel: string, ~loggedInUser: UserGet.t, _children) => {
+let make = (~channel: string, ~loggedInUser: Queries.User.t, _children) => {
   ...component,
   initialState: () => {page: 0, selected: None},
   reducer: (action, state) =>
@@ -180,9 +180,9 @@ let make = (~channel: string, ~loggedInUser: UserGet.t, _children) => {
       })
     },
   render: ({state, send}) =>
-    SeriesCollectionGet.component(
-      (seriesCollection: array(SeriesCollectionGet.series)) =>
-      MeasurablesGet.component(
+    Queries.SeriesCollection.component(
+      (seriesCollection: array(Queries.SeriesCollection.series)) =>
+      Queries.Measurables.component(
         channel,
         state.page,
         itemsPerPage,

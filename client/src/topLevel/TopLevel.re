@@ -16,8 +16,8 @@ let make = (~route: route, _children) => {
       | _ => None
       };
 
-    UserGet.withLoggedInUserQuery
-    |> E.F.apply((loggedInUser: UserGet.t) =>
+    Queries.User.withLoggedInUserQuery
+    |> E.F.apply((loggedInUser: Queries.User.t) =>
          switch (loggedInUser) {
          | Some(_userIsLoggedIn) =>
            let inApp = (~key="", e) =>

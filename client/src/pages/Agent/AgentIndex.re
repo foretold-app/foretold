@@ -7,7 +7,7 @@ let component = ReasonReact.statelessComponent("Measurables");
 let make = _children => {
   ...component,
   render: _ =>
-    AgentsGet.QueryComponent.make(({result}) =>
+    Queries.Agents.QueryComponent.make(({result}) =>
       result
       |> ApolloUtils.apolloResponseToResult
       |> E.R.fmap(d => d##agents)

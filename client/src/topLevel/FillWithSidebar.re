@@ -51,7 +51,8 @@ module Styles = {
 };
 
 let component = ReasonReact.statelessComponent("SidebarFill");
-let make = (~channel: option(string), ~loggedInUser: UserGet.t, children) => {
+let make =
+    (~channel: option(string), ~loggedInUser: Queries.User.t, children) => {
   ...component,
   render: _self =>
     <UseRouterForLinks>

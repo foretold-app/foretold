@@ -28,7 +28,7 @@ module Styles = {
     ]);
 };
 
-let make = (~series: SeriesCollectionGet.series, _children) => {
+let make = (~series: Queries.SeriesCollection.series, _children) => {
   ...component,
   render: _self =>
     <div

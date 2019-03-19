@@ -79,7 +79,7 @@ module Query = [%graphql
            descriptionEntity
            descriptionProperty
            descriptionDate @bsDecoder(fn: "E.J.O.toMoment")
-           state @bsDecoder(fn: "QueriesHelper.string_to_measurableState")
+           state @bsDecoder(fn: "DataModel.MeasurableState.fromString")
            stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
            expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
            createdAt @bsDecoder(fn: "E.J.toMoment")

@@ -27,7 +27,7 @@ type action =
 
 let component = ReasonReact.reducerComponent("Measurables");
 
-let seriesTop = (series: SeriesGet.series) =>
+let seriesTop = (series: Queries.Series.series) =>
   <Div flexDirection=`column styles=[Styles.header]>
     <Div flex=1>
       <Div flexDirection=`row>
@@ -56,7 +56,7 @@ let seriesTop = (series: SeriesGet.series) =>
   </Div>;
 
 let make =
-    (~channel: string, ~id: string, ~loggedInUser: UserGet.t, _children) => {
+    (~channel: string, ~id: string, ~loggedInUser: Queries.User.t, _children) => {
   ...component,
   initialState: () => {selected: None},
   reducer: (action, _state) =>
@@ -65,7 +65,7 @@ let make =
     },
   render: ({state, send}) => {
     let medium =
-      MeasurablesGet.componentWithSeries(channel, id, measurables =>
+      Queries.Measurables.componentWithSeries(channel, id, measurables =>
         <SeriesShowTable
           measurables
           selected={state.selected}
@@ -78,7 +78,7 @@ let make =
       |> E.O.fmap(elId => <MeasurableShow__Component id=elId loggedInUser />)
       |> E.O.React.defaultNull;
 
-    SeriesGet.component(~id)
+    Queries.Series.component(~id)
     |> E.F.apply(series =>
          <>
            <SLayout.Header>
@@ -86,7 +86,7 @@ let make =
                SLayout.seriesHead(
                  channel,
                  series
-                 |> E.O.bind(_, (s: SeriesGet.series) => s.name)
+                 |> E.O.bind(_, (s: Queries.Series.series) => s.name)
                  |> E.O.default(""),
                )
              }

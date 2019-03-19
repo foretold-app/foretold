@@ -46,7 +46,7 @@ module WithEditMutation = {
 };
 
 let formCreation = (id, m) => {
-  let measurable = MeasurableGet.toMeasurable(m);
+  let measurable = Queries.Measurable.toMeasurable(m);
   WithEditMutation.Mutation.make((mutation, data) =>
     MeasurableForm.SignUpForm.make(
       ~onSubmit=
@@ -118,7 +118,7 @@ let make = (~id: string, _children) => {
         {SLayout.Header.textDiv("Edit Measurable")}
       </SLayout.Header>
       <SLayout.MainSection>
-        {MeasurableGet.component(~id, m => formCreation(id, m))}
+        {Queries.Measurable.component(~id, m => formCreation(id, m))}
       </SLayout.MainSection>
     </>,
 };

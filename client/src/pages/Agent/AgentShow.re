@@ -3,7 +3,7 @@ open Foretold__GraphQL;
 
 let notFound = <h3> {"Agent not found" |> ste} </h3>;
 
-let agentSection = (e: AgentGet.agent) =>
+let agentSection = (e: Queries.Agent.agent) =>
   switch (e) {
   | {bot: Some(r)} =>
     <>
@@ -20,11 +20,11 @@ let component = ReasonReact.statelessComponent("AgentShow");
 let make = (~id: string, _children) => {
   ...component,
   render: _ =>
-    AgentGet.component(
+    Queries.Agent.component(
       ~id,
       agent => {
         let mm =
-          AgentGet.toMeasurables(agent.measurements |> E.A.O.concatSomes);
+          Queries.Agent.toMeasurables(agent.measurements |> E.A.O.concatSomes);
         <>
           <SLayout.Header> {agentSection(agent)} </SLayout.Header>
           <SLayout.MainSection>

@@ -54,7 +54,7 @@ let make =
                <div className=SeriesShowTableStyles.column>
                  {
                    switch (TableS.formatDate(m.descriptionDate)) {
-                   | "" => ReasonReact.null
+                   | "" => E.React.null
                    | e =>
                      <span className=PrimaryTableStyles.calDateO>
                        {e |> ste}

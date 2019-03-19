@@ -112,7 +112,7 @@ let make = (~channel, _children) => {
                     |> doIfSome(_ =>
                          DataModel.Url.push(ChannelShow(channel))
                        );
-                    ReasonReact.null;
+                    E.React.null;
                   | NotCalled => showForm
                   };
                 },

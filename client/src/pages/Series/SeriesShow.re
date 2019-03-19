@@ -36,11 +36,11 @@ let seriesHero = (series: DataModel.Series.t) =>
             switch (series.creator) {
             | Some({name: Some(name), id}) =>
               <div className=PrimaryTableStyles.item>
-                <a href={DataModel.Url.mapLinkToUrl(AgentShow(id))}>
+                <a href={DataModel.Url.toString(AgentShow(id))}>
                   {name |> ste}
                 </a>
               </div>
-            | _ => ReasonReact.null
+            | _ => E.React.null
             }
           }
         </Div>

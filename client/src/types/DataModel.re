@@ -79,7 +79,7 @@ module Url = {
     | MeasurableEdit(string)
     | MeasurableNew(string);
 
-  let mapLinkToUrl = (r: t) =>
+  let toString = (r: t) =>
     switch ((r: t)) {
     | Home => "/"
     | AgentIndex => "/agents"
@@ -95,13 +95,14 @@ module Url = {
     | MeasurableNew(channel) => "/c/" ++ channel ++ "/new"
     | SeriesShow(channel, id) => "/c/" ++ channel ++ "/s/" ++ id
     };
-  let push = (r: t) => r |> mapLinkToUrl |> ReasonReact.Router.push;
+
+  let push = (r: t) => r |> toString |> ReasonReact.Router.push;
 };
 
 module Channel = {
   type t = string;
   let showLink = t => Url.ChannelShow(t);
-  let showUrl = showLink ||> Url.mapLinkToUrl;
+  let showUrl = showLink ||> Url.toString;
   let showPush = showLink ||> Url.push;
   let present = (~hashClassName="", s) =>
     <span>

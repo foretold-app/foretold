@@ -44,7 +44,7 @@ let make = (~id: string, _children) => {
                    switch (r.value.valueType) {
                    | String(s) => s |> ste
                    | ThingId(s) =>
-                     <a href={DataModel.Url.mapLinkToUrl(ItemShow(s))}>
+                     <a href={DataModel.Url.toString(ItemShow(s))}>
                        {s |> ste}
                      </a>
                    | _ => "no-name" |> ste

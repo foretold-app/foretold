@@ -121,11 +121,11 @@ let agentLink = (~m: DataModel.Measurement.t) => {
     switch (agent, agent |> E.O.bind(_, DataModel.Agent.name)) {
     | (Some(agent), Some(name)) =>
       <a
-        href={DataModel.Url.mapLinkToUrl(AgentShow(agent.id))}
+        href={DataModel.Url.toString(AgentShow(agent.id))}
         className=agentStyle>
         {name |> ste}
       </a>
-    | (_, _) => "" |> ste
+    | _ => "" |> ste
     };
   let isJudge = isJudgement(m);
   if (isJudge) {
@@ -150,7 +150,7 @@ let descriptionStyle =
 
 let description = (~m: DataModel.Measurement.t) =>
   switch (m.description |> E.O.default("")) {
-  | "" => <div />
+  | "" => E.React.null
   | text => <div className=descriptionStyle> <p> {text |> ste} </p> </div>
   };
 

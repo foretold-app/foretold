@@ -107,7 +107,7 @@ let link = (~m: DataModel.Measurable.t) =>
     <span className=PrimaryTableStyles.namme> {m.name |> ste} </span>
     {
       switch (formatDate(m.descriptionDate)) {
-      | "" => ReasonReact.null
+      | "" => E.React.null
       | e =>
         [|
           <span className=PrimaryTableStyles.calDate> {"on " |> ste} </span>,
@@ -121,7 +121,7 @@ let link = (~m: DataModel.Measurable.t) =>
 let description = (~m: DataModel.Measurable.t) =>
   switch (m.description) {
   | Some("")
-  | None => ReasonReact.null
+  | None => E.React.null
   | Some(text) => <p> {text |> ste} </p>
   };
 
@@ -133,16 +133,16 @@ let endpointResponse = (~m: DataModel.Measurable.t) =>
     m.resolutionEndpoint |> E.O.default(""),
     m.resolutionEndpointResponse,
   ) {
-  | ("", _) => ReasonReact.null
+  | ("", _) => E.React.null
   | (_, Some(r)) => "Current Endpoint Value: " ++ stringOfFloat(r) |> ste
-  | _ => ReasonReact.null
+  | _ => E.React.null
   };
 
 let creatorLink = (~m: DataModel.Measurable.t) =>
   m.creator
   |> E.O.fmap((c: DataModel.Agent.t) =>
        <div className=PrimaryTableStyles.item>
-         <a href={DataModel.Url.mapLinkToUrl(AgentShow(c.id))}>
+         <a href={DataModel.Url.toString(AgentShow(c.id))}>
            {c.name |> E.O.default("") |> ste}
          </a>
        </div>
@@ -152,7 +152,7 @@ let creatorLink = (~m: DataModel.Measurable.t) =>
 let editLink = (~m: DataModel.Measurable.t) =>
   <div className=PrimaryTableStyles.item>
     <a
-      href={DataModel.Url.mapLinkToUrl(MeasurableEdit(m.id))}
+      href={DataModel.Url.toString(MeasurableEdit(m.id))}
       className={PrimaryTableStyles.itemButton(NORMAL)}>
       {"Edit" |> ste}
     </a>
@@ -192,7 +192,7 @@ let series = (~m: DataModel.Measurable.t) =>
              <Icon.Icon icon="LAYERS" />
              <a
                href={
-                 DataModel.Url.mapLinkToUrl(
+                 DataModel.Url.toString(
                    SeriesShow(m.channel |> E.O.default(""), r.id),
                  )
                }>

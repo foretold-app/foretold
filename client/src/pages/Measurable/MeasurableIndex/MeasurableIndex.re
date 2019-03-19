@@ -142,7 +142,7 @@ let deselectedView =
           </>,
         )
       }
-      <MeasurableIndex__Table
+      <C.Measurables.BasicTable
         measurables
         loggedInUser
         showExtraData=true

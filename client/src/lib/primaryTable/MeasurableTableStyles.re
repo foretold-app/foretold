@@ -1,22 +1,4 @@
 open Utils;
-open PrimaryTableBase;
-
-let compareSimilarMeasurables =
-    (measurableA: DataModel.Measurable.t, measurableB: DataModel.Measurable.t) =>
-  switch (
-    measurableA.expectedResolutionDate,
-    measurableB.expectedResolutionDate,
-  ) {
-  | (Some(a), Some(b)) => MomentRe.Moment.isAfter(a, b) ? 1 : (-1)
-  | _ => 1
-  };
-
-let compareMeasurables =
-    (measurableA: DataModel.Measurable.t, measurableB: DataModel.Measurable.t) =>
-  switch (status(measurableA), status(measurableB)) {
-  | (a, b) when a == b => compareSimilarMeasurables(measurableA, measurableB)
-  | (a, b) => statusInt(a) > statusInt(b) ? (-1) : 1
-  };
 
 let formatDate = e =>
   e |> E.O.fmap(E.M.format(E.M.format_simple)) |> E.O.default("");
@@ -26,47 +8,7 @@ type dateDisplay =
   | BOTTOM
   | WHOLE;
 
-let dateFinder = (head, p, date, dateDisplay) => {
-  let date = formatDate(date);
-  switch (dateDisplay) {
-  | TOP => head |> ste
-  | BOTTOM => p ++ date |> ste
-  | WHOLE =>
-    <div className=PrimaryTableStyles.statusRow>
-      <h3> {head |> ste} </h3>
-      <p> {p ++ date |> ste} </p>
-    </div>
-  };
-};
-
-let dateStatusI = (~measurable: DataModel.Measurable.t, ~dateDisplay) => {
-  let m = measurable;
-  switch (status(m)) {
-  | OPEN =>
-    dateFinder("Open", "Closes ~", m.expectedResolutionDate, dateDisplay)
-  | PENDING_REVIEW =>
-    dateFinder(
-      "Judgement Pending",
-      "Pending since ",
-      m.expectedResolutionDate,
-      dateDisplay,
-    )
-  | ARCHIVED =>
-    dateFinder("Archived", "Archived on ", m.stateUpdatedAt, dateDisplay)
-  | JUDGED =>
-    dateFinder("Judged", "Judged on ", m.stateUpdatedAt, dateDisplay)
-  };
-};
-
-let dateStatus = (~measurable: DataModel.Measurable.t) =>
-  dateStatusI(~measurable, ~dateDisplay=WHOLE);
-
-let dateStatusWrapper = (~measurable: DataModel.Measurable.t) =>
-  <div className={PrimaryTableStyles.statusColor(~measurable)}>
-    {dateStatus(~measurable)}
-  </div>;
-
-let sortMeasurables = m => E.A.stableSortBy(m, compareMeasurables);
+let sortMeasurables = m => E.A.stableSortBy(m, DataModel.Measurable.compare);
 
 let graph = Data.make;
 
@@ -293,4 +235,5 @@ let unArchiveButton = (~m: DataModel.Measurable.t) =>
   |> E.React.el;
 
 let archiveOption = (~m: DataModel.Measurable.t) =>
-  status(m) !== ARCHIVED ? archiveButton(~m) : unArchiveButton(~m);
+  DataModel.Measurable.toStatus(m) !== ARCHIVED ?
+    archiveButton(~m) : unArchiveButton(~m);

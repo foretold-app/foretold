@@ -24,7 +24,9 @@ let make = (~id: string, _children) => {
       ~id,
       agent => {
         let mm =
-          Queries.Agent.toMeasurables(agent.measurements |> E.A.O.concatSomes);
+          Queries.Agent.toMeasurables(
+            agent.measurements |> E.A.O.concatSomes,
+          );
         <>
           <SLayout.Header> {agentSection(agent)} </SLayout.Header>
           <SLayout.MainSection>
@@ -35,7 +37,10 @@ let make = (~id: string, _children) => {
                    <>
                      <div className=AgentShowStyles.block>
                        {MeasurableTableStyles.link(~m)}
-                       {MeasurableTableStyles.dateStatus(~measurable=m)}
+                       <C.Measurable.StatusDisplay
+                         measurable=m
+                         dateDisplay=WHOLE
+                       />
                      </div>
                      <div className=MeasurementTableStyles.group>
                        {measurements |> MeasurementsBlock.make}

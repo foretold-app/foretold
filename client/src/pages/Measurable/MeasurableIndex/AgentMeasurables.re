@@ -6,6 +6,10 @@ let make = (~id: string, ~loggedInUser: Queries.User.t, _children) => {
   render: _self =>
     Queries.Measurables.componentWithCreator(id)
     |> E.F.apply(measurables =>
-         <MeasurableIndex__Table measurables loggedInUser showExtraData=true />
+         <C.Measurables.BasicTable
+           measurables
+           loggedInUser
+           showExtraData=true
+         />
        ),
 };

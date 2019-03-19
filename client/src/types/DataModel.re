@@ -216,6 +216,23 @@ module Measurement = {
   };
 };
 
+module MeasurableStatus = {
+  type t =
+    | OPEN
+    | PENDING_REVIEW
+    | ARCHIVED
+    | JUDGED;
+
+  /* TODO: CHange closed to judged */
+
+  let toInt = (status: t) =>
+    switch (status) {
+    | OPEN => 3
+    | PENDING_REVIEW => 2
+    | JUDGED => 1
+    | ARCHIVED => 0
+    };
+};
 module Measurable = {
   type t = {
     id: string,
@@ -239,6 +256,35 @@ module Measurable = {
     measurements: option(list(Measurement.t)),
     series: option(Series.t),
   };
+
+  let toStatus = (measurable: t) => {
+    let state = measurable.state |> E.O.toExn("Needs state from GraphQL");
+    if (state === `ARCHIVED) {
+      MeasurableStatus.ARCHIVED;
+    } else if (state === `JUDGED) {
+      JUDGED;
+    } else {
+      let pastExpectedResolutionDate =
+        switch (measurable.expectedResolutionDate) {
+        | None => false
+        | Some(e) => MomentRe.Moment.isAfter(MomentRe.momentNow(), e)
+        };
+      if (pastExpectedResolutionDate) {PENDING_REVIEW} else {OPEN};
+    };
+  };
+
+  let compare = (measurableA: t, measurableB: t) =>
+    switch (
+      toStatus(measurableA),
+      toStatus(measurableB),
+      measurableA.expectedResolutionDate,
+      measurableB.expectedResolutionDate,
+    ) {
+    | (a, b, Some(aa), Some(bb)) when a == b =>
+      MomentRe.Moment.isAfter(aa, bb) ? 1 : (-1)
+    | (a, b, _, _) =>
+      MeasurableStatus.toInt(a) > MeasurableStatus.toInt(b) ? (-1) : 1
+    };
 
   let make =
       (

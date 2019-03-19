@@ -1,5 +1,4 @@
 open Css;
-open PrimaryTableBase;
 let group =
   style([
     border(`px(1), `solid, hex("eee")),
@@ -130,7 +129,7 @@ let statusRow =
 let statusColor = (~measurable: DataModel.Measurable.t) => {
   let main = [padding2(~v=`px(1), ~h=`px(8)), borderRadius(`px(4))];
   let statusSpecific =
-    switch (status(measurable)) {
+    switch (DataModel.Measurable.toStatus(measurable)) {
     | OPEN => [background(`hex("bff5bd"))]
     | PENDING_REVIEW => [background(`hex("fff8da"))]
     | JUDGED => [background(`hex("ead7f3"))]

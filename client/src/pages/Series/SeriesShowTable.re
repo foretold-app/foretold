@@ -17,7 +17,7 @@ let make =
     let _measurables =
       TableS.sortMeasurables(measurables)
       |> E.JsArray.filter((e: DataModel.Measurable.t) =>
-           PrimaryTableBase.status(e) != ARCHIVED
+           DataModel.Measurable.toStatus(e) != ARCHIVED
          );
     <div className=PrimaryTableStyles.group>
       {
@@ -67,12 +67,10 @@ let make =
                  {TableS.measurers(~m)}
                </div>
                <div className=SeriesShowTableStyles.column>
-                 TableS.(TableS.dateStatusI(~measurable=m, ~dateDisplay=TOP))
+                 <C.Measurable.StatusDisplay measurable=m dateDisplay=TOP />
                </div>
                <div className=SeriesShowTableStyles.column>
-                 TableS.(
-                   TableS.dateStatusI(~measurable=m, ~dateDisplay=BOTTOM)
-                 )
+                 <C.Measurable.StatusDisplay measurable=m dateDisplay=BOTTOM />
                </div>
              </div>
            )

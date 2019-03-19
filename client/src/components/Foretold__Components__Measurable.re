@@ -2,8 +2,89 @@ open Utils;
 open Style.Grid;
 open Foretold__GraphQL;
 
-module FullPresentation = {
+module StatusDisplay = {
+  let formatDate = e =>
+    e |> E.O.fmap(E.M.format(E.M.format_simple)) |> E.O.default("");
+
+  type dateDisplay =
+    | TOP
+    | BOTTOM
+    | WHOLE;
+
+  type status =
+    | OPEN
+    | PENDING_REVIEW
+    | ARCHIVED
+    | JUDGED;
+
+  let dateFinder = (head, p, date, dateDisplay) => {
+    let date = formatDate(date);
+    switch (dateDisplay) {
+    | TOP => head |> ste
+    | BOTTOM => p ++ date |> ste
+    | WHOLE =>
+      <div className=PrimaryTableStyles.statusRow>
+        <h3> {head |> ste} </h3>
+        <p> {p ++ date |> ste} </p>
+      </div>
+    };
+  };
+
+  let statusShow = (~measurable: DataModel.Measurable.t, ~dateDisplay) =>
+    switch (DataModel.Measurable.toStatus(measurable)) {
+    | OPEN =>
+      dateFinder(
+        "Open",
+        "Closes ~",
+        measurable.expectedResolutionDate,
+        dateDisplay,
+      )
+    | PENDING_REVIEW =>
+      dateFinder(
+        "Judgement Pending",
+        "Pending since ",
+        measurable.expectedResolutionDate,
+        dateDisplay,
+      )
+    | ARCHIVED =>
+      dateFinder(
+        "Archived",
+        "Archived on ",
+        measurable.stateUpdatedAt,
+        dateDisplay,
+      )
+    | JUDGED =>
+      dateFinder(
+        "Judged",
+        "Judged on ",
+        measurable.stateUpdatedAt,
+        dateDisplay,
+      )
+    };
   let component = ReasonReact.statelessComponent("MeasurableShow");
+
+  let make =
+      (
+        ~measurable: DataModel.Measurable.t,
+        ~dateDisplay=WHOLE,
+        ~withStatusColorSurrounding=false,
+        _children,
+      ) => {
+    ...component,
+    render: _self => {
+      let finder = statusShow(~measurable, ~dateDisplay);
+      true ?
+        <div className={PrimaryTableStyles.statusColor(~measurable)}>
+          finder
+        </div> :
+        finder;
+    },
+  };
+};
+
+module FullPresentation = {
+  let component =
+    ReasonReact.statelessComponent("MeasurableFullPresentation");
 
   module Styles = {
     open Css;
@@ -31,7 +112,11 @@ module FullPresentation = {
                      {MeasurableTableStyles.description(~m)}
                    </Div>
                    <Div flex=1>
-                     {MeasurableTableStyles.dateStatusWrapper(~measurable=m)}
+                     <StatusDisplay
+                       measurable=m
+                       dateDisplay=WHOLE
+                       withStatusColorSurrounding=true
+                     />
                    </Div>
                  </Div>
                </Div>

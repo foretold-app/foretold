@@ -4,17 +4,22 @@ module.exports = {
   up: async function () {
     const user = await models.User.findOne({
       where: { name: 'Service Account' },
+      include: [models.User.Agent]
     });
-    await models.Channel.findOrCreate({
+    let channel = await models.Channel.findOne({
       where: { name: 'unlisted' },
-      defaults: {
+    });
+
+    if (!channel) {
+      channel = await models.Channel.create({
         name: 'unlisted',
-        agentId: user.agentId,
         creatorId: user.agentId,
         isArchived: false,
         isPublic: false,
-      },
-    });
+      });
+
+      await models.Channel.Agents.set(channel, user.Agent);
+    }
   },
 
   down: async function () {

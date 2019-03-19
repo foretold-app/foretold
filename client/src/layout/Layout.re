@@ -3,7 +3,7 @@ open Foretold__GraphQL;
 
 let defaultChannel = "general";
 let component = ReasonReact.statelessComponent("TopLevel");
-let make = (~route: route, _children) => {
+let make = (~route: Route.t, _children) => {
   ...component,
   render: _ => {
     let channel =
@@ -21,7 +21,7 @@ let make = (~route: route, _children) => {
          switch (loggedInUser) {
          | Some(_userIsLoggedIn) =>
            let inApp = (~key="", e) =>
-             FillWithSidebar.make(~channel, ~loggedInUser)
+             Layout__Component__FillWithSidebar.make(~channel, ~loggedInUser)
              |> E.React.makeToEl(~children=E.React.makeToEl(e), ~key);
            switch (route) {
            | AgentMeasurables(id) =>

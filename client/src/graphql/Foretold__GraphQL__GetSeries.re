@@ -10,8 +10,16 @@ type series = {
   creator: option(creator),
 };
 
+let toAgent = (m: creator): DataModel.Agent.t =>
+  DataModel.Agent.make(~id=m.id, ~name=m.name, ());
+
 let toSeries = (m: series): DataModel.Series.t =>
-  DataModel.Series.make(~id=m.id, ~name=m.name, ());
+  DataModel.Series.make(
+    ~id=m.id,
+    ~name=m.name,
+    ~creator=m.creator |> E.O.fmap(toAgent),
+    (),
+  );
 
 module Query = [%graphql
   {|
@@ -36,7 +44,7 @@ let component = (~id, innerFn) => {
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
     |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(e => e##series)
+    |> E.R.fmap(e => e##series |> E.O.fmap(toSeries))
     |> E.R.fmap(innerFn)
     |> E.R.id
   )

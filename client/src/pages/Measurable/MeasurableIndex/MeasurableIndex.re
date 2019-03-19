@@ -47,7 +47,7 @@ let itemHeader = (channel: string, onForward, onBackward, isAtStart, isAtEnd) =>
     <Antd.Button onClick={_ => onForward()} disabled=isAtEnd>
       <Icon.Icon icon="ARROW_RIGHT" />
     </Antd.Button>
-    {SLayout.button(channel)}
+    {C.Channel.SimpleHeader.button(channel)}
   </>;
 
 let selectedView =
@@ -82,7 +82,7 @@ let selectedView =
     <SLayout.MainSection>
       {
         switch (measurable) {
-        | Some(m) => <MeasurableShow__Component id={m.id} loggedInUser />
+        | Some(m) => <C.Measurable.FullPresentation id={m.id} loggedInUser />
         | None => "Item not found" |> ste
         }
       }
@@ -132,7 +132,7 @@ let deselectedView =
                        onClick={
                          _e => Urls.pushToLink(SeriesShow(x.channel, x.id))
                        }>
-                       <SeriesCard series=x />
+                       <C.Series.Card series=x />
                      </div>
                    )
                 |> ReasonReact.array
@@ -171,12 +171,12 @@ let make = (~channel: string, ~loggedInUser: Queries.User.t, _children) => {
     | SelectIncrement =>
       ReasonReact.Update({
         ...state,
-        selected: state.selected |> E.O.fmap(r => r + 1),
+        selected: state.selected |> E.O.fmap(E.I.increment),
       })
     | SelectDecrement =>
       ReasonReact.Update({
         ...state,
-        selected: state.selected |> E.O.fmap(r => r - 1),
+        selected: state.selected |> E.O.fmap(E.I.decrement),
       })
     },
   render: ({state, send}) =>

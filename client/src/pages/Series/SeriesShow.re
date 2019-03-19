@@ -5,11 +5,6 @@ open Foretold__GraphQL;
 
 module Styles = {
   open Css;
-  let sidebar =
-    style([Css.float(`left), left(px(0)), backgroundColor(hex("eee"))]);
-
-  let body = style([marginLeft(px(200)), padding(px(30))]);
-
   let header =
     style([
       backgroundColor(hex("f5f7f9")),
@@ -27,7 +22,7 @@ type action =
 
 let component = ReasonReact.reducerComponent("Measurables");
 
-let seriesTop = (series: Queries.Series.series) =>
+let seriesHero = (series: DataModel.Series.t) =>
   <Div flexDirection=`column styles=[Styles.header]>
     <Div flex=1>
       <Div flexDirection=`row>
@@ -75,7 +70,9 @@ let make =
 
     let bottom =
       state.selected
-      |> E.O.fmap(elId => <MeasurableShow__Component id=elId loggedInUser />)
+      |> E.O.fmap(elId =>
+           <C.Measurable.FullPresentation id=elId loggedInUser />
+         )
       |> E.O.React.defaultNull;
 
     Queries.Series.component(~id)
@@ -86,13 +83,13 @@ let make =
                SLayout.seriesHead(
                  channel,
                  series
-                 |> E.O.bind(_, (s: Queries.Series.series) => s.name)
+                 |> E.O.bind(_, (s: DataModel.Series.t) => s.name)
                  |> E.O.default(""),
                )
              }
            </SLayout.Header>
            <SLayout.MainSection>
-             {series |> E.O.fmap(seriesTop) |> E.O.React.defaultNull}
+             {series |> E.O.fmap(seriesHero) |> E.O.React.defaultNull}
              <div className=SeriesShowTableStyles.topPart> medium </div>
              bottom
            </SLayout.MainSection>

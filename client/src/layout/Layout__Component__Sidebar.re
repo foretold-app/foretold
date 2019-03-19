@@ -115,14 +115,11 @@ let make = (~channel, ~loggedInUser: Queries.User.t, _children) => {
           ]
           |> E.L.fmap(e =>
                <div
-                 onClick={_e => Urls.pushToLink(ChannelShow(e))}
+                 onClick={_e => DataModel.Channel.showPush(e)}
                  className={
                    Some(e) == channel ? Styles.selectedItem : Styles.item
                  }>
-                 <span>
-                   <span className=Styles.hash> {"#" |> ste} </span>
-                   <span> {e |> ste} </span>
-                 </span>
+                 {DataModel.Channel.present(~hashClassName=Styles.hash, e)}
                </div>
              )
           |> E.A.of_list

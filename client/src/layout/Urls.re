@@ -1,4 +1,4 @@
-open Routes;
+open Routes.Route;
 
 type link =
   | Home

@@ -1,3 +1,6 @@
+open Rationale.Function.Infix;
+open Utils;
+
 type user = {
   id: string,
   name: string,
@@ -12,18 +15,16 @@ module Bot = {
   };
 };
 
-module Series = {
-  type t = {
-    id: string,
-    description: option(string),
-    name: option(string),
-  };
-
-  let make = (~id, ~name=None, ~description=None, ()) => {
-    id,
-    name,
-    description,
-  };
+module Channel = {
+  type t = string;
+  let showLink = t => Urls.ChannelShow(t);
+  let showUrl = showLink ||> Urls.mapLinkToUrl;
+  let showPush = showLink ||> Urls.pushToLink;
+  let present = (~hashClassName="", s) =>
+    <span>
+      <span className=hashClassName> {"#" |> ste} </span>
+      <span> {s |> ste} </span>
+    </span>;
 };
 
 module Agent = {
@@ -50,6 +51,22 @@ module Agent = {
     name,
     measurementCount,
     agentType,
+  };
+};
+
+module Series = {
+  type t = {
+    id: string,
+    description: option(string),
+    name: option(string),
+    creator: option(Agent.t),
+  };
+
+  let make = (~id, ~name=None, ~description=None, ~creator=None, ()) => {
+    id,
+    name,
+    description,
+    creator,
   };
 };
 

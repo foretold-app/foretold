@@ -55,10 +55,12 @@ let make =
     (~channel: option(string), ~loggedInUser: Queries.User.t, children) => {
   ...component,
   render: _self =>
-    <UseRouterForLinks>
+    <Layout__Component__UseRouterForLinks>
       <div className=Styles.outer>
-        <div className=Styles.left> <Sidebar channel loggedInUser /> </div>
+        <div className=Styles.left>
+          <Layout__Component__Sidebar channel loggedInUser />
+        </div>
         <div className=Styles.right> children </div>
       </div>
-    </UseRouterForLinks>,
+    </Layout__Component__UseRouterForLinks>,
 };

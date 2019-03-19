@@ -32,6 +32,11 @@ module F = {
   let apply = (a, e) => a |> e;
 };
 
+module I = {
+  let increment = 1->(+);
+  let decrement = 1->(-);
+};
+
 /* R for Result */
 module R = {
   let result = Rationale.Result.result;

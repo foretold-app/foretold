@@ -6,11 +6,13 @@ type series = {
   name: option(string),
 };
 
-let toSeries = (c: series): DataModel.Series.t => {
-  id: c.id,
-  description: c.description,
-  name: c.name,
-};
+let toSeries = (c: series): DataModel.Series.t =>
+  DataModel.Series.make(
+    ~id=c.id,
+    ~description=c.description,
+    ~name=c.name,
+    (),
+  );
 
 type creator = {
   id: string,

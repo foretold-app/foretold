@@ -169,9 +169,14 @@ const schema = new graphql.GraphQLSchema({
         },
       },
 
+      // @done
       channelCreate: {
         type: types.channel,
-        args: { id: { type: graphql.GraphQLString } },
+        args: {
+          input: {
+            type: new graphql.GraphQLNonNull(types.channelInput),
+          },
+        },
         resolve: async (root, values, options) => {
           return data.channelsData.channelCreate(root, values, options);
         },

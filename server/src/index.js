@@ -32,21 +32,14 @@ const server = new ApolloServer({
   },
   context: async ({ req }) => {
     const token = getToken(req);
-    const user = new Promise(resolve =>
-      jwt.verify(token, process.env.AUTH0_SECRET,(err, result) => {
+    const user = new Promise((resolve) => {
+      return jwt.verify(token, process.env.AUTH0_SECRET, (err, result) => {
         if (err) {
-          resolve({
-            ok: false,
-            result: err
-          });
-        } else {
-          resolve({
-            ok: true,
-            result
-          });
+          return resolve({ ok: false, result: err });
         }
+        resolve({ ok: true, result });
       })
-    );
+    });
     return { user };
   }
 });

@@ -8,6 +8,7 @@ const { capitalizeFirstLetter } = require('../helpers');
 
 const { competitor } = require('./competitor');
 const { valueType } = require('./value-type');
+const { channelInput } = require('./channel-input');
 
 /**
  * @deprecated
@@ -79,8 +80,8 @@ const channel = new graphql.GraphQLObjectType({
     id: { type: graphql.GraphQLString },
     name: { type: graphql.GraphQLString },
     description: { type: graphql.GraphQLString },
-    isArchived: { type: graphql.GraphQLString },
-    isPublic: { type: graphql.GraphQLString },
+    isArchived: { type: graphql.GraphQLBoolean },
+    isPublic: { type: graphql.GraphQLBoolean },
     creator: {
       type: agentType,
       resolve: resolver(models.Agent),
@@ -115,6 +116,7 @@ module.exports = {
   measurementType,
 
   channel,
+  channelInput,
 
   // @todo: tmp
   filterr,

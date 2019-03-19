@@ -24,12 +24,12 @@ module.exports = (sequelize, DataTypes) => {
     isArchived: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      default: false,
+      defaultValue: false,
     },
     isPublic: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      default: true,
+      defaultValue: true,
     },
   });
 

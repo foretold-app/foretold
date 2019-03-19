@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const models = require("../models");
+const models = require('../models');
 
 class UsersData {
 
@@ -8,12 +8,11 @@ class UsersData {
    * @return {Promise<Array<Model>|Model>}
    */
   async auth0User(auth0Id) {
-    const users = await models.User.findAll({
-      where: {
-        auth0Id: auth0Id,
-      }
+    const user = await models.User.findOne({
+      where: { auth0Id: auth0Id },
     });
-    return users && users[0];
+    if (!user) throw new Error('User is not found');
+    return user;
   }
 
   /**
@@ -23,10 +22,9 @@ class UsersData {
   async getAuth0Id(options) {
     const res = await options.user;
     const ok = _.get(res, 'ok');
-    const name = _.get(res, 'result.name');
     const sub = _.get(res, 'result.sub');
-    if (!ok) throw new Error(name);
-    if (!sub) throw new Error("No User Id");
+    if (!ok) throw new Error('Something went wrong');
+    if (!sub) throw new Error('No User Id');
     return sub;
   }
 

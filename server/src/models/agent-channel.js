@@ -1,25 +1,22 @@
 /**
  * @param sequelize
- * @param DataTypes
  * @return {*}
  */
 module.exports = (sequelize) => {
-  const AgentChannel = sequelize.define('AgentsChannels', {}, {
-    timestamps: false
-  });
+  const AgentsChannels = sequelize.define('AgentsChannels', {});
 
-  AgentChannel.associate = function (models) {
+  AgentsChannels.associate = function (models) {
     models.Agent.belongsToMany(models.Channel, {
-      through: AgentChannel,
+      through: AgentsChannels,
       foreignKey: 'id',
       as: 'agentId',
     });
     models.Channel.belongsToMany(models.Agent, {
-      through: AgentChannel,
+      through: AgentsChannels,
       foreignKey: 'id',
       as: 'channelId',
     });
   };
 
-  return AgentChannel;
+  return AgentsChannels;
 };

@@ -161,11 +161,15 @@ const schema = new graphql.GraphQLSchema({
         }
       },
 
+      // @done
       channelUpdate: {
         type: types.channel,
-        args: { id: { type: graphql.GraphQLString } },
-        resolve: async (root, values, options) => {
-          return data.channelsData.channelUpdate(root, values, options);
+        args: {
+          id: { type: graphql.GraphQLString },
+          input: { type: new graphql.GraphQLNonNull(types.channelInput) },
+        },
+        resolve: async (root, values) => {
+          return data.channelsData.channelUpdate(root, values);
         },
       },
 
@@ -173,9 +177,7 @@ const schema = new graphql.GraphQLSchema({
       channelCreate: {
         type: types.channel,
         args: {
-          input: {
-            type: new graphql.GraphQLNonNull(types.channelInput),
-          },
+          input: { type: new graphql.GraphQLNonNull(types.channelInput) },
         },
         resolve: async (root, values, options) => {
           return data.channelsData.channelCreate(root, values, options);

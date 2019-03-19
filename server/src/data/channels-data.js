@@ -10,20 +10,19 @@ class ChannelsData {
     this.usersData = new UsersData();
   }
 
-  async channelUpdate(root, values, options) {
-    console.log(root, values, options);
-    return true;
+  async channelUpdate(root, values) {
+    const id = _.get(values, 'id');
+    const input = _.get(values, 'input');
+    return await this.updateOne(id, input);
   }
 
   async channelCreate(root, values, options) {
-    // @todo: fix
+    // @todo:
     const auth0Id = await this.usersData.getAuth0Id(options);
     const user = await this.usersData.auth0User(auth0Id);
 
     const input = _.get(values, 'input');
-    const channel = await this.createOne(user, input);
-
-    return channel;
+    return await this.createOne(user, input);
   }
 
   async addPersonToChannel(root, values, options) {
@@ -63,12 +62,24 @@ class ChannelsData {
 
   /**
    * @param {string} id
+   * @param {object} input
+   * @return {Promise<Model>}
+   */
+  async updateOne(id, input) {
+    return await models.Channel.update({
+      input,
+      where: { id },
+    });
+  }
+
+  /**
+   * @param {string} id
    * @return {Promise<Model>}
    */
   async getAgentsByChannelId(id) {
     const channel = await models.Channel.findOne({
       where: { id },
-      include: [{model: models.Agent, as: 'agents'}],
+      include: [{ model: models.Agent, as: 'agents' }],
     });
     return channel.agents;
   }
@@ -80,7 +91,7 @@ class ChannelsData {
   async getCreatorByChannelId(id) {
     const channel = await models.Channel.findOne({
       where: { id },
-      include: [{model: models.Agent, as: 'creator'}],
+      include: [{ model: models.Agent, as: 'creator' }],
     });
     return channel.creator;
   }

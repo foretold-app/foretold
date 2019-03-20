@@ -133,6 +133,7 @@ const schema = new graphql.GraphQLSchema({
           return data.seriesData.createSeries(root, values, options);
         }
       },
+      // @ok
       archiveMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
@@ -140,6 +141,7 @@ const schema = new graphql.GraphQLSchema({
           return data.measurablesData.archiveMeasurable(root, values, options);
         }
       },
+      // @ok
       unArchiveMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
@@ -147,6 +149,7 @@ const schema = new graphql.GraphQLSchema({
           return data.measurablesData.unArchiveMeasurable(root, values, options);
         }
       },
+      // @ok
       editMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id', 'name', 'description', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty'])),

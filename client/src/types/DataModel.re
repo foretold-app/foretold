@@ -191,6 +191,8 @@ module Measurement = {
     agent: option(Agent.t),
   };
 
+  let isJudgement = (m: t) => m.competitorType == `OBJECTIVE;
+
   let make =
       (
         ~id,
@@ -285,6 +287,8 @@ module Measurable = {
     | (a, b, _, _) =>
       MeasurableStatus.toInt(a) > MeasurableStatus.toInt(b) ? (-1) : 1
     };
+
+  let stableSort = m => E.A.stableSortBy(m, compare);
 
   let make =
       (

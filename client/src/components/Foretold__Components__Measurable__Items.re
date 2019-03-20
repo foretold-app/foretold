@@ -1,53 +1,43 @@
 open Utils;
+open DataModel;
 
 module Shared = Foretold__Components__Shared;
-let formatDate = e =>
-  e |> E.O.fmap(E.M.format(E.M.format_simple)) |> E.O.default("");
 
-type dateDisplay =
-  | TOP
-  | BOTTOM
-  | WHOLE;
+type measurable = Measurable.t;
 
-let sortMeasurables = m => E.A.stableSortBy(m, DataModel.Measurable.compare);
-
-module Entities = {
-  let graph = Data.make;
-
-  let description = (description: string) =>
-    ItemShow.findName(graph, description);
-
-  let nameWithDate = (~m: DataModel.Measurable.t) =>
-    switch (formatDate(m.descriptionDate)) {
-    | "" => m.name
-    | e => m.name ++ " on " ++ e
-    };
-
-  let itemUrl = id => {j|/items/$id|j};
-
-  let xEntityLink =
-      (attribute, ~m: DataModel.Measurable.t, ~className: string) =>
+module MeasurableEntityLinks = {
+  let xEntityLink = (attribute, ~m: measurable, ~className: string) =>
     m
     |> attribute
-    |> E.O.bind(_, ItemShow.findName(graph))
+    |> E.O.bind(_, Foretold__Components__Ken.findName)
     |> E.O.bind(_, r =>
          m
          |> attribute
-         |> E.O.fmap(d => <a href={d |> itemUrl} className> {r |> ste} </a>)
+         |> E.O.fmap(d =>
+              <a href={d |> Foretold__Components__Ken.itemUrl} className>
+                {r |> ste}
+              </a>
+            )
        );
 
   let nameEntityLink = xEntityLink(r => r.descriptionEntity);
   let propertyEntityLink = xEntityLink(r => r.descriptionProperty);
 };
 
-let link = (~m: DataModel.Measurable.t) =>
+let formatDate = e =>
+  e |> E.O.fmap(E.M.format(E.M.format_simple)) |> E.O.default("");
+
+let link = (~m: measurable) =>
   <>
     {
-      Entities.nameEntityLink(~m, ~className=PrimaryTableStyles.itemLink)
+      MeasurableEntityLinks.nameEntityLink(
+        ~m,
+        ~className=PrimaryTableStyles.itemLink,
+      )
       |> E.O.React.defaultNull
     }
     {
-      Entities.propertyEntityLink(
+      MeasurableEntityLinks.propertyEntityLink(
         ~m,
         ~className=PrimaryTableStyles.propertyLink,
       )
@@ -55,9 +45,9 @@ let link = (~m: DataModel.Measurable.t) =>
     }
     <span className=PrimaryTableStyles.namme> {m.name |> ste} </span>
     {
-      switch (formatDate(m.descriptionDate)) {
-      | "" => E.React.null
-      | e =>
+      switch (m.descriptionDate |> E.O.fmap(E.M.goFormat_simple)) {
+      | None => E.React.null
+      | Some(e) =>
         [|
           <span className=PrimaryTableStyles.calDate> {"on " |> ste} </span>,
           <span className=PrimaryTableStyles.calDateO> {e |> ste} </span>,
@@ -67,71 +57,67 @@ let link = (~m: DataModel.Measurable.t) =>
     }
   </>;
 
-let description = (~m: DataModel.Measurable.t) =>
+let description = (~m: measurable) =>
   switch (m.description) {
   | Some("")
   | None => E.React.null
   | Some(text) => <p> {text |> ste} </p>
   };
 
-/* TODO: Move */
-let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
-
-let endpointResponse = (~m: DataModel.Measurable.t) =>
+let endpointResponse = (~m: measurable) =>
   switch (
     m.resolutionEndpoint |> E.O.default(""),
     m.resolutionEndpointResponse,
   ) {
   | ("", _) => E.React.null
-  | (_, Some(r)) => "Current Endpoint Value: " ++ stringOfFloat(r) |> ste
+  | (_, Some(r)) =>
+    "Current Endpoint Value: " ++ E.Float.with3DigitsPrecision(r) |> ste
   | _ => E.React.null
   };
 
-let creatorLink = (~m: DataModel.Measurable.t) =>
+let creatorLink = (~m: measurable) =>
   m.creator
-  |> E.O.fmap((c: DataModel.Agent.t) =>
+  |> E.O.fmap((c: Agent.t) =>
        <div className=Shared.Item.item>
-         <a href={DataModel.Url.toString(AgentShow(c.id))}>
+         <a href={Url.toString(AgentShow(c.id))}>
            {c.name |> E.O.default("") |> ste}
          </a>
        </div>
      )
   |> E.O.React.defaultNull;
 
-let editLink = (~m: DataModel.Measurable.t) =>
+let editLink = (~m: measurable) =>
   <div className=Shared.Item.item>
     <a
-      href={DataModel.Url.toString(MeasurableEdit(m.id))}
+      href={Url.toString(MeasurableEdit(m.id))}
       className={Shared.Item.itemButton(NORMAL)}>
       {"Edit" |> ste}
     </a>
   </div>;
 
-let measurements = (~m: DataModel.Measurable.t) =>
+let measurements = (~m: measurable) =>
   switch (m.measurementCount) {
-  | Some(0) => <div />
-  | None => <div />
+  | Some(0) => E.React.null
+  | None => E.React.null
   | Some(count) =>
     <div className=Shared.Item.item>
       <Icon.Icon icon="BULB" />
-      <span> {count |> string_of_int |> ste} </span>
+      {count |> string_of_int |> ste}
     </div>
   };
 
-let measurers = (~m: DataModel.Measurable.t) =>
+let measurers = (~m: measurable) =>
   switch (m.measurerCount) {
-  | Some(0) => <div />
-  | None => <div />
+  | Some(0) => E.React.null
+  | None => E.React.null
   | Some(count) =>
     <div className=Shared.Item.item>
-      <span>
-        <Icon.Icon icon="PEOPLE" />
-        {count |> string_of_int |> ste}
-      </span>
+      <Icon.Icon icon="PEOPLE" />
+      {count |> string_of_int |> ste}
     </div>
   };
 
-let series = (~m: DataModel.Measurable.t) =>
+let series = (~m: measurable) =>
   m.series
   |> E.O.bind(_, r =>
        switch (r.name) {
@@ -141,7 +127,7 @@ let series = (~m: DataModel.Measurable.t) =>
              <Icon.Icon icon="LAYERS" />
              <a
                href={
-                 DataModel.Url.toString(
+                 Url.toString(
                    SeriesShow(m.channel |> E.O.default(""), r.id),
                  )
                }>
@@ -154,22 +140,19 @@ let series = (~m: DataModel.Measurable.t) =>
      )
   |> E.O.React.defaultNull;
 
-let expectedResolutionDate = (~m: DataModel.Measurable.t) =>
+let expectedResolutionDate = (~m: measurable) =>
   <div className=Shared.Item.item>
-    <span> {"Resolves on " |> ste} </span>
-    <span> {m.expectedResolutionDate |> formatDate |> ste} </span>
+    {"Resolves on " ++ (m.expectedResolutionDate |> formatDate) |> ste}
   </div>;
 
-let resolutionEndpoint = (~m: DataModel.Measurable.t) =>
+let resolutionEndpoint = (~m: measurable) =>
   switch (m.resolutionEndpoint |> E.O.default("")) {
   | "" => ReasonReact.null
   | text =>
-    <div className=Shared.Item.item>
-      <span> <span> {"Endpoint: " |> ste} </span> {text |> ste} </span>
-    </div>
+    <div className=Shared.Item.item> {"Endpoint: " ++ text |> ste} </div>
   };
 
-let archiveButton = (~m: DataModel.Measurable.t) =>
+let archiveButton = (~m: measurable) =>
   Foretold__GraphQL.Mutations.MeasurableUnarchive.Mutation.make((mutation, _) =>
     <div className=Shared.Item.item>
       <div
@@ -187,7 +170,7 @@ let archiveButton = (~m: DataModel.Measurable.t) =>
   )
   |> E.React.el;
 
-let unArchiveButton = (~m: DataModel.Measurable.t) =>
+let unArchiveButton = (~m: measurable) =>
   Foretold__GraphQL.Mutations.MeasurableArchive.Mutation.make((mutation, _) =>
     <div className=Shared.Item.item>
       <div
@@ -205,6 +188,6 @@ let unArchiveButton = (~m: DataModel.Measurable.t) =>
   )
   |> E.React.el;
 
-let archiveOption = (~m: DataModel.Measurable.t) =>
-  DataModel.Measurable.toStatus(m) !== ARCHIVED ?
+let archiveOption = (~m: measurable) =>
+  Measurable.toStatus(m) !== ARCHIVED ?
     archiveButton(~m) : unArchiveButton(~m);

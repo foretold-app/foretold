@@ -5,8 +5,6 @@ open Css;
 
 type measurement = DataModel.Measurement.t;
 
-let isJudgement = (m: measurement) => m.competitorType == `OBJECTIVE;
-
 module Styles = {
   open Css;
 
@@ -111,7 +109,6 @@ module Styles = {
 };
 
 module Helpers = {
-  let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
   let smallDistribution = (m: measurement, g: (float, float)) =>
     switch (m.value) {
     | Belt.Result.Ok(`FloatCdf(r)) =>
@@ -120,24 +117,25 @@ module Helpers = {
       |> Value.FloatCdf.toPoints
       |> (data => <WideChart data bounds=g />)
     | Belt.Result.Ok(`FloatPoint(r)) =>
-      <div className=Styles.middle> {stringOfFloat(r) |> ste} </div>
-    | _ => "" |> ste
+      <div className=Styles.middle>
+        {r |> E.Float.with3DigitsPrecision |> ste}
+      </div>
+    | _ => E.React.null
     };
-
-  let formatDate = e =>
-    e |> E.O.fmap(E.M.format(E.M.format_simple)) |> E.O.default("");
 
   let description = (~m: measurement) =>
-    switch (m.description |> E.O.default("")) {
-    | "" => E.React.null
-    | text =>
-      <div className=Styles.descriptionStyle> <p> {text |> ste} </p> </div>
-    };
+    m.description
+    |> E.O.fmap(text =>
+         <div className=Styles.descriptionStyle> <p> {text |> ste} </p> </div>
+       )
+    |> E.O.React.defaultNull;
 
   let relevantAt = (~m: measurement) =>
-    <div className=Styles.date> {m.relevantAt |> formatDate |> ste} </div>;
-
-  let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
+    m.relevantAt
+    |> E.O.fmap(d =>
+         <div className=Styles.date> {d |> E.M.goFormat_simple |> ste} </div>
+       )
+    |> E.O.React.defaultNull;
 
   let getFloatCdf = (e: Belt.Result.t(Value.t, string)) =>
     switch (e) {
@@ -176,7 +174,7 @@ module Helpers = {
     Rationale.Option.Infix.(
       floatCdf(e)
       >>= E.FloatCdf.firstAboveValue(n)
-      <$> stringOfFloat
+      <$> E.Float.with3DigitsPrecision
       |> E.O.default("")
     );
 
@@ -201,7 +199,10 @@ module Helpers = {
         E.FloatCdf.firstAboveValue(0.95, r),
       ) {
       | (Some(low), Some(high)) =>
-        let foo = stringOfFloat(low) ++ " to " ++ stringOfFloat(high);
+        let foo =
+          E.Float.with3DigitsPrecision(low)
+          ++ " to "
+          ++ E.Float.with3DigitsPrecision(high);
         Some(foo);
       | _ => None
       }
@@ -234,7 +235,7 @@ module Helpers = {
         ),
         selector(" a", [fontSize(`em(0.9))]),
       ]);
-    let isJudge = isJudgement(m);
+    let isJudge = DataModel.Measurement.isJudgement(m);
 
     if (isJudge) {
       <div className=judgementStyle>

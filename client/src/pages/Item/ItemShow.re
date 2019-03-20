@@ -2,29 +2,10 @@ open Utils;
 
 let component = ReasonReact.statelessComponent("ItemShow");
 
-let findName = (graph, propertyId) =>
-  graph
-  |> Graph_T.F.factList
-  |> Graph_Fact_Filters.withSubject(propertyId)
-  |> Graph_Fact_Filters.withProperty("@base/properties/p-name")
-  |> E.L.head
-  |> E.O.bind(_, (k: Graph_T.T.fact) =>
-       switch (k.value.valueType) {
-       | String(s) => Some(s)
-       | ThingId(s) => Some(s)
-       | _ => None
-       }
-     );
-
 let make = (~id: string, _children) => {
   ...component,
   render: _ => {
-    let graph = Data.make;
-    let names =
-      graph
-      |> Graph_T.F.factList
-      |> Graph_Fact_Filters.withSubject(id)
-      |> E.L.fmap((f: Graph_T.T.fact) => f);
+    let names = C.Ken.names(id);
     <>
       <SLayout.Header> {SLayout.Header.textDiv(id)} </SLayout.Header>
       <SLayout.MainSection>
@@ -35,7 +16,7 @@ let make = (~id: string, _children) => {
                <>
                  <h3>
                    {
-                     findName(graph, r.propertyId)
+                     C.Ken.findName(r.propertyId)
                      |> E.O.default("no-name")
                      |> ste
                    }

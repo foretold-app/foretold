@@ -1,8 +1,5 @@
 open Utils;
 
-let formatDate = e =>
-  e |> E.O.fmap(E.M.format(E.M.format_simple)) |> E.O.default("");
-
 type dateDisplay =
   | TOP
   | BOTTOM
@@ -48,7 +45,7 @@ let statusRow =
   );
 
 let dateFinder = (head, p, date, dateDisplay) => {
-  let date = formatDate(date);
+  let date = date |> E.O.fmap(E.M.goFormat_simple) |> E.O.default("");
   switch (dateDisplay) {
   | TOP => head |> ste
   | BOTTOM => p ++ date |> ste

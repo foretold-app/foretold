@@ -13,6 +13,16 @@ module Styles = {
       borderRadius(`px(3)),
       marginBottom(`px(10)),
     ]);
+
+  let topPart =
+    style([
+      maxHeight(`px(300)),
+      overflowY(`auto),
+      borderRadius(`px(2)),
+      border(`px(1), `solid, `hex("ddd")),
+      marginTop(`em(2.)),
+      marginBottom(`em(2.)),
+    ]);
 };
 
 type state = {selected: option(string)};
@@ -61,7 +71,7 @@ let make =
   render: ({state, send}) => {
     let medium =
       Queries.Measurables.componentWithSeries(channel, id, measurables =>
-        <SeriesShowTable
+        <C.Measurables.SeriesTable
           measurables
           selected={state.selected}
           onClick={id => send(UpdateSelected(id))}
@@ -90,7 +100,7 @@ let make =
            </SLayout.Header>
            <SLayout.MainSection>
              {series |> E.O.fmap(seriesHero) |> E.O.React.defaultNull}
-             <div className=SeriesShowTableStyles.topPart> medium </div>
+             <div className=Styles.topPart> medium </div>
              bottom
            </SLayout.MainSection>
          </>

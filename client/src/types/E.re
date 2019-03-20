@@ -28,8 +28,13 @@ module O = {
   };
 };
 
+/* Functions */
 module F = {
   let apply = (a, e) => a |> e;
+};
+
+module Float = {
+  let with3DigitsPrecision = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
 };
 
 module I = {
@@ -69,6 +74,8 @@ module M = {
   let format = Moment.format;
   let format_standard = "MMM DD, YYYY HH:MM:SS";
   let format_simple = "L";
+  /* TODO: Figure out better name */
+  let goFormat_simple = format(format_simple);
 };
 
 module JsDate = {

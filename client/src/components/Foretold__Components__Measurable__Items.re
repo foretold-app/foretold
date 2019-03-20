@@ -27,35 +27,47 @@ module MeasurableEntityLinks = {
 let formatDate = e =>
   e |> E.O.fmap(E.M.format(E.M.format_simple)) |> E.O.default("");
 
-let link = (~m: measurable) =>
+let dateOnStyle =
+  Css.(
+    style([
+      marginLeft(`em(0.3)),
+      lineHeight(`em(1.56)),
+      fontSize(`em(1.1)),
+    ])
+  );
+
+let dateItem = (~m: measurable, ~showOn=true, ~onStyle=dateOnStyle, ()) =>
+  switch (m.descriptionDate |> E.O.fmap(E.M.goFormat_simple), showOn) {
+  | (None, _) => E.React.null
+  | (Some(e), true) =>
+    [|
+      <span className=onStyle> {"on " |> ste} </span>,
+      <span className=Shared.TagLink.dateItem> {e |> ste} </span>,
+    |]
+    |> ReasonReact.array
+  | (Some(e), false) =>
+    <span className=Shared.TagLink.dateItem> {e |> ste} </span>
+  };
+
+let link = (~m: measurable) => {
+  open Css;
+  let name = style([fontSize(`em(1.2)), color(`hex("333"))]);
   <>
     {
-      MeasurableEntityLinks.nameEntityLink(
-        ~m,
-        ~className=PrimaryTableStyles.itemLink,
-      )
+      MeasurableEntityLinks.nameEntityLink(~m, ~className=Shared.TagLink.item)
       |> E.O.React.defaultNull
     }
     {
       MeasurableEntityLinks.propertyEntityLink(
         ~m,
-        ~className=PrimaryTableStyles.propertyLink,
+        ~className=Shared.TagLink.property,
       )
       |> E.O.React.defaultNull
     }
-    <span className=PrimaryTableStyles.namme> {m.name |> ste} </span>
-    {
-      switch (m.descriptionDate |> E.O.fmap(E.M.goFormat_simple)) {
-      | None => E.React.null
-      | Some(e) =>
-        [|
-          <span className=PrimaryTableStyles.calDate> {"on " |> ste} </span>,
-          <span className=PrimaryTableStyles.calDateO> {e |> ste} </span>,
-        |]
-        |> ReasonReact.array
-      }
-    }
+    <span className=name> {m.name |> ste} </span>
+    {dateItem(~m, ())}
   </>;
+};
 
 let description = (~m: measurable) =>
   switch (m.description) {

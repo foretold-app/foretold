@@ -5,6 +5,8 @@ open DataModel;
 let component = ReasonReact.statelessComponent("MeasurablesSeriesTable");
 
 module MeasurableItems = Foretold__Components__Measurable__Items;
+module Shared = Foretold__Components__Shared;
+
 module Styles = {
   open Css;
 
@@ -25,6 +27,11 @@ module Styles = {
     ]);
 
   let column = style([flex(1)]);
+  let group =
+    style([
+      border(`px(1), `solid, hex("eee")),
+      backgroundColor(hex("fafafa")),
+    ]);
 };
 
 let make =
@@ -41,7 +48,7 @@ let make =
       |> E.JsArray.filter((e: Measurable.t) =>
            Measurable.toStatus(e) != ARCHIVED
          );
-    <div className=PrimaryTableStyles.group>
+    <div className=Styles.group>
       {
         _measurables
         |> Js_array.sortInPlaceWith((a: Measurable.t, b: Measurable.t) =>
@@ -58,7 +65,7 @@ let make =
                  {
                    MeasurableItems.MeasurableEntityLinks.nameEntityLink(
                      ~m,
-                     ~className=PrimaryTableStyles.itemLink,
+                     ~className=Shared.TagLink.item,
                    )
                    |> E.O.React.defaultNull
                  }
@@ -67,21 +74,13 @@ let make =
                  {
                    MeasurableItems.MeasurableEntityLinks.propertyEntityLink(
                      ~m,
-                     ~className=PrimaryTableStyles.propertyLink,
+                     ~className=Shared.TagLink.property,
                    )
                    |> E.O.React.defaultNull
                  }
                </div>
                <div className=Styles.column>
-                 {
-                   switch (MeasurableItems.formatDate(m.descriptionDate)) {
-                   | "" => E.React.null
-                   | e =>
-                     <span className=PrimaryTableStyles.calDateO>
-                       {e |> ste}
-                     </span>
-                   }
-                 }
+                 {MeasurableItems.dateItem(~m, ~showOn=false, ())}
                </div>
                <div className=Styles.column>
                  {MeasurableItems.measurements(~m)}

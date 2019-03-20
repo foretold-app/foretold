@@ -109,31 +109,40 @@ const schema = new graphql.GraphQLSchema({
   mutation: new graphql.GraphQLObjectType({
     name: 'Mutation',
     fields: {
-      // @ok
+
       createMeasurement: {
         type: types.measurementType,
-        args: filterr(_.pick(attributeFields(models.Measurement), ['value', 'competitorType', 'measurableId', 'agentId', 'description'])),
+        args: filterr(_.pick(attributeFields(models.Measurement), [
+          'value', 'competitorType', 'measurableId', 'agentId', 'description'
+        ])),
         resolve: async (root, values, options) => {
           return data.measurementData.createMeasurement(root, values, options);
         },
       },
-      // @ok
+
       createMeasurable: {
         type: types.measurableType,
-        args: filterr(_.pick(attributeFields(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty', 'channelId'])),
+        args: filterr(_.pick(attributeFields(models.Measurable), [
+          'name', 'description', 'valueType', 'expectedResolutionDate',
+          'resolutionEndpoint', 'descriptionEntity', 'descriptionDate',
+          'descriptionProperty', 'channelId',
+        ])),
         resolve: async (root, values, options) => {
           return data.measurablesData.createMeasurable(root, values, options);
         }
       },
-      // @ok
+
       createSeries: {
         type: types.seriesType,
-        args: filterr(_.pick(attributeFields(models.Series), ['name', 'description', 'channelId', 'subjects', 'properties', 'dates'])),
+        args: filterr(_.pick(attributeFields(models.Series), [
+          'name', 'description', 'channelId', 'subjects', 'properties',
+          'dates',
+        ])),
         resolve: async (root, values, options) => {
           return data.seriesData.createSeries(root, values, options);
         }
       },
-      // @ok
+
       archiveMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
@@ -141,7 +150,7 @@ const schema = new graphql.GraphQLSchema({
           return data.measurablesData.archiveMeasurable(root, values, options);
         }
       },
-      // @ok
+
       unArchiveMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
@@ -149,14 +158,19 @@ const schema = new graphql.GraphQLSchema({
           return data.measurablesData.unArchiveMeasurable(root, values, options);
         }
       },
-      // @ok
+
       editMeasurable: {
         type: types.measurableType,
-        args: filterr(_.pick(attributeFields(models.Measurable), ['id', 'name', 'description', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty'])),
+        args: filterr(_.pick(attributeFields(models.Measurable), [
+          'id', 'name', 'description', 'expectedResolutionDate',
+          'resolutionEndpoint', 'descriptionEntity', 'descriptionDate',
+          'descriptionProperty',
+        ])),
         resolve: async (root, values, options) => {
           return data.measurablesData.editMeasurable(root, values, options);
         }
       },
+
       editUser: {
         type: types.userType,
         args: filterr(_.pick(attributeFields(models.User), ["id", "name"])),
@@ -212,6 +226,6 @@ const schema = new graphql.GraphQLSchema({
   })
 });
 
-export {
-  schema
+module.exports = {
+  schema,
 };

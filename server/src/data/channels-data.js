@@ -12,16 +12,6 @@ class ChannelsData {
 
   /**
    * @param values
-   * @returns {Promise<Model>}
-   */
-  async channelUpdate(values) {
-    const id = _.get(values, 'id');
-    const input = _.get(values, 'input');
-    return await this.updateOne(id, input);
-  }
-
-  /**
-   * @param values
    * @param options
    * @returns {Promise<Model>}
    */
@@ -32,28 +22,6 @@ class ChannelsData {
 
     const input = _.get(values, 'input');
     return await this.createOne(user, input);
-  }
-
-  /**
-   * @param root
-   * @param values
-   * @param options
-   * @returns {Promise<boolean>}
-   */
-  async addPersonToChannel(root, values, options) {
-    console.log(root, values, options);
-    return true;
-  }
-
-  /**
-   * @param root
-   * @param values
-   * @param options
-   * @returns {Promise<boolean>}
-   */
-  async removePersonFromChannel(root, values, options) {
-    console.log(root, values, options);
-    return true;
   }
 
   /**

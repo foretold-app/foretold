@@ -164,10 +164,10 @@ const schema = new graphql.GraphQLSchema({
         type: types.channels.channel,
         args: {
           id: { type: graphql.GraphQLString },
-          input: { type: new graphql.GraphQLNonNull(types.channelInput) },
+          input: { type: new graphql.GraphQLNonNull(types.channels.channelInput) },
         },
         resolve: async (root, values) => {
-          return data.channelsData.channelUpdate(values);
+          return data.channelsData.updateOne(values.id, values.input);
         },
       },
 
@@ -182,19 +182,19 @@ const schema = new graphql.GraphQLSchema({
         },
       },
 
-      AddPersonToChannel: {
+      agentsChannelsCreate: {
         type: types.channels.channel,
         args: { id: { type: graphql.GraphQLString } },
         resolve: async (root, values, options) => {
-          return data.channelsData.addPersonToChannel(root, values, options);
+          return data.agentsChannelsData.createOne(root, values, options);
         },
       },
 
-      RemovePersonFromChannel: {
+      agentsChannelsDelete: {
         type: types.channels.channel,
         args: { id: { type: graphql.GraphQLString } },
         resolve: async (root, values, options) => {
-          return data.channelsData.removePersonFromChannel(root, values, options);
+          return data.agentsChannelsData.deleteOne(root, values, options);
         },
       },
 

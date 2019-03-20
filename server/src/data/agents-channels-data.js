@@ -11,24 +11,28 @@ class AgentsChannelsData {
   /**
    * @param {string} channelId
    * @param {string} agentId
-   * @returns {Promise<boolean>}
+   * @returns {Promise<Model>}
    */
   async createOne(channelId, agentId) {
-    return await models.AgentsChannels.create({
+    const agentChannel = await models.AgentsChannels.create({
       channelId,
       agentId,
     });
+    return agentChannel;
   }
 
   /**
-   * @param root
-   * @param values
-   * @param options
-   * @returns {Promise<boolean>}
+   * @param {string} channelId
+   * @param {string} agentId
+   * @returns {Promise<Model>}
    */
-  async deleteOne(root, values, options) {
-    console.log(root, values, options);
-    return true;
+  async deleteOne(channelId, agentId) {
+    const agentChannel = await models.AgentsChannels.create({
+      channelId,
+      agentId,
+    });
+    if (agentChannel) await agentChannel.destroy();
+    return agentChannel;
   }
 
 }

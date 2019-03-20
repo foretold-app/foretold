@@ -183,18 +183,24 @@ const schema = new graphql.GraphQLSchema({
       },
 
       agentsChannelsCreate: {
-        type: types.channels.channel,
-        args: { id: { type: graphql.GraphQLString } },
-        resolve: async (root, values, options) => {
-          return data.agentsChannelsData.createOne(root, values, options);
+        type: types.agentsChannels.agentsChannel,
+        args: {
+          agentId: { type: graphql.GraphQLString },
+          channelId: { type: graphql.GraphQLString },
+        },
+        resolve: async (root, values) => {
+          return data.agentsChannelsData.createOne(values.channelId, values.agentId);
         },
       },
 
       agentsChannelsDelete: {
         type: types.channels.channel,
-        args: { id: { type: graphql.GraphQLString } },
-        resolve: async (root, values, options) => {
-          return data.agentsChannelsData.deleteOne(root, values, options);
+        args: {
+          agentId: { type: graphql.GraphQLString },
+          channelId: { type: graphql.GraphQLString },
+        },
+        resolve: async (root, values) => {
+          return data.agentsChannelsData.deleteOne(values.channelId, values.agentId);
         },
       },
 

@@ -10,6 +10,7 @@ const { filterr } = require('./filterr');
 
 const agents = require('./agents');
 const channels = require('./channels');
+const agentsChannels = require('./agents-channels');
 
 /**
  * @deprecated
@@ -81,5 +82,6 @@ module.exports = {
   measurementType,
 
   agents,
-  channels
+  channels,
+  agentsChannels,
 };

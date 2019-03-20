@@ -40,6 +40,7 @@ async function authentication(options) {
     if (token) {
       return await authenticationByJwtToken(token);
     }
+    // @todo:
     return {};
   } catch (err) {
     console.error('Authentication Error', err);

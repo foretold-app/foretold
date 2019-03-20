@@ -25,10 +25,8 @@ class ChannelsData {
         ...input,
         creatorId: user.agentId,
       });
-
       await this.agentsChannelsData.createOne(channel.id, user.agentId);
     }
-
     return channel;
   }
 

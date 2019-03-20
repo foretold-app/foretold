@@ -4,10 +4,6 @@ const models = require("../models");
 
 class AgentsChannelsData {
 
-  constructor() {
-
-  }
-
   /**
    * @param {string} channelId
    * @param {string} agentId

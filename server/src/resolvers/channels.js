@@ -2,7 +2,8 @@ const data = require('../data');
 
 /**
  * @param {Model} channel
- * @returns {Promise<Model>}
+ * @param {string} channel.id
+ * @returns {Promise<Model[]>}
  */
 async function channelAgents(channel) {
   return await data.channelsData.getAgentsByChannelId(channel.id);
@@ -10,6 +11,7 @@ async function channelAgents(channel) {
 
 /**
  * @param {Model} channel
+ * @param {string} channel.id
  * @returns {Promise<Model>}
  */
 async function channelCreator(channel) {

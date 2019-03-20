@@ -14,10 +14,11 @@ class AgentsChannelsData {
    * @returns {Promise<Model>}
    */
   async createOne(channelId, agentId) {
-    const agentChannel = await models.AgentsChannels.create({
-      channelId,
-      agentId,
-    });
+    const input = { channelId, agentId };
+    await this.validate(input);
+    const agentChannel =
+      await models.AgentsChannels.findOne({ where: input }) ||
+      await models.AgentsChannels.create(input);
     return agentChannel;
   }
 
@@ -27,12 +28,28 @@ class AgentsChannelsData {
    * @returns {Promise<Model>}
    */
   async deleteOne(channelId, agentId) {
-    const agentChannel = await models.AgentsChannels.create({
-      channelId,
-      agentId,
-    });
-    if (agentChannel) await agentChannel.destroy();
+    const input = { channelId, agentId };
+    await this.validate(input);
+    const agentChannel = await models.AgentsChannels.findOne({ where: input });
+    if (agentChannel) {
+      await models.AgentsChannels.destroy({ where: input });
+    }
     return agentChannel;
+  }
+
+  /**
+   * @param {string} channelId
+   * @param {string} agentId
+   * @return {Promise<*>}
+   */
+  async validate({ channelId, agentId }) {
+    if (!await models.Channel.findById(channelId)) {
+      return Promise.reject(new Error(`Channel "${channelId}" is not found.`));
+    }
+    if (!await models.Agent.findById(agentId)) {
+      return Promise.reject(new Error(`Agent "${agentId}" is not found.`));
+    }
+    return true;
   }
 
 }

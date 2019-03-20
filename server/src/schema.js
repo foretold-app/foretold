@@ -159,7 +159,6 @@ const schema = new graphql.GraphQLSchema({
         }
       },
 
-      // @done
       channelUpdate: {
         type: types.channels.channel,
         args: {
@@ -171,7 +170,6 @@ const schema = new graphql.GraphQLSchema({
         },
       },
 
-      // @done
       channelCreate: {
         type: types.channels.channel,
         args: {
@@ -194,7 +192,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       agentsChannelsDelete: {
-        type: types.channels.channel,
+        type: types.agentsChannels.agentsChannel,
         args: {
           agentId: { type: graphql.GraphQLString },
           channelId: { type: graphql.GraphQLString },

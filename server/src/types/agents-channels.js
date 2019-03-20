@@ -5,7 +5,7 @@ const agentsChannel = new graphql.GraphQLObjectType({
   fields: {
     agentId: { type: graphql.GraphQLString },
     channelId: { type: graphql.GraphQLString },
-  }
+  },
 });
 
 module.exports = {

@@ -109,6 +109,7 @@ const schema = new graphql.GraphQLSchema({
   mutation: new graphql.GraphQLObjectType({
     name: 'Mutation',
     fields: {
+      // @ok
       createMeasurement: {
         type: types.measurementType,
         args: filterr(_.pick(attributeFields(models.Measurement), ['value', 'competitorType', 'measurableId', 'agentId', 'description'])),
@@ -116,9 +117,10 @@ const schema = new graphql.GraphQLSchema({
           return data.measurementData.createMeasurement(root, values, options);
         },
       },
+      // @ok
       createMeasurable: {
         type: types.measurableType,
-        args: filterr(_.pick(attributeFields(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty', 'channel'])),
+        args: filterr(_.pick(attributeFields(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty', 'channelId'])),
         resolve: async (root, values, options) => {
           return data.measurablesData.createMeasurable(root, values, options);
         }

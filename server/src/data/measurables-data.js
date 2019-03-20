@@ -12,29 +12,10 @@ class MeasurablesData {
    * @return {Promise<*>}
    */
   async createMeasurable (root, values, options) {
-    const {
-      name,
-      description,
-      valueType,
-      expectedResolutionDate,
-      resolutionEndpoint,
-      descriptionDate,
-      descriptionEntity,
-      descriptionProperty,
-      channel
-    } = values;
     const user = options.user;
     const newMeasurable = await models.Measurable.create({
-      name,
-      valueType,
-      description,
-      expectedResolutionDate,
+      ...values,
       creatorId: user.agentId,
-      descriptionEntity,
-      descriptionDate,
-      resolutionEndpoint,
-      descriptionProperty,
-      channel
     });
     let notification = await newMeasurable.creationNotification(user);
     notify(notification);

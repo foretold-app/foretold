@@ -1,6 +1,4 @@
 const models = require("../models");
-const { notify } = require("../lib/notifications");
-
 
 class SeriesData {
   /**
@@ -19,8 +17,6 @@ class SeriesData {
           properties,
           dates,
     } = values;
-    // const _auth0Id = await this.usersData.getAuth0Id(options);
-    // const user = await this.usersData.auth0User(_auth0Id);
     const newSeries = await models.Series.create({
           name,
           description,

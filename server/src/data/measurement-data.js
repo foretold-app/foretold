@@ -22,8 +22,7 @@ class MeasurementData {
       measurableId,
       description,
     } = values;
-    const _auth0Id = await this.usersData.getAuth0Id(options);
-    const user = await this.usersData.auth0User(_auth0Id);
+    const user = options.user;
     const newMeasurement = await models.Measurement.create({
       value,
       competitorType,

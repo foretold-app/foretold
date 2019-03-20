@@ -1,23 +1,14 @@
 const path = require('path');
+const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser-graphql');
-
-const jwt = require('jsonwebtoken');
 const { ApolloServer } = require('apollo-server-express');
 
 const models = require("./models");
 const { schema } = require('./schema');
+const { authentication } = require('./authentication');
 
 const PORT = process.env.PORT || 4000;
-
-function getToken(req) {
-  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-    return req.headers.authorization.split(' ')[1];
-  } else if (req.query && req.query.token) {
-    return req.query.token;
-  }
-  return null;
-}
 
 const server = new ApolloServer({
   introspection: true,
@@ -30,22 +21,13 @@ const server = new ApolloServer({
   formatResponse: response => {
     return response;
   },
-  context: async ({ req }) => {
-    const token = getToken(req);
-    const user = new Promise((resolve) => {
-      return jwt.verify(token, process.env.AUTH0_SECRET, (err, result) => {
-        if (err) {
-          return resolve({ ok: false, result: err });
-        }
-        resolve({ ok: true, result });
-      })
-    });
+  context: async ({req}) => {
+    const user = await authentication(req);
     return { user };
   }
 });
 
 const app = express();
-const cors = require("cors");
 app.use(cors());
 
 // Returns all routes excluding "/graphql" as static files

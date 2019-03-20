@@ -176,7 +176,7 @@ const schema = new graphql.GraphQLSchema({
           input: { type: new graphql.GraphQLNonNull(types.channels.channelInput) },
         },
         resolve: async (root, values, options) => {
-          return data.channelsData.channelCreate(values, options);
+          return data.channelsData.createOne(options.user, values.input);
         },
       },
 

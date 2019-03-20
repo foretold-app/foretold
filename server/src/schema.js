@@ -125,9 +125,10 @@ const schema = new graphql.GraphQLSchema({
           return data.measurablesData.createMeasurable(root, values, options);
         }
       },
+      // @ok
       createSeries: {
         type: types.seriesType,
-        args: filterr(_.pick(attributeFields(models.Series), ['name', 'description', 'channel', 'subjects', 'properties', 'dates'])),
+        args: filterr(_.pick(attributeFields(models.Series), ['name', 'description', 'channelId', 'subjects', 'properties', 'dates'])),
         resolve: async (root, values, options) => {
           return data.seriesData.createSeries(root, values, options);
         }

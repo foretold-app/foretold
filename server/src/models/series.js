@@ -29,6 +29,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ARRAY(DataTypes.DATE),
       allowNull: true,
     },
+    channelId: {
+      type: DataTypes.UUID(),
+      allowNull: false,
+    },
   },
     {
     hooks: {
@@ -50,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
                     expectedResolutionDate: date,
                     seriesId: this.id,
                     creatorId: this.creatorId,
-                    channel: this.channel,
+                    channelId: this.channelId,
                     valueType: "FLOAT"
                 });
             }

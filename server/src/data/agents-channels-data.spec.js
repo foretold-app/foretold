@@ -38,4 +38,33 @@ describe('AgentsChannelsData', () => {
       });
     });
   });
+
+  describe('deleteOne - branch A', () => {
+    beforeAll(() => {
+      jest.spyOn(models.AgentsChannels, 'findOne').mockReset().mockReturnValue(Promise.resolve(true));
+      jest.spyOn(models.AgentsChannels, 'destroy').mockReset().mockReturnValue(Promise.resolve(true));
+    });
+    it('deleteOne', () => {
+      return instance.deleteOne(channelId, agentId).then((result) => {
+        expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({ where: input });
+        expect(models.AgentsChannels.destroy).toHaveBeenCalledWith({ where: input });
+        expect(result).toBe(true);
+      });
+    });
+  });
+
+  describe('deleteOne - branch B', () => {
+    beforeAll(() => {
+      models.AgentsChannels.findOne.mockReset();
+      models.AgentsChannels.destroy.mockReset();
+      jest.spyOn(models.AgentsChannels, 'findOne').mockReturnValue(Promise.resolve(false));
+    });
+    it('deleteOne', () => {
+      return instance.deleteOne(channelId, agentId).then((result) => {
+        expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({ where: input });
+        expect(models.AgentsChannels.destroy).toHaveBeenCalledTimes(0);
+        expect(result).toBe(false);
+      });
+    });
+  });
 });

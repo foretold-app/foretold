@@ -35,7 +35,7 @@ let seriesHero = (series: DataModel.Series.t) =>
           {
             switch (series.creator) {
             | Some({name: Some(name), id}) =>
-              <div className=PrimaryTableStyles.item>
+              <div className=C.Shared.Item.item>
                 <a href={DataModel.Url.toString(AgentShow(id))}>
                   {name |> ste}
                 </a>

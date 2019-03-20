@@ -1,5 +1,6 @@
 open Utils;
 
+module Shared = Foretold__Components__Shared;
 let formatDate = e =>
   e |> E.O.fmap(E.M.format(E.M.format_simple)) |> E.O.default("");
 
@@ -89,7 +90,7 @@ let endpointResponse = (~m: DataModel.Measurable.t) =>
 let creatorLink = (~m: DataModel.Measurable.t) =>
   m.creator
   |> E.O.fmap((c: DataModel.Agent.t) =>
-       <div className=PrimaryTableStyles.item>
+       <div className=Shared.Item.item>
          <a href={DataModel.Url.toString(AgentShow(c.id))}>
            {c.name |> E.O.default("") |> ste}
          </a>
@@ -98,10 +99,10 @@ let creatorLink = (~m: DataModel.Measurable.t) =>
   |> E.O.React.defaultNull;
 
 let editLink = (~m: DataModel.Measurable.t) =>
-  <div className=PrimaryTableStyles.item>
+  <div className=Shared.Item.item>
     <a
       href={DataModel.Url.toString(MeasurableEdit(m.id))}
-      className={PrimaryTableStyles.itemButton(NORMAL)}>
+      className={Shared.Item.itemButton(NORMAL)}>
       {"Edit" |> ste}
     </a>
   </div>;
@@ -111,7 +112,7 @@ let measurements = (~m: DataModel.Measurable.t) =>
   | Some(0) => <div />
   | None => <div />
   | Some(count) =>
-    <div className=PrimaryTableStyles.item>
+    <div className=Shared.Item.item>
       <Icon.Icon icon="BULB" />
       <span> {count |> string_of_int |> ste} </span>
     </div>
@@ -122,7 +123,7 @@ let measurers = (~m: DataModel.Measurable.t) =>
   | Some(0) => <div />
   | None => <div />
   | Some(count) =>
-    <div className=PrimaryTableStyles.item>
+    <div className=Shared.Item.item>
       <span>
         <Icon.Icon icon="PEOPLE" />
         {count |> string_of_int |> ste}
@@ -136,7 +137,7 @@ let series = (~m: DataModel.Measurable.t) =>
        switch (r.name) {
        | Some(name) =>
          Some(
-           <div className=PrimaryTableStyles.item>
+           <div className=Shared.Item.item>
              <Icon.Icon icon="LAYERS" />
              <a
                href={
@@ -154,7 +155,7 @@ let series = (~m: DataModel.Measurable.t) =>
   |> E.O.React.defaultNull;
 
 let expectedResolutionDate = (~m: DataModel.Measurable.t) =>
-  <div className=PrimaryTableStyles.item>
+  <div className=Shared.Item.item>
     <span> {"Resolves on " |> ste} </span>
     <span> {m.expectedResolutionDate |> formatDate |> ste} </span>
   </div>;
@@ -163,16 +164,16 @@ let resolutionEndpoint = (~m: DataModel.Measurable.t) =>
   switch (m.resolutionEndpoint |> E.O.default("")) {
   | "" => ReasonReact.null
   | text =>
-    <div className=PrimaryTableStyles.item>
+    <div className=Shared.Item.item>
       <span> <span> {"Endpoint: " |> ste} </span> {text |> ste} </span>
     </div>
   };
 
 let archiveButton = (~m: DataModel.Measurable.t) =>
   Foretold__GraphQL.Mutations.MeasurableUnarchive.Mutation.make((mutation, _) =>
-    <div className=PrimaryTableStyles.item>
+    <div className=Shared.Item.item>
       <div
-        className={PrimaryTableStyles.itemButton(DANGER)}
+        className={Shared.Item.itemButton(DANGER)}
         onClick={
           _ =>
             Foretold__GraphQL.Mutations.MeasurableUnarchive.mutate(
@@ -188,9 +189,9 @@ let archiveButton = (~m: DataModel.Measurable.t) =>
 
 let unArchiveButton = (~m: DataModel.Measurable.t) =>
   Foretold__GraphQL.Mutations.MeasurableArchive.Mutation.make((mutation, _) =>
-    <div className=PrimaryTableStyles.item>
+    <div className=Shared.Item.item>
       <div
-        className={PrimaryTableStyles.itemButton(DANGER)}
+        className={Shared.Item.itemButton(DANGER)}
         onClick={
           _ =>
             Foretold__GraphQL.Mutations.MeasurableArchive.mutate(

@@ -4,18 +4,18 @@ let group =
     border(`px(1), `solid, hex("eee")),
     backgroundColor(hex("fafafa")),
   ]);
-let statusOpacity = (measurable: DataModel.Measurable.t) => {
-  let state = measurable.state |> E.O.toExn("Needs state from GraphQL");
-  if (state === `ARCHIVED) {
-    0.8;
-  } else if (state === `JUDGED) {
-    0.55;
-  } else {
-    1.0;
-  };
-};
 
-let row = m =>
+let row = m => {
+  let statusOpacity = (measurable: DataModel.Measurable.t) => {
+    let state = measurable.state |> E.O.toExn("Needs state from GraphQL");
+    if (state === `ARCHIVED) {
+      0.8;
+    } else if (state === `JUDGED) {
+      0.55;
+    } else {
+      1.0;
+    };
+  };
   style([
     width(`percent(100.0)),
     borderBottom(`px(1), `solid, hex("eee")),
@@ -31,112 +31,20 @@ let row = m =>
     selector(":last-child", [borderBottom(`px(0), `solid, hex("eee"))]),
     selector(":hover", [backgroundColor(`hex("eef0f3"))]),
   ]);
+};
 
 let mainColumn = style([flex(5), display(`flex), flexDirection(`column)]);
-let item =
-  style([
-    float(`left),
-    fontSize(`px(12)),
-    marginRight(`px(18)),
-    color(`hex("bbb")),
-    selector(
-      " a",
-      [color(`hex("777")), selector(":hover", [color(hex("333"))])],
-    ),
-  ]);
-
-type buttonStyle =
-  | NORMAL
-  | DANGER;
-
-type buttonStyleColors = {
-  background: string,
-  backgroundHovered: string,
-  color: string,
-  colorHovered: string,
-};
-
-let buttonColors = (t: buttonStyle) =>
-  switch (t) {
-  | NORMAL => {
-      background: "ece7e7",
-      backgroundHovered: "cec8c8",
-      color: "908a8a",
-      colorHovered: "423636",
-    }
-  | DANGER => {
-      background: "eadede",
-      backgroundHovered: "f9c8c8",
-      color: "a08181",
-      colorHovered: "671919",
-    }
-  };
-
-let itemButton = (t: buttonStyle) => {
-  let colors = buttonColors(t);
-  style([
-    color(`hex(colors.color)),
-    borderRadius(`px(2)),
-    padding2(~v=`px(1), ~h=`px(4)),
-    Css.cursor(`pointer),
-    float(`left),
-    backgroundColor(hex(colors.background)),
-    selector(
-      ":hover",
-      [
-        backgroundColor(hex(colors.backgroundHovered)),
-        color(`hex(colors.colorHovered)),
-      ],
-    ),
-  ]);
-};
 
 let mainColumnTop =
   style([
     flex(1),
     paddingLeft(px(2)),
-    /* selector(
-         " a",
-         [
-           color(`hex("333")),
-           fontSize(`px(18)),
-           selector(":hover", [backgroundColor(hex("ddd"))]),
-         ],
-       ), */
     selector(" p", [marginTop(`px(3)), marginBottom(`px(8))]),
   ]);
+
 let mainColumnBottom =
   style([flex(1), padding(`px(2)), marginTop(`px(2))]);
 let rightColumn = style([flex(1)]);
-let statusRow =
-  style([
-    flex(1),
-    selector(
-      " h3",
-      [
-        marginTop(px(2)),
-        marginBottom(px(-1)),
-        fontSize(px(16)),
-        color(`hex("666")),
-      ],
-    ),
-    selector(
-      " p",
-      [marginBottom(px(2)), fontSize(`px(12)), color(`hex("aaa"))],
-    ),
-  ]);
-
-let statusColor = (~measurable: DataModel.Measurable.t) => {
-  let main = [padding2(~v=`px(1), ~h=`px(8)), borderRadius(`px(4))];
-  let statusSpecific =
-    switch (DataModel.Measurable.toStatus(measurable)) {
-    | OPEN => [background(`hex("bff5bd"))]
-    | PENDING_REVIEW => [background(`hex("fff8da"))]
-    | JUDGED => [background(`hex("ead7f3"))]
-    | ARCHIVED => [background(`hex("cccccc"))]
-    };
-  style([main, statusSpecific] |> E.L.concat);
-};
 
 let linkS = [
   padding2(~v=`px(1), ~h=`px(4)),

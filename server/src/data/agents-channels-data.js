@@ -2,23 +2,22 @@ const _ = require('lodash');
 
 const models = require("../models");
 
-const { UsersData } = require('./users-data');
-
 class AgentsChannelsData {
 
   constructor() {
-    this.usersData = new UsersData();
+
   }
 
   /**
-   * @param root
-   * @param values
-   * @param options
+   * @param {string} channelId
+   * @param {string} agentId
    * @returns {Promise<boolean>}
    */
-  async createOne(root, values, options) {
-    console.log(root, values, options);
-    return true;
+  async createOne(channelId, agentId) {
+    return await models.AgentsChannels.create({
+      channelId,
+      agentId,
+    });
   }
 
   /**

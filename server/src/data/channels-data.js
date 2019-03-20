@@ -3,11 +3,13 @@ const _ = require('lodash');
 const models = require("../models");
 
 const { UsersData } = require('./users-data');
+const { AgentsChannelsData } = require('./agents-channels-data');
 
 class ChannelsData {
 
   constructor() {
     this.usersData = new UsersData();
+    this.agentsChannelsData = new AgentsChannelsData();
   }
 
   /**
@@ -40,10 +42,7 @@ class ChannelsData {
         creatorId: user.agentId,
       });
 
-      await models.AgentsChannels.create({
-        channelId: channel.id,
-        agentId: user.agentId,
-      });
+      await this.agentsChannelsData.createOne(channel.id, user.agentId);
     }
 
     return channel;
@@ -55,10 +54,11 @@ class ChannelsData {
    * @return {Promise<Model>}
    */
   async updateOne(id, input) {
-    return await models.Channel.update({
-      input,
+    const channel = await models.Channel.findOne({
       where: { id },
     });
+    await channel.update(input);
+    return channel;
   }
 
   /**

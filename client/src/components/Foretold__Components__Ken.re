@@ -2,7 +2,7 @@ open Utils;
 type measurable = DataModel.Measurable.t;
 let graph = Data.make;
 
-let itemUrl = id => DataModel.Url.toString(ItemShow(id));
+let itemUrl = id => DataModel.Url.toString(EntityShow(id));
 
 let findName = propertyId =>
   graph

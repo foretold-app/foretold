@@ -27,7 +27,7 @@ let make = (~route: Route.t, _children) => {
            | AgentMeasurables(id) =>
              AgentMeasurables.make(~id, ~loggedInUser) |> inApp
            | AgentIndex => AgentIndex.make |> inApp
-           | ItemShow(id) => ItemShow.make(~id) |> inApp
+           | EntityShow(id) => EntityShow.make(~id) |> inApp
            | Redirect => Redirect.make |> inApp
            | Profile => Profile.make(~loggedInUser) |> inApp
            | AgentShow(id) => AgentShow.make(~id) |> inApp

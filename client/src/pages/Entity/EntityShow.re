@@ -1,6 +1,6 @@
 open Utils;
 
-let component = ReasonReact.statelessComponent("ItemShow");
+let component = ReasonReact.statelessComponent("EntityShow");
 
 let make = (~id: string, _children) => {
   ...component,
@@ -25,7 +25,7 @@ let make = (~id: string, _children) => {
                    switch (r.value.valueType) {
                    | String(s) => s |> ste
                    | ThingId(s) =>
-                     <a href={DataModel.Url.toString(ItemShow(s))}>
+                     <a href={DataModel.Url.toString(EntityShow(s))}>
                        {s |> ste}
                      </a>
                    | _ => "no-name" |> ste

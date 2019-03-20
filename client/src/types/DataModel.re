@@ -22,7 +22,7 @@ module Route = {
     | Redirect
     | Login
     | Profile
-    | ItemShow(string)
+    | EntityShow(string)
     | AgentShow(string)
     | AgentMeasurables(string)
     | ChannelShow(string)
@@ -49,7 +49,7 @@ module Route = {
       | None => Home
       }
     | ["agents", id] => AgentShow(id)
-    | ["items", ...id] => ItemShow(String.concat("/", id))
+    | ["entities", ...id] => EntityShow(String.concat("/", id))
     | ["agents", id, "measurables"] => AgentMeasurables(id)
     | ["channels", "new"] => ChannelNew
     | ["channels"] => ChannelIndex
@@ -68,7 +68,7 @@ module Url = {
     | Home
     | AgentIndex
     | Profile
-    | ItemShow(string)
+    | EntityShow(string)
     | AgentShow(string)
     | AgentMeasurables(string)
     | ChannelShow(string)
@@ -84,7 +84,7 @@ module Url = {
     | Home => "/"
     | AgentIndex => "/agents"
     | Profile => "/profile/"
-    | ItemShow(id) => "/items/" ++ id
+    | EntityShow(id) => "/entities/" ++ id
     | AgentShow(id) => "/agents/" ++ id
     | AgentMeasurables(id) => "/agents/" ++ id ++ "/measurables"
     | ChannelNew => "/channels/" ++ "new"

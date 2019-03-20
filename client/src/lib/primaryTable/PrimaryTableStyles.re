@@ -1,4 +1,5 @@
 open Css;
+/* TODO: Delete me! */
 let group =
   style([
     border(`px(1), `solid, hex("eee")),

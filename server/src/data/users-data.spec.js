@@ -30,5 +30,24 @@ describe('UsersData', () => {
     });
   });
 
+  describe('editUser - branch A', () => {
+    const root = {};
+    const values = { id: 'id1', name: 'name1' };
+    const options = { user: { auth0Id: 'auh0Id2' } };
+    const update = jest.fn(() => Promise.resolve(true));
+    beforeAll(() => {
+      jest.spyOn(models.User, 'findById').mockReturnValue(Promise.resolve({
+        auth0Id: 'auh0Id2',
+        update
+      }));
+    });
+    it('createOne', () => {
+      return instance.editUser(root, values, options).then((result) => {
+        expect(models.User.findById).toHaveBeenCalledWith(values.id);
+        expect(update).toHaveBeenCalledWith({ name: values.name });
+      });
+    });
+  });
+
 
 });

@@ -4,6 +4,7 @@ const models = require('../models');
 class UsersData {
 
   /**
+   * @tested
    * @param {string} auth0Id
    * @return {Promise<Array<Model>|Model>}
    */
@@ -16,6 +17,7 @@ class UsersData {
   }
 
   /**
+   * @tested
    * @param root
    * @param values
    * @param options

@@ -62,11 +62,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: "OPEN",
       allowNull: false,
     },
-    channel: {
-      type: DataTypes.STRING,
-      defaultValue: "general",
-      allowNull: true,
-    },
     stateUpdatedAt: {
       allowNull: true,
       type: DataTypes.DATE
@@ -221,6 +216,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'creatorId',
       as: 'creator'
     })
+    // Usage:
+    // const me = await models.Measurable.find();
+    // const ch = await me.getChannel();
+    Model.Channel = Model.belongsTo(models.Channel, {
+      foreignKey: 'channelId',
+    });
   }
   return Model;
 };

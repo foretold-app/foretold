@@ -96,6 +96,7 @@ const measurementType = makeObjectType(models.Measurement);
 const botType = makeObjectType(models.Bot);
 const agentType = makeObjectType(models.Agent);
 const seriesType = makeObjectType(models.Series);
+const channelType = makeObjectType(models.Channel);
 
 const getType = {
   Users: userType,
@@ -105,6 +106,7 @@ const getType = {
   measurables: measurableType,
   Series: seriesType,
   Measurements: measurementType,
+  Channels: channelType,
 };
 
 const schema = new GraphQLSchema({

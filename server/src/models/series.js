@@ -29,10 +29,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ARRAY(DataTypes.DATE),
       allowNull: true,
     },
-    channel: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     measurableCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
@@ -63,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
                     expectedResolutionDate: date,
                     seriesId: this.id,
                     creatorId: this.creatorId,
-                    channel: this.channel,
+                    channelId: this.channelId,
                     valueType: "FLOAT"
                 });
             }
@@ -80,6 +76,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'seriesId',
       as: "Measurables"
     })
+    // Usage
+    // const se = await models.Series.find();
+    // const ch = await se.getChannel();
+    Model.Channel = Model.belongsTo(models.Channel, {
+      foreignKey: 'channelId',
+    });
   }
   return Model;
 };

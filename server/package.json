@@ -29,7 +29,8 @@
     "db:migrate": "node_modules/.bin/sequelize db:migrate",
     "db:migrate:undo": "node_modules/.bin/sequelize db:migrate:undo",
     "db:seed": "node_modules/.bin/sequelize db:seed:all",
-    "db:reset": "npm run db:drop; npm run db:create; npm run db:migrate"
+    "db:reset": "npm run db:drop; npm run db:create; npm run db:migrate",
+    "babel-node": "babel-node"
   },
   "keywords": [
     "express",
@@ -133,6 +134,7 @@
     }
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": ["/manuals/"]
   }
 }

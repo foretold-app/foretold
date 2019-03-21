@@ -2,7 +2,7 @@ const graphql = require("graphql");
 
 const agents = require('./agents-channels');
 
-describe('agents types', () => {
+describe('agents channels types', () => {
   it('class should be object', () => {
     expect(agents).toBeInstanceOf(Object);
   });

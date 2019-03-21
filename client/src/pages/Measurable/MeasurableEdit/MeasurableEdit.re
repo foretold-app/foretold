@@ -1,7 +1,5 @@
 open Utils;
-open Rationale;
-open MomentRe;
-open Antd;
+open Foretold__GraphQL;
 
 module WithEditMutation = {
   module GraphQL = [%graphql
@@ -48,7 +46,7 @@ module WithEditMutation = {
 };
 
 let formCreation = (id, m) => {
-  let measurable = GetMeasurable.toMeasurable(m);
+  let measurable = Queries.Measurable.toMeasurable(m);
   WithEditMutation.Mutation.make((mutation, data) =>
     MeasurableForm.SignUpForm.make(
       ~onSubmit=
@@ -91,36 +89,36 @@ let formCreation = (id, m) => {
         switch (data.result) {
         | Loading => "Loading" |> ste
         | Error(e) =>
-          <div>
+          <>
             {"Error: " ++ e##message |> ste}
             {MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange)}
-          </div>
+          </>
         | Data(_) =>
-          <div>
-            <h3> {"Measurable successfully updated." |> ste} </h3>
+          <>
+            {"Measurable successfully updated." |> ste |> E.React.inH3}
             <div>
               {MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange)}
             </div>
-          </div>
+          </>
         | NotCalled =>
           MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange)
         },
     )
-    |> ReasonReact.element
+    |> E.React.el
   )
-  |> ReasonReact.element;
+  |> E.React.el;
 };
 
 let component = ReasonReact.statelessComponent("MeasurableEdit");
 let make = (~id: string, _children) => {
   ...component,
   render: _self =>
-    <div>
+    <>
       <SLayout.Header>
         {SLayout.Header.textDiv("Edit Measurable")}
       </SLayout.Header>
       <SLayout.MainSection>
-        {GetMeasurable.component(~id, m => formCreation(id, m))}
+        {Queries.Measurable.component(~id, m => formCreation(id, m))}
       </SLayout.MainSection>
-    </div>,
+    </>,
 };

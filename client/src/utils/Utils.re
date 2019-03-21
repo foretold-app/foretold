@@ -1,20 +1,19 @@
 open Belt.Result;
 open Rationale;
 
-let resolveOption = opt =>
-  switch (opt) {
-  | None => ""
-  | Some(s) => s
-  };
-
 let resolveRegex = (exp, str) => {
+  let resolveOption = opt =>
+    switch (opt) {
+    | None => ""
+    | Some(s) => s
+    };
   let res = exp |> Js.Re.exec(str);
   switch (res) {
   | None => ""
   | Some(result) =>
     let captures = result |> Js.Re.captures;
     switch (captures) {
-    | [|_, token|] => token |> Js.Nullable.to_opt |> resolveOption
+    | [|_, token|] => token |> Js.Nullable.toOption |> resolveOption
     | _ => ""
     };
   };
@@ -42,5 +41,3 @@ let doIfSome = (fn, s: option('a)) =>
   | Some(r) => fn(r)
   | _ => ()
   };
-
-let showIf = (cond, comp) => cond ? comp : ReasonReact.null;

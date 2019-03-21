@@ -1,13 +1,15 @@
 open Utils;
-open Rationale;
-open Result.Infix;
+open Foretold__GraphQL;
 let component = ReasonReact.statelessComponent("Measurables");
-let make = (~id: string, ~loggedInUser: GetUser.t, _children) => {
+let make = (~id: string, ~loggedInUser: Queries.User.t, _children) => {
   ...component,
   render: _self =>
-    (
-      measurables =>
-        <MeasurableIndex__Table measurables loggedInUser showExtraData=true />
-    )
-    |> GetMeasurables.componentWithCreator(id),
+    Queries.Measurables.componentWithCreator(id)
+    |> E.F.apply(measurables =>
+         <C.Measurables.BasicTable
+           measurables
+           loggedInUser
+           showExtraData=true
+         />
+       ),
 };

@@ -1,8 +1,6 @@
 open Utils;
-open Rationale;
-open Result.Infix;
-open Rationale.Function.Infix;
 open Antd;
+open Foretold__GraphQL;
 
 let ste = ReasonReact.string;
 
@@ -41,11 +39,14 @@ let component = ReasonReact.statelessComponent("Measurables");
 
 let withUserQuery =
     (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = GetUser.Query.make(~auth0Id, ());
-  GetUser.QueryComponent.make(~variables=query##variables, ({result}) =>
-    result |> ApolloUtils.apolloResponseToResult <$> innerComponentFn |> E.R.id
+  let query = Queries.User.Query.make(~auth0Id, ());
+  Queries.User.QueryComponent.make(~variables=query##variables, ({result}) =>
+    result
+    |> ApolloUtils.apolloResponseToResult
+    |> E.R.fmap(innerComponentFn)
+    |> E.R.id
   )
-  |> ReasonReact.element;
+  |> E.React.el;
 };
 
 let withUserMutation = innerComponentFn =>
@@ -53,7 +54,7 @@ let withUserMutation = innerComponentFn =>
     ~onError=e => Js.log2("Graphql Error:", e),
     innerComponentFn,
   )
-  |> ReasonReact.element;
+  |> E.React.el;
 
 let withUserForm = (id, name, mutation, innerComponentFn) =>
   Form.make(
@@ -62,12 +63,12 @@ let withUserForm = (id, name, mutation, innerComponentFn) =>
     ~schema=[(`name, Custom(_ => None))],
     innerComponentFn,
   )
-  |> ReasonReact.element;
+  |> E.React.el;
 
 let formFields = (form: Form.state, handleChange, handleSubmit: unit => unit) =>
   <Antd.Form>
     <Antd.Form.Item>
-      <h3> {"Username" |> ste} </h3>
+      {"Username" |> ste |> E.React.inH3}
       <Input
         value={form.values.name}
         onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
@@ -86,39 +87,39 @@ let make = (~loggedInUser, _children) => {
     withUserMutation((mutation, data) => {
       let id =
         loggedInUser
-        |> E.O.fmap((r: GetUser.user) => r.id)
+        |> E.O.fmap((r: Queries.User.user) => r.id)
         |> E.O.default("");
       let name =
         loggedInUser
-        |> E.O.fmap((r: GetUser.user) => r.name)
+        |> E.O.fmap((r: Queries.User.user) => r.name)
         |> E.O.default("");
       withUserForm(
         id, name, mutation, ({handleSubmit, handleChange, form, _}) =>
-        <div>
+        <>
           <SLayout.Header>
-            <h1> {"Edit Profile Information" |> ste} </h1>
+            {"Edit Profile Information" |> ste |> E.React.inH1}
           </SLayout.Header>
           <SLayout.MainSection>
             <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
               {
                 switch (data.result) {
-                | Loading => <div> {"Loading" |> ste} </div>
+                | Loading => "Loading" |> ste
                 | Error(e) =>
-                  <div>
+                  <>
                     {"Error: " ++ e##message |> ste}
                     {formFields(form, handleChange, handleSubmit)}
-                  </div>
+                  </>
                 | Data(_) =>
-                  <div>
+                  <>
                     {"Changes made successfully." |> ste}
                     {formFields(form, handleChange, handleSubmit)}
-                  </div>
+                  </>
                 | NotCalled => formFields(form, handleChange, handleSubmit)
                 }
               }
             </form>
           </SLayout.MainSection>
-        </div>
+        </>
       );
     }),
 };

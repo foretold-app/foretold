@@ -1,6 +1,4 @@
 open Utils;
-open Rationale.Result.Infix;
-open Rationale;
 open E;
 
 let component = ReasonReact.statelessComponent("Home");

@@ -1,5 +1,4 @@
 open Belt;
-open Rationale.Option;
 open Utils;
 
 type generatedAuth0Client = {. "authorize": [@bs.meth] (unit => unit)};
@@ -26,9 +25,9 @@ let safe_jwt_decode = (s: string): option('a) =>
 let getAuth0Id = (idToken: string): option(string) =>
   idToken
   |> safe_jwt_decode
-  >>= Js.Json.decodeObject
-  >>= (e => Js.Dict.get(e, "sub"))
-  >>= Js.Json.decodeString;
+  |> E.O.bind(_, Js.Json.decodeObject)
+  |> E.O.bind(_, e => Js.Dict.get(e, "sub"))
+  |> E.O.bind(_, Js.Json.decodeString);
 
 let matchAccessToken = [%re "/access_token=([^\$&]+)/g"];
 let matchExpiresIn = [%re "/expires_in=([^\$&]+)/g"];
@@ -39,7 +38,7 @@ let handleAuth = (url: ReasonReact.Router.url) => {
   let idToken = url.hash |> resolveRegex(matchIdToken);
   let expiresIn = url.hash |> resolveRegex(matchExpiresIn);
   let addedMs = expiresIn |> float_of_string |> (e => e *. 1000.);
-  let currentTimeMs = Js.Date.make() |> Js.Date.valueOf;
+  let currentTimeMs = E.JsDate.make() |> E.JsDate.valueOf;
   let expiresAtInMs = currentTimeMs +. addedMs;
   let expiresAt = expiresAtInMs |> Int64.of_float |> Int64.to_string;
   open Dom.Storage;
@@ -65,8 +64,8 @@ let authIsObsolete = () => {
   exp
   |> E.O.fmap(Int64.of_string)
   |> E.O.fmap(Int64.to_float)
-  |> E.O.fmap(e => e < Js.Date.now())
-  |> E.O.dimap(idd, () => false);
+  |> E.O.fmap(e => e < E.JsDate.now())
+  |> E.O.dimap(E.U.id, () => false);
 };
 
 let authToken = () => Dom.Storage.(localStorage |> getItem("id_token"));

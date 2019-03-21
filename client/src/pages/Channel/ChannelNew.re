@@ -1,7 +1,4 @@
 open Utils;
-open Rationale;
-open Result.Infix;
-open Rationale.Function.Infix;
 open Antd;
 open MomentRe;
 
@@ -38,7 +35,7 @@ let make = (~channel="general", _children) => {
     CreateMeasurableMutation.Mutation.make(
       ~onCompleted=e => Js.log("HI"),
       (mutation, data) =>
-        <div>
+        <>
           <SLayout.Header>
             {SLayout.Header.textDiv("NewChannel")}
           </SLayout.Header>
@@ -50,9 +47,9 @@ let make = (~channel="general", _children) => {
                 ~schema=[(`name, Custom(_ => None))],
                 ({handleSubmit, handleChange, form, _}) =>
                   switch (data.result) {
-                  | Loading => <div> {"Loading" |> ste} </div>
+                  | Loading => "Loading" |> ste
                   | Error(e) =>
-                    <div>
+                    <>
                       {"Error: " ++ e##message |> ste}
                       {
                         ChannelForm.showForm(
@@ -61,20 +58,22 @@ let make = (~channel="general", _children) => {
                           ~handleChange,
                         )
                       }
-                    </div>
+                    </>
                   | Data(data) =>
                     data##createMeasurable
                     |> E.O.fmap(e => e##id)
-                    |> doIfSome(_ => Urls.pushToLink(ChannelShow(channel)));
-                    <h2> {"Measurable successfully created" |> ste} </h2>;
+                    |> doIfSome(_ =>
+                         DataModel.Url.push(ChannelShow(channel))
+                       );
+                    "Measurable successfully created" |> ste |> E.React.inH2;
                   | NotCalled =>
                     ChannelForm.showForm(~form, ~handleSubmit, ~handleChange)
                   },
               )
-              |> ReasonReact.element
+              |> E.React.el
             }
           </SLayout.MainSection>
-        </div>,
+        </>,
     )
-    |> ReasonReact.element,
+    |> E.React.el,
 };

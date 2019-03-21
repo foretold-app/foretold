@@ -90,7 +90,7 @@ module MainSection = {
 let channelBack =
     (
       ~channelName: string,
-      ~onClick=_ => Urls.pushToLink(ChannelShow(channelName)),
+      ~onClick=_ => DataModel.Url.push(ChannelShow(channelName)),
       (),
     ) =>
   <div className=Styles.backHover onClick>
@@ -98,40 +98,17 @@ let channelBack =
   </div>;
 
 let channelLink = (c: string) =>
-  <div className=Styles.headerText> {"#" ++ c |> ste} </div>;
+  <div className=Styles.headerText> {c |> DataModel.Channel.present} </div>;
 
 let seriesHead = (channelName, seriesName) =>
-  <div>
+  <>
     {channelBack(~channelName, ())}
-    <div className=Styles.headerText> {"#" ++ channelName |> ste} </div>
+    <div className=Styles.headerText>
+      {channelName |> DataModel.Channel.present}
+    </div>
     <div className=Styles.dash> <Icon.Icon icon="THIN_RIGHT" /> </div>
     <div className=Styles.seriesText>
       <Icon.Icon icon="LAYERS" />
       {seriesName |> ste}
     </div>
-  </div>;
-
-let button = channel =>
-  <Div float=`right>
-    <Antd.Button onClick={_ => Urls.pushToLink(MeasurableNew(channel))}>
-      {"New Measurable" |> ste}
-    </Antd.Button>
-  </Div>;
-
-let channelHeader = channel =>
-  <div className=Styles.header>
-    {
-      channel
-      |> E.O.fmap(c =>
-           <div>
-             <h1>
-               <a href={Urls.mapLinkToUrl(ChannelShow(c))}>
-                 {"#" ++ c |> ste}
-               </a>
-             </h1>
-             {button(c)}
-           </div>
-         )
-      |> E.O.React.defaultNull
-    }
-  </div>;
+  </>;

@@ -1,8 +1,8 @@
-open Routes;
+open DataModel;
 
-type state = {route};
+type state = {route: Route.t};
 type action =
-  | ChangeRoute(route);
+  | ChangeRoute(Route.t);
 
 let reducer = (action, _state) =>
   switch (action) {
@@ -10,7 +10,7 @@ let reducer = (action, _state) =>
   };
 
 let mapUrlToAction = (url: ReasonReact.Router.url) =>
-  ChangeRoute(url |> Routes.mapUrlToRoute);
+  ChangeRoute(url |> Route.fromUrl);
 
 let component = ReasonReact.reducerComponent("App");
 
@@ -26,5 +26,5 @@ let make = _children => {
       ReasonReact.Router.watchUrl(url => url |> mapUrlToAction |> self.send);
     self.onUnmount(() => ReasonReact.Router.unwatchUrl(watcherID));
   },
-  render: self => <TopLevel route={self.state.route} />,
+  render: self => <Layout route={self.state.route} />,
 };

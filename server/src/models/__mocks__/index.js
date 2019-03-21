@@ -11,6 +11,8 @@ const AgentsChannels = {
 
 const Channel = {
   findById: findById,
+  findOne: jest.fn(() => Promise.resolve(true)),
+  create: jest.fn(() => Promise.resolve(true)),
 };
 
 const Agent = {

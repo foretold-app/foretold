@@ -1,6 +1,4 @@
 open Utils;
-open Rationale.Result.Infix;
-open Rationale;
 open E;
 open Css;
 open SLayout;
@@ -48,17 +46,17 @@ let make = _children => {
       <div className=row>
         <div className=column>
           <div className=nameS> {name |> ste} </div>
-          <p> {description |> ste} </p>
+          {description |> ste |> E.React.inP}
         </div>
         <div className=column>
           <Antd.Button _type=`primary> {"Join" |> ste} </Antd.Button>
         </div>
       </div>;
-    <div>
+    <>
       <SLayout.Header> {SLayout.Header.textDiv("Channels")} </SLayout.Header>
       <SLayout.MainSection>
         <div className=table> row row row row row row </div>
       </SLayout.MainSection>
-    </div>;
+    </>;
   },
 };

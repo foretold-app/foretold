@@ -1,14 +1,10 @@
 open Utils;
 open Rationale;
 open Style.Grid;
+open Foretold__GraphQL;
 
 module Styles = {
   open Css;
-  let sidebar =
-    style([Css.float(`left), left(px(0)), backgroundColor(hex("eee"))]);
-
-  let body = style([marginLeft(px(200)), padding(px(30))]);
-
   let header =
     style([
       backgroundColor(hex("f5f7f9")),
@@ -16,6 +12,16 @@ module Styles = {
       border(`px(1), `solid, `hex("e8f2f9")),
       borderRadius(`px(3)),
       marginBottom(`px(10)),
+    ]);
+
+  let topPart =
+    style([
+      maxHeight(`px(300)),
+      overflowY(`auto),
+      borderRadius(`px(2)),
+      border(`px(1), `solid, `hex("ddd")),
+      marginTop(`em(2.)),
+      marginBottom(`em(2.)),
     ]);
 };
 
@@ -26,25 +32,32 @@ type action =
 
 let component = ReasonReact.reducerComponent("Measurables");
 
-let seriesTop = (series: GetSeries.series) =>
+let seriesHero = (series: DataModel.Series.t) =>
   <Div flexDirection=`column styles=[Styles.header]>
     <Div flex=1>
       <Div flexDirection=`row>
         <Div flex=6>
-          <h2>
-            <Icon.Icon icon="LAYERS" />
-            {series.name |> Option.default("") |> ste}
-          </h2>
-          <p> {series.description |> Option.default("") |> ste} </p>
+          {
+            series.name
+            |> E.O.React.fmapOrNull(name =>
+                 <h2> <Icon.Icon icon="LAYERS" /> {name |> ste} </h2>
+               )
+          }
+          {
+            series.description
+            |> E.O.React.fmapOrNull(description =>
+                 description |> ste |> E.React.inP
+               )
+          }
           {
             switch (series.creator) {
             | Some({name: Some(name), id}) =>
-              <div className=PrimaryTableStyles.item>
-                <a href={Urls.mapLinkToUrl(AgentShow(id))}>
+              <div className=C.Shared.Item.item>
+                <a href={DataModel.Url.toString(AgentShow(id))}>
                   {name |> ste}
                 </a>
               </div>
-            | _ => ReasonReact.null
+            | _ => E.React.null
             }
           }
         </Div>
@@ -55,7 +68,7 @@ let seriesTop = (series: GetSeries.series) =>
   </Div>;
 
 let make =
-    (~channel: string, ~id: string, ~loggedInUser: GetUser.t, _children) => {
+    (~channel: string, ~id: string, ~loggedInUser: Queries.User.t, _children) => {
   ...component,
   initialState: () => {selected: None},
   reducer: (action, _state) =>
@@ -64,42 +77,38 @@ let make =
     },
   render: ({state, send}) => {
     let medium =
-      GetMeasurables.componentWithSeries(channel, id, measurables =>
-        <SeriesShowTable
+      Queries.Measurables.componentWithSeries(channel, id, measurables =>
+        <C.Measurables.SeriesTable
           measurables
           selected={state.selected}
           onClick={id => send(UpdateSelected(id))}
         />
       );
 
-    let bottom =
-      state.selected
-      |> E.O.fmap(elId => <MeasurableShow__Component id=elId loggedInUser />)
-      |> E.O.React.defaultNull;
-
-    GetSeries.component(~id, series =>
-      <div>
-        <SLayout.Header>
-          {
-            SLayout.seriesHead(
-              channel,
-              series
-              |> E.O.bind(_, (s: GetSeries.series) => s.name)
-              |> E.O.default(""),
-            )
-          }
-        </SLayout.Header>
-        <SLayout.MainSection>
-          {
-            switch (series) {
-            | Some(s) => seriesTop(s)
-            | None => ReasonReact.null
-            }
-          }
-          <div className=SeriesShowTableStyles.topPart> medium </div>
-          bottom
-        </SLayout.MainSection>
-      </div>
-    );
+    Queries.Series.component(~id)
+    |> E.F.apply(series =>
+         <>
+           <SLayout.Header>
+             {
+               SLayout.seriesHead(
+                 channel,
+                 series
+                 |> E.O.bind(_, (s: DataModel.Series.t) => s.name)
+                 |> E.O.default(""),
+               )
+             }
+           </SLayout.Header>
+           <SLayout.MainSection>
+             {series |> E.O.React.fmapOrNull(seriesHero)}
+             <div className=Styles.topPart> medium </div>
+             {
+               state.selected
+               |> E.O.React.fmapOrNull(elId =>
+                    <C.Measurable.FullPresentation id=elId loggedInUser />
+                  )
+             }
+           </SLayout.MainSection>
+         </>
+       );
   },
 };

@@ -1,7 +1,4 @@
 open Utils;
-open Rationale;
-open Result.Infix;
-open Rationale.Function.Infix;
 open Antd;
 open MomentRe;
 
@@ -68,8 +65,26 @@ let component = ReasonReact.statelessComponent("Measurables");
 
 let make = (~channel, _children) => {
   ...component,
-  render: _ =>
-    <div>
+  render: _ => {
+    let formCreator = mutation =>
+      SignUpForm.make(
+        ~onSubmit=({values}) => mutate(mutation, values, channel),
+        ~initialState={
+          name: "",
+          description: "",
+          descriptionProperty: "",
+          descriptionEntity: "",
+          expectedResolutionDate:
+            MomentRe.momentNow() |> MeasurableForm.formatDate,
+          descriptionDate: MomentRe.momentNow() |> MeasurableForm.formatDate,
+          resolutionEndpoint: "",
+          showDescriptionDate: "FALSE",
+          showDescriptionProperty: "FALSE",
+        },
+        ~schema=[(`name, Custom(_ => None))],
+      );
+
+    <>
       <SLayout.Header>
         {SLayout.Header.textDiv("New Measurable")}
       </SLayout.Header>
@@ -78,53 +93,35 @@ let make = (~channel, _children) => {
           CreateMeasurableMutation.Mutation.make(
             ~onCompleted=e => Js.log("HI"),
             (mutation, data) =>
-              SignUpForm.make(
-                ~onSubmit=({values}) => mutate(mutation, values, channel),
-                ~initialState={
-                  name: "",
-                  description: "",
-                  descriptionProperty: "",
-                  descriptionEntity: "",
-                  expectedResolutionDate:
-                    MomentRe.momentNow() |> MeasurableForm.formatDate,
-                  descriptionDate:
-                    MomentRe.momentNow() |> MeasurableForm.formatDate,
-                  resolutionEndpoint: "",
-                  showDescriptionDate: "FALSE",
-                  showDescriptionProperty: "FALSE",
-                },
-                ~schema=[(`name, Custom(_ => None))],
-                ({handleSubmit, handleChange, form, _}) =>
-                  switch (data.result) {
-                  | Loading => <div> {"Loading" |> ste} </div>
-                  | Error(e) =>
-                    <div>
-                      {"Error: " ++ e##message |> ste}
-                      {
-                        MeasurableForm.showForm(
-                          ~form,
-                          ~handleSubmit,
-                          ~handleChange,
-                        )
-                      }
-                    </div>
-                  | Data(data) =>
-                    data##createMeasurable
-                    |> E.O.fmap(e => e##id)
-                    |> doIfSome(_ => Urls.pushToLink(ChannelShow(channel)));
-                    <h2> {"Measurable successfully created" |> ste} </h2>;
-                  | NotCalled =>
+              formCreator(
+                mutation,
+                ({handleSubmit, handleChange, form, _}) => {
+                  let showForm =
                     MeasurableForm.showForm(
                       ~form,
                       ~handleSubmit,
                       ~handleChange,
-                    )
-                  },
+                    );
+                  switch (data.result) {
+                  | Loading => "Loading" |> ste
+                  | Error(e) =>
+                    <> {"Error: " ++ e##message |> ste} showForm </>
+                  | Data(data) =>
+                    data##createMeasurable
+                    |> E.O.fmap(e => e##id)
+                    |> doIfSome(_ =>
+                         DataModel.Url.push(ChannelShow(channel))
+                       );
+                    E.React.null;
+                  | NotCalled => showForm
+                  };
+                },
               )
-              |> ReasonReact.element,
+              |> E.React.el,
           )
-          |> ReasonReact.element
+          |> E.React.el
         }
       </SLayout.MainSection>
-    </div>,
+    </>;
+  },
 };

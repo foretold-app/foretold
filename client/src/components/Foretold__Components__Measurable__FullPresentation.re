@@ -1,0 +1,83 @@
+open Foretold__GraphQL;
+open Style.Grid;
+open Utils;
+
+module StatusDisplay = Foretold__Component__StatusDisplay;
+module Items = Foretold__Components__Measurable__Items;
+
+let component = ReasonReact.statelessComponent("MeasurableFullPresentation");
+
+module Styles = {
+  open Css;
+  let header =
+    style([
+      backgroundColor(`hex("f5f7f9")),
+      padding2(~v=`px(10), ~h=`px(13)),
+      border(`px(1), `solid, `hex("e8f2f9")),
+      borderRadius(`px(3)),
+      marginBottom(`px(10)),
+    ]);
+};
+
+let make = (~id: string, ~loggedInUser: Queries.User.t, _children) => {
+  ...component,
+  render: _self =>
+    Queries.MeasurableWithMeasurements.component(~id)
+    |> E.F.apply(m =>
+         <>
+           <Div flexDirection=`column styles=[Styles.header]>
+             <Div flex=1>
+               <Div flexDirection=`row>
+                 <Div flex=6>
+                   {Items.link(~m) |> E.React.inH2}
+                   {Items.description(~m) |> E.O.React.defaultNull}
+                 </Div>
+                 <Div flex=1>
+                   <StatusDisplay
+                     measurable=m
+                     dateDisplay=WHOLE
+                     withStatusColorSurrounding=true
+                   />
+                 </Div>
+               </Div>
+             </Div>
+             <Div flex=1>
+               {
+                 [|
+                   Items.series(~m) |> E.O.React.defaultNull,
+                   Items.creatorLink(~m) |> E.O.React.defaultNull,
+                   Items.resolutionEndpoint(~m) |> E.O.React.defaultNull,
+                   Items.endpointResponse(~m) |> E.O.React.defaultNull,
+                 |]
+                 |> ReasonReact.array
+               }
+             </Div>
+           </Div>
+           <>
+             {
+               loggedInUser
+               |> E.O.React.fmapOrNull((user: Queries.User.user) => {
+                    let userAgentId = user.agentId;
+                    let creatorId =
+                      m.creator |> E.O.fmap((r: DataModel.Agent.t) => r.id);
+                    <>
+                      {"Add a Measurement" |> ste |> E.React.inH2}
+                      <MeasurableShowForm
+                        measurableId=id
+                        isCreator={userAgentId == creatorId}
+                      />
+                    </>;
+                  })
+             }
+             {"Measurements" |> ste |> E.React.inH2}
+             {
+               m.measurements
+               |> E.O.React.fmapOrNull(measurements =>
+                    measurements
+                    |> Foretold__Components__Measurements__Table.make
+                  )
+             }
+           </>
+         </>
+       ),
+};

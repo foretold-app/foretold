@@ -1,6 +1,7 @@
 open E;
 open Utils;
 open Antd;
+open Foretold__GraphQL;
 
 type state = {
   floatCdf: FloatCdf.t,
@@ -90,7 +91,7 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
     </div>
     <div className=Styles.inputSection>
       {
-        showIf(
+        E.React.showIf(
           isCreator,
           <div className=Styles.select>
             {competitorType(~state, ~send)}
@@ -98,7 +99,7 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
         )
       }
       {
-        showIf(
+        E.React.showIf(
           state.competitorType == "OBJECTIVE",
           <div className=Styles.select> {dataType(~state, ~send)} </div>,
         )
@@ -143,7 +144,7 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
 
 let make =
     (
-      ~data: CreateMeasurementMutation.Mutation.renderPropObj,
+      ~data: Mutations.MeasurementCreate.Mutation.renderPropObj,
       ~onUpdate=_ => (),
       ~isCreator=false,
       ~onSubmit=_ => (),
@@ -179,13 +180,13 @@ let make =
     <Style.BorderedBox>
       {
         switch (data.result) {
-        | Loading => <div> {"Loading" |> ste} </div>
+        | Loading => "Loading" |> ste
         | Error(e) =>
-          <div>
+          <>
             {"Error: " ++ e##message |> ste}
             {mainn(~state, ~isCreator, ~send, ~onSubmit)}
-          </div>
-        | Data(_) => <h2> {"Form submitted successfully!" |> ste} </h2>
+          </>
+        | Data(_) => "Form submitted successfully!" |> ste |> E.React.inH2
         | NotCalled => mainn(~state, ~isCreator, ~send, ~onSubmit)
         }
       }

@@ -1,4 +1,3 @@
-open Rationale;
 open Rationale.Function.Infix;
 open Rationale.Result.Infix;
 open Belt.Result;

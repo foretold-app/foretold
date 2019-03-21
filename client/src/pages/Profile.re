@@ -68,7 +68,7 @@ let withUserForm = (id, name, mutation, innerComponentFn) =>
 let formFields = (form: Form.state, handleChange, handleSubmit: unit => unit) =>
   <Antd.Form>
     <Antd.Form.Item>
-      <h3> {"Username" |> ste} </h3>
+      {"Username" |> ste |> E.React.inH3}
       <Input
         value={form.values.name}
         onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
@@ -97,7 +97,7 @@ let make = (~loggedInUser, _children) => {
         id, name, mutation, ({handleSubmit, handleChange, form, _}) =>
         <>
           <SLayout.Header>
-            <h1> {"Edit Profile Information" |> ste} </h1>
+            {"Edit Profile Information" |> ste |> E.React.inH1}
           </SLayout.Header>
           <SLayout.MainSection>
             <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>

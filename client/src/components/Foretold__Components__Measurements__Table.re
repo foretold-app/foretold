@@ -115,27 +115,29 @@ module Helpers = {
       r
       |> Value.toPdf(~bucketSize=20)
       |> Value.FloatCdf.toPoints
-      |> (data => <WideChart data bounds=g />)
+      |> (data => Some(<WideChart data bounds=g />))
     | Belt.Result.Ok(`FloatPoint(r)) =>
-      <div className=Styles.middle>
-        {r |> E.Float.with3DigitsPrecision |> ste}
-      </div>
-    | _ => E.React.null
+      Some(
+        <div className=Styles.middle>
+          {r |> E.Float.with3DigitsPrecision |> ste}
+        </div>,
+      )
+    | _ => None
     };
 
   let description = (~m: measurement) =>
     m.description
     |> E.O.fmap(text =>
-         <div className=Styles.descriptionStyle> <p> {text |> ste} </p> </div>
-       )
-    |> E.O.React.defaultNull;
+         <div className=Styles.descriptionStyle>
+           {text |> ste |> E.React.inP}
+         </div>
+       );
 
   let relevantAt = (~m: measurement) =>
     m.relevantAt
     |> E.O.fmap(d =>
          <div className=Styles.date> {d |> E.M.goFormat_simple |> ste} </div>
-       )
-    |> E.O.React.defaultNull;
+       );
 
   let getFloatCdf = (e: Belt.Result.t(Value.t, string)) =>
     switch (e) {
@@ -214,12 +216,14 @@ module Helpers = {
     let aLink =
       switch (agent, agent |> E.O.bind(_, DataModel.Agent.name)) {
       | (Some(agent), Some(name)) =>
-        <a
-          href={DataModel.Url.toString(AgentShow(agent.id))}
-          className=Styles.agentStyle>
-          {name |> ste}
-        </a>
-      | _ => E.React.null
+        Some(
+          <a
+            href={DataModel.Url.toString(AgentShow(agent.id))}
+            className=Styles.agentStyle>
+            {name |> ste}
+          </a>,
+        )
+      | _ => None
       };
 
     let judgementStyle =
@@ -239,12 +243,16 @@ module Helpers = {
 
     if (isJudge) {
       <div className=judgementStyle>
-        <h3> {"Judgement" |> ste} </h3>
-        {aLink !== ("" |> ste) ? <span> {"by " |> ste} </span> : <span />}
-        aLink
+        {"Judgement" |> ste |> E.React.inH3}
+        {
+          switch (aLink) {
+          | Some(name) => <> {"by " |> ste} name </>
+          | None => E.React.null
+          }
+        }
       </div>;
     } else {
-      aLink;
+      aLink |> E.O.React.defaultNull;
     };
   };
 };
@@ -266,7 +274,9 @@ let make = (ms: list(measurement)) => {
          <div className=Styles.row key={m.id}>
            <div className=Styles.mainColumn>
              <div className=Styles.mainColumnTop>
-               {Helpers.smallDistribution(m, _bounds)}
+               {
+                 Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull
+               }
              </div>
              {
                switch (Helpers.toPercentiles(m)) {
@@ -284,10 +294,14 @@ let make = (ms: list(measurement)) => {
                  <Div flex=1>
                    <Div flexDirection=`row>
                      <Div flex=4> {Helpers.measurerLink(~m)} </Div>
-                     <Div flex=1> {Helpers.relevantAt(~m)} </Div>
+                     <Div flex=1>
+                       {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
+                     </Div>
                    </Div>
                  </Div>
-                 <Div flex=1> {Helpers.description(~m)} </Div>
+                 <Div flex=1>
+                   {Helpers.description(~m) |> E.O.React.defaultNull}
+                 </Div>
                </Div>
              </div>
            </div>

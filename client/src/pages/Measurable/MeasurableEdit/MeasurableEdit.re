@@ -95,7 +95,7 @@ let formCreation = (id, m) => {
           </>
         | Data(_) =>
           <>
-            <h3> {"Measurable successfully updated." |> ste} </h3>
+            {"Measurable successfully updated." |> ste |> E.React.inH3}
             <div>
               {MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange)}
             </div>

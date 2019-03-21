@@ -43,13 +43,13 @@ module Card = {
         </span>
         {
           series.description
-          |> E.O.fmap(d => <p> {d |> ste} </p>)
+          |> E.O.fmap(d => d |> ste |> E.React.inP)
           |> E.O.React.defaultNull
         }
         {
           series.measurableCount
           |> E.O.fmap(d =>
-               <p> {d |> string_of_int |> (e => e ++ " items") |> ste} </p>
+               d |> string_of_int |> (e => e ++ " items") |> ste |> E.React.inP
              )
           |> E.O.React.defaultNull
         }

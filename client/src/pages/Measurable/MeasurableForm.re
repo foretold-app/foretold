@@ -77,7 +77,7 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
   <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
     <Form>
       <Form.Item>
-        <h3> {"Relevant Entity (optional)" |> ste} </h3>
+        {"Relevant Entity (optional)" |> ste |> E.React.inH3}
         <Input
           value={form.values.descriptionEntity}
           onChange={
@@ -88,7 +88,7 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
         />
       </Form.Item>
       <Form.Item>
-        <h3> {"Property Type" |> ste} </h3>
+        {"Property Type" |> ste |> E.React.inH3 |> E.React.inH3}
         <Antd.Radio.Group
           value={form.values.showDescriptionProperty}
           defaultValue={form.values.showDescriptionProperty}
@@ -104,7 +104,7 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
       {
         form.values.showDescriptionProperty == "TRUE" ?
           <Form.Item>
-            <h3> {"Property Entity Name" |> ste} </h3>
+            {"Property Entity Name" |> ste |> E.React.inH3}
             <Input
               value={form.values.descriptionProperty}
               onChange={
@@ -119,7 +119,7 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
       {
         form.values.showDescriptionProperty == "FALSE" ?
           <Form.Item>
-            <h3> {"Custom Name" |> ste} </h3>
+            {"Custom Name" |> ste}
             <Input
               value={form.values.name}
               onChange={
@@ -130,7 +130,7 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
           <div />
       }
       <Form.Item>
-        <h3> {"Include a Specific Date in Name" |> ste} </h3>
+        {"Include a Specific Date in Name" |> ste |> E.React.inH3}
         <AntdSwitch
           checked={form.values.showDescriptionDate == "TRUE"}
           onChange={
@@ -141,7 +141,7 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
       {
         form.values.showDescriptionDate == "TRUE" ?
           <Form.Item>
-            <h3> {"'On' Date" |> ste} </h3>
+            {"'On' Date" |> ste |> E.React.inH3}
             <DatePicker
               value={
                 form.values.descriptionDate |> MomentRe.momentDefaultFormat
@@ -152,7 +152,7 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
           <div />
       }
       <Form.Item>
-        <h3> {"Description" |> ste} </h3>
+        {"Description" |> ste |> E.React.inH3}
         <Input
           value={form.values.description}
           onChange={
@@ -161,13 +161,12 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
         />
       </Form.Item>
       <Form.Item>
-        <h3> {"Resolution Endpoint (Optional)" |> ste} </h3>
-        <p>
-          {
-            "If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value."
-            |> ste
-          }
-        </p>
+        {"Resolution Endpoint (Optional)" |> ste |> E.React.inH3}
+        {
+          "If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value."
+          |> ste
+          |> E.React.inP
+        }
         <Input
           value={form.values.resolutionEndpoint}
           onChange={
@@ -178,7 +177,7 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
         />
       </Form.Item>
       <Form.Item>
-        <h3> {"Expected Resolution Date" |> ste} </h3>
+        {"Expected Resolution Date" |> ste |> E.React.inH3}
         <DatePicker
           value={
             form.values.expectedResolutionDate |> MomentRe.momentDefaultFormat

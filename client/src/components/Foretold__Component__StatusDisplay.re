@@ -51,8 +51,8 @@ let dateFinder = (head, p, date, dateDisplay) => {
   | BOTTOM => p ++ date |> ste
   | WHOLE =>
     <div className=statusRow>
-      <h3> {head |> ste} </h3>
-      <p> {p ++ date |> ste} </p>
+      {head |> ste |> E.React.inH3}
+      {p ++ date |> ste |> E.React.inP}
     </div>
   };
 };

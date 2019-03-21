@@ -79,7 +79,7 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 let component = (~id, innerFn) => {
   open Rationale.Result.Infix;
   open Utils;
-  let notFound = <h3> {"Agent not found" |> ste} </h3>;
+  let notFound = "Agent not found" |> ste;
   let query = Query.make(~id, ());
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
@@ -88,7 +88,7 @@ let component = (~id, innerFn) => {
     |> E.R.bind(_, e =>
          switch (e) {
          | Some(a) => Ok(a)
-         | None => Error(notFound)
+         | None => Error(notFound |> E.React.inH3)
          }
        )
     |> E.R.fmap(innerFn)

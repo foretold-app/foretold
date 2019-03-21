@@ -1,8 +1,7 @@
 open Utils;
 open Foretold__GraphQL;
 
-let toAgentLink = (id, name) => {j|<a href="/agents/$id">$name</a>|j};
-
+/* We currently don't use this file */
 let component = ReasonReact.statelessComponent("Measurables");
 let make = _children => {
   ...component,

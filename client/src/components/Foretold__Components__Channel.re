@@ -36,8 +36,9 @@ module SimpleHeader = {
       <div className=Styles.header>
         {
           channel
-          |> E.O.fmap(c => <> <h1> {simpleLink(c)} </h1> {button(c)} </>)
-          |> E.O.React.defaultNull
+          |> E.O.React.fmapOrNull(c =>
+               <> {simpleLink(c) |> E.React.inH1} {button(c)} </>
+             )
         }
       </div>,
   };

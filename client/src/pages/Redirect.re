@@ -23,13 +23,12 @@ let make = _children => {
         | _ => ()
         };
         <>
-          <h1> {"Redirecting..." |> ste} </h1>
-          <p>
-            {
-              "If you are not redirected shortly, try refreshing the page or contacting Ozzie."
-              |> ste
-            }
-          </p>
+          {"Redirecting..." |> ste |> E.React.inH1}
+          {
+            "If you are not redirected shortly, try refreshing the page or contacting Ozzie."
+            |> ste
+            |> E.React.inP
+          }
         </>;
       },
     ),

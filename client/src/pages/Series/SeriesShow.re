@@ -37,11 +37,18 @@ let seriesHero = (series: DataModel.Series.t) =>
     <Div flex=1>
       <Div flexDirection=`row>
         <Div flex=6>
-          <h2>
-            <Icon.Icon icon="LAYERS" />
-            {series.name |> Option.default("") |> ste}
-          </h2>
-          <p> {series.description |> Option.default("") |> ste} </p>
+          {
+            series.name
+            |> E.O.React.fmapOrNull(name =>
+                 <h2> <Icon.Icon icon="LAYERS" /> {name |> ste} </h2>
+               )
+          }
+          {
+            series.description
+            |> E.O.React.fmapOrNull(description =>
+                 description |> ste |> E.React.inP
+               )
+          }
           {
             switch (series.creator) {
             | Some({name: Some(name), id}) =>
@@ -78,13 +85,6 @@ let make =
         />
       );
 
-    let bottom =
-      state.selected
-      |> E.O.fmap(elId =>
-           <C.Measurable.FullPresentation id=elId loggedInUser />
-         )
-      |> E.O.React.defaultNull;
-
     Queries.Series.component(~id)
     |> E.F.apply(series =>
          <>
@@ -99,9 +99,14 @@ let make =
              }
            </SLayout.Header>
            <SLayout.MainSection>
-             {series |> E.O.fmap(seriesHero) |> E.O.React.defaultNull}
+             {series |> E.O.React.fmapOrNull(seriesHero)}
              <div className=Styles.topPart> medium </div>
-             bottom
+             {
+               state.selected
+               |> E.O.React.fmapOrNull(elId =>
+                    <C.Measurable.FullPresentation id=elId loggedInUser />
+                  )
+             }
            </SLayout.MainSection>
          </>
        );

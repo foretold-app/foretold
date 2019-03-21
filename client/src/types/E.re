@@ -24,6 +24,7 @@ module O = {
 
   module React = {
     let defaultNull = default(ReasonReact.null);
+    let fmapOrNull = fn => fmap(fn) ||> default(ReasonReact.null);
     let flatten = default(ReasonReact.null);
   };
 };
@@ -179,4 +180,8 @@ module React = {
   let makeToEl = (~key="", ~children=<div />, e) =>
     children |> e |> el(~key);
   let showIf = (cond, comp) => cond ? comp : ReasonReact.null;
+  let inP = e => <p> e </p>;
+  let inH1 = e => <h1> e </h1>;
+  let inH2 = e => <h2> e </h2>;
+  let inH3 = e => <h3> e </h3>;
 };

@@ -26,14 +26,14 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
   <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
     <Form>
       <Form.Item>
-        <h3> {"Channel Name" |> ste} </h3>
+        {"Channel Name" |> ste |> E.React.inH3}
         <Input
           value={form.values.name}
           onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
         />
       </Form.Item>
       <Form.Item>
-        <h3> {"Description" |> ste} </h3>
+        {"Description" |> ste |> E.React.inH3}
         <Input
           value={form.values.description}
           onChange={
@@ -42,7 +42,7 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
         />
       </Form.Item>
       <Form.Item>
-        <h3> {"Make Public?" |> ste} </h3>
+        {"Make Public?" |> ste |> E.React.inH3}
         <AntdSwitch
           checked={form.values.isPublic == "TRUE"}
           onChange={e => handleChange(`isPublic, e ? "TRUE" : "FALSE")}

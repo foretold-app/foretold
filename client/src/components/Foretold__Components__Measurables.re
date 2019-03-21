@@ -94,13 +94,16 @@ module BasicTable = {
                    <div className=Styles.mainColumnBottom>
                      {
                        [|
-                         E.React.showIf(showExtraData, Items.series(~m)),
                          E.React.showIf(
                            showExtraData,
-                           Items.creatorLink(~m),
+                           Items.series(~m) |> E.O.React.defaultNull,
                          ),
-                         Items.measurements(~m),
-                         Items.measurers(~m),
+                         E.React.showIf(
+                           showExtraData,
+                           Items.creatorLink(~m) |> E.O.React.defaultNull,
+                         ),
+                         Items.measurements(~m) |> E.O.React.defaultNull,
+                         Items.measurers(~m) |> E.O.React.defaultNull,
                          E.React.showIf(isSame, Items.editLink(~m)),
                          E.React.showIf(isSame, Items.archiveOption(~m)),
                        |]

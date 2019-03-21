@@ -65,7 +65,7 @@ let make = (~channel="general", _children) => {
                     |> doIfSome(_ =>
                          DataModel.Url.push(ChannelShow(channel))
                        );
-                    <h2> {"Measurable successfully created" |> ste} </h2>;
+                    "Measurable successfully created" |> ste |> E.React.inH2;
                   | NotCalled =>
                     ChannelForm.showForm(~form, ~handleSubmit, ~handleChange)
                   },

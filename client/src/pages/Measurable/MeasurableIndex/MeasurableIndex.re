@@ -122,7 +122,7 @@ let deselectedView =
         E.React.showIf(
           state.page == 0 && seriesList |> E.A.length > 0,
           <>
-            <h2> {"Series List" |> ste} </h2>
+            {"Series List" |> ste |> E.React.inH2}
             <div className=SeriesItems.items>
               {
                 seriesList

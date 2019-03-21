@@ -3,17 +3,30 @@ open Foretold__GraphQL;
 open Css;
 
 let block = style([marginBottom(`em(1.0))]);
-let notFound = <h3> {"Agent not found" |> ste} </h3>;
+let notFound = "Agent not found" |> ste |> E.React.inH3;
 
 let agentSection = (e: Queries.Agent.agent) =>
   switch (e) {
   | {bot: Some(r)} =>
     <>
-      <h2> {r.name |> E.O.default("") |> ste} </h2>
-      <h3> {r.description |> E.O.default("") |> ste} </h3>
-      <h3> {r.competitorType |> DataModel.CompetitorType.toString |> ste} </h3>
+      {
+        r.name
+        |> E.O.fmap(r => r |> ste |> E.React.inH2)
+        |> E.O.React.defaultNull
+      }
+      {
+        r.description
+        |> E.O.fmap(r => r |> ste |> E.React.inH3)
+        |> E.O.React.defaultNull
+      }
+      {
+        r.competitorType
+        |> DataModel.CompetitorType.toString
+        |> ste
+        |> E.React.inH3
+      }
     </>
-  | {user: Some(r)} => <h1> {r.name |> ste} </h1>
+  | {user: Some(r)} => r.name |> ste |> E.React.inH1
   | _ => notFound
   };
 

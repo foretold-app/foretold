@@ -80,11 +80,14 @@ let make =
                  }
                </div>
                <div className=Styles.column>
-                 {MeasurableItems.dateItem(~m, ~showOn=false, ())}
+                 {
+                   MeasurableItems.dateItem(~m, ~showOn=false, ())
+                   |> E.O.React.defaultNull
+                 }
                </div>
                <div className=Styles.column>
-                 {MeasurableItems.measurements(~m)}
-                 {MeasurableItems.measurers(~m)}
+                 {MeasurableItems.measurements(~m) |> E.O.React.defaultNull}
+                 {MeasurableItems.measurers(~m) |> E.O.React.defaultNull}
                </div>
                <div className=Styles.column>
                  <Foretold__Components__Measurable.StatusDisplay

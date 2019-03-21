@@ -14,13 +14,12 @@ let make = (~id: string, _children) => {
           |> E.A.of_list
           |> E.A.fmap((r: Graph_T.T.fact) =>
                <>
-                 <h3>
-                   {
-                     C.Ken.findName(r.propertyId)
-                     |> E.O.default("no-name")
-                     |> ste
-                   }
-                 </h3>
+                 {
+                   C.Ken.findName(r.propertyId)
+                   |> E.O.default("no-name")
+                   |> ste
+                   |> E.React.inH3
+                 }
                  Graph_T.T.(
                    switch (r.value.valueType) {
                    | String(s) => s |> ste

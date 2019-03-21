@@ -38,15 +38,17 @@ let dateOnStyle =
 
 let dateItem = (~m: measurable, ~showOn=true, ~onStyle=dateOnStyle, ()) =>
   switch (m.descriptionDate |> E.O.fmap(E.M.goFormat_simple), showOn) {
-  | (None, _) => E.React.null
+  | (None, _) => None
   | (Some(e), true) =>
-    [|
-      <span className=onStyle> {"on " |> ste} </span>,
-      <span className=Shared.TagLink.dateItem> {e |> ste} </span>,
-    |]
-    |> ReasonReact.array
+    Some(
+      [|
+        <span className=onStyle> {"on " |> ste} </span>,
+        <span className=Shared.TagLink.dateItem> {e |> ste} </span>,
+      |]
+      |> ReasonReact.array,
+    )
   | (Some(e), false) =>
-    <span className=Shared.TagLink.dateItem> {e |> ste} </span>
+    Some(<span className=Shared.TagLink.dateItem> {e |> ste} </span>)
   };
 
 let link = (~m: measurable) => {
@@ -65,15 +67,15 @@ let link = (~m: measurable) => {
       |> E.O.React.defaultNull
     }
     <span className=name> {m.name |> ste} </span>
-    {dateItem(~m, ())}
+    {dateItem(~m, ()) |> E.O.React.defaultNull}
   </>;
 };
 
 let description = (~m: measurable) =>
   switch (m.description) {
   | Some("")
-  | None => E.React.null
-  | Some(text) => <p> {text |> ste} </p>
+  | None => None
+  | Some(text) => Some(text |> ste |> E.React.inP)
   };
 
 let endpointResponse = (~m: measurable) =>
@@ -81,10 +83,12 @@ let endpointResponse = (~m: measurable) =>
     m.resolutionEndpoint |> E.O.default(""),
     m.resolutionEndpointResponse,
   ) {
-  | ("", _) => E.React.null
+  | ("", _) => None
   | (_, Some(r)) =>
-    "Current Endpoint Value: " ++ E.Float.with3DigitsPrecision(r) |> ste
-  | _ => E.React.null
+    Some(
+      "Current Endpoint Value: " ++ E.Float.with3DigitsPrecision(r) |> ste,
+    )
+  | _ => None
   };
 
 let creatorLink = (~m: measurable) =>
@@ -95,8 +99,7 @@ let creatorLink = (~m: measurable) =>
            {c.name |> E.O.default("") |> ste}
          </a>
        </div>
-     )
-  |> E.O.React.defaultNull;
+     );
 
 let editLink = (~m: measurable) =>
   <div className=Shared.Item.item>
@@ -109,24 +112,28 @@ let editLink = (~m: measurable) =>
 
 let measurements = (~m: measurable) =>
   switch (m.measurementCount) {
-  | Some(0) => E.React.null
-  | None => E.React.null
+  | Some(0) => None
+  | None => None
   | Some(count) =>
-    <div className=Shared.Item.item>
-      <Icon.Icon icon="BULB" />
-      {count |> string_of_int |> ste}
-    </div>
+    Some(
+      <div className=Shared.Item.item>
+        <Icon.Icon icon="BULB" />
+        {count |> string_of_int |> ste}
+      </div>,
+    )
   };
 
 let measurers = (~m: measurable) =>
   switch (m.measurerCount) {
-  | Some(0) => E.React.null
-  | None => E.React.null
+  | Some(0) => None
+  | None => None
   | Some(count) =>
-    <div className=Shared.Item.item>
-      <Icon.Icon icon="PEOPLE" />
-      {count |> string_of_int |> ste}
-    </div>
+    Some(
+      <div className=Shared.Item.item>
+        <Icon.Icon icon="PEOPLE" />
+        {count |> string_of_int |> ste}
+      </div>,
+    )
   };
 
 let series = (~m: measurable) =>
@@ -149,8 +156,7 @@ let series = (~m: measurable) =>
          )
        | None => None
        }
-     )
-  |> E.O.React.defaultNull;
+     );
 
 let expectedResolutionDate = (~m: measurable) =>
   <div className=Shared.Item.item>
@@ -159,9 +165,11 @@ let expectedResolutionDate = (~m: measurable) =>
 
 let resolutionEndpoint = (~m: measurable) =>
   switch (m.resolutionEndpoint |> E.O.default("")) {
-  | "" => ReasonReact.null
+  | "" => None
   | text =>
-    <div className=Shared.Item.item> {"Endpoint: " ++ text |> ste} </div>
+    Some(
+      <div className=Shared.Item.item> {"Endpoint: " ++ text |> ste} </div>,
+    )
   };
 
 let archiveButton = (~m: measurable) =>

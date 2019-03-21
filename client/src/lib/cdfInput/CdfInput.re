@@ -186,7 +186,7 @@ let make =
             {"Error: " ++ e##message |> ste}
             {mainn(~state, ~isCreator, ~send, ~onSubmit)}
           </>
-        | Data(_) => <h2> {"Form submitted successfully!" |> ste} </h2>
+        | Data(_) => "Form submitted successfully!" |> ste |> E.React.inH2
         | NotCalled => mainn(~state, ~isCreator, ~send, ~onSubmit)
         }
       }

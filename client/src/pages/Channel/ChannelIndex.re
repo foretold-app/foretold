@@ -46,7 +46,7 @@ let make = _children => {
       <div className=row>
         <div className=column>
           <div className=nameS> {name |> ste} </div>
-          <p> {description |> ste} </p>
+          {description |> ste |> E.React.inP}
         </div>
         <div className=column>
           <Antd.Button _type=`primary> {"Join" |> ste} </Antd.Button>

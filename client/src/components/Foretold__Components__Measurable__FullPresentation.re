@@ -29,8 +29,8 @@ let make = (~id: string, ~loggedInUser: Queries.User.t, _children) => {
              <Div flex=1>
                <Div flexDirection=`row>
                  <Div flex=6>
-                   <h2> {Items.link(~m)} </h2>
-                   {Items.description(~m)}
+                   {Items.link(~m) |> E.React.inH2}
+                   {Items.description(~m) |> E.O.React.defaultNull}
                  </Div>
                  <Div flex=1>
                    <StatusDisplay
@@ -44,10 +44,10 @@ let make = (~id: string, ~loggedInUser: Queries.User.t, _children) => {
              <Div flex=1>
                {
                  [|
-                   Items.series(~m),
-                   Items.creatorLink(~m),
-                   Items.resolutionEndpoint(~m),
-                   Items.endpointResponse(~m),
+                   Items.series(~m) |> E.O.React.defaultNull,
+                   Items.creatorLink(~m) |> E.O.React.defaultNull,
+                   Items.resolutionEndpoint(~m) |> E.O.React.defaultNull,
+                   Items.endpointResponse(~m) |> E.O.React.defaultNull,
                  |]
                  |> ReasonReact.array
                }
@@ -56,28 +56,26 @@ let make = (~id: string, ~loggedInUser: Queries.User.t, _children) => {
            <>
              {
                loggedInUser
-               |> E.O.fmap((user: Queries.User.user) => {
+               |> E.O.React.fmapOrNull((user: Queries.User.user) => {
                     let userAgentId = user.agentId;
                     let creatorId =
                       m.creator |> E.O.fmap((r: DataModel.Agent.t) => r.id);
                     <>
-                      <h2> {"Add a Measurement" |> ste} </h2>
+                      {"Add a Measurement" |> ste |> E.React.inH2}
                       <MeasurableShowForm
                         measurableId=id
                         isCreator={userAgentId == creatorId}
                       />
                     </>;
                   })
-               |> E.O.React.defaultNull
              }
-             <h2> {"Measurements" |> ste} </h2>
+             {"Measurements" |> ste |> E.React.inH2}
              {
                m.measurements
-               |> E.O.fmap(measurements =>
+               |> E.O.React.fmapOrNull(measurements =>
                     measurements
                     |> Foretold__Components__Measurements__Table.make
                   )
-               |> E.O.React.defaultNull
              }
            </>
          </>

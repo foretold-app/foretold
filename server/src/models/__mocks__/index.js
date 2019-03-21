@@ -23,6 +23,7 @@ const User = {
   findOne: jest.fn(() => Promise.resolve(true)),
   create: jest.fn(() => Promise.resolve(true)),
   findById: jest.fn(() => Promise.resolve(true)),
+  findOrCreate: jest.fn(() => Promise.resolve(true)),
 };
 
 module.exports = {

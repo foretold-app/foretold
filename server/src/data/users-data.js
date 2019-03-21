@@ -9,10 +9,10 @@ class UsersData {
    * @return {Promise<Array<Model>|Model>}
    */
   async getUserByAuth0Id(auth0Id) {
-    const user = await models.User.findOne({
+    const user = await models.User.findOrCreate({
       where: { auth0Id: auth0Id },
+      defaults: { auth0Id: auth0Id, name: '' },
     });
-    if (!user) throw new Error('User is not found');
     return user;
   }
 
@@ -33,32 +33,20 @@ class UsersData {
   }
 
   /**
+   * @tested
    * @param ops
    * @param values
    * @param options
    * @return {Promise<*>}
    */
-  async getUser(ops, values, options){
+  async getUser(ops, values, options) {
     const { id, auth0Id } = values;
-
-    let _auth0Id = options.user.auth0Id;
-    const _auth0User = options.user;
-
-    let user;
-    if (_auth0Id && !_auth0User) {
-      try {
-        user = await models.User.create({ auth0Id: _auth0Id, name: "" });
-      } catch (e) {
-        console.log("E", e);
-      }
-    }
-
-    if (user) {
-      return user;
+    if (options.user) {
+      return options.user;
     } else if (id) {
       return await models.User.findById(id);
     } else if (auth0Id) {
-      return await this.auth0User(auth0Id);
+      return await this.getUserByAuth0Id(auth0Id);
     }
   }
 }

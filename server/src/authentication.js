@@ -49,6 +49,8 @@ async function authentication(options) {
 }
 
 module.exports = {
+  getToken,
+  authenticationByJwtToken,
   authentication,
 };
 

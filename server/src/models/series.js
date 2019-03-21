@@ -29,6 +29,15 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ARRAY(DataTypes.DATE),
       allowNull: true,
     },
+    measurableCount: {
+      allowNull: true,
+      type: Sequelize.VIRTUAL(DataTypes.INTEGER),
+      get: async function() {
+        // TODO: These queries are likely very slow, my guess is that this could be sped up a location.
+        const items = await this.getMeasurables()
+        return items.length
+      }
+    },
   },
     {
     hooks: {

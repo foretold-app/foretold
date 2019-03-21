@@ -1,6 +1,27 @@
 open Utils;
 open Rationale;
-open Result.Infix;
+open Foretold__GraphQL;
+
+module SeriesItems = {
+  open Css;
+  let items =
+    style([
+      display(`flex),
+      flexWrap(`wrap),
+      marginTop(`em(1.0)),
+      marginBottom(`em(1.0)),
+    ]);
+  let item =
+    style([
+      Css.float(`left),
+      margin4(
+        ~top=`em(0.0),
+        ~left=`em(0.0),
+        ~right=`em(0.5),
+        ~bottom=`em(0.5),
+      ),
+    ]);
+};
 
 type state = {
   page: int,
@@ -17,49 +38,129 @@ let component = ReasonReact.reducerComponent("MeasurableIndex");
 
 let itemsPerPage = 20;
 
-let indexChannelHeader =
-    (channel: option(string), onForward, onBackward, isAtStart, isAtEnd) =>
-  channel
-  |> E.O.fmap(c =>
-       <div>
-         {SLayout.channelLink(c)}
-         <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
-           <Icon.Icon icon="ARROW_LEFT" />
-         </Antd.Button>
-         <Antd.Button onClick={_ => onForward()} disabled=isAtEnd>
-           <Icon.Icon icon="ARROW_RIGHT" />
-         </Antd.Button>
-         {SLayout.button(c)}
-       </div>
-     )
-  |> E.O.React.defaultNull;
+let itemHeader = (channel: string, onForward, onBackward, isAtStart, isAtEnd) =>
+  <>
+    {SLayout.channelLink(channel)}
+    <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
+      <Icon.Icon icon="ARROW_LEFT" />
+    </Antd.Button>
+    <Antd.Button onClick={_ => onForward()} disabled=isAtEnd>
+      <Icon.Icon icon="ARROW_RIGHT" />
+    </Antd.Button>
+    {C.Channel.SimpleHeader.button(channel)}
+  </>;
 
-let itemHeader =
+let selectedView =
     (
-      channel: option(string),
-      onForward,
-      onBackward,
-      onBack,
-      isAtStart,
-      isAtEnd,
-    ) =>
-  channel
-  |> E.O.fmap(c =>
-       <div>
-         {SLayout.channelBack(~channelName=c, ~onClick=_ => onBack(), ())}
-         {SLayout.channelLink(c)}
-         <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
-           <Icon.Icon icon="ARROW_LEFT" />
-         </Antd.Button>
-         <Antd.Button onClick={_ => onForward()} disabled=isAtEnd>
-           <Icon.Icon icon="ARROW_RIGHT" />
-         </Antd.Button>
-         {SLayout.button(c)}
-       </div>
-     )
-  |> E.O.React.defaultNull;
+      ~channel: string,
+      ~loggedInUser: Queries.User.t,
+      ~send,
+      ~measurables: array(DataModel.Measurable.t),
+      ~index: int,
+    ) => {
+  let measurable = E.A.get(measurables, index);
+  let itemsOnPage = measurables |> Array.length;
+  <>
+    <SLayout.Header>
+      {
+        SLayout.channelBack(
+          ~channelName=channel,
+          ~onClick=_ => send(Select(None)),
+          (),
+        )
+      }
+      {
+        itemHeader(
+          channel,
+          () => send(SelectIncrement),
+          () => send(SelectDecrement),
+          index == 0,
+          index == itemsOnPage - 1,
+        )
+      }
+    </SLayout.Header>
+    <SLayout.MainSection>
+      {
+        switch (measurable) {
+        | Some(m) => <C.Measurable.FullPresentation id={m.id} loggedInUser />
+        | None => "Item not found" |> ste
+        }
+      }
+    </SLayout.MainSection>
+  </>;
+};
 
-let make = (~channel: string, ~loggedInUser: GetUser.t, _children) => {
+let deselectedView =
+    (
+      ~channel: string,
+      ~loggedInUser: Queries.User.t,
+      ~send,
+      ~state,
+      ~measurables: array(DataModel.Measurable.t),
+      ~seriesCollection: array(Queries.SeriesCollection.series),
+    ) => {
+  let seriesList =
+    seriesCollection
+    |> E.A.filter((x: Queries.SeriesCollection.series) =>
+         x.channel == channel && x.measurableCount !== Some(0)
+       );
+  <>
+    {
+      itemHeader(
+        channel,
+        () => send(NextPage),
+        () => send(LastPage),
+        state.page == 0,
+        measurables->E.A.length < itemsPerPage,
+      )
+      ->E.U.toA
+      ->SLayout.Header.make
+      |> E.React.el
+    }
+    <SLayout.MainSection>
+      {
+        E.React.showIf(
+          state.page == 0 && seriesList |> E.A.length > 0,
+          <>
+            {"Series List" |> ste |> E.React.inH2}
+            <div className=SeriesItems.items>
+              {
+                seriesList
+                |> Array.map((x: Queries.SeriesCollection.series) =>
+                     <div
+                       className=SeriesItems.item
+                       onClick={
+                         _e =>
+                           DataModel.Url.push(SeriesShow(x.channel, x.id))
+                       }>
+                       <C.Series.Card series=x />
+                     </div>
+                   )
+                |> ReasonReact.array
+              }
+            </div>
+          </>,
+        )
+      }
+      <C.Measurables.BasicTable
+        measurables
+        loggedInUser
+        showExtraData=true
+        onSelect={
+          e =>
+            send(
+              Select(
+                measurables
+                |> E.A.findIndex((r: DataModel.Measurable.t) => r.id == e.id),
+              ),
+            )
+        }
+      />
+    </SLayout.MainSection>
+  </>;
+};
+
+let make = (~channel: string, ~loggedInUser: Queries.User.t, _children) => {
   ...component,
   initialState: () => {page: 0, selected: None},
   reducer: (action, state) =>
@@ -71,86 +172,35 @@ let make = (~channel: string, ~loggedInUser: GetUser.t, _children) => {
     | SelectIncrement =>
       ReasonReact.Update({
         ...state,
-        selected: state.selected |> E.O.fmap(r => r + 1),
+        selected: state.selected |> E.O.fmap(E.I.increment),
       })
     | SelectDecrement =>
       ReasonReact.Update({
         ...state,
-        selected: state.selected |> E.O.fmap(r => r - 1),
+        selected: state.selected |> E.O.fmap(E.I.decrement),
       })
     },
   render: ({state, send}) =>
-    (
-      (measurables: array(DataModel.measurable)) =>
-        <div>
-          {
-            switch (state.selected) {
-            | Some(index) =>
-              let measurable = E.A.get(measurables, index);
-              let itemsOnPage = measurables |> Array.length;
-              <div>
-                <SLayout.Header>
-                  {
-                    itemHeader(
-                      Some(channel),
-                      () => send(SelectIncrement),
-                      () => send(SelectDecrement),
-                      () => send(Select(None)),
-                      index == 0,
-                      index == itemsOnPage - 1,
-                    )
-                  }
-                </SLayout.Header>
-                <SLayout.MainSection>
-                  {
-                    switch (measurable) {
-                    | Some(m) =>
-                      <MeasurableShow__Component id={m.id} loggedInUser />
-                    | None => "Item not found" |> ste
-                    }
-                  }
-                </SLayout.MainSection>
-              </div>;
-            | _ =>
-              <div>
-                <SLayout.Header>
-                  {
-                    indexChannelHeader(
-                      Some(channel),
-                      () => send(NextPage),
-                      () => send(LastPage),
-                      state.page == 0,
-                      measurables |> Array.length < itemsPerPage,
-                    )
-                  }
-                </SLayout.Header>
-                <SLayout.MainSection>
-                  <MeasurableIndex__Table
-                    measurables
-                    loggedInUser
-                    showExtraData=true
-                    onSelect=(
-                      e =>
-                        send(
-                          Select(
-                            Some(
-                              measurables
-                              |> Array.to_list
-                              |> Rationale.RList.findIndex(
-                                   (r: DataModel.measurable) =>
-                                   r.id == e.id
-                                 )
-                              |> E.O.toExn(""),
-                            ),
-                          ),
-                        )
-                    )
-                  />
-                </SLayout.MainSection>
-              </div>
-            }
-          }
-        </div>
-    )
-    |> GetMeasurables.component(channel, state.page, itemsPerPage),
+    Queries.SeriesCollection.component(
+      (seriesCollection: array(Queries.SeriesCollection.series)) =>
+      Queries.Measurables.component(
+        channel,
+        state.page,
+        itemsPerPage,
+        (measurables: array(DataModel.Measurable.t)) =>
+        switch (state.selected) {
+        | Some(index) =>
+          selectedView(~channel, ~loggedInUser, ~send, ~measurables, ~index)
+        | _ =>
+          deselectedView(
+            ~channel,
+            ~loggedInUser,
+            ~send,
+            ~state,
+            ~measurables,
+            ~seriesCollection,
+          )
+        }
+      )
+    ),
 };

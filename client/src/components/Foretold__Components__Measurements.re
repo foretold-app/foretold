@@ -1,0 +1,1 @@
+module Table = Foretold__Components__Measurements__Table;

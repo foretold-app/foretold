@@ -16,6 +16,7 @@ type measurement = {
   high: float,
 };
 
+let formatDate = E.M.format(E.M.format_standard);
 let make = (~measurements: array(measurement), _children) => {
   ...component,
   render: _ => {
@@ -31,7 +32,6 @@ let make = (~measurements: array(measurement), _children) => {
       |> E.A.fmap(e => e.low)
       |> E.A.fold_left((a, b) => a < b ? a : b, max_float);
 
-    let formatDate = Moment.format("MMM DD, YYYY HH:MM:SS");
     let xMax =
       sorted
       |> E.A.fmap(e => e.createdAt)
@@ -40,7 +40,7 @@ let make = (~measurements: array(measurement), _children) => {
            "Jan 3, 1970" |> moment,
          )
       |> formatDate
-      |> Js.Date.fromString;
+      |> E.JsDate.fromString;
 
     let xMin =
       sorted
@@ -50,7 +50,7 @@ let make = (~measurements: array(measurement), _children) => {
            "Jan 3, 2070" |> moment,
          )
       |> formatDate
-      |> Js.Date.fromString;
+      |> E.JsDate.fromString;
 
     let aggregatePercentiles =
       sorted
@@ -59,7 +59,7 @@ let make = (~measurements: array(measurement), _children) => {
            {
              "y0": e.low,
              "y": e.high,
-             "x": e.createdAt |> formatDate |> Js.Date.fromString,
+             "x": e.createdAt |> formatDate |> E.JsDate.fromString,
            }
          );
     let competitives =
@@ -67,7 +67,7 @@ let make = (~measurements: array(measurement), _children) => {
       |> Js.Array.filter(e => e.competitorType == `COMPETITIVE)
       |> E.A.fmap(e =>
            {
-             "x": e.createdAt |> formatDate |> Js.Date.fromString,
+             "x": e.createdAt |> formatDate |> E.JsDate.fromString,
              "y1": e.low,
              "y2": e.median,
              "y3": e.high,
@@ -79,7 +79,7 @@ let make = (~measurements: array(measurement), _children) => {
       |> Js.Array.filter(e => e.competitorType == `OBJECTIVE)
       |> E.A.fmap(e =>
            {
-             "x": e.createdAt |> formatDate |> Js.Date.fromString,
+             "x": e.createdAt |> formatDate |> E.JsDate.fromString,
              "y1": e.low,
              "y2": e.median,
              "y3": e.high,
@@ -91,7 +91,7 @@ let make = (~measurements: array(measurement), _children) => {
       |> Js.Array.filter(e => e.competitorType == `AGGREGATION)
       |> E.A.fmap(e =>
            {
-             "x": e.createdAt |> formatDate |> Js.Date.fromString,
+             "x": e.createdAt |> formatDate |> E.JsDate.fromString,
              "y": e.median,
            }
          );

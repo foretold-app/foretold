@@ -1,5 +1,3 @@
-open Rationale;
-
 /* Create an InMemoryCache */
 let inMemoryCache = ApolloInMemoryCache.createInMemoryCache();
 

@@ -80,9 +80,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'seriesId',
       as: "Measurables"
     })
+    // Usage
+    // const se = await models.Series.find();
+    // const ch = await se.getChannel();
     Model.Channel = Model.belongsTo(models.Channel, {
       foreignKey: 'channelId',
-      as: 'channel'
     });
   }
   return Model;

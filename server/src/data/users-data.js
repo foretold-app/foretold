@@ -9,9 +9,10 @@ class UsersData {
    * @return {Promise<Array<Model>|Model>}
    */
   async getUserByAuth0Id(auth0Id) {
-    const user = await models.User.findOrCreate({
-      where: { auth0Id: auth0Id },
-      defaults: { auth0Id: auth0Id, name: '' },
+    const user = await models.User.findOne({
+      where: { auth0Id: auth0Id }
+    }) || await models.User.create({
+      auth0Id: auth0Id, name: '',
     });
     return user;
   }

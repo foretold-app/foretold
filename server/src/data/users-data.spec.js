@@ -16,13 +16,28 @@ describe('UsersData', () => {
 
   describe('createOne - branch A', () => {
     beforeAll(() => {
-      jest.spyOn(models.User, 'findOrCreate').mockReturnValue(Promise.resolve(true));
+      jest.spyOn(models.User, 'findOne').mockReturnValue(Promise.resolve(true));
+      jest.spyOn(models.User, 'create').mockReturnValue(Promise.resolve(true));
     });
     it('createOne', () => {
       return instance.getUserByAuth0Id(auth0Id).then((result) => {
-        expect(models.User.findOrCreate).toHaveBeenCalledWith({
+        expect(models.User.findOne).toHaveBeenCalledWith({
           where: { auth0Id },
-          defaults: { auth0Id: auth0Id, name: '' },
+        });
+        expect(result).toBe(true);
+      });
+    });
+  });
+
+  describe('createOne - branch B', () => {
+    beforeAll(() => {
+      jest.spyOn(models.User, 'findOne').mockReturnValue(Promise.resolve(false));
+      jest.spyOn(models.User, 'create').mockReturnValue(Promise.resolve(true));
+    });
+    it('createOne', () => {
+      return instance.getUserByAuth0Id(auth0Id).then((result) => {
+        expect(models.User.create).toHaveBeenCalledWith({
+          auth0Id: auth0Id, name: ''
         });
         expect(result).toBe(true);
       });

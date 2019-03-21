@@ -11,6 +11,7 @@ class ChannelsData {
   }
 
   /**
+   * @tested
    * @param {Model} user
    * @param {object} input
    * @return {Promise<Model>}
@@ -31,6 +32,7 @@ class ChannelsData {
   }
 
   /**
+   * @tested
    * @param {string} id
    * @param {object} input
    * @return {Promise<Model>}
@@ -44,6 +46,7 @@ class ChannelsData {
   }
 
   /**
+   * @tested
    * @param {string} id
    * @return {Promise<Model[]>}
    */
@@ -56,6 +59,7 @@ class ChannelsData {
   }
 
   /**
+   * @tested
    * @param {string} id
    * @return {Promise<Model>}
    */

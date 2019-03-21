@@ -78,6 +78,30 @@ describe('ChannelsData', () => {
     });
   });
 
-})
-;
+  describe('getAgentsByChannelId - branch A', () => {
+    const agents = [];
+    beforeAll(() => {
+      jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({agents}));
+    });
+    it('createOne', () => {
+      return instance.getAgentsByChannelId(id).then((result) => {
+        expect(models.Channel.findOne).toHaveBeenCalledTimes(1);
+        expect(result).toBe(agents);
+      });
+    });
+  });
 
+  describe('getCreatorByChannelId - branch A', () => {
+    const creator = 1;
+    beforeAll(() => {
+      jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({creator}));
+    });
+    it('createOne', () => {
+      return instance.getCreatorByChannelId(id).then((result) => {
+        expect(models.Channel.findOne).toHaveBeenCalledTimes(1);
+        expect(result).toBe(creator);
+      });
+    });
+  });
+
+});

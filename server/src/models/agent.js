@@ -51,9 +51,9 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'creatorId',
     }
     )
-    // models.Agent.findById('4897a0f7-6b30-4ad3-a3d1-21c487a435ce').getChannels()
+    // await (await models.Agent.findById('4897a0f7-6b30-4ad3-a3d1-21c487a435ce')).getChannels()
     // models.Agent.findAll({ include: [models.Channel] })
-    // models.Agent.find({where: { id: '4897a0f7-6b30-4ad3-a3d1-21c487a435ce' } } ).getChannels();
+    // await (await models.Agent.find({where: { id: '4897a0f7-6b30-4ad3-a3d1-21c487a435ce' } } )).getChannels();
     Model.Channels = Model.belongsToMany(models.Channel, {
       through: models.AgentsChannels,
       foreignKey: 'agentId',

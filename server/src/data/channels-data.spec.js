@@ -1,5 +1,3 @@
-jest.mock('../models');
-
 const models = require('../models');
 const { ChannelsData } = require('./channels-data');
 const { AgentsChannelsData } = require('./agents-channels-data');

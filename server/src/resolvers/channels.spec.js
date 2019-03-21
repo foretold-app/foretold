@@ -1,6 +1,3 @@
-jest.mock('../models');
-jest.mock('../lib/notifications');
-
 const channels = require('./channels');
 const data = require('../data');
 

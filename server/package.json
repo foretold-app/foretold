@@ -134,6 +134,9 @@
     }
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupFiles": [
+      "./src/jest-globals.js"
+    ]
   }
 }

@@ -1,6 +1,3 @@
-jest.mock('../models');
-jest.mock('../lib/notifications');
-
 const index = require('./index');
 
 describe('channels', () => {

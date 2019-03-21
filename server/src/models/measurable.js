@@ -218,7 +218,7 @@ module.exports = (sequelize, DataTypes) => {
     })
     // Usage:
     // const me = await models.Measurable.find();
-    // const ch = await result.getChannel();
+    // const ch = await me.getChannel();
     Model.Channel = Model.belongsTo(models.Channel, {
       foreignKey: 'channelId',
     });

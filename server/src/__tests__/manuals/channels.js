@@ -1,29 +1,26 @@
-const moment = require('moment');
-const util = require('util');
-const _ = require('lodash');
 const assert = require('assert');
 
-const models = require('./models');
+const moment = require('moment');
+const _ = require('lodash');
 
-const uuid = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (letter, r) => {
-  return ('x' === letter ? (r = Math.random() * 16 | 0) : (r & 0x3 | 0x8)).toString(16)
-});
+const models = require('./models');
 
 async function test() {
   await models.sequelize.query('BEGIN');
 
   const user1 = await models.User.create({
     name: 'Test User 1',
-    auth0Id: uuid(),
+    auth0Id: models.sequelize.fn('uuid_generate_v4'),
   });
 
   const user2 = await models.User.create({
     name: 'Test User 2',
-    auth0Id: uuid(),
+    auth0Id: models.sequelize.fn('uuid_generate_v4'),
   });
+
   const user3 = await models.User.create({
     name: 'Test User 3',
-    auth0Id: uuid(),
+    auth0Id: models.sequelize.fn('uuid_generate_v4'),
   });
 
   const channel1 = await models.Channel.create({
@@ -90,12 +87,49 @@ async function test() {
     assert(ch[0].id === channel3.id, 'Error 3');
   }
 
+  // 4
+  {
+    const result = await models.Agent.findAll({
+      where: { id: user2.agentId },
+      include: [models.Channel]
+    });
+    assert(result[0].Channels[0].id === channel2.id, 'Error 4');
+  }
+
+  // 6
+  {
+    const me = await models.Measurable.find({ where: { name: measurable1.name } });
+    const ch = await me.getChannel();
+    assert(ch.id === channel1.id, 'Error 6');
+  }
+
+  // 7
+  {
+    const se = await models.Series.find({ where: { id: serie1.id } });
+    const ch = await se.getChannel();
+    assert(ch.id === channel1.id, 'Error 7');
+  }
+
+  // 5
+  {
+    const result = await models.Channel.findAll({
+      where: { name: channel1.name },
+      include: [
+        { model: models.Agent, as: 'creator' },
+        { model: models.Agent }
+      ]
+    });
+    assert(result[0].Agents[0].id === user1.agentId, 'Error 5.0');
+    assert(result[0].creator.id === user1.agentId, 'Error 5.1');
+  }
+
   await models.sequelize.query('ROLLBACK');
 
 }
 
 test().then((result) => {
-  console.log('Test result', result);
+  console.log('Test result');
+  console.log('OK');
 }).catch((err) => {
   console.log('Tes err', err);
 });

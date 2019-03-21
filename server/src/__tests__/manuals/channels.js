@@ -3,7 +3,11 @@ const assert = require('assert');
 const moment = require('moment');
 const _ = require('lodash');
 
-const models = require('./models');
+const models = require('../../models');
+
+// To run script:
+// npm run babel-node ./src/__tests__/manuals/channels.js
+//
 
 async function test() {
   await models.sequelize.query('BEGIN');

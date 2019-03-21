@@ -19,8 +19,14 @@ const Agent = {
   findById: findById,
 };
 
+const User = {
+  findOne: jest.fn(() => Promise.resolve(true)),
+  create: jest.fn(() => Promise.resolve(true)),
+};
+
 module.exports = {
-  Channel,
+  User,
   Agent,
+  Channel,
   AgentsChannels,
 };

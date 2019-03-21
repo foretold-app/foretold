@@ -195,6 +195,12 @@ const schema = new graphql.GraphQLSchema({
         args: {
           input: { type: new graphql.GraphQLNonNull(types.channels.channelInput) },
         },
+        /**
+         * @param root
+         * @param {{ input: Schema.ChannelsInput }} values
+         * @param {Schema.Context} options
+         * @return {Promise.<Model>}
+         */
         resolve: async (root, values, options) => {
           return data.channelsData.createOne(options.user, values.input);
         },

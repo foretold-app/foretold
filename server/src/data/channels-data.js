@@ -12,9 +12,9 @@ class ChannelsData {
 
   /**
    * @tested
-   * @param {Model} user
-   * @param {object} input
-   * @return {Promise<Model>}
+   * @param {Models.User} user
+   * @param {Schema.ChannelsInput} input
+   * @return {Promise<Models.Channel>}
    */
   async createOne(user, input) {
     let channel = await models.Channel.findOne({

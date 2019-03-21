@@ -1,6 +1,7 @@
 const data = require('../data');
 
 /**
+ * @tested
  * @param {Model} channel
  * @param {string} channel.id
  * @returns {Promise<Model[]>}
@@ -10,6 +11,7 @@ async function channelAgents(channel) {
 }
 
 /**
+ * @tested
  * @param {Model} channel
  * @param {string} channel.id
  * @returns {Promise<Model>}

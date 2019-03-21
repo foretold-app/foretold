@@ -1,12 +1,9 @@
 const models = require("../models");
 const { notify } = require("../lib/notifications");
 
-const { UsersData } = require('./users-data');
-
 class MeasurementData {
-  constructor() {
-    this.usersData = new UsersData();
-  }
+
+  constructor() { }
 
   /**
    * @todo: rename

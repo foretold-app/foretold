@@ -68,7 +68,12 @@ let seriesHero = (series: DataModel.Series.t) =>
   </Div>;
 
 let make =
-    (~channel: string, ~id: string, ~loggedInUser: Queries.User.t, _children) => {
+    (
+      ~channel: DataModel.Channell.t,
+      ~id: string,
+      ~loggedInUser: Queries.User.t,
+      _children,
+    ) => {
   ...component,
   initialState: () => {selected: None},
   reducer: (action, _state) =>
@@ -77,7 +82,7 @@ let make =
     },
   render: ({state, send}) => {
     let medium =
-      Queries.Measurables.componentWithSeries(channel, id, measurables =>
+      Queries.Measurables.componentWithSeries(channel.id, id, measurables =>
         <C.Measurables.SeriesTable
           measurables
           selected={state.selected}

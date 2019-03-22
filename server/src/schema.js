@@ -140,7 +140,7 @@ const schema = new GraphQLSchema({
       ...modelResolvers("bot", "bots", botType, models.Bot),
       ...modelResolvers("agent", "agents", agentType, models.Agent),
       ...modelResolvers("series", "seriesCollection", seriesType, models.Series),
-      ...modelResolvers("channels", "channels", channelType, models.Channel),
+      ...modelResolvers("channel", "channels", channelType, models.Channel),
       stats: {
         type: new GraphQLNonNull(stats),
         resolve: async (ops, values, options) => {

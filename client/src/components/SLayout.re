@@ -89,8 +89,8 @@ module MainSection = {
 
 let channelBack =
     (
-      ~channelName: string,
-      ~onClick=_ => DataModel.Url.push(ChannelShow(channelName)),
+      ~channel: DataModel.Channell.t,
+      ~onClick=_ => DataModel.Url.push(ChannelShow(channel.id)),
       (),
     ) =>
   <div className=Styles.backHover onClick>
@@ -100,11 +100,11 @@ let channelBack =
 let channelLink = (c: string) =>
   <div className=Styles.headerText> {c |> DataModel.Channel.present} </div>;
 
-let seriesHead = (channelName, seriesName) =>
+let seriesHead = (channel: DataModel.Channell.t, seriesName) =>
   <>
-    {channelBack(~channelName, ())}
+    {channelBack(~channel, ())}
     <div className=Styles.headerText>
-      {channelName |> DataModel.Channel.present}
+      {channel |> DataModel.Channell.present}
     </div>
     <div className=Styles.dash> <Icon.Icon icon="THIN_RIGHT" /> </div>
     <div className=Styles.seriesText>

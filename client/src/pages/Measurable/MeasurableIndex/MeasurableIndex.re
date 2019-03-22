@@ -38,21 +38,22 @@ let component = ReasonReact.reducerComponent("MeasurableIndex");
 
 let itemsPerPage = 20;
 
-let itemHeader = (channel: string, onForward, onBackward, isAtStart, isAtEnd) =>
+let itemHeader =
+    (channel: DataModel.Channell.t, onForward, onBackward, isAtStart, isAtEnd) =>
   <>
-    {SLayout.channelLink(channel)}
+    {SLayout.channelLink(channel.name)}
     <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
       <Icon.Icon icon="ARROW_LEFT" />
     </Antd.Button>
     <Antd.Button onClick={_ => onForward()} disabled=isAtEnd>
       <Icon.Icon icon="ARROW_RIGHT" />
     </Antd.Button>
-    {C.Channel.SimpleHeader.button(channel)}
+    {C.Channel.SimpleHeader.button(channel.id)}
   </>;
 
 let selectedView =
     (
-      ~channelId: string,
+      ~channel: DataModel.Channell.t,
       ~loggedInUser: Queries.User.t,
       ~send,
       ~measurables: array(DataModel.Measurable.t),
@@ -62,16 +63,10 @@ let selectedView =
   let itemsOnPage = measurables |> Array.length;
   <>
     <SLayout.Header>
-      {
-        SLayout.channelBack(
-          ~channelName=channelId,
-          ~onClick=_ => send(Select(None)),
-          (),
-        )
-      }
+      {SLayout.channelBack(~channel, ~onClick=_ => send(Select(None)), ())}
       {
         itemHeader(
-          channelId,
+          channel,
           () => send(SelectIncrement),
           () => send(SelectDecrement),
           index == 0,
@@ -92,7 +87,7 @@ let selectedView =
 
 let deselectedView =
     (
-      ~channelId: string,
+      ~channel: DataModel.Channell.t,
       ~loggedInUser: Queries.User.t,
       ~send,
       ~state,
@@ -107,7 +102,7 @@ let deselectedView =
   <>
     {
       itemHeader(
-        channelId,
+        channel,
         () => send(NextPage),
         () => send(LastPage),
         state.page == 0,
@@ -162,7 +157,8 @@ let deselectedView =
   </>;
 };
 
-let make = (~channelId: string, ~loggedInUser: Queries.User.t, _children) => {
+let make =
+    (~channel: DataModel.Channell.t, ~loggedInUser: Queries.User.t, _children) => {
   ...component,
   initialState: () => {page: 0, selected: None},
   reducer: (action, state) =>
@@ -186,16 +182,16 @@ let make = (~channelId: string, ~loggedInUser: Queries.User.t, _children) => {
     Queries.SeriesCollection.component(
       (seriesCollection: array(Queries.SeriesCollection.series)) =>
       Queries.Measurables.component(
-        channelId,
+        channel.id,
         state.page,
         itemsPerPage,
         (measurables: array(DataModel.Measurable.t)) =>
         switch (state.selected) {
         | Some(index) =>
-          selectedView(~channelId, ~loggedInUser, ~send, ~measurables, ~index)
+          selectedView(~channel, ~loggedInUser, ~send, ~measurables, ~index)
         | _ =>
           deselectedView(
-            ~channelId,
+            ~channel,
             ~loggedInUser,
             ~send,
             ~state,

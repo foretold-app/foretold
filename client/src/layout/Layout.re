@@ -1,7 +1,7 @@
 open DataModel;
 open Foretold__GraphQL;
 
-let defaultChannel = "general";
+let defaultChannel = "4c5af8ad-1258-4b9c-8fa0-cc522708fc1c";
 let component = ReasonReact.statelessComponent("TopLevel");
 let make = (~route: Route.t, _children) => {
   ...component,
@@ -10,7 +10,6 @@ let make = (~route: Route.t, _children) => {
       switch (route) {
       | ChannelShow(c) => Some(c)
       | MeasurableNew(c) => Some(c)
-      | MeasurableShow(c, _) => Some(c)
       | Series(c, _) => Some(c)
       | Home => Some(defaultChannel)
       | _ => None
@@ -32,20 +31,24 @@ let make = (~route: Route.t, _children) => {
            | Profile => Profile.make(~loggedInUser) |> inApp
            | AgentShow(id) => AgentShow.make(~id) |> inApp
            | ChannelShow(channelId) =>
-             MeasurableIndex.make(~channelId, ~loggedInUser)
-             |> inApp(~key=channelId)
+             Queries.Channel.component(~id=channelId, channel =>
+               MeasurableIndex.make(~channel, ~loggedInUser)
+               |> inApp(~key=channelId)
+             )
            | ChannelIndex => ChannelIndex.make |> inApp
            | ChannelNew => ChannelNew.make(~channel=defaultChannel) |> inApp
            | MeasurableNew(channelId) =>
              MeasurableNew.make(~channelId) |> inApp
-           | MeasurableShow(channel, id) =>
-             MeasurableShow.make(~channel, ~id, ~loggedInUser) |> inApp
            | MeasurableEdit(id) => MeasurableEdit.make(~id) |> inApp
-           | Series(channel, id) =>
-             SeriesShow.make(~id, ~channel, ~loggedInUser) |> inApp
+           | Series(channelId, id) =>
+             Queries.Channel.component(~id=channelId, channel =>
+               SeriesShow.make(~id, ~channel, ~loggedInUser) |> inApp
+             )
            | _ =>
-             MeasurableIndex.make(~channelId=defaultChannel, ~loggedInUser)
-             |> inApp
+             Queries.Channel.component(~id=defaultChannel, channel =>
+               MeasurableIndex.make(~channel, ~loggedInUser)
+               |> inApp(~key=defaultChannel)
+             )
            };
          | None =>
            switch (route) {

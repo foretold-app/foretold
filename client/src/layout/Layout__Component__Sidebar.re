@@ -106,27 +106,6 @@ let make = (~channel, ~loggedInUser: Queries.User.t, _children) => {
       </div>
       <div className=Styles.over>
         {
-          [
-            "general",
-            "foretold",
-            "ozziegooen",
-            "lesswrong",
-            "movies",
-            "companies",
-          ]
-          |> E.L.fmap(e =>
-               <div
-                 onClick={_e => DataModel.Channel.showPush(e)}
-                 className={
-                   Some(e) == channel ? Styles.selectedItem : Styles.item
-                 }>
-                 {DataModel.Channel.present(~hashClassName=Styles.hash, e)}
-               </div>
-             )
-          |> E.A.of_list
-          |> ReasonReact.array
-        }
-        {
           Foretold__GraphQL.Queries.Channels.component(results =>
             results
             |> E.A.fmap(e =>

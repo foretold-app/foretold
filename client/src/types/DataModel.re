@@ -28,7 +28,6 @@ module Route = {
     | ChannelShow(string)
     | ChannelIndex
     | ChannelNew
-    | MeasurableShow(string, string)
     | MeasurableEdit(string)
     | MeasurableNew(string)
     | Series(string, string)
@@ -56,7 +55,6 @@ module Route = {
     | ["c"] => ChannelIndex
     | ["c", id] => ChannelShow(id)
     | ["c", id, "new"] => MeasurableNew(id)
-    | ["c", channel, "m", id] => MeasurableShow(channel, id)
     | ["measurables", id, "edit"] => MeasurableEdit(id)
     | ["c", channel, "s", id] => Series(channel, id)
     | _ => NotFound
@@ -75,7 +73,6 @@ module Url = {
     | ChannelNew
     | ChannelIndex
     | SeriesShow(string, string)
-    | MeasurableShow(string, string)
     | MeasurableEdit(string)
     | MeasurableNew(string);
 
@@ -90,7 +87,6 @@ module Url = {
     | ChannelNew => "/channels/" ++ "new"
     | ChannelShow(id) => "/c/" ++ id
     | ChannelIndex => "/channels"
-    | MeasurableShow(channel, id) => "/c/" ++ channel ++ "/m/" ++ id
     | MeasurableEdit(id) => "/measurables/" ++ id ++ "/edit"
     | MeasurableNew(channel) => "/c/" ++ channel ++ "/new"
     | SeriesShow(channel, id) => "/c/" ++ channel ++ "/s/" ++ id

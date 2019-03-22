@@ -60,13 +60,7 @@ module BasicTable = {
         ~measurables: array(DataModel.Measurable.t),
         ~showExtraData: bool,
         ~loggedInUser: Queries.User.t,
-        ~onSelect=(m: DataModel.Measurable.t) =>
-                    DataModel.Url.push(
-                      MeasurableShow(
-                        m.channel |> E.O.default("general"),
-                        m.id,
-                      ),
-                    ),
+        ~onSelect=(m: DataModel.Measurable.t) => (),
         _children,
       ) => {
     ...component,

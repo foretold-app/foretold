@@ -29,7 +29,7 @@ let make = _children => {
                       mutation,
                       values.name,
                       Some(values.description),
-                      true,
+                      values.isPublic == "TRUE" ? true : false,
                     ),
                 ~initialState={name: "", description: "", isPublic: "TRUE"},
                 ~schema=[(`name, Custom(_ => None))],

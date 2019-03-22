@@ -15,10 +15,12 @@ import {flash} from 'react-icons-kit/entypo/flash'
 import {gavel} from 'react-icons-kit/fa/gavel'
 import {plus as circlePlus} from 'react-icons-kit/metrize/plus'
 import {thinRight} from 'react-icons-kit/entypo/thinRight'
+import {lock} from 'react-icons-kit/icomoon/lock'
 
 
 let types = {
     "HOME": home,
+    "LOCK": lock,
     "USER":user,
     "COLUMNS":columns,
     "LAYERS":socialBuffer,

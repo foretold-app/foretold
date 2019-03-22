@@ -133,9 +133,21 @@ module Channel = {
   let showLink = t => Url.ChannelShow(t.id);
   let showUrl = showLink ||> Url.toString;
   let showPush = showLink ||> Url.push;
+  module Styles = {
+    open Css;
+    let hash = style([marginRight(`em(0.1))]);
+    let lock =
+      style([fontSize(`em(0.8)), float(`left), marginRight(`px(4))]);
+  };
   let present = (~hashClassName="", s: t) =>
     <span>
-      <span className=hashClassName> {"#" |> ste} </span>
+      <span className=hashClassName>
+        {
+          s.isPublic ?
+            <span className=Styles.hash> {"#" |> ste} </span> :
+            <span className=Styles.lock> <Icon.Icon icon="LOCK" /> </span>
+        }
+      </span>
       <span> {s.name |> ste} </span>
     </span>;
 

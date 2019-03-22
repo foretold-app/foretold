@@ -1,11 +1,6 @@
 open Utils;
 open Style.Grid;
 
-let simpleLink = c =>
-  <a href={DataModel.Channel.showUrl(c)}>
-    {DataModel.Channel.present(c)}
-  </a>;
-
 module SimpleHeader = {
   module Styles = {
     open Css;
@@ -21,25 +16,11 @@ module SimpleHeader = {
       ]);
   };
 
-  let button = channel =>
+  let button = channelId =>
     <Div float=`right>
-      <Antd.Button onClick={_ => DataModel.Url.push(MeasurableNew(channel))}>
+      <Antd.Button
+        onClick={_ => DataModel.Url.push(MeasurableNew(channelId))}>
         {"New Measurable" |> ste}
       </Antd.Button>
     </Div>;
-
-  let component = ReasonReact.statelessComponent("ChannelSimpleHeader");
-
-  let make = (~channel: option(string), _children) => {
-    ...component,
-    render: _ =>
-      <div className=Styles.header>
-        {
-          channel
-          |> E.O.React.fmapOrNull(c =>
-               <> {simpleLink(c) |> E.React.inH1} {button(c)} </>
-             )
-        }
-      </div>,
-  };
 };

@@ -16,8 +16,8 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let toChannel = m: DataModel.Channell.t =>
-  DataModel.Channell.make(
+let toChannel = m: DataModel.Channel.t =>
+  DataModel.Channel.make(
     ~id=m##id,
     ~name=m##name,
     ~description=m##description,

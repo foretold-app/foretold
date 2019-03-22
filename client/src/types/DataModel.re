@@ -122,18 +122,6 @@ module Agent = {
 };
 
 module Channel = {
-  type t = string;
-  let showLink = t => Url.ChannelShow(t);
-  let showUrl = showLink ||> Url.toString;
-  let showPush = showLink ||> Url.push;
-  let present = (~hashClassName="", s) =>
-    <span>
-      <span className=hashClassName> {"#" |> ste} </span>
-      <span> {s |> ste} </span>
-    </span>;
-};
-
-module Channell = {
   type t = {
     id: string,
     name: string,

@@ -69,7 +69,7 @@ let seriesHero = (series: DataModel.Series.t) =>
 
 let make =
     (
-      ~channel: DataModel.Channell.t,
+      ~channel: DataModel.Channel.t,
       ~id: string,
       ~loggedInUser: Queries.User.t,
       _children,

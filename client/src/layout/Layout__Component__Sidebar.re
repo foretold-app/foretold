@@ -110,9 +110,9 @@ let make = (~channel, ~loggedInUser: Queries.User.t, _children) => {
             results
             |> E.A.fmap(e =>
                  <div
-                   onClick={_e => DataModel.Channell.showPush(e)}
+                   onClick={_e => DataModel.Channel.showPush(e)}
                    className=Styles.item>
-                   {DataModel.Channell.present(~hashClassName=Styles.hash, e)}
+                   {DataModel.Channel.present(~hashClassName=Styles.hash, e)}
                  </div>
                )
             |> ReasonReact.array

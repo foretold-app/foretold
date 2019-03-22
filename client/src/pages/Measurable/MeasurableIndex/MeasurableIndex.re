@@ -39,9 +39,9 @@ let component = ReasonReact.reducerComponent("MeasurableIndex");
 let itemsPerPage = 20;
 
 let itemHeader =
-    (channel: DataModel.Channell.t, onForward, onBackward, isAtStart, isAtEnd) =>
+    (channel: DataModel.Channel.t, onForward, onBackward, isAtStart, isAtEnd) =>
   <>
-    {SLayout.channelLink(channel.name)}
+    {SLayout.channelink(channel)}
     <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
       <Icon.Icon icon="ARROW_LEFT" />
     </Antd.Button>
@@ -53,7 +53,7 @@ let itemHeader =
 
 let selectedView =
     (
-      ~channel: DataModel.Channell.t,
+      ~channel: DataModel.Channel.t,
       ~loggedInUser: Queries.User.t,
       ~send,
       ~measurables: array(DataModel.Measurable.t),
@@ -87,7 +87,7 @@ let selectedView =
 
 let deselectedView =
     (
-      ~channel: DataModel.Channell.t,
+      ~channel: DataModel.Channel.t,
       ~loggedInUser: Queries.User.t,
       ~send,
       ~state,
@@ -158,7 +158,7 @@ let deselectedView =
 };
 
 let make =
-    (~channel: DataModel.Channell.t, ~loggedInUser: Queries.User.t, _children) => {
+    (~channel: DataModel.Channel.t, ~loggedInUser: Queries.User.t, _children) => {
   ...component,
   initialState: () => {page: 0, selected: None},
   reducer: (action, state) =>

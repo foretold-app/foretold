@@ -50,6 +50,7 @@ const schema = new graphql.GraphQLSchema({
           offset: { type: graphql.GraphQLInt },
           limit: { type: graphql.GraphQLInt },
           creatorId: { type: graphql.GraphQLString },
+          channelId: { type: graphql.GraphQLString },
           seriesId: { type: graphql.GraphQLString },
         },
         resolve: async (ops, values, options) => {

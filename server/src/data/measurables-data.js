@@ -11,7 +11,7 @@ class MeasurablesData {
    * @param options
    * @return {Promise<*>}
    */
-  async createMeasurable (root, values, options) {
+  async createMeasurable(root, values, options) {
     const user = options.user;
     const newMeasurable = await models.Measurable.create({
       ...values,
@@ -104,18 +104,24 @@ class MeasurablesData {
    * @return {Promise<*|Array<Model>>}
    */
   async getAll(root, values, options) {
-    const { offset, limit, channel, seriesId, creatorId } = values;
+    const { offset, limit, channelId, seriesId, creatorId } = values;
     let where = {
-          state: {
-            [Sequelize.Op.ne]: "ARCHIVED"
-          }
-        }
+      state: {
+        [Sequelize.Op.ne]: "ARCHIVED"
+      }
+    };
 
-    if (seriesId){ where.seriesId = {[Sequelize.Op.eq]: seriesId}}
-    if (creatorId){ where.creatorId = {[Sequelize.Op.eq]: creatorId}}
-    if (channel){ where.channel = {[Sequelize.Op.eq]: channel}}
+    if (seriesId) {
+      where.seriesId = { [Sequelize.Op.eq]: seriesId }
+    }
+    if (creatorId) {
+      where.creatorId = { [Sequelize.Op.eq]: creatorId }
+    }
+    if (channelId) {
+      where.channelId = { [Sequelize.Op.eq]: channelId }
+    }
 
-    let items =  await models.Measurable.findAll({
+    let items = await models.Measurable.findAll({
       limit: limit,
       offset: offset,
       order: [['createdAt', 'DESC']],

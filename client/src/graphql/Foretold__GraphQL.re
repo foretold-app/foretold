@@ -15,4 +15,5 @@ module Mutations = {
   module MeasurementCreate = Foretold__GraphQL__CreateMeasurementMutation;
   module MeasurableArchive = Foretold__GraphQL__MeasurableArchive;
   module MeasurableUnarchive = Foretold__GraphQL__MeasurableUnarchive;
+  module ChannelCreate = Foretold__GraphQL__ChannelCreate;
 };

@@ -59,7 +59,7 @@ module Styles = {
 };
 
 let component = ReasonReact.statelessComponent("Sidebar");
-let make = (~channel, ~loggedInUser: Queries.User.t, _children) => {
+let make = (~channelId, ~loggedInUser: Queries.User.t, _children) => {
   ...component,
   render: _self =>
     <div className=Styles.sidebar>
@@ -108,10 +108,13 @@ let make = (~channel, ~loggedInUser: Queries.User.t, _children) => {
         {
           Foretold__GraphQL.Queries.Channels.component(results =>
             results
-            |> E.A.fmap(e =>
+            |> E.A.fmap((e: DataModel.Channel.t) =>
                  <div
                    onClick={_e => DataModel.Channel.showPush(e)}
-                   className=Styles.item>
+                   className={
+                     Some(e.id) == channelId ?
+                       Styles.selectedItem : Styles.item
+                   }>
                    {DataModel.Channel.present(~hashClassName=Styles.hash, e)}
                  </div>
                )

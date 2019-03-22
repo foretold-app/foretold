@@ -6,7 +6,7 @@ let component = ReasonReact.statelessComponent("TopLevel");
 let make = (~route: Route.t, _children) => {
   ...component,
   render: _ => {
-    let channel =
+    let channelId =
       switch (route) {
       | ChannelShow(c) => Some(c)
       | MeasurableNew(c) => Some(c)
@@ -20,7 +20,10 @@ let make = (~route: Route.t, _children) => {
          switch (loggedInUser) {
          | Some(_userIsLoggedIn) =>
            let inApp = (~key="", e) =>
-             Layout__Component__FillWithSidebar.make(~channel, ~loggedInUser)
+             Layout__Component__FillWithSidebar.make(
+               ~channelId,
+               ~loggedInUser,
+             )
              |> E.React.makeToEl(~children=E.React.makeToEl(e), ~key);
            switch (route) {
            | AgentMeasurables(id) =>
@@ -36,7 +39,7 @@ let make = (~route: Route.t, _children) => {
                |> inApp(~key=channelId)
              )
            | ChannelIndex => ChannelIndex.make |> inApp
-           | ChannelNew => ChannelNew.make(~channel=defaultChannel) |> inApp
+           | ChannelNew => ChannelNew.make |> inApp
            | MeasurableNew(channelId) =>
              MeasurableNew.make(~channelId) |> inApp
            | MeasurableEdit(id) => MeasurableEdit.make(~id) |> inApp

@@ -52,13 +52,13 @@ module Styles = {
 
 let component = ReasonReact.statelessComponent("SidebarFill");
 let make =
-    (~channel: option(string), ~loggedInUser: Queries.User.t, children) => {
+    (~channelId: option(string), ~loggedInUser: Queries.User.t, children) => {
   ...component,
   render: _self =>
     <Layout__Component__UseRouterForLinks>
       <div className=Styles.outer>
         <div className=Styles.left>
-          <Layout__Component__Sidebar channel loggedInUser />
+          <Layout__Component__Sidebar channelId loggedInUser />
         </div>
         <div className=Styles.right> children </div>
       </div>

@@ -62,7 +62,7 @@ let make = (~id: string, ~loggedInUser: Queries.User.t, _children) => {
                       m.creator |> E.O.fmap((r: DataModel.Agent.t) => r.id);
                     <>
                       {"Add a Measurement" |> ste |> E.React.inH2}
-                      <MeasurableShowForm
+                      <Foretold__Components__Measurement__Form
                         measurableId=id
                         isCreator={userAgentId == creatorId}
                       />

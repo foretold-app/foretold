@@ -1,6 +1,13 @@
-type agent = {id: string};
+type channel = {
+  id: string,
+  name: string,
+  isPublic: bool,
+};
 
-let convertAgent = agent => DataModel.Agent.make(~id=agent.id);
+type agent = {
+  id: string,
+  channels: Js.Array.t(option(channel)),
+};
 
 type user = {
   id: string,
@@ -23,6 +30,11 @@ module Query = [%graphql
             agentId
             agent: Agent  @bsRecord{
               id
+              channels: Channels @bsRecord{
+                name
+                id
+                isPublic
+              }
             }
         }
     }
@@ -39,8 +51,7 @@ let component =
   switch (auth0Id) {
   | Some(auth0Id) =>
     let query = Query.make(~auth0Id, ());
-    QueryComponent.make(
-      ~variables=query##variables, ~pollInterval=5000, ({result}) =>
+    QueryComponent.make(~variables=query##variables, ({result}) =>
       result
       |> ApolloUtils.apolloResponseToResult
       |> E.R.fmap(e => e##user)

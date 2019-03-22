@@ -106,20 +106,38 @@ let make = (~channelId, ~loggedInUser: Queries.User.t, _children) => {
       </div>
       <div className=Styles.over>
         {
-          Foretold__GraphQL.Queries.Channels.component(results =>
-            results
-            |> E.A.fmap((e: DataModel.Channel.t) =>
-                 <div
-                   onClick={_e => DataModel.Channel.showPush(e)}
-                   className={
-                     Some(e.id) == channelId ?
-                       Styles.selectedItem : Styles.item
-                   }>
-                   {DataModel.Channel.present(~hashClassName=Styles.hash, e)}
-                 </div>
-               )
-            |> ReasonReact.array
-          )
+          /* Foretold__GraphQL.Queries.Channels.component(results => */
+          loggedInUser
+          |> E.O.bind(_, (r: Queries.User.user) => r.agent)
+          |> E.O.fmap((r: Queries.User.agent) =>
+               r.channels
+               |> E.A.O.concatSomes
+               |> E.A.fmap((channel: Queries.User.channel) => {
+                    let _channel: DataModel.Channel.t =
+                      DataModel.Channel.make(
+                        ~id=channel.id,
+                        ~name=channel.name,
+                        ~isArchived=false,
+                        ~isPublic=channel.isPublic,
+                        (),
+                      );
+                    <div
+                      onClick={_e => DataModel.Channel.showPush(_channel)}
+                      className={
+                        Some(_channel.id) == channelId ?
+                          Styles.selectedItem : Styles.item
+                      }>
+                      {
+                        DataModel.Channel.present(
+                          ~hashClassName=Styles.hash,
+                          _channel,
+                        )
+                      }
+                    </div>;
+                  })
+               |> ReasonReact.array
+             )
+          |> E.O.React.defaultNull
         }
       </div>
     </div>,

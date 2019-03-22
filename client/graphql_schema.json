@@ -747,7 +747,7 @@
               "deprecationReason": null
             },
             {
-              "name": "channels",
+              "name": "Channels",
               "description": null,
               "args": [],
               "type": {

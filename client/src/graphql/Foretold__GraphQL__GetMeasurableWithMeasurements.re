@@ -44,7 +44,6 @@ module Query = [%graphql
               description
               valueType
               creatorId
-              channel
               resolutionEndpoint
               resolutionEndpointResponse
               descriptionEntity
@@ -148,7 +147,6 @@ let queryMeasurable = m => {
     Measurable.make(
       ~id=m##id,
       ~name=m##name,
-      ~channel=m##channel,
       ~description=m##description,
       ~resolutionEndpoint=m##resolutionEndpoint,
       ~resolutionEndpointResponse=m##resolutionEndpointResponse,

@@ -19,13 +19,20 @@ type creator = {
   name: option(string),
 };
 
+type channel = {
+  id: string,
+  name: string,
+  description: option(string),
+  isPublic: bool,
+};
+
 let toAgent = (c: creator): DataModel.Agent.t =>
   DataModel.Agent.make(~id=c.id, ~name=c.name, ());
 
 type measurable = {
   id: string,
   name: string,
-  channel: option(string),
+  channel: option(channel),
   valueType: DataModel.valueType,
   description: option(string),
   resolutionEndpoint: option(string),
@@ -43,11 +50,12 @@ type measurable = {
   descriptionProperty: option(string),
 };
 
+/* TODO: Fix channel */
 let toMeasurable = (m: measurable): DataModel.Measurable.t =>
   DataModel.Measurable.make(
     ~id=m.id,
     ~name=m.name,
-    ~channel=m.channel,
+    ~channel=None,
     ~valueType=m.valueType,
     ~description=m.description,
     ~resolutionEndpoint=m.resolutionEndpoint,
@@ -68,11 +76,16 @@ let toMeasurable = (m: measurable): DataModel.Measurable.t =>
 
 module Query = [%graphql
   {|
-    query getMeasurables ($offset: Int, $limit: Int, $channel: String, $seriesId: String, $creatorId: String) {
-        measurables(offset: $offset, limit: $limit, channel: $channel, seriesId: $seriesId, creatorId: $creatorId) @bsRecord {
+    query getMeasurables ($offset: Int, $limit: Int, $channelId: String, $seriesId: String, $creatorId: String) {
+        measurables(offset: $offset, limit: $limit, channelId: $channelId, seriesId: $seriesId, creatorId: $creatorId) @bsRecord {
            id
            name
-           channel
+           channel: Channel @bsRecord {
+             id
+             name
+             description
+             isPublic
+           }
            description
            resolutionEndpoint
            valueType
@@ -118,19 +131,19 @@ let queryToComponent = (query, innerComponentFn) =>
 
 let component =
     (
-      channel,
+      channelId,
       page,
       pageLimit,
       innerComponentFn: 'a => ReasonReact.reactElement,
     ) => {
   let query =
-    Query.make(~offset=page * pageLimit, ~limit=pageLimit, ~channel, ());
+    Query.make(~offset=page * pageLimit, ~limit=pageLimit, ~channelId, ());
   queryToComponent(query, innerComponentFn);
 };
 
 let componentWithSeries =
-    (channel, seriesId, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = Query.make(~offset=0, ~limit=200, ~channel, ~seriesId, ());
+    (channelId, seriesId, innerComponentFn: 'a => ReasonReact.reactElement) => {
+  let query = Query.make(~offset=0, ~limit=200, ~channelId, ~seriesId, ());
   queryToComponent(query, innerComponentFn);
 };
 

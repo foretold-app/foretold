@@ -7,8 +7,8 @@ let ste = ReasonReact.string;
 module CreateMeasurableMutation = {
   module GraphQL = [%graphql
     {|
-             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!, $descriptionDate: Date, $descriptionProperty: String, $channel: String) {
-                 createMeasurable(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity, descriptionDate: $descriptionDate, descriptionProperty: $descriptionProperty, channel: $channel) {
+             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!, $descriptionDate: Date, $descriptionProperty: String) {
+                 createMeasurable(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity, descriptionDate: $descriptionDate, descriptionProperty: $descriptionProperty) {
                    id
                  }
              }
@@ -60,12 +60,12 @@ let make = (~channel="general", _children) => {
                       }
                     </>
                   | Data(data) =>
-                    data##createMeasurable
-                    |> E.O.fmap(e => e##id)
-                    |> doIfSome(_ =>
-                         DataModel.Url.push(ChannelShow(channel))
-                       );
-                    "Measurable successfully created" |> ste |> E.React.inH2;
+                    /* data##createMeasurable
+                       |> E.O.fmap(e => e##id)
+                       |> doIfSome(_ =>
+                            DataModel.Url.push(ChannelShow(channel))
+                          ); */
+                    "Measurable successfully created" |> ste |> E.React.inH2
                   | NotCalled =>
                     ChannelForm.showForm(~form, ~handleSubmit, ~handleChange)
                   },

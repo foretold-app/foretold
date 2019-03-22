@@ -31,19 +31,20 @@ let make = (~route: Route.t, _children) => {
            | Redirect => Redirect.make |> inApp
            | Profile => Profile.make(~loggedInUser) |> inApp
            | AgentShow(id) => AgentShow.make(~id) |> inApp
-           | ChannelShow(channel) =>
-             MeasurableIndex.make(~channel, ~loggedInUser)
-             |> inApp(~key=channel)
+           | ChannelShow(channelId) =>
+             MeasurableIndex.make(~channelId, ~loggedInUser)
+             |> inApp(~key=channelId)
            | ChannelIndex => ChannelIndex.make |> inApp
            | ChannelNew => ChannelNew.make(~channel=defaultChannel) |> inApp
-           | MeasurableNew(channel) => MeasurableNew.make(~channel) |> inApp
+           | MeasurableNew(channelId) =>
+             MeasurableNew.make(~channelId) |> inApp
            | MeasurableShow(channel, id) =>
              MeasurableShow.make(~channel, ~id, ~loggedInUser) |> inApp
            | MeasurableEdit(id) => MeasurableEdit.make(~id) |> inApp
            | Series(channel, id) =>
              SeriesShow.make(~id, ~channel, ~loggedInUser) |> inApp
            | _ =>
-             MeasurableIndex.make(~channel=defaultChannel, ~loggedInUser)
+             MeasurableIndex.make(~channelId=defaultChannel, ~loggedInUser)
              |> inApp
            };
          | None =>

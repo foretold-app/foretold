@@ -126,6 +126,19 @@ let make = (~channel, ~loggedInUser: Queries.User.t, _children) => {
           |> E.A.of_list
           |> ReasonReact.array
         }
+        {
+          Foretold__GraphQL.Queries.Channels.component(results =>
+            results
+            |> E.A.fmap(e =>
+                 <div
+                   onClick={_e => DataModel.Channell.showPush(e)}
+                   className=Styles.item>
+                   {DataModel.Channell.present(~hashClassName=Styles.hash, e)}
+                 </div>
+               )
+            |> ReasonReact.array
+          )
+        }
       </div>
     </div>,
 };

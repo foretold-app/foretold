@@ -52,7 +52,7 @@ let itemHeader = (channel: string, onForward, onBackward, isAtStart, isAtEnd) =>
 
 let selectedView =
     (
-      ~channel: string,
+      ~channelId: string,
       ~loggedInUser: Queries.User.t,
       ~send,
       ~measurables: array(DataModel.Measurable.t),
@@ -64,14 +64,14 @@ let selectedView =
     <SLayout.Header>
       {
         SLayout.channelBack(
-          ~channelName=channel,
+          ~channelName=channelId,
           ~onClick=_ => send(Select(None)),
           (),
         )
       }
       {
         itemHeader(
-          channel,
+          channelId,
           () => send(SelectIncrement),
           () => send(SelectDecrement),
           index == 0,
@@ -92,7 +92,7 @@ let selectedView =
 
 let deselectedView =
     (
-      ~channel: string,
+      ~channelId: string,
       ~loggedInUser: Queries.User.t,
       ~send,
       ~state,
@@ -102,12 +102,12 @@ let deselectedView =
   let seriesList =
     seriesCollection
     |> E.A.filter((x: Queries.SeriesCollection.series) =>
-         x.channel == channel && x.measurableCount !== Some(0)
+         x.measurableCount !== Some(0)
        );
   <>
     {
       itemHeader(
-        channel,
+        channelId,
         () => send(NextPage),
         () => send(LastPage),
         state.page == 0,
@@ -131,7 +131,9 @@ let deselectedView =
                        className=SeriesItems.item
                        onClick={
                          _e =>
-                           DataModel.Url.push(SeriesShow(x.channel, x.id))
+                           DataModel.Url.push(
+                             SeriesShow("general-todo", x.id),
+                           )
                        }>
                        <C.Series.Card series=x />
                      </div>
@@ -160,7 +162,7 @@ let deselectedView =
   </>;
 };
 
-let make = (~channel: string, ~loggedInUser: Queries.User.t, _children) => {
+let make = (~channelId: string, ~loggedInUser: Queries.User.t, _children) => {
   ...component,
   initialState: () => {page: 0, selected: None},
   reducer: (action, state) =>
@@ -184,16 +186,16 @@ let make = (~channel: string, ~loggedInUser: Queries.User.t, _children) => {
     Queries.SeriesCollection.component(
       (seriesCollection: array(Queries.SeriesCollection.series)) =>
       Queries.Measurables.component(
-        channel,
+        channelId,
         state.page,
         itemsPerPage,
         (measurables: array(DataModel.Measurable.t)) =>
         switch (state.selected) {
         | Some(index) =>
-          selectedView(~channel, ~loggedInUser, ~send, ~measurables, ~index)
+          selectedView(~channelId, ~loggedInUser, ~send, ~measurables, ~index)
         | _ =>
           deselectedView(
-            ~channel,
+            ~channelId,
             ~loggedInUser,
             ~send,
             ~state,

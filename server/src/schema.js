@@ -140,6 +140,7 @@ const schema = new GraphQLSchema({
       ...modelResolvers("bot", "bots", botType, models.Bot),
       ...modelResolvers("agent", "agents", agentType, models.Agent),
       ...modelResolvers("series", "seriesCollection", seriesType, models.Series),
+      ...modelResolvers("channels", "channels", channelType, models.Channel),
       stats: {
         type: new GraphQLNonNull(stats),
         resolve: async (ops, values, options) => {
@@ -154,7 +155,7 @@ const schema = new GraphQLSchema({
           limit: { type: GraphQLInt },
           creatorId: { type: GraphQLString },
           seriesId: { type: GraphQLString },
-          channel: { type: GraphQLString }
+          channelId: { type: GraphQLString }
         },
         resolve: async (ops, values, options) => {
           return measurablesData.getAll(ops, values, options);
@@ -174,7 +175,7 @@ const schema = new GraphQLSchema({
       },
       createMeasurable: {
         type: measurableType,
-        args: filterr(_.pick(attributeFields(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty', 'channel'])),
+        args: filterr(_.pick(attributeFields(models.Measurable), ['name', 'description', 'valueType', 'expectedResolutionDate', 'resolutionEndpoint', 'descriptionEntity', 'descriptionDate', 'descriptionProperty', 'channelId'])),
         resolve: async (root, values, options) => {
           return measurablesData.createMeasurable(root, values, options);
         }

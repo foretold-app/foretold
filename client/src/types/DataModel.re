@@ -98,19 +98,6 @@ module Url = {
 
   let push = (r: t) => r |> toString |> ReasonReact.Router.push;
 };
-
-module Channel = {
-  type t = string;
-  let showLink = t => Url.ChannelShow(t);
-  let showUrl = showLink ||> Url.toString;
-  let showPush = showLink ||> Url.push;
-  let present = (~hashClassName="", s) =>
-    <span>
-      <span className=hashClassName> {"#" |> ste} </span>
-      <span> {s |> ste} </span>
-    </span>;
-};
-
 module Agent = {
   type agentType =
     | Bot(Bot.t)
@@ -135,6 +122,55 @@ module Agent = {
     name,
     measurementCount,
     agentType,
+  };
+};
+
+module Channel = {
+  type t = string;
+  let showLink = t => Url.ChannelShow(t);
+  let showUrl = showLink ||> Url.toString;
+  let showPush = showLink ||> Url.push;
+  let present = (~hashClassName="", s) =>
+    <span>
+      <span className=hashClassName> {"#" |> ste} </span>
+      <span> {s |> ste} </span>
+    </span>;
+};
+
+module Channell = {
+  type t = {
+    id: string,
+    name: string,
+    description: option(string),
+    isArchived: bool,
+    isPublic: bool,
+    creator: option(Agent.t),
+  };
+  let showLink = t => Url.ChannelShow(t.id);
+  let showUrl = showLink ||> Url.toString;
+  let showPush = showLink ||> Url.push;
+  let present = (~hashClassName="", s: t) =>
+    <span>
+      <span className=hashClassName> {"#" |> ste} </span>
+      <span> {s.name |> ste} </span>
+    </span>;
+
+  let make =
+      (
+        ~id,
+        ~name,
+        ~description=None,
+        ~isArchived,
+        ~isPublic,
+        ~creator=None,
+        (),
+      ) => {
+    id,
+    name,
+    description,
+    isArchived,
+    isPublic,
+    creator,
   };
 };
 
@@ -235,6 +271,7 @@ module MeasurableStatus = {
     | ARCHIVED => 0
     };
 };
+
 module Measurable = {
   type t = {
     id: string,

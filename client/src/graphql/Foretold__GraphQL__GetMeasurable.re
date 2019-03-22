@@ -9,7 +9,6 @@ type measurable = {
   name: string,
   valueType: DataModel.valueType,
   description: option(string),
-  channel: option(string),
   resolutionEndpoint: option(string),
   measurementCount: option(int),
   measurerCount: option(int),
@@ -29,7 +28,7 @@ let toMeasurable = (m: measurable): DataModel.Measurable.t =>
     ~id=m.id,
     ~name=m.name,
     ~valueType=m.valueType,
-    ~channel=m.channel,
+    ~channel=None,
     ~description=m.description,
     ~resolutionEndpoint=m.resolutionEndpoint,
     ~measurementCount=m.measurementCount,
@@ -58,7 +57,6 @@ module Query = [%graphql
            measurementCount
            measurerCount
            descriptionEntity
-           channel
            descriptionProperty
            descriptionDate @bsDecoder(fn: "E.J.O.toMoment")
            state @bsDecoder(fn: "DataModel.MeasurableState.fromString")

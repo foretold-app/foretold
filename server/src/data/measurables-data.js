@@ -27,7 +27,7 @@ class MeasurablesData {
       descriptionDate,
       descriptionEntity,
       descriptionProperty,
-      channel
+      channelId
     } = values;
     let _auth0Id = await this.usersData.getAuth0Id(options);
     const user = await this.usersData.auth0User(_auth0Id);
@@ -41,7 +41,7 @@ class MeasurablesData {
       descriptionDate,
       resolutionEndpoint,
       descriptionProperty,
-      channel
+     channelId 
     });
     let notification = await newMeasurable.creationNotification(user);
     notify(notification);
@@ -133,7 +133,7 @@ class MeasurablesData {
    * @return {Promise<*|Array<Model>>}
    */
   async getAll(root, values, options) {
-    const { offset, limit, channel, seriesId, creatorId } = values;
+    const { offset, limit, channelId, seriesId, creatorId } = values;
     let where = {
           state: {
             [Sequelize.Op.ne]: "ARCHIVED"
@@ -142,7 +142,7 @@ class MeasurablesData {
 
     if (seriesId){ where.seriesId = {[Sequelize.Op.eq]: seriesId}}
     if (creatorId){ where.creatorId = {[Sequelize.Op.eq]: creatorId}}
-    if (channel){ where.channel = {[Sequelize.Op.eq]: channel}}
+    if (channelId){ where.channelId = {[Sequelize.Op.eq]: channelId}}
 
     let items =  await models.Measurable.findAll({
       limit: limit,

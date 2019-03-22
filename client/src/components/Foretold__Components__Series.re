@@ -34,9 +34,7 @@ module Card = {
     render: _self =>
       <div
         className=Styles.card
-        onClick={
-          _e => DataModel.Url.push(SeriesShow(series.channel, series.id))
-        }>
+        onClick={_e => DataModel.Url.push(SeriesShow("general", series.id))}>
         <span className=Styles.heading>
           <Icon.Icon icon="LAYERS" />
           {series.name |> E.O.default("") |> ste}

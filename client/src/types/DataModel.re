@@ -1,17 +1,60 @@
 open Rationale.Function.Infix;
 open Utils;
 
-type user = {
-  id: string,
-  name: string,
-};
-
-module Bot = {
-  type t = {
+module Typess = {
+  type user = {
+    id: string,
+    auth0Id: option(string),
+    agent: option(agent),
+    name: string,
+  }
+  and bot = {
     competitorType: [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE],
     description: option(string),
     id: string,
     name: option(string),
+  }
+  and agentType =
+    | Bot(bot)
+    | User(user)
+  and agent = {
+    id: string,
+    name: option(string),
+    measurementCount: option(int),
+    agentType: option(agentType),
+    channels: Js.Array.t(channel),
+  }
+  and channel = {
+    id: string,
+    name: string,
+    description: option(string),
+    isArchived: bool,
+    isPublic: bool,
+    creator: option(agent),
+  };
+};
+
+module AgentType = {
+  type t = Typess.agentType;
+};
+
+module User = {
+  type t = Typess.user;
+  let make = (~id, ~name="", ~auth0Id=None, ~agent=None, ()): t => {
+    id,
+    name,
+    auth0Id,
+    agent,
+  };
+};
+
+module Bot = {
+  type t = Typess.bot;
+  let make = (~id, ~name=None, ~description=None, ~competitorType, ()): t => {
+    id,
+    competitorType,
+    description,
+    name,
   };
 };
 
@@ -95,16 +138,7 @@ module Url = {
   let push = (r: t) => r |> toString |> ReasonReact.Router.push;
 };
 module Agent = {
-  type agentType =
-    | Bot(Bot.t)
-    | User(user);
-
-  type t = {
-    id: string,
-    name: option(string),
-    measurementCount: option(int),
-    agentType: option(agentType),
-  };
+  type t = Typess.agent;
 
   let name = (a: t): option(string) =>
     switch (a.agentType) {
@@ -113,24 +147,27 @@ module Agent = {
     | None => None
     };
 
-  let make = (~id, ~name=None, ~measurementCount=None, ~agentType=None, ()) => {
+  let make =
+      (
+        ~id,
+        ~name=None,
+        ~measurementCount=None,
+        ~agentType=None,
+        ~channels=[||],
+        (),
+      )
+      : t => {
     id,
     name,
     measurementCount,
     agentType,
+    channels,
   };
 };
 
 module Channel = {
-  type t = {
-    id: string,
-    name: string,
-    description: option(string),
-    isArchived: bool,
-    isPublic: bool,
-    creator: option(Agent.t),
-  };
-  let showLink = t => Url.ChannelShow(t.id);
+  type t = Typess.channel;
+  let showLink = (t: t) => Url.ChannelShow(t.id);
   let showUrl = showLink ||> Url.toString;
   let showPush = showLink ||> Url.push;
   module Styles = {
@@ -160,7 +197,8 @@ module Channel = {
         ~isPublic,
         ~creator=None,
         (),
-      ) => {
+      )
+      : t => {
     id,
     name,
     description,
@@ -272,6 +310,7 @@ module Measurable = {
   type t = {
     id: string,
     name: string,
+    auth0Id: option(string),
     valueType,
     channel: option(string),
     description: option(string),
@@ -344,12 +383,14 @@ module Measurable = {
         ~descriptionEntity=None,
         ~descriptionDate=None,
         ~descriptionProperty=None,
+        ~auth0Id=None,
         ~series=None,
         (),
       ) => {
     id,
     name,
     channel,
+    auth0Id,
     valueType,
     description,
     resolutionEndpoint,

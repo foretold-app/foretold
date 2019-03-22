@@ -4,10 +4,26 @@ type channel = {
   isPublic: bool,
 };
 
+let toChannel = (ch: channel) =>
+  DataModel.Channel.make(
+    ~id=ch.id,
+    ~name=ch.name,
+    ~isArchived=false,
+    ~isPublic=ch.isPublic,
+    (),
+  );
+
 type agent = {
   id: string,
   channels: Js.Array.t(option(channel)),
 };
+
+let toAgent = (a: agent) =>
+  DataModel.Agent.make(
+    ~id=a.id,
+    ~channels=a.channels |> E.A.O.concatSomes |> E.A.fmap(toChannel),
+    (),
+  );
 
 type user = {
   id: string,
@@ -18,6 +34,14 @@ type user = {
 };
 
 type t = option(user);
+
+let toUser = (a: user) =>
+  DataModel.User.make(
+    ~id=a.id,
+    ~auth0Id=a.auth0Id,
+    ~agent=a.agent |> E.O.fmap(toAgent),
+    (),
+  );
 
 module Query = [%graphql
   {|
@@ -54,7 +78,22 @@ let component =
     QueryComponent.make(~variables=query##variables, ({result}) =>
       result
       |> ApolloUtils.apolloResponseToResult
-      |> E.R.fmap(e => e##user)
+      |> E.R.fmap(e =>
+           e##user
+           |> (
+             e => {
+               let channel = (ch: channel) =>
+                 DataModel.Channel.make(
+                   ~id=ch.id,
+                   ~name=ch.name,
+                   ~isArchived=false,
+                   ~isPublic=ch.isPublic,
+                   (),
+                 );
+               e;
+             }
+           )
+         )
       |> E.R.fmap(e => innerComponentFn(e))
       |> E.R.id
     )

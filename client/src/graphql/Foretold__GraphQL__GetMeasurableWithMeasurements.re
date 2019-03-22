@@ -94,21 +94,27 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let toMeasurement = (m: Types.measurement): DataModel.Measurement.t => {
   open DataModel.Agent;
-  let agentType: option(DataModel.Agent.agentType) =
+  let agentType: option(DataModel.AgentType.t) =
     m##agent
     |> E.O.bind(_, k =>
          switch (k##bot, k##user) {
          | (Some(bot), None) =>
            Some(
-             Bot({
-               id: bot##id,
-               name: bot##name,
-               competitorType: bot##competitorType,
-               description: None,
-             }),
+             DataModel.Typess.Bot(
+               DataModel.Bot.make(
+                 ~id=bot##id,
+                 ~name=bot##name,
+                 ~competitorType=bot##competitorType,
+                 (),
+               ),
+             ),
            )
          | (None, Some(user)) =>
-           Some(User({id: user##id, name: user##name}))
+           Some(
+             DataModel.Typess.User(
+               DataModel.User.make(~id=user##id, ~name=user##name, ()),
+             ),
+           )
          | (_, _) => None
          }
        );

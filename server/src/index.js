@@ -1,22 +1,14 @@
 const path = require('path');
-import express from 'express';
-import { schema } from './schema';
-
-const jwt = require('jsonwebtoken');
+const cors = require('cors');
+const express = require('express');
+const bodyParser = require('body-parser-graphql');
 const { ApolloServer } = require('apollo-server-express');
 
 const models = require("./models");
+const { schema } = require('./schema');
+const { authentication } = require('./authentication');
 
 const PORT = process.env.PORT || 4000;
-
-function getToken(req) {
-  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-    return req.headers.authorization.split(' ')[1];
-  } else if (req.query && req.query.token) {
-    return req.query.token;
-  }
-  return null;
-}
 
 const server = new ApolloServer({
   introspection: true,
@@ -29,29 +21,13 @@ const server = new ApolloServer({
   formatResponse: response => {
     return response;
   },
-  context: async ({ req }) => {
-    const token = getToken(req);
-    const user = new Promise(resolve =>
-      jwt.verify(token, process.env.AUTH0_SECRET,(err, result) => {
-        if (err) {
-          resolve({
-            ok: false,
-            result: err
-          });
-        } else {
-          resolve({
-            ok: true,
-            result
-          });
-        }
-      })
-    );
+  context: async ({req}) => {
+    const user = await authentication(req);
     return { user };
   }
 });
 
 const app = express();
-const cors = require("cors");
 app.use(cors());
 
 // Returns all routes excluding "/graphql" as static files
@@ -64,10 +40,11 @@ app.get(/^((?!graphql).)*$/,
   }
 );
 
+app.use(bodyParser.graphql());
 server.applyMiddleware({ app });
 
 models.sequelize.sync().then(() => {
   app.listen({ port: PORT }, () => {
     console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
   });
-})
+});

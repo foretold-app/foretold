@@ -122,16 +122,18 @@ let deselectedView =
               {
                 seriesList
                 |> Array.map((x: Queries.SeriesCollection.series) =>
-                     <div
-                       className=SeriesItems.item
-                       onClick={
-                         _e =>
-                           DataModel.Url.push(
-                             SeriesShow("general-todo", x.id),
-                           )
-                       }>
-                       <C.Series.Card series=x />
-                     </div>
+                     switch (x.channel) {
+                     | Some(channel) =>
+                       <div
+                         className=SeriesItems.item
+                         onClick=(
+                           _e =>
+                             DataModel.Url.push(SeriesShow(channel.id, x.id))
+                         )>
+                         <C.Series.Card series=x />
+                       </div>
+                     | None => E.React.null
+                     }
                    )
                 |> ReasonReact.array
               }

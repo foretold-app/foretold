@@ -54,7 +54,7 @@ let itemHeader =
 let selectedView =
     (
       ~channel: DataModel.Channel.t,
-      ~loggedInUser: Queries.User.t,
+      ~loggedInUser: DataModel.User.t,
       ~send,
       ~measurables: array(DataModel.Measurable.t),
       ~index: int,
@@ -88,7 +88,7 @@ let selectedView =
 let deselectedView =
     (
       ~channel: DataModel.Channel.t,
-      ~loggedInUser: Queries.User.t,
+      ~loggedInUser: DataModel.User.t,
       ~send,
       ~state,
       ~measurables: array(DataModel.Measurable.t),
@@ -160,7 +160,7 @@ let deselectedView =
 };
 
 let make =
-    (~channel: DataModel.Channel.t, ~loggedInUser: Queries.User.t, _children) => {
+    (~channel: DataModel.Channel.t, ~loggedInUser: DataModel.User.t, _children) => {
   ...component,
   initialState: () => {page: 0, selected: None},
   reducer: (action, state) =>

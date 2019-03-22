@@ -16,9 +16,9 @@ let make = (~route: Route.t, _children) => {
       };
 
     Queries.User.withLoggedInUserQuery
-    |> E.F.apply((loggedInUser: Queries.User.t) =>
+    |> E.F.apply((loggedInUser: option(DataModel.User.t)) =>
          switch (loggedInUser) {
-         | Some(_userIsLoggedIn) =>
+         | Some(loggedInUser) =>
            let inApp = (~key="", e) =>
              Layout__Component__FillWithSidebar.make(
                ~channelId,

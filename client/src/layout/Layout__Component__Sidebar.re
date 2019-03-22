@@ -59,36 +59,31 @@ module Styles = {
 };
 
 let component = ReasonReact.statelessComponent("Sidebar");
-let make = (~channelId, ~loggedInUser: Queries.User.t, _children) => {
+let make = (~channelId, ~loggedInUser: DataModel.User.t, _children) => {
   ...component,
   render: _self =>
     <div className=Styles.sidebar>
       <div className=Styles.minorHeader> {"User" |> ste} </div>
       {
-        switch (loggedInUser) {
-        | Some(user) =>
-          open Rationale.Option.Infix;
-          let idd = user.agentId |> E.O.default("");
-          <>
-            <div
-              onClick=(_e => DataModel.Url.push(Profile))
-              className=Styles.item>
-              {"Profile" |> ste}
-            </div>
-            <div
-              onClick=(_e => DataModel.Url.push(AgentMeasurables(idd)))
-              className=Styles.item>
-              {"Edit Measurables" |> ste}
-            </div>
-            <div onClick=(_e => Auth0.logout()) className=Styles.item>
-              {"Log Out" |> ste}
-            </div>
-          </>;
-        | None =>
-          <div onClick=(_e => Auth0.logIn()) className=Styles.item>
-            {"Log In" |> ste}
+        open Rationale.Option.Infix;
+        let idd =
+          loggedInUser.agent
+          |> E.O.fmap((a: DataModel.Agent.t) => a.id)
+          |> E.O.default("");
+        <>
+          <div
+            onClick={_e => DataModel.Url.push(Profile)} className=Styles.item>
+            {"Profile" |> ste}
           </div>
-        }
+          <div
+            onClick={_e => DataModel.Url.push(AgentMeasurables(idd))}
+            className=Styles.item>
+            {"Edit Measurables" |> ste}
+          </div>
+          <div onClick={_e => Auth0.logout()} className=Styles.item>
+            {"Log Out" |> ste}
+          </div>
+        </>;
       }
       <div className=Styles.over />
       <div className=Styles.sectionPadding />
@@ -106,13 +101,10 @@ let make = (~channelId, ~loggedInUser: Queries.User.t, _children) => {
       </div>
       <div className=Styles.over>
         {
-          /* Foretold__GraphQL.Queries.Channels.component(results => */
-          loggedInUser
-          |> E.O.bind(_, (r: Queries.User.user) => r.agent)
-          |> E.O.fmap((r: Queries.User.agent) =>
+          loggedInUser.agent
+          |> E.O.fmap((r: DataModel.Agent.t) =>
                r.channels
-               |> E.A.O.concatSomes
-               |> E.A.fmap((channel: Queries.User.channel) => {
+               |> E.A.fmap((channel: DataModel.Channel.t) => {
                     let _channel: DataModel.Channel.t =
                       DataModel.Channel.make(
                         ~id=channel.id,

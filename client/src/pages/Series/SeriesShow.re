@@ -71,7 +71,7 @@ let make =
     (
       ~channel: DataModel.Channel.t,
       ~id: string,
-      ~loggedInUser: Queries.User.t,
+      ~loggedInUser: DataModel.User.t,
       _children,
     ) => {
   ...component,

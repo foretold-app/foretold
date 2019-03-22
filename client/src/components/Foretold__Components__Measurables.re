@@ -59,7 +59,7 @@ module BasicTable = {
       (
         ~measurables: array(DataModel.Measurable.t),
         ~showExtraData: bool,
-        ~loggedInUser: Queries.User.t,
+        ~loggedInUser: DataModel.User.t,
         ~onSelect=(m: DataModel.Measurable.t) => (),
         _children,
       ) => {
@@ -69,10 +69,8 @@ module BasicTable = {
         {
           measurables
           |> E.A.fmap((m: DataModel.Measurable.t) => {
-               let userAgentId =
-                 loggedInUser
-                 |> E.O.bind(_, (r: Queries.User.user) => r.agent)
-                 |> E.O.fmap((r: Queries.User.agent) => r.id);
+               open Rationale.Option.Infix;
+               let userAgentId = loggedInUser.agent <$> (r => r.id);
                let measurableAgentId =
                  m.creator |> E.O.fmap((r: DataModel.Agent.t) => r.id);
                let isSame =

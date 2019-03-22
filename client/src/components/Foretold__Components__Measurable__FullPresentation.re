@@ -19,7 +19,7 @@ module Styles = {
     ]);
 };
 
-let make = (~id: string, ~loggedInUser: Queries.User.t, _children) => {
+let make = (~id: string, ~loggedInUser: DataModel.User.t, _children) => {
   ...component,
   render: _self =>
     Queries.MeasurableWithMeasurements.component(~id)
@@ -55,19 +55,18 @@ let make = (~id: string, ~loggedInUser: Queries.User.t, _children) => {
            </Div>
            <>
              {
-               loggedInUser
-               |> E.O.React.fmapOrNull((user: Queries.User.user) => {
-                    let userAgentId = user.agentId;
-                    let creatorId =
-                      m.creator |> E.O.fmap((r: DataModel.Agent.t) => r.id);
-                    <>
-                      {"Add a Measurement" |> ste |> E.React.inH2}
-                      <Foretold__Components__Measurement__Form
-                        measurableId=id
-                        isCreator={userAgentId == creatorId}
-                      />
-                    </>;
-                  })
+               let userAgentId =
+                 loggedInUser.agent
+                 |> E.O.fmap((r: DataModel.Agent.t) => r.id);
+               let creatorId =
+                 m.creator |> E.O.fmap((r: DataModel.Agent.t) => r.id);
+               <>
+                 {"Add a Measurement" |> ste |> E.React.inH2}
+                 <Foretold__Components__Measurement__Form
+                   measurableId=id
+                   isCreator={userAgentId == creatorId}
+                 />
+               </>;
              }
              {"Measurements" |> ste |> E.React.inH2}
              {

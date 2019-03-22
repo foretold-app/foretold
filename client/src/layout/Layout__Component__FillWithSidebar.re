@@ -52,7 +52,7 @@ module Styles = {
 
 let component = ReasonReact.statelessComponent("SidebarFill");
 let make =
-    (~channelId: option(string), ~loggedInUser: Queries.User.t, children) => {
+    (~channelId: option(string), ~loggedInUser: DataModel.User.t, children) => {
   ...component,
   render: _self =>
     <Layout__Component__UseRouterForLinks>

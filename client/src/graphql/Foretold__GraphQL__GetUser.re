@@ -78,22 +78,7 @@ let component =
     QueryComponent.make(~variables=query##variables, ({result}) =>
       result
       |> ApolloUtils.apolloResponseToResult
-      |> E.R.fmap(e =>
-           e##user
-           |> (
-             e => {
-               let channel = (ch: channel) =>
-                 DataModel.Channel.make(
-                   ~id=ch.id,
-                   ~name=ch.name,
-                   ~isArchived=false,
-                   ~isPublic=ch.isPublic,
-                   (),
-                 );
-               e;
-             }
-           )
-         )
+      |> E.R.fmap(e => e##user |> E.O.fmap(toUser))
       |> E.R.fmap(e => innerComponentFn(e))
       |> E.R.id
     )

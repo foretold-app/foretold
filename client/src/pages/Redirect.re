@@ -15,8 +15,8 @@ let make = _children => {
         let agentId =
           user
           |> O.bind(_, r => r.agent)
-          |> O.fmap((e: Queries.User.agent) => e.id);
-        let name = user |> O.fmap((e: Queries.User.user) => e.name);
+          |> O.fmap((e: DataModel.Agent.t) => e.id);
+        let name = user |> O.fmap((e: DataModel.User.t) => e.name);
         switch (name, agentId) {
         | (Some(""), _) => DataModel.Url.push(Profile)
         | (_, Some(id)) => DataModel.Url.push(AgentShow(id))

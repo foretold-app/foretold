@@ -22,6 +22,12 @@ module O = {
   let isSome = Rationale.Option.isSome;
   let toExn = Option.toExn;
 
+  let toResult = (error, e) =>
+    switch (e) {
+    | Some(r) => Belt.Result.Ok(r)
+    | None => Error(error)
+    };
+
   module React = {
     let defaultNull = default(ReasonReact.null);
     let fmapOrNull = fn => fmap(fn) ||> default(ReasonReact.null);

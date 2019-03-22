@@ -39,7 +39,7 @@ let nameS = style([fontWeight(`black), fontSize(`em(1.2))]);
 let name = "#general";
 let description = "A channel for doing X and Y";
 let userCount = "8";
-let make = _children => {
+let make = (~loggedInUser: Queries.User.t, _children) => {
   ...component,
   render: _ =>
     Queries.Channels.component(channels => {
@@ -55,11 +55,29 @@ let make = _children => {
             }
           </div>
           <div className=column>
-            <Antd.Button
-              _type=`primary
-              href={DataModel.Url.toString(ChannelShow(channel.id))}>
-              {"Join" |> ste}
-            </Antd.Button>
+            {
+              loggedInUser
+              |> E.O.bind(_, r => r.agent)
+              |> E.O.fmap((agent: Queries.User.agent) =>
+                   Foretold__GraphQL.Mutations.ChannelJoin.Mutation.make(
+                     (mutation, _) =>
+                     <Antd.Button
+                       _type=`primary
+                       onClick={
+                         _ =>
+                           Foretold__GraphQL.Mutations.ChannelJoin.mutate(
+                             mutation,
+                             agent.id,
+                             channel.id,
+                           )
+                       }>
+                       {"Join" |> ste}
+                     </Antd.Button>
+                   )
+                   |> E.React.el
+                 )
+              |> E.O.React.defaultNull
+            }
           </div>
         </div>;
       <>

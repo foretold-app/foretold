@@ -70,6 +70,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.DATE
     },
+    channelId: {
+      type: DataTypes.UUID(),
+      allowNull: false,
+    },
     measurementCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),

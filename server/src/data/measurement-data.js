@@ -1,12 +1,9 @@
 const models = require("../models");
 const { notify } = require("../lib/notifications");
 
-const { UsersData } = require('./users-data');
-
 class MeasurementData {
-  constructor() {
-    this.usersData = new UsersData();
-  }
+
+  constructor() { }
 
   /**
    * @todo: rename
@@ -22,8 +19,7 @@ class MeasurementData {
       measurableId,
       description,
     } = values;
-    const _auth0Id = await this.usersData.getAuth0Id(options);
-    const user = await this.usersData.auth0User(_auth0Id);
+    const user = options.user;
     const newMeasurement = await models.Measurement.create({
       value,
       competitorType,

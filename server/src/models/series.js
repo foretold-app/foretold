@@ -29,6 +29,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ARRAY(DataTypes.DATE),
       allowNull: true,
     },
+    channelId: {
+      type: DataTypes.UUID(),
+      allowNull: false,
+    },
     measurableCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),

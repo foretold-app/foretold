@@ -3,13 +3,7 @@ const Sequelize = require('sequelize');
 const models = require("../models");
 const { notify } = require("../lib/notifications");
 
-const { UsersData } = require('./users-data');
-
 class MeasurablesData {
-
-  constructor() {
-    this.usersData = new UsersData();
-  }
 
   /**
    * @param root
@@ -17,31 +11,11 @@ class MeasurablesData {
    * @param options
    * @return {Promise<*>}
    */
-  async createMeasurable (root, values, options) {
-    const {
-      name,
-      description,
-      valueType,
-      expectedResolutionDate,
-      resolutionEndpoint,
-      descriptionDate,
-      descriptionEntity,
-      descriptionProperty,
-      channelId
-    } = values;
-    let _auth0Id = await this.usersData.getAuth0Id(options);
-    const user = await this.usersData.auth0User(_auth0Id);
+  async createMeasurable(root, values, options) {
+    const user = options.user;
     const newMeasurable = await models.Measurable.create({
-      name,
-      valueType,
-      description,
-      expectedResolutionDate,
+      ...values,
       creatorId: user.agentId,
-      descriptionEntity,
-      descriptionDate,
-      resolutionEndpoint,
-      descriptionProperty,
-     channelId 
     });
     let notification = await newMeasurable.creationNotification(user);
     notify(notification);
@@ -56,8 +30,7 @@ class MeasurablesData {
    */
   async archiveMeasurable(root, values, options) {
     const { id } = values;
-    const _auth0Id = await this.usersData.getAuth0Id(options);
-    const user = await this.usersData.auth0User(_auth0Id);
+    const user = options.user;
     let measurable = await models.Measurable.findById(id);
     if (measurable.creatorId !== user.agentId) {
       throw new Error("User does not have permission");
@@ -73,8 +46,7 @@ class MeasurablesData {
    */
   async unArchiveMeasurable(root, values, options) {
     const { id } = values;
-    let _auth0Id = await this.usersData.getAuth0Id(options);
-    const user = await this.usersData.auth0User(_auth0Id);
+    const user = options.user;
     let measurable = await models.Measurable.findById(id);
     if (measurable.creatorId !== user.agentId) {
       throw new Error("User does not have permission");
@@ -99,8 +71,7 @@ class MeasurablesData {
       resolutionEndpoint,
       descriptionProperty
     } = values;
-    let _auth0Id = await this.usersData.getAuth0Id(options);
-    const user = await this.usersData.auth0User(_auth0Id);
+    const user = options.user;
     let measurable = await models.Measurable.findById(id);
     if (measurable.creatorId !== user.agentId) {
       throw new Error("User does not have permission");
@@ -135,16 +106,22 @@ class MeasurablesData {
   async getAll(root, values, options) {
     const { offset, limit, channelId, seriesId, creatorId } = values;
     let where = {
-          state: {
-            [Sequelize.Op.ne]: "ARCHIVED"
-          }
-        }
+      state: {
+        [Sequelize.Op.ne]: "ARCHIVED"
+      }
+    };
 
-    if (seriesId){ where.seriesId = {[Sequelize.Op.eq]: seriesId}}
-    if (creatorId){ where.creatorId = {[Sequelize.Op.eq]: creatorId}}
-    if (channelId){ where.channelId = {[Sequelize.Op.eq]: channelId}}
+    if (seriesId) {
+      where.seriesId = { [Sequelize.Op.eq]: seriesId }
+    }
+    if (creatorId) {
+      where.creatorId = { [Sequelize.Op.eq]: creatorId }
+    }
+    if (channelId) {
+      where.channelId = { [Sequelize.Op.eq]: channelId }
+    }
 
-    let items =  await models.Measurable.findAll({
+    let items = await models.Measurable.findAll({
       limit: limit,
       offset: offset,
       order: [['createdAt', 'DESC']],

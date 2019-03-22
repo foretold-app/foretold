@@ -57,6 +57,7 @@ module.exports = (sequelize, DataTypes) => {
       through: models.AgentsChannels,
       foreignKey: 'channelId',
       otherKey: 'agentId',
+      as: 'agents'
     });
   };
 

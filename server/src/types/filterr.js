@@ -8,6 +8,7 @@ const { valueType } = require('./value-type');
  */
 function filterr(fields) {
   let newFields = { ...fields };
+  // TODO: Refactor this. It's obviously quite hacky.
   if (!!newFields.competitorType) {
     newFields.competitorType = { type: competitor }
   }

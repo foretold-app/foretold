@@ -6,17 +6,17 @@ const agents = require('./agents');
 const channel = new graphql.GraphQLObjectType({
   name: 'Channel',
   fields: {
-    id: { type: graphql.GraphQLString },
-    name: { type: graphql.GraphQLString },
+    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     description: { type: graphql.GraphQLString },
-    isArchived: { type: graphql.GraphQLBoolean },
-    isPublic: { type: graphql.GraphQLBoolean },
+    isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
+    isPublic: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     creator: {
-      type: agents.agent2,
+      type: graphql.GraphQLNonNull(agents.agent2),
       resolve: resolvers.channels.channelCreator,
     },
     agents: {
-      type: graphql.GraphQLList(agents.agent2),
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(agents.agent2)),
       resolve: resolvers.channels.channelAgents,
     },
   }

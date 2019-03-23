@@ -10,10 +10,13 @@ const types = require('./types');
 const { stats } = require('./types/stats');
 const { filterr } = require('./types/filterr');
 
+const { authorizerChannel } = require('./auhtorizers/authorizer-channel');
+
 const schema = new graphql.GraphQLSchema({
   query: new graphql.GraphQLObjectType({
     name: 'Query',
     fields: {
+
       user: {
         type: types.userType,
         args: {
@@ -24,6 +27,7 @@ const schema = new graphql.GraphQLSchema({
           return data.usersData.getUser(ops, values, options);
         }
       },
+
       users: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.userType)),
         resolve: resolver(models.User),
@@ -34,9 +38,10 @@ const schema = new graphql.GraphQLSchema({
         args: _.pick(attributeFields(models.Measurement), ['id']),
         resolve: resolver(models.Measurement),
       },
+
       measurements: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.measurementType)),
-        resolve: resolver(models.Measurement),
+        resolve: authorizerChannel(resolver(models.Measurement)),
       },
 
       measurable: {
@@ -44,6 +49,7 @@ const schema = new graphql.GraphQLSchema({
         args: _.pick(attributeFields(models.Measurable), ['id']),
         resolve: resolver(models.Measurable),
       },
+
       measurables: {
         type: new graphql.GraphQLNonNull(new graphql.GraphQLList(types.measurableType)),
         args: {
@@ -53,9 +59,7 @@ const schema = new graphql.GraphQLSchema({
           channelId: { type: graphql.GraphQLString },
           seriesId: { type: graphql.GraphQLString },
         },
-        resolve: async (ops, values, options) => {
-          return data.measurablesData.getAll(ops, values, options);
-        }
+        resolve: authorizerChannel(data.measurablesData.getAll),
       },
 
       bot: {
@@ -63,6 +67,7 @@ const schema = new graphql.GraphQLSchema({
         args: _.pick(attributeFields(models.Bot), ['id']),
         resolve: resolver(models.Bot),
       },
+
       bots: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.botType)),
         resolve: resolver(models.Bot),
@@ -73,6 +78,7 @@ const schema = new graphql.GraphQLSchema({
         args: _.pick(attributeFields(models.Agent), ['id']),
         resolve: resolver(models.Agent),
       },
+
       agents: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.agentType)),
         resolve: resolver(models.Agent),
@@ -83,9 +89,10 @@ const schema = new graphql.GraphQLSchema({
         args: _.pick(attributeFields(models.Series), ['id']),
         resolve: resolver(models.Series),
       },
+
       seriesCollection: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.seriesType)),
-        resolve: resolver(models.Series),
+        resolve: authorizerChannel(resolver(models.Series)),
       },
 
       channel: {

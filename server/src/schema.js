@@ -10,7 +10,7 @@ const types = require('./types');
 const { stats } = require('./types/stats');
 const { filterr } = require('./types/filterr');
 
-const { authorizerChannel } = require('./auhtorizers/authorizer-channel');
+const { authorizerChannel } = require('./authorizers/authorizer-channel');
 
 const schema = new graphql.GraphQLSchema({
   query: new graphql.GraphQLObjectType({
@@ -56,8 +56,8 @@ const schema = new graphql.GraphQLSchema({
           offset: { type: graphql.GraphQLInt },
           limit: { type: graphql.GraphQLInt },
           creatorId: { type: graphql.GraphQLString },
-          channelId: { type: graphql.GraphQLString },
           seriesId: { type: graphql.GraphQLString },
+          channelId: { type: graphql.GraphQLString },
         },
         resolve: authorizerChannel(data.measurablesData.getAll),
       },

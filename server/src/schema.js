@@ -11,8 +11,6 @@ const types = require('./types');
 const { stats } = require('./types/stats');
 const { filterr } = require('./types/filterr');
 
-const { authorizerChannel } = require('./authorizers/channels');
-
 const schema = new graphql.GraphQLSchema({
   query: new graphql.GraphQLObjectType({
     name: 'Query',
@@ -43,13 +41,13 @@ const schema = new graphql.GraphQLSchema({
         args: {
           channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
-        resolve: authorizerChannel(resolver(models.Measurement)),
+        resolve: resolvers.measurables.all,
       },
 
       measurable: {
         type: types.measurableType,
         args: _.pick(attributeFields(models.Measurable), ['id']),
-        resolve: resolver(models.Measurable),
+        resolve: resolvers.measurables.one,
       },
 
       measurables: {
@@ -97,7 +95,7 @@ const schema = new graphql.GraphQLSchema({
         args: {
           channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
-        resolve: authorizerChannel(resolver(models.Series)),
+        resolve: resolvers.series.all,
       },
 
       channel: {

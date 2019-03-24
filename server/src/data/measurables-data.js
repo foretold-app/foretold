@@ -98,14 +98,11 @@ class MeasurablesData {
   }
 
   /**
-   * @param root
-   * @param values
-   * @param options
+   * @param {object} options
    * @return {Promise<*|Array<Model>>}
    */
-  async getAll(root, values, options) {
-    const { offset, limit, channelId, seriesId, creatorId } = values;
-    const user = options.user;
+  async getAll(options) {
+    const { offset, limit, channelId, seriesId, creatorId } = options;
 
     let where = {
       state: {
@@ -114,13 +111,13 @@ class MeasurablesData {
     };
 
     if (seriesId) {
-      where.seriesId = { [Sequelize.Op.eq]: seriesId }
+      where.seriesId = { [Sequelize.Op.eq]: seriesId };
     }
     if (creatorId) {
-      where.creatorId = { [Sequelize.Op.eq]: creatorId }
+      where.creatorId = { [Sequelize.Op.eq]: creatorId };
     }
     if (channelId) {
-      where.channelId = { [Sequelize.Op.eq]: channelId }
+      where.channelId = { [Sequelize.Op.eq]: channelId };
     }
 
     const items = await models.Measurable.findAll({
@@ -130,7 +127,7 @@ class MeasurablesData {
       where
     });
 
-    return items
+    return items;
   }
 
 }

@@ -24,9 +24,7 @@ const schema = new graphql.GraphQLSchema({
           id: { type: graphql.GraphQLString },
           auth0Id: { type: graphql.GraphQLString },
         },
-        resolve: async (ops, values, options) => {
-          return data.usersData.getUser(ops, values, options);
-        }
+        resolve: data.usersData.getUser,
       },
 
       users: {
@@ -63,7 +61,7 @@ const schema = new graphql.GraphQLSchema({
           seriesId: { type: graphql.GraphQLString },
           channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
-        resolve: authorizerChannel(data.measurablesData.getAll),
+        resolve: resolvers.measurables.all,
       },
 
       bot: {
@@ -105,12 +103,12 @@ const schema = new graphql.GraphQLSchema({
       channel: {
         type: types.channels.channel,
         args: { id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) } },
-        resolve: resolvers.channels.channel,
+        resolve: resolvers.channels.one,
       },
 
       channels: {
-        type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.channels.channel)),
-        resolve: resolvers.channels.channels,
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.channels.channel)),
+        resolve: resolvers.channels.all,
       },
 
       stats: {

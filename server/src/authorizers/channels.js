@@ -1,11 +1,39 @@
+const _ = require('lodash');
+
 const data = require('../data');
 
 /**
- *
+ * @param {string} channelId
+ * @param {string} agentId
+ * @returns {Promise<boolean>}
+ */
+async function channel(channelId, agentId) {
+  if (!channelId) {
+    return Promise.reject(new Error('Channel ID is required'));
+  }
+
+  if (!agentId) {
+    return Promise.reject(new Error('Agent ID is required'));
+  }
+
+  const channel = await data.channelsData.getOne(channelId);
+  if (channel.isPublic) {
+    return true;
+  }
+
+  const agentChannel = await data.agentsChannelsData.getOne({ agentId, channelId });
+  if (!agentChannel) {
+    return Promise.reject(new Error('Access denied'));
+  }
+
+  return true;
+}
+
+/**
  * @param next
  * @returns {function(*=, *=, *=, *=): *}
  */
-function authorizerChannel(next) {
+function authorizerChannelByArg(next) {
   return async (root, args, context, info) => {
 
     const channelId = args.channelId;
@@ -13,25 +41,37 @@ function authorizerChannel(next) {
 
     console.log('Channel authorizer', channelId);
 
-    if (!channelId) {
-      throw new Error('Channel ID is required');
-    }
-
-    const channel = await data.channelsData.getOne( channelId );
-    if (channel.isPublic) {
+    if (await channel(channelId, agentId)) {
       return next(root, args, context, info);
     }
 
-    const agentChannel = await data.agentsChannelsData.getOne({ agentId, channelId });
-    if (!agentChannel) {
-      throw new Error('Access denied');
-    }
-
-    return next(root, args, context, info);
+    return null;
   };
 }
 
+/**
+ * @param next
+ * @returns {function(*=, *=, *=, *=): *}
+ */
+function authorizerChannelAfter(next) {
+  return async (root, args, context, info) => {
+
+    const entity = await next(root, args, context, info);
+
+    const channelId = _.get(entity, 'channelId');
+    const agentId = _.get(context, 'user.agentId');
+
+    console.log('Channel authorizer', channelId);
+
+    if (await channel(channelId, agentId)) {
+      return entity;
+    }
+
+    return null;
+  };
+}
 
 module.exports = {
-  authorizerChannel,
+  authorizerChannelByArg,
+  authorizerChannelAfter,
 };

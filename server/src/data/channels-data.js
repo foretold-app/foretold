@@ -12,6 +12,7 @@ class ChannelsData {
 
   /**
    * @tested
+   * @public
    * @param {Models.User} user
    * @param {Schema.ChannelsInput} input
    * @return {Promise<Models.Channel>}
@@ -33,6 +34,7 @@ class ChannelsData {
 
   /**
    * @tested
+   * @public
    * @param {string} id
    * @param {object} input
    * @return {Promise<Model>}
@@ -47,6 +49,7 @@ class ChannelsData {
 
   /**
    * @tested
+   * @public
    * @param {string} id
    * @return {Promise<Model[]>}
    */
@@ -60,6 +63,7 @@ class ChannelsData {
 
   /**
    * @tested
+   * @public
    * @param {string} id
    * @return {Promise<Model>}
    */
@@ -72,6 +76,7 @@ class ChannelsData {
   }
 
   /**
+   * @public
    * @param {object} options
    * @param {number} [options.offset]
    * @param {number} [options.limit]
@@ -81,6 +86,38 @@ class ChannelsData {
   async getAll(options = {}) {
     const offset = _.get(options, 'offset', 0);
     const limit = _.get(options, 'limit', 10);
+    const query = this.getRestrictionsSync(options);
+    return await models.Channel.findAll({
+      limit: limit,
+      offset: offset,
+      order: [['createdAt', 'DESC']],
+      ...query,
+    });
+  }
+
+  /**
+   * @public
+   * @param {string} id
+   * @param {object} options
+   * @param {number} [options.offset]
+   * @param {number} [options.limit]
+   * @param {object} [options.restrictions]
+   * @return {Promise<*|Array<Model>>}
+   */
+  async getOne(id, options = {}) {
+    const query = this.getRestrictionsSync(options);
+    return await models.Channel.findOne({
+      where: { id },
+      ...query,
+    });
+  }
+
+  /**
+   * @protected
+   * @param {object} [options.restrictions]
+   * @return {object}
+   */
+  getRestrictionsSync(options = {}) {
     const restrictions = _.get(options, 'restrictions', {});
     const query = {};
     if (restrictions.agentId) {
@@ -91,12 +128,7 @@ class ChannelsData {
         required: false,
       }];
     }
-    return await models.Channel.findAll({
-      limit: limit,
-      offset: offset,
-      order: [['createdAt', 'DESC']],
-      ...query,
-    });
+    return query;
   }
 }
 

@@ -104,8 +104,8 @@ const schema = new graphql.GraphQLSchema({
 
       channel: {
         type: types.channels.channel,
-        args: { id: { type: graphql.GraphQLString } },
-        resolve: resolver(models.Channel),
+        args: { id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) } },
+        resolve: resolvers.channels.channel,
       },
 
       channels: {

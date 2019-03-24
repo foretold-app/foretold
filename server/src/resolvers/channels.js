@@ -29,14 +29,27 @@ async function channelCreator(channel) {
  */
 async function channels(root, args, context, info) {
   const agentId = context.user.agentId;
-  const options = {
-    restrictions: { agentId },
-  };
+  const options = { restrictions: { agentId } };
   return await data.channelsData.getAll(options);
+}
+
+/**
+ * @param root
+ * @param args
+ * @param context
+ * @param info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function channel(root, args, context, info) {
+  const id = args.id;
+  const agentId = context.user.agentId;
+  const options = { restrictions: { agentId } };
+  return await data.channelsData.getOne(id, options);
 }
 
 module.exports = {
   channelAgents,
   channelCreator,
   channels,
+  channel,
 };

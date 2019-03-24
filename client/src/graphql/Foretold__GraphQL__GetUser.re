@@ -68,26 +68,25 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let component =
-    (
-      auth0Id: option(string),
-      innerComponentFn: 'a => ReasonReact.reactElement,
-    ) =>
-  switch (auth0Id) {
-  | Some(auth0Id) =>
-    let query = Query.make(~auth0Id, ());
-    QueryComponent.make(~variables=query##variables, ({result}) =>
-      result
-      |> ApolloUtils.apolloResponseToResult
-      |> E.R.fmap(e => e##user |> E.O.fmap(toUser))
-      |> E.R.fmap(e => innerComponentFn(e))
-      |> E.R.id
-    )
-    |> E.React.el;
-  | None => innerComponentFn(None)
-  };
-
-let withLoggedInUserQuery = (innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let isLoggedIn = Auth0.isLoggedIn();
-  isLoggedIn ?
-    component(Auth0.userId(), innerComponentFn) : innerComponentFn(None);
+    (auth0Id: string, innerComponentFn: 'a => ReasonReact.reactElement) => {
+  let query = Query.make(~auth0Id, ());
+  QueryComponent.make(~variables=query##variables, ({result}) =>
+    result
+    |> ApolloUtils.apolloResponseToResult
+    |> E.R.fmap(e => e##user |> E.O.fmap(toUser))
+    |> E.R.fmap(e => innerComponentFn(e))
+    |> E.R.id
+  )
+  |> E.React.el;
 };
+
+let withLoggedInUserQuery = (innerComponentFn: 'a => ReasonReact.reactElement) =>
+  switch (Me.AuthTokens.make_from_storage()) {
+  | None => innerComponentFn(None)
+  | Some(tokens) =>
+    Auth0.logoutIfTokenIsObsolete(tokens);
+    switch (Me.AuthTokens.auth0Id(tokens)) {
+    | Some(auth0Id) => component(auth0Id, innerComponentFn)
+    | None => innerComponentFn(None)
+    };
+  };

@@ -81,7 +81,9 @@ module Route = {
     | [] => Home
     | ["login"] => Login
     | ["callback"] =>
-      Auth0.handleAuth(url);
+      Me.CallbackUrlToAuthTokens.make(url)
+      |> E.O.fmap(Me.AuthTokens.set)
+      |> E.O.default();
       Redirect;
     | ["redirect"] => Redirect
     | ["agents"] => AgentIndex
@@ -310,7 +312,6 @@ module Measurable = {
   type t = {
     id: string,
     name: string,
-    auth0Id: option(string),
     valueType,
     channel: option(string),
     description: option(string),
@@ -383,14 +384,12 @@ module Measurable = {
         ~descriptionEntity=None,
         ~descriptionDate=None,
         ~descriptionProperty=None,
-        ~auth0Id=None,
         ~series=None,
         (),
       ) => {
     id,
     name,
     channel,
-    auth0Id,
     valueType,
     description,
     resolutionEndpoint,

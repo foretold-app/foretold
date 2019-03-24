@@ -11,7 +11,8 @@ let make = _children => {
     <div className=StaticStyles.body>
       <div className=StaticStyles.title> {"Foretold" |> ste} </div>
       <div className=StaticStyles.description>
-        <Antd.Button _type=`primary onClick={_e => Auth0.logIn()}>
+        <Antd.Button
+          _type=`primary onClick={_e => Me.Auth0Client.triggerLoginScreen()}>
           {"Login" |> ste}
         </Antd.Button>
       </div>

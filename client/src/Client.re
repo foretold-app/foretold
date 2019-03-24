@@ -9,26 +9,29 @@ type data = {name: string};
 [@bs.scope "JSON"] [@bs.val]
 external parseIntoMyData: string => data = "parse";
 
-let headers = () =>
+let storageToHeaders = (tokens: Me.AuthTokens.t) =>
   Json.Encode.(
     object_([
       (
         "authorization",
-        Json.Encode.string(
-          "Bearer " ++ (Auth0.authToken() |> E.O.default("")),
-        ),
+        Json.Encode.string("Bearer " ++ tokens.access_token),
       ),
     ])
   );
 
 let httpLink = ApolloLinks.createHttpLink(~uri=Env.serverUrl, ());
 
-let contextLink = ApolloLinks.createContextLink(() => {"headers": headers()});
+let contextLink = (tokens: Me.AuthTokens.t) =>
+  ApolloLinks.createContextLink(() => {"headers": storageToHeaders(tokens)});
 
 let errorLink =
   ApolloLinks.apolloLinkOnError(error => Js.log2("GraphQL Error!", error));
 
-let link = ApolloLinks.from([|contextLink, errorLink, httpLink|]);
+let link = () =>
+  switch (Me.AuthTokens.make_from_storage()) {
+  | Some(s) => ApolloLinks.from([|contextLink(s), errorLink, httpLink|])
+  | None => ApolloLinks.from([|errorLink, httpLink|])
+  };
 
-let instance =
-  ReasonApollo.createApolloClient(~link, ~cache=inMemoryCache, ());
+let instance = () =>
+  ReasonApollo.createApolloClient(~link=link(), ~cache=inMemoryCache, ());

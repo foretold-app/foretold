@@ -71,6 +71,33 @@ class ChannelsData {
     return _.get(channel, 'creator');
   }
 
+  /**
+   * @param {object} options
+   * @param {number} [options.offset]
+   * @param {number} [options.limit]
+   * @param {object} [options.restrictions]
+   * @return {Promise<*|Array<Model>>}
+   */
+  async getAll(options = {}) {
+    const offset = _.get(options, 'offset', 0);
+    const limit = _.get(options, 'limit', 10);
+    const restrictions = _.get(options, 'restrictions', {});
+    const query = {};
+    if (restrictions.agentId) {
+      query.include = [{
+        model: models.Agent,
+        where: { id: restrictions.agentId },
+        as: 'agents',
+        required: false,
+      }];
+    }
+    return await models.Channel.findAll({
+      limit: limit,
+      offset: offset,
+      order: [['createdAt', 'DESC']],
+      ...query,
+    });
+  }
 }
 
 module.exports = {

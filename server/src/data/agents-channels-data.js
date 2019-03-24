@@ -43,12 +43,22 @@ class AgentsChannelsData {
    */
   async validate({ channelId, agentId }) {
     if (!await models.Channel.findById(channelId)) {
-      return Promise.reject(new Error(`Channel "${channelId}" is not found.`));
+      return Promise.reject(new Error(`Channel "${ channelId }" is not found.`));
     }
     if (!await models.Agent.findById(agentId)) {
-      return Promise.reject(new Error(`Agent "${agentId}" is not found.`));
+      return Promise.reject(new Error(`Agent "${ agentId }" is not found.`));
     }
     return true;
+  }
+
+  /**
+   * @param {object} options
+   * @param {string} options.agentId?
+   * @param {string} options.channelId?
+   * @returns {Promise<Model>}
+   */
+  async getOne(options) {
+    return await models.AgentsChannels.findOne({ where: options });
   }
 
 }

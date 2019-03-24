@@ -119,22 +119,8 @@ class MeasurablesData {
     if (creatorId) {
       where.creatorId = { [Sequelize.Op.eq]: creatorId }
     }
-
     if (channelId) {
-      where.channelId = {
-        [Sequelize.Op.in]: models.sequelize.literal(
-          `(SELECT "channelId" FROM "AgentsChannels"` +
-          ` WHERE "agentId" = '${user.agentId}')` +
-          ` AND "channelId" = '${channelId}'`
-        ),
-      };
-    } else {
-      where.channelId = {
-        [Sequelize.Op.in]: models.sequelize.literal(
-          `(SELECT "channelId" FROM "AgentsChannels"` +
-          ` WHERE "agentId" = '${user.agentId}')`
-        ),
-      };
+      where.channelId = { [Sequelize.Op.eq]: channelId }
     }
 
     const items = await models.Measurable.findAll({

@@ -5,6 +5,7 @@ const { attributeFields, resolver } = require("graphql-sequelize");
 
 const models = require("./models");
 const data = require('./data');
+const resolvers = require('./resolvers');
 
 const types = require('./types');
 const { stats } = require('./types/stats');
@@ -41,6 +42,9 @@ const schema = new graphql.GraphQLSchema({
 
       measurements: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.measurementType)),
+        args: {
+          channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
         resolve: authorizerChannel(resolver(models.Measurement)),
       },
 
@@ -57,7 +61,7 @@ const schema = new graphql.GraphQLSchema({
           limit: { type: graphql.GraphQLInt },
           creatorId: { type: graphql.GraphQLString },
           seriesId: { type: graphql.GraphQLString },
-          channelId: { type: graphql.GraphQLString },
+          channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
         resolve: authorizerChannel(data.measurablesData.getAll),
       },
@@ -92,6 +96,9 @@ const schema = new graphql.GraphQLSchema({
 
       seriesCollection: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.seriesType)),
+        args: {
+          channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
         resolve: authorizerChannel(resolver(models.Series)),
       },
 
@@ -100,9 +107,10 @@ const schema = new graphql.GraphQLSchema({
         args: { id: { type: graphql.GraphQLString } },
         resolve: resolver(models.Channel),
       },
+
       channels: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.channels.channel)),
-        resolve: resolver(models.Channel),
+        resolve: resolvers.channels.channels,
       },
 
       stats: {

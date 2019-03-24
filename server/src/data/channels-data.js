@@ -88,10 +88,10 @@ class ChannelsData {
     const limit = _.get(options, 'limit', 10);
     const query = this.getRestrictionsSync(options);
     return await models.Channel.findAll({
-      limit: limit,
-      offset: offset,
-      order: [['createdAt', 'DESC']],
+      limit,
+      offset,
       ...query,
+      order: [['createdAt', 'DESC']],
     });
   }
 
@@ -107,26 +107,33 @@ class ChannelsData {
   async getOne(id, options = {}) {
     const query = this.getRestrictionsSync(options);
     return await models.Channel.findOne({
-      where: { id },
       ...query,
+      where: { id, ...query.where }
     });
   }
 
   /**
    * @protected
+   * @param {object} [options]
    * @param {object} [options.restrictions]
+   * @param {string[]} [options.restrictions.channelIds]
    * @return {object}
    */
   getRestrictionsSync(options = {}) {
     const restrictions = _.get(options, 'restrictions', {});
-    const query = {};
-    if (restrictions.agentId) {
-      query.include = [{
-        model: models.Agent,
-        where: { id: restrictions.agentId },
-        as: 'agents',
-        required: false,
-      }];
+    const query = { where: {} };
+    if (restrictions.channelIds) {
+      query.where = {
+        [models.sequelize.Op.or]: [
+          {
+            id: restrictions.channelIds,
+            isPublic: false,
+          },
+          {
+            isPublic: true,
+          }
+        ]
+      };
     }
     return query;
   }

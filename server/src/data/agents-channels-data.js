@@ -61,6 +61,26 @@ class AgentsChannelsData {
     return await models.AgentsChannels.findOne({ where: options });
   }
 
+  /**
+   * @param {object} options
+   * @param {string} options.agentId?
+   * @param {string} options.channelId?
+   * @returns {Promise<Model>}
+   */
+  async getAll(options) {
+    return await models.AgentsChannels.findAll({ where: options });
+  }
+
+  /**
+   * @param {object} options
+   * @param {string} options.agentId?
+   * @param {string} options.channelId?
+   * @returns {Promise<string[]>}
+   */
+  async getAllChannelIds(options) {
+    return (await this.getAll(options)).map(o => o.channelId);
+  }
+
 }
 
 module.exports = {

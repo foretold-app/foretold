@@ -17,11 +17,12 @@ function authorizerChannel(next) {
       throw new Error('Channel ID is required');
     }
 
-    const agentChannel = await data.agentsChannelsData.getOne({
-      agentId,
-      channelId,
-    });
+    const channel = await data.channelsData.getOne( channelId );
+    if (channel.isPublic) {
+      return next(root, args, context, info);
+    }
 
+    const agentChannel = await data.agentsChannelsData.getOne({ agentId, channelId });
     if (!agentChannel) {
       throw new Error('Access denied');
     }

@@ -29,7 +29,8 @@ async function channelCreator(channel) {
  */
 async function all(root, args, context, info) {
   const agentId = context.user.agentId;
-  const options = { restrictions: { agentId } };
+  const channelIds = await data.agentsChannelsData.getAllChannelIds({ agentId });
+  const options = { restrictions: { channelIds } };
   return await data.channelsData.getAll(options);
 }
 
@@ -43,7 +44,8 @@ async function all(root, args, context, info) {
 async function one(root, args, context, info) {
   const id = args.id;
   const agentId = context.user.agentId;
-  const options = { restrictions: { agentId } };
+  const channelIds = await data.agentsChannelsData.getAllChannelIds({ agentId });
+  const options = { restrictions: { channelIds } };
   return await data.channelsData.getOne(id, options);
 }
 

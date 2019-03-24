@@ -6,17 +6,11 @@ const { notify } = require("../lib/notifications");
 class MeasurablesData {
 
   /**
-   * @param root
-   * @param values
-   * @param options
+   * @param data
    * @return {Promise<*>}
    */
-  async createMeasurable(root, values, options) {
-    const user = options.user;
-    const newMeasurable = await models.Measurable.create({
-      ...values,
-      creatorId: user.agentId,
-    });
+  async createMeasurable(data) {
+    const newMeasurable = await models.Measurable.create(data);
     let notification = await newMeasurable.creationNotification(user);
     notify(notification);
     return newMeasurable;

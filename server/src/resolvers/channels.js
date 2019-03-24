@@ -49,9 +49,33 @@ async function one(root, args, context, info) {
   return await data.channelsData.getOne(id, options);
 }
 
+/**
+ * @param root
+ * @param args
+ * @param context
+ * @param info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function update(root, args, context, info) {
+  return await data.channelsData.updateOne(args.id, args.input);
+}
+
+/**
+ * @param root
+ * @param {{ input: Schema.ChannelsInput }} args
+ * @param context
+ * @param info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function create(root, args, context, info) {
+  return await data.channelsData.createOne(options.user, args.input);
+}
+
 module.exports = {
-  channelAgents,
-  channelCreator,
   all,
   one,
+  create,
+  update,
+  channelAgents,
+  channelCreator,
 };

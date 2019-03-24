@@ -11,8 +11,8 @@ const { authorizerChannel } = require('../authorizers/channels');
  * @param info
  * @returns {Promise<*|Array<Model>>}
  */
-function all(root, args, context, info) {
-  return resolver(models.Measurement);
+async function all(root, args, context, info) {
+  return await resolver(models.Measurement)(root, args, context, info);
 }
 
 module.exports = {

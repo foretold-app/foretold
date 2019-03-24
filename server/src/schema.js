@@ -86,8 +86,10 @@ const schema = new graphql.GraphQLSchema({
 
       series: {
         type: types.seriesType,
-        args: _.pick(attributeFields(models.Series), ['id']),
-        resolve: resolver(models.Series),
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
+        resolve: resolvers.series.one,
       },
 
       seriesCollection: {

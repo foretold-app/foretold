@@ -23,11 +23,11 @@ async function all(root, args, context, info) {
  * @param info
  * @returns {Promise<*|Array<Model>>}
  */
-function one(root, args, context, info) {
-  return resolver(models.Measurable);
+async function one(root, args, context, info) {
+  return await resolver(models.Measurable)(root, args, context, info);
 }
 
 module.exports = {
-  one: one,
+  one,
   all: authorizerChannel(all),
 };

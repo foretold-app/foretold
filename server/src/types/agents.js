@@ -12,6 +12,7 @@ const agentType = new graphql.GraphQLEnumType({
   },
 });
 
+// used to prevent circular dependencies in generateReferences
 const agent2 = new graphql.GraphQLObjectType({
   name: 'Agent2',
   fields: {

@@ -18,6 +18,19 @@ class UsersData {
   }
 
   /**
+   * @return {Promise<Model>}
+   */
+  async getGuestUser() {
+    const user = await models.User.findOne({
+      where: { name: 'Guest' }
+    }) || await models.User.create({
+      auth0Id: models.sequelize.fn('uuid_generate_v4'),
+      name: 'Guest',
+    });
+    return user;
+  }
+
+  /**
    * @tested
    * @param root
    * @param values

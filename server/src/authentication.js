@@ -40,8 +40,7 @@ async function authentication(options) {
     if (token) {
       return await authenticationByJwtToken(token);
     }
-    // @todo:
-    return {};
+    return await usersData.getGuestUser();
   } catch (err) {
     console.error('Authentication Error', err);
     throw err;

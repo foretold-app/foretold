@@ -10,7 +10,7 @@ const types = require('./types');
 const { stats } = require('./types/stats');
 const { filterr } = require('./types/filterr');
 
-const { authorizerChannel } = require('./authorizers/authorizer-channel');
+const { authorizerChannel } = require('./authorizers/channels');
 
 const schema = new graphql.GraphQLSchema({
   query: new graphql.GraphQLObjectType({

@@ -105,6 +105,8 @@ class MeasurablesData {
    */
   async getAll(root, values, options) {
     const { offset, limit, channelId, seriesId, creatorId } = values;
+    const user = options.user;
+
     let where = {
       state: {
         [Sequelize.Op.ne]: "ARCHIVED"
@@ -117,11 +119,25 @@ class MeasurablesData {
     if (creatorId) {
       where.creatorId = { [Sequelize.Op.eq]: creatorId }
     }
+
     if (channelId) {
-      where.channelId = { [Sequelize.Op.eq]: channelId }
+      where.channelId = {
+        [Sequelize.Op.in]: models.sequelize.literal(
+          `(SELECT "channelId" FROM "AgentsChannels"` +
+          ` WHERE "agentId" = '${user.agentId}')` +
+          ` AND "channelId" = '${channelId}'`
+        ),
+      };
+    } else {
+      where.channelId = {
+        [Sequelize.Op.in]: models.sequelize.literal(
+          `(SELECT "channelId" FROM "AgentsChannels"` +
+          ` WHERE "agentId" = '${user.agentId}')`
+        ),
+      };
     }
 
-    let items = await models.Measurable.findAll({
+    const items = await models.Measurable.findAll({
       limit: limit,
       offset: offset,
       order: [['createdAt', 'DESC']],

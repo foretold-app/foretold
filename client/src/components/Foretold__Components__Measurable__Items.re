@@ -1,5 +1,5 @@
 open Utils;
-open DataModel;
+open Context.Primary;
 
 module Shared = Foretold__Components__Shared;
 

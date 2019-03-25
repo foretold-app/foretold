@@ -1,11 +1,11 @@
 type meWithTokensAndUserLoading = {
   authTokens: Context__Auth.AuthTokens.t,
-  loadingUserData: ApolloUtils.QResponse.tri(DataModel.User.t),
+  loadingUserData: ApolloUtils.QResponse.tri(Context__Primary.User.t),
 };
 
 type meWithTokensAndUserData = {
   authTokens: Context__Auth.AuthTokens.t,
-  userData: DataModel.User.t,
+  userData: Context__Primary.User.t,
 };
 
 type me =

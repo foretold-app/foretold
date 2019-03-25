@@ -3,8 +3,8 @@ type user = {
   name: string,
 };
 
-let toUser = (u: user): DataModel.User.t =>
-  DataModel.User.make(~id=u.id, ~name=u.name, ());
+let toUser = (u: user): Context.Primary.User.t =>
+  Context.Primary.User.make(~id=u.id, ~name=u.name, ());
 
 type bot = {
   competitorType: [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE],
@@ -13,7 +13,7 @@ type bot = {
   name: option(string),
 };
 
-let toBot = (a: bot): DataModel.Bot.t => {
+let toBot = (a: bot): Context.Primary.Bot.t => {
   competitorType: a.competitorType,
   description: a.description,
   id: a.id,
@@ -27,14 +27,14 @@ type agent = {
   user: option(user),
 };
 
-let toAgent = (a: agent): DataModel.Agent.t => {
-  let agentType: option(DataModel.AgentType.t) =
+let toAgent = (a: agent): Context.Primary.Agent.t => {
+  let agentType: option(Context.Primary.AgentType.t) =
     switch (a.bot, a.user) {
     | (Some(bot), None) => Some(Bot(toBot(bot)))
     | (None, Some(user)) => Some(User(toUser(user)))
     | _ => None
     };
-  DataModel.Agent.make(
+  Context.Primary.Agent.make(
     ~id=a.id,
     ~measurementCount=a.measurementCount,
     ~agentType,

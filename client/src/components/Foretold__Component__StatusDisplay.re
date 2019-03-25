@@ -11,11 +11,11 @@ type status =
   | ARCHIVED
   | JUDGED;
 
-let statusColor = (~measurable: DataModel.Measurable.t) => {
+let statusColor = (~measurable: Context.Primary.Measurable.t) => {
   open Css;
   let main = [padding2(~v=`px(1), ~h=`px(8)), borderRadius(`px(4))];
   let statusSpecific =
-    switch (DataModel.Measurable.toStatus(measurable)) {
+    switch (Context.Primary.Measurable.toStatus(measurable)) {
     | OPEN => [background(`hex("bff5bd"))]
     | PENDING_REVIEW => [background(`hex("fff8da"))]
     | JUDGED => [background(`hex("ead7f3"))]
@@ -57,8 +57,8 @@ let dateFinder = (head, p, date, dateDisplay) => {
   };
 };
 
-let statusShow = (~measurable: DataModel.Measurable.t, ~dateDisplay) =>
-  switch (DataModel.Measurable.toStatus(measurable)) {
+let statusShow = (~measurable: Context.Primary.Measurable.t, ~dateDisplay) =>
+  switch (Context.Primary.Measurable.toStatus(measurable)) {
   | OPEN =>
     dateFinder(
       "Open",
@@ -87,7 +87,7 @@ let component = ReasonReact.statelessComponent("MeasurableShow");
 
 let make =
     (
-      ~measurable: DataModel.Measurable.t,
+      ~measurable: Context.Primary.Measurable.t,
       ~dateDisplay=WHOLE,
       ~withStatusColorSurrounding=false,
       _children,

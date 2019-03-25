@@ -31,7 +31,7 @@ type action =
 
 let component = ReasonReact.reducerComponent("Measurables");
 
-let seriesHero = (series: DataModel.Series.t) =>
+let seriesHero = (series: Context.Primary.Series.t) =>
   <Div flexDirection=`column styles=[Styles.header]>
     <Div flex=1>
       <Div flexDirection=`row>
@@ -68,9 +68,9 @@ let seriesHero = (series: DataModel.Series.t) =>
 
 let make =
     (
-      ~channel: DataModel.Channel.t,
+      ~channel: Context.Primary.Channel.t,
       ~id: string,
-      ~loggedInUser: DataModel.User.t,
+      ~loggedInUser: Context.Primary.User.t,
       _children,
     ) => {
   ...component,
@@ -97,7 +97,7 @@ let make =
                SLayout.seriesHead(
                  channel,
                  series
-                 |> E.O.bind(_, (s: DataModel.Series.t) => s.name)
+                 |> E.O.bind(_, (s: Context.Primary.Series.t) => s.name)
                  |> E.O.default(""),
                )
              }

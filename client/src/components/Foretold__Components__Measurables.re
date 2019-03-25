@@ -12,7 +12,7 @@ module Styles = {
     ]);
 
   let row = m => {
-    let statusOpacity = (measurable: DataModel.Measurable.t) => {
+    let statusOpacity = (measurable: Context.Primary.Measurable.t) => {
       let state = measurable.state |> E.O.toExn("Needs state from GraphQL");
       if (state === `ARCHIVED) {
         0.8;
@@ -57,10 +57,10 @@ module BasicTable = {
 
   let make =
       (
-        ~measurables: array(DataModel.Measurable.t),
+        ~measurables: array(Context.Primary.Measurable.t),
         ~showExtraData: bool,
-        ~loggedInUser: DataModel.User.t,
-        ~onSelect=(m: DataModel.Measurable.t) => (),
+        ~loggedInUser: Context.Primary.User.t,
+        ~onSelect=(m: Context.Primary.Measurable.t) => (),
         _children,
       ) => {
     ...component,
@@ -68,11 +68,11 @@ module BasicTable = {
       <div className=Styles.group>
         {
           measurables
-          |> E.A.fmap((m: DataModel.Measurable.t) => {
+          |> E.A.fmap((m: Context.Primary.Measurable.t) => {
                open Rationale.Option.Infix;
                let userAgentId = loggedInUser.agent <$> (r => r.id);
                let measurableAgentId =
-                 m.creator |> E.O.fmap((r: DataModel.Agent.t) => r.id);
+                 m.creator |> E.O.fmap((r: Context.Primary.Agent.t) => r.id);
                let isSame =
                  userAgentId == measurableAgentId && E.O.isSome(userAgentId);
                <div

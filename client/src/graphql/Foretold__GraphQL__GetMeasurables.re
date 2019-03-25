@@ -6,8 +6,8 @@ type series = {
   name: option(string),
 };
 
-let toSeries = (c: series): DataModel.Series.t =>
-  DataModel.Series.make(
+let toSeries = (c: series): Context.Primary.Series.t =>
+  Context.Primary.Series.make(
     ~id=c.id,
     ~description=c.description,
     ~name=c.name,
@@ -26,14 +26,14 @@ type channel = {
   isPublic: bool,
 };
 
-let toAgent = (c: creator): DataModel.Agent.t =>
-  DataModel.Agent.make(~id=c.id, ~name=c.name, ());
+let toAgent = (c: creator): Context.Primary.Agent.t =>
+  Context.Primary.Agent.make(~id=c.id, ~name=c.name, ());
 
 type measurable = {
   id: string,
   name: string,
   channel: option(channel),
-  valueType: DataModel.valueType,
+  valueType: Context.Primary.valueType,
   description: option(string),
   resolutionEndpoint: option(string),
   measurementCount: option(int),
@@ -42,7 +42,7 @@ type measurable = {
   createdAt: MomentRe.Moment.t,
   updatedAt: MomentRe.Moment.t,
   expectedResolutionDate: option(MomentRe.Moment.t),
-  state: DataModel.MeasurableState.t,
+  state: Context.Primary.MeasurableState.t,
   stateUpdatedAt: option(MomentRe.Moment.t),
   creator: option(creator),
   series: option(series),
@@ -51,8 +51,8 @@ type measurable = {
 };
 
 /* TODO: Fix channel */
-let toMeasurable = (m: measurable): DataModel.Measurable.t =>
-  DataModel.Measurable.make(
+let toMeasurable = (m: measurable): Context.Primary.Measurable.t =>
+  Context.Primary.Measurable.make(
     ~id=m.id,
     ~name=m.name,
     ~channel=None,
@@ -94,7 +94,7 @@ module Query = [%graphql
            descriptionEntity
            descriptionProperty
            descriptionDate @bsDecoder(fn: "E.J.O.toMoment")
-           state @bsDecoder(fn: "DataModel.MeasurableState.fromString")
+           state @bsDecoder(fn: "Context.Primary.MeasurableState.fromString")
            stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
            expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
            createdAt @bsDecoder(fn: "E.J.toMoment")

@@ -92,16 +92,16 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let toMeasurement = (m: Types.measurement): DataModel.Measurement.t => {
-  open DataModel.Agent;
-  let agentType: option(DataModel.AgentType.t) =
+let toMeasurement = (m: Types.measurement): Context.Primary.Measurement.t => {
+  open Context.Primary.Agent;
+  let agentType: option(Context.Primary.AgentType.t) =
     m##agent
     |> E.O.bind(_, k =>
          switch (k##bot, k##user) {
          | (Some(bot), None) =>
            Some(
-             DataModel.Typess.Bot(
-               DataModel.Bot.make(
+             Context.Primary.Typess.Bot(
+               Context.Primary.Bot.make(
                  ~id=bot##id,
                  ~name=bot##name,
                  ~competitorType=bot##competitorType,
@@ -111,18 +111,18 @@ let toMeasurement = (m: Types.measurement): DataModel.Measurement.t => {
            )
          | (None, Some(user)) =>
            Some(
-             DataModel.Typess.User(
-               DataModel.User.make(~id=user##id, ~name=user##name, ()),
+             Context.Primary.Typess.User(
+               Context.Primary.User.make(~id=user##id, ~name=user##name, ()),
              ),
            )
          | (_, _) => None
          }
        );
 
-  let agent: option(DataModel.Agent.t) =
-    m##agent |> E.O.fmap(k => DataModel.Agent.make(~id=k##id, ~agentType, ()));
+  let agent: option(Context.Primary.Agent.t) =
+    m##agent |> E.O.fmap(k => Context.Primary.Agent.make(~id=k##id, ~agentType, ()));
 
-  DataModel.Measurement.make(
+  Context.Primary.Measurement.make(
     ~id=m##id,
     ~description=m##description,
     ~value=m##value,
@@ -136,7 +136,7 @@ let toMeasurement = (m: Types.measurement): DataModel.Measurement.t => {
 };
 
 let queryMeasurable = m => {
-  open DataModel;
+  open Context.Primary;
   let agent: option(Agent.t) =
     m##creator |> E.O.fmap(r => Agent.make(~id=r##id, ~name=r##name, ()));
 
@@ -159,7 +159,7 @@ let queryMeasurable = m => {
       ~createdAt=Some(m##createdAt),
       ~updatedAt=Some(m##updatedAt),
       ~expectedResolutionDate=m##expectedResolutionDate,
-      ~state=Some(m##state |> DataModel.MeasurableState.fromString),
+      ~state=Some(m##state |> Context.Primary.MeasurableState.fromString),
       ~stateUpdatedAt=m##stateUpdatedAt,
       ~descriptionEntity=m##descriptionEntity,
       ~descriptionDate=m##descriptionDate,

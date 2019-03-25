@@ -16,7 +16,7 @@ type bot = {
 type measurable = {
   id: string,
   name: string,
-  state: DataModel.MeasurableState.t,
+  state: Context.Primary.MeasurableState.t,
   stateUpdatedAt: option(MomentRe.Moment.t),
   expectedResolutionDate: option(MomentRe.Moment.t),
 };
@@ -65,7 +65,7 @@ module Query = [%graphql
              id
              name
              expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
-             state @bsDecoder(fn: "DataModel.MeasurableState.fromString")
+             state @bsDecoder(fn: "Context.Primary.MeasurableState.fromString")
              stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
           }
         }
@@ -102,7 +102,7 @@ let toMeasurables = (measurements: array(measurement)) => {
   let standardMeasurements =
     r
     |> E.A.fmap(n =>
-         DataModel.Measurement.make(
+         Context.Primary.Measurement.make(
            ~id=n.id,
            ~value=n.value,
            ~description=n.description,
@@ -126,7 +126,7 @@ let toMeasurables = (measurements: array(measurement)) => {
     |> E.L.filter_opt
     |> E.L.uniqBy((t: measurable) => t.id)
     |> E.L.fmap((e: measurable) =>
-         DataModel.Measurable.make(
+         Context.Primary.Measurable.make(
            ~id=e.id,
            ~name=e.name,
            ~expectedResolutionDate=e.expectedResolutionDate,
@@ -135,7 +135,7 @@ let toMeasurables = (measurements: array(measurement)) => {
            ~measurements=
              Some(
                standardMeasurements
-               |> E.L.filter((s: DataModel.Measurement.t) =>
+               |> E.L.filter((s: Context.Primary.Measurement.t) =>
                     s.measurableId == Some(e.id)
                   ),
              ),

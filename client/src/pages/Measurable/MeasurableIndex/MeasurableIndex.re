@@ -38,7 +38,7 @@ let component = ReasonReact.reducerComponent("MeasurableIndex");
 let itemsPerPage = 20;
 
 let itemHeader =
-    (channel: DataModel.Channel.t, onForward, onBackward, isAtStart, isAtEnd) =>
+    (channel: Context.Primary.Channel.t, onForward, onBackward, isAtStart, isAtEnd) =>
   <>
     {SLayout.channelink(channel)}
     <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
@@ -52,10 +52,10 @@ let itemHeader =
 
 let selectedView =
     (
-      ~channel: DataModel.Channel.t,
-      ~loggedInUser: DataModel.User.t,
+      ~channel: Context.Primary.Channel.t,
+      ~loggedInUser: Context.Primary.User.t,
       ~send,
-      ~measurables: array(DataModel.Measurable.t),
+      ~measurables: array(Context.Primary.Measurable.t),
       ~index: int,
     ) => {
   let measurable = E.A.get(measurables, index);
@@ -86,11 +86,11 @@ let selectedView =
 
 let deselectedView =
     (
-      ~channel: DataModel.Channel.t,
-      ~loggedInUser: DataModel.User.t,
+      ~channel: Context.Primary.Channel.t,
+      ~loggedInUser: Context.Primary.User.t,
       ~send,
       ~state,
-      ~measurables: array(DataModel.Measurable.t),
+      ~measurables: array(Context.Primary.Measurable.t),
       ~seriesCollection: array(Queries.SeriesCollection.series),
     ) => {
   let seriesList =
@@ -151,7 +151,7 @@ let deselectedView =
             send(
               Select(
                 measurables
-                |> E.A.findIndex((r: DataModel.Measurable.t) => r.id == e.id),
+                |> E.A.findIndex((r: Context.Primary.Measurable.t) => r.id == e.id),
               ),
             )
         }
@@ -160,7 +160,7 @@ let deselectedView =
   </>;
 };
 
-let make = (~channelId: string, ~loggedInUser: DataModel.User.t, _children) => {
+let make = (~channelId: string, ~loggedInUser: Context.Primary.User.t, _children) => {
   ...component,
   initialState: () => {page: 0, selected: None},
   reducer: (action, state) =>
@@ -188,7 +188,7 @@ let make = (~channelId: string, ~loggedInUser: DataModel.User.t, _children) => {
           channel.id,
           state.page,
           itemsPerPage,
-          (measurables: array(DataModel.Measurable.t)) =>
+          (measurables: array(Context.Primary.Measurable.t)) =>
           switch (state.selected) {
           | Some(index) =>
             selectedView(~channel, ~loggedInUser, ~send, ~measurables, ~index)

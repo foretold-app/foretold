@@ -39,11 +39,11 @@ let nameS = style([fontWeight(`black), fontSize(`em(1.2))]);
 let name = "#general";
 let description = "A channel for doing X and Y";
 let userCount = "8";
-let make = (~loggedInUser: DataModel.User.t, _children) => {
+let make = (~loggedInUser: Context.Primary.User.t, _children) => {
   ...component,
   render: _ =>
     Queries.Channels.component(channels => {
-      let row = (channel: DataModel.Channel.t) =>
+      let row = (channel: Context.Primary.Channel.t) =>
         <div className=row>
           <div className=column>
             <div className=nameS> {channel.name |> ste} </div>
@@ -58,7 +58,7 @@ let make = (~loggedInUser: DataModel.User.t, _children) => {
             {
               loggedInUser
               |> (r => r.agent)
-              |> E.O.fmap((agent: DataModel.Agent.t) =>
+              |> E.O.fmap((agent: Context.Primary.Agent.t) =>
                    Foretold__GraphQL.Mutations.ChannelJoin.Mutation.make(
                      (mutation, _) =>
                      <Antd.Button

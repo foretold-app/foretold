@@ -5,7 +5,7 @@ type channel = {
 };
 
 let toChannel = (ch: channel) =>
-  DataModel.Channel.make(
+  Context.Primary.Channel.make(
     ~id=ch.id,
     ~name=ch.name,
     ~isArchived=false,
@@ -19,7 +19,7 @@ type agent = {
 };
 
 let toAgent = (a: agent) =>
-  DataModel.Agent.make(
+  Context.Primary.Agent.make(
     ~id=a.id,
     ~channels=a.channels |> E.A.O.concatSomes |> E.A.fmap(toChannel),
     (),
@@ -36,7 +36,7 @@ type user = {
 type t = option(user);
 
 let toUser = (a: user) =>
-  DataModel.User.make(
+  Context.Primary.User.make(
     ~id=a.id,
     ~auth0Id=a.auth0Id,
     ~agent=a.agent |> E.O.fmap(toAgent),
@@ -68,7 +68,8 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 type innerType =
-  ApolloUtils.QResponse.tri(DataModel.User.t) => ReasonReact.reactElement;
+  ApolloUtils.QResponse.tri(Context.Primary.User.t) =>
+  ReasonReact.reactElement;
 
 let component = (auth0Id: string, innerComponentFn: innerType) => {
   let query = Query.make(~auth0Id, ());

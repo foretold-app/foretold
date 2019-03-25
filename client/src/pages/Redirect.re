@@ -12,7 +12,8 @@ let make = (~me: Context.Me.me, _children) => {
     switch (me) {
     | WithTokensAndUserData({userData}) =>
       let user = userData;
-      let agentId = user.agent |> O.fmap((e: DataModel.Agent.t) => e.id);
+      let agentId =
+        user.agent |> O.fmap((e: Context.Primary.Agent.t) => e.id);
       let name = user.name;
       switch (name, agentId) {
       | ("", _) => Context.Routing.Url.push(Profile)

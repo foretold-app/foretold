@@ -81,7 +81,7 @@ let formFields = (form: Form.state, handleChange, handleSubmit: unit => unit) =>
     </Antd.Form.Item>
   </Antd.Form>;
 
-let make = (~loggedInUser: DataModel.User.t, _children) => {
+let make = (~loggedInUser: Context.Primary.User.t, _children) => {
   ...component,
   render: _ =>
     withUserMutation((mutation, data) => {

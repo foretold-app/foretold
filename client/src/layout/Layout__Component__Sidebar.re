@@ -58,7 +58,7 @@ module Styles = {
 };
 
 let component = ReasonReact.statelessComponent("Sidebar");
-let make = (~channelId, ~loggedInUser: DataModel.User.t, _children) => {
+let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
   ...component,
   render: _self =>
     <div className=Styles.sidebar>
@@ -67,7 +67,7 @@ let make = (~channelId, ~loggedInUser: DataModel.User.t, _children) => {
         open Rationale.Option.Infix;
         let idd =
           loggedInUser.agent
-          |> E.O.fmap((a: DataModel.Agent.t) => a.id)
+          |> E.O.fmap((a: Context.Primary.Agent.t) => a.id)
           |> E.O.default("");
         <>
           <div
@@ -104,11 +104,11 @@ let make = (~channelId, ~loggedInUser: DataModel.User.t, _children) => {
       <div className=Styles.over>
         {
           loggedInUser.agent
-          |> E.O.fmap((r: DataModel.Agent.t) =>
+          |> E.O.fmap((r: Context.Primary.Agent.t) =>
                r.channels
-               |> E.A.fmap((channel: DataModel.Channel.t) => {
-                    let _channel: DataModel.Channel.t =
-                      DataModel.Channel.make(
+               |> E.A.fmap((channel: Context.Primary.Channel.t) => {
+                    let _channel: Context.Primary.Channel.t =
+                      Context.Primary.Channel.make(
                         ~id=channel.id,
                         ~name=channel.name,
                         ~isArchived=false,
@@ -116,13 +116,15 @@ let make = (~channelId, ~loggedInUser: DataModel.User.t, _children) => {
                         (),
                       );
                     <div
-                      onClick={_e => DataModel.Channel.showPush(_channel)}
+                      onClick={
+                        _e => Context.Primary.Channel.showPush(_channel)
+                      }
                       className={
                         Some(_channel.id) == channelId ?
                           Styles.selectedItem : Styles.item
                       }>
                       {
-                        DataModel.Channel.present(
+                        Context.Primary.Channel.present(
                           ~hashClassName=Styles.hash,
                           _channel,
                         )

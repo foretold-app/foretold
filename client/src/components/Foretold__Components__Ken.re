@@ -1,5 +1,5 @@
 open Utils;
-type measurable = DataModel.Measurable.t;
+type measurable = Context.Primary.Measurable.t;
 let graph = Data.make;
 
 let itemUrl = id => Context.Routing.Url.toString(EntityShow(id));

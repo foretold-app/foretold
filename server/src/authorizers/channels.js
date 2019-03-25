@@ -35,16 +35,30 @@ async function channel(channelId, agentId) {
  */
 function authorizerChannelByArg(next) {
   return async (root, args, context, info) => {
-
     const channelId = args.channelId;
     const agentId = context.user.agentId;
 
     console.log('Channel authorizer', channelId);
-
     if (await channel(channelId, agentId)) {
       return next(root, args, context, info);
     }
+    return null;
+  };
+}
 
+/**
+ * @param next
+ * @returns {function(*=, *=, *=, *=): *}
+ */
+function authorizerChannelByArgId(next) {
+  return async (root, args, context, info) => {
+    const channelId = args.id;
+    const agentId = context.user.agentId;
+
+    console.log('Channel authorizer', channelId);
+    if (await channel(channelId, agentId)) {
+      return next(root, args, context, info);
+    }
     return null;
   };
 }
@@ -55,18 +69,14 @@ function authorizerChannelByArg(next) {
  */
 function authorizerChannelAfter(next) {
   return async (root, args, context, info) => {
-
     const entity = await next(root, args, context, info);
-
     const channelId = _.get(entity, 'channelId');
     const agentId = _.get(context, 'user.agentId');
 
     console.log('Channel authorizer', channelId);
-
     if (await channel(channelId, agentId)) {
       return entity;
     }
-
     return null;
   };
 }
@@ -77,24 +87,21 @@ function authorizerChannelAfter(next) {
  */
 function authorizerChannelAfterByCtx(next) {
   return async (root, args, context, info) => {
-
     const entity = await next(root, args, context, info);
-
     const channelId = _.get(context, 'channelId');
     const agentId = _.get(context, 'user.agentId');
 
     console.log('Channel authorizer by context', channelId);
-
     if (await channel(channelId, agentId)) {
       return entity;
     }
-
     return null;
   };
 }
 
 module.exports = {
   authorizerChannelByArg,
+  authorizerChannelByArgId,
   authorizerChannelAfter,
   authorizerChannelAfterByCtx
 };

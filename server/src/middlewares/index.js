@@ -6,45 +6,45 @@ const { serie } = require('./series');
 
 const middlewares = {
   Query: {
-    measurements: async (resolve, ...rest) => {
-      await measurable(...rest);
-      await channel(...rest);
-      await agentsChannels(...rest);
-      return await resolve(...rest);
+    measurements: async (resolve, root, args, context, info) => {
+      await measurable(root, args, context, info);
+      await channel(root, args, context, info);
+      await agentsChannels(root, args, context, info);
+      return await resolve(root, args, context, info);
     },
 
-    measurement: async (resolve, ...rest) => {
-      await measurement(...rest);
-      await measurable(...rest);
-      await channel(...rest);
-      await agentsChannels(...rest);
-      return await resolve(...rest);
+    measurement: async (resolve, root, args, context, info) => {
+      await measurement(root, args, context, info);
+      await measurable(root, args, context, info);
+      await channel(root, args, context, info);
+      await agentsChannels(root, args, context, info);
+      return await resolve(root, args, context, info);
     },
 
-    measurable: async (resolve, ...rest) => {
-      await measurable(...rest);
-      await channel(...rest);
-      await agentsChannels(...rest);
-      return await resolve(...rest);
+    measurable: async (resolve, root, args, context, info) => {
+      await measurable(root, args, context, info);
+      await channel(root, args, context, info);
+      await agentsChannels(root, args, context, info);
+      return await resolve(root, args, context, info);
     },
 
-    measurables: async (resolve, ...rest) => {
-      await channel(...rest);
-      await agentsChannels(...rest);
-      return await resolve(...rest);
+    measurables: async (resolve, root, args, context, info) => {
+      await channel(root, args, context, info);
+      await agentsChannels(root, args, context, info);
+      return await resolve(root, args, context, info);
     },
 
-    series: async (resolve, ...rest) => {
-      await serie(...rest);
-      await channel(...rest);
-      await agentsChannels(...rest);
-      return await resolve(...rest);
+    series: async (resolve, root, args, context, info) => {
+      await serie(root, args, context, info);
+      await channel(root, args, context, info);
+      await agentsChannels(root, args, context, info);
+      return await resolve(root, args, context, info);
     },
 
-    seriesCollection: async (resolve, ...rest) => {
-      await channel(...rest);
-      await agentsChannels(...rest);
-      return await resolve(...rest);
+    seriesCollection: async (resolve, root, args, context, info) => {
+      await channel(root, args, context, info);
+      await agentsChannels(root, args, context, info);
+      return await resolve(root, args, context, info);
     },
   },
 };

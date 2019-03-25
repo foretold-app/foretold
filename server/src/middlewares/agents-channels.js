@@ -2,6 +2,13 @@ const _ = require('lodash');
 
 const data = require('../data');
 
+/**
+ * @param {object | null} root
+ * @param {object} args
+ * @param {object} context
+ * @param {object} info
+ * @return {Promise<void>}
+ */
 async function agentsChannels(root, args, context, info) {
   const channelId = _.get(args, 'channelId')
     || _.get(root, 'channelId')

@@ -52,7 +52,7 @@ async function create(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function archive(root, args, context, info) {
-  return await data.measurablesData.archiveMeasurable(root, args, options);
+  return await data.measurablesData.archiveMeasurable(root, args, context);
 }
 
 /**
@@ -63,7 +63,7 @@ async function archive(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function unarchive(root, args, context, info) {
-  return await data.measurablesData.unArchiveMeasurable(root, args, options);
+  return await data.measurablesData.unArchiveMeasurable(root, args, context);
 }
 
 /**
@@ -74,7 +74,7 @@ async function unarchive(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function edit(root, args, context, info) {
-  return await data.measurablesData.editMeasurable(root, args, options);
+  return await data.measurablesData.editMeasurable(root, args, context);
 }
 
 
@@ -82,7 +82,7 @@ module.exports = {
   edit,
   unarchive,
   archive,
+  create,
   one: authorizerChannelAfter(one),
-  create: authorizerChannelByArg(create),
   all: authorizerChannelByArg(all),
 };

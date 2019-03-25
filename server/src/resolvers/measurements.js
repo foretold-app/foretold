@@ -1,5 +1,6 @@
 const { resolver } = require("graphql-sequelize");
 
+const data = require('../data');
 const models = require('../models');
 
 const { authorizerChannelByArg } = require('../authorizers/channels');
@@ -34,7 +35,7 @@ async function one(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
-  return await data.measurementData.createMeasurement(root, args, options);
+  return await data.measurementData.createMeasurement(root, args, context);
 }
 
 module.exports = {

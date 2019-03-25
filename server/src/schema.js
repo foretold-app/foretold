@@ -85,6 +85,7 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolver(models.Agent),
       },
 
+      // @ok
       series: {
         type: types.seriesType,
         args: {
@@ -93,6 +94,7 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.series.one,
       },
 
+      // @ok
       seriesCollection: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.seriesType)),
         args: {
@@ -101,14 +103,20 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.series.all,
       },
 
+      // @ok, but null returns
       channel: {
         type: types.channels.channel,
         args: { id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) } },
         resolve: resolvers.channels.one,
       },
 
+      // @ok
       channels: {
         type: graphql.GraphQLNonNull(graphql.GraphQLList(types.channels.channel)),
+        args: {
+          offset: { type: graphql.GraphQLInt },
+          limit: { type: graphql.GraphQLInt },
+        },
         resolve: resolvers.channels.all,
       },
 
@@ -125,6 +133,7 @@ const schema = new graphql.GraphQLSchema({
     name: 'Mutation',
     fields: {
 
+      // @ok
       createMeasurement: {
         type: types.measurementType,
         args: filterr(_.pick(attributeFields(models.Measurement), [

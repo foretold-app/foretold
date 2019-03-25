@@ -35,7 +35,7 @@ async function all(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
-  return await data.seriesData.createSeries(root, args, options);
+  return await data.seriesData.createSeries(root, args, context);
 }
 
 module.exports = {

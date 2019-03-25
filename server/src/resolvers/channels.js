@@ -29,8 +29,10 @@ async function channelCreator(channel) {
  */
 async function all(root, args, context, info) {
   const agentId = context.user.agentId;
+  const offset = args.offset;
+  const limit = args.limit;
   const channelIds = await data.agentsChannelsData.getAllChannelIds({ agentId });
-  const options = { restrictions: { channelIds } };
+  const options = { offset, limit, restrictions: { channelIds } };
   return await data.channelsData.getAll(options);
 }
 

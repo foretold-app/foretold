@@ -1,6 +1,6 @@
-const { isChannelAllowed } = require('./channels');
-
 const { shield } = require('graphql-shield');
+
+const { isChannelAllowed } = require('./channels');
 
 const permissions = shield({
   Query: {

@@ -233,6 +233,5 @@ const schemaWithMiddlewares = applyMiddleware(
 );
 
 module.exports = {
-  schema,
   schemaWithMiddlewares,
 };

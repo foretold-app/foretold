@@ -1,15 +1,17 @@
 const _ = require('lodash');
 const { rule } = require('graphql-shield');
 
+/**
+ * @param {Model} channel
+ * @param {Model} agentChannel
+ * @return {Promise<boolean>}
+ */
 async function authorize(channel, agentChannel) {
   if (!channel) {
     return false;
   }
   if (channel.isPublic) {
     return true;
-  }
-  if (!agentChannel) {
-    return false;
   }
   if (!agentChannel) {
     return false;

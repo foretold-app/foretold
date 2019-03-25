@@ -2,6 +2,7 @@ const _ = require('lodash');
 
 const graphql = require("graphql");
 const { attributeFields, resolver } = require("graphql-sequelize");
+const { applyMiddleware } = require('graphql-middleware');
 
 const models = require("./models");
 const data = require('./data');
@@ -10,6 +11,9 @@ const resolvers = require('./resolvers');
 const types = require('./types');
 const { stats } = require('./types/stats');
 const { filterr } = require('./types/filterr');
+
+const { permissions } = require('./permissions');
+const { middlewares } = require('./middlewares');
 
 const schema = new graphql.GraphQLSchema({
   query: new graphql.GraphQLObjectType({
@@ -30,14 +34,12 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolver(models.User),
       },
 
-      // @ok
       measurement: {
         type: types.measurementType,
         args: _.pick(attributeFields(models.Measurement), ['id']),
         resolve: resolvers.measurements.one,
       },
 
-      // @ok
       measurements: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.measurementType)),
         args: {
@@ -46,14 +48,12 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.measurements.all,
       },
 
-      // @ok
       measurable: {
         type: types.measurableType,
         args: _.pick(attributeFields(models.Measurable), ['id']),
         resolve: resolvers.measurables.one,
       },
 
-      // @ok
       measurables: {
         type: new graphql.GraphQLNonNull(new graphql.GraphQLList(types.measurableType)),
         args: {
@@ -88,7 +88,6 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolver(models.Agent),
       },
 
-      // @ok
       series: {
         type: types.seriesType,
         args: {
@@ -97,7 +96,6 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.series.one,
       },
 
-      // @ok
       seriesCollection: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.seriesType)),
         args: {
@@ -106,14 +104,12 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.series.all,
       },
 
-      // @ok, but null returns
       channel: {
         type: types.channels.channel,
         args: { id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) } },
         resolve: resolvers.channels.one,
       },
 
-      // @ok
       channels: {
         type: graphql.GraphQLNonNull(graphql.GraphQLList(types.channels.channel)),
         args: {
@@ -136,7 +132,6 @@ const schema = new graphql.GraphQLSchema({
     name: 'Mutation',
     fields: {
 
-      // @ok
       createMeasurement: {
         type: types.measurementType,
         args: filterr(_.pick(attributeFields(models.Measurement), [
@@ -145,7 +140,6 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.measurements.create,
       },
 
-      // @ok
       createMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), [
@@ -156,7 +150,6 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.measurables.create,
       },
 
-      // @ok
       createSeries: {
         type: types.seriesType,
         args: filterr(_.pick(attributeFields(models.Series), [
@@ -166,21 +159,18 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.series.create,
       },
 
-      // @ok
       archiveMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
         resolve: resolvers.measurables.archive,
       },
 
-      // @ok
       unArchiveMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
         resolve: resolvers.measurables.unarchive,
       },
 
-      // @ok
       editMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), [
@@ -191,14 +181,12 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.measurables.edit,
       },
 
-      // @ok
       editUser: {
         type: types.userType,
         args: filterr(_.pick(attributeFields(models.User), ["id", "name"])),
         resolve: resolvers.users.edit,
       },
 
-      // @ok
       channelUpdate: {
         type: types.channels.channel,
         args: {
@@ -208,7 +196,6 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.channels.update,
       },
 
-      // @ok
       channelCreate: {
         type: types.channels.channel,
         args: {
@@ -217,7 +204,6 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.channels.create,
       },
 
-      // @ok
       agentsChannelsCreate: {
         type: types.agentsChannels.agentsChannel,
         args: {
@@ -227,7 +213,6 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.agentsChannels.create,
       },
 
-      // @ok
       agentsChannelsDelete: {
         type: types.agentsChannels.agentsChannel,
         args: {
@@ -241,6 +226,13 @@ const schema = new graphql.GraphQLSchema({
   })
 });
 
+const schemaWithMiddlewares = applyMiddleware(
+  schema,
+  permissions,
+  middlewares
+);
+
 module.exports = {
   schema,
+  schemaWithMiddlewares,
 };

@@ -3,9 +3,6 @@ const { resolver } = require("graphql-sequelize");
 const data = require('../data');
 const models = require('../models');
 
-const { authorizerChannelByArg } = require('../authorizers/channels');
-const { authorizerChannelAfter } = require('../authorizers/channels');
-
 /**
  * @param root
  * @param args
@@ -79,10 +76,10 @@ async function edit(root, args, context, info) {
 
 
 module.exports = {
+  one,
+  all,
   edit,
   unarchive,
   archive,
   create,
-  one: authorizerChannelAfter(one),
-  all: authorizerChannelByArg(all),
 };

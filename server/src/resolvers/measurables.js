@@ -36,9 +36,9 @@ async function one(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
-  const user = options.user;
+  const user = context.user;
   const data = {
-    ...values,
+    ...args,
     creatorId: user.agentId,
   };
   return await data.measurablesData.createMeasurable(data);

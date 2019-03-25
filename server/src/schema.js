@@ -152,6 +152,7 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.measurables.create,
       },
 
+      // @ok
       createSeries: {
         type: types.seriesType,
         args: filterr(_.pick(attributeFields(models.Series), [

@@ -1,5 +1,6 @@
 const { resolver } = require("graphql-sequelize");
 
+const data = require('../data');
 const models = require('../models');
 
 const { authorizerChannelByArg } = require('../authorizers/channels');

@@ -3,7 +3,8 @@ const { resolver } = require("graphql-sequelize");
 const data = require('../data');
 const models = require('../models');
 
-const { authorizerChannelByArg } = require('../authorizers/channels');
+const { middlewareMeasurableAfter } = require('../middlewares/measurables');
+const { authorizerChannelAfterByCtx } = require('../authorizers/channels');
 
 /**
  * @param root
@@ -39,7 +40,7 @@ async function create(root, args, context, info) {
 }
 
 module.exports = {
-  one,
-  create,
   all,
+  create,
+  one: authorizerChannelAfterByCtx(middlewareMeasurableAfter(one)),
 };

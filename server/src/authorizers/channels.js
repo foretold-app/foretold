@@ -71,7 +71,30 @@ function authorizerChannelAfter(next) {
   };
 }
 
+/**
+ * @param next
+ * @returns {function(*=, *=, *=, *=): *}
+ */
+function authorizerChannelAfterByCtx(next) {
+  return async (root, args, context, info) => {
+
+    const entity = await next(root, args, context, info);
+
+    const channelId = _.get(context, 'channelId');
+    const agentId = _.get(context, 'user.agentId');
+
+    console.log('Channel authorizer by context', channelId);
+
+    if (await channel(channelId, agentId)) {
+      return entity;
+    }
+
+    return null;
+  };
+}
+
 module.exports = {
   authorizerChannelByArg,
   authorizerChannelAfter,
+  authorizerChannelAfterByCtx
 };

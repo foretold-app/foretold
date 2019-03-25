@@ -30,7 +30,7 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolver(models.User),
       },
 
-      // @todo: + authorizer
+      // @ok
       measurement: {
         type: types.measurementType,
         args: _.pick(attributeFields(models.Measurement), ['id']),

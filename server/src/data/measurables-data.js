@@ -124,6 +124,14 @@ class MeasurablesData {
     return items;
   }
 
+  /**
+   * @param {string} id
+   * @return {Promise<*>}
+   */
+  async getOne(id) {
+    return await models.Measurable.findOne({where: {id}});
+  }
+
 }
 
 module.exports = {

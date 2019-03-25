@@ -30,26 +30,27 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolver(models.User),
       },
 
+      // @todo: + authorizer
       measurement: {
         type: types.measurementType,
         args: _.pick(attributeFields(models.Measurement), ['id']),
         resolve: resolvers.measurements.one,
       },
 
+      // @todo: + authorizer
       measurements: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.measurementType)),
-        args: {
-          channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-        },
-        resolve: resolvers.measurables.all,
+        resolve: resolvers.measurements.all,
       },
 
+      // @ok
       measurable: {
         type: types.measurableType,
         args: _.pick(attributeFields(models.Measurable), ['id']),
         resolve: resolvers.measurables.one,
       },
 
+      // @ok
       measurables: {
         type: new graphql.GraphQLNonNull(new graphql.GraphQLList(types.measurableType)),
         args: {

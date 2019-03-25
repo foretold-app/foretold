@@ -40,5 +40,5 @@ async function create(root, args, context, info) {
 module.exports = {
   one,
   create,
-  all: authorizerChannelByArg(all),
+  all,
 };

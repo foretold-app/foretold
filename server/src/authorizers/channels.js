@@ -3,16 +3,16 @@ const { rule } = require('graphql-shield');
 
 async function authorize(channel, agentChannel) {
   if (!channel) {
-    return Promise.reject(new Error('Channel ID is required'));
-  }
-  if (!agentChannel) {
-    return Promise.reject(new Error('Agent ID is required'));
+    return false;
   }
   if (channel.isPublic) {
     return true;
   }
   if (!agentChannel) {
-    return Promise.reject(new Error('Access denied'));
+    return false;
+  }
+  if (!agentChannel) {
+    return false;
   }
   return true;
 }

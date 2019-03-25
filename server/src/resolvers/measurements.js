@@ -4,6 +4,7 @@ const data = require('../data');
 const models = require('../models');
 
 const { middlewareMeasurableAfter } = require('../middlewares/measurables');
+const { middlewareMeasurableBeforeByArg } = require('../middlewares/measurables');
 const { authorizerChannelAfterByCtx } = require('../authorizers/channels');
 
 /**
@@ -40,7 +41,7 @@ async function create(root, args, context, info) {
 }
 
 module.exports = {
-  all,
   create,
+  all: authorizerChannelAfterByCtx(middlewareMeasurableBeforeByArg(all)),
   one: authorizerChannelAfterByCtx(middlewareMeasurableAfter(one)),
 };

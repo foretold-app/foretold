@@ -37,9 +37,12 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.measurements.one,
       },
 
-      // @todo: + authorizer
+      // @ok
       measurements: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.measurementType)),
+        args: {
+          measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
         resolve: resolvers.measurements.all,
       },
 

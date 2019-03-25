@@ -15,9 +15,10 @@ let make = (~route: Route.t, _children) => {
       | _ => None
       };
 
-    Queries.User.withLoggedInUserQuery(result =>
+    Queries.User.withLoggedInUserQuery2(result =>
       switch (result) {
-      | Success((loggedInUser: DataModel.User.t)) =>
+      | WithTokensAndUserData({userData}) =>
+        let loggedInUser = userData;
         let inApp = (~key="", e) =>
           Layout__Component__FillWithSidebar.make(~channelId, ~loggedInUser)
           |> E.React.makeToEl(~children=E.React.makeToEl(e), ~key);
@@ -26,7 +27,7 @@ let make = (~route: Route.t, _children) => {
           AgentMeasurables.make(~id, ~loggedInUser) |> inApp
         | AgentIndex => AgentIndex.make |> inApp
         | EntityShow(id) => EntityShow.make(~id) |> inApp
-        | Redirect => Redirect.make |> inApp
+        | Redirect => Redirect.make(~me=result) |> inApp
         | Profile => Profile.make(~loggedInUser) |> inApp
         | AgentShow(id) => AgentShow.make(~id) |> inApp
         | ChannelShow(channelId) =>
@@ -49,6 +50,7 @@ let make = (~route: Route.t, _children) => {
         switch (route) {
         | Home => <Home />
         | Login => <Login />
+        | Redirect => <Redirect me=result />
         | _ => <Home />
         };
       }

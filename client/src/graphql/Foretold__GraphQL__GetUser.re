@@ -69,6 +69,7 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 type innerType =
   ApolloUtils.QResponse.tri(DataModel.User.t) => ReasonReact.reactElement;
+
 let component = (auth0Id: string, innerComponentFn: innerType) => {
   let query = Query.make(~auth0Id, ());
   QueryComponent.make(~variables=query##variables, ({result}) =>
@@ -89,5 +90,43 @@ let withLoggedInUserQuery = (innerComponentFn: innerType) =>
     switch (Contexts.Auth.AuthTokens.auth0Id(tokens)) {
     | Some(auth0Id) => component(auth0Id, innerComponentFn)
     | None => innerComponentFn(Error("No token"))
+    };
+  };
+
+let withLoggedInUserQuery2 = innerComponentFn =>
+  switch (Contexts.Auth.AuthTokens.make_from_storage()) {
+  | None => innerComponentFn(Contexts.Me.WithoutTokens)
+  | Some(tokens) =>
+    Contexts.Auth.Actions.logoutIfTokenIsObsolete(tokens);
+    switch (tokens |> Contexts.Auth.AuthTokens.auth0Id) {
+    | None => innerComponentFn(Contexts.Me.WithoutTokens)
+    | Some(auth0Id) =>
+      let query = Query.make(~auth0Id, ());
+      QueryComponent.make(~variables=query##variables, ({result}) =>
+        result
+        |> ApolloUtils.apolloResponseToResult2
+        |> ApolloUtils.QResponse.fmap(e => e##user |> E.O.fmap(toUser))
+        |> ApolloUtils.QResponse.optionalToMissing
+        |> (
+          e =>
+            switch (e) {
+            | Success(c) =>
+              innerComponentFn(
+                Contexts.Me.WithTokensAndUserData({
+                  authTokens: tokens,
+                  userData: c,
+                }),
+              )
+            | _ =>
+              innerComponentFn(
+                Contexts.Me.WithTokensAndUserLoading({
+                  authTokens: tokens,
+                  loadingUserData: e,
+                }),
+              )
+            }
+        )
+      )
+      |> E.React.el;
     };
   };

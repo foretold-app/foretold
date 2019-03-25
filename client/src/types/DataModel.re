@@ -81,8 +81,8 @@ module Route = {
     | [] => Home
     | ["login"] => Login
     | ["callback"] =>
-      Contexts.Auth.CallbackUrlToAuthTokens.make(url)
-      |> E.O.fmap(Contexts.Auth.AuthTokens.set)
+      Context__Auth.CallbackUrlToAuthTokens.make(url)
+      |> E.O.fmap(Context__Auth.AuthTokens.set)
       |> E.O.default();
       Redirect;
     | ["redirect"] => Redirect

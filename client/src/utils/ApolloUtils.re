@@ -8,7 +8,7 @@ let apolloResponseToResult = (result: ReasonApolloTypes.queryResponse('a)) =>
     switch (error##message) {
     | "GraphQL error: JsonWebTokenError"
     | "GraphQL error: TokenExpiredError" =>
-      Contexts.Auth.Actions.logout();
+      Context__Auth.Actions.logout();
       Js.log("Automatically logged out due to GraphQL Error.");
     | _ => ()
     };

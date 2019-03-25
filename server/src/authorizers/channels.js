@@ -20,6 +20,9 @@ async function authorize(channel, agentChannel) {
 const isChannelAllowed = rule()(async (parent, args, ctx, info) => {
   const channel = _.get(ctx, 'channel');
   const agentChannel = _.get(ctx, 'agentChannel');
+  console.log(`\x1b[33m Rule (isChannelAllowed) ` +
+    `channelId ${_.get(channel, 'id')}, ` +
+    `agentChannelId ${_.get(agentChannel, 'agentId')} \x1b[0m`);
   return await authorize(channel, agentChannel);
 });
 

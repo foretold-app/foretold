@@ -228,8 +228,8 @@ const schema = new graphql.GraphQLSchema({
 
 const schemaWithMiddlewares = applyMiddleware(
   schema,
+  middlewares,
   permissions,
-  middlewares
 );
 
 module.exports = {

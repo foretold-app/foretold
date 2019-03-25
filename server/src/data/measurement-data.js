@@ -3,8 +3,6 @@ const { notify } = require("../lib/notifications");
 
 class MeasurementData {
 
-  constructor() { }
-
   /**
    * @todo: rename
    * @param root
@@ -33,6 +31,13 @@ class MeasurementData {
     return newMeasurement;
   }
 
+  /**
+   * @param {string} id
+   * @return {Promise<*>}
+   */
+  async getOne(id) {
+    return await models.Measurement.findOne({ where: { id } });
+  }
 }
 
 module.exports = {

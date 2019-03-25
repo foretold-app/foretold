@@ -15,6 +15,13 @@ class SeriesData {
     return newSeries;
   }
 
+  /**
+   * @param {string} id
+   * @return {Promise<*>}
+   */
+  async getOne(id) {
+    return await models.Series.findOne({ where: { id } });
+  }
 }
 
 module.exports = {

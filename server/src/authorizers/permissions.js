@@ -1,4 +1,4 @@
-const { isChannelAllowed } = require('./authorizers/channels');
+const { isChannelAllowed } = require('./channels');
 
 const { shield } = require('graphql-shield');
 

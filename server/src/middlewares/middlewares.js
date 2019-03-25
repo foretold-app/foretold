@@ -1,6 +1,6 @@
-const { channel } = require('./middlewares/channels');
-const { agentsChannels } = require('./middlewares/agents-channels');
-const { measurable } = require('./middlewares/measurables');
+const { channel } = require('./channels');
+const { agentsChannels } = require('./agents-channels');
+const { measurable } = require('./measurables');
 
 const middlewares = {
   Query: {

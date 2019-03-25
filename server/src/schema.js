@@ -12,8 +12,8 @@ const types = require('./types');
 const { stats } = require('./types/stats');
 const { filterr } = require('./types/filterr');
 
-const { permissions } = require('./permissions');
-const { middlewares } = require('./middlewares');
+const { permissions } = require('./authorizers/permissions');
+const { middlewares } = require('./middlewares/middlewares');
 
 const schema = new graphql.GraphQLSchema({
   query: new graphql.GraphQLObjectType({

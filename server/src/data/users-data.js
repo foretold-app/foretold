@@ -7,6 +7,7 @@ class UsersData {
    * @tested
    * @param {string} auth0Id
    * @return {Promise<Array<Model>|Model>}
+   * @todo change to more generic getOne(filter)
    */
   async getUserByAuth0Id(auth0Id) {
     const user = await models.User.findOne({

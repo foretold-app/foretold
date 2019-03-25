@@ -4,7 +4,7 @@ const data = require('../data');
 
 /**
  * @param {object | null} root
- * @param {object} args
+ * @param {{ channelId: string }} args
  * @param {object} context
  * @param {object} info
  * @return {Promise<void>}

@@ -1,5 +1,4 @@
 open Utils;
-open Rationale;
 open Foretold__GraphQL;
 
 module SeriesItems = {
@@ -128,7 +127,9 @@ let deselectedView =
                          className=SeriesItems.item
                          onClick=(
                            _e =>
-                             DataModel.Url.push(SeriesShow(channel.id, x.id))
+                             Context.Routing.Url.push(
+                               SeriesShow(channel.id, x.id),
+                             )
                          )>
                          <C.Series.Card series=x />
                        </div>

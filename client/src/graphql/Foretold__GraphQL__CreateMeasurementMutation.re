@@ -16,14 +16,14 @@ let mutate =
     (
       mutation: Mutation.apolloMutation,
       measurableId: string,
-      value: Value.t,
+      value: MeasurementValue.t,
       competitorType: competitorType,
       description: string,
     ) => {
   let m =
     Query.make(
       ~measurableId,
-      ~value=value |> Value.encode,
+      ~value=value |> MeasurementValue.encode,
       ~description,
       ~competitorType,
       (),

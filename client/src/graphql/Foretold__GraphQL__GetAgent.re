@@ -26,7 +26,7 @@ type measurement = {
   relevantAt: option(MomentRe.Moment.t),
   competitorType,
   description: option(string),
-  value: Belt.Result.t(Value.t, string),
+  value: Belt.Result.t(MeasurementValue.t, string),
   createdAt: MomentRe.Moment.t,
   taggedMeasurementId: option(string),
   measurable: option(measurable),
@@ -57,7 +57,7 @@ module Query = [%graphql
            id
            createdAt @bsDecoder(fn: "E.J.toMoment")
            relevantAt @bsDecoder(fn: "E.J.O.toMoment")
-           value @bsDecoder(fn: "Value.decode")
+           value @bsDecoder(fn: "MeasurementValue.decode")
            description
            competitorType
            taggedMeasurementId

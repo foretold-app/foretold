@@ -1,5 +1,4 @@
 open Belt.Result;
-open Rationale;
 
 let resolveRegex = (exp, str) => {
   let resolveOption = opt =>

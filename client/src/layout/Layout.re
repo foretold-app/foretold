@@ -1,4 +1,4 @@
-open DataModel;
+open Context.Routing;
 open Foretold__GraphQL;
 
 let defaultChannel = "4c5af8ad-1258-4b9c-8fa0-cc522708fc1c";

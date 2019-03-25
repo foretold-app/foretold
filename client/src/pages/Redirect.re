@@ -6,7 +6,7 @@ let ste = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("Redirecting...");
 
-let make = (~me: Contexts.Me.me, _children) => {
+let make = (~me: Context.Me.me, _children) => {
   ...component,
   render: _ =>
     switch (me) {
@@ -15,8 +15,8 @@ let make = (~me: Contexts.Me.me, _children) => {
       let agentId = user.agent |> O.fmap((e: DataModel.Agent.t) => e.id);
       let name = user.name;
       switch (name, agentId) {
-      | ("", _) => DataModel.Url.push(Profile)
-      | (_, Some(id)) => DataModel.Url.push(AgentShow(id))
+      | ("", _) => Context.Routing.Url.push(Profile)
+      | (_, Some(id)) => Context.Routing.Url.push(AgentShow(id))
       | _ => ()
       };
       <>
@@ -28,7 +28,7 @@ let make = (~me: Contexts.Me.me, _children) => {
         }
       </>;
     | _ =>
-      DataModel.Url.push(Home);
+      Context.Routing.Url.push(Home);
       <div />;
     },
 };

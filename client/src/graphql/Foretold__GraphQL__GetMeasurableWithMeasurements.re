@@ -29,7 +29,7 @@ module Types = {
     "competitorType": competitorType,
     "createdAt": MomentRe.Moment.t,
     "taggedMeasurementId": option(string),
-    "value": Belt.Result.t(Value.t, string),
+    "value": Belt.Result.t(MeasurementValue.t, string),
   };
   type measurements = Js.Array.t(option(measurement));
 };
@@ -66,7 +66,7 @@ module Query = [%graphql
               measurements: Measurements{
                 id
                 createdAt @bsDecoder(fn: "E.J.toMoment")
-                value @bsDecoder(fn: "Value.decode")
+                value @bsDecoder(fn: "MeasurementValue.decode")
                 relevantAt @bsDecoder(fn: "E.J.O.toMoment")
                 competitorType
                 description

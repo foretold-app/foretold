@@ -95,7 +95,7 @@ let creatorLink = (~m: measurable) =>
   m.creator
   |> E.O.fmap((c: Agent.t) =>
        <div className=Shared.Item.item>
-         <a href={Url.toString(AgentShow(c.id))}>
+         <a href={Context.Routing.Url.toString(AgentShow(c.id))}>
            {c.name |> E.O.default("") |> ste}
          </a>
        </div>
@@ -104,7 +104,7 @@ let creatorLink = (~m: measurable) =>
 let editLink = (~m: measurable) =>
   <div className=Shared.Item.item>
     <a
-      href={Url.toString(MeasurableEdit(m.id))}
+      href={Context.Routing.Url.toString(MeasurableEdit(m.id))}
       className={Shared.Item.itemButton(NORMAL)}>
       {"Edit" |> ste}
     </a>
@@ -146,7 +146,7 @@ let series = (~m: measurable) =>
              <Icon.Icon icon="LAYERS" />
              <a
                href={
-                 Url.toString(
+                 Context.Routing.Url.toString(
                    SeriesShow(m.channel |> E.O.default(""), r.id),
                  )
                }>

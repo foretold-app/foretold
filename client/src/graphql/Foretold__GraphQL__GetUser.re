@@ -83,23 +83,23 @@ let component = (auth0Id: string, innerComponentFn: innerType) => {
 };
 
 let withLoggedInUserQuery = (innerComponentFn: innerType) =>
-  switch (Contexts.Auth.AuthTokens.make_from_storage()) {
+  switch (Context.Auth.AuthTokens.make_from_storage()) {
   | None => innerComponentFn(Error("Not loaded"))
   | Some(tokens) =>
-    Contexts.Auth.Actions.logoutIfTokenIsObsolete(tokens);
-    switch (Contexts.Auth.AuthTokens.auth0Id(tokens)) {
+    Context.Auth.Actions.logoutIfTokenIsObsolete(tokens);
+    switch (Context.Auth.AuthTokens.auth0Id(tokens)) {
     | Some(auth0Id) => component(auth0Id, innerComponentFn)
     | None => innerComponentFn(Error("No token"))
     };
   };
 
 let withLoggedInUserQuery2 = innerComponentFn =>
-  switch (Contexts.Auth.AuthTokens.make_from_storage()) {
-  | None => innerComponentFn(Contexts.Me.WithoutTokens)
+  switch (Context.Auth.AuthTokens.make_from_storage()) {
+  | None => innerComponentFn(Context.Me.WithoutTokens)
   | Some(tokens) =>
-    Contexts.Auth.Actions.logoutIfTokenIsObsolete(tokens);
-    switch (tokens |> Contexts.Auth.AuthTokens.auth0Id) {
-    | None => innerComponentFn(Contexts.Me.WithoutTokens)
+    Context.Auth.Actions.logoutIfTokenIsObsolete(tokens);
+    switch (tokens |> Context.Auth.AuthTokens.auth0Id) {
+    | None => innerComponentFn(Context.Me.WithoutTokens)
     | Some(auth0Id) =>
       let query = Query.make(~auth0Id, ());
       QueryComponent.make(~variables=query##variables, ({result}) =>
@@ -112,14 +112,14 @@ let withLoggedInUserQuery2 = innerComponentFn =>
             switch (e) {
             | Success(c) =>
               innerComponentFn(
-                Contexts.Me.WithTokensAndUserData({
+                Context.Me.WithTokensAndUserData({
                   authTokens: tokens,
                   userData: c,
                 }),
               )
             | _ =>
               innerComponentFn(
-                Contexts.Me.WithTokensAndUserLoading({
+                Context.Me.WithTokensAndUserLoading({
                   authTokens: tokens,
                   loadingUserData: e,
                 }),

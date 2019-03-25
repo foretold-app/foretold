@@ -110,7 +110,7 @@ let make = (~channelId, _children) => {
                     data##createMeasurable
                     |> E.O.fmap(e => e##id)
                     |> doIfSome(_ =>
-                         DataModel.Url.push(ChannelShow(channelId))
+                         Context.Routing.Url.push(ChannelShow(channelId))
                        );
                     E.React.null;
                   | NotCalled => showForm

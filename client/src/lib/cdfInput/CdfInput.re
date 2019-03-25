@@ -58,7 +58,7 @@ let getValue = state =>
   switch (state.dataType) {
   | "FLOAT_CDF" =>
     `FloatCdf(
-      Value.FloatCdf.fromArrays(state.floatCdf |> (e => (e.ys, e.xs))),
+      MeasurementValue.FloatCdf.fromArrays(state.floatCdf |> (e => (e.ys, e.xs))),
     )
   | _ =>
     let point = Array.unsafe_get(state.floatCdf.xs, 0);
@@ -81,9 +81,9 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
             data={
               state.floatCdf
               |> (e => (e.xs, e.ys))
-              |> Value.FloatCdf.fromArrays
-              |> Value.toPdf(~bucketSize=20)
-              |> Value.FloatCdf.toPoints
+              |> MeasurementValue.FloatCdf.fromArrays
+              |> MeasurementValue.toPdf(~bucketSize=20)
+              |> MeasurementValue.FloatCdf.toPoints
             }
           /> :
           <div />

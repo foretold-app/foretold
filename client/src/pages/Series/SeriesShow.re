@@ -1,5 +1,4 @@
 open Utils;
-open Rationale;
 open Style.Grid;
 open Foretold__GraphQL;
 
@@ -53,7 +52,7 @@ let seriesHero = (series: DataModel.Series.t) =>
             switch (series.creator) {
             | Some({name: Some(name), id}) =>
               <div className=C.Shared.Item.item>
-                <a href={DataModel.Url.toString(AgentShow(id))}>
+                <a href={Context.Routing.Url.toString(AgentShow(id))}>
                   {name |> ste}
                 </a>
               </div>

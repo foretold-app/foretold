@@ -1,7 +1,4 @@
 open Utils;
-open Rationale.Result.Infix;
-open Rationale;
-open E;
 
 let component = ReasonReact.statelessComponent("Home");
 
@@ -13,7 +10,7 @@ let make = _children => {
       <div className=StaticStyles.description>
         <Antd.Button
           _type=`primary
-          onClick={_e => Contexts.Auth.Auth0Client.triggerLoginScreen()}>
+          onClick={_e => Context.Auth.Auth0Client.triggerLoginScreen()}>
           {"Login" |> ste}
         </Antd.Button>
       </div>

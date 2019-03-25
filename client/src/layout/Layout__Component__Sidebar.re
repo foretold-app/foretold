@@ -1,5 +1,4 @@
 open Utils;
-open Rationale;
 open Foretold__GraphQL;
 
 module Styles = {
@@ -72,16 +71,17 @@ let make = (~channelId, ~loggedInUser: DataModel.User.t, _children) => {
           |> E.O.default("");
         <>
           <div
-            onClick={_e => DataModel.Url.push(Profile)} className=Styles.item>
+            onClick={_e => Context.Routing.Url.push(Profile)}
+            className=Styles.item>
             {"Profile" |> ste}
           </div>
           <div
-            onClick={_e => DataModel.Url.push(AgentMeasurables(idd))}
+            onClick={_e => Context.Routing.Url.push(AgentMeasurables(idd))}
             className=Styles.item>
             {"Edit Measurables" |> ste}
           </div>
           <div
-            onClick={_e => Contexts.Auth.Actions.logout()}
+            onClick={_e => Context.Auth.Actions.logout()}
             className=Styles.item>
             {"Log Out" |> ste}
           </div>
@@ -92,12 +92,12 @@ let make = (~channelId, ~loggedInUser: DataModel.User.t, _children) => {
       <div className=Styles.minorHeader>
         <div
           className=Styles.minorHeaderLink
-          onClick={_e => DataModel.Url.push(ChannelIndex)}>
+          onClick={_e => Context.Routing.Url.push(ChannelIndex)}>
           {"Channels" |> ste}
         </div>
         <div
           className=Styles.minorHeaderLinkPlus
-          onClick={_e => DataModel.Url.push(ChannelNew)}>
+          onClick={_e => Context.Routing.Url.push(ChannelNew)}>
           <Icon.Icon icon="CIRCLE_PLUS" />
         </div>
       </div>

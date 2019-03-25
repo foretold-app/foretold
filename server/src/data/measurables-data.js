@@ -9,7 +9,7 @@ class MeasurablesData {
    * @param data
    * @return {Promise<*>}
    */
-  async createMeasurable(data) {
+  async createMeasurable(data, user) {
     const newMeasurable = await models.Measurable.create(data);
     let notification = await newMeasurable.creationNotification(user);
     notify(notification);

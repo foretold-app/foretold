@@ -142,6 +142,7 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.measurements.create,
       },
 
+      // @ok
       createMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), [
@@ -162,18 +163,21 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.series.create,
       },
 
+      // @ok
       archiveMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
         resolve: resolvers.measurables.archive,
       },
 
+      // @ok
       unArchiveMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
         resolve: resolvers.measurables.unarchive,
       },
 
+      // @ok
       editMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), [
@@ -184,12 +188,14 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.measurables.edit,
       },
 
+      // @ok
       editUser: {
         type: types.userType,
         args: filterr(_.pick(attributeFields(models.User), ["id", "name"])),
         resolve: resolvers.users.edit,
       },
 
+      // @ok
       channelUpdate: {
         type: types.channels.channel,
         args: {
@@ -199,6 +205,7 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.channels.update,
       },
 
+      // @ok
       channelCreate: {
         type: types.channels.channel,
         args: {
@@ -207,6 +214,7 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.channels.create,
       },
 
+      // @ok
       agentsChannelsCreate: {
         type: types.agentsChannels.agentsChannel,
         args: {
@@ -216,6 +224,7 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.agentsChannels.create,
       },
 
+      // @ok
       agentsChannelsDelete: {
         type: types.agentsChannels.agentsChannel,
         args: {

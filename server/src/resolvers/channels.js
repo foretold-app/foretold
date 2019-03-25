@@ -70,7 +70,7 @@ async function update(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
-  return await data.channelsData.createOne(options.user, args.input);
+  return await data.channelsData.createOne(context.user, args.input);
 }
 
 module.exports = {

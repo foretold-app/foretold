@@ -37,11 +37,11 @@ async function one(root, args, context, info) {
  */
 async function create(root, args, context, info) {
   const user = context.user;
-  const data = {
+  const datas = {
     ...args,
     creatorId: user.agentId,
   };
-  return await data.measurablesData.createMeasurable(data);
+  return await data.measurablesData.createMeasurable(datas, user);
 }
 
 /**

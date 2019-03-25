@@ -120,15 +120,15 @@ module CallbackUrlToAuthTokens = {
   };
 };
 
-/* type loggedInCurrentUser = DataModel.User.t;
+module Actions = {
+  let logout = () => {
+    AuthTokens.destroy();
+    ReasonReact.Router.push("/");
+    ();
+  };
 
-   type loggedOutCurrentUser =
-     | NoLocalToken
-     | HasLocalTokenAndResponseIsLoading
-     | HasLocalTokenAndResponseError(error);
-
-   type currentUserLoginState =
-     | NoLocalToken
-     | HasLocalTokenAndResponseIsLoading
-     | HasLocalTokenAndResponseError(error)
-     | HasLocalTokenAndResponse(DataModel.User.t); */
+  let logoutIfTokenIsObsolete = (tokens: AuthTokens.t) =>
+    if (tokens |> AuthTokens.isObsolete) {
+      logout();
+    };
+};

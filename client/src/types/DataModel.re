@@ -81,17 +81,13 @@ module Route = {
     | [] => Home
     | ["login"] => Login
     | ["callback"] =>
-      Me.CallbackUrlToAuthTokens.make(url)
-      |> E.O.fmap(Me.AuthTokens.set)
+      Contexts.Auth.CallbackUrlToAuthTokens.make(url)
+      |> E.O.fmap(Contexts.Auth.AuthTokens.set)
       |> E.O.default();
       Redirect;
     | ["redirect"] => Redirect
     | ["agents"] => AgentIndex
-    | ["profile"] =>
-      switch (Auth0.userId()) {
-      | Some(_) => Profile
-      | None => Home
-      }
+    | ["profile"] => Profile
     | ["agents", id] => AgentShow(id)
     | ["entities", ...id] => EntityShow(String.concat("/", id))
     | ["agents", id, "measurables"] => AgentMeasurables(id)

@@ -81,11 +81,11 @@ let component =
 };
 
 let withLoggedInUserQuery = (innerComponentFn: 'a => ReasonReact.reactElement) =>
-  switch (Me.AuthTokens.make_from_storage()) {
+  switch (Contexts.Auth.AuthTokens.make_from_storage()) {
   | None => innerComponentFn(None)
   | Some(tokens) =>
-    Auth0.logoutIfTokenIsObsolete(tokens);
-    switch (Me.AuthTokens.auth0Id(tokens)) {
+    Contexts.Auth.Actions.logoutIfTokenIsObsolete(tokens);
+    switch (Contexts.Auth.AuthTokens.auth0Id(tokens)) {
     | Some(auth0Id) => component(auth0Id, innerComponentFn)
     | None => innerComponentFn(None)
     };

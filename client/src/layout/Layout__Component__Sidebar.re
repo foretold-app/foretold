@@ -80,7 +80,9 @@ let make = (~channelId, ~loggedInUser: DataModel.User.t, _children) => {
             className=Styles.item>
             {"Edit Measurables" |> ste}
           </div>
-          <div onClick={_e => Auth0.logout()} className=Styles.item>
+          <div
+            onClick={_e => Contexts.Auth.Actions.logout()}
+            className=Styles.item>
             {"Log Out" |> ste}
           </div>
         </>;

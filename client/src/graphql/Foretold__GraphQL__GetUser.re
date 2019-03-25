@@ -67,26 +67,27 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let component =
-    (auth0Id: string, innerComponentFn: 'a => ReasonReact.reactElement) => {
+type innerType =
+  ApolloUtils.QResponse.tri(DataModel.User.t) => ReasonReact.reactElement;
+let component = (auth0Id: string, innerComponentFn: innerType) => {
   let query = Query.make(~auth0Id, ());
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
-    |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(e => e##user |> E.O.fmap(toUser))
-    |> E.R.fmap(e => innerComponentFn(e))
-    |> E.R.id
+    |> ApolloUtils.apolloResponseToResult2
+    |> ApolloUtils.QResponse.fmap(e => e##user |> E.O.fmap(toUser))
+    |> ApolloUtils.QResponse.optionalToMissing
+    |> innerComponentFn
   )
   |> E.React.el;
 };
 
-let withLoggedInUserQuery = (innerComponentFn: 'a => ReasonReact.reactElement) =>
+let withLoggedInUserQuery = (innerComponentFn: innerType) =>
   switch (Contexts.Auth.AuthTokens.make_from_storage()) {
-  | None => innerComponentFn(None)
+  | None => innerComponentFn(Error("Not loaded"))
   | Some(tokens) =>
     Contexts.Auth.Actions.logoutIfTokenIsObsolete(tokens);
     switch (Contexts.Auth.AuthTokens.auth0Id(tokens)) {
     | Some(auth0Id) => component(auth0Id, innerComponentFn)
-    | None => innerComponentFn(None)
+    | None => innerComponentFn(Error("No token"))
     };
   };

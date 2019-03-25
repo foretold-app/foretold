@@ -159,8 +159,7 @@ let deselectedView =
   </>;
 };
 
-let make =
-    (~channel: DataModel.Channel.t, ~loggedInUser: DataModel.User.t, _children) => {
+let make = (~channelId: string, ~loggedInUser: DataModel.User.t, _children) => {
   ...component,
   initialState: () => {page: 0, selected: None},
   reducer: (action, state) =>
@@ -181,26 +180,28 @@ let make =
       })
     },
   render: ({state, send}) =>
-    Queries.SeriesCollection.component(
-      (seriesCollection: array(Queries.SeriesCollection.series)) =>
-      Queries.Measurables.component(
-        channel.id,
-        state.page,
-        itemsPerPage,
-        (measurables: array(DataModel.Measurable.t)) =>
-        switch (state.selected) {
-        | Some(index) =>
-          selectedView(~channel, ~loggedInUser, ~send, ~measurables, ~index)
-        | _ =>
-          deselectedView(
-            ~channel,
-            ~loggedInUser,
-            ~send,
-            ~state,
-            ~measurables,
-            ~seriesCollection,
-          )
-        }
+    Queries.Channel.component(~id=channelId, channel =>
+      Queries.SeriesCollection.component(
+        (seriesCollection: array(Queries.SeriesCollection.series)) =>
+        Queries.Measurables.component(
+          channel.id,
+          state.page,
+          itemsPerPage,
+          (measurables: array(DataModel.Measurable.t)) =>
+          switch (state.selected) {
+          | Some(index) =>
+            selectedView(~channel, ~loggedInUser, ~send, ~measurables, ~index)
+          | _ =>
+            deselectedView(
+              ~channel,
+              ~loggedInUser,
+              ~send,
+              ~state,
+              ~measurables,
+              ~seriesCollection,
+            )
+          }
+        )
       )
     ),
 };

@@ -1,5 +1,4 @@
 open Utils;
-open Rationale;
 open Style.Grid;
 open Foretold__GraphQL;
 
@@ -32,7 +31,7 @@ type action =
 
 let component = ReasonReact.reducerComponent("Measurables");
 
-let seriesHero = (series: DataModel.Series.t) =>
+let seriesHero = (series: Context.Primary.Series.t) =>
   <Div flexDirection=`column styles=[Styles.header]>
     <Div flex=1>
       <Div flexDirection=`row>
@@ -53,7 +52,7 @@ let seriesHero = (series: DataModel.Series.t) =>
             switch (series.creator) {
             | Some({name: Some(name), id}) =>
               <div className=C.Shared.Item.item>
-                <a href={DataModel.Url.toString(AgentShow(id))}>
+                <a href={Context.Routing.Url.toString(AgentShow(id))}>
                   {name |> ste}
                 </a>
               </div>
@@ -68,7 +67,12 @@ let seriesHero = (series: DataModel.Series.t) =>
   </Div>;
 
 let make =
-    (~channel: string, ~id: string, ~loggedInUser: Queries.User.t, _children) => {
+    (
+      ~channel: Context.Primary.Channel.t,
+      ~id: string,
+      ~loggedInUser: Context.Primary.User.t,
+      _children,
+    ) => {
   ...component,
   initialState: () => {selected: None},
   reducer: (action, _state) =>
@@ -77,7 +81,7 @@ let make =
     },
   render: ({state, send}) => {
     let medium =
-      Queries.Measurables.componentWithSeries(channel, id, measurables =>
+      Queries.Measurables.componentWithSeries(channel.id, id, measurables =>
         <C.Measurables.SeriesTable
           measurables
           selected={state.selected}
@@ -93,7 +97,7 @@ let make =
                SLayout.seriesHead(
                  channel,
                  series
-                 |> E.O.bind(_, (s: DataModel.Series.t) => s.name)
+                 |> E.O.bind(_, (s: Context.Primary.Series.t) => s.name)
                  |> E.O.default(""),
                )
              }

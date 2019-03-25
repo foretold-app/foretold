@@ -7,16 +7,15 @@ type creator = {
 type measurable = {
   id: string,
   name: string,
-  valueType: DataModel.valueType,
+  valueType: Context.Primary.valueType,
   description: option(string),
-  channel: option(string),
   resolutionEndpoint: option(string),
   measurementCount: option(int),
   measurerCount: option(int),
   createdAt: MomentRe.Moment.t,
   updatedAt: MomentRe.Moment.t,
   expectedResolutionDate: option(MomentRe.Moment.t),
-  state: DataModel.MeasurableState.t,
+  state: Context.Primary.MeasurableState.t,
   stateUpdatedAt: option(MomentRe.Moment.t),
   creator: option(creator),
   descriptionEntity: option(string),
@@ -24,12 +23,12 @@ type measurable = {
   descriptionProperty: option(string),
 };
 
-let toMeasurable = (m: measurable): DataModel.Measurable.t =>
-  DataModel.Measurable.make(
+let toMeasurable = (m: measurable): Context.Primary.Measurable.t =>
+  Context.Primary.Measurable.make(
     ~id=m.id,
     ~name=m.name,
     ~valueType=m.valueType,
-    ~channel=m.channel,
+    ~channel=None,
     ~description=m.description,
     ~resolutionEndpoint=m.resolutionEndpoint,
     ~measurementCount=m.measurementCount,
@@ -58,10 +57,9 @@ module Query = [%graphql
            measurementCount
            measurerCount
            descriptionEntity
-           channel
            descriptionProperty
            descriptionDate @bsDecoder(fn: "E.J.O.toMoment")
-           state @bsDecoder(fn: "DataModel.MeasurableState.fromString")
+           state @bsDecoder(fn: "Context.Primary.MeasurableState.fromString")
            stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
            expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
            createdAt @bsDecoder(fn: "E.J.toMoment")

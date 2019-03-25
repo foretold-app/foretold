@@ -4,35 +4,16 @@ open MomentRe;
 
 let ste = ReasonReact.string;
 
-module CreateMeasurableMutation = {
-  module GraphQL = [%graphql
-    {|
-             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!, $descriptionDate: Date, $descriptionProperty: String, $channel: String) {
-                 createMeasurable(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity, descriptionDate: $descriptionDate, descriptionProperty: $descriptionProperty, channel: $channel) {
-                   id
-                 }
-             }
-     |}
-  ];
+module ChannelFormShower = ReForm.Create(ChannelForm.NewChannelParams);
 
-  module Mutation = ReasonApollo.CreateMutation(GraphQL);
-};
+let component = ReasonReact.statelessComponent("ChannelNewPage");
 
-module ChannelFormShower = ReForm.Create(ChannelForm.SignUpParams);
+module Mutation = Foretold__GraphQL.Mutations.ChannelCreate;
 
-let mutate =
-    (
-      mutation: CreateMeasurableMutation.Mutation.apolloMutation,
-      values: ChannelFormShower.values,
-      channel: string,
-    ) => ignore;
-
-let component = ReasonReact.statelessComponent("Measurables");
-
-let make = (~channel="general", _children) => {
+let make = _children => {
   ...component,
   render: _ =>
-    CreateMeasurableMutation.Mutation.make(
+    Mutation.Mutation.make(
       ~onCompleted=e => Js.log("HI"),
       (mutation, data) =>
         <>
@@ -42,7 +23,14 @@ let make = (~channel="general", _children) => {
           <SLayout.MainSection>
             {
               ChannelFormShower.make(
-                ~onSubmit=({values}) => (),
+                ~onSubmit=
+                  ({values}) =>
+                    Mutation.mutate(
+                      mutation,
+                      values.name,
+                      Some(values.description),
+                      values.isPublic == "TRUE" ? true : false,
+                    ),
                 ~initialState={name: "", description: "", isPublic: "TRUE"},
                 ~schema=[(`name, Custom(_ => None))],
                 ({handleSubmit, handleChange, form, _}) =>
@@ -60,12 +48,7 @@ let make = (~channel="general", _children) => {
                       }
                     </>
                   | Data(data) =>
-                    data##createMeasurable
-                    |> E.O.fmap(e => e##id)
-                    |> doIfSome(_ =>
-                         DataModel.Url.push(ChannelShow(channel))
-                       );
-                    "Measurable successfully created" |> ste |> E.React.inH2;
+                    "Channel successfully created" |> ste |> E.React.inH2
                   | NotCalled =>
                     ChannelForm.showForm(~form, ~handleSubmit, ~handleChange)
                   },

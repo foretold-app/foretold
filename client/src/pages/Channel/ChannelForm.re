@@ -2,7 +2,7 @@ open Utils;
 open MomentRe;
 open Antd;
 
-module SignUpParams = {
+module NewChannelParams = {
   type state = {
     name: string,
     description: string,
@@ -20,9 +20,9 @@ module SignUpParams = {
   ];
 };
 
-module SignUpForm = ReForm.Create(SignUpParams);
+module NewChannelForm = ReForm.Create(NewChannelParams);
 
-let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
+let showForm = (~form: NewChannelForm.state, ~handleSubmit, ~handleChange) =>
   <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
     <Form>
       <Form.Item>

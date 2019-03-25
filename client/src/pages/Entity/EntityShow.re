@@ -24,7 +24,7 @@ let make = (~id: string, _children) => {
                    switch (r.value.valueType) {
                    | String(s) => s |> ste
                    | ThingId(s) =>
-                     <a href={DataModel.Url.toString(EntityShow(s))}>
+                     <a href={Context.Routing.Url.toString(EntityShow(s))}>
                        {s |> ste}
                      </a>
                    | _ => "no-name" |> ste

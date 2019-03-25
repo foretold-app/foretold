@@ -57,7 +57,6 @@ const schema = new graphql.GraphQLSchema({
           return data.measurablesData.getAll(ops, values, options);
         }
       },
-
       bot: {
         type: types.botType,
         args: _.pick(attributeFields(models.Bot), ['id']),

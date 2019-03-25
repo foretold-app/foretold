@@ -1,8 +1,8 @@
 open Utils;
-type measurable = DataModel.Measurable.t;
+type measurable = Context.Primary.Measurable.t;
 let graph = Data.make;
 
-let itemUrl = id => DataModel.Url.toString(EntityShow(id));
+let itemUrl = id => Context.Routing.Url.toString(EntityShow(id));
 
 let findName = propertyId =>
   graph

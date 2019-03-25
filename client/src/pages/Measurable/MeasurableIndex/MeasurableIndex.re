@@ -1,5 +1,4 @@
 open Utils;
-open Rationale;
 open Foretold__GraphQL;
 
 module SeriesItems = {
@@ -38,37 +37,32 @@ let component = ReasonReact.reducerComponent("MeasurableIndex");
 
 let itemsPerPage = 20;
 
-let itemHeader = (channel: string, onForward, onBackward, isAtStart, isAtEnd) =>
+let itemHeader =
+    (channel: Context.Primary.Channel.t, onForward, onBackward, isAtStart, isAtEnd) =>
   <>
-    {SLayout.channelLink(channel)}
+    {SLayout.channelink(channel)}
     <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
       <Icon.Icon icon="ARROW_LEFT" />
     </Antd.Button>
     <Antd.Button onClick={_ => onForward()} disabled=isAtEnd>
       <Icon.Icon icon="ARROW_RIGHT" />
     </Antd.Button>
-    {C.Channel.SimpleHeader.button(channel)}
+    {C.Channel.SimpleHeader.button(channel.id)}
   </>;
 
 let selectedView =
     (
-      ~channel: string,
-      ~loggedInUser: Queries.User.t,
+      ~channel: Context.Primary.Channel.t,
+      ~loggedInUser: Context.Primary.User.t,
       ~send,
-      ~measurables: array(DataModel.Measurable.t),
+      ~measurables: array(Context.Primary.Measurable.t),
       ~index: int,
     ) => {
   let measurable = E.A.get(measurables, index);
   let itemsOnPage = measurables |> Array.length;
   <>
     <SLayout.Header>
-      {
-        SLayout.channelBack(
-          ~channelName=channel,
-          ~onClick=_ => send(Select(None)),
-          (),
-        )
-      }
+      {SLayout.channelBack(~channel, ~onClick=_ => send(Select(None)), ())}
       {
         itemHeader(
           channel,
@@ -92,17 +86,17 @@ let selectedView =
 
 let deselectedView =
     (
-      ~channel: string,
-      ~loggedInUser: Queries.User.t,
+      ~channel: Context.Primary.Channel.t,
+      ~loggedInUser: Context.Primary.User.t,
       ~send,
       ~state,
-      ~measurables: array(DataModel.Measurable.t),
+      ~measurables: array(Context.Primary.Measurable.t),
       ~seriesCollection: array(Queries.SeriesCollection.series),
     ) => {
   let seriesList =
     seriesCollection
     |> E.A.filter((x: Queries.SeriesCollection.series) =>
-         x.channel == channel && x.measurableCount !== Some(0)
+         x.measurableCount !== Some(0)
        );
   <>
     {
@@ -127,14 +121,20 @@ let deselectedView =
               {
                 seriesList
                 |> Array.map((x: Queries.SeriesCollection.series) =>
-                     <div
-                       className=SeriesItems.item
-                       onClick={
-                         _e =>
-                           DataModel.Url.push(SeriesShow(x.channel, x.id))
-                       }>
-                       <C.Series.Card series=x />
-                     </div>
+                     switch (x.channel) {
+                     | Some(channel) =>
+                       <div
+                         className=SeriesItems.item
+                         onClick=(
+                           _e =>
+                             Context.Routing.Url.push(
+                               SeriesShow(channel.id, x.id),
+                             )
+                         )>
+                         <C.Series.Card series=x />
+                       </div>
+                     | None => E.React.null
+                     }
                    )
                 |> ReasonReact.array
               }
@@ -151,7 +151,7 @@ let deselectedView =
             send(
               Select(
                 measurables
-                |> E.A.findIndex((r: DataModel.Measurable.t) => r.id == e.id),
+                |> E.A.findIndex((r: Context.Primary.Measurable.t) => r.id == e.id),
               ),
             )
         }
@@ -160,7 +160,7 @@ let deselectedView =
   </>;
 };
 
-let make = (~channel: string, ~loggedInUser: Queries.User.t, _children) => {
+let make = (~channelId: string, ~loggedInUser: Context.Primary.User.t, _children) => {
   ...component,
   initialState: () => {page: 0, selected: None},
   reducer: (action, state) =>
@@ -181,26 +181,28 @@ let make = (~channel: string, ~loggedInUser: Queries.User.t, _children) => {
       })
     },
   render: ({state, send}) =>
-    Queries.SeriesCollection.component(
-      (seriesCollection: array(Queries.SeriesCollection.series)) =>
-      Queries.Measurables.component(
-        channel,
-        state.page,
-        itemsPerPage,
-        (measurables: array(DataModel.Measurable.t)) =>
-        switch (state.selected) {
-        | Some(index) =>
-          selectedView(~channel, ~loggedInUser, ~send, ~measurables, ~index)
-        | _ =>
-          deselectedView(
-            ~channel,
-            ~loggedInUser,
-            ~send,
-            ~state,
-            ~measurables,
-            ~seriesCollection,
-          )
-        }
+    Queries.Channel.component(~id=channelId, channel =>
+      Queries.SeriesCollection.component(
+        (seriesCollection: array(Queries.SeriesCollection.series)) =>
+        Queries.Measurables.component(
+          channel.id,
+          state.page,
+          itemsPerPage,
+          (measurables: array(Context.Primary.Measurable.t)) =>
+          switch (state.selected) {
+          | Some(index) =>
+            selectedView(~channel, ~loggedInUser, ~send, ~measurables, ~index)
+          | _ =>
+            deselectedView(
+              ~channel,
+              ~loggedInUser,
+              ~send,
+              ~state,
+              ~measurables,
+              ~seriesCollection,
+            )
+          }
+        )
       )
     ),
 };

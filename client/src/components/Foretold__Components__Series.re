@@ -35,7 +35,7 @@ module Card = {
       <div
         className=Styles.card
         onClick={
-          _e => DataModel.Url.push(SeriesShow(series.channel, series.id))
+          _e => Context.Routing.Url.push(SeriesShow("general", series.id))
         }>
         <span className=Styles.heading>
           <Icon.Icon icon="LAYERS" />

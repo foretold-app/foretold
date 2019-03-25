@@ -3,7 +3,7 @@ open MomentRe;
 open Style.Grid;
 open Css;
 
-type measurement = DataModel.Measurement.t;
+type measurement = Context.Primary.Measurement.t;
 
 module Styles = {
   open Css;
@@ -113,8 +113,8 @@ module Helpers = {
     switch (m.value) {
     | Belt.Result.Ok(`FloatCdf(r)) =>
       r
-      |> Value.toPdf(~bucketSize=20)
-      |> Value.FloatCdf.toPoints
+      |> MeasurementValue.toPdf(~bucketSize=20)
+      |> MeasurementValue.FloatCdf.toPoints
       |> (data => Some(<WideChart data bounds=g />))
     | Belt.Result.Ok(`FloatPoint(r)) =>
       Some(
@@ -139,7 +139,7 @@ module Helpers = {
          <div className=Styles.date> {d |> E.M.goFormat_simple |> ste} </div>
        );
 
-  let getFloatCdf = (e: Belt.Result.t(Value.t, string)) =>
+  let getFloatCdf = (e: Belt.Result.t(MeasurementValue.t, string)) =>
     switch (e) {
     | Belt.Result.Ok(`FloatCdf(r)) => Some(r)
     | _ => None
@@ -214,11 +214,11 @@ module Helpers = {
   let measurerLink = (~m: measurement) => {
     let agent = m.agent;
     let aLink =
-      switch (agent, agent |> E.O.bind(_, DataModel.Agent.name)) {
+      switch (agent, agent |> E.O.bind(_, Context.Primary.Agent.name)) {
       | (Some(agent), Some(name)) =>
         Some(
           <a
-            href={DataModel.Url.toString(AgentShow(agent.id))}
+            href={Context.Routing.Url.toString(AgentShow(agent.id))}
             className=Styles.agentStyle>
             {name |> ste}
           </a>,
@@ -239,7 +239,7 @@ module Helpers = {
         ),
         selector(" a", [fontSize(`em(0.9))]),
       ]);
-    let isJudge = DataModel.Measurement.isJudgement(m);
+    let isJudge = Context.Primary.Measurement.isJudgement(m);
 
     if (isJudge) {
       <div className=judgementStyle>

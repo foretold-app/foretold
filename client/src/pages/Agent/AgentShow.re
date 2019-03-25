@@ -21,7 +21,7 @@ let agentSection = (e: Queries.Agent.agent) =>
       }
       {
         r.competitorType
-        |> DataModel.CompetitorType.toString
+        |> Context.Primary.CompetitorType.toString
         |> ste
         |> E.React.inH3
       }
@@ -47,7 +47,7 @@ let make = (~id: string, _children) => {
           <SLayout.MainSection>
             {
               mm
-              |> E.L.fmap((m: DataModel.Measurable.t) => {
+              |> E.L.fmap((m: Context.Primary.Measurable.t) => {
                    let measurements = m.measurements |> E.O.default([]);
                    <>
                      <div className=block>

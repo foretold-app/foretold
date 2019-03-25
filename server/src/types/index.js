@@ -44,7 +44,7 @@ function generateReferences(model) {
     const type = index[otherTableName];
 
     all[r.as] = {
-      type: hasMany ? graphql.GraphQLNonNull(new graphql.GraphQLList(type)) : type,
+      type: (hasMany || toMany) ? graphql.GraphQLNonNull(new graphql.GraphQLList(type)) : type,
       resolve: resolver(model[capitalizeFirstLetter(r.as)])
     };
   });

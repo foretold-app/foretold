@@ -196,3 +196,32 @@ module React = {
   let inH2 = e => <h2> e </h2>;
   let inH3 = e => <h3> e </h3>;
 };
+
+module HtppResponse = {
+  type t('a) =
+    | Loading
+    | Error(string)
+    | Success('a);
+
+  let fromApollo = (b: ReasonApolloTypes.queryResponse('a)) =>
+    switch (b) {
+    | Loading => Loading
+    | Error(e) => Error(e##message)
+    | Data(c) => Success(c)
+    };
+
+  let fmap = (fn: 'a => 'b, result: t('a)): t('b) =>
+    switch (result) {
+    | Success(response) => Success(fn(response))
+    | Error(e) => Error(e)
+    | Loading => Loading
+    };
+
+  let optionalToMissing = (result: t(option('a))): t('b) =>
+    switch (result) {
+    | Success(Some(response)) => Success(response)
+    | Success(None) => Error("Missing Needed Data")
+    | Error(e) => Error(e)
+    | Loading => Loading
+    };
+};

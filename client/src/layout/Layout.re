@@ -15,7 +15,7 @@ let make = (~route: Route.t, _children) => {
       | _ => None
       };
 
-    Queries.User.withLoggedInUserQuery2(result =>
+    Queries.User.withLoggedInUserQuery(result =>
       switch (result) {
       | WithTokensAndUserData({userData}) =>
         let loggedInUser = userData;

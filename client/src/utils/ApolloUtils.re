@@ -19,39 +19,3 @@ let apolloResponseToResult = (result: ReasonApolloTypes.queryResponse('a)) =>
     );
   | Data(response) => Ok(response)
   };
-
-module QResponse = {
-  /* type t('a) = ReasonApolloTypes.queryResponse('a); */
-  type tri('a) =
-    | Loading
-    | Error(string)
-    | RelevantDataMissing
-    | Success('a);
-
-  let fromApollo = (b: ReasonApolloTypes.queryResponse('a)) =>
-    switch (b) {
-    | Loading => Loading
-    | Error(_) => Error("sdf")
-    | Data(c) => Success(c)
-    };
-
-  let fmap = (fn: 'a => 'b, result: tri('a)): tri('b) =>
-    switch (result) {
-    | Success(response) => Success(fn(response))
-    | Error(e) => Error(e)
-    | Loading => Loading
-    | RelevantDataMissing => RelevantDataMissing
-    };
-
-  let optionalToMissing = (result: tri(option('a))): tri('b) =>
-    switch (result) {
-    | Success(Some(response)) => Success(response)
-    | Success(None) => RelevantDataMissing
-    | Error(e) => Error(e)
-    | Loading => Loading
-    | RelevantDataMissing => RelevantDataMissing
-    };
-};
-
-let apolloResponseToResult2 = (result: ReasonApolloTypes.queryResponse('a)) =>
-  result |> QResponse.fromApollo;

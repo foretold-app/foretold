@@ -12,10 +12,7 @@ external parseIntoMyData: string => data = "parse";
 let storageToHeaders = (tokens: Me.AuthTokens.t) =>
   Json.Encode.(
     object_([
-      (
-        "authorization",
-        Json.Encode.string("Bearer " ++ tokens.access_token),
-      ),
+      ("authorization", Json.Encode.string("Bearer " ++ tokens.id_token)),
     ])
   );
 

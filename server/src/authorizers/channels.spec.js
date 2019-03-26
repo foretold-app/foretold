@@ -36,13 +36,14 @@ describe('channel authorizers module', () => {
       jest.spyOn(channels, 'authorize').mockReturnValue(true);
     });
     it('calls authorize()', () => {
-      return channels.isChannelAllowedRule(root, args, context, info).then((res) => {
-        expect(channels.authorize).toHaveBeenCalledWith(
-          context.channel,
-          context.agentChannel,
-        );
-        expect(res).toBe(true);
-      });
+      return channels.isChannelAllowedRule(root, args, context, info)
+        .then((res) => {
+          expect(channels.authorize).toHaveBeenCalledWith(
+            context.channel,
+            context.agentChannel,
+          );
+          expect(res).toBe(true);
+        });
     });
   });
 

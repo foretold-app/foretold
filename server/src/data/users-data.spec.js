@@ -27,7 +27,9 @@ describe('Users Data Layer', () => {
 
   describe('createOne()', () => {
     beforeEach(() => {
-      jest.spyOn(models.User, 'findOne').mockReturnValue(Promise.resolve(false));
+      jest.spyOn(models.User, 'findOne').mockReturnValue(
+        Promise.resolve(false),
+      );
       jest.spyOn(models.User, 'create').mockReturnValue(Promise.resolve(true));
     });
     it('creates user when he is found', () => {
@@ -75,7 +77,9 @@ describe('Users Data Layer', () => {
     const values = { id: 'id1', auth0Id: 'auth0Id1' };
     const options = {};
     beforeEach(() => {
-      jest.spyOn(models.User, 'findById').mockReturnValue(Promise.resolve(true));
+      jest.spyOn(models.User, 'findById').mockReturnValue(
+        Promise.resolve(true),
+      );
     });
     it('finds user', () => {
       return instance.getUser(root, values, options).then((result) => {
@@ -89,7 +93,9 @@ describe('Users Data Layer', () => {
     const values = { auth0Id: 'auth0Id1' };
     const options = {};
     beforeEach(() => {
-      jest.spyOn(instance, 'getUserByAuth0Id').mockReturnValue(Promise.resolve(true));
+      jest.spyOn(instance, 'getUserByAuth0Id').mockReturnValue(
+        Promise.resolve(true),
+      );
     });
     it('finds user by auth0Id', () => {
       return instance.getUser(root, values, options).then((result) => {

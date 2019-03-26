@@ -12,7 +12,9 @@ describe('tests Measurement Data layer', () => {
   describe('getOne()', () => {
     const id = 'id2';
     beforeEach(() => {
-      jest.spyOn(models.Measurement, 'findOne').mockReturnValue(Promise.resolve(true));
+      jest.spyOn(models.Measurement, 'findOne').mockReturnValue(
+        Promise.resolve(true),
+      );
     });
     it('finds a measurement', () => {
       return instance.getOne(id).then((result) => {

@@ -1,5 +1,3 @@
-const Sequelize = require('sequelize');
-
 const models = require("../models");
 const { notify } = require("../lib/notifications");
 
@@ -92,6 +90,7 @@ class MeasurablesData {
   }
 
   /**
+   * @tested
    * @param {object} options
    * @return {Promise<*|Array<Model>>}
    */
@@ -100,18 +99,18 @@ class MeasurablesData {
 
     let where = {
       state: {
-        [Sequelize.Op.ne]: "ARCHIVED"
+        [models.sequelize.Op.ne]: "ARCHIVED"
       }
     };
 
     if (seriesId) {
-      where.seriesId = { [Sequelize.Op.eq]: seriesId };
+      where.seriesId = { [models.sequelize.Op.eq]: seriesId };
     }
     if (creatorId) {
-      where.creatorId = { [Sequelize.Op.eq]: creatorId };
+      where.creatorId = { [models.sequelize.Op.eq]: creatorId };
     }
     if (channelId) {
-      where.channelId = { [Sequelize.Op.eq]: channelId };
+      where.channelId = { [models.sequelize.Op.eq]: channelId };
     }
 
     const items = await models.Measurable.findAll({
@@ -125,6 +124,7 @@ class MeasurablesData {
   }
 
   /**
+   * @tested
    * @param {string} id
    * @return {Promise<*>}
    */

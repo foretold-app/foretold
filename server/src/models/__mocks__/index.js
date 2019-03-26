@@ -28,6 +28,7 @@ const Measurable = {
   create: jest.fn(() => Promise.resolve(true)),
   findById: jest.fn(() => Promise.resolve(true)),
   findOrCreate: jest.fn(() => Promise.resolve(true)),
+  findAll: jest.fn(() => Promise.resolve(true)),
 };
 
 const Measurement = {
@@ -46,7 +47,8 @@ const Series = {
 
 const sequelize = {
   Op: {
-    or: 'orop'
+    or: 'orop',
+    ne: 'neop',
   }
 };
 

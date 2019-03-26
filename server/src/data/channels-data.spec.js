@@ -2,7 +2,7 @@ const models = require('../models');
 const { ChannelsData } = require('./channels-data');
 const { AgentsChannelsData } = require('./agents-channels-data');
 
-describe('ChannelsData', () => {
+describe('tests Channels Data layer', () => {
 
   it('class should be constructor', () => {
     expect(ChannelsData).toBeInstanceOf(Function);
@@ -13,13 +13,13 @@ describe('ChannelsData', () => {
   const user = { agentId: 'agentId1' };
   const input = { name: 'Input Name 1' };
 
-  describe('createOne - branch A', () => {
+  describe('tests createOne method', () => {
     beforeEach(() => {
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve(true));
       jest.spyOn(models.Channel, 'create').mockReturnValue(Promise.resolve(true));
       jest.spyOn(AgentsChannelsData.prototype, 'createOne').mockReturnValue(Promise.resolve(true));
     });
-    it('createOne', () => {
+    it('should find channel', () => {
       return instance.createOne(user, input).then((result) => {
         expect(models.Channel.findOne).toHaveBeenCalledWith({ where: { name: input.name } });
         expect(models.Channel.create).toHaveBeenCalledTimes(0);
@@ -29,13 +29,13 @@ describe('ChannelsData', () => {
     });
   });
 
-  describe('createOne - branch B', () => {
+  describe('tests createOne method if there is no channel', () => {
     beforeEach(() => {
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve(false));
       jest.spyOn(models.Channel, 'create').mockReturnValue(Promise.resolve(true));
       jest.spyOn(AgentsChannelsData.prototype, 'createOne').mockReturnValue(Promise.resolve(true));
     });
-    it('createOne', () => {
+    it('should create channel', () => {
       return instance.createOne(user, input).then((result) => {
         expect(models.Channel.findOne).toHaveBeenCalledWith({ where: { name: input.name } });
         expect(models.Channel.create).toHaveBeenCalledTimes(1);
@@ -45,12 +45,12 @@ describe('ChannelsData', () => {
     });
   });
 
-  describe('updateOne - branch A', () => {
+  describe('test updateOne method', () => {
     const update = jest.fn(() => Promise.resolve(true));
     beforeEach(() => {
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({ update }));
     });
-    it('createOne', () => {
+    it('should fine channel', () => {
       return instance.updateOne(id, input).then((result) => {
         expect(models.Channel.findOne).toHaveBeenCalledWith({ where: { id } });
         expect(update).toHaveBeenCalledTimes(1);
@@ -58,12 +58,12 @@ describe('ChannelsData', () => {
     });
   });
 
-  describe('updateOne - branch B', () => {
+  describe('tests updateOne method if there is no channel', () => {
     const update = jest.fn(() => Promise.resolve(true));
     beforeEach(() => {
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve(false));
     });
-    it('createOne', () => {
+    it('should not update channel if it is not found', () => {
       return instance.updateOne(id, input).then((result) => {
         expect(models.Channel.findOne).toHaveBeenCalledWith({ where: { id } });
         expect(update).toHaveBeenCalledTimes(0);
@@ -72,12 +72,12 @@ describe('ChannelsData', () => {
     });
   });
 
-  describe('getAgentsByChannelId - branch A', () => {
+  describe('tests getAgentsByChannelId method', () => {
     const agents = [];
     beforeEach(() => {
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({ agents }));
     });
-    it('createOne', () => {
+    it('should fine channel and return agents', () => {
       return instance.getAgentsByChannelId(id).then((result) => {
         expect(models.Channel.findOne).toHaveBeenCalledTimes(1);
         expect(result).toBe(agents);
@@ -85,12 +85,12 @@ describe('ChannelsData', () => {
     });
   });
 
-  describe('getCreatorByChannelId - branch A', () => {
+  describe('tests getCreatorByChannelId method', () => {
     const creator = 1;
     beforeEach(() => {
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({ creator }));
     });
-    it('createOne', () => {
+    it('should find channel and return creator', () => {
       return instance.getCreatorByChannelId(id).then((result) => {
         expect(models.Channel.findOne).toHaveBeenCalledTimes(1);
         expect(result).toBe(creator);
@@ -98,13 +98,13 @@ describe('ChannelsData', () => {
     });
   });
 
-  describe('getAll', () => {
+  describe('tests getAll method', () => {
     const options = { limit: 1, offset: 2 };
     beforeEach(() => {
       jest.spyOn(instance, 'getRestrictionsSync').mockReturnValue({ query: '1' });
       jest.spyOn(models.Channel, 'findAll').mockReturnValue(Promise.resolve(true));
     });
-    it('getAll', () => {
+    it('should format restrictions and find all channels', () => {
       return instance.getAll(options).then((result) => {
         expect(instance.getRestrictionsSync).toHaveBeenCalledWith(options);
         expect(models.Channel.findAll).toHaveBeenCalledWith({
@@ -118,14 +118,14 @@ describe('ChannelsData', () => {
     });
   });
 
-  describe('getOne', () => {
+  describe('tests getOne method', () => {
     const id = 'id1';
     const options = {};
     beforeEach(() => {
       jest.spyOn(instance, 'getRestrictionsSync').mockReturnValue({ query: '1' });
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve(true));
     });
-    it('getOne', () => {
+    it('should find channel', () => {
       return instance.getOne(id, options).then((result) => {
         expect(instance.getRestrictionsSync).toHaveBeenCalledWith(options);
         expect(models.Channel.findOne).toHaveBeenCalledWith({
@@ -137,13 +137,13 @@ describe('ChannelsData', () => {
     });
   });
 
-  describe('getRestrictionsSync', () => {
+  describe('tests getRestrictionsSync methods', () => {
     const options = { restrictions: { r1: 'r1', channelIds: 'channelIds1' } };
     beforeEach(() => {
       instance.getRestrictionsSync.mockRestore();
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve(true));
     });
-    it('getRestrictionsSync', () => {
+    it('should return conditions for seek channels', () => {
       const result = instance.getRestrictionsSync(options);
       expect(result).toEqual({
         "where": {

@@ -12,9 +12,9 @@ const measurables = require('./measurables');
 const measurements = require('./measurements');
 const series = require('./series');
 
-describe('middlewares', () => {
+describe('Middlewares', () => {
 
-  it('measurements', () => {
+  it('measurements()', () => {
     const resolve = () => Promise.resolve(true);
     const root = {};
     const args = {};
@@ -28,7 +28,7 @@ describe('middlewares', () => {
     });
   });
 
-  it('measurement', () => {
+  it('measurement()', () => {
     const resolve = () => Promise.resolve(true);
     const root = {};
     const args = {};
@@ -43,7 +43,7 @@ describe('middlewares', () => {
     });
   });
 
-  it('measurable', () => {
+  it('measurable()', () => {
     const resolve = () => Promise.resolve(true);
     const root = {};
     const args = {};
@@ -71,7 +71,7 @@ describe('middlewares', () => {
   });
 
 
-  it('series', () => {
+  it('series()', () => {
     const resolve = () => Promise.resolve(true);
     const root = {};
     const args = {};
@@ -85,7 +85,7 @@ describe('middlewares', () => {
     });
   });
 
-  it('seriesCollection', () => {
+  it('seriesCollection()', () => {
     const resolve = () => Promise.resolve(true);
     const root = {};
     const args = {};

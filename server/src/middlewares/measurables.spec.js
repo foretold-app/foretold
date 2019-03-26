@@ -1,15 +1,17 @@
 const { measurable } = require('./measurables');
 const data = require('../data');
 
-describe('measurables', () => {
+describe('Measurables Middleware', () => {
 
-  describe('measurable ', () => {
+  describe('measurable() sets measurable and channelId into context ', () => {
     const measurableObj = { channelId: 'channelId1' };
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'getOne').mockReturnValue(Promise.resolve(measurableObj));
+      jest.spyOn(data.measurablesData, 'getOne').mockReturnValue(
+        Promise.resolve(measurableObj),
+      );
     });
 
-    it('A', () => {
+    it('when arguments are passed', () => {
       const root = {};
       const args = { measurableId: 'measurableId1' };
       const context = {};
@@ -22,7 +24,7 @@ describe('measurables', () => {
       });
     });
 
-    it('B', () => {
+    it('when root is passed', () => {
       const root = { measurableId: 'measurableId1' };
       const args = {};
       const context = {};
@@ -35,7 +37,7 @@ describe('measurables', () => {
       });
     });
 
-    it('C', () => {
+    it('when context is passed', () => {
       const root = {};
       const args = {};
       const context = { measurableId: 'measurableId1' };
@@ -48,7 +50,7 @@ describe('measurables', () => {
       });
     });
 
-    it('C', () => {
+    it('when arguments are passed', () => {
       const root = {};
       const args = { id: 'measurableId1' };
       const context = {};
@@ -61,7 +63,7 @@ describe('measurables', () => {
       });
     });
 
-    it('D', () => {
+    it('when nothing is passed', () => {
       const root = {};
       const args = {};
       const context = {};

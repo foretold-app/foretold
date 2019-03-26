@@ -1,15 +1,15 @@
 const { channel } = require('./channels');
 const data = require('../data');
 
-describe('channels', () => {
+describe('Channels Middleware', () => {
 
-  describe('channel ', () => {
+  describe('channel() sets channel model into context', () => {
     const channelObj = {};
     beforeEach(() => {
       jest.spyOn(data.channelsData, 'getOne').mockReturnValue(Promise.resolve(channelObj));
     });
 
-    it('A', () => {
+    it('when arguments are passed', () => {
       const root = {};
       const args = { channelId: 'channelId1' };
       const context = {};
@@ -21,7 +21,7 @@ describe('channels', () => {
       });
     });
 
-    it('B', () => {
+    it('when root is passed', () => {
       const root = { channelId: 'channelId1' };
       const args = {};
       const context = {};
@@ -33,7 +33,7 @@ describe('channels', () => {
       });
     });
 
-    it('C', () => {
+    it('when context is passed', () => {
       const root = {};
       const args = {};
       const context = { channelId: 'channelId1' };

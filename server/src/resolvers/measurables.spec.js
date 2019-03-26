@@ -34,7 +34,7 @@ describe('channels', () => {
     it('one', () => {
       return measurables.one(root, args, context, info).then((result) => {
         expect(resolver).toHaveBeenCalledWith(models.Measurable);
-        expect(result).toBe(true);
+        expect(result).toEqual([root, args, context, info]);
       });
     });
   });
@@ -89,6 +89,26 @@ describe('channels', () => {
     it('unarchive', () => {
       return measurables.unarchive(root, args, context, info).then((result) => {
         expect(data.measurablesData.unArchiveMeasurable).toHaveBeenCalledWith(
+          root,
+          args,
+          context,
+        );
+        expect(result).toBe(true);
+      });
+    });
+  });
+
+  describe('edit', () => {
+    const root = {};
+    const args = {};
+    const context = {};
+    const info = {};
+    beforeAll(() => {
+      jest.spyOn(data.measurablesData, 'editMeasurable').mockReturnValue(Promise.resolve(true));
+    });
+    it('edit', () => {
+      return measurables.edit(root, args, context, info).then((result) => {
+        expect(data.measurablesData.editMeasurable).toHaveBeenCalledWith(
           root,
           args,
           context,

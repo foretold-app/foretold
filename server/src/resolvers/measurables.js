@@ -69,6 +69,7 @@ async function unarchive(root, args, context, info) {
 }
 
 /**
+ * @tested
  * @param root
  * @param args
  * @param context

@@ -1,4 +1,4 @@
-const resolver = jest.fn(() => () => Promise.resolve(true));
+const resolver = jest.fn(() => (...args) => Promise.resolve(args));
 
 module.exports = {
   resolver,

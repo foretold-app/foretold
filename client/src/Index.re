@@ -1,4 +1,4 @@
-let instance = ApolloClient.instance();
+let instance = AppApolloClient.instance();
 
 Layout.make
 |> E.React.takeParameterFrom(WithRouteReducer.make)

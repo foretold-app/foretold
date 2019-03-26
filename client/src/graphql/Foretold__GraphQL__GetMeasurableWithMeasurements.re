@@ -29,7 +29,7 @@ module Types = {
     "competitorType": competitorType,
     "createdAt": MomentRe.Moment.t,
     "taggedMeasurementId": option(string),
-    "value": Belt.Result.t(Value.t, string),
+    "value": Belt.Result.t(MeasurementValue.t, string),
   };
   type measurements = Js.Array.t(option(measurement));
 };
@@ -44,7 +44,6 @@ module Query = [%graphql
               description
               valueType
               creatorId
-              channel
               resolutionEndpoint
               resolutionEndpointResponse
               descriptionEntity
@@ -67,7 +66,7 @@ module Query = [%graphql
               measurements: Measurements{
                 id
                 createdAt @bsDecoder(fn: "E.J.toMoment")
-                value @bsDecoder(fn: "Value.decode")
+                value @bsDecoder(fn: "MeasurementValue.decode")
                 relevantAt @bsDecoder(fn: "E.J.O.toMoment")
                 competitorType
                 description
@@ -93,31 +92,37 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let toMeasurement = (m: Types.measurement): DataModel.Measurement.t => {
-  open DataModel.Agent;
-  let agentType: option(DataModel.Agent.agentType) =
+let toMeasurement = (m: Types.measurement): Context.Primary.Measurement.t => {
+  open Context.Primary.Agent;
+  let agentType: option(Context.Primary.AgentType.t) =
     m##agent
     |> E.O.bind(_, k =>
          switch (k##bot, k##user) {
          | (Some(bot), None) =>
            Some(
-             Bot({
-               id: bot##id,
-               name: bot##name,
-               competitorType: bot##competitorType,
-               description: None,
-             }),
+             Context.Primary.Typess.Bot(
+               Context.Primary.Bot.make(
+                 ~id=bot##id,
+                 ~name=bot##name,
+                 ~competitorType=bot##competitorType,
+                 (),
+               ),
+             ),
            )
          | (None, Some(user)) =>
-           Some(User({id: user##id, name: user##name}))
+           Some(
+             Context.Primary.Typess.User(
+               Context.Primary.User.make(~id=user##id, ~name=user##name, ()),
+             ),
+           )
          | (_, _) => None
          }
        );
 
-  let agent: option(DataModel.Agent.t) =
-    m##agent |> E.O.fmap(k => DataModel.Agent.make(~id=k##id, ~agentType, ()));
+  let agent: option(Context.Primary.Agent.t) =
+    m##agent |> E.O.fmap(k => Context.Primary.Agent.make(~id=k##id, ~agentType, ()));
 
-  DataModel.Measurement.make(
+  Context.Primary.Measurement.make(
     ~id=m##id,
     ~description=m##description,
     ~value=m##value,
@@ -131,7 +136,7 @@ let toMeasurement = (m: Types.measurement): DataModel.Measurement.t => {
 };
 
 let queryMeasurable = m => {
-  open DataModel;
+  open Context.Primary;
   let agent: option(Agent.t) =
     m##creator |> E.O.fmap(r => Agent.make(~id=r##id, ~name=r##name, ()));
 
@@ -148,14 +153,13 @@ let queryMeasurable = m => {
     Measurable.make(
       ~id=m##id,
       ~name=m##name,
-      ~channel=m##channel,
       ~description=m##description,
       ~resolutionEndpoint=m##resolutionEndpoint,
       ~resolutionEndpointResponse=m##resolutionEndpointResponse,
       ~createdAt=Some(m##createdAt),
       ~updatedAt=Some(m##updatedAt),
       ~expectedResolutionDate=m##expectedResolutionDate,
-      ~state=Some(m##state |> DataModel.MeasurableState.fromString),
+      ~state=Some(m##state |> Context.Primary.MeasurableState.fromString),
       ~stateUpdatedAt=m##stateUpdatedAt,
       ~descriptionEntity=m##descriptionEntity,
       ~descriptionDate=m##descriptionDate,

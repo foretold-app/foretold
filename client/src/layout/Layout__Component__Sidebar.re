@@ -1,5 +1,4 @@
 open Utils;
-open Rationale;
 open Foretold__GraphQL;
 
 module Styles = {
@@ -59,72 +58,82 @@ module Styles = {
 };
 
 let component = ReasonReact.statelessComponent("Sidebar");
-let make = (~channel, ~loggedInUser: Queries.User.t, _children) => {
+let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
   ...component,
   render: _self =>
     <div className=Styles.sidebar>
       <div className=Styles.minorHeader> {"User" |> ste} </div>
       {
-        switch (loggedInUser) {
-        | Some(user) =>
-          open Rationale.Option.Infix;
-          let idd = user.agentId |> E.O.default("");
-          <>
-            <div
-              onClick=(_e => DataModel.Url.push(Profile))
-              className=Styles.item>
-              {"Profile" |> ste}
-            </div>
-            <div
-              onClick=(_e => DataModel.Url.push(AgentMeasurables(idd)))
-              className=Styles.item>
-              {"Edit Measurables" |> ste}
-            </div>
-            <div onClick=(_e => Auth0.logout()) className=Styles.item>
-              {"Log Out" |> ste}
-            </div>
-          </>;
-        | None =>
-          <div onClick=(_e => Auth0.logIn()) className=Styles.item>
-            {"Log In" |> ste}
+        open Rationale.Option.Infix;
+        let idd =
+          loggedInUser.agent
+          |> E.O.fmap((a: Context.Primary.Agent.t) => a.id)
+          |> E.O.default("");
+        <>
+          <div
+            onClick={_e => Context.Routing.Url.push(Profile)}
+            className=Styles.item>
+            {"Profile" |> ste}
           </div>
-        }
+          <div
+            onClick={_e => Context.Routing.Url.push(AgentMeasurables(idd))}
+            className=Styles.item>
+            {"Edit Measurables" |> ste}
+          </div>
+          <div
+            onClick={_e => Context.Auth.Actions.logout()}
+            className=Styles.item>
+            {"Log Out" |> ste}
+          </div>
+        </>;
       }
       <div className=Styles.over />
       <div className=Styles.sectionPadding />
       <div className=Styles.minorHeader>
         <div
           className=Styles.minorHeaderLink
-          onClick={_e => DataModel.Url.push(ChannelIndex)}>
+          onClick={_e => Context.Routing.Url.push(ChannelIndex)}>
           {"Channels" |> ste}
         </div>
         <div
           className=Styles.minorHeaderLinkPlus
-          onClick={_e => DataModel.Url.push(ChannelNew)}>
+          onClick={_e => Context.Routing.Url.push(ChannelNew)}>
           <Icon.Icon icon="CIRCLE_PLUS" />
         </div>
       </div>
       <div className=Styles.over>
         {
-          [
-            "general",
-            "foretold",
-            "ozziegooen",
-            "lesswrong",
-            "movies",
-            "companies",
-          ]
-          |> E.L.fmap(e =>
-               <div
-                 onClick={_e => DataModel.Channel.showPush(e)}
-                 className={
-                   Some(e) == channel ? Styles.selectedItem : Styles.item
-                 }>
-                 {DataModel.Channel.present(~hashClassName=Styles.hash, e)}
-               </div>
+          loggedInUser.agent
+          |> E.O.fmap((r: Context.Primary.Agent.t) =>
+               r.channels
+               |> E.A.fmap((channel: Context.Primary.Channel.t) => {
+                    let _channel: Context.Primary.Channel.t =
+                      Context.Primary.Channel.make(
+                        ~id=channel.id,
+                        ~name=channel.name,
+                        ~isArchived=false,
+                        ~isPublic=channel.isPublic,
+                        (),
+                      );
+                    <div
+                      onClick={
+                        _e => Context.Primary.Channel.showPush(_channel)
+                      }
+                      className={
+                        Some(_channel.id) == channelId ?
+                          Styles.selectedItem : Styles.item
+                      }>
+                      {
+                        Context.Primary.Channel.present(
+                          ~hashClassName=Styles.hash,
+                          _channel,
+                        )
+                      }
+                    </div>;
+                  })
+               |> ReasonReact.array
              )
-          |> E.A.of_list
-          |> ReasonReact.array
+          |> E.O.React.defaultNull
         }
       </div>
     </div>,

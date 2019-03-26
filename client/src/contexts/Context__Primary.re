@@ -1,127 +1,65 @@
 open Rationale.Function.Infix;
 open Utils;
 
-type user = {
-  id: string,
-  name: string,
-};
-
-module Bot = {
-  type t = {
+module Typess = {
+  type user = {
+    id: string,
+    auth0Id: option(string),
+    agent: option(agent),
+    name: string,
+  }
+  and bot = {
     competitorType: [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE],
     description: option(string),
     id: string,
     name: option(string),
-  };
-};
-
-module Route = {
-  type t =
-    | Home
-    | AgentIndex
-    | Redirect
-    | Login
-    | Profile
-    | EntityShow(string)
-    | AgentShow(string)
-    | AgentMeasurables(string)
-    | ChannelShow(string)
-    | ChannelIndex
-    | ChannelNew
-    | MeasurableShow(string, string)
-    | MeasurableEdit(string)
-    | MeasurableNew(string)
-    | Series(string, string)
-    | NotFound;
-
-  let fromUrl = (url: ReasonReact.Router.url) =>
-    switch (url.path) {
-    | [] => Home
-    | ["login"] => Login
-    | ["callback"] =>
-      Auth0.handleAuth(url);
-      Redirect;
-    | ["redirect"] => Redirect
-    | ["agents"] => AgentIndex
-    | ["profile"] =>
-      switch (Auth0.userId()) {
-      | Some(_) => Profile
-      | None => Home
-      }
-    | ["agents", id] => AgentShow(id)
-    | ["entities", ...id] => EntityShow(String.concat("/", id))
-    | ["agents", id, "measurables"] => AgentMeasurables(id)
-    | ["channels", "new"] => ChannelNew
-    | ["channels"] => ChannelIndex
-    | ["c"] => ChannelIndex
-    | ["c", id] => ChannelShow(id)
-    | ["c", id, "new"] => MeasurableNew(id)
-    | ["c", channel, "m", id] => MeasurableShow(channel, id)
-    | ["measurables", id, "edit"] => MeasurableEdit(id)
-    | ["c", channel, "s", id] => Series(channel, id)
-    | _ => NotFound
-    };
-};
-
-module Url = {
-  type t =
-    | Home
-    | AgentIndex
-    | Profile
-    | EntityShow(string)
-    | AgentShow(string)
-    | AgentMeasurables(string)
-    | ChannelShow(string)
-    | ChannelNew
-    | ChannelIndex
-    | SeriesShow(string, string)
-    | MeasurableShow(string, string)
-    | MeasurableEdit(string)
-    | MeasurableNew(string);
-
-  let toString = (r: t) =>
-    switch ((r: t)) {
-    | Home => "/"
-    | AgentIndex => "/agents"
-    | Profile => "/profile/"
-    | EntityShow(id) => "/entities/" ++ id
-    | AgentShow(id) => "/agents/" ++ id
-    | AgentMeasurables(id) => "/agents/" ++ id ++ "/measurables"
-    | ChannelNew => "/channels/" ++ "new"
-    | ChannelShow(id) => "/c/" ++ id
-    | ChannelIndex => "/channels"
-    | MeasurableShow(channel, id) => "/c/" ++ channel ++ "/m/" ++ id
-    | MeasurableEdit(id) => "/measurables/" ++ id ++ "/edit"
-    | MeasurableNew(channel) => "/c/" ++ channel ++ "/new"
-    | SeriesShow(channel, id) => "/c/" ++ channel ++ "/s/" ++ id
-    };
-
-  let push = (r: t) => r |> toString |> ReasonReact.Router.push;
-};
-
-module Channel = {
-  type t = string;
-  let showLink = t => Url.ChannelShow(t);
-  let showUrl = showLink ||> Url.toString;
-  let showPush = showLink ||> Url.push;
-  let present = (~hashClassName="", s) =>
-    <span>
-      <span className=hashClassName> {"#" |> ste} </span>
-      <span> {s |> ste} </span>
-    </span>;
-};
-
-module Agent = {
-  type agentType =
-    | Bot(Bot.t)
-    | User(user);
-
-  type t = {
+  }
+  and agentType =
+    | Bot(bot)
+    | User(user)
+  and agent = {
     id: string,
     name: option(string),
     measurementCount: option(int),
     agentType: option(agentType),
+    channels: Js.Array.t(channel),
+  }
+  and channel = {
+    id: string,
+    name: string,
+    description: option(string),
+    isArchived: bool,
+    isPublic: bool,
+    creator: option(agent),
   };
+};
+
+module AgentType = {
+  type t = Typess.agentType;
+};
+
+module User = {
+  type t = Typess.user;
+  let make = (~id, ~name="", ~auth0Id=None, ~agent=None, ()): t => {
+    id,
+    name,
+    auth0Id,
+    agent,
+  };
+};
+
+module Bot = {
+  type t = Typess.bot;
+  let make = (~id, ~name=None, ~description=None, ~competitorType, ()): t => {
+    id,
+    competitorType,
+    description,
+    name,
+  };
+};
+
+module Agent = {
+  type t = Typess.agent;
 
   let name = (a: t): option(string) =>
     switch (a.agentType) {
@@ -130,11 +68,64 @@ module Agent = {
     | None => None
     };
 
-  let make = (~id, ~name=None, ~measurementCount=None, ~agentType=None, ()) => {
+  let make =
+      (
+        ~id,
+        ~name=None,
+        ~measurementCount=None,
+        ~agentType=None,
+        ~channels=[||],
+        (),
+      )
+      : t => {
     id,
     name,
     measurementCount,
     agentType,
+    channels,
+  };
+};
+
+module Channel = {
+  type t = Typess.channel;
+  let showLink = (t: t) => Context__Routing.Url.ChannelShow(t.id);
+  let showUrl = showLink ||> Context__Routing.Url.toString;
+  let showPush = showLink ||> Context__Routing.Url.push;
+  module Styles = {
+    open Css;
+    let hash = style([marginRight(`em(0.1))]);
+    let lock =
+      style([fontSize(`em(0.8)), float(`left), marginRight(`px(4))]);
+  };
+  let present = (~hashClassName="", s: t) =>
+    <span>
+      <span className=hashClassName>
+        {
+          s.isPublic ?
+            <span className=Styles.hash> {"#" |> ste} </span> :
+            <span className=Styles.lock> <Icon.Icon icon="LOCK" /> </span>
+        }
+      </span>
+      <span> {s.name |> ste} </span>
+    </span>;
+
+  let make =
+      (
+        ~id,
+        ~name,
+        ~description=None,
+        ~isArchived,
+        ~isPublic,
+        ~creator=None,
+        (),
+      )
+      : t => {
+    id,
+    name,
+    description,
+    isArchived,
+    isPublic,
+    creator,
   };
 };
 
@@ -182,7 +173,7 @@ module Measurement = {
   type t = {
     id: string,
     description: option(string),
-    value: Belt.Result.t(Value.t, string),
+    value: Belt.Result.t(MeasurementValue.t, string),
     competitorType: CompetitorType.t,
     taggedMeasurementId: option(string),
     createdAt: option(MomentRe.Moment.t),
@@ -235,6 +226,7 @@ module MeasurableStatus = {
     | ARCHIVED => 0
     };
 };
+
 module Measurable = {
   type t = {
     id: string,

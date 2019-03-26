@@ -7,10 +7,15 @@ module Queries = {
   module Series = Foretold__GraphQL__GetSeries;
   module User = Foretold__GraphQL__GetUser;
   module SeriesCollection = Foretold__GraphQL__GetSeriesCollection;
+  module Channels = Foretold__GraphQL__ChannelsGet;
+  module Channel = Foretold__GraphQL__ChannelGet;
 };
 
 module Mutations = {
   module MeasurementCreate = Foretold__GraphQL__CreateMeasurementMutation;
   module MeasurableArchive = Foretold__GraphQL__MeasurableArchive;
   module MeasurableUnarchive = Foretold__GraphQL__MeasurableUnarchive;
+  module ChannelCreate = Foretold__GraphQL__ChannelCreate;
+  module ChannelJoin = Foretold__GraphQL__ChannelJoin;
+  module ChannelLeave = Foretold__GraphQL__ChannelLeave;
 };

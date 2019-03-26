@@ -1,4 +1,3 @@
-open Rationale;
 open Graph_T.T;
 open Graph_T;
 

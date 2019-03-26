@@ -1,6 +1,6 @@
 open Utils;
 open Rationale;
-open DataModel;
+open Context.Primary;
 
 let component = ReasonReact.statelessComponent("MeasurablesSeriesTable");
 

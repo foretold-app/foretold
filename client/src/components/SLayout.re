@@ -89,22 +89,22 @@ module MainSection = {
 
 let channelBack =
     (
-      ~channelName: string,
-      ~onClick=_ => DataModel.Url.push(ChannelShow(channelName)),
+      ~channel: Context.Primary.Channel.t,
+      ~onClick=_ => Context.Routing.Url.push(ChannelShow(channel.id)),
       (),
     ) =>
   <div className=Styles.backHover onClick>
     <Icon.Icon icon="ARROW_LEFT" />
   </div>;
 
-let channelLink = (c: string) =>
-  <div className=Styles.headerText> {c |> DataModel.Channel.present} </div>;
+let channelink = (c: Context.Primary.Channel.t) =>
+  <div className=Styles.headerText> {c |> Context.Primary.Channel.present} </div>;
 
-let seriesHead = (channelName, seriesName) =>
+let seriesHead = (channel: Context.Primary.Channel.t, seriesName) =>
   <>
-    {channelBack(~channelName, ())}
+    {channelBack(~channel, ())}
     <div className=Styles.headerText>
-      {channelName |> DataModel.Channel.present}
+      {channel |> Context.Primary.Channel.present}
     </div>
     <div className=Styles.dash> <Icon.Icon icon="THIN_RIGHT" /> </div>
     <div className=Styles.seriesText>

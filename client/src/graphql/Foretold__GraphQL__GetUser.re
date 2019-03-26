@@ -1,6 +1,29 @@
-type agent = {id: string};
+type channel = {
+  id: string,
+  name: string,
+  isPublic: bool,
+};
 
-let convertAgent = agent => DataModel.Agent.make(~id=agent.id);
+let toChannel = (ch: channel) =>
+  Context.Primary.Channel.make(
+    ~id=ch.id,
+    ~name=ch.name,
+    ~isArchived=false,
+    ~isPublic=ch.isPublic,
+    (),
+  );
+
+type agent = {
+  id: string,
+  channels: Js.Array.t(option(channel)),
+};
+
+let toAgent = (a: agent) =>
+  Context.Primary.Agent.make(
+    ~id=a.id,
+    ~channels=a.channels |> E.A.O.concatSomes |> E.A.fmap(toChannel),
+    (),
+  );
 
 type user = {
   id: string,
@@ -11,6 +34,14 @@ type user = {
 };
 
 type t = option(user);
+
+let toUser = (a: user) =>
+  Context.Primary.User.make(
+    ~id=a.id,
+    ~auth0Id=a.auth0Id,
+    ~agent=a.agent |> E.O.fmap(toAgent),
+    (),
+  );
 
 module Query = [%graphql
   {|
@@ -23,6 +54,11 @@ module Query = [%graphql
             agentId
             agent: Agent  @bsRecord{
               id
+              channels: Channels @bsRecord{
+                name
+                id
+                isPublic
+              }
             }
         }
     }
@@ -31,28 +67,40 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let component =
-    (
-      auth0Id: option(string),
-      innerComponentFn: 'a => ReasonReact.reactElement,
-    ) =>
-  switch (auth0Id) {
-  | Some(auth0Id) =>
-    let query = Query.make(~auth0Id, ());
-    QueryComponent.make(
-      ~variables=query##variables, ~pollInterval=5000, ({result}) =>
-      result
-      |> ApolloUtils.apolloResponseToResult
-      |> E.R.fmap(e => e##user)
-      |> E.R.fmap(e => innerComponentFn(e))
-      |> E.R.id
-    )
-    |> E.React.el;
-  | None => innerComponentFn(None)
+let withLoggedInUserQuery = innerComponentFn =>
+  switch (Context.Auth.AuthTokens.make_from_storage()) {
+  | None => innerComponentFn(Context.Me.WithoutTokens)
+  | Some(tokens) =>
+    Context.Auth.Actions.logoutIfTokenIsObsolete(tokens);
+    switch (tokens |> Context.Auth.AuthTokens.auth0Id) {
+    | None => innerComponentFn(Context.Me.WithoutTokens)
+    | Some(auth0Id) =>
+      let query = Query.make(~auth0Id, ());
+      QueryComponent.make(~variables=query##variables, ({result}) =>
+        result
+        |> E.HtppResponse.fromApollo
+        |> E.HtppResponse.fmap(e => e##user |> E.O.fmap(toUser))
+        |> E.HtppResponse.optionalToMissing
+        |> (
+          e =>
+            switch (e) {
+            | Success(c) =>
+              innerComponentFn(
+                Context.Me.WithTokensAndUserData({
+                  authTokens: tokens,
+                  userData: c,
+                }),
+              )
+            | _ =>
+              innerComponentFn(
+                Context.Me.WithTokensAndUserLoading({
+                  authTokens: tokens,
+                  loadingUserData: e,
+                }),
+              )
+            }
+        )
+      )
+      |> E.React.el;
+    };
   };
-
-let withLoggedInUserQuery = (innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let isLoggedIn = Auth0.isLoggedIn();
-  isLoggedIn ?
-    component(Auth0.userId(), innerComponentFn) : innerComponentFn(None);
-};

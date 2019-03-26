@@ -3,11 +3,17 @@ type creator = {
   name: option(string),
 };
 
+type channel = {
+  id: string,
+  name: string,
+  description: option(string),
+};
+
 type series = {
   id: string,
   name: option(string),
   description: option(string),
-  channel: string,
+  channel: option(channel),
   measurableCount: option(int),
   creator: option(creator),
 };
@@ -21,7 +27,11 @@ module Query = [%graphql
            id
            name
            description
-           channel
+           channel:Channel @bsRecord {
+             id
+             name
+             description
+           }
            measurableCount
            creator @bsRecord {
              id

@@ -6,30 +6,30 @@ let ste = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("Redirecting...");
 
-let make = _children => {
+let make = (~me: Context.Me.me, _children) => {
   ...component,
   render: _ =>
-    Queries.User.component(
-      Auth0.userId(),
-      user => {
-        let agentId =
-          user
-          |> O.bind(_, r => r.agent)
-          |> O.fmap((e: Queries.User.agent) => e.id);
-        let name = user |> O.fmap((e: Queries.User.user) => e.name);
-        switch (name, agentId) {
-        | (Some(""), _) => DataModel.Url.push(Profile)
-        | (_, Some(id)) => DataModel.Url.push(AgentShow(id))
-        | _ => ()
-        };
-        <>
-          {"Redirecting..." |> ste |> E.React.inH1}
-          {
-            "If you are not redirected shortly, try refreshing the page or contacting Ozzie."
-            |> ste
-            |> E.React.inP
-          }
-        </>;
-      },
-    ),
+    switch (me) {
+    | WithTokensAndUserData({userData}) =>
+      let user = userData;
+      let agentId =
+        user.agent |> O.fmap((e: Context.Primary.Agent.t) => e.id);
+      let name = user.name;
+      switch (name, agentId) {
+      | ("", _) => Context.Routing.Url.push(Profile)
+      | (_, Some(id)) => Context.Routing.Url.push(AgentShow(id))
+      | _ => ()
+      };
+      <>
+        {"Redirecting..." |> ste |> E.React.inH1}
+        {
+          "If you are not redirected shortly, try refreshing the page or contacting Ozzie."
+          |> ste
+          |> E.React.inP
+        }
+      </>;
+    | _ =>
+      Context.Routing.Url.push(Home);
+      <div />;
+    },
 };

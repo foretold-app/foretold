@@ -1,4 +1,4 @@
-open DataModel;
+open Context.Routing;
 
 type state = {route: Route.t};
 type action =

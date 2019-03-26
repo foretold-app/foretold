@@ -81,18 +81,12 @@ let formFields = (form: Form.state, handleChange, handleSubmit: unit => unit) =>
     </Antd.Form.Item>
   </Antd.Form>;
 
-let make = (~loggedInUser, _children) => {
+let make = (~loggedInUser: Context.Primary.User.t, _children) => {
   ...component,
   render: _ =>
     withUserMutation((mutation, data) => {
-      let id =
-        loggedInUser
-        |> E.O.fmap((r: Queries.User.user) => r.id)
-        |> E.O.default("");
-      let name =
-        loggedInUser
-        |> E.O.fmap((r: Queries.User.user) => r.name)
-        |> E.O.default("");
+      let id = loggedInUser.id;
+      let name = loggedInUser.name;
       withUserForm(
         id, name, mutation, ({handleSubmit, handleChange, form, _}) =>
         <>

@@ -1,5 +1,4 @@
 /* O for option */
-open Rationale;
 open Rationale.Function.Infix;
 
 /* Utils */
@@ -20,7 +19,13 @@ module O = {
   let bind = Rationale.Option.bind;
   let default = Rationale.Option.default;
   let isSome = Rationale.Option.isSome;
-  let toExn = Option.toExn;
+  let toExn = Rationale.Option.toExn;
+
+  let toResult = (error, e) =>
+    switch (e) {
+    | Some(r) => Belt.Result.Ok(r)
+    | None => Error(error)
+    };
 
   module React = {
     let defaultNull = default(ReasonReact.null);
@@ -96,20 +101,20 @@ module L = {
   let exists = List.exists;
   let sort = List.sort;
   let length = List.length;
-  let filter_opt = RList.filter_opt;
-  let uniqBy = RList.uniqBy;
-  let join = RList.join;
-  let head = RList.head;
-  let uniq = RList.uniq;
+  let filter_opt = Rationale.RList.filter_opt;
+  let uniqBy = Rationale.RList.uniqBy;
+  let join = Rationale.RList.join;
+  let head = Rationale.RList.head;
+  let uniq = Rationale.RList.uniq;
   let flatten = List.flatten;
-  let last = RList.last;
+  let last = Rationale.RList.last;
   let append = List.append;
   let getBy = Belt.List.getBy;
-  let dropLast = RList.dropLast;
-  let contains = RList.contains;
-  let without = RList.without;
+  let dropLast = Rationale.RList.dropLast;
+  let contains = Rationale.RList.contains;
+  let without = Rationale.RList.without;
   let iter = List.iter;
-  let findIndex = RList.findIndex;
+  let findIndex = Rationale.RList.findIndex;
 };
 
 /* A for Array */
@@ -143,20 +148,26 @@ module A = {
   module O = {
     let concatSomes = (optionals: Js.Array.t(option('a))): Js.Array.t('a) =>
       optionals
-      |> Js.Array.filter(Option.isSome)
-      |> Js.Array.map(Option.toExn("Warning: This should not have happened"));
+      |> Js.Array.filter(Rationale.Option.isSome)
+      |> Js.Array.map(
+           Rationale.Option.toExn("Warning: This should not have happened"),
+         );
     let concatSome = (optionals: array(option('a))): array('a) =>
       optionals
-      |> Js.Array.filter(Option.isSome)
-      |> Js.Array.map(Option.toExn("Warning: This should not have happened"));
+      |> Js.Array.filter(Rationale.Option.isSome)
+      |> Js.Array.map(
+           Rationale.Option.toExn("Warning: This should not have happened"),
+         );
   };
 };
 
 module JsArray = {
   let concatSomes = (optionals: Js.Array.t(option('a))): Js.Array.t('a) =>
     optionals
-    |> Js.Array.filter(Option.isSome)
-    |> Js.Array.map(Option.toExn("Warning: This should not have happened"));
+    |> Js.Array.filter(Rationale.Option.isSome)
+    |> Js.Array.map(
+         Rationale.Option.toExn("Warning: This should not have happened"),
+       );
   let filter = Js.Array.filter;
 };
 
@@ -167,10 +178,10 @@ module FloatCdf = {
   };
   let empty: t = {xs: [||], ys: [||]};
 
-  let firstAbove = (min: float, t: Value.FloatCdf.t) =>
+  let firstAbove = (min: float, t: MeasurementValue.FloatCdf.t) =>
     Belt.Map.findFirstBy(t, (k, _v) => k > min);
 
-  let firstAboveValue = (min: float, t: Value.FloatCdf.t) =>
+  let firstAboveValue = (min: float, t: MeasurementValue.FloatCdf.t) =>
     Rationale.Option.fmap(((_, x)) => x, firstAbove(min, t));
 };
 
@@ -184,4 +195,33 @@ module React = {
   let inH1 = e => <h1> e </h1>;
   let inH2 = e => <h2> e </h2>;
   let inH3 = e => <h3> e </h3>;
+};
+
+module HtppResponse = {
+  type t('a) =
+    | Loading
+    | Error(string)
+    | Success('a);
+
+  let fromApollo = (b: ReasonApolloTypes.queryResponse('a)) =>
+    switch (b) {
+    | Loading => Loading
+    | Error(e) => Error(e##message)
+    | Data(c) => Success(c)
+    };
+
+  let fmap = (fn: 'a => 'b, result: t('a)): t('b) =>
+    switch (result) {
+    | Success(response) => Success(fn(response))
+    | Error(e) => Error(e)
+    | Loading => Loading
+    };
+
+  let optionalToMissing = (result: t(option('a))): t('b) =>
+    switch (result) {
+    | Success(Some(response)) => Success(response)
+    | Success(None) => Error("Missing Needed Data")
+    | Error(e) => Error(e)
+    | Loading => Loading
+    };
 };

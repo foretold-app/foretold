@@ -65,7 +65,6 @@ const schema = new graphql.GraphQLSchema({
         },
         resolve: resolvers.measurables.all,
       },
-
       bot: {
         type: types.botType,
         args: _.pick(attributeFields(models.Bot), ['id']),

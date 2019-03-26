@@ -98,8 +98,34 @@ describe('AgentsChannelsData', () => {
     it('validate ', () => {
       return instance.validate({ agentId }).catch((err) => {
         expect(models.Channel.findById).toHaveBeenCalledTimes(1);
-        expect(models.Agent.findById).toHaveBeenCalledTimes(1);
+        expect(models.Agent.findById).toHaveBeenCalledTimes(0);
         expect(err).toBeInstanceOf(Error)
+      });
+    });
+  });
+
+  describe('getOne', () => {
+    const options = {};
+    beforeAll(() => {
+      jest.spyOn(models.AgentsChannels, 'findOne').mockReturnValue(Promise.resolve(true));
+    });
+    it('getOne ', () => {
+      return instance.getOne(options).then((result) => {
+        expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({ where: options });
+        expect(result).toBe(true);
+      });
+    });
+  });
+
+  describe('getAll', () => {
+    const options = {};
+    beforeAll(() => {
+      jest.spyOn(models.AgentsChannels, 'findAll').mockReturnValue(Promise.resolve(true));
+    });
+    it('getAll ', () => {
+      return instance.getAll(options).then((result) => {
+        expect(models.AgentsChannels.findAll).toHaveBeenCalledWith({ where: options });
+        expect(result).toBe(true);
       });
     });
   });

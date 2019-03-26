@@ -1,9 +1,9 @@
 const { serie } = require('./series');
 const data = require('../data');
 
-describe('series', () => {
+describe('Series Middleware', () => {
 
-  describe('serie ', () => {
+  describe('serie()', () => {
     const serieObj = { channelId: 'channelId1' };
     beforeEach(() => {
       jest.spyOn(data.seriesData, 'getOne').mockReturnValue(
@@ -11,7 +11,7 @@ describe('series', () => {
       );
     });
 
-    it('A', () => {
+    it('when arguments are passed', () => {
       const root = {};
       const args = { id: 'serieId1' };
       const context = {};

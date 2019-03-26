@@ -20,12 +20,16 @@ describe('Middlewares', () => {
     const args = {};
     const context = {};
     const info = {};
-    return middlewares.Query.measurements(resolve, root, args, context, info).then((result) => {
-      expect(measurables.measurable).toHaveBeenCalledWith(root, args, context, info);
-      expect(channels.channel).toHaveBeenCalledWith(root, args, context, info);
-      expect(agentsChannels.agentsChannels).toHaveBeenCalledWith(root, args, context, info);
-      expect(result).toBe(true);
-    });
+    return middlewares.Query.measurements(resolve, root, args, context, info)
+      .then((result) => {
+        expect(measurables.measurable)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(channels.channel)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(agentsChannels.agentsChannels)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(result).toBe(true);
+      });
   });
 
   it('measurement()', () => {
@@ -34,13 +38,18 @@ describe('Middlewares', () => {
     const args = {};
     const context = {};
     const info = {};
-    return middlewares.Query.measurement(resolve, root, args, context, info).then((result) => {
-      expect(measurements.measurement).toHaveBeenCalledWith(root, args, context, info);
-      expect(measurables.measurable).toHaveBeenCalledWith(root, args, context, info);
-      expect(channels.channel).toHaveBeenCalledWith(root, args, context, info);
-      expect(agentsChannels.agentsChannels).toHaveBeenCalledWith(root, args, context, info);
-      expect(result).toBe(true);
-    });
+    return middlewares.Query.measurement(resolve, root, args, context, info)
+      .then((result) => {
+        expect(measurements.measurement)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(measurables.measurable)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(channels.channel)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(agentsChannels.agentsChannels)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(result).toBe(true);
+      });
   });
 
   it('measurable()', () => {
@@ -49,12 +58,16 @@ describe('Middlewares', () => {
     const args = {};
     const context = {};
     const info = {};
-    return middlewares.Query.measurable(resolve, root, args, context, info).then((result) => {
-      expect(measurables.measurable).toHaveBeenCalledWith(root, args, context, info);
-      expect(channels.channel).toHaveBeenCalledWith(root, args, context, info);
-      expect(agentsChannels.agentsChannels).toHaveBeenCalledWith(root, args, context, info);
-      expect(result).toBe(true);
-    });
+    return middlewares.Query.measurable(resolve, root, args, context, info)
+      .then((result) => {
+        expect(measurables.measurable)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(channels.channel)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(agentsChannels.agentsChannels)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(result).toBe(true);
+      });
   });
 
   it('measurables', () => {
@@ -63,11 +76,14 @@ describe('Middlewares', () => {
     const args = {};
     const context = {};
     const info = {};
-    return middlewares.Query.measurables(resolve, root, args, context, info).then((result) => {
-      expect(channels.channel).toHaveBeenCalledWith(root, args, context, info);
-      expect(agentsChannels.agentsChannels).toHaveBeenCalledWith(root, args, context, info);
-      expect(result).toBe(true);
-    });
+    return middlewares.Query.measurables(resolve, root, args, context, info)
+      .then((result) => {
+        expect(channels.channel)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(agentsChannels.agentsChannels)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(result).toBe(true);
+      });
   });
 
 
@@ -77,12 +93,16 @@ describe('Middlewares', () => {
     const args = {};
     const context = {};
     const info = {};
-    return middlewares.Query.series(resolve, root, args, context, info).then((result) => {
-      expect(series.serie).toHaveBeenCalledWith(root, args, context, info);
-      expect(channels.channel).toHaveBeenCalledWith(root, args, context, info);
-      expect(agentsChannels.agentsChannels).toHaveBeenCalledWith(root, args, context, info);
-      expect(result).toBe(true);
-    });
+    return middlewares.Query.series(resolve, root, args, context, info)
+      .then((result) => {
+        expect(series.serie)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(channels.channel)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(agentsChannels.agentsChannels)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(result).toBe(true);
+      });
   });
 
   it('seriesCollection()', () => {
@@ -91,11 +111,15 @@ describe('Middlewares', () => {
     const args = {};
     const context = {};
     const info = {};
-    return middlewares.Query.seriesCollection(resolve, root, args, context, info).then((result) => {
-      expect(channels.channel).toHaveBeenCalledWith(root, args, context, info);
-      expect(agentsChannels.agentsChannels).toHaveBeenCalledWith(root, args, context, info);
-      expect(result).toBe(true);
-    });
+    return middlewares.Query
+      .seriesCollection(resolve, root, args, context, info)
+      .then((result) => {
+        expect(channels.channel)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(agentsChannels.agentsChannels)
+          .toHaveBeenCalledWith(root, args, context, info);
+        expect(result).toBe(true);
+      });
   });
 
 });

@@ -1,15 +1,17 @@
 const agentsChannels = require('./agents-channels');
 const data = require('../data');
 
-describe('AgentsChannels', () => {
+describe('AgentsChannels Resolvers', () => {
 
-  describe('update', () => {
+  describe('update()', () => {
     const root = {};
     const args = { channelId: 'channelId1', agentId: 'agentId2' };
     beforeEach(() => {
-      jest.spyOn(data.agentsChannelsData, 'createOne').mockReturnValue(Promise.resolve(true));
+      jest.spyOn(data.agentsChannelsData, 'createOne').mockReturnValue(
+        Promise.resolve(true),
+      );
     });
-    it('update', () => {
+    it('creates agent-channel row', () => {
       return agentsChannels.create(root, args).then((result) => {
         expect(data.agentsChannelsData.createOne).toHaveBeenCalledWith(
           'channelId1',
@@ -20,13 +22,14 @@ describe('AgentsChannels', () => {
     });
   });
 
-  describe('remove', () => {
+  describe('remove()', () => {
     const root = {};
     const args = { channelId: 'channelId2', agentId: 'agentId3' };
     beforeEach(() => {
-      jest.spyOn(data.agentsChannelsData, 'deleteOne').mockReturnValue(Promise.resolve(true));
+      jest.spyOn(data.agentsChannelsData, 'deleteOne')
+        .mockReturnValue(Promise.resolve(true));
     });
-    it('remove', () => {
+    it('removes agent-channel row', () => {
       return agentsChannels.remove(root, args).then((result) => {
         expect(data.agentsChannelsData.deleteOne).toHaveBeenCalledWith(
           'channelId2',

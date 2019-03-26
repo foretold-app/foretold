@@ -6,7 +6,9 @@ describe('Channels Middleware', () => {
   describe('channel() sets channel model into context', () => {
     const channelObj = {};
     beforeEach(() => {
-      jest.spyOn(data.channelsData, 'getOne').mockReturnValue(Promise.resolve(channelObj));
+      jest.spyOn(data.channelsData, 'getOne').mockReturnValue(
+        Promise.resolve(channelObj),
+      );
     });
 
     it('when arguments are passed', () => {

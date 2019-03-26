@@ -17,7 +17,8 @@ describe('Measurables Middleware', () => {
       const context = {};
       const info = {};
       return measurable(root, args, context, info).then((result) => {
-        expect(data.measurablesData.getOne).toHaveBeenCalledWith('measurableId1');
+        expect(data.measurablesData.getOne)
+          .toHaveBeenCalledWith('measurableId1');
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
         expect(context.channelId).toBe(measurableObj.channelId);
@@ -30,7 +31,8 @@ describe('Measurables Middleware', () => {
       const context = {};
       const info = {};
       return measurable(root, args, context, info).then((result) => {
-        expect(data.measurablesData.getOne).toHaveBeenCalledWith('measurableId1');
+        expect(data.measurablesData.getOne)
+          .toHaveBeenCalledWith('measurableId1');
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
         expect(context.channelId).toBe(measurableObj.channelId);
@@ -43,7 +45,8 @@ describe('Measurables Middleware', () => {
       const context = { measurableId: 'measurableId1' };
       const info = {};
       return measurable(root, args, context, info).then((result) => {
-        expect(data.measurablesData.getOne).toHaveBeenCalledWith('measurableId1');
+        expect(data.measurablesData.getOne)
+          .toHaveBeenCalledWith('measurableId1');
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
         expect(context.channelId).toBe(measurableObj.channelId);
@@ -56,7 +59,8 @@ describe('Measurables Middleware', () => {
       const context = {};
       const info = {};
       return measurable(root, args, context, info).then((result) => {
-        expect(data.measurablesData.getOne).toHaveBeenCalledWith('measurableId1');
+        expect(data.measurablesData.getOne)
+          .toHaveBeenCalledWith('measurableId1');
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
         expect(context.channelId).toBe(measurableObj.channelId);

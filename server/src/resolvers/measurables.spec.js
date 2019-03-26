@@ -4,7 +4,7 @@ const measurables = require('./measurables');
 const data = require('../data');
 const models = require('../models');
 
-describe('channels', () => {
+describe('measurables', () => {
   afterEach(() => {
     jest.clearAllMocks();
     jest.restoreAllMocks();

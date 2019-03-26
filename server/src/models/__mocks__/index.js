@@ -40,6 +40,13 @@ const Measurement = {
   findOrCreate: jest.fn(() => Promise.resolve(true)),
 };
 
+const Series = {
+  findOne: jest.fn(() => Promise.resolve(true)),
+  create: jest.fn(() => Promise.resolve(true)),
+  findById: jest.fn(() => Promise.resolve(true)),
+  findOrCreate: jest.fn(() => Promise.resolve(true)),
+};
+
 module.exports = {
   User,
   Agent,
@@ -47,4 +54,5 @@ module.exports = {
   AgentsChannels,
   Measurable,
   Measurement,
+  Series,
 };

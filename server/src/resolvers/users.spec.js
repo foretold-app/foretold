@@ -11,7 +11,7 @@ describe('users', () => {
     const root = {};
     const args = {};
     const context = {};
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.usersData, 'editUser').mockReturnValue(Promise.resolve(true));
     });
     it('all', () => {

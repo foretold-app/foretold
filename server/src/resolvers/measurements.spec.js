@@ -41,7 +41,7 @@ describe('measurements', () => {
     const args = {};
     const context = {};
     const info = {};
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.measurementData, 'createMeasurement').mockReturnValue(Promise.resolve(true));
     });
     it('create', () => {

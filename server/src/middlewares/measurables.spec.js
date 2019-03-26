@@ -5,7 +5,7 @@ describe('measurables', () => {
 
   describe('measurable ', () => {
     const measurableObj = { channelId: 'channelId1' };
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.measurablesData, 'getOne').mockReturnValue(Promise.resolve(measurableObj));
     });
 

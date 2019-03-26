@@ -17,7 +17,7 @@ describe('SeriesData', () => {
     const root = {};
     const args = {};
     const context = { user: { agentId: 'agentId1' } };
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(models.Series, 'create').mockReturnValue(Promise.resolve(true));
     });
     it('createSeries', () => {
@@ -30,7 +30,7 @@ describe('SeriesData', () => {
 
   describe('getOne', () => {
     const id = 'id3';
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(models.Series, 'findOne').mockReturnValue(Promise.resolve(true));
     });
     it('getOne', () => {

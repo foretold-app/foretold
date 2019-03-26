@@ -15,7 +15,7 @@ describe('UsersData', () => {
   const auth0Id = 'auth0Id';
 
   describe('createOne - branch A', () => {
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(models.User, 'findOne').mockReturnValue(Promise.resolve(true));
       jest.spyOn(models.User, 'create').mockReturnValue(Promise.resolve(true));
     });
@@ -30,7 +30,7 @@ describe('UsersData', () => {
   });
 
   describe('createOne - branch B', () => {
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(models.User, 'findOne').mockReturnValue(Promise.resolve(false));
       jest.spyOn(models.User, 'create').mockReturnValue(Promise.resolve(true));
     });
@@ -49,7 +49,7 @@ describe('UsersData', () => {
     const values = { id: 'id1', name: 'name1' };
     const options = { user: { auth0Id: 'auh0Id2' } };
     const update = jest.fn(() => Promise.resolve(true));
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(models.User, 'findById').mockReturnValue(Promise.resolve({
         auth0Id: 'auh0Id2',
         update
@@ -78,7 +78,7 @@ describe('UsersData', () => {
     const root = {};
     const values = { id: 'id1', auth0Id: 'auth0Id1' };
     const options = {};
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(models.User, 'findById').mockReturnValue(Promise.resolve(true));
     });
     it('createOne', () => {
@@ -92,7 +92,7 @@ describe('UsersData', () => {
     const root = {};
     const values = { auth0Id: 'auth0Id1' };
     const options = {};
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(instance, 'getUserByAuth0Id').mockReturnValue(Promise.resolve(true));
     });
     it('createOne', () => {

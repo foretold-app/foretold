@@ -14,7 +14,7 @@ describe('channels', () => {
 
   describe('channelAgents', () => {
     const channel = { id: '1' };
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.channelsData, 'getAgentsByChannelId').mockReturnValue(Promise.resolve(true));
     });
     it('channelAgents', () => {
@@ -27,7 +27,7 @@ describe('channels', () => {
 
   describe('channelCreator', () => {
     const channel = { id: '1' };
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.channelsData, 'getCreatorByChannelId').mockReturnValue(Promise.resolve(true));
     });
     it('channelCreator', () => {
@@ -43,7 +43,7 @@ describe('channels', () => {
     const context = { user: { agentId: '1' } };
     const args = { offset: 1, limit: 2 };
     const info = {};
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.agentsChannelsData, 'getAllChannelIds').mockReturnValue(Promise.resolve(['3']));
       jest.spyOn(data.channelsData, 'getAll').mockReturnValue(Promise.resolve(true));
     });
@@ -65,7 +65,7 @@ describe('channels', () => {
     const context = { user: { agentId: 'agentId1' } };
     const args = { id: 'id1' };
     const info = {};
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.agentsChannelsData, 'getAllChannelIds').mockReturnValue(Promise.resolve(['3']));
       jest.spyOn(data.channelsData, 'getOne').mockReturnValue(Promise.resolve(true));
     });
@@ -83,7 +83,7 @@ describe('channels', () => {
     const context = {};
     const args = { id: 'id2', input: { a: '1' } };
     const info = {};
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.channelsData, 'updateOne').mockReturnValue(Promise.resolve(true));
     });
     it('update', () => {
@@ -99,7 +99,7 @@ describe('channels', () => {
     const context = { user: { b: '2' } };
     const args = { input: { a: '1' } };
     const info = {};
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.channelsData, 'createOne').mockReturnValue(Promise.resolve(true));
     });
     it('create', () => {

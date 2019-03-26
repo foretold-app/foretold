@@ -41,7 +41,7 @@ describe('series', () => {
     const args = {};
     const context = {};
     const info = {};
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.seriesData, 'createSeries').mockReturnValue(Promise.resolve(true));
     });
     it('all', () => {

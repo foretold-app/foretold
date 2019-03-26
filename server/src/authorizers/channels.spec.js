@@ -34,7 +34,7 @@ describe('authorizers index', () => {
       agentChannel: { agentId: 'agentId2' },
     };
     const info = {};
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(channels, 'authorize').mockReturnValue(true);
     });
     it('isChannelAllowedRule', () => {

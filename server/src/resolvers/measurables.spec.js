@@ -15,7 +15,7 @@ describe('measurables', () => {
     const args = { channelId: 'channelId1', agentId: 'agentId2' };
     const context = {};
     const info = {};
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.measurablesData, 'getAll').mockReturnValue(Promise.resolve(true));
     });
     it('all', () => {
@@ -44,7 +44,7 @@ describe('measurables', () => {
     const args = {};
     const context = { user: { agentId: 'agentId1' } };
     const info = {};
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.measurablesData, 'createMeasurable').mockReturnValue(Promise.resolve(true));
     });
     it('create', () => {
@@ -63,7 +63,7 @@ describe('measurables', () => {
     const args = {};
     const context = {};
     const info = {};
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.measurablesData, 'archiveMeasurable').mockReturnValue(Promise.resolve(true));
     });
     it('archive', () => {
@@ -83,7 +83,7 @@ describe('measurables', () => {
     const args = {};
     const context = {};
     const info = {};
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.measurablesData, 'unArchiveMeasurable').mockReturnValue(Promise.resolve(true));
     });
     it('unarchive', () => {
@@ -103,7 +103,7 @@ describe('measurables', () => {
     const args = {};
     const context = {};
     const info = {};
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.measurablesData, 'editMeasurable').mockReturnValue(Promise.resolve(true));
     });
     it('edit', () => {

@@ -10,7 +10,7 @@ describe('AgentsChannels', () => {
   describe('update', () => {
     const root = {};
     const args = { channelId: 'channelId1', agentId: 'agentId2' };
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.agentsChannelsData, 'createOne').mockReturnValue(Promise.resolve(true));
     });
     it('update', () => {
@@ -27,7 +27,7 @@ describe('AgentsChannels', () => {
   describe('remove', () => {
     const root = {};
     const args = { channelId: 'channelId2', agentId: 'agentId3' };
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.agentsChannelsData, 'deleteOne').mockReturnValue(Promise.resolve(true));
     });
     it('remove', () => {

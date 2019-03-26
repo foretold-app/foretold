@@ -21,7 +21,7 @@ describe('MeasurablesData', () => {
       seriesId: '4',
       creatorId: '5'
     };
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(models.Measurable, 'findAll').mockReturnValue(Promise.resolve(true));
     });
     it('getAll', () => {
@@ -44,7 +44,7 @@ describe('MeasurablesData', () => {
 
   describe('getOne', () => {
     const id = 'id1';
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(models.Measurable, 'findOne').mockReturnValue(Promise.resolve(true));
     });
     it('getOne', () => {

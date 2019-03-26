@@ -5,7 +5,7 @@ describe('series', () => {
 
   describe('serie ', () => {
     const serieObj = { channelId: 'channelId1' };
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(data.seriesData, 'getOne').mockReturnValue(
         Promise.resolve(serieObj),
       );

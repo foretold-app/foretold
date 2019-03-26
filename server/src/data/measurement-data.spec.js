@@ -15,7 +15,7 @@ describe('MeasurementData', () => {
 
   describe('getOne', () => {
     const id = 'id2';
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(models.Measurement, 'findOne').mockReturnValue(Promise.resolve(true));
     });
     it('getOne', () => {

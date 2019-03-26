@@ -18,7 +18,7 @@ describe('ChannelsData', () => {
   const input = { name: 'Input Name 1' };
 
   describe('createOne - branch A', () => {
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve(true));
       jest.spyOn(models.Channel, 'create').mockReturnValue(Promise.resolve(true));
       jest.spyOn(AgentsChannelsData.prototype, 'createOne').mockReturnValue(Promise.resolve(true));
@@ -34,7 +34,7 @@ describe('ChannelsData', () => {
   });
 
   describe('createOne - branch B', () => {
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve(false));
       jest.spyOn(models.Channel, 'create').mockReturnValue(Promise.resolve(true));
       jest.spyOn(AgentsChannelsData.prototype, 'createOne').mockReturnValue(Promise.resolve(true));
@@ -51,7 +51,7 @@ describe('ChannelsData', () => {
 
   describe('updateOne - branch A', () => {
     const update = jest.fn(() => Promise.resolve(true));
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({ update }));
     });
     it('createOne', () => {
@@ -64,7 +64,7 @@ describe('ChannelsData', () => {
 
   describe('updateOne - branch B', () => {
     const update = jest.fn(() => Promise.resolve(true));
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve(false));
     });
     it('createOne', () => {
@@ -78,7 +78,7 @@ describe('ChannelsData', () => {
 
   describe('getAgentsByChannelId - branch A', () => {
     const agents = [];
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({ agents }));
     });
     it('createOne', () => {
@@ -91,7 +91,7 @@ describe('ChannelsData', () => {
 
   describe('getCreatorByChannelId - branch A', () => {
     const creator = 1;
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({ creator }));
     });
     it('createOne', () => {
@@ -104,7 +104,7 @@ describe('ChannelsData', () => {
 
   describe('getAll', () => {
     const options = { limit: 1, offset: 2 };
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(instance, 'getRestrictionsSync').mockReturnValue({ query: '1' });
       jest.spyOn(models.Channel, 'findAll').mockReturnValue(Promise.resolve(true));
     });
@@ -125,7 +125,7 @@ describe('ChannelsData', () => {
   describe('getOne', () => {
     const id = 'id1';
     const options = {};
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(instance, 'getRestrictionsSync').mockReturnValue({ query: '1' });
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve(true));
     });
@@ -143,7 +143,7 @@ describe('ChannelsData', () => {
 
   describe('getRestrictionsSync', () => {
     const options = { restrictions: { r1: 'r1', channelIds: 'channelIds1' } };
-    beforeAll(() => {
+    beforeEach(() => {
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve(true));
     });
     it('getRestrictionsSync', () => {

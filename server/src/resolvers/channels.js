@@ -38,6 +38,7 @@ async function all(root, args, context, info) {
 }
 
 /**
+ * @tested
  * @param {object | null} root
  * @param {object} args
  * @param {string} args.id

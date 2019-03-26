@@ -60,4 +60,22 @@ describe('channels', () => {
     });
   });
 
+  describe('one', () => {
+    const root = {};
+    const context = { user: { agentId: 'agentId1' } };
+    const args = { id: 'id1' };
+    const info = {};
+    beforeAll(() => {
+      jest.spyOn(data.agentsChannelsData, 'getAllChannelIds').mockReturnValue(Promise.resolve(['3']));
+      jest.spyOn(data.channelsData, 'getOne').mockReturnValue(Promise.resolve(true));
+    });
+    it('all', () => {
+      return channels.one(root, args, context, info).then((result) => {
+        expect(data.agentsChannelsData.getAllChannelIds).toHaveBeenCalledWith({ "agentId": "agentId1" });
+        expect(data.channelsData.getOne).toHaveBeenCalledWith("id1", { "restrictions": { "channelIds": ["3"] } });
+        expect(result).toBe(true);
+      });
+    });
+  });
+
 });

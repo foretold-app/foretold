@@ -26,9 +26,17 @@ const User = {
   findOrCreate: jest.fn(() => Promise.resolve(true)),
 };
 
+const Measurable = {
+  findOne: jest.fn(() => Promise.resolve(true)),
+  create: jest.fn(() => Promise.resolve(true)),
+  findById: jest.fn(() => Promise.resolve(true)),
+  findOrCreate: jest.fn(() => Promise.resolve(true)),
+};
+
 module.exports = {
   User,
   Agent,
   Channel,
   AgentsChannels,
+  Measurable,
 };

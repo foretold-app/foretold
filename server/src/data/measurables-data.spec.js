@@ -1,7 +1,7 @@
 const models = require('../models');
 const { MeasurablesData } = require('./measurables-data');
 
-describe('MeasurablesData', () => {
+describe('tests Measurables Data layer', () => {
 
   it('class should be a constructor', () => {
     expect(MeasurablesData).toBeInstanceOf(Function);
@@ -9,7 +9,7 @@ describe('MeasurablesData', () => {
 
   const instance = new MeasurablesData();
 
-  describe('getAll', () => {
+  describe('tests getAll method', () => {
     const options = {
       offset: 1,
       limit: 2,
@@ -18,9 +18,11 @@ describe('MeasurablesData', () => {
       creatorId: '5'
     };
     beforeEach(() => {
-      jest.spyOn(models.Measurable, 'findAll').mockReturnValue(Promise.resolve(true));
+      jest.spyOn(models.Measurable, 'findAll').mockReturnValue(
+        Promise.resolve(true),
+      );
     });
-    it('getAll', () => {
+    it('should find all measurables', () => {
       return instance.getAll(options).then((result) => {
         expect(models.Measurable.findAll).toHaveBeenCalledWith({
           "limit": 2,
@@ -38,18 +40,21 @@ describe('MeasurablesData', () => {
     });
   });
 
-  describe('getOne', () => {
+  describe('tests getOne method', () => {
     const id = 'id1';
     beforeEach(() => {
-      jest.spyOn(models.Measurable, 'findOne').mockReturnValue(Promise.resolve(true));
+      jest.spyOn(models.Measurable, 'findOne').mockReturnValue(
+        Promise.resolve(true),
+      );
     });
-    it('getOne', () => {
+    it('should find a measurable', () => {
       return instance.getOne(id).then((result) => {
-        expect(models.Measurable.findOne).toHaveBeenCalledWith({ "where": { "id": "id1" } });
+        expect(models.Measurable.findOne).toHaveBeenCalledWith({
+          "where": { "id": "id1" },
+        });
         expect(result).toBe(true);
       });
     });
   });
-
 
 });

@@ -9,6 +9,7 @@ const Channel = {
   findById: jest.fn(() => Promise.resolve(true)),
   findOne: jest.fn(() => Promise.resolve(true)),
   create: jest.fn(() => Promise.resolve(true)),
+  findAll: jest.fn(() => Promise.resolve(true)),
 };
 
 const Agent = {
@@ -43,6 +44,12 @@ const Series = {
   findOrCreate: jest.fn(() => Promise.resolve(true)),
 };
 
+const sequelize = {
+  Op: {
+    or: 'orop'
+  }
+};
+
 module.exports = {
   User,
   Agent,
@@ -51,4 +58,5 @@ module.exports = {
   Measurable,
   Measurement,
   Series,
+  sequelize,
 };

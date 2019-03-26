@@ -76,6 +76,7 @@ class ChannelsData {
   }
 
   /**
+   * @tested
    * @public
    * @param {object} options
    * @param {number} [options.offset]
@@ -96,6 +97,7 @@ class ChannelsData {
   }
 
   /**
+   * @tested
    * @public
    * @param {string} id
    * @param {object} options
@@ -113,6 +115,7 @@ class ChannelsData {
   }
 
   /**
+   * @tested
    * @protected
    * @param {object} [options]
    * @param {object} [options.restrictions]

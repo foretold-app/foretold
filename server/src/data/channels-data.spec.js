@@ -52,7 +52,7 @@ describe('ChannelsData', () => {
   describe('updateOne - branch A', () => {
     const update = jest.fn(() => Promise.resolve(true));
     beforeAll(() => {
-      jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({update}));
+      jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({ update }));
     });
     it('createOne', () => {
       return instance.updateOne(id, input).then((result) => {
@@ -79,7 +79,7 @@ describe('ChannelsData', () => {
   describe('getAgentsByChannelId - branch A', () => {
     const agents = [];
     beforeAll(() => {
-      jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({agents}));
+      jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({ agents }));
     });
     it('createOne', () => {
       return instance.getAgentsByChannelId(id).then((result) => {
@@ -92,12 +92,69 @@ describe('ChannelsData', () => {
   describe('getCreatorByChannelId - branch A', () => {
     const creator = 1;
     beforeAll(() => {
-      jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({creator}));
+      jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({ creator }));
     });
     it('createOne', () => {
       return instance.getCreatorByChannelId(id).then((result) => {
         expect(models.Channel.findOne).toHaveBeenCalledTimes(1);
         expect(result).toBe(creator);
+      });
+    });
+  });
+
+  describe('getAll', () => {
+    const options = { limit: 1, offset: 2 };
+    beforeAll(() => {
+      jest.spyOn(instance, 'getRestrictionsSync').mockReturnValue({ query: '1' });
+      jest.spyOn(models.Channel, 'findAll').mockReturnValue(Promise.resolve(true));
+    });
+    it('getAll', () => {
+      return instance.getAll(options).then((result) => {
+        expect(instance.getRestrictionsSync).toHaveBeenCalledWith(options);
+        expect(models.Channel.findAll).toHaveBeenCalledWith({
+          "limit": 1,
+          "offset": 2,
+          "order": [["createdAt", "DESC"]],
+          "query": "1"
+        });
+        expect(result).toBe(true);
+      });
+    });
+  });
+
+  describe('getOne', () => {
+    const id = 'id1';
+    const options = {};
+    beforeAll(() => {
+      jest.spyOn(instance, 'getRestrictionsSync').mockReturnValue({ query: '1' });
+      jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve(true));
+    });
+    it('getOne', () => {
+      return instance.getOne(id, options).then((result) => {
+        expect(instance.getRestrictionsSync).toHaveBeenCalledWith(options);
+        expect(models.Channel.findOne).toHaveBeenCalledWith({
+          "query": "1",
+          "where": { "id": "id1" }
+        });
+        expect(result).toBe(true);
+      });
+    });
+  });
+
+  describe('getRestrictionsSync', () => {
+    const options = { restrictions: { r1: 'r1', channelIds: 'channelIds1' } };
+    beforeAll(() => {
+      jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve(true));
+    });
+    it('getRestrictionsSync', () => {
+      const result = instance.getRestrictionsSync(options);
+      expect(result).toEqual({
+        "where": {
+          "orop": [{
+            "id": "channelIds1",
+            "isPublic": false
+          }, { "isPublic": true }]
+        }
       });
     });
   });

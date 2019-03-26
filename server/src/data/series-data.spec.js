@@ -2,10 +2,6 @@ const models = require('../models');
 const { SeriesData } = require('./series-data');
 
 describe('SeriesData', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-    jest.restoreAllMocks();
-  });
 
   it('class should be a constructor', () => {
     expect(SeriesData).toBeInstanceOf(Function);

@@ -5,7 +5,6 @@ const models = require("../models");
 class AgentsChannelsData {
 
   /**
-   * @tested
    * @param {string} channelId
    * @param {string} agentId
    * @returns {Promise<Model>}
@@ -20,7 +19,6 @@ class AgentsChannelsData {
   }
 
   /**
-   * @tested
    * @param {string} channelId
    * @param {string} agentId
    * @returns {Promise<Model>}
@@ -36,7 +34,6 @@ class AgentsChannelsData {
   }
 
   /**
-   * @tested
    * @param {string} channelId
    * @param {string} agentId
    * @return {Promise<*>}
@@ -52,7 +49,6 @@ class AgentsChannelsData {
   }
 
   /**
-   * @tested
    * @param {object} options
    * @param {string} options.agentId?
    * @param {string} options.channelId?
@@ -63,7 +59,6 @@ class AgentsChannelsData {
   }
 
   /**
-   * @tested
    * @param {object} options
    * @param {string} options.agentId?
    * @param {string} options.channelId?
@@ -74,7 +69,6 @@ class AgentsChannelsData {
   }
 
   /**
-   * @tested
    * @param {object} options
    * @param {string} [options.agentId]
    * @param {string} [options.channelId]

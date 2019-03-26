@@ -3,7 +3,6 @@ const { rule } = require('graphql-shield');
 
 
 /**
- * @tested
  * @param {Models.Channel} channel
  * @param {Models.AgentChannel} agentChannel
  * @return {boolean}
@@ -22,7 +21,6 @@ function authorize(channel, agentChannel) {
 }
 
 /**
- * @tested
  * @param {object} parent
  * @param {object} args
  * @param {{ channel: Models.Channel, agentChannel: Models.AgentChannel }} ctx

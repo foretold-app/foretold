@@ -3,10 +3,6 @@ const channels = require('./channels');
 const { Rule } = require('graphql-shield/dist/rules');
 
 describe('authorizers index', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-    jest.restoreAllMocks();
-  });
 
   describe('index', () => {
     it('index', () => {

@@ -1,7 +1,6 @@
 const data = require('../data');
 
 /**
- * @tested
  * @param root
  * @param values
  * @param options

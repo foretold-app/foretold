@@ -11,7 +11,6 @@ class ChannelsData {
   }
 
   /**
-   * @tested
    * @public
    * @param {Models.User} user
    * @param {Schema.ChannelsInput} input
@@ -33,7 +32,6 @@ class ChannelsData {
   }
 
   /**
-   * @tested
    * @public
    * @param {string} id
    * @param {object} input
@@ -48,7 +46,6 @@ class ChannelsData {
   }
 
   /**
-   * @tested
    * @public
    * @param {string} id
    * @return {Promise<Model[]>}
@@ -62,7 +59,6 @@ class ChannelsData {
   }
 
   /**
-   * @tested
    * @public
    * @param {string} id
    * @return {Promise<Model>}
@@ -76,7 +72,6 @@ class ChannelsData {
   }
 
   /**
-   * @tested
    * @public
    * @param {object} options
    * @param {number} [options.offset]
@@ -97,7 +92,6 @@ class ChannelsData {
   }
 
   /**
-   * @tested
    * @public
    * @param {string} id
    * @param {object} options
@@ -115,7 +109,6 @@ class ChannelsData {
   }
 
   /**
-   * @tested
    * @protected
    * @param {object} [options]
    * @param {object} [options.restrictions]

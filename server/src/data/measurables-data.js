@@ -90,7 +90,6 @@ class MeasurablesData {
   }
 
   /**
-   * @tested
    * @param {object} options
    * @return {Promise<*|Array<Model>>}
    */
@@ -124,7 +123,6 @@ class MeasurablesData {
   }
 
   /**
-   * @tested
    * @param {string} id
    * @return {Promise<*>}
    */

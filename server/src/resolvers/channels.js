@@ -1,7 +1,6 @@
 const data = require('../data');
 
 /**
- * @tested
  * @param {Models.Channel} channel
  * @returns {Promise<Model[]>}
  */
@@ -10,7 +9,6 @@ async function channelAgents(channel) {
 }
 
 /**
- * @tested
  * @param {Models.Channel} channel
  * @returns {Promise<Model>}
  */
@@ -19,7 +17,6 @@ async function channelCreator(channel) {
 }
 
 /**
- * @tested
  * @param {object | null} root
  * @param {object} args
  * @param {number} args.offset
@@ -38,7 +35,6 @@ async function all(root, args, context, info) {
 }
 
 /**
- * @tested
  * @param {object | null} root
  * @param {object} args
  * @param {string} args.id
@@ -55,7 +51,6 @@ async function one(root, args, context, info) {
 }
 
 /**
- * @tested
  * @param {object | null} root
  * @param {object} args
  * @param {string} args.id
@@ -69,7 +64,6 @@ async function update(root, args, context, info) {
 }
 
 /**
- * @tested
  * @param {object | null} root
  * @param {{ input: Schema.ChannelsInput }} args
  * @param {Schema.Context} context

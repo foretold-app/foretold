@@ -2,10 +2,6 @@ const users = require('./users');
 const data = require('../data');
 
 describe('users', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-    jest.restoreAllMocks();
-  });
 
   describe('users', () => {
     const root = {};

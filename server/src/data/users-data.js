@@ -4,7 +4,6 @@ const models = require('../models');
 class UsersData {
 
   /**
-   * @tested
    * @param {string} auth0Id
    * @return {Promise<Array<Model>|Model>}
    * @todo change to more generic getOne(filter)
@@ -32,7 +31,6 @@ class UsersData {
   }
 
   /**
-   * @tested
    * @param root
    * @param values
    * @param options
@@ -48,7 +46,6 @@ class UsersData {
   }
 
   /**
-   * @tested
    * @param ops
    * @param values
    * @param options

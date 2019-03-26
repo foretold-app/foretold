@@ -2,10 +2,6 @@ const models = require('../models');
 const { AgentsChannelsData } = require('./agents-channels-data');
 
 describe('AgentsChannelsData', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-    jest.restoreAllMocks();
-  });
 
   it('class should be constructor', () => {
     expect(AgentsChannelsData).toBeInstanceOf(Function);

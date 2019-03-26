@@ -4,7 +4,6 @@ const data = require('../data');
 const models = require('../models');
 
 /**
- * @tested
  * @param root
  * @param args
  * @param context
@@ -16,7 +15,6 @@ async function all(root, args, context, info) {
 }
 
 /**
- * @tested
  * @param root
  * @param args
  * @param context
@@ -28,7 +26,6 @@ async function one(root, args, context, info) {
 }
 
 /**
- * @tested
  * @param root
  * @param args
  * @param context
@@ -45,7 +42,6 @@ async function create(root, args, context, info) {
 }
 
 /**
- * @tested
  * @param root
  * @param args
  * @param context
@@ -57,7 +53,6 @@ async function archive(root, args, context, info) {
 }
 
 /**
- * @tested
  * @param root
  * @param args
  * @param context
@@ -69,7 +64,6 @@ async function unarchive(root, args, context, info) {
 }
 
 /**
- * @tested
  * @param root
  * @param args
  * @param context

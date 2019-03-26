@@ -14,11 +14,6 @@ const series = require('./series');
 
 describe('middlewares', () => {
 
-  afterEach(() => {
-    jest.clearAllMocks();
-    jest.restoreAllMocks();
-  });
-
   it('measurements', () => {
     const resolve = () => Promise.resolve(true);
     const root = {};

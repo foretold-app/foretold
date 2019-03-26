@@ -138,6 +138,8 @@
     }
   },
   "jest": {
+    "restoreMocks": true,
+    "clearMocks": true,
     "testEnvironment": "node",
     "testPathIgnorePatterns": [
       "/manuals/"

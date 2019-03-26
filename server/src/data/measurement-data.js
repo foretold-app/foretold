@@ -32,7 +32,6 @@ class MeasurementData {
   }
 
   /**
-   * @tested
    * @param {string} id
    * @return {Promise<*>}
    */

@@ -5,10 +5,6 @@ const data = require('../data');
 const models = require('../models');
 
 describe('series', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-    jest.restoreAllMocks();
-  });
 
   describe('one', () => {
     const root = {};

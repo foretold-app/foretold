@@ -1,7 +1,6 @@
 const data = require('../data');
 
 /**
- * @tested
  * @param root
  * @param values
  * @returns {Promise<Model>}
@@ -11,7 +10,6 @@ async function create(root, values) {
 }
 
 /**
- * @tested
  * @param root
  * @param values
  * @returns {Promise<Model>}

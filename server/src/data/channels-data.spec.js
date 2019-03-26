@@ -3,10 +3,6 @@ const { ChannelsData } = require('./channels-data');
 const { AgentsChannelsData } = require('./agents-channels-data');
 
 describe('ChannelsData', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-    jest.restoreAllMocks();
-  });
 
   it('class should be constructor', () => {
     expect(ChannelsData).toBeInstanceOf(Function);
@@ -144,6 +140,7 @@ describe('ChannelsData', () => {
   describe('getRestrictionsSync', () => {
     const options = { restrictions: { r1: 'r1', channelIds: 'channelIds1' } };
     beforeEach(() => {
+      instance.getRestrictionsSync.mockRestore();
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve(true));
     });
     it('getRestrictionsSync', () => {
@@ -154,7 +151,7 @@ describe('ChannelsData', () => {
             "id": "channelIds1",
             "isPublic": false
           }, { "isPublic": true }]
-        }
+        },
       });
     });
   });

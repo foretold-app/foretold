@@ -2,10 +2,6 @@ const agentsChannels = require('./agents-channels');
 const data = require('../data');
 
 describe('AgentsChannels', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-    jest.restoreAllMocks();
-  });
 
   describe('update', () => {
     const root = {};

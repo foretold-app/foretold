@@ -1,7 +1,7 @@
 const models = require('../models');
 const { MeasurementData } = require('./measurement-data');
 
-describe('MeasurementData', () => {
+describe('tests Measurement Data layer', () => {
 
   it('class should be a constructor', () => {
     expect(MeasurementData).toBeInstanceOf(Function);
@@ -9,14 +9,16 @@ describe('MeasurementData', () => {
 
   const instance = new MeasurementData();
 
-  describe('getOne', () => {
+  describe('getOne()', () => {
     const id = 'id2';
     beforeEach(() => {
       jest.spyOn(models.Measurement, 'findOne').mockReturnValue(Promise.resolve(true));
     });
-    it('getOne', () => {
+    it('finds a measurement', () => {
       return instance.getOne(id).then((result) => {
-        expect(models.Measurement.findOne).toHaveBeenCalledWith({ "where": { "id": "id2" } });
+        expect(models.Measurement.findOne).toHaveBeenCalledWith({
+          "where": { "id": "id2" },
+        });
         expect(result).toBe(true);
       });
     });

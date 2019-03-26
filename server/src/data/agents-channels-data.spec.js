@@ -1,7 +1,7 @@
 const models = require('../models');
 const { AgentsChannelsData } = require('./agents-channels-data');
 
-describe('tests data layer of agent-channels', () => {
+describe('data layer of agent-channels', () => {
 
   it('class should be a constructor', () => {
     expect(AgentsChannelsData).toBeInstanceOf(Function);
@@ -12,13 +12,13 @@ describe('tests data layer of agent-channels', () => {
   const agentId = 'agentId1';
   const input = { channelId, agentId };
 
-  describe('tests createOne method if there is user', () => {
+  describe('createOne() when there is user', () => {
     beforeEach(() => {
       jest.spyOn(models.AgentsChannels, 'findOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
-    it('should find user without creating new one', () => {
+    it('finds user without creating new one', () => {
       return instance.createOne(channelId, agentId).then((result) => {
         expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({
           where: input,
@@ -29,13 +29,13 @@ describe('tests data layer of agent-channels', () => {
     });
   });
 
-  describe('tests createOne if there is no user', () => {
+  describe('createOne() when there is no user', () => {
     beforeEach(() => {
       jest.spyOn(models.AgentsChannels, 'findOne').mockReturnValue(
         Promise.resolve(false),
       );
     });
-    it('should create new user', () => {
+    it('creates new user', () => {
       return instance.createOne(channelId, agentId).then((result) => {
         expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({
           where: input,
@@ -46,7 +46,7 @@ describe('tests data layer of agent-channels', () => {
     });
   });
 
-  describe('tests deleteOne method if there is user', () => {
+  describe('deleteOne() when there is user', () => {
     beforeEach(() => {
       jest.spyOn(models.AgentsChannels, 'findOne').mockReturnValue(
         Promise.resolve(true),
@@ -55,7 +55,7 @@ describe('tests data layer of agent-channels', () => {
         Promise.resolve(true),
       );
     });
-    it('should find and destroy user', () => {
+    it('finds and destroys user', () => {
       return instance.deleteOne(channelId, agentId).then((result) => {
         expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({
           where: input,
@@ -68,13 +68,13 @@ describe('tests data layer of agent-channels', () => {
     });
   });
 
-  describe('tests deleteOne method if there is no user', () => {
+  describe('deleteOne() when there is no user', () => {
     beforeEach(() => {
       jest.spyOn(models.AgentsChannels, 'findOne').mockReturnValue(
         Promise.resolve(false),
       );
     });
-    it('should not destroy user if there is no use', () => {
+    it('does not destroy user when there is no user', () => {
       return instance.deleteOne(channelId, agentId).then((result) => {
         expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({
           where: input,
@@ -85,8 +85,8 @@ describe('tests data layer of agent-channels', () => {
     });
   });
 
-  describe('tests validate method if all input is present', () => {
-    it('should find channel and agent', () => {
+  describe('validate() if all input is present', () => {
+    it('finds channel and agent', () => {
       return instance.validate(input).then((result) => {
         expect(models.Channel.findById).toHaveBeenCalledWith(channelId);
         expect(models.Agent.findById).toHaveBeenCalledWith(agentId);
@@ -95,20 +95,20 @@ describe('tests data layer of agent-channels', () => {
     });
   });
 
-  describe('tests validate method if there is channel', () => {
+  describe('validate() if there is channel', () => {
     beforeEach(() => {
       jest.spyOn(models.Channel, 'findById').mockReturnValue(
         Promise.resolve(false),
       );
     });
-    it('should throw an error ', () => {
+    it('throws an error ', () => {
       return instance.validate(input).catch((err) => {
         expect(err).toBeInstanceOf(Error)
       });
     });
   });
 
-  describe('tests validate method if there are channel and agent', () => {
+  describe('validate() if there are channel and agent', () => {
     beforeEach(() => {
       jest.spyOn(models.Channel, 'findById').mockReturnValue(
         Promise.resolve(false),
@@ -117,7 +117,7 @@ describe('tests data layer of agent-channels', () => {
         Promise.resolve(false),
       );
     });
-    it('should not find agent ', () => {
+    it('does not find agent', () => {
       return instance.validate({ agentId }).catch((err) => {
         expect(models.Channel.findById).toHaveBeenCalledTimes(1);
         expect(models.Agent.findById).toHaveBeenCalledTimes(0);
@@ -126,14 +126,14 @@ describe('tests data layer of agent-channels', () => {
     });
   });
 
-  describe('tests getOne method', () => {
+  describe('getOne()', () => {
     const options = {};
     beforeEach(() => {
       jest.spyOn(models.AgentsChannels, 'findOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
-    it('should fine agent-channel note ', () => {
+    it('finds agent-channel note ', () => {
       return instance.getOne(options).then((result) => {
         expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({
           where: options,
@@ -143,14 +143,14 @@ describe('tests data layer of agent-channels', () => {
     });
   });
 
-  describe('tests getAll method', () => {
+  describe('getAll()', () => {
     const options = {};
     beforeEach(() => {
       jest.spyOn(models.AgentsChannels, 'findAll').mockReturnValue(
         Promise.resolve(true),
       );
     });
-    it('should find agents-channels notes ', () => {
+    it('find agents-channels notes', () => {
       return instance.getAll(options).then((result) => {
         expect(models.AgentsChannels.findAll).toHaveBeenCalledWith({
           where: options,
@@ -160,14 +160,14 @@ describe('tests data layer of agent-channels', () => {
     });
   });
 
-  describe('tests getAllChannelIds method', () => {
+  describe('getAllChannelIds()', () => {
     const options = {};
     beforeEach(() => {
       jest.spyOn(instance, 'getAll').mockReturnValue(Promise.resolve([
         { channelId: 'channelId1' }
       ]));
     });
-    it('should call getAll method', () => {
+    it('calls getAll()', () => {
       return instance.getAllChannelIds(options).then((result) => {
         expect(instance.getAll).toHaveBeenCalledWith(options);
         expect(result).toEqual(['channelId1']);

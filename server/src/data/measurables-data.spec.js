@@ -9,7 +9,7 @@ describe('tests Measurables Data layer', () => {
 
   const instance = new MeasurablesData();
 
-  describe('tests getAll method', () => {
+  describe('getAll()', () => {
     const options = {
       offset: 1,
       limit: 2,
@@ -22,7 +22,7 @@ describe('tests Measurables Data layer', () => {
         Promise.resolve(true),
       );
     });
-    it('should find all measurables', () => {
+    it('finds all measurables', () => {
       return instance.getAll(options).then((result) => {
         expect(models.Measurable.findAll).toHaveBeenCalledWith({
           "limit": 2,
@@ -40,14 +40,14 @@ describe('tests Measurables Data layer', () => {
     });
   });
 
-  describe('tests getOne method', () => {
+  describe('getOne()', () => {
     const id = 'id1';
     beforeEach(() => {
       jest.spyOn(models.Measurable, 'findOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
-    it('should find a measurable', () => {
+    it('finds a measurable', () => {
       return instance.getOne(id).then((result) => {
         expect(models.Measurable.findOne).toHaveBeenCalledWith({
           "where": { "id": "id1" },

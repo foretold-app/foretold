@@ -1,15 +1,15 @@
 const { agentsChannels } = require('./agents-channels');
 const data = require('../data');
 
-describe('AgentsChannels', () => {
+describe('AgentsChannels Middlewares', () => {
 
-  describe('agentsChannels ', () => {
+  describe('agentsChannels() sets agent-channel model into context', () => {
     const agentChannel = {};
     beforeEach(() => {
       jest.spyOn(data.agentsChannelsData, 'getOne').mockReturnValue(Promise.resolve(agentChannel));
     });
 
-    it('A', () => {
+    it('when arguments are passed', () => {
       const root = {};
       const args = { channelId: 'channelId1' };
       const context = { user: { agentId: 'agentId1' } };
@@ -24,7 +24,7 @@ describe('AgentsChannels', () => {
       });
     });
 
-    it('B', () => {
+    it('when root is passed', () => {
       const root = { channelId: 'channelId1' };
       const args = {};
       const context = { user: { agentId: 'agentId1' } };
@@ -39,7 +39,7 @@ describe('AgentsChannels', () => {
       });
     });
 
-    it('C', () => {
+    it('when context is passed', () => {
       const root = {};
       const args = {};
       const context = {

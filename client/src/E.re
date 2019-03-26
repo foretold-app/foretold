@@ -188,8 +188,11 @@ module FloatCdf = {
 module React = {
   let el = ReasonReact.element;
   let null = ReasonReact.null;
-  let makeToEl = (~key="", ~children=<div />, e) =>
-    children |> e |> el(~key);
+  let makeToEl = (~key="", ~children=null, e) => children |> e |> el(~key);
+  let withParent = (~key="", e, children) => children |> e |> el(~key);
+  let withChildren = (~key="", children, e) => children |> e |> el(~key);
+  let wrapOver = (a, b) => b(a) |> makeToEl;
+  let takeParameterFrom = (a, b) => a(b) |> makeToEl;
   let showIf = (cond, comp) => cond ? comp : ReasonReact.null;
   let inP = e => <p> e </p>;
   let inH1 = e => <h1> e </h1>;

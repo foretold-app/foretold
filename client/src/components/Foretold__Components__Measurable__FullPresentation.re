@@ -71,9 +71,8 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
              {"Measurements" |> ste |> E.React.inH2}
              {
                m.measurements
-               |> E.O.React.fmapOrNull(measurements =>
-                    measurements
-                    |> Foretold__Components__Measurements__Table.make
+               |> E.O.React.fmapOrNull(
+                    Foretold__Components__Measurements__Table.make,
                   )
              }
            </>

@@ -1,7 +1,7 @@
 const { channel } = require('./channels');
 const data = require('../data');
 
-describe('channela', () => {
+describe('channels', () => {
 
   describe('channel ', () => {
     const channelObj = {};

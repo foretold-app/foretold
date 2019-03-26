@@ -1,6 +1,7 @@
 const data = require('../data');
 
 /**
+ * @tested
  * @param root
  * @param values
  * @returns {Promise<Model>}
@@ -8,7 +9,9 @@ const data = require('../data');
 async function create(root, values) {
   return await data.agentsChannelsData.createOne(values.channelId, values.agentId);
 }
+
 /**
+ * @tested
  * @param root
  * @param values
  * @returns {Promise<Model>}

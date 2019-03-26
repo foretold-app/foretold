@@ -69,7 +69,7 @@ describe('channels', () => {
       jest.spyOn(data.agentsChannelsData, 'getAllChannelIds').mockReturnValue(Promise.resolve(['3']));
       jest.spyOn(data.channelsData, 'getOne').mockReturnValue(Promise.resolve(true));
     });
-    it('all', () => {
+    it('one', () => {
       return channels.one(root, args, context, info).then((result) => {
         expect(data.agentsChannelsData.getAllChannelIds).toHaveBeenCalledWith({ "agentId": "agentId1" });
         expect(data.channelsData.getOne).toHaveBeenCalledWith("id1", { "restrictions": { "channelIds": ["3"] } });
@@ -86,7 +86,7 @@ describe('channels', () => {
     beforeAll(() => {
       jest.spyOn(data.channelsData, 'updateOne').mockReturnValue(Promise.resolve(true));
     });
-    it('all', () => {
+    it('update', () => {
       return channels.update(root, args, context, info).then((result) => {
         expect(data.channelsData.updateOne).toHaveBeenCalledWith("id2", { "a": "1" });
         expect(result).toBe(true);
@@ -102,7 +102,7 @@ describe('channels', () => {
     beforeAll(() => {
       jest.spyOn(data.channelsData, 'createOne').mockReturnValue(Promise.resolve(true));
     });
-    it('all', () => {
+    it('create', () => {
       return channels.create(root, args, context, info).then((result) => {
         expect(data.channelsData.createOne).toHaveBeenCalledWith(context.user, args.input);
         expect(result).toBe(true);

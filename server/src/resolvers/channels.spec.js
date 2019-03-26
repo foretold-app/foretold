@@ -78,4 +78,20 @@ describe('channels', () => {
     });
   });
 
+  describe('update', () => {
+    const root = {};
+    const context = {};
+    const args = { id: 'id2', input: { a: '1' } };
+    const info = {};
+    beforeAll(() => {
+      jest.spyOn(data.channelsData, 'updateOne').mockReturnValue(Promise.resolve(true));
+    });
+    it('all', () => {
+      return channels.update(root, args, context, info).then((result) => {
+        expect(data.channelsData.updateOne).toHaveBeenCalledWith("id2", { "a": "1" });
+        expect(result).toBe(true);
+      });
+    });
+  });
+
 });

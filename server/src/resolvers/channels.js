@@ -55,6 +55,7 @@ async function one(root, args, context, info) {
 }
 
 /**
+ * @tested
  * @param {object | null} root
  * @param {object} args
  * @param {string} args.id

@@ -129,5 +129,19 @@ describe('AgentsChannelsData', () => {
       });
     });
   });
+
+  describe('getAllChannelIds', () => {
+    const options = {};
+    beforeAll(() => {
+      jest.spyOn(instance, 'getAll').mockReturnValue(Promise.resolve([{channelId: 'channelId1'}]));
+    });
+    it('getAllChannelIds ', () => {
+      return instance.getAllChannelIds(options).then((result) => {
+        expect(instance.getAll).toHaveBeenCalledWith(options);
+        expect(result).toEqual(['channelId1']);
+      });
+    });
+  });
+
 });
 

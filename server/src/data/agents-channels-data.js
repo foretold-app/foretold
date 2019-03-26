@@ -74,6 +74,7 @@ class AgentsChannelsData {
   }
 
   /**
+   * @tested
    * @param {object} options
    * @param {string} [options.agentId]
    * @param {string} [options.channelId]

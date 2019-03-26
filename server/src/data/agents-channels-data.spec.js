@@ -1,9 +1,9 @@
 const models = require('../models');
 const { AgentsChannelsData } = require('./agents-channels-data');
 
-describe('AgentsChannelsData', () => {
+describe('tests data layer of agent-channels', () => {
 
-  it('class should be constructor', () => {
+  it('class should be a constructor', () => {
     expect(AgentsChannelsData).toBeInstanceOf(Function);
   });
 
@@ -12,11 +12,11 @@ describe('AgentsChannelsData', () => {
   const agentId = 'agentId1';
   const input = { channelId, agentId };
 
-  describe('createOne - branch A', () => {
+  describe('tests createOne method if there is user', () => {
     beforeEach(() => {
       jest.spyOn(models.AgentsChannels, 'findOne').mockReturnValue(Promise.resolve(true));
     });
-    it('createOne', () => {
+    it('should find user without creating new one', () => {
       return instance.createOne(channelId, agentId).then((result) => {
         expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({ where: input });
         expect(models.AgentsChannels.create).toHaveBeenCalledTimes(0);
@@ -25,11 +25,11 @@ describe('AgentsChannelsData', () => {
     });
   });
 
-  describe('createOne - branch B', () => {
+  describe('tests createOne if there is no user', () => {
     beforeEach(() => {
       jest.spyOn(models.AgentsChannels, 'findOne').mockReturnValue(Promise.resolve(false));
     });
-    it('createOne', () => {
+    it('should create new user', () => {
       return instance.createOne(channelId, agentId).then((result) => {
         expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({ where: input });
         expect(models.AgentsChannels.create).toHaveBeenCalledWith(input);
@@ -38,12 +38,12 @@ describe('AgentsChannelsData', () => {
     });
   });
 
-  describe('deleteOne - branch A', () => {
+  describe('tests deleteOne method if there is user', () => {
     beforeEach(() => {
       jest.spyOn(models.AgentsChannels, 'findOne').mockReturnValue(Promise.resolve(true));
       jest.spyOn(models.AgentsChannels, 'destroy').mockReturnValue(Promise.resolve(true));
     });
-    it('deleteOne', () => {
+    it('should find and destroy user', () => {
       return instance.deleteOne(channelId, agentId).then((result) => {
         expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({ where: input });
         expect(models.AgentsChannels.destroy).toHaveBeenCalledWith({ where: input });
@@ -52,11 +52,11 @@ describe('AgentsChannelsData', () => {
     });
   });
 
-  describe('deleteOne - branch B', () => {
+  describe('tests deleteOne method if there is no user', () => {
     beforeEach(() => {
       jest.spyOn(models.AgentsChannels, 'findOne').mockReturnValue(Promise.resolve(false));
     });
-    it('deleteOne', () => {
+    it('should not destroy user if there is no use', () => {
       return instance.deleteOne(channelId, agentId).then((result) => {
         expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({ where: input });
         expect(models.AgentsChannels.destroy).toHaveBeenCalledTimes(0);
@@ -65,7 +65,7 @@ describe('AgentsChannelsData', () => {
     });
   });
 
-  describe('validate - branch A', () => {
+  describe('tests validate method if all input is present', () => {
     it('validate', () => {
       return instance.validate(input).then((result) => {
         expect(models.Channel.findById).toHaveBeenCalledWith(channelId);

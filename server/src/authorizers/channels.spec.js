@@ -1,14 +1,11 @@
 const channels = require('./channels');
 
-const { Rule } = require('graphql-shield/dist/rules');
-
 describe('authorizers index', () => {
 
   describe('index', () => {
     it('index', () => {
       expect(channels).toBeInstanceOf(Object);
       expect(channels.authorize).toBeInstanceOf(Function);
-      expect(channels.isChannelAllowed).toBeInstanceOf(Rule);
     });
   });
 

@@ -1,14 +1,7 @@
 const index = require('./index');
 
-const { MiddlewareGenerator } = require('graphql-middleware/dist/generator');
-
-describe('authorizers index', () => {
-
-  describe('index', () => {
-    it('index', () => {
-      expect(index).toBeInstanceOf(Object);
-      expect(index.permissions).toBeInstanceOf(MiddlewareGenerator);
-    });
+describe('tests authorizes module as index.js file', () => {
+  it('should return index as an object', () => {
+    expect(index).toBeInstanceOf(Object);
   });
-
 });

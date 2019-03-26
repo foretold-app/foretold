@@ -76,7 +76,7 @@ let toMeasurable = (m: measurable): Context.Primary.Measurable.t =>
 
 module Query = [%graphql
   {|
-    query getMeasurables ($offset: Int, $limit: Int, $channelId: String, $seriesId: String, $creatorId: String) {
+    query getMeasurables ($offset: Int, $limit: Int, $channelId: String!, $seriesId: String, $creatorId: String) {
         measurables(offset: $offset, limit: $limit, channelId: $channelId, seriesId: $seriesId, creatorId: $creatorId) @bsRecord {
            id
            name
@@ -147,8 +147,8 @@ let componentWithSeries =
   queryToComponent(query, innerComponentFn);
 };
 
-let componentWithCreator =
-    (creatorId, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = Query.make(~offset=0, ~limit=200, ~creatorId, ());
-  queryToComponent(query, innerComponentFn);
-};
+/* let componentWithCreator =
+       (creatorId, innerComponentFn: 'a => ReasonReact.reactElement) => {
+     let query = Query.make(~offset=0, ~limit=200, ~creatorId, ());
+     queryToComponent(query, innerComponentFn);
+   }; */

@@ -22,8 +22,9 @@ type seriesCollection = array(series);
 
 module Query = [%graphql
   {|
-      query getSeriesCollection {
-          seriesCollection @bsRecord{
+      query getSeriesCollection($channelId: String!) {
+          seriesCollection:
+          seriesCollection(channelId: $channelId) @bsRecord{
            id
            name
            description
@@ -43,9 +44,9 @@ module Query = [%graphql
 ];
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let component = innerFn => {
+let component = (channelId, innerFn) => {
   open Rationale.Result.Infix;
-  let query = Query.make();
+  let query = Query.make(~channelId, ());
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
     |> ApolloUtils.apolloResponseToResult

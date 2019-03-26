@@ -38,7 +38,13 @@ let component = ReasonReact.reducerComponent("MeasurableIndex");
 let itemsPerPage = 20;
 
 let itemHeader =
-    (channel: Context.Primary.Channel.t, onForward, onBackward, isAtStart, isAtEnd) =>
+    (
+      channel: Context.Primary.Channel.t,
+      onForward,
+      onBackward,
+      isAtStart,
+      isAtEnd,
+    ) =>
   <>
     {SLayout.channelink(channel)}
     <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
@@ -151,7 +157,9 @@ let deselectedView =
             send(
               Select(
                 measurables
-                |> E.A.findIndex((r: Context.Primary.Measurable.t) => r.id == e.id),
+                |> E.A.findIndex((r: Context.Primary.Measurable.t) =>
+                     r.id == e.id
+                   ),
               ),
             )
         }
@@ -160,7 +168,8 @@ let deselectedView =
   </>;
 };
 
-let make = (~channelId: string, ~loggedInUser: Context.Primary.User.t, _children) => {
+let make =
+    (~channelId: string, ~loggedInUser: Context.Primary.User.t, _children) => {
   ...component,
   initialState: () => {page: 0, selected: None},
   reducer: (action, state) =>
@@ -183,7 +192,7 @@ let make = (~channelId: string, ~loggedInUser: Context.Primary.User.t, _children
   render: ({state, send}) =>
     Queries.Channel.component(~id=channelId, channel =>
       Queries.SeriesCollection.component(
-        (seriesCollection: array(Queries.SeriesCollection.series)) =>
+        channelId, (seriesCollection: array(Queries.SeriesCollection.series)) =>
         Queries.Measurables.component(
           channel.id,
           state.page,

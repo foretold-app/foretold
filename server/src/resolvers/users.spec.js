@@ -1,16 +1,18 @@
 const users = require('./users');
 const data = require('../data');
 
-describe('users', () => {
+describe('Users Resolvers', () => {
 
-  describe('users', () => {
+  describe('users()', () => {
     const root = {};
     const args = {};
     const context = {};
     beforeEach(() => {
-      jest.spyOn(data.usersData, 'editUser').mockReturnValue(Promise.resolve(true));
+      jest.spyOn(data.usersData, 'editUser').mockReturnValue(
+        Promise.resolve(true),
+      );
     });
-    it('all', () => {
+    it('edits user', () => {
       return users.edit(root, args, context).then((result) => {
         expect(data.usersData.editUser).toHaveBeenCalledWith(
           root, args, context,

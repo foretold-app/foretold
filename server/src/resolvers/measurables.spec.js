@@ -6,15 +6,17 @@ const models = require('../models');
 
 describe('Measurables Resolvers', () => {
 
-  describe('all', () => {
+  describe('all()', () => {
     const root = {};
     const args = { channelId: 'channelId1', agentId: 'agentId2' };
     const context = {};
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'getAll').mockReturnValue(Promise.resolve(true));
+      jest.spyOn(data.measurablesData, 'getAll').mockReturnValue(
+        Promise.resolve(true),
+      );
     });
-    it('all', () => {
+    it('returns measurables', () => {
       return measurables.all(root, args, context, info).then((result) => {
         expect(data.measurablesData.getAll).toHaveBeenCalledWith(args);
         expect(result).toBe(true);
@@ -22,12 +24,12 @@ describe('Measurables Resolvers', () => {
     });
   });
 
-  describe('one', () => {
+  describe('one()', () => {
     const root = {};
     const args = {};
     const context = {};
     const info = {};
-    it('one', () => {
+    it('returns a measurable', () => {
       return measurables.one(root, args, context, info).then((result) => {
         expect(resolver).toHaveBeenCalledWith(models.Measurable);
         expect(result).toEqual([root, args, context, info]);
@@ -35,15 +37,17 @@ describe('Measurables Resolvers', () => {
     });
   });
 
-  describe('create', () => {
+  describe('create()', () => {
     const root = {};
     const args = {};
     const context = { user: { agentId: 'agentId1' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'createMeasurable').mockReturnValue(Promise.resolve(true));
+      jest.spyOn(data.measurablesData, 'createMeasurable').mockReturnValue(
+        Promise.resolve(true),
+      );
     });
-    it('create', () => {
+    it('creates a measurable', () => {
       return measurables.create(root, args, context, info).then((result) => {
         expect(data.measurablesData.createMeasurable).toHaveBeenCalledWith(
           { "creatorId": "agentId1" },
@@ -54,15 +58,17 @@ describe('Measurables Resolvers', () => {
     });
   });
 
-  describe('archive', () => {
+  describe('archive()', () => {
     const root = {};
     const args = {};
     const context = {};
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'archiveMeasurable').mockReturnValue(Promise.resolve(true));
+      jest.spyOn(data.measurablesData, 'archiveMeasurable').mockReturnValue(
+        Promise.resolve(true),
+      );
     });
-    it('archive', () => {
+    it('archives a measurable', () => {
       return measurables.archive(root, args, context, info).then((result) => {
         expect(data.measurablesData.archiveMeasurable).toHaveBeenCalledWith(
           root,
@@ -74,15 +80,17 @@ describe('Measurables Resolvers', () => {
     });
   });
 
-  describe('unarchive', () => {
+  describe('unarchive()', () => {
     const root = {};
     const args = {};
     const context = {};
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'unArchiveMeasurable').mockReturnValue(Promise.resolve(true));
+      jest.spyOn(data.measurablesData, 'unArchiveMeasurable').mockReturnValue(
+        Promise.resolve(true),
+      );
     });
-    it('unarchive', () => {
+    it('unarchives a measurable', () => {
       return measurables.unarchive(root, args, context, info).then((result) => {
         expect(data.measurablesData.unArchiveMeasurable).toHaveBeenCalledWith(
           root,
@@ -94,15 +102,17 @@ describe('Measurables Resolvers', () => {
     });
   });
 
-  describe('edit', () => {
+  describe('edit()', () => {
     const root = {};
     const args = {};
     const context = {};
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'editMeasurable').mockReturnValue(Promise.resolve(true));
+      jest.spyOn(data.measurablesData, 'editMeasurable').mockReturnValue(
+        Promise.resolve(true),
+      );
     });
-    it('edit', () => {
+    it('edits a measurable', () => {
       return measurables.edit(root, args, context, info).then((result) => {
         expect(data.measurablesData.editMeasurable).toHaveBeenCalledWith(
           root,

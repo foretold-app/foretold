@@ -3,6 +3,7 @@ const _ = require('lodash');
 const data = require('../data');
 
 /**
+ * @tested
  * @param {object | null} root
  * @param {{ channelId: string }} args
  * @param {object} context

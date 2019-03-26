@@ -9,7 +9,7 @@ describe('AgentsChannels', () => {
       jest.spyOn(data.agentsChannelsData, 'getOne').mockReturnValue(Promise.resolve(agentChannel));
     });
 
-    it('createOne- A', () => {
+    it('A', () => {
       const root = {};
       const args = { channelId: 'channelId1' };
       const context = { user: { agentId: 'agentId1' } };
@@ -24,7 +24,7 @@ describe('AgentsChannels', () => {
       });
     });
 
-    it('createOne- B', () => {
+    it('B', () => {
       const root = { channelId: 'channelId1' };
       const args = {};
       const context = { user: { agentId: 'agentId1' } };
@@ -39,7 +39,7 @@ describe('AgentsChannels', () => {
       });
     });
 
-    it('createOne- C', () => {
+    it('C', () => {
       const root = {};
       const args = {};
       const context = {

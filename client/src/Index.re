@@ -1,8 +1,6 @@
-let instance = Client.instance();
+let instance = ApolloClient.instance();
 
-ReactDOMRe.renderToElementWithId(
-  Layout.make
-  |> E.React.takeParameterFrom(App.make)
-  |> E.React.withParent(ReasonApollo.Provider.make(~client=instance)),
-  "app",
-);
+Layout.make
+|> E.React.takeParameterFrom(WithRouteReducer.make)
+|> E.React.withParent(ReasonApollo.Provider.make(~client=instance))
+|> ReactDOMRe.renderToElementWithId(_, "app");

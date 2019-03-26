@@ -1,5 +1,6 @@
 open Context.Routing;
 open Foretold__GraphQL;
+open Rationale.Function.Infix;
 
 let defaultChannel = "4c5af8ad-1258-4b9c-8fa0-cc522708fc1c";
 
@@ -20,8 +21,9 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
     let sidebar =
       Layout__Component__FillWithSidebar.make(~channelId, ~loggedInUser);
 
-    let inApp = (~key="", e) =>
-      E.React.makeToEl(e) |> E.React.withParent(~key, sidebar);
+    let inApp = (~key="") =>
+      E.React.makeToEl ||> E.React.withParent(~key, sidebar);
+
     switch (route) {
     | AgentMeasurables(id) =>
       AgentMeasurables.make(~id, ~loggedInUser) |> inApp

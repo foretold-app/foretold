@@ -94,4 +94,20 @@ describe('channels', () => {
     });
   });
 
+  describe('create', () => {
+    const root = {};
+    const context = { user: { b: '2' } };
+    const args = { input: { a: '1' } };
+    const info = {};
+    beforeAll(() => {
+      jest.spyOn(data.channelsData, 'createOne').mockReturnValue(Promise.resolve(true));
+    });
+    it('all', () => {
+      return channels.create(root, args, context, info).then((result) => {
+        expect(data.channelsData.createOne).toHaveBeenCalledWith(context.user, args.input);
+        expect(result).toBe(true);
+      });
+    });
+  });
+
 });

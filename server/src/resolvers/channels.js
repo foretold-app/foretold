@@ -69,6 +69,7 @@ async function update(root, args, context, info) {
 }
 
 /**
+ * @tested
  * @param {object | null} root
  * @param {{ input: Schema.ChannelsInput }} args
  * @param {Schema.Context} context

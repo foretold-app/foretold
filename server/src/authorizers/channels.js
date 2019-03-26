@@ -1,7 +1,9 @@
 const _ = require('lodash');
 const { rule } = require('graphql-shield');
 
+
 /**
+ * @tested
  * @param {Models.Channel} channel
  * @param {Models.AgentChannel} agentChannel
  * @return {boolean}
@@ -19,23 +21,28 @@ function authorize(channel, agentChannel) {
   return true;
 }
 
-const isChannelAllowed = rule()(
-  /**
-   * @param {object} parent
-   * @param {object} args
-   * @param {{ channel: Models.Channel, agentChannel: Models.AgentChannel }} ctx
-   * @param {object} info
-   */
-  async (parent, args, ctx, info) => {
-    const channel = _.get(ctx, 'channel');
-    const agentChannel = _.get(ctx, 'agentChannel');
-    console.log(`\x1b[33m Rule (isChannelAllowed) ` +
-      `channelId ${_.get(channel, 'id')}, ` +
-      `agentChannelId ${_.get(agentChannel, 'agentId')} \x1b[0m`);
-    return await authorize(channel, agentChannel);
-  }
-);
+/**
+ * @tested
+ * @param {object} parent
+ * @param {object} args
+ * @param {{ channel: Models.Channel, agentChannel: Models.AgentChannel }} ctx
+ * @param {object} info
+ */
+async function isChannelAllowedRule(parent, args, ctx, info) {
+  const channel = _.get(ctx, 'channel');
+  const agentChannel = _.get(ctx, 'agentChannel');
+  console.log(`\x1b[33m Rule (isChannelAllowed) ` +
+    `channelId ${_.get(channel, 'id')}, ` +
+    `agentChannelId ${_.get(agentChannel, 'agentId')} \x1b[0m`);
+  return channels.authorize(channel, agentChannel);
+}
 
-module.exports = {
+const isChannelAllowed = rule()(isChannelAllowedRule);
+
+const channels = {
+  authorize,
   isChannelAllowed,
+  isChannelAllowedRule,
 };
+
+module.exports = channels;

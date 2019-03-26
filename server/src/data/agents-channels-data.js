@@ -73,8 +73,8 @@ class AgentsChannelsData {
 
   /**
    * @param {object} options
-   * @param {string} options.agentId?
-   * @param {string} options.channelId?
+   * @param {string} [options.agentId]
+   * @param {string} [options.channelId]
    * @returns {Promise<string[]>}
    */
   async getAllChannelIds(options) {

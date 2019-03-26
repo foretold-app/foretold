@@ -37,7 +37,7 @@ class ChannelsData {
    * @public
    * @param {string} id
    * @param {object} input
-   * @return {Promise<Model>}
+   * @return {Promise<Models.Channel>}
    */
   async updateOne(id, input) {
     const channel = await models.Channel.findOne({

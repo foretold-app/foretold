@@ -42,12 +42,12 @@ describe('MeasurablesData', () => {
     });
   });
 
-  describe('createOne', () => {
+  describe('getOne', () => {
     const id = 'id1';
     beforeAll(() => {
       jest.spyOn(models.Measurable, 'findOne').mockReturnValue(Promise.resolve(true));
     });
-    it('createOne', () => {
+    it('getOne', () => {
       return instance.getOne(id).then((result) => {
         expect(models.Measurable.findOne).toHaveBeenCalledWith({ "where": { "id": "id1" } });
         expect(result).toBe(true);

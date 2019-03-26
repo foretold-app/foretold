@@ -1,7 +1,9 @@
 const models = require("../models");
 
 class SeriesData {
+
   /**
+   * @tested
    * @param root
    * @param values
    * @param options
@@ -16,6 +18,7 @@ class SeriesData {
   }
 
   /**
+   * @tested
    * @param {string} id
    * @return {Promise<*>}
    */

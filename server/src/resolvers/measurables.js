@@ -1,7 +1,4 @@
-const { resolver } = require("graphql-sequelize");
-
 const data = require('../data');
-const models = require('../models');
 
 /**
  * @param root
@@ -22,7 +19,8 @@ async function all(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function one(root, args, context, info) {
-  return await resolver(models.Measurable)(root, args, context, info);
+  const agentId = context.user.agentId;
+  return await data.measurablesData.getOne(args.id, { agentId });
 }
 
 /**

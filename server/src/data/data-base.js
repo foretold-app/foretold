@@ -3,15 +3,15 @@ const models = require('../models');
 class DataBase {
 
   channelIds(agentId) {
-    return agentId ? `
+    return agentId ? `(
       SELECT "Channels"."id" FROM "Channels"
       LEFT OUTER JOIN "AgentsChannels" ON "Channels".id = "AgentsChannels"."channelId"
         AND "AgentsChannels"."agentId" = '${agentId}'
       WHERE "Channels"."isPublic" = TRUE OR "AgentsChannels"."agentId" IS NOT NULL
-    ` : `
+    )` : `(
       SELECT "Channels"."id" FROM "Channels"
       WHERE "Channels"."isPublic" = TRUE
-    `;
+    )`;
   }
 
   channelIdsLiteral(agentId) {

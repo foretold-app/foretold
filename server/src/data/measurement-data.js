@@ -56,7 +56,7 @@ class MeasurementData extends DataBase {
    * @param {object} [options.agentId]
    * @return {Promise<*>}
    */
-  async getOne(id, options) {
+  async getOne(id, options = {}) {
     return await models.Measurement.findOne({
       where: {
         id,

@@ -19,19 +19,31 @@ class SeriesData extends DataBase {
   }
 
   /**
-   * @param {string} id
+   * @param {object} options
+   * @param {string} [options.agentId]
    * @return {Promise<*>}
    */
-  async getAll() {
-    return await models.Series.findAll();
+  async getAll(options = {}) {
+    return await models.Series.findAll({
+      where: {
+        channelId: { $in: this.channelIdsLiteral(options.agentId) },
+      },
+    });
   }
 
   /**
    * @param {string} id
+   * @param {object} options
+   * @param {string} [options.agentId]
    * @return {Promise<*>}
    */
-  async getOne(id) {
-    return await models.Series.findOne({ where: { id } });
+  async getOne(id, options = {}) {
+    return await models.Series.findOne({
+      where: {
+        id,
+        channelId: { $in: this.channelIdsLiteral(options.agentId) },
+      },
+    });
   }
 }
 

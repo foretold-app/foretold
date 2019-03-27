@@ -101,7 +101,8 @@ class MeasurablesData extends DataBase {
     let where = {
       state: {
         [models.sequelize.Op.ne]: "ARCHIVED"
-      }
+      },
+      $and: [{channelId: { $in: this.channelIdsLiteral(options.agentId) }}],
     };
 
     if (seriesId) {
@@ -111,14 +112,14 @@ class MeasurablesData extends DataBase {
       where.creatorId = { [models.sequelize.Op.eq]: creatorId };
     }
     if (channelId) {
-      where.channelId = { [models.sequelize.Op.eq]: channelId };
+      where.$and.push({ channelId });
     }
 
     const items = await models.Measurable.findAll({
-      limit: limit,
-      offset: offset,
+      limit,
+      offset,
+      where,
       order: [['createdAt', 'DESC']],
-      where
     });
 
     return items;
@@ -126,10 +127,17 @@ class MeasurablesData extends DataBase {
 
   /**
    * @param {string} id
+   * @param {object} options
+   * @param {string} options.agentId
    * @return {Promise<*>}
    */
-  async getOne(id) {
-    return await models.Measurable.findOne({where: {id}});
+  async getOne(id, options = {}) {
+    return await models.Measurable.findOne({
+      where: {
+        id,
+        channelId: { $in: this.channelIdsLiteral(options.agentId) },
+      }
+    });
   }
 
 }

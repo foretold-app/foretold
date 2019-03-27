@@ -29,8 +29,7 @@ async function all(root, args, context, info) {
   const agentId = context.user.agentId;
   const offset = args.offset;
   const limit = args.limit;
-  const channelIds = await data.agentsChannelsData.getAllChannelIds({ agentId });
-  const options = { offset, limit, restrictions: { channelIds } };
+  const options = { offset, limit, agentId };
   return await data.channelsData.getAll(options);
 }
 
@@ -45,8 +44,7 @@ async function all(root, args, context, info) {
 async function one(root, args, context, info) {
   const id = args.id;
   const agentId = context.user.agentId;
-  const channelIds = await data.agentsChannelsData.getAllChannelIds({ agentId });
-  const options = { restrictions: { channelIds } };
+  const options = { agentId };
   return await data.channelsData.getOne(id, options);
 }
 

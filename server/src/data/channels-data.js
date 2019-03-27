@@ -78,18 +78,19 @@ class ChannelsData extends DataBase {
    * @param {object} options
    * @param {number} [options.offset]
    * @param {number} [options.limit]
-   * @param {object} [options.restrictions]
-   * @return {Promise<*|Array<Model>>}
+   * @param {object} [options.agentId]
+   * @return {Promise<Models.Channel[]>}
    */
   async getAll(options = {}) {
     const offset = _.get(options, 'offset', 0);
     const limit = _.get(options, 'limit', 10);
-    const query = this.getRestrictionsSync(options);
     return await models.Channel.findAll({
       limit,
       offset,
-      ...query,
       order: [['createdAt', 'DESC']],
+      where: {
+        id: { $in: this.channelIdsLiteral(options.agentId) },
+      }
     });
   }
 
@@ -99,41 +100,18 @@ class ChannelsData extends DataBase {
    * @param {object} options
    * @param {number} [options.offset]
    * @param {number} [options.limit]
-   * @param {object} [options.restrictions]
-   * @return {Promise<*|Array<Model>>}
+   * @param {string} [options.agentId]
+   * @return {Promise<Models.Channel>}
    */
   async getOne(id, options = {}) {
-    const query = this.getRestrictionsSync(options);
     return await models.Channel.findOne({
-      ...query,
-      where: { id, ...query.where }
-    });
-  }
-
-  /**
-   * @protected
-   * @param {object} [options]
-   * @param {object} [options.restrictions]
-   * @param {string[]} [options.restrictions.channelIds]
-   * @return {object}
-   */
-  getRestrictionsSync(options = {}) {
-    const restrictions = _.get(options, 'restrictions', {});
-    const query = { where: {} };
-    if (restrictions.channelIds) {
-      query.where = {
-        [models.sequelize.Op.or]: [
-          {
-            id: restrictions.channelIds,
-            isPublic: false,
-          },
-          {
-            isPublic: true,
-          }
+      where: {
+        $and: [
+          { id },
+          { id: { $in: this.channelIdsLiteral(options.agentId) } },
         ]
-      };
-    }
-    return query;
+      }
+    });
   }
 }
 

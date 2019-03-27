@@ -127,21 +127,20 @@ describe('Channels Data Layer', () => {
   describe('getAll()', () => {
     const options = { limit: 1, offset: 2 };
     beforeEach(() => {
-      jest.spyOn(instance, 'getRestrictionsSync').mockReturnValue({
-        query: '1',
-      });
       jest.spyOn(models.Channel, 'findAll').mockReturnValue(
         Promise.resolve(true),
+      );
+      jest.spyOn(instance, 'channelIdsLiteral').mockReturnValue(
+        'channelIdsLiteral',
       );
     });
     it('formats restrictions and finds all channels', () => {
       return instance.getAll(options).then((result) => {
-        expect(instance.getRestrictionsSync).toHaveBeenCalledWith(options);
         expect(models.Channel.findAll).toHaveBeenCalledWith({
           "limit": 1,
           "offset": 2,
           "order": [["createdAt", "DESC"]],
-          "query": "1"
+          "where": { "id": { "$in": "channelIdsLiteral" } }
         });
         expect(result).toBe(true);
       });
@@ -152,44 +151,24 @@ describe('Channels Data Layer', () => {
     const id = 'id1';
     const options = {};
     beforeEach(() => {
-      jest.spyOn(instance, 'getRestrictionsSync').mockReturnValue({
-        query: '1',
-      });
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(
         Promise.resolve(true),
+      );
+      jest.spyOn(instance, 'channelIdsLiteral').mockReturnValue(
+        'channelIdsLiteral',
       );
     });
     it('finds channel', () => {
       return instance.getOne(id, options).then((result) => {
-        expect(instance.getRestrictionsSync).toHaveBeenCalledWith(options);
         expect(models.Channel.findOne).toHaveBeenCalledWith({
-          "query": "1",
-          "where": { "id": "id1" }
+          "where": {
+            "$and": [
+              { "id": "id1" },
+              { "id": { "$in": "channelIdsLiteral" } }
+            ]
+          }
         });
         expect(result).toBe(true);
-      });
-    });
-  });
-
-  describe('getRestrictionsSync()', () => {
-    const options = {
-      restrictions: { r1: 'r1', channelIds: 'channelIds1' },
-    };
-    beforeEach(() => {
-      instance.getRestrictionsSync.mockRestore();
-      jest.spyOn(models.Channel, 'findOne').mockReturnValue(
-        Promise.resolve(true),
-      );
-    });
-    it('returns conditions for seek channels', () => {
-      const result = instance.getRestrictionsSync(options);
-      expect(result).toEqual({
-        "where": {
-          "orop": [{
-            "id": "channelIds1",
-            "isPublic": false
-          }, { "isPublic": true }]
-        },
       });
     });
   });

@@ -46,22 +46,16 @@ describe('Channels Resolvers', () => {
     const args = { offset: 1, limit: 2 };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.agentsChannelsData, 'getAllChannelIds').mockReturnValue(
-        Promise.resolve(['3']),
-      );
       jest.spyOn(data.channelsData, 'getAll').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('returns channels with restrictions', () => {
       return channels.all(root, args, context, info).then((result) => {
-        expect(data.agentsChannelsData.getAllChannelIds).toHaveBeenCalledWith({
-          agentId: '1',
-        });
         expect(data.channelsData.getAll).toHaveBeenCalledWith({
           "limit": 2,
           "offset": 1,
-          "restrictions": { "channelIds": ["3"] }
+          "agentId": "1"
         });
         expect(result).toBe(true);
       });
@@ -74,20 +68,14 @@ describe('Channels Resolvers', () => {
     const args = { id: 'id1' };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.agentsChannelsData, 'getAllChannelIds').mockReturnValue(
-        Promise.resolve(['3']),
-      );
       jest.spyOn(data.channelsData, 'getOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('returns channel using restrictions', () => {
       return channels.one(root, args, context, info).then((result) => {
-        expect(data.agentsChannelsData.getAllChannelIds).toHaveBeenCalledWith(
-          { "agentId": "agentId1" },
-        );
         expect(data.channelsData.getOne).toHaveBeenCalledWith("id1", {
-          "restrictions": { "channelIds": ["3"] },
+          "agentId": "agentId1"
         });
         expect(result).toBe(true);
       });
@@ -122,7 +110,7 @@ describe('Channels Resolvers', () => {
     beforeEach(() => {
       jest.spyOn(data.channelsData, 'createOne').mockReturnValue(
         Promise.resolve(true),
-        );
+      );
     });
     it('creates channel', () => {
       return channels.create(root, args, context, info).then((result) => {

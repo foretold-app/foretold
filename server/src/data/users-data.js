@@ -1,7 +1,9 @@
 const _ = require('lodash');
 const models = require('../models');
 
-class UsersData {
+const { DataBase } = require('./data-base');
+
+class UsersData extends DataBase {
 
   /**
    * @param {string} auth0Id

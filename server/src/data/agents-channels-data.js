@@ -2,7 +2,9 @@ const _ = require('lodash');
 
 const models = require("../models");
 
-class AgentsChannelsData {
+const { DataBase } = require('./data-base');
+
+class AgentsChannelsData extends DataBase {
 
   /**
    * @param {string} channelId

@@ -3,10 +3,12 @@ const _ = require('lodash');
 const models = require('../models');
 
 const { AgentsChannelsData } = require('./agents-channels-data');
+const { DataBase } = require('./data-base');
 
-class ChannelsData {
+class ChannelsData extends DataBase {
 
   constructor() {
+    super();
     this.agentsChannelsData = new AgentsChannelsData();
   }
 

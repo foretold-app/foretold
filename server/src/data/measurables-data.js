@@ -1,7 +1,9 @@
 const models = require("../models");
 const { notify } = require("../lib/notifications");
 
-class MeasurablesData {
+const { DataBase } = require('./data-base');
+
+class MeasurablesData extends DataBase {
 
   /**
    * @param data

@@ -43,7 +43,7 @@ const schema = new graphql.GraphQLSchema({
       measurements: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.measurementType)),
         args: {
-          measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          measurableId: { type: graphql.GraphQLString },
         },
         resolve: resolvers.measurements.all,
       },
@@ -61,10 +61,11 @@ const schema = new graphql.GraphQLSchema({
           limit: { type: graphql.GraphQLInt },
           creatorId: { type: graphql.GraphQLString },
           seriesId: { type: graphql.GraphQLString },
-          channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          channelId: { type: graphql.GraphQLString },
         },
         resolve: resolvers.measurables.all,
       },
+
       bot: {
         type: types.botType,
         args: _.pick(attributeFields(models.Bot), ['id']),
@@ -98,7 +99,7 @@ const schema = new graphql.GraphQLSchema({
       seriesCollection: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.seriesType)),
         args: {
-          channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          channelId: { type: graphql.GraphQLString },
         },
         resolve: resolvers.series.all,
       },

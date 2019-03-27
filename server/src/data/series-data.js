@@ -1,6 +1,8 @@
 const models = require("../models");
 
-class SeriesData {
+const { DataBase } = require('./data-base');
+
+class SeriesData extends DataBase {
 
   /**
    * @param root
@@ -14,6 +16,14 @@ class SeriesData {
       creatorId: options.user.agentId,
     });
     return newSeries;
+  }
+
+  /**
+   * @param {string} id
+   * @return {Promise<*>}
+   */
+  async getAll() {
+    return await models.Series.findAll();
   }
 
   /**

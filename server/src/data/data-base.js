@@ -3,6 +3,10 @@ const models = require('../models');
 class DataBase {
 
   /**
+   *
+   * @todo: Use ORM opportunities to join tables.
+   * @todo: Move this restrictions on "model" layer.
+   *
    * @param {string} agentId
    * @return {string}
    */
@@ -19,6 +23,7 @@ class DataBase {
   }
 
   /**
+   * @todo: see this.channelIds()
    * @param {string} agentId
    * @return {Sequelize.literal}
    */
@@ -27,6 +32,7 @@ class DataBase {
   }
 
   /**
+   * @todo: see this.channelIds()
    * @param {string} agentId
    * @return {string}
    */
@@ -39,6 +45,7 @@ class DataBase {
   }
 
   /**
+   * @todo: see this.channelIds()
    * @param {string} agentId
    * @return {Sequelize.literal}
    */

@@ -51,6 +51,12 @@ class AgentsChannelsData extends DataBase {
   }
 
   /**
+   *
+   * @todo: Call "getOne()" of "model" layer.
+   * @todo: Pass "id", "restrictions" and "filter" params
+   * @todo: right into model call.
+   * @todo: Then do the same everywhere on data layer.
+   *
    * @param {object} options
    * @param {string} options.agentId?
    * @param {string} options.channelId?

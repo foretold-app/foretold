@@ -40,7 +40,7 @@ async function authentication(options) {
     if (token) {
       return await authenticationByJwtToken(token);
     }
-    throw new Error('Token is required.');
+    return await usersData.getGuestUser();
   } catch (err) {
     console.error('Authentication', err);
     throw err;

@@ -33,6 +33,13 @@ class UsersData extends DataBase {
   }
 
   /**
+   * @return {Promise<{name: string}>}
+   */
+  async getGuestUserAsLiteral() {
+    return { name: 'Guest' };
+  }
+
+  /**
    * @param root
    * @param values
    * @param options

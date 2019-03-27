@@ -196,6 +196,7 @@ module FloatCdf = {
 module React = {
   let el = ReasonReact.element;
   let null = ReasonReact.null;
+  let str = ReasonReact.string;
   let makeToEl = (~key="", ~children=null, e) => children |> e |> el(~key);
   let withParent = (~key="", e, children) => children |> e |> el(~key);
   let withChildren = (~key="", children, e) => children |> e |> el(~key);
@@ -236,10 +237,11 @@ module HtppResponse = {
     | Loading => Loading
     };
 
-  let isError = (t: t('a)) =>
-    switch (t) {
-    | Error(e) => true
-    | _ => false
+  let withDefaults = (result: t(ReasonReact.reactElement)) =>
+    switch (result) {
+    | Success(response) => response
+    | Error(e) => <div> {"Error: " ++ e |> React.str} </div>
+    | Loading => <div> {"Loading..." |> React.str} </div>
     };
 
   let merge2 = (a: t('a), b: t('b)) =>

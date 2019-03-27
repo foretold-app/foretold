@@ -1,6 +1,8 @@
 open Utils;
 open Foretold__GraphQL;
 
+open Rationale.Function.Infix;
+
 module SeriesItems = {
   open Css;
   let items =
@@ -204,9 +206,8 @@ let make =
     },
   render: ({state, send}) => {
     let loadData = load3Queries(channelId, state.page, itemsPerPage);
-    loadData(data =>
-      switch (data) {
-      | Success((channel, series, measurables)) =>
+    loadData(
+      E.HtppResponse.fmap(((channel, series, measurables)) =>
         switch (state.selectedIndex) {
         | Some(index) =>
           selectedView(~channel, ~loggedInUser, ~send, ~measurables, ~index)
@@ -220,9 +221,8 @@ let make =
             ~seriesCollection=series,
           )
         }
-      | Loading => <div> {"Loading" |> ste} </div>
-      | Error(_) => <div> {"Error" |> ste} </div>
-      }
+      )
+      ||> E.HtppResponse.withDefaults,
     );
   },
 };

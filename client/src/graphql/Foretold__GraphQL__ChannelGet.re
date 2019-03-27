@@ -44,15 +44,15 @@ let component = (~id, fn) => {
   |> E.React.el;
 };
 
-type ttt = E.HtppResponse.t(Context.Primary.Channel.t);
+type ttt = E.HttpResponse.t(Context.Primary.Channel.t);
 
 let component2 = (~id, innerFn) => {
   let query = Query.make(~id, ());
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
-    |> E.HtppResponse.fromApollo
-    |> E.HtppResponse.fmap(e => e##channel |> E.O.fmap(toChannel))
-    |> E.HtppResponse.optionalToMissing
+    |> E.HttpResponse.fromApollo
+    |> E.HttpResponse.fmap(e => e##channel |> E.O.fmap(toChannel))
+    |> E.HttpResponse.optionalToMissing
     |> innerFn
   )
   |> E.React.el;

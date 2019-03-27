@@ -209,7 +209,7 @@ module React = {
   let inH3 = e => <h3> e </h3>;
 };
 
-module HtppResponse = {
+module HttpResponse = {
   type t('a) =
     | Loading
     | Error(string)
@@ -235,6 +235,12 @@ module HtppResponse = {
     | Success(None) => Error("Missing Needed Data")
     | Error(e) => Error(e)
     | Loading => Loading
+    };
+
+  let isSuccess = (result: t('a)) =>
+    switch (result) {
+    | Success(_) => true
+    | _ => false
     };
 
   let withDefaults = (result: t(ReasonReact.reactElement)) =>

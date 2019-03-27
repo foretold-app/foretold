@@ -146,8 +146,8 @@ let component2 = (channelId, page, pageLimit, innerComponentFn) => {
     Query.make(~offset=page * pageLimit, ~limit=pageLimit, ~channelId, ());
   QueryComponent.make(~variables=query##variables, o =>
     o.result
-    |> E.HtppResponse.fromApollo
-    |> E.HtppResponse.fmap(e =>
+    |> E.HttpResponse.fromApollo
+    |> E.HttpResponse.fmap(e =>
          e##measurables |> E.A.O.concatSomes |> E.A.fmap(toMeasurable)
        )
     |> innerComponentFn

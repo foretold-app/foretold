@@ -57,14 +57,14 @@ let component = innerFn => {
   |> E.React.el;
 };
 
-type ttt = Client.E.HtppResponse.t(Js.Array.t(series));
+type ttt = Client.E.HttpResponse.t(Js.Array.t(series));
 let component2 = innerFn => {
   open Rationale.Result.Infix;
   let query = Query.make();
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
-    |> E.HtppResponse.fromApollo
-    |> E.HtppResponse.fmap(e => e##seriesCollection |> E.JsArray.concatSomes)
+    |> E.HttpResponse.fromApollo
+    |> E.HttpResponse.fmap(e => e##seriesCollection |> E.JsArray.concatSomes)
     |> innerFn
   )
   |> E.React.el;

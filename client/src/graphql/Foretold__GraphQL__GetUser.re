@@ -78,9 +78,9 @@ let withLoggedInUserQuery = innerComponentFn =>
       let query = Query.make(~auth0Id, ());
       QueryComponent.make(~variables=query##variables, ({result}) =>
         result
-        |> E.HtppResponse.fromApollo
-        |> E.HtppResponse.fmap(e => e##user |> E.O.fmap(toUser))
-        |> E.HtppResponse.optionalToMissing
+        |> E.HttpResponse.fromApollo
+        |> E.HttpResponse.fmap(e => e##user |> E.O.fmap(toUser))
+        |> E.HttpResponse.optionalToMissing
         |> (
           e =>
             switch (e) {

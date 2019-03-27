@@ -3,7 +3,7 @@ const data = require('../data');
 
 describe('AgentsChannels Resolvers', () => {
 
-  describe('update()', () => {
+  describe('create()', () => {
     const root = {};
     const args = { channelId: 'channelId1', agentId: 'agentId2' };
     beforeEach(() => {

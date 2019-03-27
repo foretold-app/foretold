@@ -24,7 +24,7 @@ module SeriesItems = {
 
 type state = {
   page: int,
-  selected: option(int),
+  selectedIndex: option(int),
 };
 type action =
   | NextPage
@@ -38,7 +38,13 @@ let component = ReasonReact.reducerComponent("MeasurableIndex");
 let itemsPerPage = 20;
 
 let itemHeader =
-    (channel: Context.Primary.Channel.t, onForward, onBackward, isAtStart, isAtEnd) =>
+    (
+      channel: Context.Primary.Channel.t,
+      onForward,
+      onBackward,
+      isAtStart,
+      isAtEnd,
+    ) =>
   <>
     {SLayout.channelink(channel)}
     <Antd.Button onClick={_ => onBackward()} disabled=isAtStart>
@@ -151,7 +157,9 @@ let deselectedView =
             send(
               Select(
                 measurables
-                |> E.A.findIndex((r: Context.Primary.Measurable.t) => r.id == e.id),
+                |> E.A.findIndex((r: Context.Primary.Measurable.t) =>
+                     r.id == e.id
+                   ),
               ),
             )
         }
@@ -160,49 +168,82 @@ let deselectedView =
   </>;
 };
 
-let make = (~channelId: string, ~loggedInUser: Context.Primary.User.t, _children) => {
+/* let foo = fn => (r => 38) |> ((e: int => int) => e(3)); */
+
+let combine2QueryResults = (query1, query2, fnlast) =>
+  query1(response1 => query2(response2 => fnlast(response1, response2)));
+
+let top2Queries = (channelId, fn) =>
+  combine2QueryResults(
+    Queries.Channel.component2(~id=channelId),
+    Queries.SeriesCollection.component2,
+    (
+      channelResponse: Queries.Channel.ttt,
+      seriesResponse: Queries.SeriesCollection.ttt,
+    ) =>
+    fn(channelResponse, seriesResponse)
+  );
+
+let make =
+    (~channelId: string, ~loggedInUser: Context.Primary.User.t, _children) => {
   ...component,
-  initialState: () => {page: 0, selected: None},
+  initialState: () => {page: 0, selectedIndex: None},
   reducer: (action, state) =>
     switch (action) {
-    | NextPage => ReasonReact.Update({...state, page: state.page + 1})
-    | LastPage => ReasonReact.Update({...state, page: state.page - 1})
+    | NextPage =>
+      ReasonReact.Update({selectedIndex: None, page: state.page + 1})
+    | LastPage =>
+      ReasonReact.Update({selectedIndex: None, page: state.page - 1})
     | Select((num: option(int))) =>
-      ReasonReact.Update({...state, selected: num})
+      ReasonReact.Update({...state, selectedIndex: num})
     | SelectIncrement =>
       ReasonReact.Update({
         ...state,
-        selected: state.selected |> E.O.fmap(E.I.increment),
+        selectedIndex: state.selectedIndex |> E.O.fmap(E.I.increment),
       })
     | SelectDecrement =>
       ReasonReact.Update({
         ...state,
-        selected: state.selected |> E.O.fmap(E.I.decrement),
+        selectedIndex: state.selectedIndex |> E.O.fmap(E.I.decrement),
       })
     },
   render: ({state, send}) =>
-    Queries.Channel.component(~id=channelId, channel =>
-      Queries.SeriesCollection.component(
-        (seriesCollection: array(Queries.SeriesCollection.series)) =>
-        Queries.Measurables.component(
-          channel.id,
+    top2Queries(channelId, (channelResponse, seriesResponse) =>
+      switch (channelResponse, seriesResponse) {
+      | (Success(channel), Success(series)) =>
+        Queries.Measurables.component2(
+          channelId,
           state.page,
           itemsPerPage,
-          (measurables: array(Context.Primary.Measurable.t)) =>
-          switch (state.selected) {
-          | Some(index) =>
-            selectedView(~channel, ~loggedInUser, ~send, ~measurables, ~index)
-          | _ =>
-            deselectedView(
-              ~channel,
-              ~loggedInUser,
-              ~send,
-              ~state,
-              ~measurables,
-              ~seriesCollection,
-            )
+          (
+            measurablesResponse:
+              Client.E.HtppResponse.t(array(Context.Primary.Measurable.t)),
+          ) =>
+          switch (measurablesResponse) {
+          | Success(measurables) =>
+            switch (state.selectedIndex) {
+            | Some(index) =>
+              selectedView(
+                ~channel,
+                ~loggedInUser,
+                ~send,
+                ~measurables,
+                ~index,
+              )
+            | _ =>
+              deselectedView(
+                ~channel,
+                ~loggedInUser,
+                ~send,
+                ~state,
+                ~measurables,
+                ~seriesCollection=series,
+              )
+            }
+          | _ => <div />
           }
         )
-      )
+      | _ => <div />
+      }
     ),
 };

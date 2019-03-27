@@ -26,12 +26,15 @@ type state = {
   page: int,
   selectedIndex: option(int),
 };
+
 type action =
   | NextPage
   | LastPage
   | Select(option(int))
   | SelectIncrement
   | SelectDecrement;
+
+type totalState = {state};
 
 let component = ReasonReact.reducerComponent("MeasurableIndex");
 
@@ -168,12 +171,13 @@ let deselectedView =
   </>;
 };
 
-let load3Queries = (channelId, page, itemsPerPage) =>
-  E.F.flatten3Callbacks(
-    Queries.Channel.component2(~id=channelId),
-    Queries.SeriesCollection.component2,
-    Queries.Measurables.component2(channelId, page, itemsPerPage),
-  );
+let load3Queries = (channelId, page, itemsPerPage, fn) =>
+  ((a, b, c) => E.HtppResponse.merge3(a, b, c) |> fn)
+  |> E.F.flatten3Callbacks(
+       Queries.Channel.component2(~id=channelId),
+       Queries.SeriesCollection.component2,
+       Queries.Measurables.component2(channelId, page, itemsPerPage),
+     );
 
 let make =
     (~channelId: string, ~loggedInUser: Context.Primary.User.t, _children) => {
@@ -200,9 +204,9 @@ let make =
     },
   render: ({state, send}) => {
     let loadData = load3Queries(channelId, state.page, itemsPerPage);
-    loadData((channelR, seriesR, measurablesR) =>
-      switch (channelR, seriesR, measurablesR) {
-      | (Success(channel), Success(series), Success(measurables)) =>
+    loadData(data =>
+      switch (data) {
+      | Success((channel, series, measurables)) =>
         switch (state.selectedIndex) {
         | Some(index) =>
           selectedView(~channel, ~loggedInUser, ~send, ~measurables, ~index)
@@ -216,7 +220,8 @@ let make =
             ~seriesCollection=series,
           )
         }
-      | _ => <div />
+      | Loading => <div> {"Loading" |> ste} </div>
+      | Error(_) => <div> {"Error" |> ste} </div>
       }
     );
   },

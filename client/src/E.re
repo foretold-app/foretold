@@ -235,4 +235,28 @@ module HtppResponse = {
     | Error(e) => Error(e)
     | Loading => Loading
     };
+
+  let isError = (t: t('a)) =>
+    switch (t) {
+    | Error(e) => true
+    | _ => false
+    };
+
+  let merge2 = (a: t('a), b: t('b)) =>
+    switch (a, b) {
+    | (Error(a), _) => Error(a)
+    | (_, Error(b)) => Error(b)
+    | (Loading, _) => Loading
+    | (_, Loading) => Loading
+    | (Success(a), Success(b)) => Success((a, b))
+    };
+
+  let merge3 = (a: t('a), b: t('b), c: t('c)) =>
+    switch (merge2(a, b), c) {
+    | (Success((a, b)), Success(c)) => Success((a, b, c))
+    | (Error(a), _) => Error(a)
+    | (_, Error(b)) => Error(b)
+    | (Loading, _) => Loading
+    | (_, Loading) => Loading
+    };
 };

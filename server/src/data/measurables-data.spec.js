@@ -15,11 +15,15 @@ describe('tests Measurables Data layer', () => {
       limit: 2,
       channelId: '3',
       seriesId: '4',
-      creatorId: '5'
+      creatorId: '5',
+      agentId: 'agentId1'
     };
     beforeEach(() => {
       jest.spyOn(models.Measurable, 'findAll').mockReturnValue(
         Promise.resolve(true),
+      );
+      jest.spyOn(instance, 'channelIdsLiteral').mockReturnValue(
+        'channelIdsLiteral',
       );
     });
     it('finds all measurables', () => {
@@ -29,7 +33,10 @@ describe('tests Measurables Data layer', () => {
           "offset": 1,
           "order": [["createdAt", "DESC"]],
           "where": {
-            "channelId": { "undefined": "3" },
+            "$and": [
+              { "channelId": { "$in": "channelIdsLiteral" } },
+              { "channelId": "3" }
+            ],
             "creatorId": { "undefined": "5" },
             "seriesId": { "undefined": "4" },
             "state": { "neop": "ARCHIVED" }
@@ -42,15 +49,19 @@ describe('tests Measurables Data layer', () => {
 
   describe('getOne()', () => {
     const id = 'id1';
+    const options = { agentId: 'agentId1' };
     beforeEach(() => {
       jest.spyOn(models.Measurable, 'findOne').mockReturnValue(
         Promise.resolve(true),
       );
+      jest.spyOn(instance, 'channelIdsLiteral').mockReturnValue(
+        'channelIdsLiteral',
+      );
     });
     it('finds a measurable', () => {
-      return instance.getOne(id).then((result) => {
+      return instance.getOne(id, options).then((result) => {
         expect(models.Measurable.findOne).toHaveBeenCalledWith({
-          "where": { "id": "id1" },
+          "where": { "channelId": { "$in": "channelIdsLiteral" }, "id": "id1" }
         });
         expect(result).toBe(true);
       });

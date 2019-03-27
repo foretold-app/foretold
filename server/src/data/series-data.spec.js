@@ -30,15 +30,42 @@ describe('SeriesData', () => {
 
   describe('getOne()', () => {
     const id = 'id3';
+    const options = { agentId: 'agentId1' };
     beforeEach(() => {
       jest.spyOn(models.Series, 'findOne').mockReturnValue(
         Promise.resolve(true),
       );
+      jest.spyOn(instance, 'channelIdsLiteral').mockReturnValue(
+        'channelIdsLiteral',
+      );
     });
     it('finds series', () => {
-      return instance.getOne(id).then((result) => {
+      return instance.getOne(id, options).then((result) => {
         expect(models.Series.findOne).toHaveBeenCalledWith({
-          "where": { "id": "id3" },
+          "where": {
+            "channelId": { "$in": "channelIdsLiteral" },
+            "id": "id3",
+          }
+        });
+        expect(result).toBe(true);
+      });
+    });
+  });
+
+  describe('getAll()', () => {
+    const options = { agentId: 'agentId1' };
+    beforeEach(() => {
+      jest.spyOn(models.Series, 'findAll').mockReturnValue(
+        Promise.resolve(true),
+      );
+      jest.spyOn(instance, 'channelIdsLiteral').mockReturnValue(
+        'channelIdsLiteral',
+      );
+    });
+    it('finds all series', () => {
+      return instance.getAll(options).then((result) => {
+        expect(models.Series.findAll).toHaveBeenCalledWith({
+          "where": { "channelId": { "$in": "channelIdsLiteral" } },
         });
         expect(result).toBe(true);
       });

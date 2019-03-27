@@ -1,20 +1,25 @@
-const { resolver } = require("graphql-sequelize");
-
 const series = require('./series');
 const data = require('../data');
-const models = require('../models');
 
 describe('Series Resolvers', () => {
 
   describe('one()', () => {
     const root = {};
-    const args = {};
-    const context = {};
+    const args = { id: 'id1' };
+    const context = { user: { agentId: 'agentId1' } };
     const info = {};
+    beforeEach(() => {
+      jest.spyOn(data.seriesData, 'getOne').mockReturnValue(
+        Promise.resolve(true),
+      );
+    });
     it('returns series', () => {
       return series.one(root, args, context, info).then((result) => {
-        expect(resolver).toHaveBeenCalledWith(models.Series);
-        expect(result).toEqual([root, args, context, info]);
+        expect(data.seriesData.getOne).toHaveBeenCalledWith(
+          'id1',
+          { "agentId": "agentId1" },
+        );
+        expect(result).toEqual(true);
       });
     });
   });
@@ -22,12 +27,19 @@ describe('Series Resolvers', () => {
   describe('all()', () => {
     const root = {};
     const args = {};
-    const context = {};
+    const context = { user: { agentId: 'agentId1' } };
     const info = {};
+    beforeEach(() => {
+      jest.spyOn(data.seriesData, 'getAll').mockReturnValue(
+        Promise.resolve(true),
+      );
+    });
     it('returns series collection', () => {
       return series.all(root, args, context, info).then((result) => {
-        expect(resolver).toHaveBeenCalledWith(models.Series);
-        expect(result).toEqual([root, args, context, info]);
+        expect(data.seriesData.getAll).toHaveBeenCalledWith(
+          { "agentId": "agentId1" },
+        );
+        expect(result).toEqual(true);
       });
     });
   });

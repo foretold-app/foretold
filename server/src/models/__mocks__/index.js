@@ -36,6 +36,7 @@ const Measurement = {
   create: jest.fn(() => Promise.resolve(true)),
   findById: jest.fn(() => Promise.resolve(true)),
   findOrCreate: jest.fn(() => Promise.resolve(true)),
+  findAll: jest.fn(() => Promise.resolve(true)),
 };
 
 const Series = {
@@ -43,6 +44,7 @@ const Series = {
   create: jest.fn(() => Promise.resolve(true)),
   findById: jest.fn(() => Promise.resolve(true)),
   findOrCreate: jest.fn(() => Promise.resolve(true)),
+  findAll: jest.fn(() => Promise.resolve(true)),
 };
 
 const sequelize = {

@@ -8,7 +8,8 @@ const data = require('../data');
  * @returns {Promise<*|Array<Model>>}
  */
 async function all(root, args, context, info) {
-  return await data.measurablesData.getAll(args);
+  const agentId = context.user.agentId;
+  return await data.measurablesData.getAll({ ...args, agentId });
 }
 
 /**

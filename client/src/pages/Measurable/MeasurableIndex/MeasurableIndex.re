@@ -168,20 +168,11 @@ let deselectedView =
   </>;
 };
 
-/* let foo = fn => (r => 38) |> ((e: int => int) => e(3)); */
-
-let combine2QueryResults = (query1, query2, fnlast) =>
-  query1(response1 => query2(response2 => fnlast(response1, response2)));
-
-let top2Queries = (channelId, fn) =>
-  combine2QueryResults(
+let load3Queries = (channelId, page, itemsPerPage) =>
+  E.F.flatten3Callbacks(
     Queries.Channel.component2(~id=channelId),
     Queries.SeriesCollection.component2,
-    (
-      channelResponse: Queries.Channel.ttt,
-      seriesResponse: Queries.SeriesCollection.ttt,
-    ) =>
-    fn(channelResponse, seriesResponse)
+    Queries.Measurables.component2(channelId, page, itemsPerPage),
   );
 
 let make =
@@ -207,43 +198,26 @@ let make =
         selectedIndex: state.selectedIndex |> E.O.fmap(E.I.decrement),
       })
     },
-  render: ({state, send}) =>
-    top2Queries(channelId, (channelResponse, seriesResponse) =>
-      switch (channelResponse, seriesResponse) {
-      | (Success(channel), Success(series)) =>
-        Queries.Measurables.component2(
-          channelId,
-          state.page,
-          itemsPerPage,
-          (
-            measurablesResponse:
-              Client.E.HtppResponse.t(array(Context.Primary.Measurable.t)),
-          ) =>
-          switch (measurablesResponse) {
-          | Success(measurables) =>
-            switch (state.selectedIndex) {
-            | Some(index) =>
-              selectedView(
-                ~channel,
-                ~loggedInUser,
-                ~send,
-                ~measurables,
-                ~index,
-              )
-            | _ =>
-              deselectedView(
-                ~channel,
-                ~loggedInUser,
-                ~send,
-                ~state,
-                ~measurables,
-                ~seriesCollection=series,
-              )
-            }
-          | _ => <div />
-          }
-        )
+  render: ({state, send}) => {
+    let loadData = load3Queries(channelId, state.page, itemsPerPage);
+    loadData((channelR, seriesR, measurablesR) =>
+      switch (channelR, seriesR, measurablesR) {
+      | (Success(channel), Success(series), Success(measurables)) =>
+        switch (state.selectedIndex) {
+        | Some(index) =>
+          selectedView(~channel, ~loggedInUser, ~send, ~measurables, ~index)
+        | _ =>
+          deselectedView(
+            ~channel,
+            ~loggedInUser,
+            ~send,
+            ~state,
+            ~measurables,
+            ~seriesCollection=series,
+          )
+        }
       | _ => <div />
       }
-    ),
+    );
+  },
 };

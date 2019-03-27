@@ -52,8 +52,8 @@ module Float = {
 };
 
 module I = {
-  let increment = 1->(+);
-  let decrement = 1->(-);
+  let increment = n => n + 1;
+  let decrement = n => n - 1;
 };
 
 /* R for Result */

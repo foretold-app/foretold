@@ -9,8 +9,9 @@ let component = ReasonReact.reducerComponent("MeasurableIndex");
 
 let itemsPerPage = 20;
 
+/* , */
 let load3Queries = (channelId, page, itemsPerPage, fn) =>
-  ((a, b, c) => E.HttpResponse.merge3(a, b, c) |> fn)
+  ((a, b, c) => (a, E.HttpResponse.merge2(b, c)) |> fn)
   |> E.F.flatten3Callbacks(
        Queries.Channel.component2(~id=channelId),
        Queries.SeriesCollection.component2,
@@ -20,7 +21,7 @@ let load3Queries = (channelId, page, itemsPerPage, fn) =>
 let make =
     (~channelId: string, ~loggedInUser: Context.Primary.User.t, _children) => {
   ...component,
-  initialState: () => {page: 0, selectedIndex: None},
+  initialState: () => Types.Redux.initialState,
   reducer: (action, state) =>
     switch (action) {
     | NextPage =>
@@ -42,12 +43,13 @@ let make =
     },
   render: ({state, send}) => {
     let loadData = load3Queries(channelId, state.page, itemsPerPage);
-    loadData(data =>
+    loadData(((channel, query)) =>
       Types.MeasurableIndexDataState.make({
         page: state.page,
-        pageSelectedIndex: None,
+        pageSelectedIndex: state.selectedIndex,
         loggedInUser,
-        query: data,
+        channel,
+        query,
       })
       |> Components.MeasurableIndexDataState.toComponent(send)
     );

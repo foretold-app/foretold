@@ -95,33 +95,36 @@ module LoadedAndUnselected = {
 
 module MeasurableIndexDataState = {
   open Measurable__Index__Types.MeasurableIndexDataState;
-  let toHeader = (send, state: state) =>
-    switch (state) {
-    | InvalidIndexError(channel) => SLayout.channelink(channel)
-    | WithChannelButNotQuery(c) => SLayout.channelink(c.channel)
-    | LoadedAndUnselected(loadedAndUnselected) =>
-      LoadedAndUnselected.header(loadedAndUnselected, send)
-    | LoadedAndSelected(loadedAndSelected) =>
-      LoadedAndSelected.header(loadedAndSelected, send)
-    | WithoutChannel(channel) => <div />
-    };
 
-  let toBody = (send, state: state) =>
-    switch (state) {
-    | InvalidIndexError(e) => "Item Not Valid" |> ste
-    | WithChannelButNotQuery(_) => "Loading..." |> ste
-    | LoadedAndUnselected(loadedAndUnselected) =>
-      LoadedAndUnselected.body(loadedAndUnselected, send)
-    | LoadedAndSelected(loadedAndSelected) =>
-      LoadedAndSelected.body(loadedAndSelected)
-    | WithoutChannel(channel) => "Loading..." |> ste
-    };
+  let toBoth = (send, state: state) =>
+    SLayout.FullPage.(
+      switch (state) {
+      | InvalidIndexError(channel) => {
+          head: SLayout.channelink(channel),
+          body: "Item Not Valid" |> ste,
+        }
+      | WithChannelButNotQuery(c) => {
+          head: SLayout.channelink(c.channel),
+          body: "Loading..." |> ste,
+        }
+      | LoadedAndUnselected(l) => {
+          head: LoadedAndUnselected.header(l, send),
+          body: LoadedAndUnselected.body(l, send),
+        }
+      | LoadedAndSelected(l) => {
+          head: LoadedAndSelected.header(l, send),
+          body: LoadedAndSelected.body(l),
+        }
+
+      | WithoutChannel(channelResponse) => {
+          head: <div />,
+          body: "Loading..." |> ste,
+        }
+      }
+    );
 
   let toComponent = (send, state: state) =>
-    <>
-      <SLayout.Header> {toHeader(send, state)} </SLayout.Header>
-      <SLayout.MainSection> {toBody(send, state)} </SLayout.MainSection>
-    </>;
+    toBoth(send, state) |> SLayout.FullPage.make |> E.React.el;
 };
 
 module Components = {};

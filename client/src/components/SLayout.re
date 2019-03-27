@@ -87,6 +87,19 @@ module MainSection = {
   };
 };
 
+module FullPage = {
+  let component = ReasonReact.statelessComponent("Page");
+  type t = {
+    head: ReasonReact.reactElement,
+    body: ReasonReact.reactElement,
+  };
+  let make = ({head, body}: t) => {
+    ...component,
+    render: _ =>
+      <> <Header> head </Header> <MainSection> body </MainSection> </>,
+  };
+};
+
 let channelBack =
     (
       ~channel: Context.Primary.Channel.t,
@@ -98,7 +111,9 @@ let channelBack =
   </div>;
 
 let channelink = (c: Context.Primary.Channel.t) =>
-  <div className=Styles.headerText> {c |> Context.Primary.Channel.present} </div>;
+  <div className=Styles.headerText>
+    {c |> Context.Primary.Channel.present}
+  </div>;
 
 let seriesHead = (channel: Context.Primary.Channel.t, seriesName) =>
   <>

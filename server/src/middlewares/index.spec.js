@@ -95,7 +95,7 @@ describe('Middlewares', () => {
     const info = {};
     return middlewares.Query.series(resolve, root, args, context, info)
       .then((result) => {
-        expect(series.serie)
+        expect(series.series)
           .toHaveBeenCalledWith(root, args, context, info);
         expect(channels.channel)
           .toHaveBeenCalledWith(root, args, context, info);

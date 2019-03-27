@@ -1,3 +1,3 @@
 module.exports = {
-  serie: jest.fn(() => Promise.resolve(true)),
+  series: jest.fn(() => Promise.resolve(true)),
 };

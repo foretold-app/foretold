@@ -9,15 +9,15 @@ const data = require('../data');
  * @param {object} info
  * @return {Promise<void>}
  */
-async function serie(root, args, context, info) {
+async function series(root, args, context, info) {
   const id = _.get(args, 'id');
-  console.log('\x1b[36m ---> \x1b[0m Middleware (serie)', { id });
+  console.log('\x1b[36m ---> \x1b[0m Middleware (series)', { id });
   if (!id) return;
-  const serie = await data.seriesData.getOne(id);
-  context.serie = serie;
-  context.channelId = serie.channelId;
+  const series = await data.seriesData.getOne(id);
+  context.series = series;
+  context.channelId = series.channelId;
 }
 
 module.exports = {
-  serie,
+  series,
 };

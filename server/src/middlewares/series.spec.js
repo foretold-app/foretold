@@ -1,9 +1,9 @@
-const { serie } = require('./series');
+const { series } = require('./series');
 const data = require('../data');
 
 describe('Series Middleware', () => {
 
-  describe('serie()', () => {
+  describe('series()', () => {
     const serieObj = { channelId: 'channelId1' };
     beforeEach(() => {
       jest.spyOn(data.seriesData, 'getOne').mockReturnValue(
@@ -16,10 +16,10 @@ describe('Series Middleware', () => {
       const args = { id: 'serieId1' };
       const context = {};
       const info = {};
-      return serie(root, args, context, info).then((result) => {
+      return series(root, args, context, info).then((result) => {
         expect(data.seriesData.getOne).toHaveBeenCalledWith('serieId1');
         expect(result).toBe(undefined);
-        expect(context.serie).toBe(serieObj);
+        expect(context.series).toBe(serieObj);
         expect(context.channelId).toBe(serieObj.channelId);
       });
     });

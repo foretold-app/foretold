@@ -22,20 +22,20 @@ class ChannelsData extends DataBase {
     let channel = await models.Channel.findOne({
       where: { name: input.name },
     });
-
-    if (!channel) {
-      channel = await models.Channel.create({
-        ...input,
-        creatorId: user.agentId,
-      });
-      await this.agentsChannelsData.createOne(
-        channel.id,
-        user.agentId, [
-          models.AgentsChannels.ROLES.admin,
-          models.AgentsChannels.ROLES.viewer
-        ]
-      );
+    if (channel) {
+      throw new Error('Channel exists.');
     }
+    channel = await models.Channel.create({
+      ...input,
+      creatorId: user.agentId,
+    });
+    await this.agentsChannelsData.createOne(
+      channel.id,
+      user.agentId, [
+        models.AgentsChannels.ROLES.admin,
+        models.AgentsChannels.ROLES.viewer
+      ]
+    );
     return channel;
   }
 

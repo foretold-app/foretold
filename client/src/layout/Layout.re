@@ -37,6 +37,7 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
     | ChannelShow(channelId) =>
       SelectWithPaginationReducer.make(
         ~itemsPerPage=20,
+        ~channelId,
         ~subComponent=
           MeasurableIndex.make(~channelId, ~loggedInUser, ~layout),
       )
@@ -53,6 +54,7 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
     | _ =>
       SelectWithPaginationReducer.make(
         ~itemsPerPage=20,
+        ~channelId=defaultChannel,
         ~subComponent=
           MeasurableIndex.make(
             ~channelId=defaultChannel,

@@ -77,7 +77,15 @@ module LoadedAndUnselected = {
     </>;
 
   let body = (t: t, send: SelectWithPaginationReducer.Types.send) => {
-    let measurables = t.loadedResources.measurables;
+    /* let measurables = t.loadedResources.measurables; */
+    let measurables =
+      (
+        switch (t.reducerParams.response) {
+        | Some(Success(r)) => Some(r)
+        | _ => None
+        }
+      )
+      |> E.O.toExn("");
     let loggedInUser = t.loggedInUser;
     <>
       {E.React.showIf(shouldShowSeriesCollection(t), seriesList(t))}

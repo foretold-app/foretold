@@ -267,6 +267,8 @@ module Measurable = {
     };
   };
 
+  let isEqual = (a: t, b: t) => a.id == b.id;
+
   let compare = (measurableA: t, measurableB: t) =>
     switch (
       toStatus(measurableA),

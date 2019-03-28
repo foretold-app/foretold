@@ -270,6 +270,14 @@ module HttpResponse = {
     | (Loading, _) => Loading
     | (_, Loading) => Loading
     };
+
+  let isEq = (a: t('a), b: t('a), isEqual) =>
+    switch (a, b) {
+    | (Success(a), Success(b)) => isEqual(a, b)
+    | (Loading, Loading) => true
+    | (Error(a), Error(b)) => a == b
+    | (_, _) => false
+    };
 };
 
 module NonZeroInt = {

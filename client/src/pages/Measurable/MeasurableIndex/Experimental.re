@@ -18,7 +18,12 @@ module Types = {
     | ItemSelected(itemSelected);
 
   type response =
-    Client.E.HttpResponse.t(array(Context.Primary.Measurable.t));
+    Client.E.HttpResponse.t(array(Client.Context.Primary.Measurable.t));
+
+  type state = {
+    itemState,
+    response: option(response),
+  };
 
   type action =
     | UpdateResponse(response)
@@ -45,13 +50,7 @@ module Types = {
   type reducerParams = {
     itemsPerPage: int,
     itemState,
-    response: option(response),
     send,
-  };
-
-  type state = {
-    itemState,
-    response: option(response),
   };
 };
 
@@ -134,11 +133,6 @@ module Reducers = {
 
   module ItemState = {
     type t = itemState;
-    let pageNumber = (t: t) =>
-      switch (t) {
-      | ItemSelected(r) => r.pageNumber
-      | ItemUnselected(r) => r.pageNumber
-      };
   };
 
   module ReducerParams = {
@@ -162,16 +156,13 @@ module Reducers = {
 
 let component = ReasonReact.reducerComponent("PaginationReducer");
 
-let compareMeasurables = (a, b) =>
-  Belt.Array.eq(a, b, Context.Primary.Measurable.isEqual);
-
-let make = (~itemsPerPage=20, ~channelId: string, ~subComponent, _children) => {
+let make = (~itemsPerPage=20, ~subComponent, _children) => {
   ...component,
   initialState: () => {
     itemState: ItemUnselected({pageNumber: 0}),
     response: None,
   },
-  reducer: (action, state: state) =>
+  reducer: (action, state) =>
     switch (action) {
     | UpdateResponse(response) =>
       {response: Some(response), itemState: state.itemState}
@@ -192,22 +183,17 @@ let make = (~itemsPerPage=20, ~channelId: string, ~subComponent, _children) => {
     },
   render: ({state, send}) =>
     Queries.Measurables.component2(
-      channelId,
-      state.itemState |> Reducers.ItemState.pageNumber,
+      "sdf",
+      0,
       itemsPerPage,
       response => {
-        switch (state.response) {
-        | Some(r) =>
-          if (!E.HttpResponse.isEq(r, response, compareMeasurables)) {
-            send(UpdateResponse(response));
-          }
-        | None => send(UpdateResponse(response))
+        if (Some(response) != state.response) {
+          send(UpdateResponse(response));
         };
         subComponent(
           ~selectWithPaginationParams={
             itemsPerPage,
             itemState: state.itemState,
-            response: state.response,
             send,
           },
         );

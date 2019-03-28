@@ -33,7 +33,7 @@ class AgentsChannelsData extends DataBase {
     const agentChannel = await models.AgentsChannels.findOne({
       where: { channelId, agentId }
     });
-    if (agentChannel) {
+    if (agentChannel && roles.length !== 0) {
       await agentChannel.update({ roles });
     }
     return agentChannel;

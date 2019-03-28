@@ -43,7 +43,7 @@ describe('Channels Data Layer', () => {
         Promise.resolve(false),
       );
       jest.spyOn(models.Channel, 'create').mockReturnValue(
-        Promise.resolve(true),
+        Promise.resolve({ id: 'id1' }),
       );
       jest.spyOn(AgentsChannelsData.prototype, 'createOne').mockReturnValue(
         Promise.resolve(true),
@@ -56,7 +56,12 @@ describe('Channels Data Layer', () => {
         });
         expect(models.Channel.create).toHaveBeenCalledTimes(1);
         expect(AgentsChannelsData.prototype.createOne).toHaveBeenCalledTimes(1);
-        expect(result).toBe(true);
+        expect(AgentsChannelsData.prototype.createOne).toHaveBeenCalledWith(
+          "id1",
+          "agentId1",
+          ["admin", "viewer"]
+        );
+        expect(result).toEqual({ id: 'id1' });
       });
     });
   });

@@ -32,3 +32,53 @@ export namespace Schema {
     isPublic: boolean;
   }
 }
+
+export namespace Layers {
+
+  namespace DataSourceLayer {
+    type compoundId = object;
+    type id = string | compoundId;
+    type data = object;
+    type restrictions = object;
+    type filter = object;
+    type pagination = object;
+    type query = object;
+    type params = object;
+
+    interface DataSource {
+      createOne(data, restrictions): any;
+
+      getOne(params, query, restrictions): any;
+
+      updateOne(params, data, restrictions): any;
+
+      deleteOne(params, restrictions): any | null;
+
+      getAll(filter, pagination, restrictions): any[];
+    }
+  }
+
+  namespace AbstractModelsLayer {
+    type compoundId = object;
+    type id = string | compoundId;
+    type data = object;
+    type restrictions = object;
+    type filter = object;
+    type pagination = object;
+    type query = object;
+    type params = object;
+
+    interface AbstractModel {
+      deleteOne(id, restrictions): any;
+
+      updateOne(id, data, restrictions): any;
+
+      createOne(data, restrictions): any;
+
+      getOne(id, query, restrictions): any;
+
+      getAll(filter, pagination, restrictions): any[];
+    }
+  }
+
+}

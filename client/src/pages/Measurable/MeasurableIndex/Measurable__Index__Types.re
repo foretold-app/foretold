@@ -43,18 +43,6 @@ module LoadedAndSelected = {
     channel,
     loadedResources,
   };
-
-  module Actions = {
-    let itemAtIndexExists = (t: t, index) => {
-      let atLeast0 = i => i >= 0;
-      let exists = E.A.get(t.loadedResources.measurables) ||> E.O.isSome;
-      atLeast0(index) && exists(index);
-    };
-    let canIncrement = (t: t) =>
-      itemAtIndexExists(t, t.itemState.selectedIndex + 1);
-    let canDecrement = (t: t) =>
-      itemAtIndexExists(t, t.itemState.selectedIndex - 1);
-  };
 };
 
 module LoadedAndUnselected = {
@@ -83,17 +71,6 @@ module LoadedAndUnselected = {
   let selectMeasurableOfMeasurableId = (t: t, id) =>
     findMeasurableIndexOfMeasurableId(t, id)
     |> E.O.fmap(e => ReducerTypes.SelectIndex(e));
-
-  module Actions = {
-    let canIncrement = (t: t) =>
-      ReducerParams.canIncrementPage(
-        E.A.length(t.loadedResources.measurables),
-        t.reducerParams,
-      );
-
-    let canDecrement = (t: t) =>
-      ReducerParams.canDecrementPage(t.reducerParams);
-  };
 };
 
 module WithChannelButNotQuery = {
@@ -117,12 +94,6 @@ module MeasurableIndexDataState = {
     | LoadedAndUnselected(LoadedAndUnselected.t)
     | LoadedAndSelected(LoadedAndSelected.t);
 
-  let findMeasurable =
-      (index: int, query: (seriesCollectionType, measurablesType)) => {
-    let (_, measurables) = query;
-    E.A.get(measurables, index);
-  };
-
   type input = {
     reducerParams: ReducerTypes.reducerParams,
     loggedInUser,
@@ -137,7 +108,7 @@ module MeasurableIndexDataState = {
         Success(channel),
         Success(resources),
       ) =>
-      switch (findMeasurable(selectedIndex, resources)) {
+      switch (u.reducerParams.selection) {
       | Some(measurable) =>
         LoadedAndSelected({
           channel,

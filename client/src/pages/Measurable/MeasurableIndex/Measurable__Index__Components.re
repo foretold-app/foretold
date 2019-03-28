@@ -2,6 +2,7 @@ open Rationale.Function.Infix;
 open Utils;
 open Measurable__Index__Types;
 
+module ReducerParams = SelectWithPaginationReducer.Reducers.ReducerParams;
 let itemHeader =
     (
       channel: Context.Primary.Channel.t,
@@ -38,8 +39,8 @@ module LoadedAndSelected = {
           t.channel,
           () => send(SelectWithPaginationReducer.Types.NextSelection),
           () => send(SelectWithPaginationReducer.Types.LastSelection),
-          Actions.canDecrement(t),
-          Actions.canIncrement(t),
+          ReducerParams.canDecrementSelection(t.reducerParams),
+          ReducerParams.canIncrementSelection(t.reducerParams),
         )
       }
     </>;
@@ -60,8 +61,8 @@ module LoadedAndUnselected = {
       channel,
       () => send(SelectWithPaginationReducer.Types.NextPage),
       () => send(SelectWithPaginationReducer.Types.LastPage),
-      Actions.canDecrement(t),
-      Actions.canIncrement(t),
+      ReducerParams.canDecrementPage(t.reducerParams),
+      ReducerParams.canIncrementPage(t.reducerParams),
     );
   };
 
@@ -77,11 +78,10 @@ module LoadedAndUnselected = {
     </>;
 
   let body = (t: t, send: SelectWithPaginationReducer.Types.send) => {
-    /* let measurables = t.loadedResources.measurables; */
     let measurables =
       (
         switch (t.reducerParams.response) {
-        | Some(Success(r)) => Some(r)
+        | Success(r) => Some(r)
         | _ => None
         }
       )

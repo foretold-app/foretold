@@ -17,8 +17,8 @@ module Types = {
     | ItemUnselected(itemUnselected)
     | ItemSelected(itemSelected);
 
-  type response =
-    Client.E.HttpResponse.t(array(Context.Primary.Measurable.t));
+  type responseIndividual = Context.Primary.Measurable.t;
+  type response = Client.E.HttpResponse.t(array(responseIndividual));
 
   type action =
     | UpdateResponse(response)
@@ -45,13 +45,14 @@ module Types = {
   type reducerParams = {
     itemsPerPage: int,
     itemState,
-    response: option(response),
+    response,
+    selection: option(responseIndividual),
     send,
   };
 
   type state = {
     itemState,
-    response: option(response),
+    response,
   };
 };
 
@@ -141,13 +142,24 @@ module Reducers = {
       };
   };
 
+  module State = {
+    type t = state;
+    let selection = (t: t) =>
+      switch (t.itemState, t.response) {
+      | (ItemUnselected({pageNumber}), Success(m)) => E.A.get(m, pageNumber)
+      | _ => None
+      };
+  };
+
   module ReducerParams = {
     type t = reducerParams;
+
     let pageNumber = (t: t) =>
       switch (t.itemState) {
       | ItemSelected(r) => r.pageNumber
       | ItemUnselected(r) => r.pageNumber
       };
+
     let pageIndex = (t: t) =>
       switch (t.itemState) {
       | ItemSelected(r) => Some(r.selectedIndex)
@@ -155,8 +167,30 @@ module Reducers = {
       };
 
     let canDecrementPage = (t: t) => t |> pageNumber > 0;
-    let canIncrementPage = (itemsOnPage, t: t) =>
-      itemsOnPage == t.itemsPerPage;
+
+    let canIncrementPage = (t: t) =>
+      switch (t.response) {
+      | Success(r) => r |> E.A.length == t.itemsPerPage
+      | _ => false
+      };
+
+    let itemExistsAtIndex = (t: t, index) =>
+      switch (t.response) {
+      | Success(r) => index < E.A.length(r) && index >= 0
+      | _ => false
+      };
+
+    let canDecrementSelection = (t: t) =>
+      t
+      |> pageIndex
+      |> E.O.fmap(r => itemExistsAtIndex(t, r - 1))
+      |> E.O.default(false);
+
+    let canIncrementSelection = (t: t) =>
+      t
+      |> pageIndex
+      |> E.O.fmap(r => itemExistsAtIndex(t, r + 1))
+      |> E.O.default(false);
   };
 };
 
@@ -169,13 +203,12 @@ let make = (~itemsPerPage=20, ~channelId: string, ~subComponent, _children) => {
   ...component,
   initialState: () => {
     itemState: ItemUnselected({pageNumber: 0}),
-    response: None,
+    response: Loading,
   },
   reducer: (action, state: state) =>
     switch (action) {
     | UpdateResponse(response) =>
-      {response: Some(response), itemState: state.itemState}
-      ->ReasonReact.Update
+      {response, itemState: state.itemState}->ReasonReact.Update
     | _ =>
       let newState =
         switch (state, action) {
@@ -196,18 +229,15 @@ let make = (~itemsPerPage=20, ~channelId: string, ~subComponent, _children) => {
       state.itemState |> Reducers.ItemState.pageNumber,
       itemsPerPage,
       response => {
-        switch (state.response) {
-        | Some(r) =>
-          if (!E.HttpResponse.isEq(r, response, compareMeasurables)) {
-            send(UpdateResponse(response));
-          }
-        | None => send(UpdateResponse(response))
+        if (!E.HttpResponse.isEq(state.response, response, compareMeasurables)) {
+          send(UpdateResponse(response));
         };
         subComponent(
           ~selectWithPaginationParams={
             itemsPerPage,
             itemState: state.itemState,
             response: state.response,
+            selection: Reducers.State.selection(state),
             send,
           },
         );

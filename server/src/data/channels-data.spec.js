@@ -25,14 +25,9 @@ describe('Channels Data Layer', () => {
         Promise.resolve(true),
       );
     });
-    it('finds channel', () => {
-      return instance.createOne(user, input).then((result) => {
-        expect(models.Channel.findOne).toHaveBeenCalledWith({
-          where: { name: input.name },
-        });
-        expect(models.Channel.create).toHaveBeenCalledTimes(0);
-        expect(AgentsChannelsData.prototype.createOne).toHaveBeenCalledTimes(0);
-        expect(result).toBe(true);
+    it('throw an error that channel is exists', () => {
+      instance.createOne(user, input).catch((err) => {
+        expect(err).toBeInstanceOf(Error);
       });
     });
   });
@@ -154,7 +149,7 @@ describe('Channels Data Layer', () => {
 
   describe('getOne()', () => {
     const id = 'id1';
-    const options = {};
+    const options = { agentId: undefined };
     beforeEach(() => {
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(
         Promise.resolve(true),

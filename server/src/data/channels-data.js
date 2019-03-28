@@ -23,7 +23,7 @@ class ChannelsData extends DataBase {
       where: { name: input.name },
     });
     if (channel) {
-      throw new Error('Channel exists.');
+      return Promise.reject(new Error('Channel exists.'));
     }
     channel = await models.Channel.create({
       ...input,
@@ -33,8 +33,8 @@ class ChannelsData extends DataBase {
       channel.id,
       user.agentId, [
         models.AgentsChannels.ROLES.admin,
-        models.AgentsChannels.ROLES.viewer
-      ]
+        models.AgentsChannels.ROLES.viewer,
+      ],
     );
     return channel;
   }

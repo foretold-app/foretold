@@ -1,6 +1,9 @@
 const models = require("../models");
 
-class SeriesData {
+const { DataBase } = require('./data-base');
+
+class SeriesData extends DataBase {
+
   /**
    * @param root
    * @param values
@@ -15,6 +18,33 @@ class SeriesData {
     return newSeries;
   }
 
+  /**
+   * @param {object} options
+   * @param {string} [options.agentId]
+   * @return {Promise<*>}
+   */
+  async getAll(options = {}) {
+    return await models.Series.findAll({
+      where: {
+        channelId: { $in: this.channelIdsLiteral(options.agentId) },
+      },
+    });
+  }
+
+  /**
+   * @param {string} id
+   * @param {object} options
+   * @param {string} [options.agentId]
+   * @return {Promise<*>}
+   */
+  async getOne(id, options = {}) {
+    return await models.Series.findOne({
+      where: {
+        id,
+        channelId: { $in: this.channelIdsLiteral(options.agentId) },
+      },
+    });
+  }
 }
 
 module.exports = {

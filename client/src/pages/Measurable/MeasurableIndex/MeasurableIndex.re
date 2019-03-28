@@ -14,7 +14,7 @@ let load3Queries = (channelId, page, itemsPerPage, fn) =>
   ((a, b, c) => (a, E.HttpResponse.merge2(b, c)) |> fn)
   |> E.F.flatten3Callbacks(
        Queries.Channel.component2(~id=channelId),
-       Queries.SeriesCollection.component2,
+       Queries.SeriesCollection.component2(~channelId),
        Queries.Measurables.component2(channelId, page, itemsPerPage),
      );
 

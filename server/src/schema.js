@@ -2,28 +2,32 @@ const _ = require('lodash');
 
 const graphql = require("graphql");
 const { attributeFields, resolver } = require("graphql-sequelize");
+const { applyMiddleware } = require('graphql-middleware');
 
 const models = require("./models");
 const data = require('./data');
+const resolvers = require('./resolvers');
 
 const types = require('./types');
 const { stats } = require('./types/stats');
 const { filterr } = require('./types/filterr');
 
+const { permissions } = require('./authorizers');
+
 const schema = new graphql.GraphQLSchema({
   query: new graphql.GraphQLObjectType({
     name: 'Query',
     fields: {
+
       user: {
         type: types.userType,
         args: {
           id: { type: graphql.GraphQLString },
           auth0Id: { type: graphql.GraphQLString },
         },
-        resolve: async (ops, values, options) => {
-          return data.usersData.getUser(ops, values, options);
-        }
+        resolve: data.usersData.getUser,
       },
+
       users: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.userType)),
         resolve: resolver(models.User),
@@ -32,36 +36,41 @@ const schema = new graphql.GraphQLSchema({
       measurement: {
         type: types.measurementType,
         args: _.pick(attributeFields(models.Measurement), ['id']),
-        resolve: resolver(models.Measurement),
+        resolve: resolvers.measurements.one,
       },
+
       measurements: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.measurementType)),
-        resolve: resolver(models.Measurement),
+        args: {
+          measurableId: { type: graphql.GraphQLString },
+        },
+        resolve: resolvers.measurements.all,
       },
 
       measurable: {
         type: types.measurableType,
         args: _.pick(attributeFields(models.Measurable), ['id']),
-        resolve: resolver(models.Measurable),
+        resolve: resolvers.measurables.one,
       },
+
       measurables: {
         type: new graphql.GraphQLNonNull(new graphql.GraphQLList(types.measurableType)),
         args: {
           offset: { type: graphql.GraphQLInt },
           limit: { type: graphql.GraphQLInt },
           creatorId: { type: graphql.GraphQLString },
-          channelId: { type: graphql.GraphQLString },
           seriesId: { type: graphql.GraphQLString },
+          channelId: { type: graphql.GraphQLString },
         },
-        resolve: async (ops, values, options) => {
-          return data.measurablesData.getAll(ops, values, options);
-        }
+        resolve: resolvers.measurables.all,
       },
+
       bot: {
         type: types.botType,
         args: _.pick(attributeFields(models.Bot), ['id']),
         resolve: resolver(models.Bot),
       },
+
       bots: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.botType)),
         resolve: resolver(models.Bot),
@@ -72,6 +81,7 @@ const schema = new graphql.GraphQLSchema({
         args: _.pick(attributeFields(models.Agent), ['id']),
         resolve: resolver(models.Agent),
       },
+
       agents: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.agentType)),
         resolve: resolver(models.Agent),
@@ -79,22 +89,33 @@ const schema = new graphql.GraphQLSchema({
 
       series: {
         type: types.seriesType,
-        args: _.pick(attributeFields(models.Series), ['id']),
-        resolve: resolver(models.Series),
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
+        resolve: resolvers.series.one,
       },
+
       seriesCollection: {
         type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.seriesType)),
-        resolve: resolver(models.Series),
+        args: {
+          channelId: { type: graphql.GraphQLString },
+        },
+        resolve: resolvers.series.all,
       },
 
       channel: {
         type: types.channels.channel,
-        args: { id: { type: graphql.GraphQLString } },
-        resolve: resolver(models.Channel),
+        args: { id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) } },
+        resolve: resolvers.channels.one,
       },
+
       channels: {
-        type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.channels.channel)),
-        resolve: resolver(models.Channel),
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.channels.channel)),
+        args: {
+          offset: { type: graphql.GraphQLInt },
+          limit: { type: graphql.GraphQLInt },
+        },
+        resolve: resolvers.channels.all,
       },
 
       stats: {
@@ -115,9 +136,7 @@ const schema = new graphql.GraphQLSchema({
         args: filterr(_.pick(attributeFields(models.Measurement), [
           'value', 'competitorType', 'measurableId', 'agentId', 'description'
         ])),
-        resolve: async (root, values, options) => {
-          return data.measurementData.createMeasurement(root, values, options);
-        },
+        resolve: resolvers.measurements.create,
       },
 
       createMeasurable: {
@@ -127,9 +146,7 @@ const schema = new graphql.GraphQLSchema({
           'resolutionEndpoint', 'descriptionEntity', 'descriptionDate',
           'descriptionProperty', 'channelId',
         ])),
-        resolve: async (root, values, options) => {
-          return data.measurablesData.createMeasurable(root, values, options);
-        }
+        resolve: resolvers.measurables.create,
       },
 
       createSeries: {
@@ -138,25 +155,19 @@ const schema = new graphql.GraphQLSchema({
           'name', 'description', 'channelId', 'subjects', 'properties',
           'dates',
         ])),
-        resolve: async (root, values, options) => {
-          return data.seriesData.createSeries(root, values, options);
-        }
+        resolve: resolvers.series.create,
       },
 
       archiveMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
-        resolve: async (root, values, options) => {
-          return data.measurablesData.archiveMeasurable(root, values, options);
-        }
+        resolve: resolvers.measurables.archive,
       },
 
       unArchiveMeasurable: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
-        resolve: async (root, values, options) => {
-          return data.measurablesData.unArchiveMeasurable(root, values, options);
-        }
+        resolve: resolvers.measurables.unarchive,
       },
 
       editMeasurable: {
@@ -166,17 +177,13 @@ const schema = new graphql.GraphQLSchema({
           'resolutionEndpoint', 'descriptionEntity', 'descriptionDate',
           'descriptionProperty',
         ])),
-        resolve: async (root, values, options) => {
-          return data.measurablesData.editMeasurable(root, values, options);
-        }
+        resolve: resolvers.measurables.edit,
       },
 
       editUser: {
         type: types.userType,
         args: filterr(_.pick(attributeFields(models.User), ["id", "name"])),
-        resolve: async (root, values, options) => {
-          return data.usersData.editUser(root, values, options);
-        }
+        resolve: resolvers.users.edit,
       },
 
       channelUpdate: {
@@ -185,9 +192,7 @@ const schema = new graphql.GraphQLSchema({
           id: { type: graphql.GraphQLString },
           input: { type: new graphql.GraphQLNonNull(types.channels.channelInput) },
         },
-        resolve: async (root, values) => {
-          return data.channelsData.updateOne(values.id, values.input);
-        },
+        resolve: resolvers.channels.update,
       },
 
       channelCreate: {
@@ -195,15 +200,7 @@ const schema = new graphql.GraphQLSchema({
         args: {
           input: { type: new graphql.GraphQLNonNull(types.channels.channelInput) },
         },
-        /**
-         * @param root
-         * @param {{ input: Schema.ChannelsInput }} values
-         * @param {Schema.Context} options
-         * @return {Promise.<Model>}
-         */
-        resolve: async (root, values, options) => {
-          return data.channelsData.createOne(options.user, values.input);
-        },
+        resolve: resolvers.channels.create,
       },
 
       agentsChannelsCreate: {
@@ -212,9 +209,7 @@ const schema = new graphql.GraphQLSchema({
           agentId: { type: graphql.GraphQLString },
           channelId: { type: graphql.GraphQLString },
         },
-        resolve: async (root, values) => {
-          return data.agentsChannelsData.createOne(values.channelId, values.agentId);
-        },
+        resolve: resolvers.agentsChannels.create,
       },
 
       agentsChannelsDelete: {
@@ -223,15 +218,18 @@ const schema = new graphql.GraphQLSchema({
           agentId: { type: graphql.GraphQLString },
           channelId: { type: graphql.GraphQLString },
         },
-        resolve: async (root, values) => {
-          return data.agentsChannelsData.deleteOne(values.channelId, values.agentId);
-        },
+        resolve: resolvers.agentsChannels.remove,
       },
 
     }
   })
 });
 
-module.exports = {
+const schemaWithMiddlewares = applyMiddleware(
   schema,
+  permissions,
+);
+
+module.exports = {
+  schemaWithMiddlewares,
 };

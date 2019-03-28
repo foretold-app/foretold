@@ -1,22 +1,16 @@
-const Sequelize = require('sequelize');
-
 const models = require("../models");
 const { notify } = require("../lib/notifications");
 
-class MeasurablesData {
+const { DataBase } = require('./data-base');
+
+class MeasurablesData extends DataBase {
 
   /**
-   * @param root
-   * @param values
-   * @param options
+   * @param data
    * @return {Promise<*>}
    */
-  async createMeasurable(root, values, options) {
-    const user = options.user;
-    const newMeasurable = await models.Measurable.create({
-      ...values,
-      creatorId: user.agentId,
-    });
+  async createMeasurable(data, user) {
+    const newMeasurable = await models.Measurable.create(data);
     let notification = await newMeasurable.creationNotification(user);
     notify(notification);
     return newMeasurable;
@@ -98,37 +92,52 @@ class MeasurablesData {
   }
 
   /**
-   * @param root
-   * @param values
-   * @param options
+   * @param {object} options
    * @return {Promise<*|Array<Model>>}
    */
-  async getAll(root, values, options) {
-    const { offset, limit, channelId, seriesId, creatorId } = values;
+  async getAll(options) {
+    const { offset, limit, channelId, seriesId, creatorId } = options;
+
     let where = {
       state: {
-        [Sequelize.Op.ne]: "ARCHIVED"
-      }
+        [models.sequelize.Op.ne]: "ARCHIVED"
+      },
+      $and: [{channelId: { $in: this.channelIdsLiteral(options.agentId) }}],
     };
 
     if (seriesId) {
-      where.seriesId = { [Sequelize.Op.eq]: seriesId }
+      where.seriesId = { [models.sequelize.Op.eq]: seriesId };
     }
     if (creatorId) {
-      where.creatorId = { [Sequelize.Op.eq]: creatorId }
+      where.creatorId = { [models.sequelize.Op.eq]: creatorId };
     }
     if (channelId) {
-      where.channelId = { [Sequelize.Op.eq]: channelId }
+      where.$and.push({ channelId });
     }
 
-    let items = await models.Measurable.findAll({
-      limit: limit,
-      offset: offset,
+    const items = await models.Measurable.findAll({
+      limit,
+      offset,
+      where,
       order: [['createdAt', 'DESC']],
-      where
     });
 
-    return items
+    return items;
+  }
+
+  /**
+   * @param {string} id
+   * @param {object} options
+   * @param {string} options.agentId
+   * @return {Promise<*>}
+   */
+  async getOne(id, options = {}) {
+    return await models.Measurable.findOne({
+      where: {
+        id,
+        channelId: { $in: this.channelIdsLiteral(options.agentId) },
+      }
+    });
   }
 
 }

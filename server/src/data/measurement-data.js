@@ -1,9 +1,9 @@
 const models = require("../models");
 const { notify } = require("../lib/notifications");
 
-class MeasurementData {
+const { DataBase } = require('./data-base');
 
-  constructor() { }
+class MeasurementData extends DataBase {
 
   /**
    * @todo: rename
@@ -33,6 +33,37 @@ class MeasurementData {
     return newMeasurement;
   }
 
+
+  /**
+   * @public
+   * @param {object} options
+   * @param {number} [options.offset]
+   * @param {number} [options.limit]
+   * @param {object} [options.agentId]
+   * @return {Promise<*|Array<Model>>}
+   */
+  async getAll(options = {}) {
+    return await models.Measurement.findAll({
+      where: {
+        measurableId: { $in: this.measurableIdsLiteral(options.agentId) },
+      }
+    });
+  }
+
+  /**
+   * @param {string} id
+   * @param {object} options
+   * @param {object} [options.agentId]
+   * @return {Promise<*>}
+   */
+  async getOne(id, options = {}) {
+    return await models.Measurement.findOne({
+      where: {
+        id,
+        measurableId: { $in: this.measurableIdsLiteral(options.agentId) },
+      }
+    });
+  }
 }
 
 module.exports = {

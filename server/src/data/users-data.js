@@ -1,12 +1,14 @@
 const _ = require('lodash');
 const models = require('../models');
 
-class UsersData {
+const { DataBase } = require('./data-base');
+
+class UsersData extends DataBase {
 
   /**
-   * @tested
    * @param {string} auth0Id
    * @return {Promise<Array<Model>|Model>}
+   * @todo change to more generic getOne(filter)
    */
   async getUserByAuth0Id(auth0Id) {
     const user = await models.User.findOne({
@@ -18,7 +20,26 @@ class UsersData {
   }
 
   /**
-   * @tested
+   * @return {Promise<Model>}
+   */
+  async getGuestUser() {
+    const user = await models.User.findOne({
+      where: { name: 'Guest' }
+    }) || await models.User.create({
+      auth0Id: models.sequelize.fn('uuid_generate_v4'),
+      name: 'Guest',
+    });
+    return user;
+  }
+
+  /**
+   * @return {Promise<{name: string}>}
+   */
+  async getGuestUserAsLiteral() {
+    return { name: 'Guest' };
+  }
+
+  /**
    * @param root
    * @param values
    * @param options
@@ -34,7 +55,6 @@ class UsersData {
   }
 
   /**
-   * @tested
    * @param ops
    * @param values
    * @param options

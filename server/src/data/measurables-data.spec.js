@@ -37,8 +37,8 @@ describe('tests Measurables Data layer', () => {
               { "channelId": { "$in": "channelIdsLiteral" } },
               { "channelId": "3" }
             ],
-            "creatorId": { "undefined": "5" },
-            "seriesId": { "undefined": "4" },
+            "creatorId": { "eqop": "5" },
+            "seriesId": { "eqop": "4" },
             "state": { "neop": "ARCHIVED" }
           }
         });

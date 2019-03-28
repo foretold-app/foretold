@@ -8,16 +8,16 @@ const { rule } = require('graphql-shield');
  * @param {object} info
  * @return {Promise<boolean>}
  */
-async function isChannelAllowedRule(root, args, context, info) {
+async function isChannelPublicRule(root, args, context, info) {
   const channelIsPublic = _.get(context, 'channel.isPublic', false);
-  console.log(`\x1b[33m Rule (isChannelAllowed) ` +
+  console.log(`\x1b[33m Rule (isChannelPublic) ` +
     `channelId "${_.get(channel, 'id')}" \x1b[0m`);
   return !!channelIsPublic;
 }
 
 /** @type {Rule} */
-const isChannelAllowed = rule()(isChannelAllowedRule);
+const isChannelPublic = rule()(isChannelPublicRule);
 
 module.exports = {
-  isChannelAllowed,
+  isChannelPublic,
 };

@@ -22,6 +22,7 @@ const agentsChannel = new graphql.GraphQLObjectType({
   fields: {
     agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    roles: { type: graphql.GraphQLList(roles) },
   },
 });
 

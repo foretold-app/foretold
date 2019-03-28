@@ -22,7 +22,7 @@ type seriesCollection = array(series);
 
 module Query = [%graphql
   {|
-      query getSeriesCollection($channelId: String!) {
+      query getSeriesCollection($channelId: String) {
           seriesCollection:
           seriesCollection(channelId: $channelId) @bsRecord{
            id

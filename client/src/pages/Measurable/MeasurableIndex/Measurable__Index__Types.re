@@ -20,6 +20,7 @@ module Types = {
   module ReducerTypes = SelectWithPaginationReducer.Types;
   type reducerParams = ReducerTypes.reducerParams;
   module ReducerItemState = SelectWithPaginationReducer.Reducers.ItemState;
+  module ReducerParams = SelectWithPaginationReducer.Reducers.ReducerParams;
 
   type loadedResources = {
     seriesCollection: seriesCollectionType,
@@ -64,8 +65,7 @@ module LoadedAndUnselected = {
     loadedResources,
   };
 
-  let pageNumber = (t: t) =>
-    t.reducerParams.itemState |> ReducerItemState.pageNumber;
+  let pageNumber = (t: t) => t.reducerParams |> ReducerParams.pageNumber;
 
   let filteredSeriesCollection = (t: t) =>
     t.loadedResources.seriesCollection
@@ -74,10 +74,7 @@ module LoadedAndUnselected = {
        );
 
   let shouldShowSeriesCollection = (t: t) =>
-    t.reducerParams.itemState
-    |> ReducerItemState.pageNumber == 0
-    && filteredSeriesCollection(t)
-    |> E.A.length > 0;
+    pageNumber(t) == 0 && filteredSeriesCollection(t) |> E.A.length > 0;
 
   let findMeasurableIndexOfMeasurableId = (t: t, id) =>
     t.loadedResources.measurables
@@ -89,9 +86,13 @@ module LoadedAndUnselected = {
 
   module Actions = {
     let canIncrement = (t: t) =>
-      E.A.length(t.loadedResources.measurables) == pageNumber(t);
+      ReducerParams.canIncrementPage(
+        E.A.length(t.loadedResources.measurables),
+        t.reducerParams,
+      );
 
-    let canDecrement = (t: t) => pageNumber(t) > 0;
+    let canDecrement = (t: t) =>
+      ReducerParams.canDecrementPage(t.reducerParams);
   };
 };
 

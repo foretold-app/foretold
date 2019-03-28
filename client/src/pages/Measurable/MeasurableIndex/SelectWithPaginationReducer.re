@@ -123,17 +123,24 @@ module Reducers = {
 
   module ItemState = {
     type t = itemState;
+  };
+
+  module ReducerParams = {
+    type t = reducerParams;
     let pageNumber = (t: t) =>
-      switch (t) {
+      switch (t.itemState) {
       | ItemSelected(r) => r.pageNumber
       | ItemUnselected(r) => r.pageNumber
       };
-
     let pageIndex = (t: t) =>
-      switch (t) {
+      switch (t.itemState) {
       | ItemSelected(r) => Some(r.selectedIndex)
       | ItemUnselected(_) => None
       };
+
+    let canDecrementPage = (t: t) => t |> pageNumber > 0;
+    let canIncrementPage = (itemsOnPage, t: t) =>
+      itemsOnPage == t.itemsPerPage;
   };
 };
 

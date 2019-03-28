@@ -22,8 +22,8 @@ let make =
     ) => {
   let itemsPerPage = selectWithPaginationParams.itemsPerPage;
   let pageNumber =
-    selectWithPaginationParams.itemState
-    |> SelectWithPaginationReducer.Reducers.ItemState.pageNumber;
+    selectWithPaginationParams
+    |> SelectWithPaginationReducer.Reducers.ReducerParams.pageNumber;
   let loadData = load3Queries(channelId, pageNumber, itemsPerPage);
   loadData(((channel, query)) =>
     Types.MeasurableIndexDataState.make({

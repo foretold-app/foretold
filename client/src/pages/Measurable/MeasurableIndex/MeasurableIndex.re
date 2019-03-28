@@ -28,24 +28,21 @@ let make =
   ...component,
   initialState: () => Types.Redux.initialState,
   reducer: (action, state) =>
-    switch (action) {
-    | NextPage =>
-      ReasonReact.Update({selectedIndex: None, page: state.page + 1})
-    | LastPage =>
-      ReasonReact.Update({selectedIndex: None, page: state.page - 1})
-    | Select((num: option(int))) =>
-      ReasonReact.Update({...state, selectedIndex: num})
-    | SelectIncrement =>
-      ReasonReact.Update({
-        ...state,
-        selectedIndex: state.selectedIndex |> E.O.fmap(E.I.increment),
-      })
-    | SelectDecrement =>
-      ReasonReact.Update({
-        ...state,
-        selectedIndex: state.selectedIndex |> E.O.fmap(E.I.decrement),
-      })
-    },
+    ReasonReact.Update(
+      switch (action) {
+      | NextPage => {selectedIndex: None, page: state.page + 1}
+      | LastPage => {selectedIndex: None, page: state.page - 1}
+      | Select((num: option(int))) => {...state, selectedIndex: num}
+      | SelectIncrement => {
+          ...state,
+          selectedIndex: state.selectedIndex |> E.O.fmap(E.I.increment),
+        }
+      | SelectDecrement => {
+          ...state,
+          selectedIndex: state.selectedIndex |> E.O.fmap(E.I.decrement),
+        }
+      },
+    ),
   render: ({state, send}) => {
     let loadData = load3Queries(channelId, state.page, itemsPerPage);
     loadData(((channel, query)) =>

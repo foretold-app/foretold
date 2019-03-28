@@ -20,6 +20,9 @@ module O = {
   let default = Rationale.Option.default;
   let isSome = Rationale.Option.isSome;
   let toExn = Rationale.Option.toExn;
+  let some = Rationale.Option.some;
+  let flatApply = (fn, b) =>
+    Rationale.Option.apply(fn, Some(b)) |> Rationale.Option.flatten;
 
   let toResult = (error, e) =>
     switch (e) {
@@ -267,4 +270,28 @@ module HttpResponse = {
     | (Loading, _) => Loading
     | (_, Loading) => Loading
     };
+};
+
+module NonZeroInt = {
+  type t = int;
+  let make = (i: int) => i < 0 ? None : Some(i);
+  let fmap = (fn, a: t) => make(fn(a));
+  let increment = fmap(I.increment);
+  let decrement = fmap(I.decrement);
+};
+
+module BoundedInt = {
+  type t = int;
+  let make = (i: int, limit: int) => {
+    let lessThan0 = r => r < 0;
+    let greaterThanLimit = r => r > limit;
+    if (lessThan0(i) || greaterThanLimit(i)) {
+      None;
+    } else {
+      Some(i);
+    };
+  };
+  let fmap = (fn, a: t, l) => make(fn(a), l);
+  let increment = fmap(I.increment);
+  let decrement = fmap(I.decrement);
 };

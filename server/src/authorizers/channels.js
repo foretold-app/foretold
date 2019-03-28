@@ -1,7 +1,6 @@
 const _ = require('lodash');
 const { rule } = require('graphql-shield');
 
-
 /**
  * @param {Models.Channel} channel
  * @param {Models.AgentChannel} agentChannel
@@ -15,20 +14,22 @@ function authorize(channel, agentChannel) {
 }
 
 /**
- * @param {object} parent
+ * @param {object} root
  * @param {object} args
- * @param {{ channel: Models.Channel, agentChannel: Models.AgentChannel }} ctx
+ * @param {Schema.Context} context
  * @param {object} info
+ * @return {Promise<boolean>}
  */
-async function isChannelAllowedRule(parent, args, ctx, info) {
-  const channel = _.get(ctx, 'channel');
-  const agentChannel = _.get(ctx, 'agentChannel');
+async function isChannelAllowedRule(root, args, context, info) {
+  const channel = _.get(context, 'channel');
+  const agentChannel = _.get(context, 'agentChannel');
   console.log(`\x1b[33m Rule (isChannelAllowed) ` +
     `channelId ${_.get(channel, 'id')}, ` +
     `agentChannelId ${_.get(agentChannel, 'agentId')} \x1b[0m`);
   return channels.authorize(channel, agentChannel);
 }
 
+/** @type {Rule} */
 const isChannelAllowed = rule()(isChannelAllowedRule);
 
 const channels = {

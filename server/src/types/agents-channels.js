@@ -5,15 +5,6 @@ const roles = new graphql.GraphQLEnumType({
   values: {
     admin: { value: 'admin' },
     viewer: { value: 'viewer' },
-    owner: { value: 'owner' },
-  },
-});
-
-const rolesInput = new graphql.GraphQLEnumType({
-  name: 'AgentChannelRolesInput',
-  values: {
-    admin: { value: 'admin' },
-    viewer: { value: 'viewer' },
   },
 });
 
@@ -29,5 +20,4 @@ const agentsChannel = new graphql.GraphQLObjectType({
 module.exports = {
   agentsChannel,
   roles,
-  rolesInput,
 };

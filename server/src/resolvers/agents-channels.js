@@ -1,30 +1,41 @@
 const data = require('../data');
 
 /**
- * @param root
- * @param values
+ * @param {*} root
+ * @param {{channelId: string, agentId: string, roles: string[]}} args
  * @returns {Promise<Model>}
  */
-async function create(root, values) {
-  return await data.agentsChannelsData.createOne(values.channelId, values.agentId, values.roles);
+async function create(root, args) {
+  return await data.agentsChannelsData.createOne(
+    args.channelId,
+    args.agentId,
+    args.roles
+  );
 }
 
 /**
  * @param root
- * @param values
+ * @param {{channelId: string, agentId: string, roles: string[]}} args
  * @returns {Promise<Model>}
  */
-async function update(root, values) {
-  return await data.agentsChannelsData.updateOne(values.channelId, values.agentId, values.roles);
+async function update(root, args) {
+  return await data.agentsChannelsData.updateOne(
+    args.channelId,
+    args.agentId,
+    args.roles
+  );
 }
 
 /**
  * @param root
- * @param values
+ * @param {{channelId: string, agentId: string}} args
  * @returns {Promise<Model>}
  */
-async function remove(root, values) {
-  return await data.agentsChannelsData.deleteOne(values.channelId, values.agentId);
+async function remove(root, args) {
+  return await data.agentsChannelsData.deleteOne(
+    args.channelId,
+    args.agentId
+  );
 }
 
 module.exports = {

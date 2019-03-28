@@ -286,8 +286,10 @@ module BoundedInt = {
     let lessThan0 = r => r < 0;
     let greaterThanLimit = r => r > limit;
     if (lessThan0(i) || greaterThanLimit(i)) {
+      Js.log4(lessThan0(i), greaterThanLimit(i), i, limit);
       None;
     } else {
+      Js.log4("unbounded", lessThan0(i), greaterThanLimit(i), i);
       Some(i);
     };
   };

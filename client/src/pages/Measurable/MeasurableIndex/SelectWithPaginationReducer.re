@@ -25,65 +25,85 @@ module Types = {
     | NextSelection
     | LastSelection;
 
+  let name = action =>
+    switch (action) {
+    | NextPage => "NextPage"
+    | LastPage => "LastPage"
+    | Deselect => "Deselect"
+    | SelectIndex(int) => "SelectIndex"
+    | NextSelection => "nextSelection"
+    | LastSelection => "LastSelection"
+    };
+
+  type send = action => unit;
+
   type reducerParams = {
     itemsPerPage: int,
     itemState,
-    send: action => unit,
+    send,
   };
 };
 
 open Types;
 
+let itemsPerPage = 20;
+
 module Reducers = {
   module ItemSelected = {
     type t = itemSelected;
 
-    let deselect = (t: t) => ItemUnselected({pageNumber: t.pageNumber});
+    let deselect = (_, t: t) => ItemUnselected({pageNumber: t.pageNumber});
 
-    let nextSelection = (t: t) =>
-      E.BoundedInt.increment(t.selectedIndex, t.pageNumber)
+    let nextSelection = (itemsPerPage, t: t) =>
+      E.BoundedInt.increment(t.selectedIndex, itemsPerPage)
       <$> (
         selectedIndex =>
           ItemSelected({pageNumber: t.pageNumber, selectedIndex})
       );
 
-    let lastSelection = (t: t) =>
-      E.BoundedInt.decrement(t.selectedIndex, t.pageNumber)
+    let lastSelection = (itemsPerPage, t: t) =>
+      E.BoundedInt.decrement(t.selectedIndex, itemsPerPage)
       <$> (
         selectedIndex =>
           ItemSelected({pageNumber: t.pageNumber, selectedIndex})
       );
 
-    let newState = (t: t, action: action) =>
+    let newState = (itemsPerPage, t: t, action: action) =>
       (
         switch (action) {
-        | Deselect => Some(deselect ||> E.O.some)
+        | Deselect => Some(((a, b) => deselect(a, b) |> E.O.some))
         | NextSelection => Some(nextSelection)
         | LastSelection => Some(lastSelection)
         | _ => None
         }
       )
-      |> E.O.flatApply(_, t);
+      |> (
+        e =>
+          switch (e) {
+          | Some(fn) => fn(itemsPerPage, t)
+          | None => None
+          }
+      );
   };
 
   module ItemUnselected = {
     type t = itemUnselected;
 
-    let nextPage = (t: t) =>
+    let nextPage = (_, t: t) =>
       t.pageNumber
       |> E.NonZeroInt.increment
       <$> (p => ItemUnselected({pageNumber: p}));
 
-    let lastPage = (t: t) =>
+    let lastPage = (_, t: t) =>
       t.pageNumber
       |> E.NonZeroInt.decrement
       <$> (p => ItemUnselected({pageNumber: p}));
 
-    let selectIndex = (i, t: t) =>
-      E.BoundedInt.make(i, t.pageNumber)
+    let selectIndex = (i, itemsPerPage, t: t) =>
+      E.BoundedInt.make(i, itemsPerPage)
       <$> (s => ItemSelected({pageNumber: t.pageNumber, selectedIndex: s}));
 
-    let newState = (t: t, action: action) =>
+    let newState = (itemsPerPage, t: t, action: action) =>
       (
         switch (action) {
         | NextPage => Some(nextPage)
@@ -92,7 +112,28 @@ module Reducers = {
         | _ => None
         }
       )
-      |> E.O.flatApply(_, t);
+      |> (
+        e =>
+          switch (e) {
+          | Some(fn) => fn(itemsPerPage, t)
+          | None => None
+          }
+      );
+  };
+
+  module ItemState = {
+    type t = itemState;
+    let pageNumber = (t: t) =>
+      switch (t) {
+      | ItemSelected(r) => r.pageNumber
+      | ItemUnselected(r) => r.pageNumber
+      };
+
+    let pageIndex = (t: t) =>
+      switch (t) {
+      | ItemSelected(r) => Some(r.selectedIndex)
+      | ItemUnselected(_) => None
+      };
   };
 };
 
@@ -102,10 +143,13 @@ let make = (~itemsPerPage=20, ~subComponent, _children) => {
   ...component,
   initialState: () => ItemUnselected({pageNumber: 0}),
   reducer: (action, state) => {
+    Js.log3("HI", action |> Types.name, state);
     let newState =
       switch (state) {
-      | ItemUnselected(s) => Reducers.ItemUnselected.newState(s, action)
-      | ItemSelected(s) => Reducers.ItemSelected.newState(s, action)
+      | ItemUnselected(s) =>
+        Reducers.ItemUnselected.newState(itemsPerPage, s, action)
+      | ItemSelected(s) =>
+        Reducers.ItemSelected.newState(itemsPerPage, s, action)
       };
     switch (newState) {
     | Some(s) => s->ReasonReact.Update
@@ -114,6 +158,6 @@ let make = (~itemsPerPage=20, ~subComponent, _children) => {
   },
   render: ({state, send}) =>
     subComponent(
-      ~paginationReducerParams={itemsPerPage, itemState: state, send},
+      ~selectWithPaginationParams={itemsPerPage, itemState: state, send},
     ),
 };

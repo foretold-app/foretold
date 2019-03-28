@@ -26,20 +26,20 @@ let itemHeader =
 module LoadedAndSelected = {
   open Measurable__Index__Types.LoadedAndSelected;
 
-  let header = (t: t, send) =>
+  let header = (t: t, send: SelectWithPaginationReducer.Types.send) =>
     <>
       {
         SLayout.channelBack(
           ~channel=t.channel,
-          ~onClick=_ => send(Actions.deselect),
+          ~onClick=_ => send(SelectWithPaginationReducer.Types.Deselect),
           (),
         )
       }
       {
         itemHeader(
           t.channel,
-          () => send(Actions.selectIncrement),
-          () => send(Actions.selectDecrement),
+          () => send(SelectWithPaginationReducer.Types.NextSelection),
+          () => send(SelectWithPaginationReducer.Types.LastSelection),
           Actions.canDecrement(t),
           Actions.canIncrement(t),
         )
@@ -56,12 +56,12 @@ module LoadedAndSelected = {
 module LoadedAndUnselected = {
   open Measurable__Index__Types.LoadedAndUnselected;
 
-  let header = (t: t, send) => {
+  let header = (t: t, send: SelectWithPaginationReducer.Types.send) => {
     let channel = t.channel;
     itemHeader(
       channel,
-      () => send(Actions.selectNextPage),
-      () => send(Actions.selectLastPage),
+      () => send(SelectWithPaginationReducer.Types.NextPage),
+      () => send(SelectWithPaginationReducer.Types.LastPage),
       Actions.canDecrement(t),
       Actions.canIncrement(t),
     );
@@ -78,7 +78,7 @@ module LoadedAndUnselected = {
       }
     </>;
 
-  let body = (t: t, send) => {
+  let body = (t: t, send: SelectWithPaginationReducer.Types.send) => {
     let measurables = t.loadedResources.measurables;
     let loggedInUser = t.loggedInUser;
     <>
@@ -87,7 +87,12 @@ module LoadedAndUnselected = {
         measurables
         loggedInUser
         showExtraData=true
-        onSelect={e => send(selectMeasurableOfMeasurableId(t, e.id))}
+        onSelect={
+          e =>
+            selectMeasurableOfMeasurableId(t, e.id)
+            |> E.O.fmap(send)
+            |> E.O.default()
+        }
       />
     </>;
   };
@@ -96,7 +101,8 @@ module LoadedAndUnselected = {
 module MeasurableIndexDataState = {
   open Measurable__Index__Types.MeasurableIndexDataState;
 
-  let toLayoutInput = (send, state: state) => {
+  let toLayoutInput =
+      (send: SelectWithPaginationReducer.Types.send, state: state) => {
     let lmake = SLayout.LayoutConfig.make;
     switch (state) {
     | InvalidIndexError(channel) =>

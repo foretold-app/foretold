@@ -4,11 +4,6 @@ open Rationale.Function.Infix;
 
 module Types = Measurable__Index__Types;
 module Components = Measurable__Index__Components;
-open Types.Redux;
-
-let component = ReasonReact.reducerComponent("MeasurableIndex");
-
-let itemsPerPage = 20;
 
 let load3Queries = (channelId, page, itemsPerPage, fn) =>
   ((a, b, c) => (a, E.HttpResponse.merge2(b, c)) |> fn)
@@ -23,38 +18,23 @@ let make =
       ~channelId: string,
       ~loggedInUser: Context.Primary.User.t,
       ~layout=SLayout.FullPage.makeWithEl,
-      _children,
+      ~selectWithPaginationParams: SelectWithPaginationReducer.Types.reducerParams,
     ) => {
-  ...component,
-  initialState: () => Types.Redux.initialState,
-  reducer: (action, state) =>
-    ReasonReact.Update(
-      switch (action) {
-      | NextPage => {selectedIndex: None, page: state.page + 1}
-      | LastPage => {selectedIndex: None, page: state.page - 1}
-      | Select((num: option(int))) => {...state, selectedIndex: num}
-      | SelectIncrement => {
-          ...state,
-          selectedIndex: state.selectedIndex |> E.O.fmap(E.I.increment),
-        }
-      | SelectDecrement => {
-          ...state,
-          selectedIndex: state.selectedIndex |> E.O.fmap(E.I.decrement),
-        }
-      },
-    ),
-  render: ({state, send}) => {
-    let loadData = load3Queries(channelId, state.page, itemsPerPage);
-    loadData(((channel, query)) =>
-      Types.MeasurableIndexDataState.make({
-        page: state.page,
-        pageSelectedIndex: state.selectedIndex,
-        loggedInUser,
-        channel,
-        query,
-      })
-      |> Components.MeasurableIndexDataState.toLayoutInput(send)
-      |> layout
-    );
-  },
+  let itemsPerPage = selectWithPaginationParams.itemsPerPage;
+  let pageNumber =
+    selectWithPaginationParams.itemState
+    |> SelectWithPaginationReducer.Reducers.ItemState.pageNumber;
+  let loadData = load3Queries(channelId, pageNumber, itemsPerPage);
+  loadData(((channel, query)) =>
+    Types.MeasurableIndexDataState.make({
+      reducerParams: selectWithPaginationParams,
+      loggedInUser,
+      channel,
+      query,
+    })
+    |> Components.MeasurableIndexDataState.toLayoutInput(
+         selectWithPaginationParams.send,
+       )
+    |> layout
+  );
 };

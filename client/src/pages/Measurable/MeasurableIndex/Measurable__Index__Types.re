@@ -17,22 +17,9 @@ type loggedInUser = Context.Primary.User.t;
 type query = E.HttpResponse.t((seriesCollectionType, measurablesType));
 
 type page = int;
-
-module Redux = {
-  type state = {
-    page: int,
-    selectedIndex: option(int),
-  };
-
-  let initialState = {page: 0, selectedIndex: None};
-
-  type action =
-    | NextPage
-    | LastPage
-    | Select(option(int))
-    | SelectIncrement
-    | SelectDecrement;
-};
+module ReducerTypes = SelectWithPaginationReducer.Types;
+type reducerParams = ReducerTypes.reducerParams;
+module ItemState = SelectWithPaginationReducer.Reducers.ItemState;
 
 type loadedResources = {
   seriesCollection: seriesCollectionType,
@@ -46,9 +33,9 @@ let toResources = (r: (seriesCollectionType, measurablesType)) => {
 
 module LoadedAndSelected = {
   type t = {
-    page,
-    pageSelectedIndex: int,
+    reducerParams,
     selectedMeasurable: MeasurablesQuery.t,
+    itemState: ReducerTypes.itemSelected,
     channel,
     loggedInUser,
     loadedResources,
@@ -61,18 +48,15 @@ module LoadedAndSelected = {
       atLeast0(index) && exists(index);
     };
     let canIncrement = (t: t) =>
-      itemAtIndexExists(t, t.pageSelectedIndex + 1);
+      itemAtIndexExists(t, t.itemState.selectedIndex + 1);
     let canDecrement = (t: t) =>
-      itemAtIndexExists(t, t.pageSelectedIndex - 1);
-    let selectDecrement = Redux.SelectDecrement;
-    let selectIncrement = Redux.SelectIncrement;
-    let deselect = Redux.Select(None);
+      itemAtIndexExists(t, t.itemState.selectedIndex - 1);
   };
 };
 
 module LoadedAndUnselected = {
   type t = {
-    page,
+    reducerParams,
     loggedInUser,
     channel,
     loadedResources,
@@ -81,10 +65,9 @@ module LoadedAndUnselected = {
   module Actions = {
     let canIncrement = (t: t) =>
       E.A.length(t.loadedResources.measurables) == itemsPerPage;
-    let canDecrement = (t: t) => t.page > 0;
-    let selectNextPage = Redux.NextPage;
-    let selectLastPage = Redux.LastPage;
-    let select = e => Redux.Select(e);
+    let canDecrement = (t: t) =>
+      t.reducerParams.itemState
+      |> SelectWithPaginationReducer.Reducers.ItemState.pageNumber > 0;
   };
 
   let filteredSeriesCollection = (t: t) =>
@@ -94,7 +77,10 @@ module LoadedAndUnselected = {
        );
 
   let shouldShowSeriesCollection = (t: t) =>
-    t.page == 0 && filteredSeriesCollection(t) |> E.A.length > 0;
+    t.reducerParams.itemState
+    |> ItemState.pageNumber == 0
+    && filteredSeriesCollection(t)
+    |> E.A.length > 0;
 
   let findMeasurableIndexOfMeasurableId = (t: t, id) =>
     t.loadedResources.measurables
@@ -102,13 +88,14 @@ module LoadedAndUnselected = {
 
   let selectMeasurableOfMeasurableId = (t: t, id) => {
     Js.log2(id, findMeasurableIndexOfMeasurableId(t, id));
-    findMeasurableIndexOfMeasurableId(t, id) |> Actions.select;
+    findMeasurableIndexOfMeasurableId(t, id)
+    |> E.O.fmap(e => ReducerTypes.SelectIndex(e));
   };
 };
 
 module WithChannelButNotQuery = {
   type t = {
-    page,
+    reducerParams,
     loggedInUser,
     channel,
     query,
@@ -134,39 +121,45 @@ module MeasurableIndexDataState = {
   };
 
   type input = {
-    page: int,
-    pageSelectedIndex: option(int),
+    reducerParams: ReducerTypes.reducerParams,
     loggedInUser,
     channel: E.HttpResponse.t(ChannelQuery.t),
     query,
   };
 
   let make = (u: input) =>
-    switch (u.channel, u.pageSelectedIndex, u.query) {
-    | (Success(channel), Some(index), Success(r)) =>
-      switch (findMeasurable(index, r)) {
+    switch (u.channel, u.query, u.reducerParams.itemState) {
+    | (
+        Success(channel),
+        Success(r),
+        ItemSelected({pageNumber, selectedIndex}),
+      ) =>
+      switch (findMeasurable(selectedIndex, r)) {
       | Some(measurable) =>
         LoadedAndSelected({
           channel,
-          page: u.page,
-          pageSelectedIndex: index,
+          itemState: {
+            pageNumber,
+            selectedIndex,
+          },
+          reducerParams: u.reducerParams,
           selectedMeasurable: measurable,
           loggedInUser: u.loggedInUser,
           loadedResources: r |> toResources,
         })
       | _ => InvalidIndexError(channel)
       }
-    | (Success(channel), None, Success(r)) =>
+    | (Success(channel), Success(r), ItemUnselected(_)) =>
       LoadedAndUnselected({
         channel,
-        page: u.page,
+        reducerParams: u.reducerParams,
         loggedInUser: u.loggedInUser,
         loadedResources: r |> toResources,
       })
-    | (Success(channel), _, Error(_) | Loading) =>
+    | (Success(channel), Error(_) | Loading, _) =>
       WithChannelButNotQuery({
         channel,
-        page: u.page,
+        reducerParams: u.reducerParams,
         loggedInUser: u.loggedInUser,
         query: u.query,
       })

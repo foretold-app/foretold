@@ -13,6 +13,7 @@ const { stats } = require('./types/stats');
 const { filterr } = require('./types/filterr');
 
 const { permissions } = require('./authorizers');
+const { middlewares } = require('./middlewares');
 
 const schema = new graphql.GraphQLSchema({
   query: new graphql.GraphQLObjectType({
@@ -227,6 +228,7 @@ const schema = new graphql.GraphQLSchema({
 
 const schemaWithMiddlewares = applyMiddleware(
   schema,
+  middlewares,
   permissions,
 );
 

@@ -110,11 +110,14 @@ class ChannelsData extends DataBase {
    * @return {Promise<Models.Channel>}
    */
   async getOne(id, options = {}) {
+    const restrictions = 'agentId' in options
+      ? { id: { $in: this.channelIdsLiteral(options.agentId) } }
+      : {};
     return await models.Channel.findOne({
       where: {
         $and: [
           { id },
-          { id: { $in: this.channelIdsLiteral(options.agentId) } },
+          restrictions
         ]
       }
     });

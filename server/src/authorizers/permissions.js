@@ -11,6 +11,7 @@ function getPermissions() {
     },
     Mutation: {
       '*': users.isAuthenticated,
+      channelUpdate: and(users.isAuthenticated, agentsChannels.isAdmin),
       agentsChannelsCreate: and(users.isAuthenticated, agentsChannels.isAdmin),
       agentsChannelsDelete: and(users.isAuthenticated, agentsChannels.isAdmin),
       agentsChannelsUpdate: and(users.isAuthenticated, agentsChannels.isAdmin),

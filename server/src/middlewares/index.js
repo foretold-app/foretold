@@ -1,6 +1,11 @@
 const { channel } = require('./channels');
 const { agentsChannels } = require('./agents-channels');
 
+/**
+ * Do not try to use DRY principle here.
+ * Just read each section as it is.
+ */
+
 const middlewares = {
   Mutation: {
     agentsChannelsCreate: async (resolve, root, args, context, info) => {

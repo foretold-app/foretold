@@ -96,35 +96,25 @@ module LoadedAndUnselected = {
 module MeasurableIndexDataState = {
   open Measurable__Index__Types.MeasurableIndexDataState;
 
-  let toBoth = (send, state: state) =>
-    SLayout.FullPage.(
-      switch (state) {
-      | InvalidIndexError(channel) => {
-          head: SLayout.channelink(channel),
-          body: "Item Not Valid" |> ste,
-        }
-      | WithChannelButNotQuery(c) => {
-          head: SLayout.channelink(c.channel),
-          body: "Loading..." |> ste,
-        }
-      | LoadedAndUnselected(l) => {
-          head: LoadedAndUnselected.header(l, send),
-          body: LoadedAndUnselected.body(l, send),
-        }
-      | LoadedAndSelected(l) => {
-          head: LoadedAndSelected.header(l, send),
-          body: LoadedAndSelected.body(l),
-        }
-
-      | WithoutChannel(channelResponse) => {
-          head: <div />,
-          body: "Loading..." |> ste,
-        }
-      }
-    );
-
-  let toComponent = (send, state: state) =>
-    toBoth(send, state) |> SLayout.FullPage.make |> E.React.el;
+  let toLayoutInput = (send, state: state) => {
+    let lmake = SLayout.LayoutConfig.make;
+    switch (state) {
+    | InvalidIndexError(channel) =>
+      lmake(~head=SLayout.channelink(channel), ~body="Item Not Valid" |> ste)
+    | WithChannelButNotQuery(c) =>
+      lmake(~head=SLayout.channelink(c.channel), ~body="Loading..." |> ste)
+    | LoadedAndUnselected(l) =>
+      lmake(
+        ~head=LoadedAndUnselected.header(l, send),
+        ~body=LoadedAndUnselected.body(l, send),
+      )
+    | LoadedAndSelected(l) =>
+      lmake(
+        ~head=LoadedAndSelected.header(l, send),
+        ~body=LoadedAndSelected.body(l),
+      )
+    | WithoutChannel(channelResponse) =>
+      lmake(~head=<div />, ~body="Loading..." |> ste)
+    };
+  };
 };
-
-module Components = {};

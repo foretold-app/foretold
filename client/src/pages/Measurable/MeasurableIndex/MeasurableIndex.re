@@ -1,5 +1,6 @@
 open Utils;
 open Foretold__GraphQL;
+open Rationale.Function.Infix;
 
 module Types = Measurable__Index__Types;
 module Components = Measurable__Index__Components;
@@ -9,7 +10,6 @@ let component = ReasonReact.reducerComponent("MeasurableIndex");
 
 let itemsPerPage = 20;
 
-/* , */
 let load3Queries = (channelId, page, itemsPerPage, fn) =>
   ((a, b, c) => (a, E.HttpResponse.merge2(b, c)) |> fn)
   |> E.F.flatten3Callbacks(
@@ -19,7 +19,12 @@ let load3Queries = (channelId, page, itemsPerPage, fn) =>
      );
 
 let make =
-    (~channelId: string, ~loggedInUser: Context.Primary.User.t, _children) => {
+    (
+      ~channelId: string,
+      ~loggedInUser: Context.Primary.User.t,
+      ~layout=SLayout.FullPage.makeWithEl,
+      _children,
+    ) => {
   ...component,
   initialState: () => Types.Redux.initialState,
   reducer: (action, state) =>
@@ -51,7 +56,8 @@ let make =
         channel,
         query,
       })
-      |> Components.MeasurableIndexDataState.toComponent(send)
+      |> Components.MeasurableIndexDataState.toLayoutInput(send)
+      |> layout
     );
   },
 };

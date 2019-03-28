@@ -87,17 +87,23 @@ module MainSection = {
   };
 };
 
-module FullPage = {
-  let component = ReasonReact.statelessComponent("Page");
+module LayoutConfig = {
   type t = {
     head: ReasonReact.reactElement,
     body: ReasonReact.reactElement,
   };
+  let make = (~head, ~body) => {head, body};
+};
+
+module FullPage = {
+  let component = ReasonReact.statelessComponent("Page");
+  type t = LayoutConfig.t;
   let make = ({head, body}: t) => {
     ...component,
     render: _ =>
       <> <Header> head </Header> <MainSection> body </MainSection> </>,
   };
+  let makeWithEl = (t: t) => t |> make |> E.React.el;
 };
 
 let channelBack =

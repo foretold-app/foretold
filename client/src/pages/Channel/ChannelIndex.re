@@ -39,7 +39,12 @@ let nameS = style([fontWeight(`black), fontSize(`em(1.2))]);
 let name = "#general";
 let description = "A channel for doing X and Y";
 let userCount = "8";
-let make = (~loggedInUser: Context.Primary.User.t, _children) => {
+let make =
+    (
+      ~loggedInUser: Context.Primary.User.t,
+      ~layout=SLayout.FullPage.makeWithEl,
+      _children,
+    ) => {
   ...component,
   render: _ =>
     Queries.Channels.component(channels => {
@@ -80,15 +85,14 @@ let make = (~loggedInUser: Context.Primary.User.t, _children) => {
             }
           </div>
         </div>;
-      <>
-        <SLayout.Header>
-          {SLayout.Header.textDiv("Channels")}
-        </SLayout.Header>
-        <SLayout.MainSection>
+
+      SLayout.LayoutConfig.make(
+        ~head=SLayout.Header.textDiv("Channels"),
+        ~body=
           <div className=table>
             {channels |> E.A.fmap(row) |> ReasonReact.array}
-          </div>
-        </SLayout.MainSection>
-      </>;
+          </div>,
+      )
+      |> layout;
     }),
 };

@@ -24,27 +24,30 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
     let inApp = (~key="") =>
       E.React.makeToEl ||> E.React.withParent(~key, sidebar);
 
+    let layout = SLayout.FullPage.makeWithEl;
+
     switch (route) {
     | AgentMeasurables(id) =>
-      AgentMeasurables.make(~id, ~loggedInUser) |> inApp
-    | AgentIndex => AgentIndex.make |> inApp
-    | EntityShow(id) => EntityShow.make(~id) |> inApp
+      AgentMeasurables.make(~id, ~loggedInUser, ~layout) |> inApp
+    | AgentIndex => AgentIndex.make(~layout) |> inApp
+    | EntityShow(id) => EntityShow.make(~id, ~layout) |> inApp
     | Redirect => Redirect.make(~me) |> inApp
-    | Profile => Profile.make(~loggedInUser) |> inApp
-    | AgentShow(id) => AgentShow.make(~id) |> inApp
+    | Profile => Profile.make(~loggedInUser, ~layout) |> inApp
+    | AgentShow(id) => AgentShow.make(~id, ~layout) |> inApp
     | ChannelShow(channelId) =>
-      MeasurableIndex.make(~channelId, ~loggedInUser)
+      MeasurableIndex.make(~channelId, ~loggedInUser, ~layout)
       |> inApp(~key=channelId)
-    | ChannelIndex => ChannelIndex.make(~loggedInUser) |> inApp
-    | ChannelNew => ChannelNew.make |> inApp
-    | MeasurableNew(channelId) => MeasurableNew.make(~channelId) |> inApp
-    | MeasurableEdit(id) => MeasurableEdit.make(~id) |> inApp
+    | ChannelIndex => ChannelIndex.make(~loggedInUser, ~layout) |> inApp
+    | ChannelNew => ChannelNew.make(~layout) |> inApp
+    | MeasurableNew(channelId) =>
+      MeasurableNew.make(~channelId, ~layout) |> inApp
+    | MeasurableEdit(id) => MeasurableEdit.make(~id, ~layout) |> inApp
     | Series(channelId, id) =>
       Queries.Channel.component(~id=channelId, channel =>
         SeriesShow.make(~id, ~channel, ~loggedInUser) |> inApp
       )
     | _ =>
-      MeasurableIndex.make(~channelId=defaultChannel, ~loggedInUser)
+      MeasurableIndex.make(~channelId=defaultChannel, ~loggedInUser, ~layout)
       |> inApp(~key=defaultChannel)
     };
   | _ =>

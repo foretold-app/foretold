@@ -25,7 +25,7 @@ module Types = {
     | NextSelection
     | LastSelection;
 
-  let name = action =>
+  let reducerName = action =>
     switch (action) {
     | NextPage => "NextPage"
     | LastPage => "LastPage"
@@ -143,7 +143,6 @@ let make = (~itemsPerPage=20, ~subComponent, _children) => {
   ...component,
   initialState: () => ItemUnselected({pageNumber: 0}),
   reducer: (action, state) => {
-    Js.log3("HI", action |> Types.name, state);
     let newState =
       switch (state) {
       | ItemUnselected(s) =>

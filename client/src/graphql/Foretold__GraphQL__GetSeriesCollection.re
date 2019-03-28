@@ -58,7 +58,6 @@ let component = (channelId, innerFn) => {
   |> E.React.el;
 };
 
-type ttt = Client.E.HttpResponse.t(Js.Array.t(series));
 let component2 = (~channelId, innerFn) => {
   open Rationale.Result.Infix;
   let query = Query.make(~channelId, ());

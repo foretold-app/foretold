@@ -21,10 +21,10 @@ module SeriesCards = {
       ]);
   };
 
-  module Query = Client.Measurable__Index__Types.SeriesCollectionQuery;
+  module Query = Foretold__GraphQL.Queries.SeriesCollection;
 
-  type t = Query.series;
-  type ts = Js.Array.t(Query.series);
+  type t = Foretold__GraphQL.Queries.SeriesCollection.series;
+  type ts = Js.Array.t(Foretold__GraphQL.Queries.SeriesCollection.series);
 
   let make = (channelId, list: ts) =>
     <div className=Styles.items>

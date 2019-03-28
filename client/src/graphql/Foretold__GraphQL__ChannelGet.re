@@ -44,8 +44,6 @@ let component = (~id, fn) => {
   |> E.React.el;
 };
 
-type ttt = E.HttpResponse.t(Context.Primary.Channel.t);
-
 let component2 = (~id, innerFn) => {
   let query = Query.make(~id, ());
   QueryComponent.make(~variables=query##variables, ({result}) =>

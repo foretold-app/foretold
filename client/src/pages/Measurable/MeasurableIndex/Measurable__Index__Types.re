@@ -1,30 +1,32 @@
 open Rationale.Function.Infix;
 open Utils;
 
-let itemsPerPage = 20;
-module ChannelQuery = Context.Primary.Channel;
-type channelType = ChannelQuery.t;
-type channel = ChannelQuery.t;
+module Types = {
+  module ChannelQuery = Context.Primary.Channel;
+  type channelType = ChannelQuery.t;
+  type channel = ChannelQuery.t;
 
-module SeriesCollectionQuery = Foretold__GraphQL.Queries.SeriesCollection;
-type seriesCollectionType = Js.Array.t(SeriesCollectionQuery.series);
+  module SeriesCollectionQuery = Foretold__GraphQL.Queries.SeriesCollection;
+  type seriesCollectionType = Js.Array.t(SeriesCollectionQuery.series);
 
-module MeasurablesQuery = Context.Primary.Measurable;
-type measurablesType = array(MeasurablesQuery.t);
+  module MeasurablesQuery = Context.Primary.Measurable;
+  type measurablesType = array(MeasurablesQuery.t);
 
-type loggedInUser = Context.Primary.User.t;
+  type loggedInUser = Context.Primary.User.t;
 
-type query = E.HttpResponse.t((seriesCollectionType, measurablesType));
+  type query = E.HttpResponse.t((seriesCollectionType, measurablesType));
 
-type page = int;
-module ReducerTypes = SelectWithPaginationReducer.Types;
-type reducerParams = ReducerTypes.reducerParams;
-module ItemState = SelectWithPaginationReducer.Reducers.ItemState;
+  type page = int;
+  module ReducerTypes = SelectWithPaginationReducer.Types;
+  type reducerParams = ReducerTypes.reducerParams;
+  module ReducerItemState = SelectWithPaginationReducer.Reducers.ItemState;
 
-type loadedResources = {
-  seriesCollection: seriesCollectionType,
-  measurables: measurablesType,
+  type loadedResources = {
+    seriesCollection: seriesCollectionType,
+    measurables: measurablesType,
+  };
 };
+open Types;
 
 let toResources = (r: (seriesCollectionType, measurablesType)) => {
   let (seriesCollection, measurables) = r;
@@ -34,10 +36,10 @@ let toResources = (r: (seriesCollectionType, measurablesType)) => {
 module LoadedAndSelected = {
   type t = {
     reducerParams,
-    selectedMeasurable: MeasurablesQuery.t,
-    itemState: ReducerTypes.itemSelected,
-    channel,
     loggedInUser,
+    itemState: ReducerTypes.itemSelected,
+    selectedMeasurable: MeasurablesQuery.t,
+    channel,
     loadedResources,
   };
 
@@ -62,13 +64,8 @@ module LoadedAndUnselected = {
     loadedResources,
   };
 
-  module Actions = {
-    let canIncrement = (t: t) =>
-      E.A.length(t.loadedResources.measurables) == itemsPerPage;
-    let canDecrement = (t: t) =>
-      t.reducerParams.itemState
-      |> SelectWithPaginationReducer.Reducers.ItemState.pageNumber > 0;
-  };
+  let pageNumber = (t: t) =>
+    t.reducerParams.itemState |> ReducerItemState.pageNumber;
 
   let filteredSeriesCollection = (t: t) =>
     t.loadedResources.seriesCollection
@@ -78,7 +75,7 @@ module LoadedAndUnselected = {
 
   let shouldShowSeriesCollection = (t: t) =>
     t.reducerParams.itemState
-    |> ItemState.pageNumber == 0
+    |> ReducerItemState.pageNumber == 0
     && filteredSeriesCollection(t)
     |> E.A.length > 0;
 
@@ -86,10 +83,15 @@ module LoadedAndUnselected = {
     t.loadedResources.measurables
     |> E.A.findIndex((r: MeasurablesQuery.t) => r.id == id);
 
-  let selectMeasurableOfMeasurableId = (t: t, id) => {
-    Js.log2(id, findMeasurableIndexOfMeasurableId(t, id));
+  let selectMeasurableOfMeasurableId = (t: t, id) =>
     findMeasurableIndexOfMeasurableId(t, id)
     |> E.O.fmap(e => ReducerTypes.SelectIndex(e));
+
+  module Actions = {
+    let canIncrement = (t: t) =>
+      E.A.length(t.loadedResources.measurables) == pageNumber(t);
+
+    let canDecrement = (t: t) => pageNumber(t) > 0;
   };
 };
 
@@ -128,35 +130,35 @@ module MeasurableIndexDataState = {
   };
 
   let make = (u: input) =>
-    switch (u.channel, u.query, u.reducerParams.itemState) {
+    switch (u.reducerParams.itemState, u.channel, u.query) {
     | (
-        Success(channel),
-        Success(r),
         ItemSelected({pageNumber, selectedIndex}),
+        Success(channel),
+        Success(resources),
       ) =>
-      switch (findMeasurable(selectedIndex, r)) {
+      switch (findMeasurable(selectedIndex, resources)) {
       | Some(measurable) =>
         LoadedAndSelected({
           channel,
+          reducerParams: u.reducerParams,
+          loggedInUser: u.loggedInUser,
           itemState: {
             pageNumber,
             selectedIndex,
           },
-          reducerParams: u.reducerParams,
           selectedMeasurable: measurable,
-          loggedInUser: u.loggedInUser,
-          loadedResources: r |> toResources,
+          loadedResources: resources |> toResources,
         })
       | _ => InvalidIndexError(channel)
       }
-    | (Success(channel), Success(r), ItemUnselected(_)) =>
+    | (ItemUnselected(_), Success(channel), Success(r)) =>
       LoadedAndUnselected({
         channel,
         reducerParams: u.reducerParams,
         loggedInUser: u.loggedInUser,
         loadedResources: r |> toResources,
       })
-    | (Success(channel), Error(_) | Loading, _) =>
+    | (_, Success(channel), Error(_) | Loading) =>
       WithChannelButNotQuery({
         channel,
         reducerParams: u.reducerParams,

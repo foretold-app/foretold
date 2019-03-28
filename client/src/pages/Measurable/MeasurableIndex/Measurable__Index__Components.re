@@ -2,8 +2,6 @@ open Rationale.Function.Infix;
 open Utils;
 open Measurable__Index__Types;
 
-let itemsPerPage = 20;
-
 let itemHeader =
     (
       channel: Context.Primary.Channel.t,

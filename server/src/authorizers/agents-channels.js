@@ -19,4 +19,5 @@ const isAdmin = rule()(isAdminRule);
 
 module.exports = {
   isAdmin,
+  isAdminRule,
 };

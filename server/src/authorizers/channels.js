@@ -8,15 +8,9 @@ const { rule } = require('graphql-shield');
  * @return {boolean}
  */
 function authorize(channel, agentChannel) {
-  if (!channel) {
-    return false;
-  }
-  if (channel.isPublic) {
-    return true;
-  }
-  if (!agentChannel) {
-    return false;
-  }
+  if (!channel) return false;
+  if (channel.isPublic) return true;
+  if (!agentChannel) return false;
   return true;
 }
 

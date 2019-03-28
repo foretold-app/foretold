@@ -21,7 +21,7 @@ async function one(root, args, context, info) {
  */
 async function all(root, args, context, info) {
   const agentId = context.user.agentId;
-  return await data.seriesData.getAll({ agentId });
+  return await data.seriesData.getAll({ ...args, agentId });
 }
 
 /**

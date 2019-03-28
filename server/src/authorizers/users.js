@@ -19,4 +19,5 @@ const isAuthenticated = rule()(isAuthenticatedRule);
 
 module.exports = {
   isAuthenticated,
+  isAuthenticatedRule,
 };

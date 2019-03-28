@@ -58,8 +58,6 @@ module Types = {
 
 open Types;
 
-let itemsPerPage = 20;
-
 module Reducers = {
   module ItemSelected = {
     type t = itemSelected;
@@ -146,7 +144,8 @@ module Reducers = {
     type t = state;
     let selection = (t: t) =>
       switch (t.itemState, t.response) {
-      | (ItemUnselected({pageNumber}), Success(m)) => E.A.get(m, pageNumber)
+      | (ItemSelected({selectedIndex}), Success(m)) =>
+        E.A.get(m, selectedIndex)
       | _ => None
       };
   };

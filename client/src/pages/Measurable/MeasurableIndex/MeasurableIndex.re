@@ -5,12 +5,11 @@ open Rationale.Function.Infix;
 module Types = Measurable__Index__Types;
 module Components = Measurable__Index__Components;
 
-let load3Queries = (channelId, page, itemsPerPage, fn) =>
-  ((a, b, c) => (a, E.HttpResponse.merge2(b, c)) |> fn)
-  |> E.F.flatten3Callbacks(
+let load2Queries = (channelId, fn) =>
+  ((a, b) => (a, b) |> fn)
+  |> E.F.flatten2Callbacks(
        Queries.Channel.component2(~id=channelId),
        Queries.SeriesCollection.component2(~channelId),
-       Queries.Measurables.component2(channelId, page, itemsPerPage),
      );
 
 let make =
@@ -24,7 +23,7 @@ let make =
   let pageNumber =
     selectWithPaginationParams
     |> SelectWithPaginationReducer.Reducers.ReducerParams.pageNumber;
-  let loadData = load3Queries(channelId, pageNumber, itemsPerPage);
+  let loadData = load2Queries(channelId);
   loadData(((channel, query)) =>
     Types.MeasurableIndexDataState.make({
       reducerParams: selectWithPaginationParams,

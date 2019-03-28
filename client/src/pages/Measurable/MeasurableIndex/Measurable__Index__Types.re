@@ -14,25 +14,15 @@ module Types = {
 
   type loggedInUser = Context.Primary.User.t;
 
-  type query = E.HttpResponse.t((seriesCollectionType, measurablesType));
+  type query = E.HttpResponse.t(seriesCollectionType);
 
   type page = int;
   module ReducerTypes = SelectWithPaginationReducer.Types;
   type reducerParams = ReducerTypes.reducerParams;
   module ReducerItemState = SelectWithPaginationReducer.Reducers.ItemState;
   module ReducerParams = SelectWithPaginationReducer.Reducers.ReducerParams;
-
-  type loadedResources = {
-    seriesCollection: seriesCollectionType,
-    measurables: measurablesType,
-  };
 };
 open Types;
-
-let toResources = (r: (seriesCollectionType, measurablesType)) => {
-  let (seriesCollection, measurables) = r;
-  {seriesCollection, measurables};
-};
 
 module LoadedAndSelected = {
   type t = {
@@ -41,7 +31,7 @@ module LoadedAndSelected = {
     itemState: ReducerTypes.itemSelected,
     selectedMeasurable: MeasurablesQuery.t,
     channel,
-    loadedResources,
+    seriesCollection: seriesCollectionType,
   };
 };
 
@@ -50,13 +40,13 @@ module LoadedAndUnselected = {
     reducerParams,
     loggedInUser,
     channel,
-    loadedResources,
+    seriesCollection: seriesCollectionType,
   };
 
   let pageNumber = (t: t) => t.reducerParams |> ReducerParams.pageNumber;
 
   let filteredSeriesCollection = (t: t) =>
-    t.loadedResources.seriesCollection
+    t.seriesCollection
     |> E.A.filter((x: SeriesCollectionQuery.series) =>
          x.measurableCount !== Some(0)
        );
@@ -65,8 +55,10 @@ module LoadedAndUnselected = {
     pageNumber(t) == 0 && filteredSeriesCollection(t) |> E.A.length > 0;
 
   let findMeasurableIndexOfMeasurableId = (t: t, id) =>
-    t.loadedResources.measurables
-    |> E.A.findIndex((r: MeasurablesQuery.t) => r.id == id);
+    switch (t.reducerParams.response) {
+    | Success(m) => m |> E.A.findIndex((r: MeasurablesQuery.t) => r.id == id)
+    | _ => None
+    };
 
   let selectMeasurableOfMeasurableId = (t: t, id) =>
     findMeasurableIndexOfMeasurableId(t, id)
@@ -102,11 +94,17 @@ module MeasurableIndexDataState = {
   };
 
   let make = (u: input) =>
-    switch (u.reducerParams.itemState, u.channel, u.query) {
+    switch (
+      u.reducerParams.itemState,
+      u.channel,
+      u.query,
+      u.reducerParams.response,
+    ) {
     | (
         ItemSelected({pageNumber, selectedIndex}),
         Success(channel),
-        Success(resources),
+        Success(seriesCollection),
+        Success(_),
       ) =>
       switch (u.reducerParams.selection) {
       | Some(measurable) =>
@@ -119,18 +117,23 @@ module MeasurableIndexDataState = {
             selectedIndex,
           },
           selectedMeasurable: measurable,
-          loadedResources: resources |> toResources,
+          seriesCollection,
         })
       | _ => InvalidIndexError(channel)
       }
-    | (ItemUnselected(_), Success(channel), Success(r)) =>
+    | (
+        ItemUnselected(_),
+        Success(channel),
+        Success(seriesCollection),
+        Success(_),
+      ) =>
       LoadedAndUnselected({
         channel,
         reducerParams: u.reducerParams,
         loggedInUser: u.loggedInUser,
-        loadedResources: r |> toResources,
+        seriesCollection,
       })
-    | (_, Success(channel), Error(_) | Loading) =>
+    | (_, Success(channel), _, _) =>
       WithChannelButNotQuery({
         channel,
         reducerParams: u.reducerParams,

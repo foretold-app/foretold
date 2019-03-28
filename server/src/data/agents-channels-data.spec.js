@@ -11,6 +11,7 @@ describe('data layer of agent-channels', () => {
   const channelId = 'channelId1';
   const agentId = 'agentId1';
   const input = { channelId, agentId };
+  const roles = ['viewer'];
 
   describe('createOne() when there is user', () => {
     beforeEach(() => {
@@ -19,7 +20,7 @@ describe('data layer of agent-channels', () => {
       );
     });
     it('finds user without creating new one', () => {
-      return instance.createOne(channelId, agentId).then((result) => {
+      return instance.createOne(channelId, agentId, roles).then((result) => {
         expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({
           where: input,
         });
@@ -36,11 +37,13 @@ describe('data layer of agent-channels', () => {
       );
     });
     it('creates new user', () => {
-      return instance.createOne(channelId, agentId).then((result) => {
+      return instance.createOne(channelId, agentId, roles).then((result) => {
         expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({
           where: input,
         });
-        expect(models.AgentsChannels.create).toHaveBeenCalledWith(input);
+        expect(models.AgentsChannels.create).toHaveBeenCalledWith({
+          ...input, roles
+        });
         expect(result).toBe(true);
       });
     });
@@ -171,6 +174,27 @@ describe('data layer of agent-channels', () => {
       return instance.getAllChannelIds(options).then((result) => {
         expect(instance.getAll).toHaveBeenCalledWith(options);
         expect(result).toEqual(['channelId1']);
+      });
+    });
+  });
+
+  describe('updateOne()', () => {
+    const update = jest.fn(() => Promise.resolve(true));
+    beforeEach(() => {
+      jest.spyOn(models.AgentsChannels, 'findOne').mockReturnValue(
+        Promise.resolve({ update }),
+      );
+      jest.spyOn(instance, 'validate').mockReturnValue(
+        Promise.resolve(true),
+      );
+    });
+    it('updates user', () => {
+      return instance.updateOne(channelId, agentId, roles).then((result) => {
+        expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({
+          where: input,
+        });
+        expect(models.AgentsChannels.create).toHaveBeenCalledTimes(0);
+        expect(result).toEqual({update});
       });
     });
   });

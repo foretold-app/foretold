@@ -3,15 +3,17 @@ const _ = require('lodash');
 const models = require('../models');
 
 const { AgentsChannelsData } = require('./agents-channels-data');
+const { DataBase } = require('./data-base');
 
-class ChannelsData {
+class ChannelsData extends DataBase {
 
   constructor() {
+    super();
     this.agentsChannelsData = new AgentsChannelsData();
   }
 
   /**
-   * @tested
+   * @public
    * @param {Models.User} user
    * @param {Schema.ChannelsInput} input
    * @return {Promise<Models.Channel>}
@@ -32,10 +34,10 @@ class ChannelsData {
   }
 
   /**
-   * @tested
+   * @public
    * @param {string} id
    * @param {object} input
-   * @return {Promise<Model>}
+   * @return {Promise<Models.Channel>}
    */
   async updateOne(id, input) {
     const channel = await models.Channel.findOne({
@@ -46,7 +48,7 @@ class ChannelsData {
   }
 
   /**
-   * @tested
+   * @public
    * @param {string} id
    * @return {Promise<Model[]>}
    */
@@ -59,7 +61,7 @@ class ChannelsData {
   }
 
   /**
-   * @tested
+   * @public
    * @param {string} id
    * @return {Promise<Model>}
    */
@@ -71,6 +73,46 @@ class ChannelsData {
     return _.get(channel, 'creator');
   }
 
+  /**
+   * @public
+   * @param {object} options
+   * @param {number} [options.offset]
+   * @param {number} [options.limit]
+   * @param {object} [options.agentId]
+   * @return {Promise<Models.Channel[]>}
+   */
+  async getAll(options = {}) {
+    const offset = _.get(options, 'offset', 0);
+    const limit = _.get(options, 'limit', 10);
+    return await models.Channel.findAll({
+      limit,
+      offset,
+      order: [['createdAt', 'DESC']],
+      where: {
+        id: { $in: this.channelIdsLiteral(options.agentId) },
+      }
+    });
+  }
+
+  /**
+   * @public
+   * @param {string} id
+   * @param {object} options
+   * @param {number} [options.offset]
+   * @param {number} [options.limit]
+   * @param {string} [options.agentId]
+   * @return {Promise<Models.Channel>}
+   */
+  async getOne(id, options = {}) {
+    return await models.Channel.findOne({
+      where: {
+        $and: [
+          { id },
+          { id: { $in: this.channelIdsLiteral(options.agentId) } },
+        ]
+      }
+    });
+  }
 }
 
 module.exports = {

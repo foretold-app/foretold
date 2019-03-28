@@ -1,22 +1,19 @@
-const findOne = jest.fn(() => Promise.resolve(true));
-const create = jest.fn(() => Promise.resolve(true));
-const findById = jest.fn(() => Promise.resolve(true));
-const destroy = jest.fn(() => Promise.resolve(true));
-
 const AgentsChannels = {
-  findOne: findOne,
-  create: create,
-  destroy: destroy,
+  findOne: jest.fn(() => Promise.resolve(true)),
+  create: jest.fn(() => Promise.resolve(true)),
+  destroy: jest.fn(() => Promise.resolve(true)),
+  findAll: jest.fn(() => Promise.resolve(true)),
 };
 
 const Channel = {
-  findById: findById,
+  findById: jest.fn(() => Promise.resolve(true)),
   findOne: jest.fn(() => Promise.resolve(true)),
   create: jest.fn(() => Promise.resolve(true)),
+  findAll: jest.fn(() => Promise.resolve(true)),
 };
 
 const Agent = {
-  findById: findById,
+  findById: jest.fn(() => Promise.resolve(true)),
 };
 
 const User = {
@@ -26,9 +23,45 @@ const User = {
   findOrCreate: jest.fn(() => Promise.resolve(true)),
 };
 
+const Measurable = {
+  findOne: jest.fn(() => Promise.resolve(true)),
+  create: jest.fn(() => Promise.resolve(true)),
+  findById: jest.fn(() => Promise.resolve(true)),
+  findOrCreate: jest.fn(() => Promise.resolve(true)),
+  findAll: jest.fn(() => Promise.resolve(true)),
+};
+
+const Measurement = {
+  findOne: jest.fn(() => Promise.resolve(true)),
+  create: jest.fn(() => Promise.resolve(true)),
+  findById: jest.fn(() => Promise.resolve(true)),
+  findOrCreate: jest.fn(() => Promise.resolve(true)),
+  findAll: jest.fn(() => Promise.resolve(true)),
+};
+
+const Series = {
+  findOne: jest.fn(() => Promise.resolve(true)),
+  create: jest.fn(() => Promise.resolve(true)),
+  findById: jest.fn(() => Promise.resolve(true)),
+  findOrCreate: jest.fn(() => Promise.resolve(true)),
+  findAll: jest.fn(() => Promise.resolve(true)),
+};
+
+const sequelize = {
+  Op: {
+    or: 'orop',
+    ne: 'neop',
+    eq: 'eqop',
+  }
+};
+
 module.exports = {
   User,
   Agent,
   Channel,
   AgentsChannels,
+  Measurable,
+  Measurement,
+  Series,
+  sequelize,
 };

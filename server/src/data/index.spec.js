@@ -1,7 +1,7 @@
 const index = require('./index');
 
-describe('Resolvers Module', () => {
-  it('class should be object', () => {
+describe('tests data module', () => {
+  it('index should be an object', () => {
     expect(index).toBeInstanceOf(Object);
   });
 });

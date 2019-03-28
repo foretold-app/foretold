@@ -2,11 +2,7 @@ const models = require('../models');
 const { ChannelsData } = require('./channels-data');
 const { AgentsChannelsData } = require('./agents-channels-data');
 
-describe('ChannelsData', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-    jest.restoreAllMocks();
-  });
+describe('Channels Data Layer', () => {
 
   it('class should be constructor', () => {
     expect(ChannelsData).toBeInstanceOf(Function);
@@ -17,15 +13,23 @@ describe('ChannelsData', () => {
   const user = { agentId: 'agentId1' };
   const input = { name: 'Input Name 1' };
 
-  describe('createOne - branch A', () => {
-    beforeAll(() => {
-      jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve(true));
-      jest.spyOn(models.Channel, 'create').mockReturnValue(Promise.resolve(true));
-      jest.spyOn(AgentsChannelsData.prototype, 'createOne').mockReturnValue(Promise.resolve(true));
+  describe('createOne()', () => {
+    beforeEach(() => {
+      jest.spyOn(models.Channel, 'findOne').mockReturnValue(
+        Promise.resolve(true),
+      );
+      jest.spyOn(models.Channel, 'create').mockReturnValue(
+        Promise.resolve(true),
+      );
+      jest.spyOn(AgentsChannelsData.prototype, 'createOne').mockReturnValue(
+        Promise.resolve(true),
+      );
     });
-    it('createOne', () => {
+    it('finds channel', () => {
       return instance.createOne(user, input).then((result) => {
-        expect(models.Channel.findOne).toHaveBeenCalledWith({ where: { name: input.name } });
+        expect(models.Channel.findOne).toHaveBeenCalledWith({
+          where: { name: input.name },
+        });
         expect(models.Channel.create).toHaveBeenCalledTimes(0);
         expect(AgentsChannelsData.prototype.createOne).toHaveBeenCalledTimes(0);
         expect(result).toBe(true);
@@ -33,15 +37,23 @@ describe('ChannelsData', () => {
     });
   });
 
-  describe('createOne - branch B', () => {
-    beforeAll(() => {
-      jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve(false));
-      jest.spyOn(models.Channel, 'create').mockReturnValue(Promise.resolve(true));
-      jest.spyOn(AgentsChannelsData.prototype, 'createOne').mockReturnValue(Promise.resolve(true));
+  describe('createOne() if there is no channel', () => {
+    beforeEach(() => {
+      jest.spyOn(models.Channel, 'findOne').mockReturnValue(
+        Promise.resolve(false),
+      );
+      jest.spyOn(models.Channel, 'create').mockReturnValue(
+        Promise.resolve(true),
+      );
+      jest.spyOn(AgentsChannelsData.prototype, 'createOne').mockReturnValue(
+        Promise.resolve(true),
+      );
     });
-    it('createOne', () => {
+    it('creates channel', () => {
       return instance.createOne(user, input).then((result) => {
-        expect(models.Channel.findOne).toHaveBeenCalledWith({ where: { name: input.name } });
+        expect(models.Channel.findOne).toHaveBeenCalledWith({
+          where: { name: input.name },
+        });
         expect(models.Channel.create).toHaveBeenCalledTimes(1);
         expect(AgentsChannelsData.prototype.createOne).toHaveBeenCalledTimes(1);
         expect(result).toBe(true);
@@ -49,12 +61,14 @@ describe('ChannelsData', () => {
     });
   });
 
-  describe('updateOne - branch A', () => {
+  describe('updateOne()', () => {
     const update = jest.fn(() => Promise.resolve(true));
-    beforeAll(() => {
-      jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({update}));
+    beforeEach(() => {
+      jest.spyOn(models.Channel, 'findOne').mockReturnValue(
+        Promise.resolve({ update }),
+      );
     });
-    it('createOne', () => {
+    it('finds channel', () => {
       return instance.updateOne(id, input).then((result) => {
         expect(models.Channel.findOne).toHaveBeenCalledWith({ where: { id } });
         expect(update).toHaveBeenCalledTimes(1);
@@ -62,26 +76,32 @@ describe('ChannelsData', () => {
     });
   });
 
-  describe('updateOne - branch B', () => {
+  describe('updateOne() if there is no channel', () => {
     const update = jest.fn(() => Promise.resolve(true));
-    beforeAll(() => {
-      jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve(false));
+    beforeEach(() => {
+      jest.spyOn(models.Channel, 'findOne').mockReturnValue(
+        Promise.resolve(false),
+      );
     });
-    it('createOne', () => {
+    it('does not update channel when it is not found', () => {
       return instance.updateOne(id, input).then((result) => {
-        expect(models.Channel.findOne).toHaveBeenCalledWith({ where: { id } });
+        expect(models.Channel.findOne).toHaveBeenCalledWith({
+          where: { id },
+        });
         expect(update).toHaveBeenCalledTimes(0);
         expect(result).toBe(false);
       });
     });
   });
 
-  describe('getAgentsByChannelId - branch A', () => {
+  describe('getAgentsByChannelId()', () => {
     const agents = [];
-    beforeAll(() => {
-      jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({agents}));
+    beforeEach(() => {
+      jest.spyOn(models.Channel, 'findOne').mockReturnValue(
+        Promise.resolve({ agents }),
+      );
     });
-    it('createOne', () => {
+    it('finds channel and returns agents', () => {
       return instance.getAgentsByChannelId(id).then((result) => {
         expect(models.Channel.findOne).toHaveBeenCalledTimes(1);
         expect(result).toBe(agents);
@@ -89,15 +109,66 @@ describe('ChannelsData', () => {
     });
   });
 
-  describe('getCreatorByChannelId - branch A', () => {
+  describe('getCreatorByChannelId()', () => {
     const creator = 1;
-    beforeAll(() => {
-      jest.spyOn(models.Channel, 'findOne').mockReturnValue(Promise.resolve({creator}));
+    beforeEach(() => {
+      jest.spyOn(models.Channel, 'findOne').mockReturnValue(
+        Promise.resolve({ creator }),
+      );
     });
-    it('createOne', () => {
+    it('finds channel and returns creator', () => {
       return instance.getCreatorByChannelId(id).then((result) => {
         expect(models.Channel.findOne).toHaveBeenCalledTimes(1);
         expect(result).toBe(creator);
+      });
+    });
+  });
+
+  describe('getAll()', () => {
+    const options = { limit: 1, offset: 2 };
+    beforeEach(() => {
+      jest.spyOn(models.Channel, 'findAll').mockReturnValue(
+        Promise.resolve(true),
+      );
+      jest.spyOn(instance, 'channelIdsLiteral').mockReturnValue(
+        'channelIdsLiteral',
+      );
+    });
+    it('formats restrictions and finds all channels', () => {
+      return instance.getAll(options).then((result) => {
+        expect(models.Channel.findAll).toHaveBeenCalledWith({
+          "limit": 1,
+          "offset": 2,
+          "order": [["createdAt", "DESC"]],
+          "where": { "id": { "$in": "channelIdsLiteral" } }
+        });
+        expect(result).toBe(true);
+      });
+    });
+  });
+
+  describe('getOne()', () => {
+    const id = 'id1';
+    const options = {};
+    beforeEach(() => {
+      jest.spyOn(models.Channel, 'findOne').mockReturnValue(
+        Promise.resolve(true),
+      );
+      jest.spyOn(instance, 'channelIdsLiteral').mockReturnValue(
+        'channelIdsLiteral',
+      );
+    });
+    it('finds channel', () => {
+      return instance.getOne(id, options).then((result) => {
+        expect(models.Channel.findOne).toHaveBeenCalledWith({
+          "where": {
+            "$and": [
+              { "id": "id1" },
+              { "id": { "$in": "channelIdsLiteral" } }
+            ]
+          }
+        });
+        expect(result).toBe(true);
       });
     });
   });

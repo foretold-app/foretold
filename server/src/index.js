@@ -5,7 +5,7 @@ const bodyParser = require('body-parser-graphql');
 const { ApolloServer } = require('apollo-server-express');
 
 const models = require("./models");
-const { schema } = require('./schema');
+const { schemaWithMiddlewares } = require('./schema');
 const { authentication } = require('./authentication');
 
 const PORT = process.env.PORT || 4000;
@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 4000;
 const server = new ApolloServer({
   introspection: true,
   playground: true,
-  schema,
+  schema: schemaWithMiddlewares,
   formatError: error => {
     console.log("Error!", error);
     return error;

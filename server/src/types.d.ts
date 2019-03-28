@@ -5,6 +5,10 @@ export namespace Models {
    auth0Id: string;
    agentId: string;
  }
+ export interface Channel {
+   id: string;
+   isPublic: boolean;
+ }
 }
 
 export namespace Schema {

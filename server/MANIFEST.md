@@ -3,7 +3,7 @@ Application Layers:
 - Node.js
 - Express.js
 - Appolo GraphQL
-- GrpahQL
+- GraphQL
 - Middlewares
 - Permissions
 - Resolvers

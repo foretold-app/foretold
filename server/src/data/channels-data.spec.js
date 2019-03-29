@@ -50,11 +50,10 @@ describe('Channels Data Layer', () => {
           where: { name: input.name },
         });
         expect(models.Channel.create).toHaveBeenCalledTimes(1);
-        expect(AgentsChannelsData.prototype.createOne).toHaveBeenCalledTimes(1);
         expect(AgentsChannelsData.prototype.createOne).toHaveBeenCalledWith(
           "id1",
           "agentId1",
-          ["admin", "viewer"]
+          "ADMIN"
         );
         expect(result).toEqual({ id: 'id1' });
       });

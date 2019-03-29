@@ -8,7 +8,7 @@ describe('AgentsChannels Resolvers', () => {
     const args = {
       channelId: 'channelId1',
       agentId: 'agentId2',
-      roles: ['admin']
+      role: 'ADMIN'
     };
     beforeEach(() => {
       jest.spyOn(data.agentsChannelsData, 'createOne').mockReturnValue(
@@ -20,7 +20,7 @@ describe('AgentsChannels Resolvers', () => {
         expect(data.agentsChannelsData.createOne).toHaveBeenCalledWith(
           'channelId1',
           'agentId2',
-          args.roles,
+          args.role,
         );
         expect(result).toBe(true);
       });
@@ -32,7 +32,7 @@ describe('AgentsChannels Resolvers', () => {
     const args = {
       channelId: 'channelId1',
       agentId: 'agentId2',
-      roles: ['admin']
+      role: ['admin']
     };
     beforeEach(() => {
       jest.spyOn(data.agentsChannelsData, 'createOne').mockReturnValue(
@@ -44,7 +44,7 @@ describe('AgentsChannels Resolvers', () => {
         expect(data.agentsChannelsData.createOne).toHaveBeenCalledWith(
           'channelId1',
           'agentId2',
-          args.roles,
+          args.role,
         );
         expect(result).toBe(true);
       });

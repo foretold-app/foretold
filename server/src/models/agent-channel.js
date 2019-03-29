@@ -5,15 +5,15 @@
  */
 module.exports = (sequelize, DataTypes) => {
   const AgentsChannels = sequelize.define('AgentsChannels', {
-    roles: {
-      type: DataTypes.ARRAY(DataTypes.STRING(8)),
+    role: {
+      type: DataTypes.STRING(8),
       allowNull: false,
     },
   });
 
-  AgentsChannels.ROLES = {
-    admin: 'admin',
-    viewer: 'viewer',
+  AgentsChannels.ROLE = {
+    ADMIN: 'ADMIN',
+    VIEWER: 'VIEWER',
   };
 
   AgentsChannels.associate = function (models) {

@@ -1,12 +1,13 @@
 module.exports = {
-  up: async function (queryInterface) {
-    await queryInterface.sequelize.query(`
-        ALTER TABLE "AgentsChannels" ADD COLUMN "roles" VARCHAR(8)[];
-        UPDATE "AgentsChannels" SET "roles" = ARRAY['viewer', 'admin'];
-    `);
+  up: async function (queryInterface, Sequelize) {
+    await queryInterface.addColumn("AgentsChannels", "role", {
+      type: Sequelize.STRING(8),
+      allowNull: false,
+      defaultValue: 'VIEWER'
+    });
   },
 
   down: async function (queryInterface) {
-    await queryInterface.removeColumn('AgentsChannels', 'roles');
+    await queryInterface.removeColumn('AgentsChannels', 'role');
   }
 };

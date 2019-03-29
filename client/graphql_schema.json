@@ -2745,23 +2745,15 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "roles",
+                  "name": "role",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "LIST",
-                      "name": null,
-                      "ofType": {
-                        "kind": "NON_NULL",
-                        "name": null,
-                        "ofType": {
-                          "kind": "ENUM",
-                          "name": "AgentChannelRoles",
-                          "ofType": null
-                        }
-                      }
+                      "kind": "ENUM",
+                      "name": "AgentChannelRoles",
+                      "ofType": null
                     }
                   },
                   "defaultValue": null
@@ -2800,19 +2792,15 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "roles",
+                  "name": "role",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "LIST",
-                      "name": null,
-                      "ofType": {
-                        "kind": "ENUM",
-                        "name": "AgentChannelRoles",
-                        "ofType": null
-                      }
+                      "kind": "ENUM",
+                      "name": "AgentChannelRoles",
+                      "ofType": null
                     }
                   },
                   "defaultValue": null
@@ -2923,13 +2911,13 @@
           "interfaces": null,
           "enumValues": [
             {
-              "name": "admin",
+              "name": "ADMIN",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "viewer",
+              "name": "VIEWER",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -2975,11 +2963,11 @@
               "deprecationReason": null
             },
             {
-              "name": "roles",
+              "name": "role",
               "description": null,
               "args": [],
               "type": {
-                "kind": "LIST",
+                "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "ENUM",

@@ -6,12 +6,14 @@ module.exports = {
 
   down: async function (queryInterface, Sequelize) {
     await queryInterface.addColumn("Series", "channel", {
-      type: Sequelize.UUID,
-      allowNull: false
+      type: Sequelize.TEXT(),
+      allowNull: false,
+      defaultValue: 'Default Channel',
     });
     await queryInterface.addColumn("Measurables", "channel", {
-      type: Sequelize.UUID,
-      allowNull: false
+      type: Sequelize.TEXT(),
+      allowNull: false,
+      defaultValue: 'Default Channel',
     });
   }
 };

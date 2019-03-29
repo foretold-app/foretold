@@ -3,6 +3,10 @@ const AgentsChannels = {
   create: jest.fn(() => Promise.resolve(true)),
   destroy: jest.fn(() => Promise.resolve(true)),
   findAll: jest.fn(() => Promise.resolve(true)),
+  ROLE: {
+    ADMIN: 'ADMIN',
+    VIEWER: 'VIEWER',
+  }
 };
 
 const Channel = {

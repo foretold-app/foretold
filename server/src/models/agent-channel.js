@@ -1,9 +1,20 @@
 /**
  * @param sequelize
+ * @param DataTypes
  * @return {*}
  */
-module.exports = (sequelize) => {
-  const AgentsChannels = sequelize.define('AgentsChannels', {});
+module.exports = (sequelize, DataTypes) => {
+  const AgentsChannels = sequelize.define('AgentsChannels', {
+    role: {
+      type: DataTypes.STRING(8),
+      allowNull: false,
+    },
+  });
+
+  AgentsChannels.ROLE = {
+    ADMIN: 'ADMIN',
+    VIEWER: 'VIEWER',
+  };
 
   AgentsChannels.associate = function (models) {
     models.Agent.belongsToMany(models.Channel, {

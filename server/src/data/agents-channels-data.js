@@ -9,14 +9,31 @@ class AgentsChannelsData extends DataBase {
   /**
    * @param {string} channelId
    * @param {string} agentId
+   * @param {string} role
    * @returns {Promise<Model>}
    */
-  async createOne(channelId, agentId) {
-    const input = { channelId, agentId };
-    await this.validate(input);
+  async createOne(channelId, agentId, role) {
+    await this.validate({ channelId, agentId });
     const agentChannel =
-      await models.AgentsChannels.findOne({ where: input }) ||
-      await models.AgentsChannels.create(input);
+      await models.AgentsChannels.findOne({ where: { channelId, agentId } }) ||
+      await models.AgentsChannels.create({ channelId, agentId, role });
+    return agentChannel;
+  }
+
+  /**
+   * @param {string} channelId
+   * @param {string} agentId
+   * @param {string} role
+   * @returns {Promise<Model>}
+   */
+  async updateOne(channelId, agentId, role) {
+    await this.validate({ channelId, agentId });
+    const agentChannel = await models.AgentsChannels.findOne({
+      where: { channelId, agentId }
+    });
+    if (agentChannel) {
+      await agentChannel.update({ role });
+    }
     return agentChannel;
   }
 

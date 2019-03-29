@@ -5,7 +5,11 @@ describe('AgentsChannels Resolvers', () => {
 
   describe('create()', () => {
     const root = {};
-    const args = { channelId: 'channelId1', agentId: 'agentId2' };
+    const args = {
+      channelId: 'channelId1',
+      agentId: 'agentId2',
+      role: 'ADMIN'
+    };
     beforeEach(() => {
       jest.spyOn(data.agentsChannelsData, 'createOne').mockReturnValue(
         Promise.resolve(true),
@@ -16,6 +20,31 @@ describe('AgentsChannels Resolvers', () => {
         expect(data.agentsChannelsData.createOne).toHaveBeenCalledWith(
           'channelId1',
           'agentId2',
+          args.role,
+        );
+        expect(result).toBe(true);
+      });
+    });
+  });
+
+  describe('update()', () => {
+    const root = {};
+    const args = {
+      channelId: 'channelId1',
+      agentId: 'agentId2',
+      role: ['admin']
+    };
+    beforeEach(() => {
+      jest.spyOn(data.agentsChannelsData, 'createOne').mockReturnValue(
+        Promise.resolve(true),
+      );
+    });
+    it('updates agent-channel row', () => {
+      return agentsChannels.create(root, args).then((result) => {
+        expect(data.agentsChannelsData.createOne).toHaveBeenCalledWith(
+          'channelId1',
+          'agentId2',
+          args.role,
         );
         expect(result).toBe(true);
       });
@@ -24,7 +53,10 @@ describe('AgentsChannels Resolvers', () => {
 
   describe('remove()', () => {
     const root = {};
-    const args = { channelId: 'channelId2', agentId: 'agentId3' };
+    const args = {
+      channelId: 'channelId1',
+      agentId: 'agentId2',
+    };
     beforeEach(() => {
       jest.spyOn(data.agentsChannelsData, 'deleteOne')
         .mockReturnValue(Promise.resolve(true));
@@ -32,8 +64,8 @@ describe('AgentsChannels Resolvers', () => {
     it('removes agent-channel row', () => {
       return agentsChannels.remove(root, args).then((result) => {
         expect(data.agentsChannelsData.deleteOne).toHaveBeenCalledWith(
-          'channelId2',
-          'agentId3',
+          'channelId1',
+          'agentId2',
         );
         expect(result).toBe(true);
       });

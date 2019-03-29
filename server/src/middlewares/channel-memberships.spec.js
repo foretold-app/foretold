@@ -1,13 +1,13 @@
-const { agentsChannels } = require('./agents-channels');
+const { channelsMemberships } = require('./channel-memberships');
 const data = require('../data');
 
-describe('AgentsChannels Middlewares', () => {
+describe('ChannelsMemberships Middlewares', () => {
 
-  describe('agentsChannels() sets agent-channel model into context', () => {
-    const agentChannel = {};
+  describe('channelsMemberships() sets agent-channel model into context', () => {
+    const channelMembership = {};
     beforeEach(() => {
-      jest.spyOn(data.agentsChannelsData, 'getOne').mockReturnValue(
-        Promise.resolve(agentChannel),
+      jest.spyOn(data.channelsMembershipsData, 'getOne').mockReturnValue(
+        Promise.resolve(channelMembership),
       );
     });
 
@@ -16,13 +16,13 @@ describe('AgentsChannels Middlewares', () => {
       const args = { channelId: 'channelId1' };
       const context = { user: { agentId: 'agentId1' } };
       const info = {};
-      return agentsChannels(root, args, context, info).then((result) => {
-        expect(data.agentsChannelsData.getOne).toHaveBeenCalledWith({
+      return channelsMemberships(root, args, context, info).then((result) => {
+        expect(data.channelsMembershipsData.getOne).toHaveBeenCalledWith({
           "agentId": "agentId1",
           "channelId": "channelId1"
         });
         expect(result).toBe(undefined);
-        expect(context.agentChannel).toBe(agentChannel);
+        expect(context.channelMembership).toBe(channelMembership);
       });
     });
 
@@ -31,13 +31,13 @@ describe('AgentsChannels Middlewares', () => {
       const args = {};
       const context = { user: { agentId: 'agentId1' } };
       const info = {};
-      return agentsChannels(root, args, context, info).then((result) => {
-        expect(data.agentsChannelsData.getOne).toHaveBeenCalledWith({
+      return channelsMemberships(root, args, context, info).then((result) => {
+        expect(data.channelsMembershipsData.getOne).toHaveBeenCalledWith({
           "agentId": "agentId1",
           "channelId": "channelId1"
         });
         expect(result).toBe(undefined);
-        expect(context.agentChannel).toBe(agentChannel);
+        expect(context.channelMembership).toBe(channelMembership);
       });
     });
 
@@ -49,13 +49,13 @@ describe('AgentsChannels Middlewares', () => {
         channelId: 'channelId1'
       };
       const info = {};
-      return agentsChannels(root, args, context, info).then((result) => {
-        expect(data.agentsChannelsData.getOne).toHaveBeenCalledWith({
+      return channelsMemberships(root, args, context, info).then((result) => {
+        expect(data.channelsMembershipsData.getOne).toHaveBeenCalledWith({
           "agentId": "agentId1",
           "channelId": "channelId1"
         });
         expect(result).toBe(undefined);
-        expect(context.agentChannel).toBe(agentChannel);
+        expect(context.channelMembership).toBe(channelMembership);
       });
     });
 

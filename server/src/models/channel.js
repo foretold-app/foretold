@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
     // const ch = await models.Channel.findById('406da139-e440-4c74-bb3c-514ed1872cea');
     // const ag = await ch.getAgents();
     Channel.Agents = Channel.belongsToMany(models.Agent, {
-      through: models.AgentsChannels,
+      through: models.ChannelsMemberships,
       foreignKey: 'channelId',
       otherKey: 'agentId',
       as: 'agents'

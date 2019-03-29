@@ -11,12 +11,12 @@ export namespace Models {
     isPublic: boolean;
   }
 
-  export type AgentChannelRole = 'ADMIN' | 'VIEWER';
+  export type ChannelMembershipRole = 'ADMIN' | 'VIEWER';
 
-  export interface AgentChannel {
+  export interface ChannelMembership {
     agentId: string;
     channelId: string;
-    role: AgentChannelRole;
+    role: ChannelMembershipRole;
   }
 }
 
@@ -24,8 +24,8 @@ export namespace Schema {
   export interface Context {
     user: Models.User;
     channel?: Models.Channel;
-    agentChannel?: Models.AgentChannel;
-    agentsChannelsRole?: Models.AgentChannelRole;
+    channelMembership?: Models.ChannelMembership;
+    channelMembershipsRole?: Models.ChannelMembershipRole;
   }
 
   export interface ChannelsInput {

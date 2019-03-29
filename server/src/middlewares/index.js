@@ -1,5 +1,5 @@
 const { channel } = require('./channels');
-const { channelMemberships } = require('./channel-memberships');
+const { agentsChannels } = require('./agents-channels');
 const { measurable } = require('./measurables');
 
 /**
@@ -11,44 +11,44 @@ const middlewares = {
   Mutation: {
     createSeries: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);
-      await channelMemberships(root, args, context, info);
+      await agentsChannels(root, args, context, info);
       return await resolve(root, args, context, info);
     },
 
     createMeasurement: async (resolve, root, args, context, info) => {
       await measurable(root, args, context, info);
       await channel(root, args, context, info);
-      await channelMemberships(root, args, context, info);
+      await agentsChannels(root, args, context, info);
       return await resolve(root, args, context, info);
     },
 
     createMeasurable: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);
-      await channelMemberships(root, args, context, info);
+      await agentsChannels(root, args, context, info);
       return await resolve(root, args, context, info);
     },
 
     channelUpdate: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);
-      await channelMemberships(root, args, context, info);
+      await agentsChannels(root, args, context, info);
       return await resolve(root, args, context, info);
     },
 
-    channelMembershipCreate: async (resolve, root, args, context, info) => {
+    agentsChannelsCreate: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);
-      await channelMemberships(root, args, context, info);
+      await agentsChannels(root, args, context, info);
       return await resolve(root, args, context, info);
     },
 
-    channelMembershipRoleUpdate: async (resolve, root, args, context, info) => {
+    agentsChannelsUpdate: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);
-      await channelMemberships(root, args, context, info);
+      await agentsChannels(root, args, context, info);
       return await resolve(root, args, context, info);
     },
 
-    channelMembershipDelete: async (resolve, root, args, context, info) => {
+    agentsChannelsDelete: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);
-      await channelMemberships(root, args, context, info);
+      await agentsChannels(root, args, context, info);
       return await resolve(root, args, context, info);
     },
   }

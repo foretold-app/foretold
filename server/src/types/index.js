@@ -10,7 +10,7 @@ const { filterr } = require('./filterr');
 
 const agents = require('./agents');
 const channels = require('./channels');
-const channelsMemberships = require('./channels-memberhips');
+const agentsChannels = require('./agents-channels');
 
 /**
  * @deprecated
@@ -83,5 +83,5 @@ module.exports = {
 
   agents,
   channels,
-  channelsMemberships,
+  agentsChannels,
 };

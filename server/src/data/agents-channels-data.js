@@ -4,7 +4,7 @@ const models = require("../models");
 
 const { DataBase } = require('./data-base');
 
-class ChannelsMembershipsData extends DataBase {
+class AgentsChannelsData extends DataBase {
 
   /**
    * @param {string} channelId
@@ -14,10 +14,10 @@ class ChannelsMembershipsData extends DataBase {
    */
   async createOne(channelId, agentId, role) {
     await this.validate({ channelId, agentId });
-    const channelMembership =
-      await models.ChannelsMemberships.findOne({ where: { channelId, agentId } }) ||
-      await models.ChannelsMemberships.create({ channelId, agentId, role });
-    return channelMembership;
+    const agentChannel =
+      await models.AgentsChannels.findOne({ where: { channelId, agentId } }) ||
+      await models.AgentsChannels.create({ channelId, agentId, role });
+    return agentChannel;
   }
 
   /**
@@ -28,13 +28,13 @@ class ChannelsMembershipsData extends DataBase {
    */
   async updateOne(channelId, agentId, role) {
     await this.validate({ channelId, agentId });
-    const channelMembership = await models.ChannelsMemberships.findOne({
+    const agentChannel = await models.AgentsChannels.findOne({
       where: { channelId, agentId }
     });
-    if (channelMembership) {
-      await channelMembership.update({ role });
+    if (agentChannel) {
+      await agentChannel.update({ role });
     }
-    return channelMembership;
+    return agentChannel;
   }
 
   /**
@@ -45,11 +45,11 @@ class ChannelsMembershipsData extends DataBase {
   async deleteOne(channelId, agentId) {
     const input = { channelId, agentId };
     await this.validate(input);
-    const channelMembership = await models.ChannelsMemberships.findOne({ where: input });
-    if (channelMembership) {
-      await models.ChannelsMemberships.destroy({ where: input });
+    const agentChannel = await models.AgentsChannels.findOne({ where: input });
+    if (agentChannel) {
+      await models.AgentsChannels.destroy({ where: input });
     }
-    return channelMembership;
+    return agentChannel;
   }
 
   /**
@@ -77,20 +77,20 @@ class ChannelsMembershipsData extends DataBase {
    * @param {object} options
    * @param {string} options.agentId?
    * @param {string} options.channelId?
-   * @returns {Promise<Models.ChannelMembership>}
+   * @returns {Promise<Models.AgentChannel>}
    */
   async getOne(options) {
-    return await models.ChannelsMemberships.findOne({ where: options });
+    return await models.AgentsChannels.findOne({ where: options });
   }
 
   /**
    * @param {object} options
    * @param {string} options.agentId?
    * @param {string} options.channelId?
-   * @returns {Promise<Models.ChannelMembership[]>}
+   * @returns {Promise<Models.AgentChannel[]>}
    */
   async getAll(options) {
-    return await models.ChannelsMemberships.findAll({ where: options });
+    return await models.AgentsChannels.findAll({ where: options });
   }
 
   /**
@@ -106,5 +106,5 @@ class ChannelsMembershipsData extends DataBase {
 }
 
 module.exports = {
-  ChannelsMembershipsData,
+  AgentsChannelsData,
 };

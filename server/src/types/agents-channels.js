@@ -1,15 +1,15 @@
 const graphql = require("graphql");
 
 const role = new graphql.GraphQLEnumType({
-  name: 'ChannelMembershipRoles',
+  name: 'AgentChannelRoles',
   values: {
     ADMIN: { value: 'ADMIN' },
     VIEWER: { value: 'VIEWER' },
   },
 });
 
-const channelsMembership = new graphql.GraphQLObjectType({
-  name: 'ChannelsMembership',
+const agentsChannel = new graphql.GraphQLObjectType({
+  name: 'AgentsChannel',
   fields: {
     agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
@@ -18,6 +18,6 @@ const channelsMembership = new graphql.GraphQLObjectType({
 });
 
 module.exports = {
-  channelsMembership,
+  agentsChannel,
   role,
 };

@@ -1,3 +1,3 @@
 module.exports = {
-  channelsMemberships: jest.fn(() => Promise.resolve(true)),
+  agentsChannels: jest.fn(() => Promise.resolve(true)),
 };

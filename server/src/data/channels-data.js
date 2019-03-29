@@ -32,7 +32,7 @@ class ChannelsData extends DataBase {
     await this.agentsChannelsData.createOne(
       channel.id,
       user.agentId,
-      models.AgentsChannels.ROLES.ADMIN,
+      models.AgentsChannels.ROLE.ADMIN,
     );
     return channel;
   }

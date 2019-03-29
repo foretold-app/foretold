@@ -11,7 +11,7 @@ describe('data layer of agent-channels', () => {
   const channelId = 'channelId1';
   const agentId = 'agentId1';
   const input = { channelId, agentId };
-  const roles = ['viewer'];
+  const role = 'VIEWER';
 
   describe('createOne() when there is user', () => {
     beforeEach(() => {
@@ -20,7 +20,7 @@ describe('data layer of agent-channels', () => {
       );
     });
     it('finds user without creating new one', () => {
-      return instance.createOne(channelId, agentId, roles).then((result) => {
+      return instance.createOne(channelId, agentId, role).then((result) => {
         expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({
           where: input,
         });
@@ -37,12 +37,12 @@ describe('data layer of agent-channels', () => {
       );
     });
     it('creates new user', () => {
-      return instance.createOne(channelId, agentId, roles).then((result) => {
+      return instance.createOne(channelId, agentId, role).then((result) => {
         expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({
           where: input,
         });
         expect(models.AgentsChannels.create).toHaveBeenCalledWith({
-          ...input, roles
+          ...input, role
         });
         expect(result).toBe(true);
       });
@@ -189,7 +189,7 @@ describe('data layer of agent-channels', () => {
       );
     });
     it('updates user', () => {
-      return instance.updateOne(channelId, agentId, roles).then((result) => {
+      return instance.updateOne(channelId, agentId, role).then((result) => {
         expect(models.AgentsChannels.findOne).toHaveBeenCalledWith({
           where: input,
         });

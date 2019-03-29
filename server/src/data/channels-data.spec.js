@@ -25,14 +25,9 @@ describe('Channels Data Layer', () => {
         Promise.resolve(true),
       );
     });
-    it('finds channel', () => {
-      return instance.createOne(user, input).then((result) => {
-        expect(models.Channel.findOne).toHaveBeenCalledWith({
-          where: { name: input.name },
-        });
-        expect(models.Channel.create).toHaveBeenCalledTimes(0);
-        expect(AgentsChannelsData.prototype.createOne).toHaveBeenCalledTimes(0);
-        expect(result).toBe(true);
+    it('throw an error that channel is exists', () => {
+      instance.createOne(user, input).catch((err) => {
+        expect(err).toBeInstanceOf(Error);
       });
     });
   });
@@ -43,7 +38,7 @@ describe('Channels Data Layer', () => {
         Promise.resolve(false),
       );
       jest.spyOn(models.Channel, 'create').mockReturnValue(
-        Promise.resolve(true),
+        Promise.resolve({ id: 'id1' }),
       );
       jest.spyOn(AgentsChannelsData.prototype, 'createOne').mockReturnValue(
         Promise.resolve(true),
@@ -55,8 +50,12 @@ describe('Channels Data Layer', () => {
           where: { name: input.name },
         });
         expect(models.Channel.create).toHaveBeenCalledTimes(1);
-        expect(AgentsChannelsData.prototype.createOne).toHaveBeenCalledTimes(1);
-        expect(result).toBe(true);
+        expect(AgentsChannelsData.prototype.createOne).toHaveBeenCalledWith(
+          "id1",
+          "agentId1",
+          "ADMIN"
+        );
+        expect(result).toEqual({ id: 'id1' });
       });
     });
   });
@@ -149,7 +148,7 @@ describe('Channels Data Layer', () => {
 
   describe('getOne()', () => {
     const id = 'id1';
-    const options = {};
+    const options = { agentId: undefined };
     beforeEach(() => {
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(
         Promise.resolve(true),

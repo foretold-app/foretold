@@ -1,5 +1,6 @@
 const { channel } = require('./channels');
 const { agentsChannels } = require('./agents-channels');
+const { measurable } = require('./measurables');
 
 /**
  * Do not try to use DRY principle here.
@@ -8,6 +9,25 @@ const { agentsChannels } = require('./agents-channels');
 
 const middlewares = {
   Mutation: {
+    createSeries: async (resolve, root, args, context, info) => {
+      await channel(root, args, context, info);
+      await agentsChannels(root, args, context, info);
+      return await resolve(root, args, context, info);
+    },
+
+    createMeasurement: async (resolve, root, args, context, info) => {
+      await measurable(root, args, context, info);
+      await channel(root, args, context, info);
+      await agentsChannels(root, args, context, info);
+      return await resolve(root, args, context, info);
+    },
+
+    createMeasurable: async (resolve, root, args, context, info) => {
+      await channel(root, args, context, info);
+      await agentsChannels(root, args, context, info);
+      return await resolve(root, args, context, info);
+    },
+
     channelUpdate: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);
       await agentsChannels(root, args, context, info);

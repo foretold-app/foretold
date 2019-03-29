@@ -102,7 +102,7 @@ class MeasurablesData extends DataBase {
       state: {
         [models.sequelize.Op.ne]: "ARCHIVED"
       },
-      $and: [{channelId: { $in: this.channelIdsLiteral(options.agentId) }}],
+      $and: [{ channelId: { $in: this.channelIdsLiteral(options.agentId) } }],
     };
 
     if (seriesId) {
@@ -132,10 +132,13 @@ class MeasurablesData extends DataBase {
    * @return {Promise<*>}
    */
   async getOne(id, options = {}) {
+    const restrictions = 'agentId' in options
+      ? { channelId: { $in: this.channelIdsLiteral(options.agentId) } }
+      : {};
     return await models.Measurable.findOne({
       where: {
         id,
-        channelId: { $in: this.channelIdsLiteral(options.agentId) },
+        ...restrictions,
       }
     });
   }

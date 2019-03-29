@@ -1,9 +1,10 @@
 module.exports = {
-  up: async function (queryInterface) {
-    await queryInterface.sequelize.query(`
-        ALTER TABLE "AgentsChannels" ADD COLUMN "role" VARCHAR(8);
-        UPDATE "AgentsChannels" SET "role" = 'ADMIN';
-    `);
+  up: async function (queryInterface, Sequelize) {
+    await queryInterface.addColumn("AgentsChannels", "role", {
+      type: Sequelize.STRING(8),
+      allowNull: false,
+      defaultValue: 'VIEWER'
+    });
   },
 
   down: async function (queryInterface) {

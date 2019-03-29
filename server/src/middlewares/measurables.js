@@ -18,7 +18,7 @@ async function measurable(root, args, context, info) {
   if (measurableId) {
     const measurable = await data.measurablesData.getOne(measurableId);
     context.measurable = measurable;
-    context.channelId = measurable.channelId;
+    context.channelId = _.get(measurable, 'channelId');
   } else {
     context.measurable = null;
     context.channelId = null;

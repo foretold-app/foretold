@@ -77,7 +77,7 @@ class AgentsChannelsData extends DataBase {
    * @param {object} options
    * @param {string} options.agentId?
    * @param {string} options.channelId?
-   * @returns {Promise<Model>}
+   * @returns {Promise<Models.AgentChannel>}
    */
   async getOne(options) {
     return await models.AgentsChannels.findOne({ where: options });
@@ -87,7 +87,7 @@ class AgentsChannelsData extends DataBase {
    * @param {object} options
    * @param {string} options.agentId?
    * @param {string} options.channelId?
-   * @returns {Promise<Model>}
+   * @returns {Promise<Models.AgentChannel[]>}
    */
   async getAll(options) {
     return await models.AgentsChannels.findAll({ where: options });

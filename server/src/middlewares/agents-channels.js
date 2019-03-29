@@ -5,7 +5,7 @@ const data = require('../data');
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {object} context
+ * @param {Schema.Context} context
  * @param {object} info
  * @return {Promise<void>}
  */
@@ -18,12 +18,12 @@ async function agentsChannels(root, args, context, info) {
   const id = { agentId, channelId };
   console.log('\x1b[36m ---> \x1b[0m Middleware (agentsChannels)', id);
   if (channelId && agentId) {
-    const aggentChannel = await data.agentsChannelsData.getOne(id);
-    context.agentChannel = aggentChannel;
-    context.agentsChannelsRoles = _.get(aggentChannel, 'roles', []);
+    const agentChannel = await data.agentsChannelsData.getOne(id);
+    context.agentChannel = agentChannel;
+    context.agentsChannelsRole = _.get(agentChannel, 'role', []);
   } else {
     context.agentChannel = null;
-    context.agentsChannelsRoles = [];
+    context.agentsChannelsRole = null;
   }
 }
 

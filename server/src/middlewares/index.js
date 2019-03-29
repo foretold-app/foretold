@@ -22,6 +22,12 @@ const middlewares = {
       return await resolve(root, args, context, info);
     },
 
+    createMeasurable: async (resolve, root, args, context, info) => {
+      await channel(root, args, context, info);
+      await agentsChannels(root, args, context, info);
+      return await resolve(root, args, context, info);
+    },
+
     channelUpdate: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);
       await agentsChannels(root, args, context, info);

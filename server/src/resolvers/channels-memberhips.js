@@ -6,7 +6,7 @@ const data = require('../data');
  * @returns {Promise<Model>}
  */
 async function create(root, args) {
-  return await data.agentsChannelsData.createOne(
+  return await data.channelsMembershipsData.createOne(
     args.channelId,
     args.agentId,
     args.role
@@ -19,7 +19,7 @@ async function create(root, args) {
  * @returns {Promise<Model>}
  */
 async function update(root, args) {
-  return await data.agentsChannelsData.updateOne(
+  return await data.channelsMembershipsData.updateOne(
     args.channelId,
     args.agentId,
     args.role
@@ -32,7 +32,7 @@ async function update(root, args) {
  * @returns {Promise<Model>}
  */
 async function remove(root, args) {
-  return await data.agentsChannelsData.deleteOne(
+  return await data.channelsMembershipsData.deleteOne(
     args.channelId,
     args.agentId
   );

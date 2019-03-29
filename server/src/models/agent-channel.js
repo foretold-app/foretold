@@ -12,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   AgentsChannels.ROLES = {
-    admin: 'admin',
-    viewer: 'viewer',
+    ADMIN: 'ADMIN',
+    VIEWER: 'VIEWER',
   };
 
   AgentsChannels.associate = function (models) {

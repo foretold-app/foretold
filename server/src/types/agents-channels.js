@@ -3,8 +3,8 @@ const graphql = require("graphql");
 const roles = new graphql.GraphQLEnumType({
   name: 'AgentChannelRoles',
   values: {
-    admin: { value: 'admin' },
-    viewer: { value: 'viewer' },
+    ADMIN: { value: 'ADMIN' },
+    VIEWER: { value: 'VIEWER' },
   },
 });
 

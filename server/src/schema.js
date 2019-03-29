@@ -209,7 +209,7 @@ const schema = new graphql.GraphQLSchema({
         args: {
           agentId: { type: graphql.GraphQLString },
           channelId: { type: graphql.GraphQLString },
-          roles: { type: graphql.GraphQLNonNull(graphql.GraphQLList(types.agentsChannels.roles)) },
+          role: { type: graphql.GraphQLNonNull(types.agentsChannels.role) },
         },
         resolve: resolvers.agentsChannels.create,
       },
@@ -219,7 +219,7 @@ const schema = new graphql.GraphQLSchema({
         args: {
           agentId: { type: graphql.GraphQLString },
           channelId: { type: graphql.GraphQLString },
-          roles: { type: graphql.GraphQLNonNull(graphql.GraphQLList(types.agentsChannels.roles)) },
+          role: { type: graphql.GraphQLNonNull(types.agentsChannels.role) },
         },
         resolve: resolvers.agentsChannels.update,
       },

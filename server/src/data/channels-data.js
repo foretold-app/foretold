@@ -31,10 +31,8 @@ class ChannelsData extends DataBase {
     });
     await this.agentsChannelsData.createOne(
       channel.id,
-      user.agentId, [
-        models.AgentsChannels.ROLES.admin,
-        models.AgentsChannels.ROLES.viewer,
-      ],
+      user.agentId,
+      models.AgentsChannels.ROLES.ADMIN,
     );
     return channel;
   }

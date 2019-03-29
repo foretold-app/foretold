@@ -5,8 +5,8 @@
  */
 module.exports = (sequelize, DataTypes) => {
   const AgentsChannels = sequelize.define('AgentsChannels', {
-    roles: {
-      type: DataTypes.ARRAY(DataTypes.STRING(8)),
+    role: {
+      type: DataTypes.STRING(8),
       allowNull: false,
     },
   });

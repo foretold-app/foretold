@@ -115,7 +115,7 @@ let make = (~id: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _self =>
     SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("Edit Measurable"),
+      ~head=SLayout.Header.textDiv("My Measurable"),
       ~body=Queries.Measurable.component(~id, m => formCreation(id, m)),
     )
     |> layout,

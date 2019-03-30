@@ -22,7 +22,7 @@ type seriesCollection = array(series);
 
 module Query = [%graphql
   {|
-      query getSeriesCollection($channelId: String!) {
+      query getSeriesCollection($channelId: String) {
           seriesCollection:
           seriesCollection(channelId: $channelId) @bsRecord{
            id
@@ -54,6 +54,18 @@ let component = (channelId, innerFn) => {
     |> E.R.fmap(E.JsArray.concatSomes)
     |> E.R.fmap(innerFn)
     |> E.R.id
+  )
+  |> E.React.el;
+};
+
+let component2 = (~channelId, innerFn) => {
+  open Rationale.Result.Infix;
+  let query = Query.make(~channelId, ());
+  QueryComponent.make(~variables=query##variables, ({result}) =>
+    result
+    |> E.HttpResponse.fromApollo
+    |> E.HttpResponse.fmap(e => e##seriesCollection |> E.JsArray.concatSomes)
+    |> innerFn
   )
   |> E.React.el;
 };

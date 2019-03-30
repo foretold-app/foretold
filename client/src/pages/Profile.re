@@ -81,19 +81,22 @@ let formFields = (form: Form.state, handleChange, handleSubmit: unit => unit) =>
     </Antd.Form.Item>
   </Antd.Form>;
 
-let make = (~loggedInUser: Context.Primary.User.t, _children) => {
+let make =
+    (
+      ~loggedInUser: Context.Primary.User.t,
+      ~layout=SLayout.FullPage.makeWithEl,
+      _children,
+    ) => {
   ...component,
   render: _ =>
-    withUserMutation((mutation, data) => {
-      let id = loggedInUser.id;
-      let name = loggedInUser.name;
-      withUserForm(
-        id, name, mutation, ({handleSubmit, handleChange, form, _}) =>
-        <>
-          <SLayout.Header>
-            {"Edit Profile Information" |> ste |> E.React.inH1}
-          </SLayout.Header>
-          <SLayout.MainSection>
+    SLayout.LayoutConfig.make(
+      ~head=SLayout.Header.textDiv("Edit Profile Information"),
+      ~body=
+        withUserMutation((mutation, data) => {
+          let id = loggedInUser.id;
+          let name = loggedInUser.name;
+          withUserForm(
+            id, name, mutation, ({handleSubmit, handleChange, form, _}) =>
             <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
               {
                 switch (data.result) {
@@ -112,8 +115,8 @@ let make = (~loggedInUser: Context.Primary.User.t, _children) => {
                 }
               }
             </form>
-          </SLayout.MainSection>
-        </>
-      );
-    }),
+          );
+        }),
+    )
+    |> layout,
 };

@@ -23,11 +23,19 @@ class SeriesData extends DataBase {
    * @param {string} [options.agentId]
    * @return {Promise<*>}
    */
-  async getAll(options = {}) {
-    return await models.Series.findAll({
-      where: {
+  async getAll(options) {
+    const { channelId } = options;
+
+    let where = {
         channelId: { $in: this.channelIdsLiteral(options.agentId) },
-      },
+      };
+
+    if (channelId) {
+      where.channelId = { [models.sequelize.Op.eq]: channelId };
+    }
+
+    return await models.Series.findAll({
+      where
     });
   }
 

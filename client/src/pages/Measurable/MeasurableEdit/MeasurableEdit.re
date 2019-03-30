@@ -1,5 +1,6 @@
 open Utils;
 open Foretold__GraphQL;
+open Rationale.Function.Infix;
 
 module WithEditMutation = {
   module GraphQL = [%graphql
@@ -110,15 +111,12 @@ let formCreation = (id, m) => {
 };
 
 let component = ReasonReact.statelessComponent("MeasurableEdit");
-let make = (~id: string, _children) => {
+let make = (~id: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _self =>
-    <>
-      <SLayout.Header>
-        {SLayout.Header.textDiv("Edit Measurable")}
-      </SLayout.Header>
-      <SLayout.MainSection>
-        {Queries.Measurable.component(~id, m => formCreation(id, m))}
-      </SLayout.MainSection>
-    </>,
+    SLayout.LayoutConfig.make(
+      ~head=SLayout.Header.textDiv("My Measurable"),
+      ~body=Queries.Measurable.component(~id, m => formCreation(id, m)),
+    )
+    |> layout,
 };

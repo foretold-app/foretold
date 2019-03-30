@@ -76,7 +76,7 @@ let toMeasurable = (m: measurable): Context.Primary.Measurable.t =>
 
 module Query = [%graphql
   {|
-    query getMeasurables ($offset: Int, $limit: Int, $channelId: String!, $seriesId: String, $creatorId: String) {
+    query getMeasurables ($offset: Int, $limit: Int, $channelId: String, $seriesId: String, $creatorId: String) {
         measurables(offset: $offset, limit: $limit, channelId: $channelId, seriesId: $seriesId, creatorId: $creatorId) @bsRecord {
            id
            name
@@ -141,14 +141,71 @@ let component =
   queryToComponent(query, innerComponentFn);
 };
 
+let component2 = (~channelId, ~pageNumber, ~pageLimit, ~innerComponentFn) => {
+  let query =
+    Query.make(
+      ~offset=pageNumber * pageLimit,
+      ~limit=pageLimit,
+      ~channelId,
+      (),
+    );
+  QueryComponent.make(~variables=query##variables, o =>
+    o.result
+    |> E.HttpResponse.fromApollo
+    |> E.HttpResponse.fmap(e =>
+         e##measurables |> E.A.O.concatSomes |> E.A.fmap(toMeasurable)
+       )
+    |> innerComponentFn
+  )
+  |> E.React.el;
+};
+
+let component3 = (~seriesId, ~pageNumber, ~pageLimit, ~innerComponentFn) => {
+  let query =
+    Query.make(
+      ~offset=pageNumber * pageLimit,
+      ~limit=pageLimit,
+      ~seriesId,
+      (),
+    );
+  QueryComponent.make(~variables=query##variables, o =>
+    o.result
+    |> E.HttpResponse.fromApollo
+    |> E.HttpResponse.fmap(e =>
+         e##measurables |> E.A.O.concatSomes |> E.A.fmap(toMeasurable)
+       )
+    |> innerComponentFn
+  )
+  |> E.React.el;
+};
+
+let component4 = (~creatorId, ~pageNumber, ~pageLimit, ~innerComponentFn) => {
+  let query =
+    Query.make(
+      ~offset=pageNumber * pageLimit,
+      ~limit=pageLimit,
+      ~creatorId,
+      (),
+    );
+  QueryComponent.make(~variables=query##variables, o =>
+    o.result
+    |> E.HttpResponse.fromApollo
+    |> E.HttpResponse.fmap(e =>
+         e##measurables |> E.A.O.concatSomes |> E.A.fmap(toMeasurable)
+       )
+    |> innerComponentFn
+  )
+  |> E.React.el;
+};
+
 let componentWithSeries =
     (channelId, seriesId, innerComponentFn: 'a => ReasonReact.reactElement) => {
   let query = Query.make(~offset=0, ~limit=200, ~channelId, ~seriesId, ());
   queryToComponent(query, innerComponentFn);
 };
 
-/* let componentWithCreator =
-       (creatorId, innerComponentFn: 'a => ReasonReact.reactElement) => {
-     let query = Query.make(~offset=0, ~limit=200, ~creatorId, ());
-     queryToComponent(query, innerComponentFn);
-   }; */
+let componentWithCreator =
+    (creatorId, innerComponentFn: 'a => ReasonReact.reactElement) => {
+  let query = Query.make(~offset=0, ~limit=200, ~creatorId, ());
+  queryToComponent(query, innerComponentFn);
+};

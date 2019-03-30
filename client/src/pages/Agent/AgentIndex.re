@@ -3,7 +3,7 @@ open Foretold__GraphQL;
 
 /* We currently don't use this file */
 let component = ReasonReact.statelessComponent("Measurables");
-let make = _children => {
+let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>
     Queries.Agents.QueryComponent.make(({result}) =>

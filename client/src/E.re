@@ -20,6 +20,9 @@ module O = {
   let default = Rationale.Option.default;
   let isSome = Rationale.Option.isSome;
   let toExn = Rationale.Option.toExn;
+  let some = Rationale.Option.some;
+  let flatApply = (fn, b) =>
+    Rationale.Option.apply(fn, Some(b)) |> Rationale.Option.flatten;
 
   let toResult = (error, e) =>
     switch (e) {
@@ -37,6 +40,14 @@ module O = {
 /* Functions */
 module F = {
   let apply = (a, e) => a |> e;
+  let flatten2Callbacks = (fn1, fn2, fnlast) =>
+    fn1(response1 => fn2(response2 => fnlast(response1, response2)));
+  let flatten3Callbacks = (fn1, fn2, fn3, fnlast) =>
+    fn1(response1 =>
+      fn2(response2 =>
+        fn3(response3 => fnlast(response1, response2, response3))
+      )
+    );
 };
 
 module Float = {
@@ -44,8 +55,8 @@ module Float = {
 };
 
 module I = {
-  let increment = 1->(+);
-  let decrement = 1->(-);
+  let increment = n => n + 1;
+  let decrement = n => n - 1;
 };
 
 /* R for Result */
@@ -188,8 +199,12 @@ module FloatCdf = {
 module React = {
   let el = ReasonReact.element;
   let null = ReasonReact.null;
-  let makeToEl = (~key="", ~children=<div />, e) =>
-    children |> e |> el(~key);
+  let str = ReasonReact.string;
+  let makeToEl = (~key="", ~children=null, e) => children |> e |> el(~key);
+  let withParent = (~key="", e, children) => children |> e |> el(~key);
+  let withChildren = (~key="", children, e) => children |> e |> el(~key);
+  let wrapOver = (a, b) => b(a) |> makeToEl;
+  let takeParameterFrom = (a, b) => a(b) |> makeToEl;
   let showIf = (cond, comp) => cond ? comp : ReasonReact.null;
   let inP = e => <p> e </p>;
   let inH1 = e => <h1> e </h1>;
@@ -197,7 +212,7 @@ module React = {
   let inH3 = e => <h3> e </h3>;
 };
 
-module HtppResponse = {
+module HttpResponse = {
   type t('a) =
     | Loading
     | Error(string)
@@ -224,4 +239,67 @@ module HtppResponse = {
     | Error(e) => Error(e)
     | Loading => Loading
     };
+
+  let isSuccess = (result: t('a)) =>
+    switch (result) {
+    | Success(_) => true
+    | _ => false
+    };
+
+  let withDefaults = (result: t(ReasonReact.reactElement)) =>
+    switch (result) {
+    | Success(response) => response
+    | Error(e) => <div> {"Error: " ++ e |> React.str} </div>
+    | Loading => <div> {"Loading..." |> React.str} </div>
+    };
+
+  let merge2 = (a: t('a), b: t('b)) =>
+    switch (a, b) {
+    | (Error(a), _) => Error(a)
+    | (_, Error(b)) => Error(b)
+    | (Loading, _) => Loading
+    | (_, Loading) => Loading
+    | (Success(a), Success(b)) => Success((a, b))
+    };
+
+  let merge3 = (a: t('a), b: t('b), c: t('c)) =>
+    switch (merge2(a, b), c) {
+    | (Success((a, b)), Success(c)) => Success((a, b, c))
+    | (Error(a), _) => Error(a)
+    | (_, Error(b)) => Error(b)
+    | (Loading, _) => Loading
+    | (_, Loading) => Loading
+    };
+
+  let isEq = (a: t('a), b: t('a), isEqual) =>
+    switch (a, b) {
+    | (Success(a), Success(b)) => isEqual(a, b)
+    | (Loading, Loading) => true
+    | (Error(a), Error(b)) => a == b
+    | (_, _) => false
+    };
+};
+
+module NonZeroInt = {
+  type t = int;
+  let make = (i: int) => i < 0 ? None : Some(i);
+  let fmap = (fn, a: t) => make(fn(a));
+  let increment = fmap(I.increment);
+  let decrement = fmap(I.decrement);
+};
+
+module BoundedInt = {
+  type t = int;
+  let make = (i: int, limit: int) => {
+    let lessThan0 = r => r < 0;
+    let greaterThanLimit = r => r > limit;
+    if (lessThan0(i) || greaterThanLimit(i)) {
+      None;
+    } else {
+      Some(i);
+    };
+  };
+  let fmap = (fn, a: t, l) => make(fn(a), l);
+  let increment = fmap(I.increment);
+  let decrement = fmap(I.decrement);
 };

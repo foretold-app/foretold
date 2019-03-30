@@ -16,7 +16,8 @@
     "webpack": "webpack -w",
     "webpack:production": "NODE_ENV=production webpack",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "find-interface-for-file": "bsc -bs-re-out"
   },
   "keywords": [
     "BuckleScript"

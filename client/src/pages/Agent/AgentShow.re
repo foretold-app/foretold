@@ -32,39 +32,37 @@ let agentSection = (e: Queries.Agent.agent) =>
 
 let component = ReasonReact.statelessComponent("AgentShow");
 
-let make = (~id: string, _children) => {
+let make = (~id: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>
     Queries.Agent.component(
       ~id,
       agent => {
-        let mm =
-          Queries.Agent.toMeasurables(
-            agent.measurements |> E.A.O.concatSomes,
-          );
-        <>
-          <SLayout.Header> {agentSection(agent)} </SLayout.Header>
-          <SLayout.MainSection>
-            {
-              mm
-              |> E.L.fmap((m: Context.Primary.Measurable.t) => {
-                   let measurements = m.measurements |> E.O.default([]);
-                   <>
-                     <div className=block>
-                       {C.Measurable.Items.link(~m)}
-                       <C.Measurable.StatusDisplay
-                         measurable=m
-                         dateDisplay=WHOLE
-                       />
-                     </div>
-                     {measurements |> C.Measurements.Table.make}
-                   </>;
-                 })
-              |> E.A.of_list
-              |> ReasonReact.array
-            }
-          </SLayout.MainSection>
-        </>;
+        let measurables =
+          agent.measurements
+          |> E.A.O.concatSomes
+          |> Queries.Agent.toMeasurables;
+        SLayout.LayoutConfig.make(
+          ~head=agentSection(agent),
+          ~body=
+            measurables
+            |> E.L.fmap((m: Context.Primary.Measurable.t) => {
+                 let measurements = m.measurements |> E.O.default([]);
+                 <>
+                   <div className=block>
+                     {C.Measurable.Items.link(~m)}
+                     <C.Measurable.StatusDisplay
+                       measurable=m
+                       dateDisplay=WHOLE
+                     />
+                   </div>
+                   {measurements |> C.Measurements.Table.make}
+                 </>;
+               })
+            |> E.A.of_list
+            |> ReasonReact.array,
+        )
+        |> layout;
       },
     ),
 };

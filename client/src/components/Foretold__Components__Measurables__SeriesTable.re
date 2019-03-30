@@ -42,21 +42,10 @@ let make =
       _children,
     ) => {
   ...component,
-  render: _self => {
-    let _measurables =
-      Measurable.stableSort(measurables)
-      |> E.JsArray.filter((e: Measurable.t) =>
-           Measurable.toStatus(e) != ARCHIVED
-         );
+  render: _self =>
     <div className=Styles.group>
       {
-        _measurables
-        |> Js_array.sortInPlaceWith((a: Measurable.t, b: Measurable.t) =>
-             switch (a.descriptionEntity, b.descriptionEntity) {
-             | (Some(aa), Some(bb)) => bb > aa ? (-1) : 1
-             | _ => 1
-             }
-           )
+        measurables
         |> Array.map((m: Measurable.t) =>
              <div
                className={Styles.row(Some(m.id) == selected)}
@@ -105,6 +94,5 @@ let make =
            )
         |> ReasonReact.array
       }
-    </div>;
-  },
+    </div>,
 };

@@ -14,7 +14,7 @@ let mapUrlToAction = (url: ReasonReact.Router.url) =>
 
 let component = ReasonReact.reducerComponent("App");
 
-let make = _children => {
+let make = (componentForRoute, _children) => {
   ...component,
   reducer,
   initialState: () => {route: Home},
@@ -26,5 +26,5 @@ let make = _children => {
       ReasonReact.Router.watchUrl(url => url |> mapUrlToAction |> self.send);
     self.onUnmount(() => ReasonReact.Router.unwatchUrl(watcherID));
   },
-  render: self => <Layout route={self.state.route} />,
+  render: self => self.state.route |> componentForRoute,
 };

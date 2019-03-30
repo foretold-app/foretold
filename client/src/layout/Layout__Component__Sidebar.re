@@ -78,7 +78,7 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
           <div
             onClick={_e => Context.Routing.Url.push(AgentMeasurables(idd))}
             className=Styles.item>
-            {"Edit Measurables" |> ste}
+            {"My Measurables" |> ste}
           </div>
           <div
             onClick={_e => Context.Auth.Actions.logout()}

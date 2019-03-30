@@ -1,0 +1,1 @@
+let instance: unit => ApolloClient.generatedApolloClient;

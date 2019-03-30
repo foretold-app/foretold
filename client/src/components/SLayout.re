@@ -87,22 +87,37 @@ module MainSection = {
   };
 };
 
-let channelBack =
-    (
-      ~channel: Context.Primary.Channel.t,
-      ~onClick=_ => Context.Routing.Url.push(ChannelShow(channel.id)),
-      (),
-    ) =>
+module LayoutConfig = {
+  type t = {
+    head: ReasonReact.reactElement,
+    body: ReasonReact.reactElement,
+  };
+  let make = (~head, ~body) => {head, body};
+};
+
+module FullPage = {
+  let component = ReasonReact.statelessComponent("Page");
+  type t = LayoutConfig.t;
+  let make = ({head, body}: t) => {
+    ...component,
+    render: _ =>
+      <> <Header> head </Header> <MainSection> body </MainSection> </>,
+  };
+  let makeWithEl = (t: t) => t |> make |> E.React.el;
+};
+
+let channelBack = (~onClick, ()) =>
   <div className=Styles.backHover onClick>
     <Icon.Icon icon="ARROW_LEFT" />
   </div>;
 
 let channelink = (c: Context.Primary.Channel.t) =>
-  <div className=Styles.headerText> {c |> Context.Primary.Channel.present} </div>;
+  <div className=Styles.headerText>
+    {c |> Context.Primary.Channel.present}
+  </div>;
 
 let seriesHead = (channel: Context.Primary.Channel.t, seriesName) =>
   <>
-    {channelBack(~channel, ())}
     <div className=Styles.headerText>
       {channel |> Context.Primary.Channel.present}
     </div>

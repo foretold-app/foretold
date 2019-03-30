@@ -63,7 +63,7 @@ let mutate =
 
 let component = ReasonReact.statelessComponent("Measurables");
 
-let make = (~channelId, _children) => {
+let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
     let formCreator = mutation =>
@@ -84,44 +84,39 @@ let make = (~channelId, _children) => {
         ~schema=[(`name, Custom(_ => None))],
       );
 
-    <>
-      <SLayout.Header>
-        {SLayout.Header.textDiv("New Measurable")}
-      </SLayout.Header>
-      <SLayout.MainSection>
-        {
-          CreateMeasurableMutation.Mutation.make(
-            ~onCompleted=e => Js.log("HI"),
-            (mutation, data) =>
-              formCreator(
-                mutation,
-                ({handleSubmit, handleChange, form, _}) => {
-                  let showForm =
-                    MeasurableForm.showForm(
-                      ~form,
-                      ~handleSubmit,
-                      ~handleChange,
-                    );
-                  switch (data.result) {
-                  | Loading => "Loading" |> ste
-                  | Error(e) =>
-                    <> {"Error: " ++ e##message |> ste} showForm </>
-                  | Data(data) =>
-                    data##createMeasurable
-                    |> E.O.fmap(e => e##id)
-                    |> doIfSome(_ =>
-                         Context.Routing.Url.push(ChannelShow(channelId))
-                       );
-                    E.React.null;
-                  | NotCalled => showForm
-                  };
-                },
-              )
-              |> E.React.el,
-          )
-          |> E.React.el
-        }
-      </SLayout.MainSection>
-    </>;
+    SLayout.LayoutConfig.make(
+      ~head=SLayout.Header.textDiv("New Measurable"),
+      ~body=
+        CreateMeasurableMutation.Mutation.make(
+          ~onCompleted=e => Js.log("HI"),
+          (mutation, data) =>
+            formCreator(
+              mutation,
+              ({handleSubmit, handleChange, form, _}) => {
+                let showForm =
+                  MeasurableForm.showForm(
+                    ~form,
+                    ~handleSubmit,
+                    ~handleChange,
+                  );
+                switch (data.result) {
+                | Loading => "Loading" |> ste
+                | Error(e) => <> {"Error: " ++ e##message |> ste} showForm </>
+                | Data(data) =>
+                  data##createMeasurable
+                  |> E.O.fmap(e => e##id)
+                  |> doIfSome(_ =>
+                       Context.Routing.Url.push(ChannelShow(channelId))
+                     );
+                  E.React.null;
+                | NotCalled => showForm
+                };
+              },
+            )
+            |> E.React.el,
+        )
+        |> E.React.el,
+    )
+    |> layout;
   },
 };

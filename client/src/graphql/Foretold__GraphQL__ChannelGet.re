@@ -43,3 +43,15 @@ let component = (~id, fn) => {
   )
   |> E.React.el;
 };
+
+let component2 = (~id, innerFn) => {
+  let query = Query.make(~id, ());
+  QueryComponent.make(~variables=query##variables, ({result}) =>
+    result
+    |> E.HttpResponse.fromApollo
+    |> E.HttpResponse.fmap(e => e##channel |> E.O.fmap(toChannel))
+    |> E.HttpResponse.optionalToMissing
+    |> innerFn
+  )
+  |> E.React.el;
+};

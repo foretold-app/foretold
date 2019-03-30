@@ -106,12 +106,7 @@ module FullPage = {
   let makeWithEl = (t: t) => t |> make |> E.React.el;
 };
 
-let channelBack =
-    (
-      ~channel: Context.Primary.Channel.t,
-      ~onClick=_ => Context.Routing.Url.push(ChannelShow(channel.id)),
-      (),
-    ) =>
+let channelBack = (~onClick, ()) =>
   <div className=Styles.backHover onClick>
     <Icon.Icon icon="ARROW_LEFT" />
   </div>;
@@ -123,7 +118,6 @@ let channelink = (c: Context.Primary.Channel.t) =>
 
 let seriesHead = (channel: Context.Primary.Channel.t, seriesName) =>
   <>
-    {channelBack(~channel, ())}
     <div className=Styles.headerText>
       {channel |> Context.Primary.Channel.present}
     </div>

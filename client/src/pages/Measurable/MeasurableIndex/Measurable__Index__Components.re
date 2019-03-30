@@ -3,46 +3,22 @@ open Utils;
 open Measurable__Index__Logic;
 
 module ReducerParams = SelectWithPaginationReducer.Reducers.ReducerParams;
-let itemHeader =
-    (
-      channel: Context.Primary.Channel.t,
-      onForward,
-      onBackward,
-      canDecrement,
-      canIncrement,
-    ) =>
-  <>
-    {SLayout.channelink(channel)}
-    <Antd.Button onClick={_ => onBackward()} disabled={!canDecrement}>
-      <Icon.Icon icon="ARROW_LEFT" />
-    </Antd.Button>
-    <Antd.Button onClick={_ => onForward()} disabled={!canIncrement}>
-      <Icon.Icon icon="ARROW_RIGHT" />
-    </Antd.Button>
-    {C.Channel.SimpleHeader.button(channel.id)}
-  </>;
 
 module LoadedAndSelected = {
   open Measurable__Index__Logic.LoadedAndSelected;
 
   let header = (t: t, send: SelectWithPaginationReducer.Types.send) =>
     <>
+      {SelectWithPaginationReducer.Components.deselectButton(send)}
+      {SLayout.channelink(t.channel)}
       {
-        SLayout.channelBack(
-          ~channel=t.channel,
-          ~onClick=_ => send(SelectWithPaginationReducer.Types.Deselect),
-          (),
+        SelectWithPaginationReducer.Components.buttonDuo(
+          Item,
+          send,
+          t.reducerParams,
         )
       }
-      {
-        itemHeader(
-          t.channel,
-          () => send(SelectWithPaginationReducer.Types.NextSelection),
-          () => send(SelectWithPaginationReducer.Types.LastSelection),
-          ReducerParams.canDecrementSelection(t.reducerParams),
-          ReducerParams.canIncrementSelection(t.reducerParams),
-        )
-      }
+      {C.Channel.SimpleHeader.button(t.channel.id)}
     </>;
 
   let body = (t: t) =>
@@ -57,13 +33,17 @@ module LoadedAndUnselected = {
 
   let header = (t: t, send: SelectWithPaginationReducer.Types.send) => {
     let channel = t.channel;
-    itemHeader(
-      channel,
-      () => send(SelectWithPaginationReducer.Types.NextPage),
-      () => send(SelectWithPaginationReducer.Types.LastPage),
-      ReducerParams.canDecrementPage(t.reducerParams),
-      ReducerParams.canIncrementPage(t.reducerParams),
-    );
+    <>
+      {SLayout.channelink(channel)}
+      {
+        SelectWithPaginationReducer.Components.buttonDuo(
+          Page,
+          send,
+          t.reducerParams,
+        )
+      }
+      {C.Channel.SimpleHeader.button(t.channel.id)}
+    </>;
   };
 
   let seriesList = (t: t) =>

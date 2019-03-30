@@ -209,7 +209,52 @@ module Make = (Config: Config) => {
     };
   };
 
-  let component = ReasonReact.reducerComponent("PaginationReducer");
+  module Components = {
+    open Reducers.ReducerParams;
+
+    let deselectButton = send =>
+      SLayout.channelBack(~onClick=_ => send(Types.Deselect), ());
+
+    let pageButton' = (facesRight: bool, action, canMove, send, params) =>
+      <Antd.Button onClick={_ => send(action)} disabled={!canMove(params)}>
+        <Icon.Icon icon={facesRight ? "ARROW_RIGHT" : "ARROW_LEFT"} />
+      </Antd.Button>;
+
+    type buttonType =
+      | PageLast
+      | PageNext
+      | ItemLast
+      | ItemNext;
+
+    let pageButton' = (buttonType: buttonType) =>
+      switch (buttonType) {
+      | PageLast => pageButton'(false, Types.LastPage, canDecrementPage)
+      | PageNext => pageButton'(true, Types.NextPage, canIncrementPage)
+      | ItemLast =>
+        pageButton'(false, Types.LastSelection, canDecrementSelection)
+      | ItemNext =>
+        pageButton'(true, Types.NextSelection, canIncrementSelection)
+      };
+
+    type buttonGroupType =
+      | Page
+      | Item;
+    let buttonDuo = (buttonGroupType: buttonGroupType, send, params) =>
+      switch (buttonGroupType) {
+      | Page =>
+        <>
+          {pageButton'(PageLast, send, params)}
+          {pageButton'(PageNext, send, params)}
+        </>
+      | Item =>
+        <>
+          {pageButton'(ItemLast, send, params)}
+          {pageButton'(ItemNext, send, params)}
+        </>
+      };
+  };
+
+  let component = ReasonReact.reducerComponent("SelectWithPaginationReducer");
 
   let compareItems = (a, b) => Belt.Array.eq(a, b, Config.isEqual);
 

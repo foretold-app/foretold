@@ -1,6 +1,19 @@
 open Utils;
 open Style.Grid;
 open Foretold__GraphQL;
+open Context.Primary;
+
+module GetMeasurablesReducerConfig = {
+  type itemType = Context.Primary.Measurable.t;
+  type callFnParams = string;
+  let getId = (e: Context.Primary.Measurable.t) => e.id;
+  let callFn = (e: callFnParams) =>
+    Foretold__GraphQL.Queries.Measurables.component3(~seriesId=e);
+  let isEqual = (a: itemType, b: itemType) => a.id == b.id;
+};
+
+module SelectWithPaginationReducer =
+  SelectWithPaginationReducerFunctor.Make(GetMeasurablesReducerConfig);
 
 module Styles = {
   open Css;
@@ -24,95 +37,93 @@ module Styles = {
     ]);
 };
 
-type state = {selected: option(string)};
+let load2Queries = (channelId, seriesId, itemsPerPage, fn) =>
+  ((a, b, c) => (a, b, c) |> fn)
+  |> E.F.flatten3Callbacks(
+       SelectWithPaginationReducer.make(
+         ~itemsPerPage,
+         ~callFnParams=seriesId,
+         ~subComponent=_,
+       ),
+       Queries.Channel.component2(~id=channelId),
+       Queries.Series.component(~id=seriesId),
+     );
 
-type action =
-  | UpdateSelected(string);
-
-let component = ReasonReact.reducerComponent("Measurables");
-
-let seriesHero = (series: Context.Primary.Series.t) =>
-  <Div flexDirection=`column styles=[Styles.header]>
-    <Div flex=1>
-      <Div flexDirection=`row>
-        <Div flex=6>
-          {
-            series.name
-            |> E.O.React.fmapOrNull(name =>
-                 <h2> <Icon.Icon icon="LAYERS" /> {name |> ste} </h2>
-               )
-          }
-          {
-            series.description
-            |> E.O.React.fmapOrNull(description =>
-                 description |> ste |> E.React.inP
-               )
-          }
-          {
-            switch (series.creator) {
-            | Some({name: Some(name), id}) =>
-              <div className=C.Shared.Item.item>
-                <a href={Context.Routing.Url.toString(AgentShow(id))}>
-                  {name |> ste}
-                </a>
-              </div>
-            | _ => E.React.null
-            }
-          }
-        </Div>
-        <Div flex=1 />
-      </Div>
-    </Div>
-    <Div flex=1 />
-  </Div>;
-
+let component = ReasonReact.statelessComponent("Measurables");
 let make =
     (
-      ~channel: Context.Primary.Channel.t,
+      ~channelId: string,
       ~id: string,
       ~loggedInUser: Context.Primary.User.t,
+      ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {
   ...component,
-  initialState: () => {selected: None},
-  reducer: (action, _state) =>
-    switch (action) {
-    | UpdateSelected(str) => ReasonReact.Update({selected: Some(str)})
-    },
-  render: ({state, send}) => {
-    let medium =
-      Queries.Measurables.componentWithSeries(channel.id, id, measurables =>
-        <C.Measurables.SeriesTable
-          measurables
-          selected={state.selected}
-          onClick={id => send(UpdateSelected(id))}
-        />
-      );
+  render: _ => {
+    let loadData = load2Queries(channelId, id, 50);
+    let lmake = SLayout.LayoutConfig.make;
 
-    Queries.Series.component(~id)
-    |> E.F.apply(series =>
-         <>
-           <SLayout.Header>
-             {
-               SLayout.seriesHead(
-                 channel,
-                 series
-                 |> E.O.bind(_, (s: Context.Primary.Series.t) => s.name)
-                 |> E.O.default(""),
-               )
-             }
-           </SLayout.Header>
-           <SLayout.MainSection>
-             {series |> E.O.React.fmapOrNull(seriesHero)}
-             <div className=Styles.topPart> medium </div>
-             {
-               state.selected
-               |> E.O.React.fmapOrNull(elId =>
-                    <C.Measurable.FullPresentation id=elId loggedInUser />
+    loadData(((selectWithPaginationParams, channel, series)) =>
+      lmake(
+        ~head=
+          switch (channel, series, selectWithPaginationParams.selection) {
+          | (
+              Success(channel),
+              Some((series: Context.Primary.Series.t)),
+              Some(selection),
+            ) =>
+            <>
+              {SLayout.seriesHead(channel, series.name |> E.O.default(""))}
+              {
+                SelectWithPaginationReducer.Components.deselectButton(
+                  selectWithPaginationParams.send,
+                )
+              }
+              {
+                SelectWithPaginationReducer.Components.correctButtonDuo(
+                  selectWithPaginationParams,
+                )
+              }
+            </>
+          | (
+              Success(channel),
+              Some((series: Context.Primary.Series.t)),
+              None,
+            ) =>
+            <>
+              {SLayout.seriesHead(channel, series.name |> E.O.default(""))}
+              {
+                SelectWithPaginationReducer.Components.correctButtonDuo(
+                  selectWithPaginationParams,
+                )
+              }
+            </>
+          | _ => <div />
+          },
+        ~body=
+          switch (
+            selectWithPaginationParams.response,
+            selectWithPaginationParams.selection,
+          ) {
+          | (_, Some(measurable)) =>
+            <C.Measurable.FullPresentation id={measurable.id} loggedInUser />
+          | (Success(measurables), None) =>
+            <C.Measurables.SeriesTable
+              measurables
+              selected=None
+              onClick=(
+                id =>
+                  SelectWithPaginationReducer.Components.sendSelectItem(
+                    selectWithPaginationParams,
+                    id,
                   )
-             }
-           </SLayout.MainSection>
-         </>
-       );
+              )
+            />
+          | _ => <div />
+          },
+      )
+      |> layout
+    )
+    |> E.React.makeToEl;
   },
 };

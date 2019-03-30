@@ -6,6 +6,7 @@ open Rationale.Option.Infix;
 module type Config = {
   type itemType;
   let isEqual: (itemType, itemType) => bool;
+  let getId: itemType => string;
   type callFnParams = string;
   let callFn:
     (
@@ -215,8 +216,9 @@ module Make = (Config: Config) => {
     let deselectButton = send =>
       SLayout.channelBack(~onClick=_ => send(Types.Deselect), ());
 
-    let pageButton' = (facesRight: bool, action, canMove, send, params) =>
-      <Antd.Button onClick={_ => send(action)} disabled={!canMove(params)}>
+    let pageButton' = (facesRight: bool, action, canMove, params) =>
+      <Antd.Button
+        onClick={_ => params.send(action)} disabled={!canMove(params)}>
         <Icon.Icon icon={facesRight ? "ARROW_RIGHT" : "ARROW_LEFT"} />
       </Antd.Button>;
 
@@ -239,19 +241,37 @@ module Make = (Config: Config) => {
     type buttonGroupType =
       | Page
       | Item;
-    let buttonDuo = (buttonGroupType: buttonGroupType, send, params) =>
+    let buttonDuo = (buttonGroupType: buttonGroupType, params) =>
       switch (buttonGroupType) {
       | Page =>
         <>
-          {pageButton'(PageLast, send, params)}
-          {pageButton'(PageNext, send, params)}
+          {pageButton'(PageLast, params)}
+          {pageButton'(PageNext, params)}
         </>
       | Item =>
         <>
-          {pageButton'(ItemLast, send, params)}
-          {pageButton'(ItemNext, send, params)}
+          {pageButton'(ItemLast, params)}
+          {pageButton'(ItemNext, params)}
         </>
       };
+
+    let correctButtonDuo = params =>
+      switch (params.selection) {
+      | Some(_) => buttonDuo(Item, params)
+      | None => buttonDuo(Page, params)
+      };
+
+    let findIndexOfId = (t: Types.reducerParams, id: string) =>
+      switch (t.response) {
+      | Success(m) => m |> E.A.findIndex(r => Config.getId(r) == id)
+      | _ => None
+      };
+
+    let selectItemAction = (t: t, id) =>
+      findIndexOfId(t, id) |> E.O.fmap(e => Types.SelectIndex(e));
+
+    let sendSelectItem = (t: t, id) =>
+      selectItemAction(t, id) |> E.O.fmap(t.send) |> E.O.default();
   };
 
   let component = ReasonReact.reducerComponent("SelectWithPaginationReducer");

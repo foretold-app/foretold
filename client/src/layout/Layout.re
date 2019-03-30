@@ -48,9 +48,7 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
       MeasurableNew.make(~channelId, ~layout) |> inApp
     | MeasurableEdit(id) => MeasurableEdit.make(~id, ~layout) |> inApp
     | Series(channelId, id) =>
-      Queries.Channel.component(~id=channelId, channel =>
-        SeriesShow.make(~id, ~channel, ~loggedInUser) |> inApp
-      )
+      SeriesShow.make(~id, ~channelId, ~loggedInUser, ~layout) |> inApp
     | _ => <Home />
     };
   | _ =>

@@ -12,11 +12,7 @@ module LoadedAndSelected = {
       {SelectWithPaginationReducer.Components.deselectButton(send)}
       {SLayout.channelink(t.channel)}
       {
-        SelectWithPaginationReducer.Components.buttonDuo(
-          Item,
-          send,
-          t.reducerParams,
-        )
+        SelectWithPaginationReducer.Components.buttonDuo(Item, t.reducerParams)
       }
       {C.Channel.SimpleHeader.button(t.channel.id)}
     </>;
@@ -36,11 +32,7 @@ module LoadedAndUnselected = {
     <>
       {SLayout.channelink(channel)}
       {
-        SelectWithPaginationReducer.Components.buttonDuo(
-          Page,
-          send,
-          t.reducerParams,
-        )
+        SelectWithPaginationReducer.Components.buttonDuo(Page, t.reducerParams)
       }
       {C.Channel.SimpleHeader.button(t.channel.id)}
     </>;
@@ -75,9 +67,10 @@ module LoadedAndUnselected = {
         showExtraData=true
         onSelect={
           e =>
-            selectMeasurableOfMeasurableId(t, e.id)
-            |> E.O.fmap(send)
-            |> E.O.default()
+            SelectWithPaginationReducer.Components.sendSelectItem(
+              t.reducerParams,
+              e.id,
+            )
         }
       />
     </>;

@@ -141,9 +141,14 @@ let component =
   queryToComponent(query, innerComponentFn);
 };
 
-let component2 = (channelId, page, pageLimit, innerComponentFn) => {
+let component2 = (~channelId, ~pageNumber, ~pageLimit, ~innerComponentFn) => {
   let query =
-    Query.make(~offset=page * pageLimit, ~limit=pageLimit, ~channelId, ());
+    Query.make(
+      ~offset=pageNumber * pageLimit,
+      ~limit=pageLimit,
+      ~channelId,
+      (),
+    );
   QueryComponent.make(~variables=query##variables, o =>
     o.result
     |> E.HttpResponse.fromApollo

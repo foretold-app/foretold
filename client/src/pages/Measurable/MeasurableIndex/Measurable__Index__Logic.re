@@ -1,16 +1,23 @@
 open Rationale.Function.Infix;
 open Utils;
 
+module GetMeasurablesReducerConfig = {
+  type itemType = Context.Primary.Measurable.t;
+  type callFnParams = string;
+  let callFn = (e: callFnParams) =>
+    Foretold__GraphQL.Queries.Measurables.component2(~channelId=e);
+  let isEqual = (a: itemType, b: itemType) => a.id == b.id;
+};
+
+module SelectWithPaginationReducer =
+  SelectWithPaginationReducerFunctor.Make(GetMeasurablesReducerConfig);
+
 module Types = {
   module ChannelQuery = Context.Primary.Channel;
-  type channelType = ChannelQuery.t;
   type channel = ChannelQuery.t;
 
   module SeriesCollectionQuery = Foretold__GraphQL.Queries.SeriesCollection;
   type seriesCollectionType = Js.Array.t(SeriesCollectionQuery.series);
-
-  module MeasurablesQuery = Context.Primary.Measurable;
-  type measurablesType = array(MeasurablesQuery.t);
 
   type loggedInUser = Context.Primary.User.t;
 
@@ -28,10 +35,10 @@ module LoadedAndSelected = {
   type t = {
     reducerParams,
     loggedInUser,
-    itemState: ReducerTypes.itemSelected,
-    selectedMeasurable: MeasurablesQuery.t,
     channel,
     seriesCollection: seriesCollectionType,
+    itemState: ReducerTypes.itemSelected,
+    selectedMeasurable: GetMeasurablesReducerConfig.itemType,
   };
 };
 
@@ -55,10 +62,12 @@ module LoadedAndUnselected = {
     pageNumber(t) == 0 && filteredSeriesCollection(t) |> E.A.length > 0;
 
   let findMeasurableIndexOfMeasurableId = (t: t, id) =>
-    switch (t.reducerParams.response) {
-    | Success(m) => m |> E.A.findIndex((r: MeasurablesQuery.t) => r.id == id)
-    | _ => None
-    };
+    Context.Primary.Measurable.(
+      switch (t.reducerParams.response) {
+      | Success(m) => m |> E.A.findIndex(r => r.id == id)
+      | _ => None
+      }
+    );
 
   let selectMeasurableOfMeasurableId = (t: t, id) =>
     findMeasurableIndexOfMeasurableId(t, id)

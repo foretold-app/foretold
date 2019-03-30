@@ -1,6 +1,6 @@
 open Rationale.Function.Infix;
 open Utils;
-open Measurable__Index__Types;
+open Measurable__Index__Logic;
 
 module ReducerParams = SelectWithPaginationReducer.Reducers.ReducerParams;
 let itemHeader =
@@ -23,7 +23,7 @@ let itemHeader =
   </>;
 
 module LoadedAndSelected = {
-  open Measurable__Index__Types.LoadedAndSelected;
+  open Measurable__Index__Logic.LoadedAndSelected;
 
   let header = (t: t, send: SelectWithPaginationReducer.Types.send) =>
     <>
@@ -47,13 +47,13 @@ module LoadedAndSelected = {
 
   let body = (t: t) =>
     <C.Measurable.FullPresentation
-      id={t.selectedMeasurable.id}
+      id={t.selectedMeasurable |> (e => e.id)}
       loggedInUser={t.loggedInUser}
     />;
 };
 
 module LoadedAndUnselected = {
-  open Measurable__Index__Types.LoadedAndUnselected;
+  open Measurable__Index__Logic.LoadedAndUnselected;
 
   let header = (t: t, send: SelectWithPaginationReducer.Types.send) => {
     let channel = t.channel;
@@ -105,7 +105,7 @@ module LoadedAndUnselected = {
 };
 
 module MeasurableIndexDataState = {
-  open Measurable__Index__Types.MeasurableIndexDataState;
+  open Measurable__Index__Logic.MeasurableIndexDataState;
 
   let toLayoutInput =
       (send: SelectWithPaginationReducer.Types.send, state: state) => {

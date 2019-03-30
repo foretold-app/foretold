@@ -35,12 +35,7 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
     | Profile => Profile.make(~loggedInUser, ~layout) |> inApp
     | AgentShow(id) => AgentShow.make(~id, ~layout) |> inApp
     | ChannelShow(channelId) =>
-      SelectWithPaginationReducer.make(
-        ~itemsPerPage=20,
-        ~channelId,
-        ~subComponent=
-          MeasurableIndex.make(~channelId, ~loggedInUser, ~layout),
-      )
+      MeasurableIndex.make(~channelId, ~loggedInUser, ~layout)
       |> inApp(~key=channelId)
     | ChannelIndex => ChannelIndex.make(~loggedInUser, ~layout) |> inApp
     | ChannelNew => ChannelNew.make(~layout) |> inApp
@@ -51,18 +46,7 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
       Queries.Channel.component(~id=channelId, channel =>
         SeriesShow.make(~id, ~channel, ~loggedInUser) |> inApp
       )
-    | _ =>
-      SelectWithPaginationReducer.make(
-        ~itemsPerPage=20,
-        ~channelId=defaultChannel,
-        ~subComponent=
-          MeasurableIndex.make(
-            ~channelId=defaultChannel,
-            ~loggedInUser,
-            ~layout,
-          ),
-      )
-      |> inApp(~key=defaultChannel)
+    | _ => <Home />
     };
   | _ =>
     switch (route) {

@@ -22,7 +22,7 @@ let toBot = (a: bot): Context.Primary.Bot.t => {
 
 type agent = {
   id: string,
-  measurementCount: option(int),
+  measurementCount: int,
   bot: option(bot),
   user: option(user),
 };
@@ -36,7 +36,7 @@ let toAgent = (a: agent): Context.Primary.Agent.t => {
     };
   Context.Primary.Agent.make(
     ~id=a.id,
-    ~measurementCount=a.measurementCount,
+    ~measurementCount=Some(a.measurementCount),
     ~agentType,
     ~name=None,
     (),

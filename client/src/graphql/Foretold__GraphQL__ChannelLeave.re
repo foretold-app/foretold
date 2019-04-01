@@ -1,7 +1,7 @@
 module Query = [%graphql
   {|
-            mutation agentsChannelsDelete($agentId: String!, $channelId: String!) {
-                agentsChannelsDelete(agentId: $agentId, channelId: $channelId) {
+            mutation channelMembershipDelete($agentId: String!, $channelId: String!) {
+                channelMembershipDelete(agentId: $agentId, channelId: $channelId) {
                  agentId
                 }
             }

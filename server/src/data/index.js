@@ -4,6 +4,7 @@ const { UsersData } = require('./users-data');
 const { SeriesData } = require('./series-data');
 const { ChannelsData } = require('./channels-data');
 const { ChannelsMembershipsData } = require('./channels-memberships-data');
+const { AgentsData } = require('./agents-data');
 
 module.exports = {
   measurablesData: new MeasurablesData(),
@@ -12,4 +13,5 @@ module.exports = {
   seriesData: new SeriesData(),
   channelsData: new ChannelsData(),
   channelsMembershipsData: new ChannelsMembershipsData(),
+  agentsData: new AgentsData(),
 };

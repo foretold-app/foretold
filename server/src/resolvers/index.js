@@ -4,6 +4,7 @@ const series  = require('./series');
 const measurements  = require('./measurements');
 const channelsMemberships  = require('./channels-memberhips');
 const users  = require('./users');
+const agents  = require('./agents');
 
 module.exports = {
   channels,
@@ -12,4 +13,5 @@ module.exports = {
   measurements,
   channelsMemberships,
   users,
+  agents,
 };

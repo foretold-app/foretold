@@ -1,7 +1,7 @@
 module Query = [%graphql
   {|
             mutation channelMembershipCreate($agentId: String!, $channelId: String!) {
-                channelMembershipCreate(agentId: $agentId, channelId: $channelId) {
+                channelMembershipCreate(agentId: $agentId, channelId: $channelId, role: VIEWER) {
                  agentId
                 }
             }

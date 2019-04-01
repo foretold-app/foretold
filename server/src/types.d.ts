@@ -11,7 +11,7 @@ export namespace Models {
     isPublic: boolean;
   }
 
-  export type ChannelMembershipRole = 'ADMIN' | 'VIEWER';
+  export type ChannelMembershipRole = "ADMIN" | "VIEWER";
 
   export interface ChannelMembership {
     agentId: string;
@@ -37,7 +37,6 @@ export namespace Schema {
 }
 
 export namespace Layers {
-
   namespace DataSourceLayer {
     type compoundId = object;
     type id = string | compoundId;
@@ -83,5 +82,4 @@ export namespace Layers {
       getAll(filter, pagination, restrictions): any[];
     }
   }
-
 }

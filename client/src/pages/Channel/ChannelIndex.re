@@ -58,6 +58,13 @@ let make =
               |> E.O.fmap(E.React.inP)
               |> E.O.React.defaultNull
             }
+            {
+              channel.membershipCount
+              |> E.O.fmap(string_of_int)
+              |> E.O.fmap(ste)
+              |> E.O.fmap(E.React.inP)
+              |> E.O.React.defaultNull
+            }
           </div>
           <div className=column>
             {

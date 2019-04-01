@@ -87,7 +87,10 @@ module MeasurableIndexDataState = {
     | InvalidIndexError(channel) =>
       lmake(~head=SLayout.channelink(channel), ~body="Item Not Valid" |> ste)
     | WithChannelButNotQuery(c) =>
-      lmake(~head=SLayout.channelink(c.channel), ~body="Loading..." |> ste)
+      lmake(
+        ~head=SLayout.channelink(c.channel),
+        ~body="Loading Query..." |> ste,
+      )
     | LoadedAndUnselected(l) =>
       lmake(
         ~head=LoadedAndUnselected.header(l, send),
@@ -99,7 +102,7 @@ module MeasurableIndexDataState = {
         ~body=LoadedAndSelected.body(l),
       )
     | WithoutChannel(channelResponse) =>
-      lmake(~head=<div />, ~body="Loading..." |> ste)
+      lmake(~head=<div />, ~body="No channel." |> ste)
     };
   };
 };

@@ -30,6 +30,7 @@ module Typess = {
     description: option(string),
     isArchived: bool,
     isPublic: bool,
+    membershipCount: option(int),
     creator: option(agent),
   };
 };
@@ -117,6 +118,7 @@ module Channel = {
         ~isArchived,
         ~isPublic,
         ~creator=None,
+        ~membershipCount=None,
         (),
       )
       : t => {
@@ -125,6 +127,7 @@ module Channel = {
     description,
     isArchived,
     isPublic,
+    membershipCount,
     creator,
   };
 };

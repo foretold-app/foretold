@@ -1,3 +1,5 @@
+const Sequelize = require('sequelize')
+
 /**
  * @todo: Rename table to "channels".
  * @param sequelize
@@ -30,6 +32,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true,
+    },
+    membershipCount: {
+      allowNull: true,
+      type: Sequelize.VIRTUAL(DataTypes.INTEGER),
+      get: async function() {
+        const items = await this.getAgents()
+        return items.length
+      }
     },
   });
 

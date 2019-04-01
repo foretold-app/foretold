@@ -12,6 +12,7 @@ const channel = new graphql.GraphQLObjectType({
     description: { type: graphql.GraphQLString },
     isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     isPublic: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
+    membershipCount: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
     creator: {
       type: graphql.GraphQLNonNull(agents.agent),
       resolve: resolvers.channels.channelCreator,

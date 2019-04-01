@@ -2,11 +2,10 @@ module.exports = {
   up: async function (queryInterface) {
     await queryInterface.sequelize.query(`
         DROP TABLE IF EXISTS ChannelMemberships;
-    `);
 
-    await queryInterface.renameTable('AgentsChannels', 'ChannelMemberships');
+        ALTER TABLE IF EXISTS AgentsChannels
+        RENAME TO ChannelMemberships;
 
-    await queryInterface.sequelize.query(`
         ALTER TABLE "ChannelMemberships" DROP CONSTRAINT "AgentsChannels_channelId_fkey";
         ALTER TABLE "ChannelMemberships" DROP CONSTRAINT "AgentsChannels_agentId_fkey";
         
@@ -23,11 +22,10 @@ module.exports = {
   down: async function (queryInterface) {
     await queryInterface.sequelize.query(`
         DROP TABLE IF EXISTS AgentsChannels;
-    `);
 
-    await queryInterface.renameTable('ChannelMemberships', 'AgentsChannels');
-
-    await queryInterface.sequelize.query(`
+        ALTER TABLE IF EXISTS ChannelMemberships
+        RENAME TO AgentsChannels;
+        
         ALTER TABLE "AgentsChannels" DROP CONSTRAINT "ChannelMemberships_channelId_fkey";
         ALTER TABLE "AgentsChannels" DROP CONSTRAINT "ChannelMemberships_agentId_fkey";
         

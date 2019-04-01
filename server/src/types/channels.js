@@ -2,6 +2,7 @@ const graphql = require("graphql");
 
 const resolvers = require('../resolvers');
 const agents = require('./agents');
+const channelsMemberships = require('./channels-memberhips');
 
 const channel = new graphql.GraphQLObjectType({
   name: 'Channel',
@@ -18,6 +19,10 @@ const channel = new graphql.GraphQLObjectType({
     agents: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(agents.agent2)),
       resolve: resolvers.channels.channelAgents,
+    },
+    channelMemberships: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(channelsMemberships.channelsMembership)),
+      resolve: resolvers.channelsMemberships.all,
     },
   }
 });

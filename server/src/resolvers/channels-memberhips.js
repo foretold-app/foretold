@@ -3,7 +3,7 @@ const data = require('../data');
 /**
  * @param {*} root
  * @param {{channelId: string, agentId: string, role: string}} args
- * @returns {Promise<Model>}
+ * @returns {Promise<Models.ChannelMembership>}
  */
 async function create(root, args) {
   return await data.channelsMembershipsData.createOne(
@@ -16,7 +16,7 @@ async function create(root, args) {
 /**
  * @param root
  * @param {{channelId: string, agentId: string, role: string}} args
- * @returns {Promise<Model>}
+ * @returns {Promise<Models.ChannelMembership>}
  */
 async function update(root, args) {
   return await data.channelsMembershipsData.updateOne(
@@ -29,7 +29,7 @@ async function update(root, args) {
 /**
  * @param root
  * @param {{channelId: string, agentId: string}} args
- * @returns {Promise<Model>}
+ * @returns {Promise<Models.ChannelMembership | null>}
  */
 async function remove(root, args) {
   return await data.channelsMembershipsData.deleteOne(
@@ -38,7 +38,22 @@ async function remove(root, args) {
   );
 }
 
+/**
+ * @param {object | null} root
+ * @param {object} args
+ * @param {string} args.id
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<Models.ChannelMembership[]>}
+ */
+async function all(root, args, context, info) {
+  const channelId = root.id;
+  const options = { channelId };
+  return await data.channelsMembershipsData.getAll(options);
+}
+
 module.exports = {
+  all,
   remove,
   create,
   update,

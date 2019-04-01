@@ -1,4 +1,4 @@
-const AgentsChannels = {
+const ChannelMemberships = {
   findOne: jest.fn(() => Promise.resolve(true)),
   create: jest.fn(() => Promise.resolve(true)),
   destroy: jest.fn(() => Promise.resolve(true)),
@@ -63,7 +63,7 @@ module.exports = {
   User,
   Agent,
   Channel,
-  AgentsChannels,
+  ChannelMemberships,
   Measurable,
   Measurement,
   Series,

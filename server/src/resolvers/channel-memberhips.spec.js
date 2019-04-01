@@ -1,7 +1,7 @@
-const agentsChannels = require('./agents-channels');
+const channelMemberships = require('./channel-memberhips');
 const data = require('../data');
 
-describe('AgentsChannels Resolvers', () => {
+describe('ChannelMemberships Resolvers', () => {
 
   describe('create()', () => {
     const root = {};
@@ -11,13 +11,13 @@ describe('AgentsChannels Resolvers', () => {
       role: 'ADMIN'
     };
     beforeEach(() => {
-      jest.spyOn(data.agentsChannelsData, 'createOne').mockReturnValue(
+      jest.spyOn(data.channelMembershipsData, 'createOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('creates agent-channel row', () => {
-      return agentsChannels.create(root, args).then((result) => {
-        expect(data.agentsChannelsData.createOne).toHaveBeenCalledWith(
+      return channelMemberships.create(root, args).then((result) => {
+        expect(data.channelMembershipsData.createOne).toHaveBeenCalledWith(
           'channelId1',
           'agentId2',
           args.role,
@@ -35,13 +35,13 @@ describe('AgentsChannels Resolvers', () => {
       role: ['admin']
     };
     beforeEach(() => {
-      jest.spyOn(data.agentsChannelsData, 'createOne').mockReturnValue(
+      jest.spyOn(data.channelMembershipsData, 'createOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('updates agent-channel row', () => {
-      return agentsChannels.create(root, args).then((result) => {
-        expect(data.agentsChannelsData.createOne).toHaveBeenCalledWith(
+      return channelMemberships.create(root, args).then((result) => {
+        expect(data.channelMembershipsData.createOne).toHaveBeenCalledWith(
           'channelId1',
           'agentId2',
           args.role,
@@ -58,12 +58,12 @@ describe('AgentsChannels Resolvers', () => {
       agentId: 'agentId2',
     };
     beforeEach(() => {
-      jest.spyOn(data.agentsChannelsData, 'deleteOne')
+      jest.spyOn(data.channelMembershipsData, 'deleteOne')
         .mockReturnValue(Promise.resolve(true));
     });
     it('removes agent-channel row', () => {
-      return agentsChannels.remove(root, args).then((result) => {
-        expect(data.agentsChannelsData.deleteOne).toHaveBeenCalledWith(
+      return channelMemberships.remove(root, args).then((result) => {
+        expect(data.channelMembershipsData.deleteOne).toHaveBeenCalledWith(
           'channelId1',
           'agentId2',
         );

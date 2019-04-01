@@ -10,6 +10,6 @@ describe('agents types', () => {
     expect(agents.agentType).toBeInstanceOf(graphql.GraphQLEnumType);
   });
   it('agent2', () => {
-    expect(agents.agent2).toBeInstanceOf(graphql.GraphQLObjectType);
+    expect(agents.agent).toBeInstanceOf(graphql.GraphQLObjectType);
   });
 });

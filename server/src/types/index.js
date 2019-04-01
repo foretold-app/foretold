@@ -10,7 +10,7 @@ const { filterr } = require('./filterr');
 
 const agents = require('./agents');
 const channels = require('./channels');
-const agentsChannels = require('./agents-channels');
+const channelMemberships = require('./channel-memberhips');
 
 /**
  * @deprecated
@@ -56,12 +56,11 @@ const userType = makeObjectType(models.User);
 const measurableType = makeObjectType(models.Measurable);
 const measurementType = makeObjectType(models.Measurement);
 const botType = makeObjectType(models.Bot);
-const agentType = makeObjectType(models.Agent);
 const seriesType = makeObjectType(models.Series);
 
 const index = {
   Users: userType,
-  Agents: agentType,
+  Agents: agents.agent,
   Bots: botType,
   Measurables: measurableType,
   measurables: measurableType,
@@ -75,7 +74,6 @@ module.exports = {
   index,
 
   userType,
-  agentType,
   botType,
   measurableType,
   seriesType,
@@ -83,5 +81,5 @@ module.exports = {
 
   agents,
   channels,
-  agentsChannels,
+  channelMemberships,
 };

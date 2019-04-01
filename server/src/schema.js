@@ -78,13 +78,13 @@ const schema = new graphql.GraphQLSchema({
       },
 
       agent: {
-        type: types.agentType,
+        type: types.agents.agent,
         args: _.pick(attributeFields(models.Agent), ['id']),
         resolve: resolver(models.Agent),
       },
 
       agents: {
-        type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.agentType)),
+        type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.agents.agent)),
         resolve: resolver(models.Agent),
       },
 
@@ -204,33 +204,33 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.channels.create,
       },
 
-      agentsChannelsCreate: {
-        type: types.agentsChannels.agentsChannel,
+      channelMembershipCreate: {
+        type: types.channelMemberships.channelsMembership,
         args: {
           agentId: { type: graphql.GraphQLString },
           channelId: { type: graphql.GraphQLString },
-          role: { type: graphql.GraphQLNonNull(types.agentsChannels.role) },
+          role: { type: graphql.GraphQLNonNull(types.channelMemberships.role) },
         },
-        resolve: resolvers.agentsChannels.create,
+        resolve: resolvers.channelMemberships.create,
       },
 
-      agentsChannelsUpdate: {
-        type: types.agentsChannels.agentsChannel,
+      channelMembershipRoleUpdate: {
+        type: types.channelMemberships.channelsMembership,
         args: {
           agentId: { type: graphql.GraphQLString },
           channelId: { type: graphql.GraphQLString },
-          role: { type: graphql.GraphQLNonNull(types.agentsChannels.role) },
+          role: { type: graphql.GraphQLNonNull(types.channelMemberships.role) },
         },
-        resolve: resolvers.agentsChannels.update,
+        resolve: resolvers.channelMemberships.update,
       },
 
-      agentsChannelsDelete: {
-        type: types.agentsChannels.agentsChannel,
+      channelMembershipDelete: {
+        type: types.channelMemberships.channelsMembership,
         args: {
           agentId: { type: graphql.GraphQLString },
           channelId: { type: graphql.GraphQLString },
         },
-        resolve: resolvers.agentsChannels.remove,
+        resolve: resolvers.channelMemberships.remove,
       },
 
     }

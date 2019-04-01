@@ -1,7 +1,7 @@
 const { shield, allow, and, or } = require('graphql-shield');
 
 const { isAuthenticated } = require('./users');
-const { isAdmin, isViewer } = require('./agents-channels');
+const { isAdmin, isViewer } = require('./channel-memberships');
 const { isChannelPublic } = require('./channels');
 
 function getPermissions() {
@@ -16,9 +16,9 @@ function getPermissions() {
         createMeasurement: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
         createMeasurable: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
         channelUpdate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
-        agentsChannelsCreate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
-        agentsChannelsDelete: and(isAuthenticated, or(isChannelPublic, isAdmin)),
-        agentsChannelsUpdate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
+        channelMembershipCreate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
+        channelMembershipDelete: and(isAuthenticated, or(isChannelPublic, isAdmin)),
+        channelMembershipRoleUpdate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
         createSeries: and(isAuthenticated, or(isChannelPublic, isAdmin)),
       }
     },

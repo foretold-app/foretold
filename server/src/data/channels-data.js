@@ -2,14 +2,14 @@ const _ = require('lodash');
 
 const models = require('../models');
 
-const { AgentsChannelsData } = require('./agents-channels-data');
+const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { DataBase } = require('./data-base');
 
 class ChannelsData extends DataBase {
 
   constructor() {
     super();
-    this.agentsChannelsData = new AgentsChannelsData();
+    this.channelMembershipsData = new ChannelMembershipsData();
   }
 
   /**
@@ -29,10 +29,10 @@ class ChannelsData extends DataBase {
       ...input,
       creatorId: user.agentId,
     });
-    await this.agentsChannelsData.createOne(
+    await this.channelMembershipsData.createOne(
       channel.id,
       user.agentId,
-      models.AgentsChannels.ROLE.ADMIN,
+      models.ChannelMemberships.ROLE.ADMIN,
     );
     return channel;
   }

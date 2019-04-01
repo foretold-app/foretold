@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const models = require("../models");
 const { notify } = require("../lib/notifications");
 
@@ -26,7 +28,7 @@ class MeasurablesData extends DataBase {
     const { id } = values;
     const user = options.user;
     let measurable = await models.Measurable.findById(id);
-    if (measurable.creatorId !== user.agentId) {
+    if (_.get(measurable, 'creatorId') !== _.get(user, 'agentId')) {
       throw new Error("User does not have permission");
     }
     return measurable.archive();
@@ -42,7 +44,7 @@ class MeasurablesData extends DataBase {
     const { id } = values;
     const user = options.user;
     let measurable = await models.Measurable.findById(id);
-    if (measurable.creatorId !== user.agentId) {
+    if (_.get(measurable, 'creatorId') !== _.get(user, 'agentId')) {
       throw new Error("User does not have permission");
     }
     return measurable.unarchive();
@@ -67,7 +69,7 @@ class MeasurablesData extends DataBase {
     } = values;
     const user = options.user;
     let measurable = await models.Measurable.findById(id);
-    if (measurable.creatorId !== user.agentId) {
+    if (_.get(measurable, 'creatorId') !== _.get(user, 'agentId')) {
       throw new Error("User does not have permission");
     }
     let notification = await measurable.updateNotifications(user, {

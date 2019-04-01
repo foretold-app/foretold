@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const data = require('../data');
 
 /**
@@ -42,7 +43,7 @@ async function all(root, args, context, info) {
  * @returns {Promise<Models.Channel>}
  */
 async function one(root, args, context, info) {
-  const id = args.id;
+  const id = _.get(args, 'id') || _.get(root, 'channelId');
   const agentId = context.user.agentId;
   const options = { agentId };
   return await data.channelsData.getOne(id, options);

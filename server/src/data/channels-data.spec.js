@@ -1,6 +1,6 @@
 const models = require('../models');
 const { ChannelsData } = require('./channels-data');
-const { AgentsChannelsData } = require('./agents-channels-data');
+const { ChannelMembershipsData } = require('./channel-memberships-data');
 
 describe('Channels Data Layer', () => {
 
@@ -21,7 +21,7 @@ describe('Channels Data Layer', () => {
       jest.spyOn(models.Channel, 'create').mockReturnValue(
         Promise.resolve(true),
       );
-      jest.spyOn(AgentsChannelsData.prototype, 'createOne').mockReturnValue(
+      jest.spyOn(ChannelMembershipsData.prototype, 'createOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
@@ -40,7 +40,7 @@ describe('Channels Data Layer', () => {
       jest.spyOn(models.Channel, 'create').mockReturnValue(
         Promise.resolve({ id: 'id1' }),
       );
-      jest.spyOn(AgentsChannelsData.prototype, 'createOne').mockReturnValue(
+      jest.spyOn(ChannelMembershipsData.prototype, 'createOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
@@ -50,7 +50,7 @@ describe('Channels Data Layer', () => {
           where: { name: input.name },
         });
         expect(models.Channel.create).toHaveBeenCalledTimes(1);
-        expect(AgentsChannelsData.prototype.createOne).toHaveBeenCalledWith(
+        expect(ChannelMembershipsData.prototype.createOne).toHaveBeenCalledWith(
           "id1",
           "agentId1",
           "ADMIN"

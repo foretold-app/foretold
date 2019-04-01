@@ -2,6 +2,7 @@ const graphql = require("graphql");
 
 const resolvers = require('../resolvers');
 const agents = require('./agents');
+const channelMemberships = require('./channel-memberhips');
 
 const channel = new graphql.GraphQLObjectType({
   name: 'Channel',
@@ -12,12 +13,16 @@ const channel = new graphql.GraphQLObjectType({
     isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     isPublic: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     creator: {
-      type: graphql.GraphQLNonNull(agents.agent2),
+      type: graphql.GraphQLNonNull(agents.agent),
       resolve: resolvers.channels.channelCreator,
     },
     agents: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(agents.agent2)),
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(agents.agent)),
       resolve: resolvers.channels.channelAgents,
+    },
+    channelMemberships: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(channelMemberships.channelsMembership)),
+      resolve: resolvers.channelMemberships.allByChannelId,
     },
   }
 });

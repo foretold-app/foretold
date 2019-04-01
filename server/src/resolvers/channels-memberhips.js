@@ -46,14 +46,29 @@ async function remove(root, args) {
  * @param {object} info
  * @returns {Promise<Models.ChannelMembership[]>}
  */
-async function all(root, args, context, info) {
+async function allByAgentId(root, args, context, info) {
+  const agentId = root.id;
+  const options = { agentId };
+  return await data.channelsMembershipsData.getAll(options);
+}
+
+/**
+ * @param {object | null} root
+ * @param {object} args
+ * @param {string} args.id
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<Models.ChannelMembership[]>}
+ */
+async function allByChannelId(root, args, context, info) {
   const channelId = root.id;
   const options = { channelId };
   return await data.channelsMembershipsData.getAll(options);
 }
 
 module.exports = {
-  all,
+  allByAgentId,
+  allByChannelId,
   remove,
   create,
   update,

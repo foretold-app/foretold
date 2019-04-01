@@ -78,13 +78,13 @@ const schema = new graphql.GraphQLSchema({
       },
 
       agent: {
-        type: types.agentType,
+        type: types.agents.agent,
         args: _.pick(attributeFields(models.Agent), ['id']),
         resolve: resolver(models.Agent),
       },
 
       agents: {
-        type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.agentType)),
+        type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.agents.agent)),
         resolve: resolver(models.Agent),
       },
 

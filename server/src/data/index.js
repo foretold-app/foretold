@@ -3,7 +3,7 @@ const { MeasurementData } = require('./measurement-data');
 const { UsersData } = require('./users-data');
 const { SeriesData } = require('./series-data');
 const { ChannelsData } = require('./channels-data');
-const { ChannelsMembershipsData } = require('./channels-memberships-data');
+const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { AgentsData } = require('./agents-data');
 
 module.exports = {
@@ -12,6 +12,6 @@ module.exports = {
   usersData: new UsersData(),
   seriesData: new SeriesData(),
   channelsData: new ChannelsData(),
-  channelsMembershipsData: new ChannelsMembershipsData(),
+  channelMembershipsData: new ChannelMembershipsData(),
   agentsData: new AgentsData(),
 };

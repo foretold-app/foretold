@@ -205,32 +205,32 @@ const schema = new graphql.GraphQLSchema({
       },
 
       channelMembershipCreate: {
-        type: types.channelsMemberships.channelsMembership,
+        type: types.channelMemberships.channelsMembership,
         args: {
           agentId: { type: graphql.GraphQLString },
           channelId: { type: graphql.GraphQLString },
-          role: { type: graphql.GraphQLNonNull(types.channelsMemberships.role) },
+          role: { type: graphql.GraphQLNonNull(types.channelMemberships.role) },
         },
-        resolve: resolvers.channelsMemberships.create,
+        resolve: resolvers.channelMemberships.create,
       },
 
       channelMembershipRoleUpdate: {
-        type: types.channelsMemberships.channelsMembership,
+        type: types.channelMemberships.channelsMembership,
         args: {
           agentId: { type: graphql.GraphQLString },
           channelId: { type: graphql.GraphQLString },
-          role: { type: graphql.GraphQLNonNull(types.channelsMemberships.role) },
+          role: { type: graphql.GraphQLNonNull(types.channelMemberships.role) },
         },
-        resolve: resolvers.channelsMemberships.update,
+        resolve: resolvers.channelMemberships.update,
       },
 
       channelMembershipDelete: {
-        type: types.channelsMemberships.channelsMembership,
+        type: types.channelMemberships.channelsMembership,
         args: {
           agentId: { type: graphql.GraphQLString },
           channelId: { type: graphql.GraphQLString },
         },
-        resolve: resolvers.channelsMemberships.remove,
+        resolve: resolvers.channelMemberships.remove,
       },
 
     }

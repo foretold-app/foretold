@@ -1,7 +1,7 @@
 const { shield, allow, and, or } = require('graphql-shield');
 
 const { isAuthenticated } = require('./users');
-const { isAdmin, isViewer } = require('./channels-memberships');
+const { isAdmin, isViewer } = require('./channel-memberships');
 const { isChannelPublic } = require('./channels');
 
 function getPermissions() {

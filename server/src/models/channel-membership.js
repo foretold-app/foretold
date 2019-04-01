@@ -4,30 +4,30 @@
  * @return {*}
  */
 module.exports = (sequelize, DataTypes) => {
-  const ChannelsMemberships = sequelize.define('ChannelsMemberships', {
+  const ChannelMemberships = sequelize.define('ChannelMemberships', {
     role: {
       type: DataTypes.STRING(8),
       allowNull: false,
     },
   });
 
-  ChannelsMemberships.ROLE = {
+  ChannelMemberships.ROLE = {
     ADMIN: 'ADMIN',
     VIEWER: 'VIEWER',
   };
 
-  ChannelsMemberships.associate = function (models) {
+  ChannelMemberships.associate = function (models) {
     models.Agent.belongsToMany(models.Channel, {
-      through: ChannelsMemberships,
+      through: ChannelMemberships,
       foreignKey: 'id',
       as: 'agentId',
     });
     models.Channel.belongsToMany(models.Agent, {
-      through: ChannelsMemberships,
+      through: ChannelMemberships,
       foreignKey: 'id',
       as: 'channelId',
     });
   };
 
-  return ChannelsMemberships;
+  return ChannelMemberships;
 };

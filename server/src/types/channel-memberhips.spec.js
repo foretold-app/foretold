@@ -1,6 +1,6 @@
 const graphql = require("graphql");
 
-const channelMemberships = require('./channels-memberhips');
+const channelMemberships = require('./channel-memberhips');
 
 describe('channels memberships types', () => {
   it('class should be object', () => {

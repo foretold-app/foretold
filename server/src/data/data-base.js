@@ -13,9 +13,9 @@ class DataBase {
   channelIds(agentId) {
     return agentId ? `(
       SELECT "Channels"."id" FROM "Channels"
-      LEFT OUTER JOIN "ChannelsMemberships" ON "Channels".id = "ChannelsMemberships"."channelId"
-        AND "ChannelsMemberships"."agentId" = '${agentId}'
-      WHERE "Channels"."isPublic" = TRUE OR "ChannelsMemberships"."agentId" IS NOT NULL
+      LEFT OUTER JOIN "ChannelMemberships" ON "Channels".id = "ChannelMemberships"."channelId"
+        AND "ChannelMemberships"."agentId" = '${agentId}'
+      WHERE "Channels"."isPublic" = TRUE OR "ChannelMemberships"."agentId" IS NOT NULL
     )` : `(
       SELECT "Channels"."id" FROM "Channels"
       WHERE "Channels"."isPublic" = TRUE

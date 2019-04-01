@@ -20,8 +20,8 @@ function roleRule(roleName) {
   };
 }
 
-const isAdminRule = roleRule(models.ChannelsMemberships.ROLE.ADMIN);
-const isViewerRule = roleRule(models.ChannelsMemberships.ROLE.VIEWER);
+const isAdminRule = roleRule(models.ChannelMemberships.ROLE.ADMIN);
+const isViewerRule = roleRule(models.ChannelMemberships.ROLE.VIEWER);
 
 /** @type {Rule} */
 const isAdmin = rule()(isAdminRule);

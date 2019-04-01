@@ -18,7 +18,7 @@ async function channelMemberships(root, args, context, info) {
   const id = { agentId, channelId };
   console.log('\x1b[36m ---> \x1b[0m Middleware (channelMemberships)', id);
   if (channelId && agentId) {
-    const channelMembership = await data.channelsMembershipsData.getOne(id);
+    const channelMembership = await data.channelMembershipsData.getOne(id);
     context.channelMembership = channelMembership;
     context.channelMembershipsRole = _.get(channelMembership, 'role', []);
   } else {

@@ -2,7 +2,7 @@ const graphql = require("graphql");
 const { attributeFields, resolver } = require("graphql-sequelize");
 
 const resolvers = require('../resolvers');
-const channelsMemberships = require('./channels-memberhips');
+const channelMemberships = require('./channel-memberhips');
 const models = require("../models");
 
 const agentType = new graphql.GraphQLEnumType({
@@ -25,8 +25,8 @@ const agent = new graphql.GraphQLObjectType({
     name: { type: graphql.GraphQLString },
     measurementCount: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
     channelMemberships: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(channelsMemberships.channelsMembership)),
-      resolve: resolvers.channelsMemberships.allByAgentId,
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(channelMemberships.channelsMembership)),
+      resolve: resolvers.channelMemberships.allByAgentId,
     },
     User: {
       type: require('./').userType,

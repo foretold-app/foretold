@@ -1,5 +1,9 @@
 module.exports = {
   up: async function (queryInterface) {
+    await queryInterface.sequelize.query(`
+        DROP TABLE IF EXISTS ChannelMemberships;
+    `);
+
     await queryInterface.renameTable('AgentsChannels', 'ChannelMemberships');
 
     await queryInterface.sequelize.query(`
@@ -17,6 +21,10 @@ module.exports = {
   },
 
   down: async function (queryInterface) {
+    await queryInterface.sequelize.query(`
+        DROP TABLE IF EXISTS AgentsChannels;
+    `);
+
     await queryInterface.renameTable('ChannelMemberships', 'AgentsChannels');
 
     await queryInterface.sequelize.query(`

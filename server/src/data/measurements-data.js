@@ -31,7 +31,9 @@ class MeasurementsData extends DataBase {
   async getAll(options = {}) {
     return await this.models.Measurement.findAll({
       where: {
-        measurableId: { $in: this.measurableIdsLiteral(options.agentId) },
+        measurableId: {
+          [this.models.sequelize.Op.in]: this.measurableIdsLiteral(options.agentId)
+        },
       }
     });
   }
@@ -46,7 +48,9 @@ class MeasurementsData extends DataBase {
     return await this.models.Measurement.findOne({
       where: {
         id,
-        measurableId: { $in: this.measurableIdsLiteral(options.agentId) },
+        measurableId: {
+          [this.models.sequelize.Op.in]: this.measurableIdsLiteral(options.agentId)
+        },
       }
     });
   }

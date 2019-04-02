@@ -56,6 +56,8 @@ const sequelize = {
     or: 'orop',
     ne: 'neop',
     eq: 'eqop',
+    and: 'andop',
+    in: 'inop',
   }
 };
 

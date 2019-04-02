@@ -22,7 +22,9 @@ class SeriesData extends DataBase {
     const { channelId } = options;
 
     let where = {
-        channelId: { $in: this.channelIdsLiteral(options.agentId) },
+        channelId: {
+          [this.models.sequelize.Op.in]: this.channelIdsLiteral(options.agentId)
+        },
       };
 
     if (channelId) {
@@ -44,7 +46,9 @@ class SeriesData extends DataBase {
     return await this.models.Series.findOne({
       where: {
         id,
-        channelId: { $in: this.channelIdsLiteral(options.agentId) },
+        channelId: {
+          [this.models.sequelize.Op.in]: this.channelIdsLiteral(options.agentId)
+        },
       },
     });
   }

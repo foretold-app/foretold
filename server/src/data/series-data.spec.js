@@ -39,7 +39,9 @@ describe('SeriesData', () => {
       return instance.getOne(id, options).then((result) => {
         expect(models.Series.findOne).toHaveBeenCalledWith({
           "where": {
-            "channelId": { "$in": "channelIdsLiteral" },
+            "channelId": {
+              [models.sequelize.Op.in]: "channelIdsLiteral",
+            },
             "id": "id3",
           }
         });
@@ -61,7 +63,11 @@ describe('SeriesData', () => {
     it('finds all series', () => {
       return instance.getAll(options).then((result) => {
         expect(models.Series.findAll).toHaveBeenCalledWith({
-          "where": { "channelId": { "$in": "channelIdsLiteral" } },
+          "where": {
+            "channelId": {
+              [models.sequelize.Op.in]: "channelIdsLiteral"
+            }
+          },
         });
         expect(result).toBe(true);
       });

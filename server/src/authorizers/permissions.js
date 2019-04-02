@@ -10,7 +10,6 @@ function getPermissions() {
     {
       Query: {
         '*': allow,
-        user: isAuthenticated,
       },
       Mutation: {
         '*': isAuthenticated,

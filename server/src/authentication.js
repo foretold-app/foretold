@@ -18,7 +18,7 @@ function getToken(req) {
 
 /**
  * @param {string} token
- * @return {Promise<boolean | Model>}
+ * @return {Promise<boolean | Models.User>}
  */
 async function authenticationByJwtToken(token) {
   try {
@@ -40,7 +40,7 @@ async function authentication(options) {
     if (token) {
       return await authenticationByJwtToken(token);
     }
-    return await usersData.getGuestUserAsLiteral();
+    return null;
   } catch (err) {
     console.error('Authentication', err);
     throw err;

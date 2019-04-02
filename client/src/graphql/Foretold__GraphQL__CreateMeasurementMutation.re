@@ -1,7 +1,7 @@
 module Query = [%graphql
   {|
-            mutation createMeasurement($value: SequelizeJSON!, $description: String!, $competitorType:competitorType!, $measurableId:String!) {
-                createMeasurement(value: $value, description: $description, competitorType: $competitorType, measurableId:$measurableId) {
+            mutation measurementCreate($value: SequelizeJSON!, $description: String!, $competitorType:competitorType!, $measurableId:String!) {
+                measurementCreate(value: $value, description: $description, competitorType: $competitorType, measurableId:$measurableId) {
                   createdAt
                 }
             }

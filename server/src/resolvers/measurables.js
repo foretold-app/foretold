@@ -50,8 +50,7 @@ async function create(root, args, context, info) {
  */
 async function archive(root, args, context, info) {
   const { id } = args;
-  const user = context.user;
-  return await data.measurablesData.archive(id, user);
+  return await data.measurablesData.archive(id);
 }
 
 /**
@@ -63,8 +62,7 @@ async function archive(root, args, context, info) {
  */
 async function unarchive(root, args, context, info) {
   const { id } = args;
-  const user = context.user;
-  return await data.measurablesData.unArchive(id, user);
+  return await data.measurablesData.unArchive(id);
 }
 
 /**

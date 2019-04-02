@@ -79,7 +79,6 @@ describe('Measurables Resolvers', () => {
       return measurables.archive(root, args, context, info).then((result) => {
         expect(data.measurablesData.archive).toHaveBeenCalledWith(
           args.id,
-          context.user,
         );
         expect(result).toBe(true);
       });
@@ -100,7 +99,6 @@ describe('Measurables Resolvers', () => {
       return measurables.unarchive(root, args, context, info).then((result) => {
         expect(data.measurablesData.unArchive).toHaveBeenCalledWith(
           args.id,
-          context.user,
         );
         expect(result).toBe(true);
       });

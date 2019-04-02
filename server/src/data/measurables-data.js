@@ -21,20 +21,18 @@ class MeasurablesData extends DataBase {
 
   /**
    * @param {string} id
-   * @param {object} user
    * @return {Promise<Models.Measurable>}
    */
-  async archive(id, user) {
+  async archive(id) {
     let measurable = await models.Measurable.findById(id);
     return measurable.archive();
   }
 
   /**
    * @param {string} id
-   * @param {object} user
    * @return {Promise<Models.Measurable>}
    */
-  async unArchive(id, user) {
+  async unArchive(id) {
     let measurable = await models.Measurable.findById(id);
     return measurable.unarchive();
   }

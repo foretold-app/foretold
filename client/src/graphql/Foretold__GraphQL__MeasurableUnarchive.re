@@ -1,7 +1,7 @@
 module GraphQL = [%graphql
   {|
-             mutation archiveMeasurable($id: String!) {
-                 archiveMeasurable(id: $id) {
+             mutation measurableUnarchive($id: String!) {
+                 measurableUnarchive(id: $id) {
                    id
                  }
              }

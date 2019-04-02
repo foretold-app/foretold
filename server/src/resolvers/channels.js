@@ -6,7 +6,7 @@ const data = require('../data');
  * @returns {Promise<Model[]>}
  */
 async function channelAgents(channel) {
-  return await data.channelsData.getAgentsByChannelId(channel.id);
+  return await data.channels.getAgentsByChannelId(channel.id);
 }
 
 /**
@@ -14,7 +14,7 @@ async function channelAgents(channel) {
  * @returns {Promise<Model>}
  */
 async function channelCreator(channel) {
-  return await data.channelsData.getCreatorByChannelId(channel.id);
+  return await data.channels.getCreatorByChannelId(channel.id);
 }
 
 /**
@@ -31,7 +31,7 @@ async function all(root, args, context, info) {
   const offset = args.offset;
   const limit = args.limit;
   const options = { offset, limit, agentId };
-  return await data.channelsData.getAll(options);
+  return await data.channels.getAll(options);
 }
 
 /**
@@ -44,9 +44,9 @@ async function all(root, args, context, info) {
  */
 async function one(root, args, context, info) {
   const id = _.get(args, 'id') || _.get(root, 'channelId');
-  const agentId = context.user.agentId;
+  const agentId = _.get(context, 'user.agentId');
   const options = { agentId };
-  return await data.channelsData.getOne(id, options);
+  return await data.channels.getOne(id, options);
 }
 
 /**
@@ -59,7 +59,7 @@ async function one(root, args, context, info) {
  * @returns {Promise<Models.Channel>}
  */
 async function update(root, args, context, info) {
-  return await data.channelsData.updateOne(args.id, args.input);
+  return await data.channels.updateOne(args.id, args.input);
 }
 
 /**
@@ -70,7 +70,7 @@ async function update(root, args, context, info) {
  * @returns {Promise<Models.Channel>}
  */
 async function create(root, args, context, info) {
-  return await data.channelsData.createOne(context.user, args.input);
+  return await data.channels.createOne(context.user, args.input);
 }
 
 module.exports = {

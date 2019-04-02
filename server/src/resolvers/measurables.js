@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const data = require('../data');
 
 /**
@@ -9,7 +10,7 @@ const data = require('../data');
  */
 async function all(root, args, context, info) {
   const agentId = context.user.agentId;
-  return await data.measurablesData.getAll({ ...args, agentId });
+  return await data.measurables.getAll({ ...args, agentId });
 }
 
 /**
@@ -21,7 +22,7 @@ async function all(root, args, context, info) {
  */
 async function one(root, args, context, info) {
   const agentId = context.user.agentId;
-  return await data.measurablesData.getOne(args.id, { agentId });
+  return await data.measurables.getOne(args.id, { agentId });
 }
 
 /**
@@ -37,7 +38,7 @@ async function create(root, args, context, info) {
     ...args,
     creatorId: user.agentId,
   };
-  return await data.measurablesData.createMeasurable(datas, user);
+  return await data.measurables.createOne(datas, user);
 }
 
 /**
@@ -48,7 +49,8 @@ async function create(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function archive(root, args, context, info) {
-  return await data.measurablesData.archiveMeasurable(root, args, context);
+  const { id } = args;
+  return await data.measurables.archive(id);
 }
 
 /**
@@ -59,7 +61,8 @@ async function archive(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function unarchive(root, args, context, info) {
-  return await data.measurablesData.unArchiveMeasurable(root, args, context);
+  const { id } = args;
+  return await data.measurables.unArchive(id);
 }
 
 /**
@@ -69,15 +72,18 @@ async function unarchive(root, args, context, info) {
  * @param info
  * @returns {Promise<*|Array<Model>>}
  */
-async function edit(root, args, context, info) {
-  return await data.measurablesData.editMeasurable(root, args, context);
+async function update(root, args, context, info) {
+  const id = args.id;
+  const datas = _.omit(args, ['id']);
+  const user = context.user;
+  return await data.measurables.updateOne(id, datas, user);
 }
 
 
 module.exports = {
   one,
   all,
-  edit,
+  update,
   unarchive,
   archive,
   create,

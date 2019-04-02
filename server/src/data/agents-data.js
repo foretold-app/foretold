@@ -1,8 +1,8 @@
-const _ = require('lodash');
-const models = require('../models');
-
 const { DataBase } = require('./data-base');
 
+/**
+ * @implements {Layers.DataSourceLayer.DataSource}
+ */
 class AgentsData extends DataBase {
 
   /**
@@ -10,7 +10,7 @@ class AgentsData extends DataBase {
    * @return {Promise<Models.Agent>}
    */
   async getOne(id) {
-    return models.Agent.findById(id);
+    return this.models.Agent.findById(id);
   }
 }
 

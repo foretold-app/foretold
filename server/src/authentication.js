@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 
-const { usersData } = require('./data');
+const { users } = require('./data');
 
 /**
  * @param {Request} req
@@ -18,13 +18,13 @@ function getToken(req) {
 
 /**
  * @param {string} token
- * @return {Promise<boolean | Model>}
+ * @return {Promise<boolean | Models.User>}
  */
 async function authenticationByJwtToken(token) {
   try {
     const decoded = jwt.verify(token, process.env.AUTH0_SECRET);
     if (!decoded.sub) throw new Error('No User Id');
-    return await usersData.getUserByAuth0Id(decoded.sub);
+    return await users.getUserByAuth0Id(decoded.sub);
   } catch (err) {
     throw err;
   }
@@ -40,7 +40,7 @@ async function authentication(options) {
     if (token) {
       return await authenticationByJwtToken(token);
     }
-    return await usersData.getGuestUserAsLiteral();
+    return null;
   } catch (err) {
     console.error('Authentication', err);
     throw err;

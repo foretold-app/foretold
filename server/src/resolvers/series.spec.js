@@ -9,13 +9,13 @@ describe('Series Resolvers', () => {
     const context = { user: { agentId: 'agentId1' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.seriesData, 'getOne').mockReturnValue(
+      jest.spyOn(data.series, 'getOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('returns series', () => {
       return series.one(root, args, context, info).then((result) => {
-        expect(data.seriesData.getOne).toHaveBeenCalledWith(
+        expect(data.series.getOne).toHaveBeenCalledWith(
           'id1',
           { "agentId": "agentId1" },
         );
@@ -30,13 +30,13 @@ describe('Series Resolvers', () => {
     const context = { user: { agentId: 'agentId1' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.seriesData, 'getAll').mockReturnValue(
+      jest.spyOn(data.series, 'getAll').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('returns series collection', () => {
       return series.all(root, args, context, info).then((result) => {
-        expect(data.seriesData.getAll).toHaveBeenCalledWith(
+        expect(data.series.getAll).toHaveBeenCalledWith(
           { "agentId": "agentId1" },
         );
         expect(result).toEqual(true);
@@ -46,23 +46,22 @@ describe('Series Resolvers', () => {
 
   describe('create()', () => {
     const root = {};
-    const args = {};
-    const context = {};
+    const args = { a: 'a1' };
+    const context = { user: { agentId: 'agentId1' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.seriesData, 'createSeries').mockReturnValue(
+      jest.spyOn(data.series, 'createOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('creates series', () => {
       return series.create(root, args, context, info).then((result) => {
-        expect(data.seriesData.createSeries).toHaveBeenCalledWith(
-          root, args, context,
+        expect(data.series.createOne).toHaveBeenCalledWith(
+          {"a": "a1", "creatorId": "agentId1"},
         );
         expect(result).toBe(true);
       });
     });
   });
-
 
 });

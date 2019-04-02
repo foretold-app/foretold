@@ -1,96 +1,55 @@
 const _ = require('lodash');
 
-const models = require("../models");
 const { notify } = require("../lib/notifications");
 
 const { DataBase } = require('./data-base');
 
+/**
+ * @implements {Layers.DataSourceLayer.DataSource}
+ */
 class MeasurablesData extends DataBase {
 
   /**
    * @param data
+   * @param {object} user
    * @return {Promise<*>}
    */
-  async createMeasurable(data, user) {
-    const newMeasurable = await models.Measurable.create(data);
+  async createOne(data, user) {
+    const newMeasurable = await this.models.Measurable.create(data);
     let notification = await newMeasurable.creationNotification(user);
     notify(notification);
     return newMeasurable;
   }
 
   /**
-   * @param root
-   * @param values
-   * @param options
-   * @return {Promise<Promise<void>|Promise<WebAPICallResult>|never>}
+   * @param {string} id
+   * @return {Promise<Models.Measurable>}
    */
-  async archiveMeasurable(root, values, options) {
-    const { id } = values;
-    const user = options.user;
-    let measurable = await models.Measurable.findById(id);
-    if (_.get(measurable, 'creatorId') !== _.get(user, 'agentId')) {
-      throw new Error("User does not have permission");
-    }
+  async archive(id) {
+    let measurable = await this.models.Measurable.findById(id);
     return measurable.archive();
   }
 
   /**
-   * @param root
-   * @param values
-   * @param options
-   * @return {Promise<Promise<WebAPICallResult> | Promise<void>>}
+   * @param {string} id
+   * @return {Promise<Models.Measurable>}
    */
-  async unArchiveMeasurable(root, values, options) {
-    const { id } = values;
-    const user = options.user;
-    let measurable = await models.Measurable.findById(id);
-    if (_.get(measurable, 'creatorId') !== _.get(user, 'agentId')) {
-      throw new Error("User does not have permission");
-    }
+  async unArchive(id) {
+    let measurable = await this.models.Measurable.findById(id);
     return measurable.unarchive();
   }
 
   /**
-   * @param root
-   * @param values
-   * @param options
-   * @return {Promise<Promise<WebAPICallResult> | Promise<void>>}
+   * @param {string} id
+   * @param {object} data
+   * @param {object} user
+   * @return {Promise<Models.Measurable>}
    */
-  async editMeasurable(root, values, options) {
-    const {
-      id,
-      name,
-      description,
-      expectedResolutionDate,
-      descriptionEntity,
-      descriptionDate,
-      resolutionEndpoint,
-      descriptionProperty
-    } = values;
-    const user = options.user;
-    let measurable = await models.Measurable.findById(id);
-    if (_.get(measurable, 'creatorId') !== _.get(user, 'agentId')) {
-      throw new Error("User does not have permission");
-    }
-    let notification = await measurable.updateNotifications(user, {
-      name,
-      description,
-      expectedResolutionDate,
-      resolutionEndpoint,
-      descriptionEntity,
-      descriptionDate,
-      descriptionProperty
-    });
+  async updateOne(id, data, user) {
+    let measurable = await this.models.Measurable.findById(id);
+    let notification = await measurable.updateNotifications(user, data);
     notify(notification);
-    return measurable.update({
-      name,
-      description,
-      expectedResolutionDate,
-      resolutionEndpoint,
-      descriptionEntity,
-      descriptionDate,
-      descriptionProperty
-    });
+    return measurable.update(data);
   }
 
   /**
@@ -102,22 +61,22 @@ class MeasurablesData extends DataBase {
 
     let where = {
       state: {
-        [models.sequelize.Op.ne]: "ARCHIVED"
+        [this.models.sequelize.Op.ne]: "ARCHIVED"
       },
       $and: [{ channelId: { $in: this.channelIdsLiteral(options.agentId) } }],
     };
 
     if (seriesId) {
-      where.seriesId = { [models.sequelize.Op.eq]: seriesId };
+      where.seriesId = { [this.models.sequelize.Op.eq]: seriesId };
     }
     if (creatorId) {
-      where.creatorId = { [models.sequelize.Op.eq]: creatorId };
+      where.creatorId = { [this.models.sequelize.Op.eq]: creatorId };
     }
     if (channelId) {
       where.$and.push({ channelId });
     }
 
-    const items = await models.Measurable.findAll({
+    const items = await this.models.Measurable.findAll({
       limit,
       offset,
       where,
@@ -137,7 +96,7 @@ class MeasurablesData extends DataBase {
     const restrictions = 'agentId' in options
       ? { channelId: { $in: this.channelIdsLiteral(options.agentId) } }
       : {};
-    return await models.Measurable.findOne({
+    return await this.models.Measurable.findOne({
       where: {
         id,
         ...restrictions,

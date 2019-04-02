@@ -9,13 +9,13 @@ describe('Measurables Resolvers', () => {
     const context = { user: { agentId: 'agentId2' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'getAll').mockReturnValue(
+      jest.spyOn(data.measurables, 'getAll').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('returns measurables', () => {
       return measurables.all(root, args, context, info).then((result) => {
-        expect(data.measurablesData.getAll).toHaveBeenCalledWith(
+        expect(data.measurables.getAll).toHaveBeenCalledWith(
           { "agentId": "agentId2" },
         );
         expect(result).toBe(true);
@@ -29,13 +29,13 @@ describe('Measurables Resolvers', () => {
     const context = { user: { agentId: 'agentId2' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'getOne').mockReturnValue(
+      jest.spyOn(data.measurables, 'getOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('returns a measurable', () => {
       return measurables.one(root, args, context, info).then((result) => {
-        expect(data.measurablesData.getOne).toHaveBeenCalledWith(
+        expect(data.measurables.getOne).toHaveBeenCalledWith(
           'id1',
           { "agentId": "agentId2" },
         );
@@ -50,13 +50,13 @@ describe('Measurables Resolvers', () => {
     const context = { user: { agentId: 'agentId1' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'createMeasurable').mockReturnValue(
+      jest.spyOn(data.measurables, 'createOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('creates a measurable', () => {
       return measurables.create(root, args, context, info).then((result) => {
-        expect(data.measurablesData.createMeasurable).toHaveBeenCalledWith(
+        expect(data.measurables.createOne).toHaveBeenCalledWith(
           { "creatorId": "agentId1" },
           context.user,
         );
@@ -67,20 +67,18 @@ describe('Measurables Resolvers', () => {
 
   describe('archive()', () => {
     const root = {};
-    const args = {};
-    const context = {};
+    const args = { id: 'id1' };
+    const context = { user: {} };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'archiveMeasurable').mockReturnValue(
+      jest.spyOn(data.measurables, 'archive').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('archives a measurable', () => {
       return measurables.archive(root, args, context, info).then((result) => {
-        expect(data.measurablesData.archiveMeasurable).toHaveBeenCalledWith(
-          root,
-          args,
-          context,
+        expect(data.measurables.archive).toHaveBeenCalledWith(
+          args.id,
         );
         expect(result).toBe(true);
       });
@@ -89,42 +87,40 @@ describe('Measurables Resolvers', () => {
 
   describe('unarchive()', () => {
     const root = {};
-    const args = {};
-    const context = {};
+    const args = { id: 'id1' };
+    const context = { user: {} };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'unArchiveMeasurable').mockReturnValue(
+      jest.spyOn(data.measurables, 'unArchive').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('unarchives a measurable', () => {
       return measurables.unarchive(root, args, context, info).then((result) => {
-        expect(data.measurablesData.unArchiveMeasurable).toHaveBeenCalledWith(
-          root,
-          args,
-          context,
+        expect(data.measurables.unArchive).toHaveBeenCalledWith(
+          args.id,
         );
         expect(result).toBe(true);
       });
     });
   });
 
-  describe('edit()', () => {
+  describe('update()', () => {
     const root = {};
-    const args = {};
-    const context = {};
+    const args = { id: 'id1', b: 'b1' };
+    const context = { user: {} };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'editMeasurable').mockReturnValue(
+      jest.spyOn(data.measurables, 'updateOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
-    it('edits a measurable', () => {
-      return measurables.edit(root, args, context, info).then((result) => {
-        expect(data.measurablesData.editMeasurable).toHaveBeenCalledWith(
-          root,
-          args,
-          context,
+    it('updates a measurable', () => {
+      return measurables.update(root, args, context, info).then((result) => {
+        expect(data.measurables.updateOne).toHaveBeenCalledWith(
+          'id1',
+          { b: 'b1' },
+          context.user,
         );
         expect(result).toBe(true);
       });

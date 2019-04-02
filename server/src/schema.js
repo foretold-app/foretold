@@ -5,7 +5,6 @@ const { attributeFields, resolver } = require("graphql-sequelize");
 const { applyMiddleware } = require('graphql-middleware');
 
 const models = require("./models");
-const data = require('./data');
 const resolvers = require('./resolvers');
 
 const types = require('./types');
@@ -26,7 +25,7 @@ const schema = new graphql.GraphQLSchema({
           id: { type: graphql.GraphQLString },
           auth0Id: { type: graphql.GraphQLString },
         },
-        resolve: data.usersData.getUser,
+        resolve: resolvers.users.one,
       },
 
       users: {
@@ -132,7 +131,7 @@ const schema = new graphql.GraphQLSchema({
     name: 'Mutation',
     fields: {
 
-      createMeasurement: {
+      measurementCreate: {
         type: types.measurementType,
         args: filterr(_.pick(attributeFields(models.Measurement), [
           'value', 'competitorType', 'measurableId', 'agentId', 'description'
@@ -140,7 +139,7 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.measurements.create,
       },
 
-      createMeasurable: {
+      measurableCreate: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), [
           'name', 'description', 'valueType', 'expectedResolutionDate',
@@ -150,7 +149,7 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.measurables.create,
       },
 
-      createSeries: {
+      seriesCreate: {
         type: types.seriesType,
         args: filterr(_.pick(attributeFields(models.Series), [
           'name', 'description', 'channelId', 'subjects', 'properties',
@@ -159,32 +158,32 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.series.create,
       },
 
-      archiveMeasurable: {
+      measurableArchive: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
         resolve: resolvers.measurables.archive,
       },
 
-      unArchiveMeasurable: {
+      measurableUnarchive: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
         resolve: resolvers.measurables.unarchive,
       },
 
-      editMeasurable: {
+      measurableUpdate: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), [
           'id', 'name', 'description', 'expectedResolutionDate',
           'resolutionEndpoint', 'descriptionEntity', 'descriptionDate',
           'descriptionProperty',
         ])),
-        resolve: resolvers.measurables.edit,
+        resolve: resolvers.measurables.update,
       },
 
-      editUser: {
+      userUpdate: {
         type: types.userType,
         args: filterr(_.pick(attributeFields(models.User), ["id", "name"])),
-        resolve: resolvers.users.edit,
+        resolve: resolvers.users.update,
       },
 
       channelUpdate: {

@@ -13,7 +13,7 @@ export namespace Models {
 
   export type ChannelMembershipRole = "ADMIN" | "VIEWER";
 
-  export interface ChannelMembership {
+  export interface ChannelMemberships {
     agentId: string;
     channelId: string;
     role: ChannelMembershipRole;
@@ -24,7 +24,7 @@ export namespace Schema {
   export interface Context {
     user: Models.User;
     channel?: Models.Channel;
-    channelMembership?: Models.ChannelMembership;
+    channelMembership?: Models.ChannelMemberships;
     channelMembershipsRole?: Models.ChannelMembershipRole;
   }
 

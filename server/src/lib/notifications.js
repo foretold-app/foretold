@@ -1,21 +1,29 @@
 const { IncomingWebhook } = require('@slack/client');
+
 const url = process.env.SLACK_WEBHOOK_URL;
 const webhook = new IncomingWebhook(url);
-console.log(`SET UP WITH SLACK with webhook url: ${url}`)
+console.log(`SET UP WITH SLACK with webhook url: ${url}`);
 
-// Send simple text to the webhook channel
+/**
+ * @param {object} message
+ * @return {Promise.<*>}
+ */
 function notify(message) {
   if (process.env.NODE_ENV === 'development') {
     console.log('Notification sent to Slack: ', message);
-    return;
+    return Promise.resolve(true);
   }
-  webhook.send(message, function (err, res) {
-    if (err) {
-      console.error('Error Sending Notification to Slack:', err);
-    } else {
+  return webhook.send(message)
+    .then((res) => {
       console.log('Notification sent to Slack: ', res);
-    }
-  });
+      return res;
+    })
+    .catch((err) => {
+      console.error('Error Sending Notification to Slack:', err);
+      return Promise.reject(err);
+    });
 }
 
-export { notify };
+module.exports = {
+  notify,
+};

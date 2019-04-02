@@ -1,21 +1,16 @@
-const models = require("../models");
-
 const { DataBase } = require('./data-base');
 
+/**
+ * @implements {Layers.DataSourceLayer.DataSource}
+ */
 class SeriesData extends DataBase {
 
   /**
-   * @param root
-   * @param values
-   * @param options
+   * @param {object} data
    * @return {Promise<*>}
    */
-  async createSeries(root, values, options) {
-    const newSeries = await models.Series.create({
-      ...values,
-      creatorId: options.user.agentId,
-    });
-    return newSeries;
+  async createOne(data) {
+    return await this.models.Series.create(data);
   }
 
   /**
@@ -31,10 +26,10 @@ class SeriesData extends DataBase {
       };
 
     if (channelId) {
-      where.channelId = { [models.sequelize.Op.eq]: channelId };
+      where.channelId = { [this.models.sequelize.Op.eq]: channelId };
     }
 
-    return await models.Series.findAll({
+    return await this.models.Series.findAll({
       where
     });
   }
@@ -46,7 +41,7 @@ class SeriesData extends DataBase {
    * @return {Promise<*>}
    */
   async getOne(id, options = {}) {
-    return await models.Series.findOne({
+    return await this.models.Series.findOne({
       where: {
         id,
         channelId: { $in: this.channelIdsLiteral(options.agentId) },

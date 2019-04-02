@@ -11,13 +11,13 @@ describe('Channels Resolvers', () => {
   describe('channelAgents()', () => {
     const channel = { id: '1' };
     beforeEach(() => {
-      jest.spyOn(data.channelsData, 'getAgentsByChannelId').mockReturnValue(
+      jest.spyOn(data.channels, 'getAgentsByChannelId').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('returns agent-channel model', () => {
       return channels.channelAgents(channel).then((result) => {
-        expect(data.channelsData.getAgentsByChannelId)
+        expect(data.channels.getAgentsByChannelId)
           .toHaveBeenCalledWith(channel.id);
         expect(result).toBe(true);
       });
@@ -27,13 +27,13 @@ describe('Channels Resolvers', () => {
   describe('channelCreator()', () => {
     const channel = { id: '1' };
     beforeEach(() => {
-      jest.spyOn(data.channelsData, 'getCreatorByChannelId').mockReturnValue(
+      jest.spyOn(data.channels, 'getCreatorByChannelId').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('returns creator of channel', () => {
       return channels.channelCreator(channel).then((result) => {
-        expect(data.channelsData.getCreatorByChannelId)
+        expect(data.channels.getCreatorByChannelId)
           .toHaveBeenCalledWith(channel.id);
         expect(result).toBe(true);
       });
@@ -46,13 +46,13 @@ describe('Channels Resolvers', () => {
     const args = { offset: 1, limit: 2 };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.channelsData, 'getAll').mockReturnValue(
+      jest.spyOn(data.channels, 'getAll').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('returns channels with restrictions', () => {
       return channels.all(root, args, context, info).then((result) => {
-        expect(data.channelsData.getAll).toHaveBeenCalledWith({
+        expect(data.channels.getAll).toHaveBeenCalledWith({
           "limit": 2,
           "offset": 1,
           "agentId": "1"
@@ -68,13 +68,13 @@ describe('Channels Resolvers', () => {
     const args = { id: 'id1' };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.channelsData, 'getOne').mockReturnValue(
+      jest.spyOn(data.channels, 'getOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('returns channel using restrictions', () => {
       return channels.one(root, args, context, info).then((result) => {
-        expect(data.channelsData.getOne).toHaveBeenCalledWith("id1", {
+        expect(data.channels.getOne).toHaveBeenCalledWith("id1", {
           "agentId": "agentId1"
         });
         expect(result).toBe(true);
@@ -88,13 +88,13 @@ describe('Channels Resolvers', () => {
     const args = { id: 'id2', input: { a: '1' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.channelsData, 'updateOne').mockReturnValue(
+      jest.spyOn(data.channels, 'updateOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('updates channel', () => {
       return channels.update(root, args, context, info).then((result) => {
-        expect(data.channelsData.updateOne).toHaveBeenCalledWith("id2", {
+        expect(data.channels.updateOne).toHaveBeenCalledWith("id2", {
           "a": "1",
         });
         expect(result).toBe(true);
@@ -108,13 +108,13 @@ describe('Channels Resolvers', () => {
     const args = { input: { a: '1' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.channelsData, 'createOne').mockReturnValue(
+      jest.spyOn(data.channels, 'createOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('creates channel', () => {
       return channels.create(root, args, context, info).then((result) => {
-        expect(data.channelsData.createOne).toHaveBeenCalledWith(
+        expect(data.channels.createOne).toHaveBeenCalledWith(
           context.user,
           args.input,
         );

@@ -7,8 +7,8 @@ let ste = ReasonReact.string;
 module CreateMeasurableMutation = {
   module GraphQL = [%graphql
     {|
-             mutation createMeasurable($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!, $descriptionDate: Date, $descriptionProperty: String, $channelId: String!) {
-                 createMeasurable(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity, descriptionDate: $descriptionDate, descriptionProperty: $descriptionProperty, channelId: $channelId) {
+             mutation measurableCreate($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!, $descriptionDate: Date, $descriptionProperty: String, $channelId: String!) {
+                 measurableCreate(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity, descriptionDate: $descriptionDate, descriptionProperty: $descriptionProperty, channelId: $channelId) {
                    id
                  }
              }
@@ -103,7 +103,7 @@ let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
                 | Loading => "Loading" |> ste
                 | Error(e) => <> {"Error: " ++ e##message |> ste} showForm </>
                 | Data(data) =>
-                  data##createMeasurable
+                  data##measurableCreate
                   |> E.O.fmap(e => e##id)
                   |> doIfSome(_ =>
                        Context.Routing.Url.push(ChannelShow(channelId))

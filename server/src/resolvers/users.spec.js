@@ -5,22 +5,23 @@ describe('Users Resolvers', () => {
 
   describe('users()', () => {
     const root = {};
-    const args = {};
-    const context = {};
+    const args = { id: 'id1', name: 'name1' };
+    const context = { user: { agentId: 'agentId1' } };
     beforeEach(() => {
-      jest.spyOn(data.usersData, 'editUser').mockReturnValue(
+      jest.spyOn(data.users, 'updateOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('edits user', () => {
-      return users.edit(root, args, context).then((result) => {
-        expect(data.usersData.editUser).toHaveBeenCalledWith(
-          root, args, context,
+      return users.update(root, args, context).then((result) => {
+        expect(data.users.updateOne).toHaveBeenCalledWith(
+          'id1',
+          { name: 'name1' },
+          context.user,
         );
         expect(result).toBe(true);
       });
     });
   });
-
 
 });

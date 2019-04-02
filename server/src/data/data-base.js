@@ -7,7 +7,7 @@ class DataBase {
    * @todo: Use ORM opportunities to join tables.
    * @todo: Move this restrictions on "model" layer.
    *
-   * @param {string} agentId
+   * @param {string} [agentId]
    * @return {string}
    */
   channelIds(agentId) {
@@ -24,7 +24,7 @@ class DataBase {
 
   /**
    * @todo: see this.channelIds()
-   * @param {string} agentId
+   * @param {string} [agentId]
    * @return {Sequelize.literal}
    */
   channelIdsLiteral(agentId) {
@@ -33,7 +33,7 @@ class DataBase {
 
   /**
    * @todo: see this.channelIds()
-   * @param {string} agentId
+   * @param {string} [agentId]
    * @return {string}
    */
   measurableIds(agentId) {
@@ -46,7 +46,7 @@ class DataBase {
 
   /**
    * @todo: see this.channelIds()
-   * @param {string} agentId
+   * @param {string} [agentId]
    * @return {Sequelize.literal}
    */
   measurableIdsLiteral(agentId) {

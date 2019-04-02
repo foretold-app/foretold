@@ -23,7 +23,7 @@ class MeasurementsData extends DataBase {
    * @param {object} options
    * @param {number} [options.offset]
    * @param {number} [options.limit]
-   * @param {object} [options.agentId]
+   * @param {string} [options.agentId]
    * @return {Promise<*|Array<Model>>}
    */
   async getAll(options = {}) {
@@ -37,7 +37,7 @@ class MeasurementsData extends DataBase {
   /**
    * @param {string} id
    * @param {object} options
-   * @param {object} [options.agentId]
+   * @param {string} [options.agentId]
    * @return {Promise<*>}
    */
   async getOne(id, options = {}) {

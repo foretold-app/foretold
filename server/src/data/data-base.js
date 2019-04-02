@@ -2,6 +2,10 @@ const models = require('../models');
 
 class DataBase {
 
+  constructor() {
+    this.models = models;
+  }
+
   /**
    *
    * @todo: Use ORM opportunities to join tables.

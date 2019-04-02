@@ -1,7 +1,5 @@
 const _ = require('lodash');
 
-const models = require('../models');
-
 const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { DataBase } = require('./data-base');
 
@@ -22,20 +20,20 @@ class ChannelsData extends DataBase {
    * @return {Promise<Models.Channel>}
    */
   async createOne(user, input) {
-    let channel = await models.Channel.findOne({
+    let channel = await this.models.Channel.findOne({
       where: { name: input.name },
     });
     if (channel) {
       return Promise.reject(new Error('Channel exists.'));
     }
-    channel = await models.Channel.create({
+    channel = await this.models.Channel.create({
       ...input,
       creatorId: user.agentId,
     });
     await this.channelMembershipsData.createOne(
       channel.id,
       user.agentId,
-      models.ChannelMemberships.ROLE.ADMIN,
+      this.models.ChannelMemberships.ROLE.ADMIN,
     );
     return channel;
   }
@@ -47,7 +45,7 @@ class ChannelsData extends DataBase {
    * @return {Promise<Models.Channel>}
    */
   async updateOne(id, input) {
-    const channel = await models.Channel.findOne({
+    const channel = await this.models.Channel.findOne({
       where: { id },
     });
     if (channel) await channel.update(input);
@@ -60,9 +58,9 @@ class ChannelsData extends DataBase {
    * @return {Promise<Model[]>}
    */
   async getAgentsByChannelId(id) {
-    const channel = await models.Channel.findOne({
+    const channel = await this.models.Channel.findOne({
       where: { id },
-      include: [{ model: models.Agent, as: 'agents' }],
+      include: [{ model: this.models.Agent, as: 'agents' }],
     });
     return _.get(channel, 'agents', []);
   }
@@ -73,9 +71,9 @@ class ChannelsData extends DataBase {
    * @return {Promise<Model>}
    */
   async getCreatorByChannelId(id) {
-    const channel = await models.Channel.findOne({
+    const channel = await this.models.Channel.findOne({
       where: { id },
-      include: [{ model: models.Agent, as: 'creator' }],
+      include: [{ model: this.models.Agent, as: 'creator' }],
     });
     return _.get(channel, 'creator');
   }
@@ -91,7 +89,7 @@ class ChannelsData extends DataBase {
   async getAll(options = {}) {
     const offset = _.get(options, 'offset', 0);
     const limit = _.get(options, 'limit', 10);
-    return await models.Channel.findAll({
+    return await this.models.Channel.findAll({
       limit,
       offset,
       order: [['createdAt', 'DESC']],
@@ -114,7 +112,7 @@ class ChannelsData extends DataBase {
     const restrictions = 'agentId' in options
       ? { id: { $in: this.channelIdsLiteral(options.agentId) } }
       : {};
-    return await models.Channel.findOne({
+    return await this.models.Channel.findOne({
       where: {
         $and: [
           { id },

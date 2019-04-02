@@ -1,6 +1,5 @@
 const _ = require('lodash');
 
-const models = require("../models");
 const { notify } = require("../lib/notifications");
 
 const { DataBase } = require('./data-base');
@@ -16,7 +15,7 @@ class MeasurablesData extends DataBase {
    * @return {Promise<*>}
    */
   async createOne(data, user) {
-    const newMeasurable = await models.Measurable.create(data);
+    const newMeasurable = await this.models.Measurable.create(data);
     let notification = await newMeasurable.creationNotification(user);
     notify(notification);
     return newMeasurable;
@@ -27,7 +26,7 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async archive(id) {
-    let measurable = await models.Measurable.findById(id);
+    let measurable = await this.models.Measurable.findById(id);
     return measurable.archive();
   }
 
@@ -36,7 +35,7 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async unArchive(id) {
-    let measurable = await models.Measurable.findById(id);
+    let measurable = await this.models.Measurable.findById(id);
     return measurable.unarchive();
   }
 
@@ -47,7 +46,7 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async updateOne(id, data, user) {
-    let measurable = await models.Measurable.findById(id);
+    let measurable = await this.models.Measurable.findById(id);
     let notification = await measurable.updateNotifications(user, data);
     notify(notification);
     return measurable.update(data);
@@ -62,22 +61,22 @@ class MeasurablesData extends DataBase {
 
     let where = {
       state: {
-        [models.sequelize.Op.ne]: "ARCHIVED"
+        [this.models.sequelize.Op.ne]: "ARCHIVED"
       },
       $and: [{ channelId: { $in: this.channelIdsLiteral(options.agentId) } }],
     };
 
     if (seriesId) {
-      where.seriesId = { [models.sequelize.Op.eq]: seriesId };
+      where.seriesId = { [this.models.sequelize.Op.eq]: seriesId };
     }
     if (creatorId) {
-      where.creatorId = { [models.sequelize.Op.eq]: creatorId };
+      where.creatorId = { [this.models.sequelize.Op.eq]: creatorId };
     }
     if (channelId) {
       where.$and.push({ channelId });
     }
 
-    const items = await models.Measurable.findAll({
+    const items = await this.models.Measurable.findAll({
       limit,
       offset,
       where,
@@ -97,7 +96,7 @@ class MeasurablesData extends DataBase {
     const restrictions = 'agentId' in options
       ? { channelId: { $in: this.channelIdsLiteral(options.agentId) } }
       : {};
-    return await models.Measurable.findOne({
+    return await this.models.Measurable.findOne({
       where: {
         id,
         ...restrictions,

@@ -1,4 +1,3 @@
-const models = require("../models");
 const { notify } = require("../lib/notifications");
 
 const { DataBase } = require('./data-base');
@@ -15,7 +14,7 @@ class MeasurementsData extends DataBase {
    * @return {Promise<*>}
    */
   async createOne(data, user) {
-    const newMeasurement = await models.Measurement.create(data);
+    const newMeasurement = await this.models.Measurement.create(data);
     const notification = await newMeasurement.creationNotification(user);
     notify(notification);
     return newMeasurement;
@@ -30,7 +29,7 @@ class MeasurementsData extends DataBase {
    * @return {Promise<*|Array<Model>>}
    */
   async getAll(options = {}) {
-    return await models.Measurement.findAll({
+    return await this.models.Measurement.findAll({
       where: {
         measurableId: { $in: this.measurableIdsLiteral(options.agentId) },
       }
@@ -44,7 +43,7 @@ class MeasurementsData extends DataBase {
    * @return {Promise<*>}
    */
   async getOne(id, options = {}) {
-    return await models.Measurement.findOne({
+    return await this.models.Measurement.findOne({
       where: {
         id,
         measurableId: { $in: this.measurableIdsLiteral(options.agentId) },

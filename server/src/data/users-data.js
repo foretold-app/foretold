@@ -1,5 +1,4 @@
 const _ = require('lodash');
-const models = require('../models');
 
 const { DataBase } = require('./data-base');
 
@@ -24,7 +23,7 @@ class UsersData extends DataBase {
    * @return {Promise<Models.User>}
    */
   async getOne(filter) {
-    return await models.User.findOne({
+    return await this.models.User.findOne({
       where: filter
     });
   }
@@ -34,7 +33,7 @@ class UsersData extends DataBase {
    * @return {Promise<Models.User>}
    */
   async createOne(data) {
-    return await models.User.create(data);
+    return await this.models.User.create(data);
   }
 
   /**
@@ -53,7 +52,7 @@ class UsersData extends DataBase {
    * @return {Promise<Models.User>}
    */
   async updateOne(id, data, _user) {
-    let user = await models.User.findById(id);
+    let user = await this.models.User.findById(id);
     if (user && user.auth0Id === _user.auth0Id) {
       user.update(data);
     }

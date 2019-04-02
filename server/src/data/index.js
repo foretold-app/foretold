@@ -1,5 +1,5 @@
 const { MeasurablesData } = require('./measurables-data');
-const { MeasurementData } = require('./measurement-data');
+const { MeasurementsData } = require('./measurements-data');
 const { UsersData } = require('./users-data');
 const { SeriesData } = require('./series-data');
 const { ChannelsData } = require('./channels-data');
@@ -7,11 +7,11 @@ const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { AgentsData } = require('./agents-data');
 
 module.exports = {
-  measurablesData: new MeasurablesData(),
-  measurementData: new MeasurementData(),
-  usersData: new UsersData(),
-  seriesData: new SeriesData(),
-  channelsData: new ChannelsData(),
-  channelMembershipsData: new ChannelMembershipsData(),
-  agentsData: new AgentsData(),
+  measurables: new MeasurablesData(),
+  measurements: new MeasurementsData(),
+  users: new UsersData(),
+  series: new SeriesData(),
+  channels: new ChannelsData(),
+  channelMemberships: new ChannelMembershipsData(),
+  agents: new AgentsData(),
 };

@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 
-const { usersData } = require('./data');
+const { users } = require('./data');
 
 /**
  * @param {Request} req
@@ -24,7 +24,7 @@ async function authenticationByJwtToken(token) {
   try {
     const decoded = jwt.verify(token, process.env.AUTH0_SECRET);
     if (!decoded.sub) throw new Error('No User Id');
-    return await usersData.getUserByAuth0Id(decoded.sub);
+    return await users.getUserByAuth0Id(decoded.sub);
   } catch (err) {
     throw err;
   }

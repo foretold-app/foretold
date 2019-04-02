@@ -3,7 +3,7 @@ const { notify } = require("../lib/notifications");
 
 const { DataBase } = require('./data-base');
 
-class MeasurementData extends DataBase {
+class MeasurementsData extends DataBase {
 
   /**
    * @todo: rename
@@ -51,5 +51,5 @@ class MeasurementData extends DataBase {
 }
 
 module.exports = {
-  MeasurementData,
+  MeasurementsData,
 };

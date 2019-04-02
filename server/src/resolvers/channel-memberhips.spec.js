@@ -11,13 +11,13 @@ describe('ChannelMemberships Resolvers', () => {
       role: 'ADMIN'
     };
     beforeEach(() => {
-      jest.spyOn(data.channelMembershipsData, 'createOne').mockReturnValue(
+      jest.spyOn(data.channelMemberships, 'createOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('creates agent-channel row', () => {
       return channelMemberships.create(root, args).then((result) => {
-        expect(data.channelMembershipsData.createOne).toHaveBeenCalledWith(
+        expect(data.channelMemberships.createOne).toHaveBeenCalledWith(
           'channelId1',
           'agentId2',
           args.role,
@@ -35,13 +35,13 @@ describe('ChannelMemberships Resolvers', () => {
       role: ['admin']
     };
     beforeEach(() => {
-      jest.spyOn(data.channelMembershipsData, 'createOne').mockReturnValue(
+      jest.spyOn(data.channelMemberships, 'createOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('updates agent-channel row', () => {
       return channelMemberships.create(root, args).then((result) => {
-        expect(data.channelMembershipsData.createOne).toHaveBeenCalledWith(
+        expect(data.channelMemberships.createOne).toHaveBeenCalledWith(
           'channelId1',
           'agentId2',
           args.role,
@@ -58,12 +58,12 @@ describe('ChannelMemberships Resolvers', () => {
       agentId: 'agentId2',
     };
     beforeEach(() => {
-      jest.spyOn(data.channelMembershipsData, 'deleteOne')
+      jest.spyOn(data.channelMemberships, 'deleteOne')
         .mockReturnValue(Promise.resolve(true));
     });
     it('removes agent-channel row', () => {
       return channelMemberships.remove(root, args).then((result) => {
-        expect(data.channelMembershipsData.deleteOne).toHaveBeenCalledWith(
+        expect(data.channelMemberships.deleteOne).toHaveBeenCalledWith(
           'channelId1',
           'agentId2',
         );

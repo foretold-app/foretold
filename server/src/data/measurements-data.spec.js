@@ -1,13 +1,13 @@
 const models = require('../models');
-const { MeasurementData } = require('./measurement-data');
+const { MeasurementsData } = require('./measurements-data');
 
 describe('tests Measurement Data layer', () => {
 
   it('class should be a constructor', () => {
-    expect(MeasurementData).toBeInstanceOf(Function);
+    expect(MeasurementsData).toBeInstanceOf(Function);
   });
 
-  const instance = new MeasurementData();
+  const instance = new MeasurementsData();
 
   describe('getOne()', () => {
     const id = 'id2';

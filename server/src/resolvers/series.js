@@ -9,7 +9,7 @@ const data = require('../data');
  */
 async function one(root, args, context, info) {
   const agentId = context.user.agentId;
-  return await data.seriesData.getOne(args.id, { agentId });
+  return await data.series.getOne(args.id, { agentId });
 }
 
 /**
@@ -21,7 +21,7 @@ async function one(root, args, context, info) {
  */
 async function all(root, args, context, info) {
   const agentId = context.user.agentId;
-  return await data.seriesData.getAll({ ...args, agentId });
+  return await data.series.getAll({ ...args, agentId });
 }
 
 /**
@@ -36,7 +36,7 @@ async function create(root, args, context, info) {
     ...args,
     creatorId: context.user.agentId,
   };
-  return await data.seriesData.createOne(datas);
+  return await data.series.createOne(datas);
 }
 
 module.exports = {

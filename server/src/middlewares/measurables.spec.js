@@ -6,7 +6,7 @@ describe('Measurables Middleware', () => {
   describe('measurable() sets measurable and channelId into context ', () => {
     const measurableObj = { channelId: 'channelId1' };
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'getOne').mockReturnValue(
+      jest.spyOn(data.measurables, 'getOne').mockReturnValue(
         Promise.resolve(measurableObj),
       );
     });
@@ -17,7 +17,7 @@ describe('Measurables Middleware', () => {
       const context = {};
       const info = {};
       return measurable(root, args, context, info).then((result) => {
-        expect(data.measurablesData.getOne)
+        expect(data.measurables.getOne)
           .toHaveBeenCalledWith('measurableId1');
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
@@ -31,7 +31,7 @@ describe('Measurables Middleware', () => {
       const context = {};
       const info = {};
       return measurable(root, args, context, info).then((result) => {
-        expect(data.measurablesData.getOne)
+        expect(data.measurables.getOne)
           .toHaveBeenCalledWith('measurableId1');
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
@@ -45,7 +45,7 @@ describe('Measurables Middleware', () => {
       const context = { measurableId: 'measurableId1' };
       const info = {};
       return measurable(root, args, context, info).then((result) => {
-        expect(data.measurablesData.getOne)
+        expect(data.measurables.getOne)
           .toHaveBeenCalledWith('measurableId1');
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
@@ -59,7 +59,7 @@ describe('Measurables Middleware', () => {
       const context = {};
       const info = {};
       return measurable(root, args, context, info).then((result) => {
-        expect(data.measurablesData.getOne)
+        expect(data.measurables.getOne)
           .toHaveBeenCalledWith('measurableId1');
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);

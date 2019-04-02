@@ -33,8 +33,8 @@ describe('tests Measurables Data layer', () => {
           "offset": 1,
           "order": [["createdAt", "DESC"]],
           "where": {
-            "$and": [
-              { "channelId": { "$in": "channelIdsLiteral" } },
+            [models.sequelize.Op.and]: [
+              { "channelId": { [models.sequelize.Op.in]: "channelIdsLiteral" } },
               { "channelId": "3" }
             ],
             "creatorId": { "eqop": "5" },
@@ -61,7 +61,12 @@ describe('tests Measurables Data layer', () => {
     it('finds a measurable', () => {
       return instance.getOne(id, options).then((result) => {
         expect(models.Measurable.findOne).toHaveBeenCalledWith({
-          "where": { "channelId": { "$in": "channelIdsLiteral" }, "id": "id1" }
+          "where": {
+            "channelId": {
+              [models.sequelize.Op.in]: "channelIdsLiteral"
+            },
+            "id": "id1"
+          }
         });
         expect(result).toBe(true);
       });

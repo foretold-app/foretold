@@ -139,7 +139,11 @@ describe('Channels Data Layer', () => {
           "limit": 1,
           "offset": 2,
           "order": [["createdAt", "DESC"]],
-          "where": { "id": { "$in": "channelIdsLiteral" } }
+          "where": {
+            "id": {
+              [models.sequelize.Op.in]: "channelIdsLiteral"
+            }
+          }
         });
         expect(result).toBe(true);
       });
@@ -161,9 +165,13 @@ describe('Channels Data Layer', () => {
       return instance.getOne(id, options).then((result) => {
         expect(models.Channel.findOne).toHaveBeenCalledWith({
           "where": {
-            "$and": [
+            [models.sequelize.Op.and]: [
               { "id": "id1" },
-              { "id": { "$in": "channelIdsLiteral" } }
+              {
+                "id": {
+                  [models.sequelize.Op.in]: "channelIdsLiteral"
+                }
+              }
             ]
           }
         });

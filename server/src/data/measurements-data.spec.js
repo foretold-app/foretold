@@ -25,7 +25,9 @@ describe('tests Measurement Data layer', () => {
         expect(models.Measurement.findOne).toHaveBeenCalledWith({
           "where": {
             "id": "id2",
-            "measurableId": { "$in": "measurableIdsLiteral" },
+            "measurableId": {
+              [models.sequelize.Op.in]: "measurableIdsLiteral"
+            },
           }
         });
         expect(result).toBe(true);
@@ -46,7 +48,11 @@ describe('tests Measurement Data layer', () => {
     it('finds a measurement', () => {
       return instance.getAll(options).then((result) => {
         expect(models.Measurement.findAll).toHaveBeenCalledWith({
-          "where": { "measurableId": { "$in": "measurableIdsLiteral" } }
+          "where": {
+            "measurableId": {
+              [models.sequelize.Op.in]: "measurableIdsLiteral"
+            }
+          }
         });
         expect(result).toBe(true);
       });

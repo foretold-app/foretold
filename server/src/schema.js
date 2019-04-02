@@ -178,13 +178,13 @@ const schema = new graphql.GraphQLSchema({
           'resolutionEndpoint', 'descriptionEntity', 'descriptionDate',
           'descriptionProperty',
         ])),
-        resolve: resolvers.measurables.edit,
+        resolve: resolvers.measurables.update,
       },
 
       userUpdate: {
         type: types.userType,
         args: filterr(_.pick(attributeFields(models.User), ["id", "name"])),
-        resolve: resolvers.users.edit,
+        resolve: resolvers.users.update,
       },
 
       channelUpdate: {

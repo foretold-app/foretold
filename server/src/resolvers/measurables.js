@@ -69,7 +69,7 @@ async function unarchive(root, args, context, info) {
  * @param info
  * @returns {Promise<*|Array<Model>>}
  */
-async function edit(root, args, context, info) {
+async function update(root, args, context, info) {
   return await data.measurablesData.editMeasurable(root, args, context);
 }
 
@@ -77,7 +77,7 @@ async function edit(root, args, context, info) {
 module.exports = {
   one,
   all,
-  edit,
+  update,
   unarchive,
   archive,
   create,

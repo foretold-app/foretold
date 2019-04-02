@@ -109,7 +109,7 @@ describe('Measurables Resolvers', () => {
     });
   });
 
-  describe('edit()', () => {
+  describe('update()', () => {
     const root = {};
     const args = {};
     const context = {};
@@ -120,7 +120,7 @@ describe('Measurables Resolvers', () => {
       );
     });
     it('edits a measurable', () => {
-      return measurables.edit(root, args, context, info).then((result) => {
+      return measurables.update(root, args, context, info).then((result) => {
         expect(data.measurablesData.editMeasurable).toHaveBeenCalledWith(
           root,
           args,

@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const data = require('../data');
 
 /**
@@ -74,7 +75,10 @@ async function unarchive(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function update(root, args, context, info) {
-  return await data.measurablesData.editMeasurable(root, args, context);
+  const id = args.id;
+  const datas = _.omit(args, ['id']);
+  const user = context.user;
+  return await data.measurablesData.updateOne(id, datas, user);
 }
 
 

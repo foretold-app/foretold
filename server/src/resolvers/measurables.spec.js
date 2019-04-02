@@ -109,20 +109,20 @@ describe('Measurables Resolvers', () => {
 
   describe('update()', () => {
     const root = {};
-    const args = {};
-    const context = {};
+    const args = { id: 'id1', b: 'b1' };
+    const context = { user: {} };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'editMeasurable').mockReturnValue(
+      jest.spyOn(data.measurablesData, 'updateOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
-    it('edits a measurable', () => {
+    it('updates a measurable', () => {
       return measurables.update(root, args, context, info).then((result) => {
-        expect(data.measurablesData.editMeasurable).toHaveBeenCalledWith(
-          root,
-          args,
-          context,
+        expect(data.measurablesData.updateOne).toHaveBeenCalledWith(
+          'id1',
+          { b: 'b1' },
+          context.user,
         );
         expect(result).toBe(true);
       });

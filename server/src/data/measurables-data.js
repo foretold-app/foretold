@@ -45,46 +45,19 @@ class MeasurablesData extends DataBase {
   }
 
   /**
-   * @param root
-   * @param values
-   * @param options
-   * @return {Promise<Promise<WebAPICallResult> | Promise<void>>}
+   * @param {string} id
+   * @param {object} data
+   * @param {object} user
+   * @return {Promise<Models.Measurable>}
    */
-  async editMeasurable(root, values, options) {
-    const {
-      id,
-      name,
-      description,
-      expectedResolutionDate,
-      descriptionEntity,
-      descriptionDate,
-      resolutionEndpoint,
-      descriptionProperty
-    } = values;
-    const user = options.user;
+  async updateOne(id, data, user) {
     let measurable = await models.Measurable.findById(id);
     if (_.get(measurable, 'creatorId') !== _.get(user, 'agentId')) {
       throw new Error("User does not have permission");
     }
-    let notification = await measurable.updateNotifications(user, {
-      name,
-      description,
-      expectedResolutionDate,
-      resolutionEndpoint,
-      descriptionEntity,
-      descriptionDate,
-      descriptionProperty
-    });
+    let notification = await measurable.updateNotifications(user, data);
     notify(notification);
-    return measurable.update({
-      name,
-      description,
-      expectedResolutionDate,
-      resolutionEndpoint,
-      descriptionEntity,
-      descriptionDate,
-      descriptionProperty
-    });
+    return measurable.update(data);
   }
 
   /**

@@ -33,7 +33,9 @@ async function one(root, args, context, info) {
  */
 async function create(root, args, context, info) {
   const user = context.user;
-  return await data.measurementData.createOne(args, user);
+  const agentId = context.user.agentId;
+  const datas = { ...args, agentId };
+  return await data.measurementData.createOne(datas, user);
 }
 
 module.exports = {

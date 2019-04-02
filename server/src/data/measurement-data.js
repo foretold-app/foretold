@@ -12,13 +12,9 @@ class MeasurementData extends DataBase {
    * @return {Promise<*>}
    */
   async createOne(data, user) {
-    const newMeasurement = await models.Measurement.create({
-      ...data,
-      agentId: user.agentId,
-    });
+    const newMeasurement = await models.Measurement.create(data);
     const notification = await newMeasurement.creationNotification(user);
     notify(notification);
-    const measurable = await newMeasurement.getMeasurable();
     return newMeasurement;
   }
 

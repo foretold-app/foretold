@@ -47,7 +47,7 @@ describe('Measurements Resolver', () => {
   describe('create()', () => {
     const root = {};
     const args = { a: 'a1' };
-    const context = { user: {} };
+    const context = { user: { agentId: 'agentId1' } };
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.measurementData, 'createOne').mockReturnValue(
@@ -57,7 +57,7 @@ describe('Measurements Resolver', () => {
     it('creates a measurement', () => {
       return measurements.create(root, args, context, info).then((result) => {
         expect(data.measurementData.createOne).toHaveBeenCalledWith(
-          args,
+          {"a": "a1", "agentId": "agentId1"},
           context.user,
         );
         expect(result).toBe(true);

@@ -7,16 +7,40 @@ class UsersData extends DataBase {
 
   /**
    * @param {string} auth0Id
-   * @return {Promise<Array<Model>|Model>}
-   * @todo change to more generic getOne(filter)
+   * @return {Promise<Models.User>}
    */
   async getUserByAuth0Id(auth0Id) {
-    const user = await models.User.findOne({
-      where: { auth0Id: auth0Id }
-    }) || await models.User.create({
-      auth0Id: auth0Id, name: '',
+    return await this.upsertOne(
+      { auth0Id },
+      { auth0Id, name: '' },
+    );
+  }
+
+  /**
+   * @param {object} filter
+   * @return {Promise<Models.User>}
+   */
+  async getOne(filter) {
+    return await models.User.findOne({
+      where: filter
     });
-    return user;
+  }
+
+  /**
+   * @param {object} data
+   * @return {Promise<Models.User>}
+   */
+  async createOne(data) {
+    return await models.User.create(data);
+  }
+
+  /**
+   * @param {object} filter
+   * @param {object} data
+   * @return {Promise<Models.User>}
+   */
+  async upsertOne(filter, data) {
+    return await this.getOne(filter) || await this.createOne(data);
   }
 
   /**
@@ -30,7 +54,7 @@ class UsersData extends DataBase {
    * @param id
    * @param data
    * @param _user
-   * @return {Promise<Model>}
+   * @return {Promise<Models.User>}
    */
   async updateOne(id, data, _user) {
     let user = await models.User.findById(id);
@@ -38,23 +62,6 @@ class UsersData extends DataBase {
       user.update(data);
     }
     return user;
-  }
-
-  /**
-   * @param ops
-   * @param values
-   * @param options
-   * @return {Promise<*>}
-   */
-  async getUser(ops, values, options) {
-    const { id, auth0Id } = values;
-    if (options.user) {
-      return options.user;
-    } else if (id) {
-      return await models.User.findById(id);
-    } else if (auth0Id) {
-      return await this.getUserByAuth0Id(auth0Id);
-    }
   }
 }
 

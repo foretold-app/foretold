@@ -5,7 +5,6 @@ const { attributeFields, resolver } = require("graphql-sequelize");
 const { applyMiddleware } = require('graphql-middleware');
 
 const models = require("./models");
-const data = require('./data');
 const resolvers = require('./resolvers');
 
 const types = require('./types');
@@ -26,7 +25,7 @@ const schema = new graphql.GraphQLSchema({
           id: { type: graphql.GraphQLString },
           auth0Id: { type: graphql.GraphQLString },
         },
-        resolve: data.usersData.getUser,
+        resolve: resolvers.users.one,
       },
 
       users: {

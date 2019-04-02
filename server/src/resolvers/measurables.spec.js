@@ -50,13 +50,13 @@ describe('Measurables Resolvers', () => {
     const context = { user: { agentId: 'agentId1' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'createMeasurable').mockReturnValue(
+      jest.spyOn(data.measurablesData, 'createOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('creates a measurable', () => {
       return measurables.create(root, args, context, info).then((result) => {
-        expect(data.measurablesData.createMeasurable).toHaveBeenCalledWith(
+        expect(data.measurablesData.createOne).toHaveBeenCalledWith(
           { "creatorId": "agentId1" },
           context.user,
         );
@@ -67,20 +67,19 @@ describe('Measurables Resolvers', () => {
 
   describe('archive()', () => {
     const root = {};
-    const args = {};
-    const context = {};
+    const args = { id: 'id1' };
+    const context = { user: {} };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'archiveMeasurable').mockReturnValue(
+      jest.spyOn(data.measurablesData, 'archive').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('archives a measurable', () => {
       return measurables.archive(root, args, context, info).then((result) => {
-        expect(data.measurablesData.archiveMeasurable).toHaveBeenCalledWith(
-          root,
-          args,
-          context,
+        expect(data.measurablesData.archive).toHaveBeenCalledWith(
+          args.id,
+          context.user,
         );
         expect(result).toBe(true);
       });
@@ -89,20 +88,19 @@ describe('Measurables Resolvers', () => {
 
   describe('unarchive()', () => {
     const root = {};
-    const args = {};
-    const context = {};
+    const args = { id: 'id1' };
+    const context = { user: {} };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurablesData, 'unArchiveMeasurable').mockReturnValue(
+      jest.spyOn(data.measurablesData, 'unArchive').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('unarchives a measurable', () => {
       return measurables.unarchive(root, args, context, info).then((result) => {
-        expect(data.measurablesData.unArchiveMeasurable).toHaveBeenCalledWith(
-          root,
-          args,
-          context,
+        expect(data.measurablesData.unArchive).toHaveBeenCalledWith(
+          args.id,
+          context.user,
         );
         expect(result).toBe(true);
       });

@@ -11,7 +11,7 @@ class MeasurablesData extends DataBase {
    * @param data
    * @return {Promise<*>}
    */
-  async createMeasurable(data, user) {
+  async createOne(data, user) {
     const newMeasurable = await models.Measurable.create(data);
     let notification = await newMeasurable.creationNotification(user);
     notify(notification);
@@ -19,14 +19,11 @@ class MeasurablesData extends DataBase {
   }
 
   /**
-   * @param root
-   * @param values
-   * @param options
-   * @return {Promise<Promise<void>|Promise<WebAPICallResult>|never>}
+   * @param {string} id
+   * @param {object} user
+   * @return {Promise<Models.Measurable>}
    */
-  async archiveMeasurable(root, values, options) {
-    const { id } = values;
-    const user = options.user;
+  async archive(id, user) {
     let measurable = await models.Measurable.findById(id);
     if (_.get(measurable, 'creatorId') !== _.get(user, 'agentId')) {
       throw new Error("User does not have permission");
@@ -35,14 +32,11 @@ class MeasurablesData extends DataBase {
   }
 
   /**
-   * @param root
-   * @param values
-   * @param options
-   * @return {Promise<Promise<WebAPICallResult> | Promise<void>>}
+   * @param {string} id
+   * @param {object} user
+   * @return {Promise<Models.Measurable>}
    */
-  async unArchiveMeasurable(root, values, options) {
-    const { id } = values;
-    const user = options.user;
+  async unArchive(id, user) {
     let measurable = await models.Measurable.findById(id);
     if (_.get(measurable, 'creatorId') !== _.get(user, 'agentId')) {
       throw new Error("User does not have permission");

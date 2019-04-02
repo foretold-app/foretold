@@ -37,7 +37,7 @@ async function create(root, args, context, info) {
     ...args,
     creatorId: user.agentId,
   };
-  return await data.measurablesData.createMeasurable(datas, user);
+  return await data.measurablesData.createOne(datas, user);
 }
 
 /**
@@ -48,7 +48,9 @@ async function create(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function archive(root, args, context, info) {
-  return await data.measurablesData.archiveMeasurable(root, args, context);
+  const { id } = args;
+  const user = context.user;
+  return await data.measurablesData.archive(id, user);
 }
 
 /**
@@ -59,7 +61,9 @@ async function archive(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function unarchive(root, args, context, info) {
-  return await data.measurablesData.unArchiveMeasurable(root, args, context);
+  const { id } = args;
+  const user = context.user;
+  return await data.measurablesData.unArchive(id, user);
 }
 
 /**

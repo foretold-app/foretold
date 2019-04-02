@@ -82,7 +82,7 @@ class ChannelsData extends DataBase {
    * @param {object} options
    * @param {number} [options.offset]
    * @param {number} [options.limit]
-   * @param {object} [options.agentId]
+   * @param {string} [options.agentId]
    * @return {Promise<Models.Channel[]>}
    */
   async getAll(options = {}) {

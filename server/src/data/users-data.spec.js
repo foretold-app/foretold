@@ -54,10 +54,11 @@ describe('Users Data Layer', () => {
       }));
     });
     it('finds user and update him', () => {
-      return instance.updateOne(root, values, options).then((result) => {
-        expect(models.User.findById).toHaveBeenCalledWith(values.id);
-        expect(update).toHaveBeenCalledWith({ name: values.name });
-      });
+      return instance.updateOne(values.id, { name: 'name1' }, options.user)
+        .then(() => {
+          expect(models.User.findById).toHaveBeenCalledWith(values.id);
+          expect(update).toHaveBeenCalledWith({ name: values.name });
+        });
     });
   });
 

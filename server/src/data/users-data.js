@@ -27,16 +27,15 @@ class UsersData extends DataBase {
   }
 
   /**
-   * @param root
-   * @param values
-   * @param options
+   * @param id
+   * @param data
+   * @param _user
    * @return {Promise<Model>}
    */
-  async updateOne(root, values, options) {
-    const { id, name } = values;
+  async updateOne(id, data, _user) {
     let user = await models.User.findById(id);
-    if (user && user.auth0Id === options.user.auth0Id) {
-      user.update({ name });
+    if (user && user.auth0Id === _user.auth0Id) {
+      user.update(data);
     }
     return user;
   }

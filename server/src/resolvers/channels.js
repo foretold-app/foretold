@@ -44,7 +44,7 @@ async function all(root, args, context, info) {
  */
 async function one(root, args, context, info) {
   const id = _.get(args, 'id') || _.get(root, 'channelId');
-  const agentId = context.user.agentId;
+  const agentId = _.get(context, 'user.agentId');
   const options = { agentId };
   return await data.channelsData.getOne(id, options);
 }

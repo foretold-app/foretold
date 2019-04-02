@@ -46,18 +46,18 @@ describe('Series Resolvers', () => {
 
   describe('create()', () => {
     const root = {};
-    const args = {};
-    const context = {};
+    const args = { a: 'a1' };
+    const context = { user: { agentId: 'agentId1' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.seriesData, 'createSeries').mockReturnValue(
+      jest.spyOn(data.seriesData, 'createOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('creates series', () => {
       return series.create(root, args, context, info).then((result) => {
-        expect(data.seriesData.createSeries).toHaveBeenCalledWith(
-          root, args, context,
+        expect(data.seriesData.createOne).toHaveBeenCalledWith(
+          {"a": "a1", "creatorId": "agentId1"},
         );
         expect(result).toBe(true);
       });

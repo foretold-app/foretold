@@ -5,16 +5,11 @@ const { DataBase } = require('./data-base');
 class SeriesData extends DataBase {
 
   /**
-   * @param root
-   * @param values
-   * @param options
+   * @param {object} data
    * @return {Promise<*>}
    */
-  async createSeries(root, values, options) {
-    const newSeries = await models.Series.create({
-      ...values,
-      creatorId: options.user.agentId,
-    });
+  async createOne(data) {
+    const newSeries = await models.Series.create(data);
     return newSeries;
   }
 

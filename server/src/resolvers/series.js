@@ -32,7 +32,11 @@ async function all(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
-  return await data.seriesData.createSeries(root, args, context);
+  const datas = {
+    ...args,
+    creatorId: context.user.agentId,
+  };
+  return await data.seriesData.createOne(datas);
 }
 
 module.exports = {

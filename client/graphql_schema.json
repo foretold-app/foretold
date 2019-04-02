@@ -2182,7 +2182,7 @@
           "description": null,
           "fields": [
             {
-              "name": "createMeasurement",
+              "name": "measurementCreate",
               "description": null,
               "args": [
                 {
@@ -2257,7 +2257,7 @@
               "deprecationReason": null
             },
             {
-              "name": "createMeasurable",
+              "name": "measurableCreate",
               "description": null,
               "args": [
                 {
@@ -2372,7 +2372,7 @@
               "deprecationReason": null
             },
             {
-              "name": "createSeries",
+              "name": "seriesCreate",
               "description": null,
               "args": [
                 {
@@ -2461,7 +2461,7 @@
               "deprecationReason": null
             },
             {
-              "name": "archiveMeasurable",
+              "name": "measurableArchive",
               "description": null,
               "args": [
                 {
@@ -2488,7 +2488,7 @@
               "deprecationReason": null
             },
             {
-              "name": "unArchiveMeasurable",
+              "name": "measurableUnarchive",
               "description": null,
               "args": [
                 {
@@ -2515,7 +2515,7 @@
               "deprecationReason": null
             },
             {
-              "name": "editMeasurable",
+              "name": "measurableUpdate",
               "description": null,
               "args": [
                 {
@@ -2616,7 +2616,7 @@
               "deprecationReason": null
             },
             {
-              "name": "editUser",
+              "name": "userUpdate",
               "description": null,
               "args": [
                 {

@@ -46,25 +46,23 @@ describe('Measurements Resolver', () => {
 
   describe('create()', () => {
     const root = {};
-    const args = {};
-    const context = {};
+    const args = { a: 'a1' };
+    const context = { user: {} };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurementData, 'createMeasurement').mockReturnValue(
+      jest.spyOn(data.measurementData, 'createOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('creates a measurement', () => {
       return measurements.create(root, args, context, info).then((result) => {
-        expect(data.measurementData.createMeasurement).toHaveBeenCalledWith(
-          root,
+        expect(data.measurementData.createOne).toHaveBeenCalledWith(
           args,
-          context,
+          context.user,
         );
         expect(result).toBe(true);
       });
     });
   });
-
 
 });

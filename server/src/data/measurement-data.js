@@ -7,24 +7,13 @@ class MeasurementData extends DataBase {
 
   /**
    * @todo: rename
-   * @param root
-   * @param values
-   * @param options
+   * @param {object} data
+   * @param {object} user
    * @return {Promise<*>}
    */
-  async createMeasurement(root, values, options) {
-    const {
-      value,
-      competitorType,
-      measurableId,
-      description,
-    } = values;
-    const user = options.user;
+  async createOne(data, user) {
     const newMeasurement = await models.Measurement.create({
-      value,
-      competitorType,
-      measurableId,
-      description,
+      ...data,
       agentId: user.agentId,
     });
     const notification = await newMeasurement.creationNotification(user);
@@ -32,7 +21,6 @@ class MeasurementData extends DataBase {
     const measurable = await newMeasurement.getMeasurable();
     return newMeasurement;
   }
-
 
   /**
    * @public

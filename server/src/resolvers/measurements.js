@@ -32,7 +32,8 @@ async function one(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
-  return await data.measurementData.createMeasurement(root, args, context);
+  const user = context.user;
+  return await data.measurementData.createOne(args, user);
 }
 
 module.exports = {

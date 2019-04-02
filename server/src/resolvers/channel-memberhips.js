@@ -3,7 +3,7 @@ const data = require('../data');
 /**
  * @param {*} root
  * @param {{channelId: string, agentId: string, role: string}} args
- * @returns {Promise<Models.ChannelMembership>}
+ * @returns {Promise<Models.ChannelMemberships>}
  */
 async function create(root, args) {
   return await data.channelMemberships.createOne(
@@ -16,7 +16,7 @@ async function create(root, args) {
 /**
  * @param root
  * @param {{channelId: string, agentId: string, role: string}} args
- * @returns {Promise<Models.ChannelMembership>}
+ * @returns {Promise<Models.ChannelMemberships>}
  */
 async function update(root, args) {
   return await data.channelMemberships.updateOne(
@@ -29,7 +29,7 @@ async function update(root, args) {
 /**
  * @param root
  * @param {{channelId: string, agentId: string}} args
- * @returns {Promise<Models.ChannelMembership | null>}
+ * @returns {Promise<Models.ChannelMemberships | null>}
  */
 async function remove(root, args) {
   return await data.channelMemberships.deleteOne(
@@ -44,7 +44,7 @@ async function remove(root, args) {
  * @param {string} args.id
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<Models.ChannelMembership[]>}
+ * @returns {Promise<Models.ChannelMemberships[]>}
  */
 async function allByAgentId(root, args, context, info) {
   const agentId = root.id;
@@ -58,7 +58,7 @@ async function allByAgentId(root, args, context, info) {
  * @param {string} args.id
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<Models.ChannelMembership[]>}
+ * @returns {Promise<Models.ChannelMemberships[]>}
  */
 async function allByChannelId(root, args, context, info) {
   const channelId = root.id;

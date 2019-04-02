@@ -10,7 +10,7 @@ class ChannelMembershipsData extends DataBase {
    * @param {string} channelId
    * @param {string} agentId
    * @param {string} role
-   * @returns {Promise<Models.ChannelMembership>}
+   * @returns {Promise<Models.ChannelMemberships>}
    */
   async createOne(channelId, agentId, role) {
     await this.validate({ channelId, agentId });
@@ -24,7 +24,7 @@ class ChannelMembershipsData extends DataBase {
    * @param {string} channelId
    * @param {string} agentId
    * @param {string} role
-   * @returns {Promise<Models.ChannelMembership>}
+   * @returns {Promise<Models.ChannelMemberships>}
    */
   async updateOne(channelId, agentId, role) {
     await this.validate({ channelId, agentId });
@@ -40,7 +40,7 @@ class ChannelMembershipsData extends DataBase {
   /**
    * @param {string} channelId
    * @param {string} agentId
-   * @returns {Promise<Models.ChannelMembership | null>}
+   * @returns {Promise<Models.ChannelMemberships | null>}
    */
   async deleteOne(channelId, agentId) {
     const input = { channelId, agentId };
@@ -77,7 +77,7 @@ class ChannelMembershipsData extends DataBase {
    * @param {object} options
    * @param {string} options.agentId?
    * @param {string} options.channelId?
-   * @returns {Promise<Models.ChannelMembership>}
+   * @returns {Promise<Models.ChannelMemberships>}
    */
   async getOne(options) {
     return await models.ChannelMemberships.findOne({ where: options });
@@ -87,7 +87,7 @@ class ChannelMembershipsData extends DataBase {
    * @param {object} options
    * @param {string} options.agentId?
    * @param {string} options.channelId?
-   * @returns {Promise<Models.ChannelMembership[]>}
+   * @returns {Promise<Models.ChannelMemberships[]>}
    */
   async getAll(options) {
     return await models.ChannelMemberships.findAll({ where: options });

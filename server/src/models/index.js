@@ -14,14 +14,14 @@ const measurement = db.sequelize.import('./measurement');
 const series = db.sequelize.import('./series');
 const user = db.sequelize.import('./user');
 
-db[agent.name] = agent;
-db[bot.name] = bot;
-db[channelMembership.name] = channelMembership;
-db[channel.name] = channel;
-db[measurable.name] = measurable;
-db[measurement.name] = measurement;
-db[series.name] = series;
-db[user.name] = user;
+db.Agent = agent;
+db.Bot = bot;
+db.ChannelMemberships = channelMembership;
+db.Channel = channel;
+db.Measurable = measurable;
+db.Measurement = measurement;
+db.Series = series;
+db.User = user;
 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {

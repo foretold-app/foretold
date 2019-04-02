@@ -42,7 +42,7 @@ describe('Users Data Layer', () => {
     });
   });
 
-  describe('editUser()', () => {
+  describe('updateOne()', () => {
     const root = {};
     const values = { id: 'id1', name: 'name1' };
     const options = { user: { auth0Id: 'auh0Id2' } };
@@ -54,7 +54,7 @@ describe('Users Data Layer', () => {
       }));
     });
     it('finds user and update him', () => {
-      return instance.editUser(root, values, options).then((result) => {
+      return instance.updateOne(root, values, options).then((result) => {
         expect(models.User.findById).toHaveBeenCalledWith(values.id);
         expect(update).toHaveBeenCalledWith({ name: values.name });
       });

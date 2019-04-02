@@ -7,7 +7,7 @@ const data = require('../data');
  * @returns {Promise<Model>}
  */
 async function update(root, values, options) {
-  return await data.usersData.editUser(root, values, options);
+  return await data.usersData.updateOne(root, values, options);
 }
 
 module.exports = {

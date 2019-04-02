@@ -64,5 +64,4 @@ describe('Series Resolvers', () => {
     });
   });
 
-
 });

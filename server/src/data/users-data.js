@@ -20,19 +20,6 @@ class UsersData extends DataBase {
   }
 
   /**
-   * @return {Promise<Model>}
-   */
-  async getGuestUser() {
-    const user = await models.User.findOne({
-      where: { name: 'Guest' }
-    }) || await models.User.create({
-      auth0Id: models.sequelize.fn('uuid_generate_v4'),
-      name: 'Guest',
-    });
-    return user;
-  }
-
-  /**
    * @return {Promise<{name: string}>}
    */
   async getGuestUserAsLiteral() {
@@ -45,7 +32,7 @@ class UsersData extends DataBase {
    * @param options
    * @return {Promise<Model>}
    */
-  async editUser(root, values, options) {
+  async updateOne(root, values, options) {
     const { id, name } = values;
     let user = await models.User.findById(id);
     if (user && user.auth0Id === options.user.auth0Id) {

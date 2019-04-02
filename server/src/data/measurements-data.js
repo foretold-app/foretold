@@ -3,6 +3,9 @@ const { notify } = require("../lib/notifications");
 
 const { DataBase } = require('./data-base');
 
+/**
+ * @implements {Layers.DataSourceLayer.DataSource}
+ */
 class MeasurementsData extends DataBase {
 
   /**

@@ -2,6 +2,9 @@ const models = require("../models");
 
 const { DataBase } = require('./data-base');
 
+/**
+ * @implements {Layers.DataSourceLayer.DataSource}
+ */
 class SeriesData extends DataBase {
 
   /**
@@ -9,8 +12,7 @@ class SeriesData extends DataBase {
    * @return {Promise<*>}
    */
   async createOne(data) {
-    const newSeries = await models.Series.create(data);
-    return newSeries;
+    return await models.Series.create(data);
   }
 
   /**

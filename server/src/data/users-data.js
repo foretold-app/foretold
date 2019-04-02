@@ -3,6 +3,9 @@ const models = require('../models');
 
 const { DataBase } = require('./data-base');
 
+/**
+ * @implements {Layers.DataSourceLayer.DataSource}
+ */
 class UsersData extends DataBase {
 
   /**

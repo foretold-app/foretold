@@ -5,6 +5,9 @@ const models = require('../models');
 const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { DataBase } = require('./data-base');
 
+/**
+ * @implements {Layers.DataSourceLayer.DataSource}
+ */
 class ChannelsData extends DataBase {
 
   constructor() {

@@ -14,7 +14,7 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>
     SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("NewChannel"),
+      ~head=SLayout.Header.textDiv("Create a New Channel"),
       ~body=
         Mutation.Mutation.make(
           ~onCompleted=e => Js.log("HI"),

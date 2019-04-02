@@ -16,6 +16,10 @@ let mutate = (mutation: Mutation.apolloMutation, name, description, isPublic) =>
       ~input={"name": name, "description": description, "isPublic": isPublic},
       (),
     );
-  mutation(~variables=m##variables, ~refetchQueries=[|"getChannels"|], ())
+  mutation(
+    ~variables=m##variables,
+    ~refetchQueries=[|"getChannels", "user"|],
+    (),
+  )
   |> ignore;
 };

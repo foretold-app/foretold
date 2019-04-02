@@ -9,20 +9,20 @@ const { measurable } = require('./measurables');
 
 const middlewares = {
   Mutation: {
-    createSeries: async (resolve, root, args, context, info) => {
+    seriesCreate: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);
       await channelMemberships(root, args, context, info);
       return await resolve(root, args, context, info);
     },
 
-    createMeasurement: async (resolve, root, args, context, info) => {
+    measurementCreate: async (resolve, root, args, context, info) => {
       await measurable(root, args, context, info);
       await channel(root, args, context, info);
       await channelMemberships(root, args, context, info);
       return await resolve(root, args, context, info);
     },
 
-    createMeasurable: async (resolve, root, args, context, info) => {
+    measurableCreate: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);
       await channelMemberships(root, args, context, info);
       return await resolve(root, args, context, info);

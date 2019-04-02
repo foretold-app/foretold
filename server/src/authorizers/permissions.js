@@ -13,13 +13,13 @@ function getPermissions() {
       },
       Mutation: {
         '*': isAuthenticated,
-        createMeasurement: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
-        createMeasurable: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
+        measurementCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
+        measurableCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
         channelUpdate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
         channelMembershipCreate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
         channelMembershipDelete: and(isAuthenticated, or(isChannelPublic, isAdmin)),
         channelMembershipRoleUpdate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
-        createSeries: and(isAuthenticated, or(isChannelPublic, isAdmin)),
+        seriesCreate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
       }
     },
     { debug: false }

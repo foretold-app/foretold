@@ -132,7 +132,7 @@ const schema = new graphql.GraphQLSchema({
     name: 'Mutation',
     fields: {
 
-      createMeasurement: {
+      measurementCreate: {
         type: types.measurementType,
         args: filterr(_.pick(attributeFields(models.Measurement), [
           'value', 'competitorType', 'measurableId', 'agentId', 'description'
@@ -140,7 +140,7 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.measurements.create,
       },
 
-      createMeasurable: {
+      measurableCreate: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), [
           'name', 'description', 'valueType', 'expectedResolutionDate',
@@ -150,7 +150,7 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.measurables.create,
       },
 
-      createSeries: {
+      seriesCreate: {
         type: types.seriesType,
         args: filterr(_.pick(attributeFields(models.Series), [
           'name', 'description', 'channelId', 'subjects', 'properties',
@@ -159,19 +159,19 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.series.create,
       },
 
-      archiveMeasurable: {
+      measurableArchive: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
         resolve: resolvers.measurables.archive,
       },
 
-      unArchiveMeasurable: {
+      measurableUnarchive: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
         resolve: resolvers.measurables.unarchive,
       },
 
-      editMeasurable: {
+      measurableUpdate: {
         type: types.measurableType,
         args: filterr(_.pick(attributeFields(models.Measurable), [
           'id', 'name', 'description', 'expectedResolutionDate',
@@ -181,7 +181,7 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.measurables.edit,
       },
 
-      editUser: {
+      userUpdate: {
         type: types.userType,
         args: filterr(_.pick(attributeFields(models.User), ["id", "name"])),
         resolve: resolvers.users.edit,

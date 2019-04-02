@@ -1,36 +1,33 @@
-'use strict';
+const db = require('./db');
 
-var fs        = require('fs');
-var path      = require('path');
-var Sequelize = require('sequelize');
-var basename  = path.basename(__filename);
-var env       = process.env.NODE_ENV || 'development';
-var config    = require(__dirname + '/../../config/config.json')[env];
-var db        = {};
+/**
+ * Nobody loves magic when debugs.
+ * Keep it readable.
+ */
 
-if (config.use_env_variable) {
-  var sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  var sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+const agent = db.sequelize.import('./agent');
+const bot = db.sequelize.import('./bot');
+const channelMembership = db.sequelize.import('./channel-membership');
+const channel = db.sequelize.import('./channel');
+const measurable = db.sequelize.import('./measurable');
+const measurement = db.sequelize.import('./measurement');
+const series = db.sequelize.import('./series');
+const user = db.sequelize.import('./user');
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-  })
-  .forEach(file => {
-    var model = sequelize['import'](path.join(__dirname, file));
-    db[model.name] = model;
-  });
+db[agent.name] = agent;
+db[bot.name] = bot;
+db[channelMembership.name] = channelMembership;
+db[channel.name] = channel;
+db[measurable.name] = measurable;
+db[measurement.name] = measurement;
+db[series.name] = series;
+db[user.name] = user;
 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
+    console.log('Build association for model:', modelName);
     db[modelName].associate(db);
   }
 });
-
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
 
 module.exports = db;

@@ -9,6 +9,7 @@ class MeasurablesData extends DataBase {
 
   /**
    * @param data
+   * @param {object} user
    * @return {Promise<*>}
    */
   async createOne(data, user) {
@@ -25,9 +26,6 @@ class MeasurablesData extends DataBase {
    */
   async archive(id, user) {
     let measurable = await models.Measurable.findById(id);
-    if (_.get(measurable, 'creatorId') !== _.get(user, 'agentId')) {
-      throw new Error("User does not have permission");
-    }
     return measurable.archive();
   }
 
@@ -38,9 +36,6 @@ class MeasurablesData extends DataBase {
    */
   async unArchive(id, user) {
     let measurable = await models.Measurable.findById(id);
-    if (_.get(measurable, 'creatorId') !== _.get(user, 'agentId')) {
-      throw new Error("User does not have permission");
-    }
     return measurable.unarchive();
   }
 
@@ -52,9 +47,6 @@ class MeasurablesData extends DataBase {
    */
   async updateOne(id, data, user) {
     let measurable = await models.Measurable.findById(id);
-    if (_.get(measurable, 'creatorId') !== _.get(user, 'agentId')) {
-      throw new Error("User does not have permission");
-    }
     let notification = await measurable.updateNotifications(user, data);
     notify(notification);
     return measurable.update(data);

@@ -51,6 +51,27 @@ const middlewares = {
       await channelMemberships(root, args, context, info);
       return await resolve(root, args, context, info);
     },
+
+    measurableArchive: async (resolve, root, args, context, info) => {
+      await measurable(root, args, context, info);
+      await channel(root, args, context, info);
+      await channelMemberships(root, args, context, info);
+      return await resolve(root, args, context, info);
+    },
+
+    measurableUnarchive: async (resolve, root, args, context, info) => {
+      await measurable(root, args, context, info);
+      await channel(root, args, context, info);
+      await channelMemberships(root, args, context, info);
+      return await resolve(root, args, context, info);
+    },
+
+    measurableUpdate: async (resolve, root, args, context, info) => {
+      await measurable(root, args, context, info);
+      await channel(root, args, context, info);
+      await channelMemberships(root, args, context, info);
+      return await resolve(root, args, context, info);
+    },
   }
 };
 

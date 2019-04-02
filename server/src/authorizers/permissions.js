@@ -3,6 +3,7 @@ const { shield, allow, and, or } = require('graphql-shield');
 const { isAuthenticated } = require('./users');
 const { isAdmin, isViewer } = require('./channel-memberships');
 const { isChannelPublic } = require('./channels');
+const { isOwner } = require('./measurables');
 
 function getPermissions() {
   return shield(
@@ -20,6 +21,9 @@ function getPermissions() {
         channelMembershipDelete: and(isAuthenticated, or(isChannelPublic, isAdmin)),
         channelMembershipRoleUpdate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
         seriesCreate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
+        measurableArchive: and(isAuthenticated, isOwner),
+        measurableUnarchive: and(isAuthenticated, isOwner),
+        measurableUpdate: and(isAuthenticated, isOwner),
       }
     },
     { debug: false }

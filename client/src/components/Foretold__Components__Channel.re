@@ -31,4 +31,16 @@ module SimpleHeader = {
         {"Edit Channel" |> ste}
       </Antd.Button>
     </Div>;
+
+  let members = (channel: Context.Primary.Channel.t) =>
+    channel.membershipCount
+    |> E.O.React.fmapOrNull(c =>
+         <Div float=`right>
+           <Antd.Button
+             onClick={_ => Context.Routing.Url.push(ChannelEdit(channel.id))}>
+             <Icon.Icon icon="PEOPLE" />
+             {c |> string_of_int |> ste}
+           </Antd.Button>
+         </Div>
+       );
 };

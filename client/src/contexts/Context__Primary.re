@@ -1,7 +1,9 @@
 open Rationale.Function.Infix;
 open Utils;
 
-module Typess = {
+type channelMembershipRole = [ | `ADMIN | `VIEWER];
+
+module Types = {
   type user = {
     id: string,
     auth0Id: option(string),
@@ -23,6 +25,7 @@ module Typess = {
     measurementCount: option(int),
     agentType: option(agentType),
     channels: Js.Array.t(channel),
+    channelMemberships: option(Js.Array.t(channelMembership)),
   }
   and channel = {
     id: string,
@@ -32,15 +35,21 @@ module Typess = {
     isPublic: bool,
     membershipCount: option(int),
     creator: option(agent),
+    channelMemberships: option(Js.Array.t(channelMembership)),
+  }
+  and channelMembership = {
+    channel: option(channel),
+    role: channelMembershipRole,
+    agent: option(agent),
   };
 };
 
 module AgentType = {
-  type t = Typess.agentType;
+  type t = Types.agentType;
 };
 
 module User = {
-  type t = Typess.user;
+  type t = Types.user;
   let make = (~id, ~name="", ~auth0Id=None, ~agent=None, ()): t => {
     id,
     name,
@@ -50,7 +59,7 @@ module User = {
 };
 
 module Bot = {
-  type t = Typess.bot;
+  type t = Types.bot;
   let make = (~id, ~name=None, ~description=None, ~competitorType, ()): t => {
     id,
     competitorType,
@@ -60,7 +69,7 @@ module Bot = {
 };
 
 module Agent = {
-  type t = Typess.agent;
+  type t = Types.agent;
 
   let name = (a: t): option(string) =>
     switch (a.agentType) {
@@ -76,6 +85,7 @@ module Agent = {
         ~measurementCount=None,
         ~agentType=None,
         ~channels=[||],
+        ~channelMemberships=None,
         (),
       )
       : t => {
@@ -84,11 +94,12 @@ module Agent = {
     measurementCount,
     agentType,
     channels,
+    channelMemberships,
   };
 };
 
 module Channel = {
-  type t = Typess.channel;
+  type t = Types.channel;
   let showLink = (t: t) => Context__Routing.Url.ChannelShow(t.id);
   let showUrl = showLink ||> Context__Routing.Url.toString;
   let showPush = showLink ||> Context__Routing.Url.push;
@@ -119,6 +130,7 @@ module Channel = {
         ~isPublic,
         ~creator=None,
         ~membershipCount=None,
+        ~channelMemberships=None,
         (),
       )
       : t => {
@@ -129,6 +141,7 @@ module Channel = {
     isPublic,
     membershipCount,
     creator,
+    channelMemberships,
   };
 };
 

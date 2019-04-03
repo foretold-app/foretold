@@ -16,6 +16,7 @@ module LoadedAndSelected = {
       }
       {C.Channel.SimpleHeader.newMeasurable(t.channel.id)}
       {C.Channel.SimpleHeader.editChannel(t.channel.id)}
+      {C.Channel.SimpleHeader.members(t.channel)}
     </>;
 
   let body = (t: t) =>
@@ -37,6 +38,7 @@ module LoadedAndUnselected = {
       }
       {C.Channel.SimpleHeader.newMeasurable(t.channel.id)}
       {C.Channel.SimpleHeader.editChannel(t.channel.id)}
+      {C.Channel.SimpleHeader.members(t.channel)}
     </>;
   };
 

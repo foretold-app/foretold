@@ -100,7 +100,7 @@ let toMeasurement = (m: Types.measurement): Context.Primary.Measurement.t => {
          switch (k##bot, k##user) {
          | (Some(bot), None) =>
            Some(
-             Context.Primary.Typess.Bot(
+             Context.Primary.Types.Bot(
                Context.Primary.Bot.make(
                  ~id=bot##id,
                  ~name=bot##name,
@@ -111,7 +111,7 @@ let toMeasurement = (m: Types.measurement): Context.Primary.Measurement.t => {
            )
          | (None, Some(user)) =>
            Some(
-             Context.Primary.Typess.User(
+             Context.Primary.Types.User(
                Context.Primary.User.make(~id=user##id, ~name=user##name, ()),
              ),
            )
@@ -120,7 +120,8 @@ let toMeasurement = (m: Types.measurement): Context.Primary.Measurement.t => {
        );
 
   let agent: option(Context.Primary.Agent.t) =
-    m##agent |> E.O.fmap(k => Context.Primary.Agent.make(~id=k##id, ~agentType, ()));
+    m##agent
+    |> E.O.fmap(k => Context.Primary.Agent.make(~id=k##id, ~agentType, ()));
 
   Context.Primary.Measurement.make(
     ~id=m##id,

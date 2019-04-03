@@ -7,6 +7,7 @@ let defaultChannel = "4c5af8ad-1258-4b9c-8fa0-cc522708fc1c";
 let tochannelId = (route: Route.t) =>
   switch (route) {
   | ChannelShow(c) => Some(c)
+  | ChannelEdit(c) => Some(c)
   | MeasurableNew(c) => Some(c)
   | Series(c, _) => Some(c)
   | Home => Some(defaultChannel)

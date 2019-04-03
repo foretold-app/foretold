@@ -1,12 +1,12 @@
 const _ = require('lodash');
-const Sequelize = require('sequelize')
+const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Agent', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
-      defaultValue: Sequelize.UUIDV4,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
     },
     type: {

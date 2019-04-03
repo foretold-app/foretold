@@ -1,12 +1,11 @@
-'use strict';
-const Sequelize = require('sequelize')
+const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Series', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
-      defaultValue: Sequelize.UUIDV4,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
     },
     name: {
@@ -45,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
   },
     {
     hooks: {
-      afterCreate: async (series, options) => {
+      afterCreate: async (series) => {
           await series.createMeasurables()
       }
     }

@@ -1,11 +1,9 @@
-const Sequelize = require('sequelize');
-
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('User', {
       id: {
         type: DataTypes.UUID(),
         primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
+        defaultValue: DataTypes.UUIDV4,
         allowNull: false,
       },
       name: {
@@ -19,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        beforeCreate: async (event, options) => {
+        beforeCreate: async (event) => {
           let agent = await sequelize.models.Agent.create({
             type: "USER",
           });

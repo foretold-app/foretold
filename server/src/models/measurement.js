@@ -1,5 +1,4 @@
-'use strict';
-const Sequelize = require('sequelize')
+const Sequelize = require('sequelize');
 const {clientUrl} = require('../lib/urls');
 
 module.exports = (sequelize, DataTypes) => {
@@ -7,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
-      defaultValue: Sequelize.UUIDV4,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
     },
     value: {
@@ -24,11 +23,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true 
     },
     measurableId: {
-      type: DataTypes.UUID,
+      type: DataTypes.UUID(),
       allowNull: false
     },
     agentId: {
-      type: DataTypes.UUID,
+      type: DataTypes.UUID(),
       allowNull: true
     },
     relevantAt: {

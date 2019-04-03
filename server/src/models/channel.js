@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize')
+const Sequelize = require('sequelize');
 
 /**
  * @todo: Rename table to "channels".
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
-      defaultValue: sequelize.fn('uuid_generate_v4'),
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
     },
     name: {
@@ -37,8 +37,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
       get: async function() {
-        const items = await this.getAgents()
-        return items.length
+        const items = await this.getAgents();
+        return items.length;
       }
     },
   });

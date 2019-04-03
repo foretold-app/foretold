@@ -1,6 +1,5 @@
-'use strict';
-const Sequelize = require('sequelize')
-import _ from "lodash";
+const Sequelize = require('sequelize');
+const _ = require('lodash');
 const fetch = require("node-fetch");
 const moment = require('moment');
 const {clientUrl} = require('../lib/urls');
@@ -9,14 +8,14 @@ const states = {
   ARCHIVED: "ARCHIVED",
   OPEN: "OPEN",
   JUDGED: "JUDGED"
-}
+};
 
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Measurable', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
-      defaultValue: Sequelize.UUIDV4,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
     },
     name: {

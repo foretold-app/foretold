@@ -1,8 +1,10 @@
+const _ = require('lodash');
+
 const MEASURABLE_STATE = {
-  ARCHIVED: 'ARCHIVED',
   OPEN: 'OPEN',
   JUDGEMENT_PENDING: 'JUDGEMENT_PENDING',
-  JUDGED: 'JUDGED'
+  JUDGED: 'JUDGED',
+  ARCHIVED: 'ARCHIVED',
 };
 
 module.exports = {

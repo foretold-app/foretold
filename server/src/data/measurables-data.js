@@ -78,10 +78,10 @@ class MeasurablesData extends DataBase {
     });
 
     // Filter
-    // @todo: was, state: { [this.models.sequelize.Op.ne]: "ARCHIVED" }
-    if (options.states.length !== 0) {
-      where.state = { [Op.in]: options.states };
-    }
+    where.state = _.isArray(options.states)
+      ? { [Op.in]: options.states }
+      : { [Op.ne]: MeasurableModel.MEASURABLE_STATE.ARCHIVED }
+    ;
     if (channelId) where.channelId = channelId;
     if (seriesId) where.seriesId = seriesId;
     if (creatorId) where.creatorId = creatorId;

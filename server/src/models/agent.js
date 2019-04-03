@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.STRING),
-      get: async function() {
-        if (this.type == "USER"){
+      get: async function () {
+        if (this.type == "USER") {
           const user = await this.getUser();
           return _.get(user, 'name');
         } else {
@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     measurementCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
-      get: async function() {
+      get: async function () {
         const items = await this.getMeasurements()
         return items.length
       }
@@ -46,10 +46,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'agentId',
       as: 'Measurements'
     })
-    Model.Measurables = Model.hasMany(models.Measurable, 
+    Model.Measurables = Model.hasMany(models.Measurable,
       {
         foreignKey: 'creatorId',
-    }
+      }
     )
     // await (await models.Agent.findById('4897a0f7-6b30-4ad3-a3d1-21c487a435ce')).getChannels()
     // models.Agent.findAll({ include: [models.Channel] })

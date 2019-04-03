@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const {clientUrl} = require('../lib/urls');
+const { clientUrl } = require('../lib/urls');
 
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Measurement', {
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.TEXT,
-      allowNull: true 
+      allowNull: true
     },
     measurableId: {
       type: DataTypes.UUID(),
@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks: {
       afterCreate: async (measurement, options) => {
-        if (measurement.dataValues.competitorType == "OBJECTIVE"){
+        if (measurement.dataValues.competitorType == "OBJECTIVE") {
           const measurable = await measurement.getMeasurable();
           await measurable.judged();
         }
@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
-  Model.prototype.creationNotification= async function(creator){
+  Model.prototype.creationNotification = async function (creator) {
     let agent = await creator.getAgent();
     let measurable = await this.getMeasurable();
     let notification = await {
@@ -60,14 +60,15 @@ module.exports = (sequelize, DataTypes) => {
         "author_link": `${clientUrl}/agents/${agent.id}`,
         "text": this.description,
         "fields": [
-            {
-                "title": "Type",
-                "value": this.competitorType,
-                "short": true
-            }
+          {
+            "title": "Type",
+            "value": this.competitorType,
+            "short": true
+          }
         ],
         "color": "#d2ebff"
-    }]};
+      }]
+    };
     return notification;
   }
   Model.associate = function (models) {

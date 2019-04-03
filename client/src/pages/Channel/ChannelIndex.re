@@ -36,9 +36,6 @@ let table =
   ]);
 
 let nameS = style([fontWeight(`black), fontSize(`em(1.2))]);
-let name = "#general";
-let description = "A channel for doing X and Y";
-let userCount = "8";
 let make =
     (
       ~loggedInUser: Context.Primary.User.t,

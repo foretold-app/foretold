@@ -72,6 +72,8 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
       |> inApp(~key=channelId)
     | ChannelEdit(channelId) =>
       ChannelEdit.make(~channelId, ~layout) |> inApp
+    | ChannelMembers(channelId) =>
+      ChannelMembers.make(~channelId, ~loggedInUser,~layout) |> inApp
     | ChannelIndex => ChannelIndex.make(~loggedInUser, ~layout) |> inApp
     | ChannelNew => ChannelNew.make(~layout) |> inApp
     | MeasurableNew(channelId) =>

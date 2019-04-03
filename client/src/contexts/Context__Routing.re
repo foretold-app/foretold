@@ -10,6 +10,7 @@ module Route = {
     | AgentMeasurables(string)
     | ChannelShow(string)
     | ChannelEdit(string)
+    | ChannelMembers(string)
     | ChannelIndex
     | ChannelNew
     | MeasurableEdit(string)
@@ -38,6 +39,7 @@ module Route = {
     | ["c", id] => ChannelShow(id)
     | ["c", id, "new"] => MeasurableNew(id)
     | ["c", id, "edit"] => ChannelEdit(id)
+    | ["c", id, "members"] => ChannelMembers(id)
     | ["measurables", id, "edit"] => MeasurableEdit(id)
     | ["c", channel, "s", id] => Series(channel, id)
     | _ => NotFound
@@ -58,6 +60,7 @@ module Url = {
     | SeriesShow(string, string)
     | MeasurableEdit(string)
     | ChannelEdit(string)
+    | ChannelMembers(string)
     | MeasurableNew(string);
 
   let toString = (r: t) =>
@@ -72,6 +75,7 @@ module Url = {
     | ChannelShow(id) => "/c/" ++ id
     | ChannelIndex => "/channels"
     | ChannelEdit(id) => "/c/" ++ id ++ "/edit"
+    | ChannelMembers(id) => "/c/" ++ id ++ "/members"
     | MeasurableEdit(id) => "/measurables/" ++ id ++ "/edit"
     | MeasurableNew(channel) => "/c/" ++ channel ++ "/new"
     | SeriesShow(channel, id) => "/c/" ++ channel ++ "/s/" ++ id

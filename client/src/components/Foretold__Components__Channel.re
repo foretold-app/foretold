@@ -37,7 +37,9 @@ module SimpleHeader = {
     |> E.O.React.fmapOrNull(c =>
          <Div float=`right>
            <Antd.Button
-             onClick={_ => Context.Routing.Url.push(ChannelEdit(channel.id))}>
+             onClick={
+               _ => Context.Routing.Url.push(ChannelMembers(channel.id))
+             }>
              <Icon.Icon icon="PEOPLE" />
              {c |> string_of_int |> ste}
            </Antd.Button>

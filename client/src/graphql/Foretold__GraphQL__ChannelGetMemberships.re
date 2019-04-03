@@ -3,8 +3,9 @@ open Utils;
 module Query = [%graphql
   {|
     query getChannel($id: String!) {
-      channel:
+      channelWithMemberships:
       channel(id: $id){
+        id
         channelMemberships{
             role
             agent {
@@ -34,6 +35,7 @@ type innerType = {
         "role": [ | `ADMIN | `VIEWER],
       }),
     ),
+  "id": string,
 };
 
 let toChannelMemberships =
@@ -63,7 +65,9 @@ let component = (~id, innerFn) => {
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
     |> E.HttpResponse.fromApollo
-    |> E.HttpResponse.fmap(e => e##channel |> E.O.fmap(toChannelMemberships))
+    |> E.HttpResponse.fmap(e =>
+         e##channelWithMemberships |> E.O.fmap(toChannelMemberships)
+       )
     |> E.HttpResponse.optionalToMissing
     |> innerFn
   )

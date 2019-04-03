@@ -16,11 +16,19 @@ module SimpleHeader = {
       ]);
   };
 
-  let button = channelId =>
+  let newMeasurable = channelId =>
     <Div float=`right>
       <Antd.Button
         onClick={_ => Context.Routing.Url.push(MeasurableNew(channelId))}>
         {"New Measurable" |> ste}
+      </Antd.Button>
+    </Div>;
+
+  let editChannel = channelId =>
+    <Div float=`right>
+      <Antd.Button
+        onClick={_ => Context.Routing.Url.push(ChannelEdit(channelId))}>
+        {"Edit Channel" |> ste}
       </Antd.Button>
     </Div>;
 };

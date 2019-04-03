@@ -116,6 +116,13 @@ let channelink = (c: Context.Primary.Channel.t) =>
     {c |> Context.Primary.Channel.present}
   </div>;
 
+let channelEditLink = (c: Context.Primary.Channel.t) =>
+  <div
+    className=Styles.headerText
+    onClick={_ => Context.Routing.Url.push(ChannelEdit(c.id))}>
+    {"edit" |> ste}
+  </div>;
+
 let seriesHead = (channel: Context.Primary.Channel.t, seriesName) =>
   <>
     <div className=Styles.headerText>

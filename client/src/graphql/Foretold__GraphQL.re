@@ -18,4 +18,5 @@ module Mutations = {
   module ChannelCreate = Foretold__GraphQL__ChannelCreate;
   module ChannelJoin = Foretold__GraphQL__ChannelJoin;
   module ChannelLeave = Foretold__GraphQL__ChannelLeave;
+  module ChannelUpdate = Foretold__GraphQL__ChannelUpdate;
 };

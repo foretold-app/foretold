@@ -1,7 +1,7 @@
 module Query = [%graphql
   {|
-            mutation channelUpdate($input: ChannelInput!) {
-                channelUpdate(input: $input) {
+            mutation channelUpdate($id: String!, $input: ChannelInput!) {
+                channelUpdate(id: $id, input: $input) {
                  id
                 }
             }
@@ -10,9 +10,11 @@ module Query = [%graphql
 
 module Mutation = ReasonApollo.CreateMutation(Query);
 
-let mutate = (mutation: Mutation.apolloMutation, name, description, isPublic) => {
+let mutate =
+    (mutation: Mutation.apolloMutation, id, name, description, isPublic) => {
   let m =
     Query.make(
+      ~id,
       ~input={"name": name, "description": description, "isPublic": isPublic},
       (),
     );

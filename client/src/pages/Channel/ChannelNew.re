@@ -7,17 +7,14 @@ let ste = ReasonReact.string;
 
 module ChannelFormShower = ReForm.Create(ChannelForm.NewChannelParams);
 
-let component = ReasonReact.statelessComponent("ChannelNewPage");
-
 module Mutation = Foretold__GraphQL.Mutations.ChannelCreate;
-
-let toSetup = (f1, f2, fnlast) =>
-  f1((mutation, data) => f2(mutation, form => fnlast(data, form)));
 
 module CMutationForm =
   MutationForm.Make({
     type queryType = Mutation.Query.t;
   });
+
+let component = ReasonReact.statelessComponent("ChannelNewPage");
 
 let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,

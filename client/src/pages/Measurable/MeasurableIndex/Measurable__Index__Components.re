@@ -14,7 +14,8 @@ module LoadedAndSelected = {
       {
         SelectWithPaginationReducer.Components.buttonDuo(Item, t.reducerParams)
       }
-      {C.Channel.SimpleHeader.button(t.channel.id)}
+      {C.Channel.SimpleHeader.newMeasurable(t.channel.id)}
+      {C.Channel.SimpleHeader.editChannel(t.channel.id)}
     </>;
 
   let body = (t: t) =>
@@ -34,7 +35,8 @@ module LoadedAndUnselected = {
       {
         SelectWithPaginationReducer.Components.buttonDuo(Page, t.reducerParams)
       }
-      {C.Channel.SimpleHeader.button(t.channel.id)}
+      {C.Channel.SimpleHeader.newMeasurable(t.channel.id)}
+      {C.Channel.SimpleHeader.editChannel(t.channel.id)}
     </>;
   };
 

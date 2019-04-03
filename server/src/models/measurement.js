@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const { clientUrl } = require('../lib/urls');
 
 module.exports = (sequelize, DataTypes) => {
-  var Model = sequelize.define('Measurement', {
+  const Model = sequelize.define('Measurement', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
@@ -70,22 +70,27 @@ module.exports = (sequelize, DataTypes) => {
       }]
     };
     return notification;
-  }
+  };
+
   Model.associate = function (models) {
     Model.Measurable = Model.belongsTo(models.Measurable, {
       foreignKey: 'measurableId'
-    })
+    });
+
     Model.Agent = Model.belongsTo(models.Agent, {
       foreignKey: 'agentId'
-    })
+    });
+
     Model.TaggedMeasurement = Model.belongsTo(models.Measurement, {
       foreignKey: 'taggedMeasurementId',
       as: 'TaggedMeasurement'
-    })
+    });
+
     Model.TaggedBy = Model.hasMany(models.Measurement, {
       foreignKey: 'taggedMeasurementId',
       as: 'TaggedBy'
     })
-  }
+  };
+
   return Model;
 };

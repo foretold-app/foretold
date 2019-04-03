@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'id',
       as: 'agentId',
     });
+
     models.Channel.belongsToMany(models.Agent, {
       through: ChannelMemberships,
       foreignKey: 'id',

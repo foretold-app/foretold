@@ -11,7 +11,7 @@ const states = {
 };
 
 module.exports = (sequelize, DataTypes) => {
-  var Model = sequelize.define('Measurable', {
+  const Model = sequelize.define('Measurable', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
@@ -77,7 +77,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
       get: async function () {
-        const items = await this.getMeasurements()
+        const items = await this.getMeasurements();
         return items.length
       }
     },
@@ -85,7 +85,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
       get: async function () {
-        const items = await this.getMeasurements()
+        const items = await this.getMeasurements();
         return _.uniq(items.map(i => i.agentId)).length
       }
     },
@@ -105,7 +105,7 @@ module.exports = (sequelize, DataTypes) => {
           console.log(`got response from endpoint. Url: ${endpoint}, Response: ${JSON.stringify(json)}, Float: ${asFloat}`);
           return asFloat;
         } catch (e) {
-          console.error(`Error getting response from endpoint. Url: ${endpoint}, error: ${e}`)
+          console.error(`Error getting response from endpoint. Url: ${endpoint}, error: ${e}`);
           return null
         }
       }
@@ -124,26 +124,26 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     })
-  }
+  };
 
   Model.prototype.updateState = async function (state) {
     await this.update({ state, stateUpdatedAt: new Date() })
-  }
+  };
 
   Model.prototype.archive = async function () {
     await this.updateState(states.ARCHIVED)
-  }
+  };
 
   Model.prototype.unarchive = async function () {
     await this.updateState(this.isJudged ? states.JUDGED : states.OPEN)
-  }
+  };
 
   Model.prototype.judged = async function () {
     if (!this.isJudged || this.state !== states.JUDGED) {
-      await this.update({ isJudged: true })
+      await this.update({ isJudged: true });
       await this.updateState(states.JUDGED)
     }
-  }
+  };
 
   Model.prototype.processResolution = async function (agentId) {
     const asFloat = await this.resolutionEndpointResponse;
@@ -157,7 +157,7 @@ module.exports = (sequelize, DataTypes) => {
       await this.update({ hasResolutionEndpointResolved: true });
       await this.judged();
     }
-  }
+  };
 
   Model.prototype.creationNotification = async function (creator) {
     let agent = await creator.getAgent();
@@ -180,11 +180,11 @@ module.exports = (sequelize, DataTypes) => {
       }]
     };
     return notification;
-  }
+  };
 
   Model.prototype.changedFields = function (ops) {
     return Object.keys(ops).filter(r => r !== "expectedResolutionDate").filter(r => this[r] !== ops[r]);
-  }
+  };
 
   Model.prototype.updateNotifications = async function (creator, newData) {
     let changed = this.changedFields(newData);
@@ -205,27 +205,31 @@ module.exports = (sequelize, DataTypes) => {
       }]
     };
     return notification;
-  }
+  };
 
   Model.associate = function (models) {
     Model.Measurements = Model.hasMany(models.Measurement, {
       foreignKey: 'measurableId',
       as: 'Measurements'
-    })
+    });
+
     Model.Series = Model.belongsTo(models.Series, {
       foreignKey: 'seriesId',
       as: "series"
-    })
+    });
+
     Model.Creator = Model.belongsTo(models.Agent, {
       foreignKey: 'creatorId',
       as: 'creator'
-    })
+    });
+
     // Usage:
     // const me = await models.Measurable.find();
     // const ch = await me.getChannel();
     Model.Channel = Model.belongsTo(models.Channel, {
       foreignKey: 'channelId',
     });
-  }
+  };
+
   return Model;
 };

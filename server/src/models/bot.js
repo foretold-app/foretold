@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  var Model = sequelize.define('Bot', {
+  const Model = sequelize.define('Bot', {
       id: {
         type: DataTypes.UUID(),
         primaryKey: true,
@@ -30,11 +30,16 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     });
+
   Model.associate = function (models) {
     Model.User = Model.belongsTo(models.User, {
       foreignKey: 'userId',
+    });
+
+    Model.Agent = Model.belongsTo(models.Agent, {
+      foreignKey: 'agentId',
     })
-    Model.Agent = Model.belongsTo(models.Agent, { foreignKey: 'agentId' })
-  }
+  };
+
   return Model;
 };

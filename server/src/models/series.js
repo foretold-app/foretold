@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  var Model = sequelize.define('Series', {
+  const Model = sequelize.define('Series', {
       id: {
         type: DataTypes.UUID(),
         primaryKey: true,
@@ -36,8 +36,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         type: Sequelize.VIRTUAL(DataTypes.INTEGER),
         get: async function () {
-          // TODO: These queries are likely very slow, my guess is that this could be sped up a location.
-          const items = await this.getMeasurables()
+          // TODO: These queries are likely very slow,
+          //  my guess is that this could be sped up a location.
+          const items = await this.getMeasurables();
           return items.length
         }
       },
@@ -68,23 +69,26 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     }
-  }
+  };
 
   Model.associate = function (models) {
     Model.Creator = Model.belongsTo(models.Agent, {
       foreignKey: 'creatorId',
       as: 'creator'
-    })
+    });
+
     Model.Measurables = Model.hasMany(models.Measurable, {
       foreignKey: 'seriesId',
       as: "Measurables"
-    })
+    });
+
     // Usage
     // const se = await models.Series.find();
     // const ch = await se.getChannel();
     Model.Channel = Model.belongsTo(models.Channel, {
       foreignKey: 'channelId',
     });
-  }
+  };
+
   return Model;
 };

@@ -1,6 +1,7 @@
 const _ = require('lodash');
 
 const { notify } = require("../lib/notifications");
+const { MeasurableModel } = require('../modelz/measurable-model');
 
 const { DataBase } = require('./data-base');
 
@@ -8,6 +9,11 @@ const { DataBase } = require('./data-base');
  * @implements {Layers.DataSourceLayer.DataSource}
  */
 class MeasurablesData extends DataBase {
+
+  constructor() {
+    super();
+    this.MeasurableModel = new MeasurableModel();
+  }
 
   /**
    * @param data
@@ -53,6 +59,7 @@ class MeasurablesData extends DataBase {
   }
 
   /**
+   * @todo: Move me into MeasurableModel.
    * @param {object} options
    * @param {string[]} options.states
    * @param {string} options.agentId
@@ -60,36 +67,40 @@ class MeasurablesData extends DataBase {
    */
   async getAll(options) {
     const { offset, limit, channelId, seriesId, creatorId } = options;
+    const sequelize = this.models.sequelize;
+    const Op = sequelize.Op;
 
-    let where = {
-      state: {
-        [this.models.sequelize.Op.ne]: "ARCHIVED"
-      },
-      [this.models.sequelize.Op.and]: [{
-        channelId: {
-          [this.models.sequelize.Op.in]: this.channelIdsLiteral(options.agentId),
-        }
-      }],
-    };
+    const where = { [Op.and]: [] };
 
-    if (seriesId) {
-      where.seriesId = { [this.models.sequelize.Op.eq]: seriesId };
-    }
-    if (creatorId) {
-      where.creatorId = { [this.models.sequelize.Op.eq]: creatorId };
-    }
-    if (channelId) {
-      where[this.models.sequelize.Op.and].push({ channelId });
-    }
+    // Restrictions
+    where[Op.and].push({
+      channelId: { [Op.in]: this.channelIdsLiteral(options.agentId) }
+    });
 
-    const items = await this.models.Measurable.findAll({
+    // Filter
+    // @todo: was, state: { [this.models.sequelize.Op.ne]: "ARCHIVED" }
+    if (options.states.length !== 0) {
+      where.state = { [Op.in]: options.states };
+    }
+    if (channelId) where.channelId = channelId;
+    if (seriesId) where.seriesId = seriesId;
+    if (creatorId) where.creatorId = creatorId;
+
+    // Query
+    return await this.models.Measurable.findAll({
       limit,
       offset,
       where,
-      order: [['createdAt', 'DESC']],
+      order: [
+        [sequelize.col('stateOrder'), 'ASC'],
+        ['createdAt', 'DESC'],
+      ],
+      attributes: {
+        include: [
+          this.MeasurableModel.getStateOrderField(),
+        ]
+      }
     });
-
-    return items;
   }
 
   /**

@@ -116,6 +116,7 @@ module.exports = (sequelize, DataTypes) => {
         resolutionEndpoint: {
           [Sequelize.Op.ne]: ""
         },
+        // @todo: DRY, use JUDGEMENT_PENDING status
         expectedResolutionDate: {
           [Sequelize.Op.lt]: new Date()
         }

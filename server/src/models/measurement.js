@@ -1,13 +1,12 @@
-'use strict';
-const Sequelize = require('sequelize')
-const {clientUrl} = require('../lib/urls');
+const Sequelize = require('sequelize');
+const { clientUrl } = require('../lib/urls');
 
 module.exports = (sequelize, DataTypes) => {
-  var Model = sequelize.define('Measurement', {
+  const Model = sequelize.define('Measurement', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
-      defaultValue: Sequelize.UUIDV4,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
     },
     value: {
@@ -21,14 +20,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.TEXT,
-      allowNull: true 
+      allowNull: true
     },
     measurableId: {
-      type: DataTypes.UUID,
+      type: DataTypes.UUID(),
       allowNull: false
     },
     agentId: {
-      type: DataTypes.UUID,
+      type: DataTypes.UUID(),
       allowNull: true
     },
     relevantAt: {
@@ -41,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks: {
       afterCreate: async (measurement, options) => {
-        if (measurement.dataValues.competitorType == "OBJECTIVE"){
+        if (measurement.dataValues.competitorType == "OBJECTIVE") {
           const measurable = await measurement.getMeasurable();
           await measurable.judged();
         }
@@ -49,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
-  Model.prototype.creationNotification= async function(creator){
+  Model.prototype.creationNotification = async function (creator) {
     let agent = await creator.getAgent();
     let measurable = await this.getMeasurable();
     let notification = await {
@@ -61,31 +60,37 @@ module.exports = (sequelize, DataTypes) => {
         "author_link": `${clientUrl}/agents/${agent.id}`,
         "text": this.description,
         "fields": [
-            {
-                "title": "Type",
-                "value": this.competitorType,
-                "short": true
-            }
+          {
+            "title": "Type",
+            "value": this.competitorType,
+            "short": true
+          }
         ],
         "color": "#d2ebff"
-    }]};
+      }]
+    };
     return notification;
-  }
+  };
+
   Model.associate = function (models) {
     Model.Measurable = Model.belongsTo(models.Measurable, {
       foreignKey: 'measurableId'
-    })
+    });
+
     Model.Agent = Model.belongsTo(models.Agent, {
       foreignKey: 'agentId'
-    })
+    });
+
     Model.TaggedMeasurement = Model.belongsTo(models.Measurement, {
       foreignKey: 'taggedMeasurementId',
       as: 'TaggedMeasurement'
-    })
+    });
+
     Model.TaggedBy = Model.hasMany(models.Measurement, {
       foreignKey: 'taggedMeasurementId',
       as: 'TaggedBy'
     })
-  }
+  };
+
   return Model;
 };

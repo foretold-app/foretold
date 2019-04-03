@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize')
+const Sequelize = require('sequelize');
 
 /**
  * @todo: Rename table to "channels".
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
-      defaultValue: sequelize.fn('uuid_generate_v4'),
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
     },
     name: {
@@ -36,9 +36,9 @@ module.exports = (sequelize, DataTypes) => {
     membershipCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
-      get: async function() {
-        const items = await this.getAgents()
-        return items.length
+      get: async function () {
+        const items = await this.getAgents();
+        return items.length;
       }
     },
   });
@@ -61,6 +61,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'creatorId',
       as: 'creator',
     });
+
     // const ch = await models.Channel.findById('406da139-e440-4c74-bb3c-514ed1872cea');
     // const ag = await ch.getAgents();
     Channel.Agents = Channel.belongsToMany(models.Agent, {

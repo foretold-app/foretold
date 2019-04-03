@@ -46,6 +46,11 @@ module WithEditMutation = {
   };
 };
 
+module CMutationForm =
+  MutationForm.Make({
+    type queryType = WithEditMutation.GraphQL.t;
+  });
+
 let formCreation = (id, m) => {
   let measurable = Queries.Measurable.toMeasurable(m);
   WithEditMutation.Mutation.make((mutation, data) =>
@@ -87,23 +92,12 @@ let formCreation = (id, m) => {
       },
       ~schema=[(`name, Custom(_ => None))],
       ({handleSubmit, handleChange, form, _}) =>
-        switch (data.result) {
-        | Loading => "Loading" |> ste
-        | Error(e) =>
-          <>
-            {"Error: " ++ e##message |> ste}
-            {MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange)}
-          </>
-        | Data(_) =>
-          <>
-            {"Measurable successfully updated." |> ste |> E.React.inH3}
-            <div>
-              {MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange)}
-            </div>
-          </>
-        | NotCalled =>
-          MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange)
-        },
+        CMutationForm.showWithLoading(
+          ~result=data.result,
+          ~form=MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange),
+          ~successMessage="Measurable updated successfully.",
+          (),
+        ),
     )
     |> E.React.el
   )

@@ -4,6 +4,13 @@ type channel = {
   isPublic: bool,
 };
 
+type channelMembership = {
+  role: Context.Primary.channelMembershipRole,
+  channel: option(channel),
+};
+
+type channelMemberships = Js.Array.t(option(channelMembership));
+
 let toChannel = (ch: channel) =>
   Context.Primary.Channel.make(
     ~id=ch.id,
@@ -13,15 +20,26 @@ let toChannel = (ch: channel) =>
     (),
   );
 
+let toChannelMembership =
+    (ch: channelMembership): Context.Primary.Types.channelMembership => {
+  channel: ch.channel |> E.O.fmap(toChannel),
+  role: `ADMIN,
+  agent: None,
+};
+
 type agent = {
   id: string,
-  channels: Js.Array.t(option(channel)),
+  channelMemberships,
 };
 
 let toAgent = (a: agent) =>
   Context.Primary.Agent.make(
     ~id=a.id,
-    ~channels=a.channels |> E.A.O.concatSomes |> E.A.fmap(toChannel),
+    ~channelMemberships=
+      a.channelMemberships
+      |> E.A.O.concatSomes
+      |> E.A.fmap(toChannelMembership)
+      |> E.O.some,
     (),
   );
 
@@ -54,10 +72,13 @@ module Query = [%graphql
             agentId
             agent: Agent  @bsRecord{
               id
-              channels: Channels @bsRecord{
-                name
-                id
-                isPublic
+              channelMemberships @bsRecord{
+                role
+                channel @bsRecord{
+                  name
+                  id
+                  isPublic
+                }
               }
             }
         }

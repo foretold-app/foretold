@@ -50,6 +50,12 @@ module F = {
     );
 };
 
+module Bool = {
+  type t = bool;
+  let toString = (t: t) => t ? "TRUE" : "FALSE";
+  let fromString = str => str == "TRUE" ? true : false;
+};
+
 module Float = {
   let with3DigitsPrecision = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
 };
@@ -169,6 +175,11 @@ module A = {
       |> Js.Array.map(
            Rationale.Option.toExn("Warning: This should not have happened"),
          );
+    let defaultEmpty = (o: option(array('a))): array('a) =>
+      switch (o) {
+      | Some(o) => o
+      | None => [||]
+      };
   };
 };
 
@@ -246,7 +257,8 @@ module HttpResponse = {
     | _ => false
     };
 
-  let withDefaults = (result: t(ReasonReact.reactElement)) =>
+  /* Useful after applying fmap to produce reactElement*/
+  let withReactDefaults = (result: t(ReasonReact.reactElement)) =>
     switch (result) {
     | Success(response) => response
     | Error(e) => <div> {"Error: " ++ e |> React.str} </div>

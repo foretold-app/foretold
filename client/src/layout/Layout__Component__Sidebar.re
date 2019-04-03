@@ -105,7 +105,12 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
         {
           loggedInUser.agent
           |> E.O.fmap((r: Context.Primary.Agent.t) =>
-               r.channels
+               r.channelMemberships
+               |> E.A.O.defaultEmpty
+               |> E.A.fmap((r: Context.Primary.Types.channelMembership) =>
+                    r.channel
+                  )
+               |> E.A.O.concatSomes
                |> E.A.fmap((channel: Context.Primary.Channel.t) => {
                     let _channel: Context.Primary.Channel.t =
                       Context.Primary.Channel.make(

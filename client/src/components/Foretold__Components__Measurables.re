@@ -65,54 +65,57 @@ module BasicTable = {
       ) => {
     ...component,
     render: _self =>
-      <div className=Styles.group>
-        {
-          measurables
-          |> E.A.fmap((m: Context.Primary.Measurable.t) => {
-               open Rationale.Option.Infix;
-               let userAgentId = loggedInUser.agent <$> (r => r.id);
-               let measurableAgentId =
-                 m.creator |> E.O.fmap((r: Context.Primary.Agent.t) => r.id);
-               let isSame =
-                 userAgentId == measurableAgentId && E.O.isSome(userAgentId);
-               <div
-                 className={Styles.row(m)}
-                 onClick={_e => onSelect(m)}
-                 key={m.id}>
-                 <div className=Styles.mainColumn>
-                   <div className=Styles.mainColumnTop>
-                     {Items.link(~m)}
+      E.React.showIf(
+        measurables |> E.A.length > 0,
+        <div className=Styles.group>
+          {
+            measurables
+            |> E.A.fmap((m: Context.Primary.Measurable.t) => {
+                 open Rationale.Option.Infix;
+                 let userAgentId = loggedInUser.agent <$> (r => r.id);
+                 let measurableAgentId =
+                   m.creator |> E.O.fmap((r: Context.Primary.Agent.t) => r.id);
+                 let isSame =
+                   userAgentId == measurableAgentId && E.O.isSome(userAgentId);
+                 <div
+                   className={Styles.row(m)}
+                   onClick={_e => onSelect(m)}
+                   key={m.id}>
+                   <div className=Styles.mainColumn>
+                     <div className=Styles.mainColumnTop>
+                       {Items.link(~m)}
+                     </div>
+                     <div className=Styles.mainColumnBottom>
+                       {
+                         [|
+                           E.React.showIf(
+                             showExtraData,
+                             Items.series(~m) |> E.O.React.defaultNull,
+                           ),
+                           E.React.showIf(
+                             showExtraData,
+                             Items.creatorLink(~m) |> E.O.React.defaultNull,
+                           ),
+                           Items.measurements(~m) |> E.O.React.defaultNull,
+                           Items.measurers(~m) |> E.O.React.defaultNull,
+                           E.React.showIf(isSame, Items.editLink(~m)),
+                           E.React.showIf(isSame, Items.archiveOption(~m)),
+                         |]
+                         |> ReasonReact.array
+                       }
+                     </div>
                    </div>
-                   <div className=Styles.mainColumnBottom>
-                     {
-                       [|
-                         E.React.showIf(
-                           showExtraData,
-                           Items.series(~m) |> E.O.React.defaultNull,
-                         ),
-                         E.React.showIf(
-                           showExtraData,
-                           Items.creatorLink(~m) |> E.O.React.defaultNull,
-                         ),
-                         Items.measurements(~m) |> E.O.React.defaultNull,
-                         Items.measurers(~m) |> E.O.React.defaultNull,
-                         E.React.showIf(isSame, Items.editLink(~m)),
-                         E.React.showIf(isSame, Items.archiveOption(~m)),
-                       |]
-                       |> ReasonReact.array
-                     }
+                   <div className=Styles.rightColumn>
+                     <Foretold__Components__Measurable.StatusDisplay
+                       measurable=m
+                       dateDisplay=WHOLE
+                     />
                    </div>
-                 </div>
-                 <div className=Styles.rightColumn>
-                   <Foretold__Components__Measurable.StatusDisplay
-                     measurable=m
-                     dateDisplay=WHOLE
-                   />
-                 </div>
-               </div>;
-             })
-          |> ReasonReact.array
-        }
-      </div>,
+                 </div>;
+               })
+            |> ReasonReact.array
+          }
+        </div>,
+      ),
   };
 };

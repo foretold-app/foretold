@@ -2,7 +2,7 @@ const graphql = require("graphql");
 
 const { MEASURABLE_STATE } = require('../models/measurable-state');
 
-const measurableState = graphql.GraphQLNonNull(graphql.GraphQLEnumType({
+const measurableState = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
   name: 'measurableState',
   values: {
     [MEASURABLE_STATE.OPEN]: { value: MEASURABLE_STATE.OPEN },

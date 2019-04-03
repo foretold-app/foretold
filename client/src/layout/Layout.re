@@ -8,6 +8,7 @@ let tochannelId = (route: Route.t) =>
   switch (route) {
   | ChannelShow(c) => Some(c)
   | ChannelEdit(c) => Some(c)
+  | ChannelMembers(c) => Some(c)
   | MeasurableNew(c) => Some(c)
   | Series(c, _) => Some(c)
   | Home => Some(defaultChannel)

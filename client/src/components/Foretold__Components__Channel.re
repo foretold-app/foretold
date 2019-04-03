@@ -32,6 +32,24 @@ module SimpleHeader = {
       </Antd.Button>
     </Div>;
 
+  let leaveChannel = (channelId, agentId) =>
+    Foretold__GraphQL.Mutations.ChannelLeave.Mutation.make((mutation, _) =>
+      <Div float=`right>
+        <Antd.Button
+          onClick={
+            _ =>
+              Foretold__GraphQL.Mutations.ChannelLeave.mutate(
+                mutation,
+                agentId,
+                channelId,
+              )
+          }>
+          {"Leave Channel" |> ste}
+        </Antd.Button>
+      </Div>
+    )
+    |> E.React.el;
+
   let members = (channel: Context.Primary.Channel.t) =>
     channel.membershipCount
     |> E.O.React.fmapOrNull(c =>

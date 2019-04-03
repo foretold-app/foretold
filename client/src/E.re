@@ -175,6 +175,11 @@ module A = {
       |> Js.Array.map(
            Rationale.Option.toExn("Warning: This should not have happened"),
          );
+    let defaultEmpty = (o: option(array('a))): array('a) =>
+      switch (o) {
+      | Some(o) => o
+      | None => [||]
+      };
   };
 };
 

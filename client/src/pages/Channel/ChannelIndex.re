@@ -119,7 +119,7 @@ let make =
 
       SLayout.LayoutConfig.make(
         ~head=SLayout.Header.textDiv("Channels"),
-        ~body=<> <br /> <Antd.Table columns dataSource /> </>,
+        ~body=<div> <br /> <Antd.Table columns dataSource /> </div>,
       )
       |> layout;
     }),

@@ -2,6 +2,14 @@ open Rationale.Function.Infix;
 open Utils;
 
 type channelMembershipRole = [ | `ADMIN | `VIEWER];
+module ChannelMembershipRole = {
+  type t = channelMembershipRole;
+  let toString = (t: t) =>
+    switch (t) {
+    | `ADMIN => "ADMIN"
+    | `VIEWER => "VIEWER"
+    };
+};
 
 module Types = {
   type user = {

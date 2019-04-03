@@ -2,7 +2,7 @@ open Utils;
 
 module Query = [%graphql
   {|
-    query getChannel($id: String!) {
+    query getChannelMemberships($id: String!) {
       channelWithMemberships:
       channel(id: $id){
         id

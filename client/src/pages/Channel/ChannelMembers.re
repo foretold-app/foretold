@@ -17,11 +17,47 @@ let make =
     ) => {
   ...component,
   render: _ => {
+    let changeRoleAction = (agentId, channelId, role, text) =>
+      Foretold__GraphQL.Mutations.ChannelMembershipRoleUpdate.Mutation.make(
+        (mutation, _) =>
+        <a
+          href=""
+          onClick={
+            _ =>
+              Foretold__GraphQL.Mutations.ChannelMembershipRoleUpdate.mutate(
+                mutation,
+                ~agentId,
+                ~channelId,
+                ~role,
+              )
+          }>
+          {text |> ste}
+        </a>
+      )
+      |> E.React.el;
+
+    let removeFromChannel = (agentId, channelId) =>
+      Foretold__GraphQL.Mutations.ChannelLeave.Mutation.make((mutation, _) =>
+        <a
+          href=""
+          onClick={
+            _ =>
+              Foretold__GraphQL.Mutations.ChannelLeave.mutate(
+                mutation,
+                agentId,
+                channelId,
+              )
+          }>
+          {"Remove" |> ste}
+        </a>
+      )
+      |> E.React.el;
+
     let columns = [|
       Antd.Table.TableProps.make_column(
-        ~title="Channel",
+        ~title="Agent",
         ~dataIndex="agent",
-        ~key="channelName",
+        ~key="agent",
         ~width=2,
         ~render=
           (~text, ~record, ~index) =>
@@ -35,19 +71,55 @@ let make =
         (),
       ),
       Antd.Table.TableProps.make_column(
-        ~title="Channel",
+        ~title="Role",
         ~dataIndex="role",
-        ~key="channelName",
+        ~key="role",
         ~width=2,
         ~render=
           (~text, ~record, ~index) =>
             switch (record##role) {
-            | "VIEWER" =>
+            | "Viewer" =>
               <div className="ant-tag ant-tag-green"> {"Viewer" |> ste} </div>
-            | "ADMIN" =>
-              <div className="ant-tag ant-tag-blue"> {"ADMIN" |> ste} </div>
+            | "Admin" =>
+              <div className="ant-tag ant-tag-blue"> {"Admin" |> ste} </div>
             | _ => <div />
             },
+        (),
+      ),
+      Antd.Table.TableProps.make_column(
+        ~title="Change Role",
+        ~dataIndex="role",
+        ~key="actions",
+        ~width=2,
+        ~render=
+          (~text, ~record, ~index) =>
+            switch (record##role) {
+            | "Viewer" =>
+              changeRoleAction(
+                record##agentId,
+                channelId,
+                `ADMIN,
+                "Change to Admin",
+              )
+            | "Admin" =>
+              changeRoleAction(
+                record##agentId,
+                channelId,
+                `VIEWER,
+                "Change to Viewer",
+              )
+            | _ => <div />
+            },
+        (),
+      ),
+      Antd.Table.TableProps.make_column(
+        ~title="Remove",
+        ~dataIndex="role",
+        ~key="actions2",
+        ~width=2,
+        ~render=
+          (~text, ~record, ~index) =>
+            removeFromChannel(record##agentId, channelId),
         (),
       ),
     |];
@@ -60,6 +132,10 @@ let make =
                memberships
                |> E.A.fmap((r: Context.Primary.Types.channelMembership) =>
                     {
+                      "key":
+                        r.agent
+                        |> E.O.fmap((r: Context.Primary.Types.agent) => r.id)
+                        |> E.O.default(""),
                       "agentName":
                         r.agent |> E.O.bind(_, r => r.name) |> E.O.default(""),
                       "agentId":

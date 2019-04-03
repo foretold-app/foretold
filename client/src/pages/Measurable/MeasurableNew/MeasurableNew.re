@@ -63,6 +63,11 @@ let mutate =
 
 let component = ReasonReact.statelessComponent("Measurables");
 
+module CMutationForm =
+  MutationForm.Make({
+    type queryType = CreateMeasurableMutation.GraphQL.t;
+  });
+
 let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
@@ -88,30 +93,20 @@ let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
       ~head=SLayout.Header.textDiv("New Measurable"),
       ~body=
         CreateMeasurableMutation.Mutation.make(
-          ~onCompleted=e => Js.log("HI"),
+          ~onCompleted=
+            () => Context.Routing.Url.push(ChannelShow(channelId)),
           (mutation, data) =>
-            formCreator(
-              mutation,
-              ({handleSubmit, handleChange, form, _}) => {
-                let showForm =
+            formCreator(mutation, ({handleSubmit, handleChange, form, _}) =>
+              CMutationForm.showWithLoading(
+                ~result=data.result,
+                ~form=
                   MeasurableForm.showForm(
                     ~form,
                     ~handleSubmit,
                     ~handleChange,
-                  );
-                switch (data.result) {
-                | Loading => "Loading" |> ste
-                | Error(e) => <> {"Error: " ++ e##message |> ste} showForm </>
-                | Data(data) =>
-                  data##measurableCreate
-                  |> E.O.fmap(e => e##id)
-                  |> doIfSome(_ =>
-                       Context.Routing.Url.push(ChannelShow(channelId))
-                     );
-                  E.React.null;
-                | NotCalled => showForm
-                };
-              },
+                  ),
+                (),
+              )
             )
             |> E.React.el,
         )

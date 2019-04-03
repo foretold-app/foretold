@@ -66,20 +66,27 @@ let withUserForm = (id, name, mutation, innerComponentFn) =>
   |> E.React.el;
 
 let formFields = (form: Form.state, handleChange, handleSubmit: unit => unit) =>
-  <Antd.Form>
-    <Antd.Form.Item>
-      {"Username" |> ste |> E.React.inH3}
-      <Input
-        value={form.values.name}
-        onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
-      />
-    </Antd.Form.Item>
-    <Antd.Form.Item>
-      <Button _type=`primary onClick={_ => handleSubmit()}>
-        {"Submit" |> ste}
-      </Button>
-    </Antd.Form.Item>
-  </Antd.Form>;
+  <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
+    <Antd.Form>
+      <Antd.Form.Item>
+        {"Username" |> ste |> E.React.inH3}
+        <Input
+          value={form.values.name}
+          onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
+        />
+      </Antd.Form.Item>
+      <Antd.Form.Item>
+        <Button _type=`primary onClick={_ => handleSubmit()}>
+          {"Submit" |> ste}
+        </Button>
+      </Antd.Form.Item>
+    </Antd.Form>
+  </form>;
+
+module CMutationForm =
+  MutationForm.Make({
+    type queryType = EditUser.t;
+  });
 
 let make =
     (
@@ -97,24 +104,11 @@ let make =
           let name = loggedInUser.name;
           withUserForm(
             id, name, mutation, ({handleSubmit, handleChange, form, _}) =>
-            <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
-              {
-                switch (data.result) {
-                | Loading => "Loading" |> ste
-                | Error(e) =>
-                  <>
-                    {"Error: " ++ e##message |> ste}
-                    {formFields(form, handleChange, handleSubmit)}
-                  </>
-                | Data(_) =>
-                  <>
-                    {"Changes made successfully." |> ste}
-                    {formFields(form, handleChange, handleSubmit)}
-                  </>
-                | NotCalled => formFields(form, handleChange, handleSubmit)
-                }
-              }
-            </form>
+            CMutationForm.showWithLoading(
+              ~result=data.result,
+              ~form=formFields(form, handleChange, handleSubmit),
+              (),
+            )
           );
         }),
     )

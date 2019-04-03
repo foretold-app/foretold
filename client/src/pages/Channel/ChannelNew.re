@@ -14,6 +14,11 @@ module Mutation = Foretold__GraphQL.Mutations.ChannelCreate;
 let toSetup = (f1, f2, fnlast) =>
   f1((mutation, data) => f2(mutation, form => fnlast(data, form)));
 
+module CMutationForm =
+  MutationForm.Make({
+    type queryType = Mutation.Query.t;
+  });
+
 let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
@@ -37,17 +42,12 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
 
     mutationMake((mutation, data) =>
       form(mutation, ({handleSubmit, handleChange, form, _}) =>
-        switch (data.result) {
-        | Loading => "Loading" |> ste
-        | Error(e) =>
-          <>
-            {"Error: " ++ e##message |> ste}
-            {ChannelForm.showForm(~form, ~handleSubmit, ~handleChange)}
-          </>
-        | Data(data) => "Channel edited created" |> ste |> E.React.inH2
-        | NotCalled =>
-          ChannelForm.showForm(~form, ~handleSubmit, ~handleChange)
-        }
+        CMutationForm.showWithLoading(
+          ~result=data.result,
+          ~form=ChannelForm.showForm(~form, ~handleSubmit, ~handleChange),
+          ~successMessage="Channel created successfully.",
+          (),
+        )
       )
     )
     |> SLayout.LayoutConfig.make(

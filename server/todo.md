@@ -35,3 +35,10 @@ Right now the ``channelUpdate`` mutation accepts a ``ChannelInput``, but most ot
   - Channels should have a ``myRole`` attribute, which would provide the role of the current user in that channel. ``None`` should be one option.
   - There should be a ``channelJoin`` and ``channelLeave`` mutation that effect the current user.
   - ``userUpdate`` should be changed to ``updateMe`` or similar, which could only be used on the current user (note: this should probably apply to the agent, not the being)
+  
+## Direct API strategy
+We need some planning of how humans would interact with the system via API. In the beginning, I imagine this would look something like giving out tokens to each person to user for authentication. Later, they should probably create bots to do this. Later, they should have restrictions for access.
+
+## Series Functionality
+Series can get pretty complicated, but are quite important. Will think about.
+

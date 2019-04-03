@@ -45,26 +45,37 @@ let make =
   ...component,
   render: _ =>
     Queries.Channels.component(channels => {
-      let row = (channel: Context.Primary.Channel.t) =>
-        <div className=row>
-          <div className=column>
-            <div className=nameS> {channel.name |> ste} </div>
-            {
-              channel.description
-              |> E.O.fmap(ste)
-              |> E.O.fmap(E.React.inP)
-              |> E.O.React.defaultNull
-            }
-            {
-              channel.membershipCount
+      let columns = [|
+        Antd.Table.TableProps.make_column(
+          ~title="Channel",
+          ~dataIndex="id",
+          ~key="channelName",
+          ~width=1,
+          ~render=
+            (~text, ~record, ~index) =>
+              <span className=nameS> {record##name |> ste} </span>,
+          (),
+        ),
+        Antd.Table.TableProps.make_column(
+          ~title="Members",
+          ~dataIndex="count",
+          ~key="membersCount",
+          ~width=1,
+          ~render=
+            (~text, ~record, ~index) =>
+              record##count
               |> E.O.fmap(string_of_int)
-              |> E.O.fmap(ste)
-              |> E.O.fmap(E.React.inP)
-              |> E.O.React.defaultNull
-            }
-          </div>
-          <div className=column>
-            {
+              |> E.O.default("")
+              |> ste,
+          (),
+        ),
+        Antd.Table.TableProps.make_column(
+          ~title="Title",
+          ~dataIndex="name",
+          ~key="Title",
+          ~width=1,
+          ~render=
+            (~text, ~record, ~index) =>
               loggedInUser
               |> (r => r.agent)
               |> E.O.fmap((agent: Context.Primary.Agent.t) =>
@@ -77,7 +88,7 @@ let make =
                            Foretold__GraphQL.Mutations.ChannelJoin.mutate(
                              mutation,
                              agent.id,
-                             channel.id,
+                             record##id,
                            )
                        }>
                        {"Join" |> ste}
@@ -85,17 +96,25 @@ let make =
                    )
                    |> E.React.el
                  )
-              |> E.O.React.defaultNull
-            }
-          </div>
-        </div>;
+              |> E.O.React.defaultNull,
+          (),
+        ),
+      |];
+
+      let dataSource =
+        channels
+        |> E.A.fmap((r: Context.Primary.Channel.t) =>
+             {
+               "key": r.id,
+               "id": r.id,
+               "name": r.name,
+               "count": r.membershipCount,
+             }
+           );
 
       SLayout.LayoutConfig.make(
         ~head=SLayout.Header.textDiv("Channels"),
-        ~body=
-          <div className=table>
-            {channels |> E.A.fmap(row) |> ReasonReact.array}
-          </div>,
+        ~body=<div> <Antd.Table columns dataSource /> </div>,
       )
       |> layout;
     }),

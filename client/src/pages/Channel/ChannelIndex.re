@@ -6,7 +6,7 @@ open Foretold__GraphQL;
 
 let ste = ReasonReact.string;
 
-let component = ReasonReact.statelessComponent("Redirecting...");
+let component = ReasonReact.statelessComponent("ChannelIndex");
 
 let row =
   style([
@@ -50,17 +50,22 @@ let make =
           ~title="Channel",
           ~dataIndex="id",
           ~key="channelName",
-          ~width=1,
+          ~width=2,
           ~render=
             (~text, ~record, ~index) =>
-              <span className=nameS> {record##name |> ste} </span>,
+              <a
+                onClick={
+                  _ => Context.Routing.Url.push(ChannelShow(record##id))
+                }>
+                {record##name |> ste}
+              </a>,
           (),
         ),
         Antd.Table.TableProps.make_column(
           ~title="Members",
           ~dataIndex="count",
           ~key="membersCount",
-          ~width=1,
+          ~width=10,
           ~render=
             (~text, ~record, ~index) =>
               record##count
@@ -70,9 +75,9 @@ let make =
           (),
         ),
         Antd.Table.TableProps.make_column(
-          ~title="Title",
+          ~title="Join",
           ~dataIndex="name",
-          ~key="Title",
+          ~key="join",
           ~width=1,
           ~render=
             (~text, ~record, ~index) =>
@@ -114,7 +119,7 @@ let make =
 
       SLayout.LayoutConfig.make(
         ~head=SLayout.Header.textDiv("Channels"),
-        ~body=<div> <Antd.Table columns dataSource /> </div>,
+        ~body=<> <br /> <Antd.Table columns dataSource /> </>,
       )
       |> layout;
     }),

@@ -29,6 +29,7 @@ module LoadedAndSelected = {
       {leaveButton(t.loggedInUser.agent, t.channel.id)}
       {joinButton(t.loggedInUser.agent, t.channel.id)}
       {C.Channel.SimpleHeader.editChannel(t.channel.id)}
+      {C.Channel.SimpleHeader.inviteToChannel(t.channel.id)}
       {C.Channel.SimpleHeader.members(t.channel)}
     </>;
 
@@ -53,6 +54,7 @@ module LoadedAndUnselected = {
       {leaveButton(t.loggedInUser.agent, t.channel.id)}
       {joinButton(t.loggedInUser.agent, t.channel.id)}
       {C.Channel.SimpleHeader.editChannel(t.channel.id)}
+      {C.Channel.SimpleHeader.inviteToChannel(t.channel.id)}
       {C.Channel.SimpleHeader.members(t.channel)}
     </>;
   };

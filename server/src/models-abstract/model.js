@@ -2,11 +2,6 @@
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
  */
 class Model {
-  constructor(
-    model
-  ) {
-    this.model = model;
-  }
 
   getAll() {
     return Promise.reject(new Error('getAll is not implemented.'));

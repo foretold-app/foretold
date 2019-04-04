@@ -22,12 +22,14 @@ class SeriesData extends DataBase {
     const { channelId } = options;
 
     let where = {
+        // Restrictions
         channelId: {
           [this.models.sequelize.Op.in]: this.channelIdsLiteral(options.agentId)
         },
       };
 
     if (channelId) {
+      // @todo: It breaks restrictions.
       where.channelId = { [this.models.sequelize.Op.eq]: channelId };
     }
 

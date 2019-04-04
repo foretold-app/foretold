@@ -128,7 +128,8 @@ let make =
 
       SLayout.LayoutConfig.make(
         ~head=SLayout.Header.textDiv("Channels"),
-        ~body=<div> <br /> <Antd.Table columns dataSource /> </div>,
+        ~body=
+          <div> <br /> <Antd.Table columns dataSource size=`small /> </div>,
       )
       |> layout;
     }),

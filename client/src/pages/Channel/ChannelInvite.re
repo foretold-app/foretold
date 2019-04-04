@@ -76,7 +76,7 @@ let make =
                       "agentName": r.name |> E.O.default(""),
                     }
                   );
-             <Antd.Table columns dataSource />;
+             <Antd.Table columns dataSource size=`small />;
            })
         |> E.HttpResponse.withReactDefaults
       );

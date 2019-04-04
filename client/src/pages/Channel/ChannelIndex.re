@@ -62,6 +62,14 @@ let make =
           (),
         ),
         Antd.Table.TableProps.make_column(
+          ~title="Description",
+          ~dataIndex="description",
+          ~key="description",
+          ~width=2,
+          ~render=(~text, ~record, ~index) => record##description |> ste,
+          (),
+        ),
+        Antd.Table.TableProps.make_column(
           ~title="Members",
           ~dataIndex="count",
           ~key="membersCount",
@@ -113,6 +121,7 @@ let make =
                "key": r.id,
                "id": r.id,
                "name": r.name,
+               "description": r.description |> E.O.default(""),
                "count": r.membershipCount,
              }
            );

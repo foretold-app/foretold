@@ -28,10 +28,12 @@ let defaultPage =
     ) => {
   let firstUserChannel =
     loggedInUser.agent
-    |> E.O.fmap((a: Context.Primary.Agent.t) => a.channels)
-    |> E.O.bind(_, (r: Js.Array.t(Context.Primary.Channel.t)) =>
-         E.A.get(r, 0)
-       );
+    |> E.O.bind(_, (a: Context.Primary.Agent.t) => a.channelMemberships)
+    |> E.A.O.defaultEmpty
+    |> E.A.get(_, 0)
+    |> E.O.bind(_,(r:Context.Primary.Types.channelMembership) => r.channel)
+         
+       
 
   /* This should always be Some */
   switch (firstUserChannel) {

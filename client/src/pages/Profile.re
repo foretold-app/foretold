@@ -16,13 +16,7 @@ module EditUser = [%graphql
 
 module EditUserMutation = ReasonApollo.CreateMutation(EditUser);
 
-module Params = {
-  type state = {name: string};
-  type fields = [ | `name];
-  let lens = [(`name, s => s.name, (s, name) => {...s, name})];
-};
-
-module Params2 = {
+module FormConfig = {
   type field(_) =
     | Name: field(string);
   type state = {name: string};
@@ -41,7 +35,7 @@ module Params2 = {
 };
 
 /* ReFormNext */
-module Form = ReFormNext.Make(Params2);
+module Form = ReFormNext.Make(FormConfig);
 
 let mutate = (mutation: EditUserMutation.apolloMutation, values, id: string) => {
   let mutate = EditUser.make(~id, ~name=values, ());

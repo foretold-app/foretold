@@ -6,6 +6,7 @@ module Route = {
     | Login
     | Profile
     | EntityShow(string)
+    | EntityIndex
     | AgentShow(string)
     | AgentMeasurables(string)
     | ChannelShow(string)
@@ -32,6 +33,7 @@ module Route = {
     | ["agents"] => AgentIndex
     | ["profile"] => Profile
     | ["agents", id] => AgentShow(id)
+    | ["entities"] => EntityIndex
     | ["entities", ...id] => EntityShow(String.concat("/", id))
     | ["agents", id, "measurables"] => AgentMeasurables(id)
     | ["channels", "new"] => ChannelNew
@@ -53,6 +55,7 @@ module Url = {
     | Home
     | AgentIndex
     | Profile
+    | EntityIndex
     | EntityShow(string)
     | AgentShow(string)
     | AgentMeasurables(string)
@@ -71,6 +74,7 @@ module Url = {
     | Home => "/"
     | AgentIndex => "/agents"
     | Profile => "/profile/"
+    | EntityIndex => "/entities"
     | EntityShow(id) => "/entities/" ++ id
     | AgentShow(id) => "/agents/" ++ id
     | AgentMeasurables(id) => "/agents/" ++ id ++ "/measurables"

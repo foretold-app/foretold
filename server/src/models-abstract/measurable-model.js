@@ -51,17 +51,16 @@ class MeasurableModel extends ModelPostgres {
   /**
    * @return {Promise<Models.Measurable[]>}
    */
-  getAllJudgementPendingNext() {
-    return this.model.findAll({
+  getAllJudgementPendingNext(reducerFn) {
+    return this.model.reduceAll({
       where: {
         state: MEASURABLE_STATE.OPEN,
         expectedResolutionDate: {
           [this.Op.lt]: this.fn('now'),
         }
       },
-      limit: 10,
-      offset: 0,
-    });
+      limit: 1,
+    }, reducerFn);
   }
 }
 

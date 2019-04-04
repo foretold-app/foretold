@@ -32,7 +32,11 @@ function setupReduceAll(Sequelize) {
   //            console.info('Total sum is: ', totalSum);
   //        });
 
-  Sequelize.Model.prototype.reduceAll = function reduceAll(options, action, initialValue) {
+  Sequelize.Model.prototype.reduceAll = function reduceAll(
+    options,
+    action,
+    initialValue,
+  ) {
     let self = this;
     let foundRecords = -1;
     let reducedValue = initialValue;
@@ -43,26 +47,21 @@ function setupReduceAll(Sequelize) {
 
     function reduceNextChunk() {
       if (foundRecords === 0) {
-        // No more records found in table
-        // return the final reduced value.
         return reducedValue;
       } else {
         return self
           .findAll(options)
-          .tap(function (data) {
+          .then(function (data) {
             foundRecords = data.length;
-            // Increase the offset for next interation.
             options.offset += options.limit;
+            return data;
           })
           .then(function (data) {
-            // Call the callback with data rows and last reduced value.
             return action(data, reducedValue);
           })
           .then(function (newReducedValue) {
-            // Update reduced value
             reducedValue = newReducedValue;
           })
-          // Find next chunk
           .then(reduceNextChunk);
       }
     }

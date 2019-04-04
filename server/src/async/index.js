@@ -6,7 +6,9 @@ const events = require('./events');
 const EVERY_DAY_AT_MIDNIGHT = '0 0 * * *';
 
 const job = cron.scheduleJob(EVERY_DAY_AT_MIDNIGHT, () => {
-  emitter.emit(events.MEASURABLE_STATE);
+  emitter.emit(events.MEASURABLES_STATES);
 });
 
-module.exports = job;
+module.exports = {
+  job,
+};

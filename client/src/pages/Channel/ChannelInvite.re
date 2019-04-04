@@ -82,7 +82,7 @@ let make =
       );
 
     SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("Channel Members"),
+      ~head=SLayout.Header.textDiv("Invite Agents"),
       ~body=table,
     )
     |> layout;

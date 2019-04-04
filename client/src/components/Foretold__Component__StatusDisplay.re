@@ -16,10 +16,10 @@ let statusColor = (~measurable: Context.Primary.Measurable.t) => {
   let main = [padding2(~v=`px(1), ~h=`px(8)), borderRadius(`px(4))];
   let statusSpecific =
     switch (Context.Primary.Measurable.toStatus(measurable)) {
-    | OPEN => [background(`hex("bff5bd"))]
-    | PENDING_REVIEW => [background(`hex("fff8da"))]
-    | JUDGED => [background(`hex("ead7f3"))]
-    | ARCHIVED => [background(`hex("cccccc"))]
+    | `OPEN => [background(`hex("bff5bd"))]
+    | `JUDGEMENT_PENDING => [background(`hex("fff8da"))]
+    | `JUDGED => [background(`hex("ead7f3"))]
+    | `ARCHIVED => [background(`hex("cccccc"))]
     };
   style([main, statusSpecific] |> E.L.concat);
 };
@@ -59,28 +59,28 @@ let dateFinder = (head, p, date, dateDisplay) => {
 
 let statusShow = (~measurable: Context.Primary.Measurable.t, ~dateDisplay) =>
   switch (Context.Primary.Measurable.toStatus(measurable)) {
-  | OPEN =>
+  | `OPEN =>
     dateFinder(
       "Open",
       "Closes ~",
       measurable.expectedResolutionDate,
       dateDisplay,
     )
-  | PENDING_REVIEW =>
+  | `JUDGEMENT_PENDING =>
     dateFinder(
       "Judgement Pending",
       "Pending since ",
       measurable.expectedResolutionDate,
       dateDisplay,
     )
-  | ARCHIVED =>
+  | `ARCHIVED =>
     dateFinder(
       "Archived",
       "Archived on ",
       measurable.stateUpdatedAt,
       dateDisplay,
     )
-  | JUDGED =>
+  | `JUDGED =>
     dateFinder("Judged", "Judged on ", measurable.stateUpdatedAt, dateDisplay)
   };
 let component = ReasonReact.statelessComponent("MeasurableShow");

@@ -122,8 +122,8 @@ class MeasurablesData extends DataBase {
     });
   }
 
-  getAllJudgementPendingNext(reducerFn) {
-    return this.MeasurableModel.getAllJudgementPendingNext(reducerFn);
+  setJudgementPending() {
+    return this.MeasurableModel.setJudgementPending();
   }
 }
 

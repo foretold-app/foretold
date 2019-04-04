@@ -32,7 +32,7 @@ class MeasurableModel extends ModelPostgres {
   /**
    * @return {Promise<Models.Measurable[]>}
    */
-  getAllJudgementPendingNext(reducerFn) {
+  setJudgementPending(reducerFn) {
     return this.model.reduceAll({
       where: {
         state: MEASURABLE_STATE.OPEN,

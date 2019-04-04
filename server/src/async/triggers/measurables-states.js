@@ -7,14 +7,11 @@ class MeasurablesStates {
   }
 
   main() {
-    return Promise.resolve(true)
-      .then(() => this.data.measurables.getAllJudgementPendingNext(this.reducerFn));
+    return Promise.resolve()
+      .then(() => this.data.measurables.setJudgementPending())
+      .then(() => true);
   }
 
-  reducerFn(measurables) {
-    console.log('data', data);
-    return;
-  }
 }
 
 module.exports = {

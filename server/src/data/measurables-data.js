@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const { notify } = require("../lib/notifications");
-const { MeasurableModel } = require('../modelz/measurable-model');
+const { MeasurableModel } = require('../models-abstract/measurable-model');
 
 const { DataBase } = require('./data-base');
 
@@ -80,8 +80,7 @@ class MeasurablesData extends DataBase {
     // Filter
     where.state = _.isArray(options.states)
       ? { [Op.in]: options.states }
-      : { [Op.ne]: MeasurableModel.MEASURABLE_STATE.ARCHIVED }
-    ;
+      : { [Op.ne]: MeasurableModel.MEASURABLE_STATE.ARCHIVED };
     if (channelId) where.channelId = channelId;
     if (seriesId) where.seriesId = seriesId;
     if (creatorId) where.creatorId = creatorId;

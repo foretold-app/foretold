@@ -64,7 +64,6 @@ const index = {
   Agents: agents.agent,
   Bots: botType,
   Measurables: measurableType,
-  measurables: measurableType,
   Series: seriesType,
   Measurements: measurementType,
   Channels: channels.channel,

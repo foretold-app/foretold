@@ -32,7 +32,7 @@ function setupReduceAll(Sequelize) {
   //            console.info('Total sum is: ', totalSum);
   //        });
 
-  Sequelize.Model.prototype.reduceAll = function reduceAll(
+  Sequelize.Model.reduceAll = function reduceAll(
     options,
     action,
     initialValue,
@@ -68,6 +68,7 @@ function setupReduceAll(Sequelize) {
 
     return reduceNextChunk();
   };
+
 }
 
 module.exports = {

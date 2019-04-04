@@ -30,34 +30,20 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
-   *
-   * @param {object} filter
-   * @param {number} filter.offset
-   * @param {number} filter.limit
-   * @param pagination
-   * @param restrictions
-   * @return {Promise<Models.Measurable[]>}
-   */
-  getAll(filter, pagination, restrictions) {
-    const offset = _.get(pagination, 'offset', 10);
-    const limit = _.get(pagination, 'limit', 0);
-    return this.model.findAll({
-      limit,
-      offset,
-      where: filter,
-    });
-  }
-
-  /**
    * @return {Promise<Models.Measurable[]>}
    */
   getAllJudgementPendingNext(reducerFn) {
     return this.model.reduceAll({
       where: {
         state: MEASURABLE_STATE.OPEN,
-        expectedResolutionDate: {
-          [this.Op.lt]: this.fn('now'),
-        }
+        [this.Op.or]: [
+          {
+            expectedResolutionDate: {
+              [this.Op.lt]: this.fn('now'),
+            }
+          },
+          { expectedResolutionDate: null },
+        ],
       },
       limit: 1,
     }, reducerFn);

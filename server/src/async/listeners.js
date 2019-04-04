@@ -9,7 +9,7 @@ function measurablesStates() {
     new triggers.MeasurablesStates().main().then((result) => {
       console.log('measurablesStates', 'all done', result);
     }).catch((err) => {
-      console.error('measurablesStates', err.message, data);
+      console.error('measurablesStates', err.message);
       console.error(err);
     });
   } catch (e) {
@@ -28,7 +28,10 @@ function listen() {
 }
 
 // npm run babel-node ./src/async/listeners.js
-measurablesStates();
+const models  = require('../models');
+models.sequelize.sync().then(() => {
+  measurablesStates();
+})
 
 module.exports = {
   listen,

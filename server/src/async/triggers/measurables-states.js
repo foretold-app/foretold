@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const data = require('../../data');
 
 class MeasurablesStates {
@@ -7,10 +8,11 @@ class MeasurablesStates {
 
   main() {
     return Promise.resolve(true)
-      .then(() => this.data.measurables.getAllJudgementPendingNext());
+      .then(() => this.data.measurables.getAllJudgementPendingNext(this.reducerFn));
   }
 
-  reducerFn(data) {
+  reducerFn(measurables) {
+    console.log('data', data);
     return;
   }
 }

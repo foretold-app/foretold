@@ -34,10 +34,10 @@ class MeasurableModel extends ModelPostgres {
    */
   setJudgementPending() {
     return this.model.update({
-      state: MEASURABLE_STATE.JUDGEMENT_PENDING,
+      state: MeasurableModel.MEASURABLE_STATE.JUDGEMENT_PENDING,
     }, {
       where: {
-        state: MEASURABLE_STATE.OPEN,
+        state: MeasurableModel.MEASURABLE_STATE.OPEN,
         [this.Op.or]: [
           {
             expectedResolutionDate: {

@@ -30,10 +30,12 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
-   * @return {Promise<Models.Measurable[]>}
+   * @return {Promise<boolean>}
    */
-  setJudgementPending(reducerFn) {
-    return this.model.reduceAll({
+  setJudgementPending() {
+    return this.model.update({
+      state: MEASURABLE_STATE.JUDGEMENT_PENDING,
+    }, {
       where: {
         state: MEASURABLE_STATE.OPEN,
         [this.Op.or]: [
@@ -45,8 +47,7 @@ class MeasurableModel extends ModelPostgres {
           { expectedResolutionDate: null },
         ],
       },
-      limit: 1,
-    }, reducerFn);
+    }).then(() => true);
   }
 }
 

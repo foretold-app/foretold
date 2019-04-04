@@ -3,12 +3,20 @@ const cron = require('node-schedule');
 const emitter = require('./emitter');
 const events = require('./events');
 
-const EVERY_DAY_AT_MIDNIGHT = '0 0 * * *';
+function runJobs() {
+  console.log('Jobs are in a queue.');
 
-const job = cron.scheduleJob(EVERY_DAY_AT_MIDNIGHT, () => {
-  emitter.emit(events.MEASURABLES_STATES);
-});
+  const EVERY_DAY_AT_MIDNIGHT = '0 0 * * *';
+
+  const job = cron.scheduleJob(EVERY_DAY_AT_MIDNIGHT, () => {
+    emitter.emit(events.MEASURABLES_STATES);
+  });
+
+  return {
+    job,
+  };
+}
 
 module.exports = {
-  job,
+  runJobs,
 };

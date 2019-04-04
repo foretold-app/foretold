@@ -5,20 +5,20 @@ const triggers = require('./triggers');
 
 function measurablesStates() {
   try {
-    console.log('measurablesStates');
+    console.log('Job::measurablesStates');
     new triggers.MeasurablesStates().main().then((result) => {
-      console.log('measurablesStates', 'all done', result);
+      console.log('Job::measurablesStates', 'all done', result);
     }).catch((err) => {
-      console.error('measurablesStates', err.message);
+      console.error('Job::measurablesStates', err.message);
       console.error(err);
     });
   } catch (e) {
-    console.log('memberPostSave error');
+    console.log('Job::measurablesStates error');
     console.error(e);
   }
 }
 
-function listen() {
+function runListeners() {
   try {
     emitter.on(events.MEASURABLES_STATES, measurablesStates);
   } catch (e) {
@@ -27,12 +27,6 @@ function listen() {
   }
 }
 
-// npm run babel-node ./src/async/listeners.js
-const models  = require('../models');
-models.sequelize.sync().then(() => {
-  measurablesStates();
-})
-
 module.exports = {
-  listen,
+  runListeners,
 };

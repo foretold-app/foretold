@@ -122,6 +122,9 @@ class MeasurablesData extends DataBase {
     });
   }
 
+  /**
+   * @return {Promise<boolean>}
+   */
   setJudgementPending() {
     return this.MeasurableModel.setJudgementPending();
   }

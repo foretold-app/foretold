@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const data = require('../../data');
 
 class MeasurablesStates {
@@ -11,7 +10,6 @@ class MeasurablesStates {
       .then(() => this.data.measurables.setJudgementPending())
       .then(() => true);
   }
-
 }
 
 module.exports = {

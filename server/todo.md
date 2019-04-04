@@ -24,6 +24,13 @@ Right now the ``channelUpdate`` mutation accepts a ``ChannelInput``, but most ot
 - channelMembershipRoleUpdate
 - channelMembershipDelete
 
+### Channel Permissions
+- All channels need at least one admin. The admin should not be able to remove themselves, unless there is one other admin.
+- Change permissions:
+  - Authenticated users shouldn't be able to modify channel members.
+  - Authenticated users shouldn't be able to edit public channels.
+  - Authenticated users shouldn't be able to change roles.
+
 ## GraphQL Schema Changes
 - User auth0Ids should only be accessible by the logged in user. 
 - Users / Bots should only be visible as properties of Agents in the graphQL layer. Perhaps an ``agent`` would have ``userAttributes`` or similar, but the userId would be hidden. Names and descriptions should only exist on agents, as they are redundant to the other two.

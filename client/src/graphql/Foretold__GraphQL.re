@@ -9,6 +9,7 @@ module Queries = {
   module SeriesCollection = Foretold__GraphQL__GetSeriesCollection;
   module Channels = Foretold__GraphQL__ChannelsGet;
   module Channel = Foretold__GraphQL__ChannelGet;
+  module ChannelMemberships = Foretold__GraphQL__ChannelGetMemberships;
 };
 
 module Mutations = {
@@ -18,4 +19,6 @@ module Mutations = {
   module ChannelCreate = Foretold__GraphQL__ChannelCreate;
   module ChannelJoin = Foretold__GraphQL__ChannelJoin;
   module ChannelLeave = Foretold__GraphQL__ChannelLeave;
+  module ChannelUpdate = Foretold__GraphQL__ChannelUpdate;
+  module ChannelMembershipRoleUpdate = Foretold__GraphQL__ChannelMembershipRoleUpdate;
 };

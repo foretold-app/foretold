@@ -26,7 +26,7 @@ let showForm = (~form: NewChannelForm.state, ~handleSubmit, ~handleChange) =>
   <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
     <Form>
       <Form.Item>
-        {"Channel Name" |> ste |> E.React.inH3}
+        {"Name" |> ste |> E.React.inH3}
         <Input
           value={form.values.name}
           onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}

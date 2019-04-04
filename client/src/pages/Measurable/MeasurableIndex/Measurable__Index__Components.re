@@ -4,6 +4,11 @@ open Measurable__Index__Logic;
 
 module ReducerParams = SelectWithPaginationReducer.Reducers.ReducerParams;
 
+let leaveButton = (agent, channelId) =>
+  agent
+  |> E.O.fmap((e: Context.Primary.Agent.t) => e.id)
+  |> E.O.React.fmapOrNull(C.Channel.SimpleHeader.leaveChannel(channelId));
+
 module LoadedAndSelected = {
   open Measurable__Index__Logic.LoadedAndSelected;
 
@@ -14,7 +19,10 @@ module LoadedAndSelected = {
       {
         SelectWithPaginationReducer.Components.buttonDuo(Item, t.reducerParams)
       }
-      {C.Channel.SimpleHeader.button(t.channel.id)}
+      {C.Channel.SimpleHeader.newMeasurable(t.channel.id)}
+      {leaveButton(t.loggedInUser.agent, t.channel.id)}
+      {C.Channel.SimpleHeader.editChannel(t.channel.id)}
+      {C.Channel.SimpleHeader.members(t.channel)}
     </>;
 
   let body = (t: t) =>
@@ -34,7 +42,10 @@ module LoadedAndUnselected = {
       {
         SelectWithPaginationReducer.Components.buttonDuo(Page, t.reducerParams)
       }
-      {C.Channel.SimpleHeader.button(t.channel.id)}
+      {C.Channel.SimpleHeader.newMeasurable(t.channel.id)}
+      {leaveButton(t.loggedInUser.agent, t.channel.id)}
+      {C.Channel.SimpleHeader.editChannel(t.channel.id)}
+      {C.Channel.SimpleHeader.members(t.channel)}
     </>;
   };
 

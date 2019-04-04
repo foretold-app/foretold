@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const models = require('../models');
 const { ModelPostgres } = require('./model-postgres');
 
@@ -10,6 +12,8 @@ class MeasurableModel extends ModelPostgres {
       model: models.Measurable,
       sequelize: models.sequelize,
     });
+    this.Op = this.sequelize.Op;
+    this.fn = this.sequelize.fn;
   }
 
   /**
@@ -25,6 +29,40 @@ class MeasurableModel extends ModelPostgres {
     );
   }
 
+  /**
+   *
+   * @param {object} filter
+   * @param {number} filter.offset
+   * @param {number} filter.limit
+   * @param pagination
+   * @param restrictions
+   * @return {Promise<Models.Measurable[]>}
+   */
+  getAll(filter, pagination, restrictions) {
+    const offset = _.get(pagination, 'offset', 10);
+    const limit = _.get(pagination, 'limit', 0);
+    return this.model.findAll({
+      limit,
+      offset,
+      where: filter,
+    });
+  }
+
+  /**
+   * @return {Promise<Models.Measurable[]>}
+   */
+  getAllJudgementPendingNext() {
+    return this.model.findAll({
+      where: {
+        state: MEASURABLE_STATE.OPEN,
+        expectedResolutionDate: {
+          [this.Op.lt]: this.fn('now'),
+        }
+      },
+      limit: 10,
+      offset: 0,
+    });
+  }
 }
 
 MeasurableModel.MEASURABLE_STATE = MEASURABLE_STATE;

@@ -72,7 +72,7 @@ class MeasurablesData extends DataBase {
 
     const where = { [Op.and]: [] };
 
-    // Restrictions
+    // @todo: Restrictions, move it upper, into resolvers!
     where[Op.and].push({
       channelId: { [Op.in]: this.channelIdsLiteral(options.agentId) }
     });
@@ -122,6 +122,9 @@ class MeasurablesData extends DataBase {
     });
   }
 
+  getAllJudgementPendingNext() {
+    return this.MeasurableModel.getAllJudgementPendingNext();
+  }
 }
 
 module.exports = {

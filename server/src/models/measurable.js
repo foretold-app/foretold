@@ -15,6 +15,8 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
     },
+
+    // Meta
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -35,24 +37,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    resolutionEndpoint: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    hasResolutionEndpointResolved: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
     valueType: {
       type: DataTypes.ENUM(["FLOAT", "DATE", "PERCENTAGE"]),
       allowNull: false,
     },
-    isJudged: {
-      allowNull: false,
-      defaultValue: false,
-      type: DataTypes.BOOLEAN
-    },
+
+    // State
     state: {
       type: DataTypes.STRING,
       defaultValue: MEASURABLE_STATE.OPEN,
@@ -62,14 +52,34 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.DATE
     },
+    isJudged: {
+      allowNull: false,
+      defaultValue: false,
+      type: DataTypes.BOOLEAN
+    },
+
+    // Resolution
+    resolutionEndpoint: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    hasResolutionEndpointResolved: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     expectedResolutionDate: {
       allowNull: true,
       type: DataTypes.DATE
     },
+
+    // Link
     channelId: {
       type: DataTypes.UUID(),
       allowNull: false,
     },
+
+    // Counts
     measurementCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),

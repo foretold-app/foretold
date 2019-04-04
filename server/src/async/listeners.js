@@ -27,6 +27,9 @@ function listen() {
   }
 }
 
+// npm run babel-node ./src/async/listeners.js
+measurablesStates();
+
 module.exports = {
   listen,
 };

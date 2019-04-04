@@ -50,6 +50,24 @@ module SimpleHeader = {
     )
     |> E.React.el;
 
+  let joinChannel = (channelId, agentId) =>
+    Foretold__GraphQL.Mutations.ChannelJoin.Mutation.make((mutation, _) =>
+      <Div float=`right>
+        <Antd.Button
+          onClick={
+            _ =>
+              Foretold__GraphQL.Mutations.ChannelJoin.mutate(
+                mutation,
+                agentId,
+                channelId,
+              )
+          }>
+          {"Join Channel" |> ste}
+        </Antd.Button>
+      </Div>
+    )
+    |> E.React.el;
+
   let members = (channel: Context.Primary.Channel.t) =>
     channel.membershipCount
     |> E.O.React.fmapOrNull(c =>

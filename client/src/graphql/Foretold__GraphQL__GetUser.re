@@ -29,12 +29,14 @@ let toChannelMembership =
 
 type agent = {
   id: string,
+  name: option(string),
   channelMemberships,
 };
 
 let toAgent = (a: agent) =>
   Context.Primary.Agent.make(
     ~id=a.id,
+    ~name=a.name,
     ~channelMemberships=
       a.channelMemberships
       |> E.A.O.concatSomes
@@ -66,12 +68,13 @@ module Query = [%graphql
     query user ($auth0Id: String) {
         user:
           user(auth0Id: $auth0Id)  @bsRecord{
+            name
             id
             auth0Id
-            name
             agentId
             agent: Agent  @bsRecord{
               id
+              name
               channelMemberships @bsRecord{
                 role
                 channel @bsRecord{

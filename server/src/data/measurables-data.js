@@ -72,18 +72,19 @@ class MeasurablesData extends DataBase {
 
     const where = { [Op.and]: [] };
 
-    // Restrictions
+    // @todo: Restrictions, move it upper, into resolvers!
     where[Op.and].push({
       channelId: { [Op.in]: this.channelIdsLiteral(options.agentId) }
     });
 
     // Filter
-    where.state = _.isArray(options.states)
-      ? { [Op.in]: options.states }
-      : { [Op.ne]: MeasurableModel.MEASURABLE_STATE.ARCHIVED };
+    if (_.isArray(options.states)) {
+      where.state = { [Op.in]: options.states };
+    }
     if (channelId) where.channelId = channelId;
     if (seriesId) where.seriesId = seriesId;
     if (creatorId) where.creatorId = creatorId;
+    where.isArchived = false;
 
     // Query
     return await this.models.Measurable.findAll({
@@ -122,6 +123,12 @@ class MeasurablesData extends DataBase {
     });
   }
 
+  /**
+   * @return {Promise<boolean>}
+   */
+  needsToBePending() {
+    return this.MeasurableModel.needsToBePending();
+  }
 }
 
 module.exports = {

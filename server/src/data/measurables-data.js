@@ -78,12 +78,13 @@ class MeasurablesData extends DataBase {
     });
 
     // Filter
-    where.state = _.isArray(options.states)
-      ? { [Op.in]: options.states }
-      : { [Op.ne]: MeasurableModel.MEASURABLE_STATE.ARCHIVED };
+    if (_.isArray(options.states)) {
+      where.state = { [Op.in]: options.states };
+    }
     if (channelId) where.channelId = channelId;
     if (seriesId) where.seriesId = seriesId;
     if (creatorId) where.creatorId = creatorId;
+    where.isArchived = false;
 
     // Query
     return await this.models.Measurable.findAll({
@@ -125,8 +126,8 @@ class MeasurablesData extends DataBase {
   /**
    * @return {Promise<boolean>}
    */
-  setJudgementPending() {
-    return this.MeasurableModel.setJudgementPending();
+  needsToBePending() {
+    return this.MeasurableModel.needsToBePending();
   }
 }
 

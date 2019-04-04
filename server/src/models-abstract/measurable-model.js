@@ -24,7 +24,6 @@ class MeasurableModel extends ModelPostgres {
       `(CASE WHEN "state"='${MeasurableModel.MEASURABLE_STATE.OPEN}' THEN 1 ` +
       `WHEN "state"='${MeasurableModel.MEASURABLE_STATE.JUDGEMENT_PENDING}' THEN 2 ` +
       `WHEN "state"='${MeasurableModel.MEASURABLE_STATE.JUDGED}' THEN 3 ` +
-      `WHEN "state"='${MeasurableModel.MEASURABLE_STATE.ARCHIVED}' THEN 4 ` +
       `ELSE 5 END) AS "stateOrder"`,
     );
   }
@@ -32,22 +31,8 @@ class MeasurableModel extends ModelPostgres {
   /**
    * @return {Promise<boolean>}
    */
-  setJudgementPending() {
-    return this.model.update({
-      state: MeasurableModel.MEASURABLE_STATE.JUDGEMENT_PENDING,
-    }, {
-      where: {
-        state: MeasurableModel.MEASURABLE_STATE.OPEN,
-        [this.Op.or]: [
-          {
-            expectedResolutionDate: {
-              [this.Op.lt]: this.fn('now'),
-            }
-          },
-          { expectedResolutionDate: null },
-        ],
-      },
-    }).then(() => true);
+  needsToBePending() {
+    return this.model.needsToBePending();
   }
 }
 

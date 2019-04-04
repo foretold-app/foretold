@@ -1,26 +1,26 @@
 const emitter = require('./emitter');
 const events = require('./events');
 
-const triggers = require('./triggers');
+const measurables = require('./measurables');
 
-function measurablesStates() {
+function toJudgementPendingTransition() {
   try {
-    console.log('Job::measurablesStates');
-    new triggers.MeasurablesStates().main().then((result) => {
-      console.log('Job::measurablesStates', 'all done', result);
+    console.log('Job::toJudgementPendingTransition');
+    new measurables.ToJudgementPending().main().then((result) => {
+      console.log('Job::toJudgementPendingTransition', 'all done', result);
     }).catch((err) => {
-      console.error('Job::measurablesStates', err.message);
+      console.error('Job::toJudgementPendingTransition', err.message);
       console.error(err);
     });
   } catch (e) {
-    console.log('Job::measurablesStates error');
+    console.log('Job::toJudgementPendingTransition error');
     console.error(e);
   }
 }
 
 function runListeners() {
   try {
-    emitter.on(events.MEASURABLES_STATES, measurablesStates);
+    emitter.on(events.MEASURABLE_STATE_TRANSITIONS, toJudgementPendingTransition);
   } catch (e) {
     console.log('Listener error');
     console.error(e);

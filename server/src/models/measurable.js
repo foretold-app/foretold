@@ -52,21 +52,18 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.DATE
     },
-    isJudged: {
+
+    // Status
+    isArchived: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
-      type: DataTypes.BOOLEAN
     },
 
     // Resolution
     resolutionEndpoint: {
       type: DataTypes.TEXT,
       allowNull: true,
-    },
-    hasResolutionEndpointResolved: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
     },
     expectedResolutionDate: {
       allowNull: true,
@@ -96,14 +93,14 @@ module.exports = (sequelize, DataTypes) => {
         return _.uniq(items.map(i => i.agentId)).length
       }
     },
+
+    // Satellite
     resolutionEndpointResponse: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.FLOAT),
       get: async function () {
         const endpoint = await this.dataValues.resolutionEndpoint;
-        if (!endpoint || endpoint.length == 0 || endpoint == "") {
-          return false
-        }
+        if (!endpoint) return false;
         try {
           const response = await fetch(endpoint);
           const json = await response.json();
@@ -113,7 +110,7 @@ module.exports = (sequelize, DataTypes) => {
           return asFloat;
         } catch (e) {
           console.error(`Error getting response from endpoint. Url: ${endpoint}, error: ${e}`);
-          return null
+          return null;
         }
       }
     },
@@ -122,35 +119,48 @@ module.exports = (sequelize, DataTypes) => {
   Model.needsResolutionResponse = async function () {
     return await Model.findAll({
       where: {
-        hasResolutionEndpointResolved: false,
-        resolutionEndpoint: {
-          [Sequelize.Op.ne]: ""
-        },
-        // @todo: DRY, use JUDGEMENT_PENDING status
+        state: MEASURABLE_STATE.JUDGEMENT_PENDING,
         expectedResolutionDate: {
-          [Sequelize.Op.lt]: new Date()
+          [Sequelize.Op.lt]: Sequelize.fn('now'),
         }
       }
     })
   };
 
+  Model.needsToBePending = async function () {
+    return await Model.findAll({
+      where: {
+        state: MEASURABLE_STATE.OPEN,
+        [Sequelize.Op.or]: [
+          {
+            expectedResolutionDate: {
+              [Sequelize.Op.gt]: Sequelize.fn('now'),
+            }
+          },
+          { expectedResolutionDate: null },
+        ],
+      }
+    })
+  };
+
   Model.prototype.updateState = async function (state) {
-    await this.update({ state, stateUpdatedAt: new Date() })
+    await this.update({ state, stateUpdatedAt: Sequelize.fn('now') });
   };
 
   Model.prototype.archive = async function () {
-    await this.updateState(MEASURABLE_STATE.ARCHIVED)
+    await this.update({ isArchived: true });
   };
 
   Model.prototype.unarchive = async function () {
-    await this.updateState(this.isJudged ? MEASURABLE_STATE.JUDGED : MEASURABLE_STATE.OPEN)
+    await this.update({ isArchived: false });
   };
 
   Model.prototype.judged = async function () {
-    if (!this.isJudged || this.state !== MEASURABLE_STATE.JUDGED) {
-      await this.update({ isJudged: true });
-      await this.updateState(MEASURABLE_STATE.JUDGED)
-    }
+    await this.updateState(MEASURABLE_STATE.JUDGED);
+  };
+
+  Model.prototype.judgementPending = async function () {
+    await this.updateState(MEASURABLE_STATE.JUDGEMENT_PENDING);
   };
 
   Model.prototype.processResolution = async function (agentId) {
@@ -162,9 +172,8 @@ module.exports = (sequelize, DataTypes) => {
         measurableId: this.dataValues.id,
         value: { "dataType": "floatPoint", "data": asFloat }
       });
-      await this.update({ hasResolutionEndpointResolved: true });
-      await this.judged();
     }
+    await this.judged();
   };
 
   Model.prototype.creationNotification = async function (creator) {

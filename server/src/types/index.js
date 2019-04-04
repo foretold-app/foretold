@@ -11,6 +11,7 @@ const { filterr } = require('./filterr');
 const agents = require('./agents');
 const channels = require('./channels');
 const channelMemberships = require('./channel-memberhips');
+const measurables = require('./measurables');
 
 /**
  * @deprecated
@@ -70,9 +71,6 @@ const index = {
 };
 
 module.exports = {
-  ...index,
-  index,
-
   userType,
   botType,
   measurableType,
@@ -82,4 +80,5 @@ module.exports = {
   agents,
   channels,
   channelMemberships,
+  measurables,
 };

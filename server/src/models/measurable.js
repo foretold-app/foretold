@@ -2,13 +2,10 @@ const Sequelize = require('sequelize');
 const _ = require('lodash');
 const fetch = require("node-fetch");
 const moment = require('moment');
+
 const { clientUrl } = require('../lib/urls');
 
-const states = {
-  ARCHIVED: "ARCHIVED",
-  OPEN: "OPEN",
-  JUDGED: "JUDGED"
-};
+const { MEASURABLE_STATE } = require('./measurable-state');
 
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Measurable', {
@@ -58,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     state: {
       type: DataTypes.STRING,
-      defaultValue: "OPEN",
+      defaultValue: MEASURABLE_STATE.OPEN,
       allowNull: false,
     },
     stateUpdatedAt: {
@@ -119,6 +116,7 @@ module.exports = (sequelize, DataTypes) => {
         resolutionEndpoint: {
           [Sequelize.Op.ne]: ""
         },
+        // @todo: DRY, use JUDGEMENT_PENDING status
         expectedResolutionDate: {
           [Sequelize.Op.lt]: new Date()
         }
@@ -131,17 +129,17 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   Model.prototype.archive = async function () {
-    await this.updateState(states.ARCHIVED)
+    await this.updateState(MEASURABLE_STATE.ARCHIVED)
   };
 
   Model.prototype.unarchive = async function () {
-    await this.updateState(this.isJudged ? states.JUDGED : states.OPEN)
+    await this.updateState(this.isJudged ? MEASURABLE_STATE.JUDGED : MEASURABLE_STATE.OPEN)
   };
 
   Model.prototype.judged = async function () {
-    if (!this.isJudged || this.state !== states.JUDGED) {
+    if (!this.isJudged || this.state !== MEASURABLE_STATE.JUDGED) {
       await this.update({ isJudged: true });
-      await this.updateState(states.JUDGED)
+      await this.updateState(MEASURABLE_STATE.JUDGED)
     }
   };
 

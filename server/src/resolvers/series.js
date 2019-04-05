@@ -1,10 +1,10 @@
 const data = require('../data');
 
 /**
- * @param root
- * @param args
- * @param context
- * @param info
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
  * @returns {Promise<*|Array<Model>>}
  */
 async function one(root, args, context, info) {
@@ -13,10 +13,10 @@ async function one(root, args, context, info) {
 }
 
 /**
- * @param root
- * @param args
- * @param context
- * @param info
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
  * @returns {Promise<*|Array<Model>>}
  */
 async function all(root, args, context, info) {
@@ -25,15 +25,16 @@ async function all(root, args, context, info) {
 }
 
 /**
- * @param root
- * @param args
- * @param context
- * @param info
+ * @param {*} root
+ * @param {object} args
+ * @param {object} args.input
+ * @param {Schema.Context} context
+ * @param {object} info
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
   const datas = {
-    ...args,
+    ...args.input,
     creatorId: context.user.agentId,
   };
   return await data.series.createOne(datas);

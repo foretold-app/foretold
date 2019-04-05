@@ -1,5 +1,6 @@
 const graphql = require('graphql');
 const { resolver } = require('graphql-sequelize');
+const GraphQLDate = require('graphql-date');
 
 const models = require('../models');
 const { MEASURABLE_STATE } = require('../models/measurable-state');
@@ -27,16 +28,16 @@ const measurable = new graphql.GraphQLObjectType({
     description: { type: graphql.GraphQLString },
     valueType: { type: valueType },
     state: { type: graphql.GraphQLNonNull(measurableState) },
-    stateUpdatedAt: { type: graphql.GraphQLString },
+    stateUpdatedAt: { type: GraphQLDate },
     isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     resolutionEndpoint: { type: graphql.GraphQLString },
-    expectedResolutionDate: { type: graphql.GraphQLString },
+    expectedResolutionDate: { type: GraphQLDate },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     measurementCount: { type: graphql.GraphQLInt },
     measurerCount: { type: graphql.GraphQLInt },
     resolutionEndpointResponse: { type: graphql.GraphQLFloat },
-    createdAt: { type: graphql.GraphQLString },
-    updatedAt: { type: graphql.GraphQLString },
+    createdAt: { type: GraphQLDate },
+    updatedAt: { type: GraphQLDate },
     creatorId: { type: graphql.GraphQLString },
     seriesId: { type: graphql.GraphQLString },
 

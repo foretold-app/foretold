@@ -193,14 +193,7 @@ const schema = new graphql.GraphQLSchema({
         type: types.userType,
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-          input: {
-            type: new graphql.GraphQLInputObjectType({
-              name: 'UserUpdateInput',
-              fields: {
-                name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-              }
-            })
-          }
+          input: { type: types.users.userUpdateInput },
         },
         resolve: resolvers.users.update,
       },
@@ -225,16 +218,7 @@ const schema = new graphql.GraphQLSchema({
       channelMembershipCreate: {
         type: types.channelMemberships.channelsMembership,
         args: {
-          input: {
-            type: new graphql.GraphQLInputObjectType({
-              name: 'ChannelMembershipRoleCreateInput',
-              fields: {
-                agentId: { type: graphql.GraphQLString },
-                channelId: { type: graphql.GraphQLString },
-                role: { type: graphql.GraphQLNonNull(types.channelMemberships.role) },
-              }
-            })
-          }
+          input: { type: types.channels.channelMembershipRoleCreateInput },
         },
         resolve: resolvers.channelMemberships.create,
       },
@@ -242,16 +226,7 @@ const schema = new graphql.GraphQLSchema({
       channelMembershipRoleUpdate: {
         type: types.channelMemberships.channelsMembership,
         args: {
-          input: {
-            type: new graphql.GraphQLInputObjectType({
-              name: 'ChannelMembershipRoleUpdateInput',
-              fields: {
-                agentId: { type: graphql.GraphQLString },
-                channelId: { type: graphql.GraphQLString },
-                role: { type: graphql.GraphQLNonNull(types.channelMemberships.role) },
-              }
-            })
-          }
+          input: { type: types.channels.channelMembershipRoleUpdateInput },
         },
         resolve: resolvers.channelMemberships.update,
       },
@@ -259,15 +234,7 @@ const schema = new graphql.GraphQLSchema({
       channelMembershipDelete: {
         type: types.channelMemberships.channelsMembership,
         args: {
-          input: {
-            type: new graphql.GraphQLInputObjectType({
-              name: 'ChannelMembershipDeleteInput',
-              fields: {
-                agentId: { type: graphql.GraphQLString },
-                channelId: { type: graphql.GraphQLString },
-              }
-            })
-          }
+          input: { type: types.channels.channelMembershipDeleteInput },
         },
         resolve: resolvers.channelMemberships.remove,
       },

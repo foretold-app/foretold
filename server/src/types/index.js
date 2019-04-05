@@ -14,6 +14,7 @@ const channelMemberships = require('./channel-memberhips');
 const measurables = require('./measurables');
 const measurements = require('./measurements');
 const series = require('./series');
+const users = require('./users');
 
 /**
  * @deprecated
@@ -82,4 +83,5 @@ module.exports = {
   measurables,
   measurements,
   series,
+  users,
 };

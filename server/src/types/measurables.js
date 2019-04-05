@@ -35,8 +35,8 @@ const measurable = new graphql.GraphQLObjectType({
     measurementCount: { type: graphql.GraphQLInt },
     measurerCount: { type: graphql.GraphQLInt },
     resolutionEndpointResponse: { type: graphql.GraphQLFloat },
-    createdAt: { type: graphql.GraphQLString },
-    updatedAt: { type: graphql.GraphQLString },
+    createdAt: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    updatedAt: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     creatorId: { type: graphql.GraphQLString },
     seriesId: { type: graphql.GraphQLString },
 

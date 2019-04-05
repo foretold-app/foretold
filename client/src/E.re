@@ -82,6 +82,10 @@ module S = {
   let toReact = ReasonReact.string;
   let safe_float = float_of_string->safe_fn_of_string;
   let safe_int = int_of_string->safe_fn_of_string;
+  let toMoment = e => MomentRe.moment(e);
+  module O = {
+    let toMoment = O.fmap(toMoment);
+  };
 };
 
 module J = {

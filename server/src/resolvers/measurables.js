@@ -1,11 +1,10 @@
-const _ = require('lodash');
 const data = require('../data');
 
 /**
- * @param root
- * @param args
- * @param context
- * @param info
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
  * @returns {Promise<*|Array<Model>>}
  */
 async function all(root, args, context, info) {
@@ -14,10 +13,10 @@ async function all(root, args, context, info) {
 }
 
 /**
- * @param root
- * @param args
- * @param context
- * @param info
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
  * @returns {Promise<*|Array<Model>>}
  */
 async function one(root, args, context, info) {
@@ -26,26 +25,28 @@ async function one(root, args, context, info) {
 }
 
 /**
- * @param root
- * @param args
- * @param context
- * @param info
+ * @param {*} root
+ * @param {object} args
+ * @param {object} args.input
+ * @param {Schema.Context} context
+ * @param {object} info
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
   const user = context.user;
   const datas = {
-    ...args,
+    ...args.input,
     creatorId: user.agentId,
   };
   return await data.measurables.createOne(datas, user);
 }
 
 /**
- * @param root
- * @param args
- * @param context
- * @param info
+ * @param {*} root
+ * @param {object} args
+ * @param {string} args.id
+ * @param {Schema.Context} context
+ * @param {object} info
  * @returns {Promise<*|Array<Model>>}
  */
 async function archive(root, args, context, info) {
@@ -55,9 +56,10 @@ async function archive(root, args, context, info) {
 
 /**
  * @param root
- * @param args
- * @param context
- * @param info
+ * @param {object} args
+ * @param {string} args.id
+ * @param {Schema.Context} context
+ * @param {object} info
  * @returns {Promise<*|Array<Model>>}
  */
 async function unarchive(root, args, context, info) {
@@ -66,15 +68,17 @@ async function unarchive(root, args, context, info) {
 }
 
 /**
- * @param root
- * @param args
- * @param context
- * @param info
+ * @param {*} root
+ * @param {object} args
+ * @param {string} args.id
+ * @param {object} args.input
+ * @param {Schema.Context} context
+ * @param {object} info
  * @returns {Promise<*|Array<Model>>}
  */
 async function update(root, args, context, info) {
   const id = args.id;
-  const datas = _.omit(args, ['id']);
+  const datas = args.input;
   const user = context.user;
   return await data.measurables.updateOne(id, datas, user);
 }

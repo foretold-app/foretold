@@ -61,7 +61,23 @@ const measurable = new graphql.GraphQLObjectType({
   })
 });
 
+const measurableCreateInput = new graphql.GraphQLInputObjectType({
+  name: 'MeasurableCreateInput',
+  fields: () => ({
+    name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    labelCustom: { type: graphql.GraphQLString },
+    valueType: { type: require('./value-type').valueType },
+    expectedResolutionDate: { type: require('graphql-sequelize').DateType.default },
+    resolutionEndpoint: { type: graphql.GraphQLString },
+    labelSubject: { type: graphql.GraphQLString },
+    labelOnDate: { type: require('graphql-sequelize').DateType.default },
+    labelProperty: { type: graphql.GraphQLString },
+    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+  })
+});
+
 module.exports = {
   measurableState,
   measurable,
+  measurableCreateInput,
 };

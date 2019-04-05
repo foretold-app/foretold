@@ -1,5 +1,5 @@
 const graphql = require("graphql");
-const { attributeFields, resolver } = require("graphql-sequelize");
+const { resolver } = require("graphql-sequelize");
 
 const resolvers = require('../resolvers');
 const channelMemberships = require('./channel-memberhips');
@@ -41,7 +41,7 @@ const agent = new graphql.GraphQLObjectType({
       resolve: resolver(models.Measurement)
     },
     Measurables: {
-      type: graphql.GraphQLNonNull(require('./').measurableType),
+      type: graphql.GraphQLNonNull(require('./measurables').measurable),
       resolve: resolver(models.Measurable)
     },
     Channels: {

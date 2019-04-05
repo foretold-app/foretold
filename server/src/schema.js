@@ -48,13 +48,13 @@ const schema = new graphql.GraphQLSchema({
       },
 
       measurable: {
-        type: types.measurableType,
+        type: types.measurables.measurable,
         args: _.pick(attributeFields(models.Measurable), ['id']),
         resolve: resolvers.measurables.one,
       },
 
       measurables: {
-        type: new graphql.GraphQLNonNull(new graphql.GraphQLList(types.measurableType)),
+        type: new graphql.GraphQLNonNull(new graphql.GraphQLList(types.measurables.measurable)),
         args: {
           offset: { type: graphql.GraphQLInt },
           limit: { type: graphql.GraphQLInt },
@@ -141,7 +141,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       measurableCreate: {
-        type: types.measurableType,
+        type: types.measurables.measurable,
         args: filterr(_.pick(attributeFields(models.Measurable), [
           'name', 'description', 'valueType', 'expectedResolutionDate',
           'resolutionEndpoint', 'descriptionEntity', 'descriptionDate',
@@ -160,19 +160,19 @@ const schema = new graphql.GraphQLSchema({
       },
 
       measurableArchive: {
-        type: types.measurableType,
+        type: types.measurables.measurable,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
         resolve: resolvers.measurables.archive,
       },
 
       measurableUnarchive: {
-        type: types.measurableType,
+        type: types.measurables.measurable,
         args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
         resolve: resolvers.measurables.unarchive,
       },
 
       measurableUpdate: {
-        type: types.measurableType,
+        type: types.measurables.measurable,
         args: filterr(_.pick(attributeFields(models.Measurable), [
           'id', 'name', 'description', 'expectedResolutionDate',
           'resolutionEndpoint', 'descriptionEntity', 'descriptionDate',

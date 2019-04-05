@@ -151,7 +151,7 @@ const schema = new graphql.GraphQLSchema({
       measurableCreate: {
         type: types.measurables.measurable,
         args: {
-          input: { type: types.measurables.measurableCreateInput }
+          input: { type: types.measurables.measurableCreateInput },
         },
         resolve: resolvers.measurables.create,
       },
@@ -159,19 +159,7 @@ const schema = new graphql.GraphQLSchema({
       seriesCreate: {
         type: types.seriesType,
         args: {
-          input: {
-            type: new graphql.GraphQLInputObjectType({
-              name: 'SeriesCreateInput',
-              fields: {
-                name: { type: graphql.GraphQLString },
-                description: { type: graphql.GraphQLString },
-                channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-                subjects: { type: graphql.GraphQLList(graphql.GraphQLString) },
-                properties: { type: graphql.GraphQLList(graphql.GraphQLString) },
-                dates: { type: graphql.GraphQLList(require('graphql-sequelize').DateType.default) },
-              }
-            })
-          }
+          input: { type: types.series.seriesCreateInput },
         },
         resolve: resolvers.series.create,
       },
@@ -196,20 +184,7 @@ const schema = new graphql.GraphQLSchema({
         type: types.measurables.measurable,
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-          input: {
-            type: new graphql.GraphQLInputObjectType({
-              name: 'MeasurableUpdateInput',
-              fields: {
-                name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-                labelCustom: { type: graphql.GraphQLString },
-                expectedResolutionDate: { type: require('graphql-sequelize').DateType.default },
-                resolutionEndpoint: { type: graphql.GraphQLString },
-                labelSubject: { type: graphql.GraphQLString },
-                labelOnDate: { type: require('graphql-sequelize').DateType.default },
-                labelProperty: { type: graphql.GraphQLString },
-              }
-            })
-          }
+          input: { type: types.measurables.measurableUpdateInput },
         },
         resolve: resolvers.measurables.update,
       },

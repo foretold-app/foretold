@@ -1,7 +1,5 @@
-const _ = require('lodash');
-
 const graphql = require("graphql");
-const { attributeFields, resolver } = require("graphql-sequelize");
+const { resolver } = require("graphql-sequelize");
 const { applyMiddleware } = require('graphql-middleware');
 
 const models = require("./models");
@@ -9,7 +7,6 @@ const resolvers = require('./resolvers');
 
 const types = require('./types');
 const { stats } = require('./types/stats');
-const { filterr } = require('./types/filterr');
 
 const { permissions } = require('./authorizers');
 const { middlewares } = require('./middlewares');
@@ -29,7 +26,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       users: {
-        type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.userType)),
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.userType)),
         resolve: resolver(models.User),
       },
 
@@ -42,7 +39,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       measurements: {
-        type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.measurementType)),
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.measurementType)),
         args: {
           measurableId: { type: graphql.GraphQLString },
         },
@@ -58,7 +55,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       measurables: {
-        type: new graphql.GraphQLNonNull(new graphql.GraphQLList(types.measurables.measurable)),
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.measurables.measurable)),
         args: {
           offset: { type: graphql.GraphQLInt },
           limit: { type: graphql.GraphQLInt },
@@ -79,7 +76,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       bots: {
-        type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.botType)),
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.botType)),
         resolve: resolver(models.Bot),
       },
 
@@ -92,7 +89,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       agents: {
-        type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.agents.agent)),
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.agents.agent)),
         resolve: resolver(models.Agent),
       },
 
@@ -105,7 +102,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       seriesCollection: {
-        type: new graphql.GraphQLNonNull(graphql.GraphQLList(types.seriesType)),
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.seriesType)),
         args: {
           channelId: { type: graphql.GraphQLString },
         },
@@ -143,7 +140,7 @@ const schema = new graphql.GraphQLSchema({
       measurementCreate: {
         type: types.measurementType,
         args: {
-          input: { type: types.measurements.measurementCreateInput },
+          input: { type: graphql.GraphQLNonNull(types.measurements.measurementCreateInput) },
         },
         resolve: resolvers.measurements.create,
       },
@@ -151,7 +148,7 @@ const schema = new graphql.GraphQLSchema({
       measurableCreate: {
         type: types.measurables.measurable,
         args: {
-          input: { type: types.measurables.measurableCreateInput },
+          input: { type: graphql.GraphQLNonNull(types.measurables.measurableCreateInput) },
         },
         resolve: resolvers.measurables.create,
       },
@@ -159,7 +156,7 @@ const schema = new graphql.GraphQLSchema({
       seriesCreate: {
         type: types.seriesType,
         args: {
-          input: { type: types.series.seriesCreateInput },
+          input: { type: graphql.GraphQLNonNull(types.series.seriesCreateInput) },
         },
         resolve: resolvers.series.create,
       },
@@ -184,7 +181,7 @@ const schema = new graphql.GraphQLSchema({
         type: types.measurables.measurable,
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-          input: { type: types.measurables.measurableUpdateInput },
+          input: { type: graphql.GraphQLNonNull(types.measurables.measurableUpdateInput) },
         },
         resolve: resolvers.measurables.update,
       },
@@ -193,7 +190,7 @@ const schema = new graphql.GraphQLSchema({
         type: types.userType,
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-          input: { type: types.users.userUpdateInput },
+          input: { type: graphql.GraphQLNonNull(types.users.userUpdateInput) },
         },
         resolve: resolvers.users.update,
       },
@@ -202,7 +199,7 @@ const schema = new graphql.GraphQLSchema({
         type: types.channels.channel,
         args: {
           id: { type: graphql.GraphQLString },
-          input: { type: new graphql.GraphQLNonNull(types.channels.channelInput) },
+          input: { type: graphql.GraphQLNonNull(types.channels.channelInput) },
         },
         resolve: resolvers.channels.update,
       },
@@ -210,7 +207,7 @@ const schema = new graphql.GraphQLSchema({
       channelCreate: {
         type: types.channels.channel,
         args: {
-          input: { type: new graphql.GraphQLNonNull(types.channels.channelInput) },
+          input: { type: graphql.GraphQLNonNull(types.channels.channelInput) },
         },
         resolve: resolvers.channels.create,
       },
@@ -218,7 +215,7 @@ const schema = new graphql.GraphQLSchema({
       channelMembershipCreate: {
         type: types.channelMemberships.channelsMembership,
         args: {
-          input: { type: types.channels.channelMembershipRoleCreateInput },
+          input: { type: graphql.GraphQLNonNull(types.channels.channelMembershipRoleCreateInput) },
         },
         resolve: resolvers.channelMemberships.create,
       },
@@ -226,7 +223,7 @@ const schema = new graphql.GraphQLSchema({
       channelMembershipRoleUpdate: {
         type: types.channelMemberships.channelsMembership,
         args: {
-          input: { type: types.channels.channelMembershipRoleUpdateInput },
+          input: { type: graphql.GraphQLNonNull(types.channels.channelMembershipRoleUpdateInput) },
         },
         resolve: resolvers.channelMemberships.update,
       },
@@ -234,7 +231,7 @@ const schema = new graphql.GraphQLSchema({
       channelMembershipDelete: {
         type: types.channelMemberships.channelsMembership,
         args: {
-          input: { type: types.channels.channelMembershipDeleteInput },
+          input: { type: graphql.GraphQLNonNull(types.channels.channelMembershipDeleteInput) },
         },
         resolve: resolvers.channelMemberships.remove,
       },

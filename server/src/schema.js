@@ -162,10 +162,14 @@ const schema = new graphql.GraphQLSchema({
 
       seriesCreate: {
         type: types.seriesType,
-        args: filterr(_.pick(attributeFields(models.Series), [
-          'name', 'description', 'channelId', 'subjects', 'properties',
-          'dates',
-        ])),
+        args: {
+          name: { type: graphql.GraphQLString },
+          description: { type: graphql.GraphQLString },
+          channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          subjects: { type: graphql.GraphQLList(graphql.GraphQLString) },
+          properties: { type: graphql.GraphQLList(graphql.GraphQLString) },
+          dates: { type: graphql.GraphQLList(require('graphql-sequelize').DateType.default) },
+        },
         resolve: resolvers.series.create,
       },
 

@@ -20,8 +20,8 @@ module MeasurableEntityLinks = {
             )
        );
 
-  let nameEntityLink = xEntityLink(r => r.descriptionEntity);
-  let propertyEntityLink = xEntityLink(r => r.descriptionProperty);
+  let nameEntityLink = xEntityLink(r => r.labelSubject);
+  let propertyEntityLink = xEntityLink(r => r.labelProperty);
 };
 
 let formatDate = e =>
@@ -37,7 +37,7 @@ let dateOnStyle =
   );
 
 let dateItem = (~m: measurable, ~showOn=true, ~onStyle=dateOnStyle, ()) =>
-  switch (m.descriptionDate |> E.O.fmap(E.M.goFormat_simple), showOn) {
+  switch (m.labelOnDate |> E.O.fmap(E.M.goFormat_simple), showOn) {
   | (None, _) => None
   | (Some(e), true) =>
     Some(
@@ -72,7 +72,7 @@ let link = (~m: measurable) => {
 };
 
 let description = (~m: measurable) =>
-  switch (m.description) {
+  switch (m.labelCustom) {
   | Some("")
   | None => None
   | Some(text) => Some(text |> ste |> E.React.inP)

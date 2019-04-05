@@ -41,19 +41,19 @@ module Query = [%graphql
             measurable(id: $id){
               id
               name
-              description
+              labelCustom
               valueType
               creatorId
               resolutionEndpoint
               resolutionEndpointResponse
-              descriptionEntity
-              descriptionProperty
+              labelSubject
+              labelProperty
               state
-              descriptionDate @bsDecoder(fn: "E.S.O.toMoment")
-              stateUpdatedAt @bsDecoder(fn: "E.S.O.toMoment")
-              expectedResolutionDate @bsDecoder(fn: "E.S.O.toMoment")
-              createdAt @bsDecoder(fn: "E.S.toMoment")
-              updatedAt @bsDecoder(fn: "E.S.toMoment")
+              labelOnDate @bsDecoder(fn: "E.J.O.toMoment")
+              stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
+              expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
+              createdAt @bsDecoder(fn: "E.J.toMoment")
+              updatedAt @bsDecoder(fn: "E.J.toMoment")
               creator {
                 id
                 name
@@ -154,7 +154,7 @@ let queryMeasurable = m => {
     Measurable.make(
       ~id=m##id,
       ~name=m##name,
-      ~description=m##description,
+      ~labelCustom=m##labelCustom,
       ~resolutionEndpoint=m##resolutionEndpoint,
       ~resolutionEndpointResponse=m##resolutionEndpointResponse,
       ~createdAt=Some(m##createdAt),
@@ -162,9 +162,9 @@ let queryMeasurable = m => {
       ~expectedResolutionDate=m##expectedResolutionDate,
       ~state=Some(m##state |> Context.Primary.MeasurableState.fromEnum),
       ~stateUpdatedAt=m##stateUpdatedAt,
-      ~descriptionEntity=m##descriptionEntity,
-      ~descriptionDate=m##descriptionDate,
-      ~descriptionProperty=m##descriptionProperty,
+      ~labelSubject=m##labelSubject,
+      ~labelOnDate=m##labelOnDate,
+      ~labelProperty=m##labelProperty,
       ~measurements=Some(measurements),
       ~creator=agent,
       ~series,

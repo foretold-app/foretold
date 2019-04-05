@@ -7,8 +7,8 @@ let ste = ReasonReact.string;
 module CreateMeasurableMutation = {
   module GraphQL = [%graphql
     {|
-             mutation measurableCreate($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!, $descriptionDate: Date, $descriptionProperty: String, $channelId: String!) {
-                 measurableCreate(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity, descriptionDate: $descriptionDate, descriptionProperty: $descriptionProperty, channelId: $channelId) {
+             mutation measurableCreate($name: String!, $labelCustom: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $labelSubject: String!, $labelOnDate: Date, $labelProperty: String, $channelId: String!) {
+                 measurableCreate(name: $name, labelCustom: $labelCustom, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, labelSubject: $labelSubject, labelOnDate: $labelOnDate, labelProperty: $labelProperty, channelId: $channelId) {
                    id
                  }
              }
@@ -30,25 +30,25 @@ let mutate =
     values.showDescriptionDate == "TRUE" ?
       CreateMeasurableMutation.GraphQL.make(
         ~name=values.name,
-        ~description=values.description,
-        ~descriptionProperty=values.descriptionProperty,
+        ~labelCustom=values.labelCustom,
+        ~labelProperty=values.labelProperty,
         ~expectedResolutionDate=
           values.expectedResolutionDate |> Js.Json.string,
         ~resolutionEndpoint=values.resolutionEndpoint,
-        ~descriptionEntity=values.descriptionEntity,
-        ~descriptionDate=values.descriptionDate |> Js.Json.string,
+        ~labelSubject=values.labelSubject,
+        ~labelOnDate=values.labelOnDate |> Js.Json.string,
         ~valueType=`FLOAT,
         ~channelId,
         (),
       ) :
       CreateMeasurableMutation.GraphQL.make(
         ~name=values.name,
-        ~description=values.description,
-        ~descriptionProperty=values.descriptionProperty,
+        ~labelCustom=values.labelCustom,
+        ~labelProperty=values.labelProperty,
         ~expectedResolutionDate=
           values.expectedResolutionDate |> Js.Json.string,
         ~resolutionEndpoint=values.resolutionEndpoint,
-        ~descriptionEntity=values.descriptionEntity,
+        ~labelSubject=values.labelSubject,
         ~valueType=`FLOAT,
         ~channelId,
         (),
@@ -76,12 +76,12 @@ let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
         ~onSubmit=({values}) => mutate(mutation, values, channelId),
         ~initialState={
           name: "",
-          description: "",
-          descriptionProperty: "",
-          descriptionEntity: "",
+          labelCustom: "",
+          labelProperty: "",
+          labelSubject: "",
           expectedResolutionDate:
             MomentRe.momentNow() |> MeasurableForm.formatDate,
-          descriptionDate: MomentRe.momentNow() |> MeasurableForm.formatDate,
+          labelOnDate: MomentRe.momentNow() |> MeasurableForm.formatDate,
           resolutionEndpoint: "",
           showDescriptionDate: "FALSE",
           showDescriptionProperty: "FALSE",

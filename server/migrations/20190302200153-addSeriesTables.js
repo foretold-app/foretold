@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = {
   up: async function (queryInterface, Sequelize){
       var ID_TYPE = Sequelize.UUID;

@@ -18,6 +18,7 @@ module Route = {
     | MeasurableEdit(string)
     | MeasurableNew(string)
     | Series(string, string)
+    | SeriesNew(string)
     | NotFound;
 
   let fromUrl = (url: ReasonReact.Router.url) =>
@@ -45,6 +46,7 @@ module Route = {
     | ["c", id, "members"] => ChannelMembers(id)
     | ["c", id, "invite"] => ChannelInvite(id)
     | ["measurables", id, "edit"] => MeasurableEdit(id)
+    | ["c", channel, "s", "new"] => SeriesNew(channel)
     | ["c", channel, "s", id] => Series(channel, id)
     | _ => NotFound
     };
@@ -63,6 +65,7 @@ module Url = {
     | ChannelNew
     | ChannelIndex
     | SeriesShow(string, string)
+    | SeriesNew(string)
     | MeasurableEdit(string)
     | ChannelEdit(string)
     | ChannelMembers(string)
@@ -86,6 +89,7 @@ module Url = {
     | ChannelInvite(channel) => "/c/" ++ channel ++ "/invite"
     | MeasurableEdit(id) => "/measurables/" ++ id ++ "/edit"
     | MeasurableNew(channel) => "/c/" ++ channel ++ "/new"
+    | SeriesNew(channel) => "/c/" ++ channel ++ "/s/new"
     | SeriesShow(channel, id) => "/c/" ++ channel ++ "/s/" ++ id
     };
 

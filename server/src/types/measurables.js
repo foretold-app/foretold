@@ -67,10 +67,10 @@ const measurableCreateInput = new graphql.GraphQLInputObjectType({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     labelCustom: { type: graphql.GraphQLString },
     valueType: { type: require('./value-type').valueType },
-    expectedResolutionDate: { type: require('graphql-sequelize').DateType.default },
+    expectedResolutionDate: { type: DateType.default },
     resolutionEndpoint: { type: graphql.GraphQLString },
     labelSubject: { type: graphql.GraphQLString },
-    labelOnDate: { type: require('graphql-sequelize').DateType.default },
+    labelOnDate: { type: DateType.default },
     labelProperty: { type: graphql.GraphQLString },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
   })
@@ -81,10 +81,10 @@ const measurableUpdateInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     labelCustom: { type: graphql.GraphQLString },
-    expectedResolutionDate: { type: require('graphql-sequelize').DateType.default },
+    expectedResolutionDate: { type: DateType.default },
     resolutionEndpoint: { type: graphql.GraphQLString },
     labelSubject: { type: graphql.GraphQLString },
-    labelOnDate: { type: require('graphql-sequelize').DateType.default },
+    labelOnDate: { type: DateType.default },
     labelProperty: { type: graphql.GraphQLString },
   })
 });

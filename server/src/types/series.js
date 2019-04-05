@@ -1,4 +1,5 @@
 const graphql = require('graphql');
+const { DateType } = require('graphql-sequelize');
 
 const seriesCreateInput = new graphql.GraphQLInputObjectType({
   name: 'SeriesCreateInput',
@@ -8,7 +9,7 @@ const seriesCreateInput = new graphql.GraphQLInputObjectType({
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     subjects: { type: graphql.GraphQLList(graphql.GraphQLString) },
     properties: { type: graphql.GraphQLList(graphql.GraphQLString) },
-    dates: { type: graphql.GraphQLList(require('graphql-sequelize').DateType.default) },
+    dates: { type: graphql.GraphQLList(DateType.default) },
   })
 });
 

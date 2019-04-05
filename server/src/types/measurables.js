@@ -23,7 +23,7 @@ const measurable = new graphql.GraphQLObjectType({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     descriptionEntity: { type: graphql.GraphQLString },
     // scalar date iso
-    descriptionDate: { type: graphql.GraphQLString },
+    descriptionDate: { type: GraphQLDate },
     descriptionProperty: { type: graphql.GraphQLString },
     description: { type: graphql.GraphQLString },
     valueType: { type: valueType },

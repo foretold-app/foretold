@@ -31,6 +31,7 @@ module LoadedAndSelected = {
       {C.Channel.SimpleHeader.editChannel(t.channel.id)}
       {C.Channel.SimpleHeader.inviteToChannel(t.channel.id)}
       {C.Channel.SimpleHeader.members(t.channel)}
+      {C.Channel.SimpleHeader.newSeries(t.channel.id)}
     </>;
 
   let body = (t: t) =>
@@ -56,6 +57,7 @@ module LoadedAndUnselected = {
       {C.Channel.SimpleHeader.editChannel(t.channel.id)}
       {C.Channel.SimpleHeader.inviteToChannel(t.channel.id)}
       {C.Channel.SimpleHeader.members(t.channel)}
+      {C.Channel.SimpleHeader.newSeries(t.channel.id)}
     </>;
   };
 

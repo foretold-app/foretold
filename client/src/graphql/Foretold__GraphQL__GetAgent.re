@@ -64,9 +64,9 @@ module Query = [%graphql
            measurable: Measurable @bsRecord{
              id
              name
-             expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
-             state @bsDecoder(fn: "Context.Primary.MeasurableState.fromString")
-             stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
+             expectedResolutionDate @bsDecoder(fn: "E.S.O.toMoment")
+             state @bsDecoder(fn: "Context.Primary.MeasurableState.fromEnum")
+             stateUpdatedAt @bsDecoder(fn: "E.S.O.toMoment")
           }
         }
         }

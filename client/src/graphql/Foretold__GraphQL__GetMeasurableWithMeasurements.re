@@ -49,11 +49,11 @@ module Query = [%graphql
               descriptionEntity
               descriptionProperty
               state
-              descriptionDate @bsDecoder(fn: "E.J.O.toMoment")
-              stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
-              expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
-              createdAt @bsDecoder(fn: "E.J.toMoment")
-              updatedAt @bsDecoder(fn: "E.J.toMoment")
+              descriptionDate @bsDecoder(fn: "E.S.O.toMoment")
+              stateUpdatedAt @bsDecoder(fn: "E.S.O.toMoment")
+              expectedResolutionDate @bsDecoder(fn: "E.S.O.toMoment")
+              createdAt @bsDecoder(fn: "E.S.toMoment")
+              updatedAt @bsDecoder(fn: "E.S.toMoment")
               creator {
                 id
                 name
@@ -160,7 +160,7 @@ let queryMeasurable = m => {
       ~createdAt=Some(m##createdAt),
       ~updatedAt=Some(m##updatedAt),
       ~expectedResolutionDate=m##expectedResolutionDate,
-      ~state=Some(m##state |> Context.Primary.MeasurableState.fromString),
+      ~state=Some(m##state |> Context.Primary.MeasurableState.fromEnum),
       ~stateUpdatedAt=m##stateUpdatedAt,
       ~descriptionEntity=m##descriptionEntity,
       ~descriptionDate=m##descriptionDate,

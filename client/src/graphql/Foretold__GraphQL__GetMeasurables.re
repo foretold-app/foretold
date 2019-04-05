@@ -93,12 +93,12 @@ module Query = [%graphql
            measurerCount
            descriptionEntity
            descriptionProperty
-           descriptionDate @bsDecoder(fn: "E.J.O.toMoment")
-           state @bsDecoder(fn: "Context.Primary.MeasurableState.fromString")
-           stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
-           expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
-           createdAt @bsDecoder(fn: "E.J.toMoment")
-           updatedAt @bsDecoder(fn: "E.J.toMoment")
+           descriptionDate @bsDecoder(fn: "E.S.O.toMoment")
+           state @bsDecoder(fn: "Context.Primary.MeasurableState.fromEnum")
+           stateUpdatedAt @bsDecoder(fn: "E.S.O.toMoment")
+           expectedResolutionDate @bsDecoder(fn: "E.S.O.toMoment")
+           createdAt @bsDecoder(fn: "E.S.toMoment")
+           updatedAt @bsDecoder(fn: "E.S.toMoment")
            creator @bsRecord{
              id
              name

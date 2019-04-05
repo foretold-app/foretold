@@ -1,6 +1,5 @@
 const graphql = require('graphql');
-const { resolver } = require('graphql-sequelize');
-const GraphQLDate = require('graphql-date');
+const { resolver, DateType } = require('graphql-sequelize');
 
 const models = require('../models');
 const { MEASURABLE_STATE } = require('../models/measurable-state');
@@ -22,22 +21,21 @@ const measurable = new graphql.GraphQLObjectType({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     descriptionEntity: { type: graphql.GraphQLString },
-    // scalar date iso
-    descriptionDate: { type: GraphQLDate },
+    descriptionDate: { type: DateType.default },
     descriptionProperty: { type: graphql.GraphQLString },
     description: { type: graphql.GraphQLString },
     valueType: { type: valueType },
     state: { type: graphql.GraphQLNonNull(measurableState) },
-    stateUpdatedAt: { type: GraphQLDate },
+    stateUpdatedAt: { type: DateType.default },
     isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     resolutionEndpoint: { type: graphql.GraphQLString },
-    expectedResolutionDate: { type: GraphQLDate },
+    expectedResolutionDate: { type: DateType.default },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     measurementCount: { type: graphql.GraphQLInt },
     measurerCount: { type: graphql.GraphQLInt },
     resolutionEndpointResponse: { type: graphql.GraphQLFloat },
-    createdAt: { type: GraphQLDate },
-    updatedAt: { type: GraphQLDate },
+    createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
+    updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     creatorId: { type: graphql.GraphQLString },
     seriesId: { type: graphql.GraphQLString },
 

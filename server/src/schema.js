@@ -175,23 +175,32 @@ const schema = new graphql.GraphQLSchema({
 
       measurableArchive: {
         type: types.measurables.measurable,
-        args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
         resolve: resolvers.measurables.archive,
       },
 
       measurableUnarchive: {
         type: types.measurables.measurable,
-        args: filterr(_.pick(attributeFields(models.Measurable), ['id'])),
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
         resolve: resolvers.measurables.unarchive,
       },
 
       measurableUpdate: {
         type: types.measurables.measurable,
-        args: filterr(_.pick(attributeFields(models.Measurable), [
-          'id', 'name', 'labelCustom', 'expectedResolutionDate',
-          'resolutionEndpoint', 'labelSubject', 'labelOnDate',
-          'labelProperty',
-        ])),
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          labelCustom: { type: graphql.GraphQLString },
+          expectedResolutionDate: { type: require('graphql-sequelize').DateType.default },
+          resolutionEndpoint: { type: graphql.GraphQLString },
+          labelSubject: { type: graphql.GraphQLString },
+          labelOnDate: { type: require('graphql-sequelize').DateType.default },
+          labelProperty: { type: graphql.GraphQLString },
+        },
         resolve: resolvers.measurables.update,
       },
 

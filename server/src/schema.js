@@ -215,7 +215,7 @@ const schema = new graphql.GraphQLSchema({
       channelMembershipCreate: {
         type: types.channelMemberships.channelsMembership,
         args: {
-          input: { type: graphql.GraphQLNonNull(types.channels.channelMembershipRoleCreateInput) },
+          input: { type: graphql.GraphQLNonNull(types.channels.channelMembershipRoleInput) },
         },
         resolve: resolvers.channelMemberships.create,
       },
@@ -223,7 +223,7 @@ const schema = new graphql.GraphQLSchema({
       channelMembershipRoleUpdate: {
         type: types.channelMemberships.channelsMembership,
         args: {
-          input: { type: graphql.GraphQLNonNull(types.channels.channelMembershipRoleUpdateInput) },
+          input: { type: graphql.GraphQLNonNull(types.channels.channelMembershipRoleInput) },
         },
         resolve: resolvers.channelMemberships.update,
       },

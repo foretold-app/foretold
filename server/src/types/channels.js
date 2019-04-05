@@ -37,17 +37,8 @@ const channelInput = new graphql.GraphQLInputObjectType({
   }),
 });
 
-const channelMembershipRoleCreateInput = new graphql.GraphQLInputObjectType({
-  name: 'ChannelMembershipRoleCreateInput',
-  fields: () => ({
-    agentId: { type: graphql.GraphQLString },
-    channelId: { type: graphql.GraphQLString },
-    role: { type: graphql.GraphQLNonNull(require('./channel-memberhips').role) },
-  }),
-});
-
-const channelMembershipRoleUpdateInput = new graphql.GraphQLInputObjectType({
-  name: 'ChannelMembershipRoleUpdateInput',
+const channelMembershipRoleInput = new graphql.GraphQLInputObjectType({
+  name: 'ChannelMembershipRoleInput',
   fields: () => ({
     agentId: { type: graphql.GraphQLString },
     channelId: { type: graphql.GraphQLString },
@@ -66,7 +57,6 @@ const channelMembershipDeleteInput = new graphql.GraphQLInputObjectType({
 module.exports = {
   channel,
   channelInput,
-  channelMembershipRoleCreateInput,
-  channelMembershipRoleUpdateInput,
+  channelMembershipRoleInput,
   channelMembershipDeleteInput,
 };

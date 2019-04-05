@@ -45,10 +45,8 @@ app.get(/^((?!graphql).)*$/,
 app.use(bodyParser.graphql());
 server.applyMiddleware({ app });
 
-models.sequelize.sync().then(() => {
-  app.listen({ port: PORT }, () => {
-    console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
-  });
-  runJobs();
-  runListeners();
+app.listen({ port: PORT }, () => {
+  console.log(`Server ready at http://localhost:${PORT}${server.graphqlPath}`)
 });
+runJobs();
+runListeners();

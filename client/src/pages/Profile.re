@@ -6,8 +6,8 @@ let ste = ReasonReact.string;
 
 module EditUser = [%graphql
   {|
-             mutation userUpdate($id: String!, $name:String!) {
-                 userUpdate(id: $id, name: $name) {
+             mutation userUpdate($id: String!, $input:UserUpdateInput!) {
+                 userUpdate(id: $id, input: $input) {
                    id
                  }
              }
@@ -38,7 +38,7 @@ module FormConfig = {
 module Form = ReFormNext.Make(FormConfig);
 
 let mutate = (mutation: EditUserMutation.apolloMutation, values, id: string) => {
-  let mutate = EditUser.make(~id, ~name=values, ());
+  let mutate = EditUser.make(~id, ~input={"name": values}, ());
   mutation(~variables=mutate##variables, ~refetchQueries=[|"user"|], ())
   |> ignore;
 };

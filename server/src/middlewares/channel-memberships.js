@@ -11,10 +11,12 @@ const data = require('../data');
  */
 async function channelMemberships(root, args, context, info) {
   const channelId = _.get(args, 'channelId')
+    || _.get(args, 'input.channelId')
     || _.get(root, 'channelId')
     || _.get(context, 'channelId')
     || _.get(context, 'channel.id');
   const agentId = _.get(context, 'user.agentId');
+
   const id = { agentId, channelId };
   console.log('\x1b[36m ---> \x1b[0m Middleware (channelMemberships)', id);
   if (channelId && agentId) {

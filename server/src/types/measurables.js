@@ -61,7 +61,37 @@ const measurable = new graphql.GraphQLObjectType({
   })
 });
 
+const measurableCreateInput = new graphql.GraphQLInputObjectType({
+  name: 'MeasurableCreateInput',
+  fields: () => ({
+    name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    labelCustom: { type: graphql.GraphQLString },
+    valueType: { type: require('./value-type').valueType },
+    expectedResolutionDate: { type: DateType.default },
+    resolutionEndpoint: { type: graphql.GraphQLString },
+    labelSubject: { type: graphql.GraphQLString },
+    labelOnDate: { type: DateType.default },
+    labelProperty: { type: graphql.GraphQLString },
+    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+  })
+});
+
+const measurableUpdateInput = new graphql.GraphQLInputObjectType({
+  name: 'MeasurableUpdateInput',
+  fields: () => ({
+    name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    labelCustom: { type: graphql.GraphQLString },
+    expectedResolutionDate: { type: DateType.default },
+    resolutionEndpoint: { type: graphql.GraphQLString },
+    labelSubject: { type: graphql.GraphQLString },
+    labelOnDate: { type: DateType.default },
+    labelProperty: { type: graphql.GraphQLString },
+  })
+});
+
 module.exports = {
   measurableState,
   measurable,
+  measurableCreateInput,
+  measurableUpdateInput,
 };

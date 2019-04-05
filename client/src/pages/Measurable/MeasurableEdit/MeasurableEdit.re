@@ -5,8 +5,8 @@ open Rationale.Function.Infix;
 module WithEditMutation = {
   module GraphQL = [%graphql
     {|
-             mutation measurableUpdate($id: String!, $name: String!, $labelCustom: String!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $labelSubject: String!,$labelProperty: String, $labelOnDate: Date) {
-                 measurableUpdate(id: $id, name: $name, labelCustom: $labelCustom, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, labelSubject: $labelSubject,labelProperty: $labelProperty, labelOnDate: $labelOnDate) {
+             mutation measurableUpdate($id: String!, $input: MeasurableUpdateInput!) {
+                 measurableUpdate(id: $id, input: $input) {
                    id
                  }
              }
@@ -32,13 +32,16 @@ module WithEditMutation = {
     let m =
       GraphQL.make(
         ~id,
-        ~name,
-        ~labelCustom,
-        ~labelProperty,
-        ~labelOnDate=date |> Js.Json.string,
-        ~expectedResolutionDate=expectedResolutionDate |> Js.Json.string,
-        ~resolutionEndpoint,
-        ~labelSubject,
+        ~input={
+          "name": name,
+          "labelCustom": labelCustom |> E.O.some,
+          "labelProperty": labelProperty |> E.O.some,
+          "labelOnDate": date |> Js.Json.string |> E.O.some,
+          "expectedResolutionDate":
+            expectedResolutionDate |> Js.Json.string |> E.O.some,
+          "resolutionEndpoint": resolutionEndpoint |> E.O.some,
+          "labelSubject": labelSubject |> E.O.some,
+        },
         (),
       );
     mutation(~variables=m##variables, ~refetchQueries=[|"getAgent"|], ())

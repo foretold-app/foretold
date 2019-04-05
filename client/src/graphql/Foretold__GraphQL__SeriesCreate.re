@@ -1,7 +1,7 @@
 module Query = [%graphql
   {|
-            mutation seriesCreate($name: String, $description: String, $channelId: String!, $subjects: [String], $properties: [String], $dates: [Date]) {
-                seriesCreate(name: $name, description: $description, channelId: $channelId, subjects: $subjects, properties:$properties, dates:$dates) {
+            mutation seriesCreate($input:SeriesCreateInput!) {
+                seriesCreate(input: $input) {
                   name
                 }
             }
@@ -22,12 +22,14 @@ let mutate =
     ) => {
   let m =
     Query.make(
-      ~name,
-      ~description,
-      ~channelId,
-      ~subjects,
-      ~properties,
-      ~dates,
+      ~input={
+        "name": Some(name),
+        "description": Some(description),
+        "channelId": channelId,
+        "subjects": Some(subjects),
+        "properties": Some(properties),
+        "dates": Some(dates),
+      },
       (),
     );
   mutation(~variables=m##variables, ~refetchQueries=[|"getChannels"|], ())

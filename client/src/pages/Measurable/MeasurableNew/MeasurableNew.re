@@ -7,8 +7,8 @@ let ste = ReasonReact.string;
 module CreateMeasurableMutation = {
   module GraphQL = [%graphql
     {|
-             mutation measurableCreate($name: String!, $labelCustom: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $labelSubject: String!, $labelOnDate: Date, $labelProperty: String, $channelId: String!) {
-                 measurableCreate(name: $name, labelCustom: $labelCustom, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, labelSubject: $labelSubject, labelOnDate: $labelOnDate, labelProperty: $labelProperty, channelId: $channelId) {
+             mutation measurableCreate($input: MeasurableCreateInput!) {
+                 measurableCreate(input: $input) {
                    id
                  }
              }
@@ -29,28 +29,33 @@ let mutate =
   let mutate =
     values.showDescriptionDate == "TRUE" ?
       CreateMeasurableMutation.GraphQL.make(
-        ~name=values.name,
-        ~labelCustom=values.labelCustom,
-        ~labelProperty=values.labelProperty,
-        ~expectedResolutionDate=
-          values.expectedResolutionDate |> Js.Json.string,
-        ~resolutionEndpoint=values.resolutionEndpoint,
-        ~labelSubject=values.labelSubject,
-        ~labelOnDate=values.labelOnDate |> Js.Json.string,
-        ~valueType=`FLOAT,
-        ~channelId,
+        ~input={
+          "name": values.name,
+          "labelCustom": Some(values.labelCustom),
+          "labelProperty": Some(values.labelProperty),
+          "expectedResolutionDate":
+            values.expectedResolutionDate |> Js.Json.string |> E.O.some,
+          "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
+          "labelSubject": values.labelSubject |> E.O.some,
+          "labelOnDate": values.labelOnDate |> Js.Json.string |> E.O.some,
+          "valueType": `FLOAT,
+          "channelId": channelId,
+        },
         (),
       ) :
       CreateMeasurableMutation.GraphQL.make(
-        ~name=values.name,
-        ~labelCustom=values.labelCustom,
-        ~labelProperty=values.labelProperty,
-        ~expectedResolutionDate=
-          values.expectedResolutionDate |> Js.Json.string,
-        ~resolutionEndpoint=values.resolutionEndpoint,
-        ~labelSubject=values.labelSubject,
-        ~valueType=`FLOAT,
-        ~channelId,
+        ~input={
+          "name": values.name,
+          "labelCustom": Some(values.labelCustom),
+          "labelProperty": Some(values.labelProperty),
+          "expectedResolutionDate":
+            values.expectedResolutionDate |> Js.Json.string |> E.O.some,
+          "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
+          "labelSubject": values.labelSubject |> E.O.some,
+          "labelOnDate": None,
+          "valueType": `FLOAT,
+          "channelId": channelId,
+        },
         (),
       );
   mutation(

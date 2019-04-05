@@ -1,7 +1,7 @@
 module Query = [%graphql
   {|
-            mutation measurementCreate($value: SequelizeJSON!, $description: String!, $competitorType:competitorType!, $measurableId:String!) {
-                measurementCreate(value: $value, description: $description, competitorType: $competitorType, measurableId:$measurableId) {
+            mutation measurementCreate($input: MeasurementCreateInput!) {
+                measurementCreate(input: $input) {
                   createdAt
                 }
             }
@@ -22,10 +22,13 @@ let mutate =
     ) => {
   let m =
     Query.make(
-      ~measurableId,
-      ~value=value |> MeasurementValue.encode,
-      ~description,
-      ~competitorType,
+      ~input={
+        "measurableId": Some(measurableId),
+        "value": Some(value |> MeasurementValue.encode),
+        "description": Some(description),
+        "competitorType": competitorType,
+        "agentId": None,
+      },
       (),
     );
   mutation(~variables=m##variables, ~refetchQueries=[|"getMeasurable"|], ())

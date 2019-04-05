@@ -2,44 +2,48 @@ const data = require('../data');
 
 /**
  * @param {*} root
- * @param {{channelId: string, agentId: string, role: string}} args
+ * @param {{input: {channelId: string, agentId: string, role: string}}} args
  * @returns {Promise<Models.ChannelMemberships>}
  */
 async function create(root, args) {
+  const input = args.input;
   return await data.channelMemberships.createOne(
-    args.channelId,
-    args.agentId,
-    args.role
+    input.channelId,
+    input.agentId,
+    input.role
   );
 }
 
 /**
- * @param root
- * @param {{channelId: string, agentId: string, role: string}} args
+ * @param {*} root
+ * @param {{input: {channelId: string, agentId: string, role: string}}} args
  * @returns {Promise<Models.ChannelMemberships>}
  */
 async function update(root, args) {
+  const input = args.input;
   return await data.channelMemberships.updateOne(
-    args.channelId,
-    args.agentId,
-    args.role
+    input.channelId,
+    input.agentId,
+    input.role
   );
 }
 
 /**
  * @param root
- * @param {{channelId: string, agentId: string}} args
+ * @param {{input: {channelId: string, agentId: string}}} args
  * @returns {Promise<Models.ChannelMemberships | null>}
  */
 async function remove(root, args) {
+  const input = args.input;
   return await data.channelMemberships.deleteOne(
-    args.channelId,
-    args.agentId
+    input.channelId,
+    input.agentId
   );
 }
 
 /**
  * @param {object | null} root
+ * @param {string} root.id
  * @param {object} args
  * @param {string} args.id
  * @param {Schema.Context} context

@@ -34,7 +34,7 @@ module SimpleHeader = {
   let inviteToChannel = channelId =>
     buttonr("Invite Members", ChannelInvite(channelId));
 
-  let leaveChannel = (channelId, agentId) =>
+  let leaveChannel = (channelId: string, agentId: string) =>
     Foretold__GraphQL.Mutations.ChannelLeave.Mutation.make((mutation, _) =>
       <Div float=`right>
         <Antd.Button

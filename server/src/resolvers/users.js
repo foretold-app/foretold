@@ -1,22 +1,24 @@
 const data = require('../data');
 
 /**
- * @param root
- * @param args
- * @param options
+ * @param {*} root
+ * @param {object} args
+ * @param {string} args.id
+ * @param {object} args.input
+ * @param {Schema.Context} options
  * @returns {Promise<Models.User>}
  */
 async function update(root, args, options) {
-  const { id, name } = args;
-  const datas = { name };
+  const { id } = args;
+  const datas = args.input;
   const user = options.user;
   return await data.users.updateOne(id, datas, user);
 }
 
 /**
- * @param root
- * @param args
- * @param options
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} options
  * @returns {Promise<Models.User>}
  */
 async function one(root, args, options) {

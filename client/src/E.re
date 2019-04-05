@@ -111,6 +111,8 @@ module JsDate = {
 /* List */
 module L = {
   let fmap = List.map;
+  let toArray = Array.of_list;
+  let fmapi = List.mapi;
   let concat = List.concat;
   let find = List.find;
   let filter = List.filter;
@@ -130,6 +132,7 @@ module L = {
   let dropLast = Rationale.RList.dropLast;
   let contains = Rationale.RList.contains;
   let without = Rationale.RList.without;
+  let update = Rationale.RList.update;
   let iter = List.iter;
   let findIndex = Rationale.RList.findIndex;
 };

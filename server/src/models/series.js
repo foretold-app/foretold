@@ -55,6 +55,7 @@ module.exports = (sequelize, DataTypes) => {
     for (let subject of this.subjects) {
       for (let property of this.properties) {
         for (let date of this.dates) {
+          console.log("Making Measurable for Series:", subject, property, date);
           await sequelize.models.Measurable.create({
             name: "",
             descriptionEntity: subject,

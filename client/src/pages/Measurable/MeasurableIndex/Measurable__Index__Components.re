@@ -1,4 +1,5 @@
 open Rationale.Function.Infix;
+open Rationale.Option.Infix;
 open Utils;
 open Measurable__Index__Logic;
 
@@ -8,6 +9,11 @@ let leaveButton = (agent, channelId) =>
   agent
   |> E.O.fmap((e: Context.Primary.Agent.t) => e.id)
   |> E.O.React.fmapOrNull(C.Channel.SimpleHeader.leaveChannel(channelId));
+
+let joinButton = (agent, channelId) =>
+  agent
+  |> E.O.fmap((e: Context.Primary.Agent.t) => e.id)
+  |> E.O.React.fmapOrNull(C.Channel.SimpleHeader.joinChannel(channelId));
 
 module LoadedAndSelected = {
   open Measurable__Index__Logic.LoadedAndSelected;
@@ -21,7 +27,9 @@ module LoadedAndSelected = {
       }
       {C.Channel.SimpleHeader.newMeasurable(t.channel.id)}
       {leaveButton(t.loggedInUser.agent, t.channel.id)}
+      {joinButton(t.loggedInUser.agent, t.channel.id)}
       {C.Channel.SimpleHeader.editChannel(t.channel.id)}
+      {C.Channel.SimpleHeader.inviteToChannel(t.channel.id)}
       {C.Channel.SimpleHeader.members(t.channel)}
     </>;
 
@@ -44,7 +52,9 @@ module LoadedAndUnselected = {
       }
       {C.Channel.SimpleHeader.newMeasurable(t.channel.id)}
       {leaveButton(t.loggedInUser.agent, t.channel.id)}
+      {joinButton(t.loggedInUser.agent, t.channel.id)}
       {C.Channel.SimpleHeader.editChannel(t.channel.id)}
+      {C.Channel.SimpleHeader.inviteToChannel(t.channel.id)}
       {C.Channel.SimpleHeader.members(t.channel)}
     </>;
   };

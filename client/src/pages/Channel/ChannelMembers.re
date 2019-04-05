@@ -147,7 +147,7 @@ let make =
                         |> Context.Primary.ChannelMembershipRole.toString,
                     }
                   );
-             <Antd.Table columns dataSource />;
+             <Antd.Table columns dataSource size=`small />;
            })
         |> E.HttpResponse.withReactDefaults
       );

@@ -3462,10 +3462,10 @@ bs-platform@^4.0.7:
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-4.0.18.tgz#d17b8693ba1f714d9b27e0ddb365f2069ba4b8a0"
   integrity sha512-BwzW0iYHvREqUZIgQxJmdJrxexppLvJxYQ4LLexbhCp7uZU5DIZ5ub4ZHpkCkc8fn8bsXWc+Rrejb3csi+BoAQ==
 
-bs-reform@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/bs-reform/-/bs-reform-5.1.1.tgz#8b808d5d9f535fb78574ce0f18dff29a4c2d19d6"
-  integrity sha512-zzluA2kk8Ss5zZHFk4DXMQvglLJ+GAQ+FJvA4+a/A7OrOtcVT+jtFc5c+PsOn/OecH6allQqT9bLkvaTjNke6Q==
+bs-reform@^6.0.0-gadt.5:
+  version "6.0.0-gadt.5"
+  resolved "https://registry.yarnpkg.com/bs-reform/-/bs-reform-6.0.0-gadt.5.tgz#76c8f26ac6709fcc07b5d75f4e94257582c86bbd"
+  integrity sha512-KdBgBHTf0KCpOMfWvMfTfz9bW8vU73NSKV8MunygDrUozNMmwkHD6gmuUmtrjshSYq00DQz5X/qK8A4y0luODg==
 
 bs-storybook@^0.2.0:
   version "0.2.0"

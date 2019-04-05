@@ -16,21 +16,29 @@ module EditUser = [%graphql
 
 module EditUserMutation = ReasonApollo.CreateMutation(EditUser);
 
-module Params = {
+module FormConfig = {
+  type field(_) =
+    | Name: field(string);
   type state = {name: string};
-  type fields = [ | `name];
-  let lens = [(`name, s => s.name, (s, name) => {...s, name})];
+
+  let get: type value. (state, field(value)) => value =
+    (state, field) =>
+      switch (field) {
+      | Name => state.name
+      };
+
+  let set: type value. (state, field(value), value) => state =
+    (state, field, value) =>
+      switch (field) {
+      | Name => {...state, name: value}
+      };
 };
 
-module Form = ReForm.Create(Params);
+/* ReFormNext */
+module Form = ReFormNext.Make(FormConfig);
 
-let mutate =
-    (
-      mutation: EditUserMutation.apolloMutation,
-      values: Form.values,
-      id: string,
-    ) => {
-  let mutate = EditUser.make(~id, ~name=values.name, ());
+let mutate = (mutation: EditUserMutation.apolloMutation, values, id: string) => {
+  let mutate = EditUser.make(~id, ~name=values, ());
   mutation(~variables=mutate##variables, ~refetchQueries=[|"user"|], ())
   |> ignore;
 };
@@ -58,30 +66,32 @@ let withUserMutation = innerComponentFn =>
 
 let withUserForm = (id, name, mutation, innerComponentFn) =>
   Form.make(
-    ~onSubmit=({values}) => mutate(mutation, values, id),
     ~initialState={name: name},
-    ~schema=[(`name, Custom(_ => None))],
+    ~onSubmit=values => mutate(mutation, values.state.values.name, id),
+    ~schema=Form.Validation.Schema([||]),
     innerComponentFn,
   )
   |> E.React.el;
 
-let formFields = (form: Form.state, handleChange, handleSubmit: unit => unit) =>
-  <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
-    <Antd.Form>
-      <Antd.Form.Item>
-        {"Username" |> ste |> E.React.inH3}
-        <Input
-          value={form.values.name}
-          onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
-        />
-      </Antd.Form.Item>
-      <Antd.Form.Item>
-        <Button _type=`primary onClick={_ => handleSubmit()}>
-          {"Submit" |> ste}
-        </Button>
-      </Antd.Form.Item>
-    </Antd.Form>
-  </form>;
+let formFields = (form: Form.state, send, onSubmit) =>
+  <Antd.Form onSubmit={e => onSubmit()}>
+    <Antd.Form.Item>
+      {"Username" |> ste |> E.React.inH3}
+      <Input
+        value={form.values.name}
+        onChange={
+          ReForm.Helpers.handleDomFormChange(e =>
+            send(Form.FieldChangeValue(Name, e))
+          )
+        }
+      />
+    </Antd.Form.Item>
+    <Antd.Form.Item>
+      <Button _type=`primary onClick={_ => onSubmit()}>
+        {"Submit" |> ste}
+      </Button>
+    </Antd.Form.Item>
+  </Antd.Form>;
 
 module CMutationForm =
   MutationForm.Make({
@@ -100,13 +110,16 @@ let make =
       ~head=SLayout.Header.textDiv("Edit Profile Information"),
       ~body=
         withUserMutation((mutation, data) => {
+          let agent = loggedInUser.agent;
           let id = loggedInUser.id;
-          let name = loggedInUser.name;
-          withUserForm(
-            id, name, mutation, ({handleSubmit, handleChange, form, _}) =>
+          let name =
+            agent
+            |> E.O.bind(_, (r: Context.Primary.Agent.t) => r.name)
+            |> E.O.toExn("The logged in user needs an ID!");
+          withUserForm(id, name, mutation, ({send, state}) =>
             CMutationForm.showWithLoading(
               ~result=data.result,
-              ~form=formFields(form, handleChange, handleSubmit),
+              ~form=formFields(state, send, () => send(Form.Submit)),
               (),
             )
           );

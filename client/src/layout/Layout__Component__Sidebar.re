@@ -81,6 +81,11 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
             {"My Measurables" |> ste}
           </div>
           <div
+            onClick={_e => Context.Routing.Url.push(EntityIndex)}
+            className=Styles.item>
+            {"Entity List" |> ste}
+          </div>
+          <div
             onClick={_e => Context.Auth.Actions.logout()}
             className=Styles.item>
             {"Log Out" |> ste}

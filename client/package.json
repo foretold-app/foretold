@@ -39,7 +39,7 @@
     "bs-ant-design": "git+https://git@github.com/Thinkei/bs-ant-design.git",
     "bs-css": "^8.0.2",
     "bs-moment": "^0.4.4",
-    "bs-reform": "^5.1.1",
+    "bs-reform": "^6.0.0-gadt.5",
     "bs-storybook": "^0.2.0",
     "discrete-sampling": "^1.0.3",
     "financejs": "^4.1.0",

@@ -1,7 +1,7 @@
 module Query = [%graphql
   {|
-            mutation channelMembershipCreate($agentId: String!, $channelId: String!) {
-                channelMembershipCreate(agentId: $agentId, channelId: $channelId, role: VIEWER) {
+            mutation channelMembershipCreate($input: ChannelMembershipRoleInput!) {
+                channelMembershipCreate(input: $input) {
                  agentId
                 }
             }
@@ -11,7 +11,11 @@ module Query = [%graphql
 module Mutation = ReasonApollo.CreateMutation(Query);
 
 let mutate = (mutation: Mutation.apolloMutation, agentId, channelId) => {
-  let m = Query.make(~agentId, ~channelId, ());
+  let m =
+    Query.make(
+      ~input={"agentId": agentId, "channelId": channelId, "role": `VIEWER},
+      (),
+    );
   mutation(
     ~variables=m##variables,
     ~refetchQueries=[|"getChannels", "user"|],

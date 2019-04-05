@@ -6,8 +6,8 @@ let ste = ReasonReact.string;
 
 module EditUser = [%graphql
   {|
-             mutation userUpdate($id: String!, $name:String!) {
-                 userUpdate(id: $id, name: $name) {
+             mutation userUpdate($id: String!, $input:UserUpdateInput!) {
+                 userUpdate(id: $id, input: $input) {
                    id
                  }
              }

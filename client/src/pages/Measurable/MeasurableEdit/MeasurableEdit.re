@@ -5,8 +5,8 @@ open Rationale.Function.Infix;
 module WithEditMutation = {
   module GraphQL = [%graphql
     {|
-             mutation measurableUpdate($id: String!, $name: String!, $description: String!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!,$descriptionProperty: String, $descriptionDate: Date) {
-                 measurableUpdate(id: $id, name: $name, description: $description, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity,descriptionProperty: $descriptionProperty, descriptionDate: $descriptionDate) {
+             mutation measurableUpdate($id: String!, $input: MeasurableUpdateInput!) {
+                 measurableUpdate(id: $id, input: $input) {
                    id
                  }
              }

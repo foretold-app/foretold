@@ -7,8 +7,8 @@ let ste = ReasonReact.string;
 module CreateMeasurableMutation = {
   module GraphQL = [%graphql
     {|
-             mutation measurableCreate($name: String!, $description: String!, $valueType:valueType!, $expectedResolutionDate:Date, $resolutionEndpoint: String!, $descriptionEntity: String!, $descriptionDate: Date, $descriptionProperty: String, $channelId: String!) {
-                 measurableCreate(name: $name, description: $description, valueType: $valueType, expectedResolutionDate: $expectedResolutionDate, resolutionEndpoint: $resolutionEndpoint, descriptionEntity: $descriptionEntity, descriptionDate: $descriptionDate, descriptionProperty: $descriptionProperty, channelId: $channelId) {
+             mutation measurableCreate($input: MeasurableCreateInput!) {
+                 measurableCreate(input: $input) {
                    id
                  }
              }
@@ -29,28 +29,32 @@ let mutate =
   let mutate =
     values.showDescriptionDate == "TRUE" ?
       CreateMeasurableMutation.GraphQL.make(
-        ~name=values.name,
-        ~description=values.description,
-        ~descriptionProperty=values.descriptionProperty,
-        ~expectedResolutionDate=
-          values.expectedResolutionDate |> Js.Json.string,
-        ~resolutionEndpoint=values.resolutionEndpoint,
-        ~descriptionEntity=values.descriptionEntity,
-        ~descriptionDate=values.descriptionDate |> Js.Json.string,
-        ~valueType=`FLOAT,
-        ~channelId,
+        ~input={
+          "name": values.name,
+          "description": values.description,
+          "descriptionProperty": values.descriptionProperty,
+          "expectedResolutionDate":
+            values.expectedResolutionDate |> Js.Json.string,
+          "resolutionEndpoint": values.resolutionEndpoint,
+          "descriptionEntity": values.descriptionEntity,
+          "descriptionDate": values.descriptionDate |> Js.Json.string,
+          "valueType": `FLOAT,
+          "channelId": channelId,
+        },
         (),
       ) :
       CreateMeasurableMutation.GraphQL.make(
-        ~name=values.name,
-        ~description=values.description,
-        ~descriptionProperty=values.descriptionProperty,
-        ~expectedResolutionDate=
-          values.expectedResolutionDate |> Js.Json.string,
-        ~resolutionEndpoint=values.resolutionEndpoint,
-        ~descriptionEntity=values.descriptionEntity,
-        ~valueType=`FLOAT,
-        ~channelId,
+        ~input={
+          "name": values.name,
+          "description": values.description,
+          "descriptionProperty": values.descriptionProperty,
+          "expectedResolutionDate":
+            values.expectedResolutionDate |> Js.Json.string,
+          "resolutionEndpoint": values.resolutionEndpoint,
+          "descriptionEntity": values.descriptionEntity,
+          "valueType": `FLOAT,
+          "channelId": channelId,
+        },
         (),
       );
   mutation(

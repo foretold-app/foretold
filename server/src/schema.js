@@ -35,7 +35,9 @@ const schema = new graphql.GraphQLSchema({
 
       measurement: {
         type: types.measurementType,
-        args: _.pick(attributeFields(models.Measurement), ['id']),
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
         resolve: resolvers.measurements.one,
       },
 
@@ -49,7 +51,9 @@ const schema = new graphql.GraphQLSchema({
 
       measurable: {
         type: types.measurables.measurable,
-        args: _.pick(attributeFields(models.Measurable), ['id']),
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
         resolve: resolvers.measurables.one,
       },
 
@@ -68,7 +72,9 @@ const schema = new graphql.GraphQLSchema({
 
       bot: {
         type: types.botType,
-        args: _.pick(attributeFields(models.Bot), ['id']),
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
         resolve: resolver(models.Bot),
       },
 
@@ -79,7 +85,9 @@ const schema = new graphql.GraphQLSchema({
 
       agent: {
         type: types.agents.agent,
-        args: _.pick(attributeFields(models.Agent), ['id']),
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
         resolve: resolver(models.Agent),
       },
 
@@ -206,7 +214,10 @@ const schema = new graphql.GraphQLSchema({
 
       userUpdate: {
         type: types.userType,
-        args: filterr(_.pick(attributeFields(models.User), ["id", "name"])),
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
         resolve: resolvers.users.update,
       },
 

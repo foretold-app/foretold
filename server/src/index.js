@@ -7,6 +7,8 @@ const { ApolloServer } = require('apollo-server-express');
 const models = require("./models");
 const { schemaWithMiddlewares } = require('./schema');
 const { authentication } = require('./authentication');
+const { runJobs } = require('./async');
+const { runListeners } = require('./async/listeners');
 
 const PORT = process.env.PORT || 4000;
 
@@ -47,4 +49,6 @@ models.sequelize.sync().then(() => {
   app.listen({ port: PORT }, () => {
     console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
   });
+  runJobs();
+  runListeners();
 });

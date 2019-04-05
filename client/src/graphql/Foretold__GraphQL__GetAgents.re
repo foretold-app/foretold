@@ -22,6 +22,7 @@ let toBot = (a: bot): Context.Primary.Bot.t => {
 
 type agent = {
   id: string,
+  name: option(string),
   measurementCount: int,
   bot: option(bot),
   user: option(user),
@@ -36,9 +37,9 @@ let toAgent = (a: agent): Context.Primary.Agent.t => {
     };
   Context.Primary.Agent.make(
     ~id=a.id,
+    ~name=a.name,
     ~measurementCount=Some(a.measurementCount),
     ~agentType,
-    ~name=None,
     (),
   );
 };
@@ -50,6 +51,7 @@ module Query = [%graphql
     query getAgents {
       agents @bsRecord{
         id
+        name
         measurementCount
         user: User @bsRecord{
           id
@@ -67,3 +69,18 @@ module Query = [%graphql
 ];
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
+
+let component = innerFn => {
+  let query = Query.make();
+  QueryComponent.make(~variables=query##variables, ({result}) =>
+    result
+    |> E.HttpResponse.fromApollo
+    |> E.HttpResponse.fmap((e: Query.t) => {
+         let agents = e##agents;
+         let foo = agents |> E.A.O.concatSomes |> E.A.fmap(toAgent);
+         foo;
+       })
+    |> innerFn
+  )
+  |> E.React.el;
+};

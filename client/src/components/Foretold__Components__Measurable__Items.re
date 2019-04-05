@@ -209,5 +209,5 @@ let unArchiveButton = (~m: measurable) =>
   |> E.React.el;
 
 let archiveOption = (~m: measurable) =>
-  Measurable.toStatus(m) !== ARCHIVED ?
+  Measurable.toStatus(m) !== `ARCHIVED ?
     archiveButton(~m) : unArchiveButton(~m);

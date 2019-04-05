@@ -172,14 +172,23 @@ module Series = {
 type valueType = [ | `DATE | `FLOAT | `PERCENTAGE];
 
 module MeasurableState = {
-  type t = [ | `OPEN | `ARCHIVED | `JUDGED];
+  type t = [ | `OPEN | `ARCHIVED | `JUDGEMENT_PENDING | `JUDGED];
 
   let fromString = e =>
     switch (e) {
     | "OPEN" => `OPEN
     | "JUDGED" => `JUDGED
     | "ARCHIVED" => `ARCHIVED
-    | _ => Js.Exn.raiseError("Invalid GraphQL State")
+    | "JUDGEMENT_PENDING" => `JUDGEMENT_PENDING
+    | _ => Js.Exn.raiseError("Invalid GraphQL State: " ++ e)
+    };
+
+  let toInt = (status: t) =>
+    switch (status) {
+    | `OPEN => 3
+    | `JUDGEMENT_PENDING => 2
+    | `JUDGED => 1
+    | `ARCHIVED => 0
     };
 };
 
@@ -233,24 +242,6 @@ module Measurement = {
   };
 };
 
-module MeasurableStatus = {
-  type t =
-    | OPEN
-    | PENDING_REVIEW
-    | ARCHIVED
-    | JUDGED;
-
-  /* TODO: CHange closed to judged */
-
-  let toInt = (status: t) =>
-    switch (status) {
-    | OPEN => 3
-    | PENDING_REVIEW => 2
-    | JUDGED => 1
-    | ARCHIVED => 0
-    };
-};
-
 module Measurable = {
   type t = {
     id: string,
@@ -277,18 +268,7 @@ module Measurable = {
 
   let toStatus = (measurable: t) => {
     let state = measurable.state |> E.O.toExn("Needs state from GraphQL");
-    if (state === `ARCHIVED) {
-      MeasurableStatus.ARCHIVED;
-    } else if (state === `JUDGED) {
-      JUDGED;
-    } else {
-      let pastExpectedResolutionDate =
-        switch (measurable.expectedResolutionDate) {
-        | None => false
-        | Some(e) => MomentRe.Moment.isAfter(MomentRe.momentNow(), e)
-        };
-      if (pastExpectedResolutionDate) {PENDING_REVIEW} else {OPEN};
-    };
+    state;
   };
 
   let isEqual = (a: t, b: t) => a.id == b.id;
@@ -303,7 +283,7 @@ module Measurable = {
     | (a, b, Some(aa), Some(bb)) when a == b =>
       MomentRe.Moment.isAfter(aa, bb) ? 1 : (-1)
     | (a, b, _, _) =>
-      MeasurableStatus.toInt(a) > MeasurableStatus.toInt(b) ? (-1) : 1
+      MeasurableState.toInt(a) > MeasurableState.toInt(b) ? (-1) : 1
     };
 
   let stableSort = m => E.A.stableSortBy(m, compare);

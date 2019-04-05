@@ -23,3 +23,5 @@ let names = subjectId =>
   |> Graph_T.F.factList
   |> Graph_Fact_Filters.withSubject(subjectId)
   |> E.L.fmap((f: Graph_T.T.fact) => f);
+
+let things = graph |> Graph_T.F.thingArray;

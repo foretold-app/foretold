@@ -6,11 +6,13 @@ module Route = {
     | Login
     | Profile
     | EntityShow(string)
+    | EntityIndex
     | AgentShow(string)
     | AgentMeasurables(string)
     | ChannelShow(string)
     | ChannelEdit(string)
     | ChannelMembers(string)
+    | ChannelInvite(string)
     | ChannelIndex
     | ChannelNew
     | MeasurableEdit(string)
@@ -31,6 +33,7 @@ module Route = {
     | ["agents"] => AgentIndex
     | ["profile"] => Profile
     | ["agents", id] => AgentShow(id)
+    | ["entities"] => EntityIndex
     | ["entities", ...id] => EntityShow(String.concat("/", id))
     | ["agents", id, "measurables"] => AgentMeasurables(id)
     | ["channels", "new"] => ChannelNew
@@ -40,6 +43,7 @@ module Route = {
     | ["c", id, "new"] => MeasurableNew(id)
     | ["c", id, "edit"] => ChannelEdit(id)
     | ["c", id, "members"] => ChannelMembers(id)
+    | ["c", id, "invite"] => ChannelInvite(id)
     | ["measurables", id, "edit"] => MeasurableEdit(id)
     | ["c", channel, "s", id] => Series(channel, id)
     | _ => NotFound
@@ -51,6 +55,7 @@ module Url = {
     | Home
     | AgentIndex
     | Profile
+    | EntityIndex
     | EntityShow(string)
     | AgentShow(string)
     | AgentMeasurables(string)
@@ -61,6 +66,7 @@ module Url = {
     | MeasurableEdit(string)
     | ChannelEdit(string)
     | ChannelMembers(string)
+    | ChannelInvite(string)
     | MeasurableNew(string);
 
   let toString = (r: t) =>
@@ -68,6 +74,7 @@ module Url = {
     | Home => "/"
     | AgentIndex => "/agents"
     | Profile => "/profile/"
+    | EntityIndex => "/entities"
     | EntityShow(id) => "/entities/" ++ id
     | AgentShow(id) => "/agents/" ++ id
     | AgentMeasurables(id) => "/agents/" ++ id ++ "/measurables"
@@ -76,6 +83,7 @@ module Url = {
     | ChannelIndex => "/channels"
     | ChannelEdit(id) => "/c/" ++ id ++ "/edit"
     | ChannelMembers(id) => "/c/" ++ id ++ "/members"
+    | ChannelInvite(channel) => "/c/" ++ channel ++ "/invite"
     | MeasurableEdit(id) => "/measurables/" ++ id ++ "/edit"
     | MeasurableNew(channel) => "/c/" ++ channel ++ "/new"
     | SeriesShow(channel, id) => "/c/" ++ channel ++ "/s/" ++ id

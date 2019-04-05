@@ -54,7 +54,6 @@ function generateReferences(model) {
 }
 
 const userType = makeObjectType(models.User);
-const measurableType = makeObjectType(models.Measurable);
 const measurementType = makeObjectType(models.Measurement);
 const botType = makeObjectType(models.Bot);
 const seriesType = makeObjectType(models.Series);
@@ -63,8 +62,7 @@ const index = {
   Users: userType,
   Agents: agents.agent,
   Bots: botType,
-  Measurables: measurableType,
-  measurables: measurableType,
+  Measurables: measurables.measurable,
   Series: seriesType,
   Measurements: measurementType,
   Channels: channels.channel,
@@ -73,7 +71,6 @@ const index = {
 module.exports = {
   userType,
   botType,
-  measurableType,
   seriesType,
   measurementType,
 

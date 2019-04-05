@@ -134,19 +134,29 @@ const schema = new graphql.GraphQLSchema({
 
       measurementCreate: {
         type: types.measurementType,
-        args: filterr(_.pick(attributeFields(models.Measurement), [
-          'value', 'competitorType', 'measurableId', 'agentId', 'description'
-        ])),
+        args: {
+          value: { type: require('graphql-sequelize').JSONType.default },
+          competitorType: { type: require('./types/competitor').competitor },
+          measurableId: { type: graphql.GraphQLString },
+          agentId: { type: graphql.GraphQLString },
+          description: { type: graphql.GraphQLString },
+        },
         resolve: resolvers.measurements.create,
       },
 
       measurableCreate: {
         type: types.measurables.measurable,
-        args: filterr(_.pick(attributeFields(models.Measurable), [
-          'name', 'labelCustom', 'valueType', 'expectedResolutionDate',
-          'resolutionEndpoint', 'labelSubject', 'labelOnDate',
-          'labelProperty', 'channelId',
-        ])),
+        args: {
+          name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          labelCustom: { type: graphql.GraphQLString },
+          valueType: { type: require('./types/value-type').valueType },
+          expectedResolutionDate: { type: require('graphql-sequelize').DateType.default },
+          resolutionEndpoint: { type: graphql.GraphQLString },
+          labelSubject: { type: graphql.GraphQLString },
+          labelOnDate: { type: require('graphql-sequelize').DateType.default },
+          labelProperty: { type: graphql.GraphQLString },
+          channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
         resolve: resolvers.measurables.create,
       },
 

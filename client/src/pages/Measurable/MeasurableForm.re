@@ -6,10 +6,10 @@ let formatDate = E.M.format(E.M.format_standard);
 module SignUpParams = {
   type state = {
     name: string,
-    description: string,
-    descriptionEntity: string,
-    descriptionDate: string,
-    descriptionProperty: string,
+    labelCustom: string,
+    labelSubject: string,
+    labelOnDate: string,
+    labelProperty: string,
     expectedResolutionDate: string,
     resolutionEndpoint: string,
     showDescriptionDate: string,
@@ -17,10 +17,10 @@ module SignUpParams = {
   };
   type fields = [
     | `name
-    | `description
-    | `descriptionEntity
-    | `descriptionProperty
-    | `descriptionDate
+    | `labelCustom
+    | `labelSubject
+    | `labelProperty
+    | `labelOnDate
     | `expectedResolutionDate
     | `resolutionEndpoint
     | `showDescriptionDate
@@ -29,19 +29,19 @@ module SignUpParams = {
   let lens = [
     (`name, s => s.name, (s, name) => {...s, name}),
     (
-      `description,
-      s => s.description,
-      (s, description) => {...s, description},
+      `labelCustom,
+      s => s.labelCustom,
+      (s, labelCustom) => {...s, labelCustom},
     ),
     (
-      `descriptionEntity,
-      s => s.descriptionEntity,
-      (s, descriptionEntity) => {...s, descriptionEntity},
+      `labelSubject,
+      s => s.labelSubject,
+      (s, labelSubject) => {...s, labelSubject},
     ),
     (
-      `descriptionProperty,
-      s => s.descriptionProperty,
-      (s, descriptionProperty) => {...s, descriptionProperty},
+      `labelProperty,
+      s => s.labelProperty,
+      (s, labelProperty) => {...s, labelProperty},
     ),
     (
       `showDescriptionDate,
@@ -54,9 +54,9 @@ module SignUpParams = {
       (s, showDescriptionProperty) => {...s, showDescriptionProperty},
     ),
     (
-      `descriptionDate,
-      s => s.descriptionDate,
-      (s, descriptionDate) => {...s, descriptionDate},
+      `labelOnDate,
+      s => s.labelOnDate,
+      (s, labelOnDate) => {...s, labelOnDate},
     ),
     (
       `expectedResolutionDate,
@@ -79,11 +79,9 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
       <Form.Item>
         {"Relevant Entity (optional)" |> ste |> E.React.inH3}
         <Input
-          value={form.values.descriptionEntity}
+          value={form.values.labelSubject}
           onChange={
-            ReForm.Helpers.handleDomFormChange(
-              handleChange(`descriptionEntity),
-            )
+            ReForm.Helpers.handleDomFormChange(handleChange(`labelSubject))
           }
         />
       </Form.Item>
@@ -106,10 +104,10 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
           <Form.Item>
             {"Property Entity Name" |> ste |> E.React.inH3}
             <Input
-              value={form.values.descriptionProperty}
+              value={form.values.labelProperty}
               onChange={
                 ReForm.Helpers.handleDomFormChange(
-                  handleChange(`descriptionProperty),
+                  handleChange(`labelProperty),
                 )
               }
             />
@@ -143,10 +141,8 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
           <Form.Item>
             {"'On' Date" |> ste |> E.React.inH3}
             <DatePicker
-              value={
-                form.values.descriptionDate |> MomentRe.momentDefaultFormat
-              }
-              onChange={e => handleChange(`descriptionDate, e |> formatDate)}
+              value={form.values.labelOnDate |> MomentRe.moment}
+              onChange={e => handleChange(`labelOnDate, e |> formatDate)}
             />
           </Form.Item> :
           <div />
@@ -154,9 +150,9 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
       <Form.Item>
         {"Description" |> ste |> E.React.inH3}
         <Input
-          value={form.values.description}
+          value={form.values.labelCustom}
           onChange={
-            ReForm.Helpers.handleDomFormChange(handleChange(`description))
+            ReForm.Helpers.handleDomFormChange(handleChange(`labelCustom))
           }
         />
       </Form.Item>

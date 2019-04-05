@@ -16,7 +16,7 @@ let mutate =
     GraphQL.make(
       ~input={
         "agentId": Some(agentId),
-        "channelId": channelId,
+        "channelId": Some(channelId),
         "role": role,
       },
       (),

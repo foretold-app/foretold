@@ -1,6 +1,6 @@
 module Query = [%graphql
   {|
-            mutation measurementCreate($input: MeasurableCreateInput!) {
+            mutation measurementCreate($input: MeasurementCreateInput!) {
                 measurementCreate(input: $input) {
                   createdAt
                 }
@@ -23,10 +23,11 @@ let mutate =
   let m =
     Query.make(
       ~input={
-        "measurableId": measurableId,
-        "value": value |> MeasurementValue.encode,
-        "description": description,
+        "measurableId": Some(measurableId),
+        "value": Some(value |> MeasurementValue.encode),
+        "description": Some(description),
         "competitorType": competitorType,
+        "agentId": None,
       },
       (),
     );

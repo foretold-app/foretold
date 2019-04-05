@@ -38,7 +38,7 @@ module FormConfig = {
 module Form = ReFormNext.Make(FormConfig);
 
 let mutate = (mutation: EditUserMutation.apolloMutation, values, id: string) => {
-  let mutate = EditUser.make(~id, ~name=values, ());
+  let mutate = EditUser.make(~id, ~input={"name": values}, ());
   mutation(~variables=mutate##variables, ~refetchQueries=[|"user"|], ())
   |> ignore;
 };

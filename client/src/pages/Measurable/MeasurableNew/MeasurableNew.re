@@ -31,13 +31,13 @@ let mutate =
       CreateMeasurableMutation.GraphQL.make(
         ~input={
           "name": values.name,
-          "description": values.description,
-          "descriptionProperty": values.descriptionProperty,
+          "labelCustom": Some(values.labelCustom),
+          "labelProperty": Some(values.labelProperty),
           "expectedResolutionDate":
-            values.expectedResolutionDate |> Js.Json.string,
-          "resolutionEndpoint": values.resolutionEndpoint,
-          "descriptionEntity": values.descriptionEntity,
-          "descriptionDate": values.descriptionDate |> Js.Json.string,
+            values.expectedResolutionDate |> Js.Json.string |> E.O.some,
+          "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
+          "labelSubject": values.labelSubject |> E.O.some,
+          "labelOnDate": values.labelOnDate |> Js.Json.string |> E.O.some,
           "valueType": `FLOAT,
           "channelId": channelId,
         },
@@ -46,12 +46,13 @@ let mutate =
       CreateMeasurableMutation.GraphQL.make(
         ~input={
           "name": values.name,
-          "description": values.description,
-          "descriptionProperty": values.descriptionProperty,
+          "labelCustom": Some(values.labelCustom),
+          "labelProperty": Some(values.labelProperty),
           "expectedResolutionDate":
-            values.expectedResolutionDate |> Js.Json.string,
-          "resolutionEndpoint": values.resolutionEndpoint,
-          "descriptionEntity": values.descriptionEntity,
+            values.expectedResolutionDate |> Js.Json.string |> E.O.some,
+          "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
+          "labelSubject": values.labelSubject |> E.O.some,
+          "labelOnDate": None,
           "valueType": `FLOAT,
           "channelId": channelId,
         },
@@ -80,12 +81,12 @@ let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
         ~onSubmit=({values}) => mutate(mutation, values, channelId),
         ~initialState={
           name: "",
-          description: "",
-          descriptionProperty: "",
-          descriptionEntity: "",
+          labelCustom: "",
+          labelProperty: "",
+          labelSubject: "",
           expectedResolutionDate:
             MomentRe.momentNow() |> MeasurableForm.formatDate,
-          descriptionDate: MomentRe.momentNow() |> MeasurableForm.formatDate,
+          labelOnDate: MomentRe.momentNow() |> MeasurableForm.formatDate,
           resolutionEndpoint: "",
           showDescriptionDate: "FALSE",
           showDescriptionProperty: "FALSE",

@@ -16,31 +16,25 @@ module SimpleHeader = {
       ]);
   };
 
-  let newMeasurable = channelId =>
+  let buttonr = (str, action: Context.Routing.Url.t) =>
     <Div float=`right>
-      <Antd.Button
-        onClick={_ => Context.Routing.Url.push(MeasurableNew(channelId))}>
-        {"New Measurable" |> ste}
+      <Antd.Button onClick={_ => Context.Routing.Url.push(action)}>
+        {str |> ste}
       </Antd.Button>
     </Div>;
+
+  let newMeasurable = channelId =>
+    buttonr("New Measurable", MeasurableNew(channelId));
 
   let editChannel = channelId =>
-    <Div float=`right>
-      <Antd.Button
-        onClick={_ => Context.Routing.Url.push(ChannelEdit(channelId))}>
-        {"Edit Channel" |> ste}
-      </Antd.Button>
-    </Div>;
+    buttonr("Edit Measurable", ChannelEdit(channelId));
+
+  let newSeries = channelId => buttonr("New Series", SeriesNew(channelId));
 
   let inviteToChannel = channelId =>
-    <Div float=`right>
-      <Antd.Button
-        onClick={_ => Context.Routing.Url.push(ChannelInvite(channelId))}>
-        {"Invite Members" |> ste}
-      </Antd.Button>
-    </Div>;
+    buttonr("Invite Members", ChannelInvite(channelId));
 
-  let leaveChannel = (channelId, agentId) =>
+  let leaveChannel = (channelId: string, agentId: string) =>
     Foretold__GraphQL.Mutations.ChannelLeave.Mutation.make((mutation, _) =>
       <Div float=`right>
         <Antd.Button

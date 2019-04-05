@@ -34,11 +34,11 @@ type measurable = {
   name: string,
   channel: option(channel),
   valueType: Context.Primary.valueType,
-  description: option(string),
+  labelCustom: option(string),
   resolutionEndpoint: option(string),
   measurementCount: option(int),
   measurerCount: option(int),
-  descriptionEntity: option(string),
+  labelSubject: option(string),
   createdAt: MomentRe.Moment.t,
   updatedAt: MomentRe.Moment.t,
   expectedResolutionDate: option(MomentRe.Moment.t),
@@ -46,8 +46,8 @@ type measurable = {
   stateUpdatedAt: option(MomentRe.Moment.t),
   creator: option(creator),
   series: option(series),
-  descriptionDate: option(MomentRe.Moment.t),
-  descriptionProperty: option(string),
+  labelOnDate: option(MomentRe.Moment.t),
+  labelProperty: option(string),
 };
 
 /* TODO: Fix channel */
@@ -57,13 +57,13 @@ let toMeasurable = (m: measurable): Context.Primary.Measurable.t =>
     ~name=m.name,
     ~channel=None,
     ~valueType=m.valueType,
-    ~description=m.description,
+    ~labelCustom=m.labelCustom,
     ~resolutionEndpoint=m.resolutionEndpoint,
     ~measurementCount=m.measurementCount,
     ~measurerCount=m.measurerCount,
-    ~descriptionEntity=m.descriptionEntity,
-    ~descriptionDate=m.descriptionDate,
-    ~descriptionProperty=m.descriptionProperty,
+    ~labelSubject=m.labelSubject,
+    ~labelOnDate=m.labelOnDate,
+    ~labelProperty=m.labelProperty,
     ~createdAt=Some(m.createdAt),
     ~updatedAt=Some(m.updatedAt),
     ~expectedResolutionDate=m.expectedResolutionDate,
@@ -86,19 +86,19 @@ module Query = [%graphql
              description
              isPublic
            }
-           description
+           labelCustom
            resolutionEndpoint
            valueType
            measurementCount
            measurerCount
-           descriptionEntity
-           descriptionProperty
-           descriptionDate @bsDecoder(fn: "E.S.O.toMoment")
+           labelSubject
+           labelProperty
+           labelOnDate @bsDecoder(fn: "E.J.O.toMoment")
            state @bsDecoder(fn: "Context.Primary.MeasurableState.fromEnum")
-           stateUpdatedAt @bsDecoder(fn: "E.S.O.toMoment")
-           expectedResolutionDate @bsDecoder(fn: "E.S.O.toMoment")
-           createdAt @bsDecoder(fn: "E.S.toMoment")
-           updatedAt @bsDecoder(fn: "E.S.toMoment")
+           stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
+           expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
+           createdAt @bsDecoder(fn: "E.J.toMoment")
+           updatedAt @bsDecoder(fn: "E.J.toMoment")
            creator @bsRecord{
              id
              name

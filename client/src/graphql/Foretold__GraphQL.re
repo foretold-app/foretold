@@ -21,4 +21,5 @@ module Mutations = {
   module ChannelLeave = Foretold__GraphQL__ChannelLeave;
   module ChannelUpdate = Foretold__GraphQL__ChannelUpdate;
   module ChannelMembershipRoleUpdate = Foretold__GraphQL__ChannelMembershipRoleUpdate;
+  module SeriesCreate = Foretold__GraphQL__SeriesCreate;
 };

@@ -20,25 +20,28 @@ module WithEditMutation = {
         mutation: Mutation.apolloMutation,
         id: string,
         name: string,
-        description: string,
+        labelCustom: string,
         expectedResolutionDate: string,
         resolutionEndpoint: string,
-        descriptionEntity: string,
-        descriptionDate: string,
+        labelSubject: string,
+        labelOnDate: string,
         showDescriptionDate: string,
-        descriptionProperty: string,
+        labelProperty: string,
       ) => {
-    let date = showDescriptionDate == "TRUE" ? descriptionDate : "";
+    let date = showDescriptionDate == "TRUE" ? labelOnDate : "";
     let m =
       GraphQL.make(
         ~id,
-        ~name,
-        ~description,
-        ~descriptionProperty,
-        ~descriptionDate=date |> Js.Json.string,
-        ~expectedResolutionDate=expectedResolutionDate |> Js.Json.string,
-        ~resolutionEndpoint,
-        ~descriptionEntity,
+        ~input={
+          "name": name,
+          "labelCustom": labelCustom |> E.O.some,
+          "labelProperty": labelProperty |> E.O.some,
+          "labelOnDate": date |> Js.Json.string |> E.O.some,
+          "expectedResolutionDate":
+            expectedResolutionDate |> Js.Json.string |> E.O.some,
+          "resolutionEndpoint": resolutionEndpoint |> E.O.some,
+          "labelSubject": labelSubject |> E.O.some,
+        },
         (),
       );
     mutation(~variables=m##variables, ~refetchQueries=[|"getAgent"|], ())
@@ -61,34 +64,31 @@ let formCreation = (id, m) => {
             mutation,
             id,
             values.name,
-            values.description,
+            values.labelCustom,
             values.expectedResolutionDate,
             values.resolutionEndpoint,
-            values.descriptionEntity,
-            values.descriptionDate,
+            values.labelSubject,
+            values.labelOnDate,
             values.showDescriptionDate,
-            values.descriptionProperty,
+            values.labelProperty,
           ),
       ~initialState={
         name: measurable.name,
-        descriptionDate:
-          measurable.descriptionDate
+        labelOnDate:
+          measurable.labelOnDate
           |> E.O.default(MomentRe.momentNow())
           |> MeasurableForm.formatDate,
         showDescriptionDate:
-          measurable.descriptionDate
-          |> E.O.isSome
-          |> (e => e ? "TRUE" : "FALSE"),
-        descriptionEntity: measurable.descriptionEntity |> E.O.default(""),
-        description: measurable.description |> E.O.default(""),
+          measurable.labelOnDate |> E.O.isSome |> (e => e ? "TRUE" : "FALSE"),
+        labelSubject: measurable.labelSubject |> E.O.default(""),
+        labelCustom: measurable.labelCustom |> E.O.default(""),
         expectedResolutionDate:
           measurable.expectedResolutionDate
           |> E.O.default(MomentRe.momentNow())
           |> MeasurableForm.formatDate,
         resolutionEndpoint: measurable.resolutionEndpoint |> E.O.default(""),
         showDescriptionProperty: measurable.name == "" ? "TRUE" : "FALSE",
-        descriptionProperty:
-          measurable.descriptionProperty |> E.O.default(""),
+        labelProperty: measurable.labelProperty |> E.O.default(""),
       },
       ~schema=[(`name, Custom(_ => None))],
       ({handleSubmit, handleChange, form, _}) =>

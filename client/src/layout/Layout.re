@@ -67,6 +67,8 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
     | Redirect => Auth0Redirect.make(~me) |> inApp
     | EntityIndex => EntityIndex.make(~layout) |> inApp
     | Profile => Profile.make(~loggedInUser, ~layout) |> inApp
+    | SeriesNew(channelId) =>
+      SeriesNew.make(~channelId, ~loggedInUser, ~layout) |> inApp
     | AgentShow(id) => AgentShow.make(~id, ~layout) |> inApp
     | ChannelShow(channelId) =>
       MeasurableIndex.make(

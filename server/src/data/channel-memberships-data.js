@@ -76,8 +76,8 @@ class ChannelMembershipsData extends DataBase {
    * @todo: Then do the same everywhere on data layer.
    *
    * @param {object} options
-   * @param {string} options.agentId?
-   * @param {string} options.channelId?
+   * @param {string} [options.agentId]
+   * @param {string} [options.channelId]
    * @returns {Promise<Models.ChannelMemberships>}
    */
   async getOne(options) {
@@ -86,8 +86,8 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @param {object} options
-   * @param {string} options.agentId?
-   * @param {string} options.channelId?
+   * @param {string} [options.agentId]
+   * @param {string} [options.channelId]
    * @returns {Promise<Models.ChannelMemberships[]>}
    */
   async getAll(options) {

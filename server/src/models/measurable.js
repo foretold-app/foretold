@@ -21,19 +21,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    descriptionEntity: {
+    labelSubject: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    descriptionDate: {
+    labelOnDate: {
       type: DataTypes.DATE,
       allowNull: true,
     },
-    descriptionProperty: {
+    labelProperty: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    description: {
+    labelCustom: {
       type: DataTypes.TEXT,
       allowNull: true,
     },
@@ -185,7 +185,7 @@ module.exports = (sequelize, DataTypes) => {
         "title_link": `${clientUrl}/measurables/${this.id}`,
         "author_name": creator.name,
         "author_link": `${clientUrl}/agents/${agent.id}`,
-        "text": this.description,
+        "text": this.labelCustom,
         "fields": [
           {
             "title": "Resolution Date",

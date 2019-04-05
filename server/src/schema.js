@@ -143,9 +143,9 @@ const schema = new graphql.GraphQLSchema({
       measurableCreate: {
         type: types.measurables.measurable,
         args: filterr(_.pick(attributeFields(models.Measurable), [
-          'name', 'description', 'valueType', 'expectedResolutionDate',
-          'resolutionEndpoint', 'descriptionEntity', 'descriptionDate',
-          'descriptionProperty', 'channelId',
+          'name', 'labelCustom', 'valueType', 'expectedResolutionDate',
+          'resolutionEndpoint', 'labelSubject', 'labelOnDate',
+          'labelProperty', 'channelId',
         ])),
         resolve: resolvers.measurables.create,
       },
@@ -174,9 +174,9 @@ const schema = new graphql.GraphQLSchema({
       measurableUpdate: {
         type: types.measurables.measurable,
         args: filterr(_.pick(attributeFields(models.Measurable), [
-          'id', 'name', 'description', 'expectedResolutionDate',
-          'resolutionEndpoint', 'descriptionEntity', 'descriptionDate',
-          'descriptionProperty',
+          'id', 'name', 'labelCustom', 'expectedResolutionDate',
+          'resolutionEndpoint', 'labelSubject', 'labelOnDate',
+          'labelProperty',
         ])),
         resolve: resolvers.measurables.update,
       },

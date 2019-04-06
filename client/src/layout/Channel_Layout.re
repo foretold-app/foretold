@@ -3,63 +3,76 @@ open Utils;
 open Style.Grid;
 open Rationale.Function.Infix;
 
-/* module MemberTabs = {
-     type memberOption =
-       | View
-       | Invite
-       | Edit;
-   }
-
-   module TopTabs = {
-
-     type t =
-       | Measurables
-       | Members(MemberTabs.t)
-       | Options(InfoTabs.t);
-
-     let toS = (t: t) =>
-       switch (t) {
-       | Measurables => "M"
-       | Members(_) => "Me"
-       | Options(_) => "O"
-       };
-   } */
-
-module Config = {
-  type memberOption =
+module MemberTab = {
+  type t =
     | View
-    | Invite
-    | Edit;
+    | Invite;
 
-  let memberOptionToS = (t: memberOption) =>
+  let toS = (t: t) =>
     switch (t) {
     | View => "V"
     | Invite => "I"
-    | Edit => "Edit"
     };
 
-  type editOptions =
+  let toUrl = (t: t, id: string): Context__Routing.Url.t =>
+    switch (t) {
+    | View => ChannelMembers(id)
+    | Invite => ChannelInvite(id)
+    };
+};
+
+module InfoTab = {
+  type t =
     | NewSeries
     | Edit;
 
-  let editOptionToS = (t: editOptions) =>
+  let toS = (t: t) =>
     switch (t) {
     | NewSeries => "N"
     | Edit => "E"
     };
 
-  type topOption =
-    | Measurables
-    | Members(memberOption)
-    | Options(editOptions);
+  let toUrl = (t: t, id: string): Context__Routing.Url.t =>
+    switch (t) {
+    | NewSeries => SeriesNew(id)
+    | Edit => ChannelEdit(id)
+    };
+};
 
-  let topOptionToS = (t: topOption) =>
+module TopTab = {
+  type t =
+    | Measurables
+    | Members(MemberTab.t)
+    | Options(InfoTab.t);
+
+  let toS = (t: t) =>
     switch (t) {
     | Measurables => "M"
     | Members(_) => "Me"
     | Options(_) => "O"
     };
 
+  let toUrl = (t: t, id: string): Context__Routing.Url.t =>
+    switch (t) {
+    | Measurables => ChannelShow(id)
+    | Members(_) => ChannelMembers(id)
+    | Options(_) => ChannelEdit(id)
+    };
+};
+
+let topOption = (page: Context.Routing.Route.t): option(TopTab.t) =>
+  switch (page) {
+  | ChannelEdit(_) => Some(Options(Edit))
+  | SeriesNew(_) => Some(Options(NewSeries))
+  | ChannelInvite(_) => Some(Members(Invite))
+  | ChannelMembers(_) => Some(Members(View))
+  | MeasurableNew(_) => Some(Measurables)
+  | ChannelShow(_) => Some(Measurables)
+  | Series(_, _) => Some(Measurables)
+  | _ => None
+  };
+
+module Config = {
   type t = {
     head: ReasonReact.reactElement,
     body: ReasonReact.reactElement,
@@ -68,47 +81,79 @@ module Config = {
 
 let component = ReasonReact.statelessComponent("Page");
 
-let button = (value, str) =>
-  <Antd_Radio_Button value> {str |> ste} </Antd_Radio_Button>;
+let button = (value, toUrl, str, id) =>
+  <Antd_Radio_Button
+    value onClick={_ => Context.Routing.Url.push(toUrl(id))}>
+    {str |> ste}
+  </Antd_Radio_Button>;
 
-let tabs = (o: Config.topOption, channel: Context.Primary.Channel.t) =>
-  <Antd.Radio.Group
-    defaultValue="" value={o |> Config.topOptionToS} onChange={e => ()}>
-    {button(Config.Measurables |> Config.topOptionToS, "Measurables")}
-    {
-      button(
-        Config.Members(View) |> Config.topOptionToS,
-        (
-          channel.membershipCount
-          |> E.O.fmap(string_of_int)
-          |> E.O.fmap(e => e ++ " ")
-          |> E.O.default("")
+let tabs = (o: TopTab.t, channel: Context.Primary.Channel.t) =>
+  TopTab.(
+    <Antd.Radio.Group defaultValue="" value={o |> toS} onChange={e => ()}>
+      {
+        button(
+          Measurables |> toS,
+          Measurables |> toUrl,
+          "Measurables",
+          channel.id,
         )
-        ++ "Members",
-      )
-    }
-    {button(Config.Options(Edit) |> Config.topOptionToS, "Info")}
-  </Antd.Radio.Group>;
+      }
+      {
+        button(
+          Members(View) |> toS,
+          Members(View) |> toUrl,
+          (
+            channel.membershipCount
+            |> E.O.fmap(string_of_int)
+            |> E.O.fmap(e => e ++ " ")
+            |> E.O.default("")
+          )
+          ++ "Members",
+          channel.id,
+        )
+      }
+      {
+        button(
+          Options(Edit) |> toS,
+          Options(Edit) |> toUrl,
+          "Settings",
+          channel.id,
+        )
+      }
+    </Antd.Radio.Group>
+  );
 
-let memberTabs = (o: Config.memberOption) =>
-  <Antd.Radio.Group
-    defaultValue="" value={o |> Config.memberOptionToS} onChange={e => ()}>
-    {button(Config.Measurables |> Config.topOptionToS, "Members")}
-    {button(Config.Measurables |> Config.topOptionToS, "Add Members")}
-  </Antd.Radio.Group>;
+let memberTabs = (o: MemberTab.t, channel: Context.Primary.Channel.t) =>
+  MemberTab.(
+    <Antd.Radio.Group defaultValue="" value={o |> toS} onChange={e => ()}>
+      {button(View |> toS, View |> toUrl, "List", channel.id)}
+      {button(Invite |> toS, Invite |> toUrl, "Invite", channel.id)}
+    </Antd.Radio.Group>
+  );
 
-let editTabs = (o: Config.editOptions) =>
-  <Antd.Radio.Group
-    defaultValue="foo" value={o |> Config.editOptionToS} onChange={e => ()}>
-    {button(Config.Edit |> Config.editOptionToS, "Edit")}
-    {button(Config.NewSeries |> Config.editOptionToS, "New Series")}
-  </Antd.Radio.Group>;
+let editTabs = (o: InfoTab.t, channel: Context.Primary.Channel.t) =>
+  InfoTab.(
+    <Antd.Radio.Group defaultValue="foo" value={o |> toS} onChange={e => ()}>
+      {button(Edit |> toS, Edit |> toUrl, "Edit", channel.id)}
+      {button(NewSeries |> toS, NewSeries |> toUrl, "New Series", channel.id)}
+    </Antd.Radio.Group>
+  );
+
+let leaveButton = (agent, channelId) =>
+  agent
+  |> E.O.fmap((e: Context.Primary.Agent.t) => e.id)
+  |> E.O.React.fmapOrNull(C.Channel.SimpleHeader.leaveChannel(channelId));
+
+let joinButton = (agent, channelId) =>
+  agent
+  |> E.O.fmap((e: Context.Primary.Agent.t) => e.id)
+  |> E.O.React.fmapOrNull(C.Channel.SimpleHeader.joinChannel(channelId));
 
 let make =
     (
       channelId: string,
       loggedInUser: Context.Primary.User.t,
-      topOption: option(Config.topOption),
+      topOption: option(TopTab.t),
       {head, body}: LayoutConfig.t,
     ) => {
   ...component,
@@ -121,28 +166,43 @@ let make =
 
     let loadChannel =
       Foretold__GraphQL.Queries.Channel.component2(~id=channelId);
-
     let top =
       loadChannel(
-        E.HttpResponse.fmap((result: Context.Primary.Channel.t) =>
+        E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
           <>
-            <Div float=`left> {channelink(result)} </Div>
-            <Div float=`right> {tabs(topOption, result)} </Div>
+            <Div float=`left> {channelink(channel)} </Div>
+            <Div float=`right> {tabs(topOption, channel)} </Div>
           </>
+        )
+        ||> E.HttpResponse.withReactDefaults,
+      );
+
+    let foo =
+      loadChannel(
+        E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
+          switch (topOption) {
+          | Members(r) =>
+            <MainSection>
+              <Div float=`right> {memberTabs(r, channel)} </Div>
+            </MainSection>
+          | Options(r) =>
+            <MainSection>
+              <Div float=`right>
+                {leaveButton(loggedInUser.agent, channel.id)}
+                {joinButton(loggedInUser.agent, channel.id)}
+                {editTabs(r, channel)}
+              </Div>
+            </MainSection>
+          | _ => E.React.null
+          }
         )
         ||> E.HttpResponse.withReactDefaults,
       );
 
     <Layout__Component__FillWithSidebar
       channelId={Some(channelId)} loggedInUser>
-      <MainSection> top </MainSection>
-      {
-        switch (topOption) {
-        | Members(r) => <MainSection> {memberTabs(r)} </MainSection>
-        | Options(r) => <MainSection> {editTabs(r)} </MainSection>
-        | _ => E.React.null
-        }
-      }
+      <Header> top </Header>
+      foo
       <MainSection> head </MainSection>
       <MainSection> body </MainSection>
     </Layout__Component__FillWithSidebar>;
@@ -151,18 +211,6 @@ let make =
 
 let makeWithEl = (channelId, loggedInUser, topOption, t: LayoutConfig.t) =>
   make(channelId, loggedInUser, topOption, t) |> E.React.el;
-
-let topOption = (page: Context.Routing.Route.t): option(Config.topOption) =>
-  switch (page) {
-  | ChannelEdit(_) => Some(Options(Edit))
-  | SeriesNew(_) => Some(Options(NewSeries))
-  | ChannelInvite(_) => Some(Members(Invite))
-  | ChannelMembers(_) => Some(Members(View))
-  | MeasurableNew(_) => Some(Measurables)
-  | ChannelShow(_) => Some(Measurables)
-  | Series(_, _) => Some(Options(Edit))
-  | _ => None
-  };
 
 let makeWithPage =
     (page: Context.Routing.Route.t, loggedInUser): ReasonReact.reactElement => {

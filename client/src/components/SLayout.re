@@ -106,6 +106,7 @@ module FullPage = {
   };
   let makeWithEl = (t: LayoutConfig.t) => t |> make |> E.React.el;
 };
+
 let channelBack = (~onClick, ()) =>
   <div className=Styles.backHover onClick>
     <Icon.Icon icon="ARROW_LEFT" />
@@ -125,10 +126,6 @@ let channelEditLink = (c: Context.Primary.Channel.t) =>
 
 let seriesHead = (channel: Context.Primary.Channel.t, seriesName) =>
   <>
-    <div className=Styles.headerText>
-      {channel |> Context.Primary.Channel.present}
-    </div>
-    <div className=Styles.dash> <Icon.Icon icon="THIN_RIGHT" /> </div>
     <div className=Styles.seriesText>
       <Icon.Icon icon="LAYERS" />
       {seriesName |> ste}

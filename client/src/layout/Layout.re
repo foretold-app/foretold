@@ -60,6 +60,13 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
     let layout = SLayout.FullPage.makeWithEl;
 
     switch (route) {
+    | ChannelShow(_)
+    | ChannelInvite(_)
+    | ChannelMembers(_)
+    | MeasurableNew(_)
+    | SeriesNew(_)
+    | Series(_, _)
+    | ChannelEdit(_) => Channel_Layout.makeWithPage(route, loggedInUser)
     | AgentMeasurables(id) =>
       AgentMeasurables.make(~id, ~loggedInUser, ~layout) |> inApp
     | AgentIndex => AgentIndex.make(~layout) |> inApp
@@ -67,30 +74,10 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
     | Redirect => Auth0Redirect.make(~me) |> inApp
     | EntityIndex => EntityIndex.make(~layout) |> inApp
     | Profile => Profile.make(~loggedInUser, ~layout) |> inApp
-    | SeriesNew(channelId) =>
-      SeriesNew.make(~channelId, ~loggedInUser, ~layout) |> inApp
     | AgentShow(id) => AgentShow.make(~id, ~layout) |> inApp
-    | ChannelShow(channelId) =>
-      MeasurableIndex.make(
-        ~channelId,
-        ~loggedInUser,
-        ~layout,
-        ~itemsPerPage=20,
-      )
-      |> inApp(~key=channelId)
-    | ChannelEdit(channelId) =>
-      ChannelEdit.make(~channelId, ~layout) |> inApp
-    | ChannelInvite(channelId) =>
-      ChannelInvite.make(~channelId, ~loggedInUser, ~layout) |> inApp
-    | ChannelMembers(channelId) =>
-      ChannelMembers.make(~channelId, ~loggedInUser, ~layout) |> inApp
     | ChannelIndex => ChannelIndex.make(~loggedInUser, ~layout) |> inApp
     | ChannelNew => ChannelNew.make(~layout) |> inApp
-    | MeasurableNew(channelId) =>
-      MeasurableNew.make(~channelId, ~layout) |> inApp
     | MeasurableEdit(id) => MeasurableEdit.make(~id, ~layout) |> inApp
-    | Series(channelId, id) =>
-      SeriesShow.make(~id, ~channelId, ~loggedInUser, ~layout) |> inApp
     | _ => defaultPage(loggedInUser, channelId, layout)
     };
   | _ =>

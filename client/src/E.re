@@ -219,7 +219,7 @@ module React = {
   let null = ReasonReact.null;
   let str = ReasonReact.string;
   let makeToEl = (~key="", ~children=null, e) => children |> e |> el(~key);
-  let withParent = (~key="", e, children) => children |> e |> el(~key);
+  let withParent = (~key="", e, children) => [|children|] |> e |> el(~key);
   let withChildren = (~key="", children, e) => children |> e |> el(~key);
   let wrapOver = (a, b) => b(a) |> makeToEl;
   let takeParameterFrom = (a, b) => a(b) |> makeToEl;

@@ -21,7 +21,7 @@ function getPermissions() {
         channelMembershipDelete: and(isAuthenticated, isAdmin),
         channelMembershipRoleUpdate: and(isAuthenticated, isAdmin),
 
-        leaveChannel: and(isAuthenticated, isChannelPublic),
+        leaveChannel: and(isAuthenticated),
         joinChannel: and(isAuthenticated, isChannelPublic),
 
         seriesCreate: and(isAuthenticated, or(isChannelPublic, isAdmin)),

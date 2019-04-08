@@ -45,8 +45,8 @@ class MeasurableModel extends ModelPostgres {
     this.applyRestrictions(where, restrictions);
 
     // Filter
-    if (_.isArray(options.states)) {
-      where.state = { [this.in]: options.states };
+    if (_.isArray(filter.states)) {
+      where.state = { [this.in]: filter.states };
     }
     if (filter.channelId) where.channelId = filter.channelId;
     if (filter.seriesId) where.seriesId = filter.seriesId;
@@ -54,7 +54,7 @@ class MeasurableModel extends ModelPostgres {
     where.isArchived = false;
 
     // Query
-    return await this.models.Measurable.findAll({
+    return await this.model.findAll({
       limit: pagination.limit,
       offset: pagination.offset,
       where,

@@ -14,6 +14,8 @@ class ModelPostgres extends Model {
     super();
     this.model = model;
     this.sequelize = sequelize;
+    this.Op = this.sequelize.Op;
+    this.fn = this.sequelize.fn;
   }
 }
 

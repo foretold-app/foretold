@@ -12,8 +12,6 @@ class MeasurableModel extends ModelPostgres {
       model: models.Measurable,
       sequelize: models.sequelize,
     });
-    this.Op = this.sequelize.Op;
-    this.fn = this.sequelize.fn;
   }
 
   /**

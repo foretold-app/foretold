@@ -3,6 +3,8 @@ const _ = require('lodash');
 const models = require('../models');
 const { ModelPostgres } = require('./model-postgres');
 
+const { CHANNEL_MEMBERSHIP_ROLES } = require('../models/channel-membership-roles');
+
 class ChannelMembershipModel extends ModelPostgres {
   constructor() {
     super({
@@ -20,16 +22,16 @@ class ChannelMembershipModel extends ModelPostgres {
   async updateOne(channelId, agentId, role) {
     const transaction = await this.getTransaction();
     try {
-      const channelMembership = await this.model.findOne(
-        { where: { channelId, agentId } },
-        { transaction },
-      );
+      const channelMembership = await this.model.findOne({
+        where: { channelId, agentId },
+        transaction
+      });
       if (channelMembership) {
-        await channelMembership.update(
-          { role },
-          { transaction },
-        );
-        await this.checkCountOfAdmins(channelId);
+        await channelMembership.update({
+          role,
+          transaction
+        });
+        await this.checkCountOfAdmins(channelId, transaction);
         await transaction.commit();
       }
       return channelMembership;
@@ -47,16 +49,16 @@ class ChannelMembershipModel extends ModelPostgres {
   async deleteOne(channelId, agentId) {
     const transaction = await this.getTransaction();
     try {
-      const channelMembership = await this.model.findOne(
-        { where: { channelId, agentId } },
-        { transaction },
-      );
+      const channelMembership = await this.model.findOne({
+        where: { channelId, agentId },
+        transaction
+      });
       if (channelMembership) {
-        await this.model.destroy(
-          { where: { channelId, agentId } },
-          { transaction },
-        );
-        await this.checkCountOfAdmins(channelId);
+        await this.model.destroy({
+          where: { channelId, agentId },
+          transaction,
+        });
+        await this.checkCountOfAdmins(channelId, transaction);
         await transaction.commit();
       }
       return channelMembership;
@@ -68,14 +70,16 @@ class ChannelMembershipModel extends ModelPostgres {
 
   /**
    * @param {string} channelId
+   * @param {object} transaction
    * @return {Promise<*>}
    */
-  async checkCountOfAdmins(channelId) {
+  async checkCountOfAdmins(channelId, transaction) {
     const countOfAdmins = await this.model.count({
       where: {
         channelId,
         role: ChannelMembershipModel.ROLES.ADMIN,
-      }
+      },
+      transaction,
     });
     if (countOfAdmins === 0) {
       throw new Error('Operation is not permitted.');
@@ -84,7 +88,7 @@ class ChannelMembershipModel extends ModelPostgres {
   }
 }
 
-ChannelMembershipModel.ROLES = models.ChannelMemberships.ROLES;
+ChannelMembershipModel.ROLES = CHANNEL_MEMBERSHIP_ROLES;
 
 module.exports = {
   ChannelMembershipModel,

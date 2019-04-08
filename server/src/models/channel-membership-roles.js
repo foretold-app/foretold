@@ -1,0 +1,8 @@
+const CHANNEL_MEMBERSHIP_ROLES = {
+  ADMIN: 'ADMIN',
+  VIEWER: 'VIEWER',
+};
+
+module.exports = {
+  CHANNEL_MEMBERSHIP_ROLES,
+};

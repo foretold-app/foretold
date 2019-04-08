@@ -29,6 +29,7 @@ class ChannelMembershipModel extends ModelPostgres {
       if (channelMembership) {
         await channelMembership.update({
           role,
+        }, {
           transaction
         });
         await this.checkCountOfAdmins(channelId, transaction);

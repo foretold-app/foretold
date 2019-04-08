@@ -249,7 +249,7 @@ let make =
   ...component,
   render: _ =>
     SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("Edit Profile Information"),
+      ~head=SLayout.Header.textDiv("Make a New Series"),
       ~body=
         Mutations.SeriesCreate.withMutation((mutation, data) => {
           let agent = loggedInUser.agent;

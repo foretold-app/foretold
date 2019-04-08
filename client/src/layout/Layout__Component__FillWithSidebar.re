@@ -24,7 +24,7 @@ let make =
     (
       ~channelId: option(string),
       ~loggedInUser: Context.Primary.User.t,
-      children,
+      _children,
     ) => {
   ...component,
   render: _self =>
@@ -33,7 +33,7 @@ let make =
         <div className=Styles.left>
           <Layout__Component__Sidebar channelId loggedInUser />
         </div>
-        <div className=Styles.right> children </div>
+        <div className=Styles.right> ..._children </div>
       </div>
     </Layout__Component__UseRouterForLinks>,
 };

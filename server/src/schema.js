@@ -215,7 +215,7 @@ const schema = new graphql.GraphQLSchema({
       channelMembershipCreate: {
         type: types.channelMemberships.channelsMembership,
         args: {
-          input: { type: graphql.GraphQLNonNull(types.channels.channelMembershipRoleInput) },
+          input: { type: graphql.GraphQLNonNull(types.channelMemberships.channelMembershipRoleInput) },
         },
         resolve: resolvers.channelMemberships.create,
       },
@@ -223,7 +223,7 @@ const schema = new graphql.GraphQLSchema({
       channelMembershipRoleUpdate: {
         type: types.channelMemberships.channelsMembership,
         args: {
-          input: { type: graphql.GraphQLNonNull(types.channels.channelMembershipRoleInput) },
+          input: { type: graphql.GraphQLNonNull(types.channelMemberships.channelMembershipRoleInput) },
         },
         resolve: resolvers.channelMemberships.update,
       },
@@ -231,9 +231,25 @@ const schema = new graphql.GraphQLSchema({
       channelMembershipDelete: {
         type: types.channelMemberships.channelsMembership,
         args: {
-          input: { type: graphql.GraphQLNonNull(types.channels.channelMembershipDeleteInput) },
+          input: { type: graphql.GraphQLNonNull(types.channelMemberships.channelMembershipDeleteInput) },
         },
         resolve: resolvers.channelMemberships.remove,
+      },
+
+      leaveChannel: {
+        type: types.channelMemberships.channelsMembership,
+        args: {
+          input: { type: graphql.GraphQLNonNull(types.channelMemberships.joiningChannelInput) },
+        },
+        resolve: resolvers.channelMemberships.leave,
+      },
+
+      joinChannel: {
+        type: types.channelMemberships.channelsMembership,
+        args: {
+          input: { type: graphql.GraphQLNonNull(types.channelMemberships.joiningChannelInput) },
+        },
+        resolve: resolvers.channelMemberships.join,
       },
 
     }

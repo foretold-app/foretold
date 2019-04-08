@@ -111,6 +111,31 @@ class ChannelMembershipsData extends DataBase {
     return (await this.getAll(options)).map(o => o.channelId);
   }
 
+  /**
+   * @todo: createOneAs?
+   * @param options
+   * @return {Promise<Models.ChannelMemberships>}
+   */
+  async join(options) {
+    const role = ChannelMembershipModel.ROLES.VIEWER;
+    return this.createOne(
+      options.channelId,
+      options.agentId,
+      role,
+    );
+  }
+
+  /**
+   * @todo: updateOneAs?
+   * @param options
+   * @return {Promise<Models.ChannelMemberships|null>}
+   */
+  async leave(options) {
+    return this.deleteOne(
+      options.channelId,
+      options.agentId,
+    );
+  }
 }
 
 module.exports = {

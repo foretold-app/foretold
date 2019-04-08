@@ -4,7 +4,6 @@ const models = require('../models');
 const { ModelPostgres } = require('./model-postgres');
 
 class ChannelMembershipModel extends ModelPostgres {
-
   constructor() {
     super({
       model: models.ChannelMemberships,
@@ -12,6 +11,8 @@ class ChannelMembershipModel extends ModelPostgres {
     });
   }
 }
+
+ChannelMembershipModel.ROLES = models.ChannelMemberships.ROLES;
 
 module.exports = {
   ChannelMembershipModel,

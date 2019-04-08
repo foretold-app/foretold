@@ -27,7 +27,34 @@ const channelsMembership = new graphql.GraphQLObjectType({
   }),
 });
 
+const channelMembershipRoleInput = new graphql.GraphQLInputObjectType({
+  name: 'ChannelMembershipRoleInput',
+  fields: () => ({
+    agentId: { type: graphql.GraphQLString },
+    channelId: { type: graphql.GraphQLString },
+    role: { type: graphql.GraphQLNonNull(require('./channel-memberhips').role) },
+  }),
+});
+
+const channelMembershipDeleteInput = new graphql.GraphQLInputObjectType({
+  name: 'ChannelMembershipDeleteInput',
+  fields: () => ({
+    agentId: { type: graphql.GraphQLString },
+    channelId: { type: graphql.GraphQLString },
+  }),
+});
+
+const joiningChannelInput = new graphql.GraphQLInputObjectType({
+  name: 'JoiningChannelInput',
+  fields: () => ({
+    channelId: { type: graphql.GraphQLString },
+  }),
+});
+
 module.exports = {
-  channelsMembership,
   role,
+  channelsMembership,
+  channelMembershipRoleInput,
+  channelMembershipDeleteInput,
+  joiningChannelInput,
 };

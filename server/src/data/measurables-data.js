@@ -74,7 +74,7 @@ class MeasurablesData extends DataBase {
 
     // @todo: Restrictions, move it upper, into resolvers!
     where[Op.and].push({
-      channelId: { [Op.in]: this.channelIdsLiteral(options.agentId) }
+      channelId: { [Op.in]: this.MeasurableModel.channelIdsLiteral(options.agentId) }
     });
 
     // Filter
@@ -112,7 +112,7 @@ class MeasurablesData extends DataBase {
   async getOne(id, options = {}) {
     const restrictions = 'agentId' in options ? {
       channelId: {
-        [this.models.sequelize.Op.in]: this.channelIdsLiteral(options.agentId)
+        [this.models.sequelize.Op.in]: this.MeasurableModel.channelIdsLiteral(options.agentId)
       }
     } : {};
     return await this.models.Measurable.findOne({

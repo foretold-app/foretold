@@ -39,7 +39,7 @@ class MeasurementsData extends DataBase {
     return await this.models.Measurement.findAll({
       where: {
         measurableId: {
-          [this.models.sequelize.Op.in]: this.measurableIdsLiteral(options.agentId)
+          [this.models.sequelize.Op.in]: this.MeasurementModel.measurableIdsLiteral(options.agentId)
         },
       }
     });
@@ -56,7 +56,7 @@ class MeasurementsData extends DataBase {
       where: {
         id,
         measurableId: {
-          [this.models.sequelize.Op.in]: this.measurableIdsLiteral(options.agentId)
+          [this.models.sequelize.Op.in]: this.MeasurementModel.measurableIdsLiteral(options.agentId)
         },
       }
     });

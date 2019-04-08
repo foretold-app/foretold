@@ -16,6 +16,7 @@ class ModelPostgres extends Model {
     this.sequelize = sequelize;
     this.Op = this.sequelize.Op;
     this.fn = this.sequelize.fn;
+    this.literal = this.sequelize.literal;
   }
 
   /**
@@ -43,7 +44,7 @@ class ModelPostgres extends Model {
    * @return {Sequelize.literal}
    */
   channelIdsLiteral(agentId) {
-    return this.sequelize.literal(this.channelIds(agentId));
+    return this.literal(this.channelIds(agentId));
   }
 
   /**
@@ -65,7 +66,7 @@ class ModelPostgres extends Model {
    * @return {Sequelize.literal}
    */
   measurableIdsLiteral(agentId) {
-    return this.sequelize.literal(this.measurableIds(agentId));
+    return this.literal(this.measurableIds(agentId));
   }
 }
 

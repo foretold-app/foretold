@@ -72,6 +72,18 @@ const middlewares = {
       await channelMemberships(root, args, context, info);
       return await resolve(root, args, context, info);
     },
+
+    leaveChannel: async (resolve, root, args, context, info) => {
+      await channel(root, args, context, info);
+      await channelMemberships(root, args, context, info);
+      return await resolve(root, args, context, info);
+    },
+
+    joinChannel: async (resolve, root, args, context, info) => {
+      await channel(root, args, context, info);
+      await channelMemberships(root, args, context, info);
+      return await resolve(root, args, context, info);
+    },
   }
 };
 

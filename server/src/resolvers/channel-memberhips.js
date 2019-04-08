@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const data = require('../data');
 
 /**
@@ -70,10 +71,46 @@ async function allByChannelId(root, args, context, info) {
   return await data.channelMemberships.getAll(options);
 }
 
+/**
+ * @param {object | null} root
+ * @param {object} args
+ * @param {string} args.id
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<Models.ChannelMemberships>}
+ */
+async function join(root, args, context, info) {
+  const channelId = _.get(args, 'input.channelId');
+  const agentId = _.get(context, 'user.agentId');
+  return await data.channelMemberships.join({
+    channelId,
+    agentId,
+  });
+}
+
+/**
+ * @param {object | null} root
+ * @param {object} args
+ * @param {string} args.id
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<Models.ChannelMemberships>}
+ */
+async function leave(root, args, context, info) {
+  const channelId = _.get(args, 'input.channelId');
+  const agentId = _.get(context, 'user.agentId');
+  return await data.channelMemberships.leave({
+    channelId,
+    agentId,
+  });
+}
+
 module.exports = {
   allByAgentId,
   allByChannelId,
   remove,
   create,
   update,
+  join,
+  leave,
 };

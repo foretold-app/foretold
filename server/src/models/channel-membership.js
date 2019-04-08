@@ -1,3 +1,5 @@
+const { CHANNEL_MEMBERSHIP_ROLES } = require('./channel-membership-roles');
+
 /**
  * @param sequelize
  * @param DataTypes
@@ -11,10 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  ChannelMemberships.ROLE = {
-    ADMIN: 'ADMIN',
-    VIEWER: 'VIEWER',
-  };
+  ChannelMemberships.ROLE = CHANNEL_MEMBERSHIP_ROLES;
 
   ChannelMemberships.associate = function (models) {
     models.Agent.belongsToMany(models.Channel, {

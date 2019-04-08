@@ -36,13 +36,11 @@ class ChannelMembershipsData extends DataBase {
    */
   async updateOne(channelId, agentId, role) {
     await this.validate({ channelId, agentId });
-    const channelMembership = await this.models.ChannelMemberships.findOne({
-      where: { channelId, agentId }
-    });
-    if (channelMembership) {
-      await channelMembership.update({ role });
-    }
-    return channelMembership;
+    return this.ChannelMembershipModel.updateOne(
+      channelId,
+      agentId,
+      role,
+    );
   }
 
   /**
@@ -51,13 +49,11 @@ class ChannelMembershipsData extends DataBase {
    * @returns {Promise<Models.ChannelMemberships | null>}
    */
   async deleteOne(channelId, agentId) {
-    const input = { channelId, agentId };
-    await this.validate(input);
-    const channelMembership = await this.models.ChannelMemberships.findOne({ where: input });
-    if (channelMembership) {
-      await this.models.ChannelMemberships.destroy({ where: input });
-    }
-    return channelMembership;
+    await this.validate({ channelId, agentId });
+    return this.ChannelMembershipModel.deleteOne(
+      channelId,
+      agentId,
+    );
   }
 
   /**
@@ -111,6 +107,31 @@ class ChannelMembershipsData extends DataBase {
     return (await this.getAll(options)).map(o => o.channelId);
   }
 
+  /**
+   * @todo: createOneAs?
+   * @param options
+   * @return {Promise<Models.ChannelMemberships>}
+   */
+  async join(options) {
+    const role = ChannelMembershipModel.ROLES.VIEWER;
+    return this.createOne(
+      options.channelId,
+      options.agentId,
+      role,
+    );
+  }
+
+  /**
+   * @todo: updateOneAs?
+   * @param options
+   * @return {Promise<Models.ChannelMemberships|null>}
+   */
+  async leave(options) {
+    return this.deleteOne(
+      options.channelId,
+      options.agentId,
+    );
+  }
 }
 
 module.exports = {

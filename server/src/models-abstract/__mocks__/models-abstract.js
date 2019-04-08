@@ -1,6 +1,8 @@
 const ModelPostgres = {
   channelIdsLiteral: jest.fn(() => 'channelIdsLiteral'),
   measurableIdsLiteral: jest.fn(() => 'measurableIdsLiteral'),
+  deleteOne: jest.fn(() => Promise.resolve(true)),
+  updateOne: jest.fn(() => Promise.resolve(true)),
 };
 
 const AgentModel = jest.fn().mockImplementation(() => ({

@@ -15,7 +15,7 @@ function getPermissions() {
         '*': isAuthenticated,
         measurementCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
         measurableCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
-        channelUpdate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
+        channelUpdate: and(isAuthenticated, isAdmin),
 
         channelMembershipCreate: and(isAuthenticated, isAdmin),
         channelMembershipDelete: and(isAuthenticated, isAdmin),

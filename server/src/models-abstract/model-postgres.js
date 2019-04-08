@@ -89,6 +89,10 @@ class ModelPostgres extends Model {
       });
     }
   }
+
+  getTransaction() {
+    return this.sequelize.transaction();
+  }
 }
 
 module.exports = {

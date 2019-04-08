@@ -3,7 +3,7 @@ const _ = require('lodash');
 const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { DataBase } = require('./data-base');
 
-const { ChannelModel } = require('../models-abstract/channel-model');
+const { ChannelModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

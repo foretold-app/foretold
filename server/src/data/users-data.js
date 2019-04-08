@@ -2,7 +2,7 @@ const _ = require('lodash');
 
 const { DataBase } = require('./data-base');
 
-const { UserModel } = require('../models-abstract/users-model');
+const { UserModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

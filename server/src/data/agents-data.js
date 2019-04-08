@@ -1,6 +1,6 @@
 const { DataBase } = require('./data-base');
 
-const { AgentModel } = require('../models-abstract/agent-model');
+const { AgentModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

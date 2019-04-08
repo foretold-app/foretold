@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const { notify } = require("../lib/notifications");
-const { MeasurableModel } = require('../models-abstract/measurable-model');
+const { MeasurableModel } = require('../models-abstract');
 
 const { DataBase } = require('./data-base');
 

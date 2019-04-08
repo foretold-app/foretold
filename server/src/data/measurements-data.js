@@ -2,7 +2,7 @@ const { notify } = require("../lib/notifications");
 
 const { DataBase } = require('./data-base');
 
-const { MeasurementModel } = require('../models-abstract/measurement-model');
+const { MeasurementModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

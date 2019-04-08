@@ -1,9 +1,16 @@
 const { DataBase } = require('./data-base');
 
+const { SeriesModel } = require('../models-abstract/series-model');
+
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
  */
 class SeriesData extends DataBase {
+
+  constructor() {
+    super();
+    this.SeriesModel = new SeriesModel();
+  }
 
   /**
    * @param {object} data

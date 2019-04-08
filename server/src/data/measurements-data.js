@@ -2,10 +2,17 @@ const { notify } = require("../lib/notifications");
 
 const { DataBase } = require('./data-base');
 
+const { MeasurementModel } = require('../models-abstract/measurement-model');
+
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
  */
 class MeasurementsData extends DataBase {
+
+  constructor() {
+    super();
+    this.MeasurementModel = new MeasurementModel();
+  }
 
   /**
    * @todo: rename

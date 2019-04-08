@@ -2,10 +2,17 @@ const _ = require('lodash');
 
 const { DataBase } = require('./data-base');
 
+const { UserModel } = require('../models-abstract/users-model');
+
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
  */
 class UsersData extends DataBase {
+
+  constructor() {
+    super();
+    this.UserModel = new UserModel();
+  }
 
   /**
    * @param {string} auth0Id

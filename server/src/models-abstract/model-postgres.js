@@ -15,6 +15,8 @@ class ModelPostgres extends Model {
     this.model = model;
     this.sequelize = sequelize;
     this.Op = this.sequelize.Op;
+    this.in = this.sequelize.Op.in;
+    this.and = this.sequelize.Op.and;
     this.fn = this.sequelize.fn;
     this.literal = this.sequelize.literal;
   }
@@ -67,6 +69,25 @@ class ModelPostgres extends Model {
    */
   measurableIdsLiteral(agentId) {
     return this.literal(this.measurableIds(agentId));
+  }
+
+  /**
+   * @param {object} where
+   * @param {object} restrictions
+   * @param {string} [restrictions.agentId]
+   * @param {string} [restrictions.channelId]
+   */
+  applyRestrictions(where, restrictions) {
+    if (!where) where = {};
+    if (!where[this.and]) where[this.and] = [];
+
+    if (restrictions.channelId) {
+      where[this.and].push({
+        channelId: {
+          [this.in]: this.channelIdsLiteral(restrictions.agentId),
+        },
+      });
+    }
   }
 }
 

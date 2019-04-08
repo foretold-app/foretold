@@ -41,22 +41,22 @@ const measurable = new graphql.GraphQLObjectType({
 
     Measurements: {
       type: graphql.GraphQLNonNull(new graphql.GraphQLList(require('./').measurementType)),
-      resolve: resolver(models.Measurement),
+      resolve: resolver(models.Measurable.Measurements),
     },
 
     series: {
       type: require('./').seriesType,
-      resolve: resolver(models.Series),
+      resolve: resolver(models.Measurable.Series),
     },
 
     creator: {
       type: require('./agents').agent,
-      resolve: resolver(models.Agent),
+      resolve: resolver(models.Measurable.Creator),
     },
 
     Channel: {
       type: require('./channels').channel,
-      resolve: resolver(models.Channel),
+      resolve: resolver(models.Measurable.Channel),
     },
   })
 });

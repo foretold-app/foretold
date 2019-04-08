@@ -1,9 +1,16 @@
 const { DataBase } = require('./data-base');
 
+const { AgentModel } = require('../models-abstract');
+
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
  */
 class AgentsData extends DataBase {
+
+  constructor() {
+    super();
+    this.AgentModel = new AgentModel();
+  }
 
   /**
    * @param {string} id

@@ -1,9 +1,16 @@
 const { DataBase } = require('./data-base');
 
+const { SeriesModel } = require('../models-abstract');
+
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
  */
 class SeriesData extends DataBase {
+
+  constructor() {
+    super();
+    this.SeriesModel = new SeriesModel();
+  }
 
   /**
    * @param {object} data
@@ -22,11 +29,11 @@ class SeriesData extends DataBase {
     const { channelId } = options;
 
     let where = {
-        // Restrictions
-        channelId: {
-          [this.models.sequelize.Op.in]: this.channelIdsLiteral(options.agentId)
-        },
-      };
+      // Restrictions
+      channelId: {
+        [this.models.sequelize.Op.in]: this.SeriesModel.channelIdsLiteral(options.agentId)
+      },
+    };
 
     if (channelId) {
       // @todo: It breaks restrictions.
@@ -49,7 +56,7 @@ class SeriesData extends DataBase {
       where: {
         id,
         channelId: {
-          [this.models.sequelize.Op.in]: this.channelIdsLiteral(options.agentId)
+          [this.models.sequelize.Op.in]: this.SeriesModel.channelIdsLiteral(options.agentId)
         },
       },
     });

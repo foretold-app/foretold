@@ -16,9 +16,6 @@ describe('tests Measurables Data layer', () => {
       jest.spyOn(models.Measurable, 'findOne').mockReturnValue(
         Promise.resolve(true),
       );
-      jest.spyOn(instance, 'channelIdsLiteral').mockReturnValue(
-        'channelIdsLiteral',
-      );
     });
     it('finds a measurable', () => {
       return instance.getOne(id, options).then((result) => {

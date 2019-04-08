@@ -3,6 +3,8 @@ const _ = require('lodash');
 const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { DataBase } = require('./data-base');
 
+const { ChannelModel } = require('../models-abstract');
+
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
  */
@@ -11,6 +13,7 @@ class ChannelsData extends DataBase {
   constructor() {
     super();
     this.channelMembershipsData = new ChannelMembershipsData();
+    this.ChannelModel = new ChannelModel();
   }
 
   /**
@@ -95,7 +98,7 @@ class ChannelsData extends DataBase {
       order: [['createdAt', 'DESC']],
       where: {
         id: {
-          [this.models.sequelize.Op.in]: this.channelIdsLiteral(options.agentId),
+          [this.models.sequelize.Op.in]: this.ChannelModel.channelIdsLiteral(options.agentId),
         },
       }
     });
@@ -113,7 +116,7 @@ class ChannelsData extends DataBase {
   async getOne(id, options = {}) {
     const restrictions = 'agentId' in options ? {
       id: {
-        [this.models.sequelize.Op.in]: this.channelIdsLiteral(options.agentId),
+        [this.models.sequelize.Op.in]: this.ChannelModel.channelIdsLiteral(options.agentId),
       }
     } : {};
     return await this.models.Channel.findOne({

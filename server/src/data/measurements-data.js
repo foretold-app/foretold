@@ -2,10 +2,17 @@ const { notify } = require("../lib/notifications");
 
 const { DataBase } = require('./data-base');
 
+const { MeasurementModel } = require('../models-abstract');
+
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
  */
 class MeasurementsData extends DataBase {
+
+  constructor() {
+    super();
+    this.MeasurementModel = new MeasurementModel();
+  }
 
   /**
    * @todo: rename
@@ -32,7 +39,7 @@ class MeasurementsData extends DataBase {
     return await this.models.Measurement.findAll({
       where: {
         measurableId: {
-          [this.models.sequelize.Op.in]: this.measurableIdsLiteral(options.agentId)
+          [this.models.sequelize.Op.in]: this.MeasurementModel.measurableIdsLiteral(options.agentId)
         },
       }
     });
@@ -49,7 +56,7 @@ class MeasurementsData extends DataBase {
       where: {
         id,
         measurableId: {
-          [this.models.sequelize.Op.in]: this.measurableIdsLiteral(options.agentId)
+          [this.models.sequelize.Op.in]: this.MeasurementModel.measurableIdsLiteral(options.agentId)
         },
       }
     });

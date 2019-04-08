@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const { notify } = require("../lib/notifications");
-const { MeasurableModel } = require('../models-abstract/measurable-model');
+const { MeasurableModel } = require('../models-abstract');
 
 const { DataBase } = require('./data-base');
 
@@ -59,48 +59,23 @@ class MeasurablesData extends DataBase {
   }
 
   /**
-   * @todo: Move me into MeasurableModel.
    * @param {object} options
    * @param {string[]} options.states
    * @param {string} options.agentId
+   * @param {number} options.offset
+   * @param {number} options.limit
    * @return {Promise<*|Array<Model>>}
    */
   async getAll(options) {
-    const { offset, limit, channelId, seriesId, creatorId } = options;
-    const sequelize = this.models.sequelize;
-    const Op = sequelize.Op;
-
-    const where = { [Op.and]: [] };
-
-    // @todo: Restrictions, move it upper, into resolvers!
-    where[Op.and].push({
-      channelId: { [Op.in]: this.channelIdsLiteral(options.agentId) }
-    });
-
-    // Filter
-    if (_.isArray(options.states)) {
-      where.state = { [Op.in]: options.states };
-    }
-    if (channelId) where.channelId = channelId;
-    if (seriesId) where.seriesId = seriesId;
-    if (creatorId) where.creatorId = creatorId;
-    where.isArchived = false;
-
-    // Query
-    return await this.models.Measurable.findAll({
-      limit,
-      offset,
-      where,
-      order: [
-        [sequelize.col('stateOrder'), 'ASC'],
-        ['createdAt', 'DESC'],
-      ],
-      attributes: {
-        include: [
-          this.MeasurableModel.getStateOrderField(),
-        ]
-      }
-    });
+    const pagination = {
+      offset: options.offset,
+      limit: options.limit,
+    };
+    const restrictions = {
+      channelId: true,
+      agentId: options.agentId,
+    };
+    return this.MeasurableModel.getAll(options, pagination, restrictions);
   }
 
   /**
@@ -112,7 +87,7 @@ class MeasurablesData extends DataBase {
   async getOne(id, options = {}) {
     const restrictions = 'agentId' in options ? {
       channelId: {
-        [this.models.sequelize.Op.in]: this.channelIdsLiteral(options.agentId)
+        [this.models.sequelize.Op.in]: this.MeasurableModel.channelIdsLiteral(options.agentId)
       }
     } : {};
     return await this.models.Measurable.findOne({

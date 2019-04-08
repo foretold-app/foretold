@@ -2,10 +2,17 @@ const _ = require('lodash');
 
 const { DataBase } = require('./data-base');
 
+const { ChannelMembershipModel } = require('../models-abstract');
+
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
  */
 class ChannelMembershipsData extends DataBase {
+
+  constructor() {
+    super();
+    this.ChannelMembershipModel = new ChannelMembershipModel();
+  }
 
   /**
    * @param {string} channelId

@@ -129,9 +129,6 @@ describe('Channels Data Layer', () => {
       jest.spyOn(models.Channel, 'findAll').mockReturnValue(
         Promise.resolve(true),
       );
-      jest.spyOn(instance, 'channelIdsLiteral').mockReturnValue(
-        'channelIdsLiteral',
-      );
     });
     it('formats restrictions and finds all channels', () => {
       return instance.getAll(options).then((result) => {
@@ -156,9 +153,6 @@ describe('Channels Data Layer', () => {
     beforeEach(() => {
       jest.spyOn(models.Channel, 'findOne').mockReturnValue(
         Promise.resolve(true),
-      );
-      jest.spyOn(instance, 'channelIdsLiteral').mockReturnValue(
-        'channelIdsLiteral',
       );
     });
     it('finds channel', () => {

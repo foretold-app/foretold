@@ -12,8 +12,6 @@ class MeasurableModel extends ModelPostgres {
       model: models.Measurable,
       sequelize: models.sequelize,
     });
-    this.Op = this.sequelize.Op;
-    this.fn = this.sequelize.fn;
   }
 
   /**
@@ -33,6 +31,43 @@ class MeasurableModel extends ModelPostgres {
    */
   needsToBePending() {
     return this.model.needsToBePending();
+  }
+
+  /**
+   * @param filter
+   * @param pagination
+   * @param restrictions
+   * @return {Promise<void>}
+   */
+  async getAll(filter, pagination, restrictions) {
+    const where = {};
+
+    this.applyRestrictions(where, restrictions);
+
+    // Filter
+    if (_.isArray(filter.states)) {
+      where.state = { [this.in]: filter.states };
+    }
+    if (filter.channelId) where.channelId = filter.channelId;
+    if (filter.seriesId) where.seriesId = filter.seriesId;
+    if (filter.creatorId) where.creatorId = filter.creatorId;
+    where.isArchived = false;
+
+    // Query
+    return await this.model.findAll({
+      limit: pagination.limit,
+      offset: pagination.offset,
+      where,
+      order: [
+        [this.sequelize.col('stateOrder'), 'ASC'],
+        ['createdAt', 'DESC'],
+      ],
+      attributes: {
+        include: [
+          this.getStateOrderField(),
+        ]
+      }
+    });
   }
 }
 

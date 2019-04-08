@@ -6,9 +6,11 @@ describe('ChannelMemberships Resolvers', () => {
   describe('create()', () => {
     const root = {};
     const args = {
-      channelId: 'channelId1',
-      agentId: 'agentId2',
-      role: 'ADMIN'
+      input: {
+        channelId: 'channelId1',
+        agentId: 'agentId2',
+        role: 'ADMIN'
+      },
     };
     beforeEach(() => {
       jest.spyOn(data.channelMemberships, 'createOne').mockReturnValue(
@@ -20,7 +22,7 @@ describe('ChannelMemberships Resolvers', () => {
         expect(data.channelMemberships.createOne).toHaveBeenCalledWith(
           'channelId1',
           'agentId2',
-          args.role,
+          args.input.role,
         );
         expect(result).toBe(true);
       });
@@ -30,9 +32,11 @@ describe('ChannelMemberships Resolvers', () => {
   describe('update()', () => {
     const root = {};
     const args = {
-      channelId: 'channelId1',
-      agentId: 'agentId2',
-      role: ['admin']
+      input: {
+        channelId: 'channelId1',
+        agentId: 'agentId2',
+        role: ['admin']
+      }
     };
     beforeEach(() => {
       jest.spyOn(data.channelMemberships, 'createOne').mockReturnValue(
@@ -44,7 +48,7 @@ describe('ChannelMemberships Resolvers', () => {
         expect(data.channelMemberships.createOne).toHaveBeenCalledWith(
           'channelId1',
           'agentId2',
-          args.role,
+          args.input.role,
         );
         expect(result).toBe(true);
       });
@@ -54,8 +58,10 @@ describe('ChannelMemberships Resolvers', () => {
   describe('remove()', () => {
     const root = {};
     const args = {
-      channelId: 'channelId1',
-      agentId: 'agentId2',
+      input: {
+        channelId: 'channelId1',
+        agentId: 'agentId2',
+      }
     };
     beforeEach(() => {
       jest.spyOn(data.channelMemberships, 'deleteOne')

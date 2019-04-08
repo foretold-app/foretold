@@ -107,7 +107,7 @@ describe('Measurables Resolvers', () => {
 
   describe('update()', () => {
     const root = {};
-    const args = { id: 'id1', b: 'b1' };
+    const args = { id: 'id1', input: { b: 'b1' } };
     const context = { user: {} };
     const info = {};
     beforeEach(() => {

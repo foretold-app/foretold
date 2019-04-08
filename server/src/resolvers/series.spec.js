@@ -46,7 +46,7 @@ describe('Series Resolvers', () => {
 
   describe('create()', () => {
     const root = {};
-    const args = { a: 'a1' };
+    const args = { input: { a: 'a1' } };
     const context = { user: { agentId: 'agentId1' } };
     const info = {};
     beforeEach(() => {

@@ -31,9 +31,6 @@ describe('SeriesData', () => {
       jest.spyOn(models.Series, 'findOne').mockReturnValue(
         Promise.resolve(true),
       );
-      jest.spyOn(instance, 'channelIdsLiteral').mockReturnValue(
-        'channelIdsLiteral',
-      );
     });
     it('finds series', () => {
       return instance.getOne(id, options).then((result) => {
@@ -55,9 +52,6 @@ describe('SeriesData', () => {
     beforeEach(() => {
       jest.spyOn(models.Series, 'findAll').mockReturnValue(
         Promise.resolve(true),
-      );
-      jest.spyOn(instance, 'channelIdsLiteral').mockReturnValue(
-        'channelIdsLiteral',
       );
     });
     it('finds all series', () => {

@@ -16,9 +16,6 @@ describe('tests Measurement Data layer', () => {
       jest.spyOn(models.Measurement, 'findOne').mockReturnValue(
         Promise.resolve(true),
       );
-      jest.spyOn(instance, 'measurableIdsLiteral').mockReturnValue(
-        'measurableIdsLiteral',
-      );
     });
     it('finds a measurement', () => {
       return instance.getOne(id, options).then((result) => {
@@ -40,9 +37,6 @@ describe('tests Measurement Data layer', () => {
     beforeEach(() => {
       jest.spyOn(models.Measurement, 'findAll').mockReturnValue(
         Promise.resolve(true),
-      );
-      jest.spyOn(instance, 'measurableIdsLiteral').mockReturnValue(
-        'measurableIdsLiteral',
       );
     });
     it('finds a measurement', () => {

@@ -1,5 +1,5 @@
 const graphql = require('graphql');
-const { resolver, JSONType, DateType } = require('graphql-sequelize');
+const { resolver, DateType } = require('graphql-sequelize');
 
 const models = require('../models');
 
@@ -26,10 +26,9 @@ const user = new graphql.GraphQLObjectType({
     },
 
     Bot: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./').botType)),
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./bots').bot)),
       resolve: resolver(models.User.Bots),
     },
-
   })
 });
 

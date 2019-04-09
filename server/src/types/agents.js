@@ -33,7 +33,7 @@ const agent = new graphql.GraphQLObjectType({
       resolve: resolver(models.Agent.User)
     },
     Bot: {
-      type: require('./').botType,
+      type: require('./bots').bot,
       resolve: resolver(models.Agent.Bot)
     },
     Measurements: {

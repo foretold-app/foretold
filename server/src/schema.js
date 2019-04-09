@@ -68,7 +68,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       bot: {
-        type: types.botType,
+        type: types.bots.bot,
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
@@ -76,7 +76,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       bots: {
-        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.botType)),
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.bots.bot)),
         resolve: resolver(models.Bot),
       },
 

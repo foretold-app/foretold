@@ -27,6 +27,7 @@ const measurement = new graphql.GraphQLObjectType({
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     taggedMeasurementId: { type: graphql.GraphQLString },
+    iAmOwner: require('./common').iAmOwner,
 
     Measurable: {
       type: require('./measurables').measurable,

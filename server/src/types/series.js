@@ -29,6 +29,7 @@ const series = new graphql.GraphQLObjectType({
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     creatorId: { type: graphql.GraphQLString },
+    iAmOwner: require('./common').iAmOwner,
 
     creator: {
       type: require('./agents').agent,

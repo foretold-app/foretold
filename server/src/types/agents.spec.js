@@ -6,10 +6,10 @@ describe('agents types', () => {
   it('class should be object', () => {
     expect(agents).toBeInstanceOf(Object);
   });
-  it('agentType', () => {
+  it('agentType is an enum type', () => {
     expect(agents.agentType).toBeInstanceOf(graphql.GraphQLEnumType);
   });
-  it('agent2', () => {
+  it('agent is an object type', () => {
     expect(agents.agent).toBeInstanceOf(graphql.GraphQLObjectType);
   });
 });

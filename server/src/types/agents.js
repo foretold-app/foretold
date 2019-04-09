@@ -29,7 +29,7 @@ const agent = new graphql.GraphQLObjectType({
       resolve: resolvers.channelMemberships.allByAgentId,
     },
     User: {
-      type: require('./').userType,
+      type: require('./users').user,
       resolve: resolver(models.Agent.User)
     },
     Bot: {

@@ -17,7 +17,7 @@ const schema = new graphql.GraphQLSchema({
     fields: {
 
       user: {
-        type: types.userType,
+        type: types.users.user,
         args: {
           id: { type: graphql.GraphQLString },
           auth0Id: { type: graphql.GraphQLString },
@@ -26,7 +26,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       users: {
-        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.userType)),
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.users.user)),
         resolve: resolver(models.User),
       },
 
@@ -187,7 +187,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       userUpdate: {
-        type: types.userType,
+        type: types.users.user,
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
           input: { type: graphql.GraphQLNonNull(types.users.userUpdateInput) },

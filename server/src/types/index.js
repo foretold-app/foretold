@@ -56,14 +56,13 @@ function generateReferences(model) {
   return all;
 }
 
-const userType = makeObjectType(models.User);
 const botType = makeObjectType(models.Bot);
 
 const index = {
   // @todo: Simplify it
-  Users: userType,
   Bots: botType,
 
+  Users: users.user,
   Series: series.series,
   Measurements: measurements.measurement,
   Channels: channels.channel,
@@ -72,7 +71,6 @@ const index = {
 };
 
 module.exports = {
-  userType,
   botType,
 
   agents,

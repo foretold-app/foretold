@@ -1,4 +1,7 @@
 const graphql = require('graphql');
+const { resolver, JSONType, DateType } = require('graphql-sequelize');
+
+const models = require('../models');
 
 const userUpdateInput = new graphql.GraphQLInputObjectType({
   name: 'UserUpdateInput',
@@ -7,6 +10,30 @@ const userUpdateInput = new graphql.GraphQLInputObjectType({
   })
 });
 
+const user = new graphql.GraphQLObjectType({
+  name: 'User',
+  fields: () => ({
+    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    auth0Id: { type: graphql.GraphQLString },
+    createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
+    updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
+    agentId: { type: graphql.GraphQLString },
+
+    Agent: {
+      type: require('./agents').agent,
+      resolve: resolver(models.User.Agent),
+    },
+
+    Bot: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./').botType)),
+      resolve: resolver(models.User.Bots),
+    },
+
+  })
+});
+
 module.exports = {
+  user,
   userUpdateInput,
 };

@@ -1,5 +1,3 @@
-const graphql = require("graphql");
-
 const common = require('./common');
 
 describe('Common Types', () => {

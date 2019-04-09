@@ -12,7 +12,7 @@ describe('Agents Resolvers', () => {
   describe('one() when id passed through arguments', () => {
     const root = {};
     const args = { id: 'id1' };
-    it('creates agent-channel row', () => {
+    it('returns an agent by id', () => {
       return agents.one(root, args).then((result) => {
         expect(data.agents.getOne).toHaveBeenCalledWith('id1');
         expect(result).toBe(true);
@@ -23,7 +23,7 @@ describe('Agents Resolvers', () => {
   describe('one() when agentId passed through root', () => {
     const root = { agentId: 'agentId1' };
     const args = {};
-    it('creates agent-channel row', () => {
+    it('returns an agent by agentId', () => {
       return agents.one(root, args).then((result) => {
         expect(data.agents.getOne).toHaveBeenCalledWith('agentId1');
         expect(result).toBe(true);

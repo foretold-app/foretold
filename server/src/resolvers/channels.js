@@ -73,6 +73,17 @@ async function create(root, args, context, info) {
   return await data.channels.createOne(context.user, args.input);
 }
 
+/**
+ * @param {object | null} root
+ * @param {{ input: Schema.ChannelsInput }} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<string>}
+ */
+async function myRole(root, args, context, info) {
+  return 'NONE';
+}
+
 module.exports = {
   all,
   one,
@@ -80,4 +91,5 @@ module.exports = {
   update,
   channelAgents,
   channelCreator,
+  myRole,
 };

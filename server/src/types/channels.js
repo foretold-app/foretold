@@ -17,14 +17,24 @@ const channel = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(require('./channel-memberhips').roleOutput),
       resolve: resolvers.channelMemberships.myRole,
     },
+
     creator: {
       type: graphql.GraphQLNonNull(agents.agent),
       resolve: resolvers.channels.channelCreator,
     },
+
     agents: {
+      deprecationReason: 'See agents2',
       type: graphql.GraphQLNonNull(graphql.GraphQLList(agents.agent)),
       resolve: resolvers.channels.channelAgents,
     },
+
+    agents2: {
+      type: require('./connections').channelAgentsConnection.connectionType,
+      args: require('./connections').channelAgentsConnection.connectionArgs,
+      resolve: require('./connections').channelAgentsConnection.resolve
+    },
+
     channelMemberships: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(channelMemberships.channelsMembership)),
       resolve: resolvers.channelMemberships.allByChannelId,

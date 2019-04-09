@@ -41,8 +41,15 @@ const measurable = new graphql.GraphQLObjectType({
     iAmOwner: require('./common').iAmOwner,
 
     Measurements: {
+      deprecationReason: 'See Measurements2',
       type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./measurements').measurement)),
       resolve: resolver(models.Measurable.Measurements),
+    },
+
+    Measurements2: {
+      type: require('./connections').measurableMeasurementsConnection.connectionType,
+      args: require('./connections').measurableMeasurementsConnection.connectionArgs,
+      resolve: require('./connections').measurableMeasurementsConnection.resolve
     },
 
     series: {

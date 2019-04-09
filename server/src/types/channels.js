@@ -24,12 +24,6 @@ const channel = new graphql.GraphQLObjectType({
     },
 
     agents: {
-      deprecationReason: 'See agents2',
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(agents.agent)),
-      resolve: resolvers.channels.channelAgents,
-    },
-
-    agents2: {
       type: require('./connections').channelAgentsConnection.connectionType,
       args: require('./connections').channelAgentsConnection.connectionArgs,
       resolve: require('./connections').channelAgentsConnection.resolve

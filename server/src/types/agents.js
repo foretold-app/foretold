@@ -41,12 +41,6 @@ const agent = new graphql.GraphQLObjectType({
     },
 
     Measurements: {
-      deprecationReason: 'See Measurements2',
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./measurements').measurement)),
-      resolve: resolver(models.Agent.Measurements)
-    },
-
-    Measurements2: {
       type: require('./connections').agentMeasurementsConnection.connectionType,
       args: require('./connections').agentMeasurementsConnection.connectionArgs,
       resolve: require('./connections').agentMeasurementsConnection.resolve

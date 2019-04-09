@@ -78,4 +78,67 @@ describe('ChannelMemberships Resolvers', () => {
     });
   });
 
+  describe('myRole()', () => {
+    const root = { id: 'id1' };
+    const args = {};
+    const context = { user: { agentId: 'agentId1' } };
+    const info = {};
+    beforeEach(() => {
+      jest.spyOn(data.channelMemberships, 'getOneOnlyRole')
+        .mockReturnValue(Promise.resolve(true));
+    });
+    it('returns only role string', () => {
+      return channelMemberships.myRole(root, args, context, info)
+        .then((result) => {
+          expect(data.channelMemberships.getOneOnlyRole).toHaveBeenCalledWith({
+            "agentId": "agentId1",
+            "channelId": "id1"
+          });
+          expect(result).toBe(true);
+        });
+    });
+  });
+
+  describe('leave()', () => {
+    const root = {};
+    const args = { input: { channelId: 'channelId1' } };
+    const context = { user: { agentId: 'agentId1' } };
+    const info = {};
+    beforeEach(() => {
+      jest.spyOn(data.channelMemberships, 'leave')
+        .mockReturnValue(Promise.resolve(true));
+    });
+    it('leaves channel', () => {
+      return channelMemberships.leave(root, args, context, info)
+        .then((result) => {
+          expect(data.channelMemberships.leave).toHaveBeenCalledWith({
+            "agentId": "agentId1",
+            "channelId": "channelId1"
+          });
+          expect(result).toBe(true);
+        });
+    });
+  });
+
+  describe('join()', () => {
+    const root = {};
+    const args = { input: { channelId: 'channelId2' } };
+    const context = { user: { agentId: 'agentId2' } };
+    const info = {};
+    beforeEach(() => {
+      jest.spyOn(data.channelMemberships, 'join')
+        .mockReturnValue(Promise.resolve(true));
+    });
+    it('joins channel', () => {
+      return channelMemberships.join(root, args, context, info)
+        .then((result) => {
+          expect(data.channelMemberships.join).toHaveBeenCalledWith({
+            "agentId": "agentId2",
+            "channelId": "channelId2"
+          });
+          expect(result).toBe(true);
+        });
+    });
+  });
+
 });

@@ -45,7 +45,7 @@ const measurable = new graphql.GraphQLObjectType({
     },
 
     series: {
-      type: require('./').seriesType,
+      type: require('./series').series,
       resolve: resolver(models.Measurable.Series),
     },
 

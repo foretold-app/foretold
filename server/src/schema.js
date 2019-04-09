@@ -94,7 +94,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       series: {
-        type: types.seriesType,
+        type: types.series.series,
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
@@ -102,7 +102,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       seriesCollection: {
-        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.seriesType)),
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.series.series)),
         args: {
           channelId: { type: graphql.GraphQLString },
         },
@@ -154,7 +154,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       seriesCreate: {
-        type: types.seriesType,
+        type: types.series.series,
         args: {
           input: { type: graphql.GraphQLNonNull(types.series.seriesCreateInput) },
         },

@@ -5,7 +5,7 @@ const { createConnection } = require('graphql-sequelize');
 
 const measurableMeasurementsConnection = createConnection({
   name: 'measurableMeasurements',
-  nodeType: require('./measurements').measurement,
+  nodeType: require('../types').measurements.measurement,
   target: models.Measurable.Measurements,
   connectionFields: {
     total: {
@@ -17,7 +17,7 @@ const measurableMeasurementsConnection = createConnection({
 
 const agentMeasurementsConnection = createConnection({
   name: 'agentMeasurementsConnection',
-  nodeType: require('./measurements').measurement,
+  nodeType: require('../types').measurements.measurement,
   target: models.Agent.Measurements,
   connectionFields: {
     total: {
@@ -29,7 +29,7 @@ const agentMeasurementsConnection = createConnection({
 
 const channelAgentsConnection = createConnection({
   name: 'channelAgentsConnection',
-  nodeType: require('./agents').agent,
+  nodeType: require('../types').agents.agent,
   target: models.Channel.Agents,
   connectionFields: {
     total: {
@@ -41,7 +41,7 @@ const channelAgentsConnection = createConnection({
 
 const seriesMeasurablesConnection = createConnection({
   name: 'seriesMeasurablesConnection',
-  nodeType: require('./measurables').measurable,
+  nodeType: require('../types').measurables.measurable,
   target: models.Series.Measurables,
   connectionFields: {
     total: {

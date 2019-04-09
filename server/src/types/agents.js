@@ -41,9 +41,9 @@ const agent = new graphql.GraphQLObjectType({
     },
 
     Measurements: {
-      type: require('./connections').agentMeasurementsConnection.connectionType,
-      args: require('./connections').agentMeasurementsConnection.connectionArgs,
-      resolve: require('./connections').agentMeasurementsConnection.resolve
+      type: require('../connections').agentMeasurementsConnection.connectionType,
+      args: require('../connections').agentMeasurementsConnection.connectionArgs,
+      resolve: require('../connections').agentMeasurementsConnection.resolve
     },
 
     Measurables: {

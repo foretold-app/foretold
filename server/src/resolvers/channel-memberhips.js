@@ -105,6 +105,22 @@ async function leave(root, args, context, info) {
   });
 }
 
+/**
+ * @param {object | null} root
+ * @param {{ input: Schema.ChannelsInput }} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<string>}
+ */
+async function myRole(root, args, context, info) {
+  const channelId = _.get(root, 'id');
+  const agentId = _.get(context, 'user.agentId');
+  return await data.channelMemberships.getOneOnlyRole({
+    channelId,
+    agentId,
+  });
+}
+
 module.exports = {
   allByAgentId,
   allByChannelId,
@@ -113,4 +129,5 @@ module.exports = {
   update,
   join,
   leave,
+  myRole,
 };

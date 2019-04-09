@@ -15,7 +15,7 @@ const channel = new graphql.GraphQLObjectType({
     membershipCount: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
     myRole: {
       type: graphql.GraphQLNonNull(require('./channel-memberhips').roleOutput),
-      resolve: resolvers.channels.myRole,
+      resolve: resolvers.channelMemberships.myRole,
     },
     creator: {
       type: graphql.GraphQLNonNull(agents.agent),

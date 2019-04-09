@@ -19,6 +19,7 @@ const user = new graphql.GraphQLObjectType({
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     agentId: { type: graphql.GraphQLString },
+    isMe: require('./common').isMe,
 
     Agent: {
       type: require('./agents').agent,

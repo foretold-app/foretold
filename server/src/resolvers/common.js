@@ -21,7 +21,7 @@ async function iAmOwner(root, args, context, info) {
  * @returns {Promise<boolean>}
  */
 async function isMe(root, args, context, info) {
-  const agentId = _.get(root, 'id') || _.get(root, 'agentId');
+  const agentId = _.get(root, 'agentId') || _.get(root, 'id');
   const currentAgentId = _.get(context, 'user.agentId');
   return agentId && agentId === currentAgentId;
 }

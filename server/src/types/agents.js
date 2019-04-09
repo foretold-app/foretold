@@ -28,6 +28,7 @@ const agent = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(graphql.GraphQLList(channelMemberships.channelsMembership)),
       resolve: resolvers.channelMemberships.allByAgentId,
     },
+    isMe: require('./common').isMe,
     User: {
       type: require('./users').user,
       resolve: resolver(models.Agent.User)

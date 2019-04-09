@@ -31,7 +31,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       measurement: {
-        type: types.measurementType,
+        type: types.measurements.measurement,
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
@@ -39,7 +39,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       measurements: {
-        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.measurementType)),
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.measurements.measurement)),
         args: {
           measurableId: { type: graphql.GraphQLString },
         },
@@ -138,7 +138,7 @@ const schema = new graphql.GraphQLSchema({
     fields: {
 
       measurementCreate: {
-        type: types.measurementType,
+        type: types.measurements.measurement,
         args: {
           input: { type: graphql.GraphQLNonNull(types.measurements.measurementCreateInput) },
         },

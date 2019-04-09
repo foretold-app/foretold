@@ -40,7 +40,7 @@ const measurable = new graphql.GraphQLObjectType({
     seriesId: { type: graphql.GraphQLString },
 
     Measurements: {
-      type: graphql.GraphQLNonNull(new graphql.GraphQLList(require('./').measurementType)),
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./measurements').measurement)),
       resolve: resolver(models.Measurable.Measurements),
     },
 

@@ -37,7 +37,7 @@ const agent = new graphql.GraphQLObjectType({
       resolve: resolver(models.Agent.Bot)
     },
     Measurements: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./').measurementType)),
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./measurements').measurement)),
       resolve: resolver(models.Agent.Measurements)
     },
     Measurables: {
@@ -45,7 +45,7 @@ const agent = new graphql.GraphQLObjectType({
       resolve: resolver(models.Agent.Measurables)
     },
     Channels: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./').channels.channel)),
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./channels').channel)),
       resolve: resolver(models.Agent.Channels)
     }
   })

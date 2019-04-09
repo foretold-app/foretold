@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 /**
  * @param {*} root
  * @param {object} args
@@ -6,7 +8,9 @@
  * @returns {Promise<*|Array<Model>>}
  */
 async function iAmOwner(root, args, context, info) {
-  return true;
+  const creatorId = _.get(root, 'creatorId') || _.get(root, 'agentId');
+  const userAgentId = _.get(context, 'user.agentId');
+  return creatorId && creatorId === userAgentId;
 }
 
 module.exports = {

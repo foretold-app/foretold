@@ -492,7 +492,7 @@
         {
           "kind": "OBJECT",
           "name": "User",
-          "description": "User",
+          "description": null,
           "fields": [
             {
               "name": "id",
@@ -583,6 +583,22 @@
               "deprecationReason": null
             },
             {
+              "name": "isMe",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "Agent",
               "description": null,
               "args": [],
@@ -595,7 +611,7 @@
               "deprecationReason": null
             },
             {
-              "name": "Bots",
+              "name": "Bot",
               "description": null,
               "args": [],
               "type": {
@@ -710,6 +726,22 @@
                     "name": "ChannelsMembership",
                     "ofType": null
                   }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "isMe",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
                 }
               },
               "isDeprecated": false,
@@ -1038,6 +1070,22 @@
               "deprecationReason": null
             },
             {
+              "name": "myRole",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "ChannelMembershipRolesOutput",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "creator",
               "description": null,
               "args": [],
@@ -1110,9 +1158,38 @@
           "possibleTypes": null
         },
         {
+          "kind": "ENUM",
+          "name": "ChannelMembershipRolesOutput",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "ADMIN",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "VIEWER",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "NONE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
           "kind": "OBJECT",
           "name": "Bot",
-          "description": "Bot",
+          "description": null,
           "fields": [
             {
               "name": "id",
@@ -1227,24 +1304,24 @@
               "deprecationReason": null
             },
             {
-              "name": "User",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "OBJECT",
-                "name": "User",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "Agent",
               "description": null,
               "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Agent",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "User",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "User",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -1288,7 +1365,7 @@
         {
           "kind": "OBJECT",
           "name": "Measurement",
-          "description": "Measurement",
+          "description": null,
           "fields": [
             {
               "name": "id",
@@ -1430,6 +1507,22 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "iAmOwner",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -1784,6 +1877,22 @@
               "deprecationReason": null
             },
             {
+              "name": "iAmOwner",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "Measurements",
               "description": null,
               "args": [],
@@ -1916,7 +2025,7 @@
         {
           "kind": "OBJECT",
           "name": "Series",
-          "description": "Series",
+          "description": null,
           "fields": [
             {
               "name": "id",
@@ -2074,6 +2183,22 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "iAmOwner",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null

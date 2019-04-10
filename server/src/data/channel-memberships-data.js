@@ -132,6 +132,19 @@ class ChannelMembershipsData extends DataBase {
       options.agentId,
     );
   }
+
+  /**
+   * @param options
+   * @return {Promise<string>}
+   */
+  async getOneOnlyRole(options) {
+    const channelMembership = await this.getOne(options);
+    return _.get(
+      channelMembership,
+      'role',
+      ChannelMembershipModel.ROLES.NONE,
+    );
+  }
 }
 
 module.exports = {

@@ -28,16 +28,17 @@ const agent = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(graphql.GraphQLList(channelMemberships.channelsMembership)),
       resolve: resolvers.channelMemberships.allByAgentId,
     },
+    isMe: require('./common').isMe,
     User: {
-      type: require('./').userType,
+      type: require('./users').user,
       resolve: resolver(models.Agent.User)
     },
     Bot: {
-      type: require('./').botType,
+      type: require('./bots').bot,
       resolve: resolver(models.Agent.Bot)
     },
     Measurements: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./').measurementType)),
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./measurements').measurement)),
       resolve: resolver(models.Agent.Measurements)
     },
     Measurables: {
@@ -45,7 +46,7 @@ const agent = new graphql.GraphQLObjectType({
       resolve: resolver(models.Agent.Measurables)
     },
     Channels: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./').channels.channel)),
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./channels').channel)),
       resolve: resolver(models.Agent.Channels)
     }
   })

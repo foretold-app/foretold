@@ -17,7 +17,7 @@ const schema = new graphql.GraphQLSchema({
     fields: {
 
       user: {
-        type: types.userType,
+        type: types.users.user,
         args: {
           id: { type: graphql.GraphQLString },
           auth0Id: { type: graphql.GraphQLString },
@@ -26,12 +26,12 @@ const schema = new graphql.GraphQLSchema({
       },
 
       users: {
-        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.userType)),
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.users.user)),
         resolve: resolver(models.User),
       },
 
       measurement: {
-        type: types.measurementType,
+        type: types.measurements.measurement,
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
@@ -39,7 +39,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       measurements: {
-        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.measurementType)),
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.measurements.measurement)),
         args: {
           measurableId: { type: graphql.GraphQLString },
         },
@@ -68,7 +68,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       bot: {
-        type: types.botType,
+        type: types.bots.bot,
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
@@ -76,7 +76,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       bots: {
-        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.botType)),
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.bots.bot)),
         resolve: resolver(models.Bot),
       },
 
@@ -94,7 +94,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       series: {
-        type: types.seriesType,
+        type: types.series.series,
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
@@ -102,7 +102,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       seriesCollection: {
-        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.seriesType)),
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.series.series)),
         args: {
           channelId: { type: graphql.GraphQLString },
         },
@@ -138,7 +138,7 @@ const schema = new graphql.GraphQLSchema({
     fields: {
 
       measurementCreate: {
-        type: types.measurementType,
+        type: types.measurements.measurement,
         args: {
           input: { type: graphql.GraphQLNonNull(types.measurements.measurementCreateInput) },
         },
@@ -154,7 +154,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       seriesCreate: {
-        type: types.seriesType,
+        type: types.series.series,
         args: {
           input: { type: graphql.GraphQLNonNull(types.series.seriesCreateInput) },
         },
@@ -187,7 +187,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       userUpdate: {
-        type: types.userType,
+        type: types.users.user,
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
           input: { type: graphql.GraphQLNonNull(types.users.userUpdateInput) },

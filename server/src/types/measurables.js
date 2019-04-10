@@ -38,14 +38,15 @@ const measurable = new graphql.GraphQLObjectType({
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     creatorId: { type: graphql.GraphQLString },
     seriesId: { type: graphql.GraphQLString },
+    iAmOwner: require('./common').iAmOwner,
 
     Measurements: {
-      type: graphql.GraphQLNonNull(new graphql.GraphQLList(require('./').measurementType)),
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./measurements').measurement)),
       resolve: resolver(models.Measurable.Measurements),
     },
 
     series: {
-      type: require('./').seriesType,
+      type: require('./series').series,
       resolve: resolver(models.Measurable.Series),
     },
 

@@ -2,11 +2,22 @@ const graphql = require("graphql");
 
 const resolvers = require('../resolvers');
 
+const { CHANNEL_MEMBERSHIP_ROLES } = require('../models/channel-membership-roles');
+
 const role = new graphql.GraphQLEnumType({
   name: 'ChannelMembershipRoles',
   values: {
-    ADMIN: { value: 'ADMIN' },
-    VIEWER: { value: 'VIEWER' },
+    [CHANNEL_MEMBERSHIP_ROLES.ADMIN]: { value: CHANNEL_MEMBERSHIP_ROLES.ADMIN },
+    [CHANNEL_MEMBERSHIP_ROLES.VIEWER]: { value: CHANNEL_MEMBERSHIP_ROLES.VIEWER },
+  },
+});
+
+const roleOutput = new graphql.GraphQLEnumType({
+  name: 'ChannelMembershipRolesOutput',
+  values: {
+    [CHANNEL_MEMBERSHIP_ROLES.ADMIN]: { value: CHANNEL_MEMBERSHIP_ROLES.ADMIN },
+    [CHANNEL_MEMBERSHIP_ROLES.VIEWER]: { value: CHANNEL_MEMBERSHIP_ROLES.VIEWER },
+    [CHANNEL_MEMBERSHIP_ROLES.NONE]: { value: CHANNEL_MEMBERSHIP_ROLES.NONE },
   },
 });
 
@@ -53,6 +64,7 @@ const joiningChannelInput = new graphql.GraphQLInputObjectType({
 
 module.exports = {
   role,
+  roleOutput,
   channelsMembership,
   channelMembershipRoleInput,
   channelMembershipDeleteInput,

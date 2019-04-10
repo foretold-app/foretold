@@ -1,9 +1,9 @@
 const R = require('ramda');
-import * as models from "../../models/index";
+const models = require("../../models/index");
 
 const average = R.converge(R.divide, [R.sum, R.length])
 
-export async function makeAggregation(measurable) {
+async function makeAggregation(measurable) {
   const measurements = await measurable.getMeasurements();
   const percentile25 = average(measurements.map(m => m.dataValues.percentile25));
   const percentile50 = average(measurements.map(m => m.dataValues.percentile50));
@@ -16,3 +16,5 @@ export async function makeAggregation(measurable) {
     measurableId: measurable.dataValues.id
   })
 }
+
+module.exports = { makeAggregation };

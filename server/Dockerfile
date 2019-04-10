@@ -1,4 +1,4 @@
-FROM node:10-alpine
+FROM node:11.13.0-alpine
 
 RUN env
 

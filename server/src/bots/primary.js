@@ -1,6 +1,6 @@
 const models = require("../models")
 const Sequelize = require('sequelize')
-import _ from "lodash"
+const _ = require("lodash")
 const Op = Sequelize.Op;
 
 class Evaluation {

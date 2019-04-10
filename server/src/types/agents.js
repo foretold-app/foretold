@@ -29,22 +29,28 @@ const agent = new graphql.GraphQLObjectType({
       resolve: resolvers.channelMemberships.allByAgentId,
     },
     isMe: require('./common').isMe,
+
     User: {
       type: require('./users').user,
       resolve: resolver(models.Agent.User)
     },
+
     Bot: {
       type: require('./bots').bot,
       resolve: resolver(models.Agent.Bot)
     },
+
     Measurements: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./measurements').measurement)),
-      resolve: resolver(models.Agent.Measurements)
+      type: require('../connections').agentMeasurementsConnection.connectionType,
+      args: require('../connections').agentMeasurementsConnection.connectionArgs,
+      resolve: require('../connections').agentMeasurementsConnection.resolve
     },
+
     Measurables: {
       type: graphql.GraphQLNonNull(require('./measurables').measurable),
       resolve: resolver(models.Agent.Measurables)
     },
+
     Channels: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./channels').channel)),
       resolve: resolver(models.Agent.Channels)

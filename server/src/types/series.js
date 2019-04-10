@@ -37,8 +37,9 @@ const series = new graphql.GraphQLObjectType({
     },
 
     Measurables: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./measurables').measurable)),
-      resolve: resolver(models.Series.Measurables),
+      type: require('../connections').seriesMeasurablesConnection.connectionType,
+      args: require('../connections').seriesMeasurablesConnection.connectionArgs,
+      resolve: require('../connections').seriesMeasurablesConnection.resolve
     },
 
     Channel: {

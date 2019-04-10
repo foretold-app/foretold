@@ -4,7 +4,6 @@ const express = require('express');
 const bodyParser = require('body-parser-graphql');
 const { ApolloServer } = require('apollo-server-express');
 
-const models = require("./models");
 const { schemaWithMiddlewares } = require('./schema');
 const { authentication } = require('./authentication');
 const { runJobs } = require('./async');

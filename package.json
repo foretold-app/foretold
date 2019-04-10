@@ -12,7 +12,6 @@
         "client/build": "cd client && npm run build-t && cd ..",
         "client/serve": "cd client && npm run serve && cd ..",
         "server/install": "cd server && npm install && cd ..",
-        "server/build": "cd server && npm run build && cd ..",
         "server/serve": "cd server && npm run serve && cd ..",
         "server/db:create": "cd server && npm run db:create && cd ..",
         "db:create": "cd server && npm run db:create && cd ..",
@@ -21,7 +20,7 @@
         "server/db:reset": "cd server && npm run db:reset && cd ..",
         "server/db:seed": "cd server && npm run db:seed && cd ..",
         "preinstall": "printenv",
-        "postinstall": "npm run server/install && npm run server/build && npm run server/db:migrate; npm run client/install && npm run client/build"
+        "postinstall": "npm run server/install && npm run server/db:migrate; npm run client/install && npm run client/build"
     },
     "author": "",
     "license": "MIT"

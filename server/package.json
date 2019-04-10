@@ -5,37 +5,32 @@
   "repository": "https://github.com/vmasto/express-babel",
   "author": "Vassilis Mastorostergios <vmasto@gmail.com>",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "engines": {
     "node": "~9.7.1",
     "npm": ">=6.4.0"
   },
   "scripts": {
-    "prestart": "npm run -s build",
-    "start": "node dist/index.js",
-    "dev": "nodemon src/index.js --exec \"node -r dotenv/config -r babel-register\"",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js --exec \"node -r dotenv/config\"",
     "dev:production": "DATABASE_URL=postgres://ozziegooen@127.0.0.1:5432/predictions NODE_ENV=production npm run dev",
-    "thing": "nodemon src/bots/primary.js --exec \"node -r dotenv/config -r babel-register\"",
-    "resolutions": "nodemon src/bots/resolution.js --exec \"node -r dotenv/config -r babel-register\"",
-    "inspect": "nodemon --inspect src/index.js --exec babel-node",
-    "clean": "rimraf dist",
-    "build": "npm run clean && mkdir -p dist && babel src -s -D -d dist",
+    "thing": "nodemon src/bots/primary.js --exec \"node -r dotenv/config\"",
+    "resolutions": "nodemon src/bots/resolution.js --exec \"node -r dotenv/config\"",
+    "inspect": "nodemon --inspect src/index.js",
     "test": "jest --watch",
     "test:cv": "jest --coverage --forceExit",
     "test:ci": "jest --forceExit",
     "lint": "esw -w src test",
-    "serve": "node ./dist/index.js",
+    "serve": "node ./src/index.js",
     "db:create": "node_modules/.bin/sequelize db:create",
     "db:drop": "node_modules/.bin/sequelize db:drop",
     "db:migrate": "node_modules/.bin/sequelize db:migrate",
     "db:migrate:undo": "node_modules/.bin/sequelize db:migrate:undo",
     "db:seed": "node_modules/.bin/sequelize db:seed:all",
-    "db:reset": "npm run db:drop; npm run db:create; npm run db:migrate",
-    "babel-node": "babel-node"
+    "db:reset": "npm run db:drop; npm run db:create; npm run db:migrate"
   },
   "keywords": [
     "express",
-    "babel",
     "boilerplate",
     "scaffold",
     "es6",
@@ -50,10 +45,6 @@
     "apollo-server": "^2.4.8",
     "apollo-server-express": "^2.1.0",
     "auth0-js": "^9.7.3",
-    "babel-cli": "^6.26.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
     "body-parser": "^1.18.2",
     "body-parser-graphql": "^1.1.0",
     "cors": "^2.8.4",
@@ -86,9 +77,6 @@
     "sequelize-cli": "^4.1.1"
   },
   "devDependencies": {
-    "babel-eslint": "^8.0.3",
-    "babel-jest": "^21.2.0",
-    "babel-register": "^6.26.0",
     "bs-platform": "^3.1.5",
     "dotenv": "^4.0.0",
     "eslint": "^4.12.1",
@@ -100,24 +88,7 @@
     "nodemon": "^1.12.1",
     "supertest": "^3.0.0"
   },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": "current"
-          }
-        }
-      ]
-    ],
-    "plugins": [
-      "transform-object-rest-spread",
-      "transform-class-properties"
-    ]
-  },
   "eslintConfig": {
-    "parser": "babel-eslint",
     "plugins": [
       "import",
       "jest"

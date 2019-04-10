@@ -6,7 +6,7 @@ const _ = require('lodash');
 const models = require('../../models');
 
 // To run script:
-// npm run babel-node ./src/__tests__/manuals/channels.js
+// node ./src/__tests__/manuals/channels.js
 //
 
 async function test() {

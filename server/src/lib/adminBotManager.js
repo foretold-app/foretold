@@ -14,7 +14,7 @@ const setup = async function () {
     await models.Bot.create({userId: user.id, name: BOTS.RESOLUTION_BOT});
 }
 
-export const getUser = async function(symbol){
+const getUser = async function(symbol){
     const users = await models.User.findAll({
         where: {
             name: USERS[symbol],
@@ -28,7 +28,7 @@ export const getUser = async function(symbol){
     }
 }
 
-export const getBot = async function(symbol){
+const getBot = async function(symbol){
     const bots = await models.Bot.findAll({
         where: {
             name: BOTS[symbol],
@@ -41,4 +41,9 @@ export const getBot = async function(symbol){
     } else {
         return bots[0];
     }
+}
+
+module.exports = {
+  getUser,
+  getBot,
 }

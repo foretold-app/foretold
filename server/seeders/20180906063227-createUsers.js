@@ -1,7 +1,7 @@
 'use strict';
 const models = require("../src/models")
-import _ from "lodash"
-import { getArgumentValues } from "graphql/execution/values";
+const _ = require("lodash")
+const { getArgumentValues } = require("graphql/execution/values");
 
 const users = [{
   name: "Goe Roggins"

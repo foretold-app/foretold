@@ -1,4 +1,4 @@
-import request from 'supertest';
+const request = require('supertest');
 
 xdescribe('GET /', () => {
   it('should render properly', async () => {

@@ -14,6 +14,7 @@ async function channel(root, args, context, info) {
     || _.get(args, 'input.channelId')
     || _.get(root, 'channelId')
     || _.get(context, 'channelId')
+    || _.get(context, 'measurable.channelId')
     || _.get(args, 'id');
 
   console.log('\x1b[36m ---> \x1b[0m Middleware (channel)', { channelId });

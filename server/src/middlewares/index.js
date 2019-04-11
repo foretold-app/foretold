@@ -8,6 +8,15 @@ const { measurable } = require('./measurables');
  */
 
 const middlewares = {
+  Query: {
+    permissions: async (resolve, root, args, context, info) => {
+      await measurable(root, args, context, info);
+      await channel(root, args, context, info);
+      await channelMemberships(root, args, context, info);
+      return await resolve(root, args, context, info);
+    },
+  },
+
   Mutation: {
     seriesCreate: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);

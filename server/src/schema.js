@@ -16,6 +16,15 @@ const schema = new graphql.GraphQLSchema({
     name: 'Query',
     fields: {
 
+      permissions: {
+        type: types.permissions.permissions,
+        args: {
+          channelId: { type: graphql.GraphQLString },
+          measurableId: { type: graphql.GraphQLString },
+        },
+        resolve: resolvers.permissions.all,
+      },
+
       user: {
         type: types.users.user,
         args: {

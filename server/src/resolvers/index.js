@@ -6,6 +6,7 @@ const channelMemberships  = require('./channel-memberhips');
 const users  = require('./users');
 const agents  = require('./agents');
 const common  = require('./common');
+const permissions  = require('./permissions');
 
 module.exports = {
   channels,
@@ -16,4 +17,5 @@ module.exports = {
   users,
   agents,
   common,
+  permissions,
 };

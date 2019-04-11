@@ -30,6 +30,7 @@ const isViewer = rule()(isViewerRule);
 
 module.exports = {
   isAdmin,
-  isAdminRule,
   isViewer,
+  isAdminRule,
+  isViewerRule,
 };

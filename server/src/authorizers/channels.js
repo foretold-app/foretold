@@ -22,4 +22,5 @@ const isChannelPublic = rule()(isChannelPublicRule);
 
 module.exports = {
   isChannelPublic,
+  isChannelPublicRule,
 };

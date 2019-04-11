@@ -21,4 +21,5 @@ const isOwner = rule()(isOwnerRule);
 
 module.exports = {
   isOwner,
+  isOwnerRule,
 };

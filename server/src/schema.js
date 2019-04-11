@@ -16,6 +16,7 @@ const schema = new graphql.GraphQLSchema({
     types.channels.channel,
     types.channelMemberships.channelsMembership,
   ],
+
   query: new graphql.GraphQLObjectType({
     name: 'Query',
     fields: {
@@ -146,6 +147,7 @@ const schema = new graphql.GraphQLSchema({
       },
     }
   }),
+
   mutation: new graphql.GraphQLObjectType({
     name: 'Mutation',
     fields: {

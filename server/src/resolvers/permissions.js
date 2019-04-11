@@ -1,7 +1,6 @@
 const authorizers = require('../authorizers');
 
 /**
- * @todo: Super hacky.
  * @param {object | null} root
  * @param {object} args
  * @param {string} args.id
@@ -14,7 +13,6 @@ async function all(root, args, context, info) {
 }
 
 /**
- * @todo: Super hacky.
  * @param {object | null} root
  * @param {object} args
  * @param {string} args.id
@@ -27,7 +25,6 @@ async function channelMutations(root, args, context, info) {
 }
 
 /**
- * @todo: Super hacky.
  * @param {object | null} root
  * @param {object} args
  * @param {string} args.id

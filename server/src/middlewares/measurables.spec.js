@@ -21,7 +21,6 @@ describe('Measurables Middleware', () => {
           .toHaveBeenCalledWith('measurableId1');
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
-        expect(context.channelId).toBe(measurableObj.channelId);
       });
     });
 
@@ -35,7 +34,6 @@ describe('Measurables Middleware', () => {
           .toHaveBeenCalledWith('measurableId1');
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
-        expect(context.channelId).toBe(measurableObj.channelId);
       });
     });
 
@@ -49,7 +47,6 @@ describe('Measurables Middleware', () => {
           .toHaveBeenCalledWith('measurableId1');
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
-        expect(context.channelId).toBe(measurableObj.channelId);
       });
     });
 
@@ -63,7 +60,6 @@ describe('Measurables Middleware', () => {
           .toHaveBeenCalledWith('measurableId1');
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
-        expect(context.channelId).toBe(measurableObj.channelId);
       });
     });
 

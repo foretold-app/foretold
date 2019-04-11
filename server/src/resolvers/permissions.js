@@ -1,7 +1,9 @@
 const _ = require('lodash');
-const { rules, rulesChannel } = require('../authorizers');
+
+const { rules, rulesChannel, rulesChannelMemberships } = require('../authorizers');
+
 const { channelMemberships } = require('../middlewares/channel-memberships');
-const { channelByRoot } = require('../middlewares/channels');
+const { channelByRoot, channel } = require('../middlewares/channels');
 
 /**
  * @param {object} rules
@@ -60,11 +62,34 @@ async function availableChannelMutations(root, args, context, info) {
   info = _.cloneDeep(info);
   await channelByRoot(root, args, context, info);
   await channelMemberships(root, args, context, info);
-  const mutations = await (getList(rulesChannel.Mutation))(root, args, context, info);
+  const list = getList(rulesChannel.Mutation);
+  const mutations = await list(root, args, context, info);
+  return mutations.allow;
+}
+
+/**
+ * @todo: Super hacky.
+ * @param {object | null} root
+ * @param {object} args
+ * @param {string} args.id
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+async function availableChannelMembershipsMutations(root, args, context, info) {
+  root = _.cloneDeep(root);
+  args = _.cloneDeep(args);
+  context = _.cloneDeep(context);
+  info = _.cloneDeep(info);
+  await channel(root, args, context, info);
+  await channelMemberships(root, args, context, info);
+  const list = getList(rulesChannelMemberships.Mutation);
+  const mutations = await list(root, args, context, info);
   return mutations.allow;
 }
 
 module.exports = {
   all,
   availableChannelMutations,
+  availableChannelMembershipsMutations,
 };

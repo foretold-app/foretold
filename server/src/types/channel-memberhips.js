@@ -30,7 +30,7 @@ const channelsMembership = new graphql.GraphQLObjectType({
 
     availableActions: {
       type: graphql.GraphQLList(graphql.GraphQLString),
-      resolve: resolvers.permissions.availableChannelMembershipsMutations,
+      resolve: resolvers.permissions.channelMembershipsMutations,
     },
 
     channel: {

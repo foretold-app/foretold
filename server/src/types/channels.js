@@ -20,7 +20,7 @@ const channel = new graphql.GraphQLObjectType({
 
     availableActions: {
       type: graphql.GraphQLList(graphql.GraphQLString),
-      resolve: resolvers.permissions.availableChannelMutations,
+      resolve: resolvers.permissions.channelMutations,
     },
 
     creator: {

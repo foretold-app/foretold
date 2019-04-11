@@ -7,6 +7,7 @@ const { isChannelPublic } = require('./channels');
 const { isOwner } = require('./measurables');
 
 const rulesChannel = {
+  Query: {},
   Mutation: {
     channelUpdate: and(isAuthenticated, isAdmin),
     leaveChannel: and(isAuthenticated),
@@ -16,6 +17,7 @@ const rulesChannel = {
 };
 
 const rulesChannelMemberships = {
+  Query: {},
   Mutation: {
     channelMembershipDelete: and(isAuthenticated, isAdmin),
     channelMembershipRoleUpdate: and(isAuthenticated, isAdmin),

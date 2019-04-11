@@ -11,7 +11,7 @@ const { measurable } = require('./measurables');
 
 const middlewares = {
   Channel: {
-    availableActions: async (resolve, root, args, context, info) => {
+    permissions: async (resolve, root, args, context, info) => {
       context = _.cloneDeep(context);
       await channelByRoot(root, args, context, info);
       await channelMemberships(root, args, context, info);
@@ -20,7 +20,7 @@ const middlewares = {
   },
 
   ChannelsMembership: {
-    availableActions: async (resolve, root, args, context, info) => {
+    permissions: async (resolve, root, args, context, info) => {
       context = _.cloneDeep(context);
       await channel(root, args, context, info);
       await channelMemberships(root, args, context, info);

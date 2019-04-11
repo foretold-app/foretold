@@ -28,8 +28,8 @@ const channelsMembership = new graphql.GraphQLObjectType({
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     role: { type: graphql.GraphQLNonNull(role) },
 
-    availableActions: {
-      type: graphql.GraphQLList(graphql.GraphQLString),
+    permissions: {
+      type: graphql.GraphQLNonNull(require('./permissions').permissions),
       resolve: resolvers.permissions.channelMembershipsMutations,
     },
 

@@ -12,6 +12,10 @@ const { permissions } = require('./authorizers');
 const { middlewares } = require('./middlewares');
 
 const schema = new graphql.GraphQLSchema({
+  types: [
+    types.channels.channel,
+    types.channelMemberships.channelsMembership,
+  ],
   query: new graphql.GraphQLObjectType({
     name: 'Query',
     fields: {

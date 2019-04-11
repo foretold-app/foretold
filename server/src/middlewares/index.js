@@ -1,4 +1,6 @@
-const { channel } = require('./channels');
+const _ = require('lodash');
+
+const { channel, channelByRoot } = require('./channels');
 const { channelMemberships } = require('./channel-memberships');
 const { measurable } = require('./measurables');
 
@@ -8,6 +10,31 @@ const { measurable } = require('./measurables');
  */
 
 const middlewares = {
+  Channel: {
+    availableActions: async (resolve, root, args, context, info) => {
+      root = _.cloneDeep(root);
+      args = _.cloneDeep(args);
+      context = _.cloneDeep(context);
+      info = _.cloneDeep(info);
+      console.log('Channel Middleware availableActions');
+      await channelByRoot(root, args, context, info);
+      await channelMemberships(root, args, context, info);
+      return await resolve(root, args, context, info);
+    },
+  },
+
+  ChannelsMembership: {
+    availableActions: async (resolve, root, args, context, info) => {
+      root = _.cloneDeep(root);
+      args = _.cloneDeep(args);
+      context = _.cloneDeep(context);
+      info = _.cloneDeep(info);
+      await channel(root, args, context, info);
+      await channelMemberships(root, args, context, info);
+      return await resolve(root, args, context, info);
+    },
+  },
+
   Query: {
     permissions: async (resolve, root, args, context, info) => {
       await measurable(root, args, context, info);

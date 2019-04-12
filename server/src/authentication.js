@@ -5,7 +5,7 @@ const { users } = require('./data');
 const AUTH0_SECRET = process.env.AUTH0_SECRET;
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_ISSUER = process.env.JWT_ISSUER || 'Foretold';
-const JWT_EXPIN = process.env.JWT_EXPIN || '1m';
+const JWT_EXPIN = process.env.JWT_EXPIN || '31 days';
 
 if (!AUTH0_SECRET) throw new ReferenceError('AUTH0_SECRET is not defined');
 if (!JWT_SECRET) throw new ReferenceError('JWT_SECRET is not defined');
@@ -71,7 +71,7 @@ async function authenticationByJwtToken(token) {
   try {
     const decoded = decodeJwtToken(token);
     if (!decoded.sub) throw new Error('No Agent Id');
-    const user = await users.findOne({ agentId: decoded.sub });
+    const user = await users.getOne({ agentId: decoded.sub });
     if (!user) throw new Error('Not authenticated');
     return user;
   } catch (err) {

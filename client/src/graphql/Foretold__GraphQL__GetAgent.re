@@ -21,7 +21,10 @@ type measurable = {
   expectedResolutionDate: option(MomentRe.Moment.t),
 };
 
-type measurement = {
+type connection('a) =
+  option({. "edges": option(Js.Array.t(option({. "node": option('a)})))});
+
+type node = {
   id: string,
   relevantAt: option(MomentRe.Moment.t),
   competitorType,
@@ -35,8 +38,20 @@ type measurement = {
 type agent = {
   user: option(user),
   bot: option(bot),
-  measurements: array(option(measurement)),
+  measurements: connection(node),
 };
+
+let unpackEdges = (a: connection('a)): array('a) => {
+  let response =
+    a
+    |> E.O.fmap(b => b##edges |> E.A.O.defaultEmpty |> E.A.O.concatSome)
+    |> E.A.O.defaultEmpty
+    |> E.A.fmap(e => e##node)
+    |> E.A.O.concatSome;
+  response;
+};
+/* |> E.O.fmap(b => b##edges |> E.A.O.defaultEmpty)
+   |> E.O.toExn("Expected items"); */
 
 module Query = [%graphql
   {|
@@ -53,7 +68,9 @@ module Query = [%graphql
           description
           competitorType
         }
-        measurements: Measurements @bsRecord{
+        measurements: Measurements {
+           edges {
+             node @bsRecord{
            id
            createdAt @bsDecoder(fn: "E.J.toMoment")
            relevantAt @bsDecoder(fn: "E.J.O.toMoment")
@@ -68,6 +85,9 @@ module Query = [%graphql
              state @bsDecoder(fn: "Context.Primary.MeasurableState.fromEnum")
              stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
           }
+
+             }
+           }
         }
         }
     }
@@ -76,28 +96,7 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let component = (~id, innerFn) => {
-  open Rationale.Result.Infix;
-  open Utils;
-  let notFound = "Agent not found" |> ste;
-  let query = Query.make(~id, ());
-  QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(e => e##agent)
-    |> E.R.bind(_, e =>
-         switch (e) {
-         | Some(a) => Ok(a)
-         | None => Error(notFound |> E.React.inH3)
-         }
-       )
-    |> E.R.fmap(innerFn)
-    |> E.R.id
-  )
-  |> E.React.el;
-};
-
-let toMeasurables = (measurements: array(measurement)) => {
+let toMeasurables = (measurements: array(node)) => {
   let r = measurements;
   let standardMeasurements =
     r
@@ -121,7 +120,7 @@ let toMeasurables = (measurements: array(measurement)) => {
 
   let measurables =
     r
-    |> E.A.fmap((t: measurement) => (t.measurable: option(measurable)))
+    |> E.A.fmap(t => (t.measurable: option(measurable)))
     |> E.A.to_list
     |> E.L.filter_opt
     |> E.L.uniqBy((t: measurable) => t.id)
@@ -143,4 +142,39 @@ let toMeasurables = (measurements: array(measurement)) => {
          )
        );
   measurables;
+};
+
+type response = {
+  agent,
+  measurables: list(Context.Primary.Measurable.t),
+};
+
+let component = (~id, innerFn) => {
+  open Rationale.Result.Infix;
+  open Utils;
+  let notFound = "Agent not found" |> ste;
+  let query = Query.make(~id, ());
+  QueryComponent.make(~variables=query##variables, ({result}) =>
+    result
+    |> ApolloUtils.apolloResponseToResult
+    |> E.R.fmap(e => {
+         let agent = e##agent;
+         let measurements: option(array(node)) =
+           agent |> E.O.fmap(agent => agent.measurements |> unpackEdges);
+         let measurables = measurements |> E.O.fmap(toMeasurables);
+         switch (agent, measurables) {
+         | (Some(a), Some(b)) => Some({agent: a, measurables: b})
+         | _ => None
+         };
+       })
+    |> E.R.bind(_, e =>
+         switch (e) {
+         | Some(a) => Ok(a)
+         | None => Error(notFound |> E.React.inH3)
+         }
+       )
+    |> E.R.fmap(innerFn)
+    |> E.R.id
+  )
+  |> E.React.el;
 };

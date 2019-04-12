@@ -145,6 +145,14 @@ const schema = new graphql.GraphQLSchema({
           return 11;
         }
       },
+
+      authentication: {
+        type: graphql.GraphQLNonNull(types.authentications.authentication),
+        args: {
+          auth0jwt: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
+        resolve: resolvers.authentications.authentication,
+      },
     }
   }),
 

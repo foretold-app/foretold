@@ -10,6 +10,13 @@ const { measurable } = require('./measurables');
  */
 
 const middlewares = {
+  Bot: {
+    jwt: async (resolve, root, args, context, info) => {
+      context = _.cloneDeep(context);
+      return await resolve(root, args, context, info);
+    },
+  },
+
   Channel: {
     permissions: async (resolve, root, args, context, info) => {
       context = _.cloneDeep(context);

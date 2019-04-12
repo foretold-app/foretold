@@ -15,7 +15,8 @@ function roleRule(roleName) {
    */
   return (root, args, context) => {
     const role = _.get(context, 'channelMembershipsRole', []);
-    console.log(`\x1b[33m Rule (roleRule) role "${role}" = "${roleName}" \x1b[0m`);
+    console.log(`\x1b[33m Rule Channel Memberships (roleRule) ` +
+      `role "${role}" = "${roleName}" \x1b[0m`);
     return role === roleName;
   };
 }

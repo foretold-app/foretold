@@ -6,6 +6,7 @@ const measurements = require('./measurements');
 const series = require('./series');
 const users = require('./users');
 const bots = require('./bots');
+const permissions = require('./permissions');
 
 
 module.exports = {
@@ -17,4 +18,5 @@ module.exports = {
   measurements,
   series,
   users,
+  permissions,
 };

@@ -17,13 +17,11 @@ async function measurable(root, args, context, info) {
     || _.get(args, 'id');
 
   console.log('\x1b[36m ---> \x1b[0m Middleware (measurable)', { measurableId });
+
   if (measurableId) {
-    const measurable = await data.measurables.getOne(measurableId);
-    context.measurable = measurable;
-    context.channelId = _.get(measurable, 'channelId');
+    context.measurable = await data.measurables.getOne(measurableId);
   } else {
     context.measurable = null;
-    context.channelId = null;
   }
 }
 

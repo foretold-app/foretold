@@ -12,9 +12,23 @@ const { permissions } = require('./authorizers');
 const { middlewares } = require('./middlewares');
 
 const schema = new graphql.GraphQLSchema({
+  types: [
+    types.channels.channel,
+    types.channelMemberships.channelsMembership,
+  ],
+
   query: new graphql.GraphQLObjectType({
     name: 'Query',
     fields: {
+
+      permissions: {
+        type: types.permissions.permissions,
+        args: {
+          channelId: { type: graphql.GraphQLString },
+          measurableId: { type: graphql.GraphQLString },
+        },
+        resolve: resolvers.permissions.all,
+      },
 
       user: {
         type: types.users.user,
@@ -133,6 +147,7 @@ const schema = new graphql.GraphQLSchema({
       },
     }
   }),
+
   mutation: new graphql.GraphQLObjectType({
     name: 'Mutation',
     fields: {

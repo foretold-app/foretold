@@ -27,14 +27,22 @@ const channelsMembership = new graphql.GraphQLObjectType({
     agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     role: { type: graphql.GraphQLNonNull(role) },
+
+    permissions: {
+      type: graphql.GraphQLNonNull(require('./permissions').permissions),
+      resolve: resolvers.permissions.channelMembershipsMutations,
+    },
+
     channel: {
       type: require('./channels').channel,
       resolve: resolvers.channels.one,
     },
+
     agent: {
       type: require('./agents').agent,
       resolve: resolvers.agents.one,
     },
+
   }),
 });
 

@@ -1,4 +1,6 @@
-const { channel } = require('./channels');
+const _ = require('lodash');
+
+const { channel, channelByRoot } = require('./channels');
 const { channelMemberships } = require('./channel-memberships');
 const { measurable } = require('./measurables');
 
@@ -8,6 +10,33 @@ const { measurable } = require('./measurables');
  */
 
 const middlewares = {
+  Channel: {
+    permissions: async (resolve, root, args, context, info) => {
+      context = _.cloneDeep(context);
+      await channelByRoot(root, args, context, info);
+      await channelMemberships(root, args, context, info);
+      return await resolve(root, args, context, info);
+    },
+  },
+
+  ChannelsMembership: {
+    permissions: async (resolve, root, args, context, info) => {
+      context = _.cloneDeep(context);
+      await channel(root, args, context, info);
+      await channelMemberships(root, args, context, info);
+      return await resolve(root, args, context, info);
+    },
+  },
+
+  Query: {
+    permissions: async (resolve, root, args, context, info) => {
+      await measurable(root, args, context, info);
+      await channel(root, args, context, info);
+      await channelMemberships(root, args, context, info);
+      return await resolve(root, args, context, info);
+    },
+  },
+
   Mutation: {
     seriesCreate: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);

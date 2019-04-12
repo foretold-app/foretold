@@ -5,10 +5,8 @@ const { isAuthenticated } = require('./users');
 const { isAdmin, isViewer } = require('./channel-memberships');
 const { isChannelPublic } = require('./channels');
 const measurables = require('./measurables');
-const bots = require('./bots');
 
 const rulesChannel = {
-  Bot: {},
   Query: {},
   Mutation: {
     channelUpdate: and(isAuthenticated, isAdmin),
@@ -19,7 +17,6 @@ const rulesChannel = {
 };
 
 const rulesChannelMemberships = {
-  Bot: {},
   Query: {},
   Mutation: {
     channelMembershipDelete: and(isAuthenticated, isAdmin),
@@ -28,9 +25,6 @@ const rulesChannelMemberships = {
 };
 
 const rules = {
-  Bot: {
-    jwt: bots.isOwner,
-  },
   Query: {
     '*': allow,
     permissions: allow,

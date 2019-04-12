@@ -35,34 +35,27 @@ let component = ReasonReact.statelessComponent("AgentShow");
 let make = (~id: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>
-    Queries.Agent.component(
-      ~id,
-      agent => {
-        let measurables =
-          agent.measurements
-          |> E.A.O.concatSomes
-          |> Queries.Agent.toMeasurables;
-        SLayout.LayoutConfig.make(
-          ~head=agentSection(agent),
-          ~body=
-            measurables
-            |> E.L.fmap((m: Context.Primary.Measurable.t) => {
-                 let measurements = m.measurements |> E.O.default([]);
-                 <>
-                   <div className=block>
-                     {C.Measurable.Items.link(~m)}
-                     <C.Measurable.StatusDisplay
-                       measurable=m
-                       dateDisplay=WHOLE
-                     />
-                   </div>
-                   {measurements |> C.Measurements.Table.make}
-                 </>;
-               })
-            |> E.A.of_list
-            |> ReasonReact.array,
-        )
-        |> layout;
-      },
+    Queries.Agent.component(~id, ({agent, measurables}) =>
+      SLayout.LayoutConfig.make(
+        ~head=agentSection(agent),
+        ~body=
+          measurables
+          |> E.L.fmap((m: Context.Primary.Measurable.t) => {
+               let measurements = m.measurements |> E.O.default([]);
+               <>
+                 <div className=block>
+                   {C.Measurable.Items.link(~m)}
+                   <C.Measurable.StatusDisplay
+                     measurable=m
+                     dateDisplay=WHOLE
+                   />
+                 </div>
+                 {measurements |> C.Measurements.Table.make}
+               </>;
+             })
+          |> E.A.of_list
+          |> ReasonReact.array,
+      )
+      |> layout
     ),
 };

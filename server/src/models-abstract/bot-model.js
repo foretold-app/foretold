@@ -13,6 +13,25 @@ class BotModel extends ModelPostgres {
   createOne(data) {
     return this.model.create(data);
   }
+
+  /**
+   * @param filter
+   * @param pagination
+   * @param restrictions
+   * @return {Promise<void>}
+   */
+  async getAll(filter, pagination, restrictions) {
+    const where = {};
+
+    this.applyRestrictions(where, restrictions);
+
+    // Query
+    return await this.model.findAll({
+      limit: pagination.limit,
+      offset: pagination.offset,
+      where,
+    });
+  }
 }
 
 module.exports = {

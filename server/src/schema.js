@@ -92,7 +92,7 @@ const schema = new graphql.GraphQLSchema({
 
       bots: {
         type: graphql.GraphQLNonNull(graphql.GraphQLList(types.bots.bot)),
-        resolve: resolver(models.Bot),
+        resolve: resolvers.bots.all,
       },
 
       agent: {

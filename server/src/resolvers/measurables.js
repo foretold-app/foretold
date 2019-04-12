@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const data = require('../data');
 
 /**
@@ -8,7 +9,7 @@ const data = require('../data');
  * @returns {Promise<*|Array<Model>>}
  */
 async function all(root, args, context, info) {
-  const agentId = context.user.agentId;
+  const agentId = _.get(context, 'user.agentId');
   return await data.measurables.getAll({ ...args, agentId });
 }
 

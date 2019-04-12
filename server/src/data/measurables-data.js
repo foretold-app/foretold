@@ -60,10 +60,10 @@ class MeasurablesData extends DataBase {
 
   /**
    * @param {object} options
-   * @param {string[]} options.states
-   * @param {string} options.agentId
-   * @param {number} options.offset
-   * @param {number} options.limit
+   * @param {string[]} [options.states]
+   * @param {string} [options.agentId]
+   * @param {number} [options.offset]
+   * @param {number} [options.limit]
    * @return {Promise<*|Array<Model>>}
    */
   async getAll(options) {

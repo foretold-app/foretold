@@ -33,6 +33,10 @@ const UserModel = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
 
+const BotModel = jest.fn().mockImplementation(() => ({
+  ...ModelPostgres,
+}));
+
 module.exports = {
   AgentModel,
   ChannelMembershipModel,
@@ -41,4 +45,5 @@ module.exports = {
   MeasurementModel,
   SeriesModel,
   UserModel,
+  BotModel,
 };

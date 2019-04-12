@@ -7,7 +7,7 @@ const series = require('./series');
 const users = require('./users');
 const bots = require('./bots');
 const permissions = require('./permissions');
-
+const authentications = require('./authentications');
 
 module.exports = {
   bots,
@@ -19,4 +19,5 @@ module.exports = {
   series,
   users,
   permissions,
+  authentications,
 };

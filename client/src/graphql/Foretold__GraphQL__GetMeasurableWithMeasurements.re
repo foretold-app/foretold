@@ -4,34 +4,39 @@ module Types = {
   type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
   type measurement = {
     .
-    "id": string,
-    "agent":
+    "node":
       option({
         .
-        "bot":
+        "id": string,
+        "agent":
           option({
             .
+            "bot":
+              option({
+                .
+                "id": string,
+                "name": option(string),
+                "competitorType": competitorType,
+              }),
             "id": string,
             "name": option(string),
-            "competitorType": competitorType,
+            "user":
+              option({
+                .
+                "id": string,
+                "name": string,
+              }),
           }),
-        "id": string,
-        "name": option(string),
-        "user":
-          option({
-            .
-            "id": string,
-            "name": string,
-          }),
+        "description": option(string),
+        "relevantAt": option(MomentRe.Moment.t),
+        "competitorType": competitorType,
+        "createdAt": MomentRe.Moment.t,
+        "taggedMeasurementId": option(string),
+        "value": Belt.Result.t(MeasurementValue.t, string),
       }),
-    "description": option(string),
-    "relevantAt": option(MomentRe.Moment.t),
-    "competitorType": competitorType,
-    "createdAt": MomentRe.Moment.t,
-    "taggedMeasurementId": option(string),
-    "value": Belt.Result.t(MeasurementValue.t, string),
   };
-  type measurements = Js.Array.t(option(measurement));
+
+  type measurements = option({. "edges": option(Js.Array.t(measurement))});
 };
 
 module Query = [%graphql
@@ -42,8 +47,6 @@ module Query = [%graphql
               id
               name
               labelCustom
-              valueType
-              creatorId
               resolutionEndpoint
               resolutionEndpointResponse
               labelSubject
@@ -61,27 +64,30 @@ module Query = [%graphql
               series {
                 id
                 name
-                description
               }
               measurements: Measurements{
-                id
-                createdAt @bsDecoder(fn: "E.J.toMoment")
-                value @bsDecoder(fn: "MeasurementValue.decode")
-                relevantAt @bsDecoder(fn: "E.J.O.toMoment")
-                competitorType
-                description
-                taggedMeasurementId
-                agent: Agent {
-                  id
-                  name
-                  user: User {
+                edges {
+                  node{
                     id
-                    name
-                  }
-                  bot: Bot {
-                    id
-                    name
+                    createdAt @bsDecoder(fn: "E.J.toMoment")
+                    value @bsDecoder(fn: "MeasurementValue.decode")
+                    relevantAt @bsDecoder(fn: "E.J.O.toMoment")
                     competitorType
+                    description
+                    taggedMeasurementId
+                    agent: Agent {
+                      id
+                      name
+                      user: User {
+                        id
+                        name
+                      }
+                      bot: Bot {
+                        id
+                        name
+                        competitorType
+                      }
+                    }
                   }
                 }
               }
@@ -94,8 +100,10 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let toMeasurement = (m: Types.measurement): Context.Primary.Measurement.t => {
   open Context.Primary.Agent;
+  let measurement = m##node |> E.O.toExn("FD");
+  let agent = m##node |> E.O.bind(_, r => r##agent);
   let agentType: option(Context.Primary.AgentType.t) =
-    m##agent
+    agent
     |> E.O.bind(_, k =>
          switch (k##bot, k##user) {
          | (Some(bot), None) =>
@@ -120,23 +128,54 @@ let toMeasurement = (m: Types.measurement): Context.Primary.Measurement.t => {
        );
 
   let agent: option(Context.Primary.Agent.t) =
-    m##agent
+    agent
     |> E.O.fmap(k => Context.Primary.Agent.make(~id=k##id, ~agentType, ()));
 
   Context.Primary.Measurement.make(
-    ~id=m##id,
-    ~description=m##description,
-    ~value=m##value,
-    ~competitorType=m##competitorType,
-    ~taggedMeasurementId=m##taggedMeasurementId,
-    ~createdAt=Some(m##createdAt),
-    ~relevantAt=m##relevantAt,
+    ~id=measurement##id,
+    ~description=measurement##description,
+    ~value=measurement##value,
+    ~competitorType=measurement##competitorType,
+    ~taggedMeasurementId=measurement##taggedMeasurementId,
+    ~createdAt=Some(measurement##createdAt),
+    ~relevantAt=measurement##relevantAt,
     ~agent,
     (),
   );
 };
 
-let queryMeasurable = m => {
+type measurableQuery = {
+  .
+  "createdAt": MomentRe.Moment.t,
+  "creator":
+    option({
+      .
+      "id": string,
+      "name": option(string),
+    }),
+  "expectedResolutionDate": option(MomentRe.Moment.t),
+  "id": string,
+  "labelCustom": option(string),
+  "labelOnDate": option(MomentRe.Moment.t),
+  "labelProperty": option(string),
+  "labelSubject": option(string),
+  "measurements":
+    option({. "edges": option(Js.Array.t(option(Types.measurement)))}),
+  "name": string,
+  "resolutionEndpoint": option(string),
+  "resolutionEndpointResponse": option(float),
+  "series":
+    option({
+      .
+      "id": string,
+      "name": option(string),
+    }),
+  "state": [ | `JUDGED | `JUDGEMENT_PENDING | `OPEN],
+  "stateUpdatedAt": option(MomentRe.Moment.t),
+  "updatedAt": MomentRe.Moment.t,
+};
+
+let queryMeasurable = (m: measurableQuery) => {
   open Context.Primary;
   let agent: option(Agent.t) =
     m##creator |> E.O.fmap(r => Agent.make(~id=r##id, ~name=r##name, ()));
@@ -144,9 +183,16 @@ let queryMeasurable = m => {
   let series: option(Series.t) =
     m##series |> E.O.fmap(r => Series.make(~id=r##id, ~name=r##name, ()));
 
-  let measurements: list(Measurement.t) =
+  let unpackEdges =
+      (a: option({. "edges": option(Js.Array.t('a))})): Js.Array.t('a) =>
+    a
+    |> E.O.fmap(b => b##edges |> E.A.O.defaultEmpty)
+    |> E.O.toExn("Expected items");
+
+  let measurements =
     m##measurements
-    |> E.A.O.concatSomes
+    |> unpackEdges
+    |> E.A.O.concatSome
     |> E.A.fmap(toMeasurement)
     |> Array.to_list;
 

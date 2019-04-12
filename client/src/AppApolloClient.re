@@ -30,5 +30,6 @@ let link = () =>
   | None => ApolloLinks.from([|errorLink, httpLink|])
   };
 
+  /* TODO: Don't always load devtools. */
 let instance = () =>
-  ReasonApollo.createApolloClient(~link=link(), ~cache=inMemoryCache, ());
+  ReasonApollo.createApolloClient(~link=link(), ~cache=inMemoryCache, ~connectToDevTools=true,());

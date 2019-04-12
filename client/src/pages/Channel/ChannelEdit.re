@@ -16,8 +16,7 @@ module CMutationForm =
 
 let component = ReasonReact.statelessComponent("ChannelNewPage");
 
-let make =
-    (~channelId: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
+let make = (~channelId: string, ~layout, _children) => {
   ...component,
   render: _ => {
     let loadChannel =
@@ -25,6 +24,8 @@ let make =
 
     let mutationMake =
       Mutation.Mutation.make(~onCompleted=_ => ()) ||> E.React.el;
+
+    let header = SLayout.Header.textDiv("Edit Channel");
 
     let form = (mutation, channel: Context.Primary.Channel.t) =>
       ChannelFormShower.make(
@@ -61,10 +62,7 @@ let make =
       )
       ||> E.HttpResponse.withReactDefaults,
     )
-    |> SLayout.LayoutConfig.make(
-         ~head=SLayout.Header.textDiv("Edit Channel"),
-         ~body=_,
-       )
+    |> SLayout.LayoutConfig.make(~head=header, ~body=_)
     |> layout;
   },
 };

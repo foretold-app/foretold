@@ -1,5 +1,6 @@
 open Utils;
 open Style.Grid;
+open Rationale.Function.Infix;
 
 module Styles = {
   open Css;
@@ -73,6 +74,7 @@ module Styles = {
 module Header = {
   let component = ReasonReact.statelessComponent("Header");
   let textDiv = text => <div className=Styles.headerText> {text |> ste} </div>;
+
   let make = children => {
     ...component,
     render: _ => <div className=Styles.header> ...children </div>,
@@ -97,13 +99,12 @@ module LayoutConfig = {
 
 module FullPage = {
   let component = ReasonReact.statelessComponent("Page");
-  type t = LayoutConfig.t;
-  let make = ({head, body}: t) => {
+  let make = ({head, body}: LayoutConfig.t) => {
     ...component,
     render: _ =>
       <> <Header> head </Header> <MainSection> body </MainSection> </>,
   };
-  let makeWithEl = (t: t) => t |> make |> E.React.el;
+  let makeWithEl = (t: LayoutConfig.t) => t |> make |> E.React.el;
 };
 
 let channelBack = (~onClick, ()) =>
@@ -125,10 +126,6 @@ let channelEditLink = (c: Context.Primary.Channel.t) =>
 
 let seriesHead = (channel: Context.Primary.Channel.t, seriesName) =>
   <>
-    <div className=Styles.headerText>
-      {channel |> Context.Primary.Channel.present}
-    </div>
-    <div className=Styles.dash> <Icon.Icon icon="THIN_RIGHT" /> </div>
     <div className=Styles.seriesText>
       <Icon.Icon icon="LAYERS" />
       {seriesName |> ste}

@@ -1,7 +1,16 @@
-const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 
 const { users } = require('./data');
+
+const AUTH0_SECRET = process.env.AUTH0_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_ISSUER = process.env.JWT_ISSUER || 'Foretold';
+const JWT_EXPIN = process.env.JWT_EXPIN || '1m';
+
+if (!AUTH0_SECRET) throw new ReferenceError('AUTH0_SECRET is not defined');
+if (!JWT_SECRET) throw new ReferenceError('JWT_SECRET is not defined');
+if (!JWT_ISSUER) throw new ReferenceError('JWT_ISSUER is not defined');
+if (!JWT_EXPIN) throw new ReferenceError('JWT_EXPIN is not defined');
 
 /**
  * @param {Request} req
@@ -22,7 +31,7 @@ function getQueryToken(req) {
  */
 function decodeAuth0JwtToken(token) {
   try {
-    return jwt.verify(token, process.env.AUTH0_SECRET);
+    return jwt.verify(token, AUTH0_SECRET);
   } catch (err) {
     throw err;
   }
@@ -51,9 +60,9 @@ async function getJwtByAuth0Jwt(token) {
     const user = await authenticationByAuth0JwtToken(token);
     const agentId = user.agentId;
     const payload = {};
-    return jwt.sign(payload, 'shhhhh', {
-      expiresIn: '1m',
-      issuer: 'foretold',
+    return jwt.sign(payload, JWT_SECRET, {
+      expiresIn: JWT_EXPIN,
+      issuer: JWT_ISSUER,
       subject: agentId,
     });
   } catch (err) {

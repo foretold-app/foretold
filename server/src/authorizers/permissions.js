@@ -46,6 +46,7 @@ const rules = {
   },
   Mutation: {
     '*': isAuthenticated,
+    botCreate: isAuthenticated,
     channelCreate: isAuthenticated,
     userUpdate: isAuthenticated,
     measurementCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),

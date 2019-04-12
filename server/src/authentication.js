@@ -27,7 +27,7 @@ function getQueryToken(req) {
 
 /**
  * @param {string} token
- * @return {Promise<boolean | Models.User>}
+ * @return {Promise<boolean>}
  */
 function decodeAuth0JwtToken(token) {
   try {
@@ -39,7 +39,7 @@ function decodeAuth0JwtToken(token) {
 
 /**
  * @param {string} token
- * @return {Promise<boolean | Models.User>}
+ * @return {Promise<boolean>}
  */
 function decodeJwtToken(token) {
   try {
@@ -47,6 +47,19 @@ function decodeJwtToken(token) {
   } catch (err) {
     throw err;
   }
+}
+
+/**
+ * @param {object} payload
+ * @param {string} subject
+ * @return {string}
+ */
+function encondeJWT(payload, subject) {
+  return jwt.sign(payload, JWT_SECRET, {
+    expiresIn: JWT_EXPIN,
+    issuer: JWT_ISSUER,
+    subject,
+  });
 }
 
 /**
@@ -81,18 +94,14 @@ async function authenticationByJwtToken(token) {
 
 /**
  * @param {string} token
- * @return {Promise<boolean | Models.User>}
+ * @return {Promise<string>}
  */
 async function getJwtByAuth0Jwt(token) {
   try {
     const user = await authenticationByAuth0JwtToken(token);
     const agentId = user.agentId;
     const payload = {};
-    return jwt.sign(payload, JWT_SECRET, {
-      expiresIn: JWT_EXPIN,
-      issuer: JWT_ISSUER,
-      subject: agentId,
-    });
+    return encondeJWT(payload, agentId);
   } catch (err) {
     throw err;
   }
@@ -100,7 +109,7 @@ async function getJwtByAuth0Jwt(token) {
 
 /**
  * @param {Request} options
- * @return {Promise<Model | object>}
+ * @return {Promise<Models.User | null>}
  */
 async function authentication(options) {
   try {

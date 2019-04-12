@@ -41,11 +41,39 @@ function decodeAuth0JwtToken(token) {
  * @param {string} token
  * @return {Promise<boolean | Models.User>}
  */
+function decodeJwtToken(token) {
+  try {
+    return jwt.verify(token, JWT_SECRET);
+  } catch (err) {
+    throw err;
+  }
+}
+
+/**
+ * @param {string} token
+ * @return {Promise<boolean | Models.User>}
+ */
 async function authenticationByAuth0JwtToken(token) {
   try {
     const decoded = decodeAuth0JwtToken(token);
     if (!decoded.sub) throw new Error('No User Id');
     return await users.getUserByAuth0Id(decoded.sub);
+  } catch (err) {
+    throw err;
+  }
+}
+
+/**
+ * @param {string} token
+ * @return {Promise<boolean | Models.User>}
+ */
+async function authenticationByJwtToken(token) {
+  try {
+    const decoded = decodeJwtToken(token);
+    if (!decoded.sub) throw new Error('No Agent Id');
+    const user = await users.findOne({ agentId: decoded.sub });
+    if (!user) throw new Error('Not authenticated');
+    return user;
   } catch (err) {
     throw err;
   }
@@ -78,7 +106,7 @@ async function authentication(options) {
   try {
     const token = getQueryToken(options);
     if (token) {
-      return await authenticationByAuth0JwtToken(token);
+      return await authenticationByJwtToken(token);
     }
     return null;
   } catch (err) {
@@ -89,8 +117,14 @@ async function authentication(options) {
 
 module.exports = {
   getQueryToken,
-  authentication,
-  getJwtByAuth0Jwt,
+
+  decodeAuth0JwtToken,
+  decodeJwtToken,
+
   authenticationByAuth0JwtToken,
+  authenticationByJwtToken,
+
+  getJwtByAuth0Jwt,
+  authentication,
 };
 

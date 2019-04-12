@@ -7,7 +7,7 @@ const { users } = require('./data');
  * @param {Request} req
  * @return {string | null}
  */
-function getToken(req) {
+function getQueryToken(req) {
   if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
     return req.headers.authorization.split(' ')[1];
   } else if (req.query && req.query.token) {
@@ -20,11 +20,42 @@ function getToken(req) {
  * @param {string} token
  * @return {Promise<boolean | Models.User>}
  */
-async function authenticationByJwtToken(token) {
+function decodeAuth0JwtToken(token) {
   try {
-    const decoded = jwt.verify(token, process.env.AUTH0_SECRET);
+    return jwt.verify(token, process.env.AUTH0_SECRET);
+  } catch (err) {
+    throw err;
+  }
+}
+
+/**
+ * @param {string} token
+ * @return {Promise<boolean | Models.User>}
+ */
+async function authenticationByAuth0JwtToken(token) {
+  try {
+    const decoded = decodeAuth0JwtToken(token);
     if (!decoded.sub) throw new Error('No User Id');
     return await users.getUserByAuth0Id(decoded.sub);
+  } catch (err) {
+    throw err;
+  }
+}
+
+/**
+ * @param {string} token
+ * @return {Promise<boolean | Models.User>}
+ */
+async function getJwtByAuth0Jwt(token) {
+  try {
+    const user = await authenticationByAuth0JwtToken(token);
+    const agentId = user.agentId;
+    const payload = {};
+    return jwt.sign(payload, 'shhhhh', {
+      expiresIn: '1m',
+      issuer: 'foretold',
+      subject: agentId,
+    });
   } catch (err) {
     throw err;
   }
@@ -36,9 +67,9 @@ async function authenticationByJwtToken(token) {
  */
 async function authentication(options) {
   try {
-    const token = getToken(options);
+    const token = getQueryToken(options);
     if (token) {
-      return await authenticationByJwtToken(token);
+      return await authenticationByAuth0JwtToken(token);
     }
     return null;
   } catch (err) {
@@ -48,8 +79,9 @@ async function authentication(options) {
 }
 
 module.exports = {
-  getToken,
-  authenticationByJwtToken,
+  getQueryToken,
   authentication,
+  getJwtByAuth0Jwt,
+  authenticationByAuth0JwtToken,
 };
 

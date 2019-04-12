@@ -1,3 +1,7 @@
+const _ = require('lodash');
+
+const { getJwtByAuth0Jwt } = require('../authentication');
+
 /**
  * @param {object | null} root
  * @param {object} args
@@ -7,7 +11,9 @@
  * @returns {Promise<*>}
  */
 async function authentication(root, args, context, info) {
-  return { jwt: 'str' };
+  const auth0jwt = _.get(args, 'auth0jwt');
+  const jwt = await getJwtByAuth0Jwt(auth0jwt);
+  return { jwt };
 }
 
 module.exports = {

@@ -27,6 +27,16 @@ const bot = new graphql.GraphQLObjectType({
   })
 });
 
+const botInput = new graphql.GraphQLInputObjectType({
+  name: 'BotInput',
+  fields: () => ({
+    name: { type: graphql.GraphQLString },
+    description: { type: graphql.GraphQLString },
+    competitorType: { type: require('./competitor').competitor },
+  }),
+});
+
 module.exports = {
   bot,
+  botInput,
 };

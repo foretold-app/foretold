@@ -1,6 +1,6 @@
 const graphql = require("graphql");
 
-let competitor = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
+const competitor = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
   name: 'competitorType',
   values: {
     COMPETITIVE: { value: "COMPETITIVE" },

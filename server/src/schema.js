@@ -275,7 +275,7 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.channelMemberships.join,
       },
 
-      createBot: {
+      botCreate: {
         type: types.bots.bot,
         args: {
           input: { type: graphql.GraphQLNonNull(types.bots.botInput) },

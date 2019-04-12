@@ -17,7 +17,7 @@ class BotsData extends DataBase {
    * @return {Promise<*>}
    */
   async createOne(data) {
-    return await this.BotModel.create(data);
+    return await this.BotModel.createOne(data);
   }
 
 }

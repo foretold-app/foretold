@@ -6,7 +6,7 @@ This is a simple Node.js server for the foretold application. It uses graphql/ap
 2. Run ``npm install``
 3. Run ``npm run db:create``
 4. Run ``npm run db:migrate``
-5. Run ``AUTH0_SECRET={SECRET} npm run dev`` (Make sure to get the secret from Ozzie first)
+5. Run ``AUTH0_SECRET={SECRET} JWT_SECRET={SECRET} npm run dev`` (Make sure to get the secret from Ozzie first)
 
 # Run Docker Development Environment
 1. Create file docker.compose.override.yml from docker.compose.override.example.yml and set up env vars and ports.

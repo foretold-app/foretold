@@ -7,6 +7,8 @@ services:
       - AUTH0_SECRET=<change-me>
       - SLACK_WEBHOOK_URL=<change-me>
       - PORT=80
+      - JWT_SECRET=<change-me>
+      - JWT_ISSUER=Foretold
 
   database:
     environment:

@@ -108,6 +108,19 @@ async function getJwtByAuth0Jwt(token) {
 }
 
 /**
+ * @param {string} agentId
+ * @return {Promise<string>}
+ */
+async function getJwtByAgentId(agentId) {
+  try {
+    const payload = {};
+    return encondeJWT(payload, agentId);
+  } catch (err) {
+    throw err;
+  }
+}
+
+/**
  * @param {Request} options
  * @return {Promise<Models.User | null>}
  */
@@ -134,6 +147,8 @@ module.exports = {
   authenticationByJwtToken,
 
   getJwtByAuth0Jwt,
+  getJwtByAgentId,
+
   authentication,
 };
 

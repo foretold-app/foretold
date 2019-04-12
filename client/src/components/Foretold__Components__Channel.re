@@ -27,7 +27,7 @@ module SimpleHeader = {
     buttonr("New Measurable", MeasurableNew(channelId));
 
   let editChannel = channelId =>
-    buttonr("Edit Measurable", ChannelEdit(channelId));
+    buttonr("Edit Channel", ChannelEdit(channelId));
 
   let newSeries = channelId => buttonr("New Series", SeriesNew(channelId));
 

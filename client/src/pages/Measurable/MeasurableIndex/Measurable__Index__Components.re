@@ -1,6 +1,7 @@
 open Rationale.Function.Infix;
 open Rationale.Option.Infix;
 open Utils;
+open Style.Grid;
 open Measurable__Index__Logic;
 
 module ReducerParams = SelectWithPaginationReducer.Reducers.ReducerParams;
@@ -20,18 +21,17 @@ module LoadedAndSelected = {
 
   let header = (t: t, send: SelectWithPaginationReducer.Types.send) =>
     <>
-      {SelectWithPaginationReducer.Components.deselectButton(send)}
-      {SLayout.channelink(t.channel)}
-      {
-        SelectWithPaginationReducer.Components.buttonDuo(Item, t.reducerParams)
-      }
-      {C.Channel.SimpleHeader.newMeasurable(t.channel.id)}
-      {leaveButton(t.loggedInUser.agent, t.channel.id)}
-      {joinButton(t.loggedInUser.agent, t.channel.id)}
-      {C.Channel.SimpleHeader.editChannel(t.channel.id)}
-      {C.Channel.SimpleHeader.inviteToChannel(t.channel.id)}
-      {C.Channel.SimpleHeader.members(t.channel)}
-      {C.Channel.SimpleHeader.newSeries(t.channel.id)}
+      <Div float=`left>
+        {SelectWithPaginationReducer.Components.deselectButton(send)}
+      </Div>
+      <Div float=`right>
+        {
+          SelectWithPaginationReducer.Components.buttonDuo(
+            Item,
+            t.reducerParams,
+          )
+        }
+      </Div>
     </>;
 
   let body = (t: t) =>
@@ -44,22 +44,13 @@ module LoadedAndSelected = {
 module LoadedAndUnselected = {
   open Measurable__Index__Logic.LoadedAndUnselected;
 
-  let header = (t: t, send: SelectWithPaginationReducer.Types.send) => {
-    let channel = t.channel;
-    <>
-      {SLayout.channelink(channel)}
+  let header = (t: t, send: SelectWithPaginationReducer.Types.send) =>
+    <Div float=`right>
       {
         SelectWithPaginationReducer.Components.buttonDuo(Page, t.reducerParams)
       }
       {C.Channel.SimpleHeader.newMeasurable(t.channel.id)}
-      {leaveButton(t.loggedInUser.agent, t.channel.id)}
-      {joinButton(t.loggedInUser.agent, t.channel.id)}
-      {C.Channel.SimpleHeader.editChannel(t.channel.id)}
-      {C.Channel.SimpleHeader.inviteToChannel(t.channel.id)}
-      {C.Channel.SimpleHeader.members(t.channel)}
-      {C.Channel.SimpleHeader.newSeries(t.channel.id)}
-    </>;
-  };
+    </Div>;
 
   let seriesList = (t: t) =>
     <>
@@ -108,12 +99,9 @@ module MeasurableIndexDataState = {
     let lmake = SLayout.LayoutConfig.make;
     switch (state) {
     | InvalidIndexError(channel) =>
-      lmake(~head=SLayout.channelink(channel), ~body="Item Not Valid" |> ste)
+      lmake(~head=E.React.null, ~body="Item Not Valid" |> ste)
     | WithChannelButNotQuery(c) =>
-      lmake(
-        ~head=SLayout.channelink(c.channel),
-        ~body="Loading Query..." |> ste,
-      )
+      lmake(~head=E.React.null, ~body="Loading Query..." |> ste)
     | LoadedAndUnselected(l) =>
       lmake(
         ~head=LoadedAndUnselected.header(l, send),
@@ -125,7 +113,7 @@ module MeasurableIndexDataState = {
         ~body=LoadedAndSelected.body(l),
       )
     | WithoutChannel(channelResponse) =>
-      lmake(~head=<div />, ~body="No channel." |> ste)
+      lmake(~head=E.React.null, ~body="No channel." |> ste)
     };
   };
 };

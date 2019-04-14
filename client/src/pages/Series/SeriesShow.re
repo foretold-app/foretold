@@ -49,7 +49,7 @@ let load2Queries = (channelId, seriesId, itemsPerPage, fn) =>
        Queries.Series.component(~id=seriesId),
      );
 
-let component = ReasonReact.statelessComponent("Measurables");
+let component = ReasonReact.statelessComponent("SeriesShowPage");
 let make =
     (
       ~channelId: string,

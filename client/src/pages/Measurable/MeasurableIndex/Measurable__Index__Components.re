@@ -72,12 +72,10 @@ module LoadedAndUnselected = {
         }
       )
       |> E.O.toExn("");
-    let loggedInUser = t.loggedInUser;
     <>
       {E.React.showIf(shouldShowSeriesCollection(t), seriesList(t))}
       <C.Measurables.BasicTable
         measurables
-        loggedInUser
         showExtraData=true
         onSelect={
           e =>

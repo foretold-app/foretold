@@ -11,6 +11,7 @@ module Query = [%graphql
         isArchived
         isPublic
         membershipCount
+        myRole
       }
     }
   |}
@@ -25,6 +26,7 @@ let toChannel = m: Context.Primary.Channel.t =>
     ~description=m##description,
     ~isArchived=m##isArchived,
     ~isPublic=m##isPublic,
+    ~myRole=Some(m##myRole),
     ~membershipCount=Some(m##membershipCount),
     (),
   );

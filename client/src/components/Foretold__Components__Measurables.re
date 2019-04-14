@@ -59,7 +59,6 @@ module BasicTable = {
       (
         ~measurables: array(Context.Primary.Measurable.t),
         ~showExtraData: bool,
-        ~loggedInUser: Context.Primary.User.t,
         ~onSelect=(m: Context.Primary.Measurable.t) => (),
         _children,
       ) => {
@@ -72,11 +71,7 @@ module BasicTable = {
             measurables
             |> E.A.fmap((m: Context.Primary.Measurable.t) => {
                  open Rationale.Option.Infix;
-                 let userAgentId = loggedInUser.agent <$> (r => r.id);
-                 let measurableAgentId =
-                   m.creator |> E.O.fmap((r: Context.Primary.Agent.t) => r.id);
-                 let isSame =
-                   userAgentId == measurableAgentId && E.O.isSome(userAgentId);
+                 let iAmOwner = m.iAmOwner == Some(true);
                  <div
                    className={Styles.row(m)}
                    onClick={_e => onSelect(m)}
@@ -98,8 +93,8 @@ module BasicTable = {
                            ),
                            Items.measurements(~m) |> E.O.React.defaultNull,
                            Items.measurers(~m) |> E.O.React.defaultNull,
-                           E.React.showIf(isSame, Items.editLink(~m)),
-                           E.React.showIf(isSame, Items.archiveOption(~m)),
+                           E.React.showIf(iAmOwner, Items.editLink(~m)),
+                           E.React.showIf(iAmOwner, Items.archiveOption(~m)),
                          |]
                          |> ReasonReact.array
                        }

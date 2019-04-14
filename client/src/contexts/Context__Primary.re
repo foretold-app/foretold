@@ -2,6 +2,8 @@ open Rationale.Function.Infix;
 open Utils;
 
 type channelMembershipRole = [ | `ADMIN | `VIEWER];
+type myMembershipRole = [ | `ADMIN | `VIEWER | `NONE];
+
 module ChannelMembershipRole = {
   type t = channelMembershipRole;
   let toString = (t: t) =>
@@ -43,6 +45,7 @@ module Types = {
     isPublic: bool,
     membershipCount: option(int),
     creator: option(agent),
+    myRole: option(myMembershipRole),
     channelMemberships: option(Js.Array.t(channelMembership)),
   }
   and channelMembership = {
@@ -138,6 +141,7 @@ module Channel = {
         ~isPublic,
         ~creator=None,
         ~membershipCount=None,
+        ~myRole=None,
         ~channelMemberships=None,
         (),
       )
@@ -149,6 +153,7 @@ module Channel = {
     isPublic,
     membershipCount,
     creator,
+    myRole,
     channelMemberships,
   };
 };
@@ -272,6 +277,7 @@ module Measurable = {
     creator: option(Agent.t),
     measurements: option(list(Measurement.t)),
     series: option(Series.t),
+    iAmOwner: option(bool),
   };
 
   let toStatus = (measurable: t) => {
@@ -318,6 +324,7 @@ module Measurable = {
         ~labelProperty=None,
         ~labelCustom=None,
         ~series=None,
+        ~iAmOwner=None,
         (),
       ) => {
     id,
@@ -340,5 +347,6 @@ module Measurable = {
     labelProperty,
     labelCustom,
     series,
+    iAmOwner,
   };
 };

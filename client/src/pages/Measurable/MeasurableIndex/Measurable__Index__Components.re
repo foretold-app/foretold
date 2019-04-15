@@ -26,7 +26,8 @@ module LoadedAndSelected = {
 
   let body = (t: t) =>
     <C.Measurable.FullPresentation
-      id={t.selectedMeasurable |> (e => e.id)}
+      id={t.selectedMeasurable.id}
+      key={t.selectedMeasurable.id}
       loggedInUser={t.loggedInUser}
     />;
 };

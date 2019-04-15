@@ -15,6 +15,12 @@ export class GuesstimateInput extends React.Component {
         super(props);
         this.state = {value: '', items:[]};
         this.handleChange = this.handleChange.bind(this);
+        this.textInput = React.createRef();
+    }
+    componentDidMount(){
+        if (this.props.focusOnRender){
+            this.textInput.focus();
+        }
     }
     handleChange(event) {
         let [error, item] = Guesstimator.parse({text: event.target.value})
@@ -31,8 +37,7 @@ export class GuesstimateInput extends React.Component {
       }
     
     render() {
-        return (<Input type="text" value={this.state.value} onChange={this.handleChange}/>
-    
+        return (<Input type="text" value={this.state.value} onChange={this.handleChange} ref={input => this.textInput = input}/>
         )
     }
 }

@@ -1,11 +1,15 @@
 let fn = (a: (array(float), array(float))) => ();
 
 [@bs.module "./GuesstimateInput.js"]
-external guesstimateInput : ReasonReact.reactClass = "GuesstimateInput";
+external guesstimateInput: ReasonReact.reactClass = "GuesstimateInput";
 
-let make = (~sampleCount=1000, ~onUpdate=fn, children) =>
+let make = (~sampleCount=1000, ~onUpdate=fn, ~focusOnRender=true, children) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=guesstimateInput,
-    ~props={"sampleCount": sampleCount, "onUpdate": onUpdate},
+    ~props={
+      "sampleCount": sampleCount,
+      "onUpdate": onUpdate,
+      "focusOnRender": focusOnRender,
+    },
     children,
   );

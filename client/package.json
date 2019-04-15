@@ -60,7 +60,7 @@
     "reason-react": ">=0.4.0",
     "static-server": "^2.2.1",
     "subscriptions-transport-ws": "^0.9.14",
-    "victory": "^32.0.0",
+    "victory": "^32.2.0",
     "@babel/preset-react": "^7.0.0",
     "@glennsl/bs-jest": "^0.4.7",
     "@storybook/addon-actions": "^3.4.11",

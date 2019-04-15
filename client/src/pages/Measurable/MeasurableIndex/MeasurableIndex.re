@@ -30,7 +30,7 @@ let make =
       ~channelId: string,
       ~loggedInUser: Context.Primary.User.t,
       ~itemsPerPage: int=20,
-      ~layout=SLayout.FullPage.makeWithEl,
+      ~layout,
     ) => {
   let loadData = load3Queries(channelId, itemsPerPage);
   loadData(((selectWithPaginationParams, channel, query)) =>

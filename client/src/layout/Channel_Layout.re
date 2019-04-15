@@ -229,7 +229,9 @@ let makeWithPage =
   let topOption = topOption(page);
 
   let layout = (channelId, fn) =>
-    makeWithEl(channelId, loggedInUser, topOption) |> fn |> E.React.makeToEl;
+    makeWithEl(channelId, loggedInUser, topOption)
+    |> fn
+    |> E.React.makeToEl(~key=channelId);
 
   switch (page) {
   | ChannelShow(channelId) =>

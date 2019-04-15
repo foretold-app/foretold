@@ -23,7 +23,7 @@ let make =
           href=""
           onClick={
             _ =>
-              Foretold__GraphQL.Mutations.ChannelJoin.mutate(
+              Foretold__GraphQL.Mutations.ChannelMembershipCreate.mutate(
                 mutation,
                 agentId,
                 channelId,

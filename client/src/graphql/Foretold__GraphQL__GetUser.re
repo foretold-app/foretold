@@ -21,11 +21,13 @@ let toChannel = (ch: channel) =>
   );
 
 let toChannelMembership =
-    (ch: channelMembership): Context.Primary.Types.channelMembership => {
-  channel: ch.channel |> E.O.fmap(toChannel),
-  role: `ADMIN,
-  agent: None,
-};
+    (ch: channelMembership): Context.Primary.Types.channelMembership =>
+  Context.Primary.ChannelMembership.make(
+    ~channel=ch.channel |> E.O.fmap(toChannel),
+    ~role=`ADMIN,
+    ~agent=None,
+    (),
+  );
 
 type agent = {
   id: string,

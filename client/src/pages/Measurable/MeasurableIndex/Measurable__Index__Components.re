@@ -6,16 +6,6 @@ open Measurable__Index__Logic;
 
 module ReducerParams = SelectWithPaginationReducer.Reducers.ReducerParams;
 
-let leaveButton = (agent, channelId) =>
-  agent
-  |> E.O.fmap((e: Context.Primary.Agent.t) => e.id)
-  |> E.O.React.fmapOrNull(C.Channel.SimpleHeader.leaveChannel(channelId));
-
-let joinButton = (agent, channelId) =>
-  agent
-  |> E.O.fmap((e: Context.Primary.Agent.t) => e.id)
-  |> E.O.React.fmapOrNull(C.Channel.SimpleHeader.joinChannel(channelId));
-
 module LoadedAndSelected = {
   open Measurable__Index__Logic.LoadedAndSelected;
 

@@ -8,13 +8,22 @@ let ste = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("ChannelMembers");
 
+type columnRecord = {
+  .
+  "agentId": string,
+  "agentName": string,
+  "key": string,
+  "permissions": option(Context.Primary.Types.permissions),
+  "role": string,
+};
+
+let canX = (x, record: columnRecord) =>
+  record##permissions
+  |> E.O.fmap(r => Context.Primary.Permissions.canX(x, r))
+  |> E.O.default(false);
+
 let make =
-    (
-      ~channelId: string,
-      ~loggedInUser: Context.Primary.User.t,
-      ~layout=SLayout.FullPage.makeWithEl,
-      _children,
-    ) => {
+    (~channelId: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
     let changeRoleAction = (agentId, channelId, role, text) =>
@@ -37,12 +46,13 @@ let make =
       |> E.React.el;
 
     let removeFromChannel = (agentId, channelId) =>
-      Foretold__GraphQL.Mutations.ChannelLeave.Mutation.make((mutation, _) =>
+      Foretold__GraphQL.Mutations.ChannelMembershipDelete.Mutation.make(
+        (mutation, _) =>
         <a
           href=""
           onClick={
             _ =>
-              Foretold__GraphQL.Mutations.ChannelLeave.mutate(
+              Foretold__GraphQL.Mutations.ChannelMembershipDelete.mutate(
                 mutation,
                 agentId,
                 channelId,
@@ -95,18 +105,24 @@ let make =
           (~text, ~record, ~index) =>
             switch (record##role) {
             | "Viewer" =>
-              changeRoleAction(
-                record##agentId,
-                channelId,
-                `ADMIN,
-                "Change to Admin",
+              E.React.showIf(
+                canX(`channelMembershipRoleUpdate, record),
+                changeRoleAction(
+                  record##agentId,
+                  channelId,
+                  `ADMIN,
+                  "Change to Admin",
+                ),
               )
             | "Admin" =>
-              changeRoleAction(
-                record##agentId,
-                channelId,
-                `VIEWER,
-                "Change to Viewer",
+              E.React.showIf(
+                canX(`channelMembershipDelete, record),
+                changeRoleAction(
+                  record##agentId,
+                  channelId,
+                  `VIEWER,
+                  "Change to Viewer",
+                ),
               )
             | _ => <div />
             },
@@ -119,7 +135,10 @@ let make =
         ~width=2,
         ~render=
           (~text, ~record, ~index) =>
-            removeFromChannel(record##agentId, channelId),
+            E.React.showIf(
+              canX(`channelMembershipRoleUpdate, record),
+              removeFromChannel(record##agentId, channelId),
+            ),
         (),
       ),
     |];
@@ -138,6 +157,7 @@ let make =
                         |> E.O.default(""),
                       "agentName":
                         r.agent |> E.O.bind(_, r => r.name) |> E.O.default(""),
+                      "permissions": r.permissions,
                       "agentId":
                         r.agent
                         |> E.O.fmap((r: Context.Primary.Types.agent) => r.id)

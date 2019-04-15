@@ -3,6 +3,22 @@ open Utils;
 
 type channelMembershipRole = [ | `ADMIN | `VIEWER];
 type myMembershipRole = [ | `ADMIN | `VIEWER | `NONE];
+type permission = [
+  | `channelCreate
+  | `channelMembershipCreate
+  | `channelMembershipDelete
+  | `channelMembershipRoleUpdate
+  | `channelUpdate
+  | `joinChannel
+  | `leaveChannel
+  | `measurableArchive
+  | `measurableCreate
+  | `measurableUnarchive
+  | `measurableUpdate
+  | `measurementCreate
+  | `seriesCreate
+  | `userUpdate
+];
 
 module ChannelMembershipRole = {
   type t = channelMembershipRole;
@@ -14,6 +30,7 @@ module ChannelMembershipRole = {
 };
 
 module Types = {
+  type permissions = {allow: list(permission)};
   type user = {
     id: string,
     auth0Id: option(string),
@@ -52,6 +69,24 @@ module Types = {
     channel: option(channel),
     role: channelMembershipRole,
     agent: option(agent),
+    permissions: option(permissions),
+  };
+};
+
+module Permissions = {
+  type t = Types.permissions;
+  let make = (a: list(permission)): t => {allow: a};
+  let canX = (permission: permission, t: t): bool =>
+    t.allow |> E.L.exists(r => r == permission);
+};
+
+module ChannelMembership = {
+  type t = Types.channelMembership;
+  let make = (~role, ~channel=None, ~agent=None, ~permissions=None, ()): t => {
+    role,
+    channel,
+    agent,
+    permissions,
   };
 };
 

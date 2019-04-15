@@ -113,7 +113,8 @@ module Helpers = {
     switch (m.value) {
     | Belt.Result.Ok(`FloatCdf(r)) =>
       r
-      |> MeasurementValue.toPdf(~bucketSize=20)
+      |> MeasurementValue.toChunks(~bucketSize=20)
+      |> MeasurementValue.toPdf
       |> MeasurementValue.FloatCdf.toPoints
       |> (data => Some(<WideChart data bounds=g />))
     | Belt.Result.Ok(`FloatPoint(r)) =>

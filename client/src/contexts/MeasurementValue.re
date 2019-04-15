@@ -124,13 +124,16 @@ module DateTimePoint = {
 
 module FloatCdf = MakeCdf(FloatPoint);
 
-let toPdf = (~bucketSize=10, t: FloatCdf.t): FloatCdf.t => {
-  let inChunks =
-    t
-    |> FloatCdf.toArray
-    |> Array.to_list
-    |> Belt.List.keepWithIndex(_, (_, i) => i mod bucketSize == 0)
-    |> Belt.List.keepWithIndex(_, (_, i) => i != 0);
+let toChunks = (~bucketSize=10, t: FloatCdf.t): FloatCdf.t =>
+  t
+  |> FloatCdf.toArray
+  |> Array.to_list
+  |> Belt.List.keepWithIndex(_, (_, i) => i mod bucketSize == 0)
+  |> Array.of_list
+  |> FloatCdf.fromArray;
+
+let toPdf = (t: FloatCdf.t): FloatCdf.t => {
+  let inChunks = t |> FloatCdf.toArray |> Array.to_list;
   inChunks
   |> List.mapi((i, e) => {
        let (y, x) = e;

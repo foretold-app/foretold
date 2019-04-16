@@ -21,17 +21,37 @@ function roleRule(roleName) {
   };
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @return {Promise<boolean>}
+ */
+async function isInChannelRule(root, args, context, info) {
+  const channelMembership = _.get(context, 'channelMembership');
+  const agentId = _.get(context, 'agent.id');
+  const result = !!channelMembership;
+  console.log(`\x1b[33m Rule Channel Memberships (isInChannelRule) ` +
+    `agentId ${agentId} = ${result} \x1b[0m`);
+  return result;
+}
+
 const isAdminRule = roleRule(models.ChannelMemberships.ROLE.ADMIN);
 const isViewerRule = roleRule(models.ChannelMemberships.ROLE.VIEWER);
 
 /** @type {Rule} */
-const isAdmin = rule()(isAdminRule);
+const isAdmin = rule({ cache: 'no_cache' })(isAdminRule);
 /** @type {Rule} */
-const isViewer = rule()(isViewerRule);
+const isViewer = rule({ cache: 'no_cache' })(isViewerRule);
+/** @type {Rule} */
+const isInChannel = rule({ cache: 'no_cache' })(isInChannelRule);
 
 module.exports = {
   isAdmin,
   isViewer,
+  isInChannel,
+
   isAdminRule,
   isViewerRule,
 };

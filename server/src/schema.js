@@ -152,7 +152,7 @@ const schema = new graphql.GraphQLSchema({
         args: {
           auth0jwt: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
-        resolve: resolvers.authentications.authentication,
+        resolve: resolvers.authentications.getJwtByAuth0Jwt,
       },
     }
   }),

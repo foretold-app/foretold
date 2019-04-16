@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const { getJwtByAuth0Jwt, getJwtByAgentId } = require('../authentication');
+const authentication = require('../authentication');
 
 /**
  * @param {object | null} root
@@ -8,11 +8,11 @@ const { getJwtByAuth0Jwt, getJwtByAgentId } = require('../authentication');
  * @param {string} args.id
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<*>}
+ * @returns {Promise<{jwt: string}>}
  */
-async function authentication(root, args, context, info) {
+async function getJwtByAuth0Jwt(root, args, context, info) {
   const auth0jwt = _.get(args, 'auth0jwt');
-  const jwt = await getJwtByAuth0Jwt(auth0jwt);
+  const jwt = await authentication.getJwtByAuth0Jwt(auth0jwt);
   return { jwt };
 }
 
@@ -24,12 +24,12 @@ async function authentication(root, args, context, info) {
  * @param {object} info
  * @returns {Promise<*>}
  */
-async function getJwtForBot(root, args, context, info) {
+async function getJwtByAgentId(root, args, context, info) {
   const botAgentId = _.get(root, 'agentId');
-  return await getJwtByAgentId(botAgentId);
+  return await authentication.getJwtByAgentId(botAgentId);
 }
 
 module.exports = {
-  authentication,
-  getJwtForBot,
+  getJwtByAuth0Jwt,
+  getJwtByAgentId,
 };

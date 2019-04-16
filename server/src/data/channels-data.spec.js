@@ -10,7 +10,7 @@ describe('Channels Data Layer', () => {
 
   const instance = new ChannelsData();
   const id = 'someId1';
-  const user = { agentId: 'agentId1' };
+  const agent = { id: 'agentId1' };
   const input = { name: 'Input Name 1' };
 
   describe('createOne()', () => {
@@ -26,7 +26,7 @@ describe('Channels Data Layer', () => {
       );
     });
     it('throw an error that channel is exists', () => {
-      instance.createOne(user, input).catch((err) => {
+      instance.createOne(agent, input).catch((err) => {
         expect(err).toBeInstanceOf(Error);
       });
     });
@@ -45,7 +45,7 @@ describe('Channels Data Layer', () => {
       );
     });
     it('creates channel', () => {
-      return instance.createOne(user, input).then((result) => {
+      return instance.createOne(agent, input).then((result) => {
         expect(models.Channel.findOne).toHaveBeenCalledWith({
           where: { name: input.name },
         });
@@ -68,7 +68,7 @@ describe('Channels Data Layer', () => {
       );
     });
     it('finds channel', () => {
-      return instance.updateOne(id, input).then((result) => {
+      return instance.updateOne(id, input).then(() => {
         expect(models.Channel.findOne).toHaveBeenCalledWith({ where: { id } });
         expect(update).toHaveBeenCalledTimes(1);
       });

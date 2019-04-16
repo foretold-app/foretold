@@ -42,7 +42,7 @@ describe('Channels Resolvers', () => {
 
   describe('all()', () => {
     const root = {};
-    const context = { user: { agentId: '1' } };
+    const context = { agent: { id: '1' } };
     const args = { offset: 1, limit: 2 };
     const info = {};
     beforeEach(() => {
@@ -64,7 +64,7 @@ describe('Channels Resolvers', () => {
 
   describe('one()', () => {
     const root = {};
-    const context = { user: { agentId: 'agentId1' } };
+    const context = { agent: { id: 'agentId1' } };
     const args = { id: 'id1' };
     const info = {};
     beforeEach(() => {
@@ -104,7 +104,7 @@ describe('Channels Resolvers', () => {
 
   describe('create()', () => {
     const root = {};
-    const context = { user: { b: '2' } };
+    const context = { agent: { b: '2' } };
     const args = { input: { a: '1' } };
     const info = {};
     beforeEach(() => {
@@ -115,7 +115,7 @@ describe('Channels Resolvers', () => {
     it('creates channel', () => {
       return channels.create(root, args, context, info).then((result) => {
         expect(data.channels.createOne).toHaveBeenCalledWith(
-          context.user,
+          context.agent,
           args.input,
         );
         expect(result).toBe(true);

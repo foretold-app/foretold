@@ -42,7 +42,9 @@ export namespace Models {
 
 export namespace Schema {
   export interface Context {
-    user: Models.User;
+    user?: Models.User;
+    bot?: Models.Bot;
+    agent: Models.Agent;
     channel?: Models.Channel;
     channelMembership?: Models.ChannelMemberships;
     channelMembershipsRole?: Models.ChannelMembershipRole;

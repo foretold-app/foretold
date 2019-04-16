@@ -18,11 +18,11 @@ class ChannelsData extends DataBase {
 
   /**
    * @public
-   * @param {Models.User} user
+   * @param {Models.Agent} agent
    * @param {Schema.ChannelsInput} input
    * @return {Promise<Models.Channel>}
    */
-  async createOne(user, input) {
+  async createOne(agent, input) {
     let channel = await this.models.Channel.findOne({
       where: { name: input.name },
     });
@@ -31,11 +31,11 @@ class ChannelsData extends DataBase {
     }
     channel = await this.models.Channel.create({
       ...input,
-      creatorId: user.agentId,
+      creatorId: agent.id,
     });
     await this.channelMembershipsData.createOne(
       channel.id,
-      user.agentId,
+      agent.id,
       this.models.ChannelMemberships.ROLE.ADMIN,
     );
     return channel;

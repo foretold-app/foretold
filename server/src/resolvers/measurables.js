@@ -9,7 +9,7 @@ const data = require('../data');
  * @returns {Promise<*|Array<Model>>}
  */
 async function all(root, args, context, info) {
-  const agentId = _.get(context, 'user.agentId');
+  const agentId = _.get(context, 'agent.id');
   return await data.measurables.getAll({ ...args, agentId });
 }
 
@@ -21,7 +21,7 @@ async function all(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function one(root, args, context, info) {
-  const agentId = context.user.agentId;
+  const agentId = _.get(context, 'agent.id');
   return await data.measurables.getOne(args.id, { agentId });
 }
 
@@ -35,9 +35,10 @@ async function one(root, args, context, info) {
  */
 async function create(root, args, context, info) {
   const user = context.user;
+  const agentId = _.get(context, 'agent.id');
   const datas = {
     ...args.input,
-    creatorId: user.agentId,
+    creatorId: agentId,
   };
   return await data.measurables.createOne(datas, user);
 }
@@ -80,6 +81,7 @@ async function unarchive(root, args, context, info) {
 async function update(root, args, context, info) {
   const id = args.id;
   const datas = args.input;
+  // @todo: user!
   const user = context.user;
   return await data.measurables.updateOne(id, datas, user);
 }

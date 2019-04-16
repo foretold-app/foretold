@@ -11,6 +11,7 @@ const data = require('../data');
 async function update(root, args, options) {
   const { id } = args;
   const datas = args.input;
+  // @todo: user!
   const user = options.user;
   return await data.users.updateOne(id, datas, user);
 }

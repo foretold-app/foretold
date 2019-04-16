@@ -9,15 +9,15 @@ const { rule } = require('graphql-shield');
  * @return {Promise<boolean>}
  */
 async function isOwnerRule(root, args, context, info) {
-  const creatorId = _.get(context, 'measurable.creatorId');
-  const agentId = _.get(context, 'user.agentId');
-  const isOwner = creatorId === agentId;
-  console.log(`\x1b[33m Rule Measurables (isOwner) ${isOwner} \x1b[0m`);
+  const botUserId = _.get(root, 'userId');
+  const userId = _.get(context, 'user.id');
+  const isOwner = !!botUserId && botUserId === userId;
+  console.log(`\x1b[33m Rule Bots (isOwner) ${isOwner} \x1b[0m`);
   return isOwner;
 }
 
 /** @type {Rule} */
-const isOwner = rule()(isOwnerRule);
+const isOwner = rule({ cache: 'no_cache' })(isOwnerRule);
 
 module.exports = {
   isOwner,

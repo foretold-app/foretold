@@ -14,6 +14,7 @@ class ChannelMembershipModel extends ModelPostgres {
   }
 
   /**
+   * @todo: fix interface
    * @param {string} channelId
    * @param {string} agentId
    * @param {string} role
@@ -43,6 +44,7 @@ class ChannelMembershipModel extends ModelPostgres {
   }
 
   /**
+   * @todo: fix interface
    * @param {string} channelId
    * @param {string} agentId
    * @returns {Promise<Models.ChannelMemberships | null>}
@@ -70,6 +72,7 @@ class ChannelMembershipModel extends ModelPostgres {
   }
 
   /**
+   * @protected
    * @param {string} channelId
    * @param {object} transaction
    * @return {Promise<*>}
@@ -83,6 +86,7 @@ class ChannelMembershipModel extends ModelPostgres {
       transaction,
     });
     if (countOfAdmins === 0) {
+      // @todo: move into permissions
       throw new Error('Operation is not permitted.');
     }
     return countOfAdmins;

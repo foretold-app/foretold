@@ -4,7 +4,8 @@ const { shield, allow, and, or } = require('graphql-shield');
 const { isAuthenticated } = require('./users');
 const { isAdmin, isViewer } = require('./channel-memberships');
 const { isChannelPublic } = require('./channels');
-const { isOwner } = require('./measurables');
+const measurables = require('./measurables');
+const bots = require('./bots');
 
 const rulesChannel = {
   Query: {},
@@ -25,6 +26,9 @@ const rulesChannelMemberships = {
 };
 
 const rules = {
+  Bot: {
+    jwt: bots.isOwner,
+  },
   Query: {
     '*': allow,
     permissions: allow,
@@ -53,9 +57,9 @@ const rules = {
     seriesCreate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
 
     measurableCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
-    measurableArchive: and(isAuthenticated, isOwner),
-    measurableUnarchive: and(isAuthenticated, isOwner),
-    measurableUpdate: and(isAuthenticated, isOwner),
+    measurableArchive: and(isAuthenticated, measurables.isOwner),
+    measurableUnarchive: and(isAuthenticated, measurables.isOwner),
+    measurableUpdate: and(isAuthenticated, measurables.isOwner),
 
     ...rulesChannel.Mutation,
     ...rulesChannelMemberships.Mutation,

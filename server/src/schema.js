@@ -15,6 +15,7 @@ const schema = new graphql.GraphQLSchema({
   types: [
     types.channels.channel,
     types.channelMemberships.channelsMembership,
+    types.bots.bot,
   ],
 
   query: new graphql.GraphQLObjectType({
@@ -86,12 +87,13 @@ const schema = new graphql.GraphQLSchema({
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
-        resolve: resolver(models.Bot),
+        resolve: resolvers.bots.one,
       },
 
       bots: {
-        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.bots.bot)),
-        resolve: resolver(models.Bot),
+        type: require('./connections').botsConnection.connectionType,
+        args: require('./connections').botsConnection.connectionArgs,
+        resolve: require('./connections').botsConnection.resolve,
       },
 
       agent: {
@@ -151,7 +153,7 @@ const schema = new graphql.GraphQLSchema({
         args: {
           auth0jwt: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
-        resolve: resolvers.authentications.authentication,
+        resolve: resolvers.authentications.getJwtByAuth0Jwt,
       },
     }
   }),

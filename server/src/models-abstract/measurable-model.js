@@ -5,6 +5,9 @@ const { ModelPostgres } = require('./model-postgres');
 
 const { MEASURABLE_STATE } = require('../models/measurable-state');
 
+/**
+ * @implements {Layers.AbstractModelsLayer.AbstractModel}
+ */
 class MeasurableModel extends ModelPostgres {
 
   constructor() {
@@ -15,6 +18,7 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
+   * @protected
    * @return {Sequelize.literal|*}
    */
   getStateOrderField() {
@@ -27,6 +31,7 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
+   * @protected
    * @return {Promise<boolean>}
    */
   needsToBePending() {

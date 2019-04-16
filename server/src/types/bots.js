@@ -15,6 +15,11 @@ const bot = new graphql.GraphQLObjectType({
     agentId: { type: graphql.GraphQLString },
     userId: { type: graphql.GraphQLString },
 
+    jwt: {
+      type: graphql.GraphQLString,
+      resolve: require('../resolvers/authentications').getJwtByAgentId,
+    },
+
     Agent: {
       type: require('./agents').agent,
       resolve: resolver(models.Bot.Agent),

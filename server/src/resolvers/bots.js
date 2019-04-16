@@ -18,6 +18,32 @@ async function create(root, args, options, info) {
   return await data.bots.createOne(datas);
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function all(root, args, context, info) {
+  const datas = { ...args };
+  return await data.bots.getAll(datas);
+}
+
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function one(root, args, context, info) {
+  const id = _.get(args, 'id');
+  return await data.bots.getOne({ id });
+}
+
 module.exports = {
+  all,
+  one,
   create,
 };

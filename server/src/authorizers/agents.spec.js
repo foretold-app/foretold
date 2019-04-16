@@ -6,7 +6,7 @@ describe('Agents Authorizers', () => {
     it('returns true when user model exists within context', () => {
       const root = {};
       const args = {};
-      const context = { user: { id: 'id1' } };
+      const context = { agent: { id: 'id1' } };
       const info = {};
       return isAuthenticatedRule(root, args, context, info).then((result) => {
         expect(result).toBe(true);

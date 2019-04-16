@@ -10,7 +10,7 @@ const { rule } = require('graphql-shield');
  */
 async function isOwnerRule(root, args, context, info) {
   const creatorId = _.get(context, 'measurable.creatorId');
-  const agentId = _.get(context, 'user.agentId');
+  const agentId = _.get(context, 'agent.id');
   const isOwner = creatorId === agentId;
   console.log(`\x1b[33m Rule Measurables (isOwner) ${isOwner} \x1b[0m`);
   return isOwner;

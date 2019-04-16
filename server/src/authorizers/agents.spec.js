@@ -1,6 +1,6 @@
-const { isAuthenticatedRule } = require('./users');
+const { isAuthenticatedRule } = require('./agents');
 
-describe('Users Authorizers', () => {
+describe('Agents Authorizers', () => {
 
   describe('isAuthenticatedRule()', () => {
     it('returns true when user model exists within context', () => {

@@ -22,9 +22,10 @@ const server = new ApolloServer({
   formatResponse: response => {
     return response;
   },
-  context: async ({req}) => {
-    const user = await authentication(req);
-    return { user };
+  context: async ({ req }) => {
+    const context = await authentication(req);
+    console.log('Context', context);
+    return context;
   }
 });
 
@@ -47,5 +48,6 @@ server.applyMiddleware({ app });
 app.listen({ port: PORT }, () => {
   console.log(`Server ready at http://localhost:${PORT}${server.graphqlPath}`)
 });
+
 runJobs();
 runListeners();

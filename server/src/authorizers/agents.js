@@ -9,10 +9,10 @@ const { rule } = require('graphql-shield');
  * @return {Promise<boolean>}
  */
 async function isAuthenticatedRule(root, args, context, info) {
-  const userId = _.get(context, 'user.id');
-  const result = !!userId;
+  const agentId = _.get(context, 'agent.id');
+  const result = !!agentId;
   console.log(`\x1b[33m Rule Users (isAuthenticatedRule) ` +
-    `userId ${userId} = ${result} \x1b[0m`);
+    `userId ${agentId} = ${result} \x1b[0m`);
   return result;
 }
 

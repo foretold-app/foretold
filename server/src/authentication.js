@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const { users } = require('./data');
+const { agents } = require('./data');
 
 const AUTH0_SECRET = process.env.AUTH0_SECRET;
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -78,15 +79,21 @@ async function authenticationByAuth0JwtToken(token) {
 
 /**
  * @param {string} token
- * @return {Promise<boolean | Models.User>}
+ * @return {Promise<{agent: Models.Agent, user: Models.User, bot: Models.Bot}>}
  */
 async function authenticationByJwtToken(token) {
   try {
     const decoded = decodeJwtToken(token);
-    if (!decoded.sub) throw new Error('No Agent Id');
-    const user = await users.getOne({ agentId: decoded.sub });
-    if (!user) throw new Error('Not authenticated');
-    return user;
+    const agentId = decoded.sub;
+    if (!agentId) throw new Error('No Agent Id');
+
+    const agent = await agents.getOne(agentId);
+    if (!agent) throw new Error('Not authenticated');
+
+    const bot = await agent.getBot();
+    const user = await agent.getUser();
+
+    return { agent, bot, user };
   } catch (err) {
     throw err;
   }
@@ -122,7 +129,7 @@ async function getJwtByAgentId(agentId) {
 
 /**
  * @param {Request} options
- * @return {Promise<Models.User | null>}
+ * @return {Promise<*>}
  */
 async function authentication(options) {
   try {
@@ -139,16 +146,9 @@ async function authentication(options) {
 
 module.exports = {
   getQueryToken,
-
-  decodeAuth0JwtToken,
-  decodeJwtToken,
-
   authenticationByAuth0JwtToken,
-  authenticationByJwtToken,
-
   getJwtByAuth0Jwt,
   getJwtByAgentId,
-
   authentication,
 };
 

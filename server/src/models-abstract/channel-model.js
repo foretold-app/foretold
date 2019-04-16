@@ -3,6 +3,9 @@ const _ = require('lodash');
 const models = require('../models');
 const { ModelPostgres } = require('./model-postgres');
 
+/**
+ * @implements {Layers.AbstractModelsLayer.AbstractModel}
+ */
 class ChannelModel extends ModelPostgres {
 
   constructor() {

@@ -5,6 +5,9 @@ const { ModelPostgres } = require('./model-postgres');
 
 const { MEASURABLE_STATE } = require('../models/measurable-state');
 
+/**
+ * @implements {Layers.AbstractModelsLayer.AbstractModel}
+ */
 class MeasurableModel extends ModelPostgres {
 
   constructor() {

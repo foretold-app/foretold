@@ -1,6 +1,9 @@
 const models = require('../models');
 const { ModelPostgres } = require('./model-postgres');
 
+/**
+ * @implements {Layers.AbstractModelsLayer.AbstractModel}
+ */
 class BotModel extends ModelPostgres {
 
   constructor() {

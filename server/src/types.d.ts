@@ -68,21 +68,40 @@ export namespace Layers {
     type params = object;
 
     interface DataSource {
-      createOne(data, restrictions): any;
+      createOne(
+        data,
+        restrictions,
+      ): any;
 
-      getOne(params, query, restrictions): any;
+      getOne(
+        params,
+        query,
+        restrictions,
+      ): any;
 
-      updateOne(params, data, restrictions): any;
+      updateOne(
+        params,
+        data,
+        restrictions,
+      ): any;
 
-      deleteOne(params, restrictions): any | null;
+      deleteOne(
+        params,
+        restrictions,
+      ): any | null;
 
-      getAll(filter, pagination, restrictions): any[];
+      getAll(
+        filter,
+        pagination,
+        restrictions,
+      ): any[];
     }
   }
 
   namespace AbstractModelsLayer {
     type compoundId = object;
     type id = string | compoundId;
+
     type data = object;
     type restrictions = object;
     type filter = object;
@@ -91,15 +110,33 @@ export namespace Layers {
     type params = object;
 
     interface AbstractModel {
-      deleteOne(id, restrictions): any;
+      deleteOne(
+        params: params,
+        restrictions: restrictions,
+      ): any;
 
-      updateOne(id, data, restrictions): any;
+      updateOne(
+        params: params,
+        data: data,
+        restrictions: restrictions,
+      ): any;
 
-      createOne(data, restrictions): any;
+      createOne(
+        data: data,
+        restrictions: restrictions,
+      ): any;
 
-      getOne(id, query, restrictions): any;
+      getOne(
+        params: params,
+        query: query,
+        restrictions: restrictions,
+      ): any;
 
-      getAll(filter, pagination, restrictions): any[];
+      getAll(
+        filter: filter,
+        pagination: pagination,
+        restrictions: restrictions,
+      ): any[];
     }
   }
 }

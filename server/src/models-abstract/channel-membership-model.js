@@ -83,6 +83,7 @@ class ChannelMembershipModel extends ModelPostgres {
       transaction,
     });
     if (countOfAdmins === 0) {
+      // @todo: move into permissions
       throw new Error('Operation is not permitted.');
     }
     return countOfAdmins;

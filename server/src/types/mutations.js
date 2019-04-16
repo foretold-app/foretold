@@ -17,6 +17,7 @@ const mutations = new graphql.GraphQLEnumType({
     channelMembershipDelete: { value: "channelMembershipDelete" },
     leaveChannel: { value: "leaveChannel" },
     joinChannel: { value: "joinChannel" },
+    botCreate: { value: "botCreate" },
   }
 });
 

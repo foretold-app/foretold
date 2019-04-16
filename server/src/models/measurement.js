@@ -49,6 +49,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   /**
+   * @todo: move me
+   * @public
    * @param {Models.Creator} creator
    * @return {Promise<void>}
    */

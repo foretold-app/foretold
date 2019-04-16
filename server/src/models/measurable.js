@@ -181,6 +181,8 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   /**
+   * @todo: move me
+   * @public
    * @param {Models.Creator} creator
    * @return {Promise<*>}
    */
@@ -216,6 +218,8 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   /**
+   * @todo: move me
+   * @public
    * @param {Models.Creator} creator
    * @param {object} newData
    * @return {Promise<*>}

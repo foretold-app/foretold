@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     hooks: {
-      afterCreate: async (measurement, options) => {
+      afterCreate: async (measurement) => {
         if (measurement.dataValues.competitorType == "OBJECTIVE") {
           const measurable = await measurement.getMeasurable();
           await measurable.judged();
@@ -48,7 +48,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
-  Model.prototype.creationNotification = async function (creator) {
+  /**
+   * @param {Models.Creator} creator
+   * @return {Promise<void>}
+   */
+  Model.prototype.creationNotification = async function creationNotification(creator) {
     let agent = await creator.getAgent();
     let measurable = await this.getMeasurable();
     let notification = await {
@@ -72,7 +76,7 @@ module.exports = (sequelize, DataTypes) => {
     return notification;
   };
 
-  Model.associate = function (models) {
+  Model.associate = function associate(models) {
     Model.Measurable = Model.belongsTo(models.Measurable, {
       foreignKey: 'measurableId'
     });

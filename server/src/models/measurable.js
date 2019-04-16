@@ -98,7 +98,7 @@ module.exports = (sequelize, DataTypes) => {
     resolutionEndpointResponse: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.FLOAT),
-      get: async function () {
+      get: async function resolutionEndpointResponseGetter() {
         const endpoint = await this.dataValues.resolutionEndpoint;
         if (!endpoint) return false;
         try {
@@ -116,7 +116,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Model.needsResolutionResponse = async function () {
+  Model.needsResolutionResponse = async function needsResolutionResponse() {
     return await Model.findAll({
       where: {
         state: MEASURABLE_STATE.JUDGEMENT_PENDING,
@@ -127,7 +127,7 @@ module.exports = (sequelize, DataTypes) => {
     })
   };
 
-  Model.needsToBePending = async function () {
+  Model.needsToBePending = async function needsToBePending() {
     return await Model.findAll({
       where: {
         state: MEASURABLE_STATE.OPEN,
@@ -143,27 +143,31 @@ module.exports = (sequelize, DataTypes) => {
     })
   };
 
-  Model.prototype.updateState = async function (state) {
+  Model.prototype.updateState = async function updateState(state) {
     await this.update({ state, stateUpdatedAt: Sequelize.fn('now') });
   };
 
-  Model.prototype.archive = async function () {
+  Model.prototype.archive = async function archive() {
     await this.update({ isArchived: true });
   };
 
-  Model.prototype.unarchive = async function () {
+  Model.prototype.unarchive = async function unarchive() {
     await this.update({ isArchived: false });
   };
 
-  Model.prototype.judged = async function () {
+  Model.prototype.judged = async function judged() {
     await this.updateState(MEASURABLE_STATE.JUDGED);
   };
 
-  Model.prototype.judgementPending = async function () {
+  Model.prototype.judgementPending = async function judgementPending() {
     await this.updateState(MEASURABLE_STATE.JUDGEMENT_PENDING);
   };
 
-  Model.prototype.processResolution = async function (agentId) {
+  /**
+   * @param {Models.Agent.id} agentId
+   * @return {Promise<void>}
+   */
+  Model.prototype.processResolution = async function processResolution(agentId) {
     const asFloat = await this.resolutionEndpointResponse;
     if (asFloat) {
       await sequelize.models.Measurement.create({
@@ -176,7 +180,11 @@ module.exports = (sequelize, DataTypes) => {
     await this.judged();
   };
 
-  Model.prototype.creationNotification = async function (creator) {
+  /**
+   * @param {Models.Creator} creator
+   * @return {Promise<*>}
+   */
+  Model.prototype.creationNotification = async function creationNotification(creator) {
     let agent = await creator.getAgent();
     let notification = {
       "attachments": [{
@@ -199,11 +207,20 @@ module.exports = (sequelize, DataTypes) => {
     return notification;
   };
 
-  Model.prototype.changedFields = function (ops) {
+  /**
+   * @param {object} ops
+   * @return {string[]}
+   */
+  Model.prototype.changedFields = function changedFields(ops) {
     return Object.keys(ops).filter(r => r !== "expectedResolutionDate").filter(r => this[r] !== ops[r]);
   };
 
-  Model.prototype.updateNotifications = async function (creator, newData) {
+  /**
+   * @param {Models.Creator} creator
+   * @param {object} newData
+   * @return {Promise<*>}
+   */
+  Model.prototype.updateNotifications = async function updateNotifications(creator, newData) {
     let changed = this.changedFields(newData);
     let agent = await creator.getAgent();
     let notification = {
@@ -224,7 +241,7 @@ module.exports = (sequelize, DataTypes) => {
     return notification;
   };
 
-  Model.associate = function (models) {
+  Model.associate = function associate(models) {
     Model.Measurements = Model.hasMany(models.Measurement, {
       foreignKey: 'measurableId',
       as: 'Measurements'

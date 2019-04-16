@@ -34,11 +34,10 @@ async function one(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
-  // @todo: user!
-  const user = context.user;
+  const creator = context.creator;
   const agentId = _.get(context, 'agent.id');
   const datas = { ...args.input, agentId };
-  return await data.measurements.createOne(datas, user);
+  return await data.measurements.createOne(datas, creator);
 }
 
 module.exports = {

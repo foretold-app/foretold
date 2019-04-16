@@ -17,15 +17,15 @@ class MeasurementsData extends DataBase {
   /**
    * @todo: rename
    * @param {object} data
-   * @param {object} user
-   * @return {Promise<*>}
+   * @param {Models.Creator} creator
+   * @return {Promise<Models.Measurement>}
    */
-  async createOne(data, user) {
-    const newMeasurement = await this.models.Measurement.create(data);
-    // @todo: user
-    const notification = await newMeasurement.creationNotification(user);
+  async createOne(data, creator) {
+    const measurement = await this.models.Measurement.create(data);
+    /** @type {Models.Measurement} */
+    const notification = await measurement.creationNotification(creator);
     notify(notification);
-    return newMeasurement;
+    return measurement;
   }
 
   /**

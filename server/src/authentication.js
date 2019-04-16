@@ -79,7 +79,7 @@ async function authenticationByAuth0JwtToken(token) {
 
 /**
  * @param {string} token
- * @return {Promise<{agent: Models.Agent, user: Models.User, bot: Models.Bot}>}
+ * @return {Promise<Schema.Context>}
  */
 async function authenticationByJwtToken(token) {
   try {
@@ -92,8 +92,9 @@ async function authenticationByJwtToken(token) {
 
     const bot = await agent.getBot();
     const user = await agent.getUser();
+    const creator = bot || user;
 
-    return { agent, bot, user };
+    return { agent, bot, user, creator };
   } catch (err) {
     throw err;
   }

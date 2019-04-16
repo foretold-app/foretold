@@ -27,11 +27,25 @@ async function create(root, args, options, info) {
  */
 async function all(root, args, context, info) {
   const userId = _.get(context, 'user.id');
-  return await data.bots.getAll({ ...args, userId });
+  const datas = { ...args, userId };
+  return await data.bots.getAll(datas);
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function one(root, args, context, info) {
+  const id = _.get(args, 'id');
+  const userId = _.get(context, 'user.id');
+  return await data.bots.getOne({ id }, null, { userId });
+}
 
 module.exports = {
   all,
+  one,
   create,
 };

@@ -75,7 +75,8 @@ class ModelPostgres extends Model {
    * @param {object} where
    * @param {object} restrictions
    * @param {string} [restrictions.agentId]
-   * @param {string} [restrictions.channelId]
+   * @param {string} [restrictions.userId]
+   * @param {boolean} [restrictions.channelId]
    */
   applyRestrictions(where, restrictions) {
     if (!where) where = {};
@@ -86,6 +87,12 @@ class ModelPostgres extends Model {
         channelId: {
           [this.in]: this.channelIdsLiteral(restrictions.agentId),
         },
+      });
+    }
+
+    if (restrictions.userId) {
+      where[this.and].push({
+        userId: restrictions.userId,
       });
     }
   }

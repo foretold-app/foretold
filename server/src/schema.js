@@ -87,7 +87,7 @@ const schema = new graphql.GraphQLSchema({
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
-        resolve: resolver(models.Bot),
+        resolve: resolvers.bots.one,
       },
 
       bots: {

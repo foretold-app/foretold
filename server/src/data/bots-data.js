@@ -20,13 +20,11 @@ class BotsData extends DataBase {
     return await this.BotModel.createOne(data);
   }
 
-
   /**
    * @param {object} options
-   * @param {string[]} options.states
-   * @param {string} options.userId
-   * @param {number} options.offset
-   * @param {number} options.limit
+   * @param {string} [options.userId]
+   * @param {number} [options.offset]
+   * @param {number} [options.limit]
    * @return {Promise<*|Array<Model>>}
    */
   async getAll(options) {
@@ -35,10 +33,19 @@ class BotsData extends DataBase {
       limit: options.limit,
     };
     const restrictions = {
-      userId: true,
-      agentId: options.userId,
+      userId: options.userId,
     };
     return this.BotModel.getAll(options, pagination, restrictions);
+  }
+
+  /**
+   * @param params
+   * @param query
+   * @param restrictions
+   * @return {Promise<void>}
+   */
+  async getOne(params, query, restrictions) {
+    return this.BotModel.getOne(params, query, restrictions);
   }
 }
 

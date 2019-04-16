@@ -61,6 +61,7 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
     | EntityIndex => EntityIndex.make(~layout) |> inApp
     | Profile => Profile.make(~loggedInUser, ~layout) |> inApp
     | AgentShow(id) => AgentShow.make(~id, ~layout) |> inApp
+    | AgentBots(id) => AgentBots.make(~id, ~layout) |> inApp
     | ChannelIndex => ChannelIndex.make(~loggedInUser, ~layout) |> inApp
     | ChannelNew => ChannelNew.make(~layout) |> inApp
     | MeasurableEdit(id) => MeasurableEdit.make(~id, ~layout) |> inApp

@@ -10,6 +10,7 @@ module Route = {
     | EntityIndex
     | AgentShow(string)
     | AgentMeasurables(string)
+    | AgentBots(string)
     | ChannelShow(string)
     | ChannelEdit(string)
     | ChannelMembers(string)
@@ -35,10 +36,10 @@ module Route = {
     | ["agents"] => AgentIndex
     | ["profile"] => Profile
     | ["agents", id] => AgentShow(id)
-    | ["agents", id, "bots"] => AgentShow(id)
+    | ["agents", id, "bots"] => AgentBots(id)
+    | ["agents", id, "measurables"] => AgentMeasurables(id)
     | ["entities"] => EntityIndex
     | ["entities", ...id] => EntityShow(String.concat("/", id))
-    | ["agents", id, "measurables"] => AgentMeasurables(id)
     | ["channels", "new"] => ChannelNew
     | ["channels"] => ChannelIndex
     | ["c"] => ChannelIndex
@@ -64,6 +65,7 @@ module Url = {
     | EntityShow(string)
     | AgentShow(string)
     | AgentMeasurables(string)
+    | AgentBots(string)
     | ChannelShow(string)
     | ChannelNew
     | ChannelIndex
@@ -84,6 +86,7 @@ module Url = {
     | EntityIndex => "/entities"
     | EntityShow(id) => "/entities/" ++ id
     | AgentShow(id) => "/agents/" ++ id
+    | AgentBots(id) => "/agents/" ++ id ++ "/bots"
     | AgentMeasurables(id) => "/agents/" ++ id ++ "/measurables"
     | ChannelNew => "/channels/" ++ "new"
     | ChannelShow(id) => "/c/" ++ id

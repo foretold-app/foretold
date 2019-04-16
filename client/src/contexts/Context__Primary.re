@@ -11,6 +11,7 @@ module ChannelMembershipRole = {
     };
 };
 
+type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
 module Types = {
   type user = {
     id: string,
@@ -19,10 +20,11 @@ module Types = {
     name: string,
   }
   and bot = {
-    competitorType: [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE],
+    competitorType,
     description: option(string),
     id: string,
     name: option(string),
+    jwt: option(string),
   }
   and agentType =
     | Bot(bot)
@@ -68,11 +70,21 @@ module User = {
 
 module Bot = {
   type t = Types.bot;
-  let make = (~id, ~name=None, ~description=None, ~competitorType, ()): t => {
+  module CompetitorType = {
+    let toString = (c: competitorType) =>
+      switch (c) {
+      | `AGGREGATION => "Aggregation"
+      | `COMPETITIVE => "Competitive"
+      | `OBJECTIVE => "Judge"
+      };
+  };
+  let make =
+      (~id, ~name=None, ~description=None, ~competitorType, ~jwt=None, ()): t => {
     id,
     competitorType,
     description,
     name,
+    jwt,
   };
 };
 

@@ -16,7 +16,7 @@ async function channelMemberships(root, args, context, info) {
     || _.get(context, 'channelId')
     || _.get(context, 'measurable.channelId')
     || _.get(context, 'channel.id');
-  const agentId = _.get(context, 'user.agentId');
+  const agentId = _.get(context, 'agent.id');
 
   const id = { agentId, channelId };
   console.log('\x1b[36m ---> \x1b[0m Middleware (channelMemberships)', id);

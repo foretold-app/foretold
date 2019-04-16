@@ -31,7 +31,7 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
-   * @protected
+   * @public
    * @return {Promise<boolean>}
    */
   needsToBePending() {

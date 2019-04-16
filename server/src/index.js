@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const path = require('path');
 const cors = require('cors');
 const express = require('express');
@@ -22,9 +23,16 @@ const server = new ApolloServer({
   formatResponse: response => {
     return response;
   },
-  context: async ({req}) => {
-    const user = await authentication(req);
-    return { user };
+  context: async ({ req }) => {
+    const context = await authentication(req);
+    console.log(' --- ');
+    console.log(' ✓ Context User Id', _.get(context, 'user.id'));
+    console.log(' ✓ Context Agent Id', _.get(context, 'agent.id'));
+    console.log(' ✓ Context Bot Id', _.get(context, 'bot.id'));
+    console.log(' ✓ Context Creator Id', _.get(context, 'creator.id'));
+    console.log(' ✓ Context Creator Name', _.get(context, 'creator.constructor.name'));
+    console.log(' --- ');
+    return context;
   }
 });
 
@@ -47,5 +55,6 @@ server.applyMiddleware({ app });
 app.listen({ port: PORT }, () => {
   console.log(`Server ready at http://localhost:${PORT}${server.graphqlPath}`)
 });
+
 runJobs();
 runListeners();

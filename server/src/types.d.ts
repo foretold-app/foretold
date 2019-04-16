@@ -1,10 +1,4 @@
 export namespace Models {
-  export interface User {
-    id: string;
-    name: string;
-    auth0Id: string;
-    agentId: string;
-  }
 
   export interface Channel {
     id: string;
@@ -13,14 +7,27 @@ export namespace Models {
 
   export interface Bot {
     id: string;
+    name: string;
+    getAgent(): Models.Agent;
+  }
+
+  export interface User {
+    id: string;
+    name: string;
+    auth0Id: string;
+    agentId: string;
+    getAgent(): Models.Agent;
   }
 
   export interface Measurable {
     id: string;
+    creationNotification(creator: Models.Creator): any;
+    updateNotifications(creator: Models.Creator): any;
   }
 
   export interface Measurement {
     id: string;
+    creationNotification(creator: Models.Creator): any;
   }
 
   export interface Agent {
@@ -38,11 +45,16 @@ export namespace Models {
     channelId: string;
     role: ChannelMembershipRole;
   }
+
+  export type Creator = Models.User | Models.Bot;
 }
 
 export namespace Schema {
   export interface Context {
-    user: Models.User;
+    user?: Models.User;
+    bot?: Models.Bot;
+    agent: Models.Agent;
+    creator: Models.User | Models.Bot;
     channel?: Models.Channel;
     channelMembership?: Models.ChannelMemberships;
     channelMembershipsRole?: Models.ChannelMembershipRole;

@@ -81,7 +81,7 @@ async function allByChannelId(root, args, context, info) {
  */
 async function join(root, args, context, info) {
   const channelId = _.get(args, 'input.channelId');
-  const agentId = _.get(context, 'user.agentId');
+  const agentId = _.get(context, 'agent.id');
   return await data.channelMemberships.join({
     channelId,
     agentId,
@@ -98,7 +98,7 @@ async function join(root, args, context, info) {
  */
 async function leave(root, args, context, info) {
   const channelId = _.get(args, 'input.channelId');
-  const agentId = _.get(context, 'user.agentId');
+  const agentId = _.get(context, 'agent.id');
   return await data.channelMemberships.leave({
     channelId,
     agentId,
@@ -114,7 +114,7 @@ async function leave(root, args, context, info) {
  */
 async function myRole(root, args, context, info) {
   const channelId = _.get(root, 'id');
-  const agentId = _.get(context, 'user.agentId');
+  const agentId = _.get(context, 'agent.id');
   return await data.channelMemberships.getOneOnlyRole({
     channelId,
     agentId,

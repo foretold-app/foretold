@@ -6,7 +6,7 @@ describe('Measurables Resolvers', () => {
   describe('all()', () => {
     const root = {};
     const args = {};
-    const context = { user: { agentId: 'agentId2' } };
+    const context = { agent: { id: 'agentId2' } };
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.measurables, 'getAll').mockReturnValue(
@@ -26,7 +26,7 @@ describe('Measurables Resolvers', () => {
   describe('one()', () => {
     const root = {};
     const args = { id: 'id1' };
-    const context = { user: { agentId: 'agentId2' } };
+    const context = { agent: { id: 'agentId2' } };
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.measurables, 'getOne').mockReturnValue(
@@ -47,7 +47,7 @@ describe('Measurables Resolvers', () => {
   describe('create()', () => {
     const root = {};
     const args = {};
-    const context = { user: { agentId: 'agentId1' } };
+    const context = { agent: { id: 'agentId1' } };
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.measurables, 'createOne').mockReturnValue(
@@ -68,7 +68,7 @@ describe('Measurables Resolvers', () => {
   describe('archive()', () => {
     const root = {};
     const args = { id: 'id1' };
-    const context = { user: {} };
+    const context = { agent: {} };
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.measurables, 'archive').mockReturnValue(
@@ -88,7 +88,7 @@ describe('Measurables Resolvers', () => {
   describe('unarchive()', () => {
     const root = {};
     const args = { id: 'id1' };
-    const context = { user: {} };
+    const context = { agent: {} };
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.measurables, 'unArchive').mockReturnValue(
@@ -108,7 +108,7 @@ describe('Measurables Resolvers', () => {
   describe('update()', () => {
     const root = {};
     const args = { id: 'id1', input: { b: 'b1' } };
-    const context = { user: {} };
+    const context = { agent: {} };
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.measurables, 'updateOne').mockReturnValue(

@@ -6,7 +6,7 @@ describe('Series Resolvers', () => {
   describe('one()', () => {
     const root = {};
     const args = { id: 'id1' };
-    const context = { user: { agentId: 'agentId1' } };
+    const context = { agent: { id: 'agentId1' } };
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.series, 'getOne').mockReturnValue(
@@ -27,7 +27,7 @@ describe('Series Resolvers', () => {
   describe('all()', () => {
     const root = {};
     const args = {};
-    const context = { user: { agentId: 'agentId1' } };
+    const context = { agent: { id: 'agentId2' } };
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.series, 'getAll').mockReturnValue(
@@ -37,7 +37,7 @@ describe('Series Resolvers', () => {
     it('returns series collection', () => {
       return series.all(root, args, context, info).then((result) => {
         expect(data.series.getAll).toHaveBeenCalledWith(
-          { "agentId": "agentId1" },
+          { "agentId": "agentId2" },
         );
         expect(result).toEqual(true);
       });
@@ -47,7 +47,7 @@ describe('Series Resolvers', () => {
   describe('create()', () => {
     const root = {};
     const args = { input: { a: 'a1' } };
-    const context = { user: { agentId: 'agentId1' } };
+    const context = { agent: { id: 'agentId3' } };
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.series, 'createOne').mockReturnValue(
@@ -57,7 +57,7 @@ describe('Series Resolvers', () => {
     it('creates series', () => {
       return series.create(root, args, context, info).then((result) => {
         expect(data.series.createOne).toHaveBeenCalledWith(
-          {"a": "a1", "creatorId": "agentId1"},
+          {"a": "a1", "creatorId": "agentId3"},
         );
         expect(result).toBe(true);
       });

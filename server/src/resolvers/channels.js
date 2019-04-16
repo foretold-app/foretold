@@ -27,7 +27,7 @@ async function channelCreator(channel) {
  * @returns {Promise<Models.Channel[]>}
  */
 async function all(root, args, context, info) {
-  const agentId = context.user.agentId;
+  const agentId = _.get(context, 'agent.id');
   const offset = args.offset;
   const limit = args.limit;
   const options = { offset, limit, agentId };
@@ -44,7 +44,7 @@ async function all(root, args, context, info) {
  */
 async function one(root, args, context, info) {
   const id = _.get(args, 'id') || _.get(root, 'channelId');
-  const agentId = _.get(context, 'user.agentId');
+  const agentId = _.get(context, 'agent.id');
   const options = { agentId };
   return await data.channels.getOne(id, options);
 }
@@ -70,7 +70,7 @@ async function update(root, args, context, info) {
  * @returns {Promise<Models.Channel>}
  */
 async function create(root, args, context, info) {
-  return await data.channels.createOne(context.user, args.input);
+  return await data.channels.createOne(context.agent, args.input);
 }
 
 module.exports = {

@@ -13,6 +13,7 @@ const data = require('../data');
 async function create(root, args, options, info) {
   const datas = {
     ...args.input,
+    // required
     userId: _.get(options, 'user.id'),
   };
   return await data.bots.createOne(datas);

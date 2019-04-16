@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const { shield, allow, and, or } = require('graphql-shield');
 
-const { isAuthenticated } = require('./users');
+const { isAuthenticated } = require('./agents');
 const { isAdmin, isViewer } = require('./channel-memberships');
 const { isChannelPublic } = require('./channels');
 const measurables = require('./measurables');

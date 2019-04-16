@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const data = require('../data');
 
 /**
@@ -8,7 +9,7 @@ const data = require('../data');
  * @returns {Promise<*|Array<Model>>}
  */
 async function one(root, args, context, info) {
-  const agentId = context.user.agentId;
+  const agentId = _.get(context, 'agent.id');
   return await data.series.getOne(args.id, { agentId });
 }
 
@@ -20,7 +21,7 @@ async function one(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function all(root, args, context, info) {
-  const agentId = context.user.agentId;
+  const agentId = _.get(context, 'agent.id');
   return await data.series.getAll({ ...args, agentId });
 }
 
@@ -33,9 +34,10 @@ async function all(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
+  const agentId = _.get(context, 'agent.id');
   const datas = {
     ...args.input,
-    creatorId: context.user.agentId,
+    creatorId: agentId,
   };
   return await data.series.createOne(datas);
 }

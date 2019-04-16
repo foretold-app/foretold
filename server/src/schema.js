@@ -142,10 +142,7 @@ const schema = new graphql.GraphQLSchema({
 
       stats: {
         type: new graphql.GraphQLNonNull(stats),
-        resolve: async (ops, values, options) => {
-          // @todo:
-          return 11;
-        }
+        resolve: () => true
       },
 
       authentication: {

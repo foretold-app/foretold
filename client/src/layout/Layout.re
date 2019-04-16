@@ -54,6 +54,7 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
     | ChannelEdit(_) => Channel_Layout.makeWithPage(route, loggedInUser)
     | AgentMeasurables(id) =>
       AgentMeasurables.make(~id, ~loggedInUser, ~layout) |> inApp
+    | BotCreate => BotCreate.make(~layout) |> inApp
     | AgentIndex => AgentIndex.make(~layout) |> inApp
     | EntityShow(id) => EntityShow.make(~id, ~layout) |> inApp
     | Redirect => Auth0Redirect.make(~me) |> inApp

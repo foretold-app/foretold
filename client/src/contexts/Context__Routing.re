@@ -5,6 +5,7 @@ module Route = {
     | Redirect
     | Login
     | Profile
+    | BotCreate
     | EntityShow(string)
     | EntityIndex
     | AgentShow(string)
@@ -34,6 +35,7 @@ module Route = {
     | ["agents"] => AgentIndex
     | ["profile"] => Profile
     | ["agents", id] => AgentShow(id)
+    | ["agents", id, "bots"] => AgentShow(id)
     | ["entities"] => EntityIndex
     | ["entities", ...id] => EntityShow(String.concat("/", id))
     | ["agents", id, "measurables"] => AgentMeasurables(id)
@@ -58,6 +60,7 @@ module Url = {
     | AgentIndex
     | Profile
     | EntityIndex
+    | BotCreate
     | EntityShow(string)
     | AgentShow(string)
     | AgentMeasurables(string)
@@ -77,6 +80,7 @@ module Url = {
     | Home => "/"
     | AgentIndex => "/agents"
     | Profile => "/profile/"
+    | BotCreate => "/bots/new"
     | EntityIndex => "/entities"
     | EntityShow(id) => "/entities/" ++ id
     | AgentShow(id) => "/agents/" ++ id

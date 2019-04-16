@@ -35,13 +35,14 @@ class BotModel extends ModelPostgres {
   }
 
   /**
-   * @param {string} id
+   * @param {object} params
+   * @param {string} params.id
    * @param {object} query
    * @param {object} restrictions
-   * @return {Promise<Model>}
+   * @return {Promise<Models.Bot>}
    */
-  async getOne({ id }, query, restrictions) {
-    const where = { id };
+  async getOne(params, query, restrictions) {
+    const where = { id: params.id };
     this.applyRestrictions(where, restrictions);
     return await this.model.findOne({
       where,

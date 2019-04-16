@@ -11,6 +11,26 @@ export namespace Models {
     isPublic: boolean;
   }
 
+  export interface Bot {
+    id: string;
+  }
+
+  export interface Measurable {
+    id: string;
+  }
+
+  export interface Measurement {
+    id: string;
+  }
+
+  export interface Agent {
+    id: string;
+  }
+
+  export interface Series {
+    id: string;
+  }
+
   export type ChannelMembershipRole = "ADMIN" | "VIEWER";
 
   export interface ChannelMemberships {

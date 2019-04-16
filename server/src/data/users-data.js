@@ -60,6 +60,7 @@ class UsersData extends DataBase {
    */
   async updateOne(id, data, _user) {
     let user = await this.models.User.findById(id);
+    // @todo: move it into permissions
     if (user && user.auth0Id === _user.auth0Id) {
       user.update(data);
     }

@@ -17,7 +17,7 @@ async function isOwnerRule(root, args, context, info) {
 }
 
 /** @type {Rule} */
-const isOwner = rule()(isOwnerRule);
+const isOwner = rule({ cache: 'no_cache' })(isOwnerRule);
 
 module.exports = {
   isOwner,

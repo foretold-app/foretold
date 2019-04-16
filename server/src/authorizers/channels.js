@@ -18,7 +18,7 @@ async function isChannelPublicRule(root, args, context, info) {
 }
 
 /** @type {Rule} */
-const isChannelPublic = rule()(isChannelPublicRule);
+const isChannelPublic = rule({ cache: 'no_cache' })(isChannelPublicRule);
 
 module.exports = {
   isChannelPublic,

@@ -1,5 +1,3 @@
-const _ = require('lodash');
-
 const { channel, channelByRoot } = require('./channels');
 const { channelMemberships } = require('./channel-memberships');
 const { measurable } = require('./measurables');
@@ -8,7 +6,6 @@ const { measurable } = require('./measurables');
  * Do not try to use DRY principle here.
  * Just read each section as it is.
  */
-
 const middlewares = {
   Bot: {
     jwt: async (resolve, root, args, context, info) => {
@@ -19,7 +16,6 @@ const middlewares = {
 
   Channel: {
     permissions: async (resolve, root, args, context, info) => {
-      context = _.cloneDeep(context);
       await channelByRoot(root, args, context, info);
       await channelMemberships(root, args, context, info);
       return await resolve(root, args, context, info);
@@ -28,7 +24,6 @@ const middlewares = {
 
   ChannelsMembership: {
     permissions: async (resolve, root, args, context, info) => {
-      context = _.cloneDeep(context);
       await channel(root, args, context, info);
       await channelMemberships(root, args, context, info);
       return await resolve(root, args, context, info);

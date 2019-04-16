@@ -1,8 +1,8 @@
 const _ = require('lodash');
-const { shield, allow, and, or } = require('graphql-shield');
+const { shield, allow, and, or, not } = require('graphql-shield');
 
 const { isAuthenticated } = require('./agents');
-const { isAdmin, isViewer } = require('./channel-memberships');
+const { isAdmin, isViewer, isInChannel } = require('./channel-memberships');
 const { isChannelPublic } = require('./channels');
 const measurables = require('./measurables');
 const bots = require('./bots');
@@ -11,8 +11,8 @@ const rulesChannel = {
   Query: {},
   Mutation: {
     channelUpdate: and(isAuthenticated, isAdmin),
-    leaveChannel: and(isAuthenticated),
-    joinChannel: and(isAuthenticated, isChannelPublic),
+    leaveChannel: and(isAuthenticated, isInChannel),
+    joinChannel: and(isAuthenticated, isChannelPublic, not(isInChannel)),
     channelMembershipCreate: and(isAuthenticated, isAdmin),
   }
 };

@@ -1,5 +1,3 @@
-const _ = require('lodash');
-
 const { channel, channelByRoot } = require('./channels');
 const { channelMemberships } = require('./channel-memberships');
 const { measurable } = require('./measurables');
@@ -8,7 +6,6 @@ const { measurable } = require('./measurables');
  * Do not try to use DRY principle here.
  * Just read each section as it is.
  */
-
 const middlewares = {
   Bot: {
     jwt: async (resolve, root, args, context, info) => {

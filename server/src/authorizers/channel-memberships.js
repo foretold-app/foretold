@@ -41,11 +41,11 @@ const isAdminRule = roleRule(models.ChannelMemberships.ROLE.ADMIN);
 const isViewerRule = roleRule(models.ChannelMemberships.ROLE.VIEWER);
 
 /** @type {Rule} */
-const isAdmin = rule()(isAdminRule);
+const isAdmin = rule({ cache: 'no_cache' })(isAdminRule);
 /** @type {Rule} */
-const isViewer = rule()(isViewerRule);
+const isViewer = rule({ cache: 'no_cache' })(isViewerRule);
 /** @type {Rule} */
-const isInChannel = rule()(isInChannelRule);
+const isInChannel = rule({ cache: 'no_cache' })(isInChannelRule);
 
 module.exports = {
   isAdmin,

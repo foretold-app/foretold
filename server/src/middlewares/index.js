@@ -19,7 +19,6 @@ const middlewares = {
 
   Channel: {
     permissions: async (resolve, root, args, context, info) => {
-      context = _.cloneDeep(context);
       await channelByRoot(root, args, context, info);
       await channelMemberships(root, args, context, info);
       return await resolve(root, args, context, info);
@@ -28,7 +27,6 @@ const middlewares = {
 
   ChannelsMembership: {
     permissions: async (resolve, root, args, context, info) => {
-      context = _.cloneDeep(context);
       await channel(root, args, context, info);
       await channelMemberships(root, args, context, info);
       return await resolve(root, args, context, info);

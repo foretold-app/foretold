@@ -17,7 +17,7 @@ async function isAuthenticatedRule(root, args, context, info) {
 }
 
 /** @type {Rule} */
-const isAuthenticated = rule()(isAuthenticatedRule);
+const isAuthenticated = rule({ cache: 'no_cache' })(isAuthenticatedRule);
 
 module.exports = {
   isAuthenticated,

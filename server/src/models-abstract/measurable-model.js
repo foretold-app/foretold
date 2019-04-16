@@ -18,6 +18,7 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
+   * @protected
    * @return {Sequelize.literal|*}
    */
   getStateOrderField() {
@@ -30,6 +31,7 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
+   * @protected
    * @return {Promise<boolean>}
    */
   needsToBePending() {

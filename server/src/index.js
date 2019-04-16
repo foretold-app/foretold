@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const path = require('path');
 const cors = require('cors');
 const express = require('express');
@@ -24,7 +25,13 @@ const server = new ApolloServer({
   },
   context: async ({ req }) => {
     const context = await authentication(req);
-    console.log('Context', context);
+    console.log(' --- ');
+    console.log(' ✓ Context User Id', _.get(context, 'user.id'));
+    console.log(' ✓ Context Agent Id', _.get(context, 'agent.id'));
+    console.log(' ✓ Context Bot Id', _.get(context, 'bot.id'));
+    console.log(' ✓ Context Creator Id', _.get(context, 'creator.id'));
+    console.log(' ✓ Context Creator Name', _.get(context, 'creator.constructor.name'));
+    console.log(' --- ');
     return context;
   }
 });

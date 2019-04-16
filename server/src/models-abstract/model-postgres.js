@@ -78,8 +78,7 @@ class ModelPostgres extends Model {
    * @param {string} [restrictions.userId]
    * @param {boolean} [restrictions.channelId]
    */
-  applyRestrictions(where, restrictions) {
-    if (!where) where = {};
+  applyRestrictions(where = {}, restrictions = {}) {
     if (!where[this.and]) where[this.and] = [];
 
     if (restrictions.channelId) {

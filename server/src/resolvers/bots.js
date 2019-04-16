@@ -26,8 +26,7 @@ async function create(root, args, options, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function all(root, args, context, info) {
-  const userId = _.get(context, 'user.id');
-  const datas = { ...args, userId };
+  const datas = { ...args };
   return await data.bots.getAll(datas);
 }
 
@@ -40,8 +39,7 @@ async function all(root, args, context, info) {
  */
 async function one(root, args, context, info) {
   const id = _.get(args, 'id');
-  const userId = _.get(context, 'user.id');
-  return await data.bots.getOne({ id }, null, { userId });
+  return await data.bots.getOne({ id });
 }
 
 module.exports = {

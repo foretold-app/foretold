@@ -22,20 +22,10 @@ class BotsData extends DataBase {
 
   /**
    * @param {object} options
-   * @param {string} [options.userId]
-   * @param {number} [options.offset]
-   * @param {number} [options.limit]
    * @return {Promise<*|Array<Model>>}
    */
   async getAll(options) {
-    const pagination = {
-      offset: options.offset,
-      limit: options.limit,
-    };
-    const restrictions = {
-      userId: options.userId,
-    };
-    return this.BotModel.getAll(options, pagination, restrictions);
+    return this.BotModel.getAll(options);
   }
 
   /**

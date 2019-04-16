@@ -5,6 +5,7 @@ const { isAuthenticated } = require('./users');
 const { isAdmin, isViewer } = require('./channel-memberships');
 const { isChannelPublic } = require('./channels');
 const measurables = require('./measurables');
+const bots = require('./bots');
 
 const rulesChannel = {
   Query: {},
@@ -25,6 +26,9 @@ const rulesChannelMemberships = {
 };
 
 const rules = {
+  Bot: {
+    jwt: bots.isOwner,
+  },
   Query: {
     '*': allow,
     permissions: allow,
@@ -34,8 +38,8 @@ const rules = {
     measurements: allow,
     measurable: allow,
     measurables: allow,
-    bot: isAuthenticated,
-    bots: isAuthenticated,
+    bot: allow,
+    bots: allow,
     agent: allow,
     agents: allow,
     series: allow,

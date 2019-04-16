@@ -23,11 +23,11 @@ class BotModel extends ModelPostgres {
 
   /**
    * @param {object} filter
-   * @param {object} pagination
-   * @param {object} restrictions
+   * @param {object} [pagination]
+   * @param {object} [restrictions]
    * @return {Promise<void>}
    */
-  async getAll(filter, pagination, restrictions) {
+  async getAll(filter, pagination = {}, restrictions = {}) {
     const where = {};
     this.applyRestrictions(where, restrictions);
     return await this.model.findAll({
@@ -44,7 +44,7 @@ class BotModel extends ModelPostgres {
    * @param {object} restrictions
    * @return {Promise<Models.Bot>}
    */
-  async getOne(params, query, restrictions) {
+  async getOne(params, query = {}, restrictions = {}) {
     const where = { id: params.id };
     this.applyRestrictions(where, restrictions);
     return await this.model.findOne({

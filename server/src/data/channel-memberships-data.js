@@ -109,7 +109,7 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @todo: createOneAs?
-   * @param options
+   * @param {object} options
    * @return {Promise<Models.ChannelMemberships>}
    */
   async join(options) {
@@ -123,7 +123,7 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @todo: updateOneAs?
-   * @param options
+   * @param {object} options
    * @return {Promise<Models.ChannelMemberships|null>}
    */
   async leave(options) {
@@ -134,7 +134,7 @@ class ChannelMembershipsData extends DataBase {
   }
 
   /**
-   * @param options
+   * @param {object} options
    * @return {Promise<string>}
    */
   async getOneOnlyRole(options) {
@@ -144,6 +144,17 @@ class ChannelMembershipsData extends DataBase {
       'role',
       ChannelMembershipModel.ROLES.NONE,
     );
+  }
+
+  /**
+   * @param {object} options
+   * @return {Promise<Models.ChannelMemberships[]>}
+   */
+  async getAllOnlyAdmins(options) {
+    return await this.getAll({
+      ...options,
+      role: ChannelMembershipModel.ROLES.ADMIN,
+    });
   }
 }
 

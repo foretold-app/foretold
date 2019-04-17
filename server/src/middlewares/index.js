@@ -1,5 +1,6 @@
 const { channel, channelByRoot } = require('./channels');
 const { channelMemberships } = require('./channel-memberships');
+const { channelMembershipsAdmins } = require('./channel-memberships');
 const { measurable, measurableByRoot } = require('./measurables');
 
 /**
@@ -27,6 +28,7 @@ const middlewares = {
     permissions: async (resolve, root, args, context, info) => {
       await channelByRoot(root, args, context, info);
       await channelMemberships(root, args, context, info);
+      await channelMembershipsAdmins(root, args, context, info);
       return await resolve(root, args, context, info);
     },
   },
@@ -44,6 +46,7 @@ const middlewares = {
       await measurable(root, args, context, info);
       await channel(root, args, context, info);
       await channelMemberships(root, args, context, info);
+      await channelMembershipsAdmins(root, args, context, info);
       return await resolve(root, args, context, info);
     },
   },

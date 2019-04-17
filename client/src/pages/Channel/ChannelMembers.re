@@ -106,7 +106,7 @@ let make =
             switch (record##role) {
             | "Viewer" =>
               E.React.showIf(
-                canX(`channelMembershipRoleUpdate, record),
+                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, record),
                 changeRoleAction(
                   record##agentId,
                   channelId,
@@ -116,7 +116,7 @@ let make =
               )
             | "Admin" =>
               E.React.showIf(
-                canX(`channelMembershipDelete, record),
+                canX(`CHANNEL_MEMBERSHIP_DELETE, record),
                 changeRoleAction(
                   record##agentId,
                   channelId,
@@ -136,7 +136,7 @@ let make =
         ~render=
           (~text, ~record, ~index) =>
             E.React.showIf(
-              canX(`channelMembershipRoleUpdate, record),
+              canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, record),
               removeFromChannel(record##agentId, channelId),
             ),
         (),

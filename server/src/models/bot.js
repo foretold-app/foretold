@@ -1,43 +1,33 @@
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Bot', {
-      id: {
-        type: DataTypes.UUID(),
-        primaryKey: true,
-        defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
-      },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      description: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      competitorType: {
-        type: DataTypes.ENUM(["COMPETITIVE", "AGGREGATION", "OBJECTIVE"]),
-        defaultValue: "COMPETITIVE",
-        allowNull: true,
-      },
+    id: {
+      type: DataTypes.UUID(),
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
     },
-    {
-      hooks: {
-        beforeCreate: async (event) => {
-          let agent = await sequelize.models.Agent.create({
-            type: "BOT",
-          });
-          event.agentId = agent.dataValues.id
-        }
-      }
-    });
+    name: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    competitorType: {
+      type: DataTypes.ENUM(["COMPETITIVE", "AGGREGATION", "OBJECTIVE"]),
+      defaultValue: "COMPETITIVE",
+      allowNull: true,
+    },
+  });
 
   Model.associate = function (models) {
     Model.User = Model.belongsTo(models.User, {
-      foreignKey: 'userId',
+      foreignKey: 'ownerUserId',
     });
 
     Model.Agent = Model.belongsTo(models.Agent, {
-      foreignKey: 'agentId',
+      foreignKey: 'ownerAgentId',
     })
   };
 

@@ -13,7 +13,8 @@ async function create(root, args, options, info) {
   const datas = {
     ...args.input,
     // required
-    userId: _.get(options, 'user.id'),
+    ownerUserId: _.get(options, 'user.id'),
+    ownerAgentId: _.get(options, 'agent.id'),
   };
   return await data.bots.createOne(datas);
 }

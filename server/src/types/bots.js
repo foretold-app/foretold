@@ -12,8 +12,8 @@ const bot = new graphql.GraphQLObjectType({
     competitorType: { type: require('./competitor').competitor },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    agentId: { type: graphql.GraphQLString },
-    userId: { type: graphql.GraphQLString },
+    ownerAgentId: { type: graphql.GraphQLString },
+    ownerUserId: { type: graphql.GraphQLString },
 
     jwt: {
       type: graphql.GraphQLString,

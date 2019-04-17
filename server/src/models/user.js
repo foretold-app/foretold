@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Model.Bots = Model.hasMany(models.Bot, {
-      foreignKey: 'userId',
+      foreignKey: 'ownerUserId',
     });
   };
 

@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Model.Bot = Model.hasOne(models.Bot, {
-      foreignKey: 'agentId',
+      foreignKey: 'ownerAgentId',
     });
 
     Model.Measurements = Model.hasMany(models.Measurement, {

@@ -25,7 +25,7 @@ async function channelMemberships(root, args, context, info) {
   if (channelId && agentId) {
     const channelMembership = await data.channelMemberships.getOne(compoundId);
     context.channelMembership = channelMembership;
-    context.channelMembershipsRole = _.get(channelMembership, 'role', []);
+    context.channelMembershipsRole = _.get(channelMembership, 'role');
   } else {
     context.channelMembership = null;
     context.channelMembershipsRole = null;

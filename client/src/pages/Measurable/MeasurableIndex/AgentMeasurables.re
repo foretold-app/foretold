@@ -2,7 +2,7 @@ open Utils;
 open Foretold__GraphQL;
 
 let make' = (loggedInUser, measurables) =>
-  <C.Measurables.BasicTable measurables loggedInUser showExtraData=true />;
+  <C.Measurables.BasicTable measurables showExtraData=true />;
 
 module GetMeasurablesReducerConfig = {
   type itemType = Context.Primary.Measurable.t;
@@ -67,7 +67,6 @@ let make =
           | (Success(measurables), None) =>
             <C.Measurables.BasicTable
               measurables
-              loggedInUser
               showExtraData=true
               onSelect=(
                 e =>

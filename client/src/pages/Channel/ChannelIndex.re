@@ -100,7 +100,6 @@ let make =
                          _ =>
                            Foretold__GraphQL.Mutations.ChannelJoin.mutate(
                              mutation,
-                             agent.id,
                              record##id,
                            )
                        }>

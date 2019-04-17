@@ -113,21 +113,16 @@ let tabs = (o: TopTab.t, channel: Context.Primary.Channel.t) =>
         )
       }
       {
-        button(
-          Options(Edit) |> toS,
-          Options(Edit) |> toUrl,
-          "Settings",
-          channel.id,
+        E.React.showIf(
+          channel.myRole === Some(`ADMIN),
+          button(
+            Options(Edit) |> toS,
+            Options(Edit) |> toUrl,
+            "Settings",
+            channel.id,
+          ),
         )
       }
-    </Antd.Radio.Group>
-  );
-
-let memberTabs = (o: MemberTab.t, channel: Context.Primary.Channel.t) =>
-  MemberTab.(
-    <Antd.Radio.Group defaultValue="" value={o |> toS} onChange={e => ()}>
-      {button(View |> toS, View |> toUrl, "List", channel.id)}
-      {button(Invite |> toS, Invite |> toUrl, "Invite", channel.id)}
     </Antd.Radio.Group>
   );
 
@@ -139,15 +134,28 @@ let editTabs = (o: InfoTab.t, channel: Context.Primary.Channel.t) =>
     </Antd.Radio.Group>
   );
 
-let leaveButton = (agent, channelId) =>
-  agent
-  |> E.O.fmap((e: Context.Primary.Agent.t) => e.id)
-  |> E.O.React.fmapOrNull(C.Channel.SimpleHeader.leaveChannel(channelId));
+let leaveButton = channelId => C.Channel.SimpleHeader.leaveChannel(channelId);
 
-let joinButton = (agent, channelId) =>
-  agent
-  |> E.O.fmap((e: Context.Primary.Agent.t) => e.id)
-  |> E.O.React.fmapOrNull(C.Channel.SimpleHeader.joinChannel(channelId));
+let joinButton = channelId => C.Channel.SimpleHeader.joinChannel(channelId);
+
+let memberTabs = (agent, o: MemberTab.t, channel: Context.Primary.Channel.t) =>
+  MemberTab.(
+    <Antd.Radio.Group defaultValue="" value={o |> toS} onChange={e => ()}>
+      {button(View |> toS, View |> toUrl, "List", channel.id)}
+      {
+        E.React.showIf(
+          channel.myRole !== Some(`NONE),
+          leaveButton(channel.id),
+        )
+      }
+      {
+        E.React.showIf(
+          channel.myRole === Some(`ADMIN),
+          button(Invite |> toS, Invite |> toUrl, "Invite", channel.id),
+        )
+      }
+    </Antd.Radio.Group>
+  );
 
 let make =
     (
@@ -172,26 +180,30 @@ let make =
           <>
             <Div float=`left> {channelink(channel)} </Div>
             <Div float=`right> {tabs(topOption, channel)} </Div>
+            {
+              E.React.showIf(
+                channel.myRole === Some(`NONE),
+                <Div float=`right> {joinButton(channel.id)} </Div>,
+              )
+            }
           </>
         )
         ||> E.HttpResponse.withReactDefaults,
       );
 
-    let foo =
+    let bottomHeader =
       loadChannel(
         E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
           switch (topOption) {
           | Members(r) =>
             <MainSection>
-              <Div float=`right> {memberTabs(r, channel)} </Div>
+              <Div float=`right>
+                {memberTabs(loggedInUser.agent, r, channel)}
+              </Div>
             </MainSection>
           | Options(r) =>
             <MainSection>
-              <Div float=`right>
-                {leaveButton(loggedInUser.agent, channel.id)}
-                {joinButton(loggedInUser.agent, channel.id)}
-                {editTabs(r, channel)}
-              </Div>
+              <Div float=`right> {editTabs(r, channel)} </Div>
             </MainSection>
           | _ => E.React.null
           }
@@ -202,7 +214,7 @@ let make =
     <Layout__Component__FillWithSidebar
       channelId={Some(channelId)} loggedInUser>
       <Header> top </Header>
-      foo
+      bottomHeader
       <MainSection> head </MainSection>
       <MainSection> body </MainSection>
     </Layout__Component__FillWithSidebar>;
@@ -217,7 +229,9 @@ let makeWithPage =
   let topOption = topOption(page);
 
   let layout = (channelId, fn) =>
-    makeWithEl(channelId, loggedInUser, topOption) |> fn |> E.React.makeToEl;
+    makeWithEl(channelId, loggedInUser, topOption)
+    |> fn
+    |> E.React.makeToEl(~key=channelId);
 
   switch (page) {
   | ChannelShow(channelId) =>
@@ -234,8 +248,7 @@ let makeWithPage =
   | MeasurableNew(channelId) =>
     MeasurableNew.make(~channelId, ~layout=_) |> layout(channelId)
   | ChannelMembers(channelId) =>
-    ChannelMembers.make(~channelId, ~loggedInUser, ~layout=_)
-    |> layout(channelId)
+    ChannelMembers.make(~channelId, ~layout=_) |> layout(channelId)
   | ChannelInvite(channelId) =>
     ChannelInvite.make(~channelId, ~loggedInUser, ~layout=_)
     |> layout(channelId)

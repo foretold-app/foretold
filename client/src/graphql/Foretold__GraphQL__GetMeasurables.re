@@ -39,6 +39,7 @@ type measurable = {
   measurementCount: option(int),
   measurerCount: option(int),
   labelSubject: option(string),
+  iAmOwner: bool,
   createdAt: MomentRe.Moment.t,
   updatedAt: MomentRe.Moment.t,
   expectedResolutionDate: option(MomentRe.Moment.t),
@@ -71,6 +72,7 @@ let toMeasurable = (m: measurable): Context.Primary.Measurable.t =>
     ~stateUpdatedAt=m.stateUpdatedAt,
     ~creator=E.O.fmap(toAgent, m.creator),
     ~series=E.O.fmap(toSeries, m.series),
+    ~iAmOwner=Some(m.iAmOwner),
     (),
   );
 
@@ -93,6 +95,7 @@ module Query = [%graphql
            measurerCount
            labelSubject
            labelProperty
+           iAmOwner
            labelOnDate @bsDecoder(fn: "E.J.O.toMoment")
            state @bsDecoder(fn: "Context.Primary.MeasurableState.fromEnum")
            stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")

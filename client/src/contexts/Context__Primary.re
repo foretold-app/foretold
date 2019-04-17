@@ -2,6 +2,24 @@ open Rationale.Function.Infix;
 open Utils;
 
 type channelMembershipRole = [ | `ADMIN | `VIEWER];
+type myMembershipRole = [ | `ADMIN | `VIEWER | `NONE];
+type permission = [
+  | `channelCreate
+  | `channelMembershipCreate
+  | `channelMembershipDelete
+  | `channelMembershipRoleUpdate
+  | `channelUpdate
+  | `joinChannel
+  | `leaveChannel
+  | `measurableArchive
+  | `measurableCreate
+  | `measurableUnarchive
+  | `measurableUpdate
+  | `measurementCreate
+  | `seriesCreate
+  | `userUpdate
+];
+
 module ChannelMembershipRole = {
   type t = channelMembershipRole;
   let toString = (t: t) =>
@@ -13,6 +31,7 @@ module ChannelMembershipRole = {
 
 type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
 module Types = {
+  type permissions = {allow: list(permission)};
   type user = {
     id: string,
     auth0Id: option(string),
@@ -46,12 +65,31 @@ module Types = {
     isPublic: bool,
     membershipCount: option(int),
     creator: option(agent),
+    myRole: option(myMembershipRole),
     channelMemberships: option(Js.Array.t(channelMembership)),
   }
   and channelMembership = {
     channel: option(channel),
     role: channelMembershipRole,
     agent: option(agent),
+    permissions: option(permissions),
+  };
+};
+
+module Permissions = {
+  type t = Types.permissions;
+  let make = (a: list(permission)): t => {allow: a};
+  let canX = (permission: permission, t: t): bool =>
+    t.allow |> E.L.exists(r => r == permission);
+};
+
+module ChannelMembership = {
+  type t = Types.channelMembership;
+  let make = (~role, ~channel=None, ~agent=None, ~permissions=None, ()): t => {
+    role,
+    channel,
+    agent,
+    permissions,
   };
 };
 
@@ -161,6 +199,7 @@ module Channel = {
         ~isPublic,
         ~creator=None,
         ~membershipCount=None,
+        ~myRole=None,
         ~channelMemberships=None,
         (),
       )
@@ -172,6 +211,7 @@ module Channel = {
     isPublic,
     membershipCount,
     creator,
+    myRole,
     channelMemberships,
   };
 };
@@ -295,6 +335,7 @@ module Measurable = {
     creator: option(Agent.t),
     measurements: option(list(Measurement.t)),
     series: option(Series.t),
+    iAmOwner: option(bool),
   };
 
   let toStatus = (measurable: t) => {
@@ -341,6 +382,7 @@ module Measurable = {
         ~labelProperty=None,
         ~labelCustom=None,
         ~series=None,
+        ~iAmOwner=None,
         (),
       ) => {
     id,
@@ -363,5 +405,6 @@ module Measurable = {
     labelProperty,
     labelCustom,
     series,
+    iAmOwner,
   };
 };

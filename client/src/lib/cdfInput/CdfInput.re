@@ -58,7 +58,9 @@ let getValue = state =>
   switch (state.dataType) {
   | "FLOAT_CDF" =>
     `FloatCdf(
-      MeasurementValue.FloatCdf.fromArrays(state.floatCdf |> (e => (e.ys, e.xs))),
+      MeasurementValue.FloatCdf.fromArrays(
+        state.floatCdf |> (e => (e.ys, e.xs)),
+      ),
     )
   | _ =>
     let point = Array.unsafe_get(state.floatCdf.xs, 0);
@@ -82,7 +84,8 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
               state.floatCdf
               |> (e => (e.xs, e.ys))
               |> MeasurementValue.FloatCdf.fromArrays
-              |> MeasurementValue.toPdf(~bucketSize=20)
+              |> MeasurementValue.toChunks(~bucketSize=20)
+              |> MeasurementValue.toPdf
               |> MeasurementValue.FloatCdf.toPoints
             }
           /> :
@@ -107,6 +110,7 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
       <div className=Styles.inputBox>
         <h4 className=Styles.label> {"Value" |> ste} </h4>
         <GuesstimateInput
+          focusOnRender=true
           sampleCount=1000
           onUpdate={
             e =>

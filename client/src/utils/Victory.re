@@ -7,14 +7,14 @@ type victoryData = {
 module VictoryTheme = {
   type t;
   [@bs.module "victory-core/es/victory-theme/material"] [@bs.val]
-  external material : t = "default";
+  external material: t = "default";
   [@bs.module "victory-core/es/victory-theme/grayscale"] [@bs.val]
-  external grayscale : t = "default";
+  external grayscale: t = "default";
 };
 
 module VictoryBar = {
   [@bs.module "victory"]
-  external victoryBar : ReasonReact.reactClass = "VictoryBar";
+  external victoryBar: ReasonReact.reactClass = "VictoryBar";
   let make = (~data=?, children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=victoryBar,
@@ -25,7 +25,7 @@ module VictoryBar = {
 
 module VictoryStack = {
   [@bs.module "victory"]
-  external victoryStack : ReasonReact.reactClass = "VictoryStack";
+  external victoryStack: ReasonReact.reactClass = "VictoryStack";
   let make = (~colorScale=?, children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=victoryStack,
@@ -36,7 +36,7 @@ module VictoryStack = {
 
 module VictoryChart = {
   [@bs.module "victory"]
-  external victoryChart : ReasonReact.reactClass = "VictoryChart";
+  external victoryChart: ReasonReact.reactClass = "VictoryChart";
   let make =
       (
         ~domainPadding=?,
@@ -67,7 +67,7 @@ module VictoryChart = {
 
 module VictoryAxis = {
   [@bs.module "victory"]
-  external victoryAxis : ReasonReact.reactClass = "VictoryAxis";
+  external victoryAxis: ReasonReact.reactClass = "VictoryAxis";
   let make =
       (
         ~tickValues=?,
@@ -94,9 +94,9 @@ module VictoryAxis = {
 
 module VictoryArea = {
   [@bs.module "victory"]
-  external victoryArea : ReasonReact.reactClass = "VictoryArea";
+  external victoryArea: ReasonReact.reactClass = "VictoryArea";
   let make =
-      (~animate=?, ~data=?, ~interpolation="linear", ~style=?, children) =>
+      (~animate=?, ~data=?, ~interpolation="stepBefore", ~style=?, children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=victoryArea,
       ~props={
@@ -111,7 +111,7 @@ module VictoryArea = {
 
 module VictoryLine = {
   [@bs.module "victory"]
-  external victoryLine : ReasonReact.reactClass = "VictoryLine";
+  external victoryLine: ReasonReact.reactClass = "VictoryLine";
   let make = (~data=?, ~style=?, children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=victoryLine,
@@ -125,7 +125,7 @@ module VictoryLine = {
 
 module VictoryScatter = {
   [@bs.module "victory"]
-  external victoryScatter : ReasonReact.reactClass = "victoryScatter";
+  external victoryScatter: ReasonReact.reactClass = "victoryScatter";
   let make = (~data=?, ~style=?, children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=victoryScatter,
@@ -139,7 +139,7 @@ module VictoryScatter = {
 
 module VictoryMeasurement = {
   [@bs.module "./VictoryMeasurement.js"]
-  external victoryMeasurement : ReasonReact.reactClass = "VictoryMeasurement";
+  external victoryMeasurement: ReasonReact.reactClass = "VictoryMeasurement";
   let make = (~point=?, ~scale=?, ~color=?, children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=victoryMeasurement,

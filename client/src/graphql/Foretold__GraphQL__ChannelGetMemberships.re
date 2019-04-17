@@ -8,6 +8,11 @@ module Query = [%graphql
         id
         channelMemberships{
             role
+            permissions {
+              mutations {
+                allow
+              }
+            }
             agent {
                 id
                 name
@@ -32,6 +37,33 @@ type innerType = {
             "id": string,
             "name": option(string),
           }),
+        "permissions": {
+          .
+          "mutations": {
+            .
+            "allow":
+              Js.Array.t(
+                option(
+                  [
+                    | `channelCreate
+                    | `channelMembershipCreate
+                    | `channelMembershipDelete
+                    | `channelMembershipRoleUpdate
+                    | `channelUpdate
+                    | `joinChannel
+                    | `leaveChannel
+                    | `measurableArchive
+                    | `measurableCreate
+                    | `measurableUnarchive
+                    | `measurableUpdate
+                    | `measurementCreate
+                    | `seriesCreate
+                    | `userUpdate
+                  ],
+                ),
+              ),
+          },
+        },
         "role": [ | `ADMIN | `VIEWER],
       }),
     ),
@@ -54,7 +86,18 @@ let toChannelMemberships =
                  ~name=r##agent |> E.O.bind(_, r => r##name),
                  (),
                );
-             {channel: None, role: r##role, agent: Some(agent)};
+             let allowMutations =
+               r##permissions##mutations##allow
+               |> E.A.O.concatSome
+               |> E.A.to_list;
+             let permissions =
+               Context.Primary.Permissions.make(allowMutations);
+             Context.Primary.ChannelMembership.make(
+               ~role=r##role,
+               ~agent=Some(agent),
+               ~permissions=Some(permissions),
+               (),
+             );
            })
     );
   channelMemberships;

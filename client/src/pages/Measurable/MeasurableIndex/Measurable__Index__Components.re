@@ -6,16 +6,6 @@ open Measurable__Index__Logic;
 
 module ReducerParams = SelectWithPaginationReducer.Reducers.ReducerParams;
 
-let leaveButton = (agent, channelId) =>
-  agent
-  |> E.O.fmap((e: Context.Primary.Agent.t) => e.id)
-  |> E.O.React.fmapOrNull(C.Channel.SimpleHeader.leaveChannel(channelId));
-
-let joinButton = (agent, channelId) =>
-  agent
-  |> E.O.fmap((e: Context.Primary.Agent.t) => e.id)
-  |> E.O.React.fmapOrNull(C.Channel.SimpleHeader.joinChannel(channelId));
-
 module LoadedAndSelected = {
   open Measurable__Index__Logic.LoadedAndSelected;
 
@@ -36,7 +26,8 @@ module LoadedAndSelected = {
 
   let body = (t: t) =>
     <C.Measurable.FullPresentation
-      id={t.selectedMeasurable |> (e => e.id)}
+      id={t.selectedMeasurable.id}
+      key={t.selectedMeasurable.id}
       loggedInUser={t.loggedInUser}
     />;
 };
@@ -72,12 +63,10 @@ module LoadedAndUnselected = {
         }
       )
       |> E.O.toExn("");
-    let loggedInUser = t.loggedInUser;
     <>
       {E.React.showIf(shouldShowSeriesCollection(t), seriesList(t))}
       <C.Measurables.BasicTable
         measurables
-        loggedInUser
         showExtraData=true
         onSelect={
           e =>

@@ -34,7 +34,7 @@ module SimpleHeader = {
   let inviteToChannel = channelId =>
     buttonr("Invite Members", ChannelInvite(channelId));
 
-  let leaveChannel = (channelId: string, agentId: string) =>
+  let leaveChannel = (channelId: string) =>
     Foretold__GraphQL.Mutations.ChannelLeave.Mutation.make((mutation, _) =>
       <Div float=`right>
         <Antd.Button
@@ -42,7 +42,6 @@ module SimpleHeader = {
             _ =>
               Foretold__GraphQL.Mutations.ChannelLeave.mutate(
                 mutation,
-                agentId,
                 channelId,
               )
           }>
@@ -52,7 +51,7 @@ module SimpleHeader = {
     )
     |> E.React.el;
 
-  let joinChannel = (channelId, agentId) =>
+  let joinChannel = channelId =>
     Foretold__GraphQL.Mutations.ChannelJoin.Mutation.make((mutation, _) =>
       <Div float=`right>
         <Antd.Button
@@ -60,7 +59,6 @@ module SimpleHeader = {
             _ =>
               Foretold__GraphQL.Mutations.ChannelJoin.mutate(
                 mutation,
-                agentId,
                 channelId,
               )
           }>

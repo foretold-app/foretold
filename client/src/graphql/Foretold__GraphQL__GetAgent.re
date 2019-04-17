@@ -51,6 +51,8 @@ let unpackEdges = (a: connection('a)): array('a) => {
     |> E.A.O.concatSome;
   response;
 };
+/* |> E.O.fmap(b => b##edges |> E.A.O.defaultEmpty)
+   |> E.O.toExn("Expected items"); */
 
 module Query = [%graphql
   {|

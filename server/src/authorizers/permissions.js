@@ -2,11 +2,11 @@ const _ = require('lodash');
 const { shield, allow, and, or, not } = require('graphql-shield');
 
 const { isAuthenticated } = require('./agents');
+const { isChannelPublic } = require('./channels');
 const { isAdmin, isViewer, isInChannel } = require('./channel-memberships');
-const { isMinOneAdmin } = require('./channel-memberships');
+const { isMoreThenOneAdmin } = require('./channel-memberships');
 const { isSubjectAsObject } = require('./channel-memberships');
 const { isObjectAdmin } = require('./channel-memberships');
-const { isChannelPublic } = require('./channels');
 const measurables = require('./measurables');
 const bots = require('./bots');
 
@@ -17,7 +17,7 @@ const rulesChannel = {
     leaveChannel: and(
       isAuthenticated,
       isInChannel,
-      or(and(isAdmin, isMinOneAdmin), not(isAdmin)),
+      or(and(isAdmin, isMoreThenOneAdmin), not(isAdmin)),
     ),
     joinChannel: and(isAuthenticated, isChannelPublic, not(isInChannel)),
     channelMembershipCreate: and(isAuthenticated, isAdmin),
@@ -30,7 +30,7 @@ const rulesChannelMemberships = {
     channelMembershipDelete: and(
       isAuthenticated,
       isAdmin,
-      or(and(isObjectAdmin, isMinOneAdmin), not(isObjectAdmin)),
+      or(and(isObjectAdmin, isMoreThenOneAdmin), not(isObjectAdmin)),
     ),
     channelMembershipRoleUpdate: and(
       isAuthenticated,

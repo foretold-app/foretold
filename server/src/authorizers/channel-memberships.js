@@ -45,7 +45,7 @@ async function isInChannelRule(root, args, context, info) {
  * @param {object} info
  * @return {Promise<boolean>}
  */
-async function isMinOneAdminRule(root, args, context, info) {
+async function isMoreThenOneAdminRule(root, args, context, info) {
   const channelMembershipsAdmins = _.get(context, 'channelMembershipsAdmins');
   const result =
     _.isArray(channelMembershipsAdmins) &&
@@ -96,7 +96,7 @@ const isViewer = rule({ cache: 'no_cache' })(isViewerRule);
 /** @type {Rule} */
 const isInChannel = rule({ cache: 'no_cache' })(isInChannelRule);
 /** @type {Rule} */
-const isMinOneAdmin = rule({ cache: 'no_cache' })(isMinOneAdminRule);
+const isMoreThenOneAdmin = rule({ cache: 'no_cache' })(isMoreThenOneAdminRule);
 /** @type {Rule} */
 const isSubjectAsObject = rule({ cache: 'no_cache' })(isSubjectAsObjectRule);
 /** @type {Rule} */
@@ -106,7 +106,7 @@ module.exports = {
   isAdmin,
   isViewer,
   isInChannel,
-  isMinOneAdmin,
+  isMoreThenOneAdmin,
   isSubjectAsObject,
   isObjectAdmin,
 

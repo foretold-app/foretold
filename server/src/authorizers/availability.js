@@ -68,7 +68,7 @@ async function availableAll(root, args, context, info) {
  * @param {object} info
  * @returns {Promise<*>}
  */
-async function availableChannelMutations(root, args, context, info) {
+async function availableChannelPermissions(root, args, context, info) {
   return getAll(rulesChannel)(root, args, context, info);
 }
 
@@ -79,7 +79,7 @@ async function availableChannelMutations(root, args, context, info) {
  * @param {object} info
  * @returns {Promise<*>}
  */
-async function availableChannelMembershipsMutations(root, args, context, info) {
+async function availableChannelMembershipsPermissions(root, args, context, info) {
   return getAll(rulesChannelMemberships)(root, args, context, info);
 }
 
@@ -96,7 +96,7 @@ async function availableMeasurablesPermissions(root, args, context, info) {
 
 module.exports = {
   availableAll,
-  availableChannelMutations,
+  availableChannelPermissions,
   availableMeasurablesPermissions,
-  availableChannelMembershipsMutations,
+  availableChannelMembershipsPermissions,
 };

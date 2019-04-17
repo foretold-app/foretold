@@ -18,8 +18,8 @@ async function all(root, args, context, info) {
  * @param {object} info
  * @returns {Promise<*>}
  */
-async function channelMutations(root, args, context, info) {
-  return authorizers.availableChannelMutations(root, args, context, info);
+async function channelPermissions(root, args, context, info) {
+  return authorizers.availableChannelPermissions(root, args, context, info);
 }
 
 /**
@@ -29,8 +29,8 @@ async function channelMutations(root, args, context, info) {
  * @param {object} info
  * @returns {Promise<*>}
  */
-async function channelMembershipsMutations(root, args, context, info) {
-  return authorizers.availableChannelMembershipsMutations(root, args, context, info);
+async function channelMembershipsPermissions(root, args, context, info) {
+  return authorizers.availableChannelMembershipsPermissions(root, args, context, info);
 }
 
 /**
@@ -46,7 +46,7 @@ async function measurablesPermissions(root, args, context, info) {
 
 module.exports = {
   all,
-  channelMutations,
+  channelPermissions,
   measurablesPermissions,
-  channelMembershipsMutations,
+  channelMembershipsPermissions,
 };

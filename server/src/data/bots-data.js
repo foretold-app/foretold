@@ -22,6 +22,15 @@ class BotsData extends DataBase {
   }
 
   /**
+   * @param {object} params
+   * @param {object} data
+   * @return {Promise<*>}
+   */
+  async updateOne(params, data) {
+    return await this.BotModel.updateOne(params, data);
+  }
+
+  /**
    * @todo: fix interface (filter, pagination, options)
    * @param {object} options
    * @return {Promise<*|Array<Model>>}

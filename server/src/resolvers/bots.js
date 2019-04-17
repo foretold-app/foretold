@@ -4,7 +4,6 @@ const data = require('../data');
 /**
  * @param {*} root
  * @param {object} args
- * @param {string} args.id
  * @param {object} args.input
  * @param {Schema.Context} options
  * @param {object} info
@@ -17,6 +16,19 @@ async function create(root, args, options, info) {
     userId: _.get(options, 'user.id'),
   };
   return await data.bots.createOne(datas);
+}
+
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {string} args.id
+ * @param {object} args.input
+ * @param {Schema.Context} options
+ * @param {object} info
+ * @returns {Promise<Models.User>}
+ */
+async function update(root, args, options, info) {
+  return await data.bots.updateOne({ id: args.id }, args.input);
 }
 
 /**
@@ -46,5 +58,6 @@ async function one(root, args, context, info) {
 module.exports = {
   all,
   one,
+  update,
   create,
 };

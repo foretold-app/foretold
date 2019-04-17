@@ -22,6 +22,18 @@ class BotModel extends ModelPostgres {
   }
 
   /**
+   * @param {object} params
+   * @param {object} data
+   * @return {data}
+   */
+  createOne(params, data) {
+    return this.model.update(
+      data,
+      { where: params }
+    );
+  }
+
+  /**
    * @param {object} filter
    * @param {object} [pagination]
    * @param {object} [restrictions]

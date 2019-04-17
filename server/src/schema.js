@@ -282,6 +282,15 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.bots.create,
       },
 
+      botUpdate: {
+        type: types.bots.bot,
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          input: { type: graphql.GraphQLNonNull(types.bots.botInput) },
+        },
+        resolve: resolvers.bots.update,
+      },
+
     }
   })
 });

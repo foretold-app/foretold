@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const changeCase = require('change-case');
 
 const { rules } = require('./permissions');
 const { rulesChannelMemberships } = require('./permissions');
@@ -17,15 +18,19 @@ function getList(rules) {
     for (const ruleName in rules) {
       const rule = rules[ruleName];
       const resolving = await rule.resolve(root, args, context, info);
+
+      const ruleNameUpperCase = changeCase.constantCase(ruleName);
       if (resolving === true) {
-        allow.push(ruleName);
+        allow.push(ruleNameUpperCase);
       } else {
-        deny.push(ruleName);
+        deny.push(ruleNameUpperCase);
       }
     }
 
     _.pull(allow, '*');
     _.pull(deny, '*');
+    _.pull(allow, '');
+    _.pull(deny, '');
 
     return { allow, deny };
   };

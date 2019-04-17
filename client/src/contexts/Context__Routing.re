@@ -42,6 +42,7 @@ module Route = {
     | ["entities", ...id] => EntityShow(String.concat("/", id))
     | ["channels", "new"] => ChannelNew
     | ["channels"] => ChannelIndex
+    | ["bots", "new"] => BotCreate
     | ["c"] => ChannelIndex
     | ["c", id] => ChannelShow(id)
     | ["c", id, "new"] => MeasurableNew(id)

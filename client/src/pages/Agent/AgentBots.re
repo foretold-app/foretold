@@ -1,13 +1,29 @@
 open Utils;
 open Foretold__GraphQL;
 open Css;
+open Style.Grid;
 
 let block = style([marginBottom(`em(1.0))]);
 let notFound = "Agent not found" |> ste |> E.React.inH3;
 
 let agentSection = (e: Queries.Agent.agent) =>
   switch (e) {
-  | {user: Some(r)} => r.name ++ ": Bots" |> ste |> E.React.inH1
+  | {user: Some(r)} =>
+    <>
+      {SLayout.Header.textDiv(r.name ++ ": Bots")}
+      {
+        E.React.showIf(
+          e.isMe,
+          <Div float=`right>
+            <Antd.Button
+              onClick={_ => Context.Routing.Url.push(BotCreate)}
+              _type=`primary>
+              {"New Bot" |> ste}
+            </Antd.Button>
+          </Div>,
+        )
+      }
+    </>
   | _ => notFound
   };
 

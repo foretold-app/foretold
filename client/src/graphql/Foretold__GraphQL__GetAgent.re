@@ -39,6 +39,7 @@ type agent = {
   user: option(user),
   bot: option(bot),
   measurements: connection(node),
+  isMe: bool,
 };
 
 let unpackEdges = (a: connection('a)): array('a) => {
@@ -56,6 +57,7 @@ module Query = [%graphql
     query getAgent ($id: String!) {
         agent:
         agent(id: $id) @bsRecord{
+        isMe
         user: User @bsRecord{
           id
           name

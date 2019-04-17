@@ -19,7 +19,7 @@ const bot = new graphql.GraphQLObjectType({
 
     jwt: {
       type: graphql.GraphQLString,
-      resolve: require('../resolvers/authentications').getJwtByAgentId,
+      resolve: require('../resolvers/authentications').getJwtByOwnerAgentId,
     },
 
     Agent: {

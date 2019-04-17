@@ -29,7 +29,21 @@ async function getJwtByAgentId(root, args, context, info) {
   return await authentication.getJwtByAgentId(botAgentId);
 }
 
+/**
+ * @param {object | null} root
+ * @param {object} args
+ * @param {string} args.id
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+async function getJwtByOwnerAgentId(root, args, context, info) {
+  const botOwnerAgentId = _.get(root, 'ownerAgentId');
+  return await authentication.getJwtByAgentId(botOwnerAgentId);
+}
+
 module.exports = {
   getJwtByAuth0Jwt,
   getJwtByAgentId,
+  getJwtByOwnerAgentId,
 };

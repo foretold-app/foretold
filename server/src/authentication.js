@@ -94,6 +94,9 @@ async function authenticationByJwtToken(token) {
     const user = await agent.getUser();
     const creator = bot || user;
 
+    if (!bot) throw new Error('Not authenticated');
+    if (!user) throw new Error('Not authenticated');
+
     return { agent, bot, user, creator };
   } catch (err) {
     throw err;

@@ -30,7 +30,7 @@ const channelsMembership = new graphql.GraphQLObjectType({
 
     permissions: {
       type: graphql.GraphQLNonNull(require('./permissions').permissions),
-      resolve: resolvers.permissions.channelMembershipsMutations,
+      resolve: resolvers.permissions.channelMembershipsPermissions,
     },
 
     channel: {

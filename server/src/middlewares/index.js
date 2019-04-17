@@ -1,6 +1,6 @@
 const { channel, channelByRoot } = require('./channels');
 const { channelMemberships } = require('./channel-memberships');
-const { measurable } = require('./measurables');
+const { measurable, measurableByRoot } = require('./measurables');
 
 /**
  * Do not try to use DRY principle here.
@@ -11,6 +11,15 @@ const middlewares = {
     jwt: async (resolve, root, args, context, info) => {
       const result = await resolve(root, args, context, info);
       return (result instanceof Error) ? null : result;
+    },
+  },
+
+  Measurable: {
+    permissions: async (resolve, root, args, context, info) => {
+      await measurableByRoot(root, args, context, info);
+      await channel(root, args, context, info);
+      await channelMemberships(root, args, context, info);
+      return await resolve(root, args, context, info);
     },
   },
 

@@ -58,10 +58,15 @@ const botsConnection = createConnection({
   connectionFields: {
     total: {
       type: graphql.GraphQLInt,
-      resolve: ({ fullCount }) => fullCount
+      resolve: async ({ fullCount, where }) => {
+        if (!fullCount) {
+          return models.Bot.count({ where });
+        }
+        return fullCount;
+      },
     }
   },
-  where: function (key, value) {
+  where: (key, value) => {
     return { [key]: value };
   },
 });

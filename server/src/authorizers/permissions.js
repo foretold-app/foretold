@@ -3,6 +3,9 @@ const { shield, allow, and, or, not } = require('graphql-shield');
 
 const { isAuthenticated } = require('./agents');
 const { isAdmin, isViewer, isInChannel } = require('./channel-memberships');
+const { isMinOneAdmin } = require('./channel-memberships');
+const { isSubjectAsObject } = require('./channel-memberships');
+const { isObjectAdmin } = require('./channel-memberships');
 const { isChannelPublic } = require('./channels');
 const measurables = require('./measurables');
 const bots = require('./bots');
@@ -11,7 +14,11 @@ const rulesChannel = {
   Query: {},
   Mutation: {
     channelUpdate: and(isAuthenticated, isAdmin),
-    leaveChannel: and(isAuthenticated, isInChannel),
+    leaveChannel: and(
+      isAuthenticated,
+      isInChannel,
+      or(and(isAdmin, isMinOneAdmin), not(isAdmin)),
+    ),
     joinChannel: and(isAuthenticated, isChannelPublic, not(isInChannel)),
     channelMembershipCreate: and(isAuthenticated, isAdmin),
   }
@@ -20,8 +27,16 @@ const rulesChannel = {
 const rulesChannelMemberships = {
   Query: {},
   Mutation: {
-    channelMembershipDelete: and(isAuthenticated, isAdmin),
-    channelMembershipRoleUpdate: and(isAuthenticated, isAdmin),
+    channelMembershipDelete: and(
+      isAuthenticated,
+      isAdmin,
+      or(and(isObjectAdmin, isMinOneAdmin), not(isObjectAdmin)),
+    ),
+    channelMembershipRoleUpdate: and(
+      isAuthenticated,
+      isAdmin,
+      or(isObjectAdmin, and(not(isObjectAdmin), not(isSubjectAsObject))),
+    ),
   }
 };
 

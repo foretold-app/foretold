@@ -2,6 +2,7 @@ const _ = require('lodash');
 const { rule } = require('graphql-shield');
 
 const models = require('../models');
+const { CHANNEL_MEMBERSHIP_ROLES } = require('../models/channel-membership-roles');
 
 /**
  * @param {string} roleName
@@ -44,12 +45,43 @@ async function isInChannelRule(root, args, context, info) {
  * @param {object} info
  * @return {Promise<boolean>}
  */
-async function isOnlyOneAdminRule(root, args, context, info) {
+async function isMinOneAdminRule(root, args, context, info) {
   const channelMembershipsAdmins = _.get(context, 'channelMembershipsAdmins');
   const result =
     _.isArray(channelMembershipsAdmins) &&
-    _.size(channelMembershipsAdmins) === 1;
+    _.size(channelMembershipsAdmins) > 1;
   console.log(`\x1b[33m Rule Channel Memberships (onlyOneAdminRule) ` +
+    `result = ${result} \x1b[0m`);
+  return result;
+}
+
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @return {Promise<boolean>}
+ */
+async function isSubjectAsObjectRule(root, args, context, info) {
+  const objectAgentId = _.get(args, 'input.agentId');
+  const subjectAgentId = _.get(context, 'agent.id');
+  const result = !!objectAgentId && objectAgentId === subjectAgentId;
+  console.log(`\x1b[33m Rule Channel Memberships (isSubjectAsObjectRule) ` +
+    `result = ${result} \x1b[0m`);
+  return result;
+}
+
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @return {Promise<boolean>}
+ */
+async function isObjectAdminRule(root, args, context, info) {
+  const role = _.get(args, 'input.role');
+  const result = !!role && role === CHANNEL_MEMBERSHIP_ROLES.ADMIN;
+  console.log(`\x1b[33m Rule Channel Memberships (isObjectAdminRule) ` +
     `result = ${result} \x1b[0m`);
   return result;
 }
@@ -64,13 +96,19 @@ const isViewer = rule({ cache: 'no_cache' })(isViewerRule);
 /** @type {Rule} */
 const isInChannel = rule({ cache: 'no_cache' })(isInChannelRule);
 /** @type {Rule} */
-const isOnlyOneAdmin = rule({ cache: 'no_cache' })(isOnlyOneAdminRule);
+const isMinOneAdmin = rule({ cache: 'no_cache' })(isMinOneAdminRule);
+/** @type {Rule} */
+const isSubjectAsObject = rule({ cache: 'no_cache' })(isSubjectAsObjectRule);
+/** @type {Rule} */
+const isObjectAdmin = rule({ cache: 'no_cache' })(isObjectAdminRule);
 
 module.exports = {
   isAdmin,
   isViewer,
   isInChannel,
-  isOnlyOneAdmin,
+  isMinOneAdmin,
+  isSubjectAsObject,
+  isObjectAdmin,
 
   isAdminRule,
   isViewerRule,

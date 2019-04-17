@@ -29,8 +29,8 @@ const rulesMeasurables = {
   Query: {},
   Mutation: {
     measurableCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
-    measurableArchive: and(isAuthenticated, measurables.isOwner),
-    measurableUnarchive: and(isAuthenticated, measurables.isOwner),
+    measurableArchive: and(isAuthenticated, measurables.isOwner, not(measurables.isArchived)),
+    measurableUnarchive: and(isAuthenticated, measurables.isOwner, measurables.isArchived),
     measurableUpdate: and(isAuthenticated, measurables.isOwner),
   }
 };

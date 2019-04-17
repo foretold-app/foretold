@@ -37,6 +37,23 @@ async function isInChannelRule(root, args, context, info) {
   return result;
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @return {Promise<boolean>}
+ */
+async function isOnlyOneAdminRule(root, args, context, info) {
+  const channelMembershipsAdmins = _.get(context, 'channelMembershipsAdmins');
+  const result =
+    _.isArray(channelMembershipsAdmins) &&
+    _.size(channelMembershipsAdmins) === 1;
+  console.log(`\x1b[33m Rule Channel Memberships (onlyOneAdminRule) ` +
+    `result = ${result} \x1b[0m`);
+  return result;
+}
+
 const isAdminRule = roleRule(models.ChannelMemberships.ROLE.ADMIN);
 const isViewerRule = roleRule(models.ChannelMemberships.ROLE.VIEWER);
 
@@ -46,11 +63,14 @@ const isAdmin = rule({ cache: 'no_cache' })(isAdminRule);
 const isViewer = rule({ cache: 'no_cache' })(isViewerRule);
 /** @type {Rule} */
 const isInChannel = rule({ cache: 'no_cache' })(isInChannelRule);
+/** @type {Rule} */
+const isOnlyOneAdmin = rule({ cache: 'no_cache' })(isOnlyOneAdminRule);
 
 module.exports = {
   isAdmin,
   isViewer,
   isInChannel,
+  isOnlyOneAdmin,
 
   isAdminRule,
   isViewerRule,

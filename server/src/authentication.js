@@ -55,7 +55,7 @@ function decodeJwtToken(token) {
  * @param {string} subject
  * @return {string}
  */
-function encondeJWT(payload, subject) {
+function encodeJWT(payload, subject) {
   return jwt.sign(payload, JWT_SECRET, {
     expiresIn: JWT_EXPIN,
     issuer: JWT_ISSUER,
@@ -109,7 +109,7 @@ async function getJwtByAuth0Jwt(token) {
     const user = await authenticationByAuth0JwtToken(token);
     const agentId = user.agentId;
     const payload = {};
-    return encondeJWT(payload, agentId);
+    return encodeJWT(payload, agentId);
   } catch (err) {
     throw err;
   }
@@ -122,7 +122,7 @@ async function getJwtByAuth0Jwt(token) {
 async function getJwtByAgentId(agentId) {
   try {
     const payload = {};
-    return encondeJWT(payload, agentId);
+    return encodeJWT(payload, agentId);
   } catch (err) {
     throw err;
   }

@@ -10,10 +10,12 @@ const bot = new graphql.GraphQLObjectType({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     description: { type: graphql.GraphQLString },
     competitorType: { type: require('./competitor').competitor },
+
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    ownerAgentId: { type: graphql.GraphQLString },
-    ownerUserId: { type: graphql.GraphQLString },
+
+    ownerAgentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    ownerUserId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
 
     jwt: {
       type: graphql.GraphQLString,

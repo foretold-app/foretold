@@ -50,7 +50,7 @@ async function isMoreThenOneAdminRule(root, args, context, info) {
   const result =
     _.isArray(channelMembershipsAdmins) &&
     _.size(channelMembershipsAdmins) > 1;
-  console.log(`\x1b[33m Rule Channel Memberships (onlyOneAdminRule) ` +
+  console.log(`\x1b[33m Rule Channel Memberships (isMoreThenOneAdminRule) ` +
     `result = ${result} \x1b[0m`);
   return result;
 }

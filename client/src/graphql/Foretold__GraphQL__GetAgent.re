@@ -39,6 +39,7 @@ type agent = {
   user: option(user),
   bot: option(bot),
   measurements: connection(node),
+  isMe: bool,
 };
 
 let unpackEdges = (a: connection('a)): array('a) => {
@@ -50,14 +51,13 @@ let unpackEdges = (a: connection('a)): array('a) => {
     |> E.A.O.concatSome;
   response;
 };
-/* |> E.O.fmap(b => b##edges |> E.A.O.defaultEmpty)
-   |> E.O.toExn("Expected items"); */
 
 module Query = [%graphql
   {|
     query getAgent ($id: String!) {
         agent:
         agent(id: $id) @bsRecord{
+        isMe
         user: User @bsRecord{
           id
           name

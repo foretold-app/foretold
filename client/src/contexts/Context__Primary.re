@@ -25,6 +25,7 @@ module Types = {
     id: string,
     name: option(string),
     jwt: option(string),
+    agent: option(agent),
   }
   and agentType =
     | Bot(bot)
@@ -79,12 +80,22 @@ module Bot = {
       };
   };
   let make =
-      (~id, ~name=None, ~description=None, ~competitorType, ~jwt=None, ()): t => {
+      (
+        ~id,
+        ~name=None,
+        ~description=None,
+        ~competitorType,
+        ~jwt=None,
+        ~agent=None,
+        (),
+      )
+      : t => {
     id,
     competitorType,
     description,
     name,
     jwt,
+    agent,
   };
 };
 

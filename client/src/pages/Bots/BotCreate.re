@@ -1,6 +1,5 @@
 open Utils;
 open MomentRe;
-open Antd;
 open Foretold__GraphQL;
 
 type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
@@ -65,7 +64,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
   <Antd.Form onSubmit={e => onSubmit()}>
     <Antd.Form.Item>
       {"Name" |> ste |> E.React.inH3}
-      <Input
+      <Antd.Input
         value={form.values.name}
         onChange={
           ReForm.Helpers.handleDomFormChange(e =>
@@ -76,7 +75,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
     </Antd.Form.Item>
     <Antd.Form.Item>
       {"Description" |> ste |> E.React.inH3}
-      <Input
+      <Antd.Input
         value={form.values.description}
         onChange={
           ReForm.Helpers.handleDomFormChange(e =>
@@ -86,9 +85,9 @@ let formFields = (form: Form.state, send, onSubmit) =>
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
-      <Button _type=`primary onClick={_ => onSubmit()}>
+      <Antd.Button _type=`primary onClick={_ => onSubmit()}>
         {"Submit" |> ste}
-      </Button>
+      </Antd.Button>
     </Antd.Form.Item>
   </Antd.Form>;
 

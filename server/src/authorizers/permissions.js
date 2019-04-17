@@ -28,7 +28,7 @@ const rulesChannelMemberships = {
 const rulesMeasurables = {
   Query: {},
   Mutation: {
-    measurableCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
+    measurementCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
     measurableArchive: and(isAuthenticated, measurables.isOwner, not(measurables.isArchived)),
     measurableUnarchive: and(isAuthenticated, measurables.isOwner, measurables.isArchived),
     measurableUpdate: and(isAuthenticated, measurables.isOwner),
@@ -63,8 +63,8 @@ const rules = {
     botCreate: isAuthenticated,
     channelCreate: isAuthenticated,
     userUpdate: isAuthenticated,
-    measurementCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
     seriesCreate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
+    measurableCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
 
     ...rulesMeasurables.Mutation,
     ...rulesChannel.Mutation,

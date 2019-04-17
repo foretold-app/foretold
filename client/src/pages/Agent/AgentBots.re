@@ -20,7 +20,12 @@ let columns = [|
     ~key="name",
     ~width=2,
     ~render=
-      (~text, ~record, ~index) => record##name |> E.O.default("") |> ste,
+      (~text, ~record, ~index) =>
+        <a
+          onClick={_ => Context.Routing.Url.push(AgentShow(record##agentId))}
+          href="">
+          {record##name |> E.O.default("") |> ste}
+        </a>,
     (),
   ),
   Antd.Table.TableProps.make_column(
@@ -73,6 +78,10 @@ let make = (~id: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
                        {
                          "key": b.id,
                          "description": b.description,
+                         "agentId":
+                           b.agent
+                           |> E.O.fmap((r: Context.Primary.Agent.t) => r.id)
+                           |> E.O.default(""),
                          "name": b.name,
                          "jwt": b.jwt,
                          "competitorType": b.competitorType,

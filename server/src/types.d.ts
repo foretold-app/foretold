@@ -57,6 +57,7 @@ export namespace Schema {
     creator: Models.User | Models.Bot;
     channel?: Models.Channel;
     channelMembership?: Models.ChannelMemberships;
+    channelMembershipsAdmins?: Models.ChannelMemberships[];
     channelMembershipsRole?: Models.ChannelMembershipRole;
   }
 

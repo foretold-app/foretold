@@ -1,5 +1,8 @@
+const _ = require('lodash');
+
 const { channel, channelByRoot } = require('./channels');
 const { channelMemberships } = require('./channel-memberships');
+const { channelMembershipsAdmins } = require('./channel-memberships');
 const { measurable, measurableByRoot } = require('./measurables');
 
 /**
@@ -25,16 +28,20 @@ const middlewares = {
 
   Channel: {
     permissions: async (resolve, root, args, context, info) => {
+      context = _.cloneDeep(context);
       await channelByRoot(root, args, context, info);
       await channelMemberships(root, args, context, info);
+      await channelMembershipsAdmins(root, args, context, info);
       return await resolve(root, args, context, info);
     },
   },
 
   ChannelsMembership: {
     permissions: async (resolve, root, args, context, info) => {
+      context = _.cloneDeep(context);
       await channel(root, args, context, info);
       await channelMemberships(root, args, context, info);
+      await channelMembershipsAdmins(root, args, context, info);
       return await resolve(root, args, context, info);
     },
   },
@@ -44,6 +51,7 @@ const middlewares = {
       await measurable(root, args, context, info);
       await channel(root, args, context, info);
       await channelMemberships(root, args, context, info);
+      await channelMembershipsAdmins(root, args, context, info);
       return await resolve(root, args, context, info);
     },
   },
@@ -77,18 +85,21 @@ const middlewares = {
     channelMembershipCreate: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);
       await channelMemberships(root, args, context, info);
+      await channelMembershipsAdmins(root, args, context, info);
       return await resolve(root, args, context, info);
     },
 
     channelMembershipRoleUpdate: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);
       await channelMemberships(root, args, context, info);
+      await channelMembershipsAdmins(root, args, context, info);
       return await resolve(root, args, context, info);
     },
 
     channelMembershipDelete: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);
       await channelMemberships(root, args, context, info);
+      await channelMembershipsAdmins(root, args, context, info);
       return await resolve(root, args, context, info);
     },
 
@@ -116,12 +127,14 @@ const middlewares = {
     leaveChannel: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);
       await channelMemberships(root, args, context, info);
+      await channelMembershipsAdmins(root, args, context, info);
       return await resolve(root, args, context, info);
     },
 
     joinChannel: async (resolve, root, args, context, info) => {
       await channel(root, args, context, info);
       await channelMemberships(root, args, context, info);
+      await channelMembershipsAdmins(root, args, context, info);
       return await resolve(root, args, context, info);
     },
   }

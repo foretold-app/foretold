@@ -41,7 +41,9 @@ class ChannelMembershipModel extends ModelPostgres {
       where: { channelId, agentId },
     });
     if (channelMembership) {
-      await channelMembership.destroy();
+      await this.model.destroy({
+        where: { channelId, agentId },
+      });
     }
     return channelMembership;
   }

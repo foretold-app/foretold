@@ -92,7 +92,10 @@ const schema = new graphql.GraphQLSchema({
 
       bots: {
         type: require('./connections').botsConnection.connectionType,
-        args: require('./connections').botsConnection.connectionArgs,
+        args: {
+          ...require('./connections').botsConnection.connectionArgs,
+          ownerAgentId: { type: graphql.GraphQLString },
+        },
         resolve: require('./connections').botsConnection.resolve,
       },
 

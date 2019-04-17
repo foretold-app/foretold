@@ -61,6 +61,9 @@ const botsConnection = createConnection({
       resolve: ({ fullCount }) => fullCount
     }
   },
+  where: function (key, value) {
+    return { [key]: value };
+  },
 });
 
 module.exports = {

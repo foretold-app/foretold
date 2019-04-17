@@ -25,6 +25,16 @@ const rulesChannelMemberships = {
   }
 };
 
+const rulesMeasurables = {
+  Query: {},
+  Mutation: {
+    measurableCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
+    measurableArchive: and(isAuthenticated, measurables.isOwner),
+    measurableUnarchive: and(isAuthenticated, measurables.isOwner),
+    measurableUpdate: and(isAuthenticated, measurables.isOwner),
+  }
+};
+
 const rules = {
   Bot: {
     jwt: bots.isOwner,
@@ -56,11 +66,7 @@ const rules = {
     measurementCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
     seriesCreate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
 
-    measurableCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
-    measurableArchive: and(isAuthenticated, measurables.isOwner),
-    measurableUnarchive: and(isAuthenticated, measurables.isOwner),
-    measurableUpdate: and(isAuthenticated, measurables.isOwner),
-
+    ...rulesMeasurables.Mutation,
     ...rulesChannel.Mutation,
     ...rulesChannelMemberships.Mutation,
   }
@@ -76,6 +82,7 @@ function getPermissions() {
 module.exports = {
   rules,
   rulesChannel,
+  rulesMeasurables,
   rulesChannelMemberships,
   getPermissions,
 };

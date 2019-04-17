@@ -1,6 +1,9 @@
 const _ = require('lodash');
 
-const { rules, rulesChannelMemberships, rulesChannel } = require('./permissions');
+const { rules } = require('./permissions');
+const { rulesChannelMemberships } = require('./permissions');
+const { rulesChannel } = require('./permissions');
+const { rulesMeasurables } = require('./permissions');
 
 /**
  * @param {object} rules
@@ -35,7 +38,6 @@ function getAll(rulesPart) {
   /**
    * @param {object | null} root
    * @param {object} args
-   * @param {string} args.id
    * @param {Schema.Context} context
    * @param {object} info
    * @returns {Promise<*>}
@@ -50,7 +52,6 @@ function getAll(rulesPart) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {string} args.id
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<*>}
@@ -74,7 +75,6 @@ async function availableChannelMutations(root, args, context, info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {string} args.id
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<*>}
@@ -83,8 +83,20 @@ async function availableChannelMembershipsMutations(root, args, context, info) {
   return getAll(rulesChannelMemberships)(root, args, context, info);
 }
 
+/**
+ * @param {object | null} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+async function availableMeasurablesPermissions(root, args, context, info) {
+  return getAll(rulesMeasurables)(root, args, context, info);
+}
+
 module.exports = {
   availableAll,
   availableChannelMutations,
+  availableMeasurablesPermissions,
   availableChannelMembershipsMutations,
 };

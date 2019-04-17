@@ -40,6 +40,11 @@ const measurable = new graphql.GraphQLObjectType({
     seriesId: { type: graphql.GraphQLString },
     iAmOwner: require('./common').iAmOwner,
 
+    permissions: {
+      type: graphql.GraphQLNonNull(require('./permissions').permissions),
+      resolve: resolvers.permissions.measurablesPermissions,
+    },
+
     Measurements: {
       type: require('../connections').measurableMeasurementsConnection.connectionType,
       args: require('../connections').measurableMeasurementsConnection.connectionArgs,

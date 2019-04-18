@@ -8,7 +8,7 @@ const data = require('../data');
  * @param {number} args.first
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<{data: Models.Measurement[], total: number}>}
+ * @returns {Promise<Models.Measurement[]>}
  */
 async function all(root, args, context, info) {
   /** @type {string} */
@@ -24,7 +24,9 @@ async function all(root, args, context, info) {
     limit: _.get(args, 'first'),
   };
   const options = { agentId };
-  return await data.measurements.getAll(filter, pagination, options);
+  const result = await data.measurements.getAll(filter, pagination, options);
+  context.total = result.total;
+  return result.data;
 }
 
 /**

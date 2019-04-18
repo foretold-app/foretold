@@ -1,19 +1,21 @@
 const _ = require('lodash');
 
 /**
- *
- * @param {{data: *, total: number}} result
- * @param {objects} args
+ * @param {*[]} result
+ * @param {object} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
  * @return {{total: *, pageInfo: {hasNextPage: boolean, hasPreviousPage: boolean, endCursor: *, startCursor: *}, edges: *}}
  */
-function connection(result, args) {
-  const { data, total } = result;
+function connection(result, root, args, context, info) {
+  const total = context.total;
 
   const last = _.get(args, 'last', 0);
-  const count = data.length;
+  const count = result.length;
 
-  const start = _.head(data);
-  const end = _.last(data);
+  const start = _.head(result);
+  const end = _.last(result);
 
   const startCursor = _.get(start, 'createdAt');
   const endCursor = _.get(end, 'createdAt');
@@ -21,7 +23,7 @@ function connection(result, args) {
   const hasNextPage = (last + count) < total;
   const hasPreviousPage = !!last;
 
-  const edges = data.map(o => ({ node: o, cursor: _.get(o, 'createdAt') }));
+  const edges = result.map(o => ({ node: o, cursor: _.get(o, 'createdAt') }));
 
   return {
     total: total,

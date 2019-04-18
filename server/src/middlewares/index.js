@@ -58,7 +58,7 @@ const middlewares = {
 
     measurements: async (resolve, root, args, context, info) => {
       const result = await resolve(root, args, context, info);
-      return connection(result, args);
+      return connection(result, root, args, context, info);
     },
   },
 

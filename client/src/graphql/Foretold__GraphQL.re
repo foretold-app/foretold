@@ -1,4 +1,5 @@
 module Queries = {
+  module Authentication = Foretold__GraphQL__Authentication;
   module Agent = Foretold__GraphQL__GetAgent;
   module Bots = Foretold__GraphQL__BotsGet;
   module Agents = Foretold__GraphQL__GetAgents;

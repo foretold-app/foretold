@@ -77,4 +77,4 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
   };
 
 let make = (route: Route.t) =>
-  route |> toRoutePage |> Queries.User.withLoggedInUserQuery;
+  toRoutePage(route) |> Queries.User.withLoggedInUserQuery;

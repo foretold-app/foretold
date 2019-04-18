@@ -94,11 +94,11 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let withLoggedInUserQuery = innerComponentFn =>
-  switch (Context.Auth.AuthTokens.make_from_storage()) {
+  switch (Context.Auth.Auth0Tokens.make_from_storage()) {
   | None => innerComponentFn(Context.Me.WithoutTokens)
   | Some(tokens) =>
     Context.Auth.Actions.logoutIfTokenIsObsolete(tokens);
-    switch (tokens |> Context.Auth.AuthTokens.auth0Id) {
+    switch (tokens |> Context.Auth.Auth0Tokens.auth0Id) {
     | None => innerComponentFn(Context.Me.WithoutTokens)
     | Some(auth0Id) =>
       let query = Query.make(~auth0Id, ());

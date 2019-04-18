@@ -12,7 +12,7 @@ module Jwt = {
   let make = (s: string) => s |> decode |> Js.Json.decodeObject;
 };
 
-module AuthTokens = {
+module Auth0Tokens = {
   type access_token = string;
   type id_token = string;
   type expires_at = string;
@@ -94,7 +94,7 @@ module Auth0Client = {
     authOptions |> createClient |> (c => c##authorize());
 };
 
-module CallbackUrlToAuthTokens = {
+module CallbackUrlToAuth0Tokens = {
   open Belt;
   open Utils;
 
@@ -115,20 +115,20 @@ module CallbackUrlToAuthTokens = {
     | ("", _, _) => None
     | (_, "", _) => None
     | (_, _, "") => None
-    | _ => Some(AuthTokens.make(accessToken, idToken, expiresAt))
+    | _ => Some(Auth0Tokens.make(accessToken, idToken, expiresAt))
     };
   };
 };
 
 module Actions = {
   let logout = () => {
-    AuthTokens.destroy();
+    Auth0Tokens.destroy();
     ReasonReact.Router.push("/");
     ();
   };
 
-  let logoutIfTokenIsObsolete = (tokens: AuthTokens.t) =>
-    if (tokens |> AuthTokens.isObsolete) {
+  let logoutIfTokenIsObsolete = (tokens: Auth0Tokens.t) =>
+    if (tokens |> Auth0Tokens.isObsolete) {
       logout();
     };
 };

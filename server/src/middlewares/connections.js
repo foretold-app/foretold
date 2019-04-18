@@ -11,13 +11,13 @@ function connection(all, args) {
   const count = all.length;
 
   const start = _.head(all);
-  const end = _.head(all);
+  const end = _.last(all);
 
   const startCursor = _.get(start, 'id');
   const endCursor = _.get(end, 'id');
 
   const total = _.get(all, [0, 'total'], 0);
-  const hasNextPage = (last + count) > total;
+  const hasNextPage = (last + count) < total;
   const hasPreviousPage = !!last;
 
   const edges = all.map(o => ({ node: o, cursor: _.get(o, 'id') }));

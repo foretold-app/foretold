@@ -13,8 +13,8 @@ const isMe = {
 };
 
 const connectionArguments = {
-  after: { type: graphql.GraphQLBoolean },
-  before: { type: graphql.GraphQLBoolean },
+  after: { type: graphql.GraphQLString },
+  before: { type: graphql.GraphQLString },
   first: { type: graphql.GraphQLInt },
   last: { type: graphql.GraphQLInt },
 };

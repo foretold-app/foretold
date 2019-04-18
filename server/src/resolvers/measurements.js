@@ -13,7 +13,12 @@ const data = require('../data');
 async function all(root, args, context, info) {
   /** @type {string} */
   const agentId = _.get(context, 'agent.id');
-  const filter = {};
+  const filter = {
+    measurableId: _.get(args, 'measurableId'),
+    agentId: _.get(args, 'agentId'),
+    after: _.get(args, 'after'),
+    before: _.get(args, 'before'),
+  };
   const pagination = {
     offset: _.get(args, 'last'),
     limit: _.get(args, 'first'),

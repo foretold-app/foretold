@@ -17,6 +17,10 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @param {object} filter
+   * @param {string} [filter.measurableId]
+   * @param {string} [filter.agentId]
+   * @param {string} [filter.after]
+   * @param {string} [filter.before]
    * @param {object} pagination
    * @param {object} restrictions
    * @return {Promise<void>}
@@ -25,6 +29,10 @@ class MeasurementModel extends ModelPostgres {
     const where = {};
 
     this.applyRestrictions(where, restrictions);
+    this.applyCursors(where, filter);
+
+    if (filter.measurableId) where.measurableId = filter.measurableId;
+    if (filter.agentId) where.agentId = filter.agentId;
 
     return await this.model.findAll({
       limit: pagination.limit,

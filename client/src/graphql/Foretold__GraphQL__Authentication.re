@@ -10,11 +10,14 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let withLoggedInUserQuery = innerComponentFn =>
+let redirectingMessage =
+  <h3> {"You are being redirected..." |> Utils.ste} </h3>;
+
+let component = innerComponent =>
   switch (Context.Auth.Auth0Tokens.make_from_storage()) {
   | None =>
     Context.Auth.Actions.logout();
-    innerComponentFn();
+    redirectingMessage;
   | Some(tokens) =>
     Context.Auth.Actions.logoutIfTokenIsObsolete(tokens);
     let query = Query.make(~auth0jwt=tokens.id_token, ());
@@ -25,10 +28,13 @@ let withLoggedInUserQuery = innerComponentFn =>
       |> (
         e =>
           switch (e) {
-          | Success(c) => innerComponentFn()
+          | Success(c) =>
+            Context.Auth.ServerJwt.set(c);
+            ReasonReact.Router.push("/");
+            redirectingMessage;
           | _ =>
             Context.Auth.Actions.logout();
-            innerComponentFn();
+            redirectingMessage;
           }
       )
     )

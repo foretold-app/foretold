@@ -94,6 +94,31 @@ module Auth0Client = {
     authOptions |> createClient |> (c => c##authorize());
 };
 
+module ServerJwt = {
+  type jwt = string;
+  type t = jwt;
+
+  let set = (t: t) => {
+    open Dom.Storage;
+    localStorage |> setItem("server_jwt", t);
+    ();
+  };
+
+  let destroy = () => {
+    open Dom.Storage;
+    localStorage |> removeItem("server_jwt");
+    ();
+  };
+
+  let exists = (t: option(t)) => E.O.isSome(t);
+
+  let make_from_storage = (): option(t) => {
+    open Dom.Storage;
+    let get = e => localStorage |> getItem(e);
+    get("server_jwt");
+  };
+};
+
 module CallbackUrlToAuth0Tokens = {
   open Belt;
   open Utils;
@@ -123,6 +148,7 @@ module CallbackUrlToAuth0Tokens = {
 module Actions = {
   let logout = () => {
     Auth0Tokens.destroy();
+    ServerJwt.destroy();
     ReasonReact.Router.push("/");
     ();
   };

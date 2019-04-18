@@ -51,7 +51,26 @@ const measurement = new graphql.GraphQLObjectType({
   })
 });
 
+const measurementsEdge = new graphql.GraphQLObjectType({
+  name: 'MeasurementsEdge',
+  fields: () => ({
+    node: { type: require('./measurements').measurement },
+    cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+  }),
+});
+
+const measurementsConnection = new graphql.GraphQLObjectType({
+  name: 'MeasurementsConnection',
+  fields: () => ({
+    total: { type: graphql.GraphQLInt },
+    pageInfo: { type: graphql.GraphQLNonNull(require('./common').pageInfo) },
+    edges: { type: graphql.GraphQLList(require('./measurements').measurementsEdge) },
+  }),
+});
+
 module.exports = {
   measurement,
   measurementCreateInput,
+  measurementsEdge,
+  measurementsConnection,
 };

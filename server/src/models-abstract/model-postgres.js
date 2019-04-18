@@ -18,6 +18,7 @@ class ModelPostgres extends Model {
     this.in = this.sequelize.Op.in;
     this.and = this.sequelize.Op.and;
     this.fn = this.sequelize.fn;
+    this.col = this.sequelize.col;
     this.literal = this.sequelize.literal;
   }
 
@@ -77,6 +78,7 @@ class ModelPostgres extends Model {
    * @param {string} [restrictions.agentId]
    * @param {string} [restrictions.userId]
    * @param {boolean} [restrictions.channelId]
+   * @param {boolean} [restrictions.measurableId]
    */
   applyRestrictions(where = {}, restrictions = {}) {
     if (!where[this.and]) where[this.and] = [];
@@ -94,10 +96,21 @@ class ModelPostgres extends Model {
         userId: restrictions.userId,
       });
     }
+
+    if (restrictions.measurableId) {
+      where[this.and].push({
+        measurableId: {
+          [this.in]: this.measurableIdsLiteral(restrictions.agentId),
+        },
+      });
+    }
   }
 
-  getTransaction() {
-    return this.sequelize.transaction();
+  /**
+   * @return {[string, string]}
+   */
+  getTotal() {
+    return [this.literal('COUNT(*) OVER ()'), 'total'];
   }
 }
 

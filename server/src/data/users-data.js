@@ -6,6 +6,7 @@ const { UserModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
+ * @property {UserModel} UserModel
  */
 class UsersData extends DataBase {
 
@@ -26,6 +27,7 @@ class UsersData extends DataBase {
   }
 
   /**
+   * @todo: fix interface (params, query, options)
    * @param {object} filter
    * @return {Promise<Models.User>}
    */
@@ -36,6 +38,7 @@ class UsersData extends DataBase {
   }
 
   /**
+   * @todo: fix interface
    * @param {object} data
    * @return {Promise<Models.User>}
    */
@@ -44,6 +47,7 @@ class UsersData extends DataBase {
   }
 
   /**
+   * @todo: fix interface
    * @param {object} filter
    * @param {object} data
    * @return {Promise<Models.User>}
@@ -53,6 +57,8 @@ class UsersData extends DataBase {
   }
 
   /**
+   * @todo: fix interface
+   * @todo: move to permissions
    * @param id
    * @param data
    * @param _user

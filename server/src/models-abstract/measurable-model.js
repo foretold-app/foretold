@@ -39,9 +39,9 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
-   * @param filter
-   * @param pagination
-   * @param restrictions
+   * @param {object} filter
+   * @param {object} pagination
+   * @param {object} restrictions
    * @return {Promise<void>}
    */
   async getAll(filter, pagination, restrictions) {

@@ -16,6 +16,8 @@ class MeasurablesData extends DataBase {
   }
 
   /**
+   * @todo: fix interface (data, options)
+   * @public
    * @param {object} data
    * @param {Models.Creator} creator
    * @return {Promise<Models.Measurable>}
@@ -29,6 +31,8 @@ class MeasurablesData extends DataBase {
   }
 
   /**
+   * @todo: rework
+   * @public
    * @param {string} id
    * @return {Promise<Models.Measurable>}
    */
@@ -38,6 +42,8 @@ class MeasurablesData extends DataBase {
   }
 
   /**
+   * @todo: rework
+   * @public
    * @param {string} id
    * @return {Promise<Models.Measurable>}
    */
@@ -47,6 +53,8 @@ class MeasurablesData extends DataBase {
   }
 
   /**
+   * @todo: fix interface (params, data, options)
+   * @public
    * @param {string} id
    * @param {object} data
    * @param {Models.Creator} creator
@@ -61,6 +69,8 @@ class MeasurablesData extends DataBase {
   }
 
   /**
+   * @todo: fix interface (filer, pagination, options*)
+   * @public
    * @param {object} options
    * @param {string[]} [options.states]
    * @param {string} [options.agentId]
@@ -81,6 +91,9 @@ class MeasurablesData extends DataBase {
   }
 
   /**
+   * @todo: move down
+   * @todo: fix interface (params*, query, options*)
+   * @public
    * @param {string} id
    * @param {object} options
    * @param {string} options.agentId
@@ -101,6 +114,7 @@ class MeasurablesData extends DataBase {
   }
 
   /**
+   * @public
    * @return {Promise<boolean>}
    */
   needsToBePending() {

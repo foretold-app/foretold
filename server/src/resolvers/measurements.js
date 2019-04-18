@@ -4,25 +4,22 @@ const data = require('../data');
 /**
  * @param {*} root
  * @param {object} args
+ * @param {number} args.last
+ * @param {number} args.first
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<*|Array<Model>>}
  */
 async function all(root, args, context, info) {
+  /** @type {string} */
   const agentId = _.get(context, 'agent.id');
-  const all = await data.measurements.getAll({ agentId });
-  return {
-    total: 10,
-    pageInfo: {
-      hasNextPage: true,
-      hasPreviousPage: true,
-      startCursor: '1',
-      endCursor: '2',
-    },
-    edges: [
-      { node: all[0], cursor: '3'}
-    ],
-  }
+  const filter = {};
+  const pagination = {
+    offset: _.get(args, 'last'),
+    limit: _.get(args, 'first'),
+  };
+  const options = { agentId };
+  return await data.measurements.getAll(filter, pagination, options);
 }
 
 /**

@@ -37,6 +37,10 @@ module.exports = (sequelize, DataTypes) => {
         return this.getDataValue('relevantAt') || this.getDataValue('createdAt')
       }
     },
+    // @todo: need here?
+    total: {
+      type: DataTypes.VIRTUAL,
+    },
   }, {
     hooks: {
       afterCreate: async (measurement) => {

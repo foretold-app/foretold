@@ -74,7 +74,7 @@ export namespace Layers {
     type compoundId = object;
     type id = string | compoundId;
     type data = object;
-    type restrictions = object;
+    type options = object;
     type filter = object;
     type pagination = object;
     type query = object;
@@ -83,30 +83,30 @@ export namespace Layers {
     interface DataSource {
       createOne(
         data,
-        restrictions,
+        options,
       ): any;
 
       getOne(
         params,
         query,
-        restrictions,
+        options,
       ): any;
 
       updateOne(
         params,
         data,
-        restrictions,
+        options,
       ): any;
 
       deleteOne(
         params,
-        restrictions,
+        options,
       ): any | null;
 
       getAll(
         filter,
         pagination,
-        restrictions,
+        options,
       ): any[];
     }
   }

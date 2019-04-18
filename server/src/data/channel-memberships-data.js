@@ -6,6 +6,7 @@ const { ChannelMembershipModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
+ * @property {ChannelMembershipModel} ChannelMembershipModel
  */
 class ChannelMembershipsData extends DataBase {
 
@@ -15,6 +16,7 @@ class ChannelMembershipsData extends DataBase {
   }
 
   /**
+   * @todo: fix interface (data, options)
    * @param {string} channelId
    * @param {string} agentId
    * @param {string} role
@@ -29,6 +31,7 @@ class ChannelMembershipsData extends DataBase {
   }
 
   /**
+   * @todo: fix interface (params, query, options)
    * @param {string} channelId
    * @param {string} agentId
    * @param {string} role
@@ -44,6 +47,7 @@ class ChannelMembershipsData extends DataBase {
   }
 
   /**
+   * @todo: fix interface (params, options)
    * @param {string} channelId
    * @param {string} agentId
    * @returns {Promise<Models.ChannelMemberships | null>}
@@ -57,6 +61,7 @@ class ChannelMembershipsData extends DataBase {
   }
 
   /**
+   * @protected
    * @param {string} channelId
    * @param {string} agentId
    * @return {Promise<*>}
@@ -78,6 +83,7 @@ class ChannelMembershipsData extends DataBase {
    * @todo: right into model call.
    * @todo: Then do the same everywhere on data layer.
    *
+   * @todo: fix interface (params, query, options)
    * @param {object} options
    * @param {string} [options.agentId]
    * @param {string} [options.channelId]
@@ -88,6 +94,7 @@ class ChannelMembershipsData extends DataBase {
   }
 
   /**
+   * @todo: fix interface (filter, pagination, options)
    * @param {object} options
    * @param {string} [options.agentId]
    * @param {string} [options.channelId]

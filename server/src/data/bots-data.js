@@ -4,6 +4,7 @@ const { BotModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
+ * @property {BotModel} BotModel
  */
 class BotsData extends DataBase {
 
@@ -21,6 +22,7 @@ class BotsData extends DataBase {
   }
 
   /**
+   * @todo: fix interface (filter, pagination, options)
    * @param {object} options
    * @return {Promise<*|Array<Model>>}
    */
@@ -29,9 +31,10 @@ class BotsData extends DataBase {
   }
 
   /**
-   * @param params
-   * @param query
-   * @param restrictions
+   * @todo: fix interface (params, query, options*)
+   * @param {object} params
+   * @param {object} query
+   * @param {object} restrictions
    * @return {Promise<void>}
    */
   async getOne(params, query, restrictions) {

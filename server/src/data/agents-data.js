@@ -4,6 +4,7 @@ const { AgentModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
+ * @property {AgentModel} AgentModel
  */
 class AgentsData extends DataBase {
 
@@ -13,6 +14,7 @@ class AgentsData extends DataBase {
   }
 
   /**
+   * @todo: fix interface (params, query, options)
    * @param {string} id
    * @return {Promise<Models.Agent>}
    */

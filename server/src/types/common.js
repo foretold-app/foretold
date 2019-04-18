@@ -19,8 +19,8 @@ const connectionArguments = {
   last: { type: graphql.GraphQLInt },
 };
 
-const pageInfo = new graphql.GraphQLObjectType({
-  name: 'PageInfo',
+const pageInfoConnection = new graphql.GraphQLObjectType({
+  name: 'PageInfoConnection',
   fields: () => ({
     hasNextPage: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     hasPreviousPage: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
@@ -33,5 +33,5 @@ module.exports = {
   iAmOwner,
   isMe,
   connectionArguments,
-  pageInfo,
+  pageInfoConnection,
 };

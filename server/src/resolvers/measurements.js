@@ -10,7 +10,19 @@ const data = require('../data');
  */
 async function all(root, args, context, info) {
   const agentId = _.get(context, 'agent.id');
-  return await data.measurements.getAll({ agentId });
+  const all = await data.measurements.getAll({ agentId });
+  return {
+    total: 10,
+    pageInfo: {
+      hasNextPage: true,
+      hasPreviousPage: true,
+      startCursor: '1',
+      endCursor: '2',
+    },
+    edges: [
+      { node: all[0], cursor: '3'}
+    ],
+  }
 }
 
 /**

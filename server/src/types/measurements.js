@@ -63,7 +63,7 @@ const measurementsConnection = new graphql.GraphQLObjectType({
   name: 'MeasurementsConnection',
   fields: () => ({
     total: { type: graphql.GraphQLInt },
-    pageInfo: { type: graphql.GraphQLNonNull(require('./common').pageInfo) },
+    pageInfo: { type: graphql.GraphQLNonNull(require('./common').pageInfoConnection) },
     edges: { type: graphql.GraphQLList(require('./measurements').measurementsEdge) },
   }),
 });

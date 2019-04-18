@@ -1,3 +1,6 @@
+[@bs.val] [@bs.scope ("window", "location")]
+external reload: unit => unit = "reload";
+
 module Query = [%graphql
   {|
     query authentication ($auth0jwt: String!) {
@@ -29,6 +32,7 @@ let component = (auth0Tokens: Context.Auth.Auth0Tokens.t, _innerComponent) => {
           switch (e) {
           | Success(c) =>
             Context.Auth.ServerJwt.set(c);
+            reload();
             _innerComponent;
           | _ => redirectingMessage
           }

@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const Sequelize = require('sequelize');
 const { clientUrl } = require('../lib/urls');
 
@@ -11,7 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     value: {
       type: DataTypes.JSON,
-      allowNull: false
+      allowNull: false,
+      get: getMeasurementValue,
+      set: setMeasurementValue,
     },
     competitorType: {
       type: DataTypes.ENUM(["OBJECTIVE", "COMPETITIVE", "AGGREGATION"]),
@@ -47,6 +50,26 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
+
+  /**
+   * @param {object} value
+   */
+  function setMeasurementValue(value) {
+    this.dataValues.value = {
+      data: _.get(value, 'floatCdf'),
+      dataType: 'floatCdf'
+    };
+  }
+
+  function getMeasurementValue() {
+    const value = _.get(this, 'dataValues.value');
+    const data = _.get(this, 'dataValues.value.data');
+    const dataType = _.get(this, 'dataValues.value.dataType');
+    if (dataType !== undefined && data !== undefined) {
+      return { [dataType]: data };
+    }
+    return value;
+  }
 
   /**
    * @todo: move me

@@ -40,8 +40,7 @@ async function update(root, args, options, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function all(root, args, context, info) {
-  const datas = { ...args };
-  return await data.bots.getAll(datas);
+  return await data.bots.getAll(args);
 }
 
 /**

@@ -15,29 +15,32 @@ class BotModel extends ModelPostgres {
 
   /**
    * @param {object} data
-   * @return {data}
+   * @return {Promise<Models.Bot>}
    */
-  createOne(data) {
+  async createOne(data) {
     return this.model.create(data);
   }
 
   /**
    * @param {object} params
    * @param {object} data
-   * @return {data}
+   * @return {Promise<Models.Bot>}
    */
-  createOne(params, data) {
-    return this.model.update(
-      data,
-      { where: params }
-    );
+  async updateOne(params, data) {
+    const bot = await this.model.findOne({
+      where: params,
+    });
+    if (bot) {
+      await bot.update(data);
+    }
+    return bot;
   }
 
   /**
    * @param {object} filter
    * @param {object} [pagination]
    * @param {object} [restrictions]
-   * @return {Promise<void>}
+   * @return {Promise<Models.Bot[]>}
    */
   async getAll(filter, pagination = {}, restrictions = {}) {
     const where = {};

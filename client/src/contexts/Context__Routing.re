@@ -5,10 +5,12 @@ module Route = {
     | Redirect
     | Login
     | Profile
+    | BotCreate
     | EntityShow(string)
     | EntityIndex
     | AgentShow(string)
     | AgentMeasurables(string)
+    | AgentBots(string)
     | ChannelShow(string)
     | ChannelEdit(string)
     | ChannelMembers(string)
@@ -26,19 +28,21 @@ module Route = {
     | [] => Home
     | ["login"] => Login
     | ["callback"] =>
-      Context__Auth.CallbackUrlToAuthTokens.make(url)
-      |> E.O.fmap(Context__Auth.AuthTokens.set)
+      Context__Auth.CallbackUrlToAuth0Tokens.make(url)
+      |> E.O.fmap(Context__Auth.Auth0Tokens.set)
       |> E.O.default();
       Redirect;
     | ["redirect"] => Redirect
     | ["agents"] => AgentIndex
     | ["profile"] => Profile
     | ["agents", id] => AgentShow(id)
+    | ["agents", id, "bots"] => AgentBots(id)
+    | ["agents", id, "measurables"] => AgentMeasurables(id)
     | ["entities"] => EntityIndex
     | ["entities", ...id] => EntityShow(String.concat("/", id))
-    | ["agents", id, "measurables"] => AgentMeasurables(id)
     | ["channels", "new"] => ChannelNew
     | ["channels"] => ChannelIndex
+    | ["bots", "new"] => BotCreate
     | ["c"] => ChannelIndex
     | ["c", id] => ChannelShow(id)
     | ["c", id, "new"] => MeasurableNew(id)
@@ -58,9 +62,11 @@ module Url = {
     | AgentIndex
     | Profile
     | EntityIndex
+    | BotCreate
     | EntityShow(string)
     | AgentShow(string)
     | AgentMeasurables(string)
+    | AgentBots(string)
     | ChannelShow(string)
     | ChannelNew
     | ChannelIndex
@@ -77,9 +83,11 @@ module Url = {
     | Home => "/"
     | AgentIndex => "/agents"
     | Profile => "/profile/"
+    | BotCreate => "/bots/new"
     | EntityIndex => "/entities"
     | EntityShow(id) => "/entities/" ++ id
     | AgentShow(id) => "/agents/" ++ id
+    | AgentBots(id) => "/agents/" ++ id ++ "/bots"
     | AgentMeasurables(id) => "/agents/" ++ id ++ "/measurables"
     | ChannelNew => "/channels/" ++ "new"
     | ChannelShow(id) => "/c/" ++ id

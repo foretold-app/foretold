@@ -18,6 +18,8 @@ let toBot = (a: bot): Context.Primary.Bot.t => {
   description: a.description,
   id: a.id,
   name: a.name,
+  jwt: None,
+  agent: None,
 };
 
 type agent = {

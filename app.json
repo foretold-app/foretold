@@ -16,6 +16,15 @@
     },
     "AUTH0_CLIENT_ID": {
       "required": true
+    },
+    "JWT_SECRET": {
+      "required": true
+    },
+    "JWT_ISSUER": {
+      "required": true
+    },
+    "JWT_EXPIN": {
+      "required": true
     }
   },
   "formation": {

@@ -1,14 +1,16 @@
 const { getPermissions } = require('./permissions');
 
 const { availableAll } = require('./availability');
-const { availableChannelMutations } = require('./availability');
-const { availableChannelMembershipsMutations } = require('./availability');
+const { availableChannelPermissions } = require('./availability');
+const { availableChannelMembershipsPermissions } = require('./availability');
+const { availableMeasurablesPermissions } = require('./availability');
 
 const permissions = getPermissions();
 
 module.exports = {
   availableAll,
-  availableChannelMutations,
-  availableChannelMembershipsMutations,
+  availableChannelPermissions,
+  availableMeasurablesPermissions,
+  availableChannelMembershipsPermissions,
   permissions,
 };

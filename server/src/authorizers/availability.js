@@ -1,6 +1,10 @@
 const _ = require('lodash');
+const changeCase = require('change-case');
 
-const { rules, rulesChannelMemberships, rulesChannel } = require('./permissions');
+const { rules } = require('./permissions');
+const { rulesChannelMemberships } = require('./permissions');
+const { rulesChannel } = require('./permissions');
+const { rulesMeasurables } = require('./permissions');
 
 /**
  * @param {object} rules
@@ -14,15 +18,19 @@ function getList(rules) {
     for (const ruleName in rules) {
       const rule = rules[ruleName];
       const resolving = await rule.resolve(root, args, context, info);
+
+      const ruleNameUpperCase = changeCase.constantCase(ruleName);
       if (resolving === true) {
-        allow.push(ruleName);
+        allow.push(ruleNameUpperCase);
       } else {
-        deny.push(ruleName);
+        deny.push(ruleNameUpperCase);
       }
     }
 
     _.pull(allow, '*');
     _.pull(deny, '*');
+    _.pull(allow, '');
+    _.pull(deny, '');
 
     return { allow, deny };
   };
@@ -35,7 +43,6 @@ function getAll(rulesPart) {
   /**
    * @param {object | null} root
    * @param {object} args
-   * @param {string} args.id
    * @param {Schema.Context} context
    * @param {object} info
    * @returns {Promise<*>}
@@ -50,7 +57,6 @@ function getAll(rulesPart) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {string} args.id
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<*>}
@@ -67,24 +73,35 @@ async function availableAll(root, args, context, info) {
  * @param {object} info
  * @returns {Promise<*>}
  */
-async function availableChannelMutations(root, args, context, info) {
+async function availableChannelPermissions(root, args, context, info) {
   return getAll(rulesChannel)(root, args, context, info);
 }
 
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {string} args.id
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<*>}
  */
-async function availableChannelMembershipsMutations(root, args, context, info) {
+async function availableChannelMembershipsPermissions(root, args, context, info) {
   return getAll(rulesChannelMemberships)(root, args, context, info);
+}
+
+/**
+ * @param {object | null} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+async function availableMeasurablesPermissions(root, args, context, info) {
+  return getAll(rulesMeasurables)(root, args, context, info);
 }
 
 module.exports = {
   availableAll,
-  availableChannelMutations,
-  availableChannelMembershipsMutations,
+  availableChannelPermissions,
+  availableMeasurablesPermissions,
+  availableChannelMembershipsPermissions,
 };

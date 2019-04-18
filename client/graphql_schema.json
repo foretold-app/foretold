@@ -300,19 +300,52 @@
             {
               "name": "bots",
               "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "Bot",
+              "args": [
+                {
+                  "name": "after",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
                     "ofType": null
-                  }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
                 }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "botsConnectionConnection",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -505,6 +538,37 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "authentication",
+              "description": null,
+              "args": [
+                {
+                  "name": "auth0jwt",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Authentication",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -625,85 +689,91 @@
           "interfaces": null,
           "enumValues": [
             {
-              "name": "measurementCreate",
+              "name": "MEASUREMENT_CREATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "measurableCreate",
+              "name": "MEASURABLE_CREATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "seriesCreate",
+              "name": "SERIES_CREATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "measurableArchive",
+              "name": "MEASURABLE_ARCHIVE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "measurableUnarchive",
+              "name": "MEASURABLE_UNARCHIVE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "measurableUpdate",
+              "name": "MEASURABLE_UPDATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "userUpdate",
+              "name": "USER_UPDATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "channelUpdate",
+              "name": "CHANNEL_UPDATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "channelCreate",
+              "name": "CHANNEL_CREATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "channelMembershipCreate",
+              "name": "CHANNEL_MEMBERSHIP_CREATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "channelMembershipRoleUpdate",
+              "name": "CHANNEL_MEMBERSHIP_DELETE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "channelMembershipDelete",
+              "name": "CHANNEL_MEMBERSHIP_ROLE_UPDATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "leaveChannel",
+              "name": "LEAVE_CHANNEL",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "joinChannel",
+              "name": "JOIN_CHANNEL",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "BOT_CREATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -771,97 +841,97 @@
           "interfaces": null,
           "enumValues": [
             {
-              "name": "permissions",
+              "name": "PERMISSIONS",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "user",
+              "name": "USER",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "users",
+              "name": "USERS",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "measurement",
+              "name": "MEASUREMENT",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "measurements",
+              "name": "MEASUREMENTS",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "measurable",
+              "name": "MEASURABLE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "measurables",
+              "name": "MEASURABLES",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "bot",
+              "name": "BOT",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "bots",
+              "name": "BOTS",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "agent",
+              "name": "AGENT",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "agents",
+              "name": "AGENTS",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "series",
+              "name": "SERIES",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "seriesCollection",
+              "name": "SERIES_COLLECTION",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "channel",
+              "name": "CHANNEL",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "channels",
+              "name": "CHANNELS",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "stats",
+              "name": "STATS",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -991,7 +1061,7 @@
               "deprecationReason": null
             },
             {
-              "name": "Bot",
+              "name": "Bots",
               "description": null,
               "args": [],
               "type": {
@@ -1943,6 +2013,18 @@
               "deprecationReason": null
             },
             {
+              "name": "jwt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "Agent",
               "description": null,
               "args": [],
@@ -2626,6 +2708,22 @@
               "deprecationReason": null
             },
             {
+              "name": "permissions",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Permissions",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "Measurements",
               "description": null,
               "args": [
@@ -2672,7 +2770,7 @@
               ],
               "type": {
                 "kind": "OBJECT",
-                "name": "measurableMeasurementsConnection",
+                "name": "measurableMeasurementsConnectionConnection",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -2790,7 +2888,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "measurableMeasurementsConnection",
+          "name": "measurableMeasurementsConnectionConnection",
           "description": "A connection to a list of items.",
           "fields": [
             {
@@ -2818,7 +2916,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "measurableMeasurementsEdge",
+                  "name": "measurableMeasurementsConnectionEdge",
                   "ofType": null
                 }
               },
@@ -2845,7 +2943,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "measurableMeasurementsEdge",
+          "name": "measurableMeasurementsConnectionEdge",
           "description": "An edge in a connection.",
           "fields": [
             {
@@ -3242,6 +3340,100 @@
         },
         {
           "kind": "OBJECT",
+          "name": "botsConnectionConnection",
+          "description": "A connection to a list of items.",
+          "fields": [
+            {
+              "name": "pageInfo",
+              "description": "Information to aid in pagination.",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfo",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "edges",
+              "description": "A list of edges.",
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "botsConnectionEdge",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "total",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "botsConnectionEdge",
+          "description": "An edge in a connection.",
+          "fields": [
+            {
+              "name": "node",
+              "description": "The item at the end of the edge",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Bot",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cursor",
+              "description": "A cursor for use in pagination",
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
           "name": "Stats",
           "description": null,
           "fields": [
@@ -3319,6 +3511,33 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "Authentication",
+          "description": null,
+          "fields": [
+            {
+              "name": "jwt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
                   "ofType": null
                 }
               },
@@ -3747,6 +3966,33 @@
               "type": {
                 "kind": "OBJECT",
                 "name": "ChannelsMembership",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "botCreate",
+              "description": null,
+              "args": [
+                {
+                  "name": "input",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "BotInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Bot",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -4271,6 +4517,51 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "BotInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "competitorType",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "competitorType",
+                  "ofType": null
+                }
               },
               "defaultValue": null
             }

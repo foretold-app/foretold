@@ -4,20 +4,21 @@ open Utils;
 type channelMembershipRole = [ | `ADMIN | `VIEWER];
 type myMembershipRole = [ | `ADMIN | `VIEWER | `NONE];
 type permission = [
-  | `channelCreate
-  | `channelMembershipCreate
-  | `channelMembershipDelete
-  | `channelMembershipRoleUpdate
-  | `channelUpdate
-  | `joinChannel
-  | `leaveChannel
-  | `measurableArchive
-  | `measurableCreate
-  | `measurableUnarchive
-  | `measurableUpdate
-  | `measurementCreate
-  | `seriesCreate
-  | `userUpdate
+  | `BOT_CREATE
+  | `CHANNEL_CREATE
+  | `CHANNEL_MEMBERSHIP_CREATE
+  | `CHANNEL_MEMBERSHIP_DELETE
+  | `CHANNEL_MEMBERSHIP_ROLE_UPDATE
+  | `CHANNEL_UPDATE
+  | `JOIN_CHANNEL
+  | `LEAVE_CHANNEL
+  | `MEASURABLE_ARCHIVE
+  | `MEASURABLE_CREATE
+  | `MEASURABLE_UNARCHIVE
+  | `MEASURABLE_UPDATE
+  | `MEASUREMENT_CREATE
+  | `SERIES_CREATE
+  | `USER_UPDATE
 ];
 
 module ChannelMembershipRole = {
@@ -29,6 +30,7 @@ module ChannelMembershipRole = {
     };
 };
 
+type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
 module Types = {
   type permissions = {allow: list(permission)};
   type user = {
@@ -38,10 +40,12 @@ module Types = {
     name: string,
   }
   and bot = {
-    competitorType: [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE],
+    competitorType,
     description: option(string),
     id: string,
     name: option(string),
+    jwt: option(string),
+    agent: option(agent),
   }
   and agentType =
     | Bot(bot)
@@ -106,11 +110,31 @@ module User = {
 
 module Bot = {
   type t = Types.bot;
-  let make = (~id, ~name=None, ~description=None, ~competitorType, ()): t => {
+  module CompetitorType = {
+    let toString = (c: competitorType) =>
+      switch (c) {
+      | `AGGREGATION => "Aggregation"
+      | `COMPETITIVE => "Competitive"
+      | `OBJECTIVE => "Judge"
+      };
+  };
+  let make =
+      (
+        ~id,
+        ~name=None,
+        ~description=None,
+        ~competitorType,
+        ~jwt=None,
+        ~agent=None,
+        (),
+      )
+      : t => {
     id,
     competitorType,
     description,
     name,
+    jwt,
+    agent,
   };
 };
 

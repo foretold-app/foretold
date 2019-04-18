@@ -81,7 +81,7 @@ describe('ChannelMemberships Resolvers', () => {
   describe('myRole()', () => {
     const root = { id: 'id1' };
     const args = {};
-    const context = { user: { agentId: 'agentId1' } };
+    const context = { agent: { id: 'agentId10' } };
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.channelMemberships, 'getOneOnlyRole')
@@ -91,7 +91,7 @@ describe('ChannelMemberships Resolvers', () => {
       return channelMemberships.myRole(root, args, context, info)
         .then((result) => {
           expect(data.channelMemberships.getOneOnlyRole).toHaveBeenCalledWith({
-            "agentId": "agentId1",
+            "agentId": "agentId10",
             "channelId": "id1"
           });
           expect(result).toBe(true);
@@ -102,7 +102,7 @@ describe('ChannelMemberships Resolvers', () => {
   describe('leave()', () => {
     const root = {};
     const args = { input: { channelId: 'channelId1' } };
-    const context = { user: { agentId: 'agentId1' } };
+    const context = { agent: { id: 'agentId11' } };
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.channelMemberships, 'leave')
@@ -112,7 +112,7 @@ describe('ChannelMemberships Resolvers', () => {
       return channelMemberships.leave(root, args, context, info)
         .then((result) => {
           expect(data.channelMemberships.leave).toHaveBeenCalledWith({
-            "agentId": "agentId1",
+            "agentId": "agentId11",
             "channelId": "channelId1"
           });
           expect(result).toBe(true);
@@ -123,7 +123,7 @@ describe('ChannelMemberships Resolvers', () => {
   describe('join()', () => {
     const root = {};
     const args = { input: { channelId: 'channelId2' } };
-    const context = { user: { agentId: 'agentId2' } };
+    const context = { agent: { id: 'agentId12' } };
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.channelMemberships, 'join')
@@ -133,7 +133,7 @@ describe('ChannelMemberships Resolvers', () => {
       return channelMemberships.join(root, args, context, info)
         .then((result) => {
           expect(data.channelMemberships.join).toHaveBeenCalledWith({
-            "agentId": "agentId2",
+            "agentId": "agentId12",
             "channelId": "channelId2"
           });
           expect(result).toBe(true);

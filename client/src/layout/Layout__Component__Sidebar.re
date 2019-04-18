@@ -75,6 +75,26 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
             className=Styles.item>
             {"Profile" |> ste}
           </div>
+          {
+            loggedInUser.agent
+            |> E.O.React.fmapOrNull((r: Context.Primary.Agent.t) =>
+                 <div
+                   onClick={_e => Context.Routing.Url.push(AgentBots(r.id))}
+                   className=Styles.item>
+                   {"My Bots" |> ste}
+                 </div>
+               )
+          }
+          {
+            loggedInUser.agent
+            |> E.O.React.fmapOrNull((r: Context.Primary.Agent.t) =>
+                 <div
+                   onClick={_e => Context.Routing.Url.push(AgentShow(r.id))}
+                   className=Styles.item>
+                   {"My Measurements" |> ste}
+                 </div>
+               )
+          }
           <div
             onClick={_e => Context.Routing.Url.push(AgentMeasurables(idd))}
             className=Styles.item>

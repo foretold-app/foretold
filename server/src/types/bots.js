@@ -15,6 +15,11 @@ const bot = new graphql.GraphQLObjectType({
     agentId: { type: graphql.GraphQLString },
     userId: { type: graphql.GraphQLString },
 
+    jwt: {
+      type: graphql.GraphQLString,
+      resolve: require('../resolvers/authentications').getJwtByAgentId,
+    },
+
     Agent: {
       type: require('./agents').agent,
       resolve: resolver(models.Bot.Agent),
@@ -27,6 +32,16 @@ const bot = new graphql.GraphQLObjectType({
   })
 });
 
+const botInput = new graphql.GraphQLInputObjectType({
+  name: 'BotInput',
+  fields: () => ({
+    name: { type: graphql.GraphQLString },
+    description: { type: graphql.GraphQLString },
+    competitorType: { type: require('./competitor').competitor },
+  }),
+});
+
 module.exports = {
   bot,
+  botInput,
 };

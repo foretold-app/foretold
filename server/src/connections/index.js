@@ -4,7 +4,7 @@ const models = require('../models');
 const { createConnection } = require('graphql-sequelize');
 
 const measurableMeasurementsConnection = createConnection({
-  name: 'measurableMeasurements',
+  name: 'measurableMeasurementsConnection',
   nodeType: require('../types').measurements.measurement,
   target: models.Measurable.Measurements,
   connectionFields: {
@@ -51,9 +51,22 @@ const seriesMeasurablesConnection = createConnection({
   },
 });
 
+const botsConnection = createConnection({
+  name: 'botsConnection',
+  nodeType: require('../types').bots.bot,
+  target: models.Bot,
+  connectionFields: {
+    total: {
+      type: graphql.GraphQLInt,
+      resolve: ({ fullCount }) => fullCount
+    }
+  },
+});
+
 module.exports = {
   measurableMeasurementsConnection,
   agentMeasurementsConnection,
   channelAgentsConnection,
   seriesMeasurablesConnection,
+  botsConnection,
 };

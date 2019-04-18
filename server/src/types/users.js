@@ -26,7 +26,7 @@ const user = new graphql.GraphQLObjectType({
       resolve: resolver(models.User.Agent),
     },
 
-    Bot: {
+    Bots: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./bots').bot)),
       resolve: resolver(models.User.Bots),
     },

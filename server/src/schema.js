@@ -15,6 +15,7 @@ const schema = new graphql.GraphQLSchema({
   types: [
     types.channels.channel,
     types.channelMemberships.channelsMembership,
+    types.bots.bot,
   ],
 
   query: new graphql.GraphQLObjectType({
@@ -86,12 +87,13 @@ const schema = new graphql.GraphQLSchema({
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
-        resolve: resolver(models.Bot),
+        resolve: resolvers.bots.one,
       },
 
       bots: {
-        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.bots.bot)),
-        resolve: resolver(models.Bot),
+        type: require('./connections').botsConnection.connectionType,
+        args: require('./connections').botsConnection.connectionArgs,
+        resolve: require('./connections').botsConnection.resolve,
       },
 
       agent: {
@@ -140,10 +142,15 @@ const schema = new graphql.GraphQLSchema({
 
       stats: {
         type: new graphql.GraphQLNonNull(stats),
-        resolve: async (ops, values, options) => {
-          // @todo:
-          return 11;
-        }
+        resolve: () => true
+      },
+
+      authentication: {
+        type: graphql.GraphQLNonNull(types.authentications.authentication),
+        args: {
+          auth0jwt: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
+        resolve: resolvers.authentications.getJwtByAuth0Jwt,
       },
     }
   }),
@@ -265,6 +272,14 @@ const schema = new graphql.GraphQLSchema({
           input: { type: graphql.GraphQLNonNull(types.channelMemberships.joiningChannelInput) },
         },
         resolve: resolvers.channelMemberships.join,
+      },
+
+      botCreate: {
+        type: types.bots.bot,
+        args: {
+          input: { type: graphql.GraphQLNonNull(types.bots.botInput) },
+        },
+        resolve: resolvers.bots.create,
       },
 
     }

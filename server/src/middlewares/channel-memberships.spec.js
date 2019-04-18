@@ -14,7 +14,7 @@ describe('ChannelMemberships Middlewares', () => {
     it('when arguments are passed', () => {
       const root = {};
       const args = { channelId: 'channelId1' };
-      const context = { user: { agentId: 'agentId1' } };
+      const context = { agent: { id: 'agentId1' } };
       const info = {};
       return channelMemberships(root, args, context, info).then((result) => {
         expect(data.channelMemberships.getOne).toHaveBeenCalledWith({
@@ -29,11 +29,11 @@ describe('ChannelMemberships Middlewares', () => {
     it('when root is passed', () => {
       const root = { channelId: 'channelId1' };
       const args = {};
-      const context = { user: { agentId: 'agentId1' } };
+      const context = { agent: { id: 'agentId2' } };
       const info = {};
       return channelMemberships(root, args, context, info).then((result) => {
         expect(data.channelMemberships.getOne).toHaveBeenCalledWith({
-          "agentId": "agentId1",
+          "agentId": "agentId2",
           "channelId": "channelId1"
         });
         expect(result).toBe(undefined);
@@ -45,13 +45,13 @@ describe('ChannelMemberships Middlewares', () => {
       const root = {};
       const args = {};
       const context = {
-        user: { agentId: 'agentId1' },
+        agent: { id: 'agentId3' },
         channelId: 'channelId1'
       };
       const info = {};
       return channelMemberships(root, args, context, info).then((result) => {
         expect(data.channelMemberships.getOne).toHaveBeenCalledWith({
-          "agentId": "agentId1",
+          "agentId": "agentId3",
           "channelId": "channelId1"
         });
         expect(result).toBe(undefined);

@@ -47,6 +47,7 @@
     "auth0-js": "^9.7.3",
     "body-parser": "^1.18.2",
     "body-parser-graphql": "^1.1.0",
+    "change-case": "^3.1.0",
     "cors": "^2.8.4",
     "dataloader-sequelize": "^1.7.2",
     "enforce": "^0.1.7",

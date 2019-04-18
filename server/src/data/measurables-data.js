@@ -16,15 +16,16 @@ class MeasurablesData extends DataBase {
   }
 
   /**
-   * @param data
-   * @param {object} user
-   * @return {Promise<*>}
+   * @param {object} data
+   * @param {Models.Creator} creator
+   * @return {Promise<Models.Measurable>}
    */
-  async createOne(data, user) {
-    const newMeasurable = await this.models.Measurable.create(data);
-    let notification = await newMeasurable.creationNotification(user);
+  async createOne(data, creator) {
+    const measurable = await this.models.Measurable.create(data);
+    /** @type {Models.Measurable} */
+    const notification = await measurable.creationNotification(creator);
     notify(notification);
-    return newMeasurable;
+    return measurable;
   }
 
   /**
@@ -48,22 +49,23 @@ class MeasurablesData extends DataBase {
   /**
    * @param {string} id
    * @param {object} data
-   * @param {object} user
+   * @param {Models.Creator} creator
    * @return {Promise<Models.Measurable>}
    */
-  async updateOne(id, data, user) {
+  async updateOne(id, data, creator) {
     let measurable = await this.models.Measurable.findById(id);
-    let notification = await measurable.updateNotifications(user, data);
+    /** @type {Models.Measurable} */
+    const notification = await measurable.updateNotifications(creator, data);
     notify(notification);
     return measurable.update(data);
   }
 
   /**
    * @param {object} options
-   * @param {string[]} options.states
-   * @param {string} options.agentId
-   * @param {number} options.offset
-   * @param {number} options.limit
+   * @param {string[]} [options.states]
+   * @param {string} [options.agentId]
+   * @param {number} [options.offset]
+   * @param {number} [options.limit]
    * @return {Promise<*|Array<Model>>}
    */
   async getAll(options) {

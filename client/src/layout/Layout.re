@@ -54,12 +54,14 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
     | ChannelEdit(_) => Channel_Layout.makeWithPage(route, loggedInUser)
     | AgentMeasurables(id) =>
       AgentMeasurables.make(~id, ~loggedInUser, ~layout) |> inApp
+    | BotCreate => BotCreate.make(~layout) |> inApp
     | AgentIndex => AgentIndex.make(~layout) |> inApp
     | EntityShow(id) => EntityShow.make(~id, ~layout) |> inApp
     | Redirect => Auth0Redirect.make(~me) |> inApp
     | EntityIndex => EntityIndex.make(~layout) |> inApp
     | Profile => Profile.make(~loggedInUser, ~layout) |> inApp
     | AgentShow(id) => AgentShow.make(~id, ~layout) |> inApp
+    | AgentBots(id) => AgentBots.make(~id, ~layout) |> inApp
     | ChannelIndex => ChannelIndex.make(~loggedInUser, ~layout) |> inApp
     | ChannelNew => ChannelNew.make(~layout) |> inApp
     | MeasurableEdit(id) => MeasurableEdit.make(~id, ~layout) |> inApp
@@ -75,4 +77,4 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
   };
 
 let make = (route: Route.t) =>
-  route |> toRoutePage |> Queries.User.withLoggedInUserQuery;
+  toRoutePage(route) |> Queries.User.withLoggedInUserQuery;

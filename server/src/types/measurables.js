@@ -3,6 +3,7 @@ const { resolver, DateType } = require('graphql-sequelize');
 
 const models = require('../models');
 const { MEASURABLE_STATE } = require('../models/measurable-state');
+const resolvers = require('../resolvers');
 
 const { valueType } = require('./value-type');
 
@@ -39,6 +40,11 @@ const measurable = new graphql.GraphQLObjectType({
     creatorId: { type: graphql.GraphQLString },
     seriesId: { type: graphql.GraphQLString },
     iAmOwner: require('./common').iAmOwner,
+
+    permissions: {
+      type: graphql.GraphQLNonNull(require('./permissions').permissions),
+      resolve: resolvers.permissions.measurablesPermissions,
+    },
 
     Measurements: {
       type: require('../connections').measurableMeasurementsConnection.connectionType,

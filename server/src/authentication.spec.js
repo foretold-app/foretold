@@ -5,10 +5,10 @@ describe('authentication', () => {
     expect(authentication).toBeInstanceOf(Object);
   });
   it('getToken', () => {
-    expect(authentication.getToken).toBeInstanceOf(Function);
+    expect(authentication.getQueryToken).toBeInstanceOf(Function);
   });
-  it('authenticationByJwtToken', () => {
-    expect(authentication.authenticationByJwtToken).toBeInstanceOf(Function);
+  it('authenticationByAuth0JwtToken', () => {
+    expect(authentication.authenticationByAuth0JwtToken).toBeInstanceOf(Function);
   });
   it('authentication', () => {
     expect(authentication.authentication).toBeInstanceOf(Function);

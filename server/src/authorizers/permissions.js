@@ -1,17 +1,25 @@
 const _ = require('lodash');
-const { shield, allow, and, or } = require('graphql-shield');
+const { shield, allow, and, or, not } = require('graphql-shield');
 
-const { isAuthenticated } = require('./users');
-const { isAdmin, isViewer } = require('./channel-memberships');
+const { isAuthenticated } = require('./agents');
 const { isChannelPublic } = require('./channels');
-const { isOwner } = require('./measurables');
+const { isAdmin, isViewer, isInChannel } = require('./channel-memberships');
+const { isMoreThenOneAdmin } = require('./channel-memberships');
+const { isSubjectAsObject } = require('./channel-memberships');
+const { isObjectAdmin } = require('./channel-memberships');
+const measurables = require('./measurables');
+const bots = require('./bots');
 
 const rulesChannel = {
   Query: {},
   Mutation: {
     channelUpdate: and(isAuthenticated, isAdmin),
-    leaveChannel: and(isAuthenticated),
-    joinChannel: and(isAuthenticated, isChannelPublic),
+    leaveChannel: and(
+      isAuthenticated,
+      isInChannel,
+      or(and(isAdmin, isMoreThenOneAdmin), not(isAdmin)),
+    ),
+    joinChannel: and(isAuthenticated, isChannelPublic, not(isInChannel)),
     channelMembershipCreate: and(isAuthenticated, isAdmin),
   }
 };
@@ -19,12 +27,33 @@ const rulesChannel = {
 const rulesChannelMemberships = {
   Query: {},
   Mutation: {
-    channelMembershipDelete: and(isAuthenticated, isAdmin),
-    channelMembershipRoleUpdate: and(isAuthenticated, isAdmin),
+    channelMembershipDelete: and(
+      isAuthenticated,
+      isAdmin,
+      or(and(isObjectAdmin, isMoreThenOneAdmin), not(isObjectAdmin)),
+    ),
+    channelMembershipRoleUpdate: and(
+      isAuthenticated,
+      isAdmin,
+      or(isObjectAdmin, and(not(isObjectAdmin), not(isSubjectAsObject))),
+    ),
+  }
+};
+
+const rulesMeasurables = {
+  Query: {},
+  Mutation: {
+    measurementCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
+    measurableArchive: and(isAuthenticated, measurables.isOwner, not(measurables.isArchived)),
+    measurableUnarchive: and(isAuthenticated, measurables.isOwner, measurables.isArchived),
+    measurableUpdate: and(isAuthenticated, measurables.isOwner),
   }
 };
 
 const rules = {
+  Bot: {
+    jwt: bots.isOwner,
+  },
   Query: {
     '*': allow,
     permissions: allow,
@@ -46,16 +75,13 @@ const rules = {
   },
   Mutation: {
     '*': isAuthenticated,
+    botCreate: isAuthenticated,
     channelCreate: isAuthenticated,
     userUpdate: isAuthenticated,
-    measurementCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
     seriesCreate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
-
     measurableCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
-    measurableArchive: and(isAuthenticated, isOwner),
-    measurableUnarchive: and(isAuthenticated, isOwner),
-    measurableUpdate: and(isAuthenticated, isOwner),
 
+    ...rulesMeasurables.Mutation,
     ...rulesChannel.Mutation,
     ...rulesChannelMemberships.Mutation,
   }
@@ -71,6 +97,7 @@ function getPermissions() {
 module.exports = {
   rules,
   rulesChannel,
+  rulesMeasurables,
   rulesChannelMemberships,
   getPermissions,
 };

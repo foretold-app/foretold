@@ -4,4 +4,5 @@ module.exports = {
   and: jest.fn(() => () => Promise.resolve()),
   allow: jest.fn(() => () => Promise.resolve()),
   or: jest.fn(() => () => Promise.resolve()),
+  not: jest.fn(() => () => Promise.resolve()),
 };

@@ -12,7 +12,7 @@ module Jwt = {
   let make = (s: string) => s |> decode |> Js.Json.decodeObject;
 };
 
-module AuthTokens = {
+module Auth0Tokens = {
   type access_token = string;
   type id_token = string;
   type expires_at = string;
@@ -94,7 +94,32 @@ module Auth0Client = {
     authOptions |> createClient |> (c => c##authorize());
 };
 
-module CallbackUrlToAuthTokens = {
+module ServerJwt = {
+  type jwt = string;
+  type t = jwt;
+
+  let set = (t: t) => {
+    open Dom.Storage;
+    localStorage |> setItem("server_jwt", t);
+    ();
+  };
+
+  let destroy = () => {
+    open Dom.Storage;
+    localStorage |> removeItem("server_jwt");
+    ();
+  };
+
+  let exists = (t: option(t)) => E.O.isSome(t);
+
+  let make_from_storage = (): option(t) => {
+    open Dom.Storage;
+    let get = e => localStorage |> getItem(e);
+    get("server_jwt");
+  };
+};
+
+module CallbackUrlToAuth0Tokens = {
   open Belt;
   open Utils;
 
@@ -115,20 +140,21 @@ module CallbackUrlToAuthTokens = {
     | ("", _, _) => None
     | (_, "", _) => None
     | (_, _, "") => None
-    | _ => Some(AuthTokens.make(accessToken, idToken, expiresAt))
+    | _ => Some(Auth0Tokens.make(accessToken, idToken, expiresAt))
     };
   };
 };
 
 module Actions = {
   let logout = () => {
-    AuthTokens.destroy();
+    Auth0Tokens.destroy();
+    ServerJwt.destroy();
     ReasonReact.Router.push("/");
     ();
   };
 
-  let logoutIfTokenIsObsolete = (tokens: AuthTokens.t) =>
-    if (tokens |> AuthTokens.isObsolete) {
+  let logoutIfTokenIsObsolete = (tokens: Auth0Tokens.t) =>
+    if (tokens |> Auth0Tokens.isObsolete) {
       logout();
     };
 };

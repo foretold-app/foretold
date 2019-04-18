@@ -8,7 +8,7 @@ const data = require('../data');
  * @param {number} args.first
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<*|Array<Model>>}
+ * @returns {Promise<{data: Models.Measurement[], total: number}>}
  */
 async function all(root, args, context, info) {
   /** @type {string} */

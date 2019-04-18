@@ -79,35 +79,37 @@ export namespace Layers {
     type pagination = object;
     type query = object;
     type params = object;
+    type response = { data: any };
+    type responseList = { data: any, total: number };
 
     interface DataSource {
       createOne(
         data,
         options,
-      ): any;
+      ): response;
 
       getOne(
         params,
         query,
         options,
-      ): any;
+      ): response;
 
       updateOne(
         params,
         data,
         options,
-      ): any;
+      ): response;
 
       deleteOne(
         params,
         options,
-      ): any | null;
+      ): response;
 
       getAll(
         filter,
         pagination,
         options,
-      ): any[];
+      ): responseList;
     }
   }
 
@@ -121,35 +123,37 @@ export namespace Layers {
     type pagination = object;
     type query = object;
     type params = object;
+    type response = { data: any };
+    type responseList = { data: any, total: number };
 
     interface AbstractModel {
       deleteOne(
         params: params,
         restrictions: restrictions,
-      ): any;
+      ): response;
 
       updateOne(
         params: params,
         data: data,
         restrictions: restrictions,
-      ): any;
+      ): response;
 
       createOne(
         data: data,
         restrictions: restrictions,
-      ): any;
+      ): response;
 
       getOne(
         params: params,
         query: query,
         restrictions: restrictions,
-      ): any;
+      ): response;
 
       getAll(
         filter: filter,
         pagination: pagination,
         restrictions: restrictions,
-      ): any[];
+      ): responseList;
     }
   }
 }

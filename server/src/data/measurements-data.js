@@ -36,7 +36,7 @@ class MeasurementsData extends DataBase {
    * @param {object} [options]
    * @param {boolean} [options.measurableId]
    * @param {string} options.agentId
-   * @return {Promise<void>}
+   * @return {Promise<{data: Models.Measurement[], total: number}>}
    */
   async getAll(filter = {}, pagination = {}, options = {}) {
     const restrictions = {

@@ -2,25 +2,26 @@ const _ = require('lodash');
 
 /**
  *
- * @param {{id: string, total: number}[]} all
+ * @param {{data: *, total: number}} result
  * @param {objects} args
  * @return {{total: *, pageInfo: {hasNextPage: boolean, hasPreviousPage: boolean, endCursor: *, startCursor: *}, edges: *}}
  */
-function connection(all, args) {
+function connection(result, args) {
+  const { data, total } = result;
+
   const last = _.get(args, 'last', 0);
-  const count = all.length;
+  const count = data.length;
 
-  const start = _.head(all);
-  const end = _.last(all);
+  const start = _.head(data);
+  const end = _.last(data);
 
-  const startCursor = _.get(start, 'id');
-  const endCursor = _.get(end, 'id');
+  const startCursor = _.get(start, 'createdAt');
+  const endCursor = _.get(end, 'createdAt');
 
-  const total = _.get(all, [0, 'total'], 0);
   const hasNextPage = (last + count) < total;
   const hasPreviousPage = !!last;
 
-  const edges = all.map(o => ({ node: o, cursor: _.get(o, 'id') }));
+  const edges = data.map(o => ({ node: o, cursor: _.get(o, 'createdAt') }));
 
   return {
     total: total,

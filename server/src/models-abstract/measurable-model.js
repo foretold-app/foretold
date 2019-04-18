@@ -42,7 +42,7 @@ class MeasurableModel extends ModelPostgres {
    * @param {object} filter
    * @param {object} pagination
    * @param {object} restrictions
-   * @return {Promise<void>}
+   * @return {Promise<*>}
    */
   async getAll(filter, pagination, restrictions) {
     const where = {};

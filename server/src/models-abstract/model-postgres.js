@@ -119,26 +119,19 @@ class ModelPostgres extends Model {
 
     if (filter.after) {
       where[this.and].push({
-        id: {
-          [this.gt]: filter.after,
+        createdAt: {
+          [this.gt]: new Date(filter.after * 1),
         },
       });
     }
 
     if (filter.before) {
       where[this.and].push({
-        id: {
-          [this.lt]: filter.before,
+        createdAt: {
+          [this.lt]: new Date(filter.before * 1),
         },
       });
     }
-  }
-
-  /**
-   * @return {[string, string]}
-   */
-  getTotal() {
-    return [this.literal('COUNT(*) OVER ()'), 'total'];
   }
 }
 

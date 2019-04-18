@@ -23,7 +23,7 @@ class MeasurementModel extends ModelPostgres {
    * @param {string} [filter.before]
    * @param {object} pagination
    * @param {object} restrictions
-   * @return {Promise<void>}
+   * @return {Promise<{data: Models.Measurement[], total: number}>}
    */
   async getAll(filter, pagination, restrictions) {
     const where = {};
@@ -34,17 +34,21 @@ class MeasurementModel extends ModelPostgres {
     if (filter.measurableId) where.measurableId = filter.measurableId;
     if (filter.agentId) where.agentId = filter.agentId;
 
-    return await this.model.findAll({
+    const cond = {
       limit: pagination.limit,
       offset: pagination.offset,
-      attributes: {
-        include: [this.getTotal()]
-      },
       where,
       order: [
         ['createdAt', 'DESC'],
       ],
-    });
+    };
+
+    /** @type {Models.Measurement[]} */
+    const data = await this.model.findAll(cond);
+    /** @type {number} */
+    const total = await this.model.count(cond);
+
+    return { data, total };
   }
 }
 

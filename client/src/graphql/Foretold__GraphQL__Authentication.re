@@ -13,14 +13,13 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 let redirectingMessage =
   <h3> {"You are being redirected..." |> Utils.ste} </h3>;
 
-let component = innerComponent =>
-  switch (Context.Auth.Auth0Tokens.make_from_storage()) {
+let component = (auth0Tokens: Context.Auth.Auth0Tokens.t, _innerComponent) => {
+  Js.log("Checking for jwt token");
+  switch (Context.Auth.ServerJwt.make_from_storage()) {
+  | Some(_) => _innerComponent
   | None =>
-    Context.Auth.Actions.logout();
-    redirectingMessage;
-  | Some(tokens) =>
-    Context.Auth.Actions.logoutIfTokenIsObsolete(tokens);
-    let query = Query.make(~auth0jwt=tokens.id_token, ());
+    let query = Query.make(~auth0jwt=auth0Tokens.id_token, ());
+    Js.log("Getting jwt token from Server");
     QueryComponent.make(~variables=query##variables, ({result}) =>
       result
       |> E.HttpResponse.fromApollo
@@ -30,13 +29,11 @@ let component = innerComponent =>
           switch (e) {
           | Success(c) =>
             Context.Auth.ServerJwt.set(c);
-            ReasonReact.Router.push("/");
-            redirectingMessage;
-          | _ =>
-            Context.Auth.Actions.logout();
-            redirectingMessage;
+            _innerComponent;
+          | _ => redirectingMessage
           }
       )
     )
     |> E.React.el;
   };
+};

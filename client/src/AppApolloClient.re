@@ -26,10 +26,15 @@ let errorLink =
 
 let link = () =>
   switch (Context.Auth.Auth0Tokens.make_from_storage()) {
-  | Some(s) => ApolloLinks.from([|contextLink(s), errorLink, httpLink|])
+  | Some(s) => ApolloLinks.from([|errorLink, httpLink|])
   | None => ApolloLinks.from([|errorLink, httpLink|])
   };
 
-  /* TODO: Don't always load devtools. */
+/* TODO: Don't always load devtools. */
 let instance = () =>
-  ReasonApollo.createApolloClient(~link=link(), ~cache=inMemoryCache, ~connectToDevTools=true,());
+  ReasonApollo.createApolloClient(
+    ~link=link(),
+    ~cache=inMemoryCache,
+    ~connectToDevTools=true,
+    (),
+  );

@@ -40,13 +40,10 @@ let competitorType = (~state, ~send) =>
   </Select>;
 
 let dataType = (~state, ~send) =>
-  <Select
-    value={state.dataType}
-    onChange={e => send(UpdateDataType(e))}
-    /* TODO: ADD BACK */
-    /* <Select.Option value="FLOAT_CDF"> {"Distribution" |> ste} </Select.Option>
-       <Select.Option value="FLOAT"> {"Point" |> ste} </Select.Option> */
-  />;
+  <Select value={state.dataType} onChange={e => send(UpdateDataType(e))}>
+    <Select.Option value="FLOAT_CDF"> {"Distribution" |> ste} </Select.Option>
+    <Select.Option value="FLOAT"> {"Point" |> ste} </Select.Option>
+  </Select>;
 
 let getIsValid = state =>
   switch (state.dataType) {

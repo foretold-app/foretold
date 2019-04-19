@@ -1,7 +1,7 @@
 const models = require('../models');
 const { MeasurementsData } = require('./measurements-data');
 
-describe('tests Measurement Data layer', () => {
+describe('Measurement Data layer', () => {
 
   it('class should be a constructor', () => {
     expect(MeasurementsData).toBeInstanceOf(Function);
@@ -35,19 +35,17 @@ describe('tests Measurement Data layer', () => {
   describe('getAll()', () => {
     const options = { agentId: 'agentId1' };
     beforeEach(() => {
-      jest.spyOn(models.Measurement, 'findAll').mockReturnValue(
+      jest.spyOn(instance.MeasurementModel, 'getAll').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('finds a measurement', () => {
-      return instance.getAll(options).then((result) => {
-        expect(models.Measurement.findAll).toHaveBeenCalledWith({
-          "where": {
-            "measurableId": {
-              [models.sequelize.Op.in]: "measurableIdsLiteral"
-            }
-          }
-        });
+      return instance.getAll({}, {}, options).then((result) => {
+        expect(instance.MeasurementModel.getAll).toHaveBeenCalledWith(
+          {},
+          {},
+          { "agentId": "agentId1", "measurableId": true },
+        );
         expect(result).toBe(true);
       });
     });

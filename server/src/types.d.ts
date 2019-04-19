@@ -79,39 +79,39 @@ export namespace Layers {
     type data = object;
     type options = object;
     type filter = object;
-    type pagination = object;
+    type pagination = { limit?: number, offset?: number };
     type query = object;
     type params = object;
     type response = { data: any };
-    type responseList = { data: any, total: number };
+    type responseList = { data: any[], total: number };
 
     interface DataSource {
       createOne(
-        data,
-        options,
+        data: data,
+        options: options,
       ): response;
 
       getOne(
-        params,
-        query,
-        options,
+        params: params,
+        query: query,
+        options: options,
       ): response;
 
       updateOne(
-        params,
-        data,
-        options,
+        params: params,
+        data: data,
+        options: options,
       ): response;
 
       deleteOne(
-        params,
-        options,
+        params: params,
+        options: options,
       ): response;
 
       getAll(
-        filter,
-        pagination,
-        options,
+        filter: filter,
+        pagination: pagination,
+        options: options,
       ): responseList;
     }
   }
@@ -121,13 +121,18 @@ export namespace Layers {
     type id = string | compoundId;
 
     type data = object;
-    type restrictions = object;
+    type restrictions = {
+      agentId?: string,
+      userId?: string,
+      channelId?: boolean,
+      measurableId?: boolean,
+    };
     type filter = object;
-    type pagination = object;
+    type pagination = { limit?: number, offset?: number };
     type query = object;
     type params = object;
     type response = { data: any };
-    type responseList = { data: any, total: number };
+    type responseList = { data: any[], total: number };
 
     interface AbstractModel {
       deleteOne(

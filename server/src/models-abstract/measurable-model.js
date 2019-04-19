@@ -39,15 +39,21 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
-   * @param {object} filter
-   * @param {object} pagination
-   * @param {object} restrictions
-   * @return {Promise<*>}
+   * @public
+   * @param {Layers.AbstractModelsLayer.filter} [filter]
+   * @param {string} [filter.channelId]
+   * @param {string} [filter.seriesId]
+   * @param {string} [filter.creatorId]
+   * @param {string[]} [filter.states]
+   * @param {Layers.AbstractModelsLayer.pagination} [pagination]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @return {Promise<{data: Models.Measurable[], total: number}>}
    */
-  async getAll(filter, pagination, restrictions) {
+  async getAll(filter = {}, pagination, restrictions) {
     const where = {};
 
     this.applyRestrictions(where, restrictions);
+    this.applyCursors(where, filter);
 
     // Filter
     if (_.isArray(filter.states)) {
@@ -58,8 +64,7 @@ class MeasurableModel extends ModelPostgres {
     if (filter.creatorId) where.creatorId = filter.creatorId;
     where.isArchived = false;
 
-    // Query
-    return await this.model.findAll({
+    const cond = {
       limit: pagination.limit,
       offset: pagination.offset,
       where,
@@ -70,9 +75,16 @@ class MeasurableModel extends ModelPostgres {
       attributes: {
         include: [
           this.getStateOrderField(),
-        ]
-      }
-    });
+        ],
+      },
+    };
+
+    /** @type {Models.Measurable[]} */
+    const data = await this.model.findAll(cond);
+    // /** @type {number} */
+    const total = await this.model.count({ where });
+
+    return { data, total };
   }
 }
 

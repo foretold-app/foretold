@@ -75,12 +75,8 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param {object} where
-   * @param {object} restrictions
-   * @param {string} [restrictions.agentId]
-   * @param {string} [restrictions.userId]
-   * @param {boolean} [restrictions.channelId]
-   * @param {boolean} [restrictions.measurableId]
+   * @param {object} [where]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    */
   applyRestrictions(where = {}, restrictions = {}) {
     if (!where[this.and]) where[this.and] = [];

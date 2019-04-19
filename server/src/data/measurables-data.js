@@ -69,25 +69,19 @@ class MeasurablesData extends DataBase {
   }
 
   /**
-   * @todo: fix interface (filer, pagination, options*)
    * @public
-   * @param {object} options
-   * @param {string[]} [options.states]
+   * @param {Layers.DataSourceLayer.filter} [filter]
+   * @param {Layers.DataSourceLayer.pagination} [pagination]
+   * @param {Layers.DataSourceLayer.options} [options]
    * @param {string} [options.agentId]
-   * @param {number} [options.offset]
-   * @param {number} [options.limit]
-   * @return {Promise<*|Array<Model>>}
+   * @return {Promise<{data: Models.Measurable[], total: number}>}
    */
-  async getAll(options) {
-    const pagination = {
-      offset: options.offset,
-      limit: options.limit,
-    };
+  async getAll(filter = {}, pagination = {}, options = {}) {
     const restrictions = {
       channelId: true,
       agentId: options.agentId,
     };
-    return this.MeasurableModel.getAll(options, pagination, restrictions);
+    return this.MeasurableModel.getAll(filter, pagination, restrictions);
   }
 
   /**

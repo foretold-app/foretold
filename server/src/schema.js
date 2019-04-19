@@ -72,10 +72,9 @@ const schema = new graphql.GraphQLSchema({
       },
 
       measurables: {
-        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.measurables.measurable)),
+        type: types.measurables.measurablesConnection,
         args: {
-          offset: { type: graphql.GraphQLInt },
-          limit: { type: graphql.GraphQLInt },
+          ...types.common.connectionArguments,
           creatorId: { type: graphql.GraphQLString },
           seriesId: { type: graphql.GraphQLString },
           channelId: { type: graphql.GraphQLString },

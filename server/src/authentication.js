@@ -51,16 +51,18 @@ function decodeJwtToken(token) {
 }
 
 /**
- * @param {object} payload
+ * @param {object} [payload]
  * @param {string} subject
+ * @param {string | null} [expiresIn]
  * @return {string}
  */
-function encondeJWT(payload, subject) {
-  return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: JWT_EXPIN,
-    issuer: JWT_ISSUER,
+function encodeJWT(payload = {}, subject, expiresIn = JWT_EXPIN) {
+  const options = {
     subject,
-  });
+    issuer: JWT_ISSUER,
+  };
+  if (expiresIn) options.expiresIn = expiresIn;
+  return jwt.sign(payload, JWT_SECRET, options);
 }
 
 /**
@@ -108,21 +110,19 @@ async function getJwtByAuth0Jwt(token) {
   try {
     const user = await authenticationByAuth0JwtToken(token);
     const agentId = user.agentId;
-    const payload = {};
-    return encondeJWT(payload, agentId);
+    return encodeJWT({}, agentId);
   } catch (err) {
     throw err;
   }
 }
 
 /**
- * @param {string} agentId
+ * @param {string} subject
  * @return {Promise<string>}
  */
-async function getJwtByAgentId(agentId) {
+async function getJwtForever(subject) {
   try {
-    const payload = {};
-    return encondeJWT(payload, agentId);
+    return encodeJWT({}, subject, null);
   } catch (err) {
     throw err;
   }
@@ -149,7 +149,7 @@ module.exports = {
   getQueryToken,
   authenticationByAuth0JwtToken,
   getJwtByAuth0Jwt,
-  getJwtByAgentId,
+  getJwtForever,
   authentication,
 };
 

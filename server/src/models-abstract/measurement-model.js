@@ -46,7 +46,7 @@ class MeasurementModel extends ModelPostgres {
     /** @type {Models.Measurement[]} */
     const data = await this.model.findAll(cond);
     /** @type {number} */
-    const total = await this.model.count(cond);
+    const total = await this.model.count({ where });
 
     return { data, total };
   }

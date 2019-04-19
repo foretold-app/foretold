@@ -81,8 +81,8 @@ class MeasurableModel extends ModelPostgres {
 
     /** @type {Models.Measurable[]} */
     const data = await this.model.findAll(cond);
-    /** @type {number} */
-    const total = await this.model.count(cond);
+    // /** @type {number} */
+    const total = await this.model.count({ where });
 
     return { data, total };
   }

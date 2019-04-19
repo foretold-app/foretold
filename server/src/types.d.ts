@@ -32,6 +32,8 @@ export namespace Models {
 
   export interface Agent {
     id: string;
+    getBot(): Models.Bot;
+    getUser(): Models.User;
   }
 
   export interface Series {
@@ -54,12 +56,12 @@ export namespace Schema {
     user?: Models.User;
     bot?: Models.Bot;
     agent: Models.Agent;
-    creator: Models.User | Models.Bot;
+    creator?: Models.User | Models.Bot;
     channel?: Models.Channel;
     channelMembership?: Models.ChannelMemberships;
     channelMembershipsAdmins?: Models.ChannelMemberships[];
     channelMembershipsRole?: Models.ChannelMembershipRole;
-    total: number;
+    total?: number;
   }
 
   export interface ChannelsInput {

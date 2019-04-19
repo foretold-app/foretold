@@ -26,7 +26,7 @@ async function getJwtByAuth0Jwt(root, args, context, info) {
  */
 async function getJwtByAgentId(root, args, context, info) {
   const botAgentId = _.get(root, 'agentId');
-  return await authentication.getJwtByAgentId(botAgentId);
+  return await authentication.getJwtForever(botAgentId);
 }
 
 module.exports = {

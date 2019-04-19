@@ -17,6 +17,7 @@ class ChannelsData extends DataBase {
   }
 
   /**
+   * @todo: fix interface (data, options)
    * @public
    * @param {Models.Agent} agent
    * @param {Schema.ChannelsInput} input
@@ -42,6 +43,7 @@ class ChannelsData extends DataBase {
   }
 
   /**
+   * @todo: fix interface (params, data, options)
    * @public
    * @param {string} id
    * @param {object} input
@@ -56,6 +58,7 @@ class ChannelsData extends DataBase {
   }
 
   /**
+   * @todo: rework
    * @public
    * @param {string} id
    * @return {Promise<Model[]>}
@@ -69,6 +72,7 @@ class ChannelsData extends DataBase {
   }
 
   /**
+   * @todo: rework
    * @public
    * @param {string} id
    * @return {Promise<Model>}
@@ -82,6 +86,8 @@ class ChannelsData extends DataBase {
   }
 
   /**
+   * @todo: fix interface (filter, pagination, options)
+   * @todo: move down (model abstraction)
    * @public
    * @param {object} options
    * @param {number} [options.offset]
@@ -105,6 +111,8 @@ class ChannelsData extends DataBase {
   }
 
   /**
+   * @todo: fix interface (params, query, options)
+   * @todo: move down (model abstraction)
    * @public
    * @param {string} id
    * @param {object} options

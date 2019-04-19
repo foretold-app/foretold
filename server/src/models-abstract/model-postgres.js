@@ -16,8 +16,11 @@ class ModelPostgres extends Model {
     this.sequelize = sequelize;
     this.Op = this.sequelize.Op;
     this.in = this.sequelize.Op.in;
+    this.gt = this.sequelize.Op.gt;
+    this.lt = this.sequelize.Op.lt;
     this.and = this.sequelize.Op.and;
     this.fn = this.sequelize.fn;
+    this.col = this.sequelize.col;
     this.literal = this.sequelize.literal;
   }
 
@@ -77,6 +80,7 @@ class ModelPostgres extends Model {
    * @param {string} [restrictions.agentId]
    * @param {string} [restrictions.userId]
    * @param {boolean} [restrictions.channelId]
+   * @param {boolean} [restrictions.measurableId]
    */
   applyRestrictions(where = {}, restrictions = {}) {
     if (!where[this.and]) where[this.and] = [];
@@ -94,10 +98,40 @@ class ModelPostgres extends Model {
         userId: restrictions.userId,
       });
     }
+
+    if (restrictions.measurableId) {
+      where[this.and].push({
+        measurableId: {
+          [this.in]: this.measurableIdsLiteral(restrictions.agentId),
+        },
+      });
+    }
   }
 
-  getTransaction() {
-    return this.sequelize.transaction();
+  /**
+   * @param {object} [where]
+   * @param {object} [filter]
+   * @param {string} [filter.after]
+   * @param {string} [filter.before]
+   */
+  applyCursors(where = {}, filter = {}) {
+    if (!where[this.and]) where[this.and] = [];
+
+    if (filter.after) {
+      where[this.and].push({
+        createdAt: {
+          [this.gt]: new Date(filter.after * 1),
+        },
+      });
+    }
+
+    if (filter.before) {
+      where[this.and].push({
+        createdAt: {
+          [this.lt]: new Date(filter.before * 1),
+        },
+      });
+    }
   }
 }
 

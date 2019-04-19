@@ -12,7 +12,26 @@ const isMe = {
   resolve: resolvers.common.isMe,
 };
 
+const connectionArguments = {
+  after: { type: graphql.GraphQLString },
+  before: { type: graphql.GraphQLString },
+  first: { type: graphql.GraphQLInt },
+  last: { type: graphql.GraphQLInt },
+};
+
+const pageInfoConnection = new graphql.GraphQLObjectType({
+  name: 'PageInfoConnection',
+  fields: () => ({
+    hasNextPage: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
+    hasPreviousPage: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
+    startCursor: { type: graphql.GraphQLString },
+    endCursor: { type: graphql.GraphQLString },
+  }),
+});
+
 module.exports = {
   iAmOwner,
   isMe,
+  connectionArguments,
+  pageInfoConnection,
 };

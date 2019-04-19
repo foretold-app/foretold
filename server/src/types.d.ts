@@ -59,6 +59,7 @@ export namespace Schema {
     channelMembership?: Models.ChannelMemberships;
     channelMembershipsAdmins?: Models.ChannelMemberships[];
     channelMembershipsRole?: Models.ChannelMembershipRole;
+    total: number;
   }
 
   export interface ChannelsInput {
@@ -74,40 +75,42 @@ export namespace Layers {
     type compoundId = object;
     type id = string | compoundId;
     type data = object;
-    type restrictions = object;
+    type options = object;
     type filter = object;
     type pagination = object;
     type query = object;
     type params = object;
+    type response = { data: any };
+    type responseList = { data: any, total: number };
 
     interface DataSource {
       createOne(
         data,
-        restrictions,
-      ): any;
+        options,
+      ): response;
 
       getOne(
         params,
         query,
-        restrictions,
-      ): any;
+        options,
+      ): response;
 
       updateOne(
         params,
         data,
-        restrictions,
-      ): any;
+        options,
+      ): response;
 
       deleteOne(
         params,
-        restrictions,
-      ): any | null;
+        options,
+      ): response;
 
       getAll(
         filter,
         pagination,
-        restrictions,
-      ): any[];
+        options,
+      ): responseList;
     }
   }
 
@@ -121,35 +124,37 @@ export namespace Layers {
     type pagination = object;
     type query = object;
     type params = object;
+    type response = { data: any };
+    type responseList = { data: any, total: number };
 
     interface AbstractModel {
       deleteOne(
         params: params,
         restrictions: restrictions,
-      ): any;
+      ): response;
 
       updateOne(
         params: params,
         data: data,
         restrictions: restrictions,
-      ): any;
+      ): response;
 
       createOne(
         data: data,
         restrictions: restrictions,
-      ): any;
+      ): response;
 
       getOne(
         params: params,
         query: query,
         restrictions: restrictions,
-      ): any;
+      ): response;
 
       getAll(
         filter: filter,
         pagination: pagination,
         restrictions: restrictions,
-      ): any[];
+      ): responseList;
     }
   }
 }

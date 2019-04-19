@@ -8,6 +8,7 @@ const users = require('./users');
 const bots = require('./bots');
 const permissions = require('./permissions');
 const authentications = require('./authentications');
+const common = require('./common');
 
 module.exports = {
   bots,
@@ -20,4 +21,5 @@ module.exports = {
   users,
   permissions,
   authentications,
+  common,
 };

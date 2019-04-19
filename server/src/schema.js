@@ -54,9 +54,11 @@ const schema = new graphql.GraphQLSchema({
       },
 
       measurements: {
-        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.measurements.measurement)),
+        type: types.measurements.measurementsConnection,
         args: {
+          ...types.common.connectionArguments,
           measurableId: { type: graphql.GraphQLString },
+          agentId: { type: graphql.GraphQLString },
         },
         resolve: resolvers.measurements.all,
       },

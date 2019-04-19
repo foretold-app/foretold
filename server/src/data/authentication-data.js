@@ -21,6 +21,7 @@ class AuthenticationData {
     this.JWT_SECRET = JWT_SECRET;
     this.JWT_ISSUER = JWT_ISSUER;
     this.JWT_EXPIN = JWT_EXPIN;
+
     this.users = new UsersData();
     this.agents = new AgentsData();
   }

@@ -1,6 +1,7 @@
 const { DataBase } = require('./data-base');
 
 const { BotModel } = require('../models-abstract');
+const { AuthenticationData } = require('./authentication-data');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -11,6 +12,7 @@ class BotsData extends DataBase {
   constructor() {
     super();
     this.BotModel = new BotModel();
+    this.authentication = new AuthenticationData();
   }
 
   /**
@@ -39,6 +41,15 @@ class BotsData extends DataBase {
    */
   async getOne(params, query, restrictions) {
     return this.BotModel.getOne(params, query, restrictions);
+  }
+
+  /**
+   * @param {object} params
+   * @return {Promise<void>}
+   */
+  async tokenRefresh(params) {
+    const bot = await this.BotModel.getOne(params);
+    return this.authentication.getJwtForever(bot.id);
   }
 }
 

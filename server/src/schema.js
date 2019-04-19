@@ -221,7 +221,7 @@ const schema = new graphql.GraphQLSchema({
       channelUpdate: {
         type: types.channels.channel,
         args: {
-          id: { type: graphql.GraphQLString },
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
           input: { type: graphql.GraphQLNonNull(types.channels.channelInput) },
         },
         resolve: resolvers.channels.update,
@@ -281,6 +281,14 @@ const schema = new graphql.GraphQLSchema({
           input: { type: graphql.GraphQLNonNull(types.bots.botInput) },
         },
         resolve: resolvers.bots.create,
+      },
+
+      botTokenRefresh: {
+        type: types.authentications.authentication,
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
+        resolve: resolvers.bots.tokenRefresh,
       },
 
     }

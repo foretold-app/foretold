@@ -102,6 +102,14 @@ class ModelPostgres extends Model {
         },
       });
     }
+
+    if (restrictions.measuredByAgentId) {
+      where[this.and].push({
+        measurementId: {
+          [this.in]: this.measurementIdsLiteral(restrictions.measuredByAgentId),
+        },
+      });
+    }
   }
 
   /**

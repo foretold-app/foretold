@@ -31,9 +31,10 @@ class MeasurementsData extends DataBase {
   }
 
   /**
-   * @param {object} [filter]
-   * @param {object} [pagination]
-   * @param {object} [options]
+   * @public
+   * @param {Layers.DataSourceLayer.filter} [filter]
+   * @param {Layers.DataSourceLayer.pagination} [pagination]
+   * @param {Layers.DataSourceLayer.options} [options]
    * @param {boolean} [options.measurableId]
    * @param {string} options.agentId
    * @return {Promise<{data: Models.Measurement[], total: number}>}

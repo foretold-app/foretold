@@ -16,13 +16,14 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @param {object} filter
+   * @public
+   * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {string} [filter.measurableId]
    * @param {string} [filter.agentId]
    * @param {string} [filter.after]
    * @param {string} [filter.before]
-   * @param {object} pagination
-   * @param {object} restrictions
+   * @param {Layers.AbstractModelsLayer.pagination} [pagination]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {Promise<{data: Models.Measurement[], total: number}>}
    */
   async getAll(filter, pagination, restrictions) {

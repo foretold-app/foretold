@@ -93,40 +93,54 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
+let inner =
+    (tokens: Context.Auth.Auth0Tokens.t, auth0Id: string, innerComponentFn) => {
+  let query = Query.make(~auth0Id, ());
+  QueryComponent.make(~variables=query##variables, ({result}) =>
+    result
+    |> E.HttpResponse.fromApollo
+    |> E.HttpResponse.fmap(e => e##user |> E.O.fmap(toUser))
+    |> E.HttpResponse.optionalToMissing
+    |> (
+      e =>
+        switch (e) {
+        | Success(c) =>
+          innerComponentFn(
+            Context.Me.WithTokensAndUserData({
+              authTokens: tokens,
+              userData: c,
+            }),
+          )
+        | _ =>
+          innerComponentFn(
+            Context.Me.WithTokensAndUserLoading({
+              authTokens: tokens,
+              loadingUserData: e,
+            }),
+          )
+        }
+    )
+  )
+  |> E.React.el;
+};
+
+let logOutIfTokensObsolete = t => {
+  Context.Auth.Actions.logoutIfTokenIsObsolete(t);
+  t;
+};
+
 let withLoggedInUserQuery = innerComponentFn =>
-  switch (Context.Auth.AuthTokens.make_from_storage()) {
-  | None => innerComponentFn(Context.Me.WithoutTokens)
-  | Some(tokens) =>
-    Context.Auth.Actions.logoutIfTokenIsObsolete(tokens);
-    switch (tokens |> Context.Auth.AuthTokens.auth0Id) {
-    | None => innerComponentFn(Context.Me.WithoutTokens)
-    | Some(auth0Id) =>
-      let query = Query.make(~auth0Id, ());
-      QueryComponent.make(~variables=query##variables, ({result}) =>
-        result
-        |> E.HttpResponse.fromApollo
-        |> E.HttpResponse.fmap(e => e##user |> E.O.fmap(toUser))
-        |> E.HttpResponse.optionalToMissing
-        |> (
-          e =>
-            switch (e) {
-            | Success(c) =>
-              innerComponentFn(
-                Context.Me.WithTokensAndUserData({
-                  authTokens: tokens,
-                  userData: c,
-                }),
-              )
-            | _ =>
-              innerComponentFn(
-                Context.Me.WithTokensAndUserLoading({
-                  authTokens: tokens,
-                  loadingUserData: e,
-                }),
-              )
-            }
-        )
-      )
-      |> E.React.el;
-    };
-  };
+  Context.Auth.Auth0Tokens.make_from_storage()
+  |> E.O.fmap(logOutIfTokensObsolete)
+  |> E.O.bind(_, (tokens: Context.Auth.Auth0Tokens.t) =>
+       tokens
+       |> Context.Auth.Auth0Tokens.auth0Id
+       |> E.O.fmap(auth0Id => (tokens, auth0Id))
+     )
+  |> E.O.fmap(((tokens, auth0Id)) =>
+       Foretold__GraphQL__Authentication.component(
+         tokens,
+         inner(tokens, auth0Id, innerComponentFn),
+       )
+     )
+  |> E.O.default(innerComponentFn(Context.Me.WithoutTokens));

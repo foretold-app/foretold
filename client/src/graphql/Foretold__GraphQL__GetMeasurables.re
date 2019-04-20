@@ -29,7 +29,7 @@ type channel = {
 let toAgent = (c: creator): Context.Primary.Agent.t =>
   Context.Primary.Agent.make(~id=c.id, ~name=c.name, ());
 
-type measurable = {
+type node = {
   id: string,
   name: string,
   channel: option(channel),
@@ -52,7 +52,7 @@ type measurable = {
 };
 
 /* TODO: Fix channel */
-let toMeasurable = (m: measurable): Context.Primary.Measurable.t =>
+let toMeasurable = (m: node): Context.Primary.Measurable.t =>
   Context.Primary.Measurable.make(
     ~id=m.id,
     ~name=m.name,
@@ -78,39 +78,50 @@ let toMeasurable = (m: measurable): Context.Primary.Measurable.t =>
 
 module Query = [%graphql
   {|
-    query getMeasurables ($offset: Int, $limit: Int, $channelId: String, $seriesId: String, $creatorId: String) {
-        measurables(offset: $offset, limit: $limit, channelId: $channelId, seriesId: $seriesId, creatorId: $creatorId) @bsRecord {
-           id
-           name
-           channel: Channel @bsRecord {
-             id
-             name
-             description
-             isPublic
-           }
-           labelCustom
-           resolutionEndpoint
-           valueType
-           measurementCount
-           measurerCount
-           labelSubject
-           labelProperty
-           iAmOwner
-           labelOnDate @bsDecoder(fn: "E.J.O.toMoment")
-           state @bsDecoder(fn: "Context.Primary.MeasurableState.fromEnum")
-           stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
-           expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
-           createdAt @bsDecoder(fn: "E.J.toMoment")
-           updatedAt @bsDecoder(fn: "E.J.toMoment")
-           creator @bsRecord{
-             id
-             name
-           }
-           series @bsRecord{
-             id
-             name
-             description
-           }
+    query getMeasurables ($channelId: String, $seriesId: String, $creatorId: String, $first: Int, $after: String) {
+        measurables(channelId: $channelId, seriesId: $seriesId, creatorId: $creatorId, first: $first, after: $after) {
+          total
+          pageInfo{
+            hasPreviousPage
+            hasNextPage
+            startCursor
+            endCursor
+          }
+          edges{
+            node @bsRecord{
+              id
+              name
+              channel: Channel @bsRecord {
+                id
+                name
+                description
+                isPublic
+              }
+              labelCustom
+              resolutionEndpoint
+              valueType
+              measurementCount
+              measurerCount
+              labelSubject
+              labelProperty
+              iAmOwner
+              labelOnDate @bsDecoder(fn: "E.J.O.toMoment")
+              state @bsDecoder(fn: "Context.Primary.MeasurableState.fromEnum")
+              stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
+              expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
+              createdAt @bsDecoder(fn: "E.J.toMoment")
+              updatedAt @bsDecoder(fn: "E.J.toMoment")
+              creator @bsRecord{
+                id
+                name
+              }
+              series @bsRecord{
+                id
+                name
+                description
+              }
+            }
+          }
         }
     }
   |}
@@ -118,16 +129,15 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
+let unpackEdges = a =>
+  a##measurables
+  |> E.O.fmap(Context.Primary.Connection.fromJson(toMeasurable));
+
 let queryToComponent = (query, innerComponentFn) =>
   QueryComponent.make(~variables=query##variables, o =>
     o.result
     |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(
-         (d => d##measurables)
-         ||> E.A.O.concatSomes
-         ||> E.A.fmap(toMeasurable)
-         ||> innerComponentFn,
-       )
+    |> E.R.fmap(unpackEdges ||> innerComponentFn)
     |> E.R.id
   )
   |> E.React.el;
@@ -139,63 +149,50 @@ let component =
       pageLimit,
       innerComponentFn: 'a => ReasonReact.reactElement,
     ) => {
-  let query =
-    Query.make(~offset=page * pageLimit, ~limit=pageLimit, ~channelId, ());
+  let query = Query.make(~channelId, ());
   queryToComponent(query, innerComponentFn);
 };
 
-let component2 = (~channelId, ~pageNumber, ~pageLimit, ~innerComponentFn) => {
+let component2 =
+    (~channelId, ~pageLimit, ~after: option(string), ~innerComponentFn) => {
   let query =
     Query.make(
-      ~offset=pageNumber * pageLimit,
-      ~limit=pageLimit,
       ~channelId,
+      ~first=pageLimit,
+      ~after=after |> E.O.default(""),
       (),
     );
   QueryComponent.make(~variables=query##variables, o =>
     o.result
     |> E.HttpResponse.fromApollo
-    |> E.HttpResponse.fmap(e =>
-         e##measurables |> E.A.O.concatSomes |> E.A.fmap(toMeasurable)
-       )
+    |> E.HttpResponse.fmap(unpackEdges)
+    |> E.HttpResponse.optionalToMissing
     |> innerComponentFn
   )
   |> E.React.el;
 };
 
-let component3 = (~seriesId, ~pageNumber, ~pageLimit, ~innerComponentFn) => {
-  let query =
-    Query.make(
-      ~offset=pageNumber * pageLimit,
-      ~limit=pageLimit,
-      ~seriesId,
-      (),
-    );
+let component3 =
+    (~seriesId, ~pageLimit, ~after: option(string), ~innerComponentFn) => {
+  let query = Query.make(~seriesId, ~first=pageLimit, ());
   QueryComponent.make(~variables=query##variables, o =>
     o.result
     |> E.HttpResponse.fromApollo
-    |> E.HttpResponse.fmap(e =>
-         e##measurables |> E.A.O.concatSomes |> E.A.fmap(toMeasurable)
-       )
+    |> E.HttpResponse.fmap(unpackEdges)
+    |> E.HttpResponse.optionalToMissing
     |> innerComponentFn
   )
   |> E.React.el;
 };
 
-let component4 = (~creatorId, ~pageNumber, ~pageLimit, ~innerComponentFn) => {
-  let query =
-    Query.make(
-      ~offset=pageNumber * pageLimit,
-      ~limit=pageLimit,
-      ~creatorId,
-      (),
-    );
+let component4 =
+    (~creatorId, ~pageLimit, ~after: option(string), ~innerComponentFn) => {
+  let query = Query.make(~creatorId, ~first=pageLimit, ());
   QueryComponent.make(~variables=query##variables, o =>
     o.result
     |> E.HttpResponse.fromApollo
-    |> E.HttpResponse.fmap(e =>
-         e##measurables |> E.A.O.concatSomes |> E.A.fmap(toMeasurable)
-       )
+    |> E.HttpResponse.fmap(unpackEdges)
+    |> E.HttpResponse.optionalToMissing
     |> innerComponentFn
   )
   |> E.React.el;
@@ -203,12 +200,12 @@ let component4 = (~creatorId, ~pageNumber, ~pageLimit, ~innerComponentFn) => {
 
 let componentWithSeries =
     (channelId, seriesId, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = Query.make(~offset=0, ~limit=200, ~channelId, ~seriesId, ());
+  let query = Query.make(~channelId, ~seriesId, ());
   queryToComponent(query, innerComponentFn);
 };
 
 let componentWithCreator =
     (creatorId, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = Query.make(~offset=0, ~limit=200, ~creatorId, ());
+  let query = Query.make(~creatorId, ());
   queryToComponent(query, innerComponentFn);
 };

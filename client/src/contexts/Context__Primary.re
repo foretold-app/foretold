@@ -75,6 +75,64 @@ module Types = {
     agent: option(agent),
     permissions: option(permissions),
   };
+
+  type pageInfo = {
+    hasNextPage: bool,
+    hasPreviousPage: bool,
+    endCursor: option(string),
+    startCursor: option(string),
+  };
+
+  type connection('a) = {
+    pageInfo,
+    total: option(int),
+    edges: array('a),
+  };
+};
+
+module PageInfo = {
+  type t = Types.pageInfo;
+  let fromJson =
+      (
+        pageInfo: {
+          .
+          "endCursor": option(string),
+          "hasNextPage": bool,
+          "hasPreviousPage": bool,
+          "startCursor": option(string),
+        },
+      )
+      : t => {
+    endCursor: pageInfo##endCursor,
+    startCursor: pageInfo##startCursor,
+    hasPreviousPage: pageInfo##hasPreviousPage,
+    hasNextPage: pageInfo##hasNextPage,
+  };
+};
+
+module Connection = {
+  type t('a) = Types.connection('a);
+  let make =
+      (~pageInfo: Types.pageInfo, ~total=None, ~edges: array('a)): t('a) => {
+    pageInfo,
+    total,
+    edges,
+  };
+  type edges('a) = option(Js.Array.t(option({. "node": option('a)})));
+
+  let flattenEdges = (edges: edges('a)) =>
+    edges
+    |> E.A.O.defaultEmpty
+    |> E.A.O.concatSome
+    |> E.A.fmap(e => e##node)
+    |> E.A.O.concatSome;
+
+  let fromJson = (nodeTransformation, json) => {
+    let pageInfo = json##pageInfo |> PageInfo.fromJson;
+    let total = json##total;
+    let edges = json##edges |> flattenEdges |> E.A.fmap(nodeTransformation);
+    make(~pageInfo, ~total, ~edges);
+  };
 };
 
 module Permissions = {

@@ -107,9 +107,9 @@ let make =
           ) {
           | (_, Some(measurable)) =>
             <C.Measurable.FullPresentation id={measurable.id} loggedInUser />
-          | (Success(measurables), None) =>
+          | (Success(connection), None) =>
             <C.Measurables.SeriesTable
-              measurables
+              measurables={connection.edges}
               selected=None
               onClick=(
                 id =>

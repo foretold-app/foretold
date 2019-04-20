@@ -258,6 +258,13 @@ module HttpResponse = {
     | Loading => Loading
     };
 
+  let flatten = (successFn, errorFn, loadingFn, result: t('a)) =>
+    switch (result) {
+    | Success(response) => successFn(response)
+    | Error(e) => errorFn(e)
+    | Loading => loadingFn()
+    };
+
   let isSuccess = (result: t('a)) =>
     switch (result) {
     | Success(_) => true

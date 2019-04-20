@@ -11,9 +11,11 @@ module type Config = {
   let callFn:
     (
       callFnParams,
-      ~pageNumber: int,
       ~pageLimit: int,
-      ~innerComponentFn: Client.E.HttpResponse.t(array(itemType)) =>
+      ~after: option(string),
+      ~innerComponentFn: Client.E.HttpResponse.t(
+                           Context.Primary.Connection.t(itemType),
+                         ) =>
                          ReasonReact.reactElement
     ) =>
     ReasonReact.reactElement;
@@ -22,20 +24,18 @@ module type Config = {
 module Make = (Config: Config) => {
   module Config = Config;
   module Types = {
-    type pageNumber = int;
+    type after = option(string);
+    type pageConfig = {after};
 
-    type itemUnselected = {pageNumber: int};
-
-    type itemSelected = {
-      pageNumber,
-      selectedIndex: int,
-    };
+    type itemSelected = {selectedIndex: int};
 
     type itemState =
-      | ItemUnselected(itemUnselected)
+      | ItemUnselected
       | ItemSelected(itemSelected);
 
-    type response = Client.E.HttpResponse.t(array(Config.itemType));
+    type connection = Context.Primary.Connection.t(Config.itemType);
+
+    type response = Client.E.HttpResponse.t(connection);
 
     type action =
       | UpdateResponse(response)
@@ -70,6 +70,7 @@ module Make = (Config: Config) => {
     type state = {
       itemState,
       response,
+      pageConfig,
     };
   };
 
@@ -79,21 +80,15 @@ module Make = (Config: Config) => {
     module ItemSelected = {
       type t = itemSelected;
 
-      let deselect = (_, t: t) => ItemUnselected({pageNumber: t.pageNumber});
+      let deselect = (_, t: t) => ItemUnselected;
 
       let nextSelection = (itemsPerPage, t: t) =>
         E.BoundedInt.increment(t.selectedIndex, itemsPerPage)
-        <$> (
-          selectedIndex =>
-            ItemSelected({pageNumber: t.pageNumber, selectedIndex})
-        );
+        <$> (selectedIndex => ItemSelected({selectedIndex: t.selectedIndex}));
 
       let lastSelection = (itemsPerPage, t: t) =>
         E.BoundedInt.decrement(t.selectedIndex, itemsPerPage)
-        <$> (
-          selectedIndex =>
-            ItemSelected({pageNumber: t.pageNumber, selectedIndex})
-        );
+        <$> (selectedIndex => ItemSelected({selectedIndex: selectedIndex}));
 
       let newState = (itemsPerPage, t: t, action: action) =>
         (
@@ -114,46 +109,39 @@ module Make = (Config: Config) => {
     };
 
     module ItemUnselected = {
-      type t = itemUnselected;
-
-      let nextPage = (_, t: t) =>
-        t.pageNumber
-        |> E.NonZeroInt.increment
-        <$> (p => ItemUnselected({pageNumber: p}));
-
-      let lastPage = (_, t: t) =>
-        t.pageNumber
-        |> E.NonZeroInt.decrement
-        <$> (p => ItemUnselected({pageNumber: p}));
-
-      let selectIndex = (i, itemsPerPage, t: t) =>
-        E.BoundedInt.make(i, itemsPerPage)
-        <$> (s => ItemSelected({pageNumber: t.pageNumber, selectedIndex: s}));
-
-      let newState = (itemsPerPage, t: t, action: action) =>
-        (
-          switch (action) {
-          | NextPage => Some(nextPage)
-          | LastPage => Some(lastPage)
-          | SelectIndex(i) => Some(selectIndex(i))
-          | _ => None
+      let nextPage = (r: response) =>
+        r
+        |> E.HttpResponse.fmap((r: Context.Primary.Connection.t('a)) =>
+             {after: r.pageInfo.endCursor}
+           )
+        |> E.HttpResponse.flatten(r => Some(r), _ => None, () => None)
+        |> (
+          e => {
+            Js.log("HI");
+            e;
           }
         )
-        |> (
-          e =>
-            switch (e) {
-            | Some(fn) => fn(itemsPerPage, t)
-            | None => None
-            }
-        );
-    };
+        |> E.O.default({after: None});
 
-    module ItemState = {
-      type t = itemState;
-      let pageNumber = (t: t) =>
-        switch (t) {
-        | ItemSelected(r) => r.pageNumber
-        | ItemUnselected(r) => r.pageNumber
+      let lastPage = (r: response): pageConfig =>
+        r
+        |> E.HttpResponse.fmap((r: Context.Primary.Connection.t('a)) =>
+             {after: r.pageInfo.startCursor}
+           )
+        |> E.HttpResponse.flatten(r => Some(r), _ => None, () => None)
+        |> E.O.default({after: None});
+
+      let selectIndex = (i, itemsPerPage) =>
+        E.BoundedInt.make(i, itemsPerPage)
+        <$> (s => ItemSelected({selectedIndex: s}));
+
+      let newState = (itemsPerPage, t: response, action: action, pageConfig) =>
+        switch (action) {
+        | NextPage => Some((ItemUnselected, nextPage(t)))
+        | LastPage => Some((ItemUnselected, lastPage(t)))
+        | SelectIndex(i) =>
+          selectIndex(i, itemsPerPage) |> E.O.fmap(r => (r, pageConfig))
+        | _ => None
         };
     };
 
@@ -162,7 +150,7 @@ module Make = (Config: Config) => {
       let selection = (t: t) =>
         switch (t.itemState, t.response) {
         | (ItemSelected({selectedIndex}), Success(m)) =>
-          E.A.get(m, selectedIndex)
+          E.A.get(m.edges, selectedIndex)
         | _ => None
         };
     };
@@ -170,29 +158,25 @@ module Make = (Config: Config) => {
     module ReducerParams = {
       type t = reducerParams;
 
-      let pageNumber = (t: t) =>
-        switch (t.itemState) {
-        | ItemSelected(r) => r.pageNumber
-        | ItemUnselected(r) => r.pageNumber
-        };
-
       let pageIndex = (t: t) =>
         switch (t.itemState) {
         | ItemSelected(r) => Some(r.selectedIndex)
         | ItemUnselected(_) => None
         };
 
-      let canDecrementPage = (t: t) => t |> pageNumber > 0;
+      let canDecrementPage = (t: t) =>
+        t.response
+        |> E.HttpResponse.fmap((r: connection) => r.pageInfo.hasPreviousPage)
+        |> E.HttpResponse.flatten(r => r, _ => false, () => false);
 
       let canIncrementPage = (t: t) =>
-        switch (t.response) {
-        | Success(r) => r |> E.A.length == t.itemsPerPage
-        | _ => false
-        };
+        t.response
+        |> E.HttpResponse.fmap((r: connection) => r.pageInfo.hasNextPage)
+        |> E.HttpResponse.flatten(r => r, _ => false, () => false);
 
       let itemExistsAtIndex = (t: t, index) =>
         switch (t.response) {
-        | Success(r) => index < E.A.length(r) && index >= 0
+        | Success(r) => index < E.A.length(r.edges) && index >= 0
         | _ => false
         };
 
@@ -263,7 +247,7 @@ module Make = (Config: Config) => {
 
     let findIndexOfId = (t: Types.reducerParams, id: string) =>
       switch (t.response) {
-      | Success(m) => m |> E.A.findIndex(r => Config.getId(r) == id)
+      | Success(m) => m.edges |> E.A.findIndex(r => Config.getId(r) == id)
       | _ => None
       };
 
@@ -276,7 +260,12 @@ module Make = (Config: Config) => {
 
   let component = ReasonReact.reducerComponent("SelectWithPaginationReducer");
 
-  let compareItems = (a, b) => Belt.Array.eq(a, b, Config.isEqual);
+  let compareItems =
+      (
+        a: Context.Primary.Connection.t('a),
+        b: Context.Primary.Connection.t('a),
+      ) =>
+    Belt.Array.eq(a.edges, b.edges, Config.isEqual);
 
   let make =
       (
@@ -287,31 +276,42 @@ module Make = (Config: Config) => {
       ) => {
     ...component,
     initialState: () => {
-      itemState: ItemUnselected({pageNumber: 0}),
+      itemState: ItemUnselected,
       response: Loading,
+      pageConfig: {
+        after: None,
+      },
     },
     reducer: (action, state: state) =>
       switch (action) {
       | UpdateResponse(response) =>
-        {response, itemState: state.itemState}->ReasonReact.Update
+        {response, itemState: state.itemState, pageConfig: state.pageConfig}
+        ->ReasonReact.Update
       | _ =>
         let newState =
           switch (state, action) {
-          | ({itemState: ItemUnselected(s)}, _) =>
-            Reducers.ItemUnselected.newState(itemsPerPage, s, action)
+          | ({itemState: ItemUnselected}, _) =>
+            Reducers.ItemUnselected.newState(
+              itemsPerPage,
+              state.response,
+              action,
+              state.pageConfig,
+            )
           | ({itemState: ItemSelected(s)}, _) =>
             Reducers.ItemSelected.newState(itemsPerPage, s, action)
+            |> E.O.fmap((r: Types.itemState) => (r, state.pageConfig))
           };
         switch (newState) {
-        | Some(s) =>
-          {response: state.response, itemState: s}->ReasonReact.Update
+        | Some((itemState, pageConfig)) =>
+          {response: state.response, itemState, pageConfig}
+          ->ReasonReact.Update
         | None => ReasonReact.NoUpdate
         };
       },
     render: ({state, send}) =>
       callFnParams
       |> Config.callFn(
-           ~pageNumber=state.itemState |> Reducers.ItemState.pageNumber,
+           ~after=state.pageConfig.after,
            ~pageLimit=itemsPerPage,
            ~innerComponentFn=response => {
              if (!E.HttpResponse.isEq(state.response, response, compareItems)) {

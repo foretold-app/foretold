@@ -64,9 +64,9 @@ let make =
           ) {
           | (_, Some(measurable)) =>
             <C.Measurable.FullPresentation id={measurable.id} loggedInUser />
-          | (Success(measurables), None) =>
+          | (Success(connection), None) =>
             <C.Measurables.BasicTable
-              measurables
+              measurables={connection.edges}
               showExtraData=true
               onSelect=(
                 e =>

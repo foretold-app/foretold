@@ -27,7 +27,7 @@ module Types = {
   type page = int;
   module ReducerTypes = SelectWithPaginationReducer.Types;
   type reducerParams = ReducerTypes.reducerParams;
-  module ReducerItemState = SelectWithPaginationReducer.Reducers.ItemState;
+  /* module ReducerItemState = SelectWithPaginationReducer.Reducers.ItemState; */
   module ReducerParams = SelectWithPaginationReducer.Reducers.ReducerParams;
 };
 open Types;
@@ -51,7 +51,7 @@ module LoadedAndUnselected = {
     seriesCollection: seriesCollectionType,
   };
 
-  let pageNumber = (t: t) => t.reducerParams |> ReducerParams.pageNumber;
+  let pageNumber = (t: t) => 3;
 
   let filteredSeriesCollection = (t: t) =>
     t.seriesCollection
@@ -65,7 +65,7 @@ module LoadedAndUnselected = {
   let findMeasurableIndexOfMeasurableId = (t: t, id) =>
     Context.Primary.Measurable.(
       switch (t.reducerParams.response) {
-      | Success(m) => m |> E.A.findIndex(r => r.id == id)
+      | Success(m) => m.edges |> E.A.findIndex(r => r.id == id)
       | _ => None
       }
     );
@@ -111,7 +111,7 @@ module MeasurableIndexDataState = {
       u.reducerParams.response,
     ) {
     | (
-        ItemSelected({pageNumber, selectedIndex}),
+        ItemSelected({selectedIndex}),
         Success(channel),
         Success(seriesCollection),
         Success(_),
@@ -123,8 +123,7 @@ module MeasurableIndexDataState = {
           reducerParams: u.reducerParams,
           loggedInUser: u.loggedInUser,
           itemState: {
-            pageNumber,
-            selectedIndex,
+            selectedIndex: selectedIndex,
           },
           selectedMeasurable: measurable,
           seriesCollection,

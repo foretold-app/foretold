@@ -24,7 +24,7 @@ module SimpleHeader = {
     </Div>;
 
   let newMeasurable = channelId =>
-    buttonr("New Measurable", MeasurableNew(channelId));
+    buttonr("New Question", MeasurableNew(channelId));
 
   let editChannel = channelId =>
     buttonr("Edit Channel", ChannelEdit(channelId));

@@ -91,14 +91,14 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
                  <div
                    onClick={_e => Context.Routing.Url.push(AgentShow(r.id))}
                    className=Styles.item>
-                   {"My Measurements" |> ste}
+                   {"My Predictions" |> ste}
                  </div>
                )
           }
           <div
             onClick={_e => Context.Routing.Url.push(AgentMeasurables(idd))}
             className=Styles.item>
-            {"My Measurables" |> ste}
+            {"My Questions" |> ste}
           </div>
           <div
             onClick={_e => Context.Routing.Url.push(EntityIndex)}

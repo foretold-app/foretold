@@ -114,8 +114,8 @@ module Bot = {
     let toString = (c: competitorType) =>
       switch (c) {
       | `AGGREGATION => "Aggregation"
-      | `COMPETITIVE => "Competitive"
-      | `OBJECTIVE => "Judge"
+      | `COMPETITIVE => "Prediction"
+      | `OBJECTIVE => "Judgement"
       };
   };
   let make =

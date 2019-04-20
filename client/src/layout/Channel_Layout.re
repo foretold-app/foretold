@@ -94,7 +94,7 @@ let tabs = (o: TopTab.t, channel: Context.Primary.Channel.t) =>
         button(
           Measurables |> toS,
           Measurables |> toUrl,
-          "Measurables",
+          "Questions",
           channel.id,
         )
       }

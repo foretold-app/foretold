@@ -70,11 +70,6 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
           onClick={_e => Context.Routing.Url.push(ChannelIndex)}>
           {"Channels" |> ste}
         </div>
-        <div
-          className=Styles.minorHeaderLinkPlus
-          onClick={_e => Context.Routing.Url.push(ChannelNew)}>
-          <Icon.Icon icon="CIRCLE_PLUS" />
-        </div>
       </div>
       <div className=Styles.over>
         {

@@ -22,6 +22,15 @@ module Styles = {
       minWidth(`px(200)),
     ]);
   let right = style([flex(7), width(`percent(100.0))]);
+  let headerLink =
+    style([
+      cursor(`pointer),
+      marginRight(`em(2.)),
+      fontSize(`em(1.1)),
+      color(`hex("61738d")),
+      fontWeight(`num(400)),
+      selector(":hover", [color(`hex("000"))]),
+    ]);
 };
 
 let foo: ReasonReact.reactElement = "sdf" |> ste;
@@ -49,6 +58,10 @@ let bar = agentId =>
       className=action>
       {"My Predictions" |> ste}
     </div>
+    <div
+      onClick={_e => Context.Routing.Url.push(ChannelNew)} className=action>
+      {"Make a New Channel" |> ste}
+    </div>
     <div onClick={_ => Context.Auth.Actions.logout()} className=action>
       {"Log Out" |> ste}
     </div>
@@ -57,12 +70,12 @@ let bar = agentId =>
 let header = (loggedInUser: Context.Primary.User.t) =>
   switch (loggedInUser.agent) {
   | Some((agent: Context.Primary.Types.agent)) =>
-    <AntdDropdown2
+    <AntdDropdown
       overlay={bar(agent.id)}
       overlayClassName=Layout__Dropdown.Styles.dropdown>
       {agent.name |> E.O.default("") |> ste}
       <Icon.Icon icon="CHEVRON_DOWN" />
-    </AntdDropdown2>
+    </AntdDropdown>
   | None => ReasonReact.null
   };
 let make = (~loggedInUser: Context.Primary.User.t, _children) => {
@@ -70,8 +83,17 @@ let make = (~loggedInUser: Context.Primary.User.t, _children) => {
   render: _self =>
     <Div styles=[Styles.outer]>
       <Div float=`left>
-        <div onClick={_e => Context.Routing.Url.push(EntityIndex)}>
-          {"Entity List" |> ste}
+        <div
+          onClick={_e => Context.Routing.Url.push(ChannelIndex)}
+          className=Styles.headerLink>
+          {"Public Channels" |> ste}
+        </div>
+      </Div>
+      <Div float=`left>
+        <div
+          onClick={_e => Context.Routing.Url.push(EntityIndex)}
+          className=Styles.headerLink>
+          {"Entity Explorer" |> ste}
         </div>
       </Div>
       <Div float=`right> {header(loggedInUser)} </Div>

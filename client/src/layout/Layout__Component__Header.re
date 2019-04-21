@@ -2,6 +2,9 @@ open Utils;
 open Style.Grid;
 open Foretold__GraphQL;
 
+/* border: 1px solid #dcdcdc;
+       box-shadow: 1px 1px 5px #ede6e6;
+   } */
 module Styles = {
   open Css;
   let outer =
@@ -25,47 +28,43 @@ let foo: ReasonReact.reactElement = "sdf" |> ste;
 
 let component = ReasonReact.statelessComponent("Header");
 
+let action = Layout__Dropdown.Styles.action;
 let bar = agentId =>
-  <Antd.Menu>
-    <Antd.Menu.Item>
-      <div onClick={_ => Context.Routing.Url.push(Profile)}>
-        {"Profile" |> ste}
-      </div>
-    </Antd.Menu.Item>
-    <Antd.Menu.Item>
-      <div
-        onClick={_ => Context.Routing.Url.push(AgentMeasurables(agentId))}>
-        {"My Questions" |> ste}
-      </div>
-    </Antd.Menu.Item>
-    <Antd.Menu.Item>
-      <div onClick={_ => Context.Routing.Url.push(AgentBots(agentId))}>
-        {"My Bots" |> ste}
-      </div>
-    </Antd.Menu.Item>
-    <Antd.Menu.Item>
-      <div onClick={_ => Context.Routing.Url.push(AgentShow(agentId))}>
-        {"My Predictions" |> ste}
-      </div>
-    </Antd.Menu.Item>
-    <Antd.Menu.Item>
-      <div onClick={_ => Context.Auth.Actions.logout()}>
-        {"Log Out" |> ste}
-      </div>
-    </Antd.Menu.Item>
-  </Antd.Menu>;
+  <>
+    <div onClick={_ => Context.Routing.Url.push(Profile)} className=action>
+      {"Profile" |> ste}
+    </div>
+    <div
+      onClick={_ => Context.Routing.Url.push(AgentMeasurables(agentId))}
+      className=action>
+      {"My Questions" |> ste}
+    </div>
+    <div
+      onClick={_ => Context.Routing.Url.push(AgentBots(agentId))}
+      className=action>
+      {"My Bots" |> ste}
+    </div>
+    <div
+      onClick={_ => Context.Routing.Url.push(AgentShow(agentId))}
+      className=action>
+      {"My Predictions" |> ste}
+    </div>
+    <div onClick={_ => Context.Auth.Actions.logout()} className=action>
+      {"Log Out" |> ste}
+    </div>
+  </>;
 
-let header = (loggedInUser: Context.Primary.User.t) => {
-  let id =
-    loggedInUser.agent |> E.O.fmap((a: Context.Primary.Agent.t) => a.id);
-  switch (id) {
-  | Some(id) =>
-    <AntdDropdown2 overlay={bar(id)}>
-      {loggedInUser.name ++ "Hi" |> ste}
+let header = (loggedInUser: Context.Primary.User.t) =>
+  switch (loggedInUser.agent) {
+  | Some((agent: Context.Primary.Types.agent)) =>
+    <AntdDropdown2
+      overlay={bar(agent.id)}
+      overlayClassName=Layout__Dropdown.Styles.dropdown>
+      {agent.name |> E.O.default("") |> ste}
+      <Icon.Icon icon="CHEVRON_DOWN" />
     </AntdDropdown2>
   | None => ReasonReact.null
   };
-};
 let make = (~loggedInUser: Context.Primary.User.t, _children) => {
   ...component,
   render: _self =>

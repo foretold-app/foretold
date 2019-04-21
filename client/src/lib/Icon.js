@@ -18,6 +18,7 @@ import {thinRight} from 'react-icons-kit/entypo/thinRight'
 import {lock} from 'react-icons-kit/icomoon/lock'
 import {chevronLeft} from 'react-icons-kit/fa/chevronLeft'
 import {chevronRight} from 'react-icons-kit/fa/chevronRight'
+import {chevronDown} from 'react-icons-kit/fa/chevronDown'
 
 
 let types = {
@@ -35,6 +36,7 @@ let types = {
     "ARROW_LEFT": arrowLeft2,
     "CHEVRON_LEFT": chevronLeft,
     "CHEVRON_RIGHT": chevronRight,
+    "CHEVRON_DOWN": chevronDown,
     "THIN_RIGHT":thinRight 
 }
 

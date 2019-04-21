@@ -2,11 +2,14 @@
 external dropdown: ReasonReact.reactClass = "Dropdown";
 
 [@bs.obj]
-external makeProps: (~overlay: ReasonReact.reactElement=?, unit) => _ = "";
+external makeProps:
+  (~overlay: ReasonReact.reactElement=?, ~overlayClassName: string=?, unit) =>
+  _ =
+  "";
 
-let make = (~overlay=?, children) =>
+let make = (~overlay=?, ~overlayClassName=?, children) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=dropdown,
-    ~props=makeProps(~overlay?, ()),
+    ~props=makeProps(~overlay?, ~overlayClassName?, ()),
     children,
   );

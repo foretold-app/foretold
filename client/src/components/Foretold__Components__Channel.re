@@ -6,7 +6,6 @@ module SimpleHeader = {
     open Css;
     let header =
       style([
-        borderBottom(`px(1), `solid, `hex("eee")),
         paddingLeft(`px(10)),
         paddingBottom(`em(0.8)),
         paddingRight(`em(0.4)),

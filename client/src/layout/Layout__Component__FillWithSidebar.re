@@ -9,6 +9,7 @@ module Styles = {
       display(`flex),
       flexDirection(`row),
       minHeight(`percent(100.0)),
+      backgroundColor(`hex("F0F2F5")),
     ]);
   let left =
     style([
@@ -33,7 +34,10 @@ let make =
         <div className=Styles.left>
           <Layout__Component__Sidebar channelId loggedInUser />
         </div>
-        <div className=Styles.right> ..._children </div>
+        <div className=Styles.right>
+          <Layout__Component__Header loggedInUser />
+          <div> ..._children </div>
+        </div>
       </div>
     </Layout__Component__UseRouterForLinks>,
 };

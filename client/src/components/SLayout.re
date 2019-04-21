@@ -7,10 +7,10 @@ module Styles = {
   let header =
     style([
       borderBottom(`px(1), `solid, `hex("eee")),
-      paddingLeft(`px(10)),
+      paddingLeft(`em(1.)),
       paddingBottom(`em(0.8)),
-      paddingRight(`em(0.4)),
-      paddingTop(`px(10)),
+      paddingRight(`em(1.)),
+      paddingTop(`em(1.5)),
       float(`left),
       width(`percent(100.)),
     ]);
@@ -52,6 +52,15 @@ module Styles = {
       fontWeight(`bold),
       float(`left),
     ]);
+  let largeCardOuter = style([padding(`em(0.3))]);
+  let largeCardInner =
+    style([
+      background(`hex("fff")),
+      borderRadius(`px(5)),
+      padding(`em(1.)),
+      width(`percent(100.)),
+      float(`left),
+    ]);
   let mainSection =
     style([
       float(`left),
@@ -71,6 +80,16 @@ module Styles = {
     ]);
 };
 
+module LargeCard = {
+  let component = ReasonReact.statelessComponent("LargeCard");
+  let make = children => {
+    ...component,
+    render: _ =>
+      <div className=Styles.largeCardOuter>
+        <div className=Styles.largeCardInner> ...children </div>
+      </div>,
+  };
+};
 module Header = {
   let component = ReasonReact.statelessComponent("Header");
   let textDiv = text => <div className=Styles.headerText> {text |> ste} </div>;
@@ -85,7 +104,10 @@ module MainSection = {
   let component = ReasonReact.statelessComponent("MainSection");
   let make = children => {
     ...component,
-    render: _ => <div className=Styles.mainSection> ...children </div>,
+    render: _ =>
+      <div className=Styles.mainSection>
+        <LargeCard> ...children </LargeCard>
+      </div>,
   };
 };
 

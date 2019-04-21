@@ -208,16 +208,18 @@ let make =
 
     <Layout__Component__FillWithSidebar
       channelId={Some(channelId)} loggedInUser>
-      <Header> top </Header>
-      <MainSection>
-        <Div flexDirection=`column>
-          <Div flex=1 styles=[Css.style([Css.marginBottom(`em(1.))])]>
-            bottomHeader
-            head
+      <div className=Styles.container>
+        <Header> top </Header>
+        <MainSection>
+          <Div flexDirection=`column>
+            <Div flex=1 styles=[Css.style([Css.marginBottom(`em(1.))])]>
+              bottomHeader
+              head
+            </Div>
+            <Div flex=1> body </Div>
           </Div>
-          <Div flex=1> body </Div>
-        </Div>
-      </MainSection>
+        </MainSection>
+      </div>
     </Layout__Component__FillWithSidebar>;
   },
 };

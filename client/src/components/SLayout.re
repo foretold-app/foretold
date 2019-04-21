@@ -28,6 +28,7 @@ module Styles = {
       float(`left),
       fontWeight(`medium),
     ]);
+  let container = style([maxWidth(`px(1170)), margin(`auto)]);
   let backHover =
     style([
       color(`hex("8b949e")),
@@ -124,7 +125,10 @@ module FullPage = {
   let make = ({head, body}: LayoutConfig.t) => {
     ...component,
     render: _ =>
-      <> <Header> head </Header> <MainSection> body </MainSection> </>,
+      <div className=Styles.container>
+        <Header> head </Header>
+        <MainSection> body </MainSection>
+      </div>,
   };
   let makeWithEl = (t: LayoutConfig.t) => t |> make |> E.React.el;
 };

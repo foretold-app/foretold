@@ -74,35 +74,37 @@ module SignUpParams = {
 module SignUpForm = ReForm.Create(SignUpParams);
 
 let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
-  <form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
-    <Form>
-      <Form.Item>
-        {"Relevant Entity (optional)" |> ste |> E.React.inH3}
-        <Input
-          value={form.values.labelSubject}
-          onChange={
-            ReForm.Helpers.handleDomFormChange(handleChange(`labelSubject))
-          }
-        />
-      </Form.Item>
-      <Form.Item>
-        {"Property Type" |> ste |> E.React.inH3 |> E.React.inH3}
-        <Antd.Radio.Group
-          value={form.values.showDescriptionProperty}
-          defaultValue={form.values.showDescriptionProperty}
-          onChange={
-            ReForm.Helpers.handleDomFormChange(
-              handleChange(`showDescriptionProperty),
-            )
-          }>
-          <Antd.Radio value="FALSE"> {"Custom Name" |> ste} </Antd.Radio>
-          <Antd.Radio value="TRUE"> {"Property Entity" |> ste} </Antd.Radio>
-        </Antd.Radio.Group>
-      </Form.Item>
-      {
-        form.values.showDescriptionProperty == "TRUE" ?
-          <Form.Item>
-            {"Property Entity Name" |> ste |> E.React.inH3}
+  <AntdForm onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
+    <Form.Item label="Question Type">
+      <Antd.Radio.Group
+        value={form.values.showDescriptionProperty}
+        defaultValue={form.values.showDescriptionProperty}
+        onChange={
+          ReForm.Helpers.handleDomFormChange(
+            handleChange(`showDescriptionProperty),
+          )
+        }>
+        <Antd.Radio value="FALSE"> {"Simple" |> ste} </Antd.Radio>
+        <Antd.Radio value="TRUE">
+          {"Subject-Property-Date" |> ste}
+        </Antd.Radio>
+      </Antd.Radio.Group>
+    </Form.Item>
+    {
+      E.React.showIf(
+        form.values.showDescriptionProperty == "TRUE",
+        <>
+          <Form.Item label="Subject">
+            <Input
+              value={form.values.labelSubject}
+              onChange={
+                ReForm.Helpers.handleDomFormChange(
+                  handleChange(`labelSubject),
+                )
+              }
+            />
+          </Form.Item>
+          <Form.Item label="Property">
             <Input
               value={form.values.labelProperty}
               onChange={
@@ -111,82 +113,78 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
                 )
               }
             />
-          </Form.Item> :
-          <div />
-      }
-      {
-        form.values.showDescriptionProperty == "FALSE" ?
-          <Form.Item>
-            {"Custom Name" |> ste}
-            <Input
-              value={form.values.name}
+          </Form.Item>
+          <Form.Item label="Include a Specific Date in Name">
+            <AntdSwitch
+              checked={form.values.showDescriptionDate == "TRUE"}
               onChange={
-                ReForm.Helpers.handleDomFormChange(handleChange(`name))
+                e => handleChange(`showDescriptionDate, e ? "TRUE" : "FALSE")
               }
             />
-          </Form.Item> :
-          <div />
-      }
-      <Form.Item>
-        {"Include a Specific Date in Name" |> ste |> E.React.inH3}
-        <AntdSwitch
-          checked={form.values.showDescriptionDate == "TRUE"}
-          onChange={
-            e => handleChange(`showDescriptionDate, e ? "TRUE" : "FALSE")
+          </Form.Item>
+          {
+            form.values.showDescriptionDate == "TRUE" ?
+              <Form.Item label="'On' Date">
+                <DatePicker
+                  value={form.values.labelOnDate |> MomentRe.moment}
+                  onChange={
+                    e => {
+                      handleChange(`labelOnDate, e |> formatDate);
+                      handleChange(`expectedResolutionDate, e |> formatDate);
+                    }
+                  }
+                />
+              </Form.Item> :
+              <div />
           }
-        />
-      </Form.Item>
-      {
-        form.values.showDescriptionDate == "TRUE" ?
-          <Form.Item>
-            {"'On' Date" |> ste |> E.React.inH3}
-            <DatePicker
-              value={form.values.labelOnDate |> MomentRe.moment}
-              onChange={e => handleChange(`labelOnDate, e |> formatDate)}
-            />
-          </Form.Item> :
-          <div />
-      }
-      <Form.Item>
-        {"Description" |> ste |> E.React.inH3}
-        <Input
-          value={form.values.labelCustom}
-          onChange={
-            ReForm.Helpers.handleDomFormChange(handleChange(`labelCustom))
-          }
-        />
-      </Form.Item>
-      <Form.Item>
-        {"Resolution Endpoint (Optional)" |> ste |> E.React.inH3}
-        {
-          "If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value."
-          |> ste
-          |> E.React.inP
+        </>,
+      )
+    }
+    {
+      E.React.showIf(
+        form.values.showDescriptionProperty == "FALSE",
+        <Form.Item label="Name">
+          <Input
+            value={form.values.name}
+            onChange={
+              ReForm.Helpers.handleDomFormChange(handleChange(`name))
+            }
+          />
+        </Form.Item>,
+      )
+    }
+    <Form.Item label="Description">
+      <Input
+        value={form.values.labelCustom}
+        onChange={
+          ReForm.Helpers.handleDomFormChange(handleChange(`labelCustom))
         }
-        <Input
-          value={form.values.resolutionEndpoint}
-          onChange={
-            ReForm.Helpers.handleDomFormChange(
-              handleChange(`resolutionEndpoint),
-            )
-          }
-        />
-      </Form.Item>
-      <Form.Item>
-        {"Expected Resolution Date" |> ste |> E.React.inH3}
-        <DatePicker
-          value={
-            form.values.expectedResolutionDate |> MomentRe.momentDefaultFormat
-          }
-          onChange={
-            e => handleChange(`expectedResolutionDate, e |> formatDate)
-          }
-        />
-      </Form.Item>
-      <Form.Item>
-        <Button _type=`primary onClick={_ => handleSubmit()}>
-          {"Submit" |> ste}
-        </Button>
-      </Form.Item>
-    </Form>
-  </form>;
+      />
+    </Form.Item>
+    <Form.Item
+      label="Resolution Endpoint"
+      help="If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value.">
+      <Input
+        value={form.values.resolutionEndpoint}
+        onChange={
+          ReForm.Helpers.handleDomFormChange(
+            handleChange(`resolutionEndpoint),
+          )
+        }
+      />
+    </Form.Item>
+    <Form.Item label="Expected Resolution Date">
+      <DatePicker
+        value={
+          form.values.expectedResolutionDate |> MomentRe.momentDefaultFormat
+        }
+        onChange={e => handleChange(`expectedResolutionDate, e |> formatDate)}
+        disabled={form.values.showDescriptionDate == "TRUE"}
+      />
+    </Form.Item>
+    <Form.Item>
+      <Button _type=`primary onClick={_ => handleSubmit()}>
+        {"Submit" |> ste}
+      </Button>
+    </Form.Item>
+  </AntdForm>;

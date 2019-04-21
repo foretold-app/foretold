@@ -73,6 +73,22 @@ module SignUpParams = {
 
 module SignUpForm = ReForm.Create(SignUpParams);
 
+let dataSource =
+  EKen.Things.getAll
+  |> EKen.Things.withNames
+  |> E.A.fmap((r: Graph_T.T.thing) =>
+       {"key": r |> Graph_T.Thing.id, "id": r |> Graph_T.Thing.id}
+     );
+
+let dataSourceSelectItems =
+  dataSource
+  |> E.A.fmap(r =>
+       <AntdSelect.Option key=r##key value=r##id>
+         {r##id |> ste}
+       </AntdSelect.Option>
+     )
+  |> ReasonReact.array;
+
 let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
   <AntdForm onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
     <Form.Item label="Question Type">
@@ -94,25 +110,19 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
       E.React.showIf(
         form.values.showDescriptionProperty == "TRUE",
         <>
-          <Form.Item label="Subject">
-            <Input
+          <Form.Item label="Subject" required=true>
+            <AntdSelect
               value={form.values.labelSubject}
-              onChange={
-                ReForm.Helpers.handleDomFormChange(
-                  handleChange(`labelSubject),
-                )
-              }
-            />
+              onChange={e => handleChange(`labelSubject, e)}>
+              dataSourceSelectItems
+            </AntdSelect>
           </Form.Item>
-          <Form.Item label="Property">
-            <Input
+          <Form.Item label="Property" required=true>
+            <AntdSelect
               value={form.values.labelProperty}
-              onChange={
-                ReForm.Helpers.handleDomFormChange(
-                  handleChange(`labelProperty),
-                )
-              }
-            />
+              onChange={e => handleChange(`labelProperty, e)}>
+              dataSourceSelectItems
+            </AntdSelect>
           </Form.Item>
           <Form.Item label="Include a Specific Date in Name">
             <AntdSwitch
@@ -143,7 +153,7 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
     {
       E.React.showIf(
         form.values.showDescriptionProperty == "FALSE",
-        <Form.Item label="Name">
+        <Form.Item label="Name" required=true>
           <Input
             value={form.values.name}
             onChange={
@@ -173,7 +183,9 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
         }
       />
     </Form.Item>
-    <Form.Item label="Expected Resolution Date">
+    <Form.Item
+      label="Expected Resolution Date"
+      help="When do you expect this will be resolvable by? You will get a notification when this date occurs.">
       <DatePicker
         value={
           form.values.expectedResolutionDate |> MomentRe.momentDefaultFormat

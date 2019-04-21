@@ -28,17 +28,14 @@ let columns = [|
   ),
 |];
 
-let getName = (t: Graph_T.T.thing) =>
-  t |> Graph_T.Thing.id |> C.Ken.findName |> E.O.default("");
-
 let dataSource =
-  C.Ken.things
-  |> E.A.filter(r => getName(r) != "")
+  EKen.Things.getAll
+  |> EKen.Things.withNames
   |> E.A.fmap((r: Graph_T.T.thing) =>
        {
          "key": r |> Graph_T.Thing.id,
          "id": r |> Graph_T.Thing.id,
-         "name": r |> getName,
+         "name": r |> EKen.Thing.getName,
        }
      );
 

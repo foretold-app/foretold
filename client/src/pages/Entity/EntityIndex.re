@@ -5,9 +5,9 @@ let component = ReasonReact.statelessComponent("EntityShow");
 
 let columns = [|
   Antd.Table.TableProps.make_column(
-    ~title="Agent",
-    ~dataIndex="agent",
-    ~key="agent",
+    ~title="Name",
+    ~dataIndex="name",
+    ~key="name",
     ~width=2,
     ~render=
       (~text, ~record, ~index) =>
@@ -19,9 +19,17 @@ let columns = [|
     (),
   ),
   Antd.Table.TableProps.make_column(
-    ~title="Remove",
-    ~dataIndex="role",
-    ~key="actions2",
+    ~title="Instance Of",
+    ~dataIndex="instance",
+    ~key="instance",
+    ~width=2,
+    ~render=(~text, ~record, ~index) => record##instance |> ste,
+    (),
+  ),
+  Antd.Table.TableProps.make_column(
+    ~title="Id",
+    ~dataIndex="id",
+    ~key="id",
     ~width=2,
     ~render=(~text, ~record, ~index) => record##id |> ste,
     (),
@@ -36,6 +44,7 @@ let dataSource =
          "key": r |> Graph_T.Thing.id,
          "id": r |> Graph_T.Thing.id,
          "name": r |> EKen.Thing.getName,
+         "instance": r |> EKen.Thing.getInstanceOfName,
        }
      );
 

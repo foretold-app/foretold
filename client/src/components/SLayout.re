@@ -6,7 +6,6 @@ module Styles = {
   open Css;
   let header =
     style([
-      borderBottom(`px(1), `solid, `hex("eee")),
       paddingLeft(`em(1.)),
       paddingBottom(`em(0.8)),
       paddingRight(`em(1.)),
@@ -16,8 +15,8 @@ module Styles = {
     ]);
   let headerText =
     style([
-      color(`hex("333")),
-      fontSize(`em(2.0)),
+      color(`hex("486474")),
+      fontSize(`em(1.8)),
       fontWeight(`bold),
       float(`left),
     ]);
@@ -29,23 +28,7 @@ module Styles = {
       fontWeight(`medium),
     ]);
   let container = style([maxWidth(`px(1170)), margin(`auto)]);
-  let backHover =
-    style([
-      color(`hex("8b949e")),
-      background(`hex("e2e8ea")),
-      fontSize(`em(1.3)),
-      float(`left),
-      padding(`px(6)),
-      lineHeight(`px(0)),
-      borderRadius(`percent(50.)),
-      marginRight(`em(0.7)),
-      marginTop(`em(0.3)),
-      cursor(`pointer),
-      selector(
-        ":hover",
-        [color(`hex("445b7d")), background(`hex("c2cbd4"))],
-      ),
-    ]);
+  let backHover = style([fontSize(`em(1.3))]);
   let foo =
     style([
       color(`hex("333")),
@@ -134,9 +117,10 @@ module FullPage = {
 };
 
 let channelBack = (~onClick, ()) =>
-  <div className=Styles.backHover onClick>
+  <Antd.Button onClick className=Styles.backHover>
     <Icon.Icon icon="ARROW_LEFT" />
-  </div>;
+    {"Back" |> ste}
+  </Antd.Button>;
 
 let channelink = (c: Context.Primary.Channel.t) =>
   <div className=Styles.headerText>

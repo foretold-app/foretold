@@ -16,6 +16,8 @@ import {gavel} from 'react-icons-kit/fa/gavel'
 import {plus as circlePlus} from 'react-icons-kit/metrize/plus'
 import {thinRight} from 'react-icons-kit/entypo/thinRight'
 import {lock} from 'react-icons-kit/icomoon/lock'
+import {chevronLeft} from 'react-icons-kit/fa/chevronLeft'
+import {chevronRight} from 'react-icons-kit/fa/chevronRight'
 
 
 let types = {
@@ -31,6 +33,8 @@ let types = {
     "CIRCLE_PLUS": circlePlus,
     "ARROW_RIGHT": arrowRight2,
     "ARROW_LEFT": arrowLeft2,
+    "CHEVRON_LEFT": chevronLeft,
+    "CHEVRON_RIGHT": chevronRight,
     "THIN_RIGHT":thinRight 
 }
 

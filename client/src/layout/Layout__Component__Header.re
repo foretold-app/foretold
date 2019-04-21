@@ -60,7 +60,9 @@ let header = (loggedInUser: Context.Primary.User.t) => {
     loggedInUser.agent |> E.O.fmap((a: Context.Primary.Agent.t) => a.id);
   switch (id) {
   | Some(id) =>
-    <AntdDropdown2 overlay={bar(id)}> {"OzzieGooen" |> ste} </AntdDropdown2>
+    <AntdDropdown2 overlay={bar(id)}>
+      {loggedInUser.name ++ "Hi" |> ste}
+    </AntdDropdown2>
   | None => ReasonReact.null
   };
 };

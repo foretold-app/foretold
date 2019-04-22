@@ -45,6 +45,7 @@ class MeasurableModel extends ModelPostgres {
    * @param {string} [filter.seriesId]
    * @param {string} [filter.creatorId]
    * @param {string[]} [filter.states]
+   * @param {string[]} [filter.isArchived]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {Promise<{data: Models.Measurable[], total: number}>}
@@ -54,6 +55,7 @@ class MeasurableModel extends ModelPostgres {
 
     this.applyRestrictions(where, restrictions);
     this.applyCursors(where, filter);
+    this.applyFilter(where, filter);
 
     // Filter
     if (_.isArray(filter.states)) {
@@ -62,7 +64,6 @@ class MeasurableModel extends ModelPostgres {
     if (filter.channelId) where.channelId = filter.channelId;
     if (filter.seriesId) where.seriesId = filter.seriesId;
     if (filter.creatorId) where.creatorId = filter.creatorId;
-    where.isArchived = false;
 
     const cond = {
       limit: pagination.limit,

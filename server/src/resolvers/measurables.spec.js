@@ -26,14 +26,18 @@ describe('Measurables Resolvers', () => {
       return measurables.all(root, args, context, info).then((result) => {
         expect(data.measurables.getAll).toHaveBeenCalledWith(
           {
-            "after": "after1",
-            "before": "before1",
             "channelId": "channelId2",
             "creatorId": "creatorId1",
+            "isArchived": undefined,
             "seriesId": "seriesId2",
             "states": "states1"
           },
-          { "limit": "first1", "offset": "last1" },
+          {
+            "after": "after1",
+            "before": "before1",
+            "first": "first1",
+            "last": "last1"
+          },
           { "agentId": "agentId2" },
         );
         expect(result).toBe(true);

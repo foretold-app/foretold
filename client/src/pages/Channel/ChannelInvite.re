@@ -18,7 +18,8 @@ let make =
   ...component,
   render: _ => {
     let addToChannel = (agentId, channelId) =>
-      Foretold__GraphQL.Mutations.ChannelJoin.Mutation.make((mutation, _) =>
+      Foretold__GraphQL.Mutations.ChannelMembershipCreate.Mutation.make(
+        (mutation, _) =>
         <a
           href=""
           onClick={

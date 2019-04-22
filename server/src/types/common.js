@@ -7,6 +7,11 @@ const iAmOwner = {
   resolve: resolvers.common.iAmOwner,
 };
 
+const iAmOwnerByUserId = {
+  type: graphql.GraphQLNonNull(graphql.GraphQLBoolean),
+  resolve: resolvers.common.iAmOwnerByUserId,
+};
+
 const isMe = {
   type: graphql.GraphQLNonNull(graphql.GraphQLBoolean),
   resolve: resolvers.common.isMe,
@@ -30,8 +35,9 @@ const pageInfoConnection = new graphql.GraphQLObjectType({
 });
 
 module.exports = {
-  iAmOwner,
   isMe,
+  iAmOwner,
+  iAmOwnerByUserId,
   connectionArguments,
   pageInfoConnection,
 };

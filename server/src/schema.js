@@ -80,6 +80,7 @@ const schema = new graphql.GraphQLSchema({
           channelId: { type: graphql.GraphQLString },
           measuredByAgentId: { type: graphql.GraphQLString },
           states: { type: graphql.GraphQLList(types.measurables.measurableState) },
+          isArchived: { type: graphql.GraphQLList(types.common.isArchived) },
         },
         resolve: resolvers.measurables.all,
       },

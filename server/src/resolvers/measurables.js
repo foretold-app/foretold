@@ -9,6 +9,7 @@ const data = require('../data');
  * @param {string} args.channelId
  * @param {string} args.measuredByAgentId
  * @param {string[]} args.states
+ * @param {string[]} args.isArchived
  * @param {string} args.after
  * @param {string} args.before
  * @param {number} args.last
@@ -19,12 +20,13 @@ const data = require('../data');
  */
 async function all(root, args, context, info) {
   const filter = {
-    after: _.get(args, 'after'),
-    before: _.get(args, 'before'),
-    states: _.get(args, 'states'),
     creatorId: _.get(args, 'creatorId'),
     seriesId: _.get(args, 'seriesId'),
     channelId: _.get(args, 'channelId'),
+    states: _.get(args, 'states'),
+    isArchived: _.get(args, 'isArchived'),
+    after: _.get(args, 'after'),
+    before: _.get(args, 'before'),
   };
   const pagination = {
     offset: _.get(args, 'last'),

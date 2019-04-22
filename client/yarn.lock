@@ -3457,10 +3457,10 @@ bs-moment@^0.4.4:
   resolved "https://registry.yarnpkg.com/bs-moment/-/bs-moment-0.4.4.tgz#3d59767e8cd0107393c4f371e15b95bf862ceaac"
   integrity sha512-fAcofbF1bTj6fuwk4cCZ0Teod75dhXPulnNhRwx7+PTtccNMdn35SCb98JxwrprQgCvoZircIgmu8nGLsOaqaA==
 
-bs-platform@^4.0.7:
-  version "4.0.18"
-  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-4.0.18.tgz#d17b8693ba1f714d9b27e0ddb365f2069ba4b8a0"
-  integrity sha512-BwzW0iYHvREqUZIgQxJmdJrxexppLvJxYQ4LLexbhCp7uZU5DIZ5ub4ZHpkCkc8fn8bsXWc+Rrejb3csi+BoAQ==
+bs-platform@^5.0.0:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-5.0.3.tgz#2b167603ef52574cb9534fabab702f6013715e6c"
+  integrity sha512-GAeypBebeDGTay5kJ3v5Z3Whp1Q4zQ0hAttflVtPG3zps88xDZnVAlS3JGIIBDmJFEMyNtv5947a/IWKvWXcPw==
 
 bs-reform@^6.0.0-gadt.5:
   version "6.0.0-gadt.5"
@@ -10773,6 +10773,16 @@ react-docgen@^3.0.0-beta11:
     prop-types "^15.6.2"
     scheduler "^0.13.4"
 
+react-dom@>=16.8.1:
+  version "16.8.6"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.6.tgz#71d6303f631e8b0097f56165ef608f051ff6e10f"
+  integrity sha512-1nL7PIq9LTL3fthPqwkvr2zY7phIPjYrT0jp4HjyEQrEROnw4dG41VVwi/wfoCneoleqrNX7iAD+pXebJZwrwA==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.13.6"
+
 react-error-overlay@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-4.0.1.tgz#417addb0814a90f3a7082eacba7cee588d00da89"
@@ -10921,6 +10931,16 @@ react@>=15, "react@>=15.0.0 || >=16.0.0", react@^16.6.3:
     prop-types "^15.6.2"
     scheduler "^0.13.4"
 
+react@>=16.8.1:
+  version "16.8.6"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"
+  integrity sha512-pC0uMkhLaHm11ZSJULfOBqV4tIZkx87ZLvbbQYunNixAAvjnC+snJCg0XQXn9VIsttVsbZP/H/ewzgsd5fxKXw==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.13.6"
+
 read-pkg-up@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/read-pkg-up/-/read-pkg-up-2.0.0.tgz#6b72a8048984e0c41e79510fd5e9fa99b3b549be"
@@ -10998,14 +11018,6 @@ reason-apollo@^0.13.0:
   resolved "https://registry.yarnpkg.com/reason-apollo/-/reason-apollo-0.13.0.tgz#5727831dc6d49271a318dfb36724186b81d9890c"
   integrity sha512-PeJltFH53Z0mhyoKdADeLg/7CBALOlXg1L+n6SbvNmUgKYzIm5nXfPxd9YD0SuH3nxEPszFAmA/kEWStguCj4Q==
 
-reason-react@>=0.4.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.6.0.tgz#e9a7d6a10958161c3a12ef7fec1b6662edaae94a"
-  integrity sha512-FKzBDXE96KPyUbeRo2ToqUe9rl4IKgwegtjCXvyx0bzJXCKLqwiiN3OiOTH/siJS+/IZRZhBAHnd/R3VkRMsMQ==
-  dependencies:
-    react ">=15.0.0 || >=16.0.0"
-    react-dom ">=15.0.0 || >=16.0.0"
-
 reason-react@^0.4.2:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.4.2.tgz#690d34e3e91a2585cdc5f58384b6c8ff653c32c1"
@@ -11013,6 +11025,14 @@ reason-react@^0.4.2:
   dependencies:
     react ">=15.0.0 || >=16.0.0"
     react-dom ">=15.0.0 || >=16.0.0"
+
+reason-react@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.7.0.tgz#46a975c321e81cd51310d7b1a02418ca7667b0d6"
+  integrity sha512-czR/f0lY5iyLCki9gwftOFF5Zs40l7ZSFmpGK/Z6hx2jBVeFDmIiXB8bAQW/cO6IvtuEt97OmsYueiuOYG9XjQ==
+  dependencies:
+    react ">=16.8.1"
+    react-dom ">=16.8.1"
 
 recast@^0.16.0:
   version "0.16.2"
@@ -11493,6 +11513,14 @@ scheduler@^0.13.4:
   version "0.13.4"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.4.tgz#8fef05e7a3580c76c0364d2df5e550e4c9140298"
   integrity sha512-cvSOlRPxOHs5dAhP9yiS/6IDmVAVxmk33f0CtTJRkmUWcb1Us+t7b1wqdzoC0REw2muC9V5f1L/w5R5uKGaepA==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+
+scheduler@^0.13.6:
+  version "0.13.6"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.6.tgz#466a4ec332467b31a91b9bf74e5347072e4cd889"
+  integrity sha512-IWnObHt413ucAYKsD9J1QShUKkbKLQQHdxRyw73sw4FN26iWr3DY/H34xGPe4nmL1DwXyWmSWmMrA9TfQbE/XQ==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"

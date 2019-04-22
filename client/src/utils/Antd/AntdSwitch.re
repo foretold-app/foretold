@@ -8,7 +8,7 @@ let optBoolToOptJsBoolean =
 let unwrapBool = v => Js.Undefined.from_opt @@ optBoolToOptJsBoolean(v);
 
 [@bs.module "../../../node_modules/antd/lib/switch"]
-external switch_: ReasonReact.reactClass = "default";
+external switch': ReasonReact.reactClass = "default";
 %bs.raw
 "require('../../../node_modules/antd/lib/switch/style/index.css')";
 
@@ -26,7 +26,7 @@ let make =
       ~onChange=?,
     ) =>
   ReasonReact.wrapJsForReason(
-    ~reactClass=switch__,
+    ~reactClass=switch',
     ~props=
       Js.Undefined.{
         "defaultChecked": unwrapBool(defaultChecked),

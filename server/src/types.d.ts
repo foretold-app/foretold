@@ -126,6 +126,7 @@ export namespace Layers {
       userId?: string,
       channelId?: boolean,
       measurableId?: boolean,
+      measuredByAgentId?: string,
     };
     type filter = object;
     type pagination = { limit?: number, offset?: number };

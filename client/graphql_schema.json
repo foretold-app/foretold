@@ -302,6 +302,16 @@
                   "defaultValue": null
                 },
                 {
+                  "name": "measuredByAgentId",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
                   "name": "states",
                   "description": null,
                   "type": {

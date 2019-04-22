@@ -1,4 +1,5 @@
 const { Model } = require('./model');
+const models = require('../models');
 
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
@@ -13,6 +14,7 @@ class ModelPostgres extends Model {
   ) {
     super();
     this.model = model;
+    this.models = models;
     this.sequelize = sequelize;
     this.Op = this.sequelize.Op;
     this.in = this.sequelize.Op.in;
@@ -100,6 +102,22 @@ class ModelPostgres extends Model {
         measurableId: {
           [this.in]: this.measurableIdsLiteral(restrictions.agentId),
         },
+      });
+    }
+  }
+
+  /**
+   * @param {object} [include]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   */
+  applyRestrictionsIncluding(include = [], restrictions = {}) {
+    if (!include) include = [];
+
+    if (restrictions.measuredByAgentId) {
+      include.push({
+        model: this.models.Measurement,
+        as: 'Measurements',
+        where: { agentId: restrictions.measuredByAgentId },
       });
     }
   }

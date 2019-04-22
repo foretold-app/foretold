@@ -7,6 +7,7 @@ const data = require('../data');
  * @param {string} args.creatorId
  * @param {string} args.seriesId
  * @param {string} args.channelId
+ * @param {string} args.measuredByAgentId
  * @param {string[]} args.states
  * @param {string[]} args.isArchived
  * @param {string} args.after
@@ -18,8 +19,6 @@ const data = require('../data');
  * @returns {Promise<Models.Measurable[]>}
  */
 async function all(root, args, context, info) {
-  /** @type {string} */
-  const agentId = _.get(context, 'agent.id');
   const filter = {
     creatorId: _.get(args, 'creatorId'),
     seriesId: _.get(args, 'seriesId'),
@@ -33,7 +32,10 @@ async function all(root, args, context, info) {
     offset: _.get(args, 'last'),
     limit: _.get(args, 'first'),
   };
-  const options = { agentId };
+  const options = {
+    agentId: _.get(context, 'agent.id'),
+    measuredByAgentId: _.get(args, 'measuredByAgentId'),
+  };
   const result = await data.measurables.getAll(filter, pagination, options);
   context.total = result.total;
   return result.data;

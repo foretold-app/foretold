@@ -1,12 +1,28 @@
 const graphql = require('graphql');
-const { resolver, JSONType, DateType } = require('graphql-sequelize');
+const { resolver, DateType } = require('graphql-sequelize');
 
 const models = require('../models');
+
+// Input
+const measurementValueInputFloatCdf = new graphql.GraphQLInputObjectType({
+  name: 'MeasurementValueInputFloatCdf',
+  fields: () => ({
+    xs: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLFloat)) },
+    ys: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLFloat)) },
+  }),
+});
+
+const measurementValueInput = new graphql.GraphQLInputObjectType({
+  name: 'MeasurementValueInput',
+  fields: () => ({
+    floatCdf: { type: graphql.GraphQLNonNull(measurementValueInputFloatCdf) },
+  }),
+});
 
 const measurementCreateInput = new graphql.GraphQLInputObjectType({
   name: 'MeasurementCreateInput',
   fields: () => ({
-    value: { type: JSONType.default },
+    value: { type: measurementValueInput },
     competitorType: { type: require('./competitor').competitor },
     measurableId: { type: graphql.GraphQLString },
     agentId: { type: graphql.GraphQLString },
@@ -14,11 +30,27 @@ const measurementCreateInput = new graphql.GraphQLInputObjectType({
   }),
 });
 
+// Output
+const measurementValueFloatCdf = new graphql.GraphQLObjectType({
+  name: 'MeasurementValueFloatCdf',
+  fields: () => ({
+    xs: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLFloat)) },
+    ys: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLFloat)) },
+  }),
+});
+
+const measurementValue = new graphql.GraphQLObjectType({
+  name: 'MeasurementValue',
+  fields: () => ({
+    floatCdf: { type: graphql.GraphQLNonNull(measurementValueFloatCdf) },
+  }),
+});
+
 const measurement = new graphql.GraphQLObjectType({
   name: 'Measurement',
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    value: { type: graphql.GraphQLNonNull(JSONType.default) },
+    value: { type: graphql.GraphQLNonNull(measurementValue) },
     competitorType: { type: require('./competitor').competitor },
     description: { type: graphql.GraphQLString },
     measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },

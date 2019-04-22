@@ -1,6 +1,6 @@
 module Query = [%graphql
   {|
-            mutation channelMembershipDelete($input: ChannelMembershipRoleInput!) {
+            mutation channelMembershipDelete($input: ChannelMembershipDeleteInput!) {
                 channelMembershipDelete(input: $input) {
                  agentId
                 }

@@ -22,7 +22,7 @@ function connection(result, root, args, context, info) {
     if (first) {
       return (args.after + count) < total;
     } else if (last) {
-      return (args.before + count - 1) < total;
+      return (args.before + count) < total;
     }
     return false;
   })();

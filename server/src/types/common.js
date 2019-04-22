@@ -34,9 +34,18 @@ const pageInfoConnection = new graphql.GraphQLObjectType({
   }),
 });
 
+const isArchived = new graphql.GraphQLEnumType({
+  name: 'isArchived',
+  values: {
+    TRUE: { value: "TRUE" },
+    FALSE: { value: "FALSE" },
+  }
+});
+
 module.exports = {
   isMe,
   iAmOwner,
+  isArchived,
   iAmOwnerByUserId,
   connectionArguments,
   pageInfoConnection,

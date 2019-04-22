@@ -8,6 +8,7 @@ const data = require('../data');
  * @param {string} args.seriesId
  * @param {string} args.channelId
  * @param {string[]} args.states
+ * @param {string[]} args.isArchived
  * @param {string} args.after
  * @param {string} args.before
  * @param {number} args.last
@@ -24,6 +25,7 @@ async function all(root, args, context, info) {
     seriesId: _.get(args, 'seriesId'),
     channelId: _.get(args, 'channelId'),
     states: _.get(args, 'states'),
+    isArchived: _.get(args, 'isArchived'),
     after: _.get(args, 'after'),
     before: _.get(args, 'before'),
   };

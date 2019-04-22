@@ -123,32 +123,6 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param {object} [where]
-   * @param {object} [filter]
-   * @param {string} [filter.after]
-   * @param {string} [filter.before]
-   */
-  applyCursors(where = {}, filter = {}) {
-    if (!where[this.and]) where[this.and] = [];
-
-    if (filter.after) {
-      where[this.and].push({
-        createdAt: {
-          [this.gt]: new Date(filter.after * 1),
-        },
-      });
-    }
-
-    if (filter.before) {
-      where[this.and].push({
-        createdAt: {
-          [this.lt]: new Date(filter.before * 1),
-        },
-      });
-    }
-  }
-
-  /**
    *
    * @param {object} pagination
    * @param {number} pagination.first

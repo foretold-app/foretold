@@ -55,10 +55,19 @@ module.exports = (sequelize, DataTypes) => {
    * @param {object} value
    */
   function setMeasurementValue(value) {
-    this.dataValues.value = {
-      data: _.get(value, 'floatCdf'),
-      dataType: 'floatCdf'
-    };
+    let data, dataType;
+
+    const types = ['floatCdf', 'floatPoint'];
+    for (const type of types) {
+      if (_.has(value, type)) {
+        data = _.get(value, type);
+        dataType = type;
+      }
+    }
+
+    if (data && dataType) {
+      this.dataValues.value = { data, dataType };
+    }
   }
 
   function getMeasurementValue() {

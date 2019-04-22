@@ -15,7 +15,8 @@ const measurementValueInputFloatCdf = new graphql.GraphQLInputObjectType({
 const measurementValueInput = new graphql.GraphQLInputObjectType({
   name: 'MeasurementValueInput',
   fields: () => ({
-    floatCdf: { type: graphql.GraphQLNonNull(measurementValueInputFloatCdf) },
+    floatCdf: { type: measurementValueInputFloatCdf },
+    floatPoint: { type: graphql.GraphQLFloat },
   }),
 });
 
@@ -42,7 +43,8 @@ const measurementValueFloatCdf = new graphql.GraphQLObjectType({
 const measurementValue = new graphql.GraphQLObjectType({
   name: 'MeasurementValue',
   fields: () => ({
-    floatCdf: { type: graphql.GraphQLNonNull(measurementValueFloatCdf) },
+    floatCdf: { type: measurementValueFloatCdf },
+    floatPoint: { type: graphql.GraphQLFloat },
   }),
 });
 

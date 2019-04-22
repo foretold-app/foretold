@@ -7,15 +7,15 @@ module.exports = {
     );
     if (users.length === 0) {
       const [agents] = await queryInterface.sequelize.query(
-        `INSERT INTO "Agents" ("id", "type") ` +
-        `VALUES (uuid_generate_v4(), 'USER')` +
+        `INSERT INTO "Agents" ("id", "type", "createdAt", "updatedAt") ` +
+        `VALUES (uuid_generate_v4(), 'USER', now(), now())` +
         `RETURNING "id"`
       );
       const agentId = _.get(agents, [0, 'id']);
       await queryInterface.sequelize.query(
-        `INSERT INTO "Users" ("id", "name", "auth0Id", "agentId") ` +
+        `INSERT INTO "Users" ("id", "name", "auth0Id", "agentId",  "createdAt", "updatedAt") ` +
         `VALUES ` +
-        `(uuid_generate_v4(), 'Service Account', uuid_generate_v4(), '${agentId}')`
+        `(uuid_generate_v4(), 'Service Account', uuid_generate_v4(), '${agentId}', now(), now())`
       );
     }
   },

@@ -114,8 +114,8 @@ module Bot = {
     let toString = (c: competitorType) =>
       switch (c) {
       | `AGGREGATION => "Aggregation"
-      | `COMPETITIVE => "Competitive"
-      | `OBJECTIVE => "Judge"
+      | `COMPETITIVE => "Prediction"
+      | `OBJECTIVE => "Judgement"
       };
   };
   let make =
@@ -320,6 +320,7 @@ module Measurable = {
     name: string,
     valueType,
     channel: option(string),
+    isArchived: option(bool),
     resolutionEndpoint: option(string),
     resolutionEndpointResponse: option(float),
     measurementCount: option(int),
@@ -383,6 +384,7 @@ module Measurable = {
         ~labelProperty=None,
         ~labelCustom=None,
         ~series=None,
+        ~isArchived=None,
         ~iAmOwner=None,
         (),
       ) => {
@@ -406,6 +408,7 @@ module Measurable = {
     labelProperty,
     labelCustom,
     series,
+    isArchived,
     iAmOwner,
   };
 };

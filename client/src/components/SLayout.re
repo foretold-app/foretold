@@ -6,18 +6,17 @@ module Styles = {
   open Css;
   let header =
     style([
-      borderBottom(`px(1), `solid, `hex("eee")),
-      paddingLeft(`px(10)),
+      paddingLeft(`em(1.)),
       paddingBottom(`em(0.8)),
-      paddingRight(`em(0.4)),
-      paddingTop(`px(10)),
+      paddingRight(`em(1.)),
+      paddingTop(`em(1.5)),
       float(`left),
       width(`percent(100.)),
     ]);
   let headerText =
     style([
-      color(`hex("333")),
-      fontSize(`em(2.0)),
+      color(`hex("486474")),
+      fontSize(`em(1.8)),
       fontWeight(`bold),
       float(`left),
     ]);
@@ -28,28 +27,22 @@ module Styles = {
       float(`left),
       fontWeight(`medium),
     ]);
-  let backHover =
-    style([
-      color(`hex("8b949e")),
-      background(`hex("e2e8ea")),
-      fontSize(`em(1.3)),
-      float(`left),
-      padding(`px(6)),
-      lineHeight(`px(0)),
-      borderRadius(`percent(50.)),
-      marginRight(`em(0.7)),
-      marginTop(`em(0.3)),
-      cursor(`pointer),
-      selector(
-        ":hover",
-        [color(`hex("445b7d")), background(`hex("c2cbd4"))],
-      ),
-    ]);
+  let container = style([maxWidth(`px(1170)), margin(`auto)]);
+  let backHover = style([fontSize(`em(1.3))]);
   let foo =
     style([
       color(`hex("333")),
       fontSize(`em(2.0)),
       fontWeight(`bold),
+      float(`left),
+    ]);
+  let largeCardOuter = style([padding(`em(0.3))]);
+  let largeCardInner =
+    style([
+      background(`hex("fff")),
+      borderRadius(`px(5)),
+      padding(`em(1.)),
+      width(`percent(100.)),
       float(`left),
     ]);
   let mainSection =
@@ -71,6 +64,16 @@ module Styles = {
     ]);
 };
 
+module LargeCard = {
+  let component = ReasonReact.statelessComponent("LargeCard");
+  let make = children => {
+    ...component,
+    render: _ =>
+      <div className=Styles.largeCardOuter>
+        <div className=Styles.largeCardInner> ...children </div>
+      </div>,
+  };
+};
 module Header = {
   let component = ReasonReact.statelessComponent("Header");
   let textDiv = text => <div className=Styles.headerText> {text |> ste} </div>;
@@ -85,7 +88,10 @@ module MainSection = {
   let component = ReasonReact.statelessComponent("MainSection");
   let make = children => {
     ...component,
-    render: _ => <div className=Styles.mainSection> ...children </div>,
+    render: _ =>
+      <div className=Styles.mainSection>
+        <LargeCard> ...children </LargeCard>
+      </div>,
   };
 };
 
@@ -102,15 +108,19 @@ module FullPage = {
   let make = ({head, body}: LayoutConfig.t) => {
     ...component,
     render: _ =>
-      <> <Header> head </Header> <MainSection> body </MainSection> </>,
+      <div className=Styles.container>
+        <Header> head </Header>
+        <MainSection> body </MainSection>
+      </div>,
   };
   let makeWithEl = (t: LayoutConfig.t) => t |> make |> E.React.el;
 };
 
 let channelBack = (~onClick, ()) =>
-  <div className=Styles.backHover onClick>
+  <Antd.Button onClick className=Styles.backHover>
     <Icon.Icon icon="ARROW_LEFT" />
-  </div>;
+    {"Back" |> ste}
+  </Antd.Button>;
 
 let channelink = (c: Context.Primary.Channel.t) =>
   <div className=Styles.headerText>

@@ -18,6 +18,20 @@ let findName = propertyId =>
        }
      );
 
+let findInstanceOfName = propertyId =>
+  graph
+  |> Graph_T.F.factList
+  |> Graph_Fact_Filters.withSubject(propertyId)
+  |> Graph_Fact_Filters.withProperty("@base/properties/p-instance-of")
+  |> E.L.head
+  |> E.O.bind(_, (k: Graph_T.T.fact) =>
+       switch (k.value.valueType) {
+       | String(s) => Some(s)
+       | ThingId(s) => findName(s)
+       | _ => None
+       }
+     );
+
 let names = subjectId =>
   graph
   |> Graph_T.F.factList

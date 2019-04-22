@@ -61,14 +61,14 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                let creatorId =
                  m.creator |> E.O.fmap((r: Context.Primary.Agent.t) => r.id);
                <>
-                 {"Add a Measurement" |> ste |> E.React.inH2}
+                 {"Add a Prediction" |> ste |> E.React.inH2}
                  <Foretold__Components__Measurement__Form
                    measurableId=id
                    isCreator={userAgentId == creatorId}
                  />
                </>;
              }
-             {"Measurements" |> ste |> E.React.inH2}
+             {"Predictions" |> ste |> E.React.inH2}
              {
                m.measurements
                |> E.O.React.fmapOrNull(

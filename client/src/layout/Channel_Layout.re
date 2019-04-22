@@ -94,7 +94,7 @@ let tabs = (o: TopTab.t, channel: Context.Primary.Channel.t) =>
         button(
           Measurables |> toS,
           Measurables |> toUrl,
-          "Measurables",
+          "Questions",
           channel.id,
         )
       }
@@ -196,15 +196,10 @@ let make =
         E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
           switch (topOption) {
           | Members(r) =>
-            <MainSection>
-              <Div float=`right>
-                {memberTabs(loggedInUser.agent, r, channel)}
-              </Div>
-            </MainSection>
-          | Options(r) =>
-            <MainSection>
-              <Div float=`right> {editTabs(r, channel)} </Div>
-            </MainSection>
+            <Div float=`right>
+              {memberTabs(loggedInUser.agent, r, channel)}
+            </Div>
+          | Options(r) => <Div float=`right> {editTabs(r, channel)} </Div>
           | _ => E.React.null
           }
         )
@@ -213,10 +208,18 @@ let make =
 
     <Layout__Component__FillWithSidebar
       channelId={Some(channelId)} loggedInUser>
-      <Header> top </Header>
-      bottomHeader
-      <MainSection> head </MainSection>
-      <MainSection> body </MainSection>
+      <div className=Styles.container>
+        <Header> top </Header>
+        <MainSection>
+          <Div flexDirection=`column>
+            <Div flex=1 styles=[Css.style([Css.marginBottom(`em(1.))])]>
+              bottomHeader
+              head
+            </Div>
+            <Div flex=1> body </Div>
+          </Div>
+        </MainSection>
+      </div>
     </Layout__Component__FillWithSidebar>;
   },
 };

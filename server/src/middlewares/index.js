@@ -64,6 +64,7 @@ const middlewares = {
     },
 
     measurementCreate: async (resolve, root, args, context, info) => {
+      await measurementValueValidation(root, args, context, info);
       await measurable(root, args, context, info);
       await channel(root, args, context, info);
       await channelMemberships(root, args, context, info);

@@ -4,6 +4,7 @@ const { channel, channelByRoot } = require('./channels');
 const { channelMemberships } = require('./channel-memberships');
 const { channelMembershipsAdmins } = require('./channel-memberships');
 const { measurable, measurableByRoot } = require('./measurables');
+const { measurementValueValidation } = require('./measurements');
 
 /**
  * Do not try to use DRY principle here.

@@ -1,4 +1,5 @@
 const { Model } = require('./model');
+const models = require('../models');
 
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
@@ -13,6 +14,7 @@ class ModelPostgres extends Model {
   ) {
     super();
     this.model = model;
+    this.models = models;
     this.sequelize = sequelize;
     this.Op = this.sequelize.Op;
     this.in = this.sequelize.Op.in;
@@ -67,27 +69,6 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: see this.channelIds()
-   * @param {string} measuredByAgentId
-   * @return {string}
-   */
-  measurableIdsByMeasurements(measuredByAgentId) {
-    return `(
-      SELECT DISTINCT "Measurements"."measurableId" FROM "Measurements"
-      WHERE "Measurements"."agentId" = '${measuredByAgentId}'
-    )`;
-  }
-
-  /**
-   * @todo: see this.channelIds()
-   * @param {string} measuredByAgentId
-   * @return {string}
-   */
-  measurableIdsByMeasurementsLiteral(measuredByAgentId) {
-    return this.literal(this.measurableIdsByMeasurements(measuredByAgentId));
-  }
-
-  /**
-   * @todo: see this.channelIds()
    * @param {string} [agentId]
    * @return {Sequelize.literal}
    */
@@ -123,12 +104,20 @@ class ModelPostgres extends Model {
         },
       });
     }
+  }
+
+  /**
+   * @param {object} [include]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   */
+  applyRestrictionsIncluding(include = [], restrictions = {}) {
+    if (!include) include = [];
 
     if (restrictions.measuredByAgentId) {
-      where[this.and].push({
-        id: {
-          [this.in]: this.measurableIdsByMeasurementsLiteral(restrictions.measuredByAgentId),
-        },
+      include.push({
+        model: this.models.Measurement,
+        as: 'Measurements',
+        where: { agentId: restrictions.measuredByAgentId },
       });
     }
   }

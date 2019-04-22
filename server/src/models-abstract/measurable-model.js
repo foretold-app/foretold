@@ -69,6 +69,10 @@ class MeasurableModel extends ModelPostgres {
     const cond = {
       where,
       include,
+    };
+
+    const options = {
+      ...cond,
       limit: pagination.limit,
       offset: pagination.offset,
       order: [
@@ -81,9 +85,9 @@ class MeasurableModel extends ModelPostgres {
     };
 
     /** @type {Models.Measurable[]} */
-    const data = await this.model.findAll(cond);
-    // /** @type {number} */
-    const total = await this.model.count({ where, include });
+    const data = await this.model.findAll(options);
+    /** @type {number} */
+    const total = await this.model.count(cond);
 
     return { data, total };
   }

@@ -79,6 +79,7 @@ const schema = new graphql.GraphQLSchema({
           seriesId: { type: graphql.GraphQLString },
           channelId: { type: graphql.GraphQLString },
           states: { type: graphql.GraphQLList(types.measurables.measurableState) },
+          isArchived: { type: graphql.GraphQLList(types.common.isArchived) },
         },
         resolve: resolvers.measurables.all,
       },

@@ -129,6 +129,38 @@ class ModelPostgres extends Model {
       });
     }
   }
+
+  /**
+   * @protectedo
+   * @param {object} [where]
+   * @param {object} [filter]
+   * @param {string} [filter.isArchived]
+   */
+  applyFilter(where = {}, filter = {}) {
+    if (!where) where = {};
+
+    if (filter.isArchived) {
+      where.isArchived = {
+        [this.in]: this.getBooleansOfList(filter.isArchived),
+      };
+    }
+  }
+
+  /**
+   * @protected
+   * @param list
+   * @return {*}
+   */
+  getBooleansOfList(list) {
+    return list.map(item => {
+      if (item === 'TRUE') {
+        return true;
+      } else if (item === 'FALSE') {
+        return false;
+      }
+      return item;
+    });
+  }
 }
 
 module.exports = {

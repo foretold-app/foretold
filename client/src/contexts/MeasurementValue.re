@@ -2,6 +2,17 @@ open Rationale.Function.Infix;
 open Rationale.Result.Infix;
 open Belt.Result;
 
+type valueResult = {
+  .
+  "floatCdf":
+    option({
+      .
+      "xs": Js.Array.t(float),
+      "ys": Js.Array.t(float),
+    }),
+  "floatPoint": option(float),
+};
+
 let decodeResult = (fn, json) =>
   try (Ok(json |> fn)) {
   | Json_decode.DecodeError(e) => Error(e)
@@ -89,13 +100,24 @@ module MakeCdf = (Item: Point) => {
   let decode =
     decodeResult(Json.Decode.field("data", dataDecoder) ||> fromDict);
 
-  let dataEncoder = t => {
-    let (xs, ys) = t |> toArrays;
-    let xsEncoded =
-      xs |> Array.map(Json.Encode.float) |> Json.Encode.jsonArray;
-    let ysEncoded = ys |> Array.map(Item.encodeFn) |> Json.Encode.jsonArray;
-    Json.Encode.(object_([("xs", xsEncoded), ("ys", ysEncoded)]));
+  let xs = t => {
+    let (xs, _) = t |> toArrays;
+    xs;
   };
+
+  let ys = t => {
+    let (_, ys) = t |> toArrays;
+    ys;
+  };
+
+  let xsEncoded = t =>
+    t |> xs |> Array.map(Json.Encode.float) |> Json.Encode.jsonArray;
+
+  let ysEncoded = t =>
+    t |> ys |> Array.map(Item.encodeFn) |> Json.Encode.jsonArray;
+
+  let dataEncoder = t =>
+    Json.Encode.(object_([("xs", xsEncoded(t)), ("ys", ysEncoded(t))]));
 
   let encode = (name: string, t: t) =>
     Json.Encode.(
@@ -246,5 +268,40 @@ let decode = (j: Js.Json.t): Belt.Result.t(t, string) => {
   switch (decodingType) {
   | Ok(e) => j |> decoder(e)
   | Error(n) => Error(n)
+  };
+};
+
+type graphQlResult = {
+  .
+  "floatCdf":
+    option({
+      .
+      "xs": Js.Array.t(float),
+      "ys": Js.Array.t(float),
+    }),
+  "floatPoint": option(float),
+};
+
+let decodeGraphql = (j: valueResult): Belt.Result.t(t, string) =>
+  switch (j##floatCdf, j##floatPoint) {
+  | (Some(r), _) => Ok(`FloatCdf(FloatCdf.fromArrays((r##xs, r##ys))))
+  | (_, Some(r)) => Ok(`FloatPoint(r))
+  | _ => Error("Could not convert")
+  };
+
+let encodeToGraphQLMutation = (e: t) => {
+  let n = typeToName(e);
+  switch (e) {
+  | `FloatPoint(k) => Some({"floatPoint": Some(k), "floatCdf": None})
+  | `FloatCdf(k) =>
+    Some({
+      "floatPoint": None,
+      "floatCdf":
+        Some({
+          "xs": FloatCdf.xs(k) |> Array.map(e => Some(e)),
+          "ys": FloatCdf.ys(k) |> Array.map(e => Some(e)),
+        }),
+    })
+  | _ => None
   };
 };

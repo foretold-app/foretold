@@ -31,7 +31,7 @@ async function measurementValueValidation(root, args, context, info) {
 
   if (floatCdf && floatPoint) throw new Error(ERR_1());
   if (floatCdf && sizeXs !== sizeYs) throw new Error(ERR_2());
-  if (floatCdf && sizeXs >= MAX_XS) throw new Error(ERR_3(sizeXs));
+  if (floatCdf && sizeXs > MAX_XS) throw new Error(ERR_3(sizeXs));
   if (!floatCdf && !floatPoint) throw new Error(ERR_4());
 
   return true;

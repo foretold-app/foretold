@@ -25,15 +25,7 @@ let mutate =
     Query.make(
       ~input={
         "measurableId": Some(measurableId),
-        "value":
-          Some({
-            "floatPoint": Some(3.0),
-            "floatCdf":
-              Some({
-                "xs": [|Some(3.0), Some(5.0)|],
-                "ys": [|Some(3.0)|],
-              }),
-          }),
+        "value": value |> MeasurementValue.encodeToGraphQLMutation,
         "description": Some(description),
         "competitorType": competitorType,
         "agentId": None,

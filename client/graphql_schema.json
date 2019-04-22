@@ -2414,13 +2414,21 @@
               "description": null,
               "args": [],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "MeasurementValueFloatCdf",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "MeasurementValueFloatCdf",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "floatPoint",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -2447,9 +2455,13 @@
                   "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Float",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Float",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -2467,9 +2479,13 @@
                   "kind": "LIST",
                   "name": null,
                   "ofType": {
-                    "kind": "SCALAR",
-                    "name": "Float",
-                    "ofType": null
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "Float",
+                      "ofType": null
+                    }
                   }
                 }
               },
@@ -4147,13 +4163,19 @@
               "name": "floatCdf",
               "description": null,
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "MeasurementValueInputFloatCdf",
-                  "ofType": null
-                }
+                "kind": "INPUT_OBJECT",
+                "name": "MeasurementValueInputFloatCdf",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "floatPoint",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
               },
               "defaultValue": null
             }

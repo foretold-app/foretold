@@ -35,8 +35,8 @@ const measurementCreateInput = new graphql.GraphQLInputObjectType({
 const measurementValueFloatCdf = new graphql.GraphQLObjectType({
   name: 'MeasurementValueFloatCdf',
   fields: () => ({
-    xs: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLFloat)) },
-    ys: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLFloat)) },
+    xs: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLNonNull(graphql.GraphQLFloat))) },
+    ys: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLNonNull(graphql.GraphQLFloat))) },
   }),
 });
 

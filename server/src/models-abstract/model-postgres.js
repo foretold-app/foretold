@@ -67,6 +67,27 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: see this.channelIds()
+   * @param {string} measuredByAgentId
+   * @return {string}
+   */
+  measurableIdsByMeasurements(measuredByAgentId) {
+    return `(
+      SELECT DISTINCT "Measurements"."measurableId" FROM "Measurements"
+      WHERE "Measurements"."agentId" = '${measuredByAgentId}'
+    )`;
+  }
+
+  /**
+   * @todo: see this.channelIds()
+   * @param {string} measuredByAgentId
+   * @return {string}
+   */
+  measurableIdsByMeasurementsLiteral(measuredByAgentId) {
+    return this.literal(this.measurableIdsByMeasurements(measuredByAgentId));
+  }
+
+  /**
+   * @todo: see this.channelIds()
    * @param {string} [agentId]
    * @return {Sequelize.literal}
    */
@@ -105,8 +126,8 @@ class ModelPostgres extends Model {
 
     if (restrictions.measuredByAgentId) {
       where[this.and].push({
-        measurementId: {
-          [this.in]: this.measurementIdsLiteral(restrictions.measuredByAgentId),
+        id: {
+          [this.in]: this.measurableIdsByMeasurementsLiteral(restrictions.measuredByAgentId),
         },
       });
     }

@@ -2,9 +2,10 @@ const _ = require('lodash');
 
 const MAX_XS = 1000;
 
-const ERR_1 = 'Only FloatCdf or FloatPoint are available.';
-const ERR_2 = 'Xs and Ys should have the same size.';
-const ERR_3 = `Xs should have max size less then ${MAX_XS}.`;
+const ERR_1 = () => 'You have entered both floatCdf and floatPoint values. You can only submit one type of value. ';
+const ERR_2 = () => 'Xs and Ys should be the same size.';
+const ERR_3 = (xsEntered) => `Xs of length (${xsEntered}) exceeds maximum of length ${MAX_XS}.`;
+const ERR_4 = () => 'You must submit one kind of value.';
 
 /**
  * @param {*} root
@@ -23,12 +24,15 @@ async function measurementValueValidation(root, args, context, info) {
   const floatCdf = _.get(args, 'input.value.floatCdf');
   const xs = _.get(floatCdf, 'xs');
   const ys = _.get(floatCdf, 'ys');
+  const sizeXs = _.size(xs);
+  const sizeYs = _.size(ys);
 
   const floatPoint = _.get(args, 'input.value.floatPoint');
 
-  if (floatCdf !== undefined && floatPoint !== undefined) throw new Error(ERR_1);
-  if (floatCdf !== undefined && _.size(xs) !== _.size(ys)) throw new Error(ERR_2);
-  if (floatCdf !== undefined && _.size(xs) >= MAX_XS) throw new Error(ERR_3);
+  if (floatCdf && floatPoint) throw new Error(ERR_1());
+  if (floatCdf && sizeXs !== sizeYs) throw new Error(ERR_2());
+  if (floatCdf && sizeXs >= MAX_XS) throw new Error(ERR_3(sizeXs));
+  if (!floatCdf && !floatPoint) throw new Error(ERR_4());
 
   return true;
 }

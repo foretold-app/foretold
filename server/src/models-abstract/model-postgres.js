@@ -1,4 +1,5 @@
 const { Model } = require('./model');
+const models = require('../models');
 
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
@@ -13,6 +14,7 @@ class ModelPostgres extends Model {
   ) {
     super();
     this.model = model;
+    this.models = models;
     this.sequelize = sequelize;
     this.Op = this.sequelize.Op;
     this.in = this.sequelize.Op.in;
@@ -105,29 +107,82 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @param {object} [include]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   */
+  applyRestrictionsIncluding(include = [], restrictions = {}) {
+    if (!include) include = [];
+
+    if (restrictions.measuredByAgentId) {
+      include.push({
+        model: this.models.Measurement,
+        as: 'Measurements',
+        where: { agentId: restrictions.measuredByAgentId },
+      });
+    }
+  }
+
+  /**
+   *
+   * @param {object} pagination
+   * @param {number} pagination.first
+   * @param {string} pagination.after
+   * @param {number} pagination.last
+   * @param {string} pagination.before
+   * @param {number} pagination.limit
+   * @param {number} pagination.offset
+   * @param {object} orderIn
+   * @param {*} orderIn.asc
+   * @param {*} orderIn.desc
+   * @return {{offset: *, limit: *, order: *}}
+   */
+  getEdgePagination(pagination, orderIn) {
+    let limit, offset, order;
+
+    if (pagination.first) limit = pagination.first;
+    if (pagination.first) order = orderIn.asc;
+    if (pagination.after) offset = pagination.after;
+
+    if (pagination.last) limit = pagination.last;
+    if (pagination.last) order = orderIn.desc;
+    if (pagination.before) offset = pagination.before;
+
+    if (!limit) limit = pagination.limit;
+    if (!offset) offset = pagination.offset;
+
+    return { limit, offset, order };
+  }
+
+  /**
+   * @protectedo
    * @param {object} [where]
    * @param {object} [filter]
-   * @param {string} [filter.after]
-   * @param {string} [filter.before]
+   * @param {string} [filter.isArchived]
    */
-  applyCursors(where = {}, filter = {}) {
-    if (!where[this.and]) where[this.and] = [];
+  applyFilter(where = {}, filter = {}) {
+    if (!where) where = {};
 
-    if (filter.after) {
-      where[this.and].push({
-        createdAt: {
-          [this.gt]: new Date(filter.after * 1),
-        },
-      });
+    if (filter.isArchived) {
+      where.isArchived = {
+        [this.in]: this.getBooleansOfList(filter.isArchived),
+      };
     }
+  }
 
-    if (filter.before) {
-      where[this.and].push({
-        createdAt: {
-          [this.lt]: new Date(filter.before * 1),
-        },
-      });
-    }
+  /**
+   * @protected
+   * @param list
+   * @return {*}
+   */
+  getBooleansOfList(list) {
+    return list.map(item => {
+      if (item === 'TRUE') {
+        return true;
+      } else if (item === 'FALSE') {
+        return false;
+      }
+      return item;
+    });
   }
 }
 

@@ -74,12 +74,14 @@ class MeasurablesData extends DataBase {
    * @param {Layers.DataSourceLayer.pagination} [pagination]
    * @param {Layers.DataSourceLayer.options} [options]
    * @param {string} [options.agentId]
+   * @param {string} [options.measuredByAgentId]
    * @return {Promise<{data: Models.Measurable[], total: number}>}
    */
   async getAll(filter = {}, pagination = {}, options = {}) {
     const restrictions = {
       channelId: true,
       agentId: options.agentId,
+      measuredByAgentId: options.measuredByAgentId,
     };
     return this.MeasurableModel.getAll(filter, pagination, restrictions);
   }

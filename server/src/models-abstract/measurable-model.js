@@ -45,15 +45,18 @@ class MeasurableModel extends ModelPostgres {
    * @param {string} [filter.seriesId]
    * @param {string} [filter.creatorId]
    * @param {string[]} [filter.states]
+   * @param {string[]} [filter.isArchived]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {Promise<{data: Models.Measurable[], total: number}>}
    */
   async getAll(filter = {}, pagination, restrictions) {
     const where = {};
+    const include = [];
 
     this.applyRestrictions(where, restrictions);
-    this.applyCursors(where, filter);
+    this.applyRestrictionsIncluding(include, restrictions);
+    this.applyFilter(where, filter);
 
     // Filter
     if (_.isArray(filter.states)) {
@@ -62,27 +65,35 @@ class MeasurableModel extends ModelPostgres {
     if (filter.channelId) where.channelId = filter.channelId;
     if (filter.seriesId) where.seriesId = filter.seriesId;
     if (filter.creatorId) where.creatorId = filter.creatorId;
-    where.isArchived = false;
 
-    const cond = {
-      limit: pagination.limit,
-      offset: pagination.offset,
-      where,
-      order: [
+    const cond = { where, include };
+
+    const order = {
+      asc: [
         [this.sequelize.col('stateOrder'), 'ASC'],
         ['createdAt', 'DESC'],
       ],
+      desc: [
+        [this.sequelize.col('stateOrder'), 'DESC'],
+        ['createdAt', 'ASC'],
+      ],
+    };
+    const edgePagination = this.getEdgePagination(pagination, order);
+
+    const options = {
+      ...cond,
+      limit: edgePagination.limit,
+      offset: edgePagination.offset,
+      order: edgePagination.order,
       attributes: {
-        include: [
-          this.getStateOrderField(),
-        ],
+        include: [ this.getStateOrderField() ],
       },
     };
 
     /** @type {Models.Measurable[]} */
-    const data = await this.model.findAll(cond);
-    // /** @type {number} */
-    const total = await this.model.count({ where });
+    const data = await this.model.findAll(options);
+    /** @type {number} */
+    const total = await this.model.count(cond);
 
     return { data, total };
   }

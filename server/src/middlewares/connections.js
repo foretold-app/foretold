@@ -10,20 +10,51 @@ const _ = require('lodash');
  */
 function connection(result, root, args, context, info) {
   const total = context.total;
+  const count = _.get(result, 'length');
 
-  const last = _.get(args, 'last', 0);
-  const count = result.length;
+  const first = args.first;
+  const after = args.after + 1;
 
-  const start = _.head(result);
-  const end = _.last(result);
+  const last = args.last;
+  const before = args.before + 1;
 
-  const startCursor = _.get(start, 'createdAt');
-  const endCursor = _.get(end, 'createdAt');
+  const hasNextPage = (() => {
+    if (first) {
+      return (args.after + count) < total;
+    } else if (last) {
+      return (args.before + count) < total;
+    }
+    return false;
+  })();
 
-  const hasNextPage = (last + count) < total;
-  const hasPreviousPage = !!last;
+  const hasPreviousPage = (() => {
+    if (first) {
+      return !!args.after;
+    } else if (last) {
+      return !!args.before;
+    }
+    return false;
+  })();
 
-  const edges = result.map(o => ({ node: o, cursor: _.get(o, 'createdAt') }));
+  const getCursor = (i) => {
+    if (first) {
+      return i + after;
+    } else if (last) {
+      return i + before;
+    }
+    return i;
+  };
+
+  const edges = result.map((o, i) => ({
+    node: o,
+    cursor: getCursor(i),
+  }));
+
+  const start = _.head(edges);
+  const end = _.last(edges);
+
+  const startCursor = _.get(start, 'cursor');
+  const endCursor = _.get(end, 'cursor');
 
   return {
     total: total,
@@ -37,6 +68,28 @@ function connection(result, root, args, context, info) {
   };
 }
 
+/**
+ * @param root
+ * @param args
+ * @param context
+ * @param info
+ */
+async function connectionArguments(root, args, context, info) {
+  const beforeCursor = _.get(args, 'before', 0);
+  const afterCursor = _.get(args, 'after', 0);
+
+  const before = beforeCursor * 1;
+  const after = afterCursor * 1;
+
+  args.before = before;
+  args.after = after;
+  args.last = _.get(args, 'last', 0);
+  args.first = _.get(args, 'first', 0);
+
+  return true;
+}
+
 module.exports = {
   connection,
+  connectionArguments,
 };

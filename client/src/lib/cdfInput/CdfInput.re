@@ -35,8 +35,8 @@ let competitorType = (~state, ~send) =>
   <Select
     value={state.competitorType}
     onChange={e => send(UpdateCompetitorType(e))}>
-    <Select.Option value="COMPETITIVE"> {"Competitive" |> ste} </Select.Option>
-    <Select.Option value="OBJECTIVE"> {"Objective" |> ste} </Select.Option>
+    <Select.Option value="COMPETITIVE"> {"Prediction" |> ste} </Select.Option>
+    <Select.Option value="OBJECTIVE"> {"Judgement" |> ste} </Select.Option>
   </Select>;
 
 let dataType = (~state, ~send) =>

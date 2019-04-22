@@ -95,7 +95,7 @@ let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
       );
 
     SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("New Measurable"),
+      ~head=SLayout.Header.textDiv("New Question"),
       ~body=
         CreateMeasurableMutation.Mutation.make(
           ~onCompleted=

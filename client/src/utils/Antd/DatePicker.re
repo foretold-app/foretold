@@ -8,6 +8,7 @@ external makeProps:
   (
     ~className: string=?,
     ~style: ReactDOMRe.Style.t=?,
+    ~disabled: bool,
     ~value: MomentRe.Moment.t=?,
     ~onChange: MomentRe.Moment.t => unit=?,
     unit
@@ -15,9 +16,11 @@ external makeProps:
   _ =
   "";
 
-let make = (~className=?, ~style=?, ~onChange=?, ~value=?, children) =>
+let make =
+    (~className=?, ~style=?, ~onChange=?, ~value=?, ~disabled=false, children) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,
-    ~props=makeProps(~className?, ~style?, ~onChange?, ~value?, ()),
+    ~props=
+      makeProps(~className?, ~style?, ~onChange?, ~value?, ~disabled, ()),
     children,
   );

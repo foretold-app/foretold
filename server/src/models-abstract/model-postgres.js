@@ -149,6 +149,37 @@ class ModelPostgres extends Model {
   }
 
   /**
+   *
+   * @param {object} pagination
+   * @param {number} pagination.first
+   * @param {string} pagination.after
+   * @param {number} pagination.last
+   * @param {string} pagination.before
+   * @param {number} pagination.limit
+   * @param {number} pagination.offset
+   * @param {object} orderIn
+   * @param {*} orderIn.asc
+   * @param {*} orderIn.desc
+   * @return {{offset: *, limit: *, order: *}}
+   */
+  getEdgePagination(pagination, orderIn) {
+    let limit, offset, order;
+
+    if (pagination.first) limit = pagination.first;
+    if (pagination.first) order = orderIn.asc;
+    if (pagination.after) offset = pagination.after;
+
+    if (pagination.last) limit = pagination.last;
+    if (pagination.last) order = orderIn.desc;
+    if (pagination.before) offset = pagination.before;
+
+    if (!limit) limit = pagination.limit;
+    if (!offset) offset = pagination.offset;
+
+    return { limit, offset, order };
+  }
+
+  /**
    * @protectedo
    * @param {object} [where]
    * @param {object} [filter]

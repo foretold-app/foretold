@@ -51,8 +51,10 @@ class MeasurableModel extends ModelPostgres {
    */
   async getAll(filter = {}, pagination, restrictions) {
     const where = {};
+    const include = [];
 
     this.applyRestrictions(where, restrictions);
+    this.applyRestrictionsIncluding(include, restrictions);
     this.applyCursors(where, filter);
 
     // Filter
@@ -65,24 +67,23 @@ class MeasurableModel extends ModelPostgres {
     where.isArchived = false;
 
     const cond = {
+      where,
+      include,
       limit: pagination.limit,
       offset: pagination.offset,
-      where,
       order: [
         [this.sequelize.col('stateOrder'), 'ASC'],
         ['createdAt', 'DESC'],
       ],
       attributes: {
-        include: [
-          this.getStateOrderField(),
-        ],
+        include: [this.getStateOrderField()],
       },
     };
 
     /** @type {Models.Measurable[]} */
     const data = await this.model.findAll(cond);
     // /** @type {number} */
-    const total = await this.model.count({ where });
+    const total = await this.model.count({ where, include });
 
     return { data, total };
   }

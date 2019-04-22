@@ -14,6 +14,7 @@ const bot = new graphql.GraphQLObjectType({
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     agentId: { type: graphql.GraphQLString },
     userId: { type: graphql.GraphQLString },
+    iAmOwner: require('./common').iAmOwnerByUserId,
 
     jwt: {
       type: graphql.GraphQLString,

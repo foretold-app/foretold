@@ -41,7 +41,7 @@ class MeasurementModel extends ModelPostgres {
     const cond = {
       limit: edgePagination.limit,
       offset: edgePagination.offset,
-      order: ['createdAt', 'DESC'],
+      order: [['createdAt', 'DESC']],
       where,
     };
 

@@ -5,10 +5,10 @@ let optBoolToOptJsBoolean =
   | None => None
   | Some(v) => Some(v);
 
-let unwrapBool = v => Js.Undefined.from_opt @@ optBoolToOptJsBoolean(v);
+let unwrapBool = v => Js.Undefined.fromOption @@ optBoolToOptJsBoolean(v);
 
 [@bs.module "../../../node_modules/antd/lib/switch"]
-external switch_: ReasonReact.reactClass = "default";
+external switch': ReasonReact.reactClass = "default";
 %bs.raw
 "require('../../../node_modules/antd/lib/switch/style/index.css')";
 
@@ -26,18 +26,18 @@ let make =
       ~onChange=?,
     ) =>
   ReasonReact.wrapJsForReason(
-    ~reactClass=switch__,
+    ~reactClass=switch',
     ~props=
       Js.Undefined.{
         "defaultChecked": unwrapBool(defaultChecked),
         "disabled": unwrapBool(disabled),
-        "checkedChildren": from_opt(checkedChildren),
-        "className": from_opt(className),
-        "size": from_opt(size),
-        "style": from_opt(style),
+        "checkedChildren": fromOption(checkedChildren),
+        "className": fromOption(className),
+        "size": fromOption(size),
+        "style": fromOption(style),
         "checked": unwrapBool(checked),
-        "id": from_opt(id),
-        "unCheckedChildren": from_opt(unCheckedChildren),
-        "onChange": from_opt(onChange),
+        "id": fromOption(id),
+        "unCheckedChildren": fromOption(unCheckedChildren),
+        "onChange": fromOption(onChange),
       },
   );

@@ -5,9 +5,9 @@ let component = ReasonReact.statelessComponent("EntityShow");
 
 let columns = [|
   Antd.Table.TableProps.make_column(
-    ~title="Agent",
-    ~dataIndex="agent",
-    ~key="agent",
+    ~title="Name",
+    ~dataIndex="name",
+    ~key="name",
     ~width=2,
     ~render=
       (~text, ~record, ~index) =>
@@ -19,26 +19,32 @@ let columns = [|
     (),
   ),
   Antd.Table.TableProps.make_column(
-    ~title="Remove",
-    ~dataIndex="role",
-    ~key="actions2",
+    ~title="Instance Of",
+    ~dataIndex="instance",
+    ~key="instance",
+    ~width=2,
+    ~render=(~text, ~record, ~index) => record##instance |> ste,
+    (),
+  ),
+  Antd.Table.TableProps.make_column(
+    ~title="Id",
+    ~dataIndex="id",
+    ~key="id",
     ~width=2,
     ~render=(~text, ~record, ~index) => record##id |> ste,
     (),
   ),
 |];
 
-let getName = (t: Graph_T.T.thing) =>
-  t |> Graph_T.Thing.id |> C.Ken.findName |> E.O.default("");
-
 let dataSource =
-  C.Ken.things
-  |> E.A.filter(r => getName(r) != "")
+  EKen.Things.getAll
+  |> EKen.Things.withNames
   |> E.A.fmap((r: Graph_T.T.thing) =>
        {
          "key": r |> Graph_T.Thing.id,
          "id": r |> Graph_T.Thing.id,
-         "name": r |> getName,
+         "name": r |> EKen.Thing.getName,
+         "instance": r |> EKen.Thing.getInstanceOfName,
        }
      );
 

@@ -200,11 +200,42 @@ module Make = (Config: Config) => {
     let deselectButton = send =>
       SLayout.channelBack(~onClick=_ => send(Types.Deselect), ());
 
+    module Styles = {
+      open Css;
+      let header = (~isDisabled) => {
+        let normalStyles = [
+          fontSize(`em(1.3)),
+          float(`left),
+          padding(`px(6)),
+          lineHeight(`px(0)),
+          marginRight(`em(0.7)),
+          marginTop(`em(0.1)),
+          color(`hex("e6e5e5")),
+          borderRadius(`percent(50.)),
+          userSelect(`none),
+        ];
+        let enabledOnlyStyles = [
+          color(`hex("a3abb6")),
+          cursor(`pointer),
+          selector(
+            ":hover",
+            [color(`hex("445b7d")), background(`hex("e9eff7"))],
+          ),
+        ];
+        let allStyles =
+          isDisabled ?
+            normalStyles : E.L.append(normalStyles, enabledOnlyStyles);
+        style(allStyles);
+      };
+    };
+
     let pageButton' = (facesRight: bool, action, canMove, params) =>
-      <Antd.Button
-        onClick={_ => params.send(action)} disabled={!canMove(params)}>
-        <Icon.Icon icon={facesRight ? "ARROW_RIGHT" : "ARROW_LEFT"} />
-      </Antd.Button>;
+      <div
+        className={Styles.header(~isDisabled=!canMove(params))}
+        onClick={_ => params.send(action)}
+        disabled={!canMove(params)}>
+        <Icon.Icon icon={facesRight ? "CHEVRON_RIGHT" : "CHEVRON_LEFT"} />
+      </div>;
 
     type buttonType =
       | PageLast

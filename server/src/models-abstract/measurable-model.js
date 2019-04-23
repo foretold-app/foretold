@@ -68,32 +68,27 @@ class MeasurableModel extends ModelPostgres {
 
     const cond = { where, include };
 
-    const order = {
-      asc: [
-        [this.sequelize.col('stateOrder'), 'ASC'],
-        ['createdAt', 'DESC'],
-      ],
-      desc: [
-        [this.sequelize.col('stateOrder'), 'DESC'],
-        ['createdAt', 'ASC'],
-      ],
-    };
-    const edgePagination = this.getEdgePagination(pagination, order);
+    /** @type {number} */
+    const total = await this.model.count(cond);
+
+    const edgePagination = this.getEdgePagination(pagination, total);
 
     const options = {
       ...cond,
       limit: edgePagination.limit,
       offset: edgePagination.offset,
-      order: edgePagination.order,
+      order: [
+        [this.sequelize.col('stateOrder'), 'ASC'],
+        ['createdAt', 'DESC'],
+      ],
       attributes: {
-        include: [ this.getStateOrderField() ],
+        include: [this.getStateOrderField()],
       },
     };
 
     /** @type {Models.Measurable[]} */
-    const data = await this.model.findAll(options);
-    /** @type {number} */
-    const total = await this.model.count(cond);
+    let data = await this.model.findAll(options);
+    data = this.setCursors(data, edgePagination);
 
     return { data, total };
   }

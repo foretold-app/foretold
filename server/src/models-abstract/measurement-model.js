@@ -34,23 +34,20 @@ class MeasurementModel extends ModelPostgres {
     if (filter.measurableId) where.measurableId = filter.measurableId;
     if (filter.agentId) where.agentId = filter.agentId;
 
-    const order = {
-      asc: ['createdAt', 'ASC'],
-      desc: ['createdAt', 'DESC'],
-    };
-    const edgePagination = this.getEdgePagination(pagination, order);
+    /** @type {number} */
+    const total = await this.model.count({ where });
+    const edgePagination = this.getEdgePagination(pagination, total);
 
     const cond = {
       limit: edgePagination.limit,
       offset: edgePagination.offset,
-      order: edgePagination.order,
+      order: ['createdAt', 'DESC'],
       where,
     };
 
     /** @type {Models.Measurement[]} */
-    const data = await this.model.findAll(cond);
-    /** @type {number} */
-    const total = await this.model.count({ where });
+    let data = await this.model.findAll(cond);
+    data = this.setCursors(data, edgePagination);
 
     return { data, total };
   }

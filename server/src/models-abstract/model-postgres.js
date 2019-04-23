@@ -131,26 +131,42 @@ class ModelPostgres extends Model {
    * @param {string} pagination.before
    * @param {number} pagination.limit
    * @param {number} pagination.offset
-   * @param {object} orderIn
-   * @param {*} orderIn.asc
-   * @param {*} orderIn.desc
+   * @param {number} total
    * @return {{offset: *, limit: *, order: *}}
    */
-  getEdgePagination(pagination, orderIn) {
-    let limit, offset, order;
+  getEdgePagination(pagination, total) {
+    pagination.before = Math.abs(pagination.before) || total;
+    pagination.after = Math.abs(pagination.after) || 0;
+    pagination.last = Math.abs(pagination.last) || 0;
+    pagination.first = Math.abs(pagination.first) || 0;
 
+    let offset, limit;
     if (pagination.first) limit = pagination.first;
-    if (pagination.first) order = orderIn.asc;
     if (pagination.after) offset = pagination.after;
 
-    if (pagination.last) limit = pagination.last;
-    if (pagination.last) order = orderIn.desc;
-    if (pagination.before) offset = pagination.before;
+    if (!offset && !limit) {
+      if (pagination.last) {
+        limit = pagination.last;
+        offset = pagination.before - pagination.last;
+      } else if (pagination.before !== total) {
+        limit = pagination.before;
+      }
+    }
 
-    if (!limit) limit = pagination.limit;
-    if (!offset) offset = pagination.offset;
+    offset = offset || 0;
+    return { limit, offset };
+  }
 
-    return { limit, offset, order };
+  /**
+   * @param data
+   * @param edgePagination
+   * @return {*}
+   */
+  setCursors(data, edgePagination) {
+    return data.map((item, index) => {
+      item.cursor = edgePagination.offset + index;
+      return item;
+    });
   }
 
   /**

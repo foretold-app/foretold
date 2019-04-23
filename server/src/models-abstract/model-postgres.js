@@ -142,7 +142,7 @@ class ModelPostgres extends Model {
 
     let offset, limit;
     if (pagination.first) limit = pagination.first;
-    if (pagination.after) offset = pagination.after;
+    if (pagination.after) offset = pagination.after + 1;
 
     if (!offset && !limit) {
       if (pagination.last) {
@@ -154,6 +154,13 @@ class ModelPostgres extends Model {
     }
 
     offset = offset || 0;
+    if (limit > total) limit = total;
+    if (offset < 0) {
+      limit += offset;
+      offset = 0;
+    }
+    if (limit < 0) limit = 0;
+
     return { limit, offset };
   }
 

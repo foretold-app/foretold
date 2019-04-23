@@ -14,6 +14,7 @@ describe('Measurables Resolvers', () => {
       before: 'before1',
       last: 'last1',
       first: 'first1',
+      isArchived: 'isArchived1',
     };
     const context = { agent: { id: 'agentId2' } };
     const info = {};
@@ -28,7 +29,7 @@ describe('Measurables Resolvers', () => {
           {
             "channelId": "channelId2",
             "creatorId": "creatorId1",
-            "isArchived": undefined,
+            "isArchived": "isArchived1",
             "seriesId": "seriesId2",
             "states": "states1"
           },

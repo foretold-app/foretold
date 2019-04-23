@@ -23,14 +23,14 @@ function connection(result, root, args, context, info) {
   const hasPreviousPage = _.toNumber(startCursor) > 0;
 
   return {
-    total: total,
-    pageInfo: {
-      hasNextPage: hasNextPage,
-      hasPreviousPage: hasPreviousPage,
-      startCursor: startCursor,
-      endCursor: endCursor,
-    },
+    total,
     edges,
+    pageInfo: {
+      hasNextPage,
+      hasPreviousPage,
+      startCursor,
+      endCursor,
+    },
   };
 }
 

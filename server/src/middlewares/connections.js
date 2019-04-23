@@ -41,18 +41,11 @@ function connection(result, root, args, context, info) {
  * @param {object} info
  */
 async function connectionArguments(root, args, context, info) {
-  const beforeCursor = _.get(args, 'before', 0);
-  const afterCursor = _.get(args, 'after', 0);
-
-  const before = beforeCursor * 1;
-  const after = afterCursor * 1;
-
-  args.before = before;
-  args.after = after;
+  args.before = _.get(args, 'before', 0) * 1;
+  args.after = _.get(args, 'after', 0) * 1;
 
   args.last = _.get(args, 'last', 0);
   args.first = _.get(args, 'first', 0);
-
   return true;
 }
 

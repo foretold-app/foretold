@@ -134,7 +134,7 @@ class ModelPostgres extends Model {
    * @param {number} total
    * @return {{offset: *, limit: *, order: *}}
    */
-  getEdgePagination(pagination, total) {
+  getPagination(pagination, total) {
     pagination.before = Math.abs(pagination.before) || total;
     pagination.after = Math.abs(pagination.after) || 0;
     pagination.last = Math.abs(pagination.last) || 0;
@@ -162,9 +162,9 @@ class ModelPostgres extends Model {
    * @param edgePagination
    * @return {*}
    */
-  setCursors(data, edgePagination) {
+  setIndexes(data, edgePagination) {
     return data.map((item, index) => {
-      item.cursor = edgePagination.offset + index;
+      item.index = edgePagination.offset + index;
       return item;
     });
   }

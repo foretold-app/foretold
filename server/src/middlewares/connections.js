@@ -11,7 +11,7 @@ const _ = require('lodash');
 function connection(result, root, args, context, info) {
   const total = context.total;
 
-  const edges = result.map(node => ({ node, cursor: node.cursor }));
+  const edges = result.map(node => ({ node, cursor: node.index }));
 
   const start = _.head(edges);
   const end = _.last(edges);
@@ -35,10 +35,10 @@ function connection(result, root, args, context, info) {
 }
 
 /**
- * @param root
- * @param args
- * @param context
- * @param info
+ * @param {object} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
  */
 async function connectionArguments(root, args, context, info) {
   const beforeCursor = _.get(args, 'before', 0);

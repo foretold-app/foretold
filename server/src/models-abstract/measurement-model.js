@@ -36,7 +36,7 @@ class MeasurementModel extends ModelPostgres {
 
     /** @type {number} */
     const total = await this.model.count({ where });
-    const edgePagination = this.getEdgePagination(pagination, total);
+    const edgePagination = this.getPagination(pagination, total);
 
     const cond = {
       limit: edgePagination.limit,
@@ -47,7 +47,7 @@ class MeasurementModel extends ModelPostgres {
 
     /** @type {Models.Measurement[]} */
     let data = await this.model.findAll(cond);
-    data = this.setCursors(data, edgePagination);
+    data = this.setIndexes(data, edgePagination);
 
     return { data, total };
   }

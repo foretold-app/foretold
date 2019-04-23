@@ -59,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
 
     const types = ['floatCdf', 'floatPoint'];
     for (const type of types) {
-      if (_.has(value, type)) {
+      if (_.has(value, type) && _.get(value, type)) {
         data = _.get(value, type);
         dataType = type;
       }

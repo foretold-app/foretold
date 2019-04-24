@@ -9,11 +9,7 @@ let agentSection = (e: Queries.Agent.agent) =>
   switch (e) {
   | {bot: Some(r)} =>
     <>
-      {
-        r.name
-        |> E.O.fmap(r => r |> ste |> E.React.inH2)
-        |> E.O.React.defaultNull
-      }
+      {r.name |> ste |> E.React.inH2}
       {
         r.description
         |> E.O.fmap(r => r |> ste |> E.React.inH3)

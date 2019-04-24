@@ -10,7 +10,7 @@ type bot = {
   competitorType,
   description: option(string),
   id: string,
-  name: option(string),
+  name: string,
 };
 
 type measurable = {

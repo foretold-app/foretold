@@ -15,7 +15,7 @@ module Types = {
               option({
                 .
                 "id": string,
-                "name": option(string),
+                "name": string,
                 "competitorType": competitorType,
               }),
             "id": string,
@@ -117,7 +117,7 @@ let toMeasurement = (m: Types.measurement): Context.Primary.Measurement.t => {
              Context.Primary.Types.Bot(
                Context.Primary.Bot.make(
                  ~id=bot##id,
-                 ~name=bot##name,
+                 ~name=Some(bot##name),
                  ~competitorType=bot##competitorType,
                  (),
                ),

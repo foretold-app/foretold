@@ -8,12 +8,13 @@ const { rule } = require('graphql-shield');
  * @param {object} info
  * @return {Promise<boolean>}
  */
-async function isOwnerRule(root, args, context, info) {
+async function measurableIsOwnedByCurrentAgentRule(root, args, context, info) {
   const creatorId = _.get(context, 'measurable.creatorId');
   const agentId = _.get(context, 'agent.id');
-  const isOwner = creatorId === agentId;
-  console.log(`\x1b[33m Rule Measurables (isOwner) "${isOwner}" \x1b[0m`);
-  return isOwner;
+  const result = creatorId === agentId;
+  console.log(`\x1b[33m Rule Measurables (measurableIsOwnedByCurrentAgent) ` +
+    `"${result}" \x1b[0m`);
+  return result;
 }
 
 /**
@@ -23,21 +24,24 @@ async function isOwnerRule(root, args, context, info) {
  * @param {object} info
  * @return {Promise<boolean>}
  */
-async function isArchivedRule(root, args, context, info) {
-  const isArchived = !!_.get(context, 'measurable.isArchived');
+async function measurableIsArchivedRule(root, args, context, info) {
+  const result = !!_.get(context, 'measurable.isArchived');
   console.log(`\x1b[33m Rule Measurables ` +
-    `(isArchivedRule) "${isArchived}"\x1b[0m`);
-  return isArchived;
+    `(measurableIsArchivedRule) "${result}"\x1b[0m`);
+  return result;
 }
 
 /** @type {Rule} */
-const isOwner = rule({ cache: 'no_cache' })(isOwnerRule);
+const measurableIsOwnedByCurrentAgent = rule({
+  cache: 'no_cache',
+})(measurableIsOwnedByCurrentAgentRule);
+
 /** @type {Rule} */
-const isArchived = rule({ cache: 'no_cache' })(isArchivedRule);
+const measurableIsArchived = rule({
+  cache: 'no_cache',
+})(measurableIsArchivedRule);
 
 module.exports = {
-  isOwner,
-  isArchived,
-
-  isOwnerRule,
+  measurableIsOwnedByCurrentAgent,
+  measurableIsArchived,
 };

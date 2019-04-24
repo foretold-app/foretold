@@ -3,24 +3,36 @@ const { shield, allow, and, or, not } = require('graphql-shield');
 
 const { isAuthenticated } = require('./agents');
 const { isChannelPublic } = require('./channels');
-const { isAdmin, isViewer, isInChannel } = require('./channel-memberships');
-const { isMoreThenOneAdmin } = require('./channel-memberships');
-const { isSubjectAsObject } = require('./channel-memberships');
-const { isObjectAdmin } = require('./channel-memberships');
-const measurables = require('./measurables');
-const bots = require('./bots');
+const { isAdmin, isViewer } = require('./channel-memberships');
+const { channelHasMembershipWithCurrentAgent } = require('./channel-memberships');
+const { channelHasMultipleAdmins } = require('./channel-memberships');
+const { membershipBelongsToCurrentAgent } = require('./channel-memberships');
+const { membershipHasAdminRole } = require('./channel-memberships');
+const { measurableIsOwnedByCurrentAgent } = require('./measurables');
+const { measurableIsArchived } = require('./measurables');
+const { botBelongsToCurrentUser } = require('./bots');
 
 const rulesChannel = {
   Query: {},
   Mutation: {
-    channelUpdate: and(isAuthenticated, isAdmin),
+    channelUpdate: and(
+      isAuthenticated,
+      isAdmin,
+    ),
     leaveChannel: and(
       isAuthenticated,
-      isInChannel,
-      or(and(isAdmin, isMoreThenOneAdmin), not(isAdmin)),
+      channelHasMembershipWithCurrentAgent,
+      or(and(isAdmin, channelHasMultipleAdmins), not(isAdmin)),
     ),
-    joinChannel: and(isAuthenticated, isChannelPublic, not(isInChannel)),
-    channelMembershipCreate: and(isAuthenticated, isAdmin),
+    joinChannel: and(
+      isAuthenticated,
+      isChannelPublic,
+      not(channelHasMembershipWithCurrentAgent),
+    ),
+    channelMembershipCreate: and(
+      isAuthenticated,
+      isAdmin,
+    ),
   }
 };
 
@@ -30,15 +42,18 @@ const rulesChannelMemberships = {
     channelMembershipDelete: and(
       isAuthenticated,
       isAdmin,
-      or(and(isObjectAdmin, isMoreThenOneAdmin), not(isSubjectAsObject)),
+      or(
+        and(membershipHasAdminRole, channelHasMultipleAdmins),
+        not(membershipBelongsToCurrentAgent),
+      ),
     ),
     channelMembershipRoleUpdate: and(
       isAuthenticated,
       isAdmin,
       or(
-        and(isMoreThenOneAdmin, isSubjectAsObject),
-        and(isMoreThenOneAdmin, isObjectAdmin),
-        not(isSubjectAsObject),
+        and(channelHasMultipleAdmins, membershipBelongsToCurrentAgent),
+        and(channelHasMultipleAdmins, membershipHasAdminRole),
+        not(membershipBelongsToCurrentAgent),
       ),
     ),
   }
@@ -47,16 +62,30 @@ const rulesChannelMemberships = {
 const rulesMeasurables = {
   Query: {},
   Mutation: {
-    measurementCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
-    measurableArchive: and(isAuthenticated, measurables.isOwner, not(measurables.isArchived)),
-    measurableUnarchive: and(isAuthenticated, measurables.isOwner, measurables.isArchived),
-    measurableUpdate: and(isAuthenticated, measurables.isOwner),
+    measurementCreate: and(
+      isAuthenticated,
+      or(isChannelPublic, or(isAdmin, isViewer)),
+    ),
+    measurableArchive: and(
+      isAuthenticated,
+      measurableIsOwnedByCurrentAgent,
+      not(measurableIsArchived),
+    ),
+    measurableUnarchive: and(
+      isAuthenticated,
+      measurableIsOwnedByCurrentAgent,
+      measurableIsArchived,
+    ),
+    measurableUpdate: and(
+      isAuthenticated,
+      measurableIsOwnedByCurrentAgent,
+    ),
   }
 };
 
 const rules = {
   Bot: {
-    jwt: bots.isOwner,
+    jwt: botBelongsToCurrentUser,
   },
   Query: {
     '*': allow,
@@ -83,7 +112,10 @@ const rules = {
     channelCreate: isAuthenticated,
     userUpdate: isAuthenticated,
     seriesCreate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
-    measurableCreate: and(isAuthenticated, or(isChannelPublic, or(isAdmin, isViewer))),
+    measurableCreate: and(
+      isAuthenticated,
+      or(isChannelPublic, or(isAdmin, isViewer)),
+    ),
 
     ...rulesMeasurables.Mutation,
     ...rulesChannel.Mutation,

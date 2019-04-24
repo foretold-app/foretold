@@ -26,11 +26,14 @@ class BotModel extends ModelPostgres {
    * @param {object} data
    * @return {data}
    */
-  createOne(params, data) {
-    return this.model.update(
-      data,
-      { where: params }
-    );
+  async updateOne(params, data) {
+    const bot = await this.model.findOne({
+      where: params,
+    });
+    if (bot) {
+      await bot.update(data);
+    }
+    return bot;
   }
 
   /**

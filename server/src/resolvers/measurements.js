@@ -16,12 +16,12 @@ async function all(root, args, context, info) {
   const filter = {
     measurableId: _.get(args, 'measurableId'),
     agentId: _.get(args, 'agentId'),
-    after: _.get(args, 'after'),
-    before: _.get(args, 'before'),
   };
   const pagination = {
-    offset: _.get(args, 'last'),
-    limit: _.get(args, 'first'),
+    after: _.get(args, 'after'),
+    before: _.get(args, 'before'),
+    last: _.get(args, 'last'),
+    first: _.get(args, 'first'),
   };
   const options = { agentId };
   const result = await data.measurements.getAll(filter, pagination, options);

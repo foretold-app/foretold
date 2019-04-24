@@ -2,7 +2,7 @@ const _ = require('lodash');
 const { shield, allow, and, or, not } = require('graphql-shield');
 
 const { currentAgentIsAuthenticated } = require('./agents');
-const { isChannelPublic } = require('./channels');
+const { channelIsPublic } = require('./channels');
 const { currentAgentIsChannelAdmin } = require('./channel-memberships');
 const { currentAgentIsChannelViewer } = require('./channel-memberships');
 const { channelHasMembershipWithCurrentAgent } = require('./channel-memberships');
@@ -30,7 +30,7 @@ const rulesChannel = {
     ),
     joinChannel: and(
       currentAgentIsAuthenticated,
-      isChannelPublic,
+      channelIsPublic,
       not(channelHasMembershipWithCurrentAgent),
     ),
     channelMembershipCreate: and(
@@ -69,7 +69,7 @@ const rulesMeasurables = {
     measurementCreate: and(
       currentAgentIsAuthenticated,
       or(
-        isChannelPublic,
+        channelIsPublic,
         or(currentAgentIsChannelAdmin, currentAgentIsChannelViewer),
       ),
     ),
@@ -120,12 +120,12 @@ const rules = {
     userUpdate: currentAgentIsAuthenticated,
     seriesCreate: and(
       currentAgentIsAuthenticated,
-      or(isChannelPublic, currentAgentIsChannelAdmin),
+      or(channelIsPublic, currentAgentIsChannelAdmin),
     ),
     measurableCreate: and(
       currentAgentIsAuthenticated,
       or(
-        isChannelPublic,
+        channelIsPublic,
         or(currentAgentIsChannelAdmin, currentAgentIsChannelViewer),
       ),
     ),

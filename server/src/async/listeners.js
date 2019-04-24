@@ -2,7 +2,6 @@ const emitter = require('./emitter');
 const events = require('./events');
 
 const measurables = require('./measurables');
-const bots = require('./bots');
 
 function toJudgementPendingTransition() {
   try {

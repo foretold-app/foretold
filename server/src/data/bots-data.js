@@ -41,12 +41,12 @@ class BotsData extends DataBase {
 
   /**
    * @todo: fix interface (params, query, options*)
-   * @param {object} params
-   * @param {object} query
-   * @param {object} restrictions
+   * @param {object} [params]
+   * @param {object} [query]
+   * @param {object} [restrictions]
    * @return {Promise<void>}
    */
-  async getOne(params, query, restrictions) {
+  async getOne(params = {}, query = {}, restrictions = {}) {
     return this.BotModel.getOne(params, query, restrictions);
   }
 }

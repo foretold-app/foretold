@@ -116,6 +116,10 @@ const rules = {
   Mutation: {
     '*': currentAgentIsAuthenticated,
     botCreate: currentAgentIsAuthenticated,
+    botUpdate: and(
+      currentAgentIsAuthenticated,
+      botBelongsToCurrentUser,
+    ),
     channelCreate: currentAgentIsAuthenticated,
     userUpdate: currentAgentIsAuthenticated,
     seriesCreate: and(

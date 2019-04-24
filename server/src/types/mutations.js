@@ -18,6 +18,7 @@ const mutations = new graphql.GraphQLEnumType({
     LEAVE_CHANNEL: { value: "LEAVE_CHANNEL" },
     JOIN_CHANNEL: { value: "JOIN_CHANNEL" },
     BOT_CREATE: { value: "BOT_CREATE" },
+    BOT_UPDATE: { value: "BOT_UPDATE" },
   }
 });
 

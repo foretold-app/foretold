@@ -267,6 +267,9 @@ module HttpResponse = {
     | Loading => loadingFn()
     };
 
+  let flattenDefault = (default, successFn: 'a => 'b) =>
+    flatten(successFn, _ => default, () => default);
+
   let isSuccess = (result: t('a)) =>
     switch (result) {
     | Success(_) => true

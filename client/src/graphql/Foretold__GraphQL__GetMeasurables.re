@@ -80,8 +80,8 @@ let toMeasurable = (m: node): Context.Primary.Measurable.t =>
 
 module Query = [%graphql
   {|
-    query getMeasurables ($channelId: String, $seriesId: String, $creatorId: String, $first: Int, $after: String) {
-        measurables(channelId: $channelId, seriesId: $seriesId, creatorId: $creatorId, first: $first, after: $after) {
+    query getMeasurables ($channelId: String, $seriesId: String, $creatorId: String, $first: Int, $last: Int, $after: String, $before: String) {
+        measurables(channelId: $channelId, seriesId: $seriesId, creatorId: $creatorId, first: $first, last: $last, after: $after, before: $before) {
           total
           pageInfo{
             hasPreviousPage
@@ -145,39 +145,40 @@ let queryToComponent = (query, innerComponentFn) =>
   )
   |> E.React.el;
 
-let component =
+type inputType('a) =
+  (
+    ~channelId: string=?,
+    ~seriesId: string=?,
+    ~creatorId: string=?,
+    ~first: int=?,
+    ~last: int=?,
+    ~after: string=?,
+    ~before: string=?,
+    unit
+  ) =>
+  'a;
+
+type direction = Context.Primary.Connection.direction;
+
+let queryDirection =
     (
-      channelId,
-      page,
-      pageLimit,
-      innerComponentFn: 'a => ReasonReact.reactElement,
-    ) => {
-  let query = Query.make(~channelId, ());
-  queryToComponent(query, innerComponentFn);
-};
-
-let component2 =
-    (~channelId, ~pageLimit, ~after: option(string), ~innerComponentFn) => {
-  let query =
-    Query.make(
-      ~channelId,
-      ~first=pageLimit,
-      ~after=after |> E.O.default(""),
+      ~seriesId=?,
+      ~channelId=?,
+      ~creatorId=?,
+      ~pageLimit,
+      ~direction,
+      ~fn: inputType('a),
       (),
-    );
-  QueryComponent.make(~variables=query##variables, o =>
-    o.result
-    |> E.HttpResponse.fromApollo
-    |> E.HttpResponse.fmap(unpackEdges)
-    |> E.HttpResponse.optionalToMissing
-    |> innerComponentFn
-  )
-  |> E.React.el;
+    ) => {
+  let fn = fn(~seriesId?, ~channelId?, ~creatorId?);
+  switch ((direction: direction)) {
+  | None => fn(~first=pageLimit, ())
+  | After(after) => fn(~first=pageLimit, ~after, ())
+  | Before(before) => fn(~last=pageLimit, ~before, ())
+  };
 };
 
-let component3 =
-    (~seriesId, ~pageLimit, ~after: option(string), ~innerComponentFn) => {
-  let query = Query.make(~seriesId, ~first=pageLimit, ());
+let componentMaker = (query, innerComponentFn) =>
   QueryComponent.make(~variables=query##variables, o =>
     o.result
     |> E.HttpResponse.fromApollo
@@ -186,29 +187,25 @@ let component3 =
     |> innerComponentFn
   )
   |> E.React.el;
-};
 
-let component4 =
-    (~creatorId, ~pageLimit, ~after: option(string), ~innerComponentFn) => {
-  let query = Query.make(~creatorId, ~first=pageLimit, ());
-  QueryComponent.make(~variables=query##variables, o =>
-    o.result
-    |> E.HttpResponse.fromApollo
-    |> E.HttpResponse.fmap(unpackEdges)
-    |> E.HttpResponse.optionalToMissing
-    |> innerComponentFn
-  )
-  |> E.React.el;
+/* TODO: I'm sure there is a dryer way to do this but couldn't figure out quickly. */
+let component2 =
+    (~channelId, ~pageLimit, ~direction: direction, ~innerComponentFn) => {
+  let query =
+    queryDirection(~channelId, ~pageLimit, ~direction, ~fn=Query.make, ());
+  componentMaker(query, innerComponentFn);
 };
 
 let componentWithSeries =
-    (channelId, seriesId, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = Query.make(~channelId, ~seriesId, ());
-  queryToComponent(query, innerComponentFn);
+    (~seriesId, ~pageLimit, ~direction: direction, ~innerComponentFn) => {
+  let query =
+    queryDirection(~seriesId, ~pageLimit, ~direction, ~fn=Query.make, ());
+  componentMaker(query, innerComponentFn);
 };
 
 let componentWithCreator =
-    (creatorId, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = Query.make(~creatorId, ());
-  queryToComponent(query, innerComponentFn);
+    (~creatorId, ~pageLimit, ~direction: direction, ~innerComponentFn) => {
+  let query =
+    queryDirection(~creatorId, ~pageLimit, ~direction, ~fn=Query.make, ());
+  componentMaker(query, innerComponentFn);
 };

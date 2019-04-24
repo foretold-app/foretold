@@ -133,6 +133,27 @@ module Connection = {
     let edges = json##edges |> flattenEdges |> E.A.fmap(nodeTransformation);
     make(~pageInfo, ~total, ~edges);
   };
+
+  type cursorId = string;
+  type direction =
+    | None
+    | Before(cursorId)
+    | After(cursorId);
+
+  let hasNextPage = (t: t('a)) => t.pageInfo.hasNextPage;
+  let hasPreviousPage = (t: t('a)) => t.pageInfo.hasPreviousPage;
+
+  let nextPageDirection = (t: t('a)) =>
+    switch (hasNextPage(t), t.pageInfo.endCursor) {
+    | (true, Some(b)) => Some(After(b))
+    | _ => None
+    };
+
+  let lastPageDirection = (t: t('a)) =>
+    switch (hasPreviousPage(t), t.pageInfo.startCursor) {
+    | (true, Some(b)) => Some(Before(b))
+    | _ => None
+    };
 };
 
 module Permissions = {

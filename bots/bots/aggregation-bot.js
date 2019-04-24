@@ -1,6 +1,6 @@
-const { API } = require('./api');
+const { API } = require('../api');
 
-const config = require('./config');
+const config = require('../config');
 
 class AggregationBot {
   constructor() {

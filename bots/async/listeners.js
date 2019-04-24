@@ -1,7 +1,7 @@
 const emitter = require('./emitter');
 const events = require('./events');
 
-const bots = require('./bots');
+const bots = require('../bots');
 
 function runAggregationBot() {
   try {

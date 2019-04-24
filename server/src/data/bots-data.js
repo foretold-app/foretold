@@ -22,6 +22,15 @@ class BotsData extends DataBase {
   }
 
   /**
+   * @param {object} params
+   * @param {object} data
+   * @return {Promise<*>}
+   */
+  async updateOne(params, data) {
+    return await this.BotModel.updateOne(params, data);
+  }
+
+  /**
    * @todo: fix interface (filter, pagination, options)
    * @param {object} options
    * @return {Promise<*|Array<Model>>}
@@ -32,12 +41,12 @@ class BotsData extends DataBase {
 
   /**
    * @todo: fix interface (params, query, options*)
-   * @param {object} params
-   * @param {object} query
-   * @param {object} restrictions
+   * @param {object} [params]
+   * @param {object} [query]
+   * @param {object} [restrictions]
    * @return {Promise<void>}
    */
-  async getOne(params, query, restrictions) {
+  async getOne(params = {}, query = {}, restrictions = {}) {
     return this.BotModel.getOne(params, query, restrictions);
   }
 }

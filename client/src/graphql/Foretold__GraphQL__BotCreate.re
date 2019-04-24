@@ -15,7 +15,7 @@ let mutate =
   let m =
     Query.make(
       ~input={
-        "name": Some(name),
+        "name": name,
         "description": Some(description),
         "competitorType": competitorType,
       },

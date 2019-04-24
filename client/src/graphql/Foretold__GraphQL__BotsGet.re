@@ -40,13 +40,13 @@ type bot = {
   "description": option(string),
   "jwt": option(string),
   "agent": option({. "id": string}),
-  "name": option(string),
+  "name": string,
 };
 
 let toBot = (m: bot) =>
   Context.Primary.Bot.make(
     ~id=m##id,
-    ~name=m##name,
+    ~name=Some(m##name),
     ~description=m##description,
     ~competitorType=m##competitorType,
     ~jwt=m##jwt,

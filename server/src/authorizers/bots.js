@@ -8,18 +8,19 @@ const { rule } = require('graphql-shield');
  * @param {object} info
  * @return {Promise<boolean>}
  */
-async function isOwnerRule(root, args, context, info) {
+async function botBelongsToCurrentUserRule(root, args, context, info) {
   const botUserId = _.get(root, 'userId');
   const userId = _.get(context, 'user.id');
-  const isOwner = !!botUserId && botUserId === userId;
-  console.log(`\x1b[33m Rule Bots (isOwner) ${isOwner} \x1b[0m`);
-  return isOwner;
+  const result = !!botUserId && botUserId === userId;
+  console.log(`\x1b[33m Rule Bots (botBelongsToCurrentUser) "${result}"\x1b[0m`);
+  return result;
 }
 
 /** @type {Rule} */
-const isOwner = rule({ cache: 'no_cache' })(isOwnerRule);
+const botBelongsToCurrentUser = rule({
+  cache: 'no_cache',
+})(botBelongsToCurrentUserRule);
 
 module.exports = {
-  isOwner,
-  isOwnerRule,
+  botBelongsToCurrentUser,
 };

@@ -8,18 +8,20 @@ const { rule } = require('graphql-shield');
  * @param {object} info
  * @return {Promise<boolean>}
  */
-async function isAuthenticatedRule(root, args, context, info) {
+async function currentAgentIsAuthenticatedRule(root, args, context, info) {
   const agentId = _.get(context, 'agent.id');
   const result = !!agentId;
-  console.log(`\x1b[33m Rule Agents (isAuthenticatedRule) ` +
+  console.log(`\x1b[33m Rule Agents (currentAgentIsAuthenticatedRule) ` +
     `agentId "${agentId}", result = "${result}"\x1b[0m`);
   return result;
 }
 
 /** @type {Rule} */
-const isAuthenticated = rule({ cache: 'no_cache' })(isAuthenticatedRule);
+const currentAgentIsAuthenticated = rule({
+  cache: 'no_cache',
+})(currentAgentIsAuthenticatedRule);
 
 module.exports = {
-  isAuthenticated,
-  isAuthenticatedRule,
+  currentAgentIsAuthenticated,
+  currentAgentIsAuthenticatedRule,
 };

@@ -47,6 +47,7 @@ type measurable = {
   stateUpdatedAt: option(MomentRe.Moment.t),
   creator: option(creator),
   series: option(series),
+  isArchived: bool,
   labelOnDate: option(MomentRe.Moment.t),
   labelProperty: option(string),
 };
@@ -57,6 +58,7 @@ let toMeasurable = (m: measurable): Context.Primary.Measurable.t =>
     ~id=m.id,
     ~name=m.name,
     ~channel=None,
+    ~isArchived=Some(m.isArchived),
     ~valueType=m.valueType,
     ~labelCustom=m.labelCustom,
     ~resolutionEndpoint=m.resolutionEndpoint,
@@ -96,6 +98,7 @@ module Query = [%graphql
            labelSubject
            labelProperty
            iAmOwner
+           isArchived
            labelOnDate @bsDecoder(fn: "E.J.O.toMoment")
            state @bsDecoder(fn: "Context.Primary.MeasurableState.fromEnum")
            stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")

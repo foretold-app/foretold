@@ -123,29 +123,57 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param {object} [where]
-   * @param {object} [filter]
-   * @param {string} [filter.after]
-   * @param {string} [filter.before]
+   *
+   * @param {object} pagination
+   * @param {number} pagination.first
+   * @param {string} pagination.after
+   * @param {number} pagination.last
+   * @param {string} pagination.before
+   * @param {number} pagination.limit
+   * @param {number} pagination.offset
+   * @param {number} total
+   * @return {{offset: *, limit: *, order: *}}
    */
-  applyCursors(where = {}, filter = {}) {
-    if (!where[this.and]) where[this.and] = [];
+  getPagination(pagination, total) {
+    pagination.before = Math.abs(pagination.before) || total;
+    pagination.after = Math.abs(pagination.after) || 0;
+    pagination.last = Math.abs(pagination.last) || 0;
+    pagination.first = Math.abs(pagination.first) || 0;
 
-    if (filter.after) {
-      where[this.and].push({
-        createdAt: {
-          [this.gt]: new Date(filter.after * 1),
-        },
-      });
+    let offset, limit;
+    if (pagination.first) limit = pagination.first;
+    if (pagination.after) offset = pagination.after + 1;
+
+    if (!offset && !limit) {
+      if (pagination.last) {
+        limit = pagination.last;
+        offset = pagination.before - pagination.last;
+      } else if (pagination.before !== total) {
+        limit = pagination.before;
+      }
     }
 
-    if (filter.before) {
-      where[this.and].push({
-        createdAt: {
-          [this.lt]: new Date(filter.before * 1),
-        },
-      });
+    offset = offset || 0;
+    if (limit > total) limit = total;
+    if (offset < 0) {
+      limit += offset;
+      offset = 0;
     }
+    if (limit < 0) limit = 0;
+
+    return { limit, offset };
+  }
+
+  /**
+   * @param data
+   * @param edgePagination
+   * @return {*}
+   */
+  setIndexes(data, edgePagination) {
+    return data.map((item, index) => {
+      item.index = edgePagination.offset + index;
+      return item;
+    });
   }
 
   /**

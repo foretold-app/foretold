@@ -79,7 +79,14 @@ export namespace Layers {
     type data = object;
     type options = object;
     type filter = object;
-    type pagination = { limit?: number, offset?: number };
+    type pagination = {
+      limit?: number,
+      offset?: number,
+      last?: number,
+      first?: number,
+      after?: string,
+      before?: string,
+    };
     type query = object;
     type params = object;
     type response = { data: any };
@@ -129,7 +136,14 @@ export namespace Layers {
       measuredByAgentId?: string,
     };
     type filter = object;
-    type pagination = { limit?: number, offset?: number };
+    type pagination = {
+      limit?: number,
+      offset?: number,
+      last?: number,
+      first?: number,
+      after?: string,
+      before?: string,
+    };
     type query = object;
     type params = object;
     type response = { data: any };

@@ -29,10 +29,10 @@ type node = {
   relevantAt: option(MomentRe.Moment.t),
   competitorType,
   description: option(string),
-  value: Belt.Result.t(MeasurementValue.t, string),
   createdAt: MomentRe.Moment.t,
   taggedMeasurementId: option(string),
   measurable: option(measurable),
+  value: MeasurementValue.graphQlResult,
 };
 
 type agent = {
@@ -73,20 +73,26 @@ module Query = [%graphql
         measurements: Measurements {
            edges {
              node @bsRecord{
-           id
-           createdAt @bsDecoder(fn: "E.J.toMoment")
-           relevantAt @bsDecoder(fn: "E.J.O.toMoment")
-           value @bsDecoder(fn: "MeasurementValue.decode")
-           description
-           competitorType
-           taggedMeasurementId
-           measurable: Measurable @bsRecord{
-             id
-             name
-             expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
-             state @bsDecoder(fn: "Context.Primary.MeasurableState.fromEnum")
-             stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
-          }
+              id
+              createdAt @bsDecoder(fn: "E.J.toMoment")
+              relevantAt @bsDecoder(fn: "E.J.O.toMoment")
+              description
+              competitorType
+              taggedMeasurementId
+              value {
+                floatCdf {
+                  xs
+                  ys
+                }
+                floatPoint
+              }
+              measurable: Measurable @bsRecord{
+                id
+                name
+                expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
+                state @bsDecoder(fn: "Context.Primary.MeasurableState.fromEnum")
+                stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
+              }
 
              }
            }
@@ -105,7 +111,7 @@ let toMeasurables = (measurements: array(node)) => {
     |> E.A.fmap(n =>
          Context.Primary.Measurement.make(
            ~id=n.id,
-           ~value=n.value,
+           ~value=n.value |> MeasurementValue.decodeGraphql,
            ~description=n.description,
            ~createdAt=Some(n.createdAt),
            ~competitorType=n.competitorType,

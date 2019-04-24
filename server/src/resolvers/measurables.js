@@ -25,12 +25,12 @@ async function all(root, args, context, info) {
     channelId: _.get(args, 'channelId'),
     states: _.get(args, 'states'),
     isArchived: _.get(args, 'isArchived'),
-    after: _.get(args, 'after'),
-    before: _.get(args, 'before'),
   };
   const pagination = {
-    offset: _.get(args, 'last'),
-    limit: _.get(args, 'first'),
+    last: _.get(args, 'last'),
+    first: _.get(args, 'first'),
+    after: _.get(args, 'after'),
+    before: _.get(args, 'before'),
   };
   const options = {
     agentId: _.get(context, 'agent.id'),

@@ -132,7 +132,57 @@
               "description": null,
               "args": [
                 {
+                  "name": "after",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
                   "name": "measurableId",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "agentId",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -143,17 +193,9 @@
                 }
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "Measurement",
-                    "ofType": null
-                  }
-                }
+                "kind": "OBJECT",
+                "name": "MeasurementsConnection",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -190,7 +232,27 @@
               "description": null,
               "args": [
                 {
-                  "name": "offset",
+                  "name": "after",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -200,7 +262,7 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "limit",
+                  "name": "last",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
@@ -240,6 +302,16 @@
                   "defaultValue": null
                 },
                 {
+                  "name": "measuredByAgentId",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
                   "name": "states",
                   "description": null,
                   "type": {
@@ -252,20 +324,26 @@
                     }
                   },
                   "defaultValue": null
+                },
+                {
+                  "name": "isArchived",
+                  "description": null,
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "isArchived",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
                 }
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "Measurable",
-                    "ofType": null
-                  }
-                }
+                "kind": "OBJECT",
+                "name": "MeasurablesConnection",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -344,7 +422,7 @@
               ],
               "type": {
                 "kind": "OBJECT",
-                "name": "botsConnectionConnection",
+                "name": "BotsConnection",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -1278,7 +1356,7 @@
               ],
               "type": {
                 "kind": "OBJECT",
-                "name": "agentMeasurementsConnectionConnection",
+                "name": "AgentMeasurementsConnection",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -1673,7 +1751,7 @@
               ],
               "type": {
                 "kind": "OBJECT",
-                "name": "channelAgentsConnectionConnection",
+                "name": "ChannelAgentsConnection",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -1736,7 +1814,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "channelAgentsConnectionConnection",
+          "name": "ChannelAgentsConnection",
           "description": "A connection to a list of items.",
           "fields": [
             {
@@ -1764,7 +1842,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "channelAgentsConnectionEdge",
+                  "name": "ChannelAgentsEdge",
                   "ofType": null
                 }
               },
@@ -1858,7 +1936,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "channelAgentsConnectionEdge",
+          "name": "ChannelAgentsEdge",
           "description": "An edge in a connection.",
           "fields": [
             {
@@ -2013,6 +2091,22 @@
               "deprecationReason": null
             },
             {
+              "name": "iAmOwner",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "jwt",
               "description": null,
               "args": [],
@@ -2085,7 +2179,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "agentMeasurementsConnectionConnection",
+          "name": "AgentMeasurementsConnection",
           "description": "A connection to a list of items.",
           "fields": [
             {
@@ -2113,7 +2207,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "agentMeasurementsConnectionEdge",
+                  "name": "AgentMeasurementsEdge",
                   "ofType": null
                 }
               },
@@ -2140,7 +2234,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "agentMeasurementsConnectionEdge",
+          "name": "AgentMeasurementsEdge",
           "description": "An edge in a connection.",
           "fields": [
             {
@@ -2864,7 +2958,7 @@
               ],
               "type": {
                 "kind": "OBJECT",
-                "name": "measurableMeasurementsConnectionConnection",
+                "name": "MeasurableMeasurementsConnection",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -2972,7 +3066,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "measurableMeasurementsConnectionConnection",
+          "name": "MeasurableMeasurementsConnection",
           "description": "A connection to a list of items.",
           "fields": [
             {
@@ -3000,7 +3094,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "measurableMeasurementsConnectionEdge",
+                  "name": "MeasurableMeasurementsEdge",
                   "ofType": null
                 }
               },
@@ -3027,7 +3121,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "measurableMeasurementsConnectionEdge",
+          "name": "MeasurableMeasurementsEdge",
           "description": "An edge in a connection.",
           "fields": [
             {
@@ -3304,7 +3398,7 @@
               ],
               "type": {
                 "kind": "OBJECT",
-                "name": "seriesMeasurablesConnectionConnection",
+                "name": "SeriesMeasurablesConnection",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -3330,7 +3424,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "seriesMeasurablesConnectionConnection",
+          "name": "SeriesMeasurablesConnection",
           "description": "A connection to a list of items.",
           "fields": [
             {
@@ -3358,7 +3452,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "seriesMeasurablesConnectionEdge",
+                  "name": "SeriesMeasurablesEdge",
                   "ofType": null
                 }
               },
@@ -3385,7 +3479,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "seriesMeasurablesConnectionEdge",
+          "name": "SeriesMeasurablesEdge",
           "description": "An edge in a connection.",
           "fields": [
             {
@@ -3424,7 +3518,285 @@
         },
         {
           "kind": "OBJECT",
-          "name": "botsConnectionConnection",
+          "name": "MeasurementsConnection",
+          "description": null,
+          "fields": [
+            {
+              "name": "total",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pageInfo",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfoConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "edges",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "MeasurementsEdge",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PageInfoConnection",
+          "description": null,
+          "fields": [
+            {
+              "name": "hasNextPage",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "hasPreviousPage",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "startCursor",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "endCursor",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "MeasurementsEdge",
+          "description": null,
+          "fields": [
+            {
+              "name": "node",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Measurement",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cursor",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "isArchived",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "TRUE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "FALSE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "MeasurablesConnection",
+          "description": null,
+          "fields": [
+            {
+              "name": "total",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "pageInfo",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "PageInfoConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "edges",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "MeasurablesEdge",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "MeasurablesEdge",
+          "description": null,
+          "fields": [
+            {
+              "name": "node",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Measurable",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "cursor",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "BotsConnection",
           "description": "A connection to a list of items.",
           "fields": [
             {
@@ -3452,7 +3824,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "botsConnectionEdge",
+                  "name": "BotsEdge",
                   "ofType": null
                 }
               },
@@ -3479,7 +3851,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "botsConnectionEdge",
+          "name": "BotsEdge",
           "description": "An edge in a connection.",
           "fields": [
             {

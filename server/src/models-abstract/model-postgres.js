@@ -1,4 +1,5 @@
 const { Model } = require('./model');
+const models = require('../models');
 
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
@@ -13,11 +14,15 @@ class ModelPostgres extends Model {
   ) {
     super();
     this.model = model;
+    this.models = models;
     this.sequelize = sequelize;
     this.Op = this.sequelize.Op;
     this.in = this.sequelize.Op.in;
+    this.gt = this.sequelize.Op.gt;
+    this.lt = this.sequelize.Op.lt;
     this.and = this.sequelize.Op.and;
     this.fn = this.sequelize.fn;
+    this.col = this.sequelize.col;
     this.literal = this.sequelize.literal;
   }
 
@@ -72,11 +77,8 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param {object} where
-   * @param {object} restrictions
-   * @param {string} [restrictions.agentId]
-   * @param {string} [restrictions.userId]
-   * @param {boolean} [restrictions.channelId]
+   * @param {object} [where]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    */
   applyRestrictions(where = {}, restrictions = {}) {
     if (!where[this.and]) where[this.and] = [];
@@ -94,10 +96,116 @@ class ModelPostgres extends Model {
         userId: restrictions.userId,
       });
     }
+
+    if (restrictions.measurableId) {
+      where[this.and].push({
+        measurableId: {
+          [this.in]: this.measurableIdsLiteral(restrictions.agentId),
+        },
+      });
+    }
   }
 
-  getTransaction() {
-    return this.sequelize.transaction();
+  /**
+   * @param {object} [include]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   */
+  applyRestrictionsIncluding(include = [], restrictions = {}) {
+    if (!include) include = [];
+
+    if (restrictions.measuredByAgentId) {
+      include.push({
+        model: this.models.Measurement,
+        as: 'Measurements',
+        where: { agentId: restrictions.measuredByAgentId },
+      });
+    }
+  }
+
+  /**
+   *
+   * @param {object} pagination
+   * @param {number} pagination.first
+   * @param {string} pagination.after
+   * @param {number} pagination.last
+   * @param {string} pagination.before
+   * @param {number} pagination.limit
+   * @param {number} pagination.offset
+   * @param {number} total
+   * @return {{offset: *, limit: *, order: *}}
+   */
+  getPagination(pagination, total) {
+    pagination.before = Math.abs(pagination.before) || total;
+    pagination.after = Math.abs(pagination.after) || 0;
+    pagination.last = Math.abs(pagination.last) || 0;
+    pagination.first = Math.abs(pagination.first) || 0;
+
+    let offset, limit;
+    if (pagination.first) limit = pagination.first;
+    if (pagination.after) offset = pagination.after + 1;
+
+    if (!offset && !limit) {
+      if (pagination.last) {
+        limit = pagination.last;
+        offset = pagination.before - pagination.last;
+      } else if (pagination.before !== total) {
+        limit = pagination.before;
+      }
+    }
+
+    offset = offset || 0;
+    if (limit > total) limit = total;
+    if (offset < 0) {
+      limit += offset;
+      offset = 0;
+    }
+    if (limit < 0) limit = 0;
+
+    return { limit, offset };
+  }
+
+  /**
+   * @param data
+   * @param edgePagination
+   * @return {*}
+   */
+  setIndexes(data, edgePagination) {
+    return data.map((item, index) => {
+      item.index = edgePagination.offset + index;
+      return item;
+    });
+  }
+
+  /**
+   * @protectedo
+   * @param {object} [where]
+   * @param {object} [filter]
+   * @param {string} [filter.isArchived]
+   */
+  applyFilter(where = {}, filter = {}) {
+    if (!where) where = {};
+
+    if (filter.isArchived) {
+      where.isArchived = {
+        [this.in]: this.getBooleansOfList(filter.isArchived),
+      };
+    }
+  }
+
+  /**
+   * @protected
+   * @param list
+   * @return {*}
+   */
+  getBooleansOfList(list) {
+    return list.map(item => {
+      if (item === 'TRUE') {
+        return true;
+      } else if (item === 'FALSE') {
+        return false;
+      }
+      return item;
+    });
   }
 }
 

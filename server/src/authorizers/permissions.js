@@ -30,12 +30,16 @@ const rulesChannelMemberships = {
     channelMembershipDelete: and(
       isAuthenticated,
       isAdmin,
-      or(and(isObjectAdmin, isMoreThenOneAdmin), not(isObjectAdmin)),
+      or(and(isObjectAdmin, isMoreThenOneAdmin), not(isSubjectAsObject)),
     ),
     channelMembershipRoleUpdate: and(
       isAuthenticated,
       isAdmin,
-      or(isObjectAdmin, and(not(isObjectAdmin), not(isSubjectAsObject))),
+      or(
+        and(isMoreThenOneAdmin, isSubjectAsObject),
+        and(isMoreThenOneAdmin, isObjectAdmin),
+        not(isSubjectAsObject),
+      ),
     ),
   }
 };

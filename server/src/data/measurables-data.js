@@ -16,6 +16,8 @@ class MeasurablesData extends DataBase {
   }
 
   /**
+   * @todo: fix interface (data, options)
+   * @public
    * @param {object} data
    * @param {Models.Creator} creator
    * @return {Promise<Models.Measurable>}
@@ -29,6 +31,8 @@ class MeasurablesData extends DataBase {
   }
 
   /**
+   * @todo: rework
+   * @public
    * @param {string} id
    * @return {Promise<Models.Measurable>}
    */
@@ -38,6 +42,8 @@ class MeasurablesData extends DataBase {
   }
 
   /**
+   * @todo: rework
+   * @public
    * @param {string} id
    * @return {Promise<Models.Measurable>}
    */
@@ -47,6 +53,8 @@ class MeasurablesData extends DataBase {
   }
 
   /**
+   * @todo: fix interface (params, data, options)
+   * @public
    * @param {string} id
    * @param {object} data
    * @param {Models.Creator} creator
@@ -61,26 +69,27 @@ class MeasurablesData extends DataBase {
   }
 
   /**
-   * @param {object} options
-   * @param {string[]} [options.states]
+   * @public
+   * @param {Layers.DataSourceLayer.filter} [filter]
+   * @param {Layers.DataSourceLayer.pagination} [pagination]
+   * @param {Layers.DataSourceLayer.options} [options]
    * @param {string} [options.agentId]
-   * @param {number} [options.offset]
-   * @param {number} [options.limit]
-   * @return {Promise<*|Array<Model>>}
+   * @param {string} [options.measuredByAgentId]
+   * @return {Promise<{data: Models.Measurable[], total: number}>}
    */
-  async getAll(options) {
-    const pagination = {
-      offset: options.offset,
-      limit: options.limit,
-    };
+  async getAll(filter = {}, pagination = {}, options = {}) {
     const restrictions = {
       channelId: true,
       agentId: options.agentId,
+      measuredByAgentId: options.measuredByAgentId,
     };
-    return this.MeasurableModel.getAll(options, pagination, restrictions);
+    return this.MeasurableModel.getAll(filter, pagination, restrictions);
   }
 
   /**
+   * @todo: move down
+   * @todo: fix interface (params*, query, options*)
+   * @public
    * @param {string} id
    * @param {object} options
    * @param {string} options.agentId
@@ -101,6 +110,7 @@ class MeasurablesData extends DataBase {
   }
 
   /**
+   * @public
    * @return {Promise<boolean>}
    */
   needsToBePending() {

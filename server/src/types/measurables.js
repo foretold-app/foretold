@@ -97,9 +97,28 @@ const measurableUpdateInput = new graphql.GraphQLInputObjectType({
   })
 });
 
+const measurablesEdge = new graphql.GraphQLObjectType({
+  name: 'MeasurablesEdge',
+  fields: () => ({
+    node: { type: require('./measurables').measurable },
+    cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+  }),
+});
+
+const measurablesConnection = new graphql.GraphQLObjectType({
+  name: 'MeasurablesConnection',
+  fields: () => ({
+    total: { type: graphql.GraphQLInt },
+    pageInfo: { type: graphql.GraphQLNonNull(require('./common').pageInfoConnection) },
+    edges: { type: graphql.GraphQLList(require('./measurables').measurablesEdge) },
+  }),
+});
+
 module.exports = {
   measurableState,
   measurable,
   measurableCreateInput,
   measurableUpdateInput,
+  measurablesEdge,
+  measurablesConnection,
 };

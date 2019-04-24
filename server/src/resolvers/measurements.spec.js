@@ -5,18 +5,35 @@ describe('Measurements Resolver', () => {
 
   describe('all()', () => {
     const root = {};
-    const args = {};
+    const args = {
+      measurableId: 'measurableId1',
+      agentId: 'agentId2',
+      after: 'after3',
+      before: 'before4',
+      last: 'last5',
+      first: 'first5',
+    };
     const context = { agent: { id: 'agentId1' } };
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.measurements, 'getAll').mockReturnValue(
-        Promise.resolve(true),
+        Promise.resolve({
+          data: true,
+          total: 1
+        }),
       );
     });
     it('returns measurements', () => {
       return measurements.all(root, args, context, info).then((result) => {
         expect(data.measurements.getAll).toHaveBeenCalledWith(
-          { agentId: 'agentId1' },
+          { "agentId": "agentId2", "measurableId": "measurableId1" },
+          {
+            "after": "after3",
+            "before": "before4",
+            "first": "first5",
+            "last": "last5"
+          },
+          { "agentId": "agentId1" },
         );
         expect(result).toEqual(true);
       });
@@ -57,7 +74,7 @@ describe('Measurements Resolver', () => {
     it('creates a measurement', () => {
       return measurements.create(root, args, context, info).then((result) => {
         expect(data.measurements.createOne).toHaveBeenCalledWith(
-          {"a": "a1", "agentId": "agentId3"},
+          { "a": "a1", "agentId": "agentId3" },
           context.user,
         );
         expect(result).toBe(true);

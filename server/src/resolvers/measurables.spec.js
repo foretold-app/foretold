@@ -5,17 +5,40 @@ describe('Measurables Resolvers', () => {
 
   describe('all()', () => {
     const root = {};
-    const args = {};
+    const args = {
+      creatorId: 'creatorId1',
+      seriesId: 'seriesId2',
+      channelId: 'channelId2',
+      states: 'states1',
+      after: 'after1',
+      before: 'before1',
+      last: 'last1',
+      first: 'first1',
+      isArchived: 'isArchived1',
+    };
     const context = { agent: { id: 'agentId2' } };
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.measurables, 'getAll').mockReturnValue(
-        Promise.resolve(true),
+        Promise.resolve({ data: true }),
       );
     });
     it('returns measurables', () => {
       return measurables.all(root, args, context, info).then((result) => {
         expect(data.measurables.getAll).toHaveBeenCalledWith(
+          {
+            "channelId": "channelId2",
+            "creatorId": "creatorId1",
+            "isArchived": "isArchived1",
+            "seriesId": "seriesId2",
+            "states": "states1"
+          },
+          {
+            "after": "after1",
+            "before": "before1",
+            "first": "first1",
+            "last": "last1"
+          },
           { "agentId": "agentId2" },
         );
         expect(result).toBe(true);

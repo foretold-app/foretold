@@ -54,9 +54,11 @@ const schema = new graphql.GraphQLSchema({
       },
 
       measurements: {
-        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.measurements.measurement)),
+        type: types.measurements.measurementsConnection,
         args: {
+          ...types.common.connectionArguments,
           measurableId: { type: graphql.GraphQLString },
+          agentId: { type: graphql.GraphQLString },
         },
         resolve: resolvers.measurements.all,
       },
@@ -70,14 +72,15 @@ const schema = new graphql.GraphQLSchema({
       },
 
       measurables: {
-        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.measurables.measurable)),
+        type: types.measurables.measurablesConnection,
         args: {
-          offset: { type: graphql.GraphQLInt },
-          limit: { type: graphql.GraphQLInt },
+          ...types.common.connectionArguments,
           creatorId: { type: graphql.GraphQLString },
           seriesId: { type: graphql.GraphQLString },
           channelId: { type: graphql.GraphQLString },
+          measuredByAgentId: { type: graphql.GraphQLString },
           states: { type: graphql.GraphQLList(types.measurables.measurableState) },
+          isArchived: { type: graphql.GraphQLList(types.common.isArchived) },
         },
         resolve: resolvers.measurables.all,
       },

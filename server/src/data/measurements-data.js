@@ -6,6 +6,7 @@ const { MeasurementModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
+ * @property {MeasurementModel} MeasurementModel
  */
 class MeasurementsData extends DataBase {
 
@@ -15,7 +16,8 @@ class MeasurementsData extends DataBase {
   }
 
   /**
-   * @todo: rename
+   * @todo: fix interface
+   * @todo: rename, move down
    * @param {object} data
    * @param {Models.Creator} creator
    * @return {Promise<Models.Measurement>}
@@ -30,23 +32,24 @@ class MeasurementsData extends DataBase {
 
   /**
    * @public
-   * @param {object} options
-   * @param {number} [options.offset]
-   * @param {number} [options.limit]
-   * @param {string} [options.agentId]
-   * @return {Promise<*|Array<Model>>}
+   * @param {Layers.DataSourceLayer.filter} [filter]
+   * @param {Layers.DataSourceLayer.pagination} [pagination]
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @param {boolean} [options.measurableId]
+   * @param {string} options.agentId
+   * @return {Promise<{data: Models.Measurement[], total: number}>}
    */
-  async getAll(options = {}) {
-    return await this.models.Measurement.findAll({
-      where: {
-        measurableId: {
-          [this.models.sequelize.Op.in]: this.MeasurementModel.measurableIdsLiteral(options.agentId)
-        },
-      }
-    });
+  async getAll(filter = {}, pagination = {}, options = {}) {
+    const restrictions = {
+      measurableId: true,
+      agentId: options.agentId,
+    };
+    return this.MeasurementModel.getAll(filter, pagination, restrictions);
   }
 
   /**
+   * @todo: fix interface
+   * @todo: move down
    * @param {string} id
    * @param {object} options
    * @param {string} [options.agentId]

@@ -5,6 +5,7 @@ const { channelMemberships } = require('./channel-memberships');
 const { channelMembershipsAdmins } = require('./channel-memberships');
 const { measurable, measurableByRoot } = require('./measurables');
 const { measurementValueValidation } = require('./measurements');
+const { connection, connectionArguments } = require('./connections');
 
 /**
  * Do not try to use DRY principle here.
@@ -54,6 +55,18 @@ const middlewares = {
       await channelMemberships(root, args, context, info);
       await channelMembershipsAdmins(root, args, context, info);
       return await resolve(root, args, context, info);
+    },
+
+    measurements: async (resolve, root, args, context, info) => {
+      await connectionArguments(root, args, context, info);
+      const result = await resolve(root, args, context, info);
+      return connection(result, root, args, context, info);
+    },
+
+    measurables: async (resolve, root, args, context, info) => {
+      await connectionArguments(root, args, context, info);
+      const result = await resolve(root, args, context, info);
+      return connection(result, root, args, context, info);
     },
   },
 

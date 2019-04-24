@@ -14,6 +14,20 @@ async function iAmOwner(root, args, context, info) {
 }
 
 /**
+ * @todo: remove then
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<boolean>}
+ */
+async function iAmOwnerByUserId(root, args, context, info) {
+  const creatorId = _.get(root, 'userId');
+  const currentCreatorId = _.get(context, 'user.id');
+  return !!creatorId && creatorId === currentCreatorId;
+}
+
+/**
  * @param {*} root
  * @param {object} args
  * @param {Schema.Context} context
@@ -29,4 +43,5 @@ async function isMe(root, args, context, info) {
 module.exports = {
   isMe,
   iAmOwner,
+  iAmOwnerByUserId,
 };

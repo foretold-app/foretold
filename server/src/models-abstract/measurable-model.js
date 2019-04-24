@@ -39,15 +39,24 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
-   * @param filter
-   * @param pagination
-   * @param restrictions
-   * @return {Promise<void>}
+   * @public
+   * @param {Layers.AbstractModelsLayer.filter} [filter]
+   * @param {string} [filter.channelId]
+   * @param {string} [filter.seriesId]
+   * @param {string} [filter.creatorId]
+   * @param {string[]} [filter.states]
+   * @param {string[]} [filter.isArchived]
+   * @param {Layers.AbstractModelsLayer.pagination} [pagination]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @return {Promise<{data: Models.Measurable[], total: number}>}
    */
-  async getAll(filter, pagination, restrictions) {
+  async getAll(filter = {}, pagination, restrictions) {
     const where = {};
+    const include = [];
 
     this.applyRestrictions(where, restrictions);
+    this.applyRestrictionsIncluding(include, restrictions);
+    this.applyFilter(where, filter);
 
     // Filter
     if (_.isArray(filter.states)) {
@@ -56,23 +65,31 @@ class MeasurableModel extends ModelPostgres {
     if (filter.channelId) where.channelId = filter.channelId;
     if (filter.seriesId) where.seriesId = filter.seriesId;
     if (filter.creatorId) where.creatorId = filter.creatorId;
-    where.isArchived = false;
 
-    // Query
-    return await this.model.findAll({
-      limit: pagination.limit,
-      offset: pagination.offset,
-      where,
+    const cond = { where, include };
+
+    /** @type {number} */
+    const total = await this.model.count(cond);
+    const edgePagination = this.getPagination(pagination, total);
+
+    const options = {
+      ...cond,
+      limit: edgePagination.limit,
+      offset: edgePagination.offset,
       order: [
         [this.sequelize.col('stateOrder'), 'ASC'],
         ['createdAt', 'DESC'],
       ],
       attributes: {
-        include: [
-          this.getStateOrderField(),
-        ]
-      }
-    });
+        include: [this.getStateOrderField()],
+      },
+    };
+
+    /** @type {Models.Measurable[]} */
+    let data = await this.model.findAll(options);
+    data = this.setIndexes(data, edgePagination);
+
+    return { data, total };
   }
 }
 

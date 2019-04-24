@@ -35,7 +35,11 @@ const rulesChannelMemberships = {
     channelMembershipRoleUpdate: and(
       isAuthenticated,
       isAdmin,
-      or(isObjectAdmin, and(not(isObjectAdmin), not(isSubjectAsObject))),
+      or(
+        and(isMoreThenOneAdmin, isSubjectAsObject),
+        and(isMoreThenOneAdmin, isObjectAdmin),
+        not(isSubjectAsObject),
+      ),
     ),
   }
 };

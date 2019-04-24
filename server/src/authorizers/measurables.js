@@ -12,7 +12,7 @@ async function isOwnerRule(root, args, context, info) {
   const creatorId = _.get(context, 'measurable.creatorId');
   const agentId = _.get(context, 'agent.id');
   const isOwner = creatorId === agentId;
-  console.log(`\x1b[33m Rule Measurables (isOwner) ${isOwner} \x1b[0m`);
+  console.log(`\x1b[33m Rule Measurables (isOwner) "${isOwner}" \x1b[0m`);
   return isOwner;
 }
 
@@ -26,7 +26,7 @@ async function isOwnerRule(root, args, context, info) {
 async function isArchivedRule(root, args, context, info) {
   const isArchived = !!_.get(context, 'measurable.isArchived');
   console.log(`\x1b[33m Rule Measurables ` +
-    `(isArchivedRule) ${isArchived} \x1b[0m`);
+    `(isArchivedRule) "${isArchived}"\x1b[0m`);
   return isArchived;
 }
 

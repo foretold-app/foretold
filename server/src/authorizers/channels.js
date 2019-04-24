@@ -13,7 +13,7 @@ async function isChannelPublicRule(root, args, context, info) {
   console.log(`\x1b[33m Rule Channels (isChannelPublic) ` +
     `channelId "${_.get(context, 'channel.id')}", ` +
     `isChannelPublic "${JSON.stringify(isChannelPublic)}"` +
-    ` \x1b[0m`);
+    `\x1b[0m`);
   return isChannelPublic;
 }
 
@@ -22,5 +22,4 @@ const isChannelPublic = rule({ cache: 'no_cache' })(isChannelPublicRule);
 
 module.exports = {
   isChannelPublic,
-  isChannelPublicRule,
 };

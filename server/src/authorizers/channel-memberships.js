@@ -16,9 +16,10 @@ function roleRule(roleName) {
    */
   return (root, args, context) => {
     const role = _.get(context, 'channelMembershipsRole', []);
+    const result = role === roleName;
     console.log(`\x1b[33m Rule Channel Memberships (roleRule) ` +
-      `role "${role}" = "${roleName}" \x1b[0m`);
-    return role === roleName;
+      `role "${role}" = "${roleName}", result = "${result}"\x1b[0m`);
+    return result;
   };
 }
 
@@ -34,7 +35,7 @@ async function isInChannelRule(root, args, context, info) {
   const agentId = _.get(context, 'agent.id');
   const result = !!channelMembership;
   console.log(`\x1b[33m Rule Channel Memberships (isInChannelRule) ` +
-    `agentId ${agentId} = ${result} \x1b[0m`);
+    `agentId "${agentId}", result = "${result}"\x1b[0m`);
   return result;
 }
 
@@ -51,7 +52,7 @@ async function isMoreThenOneAdminRule(root, args, context, info) {
     _.isArray(channelMembershipsAdmins) &&
     _.size(channelMembershipsAdmins) > 1;
   console.log(`\x1b[33m Rule Channel Memberships (isMoreThenOneAdminRule) ` +
-    `result = ${result} \x1b[0m`);
+    `result = "${result}"\x1b[0m`);
   return result;
 }
 
@@ -68,8 +69,8 @@ async function isSubjectAsObjectRule(root, args, context, info) {
   const subjectAgentId = _.get(context, 'agent.id');
   const result = !!objectAgentId && objectAgentId === subjectAgentId;
   console.log(`\x1b[33m Rule Channel Memberships (isSubjectAsObjectRule) ` +
-    `objectAgentId = ${objectAgentId} subjectAgentId = ${subjectAgentId} ` +
-    `result = ${result} \x1b[0m`);
+    `objectAgentId = "${objectAgentId}", subjectAgentId = "${subjectAgentId}", ` +
+    `result = "${result}"\x1b[0m`);
   return result;
 }
 
@@ -86,7 +87,7 @@ async function isObjectAdminRule(root, args, context, info) {
     || _.get(context, 'channelMembershipsRole');
   const result = !!role && role === CHANNEL_MEMBERSHIP_ROLES.ADMIN;
   console.log(`\x1b[33m Rule Channel Memberships (isObjectAdminRule) ` +
-    `role = ${role} result = ${result} \x1b[0m`);
+    `role = "${role}", result = "${result}"\x1b[0m`);
   return result;
 }
 

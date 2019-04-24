@@ -12,7 +12,7 @@ async function isOwnerRule(root, args, context, info) {
   const botUserId = _.get(root, 'userId');
   const userId = _.get(context, 'user.id');
   const isOwner = !!botUserId && botUserId === userId;
-  console.log(`\x1b[33m Rule Bots (isOwner) ${isOwner} \x1b[0m`);
+  console.log(`\x1b[33m Rule Bots (isOwner) "${isOwner}"\x1b[0m`);
   return isOwner;
 }
 

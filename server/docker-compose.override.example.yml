@@ -9,6 +9,8 @@ services:
       - PORT=80
       - JWT_SECRET=<change-me>
       - JWT_ISSUER=Foretold
+      - API_URL=http://chane-me/graphql
+      - BOT_TOKEN=<change-me>
 
   database:
     environment:

@@ -1,6 +1,7 @@
 const graphqlClient = require('graphql-client');
 
 const queries = require('./queries');
+const config = require('../config');
 
 class API {
   /**
@@ -10,6 +11,7 @@ class API {
     this.token = token;
     this.graphqlClient = graphqlClient;
     this.queries = queries;
+    this.config = config;
 
     this.client = this.getClient();
   }
@@ -20,7 +22,7 @@ class API {
    */
   getClient() {
     return this.graphqlClient({
-      url: API.URL,
+      url: this.config.API_URL,
       headers: {
         Authorization: 'Bearer ' + this.token,
       }
@@ -55,8 +57,6 @@ class API {
     return this.query(this.queries.measurables);
   }
 }
-
-API.URL = 'http://dev.wirnex.com:31000/graphql';
 
 module.exports = {
   API,

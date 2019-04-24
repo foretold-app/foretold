@@ -12,6 +12,7 @@ module Mutation = ReasonApollo.CreateMutation(Query);
 
 type competitorType = [ | `COMPETITIVE | `OBJECTIVE];
 
+/* TODO: Finish this so that value returns the actually correct results. */
 let mutate =
     (
       mutation: Mutation.apolloMutation,
@@ -24,7 +25,7 @@ let mutate =
     Query.make(
       ~input={
         "measurableId": Some(measurableId),
-        "value": Some(value |> MeasurementValue.encode),
+        "value": value |> MeasurementValue.encodeToGraphQLMutation,
         "description": Some(description),
         "competitorType": competitorType,
         "agentId": None,

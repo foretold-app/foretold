@@ -30,7 +30,7 @@ module Styles = {
       marginTop(`em(-0.2)),
       selector(":hover", [color(`rgba((255, 255, 255, 0.9)))]),
     ]);
-  let sectionPadding = style([height(`em(3.0)), width(`percent(100.0))]);
+  let sectionPadding = style([height(`em(1.0)), width(`percent(100.0))]);
   let item =
     style([
       flex(1),
@@ -62,56 +62,6 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
   ...component,
   render: _self =>
     <div className=Styles.sidebar>
-      <div className=Styles.minorHeader> {"User" |> ste} </div>
-      {
-        open Rationale.Option.Infix;
-        let idd =
-          loggedInUser.agent
-          |> E.O.fmap((a: Context.Primary.Agent.t) => a.id)
-          |> E.O.default("");
-        <>
-          <div
-            onClick={_e => Context.Routing.Url.push(Profile)}
-            className=Styles.item>
-            {"Profile" |> ste}
-          </div>
-          {
-            loggedInUser.agent
-            |> E.O.React.fmapOrNull((r: Context.Primary.Agent.t) =>
-                 <div
-                   onClick={_e => Context.Routing.Url.push(AgentBots(r.id))}
-                   className=Styles.item>
-                   {"My Bots" |> ste}
-                 </div>
-               )
-          }
-          {
-            loggedInUser.agent
-            |> E.O.React.fmapOrNull((r: Context.Primary.Agent.t) =>
-                 <div
-                   onClick={_e => Context.Routing.Url.push(AgentShow(r.id))}
-                   className=Styles.item>
-                   {"My Measurements" |> ste}
-                 </div>
-               )
-          }
-          <div
-            onClick={_e => Context.Routing.Url.push(AgentMeasurables(idd))}
-            className=Styles.item>
-            {"My Measurables" |> ste}
-          </div>
-          <div
-            onClick={_e => Context.Routing.Url.push(EntityIndex)}
-            className=Styles.item>
-            {"Entity List" |> ste}
-          </div>
-          <div
-            onClick={_e => Context.Auth.Actions.logout()}
-            className=Styles.item>
-            {"Log Out" |> ste}
-          </div>
-        </>;
-      }
       <div className=Styles.over />
       <div className=Styles.sectionPadding />
       <div className=Styles.minorHeader>
@@ -119,11 +69,6 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
           className=Styles.minorHeaderLink
           onClick={_e => Context.Routing.Url.push(ChannelIndex)}>
           {"Channels" |> ste}
-        </div>
-        <div
-          className=Styles.minorHeaderLinkPlus
-          onClick={_e => Context.Routing.Url.push(ChannelNew)}>
-          <Icon.Icon icon="CIRCLE_PLUS" />
         </div>
       </div>
       <div className=Styles.over>

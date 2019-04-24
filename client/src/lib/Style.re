@@ -4,7 +4,6 @@ module BorderedBox = {
     open Css;
     let item =
       style([
-        maxWidth(px(1500)),
         display(`flex),
         flexDirection(`row),
         padding(px(12)),

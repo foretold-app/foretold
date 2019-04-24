@@ -14,7 +14,12 @@ let mutate = (mutation: Mutation.apolloMutation, channelId) => {
   let m = Query.make(~input={"channelId": Some(channelId)}, ());
   mutation(
     ~variables=m##variables,
-    ~refetchQueries=[|"getChannels", "user", "getChannelMemberships"|],
+    ~refetchQueries=[|
+      "getChannels",
+      "user",
+      "getChannel",
+      "getChannelMemberships",
+    |],
     (),
   )
   |> ignore;

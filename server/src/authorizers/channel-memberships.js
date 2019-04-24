@@ -94,18 +94,22 @@ async function membershipHasAdminRoleRule(root, args, context, info) {
   return result;
 }
 
-const isAdminRule = roleRule(models.ChannelMemberships.ROLE.ADMIN);
-const isViewerRule = roleRule(models.ChannelMemberships.ROLE.VIEWER);
+const currentAgentIsChannelAdminRule = roleRule(
+  models.ChannelMemberships.ROLE.ADMIN,
+);
+const currentAgentIsChannelViewerRule = roleRule(
+  models.ChannelMemberships.ROLE.VIEWER,
+);
 
 /** @type {Rule} */
-const isAdmin = rule({
+const currentAgentIsChannelAdmin = rule({
   cache: 'no_cache',
-})(isAdminRule);
+})(currentAgentIsChannelAdminRule);
 
 /** @type {Rule} */
-const isViewer = rule({
+const currentAgentIsChannelViewer = rule({
   cache: 'no_cache',
-})(isViewerRule);
+})(currentAgentIsChannelViewerRule);
 
 /** @type {Rule} */
 const channelHasMembershipWithCurrentAgent = rule({
@@ -128,13 +132,13 @@ const membershipHasAdminRole = rule({
 })(membershipHasAdminRoleRule);
 
 module.exports = {
-  isAdmin,
-  isViewer,
+  currentAgentIsChannelAdmin,
+  currentAgentIsChannelViewer,
   channelHasMembershipWithCurrentAgent,
   channelHasMultipleAdmins,
   membershipBelongsToCurrentAgent,
   membershipHasAdminRole,
 
-  isAdminRule,
-  isViewerRule,
+  currentAgentIsChannelAdminRule,
+  currentAgentIsChannelViewerRule,
 };

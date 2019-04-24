@@ -1,9 +1,10 @@
 const _ = require('lodash');
 const { shield, allow, and, or, not } = require('graphql-shield');
 
-const { isAuthenticated } = require('./agents');
+const { currentAgentIsAuthenticated } = require('./agents');
 const { isChannelPublic } = require('./channels');
-const { isAdmin, isViewer } = require('./channel-memberships');
+const { currentAgentIsChannelAdmin } = require('./channel-memberships');
+const { currentAgentIsChannelViewer } = require('./channel-memberships');
 const { channelHasMembershipWithCurrentAgent } = require('./channel-memberships');
 const { channelHasMultipleAdmins } = require('./channel-memberships');
 const { membershipBelongsToCurrentAgent } = require('./channel-memberships');
@@ -16,22 +17,25 @@ const rulesChannel = {
   Query: {},
   Mutation: {
     channelUpdate: and(
-      isAuthenticated,
-      isAdmin,
+      currentAgentIsAuthenticated,
+      currentAgentIsChannelAdmin,
     ),
     leaveChannel: and(
-      isAuthenticated,
+      currentAgentIsAuthenticated,
       channelHasMembershipWithCurrentAgent,
-      or(and(isAdmin, channelHasMultipleAdmins), not(isAdmin)),
+      or(
+        and(currentAgentIsChannelAdmin, channelHasMultipleAdmins),
+        not(currentAgentIsChannelAdmin),
+      ),
     ),
     joinChannel: and(
-      isAuthenticated,
+      currentAgentIsAuthenticated,
       isChannelPublic,
       not(channelHasMembershipWithCurrentAgent),
     ),
     channelMembershipCreate: and(
-      isAuthenticated,
-      isAdmin,
+      currentAgentIsAuthenticated,
+      currentAgentIsChannelAdmin,
     ),
   }
 };
@@ -40,16 +44,16 @@ const rulesChannelMemberships = {
   Query: {},
   Mutation: {
     channelMembershipDelete: and(
-      isAuthenticated,
-      isAdmin,
+      currentAgentIsAuthenticated,
+      currentAgentIsChannelAdmin,
       or(
         and(membershipHasAdminRole, channelHasMultipleAdmins),
         not(membershipBelongsToCurrentAgent),
       ),
     ),
     channelMembershipRoleUpdate: and(
-      isAuthenticated,
-      isAdmin,
+      currentAgentIsAuthenticated,
+      currentAgentIsChannelAdmin,
       or(
         and(channelHasMultipleAdmins, membershipBelongsToCurrentAgent),
         and(channelHasMultipleAdmins, membershipHasAdminRole),
@@ -63,21 +67,24 @@ const rulesMeasurables = {
   Query: {},
   Mutation: {
     measurementCreate: and(
-      isAuthenticated,
-      or(isChannelPublic, or(isAdmin, isViewer)),
+      currentAgentIsAuthenticated,
+      or(
+        isChannelPublic,
+        or(currentAgentIsChannelAdmin, currentAgentIsChannelViewer),
+      ),
     ),
     measurableArchive: and(
-      isAuthenticated,
+      currentAgentIsAuthenticated,
       measurableIsOwnedByCurrentAgent,
       not(measurableIsArchived),
     ),
     measurableUnarchive: and(
-      isAuthenticated,
+      currentAgentIsAuthenticated,
       measurableIsOwnedByCurrentAgent,
       measurableIsArchived,
     ),
     measurableUpdate: and(
-      isAuthenticated,
+      currentAgentIsAuthenticated,
       measurableIsOwnedByCurrentAgent,
     ),
   }
@@ -107,14 +114,20 @@ const rules = {
     stats: allow,
   },
   Mutation: {
-    '*': isAuthenticated,
-    botCreate: isAuthenticated,
-    channelCreate: isAuthenticated,
-    userUpdate: isAuthenticated,
-    seriesCreate: and(isAuthenticated, or(isChannelPublic, isAdmin)),
+    '*': currentAgentIsAuthenticated,
+    botCreate: currentAgentIsAuthenticated,
+    channelCreate: currentAgentIsAuthenticated,
+    userUpdate: currentAgentIsAuthenticated,
+    seriesCreate: and(
+      currentAgentIsAuthenticated,
+      or(isChannelPublic, currentAgentIsChannelAdmin),
+    ),
     measurableCreate: and(
-      isAuthenticated,
-      or(isChannelPublic, or(isAdmin, isViewer)),
+      currentAgentIsAuthenticated,
+      or(
+        isChannelPublic,
+        or(currentAgentIsChannelAdmin, currentAgentIsChannelViewer),
+      ),
     ),
 
     ...rulesMeasurables.Mutation,

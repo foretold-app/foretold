@@ -9,7 +9,7 @@ module Item = {
       color(`hex("bbb")),
       selector(
         " a",
-        [color(`hex("777")), selector(":hover", [color(hex("333"))])],
+        [color(`hex("aaa")), selector(":hover", [color(hex("333"))])],
       ),
     ]);
 

@@ -32,7 +32,7 @@ module Types = {
         "competitorType": competitorType,
         "createdAt": MomentRe.Moment.t,
         "taggedMeasurementId": option(string),
-        "value": Belt.Result.t(MeasurementValue.t, string),
+        "value": MeasurementValue.graphQlResult,
       }),
   };
 
@@ -70,7 +70,13 @@ module Query = [%graphql
                   node{
                     id
                     createdAt @bsDecoder(fn: "E.J.toMoment")
-                    value @bsDecoder(fn: "MeasurementValue.decode")
+                    value {
+                      floatCdf {
+                        xs
+                        ys
+                      }
+                      floatPoint
+                    }
                     relevantAt @bsDecoder(fn: "E.J.O.toMoment")
                     competitorType
                     description
@@ -134,7 +140,7 @@ let toMeasurement = (m: Types.measurement): Context.Primary.Measurement.t => {
   Context.Primary.Measurement.make(
     ~id=measurement##id,
     ~description=measurement##description,
-    ~value=measurement##value,
+    ~value=measurement##value |> MeasurementValue.decodeGraphql,
     ~competitorType=measurement##competitorType,
     ~taggedMeasurementId=measurement##taggedMeasurementId,
     ~createdAt=Some(measurement##createdAt),

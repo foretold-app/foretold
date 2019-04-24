@@ -58,7 +58,7 @@ module LoadedAndUnselected = {
     let measurables =
       (
         switch (t.reducerParams.response) {
-        | Success(r) => Some(r)
+        | Success(r) => Some(r.edges)
         | _ => None
         }
       )

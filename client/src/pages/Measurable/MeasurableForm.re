@@ -80,14 +80,19 @@ let dataSource =
        {"key": r |> Graph_T.Thing.id, "id": r |> Graph_T.Thing.id}
      );
 
-let dataSourceSelectItems =
-  dataSource
-  |> E.A.fmap(r =>
-       <AntdSelect.Option key=r##key value=r##id>
-         {r##id |> ste}
-       </AntdSelect.Option>
-     )
-  |> ReasonReact.array;
+/* let dataSourceSelectItems =
+   dataSource
+   |> E.A.fmap(r =>
+        <AntdSelect.Option key=r##key value=r##id>
+          {r##id |> ste}
+        </AntdSelect.Option>
+      )
+   |> ReasonReact.array; */
+/* <AntdSelect
+     value={form.values.labelSubject}
+     onChange={e => handleChange(`labelSubject, e)}>
+     dataSourceSelectItems
+   </AntdSelect> */
 
 let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
   <AntdForm onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
@@ -111,18 +116,28 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
         form.values.showDescriptionProperty == "TRUE",
         <>
           <Form.Item label="Subject" required=true>
-            <AntdSelect
+            <Antd.Input
               value={form.values.labelSubject}
-              onChange={e => handleChange(`labelSubject, e)}>
-              dataSourceSelectItems
-            </AntdSelect>
+              onChange={
+                e =>
+                  handleChange(
+                    `labelSubject,
+                    ReactEvent.Form.target(e)##value,
+                  )
+              }
+            />
           </Form.Item>
           <Form.Item label="Property" required=true>
-            <AntdSelect
+            <Antd.Input
               value={form.values.labelProperty}
-              onChange={e => handleChange(`labelProperty, e)}>
-              dataSourceSelectItems
-            </AntdSelect>
+              onChange={
+                e =>
+                  handleChange(
+                    `labelProperty,
+                    ReactEvent.Form.target(e)##value,
+                  )
+              }
+            />
           </Form.Item>
           <Form.Item label="Include a Specific Date in Name">
             <AntdSwitch

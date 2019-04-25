@@ -54,21 +54,24 @@ class API {
    * @return {*}
    */
   measurables() {
-    return this.query(this.queries.measurables);
+    return this.query(this.queries.measurables)
+      .then((result) => {
+        return result.data.measurables.edges.map(edge => edge.node);
+      });
   }
 
   /**
    * @public
    * @return {*}
    */
-  measurementCreate() {
+  measurementCreate({ floatPoint, measurableId }) {
     return this.query(this.queries.measurementCreate, {
       input: {
         value: {
-          floatPoint: 10.111
+          floatPoint
         },
+        measurableId,
         competitorType: "COMPETITIVE",
-        measurableId: "4dda3bb8-e036-4820-9975-ae7d330f9cb0",
       },
     });
   }

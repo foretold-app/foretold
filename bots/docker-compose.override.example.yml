@@ -1,0 +1,9 @@
+version: "2"
+
+services:
+
+  app:
+    environment:
+      - API_URL=http://chane-me/graphql
+      - BOT_TOKEN=<change-me>
+

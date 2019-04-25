@@ -25,18 +25,39 @@ query measurables {
 }
 `;
 
-const queryExample = `
-query search ($query: String, $from: Int, $limit: Int) {
-  search(query: $query, from: $from, limit: $limit) {
-    took,
-    totalHits,
-    hits {
-      name
-    }
+const measurementCreate = `
+mutation measurementCreate($input: MeasurementCreateInput!) {
+  measurementCreate(input: $input) {
+    createdAt
+    __typename
   }
+}
+
+input MeasurementCreateInput {
+  measurableId: String
+  author: String
+  value: MeasurementValueInput
+  competitorType: competitorType!
+}
+
+input MeasurementValueInput {
+  floatCdf: MeasurementValueInputFloatCdf
+  floatPoint: Float
+}
+
+enum competitorType {
+  COMPETITIVE
+  AGGREGATION
+  OBJECTIVE
+}
+
+type MeasurementValueInputFloatCdf {
+  xs: [Float]!
+  ys: [Float]!
 }
 `;
 
 module.exports = {
   measurables,
+  measurementCreate,
 };

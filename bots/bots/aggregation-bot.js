@@ -8,7 +8,8 @@ class AggregationBot {
   }
 
   async main() {
-    await this.api.measurables();
+    // await this.api.measurables();
+    await this.api.measurementCreate();
     return true;
   }
 }

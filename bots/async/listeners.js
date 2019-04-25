@@ -20,6 +20,7 @@ function runAggregationBot() {
 
 function runListeners() {
   try {
+    console.log('Jobs are ready.');
     emitter.on(events.AGGREGATION_BOT, runAggregationBot);
   } catch (e) {
     console.log('Listener error');

@@ -1,0 +1,19 @@
+version: "2"
+
+services:
+
+  app:
+    build: ./
+    volumes:
+      - ./package.json:/opt/app/package.json
+      - ./node_modules:/opt/app/node_modules
+      - ./api:/opt/app/api
+      - ./async:/opt/app/async
+      - ./bots:/opt/app/bots
+      - ./config:/opt/app/config
+    environment:
+      - API_URL=http://chane-me/graphql
+      - BOT_TOKEN=<change-me>
+    command: >
+      npm run serve
+

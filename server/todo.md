@@ -49,4 +49,3 @@ We need some planning of how humans would interact with the system via API. In t
 
 ## Series Functionality
 Series can get pretty complicated, but are quite important. Will think about.
-

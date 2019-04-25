@@ -25,18 +25,16 @@ query measurables {
 }
 `;
 
-const queryExample = `
-query search ($query: String, $from: Int, $limit: Int) {
-  search(query: $query, from: $from, limit: $limit) {
-    took,
-    totalHits,
-    hits {
-      name
-    }
+const measurementCreate = `
+mutation measurementCreate($input: MeasurementCreateInput!) {
+  measurementCreate(input: $input) {
+    createdAt
+    __typename
   }
 }
 `;
 
 module.exports = {
   measurables,
+  measurementCreate,
 };

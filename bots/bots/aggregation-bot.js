@@ -8,7 +8,15 @@ class AggregationBot {
   }
 
   async main() {
-    await this.api.measurables();
+    const measurables = await this.api.measurables();
+
+    for(const measurable of measurables) {
+      await this.api.measurementCreate({
+        measurableId: measurable.id,
+        floatPoint: 10.111,
+      });
+    }
+
     return true;
   }
 }

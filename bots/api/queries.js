@@ -18,10 +18,14 @@ query measurables {
 `;
 
 const measurements = `
-query search ($measurableId: String) {
+query search (
+  $measurableId: String
+  $competitorType: [competitorType!]
+) {
   measurements(
     first: 500
     measurableId: $measurableId
+    competitorType: $competitorType
   ) {
     edges {
       node {
@@ -34,7 +38,9 @@ query search ($measurableId: String) {
 `;
 
 const measurementCreate = `
-mutation measurementCreate($input: MeasurementCreateInput!) {
+mutation measurementCreate(
+  $input: MeasurementCreateInput!
+) {
   measurementCreate(input: $input) {
     createdAt
     __typename

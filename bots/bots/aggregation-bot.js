@@ -10,13 +10,15 @@ class AggregationBot {
   async main() {
     const measurables = await this.api.measurables();
 
-    for(const measurable of measurables) {
+    for (const measurable of measurables) {
       const measurements = await this.api.measurements({
         measurableId: measurable.id,
+        competitorType: ['COMPETITIVE'],
       });
       await this.api.measurementCreate({
         measurableId: measurable.id,
         floatPoint: 10.111,
+        competitorType: 'AGGREGATION',
       });
     }
 

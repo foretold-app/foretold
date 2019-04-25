@@ -59,6 +59,7 @@ const schema = new graphql.GraphQLSchema({
           ...types.common.connectionArguments,
           measurableId: { type: graphql.GraphQLString },
           agentId: { type: graphql.GraphQLString },
+          competitorType: { type: graphql.GraphQLList(types.competitor.competitor) },
         },
         resolve: resolvers.measurements.all,
       },

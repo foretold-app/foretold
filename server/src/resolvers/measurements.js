@@ -6,6 +6,9 @@ const data = require('../data');
  * @param {object} args
  * @param {number} args.last
  * @param {number} args.first
+ * @param {string} args.measurableId
+ * @param {string} args.agentId
+ * @param {string[]} args.competitorType
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<Models.Measurement[]>}
@@ -16,6 +19,7 @@ async function all(root, args, context, info) {
   const filter = {
     measurableId: _.get(args, 'measurableId'),
     agentId: _.get(args, 'agentId'),
+    competitorType: _.get(args, 'competitorType'),
   };
   const pagination = {
     after: _.get(args, 'after'),

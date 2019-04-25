@@ -62,12 +62,12 @@ class API {
    * @public
    * @return {*}
    */
-  measurementCreate({ floatPoint, measurableId }) {
+  measurementCreate({ floatPoint, measurableId, competitorType }) {
     return this.query(this.queries.measurementCreate, {
       input: {
         value: { floatPoint },
         measurableId,
-        competitorType: "COMPETITIVE",
+        competitorType,
       },
     });
   }
@@ -76,8 +76,11 @@ class API {
    * @public
    * @return {*}
    */
-  async measurements({ measurableId }) {
-    const result = await this.query(this.queries.measurements, { measurableId });
+  async measurements({ measurableId, competitorType }) {
+    const result = await this.query(this.queries.measurements, {
+      measurableId,
+      competitorType
+    });
     return this.getList('measurements')(result);
   }
 

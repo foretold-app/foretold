@@ -7,22 +7,35 @@ class AggregationBot {
     this.api = new API(config.BOT_TOKEN);
   }
 
+  /**
+   * @public
+   * @return {Promise<boolean>}
+   */
   async main() {
     const measurables = await this.api.measurables();
 
     for (const measurable of measurables) {
-      const measurements = await this.api.measurements({
+      const measurements = await this.api.measurementsCompetitive({
         measurableId: measurable.id,
-        competitorType: ['COMPETITIVE'],
       });
-      await this.api.measurementCreate({
+      const aggregated = await this.aggregate(measurements);
+      await this.api.measurementCreateAggregation({
         measurableId: measurable.id,
-        floatPoint: 10.111,
-        competitorType: 'AGGREGATION',
+        ...aggregated,
       });
     }
 
     return true;
+  }
+
+  /**
+   * @param {object[]} measurements
+   * @return {Promise<{floatPoint: number}>}
+   */
+  async aggregate(measurements) {
+    return {
+      floatPoint: 7.77,
+    };
   }
 }
 

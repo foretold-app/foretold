@@ -76,12 +76,35 @@ class API {
    * @public
    * @return {*}
    */
+  measurementCreateAggregation({ measurableId, ...rest }) {
+    return this.measurementCreate({
+      measurableId,
+      competitorType: 'AGGREGATION',
+      ...rest
+    });
+  }
+
+  /**
+   * @public
+   * @return {*}
+   */
   async measurements({ measurableId, competitorType }) {
     const result = await this.query(this.queries.measurements, {
       measurableId,
       competitorType
     });
     return this.getList('measurements')(result);
+  }
+
+  /**
+   * @public
+   * @return {*}
+   */
+  async measurementsCompetitive({ measurableId }) {
+    return this.measurements({
+      measurableId,
+      competitorType: ['COMPETITIVE'],
+    });
   }
 
   /**

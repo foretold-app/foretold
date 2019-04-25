@@ -11,6 +11,9 @@ class AggregationBot {
     const measurables = await this.api.measurables();
 
     for(const measurable of measurables) {
+      const measurements = await this.api.measurements({
+        measurableId: measurable.id,
+      });
       await this.api.measurementCreate({
         measurableId: measurable.id,
         floatPoint: 10.111,

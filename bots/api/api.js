@@ -53,11 +53,9 @@ class API {
    * @public
    * @return {*}
    */
-  measurables() {
-    return this.query(this.queries.measurables)
-      .then((result) => {
-        return result.data.measurables.edges.map(edge => edge.node);
-      });
+  async measurables() {
+    const result = await this.query(this.queries.measurables);
+    return this.getList('measurables')(result);
   }
 
   /**
@@ -67,13 +65,29 @@ class API {
   measurementCreate({ floatPoint, measurableId }) {
     return this.query(this.queries.measurementCreate, {
       input: {
-        value: {
-          floatPoint
-        },
+        value: { floatPoint },
         measurableId,
         competitorType: "COMPETITIVE",
       },
     });
+  }
+
+  /**
+   * @public
+   * @return {*}
+   */
+  async measurements({ measurableId }) {
+    const result = await this.query(this.queries.measurements, { measurableId });
+    return this.getList('measurements')(result);
+  }
+
+  /**
+   * @protected
+   * @param {string} alias
+   * @return {Function}
+   */
+  getList(alias) {
+    return (result) => result.data[alias].edges.map(edge => edge.node);
   }
 }
 

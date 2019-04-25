@@ -1,24 +1,32 @@
 const measurables = `
 query measurables {
-  measurables(first: 500, states: [OPEN, JUDGEMENT_PENDING], isArchived: [FALSE]) {
-      total
+  measurables(
+    first: 500
+    states: [OPEN, JUDGEMENT_PENDING] 
+    isArchived: [FALSE]
+  ) {
       edges {
         node {
           id
           name
           valueType
           state
-          Measurements(first:1){
-            edges {
-               node {
-                 id
-                 value {
-                    floatCdf { xs ys }
-                    floatPoint
-                 }
-               }
-            }
-          }
+      }
+    }
+  }
+}
+`;
+
+const measurements = `
+query search ($measurableId: String) {
+  measurements(
+    first: 500
+    measurableId: $measurableId
+  ) {
+    edges {
+      node {
+        id
+        value { floatCdf { xs ys } floatPoint }
       }
     }
   }
@@ -36,5 +44,6 @@ mutation measurementCreate($input: MeasurementCreateInput!) {
 
 module.exports = {
   measurables,
+  measurements,
   measurementCreate,
 };

@@ -50,6 +50,7 @@ class API {
   }
 
   /**
+   * @todo: use streams
    * @public
    * @return {*}
    */
@@ -85,6 +86,7 @@ class API {
   }
 
   /**
+   * @todo: use streams
    * @public
    * @return {*}
    */

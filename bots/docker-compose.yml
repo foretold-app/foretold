@@ -15,5 +15,5 @@ services:
       - API_URL=http://chane-me/graphql
       - BOT_TOKEN=<change-me>
     command: >
-      node_modules/.bin/nodemon ./index.js
+      npm run serve
 

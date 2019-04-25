@@ -32,29 +32,6 @@ mutation measurementCreate($input: MeasurementCreateInput!) {
     __typename
   }
 }
-
-input MeasurementCreateInput {
-  measurableId: String
-  author: String
-  value: MeasurementValueInput
-  competitorType: competitorType!
-}
-
-input MeasurementValueInput {
-  floatCdf: MeasurementValueInputFloatCdf
-  floatPoint: Float
-}
-
-enum competitorType {
-  COMPETITIVE
-  AGGREGATION
-  OBJECTIVE
-}
-
-type MeasurementValueInputFloatCdf {
-  xs: [Float]!
-  ys: [Float]!
-}
 `;
 
 module.exports = {

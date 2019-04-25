@@ -63,11 +63,13 @@ class API {
    */
   measurementCreate() {
     return this.query(this.queries.measurementCreate, {
-      value: {
-        floatPoint: 10.1
+      input: {
+        value: {
+          floatPoint: 10.111
+        },
+        competitorType: "COMPETITIVE",
+        measurableId: "4dda3bb8-e036-4820-9975-ae7d330f9cb0",
       },
-      competitorType: "COMPETITIVE",
-      measurableId: "4dda3bb8-e036-4820-9975-ae7d330f9cb0",
     });
   }
 }

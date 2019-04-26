@@ -29,7 +29,7 @@ const max = R.reduce(R.max, -Infinity);
  * @return {number[]}
  */
 function range(min, max, n) {
-  if (n <= 0) throw new RangeError('n is zero');
+  if (n <= 0) throw new RangeError('n is less then zero');
   if (n === Infinity) throw new RangeError('n is Infinity');
   if (n === 0) return [];
   if (n === 1) return [min];

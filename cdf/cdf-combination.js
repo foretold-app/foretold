@@ -1,11 +1,11 @@
 const R = require('ramda');
 
-const { CDF } = require('./cdf');
+const { Cdf } = require('./cdf');
 const { range, min, max } = require('./functions');
 
 class CdfCombination {
   /**
-   * @param {CDF[]} cdfs
+   * @param {Cdf[]} cdfs
    */
   constructor(cdfs) {
     this.cdfs = cdfs;
@@ -52,12 +52,12 @@ class CdfCombination {
 
   /**
    * @param {number} sampleCount
-   * @return {CDF}
+   * @return {Cdf}
    */
   combine(sampleCount) {
     const xs = this.xsToAnalyze(sampleCount);
     const means = R.map(xPoint => this.meanOfYsAtXPoint(xPoint), xs);
-    return new CDF(xs, means);
+    return new Cdf(xs, means);
   }
 }
 

@@ -3,32 +3,68 @@ const R = require('ramda');
 const { interpolate } = require('./functions');
 
 class Cdf {
-  //TODO: This should validate that these are the same length, and should order them to make sure that xs are increasing.
+  /**
+   * TODO: This should validate that these are the same length, and should order them to make sure that xs are increasing.
+   * @param {number[]} xs
+   * @param {number[]} ys
+   */
   constructor(xs, ys) {
     this.xs = xs;
     this.ys = ys;
   }
 
-
+  /**
+   * @param {number[]} xs
+   * @param {number[]} ys
+   * @return {boolean}
+   */
   validate(xs, ys) {
     const sameLength = xs.length === ys.length;
     return sameLength;
   }
 
+  /**
+   * @param x
+   * @return {*}
+   */
   findY(x) {
     let firstHigherIndex = R.findIndex(R.gt(R.__, x))(this.xs);
     let lowerOrEqualXIndex = firstHigherIndex - 1;
     let needsInterpolation = this.xs[lowerOrEqualXIndex] !== x;
     if (needsInterpolation) {
-      return interpolate(this.xs[lowerOrEqualXIndex], this.xs[firstHigherIndex], this.ys[lowerOrEqualXIndex], this.ys[firstHigherIndex], x);
+      return interpolate(
+        this.xs[lowerOrEqualXIndex],
+        this.xs[firstHigherIndex],
+        this.ys[lowerOrEqualXIndex],
+        this.ys[firstHigherIndex],
+        x
+      );
     } else {
       return this.ys[lowerOrEqualXIndex];
     }
   }
 
-  //TODO: This should do the same thing as `findY`, but for X.
+  /**
+   * This should do the same thing as `findY`, but for Y.
+   * @param y
+   * @return {*}
+   */
   findX(y) {
-
+    let firstHigherIndex = R.findIndex(R.gt(R.__, y))(this.ys);
+    let lowerOrEqualIndex = firstHigherIndex - 1;
+    let needsInterpolation = this.ys[lowerOrEqualIndex] !== y;
+    if (needsInterpolation) {
+      // @todo: should we turn axes?
+      return interpolate(
+        this.xs[lowerOrEqualIndex],
+        this.xs[firstHigherIndex],
+        this.ys[lowerOrEqualIndex],
+        this.ys[firstHigherIndex],
+        y
+      );
+    } else {
+      return this.xs[lowerOrEqualIndex];
+    }
   }
 
   convertWithAlternativeXs(xs) {

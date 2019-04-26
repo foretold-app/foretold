@@ -50,30 +50,72 @@ class API {
   }
 
   /**
+   * @todo: use streams
    * @public
    * @return {*}
    */
-  measurables() {
-    return this.query(this.queries.measurables)
-      .then((result) => {
-        return result.data.measurables.edges.map(edge => edge.node);
-      });
+  async measurables() {
+    const result = await this.query(this.queries.measurables);
+    return this.getList('measurables')(result);
   }
 
   /**
    * @public
    * @return {*}
    */
-  measurementCreate({ floatPoint, measurableId }) {
+  measurementCreate({ floatPoint, measurableId, competitorType }) {
     return this.query(this.queries.measurementCreate, {
       input: {
-        value: {
-          floatPoint
-        },
+        value: { floatPoint },
         measurableId,
-        competitorType: "COMPETITIVE",
+        competitorType,
       },
     });
+  }
+
+  /**
+   * @public
+   * @return {*}
+   */
+  measurementCreateAggregation({ measurableId, ...rest }) {
+    return this.measurementCreate({
+      measurableId,
+      competitorType: 'AGGREGATION',
+      ...rest
+    });
+  }
+
+  /**
+   * @todo: use streams
+   * @public
+   * @return {*}
+   */
+  async measurements({ measurableId, competitorType }) {
+    const result = await this.query(this.queries.measurements, {
+      measurableId,
+      competitorType
+    });
+    return this.getList('measurements')(result);
+  }
+
+  /**
+   * @public
+   * @return {*}
+   */
+  async measurementsCompetitive({ measurableId }) {
+    return this.measurements({
+      measurableId,
+      competitorType: ['COMPETITIVE'],
+    });
+  }
+
+  /**
+   * @protected
+   * @param {string} alias
+   * @return {Function}
+   */
+  getList(alias) {
+    return (result) => result.data[alias].edges.map(edge => edge.node);
   }
 }
 

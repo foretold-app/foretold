@@ -20,8 +20,7 @@ class MeasurementModel extends ModelPostgres {
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {string} [filter.measurableId]
    * @param {string} [filter.agentId]
-   * @param {string} [filter.after]
-   * @param {string} [filter.before]
+   * @param {string[]} [filter.competitorType]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {Promise<{data: Models.Measurement[], total: number}>}
@@ -33,6 +32,9 @@ class MeasurementModel extends ModelPostgres {
 
     if (filter.measurableId) where.measurableId = filter.measurableId;
     if (filter.agentId) where.agentId = filter.agentId;
+    if (filter.competitorType) where.competitorType = {
+      [this.in]: filter.competitorType,
+    };
 
     /** @type {number} */
     const total = await this.model.count({ where });

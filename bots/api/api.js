@@ -54,10 +54,8 @@ class API {
    * @public
    * @return {*}
    */
-  async measurables({ aggregatedBefore }) {
-    const result = await this.query(this.queries.measurables, {
-      aggregatedBefore,
-    });
+  async measurables() {
+    const result = await this.query(this.queries.measurables);
     return this.getList('measurables')(result);
   }
 
@@ -66,9 +64,7 @@ class API {
    * @return {*}
    */
   async measurablesForAggregation() {
-    return this.measurables({
-      aggregatedBefore: new Date(),
-    });
+    return this.measurables();
   }
 
   /**
@@ -126,11 +122,11 @@ class API {
    * @public
    * @return {*}
    */
-  async measurementsForAggregation({ measurableId }) {
+  async measurementsForAggregation({ measurableId, createdAfter }) {
     return this.measurements({
       measurableId,
+      createdAfter,
       competitorType: ['COMPETITIVE'],
-      createdAfter: new Date(),
     });
   }
 

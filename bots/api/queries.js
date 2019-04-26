@@ -1,12 +1,9 @@
 const measurables = `
-query measurables (
-  $aggregatedBefore: Date
-) {
+query measurables {
   measurables(
     first: 500
     states: [OPEN, JUDGEMENT_PENDING] 
     isArchived: [FALSE]
-    aggregatedBefore: $aggregatedBefore
   ) {
       edges {
         node {
@@ -14,6 +11,7 @@ query measurables (
           name
           valueType
           state
+          aggregatedAt
       }
     }
   }

@@ -17,17 +17,19 @@ class AggregationBot {
 
     for (const measurable of measurables) {
       const id = { measurableId: measurable.id };
-      const measurements = await this.api.measurementsForAggregation(id);
+      const measurements = await this.api.measurementsForAggregation(
+        { ...id, createdAfter: measurable.aggregatedAt },
+      );
 
       if (!measurements.length) {
         console.log(`Pass aggregation for "${id.measurableId}".`);
         continue;
       }
 
-      console.log(`---`);
-      console.log(`Going to aggregate for "${id.measurableId}" measurable.`);
-      console.log(`Going to aggregate ${measurements.length} measurements.`);
-      console.log(`---`);
+      console.log(
+        `Going to aggregate for "${id.measurableId}" measurable, ` +
+        `${measurements.length} measurements.`
+      );
 
       const aggregated = await this.aggregate(measurements);
       await this.api.measurementCreateAggregation({ ...id, ...aggregated });

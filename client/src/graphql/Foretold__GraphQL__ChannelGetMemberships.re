@@ -46,6 +46,7 @@ type innerType = {
                 option(
                   [
                     | `BOT_CREATE
+                    | `BOT_UPDATE
                     | `CHANNEL_CREATE
                     | `CHANNEL_MEMBERSHIP_CREATE
                     | `CHANNEL_MEMBERSHIP_DELETE

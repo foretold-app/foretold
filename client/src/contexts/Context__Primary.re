@@ -5,6 +5,7 @@ type channelMembershipRole = [ | `ADMIN | `VIEWER];
 type myMembershipRole = [ | `ADMIN | `VIEWER | `NONE];
 type permission = [
   | `BOT_CREATE
+  | `BOT_UPDATE
   | `CHANNEL_CREATE
   | `CHANNEL_MEMBERSHIP_CREATE
   | `CHANNEL_MEMBERSHIP_DELETE

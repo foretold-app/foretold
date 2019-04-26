@@ -69,6 +69,7 @@ class MeasurableModel extends ModelPostgres {
 
     const cond = { where, include };
 
+    // @todo: repair total!
     /** @type {number} */
     const total = await this.model.count(cond);
     const edgePagination = this.getPagination(pagination, total);

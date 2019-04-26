@@ -21,11 +21,13 @@ const measurements = `
 query search (
   $measurableId: String
   $competitorType: [competitorType!]
+  $createdAfter: Date
 ) {
   measurements(
     first: 500
     measurableId: $measurableId
     competitorType: $competitorType
+    createdAfter: $createdAfter
   ) {
     edges {
       node {

@@ -90,10 +90,11 @@ class API {
    * @public
    * @return {*}
    */
-  async measurements({ measurableId, competitorType }) {
+  async measurements({ measurableId, competitorType, createdAfter }) {
     const result = await this.query(this.queries.measurements, {
       measurableId,
-      competitorType
+      competitorType,
+      createdAfter,
     });
     return this.getList('measurements')(result);
   }
@@ -114,10 +115,11 @@ class API {
    * @public
    * @return {*}
    */
-  async measurementsCompetitive({ measurableId }) {
+  async measurementsForAggregation({ measurableId }) {
     return this.measurements({
       measurableId,
       competitorType: ['COMPETITIVE'],
+      createdAfter: new Date(),
     });
   }
 

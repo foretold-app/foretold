@@ -40,6 +40,7 @@ const measurable = new graphql.GraphQLObjectType({
     creatorId: { type: graphql.GraphQLString },
     seriesId: { type: graphql.GraphQLString },
     iAmOwner: require('./common').iAmOwner,
+    aggregatedAt: { type: DateType.default },
 
     permissions: {
       type: graphql.GraphQLNonNull(require('./permissions').permissions),
@@ -94,6 +95,7 @@ const measurableUpdateInput = new graphql.GraphQLInputObjectType({
     labelSubject: { type: graphql.GraphQLString },
     labelOnDate: { type: DateType.default },
     labelProperty: { type: graphql.GraphQLString },
+    aggregatedAt: { type: DateType.default },
   })
 });
 

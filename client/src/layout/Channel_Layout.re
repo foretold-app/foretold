@@ -126,6 +126,47 @@ let tabs = (o: TopTab.t, channel: Context.Primary.Channel.t) =>
     </Antd.Radio.Group>
   );
 
+let newTab = (isActive, toUrl, str, id) =>
+  <a
+    className={SLayout.Styles.tab(isActive)}
+    onClick={_ => Context.Routing.Url.push(toUrl(id))}>
+    {str |> ste}
+  </a>;
+
+let newTabs = (o: TopTab.t, channel: Context.Primary.Channel.t) =>
+  TopTab.(
+    <div>
+      {
+        newTab(o == Measurables, Measurables |> toUrl, "Questions", channel.id)
+      }
+      {
+        newTab(
+          o == Members(View),
+          Members(View) |> toUrl,
+          (
+            channel.membershipCount
+            |> E.O.fmap(string_of_int)
+            |> E.O.fmap(e => e ++ " ")
+            |> E.O.default("")
+          )
+          ++ "Members",
+          channel.id,
+        )
+      }
+      {
+        E.React.showIf(
+          channel.myRole === Some(`ADMIN),
+          newTab(
+            o == Options(Edit),
+            Options(Edit) |> toUrl,
+            "Settings",
+            channel.id,
+          ),
+        )
+      }
+    </div>
+  );
+
 let editTabs = (o: InfoTab.t, channel: Context.Primary.Channel.t) =>
   InfoTab.(
     <Antd.Radio.Group defaultValue="foo" value={o |> toS} onChange={e => ()}>
@@ -179,7 +220,6 @@ let make =
         E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
           <>
             <Div float=`left> {channelink(channel)} </Div>
-            <Div float=`right> {tabs(topOption, channel)} </Div>
             {
               E.React.showIf(
                 channel.myRole === Some(`NONE),
@@ -187,6 +227,14 @@ let make =
               )
             }
           </>
+        )
+        ||> E.HttpResponse.withReactDefaults,
+      );
+
+    let secondLevel =
+      loadChannel(
+        E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
+          <Div> {newTabs(topOption, channel)} </Div>
         )
         ||> E.HttpResponse.withReactDefaults,
       );
@@ -208,8 +256,17 @@ let make =
 
     <Layout__Component__FillWithSidebar
       channelId={Some(channelId)} loggedInUser>
+      <div className=Styles.header1outer>
+        <div className=Styles.container>
+          <div className=Styles.header1inner> top </div>
+        </div>
+      </div>
+      <div className=Styles.header2outer>
+        <div className=Styles.container>
+          <div className=Styles.header2inner> secondLevel </div>
+        </div>
+      </div>
       <div className=Styles.container>
-        <Header> top </Header>
         <MainSection>
           <Div flexDirection=`column>
             <Div flex=1 styles=[Css.style([Css.marginBottom(`em(1.))])]>

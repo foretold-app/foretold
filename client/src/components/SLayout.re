@@ -27,7 +27,39 @@ module Styles = {
       float(`left),
       fontWeight(`medium),
     ]);
+  let channelText =
+    style([color(`hex("242424")), fontSize(`em(1.2)), float(`left)]);
   let container = style([maxWidth(`px(1170)), margin(`auto)]);
+  let header1outer =
+    style([
+      width(`percent(100.0)),
+      float(`left),
+      backgroundColor(`hex("fff")),
+      borderBottom(`px(1), `solid, `hex("e6e9f0")),
+    ]);
+  let header1inner =
+    style([
+      width(`percent(100.0)),
+      float(`left),
+      fontWeight(`num(600)),
+      padding2(~v=`em(0.7), ~h=`em(1.0)),
+    ]);
+  let header2outer =
+    style([
+      width(`percent(100.0)),
+      float(`left),
+      backgroundColor(`hex("fbfcfd")),
+      borderBottom(`px(1), `solid, `hex("e6e9f0")),
+    ]);
+  let header2inner =
+    style([
+      width(`percent(100.0)),
+      float(`left),
+      paddingLeft(`em(1.)),
+      paddingRight(`em(1.)),
+      paddingTop(`em(0.5)),
+    ]);
+  let header2 = style([background(`hex("f0f"))]);
   let backHover = style([fontSize(`em(1.3))]);
   let foo =
     style([
@@ -62,6 +94,17 @@ module Styles = {
       fontSize(`em(1.5)),
       color(`hex("ccc")),
     ]);
+  let tab = isActive => {
+    let stylee = [
+      float(`left),
+      color(isActive ? `hex("2595ed") : `hex("848484")),
+      padding2(~v=`em(0.5), ~h=`em(1.)),
+    ];
+    style(
+      isActive ?
+        [borderBottom(`px(4), `solid, `hex("1a90ec")), ...stylee] : stylee,
+    );
+  };
 };
 
 module LargeCard = {
@@ -123,7 +166,9 @@ let channelBack = (~onClick, ()) =>
   </Antd.Button>;
 
 let channelink = (c: Context.Primary.Channel.t) =>
-  <div className=Styles.headerText>
+  <div
+    className=Styles.channelText
+    onClick={_ => Context.Routing.Url.push(ChannelShow(c.id))}>
     {c |> Context.Primary.Channel.present}
   </div>;
 

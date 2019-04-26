@@ -9,6 +9,7 @@ const bots = require('./bots');
 const permissions = require('./permissions');
 const authentications = require('./authentications');
 const common = require('./common');
+const competitor = require('./competitor');
 
 module.exports = {
   bots,
@@ -22,4 +23,5 @@ module.exports = {
   permissions,
   authentications,
   common,
+  competitor,
 };

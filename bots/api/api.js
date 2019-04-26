@@ -63,14 +63,6 @@ class API {
    * @public
    * @return {*}
    */
-  async measurablesForAggregation() {
-    return this.measurables();
-  }
-
-  /**
-   * @public
-   * @return {*}
-   */
   measurementCreate({ floatPoint, measurableId, competitorType }) {
     return this.query(this.queries.measurementCreate, {
       input: {
@@ -78,18 +70,6 @@ class API {
         measurableId,
         competitorType,
       },
-    });
-  }
-
-  /**
-   * @public
-   * @return {*}
-   */
-  measurementCreateAggregation({ measurableId, ...rest }) {
-    return this.measurementCreate({
-      measurableId,
-      competitorType: 'AGGREGATION',
-      ...rest
     });
   }
 
@@ -116,6 +96,26 @@ class API {
       measurableId,
     });
     return this.getOne('measurableAggregate')(result);
+  }
+
+  /**
+   * @public
+   * @return {*}
+   */
+  measurementCreateAggregation({ measurableId, ...rest }) {
+    return this.measurementCreate({
+      measurableId,
+      competitorType: 'AGGREGATION',
+      ...rest
+    });
+  }
+
+  /**
+   * @public
+   * @return {*}
+   */
+  async measurablesForAggregation() {
+    return this.measurables();
   }
 
   /**

@@ -50,20 +50,6 @@ mutation measurementCreate(
 }
 `;
 
-const measurableUpdate = `
-mutation measurableUpdate(
-  $measurableId: String!
-  $input: MeasurableUpdateInput!
-) {
-  measurableUpdate(
-    id: $measurableId
-    input: $input
-  ) {
-    aggregatedAt
-  }
-}
-`;
-
 const measurableAggregate = `
 mutation measurableAggregate(
   $measurableId: String!
@@ -80,6 +66,5 @@ module.exports = {
   measurables,
   measurements,
   measurementCreate,
-  measurableUpdate,
   measurableAggregate,
 };

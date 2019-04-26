@@ -54,9 +54,21 @@ class API {
    * @public
    * @return {*}
    */
-  async measurables() {
-    const result = await this.query(this.queries.measurables);
+  async measurables({ aggregatedBefore }) {
+    const result = await this.query(this.queries.measurables, {
+      aggregatedBefore,
+    });
     return this.getList('measurables')(result);
+  }
+
+  /**
+   * @public
+   * @return {*}
+   */
+  async measurablesForAggregation() {
+    return this.measurables({
+      aggregatedBefore: new Date(),
+    });
   }
 
   /**

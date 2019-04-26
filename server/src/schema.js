@@ -83,6 +83,7 @@ const schema = new graphql.GraphQLSchema({
           measuredByAgentId: { type: graphql.GraphQLString },
           states: { type: graphql.GraphQLList(types.measurables.measurableState) },
           isArchived: { type: graphql.GraphQLList(types.common.isArchived) },
+          aggregatedBefore: { type: types.DateType.default },
         },
         resolve: resolvers.measurables.all,
       },

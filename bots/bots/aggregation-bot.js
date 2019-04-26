@@ -12,7 +12,7 @@ class AggregationBot {
    * @return {Promise<boolean>}
    */
   async main() {
-    const measurables = await this.api.measurables();
+    const measurables = await this.api.measurablesForAggregation();
 
     for (const measurable of measurables) {
       const id = { measurableId: measurable.id };

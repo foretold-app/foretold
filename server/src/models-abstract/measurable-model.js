@@ -47,6 +47,7 @@ class MeasurableModel extends ModelPostgres {
    * @param {string[]} [filter.states]
    * @param {string[]} [filter.isArchived]
    * @param {boolean} [filter.isAggregated]
+   * @param {string} [filter.aggregatedBefore]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {Promise<{data: Models.Measurable[], total: number}>}
@@ -66,6 +67,9 @@ class MeasurableModel extends ModelPostgres {
     if (filter.channelId) where.channelId = filter.channelId;
     if (filter.seriesId) where.seriesId = filter.seriesId;
     if (filter.creatorId) where.creatorId = filter.creatorId;
+    if (filter.aggregatedBefore) where.aggregatedAt = {
+      [this.lt]: filter.aggregatedBefore,
+    };
 
     const cond = { where, include };
 

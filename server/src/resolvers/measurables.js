@@ -10,6 +10,7 @@ const data = require('../data');
  * @param {string} args.measuredByAgentId
  * @param {string[]} args.states
  * @param {string[]} args.isArchived
+ * @param {string} args.aggregatedBefore
  * @param {string} args.after
  * @param {string} args.before
  * @param {number} args.last
@@ -25,6 +26,7 @@ async function all(root, args, context, info) {
     channelId: _.get(args, 'channelId'),
     states: _.get(args, 'states'),
     isArchived: _.get(args, 'isArchived'),
+    aggregatedBefore: _.get(args, 'aggregatedBefore'),
   };
   const pagination = {
     last: _.get(args, 'last'),

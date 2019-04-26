@@ -10,7 +10,6 @@ const data = require('../data');
  * @param {string} args.measuredByAgentId
  * @param {string[]} args.states
  * @param {string[]} args.isArchived
- * @param {boolean} args.isAggregated
  * @param {string} args.after
  * @param {string} args.before
  * @param {number} args.last
@@ -26,7 +25,6 @@ async function all(root, args, context, info) {
     channelId: _.get(args, 'channelId'),
     states: _.get(args, 'states'),
     isArchived: _.get(args, 'isArchived'),
-    isAggregated: _.get(args, 'isAggregated'),
   };
   const pagination = {
     last: _.get(args, 'last'),
@@ -115,32 +113,6 @@ async function update(root, args, context, info) {
   return await data.measurables.updateOne(id, datas, creator);
 }
 
-/**
- * @param {*} root
- * @param {object} args
- * @param {string} args.id
- * @param {Schema.Context} context
- * @param {object} info
- * @returns {Promise<*|Array<Model>>}
- */
-async function aggregate(root, args, context, info) {
-  const id = args.id;
-  return await data.measurables.markAggregated(id);
-}
-
-/**
- * @param {*} root
- * @param {object} args
- * @param {string} args.id
- * @param {Schema.Context} context
- * @param {object} info
- * @returns {Promise<*|Array<Model>>}
- */
-async function unaggregate(root, args, context, info) {
-  const id = args.id;
-  return await data.measurables.markUnaggregated(id);
-}
-
 module.exports = {
   one,
   all,
@@ -148,6 +120,4 @@ module.exports = {
   update,
   archive,
   unarchive,
-  aggregate,
-  unaggregate,
 };

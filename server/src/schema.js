@@ -82,7 +82,6 @@ const schema = new graphql.GraphQLSchema({
           measuredByAgentId: { type: graphql.GraphQLString },
           states: { type: graphql.GraphQLList(types.measurables.measurableState) },
           isArchived: { type: graphql.GraphQLList(types.common.isArchived) },
-          isAggregated: { type: graphql.GraphQLBoolean },
         },
         resolve: resolvers.measurables.all,
       },
@@ -202,22 +201,6 @@ const schema = new graphql.GraphQLSchema({
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
         resolve: resolvers.measurables.unarchive,
-      },
-
-      measurableAggregate: {
-        type: types.measurables.measurable,
-        args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-        },
-        resolve: resolvers.measurables.aggregate,
-      },
-
-      measurableUnaggregate: {
-        type: types.measurables.measurable,
-        args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-        },
-        resolve: resolvers.measurables.unaggregate,
       },
 
       measurableUpdate: {

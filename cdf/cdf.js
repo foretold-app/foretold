@@ -1,3 +1,7 @@
+const R = require('ramda');
+
+const { interpolate } = require('./functions');
+
 class Cdf {
   //TODO: This should validate that these are the same length, and should order them to make sure that xs are increasing.
   constructor(xs, ys) {
@@ -5,8 +9,9 @@ class Cdf {
     this.ys = ys;
   }
 
+
   validate(xs, ys) {
-    const sameLength = xs.length == ys.length;
+    const sameLength = xs.length === ys.length;
     return sameLength;
   }
 
@@ -38,7 +43,7 @@ class Cdf {
 
   sampleSingle() {
     const yValue = Math.random();
-    return findX(yValue);
+    return this.findX(yValue);
   }
 
   //TODO: Produce n samples, using ``sampleSingle`` for each.

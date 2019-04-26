@@ -1,3 +1,8 @@
+const R = require('ramda');
+
+const { CDF } = require('./cdf');
+const { range } = require('./functions');
+
 class CdfCombination {
   constructor(cdfs) {
     this.cdfs = cdfs;
@@ -25,8 +30,8 @@ class CdfCombination {
   }
 
   combine(sampleCount) {
-    const xs = xsToAnalyze(sampleCount);
-    const means = R.map(r => meanOfYsAtXPoint(xPoint), xs);
+    const xs = this.xsToAnalyze(sampleCount);
+    const means = R.map(r => this.meanOfYsAtXPoint(xPoint), xs);
     return new CDF(xs, means);
   }
 }

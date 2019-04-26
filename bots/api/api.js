@@ -103,10 +103,11 @@ class API {
    * @return {*}
    */
   async measurableAggregate({ measurableId }) {
-    const result = await this.query(this.queries.measurableAggregate, {
+    const result = await this.query(this.queries.measurableUpdate, {
       measurableId,
+      input: { aggregatedAt: new Date() }
     });
-    return this.getOne('measurableAggregate')(result);
+    return this.getOne('measurableUpdate')(result);
   }
 
   /**

@@ -1,3 +1,5 @@
+const { DateType } = require('graphql-sequelize');
+
 const agents = require('./agents');
 const channels = require('./channels');
 const channelMemberships = require('./channel-memberhips');
@@ -24,4 +26,5 @@ module.exports = {
   authentications,
   common,
   competitor,
+  DateType,
 };

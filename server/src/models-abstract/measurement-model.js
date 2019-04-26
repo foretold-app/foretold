@@ -21,6 +21,7 @@ class MeasurementModel extends ModelPostgres {
    * @param {string} [filter.measurableId]
    * @param {string} [filter.agentId]
    * @param {string[]} [filter.competitorType]
+   * @param {string} [filter.createdAfter]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {Promise<{data: Models.Measurement[], total: number}>}
@@ -34,6 +35,9 @@ class MeasurementModel extends ModelPostgres {
     if (filter.agentId) where.agentId = filter.agentId;
     if (filter.competitorType) where.competitorType = {
       [this.in]: filter.competitorType,
+    };
+    if (filter.createdAfter) where.createdAt = {
+      [this.gt]: filter.createdAfter,
     };
 
     /** @type {number} */

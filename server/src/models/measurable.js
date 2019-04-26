@@ -52,6 +52,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.DATE
     },
+    aggregatedAt: {
+      allowNull: true,
+      type: DataTypes.DATE
+    },
 
     // Status
     isArchived: {
@@ -210,6 +214,7 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   /**
+   * @todo: move me
    * @param {object} ops
    * @return {string[]}
    */

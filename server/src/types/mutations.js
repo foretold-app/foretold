@@ -19,6 +19,8 @@ const mutations = new graphql.GraphQLEnumType({
     JOIN_CHANNEL: { value: "JOIN_CHANNEL" },
     BOT_CREATE: { value: "BOT_CREATE" },
     BOT_UPDATE: { value: "BOT_UPDATE" },
+    MEASURABLE_AGGREGATE: { value: "MEASURABLE_AGGREGATE" },
+    MEASURABLE_UNAGGREGATE: { value: "MEASURABLE_UNAGGREGATE" },
   }
 });
 

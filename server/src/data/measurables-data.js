@@ -137,6 +137,15 @@ class MeasurablesData extends DataBase {
   async markAggregated(id) {
     return this.updateOne2({ id }, { aggregatedAt: new Date() });
   }
+
+  /**
+   * @public
+   * @param {string} id
+   * @return {Promise<Models.Measurable>}
+   */
+  async markUnaggregated(id) {
+    return this.updateOne2({ id }, { aggregatedAt: null });
+  }
 }
 
 module.exports = {

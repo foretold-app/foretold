@@ -128,6 +128,18 @@ async function aggregate(root, args, context, info) {
   return await data.measurables.markAggregated(id);
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {string} args.id
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function unaggregate(root, args, context, info) {
+  const id = args.id;
+  return await data.measurables.markUnaggregated(id);
+}
 
 module.exports = {
   one,
@@ -137,4 +149,5 @@ module.exports = {
   archive,
   unarchive,
   aggregate,
+  unaggregate,
 };

@@ -133,6 +133,14 @@ const rules = {
         or(currentAgentIsChannelAdmin, currentAgentIsChannelViewer),
       ),
     ),
+    measurableAggregate: and(
+      currentAgentIsAuthenticated,
+      measurableIsOwnedByCurrentAgent,
+    ),
+    measurableUnaggregate: and(
+      currentAgentIsAuthenticated,
+      measurableIsOwnedByCurrentAgent,
+    ),
 
     ...rulesMeasurables.Mutation,
     ...rulesChannel.Mutation,

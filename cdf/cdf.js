@@ -24,10 +24,12 @@ class Cdf {
   }
 
   /**
+   * If xs=[1,2,3], and ys=[5,6,7],
+   * then findY(1) = 5, findY(3) = 7, findY(1.5) = 5.5
    * @param x
    * @return {*}
    */
-  findY(x) {
+  findY(x) {//1
     let firstHigherIndex = R.findIndex(R.gt(R.__, x))(this.xs);
     let lowerOrEqualXIndex = firstHigherIndex - 1;
     let needsInterpolation = this.xs[lowerOrEqualXIndex] !== x;
@@ -45,6 +47,8 @@ class Cdf {
   }
 
   /**
+   * If xs=[1,2,3], and ys=[5,6,7],
+   * then findX(5) = 1, findX(7) = 3, findY(5.5) = 1.5
    * This should do the same thing as `findY`, but for Y.
    * @param y
    * @return {*}
@@ -56,10 +60,10 @@ class Cdf {
     if (needsInterpolation) {
       // @todo: should we turn axes?
       return interpolate(
-        this.xs[lowerOrEqualIndex],
-        this.xs[firstHigherIndex],
         this.ys[lowerOrEqualIndex],
         this.ys[firstHigherIndex],
+        this.xs[lowerOrEqualIndex],
+        this.xs[firstHigherIndex],
         y
       );
     } else {

@@ -10,14 +10,14 @@ type bot = {
   competitorType: [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE],
   description: option(string),
   id: string,
-  name: option(string),
+  name: string,
 };
 
 let toBot = (a: bot): Context.Primary.Bot.t => {
   competitorType: a.competitorType,
   description: a.description,
   id: a.id,
-  name: a.name,
+  name: Some(a.name),
   jwt: None,
   agent: None,
 };

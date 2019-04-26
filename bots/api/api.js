@@ -41,7 +41,7 @@ class API {
         throw new Error('Not authorized');
       }
     }).then((body) => {
-      console.log(body);
+      // console.log(body);
       return body;
     }).catch((err) => {
       console.log(err.message);
@@ -116,11 +116,10 @@ class API {
    * @return {*}
    */
   async measurableAggregate({ measurableId }) {
-    const result = await this.query(this.queries.measurableUpdate, {
+    const result = await this.query(this.queries.measurableAggregate, {
       measurableId,
-      input: { aggregatedAt: new Date() }
     });
-    return this.getOne('measurableUpdate')(result);
+    return this.getOne('measurableAggregate')(result);
   }
 
   /**

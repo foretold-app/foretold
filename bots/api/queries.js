@@ -66,9 +66,22 @@ mutation measurableUpdate(
 }
 `;
 
+const measurableAggregate = `
+mutation measurableAggregate(
+  $measurableId: String!
+) {
+  measurableAggregate(
+    id: $measurableId
+  ) {
+    aggregatedAt
+  }
+}
+`;
+
 module.exports = {
   measurables,
   measurements,
   measurementCreate,
   measurableUpdate,
+  measurableAggregate,
 };

@@ -115,12 +115,26 @@ async function update(root, args, context, info) {
   return await data.measurables.updateOne(id, datas, creator);
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {string} args.id
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function aggregate(root, args, context, info) {
+  const id = args.id;
+  return await data.measurables.markAggregated(id);
+}
+
 
 module.exports = {
   one,
   all,
-  update,
-  unarchive,
-  archive,
   create,
+  update,
+  archive,
+  unarchive,
+  aggregate,
 };

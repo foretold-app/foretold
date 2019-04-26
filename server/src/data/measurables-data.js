@@ -69,6 +69,18 @@ class MeasurablesData extends DataBase {
   }
 
   /**
+   * @todo: use this method, remove "2" differential
+   * @public
+   * @param {object} params
+   * @param {object} [data]
+   * @param {object} [options]
+   * @return {Promise<Models.Measurable>}
+   */
+  async updateOne2(params, data = {}, options = {}) {
+    return await this.MeasurableModel.updateOne(params, data);
+  }
+
+  /**
    * @public
    * @param {Layers.DataSourceLayer.filter} [filter]
    * @param {Layers.DataSourceLayer.pagination} [pagination]
@@ -115,6 +127,15 @@ class MeasurablesData extends DataBase {
    */
   needsToBePending() {
     return this.MeasurableModel.needsToBePending();
+  }
+
+  /**
+   * @public
+   * @param {string} id
+   * @return {Promise<Models.Measurable>}
+   */
+  async markAggregated(id) {
+    return this.updateOne2({ id }, { aggregatedAt: new Date() });
   }
 }
 

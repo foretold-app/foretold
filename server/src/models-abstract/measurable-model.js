@@ -66,7 +66,7 @@ class MeasurableModel extends ModelPostgres {
     if (filter.channelId) where.channelId = filter.channelId;
     if (filter.seriesId) where.seriesId = filter.seriesId;
     if (filter.creatorId) where.creatorId = filter.creatorId;
-    where.isAggregated = { [filter.isAggregated ? this.ne : this.eq]: null };
+    where.aggregatedAt = { [filter.isAggregated ? this.ne : this.eq]: null };
 
     const cond = { where, include };
 

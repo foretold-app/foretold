@@ -14,6 +14,7 @@ class BotModel extends ModelPostgres {
   }
 
   /**
+   * @todo: use super methods
    * @param {object} data
    * @return {data}
    */
@@ -22,6 +23,7 @@ class BotModel extends ModelPostgres {
   }
 
   /**
+   * @todo: use super methods
    * @param {object} params
    * @param {object} data
    * @return {data}
@@ -37,6 +39,7 @@ class BotModel extends ModelPostgres {
   }
 
   /**
+   * @todo: use super methods
    * @param {object} filter
    * @param {object} [pagination]
    * @param {object} [restrictions]
@@ -53,6 +56,7 @@ class BotModel extends ModelPostgres {
   }
 
   /**
+   * @todo: use super methods
    * @param {object} params
    * @param {string} params.id
    * @param {object} query

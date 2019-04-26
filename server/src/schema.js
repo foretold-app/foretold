@@ -204,6 +204,14 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.measurables.unarchive,
       },
 
+      measurableAggregate: {
+        type: types.measurables.measurable,
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+        },
+        resolve: resolvers.measurables.aggregate,
+      },
+
       measurableUpdate: {
         type: types.measurables.measurable,
         args: {

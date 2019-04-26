@@ -179,7 +179,7 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @protectedo
+   * @protected
    * @param {object} [where]
    * @param {object} [filter]
    * @param {string} [filter.isArchived]
@@ -208,6 +208,22 @@ class ModelPostgres extends Model {
       }
       return item;
     });
+  }
+
+  /**
+   * @public
+   * @param {object} params
+   * @param {object} data
+   * @return {data}
+   */
+  async updateOne(params, data) {
+    const entity = await this.model.findOne({
+      where: params,
+    });
+    if (entity) {
+      await entity.update(data);
+    }
+    return entity;
   }
 }
 

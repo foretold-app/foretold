@@ -102,6 +102,17 @@ class API {
    * @public
    * @return {*}
    */
+  async measurableAggregate({ measurableId }) {
+    const result = await this.query(this.queries.measurableAggregate, {
+      measurableId,
+    });
+    return this.getOne('measurableAggregate')(result);
+  }
+
+  /**
+   * @public
+   * @return {*}
+   */
   async measurementsCompetitive({ measurableId }) {
     return this.measurements({
       measurableId,
@@ -116,6 +127,15 @@ class API {
    */
   getList(alias) {
     return (result) => result.data[alias].edges.map(edge => edge.node);
+  }
+
+  /**
+   * @protected
+   * @param {string} alias
+   * @return {Function}
+   */
+  getOne(alias) {
+    return (result) => result.data[alias];
   }
 }
 

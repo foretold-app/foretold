@@ -4,6 +4,7 @@ query measurables {
     first: 500
     states: [OPEN, JUDGEMENT_PENDING] 
     isArchived: [FALSE]
+<    isAggregated: false
   ) {
       edges {
         node {
@@ -43,7 +44,16 @@ mutation measurementCreate(
 ) {
   measurementCreate(input: $input) {
     createdAt
-    __typename
+  }
+}
+`;
+
+const measurableAggregate = `
+mutation measurableAggregate(
+  $measurableId: String
+) {
+  measurableAggregate(id: $measurableId) {
+    aggregatedAt
   }
 }
 `;
@@ -52,4 +62,5 @@ module.exports = {
   measurables,
   measurements,
   measurementCreate,
+  measurableAggregate,
 };

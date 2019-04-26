@@ -4,7 +4,7 @@ query measurables {
     first: 500
     states: [OPEN, JUDGEMENT_PENDING] 
     isArchived: [FALSE]
-<    isAggregated: false
+    isAggregated: false
   ) {
       edges {
         node {
@@ -50,7 +50,7 @@ mutation measurementCreate(
 
 const measurableAggregate = `
 mutation measurableAggregate(
-  $measurableId: String
+  $measurableId: String!
 ) {
   measurableAggregate(id: $measurableId) {
     aggregatedAt

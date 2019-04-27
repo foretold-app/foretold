@@ -231,6 +231,27 @@ let make =
         ||> E.HttpResponse.withReactDefaults,
       );
 
+    let sidebar1 =
+      loadChannel(
+        E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
+          <SLayout.SidebarSection.Container>
+            <SLayout.SidebarSection.Header>
+              {channel |> Context.Primary.Channel.present}
+            </SLayout.SidebarSection.Header>
+            <SLayout.SidebarSection.Body>
+              {channel.description |> E.O.default("") |> ste}
+              {joinButton(channel.id)}
+              {
+                Foretold__Components__Channel.SimpleHeader.newMeasurable(
+                  channel.id,
+                )
+              }
+            </SLayout.SidebarSection.Body>
+          </SLayout.SidebarSection.Container>
+        )
+        ||> E.HttpResponse.withReactDefaults,
+      );
+
     let secondLevel =
       loadChannel(
         E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
@@ -267,15 +288,21 @@ let make =
         </div>
       </div>
       <div className=Styles.container>
-        <MainSection>
-          <Div flexDirection=`column>
-            <Div flex=1 styles=[Css.style([Css.marginBottom(`em(1.))])]>
-              bottomHeader
-              head
-            </Div>
-            <Div flex=1> body </Div>
+        <Div flexDirection=`row styles=[SLayout.Styles.width100]>
+          <Div flex=3>
+            <MainSection>
+              <Div flexDirection=`column>
+                <Div
+                  flex=1 styles=[Css.style([Css.marginBottom(`em(1.))])]>
+                  bottomHeader
+                  head
+                </Div>
+                <Div flex=1> body </Div>
+              </Div>
+            </MainSection>
           </Div>
-        </MainSection>
+          <Div flex=1> sidebar1 </Div>
+        </Div>
       </div>
     </Layout__Component__FillWithSidebar>;
   },

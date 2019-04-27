@@ -13,6 +13,7 @@ module Styles = {
       float(`left),
       width(`percent(100.)),
     ]);
+  let width100 = style([width(`percent(100.))]);
   let headerText =
     style([
       color(`hex("486474")),
@@ -28,7 +29,7 @@ module Styles = {
       fontWeight(`medium),
     ]);
   let channelText =
-    style([color(`hex("242424")), fontSize(`em(1.2)), float(`left)]);
+    style([color(`hex("242424")), fontSize(`em(1.4)), float(`left)]);
   let container = style([maxWidth(`px(1170)), margin(`auto)]);
   let header1outer =
     style([
@@ -72,6 +73,7 @@ module Styles = {
   let largeCardInner =
     style([
       background(`hex("fff")),
+      border(`px(1), `solid, `hex("e1e5f0")),
       borderRadius(`px(5)),
       padding(`em(1.)),
       width(`percent(100.)),
@@ -97,8 +99,9 @@ module Styles = {
   let tab = isActive => {
     let stylee = [
       float(`left),
+      fontSize(`em(1.1)),
       color(isActive ? `hex("2595ed") : `hex("848484")),
-      padding2(~v=`em(0.5), ~h=`em(1.)),
+      padding2(~v=`em(0.5), ~h=`em(0.7)),
     ];
     style(
       isActive ?
@@ -166,11 +169,11 @@ let channelBack = (~onClick, ()) =>
   </Antd.Button>;
 
 let channelink = (c: Context.Primary.Channel.t) =>
-  <div
+  <a
     className=Styles.channelText
     onClick={_ => Context.Routing.Url.push(ChannelShow(c.id))}>
     {c |> Context.Primary.Channel.present}
-  </div>;
+  </a>;
 
 let channelEditLink = (c: Context.Primary.Channel.t) =>
   <div
@@ -186,3 +189,64 @@ let seriesHead = (channel: Context.Primary.Channel.t, seriesName) =>
       {seriesName |> ste}
     </div>
   </>;
+
+module SidebarSection = {
+  module Styles_ = {
+    open Css;
+    let containerOuter = style([paddingTop(`px(10))]);
+    let containerInner =
+      style([
+        background(`hex("fff")),
+        borderRadius(`px(5)),
+        width(`percent(100.)),
+        border(`px(1), `solid, `hex("e8eaef")),
+        float(`left),
+      ]);
+    let header =
+      style([
+        float(`left),
+        fontSize(`em(1.1)),
+        width(`percent(100.)),
+        color(`hex("242424")),
+        fontWeight(`num(600)),
+        padding(`em(1.)),
+        padding2(~v=`em(0.5), ~h=`em(0.7)),
+        borderBottom(`px(1), `solid, `hex("e6e9f0")),
+      ]);
+    let body =
+      style([
+        float(`left),
+        padding(`em(1.)),
+        fontSize(`em(1.1)),
+        padding2(~v=`em(0.5), ~h=`em(0.7)),
+        color(`hex("858585")),
+      ]);
+  };
+
+  module Container = {
+    let component = ReasonReact.statelessComponent("Container");
+    let make = children => {
+      ...component,
+      render: _ =>
+        <div className=Styles_.containerOuter>
+          <div className=Styles_.containerInner> ...children </div>
+        </div>,
+    };
+  };
+
+  module Header = {
+    let component = ReasonReact.statelessComponent("Container");
+    let make = children => {
+      ...component,
+      render: _ => <div className=Styles_.header> ...children </div>,
+    };
+  };
+
+  module Body = {
+    let component = ReasonReact.statelessComponent("Body");
+    let make = children => {
+      ...component,
+      render: _ => <div className=Styles_.body> ...children </div>,
+    };
+  };
+};

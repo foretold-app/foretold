@@ -2,14 +2,11 @@ open Utils;
 open Style.Grid;
 open Foretold__GraphQL;
 
-/* border: 1px solid #dcdcdc;
-       box-shadow: 1px 1px 5px #ede6e6;
-   } */
 module Styles = {
   open Css;
   let outer =
     style([
-      padding2(~v=`em(1.5), ~h=`em(2.)),
+      padding2(~v=`em(1.0), ~h=`em(2.)),
       float(`left),
       backgroundColor(`rgb((255, 255, 255))),
       width(`percent(100.)),
@@ -33,12 +30,10 @@ module Styles = {
     ]);
 };
 
-let foo: ReasonReact.reactElement = "sdf" |> ste;
-
 let component = ReasonReact.statelessComponent("Header");
 
 let action = Layout__Dropdown.Styles.action;
-let bar = agentId =>
+let userDropdown = agentId =>
   <>
     <div onClick={_ => Context.Routing.Url.push(Profile)} className=action>
       {"Profile" |> ste}
@@ -71,7 +66,7 @@ let header = (loggedInUser: Context.Primary.User.t) =>
   switch (loggedInUser.agent) {
   | Some((agent: Context.Primary.Types.agent)) =>
     <AntdDropdown
-      overlay={bar(agent.id)}
+      overlay={userDropdown(agent.id)}
       overlayClassName=Layout__Dropdown.Styles.dropdown>
       {agent.name |> E.O.default("") |> ste}
       <Icon.Icon icon="CHEVRON_DOWN" />

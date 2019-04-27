@@ -39,7 +39,7 @@ module Styles = {
     ]);
   };
   let mainColumn =
-    style([flex(5), display(`flex), flexDirection(`column)]);
+    style([flex(4), display(`flex), flexDirection(`column)]);
 
   let mainColumnTop =
     style([

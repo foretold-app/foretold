@@ -212,7 +212,7 @@ module Make = (Config: Config) => {
           userSelect(`none),
         ];
         let enabledOnlyStyles = [
-          color(`hex("a3abb6")),
+          color(`hex("838383")),
           cursor(`pointer),
           selector(
             ":hover",
@@ -229,7 +229,7 @@ module Make = (Config: Config) => {
     let pageButton' = (facesRight: bool, action, canMove, params) =>
       <div
         className={Styles.header(~isDisabled=!canMove(params))}
-        onClick={_ => params.send(action)}
+        onClick={_ => canMove(params) ? params.send(action) : ()}
         disabled={!canMove(params)}>
         <Icon.Icon icon={facesRight ? "CHEVRON_RIGHT" : "CHEVRON_LEFT"} />
       </div>;

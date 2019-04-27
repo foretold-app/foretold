@@ -58,23 +58,20 @@ let header = (loggedInUser: Context.Primary.User.t) =>
     </AntdDropdown>
   | None => ReasonReact.null
   };
+
 let make = (~loggedInUser: Context.Primary.User.t, _children) => {
   ...component,
   render: _self =>
     <Div styles=[Styles.outer]>
       <Div float=`left>
-        <div
-          onClick={_e => Context.Routing.Url.push(ChannelIndex)}
-          className=Styles.headerLink>
+        <C.Link linkType={Internal(ChannelIndex)} className=Styles.headerLink>
           {"Public Channels" |> ste}
-        </div>
+        </C.Link>
       </Div>
       <Div float=`left>
-        <div
-          onClick={_e => Context.Routing.Url.push(EntityIndex)}
-          className=Styles.headerLink>
+        <C.Link linkType={Internal(EntityIndex)} className=Styles.headerLink>
           {"Entity Explorer" |> ste}
-        </div>
+        </C.Link>
       </Div>
       <Div float=`right> {header(loggedInUser)} </Div>
     </Div>,

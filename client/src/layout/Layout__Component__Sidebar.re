@@ -42,6 +42,7 @@ module Styles = {
       textDecoration(`none),
       hover([background(`hex("435e90"))]),
       selector("a", [borderBottom(`px(2), `solid, hex("eee"))]),
+      selector(":hover", [color(`rgba((255, 255, 255, 0.6)))]),
     ]);
   let selectedItem =
     style([
@@ -54,6 +55,7 @@ module Styles = {
       padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
       focus([textDecoration(`none)]),
       textDecoration(`none),
+      selector(":hover", [color(`rgba((255, 255, 255, 0.8)))]),
     ]);
 };
 
@@ -65,11 +67,10 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
       <div className=Styles.over />
       <div className=Styles.sectionPadding />
       <div className=Styles.minorHeader>
-        <div
-          className=Styles.minorHeaderLink
-          onClick={_e => Context.Routing.Url.push(ChannelIndex)}>
+        <C.Link
+          linkType={Internal(ChannelIndex)} className=Styles.minorHeaderLink>
           {"Channels" |> ste}
-        </div>
+        </C.Link>
       </div>
       <div className=Styles.over>
         {
@@ -90,9 +91,9 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
                         ~isPublic=channel.isPublic,
                         (),
                       );
-                    <div
-                      onClick={
-                        _e => Context.Primary.Channel.showPush(_channel)
+                    <C.Link
+                      linkType={
+                        Internal(Context.Primary.Channel.showLink(_channel))
                       }
                       className={
                         Some(_channel.id) == channelId ?
@@ -104,7 +105,7 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
                           _channel,
                         )
                       }
-                    </div>;
+                    </C.Link>;
                   })
                |> ReasonReact.array
              )

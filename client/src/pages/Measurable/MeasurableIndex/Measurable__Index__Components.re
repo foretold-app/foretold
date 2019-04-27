@@ -40,7 +40,6 @@ module LoadedAndUnselected = {
       {
         SelectWithPaginationReducer.Components.buttonDuo(Page, t.reducerParams)
       }
-      {C.Channel.SimpleHeader.newMeasurable(t.channel.id)}
     </Div>;
 
   let seriesList = (t: t) =>

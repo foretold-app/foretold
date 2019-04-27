@@ -1,5 +1,4 @@
 open Utils;
-open Foretold__GraphQL;
 open Rationale.Function.Infix;
 open Rationale.Option.Infix;
 
@@ -9,7 +8,7 @@ module type Config = {
   type itemType;
   let isEqual: (itemType, itemType) => bool;
   let getId: itemType => string;
-  type callFnParams = string;
+  type callFnParams;
   let callFn:
     (
       callFnParams,

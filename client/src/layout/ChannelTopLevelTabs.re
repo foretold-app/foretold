@@ -26,7 +26,7 @@ module TabTypes = {
     | ChannelInvite(_) => Some(Members(Invite))
     | ChannelMembers(_) => Some(Members(View))
     | MeasurableNew(_) => Some(Measurables)
-    | ChannelShow(_) => Some(Measurables)
+    | ChannelShow(_, _) => Some(Measurables)
     | Series(_, _) => Some(Measurables)
     | _ => None
     };

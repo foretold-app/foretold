@@ -14,9 +14,7 @@ module Styles = {
   let row = m => {
     let statusOpacity = (measurable: Context.Primary.Measurable.t) => {
       let state = measurable.state |> E.O.toExn("Needs state from GraphQL");
-      if (state === `ARCHIVED) {
-        0.8;
-      } else if (state === `JUDGED) {
+      if (state === `JUDGED) {
         0.55;
       } else {
         1.0;

@@ -16,8 +16,6 @@ let button = (value, toUrl, str, id) =>
     {str |> ste}
   </Antd_Radio_Button>;
 
-let leaveButton = channelId => C.Channel.SimpleHeader.leaveChannel(channelId);
-
 let toUrl = (t: t, id: string): Context__Routing.Url.t =>
   switch (t) {
   | View => ChannelMembers(id)
@@ -26,10 +24,6 @@ let toUrl = (t: t, id: string): Context__Routing.Url.t =>
 
 let component = (agent, o: t, channel: Context.Primary.Channel.t) =>
   <Antd.Radio.Group defaultValue="" value={o |> toS} onChange={e => ()}>
-    {button(View |> toS, View |> toUrl, "List", channel.id)}
-    {
-      E.React.showIf(channel.myRole !== Some(`NONE), leaveButton(channel.id))
-    }
     {
       E.React.showIf(
         channel.myRole === Some(`ADMIN),

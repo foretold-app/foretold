@@ -26,7 +26,7 @@ let defaultPage = (loggedInUser: Context.Primary.User.t, layout) => {
   /* This should always be Some */
   switch (firstUserChannel) {
   | Some({id: channelIdSome}) =>
-    Channel_Layout.makeWithPage(ChannelShow(channelIdSome), loggedInUser)
+    Channel_Layout.makeWithPage(ChannelShow(channelIdSome, ""), loggedInUser)
   | _ => ChannelIndex.make(~loggedInUser, ~layout) |> inApp
   };
 };
@@ -45,7 +45,7 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
     let layout = SLayout.FullPage.makeWithEl;
 
     switch (route) {
-    | ChannelShow(_)
+    | ChannelShow(_, _)
     | ChannelInvite(_)
     | ChannelMembers(_)
     | MeasurableNew(_)

@@ -31,22 +31,17 @@ let make =
 
     let loadChannel =
       Foretold__GraphQL.Queries.Channel.component2(~id=channelId);
+
     let top =
       loadChannel(
         E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
-          <>
-            <Div float=`left> {channelink(channel)} </Div>
-            {
-              E.React.showIf(
-                channel.myRole === Some(`NONE),
-                <Div float=`right> {joinButton(channel.id)} </Div>,
-              )
-            }
-          </>
+          <> {channelink(channel)} </>
         )
         ||> E.HttpResponse.withReactDefaults,
       );
 
+    let leaveButton = channelId =>
+      C.Channel.SimpleHeader.leaveChannel(channelId);
     let sidebar1 =
       loadChannel(
         E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
@@ -56,11 +51,14 @@ let make =
             </SLayout.SidebarSection.Header>
             <SLayout.SidebarSection.Body>
               {channel.description |> E.O.default("") |> ste}
-              {joinButton(channel.id)}
               {
                 Foretold__Components__Channel.SimpleHeader.newMeasurable(
                   channel.id,
                 )
+              }
+              {
+                channel.myRole === Some(`NONE) ?
+                  joinButton(channel.id) : leaveButton(channel.id)
               }
             </SLayout.SidebarSection.Body>
           </SLayout.SidebarSection.Container>
@@ -140,9 +138,10 @@ let makeWithPage =
     |> E.React.makeToEl(~key=channelId);
 
   switch (page) {
-  | ChannelShow(channelId) =>
+  | ChannelShow(channelId, searchParams) =>
     MeasurableIndex.make(
       ~channelId,
+      ~searchParams,
       ~loggedInUser,
       ~itemsPerPage=20,
       ~layout=_,

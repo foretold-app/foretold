@@ -316,13 +316,12 @@ module Series = {
 type valueType = [ | `DATE | `FLOAT | `PERCENTAGE];
 
 module MeasurableState = {
-  type t = [ | `OPEN | `ARCHIVED | `JUDGEMENT_PENDING | `JUDGED];
+  type t = [ | `OPEN | `JUDGEMENT_PENDING | `JUDGED];
 
   let fromString = e =>
     switch (e) {
     | "OPEN" => `OPEN
     | "JUDGED" => `JUDGED
-    | "ARCHIVED" => `ARCHIVED
     | "JUDGEMENT_PENDING" => `JUDGEMENT_PENDING
     | _ => Js.Exn.raiseError("Invalid GraphQL State: " ++ e)
     };
@@ -337,10 +336,9 @@ module MeasurableState = {
 
   let toInt = (status: t) =>
     switch (status) {
-    | `OPEN => 3
-    | `JUDGEMENT_PENDING => 2
-    | `JUDGED => 1
-    | `ARCHIVED => 0
+    | `OPEN => 2
+    | `JUDGEMENT_PENDING => 1
+    | `JUDGED => 0
     };
 };
 

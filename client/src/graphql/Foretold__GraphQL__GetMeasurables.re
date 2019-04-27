@@ -80,8 +80,8 @@ let toMeasurable = (m: node): Context.Primary.Measurable.t =>
 
 module Query = [%graphql
   {|
-    query getMeasurables ($channelId: String, $seriesId: String, $creatorId: String, $first: Int, $last: Int, $after: String, $before: String) {
-        measurables(channelId: $channelId, seriesId: $seriesId, creatorId: $creatorId, first: $first, last: $last, after: $after, before: $before) {
+    query getMeasurables ( $states: [measurableState]!, $channelId: String, $seriesId: String, $creatorId: String,$first: Int, $last: Int, $after: String, $before: String) {
+        measurables(states: $states, channelId: $channelId, seriesId: $seriesId, creatorId: $creatorId, first: $first, last: $last, after: $after, before: $before) {
           total
           pageInfo{
             hasPreviousPage
@@ -145,8 +145,11 @@ let queryToComponent = (query, innerComponentFn) =>
   )
   |> E.React.el;
 
+type measurableStates = Context.Primary.MeasurableState.t;
+
 type inputType('a) =
   (
+    ~states: Js.Array.t(option(measurableStates)),
     ~channelId: string=?,
     ~seriesId: string=?,
     ~creatorId: string=?,
@@ -162,6 +165,7 @@ type direction = Context.Primary.Connection.direction;
 
 let queryDirection =
     (
+      ~states: Js.Array.t(option(measurableStates)),
       ~seriesId=?,
       ~channelId=?,
       ~creatorId=?,
@@ -170,7 +174,7 @@ let queryDirection =
       ~fn: inputType('a),
       (),
     ) => {
-  let fn = fn(~seriesId?, ~channelId?, ~creatorId?);
+  let fn = fn(~seriesId?, ~channelId?, ~creatorId?, ~states);
   switch ((direction: direction)) {
   | None => fn(~first=pageLimit, ())
   | After(after) => fn(~first=pageLimit, ~after, ())
@@ -190,22 +194,49 @@ let componentMaker = (query, innerComponentFn) =>
 
 /* TODO: I'm sure there is a dryer way to do this but couldn't figure out quickly. */
 let component2 =
-    (~channelId, ~pageLimit, ~direction: direction, ~innerComponentFn) => {
+    (
+      ~channelId,
+      ~pageLimit,
+      ~states,
+      ~direction: direction,
+      ~innerComponentFn,
+    ) => {
   let query =
-    queryDirection(~channelId, ~pageLimit, ~direction, ~fn=Query.make, ());
+    queryDirection(
+      ~channelId,
+      ~pageLimit,
+      ~direction,
+      ~states,
+      ~fn=Query.make,
+      (),
+    );
   componentMaker(query, innerComponentFn);
 };
 
 let componentWithSeries =
     (~seriesId, ~pageLimit, ~direction: direction, ~innerComponentFn) => {
   let query =
-    queryDirection(~seriesId, ~pageLimit, ~direction, ~fn=Query.make, ());
+    queryDirection(
+      ~seriesId,
+      ~pageLimit,
+      ~direction,
+      ~states=[|Some(`OPEN)|],
+      ~fn=Query.make,
+      (),
+    );
   componentMaker(query, innerComponentFn);
 };
 
 let componentWithCreator =
     (~creatorId, ~pageLimit, ~direction: direction, ~innerComponentFn) => {
   let query =
-    queryDirection(~creatorId, ~pageLimit, ~direction, ~fn=Query.make, ());
+    queryDirection(
+      ~creatorId,
+      ~pageLimit,
+      ~direction,
+      ~states=[|Some(`OPEN)|],
+      ~fn=Query.make,
+      (),
+    );
   componentMaker(query, innerComponentFn);
 };

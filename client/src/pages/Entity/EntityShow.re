@@ -23,9 +23,10 @@ let make = (~id: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
                  switch (r.value.valueType) {
                  | String(s) => s |> ste
                  | ThingId(s) =>
-                   <a href={Context.Routing.Url.toString(EntityShow(s))}>
+                   <Foretold__Components__Link
+                     linkType={Internal(EntityShow(s))}>
                      {s |> ste}
-                   </a>
+                   </Foretold__Components__Link>
                  | _ => "no-name" |> ste
                  }
                )

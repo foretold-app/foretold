@@ -157,18 +157,16 @@ let channelBack = (~onClick, ()) =>
   </Antd.Button>;
 
 let channelink = (c: Context.Primary.Channel.t) =>
-  <a
-    className=Styles.channelText
-    onClick={_ => Context.Routing.Url.push(ChannelShow(c.id))}>
+  <Foretold__Components__Link
+    linkType={Internal(ChannelShow(c.id))} className=Styles.channelText>
     {c |> Context.Primary.Channel.present}
-  </a>;
+  </Foretold__Components__Link>;
 
 let channelEditLink = (c: Context.Primary.Channel.t) =>
-  <div
-    className=Styles.headerText
-    onClick={_ => Context.Routing.Url.push(ChannelEdit(c.id))}>
+  <Foretold__Components__Link
+    linkType={Internal(ChannelEdit(c.id))} className=Styles.headerText>
     {"edit" |> ste}
-  </div>;
+  </Foretold__Components__Link>;
 
 let seriesHead = (channel: Context.Primary.Channel.t, seriesName) =>
   <>

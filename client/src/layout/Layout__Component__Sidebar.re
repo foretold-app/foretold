@@ -35,20 +35,21 @@ module Styles = {
     style([
       flex(1),
       color(`rgba((255, 255, 255, 0.6))),
-      hover([color(`rgba((255, 255, 255, 0.6)))]),
       fontSize(`em(1.2)),
       padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
       cursor(`pointer),
       textDecoration(`none),
       hover([background(`hex("435e90"))]),
       selector("a", [borderBottom(`px(2), `solid, hex("eee"))]),
-      selector(":hover", [color(`rgba((255, 255, 255, 0.6)))]),
+      selector(
+        ":hover",
+        [background(`hex("435e90")), color(`rgba((255, 255, 255, 0.6)))],
+      ),
     ]);
   let selectedItem =
     style([
       flex(1),
       color(`rgba((255, 255, 255, 0.8))),
-      hover([color(`rgba((255, 255, 255, 0.8)))]),
       background(`hex("3192ff")),
       fontSize(`em(1.2)),
       cursor(`pointer),

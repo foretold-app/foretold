@@ -14,8 +14,8 @@ module SearchResultsA = {
 };
 
 let load3Queries = (channelId, states, itemsPerPage, fn) =>
-  ((a, b, c) => (a, b, c) |> fn)
-  |> E.F.flatten3Callbacks(
+  ((a, b, c, d) => (a, b, c, d) |> fn)
+  |> E.F.flatten4Callbacks(
        Types.SelectWithPaginationReducer.make(
          ~itemsPerPage,
          ~callFnParams={channelId, states},
@@ -23,6 +23,7 @@ let load3Queries = (channelId, states, itemsPerPage, fn) =>
        ),
        Queries.Channel.component2(~id=channelId),
        Queries.SeriesCollection.component2(~channelId),
+       Queries.MeasurablesStateStats.component2(~channelId),
      );
 
 let make =
@@ -38,7 +39,8 @@ let make =
     |> E.O.fmap(r => r)
     |> E.O.default(`OPEN);
   let loadData = load3Queries(channelId, [|state|], itemsPerPage);
-  loadData(((selectWithPaginationParams, channel, query)) =>
+  loadData(
+    ((selectWithPaginationParams, channel, query, measurablesStateStats)) =>
     Types.MeasurableIndexDataState.make({
       reducerParams: selectWithPaginationParams,
       loggedInUser,
@@ -47,6 +49,7 @@ let make =
     })
     |> Components.MeasurableIndexDataState.toLayoutInput(
          selectWithPaginationParams.send,
+         measurablesStateStats,
        )
     |> layout
   );

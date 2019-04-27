@@ -81,7 +81,7 @@ let toMeasurable = (m: node): Context.Primary.Measurable.t =>
 module Query = [%graphql
   {|
     query getMeasurables ( $states: [measurableState]!, $channelId: String, $seriesId: String, $creatorId: String,$first: Int, $last: Int, $after: String, $before: String) {
-        measurables(states: $states, channelId: $channelId, seriesId: $seriesId, creatorId: $creatorId, first: $first, last: $last, after: $after, before: $before) {
+        measurables: measurables(states: $states, channelId: $channelId, seriesId: $seriesId, creatorId: $creatorId, first: $first, last: $last, after: $after, before: $before) {
           total
           pageInfo{
             hasPreviousPage
@@ -125,6 +125,12 @@ module Query = [%graphql
               }
             }
           }
+        }
+        open: measurables(states: [OPEN], channelId: $channelId, seriesId: $seriesId, creatorId: $creatorId, first: $first, last: $last, after: $after, before: $before) {
+          total
+        }
+        closed: measurables(states: [JUDGED], channelId: $channelId, seriesId: $seriesId, creatorId: $creatorId, first: $first, last: $last, after: $after, before: $before) {
+          total
         }
     }
   |}

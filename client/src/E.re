@@ -48,6 +48,14 @@ module F = {
         fn3(response3 => fnlast(response1, response2, response3))
       )
     );
+  let flatten4Callbacks = (fn1, fn2, fn3, fn4, fnlast) =>
+    fn1(response1 =>
+      fn2(response2 =>
+        fn3(response3 =>
+          fn4(response4 => fnlast(response1, response2, response3, response4))
+        )
+      )
+    );
 };
 
 module Bool = {

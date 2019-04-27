@@ -6,6 +6,11 @@ open Measurable__Index__Logic;
 
 module ReducerParams = SelectWithPaginationReducer.Reducers.ReducerParams;
 
+type measurablesStateStats =
+  E.HttpResponse.t(
+    option(Foretold__GraphQL.Queries.MeasurablesStateStats.stats),
+  );
+
 module LoadedAndSelected = {
   open Measurable__Index__Logic.LoadedAndSelected;
 
@@ -62,7 +67,7 @@ module LoadedAndUnselected = {
       ]
       |> style;
   };
-  let stateLink = (state, text) =>
+  let stateLink = (state, text, num: int) =>
     <Foretold__Components__Link
       className=Styles.stateLink
       linkType={
@@ -71,14 +76,34 @@ module LoadedAndUnselected = {
         )
       }>
       {text |> ste}
+      {" - " ++ (num |> string_of_int) |> ste}
     </Foretold__Components__Link>;
 
-  let header = (t: t, send: SelectWithPaginationReducer.Types.send) =>
+  let header =
+      (
+        t: t,
+        stats: measurablesStateStats,
+        send: SelectWithPaginationReducer.Types.send,
+      ) =>
     <Div>
       <Div float=`left>
-        {stateLink(`OPEN, "Open")}
-        {stateLink(`JUDGEMENT_PENDING, "Pending Resolution")}
-        {stateLink(`JUDGED, "Closed")}
+        {
+          switch (stats) {
+          | Success(Some(r)) =>
+            <>
+              {stateLink(`OPEN, "Open", r.openTotal)}
+              {
+                stateLink(
+                  `JUDGEMENT_PENDING,
+                  "Pending Resolution",
+                  r.pendingTotal,
+                )
+              }
+              {stateLink(`JUDGED, "Closed", r.closedTotal)}
+            </>
+          | _ => <> </>
+          }
+        }
       </Div>
       <Div float=`right>
         <Div
@@ -146,7 +171,11 @@ module MeasurableIndexDataState = {
   open Measurable__Index__Logic.MeasurableIndexDataState;
 
   let toLayoutInput =
-      (send: SelectWithPaginationReducer.Types.send, state: state) => {
+      (
+        send: SelectWithPaginationReducer.Types.send,
+        stats: measurablesStateStats,
+        state: state,
+      ) => {
     let lmake = SLayout.LayoutConfig.make;
     switch (state) {
     | InvalidIndexError(channel) =>
@@ -155,7 +184,7 @@ module MeasurableIndexDataState = {
       lmake(~head=E.React.null, ~body="Loading Query..." |> ste)
     | LoadedAndUnselected(l) =>
       lmake(
-        ~head=LoadedAndUnselected.header(l, send),
+        ~head=LoadedAndUnselected.header(l, stats, send),
         ~body=LoadedAndUnselected.body(l, send),
       )
     | LoadedAndSelected(l) =>

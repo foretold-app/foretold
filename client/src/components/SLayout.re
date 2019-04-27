@@ -96,18 +96,6 @@ module Styles = {
       fontSize(`em(1.5)),
       color(`hex("ccc")),
     ]);
-  let tab = isActive => {
-    let stylee = [
-      float(`left),
-      fontSize(`em(1.1)),
-      color(isActive ? `hex("2595ed") : `hex("848484")),
-      padding2(~v=`em(0.5), ~h=`em(0.7)),
-    ];
-    style(
-      isActive ?
-        [borderBottom(`px(4), `solid, `hex("1a90ec")), ...stylee] : stylee,
-    );
-  };
 };
 
 module LargeCard = {

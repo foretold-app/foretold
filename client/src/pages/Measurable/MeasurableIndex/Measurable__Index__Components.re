@@ -34,12 +34,45 @@ module LoadedAndSelected = {
 
 module LoadedAndUnselected = {
   open Measurable__Index__Logic.LoadedAndUnselected;
+  module Styles = {
+    open Css;
+    let stateLink =
+      [
+        color(`hex("262626")),
+        marginRight(`em(2.)),
+        marginTop(`em(0.5)),
+        float(`left),
+        focus([fontWeight(`num(600)), textDecoration(`none)]),
+        hover([color(`hex("262626"))]),
+      ]
+      |> style;
+  };
+  let stateLink = (state, text) =>
+    <Foretold__Components__Link
+      className=Styles.stateLink
+      linkType={
+        External(
+          SearchResults.make(Some(state)) |> SearchResults.toUrlParams,
+        )
+      }>
+      {text |> ste}
+    </Foretold__Components__Link>;
 
   let header = (t: t, send: SelectWithPaginationReducer.Types.send) =>
-    <Div float=`right>
-      {
-        SelectWithPaginationReducer.Components.buttonDuo(Page, t.reducerParams)
-      }
+    <Div>
+      <Div float=`left>
+        {stateLink(`OPEN, "Open")}
+        {stateLink(`JUDGEMENT_PENDING, "Pending Resolution")}
+        {stateLink(`JUDGED, "Closed")}
+      </Div>
+      <Div float=`right>
+        {
+          SelectWithPaginationReducer.Components.buttonDuo(
+            Page,
+            t.reducerParams,
+          )
+        }
+      </Div>
     </Div>;
 
   let seriesList = (t: t) =>

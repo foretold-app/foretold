@@ -176,6 +176,12 @@ module Make = (Config: Config) => {
         | Success(m) => m.pageInfo.endCursor |> E.O.fmap(int_of_string)
         | _ => None
         };
+
+      let selectionIndex = (t: t) =>
+        switch (pageIndex(t), lowerBoundIndex(t)) {
+        | (Some(page), Some(lower)) => Some(page + lower)
+        | _ => None
+        };
     };
 
     module ItemUnselected = {
@@ -302,13 +308,9 @@ module Make = (Config: Config) => {
       };
 
     let selectionOfX = (t: Types.reducerParams) =>
-      switch (totalItems(t), upperBoundIndex(t), lowerBoundIndex(t)) {
-      | (Some(count), Some(upper), Some(lower)) =>
-        string_of_int(lower + 1)
-        ++ "-"
-        ++ string_of_int(upper + 1)
-        ++ " of "
-        ++ string_of_int(count)
+      switch (totalItems(t), selectionIndex(t)) {
+      | (Some(count), Some(selection)) =>
+        string_of_int(selection + 1) ++ " of " ++ string_of_int(count)
       | _ => ""
       };
 

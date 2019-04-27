@@ -22,8 +22,14 @@ module LoadedAndSelected = {
               Css.marginTop(`em(0.5)),
               Css.marginRight(`em(0.4)),
             ]),
-          ]
-        />
+          ]>
+          {
+            SelectWithPaginationReducer.Components.selectionOfX(
+              t.reducerParams,
+            )
+            |> ste
+          }
+        </Div>
         {
           SelectWithPaginationReducer.Components.buttonDuo(
             Item,

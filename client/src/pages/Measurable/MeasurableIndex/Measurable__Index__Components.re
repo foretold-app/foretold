@@ -15,6 +15,15 @@ module LoadedAndSelected = {
         {SelectWithPaginationReducer.Components.deselectButton(send)}
       </Div>
       <Div float=`right>
+        <Div
+          float=`left
+          styles=[
+            Css.style([
+              Css.marginTop(`em(0.5)),
+              Css.marginRight(`em(0.4)),
+            ]),
+          ]
+        />
         {
           SelectWithPaginationReducer.Components.buttonDuo(
             Item,
@@ -42,7 +51,7 @@ module LoadedAndUnselected = {
         marginRight(`em(2.)),
         marginTop(`em(0.5)),
         float(`left),
-        focus([fontWeight(`num(600)), textDecoration(`none)]),
+        focus([textDecoration(`none)]),
         hover([color(`hex("262626"))]),
       ]
       |> style;
@@ -66,12 +75,27 @@ module LoadedAndUnselected = {
         {stateLink(`JUDGED, "Closed")}
       </Div>
       <Div float=`right>
-        {
-          SelectWithPaginationReducer.Components.buttonDuo(
-            Page,
-            t.reducerParams,
-          )
-        }
+        <Div
+          float=`left
+          styles=[
+            Css.style([
+              Css.marginTop(`em(0.5)),
+              Css.marginRight(`em(0.4)),
+            ]),
+          ]>
+          {
+            SelectWithPaginationReducer.Components.rangeOfX(t.reducerParams)
+            |> ste
+          }
+        </Div>
+        <Div float=`left>
+          {
+            SelectWithPaginationReducer.Components.buttonDuo(
+              Page,
+              t.reducerParams,
+            )
+          }
+        </Div>
       </Div>
     </Div>;
 

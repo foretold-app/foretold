@@ -29,7 +29,7 @@ let make =
     ) => {
   ...component,
   render: _self =>
-    <Layout__Component__UseRouterForLinks>
+    <>
       <div className=Styles.outer>
         <div className=Styles.left>
           <Layout__Component__Sidebar channelId loggedInUser />
@@ -39,5 +39,5 @@ let make =
           <div> ..._children </div>
         </div>
       </div>
-    </Layout__Component__UseRouterForLinks>,
+    </>,
 };

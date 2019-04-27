@@ -33,34 +33,19 @@ module Styles = {
 let component = ReasonReact.statelessComponent("Header");
 
 let action = Layout__Dropdown.Styles.action;
+
+let link = (linkType: C.Link.linkType, str) =>
+  <C.Link linkType className=action> {str |> ste} </C.Link>;
+
 let userDropdown = agentId =>
-  <>
-    <div onClick={_ => Context.Routing.Url.push(Profile)} className=action>
-      {"Profile" |> ste}
-    </div>
-    <div
-      onClick={_ => Context.Routing.Url.push(AgentMeasurables(agentId))}
-      className=action>
-      {"My Questions" |> ste}
-    </div>
-    <div
-      onClick={_ => Context.Routing.Url.push(AgentBots(agentId))}
-      className=action>
-      {"My Bots" |> ste}
-    </div>
-    <div
-      onClick={_ => Context.Routing.Url.push(AgentShow(agentId))}
-      className=action>
-      {"My Predictions" |> ste}
-    </div>
-    <div
-      onClick={_e => Context.Routing.Url.push(ChannelNew)} className=action>
-      {"Make a New Channel" |> ste}
-    </div>
-    <div onClick={_ => Context.Auth.Actions.logout()} className=action>
-      {"Log Out" |> ste}
-    </div>
-  </>;
+  <div className=Layout__Dropdown.Styles.actions>
+    {link(Internal(Profile), "Profile")}
+    {link(Internal(AgentMeasurables(agentId)), "My Questions")}
+    {link(Internal(AgentBots(agentId)), "My Bots")}
+    {link(Internal(AgentShow(agentId)), "My Predictions")}
+    {link(Internal(ChannelNew), "Make a new Channel")}
+    {link(Action(_ => Context.Auth.Actions.logout()), "Logout")}
+  </div>;
 
 let header = (loggedInUser: Context.Primary.User.t) =>
   switch (loggedInUser.agent) {

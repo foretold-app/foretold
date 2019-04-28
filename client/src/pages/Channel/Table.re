@@ -2,10 +2,19 @@ open Utils;
 
 module Styles = {
   open Css;
-  let table =
-    [display(`flex), flexWrap(`wrap), flexDirection(`column)] |> style;
-  let row = [flex(1), display(`flex), flexDirection(`row)] |> style;
-  let cell = [flex(1)] |> style;
+  let table = [display(`flex), flexDirection(`column)] |> style;
+  let row =
+    [
+      flex(1),
+      display(`flex),
+      borderBottom(`px(1), `solid, `hex("e7eaf0")),
+      selector(
+        ":last-child",
+        [borderBottom(`px(0), `solid, hex("e7eaf0"))],
+      ),
+    ]
+    |> style;
+  let cell = [flex(1), padding2(~v=`em(0.6), ~h=`em(0.5))] |> style;
 };
 
 module Table = {

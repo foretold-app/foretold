@@ -20,18 +20,19 @@ let make =
     let addToChannel = (agentId, channelId) =>
       Foretold__GraphQL.Mutations.ChannelMembershipCreate.Mutation.make(
         (mutation, _) =>
-        <a
-          href=""
-          onClick={
-            _ =>
-              Foretold__GraphQL.Mutations.ChannelMembershipCreate.mutate(
-                mutation,
-                agentId,
-                channelId,
-              )
+        <Foretold__Components__Link
+          linkType={
+            Action(
+              _ =>
+                Foretold__GraphQL.Mutations.ChannelMembershipCreate.mutate(
+                  mutation,
+                  agentId,
+                  channelId,
+                ),
+            )
           }>
           {"Add to Channel" |> ste}
-        </a>
+        </Foretold__Components__Link>
       )
       |> E.React.el;
 
@@ -43,13 +44,10 @@ let make =
         ~width=2,
         ~render=
           (~text, ~record, ~index) =>
-            <a
-              onClick={
-                _ => Context.Routing.Url.push(AgentShow(record##agentId))
-              }
-              href="">
+            <Foretold__Components__Link
+              linkType={Internal(AgentShow(record##agentId))}>
               {record##agentName |> ste}
-            </a>,
+            </Foretold__Components__Link>,
         (),
       ),
       Antd.Table.TableProps.make_column(

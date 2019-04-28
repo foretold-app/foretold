@@ -1,12 +1,98 @@
 open Rationale.Function.Infix;
 open Utils;
 
+module KeyValuePairs = {
+  type t = {
+    key: string,
+    value: string,
+  };
+
+  type ts = array(t);
+
+  let fromSearchParam = (r: string) =>
+    r
+    |> Js.String.split("&")
+    |> E.A.fmap(r => {
+         let param = Js.String.split("=", r) |> E.A.to_list;
+         switch (param) {
+         | [key, value] => Some({key, value})
+         | _ => None
+         };
+       })
+    |> E.A.O.concatSome;
+
+  let get = (key, ts: ts) =>
+    ts
+    |> E.A.filter(r => r.key == key)
+    |> E.A.get(_, 0)
+    |> E.O.fmap(r => r.value);
+
+  let toUrlParams = (ts: ts) =>
+    ts
+    |> E.A.fmap(r => r.key ++ "=" ++ r.value)
+    |> Js.Array.joinWith("&")
+    |> (r => "?" ++ r);
+
+  let make = (key, value) => {key, value};
+};
+
+module SearchResults = {
+  type query = {state: option(Context.Primary.MeasurableState.t)};
+
+  let make = (state: option(Context.Primary.MeasurableState.t)): query => {
+    state: state,
+  };
+
+  let stateFromString =
+      (r: string): option(Context.Primary.MeasurableState.t) =>
+    switch (r) {
+    | "open" => Some(`OPEN)
+    | "closed" => Some(`JUDGED)
+    | "pending" => Some(`JUDGEMENT_PENDING)
+    | _ => None
+    };
+
+  let statetoString = (s: Context.Primary.MeasurableState.t) =>
+    switch (s) {
+    | `OPEN => "open"
+    | `JUDGED => "closed"
+    | `JUDGEMENT_PENDING => "pending"
+    };
+
+  let fromString = (r: string): query => {
+    let keyValuePairs = KeyValuePairs.fromSearchParam(r);
+    let state =
+      switch (keyValuePairs |> KeyValuePairs.get("state")) {
+      | Some(state) => stateFromString(state)
+      | _ => None
+      };
+    make(state);
+  };
+
+  let toKeyValuePairs = (query: query): KeyValuePairs.ts => {
+    let state =
+      query.state
+      |> E.O.fmap(statetoString)
+      |> E.O.fmap(r => KeyValuePairs.make("state", r));
+    state |> E.O.fmap(e => [|e|]) |> E.O.default([||]);
+  };
+
+  let toUrlParams = (r: query): string =>
+    r |> toKeyValuePairs |> KeyValuePairs.toUrlParams;
+};
+
 module GetMeasurablesReducerConfig = {
   type itemType = Context.Primary.Measurable.t;
-  type callFnParams = string;
+  type callFnParams = {
+    channelId: string,
+    states: array(Context.Primary.MeasurableState.t),
+  };
   let getId = (e: Context.Primary.Measurable.t) => e.id;
   let callFn = (e: callFnParams) =>
-    Foretold__GraphQL.Queries.Measurables.component2(~channelId=e);
+    Foretold__GraphQL.Queries.Measurables.component2(
+      ~channelId=e.channelId,
+      ~states=e.states |> E.A.fmap(r => Some(r)),
+    );
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
 };
 

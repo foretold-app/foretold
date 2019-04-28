@@ -37,11 +37,10 @@ let columns = [|
     ~width=2,
     ~render=
       (~text, ~record, ~index) =>
-        <a
-          onClick={_ => Context.Routing.Url.push(AgentShow(record##agentId))}
-          href="">
+        <Foretold__Components__Link
+          linkType={Internal(AgentShow(record##agentId))}>
           {record##name |> E.O.default("") |> ste}
-        </a>,
+        </Foretold__Components__Link>,
     (),
   ),
   Antd.Table.TableProps.make_column(

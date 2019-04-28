@@ -53,12 +53,10 @@ let make =
           ~width=2,
           ~render=
             (~text, ~record, ~index) =>
-              <a
-                onClick={
-                  _ => Context.Routing.Url.push(ChannelShow(record##id))
-                }>
+              <Foretold__Components__Link
+                linkType={Internal(ChannelShow(record##id))}>
                 {record##name |> ste}
-              </a>,
+              </Foretold__Components__Link>,
           (),
         ),
         Antd.Table.TableProps.make_column(

@@ -11,11 +11,10 @@ let columns = [|
     ~width=2,
     ~render=
       (~text, ~record, ~index) =>
-        <a
-          onClick={_ => Context.Routing.Url.push(EntityShow(record##id))}
-          href="">
+        <Foretold__Components__Link
+          linkType={Internal(EntityShow(record##id))}>
           {record##name |> ste}
-        </a>,
+        </Foretold__Components__Link>,
     (),
   ),
   Antd.Table.TableProps.make_column(

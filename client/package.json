@@ -1,6 +1,6 @@
 {
   "name": "prediction-client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "scripts": {
     "build-bsb": "bsb -make-world",
     "clean": "bsb -clean-world",
@@ -8,8 +8,10 @@
     "parcel": "API_URL=${API_URL:-http://localhost:4000/graphql} AUTH0_DOMAIN=${AUTH0_DOMAIN:-guesstimate.auth0.com} AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID:-gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT} parcel ./src/index.html --public-url /",
     "parcel-staging": "parcel ./src/index.html --public-url /",
     "parcel-production": "parcel ./src/index.html --public-url /",
-    "build": "parcel build ./src/index.html",
+    "build": "parcel build ./src/index.html --no-minify --no-cache --bundle-node-modules",
     "build-for-server": "API_URL=https://api.foretold.io/graphql AUTH0_DOMAIN=foretold.auth0.com AUTH0_CLIENT_ID=oIh53ohBnA4xqhaO8vZXa7PiW6TCXjMV yarn run build",
+    "server-deploy": "netlify deploy --dir=dist --prod",
+    "build-and-deploy": "yarn run clean && yarn run build-bsb && yarn run build-for-server && yarn run server-deploy",
     "serve": "static-server ./dist -p ${PORT} -d",
     "serve-ws": "ws -d dist --spa index.html",
     "build-t": "npm run clean && npm run build-bsb && npm run build",
@@ -85,6 +87,7 @@
     "style-loader": "^0.23.0",
     "subscriptions-transport-ws": "^0.9.14",
     "victory": "^32.2.0",
+    "warning": "^4.0.3",
     "webpack": "^4.0.1",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.2.1"

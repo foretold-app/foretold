@@ -3,11 +3,12 @@ FROM node:11.13.0-alpine
 RUN env
 
 COPY package.json /opt/app/
-COPY yarn.lock /opt/app/
+#COPY yarn.lock /opt/app/
 WORKDIR /opt/app
 
-RUN apk add --no-cache build-base python nano mc curl && \
-  npm install --loglevel=warn
+RUN apk add --no-cache build-base python nano mc curl git ninja
+RUN apk add --no-cache ocaml
+RUN yarn
 
 COPY .storybook/ /opt/app/.storybook
 COPY lib/ /opt/app/lib
@@ -21,5 +22,7 @@ COPY _redirects /opt/app/
 COPY bsconfig.json /opt/app/
 COPY graphql_schema.json /opt/app/
 COPY webpack.config.js /opt/app/
+
+RUN yarn run build-for-server
 
 EXPOSE ${PORT:-80}

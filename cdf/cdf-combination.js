@@ -1,7 +1,5 @@
-const R = require('ramda');
-
 const { Cdf } = require('./cdf');
-const { range, min, max } = require('./functions');
+const { range, min, max, mean } = require('./functions');
 
 class CdfCombination {
   /**
@@ -15,14 +13,14 @@ class CdfCombination {
    * @return {number}
    */
   minBounds() {
-    return min(R.map(e => e.xs[0], this.cdfs))
+    return min(this.cdfs.map(e => e.xs[0]))
   }
 
   /**
    * @return {number}
    */
   maxBounds() {
-    return max(R.map(e => e.xs[0], this.cdfs))
+    return max(this.cdfs.map(e => e.xs[0]))
   }
 
   /**
@@ -38,7 +36,7 @@ class CdfCombination {
    * @return {number[]}
    */
   allYsAtXPoint(xPoint) {
-    return R.map(r => r.findY(xPoint), this.cdfs);
+    return this.cdfs.map(r => r.findY(xPoint));
   }
 
   /**
@@ -47,7 +45,7 @@ class CdfCombination {
    * @return {number}
    */
   meanOfYsAtXPoint(xPoint) {
-    return R.mean(this.allYsAtXPoint(xPoint));
+    return mean(this.allYsAtXPoint(xPoint));
   }
 
   /**
@@ -56,7 +54,7 @@ class CdfCombination {
    */
   combine(sampleCount) {
     const xs = this.xsToAnalyze(sampleCount);
-    const means = R.map(xPoint => this.meanOfYsAtXPoint(xPoint), xs);
+    const means = xs.map(xPoint => this.meanOfYsAtXPoint(xPoint));
     return new Cdf(xs, means);
   }
 }

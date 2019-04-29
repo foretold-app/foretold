@@ -1,10 +1,9 @@
-const R = require('ramda');
-
 const { interpolate } = require('./functions');
 
 class Cdf {
   /**
-   * TODO: This should validate that these are the same length, and should order them to make sure that xs are increasing.
+   * TODO: This should validate that these are the same length,
+   * TODO: and should order them to make sure that xs are increasing.
    * @param {number[]} xs
    * @param {number[]} ys
    */
@@ -29,8 +28,8 @@ class Cdf {
    * @param x
    * @return {*}
    */
-  findY(x) {//1
-    let firstHigherIndex = R.findIndex(R.gt(R.__, x))(this.xs);
+  findY(x) {
+    let firstHigherIndex = this.xs.findIndex(X => X > x);
     let lowerOrEqualXIndex = firstHigherIndex - 1;
     let needsInterpolation = this.xs[lowerOrEqualXIndex] !== x;
     if (needsInterpolation) {
@@ -54,7 +53,7 @@ class Cdf {
    * @return {*}
    */
   findX(y) {
-    let firstHigherIndex = R.findIndex(R.gt(R.__, y))(this.ys);
+    let firstHigherIndex = this.ys.findIndex(Y => Y > y);
     let lowerOrEqualIndex = firstHigherIndex - 1;
     let needsInterpolation = this.ys[lowerOrEqualIndex] !== y;
     if (needsInterpolation) {
@@ -76,7 +75,7 @@ class Cdf {
    * @return {Cdf}
    */
   convertWithAlternativeXs(xs) {
-    const ys = R.map((x) => this.findY(x), xs);
+    const ys = xs.map(x => this.findY(x));
     return new Cdf(xs, ys);
   }
 

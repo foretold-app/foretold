@@ -54,9 +54,19 @@ function range(min, max, n) {
   return result;
 }
 
+/**
+ * @param {number[]} arr
+ * @return {number}
+ */
+function mean(arr) {
+  const sum = arr.reduce((acc, val) => acc + val, 0);
+  return sum / arr.length;
+}
+
 module.exports = {
   interpolate,
   min,
   max,
   range,
+  mean,
 };

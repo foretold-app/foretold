@@ -1,5 +1,3 @@
-const R = require('ramda');
-
 /**
  * @param {number} xMin
  * @param {number} xMax
@@ -13,9 +11,6 @@ function interpolate(xMin, xMax, yMin, yMax, xIntended) {
   const maxProportion = (xIntended - xMin) / (xMax - xMin);
   return (yMin * minProportion) + (yMax * maxProportion);
 }
-
-const min = R.reduce(R.min, Infinity);
-const max = R.reduce(R.max, -Infinity);
 
 /**
  * @todo: write a test for me
@@ -61,6 +56,34 @@ function range(min, max, n) {
 function mean(arr) {
   const sum = arr.reduce((acc, val) => acc + val, 0);
   return sum / arr.length;
+}
+
+/**
+ * @param {number[]} arr
+ * @return {number}
+ */
+function min(arr) {
+  let val = arr[0];
+  for(let i = 1; i < arr.length; i++ ){
+    if (arr[i] < val) {
+      val = arr[i];
+    }
+  }
+  return val;
+}
+
+/**
+ * @param {number[]} arr
+ * @return {number}
+ */
+function max(arr) {
+  let val = arr[0];
+  for(let i = 1; i < arr.length; i++ ){
+    if (arr[i] > val) {
+      val = arr[i];
+    }
+  }
+  return val;
 }
 
 module.exports = {

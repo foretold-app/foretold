@@ -71,24 +71,39 @@ class Cdf {
     }
   }
 
+  /**
+   * @param {number[]} xs
+   * @return {Cdf}
+   */
   convertWithAlternativeXs(xs) {
-    const ys = R.map(this.findY, xs);
+    const ys = R.map((x) => this.findY(x), xs);
     return new Cdf(xs, ys);
   }
 
+  /**
+   * @param {number} newLength
+   * @return {Cdf}
+   */
   convertToNewLength(newLength) {
-    const _range = range(min(this.xs), max(this.xs));
-    const ys = this.convertWithAlternativeXs(_range);
+    const _range = range(min(this.xs), max(this.xs), newLength);
+    return this.convertWithAlternativeXs(_range);
   }
 
+  /**
+   * @return {number}
+   */
   sampleSingle() {
-    const yValue = Math.random();
-    return this.findX(yValue);
+    const y = Math.random();
+    return this.findX(y);
   }
 
-  //TODO: Produce n samples, using ``sampleSingle`` for each.
-  sample(sampleSize) {
-
+  /**
+   * Poduce n samples, using ``sampleSingle`` for each.
+   * @param size
+   * @return {number[]}
+   */
+  sample(size) {
+    return Array(size).map(() => this.sampleSingle());
   }
 
   //FUTURE TODO: Don't do this one in this story, but it would be nice to do later.

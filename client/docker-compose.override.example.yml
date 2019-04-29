@@ -4,4 +4,6 @@ services:
 
   app:
     environment:
-      - AUTH0_SECRET=<change-me>
+      - AUTH0_DOMAIN=<change-me>
+      - API_URL=<change-me>
+      - AUTH0_CLIENT_ID=<change-me>

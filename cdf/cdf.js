@@ -2,12 +2,20 @@ const { interpolate } = require('./functions');
 
 class Cdf {
   /**
-   * TODO: This should validate that these are the same length
    * @param {number[]} xs
    * @param {number[]} ys
    */
   constructor(xs, ys) {
-    const sorted = this.order(xs, ys);
+    this.xs = xs;
+    this.ys = ys;
+
+    if (!this.validateSize(this.xs, this.ys)) {
+      const corrected = this.convertToNewLength(this.xs.length);
+      this.xs = corrected.xs;
+      this.ys = corrected.ys;
+    }
+
+    const sorted = this.order(this.xs, this.ys);
     this.xs = sorted.xs;
     this.ys = sorted.ys;
   }
@@ -37,9 +45,8 @@ class Cdf {
    * @param {number[]} ys
    * @return {boolean}
    */
-  validate(xs, ys) {
-    const sameLength = xs.length === ys.length;
-    return sameLength;
+  validateSize(xs, ys) {
+    return xs.length === ys.length;
   }
 
   /**
@@ -92,16 +99,16 @@ class Cdf {
 
   /**
    * @param {number[]} xs
-   * @return {Cdf}
+   * @return {{xs: number[], ys: number[]}}
    */
   convertWithAlternativeXs(xs) {
     const ys = xs.map(x => this.findY(x));
-    return new Cdf(xs, ys);
+    return { xs, ys };
   }
 
   /**
    * @param {number} newLength
-   * @return {Cdf}
+   * @return {{xs: number[], ys: number[]}}
    */
   convertToNewLength(newLength) {
     const _range = range(min(this.xs), max(this.xs), newLength);

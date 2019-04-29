@@ -1,4 +1,4 @@
-FROM node:11.13.0-alpine
+FROM node:11.13.0
 
 RUN env
 
@@ -6,8 +6,9 @@ COPY package.json /opt/app/
 #COPY yarn.lock /opt/app/
 WORKDIR /opt/app
 
-RUN apk add --no-cache build-base python nano mc curl git ninja
-RUN apk add --no-cache ocaml
+RUN apt-get update
+RUN apt-get install -y nano mc curl git
+RUN apt-get install -y ocaml
 RUN yarn
 
 COPY .storybook/ /opt/app/.storybook

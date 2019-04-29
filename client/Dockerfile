@@ -1,9 +1,10 @@
 FROM node:11.13.0
 
 RUN env
+ENV NODE_ENV=development
 
 COPY package.json /opt/app/
-#COPY yarn.lock /opt/app/
+COPY yarn.lock /opt/app/
 WORKDIR /opt/app
 
 RUN apt-get update

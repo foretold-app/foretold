@@ -2,14 +2,34 @@ const { interpolate } = require('./functions');
 
 class Cdf {
   /**
-   * TODO: This should validate that these are the same length,
-   * TODO: and should order them to make sure that xs are increasing.
+   * TODO: This should validate that these are the same length
    * @param {number[]} xs
    * @param {number[]} ys
    */
   constructor(xs, ys) {
-    this.xs = xs;
-    this.ys = ys;
+    const sorted = this.order(xs, ys);
+    this.xs = sorted.xs;
+    this.ys = sorted.ys;
+  }
+
+  /**
+   * Order them to make sure that xs are increasing
+   * @param {number[]} xs
+   * @param {number[]} ys
+   * @return {{ys: number[], xs: number[]}}
+   */
+  order(xs, ys) {
+    const xsYs = xs.map((v, i) => ({ ys: ys[i], xs: v }));
+    const sorted = xsYs.sort((a, b) => {
+      if (a.xs > b.xs) return 1;
+      if (a.xs < b.xs) return -1;
+      return 0;
+    });
+
+    const XS = sorted.map(v => v.xs);
+    const YS = sorted.map(v => v.ys);
+
+    return { xs: XS, ys: YS };
   }
 
   /**

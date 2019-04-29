@@ -14,7 +14,7 @@
     "build-for-development": "API_URL=${API_URL:-http://localhost:4000/graphql} AUTH0_DOMAIN=${AUTH0_DOMAIN:-guesstimate.auth0.com} AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID:-gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT} yarn run build",
     "server-deploy": "netlify deploy --dir=dist --prod",
     "build-and-deploy": "yarn run clean && yarn run build-bsb && yarn run build-for-server && yarn run server-deploy",
-    "serve": "static-server ./dist -p ${PORT} -d",
+    "serve": "static-server ./dist -p ${PORT} -d -n ./dist/index.html",
     "serve-ws": "ws -d dist --spa index.html",
     "build-t": "npm run clean && npm run build-bsb && npm run build",
     "test": "jest --ci --bail --no-cache",

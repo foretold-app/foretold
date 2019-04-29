@@ -1,0 +1,25 @@
+FROM node:11.13.0-alpine
+
+RUN env
+
+COPY package.json /opt/app/
+COPY yarn.lock /opt/app/
+WORKDIR /opt/app
+
+RUN apk add --no-cache build-base python nano mc curl && \
+  npm install --loglevel=warn
+
+COPY .storybook/ /opt/app/.storybook
+COPY lib/ /opt/app/lib
+COPY src/ /opt/app/src
+COPY stories/ /opt/app/stories
+COPY .babelrc /opt/app/
+COPY .merlin /opt/app/
+COPY .netlifyk /opt/app/
+COPY .uglifyrc /opt/app/
+COPY _redirects /opt/app/
+COPY bsconfig.json /opt/app/
+COPY graphql_schema.json /opt/app/
+COPY webpack.config.js /opt/app/
+
+EXPOSE ${PORT:-80}

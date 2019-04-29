@@ -1,0 +1,16 @@
+version: "2"
+
+services:
+
+  app:
+    build: ./
+    environment:
+      - AUTH0_SECRET=<change-me>
+      - SLACK_WEBHOOK_URL=<change-me>
+      - PORT=80
+      - NODE_PATH=/opt/app
+      - JWT_SECRET=<change-me>
+      - JWT_ISSUER=Foretold
+    command: >
+      yarn run serve
+

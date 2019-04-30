@@ -95,6 +95,28 @@ function random(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+/**
+ * @param {number} from
+ * @param {number} to
+ * @return {number[]}
+ */
+function up(from, to) {
+  const arr = [];
+  for (let i = from; i <= to; i++) arr.push(i);
+  return arr;
+}
+
+/**
+ * @param {number} from
+ * @param {number} to
+ * @return {number[]}
+ */
+function down(from, to) {
+  const arr = [];
+  for (let i = from; i >= to; i--) arr.push(i);
+  return arr;
+}
+
 module.exports = {
   interpolate,
   min,
@@ -102,4 +124,6 @@ module.exports = {
   range,
   mean,
   random,
+  up,
+  down,
 };

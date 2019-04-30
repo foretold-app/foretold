@@ -1,16 +1,5 @@
 const { Cdf } = require('./cdf');
-
-function up(from, to) {
-  const arr = [];
-  for (let i = from; i <= to; i++) arr.push(i);
-  return arr;
-}
-
-function down(from, to) {
-  const arr = [];
-  for (let i = from; i >= to; i--) arr.push(i);
-  return arr;
-}
+const { up, down } = require('./functions');
 
 describe('CDF Class', () => {
   it('constructor()', () => {

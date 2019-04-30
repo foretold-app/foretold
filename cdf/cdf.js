@@ -1,4 +1,4 @@
-const { interpolate, range, min, max } = require('./functions');
+const { interpolate, range, min, max, random } = require('./functions');
 
 class Cdf {
   /**
@@ -115,8 +115,8 @@ class Cdf {
    * @return {number}
    */
   sampleSingle() {
-    const y = Math.random();
-    return this.findX(y);
+    const x = random(min(this.xs), max(this.xs));
+    return this.findY(x);
   }
 
   /**
@@ -125,7 +125,7 @@ class Cdf {
    * @return {number[]}
    */
   sample(size) {
-    return Array(size).map(() => this.sampleSingle());
+    return Array.from(Array(size), () => this.sampleSingle());
   }
 
   /**

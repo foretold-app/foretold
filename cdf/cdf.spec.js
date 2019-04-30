@@ -60,4 +60,13 @@ describe('CDF Class', () => {
     expect(CDF.xs).toEqual([1, 5, 9]);
     expect(CDF.ys).toEqual([9, 5, 1]);
   });
+  it('sample()', () => {
+    const xs = up(1, 9);
+    const ys = down(9, 1);
+    const cdf = new Cdf(xs, ys);
+    const XS = cdf.sample(3);
+    expect(Number.isInteger(XS[0])).toBe(true);
+    expect(Number.isInteger(XS[1])).toBe(true);
+    expect(Number.isInteger(XS[2])).toBe(true);
+  });
 });

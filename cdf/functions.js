@@ -64,7 +64,7 @@ function mean(arr) {
  */
 function min(arr) {
   let val = arr[0];
-  for(let i = 1; i < arr.length; i++ ){
+  for (let i = 1; i < arr.length; i++) {
     if (arr[i] < val) {
       val = arr[i];
     }
@@ -78,12 +78,21 @@ function min(arr) {
  */
 function max(arr) {
   let val = arr[0];
-  for(let i = 1; i < arr.length; i++ ){
+  for (let i = 1; i < arr.length; i++) {
     if (arr[i] > val) {
       val = arr[i];
     }
   }
   return val;
+}
+
+/**
+ * @param {number} min
+ * @param {number} max
+ * @return {number}
+ */
+function random(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 module.exports = {
@@ -92,4 +101,5 @@ module.exports = {
   max,
   range,
   mean,
+  random,
 };

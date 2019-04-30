@@ -41,9 +41,9 @@ function range(min, max, n) {
     item += interval;
   } while (item <= max);
 
-  // corrects results
+  // corrects results because of math errors
   if ((n + 1) - result.length === 1) {
-    result.push(b);
+    result.push(max);
   }
 
   return result;

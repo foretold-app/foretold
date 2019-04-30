@@ -6,16 +6,11 @@ class Cdf {
    * @param {number[]} ys
    */
   constructor(xs, ys) {
-    this.xs = xs;
-    this.ys = ys;
-
-    if (!this.validateSize(this.xs, this.ys)) {
-      const corrected = this.convertToNewLength(this.xs.length);
-      this.xs = corrected.xs;
-      this.ys = corrected.ys;
+    if (!this.validateSize(xs, ys)) {
+      throw new Error('Arrays of "xs" and "ys" have different sizes.');
     }
 
-    const sorted = this.order(this.xs, this.ys);
+    const sorted = this.order(xs, ys);
     this.xs = sorted.xs;
     this.ys = sorted.ys;
   }
@@ -99,16 +94,16 @@ class Cdf {
 
   /**
    * @param {number[]} xs
-   * @return {{xs: number[], ys: number[]}}
+   * @return {Cdf}
    */
   convertWithAlternativeXs(xs) {
     const ys = xs.map(x => this.findY(x));
-    return { xs, ys };
+    return new Cdf(xs, ys);
   }
 
   /**
    * @param {number} newLength
-   * @return {{xs: number[], ys: number[]}}
+   * @return {Cdf}
    */
   convertToNewLength(newLength) {
     const _range = range(min(this.xs), max(this.xs), newLength);
@@ -132,7 +127,11 @@ class Cdf {
     return Array(size).map(() => this.sampleSingle());
   }
 
-  //FUTURE TODO: Don't do this one in this story, but it would be nice to do later.
+  /**
+   * FUTURE
+   * TODO: Don't do this one in this story, but it would be nice to do later.
+   * @todo: rename to "meanX"
+   */
   mean() {
 
   }

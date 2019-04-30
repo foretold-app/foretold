@@ -43,4 +43,21 @@ describe('CDF Class', () => {
     expect(cdf.findX(7)).toEqual(3);
     expect(cdf.findX(5.5)).toEqual(1.5);
   });
+  it('convertWithAlternativeXs() when "XS" within "xs"', () => {
+    const xs = up(1, 9);
+    const ys = down(9, 1);
+    const cdf = new Cdf(xs, ys);
+    const XS = up(3, 7);
+    const CDF = cdf.convertWithAlternativeXs(XS);
+    expect(CDF.xs).toEqual([3, 4, 5, 6, 7]);
+    expect(CDF.ys).toEqual([7, 6, 5, 4, 3]);
+  });
+  it('convertToNewLength()', () => {
+    const xs = up(1, 9);
+    const ys = down(9, 1);
+    const cdf = new Cdf(xs, ys);
+    const CDF = cdf.convertToNewLength(3);
+    expect(CDF.xs).toEqual([1, 5, 9]);
+    expect(CDF.ys).toEqual([9, 5, 1]);
+  });
 });

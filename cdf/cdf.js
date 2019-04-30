@@ -1,4 +1,4 @@
-const { interpolate } = require('./functions');
+const { interpolate, range, min, max } = require('./functions');
 
 class Cdf {
   /**

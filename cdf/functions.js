@@ -29,6 +29,7 @@ function range(min, max, n) {
   if (n === 0) return [];
   if (n === 1) return [min];
   if (n === 2) return [min, max];
+  if (min === max) return Array(n).fill(min);
   n -= 1;
   const diff = min - max;
   const interval = Math.abs(diff / n);
@@ -64,7 +65,7 @@ function mean(arr) {
  */
 function min(arr) {
   let val = arr[0];
-  for(let i = 1; i < arr.length; i++ ){
+  for (let i = 1; i < arr.length; i++) {
     if (arr[i] < val) {
       val = arr[i];
     }
@@ -78,12 +79,43 @@ function min(arr) {
  */
 function max(arr) {
   let val = arr[0];
-  for(let i = 1; i < arr.length; i++ ){
+  for (let i = 1; i < arr.length; i++) {
     if (arr[i] > val) {
       val = arr[i];
     }
   }
   return val;
+}
+
+/**
+ * @param {number} min
+ * @param {number} max
+ * @return {number}
+ */
+function random(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+/**
+ * @param {number} from
+ * @param {number} to
+ * @return {number[]}
+ */
+function up(from, to) {
+  const arr = [];
+  for (let i = from; i <= to; i++) arr.push(i);
+  return arr;
+}
+
+/**
+ * @param {number} from
+ * @param {number} to
+ * @return {number[]}
+ */
+function down(from, to) {
+  const arr = [];
+  for (let i = from; i >= to; i--) arr.push(i);
+  return arr;
 }
 
 module.exports = {
@@ -92,4 +124,7 @@ module.exports = {
   max,
   range,
   mean,
+  random,
+  up,
+  down,
 };

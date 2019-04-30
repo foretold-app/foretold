@@ -29,6 +29,7 @@ function range(min, max, n) {
   if (n === 0) return [];
   if (n === 1) return [min];
   if (n === 2) return [min, max];
+  if (min === max) return Array(n).fill(min);
   n -= 1;
   const diff = min - max;
   const interval = Math.abs(diff / n);

@@ -52,6 +52,8 @@ class Cdf {
    */
   findY(x) {
     let firstHigherIndex = this.xs.findIndex(X => X >= x);
+    if (firstHigherIndex < 0) return this.ys[this.ys.length - 1];
+    if (firstHigherIndex === 0) return this.ys[0];
     let lowerOrEqualIndex = firstHigherIndex - 1;
     if (lowerOrEqualIndex < 0) lowerOrEqualIndex = 0;
     let needsInterpolation = this.xs[lowerOrEqualIndex] !== x;
@@ -77,6 +79,8 @@ class Cdf {
    */
   findX(y) {
     let firstHigherIndex = this.ys.findIndex(Y => Y >= y);
+    if (firstHigherIndex < 0) return this.xs[this.xs.length - 1];
+    if (firstHigherIndex === 0) return this.xs[0];
     let lowerOrEqualIndex = firstHigherIndex - 1;
     if (lowerOrEqualIndex < 0) lowerOrEqualIndex = 0;
     let needsInterpolation = this.ys[lowerOrEqualIndex] !== y;

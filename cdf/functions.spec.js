@@ -22,6 +22,7 @@ describe('Functions', () => {
     expect(range(-10.3, 17, 3)).toEqual([-10.3, 3.3499999999999996, 17]);
     expect(range(-10.3, 17, 5)).toEqual([-10.3, -3.4750000000000005, 3.3499999999999996, 10.175, 17]);
     expect(range(-10.3, 17.31, 3)).toEqual([-10.3, 3.504999999999999, 17.31]);
+    expect(range(1, 1, 3)).toEqual([1, 1, 1]);
   });
   it('mean()', () => {
     expect(mean([1, 2, 3])).toBe(2);

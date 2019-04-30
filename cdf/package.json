@@ -28,7 +28,7 @@
       "/manuals/"
     ],
     "setupFiles": [
-      "./src/jest-globals.js"
+      "./jest-globals.js"
     ]
   }
 }

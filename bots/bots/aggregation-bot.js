@@ -1,3 +1,6 @@
+const _ = require('lodash');
+const { Cdf } = require('cdf/cdf');
+
 const { API } = require('../api');
 
 const config = require('../config');

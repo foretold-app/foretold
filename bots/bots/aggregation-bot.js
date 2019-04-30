@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const { Cdf } = require('cdf/cdf');
+const { CdfCombination } = require('cdf/cdf-combination');
 
 const { API } = require('../api');
 
@@ -16,29 +17,52 @@ class AggregationBot {
    */
   async main() {
     const measurables = await this.api.measurables();
+    if (measurables.length === 0) {
+      console.log('Measurables list is empty.');
+      return true;
+    }
+
+    console.log(`Going to process ${measurables.length} measurables.`);
 
     for (const measurable of measurables) {
-      const measurableId = measurable.id;
-      const measurements = await this.api.measurementsCompetitive({
-        measurableId,
-      });
+      const id = { measurableId: measurable.id };
+
+      const measurements = await this.api.measurementsCompetitive(id);
+      console.log(`Going to process ${measurements.length} measurements.`);
+      if (measurements.length === 0) continue;
+
       const aggregated = await this.aggregate(measurements);
-      await this.api.measurementCreateAggregation({
-        measurableId,
-        ...aggregated,
-      });
+      if (!aggregated) continue;
+
+      await this.api.measurementCreateAggregation({ ...id, ...aggregated });
     }
 
     return true;
   }
 
   /**
+   * @todo: What to do with "floatPoint" spot?
    * @param {object[]} measurements
-   * @return {Promise<{floatPoint: number}>}
+   * @return {Promise<{floatPoint: number} | {floatCdf: {xs: number[], ys: number[]}} | null>}
    */
   async aggregate(measurements) {
+    const cdfs = measurements.filter((measurement) => {
+      return !!_.get(measurement, 'value.floatCdf');
+    }).map((measurement) => {
+      const xs = _.get(measurement, 'value.floatCdf.xs');
+      const ys = _.get(measurement, 'value.floatCdf.ys');
+      return new Cdf(xs, ys);
+    });
+
+    if (cdfs.length === 0) return null;
+
+    const combined = new CdfCombination(cdfs).combine(10);
+
     return {
-      floatPoint: 7.77,
+      floatCdf: {
+        xs: combined.xs,
+        ys: combined.ys
+      },
     };
   }
 }

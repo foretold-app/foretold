@@ -4,8 +4,31 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --watch",
+    "test:cv": "jest --coverage --forceExit",
+    "test:ci": "jest --forceExit"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^21.2.1"
+  },
+  "keywords": [
+    "foretold",
+    "cdf",
+    "javascript",
+    "prediction",
+    "trands"
+  ],
+  "jest": {
+    "restoreMocks": true,
+    "clearMocks": true,
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/manuals/"
+    ],
+    "setupFiles": [
+      "./src/jest-globals.js"
+    ]
+  }
 }

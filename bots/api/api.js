@@ -41,7 +41,7 @@ class API {
         throw new Error('Not authorized');
       }
     }).then((body) => {
-      console.log(body);
+      // console.log(body);
       return body;
     }).catch((err) => {
       console.log(err.message);
@@ -63,10 +63,10 @@ class API {
    * @public
    * @return {*}
    */
-  measurementCreate({ floatPoint, measurableId, competitorType }) {
+  measurementCreate({ floatPoint, floatCdf, measurableId, competitorType }) {
     return this.query(this.queries.measurementCreate, {
       input: {
-        value: { floatPoint },
+        value: { floatPoint, floatCdf },
         measurableId,
         competitorType,
       },

@@ -115,8 +115,8 @@ class Cdf {
    * @return {number}
    */
   sampleSingle() {
-    const x = random(min(this.xs), max(this.xs));
-    return this.findY(x);
+    const y = random(min(this.ys), max(this.ys));
+    return this.findX(y);
   }
 
   /**

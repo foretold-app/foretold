@@ -13,7 +13,6 @@ function interpolate(xMin, xMax, yMin, yMax, xIntended) {
 }
 
 /**
- * @todo: write a test for me
  * This should return an array of n evenly-spaced items
  * between min and max, including min and max.
  * range(1,5,3) = [1, 3, 5];

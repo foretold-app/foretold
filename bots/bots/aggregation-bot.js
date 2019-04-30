@@ -41,9 +41,9 @@ class AggregationBot {
   }
 
   /**
-   * @todo: What to do with "floatPoint" spot?
+   * Need to aggregate only "floatCdf".
    * @param {object[]} measurements
-   * @return {Promise<{floatPoint: number} | {floatCdf: {xs: number[], ys: number[]}} | null>}
+   * @return {Promise<{floatCdf: {xs: number[], ys: number[]}} | null>}
    */
   async aggregate(measurements) {
     const cdfs = measurements.filter((measurement) => {
@@ -56,8 +56,7 @@ class AggregationBot {
 
     if (cdfs.length === 0) return null;
 
-    // @todo: What's about the limit?
-    const combined = new CdfCombination(cdfs).combine(10);
+    const combined = new CdfCombination(cdfs).combine(config.CDF_COMBINE_SIZE);
 
     return {
       floatCdf: {

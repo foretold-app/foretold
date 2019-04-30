@@ -6,4 +6,5 @@ services:
     environment:
       - API_URL=http://chane-me/graphql
       - BOT_TOKEN=<change-me>
+      - CDF_COMBINE_SIZE=1000
 

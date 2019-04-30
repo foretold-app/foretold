@@ -1,4 +1,4 @@
-const { interpolate } = require('./functions');
+const { interpolate, range, min, max, random } = require('./functions');
 
 class Cdf {
   /**
@@ -47,23 +47,26 @@ class Cdf {
   /**
    * If xs=[1,2,3], and ys=[5,6,7],
    * then findY(1) = 5, findY(3) = 7, findY(1.5) = 5.5
-   * @param x
-   * @return {*}
+   * @param {number} x
+   * @return {number}
    */
   findY(x) {
-    let firstHigherIndex = this.xs.findIndex(X => X > x);
-    let lowerOrEqualXIndex = firstHigherIndex - 1;
-    let needsInterpolation = this.xs[lowerOrEqualXIndex] !== x;
+    let firstHigherIndex = this.xs.findIndex(X => X >= x);
+    if (firstHigherIndex < 0) return this.ys[this.ys.length - 1];
+    if (firstHigherIndex === 0) return this.ys[0];
+    let lowerOrEqualIndex = firstHigherIndex - 1;
+    if (lowerOrEqualIndex < 0) lowerOrEqualIndex = 0;
+    let needsInterpolation = this.xs[lowerOrEqualIndex] !== x;
     if (needsInterpolation) {
       return interpolate(
-        this.xs[lowerOrEqualXIndex],
+        this.xs[lowerOrEqualIndex],
         this.xs[firstHigherIndex],
-        this.ys[lowerOrEqualXIndex],
+        this.ys[lowerOrEqualIndex],
         this.ys[firstHigherIndex],
         x
       );
     } else {
-      return this.ys[lowerOrEqualXIndex];
+      return this.ys[lowerOrEqualIndex];
     }
   }
 
@@ -71,15 +74,17 @@ class Cdf {
    * If xs=[1,2,3], and ys=[5,6,7],
    * then findX(5) = 1, findX(7) = 3, findY(5.5) = 1.5
    * This should do the same thing as `findY`, but for Y.
-   * @param y
-   * @return {*}
+   * @param {number} y
+   * @return {number}
    */
   findX(y) {
-    let firstHigherIndex = this.ys.findIndex(Y => Y > y);
+    let firstHigherIndex = this.ys.findIndex(Y => Y >= y);
+    if (firstHigherIndex < 0) return this.xs[this.xs.length - 1];
+    if (firstHigherIndex === 0) return this.xs[0];
     let lowerOrEqualIndex = firstHigherIndex - 1;
+    if (lowerOrEqualIndex < 0) lowerOrEqualIndex = 0;
     let needsInterpolation = this.ys[lowerOrEqualIndex] !== y;
     if (needsInterpolation) {
-      // @todo: should we turn axes?
       return interpolate(
         this.ys[lowerOrEqualIndex],
         this.ys[firstHigherIndex],
@@ -114,7 +119,7 @@ class Cdf {
    * @return {number}
    */
   sampleSingle() {
-    const y = Math.random();
+    const y = random(min(this.ys), max(this.ys));
     return this.findX(y);
   }
 
@@ -124,7 +129,7 @@ class Cdf {
    * @return {number[]}
    */
   sample(size) {
-    return Array(size).map(() => this.sampleSingle());
+    return Array.from(Array(size), () => this.sampleSingle());
   }
 
   /**

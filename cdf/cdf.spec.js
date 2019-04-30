@@ -16,15 +16,23 @@ describe('CDF Class', () => {
   it('constructor()', () => {
     const xs = up(1, 9);
     const ys = up(1, 8);
-    expect(function () {
+    expect(() => {
       new Cdf(xs, ys);
     }).toThrow(/^Arrays of "xs" and "ys" have different sizes.$/);
   });
-  it('constructor()', () => {
+  it('order()', () => {
     const xs = down(9, 1);
     const ys = up(1, 9);
     const cdf = new Cdf(xs, ys);
     expect(cdf.xs).toEqual(up(1, 9));
     expect(cdf.ys).toEqual(down(9, 1));
+  });
+  it('findY()', () => {
+    const xs = [1, 2, 3];
+    const ys = [5, 6, 7];
+    const cdf = new Cdf(xs, ys);
+    expect(cdf.findY(1)).toEqual(5);
+    expect(cdf.findY(3)).toEqual(7);
+    expect(cdf.findY(1.5)).toEqual(5.5);
   });
 });

@@ -47,24 +47,24 @@ class Cdf {
   /**
    * If xs=[1,2,3], and ys=[5,6,7],
    * then findY(1) = 5, findY(3) = 7, findY(1.5) = 5.5
-   * @param x
-   * @return {*}
+   * @param {number} x
+   * @return {number}
    */
   findY(x) {
     let firstHigherIndex = this.xs.findIndex(X => X >= x);
-    let lowerOrEqualXIndex = firstHigherIndex - 1;
-    if (lowerOrEqualXIndex < 0) lowerOrEqualXIndex = 0;
-    let needsInterpolation = this.xs[lowerOrEqualXIndex] !== x;
+    let lowerOrEqualIndex = firstHigherIndex - 1;
+    if (lowerOrEqualIndex < 0) lowerOrEqualIndex = 0;
+    let needsInterpolation = this.xs[lowerOrEqualIndex] !== x;
     if (needsInterpolation) {
       return interpolate(
-        this.xs[lowerOrEqualXIndex],
+        this.xs[lowerOrEqualIndex],
         this.xs[firstHigherIndex],
-        this.ys[lowerOrEqualXIndex],
+        this.ys[lowerOrEqualIndex],
         this.ys[firstHigherIndex],
         x
       );
     } else {
-      return this.ys[lowerOrEqualXIndex];
+      return this.ys[lowerOrEqualIndex];
     }
   }
 
@@ -72,15 +72,15 @@ class Cdf {
    * If xs=[1,2,3], and ys=[5,6,7],
    * then findX(5) = 1, findX(7) = 3, findY(5.5) = 1.5
    * This should do the same thing as `findY`, but for Y.
-   * @param y
-   * @return {*}
+   * @param {number} y
+   * @return {number}
    */
   findX(y) {
-    let firstHigherIndex = this.ys.findIndex(Y => Y > y);
+    let firstHigherIndex = this.ys.findIndex(Y => Y >= y);
     let lowerOrEqualIndex = firstHigherIndex - 1;
+    if (lowerOrEqualIndex < 0) lowerOrEqualIndex = 0;
     let needsInterpolation = this.ys[lowerOrEqualIndex] !== y;
     if (needsInterpolation) {
-      // @todo: should we turn axes?
       return interpolate(
         this.ys[lowerOrEqualIndex],
         this.ys[firstHigherIndex],

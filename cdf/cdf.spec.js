@@ -35,4 +35,12 @@ describe('CDF Class', () => {
     expect(cdf.findY(3)).toEqual(7);
     expect(cdf.findY(1.5)).toEqual(5.5);
   });
+  it('findX()', () => {
+    const xs = [1, 2, 3];
+    const ys = [5, 6, 7];
+    const cdf = new Cdf(xs, ys);
+    expect(cdf.findX(5)).toEqual(1);
+    expect(cdf.findX(7)).toEqual(3);
+    expect(cdf.findX(5.5)).toEqual(1.5);
+  });
 });

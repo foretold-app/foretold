@@ -56,6 +56,7 @@ class AggregationBot {
 
     if (cdfs.length === 0) return null;
 
+    // @todo: What's about the limit?
     const combined = new CdfCombination(cdfs).combine(10);
 
     return {

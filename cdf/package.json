@@ -18,7 +18,7 @@
     "cdf",
     "javascript",
     "prediction",
-    "trands"
+    "trends"
   ],
   "jest": {
     "restoreMocks": true,

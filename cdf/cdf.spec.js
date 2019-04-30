@@ -11,10 +11,10 @@ describe('CDF Class', () => {
   });
   it('order()', () => {
     const xs = down(9, 1);
-    const ys = up(1, 9);
+    const ys = down(9, 1);
     const cdf = new Cdf(xs, ys);
     expect(cdf.xs).toEqual(up(1, 9));
-    expect(cdf.ys).toEqual(down(9, 1));
+    expect(cdf.ys).toEqual(up(1, 9));
   });
   it('findY()', () => {
     const xs = [1, 2, 3];
@@ -34,24 +34,24 @@ describe('CDF Class', () => {
   });
   it('convertWithAlternativeXs() when "XS" within "xs"', () => {
     const xs = up(1, 9);
-    const ys = down(9, 1);
+    const ys = up(20, 28);
     const cdf = new Cdf(xs, ys);
     const XS = up(3, 7);
     const CDF = cdf.convertWithAlternativeXs(XS);
     expect(CDF.xs).toEqual([3, 4, 5, 6, 7]);
-    expect(CDF.ys).toEqual([7, 6, 5, 4, 3]);
+    expect(CDF.ys).toEqual([22, 23, 24, 25, 26]);
   });
   it('convertToNewLength()', () => {
     const xs = up(1, 9);
-    const ys = down(9, 1);
+    const ys = up(50, 58);
     const cdf = new Cdf(xs, ys);
     const CDF = cdf.convertToNewLength(3);
     expect(CDF.xs).toEqual([1, 5, 9]);
-    expect(CDF.ys).toEqual([9, 5, 1]);
+    expect(CDF.ys).toEqual([50, 54, 58]);
   });
   it('sample()', () => {
     const xs = up(1, 9);
-    const ys = down(9, 1);
+    const ys = up(70, 78);
     const cdf = new Cdf(xs, ys);
     const XS = cdf.sample(3);
     expect(Number.isInteger(XS[0])).toBe(true);

@@ -29,53 +29,32 @@ let agentSection = (e: Queries.Agent.agent) =>
 
 let component = ReasonReact.statelessComponent("AgentBots");
 
-let columns = [|
-  Antd.Table.TableProps.make_column(
-    ~title="Bot",
-    ~dataIndex="name",
-    ~key="name",
-    ~width=2,
-    ~render=
-      (~text, ~record, ~index) =>
-        <Foretold__Components__Link
-          linkType={Internal(AgentShow(record##agentId))}>
-          {record##name |> E.O.default("") |> ste}
-        </Foretold__Components__Link>,
-    (),
-  ),
-  Antd.Table.TableProps.make_column(
-    ~title="Description",
-    ~dataIndex="description",
-    ~key="name",
-    ~width=2,
-    ~render=
-      (~text, ~record, ~index) =>
-        record##description |> E.O.default("") |> ste,
-    (),
-  ),
-  Antd.Table.TableProps.make_column(
-    ~title="Bot Type",
-    ~dataIndex="competitorType",
-    ~key="competitorType",
-    ~width=2,
-    ~render=
-      (~text, ~record, ~index) =>
-        record##competitorType
-        |> Context.Primary.Bot.CompetitorType.toString
-        |> ste,
-    (),
-  ),
-  Antd.Table.TableProps.make_column(
-    ~title="Token",
-    ~dataIndex="jwt",
-    ~key="name",
-    ~width=2,
-    ~render=
-      (~text, ~record, ~index) =>
-        <Antd.Input value={record##jwt |> E.O.default("")} />,
-    (),
-  ),
-|];
+module Columns = {
+  type record = Context.Primary.Bot.t;
+  type column = Table.column(Context.Primary.Bot.t);
+  let nameColumn: column = {
+    name: "Name" |> ste,
+    render: (r: record) =>
+      switch (r.name, r.agent) {
+      | (Some(name), Some(agent)) =>
+        <Foretold__Components__Link linkType={Internal(AgentShow(agent.id))}>
+          {name |> ste}
+        </Foretold__Components__Link>
+      | _ => ReasonReact.null
+      },
+  };
+  let descriptionColumn: column = {
+    name: "Description" |> ste,
+    render: (r: record) => r.description |> E.O.default("") |> ste,
+  };
+
+  let tokenColumn: column = {
+    name: "Token" |> ste,
+    render: (r: record) => <Antd.Input value={r.jwt |> E.O.default("")} />,
+  };
+
+  let all = [|nameColumn, descriptionColumn, tokenColumn|];
+};
 
 let make = (~id: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
@@ -84,27 +63,7 @@ let make = (~id: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
       Queries.Bots.component(bots =>
         SLayout.LayoutConfig.make(
           ~head=agentSection(agent),
-          ~body=
-            <div>
-              {
-                let dataSource =
-                  bots
-                  |> E.A.fmap((b: Context.Primary.Bot.t) =>
-                       {
-                         "key": b.id,
-                         "description": b.description,
-                         "agentId":
-                           b.agent
-                           |> E.O.fmap((r: Context.Primary.Agent.t) => r.id)
-                           |> E.O.default(""),
-                         "name": b.name,
-                         "jwt": b.jwt,
-                         "competitorType": b.competitorType,
-                       }
-                     );
-                <Antd.Table columns dataSource size=`small />;
-              }
-            </div>,
+          ~body=Table.fromColumns(Columns.all, bots),
         )
         |> layout
       )

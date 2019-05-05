@@ -1,5 +1,3 @@
-open Rationale.Function.Infix;
-open Rationale.Option.Infix;
 open Utils;
 open Style.Grid;
 open Measurable__Index__Logic;
@@ -130,16 +128,16 @@ module LoadedAndUnselected = {
       </Div>
     </Div>;
 
-  let seriesList = (t: t) =>
-    <>
-      {"Series List" |> ste |> E.React.inH2}
-      {
-        C.SeriesCollection.SeriesCards.make(
-          t.channel.id,
-          filteredSeriesCollection(t),
-        )
-      }
-    </>;
+  /* let seriesList = (t: t) =>
+     <>
+       {"Series List" |> ste |> E.React.inH2}
+       {
+         C.SeriesCollection.SeriesCards.make(
+           t.channel.id,
+           filteredSeriesCollection(t),
+         )
+       }
+     </>; */
 
   let body = (t: t, send: SelectWithPaginationReducer.Types.send) => {
     let measurables =
@@ -151,7 +149,6 @@ module LoadedAndUnselected = {
       )
       |> E.O.toExn("");
     <>
-      {E.React.showIf(shouldShowSeriesCollection(t), seriesList(t))}
       <C.Measurables.BasicTable
         measurables
         showExtraData=true

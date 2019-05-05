@@ -1,6 +1,4 @@
-open Utils;
 open Foretold__GraphQL;
-open Rationale.Function.Infix;
 
 module Types = Measurable__Index__Logic;
 module Components = Measurable__Index__Components;

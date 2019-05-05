@@ -1,6 +1,5 @@
 open Utils;
 open Style.Grid;
-open Foretold__GraphQL;
 
 module Styles = {
   open Css;

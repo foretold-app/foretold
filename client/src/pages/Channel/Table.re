@@ -41,7 +41,9 @@ module Row = {
       <div className=Styles.row>
         {
           cells
-          |> E.A.fmap((r: ReasonReact.reactElement) => <Cell> r </Cell>)
+          |> E.A.fmapi((i, r: ReasonReact.reactElement) =>
+               <Cell key={i |> string_of_int}> r </Cell>
+             )
           |> ReasonReact.array
         }
       </div>,
@@ -58,9 +60,10 @@ let fromColumns = (columns: array(column('a)), rows: array('a)) =>
     <Row cells={columns |> E.A.fmap((c: column('a)) => c.name)} />
     {
       rows
-      |> E.A.fmap((r: 'a) =>
+      |> E.A.fmapi((i, r: 'a) =>
            <Row
              cells={columns |> E.A.fmap((c: column('a)) => c.render(r))}
+             key={i |> string_of_int}
            />
          )
       |> ReasonReact.array

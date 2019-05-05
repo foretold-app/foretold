@@ -1,5 +1,4 @@
 open Utils;
-open Rationale.Function.Infix;
 
 let component = ReasonReact.statelessComponent("EntityShow");
 

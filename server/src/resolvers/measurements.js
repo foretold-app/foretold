@@ -8,6 +8,10 @@ const data = require('../data');
  * @param {number} args.first
  * @param {string} args.measurableId
  * @param {string} args.agentId
+ * @param {object} args.findInDateRange
+ * @param {string} args.findInDateRange.startDate
+ * @param {string} args.findInDateRange.endDate
+ * @param {number} args.findInDateRange.spacedLimit
  * @param {string[]} args.competitorType
  * @param {Schema.Context} context
  * @param {object} info
@@ -20,6 +24,7 @@ async function all(root, args, context, info) {
     measurableId: _.get(args, 'measurableId'),
     agentId: _.get(args, 'agentId'),
     competitorType: _.get(args, 'competitorType'),
+    findInDateRange: _.get(args, 'findInDateRange'),
   };
   const pagination = {
     after: _.get(args, 'after'),

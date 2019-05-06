@@ -31,6 +31,15 @@ const measurementCreateInput = new graphql.GraphQLInputObjectType({
   }),
 });
 
+const measurementsInDateRangeInput = new graphql.GraphQLInputObjectType({
+  name: 'MeasurementsInDateRangeInput',
+  fields: () => ({
+    startDate: { type: graphql.GraphQLNonNull(DateType.default) },
+    endDate: { type: DateType.default },
+    spacedLimit: { type: graphql.GraphQLInt },
+  }),
+});
+
 // Output
 const measurementValueFloatCdf = new graphql.GraphQLObjectType({
   name: 'MeasurementValueFloatCdf',
@@ -107,4 +116,5 @@ module.exports = {
   measurementCreateInput,
   measurementsEdge,
   measurementsConnection,
+  measurementsInDateRangeInput,
 };

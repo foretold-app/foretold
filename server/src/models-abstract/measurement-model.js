@@ -26,6 +26,10 @@ class MeasurementModel extends ModelPostgres {
    * @return {Promise<{data: Models.Measurement[], total: number}>}
    */
   async getAll(filter, pagination, restrictions) {
+    const startDate = _.get(filter, 'findInDateRange.startDate');
+    const endDate = _.get(filter, 'findInDateRange.endDate');
+    const spacedLimit = _.get(filter, 'findInDateRange.spacedLimit');
+
     const where = {};
 
     this.applyRestrictions(where, restrictions);
@@ -35,6 +39,8 @@ class MeasurementModel extends ModelPostgres {
     if (filter.competitorType) where.competitorType = {
       [this.in]: filter.competitorType,
     };
+    if (startDate) _.set(where, ['createdAt', this.gte], startDate);
+    if (endDate) _.set(where, ['createdAt', this.lte], endDate);
 
     /** @type {number} */
     const total = await this.model.count({ where });

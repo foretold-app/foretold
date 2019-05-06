@@ -50,6 +50,7 @@ class MeasurementModel extends ModelPostgres {
     /** @type {Models.Measurement[]} */
     let data = await this.model.findAll(cond);
     data = this.setIndexes(data, edgePagination);
+    data.total = total;
 
     return { data, total };
   }

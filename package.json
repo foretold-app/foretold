@@ -8,6 +8,7 @@
         "npm": ">=6.4.0"
     },
     "scripts": {
+        "lerna": "lerna",
         "client/install": "cd client && npm install && cd ..",
         "client/build": "cd client && npm run build-t && cd ..",
         "client/serve": "cd client && npm run serve && cd ..",
@@ -23,5 +24,8 @@
         "postinstall": "npm run server/install && npm run server/db:migrate; npm run client/install && npm run client/build"
     },
     "author": "",
-    "license": "MIT"
+    "license": "MIT",
+    "devDependencies": {
+        "lerna": "^3.13.4"
+    }
 }

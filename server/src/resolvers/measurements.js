@@ -34,7 +34,6 @@ async function all(root, args, context, info) {
   };
   const options = { agentId };
   const result = await data.measurements.getAll(filter, pagination, options);
-  context.total = result.total;
   return result.data;
 }
 

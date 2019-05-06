@@ -58,6 +58,7 @@ class MeasurementModel extends ModelPostgres {
     /** @type {Models.Measurement[]} */
     let data = await this.model.findAll(cond);
     data = this.setIndexes(data, edgePagination);
+    data.total = total;
 
     // tricky
     if (spacedLimit) data = splitBy(data, spacedLimit);

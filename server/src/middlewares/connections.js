@@ -9,7 +9,7 @@ const _ = require('lodash');
  * @return {{total: *, pageInfo: {hasNextPage: boolean, hasPreviousPage: boolean, endCursor: *, startCursor: *}, edges: *}}
  */
 function connection(result, root, args, context, info) {
-  const total = context.total;
+  const total = _.get(result, 'total');
 
   const edges = result.map(node => ({ node, cursor: node.index }));
 

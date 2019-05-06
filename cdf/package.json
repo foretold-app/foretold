@@ -1,0 +1,34 @@
+{
+  "name": "foretold-cdf",
+  "version": "1.0.0",
+  "description": "Cumulative distribution function example",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --watch",
+    "test:cv": "jest --coverage --forceExit",
+    "test:ci": "jest --forceExit"
+  },
+  "author": "Ozzie Gooen",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^24.7.1"
+  },
+  "keywords": [
+    "foretold",
+    "cdf",
+    "javascript",
+    "prediction",
+    "trends"
+  ],
+  "jest": {
+    "restoreMocks": true,
+    "clearMocks": true,
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/manuals/"
+    ],
+    "setupFiles": [
+      "./jest-globals.js"
+    ]
+  }
+}

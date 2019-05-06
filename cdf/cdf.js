@@ -119,7 +119,7 @@ class Cdf {
    * @return {number}
    */
   sampleSingle() {
-    const y = random(min(this.ys), max(this.ys));
+    const y = Math.random();
     return this.findX(y);
   }
 

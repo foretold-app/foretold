@@ -83,7 +83,7 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
                     r.channel
                   )
                |> E.A.O.concatSomes
-               |> E.A.fmap((channel: Context.Primary.Channel.t) => {
+               |> E.A.fmapi((i, channel: Context.Primary.Channel.t) => {
                     let _channel: Context.Primary.Channel.t =
                       Context.Primary.Channel.make(
                         ~id=channel.id,
@@ -93,6 +93,7 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
                         (),
                       );
                     <C.Link
+                      key={i |> string_of_int}
                       linkType={
                         Internal(Context.Primary.Channel.showLink(_channel))
                       }

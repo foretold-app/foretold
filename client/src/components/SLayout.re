@@ -1,6 +1,4 @@
 open Utils;
-open Style.Grid;
-open Rationale.Function.Infix;
 
 module Styles = {
   open Css;

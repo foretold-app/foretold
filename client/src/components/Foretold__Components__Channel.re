@@ -3,15 +3,14 @@ open Style.Grid;
 
 module SimpleHeader = {
   module Styles = {
-    open Css;
     let header =
-      style([
-        paddingLeft(`px(10)),
-        paddingBottom(`em(0.8)),
-        paddingRight(`em(0.4)),
-        paddingTop(`px(10)),
-        float(`left),
-        width(`percent(100.)),
+      Css.style([
+        Css.paddingLeft(`px(10)),
+        Css.paddingBottom(`em(0.8)),
+        Css.paddingRight(`em(0.4)),
+        Css.paddingTop(`px(10)),
+        Css.float(`left),
+        Css.width(`percent(100.)),
       ]);
   };
 

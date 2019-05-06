@@ -44,8 +44,10 @@ let dateItem = (~m: measurable, ~showOn=true, ~onStyle=dateOnStyle, ()) =>
   | (Some(e), true) =>
     Some(
       [|
-        <span className=onStyle> {"on " |> ste} </span>,
-        <span className=Shared.TagLink.dateItem> {e |> ste} </span>,
+        <span className=onStyle key="on"> {"on " |> ste} </span>,
+        <span className=Shared.TagLink.dateItem key="dateItem">
+          {e |> ste}
+        </span>,
       |]
       |> ReasonReact.array,
     )

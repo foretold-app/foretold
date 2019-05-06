@@ -1,4 +1,3 @@
-open Utils;
 type measurable = Context.Primary.Measurable.t;
 let graph = Data.make;
 

@@ -1,6 +1,3 @@
-open Rationale.Function.Infix;
-open Utils;
-
 module KeyValuePairs = {
   type t = {
     key: string,

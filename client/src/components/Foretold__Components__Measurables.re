@@ -1,5 +1,3 @@
-open Utils;
-open Foretold__GraphQL;
 module Items = Foretold__Components__Measurable__Items;
 module SeriesTable = Foretold__Components__Measurables__SeriesTable;
 
@@ -68,7 +66,6 @@ module BasicTable = {
           {
             measurables
             |> E.A.fmap((m: Context.Primary.Measurable.t) => {
-                 open Rationale.Option.Infix;
                  let iAmOwner = m.iAmOwner == Some(true);
                  <div
                    className={Styles.row(m)}

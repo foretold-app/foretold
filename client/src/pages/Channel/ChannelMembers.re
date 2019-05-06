@@ -1,174 +1,140 @@
 open Utils;
-open E;
-open Css;
-open SLayout;
 open Foretold__GraphQL;
 
 let ste = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("ChannelMembers");
 
-type columnRecord = {
-  .
-  "agentId": string,
-  "agentName": string,
-  "key": string,
-  "permissions": option(Context.Primary.Types.permissions),
-  "role": string,
-};
+let changeRoleAction = (agentId, channelId, role, text) =>
+  Foretold__GraphQL.Mutations.ChannelMembershipRoleUpdate.Mutation.make(
+    (mutation, _) =>
+    <Foretold__Components__Link
+      linkType={
+        Action(
+          _ =>
+            Foretold__GraphQL.Mutations.ChannelMembershipRoleUpdate.mutate(
+              mutation,
+              ~agentId,
+              ~channelId,
+              ~role,
+            ),
+        )
+      }>
+      {text |> ste}
+    </Foretold__Components__Link>
+  )
+  |> E.React.el;
 
-let canX = (x, record: columnRecord) =>
-  record##permissions
-  |> E.O.fmap(r => Context.Primary.Permissions.canX(x, r))
-  |> E.O.default(false);
+let removeFromChannel = (agentId, channelId) =>
+  Foretold__GraphQL.Mutations.ChannelMembershipDelete.Mutation.make(
+    (mutation, _) =>
+    <Foretold__Components__Link
+      linkType={
+        Action(
+          _ =>
+            Foretold__GraphQL.Mutations.ChannelMembershipDelete.mutate(
+              mutation,
+              agentId,
+              channelId,
+            ),
+        )
+      }>
+      {"Remove" |> ste}
+    </Foretold__Components__Link>
+  )
+  |> E.React.el;
 
-let make =
-    (~channelId: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
-  ...component,
-  render: _ => {
-    let changeRoleAction = (agentId, channelId, role, text) =>
-      Foretold__GraphQL.Mutations.ChannelMembershipRoleUpdate.Mutation.make(
-        (mutation, _) =>
-        <a
-          href=""
-          onClick={
-            _ =>
-              Foretold__GraphQL.Mutations.ChannelMembershipRoleUpdate.mutate(
-                mutation,
-                ~agentId,
-                ~channelId,
-                ~role,
-              )
-          }>
-          {text |> ste}
-        </a>
-      )
-      |> E.React.el;
+module Columns = {
+  type column = Table.column(Context.Primary.Types.channelMembership);
+  let canX = (x, record: Context.Primary.Types.channelMembership) =>
+    record.permissions
+    |> E.O.fmap(r => Context.Primary.Permissions.canX(x, r))
+    |> E.O.default(false);
 
-    let removeFromChannel = (agentId, channelId) =>
-      Foretold__GraphQL.Mutations.ChannelMembershipDelete.Mutation.make(
-        (mutation, _) =>
-        <a
-          href=""
-          onClick={
-            _ =>
-              Foretold__GraphQL.Mutations.ChannelMembershipDelete.mutate(
-                mutation,
-                agentId,
-                channelId,
-              )
-          }>
-          {"Remove" |> ste}
-        </a>
-      )
-      |> E.React.el;
+  let agentColumn: column = {
+    name: "Agent" |> ste,
+    render: m =>
+      m.agent
+      |> E.O.fmap((r: Context.Primary.Types.agent) =>
+           <Foretold__Components__Link linkType={Internal(AgentShow(r.id))}>
+             {r.name |> E.O.default("Anonymous") |> ste}
+           </Foretold__Components__Link>
+         )
+      |> E.O.React.defaultNull,
+  };
 
-    let columns = [|
-      Antd.Table.TableProps.make_column(
-        ~title="Agent",
-        ~dataIndex="agent",
-        ~key="agent",
-        ~width=2,
-        ~render=
-          (~text, ~record, ~index) =>
-            <a
-              onClick={
-                _ => Context.Routing.Url.push(AgentShow(record##agentId))
-              }
-              href="">
-              {record##agentName |> ste}
-            </a>,
-        (),
-      ),
-      Antd.Table.TableProps.make_column(
-        ~title="Role",
-        ~dataIndex="role",
-        ~key="role",
-        ~width=2,
-        ~render=
-          (~text, ~record, ~index) =>
-            switch (record##role) {
-            | "Viewer" =>
-              <div className="ant-tag ant-tag-green"> {"Viewer" |> ste} </div>
-            | "Admin" =>
-              <div className="ant-tag ant-tag-blue"> {"Admin" |> ste} </div>
-            | _ => <div />
-            },
-        (),
-      ),
-      Antd.Table.TableProps.make_column(
-        ~title="Change Role",
-        ~dataIndex="role",
-        ~key="actions",
-        ~width=2,
-        ~render=
-          (~text, ~record, ~index) =>
-            switch (record##role) {
-            | "Viewer" =>
+  let roleColumn: column = {
+    name: "Role" |> ste,
+    render: m =>
+      switch (m.role) {
+      | `ADMIN =>
+        <div className="ant-tag ant-tag-green"> {"Viewer" |> ste} </div>
+      | `VIEWER =>
+        <div className="ant-tag ant-tag-blue"> {"Admin" |> ste} </div>
+      },
+  };
+
+  let roleChangeColumn: string => column =
+    channelId => {
+      name: "Change Role" |> ste,
+      render: m =>
+        <div>
+          {
+            switch (m.role, m.agent) {
+            | (`VIEWER, Some(agent)) =>
               E.React.showIf(
-                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, record),
+                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
                 changeRoleAction(
-                  record##agentId,
+                  agent.id,
                   channelId,
                   `ADMIN,
                   "Change to Admin",
                 ),
               )
-            | "Admin" =>
+            | (`ADMIN, Some(agent)) =>
               E.React.showIf(
-                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, record),
+                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
                 changeRoleAction(
-                  record##agentId,
+                  agent.id,
                   channelId,
                   `VIEWER,
                   "Change to Viewer",
                 ),
               )
             | _ => <div />
-            },
-        (),
-      ),
-      Antd.Table.TableProps.make_column(
-        ~title="Remove",
-        ~dataIndex="role",
-        ~key="actions2",
-        ~width=2,
-        ~render=
-          (~text, ~record, ~index) =>
-            E.React.showIf(
-              canX(`CHANNEL_MEMBERSHIP_DELETE, record),
-              removeFromChannel(record##agentId, channelId),
-            ),
-        (),
-      ),
-    |];
+            }
+          }
+        </div>,
+    };
 
+  let removeFromChannelColumn: string => column =
+    channelId => {
+      name: "Remove" |> ste,
+      render: m =>
+        switch (m.agent, canX(`CHANNEL_MEMBERSHIP_DELETE, m)) {
+        | (Some(agent), true) => removeFromChannel(agent.id, channelId)
+        | _ => ReasonReact.null
+        },
+    };
+
+  let all = channelId => [|
+    agentColumn,
+    roleColumn,
+    roleChangeColumn(channelId),
+    removeFromChannelColumn(channelId),
+  |];
+};
+
+let make =
+    (~channelId: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
+  ...component,
+  render: _ => {
     let table =
       Queries.ChannelMemberships.component(~id=channelId, memberships =>
         memberships
-        |> E.HttpResponse.fmap(memberships => {
-             let dataSource =
-               memberships
-               |> E.A.fmap((r: Context.Primary.Types.channelMembership) =>
-                    {
-                      "key":
-                        r.agent
-                        |> E.O.fmap((r: Context.Primary.Types.agent) => r.id)
-                        |> E.O.default(""),
-                      "agentName":
-                        r.agent |> E.O.bind(_, r => r.name) |> E.O.default(""),
-                      "permissions": r.permissions,
-                      "agentId":
-                        r.agent
-                        |> E.O.fmap((r: Context.Primary.Types.agent) => r.id)
-                        |> E.O.default(""),
-                      "role":
-                        r.role
-                        |> Context.Primary.ChannelMembershipRole.toString,
-                    }
-                  );
-             <Antd.Table columns dataSource size=`small />;
-           })
+        |> E.HttpResponse.fmap(memberships =>
+             Table.fromColumns(Columns.all(channelId), memberships)
+           )
         |> E.HttpResponse.withReactDefaults
       );
 

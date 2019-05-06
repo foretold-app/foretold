@@ -1,5 +1,4 @@
 open Utils;
-open Foretold__GraphQL;
 open Rationale.Function.Infix;
 open Rationale.Option.Infix;
 
@@ -9,7 +8,7 @@ module type Config = {
   type itemType;
   let isEqual: (itemType, itemType) => bool;
   let getId: itemType => string;
-  type callFnParams = string;
+  type callFnParams;
   let callFn:
     (
       callFnParams,
@@ -159,6 +158,30 @@ module Make = (Config: Config) => {
         |> pageIndex
         |> E.O.fmap(r => itemExistsAtIndex(t, r + 1))
         |> E.O.default(false);
+
+      let totalItems = (t: t) =>
+        switch (t.response) {
+        | Success(m) => m.total
+        | _ => None
+        };
+
+      let lowerBoundIndex = (t: t) =>
+        switch (t.response) {
+        | Success(m) => m.pageInfo.startCursor |> E.O.fmap(int_of_string)
+        | _ => None
+        };
+
+      let upperBoundIndex = (t: t) =>
+        switch (t.response) {
+        | Success(m) => m.pageInfo.endCursor |> E.O.fmap(int_of_string)
+        | _ => None
+        };
+
+      let selectionIndex = (t: t) =>
+        switch (pageIndex(t), lowerBoundIndex(t)) {
+        | (Some(page), Some(lower)) => Some(page + lower)
+        | _ => None
+        };
     };
 
     module ItemUnselected = {
@@ -212,7 +235,7 @@ module Make = (Config: Config) => {
           userSelect(`none),
         ];
         let enabledOnlyStyles = [
-          color(`hex("a3abb6")),
+          color(`hex("838383")),
           cursor(`pointer),
           selector(
             ":hover",
@@ -229,7 +252,7 @@ module Make = (Config: Config) => {
     let pageButton' = (facesRight: bool, action, canMove, params) =>
       <div
         className={Styles.header(~isDisabled=!canMove(params))}
-        onClick={_ => params.send(action)}
+        onClick={_ => canMove(params) ? params.send(action) : ()}
         disabled={!canMove(params)}>
         <Icon.Icon icon={facesRight ? "CHEVRON_RIGHT" : "CHEVRON_LEFT"} />
       </div>;
@@ -271,6 +294,24 @@ module Make = (Config: Config) => {
       switch (params.selection) {
       | Some(_) => buttonDuo(Item, params)
       | None => buttonDuo(Page, params)
+      };
+
+    let rangeOfX = (t: Types.reducerParams) =>
+      switch (totalItems(t), upperBoundIndex(t), lowerBoundIndex(t)) {
+      | (Some(count), Some(upper), Some(lower)) =>
+        string_of_int(lower + 1)
+        ++ "-"
+        ++ string_of_int(upper + 1)
+        ++ " of "
+        ++ string_of_int(count)
+      | _ => ""
+      };
+
+    let selectionOfX = (t: Types.reducerParams) =>
+      switch (totalItems(t), selectionIndex(t)) {
+      | (Some(count), Some(selection)) =>
+        string_of_int(selection + 1) ++ " of " ++ string_of_int(count)
+      | _ => ""
       };
 
     let findIndexOfId = (t: Types.reducerParams, id: string) =>

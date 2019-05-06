@@ -1,7 +1,4 @@
-open Utils;
-open Foretold__GraphQL;
-
-let make' = (loggedInUser, measurables) =>
+let make' = (_, measurables) =>
   <C.Measurables.BasicTable measurables showExtraData=true />;
 
 module GetMeasurablesReducerConfig = {
@@ -34,7 +31,7 @@ let make =
       lmake(
         ~head=
           switch (selectWithPaginationParams.selection) {
-          | Some(selection) =>
+          | Some(_selection) =>
             <>
               {
                 SelectWithPaginationReducer.Components.deselectButton(
@@ -55,7 +52,6 @@ let make =
                 )
               }
             </>
-          | _ => <div />
           },
         ~body=
           switch (

@@ -36,6 +36,31 @@ let table =
   ]);
 
 let nameS = style([fontWeight(`black), fontSize(`em(1.2))]);
+
+module Columns = {
+  type record = Context.Primary.Channel.t;
+  type column = Table.column(Context.Primary.Channel.t);
+  let nameColumn: column = {
+    name: "Name" |> ste,
+    render: (r: record) =>
+      <Foretold__Components__Link linkType={Internal(ChannelShow(r.id))}>
+        {r.name |> ste}
+      </Foretold__Components__Link>,
+  };
+  let descriptionColumn: column = {
+    name: "Description" |> ste,
+    render: (r: record) => r.description |> E.O.default("") |> ste,
+  };
+
+  let memberCountColumn: column = {
+    name: "Members" |> ste,
+    render: (r: record) =>
+      r.membershipCount |> E.O.fmap(string_of_int) |> E.O.default("") |> ste,
+  };
+
+  let all = [|nameColumn, descriptionColumn, memberCountColumn|];
+};
+
 let make =
     (
       ~loggedInUser: Context.Primary.User.t,
@@ -44,92 +69,11 @@ let make =
     ) => {
   ...component,
   render: _ =>
-    Queries.Channels.component(channels => {
-      let columns = [|
-        Antd.Table.TableProps.make_column(
-          ~title="Channel",
-          ~dataIndex="id",
-          ~key="channelName",
-          ~width=2,
-          ~render=
-            (~text, ~record, ~index) =>
-              <a
-                onClick={
-                  _ => Context.Routing.Url.push(ChannelShow(record##id))
-                }>
-                {record##name |> ste}
-              </a>,
-          (),
-        ),
-        Antd.Table.TableProps.make_column(
-          ~title="Description",
-          ~dataIndex="description",
-          ~key="description",
-          ~width=2,
-          ~render=(~text, ~record, ~index) => record##description |> ste,
-          (),
-        ),
-        Antd.Table.TableProps.make_column(
-          ~title="Members",
-          ~dataIndex="count",
-          ~key="membersCount",
-          ~width=10,
-          ~render=
-            (~text, ~record, ~index) =>
-              record##count
-              |> E.O.fmap(string_of_int)
-              |> E.O.default("")
-              |> ste,
-          (),
-        ),
-        Antd.Table.TableProps.make_column(
-          ~title="Join",
-          ~dataIndex="name",
-          ~key="join",
-          ~width=1,
-          ~render=
-            (~text, ~record, ~index) =>
-              loggedInUser
-              |> (r => r.agent)
-              |> E.O.fmap((agent: Context.Primary.Agent.t) =>
-                   Foretold__GraphQL.Mutations.ChannelJoin.Mutation.make(
-                     (mutation, _) =>
-                     <Antd.Button
-                       _type=`primary
-                       onClick={
-                         _ =>
-                           Foretold__GraphQL.Mutations.ChannelJoin.mutate(
-                             mutation,
-                             record##id,
-                           )
-                       }>
-                       {"Join" |> ste}
-                     </Antd.Button>
-                   )
-                   |> E.React.el
-                 )
-              |> E.O.React.defaultNull,
-          (),
-        ),
-      |];
-
-      let dataSource =
-        channels
-        |> E.A.fmap((r: Context.Primary.Channel.t) =>
-             {
-               "key": r.id,
-               "id": r.id,
-               "name": r.name,
-               "description": r.description |> E.O.default(""),
-               "count": r.membershipCount,
-             }
-           );
-
+    Queries.Channels.component(channels =>
       SLayout.LayoutConfig.make(
         ~head=SLayout.Header.textDiv("Channels"),
-        ~body=
-          <div> <br /> <Antd.Table columns dataSource size=`small /> </div>,
+        ~body=<div> <br /> {Table.fromColumns(Columns.all, channels)} </div>,
       )
-      |> layout;
-    }),
+      |> layout
+    ),
 };

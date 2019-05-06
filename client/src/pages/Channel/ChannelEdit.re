@@ -1,6 +1,3 @@
-open Utils;
-open Antd;
-open MomentRe;
 open Rationale.Function.Infix;
 
 let ste = ReasonReact.string;

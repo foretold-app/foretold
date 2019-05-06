@@ -1,15 +1,11 @@
 open Utils;
 open Style.Grid;
-open Foretold__GraphQL;
 
-/* border: 1px solid #dcdcdc;
-       box-shadow: 1px 1px 5px #ede6e6;
-   } */
 module Styles = {
   open Css;
   let outer =
     style([
-      padding2(~v=`em(1.5), ~h=`em(2.)),
+      padding2(~v=`em(1.0), ~h=`em(2.)),
       float(`left),
       backgroundColor(`rgb((255, 255, 255))),
       width(`percent(100.)),
@@ -33,68 +29,48 @@ module Styles = {
     ]);
 };
 
-let foo: ReasonReact.reactElement = "sdf" |> ste;
-
 let component = ReasonReact.statelessComponent("Header");
 
 let action = Layout__Dropdown.Styles.action;
-let bar = agentId =>
-  <>
-    <div onClick={_ => Context.Routing.Url.push(Profile)} className=action>
-      {"Profile" |> ste}
-    </div>
-    <div
-      onClick={_ => Context.Routing.Url.push(AgentMeasurables(agentId))}
-      className=action>
-      {"My Questions" |> ste}
-    </div>
-    <div
-      onClick={_ => Context.Routing.Url.push(AgentBots(agentId))}
-      className=action>
-      {"My Bots" |> ste}
-    </div>
-    <div
-      onClick={_ => Context.Routing.Url.push(AgentShow(agentId))}
-      className=action>
-      {"My Predictions" |> ste}
-    </div>
-    <div
-      onClick={_e => Context.Routing.Url.push(ChannelNew)} className=action>
-      {"Make a New Channel" |> ste}
-    </div>
-    <div onClick={_ => Context.Auth.Actions.logout()} className=action>
-      {"Log Out" |> ste}
-    </div>
-  </>;
+
+let link = (linkType: C.Link.linkType, str) =>
+  <C.Link linkType className=action> {str |> ste} </C.Link>;
+
+let userDropdown = agentId =>
+  <div className=Layout__Dropdown.Styles.actions>
+    {link(Internal(Profile), "Profile")}
+    {link(Internal(AgentMeasurables(agentId)), "My Questions")}
+    {link(Internal(AgentBots(agentId)), "My Bots")}
+    {link(Internal(AgentShow(agentId)), "My Predictions")}
+    {link(Internal(ChannelNew), "Make a new Channel")}
+    {link(Action(_ => Context.Auth.Actions.logout()), "Logout")}
+  </div>;
 
 let header = (loggedInUser: Context.Primary.User.t) =>
   switch (loggedInUser.agent) {
   | Some((agent: Context.Primary.Types.agent)) =>
     <AntdDropdown
-      overlay={bar(agent.id)}
+      overlay={userDropdown(agent.id)}
       overlayClassName=Layout__Dropdown.Styles.dropdown>
       {agent.name |> E.O.default("") |> ste}
       <Icon.Icon icon="CHEVRON_DOWN" />
     </AntdDropdown>
   | None => ReasonReact.null
   };
+
 let make = (~loggedInUser: Context.Primary.User.t, _children) => {
   ...component,
   render: _self =>
     <Div styles=[Styles.outer]>
       <Div float=`left>
-        <div
-          onClick={_e => Context.Routing.Url.push(ChannelIndex)}
-          className=Styles.headerLink>
+        <C.Link linkType={Internal(ChannelIndex)} className=Styles.headerLink>
           {"Public Channels" |> ste}
-        </div>
+        </C.Link>
       </Div>
       <Div float=`left>
-        <div
-          onClick={_e => Context.Routing.Url.push(EntityIndex)}
-          className=Styles.headerLink>
+        <C.Link linkType={Internal(EntityIndex)} className=Styles.headerLink>
           {"Entity Explorer" |> ste}
-        </div>
+        </C.Link>
       </Div>
       <Div float=`right> {header(loggedInUser)} </Div>
     </Div>,

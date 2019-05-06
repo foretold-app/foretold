@@ -1,5 +1,3 @@
-open Utils;
-open Foretold__GraphQL;
 module Items = Foretold__Components__Measurable__Items;
 module SeriesTable = Foretold__Components__Measurables__SeriesTable;
 
@@ -14,9 +12,7 @@ module Styles = {
   let row = m => {
     let statusOpacity = (measurable: Context.Primary.Measurable.t) => {
       let state = measurable.state |> E.O.toExn("Needs state from GraphQL");
-      if (state === `ARCHIVED) {
-        0.8;
-      } else if (state === `JUDGED) {
+      if (state === `JUDGED) {
         0.55;
       } else {
         1.0;
@@ -39,7 +35,7 @@ module Styles = {
     ]);
   };
   let mainColumn =
-    style([flex(5), display(`flex), flexDirection(`column)]);
+    style([flex(4), display(`flex), flexDirection(`column)]);
 
   let mainColumnTop =
     style([
@@ -70,7 +66,6 @@ module BasicTable = {
           {
             measurables
             |> E.A.fmap((m: Context.Primary.Measurable.t) => {
-                 open Rationale.Option.Infix;
                  let iAmOwner = m.iAmOwner == Some(true);
                  <div
                    className={Styles.row(m)}

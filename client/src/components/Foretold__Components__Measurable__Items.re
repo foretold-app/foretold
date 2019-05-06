@@ -14,9 +14,11 @@ module MeasurableEntityLinks = {
          m
          |> attribute
          |> E.O.fmap(d =>
-              <a href={d |> Foretold__Components__Ken.itemUrl} className>
+              <Foretold__Components__Link
+                linkType={External(d |> Foretold__Components__Ken.itemUrl)}
+                className>
                 {r |> ste}
-              </a>
+              </Foretold__Components__Link>
             )
        );
 
@@ -42,8 +44,10 @@ let dateItem = (~m: measurable, ~showOn=true, ~onStyle=dateOnStyle, ()) =>
   | (Some(e), true) =>
     Some(
       [|
-        <span className=onStyle> {"on " |> ste} </span>,
-        <span className=Shared.TagLink.dateItem> {e |> ste} </span>,
+        <span className=onStyle key="on"> {"on " |> ste} </span>,
+        <span className=Shared.TagLink.dateItem key="dateItem">
+          {e |> ste}
+        </span>,
       |]
       |> ReasonReact.array,
     )
@@ -94,20 +98,19 @@ let endpointResponse = (~m: measurable) =>
 let creatorLink = (~m: measurable) =>
   m.creator
   |> E.O.fmap((c: Agent.t) =>
-       <div className=Shared.Item.item>
-         <a href={Context.Routing.Url.toString(AgentShow(c.id))}>
-           {c.name |> E.O.default("") |> ste}
-         </a>
-       </div>
+       <Foretold__Components__Link
+         linkType={Internal(AgentShow(c.id))} className=Shared.Item.item>
+         {c.name |> E.O.default("") |> ste}
+       </Foretold__Components__Link>
      );
 
 let editLink = (~m: measurable) =>
   <div className=Shared.Item.item>
-    <a
-      href={Context.Routing.Url.toString(MeasurableEdit(m.id))}
+    <Foretold__Components__Link
+      linkType={Internal(MeasurableEdit(m.id))}
       className={Shared.Item.itemButton(NORMAL)}>
       {"Edit" |> ste}
-    </a>
+    </Foretold__Components__Link>
   </div>;
 
 let measurements = (~m: measurable) =>
@@ -143,15 +146,13 @@ let series = (~m: measurable) =>
        | Some(name) =>
          Some(
            <div className=Shared.Item.item>
-             <Icon.Icon icon="LAYERS" />
-             <a
-               href={
-                 Context.Routing.Url.toString(
-                   SeriesShow(m.channel |> E.O.default(""), r.id),
-                 )
+             <Foretold__Components__Link
+               linkType={
+                 Internal(SeriesShow(m.channel |> E.O.default(""), r.id))
                }>
+               <Icon.Icon icon="LAYERS" />
                {name |> ste}
-             </a>
+             </Foretold__Components__Link>
            </div>,
          )
        | None => None

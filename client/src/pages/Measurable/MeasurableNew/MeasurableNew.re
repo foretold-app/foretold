@@ -1,7 +1,3 @@
-open Utils;
-open Antd;
-open MomentRe;
-
 let ste = ReasonReact.string;
 
 module CreateMeasurableMutation = {

@@ -1,5 +1,3 @@
-open MomentRe;
-
 type user = {
   id: string,
   name: string,
@@ -158,7 +156,6 @@ type response = {
 };
 
 let component = (~id, innerFn) => {
-  open Rationale.Result.Infix;
   open Utils;
   let notFound = "Agent not found" |> ste;
   let query = Query.make(~id, ());

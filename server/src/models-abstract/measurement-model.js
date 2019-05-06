@@ -1,6 +1,8 @@
 const _ = require('lodash');
 
 const models = require('../models');
+const { splitBy } = require('../lib/functions');
+
 const { ModelPostgres } = require('./model-postgres');
 
 /**
@@ -56,6 +58,9 @@ class MeasurementModel extends ModelPostgres {
     /** @type {Models.Measurement[]} */
     let data = await this.model.findAll(cond);
     data = this.setIndexes(data, edgePagination);
+
+    // tricky
+    if (spacedLimit) data = splitBy(data, spacedLimit);
 
     return { data, total };
   }

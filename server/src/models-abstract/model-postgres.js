@@ -19,7 +19,9 @@ class ModelPostgres extends Model {
     this.Op = this.sequelize.Op;
     this.in = this.sequelize.Op.in;
     this.gt = this.sequelize.Op.gt;
+    this.gte = this.sequelize.Op.gte;
     this.lt = this.sequelize.Op.lt;
+    this.lte = this.sequelize.Op.lte;
     this.and = this.sequelize.Op.and;
     this.fn = this.sequelize.fn;
     this.col = this.sequelize.col;

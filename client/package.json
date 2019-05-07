@@ -1,5 +1,5 @@
 {
-  "name": "prediction-client",
+  "name": "@foretold/client",
   "version": "0.2.0",
   "scripts": {
     "build-bsb": "bsb -make-world",

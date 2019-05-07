@@ -75,6 +75,8 @@ async function create(root, args, context, info) {
 async function latest(root, args, context, info) {
   const measurable = root;
   const agentId = args.resultOrLatestMeasurementForAgentId;
+  if (!measurable) return null;
+  if (!agentId) return null;
   return await data.measurements.getLatest({
     measurable,
     agentId,

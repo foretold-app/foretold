@@ -8,7 +8,6 @@ type dateDisplay =
 type status =
   | OPEN
   | PENDING_REVIEW
-  | ARCHIVED
   | JUDGED;
 
 let statusColor = (~measurable: Context.Primary.Measurable.t) => {
@@ -19,7 +18,6 @@ let statusColor = (~measurable: Context.Primary.Measurable.t) => {
     | `OPEN => [background(`hex("bff5bd"))]
     | `JUDGEMENT_PENDING => [background(`hex("fff8da"))]
     | `JUDGED => [background(`hex("ead7f3"))]
-    | `ARCHIVED => [background(`hex("cccccc"))]
     };
   style([main, statusSpecific] |> E.L.concat);
 };
@@ -71,13 +69,6 @@ let statusShow = (~measurable: Context.Primary.Measurable.t, ~dateDisplay) =>
       "Judgement Pending",
       "Pending since ",
       measurable.expectedResolutionDate,
-      dateDisplay,
-    )
-  | `ARCHIVED =>
-    dateFinder(
-      "Archived",
-      "Archived on ",
-      measurable.stateUpdatedAt,
       dateDisplay,
     )
   | `JUDGED =>

@@ -1,5 +1,3 @@
-open Utils;
-
 module Query = [%graphql
   {|
     query getChannels {

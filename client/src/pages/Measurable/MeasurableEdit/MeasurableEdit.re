@@ -1,6 +1,4 @@
-open Utils;
 open Foretold__GraphQL;
-open Rationale.Function.Infix;
 
 module WithEditMutation = {
   module GraphQL = [%graphql

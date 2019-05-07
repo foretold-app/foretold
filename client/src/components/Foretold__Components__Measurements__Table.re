@@ -218,11 +218,11 @@ module Helpers = {
       switch (agent, agent |> E.O.bind(_, Context.Primary.Agent.name)) {
       | (Some(agent), Some(name)) =>
         Some(
-          <a
-            href={Context.Routing.Url.toString(AgentShow(agent.id))}
+          <Foretold__Components__Link
+            linkType={Internal(AgentShow(agent.id))}
             className=Styles.agentStyle>
             {name |> ste}
-          </a>,
+          </Foretold__Components__Link>,
         )
       | _ => None
       };

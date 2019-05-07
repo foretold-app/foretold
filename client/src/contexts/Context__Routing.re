@@ -11,7 +11,7 @@ module Route = {
     | AgentShow(string)
     | AgentMeasurables(string)
     | AgentBots(string)
-    | ChannelShow(string)
+    | ChannelShow(string, string)
     | ChannelEdit(string)
     | ChannelMembers(string)
     | ChannelInvite(string)
@@ -44,7 +44,7 @@ module Route = {
     | ["channels"] => ChannelIndex
     | ["bots", "new"] => BotCreate
     | ["c"] => ChannelIndex
-    | ["c", id] => ChannelShow(id)
+    | ["c", id] => ChannelShow(id, url.search)
     | ["c", id, "new"] => MeasurableNew(id)
     | ["c", id, "edit"] => ChannelEdit(id)
     | ["c", id, "members"] => ChannelMembers(id)

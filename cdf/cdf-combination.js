@@ -20,7 +20,7 @@ class CdfCombination {
    * @return {number}
    */
   maxBounds() {
-    return max(this.cdfs.map(e => e.xs[0]))
+    return max(this.cdfs.map(e => e.xs[e.xs.length - 1]))
   }
 
   /**

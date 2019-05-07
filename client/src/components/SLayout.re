@@ -1,6 +1,4 @@
 open Utils;
-open Style.Grid;
-open Rationale.Function.Infix;
 
 module Styles = {
   open Css;
@@ -13,6 +11,7 @@ module Styles = {
       float(`left),
       width(`percent(100.)),
     ]);
+  let width100 = style([width(`percent(100.))]);
   let headerText =
     style([
       color(`hex("486474")),
@@ -27,7 +26,39 @@ module Styles = {
       float(`left),
       fontWeight(`medium),
     ]);
+  let channelText =
+    style([color(`hex("242424")), fontSize(`em(1.4)), float(`left)]);
   let container = style([maxWidth(`px(1170)), margin(`auto)]);
+  let header1outer =
+    style([
+      width(`percent(100.0)),
+      float(`left),
+      backgroundColor(`hex("fff")),
+      borderBottom(`px(1), `solid, `hex("e6e9f0")),
+    ]);
+  let header1inner =
+    style([
+      width(`percent(100.0)),
+      float(`left),
+      fontWeight(`num(600)),
+      padding2(~v=`em(0.7), ~h=`em(1.0)),
+    ]);
+  let header2outer =
+    style([
+      width(`percent(100.0)),
+      float(`left),
+      backgroundColor(`hex("fbfcfd")),
+      borderBottom(`px(1), `solid, `hex("e6e9f0")),
+    ]);
+  let header2inner =
+    style([
+      width(`percent(100.0)),
+      float(`left),
+      paddingLeft(`em(1.)),
+      paddingRight(`em(1.)),
+      paddingTop(`em(0.5)),
+    ]);
+  let header2 = style([background(`hex("f0f"))]);
   let backHover = style([fontSize(`em(1.3))]);
   let foo =
     style([
@@ -40,6 +71,7 @@ module Styles = {
   let largeCardInner =
     style([
       background(`hex("fff")),
+      border(`px(1), `solid, `hex("e1e5f0")),
       borderRadius(`px(5)),
       padding(`em(1.)),
       width(`percent(100.)),
@@ -123,16 +155,16 @@ let channelBack = (~onClick, ()) =>
   </Antd.Button>;
 
 let channelink = (c: Context.Primary.Channel.t) =>
-  <div className=Styles.headerText>
+  <Foretold__Components__Link
+    linkType={Internal(ChannelShow(c.id))} className=Styles.channelText>
     {c |> Context.Primary.Channel.present}
-  </div>;
+  </Foretold__Components__Link>;
 
 let channelEditLink = (c: Context.Primary.Channel.t) =>
-  <div
-    className=Styles.headerText
-    onClick={_ => Context.Routing.Url.push(ChannelEdit(c.id))}>
+  <Foretold__Components__Link
+    linkType={Internal(ChannelEdit(c.id))} className=Styles.headerText>
     {"edit" |> ste}
-  </div>;
+  </Foretold__Components__Link>;
 
 let seriesHead = (channel: Context.Primary.Channel.t, seriesName) =>
   <>
@@ -141,3 +173,64 @@ let seriesHead = (channel: Context.Primary.Channel.t, seriesName) =>
       {seriesName |> ste}
     </div>
   </>;
+
+module SidebarSection = {
+  module Styles_ = {
+    open Css;
+    let containerOuter = style([paddingTop(`px(10))]);
+    let containerInner =
+      style([
+        background(`hex("fff")),
+        borderRadius(`px(5)),
+        width(`percent(100.)),
+        border(`px(1), `solid, `hex("e8eaef")),
+        float(`left),
+      ]);
+    let header =
+      style([
+        float(`left),
+        fontSize(`em(1.1)),
+        width(`percent(100.)),
+        color(`hex("242424")),
+        fontWeight(`num(600)),
+        padding(`em(1.)),
+        padding2(~v=`em(0.5), ~h=`em(0.7)),
+        borderBottom(`px(1), `solid, `hex("e6e9f0")),
+      ]);
+    let body =
+      style([
+        float(`left),
+        padding(`em(1.)),
+        fontSize(`em(1.1)),
+        padding2(~v=`em(0.5), ~h=`em(0.7)),
+        color(`hex("858585")),
+      ]);
+  };
+
+  module Container = {
+    let component = ReasonReact.statelessComponent("Container");
+    let make = children => {
+      ...component,
+      render: _ =>
+        <div className=Styles_.containerOuter>
+          <div className=Styles_.containerInner> ...children </div>
+        </div>,
+    };
+  };
+
+  module Header = {
+    let component = ReasonReact.statelessComponent("Container");
+    let make = children => {
+      ...component,
+      render: _ => <div className=Styles_.header> ...children </div>,
+    };
+  };
+
+  module Body = {
+    let component = ReasonReact.statelessComponent("Body");
+    let make = children => {
+      ...component,
+      render: _ => <div className=Styles_.body> ...children </div>,
+    };
+  };
+};

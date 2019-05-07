@@ -5,6 +5,7 @@ module Queries = {
   module Agents = Foretold__GraphQL__GetAgents;
   module Measurable = Foretold__GraphQL__GetMeasurable;
   module Measurables = Foretold__GraphQL__GetMeasurables;
+  module MeasurablesStateStats = Foretold__GraphQL__GetMeasurablesStateStats;
   module MeasurableWithMeasurements = Foretold__GraphQL__GetMeasurableWithMeasurements;
   module Series = Foretold__GraphQL__GetSeries;
   module User = Foretold__GraphQL__GetUser;

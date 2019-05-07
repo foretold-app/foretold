@@ -1,5 +1,4 @@
 open Utils;
-open Style.Grid;
 
 module Card = {
   let component = ReasonReact.statelessComponent("SeriesCard");

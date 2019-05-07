@@ -1,7 +1,3 @@
-open Utils;
-open Style.Grid;
-open Foretold__GraphQL;
-
 module Styles = {
   open Css;
   let outer =
@@ -29,15 +25,13 @@ let make =
     ) => {
   ...component,
   render: _self =>
-    <Layout__Component__UseRouterForLinks>
-      <div className=Styles.outer>
-        <div className=Styles.left>
-          <Layout__Component__Sidebar channelId loggedInUser />
-        </div>
-        <div className=Styles.right>
-          <Layout__Component__Header loggedInUser />
-          <div> ..._children </div>
-        </div>
+    <div className=Styles.outer>
+      <div className=Styles.left>
+        <Layout__Component__Sidebar channelId loggedInUser />
       </div>
-    </Layout__Component__UseRouterForLinks>,
+      <div className=Styles.right>
+        <Layout__Component__Header loggedInUser />
+        <div> ..._children </div>
+      </div>
+    </div>,
 };

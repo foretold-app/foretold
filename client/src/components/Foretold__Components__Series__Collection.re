@@ -21,17 +21,16 @@ module SeriesCards = {
       ]);
   };
 
-  module Query = Foretold__GraphQL.Queries.SeriesCollection;
-
   type t = Foretold__GraphQL.Queries.SeriesCollection.series;
-  type ts = Js.Array.t(Foretold__GraphQL.Queries.SeriesCollection.series);
+  type ts = Js.Array.t(t);
 
   let make = (channelId, list: ts) =>
     <div className=Styles.items>
       {
         list
-        |> Array.map((x: t) =>
+        |> E.A.fmapi((i, x: t) =>
              <div
+               key={i |> string_of_int}
                className=Styles.itemPositioning
                onClick={
                  _e => Context.Routing.Url.push(SeriesShow(channelId, x.id))

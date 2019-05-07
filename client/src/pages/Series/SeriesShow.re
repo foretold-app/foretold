@@ -1,7 +1,4 @@
-open Utils;
-open Style.Grid;
 open Foretold__GraphQL;
-open Context.Primary;
 
 module GetMeasurablesReducerConfig = {
   type itemType = Context.Primary.Measurable.t;

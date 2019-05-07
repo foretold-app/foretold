@@ -23,6 +23,7 @@ class MeasurementModel extends ModelPostgres {
    * @param {string} [filter.measurableId]
    * @param {string} [filter.agentId]
    * @param {string[]} [filter.competitorType]
+   * @param {string} [filter.notTaggedByAgent]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {Promise<{data: Models.Measurement[], total: number}>}
@@ -33,6 +34,7 @@ class MeasurementModel extends ModelPostgres {
     const spacedLimit = _.get(filter, 'findInDateRange.spacedLimit');
 
     const where = {};
+    const include = [];
 
     this.applyRestrictions(where, restrictions);
 
@@ -43,9 +45,19 @@ class MeasurementModel extends ModelPostgres {
     };
     if (startDate) _.set(where, ['createdAt', this.gte], startDate);
     if (endDate) _.set(where, ['createdAt', this.lte], endDate);
+    if (filter.notTaggedByAgent) include.push({
+      model: this.models.Measurement,
+      as: 'UntaggedMeasurement',
+      where: { agentId: filter.notTaggedByAgent, },
+      on: {
+        '$Measurement.id$': {
+          [this.not]: this.col('Measurement.taggedMeasurementId'),
+        },
+      },
+    });
 
     /** @type {number} */
-    const total = await this.model.count({ where });
+    const total = await this.model.count({ where, include });
     const edgePagination = this.getPagination(pagination, total);
 
     const cond = {
@@ -53,6 +65,7 @@ class MeasurementModel extends ModelPostgres {
       offset: edgePagination.offset,
       order: [['createdAt', 'DESC']],
       where,
+      include,
     };
 
     /** @type {Models.Measurement[]} */

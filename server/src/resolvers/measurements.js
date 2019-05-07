@@ -8,6 +8,7 @@ const data = require('../data');
  * @param {number} args.first
  * @param {string} args.measurableId
  * @param {string} args.agentId
+ * @param {string} args.notTaggedByAgent
  * @param {object} args.findInDateRange
  * @param {string} args.findInDateRange.startDate
  * @param {string} args.findInDateRange.endDate
@@ -25,6 +26,7 @@ async function all(root, args, context, info) {
     agentId: _.get(args, 'agentId'),
     competitorType: _.get(args, 'competitorType'),
     findInDateRange: _.get(args, 'findInDateRange'),
+    notTaggedByAgent: _.get(args, 'notTaggedByAgent'),
   };
   const pagination = {
     after: _.get(args, 'after'),

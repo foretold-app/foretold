@@ -63,6 +63,7 @@
     "bs-storybook": "^0.2.0",
     "bsb-js": "^1.1.7",
     "css-loader": "^2.1.1",
+    "d3": "^5.9.2",
     "discrete-sampling": "^1.0.3",
     "file-loader": "^2.0.0",
     "financejs": "^4.1.0",

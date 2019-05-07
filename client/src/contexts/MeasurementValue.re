@@ -33,6 +33,7 @@ let makeEncode = (encodeFn, name: string, i: 'a) =>
 module type Point = {
   type t;
   let equal: (t, t) => bool;
+  let compare: (t, t) => int;
   let encodeFn: t => Js.Json.t;
   let decodeFn: Json.Decode.decoder(t);
 };
@@ -68,10 +69,29 @@ module MakeCdf = (Item: Point) => {
     |> Array.map(((y, x)) => (string_of_float(y), x))
     |> Js.Dict.fromArray;
 
-  let toPoints = (t: t) =>
-    t |> toArray |> Array.map(((y, x)) => point(~x, ~y));
-
   let fromArray = a => a |> Belt.Map.fromArray(~id=(module Id));
+
+  let sortArrayByXs = tArray =>
+    tArray
+    |> Belt.SortArray.stableSortBy(_, ((_, x1), (_, x2)) =>
+         Item.compare(x1, x2)
+       );
+
+  let toPoints = (t: t) =>
+    t |> toArray |> sortArrayByXs |> Array.map(((y, x)) => point(~x, ~y));
+
+  let toJss = (t: t) => {
+    "ys": t |> Belt.Map.keysToArray,
+    "xs": t |> Belt.Map.valuesToArray,
+  };
+
+  let toJs = (t: t) => {
+    let points = t |> toArray |> sortArrayByXs;
+    {
+      "xs": points |> Array.map(((_, x)) => x),
+      "ys": points |> Array.map(((y, _)) => y),
+    };
+  };
 
   let fromDict = (r: Js.Dict.t(Item.t)) =>
     r
@@ -131,6 +151,7 @@ module MakeCdf = (Item: Point) => {
 module FloatPoint = {
   type t = float;
   let equal = (a: t, b: t) => a == b;
+  let compare = (a: t, b: t) => a > b ? 1 : (-1);
 
   let decodeFn = Json.Decode.float;
   let encodeFn = Json.Encode.float;
@@ -139,6 +160,7 @@ module FloatPoint = {
 module DateTimePoint = {
   type t = string;
   let equal = (a: t, b: t) => a == b;
+  let compare = (a: t, b: t) => a > b ? 1 : (-1);
 
   let encodeFn = Json.Encode.string;
   let decodeFn = Json.Decode.string;

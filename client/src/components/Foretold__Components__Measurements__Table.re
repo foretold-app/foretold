@@ -112,11 +112,12 @@ module Helpers = {
   let smallDistribution = (m: measurement, g: (float, float)) =>
     switch (m.value) {
     | Belt.Result.Ok(`FloatCdf(r)) =>
+      let (minX, maxX) = g;
       r
       |> MeasurementValue.toChunks(~bucketSize=20)
       |> MeasurementValue.toPdf
-      |> MeasurementValue.FloatCdf.toPoints
-      |> (data => Some(<WideChart data bounds=g />))
+      |> MeasurementValue.FloatCdf.toJs
+      |> (data => Some(<SmallCdfChart data minX maxX />));
     | Belt.Result.Ok(`FloatPoint(r)) =>
       Some(
         <div className=Styles.middle>
@@ -245,12 +246,10 @@ module Helpers = {
     if (isJudge) {
       <div className=judgementStyle>
         {"Judgement" |> ste |> E.React.inH3}
-        {
-          switch (aLink) {
-          | Some(name) => <> {"by " |> ste} name </>
-          | None => E.React.null
-          }
-        }
+        {switch (aLink) {
+         | Some(name) => <> {"by " |> ste} name </>
+         | None => E.React.null
+         }}
       </div>;
     } else {
       aLink |> E.O.React.defaultNull;
@@ -275,19 +274,15 @@ let make = (ms: list(measurement)) => {
          <div className=Styles.row key={m.id}>
            <div className=Styles.mainColumn>
              <div className=Styles.mainColumnTop>
-               {
-                 Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull
-               }
+               {Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull}
              </div>
-             {
-               switch (Helpers.toPercentiles(m)) {
-               | Some(a) =>
-                 <div className={Styles.percentiles ++ " " ++ "foo"}>
-                   {a |> ste}
-                 </div>
-               | _ => <span />
-               }
-             }
+             {switch (Helpers.toPercentiles(m)) {
+              | Some(a) =>
+                <div className={Styles.percentiles ++ " " ++ "foo"}>
+                  {a |> ste}
+                </div>
+              | _ => <span />
+              }}
            </div>
            <div className=Styles.rightColumn>
              <div className=Styles.rightColumnInner>
@@ -312,14 +307,6 @@ let make = (ms: list(measurement)) => {
     |> ReasonReact.array;
   E.React.showIf(
     ms |> E.L.length > 0,
-    <div className=Styles.group>
-      items
-      <div className=Styles.axisRow>
-        <div className=Styles.mainColumn>
-          <div className=Styles.mainColumnTop> <XAxis bounds=_bounds /> </div>
-        </div>
-        <div className=Styles.axisRightColumn />
-      </div>
-    </div>,
+    <div className=Styles.group> items </div>,
   );
 };

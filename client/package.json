@@ -1,6 +1,6 @@
 {
-  "name": "@foretold/prediction-client",
-  "version": "0.1.0",
+  "name": "@foretold/client",
+  "version": "1.0.0",
   "scripts": {
     "build-bsb": "bsb -make-world",
     "clean": "bsb -clean-world",

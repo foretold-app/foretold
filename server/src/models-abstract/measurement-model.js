@@ -23,29 +23,17 @@ class MeasurementModel extends ModelPostgres {
    * @param {string} [filter.measurableId]
    * @param {string} [filter.agentId]
    * @param {string[]} [filter.competitorType]
+   * @param {string} [filter.notTaggedByAgent]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {Promise<{data: Models.Measurement[], total: number}>}
    */
   async getAll(filter, pagination, restrictions) {
-    const startDate = _.get(filter, 'findInDateRange.startDate');
-    const endDate = _.get(filter, 'findInDateRange.endDate');
-    const spacedLimit = _.get(filter, 'findInDateRange.spacedLimit');
-
-    const where = {};
-
+    const { where, include, spacedLimit } = this.makeFilter(filter);
     this.applyRestrictions(where, restrictions);
 
-    if (filter.measurableId) where.measurableId = filter.measurableId;
-    if (filter.agentId) where.agentId = filter.agentId;
-    if (filter.competitorType) where.competitorType = {
-      [this.in]: filter.competitorType,
-    };
-    if (startDate) _.set(where, ['createdAt', this.gte], startDate);
-    if (endDate) _.set(where, ['createdAt', this.lte], endDate);
-
     /** @type {number} */
-    const total = await this.model.count({ where });
+    const total = await this.model.count({ where, include });
     const edgePagination = this.getPagination(pagination, total);
 
     const cond = {
@@ -53,6 +41,7 @@ class MeasurementModel extends ModelPostgres {
       offset: edgePagination.offset,
       order: [['createdAt', 'DESC']],
       where,
+      include,
     };
 
     /** @type {Models.Measurement[]} */
@@ -64,6 +53,39 @@ class MeasurementModel extends ModelPostgres {
     if (spacedLimit) data = splitBy(data, spacedLimit);
 
     return { data, total };
+  }
+
+  /**
+   * @protected
+   * @param {object} filter
+   * @return {{include: Array, spacedLimit: *, where: {}}}
+   */
+  makeFilter(filter) {
+    const where = { [this.and]: [] };
+    const include = [];
+
+    const startDate = _.get(filter, 'findInDateRange.startDate');
+    const endDate = _.get(filter, 'findInDateRange.endDate');
+    const spacedLimit = _.get(filter, 'findInDateRange.spacedLimit');
+
+    if (filter.measurableId) where.measurableId = filter.measurableId;
+    if (filter.agentId) where.agentId = filter.agentId;
+    if (filter.competitorType) where.competitorType = {
+      [this.in]: filter.competitorType,
+    };
+    if (startDate) _.set(where, ['createdAt', this.gte], startDate);
+    if (endDate) _.set(where, ['createdAt', this.lte], endDate);
+    if (filter.notTaggedByAgent) {
+      include.push({
+        model: this.models.Measurement,
+        as: 'TaggedMeasurement',
+        where: { agentId: filter.notTaggedByAgent },
+        required: false,
+      });
+      where[this.and].push({ '$TaggedMeasurement.id$': null });
+    }
+
+    return { where, include, spacedLimit };
   }
 }
 

@@ -1,13 +1,15 @@
 {
-    "name": "sps",
-    "version": "1.0.0",
+    "name": "@foretold/sps",
+    "version": "1.0.2",
     "description": "Simple prediction service",
     "main": "index.js",
     "engines": {
         "node": "~9.7.1",
         "npm": ">=6.4.0"
     },
+    "private": false,
     "scripts": {
+        "lerna": "lerna",
         "client/install": "cd client && npm install && cd ..",
         "client/build": "cd client && npm run build-t && cd ..",
         "client/serve": "cd client && npm run serve && cd ..",
@@ -23,5 +25,8 @@
         "postinstall": "npm run server/install && npm run server/db:migrate; npm run client/install && npm run client/build"
     },
     "author": "",
-    "license": "MIT"
+    "license": "MIT",
+    "devDependencies": {
+        "lerna": "^3.13.4"
+    }
 }

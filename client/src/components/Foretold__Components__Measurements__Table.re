@@ -307,14 +307,6 @@ let make = (ms: list(measurement)) => {
     |> ReasonReact.array;
   E.React.showIf(
     ms |> E.L.length > 0,
-    <div className=Styles.group>
-      items
-      <div className=Styles.axisRow>
-        <div className=Styles.mainColumn>
-          <div className=Styles.mainColumnTop> <XAxis bounds=_bounds /> </div>
-        </div>
-        <div className=Styles.axisRightColumn />
-      </div>
-    </div>,
+    <div className=Styles.group> items </div>,
   );
 };

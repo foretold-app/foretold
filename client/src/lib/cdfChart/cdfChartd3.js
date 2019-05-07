@@ -11,8 +11,8 @@ function chart() {
         marginRight: 5,
         marginLeft: 5,
         container: 'body',
-        minX: 0.1,
-        maxX: 1000,
+        minX: false,
+        maxX: false,
         scale: 'linear',
         showDistributionLines: true,
         lineColors: ['#2C3E50', '#2C3E50'],
@@ -53,8 +53,10 @@ function chart() {
         //Scales
         var xScale;
 
+        var xMin = d3.min(attrs.data.primary.xs);
+        var xMax = d3.max(attrs.data.primary.xs);
         if (attrs.scale  ===  'linear') {
-            xScale = d3.scaleLinear().domain([attrs.minX, attrs.maxX]).range([0, calc.chartWidth]);
+            xScale = d3.scaleLinear().domain([attrs.minX || xMin, attrs.maxX || xMax]).range([0, calc.chartWidth]);
         } else {
             xScale = d3.scaleLog().base(attrs.logBase).domain([attrs.minX, attrs.maxX]).range([0, calc.chartWidth]);
         }

@@ -19,13 +19,17 @@ class CdfChart extends React.Component {
   componentDidMount() {
     this.drawChart();
   }
+
+  componentDidUpdate() {
+    this.drawChart();
+  }
     
   drawChart() {
     // TODO: Fix for log when minX is 0;
     var _chart = chart()
           .svgHeight(this.props.height)
           .maxX(this.props.maxX)
-          .marginBottom(15)
+          .marginBottom(this.props.marginBottom || 15)
           .marginLeft(0)
           .marginRight(0)
           .showDistributionLines(this.props.showDistributionLines)

@@ -1,6 +1,6 @@
 {
-    "name": "foretold-sps",
-    "version": "1.0.1",
+    "name": "@foretold/sps",
+    "version": "1.0.2",
     "description": "Simple prediction service",
     "main": "index.js",
     "engines": {

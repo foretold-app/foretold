@@ -33,7 +33,7 @@ class MeasurementModel extends ModelPostgres {
     const endDate = _.get(filter, 'findInDateRange.endDate');
     const spacedLimit = _.get(filter, 'findInDateRange.spacedLimit');
 
-    const where = {};
+    const where = { [this.and]: [] };
     const include = [];
 
     this.applyRestrictions(where, restrictions);
@@ -45,16 +45,15 @@ class MeasurementModel extends ModelPostgres {
     };
     if (startDate) _.set(where, ['createdAt', this.gte], startDate);
     if (endDate) _.set(where, ['createdAt', this.lte], endDate);
-    if (filter.notTaggedByAgent) include.push({
-      model: this.models.Measurement,
-      as: 'UntaggedMeasurement',
-      where: { agentId: filter.notTaggedByAgent, },
-      on: {
-        '$Measurement.id$': {
-          [this.not]: this.col('Measurement.taggedMeasurementId'),
-        },
-      },
-    });
+    if (filter.notTaggedByAgent) {
+      include.push({
+        model: this.models.Measurement,
+        as: 'TaggedMeasurement',
+        where: { agentId: filter.notTaggedByAgent },
+        required: false,
+      });
+      where[this.and].push({ '$TaggedMeasurement.id$': null });
+    }
 
     /** @type {number} */
     const total = await this.model.count({ where, include });

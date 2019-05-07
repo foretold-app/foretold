@@ -258,7 +258,7 @@ class ModelPostgres extends Model {
   async getOne(params, query = {}, restrictions = {}) {
     const where = { ...params };
     const sort = query.sort === 1 ? 'ASC' : 'DESC';
-    const order = ['createdAt', sort];
+    const order = [['createdAt', sort]];
     this.applyRestrictions(where, restrictions);
     return await this.model.findOne({
       where,

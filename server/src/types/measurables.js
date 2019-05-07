@@ -69,6 +69,9 @@ const measurable = new graphql.GraphQLObjectType({
 
     Measurement: {
       type: require('./measurements').measurement,
+      args: {
+        resultOrLatestMeasurementForAgentId: { type: graphql.GraphQLString },
+      },
       resolve: resolvers.measurements.latest,
     },
   })

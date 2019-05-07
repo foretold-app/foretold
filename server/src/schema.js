@@ -83,7 +83,6 @@ const schema = new graphql.GraphQLSchema({
           measuredByAgentId: { type: graphql.GraphQLString },
           states: { type: graphql.GraphQLList(types.measurables.measurableState) },
           isArchived: { type: graphql.GraphQLList(types.common.isArchived) },
-          resultOrLatestMeasurementForAgentId: { type: graphql.GraphQLString },
         },
         resolve: resolvers.measurables.all,
       },

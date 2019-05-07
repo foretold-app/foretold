@@ -3,6 +3,8 @@ const { notify } = require("../lib/notifications");
 const { DataBase } = require('./data-base');
 
 const { MeasurementModel } = require('../models-abstract');
+const { MEASURABLE_STATE } = require('../models/measurable-state');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../models/measurement-competitor-type');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -64,6 +66,31 @@ class MeasurementsData extends DataBase {
         },
       }
     });
+  }
+
+  /**
+   * @param {Models.Measurable} measurable
+   * @param {string} agentId
+   * @return {Promise<Models.Measurement>}
+   */
+  async getLatest({ measurable, agentId } = {}) {
+    if (!agentId) throw new Error('Agent ID is required');
+    if (!measurable) throw new Error('Measurable is required');
+    const competitorType = MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE;
+    if (measurable.state === MEASURABLE_STATE.JUDGED) {
+      /** @type {Models.Measurement} */
+      const measurement = await this.MeasurementModel.getOne({
+        agentId,
+        competitorType,
+      });
+      if (!measurement) {
+        throw new Error('Measurement as Objective is not found');
+      }
+      return measurement;
+    }
+    /** @type {Models.Measurement} */
+    const measurement = await this.MeasurementModel.getOne({ agentId });
+    return measurement;
   }
 }
 

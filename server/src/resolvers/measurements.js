@@ -64,8 +64,26 @@ async function create(root, args, context, info) {
   return await data.measurements.createOne(datas, creator);
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {string} args.resultOrLatestMeasurementForAgentId
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function latest(root, args, context, info) {
+  const measurable = root;
+  const agentId = args.resultOrLatestMeasurementForAgentId;
+  return await data.measurements.getLatest({
+    measurable,
+    agentId,
+  });
+}
+
 module.exports = {
   one,
   all,
   create,
+  latest,
 };

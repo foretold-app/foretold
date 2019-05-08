@@ -24,6 +24,7 @@ class AggregationBot {
       console.log(`Measurements (not tagged) are empty.`);
       return true;
     }
+
     console.log(
       `Got "${measurementsNotTagged.length}" not tagged measurements ` +
       `for an aggregation.`

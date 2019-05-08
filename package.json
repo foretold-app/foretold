@@ -10,6 +10,7 @@
     "private": false,
     "scripts": {
         "lerna": "lerna",
+        "start": "pm2 start processes.json",
         "client/install": "cd client && npm install && cd ..",
         "client/build": "cd client && npm run build-t && cd ..",
         "client/serve": "cd client && npm run serve && cd ..",
@@ -28,6 +29,9 @@
     },
     "author": "",
     "license": "MIT",
+    "dependencies": {
+        "pm2": "^3.5.0"
+    },
     "devDependencies": {
         "lerna": "^3.13.4"
     }

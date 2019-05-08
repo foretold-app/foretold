@@ -1,0 +1,12 @@
+{
+  "apps": [
+    {
+      "name": "server",
+      "script": "./server/src/index.js"
+    },
+    {
+      "name": "bots",
+      "script": "./bots/index.js"
+    }
+  ]
+}

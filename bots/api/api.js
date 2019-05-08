@@ -64,12 +64,11 @@ class API {
    * @public
    * @return {*}
    */
-  measurementCreate({ floatPoint, floatCdf, measurableId, competitorType }) {
+  measurementCreate({ floatCdf, ...rest}) {
     return this.query(this.queries.measurementCreate, {
       input: {
-        value: { floatPoint, floatCdf },
-        measurableId,
-        competitorType,
+        value: { floatCdf },
+        ...rest,
       },
     });
   }
@@ -78,11 +77,10 @@ class API {
    * @public
    * @return {*}
    */
-  measurementCreateAggregation({ measurableId, ...rest }) {
+  measurementCreateAggregation(params) {
     return this.measurementCreate({
-      measurableId,
-      competitorType: 'AGGREGATION',
-      ...rest
+      competitorType: 'OBJECTIVE',
+      ...params,
     });
   }
 

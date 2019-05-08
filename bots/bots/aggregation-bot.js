@@ -33,6 +33,8 @@ class AggregationBot {
     for (const measurement of measurementsNotTagged) {
       const measurableId = measurement.measurableId;
       const createdAt = measurement.createdAt;
+      const relevantAt = measurement.createdAt;
+      const taggedMeasurementId = measurement.id;
 
       console.log(
         `Measurable id = "${measurableId}", ` +
@@ -53,7 +55,12 @@ class AggregationBot {
       const measurementIds = measurements.map(item => item.id);
       console.log(`Measurement IDs "${measurementIds.join(', ')}".`);
 
-      await this.api.measurementCreateAggregation({ measurableId, ...aggregated });
+      await this.api.measurementCreateAggregation({
+        measurableId,
+        relevantAt,
+        taggedMeasurementId,
+        ...aggregated
+      });
     }
 
     return true;

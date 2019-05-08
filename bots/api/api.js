@@ -90,11 +90,8 @@ class API {
    * @public
    * @return {*}
    */
-  async measurements({ measurableId, competitorType }) {
-    const result = await this.query(this.queries.measurements, {
-      measurableId,
-      competitorType
-    });
+  async measurements(params) {
+    const result = await this.query(this.queries.measurements, params);
     return this.getList('measurements')(result);
   }
 
@@ -102,10 +99,10 @@ class API {
    * @public
    * @return {*}
    */
-  async measurementsCompetitive({ measurableId }) {
+  async measurementsCompetitive(params) {
     return this.measurements({
-      measurableId,
       competitorType: ['COMPETITIVE'],
+      ...params,
     });
   }
 

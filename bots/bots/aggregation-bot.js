@@ -16,25 +16,44 @@ class AggregationBot {
    * @return {Promise<boolean>}
    */
   async main() {
-    const measurables = await this.api.measurables();
-    if (measurables.length === 0) {
-      console.log('Measurables list is empty.');
+    const measurementsNotTagged = await this.api.measurementsCompetitive({
+      notTaggedByAgent: config.BOT_AGENT_ID,
+    });
+
+    if (measurementsNotTagged.length === 0) {
+      console.log(`Measurements (not tagged) are empty.`);
       return true;
     }
 
-    console.log(`Going to process ${measurables.length} measurables.`);
+    console.log(
+      `Got "${measurementsNotTagged.length}" not tagged measurements ` +
+      `for an aggregation.`
+    );
 
-    for (const measurable of measurables) {
-      const id = { measurableId: measurable.id };
+    for (const measurement of measurementsNotTagged) {
+      const measurableId = measurement.measurableId;
+      const createdAt = measurement.createdAt;
 
-      const measurements = await this.api.measurementsCompetitive(id);
-      console.log(`Going to process ${measurements.length} measurements.`);
+      console.log(
+        `Measurable id = "${measurableId}", ` +
+        `created at = "${createdAt}".`
+      );
+
+      const measurements = await this.api.measurementsCompetitive({
+        measurableId,
+        findInDateRange: { endDate: createdAt },
+      });
+
+      console.log(`Got "${measurements.length}" for aggregation.`);
       if (measurements.length === 0) continue;
 
       const aggregated = await this.aggregate(measurements);
       if (!aggregated) continue;
 
-      await this.api.measurementCreateAggregation({ ...id, ...aggregated });
+      const measurementIds = measurements.map(item => item.id);
+      console.log(`Measurement IDs "${measurementIds.join(', ')}".`);
+
+      await this.api.measurementCreateAggregation({ measurableId, ...aggregated });
     }
 
     return true;

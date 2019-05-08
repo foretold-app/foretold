@@ -21,16 +21,22 @@ const measurements = `
 query search (
   $measurableId: String
   $competitorType: [competitorType!]
+  $notTaggedByAgent: String
+  $findInDateRange: MeasurementsInDateRangeInput
 ) {
   measurements(
-    first: 500
+    first: 200
     measurableId: $measurableId
     competitorType: $competitorType
+    notTaggedByAgent: $notTaggedByAgent
+    findInDateRange: $findInDateRange
   ) {
     edges {
       node {
         id
         value { floatCdf { xs ys } floatPoint }
+        measurableId
+        createdAt
       }
     }
   }

@@ -49,6 +49,9 @@ class AggregationBot {
       const aggregated = await this.aggregate(measurements);
       if (!aggregated) continue;
 
+      const measurementIds = measurements.map(item => item.id);
+      console.log(`Measurement IDs "${measurementIds.join(', ')}".`);
+
       await this.api.measurementCreateAggregation({ measurableId, ...aggregated });
     }
 

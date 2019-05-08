@@ -69,14 +69,13 @@ async function create(root, args, context, info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {string} args.resultOrLatestMeasurementForAgentId
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<*|Array<Model>>}
  */
 async function latest(root, args, context, info) {
   const measurable = root;
-  const agentId = args.resultOrLatestMeasurementForAgentId;
+  const agentId = context.resultOrLatestMeasurementForAgentId;
   if (!measurable) return null;
   if (!agentId) return null;
   return await data.measurements.getLatest({

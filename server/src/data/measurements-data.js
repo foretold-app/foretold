@@ -74,9 +74,12 @@ class MeasurementsData extends DataBase {
    * @return {Promise<Models.Measurement>}
    */
   async getLatest({ measurable, agentId } = {}) {
+    const measurableId = measurable.id;
+    const competitorType = MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE;
+
     if (measurable.state === MEASURABLE_STATE.JUDGED) {
-      const competitorType = MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE;
       const measurement = await this.MeasurementModel.getOne({
+        measurableId,
         agentId,
         competitorType,
       });
@@ -85,7 +88,8 @@ class MeasurementsData extends DataBase {
       }
       return measurement;
     }
-    return await this.MeasurementModel.getOne({ agentId });
+
+    return await this.MeasurementModel.getOne({ measurableId, agentId });
   }
 }
 

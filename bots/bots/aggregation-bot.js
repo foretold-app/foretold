@@ -16,20 +16,20 @@ class AggregationBot {
    * @return {Promise<boolean>}
    */
   async main() {
-    const measurementNotTagged = await this.api.measurementsCompetitive({
+    const measurementsNotTagged = await this.api.measurementsCompetitive({
       notTaggedByAgent: config.BOT_AGENT_ID,
     });
 
-    if (measurementNotTagged.length === 0) {
+    if (measurementsNotTagged.length === 0) {
       console.log(`Measurements (not tagged) are empty.`);
       return true;
     }
     console.log(
-      `Got "${measurementNotTagged.length}" not tagged measurements ` +
+      `Got "${measurementsNotTagged.length}" not tagged measurements ` +
       `for an aggregation.`
     );
 
-    for (const measurement of measurementNotTagged) {
+    for (const measurement of measurementsNotTagged) {
       const measurableId = measurement.measurableId;
       const createdAt = measurement.createdAt;
 

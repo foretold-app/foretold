@@ -210,6 +210,62 @@ class ModelPostgres extends Model {
       return item;
     });
   }
+
+  /**
+   * @param {object} data
+   * @return {data}
+   */
+  async createOne(data) {
+    return this.model.create(data);
+  }
+
+  /**
+   * @param {object} params
+   * @param {object} data
+   * @return {data}
+   */
+  async updateOne(params, data) {
+    const entity = await this.model.findOne({
+      where: params,
+    });
+    if (entity) {
+      await entity.update(data);
+    }
+    return entity;
+  }
+
+  /**
+   * @param {object} filter
+   * @param {object} [pagination]
+   * @param {object} [restrictions]
+   * @return {Promise<void>}
+   */
+  async getAll(filter, pagination = {}, restrictions = {}) {
+    const where = {};
+    this.applyRestrictions(where, restrictions);
+    return await this.model.findAll({
+      limit: pagination.limit,
+      offset: pagination.offset,
+      where,
+    });
+  }
+
+  /**
+   * @param {object} params
+   * @param {object} query
+   * @param {object} restrictions
+   * @return {Promise<Models.Model>}
+   */
+  async getOne(params, query = {}, restrictions = {}) {
+    const where = { ...params };
+    const sort = query.sort === 1 ? 'ASC' : 'DESC';
+    const order = [['createdAt', sort]];
+    this.applyRestrictions(where, restrictions);
+    return await this.model.findOne({
+      where,
+      order,
+    });
+  }
 }
 
 module.exports = {

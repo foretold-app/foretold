@@ -1,5 +1,9 @@
 export namespace Models {
 
+  export interface Model {
+    id: string;
+  }
+
   export interface Channel {
     id: string;
     isPublic: boolean;
@@ -21,11 +25,12 @@ export namespace Models {
 
   export interface Measurable {
     id: string;
+    state: string;
     creationNotification(creator: Models.Creator): any;
     updateNotifications(creator: Models.Creator): any;
   }
 
-  export interface Measurement {
+  export interface Measurement extends Model {
     id: string;
     creationNotification(creator: Models.Creator): any;
   }
@@ -61,6 +66,7 @@ export namespace Schema {
     channelMembership?: Models.ChannelMemberships;
     channelMembershipsAdmins?: Models.ChannelMemberships[];
     channelMembershipsRole?: Models.ChannelMembershipRole;
+    resultOrLatestMeasurementForAgentId?: string;
   }
 
   export interface ChannelsInput {

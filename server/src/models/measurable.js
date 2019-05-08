@@ -134,7 +134,7 @@ module.exports = (sequelize, DataTypes) => {
         [Sequelize.Op.or]: [
           {
             expectedResolutionDate: {
-              [Sequelize.Op.gt]: Sequelize.fn('now'),
+              [Sequelize.Op.lt]: Sequelize.fn('now'),
             }
           },
           { expectedResolutionDate: null },

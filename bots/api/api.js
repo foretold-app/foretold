@@ -56,33 +56,31 @@ class API {
    * @return {*}
    */
   async measurables() {
-    const result = await this.query(this.queries.measurables);
-    return this.getList('measurables')(result);
+    await this.query(this.queries.measurables);
   }
 
   /**
    * @public
    * @return {*}
    */
-  measurementCreate({ floatPoint, floatCdf, measurableId, competitorType }) {
-    return this.query(this.queries.measurementCreate, {
+  async measurementCreate({ floatCdf, ...rest}) {
+    const result = await this.query(this.queries.measurementCreate, {
       input: {
-        value: { floatPoint, floatCdf },
-        measurableId,
-        competitorType,
+        value: { floatCdf },
+        ...rest,
       },
     });
+    return this.getList('measurementCreate')(result);
   }
 
   /**
    * @public
    * @return {*}
    */
-  measurementCreateAggregation({ measurableId, ...rest }) {
+  measurementCreateAggregation(params) {
     return this.measurementCreate({
-      measurableId,
       competitorType: 'AGGREGATION',
-      ...rest
+      ...params,
     });
   }
 

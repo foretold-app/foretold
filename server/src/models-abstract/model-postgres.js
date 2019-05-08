@@ -24,6 +24,7 @@ class ModelPostgres extends Model {
     this.lte = this.sequelize.Op.lte;
     this.and = this.sequelize.Op.and;
     this.not = this.sequelize.Op.not;
+    this.notIn = this.sequelize.Op.notIn;
     this.fn = this.sequelize.fn;
     this.col = this.sequelize.col;
     this.literal = this.sequelize.literal;
@@ -68,6 +69,29 @@ class ModelPostgres extends Model {
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
     )`;
+  }
+
+  /**
+   * @todo: see this.channelIds()
+   * @param {string} [agentId]
+   * @return {string}
+   */
+  taggedMeasurements(agentId) {
+    return `(
+      SELECT "taggedMeasurementId"
+      FROM "Measurements"
+      WHERE "agentId" = '${agentId}'
+      AND "taggedMeasurementId" IS NOT NULL
+    )`;
+  }
+
+  /**
+   * @todo: see this.channelIds()
+   * @param {string} [agentId]
+   * @return {string}
+   */
+  taggedMeasurementsLiteral(agentId) {
+    return this.literal(this.taggedMeasurements(agentId));
   }
 
   /**

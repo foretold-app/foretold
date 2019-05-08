@@ -2,6 +2,8 @@ const _ = require('lodash');
 const Sequelize = require('sequelize');
 const { clientUrl } = require('../lib/urls');
 
+const { MEASUREMENT_COMPETITOR_TYPE } = require('./measurement-competitor-type');
+
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Measurement', {
     id: {
@@ -17,8 +19,12 @@ module.exports = (sequelize, DataTypes) => {
       set: setMeasurementValue,
     },
     competitorType: {
-      type: DataTypes.ENUM(["OBJECTIVE", "COMPETITIVE", "AGGREGATION"]),
-      defaultValue: "COMPETITIVE",
+      type: DataTypes.ENUM([
+        MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
+        MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE,
+        MEASUREMENT_COMPETITOR_TYPE.AGGREGATION,
+      ]),
+      defaultValue: MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE,
       allowNull: true,
     },
     description: {
@@ -43,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks: {
       afterCreate: async (measurement) => {
-        if (measurement.dataValues.competitorType == "OBJECTIVE") {
+        if (measurement.dataValues.competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE) {
           const measurable = await measurement.getMeasurable();
           await measurable.judged();
         }

@@ -75,15 +75,9 @@ class MeasurementModel extends ModelPostgres {
     };
     if (startDate) _.set(where, ['createdAt', this.gte], startDate);
     if (endDate) _.set(where, ['createdAt', this.lte], endDate);
-    if (filter.notTaggedByAgent) {
-      include.push({
-        model: this.models.Measurement,
-        as: 'TaggedMeasurement',
-        where: { agentId: filter.notTaggedByAgent },
-        required: false,
-      });
-      where[this.and].push({ '$TaggedMeasurement.id$': null });
-    }
+    if (filter.notTaggedByAgent) where.id = {
+      [this.notIn]: this.taggedMeasurementsLiteral(filter.notTaggedByAgent),
+    };
 
     return { where, include, spacedLimit };
   }

@@ -56,21 +56,21 @@ class API {
    * @return {*}
    */
   async measurables() {
-    const result = await this.query(this.queries.measurables);
-    return this.getList('measurables')(result);
+    await this.query(this.queries.measurables);
   }
 
   /**
    * @public
    * @return {*}
    */
-  measurementCreate({ floatCdf, ...rest}) {
-    return this.query(this.queries.measurementCreate, {
+  async measurementCreate({ floatCdf, ...rest}) {
+    const result = await this.query(this.queries.measurementCreate, {
       input: {
         value: { floatCdf },
         ...rest,
       },
     });
+    return this.getList('measurementCreate')(result);
   }
 
   /**
@@ -79,7 +79,7 @@ class API {
    */
   measurementCreateAggregation(params) {
     return this.measurementCreate({
-      competitorType: 'OBJECTIVE',
+      competitorType: 'AGGREGATION',
       ...params,
     });
   }

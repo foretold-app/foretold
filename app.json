@@ -25,10 +25,19 @@
     },
     "JWT_EXPIN": {
       "required": true
+    },
+    "BOT_TOKEN": {
+      "required": true
+    },
+    "BOT_AGENT_ID": {
+      "required": true
     }
   },
   "formation": {
     "web": {
+      "quantity": 1
+    },
+    "worker": {
       "quantity": 1
     }
   },

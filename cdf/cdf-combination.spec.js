@@ -17,7 +17,7 @@ describe('CdfCombination Class', () => {
       new Cdf(up(20, 30), up(50, 60)),
     ];
     const comb = new CdfCombination(cdfs);
-    expect(comb.maxBounds()).toBe(20);
+    expect(comb.maxBounds()).toBe(30);
   });
   it('xsToAnalyze()', () => {
     const cdfs = [
@@ -25,7 +25,7 @@ describe('CdfCombination Class', () => {
       new Cdf(up(20, 30), up(50, 60)),
     ];
     const comb = new CdfCombination(cdfs);
-    expect(comb.xsToAnalyze(3)).toEqual([1, 10.5, 20]);
+    expect(comb.xsToAnalyze(3)).toEqual([1, 15.5, 30]);
   });
   it('allYsAtXPoint()', () => {
     const cdfs = [
@@ -52,7 +52,7 @@ describe('CdfCombination Class', () => {
     ];
     const comb = new CdfCombination(cdfs);
     const combined = comb.combine(5);
-    expect(combined.xs).toEqual([1, 6, 11, 16, 21]);
-    expect(combined.ys).toEqual([6, 8.5, 10, 10, 10]);
+    expect(combined.xs).toEqual([1, 8, 15, 22, 29]);
+    expect(combined.ys).toEqual([6, 9.5, 10, 10.5, 14]);
   });
 });

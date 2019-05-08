@@ -61,6 +61,7 @@ const schema = new graphql.GraphQLSchema({
           agentId: { type: graphql.GraphQLString },
           competitorType: { type: graphql.GraphQLList(types.competitor.competitor) },
           findInDateRange: { type: types.measurements.measurementsInDateRangeInput },
+          notTaggedByAgent: { type: graphql.GraphQLString },
         },
         resolve: resolvers.measurements.all,
       },

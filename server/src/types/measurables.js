@@ -66,6 +66,11 @@ const measurable = new graphql.GraphQLObjectType({
       type: require('./channels').channel,
       resolve: resolver(models.Measurable.Channel),
     },
+
+    recentMeasurement: {
+      type: require('./measurements').measurement,
+      resolve: resolvers.measurements.latest,
+    },
   })
 });
 

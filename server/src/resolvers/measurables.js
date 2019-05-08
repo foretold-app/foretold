@@ -8,6 +8,7 @@ const data = require('../data');
  * @param {string} args.seriesId
  * @param {string} args.channelId
  * @param {string} args.measuredByAgentId
+ * @param {string} args.resultOrLatestMeasurementForAgentId
  * @param {string[]} args.states
  * @param {string[]} args.isArchived
  * @param {string} args.after
@@ -36,6 +37,8 @@ async function all(root, args, context, info) {
     agentId: _.get(context, 'agent.id'),
     measuredByAgentId: _.get(args, 'measuredByAgentId'),
   };
+  // tricky
+  context.resultOrLatestMeasurementForAgentId = args.resultOrLatestMeasurementForAgentId;
   const result = await data.measurables.getAll(filter, pagination, options);
   return result.data;
 }

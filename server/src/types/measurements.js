@@ -28,13 +28,15 @@ const measurementCreateInput = new graphql.GraphQLInputObjectType({
     measurableId: { type: graphql.GraphQLString },
     agentId: { type: graphql.GraphQLString },
     description: { type: graphql.GraphQLString },
+    taggedMeasurementId: { type: graphql.GraphQLString },
+    relevantAt: { type: DateType.default },
   }),
 });
 
 const measurementsInDateRangeInput = new graphql.GraphQLInputObjectType({
   name: 'MeasurementsInDateRangeInput',
   fields: () => ({
-    startDate: { type: graphql.GraphQLNonNull(DateType.default) },
+    startDate: { type: DateType.default },
     endDate: { type: DateType.default },
     spacedLimit: { type: graphql.GraphQLInt },
   }),

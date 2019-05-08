@@ -10,7 +10,7 @@
     "private": false,
     "scripts": {
         "lerna": "lerna",
-        "start": "pm2 start processes.json",
+        "start": "pm2 start processes.config.js",
         "client/install": "cd client && npm install && cd ..",
         "client/build": "cd client && npm run build-t && cd ..",
         "client/serve": "cd client && npm run serve && cd ..",

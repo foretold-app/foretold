@@ -218,6 +218,16 @@
                     "ofType": null
                   },
                   "defaultValue": null
+                },
+                {
+                  "name": "notTaggedByAgent",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
                 }
               ],
               "type": {
@@ -3564,13 +3574,9 @@
               "name": "startDate",
               "description": null,
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Date",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
               },
               "defaultValue": null
             },

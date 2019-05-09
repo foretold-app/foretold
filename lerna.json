@@ -1,6 +1,7 @@
 {
   "packages": [
-    "cdf"
+    "packages/*"
   ],
+  "npmClient": "yarn",
   "version": "independent"
 }

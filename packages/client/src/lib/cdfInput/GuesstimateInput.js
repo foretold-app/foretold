@@ -1,6 +1,5 @@
 import React from "react";
 import {Guesstimator} from '../guesstimator/index';
-import {VictoryChart, VictoryLine} from "victory";
 import {Input} from "antd";
 import _ from "lodash";
 

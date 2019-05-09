@@ -1,5 +1,7 @@
-[@bs.module "antd/lib/date-picker/index"]
-external reactClass: ReasonReact.reactClass = "default";
+// from https://github.com/JakubMarkiewicz/bs-ant-design/blob/master/src/Antd_DatePicker.re
+
+[@bs.module]
+external reactClass: ReasonReact.reactClass = "antd/lib/date-picker";
 
 [%bs.raw {|require("antd/lib/date-picker/style")|}];
 

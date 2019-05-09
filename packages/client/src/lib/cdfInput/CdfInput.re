@@ -80,7 +80,6 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
                state.floatCdf
                |> (e => (e.xs, e.ys))
                |> MeasurementValue.FloatCdf.fromArrays
-               |> MeasurementValue.toChunks(~bucketSize=20)
                |> MeasurementValue.toPdf
                |> MeasurementValue.FloatCdf.toJs
              }
@@ -100,7 +99,7 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
         <h4 className=Styles.label> {"Value" |> ste} </h4>
         <GuesstimateInput
           focusOnRender=true
-          sampleCount=1000
+          sampleCount=30000
           onUpdate={e =>
             {let (ys, xs) = e
              let asGroup: FloatCdf.t = {xs, ys}

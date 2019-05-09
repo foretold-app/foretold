@@ -68,9 +68,9 @@ module Columns = {
     render: m =>
       switch (m.role) {
       | `ADMIN =>
-        <div className="ant-tag ant-tag-green"> {"Viewer" |> ste} </div>
-      | `VIEWER =>
         <div className="ant-tag ant-tag-blue"> {"Admin" |> ste} </div>
+      | `VIEWER =>
+        <div className="ant-tag ant-tag-green"> {"Viewer" |> ste} </div>
       },
   };
 
@@ -79,31 +79,29 @@ module Columns = {
       name: "Change Role" |> ste,
       render: m =>
         <div>
-          {
-            switch (m.role, m.agent) {
-            | (`VIEWER, Some(agent)) =>
-              E.React.showIf(
-                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
-                changeRoleAction(
-                  agent.id,
-                  channelId,
-                  `ADMIN,
-                  "Change to Admin",
-                ),
-              )
-            | (`ADMIN, Some(agent)) =>
-              E.React.showIf(
-                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
-                changeRoleAction(
-                  agent.id,
-                  channelId,
-                  `VIEWER,
-                  "Change to Viewer",
-                ),
-              )
-            | _ => <div />
-            }
-          }
+          {switch (m.role, m.agent) {
+           | (`VIEWER, Some(agent)) =>
+             E.React.showIf(
+               canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
+               changeRoleAction(
+                 agent.id,
+                 channelId,
+                 `ADMIN,
+                 "Change to Admin",
+               ),
+             )
+           | (`ADMIN, Some(agent)) =>
+             E.React.showIf(
+               canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
+               changeRoleAction(
+                 agent.id,
+                 channelId,
+                 `VIEWER,
+                 "Change to Viewer",
+               ),
+             )
+           | _ => <div />
+           }}
         </div>,
     };
 

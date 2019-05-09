@@ -36,6 +36,7 @@
 		"@babel/preset-react": "7.0.0",
 		"@glennsl/bs-jest": "^0.4.7",
 		"@glennsl/bs-json": "^3.0.0",
+		"@foretold/cdf": "^1.0.7",
 		"@ncthbrt/re-secure-random-string": "^2.0.0",
 		"@storybook/addon-actions": "^3.4.11",
 		"@storybook/addon-links": "^3.4.11",

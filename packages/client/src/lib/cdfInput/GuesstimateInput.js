@@ -1,12 +1,13 @@
 import React from "react";
 import {Guesstimator} from '../guesstimator/index';
 import {Input} from "antd";
+import {Samples} from "@foretold/cdf";
 import _ from "lodash";
 
 const toCdf = (values) => {
-    const sorted = _.sortBy(values)
-    const length = values.length
-    return [_.map(sorted, (o,i) => (i / length)), sorted]
+    const samples = new Samples(values);
+    const cdf = samples.toCdf({size:1000, width:20});
+    return [cdf.ys, cdf.xs];
 }
 
 export class GuesstimateInput extends React.Component {

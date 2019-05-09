@@ -1,43 +1,63 @@
-/* from: https://github.com/tiensonqin/bs-antd/blob/master/src/Antd.re */
+[@bs.module] external switcher: ReasonReact.reactClass = "antd/lib/switch";
 
-let optBoolToOptJsBoolean =
-  fun
-  | None => None
-  | Some(v) => Some(v);
+[%bs.raw {|require("antd/lib/switch/style")|}];
 
-let unwrapBool = v => Js.Undefined.fromOption @@ optBoolToOptJsBoolean(v);
+[@bs.deriving jsConverter]
+type size = [ | `default | `small];
 
-[@bs.module "../../../node_modules/antd/lib/switch"]
-external switch': ReasonReact.reactClass = "default";
-%bs.raw
-"require('../../../node_modules/antd/lib/switch/style/index.css')";
+[@bs.obj]
+external makeProps:
+  (
+    ~prefixCls: string=?,
+    ~size: string=?,
+    ~className: string=?,
+    ~checked: bool=?,
+    ~defaultChecked: bool=?,
+    ~onChange: bool => unit=?,
+    ~checkedChildren: ReasonReact.reactElement=?,
+    ~unCheckedChildren: ReasonReact.reactElement=?,
+    ~disabled: bool=?,
+    ~loading: bool=?,
+    ~autoFocus: bool=?,
+    ~style: ReactDOMRe.Style.t=?,
+    unit
+  ) =>
+  _ =
+  "";
 
 let make =
     (
-      ~defaultChecked=?,
-      ~disabled=?,
-      ~checkedChildren=?,
-      ~className=?,
+      ~prefixCls=?,
       ~size=?,
-      ~style=?,
+      ~className=?,
       ~checked=?,
-      ~id=?,
-      ~unCheckedChildren=?,
+      ~defaultChecked=?,
       ~onChange=?,
+      ~checkedChildren=?,
+      ~unCheckedChildren=?,
+      ~disabled=?,
+      ~loading=?,
+      ~autoFocus=?,
+      ~style=?,
+      children,
     ) =>
   ReasonReact.wrapJsForReason(
-    ~reactClass=switch',
+    ~reactClass=switcher,
     ~props=
-      Js.Undefined.{
-        "defaultChecked": unwrapBool(defaultChecked),
-        "disabled": unwrapBool(disabled),
-        "checkedChildren": fromOption(checkedChildren),
-        "className": fromOption(className),
-        "size": fromOption(size),
-        "style": fromOption(style),
-        "checked": unwrapBool(checked),
-        "id": fromOption(id),
-        "unCheckedChildren": fromOption(unCheckedChildren),
-        "onChange": fromOption(onChange),
-      },
+      makeProps(
+        ~prefixCls?,
+        ~size=?Js.Option.map((. b) => sizeToJs(b), size),
+        ~className?,
+        ~checked?,
+        ~defaultChecked?,
+        ~onChange?,
+        ~checkedChildren?,
+        ~unCheckedChildren?,
+        ~disabled?,
+        ~loading?,
+        ~autoFocus?,
+        ~style?,
+        (),
+      ),
+    children,
   );

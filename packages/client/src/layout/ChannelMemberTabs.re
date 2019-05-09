@@ -11,10 +11,9 @@ let toS = (t: t) =>
   };
 
 let button = (value, toUrl, str, id) =>
-  <Antd_Radio_Button
-    value onClick={_ => Context.Routing.Url.push(toUrl(id))}>
+  <Antd.Button onClick={_ => Context.Routing.Url.push(toUrl(id))}>
     {str |> ste}
-  </Antd_Radio_Button>;
+  </Antd.Button>;
 
 let toUrl = (t: t, id: string): Context__Routing.Url.t =>
   switch (t) {
@@ -23,11 +22,7 @@ let toUrl = (t: t, id: string): Context__Routing.Url.t =>
   };
 
 let component = (agent, o: t, channel: Context.Primary.Channel.t) =>
-  <Antd.Radio.Group defaultValue="" value={o |> toS} onChange={e => ()}>
-    {
-      E.React.showIf(
-        channel.myRole === Some(`ADMIN),
-        button(Invite |> toS, Invite |> toUrl, "Invite", channel.id),
-      )
-    }
-  </Antd.Radio.Group>;
+  E.React.showIf(
+    channel.myRole === Some(`ADMIN),
+    button(Invite |> toS, Invite |> toUrl, "Invite", channel.id),
+  );

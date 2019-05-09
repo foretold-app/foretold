@@ -63,4 +63,13 @@ describe('CDF Class', () => {
     expect(Number.isInteger(XS[1])).toBe(true);
     expect(Number.isInteger(XS[2])).toBe(true);
   });
+  it('toPdf()', () => {
+    const xs = [1,2,5,8];
+    const ys = [0.0, 0.4, 0.8, 1.0];
+    const cdf = new Cdf(xs, ys);
+    const pdf = cdf.toPdf();
+    expect(pdf.xs).toStrictEqual(cdf.xs);
+    expect(pdf.ys[1]).toBeCloseTo(0.4);
+    expect(pdf.ys[2]).toBeCloseTo(0.4);
+  });
 });

@@ -132,6 +132,13 @@ class Cdf {
     return Array.from(Array(size), () => this.sampleSingle());
   }
 
+  toPdf(){
+      let newYs = [this.ys[0]];
+      for (var i = 1; i < this.ys.length; i++) {
+          newYs.push(this.ys[i] - this.ys[i-1])
+      }
+      return new Pdf(this.xs, newYs);
+  }
   /**
    * FUTURE
    * TODO: Don't do this one in this story, but it would be nice to do later.
@@ -142,6 +149,57 @@ class Cdf {
   }
 }
 
+class Pdf {
+  /**
+   * @param {number[]} xs
+   * @param {number[]} ys
+   */
+  constructor(xs, ys) {
+    if (!this.validateSize(xs, ys)) {
+      throw new Error('Arrays of "xs" and "ys" have different sizes.');
+    }
+
+    if (!this.validateHasLength(xs)) {
+      throw new Error('You need at least one element.');
+    }
+
+    const sorted = this.order(xs, ys);
+    this.xs = sorted.xs;
+    this.ys = sorted.ys;
+  }
+
+  validateSize(xs, ys) {
+    return xs.length === ys.length;
+  }
+
+  validateHasLength(xs) {
+    return xs.length > 0;
+  }
+
+  order(xs, ys) {
+    const xsYs = xs.map((v, i) => ({ ys: ys[i], xs: v }));
+    const sorted = xsYs.sort((a, b) => {
+      if (a.xs > b.xs) return 1;
+      if (a.xs < b.xs) return -1;
+      return 0;
+    });
+
+    const XS = sorted.map(v => v.xs);
+    const YS = sorted.map(v => v.ys);
+
+    return { xs: XS, ys: YS };
+  }
+
+  toCdf(){
+      let newYs = [this.ys[0]];
+      for (var i = 1; i < this.ys.length; i++) {
+          newYs.push(newYs[i-1] + this.ys[i])
+      }
+      return new Cdf(this.xs, newYs);
+  }
+}
+
 module.exports = {
   Cdf,
+  Pdf,
 };

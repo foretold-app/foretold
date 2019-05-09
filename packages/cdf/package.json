@@ -1,7 +1,7 @@
 {
   "name": "@foretold/cdf",
-  "version": "1.0.6",
-  "description": "Cumulative distribution function example",
+  "version": "1.0.7",
+  "description": "Cumulative distribution functions",
   "main": "index.js",
   "scripts": {
     "test": "jest --watch",
@@ -13,6 +13,9 @@
   "license": "MIT",
   "devDependencies": {
     "jest": "^24.7.1"
+  },
+  "dependencies": {
+    "pdfast": "^0.2.0"
   },
   "private": false,
   "keywords": [

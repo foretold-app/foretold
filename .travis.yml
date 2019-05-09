@@ -22,7 +22,7 @@ before_script:
   - echo Before-Script-OK
 
 install:
-  - docker build -t main ./server
+  - docker build -t main ./packages/server
 
 script:
   - printenv

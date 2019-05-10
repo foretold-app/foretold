@@ -1,0 +1,23 @@
+{
+  "name": "@foretold/theme",
+  "reason": {
+    "react-jsx": 2
+  },
+  "refmt": 3,
+  "bs-dependencies": [
+    "reason-react",
+    "bs-css"
+  ],
+  "warnings": {
+    "error": "+5"
+  },
+  "namespace": true,
+  "sources": [{
+      "dir": "src"
+    },
+    {
+      "dir": "example",
+      "type": "dev"
+    }
+  ]
+}

@@ -7,19 +7,13 @@ module Colors' = {
 module Styles = {
   open Css;
   let outer =
-    style([
-      width(`percent(100.0)),
-      float(`left),
-      backgroundColor(Colors'.background),
-    ]);
+    style([backgroundColor(Colors'.background)] @ Base.fullWidthFloatLeft);
 
   let inner =
-    style([
-      width(`percent(100.0)),
-      float(`left),
-      boxSizing(`borderBox),
-      padding2(~v=`em(1.), ~h=`em(2.0)),
-    ]);
+    style(
+      [boxSizing(`borderBox), padding2(~v=`em(1.), ~h=`em(2.0))]
+      @ Base.fullWidthFloatLeft,
+    );
 
   let hero =
     style([
@@ -39,7 +33,7 @@ let linkStyles =
   ];
 
 let link =
-  Main.BaseLink.make(
+  BaseLink.make(
     ~colors=(`hex("3562AE"), Colors.darkAccentBlue),
     ~styles=
       linkStyles
@@ -53,7 +47,7 @@ let link =
   );
 
 let secondaryLink =
-  Main.BaseLink.make(
+  BaseLink.make(
     ~colors=(Colors'.secondary, Colors.darkAccentBlue),
     ~styles=
       linkStyles
@@ -99,11 +93,11 @@ module SubHeader = {
         marginRight(`em(1.8)),
         float(`left),
       ];
-    <Main.BaseLink
+    <BaseLink
       colors={isActive ? activeColors : inactiveColors}
       styles=Css.((isActive ? activeStyles : inactiveStyles) @ allStyles)>
       ...children
-    </Main.BaseLink>;
+    </BaseLink>;
   };
 
   let make = children => {
@@ -112,11 +106,7 @@ module SubHeader = {
       <Div
         styles=[
           Css.(
-            style([
-              width(`percent(100.0)),
-              float(`left),
-              backgroundColor(Colors.white),
-            ])
+            style([backgroundColor(Colors.white)] @ Base.fullWidthFloatLeft)
           ),
         ]>
         <Div

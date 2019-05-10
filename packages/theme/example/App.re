@@ -3,9 +3,15 @@ ReactDOMRe.renderToElementWithId(
     <AppHeader
       links={
         [|
-          AppHeader.link(~href="#", [|"Link 1" |> ReasonReact.string|])
+          AppHeader.link(
+            ~href="#",
+            [|"Public Channels" |> ReasonReact.string|],
+          )
           |> ReasonReact.element,
-          AppHeader.link(~href="#", [|"Link 2" |> ReasonReact.string|])
+          AppHeader.link(
+            ~href="#",
+            [|"Entity Explorer" |> ReasonReact.string|],
+          )
           |> ReasonReact.element,
         |]
         |> ReasonReact.array

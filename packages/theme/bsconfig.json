@@ -5,8 +5,9 @@
   },
   "refmt": 3,
   "bs-dependencies": [
+    "bs-css",
     "reason-react",
-    "bs-css"
+    "rationale"
   ],
   "warnings": {
     "error": "+5"

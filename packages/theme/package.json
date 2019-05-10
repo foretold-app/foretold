@@ -20,6 +20,7 @@
     "dependencies": {
         "bs-css": "^8.0.2",
         "emotion": "^10.0.7",
+        "rationale": "^0.1.6",
         "reason-react": "^0.7.0"
     },
     "devDependencies": {

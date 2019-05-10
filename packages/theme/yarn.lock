@@ -1308,6 +1308,11 @@ bs-css@^8.0.2:
   dependencies:
     emotion "^9.2.12"
 
+bs-moment@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/bs-moment/-/bs-moment-0.4.4.tgz#3d59767e8cd0107393c4f371e15b95bf862ceaac"
+  integrity sha512-fAcofbF1bTj6fuwk4cCZ0Teod75dhXPulnNhRwx7+PTtccNMdn35SCb98JxwrprQgCvoZircIgmu8nGLsOaqaA==
+
 bs-platform@^5.0.0:
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-5.0.4.tgz#d406ef43c12d1b19d8546884d8b5b4e0fb709372"
@@ -4338,6 +4343,11 @@ range-parser@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.0.tgz#f49be6b487894ddc40dcc94a322f611092e00d5e"
   integrity sha1-9JvmtIeJTdxA3MlKMi9hEJLgDV4=
+
+rationale@^0.1.6:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/rationale/-/rationale-0.1.10.tgz#a14567d3eea7facaba0ed35d68ef2127fdd861d7"
+  integrity sha512-WMBpRHHjhY4AA8BtboQsA5voL2dQXhbtX0C/F4HYOGFZDZz5gbUfZVs22Sc4FqyvpJoT/1A+PhcpOvefnKKxJQ==
 
 rc@^1.2.7:
   version "1.2.8"

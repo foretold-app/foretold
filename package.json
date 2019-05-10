@@ -2,7 +2,7 @@
     "name": "@foretold/foretold",
     "version": "1.0.2",
     "description": "Simple prediction service",
-    "private": false,
+    "private": true,
     "scripts": {
         "lerna": "lerna",
         "bootstrap": "lerna bootstrap",

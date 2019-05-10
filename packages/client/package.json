@@ -27,21 +27,15 @@
 		"update-gql": "yarn send-introspection-query http://localhost:4000/graphql",
 		"webpack": "webpack -w",
 		"webpack:production": "NODE_ENV=production webpack",
-		"storybook": "start-storybook -p 6006",
-		"build-storybook": "build-storybook",
 		"find-interface-for-file": "bsc -bs-re-out",
 		"analyze": "source-map-explorer dist/Index.adc0ecca.js"
 	},
 	"dependencies": {
 		"@babel/preset-react": "7.0.0",
+		"@foretold/cdf": "^1.0.7",
 		"@glennsl/bs-jest": "^0.4.7",
 		"@glennsl/bs-json": "^3.0.0",
-		"@foretold/cdf": "^1.0.7",
 		"@ncthbrt/re-secure-random-string": "^2.0.0",
-		"@storybook/addon-actions": "^3.4.11",
-		"@storybook/addon-links": "^3.4.11",
-		"@storybook/addons": "^3.4.11",
-		"@storybook/react": "^3.4.11",
 		"antd": "^3.17.0",
 		"apollo-cache-inmemory": "^1.2.9",
 		"apollo-client": "^2.4.1",
@@ -62,7 +56,6 @@
 		"bs-moment": "^0.4.4",
 		"bs-platform": "^5.0.0",
 		"bs-reform": "^6.0.0-gadt.5",
-		"bs-storybook": "^0.2.0",
 		"bsb-js": "^1.1.7",
 		"css-loader": "^2.1.1",
 		"d3": "^5.9.2",
@@ -96,5 +89,8 @@
 		"webpack": "^4.0.1",
 		"webpack-cli": "^3.1.0",
 		"webpack-dev-server": "^3.2.1"
+	},
+	"devDependencies": {
+		"babel-preset-react": "^6.24.1"
 	}
 }

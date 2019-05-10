@@ -10,9 +10,6 @@
   "sources": [{
     "dir": "src",
     "subdirs": true
-  }, {
-    "dir": "stories",
-    "subdirs": true
   }],
   "package-specs": [{
     "module": "commonjs",
@@ -27,7 +24,6 @@
     "bs-css",
     "bs-ant-design",
     "bs-moment",
-    "bs-storybook",
     "reason-react",
     "@ncthbrt/re-secure-random-string",
     "reason-apollo",

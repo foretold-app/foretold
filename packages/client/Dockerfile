@@ -12,7 +12,6 @@ RUN apt-get install -y nano mc curl git
 RUN apt-get install -y ocaml
 RUN yarn
 
-COPY .storybook/ /opt/app/.storybook
 COPY lib/ /opt/app/lib
 COPY src/ /opt/app/src
 COPY stories/ /opt/app/stories

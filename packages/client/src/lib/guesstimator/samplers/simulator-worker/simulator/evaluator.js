@@ -46,7 +46,6 @@ math.import(Filters, {override: true})
 export function Evaluate(text, sampleCount, inputs) {
   try {
     const compiled = math.compile(text)
-    let m = math;
     return evaluate(compiled, inputs, sampleCount, text)
   } catch ({message}) {
     if (message.startsWith('Unexpected end of expression')) {

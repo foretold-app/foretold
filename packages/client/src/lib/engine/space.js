@@ -1,5 +1,3 @@
-import math from 'mathjs'
-
 import * as _graph from './graph'
 import * as _metric from './metric'
 import * as _guesstimate from './guesstimate'

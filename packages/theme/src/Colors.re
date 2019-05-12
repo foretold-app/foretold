@@ -30,6 +30,7 @@ let primary = mainBlue;
 module Text = {
   module LightBackground = {
     let main = textDark;
+    let p = "#626875"->r;
     let light = accentBlue;
     let active = "#3562AE"->r;
   };

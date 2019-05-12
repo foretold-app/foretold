@@ -14,7 +14,8 @@
   },
   "namespace": true,
   "sources": [{
-      "dir": "src"
+      "dir": "src",
+      "subdirs": true
     },
     {
       "dir": "example",

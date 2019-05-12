@@ -17,7 +17,7 @@ ReactDOMRe.renderToElementWithId(
         |> ReasonReact.array
       }
     />
-    AppGroupHeader.make
+    ExampleFullPage.make
   </div>,
   "app",
 );

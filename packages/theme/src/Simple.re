@@ -10,6 +10,10 @@ let tagStyles = (~isDisabled=false, ~heightPadding=2, ()) => {
   isDisabled ? disabledStyles @ main : main;
 };
 
+module Linktag = {
+  let make = BaseLink.make(~styles=tagStyles(), ~isDisabled=false);
+};
+
 let activeItemWithNumber = (isActive, text, number: int) => {
   let textStyle =
     Css.[Base.floatLeft, marginRight(`em(1.0)), marginTop(`px(3))];

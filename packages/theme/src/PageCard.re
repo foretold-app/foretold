@@ -40,3 +40,35 @@ let header = children =>
     ]>
     children
   </Div>;
+
+module H1 = {
+  let component = ReasonReact.statelessComponent("H1");
+  let make = children => {
+    ...component,
+    render: _self =>
+      <h1
+        className=Css.(
+          style(
+            [
+              fontSize(`px(21)),
+              fontWeight(`num(500)),
+              marginTop(`em(0.0)),
+            ]
+            @ Base.fullWidthFloatLeft,
+          )
+        )>
+        ...children
+      </h1>,
+  };
+};
+
+module P = {
+  let component = ReasonReact.statelessComponent("P");
+  let make = children => {
+    ...component,
+    render: _self =>
+      <p className=Css.(style([color(Colors.Text.LightBackground.p)]))>
+        ...children
+      </p>,
+  };
+};

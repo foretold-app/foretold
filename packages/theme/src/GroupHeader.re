@@ -35,6 +35,7 @@ let linkStyles =
 let link =
   BaseLink.make(
     ~colors=(`hex("3562AE"), Colors.darkAccentBlue),
+    ~isDisabled=false,
     ~styles=
       linkStyles
       @ Css.[
@@ -49,6 +50,7 @@ let link =
 let secondaryLink =
   BaseLink.make(
     ~colors=(Colors'.secondary, Colors.darkAccentBlue),
+    ~isDisabled=false,
     ~styles=
       linkStyles
       @ Css.[
@@ -95,6 +97,7 @@ module SubHeader = {
       ];
     <BaseLink
       colors={isActive ? activeColors : inactiveColors}
+      isDisabled=false
       styles=Css.((isActive ? activeStyles : inactiveStyles) @ allStyles)>
       ...children
     </BaseLink>;

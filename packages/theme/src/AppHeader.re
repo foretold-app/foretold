@@ -15,6 +15,7 @@ let component = ReasonReact.statelessComponent(__MODULE__);
 let link =
   BaseLink.make(
     ~colors=(Colors.accentBlue, Colors.darkAccentBlue),
+    ~isDisabled=false,
     ~styles=Css.[marginRight(`em(2.)), fontWeight(`num(400))],
   );
 

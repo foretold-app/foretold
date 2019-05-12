@@ -83,9 +83,24 @@ let make =
         {
           PageCard.header(
             [|
-              Simple.tag("Open" |> ReasonReact.string, 12),
-              Simple.tag("Pending Resolution" |> ReasonReact.string, 12),
-              Simple.tag("Closed" |> ReasonReact.string, 12),
+              Simple.activeItemWithNumber("Open" |> ReasonReact.string, 12),
+              Simple.activeItemWithNumber(
+                "Pending Resolution" |> ReasonReact.string,
+                18,
+              ),
+              Simple.activeItemWithNumber("Closed" |> ReasonReact.string, 10),
+              PaginationButtons.make({
+                currentValue: Item(3),
+                max: 100,
+                pageLeft: {
+                  isDisabled: false,
+                  onClick: _ => (),
+                },
+                pageRight: {
+                  isDisabled: true,
+                  onClick: _ => (),
+                },
+              }),
             |]
             |> ReasonReact.array,
           )

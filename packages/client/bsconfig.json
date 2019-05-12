@@ -20,6 +20,7 @@
   "bs-dependencies": [
     "@glennsl/bs-json",
     "@glennsl/bs-jest",
+    "@foretold/components",
     "bs-reform",
     "bs-css",
     "bs-ant-design",

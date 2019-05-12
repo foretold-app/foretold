@@ -1,5 +1,5 @@
 {
-    "name": "@foretold/theme",
+    "name": "@foretold/components",
     "version": "0.0.1",
     "description": "",
     "scripts": {
@@ -18,7 +18,7 @@
     "author": "Ozzie Gooen <ozzieagooen@gmail.com>",
     "license": "MIT",
     "dependencies": {
-        "bs-css": "^8.0.2",
+        "bs-css": "8.0.2",
         "emotion": "^10.0.7",
         "rationale": "^0.1.6",
         "reason-react": "^0.7.0"

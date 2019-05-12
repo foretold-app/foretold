@@ -1301,17 +1301,12 @@ browserslist@^4.0.0, browserslist@^4.1.0, browserslist@^4.3.4:
     electron-to-chromium "^1.3.127"
     node-releases "^1.1.17"
 
-bs-css@^8.0.2:
-  version "8.0.4"
-  resolved "https://registry.yarnpkg.com/bs-css/-/bs-css-8.0.4.tgz#3fee97b2261734be56f67ee7e444dbae3a99d15b"
-  integrity sha512-03kgfSF2xs6VSurBn92yjkjIZl+U5gScleuU5fUeJelqY85ipqZpTt+npaGJcSyoUJqePR8Bzu2zsF8kJiwB6w==
+bs-css@8.0.2:
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/bs-css/-/bs-css-8.0.2.tgz#04e84b6cbdfe873b39367b90887de8bf46057f7a"
+  integrity sha512-aMsEMmuR2F9gmQMCDja+oMUJzOvEoHcymHlYRQueKxELmghtXqSrw+Z+Bsz/umr/+tuhiQ322z0f6NNL8mfUig==
   dependencies:
     emotion "^9.2.12"
-
-bs-moment@^0.4.4:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/bs-moment/-/bs-moment-0.4.4.tgz#3d59767e8cd0107393c4f371e15b95bf862ceaac"
-  integrity sha512-fAcofbF1bTj6fuwk4cCZ0Teod75dhXPulnNhRwx7+PTtccNMdn35SCb98JxwrprQgCvoZircIgmu8nGLsOaqaA==
 
 bs-platform@^5.0.0:
   version "5.0.4"

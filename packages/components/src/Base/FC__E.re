@@ -1,4 +1,3 @@
-/* O for option */
 open Rationale.Function.Infix;
 
 /* Utils */

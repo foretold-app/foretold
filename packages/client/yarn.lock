@@ -2969,7 +2969,7 @@ browserslist@^4.0.0, browserslist@^4.1.0, browserslist@^4.3.4:
     antd "^3.8.2"
     re-classnames "^3.0.0"
 
-bs-css@^8.0.2:
+bs-css@8.0.2:
   version "8.0.2"
   resolved "https://registry.yarnpkg.com/bs-css/-/bs-css-8.0.2.tgz#04e84b6cbdfe873b39367b90887de8bf46057f7a"
   integrity sha512-aMsEMmuR2F9gmQMCDja+oMUJzOvEoHcymHlYRQueKxELmghtXqSrw+Z+Bsz/umr/+tuhiQ322z0f6NNL8mfUig==

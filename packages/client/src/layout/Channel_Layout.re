@@ -99,11 +99,13 @@ let make =
           <div className=Styles.header1inner> top </div>
         </div>
       </div>
-      <div className=Styles.header2outer>
-        <div className=Styles.container>
-          <div className=Styles.header2inner> secondLevel </div>
+      <FC.GroupHeader.SubHeader>
+        <div className=Styles.header2outer>
+          <div className=Styles.container>
+            <div className=Styles.header2inner> secondLevel </div>
+          </div>
         </div>
-      </div>
+      </FC.GroupHeader.SubHeader>
       <div className=Styles.container>
         <Div flexDirection=`row styles=[SLayout.Styles.width100]>
           <Div flex=3>

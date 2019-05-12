@@ -33,6 +33,7 @@
 	"dependencies": {
 		"@babel/preset-react": "7.0.0",
 		"@foretold/cdf": "^1.0.7",
+		"@foretold/components": "^0.0.1",
 		"@glennsl/bs-jest": "^0.4.7",
 		"@glennsl/bs-json": "^3.0.0",
 		"@ncthbrt/re-secure-random-string": "^2.0.0",
@@ -52,7 +53,7 @@
 		"babel-preset-stage-0": "^6.24.1",
 		"babel-runtime": "^6.26.0",
 		"bs-ant-design": "git+https://git@github.com/Thinkei/bs-ant-design.git",
-		"bs-css": "^8.0.2",
+		"bs-css": "8.0.2",
 		"bs-moment": "^0.4.4",
 		"bs-platform": "^5.0.0",
 		"bs-reform": "^6.0.0-gadt.5",

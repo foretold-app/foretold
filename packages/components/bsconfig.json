@@ -1,18 +1,22 @@
 {
-  "name": "@foretold/theme",
+  "name": "@foretold/components",
   "reason": {
     "react-jsx": 2
   },
   "refmt": 3,
+  "bs-dev-dependencies": [],
   "bs-dependencies": [
-    "bs-css",
     "reason-react",
+    "bs-css",
     "rationale"
   ],
   "warnings": {
     "error": "+5"
   },
-  "namespace": true,
+  "package-specs": {
+    "module": "es6-global",
+    "in-source": false
+  },
   "sources": [{
       "dir": "src",
       "subdirs": true

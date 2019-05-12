@@ -1,0 +1,34 @@
+{
+    "name": "@foretold",
+    "version": "0.0.0",
+    "bs-dependencies": [
+        "@foretold/components",
+        "@glennsl/bs-json",
+        "@glennsl/bs-jest",
+        "@foretold/components",
+        "bs-reform",
+        "bs-css",
+        "bs-ant-design",
+        "bs-moment",
+        "reason-react",
+        "@ncthbrt/re-secure-random-string",
+        "reason-apollo",
+        "rationale"
+    ],
+    "warnings": {
+        "error": "+101"
+    },
+    "package-specs": [{
+        "module": "commonjs",
+        "in-source": true
+    }],
+    "sources": [{
+            "dir": "packages/client/src",
+            "subdirs": true
+        },
+        {
+            "dir": "packages/components/src",
+            "subdirs": true
+        }
+    ]
+}

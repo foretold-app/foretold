@@ -3,7 +3,7 @@ let style =
     style(
       [
         padding2(~v=`px(0), ~h=`em(1.5)),
-        borderBottom(`px(1), `solid, `hex("D5D7DAAA")),
+        borderBottom(`px(1), `solid, Colors.accentBlueO8),
       ]
       @ Base.fullWidthFloatLeft,
     )

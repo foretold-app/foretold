@@ -33,24 +33,7 @@ let header = children =>
     styles=[
       Css.(
         style(
-          [borderBottom(`px(1), `solid, `hex("D5D7DAAA")), defaultPadding]
-          @ Base.fullWidthFloatLeft,
-        )
-      ),
-    ]>
-    children
-  </Div>;
-
-let subheader = children =>
-  <Div
-    styles=[
-      Css.(
-        style(
-          [
-            background(`hex("e7eaef")),
-            borderBottom(`px(1), `solid, `hex("D5D7DAAA")),
-            defaultPadding,
-          ]
+          [borderBottom(`px(1), `solid, Colors.accentBlueO8)]
           @ Base.fullWidthFloatLeft,
         )
       ),

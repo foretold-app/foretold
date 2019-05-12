@@ -25,7 +25,7 @@ module Styles = {
 
 let linkStyles =
   Css.[
-    float(`right),
+    Base.floatRight,
     marginLeft(`em(2.)),
     marginTop(`em(0.5)),
     borderRadius(`px(5)),

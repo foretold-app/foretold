@@ -105,7 +105,35 @@ let make =
             |> ReasonReact.array,
           )
         }
-        {PageCard.subheader("Knowledge Graph" |> ReasonReact.string)}
+        <Table.HeaderRow>
+          <Table.Cell
+            flex=2
+            styles=[
+              Css.(
+                style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))])
+              ),
+            ]>
+            {"Name & Status" |> ReasonReact.string}
+          </Table.Cell>
+          <Table.Cell
+            flex=1
+            styles=[
+              Css.(
+                style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))])
+              ),
+            ]>
+            {"Prediction Over Time" |> ReasonReact.string}
+          </Table.Cell>
+          <Table.Cell
+            flex=1
+            styles=[
+              Css.(
+                style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))])
+              ),
+            ]>
+            {"Details" |> ReasonReact.string}
+          </Table.Cell>
+        </Table.HeaderRow>
         <Table.Row>
           <Table.Cell
             flex=2

@@ -47,7 +47,7 @@ let subheader = children =>
       Css.(
         style(
           [
-            background(`hex("F9FAFB")),
+            background(`hex("e7eaef")),
             borderBottom(`px(1), `solid, `hex("D5D7DAAA")),
             defaultPadding,
           ]

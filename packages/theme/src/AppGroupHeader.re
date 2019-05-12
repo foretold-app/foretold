@@ -106,7 +106,34 @@ let make =
           )
         }
         {PageCard.subheader("Knowledge Graph" |> ReasonReact.string)}
-        {"Knowledge Graph" |> ReasonReact.string}
+        <Table.Row>
+          <Table.Cell
+            flex=2
+            styles=[
+              Css.(
+                style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])
+              ),
+            ]>
+            <div className=Table.Row.headerStyle>
+              {"What will the GDP of China be in 2020?" |> ReasonReact.string}
+            </div>
+            <div
+              className=Css.(
+                style([
+                  fontWeight(`num(500)),
+                  color(Colors.Statuses.green),
+                ])
+              )>
+              {"Open" |> ReasonReact.string}
+            </div>
+          </Table.Cell>
+          <Table.Cell flex=1 styles=[Css.(style([paddingTop(`em(1.0))]))]>
+            {"Knowledge Graph" |> ReasonReact.string}
+          </Table.Cell>
+          <Table.Cell flex=1 styles=[Css.(style([paddingTop(`em(1.0))]))]>
+            {"Knowledge Graph" |> ReasonReact.string}
+          </Table.Cell>
+        </Table.Row>
       </PageCard>
     </Div>
   </Div>;

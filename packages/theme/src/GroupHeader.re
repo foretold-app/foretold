@@ -40,9 +40,10 @@ let link =
       linkStyles
       @ Css.[
           background(Colors'.primary),
+          Css.transition(~duration=100, "background"),
           selector(
             ":hover",
-            [background(Colors.smokeWhite), color(Colors.darkAccentBlue)],
+            [background(Colors.whiteOc), color(Colors.darkAccentBlue)],
           ),
         ],
   );
@@ -55,12 +56,8 @@ let secondaryLink =
       linkStyles
       @ Css.[
           border(`px(1), `solid, Colors'.secondary),
-          Css.transition(~duration=400, "background"),
-          Css.transition(~duration=400, "color"),
-          selector(
-            ":hover",
-            [background(Colors.smokeWhite), color(Colors.darkAccentBlue)],
-          ),
+          Css.transition(~duration=100, "background"),
+          selector(":hover", [background(Colors.whiteO2)]),
         ],
   );
 
@@ -87,7 +84,7 @@ module SubHeader = {
         borderBottom(`px(2), `solid, Colors.clear),
         color(LightBackground.main),
       ];
-    let inactiveColors = (LightBackground.main, LightBackground.main);
+    let inactiveColors = (LightBackground.main, LightBackground.active);
     let allStyles =
       Css.[
         paddingBottom(`em(0.8)),

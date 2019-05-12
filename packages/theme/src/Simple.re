@@ -10,11 +10,20 @@ let tagStyles = (~isDisabled=false, ~heightPadding=2, ()) => {
   isDisabled ? disabledStyles @ main : main;
 };
 
-let activeItemWithNumber = (text, number: int) => {
+let activeItemWithNumber = (isActive, text, number: int) => {
   let textStyle =
     Css.[Base.floatLeft, marginRight(`em(1.0)), marginTop(`px(3))];
+
+  let colors =
+    isActive ?
+      (
+        Colors.Text.LightBackground.active,
+        Colors.Text.LightBackground.active,
+      ) :
+      (Colors.Text.LightBackground.main, Colors.Text.LightBackground.active);
+
   <BaseLink
-    colors=(Colors.darkAccentBlue, Colors.grey1)
+    colors
     styles=Css.[Base.floatLeft, padding2(~v=`em(1.), ~h=`em(1.5))]
     isDisabled=false>
     <span className={Css.style(textStyle)}> text </span>

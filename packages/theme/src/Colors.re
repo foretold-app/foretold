@@ -5,6 +5,9 @@ let r = c => c->removeHex->(e => `hex(e));
 let white = "#FFFFFF"->r;
 let black = "#000000"->r;
 let greyO4 = "#00000044"->r;
+let whiteO2 = "#ffffff20"->r;
+let whiteO4 = "#ffffff40"->r;
+let whiteOc = "#ffffffc0"->r;
 let clear = "#00000000"->r;
 
 let textDark = "#192D44"->r;

@@ -123,16 +123,22 @@ let make =
             <Div>
               <Div>
                 {
-                  Simple.activeItemWithNumber("Open" |> ReasonReact.string, 12)
+                  Simple.activeItemWithNumber(
+                    true,
+                    "Open" |> ReasonReact.string,
+                    12,
+                  )
                 }
                 {
                   Simple.activeItemWithNumber(
+                    false,
                     "Pending Resolution" |> ReasonReact.string,
                     18,
                   )
                 }
                 {
                   Simple.activeItemWithNumber(
+                    false,
                     "Closed" |> ReasonReact.string,
                     10,
                   )
@@ -141,7 +147,7 @@ let make =
               <Div float=`right>
                 {
                   PaginationButtons.make({
-                    currentValue: Item(3),
+                    currentValue: Range(3, 10),
                     max: 100,
                     pageLeft: {
                       isDisabled: false,

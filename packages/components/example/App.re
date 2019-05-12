@@ -1,3 +1,4 @@
+open FC;
 ReactDOMRe.renderToElementWithId(
   <div className=Css.(style([fontFamily("poppins")]))>
     <AppHeader

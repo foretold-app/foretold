@@ -1,3 +1,6 @@
+open FC;
+open Base;
+
 let row =
   <Table.Row>
     <Table.Cell
@@ -17,22 +20,22 @@ let row =
     </Table.Cell>
     <Table.Cell flex=1 styles=[Css.(style([paddingTop(`em(0.5))]))]>
       <Div>
-        <BaseLink styles=[Css.marginRight(`em(1.0))]>
+        <Link styles=[Css.marginRight(`em(1.0))]>
           {"Series A" |> ReasonReact.string}
-        </BaseLink>
-        <BaseLink> {"19" |> ReasonReact.string} </BaseLink>
+        </Link>
+        <Link> {"19" |> ReasonReact.string} </Link>
       </Div>
       <Div>
-        <BaseLink
+        <Link
           styles=[
             Css.marginRight(`em(1.0)),
             Css.textDecoration(`underline),
           ]>
           {"Edit" |> ReasonReact.string}
-        </BaseLink>
-        <BaseLink styles=[Css.textDecoration(`underline)]>
+        </Link>
+        <Link styles=[Css.textDecoration(`underline)]>
           {"Archive" |> ReasonReact.string}
-        </BaseLink>
+        </Link>
       </Div>
     </Table.Cell>
   </Table.Row>;

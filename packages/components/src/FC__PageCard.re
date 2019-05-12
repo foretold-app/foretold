@@ -1,7 +1,8 @@
+open FC__Base;
 let component = ReasonReact.statelessComponent(__MODULE__);
 
 let link =
-  BaseLink.make(
+  Link.make(
     ~colors=(Colors.accentBlue, Colors.darkAccentBlue),
     ~styles=Css.[marginRight(`em(2.)), fontWeight(`num(400))],
   );
@@ -18,7 +19,7 @@ let make = children => {
               border(`px(1), `solid, `hex("D5D7DA")),
               borderRadius(`px(5)),
             ]
-            @ Base.fullWidthFloatLeft,
+            @ BaseStyles.fullWidthFloatLeft,
           )
         ),
       ]>
@@ -34,7 +35,7 @@ let header = children =>
       Css.(
         style(
           [borderBottom(`px(1), `solid, Colors.accentBlueO8)]
-          @ Base.fullWidthFloatLeft,
+          @ BaseStyles.fullWidthFloatLeft,
         )
       ),
     ]>
@@ -54,7 +55,7 @@ module H1 = {
               fontWeight(`num(500)),
               marginTop(`em(0.0)),
             ]
-            @ Base.fullWidthFloatLeft,
+            @ BaseStyles.fullWidthFloatLeft,
           )
         )>
         ...children

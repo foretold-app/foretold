@@ -1,3 +1,4 @@
+open FC__Base;
 let make =
   <Div>
     Example__AppGroupHeader.make
@@ -12,7 +13,7 @@ let make =
               paddingRight(`em(2.)),
               boxSizing(`borderBox),
             ]
-            @ Base.fullWidthFloatLeft,
+            @ BaseStyles.fullWidthFloatLeft,
           )
         ),
       ]>
@@ -29,7 +30,7 @@ let make =
               paddingRight(`em(2.)),
               boxSizing(`borderBox),
             ]
-            @ Base.fullWidthFloatLeft,
+            @ BaseStyles.fullWidthFloatLeft,
           )
         ),
       ]>
@@ -38,7 +39,11 @@ let make =
           <Div> Example__MeasurableTopCard.make </Div>
           <Div
             styles=[
-              Css.(style([marginTop(`em(2.0))] @ Base.fullWidthFloatLeft)),
+              Css.(
+                style(
+                  [marginTop(`em(2.0))] @ BaseStyles.fullWidthFloatLeft,
+                )
+              ),
             ]>
             Example__CardMeasurableMeasurements.make
           </Div>

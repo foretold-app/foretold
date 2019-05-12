@@ -1,3 +1,6 @@
+open FC;
+open Base;
+
 let make =
   <Div>
     <GroupHeader hero={"US Politics" |> ReasonReact.string}>

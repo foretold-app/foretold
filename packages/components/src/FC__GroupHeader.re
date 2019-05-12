@@ -1,3 +1,5 @@
+open FC__Base;
+
 module Colors' = {
   let background = Colors.mainBlue;
   let primary = Colors.white;
@@ -7,12 +9,14 @@ module Colors' = {
 module Styles = {
   open Css;
   let outer =
-    style([backgroundColor(Colors'.background)] @ Base.fullWidthFloatLeft);
+    style(
+      [backgroundColor(Colors'.background)] @ BaseStyles.fullWidthFloatLeft,
+    );
 
   let inner =
     style(
       [boxSizing(`borderBox), padding2(~v=`em(1.), ~h=`em(2.0))]
-      @ Base.fullWidthFloatLeft,
+      @ BaseStyles.fullWidthFloatLeft,
     );
 
   let hero =
@@ -25,7 +29,7 @@ module Styles = {
 
 let linkStyles =
   Css.[
-    Base.floatRight,
+    BaseStyles.floatRight,
     marginLeft(`em(2.)),
     marginTop(`em(0.5)),
     borderRadius(`px(5)),
@@ -33,7 +37,7 @@ let linkStyles =
   ];
 
 let link =
-  BaseLink.make(
+  Link.make(
     ~colors=(`hex("3562AE"), Colors.darkAccentBlue),
     ~isDisabled=false,
     ~styles=
@@ -49,7 +53,7 @@ let link =
   );
 
 let secondaryLink =
-  BaseLink.make(
+  Link.make(
     ~colors=(Colors'.secondary, Colors.darkAccentBlue),
     ~isDisabled=false,
     ~styles=
@@ -81,7 +85,9 @@ module SubHeader = {
       <Div
         styles=[
           Css.(
-            style([backgroundColor(Colors.white)] @ Base.fullWidthFloatLeft)
+            style(
+              [backgroundColor(Colors.white)] @ BaseStyles.fullWidthFloatLeft,
+            )
           ),
         ]>
         <Div
@@ -97,7 +103,7 @@ module SubHeader = {
                     Colors.greyO4,
                   ),
                 ]
-                @ Base.fullWidthFloatLeft,
+                @ BaseStyles.fullWidthFloatLeft,
               )
             ),
           ]>

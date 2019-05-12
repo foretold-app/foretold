@@ -1,3 +1,6 @@
+open FC;
+open Base;
+
 let make =
   <PageCard>
     {
@@ -6,7 +9,7 @@ let make =
           <Div
             styles=[
               Css.style([
-                Base.floatLeft,
+                BaseStyles.floatLeft,
                 Css.padding2(~v=`em(1.), ~h=`em(1.5)),
               ]),
             ]>
@@ -35,7 +38,7 @@ let make =
       styles=[
         Css.style(
           [Css.padding2(~v=`em(1.5), ~h=`em(1.5))]
-          @ Base.fullWidthFloatLeft,
+          @ BaseStyles.fullWidthFloatLeft,
         ),
       ]>
       <Div flexDirection=`row>

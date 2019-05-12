@@ -1,3 +1,5 @@
+open FC__Base;
+
 module Cell = {
   let style = flexAmount => Css.(style([flex(flexAmount)]));
 
@@ -23,7 +25,7 @@ module HeaderRow = {
           flexDirection(`row),
           defaultPadding,
         ]
-        @ Base.fullWidthFloatLeft,
+        @ BaseStyles.fullWidthFloatLeft,
       )
     );
 
@@ -44,9 +46,9 @@ module Row = {
           borderBottom(`px(1), `solid, Colors.accentBlueO8),
           display(`flex),
           flexDirection(`row),
-          selector(":last-child", Base.borderNone),
+          selector(":last-child", BaseStyles.borderNone),
         ]
-        @ Base.fullWidthFloatLeft,
+        @ BaseStyles.fullWidthFloatLeft,
       )
     );
 

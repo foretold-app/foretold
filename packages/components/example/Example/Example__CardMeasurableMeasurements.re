@@ -1,3 +1,6 @@
+open FC;
+open Base;
+
 let make =
   <PageCard>
     {
@@ -6,7 +9,7 @@ let make =
           <Div
             styles=[
               Css.style([
-                Base.floatLeft,
+                BaseStyles.floatLeft,
                 Css.padding3(~top=`em(0.2), ~bottom=`em(0.0), ~h=`em(1.5)),
               ]),
             ]>
@@ -21,7 +24,7 @@ let make =
       styles=[
         Css.style(
           [Css.padding2(~v=`em(1.5), ~h=`em(1.5))]
-          @ Base.fullWidthFloatLeft,
+          @ BaseStyles.fullWidthFloatLeft,
         ),
       ]>
       <PageCard.P>

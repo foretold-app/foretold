@@ -1,3 +1,4 @@
+open FC__Base;
 open Colors.Text;
 
 let activeStyles =
@@ -16,17 +17,17 @@ let allStyles =
     paddingLeft(`em(0.4)),
     paddingRight(`em(0.4)),
     marginRight(`em(1.8)),
-    Base.floatLeft,
+    BaseStyles.floatLeft,
   ];
 
 let component = ReasonReact.statelessComponent("Tab");
 let make = (~isActive=false, children) => {
   ...component,
   render: _self =>
-    <BaseLink
+    <Link
       colors={isActive ? activeColors : inactiveColors}
       isDisabled=false
       styles=Css.((isActive ? activeStyles : inactiveStyles) @ allStyles)>
       ...children
-    </BaseLink>,
+    </Link>,
 };

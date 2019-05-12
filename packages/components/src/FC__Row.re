@@ -1,3 +1,5 @@
+open FC__Base;
+
 let style =
   Css.(
     style(
@@ -5,7 +7,7 @@ let style =
         padding2(~v=`px(0), ~h=`em(1.5)),
         borderBottom(`px(1), `solid, Colors.accentBlueO8),
       ]
-      @ Base.fullWidthFloatLeft,
+      @ BaseStyles.fullWidthFloatLeft,
     )
   );
 

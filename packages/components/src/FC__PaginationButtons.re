@@ -1,3 +1,4 @@
+open FC__Base;
 type directionButton = {
   isDisabled: bool,
   onClick: ReactEvent.Mouse.t => unit,
@@ -24,28 +25,30 @@ let _text = (t: t) => {
 };
 
 let _directionLink = (t: directionButton, icon: string, positionStyles) =>
-  <BaseLink
+  <Link
     colors=(Colors.darkAccentBlue, Colors.black)
     isDisabled={t.isDisabled}
     onClick={t.onClick}
     styles={
-      Simple.tagStyles(~heightPadding=5, ~isDisabled=t.isDisabled, ())
+      FC__Simple.tagStyles(~heightPadding=5, ~isDisabled=t.isDisabled, ())
       @ positionStyles
     }>
     {icon |> ReasonReact.string}
-  </BaseLink>;
+  </Link>;
 
 let make = (t: t) => {
   let textStyle =
     Css.[
-      Base.floatLeft,
+      BaseStyles.floatLeft,
       marginRight(`em(0.5)),
       marginTop(`em(0.4)),
       color(Colors.accentBlue),
     ];
   <Div
     styles=[
-      Css.(style([Base.floatLeft, padding2(~v=`em(0.7), ~h=`em(1.5))])),
+      Css.(
+        style([BaseStyles.floatLeft, padding2(~v=`em(0.7), ~h=`em(1.5))])
+      ),
     ]>
     <span className={Css.style(textStyle)}>
       {_text(t) |> ReasonReact.string}

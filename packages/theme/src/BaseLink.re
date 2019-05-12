@@ -1,6 +1,9 @@
 let component = ReasonReact.statelessComponent(__MODULE__);
 
-let defaultColors = (Css_Colors.yellow, Css_Colors.tomato);
+let defaultColors = (
+  Colors.Text.LightBackground.main,
+  Colors.Text.LightBackground.light,
+);
 
 let headerLink = (~colors, ~styles, ~isDisabled=false, ()) => {
   let (mainColor, hoverColor) = colors;

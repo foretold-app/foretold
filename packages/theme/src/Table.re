@@ -44,6 +44,7 @@ module Row = {
           borderBottom(`px(1), `solid, Colors.accentBlueO8),
           display(`flex),
           flexDirection(`row),
+          selector(":last-child", Base.borderNone),
         ]
         @ Base.fullWidthFloatLeft,
       )

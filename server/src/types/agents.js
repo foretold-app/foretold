@@ -29,6 +29,7 @@ const agent = new graphql.GraphQLObjectType({
       resolve: resolvers.channelMemberships.allByAgentId,
     },
     isMe: require('./common').isMe,
+    isAdmin: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
 
     User: {
       type: require('./users').user,

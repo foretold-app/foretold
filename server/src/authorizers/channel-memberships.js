@@ -5,22 +5,37 @@ const models = require('../models');
 const { CHANNEL_MEMBERSHIP_ROLES } = require('../models/channel-membership-roles');
 
 /**
- * @param {string} roleName
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @return {Promise<boolean>}
  */
-function roleRule(roleName) {
-  /**
-   * @param {*} root
-   * @param {object} args
-   * @param {Schema.Context} context
-   * @return {Promise<boolean>}
-   */
-  return (root, args, context) => {
-    const role = _.get(context, 'channelMembershipsRole', []);
-    const result = role === roleName;
-    console.log(`\x1b[33m Rule Channel Memberships (roleRule) ` +
-      `role "${role}" = "${roleName}", result = "${result}"\x1b[0m`);
-    return result;
-  };
+async function currentAgentIsChannelAdminRule(root, args, context) {
+  const roleName = models.ChannelMemberships.ROLE.ADMIN;
+  const role = _.get(context, 'channelMembershipsRole', []);
+  const result = role === roleName;
+  console.log(
+    `\x1b[33m Rule Channel Memberships (currentAgentIsChannelAdminRule) ` +
+    `role "${role}" = "${roleName}", result = "${result}"\x1b[0m`
+  );
+  return result;
+}
+
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @return {Promise<boolean>}
+ */
+async function currentAgentIsChannelViewerRule(root, args, context) {
+  const roleName = models.ChannelMemberships.ROLE.VIEWER;
+  const role = _.get(context, 'channelMembershipsRole', []);
+  const result = role === roleName;
+  console.log(
+    `\x1b[33m Rule Channel Memberships (currentAgentIsChannelViewerRule) ` +
+    `role "${role}" = "${roleName}", result = "${result}"\x1b[0m`
+  );
+  return result;
 }
 
 /**
@@ -94,13 +109,6 @@ async function membershipHasAdminRoleRule(root, args, context, info) {
   return result;
 }
 
-const currentAgentIsChannelAdminRule = roleRule(
-  models.ChannelMemberships.ROLE.ADMIN,
-);
-const currentAgentIsChannelViewerRule = roleRule(
-  models.ChannelMemberships.ROLE.VIEWER,
-);
-
 /** @type {Rule} */
 const currentAgentIsChannelAdmin = rule({
   cache: 'no_cache',
@@ -138,7 +146,4 @@ module.exports = {
   channelHasMultipleAdmins,
   membershipBelongsToCurrentAgent,
   membershipHasAdminRole,
-
-  currentAgentIsChannelAdminRule,
-  currentAgentIsChannelViewerRule,
 };

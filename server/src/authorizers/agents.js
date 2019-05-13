@@ -16,12 +16,35 @@ async function currentAgentIsAuthenticatedRule(root, args, context, info) {
   return result;
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @return {Promise<boolean>}
+ */
+async function currentAgentIsApplicationAdminRule(root, args, context, info) {
+  const isAdmin = _.get(context, 'agent.isAdmin', false);
+  const result = !!isAdmin;
+  console.log(
+    `\x1b[33m Rule Agents (currentAgentIsAdminRule) ` +
+    `result = "${result}"\x1b[0m`,
+  );
+  return result;
+}
+
 /** @type {Rule} */
 const currentAgentIsAuthenticated = rule({
   cache: 'no_cache',
 })(currentAgentIsAuthenticatedRule);
 
+/** @type {Rule} */
+const currentAgentIsApplicationAdmin = rule({
+  cache: 'no_cache',
+})(currentAgentIsApplicationAdminRule);
+
 module.exports = {
   currentAgentIsAuthenticated,
+  currentAgentIsApplicationAdmin,
   currentAgentIsAuthenticatedRule,
 };

@@ -2,20 +2,22 @@ export namespace Models {
 
   export interface Model {
     id: string;
+    createdAt: string;
+    updatedAt: string;
   }
 
-  export interface Channel {
+  export interface Channel extends Model {
     id: string;
     isPublic: boolean;
   }
 
-  export interface Bot {
+  export interface Bot extends Model {
     id: string;
     name: string;
     getAgent(): Models.Agent;
   }
 
-  export interface User {
+  export interface User extends Model {
     id: string;
     name: string;
     auth0Id: string;
@@ -23,7 +25,7 @@ export namespace Models {
     getAgent(): Models.Agent;
   }
 
-  export interface Measurable {
+  export interface Measurable extends Model {
     id: string;
     state: string;
     creationNotification(creator: Models.Creator): any;
@@ -35,13 +37,17 @@ export namespace Models {
     creationNotification(creator: Models.Creator): any;
   }
 
-  export interface Agent {
+  export interface Agent extends Model {
     id: string;
+    isAdmin: boolean;
+    type: 'BOT' | 'USER';
+    name: string;
+    measurementCount: number;
     getBot(): Models.Bot;
     getUser(): Models.User;
   }
 
-  export interface Series {
+  export interface Series extends Model {
     id: string;
   }
 

@@ -14,7 +14,7 @@ const { bot } = require('./bots');
  */
 const middlewares = {
   Bot: {
-    jwt: async (resolve, root, args, context, info) => {
+    token: async (resolve, root, args, context, info) => {
       const result = await resolve(root, args, context, info);
       return (result instanceof Error) ? null : result;
     },

@@ -15,6 +15,7 @@ class MeasurementsData extends DataBase {
   constructor() {
     super();
     this.MeasurementModel = new MeasurementModel();
+    this.model = this.MeasurementModel;
   }
 
   /**

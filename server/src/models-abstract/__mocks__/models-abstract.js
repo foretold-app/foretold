@@ -5,6 +5,7 @@ const ModelPostgres = {
   updateOne: jest.fn(() => Promise.resolve(true)),
   getAll: jest.fn(() => Promise.resolve(true)),
   findAll: jest.fn(() => Promise.resolve(true)),
+  updateAll: jest.fn(() => Promise.resolve(true)),
 };
 
 const AgentModel = jest.fn().mockImplementation(() => ({
@@ -39,6 +40,14 @@ const BotModel = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
 
+const TokenModel = jest.fn().mockImplementation(() => ({
+  ...ModelPostgres,
+}));
+
+const Model = jest.fn().mockImplementation(() => ({
+  ...ModelPostgres,
+}));
+
 module.exports = {
   AgentModel,
   ChannelMembershipModel,
@@ -48,4 +57,6 @@ module.exports = {
   SeriesModel,
   UserModel,
   BotModel,
+  TokenModel,
+  Model,
 };

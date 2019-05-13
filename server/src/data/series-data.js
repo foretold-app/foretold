@@ -11,6 +11,7 @@ class SeriesData extends DataBase {
   constructor() {
     super();
     this.SeriesModel = new SeriesModel();
+    this.model = this.SeriesModel;
   }
 
   /**

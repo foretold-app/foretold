@@ -11,6 +11,7 @@ class AgentsData extends DataBase {
   constructor() {
     super();
     this.AgentModel = new AgentModel();
+    this.model = this.AgentModel;
   }
 
   /**

@@ -104,7 +104,7 @@ const rulesMeasurables = {
 
 const rules = {
   Bot: {
-    jwt: botBelongsToCurrentUser,
+    token: botBelongsToCurrentUser,
   },
   Query: {
     '*': allow,

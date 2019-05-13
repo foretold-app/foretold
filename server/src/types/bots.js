@@ -16,9 +16,9 @@ const bot = new graphql.GraphQLObjectType({
     userId: { type: graphql.GraphQLString },
     iAmOwner: require('./common').iAmOwnerByUserId,
 
-    jwt: {
+    token: {
       type: graphql.GraphQLString,
-      resolve: require('../resolvers/authentications').getJwtByAgentId,
+      resolve: require('../resolvers/authentications').getTokenByAgentId,
     },
 
     Agent: {

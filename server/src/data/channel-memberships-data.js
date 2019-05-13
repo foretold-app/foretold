@@ -13,6 +13,7 @@ class ChannelMembershipsData extends DataBase {
   constructor() {
     super();
     this.ChannelMembershipModel = new ChannelMembershipModel();
+    this.model = this.ChannelMembershipModel;
   }
 
   /**

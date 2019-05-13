@@ -1,4 +1,5 @@
 const _ = require('lodash');
+
 const data = require('../data');
 
 /**
@@ -55,9 +56,23 @@ async function one(root, args, context, info) {
   return await data.bots.getOne({ id });
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<{token: string}>}
+ */
+async function tokenRefresh(root, args, context, info) {
+  const id = _.get(args, 'id');
+  const token = await data.bots.tokenRefresh({ id });
+  return { token };
+}
+
 module.exports = {
   all,
   one,
   update,
   create,
+  tokenRefresh,
 };

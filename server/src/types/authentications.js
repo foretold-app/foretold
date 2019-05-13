@@ -1,12 +1,20 @@
 const graphql = require("graphql");
 
-const authentication = new graphql.GraphQLObjectType({
-  name: 'Authentication',
+const authenticationJwt = new graphql.GraphQLObjectType({
+  name: 'AuthenticationJwt',
   fields: () => ({
     jwt: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
   }),
 });
 
+const authenticationToken = new graphql.GraphQLObjectType({
+  name: 'AuthenticationToken',
+  fields: () => ({
+    token: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+  }),
+});
+
 module.exports = {
-  authentication,
+  authenticationJwt,
+  authenticationToken,
 };

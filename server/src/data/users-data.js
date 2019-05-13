@@ -13,6 +13,7 @@ class UsersData extends DataBase {
   constructor() {
     super();
     this.UserModel = new UserModel();
+    this.model = this.UserModel;
   }
 
   /**

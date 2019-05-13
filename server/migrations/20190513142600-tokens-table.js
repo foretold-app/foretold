@@ -11,7 +11,7 @@ module.exports = {
           allowNull: false,
         },
         agentId: {
-          type: Sequelize.DataTypes.STRING,
+          type: Sequelize.DataTypes.UUID(),
           allowNull: false,
           references: {
             model: 'Agents',

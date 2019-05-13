@@ -112,11 +112,12 @@ module Helpers = {
   let smallDistribution = (m: measurement, g: (float, float)) =>
     switch (m.value) {
     | Belt.Result.Ok(`FloatCdf(r)) =>
+      let (minX, maxX) = g;
       r
-      |> MeasurementValue.toChunks(~bucketSize=20)
+      |> MeasurementValue.toChunks(~bucketSize=3)
       |> MeasurementValue.toPdf
-      |> MeasurementValue.FloatCdf.toPoints
-      |> (data => Some(<WideChart data bounds=g />))
+      |> MeasurementValue.FloatCdf.toJs
+      |> (data => Some(<SmallCdfChart data minX maxX />));
     | Belt.Result.Ok(`FloatPoint(r)) =>
       Some(
         <div className=Styles.middle>
@@ -312,14 +313,6 @@ let make = (ms: list(measurement)) => {
     |> ReasonReact.array;
   E.React.showIf(
     ms |> E.L.length > 0,
-    <div className=Styles.group>
-      items
-      <div className=Styles.axisRow>
-        <div className=Styles.mainColumn>
-          <div className=Styles.mainColumnTop> <XAxis bounds=_bounds /> </div>
-        </div>
-        <div className=Styles.axisRightColumn />
-      </div>
-    </div>,
+    <div className=Styles.group> items </div>,
   );
 };

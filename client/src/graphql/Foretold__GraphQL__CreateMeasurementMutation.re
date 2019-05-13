@@ -28,6 +28,8 @@ let mutate =
         "value": value |> MeasurementValue.encodeToGraphQLMutation,
         "description": Some(description),
         "competitorType": competitorType,
+        "relevantAt": None,
+        "taggedMeasurementId": None,
         "agentId": None,
       },
       (),

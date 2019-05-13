@@ -24,6 +24,7 @@ class ModelPostgres extends Model {
     this.lte = this.sequelize.Op.lte;
     this.and = this.sequelize.Op.and;
     this.not = this.sequelize.Op.not;
+    this.notIn = this.sequelize.Op.notIn;
     this.fn = this.sequelize.fn;
     this.col = this.sequelize.col;
     this.literal = this.sequelize.literal;
@@ -68,6 +69,29 @@ class ModelPostgres extends Model {
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
     )`;
+  }
+
+  /**
+   * @todo: see this.channelIds()
+   * @param {string} [agentId]
+   * @return {string}
+   */
+  taggedMeasurements(agentId) {
+    return `(
+      SELECT "taggedMeasurementId"
+      FROM "Measurements"
+      WHERE "agentId" = '${agentId}'
+      AND "taggedMeasurementId" IS NOT NULL
+    )`;
+  }
+
+  /**
+   * @todo: see this.channelIds()
+   * @param {string} [agentId]
+   * @return {string}
+   */
+  taggedMeasurementsLiteral(agentId) {
+    return this.literal(this.taggedMeasurements(agentId));
   }
 
   /**
@@ -208,6 +232,62 @@ class ModelPostgres extends Model {
         return false;
       }
       return item;
+    });
+  }
+
+  /**
+   * @param {object} data
+   * @return {data}
+   */
+  async createOne(data) {
+    return this.model.create(data);
+  }
+
+  /**
+   * @param {object} params
+   * @param {object} data
+   * @return {data}
+   */
+  async updateOne(params, data) {
+    const entity = await this.model.findOne({
+      where: params,
+    });
+    if (entity) {
+      await entity.update(data);
+    }
+    return entity;
+  }
+
+  /**
+   * @param {object} filter
+   * @param {object} [pagination]
+   * @param {object} [restrictions]
+   * @return {Promise<void>}
+   */
+  async getAll(filter, pagination = {}, restrictions = {}) {
+    const where = {};
+    this.applyRestrictions(where, restrictions);
+    return await this.model.findAll({
+      limit: pagination.limit,
+      offset: pagination.offset,
+      where,
+    });
+  }
+
+  /**
+   * @param {object} params
+   * @param {object} query
+   * @param {object} restrictions
+   * @return {Promise<Models.Model>}
+   */
+  async getOne(params, query = {}, restrictions = {}) {
+    const where = { ...params };
+    const sort = query.sort === 1 ? 'ASC' : 'DESC';
+    const order = [['createdAt', sort]];
+    this.applyRestrictions(where, restrictions);
+    return await this.model.findOne({
+      where,
+      order,
     });
   }
 }

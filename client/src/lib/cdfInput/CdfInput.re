@@ -75,14 +75,14 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
   <div className=Styles.form>
     <div className=Styles.chartSection>
       {E.A.length(state.floatCdf.xs) > 1
-         ? <InputChart
+         ? <LargeCdfChart
              data={
                state.floatCdf
                |> (e => (e.xs, e.ys))
                |> MeasurementValue.FloatCdf.fromArrays
                |> MeasurementValue.toChunks(~bucketSize=20)
                |> MeasurementValue.toPdf
-               |> MeasurementValue.FloatCdf.toPoints
+               |> MeasurementValue.FloatCdf.toJs
              }
            />
          : <div />}

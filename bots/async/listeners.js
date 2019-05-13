@@ -9,7 +9,7 @@ function runAggregationBot() {
     new bots.AggregationBot().main().then((result) => {
       console.log('Job::runAggregationBot', 'all done', result);
     }).catch((err) => {
-      console.error('Job::runAggregationBot', err.message);
+      console.error('Job::runAggregationBot', err);
       console.error(err);
     });
   } catch (e) {

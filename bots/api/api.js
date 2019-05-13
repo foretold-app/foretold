@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const graphqlClient = require('graphql-client');
 
 const queries = require('./queries');
@@ -55,33 +56,31 @@ class API {
    * @return {*}
    */
   async measurables() {
-    const result = await this.query(this.queries.measurables);
-    return this.getList('measurables')(result);
+    await this.query(this.queries.measurables);
   }
 
   /**
    * @public
    * @return {*}
    */
-  measurementCreate({ floatPoint, floatCdf, measurableId, competitorType }) {
-    return this.query(this.queries.measurementCreate, {
+  async measurementCreate({ floatCdf, ...rest}) {
+    const result = await this.query(this.queries.measurementCreate, {
       input: {
-        value: { floatPoint, floatCdf },
-        measurableId,
-        competitorType,
+        value: { floatCdf },
+        ...rest,
       },
     });
+    return this.getList('measurementCreate')(result);
   }
 
   /**
    * @public
    * @return {*}
    */
-  measurementCreateAggregation({ measurableId, ...rest }) {
+  measurementCreateAggregation(params) {
     return this.measurementCreate({
-      measurableId,
       competitorType: 'AGGREGATION',
-      ...rest
+      ...params,
     });
   }
 
@@ -90,11 +89,8 @@ class API {
    * @public
    * @return {*}
    */
-  async measurements({ measurableId, competitorType }) {
-    const result = await this.query(this.queries.measurements, {
-      measurableId,
-      competitorType
-    });
+  async measurements(params) {
+    const result = await this.query(this.queries.measurements, params);
     return this.getList('measurements')(result);
   }
 
@@ -102,10 +98,10 @@ class API {
    * @public
    * @return {*}
    */
-  async measurementsCompetitive({ measurableId }) {
+  async measurementsCompetitive(params) {
     return this.measurements({
-      measurableId,
       competitorType: ['COMPETITIVE'],
+      ...params,
     });
   }
 
@@ -115,7 +111,23 @@ class API {
    * @return {Function}
    */
   getList(alias) {
-    return (result) => result.data[alias].edges.map(edge => edge.node);
+    return (result) => {
+      this.proceedErrors(result);
+      const edges = _.get(result, ['data', alias, 'edges'], []);
+      return edges.map(edge => edge.node);
+    }
+  }
+
+  /**
+   * @param result
+   */
+  proceedErrors(result) {
+    const errors = _.get(result, 'errors', []);
+    if (errors.length === 0) return;
+    _.each(errors, (err) => {
+      const message = _.get(err, 'message');
+      console.error(message);
+    });
   }
 }
 

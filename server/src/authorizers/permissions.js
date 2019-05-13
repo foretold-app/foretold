@@ -2,6 +2,7 @@ const _ = require('lodash');
 const { shield, allow, and, or, not } = require('graphql-shield');
 
 const { currentAgentIsAuthenticated } = require('./agents');
+const { currentAgentIsAdmin } = require('./agents');
 const { channelIsPublic } = require('./channels');
 const { currentAgentIsChannelAdmin } = require('./channel-memberships');
 const { currentAgentIsChannelViewer } = require('./channel-memberships');
@@ -13,19 +14,24 @@ const { measurableIsOwnedByCurrentAgent } = require('./measurables');
 const { measurableIsArchived } = require('./measurables');
 const { botBelongsToCurrentUser } = require('./bots');
 
+const currentAgentIsAdminOrChannelAdmin = or(
+  currentAgentIsAdmin,
+  currentAgentIsChannelAdmin,
+);
+
 const rulesChannel = {
   Query: {},
   Mutation: {
     channelUpdate: and(
       currentAgentIsAuthenticated,
-      currentAgentIsChannelAdmin,
+      currentAgentIsAdminOrChannelAdmin,
     ),
     leaveChannel: and(
       currentAgentIsAuthenticated,
       channelHasMembershipWithCurrentAgent,
       or(
-        and(currentAgentIsChannelAdmin, channelHasMultipleAdmins),
-        not(currentAgentIsChannelAdmin),
+        and(currentAgentIsAdminOrChannelAdmin, channelHasMultipleAdmins),
+        not(currentAgentIsAdminOrChannelAdmin),
       ),
     ),
     joinChannel: and(
@@ -35,7 +41,7 @@ const rulesChannel = {
     ),
     channelMembershipCreate: and(
       currentAgentIsAuthenticated,
-      currentAgentIsChannelAdmin,
+      currentAgentIsAdminOrChannelAdmin,
     ),
   }
 };
@@ -45,7 +51,7 @@ const rulesChannelMemberships = {
   Mutation: {
     channelMembershipDelete: and(
       currentAgentIsAuthenticated,
-      currentAgentIsChannelAdmin,
+      currentAgentIsAdminOrChannelAdmin,
       or(
         and(membershipHasAdminRole, channelHasMultipleAdmins),
         not(membershipBelongsToCurrentAgent),
@@ -53,7 +59,7 @@ const rulesChannelMemberships = {
     ),
     channelMembershipRoleUpdate: and(
       currentAgentIsAuthenticated,
-      currentAgentIsChannelAdmin,
+      currentAgentIsAdminOrChannelAdmin,
       or(
         and(channelHasMultipleAdmins, membershipBelongsToCurrentAgent),
         and(channelHasMultipleAdmins, membershipHasAdminRole),
@@ -70,7 +76,7 @@ const rulesMeasurables = {
       currentAgentIsAuthenticated,
       or(
         channelIsPublic,
-        or(currentAgentIsChannelAdmin, currentAgentIsChannelViewer),
+        or(currentAgentIsAdminOrChannelAdmin, currentAgentIsChannelViewer),
       ),
     ),
     measurableArchive: and(
@@ -124,13 +130,13 @@ const rules = {
     userUpdate: currentAgentIsAuthenticated,
     seriesCreate: and(
       currentAgentIsAuthenticated,
-      or(channelIsPublic, currentAgentIsChannelAdmin),
+      or(channelIsPublic, currentAgentIsAdminOrChannelAdmin),
     ),
     measurableCreate: and(
       currentAgentIsAuthenticated,
       or(
         channelIsPublic,
-        or(currentAgentIsChannelAdmin, currentAgentIsChannelViewer),
+        or(currentAgentIsAdminOrChannelAdmin, currentAgentIsChannelViewer),
       ),
     ),
 

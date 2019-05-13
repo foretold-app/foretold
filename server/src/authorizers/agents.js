@@ -23,7 +23,7 @@ async function currentAgentIsAuthenticatedRule(root, args, context, info) {
  * @param {object} info
  * @return {Promise<boolean>}
  */
-async function currentAgentIsAdminRule(root, args, context, info) {
+async function currentAgentIsApplicationAdminRule(root, args, context, info) {
   const isAdmin = _.get(context, 'agent.isAdmin', false);
   const result = !!isAdmin;
   console.log(
@@ -39,12 +39,12 @@ const currentAgentIsAuthenticated = rule({
 })(currentAgentIsAuthenticatedRule);
 
 /** @type {Rule} */
-const currentAgentIsAdmin = rule({
+const currentAgentIsApplicationAdmin = rule({
   cache: 'no_cache',
-})(currentAgentIsAdminRule);
+})(currentAgentIsApplicationAdminRule);
 
 module.exports = {
   currentAgentIsAuthenticated,
-  currentAgentIsAdmin,
+  currentAgentIsApplicationAdmin,
   currentAgentIsAuthenticatedRule,
 };

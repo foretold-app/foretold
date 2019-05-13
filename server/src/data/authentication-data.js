@@ -4,6 +4,7 @@ const config = require('../config');
 
 const { UsersData } = require('./users-data');
 const { AgentsData } = require('./agents-data');
+const { TokensData } = require('./tokens-data');
 
 class AuthenticationData {
 
@@ -17,6 +18,7 @@ class AuthenticationData {
 
     this.users = new UsersData();
     this.agents = new AgentsData();
+    this.tokens = new TokensData();
   }
 
   /**
@@ -80,19 +82,42 @@ class AuthenticationData {
     try {
       const decoded = this.decodeJwtToken(token);
       const agentId = decoded.sub;
-      if (!agentId) throw new Error('No Agent Id');
-
-      const agent = await this.agents.getOne(agentId);
-      if (!agent) throw new Error('Not authenticated');
-
-      const bot = await agent.getBot();
-      const user = await agent.getUser();
-      const creator = bot || user;
-
-      return { agent, bot, user, creator };
+      return await this.getContext(agentId);
     } catch (err) {
       throw err;
     }
+  }
+
+  /**
+   * @public
+   * @param {string} token
+   * @return {Promise<Schema.Context>}
+   */
+  async authenticationByToken(token) {
+    try {
+      const agentId = await this.tokens.getAgentIdByToken(token);
+      return await this.getContext(agentId);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * @protected
+   * @param {string} agentId
+   * @return {Promise<{agent: Models.Agent, creator: *, bot, user}>}
+   */
+  async getContext(agentId) {
+    if (!agentId) throw new Error('No Agent Id');
+
+    const agent = await this.agents.getOne(agentId);
+    if (!agent) throw new Error('Not authenticated');
+
+    const bot = await agent.getBot();
+    const user = await agent.getUser();
+    const creator = bot || user;
+
+    return { agent, bot, user, creator };
   }
 
   /**
@@ -116,6 +141,21 @@ class AuthenticationData {
   async getJwtForever(subject) {
     try {
       return this.encodeJWT({}, subject, null);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * @param {string} token
+   * @return {Promise<*>}
+   */
+  async authenticate(token) {
+    try {
+      if (this.tokens.validate(token)) {
+        return await this.authenticationByToken(token);
+      }
+      return await this.authenticationByJwtToken(token);
     } catch (err) {
       throw err;
     }

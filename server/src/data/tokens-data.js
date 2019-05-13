@@ -19,21 +19,58 @@ class TokensData extends DataBase {
 
   /**
    * @public
-   * @param {string} agentId
-   * @return {Promise<string>}
+   * @param {string} token
+   * @return {boolean}
    */
-  async getOrCreateActiveTokenForAgentId(agentId) {
-    let token = await this.model.getOne({
+  validate(token) {
+    const length = token.length === this.MAX_TOKEN_SIZE;
+    const pattern = /^([0-9a-z]+)$/.test(token);
+    return length && pattern;
+  }
+
+  /**
+   * @param {string} agentId
+   * @return {Promise<Models.Token>}
+   */
+  async getActiveToken(agentId) {
+    return await this.model.getOne({
       agentId,
       isActive: true
     }, {
       sort: -1,
     });
-    if (!token) token = await this.model.createOne({
+  }
+
+  /**
+   * @param {string} agentId
+   * @return {Promise<Models.Token>}
+   */
+  async createActiveToken(agentId) {
+    return await this.model.createOne({
       agentId,
       token: this.getToken(),
       isActive: true,
     });
+  }
+
+  /**
+   * @param {string} agentId
+   * @return {Promise<null | string>}
+   */
+  async getAgentIdByToken(agentId) {
+    const token = await this.getActiveToken(agentId);
+    if (!token) return null;
+    return token.agentId;
+  }
+
+  /**
+   * @public
+   * @param {string} agentId
+   * @return {Promise<string>}
+   */
+  async getOrCreateActiveTokenForAgentId(agentId) {
+    let token = await this.getActiveToken(agentId);
+    if (!token) token = await this.createActiveToken(agentId);
     return token.token;
   }
 

@@ -58,7 +58,7 @@ class BotsData extends DataBase {
    */
   async tokenRefresh(params) {
     const bot = await this.BotModel.getOne(params);
-    return this.authentication.getJwtForever(bot.id);
+    return this.authentication.getJwtForever(bot.agentId);
   }
 }
 

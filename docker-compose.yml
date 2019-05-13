@@ -1,0 +1,25 @@
+version: "2"
+
+services:
+
+  app:
+    build: ./
+    environment:
+      # Persistence
+      - PORT=80
+      - NODE_PATH=/opt
+      - JWT_ISSUER=Foretold
+      # Changeable
+      - AUTH0_SECRET=<change-me>
+      - SLACK_WEBHOOK_URL=<change-me>
+      - JWT_SECRET=<change-me>
+      - API_URL=http://chane-me/graphql
+      - BOT_TOKEN=<change-me>
+    command: npm start
+    links:
+      - database
+
+  database:
+    image: postgres:11
+    environment:
+      - POSTGRES_PASSWORD=<change-me>

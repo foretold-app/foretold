@@ -1,0 +1,381 @@
+0 silly argv { _: [ 'bootstrap' ],
+0 silly argv   lernaVersion: '3.13.4',
+0 silly argv   '$0': '/usr/local/opt/nvm/versions/node/v10.14.1/bin/lerna' }
+1 notice cli v3.13.4
+2 verbose rootPath /Users/ozziegooen/Exercism/reasonml/prediction-app
+3 info versioning independent
+4 silly batched [ PackageGraphNode {
+4 silly batched     name: '@foretold/cdf',
+4 silly batched     externalDependencies: Map { 'jest' => [Object] },
+4 silly batched     localDependencies: Map {},
+4 silly batched     localDependents: Map { '@foretold/bots' => [PackageGraphNode] } },
+4 silly batched   PackageGraphNode {
+4 silly batched     name: '@foretold/client',
+4 silly batched     externalDependencies:
+4 silly batched      Map {
+4 silly batched        '@babel/preset-react' => [Object],
+4 silly batched        '@glennsl/bs-jest' => [Object],
+4 silly batched        '@glennsl/bs-json' => [Object],
+4 silly batched        '@ncthbrt/re-secure-random-string' => [Object],
+4 silly batched        '@storybook/addon-actions' => [Object],
+4 silly batched        '@storybook/addon-links' => [Object],
+4 silly batched        '@storybook/addons' => [Object],
+4 silly batched        '@storybook/react' => [Object],
+4 silly batched        'apollo-cache-inmemory' => [Object],
+4 silly batched        'apollo-client' => [Object],
+4 silly batched        'apollo-link' => [Object],
+4 silly batched        'apollo-link-context' => [Object],
+4 silly batched        'apollo-link-error' => [Object],
+4 silly batched        'apollo-link-http' => [Object],
+4 silly batched        'apollo-link-ws' => [Object],
+4 silly batched        'apollo-utilities' => [Object],
+4 silly batched        'auth0-js' => [Object],
+4 silly batched        'babel-core' => [Object],
+4 silly batched        'babel-plugin-import' => [Object],
+4 silly batched        'babel-preset-es2015' => [Object],
+4 silly batched        'babel-preset-stage-0' => [Object],
+4 silly batched        'babel-runtime' => [Object],
+4 silly batched        'bs-ant-design' => [Object],
+4 silly batched        'bs-css' => [Object],
+4 silly batched        'bs-moment' => [Object],
+4 silly batched        'bs-platform' => [Object],
+4 silly batched        'bs-reform' => [Object],
+4 silly batched        'bs-storybook' => [Object],
+4 silly batched        'bsb-js' => [Object],
+4 silly batched        'css-loader' => [Object],
+4 silly batched        'd3' => [Object],
+4 silly batched        'discrete-sampling' => [Object],
+4 silly batched        'file-loader' => [Object],
+4 silly batched        'financejs' => [Object],
+4 silly batched        'graphql' => [Object],
+4 silly batched        'graphql-tag' => [Object],
+4 silly batched        'graphql_ppx' => [Object],
+4 silly batched        'jstat' => [Object],
+4 silly batched        'jwt-decode' => [Object],
+4 silly batched        'less' => [Object],
+4 silly batched        'less-loader' => [Object],
+4 silly batched        'lib' => [Object],
+4 silly batched        'lodash' => [Object],
+4 silly batched        'mathjs' => [Object],
+4 silly batched        'node-uuid' => [Object],
+4 silly batched        'parcel-bundler' => [Object],
+4 silly batched        'rationale' => [Object],
+4 silly batched        'react' => [Object],
+4 silly batched        'react-apollo' => [Object],
+4 silly batched        'react-dom' => [Object],
+4 silly batched        'react-icons-kit' => [Object],
+4 silly batched        'reason-apollo' => [Object],
+4 silly batched        'reason-react' => [Object],
+4 silly batched        'source-map-explorer' => [Object],
+4 silly batched        'static-server' => [Object],
+4 silly batched        'style-loader' => [Object],
+4 silly batched        'subscriptions-transport-ws' => [Object],
+4 silly batched        'victory' => [Object],
+4 silly batched        'warning' => [Object],
+4 silly batched        'webpack' => [Object],
+4 silly batched        'webpack-cli' => [Object],
+4 silly batched        'webpack-dev-server' => [Object] },
+4 silly batched     localDependencies: Map {},
+4 silly batched     localDependents: Map {} },
+4 silly batched   PackageGraphNode {
+4 silly batched     name: '@foretold/server',
+4 silly batched     externalDependencies:
+4 silly batched      Map {
+4 silly batched        'dotenv' => [Object],
+4 silly batched        'eslint' => [Object],
+4 silly batched        'eslint-plugin-import' => [Object],
+4 silly batched        'eslint-plugin-jest' => [Object],
+4 silly batched        'eslint-watch' => [Object],
+4 silly batched        'graphql_ppx' => [Object],
+4 silly batched        'jest' => [Object],
+4 silly batched        'nodemon' => [Object],
+4 silly batched        'supertest' => [Object],
+4 silly batched        '@slack/client' => [Object],
+4 silly batched        'apollo-server' => [Object],
+4 silly batched        'apollo-server-express' => [Object],
+4 silly batched        'auth0-js' => [Object],
+4 silly batched        'body-parser' => [Object],
+4 silly batched        'body-parser-graphql' => [Object],
+4 silly batched        'change-case' => [Object],
+4 silly batched        'cors' => [Object],
+4 silly batched        'express' => [Object],
+4 silly batched        'express-graphql' => [Object],
+4 silly batched        'graphql' => [Object],
+4 silly batched        'graphql-client' => [Object],
+4 silly batched        'graphql-middleware' => [Object],
+4 silly batched        'graphql-sequelize' => [Object],
+4 silly batched        'graphql-shield' => [Object],
+4 silly batched        'jsonwebtoken' => [Object],
+4 silly batched        'moment' => [Object],
+4 silly batched        'graphql-relay' => [Object],
+4 silly batched        'node-fetch' => [Object],
+4 silly batched        'node-schedule' => [Object],
+4 silly batched        'pg' => [Object],
+4 silly batched        'sequelize' => [Object],
+4 silly batched        'sequelize-cli' => [Object] },
+4 silly batched     localDependencies: Map {},
+4 silly batched     localDependents: Map {} } ]
+5 silly batched [ PackageGraphNode {
+5 silly batched     name: '@foretold/bots',
+5 silly batched     externalDependencies:
+5 silly batched      Map {
+5 silly batched        'graphql-client' => [Object],
+5 silly batched        'node-schedule' => [Object],
+5 silly batched        'lodash' => [Object],
+5 silly batched        'nodemon' => [Object] },
+5 silly batched     localDependencies: Map {},
+5 silly batched     localDependents: Map {} } ]
+6 silly npmConfig { registry: undefined,
+6 silly npmConfig   npmClient: 'yarn',
+6 silly npmConfig   npmClientArgs: [],
+6 silly npmConfig   mutex: 'network:42424' }
+7 info Bootstrapping 4 packages
+8 verbose lifecycle preinstall
+9 silly lifecycle No script for "preinstall" in "@foretold/cdf", continuing
+10 silly lifecycle No script for "preinstall" in "@foretold/client", continuing
+11 silly lifecycle No script for "preinstall" in "@foretold/server", continuing
+12 silly lifecycle No script for "preinstall" in "@foretold/bots", continuing
+13 silly hasDependencyInstalled @foretold/bots graphql-client
+14 silly hasDependencyInstalled @foretold/server graphql-client
+15 silly hasDependencyInstalled @foretold/bots node-schedule
+16 silly hasDependencyInstalled @foretold/server node-schedule
+17 silly hasDependencyInstalled @foretold/bots lodash
+18 silly hasDependencyInstalled @foretold/client lodash
+19 silly hasDependencyInstalled @foretold/bots nodemon
+20 silly hasDependencyInstalled @foretold/server nodemon
+21 silly hasDependencyInstalled @foretold/cdf jest
+22 silly hasDependencyInstalled @foretold/server jest
+23 silly hasDependencyInstalled @foretold/client @babel/preset-react
+24 silly hasDependencyInstalled @foretold/client @glennsl/bs-jest
+25 silly hasDependencyInstalled @foretold/client @glennsl/bs-json
+26 silly hasDependencyInstalled @foretold/client @ncthbrt/re-secure-random-string
+27 silly hasDependencyInstalled @foretold/client @storybook/addon-actions
+28 silly hasDependencyInstalled @foretold/client @storybook/addon-links
+29 silly hasDependencyInstalled @foretold/client @storybook/addons
+30 silly hasDependencyInstalled @foretold/client @storybook/react
+31 silly hasDependencyInstalled @foretold/client apollo-cache-inmemory
+32 silly hasDependencyInstalled @foretold/client apollo-client
+33 silly hasDependencyInstalled @foretold/client apollo-link
+34 silly hasDependencyInstalled @foretold/client apollo-link-context
+35 silly hasDependencyInstalled @foretold/client apollo-link-error
+36 silly hasDependencyInstalled @foretold/client apollo-link-http
+37 silly hasDependencyInstalled @foretold/client apollo-link-ws
+38 silly hasDependencyInstalled @foretold/client apollo-utilities
+39 silly hasDependencyInstalled @foretold/client auth0-js
+40 silly hasDependencyInstalled @foretold/server auth0-js
+41 silly hasDependencyInstalled @foretold/client babel-core
+42 silly hasDependencyInstalled @foretold/client babel-plugin-import
+43 silly hasDependencyInstalled @foretold/client babel-preset-es2015
+44 silly hasDependencyInstalled @foretold/client babel-preset-stage-0
+45 silly hasDependencyInstalled @foretold/client babel-runtime
+46 silly hasDependencyInstalled @foretold/client bs-ant-design
+47 silly hasDependencyInstalled @foretold/client bs-css
+48 silly hasDependencyInstalled @foretold/client bs-moment
+49 silly hasDependencyInstalled @foretold/client bs-platform
+50 silly hasDependencyInstalled @foretold/client bs-reform
+51 silly hasDependencyInstalled @foretold/client bs-storybook
+52 silly hasDependencyInstalled @foretold/client bsb-js
+53 silly hasDependencyInstalled @foretold/client css-loader
+54 silly hasDependencyInstalled @foretold/client d3
+55 silly hasDependencyInstalled @foretold/client discrete-sampling
+56 silly hasDependencyInstalled @foretold/client file-loader
+57 silly hasDependencyInstalled @foretold/client financejs
+58 silly hasDependencyInstalled @foretold/client graphql
+59 silly hasDependencyInstalled @foretold/server graphql
+60 silly hasDependencyInstalled @foretold/client graphql-tag
+61 silly hasDependencyInstalled @foretold/client graphql_ppx
+62 silly hasDependencyInstalled @foretold/server graphql_ppx
+63 silly hasDependencyInstalled @foretold/client jstat
+64 silly hasDependencyInstalled @foretold/client jwt-decode
+65 silly hasDependencyInstalled @foretold/client less
+66 silly hasDependencyInstalled @foretold/client less-loader
+67 silly hasDependencyInstalled @foretold/client lib
+68 silly hasDependencyInstalled @foretold/client mathjs
+69 silly hasDependencyInstalled @foretold/client node-uuid
+70 silly hasDependencyInstalled @foretold/client parcel-bundler
+71 silly hasDependencyInstalled @foretold/client rationale
+72 silly hasDependencyInstalled @foretold/client react
+73 silly hasDependencyInstalled @foretold/client react-apollo
+74 silly hasDependencyInstalled @foretold/client react-dom
+75 silly hasDependencyInstalled @foretold/client react-icons-kit
+76 silly hasDependencyInstalled @foretold/client reason-apollo
+77 silly hasDependencyInstalled @foretold/client reason-react
+78 silly hasDependencyInstalled @foretold/client source-map-explorer
+79 silly hasDependencyInstalled @foretold/client static-server
+80 silly hasDependencyInstalled @foretold/client style-loader
+81 silly hasDependencyInstalled @foretold/client subscriptions-transport-ws
+82 silly hasDependencyInstalled @foretold/client victory
+83 silly hasDependencyInstalled @foretold/client warning
+84 silly hasDependencyInstalled @foretold/client webpack
+85 silly hasDependencyInstalled @foretold/client webpack-cli
+86 silly hasDependencyInstalled @foretold/client webpack-dev-server
+87 silly hasDependencyInstalled @foretold/server dotenv
+88 silly hasDependencyInstalled @foretold/server eslint
+89 silly hasDependencyInstalled @foretold/server eslint-plugin-import
+90 silly hasDependencyInstalled @foretold/server eslint-plugin-jest
+91 silly hasDependencyInstalled @foretold/server eslint-watch
+92 silly hasDependencyInstalled @foretold/server supertest
+93 silly hasDependencyInstalled @foretold/server @slack/client
+94 silly hasDependencyInstalled @foretold/server apollo-server
+95 silly hasDependencyInstalled @foretold/server apollo-server-express
+96 silly hasDependencyInstalled @foretold/server body-parser
+97 silly hasDependencyInstalled @foretold/server body-parser-graphql
+98 silly hasDependencyInstalled @foretold/server change-case
+99 silly hasDependencyInstalled @foretold/server cors
+100 silly hasDependencyInstalled @foretold/server express
+101 silly hasDependencyInstalled @foretold/server express-graphql
+102 silly hasDependencyInstalled @foretold/server graphql-middleware
+103 silly hasDependencyInstalled @foretold/server graphql-sequelize
+104 silly hasDependencyInstalled @foretold/server graphql-shield
+105 silly hasDependencyInstalled @foretold/server jsonwebtoken
+106 silly hasDependencyInstalled @foretold/server moment
+107 silly hasDependencyInstalled @foretold/server graphql-relay
+108 silly hasDependencyInstalled @foretold/server node-fetch
+109 silly hasDependencyInstalled @foretold/server pg
+110 silly hasDependencyInstalled @foretold/server sequelize
+111 silly hasDependencyInstalled @foretold/server sequelize-cli
+112 silly root dependencies {}
+113 silly leaf dependencies {}
+114 info Installing external dependencies
+115 verbose actions 1 actions, concurrency 8
+116 silly npmInstallDependencies @foretold/client [ 'lodash@^4.17.11',
+116 silly npmInstallDependencies   '@babel/preset-react@7.0.0',
+116 silly npmInstallDependencies   '@glennsl/bs-jest@^0.4.7',
+116 silly npmInstallDependencies   '@glennsl/bs-json@^3.0.0',
+116 silly npmInstallDependencies   '@ncthbrt/re-secure-random-string@^2.0.0',
+116 silly npmInstallDependencies   '@storybook/addon-actions@^3.4.11',
+116 silly npmInstallDependencies   '@storybook/addon-links@^3.4.11',
+116 silly npmInstallDependencies   '@storybook/addons@^3.4.11',
+116 silly npmInstallDependencies   '@storybook/react@^3.4.11',
+116 silly npmInstallDependencies   'apollo-cache-inmemory@^1.2.9',
+116 silly npmInstallDependencies   'apollo-client@^2.4.1',
+116 silly npmInstallDependencies   'apollo-link@^1.2.11',
+116 silly npmInstallDependencies   'apollo-link-context@^1.0.17',
+116 silly npmInstallDependencies   'apollo-link-error@^1.1.10',
+116 silly npmInstallDependencies   'apollo-link-http@^1.5.14',
+116 silly npmInstallDependencies   'apollo-link-ws@^1.0.17',
+116 silly npmInstallDependencies   'apollo-utilities@^1.0.20',
+116 silly npmInstallDependencies   'auth0-js@^9.7.3',
+116 silly npmInstallDependencies   'babel-core@^6.26.3',
+116 silly npmInstallDependencies   'babel-plugin-import@^1.6.3',
+116 silly npmInstallDependencies   'babel-preset-es2015@^6.24.1',
+116 silly npmInstallDependencies   'babel-preset-stage-0@^6.24.1',
+116 silly npmInstallDependencies   'babel-runtime@^6.26.0',
+116 silly npmInstallDependencies   'bs-ant-design@git+https://git@github.com/Thinkei/bs-ant-design.git',
+116 silly npmInstallDependencies   'bs-css@^8.0.2',
+116 silly npmInstallDependencies   'bs-moment@^0.4.4',
+116 silly npmInstallDependencies   'bs-platform@^5.0.0',
+116 silly npmInstallDependencies   'bs-reform@^6.0.0-gadt.5',
+116 silly npmInstallDependencies   'bs-storybook@^0.2.0',
+116 silly npmInstallDependencies   'bsb-js@^1.1.7',
+116 silly npmInstallDependencies   'css-loader@^2.1.1',
+116 silly npmInstallDependencies   'd3@^5.9.2',
+116 silly npmInstallDependencies   'discrete-sampling@^1.0.3',
+116 silly npmInstallDependencies   'file-loader@^2.0.0',
+116 silly npmInstallDependencies   'financejs@^4.1.0',
+116 silly npmInstallDependencies   'graphql@^14.1.1',
+116 silly npmInstallDependencies   'graphql-tag@^2.9.2',
+116 silly npmInstallDependencies   'graphql_ppx@^0.2.8',
+116 silly npmInstallDependencies   'jstat@^1.7.1',
+116 silly npmInstallDependencies   'jwt-decode@^2.2.0',
+116 silly npmInstallDependencies   'less@^2.7.3',
+116 silly npmInstallDependencies   'less-loader@^4.1.0',
+116 silly npmInstallDependencies   'lib@^4.0.1',
+116 silly npmInstallDependencies   'mathjs@^5.1.2',
+116 silly npmInstallDependencies   'node-uuid@^1.4.8',
+116 silly npmInstallDependencies   'parcel-bundler@^1.12.3',
+116 silly npmInstallDependencies   'rationale@^0.1.6',
+116 silly npmInstallDependencies   'react@>=15',
+116 silly npmInstallDependencies   'react-apollo@^2.1.11',
+116 silly npmInstallDependencies   'react-dom@^16.2.0',
+116 silly npmInstallDependencies   'react-icons-kit@^1.2.1',
+116 silly npmInstallDependencies   'reason-apollo@^0.15.0',
+116 silly npmInstallDependencies   'reason-react@^0.7.0',
+116 silly npmInstallDependencies   'source-map-explorer@^1.8.0',
+116 silly npmInstallDependencies   'static-server@^2.2.1',
+116 silly npmInstallDependencies   'style-loader@^0.23.0',
+116 silly npmInstallDependencies   'subscriptions-transport-ws@^0.9.14',
+116 silly npmInstallDependencies   'victory@^32.2.2',
+116 silly npmInstallDependencies   'warning@^4.0.3',
+116 silly npmInstallDependencies   'webpack@^4.0.1',
+116 silly npmInstallDependencies   'webpack-cli@^3.1.0',
+116 silly npmInstallDependencies   'webpack-dev-server@^3.2.1' ]
+117 silly npmInstallDependencies backup /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/package.json
+118 silly npmInstallDependencies writing tempJson { name: '@foretold/client',
+118 silly npmInstallDependencies   version: '0.2.0',
+118 silly npmInstallDependencies   keywords: [ 'BuckleScript' ],
+118 silly npmInstallDependencies   author: '',
+118 silly npmInstallDependencies   license: 'MIT',
+118 silly npmInstallDependencies   dependencies:
+118 silly npmInstallDependencies    { '@babel/preset-react': '7.0.0',
+118 silly npmInstallDependencies      '@glennsl/bs-jest': '^0.4.7',
+118 silly npmInstallDependencies      '@glennsl/bs-json': '^3.0.0',
+118 silly npmInstallDependencies      '@ncthbrt/re-secure-random-string': '^2.0.0',
+118 silly npmInstallDependencies      '@storybook/addon-actions': '^3.4.11',
+118 silly npmInstallDependencies      '@storybook/addon-links': '^3.4.11',
+118 silly npmInstallDependencies      '@storybook/addons': '^3.4.11',
+118 silly npmInstallDependencies      '@storybook/react': '^3.4.11',
+118 silly npmInstallDependencies      'apollo-cache-inmemory': '^1.2.9',
+118 silly npmInstallDependencies      'apollo-client': '^2.4.1',
+118 silly npmInstallDependencies      'apollo-link': '^1.2.11',
+118 silly npmInstallDependencies      'apollo-link-context': '^1.0.17',
+118 silly npmInstallDependencies      'apollo-link-error': '^1.1.10',
+118 silly npmInstallDependencies      'apollo-link-http': '^1.5.14',
+118 silly npmInstallDependencies      'apollo-link-ws': '^1.0.17',
+118 silly npmInstallDependencies      'apollo-utilities': '^1.0.20',
+118 silly npmInstallDependencies      'auth0-js': '^9.7.3',
+118 silly npmInstallDependencies      'babel-core': '^6.26.3',
+118 silly npmInstallDependencies      'babel-plugin-import': '^1.6.3',
+118 silly npmInstallDependencies      'babel-preset-es2015': '^6.24.1',
+118 silly npmInstallDependencies      'babel-preset-stage-0': '^6.24.1',
+118 silly npmInstallDependencies      'babel-runtime': '^6.26.0',
+118 silly npmInstallDependencies      'bs-ant-design': 'git+https://git@github.com/Thinkei/bs-ant-design.git',
+118 silly npmInstallDependencies      'bs-css': '^8.0.2',
+118 silly npmInstallDependencies      'bs-moment': '^0.4.4',
+118 silly npmInstallDependencies      'bs-platform': '^5.0.0',
+118 silly npmInstallDependencies      'bs-reform': '^6.0.0-gadt.5',
+118 silly npmInstallDependencies      'bs-storybook': '^0.2.0',
+118 silly npmInstallDependencies      'bsb-js': '^1.1.7',
+118 silly npmInstallDependencies      'css-loader': '^2.1.1',
+118 silly npmInstallDependencies      d3: '^5.9.2',
+118 silly npmInstallDependencies      'discrete-sampling': '^1.0.3',
+118 silly npmInstallDependencies      'file-loader': '^2.0.0',
+118 silly npmInstallDependencies      financejs: '^4.1.0',
+118 silly npmInstallDependencies      graphql: '^14.1.1',
+118 silly npmInstallDependencies      'graphql-tag': '^2.9.2',
+118 silly npmInstallDependencies      graphql_ppx: '^0.2.8',
+118 silly npmInstallDependencies      jstat: '^1.7.1',
+118 silly npmInstallDependencies      'jwt-decode': '^2.2.0',
+118 silly npmInstallDependencies      less: '^2.7.3',
+118 silly npmInstallDependencies      'less-loader': '^4.1.0',
+118 silly npmInstallDependencies      lib: '^4.0.1',
+118 silly npmInstallDependencies      lodash: '^4.17.11',
+118 silly npmInstallDependencies      mathjs: '^5.1.2',
+118 silly npmInstallDependencies      'node-uuid': '^1.4.8',
+118 silly npmInstallDependencies      'parcel-bundler': '^1.12.3',
+118 silly npmInstallDependencies      rationale: '^0.1.6',
+118 silly npmInstallDependencies      react: '>=15',
+118 silly npmInstallDependencies      'react-apollo': '^2.1.11',
+118 silly npmInstallDependencies      'react-dom': '^16.2.0',
+118 silly npmInstallDependencies      'react-icons-kit': '^1.2.1',
+118 silly npmInstallDependencies      'reason-apollo': '^0.15.0',
+118 silly npmInstallDependencies      'reason-react': '^0.7.0',
+118 silly npmInstallDependencies      'source-map-explorer': '^1.8.0',
+118 silly npmInstallDependencies      'static-server': '^2.2.1',
+118 silly npmInstallDependencies      'style-loader': '^0.23.0',
+118 silly npmInstallDependencies      'subscriptions-transport-ws': '^0.9.14',
+118 silly npmInstallDependencies      victory: '^32.2.2',
+118 silly npmInstallDependencies      warning: '^4.0.3',
+118 silly npmInstallDependencies      webpack: '^4.0.1',
+118 silly npmInstallDependencies      'webpack-cli': '^3.1.0',
+118 silly npmInstallDependencies      'webpack-dev-server': '^3.2.1' },
+118 silly npmInstallDependencies   devDependencies: {} }
+119 silly getExecOpts /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client undefined
+120 silly npmInstall [ 'yarn',
+120 silly npmInstall   [ 'install', '--mutex', 'network:42424', '--non-interactive' ] ]
+121 silly npmInstallDependencies cleanup /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/package.json
+122 error Error: ENOENT: no such file or directory, rename '/Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/package.json.lerna_backup' -> '/Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/package.json'
+122 error     at Object.renameSync (fs.js:591:3)
+122 error     at cleanup (/Users/ozziegooen/Exercism/reasonml/prediction-app/node_modules/@lerna/npm-install/npm-install.js:70:10)
+122 error     at done (/Users/ozziegooen/Exercism/reasonml/prediction-app/node_modules/@lerna/npm-install/npm-install.js:78:7)
+122 error     at writePkg.then.then (/Users/ozziegooen/Exercism/reasonml/prediction-app/node_modules/@lerna/npm-install/npm-install.js:94:19)

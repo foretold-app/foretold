@@ -10,7 +10,7 @@ module.exports = {
       relevantAt: null,
     }, {
       taggedMeasurementId: {
-        [Sequelize.Op.ne]: null,
+        [Sequelize.Op.eq]: null,
       }
     });
   }

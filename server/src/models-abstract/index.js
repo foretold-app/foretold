@@ -6,6 +6,8 @@ const { MeasurementModel } = require('./measurement-model');
 const { SeriesModel } = require('./series-model');
 const { UserModel } = require('./user-model');
 const { BotModel } = require('./bot-model');
+const { TokenModel } = require('./token-model');
+const { Model } = require('./model');
 
 module.exports = {
   AgentModel,
@@ -16,4 +18,6 @@ module.exports = {
   SeriesModel,
   UserModel,
   BotModel,
+  TokenModel,
+  Model,
 };

@@ -1,26 +1,20 @@
 const jwt = require('jsonwebtoken');
 
+const config = require('../config');
+
 const { UsersData } = require('./users-data');
 const { AgentsData } = require('./agents-data');
-
-const AUTH0_SECRET = process.env.AUTH0_SECRET;
-const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_ISSUER = process.env.JWT_ISSUER || 'Foretold';
-const JWT_EXPIN = process.env.JWT_EXPIN || '31 days';
-
-if (!AUTH0_SECRET) throw new ReferenceError('AUTH0_SECRET is not defined');
-if (!JWT_SECRET) throw new ReferenceError('JWT_SECRET is not defined');
-if (!JWT_ISSUER) throw new ReferenceError('JWT_ISSUER is not defined');
-if (!JWT_EXPIN) throw new ReferenceError('JWT_EXPIN is not defined');
 
 class AuthenticationData {
 
   constructor() {
     this.jwt = jwt;
-    this.AUTH0_SECRET = AUTH0_SECRET;
-    this.JWT_SECRET = JWT_SECRET;
-    this.JWT_ISSUER = JWT_ISSUER;
-    this.JWT_EXPIN = JWT_EXPIN;
+
+    this.AUTH0_SECRET = config.AUTH0_SECRET;
+    this.JWT_SECRET = config.JWT_SECRET;
+    this.JWT_ISSUER = config.JWT_ISSUER;
+    this.JWT_EXPIN = config.JWT_EXPIN;
+
     this.users = new UsersData();
     this.agents = new AgentsData();
   }
@@ -61,7 +55,6 @@ class AuthenticationData {
       issuer: this.JWT_ISSUER,
     };
     if (expiresIn) options.expiresIn = expiresIn;
-    console.log(expiresIn)
     return this.jwt.sign(payload, this.JWT_SECRET, options);
   }
 

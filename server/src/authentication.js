@@ -21,7 +21,7 @@ async function authentication(options) {
   try {
     const token = getQueryToken(options);
     if (token) {
-      return await data.authentication.authenticationByJwtToken(token);
+      return await data.authentication.authenticate(token);
     }
     return null;
   } catch (err) {

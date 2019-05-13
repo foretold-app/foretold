@@ -2,7 +2,7 @@ const AUTH0_SECRET = process.env.AUTH0_SECRET;
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_ISSUER = process.env.JWT_ISSUER || 'Foretold';
 const JWT_EXPIN = process.env.JWT_EXPIN || '31 days';
-const MAX_BOT_TOKEN_SIZE = process.env.MAX_TOKEN_SIZE * 1 || 32;
+const MAX_BOT_TOKEN_SIZE = process.env.MAX_BOT_TOKEN_SIZE * 1 || 32;
 
 if (!AUTH0_SECRET) throw new ReferenceError('AUTH0_SECRET is not defined');
 if (!JWT_SECRET) throw new ReferenceError('JWT_SECRET is not defined');

@@ -14,7 +14,8 @@ class TokensData extends DataBase {
   constructor() {
     super();
     this.model = new TokenModel();
-    this.MAX_TOKEN_SIZE = config.MAX_BOT_TOKEN_SIZE;
+    this.MAX_BOT_TOKEN_SIZE = config.MAX_BOT_TOKEN_SIZE;
+    this.MAX_BOT_TOKEN_SIZE_INCOMIN = this.MAX_BOT_TOKEN_SIZE * 2;
   }
 
   /**
@@ -23,22 +24,22 @@ class TokensData extends DataBase {
    * @return {boolean}
    */
   validate(token) {
-    const length = token.length === this.MAX_TOKEN_SIZE;
+    const length = token.length === this.MAX_BOT_TOKEN_SIZE_INCOMIN;
     const pattern = /^([0-9a-z]+)$/.test(token);
     return length && pattern;
   }
 
   /**
-   * @param {string} agentId
+   * @param {string} [agentId]
+   * @param {string} [token]
    * @return {Promise<Models.Token>}
    */
-  async getActiveToken(agentId) {
-    return await this.model.getOne({
-      agentId,
-      isActive: true
-    }, {
-      sort: -1,
-    });
+  async getActiveToken({ agentId, token }) {
+    const cond = { isActive: true };
+    if (agentId) cond.agentId = agentId;
+    if (token) cond.token = token;
+    const options = { sort: -1 };
+    return await this.model.getOne(cond, options);
   }
 
   /**
@@ -54,11 +55,11 @@ class TokensData extends DataBase {
   }
 
   /**
-   * @param {string} agentId
+   * @param {string} tokenIn
    * @return {Promise<null | string>}
    */
-  async getAgentIdByToken(agentId) {
-    const token = await this.getActiveToken(agentId);
+  async getAgentIdByToken(tokenIn) {
+    const token = await this.getActiveToken({ token: tokenIn });
     if (!token) return null;
     return token.agentId;
   }
@@ -69,7 +70,7 @@ class TokensData extends DataBase {
    * @return {Promise<string>}
    */
   async getOrCreateActiveTokenForAgentId(agentId) {
-    let token = await this.getActiveToken(agentId);
+    let token = await this.getActiveToken({ agentId });
     if (!token) token = await this.createActiveToken(agentId);
     return token.token;
   }
@@ -94,7 +95,7 @@ class TokensData extends DataBase {
    * @return {string}
    */
   getToken() {
-    return crypto.randomBytes(this.MAX_TOKEN_SIZE).toString('hex');
+    return crypto.randomBytes(this.MAX_BOT_TOKEN_SIZE).toString('hex');
   }
 }
 

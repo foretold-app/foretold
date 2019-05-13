@@ -42,9 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     relevantAt: {
       allowNull: true,
       type: Sequelize.DATE,
-      get() {
-        return this.getDataValue('relevantAt') || this.getDataValue('createdAt')
-      }
+      defaultValue: DataTypes.NOW,
     },
   }, {
     hooks: {

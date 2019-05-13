@@ -13,6 +13,7 @@ class MeasurablesData extends DataBase {
   constructor() {
     super();
     this.MeasurableModel = new MeasurableModel();
+    this.model = this.MeasurableModel;
   }
 
   /**

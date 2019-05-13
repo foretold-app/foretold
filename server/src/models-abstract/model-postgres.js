@@ -16,6 +16,7 @@ class ModelPostgres extends Model {
     this.model = model;
     this.models = models;
     this.sequelize = sequelize;
+
     this.Op = this.sequelize.Op;
     this.in = this.sequelize.Op.in;
     this.gt = this.sequelize.Op.gt;
@@ -25,6 +26,7 @@ class ModelPostgres extends Model {
     this.and = this.sequelize.Op.and;
     this.not = this.sequelize.Op.not;
     this.notIn = this.sequelize.Op.notIn;
+
     this.fn = this.sequelize.fn;
     this.col = this.sequelize.col;
     this.literal = this.sequelize.literal;
@@ -256,6 +258,18 @@ class ModelPostgres extends Model {
       await entity.update(data);
     }
     return entity;
+  }
+
+  /**
+   * @param {object} params
+   * @param {object} data
+   * @return {boolean}
+   */
+  async updateAll(params, data) {
+    return !!await this.model.update(
+      data,
+      { where: params },
+    );
   }
 
   /**

@@ -1,7 +1,7 @@
 const { DataBase } = require('./data-base');
 
 const { BotModel } = require('../models-abstract');
-const { AuthenticationData } = require('./authentication-data');
+const { TokensData } = require('./tokens-data');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -12,7 +12,8 @@ class BotsData extends DataBase {
   constructor() {
     super();
     this.BotModel = new BotModel();
-    this.authentication = new AuthenticationData();
+    this.model = this.BotModel;
+    this.tokens = new TokensData();
   }
 
   /**
@@ -58,7 +59,7 @@ class BotsData extends DataBase {
    */
   async tokenRefresh(params) {
     const bot = await this.BotModel.getOne(params);
-    return this.authentication.getJwtForever(bot.agentId);
+    return this.tokens.revokeTokensAndGetTokenByAgentId(bot.agentId);
   }
 }
 

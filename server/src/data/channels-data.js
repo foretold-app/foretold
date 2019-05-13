@@ -14,6 +14,7 @@ class ChannelsData extends DataBase {
     super();
     this.channelMembershipsData = new ChannelMembershipsData();
     this.ChannelModel = new ChannelModel();
+    this.model = this.ChannelModel;
   }
 
   /**

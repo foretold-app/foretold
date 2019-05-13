@@ -54,6 +54,11 @@ export namespace Models {
   }
 
   export type Creator = Models.User | Models.Bot;
+
+  export interface Token {
+    token: string;
+    isActive: boolean;
+  }
 }
 
 export namespace Schema {
@@ -182,6 +187,11 @@ export namespace Layers {
         pagination: pagination,
         restrictions: restrictions,
       ): responseList;
+
+      updateAll(
+        params: params,
+        data: data,
+      ): boolean;
     }
   }
 }

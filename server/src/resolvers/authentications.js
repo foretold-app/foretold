@@ -29,7 +29,21 @@ async function getJwtByAgentId(root, args, context, info) {
   return await data.authentication.getJwtForever(botAgentId);
 }
 
+/**
+ * @param {object | null} root
+ * @param {object} args
+ * @param {string} args.id
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+async function getTokenByAgentId(root, args, context, info) {
+  const agentId = _.get(root, 'agentId');
+  return await data.token.getOrCreateActiveTokenForAgentId(agentId);
+}
+
 module.exports = {
   getJwtByAuth0Jwt,
   getJwtByAgentId,
+  getTokenByAgentId,
 };

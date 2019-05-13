@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM(["USER", "BOT"]),
       allowNull: false,
     },
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     name: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.STRING),

@@ -10,10 +10,6 @@ module.exports = {
           defaultValue: Sequelize.fn('uuid_generate_v4'),
           allowNull: false,
         },
-        token: {
-          type: Sequelize.DataTypes.STRING,
-          allowNull: true,
-        },
         agentId: {
           type: Sequelize.DataTypes.STRING,
           allowNull: false,
@@ -22,18 +18,14 @@ module.exports = {
             key: 'id',
           }
         },
-        issuedAtBefore: {
-          type: Sequelize.DataTypes.DATE,
+        token: {
+          type: Sequelize.DataTypes.STRING,
           allowNull: true,
         },
-        issuedAtAfter: {
-          type: Sequelize.DataTypes.DATE,
-          allowNull: true,
-        },
-        isLocked: {
+        isActive: {
           type: Sequelize.DataTypes.BOOLEAN,
           allowNull: false,
-          defaultValue: false,
+          defaultValue: true,
         },
         createdAt: {
           type: Sequelize.DataTypes.DATE,

@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
-      defaultValue: Sequelize.fn('uuid_generate_v4'),
+      defaultValue: sequelize.fn('uuid_generate_v4'),
       allowNull: false,
     },
     agentId: {

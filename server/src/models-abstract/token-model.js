@@ -10,7 +10,7 @@ class TokenModel extends ModelPostgres {
 
   constructor() {
     super({
-      model: models.Channel,
+      model: models.Token,
       sequelize: models.sequelize,
     });
   }

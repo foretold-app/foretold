@@ -39,7 +39,7 @@ async function getJwtByAgentId(root, args, context, info) {
  */
 async function getTokenByAgentId(root, args, context, info) {
   const agentId = _.get(root, 'agentId');
-  return await data.token.getOrCreateActiveTokenForAgentId(agentId);
+  return await data.tokens.getOrCreateActiveTokenForAgentId(agentId);
 }
 
 module.exports = {

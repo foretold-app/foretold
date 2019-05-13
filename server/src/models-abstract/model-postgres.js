@@ -266,10 +266,10 @@ class ModelPostgres extends Model {
    * @return {boolean}
    */
   async updateAll(params, data) {
-    return !!await this.model.update(
+    return !!(await this.model.update(
       data,
       { where: params },
-    );
+    ));
   }
 
   /**

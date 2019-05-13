@@ -12,28 +12,34 @@ class TokensData extends DataBase {
   constructor() {
     super();
     this.model = new TokenModel();
+    this.MAX_TOKEN_SIZE = 32;
   }
 
   /**
+   * @public
    * @param {string} agentId
-   * @return {Promise<Models.Token>}
+   * @return {Promise<string>}
    */
   async getOrCreateActiveTokenForAgentId(agentId) {
-    const token = await this.model.getOne({
+    let token = await this.model.getOne({
       agentId,
       isActive: true
+    }, {
+      sort: -1,
     });
-    if (token) return token;
-    return await this.model.createOne({
+    if (!token) token = await this.model.createOne({
+      agentId,
       token: this.getToken(),
       isActive: true,
     });
+    return token.token;
   }
 
   /**
    * @todo: add transaction
+   * @public
    * @param {string} agentId
-   * @return {Promise<Models.Token>}
+   * @return {Promise<string>}
    */
   async revokeTokensAndGetTokenByAgentId(agentId) {
     await this.model.updateAll({
@@ -45,10 +51,11 @@ class TokensData extends DataBase {
   }
 
   /**
+   * @protected
    * @return {string}
    */
   getToken() {
-    return crypto.randomBytes(64).toString('hex');
+    return crypto.randomBytes(this.MAX_TOKEN_SIZE).toString('hex');
   }
 }
 

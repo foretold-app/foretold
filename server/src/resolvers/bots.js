@@ -61,12 +61,12 @@ async function one(root, args, context, info) {
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<*|Array<Model>>}
+ * @returns {Promise<{token: string}>}
  */
 async function tokenRefresh(root, args, context, info) {
   const id = _.get(args, 'id');
-  const jwt = await data.bots.tokenRefresh({ id });
-  return { jwt };
+  const token = await data.bots.tokenRefresh({ id });
+  return { token };
 }
 
 module.exports = {

@@ -153,7 +153,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       authentication: {
-        type: graphql.GraphQLNonNull(types.authentications.authentication),
+        type: graphql.GraphQLNonNull(types.authentications.authenticationJwt),
         args: {
           auth0jwt: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
@@ -299,7 +299,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       botTokenRefresh: {
-        type: types.authentications.authentication,
+        type: types.authentications.authenticationToken,
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },

@@ -55,11 +55,11 @@ class BotsData extends DataBase {
 
   /**
    * @param {object} params
-   * @return {Promise<void>}
+   * @return {Promise<string>}
    */
   async tokenRefresh(params) {
     const bot = await this.BotModel.getOne(params);
-    return this.tokens.revokeTokensAndGetTokenByAgentId(bot.agentId);
+    return await this.tokens.revokeTokensAndGetTokenByAgentId(bot.agentId);
   }
 }
 

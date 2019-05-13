@@ -1,6 +1,8 @@
 const crypto = require('crypto');
 const { DataBase } = require('./data-base');
 
+const config = require('../config');
+
 const { TokenModel } = require('../models-abstract');
 
 /**
@@ -12,7 +14,7 @@ class TokensData extends DataBase {
   constructor() {
     super();
     this.model = new TokenModel();
-    this.MAX_TOKEN_SIZE = 32;
+    this.MAX_TOKEN_SIZE = config.MAX_BOT_TOKEN_SIZE;
   }
 
   /**

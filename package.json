@@ -12,6 +12,7 @@
         "lerna": "lerna",
         "bootstrap": "lerna bootstrap",
         "start": "node packages",
+        "dev": "nodemon packages",
         "client/build": "cd packages/client && npm run build-t && cd ../..",
         "server/db:create": "cd packages/server && npm run db:create && cd ../..",
         "server/db:migrate": "cd packages/server && npm run db:migrate cd ../..",
@@ -26,6 +27,7 @@
     "author": "Foretold",
     "license": "MIT",
     "devDependencies": {
-        "lerna": "^3.13.4"
+        "lerna": "^3.13.4",
+        "nodemon": "^1.12.1"
     }
 }

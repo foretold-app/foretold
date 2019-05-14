@@ -50,7 +50,7 @@ module Columns = {
 
   let tokenColumn: column = {
     name: "Token" |> ste,
-    render: (r: record) => <Antd.Input value={r.jwt |> E.O.default("")} />,
+    render: (r: record) => <Antd.Input value={r.token |> E.O.default("")} />,
   };
 
   let all = [|nameColumn, descriptionColumn, tokenColumn|];

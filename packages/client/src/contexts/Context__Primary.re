@@ -45,7 +45,7 @@ module Types = {
     description: option(string),
     id: string,
     name: option(string),
-    jwt: option(string),
+    token: option(string),
     agent: option(agent),
   }
   and agentType =
@@ -204,7 +204,7 @@ module Bot = {
         ~name=None,
         ~description=None,
         ~competitorType,
-        ~jwt=None,
+        ~token=None,
         ~agent=None,
         (),
       )
@@ -213,7 +213,7 @@ module Bot = {
     competitorType,
     description,
     name,
-    jwt,
+    token,
     agent,
   };
 };

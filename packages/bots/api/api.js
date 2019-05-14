@@ -42,7 +42,7 @@ class API {
         throw new Error('Not authorized');
       }
     }).then((body) => {
-      // console.log(body);
+      // console.log(query, variables, body);
       return body;
     }).catch((err) => {
       console.log(err.message);

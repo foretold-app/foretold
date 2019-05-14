@@ -18,7 +18,7 @@ let toBot = (a: bot): Context.Primary.Bot.t => {
   description: a.description,
   id: a.id,
   name: Some(a.name),
-  jwt: None,
+  token: None,
   agent: None,
 };
 

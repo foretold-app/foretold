@@ -8,7 +8,7 @@ module Query = [%graphql
                   name
                   description
                   competitorType
-                  jwt
+                  token
                   agent: Agent{
                     id
                   }
@@ -36,7 +36,7 @@ type bot = {
   "competitorType": [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE],
   "id": string,
   "description": option(string),
-  "jwt": option(string),
+  "token": option(string),
   "agent": option({. "id": string}),
   "name": string,
 };
@@ -47,7 +47,7 @@ let toBot = (m: bot) =>
     ~name=Some(m##name),
     ~description=m##description,
     ~competitorType=m##competitorType,
-    ~jwt=m##jwt,
+    ~token=m##token,
     ~agent=
       m##agent |> E.O.fmap(r => Context.Primary.Agent.make(~id=r##id, ())),
     (),

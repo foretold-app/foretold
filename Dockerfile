@@ -13,3 +13,4 @@ RUN npm install --loglevel=warn --unsafe-perm --ignore-scripts
 RUN npm run bootstrap
 
 EXPOSE ${PORT:-80}
+

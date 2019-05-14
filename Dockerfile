@@ -9,6 +9,6 @@ COPY lerna.json /opt/app/
 COPY packages /opt/app/packages/
 WORKDIR /opt/app
 
-RUN npm install --loglevel=warn
+RUN npm install --loglevel=warn --unsafe-perm
 
 EXPOSE ${PORT:-80}

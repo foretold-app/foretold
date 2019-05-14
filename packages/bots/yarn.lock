@@ -2,11 +2,6 @@
 # yarn lockfile v1
 
 
-"@foretold/cdf@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@foretold/cdf/-/cdf-1.0.6.tgz#fca94d7c0d41fe134299e4d669f2890918f1dbe2"
-  integrity sha512-FzRVb/XEbPpFW6dSdrEddfu+CuXqTlOwtfjLbSycTkWY3vLA4ID+fyUnYI5lHGzVQK150SMZQVW7fTL807wzog==
-
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"

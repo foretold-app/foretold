@@ -12,6 +12,7 @@ services:
       # Defaults
       - JWT_ISSUER=Foretold
       - CDF_COMBINE_SIZE=1000
+      - AGGR_SCHEDULE=0 * * * *
       # Need to change
       - API_URL=<change-me>
       - AUTH0_SECRET=<change-me>

@@ -8,4 +8,5 @@ services:
       - BOT_TOKEN=<change-me>
       - BOT_AGENT_ID=<change-me>
       - CDF_COMBINE_SIZE=1000
+      - AGGR_SCHEDULE=0 * * * *
 

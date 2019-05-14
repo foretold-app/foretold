@@ -3,3 +3,4 @@ coverage
 node_modules
 DEV.md
 .directory
+docker-compose.override.yml

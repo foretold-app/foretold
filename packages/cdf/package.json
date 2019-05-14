@@ -6,8 +6,7 @@
   "scripts": {
     "test": "jest --watch",
     "test:cv": "jest --coverage --forceExit",
-    "test:ci": "jest --forceExit",
-    "prepublish": "npm run test:ci"
+    "test:ci": "jest --forceExit"
   },
   "author": "Ozzie Gooen",
   "license": "MIT",

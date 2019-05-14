@@ -19,7 +19,7 @@
         "server/db:reset": "cd packages/server && npm run db:reset && cd ../..",
         "server/db:seed": "cd packages/server && npm run db:seed && cd ../..",
         "migrate": "npm run server/db:migrate;",
-        "build": "npm run client/build;",
+        "_build": "npm run client/build;",
         "preinstall": "printenv",
         "postinstall": "npm run bootstrap; npm run migrate;"
     },

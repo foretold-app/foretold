@@ -1,0 +1,16 @@
+version: "2"
+
+services:
+
+  app:
+    environment:
+      - AUTH0_SECRET=<change-me>
+      - SLACK_WEBHOOK_URL=<change-me>
+      - JWT_SECRET=<change-me>
+      - JWT_ISSUER=Foretold
+      - BOT_TOKEN=<change-me>
+      - BOT_AGENT_ID=<change-me>
+
+  database:
+    environment:
+      - POSTGRES_PASSWORD=<change-me>

@@ -4,10 +4,10 @@ services:
 
   app:
     environment:
+      - API_URL=<change-me>
       - AUTH0_SECRET=<change-me>
       - SLACK_WEBHOOK_URL=<change-me>
       - JWT_SECRET=<change-me>
-      - JWT_ISSUER=Foretold
       - BOT_TOKEN=<change-me>
       - BOT_AGENT_ID=<change-me>
 

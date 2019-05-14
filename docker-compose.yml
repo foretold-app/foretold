@@ -8,14 +8,17 @@ services:
       # Persistence
       - PORT=80
       - NODE_PATH=/opt/app
+      - NODE_ENV=development
+      # Defaults
+      - JWT_ISSUER=Foretold
+      - CDF_COMBINE_SIZE=1000
       # Need to change
+      - API_URL=<change-me>
       - AUTH0_SECRET=<change-me>
       - SLACK_WEBHOOK_URL=<change-me>
       - JWT_SECRET=<change-me>
-      - JWT_ISSUER=Foretold
       - BOT_TOKEN=<change-me>
       - BOT_AGENT_ID=<change-me>
-      - CDF_COMBINE_SIZE=1000
     command: npm start
     links:
       - database

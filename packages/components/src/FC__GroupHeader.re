@@ -1,16 +1,20 @@
 open FC__Base;
 
 module Colors' = {
-  let background = Colors.mainBlue;
-  let primary = Colors.white;
-  let secondary = `hex("ffffffb1");
+  let background = Colors.smokeWhite;
+  let primary = Colors.link;
+  let secondary = Colors.link;
 };
 
 module Styles = {
   open Css;
   let outer =
     style(
-      [backgroundColor(Colors'.background)] @ BaseStyles.fullWidthFloatLeft,
+      [
+        backgroundColor(Colors.white),
+        borderBottom(`px(1), `solid, Colors.accentBlueO8),
+      ]
+      @ BaseStyles.fullWidthFloatLeft,
     );
 
   let inner =
@@ -31,36 +35,35 @@ let linkStyles =
 
 let link =
   Link.make(
-    ~colors=(`hex("3562AE"), Colors.darkAccentBlue),
+    ~colors=(Colors.link, Colors.link),
     ~isDisabled=false,
     ~styles=
       linkStyles
       @ Css.[
-          background(Colors'.primary),
+          border(`px(1), `solid, Colors.accentBlue),
+          background(Colors.lightGrayBackground),
           Css.transition(~duration=100, "background"),
-          selector(
-            ":hover",
-            [background(Colors.whiteOc), color(Colors.darkAccentBlue)],
-          ),
+          selector(":hover", [background(Colors.lightGrayBackground)]),
         ],
   );
 
 let secondaryLink =
   Link.make(
-    ~colors=(Colors'.secondary, Colors.darkAccentBlue),
+    ~colors=(Colors.link, Colors.link),
     ~isDisabled=false,
     ~styles=
       linkStyles
       @ Css.[
-          border(`px(1), `solid, Colors'.secondary),
+          border(`px(1), `solid, Colors.accentBlue),
+          background(Colors.lightGrayBackground),
           Css.transition(~duration=100, "background"),
-          selector(":hover", [background(Colors.whiteO2)]),
+          selector(":hover", [background(Colors.lightGrayBackground)]),
         ],
   );
 
 let component = ReasonReact.statelessComponent(__MODULE__);
 
-let make = (~hero: ReasonReact.reactElement, children) => {
+let make = children => {
   ...component,
   render: _self =>
     <Div styles=[Styles.outer]>
@@ -79,7 +82,8 @@ module SubHeader = {
         styles=[
           Css.(
             style(
-              [backgroundColor(Colors.white)] @ BaseStyles.fullWidthFloatLeft,
+              [backgroundColor(Colors.lighterGrayBackground)]
+              @ BaseStyles.fullWidthFloatLeft,
             )
           ),
         ]>

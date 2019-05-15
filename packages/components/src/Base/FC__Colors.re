@@ -12,13 +12,16 @@ let clear = "#00000000"->r;
 
 let textDarker = "#333333"->r;
 let textDark = "#5f6d7d"->r;
-let textMedium = "#757575"->r;
+let textMedium = "#9a9ea7"->r;
 let smokeWhite = "#F0F1F3"->r;
 let lightGrayBackground = "#f4f6f9"->r;
+let lighterGrayBackground = "#fbfcfd"->r;
+let grayBackground = "#dcdee0"->r;
 let greydisabled = "#e3e4e6"->r;
 let accentBlue = "#8C9EB5"->r;
 let accentBlueO8 = "#8C9EB560"->r;
 let mainBlue = "#347296"->r;
+let link = "#1b598e"->r;
 let darkAccentBlue = "#5C6E95"->r;
 let grey1 = "#868686"->r;
 let border = "#D5D7DA"->r;
@@ -41,7 +44,7 @@ let primary = mainBlue;
 module Text = {
   module LightBackground = {
     let main = textDark;
-    let p = "#626875"->r;
+    let p = "#777c88"->r;
     let light = accentBlue;
     let active = "#3562AE"->r;
   };

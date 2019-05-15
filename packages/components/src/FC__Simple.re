@@ -5,7 +5,7 @@ let tagStyles = (~isDisabled=false, ~heightPadding=2, ()) => {
     Css.[
       padding2(~v=`px(heightPadding), ~h=`px(14)),
       BaseStyles.floatLeft,
-      borderRadius(`px(7)),
+      borderRadius(`px(5)),
       border(`px(1), `solid, Colors.accentBlueO8),
     ];
   let disabledStyles = Css.[background(Colors.greydisabled)];

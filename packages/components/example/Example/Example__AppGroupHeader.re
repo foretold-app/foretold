@@ -3,14 +3,15 @@ open Base;
 
 let make =
   <Div>
-    <GroupHeader hero={"US Politics" |> ReasonReact.string}>
+    <GroupHeader>
       <Div float=`left>
         <div
           className=Css.(
             style([
-              fontSize(`px(24)),
+              fontSize(`em(1.2)),
+              marginTop(`px(5)),
               Colors.FontWeights.heavy,
-              color(GroupHeader.Colors'.primary),
+              color(Colors.link),
             ])
           )>
           {"Great Group" |> ReasonReact.string}
@@ -18,8 +19,9 @@ let make =
         <p
           className=Css.(
             style([
-              color(GroupHeader.Colors'.secondary),
-              marginTop(`px(0)),
+              color(FC__Colors.Text.LightBackground.p),
+              marginTop(`px(5)),
+              marginBottom(`px(3)),
             ])
           )>
           {

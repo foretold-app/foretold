@@ -7,6 +7,7 @@ module Styles = {
       [
         padding2(~v=`em(1.0), ~h=`em(2.)),
         backgroundColor(`rgb((255, 255, 255))),
+        borderBottom(`px(2), `solid, FC__Colors.border),
       ]
       @ BaseStyles.fullWidthFloatLeft,
     );

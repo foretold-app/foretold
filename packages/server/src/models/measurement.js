@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     relevantAt: {
-      allowNull: true,
+      allowNull: false,
       type: Sequelize.DATE,
       defaultValue: DataTypes.NOW,
     },

@@ -49,8 +49,8 @@ let make =
     </GroupHeader>
     <GroupHeader.SubHeader>
       <Tab isActive=true> {"Questions" |> ReasonReact.string} </Tab>
-      <Tab isActive=false> {"Questions" |> ReasonReact.string} </Tab>
-      <Tab isActive=false> {"Questions" |> ReasonReact.string} </Tab>
-      <Tab isActive=false> {"Questions" |> ReasonReact.string} </Tab>
+      <Tab isActive=false> {"Knowledge Graph" |> ReasonReact.string} </Tab>
+      <Tab isActive=false> {"Leaderboard" |> ReasonReact.string} </Tab>
+      <Tab isActive=false> {"Settings" |> ReasonReact.string} </Tab>
     </GroupHeader.SubHeader>
   </Div>;

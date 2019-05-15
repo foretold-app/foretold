@@ -41,13 +41,13 @@ let make = (t: t) => {
     Css.[
       BaseStyles.floatLeft,
       marginRight(`em(0.5)),
-      marginTop(`em(0.4)),
+      marginTop(`em(0.45)),
       color(Colors.accentBlue),
     ];
   <Div
     styles=[
       Css.(
-        style([BaseStyles.floatLeft, padding2(~v=`em(0.7), ~h=`em(1.5))])
+        style([BaseStyles.floatLeft, padding2(~v=`em(0.5), ~h=`em(1.5))])
       ),
     ]>
     <span className={Css.style(textStyle)}>

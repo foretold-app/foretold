@@ -10,7 +10,7 @@ let make =
             styles=[
               Css.style([
                 BaseStyles.floatLeft,
-                Css.padding2(~v=`em(1.), ~h=`em(1.5)),
+                Css.padding2(~v=`em(0.6), ~h=`em(1.5)),
               ]),
             ]>
             <Simple.Linktag> {"< Back" |> ReasonReact.string} </Simple.Linktag>

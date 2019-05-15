@@ -9,7 +9,7 @@ let make =
           className=Css.(
             style([
               fontSize(`px(24)),
-              fontWeight(`num(500)),
+              Colors.FontWeights.heavy,
               color(GroupHeader.Colors'.primary),
             ])
           )>

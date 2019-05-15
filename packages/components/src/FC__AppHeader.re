@@ -21,7 +21,7 @@ let link =
       FC__Colors.Text.LightBackground.main,
     ),
     ~isDisabled=false,
-    ~styles=Css.[marginRight(`em(2.)), fontWeight(`num(400))],
+    ~styles=Css.[marginRight(`em(2.))],
   );
 
 let make = (~links: ReasonReact.reactElement, _children) => {

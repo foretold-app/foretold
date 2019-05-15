@@ -13,12 +13,13 @@ let tagStyles = (~isDisabled=false, ~heightPadding=2, ()) => {
 };
 
 module Linktag = {
-  let make = Link.make(~styles=tagStyles(), ~isDisabled=false);
+  let make =
+    Link.make(~styles=tagStyles(~heightPadding=4, ()), ~isDisabled=false);
 };
 
 let activeItemWithNumber = (isActive, text, number: int) => {
   let textStyle =
-    Css.[BaseStyles.floatLeft, marginRight(`em(1.0)), marginTop(`px(3))];
+    Css.[BaseStyles.floatLeft, marginRight(`em(0.7)), marginTop(`px(3))];
 
   let colors =
     isActive ?
@@ -30,7 +31,7 @@ let activeItemWithNumber = (isActive, text, number: int) => {
 
   <Link
     colors
-    styles=Css.[BaseStyles.floatLeft, padding2(~v=`em(1.), ~h=`em(1.5))]
+    styles=Css.[BaseStyles.floatLeft, padding2(~v=`em(0.7), ~h=`em(1.2))]
     isDisabled=false>
     <span className={Css.style(textStyle)}> text </span>
     <span className={Css.style(tagStyles())}>

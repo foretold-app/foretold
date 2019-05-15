@@ -1,6 +1,6 @@
 open FC;
 ReactDOMRe.renderToElementWithId(
-  <div className=Css.(style([fontFamily("poppins")]))>
+  <div className=Css.(style([fontFamily("Lato")]))>
     <AppHeader
       links={
         [|

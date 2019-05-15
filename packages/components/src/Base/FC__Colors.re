@@ -10,14 +10,25 @@ let whiteO4 = "#ffffff40"->r;
 let whiteOc = "#ffffffc0"->r;
 let clear = "#00000000"->r;
 
-let textDark = "#192D44"->r;
+let textDarker = "#333333"->r;
+let textDark = "#5f6d7d"->r;
+let textMedium = "#757575"->r;
 let smokeWhite = "#F0F1F3"->r;
+let lightGrayBackground = "#f4f6f9"->r;
 let greydisabled = "#e3e4e6"->r;
 let accentBlue = "#8C9EB5"->r;
 let accentBlueO8 = "#8C9EB560"->r;
 let mainBlue = "#347296"->r;
 let darkAccentBlue = "#5C6E95"->r;
 let grey1 = "#868686"->r;
+let border = "#D5D7DA"->r;
+
+module FontWeights = {
+  let light = Css.fontWeight(`num(300));
+  let regular = Css.fontWeight(`num(400));
+  let heavy = Css.fontWeight(`num(700));
+  let veryHeavy = Css.fontWeight(`num(900));
+};
 
 module Statuses = {
   let green = "#6C8A64"->r;

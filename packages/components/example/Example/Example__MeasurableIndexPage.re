@@ -6,34 +6,45 @@ let row =
     <Table.Cell
       flex=6
       styles=[
-        Css.(style([paddingTop(`em(0.8)), paddingBottom(`em(0.3))])),
+        Css.(style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])),
       ]>
       <div className=Table.Row.headerStyle>
         {"What will the GDP of China be in 2020?" |> ReasonReact.string}
       </div>
       <div
         className=Css.(
-          style([fontWeight(`num(500)), color(Colors.Statuses.green)])
+          style([
+            Colors.FontWeights.heavy,
+            color(Colors.Statuses.green),
+            fontSize(`em(0.9)),
+          ])
         )>
         {"Open" |> ReasonReact.string}
       </div>
     </Table.Cell>
     <Table.Cell flex=1 styles=[Css.(style([paddingTop(`em(0.5))]))]>
       <Div>
-        <Link styles=[Css.marginRight(`em(1.0))]>
+        <Link
+          styles=[Css.marginRight(`em(1.0))]
+          colors=(Colors.textMedium, Colors.textDark)>
           {"Series A" |> ReasonReact.string}
         </Link>
-        <Link> {"19" |> ReasonReact.string} </Link>
+        <Link colors=(Colors.textMedium, Colors.textDark)>
+          {"19" |> ReasonReact.string}
+        </Link>
       </Div>
       <Div>
         <Link
+          colors=(Colors.textMedium, Colors.textDark)
           styles=[
             Css.marginRight(`em(1.0)),
             Css.textDecoration(`underline),
           ]>
           {"Edit" |> ReasonReact.string}
         </Link>
-        <Link styles=[Css.textDecoration(`underline)]>
+        <Link
+          styles=[Css.textDecoration(`underline)]
+          colors=(Colors.textMedium, Colors.textDark)>
           {"Archive" |> ReasonReact.string}
         </Link>
       </Div>

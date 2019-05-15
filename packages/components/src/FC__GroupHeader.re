@@ -18,13 +18,6 @@ module Styles = {
       [boxSizing(`borderBox), padding2(~v=`em(1.), ~h=`em(2.0))]
       @ BaseStyles.fullWidthFloatLeft,
     );
-
-  let hero =
-    style([
-      fontSize(`px(24)),
-      color(Colors'.primary),
-      fontFamily("poppins"),
-    ]);
 };
 
 let linkStyles =
@@ -96,12 +89,7 @@ module SubHeader = {
               style(
                 [
                   padding2(~v=`em(0.0), ~h=`em(2.0)),
-                  boxShadow(
-                    ~x=`px(1),
-                    ~y=`px(1),
-                    ~blur=`px(4),
-                    Colors.greyO4,
-                  ),
+                  borderBottom(`px(1), `solid, FC__Colors.border),
                 ]
                 @ BaseStyles.fullWidthFloatLeft,
               )

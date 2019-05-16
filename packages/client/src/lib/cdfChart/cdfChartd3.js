@@ -31,6 +31,7 @@ function chart() {
     var main = function () {
         //Drawing containers
         var container = d3.select(attrs.container);
+        // TODO: This takes a lot of computation, is quite slow at scale.
         var containerRect = container.node().getBoundingClientRect();
         if (containerRect.width > 0) attrs.svgWidth = containerRect.width;
 

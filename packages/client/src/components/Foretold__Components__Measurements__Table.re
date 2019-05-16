@@ -138,7 +138,7 @@ module Helpers = {
   let relevantAt = (~m: measurement) =>
     m.relevantAt
     |> E.O.fmap(d =>
-         <div className=Styles.date> {d |> E.M.goFormat_simple |> ste} </div>
+         <div className=Styles.date> {d |> E.M.goFormat_standard |> ste} </div>
        );
 
   let getFloatCdf = (e: Belt.Result.t(MeasurementValue.t, string)) =>

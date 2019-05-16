@@ -111,6 +111,7 @@ module M = {
   let format_simple = "L";
   /* TODO: Figure out better name */
   let goFormat_simple = format(format_simple);
+  let goFormat_standard = format(format_standard);
 };
 
 module JsDate = {

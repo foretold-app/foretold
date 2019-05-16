@@ -64,10 +64,33 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                </>;
              }
              {"Predictions" |> ste |> E.React.inH2}
-             {m.measurements
-              |> E.O.React.fmapOrNull(
-                   Foretold__Components__Measurements__Table.make,
-                 )}
+             {
+               Queries.Measurements.component(
+                 ~measurableId=m.id,
+                 ~pageLimit=20,
+                 ~direction=None,
+                 ~innerComponentFn=(
+                                     m:
+                                       option(
+                                         Context.Primary.Connection.t(
+                                           Context.Primary.Measurement.t,
+                                         ),
+                                       ),
+                                   ) =>
+                 m
+                 |> E.O.React.fmapOrNull(
+                      (
+                        b:
+                          Context.Primary.Connection.t(
+                            Context.Primary.Measurement.t,
+                          ),
+                      ) =>
+                      b.edges
+                      |> E.A.to_list
+                      |> Foretold__Components__Measurements__Table.make
+                    )
+               )
+             }
            </>
          </>
        ),

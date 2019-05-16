@@ -117,7 +117,20 @@ module Helpers = {
       |> MeasurementValue.toChunks(~bucketSize=3)
       |> MeasurementValue.toPdf
       |> MeasurementValue.FloatCdf.toJs
-      |> (data => Some(<SmallCdfChart data minX maxX />));
+      |> (
+        data =>
+          Some(
+            <SmallCdfChart
+              data
+              minX
+              maxX
+              color={
+                m.competitorType == `AGGREGATION ?
+                  `hex("b1b9c6") : `hex("487192")
+              }
+            />,
+          )
+      );
     | Belt.Result.Ok(`FloatPoint(r)) =>
       Some(
         <div className=Styles.middle>
@@ -266,9 +279,20 @@ let make = (ms: list(measurement)) => {
   let items =
     ms
     |> E.L.sort((a: measurement, b: measurement) =>
-         switch (a.createdAt, b.createdAt) {
-         | (Some(c), Some(d)) =>
-           Moment.toUnix(c) < Moment.toUnix(d) ? 1 : (-1)
+         switch (
+           a.relevantAt,
+           b.relevantAt,
+           a.competitorType,
+           b.competitorType,
+         ) {
+         | (Some(c), Some(d), _, _) when Moment.toUnix(c) < Moment.toUnix(d) => 1
+         | (Some(c), Some(d), `AGGREGATION, `COMPETITIVE)
+             when Moment.toUnix(c) == Moment.toUnix(d) => (-1)
+         | (Some(c), Some(d), `COMPETITIVE, `AGGREGATION)
+             when Moment.toUnix(c) == Moment.toUnix(d) => 1
+         | (Some(c), Some(d), _, _)
+             when Moment.toUnix(c) == Moment.toUnix(d) => 0
+         | (Some(c), Some(d), _, _) when Moment.toUnix(c) > Moment.toUnix(d) => (-1)
          | _ => 0
          }
        )

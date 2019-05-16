@@ -15,7 +15,6 @@ function chart() {
         maxX: false,
         scale: 'linear',
         showDistributionLines: true,
-        lineColors: ['#2C3E50', '#2C3E50'],
         areaColors: ['#E1E5EC', '#E1E5EC'],
         logBase: 10,
         verticalLine: 110,
@@ -43,7 +42,6 @@ function chart() {
         calc.chartWidth = attrs.svgWidth - attrs.marginRight - calc.chartLeftMargin;
         calc.chartHeight = attrs.svgHeight - attrs.marginBottom - calc.chartTopMargin;
 
-        var lineColor = d3.scaleOrdinal().range(attrs.lineColors)
         var areaColor = d3.scaleOrdinal().range(attrs.areaColors)
 
         var linePath, areaPath;
@@ -123,7 +121,6 @@ function chart() {
             linePath = chart.patternify({ tag: 'path', selector: 'line-path', data: dataPoints })
                 .attr('d', line)
                 .attr('id', (d, i) => 'line-' + (i + 1))
-                .attr('stroke', (d, i) => lineColor(i))
                 .attr('opacity', (d, i) => {
                     return i  ===  0 ? 0.7 : 1
                 })

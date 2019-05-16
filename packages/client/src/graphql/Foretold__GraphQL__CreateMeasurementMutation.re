@@ -34,6 +34,10 @@ let mutate =
       },
       (),
     );
-  mutation(~variables=m##variables, ~refetchQueries=[|"getMeasurable"|], ())
+  mutation(
+    ~variables=m##variables,
+    ~refetchQueries=[|"getMeasurements"|],
+    (),
+  )
   |> ignore;
 };

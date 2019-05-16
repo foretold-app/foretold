@@ -9,19 +9,20 @@ let foo = {
 
 module Styles = {
   open Css;
-  let graph =
+  let graph = chartColor =>
     style([
       selector(".axis", [fontSize(`px(9))]),
       selector(".domain", [display(`none)]),
       selector(".tick line", [display(`none)]),
       selector(".tick text", [color(`hex("bfcad4"))]),
-      selector(".chart .area-path", [SVG.fill(`hex("7e9db7"))]),
+      selector(".chart .area-path", [SVG.fill(chartColor)]),
     ]);
 };
-let make = (~data, ~minX, ~maxX, _children) => {
+
+let make = (~data, ~minX, ~maxX, ~color=`hex("7e9db7"), _children) => {
   ...component,
   render: _ =>
-    <div className=Styles.graph>
+    <div className={Styles.graph(color)}>
       <CdfChart
         width=300
         height=50

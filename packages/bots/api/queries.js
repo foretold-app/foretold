@@ -37,6 +37,7 @@ query search (
         value { floatCdf { xs ys } floatPoint }
         measurableId
         createdAt
+        agentId
       }
     }
   }

@@ -46,13 +46,16 @@ class AggregationBot {
         findInDateRange: { endDate: createdAt },
       });
 
-      console.log(`Got "${measurements.length}" for aggregation.`);
-      if (measurements.length === 0) continue;
+      let inOrder = _.orderBy(measurements, ['createdAt'], ['desc']);
+      let lastOfEachAgent = _.uniqBy(inOrder, r => r.agentId);
 
-      const aggregated = await this.aggregate(measurements);
+      console.log(`Got "${lastOfEachAgent.length}" for aggregation.`);
+      if (lastOfEachAgent.length === 0) continue;
+
+      const aggregated = await this.aggregate(lastOfEachAgent);
       if (!aggregated) continue;
 
-      const measurementIds = measurements.map(item => item.id);
+      const measurementIds = lastOfEachAgent.map(item => item.id);
       console.log(`Measurement IDs "${measurementIds.join(', ')}".`);
 
       await this.api.measurementCreateAggregation({

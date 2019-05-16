@@ -14,7 +14,11 @@ let mutate = (mutation: Mutation.apolloMutation, id: string) => {
   let m = GraphQL.make(~id, ());
   mutation(
     ~variables=m##variables,
-    ~refetchQueries=[|"getAgent", "getMeasurables"|],
+    ~refetchQueries=[|
+      "getAgent",
+      "getMeasurables",
+      "getMeasurablesStateStats",
+    |],
     (),
   )
   |> ignore;

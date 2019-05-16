@@ -42,15 +42,10 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                </Div>
              </Div>
              <Div flex=1>
-               {
-                 [|
-                   Items.series(~m) |> E.O.React.defaultNull,
-                   Items.creatorLink(~m) |> E.O.React.defaultNull,
-                   Items.resolutionEndpoint(~m) |> E.O.React.defaultNull,
-                   Items.endpointResponse(~m) |> E.O.React.defaultNull,
-                 |]
-                 |> ReasonReact.array
-               }
+               {Items.series(~m) |> E.O.React.defaultNull}
+               {Items.creatorLink(~m) |> E.O.React.defaultNull}
+               {Items.resolutionEndpoint(~m) |> E.O.React.defaultNull}
+               {Items.endpointResponse(~m) |> E.O.React.defaultNull}
              </Div>
            </Div>
            <>
@@ -69,12 +64,10 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                </>;
              }
              {"Predictions" |> ste |> E.React.inH2}
-             {
-               m.measurements
-               |> E.O.React.fmapOrNull(
-                    Foretold__Components__Measurements__Table.make,
-                  )
-             }
+             {m.measurements
+              |> E.O.React.fmapOrNull(
+                   Foretold__Components__Measurements__Table.make,
+                 )}
            </>
          </>
        ),

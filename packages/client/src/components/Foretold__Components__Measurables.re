@@ -63,48 +63,41 @@ module BasicTable = {
       E.React.showIf(
         measurables |> E.A.length > 0,
         <div className=Styles.group>
-          {
-            measurables
-            |> E.A.fmap((m: Context.Primary.Measurable.t) => {
-                 let iAmOwner = m.iAmOwner == Some(true);
-                 <div
-                   className={Styles.row(m)}
-                   onClick={_e => onSelect(m)}
-                   key={m.id}>
-                   <div className=Styles.mainColumn>
-                     <div className=Styles.mainColumnTop>
-                       {Items.link(~m)}
-                     </div>
-                     <div className=Styles.mainColumnBottom>
-                       {
-                         [|
-                           E.React.showIf(
-                             showExtraData,
-                             Items.series(~m) |> E.O.React.defaultNull,
-                           ),
-                           E.React.showIf(
-                             showExtraData,
-                             Items.creatorLink(~m) |> E.O.React.defaultNull,
-                           ),
-                           Items.measurements(~m) |> E.O.React.defaultNull,
-                           Items.measurers(~m) |> E.O.React.defaultNull,
-                           E.React.showIf(iAmOwner, Items.editLink(~m)),
-                           E.React.showIf(iAmOwner, Items.archiveOption(~m)),
-                         |]
-                         |> ReasonReact.array
-                       }
-                     </div>
-                   </div>
-                   <div className=Styles.rightColumn>
-                     <Foretold__Components__Measurable.StatusDisplay
-                       measurable=m
-                       dateDisplay=WHOLE
-                     />
-                   </div>
-                 </div>;
-               })
-            |> ReasonReact.array
-          }
+          {measurables
+           |> E.A.fmap((m: Context.Primary.Measurable.t) => {
+                let iAmOwner = m.iAmOwner == Some(true);
+                <div
+                  className={Styles.row(m)}
+                  onClick={_e => onSelect(m)}
+                  key={m.id}>
+                  <div className=Styles.mainColumn>
+                    <div className=Styles.mainColumnTop>
+                      {Items.link(~m)}
+                    </div>
+                    <div className=Styles.mainColumnBottom>
+                      {E.React.showIf(
+                         showExtraData,
+                         Items.series(~m) |> E.O.React.defaultNull,
+                       )}
+                      {E.React.showIf(
+                         showExtraData,
+                         Items.creatorLink(~m) |> E.O.React.defaultNull,
+                       )}
+                      {Items.measurements(~m) |> E.O.React.defaultNull}
+                      {Items.measurers(~m) |> E.O.React.defaultNull}
+                      {E.React.showIf(iAmOwner, Items.editLink(~m))}
+                      {E.React.showIf(iAmOwner, Items.archiveOption(~m))}
+                    </div>
+                  </div>
+                  <div className=Styles.rightColumn>
+                    <Foretold__Components__Measurable.StatusDisplay
+                      measurable=m
+                      dateDisplay=WHOLE
+                    />
+                  </div>
+                </div>;
+              })
+           |> ReasonReact.array}
         </div>,
       ),
   };

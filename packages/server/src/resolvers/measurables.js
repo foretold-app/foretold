@@ -1,5 +1,7 @@
 const _ = require('lodash');
 const data = require('../data');
+const filters = require('../data/filters');
+const paginations = require('../data/paginations');
 
 /**
  * @param {*} root
@@ -20,19 +22,8 @@ const data = require('../data');
  * @returns {Promise<Models.Measurable[]>}
  */
 async function all(root, args, context, info) {
-  const filter = {
-    creatorId: _.get(args, 'creatorId'),
-    seriesId: _.get(args, 'seriesId'),
-    channelId: _.get(args, 'channelId'),
-    states: _.get(args, 'states'),
-    isArchived: _.get(args, 'isArchived'),
-  };
-  const pagination = {
-    last: _.get(args, 'last'),
-    first: _.get(args, 'first'),
-    after: _.get(args, 'after'),
-    before: _.get(args, 'before'),
-  };
+  const filter = new filters.MeasurableFilter({ options: args });
+  const pagination = new paginations.Pagination({ options: args });
   const options = {
     isAdmin: _.get(context, 'agent.isAdmin'),
     agentId: _.get(context, 'agent.id'),

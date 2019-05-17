@@ -30,7 +30,7 @@ let linkStyles =
     marginLeft(`em(2.)),
     marginTop(`em(0.5)),
     borderRadius(`px(5)),
-    padding2(~v=`em(0.45), ~h=`em(2.1)),
+    padding2(~v=`em(0.5), ~h=`em(2.0)),
   ];
 
 let link =
@@ -40,22 +40,8 @@ let link =
     ~styles=
       linkStyles
       @ Css.[
-          border(`px(1), `solid, Colors.accentBlue),
-          background(Colors.lightGrayBackground),
-          Css.transition(~duration=100, "background"),
-          selector(":hover", [background(Colors.lightGrayBackground)]),
-        ],
-  );
-
-let secondaryLink =
-  Link.make(
-    ~colors=(Colors.link, Colors.link),
-    ~isDisabled=false,
-    ~styles=
-      linkStyles
-      @ Css.[
-          border(`px(1), `solid, Colors.accentBlue),
-          background(Colors.lightGrayBackground),
+          border(`px(1), `solid, `hex("c7cfdb")),
+          background(Colors.white),
           Css.transition(~duration=100, "background"),
           selector(":hover", [background(Colors.lightGrayBackground)]),
         ],

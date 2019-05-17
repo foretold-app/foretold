@@ -8,10 +8,10 @@ let make =
         <div
           className=Css.(
             style([
-              fontSize(`em(1.2)),
+              fontSize(`em(1.4)),
               marginTop(`px(5)),
               Colors.FontWeights.heavy,
-              color(Colors.link),
+              color(Colors.darkLink),
             ])
           )>
           {"Great Group" |> ReasonReact.string}
@@ -19,7 +19,7 @@ let make =
         <p
           className=Css.(
             style([
-              color(FC__Colors.Text.LightBackground.p),
+              color(`hex("36485c")),
               marginTop(`px(5)),
               marginBottom(`px(3)),
             ])
@@ -32,7 +32,7 @@ let make =
       </Div>
       <Div float=`right>
         {
-          GroupHeader.secondaryLink(
+          GroupHeader.link(
             ~href="#",
             [|"Leave Channel" |> ReasonReact.string|],
           )

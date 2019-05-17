@@ -21,7 +21,8 @@ let greydisabled = "#e3e4e6"->r;
 let accentBlue = "#8C9EB5"->r;
 let accentBlueO8 = "#8C9EB560"->r;
 let mainBlue = "#347296"->r;
-let link = "#1b598e"->r;
+let link = "#4a72b7"->r;
+let darkLink = "#1a2e45"->r;
 let darkAccentBlue = "#5C6E95"->r;
 let grey1 = "#868686"->r;
 let border = "#D5D7DA"->r;
@@ -34,7 +35,7 @@ module FontWeights = {
 };
 
 module Statuses = {
-  let green = "#6C8A64"->r;
+  let green = "#528c0e"->r;
   let red = "#925151"->r;
   let yellow = "#C09C66"->r;
 };

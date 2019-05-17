@@ -1,6 +1,24 @@
 open FC__Base;
+open FC;
 let make =
   <Div>
+    <AppHeader
+      links={
+        [|
+          AppHeader.link(
+            ~href="#",
+            [|"Public Channels" |> ReasonReact.string|],
+          )
+          |> ReasonReact.element,
+          AppHeader.link(
+            ~href="#",
+            [|"Entity Explorer" |> ReasonReact.string|],
+          )
+          |> ReasonReact.element,
+        |]
+        |> ReasonReact.array
+      }
+    />
     Example__AppGroupHeader.make
     <Div
       styles=[

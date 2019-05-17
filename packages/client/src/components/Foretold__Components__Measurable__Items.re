@@ -109,6 +109,29 @@ let editLink = (~m: measurable) =>
     </Foretold__Components__Link>
   </div>;
 
+type referenceProps = {. "ref": Js.nullable(Dom.element) => unit};
+
+type arrowPropsType = {
+  .
+  "ref": Js.nullable(Dom.element) => unit,
+  "style": ReactDOMRe.style,
+};
+
+type popperProps = {
+  .
+  "ref": Js.nullable(Dom.element) => unit,
+  "style": ReactDOMRe.style,
+  "placement": option(Js.Nullable.t(int)),
+  "arrowProps": arrowPropsType,
+};
+
+let withDataAttributes = (~data, element) =>
+  ReasonReact.cloneElement(
+    element,
+    ~props=Obj.magic(Js.Dict.fromList(data)),
+    [||],
+  );
+
 let measurements = (~m: measurable) =>
   switch (m.measurementCount) {
   | Some(0) => None
@@ -116,6 +139,29 @@ let measurements = (~m: measurable) =>
   | Some(count) =>
     Some(
       <div className=Shared.Item.item>
+        <ReactPopover_Manager>
+          <ReactPopover_Reference>
+            (
+              (props: referenceProps) =>
+                <button ref=props##ref> {"Popper" |> ste} </button>
+            )
+          </ReactPopover_Reference>
+          <ReactPopover_Popper>
+            (
+              (props: popperProps) =>
+                withDataAttributes(
+                  ~data=[("data-placement", props##placement)],
+                  <div ref=props##ref style=props##style>
+                    {"Tip 1" |> ste}
+                    <div
+                      ref=props##arrowProps##ref
+                      style=props##arrowProps##style
+                    />
+                  </div>,
+                )
+            )
+          </ReactPopover_Popper>
+        </ReactPopover_Manager>
         <Icon.Icon icon="BULB" />
         {count |> string_of_int |> ste}
       </div>,

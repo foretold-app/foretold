@@ -81,6 +81,7 @@ class MeasurablesData extends DataBase {
   async getAll(filter = {}, pagination = {}, options = {}) {
     const restrictions = {
       channelId: true,
+      isAdmin: options.isAdmin,
       agentId: options.agentId,
       measuredByAgentId: options.measuredByAgentId,
     };

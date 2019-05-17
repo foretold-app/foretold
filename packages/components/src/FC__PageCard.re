@@ -16,7 +16,7 @@ let make = children => {
           style(
             [
               background(Colors.white),
-              border(`px(1), `solid, FC__Colors.border),
+              border(`px(1), `solid, Colors.border),
               borderRadius(`px(5)),
             ]
             @ BaseStyles.fullWidthFloatLeft,

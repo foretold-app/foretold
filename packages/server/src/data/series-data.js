@@ -44,9 +44,7 @@ class SeriesData extends DataBase {
       where.channelId = { [this.models.sequelize.Op.eq]: channelId };
     }
 
-    return await this.models.Series.findAll({
-      where
-    });
+    return await this.models.Series.findAll({ where });
   }
 
   /**

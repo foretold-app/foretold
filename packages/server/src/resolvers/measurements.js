@@ -19,8 +19,6 @@ const data = require('../data');
  * @returns {Promise<Models.Measurement[]>}
  */
 async function all(root, args, context, info) {
-  /** @type {string} */
-  const agentId = _.get(context, 'agent.id');
   const filter = {
     measurableId: _.get(args, 'measurableId'),
     agentId: _.get(args, 'agentId'),
@@ -34,7 +32,10 @@ async function all(root, args, context, info) {
     last: _.get(args, 'last'),
     first: _.get(args, 'first'),
   };
-  const options = { agentId };
+  const options = {
+    isAdmin: _.get(context, 'agent.isAdmin'),
+    agentId: _.get(context, 'agent.id'),
+  };
   const result = await data.measurements.getAll(filter, pagination, options);
   return result.data;
 }

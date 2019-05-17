@@ -8,7 +8,7 @@ const authorizers = require('../authorizers');
  * @returns {Promise<*>}
  */
 async function all(root, args, context, info) {
-  return authorizers.availableAll(root, args, context, info);
+  return await authorizers.availableAll(root, args, context, info);
 }
 
 /**
@@ -19,7 +19,7 @@ async function all(root, args, context, info) {
  * @returns {Promise<*>}
  */
 async function channelPermissions(root, args, context, info) {
-  return authorizers.availableChannelPermissions(root, args, context, info);
+  return await authorizers.availableChannelPermissions(root, args, context, info);
 }
 
 /**
@@ -30,7 +30,7 @@ async function channelPermissions(root, args, context, info) {
  * @returns {Promise<*>}
  */
 async function channelMembershipsPermissions(root, args, context, info) {
-  return authorizers.availableChannelMembershipsPermissions(root, args, context, info);
+  return await authorizers.availableChannelMembershipsPermissions(root, args, context, info);
 }
 
 /**
@@ -41,7 +41,7 @@ async function channelMembershipsPermissions(root, args, context, info) {
  * @returns {Promise<*>}
  */
 async function measurablesPermissions(root, args, context, info) {
-  return authorizers.availableMeasurablesPermissions(root, args, context, info);
+  return await authorizers.availableMeasurablesPermissions(root, args, context, info);
 }
 
 module.exports = {

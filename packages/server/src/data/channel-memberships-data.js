@@ -40,7 +40,7 @@ class ChannelMembershipsData extends DataBase {
    */
   async updateOne(channelId, agentId, role) {
     await this.validate({ channelId, agentId });
-    return this.ChannelMembershipModel.updateOne(
+    return await this.ChannelMembershipModel.updateOne(
       channelId,
       agentId,
       role,
@@ -55,7 +55,7 @@ class ChannelMembershipsData extends DataBase {
    */
   async deleteOne(channelId, agentId) {
     await this.validate({ channelId, agentId });
-    return this.ChannelMembershipModel.deleteOne(
+    return await this.ChannelMembershipModel.deleteOne(
       channelId,
       agentId,
     );
@@ -122,7 +122,7 @@ class ChannelMembershipsData extends DataBase {
    */
   async join(options) {
     const role = ChannelMembershipModel.ROLES.VIEWER;
-    return this.createOne(
+    return await this.createOne(
       options.channelId,
       options.agentId,
       role,
@@ -135,7 +135,7 @@ class ChannelMembershipsData extends DataBase {
    * @return {Promise<Models.ChannelMemberships|null>}
    */
   async leave(options) {
-    return this.deleteOne(
+    return await this.deleteOne(
       options.channelId,
       options.agentId,
     );

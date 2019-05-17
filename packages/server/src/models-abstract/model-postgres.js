@@ -13,6 +13,7 @@ class ModelPostgres extends Model {
     }
   ) {
     super();
+
     this.model = model;
     this.models = models;
     this.sequelize = sequelize;
@@ -33,9 +34,7 @@ class ModelPostgres extends Model {
   }
 
   /**
-   *
    * @todo: Use ORM opportunities to join tables.
-   *
    * @param {string} [agentId]
    * @return {string}
    */
@@ -152,7 +151,6 @@ class ModelPostgres extends Model {
   }
 
   /**
-   *
    * @param {object} pagination
    * @param {number} pagination.first
    * @param {string} pagination.after
@@ -194,9 +192,9 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param data
-   * @param edgePagination
-   * @return {*}
+   * @param {*[]} data
+   * @param {object} edgePagination
+   * @return {*[]}
    */
   setIndexes(data, edgePagination) {
     return data.map((item, index) => {
@@ -209,7 +207,7 @@ class ModelPostgres extends Model {
    * @protectedo
    * @param {object} [where]
    * @param {object} [filter]
-   * @param {string} [filter.isArchived]
+   * @param {string[]} [filter.isArchived]
    */
   applyFilter(where = {}, filter = {}) {
     if (!where) where = {};
@@ -223,8 +221,8 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @param list
-   * @return {*}
+   * @param {*[]} list
+   * @return {*[]}
    */
   getBooleansOfList(list) {
     return list.map(item => {
@@ -239,16 +237,16 @@ class ModelPostgres extends Model {
 
   /**
    * @param {object} data
-   * @return {data}
+   * @return {Promise.<object>}
    */
   async createOne(data) {
-    return this.model.create(data);
+    return await this.model.create(data);
   }
 
   /**
    * @param {object} params
    * @param {object} data
-   * @return {data}
+   * @return {Promise.<object>}
    */
   async updateOne(params, data) {
     const entity = await this.model.findOne({

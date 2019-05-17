@@ -107,8 +107,10 @@ class ModelPostgres extends Model {
   /**
    * @param {object} [where]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @return {object}
    */
   applyRestrictions(where = {}, restrictions = {}) {
+    if (restrictions.isAdmin) return where;
     if (!where[this.and]) where[this.and] = [];
 
     if (restrictions.channelId) {
@@ -132,6 +134,8 @@ class ModelPostgres extends Model {
         },
       });
     }
+
+    return where;
   }
 
   /**
@@ -141,6 +145,7 @@ class ModelPostgres extends Model {
   applyRestrictionsIncluding(include = [], restrictions = {}) {
     if (!include) include = [];
 
+    // @todo: It is a filter, but not restriction
     if (restrictions.measuredByAgentId) {
       include.push({
         model: this.models.Measurement,

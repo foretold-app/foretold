@@ -102,6 +102,11 @@ export namespace Layers {
       creatorId?: string,
       seriesId?: string,
       channelId?: string,
+      measurableId?: string,
+      agentId?: string,
+      competitorType?: string,
+      findInDateRange?: object,
+      notTaggedByAgent?: string,
       states?: string[],
       isArchived?: string[],
     };

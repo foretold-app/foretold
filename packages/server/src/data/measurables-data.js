@@ -84,7 +84,7 @@ class MeasurablesData extends DataBase {
       agentId: options.agentId,
       measuredByAgentId: options.measuredByAgentId,
     };
-    return this.MeasurableModel.getAll(filter, pagination, restrictions);
+    return await this.MeasurableModel.getAll(filter, pagination, restrictions);
   }
 
   /**

@@ -30,7 +30,7 @@ class DataBase {
    * @return {Promise<void>}
    */
   async getOne(params = {}, query = {}, options = {}) {
-    return this.model.getOne(params, query, options);
+    return await this.model.getOne(params, query, options);
   }
 
   /**
@@ -61,7 +61,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    */
   async getAll(filter = {}, pagination = {}, options = {}) {
-    return this.model.getAll(filter, pagination, options);
+    return await this.model.getAll(filter, pagination, options);
   }
 
 }

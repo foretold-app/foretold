@@ -45,9 +45,10 @@ class MeasurementsData extends DataBase {
   async getAll(filter = {}, pagination = {}, options = {}) {
     const restrictions = {
       measurableId: true,
+      isAdmin: options.isAdmin,
       agentId: options.agentId,
     };
-    return this.MeasurementModel.getAll(filter, pagination, restrictions);
+    return await this.MeasurementModel.getAll(filter, pagination, restrictions);
   }
 
   /**

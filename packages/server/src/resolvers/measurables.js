@@ -34,6 +34,7 @@ async function all(root, args, context, info) {
     before: _.get(args, 'before'),
   };
   const options = {
+    isAdmin: _.get(context, 'agent.isAdmin'),
     agentId: _.get(context, 'agent.id'),
     measuredByAgentId: _.get(args, 'measuredByAgentId'),
   };
@@ -87,7 +88,7 @@ async function archive(root, args, context, info) {
 }
 
 /**
- * @param root
+ * @param {*} root
  * @param {object} args
  * @param {string} args.id
  * @param {Schema.Context} context

@@ -36,10 +36,10 @@ class BotsData extends DataBase {
   /**
    * @todo: fix interface (filter, pagination, options)
    * @param {object} options
-   * @return {Promise<*|Array<Model>>}
+   * @return {Promise<*>}
    */
   async getAll(options) {
-    return this.BotModel.getAll(options);
+    return await this.BotModel.getAll(options);
   }
 
   /**
@@ -47,10 +47,10 @@ class BotsData extends DataBase {
    * @param {object} [params]
    * @param {object} [query]
    * @param {object} [restrictions]
-   * @return {Promise<void>}
+   * @return {Promise<*>}
    */
   async getOne(params = {}, query = {}, restrictions = {}) {
-    return this.BotModel.getOne(params, query, restrictions);
+    return await this.BotModel.getOne(params, query, restrictions);
   }
 
   /**
@@ -59,6 +59,7 @@ class BotsData extends DataBase {
    */
   async tokenRefresh(params) {
     const bot = await this.BotModel.getOne(params);
+    if (!bot) throw new Error('Bot is not found');
     return await this.tokens.revokeTokensAndGetTokenByAgentId(bot.agentId);
   }
 }

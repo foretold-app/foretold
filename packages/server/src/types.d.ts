@@ -93,8 +93,23 @@ export namespace Layers {
     type compoundId = object;
     type id = string | compoundId;
     type data = object;
-    type options = object;
-    type filter = object;
+    type options = {
+      isAdmin?: boolean,
+      agentId?: string,
+      measuredByAgentId?: string,
+    };
+    type filter = {
+      creatorId?: string,
+      seriesId?: string,
+      channelId?: string,
+      measurableId?: string,
+      agentId?: string,
+      competitorType?: string,
+      findInDateRange?: object,
+      notTaggedByAgent?: string,
+      states?: string[],
+      isArchived?: string[],
+    };
     type pagination = {
       limit?: number,
       offset?: number,
@@ -146,6 +161,7 @@ export namespace Layers {
     type data = object;
     type restrictions = {
       agentId?: string,
+      isAdmin?: boolean,
       userId?: string,
       channelId?: boolean,
       measurableId?: boolean,

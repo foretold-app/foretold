@@ -43,7 +43,7 @@ module Row = {
       style(
         [
           padding2(~v=`px(0), ~h=`em(1.5)),
-          borderBottom(`px(1), `solid, Colors.accentBlueO8),
+          borderBottom(`px(1), `solid, Colors.accentBlue1a),
           display(`flex),
           hover([background(Colors.lightGrayBackground)]),
           flexDirection(`row),

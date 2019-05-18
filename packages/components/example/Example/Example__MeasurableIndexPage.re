@@ -6,6 +6,13 @@ let dist: Stats.dist = {
   ys: ExampleCdfs.Example1.ys,
 };
 
+let llink =
+  FC__Link.make(
+    ~colors=(`hex("384e67"), Colors.link),
+    ~isDisabled=false,
+    ~styles=[Css.textDecoration(`underline)],
+  );
+
 let row =
   <Table.Row>
     <Table.Cell
@@ -13,18 +20,43 @@ let row =
       styles=[
         Css.(style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])),
       ]>
-      <div className=Table.Row.headerStyle>
-        {"What will the GDP of China be in 2020?" |> ReasonReact.string}
+      <div>
+        <span className=Table.Row.headerStyle>
+          {"What will the " |> ReasonReact.string}
+          {
+            llink(~href="d", [|"GDP" |> ReasonReact.string|])
+            |> ReasonReact.element
+          }
+          {" of " |> ReasonReact.string}
+          {
+            llink(~href="China", [|"China" |> ReasonReact.string|])
+            |> ReasonReact.element
+          }
+          {" in " |> ReasonReact.string}
+          {
+            llink(~href="2018", [|"2018" |> ReasonReact.string|])
+            |> ReasonReact.element
+          }
+        </span>
       </div>
-      <div
-        className=Css.(
-          style([
-            Colors.FontWeights.heavy,
-            color(Colors.Statuses.green),
-            fontSize(`em(0.9)),
-          ])
-        )>
-        {"Open" |> ReasonReact.string}
+      <div>
+        <span
+          className=Css.(
+            style([
+              Colors.FontWeights.heavy,
+              color(Colors.Statuses.green),
+              marginRight(`em(1.0)),
+              fontSize(`em(0.9)),
+            ])
+          )>
+          {"Open" |> ReasonReact.string}
+        </span>
+        <span
+          className=Css.(
+            style([color(Colors.textMedium), fontSize(`em(0.9))])
+          )>
+          {"Closes in 8 days" |> ReasonReact.string}
+        </span>
       </div>
     </Table.Cell>
     <Table.Cell

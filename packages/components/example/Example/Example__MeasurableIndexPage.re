@@ -4,7 +4,7 @@ open Base;
 let row =
   <Table.Row>
     <Table.Cell
-      flex=6
+      flex=4
       styles=[
         Css.(style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])),
       ]>
@@ -112,7 +112,7 @@ let make =
     }
     <Table.HeaderRow>
       <Table.Cell
-        flex=6
+        flex=4
         styles=[
           Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))])),
         ]>

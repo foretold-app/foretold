@@ -55,9 +55,10 @@ module Row = {
 
   let headerStyle =
     Css.style([
-      Css.fontSize(`em(1.15)),
-      Css.lineHeight(`em(1.2)),
-      Css.color(Colors.textDarker),
+      Css.fontSize(`em(1.05)),
+      Css.lineHeight(`em(1.5)),
+      Css.fontWeight(`num(600)),
+      Css.color(`hex("384e67")),
     ]);
 
   let component = ReasonReact.statelessComponent("TABLE ROW");

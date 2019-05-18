@@ -37,7 +37,7 @@ class CdfChart extends React.Component {
           .marginTop(_.isFinite(this.props.marginTop) ? this.props.marginTop : 10)
           .verticalLine(this.props.verticalLine)
           .showVerticalLine(this.props.showVerticalLine)
-          .onHover(e => {})
+          .onHover(e => this.props.onHover(e))
           .container("#" + this.state.divId);
     _chart.data({primary: this.props.primaryDistribution}).render();
   }

@@ -15,10 +15,10 @@ module JS = {
 
   let doAsDist = (f, d: dist) => d |> fromDist |> f |> toDist;
   [@bs.module "./stats.js"] external cdfToPdf: distJs => distJs = "cdfToPdf";
-  [@bs.module "./stats.js"] external findY: (distJs, float) => float = "findY";
-  [@bs.module "./stats.js"] external findX: (distJs, float) => float = "findX";
+  [@bs.module "./stats.js"] external findY: (float, distJs) => float = "findY";
+  [@bs.module "./stats.js"] external findX: (float, distJs) => float = "findX";
 };
 
 let toPdf = (dist: dist) => dist |> JS.doAsDist(JS.cdfToPdf);
-let findX = (dist: dist) => dist |> JS.fromDist |> JS.findX;
-let findY = (dist: dist) => dist |> JS.fromDist |> JS.findY;
+let findX = (y: float, dist: dist) => dist |> JS.fromDist |> JS.findX(y);
+let findY = (x: float, dist: dist) => dist |> JS.fromDist |> JS.findY(x);

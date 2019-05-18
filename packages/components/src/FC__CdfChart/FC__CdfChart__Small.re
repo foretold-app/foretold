@@ -20,12 +20,34 @@ module Styles = {
 
 let make = (~data, ~minX, ~maxX, ~color=`hex("7e9db7"), _children) => {
   ...component,
-  render: _ =>
+  render: _ => {
+    let cdf: Stats.dist = {xs: data##xs, ys: data##ys};
+    let pdf = cdf |> Stats.toPdf;
+
     <div className={Styles.graph(color)}>
       <div className=Styles.textOverlay>
-        <div className=Styles.mainText> {"25T" |> ReasonReact.string} </div>
+        <div className=Styles.mainText>
+          {
+            cdf
+            |> Stats.findX(0.5)
+            |> FC__E.Float.with3DigitsPrecision
+            |> ReasonReact.string
+          }
+        </div>
         <div className=Styles.secondaryText>
-          {"10T to 80T" |> ReasonReact.string}
+          {
+            cdf
+            |> Stats.findX(0.05)
+            |> FC__E.Float.with3DigitsPrecision
+            |> ReasonReact.string
+          }
+          {" to " |> ReasonReact.string}
+          {
+            cdf
+            |> Stats.findX(0.95)
+            |> FC__E.Float.with3DigitsPrecision
+            |> ReasonReact.string
+          }
         </div>
       </div>
       <FC__CdfChart__Base
@@ -37,7 +59,9 @@ let make = (~data, ~minX, ~maxX, ~color=`hex("7e9db7"), _children) => {
         marginTop=0
         showVerticalLine=false
         showDistributionLines=false
-        primaryDistribution=data
+        primaryDistribution={"xs": pdf.xs, "ys": pdf.ys}
+        onHover={r => ()}
       />
-    </div>,
+    </div>;
+  },
 };

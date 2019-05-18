@@ -1,6 +1,11 @@
 open FC;
 open Base;
 
+let dist: Stats.dist = {
+  xs: ExampleCdfs.Example1.xs,
+  ys: ExampleCdfs.Example1.ys,
+};
+
 let row =
   <Table.Row>
     <Table.Cell
@@ -28,7 +33,7 @@ let row =
         Css.(style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])),
       ]>
       <FC__CdfChart__Small
-        data={"xs": ExampleCdfs.Example1.xs, "ys": ExampleCdfs.Example1.ys}
+        data={"xs": dist.xs, "ys": dist.ys}
         minX=2.0
         color={`hex("#d9dcdf")}
         maxX=12.0

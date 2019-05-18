@@ -12,6 +12,11 @@
   "warnings": {
     "error": "+5"
   },
+  "suffix": ".bs.js",
+  "package-specs": [{
+    "module": "commonjs",
+    "in-source": true
+  }],
   "namespace": true,
   "sources": [{
       "dir": "src",

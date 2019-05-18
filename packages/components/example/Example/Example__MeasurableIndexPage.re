@@ -22,6 +22,18 @@ let row =
         {"Open" |> ReasonReact.string}
       </div>
     </Table.Cell>
+    <Table.Cell
+      flex=2
+      styles=[
+        Css.(style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])),
+      ]>
+      <FC__CdfChart__Small
+        data={"xs": ExampleCdfs.Example1.xs, "ys": ExampleCdfs.Example1.ys}
+        minX=2.0
+        color={`hex("#d9dcdf")}
+        maxX=12.0
+      />
+    </Table.Cell>
     <Table.Cell flex=1 styles=[Css.(style([paddingTop(`em(0.5))]))]>
       <Div>
         <Link
@@ -105,6 +117,13 @@ let make =
           Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))])),
         ]>
         {"Name & Status" |> ReasonReact.string}
+      </Table.Cell>
+      <Table.Cell
+        flex=2
+        styles=[
+          Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))])),
+        ]>
+        {"Aggregate Prediction" |> ReasonReact.string}
       </Table.Cell>
       <Table.Cell
         flex=1

@@ -18,6 +18,7 @@
     "author": "Ozzie Gooen <ozzieagooen@gmail.com>",
     "license": "MIT",
     "dependencies": {
+        "@foretold/cdf": "^1.0.7",
         "bs-css": "^8.0.2",
         "d3": "^5.9.2",
         "emotion": "^10.0.7",

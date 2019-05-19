@@ -58,7 +58,9 @@ let make =
           }
         </Div>
         <Div flex=1>
-          {"What would the US GDP Be in 2020?" |> ReasonReact.string}
+          <FC__AgentLink>
+            {"Roger Adams" |> ReasonReact.string}
+          </FC__AgentLink>
         </Div>
       </Div>
       <Div styles=[Css.style([Css.marginTop(`em(2.0))])]>

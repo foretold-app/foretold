@@ -26,7 +26,7 @@ let row =
       ]>
       <div>
         <span className=Table.Row.primaryText>
-          {"What will the " |> ReasonReact.string}
+          {"What will be the " |> ReasonReact.string}
           {
             llink(~href="d", [|"GDP" |> ReasonReact.string|])
             |> ReasonReact.element

@@ -52,11 +52,13 @@ let make =
           {"What would the US GDP Be in 2020?" |> ReasonReact.string}
         </Div>
       </Div>
-      <PageCard.P>
-        {
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vulputate tortor a sapien aliquet ullamcorper. Nunc non varius sapien, quis elementum sapien. Morbi ac tristique quam. Cras hendrerit accumsan pretium. Praesent id nisl sit amet eros imperdiet placerat. Vestibulum sodales posuere diam vel laoreet."
-          |> ReasonReact.string
-        }
-      </PageCard.P>
+      <Div styles=[Css.style([Css.marginTop(`em(2.0))])]>
+        <PageCard.P>
+          {
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vulputate tortor a sapien aliquet ullamcorper. Nunc non varius sapien, quis elementum sapien. Morbi ac tristique quam. Cras hendrerit accumsan pretium. Praesent id nisl sit amet eros imperdiet placerat. Vestibulum sodales posuere diam vel laoreet."
+            |> ReasonReact.string
+          }
+        </PageCard.P>
+      </Div>
     </Div>
   </PageCard>;

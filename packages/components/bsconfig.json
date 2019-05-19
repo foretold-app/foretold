@@ -6,6 +6,7 @@
   "refmt": 3,
   "bs-dependencies": [
     "bs-css",
+    "bs-moment",
     "reason-react",
     "rationale"
   ],

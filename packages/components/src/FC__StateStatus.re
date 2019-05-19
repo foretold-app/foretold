@@ -31,7 +31,7 @@ module Style = {
     );
 
   let text = fontSize' =>
-    Css.(style([color(FC__Colors.textMedium), fontSize(fontSize')]));
+    Css.(style([color(FC__Colors.accentBlue), fontSize(fontSize')]));
 };
 
 let make = (~state: State.t, ~fontSize=`em(0.9), ()) =>

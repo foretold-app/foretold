@@ -1308,6 +1308,11 @@ bs-css@^8.0.2:
   dependencies:
     emotion "^9.2.12"
 
+bs-moment@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/bs-moment/-/bs-moment-0.4.4.tgz#3d59767e8cd0107393c4f371e15b95bf862ceaac"
+  integrity sha512-fAcofbF1bTj6fuwk4cCZ0Teod75dhXPulnNhRwx7+PTtccNMdn35SCb98JxwrprQgCvoZircIgmu8nGLsOaqaA==
+
 bs-platform@^5.0.0:
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-5.0.4.tgz#d406ef43c12d1b19d8546884d8b5b4e0fb709372"
@@ -3631,6 +3636,11 @@ mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.1:
   integrity sha1-MAV0OOrGz3+MR2fzhkjWaX11yQM=
   dependencies:
     minimist "0.0.8"
+
+moment@2.24.0:
+  version "2.24.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+  integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
 
 ms@2.0.0:
   version "2.0.0"

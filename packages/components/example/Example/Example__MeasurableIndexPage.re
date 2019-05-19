@@ -6,6 +6,8 @@ let dist: Stats.dist = {
   ys: ExampleCdfs.Example1.ys,
 };
 
+let foo = MomentRe.momentNow();
+
 let llink =
   FC__Link.make(
     ~colors=(`hex("384e67"), Colors.link),

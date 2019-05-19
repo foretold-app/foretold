@@ -14,7 +14,7 @@ let llink =
   );
 
 let row =
-  <Table.Row>
+  <Table.RowLink onClick={_ => Js.log("Row Clicked")}>
     <Table.Cell
       flex=4
       styles=[
@@ -82,7 +82,7 @@ let row =
         </Link>
       </Div>
     </Table.Cell>
-  </Table.Row>;
+  </Table.RowLink>;
 
 let make =
   <PageCard>

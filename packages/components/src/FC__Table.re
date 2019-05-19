@@ -24,12 +24,19 @@ module Styles = {
           padding2(~v=`px(0), ~h=`em(1.5)),
           borderBottom(`px(1), `solid, Colors.accentBlue1a),
           display(`flex),
-          hover([background(Colors.lightGrayBackground)]),
           flexDirection(`row),
           selector(":last-child", BaseStyles.borderNone),
         ]
         @ BaseStyles.fullWidthFloatLeft,
       )
+    );
+
+  let clickableRow =
+    Css.(
+      style([
+        hover([background(Colors.lightGrayBackground)]),
+        cursor(`pointer),
+      ])
     );
 };
 
@@ -68,5 +75,17 @@ module Row = {
   let make = children => {
     ...component,
     render: _self => <Div styles=[Styles.row]> ...children </Div>,
+  };
+};
+
+module RowLink = {
+  let component = ReasonReact.statelessComponent("TABLE ROW");
+
+  let make = (~onClick, children) => {
+    ...component,
+    render: _self =>
+      <Div styles=[Styles.row, Styles.clickableRow] onClick>
+        ...children
+      </Div>,
   };
 };

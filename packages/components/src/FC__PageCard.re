@@ -4,7 +4,7 @@ let component = ReasonReact.statelessComponent(__MODULE__);
 let link =
   Link.make(
     ~colors=(Colors.accentBlue, Colors.darkAccentBlue),
-    ~styles=Css.[marginRight(`em(2.))],
+    ~styles=Css.(style([marginRight(`em(2.))])),
   );
 
 let make = children => {

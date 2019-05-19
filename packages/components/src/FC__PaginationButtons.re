@@ -30,8 +30,10 @@ let _directionLink = (t: directionButton, icon: string, positionStyles) =>
     isDisabled={t.isDisabled}
     onClick={t.onClick}
     styles={
-      FC__Simple.tagStyles(~heightPadding=5, ~isDisabled=t.isDisabled, ())
-      @ positionStyles
+      Css.merge([
+        FC__Simple.tagStyles(~heightPadding=5, ~isDisabled=t.isDisabled, ()),
+        positionStyles,
+      ])
     }>
     {icon |> ReasonReact.string}
   </Link>;
@@ -53,7 +55,7 @@ let make = (t: t) => {
     <span className={Css.style(textStyle)}>
       {_text(t) |> ReasonReact.string}
     </span>
-    {_directionLink(t.pageLeft, "<", [])}
-    {_directionLink(t.pageRight, ">", [Css.marginLeft(`em(0.3))])}
+    {_directionLink(t.pageLeft, "<", "")}
+    {_directionLink(t.pageRight, ">", Css.(style([marginLeft(`em(0.3))])))}
   </Div>;
 };

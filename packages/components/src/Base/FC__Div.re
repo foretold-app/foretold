@@ -18,7 +18,8 @@ let make = (~styles=[], ~flex=?, ~flexDirection=?, ~float=?, children) => {
            Css.style([display(`flex), Css.flexDirection(e)])
          )
       |> FC__E.O.default("");
-    let allStyles = [flexStyle, directionStyle, floatStyle, ...styles];
-    <div className={FC__E.L.join(" ", allStyles)}> ...children </div>;
+    let allStyles =
+      Css.merge([flexStyle, directionStyle, floatStyle, ...styles]);
+    <div className=allStyles> ...children </div>;
   },
 };

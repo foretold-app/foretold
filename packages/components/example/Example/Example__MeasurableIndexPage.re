@@ -10,7 +10,7 @@ let llink =
   FC__Link.make(
     ~colors=(`hex("384e67"), Colors.link),
     ~isDisabled=false,
-    ~styles=[Css.textDecoration(`underline)],
+    ~styles=Css.(style([textDecoration(`underline)])),
   );
 
 let row =
@@ -74,7 +74,7 @@ let row =
     <Table.Cell flex=1 styles=[Css.(style([paddingTop(`em(0.5))]))]>
       <Div>
         <Link
-          styles=[Css.marginRight(`em(1.0))]
+          styles=Css.(style([marginRight(`em(1.0))]))
           colors=(Colors.textMedium, Colors.textDark)>
           {"Series A" |> ReasonReact.string}
         </Link>
@@ -85,14 +85,16 @@ let row =
       <Div>
         <Link
           colors=(Colors.textMedium, Colors.textDark)
-          styles=[
-            Css.marginRight(`em(1.0)),
-            Css.textDecoration(`underline),
-          ]>
+          styles=Css.(
+            style([
+              Css.marginRight(`em(1.0)),
+              Css.textDecoration(`underline),
+            ])
+          )>
           {"Edit" |> ReasonReact.string}
         </Link>
         <Link
-          styles=[Css.textDecoration(`underline)]
+          styles=Css.(style([Css.textDecoration(`underline)]))
           colors=(Colors.textMedium, Colors.textDark)>
           {"Archive" |> ReasonReact.string}
         </Link>

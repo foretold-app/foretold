@@ -8,21 +8,19 @@ let defaultColors = (
 let headerLink = (~colors, ~styles, ~isDisabled=false, ()) => {
   let (mainColor, hoverColor) = colors;
 
-  let disabledStyles =
-    isDisabled ? Css.[pointerEvents(`none), cursor(`default)] : [];
-
-  Css.(
-    style(
-      [
+  let primaryStyles =
+    Css.(
+      style([
         color(mainColor),
         textDecoration(`none),
         userSelect(`none),
         selector(":hover", [color(hoverColor)]),
-      ]
-      @ styles
-      @ disabledStyles,
-    )
-  );
+      ])
+    );
+  let disabledStyles =
+    isDisabled ? Css.(style([pointerEvents(`none), cursor(`default)])) : "";
+
+  Css.(merge([primaryStyles, styles, disabledStyles]));
 };
 
 let make =
@@ -31,7 +29,7 @@ let make =
       ~onClick=?,
       ~colors=defaultColors,
       ~isDisabled=false,
-      ~styles=[],
+      ~styles="",
       children,
     ) => {
   ...component,

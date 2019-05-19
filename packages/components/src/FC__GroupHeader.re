@@ -25,26 +25,32 @@ module Styles = {
 };
 
 let linkStyles =
-  Css.[
-    BaseStyles.floatRight,
-    marginLeft(`em(2.)),
-    marginTop(`em(0.5)),
-    borderRadius(`px(5)),
-    padding2(~v=`em(0.5), ~h=`em(2.0)),
-  ];
+  Css.(
+    style([
+      BaseStyles.floatRight,
+      marginLeft(`em(2.)),
+      marginTop(`em(0.5)),
+      borderRadius(`px(5)),
+      padding2(~v=`em(0.5), ~h=`em(2.0)),
+    ])
+  );
 
 let link =
   Link.make(
     ~colors=(Colors.link, Colors.link),
     ~isDisabled=false,
     ~styles=
-      linkStyles
-      @ Css.[
-          border(`px(1), `solid, `hex("c7cfdb")),
-          background(Colors.white),
-          Css.transition(~duration=100, "background"),
-          selector(":hover", [background(Colors.lightGrayBackground)]),
-        ],
+      Css.merge([
+        linkStyles,
+        Css.(
+          style([
+            border(`px(1), `solid, `hex("c7cfdb")),
+            background(Colors.white),
+            Css.transition(~duration=100, "background"),
+            selector(":hover", [background(Colors.lightGrayBackground)]),
+          ])
+        ),
+      ]),
   );
 
 let component = ReasonReact.statelessComponent(__MODULE__);

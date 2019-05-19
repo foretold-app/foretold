@@ -46,6 +46,7 @@ let make =
           <PageCard.H1>
             {"What would the US GDP Be in 2020?" |> ReasonReact.string}
           </PageCard.H1>
+          {FC__StateStatus.make(~state=OPEN, ~fontSize=`em(1.0), ())}
         </Div>
         <Div flex=1>
           {"What would the US GDP Be in 2020?" |> ReasonReact.string}

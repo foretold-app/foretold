@@ -39,25 +39,7 @@ let row =
           }
         </span>
       </div>
-      <div>
-        <span
-          className=Css.(
-            style([
-              Colors.FontWeights.heavy,
-              color(Colors.Statuses.green),
-              marginRight(`em(1.0)),
-              fontSize(`em(0.9)),
-            ])
-          )>
-          {"Open" |> ReasonReact.string}
-        </span>
-        <span
-          className=Css.(
-            style([color(Colors.textMedium), fontSize(`em(0.9))])
-          )>
-          {"Closes in 8 days" |> ReasonReact.string}
-        </span>
-      </div>
+      {FC__StateStatus.make(~state=OPEN, ~fontSize=`em(0.85), ())}
     </Table.Cell>
     <Table.Cell
       flex=2

@@ -51,9 +51,10 @@ module H1 = {
         className=Css.(
           style(
             [
-              fontSize(`px(21)),
+              fontSize(`em(1.4)),
               FC__Colors.FontWeights.heavy,
               marginTop(`em(0.0)),
+              marginBottom(`em(0.4)),
             ]
             @ BaseStyles.fullWidthFloatLeft,
           )

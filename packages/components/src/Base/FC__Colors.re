@@ -37,8 +37,8 @@ module FontWeights = {
 
 module Statuses = {
   let green = "#689533"->r;
-  let red = "#925151"->r;
   let yellow = "#C09C66"->r;
+  let resolved = accentBlue;
 };
 
 let primary = mainBlue;

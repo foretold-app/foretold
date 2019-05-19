@@ -6,6 +6,8 @@ let dist: Stats.dist = {
   ys: ExampleCdfs.Example1.ys,
 };
 
+let futureTime = 1559005200;
+
 let foo = MomentRe.momentNow();
 
 let llink =
@@ -41,7 +43,13 @@ let row =
           }
         </span>
       </div>
-      {FC__StateStatus.make(~state=OPEN, ~fontSize=`em(0.85), ())}
+      {
+        FC__StateStatus.make(
+          ~state=OPEN(MomentRe.momentWithUnix(futureTime)),
+          ~fontSize=`em(0.85),
+          (),
+        )
+      }
     </Table.Cell>
     <Table.Cell
       flex=2

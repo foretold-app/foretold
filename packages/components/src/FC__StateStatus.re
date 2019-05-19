@@ -1,21 +1,34 @@
+type expectedResolutionDate = MomentRe.Moment.t;
+type resolutionDate = MomentRe.Moment.t;
+
 module State = {
   type t =
-    | OPEN
-    | PENDING
-    | RESOLVED;
+    | OPEN(expectedResolutionDate)
+    | PENDING(expectedResolutionDate)
+    | RESOLVED(resolutionDate);
 
   let toColor = (t: t) =>
     switch (t) {
-    | OPEN => FC__Colors.Statuses.green
-    | PENDING => FC__Colors.Statuses.yellow
-    | RESOLVED => FC__Colors.Statuses.red
+    | OPEN(_) => FC__Colors.Statuses.green
+    | PENDING(_) => FC__Colors.Statuses.yellow
+    | RESOLVED(_) => FC__Colors.Statuses.resolved
     };
 
   let toText = (t: t) =>
     switch (t) {
-    | OPEN => "Open"
-    | PENDING => "Pending"
-    | RESOLVED => "Resolved"
+    | OPEN(_) => "Open"
+    | PENDING(_) => "Pending"
+    | RESOLVED(_) => "Resolved"
+    };
+
+  let toSubtext = (t: t) =>
+    switch (t) {
+    | OPEN(time) =>
+      "Resolves " ++ MomentRe.Moment.fromNow(time, ~withoutSuffix=None)
+    | PENDING(time) =>
+      "Pending since " ++ MomentRe.Moment.fromNow(time, ~withoutSuffix=None)
+    | RESOLVED(time) =>
+      "Resolved " ++ MomentRe.Moment.fromNow(time, ~withoutSuffix=None)
     };
 };
 
@@ -40,6 +53,6 @@ let make = (~state: State.t, ~fontSize=`em(0.9), ()) =>
       {State.toText(state) |> ReasonReact.string}
     </span>
     <span className={Style.text(fontSize)}>
-      {"Closes in 8 days" |> ReasonReact.string}
+      {State.toSubtext(state) |> ReasonReact.string}
     </span>
   </div>;

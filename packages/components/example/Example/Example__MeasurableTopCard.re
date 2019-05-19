@@ -1,6 +1,9 @@
 open FC;
 open Base;
 
+let pastTime = 1483232400;
+let futureTime = 1559005200;
+
 let make =
   <PageCard>
     {
@@ -46,7 +49,13 @@ let make =
           <PageCard.H1>
             {"What would the US GDP Be in 2020?" |> ReasonReact.string}
           </PageCard.H1>
-          {FC__StateStatus.make(~state=OPEN, ~fontSize=`em(1.0), ())}
+          {
+            FC__StateStatus.make(
+              ~state=RESOLVED(MomentRe.momentWithUnix(pastTime)),
+              ~fontSize=`em(1.0),
+              (),
+            )
+          }
         </Div>
         <Div flex=1>
           {"What would the US GDP Be in 2020?" |> ReasonReact.string}

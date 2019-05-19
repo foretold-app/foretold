@@ -17,6 +17,7 @@ let headerLink = (~colors, ~styles, ~isDisabled=false, ()) => {
         selector(":hover", [color(hoverColor)]),
       ])
     );
+
   let disabledStyles =
     isDisabled ? Css.(style([pointerEvents(`none), cursor(`default)])) : "";
 

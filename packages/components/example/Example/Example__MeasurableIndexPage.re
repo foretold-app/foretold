@@ -21,7 +21,7 @@ let row =
         Css.(style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])),
       ]>
       <div>
-        <span className=Table.Row.headerStyle>
+        <span className=Table.Row.primaryText>
           {"What will the " |> ReasonReact.string}
           {
             llink(~href="d", [|"GDP" |> ReasonReact.string|])

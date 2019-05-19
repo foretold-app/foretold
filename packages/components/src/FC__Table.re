@@ -1,20 +1,8 @@
 open FC__Base;
 
-module Cell = {
-  let style = flexAmount => Css.(style([flex(flexAmount)]));
-
-  let component = ReasonReact.statelessComponent("TABLE CELL");
-
-  let make = (~flex, ~styles, children) => {
-    ...component,
-    render: _self =>
-      <Div styles={[style(flex)] @ styles}> ...children </Div>,
-  };
-};
-
-module HeaderRow = {
+module Styles = {
   let defaultPadding = Css.padding2(~v=`em(0.0), ~h=`em(1.5));
-  let style =
+  let headerRow =
     Css.(
       style(
         [
@@ -29,16 +17,7 @@ module HeaderRow = {
       )
     );
 
-  let component = ReasonReact.statelessComponent("TABLE HEADER ROW");
-
-  let make = children => {
-    ...component,
-    render: _self => <Div styles=[style]> ...children </Div>,
-  };
-};
-
-module Row = {
-  let style =
+  let row =
     Css.(
       style(
         [
@@ -52,8 +31,31 @@ module Row = {
         @ BaseStyles.fullWidthFloatLeft,
       )
     );
+};
 
-  let headerStyle =
+module Cell = {
+  let style = flexAmount => Css.(style([flex(flexAmount)]));
+
+  let component = ReasonReact.statelessComponent("TABLE CELL");
+
+  let make = (~flex, ~styles, children) => {
+    ...component,
+    render: _self =>
+      <Div styles={[style(flex)] @ styles}> ...children </Div>,
+  };
+};
+
+module HeaderRow = {
+  let component = ReasonReact.statelessComponent("TABLE HEADER ROW");
+
+  let make = children => {
+    ...component,
+    render: _self => <Div styles=[Styles.headerRow]> ...children </Div>,
+  };
+};
+
+module Row = {
+  let primaryText =
     Css.style([
       Css.fontSize(`em(1.05)),
       Css.lineHeight(`em(1.5)),
@@ -65,6 +67,6 @@ module Row = {
 
   let make = children => {
     ...component,
-    render: _self => <Div styles=[style]> ...children </Div>,
+    render: _self => <Div styles=[Styles.row]> ...children </Div>,
   };
 };

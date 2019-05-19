@@ -32,14 +32,14 @@ let make =
       </Div>
       <Div float=`right>
         {
-          GroupHeader.link(
+          GroupHeader.actionButton(
             ~href="#",
             [|"Leave Channel" |> ReasonReact.string|],
           )
           |> ReasonReact.element
         }
         {
-          GroupHeader.link(
+          GroupHeader.actionButton(
             ~href="#",
             [|"Create Question" |> ReasonReact.string|],
           )

@@ -11,14 +11,12 @@ let make = (~id: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
       ~body=
         names
         |> E.A.of_list
-        |> E.A.fmap((r: Graph_T.T.fact) =>
-             <>
-               {
-                 C.Ken.findName(r.propertyId)
-                 |> E.O.default("no-name")
-                 |> ste
-                 |> E.React.inH3
-               }
+        |> E.A.fmapi((i, r: Graph_T.T.fact) =>
+             <div key={i |> string_of_int}>
+               {C.Ken.findName(r.propertyId)
+                |> E.O.default("no-name")
+                |> ste
+                |> E.React.inH3}
                Graph_T.T.(
                  switch (r.value.valueType) {
                  | String(s) => s |> ste
@@ -30,7 +28,7 @@ let make = (~id: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
                  | _ => "no-name" |> ste
                  }
                )
-             </>
+             </div>
            )
         |> ReasonReact.array,
     )

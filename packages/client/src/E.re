@@ -8,6 +8,7 @@ module U = {
   let id = e => e;
 };
 
+/* @todo: Objects? */
 module O = {
   let dimap = (sFn, rFn, e) =>
     switch (e) {
@@ -343,3 +344,10 @@ module BoundedInt = {
   let increment = fmap(I.increment);
   let decrement = fmap(I.decrement);
 };
+
+let withDataAttributes = (~data, element) =>
+  ReasonReact.cloneElement(
+    element,
+    ~props=Obj.magic(Js.Dict.fromList(data)),
+    [||],
+  );

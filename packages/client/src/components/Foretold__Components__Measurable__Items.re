@@ -5,6 +5,18 @@ module Shared = Foretold__Components__Shared;
 
 type measurable = Measurable.t;
 
+module Styles = {
+  open Css;
+  let tooltip =
+    Css.style([
+      Css.backgroundColor(`hex("f5f7f9")),
+      Css.padding2(~v=`px(10), ~h=`px(13)),
+      Css.border(`px(1), `solid, `hex("e8f2f9")),
+      Css.borderRadius(`px(3)),
+      Css.marginBottom(`px(10)),
+    ]);
+};
+
 module MeasurableEntityLinks = {
   let xEntityLink = (attribute, ~m: measurable, ~className: string) =>
     m
@@ -109,29 +121,6 @@ let editLink = (~m: measurable) =>
     </Foretold__Components__Link>
   </div>;
 
-type referenceProps = {. "ref": Js.nullable(Dom.element) => unit};
-
-type arrowPropsType = {
-  .
-  "ref": Js.nullable(Dom.element) => unit,
-  "style": ReactDOMRe.style,
-};
-
-type popperProps = {
-  .
-  "ref": Js.nullable(Dom.element) => unit,
-  "style": ReactDOMRe.style,
-  "placement": option(Js.Nullable.t(int)),
-  "arrowProps": arrowPropsType,
-};
-
-let withDataAttributes = (~data, element) =>
-  ReasonReact.cloneElement(
-    element,
-    ~props=Obj.magic(Js.Dict.fromList(data)),
-    [||],
-  );
-
 let measurements = (~m: measurable) =>
   switch (m.measurementCount) {
   | Some(0) => None
@@ -140,19 +129,15 @@ let measurements = (~m: measurable) =>
     Some(
       <div className=Shared.Item.item>
         <ReactPopover_Manager>
-          <ReactPopover_Reference>
+          <ReactPopover_Popper placement="auto">
             (
-              (props: referenceProps) =>
-                <button ref=props##ref> {"Popper" |> ste} </button>
-            )
-          </ReactPopover_Reference>
-          <ReactPopover_Popper>
-            (
-              (props: popperProps) =>
-                withDataAttributes(
+              (props: ReactPopover_Popper.popperProps) =>
+                E.withDataAttributes(
                   ~data=[("data-placement", props##placement)],
                   <div ref=props##ref style=props##style>
-                    {"Tip 1" |> ste}
+                    <div className=Styles.tooltip>
+                      {"Count " ++ string_of_int(count) |> ste}
+                    </div>
                     <div
                       ref=props##arrowProps##ref
                       style=props##arrowProps##style
@@ -161,9 +146,16 @@ let measurements = (~m: measurable) =>
                 )
             )
           </ReactPopover_Popper>
+          <ReactPopover_Reference>
+            (
+              (props: ReactPopover_Reference.referenceProps) =>
+                <div ref=props##ref>
+                  <Icon.Icon icon="BULB" />
+                  {count |> string_of_int |> ste}
+                </div>
+            )
+          </ReactPopover_Reference>
         </ReactPopover_Manager>
-        <Icon.Icon icon="BULB" />
-        {count |> string_of_int |> ste}
       </div>,
     )
   };

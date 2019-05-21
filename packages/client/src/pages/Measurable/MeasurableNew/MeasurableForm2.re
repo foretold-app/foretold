@@ -15,7 +15,6 @@ module FormConfig = {
     | ShowDescriptionDate: field(string)
     | ShowDescriptionProperty: field(string);
 
-  // @todo: unduplicate
   type state = Mutations.MeasurableCreate.values;
 
   let get: type value. (state, field(value)) => value =
@@ -221,14 +220,21 @@ let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
     let head = SLayout.Header.textDiv("New Question");
 
     let body =
-      Mutations.MeasurableCreate.withMutation((mutation, data) =>
-        withForm(mutation, channelId, ({send, state}) =>
-          CMutationForm.showWithLoading(
-            ~result=data.result,
-            ~form=formFields(state, send, () => send(Form.Submit)),
-            (),
-          )
-        )
+      Mutations.MeasurableCreate.withMutation(
+        ~onCompleted=
+          _ => {
+            Context.Routing.Url.push(ChannelShow(channelId));
+            ();
+          },
+        ~innerComponentFn=
+          (mutation, data) =>
+            withForm(mutation, channelId, ({send, state}) =>
+              CMutationForm.showWithLoading(
+                ~result=data.result,
+                ~form=formFields(state, send, () => send(Form.Submit)),
+                (),
+              )
+            ),
       )
       |> E.React.el;
 

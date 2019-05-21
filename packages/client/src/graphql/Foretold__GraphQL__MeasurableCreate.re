@@ -10,7 +10,6 @@ module Query = [%graphql
 
 module Mutation = ReasonApollo.CreateMutation(Query);
 
-// @todo: unduplicate
 type values = {
   name: string,
   labelCustom: string,
@@ -66,8 +65,9 @@ let mutate =
   |> ignore;
 };
 
-let withMutation = innerComponentFn =>
+let withMutation = (~onCompleted, ~innerComponentFn) =>
   Mutation.make(
+    ~onCompleted,
     ~onError=e => Js.log2("Graphql Error:", e),
     innerComponentFn,
   );

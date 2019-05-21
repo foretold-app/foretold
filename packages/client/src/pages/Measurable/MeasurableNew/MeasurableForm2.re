@@ -54,17 +54,19 @@ module CMutationForm =
     type queryType = Mutations.MeasurableCreate.Query.t;
   });
 
+let formatDate = E.M.format(E.M.format_standard);
+
 let withForm = (mutation, channelId, innerComponentFn) => {
   let initialState: FormConfig.state = {
     name: "",
     labelCustom: "",
     labelSubject: "",
-    labelOnDate: "",
+    labelOnDate: MomentRe.momentNow() |> formatDate,
     labelProperty: "",
-    expectedResolutionDate: "",
+    expectedResolutionDate: MomentRe.momentNow() |> formatDate,
     resolutionEndpoint: "",
-    showDescriptionDate: "",
-    showDescriptionProperty: "",
+    showDescriptionDate: "FALSE",
+    showDescriptionProperty: "FALSE",
   };
 
   Form.make(
@@ -146,11 +148,9 @@ let formFields = (form: Form.state, send, onSubmit) =>
        <Antd.Form.Item label="Name" required=true>
          <Input
            value={form.values.name}
-           onChange={e => {
-             // ReForm.Helpers.handleDomFormChange(handleChange(`name))
-             Js.log2("name", e);
-             ();
-           }}
+           onChange={ReForm.Helpers.handleDomFormChange(e =>
+             send(Form.FieldChangeValue(Name, e))
+           )}
          />
        </Antd.Form.Item>,
      )}
@@ -180,8 +180,9 @@ let formFields = (form: Form.state, send, onSubmit) =>
           form.values.expectedResolutionDate |> MomentRe.momentDefaultFormat
         }
         onChange={e => {
-          //handleChange(`expectedResolutionDate, e |> formatDate)
-          Js.log2("expectedResolutionDate", e);
+          send(
+            Form.FieldChangeValue(ExpectedResolutionDate, e |> formatDate),
+          );
           ();
         }}
         disabled={form.values.showDescriptionDate == "TRUE"}

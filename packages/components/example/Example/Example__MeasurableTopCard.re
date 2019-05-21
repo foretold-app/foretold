@@ -1,6 +1,9 @@
 open FC;
 open Base;
 
+let pastTime = 1483232400;
+let futureTime = 1559005200;
+
 let make =
   <PageCard>
     {
@@ -46,16 +49,27 @@ let make =
           <PageCard.H1>
             {"What would the US GDP Be in 2020?" |> ReasonReact.string}
           </PageCard.H1>
+          {
+            FC__StateStatus.make(
+              ~state=RESOLVED(MomentRe.momentWithUnix(pastTime)),
+              ~fontSize=`em(1.0),
+              (),
+            )
+          }
         </Div>
         <Div flex=1>
-          {"What would the US GDP Be in 2020?" |> ReasonReact.string}
+          <FC__AgentLink>
+            {"Roger Adams" |> ReasonReact.string}
+          </FC__AgentLink>
         </Div>
       </Div>
-      <PageCard.P>
-        {
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vulputate tortor a sapien aliquet ullamcorper. Nunc non varius sapien, quis elementum sapien. Morbi ac tristique quam. Cras hendrerit accumsan pretium. Praesent id nisl sit amet eros imperdiet placerat. Vestibulum sodales posuere diam vel laoreet."
-          |> ReasonReact.string
-        }
-      </PageCard.P>
+      <Div styles=[Css.style([Css.marginTop(`em(2.0))])]>
+        <PageCard.P>
+          {
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vulputate tortor a sapien aliquet ullamcorper. Nunc non varius sapien, quis elementum sapien. Morbi ac tristique quam. Cras hendrerit accumsan pretium. Praesent id nisl sit amet eros imperdiet placerat. Vestibulum sodales posuere diam vel laoreet."
+            |> ReasonReact.string
+          }
+        </PageCard.P>
+      </Div>
     </Div>
   </PageCard>;

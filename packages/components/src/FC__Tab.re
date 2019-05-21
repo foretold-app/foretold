@@ -27,7 +27,9 @@ let make = (~isActive=false, children) => {
     <Link
       colors={isActive ? activeColors : inactiveColors}
       isDisabled=false
-      styles=Css.((isActive ? activeStyles : inactiveStyles) @ allStyles)>
+      styles={
+        Css.style((isActive ? activeStyles : inactiveStyles) @ allStyles)
+      }>
       ...children
     </Link>,
 };

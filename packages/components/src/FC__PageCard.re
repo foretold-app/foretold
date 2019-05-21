@@ -4,7 +4,7 @@ let component = ReasonReact.statelessComponent(__MODULE__);
 let link =
   Link.make(
     ~colors=(Colors.accentBlue, Colors.darkAccentBlue),
-    ~styles=Css.[marginRight(`em(2.))],
+    ~styles=Css.(style([marginRight(`em(2.))])),
   );
 
 let make = children => {
@@ -51,9 +51,11 @@ module H1 = {
         className=Css.(
           style(
             [
-              fontSize(`px(21)),
+              fontSize(`em(1.4)),
+              color(`hex("192D44")),
               FC__Colors.FontWeights.heavy,
               marginTop(`em(0.0)),
+              marginBottom(`em(0.4)),
             ]
             @ BaseStyles.fullWidthFloatLeft,
           )

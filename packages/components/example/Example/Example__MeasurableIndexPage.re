@@ -1,26 +1,55 @@
 open FC;
 open Base;
 
+let dist: Stats.dist = {
+  xs: ExampleCdfs.Example1.xs,
+  ys: ExampleCdfs.Example1.ys,
+};
+
+let futureTime = 1559005200;
+
+let foo = MomentRe.momentNow();
+
+let llink =
+  FC__Link.make(
+    ~colors=(`hex("384e67"), Colors.link),
+    ~isDisabled=false,
+    ~styles=Css.(style([textDecoration(`underline)])),
+  );
+
 let row =
-  <Table.Row>
+  <Table.RowLink onClick={_ => Js.log("Row Clicked")}>
     <Table.Cell
       flex=4
       styles=[
         Css.(style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])),
       ]>
-      <div className=Table.Row.headerStyle>
-        {"What will the GDP of China be in 2020?" |> ReasonReact.string}
+      <div>
+        <span className=Table.Row.primaryText>
+          {"What will be the " |> ReasonReact.string}
+          {
+            llink(~href="d", [|"GDP" |> ReasonReact.string|])
+            |> ReasonReact.element
+          }
+          {" of " |> ReasonReact.string}
+          {
+            llink(~href="China", [|"China" |> ReasonReact.string|])
+            |> ReasonReact.element
+          }
+          {" in " |> ReasonReact.string}
+          {
+            llink(~href="2018", [|"2018" |> ReasonReact.string|])
+            |> ReasonReact.element
+          }
+        </span>
       </div>
-      <div
-        className=Css.(
-          style([
-            Colors.FontWeights.heavy,
-            color(Colors.Statuses.green),
-            fontSize(`em(0.9)),
-          ])
-        )>
-        {"Open" |> ReasonReact.string}
-      </div>
+      {
+        FC__StateStatus.make(
+          ~state=OPEN(MomentRe.momentWithUnix(futureTime)),
+          ~fontSize=`em(0.85),
+          (),
+        )
+      }
     </Table.Cell>
     <Table.Cell
       flex=2
@@ -28,7 +57,7 @@ let row =
         Css.(style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])),
       ]>
       <FC__CdfChart__Small
-        data={"xs": ExampleCdfs.Example1.xs, "ys": ExampleCdfs.Example1.ys}
+        data={"xs": dist.xs, "ys": dist.ys}
         minX=2.0
         color={`hex("#d9dcdf")}
         maxX=12.0
@@ -37,7 +66,7 @@ let row =
     <Table.Cell flex=1 styles=[Css.(style([paddingTop(`em(0.5))]))]>
       <Div>
         <Link
-          styles=[Css.marginRight(`em(1.0))]
+          styles=Css.(style([marginRight(`em(1.0))]))
           colors=(Colors.textMedium, Colors.textDark)>
           {"Series A" |> ReasonReact.string}
         </Link>
@@ -48,20 +77,22 @@ let row =
       <Div>
         <Link
           colors=(Colors.textMedium, Colors.textDark)
-          styles=[
-            Css.marginRight(`em(1.0)),
-            Css.textDecoration(`underline),
-          ]>
+          styles=Css.(
+            style([
+              Css.marginRight(`em(1.0)),
+              Css.textDecoration(`underline),
+            ])
+          )>
           {"Edit" |> ReasonReact.string}
         </Link>
         <Link
-          styles=[Css.textDecoration(`underline)]
+          styles=Css.(style([Css.textDecoration(`underline)]))
           colors=(Colors.textMedium, Colors.textDark)>
           {"Archive" |> ReasonReact.string}
         </Link>
       </Div>
     </Table.Cell>
-  </Table.Row>;
+  </Table.RowLink>;
 
 let make =
   <PageCard>

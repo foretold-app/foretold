@@ -2,14 +2,16 @@ open FC__Base;
 
 let tagStyles = (~isDisabled=false, ~heightPadding=2, ()) => {
   let main =
-    Css.[
-      padding2(~v=`px(heightPadding), ~h=`px(14)),
-      BaseStyles.floatLeft,
-      borderRadius(`px(5)),
-      border(`px(1), `solid, Colors.accentBlueO8),
-    ];
-  let disabledStyles = Css.[background(Colors.greydisabled)];
-  isDisabled ? disabledStyles @ main : main;
+    Css.(
+      style([
+        padding2(~v=`px(heightPadding), ~h=`px(14)),
+        BaseStyles.floatLeft,
+        borderRadius(`px(5)),
+        border(`px(1), `solid, Colors.accentBlueO8),
+      ])
+    );
+  let disabledStyles = Css.(style([background(Colors.greydisabled)]));
+  isDisabled ? Css.merge([disabledStyles, main]) : main;
 };
 
 module Linktag = {
@@ -19,7 +21,13 @@ module Linktag = {
 
 let activeItemWithNumber = (isActive, text, number: int) => {
   let textStyle =
-    Css.[BaseStyles.floatLeft, marginRight(`em(0.7)), marginTop(`px(3))];
+    Css.(
+      style([
+        BaseStyles.floatLeft,
+        marginRight(`em(0.7)),
+        marginTop(`px(3)),
+      ])
+    );
 
   let colors =
     isActive ?
@@ -31,10 +39,12 @@ let activeItemWithNumber = (isActive, text, number: int) => {
 
   <Link
     colors
-    styles=Css.[BaseStyles.floatLeft, padding2(~v=`em(0.7), ~h=`em(1.2))]
+    styles=Css.(
+      style([BaseStyles.floatLeft, padding2(~v=`em(0.7), ~h=`em(1.2))])
+    )
     isDisabled=false>
-    <span className={Css.style(textStyle)}> text </span>
-    <span className={Css.style(tagStyles())}>
+    <span className=textStyle> text </span>
+    <span className={tagStyles()}>
       {number |> string_of_int |> ReasonReact.string}
     </span>
   </Link>;

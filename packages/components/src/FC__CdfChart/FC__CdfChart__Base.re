@@ -20,6 +20,7 @@ external makeProps:
     ~maxX: float=?,
     ~minX: float=?,
     ~primaryDistribution: data=?,
+    ~onHover: float => unit=?,
     unit
   ) =>
   _ =
@@ -35,6 +36,7 @@ let make =
       ~showDistributionLines=?,
       ~maxX=?,
       ~minX=?,
+      ~onHover=?,
       ~primaryDistribution=?,
       children,
     ) =>
@@ -47,6 +49,7 @@ let make =
         ~verticalLine?,
         ~marginBottom?,
         ~marginTop?,
+        ~onHover?,
         ~showVerticalLine?,
         ~showDistributionLines?,
         ~maxX?,

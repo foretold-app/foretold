@@ -14,7 +14,7 @@ module Styles = {
       selector(".domain", [display(`none)]),
       selector(".tick line", [display(`none)]),
       selector(".tick text", [color(`hex("bfcad4"))]),
-      selector(".chart .area-path", [SVG.fill(chartColor)]),
+      selector(".chart .area-path", [SVG.fill(`hex("3562AE66"))]),
     ]);
 };
 
@@ -25,10 +25,9 @@ let make = (~data, ~minX, ~maxX, ~color=`hex("7e9db7"), _children) => {
     let pdf = cdf |> Stats.toPdf;
 
     <div className={Styles.graph(color)}>
-      <div className=Styles.textOverlay> <StatSummary cdf /> </div>
       <FC__CdfChart__Base
         width=200
-        height=40
+        height=30
         minX
         maxX
         marginBottom=0

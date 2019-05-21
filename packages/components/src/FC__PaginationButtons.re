@@ -1,4 +1,5 @@
 open FC__Base;
+
 type directionButton = {
   isDisabled: bool,
   onClick: ReactEvent.Mouse.t => unit,
@@ -24,36 +25,44 @@ let _text = (t: t) => {
   currentValue ++ " of " ++ (t.max |> string_of_int);
 };
 
+module Styles = {
+  let link = isDisabled =>
+    FC__Simple.tagStyles(~heightPadding=5, ~isDisabled, ());
+
+  let linkColors = (Colors.darkAccentBlue, Colors.black);
+
+  let buttonLabel =
+    Css.(
+      style([
+        BaseStyles.floatLeft,
+        marginRight(`em(0.5)),
+        marginTop(`em(0.45)),
+        color(Colors.accentBlue),
+      ])
+    );
+
+  let position =
+    Css.(
+      style([BaseStyles.floatLeft, padding2(~v=`em(0.5), ~h=`em(1.5))])
+    );
+
+  let rightButton = Css.(style([marginLeft(`em(0.3))]));
+};
+
 let _directionLink = (t: directionButton, icon: string, positionStyles) =>
   <Link
-    colors=(Colors.darkAccentBlue, Colors.black)
+    colors=Styles.linkColors
     isDisabled={t.isDisabled}
     onClick={t.onClick}
-    styles={
-      FC__Simple.tagStyles(~heightPadding=5, ~isDisabled=t.isDisabled, ())
-      @ positionStyles
-    }>
+    styles={Css.merge([Styles.link(t.isDisabled), positionStyles])}>
     {icon |> ReasonReact.string}
   </Link>;
 
-let make = (t: t) => {
-  let textStyle =
-    Css.[
-      BaseStyles.floatLeft,
-      marginRight(`em(0.5)),
-      marginTop(`em(0.45)),
-      color(Colors.accentBlue),
-    ];
-  <Div
-    styles=[
-      Css.(
-        style([BaseStyles.floatLeft, padding2(~v=`em(0.5), ~h=`em(1.5))])
-      ),
-    ]>
-    <span className={Css.style(textStyle)}>
+let make = (t: t) =>
+  <Div styles=[Styles.position]>
+    <span className=Styles.buttonLabel>
       {_text(t) |> ReasonReact.string}
     </span>
-    {_directionLink(t.pageLeft, "<", [])}
-    {_directionLink(t.pageRight, ">", [Css.marginLeft(`em(0.3))])}
+    {_directionLink(t.pageLeft, "<", "")}
+    {_directionLink(t.pageRight, ">", Styles.rightButton)}
   </Div>;
-};

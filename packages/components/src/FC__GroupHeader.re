@@ -1,11 +1,5 @@
 open FC__Base;
 
-module Colors' = {
-  let background = Colors.smokeWhite;
-  let primary = Colors.link;
-  let secondary = Colors.link;
-};
-
 module Styles = {
   open Css;
   let outer =
@@ -22,29 +16,30 @@ module Styles = {
       [boxSizing(`borderBox), padding2(~v=`em(1.), ~h=`em(2.0))]
       @ BaseStyles.fullWidthFloatLeft,
     );
+
+  let actionButton =
+    style([
+      border(`px(1), `solid, `hex("c7cfdb")),
+      background(Colors.white),
+      Css.transition(~duration=100, "background"),
+      selector(":hover", [background(Colors.lightGrayBackground)]),
+    ]);
+
+  let actionButtonPosition =
+    style([
+      BaseStyles.floatRight,
+      marginLeft(`em(2.)),
+      marginTop(`em(0.5)),
+      borderRadius(`px(5)),
+      padding2(~v=`em(0.5), ~h=`em(2.0)),
+    ]);
 };
 
-let linkStyles =
-  Css.[
-    BaseStyles.floatRight,
-    marginLeft(`em(2.)),
-    marginTop(`em(0.5)),
-    borderRadius(`px(5)),
-    padding2(~v=`em(0.5), ~h=`em(2.0)),
-  ];
-
-let link =
+let actionButton =
   Link.make(
     ~colors=(Colors.link, Colors.link),
     ~isDisabled=false,
-    ~styles=
-      linkStyles
-      @ Css.[
-          border(`px(1), `solid, `hex("c7cfdb")),
-          background(Colors.white),
-          Css.transition(~duration=100, "background"),
-          selector(":hover", [background(Colors.lightGrayBackground)]),
-        ],
+    ~styles=Css.merge([Styles.actionButtonPosition, Styles.actionButton]),
   );
 
 let component = ReasonReact.statelessComponent(__MODULE__);
@@ -59,7 +54,7 @@ let make = children => {
 
 module SubHeader = {
   open Colors.Text;
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Subheader");
+  let component = ReasonReact.statelessComponent(__MODULE__ ++ " Subheader");
 
   let make = children => {
     ...component,

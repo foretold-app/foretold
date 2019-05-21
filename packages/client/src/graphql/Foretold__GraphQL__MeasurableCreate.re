@@ -10,12 +10,21 @@ module Query = [%graphql
 
 module Mutation = ReasonApollo.CreateMutation(Query);
 
+// @todo: unduplicate
+type values = {
+  name: string,
+  labelCustom: string,
+  labelSubject: string,
+  labelOnDate: string,
+  labelProperty: string,
+  expectedResolutionDate: string,
+  resolutionEndpoint: string,
+  showDescriptionDate: string,
+  showDescriptionProperty: string,
+};
+
 let mutate =
-    (
-      mutation: Mutation.apolloMutation,
-      values: SignUpForm.values,
-      channelId: string,
-    ) => {
+    (mutation: Mutation.apolloMutation, values: values, channelId: string) => {
   let mutate =
     values.showDescriptionDate == "TRUE"
       ? Query.make(

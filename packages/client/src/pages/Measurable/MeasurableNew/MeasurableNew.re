@@ -4,7 +4,7 @@ let component = ReasonReact.statelessComponent("MeasurableNew");
 
 module CMutationForm =
   MutationForm.Make({
-    type queryType = CreateMeasurableMutation.GraphQL.t;
+    type queryType = Mutations.MeasurableCreate.Query.t;
   });
 
 let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {

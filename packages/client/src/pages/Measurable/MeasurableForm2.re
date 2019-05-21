@@ -14,6 +14,7 @@ module FormConfig = {
     | ShowDescriptionDate: field(string)
     | ShowDescriptionProperty: field(string);
 
+  // @todo: unduplicate
   type state = {
     name: string,
     labelCustom: string,
@@ -80,17 +81,10 @@ let withForm = (mutation, innerComponentFn) =>
     ~onSubmit=
       values => {
         let mutate =
-          Mutations.BotCreate.mutate(
+          Mutations.MeasurableCreate.mutate(
             mutation,
-            values.state.values.name,
-            values.state.values.labelCustom,
-            values.state.values.labelSubject,
-            values.state.values.labelOnDate,
-            values.state.values.labelProperty,
-            values.state.values.expectedResolutionDate,
-            values.state.values.resolutionEndpoint,
-            values.state.values.showDescriptionDate,
-            values.state.values.showDescriptionProperty,
+            values.state.values,
+            channelId = "sdfsdf" // @todo:
           );
         ();
       },
@@ -128,19 +122,20 @@ let formFields = (form: Form.state, send, onSubmit) =>
 
 let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
-  render: _ =>
-    SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("Make a New Bot"),
-      ~body=
-        Mutations.BotCreate.withMutation((mutation, data) =>
-          withForm(mutation, ({send, state}) =>
-            CMutationForm.showWithLoading(
-              ~result=data.result,
-              ~form=formFields(state, send, () => send(Form.Submit)),
-              (),
-            )
+  render: _ => {
+    let head = SLayout.Header.textDiv("Make a New Bot");
+
+    let body =
+      Mutations.BotCreate.withMutation((mutation, data) =>
+        withForm(mutation, ({send, state}) =>
+          CMutationForm.showWithLoading(
+            ~result=data.result,
+            ~form=formFields(state, send, () => send(Form.Submit)),
+            (),
           )
-        ),
-    )
-    |> layout,
+        )
+      );
+
+    SLayout.LayoutConfig.make(~head, ~body) |> layout;
+  },
 };

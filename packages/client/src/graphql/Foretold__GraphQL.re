@@ -29,4 +29,5 @@ module Mutations = {
   module ChannelMembershipRoleUpdate = Foretold__GraphQL__ChannelMembershipRoleUpdate;
   module SeriesCreate = Foretold__GraphQL__SeriesCreate;
   module BotCreate = Foretold__GraphQL__BotCreate;
+  module MeasurableCreate = Foretold__GraphQL__MeasurableCreate;
 };

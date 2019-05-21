@@ -65,3 +65,7 @@ let mutate =
   )
   |> ignore;
 };
+
+let withMutation = innerComponentFn =>
+  Mutation.make(~onError=e => Js.log2("Graphql Error:", e), innerComponentFn)
+  |> E.React.el;

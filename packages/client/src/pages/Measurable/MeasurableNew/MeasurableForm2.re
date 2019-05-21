@@ -15,17 +15,7 @@ module FormConfig = {
     | ShowDescriptionProperty: field(string);
 
   // @todo: unduplicate
-  type state = {
-    name: string,
-    labelCustom: string,
-    labelSubject: string,
-    labelOnDate: string,
-    labelProperty: string,
-    expectedResolutionDate: string,
-    resolutionEndpoint: string,
-    showDescriptionDate: string,
-    showDescriptionProperty: string,
-  };
+  type state = Mutations.MeasurableCreate.values;
 
   let get: type value. (state, field(value)) => value =
     (state, field) =>
@@ -58,11 +48,11 @@ module FormConfig = {
 
 module Form = ReFormNext.Make(FormConfig);
 
-let component = ReasonReact.statelessComponent("BotForm");
+let component = ReasonReact.statelessComponent("MeasurementForm");
 
 module CMutationForm =
   MutationForm.Make({
-    type queryType = Mutations.BotCreate.Query.t;
+    type queryType = Mutations.MeasurableCreate.Query.t;
   });
 
 let withForm = (mutation, innerComponentFn) =>
@@ -84,7 +74,7 @@ let withForm = (mutation, innerComponentFn) =>
           Mutations.MeasurableCreate.mutate(
             mutation,
             values.state.values,
-            channelId = "sdfsdf" // @todo:
+            "sdfsdf" // @todo:
           );
         ();
       },
@@ -105,15 +95,6 @@ let formFields = (form: Form.state, send, onSubmit) =>
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"Description" |> ste |> E.React.inH3}
-      <Antd.Input
-        value={form.values.description}
-        onChange={ReForm.Helpers.handleDomFormChange(e =>
-          send(Form.FieldChangeValue(Description, e))
-        )}
-      />
-    </Antd.Form.Item>
-    <Antd.Form.Item>
       <Antd.Button _type=`primary onClick={_ => onSubmit()}>
         {"Submit" |> ste}
       </Antd.Button>
@@ -123,10 +104,10 @@ let formFields = (form: Form.state, send, onSubmit) =>
 let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
-    let head = SLayout.Header.textDiv("Make a New Bot");
+    let head = SLayout.Header.textDiv("New Question");
 
     let body =
-      Mutations.BotCreate.withMutation((mutation, data) =>
+      Mutations.MeasurableCreate.withMutation((mutation, data) =>
         withForm(mutation, ({send, state}) =>
           CMutationForm.showWithLoading(
             ~result=data.result,

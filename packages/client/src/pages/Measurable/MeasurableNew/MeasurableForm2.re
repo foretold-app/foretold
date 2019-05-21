@@ -8,9 +8,9 @@ module FormConfig = {
     | Name: field(string)
     | LabelCustom: field(string)
     | LabelSubject: field(string)
-    | LabelOnDate: field(string)
+    | LabelOnDate: field(Js.Nullable.t(string))
     | LabelProperty: field(string)
-    | ExpectedResolutionDate: field(string)
+    | ExpectedResolutionDate: field(Js.Nullable.t(string))
     | ResolutionEndpoint: field(string)
     | ShowDescriptionDate: field(string)
     | ShowDescriptionProperty: field(string);
@@ -60,9 +60,10 @@ let withForm = (mutation, channelId, innerComponentFn) => {
     name: "",
     labelCustom: "",
     labelSubject: "",
-    labelOnDate: MomentRe.momentNow() |> formatDate,
+    labelOnDate: MomentRe.momentNow() |> formatDate |> Js.Nullable.return,
     labelProperty: "",
-    expectedResolutionDate: MomentRe.momentNow() |> formatDate,
+    expectedResolutionDate:
+      MomentRe.momentNow() |> formatDate |> Js.Nullable.return,
     resolutionEndpoint: "",
     showDescriptionDate: "FALSE",
     showDescriptionProperty: "FALSE",
@@ -148,16 +149,24 @@ let formFields = (form: Form.state, send, onSubmit) =>
          {form.values.showDescriptionDate == "TRUE"
             ? <Antd.Form.Item label="'On' Date">
                 <DatePicker
-                  value={form.values.labelOnDate |> MomentRe.moment}
+                  value={
+                    form.values.labelOnDate
+                    |> Js.Nullable.toOption
+                    |> Utils.resolveOption
+                    |> MomentRe.moment
+                  }
                   onChange={e => {
                     send(
                       Form.FieldChangeValue(
                         ExpectedResolutionDate,
-                        e |> formatDate,
+                        e |> formatDate |> Js.Nullable.return,
                       ),
                     );
                     send(
-                      Form.FieldChangeValue(LabelOnDate, e |> formatDate),
+                      Form.FieldChangeValue(
+                        LabelOnDate,
+                        e |> formatDate |> Js.Nullable.return,
+                      ),
                     );
                     ();
                   }}
@@ -200,11 +209,17 @@ let formFields = (form: Form.state, send, onSubmit) =>
       help="When do you expect this will be resolvable by? You will get a notification when this date occurs.">
       <DatePicker
         value={
-          form.values.expectedResolutionDate |> MomentRe.momentDefaultFormat
+          form.values.expectedResolutionDate
+          |> Js.Nullable.toOption
+          |> Utils.resolveOption
+          |> MomentRe.momentDefaultFormat
         }
         onChange={e => {
           send(
-            Form.FieldChangeValue(ExpectedResolutionDate, e |> formatDate),
+            Form.FieldChangeValue(
+              ExpectedResolutionDate,
+              e |> formatDate |> Js.Nullable.return,
+            ),
           );
           ();
         }}

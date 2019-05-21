@@ -14,9 +14,9 @@ type values = {
   name: string,
   labelCustom: string,
   labelSubject: string,
-  labelOnDate: string,
+  labelOnDate: Js.Nullable.t(string),
   labelProperty: string,
-  expectedResolutionDate: string,
+  expectedResolutionDate: Js.Nullable.t(string),
   resolutionEndpoint: string,
   showDescriptionDate: string,
   showDescriptionProperty: string,
@@ -32,10 +32,19 @@ let mutate =
             "labelCustom": Some(values.labelCustom),
             "labelProperty": Some(values.labelProperty),
             "expectedResolutionDate":
-              values.expectedResolutionDate |> Js.Json.string |> E.O.some,
+              values.expectedResolutionDate
+              |> Js.Nullable.toOption
+              |> Utils.resolveOption
+              |> Js.Json.string
+              |> E.O.some,
             "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
             "labelSubject": values.labelSubject |> E.O.some,
-            "labelOnDate": values.labelOnDate |> Js.Json.string |> E.O.some,
+            "labelOnDate":
+              values.labelOnDate
+              |> Js.Nullable.toOption
+              |> Utils.resolveOption
+              |> Js.Json.string
+              |> E.O.some,
             "valueType": `FLOAT,
             "channelId": channelId,
           },
@@ -47,7 +56,11 @@ let mutate =
             "labelCustom": Some(values.labelCustom),
             "labelProperty": Some(values.labelProperty),
             "expectedResolutionDate":
-              values.expectedResolutionDate |> Js.Json.string |> E.O.some,
+              values.expectedResolutionDate
+              |> Js.Nullable.toOption
+              |> Utils.resolveOption
+              |> Js.Json.string
+              |> E.O.some,
             "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
             "labelSubject": values.labelSubject |> E.O.some,
             "labelOnDate": None,

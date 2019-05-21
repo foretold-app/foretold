@@ -1,11 +1,12 @@
 open Belt.Result;
 
+let resolveOption = opt =>
+  switch (opt) {
+  | None => ""
+  | Some(s) => s
+  };
+
 let resolveRegex = (exp, str) => {
-  let resolveOption = opt =>
-    switch (opt) {
-    | None => ""
-    | Some(s) => s
-    };
   let res = exp |> Js.Re.exec(str);
   switch (res) {
   | None => ""

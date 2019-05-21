@@ -73,7 +73,13 @@ let withForm = (mutation, channelId, innerComponentFn) => {
     ~onSubmit=
       ({state}) =>
         Mutations.MeasurableCreate.mutate(mutation, state.values, channelId),
-    ~schema=Form.Validation.Schema([||]),
+    ~schema=
+      Form.Validation.Schema([|
+        Custom(
+          Name,
+          values => values.name == "" ? Error("Can't be empty") : Valid // @todo:
+        ),
+      |]),
     innerComponentFn,
   )
   |> E.React.el;

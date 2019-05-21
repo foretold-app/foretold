@@ -102,8 +102,12 @@ let formFields = (form: Form.state, send, onSubmit) =>
            <Antd.Input
              value={form.values.labelSubject}
              onChange={e => {
-               // handleChange(`labelSubject, ReactEvent.Form.target(e)##value);
-               Js.log2("labelSubject", e);
+               send(
+                 Form.FieldChangeValue(
+                   LabelSubject,
+                   ReactEvent.Form.target(e)##value,
+                 ),
+               );
                ();
              }}
            />
@@ -112,8 +116,12 @@ let formFields = (form: Form.state, send, onSubmit) =>
            <Antd.Input
              value={form.values.labelProperty}
              onChange={e => {
-               // handleChange(`labelProperty, ReactEvent.Form.target(e)##value);
-               Js.log2("labelProperty", e);
+               send(
+                 Form.FieldChangeValue(
+                   LabelProperty,
+                   ReactEvent.Form.target(e)##value,
+                 ),
+               );
                ();
              }}
            />
@@ -122,8 +130,12 @@ let formFields = (form: Form.state, send, onSubmit) =>
            <AntdSwitch
              checked={form.values.showDescriptionDate == "TRUE"}
              onChange={e => {
-               // handleChange(`showDescriptionDate, e ? "TRUE" : "FALSE")
-               Js.log2("showDescriptionDate", e);
+               send(
+                 Form.FieldChangeValue(
+                   ShowDescriptionDate,
+                   e ? "TRUE" : "FALSE",
+                 ),
+               );
                ();
              }}
            />
@@ -133,9 +145,15 @@ let formFields = (form: Form.state, send, onSubmit) =>
                 <DatePicker
                   value={form.values.labelOnDate |> MomentRe.moment}
                   onChange={e => {
-                    // handleChange(`expectedResolutionDate, e |> formatDate);
-                    // handleChange(`labelOnDate, e |> formatDate);
-                    Js.log2("expectedResolutionDate", e);
+                    send(
+                      Form.FieldChangeValue(
+                        ExpectedResolutionDate,
+                        e |> formatDate,
+                      ),
+                    );
+                    send(
+                      Form.FieldChangeValue(LabelOnDate, e |> formatDate),
+                    );
                     ();
                   }}
                 />

@@ -1,6 +1,7 @@
 open Utils;
 open MomentRe;
 open Foretold__GraphQL;
+open Antd;
 
 module FormConfig = {
   type field(_) =
@@ -48,74 +49,169 @@ module FormConfig = {
 
 module Form = ReFormNext.Make(FormConfig);
 
-let component = ReasonReact.statelessComponent("MeasurementForm");
-
 module CMutationForm =
   MutationForm.Make({
     type queryType = Mutations.MeasurableCreate.Query.t;
   });
 
-let withForm = (mutation, innerComponentFn) =>
+let withForm = (mutation, channelId, innerComponentFn) => {
+  let initialState: FormConfig.state = {
+    name: "",
+    labelCustom: "",
+    labelSubject: "",
+    labelOnDate: "",
+    labelProperty: "",
+    expectedResolutionDate: "",
+    resolutionEndpoint: "",
+    showDescriptionDate: "",
+    showDescriptionProperty: "",
+  };
+
   Form.make(
-    ~initialState={
-      name: "",
-      labelCustom: "",
-      labelSubject: "",
-      labelOnDate: "",
-      labelProperty: "",
-      expectedResolutionDate: "",
-      resolutionEndpoint: "",
-      showDescriptionDate: "",
-      showDescriptionProperty: "",
-    },
+    ~initialState,
     ~onSubmit=
-      values => {
-        let mutate =
-          Mutations.MeasurableCreate.mutate(
-            mutation,
-            values.state.values,
-            "sdfsdf" // @todo:
-          );
-        ();
-      },
+      ({state}) =>
+        Mutations.MeasurableCreate.mutate(mutation, state.values, channelId),
     ~schema=Form.Validation.Schema([||]),
     innerComponentFn,
   )
   |> E.React.el;
+};
 
 let formFields = (form: Form.state, send, onSubmit) =>
   <Antd.Form onSubmit={e => onSubmit()}>
-    <Antd.Form.Item>
-      {"Name" |> ste |> E.React.inH3}
-      <Antd.Input
-        value={form.values.name}
+    <Antd.Form.Item label="Question Type">
+      <Antd.Radio.Group
+        value={form.values.showDescriptionProperty}
+        defaultValue={form.values.showDescriptionProperty}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
-          send(Form.FieldChangeValue(Name, e))
+          send(Form.FieldChangeValue(ShowDescriptionProperty, e))
+        )}>
+        <Antd.Radio value="FALSE"> {"Simple" |> ste} </Antd.Radio>
+        <Antd.Radio value="TRUE">
+          {"Subject-Property-Date" |> ste}
+        </Antd.Radio>
+      </Antd.Radio.Group>
+    </Antd.Form.Item>
+    {E.React.showIf(
+       form.values.showDescriptionProperty == "TRUE",
+       <>
+         <Antd.Form.Item label="Subject" required=true>
+           <Antd.Input
+             value={form.values.labelSubject}
+             onChange={e => {
+               // handleChange(`labelSubject, ReactEvent.Form.target(e)##value);
+               Js.log2("labelSubject", e);
+               ();
+             }}
+           />
+         </Antd.Form.Item>
+         <Antd.Form.Item label="Property" required=true>
+           <Antd.Input
+             value={form.values.labelProperty}
+             onChange={e => {
+               // handleChange(`labelProperty, ReactEvent.Form.target(e)##value);
+               Js.log2("labelProperty", e);
+               ();
+             }}
+           />
+         </Antd.Form.Item>
+         <Antd.Form.Item label="Include a Specific Date in Name">
+           <AntdSwitch
+             checked={form.values.showDescriptionDate == "TRUE"}
+             onChange={e => {
+               // handleChange(`showDescriptionDate, e ? "TRUE" : "FALSE")
+               Js.log2("showDescriptionDate", e);
+               ();
+             }}
+           />
+         </Antd.Form.Item>
+         {form.values.showDescriptionDate == "TRUE"
+            ? <Antd.Form.Item label="'On' Date">
+                <DatePicker
+                  value={form.values.labelOnDate |> MomentRe.moment}
+                  onChange={e => {
+                    // handleChange(`expectedResolutionDate, e |> formatDate);
+                    // handleChange(`labelOnDate, e |> formatDate);
+                    Js.log2("expectedResolutionDate", e);
+                    ();
+                  }}
+                />
+              </Antd.Form.Item>
+            : <div />}
+       </>,
+     )}
+    {E.React.showIf(
+       form.values.showDescriptionProperty == "FALSE",
+       <Antd.Form.Item label="Name" required=true>
+         <Input
+           value={form.values.name}
+           onChange={e => {
+             // ReForm.Helpers.handleDomFormChange(handleChange(`name))
+             Js.log2("name", e);
+             ();
+           }}
+         />
+       </Antd.Form.Item>,
+     )}
+    <Antd.Form.Item label="Description">
+      <Input
+        value={form.values.labelCustom}
+        onChange={ReForm.Helpers.handleDomFormChange(e =>
+          send(Form.FieldChangeValue(LabelCustom, e))
         )}
       />
     </Antd.Form.Item>
+    <Antd.Form.Item
+      label="Resolution Endpoint"
+      help="If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value.">
+      <Input
+        value={form.values.resolutionEndpoint}
+        onChange={ReForm.Helpers.handleDomFormChange(e =>
+          send(Form.FieldChangeValue(ResolutionEndpoint, e))
+        )}
+      />
+    </Antd.Form.Item>
+    <Antd.Form.Item
+      label="Expected Resolution Date"
+      help="When do you expect this will be resolvable by? You will get a notification when this date occurs.">
+      <DatePicker
+        value={
+          form.values.expectedResolutionDate |> MomentRe.momentDefaultFormat
+        }
+        onChange={e => {
+          //handleChange(`expectedResolutionDate, e |> formatDate)
+          Js.log2("expectedResolutionDate", e);
+          ();
+        }}
+        disabled={form.values.showDescriptionDate == "TRUE"}
+      />
+    </Antd.Form.Item>
     <Antd.Form.Item>
-      <Antd.Button _type=`primary onClick={_ => onSubmit()}>
+      <Button _type=`primary onClick={_ => onSubmit()}>
         {"Submit" |> ste}
-      </Antd.Button>
+      </Button>
     </Antd.Form.Item>
   </Antd.Form>;
 
-let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
+let component = ReasonReact.statelessComponent("MeasurementForm");
+
+let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
     let head = SLayout.Header.textDiv("New Question");
 
     let body =
       Mutations.MeasurableCreate.withMutation((mutation, data) =>
-        withForm(mutation, ({send, state}) =>
+        withForm(mutation, channelId, ({send, state}) =>
           CMutationForm.showWithLoading(
             ~result=data.result,
             ~form=formFields(state, send, () => send(Form.Submit)),
             (),
           )
         )
-      );
+      )
+      |> E.React.el;
 
     SLayout.LayoutConfig.make(~head, ~body) |> layout;
   },

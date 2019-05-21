@@ -48,7 +48,7 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
     | ChannelShow(_, _)
     | ChannelInvite(_)
     | ChannelMembers(_)
-    | MeasurableNew(_)
+    | MeasurableForm2(_)
     | SeriesNew(_)
     | Series(_, _)
     | ChannelEdit(_) => Channel_Layout.makeWithPage(route, loggedInUser)

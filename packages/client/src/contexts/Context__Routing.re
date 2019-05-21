@@ -18,7 +18,7 @@ module Route = {
     | ChannelIndex
     | ChannelNew
     | MeasurableEdit(string)
-    | MeasurableNew(string)
+    | MeasurableForm2(string)
     | Series(string, string)
     | SeriesNew(string)
     | NotFound;
@@ -45,7 +45,7 @@ module Route = {
     | ["bots", "new"] => BotCreate
     | ["c"] => ChannelIndex
     | ["c", id] => ChannelShow(id, url.search)
-    | ["c", id, "new"] => MeasurableNew(id)
+    | ["c", id, "new"] => MeasurableForm2(id)
     | ["c", id, "edit"] => ChannelEdit(id)
     | ["c", id, "members"] => ChannelMembers(id)
     | ["c", id, "invite"] => ChannelInvite(id)
@@ -76,7 +76,7 @@ module Url = {
     | ChannelEdit(string)
     | ChannelMembers(string)
     | ChannelInvite(string)
-    | MeasurableNew(string);
+    | MeasurableForm2(string);
 
   let toString = (r: t) =>
     switch ((r: t)) {
@@ -96,7 +96,7 @@ module Url = {
     | ChannelMembers(id) => "/c/" ++ id ++ "/members"
     | ChannelInvite(channel) => "/c/" ++ channel ++ "/invite"
     | MeasurableEdit(id) => "/measurables/" ++ id ++ "/edit"
-    | MeasurableNew(channel) => "/c/" ++ channel ++ "/new"
+    | MeasurableForm2(channel) => "/c/" ++ channel ++ "/new"
     | SeriesNew(channel) => "/c/" ++ channel ++ "/s/new"
     | SeriesShow(channel, id) => "/c/" ++ channel ++ "/s/" ++ id
     };

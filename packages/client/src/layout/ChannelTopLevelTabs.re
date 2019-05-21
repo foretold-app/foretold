@@ -25,7 +25,7 @@ module TabTypes = {
     | SeriesNew(_) => Some(Options(NewSeries))
     | ChannelInvite(_) => Some(Members(Invite))
     | ChannelMembers(_) => Some(Members(View))
-    | MeasurableNew(_) => Some(Measurables)
+    | MeasurableForm2(_) => Some(Measurables)
     | ChannelShow(_, _) => Some(Measurables)
     | Series(_, _) => Some(Measurables)
     | _ => None
@@ -44,9 +44,9 @@ module Component = {
         padding2(~v=`em(0.5), ~h=`em(0.7)),
       ];
       style(
-        isActive ?
-          [borderBottom(`px(4), `solid, `hex("1a90ec")), ...stylee] :
-          stylee,
+        isActive
+          ? [borderBottom(`px(4), `solid, `hex("1a90ec")), ...stylee]
+          : stylee,
       );
     };
   };
@@ -59,28 +59,24 @@ module Component = {
   let tabs = (o: t, channel: Context.Primary.Channel.t) =>
     <div>
       {tab(o == Measurables, toUrl(channel.id, Measurables), "Questions")}
-      {
-        tab(
-          o == Members(View),
-          toUrl(channel.id, Members(View)),
-          (
-            channel.membershipCount
-            |> E.O.fmap(string_of_int)
-            |> E.O.fmap(e => e ++ " ")
-            |> E.O.default("")
-          )
-          ++ "Members",
-        )
-      }
-      {
-        E.React.showIf(
-          channel.myRole === Some(`ADMIN),
-          tab(
-            o == Options(Edit),
-            toUrl(channel.id, Options(Edit)),
-            "Settings",
-          ),
-        )
-      }
+      {tab(
+         o == Members(View),
+         toUrl(channel.id, Members(View)),
+         (
+           channel.membershipCount
+           |> E.O.fmap(string_of_int)
+           |> E.O.fmap(e => e ++ " ")
+           |> E.O.default("")
+         )
+         ++ "Members",
+       )}
+      {E.React.showIf(
+         channel.myRole === Some(`ADMIN),
+         tab(
+           o == Options(Edit),
+           toUrl(channel.id, Options(Edit)),
+           "Settings",
+         ),
+       )}
     </div>;
 };

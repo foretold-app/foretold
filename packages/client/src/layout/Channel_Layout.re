@@ -51,15 +51,11 @@ let make =
             </SLayout.SidebarSection.Header>
             <SLayout.SidebarSection.Body>
               {channel.description |> E.O.default("") |> ste}
-              {
-                Foretold__Components__Channel.SimpleHeader.newMeasurable(
-                  channel.id,
-                )
-              }
-              {
-                channel.myRole === Some(`NONE) ?
-                  joinButton(channel.id) : leaveButton(channel.id)
-              }
+              {Foretold__Components__Channel.SimpleHeader.newMeasurable(
+                 channel.id,
+               )}
+              {channel.myRole === Some(`NONE)
+                 ? joinButton(channel.id) : leaveButton(channel.id)}
             </SLayout.SidebarSection.Body>
           </SLayout.SidebarSection.Container>
         )
@@ -150,8 +146,8 @@ let makeWithPage =
   | Series(channelId, id) =>
     SeriesShow.make(~id, ~channelId, ~loggedInUser, ~layout=_)
     |> layout(channelId)
-  | MeasurableNew(channelId) =>
-    MeasurableNew.make(~channelId, ~layout=_) |> layout(channelId)
+  | MeasurableForm2(channelId) =>
+    MeasurableForm2.make(~channelId, ~layout=_) |> layout(channelId)
   | ChannelMembers(channelId) =>
     ChannelMembers.make(~channelId, ~layout=_) |> layout(channelId)
   | ChannelInvite(channelId) =>

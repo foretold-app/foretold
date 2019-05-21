@@ -22,7 +22,7 @@ module SimpleHeader = {
     </Div>;
 
   let newMeasurable = channelId =>
-    buttonr("New Question", MeasurableNew(channelId));
+    buttonr("New Question", MeasurableForm2(channelId));
 
   let editChannel = channelId =>
     buttonr("Edit Channel", ChannelEdit(channelId));
@@ -36,12 +36,11 @@ module SimpleHeader = {
     Foretold__GraphQL.Mutations.ChannelLeave.Mutation.make((mutation, _) =>
       <Div float=`right>
         <Antd.Button
-          onClick={
-            _ =>
-              Foretold__GraphQL.Mutations.ChannelLeave.mutate(
-                mutation,
-                channelId,
-              )
+          onClick={_ =>
+            Foretold__GraphQL.Mutations.ChannelLeave.mutate(
+              mutation,
+              channelId,
+            )
           }>
           {"Leave Channel" |> ste}
         </Antd.Button>
@@ -53,12 +52,11 @@ module SimpleHeader = {
     Foretold__GraphQL.Mutations.ChannelJoin.Mutation.make((mutation, _) =>
       <Div float=`right>
         <Antd.Button
-          onClick={
-            _ =>
-              Foretold__GraphQL.Mutations.ChannelJoin.mutate(
-                mutation,
-                channelId,
-              )
+          onClick={_ =>
+            Foretold__GraphQL.Mutations.ChannelJoin.mutate(
+              mutation,
+              channelId,
+            )
           }>
           {"Join Channel" |> ste}
         </Antd.Button>
@@ -71,8 +69,8 @@ module SimpleHeader = {
     |> E.O.React.fmapOrNull(c =>
          <Div float=`right>
            <Antd.Button
-             onClick={
-               _ => Context.Routing.Url.push(ChannelMembers(channel.id))
+             onClick={_ =>
+               Context.Routing.Url.push(ChannelMembers(channel.id))
              }>
              <Icon.Icon icon="PEOPLE" />
              {c |> string_of_int |> ste}

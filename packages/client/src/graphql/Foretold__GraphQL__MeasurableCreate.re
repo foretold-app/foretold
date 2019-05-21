@@ -25,7 +25,7 @@ type values = {
 
 let mutate =
     (mutation: Mutation.apolloMutation, values: values, channelId: string) => {
-  let mutate =
+  let preparedQuery =
     values.showDescriptionDate == "TRUE"
       ? Query.make(
           ~input={
@@ -59,7 +59,7 @@ let mutate =
         );
 
   mutation(
-    ~variables=mutate##variables,
+    ~variables=preparedQuery##variables,
     ~refetchQueries=[|"getMeasurables"|], // @todo
     (),
   )
@@ -67,5 +67,7 @@ let mutate =
 };
 
 let withMutation = innerComponentFn =>
-  Mutation.make(~onError=e => Js.log2("Graphql Error:", e), innerComponentFn)
-  |> E.React.el;
+  Mutation.make(
+    ~onError=e => Js.log2("Graphql Error:", e),
+    innerComponentFn,
+  );

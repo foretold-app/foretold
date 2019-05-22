@@ -24,7 +24,10 @@ let defaultPage = (loggedInUser: Context.Primary.User.t, layout) => {
   /* This should always be Some */
   switch (firstUserChannel) {
   | Some({id: channelIdSome}) =>
-    Channel_Layout.makeWithPage(ChannelShow(channelIdSome, ""), loggedInUser)
+    Channel_Layout.makeWithPage(
+      {channelId: channelIdSome, subPage: Measurables("")},
+      loggedInUser,
+    )
   | _ => ChannelIndex.make(~loggedInUser, ~layout) |> inApp
   };
 };
@@ -43,13 +46,7 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
     let layout = SLayout.FullPage.makeWithEl;
 
     switch (route) {
-    | ChannelShow(_, _)
-    | ChannelInvite(_)
-    | ChannelMembers(_)
-    | MeasurableNew(_)
-    | SeriesNew(_)
-    | Series(_, _)
-    | ChannelEdit(_) => Channel_Layout.makeWithPage(route, loggedInUser)
+    | Channel(channel) => Channel_Layout.makeWithPage(channel, loggedInUser)
     | AgentMeasurables(id) =>
       AgentMeasurables.make(~id, ~loggedInUser, ~layout) |> inApp
     | BotCreate => BotCreate.make(~layout) |> inApp

@@ -1,4 +1,22 @@
 module Route = {
+  type seriesId = string;
+  type channelId = string;
+  type measurablesSearchString = string;
+
+  type channelSubPage =
+    | Measurables(measurablesSearchString)
+    | NewMeasurable
+    | Members
+    | InviteNewMember
+    | Settings
+    | NewSeries
+    | Series(seriesId);
+
+  type channelPage = {
+    channelId,
+    subPage: channelSubPage,
+  };
+
   type t =
     | Home
     | AgentIndex
@@ -11,16 +29,10 @@ module Route = {
     | AgentShow(string)
     | AgentMeasurables(string)
     | AgentBots(string)
-    | ChannelShow(string, string)
-    | ChannelEdit(string)
-    | ChannelMembers(string)
-    | ChannelInvite(string)
+    | Channel(channelPage)
     | ChannelIndex
     | ChannelNew
     | MeasurableEdit(string)
-    | MeasurableNew(string)
-    | Series(string, string)
-    | SeriesNew(string)
     | NotFound;
 
   let fromUrl = (url: ReasonReact.Router.url) =>
@@ -43,15 +55,17 @@ module Route = {
     | ["channels", "new"] => ChannelNew
     | ["channels"] => ChannelIndex
     | ["bots", "new"] => BotCreate
-    | ["c"] => ChannelIndex
-    | ["c", id] => ChannelShow(id, url.search)
-    | ["c", id, "new"] => MeasurableNew(id)
-    | ["c", id, "edit"] => ChannelEdit(id)
-    | ["c", id, "members"] => ChannelMembers(id)
-    | ["c", id, "invite"] => ChannelInvite(id)
     | ["measurables", id, "edit"] => MeasurableEdit(id)
-    | ["c", channel, "s", "new"] => SeriesNew(channel)
-    | ["c", channel, "s", id] => Series(channel, id)
+    | ["c"] => ChannelIndex
+    | ["c", channelId] =>
+      Channel({channelId, subPage: Measurables(url.search)})
+    | ["c", channelId, "new"] => Channel({channelId, subPage: NewMeasurable})
+    | ["c", channelId, "edit"] => Channel({channelId, subPage: Settings})
+    | ["c", channelId, "members"] => Channel({channelId, subPage: Members})
+    | ["c", channelId, "s", "new"] =>
+      Channel({channelId, subPage: NewSeries})
+    | ["c", channelId, "s", seriesId] =>
+      Channel({channelId, subPage: Series(seriesId)})
     | _ => NotFound
     };
 };

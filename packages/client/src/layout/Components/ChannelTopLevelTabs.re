@@ -19,16 +19,15 @@ module TabTypes = {
     | Options(_) => ChannelEdit(channelId)
     };
 
-  let fromPage = (page: Context.Routing.Route.t): option(t) =>
-    switch (page) {
-    | ChannelEdit(_) => Some(Options(Edit))
-    | SeriesNew(_) => Some(Options(NewSeries))
-    | ChannelInvite(_) => Some(Members(Invite))
-    | ChannelMembers(_) => Some(Members(View))
-    | MeasurableNew(_) => Some(Measurables)
-    | ChannelShow(_, _) => Some(Measurables)
-    | Series(_, _) => Some(Measurables)
-    | _ => None
+  let fromPage = (page: Context.Routing.Route.channelPage): option(t) =>
+    switch (page.subPage) {
+    | Settings => Some(Options(Edit))
+    | NewSeries => Some(Options(NewSeries))
+    | InviteNewMember => Some(Members(Invite))
+    | Members => Some(Members(View))
+    | NewMeasurable => Some(Measurables)
+    | Measurables(_) => Some(Measurables)
+    | Series(_) => Some(Measurables)
     };
 };
 

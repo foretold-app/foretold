@@ -2,8 +2,6 @@ open Context.Routing;
 open Foretold__GraphQL;
 open Rationale.Function.Infix;
 
-let defaultChannel = "4c5af8ad-1258-4b9c-8fa0-cc522708fc1c";
-
 let defaultPage = (loggedInUser: Context.Primary.User.t, layout) => {
   let firstUserChannel =
     loggedInUser.agent

@@ -6,7 +6,8 @@ let ste = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("Redirecting...");
 
-let make = (~me: Context.Me.me, _children) => {
+let make =
+    (~me: Context.Me.me, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>
     switch (me) {

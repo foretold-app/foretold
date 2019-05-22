@@ -1,6 +1,7 @@
 open Context.Routing;
 open Foretold__GraphQL;
 open Rationale.Function.Infix;
+open Pages;
 
 let defaultPage = (loggedInUser: Context.Primary.User.t, layout) => {
   let firstUserChannel =
@@ -32,6 +33,114 @@ let defaultPage = (loggedInUser: Context.Primary.User.t, layout) => {
   };
 };
 
+module Wrapper = {
+  type channelId = string;
+  type loggedInUser = Client.Context.Primary.User.t;
+
+  type t =
+    | Channel(channelId)
+    | NoChannel(loggedInUser);
+
+  let channelWrapper = (channelId, fn) =>
+    fn |> E.React.makeToEl(~key=channelId);
+
+  let noChannelSidebar = (loggedInUser, ~key="") =>
+    E.React.makeToEl
+    ||> E.React.withParent(
+          ~key,
+          Layout__Component__FillWithSidebar.make(
+            ~channelId=None,
+            ~loggedInUser,
+          ),
+        );
+
+  let noChannelSidebar2 = (loggedInUser, ~key="") =>
+    E.React.withParent(
+      ~key,
+      Layout__Component__FillWithSidebar.make(~channelId=None, ~loggedInUser),
+    );
+  let fromRoute = (route: Context.Routing.Route.t, loggedInUser) =>
+    switch (route) {
+    | Channel({channelId, _}) => Channel(channelId)
+    | AgentMeasurables(_)
+    | BotCreate
+    | AgentIndex
+    | EntityShow(_)
+    | Redirect
+    | EntityIndex
+    | Profile
+    | AgentShow(_)
+    | AgentBots(_)
+    | ChannelIndex
+    | MeasurableEdit(_)
+    | _ => NoChannel(loggedInUser)
+    };
+
+  let toComponent = t =>
+    switch (t) {
+    | Channel(channelId) => channelWrapper(channelId)
+    | NoChannel(loggedInUser) => noChannelSidebar(loggedInUser, ~key="")
+    };
+};
+
+module Layout = {
+  type channelId = string;
+  type channelPage = Context.Routing.Route.channelPage;
+  type loggedInUser = Context.Primary.User.t;
+
+  type t =
+    | Channel(channelPage, loggedInUser)
+    | NoChannel;
+
+  let noChannelLayout = SLayout.FullPage.makeWithEl;
+  let channelLayout = (channelPage, loggedInUser) =>
+    Channel_Layout_C.makeWithEl(channelPage, loggedInUser);
+
+  let fromRoute = (route: Context.Routing.Route.t, loggedInUser) =>
+    switch (route) {
+    | Channel(channelPage) => Channel(channelPage, loggedInUser)
+    | AgentMeasurables(_)
+    | BotCreate
+    | AgentIndex
+    | EntityShow(_)
+    | Redirect
+    | EntityIndex
+    | Profile
+    | AgentShow(_)
+    | AgentBots(_)
+    | ChannelIndex
+    | MeasurableEdit(_)
+    | _ => NoChannel
+    };
+
+  let toComponent = t =>
+    switch (t) {
+    | Channel(channelPage, loggedInUser) =>
+      channelLayout(channelPage, loggedInUser)
+    | NoChannel => noChannelLayout
+    };
+};
+
+module type Config = {
+  type customParams;
+  type layoutConfig;
+  let loggedOutPage: ReasonReact.reactElement;
+  let layout: layoutConfig => ReasonReact.reactElement;
+  let wrapper:
+    (
+      Client.Context.Primary.User.t,
+      ReasonReact.reactElement => ReasonReact.component('a, 'b, 'c)
+    ) =>
+    ReasonReact.reactElement;
+};
+
+let showHomeIfNoUser =
+    (
+      loggedInUser: option(Context.Primary.User.t),
+      fn: Context.Primary.User.t => ReasonReact.reactElement,
+    ) =>
+  loggedInUser |> E.O.fmap(fn) |> E.O.default(<Home />);
+
 let toRoutePage = (route: Route.t, me: Context.Me.me) =>
   switch (me) {
   | WithTokensAndUserData({userData}) =>
@@ -46,20 +155,21 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
     let layout = SLayout.FullPage.makeWithEl;
 
     switch (route) {
+    | Redirect => Auth0Redirect.make(~me, ~layout) |> inApp
     | Channel(channel) => Channel_Layout.makeWithPage(channel, loggedInUser)
     | AgentMeasurables(id) =>
       AgentMeasurables.make(~id, ~loggedInUser, ~layout) |> inApp
     | BotCreate => BotCreate.make(~layout) |> inApp
     | AgentIndex => AgentIndex.make(~layout) |> inApp
     | EntityShow(id) => EntityShow.make(~id, ~layout) |> inApp
-    | Redirect => Auth0Redirect.make(~me) |> inApp
-    | EntityIndex => EntityIndex.make(~layout) |> inApp
-    | Profile => Profile.make(~loggedInUser, ~layout) |> inApp
-    | AgentShow(id) => AgentShow.make(~id, ~layout) |> inApp
-    | AgentBots(id) => AgentBots.make(~id, ~layout) |> inApp
-    | ChannelIndex => ChannelIndex.make(~loggedInUser, ~layout) |> inApp
-    | ChannelNew => ChannelNew.make(~layout) |> inApp
-    | MeasurableEdit(id) => MeasurableEdit.make(~id, ~layout) |> inApp
+    | EntityIndex => EntityIndex'.toEl(Some(loggedInUser))
+    | Profile => Profile'.toEl(Some(loggedInUser))
+    | AgentShow(id) => AgentShow'.toEl({id: id}, Some(loggedInUser))
+    | AgentBots(id) => AgentBots'.toEl({id: id}, Some(loggedInUser))
+    | ChannelIndex => ChannelIndex'.toEl(Some(loggedInUser))
+    | ChannelNew => ChannelNew'.toEl(Some(loggedInUser))
+    | MeasurableEdit(id) =>
+      MeasurableEdit'.toEl({id: id}, Some(loggedInUser))
     | _ => defaultPage(loggedInUser, layout)
     };
   | _ =>

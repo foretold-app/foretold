@@ -70,7 +70,13 @@ module P = {
   let make = children => {
     ...component,
     render: _self =>
-      <p className=Css.(style([color(Colors.Text.LightBackground.p)]))>
+      <p
+        className=Css.(
+          style([
+            color(Colors.Text.LightBackground.p),
+            lineHeight(`em(1.5)),
+          ])
+        )>
         ...children
       </p>,
   };

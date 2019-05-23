@@ -69,4 +69,5 @@ let make =
         <Div flex=2> Example__MeasurableTopCard.make </Div>
       </Div>
     </Div>
+    <Footer/>
   </Div>;

@@ -2,21 +2,24 @@ open Utils;
 
 let component = ReasonReact.statelessComponent("EntityShow");
 
-let make = (~id: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
+type pageParams = {id: string};
+let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
-    let names = C.Ken.names(id);
+    let names = C.Ken.names(pageParams.id);
     SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv(id),
+      ~head=SLayout.Header.textDiv(pageParams.id),
       ~body=
         names
         |> E.A.of_list
         |> E.A.fmapi((i, r: Graph_T.T.fact) =>
              <div key={i |> string_of_int}>
-               {C.Ken.findName(r.propertyId)
-                |> E.O.default("no-name")
-                |> ste
-                |> E.React.inH3}
+               {
+                 C.Ken.findName(r.propertyId)
+                 |> E.O.default("no-name")
+                 |> ste
+                 |> E.React.inH3
+               }
                Graph_T.T.(
                  switch (r.value.valueType) {
                  | String(s) => s |> ste

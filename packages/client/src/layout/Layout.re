@@ -154,14 +154,15 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) =>
 
     let layout = SLayout.FullPage.makeWithEl;
 
+    /* let sLU; */
     switch (route) {
     | Redirect => Auth0Redirect.make(~me, ~layout) |> inApp
     | Channel(channel) => Channel_Layout.makeWithPage(channel, loggedInUser)
     | AgentMeasurables(id) =>
-      AgentMeasurables.make(~id, ~loggedInUser, ~layout) |> inApp
-    | BotCreate => BotCreate.make(~layout) |> inApp
-    | AgentIndex => AgentIndex.make(~layout) |> inApp
-    | EntityShow(id) => EntityShow.make(~id, ~layout) |> inApp
+      AgentMeasurables'.toEl({id: id}, Some(loggedInUser))
+    | BotCreate => BotCreate'.toEl(Some(loggedInUser))
+    | AgentIndex => AgentIndex'.toEl(Some(loggedInUser))
+    | EntityShow(id) => EntityShow'.toEl({id: id}, Some(loggedInUser))
     | EntityIndex => EntityIndex'.toEl(Some(loggedInUser))
     | Profile => Profile'.toEl(Some(loggedInUser))
     | AgentShow(id) => AgentShow'.toEl({id: id}, Some(loggedInUser))

@@ -91,60 +91,67 @@ let standard =
   |> Wrapper.noChannelSidebar(~key="", loggedInUser);
 
 }
+
+let justPageParams = (make, pageParams, loggedInUser) =>{
+    let makeWithUser = loggedInUser => (make(~pageParams) |> LayoutWrapper.standard(loggedInUser));
+    showHomeIfNoUser(makeWithUser,loggedInUser);
+  }
+
+let justLoggedInUser = (make, loggedInUser) =>{
+    let makeWithUser = loggedInUser => (make(~loggedInUser) |> LayoutWrapper.standard(loggedInUser));
+    showHomeIfNoUser(makeWithUser,loggedInUser);
+  }
+
+let pageParamsAndUser = (make, pageParams, loggedInUser) =>{
+    let makeWithUser = loggedInUser => (make(~pageParams, ~loggedInUser) |> LayoutWrapper.standard(loggedInUser));
+    showHomeIfNoUser(makeWithUser,loggedInUser);
+  }
+
+let noParams = (make, loggedInUser) =>{
+    let makeWithUser = loggedInUser => (make |> LayoutWrapper.standard(loggedInUser));
+    showHomeIfNoUser(makeWithUser,loggedInUser);
+  }
+
 module EntityShow' = {
-  let _loggedInMake = (id, loggedInUser) => {
-    EntityShow.make(~id) |> LayoutWrapper.standard(loggedInUser);
-  };
-  let toEl = (id) =>
-  id |> _loggedInMake |> showHomeIfNoUser;
+  let toEl = EntityShow.make |> justPageParams
+};
+
+module AgentMeasurables' = {
+  let toEl = AgentMeasurables.make |> pageParamsAndUser
+};
+
+module BotCreate' = {
+  let toEl = BotCreate.make |> noParams
+};
+
+module AgentIndex' = {
+  let toEl = AgentIndex.make |> noParams
 };
 
 module AgentShow' = {
-  let _loggedInMake = (pageParams, loggedInUser) => {
-    AgentShow.make(~pageParams) |> LayoutWrapper.standard(loggedInUser);
-  };
-  let toEl = (pageParams) =>
-  pageParams |> _loggedInMake |> showHomeIfNoUser;
+  let toEl = AgentShow.make |> justPageParams
 };
 
 module Profile' = {
-  let _loggedInMake = (loggedInUser) => {
-    Profile.make(~loggedInUser) |> LayoutWrapper.standard(loggedInUser);
-  };
-  let toEl = _loggedInMake |> showHomeIfNoUser;
+  let toEl = Profile.make |> justLoggedInUser
 };
 
 module AgentBots' = {
-  let _loggedInMake = (pageParams, loggedInUser) => {
-    AgentBots.make(~pageParams) |> LayoutWrapper.standard(loggedInUser);
-  };
-  let toEl = pageParams => pageParams |> _loggedInMake |> showHomeIfNoUser;
+  let toEl = AgentBots.make |> justPageParams
 };
 
 module ChannelIndex' = {
-  let _loggedInMake = (loggedInUser) => {
-    ChannelIndex.make(~loggedInUser) |> LayoutWrapper.standard(loggedInUser);
-  };
-  let toEl = _loggedInMake |> showHomeIfNoUser;
+  let toEl = ChannelIndex.make |> justLoggedInUser
 };
 
 module ChannelNew' = {
-  let _loggedInMake = (loggedInUser) => {
-    ChannelNew.make |> LayoutWrapper.standard(loggedInUser);
-  };
-  let toEl = _loggedInMake |> showHomeIfNoUser;
+  let toEl = ChannelNew.make |> noParams
 };
 
 module MeasurableEdit' = {
-  let _loggedInMake = (pageParams, loggedInUser) => {
-    MeasurableEdit.make(~pageParams) |> LayoutWrapper.standard(loggedInUser);
-  };
-  let toEl = pageParams => pageParams |>_loggedInMake |> showHomeIfNoUser;
+  let toEl = MeasurableEdit.make |> justPageParams
 };
 
 module EntityIndex' = {
-  let _loggedInMake = (loggedInUser) => {
-    EntityIndex.make |> LayoutWrapper.standard(loggedInUser);
-  };
-  let toEl = _loggedInMake |> showHomeIfNoUser;
+  let toEl = EntityIndex.make |> noParams
 };

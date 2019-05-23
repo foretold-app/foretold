@@ -59,13 +59,17 @@ let link = (~m: measurable) => {
   open Css;
   let name = style([fontSize(`em(1.2)), color(`hex("333"))]);
   <>
-    {MeasurableEntityLinks.nameEntityLink(~m, ~className=Shared.TagLink.item)
-     |> E.O.React.defaultNull}
-    {MeasurableEntityLinks.propertyEntityLink(
-       ~m,
-       ~className=Shared.TagLink.property,
-     )
-     |> E.O.React.defaultNull}
+    {
+      MeasurableEntityLinks.nameEntityLink(~m, ~className=Shared.TagLink.item)
+      |> E.O.React.defaultNull
+    }
+    {
+      MeasurableEntityLinks.propertyEntityLink(
+        ~m,
+        ~className=Shared.TagLink.property,
+      )
+      |> E.O.React.defaultNull
+    }
     <span className=name> {m.name |> ste} </span>
     {dateItem(~m, ()) |> E.O.React.defaultNull}
   </>;
@@ -135,7 +139,13 @@ let measurers = (~m: measurable) =>
     )
   };
 
-let series = (~m: measurable) =>
+let series = (~m: measurable, ~channelId=None, ()) => {
+  let channelId =
+    switch (channelId, m.channel) {
+    | (Some(c), _) => c
+    | (_, Some(c)) => c
+    | (_, _) => ""
+    };
   m.series
   |> E.O.bind(_, r =>
        switch (r.name) {
@@ -143,9 +153,7 @@ let series = (~m: measurable) =>
          Some(
            <div className=Shared.Item.item>
              <Foretold__Components__Link
-               linkType={
-                 Internal(SeriesShow(m.channel |> E.O.default(""), r.id))
-               }>
+               linkType={Internal(SeriesShow(channelId, r.id))}>
                <Icon.Icon icon="LAYERS" />
                {name |> ste}
              </Foretold__Components__Link>
@@ -154,6 +162,7 @@ let series = (~m: measurable) =>
        | None => None
        }
      );
+};
 
 let expectedResolutionDate = (~m: measurable) =>
   <div className=Shared.Item.item>
@@ -174,13 +183,15 @@ let archiveButton = (~m: measurable) =>
     <div className=Shared.Item.item>
       <div
         className={Shared.Item.itemButton(DANGER)}
-        onClick={e => {
-          Foretold__GraphQL.Mutations.MeasurableArchive.mutate(
-            mutation,
-            m.id,
-          );
-          ReactEvent.Synthetic.stopPropagation(e);
-        }}>
+        onClick={
+          e => {
+            Foretold__GraphQL.Mutations.MeasurableArchive.mutate(
+              mutation,
+              m.id,
+            );
+            ReactEvent.Synthetic.stopPropagation(e);
+          }
+        }>
         {"Archive" |> ste}
       </div>
     </div>
@@ -192,13 +203,15 @@ let unArchiveButton = (~m: measurable) =>
     <div className=Shared.Item.item>
       <div
         className={Shared.Item.itemButton(DANGER)}
-        onClick={e => {
-          Foretold__GraphQL.Mutations.MeasurableUnarchive.mutate(
-            mutation,
-            m.id,
-          );
-          ReactEvent.Synthetic.stopPropagation(e);
-        }}>
+        onClick={
+          e => {
+            Foretold__GraphQL.Mutations.MeasurableUnarchive.mutate(
+              mutation,
+              m.id,
+            );
+            ReactEvent.Synthetic.stopPropagation(e);
+          }
+        }>
         {"Unarchive" |> ste}
       </div>
     </div>

@@ -152,6 +152,7 @@ module LoadedAndUnselected = {
       <C.Measurables.BasicTable
         measurables
         showExtraData=true
+        channelId={Some(t.channel.id)}
         onSelect={
           e =>
             SelectWithPaginationReducer.Components.sendSelectItem(

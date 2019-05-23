@@ -42,7 +42,7 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                </Div>
              </Div>
              <Div flex=1>
-               {Items.series(~m) |> E.O.React.defaultNull}
+               {Items.series(~m, ()) |> E.O.React.defaultNull}
                {Items.creatorLink(~m) |> E.O.React.defaultNull}
                {Items.resolutionEndpoint(~m) |> E.O.React.defaultNull}
                {Items.endpointResponse(~m) |> E.O.React.defaultNull}

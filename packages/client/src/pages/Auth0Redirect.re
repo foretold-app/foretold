@@ -6,12 +6,11 @@ let ste = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("Redirecting...");
 
-let make =
-    (~me: Context.Me.me, ~layout=SLayout.FullPage.makeWithEl, _children) => {
+let make = (~loggedInUser: option(Context__Primary.User.t), _children) => {
   ...component,
   render: _ =>
-    switch (me) {
-    | WithTokensAndUserData({userData}) =>
+    switch (loggedInUser) {
+    | Some(userData) =>
       let user = userData;
       let agentId =
         user.agent |> O.fmap((e: Context.Primary.Agent.t) => e.id);

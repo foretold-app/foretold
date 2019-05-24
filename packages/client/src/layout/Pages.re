@@ -1,157 +1,53 @@
 open Context.Routing;
 open Foretold__GraphQL;
 open Rationale.Function.Infix;
-
-module Wrapper = {
-  type channelId = string;
-  type loggedInUser = Client.Context.Primary.User.t;
-
-  type t =
-    | Channel(channelId)
-    | NoChannel(loggedInUser);
-
-  let channelWrapper = (channelId, fn) =>
-    fn |> E.React.makeToEl(~key=channelId);
-
-  let noChannelSidebar = (loggedInUser, ~key="") =>
-    E.React.makeToEl
-    ||> E.React.withParent(
-          ~key,
-          Layout__Component__FillWithSidebar.make(
-            ~channelId=None,
-            ~loggedInUser,
-          ),
-        );
-
-  let noChannelSidebar2 = (loggedInUser, ~key="") =>
-    E.React.withParent(
-      ~key,
-      Layout__Component__FillWithSidebar.make(~channelId=None, ~loggedInUser),
-    );
-};
-
-module Renderer = {
-  type channelId = string;
-  type channelPage = Context.Routing.Route.channelPage;
-  type loggedInUser = Context.Primary.User.t;
-
-  type t =
-    | Channel(channelPage, loggedInUser)
-    | NoChannel;
-
-  let normal = SLayout.FullPage.makeWithEl;
-  let channelLayout = (channelPage, loggedInUser) =>
-    Channel_Layout_C.makeWithEl(channelPage, loggedInUser);
-
-  let fromRoute = (route: Context.Routing.Route.t, loggedInUser) =>
-    switch (route) {
-    | Channel(channelPage) => Channel(channelPage, loggedInUser)
-    | AgentMeasurables(_)
-    | BotCreate
-    | AgentIndex
-    | EntityShow(_)
-    | Redirect
-    | EntityIndex
-    | Profile
-    | AgentShow(_)
-    | AgentBots(_)
-    | ChannelIndex
-    | MeasurableEdit(_)
-    | _ => NoChannel
-    };
-
-  let toComponent = t =>
-    switch (t) {
-    | Channel(channelPage, loggedInUser) =>
-      channelLayout(channelPage, loggedInUser)
-    | NoChannel => normal
-    };
-};
-
-let showHomeIfNoUser =
-    (
-      fn: Context.Primary.User.t => ReasonReact.reactElement,
-      loggedInUser: option(Context.Primary.User.t),
-    ) =>
-  loggedInUser |> E.O.fmap(fn) |> E.O.default(<Home />);
-
-module LayoutWrapper = {
-
-let standard =
-    (
-      loggedInUser,
-      make:
-        (
-          ~layout: 'a => ReasonReact.reactElement=?,
-          ReasonReact.reactElement
-        ) =>
-        'b
-    ) =>
-  make(~layout=Renderer.normal)
-  |> Wrapper.noChannelSidebar(~key="", loggedInUser);
-
-}
-
-let justPageParams = (make, pageParams, loggedInUser) =>{
-    let makeWithUser = loggedInUser => (make(~pageParams) |> LayoutWrapper.standard(loggedInUser));
-    showHomeIfNoUser(makeWithUser,loggedInUser);
-  }
-
-let justLoggedInUser = (make, loggedInUser) =>{
-    let makeWithUser = loggedInUser => (make(~loggedInUser) |> LayoutWrapper.standard(loggedInUser));
-    showHomeIfNoUser(makeWithUser,loggedInUser);
-  }
-
-let pageParamsAndUser = (make, pageParams, loggedInUser) =>{
-    let makeWithUser = loggedInUser => (make(~pageParams, ~loggedInUser) |> LayoutWrapper.standard(loggedInUser));
-    showHomeIfNoUser(makeWithUser,loggedInUser);
-  }
-
-let noParams = (make, loggedInUser) =>{
-    let makeWithUser = loggedInUser => (make |> LayoutWrapper.standard(loggedInUser));
-    showHomeIfNoUser(makeWithUser,loggedInUser);
-  }
+open PageConfig;
 
 module EntityShow' = {
-  let toEl = EntityShow.make |> justPageParams
+  let toEl = EntityShow.make |> LoggedInPage.justPageParams;
 };
 
 module AgentMeasurables' = {
-  let toEl = AgentMeasurables.make |> pageParamsAndUser
+  let toEl = AgentMeasurables.make |> LoggedInPage.pageParamsAndUser;
 };
 
 module BotCreate' = {
-  let toEl = BotCreate.make |> noParams
+  let toEl = BotCreate.make |> LoggedInPage.noParams;
 };
 
 module AgentIndex' = {
-  let toEl = AgentIndex.make |> noParams
+  let toEl = AgentIndex.make |> LoggedInPage.noParams;
 };
 
 module AgentShow' = {
-  let toEl = AgentShow.make |> justPageParams
+  let toEl = AgentShow.make |> LoggedInPage.justPageParams;
 };
 
 module Profile' = {
-  let toEl = Profile.make |> justLoggedInUser
+  let toEl = Profile.make |> LoggedInPage.justLoggedInUser;
 };
 
 module AgentBots' = {
-  let toEl = AgentBots.make |> justPageParams
+  let toEl = AgentBots.make |> LoggedInPage.justPageParams;
 };
 
 module ChannelIndex' = {
-  let toEl = ChannelIndex.make |> justLoggedInUser
+  let toEl = ChannelIndex.make |> LoggedInPage.justLoggedInUser;
 };
 
 module ChannelNew' = {
-  let toEl = ChannelNew.make |> noParams
+  let toEl = ChannelNew.make |> LoggedInPage.noParams;
 };
 
 module MeasurableEdit' = {
-  let toEl = MeasurableEdit.make |> justPageParams
+  let toEl = MeasurableEdit.make |> LoggedInPage.justPageParams;
 };
 
 module EntityIndex' = {
-  let toEl = EntityIndex.make |> noParams
+  let toEl = EntityIndex.make |> LoggedInPage.noParams;
+};
+
+module Auth0Redirect' = {
+  let toEl = loggedInUser =>
+    Auth0Redirect.make(~loggedInUser) |> E.React.makeToEl;
 };

@@ -228,6 +228,12 @@ module Agent = {
     | None => None
     };
 
+  let firstMembership = (t: t) =>
+    t.channelMemberships |> E.A.O.defaultEmpty |> E.A.get(_, 0);
+
+  let firstChannel = (t: t) =>
+    t |> firstMembership |> E.O.bind(_, r => r.channel);
+
   let make =
       (
         ~id,

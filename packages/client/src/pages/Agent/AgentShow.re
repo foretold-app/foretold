@@ -28,10 +28,11 @@ let agentSection = (e: Queries.Agent.agent) =>
 
 let component = ReasonReact.statelessComponent("AgentShow");
 
-let make = (~id: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
+type pageParams = {id: string};
+let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>
-    Queries.Agent.component(~id, ({agent, measurables}) =>
+    Queries.Agent.component(~id=pageParams.id, ({agent, measurables}) =>
       SLayout.LayoutConfig.make(
         ~head=agentSection(agent),
         ~body=

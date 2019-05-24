@@ -56,10 +56,11 @@ module Columns = {
   let all = [|nameColumn, descriptionColumn, tokenColumn|];
 };
 
-let make = (~id: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
+type pageParams = {id: string};
+let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>
-    Queries.Agent.component(~id, ({agent}) =>
+    Queries.Agent.component(~id=pageParams.id, ({agent}) =>
       Queries.Bots.component(bots =>
         SLayout.LayoutConfig.make(
           ~head=agentSection(agent),

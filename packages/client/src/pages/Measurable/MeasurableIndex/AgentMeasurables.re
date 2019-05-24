@@ -14,9 +14,10 @@ module SelectWithPaginationReducer =
   SelectWithPaginationReducerFunctor.Make(GetMeasurablesReducerConfig);
 
 let component = ReasonReact.statelessComponent("AgentMeasurables");
+type pageParams = {id: string};
 let make =
     (
-      ~id: string,
+      ~pageParams: pageParams,
       ~loggedInUser: Context.Primary.User.t,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
@@ -26,7 +27,7 @@ let make =
     let lmake = SLayout.LayoutConfig.make;
     SelectWithPaginationReducer.make(
       ~itemsPerPage=20,
-      ~callFnParams=id,
+      ~callFnParams=pageParams.id,
       ~subComponent=selectWithPaginationParams =>
       lmake(
         ~head=

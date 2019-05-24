@@ -23,6 +23,7 @@ let accentBlueO8 = "#8C9EB540"->r;
 let accentBlue1a = "#8c9eb530"->r;
 let mainBlue = "#347296"->r;
 let link = "#4a72b7"->r;
+let linkAccent = "#437bff"->r;
 let darkLink = "#1a2e45"->r;
 let darkAccentBlue = "#5C6E95"->r;
 let grey1 = "#868686"->r;

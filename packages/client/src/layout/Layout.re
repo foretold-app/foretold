@@ -2,36 +2,18 @@ open Context.Routing;
 open Foretold__GraphQL;
 open Rationale.Function.Infix;
 open Pages;
-/*
- let defaultPage = (loggedInUser: Context.Primary.User.t, layout) => {
-   let firstUserChannel =
-     loggedInUser.agent
-     |> E.O.bind(_, (a: Context.Primary.Agent.t) => a.channelMemberships)
-     |> E.A.O.defaultEmpty
-     |> E.A.get(_, 0)
-     |> E.O.bind(_, (r: Context.Primary.Types.channelMembership) => r.channel);
 
-   let sidebar =
-     Layout__Component__FillWithSidebar.make(
-       ~channelId=
-         firstUserChannel
-         |> E.O.fmap((c: Context.Primary.Types.channel) => c.id),
-       ~loggedInUser,
-     );
-
-   let inApp = (~key="") =>
-     E.React.makeToEl ||> E.React.withParent(~key, sidebar);
-
-   /* This should always be Some */
-   switch (firstUserChannel) {
-   | Some({id: channelIdSome}) =>
-     Channel_Layout.makeWithPage(
-       {channelId: channelIdSome, subPage: Measurables("")},
-       loggedInUser,
+let defaultPage = (loggedInUser: option(Context.Primary.User.t)) =>
+  loggedInUser
+  |> E.O.bind(_, loggedInUser =>
+       loggedInUser.agent
+       |> E.O.bind(_, Context.Primary.Agent.firstChannel)
+       |> E.O.fmap((channel: Context.Primary.Types.channel) => {
+            Context.Routing.Url.push(ChannelShow(channel.id));
+            <Home />;
+          })
      )
-   | _ => ChannelIndex.make(~loggedInUser, ~layout) |> inApp
-   };
- }; */
+  |> E.O.default(<Home />);
 
 let meToUser = (me: Context.Me.me) =>
   switch (me) {
@@ -42,7 +24,7 @@ let meToUser = (me: Context.Me.me) =>
 let toRoutePage = (route: Route.t, me: Context.Me.me) => {
   let loggedInUser = meToUser(me);
   switch (route) {
-  | Home => <Home />
+  | Home => defaultPage(loggedInUser)
   | Login => <Login />
   | Channel(channel) => Channel_Layout.makeWithPage(channel, loggedInUser)
   | Redirect => Auth0Redirect'.toEl(loggedInUser)

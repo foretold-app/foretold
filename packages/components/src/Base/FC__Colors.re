@@ -55,16 +55,3 @@ module Text = {
     let active = "#3562AE"->r;
   };
 };
-
-module LinkOnHover = {
-  let sameColor = a => (a, a);
-  let darker = a =>
-    switch (a) {
-    | r when r == primary => grey1
-    };
-};
-
-module CssM = {
-  let colors = (~primary, ~onHover=primary, ()) =>
-    Css.[color(primary), hover([color(onHover)])];
-};

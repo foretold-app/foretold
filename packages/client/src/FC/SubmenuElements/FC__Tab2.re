@@ -15,7 +15,7 @@ let styles = (~isDisabled=false, ~heightPadding=2, ()) => {
 };
 
 let component = ReasonReact.statelessComponent("Tab2");
-let make = (~isActive, ~number: option(int)=?, children) => {
+let make = (~isActive, ~onClick=?, ~number: option(int)=?, children) => {
   ...component,
   render: _self => {
     let textStyle =
@@ -41,6 +41,7 @@ let make = (~isActive, ~number: option(int)=?, children) => {
       );
 
     <Link
+      ?onClick
       className=Css.(
         style(
           [BaseStyles.floatLeft, padding2(~v=`em(0.7), ~h=`em(1.2))]

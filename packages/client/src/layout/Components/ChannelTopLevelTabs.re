@@ -33,27 +33,11 @@ module TabTypes = {
 
 module Component = {
   open TabTypes;
-  module Styles = {
-    open Css;
-    let tab = isActive => {
-      let stylee = [
-        float(`left),
-        fontSize(`em(1.1)),
-        color(isActive ? `hex("2595ed") : `hex("848484")),
-        padding2(~v=`em(0.5), ~h=`em(0.7)),
-      ];
-      style(
-        isActive ?
-          [borderBottom(`px(4), `solid, `hex("1a90ec")), ...stylee] :
-          stylee,
-      );
-    };
-  };
 
   let tab = (isActive, interalUrl, str) =>
-    <C.Link className={Styles.tab(isActive)} linkType={Internal(interalUrl)}>
+    <FC.Tab isActive onClick={C.Link.LinkType.onClick(Internal(interalUrl))}>
       {str |> ste}
-    </C.Link>;
+    </FC.Tab>;
 
   let tabs = (o: t, channel: Context.Primary.Channel.t) =>
     <div>

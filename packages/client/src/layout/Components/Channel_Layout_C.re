@@ -76,47 +76,18 @@ let make =
         ||> E.HttpResponse.withReactDefaults,
       );
 
-    let bottomHeader =
-      loadChannel(
-        E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
-          switch (topOption) {
-          | Members(r) =>
-            <Div float=`right>
-              {ChannelMemberTabs.component(loggedInUser.agent, r, channel)}
-            </Div>
-          | Options(r) =>
-            <Div float=`right> {ChannelInfoTabs.component(r, channel)} </Div>
-          | _ => E.React.null
-          }
-        )
-        ||> E.HttpResponse.withReactDefaults,
-      );
-
     <Layout__Component__FillWithSidebar
       channelId={Some(channelId)} loggedInUser>
-      <div className=Styles.header1outer>
-        <div className=Styles.container>
-          <div className=Styles.header1inner> top </div>
-        </div>
-      </div>
-      <div className=Styles.header2outer>
-        <div className=Styles.container>
-          <div className=Styles.header2inner> secondLevel </div>
-        </div>
-      </div>
+      <FC.GroupHeader> top </FC.GroupHeader>
+      <FC.GroupHeader.SubHeader> secondLevel </FC.GroupHeader.SubHeader>
       <div className=Styles.container>
         <Div flexDirection=`row styles=[SLayout.Styles.width100]>
-          <Div flex=3>
-            <MainSection>
-              <Div flexDirection=`column>
-                <Div
-                  flex=1 styles=[Css.style([Css.marginBottom(`em(1.))])]>
-                  bottomHeader
-                  head
-                </Div>
-                <Div flex=1> body </Div>
-              </Div>
-            </MainSection>
+          <Div
+            styles=[
+              Css.(style([marginTop(`em(1.0)), marginRight(`em(2.0))])),
+            ]
+            flex=3>
+            <FC.PageCard> {FC.PageCard.header(head)} body </FC.PageCard>
           </Div>
           <Div flex=1> sidebar1 </Div>
         </Div>

@@ -307,6 +307,42 @@ module Make = (Config: Config) => {
       | _ => ""
       };
 
+    let paginationItem = (t: Types.reducerParams) =>
+      switch (totalItems(t), selectionIndex(t)) {
+      | (Some(count), Some(selection)) =>
+        FC.PaginationButtons.make({
+          currentValue: Item(selection),
+          max: count,
+          pageLeft: {
+            isDisabled: !canDecrementSelection(t),
+            onClick: _ => t.send(Types.LastSelection),
+          },
+          pageRight: {
+            isDisabled: !canIncrementSelection(t),
+            onClick: _ => t.send(Types.NextSelection),
+          },
+        })
+      | _ => "" |> ste
+      };
+
+    let paginationPage = (t: Types.reducerParams) =>
+      switch (totalItems(t), upperBoundIndex(t), lowerBoundIndex(t)) {
+      | (Some(count), Some(upper), Some(lower)) =>
+        FC.PaginationButtons.make({
+          currentValue: Range(lower, upper),
+          max: count,
+          pageLeft: {
+            isDisabled: !canDecrementPage(t),
+            onClick: _ => t.send(Types.LastPage),
+          },
+          pageRight: {
+            isDisabled: !canIncrementPage(t),
+            onClick: _ => t.send(Types.NextPage),
+          },
+        })
+      | _ => "" |> ste
+      };
+
     let selectionOfX = (t: Types.reducerParams) =>
       switch (totalItems(t), selectionIndex(t)) {
       | (Some(count), Some(selection)) =>

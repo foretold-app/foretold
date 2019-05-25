@@ -149,10 +149,7 @@ module FullPage = {
 };
 
 let channelBack = (~onClick, ()) =>
-  <Antd.Button onClick className=Styles.backHover>
-    <Icon.Icon icon="ARROW_LEFT" />
-    {"Back" |> ste}
-  </Antd.Button>;
+  <FC__Button onClick> {"< Back" |> ReasonReact.string} </FC__Button>;
 
 let channelink = (c: Context.Primary.Channel.t) =>
   <Foretold__Components__Link

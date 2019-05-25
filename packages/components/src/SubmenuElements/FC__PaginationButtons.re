@@ -26,10 +26,6 @@ let _text = (t: t) => {
 };
 
 module Styles = {
-  let link = isDisabled => FC__Tag.styles(~heightPadding=5, ~isDisabled, ());
-
-  let linkColors = (Colors.darkAccentBlue, Colors.black);
-
   let buttonLabel =
     Css.(
       style([

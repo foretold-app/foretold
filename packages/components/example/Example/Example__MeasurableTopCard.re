@@ -15,9 +15,9 @@ let make =
                 BaseStyles.floatLeft,
                 Css.padding2(~v=`em(0.6), ~h=`em(1.5)),
               ]),
-            ]
-            /* <FC__Button> {"< Back" |> ReasonReact.string} </FC__Button> */
-          />
+            ]>
+            <FC__Button> {"< Back" |> ReasonReact.string} </FC__Button>
+          </Div>
           <Div float=`right>
             {
               PaginationButtons.make({

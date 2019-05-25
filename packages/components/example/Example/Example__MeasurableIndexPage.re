@@ -117,27 +117,15 @@ let make =
       PageCard.header(
         <Div>
           <Div>
-            {
-              Tag.withNumber(
-                ~isActive=true,
-                ~text="Open" |> ReasonReact.string,
-                ~number=12,
-              )
-            }
-            {
-              Tag.withNumber(
-                ~isActive=false,
-                ~text="Pending Resolution" |> ReasonReact.string,
-                ~number=18,
-              )
-            }
-            {
-              Tag.withNumber(
-                ~isActive=false,
-                ~text="Closed" |> ReasonReact.string,
-                ~number=10,
-              )
-            }
+            <Tab2 isActive=true number=12>
+              {"Open" |> ReasonReact.string}
+            </Tab2>
+            <Tab2 isActive=false number=18>
+              {"Pending Resolution" |> ReasonReact.string}
+            </Tab2>
+            <Tab2 isActive=false number=831>
+              {"Closed" |> ReasonReact.string}
+            </Tab2>
           </Div>
           <Div float=`right>
             {

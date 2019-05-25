@@ -23,6 +23,8 @@ module Styles = {
       background(Colors.white),
       Css.transition(~duration=100, "background"),
       selector(":hover", [background(Colors.lightGrayBackground)]),
+      color(Colors.link),
+      hover([color(Colors.link)]),
     ]);
 
   let actionButtonPosition =
@@ -37,9 +39,9 @@ module Styles = {
 
 let actionButton =
   Link.make(
-    ~colors=(Colors.link, Colors.link),
     ~isDisabled=false,
-    ~styles=Css.merge([Styles.actionButtonPosition, Styles.actionButton]),
+    ~className=
+      Css.(merge([Styles.actionButtonPosition, Styles.actionButton])),
   );
 
 let component = ReasonReact.statelessComponent(__MODULE__);

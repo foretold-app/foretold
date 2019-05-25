@@ -6,7 +6,7 @@ let styles = (~isDisabled=false, ~heightPadding=2, ()) => {
       style([
         padding2(~v=`px(heightPadding), ~h=`px(14)),
         BaseStyles.floatLeft,
-        borderRadius(`px(5)),
+        borderRadius(Colors.BorderRadius.medium),
         border(`px(1), `solid, Colors.accentBlueO8),
       ])
     );
@@ -16,7 +16,7 @@ let styles = (~isDisabled=false, ~heightPadding=2, ()) => {
 
 module TagLink = {
   let make =
-    Link.make(~styles=styles(~heightPadding=4, ()), ~isDisabled=false);
+    Link.make(~className=styles(~heightPadding=4, ()), ~isDisabled=false);
 };
 
 let withNumber = (~isActive, ~text, ~number: int) => {
@@ -30,17 +30,23 @@ let withNumber = (~isActive, ~text, ~number: int) => {
     );
 
   let colors =
-    isActive ?
-      (
-        Colors.Text.LightBackground.active,
-        Colors.Text.LightBackground.active,
-      ) :
-      (Colors.Text.LightBackground.main, Colors.Text.LightBackground.active);
+    Colors.Text.(
+      isActive ?
+        Css.[
+          color(LightBackground.active),
+          hover([color(LightBackground.active)]),
+        ] :
+        Css.[
+          color(LightBackground.main),
+          hover([color(LightBackground.active)]),
+        ]
+    );
 
   <Link
-    colors
-    styles=Css.(
-      style([BaseStyles.floatLeft, padding2(~v=`em(0.7), ~h=`em(1.2))])
+    className=Css.(
+      style(
+        [BaseStyles.floatLeft, padding2(~v=`em(0.7), ~h=`em(1.2))] @ colors,
+      )
     )
     isDisabled=false>
     <span className=textStyle> text </span>

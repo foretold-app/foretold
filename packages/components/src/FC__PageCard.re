@@ -3,8 +3,14 @@ let component = ReasonReact.statelessComponent(__MODULE__);
 
 let link =
   Link.make(
-    ~colors=(Colors.accentBlue, Colors.darkAccentBlue),
-    ~styles=Css.(style([marginRight(`em(2.))])),
+    ~className=
+      Css.(
+        style([
+          marginRight(`em(2.)),
+          color(Colors.accentBlue),
+          hover([color(Colors.darkAccentBlue)]),
+        ])
+      ),
   );
 
 let make = children => {

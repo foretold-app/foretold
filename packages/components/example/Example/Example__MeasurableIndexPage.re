@@ -9,9 +9,15 @@ let foo = MomentRe.momentNow();
 
 let llink =
   FC__Link.make(
-    ~colors=(`hex("384e67"), Colors.link),
     ~isDisabled=false,
-    ~styles=Css.(style([textDecoration(`underline)])),
+    ~className=
+      Css.(
+        style([
+          textDecoration(`underline),
+          color(`hex("384e67")),
+          hover([color(Colors.link)]),
+        ])
+      ),
   );
 
 let row =
@@ -58,28 +64,47 @@ let row =
     <Table.Cell flex=1 styles=[Css.(style([paddingTop(`em(0.5))]))]>
       <Div>
         <Link
-          styles=Css.(style([marginRight(`em(1.0))]))
-          colors=(Colors.textMedium, Colors.textDark)>
+          className=Css.(
+            style([
+              marginRight(`em(1.0)),
+              color(Colors.textMedium),
+              hover([color(Colors.textDark)]),
+            ])
+          )>
           {"Series A" |> ReasonReact.string}
         </Link>
-        <Link colors=(Colors.textMedium, Colors.textDark)>
+        <Link
+          className=Css.(
+            style([
+              marginRight(`em(1.0)),
+              color(Colors.textMedium),
+              hover([color(Colors.textDark)]),
+            ])
+          )>
           {"19" |> ReasonReact.string}
         </Link>
       </Div>
       <Div>
         <Link
-          colors=(Colors.textMedium, Colors.textDark)
-          styles=Css.(
+          className=Css.(
             style([
-              Css.marginRight(`em(1.0)),
-              Css.textDecoration(`underline),
+              marginRight(`em(1.0)),
+              textDecoration(`underline),
+              color(Colors.textMedium),
+              hover([color(Colors.textDark)]),
             ])
           )>
           {"Edit" |> ReasonReact.string}
         </Link>
         <Link
-          styles=Css.(style([Css.textDecoration(`underline)]))
-          colors=(Colors.textMedium, Colors.textDark)>
+          className=Css.(
+            style([
+              marginRight(`em(1.0)),
+              textDecoration(`underline),
+              color(Colors.textMedium),
+              hover([color(Colors.textDark)]),
+            ])
+          )>
           {"Archive" |> ReasonReact.string}
         </Link>
       </Div>

@@ -25,12 +25,15 @@ let component = ReasonReact.statelessComponent(__MODULE__);
 
 let link =
   FC__Link.make(
-    ~colors=(
-      FC__Colors.Text.LightBackground.main,
-      FC__Colors.Text.LightBackground.main,
-    ),
     ~isDisabled=false,
-    ~styles=Css.style([Css.marginRight(`em(2.))]),
+    ~className=
+      Css.(
+        style([
+          marginRight(`em(2.)),
+          color(FC__Colors.Text.LightBackground.main),
+          hover([color(FC__Colors.Text.LightBackground.main)]),
+        ])
+      ),
   );
 
 let make = (~links: ReasonReact.reactElement, _children) => {

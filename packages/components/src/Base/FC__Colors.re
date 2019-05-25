@@ -28,6 +28,7 @@ let darkLink = "#1a2e45"->r;
 let darkAccentBlue = "#5C6E95"->r;
 let grey1 = "#868686"->r;
 let border = "#D5D7DA"->r;
+let primary = mainBlue;
 
 module FontWeights = {
   let light = Css.fontWeight(`num(300));
@@ -36,13 +37,15 @@ module FontWeights = {
   let veryHeavy = Css.fontWeight(`num(900));
 };
 
+module BorderRadius = {
+  let medium = `px(5);
+};
+
 module Statuses = {
   let green = "#689533"->r;
   let yellow = "#C09C66"->r;
   let resolved = accentBlue;
 };
-
-let primary = mainBlue;
 
 module Text = {
   module LightBackground = {
@@ -51,4 +54,17 @@ module Text = {
     let light = accentBlue;
     let active = "#3562AE"->r;
   };
+};
+
+module LinkOnHover = {
+  let sameColor = a => (a, a);
+  let darker = a =>
+    switch (a) {
+    | r when r == primary => grey1
+    };
+};
+
+module CssM = {
+  let colors = (~primary, ~onHover=primary, ()) =>
+    Css.[color(primary), hover([color(onHover)])];
 };

@@ -49,13 +49,10 @@ module Styles = {
 };
 
 let _directionLink = (t: directionButton, icon: string, positionStyles) =>
-  <Link
-    colors=Styles.linkColors
-    isDisabled={t.isDisabled}
-    onClick={t.onClick}
-    styles={Css.merge([Styles.link(t.isDisabled), positionStyles])}>
+  <FC__Button
+    isDisabled={t.isDisabled} onClick={t.onClick} className=positionStyles>
     {icon |> ReasonReact.string}
-  </Link>;
+  </FC__Button>;
 
 let make = (t: t) =>
   <Div styles=[Styles.position]>

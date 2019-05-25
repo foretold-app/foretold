@@ -7,10 +7,7 @@ let format_standard = "LLL";
    let format_simple = "L";
    let goFormat_simple = format(format_simple); */
 
-let dist: Stats.dist = {
-  xs: ExampleCdfs.Example1.xs,
-  ys: ExampleCdfs.Example1.ys,
-};
+let cdf = ExampleCdfs.Example1.cdf;
 
 let row =
   <Table.RowLink onClick={_ => Js.log("Row Clicked")}>
@@ -19,19 +16,14 @@ let row =
       styles=[
         Css.(style([paddingTop(`em(0.6)), paddingBottom(`em(0.0))])),
       ]>
-      <FC__CdfChart__Plain
-        data={"xs": dist.xs, "ys": dist.ys}
-        minX=2.0
-        color={`hex("#d9dcdf")}
-        maxX=12.0
-      />
+      <FC__CdfChart__Plain cdf minX=2.0 color={`hex("#d9dcdf")} maxX=12.0 />
     </Table.Cell>
     <Table.Cell
       flex=1
       styles=[
         Css.(style([paddingTop(`em(0.2)), paddingBottom(`em(0.3))])),
       ]>
-      <StatSummary cdf={xs: dist.xs, ys: dist.ys} />
+      <FC__CdfChart__StatSummary cdf />
     </Table.Cell>
     <Table.Cell
       flex=1

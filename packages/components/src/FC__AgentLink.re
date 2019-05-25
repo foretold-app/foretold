@@ -1,9 +1,4 @@
-let component = ReasonReact.statelessComponent("AgentLink");
-
-module Styles = {
-  open Css;
-  let mainText = style([color(FC__Colors.accentBlue)]);
-};
+let component = ReasonReact.statelessComponent(__MODULE__);
 
 let make =
   FC__Link.make(

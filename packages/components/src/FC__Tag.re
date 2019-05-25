@@ -1,6 +1,6 @@
 open FC__Base;
 
-let tagStyles = (~isDisabled=false, ~heightPadding=2, ()) => {
+let styles = (~isDisabled=false, ~heightPadding=2, ()) => {
   let main =
     Css.(
       style([
@@ -14,12 +14,12 @@ let tagStyles = (~isDisabled=false, ~heightPadding=2, ()) => {
   isDisabled ? Css.merge([disabledStyles, main]) : main;
 };
 
-module Linktag = {
+module TagLink = {
   let make =
-    Link.make(~styles=tagStyles(~heightPadding=4, ()), ~isDisabled=false);
+    Link.make(~styles=styles(~heightPadding=4, ()), ~isDisabled=false);
 };
 
-let activeItemWithNumber = (isActive, text, number: int) => {
+let withNumber = (~isActive, ~text, ~number: int) => {
   let textStyle =
     Css.(
       style([
@@ -44,7 +44,7 @@ let activeItemWithNumber = (isActive, text, number: int) => {
     )
     isDisabled=false>
     <span className=textStyle> text </span>
-    <span className={tagStyles()}>
+    <span className={styles()}>
       {number |> string_of_int |> ReasonReact.string}
     </span>
   </Link>;

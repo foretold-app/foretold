@@ -7,6 +7,7 @@ module BaseStyles = {
   let borderNone = Css.[borderBottom(`px(0), `solid, hex("fff"))];
 };
 
+module Types = FC__Types;
 module Link = FC__Link;
 module Colors = FC__Colors;
 module Div = FC__Div;

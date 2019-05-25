@@ -26,8 +26,7 @@ let _text = (t: t) => {
 };
 
 module Styles = {
-  let link = isDisabled =>
-    FC__Simple.tagStyles(~heightPadding=5, ~isDisabled, ());
+  let link = isDisabled => FC__Tag.styles(~heightPadding=5, ~isDisabled, ());
 
   let linkColors = (Colors.darkAccentBlue, Colors.black);
 

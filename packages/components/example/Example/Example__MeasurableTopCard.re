@@ -16,7 +16,7 @@ let make =
                 Css.padding2(~v=`em(0.6), ~h=`em(1.5)),
               ]),
             ]>
-            <Simple.Linktag> {"< Back" |> ReasonReact.string} </Simple.Linktag>
+            <Tag.TagLink> {"< Back" |> ReasonReact.string} </Tag.TagLink>
           </Div>
           <Div float=`right>
             {

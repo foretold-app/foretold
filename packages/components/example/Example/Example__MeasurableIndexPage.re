@@ -1,10 +1,7 @@
 open FC;
 open Base;
 
-let dist: Stats.dist = {
-  xs: ExampleCdfs.Example1.xs,
-  ys: ExampleCdfs.Example1.ys,
-};
+let cdf = ExampleCdfs.Example1.cdf;
 
 let futureTime = 1559005200;
 
@@ -56,12 +53,7 @@ let row =
       styles=[
         Css.(style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])),
       ]>
-      <FC__CdfChart__Small
-        data={"xs": dist.xs, "ys": dist.ys}
-        minX=2.0
-        color={`hex("#d9dcdf")}
-        maxX=12.0
-      />
+      <FC__CdfChart__Small cdf minX=2.0 color={`hex("#d9dcdf")} maxX=12.0 />
     </Table.Cell>
     <Table.Cell flex=1 styles=[Css.(style([paddingTop(`em(0.5))]))]>
       <Div>
@@ -101,24 +93,24 @@ let make =
         <Div>
           <Div>
             {
-              Simple.activeItemWithNumber(
-                true,
-                "Open" |> ReasonReact.string,
-                12,
+              Tag.withNumber(
+                ~isActive=true,
+                ~text="Open" |> ReasonReact.string,
+                ~number=12,
               )
             }
             {
-              Simple.activeItemWithNumber(
-                false,
-                "Pending Resolution" |> ReasonReact.string,
-                18,
+              Tag.withNumber(
+                ~isActive=false,
+                ~text="Pending Resolution" |> ReasonReact.string,
+                ~number=18,
               )
             }
             {
-              Simple.activeItemWithNumber(
-                false,
-                "Closed" |> ReasonReact.string,
-                10,
+              Tag.withNumber(
+                ~isActive=false,
+                ~text="Closed" |> ReasonReact.string,
+                ~number=10,
               )
             }
           </Div>

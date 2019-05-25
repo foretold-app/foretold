@@ -89,17 +89,24 @@ let component = ReasonReact.statelessComponent(__MODULE__);
 
 /**
  * Shows a footer with an element (ie. name and copyright), and a list of items
- * Expects a tuple with (react element, array(react items))
  */
-let make = ((element, items)) => {
+let make =
+    (
+      ~logo: ReasonReact.reactElement,
+      ~links: array(ReasonReact.reactElement),
+      _children,
+    ) => {
   ...component,
   render: _self =>
     <div className=Styles.layoutBox>
       <div className=Styles.footerBox>
         <div className=Styles.sections>
-          <div className=Styles.element> element </div>
+          <div className=Styles.element> logo </div>
           <ul className=Styles.items>
-            ...{(items->Belt.Array.map)(item => <li> item </li>)}
+            {
+              links->Belt.Array.map(item => <li> item </li>)
+              |> ReasonReact.array
+            }
           </ul>
         </div>
       </div>

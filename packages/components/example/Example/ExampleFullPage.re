@@ -69,16 +69,14 @@ let make =
         <Div flex=2> Example__MeasurableTopCard.make </Div>
       </Div>
     </Div>
-    <Footer>
-      ...(
-           React.string({js|2019 \u00a9 Foretold|js}),
-           [|
-             <a href="#"> {React.string("About")} </a>,
-             <a href="#"> {React.string("Help")} </a>,
-             <a href="#"> {React.string("Documentation")} </a>,
-             <a href="#"> {React.string("Privacy Policy")} </a>,
-             <a href="#"> {React.string("Terms of Service")} </a>,
-           |],
-         )
-    </Footer>
+    <Footer
+      logo={React.string({js|2019 \u00a9 Foretold|js})}
+      links=[|
+        <a href="#"> {React.string("About")} </a>,
+        <a href="#"> {React.string("Help")} </a>,
+        <a href="#"> {React.string("Documentation")} </a>,
+        <a href="#"> {React.string("Privacy Policy")} </a>,
+        <a href="#"> {React.string("Terms of Service")} </a>,
+      |]
+    />
   </Div>;

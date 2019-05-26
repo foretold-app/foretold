@@ -6,10 +6,19 @@ let styles = (~isDisabled=false, ~heightPadding=4, ()) => {
         FC__Base.BaseStyles.floatLeft,
         borderRadius(FC__Colors.BorderRadius.medium),
         border(`px(1), `solid, FC__Colors.accentBlueO8),
-        hover([background(FC__Colors.border)]),
+        color(FC__Colors.textDark),
+        hover([
+          background(FC__Colors.buttonHover),
+          color(FC__Colors.textDark),
+        ]),
+        transition(
+          ~duration=FC__Colors.Transitions.standardLength,
+          "background",
+        ),
       ])
     );
-  let disabledStyles = Css.(style([background(FC__Colors.greydisabled)]));
+  let disabledStyles =
+    Css.(style([background(FC__Colors.greydisabled), opacity(0.5)]));
   isDisabled ? Css.merge([disabledStyles, main]) : main;
 };
 

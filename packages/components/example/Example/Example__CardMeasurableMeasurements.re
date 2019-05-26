@@ -49,44 +49,37 @@ let row =
 
 let make =
   <PageCard>
-    {
-      PageCard.header(
-        <Div>
-          <Div
-            styles=[
-              Css.style([
-                BaseStyles.floatLeft,
-                Css.padding3(~top=`em(0.2), ~bottom=`em(0.0), ~h=`em(1.5)),
-              ]),
-            ]>
-            <Tab isActive=true> {"Predictions" |> ReasonReact.string} </Tab>
-            <Tab isActive=false> {"Settings" |> ReasonReact.string} </Tab>
-          </Div>
-        </Div>,
-      )
-    }
-    {
-      PageCard.header(
-        <Div>
-          <Div float=`right>
-            {
-              PaginationButtons.make({
-                currentValue: Range(3, 10),
-                max: 100,
-                pageLeft: {
-                  isDisabled: false,
-                  onClick: _ => (),
-                },
-                pageRight: {
-                  isDisabled: true,
-                  onClick: _ => (),
-                },
-              })
-            }
-          </Div>
-        </Div>,
-      )
-    }
+    <PageCard.HeaderRow>
+      <Div>
+        <Div
+          styles=[
+            Css.style([BaseStyles.floatLeft, Css.paddingTop(`em(0.2))]),
+          ]>
+          <Tab isActive=true> {"Predictions" |> ReasonReact.string} </Tab>
+          <Tab isActive=false> {"Settings" |> ReasonReact.string} </Tab>
+        </Div>
+      </Div>
+      <Div>
+        <Div
+          float=`right
+          styles=[Css.style([PageCard.HeaderRow.Styles.itemTopPadding])]>
+          {
+            PaginationButtons.make({
+              currentValue: Range(3, 10),
+              max: 100,
+              pageLeft: {
+                isDisabled: false,
+                onClick: _ => (),
+              },
+              pageRight: {
+                isDisabled: true,
+                onClick: _ => (),
+              },
+            })
+          }
+        </Div>
+      </Div>
+    </PageCard.HeaderRow>
     <Div styles=[Css.style(BaseStyles.fullWidthFloatLeft)]>
       <Table.HeaderRow>
         <Table.Cell flex=2>

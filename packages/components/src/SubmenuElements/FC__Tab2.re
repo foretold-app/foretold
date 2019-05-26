@@ -22,7 +22,7 @@ let make = (~isActive, ~onClick=?, ~number: option(int)=?, children) => {
       Css.(
         style([
           BaseStyles.floatLeft,
-          marginRight(`em(0.7)),
+          marginRight(`em(0.5)),
           marginTop(`px(3)),
         ])
       );
@@ -43,10 +43,7 @@ let make = (~isActive, ~onClick=?, ~number: option(int)=?, children) => {
     <Link
       ?onClick
       className=Css.(
-        style(
-          [BaseStyles.floatLeft, padding2(~v=`em(0.7), ~h=`em(1.2))]
-          @ colors,
-        )
+        style([BaseStyles.floatLeft, marginRight(`em(1.8))] @ colors)
       )
       isDisabled=false>
       <span className=textStyle> ...children </span>

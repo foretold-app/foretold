@@ -6,7 +6,6 @@ let styles = (~isDisabled=false, ~heightPadding=4, ()) => {
         FC__Base.BaseStyles.floatLeft,
         borderRadius(FC__Colors.BorderRadius.medium),
         border(`px(1), `solid, FC__Colors.accentBlueO8),
-        hover([background(FC__Colors.border)]),
       ])
     );
   let disabledStyles = Css.(style([background(FC__Colors.greydisabled)]));

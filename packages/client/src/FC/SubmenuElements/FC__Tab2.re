@@ -44,8 +44,7 @@ let make = (~isActive, ~onClick=?, ~number: option(int)=?, children) => {
       ?onClick
       className=Css.(
         style(
-          [BaseStyles.floatLeft, padding2(~v=`em(0.7), ~h=`em(1.2))]
-          @ colors,
+          [BaseStyles.floatLeft, padding2(~v=`em(0.7), ~h=`zero)] @ colors,
         )
       )
       isDisabled=false>

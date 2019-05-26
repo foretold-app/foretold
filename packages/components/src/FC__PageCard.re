@@ -35,18 +35,56 @@ let make = children => {
 
 let defaultPadding = Css.padding2(~v=`em(0.0), ~h=`em(1.5));
 
-let header = children =>
-  <Div
-    styles=[
-      Css.(
-        style(
-          [borderBottom(`px(1), `solid, Colors.accentBlueO8)]
-          @ BaseStyles.fullWidthFloatLeft,
-        )
-      ),
-    ]>
-    children
-  </Div>;
+module HeaderRow = {
+  let component = ReasonReact.statelessComponent("PageCard HeaderRow");
+
+  module Styles = {
+    let itemTopPadding = Css.paddingTop(`em(0.9));
+    let itemBottomPadding = Css.paddingBottom(`em(0.9));
+  };
+
+  module Title = {
+    let component =
+      ReasonReact.statelessComponent("PageCard HeaderRow Title");
+
+    let make = children => {
+      ...component,
+      render: _self =>
+        <Div
+          styles=[
+            Css.(
+              style([
+                color(Colors.textDark),
+                Styles.itemBottomPadding,
+                Styles.itemTopPadding,
+                FC__Colors.FontWeights.heavy,
+              ])
+            ),
+          ]>
+          ...children
+        </Div>,
+    };
+  };
+
+  let make = children => {
+    ...component,
+    render: _self =>
+      <Div
+        styles=[
+          Css.(
+            style(
+              [
+                borderBottom(`px(1), `solid, Colors.accentBlueO8),
+                defaultPadding,
+              ]
+              @ BaseStyles.fullWidthFloatLeft,
+            )
+          ),
+        ]>
+        ...children
+      </Div>,
+  };
+};
 
 module H1 = {
   let component = ReasonReact.statelessComponent("H1");

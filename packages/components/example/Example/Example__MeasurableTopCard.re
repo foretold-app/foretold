@@ -6,37 +6,43 @@ let futureTime = 1559005200;
 
 let make =
   <PageCard>
-    {
-      PageCard.header(
-        <Div>
-          <Div
-            styles=[
-              Css.style([
-                BaseStyles.floatLeft,
-                Css.padding2(~v=`em(0.6), ~h=`em(1.5)),
-              ]),
-            ]>
-            <FC__Button> {"< Back" |> ReasonReact.string} </FC__Button>
-          </Div>
-          <Div float=`right>
-            {
-              PaginationButtons.make({
-                currentValue: Range(3, 10),
-                max: 100,
-                pageLeft: {
-                  isDisabled: false,
-                  onClick: _ => (),
-                },
-                pageRight: {
-                  isDisabled: true,
-                  onClick: _ => (),
-                },
-              })
-            }
-          </Div>
-        </Div>,
-      )
-    }
+    <PageCard.HeaderRow>
+      <Div>
+        <Div
+          styles=[
+            Css.style([
+              BaseStyles.floatLeft,
+              PageCard.HeaderRow.Styles.itemTopPadding,
+              PageCard.HeaderRow.Styles.itemBottomPadding,
+            ]),
+          ]>
+          <FC__Button> {"< Back" |> ReasonReact.string} </FC__Button>
+        </Div>
+        <Div
+          float=`right
+          styles=[
+            Css.style([
+              PageCard.HeaderRow.Styles.itemTopPadding,
+              PageCard.HeaderRow.Styles.itemBottomPadding,
+            ]),
+          ]>
+          {
+            PaginationButtons.make({
+              currentValue: Range(3, 10),
+              max: 100,
+              pageLeft: {
+                isDisabled: false,
+                onClick: _ => (),
+              },
+              pageRight: {
+                isDisabled: true,
+                onClick: _ => (),
+              },
+            })
+          }
+        </Div>
+      </Div>
+    </PageCard.HeaderRow>
     <Div
       styles=[
         Css.style(

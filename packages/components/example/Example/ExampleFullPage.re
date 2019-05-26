@@ -29,7 +29,6 @@ let make =
               width(`percent(100.)),
               paddingLeft(`em(2.)),
               paddingRight(`em(2.)),
-              boxSizing(`borderBox),
             ]
             @ BaseStyles.fullWidthFloatLeft,
           )
@@ -67,6 +66,28 @@ let make =
           </Div>
         </Div>
         <Div flex=2> Example__MeasurableTopCard.make </Div>
+      </Div>
+    </Div>
+    <Div
+      styles=[
+        Css.(
+          style(
+            [
+              marginTop(`em(2.)),
+              width(`percent(100.)),
+              paddingLeft(`em(2.)),
+              paddingRight(`em(2.)),
+              boxSizing(`borderBox),
+            ]
+            @ BaseStyles.fullWidthFloatLeft,
+          )
+        ),
+      ]>
+      <Div flexDirection=`row>
+        <Div flex=5 styles=[Css.(style([paddingRight(`em(2.0))]))]>
+          <Div> Example__MemberTableCard.make </Div>
+        </Div>
+        <Div flex=2 />
       </Div>
     </Div>
     <Footer

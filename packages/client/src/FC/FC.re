@@ -9,6 +9,7 @@ module Tab2 = FC__Tab2;
 module Table = FC__Table;
 module Footer = FC__Footer;
 module Stats = FC__Stats;
+module StateStatus = FC__StateStatus;
 
 module Charts = {
   module Large = FC__CdfChart__Large;

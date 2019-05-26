@@ -12,8 +12,6 @@ module Config = {
 
 let component = ReasonReact.statelessComponent("Page");
 
-let joinButton = channelId => C.Channel.SimpleHeader.joinChannel(channelId);
-
 let make =
     (
       channelPage: Context.Routing.Route.channelPage,
@@ -32,16 +30,32 @@ let make =
     let loadChannel =
       Foretold__GraphQL.Queries.Channel.component2(~id=channelId);
 
+    let joinButton = channelId =>
+      C.Channel.SimpleHeader.joinChannel(channelId);
+    let leaveButton = channelId =>
+      C.Channel.SimpleHeader.leaveChannel(channelId);
+
     let top =
       loadChannel(
         E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
-          <> {channelink(channel)} </>
+          <>
+            <Div float=`left> {channelink(channel)} </Div>
+            <Div float=`right>
+              {
+                Foretold__Components__Channel.SimpleHeader.newMeasurable(
+                  channel.id,
+                )
+              }
+              {
+                channel.myRole === Some(`NONE) ?
+                  joinButton(channel.id) : leaveButton(channel.id)
+              }
+            </Div>
+          </>
         )
         ||> E.HttpResponse.withReactDefaults,
       );
 
-    let leaveButton = channelId =>
-      C.Channel.SimpleHeader.leaveChannel(channelId);
     let sidebar1 =
       loadChannel(
         E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
@@ -69,9 +83,7 @@ let make =
     let secondLevel =
       loadChannel(
         E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
-          <Div>
-            {ChannelTopLevelTabs.Component.tabs(topOption, channel)}
-          </Div>
+          ChannelTopLevelTabs.Component.tabs(topOption, channel)
         )
         ||> E.HttpResponse.withReactDefaults,
       );
@@ -89,7 +101,6 @@ let make =
             flex=3>
             <FC.PageCard> {FC.PageCard.header(head)} body </FC.PageCard>
           </Div>
-          <Div flex=1> sidebar1 </Div>
         </Div>
       </div>
     </Layout__Component__FillWithSidebar>;

@@ -42,10 +42,7 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
                <>
                  <div className=block>
                    {C.Measurable.Items.link(~m)}
-                   <C.Measurable.StatusDisplay
-                     measurable=m
-                     dateDisplay=WHOLE
-                   />
+                   <C.Measurable.StatusDisplay measurable=m />
                  </div>
                  {measurements |> C.Measurements.Table.make}
                </>;

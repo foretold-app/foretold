@@ -40,7 +40,7 @@ module Component = {
     </FC.Tab>;
 
   let tabs = (o: t, channel: Context.Primary.Channel.t) =>
-    <div>
+    <>
       {tab(o == Measurables, toUrl(channel.id, Measurables), "Questions")}
       {
         tab(
@@ -65,5 +65,5 @@ module Component = {
           ),
         )
       }
-    </div>;
+    </>;
 };

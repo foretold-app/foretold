@@ -32,13 +32,7 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                    {Items.link(~m) |> E.React.inH2}
                    {Items.description(~m) |> E.O.React.defaultNull}
                  </Div>
-                 <Div flex=1>
-                   <StatusDisplay
-                     measurable=m
-                     dateDisplay=WHOLE
-                     withStatusColorSurrounding=true
-                   />
-                 </Div>
+                 <Div flex=1> <StatusDisplay measurable=m /> </Div>
                </Div>
              </Div>
              <Div flex=1>

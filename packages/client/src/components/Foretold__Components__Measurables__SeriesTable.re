@@ -79,13 +79,11 @@ let make =
                <div className=Styles.column>
                  <Foretold__Components__Measurable.StatusDisplay
                    measurable=m
-                   dateDisplay=TOP
                  />
                </div>
                <div className=Styles.column>
                  <Foretold__Components__Measurable.StatusDisplay
                    measurable=m
-                   dateDisplay=BOTTOM
                  />
                </div>
              </div>

@@ -13,30 +13,30 @@ let row =
   <Table.RowLink onClick={_ => Js.log("Row Clicked")}>
     <Table.Cell
       flex=2
-      styles=[
-        Css.(style([paddingTop(`em(0.6)), paddingBottom(`em(0.0))])),
-      ]>
+      className=Css.(
+        style([paddingTop(`em(0.6)), paddingBottom(`em(0.0))])
+      )>
       <FC__CdfChart__Plain cdf minX=2.0 color={`hex("#d9dcdf")} maxX=12.0 />
     </Table.Cell>
     <Table.Cell
       flex=1
-      styles=[
-        Css.(style([paddingTop(`em(0.2)), paddingBottom(`em(0.3))])),
-      ]>
+      className=Css.(
+        style([paddingTop(`em(0.2)), paddingBottom(`em(0.3))])
+      )>
       <FC__CdfChart__StatSummary cdf />
     </Table.Cell>
     <Table.Cell
       flex=1
-      styles=[
-        Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])),
-      ]>
+      className=Css.(
+        style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])
+      )>
       <FC__AgentLink> {"Roger Adams" |> ReasonReact.string} </FC__AgentLink>
     </Table.Cell>
     <Table.Cell
       flex=1
-      styles=[
-        Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])),
-      ]>
+      className=Css.(
+        style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])
+      )>
       <span className=Css.(style([color(FC__Colors.textMedium)]))>
         {
           MomentRe.momentWithUnix(pastTime)
@@ -89,34 +89,14 @@ let make =
     }
     <Div styles=[Css.style(BaseStyles.fullWidthFloatLeft)]>
       <Table.HeaderRow>
-        <Table.Cell
-          flex=2
-          styles=[
-            Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))])),
-          ]>
+        <Table.Cell flex=2>
           {"Prediction Distribution" |> ReasonReact.string}
         </Table.Cell>
-        <Table.Cell
-          flex=1
-          styles=[
-            Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))])),
-          ]>
+        <Table.Cell flex=1>
           {"Prediction Value" |> ReasonReact.string}
         </Table.Cell>
-        <Table.Cell
-          flex=1
-          styles=[
-            Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))])),
-          ]>
-          {"Agent" |> ReasonReact.string}
-        </Table.Cell>
-        <Table.Cell
-          flex=1
-          styles=[
-            Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))])),
-          ]>
-          {"Time" |> ReasonReact.string}
-        </Table.Cell>
+        <Table.Cell flex=1> {"Agent" |> ReasonReact.string} </Table.Cell>
+        <Table.Cell flex=1> {"Time" |> ReasonReact.string} </Table.Cell>
       </Table.HeaderRow>
       row
       row

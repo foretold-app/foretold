@@ -5,8 +5,6 @@ let cdf = ExampleCdfs.Example1.cdf;
 
 let futureTime = 1559005200;
 
-let foo = MomentRe.momentNow();
-
 let llink =
   FC__Link.make(
     ~isDisabled=false,
@@ -20,32 +18,27 @@ let llink =
       ),
   );
 
+let foo = Css.(style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))]));
 let row =
   <Table.RowLink onClick={_ => Js.log("Row Clicked")}>
-    <Table.Cell
-      flex=4
-      styles=[
-        Css.(style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])),
-      ]>
-      <div>
-        <span className=Table.Row.primaryText>
-          {"What will be the " |> ReasonReact.string}
-          {
-            llink(~href="d", [|"GDP" |> ReasonReact.string|])
-            |> ReasonReact.element
-          }
-          {" of " |> ReasonReact.string}
-          {
-            llink(~href="China", [|"China" |> ReasonReact.string|])
-            |> ReasonReact.element
-          }
-          {" in " |> ReasonReact.string}
-          {
-            llink(~href="2018", [|"2018" |> ReasonReact.string|])
-            |> ReasonReact.element
-          }
-        </span>
-      </div>
+    <Table.Cell flex=4 className=foo>
+      <span className=Table.Styles.Elements.primaryText>
+        {"What will be the " |> ReasonReact.string}
+        {
+          llink(~href="d", [|"GDP" |> ReasonReact.string|])
+          |> ReasonReact.element
+        }
+        {" of " |> ReasonReact.string}
+        {
+          llink(~href="China", [|"China" |> ReasonReact.string|])
+          |> ReasonReact.element
+        }
+        {" in " |> ReasonReact.string}
+        {
+          llink(~href="2018", [|"2018" |> ReasonReact.string|])
+          |> ReasonReact.element
+        }
+      </span>
       {
         FC__StateStatus.make(
           ~state=OPEN(MomentRe.momentWithUnix(futureTime)),
@@ -54,57 +47,23 @@ let row =
         )
       }
     </Table.Cell>
-    <Table.Cell
-      flex=2
-      styles=[
-        Css.(style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])),
-      ]>
+    <Table.Cell flex=2 className=foo>
       <FC__CdfChart__Small cdf minX=2.0 color={`hex("#d9dcdf")} maxX=12.0 />
     </Table.Cell>
-    <Table.Cell flex=1 styles=[Css.(style([paddingTop(`em(0.5))]))]>
+    <Table.Cell flex=1 className=Css.(style([paddingTop(`em(0.5))]))>
       <Div>
-        <Link
-          className=Css.(
-            style([
-              marginRight(`em(1.0)),
-              color(Colors.textMedium),
-              hover([color(Colors.textDark)]),
-            ])
-          )>
+        <Link className={Table.Styles.Elements.link(~isUnderlined=false, ())}>
           {"Series A" |> ReasonReact.string}
         </Link>
-        <Link
-          className=Css.(
-            style([
-              marginRight(`em(1.0)),
-              color(Colors.textMedium),
-              hover([color(Colors.textDark)]),
-            ])
-          )>
+        <Link className={Table.Styles.Elements.link(~isUnderlined=false, ())}>
           {"19" |> ReasonReact.string}
         </Link>
       </Div>
       <Div>
-        <Link
-          className=Css.(
-            style([
-              marginRight(`em(1.0)),
-              textDecoration(`underline),
-              color(Colors.textMedium),
-              hover([color(Colors.textDark)]),
-            ])
-          )>
+        <Link className={Table.Styles.Elements.link(~isUnderlined=true, ())}>
           {"Edit" |> ReasonReact.string}
         </Link>
-        <Link
-          className=Css.(
-            style([
-              marginRight(`em(1.0)),
-              textDecoration(`underline),
-              color(Colors.textMedium),
-              hover([color(Colors.textDark)]),
-            ])
-          )>
+        <Link className={Table.Styles.Elements.link(~isUnderlined=true, ())}>
           {"Archive" |> ReasonReact.string}
         </Link>
       </Div>
@@ -147,27 +106,11 @@ let make =
       )
     }
     <Table.HeaderRow>
-      <Table.Cell
-        flex=4
-        styles=[
-          Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))])),
-        ]>
-        {"Name & Status" |> ReasonReact.string}
-      </Table.Cell>
-      <Table.Cell
-        flex=2
-        styles=[
-          Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))])),
-        ]>
+      <Table.Cell flex=4> {"Name & Status" |> ReasonReact.string} </Table.Cell>
+      <Table.Cell flex=2>
         {"Aggregate Prediction" |> ReasonReact.string}
       </Table.Cell>
-      <Table.Cell
-        flex=1
-        styles=[
-          Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))])),
-        ]>
-        {"Details" |> ReasonReact.string}
-      </Table.Cell>
+      <Table.Cell flex=1> {"Details" |> ReasonReact.string} </Table.Cell>
     </Table.HeaderRow>
     row
     row

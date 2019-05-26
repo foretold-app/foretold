@@ -52,7 +52,6 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                  />
                </>;
              }
-             {"Predictions" |> ste |> E.React.inH2}
              {
                Queries.Measurements.component(
                  ~measurableId=m.id,

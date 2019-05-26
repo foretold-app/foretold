@@ -7,7 +7,9 @@
         "clean": "bsb -clean-world",
         "predev": "npm run build",
         "dev": "parcel example/index.html",
-        "start": "bsb -make-world -w"
+        "start": "bsb -make-world -w",
+        "cp-from-client": "/bin/cp -rf ../client/src/FC/* src/",
+        "cp-to-client": "/bin/cp -rf src/* ../client/src/FC/"
     },
     "keywords": [
         "foretold",

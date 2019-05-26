@@ -31,7 +31,7 @@ module Styles = {
     style([
       BaseStyles.floatRight,
       marginLeft(`em(2.)),
-      marginTop(`em(0.5)),
+      marginTop(`em(0.2)),
       borderRadius(`px(5)),
       padding2(~v=`em(0.5), ~h=`em(2.0)),
     ]);

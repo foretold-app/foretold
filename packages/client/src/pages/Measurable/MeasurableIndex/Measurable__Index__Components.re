@@ -14,7 +14,13 @@ module LoadedAndSelected = {
 
   let header = (t: t, send: SelectWithPaginationReducer.Types.send) =>
     <>
-      <Div float=`left>
+      <Div
+        styles=[
+          Css.style([
+            FC.Base.BaseStyles.floatLeft,
+            Css.padding2(~v=`em(0.6), ~h=`em(1.5)),
+          ]),
+        ]>
         {SelectWithPaginationReducer.Components.deselectButton(send)}
       </Div>
       <Div float=`right>
@@ -123,7 +129,7 @@ module MeasurableIndexDataState = {
       ) => {
     let lmake = SLayout.LayoutConfig.make;
     switch (state) {
-    | InvalidIndexError(channel) =>
+    | InvalidIndexError(_) =>
       lmake(~head=E.React.null, ~body="Item Not Valid" |> ste)
     | WithChannelButNotQuery(c) =>
       lmake(~head=E.React.null, ~body="Loading Query..." |> ste)
@@ -137,7 +143,7 @@ module MeasurableIndexDataState = {
         ~head=LoadedAndSelected.header(l, send),
         ~body=LoadedAndSelected.body(l),
       )
-    | WithoutChannel(channelResponse) =>
+    | WithoutChannel(_) =>
       lmake(~head=E.React.null, ~body="No channel." |> ste)
     };
   };

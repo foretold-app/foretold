@@ -16,11 +16,12 @@ let statusShow = (~measurable: Context.Primary.Measurable.t) =>
       ~fontSize=`em(0.85),
       (),
     )
-  | (_, _, _) => ReasonReact.null
+  | (_, _, _) =>
+    Js.log("Missing data in statusShow");
+    ReasonReact.null;
   };
-let component = ReasonReact.statelessComponent("MeasurableShow");
 
-let futureTime = 1559005200;
+let component = ReasonReact.statelessComponent("MeasurableShow");
 
 let make = (~measurable: Context.Primary.Measurable.t, _children) => {
   ...component,

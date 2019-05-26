@@ -296,17 +296,6 @@ module Make = (Config: Config) => {
       | None => buttonDuo(Page, params)
       };
 
-    let rangeOfX = (t: Types.reducerParams) =>
-      switch (totalItems(t), upperBoundIndex(t), lowerBoundIndex(t)) {
-      | (Some(count), Some(upper), Some(lower)) =>
-        string_of_int(lower + 1)
-        ++ "-"
-        ++ string_of_int(upper + 1)
-        ++ " of "
-        ++ string_of_int(count)
-      | _ => ""
-      };
-
     let paginationItem = (t: Types.reducerParams) =>
       switch (totalItems(t), selectionIndex(t)) {
       | (Some(count), Some(selection)) =>
@@ -341,13 +330,6 @@ module Make = (Config: Config) => {
           },
         })
       | _ => "" |> ste
-      };
-
-    let selectionOfX = (t: Types.reducerParams) =>
-      switch (totalItems(t), selectionIndex(t)) {
-      | (Some(count), Some(selection)) =>
-        string_of_int(selection + 1) ++ " of " ++ string_of_int(count)
-      | _ => ""
       };
 
     let findIndexOfId = (t: Types.reducerParams, id: string) =>

@@ -33,6 +33,7 @@ let make =
       <Div float=`right>
         {
           GroupHeader.actionButton(
+            ~variant=Secondary,
             ~href="#",
             [|"Leave Channel" |> ReasonReact.string|],
           )

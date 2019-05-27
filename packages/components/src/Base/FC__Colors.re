@@ -1,6 +1,12 @@
 /* // this is used to show hex color; */
 let removeHex = Js.String.sliceToEnd(~from=1);
 let r = c => c->removeHex->(e => `hex(e));
+type col = [ | `hex(Js.String.t)];
+
+let toS = (col: col) =>
+  switch (col) {
+  | `hex(c) => c
+  };
 
 let white = "#FFFFFF"->r;
 let black = "#000000"->r;
@@ -24,6 +30,7 @@ let accentBlueO8 = "#8C9EB540"->r;
 let accentBlue1a = "#8c9eb530"->r;
 let mainBlue = "#347296"->r;
 let link = "#4a72b7"->r;
+let linkHover = "#375ea1"->r;
 let linkAccent = "#437bff"->r;
 let darkLink = "#1a2e45"->r;
 let darkAccentBlue = "#5C6E95"->r;

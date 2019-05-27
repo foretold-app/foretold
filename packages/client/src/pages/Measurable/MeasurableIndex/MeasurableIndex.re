@@ -3,14 +3,6 @@ open Foretold__GraphQL;
 module Types = Measurable__Index__Logic;
 module Components = Measurable__Index__Components;
 
-module SearchResultsA = {
-  type query = {
-    key: string,
-    value: string,
-  };
-  type t = array(query);
-};
-
 let load3Queries = (channelId, states, itemsPerPage, fn) =>
   ((a, b, c, d) => (a, b, c, d) |> fn)
   |> E.F.flatten4Callbacks(
@@ -27,16 +19,19 @@ let load3Queries = (channelId, states, itemsPerPage, fn) =>
 let make =
     (
       ~channelId: string,
-      ~searchParams: string,
+      ~searchParams: Context.QueryParams.MeasurableIndex.query,
       ~loggedInUser: Context.Primary.User.t,
       ~itemsPerPage: int=20,
       ~layout,
     ) => {
-  let state =
-    Measurable__Index__Logic.SearchResults.fromString(searchParams).state
-    |> E.O.fmap(r => r)
-    |> E.O.default(`OPEN);
-  let loadData = load3Queries(channelId, [|state|], itemsPerPage);
+  let loadData =
+    load3Queries(
+      channelId,
+      [|
+        searchParams.state |> E.O.toExn("This should not have been possible."),
+      |],
+      itemsPerPage,
+    );
   loadData(
     ((selectWithPaginationParams, channel, query, measurablesStateStats)) =>
     Types.MeasurableIndexDataState.make({
@@ -47,6 +42,7 @@ let make =
     })
     |> Components.MeasurableIndexDataState.toLayoutInput(
          selectWithPaginationParams.send,
+         searchParams,
          measurablesStateStats,
        )
     |> layout

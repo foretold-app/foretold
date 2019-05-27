@@ -20,7 +20,7 @@ let _text = (t: t) => {
   let currentValue =
     switch (t.currentValue) {
     | Item(i) => i |> string_of_int
-    | Range(a, b) => (a |> string_of_int) ++ " - " ++ (b |> string_of_int)
+    | Range(a, b) => (a + 1 |> string_of_int) ++ " - " ++ (b |> string_of_int)
     };
   currentValue ++ " of " ++ (t.max |> string_of_int);
 };

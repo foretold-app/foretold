@@ -10,7 +10,6 @@ let agentSection = (e: Queries.Agent.agent) =>
   switch (e) {
   | {user: Some(r)} =>
     <>
-      {SLayout.Header.textDiv(r.name ++ ": Bots")}
       {
         E.React.showIf(
           e.isMe,
@@ -37,7 +36,8 @@ module Columns = {
     render: (r: record) =>
       switch (r.name, r.agent) {
       | (Some(name), Some(agent)) =>
-        <Foretold__Components__Link linkType={Internal(AgentShow(agent.id))}>
+        <Foretold__Components__Link
+          linkType={Internal(Agent({agentId: agent.id, subPage: AgentShow}))}>
           {name |> ste}
         </Foretold__Components__Link>
       | _ => ReasonReact.null
@@ -64,7 +64,10 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
       Queries.Bots.component(bots =>
         SLayout.LayoutConfig.make(
           ~head=agentSection(agent),
-          ~body=Table.fromColumns(Columns.all, bots),
+          ~body=
+            <FC.PageCard.BodyPadding>
+              {Table.fromColumns(Columns.all, bots)}
+            </FC.PageCard.BodyPadding>,
         )
         |> layout
       )

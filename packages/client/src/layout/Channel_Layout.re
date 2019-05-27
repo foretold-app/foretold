@@ -1,6 +1,6 @@
 /* TODO: Allow for cases where user is not logged in */
 let makeWithPage =
-    (channelPage: Context.Routing.Route.channelPage, loggedInUser)
+    (channelPage: Context.Routing.ChannelPage.t, loggedInUser)
     : ReasonReact.reactElement => {
   let channelId = channelPage.channelId;
   switch (loggedInUser) {

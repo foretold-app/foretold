@@ -45,7 +45,11 @@ let make =
         ~render=
           (~text, ~record, ~index) =>
             <Foretold__Components__Link
-              linkType={Internal(AgentShow(record##agentId))}>
+              linkType={
+                Internal(
+                  Agent({agentId: record##agentId, subPage: AgentShow}),
+                )
+              }>
               {record##agentName |> ste}
             </Foretold__Components__Link>,
         (),

@@ -13,6 +13,7 @@ let headerLink = (~className, ~isDisabled=false, ()) => {
         userSelect(`none),
         color(FC__Colors.Text.LightBackground.main),
         hover([color(FC__Colors.Text.LightBackground.light)]),
+        focus([textDecoration(`none)]),
       ])
     );
 

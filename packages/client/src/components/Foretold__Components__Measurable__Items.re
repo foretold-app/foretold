@@ -99,7 +99,8 @@ let creatorLink = (~m: measurable) =>
   m.creator
   |> E.O.fmap((c: Agent.t) =>
        <Foretold__Components__Link
-         linkType={Internal(AgentShow(c.id))} className=Shared.Item.item>
+         linkType={Internal(Agent({agentId: c.id, subPage: AgentShow}))}
+         className=Shared.Item.item>
          {c.name |> E.O.default("") |> ste}
        </Foretold__Components__Link>
      );

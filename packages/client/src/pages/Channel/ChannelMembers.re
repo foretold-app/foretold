@@ -56,7 +56,8 @@ module Columns = {
     render: m =>
       m.agent
       |> E.O.fmap((r: Context.Primary.Types.agent) =>
-           <Foretold__Components__Link linkType={Internal(AgentShow(r.id))}>
+           <Foretold__Components__Link
+             linkType={Internal(Agent({agentId: r.id, subPage: AgentShow}))}>
              {r.name |> E.O.default("Anonymous") |> ste}
            </Foretold__Components__Link>
          )
@@ -140,9 +141,33 @@ let make =
 
     SLayout.LayoutConfig.make(
       ~head=
-        <FC.PageCard.HeaderRow.Title>
-          {"Channel Members" |> ste}
-        </FC.PageCard.HeaderRow.Title>,
+        <>
+          <FC.Base.Div float=`left>
+            <FC.PageCard.HeaderRow.Title>
+              {"Channel Members" |> ste}
+            </FC.PageCard.HeaderRow.Title>
+          </FC.Base.Div>
+          <FC.Base.Div
+            float=`right
+            className={
+              Css.style([
+                FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+              ])
+            }>
+            <FC.Base.Button
+              variant=Primary
+              onClick={
+                e =>
+                  Foretold__Components__Link.LinkType.onClick(
+                    Internal(ChannelInvite(channelId)),
+                    e,
+                  )
+              }>
+              {"Add Members" |> ste}
+            </FC.Base.Button>
+          </FC.Base.Div>
+        </>,
       ~body=<FC.PageCard.BodyPadding> table </FC.PageCard.BodyPadding>,
     )
     |> layout;

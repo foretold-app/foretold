@@ -86,6 +86,23 @@ module HeaderRow = {
   };
 };
 
+module BodyPadding = {
+  let component = ReasonReact.statelessComponent("Card Body");
+  let make = children => {
+    ...component,
+    render: _self =>
+      <Div
+        styles=[
+          Css.style(
+            [Css.padding2(~v=`em(1.5), ~h=`em(1.5))]
+            @ BaseStyles.fullWidthFloatLeft,
+          ),
+        ]>
+        ...children
+      </Div>,
+  };
+};
+
 module H1 = {
   let component = ReasonReact.statelessComponent("H1");
   let make = children => {

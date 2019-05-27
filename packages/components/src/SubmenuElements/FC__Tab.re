@@ -2,14 +2,17 @@ open FC__Base;
 open Colors.Text;
 
 let activeStyles =
-  Css.[borderBottom(`px(2), `solid, LightBackground.active)];
-let activeColors = (LightBackground.active, LightBackground.active);
+  Css.[
+    borderBottom(`px(2), `solid, LightBackground.active),
+    color(LightBackground.active),
+    hover([color(LightBackground.active)]),
+  ];
 let inactiveStyles =
   Css.[
     borderBottom(`px(2), `solid, Colors.clear),
     color(LightBackground.main),
+    hover([color(LightBackground.active)]),
   ];
-let inactiveColors = (LightBackground.main, LightBackground.active);
 let allStyles =
   Css.[
     paddingBottom(`em(0.8)),
@@ -21,13 +24,13 @@ let allStyles =
   ];
 
 let component = ReasonReact.statelessComponent("Tab");
-let make = (~isActive=false, children) => {
+let make = (~isActive=false, ~onClick=?, children) => {
   ...component,
   render: _self =>
     <Link
-      colors={isActive ? activeColors : inactiveColors}
       isDisabled=false
-      styles={
+      ?onClick
+      className={
         Css.style((isActive ? activeStyles : inactiveStyles) @ allStyles)
       }>
       ...children

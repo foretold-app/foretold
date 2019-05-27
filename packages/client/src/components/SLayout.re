@@ -108,7 +108,8 @@ module LargeCard = {
 };
 module Header = {
   let component = ReasonReact.statelessComponent("Header");
-  let textDiv = text => <div className=Styles.headerText> {text |> ste} </div>;
+  let textDiv = text =>
+    <FC.PageCard.HeaderRow.Title> {text |> ste} </FC.PageCard.HeaderRow.Title>;
 
   let make = children => {
     ...component,
@@ -149,10 +150,7 @@ module FullPage = {
 };
 
 let channelBack = (~onClick, ()) =>
-  <Antd.Button onClick className=Styles.backHover>
-    <Icon.Icon icon="ARROW_LEFT" />
-    {"Back" |> ste}
-  </Antd.Button>;
+  <FC__Button onClick> {"< Back" |> ReasonReact.string} </FC__Button>;
 
 let channelink = (c: Context.Primary.Channel.t) =>
   <Foretold__Components__Link

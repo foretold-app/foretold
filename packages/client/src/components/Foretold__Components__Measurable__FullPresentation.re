@@ -10,13 +10,10 @@ let component = ReasonReact.statelessComponent("MeasurableFullPresentation");
 module Styles = {
   open Css;
   let header =
-    style([
-      backgroundColor(`hex("f5f7f9")),
-      padding2(~v=`px(10), ~h=`px(13)),
-      border(`px(1), `solid, `hex("e8f2f9")),
-      borderRadius(`px(3)),
-      marginBottom(`px(10)),
-    ]);
+    style(
+      [padding2(~v=`em(1.5), ~h=`em(1.5))]
+      @ FC.Base.BaseStyles.fullWidthFloatLeft,
+    );
 };
 
 let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
@@ -25,21 +22,13 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
     Queries.MeasurableWithMeasurements.component(~id)
     |> E.F.apply(m =>
          <>
-           <Div flexDirection=`column styles=[Styles.header]>
-             <Div flex=1>
-               <Div flexDirection=`row>
-                 <Div flex=6>
-                   {Items.link(~m) |> E.React.inH2}
-                   {Items.description(~m) |> E.O.React.defaultNull}
-                 </Div>
-                 <Div flex=1>
-                   <StatusDisplay
-                     measurable=m
-                     dateDisplay=WHOLE
-                     withStatusColorSurrounding=true
-                   />
-                 </Div>
-               </Div>
+           <Div flexDirection=`row styles=[Styles.header]>
+             <Div flex=4>
+               <FC.PageCard.H1> {Items.link(~m)} </FC.PageCard.H1>
+               <StatusDisplay measurable=m />
+               <FC.PageCard.P>
+                 {Items.description(~m) |> E.O.React.defaultNull}
+               </FC.PageCard.P>
              </Div>
              <Div flex=1>
                {Items.series(~m, ()) |> E.O.React.defaultNull}
@@ -63,7 +52,6 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                  />
                </>;
              }
-             {"Predictions" |> ste |> E.React.inH2}
              {
                Queries.Measurements.component(
                  ~measurableId=m.id,

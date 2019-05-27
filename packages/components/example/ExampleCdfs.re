@@ -2003,4 +2003,5 @@ module Example1 = {
     1.0000000000000018,
     1.0000000000000018,
   |];
+  let cdf: FC__Types.Dist.t = {xs, ys};
 };

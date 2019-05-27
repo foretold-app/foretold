@@ -44,21 +44,26 @@ let make = (~channelId: string, ~layout, _children) => {
       )
       ||> E.React.el;
 
-    loadChannel(
-      E.HttpResponse.fmap(result =>
-        mutationMake((mutation, data) =>
-          form(mutation, result, ({handleSubmit, handleChange, form, _}) =>
-            CMutationForm.showWithLoading(
-              ~result=data.result,
-              ~form=ChannelForm.showForm(~form, ~handleSubmit, ~handleChange),
-              ~successMessage="Channel edited successfully.",
-              (),
+    <FC.PageCard.BodyPadding>
+      {
+        loadChannel(
+          E.HttpResponse.fmap(result =>
+            mutationMake((mutation, data) =>
+              form(mutation, result, ({handleSubmit, handleChange, form, _}) =>
+                CMutationForm.showWithLoading(
+                  ~result=data.result,
+                  ~form=
+                    ChannelForm.showForm(~form, ~handleSubmit, ~handleChange),
+                  ~successMessage="Channel edited successfully.",
+                  (),
+                )
+              )
             )
           )
+          ||> E.HttpResponse.withReactDefaults,
         )
-      )
-      ||> E.HttpResponse.withReactDefaults,
-    )
+      }
+    </FC.PageCard.BodyPadding>
     |> SLayout.LayoutConfig.make(~head=header, ~body=_)
     |> layout;
   },

@@ -296,22 +296,40 @@ module Make = (Config: Config) => {
       | None => buttonDuo(Page, params)
       };
 
-    let rangeOfX = (t: Types.reducerParams) =>
-      switch (totalItems(t), upperBoundIndex(t), lowerBoundIndex(t)) {
-      | (Some(count), Some(upper), Some(lower)) =>
-        string_of_int(lower + 1)
-        ++ "-"
-        ++ string_of_int(upper + 1)
-        ++ " of "
-        ++ string_of_int(count)
-      | _ => ""
-      };
-
-    let selectionOfX = (t: Types.reducerParams) =>
+    let paginationItem = (t: Types.reducerParams) =>
       switch (totalItems(t), selectionIndex(t)) {
       | (Some(count), Some(selection)) =>
-        string_of_int(selection + 1) ++ " of " ++ string_of_int(count)
-      | _ => ""
+        FC.PaginationButtons.make({
+          currentValue: Item(selection),
+          max: count,
+          pageLeft: {
+            isDisabled: !canDecrementSelection(t),
+            onClick: _ => t.send(Types.LastSelection),
+          },
+          pageRight: {
+            isDisabled: !canIncrementSelection(t),
+            onClick: _ => t.send(Types.NextSelection),
+          },
+        })
+      | _ => "" |> ste
+      };
+
+    let paginationPage = (t: Types.reducerParams) =>
+      switch (totalItems(t), upperBoundIndex(t), lowerBoundIndex(t)) {
+      | (Some(count), Some(upper), Some(lower)) =>
+        FC.PaginationButtons.make({
+          currentValue: Range(lower, upper),
+          max: count,
+          pageLeft: {
+            isDisabled: !canDecrementPage(t),
+            onClick: _ => t.send(Types.LastPage),
+          },
+          pageRight: {
+            isDisabled: !canIncrementPage(t),
+            onClick: _ => t.send(Types.NextPage),
+          },
+        })
+      | _ => "" |> ste
       };
 
     let findIndexOfId = (t: Types.reducerParams, id: string) =>

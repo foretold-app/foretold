@@ -16,47 +16,6 @@ module Styles = {
       color(`hex("7d7ea2")),
       marginTop(`px(6)),
     ]);
-
-  let percentiles =
-    style([
-      top(`em(0.2)),
-      right(`em(0.5)),
-      fontSize(`em(1.1)),
-      position(`absolute),
-      marginRight(`px(6)),
-      color(`hex("5d7682")),
-      display(`none),
-    ]);
-
-  let group =
-    style([
-      borderRadius(`px(2)),
-      border(`px(1), `solid, `hex("e1eaf1")),
-    ]);
-
-  let row =
-    style([
-      width(`percent(100.0)),
-      selector(" h2", [marginTop(px(2))]),
-      display(`flex),
-      flexDirection(`row),
-      backgroundColor(`hex("eaf0f5")),
-      selector(":last-child", [borderBottom(`px(0), `solid, hex("fff"))]),
-      selector(":hover", [selector(" .foo", [display(`inline)])]),
-    ]);
-
-  let axisRow =
-    style([
-      width(`percent(100.0)),
-      selector(" h2", [marginTop(px(2))]),
-      display(`flex),
-      flexDirection(`row),
-      backgroundColor(`hex("e2eaef")),
-      selector(":last-child", [borderBottom(`px(0), `solid, hex("fff"))]),
-    ]);
-
-  let axisRightColumn = style([flex(3), display(`flex)]);
-
   let mainColumn =
     style([
       flex(1),
@@ -97,12 +56,7 @@ module Styles = {
       ),
     ]);
 
-  let date =
-    style([
-      float(`right),
-      color(`rgba((35, 35, 35, 0.34))),
-      marginTop(`px(1)),
-    ]);
+  let date = style([color(`rgba((35, 35, 35, 0.34)))]);
 
   let agentStyle =
     style([color(`rgb((102, 121, 134))), fontSize(`em(1.1))]);
@@ -137,6 +91,19 @@ module Helpers = {
           {r |> E.Float.with3DigitsPrecision |> ste}
         </div>,
       )
+    | _ => None
+    };
+
+  let statSummary = (m: measurement) =>
+    switch (m.value) {
+    | Belt.Result.Ok(`FloatCdf(r)) =>
+      r
+      |> MeasurementValue.toChunks(~bucketSize=3)
+      |> MeasurementValue.FloatCdf.toJs
+      |> FC.Base.Types.Dist.fromJson
+      |> (cdf => Some(<FC__CdfChart__StatSummary cdf />))
+    | Belt.Result.Ok(`FloatPoint(r)) =>
+      Some(r |> E.Float.with3DigitsPrecision |> ste)
     | _ => None
     };
 
@@ -187,14 +154,6 @@ module Helpers = {
     | _ => None
     };
 
-  let percentile = (n, e) =>
-    Rationale.Option.Infix.(
-      floatCdf(e)
-      >>= E.FloatCdf.firstAboveValue(n)
-      <$> E.Float.with3DigitsPrecision
-      |> E.O.default("")
-    );
-
   let toChartMeasurement = (m: measurement) =>
     switch (m.value) {
     | Belt.Result.Ok(`FloatCdf(r)) =>
@@ -203,24 +162,6 @@ module Helpers = {
         E.FloatCdf.firstAboveValue(0.95, r),
       ) {
       | (Some(low), Some(high)) => Some((low, high))
-      | _ => None
-      }
-    | _ => None
-    };
-
-  let toPercentiles = (m: measurement) =>
-    switch (m.value) {
-    | Belt.Result.Ok(`FloatCdf(r)) =>
-      switch (
-        E.FloatCdf.firstAboveValue(0.05, r),
-        E.FloatCdf.firstAboveValue(0.95, r),
-      ) {
-      | (Some(low), Some(high)) =>
-        let foo =
-          E.Float.with3DigitsPrecision(low)
-          ++ " to "
-          ++ E.Float.with3DigitsPrecision(high);
-        Some(foo);
       | _ => None
       }
     | _ => None
@@ -274,6 +215,12 @@ module Helpers = {
 
 let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
 
+let primaryCellStyle =
+  Css.(style([paddingTop(`em(0.6)), paddingBottom(`em(0.0))]));
+
+let headerCellStyle =
+  Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))]));
+
 let make = (ms: list(measurement)) => {
   let _bounds = Helpers.bounds(ms |> E.A.of_list);
   let items =
@@ -297,46 +244,35 @@ let make = (ms: list(measurement)) => {
          }
        )
     |> E.L.fmap((m: measurement) =>
-         <div className=Styles.row key={m.id}>
-           <div className=Styles.mainColumn>
-             <div className=Styles.mainColumnTop>
-               {
-                 Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull
-               }
-             </div>
-             {
-               switch (Helpers.toPercentiles(m)) {
-               | Some(a) =>
-                 <div className={Styles.percentiles ++ " " ++ "foo"}>
-                   {a |> ste}
-                 </div>
-               | _ => <span />
-               }
-             }
-           </div>
-           <div className=Styles.rightColumn>
-             <div className=Styles.rightColumnInner>
-               <Div flexDirection=`column>
-                 <Div flex=1>
-                   <Div flexDirection=`row>
-                     <Div flex=4> {Helpers.measurerLink(~m)} </Div>
-                     <Div flex=1>
-                       {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
-                     </Div>
-                   </Div>
-                 </Div>
-                 <Div flex=1>
-                   {Helpers.description(~m) |> E.O.React.defaultNull}
-                 </Div>
-               </Div>
-             </div>
-           </div>
-         </div>
+         <FC.Table.Row key={m.id}>
+           <FC.Table.Cell flex=2 className=primaryCellStyle>
+             {Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull}
+           </FC.Table.Cell>
+           <FC.Table.Cell flex=1 className=primaryCellStyle>
+             {Helpers.statSummary(m) |> E.O.React.defaultNull}
+           </FC.Table.Cell>
+           <FC.Table.Cell flex=1 className=primaryCellStyle>
+             {Helpers.measurerLink(~m)}
+           </FC.Table.Cell>
+           <FC.Table.Cell flex=1 className=primaryCellStyle>
+             {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
+           </FC.Table.Cell>
+         </FC.Table.Row>
        )
     |> E.A.of_list
     |> ReasonReact.array;
   E.React.showIf(
     ms |> E.L.length > 0,
-    <div className=Styles.group> items </div>,
+    <>
+      <FC.Table.HeaderRow>
+        <FC.Table.Cell flex=2>
+          {"Prediction Distribution" |> ste}
+        </FC.Table.Cell>
+        <FC.Table.Cell flex=1> {"Prediction Value" |> ste} </FC.Table.Cell>
+        <FC.Table.Cell flex=1> {"Agent" |> ste} </FC.Table.Cell>
+        <FC.Table.Cell flex=1> {"Time" |> ste} </FC.Table.Cell>
+      </FC.Table.HeaderRow>
+      items
+    </>,
   );
 };

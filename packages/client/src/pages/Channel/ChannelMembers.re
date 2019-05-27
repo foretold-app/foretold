@@ -79,29 +79,31 @@ module Columns = {
       name: "Change Role" |> ste,
       render: m =>
         <div>
-          {switch (m.role, m.agent) {
-           | (`VIEWER, Some(agent)) =>
-             E.React.showIf(
-               canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
-               changeRoleAction(
-                 agent.id,
-                 channelId,
-                 `ADMIN,
-                 "Change to Admin",
-               ),
-             )
-           | (`ADMIN, Some(agent)) =>
-             E.React.showIf(
-               canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
-               changeRoleAction(
-                 agent.id,
-                 channelId,
-                 `VIEWER,
-                 "Change to Viewer",
-               ),
-             )
-           | _ => <div />
-           }}
+          {
+            switch (m.role, m.agent) {
+            | (`VIEWER, Some(agent)) =>
+              E.React.showIf(
+                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
+                changeRoleAction(
+                  agent.id,
+                  channelId,
+                  `ADMIN,
+                  "Change to Admin",
+                ),
+              )
+            | (`ADMIN, Some(agent)) =>
+              E.React.showIf(
+                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
+                changeRoleAction(
+                  agent.id,
+                  channelId,
+                  `VIEWER,
+                  "Change to Viewer",
+                ),
+              )
+            | _ => <div />
+            }
+          }
         </div>,
     };
 
@@ -137,8 +139,11 @@ let make =
       );
 
     SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("Channel Members"),
-      ~body=table,
+      ~head=
+        <FC.PageCard.HeaderRow.Title>
+          {"Channel Members" |> ste}
+        </FC.PageCard.HeaderRow.Title>,
+      ~body=<FC.PageCard.BodyPadding> table </FC.PageCard.BodyPadding>,
     )
     |> layout;
   },

@@ -29,7 +29,6 @@ let make =
               width(`percent(100.)),
               paddingLeft(`em(2.)),
               paddingRight(`em(2.)),
-              boxSizing(`borderBox),
             ]
             @ BaseStyles.fullWidthFloatLeft,
           )
@@ -69,16 +68,36 @@ let make =
         <Div flex=2> Example__MeasurableTopCard.make </Div>
       </Div>
     </Div>
-    <Footer>
-      ...(
-           React.string({js|2019 \u00a9 Foretold|js}),
-           [|
-             <a href="#"> {React.string("About")} </a>,
-             <a href="#"> {React.string("Help")} </a>,
-             <a href="#"> {React.string("Documentation")} </a>,
-             <a href="#"> {React.string("Privacy Policy")} </a>,
-             <a href="#"> {React.string("Terms of Service")} </a>,
-           |],
-         )
-    </Footer>
+    <Div
+      styles=[
+        Css.(
+          style(
+            [
+              marginTop(`em(2.)),
+              width(`percent(100.)),
+              paddingLeft(`em(2.)),
+              paddingRight(`em(2.)),
+              boxSizing(`borderBox),
+            ]
+            @ BaseStyles.fullWidthFloatLeft,
+          )
+        ),
+      ]>
+      <Div flexDirection=`row>
+        <Div flex=5 styles=[Css.(style([paddingRight(`em(2.0))]))]>
+          <Div> Example__MemberTableCard.make </Div>
+        </Div>
+        <Div flex=2 />
+      </Div>
+    </Div>
+    <Footer
+      logo={React.string({js|2019 \u00a9 Foretold|js})}
+      links=[|
+        <a href="#"> {React.string("About")} </a>,
+        <a href="#"> {React.string("Help")} </a>,
+        <a href="#"> {React.string("Documentation")} </a>,
+        <a href="#"> {React.string("Privacy Policy")} </a>,
+        <a href="#"> {React.string("Terms of Service")} </a>,
+      |]
+    />
   </Div>;

@@ -3,37 +3,7 @@ module SeriesTable = Foretold__Components__Measurables__SeriesTable;
 
 module Styles = {
   open Css;
-  let group =
-    style([
-      border(`px(1), `solid, hex("eee")),
-      backgroundColor(hex("fafafa")),
-    ]);
 
-  let row = m => {
-    let statusOpacity = (measurable: Context.Primary.Measurable.t) => {
-      let state = measurable.state |> E.O.toExn("Needs state from GraphQL");
-      if (state === `JUDGED) {
-        0.55;
-      } else {
-        1.0;
-      };
-    };
-    style([
-      width(`percent(100.0)),
-      borderBottom(`px(1), `solid, hex("eee")),
-      selector(" h2", [marginTop(px(2))]),
-      display(`flex),
-      opacity(statusOpacity(m)),
-      flexDirection(`row),
-      paddingLeft(px(8)),
-      paddingRight(px(8)),
-      paddingTop(px(8)),
-      paddingBottom(px(7)),
-      cursor(`pointer),
-      selector(":last-child", [borderBottom(`px(0), `solid, hex("eee"))]),
-      selector(":hover", [backgroundColor(`hex("eef0f3"))]),
-    ]);
-  };
   let mainColumn =
     style([flex(4), display(`flex), flexDirection(`column)]);
 
@@ -63,50 +33,64 @@ module BasicTable = {
     render: _self =>
       E.React.showIf(
         measurables |> E.A.length > 0,
-        <div className=Styles.group>
+        <>
+          <FC.Table.HeaderRow>
+            <FC.Table.Cell flex=3>
+              {"Name & Status" |> ReasonReact.string}
+            </FC.Table.Cell>
+            <FC.Table.Cell flex=1>
+              {"Details" |> ReasonReact.string}
+            </FC.Table.Cell>
+          </FC.Table.HeaderRow>
           {
             measurables
             |> E.A.fmap((m: Context.Primary.Measurable.t) => {
                  let iAmOwner = m.iAmOwner == Some(true);
-                 <div
-                   className={Styles.row(m)}
-                   onClick={_e => onSelect(m)}
-                   key={m.id}>
-                   <div className=Styles.mainColumn>
-                     <div className=Styles.mainColumnTop>
-                       {Items.link(~m)}
+                 <FC.Table.RowLink onClick={_e => onSelect(m)} key={m.id}>
+                   <FC.Table.Cell
+                     flex=3
+                     className=Css.(
+                       style([
+                         paddingTop(`em(1.0)),
+                         paddingBottom(`em(0.5)),
+                       ])
+                     )>
+                     <div className=Styles.mainColumn>
+                       <div className=Styles.mainColumnTop>
+                         {Items.link(~m)}
+                       </div>
                      </div>
-                     <div className=Styles.mainColumnBottom>
-                       {
-                         E.React.showIf(
-                           showExtraData,
-                           Items.series(~m, ~channelId, ())
-                           |> E.O.React.defaultNull,
-                         )
-                       }
-                       {
-                         E.React.showIf(
-                           showExtraData,
-                           Items.creatorLink(~m) |> E.O.React.defaultNull,
-                         )
-                       }
-                       {Items.measurements(~m) |> E.O.React.defaultNull}
-                       {Items.measurers(~m) |> E.O.React.defaultNull}
-                       {E.React.showIf(iAmOwner, Items.editLink(~m))}
-                       {E.React.showIf(iAmOwner, Items.archiveOption(~m))}
+                     <div className=Styles.rightColumn>
+                       <Foretold__Components__Measurable.StatusDisplay
+                         measurable=m
+                       />
                      </div>
-                   </div>
-                   <div className=Styles.rightColumn>
-                     <Foretold__Components__Measurable.StatusDisplay
-                       measurable=m
-                       dateDisplay=WHOLE
-                     />
-                   </div>
-                 </div>;
+                   </FC.Table.Cell>
+                   <FC.Table.Cell
+                     flex=1 className=Css.(style([paddingTop(`em(0.5))]))>
+                     {
+                       E.React.showIf(
+                         showExtraData,
+                         Items.series(~m, ~channelId, ())
+                         |> E.O.React.defaultNull,
+                       )
+                     }
+                     {
+                       E.React.showIf(
+                         showExtraData,
+                         Items.creatorLink(~m) |> E.O.React.defaultNull,
+                       )
+                     }
+                     {Items.measurements(~m) |> E.O.React.defaultNull}
+                     {Items.measurers(~m) |> E.O.React.defaultNull}
+                     {E.React.showIf(iAmOwner, Items.editLink(~m))}
+                     {E.React.showIf(iAmOwner, Items.archiveOption(~m))}
+                   </FC.Table.Cell>
+                 </FC.Table.RowLink>;
                })
             |> ReasonReact.array
           }
-        </div>,
+        </>,
       ),
   };
 };

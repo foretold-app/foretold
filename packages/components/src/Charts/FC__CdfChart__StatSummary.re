@@ -8,14 +8,14 @@ module Styles = {
     style([fontSize(`em(0.9)), color(FC__Colors.accentBlue)]);
 };
 
-let make = (~cdf: Stats.dist, _children) => {
+let make = (~cdf: FC__Types.Dist.t, _children) => {
   ...component,
   render: _ =>
     <>
       <div className=Styles.mainText>
         {
           cdf
-          |> Stats.findX(0.5)
+          |> FC__Types.Dist.findX(0.5)
           |> FC__E.Float.with3DigitsPrecision
           |> ReasonReact.string
         }
@@ -23,14 +23,14 @@ let make = (~cdf: Stats.dist, _children) => {
       <div className=Styles.secondaryText>
         {
           cdf
-          |> Stats.findX(0.05)
+          |> FC__Types.Dist.findX(0.05)
           |> FC__E.Float.with3DigitsPrecision
           |> ReasonReact.string
         }
         {" to " |> ReasonReact.string}
         {
           cdf
-          |> Stats.findX(0.95)
+          |> FC__Types.Dist.findX(0.95)
           |> FC__E.Float.with3DigitsPrecision
           |> ReasonReact.string
         }

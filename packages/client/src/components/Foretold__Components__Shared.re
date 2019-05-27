@@ -4,7 +4,7 @@ module Item = {
   let item =
     style([
       float(`left),
-      fontSize(`px(12)),
+      fontSize(`em(1.0)),
       marginRight(`px(18)),
       color(`hex("bbb")),
       selector(

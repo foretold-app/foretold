@@ -14,28 +14,26 @@ module LoadedAndSelected = {
 
   let header = (t: t, send: SelectWithPaginationReducer.Types.send) =>
     <>
-      <Div float=`left>
+      <Div
+        float=`left
+        styles=[
+          Css.style([
+            FC.PageCard.HeaderRow.Styles.itemTopPadding,
+            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+          ]),
+        ]>
         {SelectWithPaginationReducer.Components.deselectButton(send)}
       </Div>
-      <Div float=`right>
-        <Div
-          float=`left
-          styles=[
-            Css.style([
-              Css.marginTop(`em(0.5)),
-              Css.marginRight(`em(0.4)),
-            ]),
-          ]>
-          {
-            SelectWithPaginationReducer.Components.selectionOfX(
-              t.reducerParams,
-            )
-            |> ste
-          }
-        </Div>
+      <Div
+        float=`right
+        styles=[
+          Css.style([
+            FC.PageCard.HeaderRow.Styles.itemTopPadding,
+            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+          ]),
+        ]>
         {
-          SelectWithPaginationReducer.Components.buttonDuo(
-            Item,
+          SelectWithPaginationReducer.Components.paginationItem(
             t.reducerParams,
           )
         }
@@ -52,30 +50,20 @@ module LoadedAndSelected = {
 
 module LoadedAndUnselected = {
   open Measurable__Index__Logic.LoadedAndUnselected;
-  module Styles = {
-    open Css;
-    let stateLink =
-      [
-        color(`hex("262626")),
-        marginRight(`em(2.)),
-        marginTop(`em(0.5)),
-        float(`left),
-        focus([textDecoration(`none)]),
-        hover([color(`hex("262626"))]),
-      ]
-      |> style;
-  };
+
   let stateLink = (state, text, num: int) =>
-    <Foretold__Components__Link
-      className=Styles.stateLink
-      linkType={
-        External(
-          SearchResults.make(Some(state)) |> SearchResults.toUrlParams,
+    <FC.Tab2
+      isActive=false
+      number=num
+      onClick={
+        Foretold__Components__Link.LinkType.onClick(
+          External(
+            SearchResults.make(Some(state)) |> SearchResults.toUrlParams,
+          ),
         )
       }>
       {text |> ste}
-      {" - " ++ (num |> string_of_int) |> ste}
-    </Foretold__Components__Link>;
+    </FC.Tab2>;
 
   let header =
       (
@@ -88,7 +76,14 @@ module LoadedAndUnselected = {
         {
           switch (stats) {
           | Success(Some(r)) =>
-            <>
+            <Div
+              float=`left
+              styles=[
+                Css.style([
+                  FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                  FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+                ]),
+              ]>
               {stateLink(`OPEN, "Open", r.openTotal)}
               {
                 stateLink(
@@ -98,46 +93,26 @@ module LoadedAndUnselected = {
                 )
               }
               {stateLink(`JUDGED, "Closed", r.closedTotal)}
-            </>
+            </Div>
           | _ => <> </>
           }
         }
       </Div>
-      <Div float=`right>
-        <Div
-          float=`left
-          styles=[
-            Css.style([
-              Css.marginTop(`em(0.5)),
-              Css.marginRight(`em(0.4)),
-            ]),
-          ]>
-          {
-            SelectWithPaginationReducer.Components.rangeOfX(t.reducerParams)
-            |> ste
-          }
-        </Div>
-        <Div float=`left>
-          {
-            SelectWithPaginationReducer.Components.buttonDuo(
-              Page,
-              t.reducerParams,
-            )
-          }
-        </Div>
+      <Div
+        float=`right
+        styles=[
+          Css.style([
+            FC.PageCard.HeaderRow.Styles.itemTopPadding,
+            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+          ]),
+        ]>
+        {
+          SelectWithPaginationReducer.Components.paginationPage(
+            t.reducerParams,
+          )
+        }
       </Div>
     </Div>;
-
-  /* let seriesList = (t: t) =>
-     <>
-       {"Series List" |> ste |> E.React.inH2}
-       {
-         C.SeriesCollection.SeriesCards.make(
-           t.channel.id,
-           filteredSeriesCollection(t),
-         )
-       }
-     </>; */
 
   let body = (t: t, send: SelectWithPaginationReducer.Types.send) => {
     let measurables =
@@ -176,7 +151,7 @@ module MeasurableIndexDataState = {
       ) => {
     let lmake = SLayout.LayoutConfig.make;
     switch (state) {
-    | InvalidIndexError(channel) =>
+    | InvalidIndexError(_) =>
       lmake(~head=E.React.null, ~body="Item Not Valid" |> ste)
     | WithChannelButNotQuery(c) =>
       lmake(~head=E.React.null, ~body="Loading Query..." |> ste)
@@ -190,7 +165,7 @@ module MeasurableIndexDataState = {
         ~head=LoadedAndSelected.header(l, send),
         ~body=LoadedAndSelected.body(l),
       )
-    | WithoutChannel(channelResponse) =>
+    | WithoutChannel(_) =>
       lmake(~head=E.React.null, ~body="No channel." |> ste)
     };
   };

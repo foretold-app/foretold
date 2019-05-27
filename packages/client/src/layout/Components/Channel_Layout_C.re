@@ -12,8 +12,6 @@ module Config = {
 
 let component = ReasonReact.statelessComponent("Page");
 
-let joinButton = channelId => C.Channel.SimpleHeader.joinChannel(channelId);
-
 let make =
     (
       channelPage: Context.Routing.Route.channelPage,
@@ -32,16 +30,32 @@ let make =
     let loadChannel =
       Foretold__GraphQL.Queries.Channel.component2(~id=channelId);
 
+    let joinButton = channelId =>
+      C.Channel.SimpleHeader.joinChannel(channelId);
+    let leaveButton = channelId =>
+      C.Channel.SimpleHeader.leaveChannel(channelId);
+
     let top =
       loadChannel(
         E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
-          <> {channelink(channel)} </>
+          <>
+            <Div float=`left> {channelink(channel)} </Div>
+            <Div float=`right>
+              {
+                Foretold__Components__Channel.SimpleHeader.newMeasurable(
+                  channel.id,
+                )
+              }
+              {
+                channel.myRole === Some(`NONE) ?
+                  joinButton(channel.id) : leaveButton(channel.id)
+              }
+            </Div>
+          </>
         )
         ||> E.HttpResponse.withReactDefaults,
       );
 
-    let leaveButton = channelId =>
-      C.Channel.SimpleHeader.leaveChannel(channelId);
     let sidebar1 =
       loadChannel(
         E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
@@ -69,56 +83,27 @@ let make =
     let secondLevel =
       loadChannel(
         E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
-          <Div>
-            {ChannelTopLevelTabs.Component.tabs(topOption, channel)}
-          </Div>
-        )
-        ||> E.HttpResponse.withReactDefaults,
-      );
-
-    let bottomHeader =
-      loadChannel(
-        E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
-          switch (topOption) {
-          | Members(r) =>
-            <Div float=`right>
-              {ChannelMemberTabs.component(loggedInUser.agent, r, channel)}
-            </Div>
-          | Options(r) =>
-            <Div float=`right> {ChannelInfoTabs.component(r, channel)} </Div>
-          | _ => E.React.null
-          }
+          ChannelTopLevelTabs.Component.tabs(topOption, channel)
         )
         ||> E.HttpResponse.withReactDefaults,
       );
 
     <Layout__Component__FillWithSidebar
       channelId={Some(channelId)} loggedInUser>
-      <div className=Styles.header1outer>
-        <div className=Styles.container>
-          <div className=Styles.header1inner> top </div>
-        </div>
-      </div>
-      <div className=Styles.header2outer>
-        <div className=Styles.container>
-          <div className=Styles.header2inner> secondLevel </div>
-        </div>
-      </div>
+      <FC.GroupHeader> top </FC.GroupHeader>
+      <FC.GroupHeader.SubHeader> secondLevel </FC.GroupHeader.SubHeader>
       <div className=Styles.container>
         <Div flexDirection=`row styles=[SLayout.Styles.width100]>
-          <Div flex=3>
-            <MainSection>
-              <Div flexDirection=`column>
-                <Div
-                  flex=1 styles=[Css.style([Css.marginBottom(`em(1.))])]>
-                  bottomHeader
-                  head
-                </Div>
-                <Div flex=1> body </Div>
-              </Div>
-            </MainSection>
+          <Div
+            styles=[
+              Css.(style([marginTop(`em(1.0)), marginRight(`em(2.0))])),
+            ]
+            flex=3>
+            <FC.PageCard>
+              <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
+              body
+            </FC.PageCard>
           </Div>
-          <Div flex=1> sidebar1 </Div>
         </Div>
       </div>
     </Layout__Component__FillWithSidebar>;

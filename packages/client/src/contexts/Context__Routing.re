@@ -1,22 +1,41 @@
-module Route = {
-  type seriesId = string;
-  type channelId = string;
-  type measurablesSearchString = string;
+type channelId = string;
+type seriesId = string;
+type measurablesSearchString = string;
+type agentId = string;
 
-  type channelSubPage =
-    | Measurables(measurablesSearchString)
-    | NewMeasurable
-    | Members
-    | InviteNewMember
-    | Settings
-    | NewSeries
-    | Series(seriesId);
-
-  type channelPage = {
-    channelId,
-    subPage: channelSubPage,
+module AgentPage = {
+  module SubPage = {
+    type t =
+      | AgentShow
+      | AgentMeasurables
+      | AgentBots;
   };
 
+  type t = {
+    agentId,
+    subPage: SubPage.t,
+  };
+};
+
+module ChannelPage = {
+  module SubPage = {
+    type t =
+      | Measurables(measurablesSearchString)
+      | NewMeasurable
+      | Members
+      | InviteNewMember
+      | Settings
+      | NewSeries
+      | Series(seriesId);
+  };
+
+  type t = {
+    channelId,
+    subPage: SubPage.t,
+  };
+};
+
+module Route = {
   type t =
     | Home
     | AgentIndex
@@ -26,10 +45,8 @@ module Route = {
     | BotCreate
     | EntityShow(string)
     | EntityIndex
-    | AgentShow(string)
-    | AgentMeasurables(string)
-    | AgentBots(string)
-    | Channel(channelPage)
+    | Channel(ChannelPage.t)
+    | Agent(AgentPage.t)
     | ChannelIndex
     | ChannelNew
     | MeasurableEdit(string)
@@ -47,9 +64,6 @@ module Route = {
     | ["redirect"] => Redirect
     | ["agents"] => AgentIndex
     | ["profile"] => Profile
-    | ["agents", id] => AgentShow(id)
-    | ["agents", id, "bots"] => AgentBots(id)
-    | ["agents", id, "measurables"] => AgentMeasurables(id)
     | ["entities"] => EntityIndex
     | ["entities", ...id] => EntityShow(String.concat("/", id))
     | ["channels", "new"] => ChannelNew
@@ -66,6 +80,10 @@ module Route = {
       Channel({channelId, subPage: NewSeries})
     | ["c", channelId, "s", seriesId] =>
       Channel({channelId, subPage: Series(seriesId)})
+    | ["agents", agentId] => Agent({agentId, subPage: AgentShow})
+    | ["agents", agentId, "bots"] => Agent({agentId, subPage: AgentBots})
+    | ["agents", agentId, "measurables"] =>
+      Agent({agentId, subPage: AgentMeasurables})
     | _ => NotFound
     };
 };
@@ -78,9 +96,7 @@ module Url = {
     | EntityIndex
     | BotCreate
     | EntityShow(string)
-    | AgentShow(string)
-    | AgentMeasurables(string)
-    | AgentBots(string)
+    | Agent(AgentPage.t)
     | ChannelShow(string)
     | ChannelNew
     | ChannelIndex
@@ -100,9 +116,10 @@ module Url = {
     | BotCreate => "/bots/new"
     | EntityIndex => "/entities"
     | EntityShow(id) => "/entities/" ++ id
-    | AgentShow(id) => "/agents/" ++ id
-    | AgentBots(id) => "/agents/" ++ id ++ "/bots"
-    | AgentMeasurables(id) => "/agents/" ++ id ++ "/measurables"
+    | Agent({agentId, subPage: AgentShow}) => "/agents/" ++ agentId
+    | Agent({agentId, subPage: AgentBots}) => "/agents/" ++ agentId ++ "/bots"
+    | Agent({agentId, subPage: AgentMeasurables}) =>
+      "/agents/" ++ agentId ++ "/measurables"
     | ChannelNew => "/channels/" ++ "new"
     | ChannelShow(id) => "/c/" ++ id
     | ChannelIndex => "/channels"

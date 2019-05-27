@@ -56,7 +56,8 @@ module Columns = {
     render: m =>
       m.agent
       |> E.O.fmap((r: Context.Primary.Types.agent) =>
-           <Foretold__Components__Link linkType={Internal(AgentShow(r.id))}>
+           <Foretold__Components__Link
+             linkType={Internal(Agent({agentId: r.id, subPage: AgentShow}))}>
              {r.name |> E.O.default("Anonymous") |> ste}
            </Foretold__Components__Link>
          )

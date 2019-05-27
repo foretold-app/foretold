@@ -7,10 +7,6 @@ module EntityShow' = {
   let toEl = EntityShow.make |> LoggedInPage.justPageParams;
 };
 
-module AgentMeasurables' = {
-  let toEl = AgentMeasurables.make |> LoggedInPage.pageParamsAndUser;
-};
-
 module BotCreate' = {
   let toEl = BotCreate.make |> LoggedInPage.noParams;
 };
@@ -19,16 +15,8 @@ module AgentIndex' = {
   let toEl = AgentIndex.make |> LoggedInPage.noParams;
 };
 
-module AgentShow' = {
-  let toEl = AgentShow.make |> LoggedInPage.justPageParams;
-};
-
 module Profile' = {
   let toEl = Profile.make |> LoggedInPage.justLoggedInUser;
-};
-
-module AgentBots' = {
-  let toEl = AgentBots.make |> LoggedInPage.justPageParams;
 };
 
 module ChannelIndex' = {

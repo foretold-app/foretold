@@ -174,7 +174,9 @@ module Helpers = {
       | (Some(agent), Some(name)) =>
         Some(
           <Foretold__Components__Link
-            linkType={Internal(AgentShow(agent.id))}
+            linkType={
+              Internal(Agent({agentId: agent.id, subPage: AgentShow}))
+            }
             className=Styles.agentStyle>
             {name |> ste}
           </Foretold__Components__Link>,

@@ -39,9 +39,14 @@ let link = (linkType: C.Link.linkType, str) =>
 let userDropdown = agentId =>
   <div className=Layout__Dropdown.Styles.actions>
     {link(Internal(Profile), "Profile")}
-    {link(Internal(AgentMeasurables(agentId)), "My Questions")}
-    {link(Internal(AgentBots(agentId)), "My Bots")}
-    {link(Internal(AgentShow(agentId)), "My Predictions")}
+    {
+      link(
+        Internal(Agent({agentId, subPage: AgentMeasurables})),
+        "My Questions",
+      )
+    }
+    {link(Internal(Agent({agentId, subPage: AgentBots})), "My Bots")}
+    {link(Internal(Agent({agentId, subPage: AgentShow})), "My Predictions")}
     {link(Internal(ChannelNew), "Make a new Channel")}
     {link(Action(_ => Context.Auth.Actions.logout()), "Logout")}
   </div>;

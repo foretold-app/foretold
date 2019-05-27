@@ -19,7 +19,7 @@ module TabTypes = {
     | Options(_) => ChannelEdit(channelId)
     };
 
-  let fromPage = (page: Context.Routing.Route.channelPage): option(t) =>
+  let fromPage = (page: Context.Routing.ChannelPage.t): option(t) =>
     switch (page.subPage) {
     | Settings => Some(Options(Edit))
     | NewSeries => Some(Options(NewSeries))

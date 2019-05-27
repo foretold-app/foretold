@@ -17,7 +17,8 @@ let make = (~loggedInUser: option(Context__Primary.User.t), _children) => {
       let name = user.name;
       switch (name, agentId) {
       | ("", _) => Context.Routing.Url.push(Profile)
-      | (_, Some(id)) => Context.Routing.Url.push(AgentShow(id))
+      | (_, Some(id)) =>
+        Context.Routing.Url.push(Agent({agentId: id, subPage: AgentShow}))
       | _ => ()
       };
       <>

@@ -18,6 +18,11 @@ module AgentPage = {
 };
 
 module ChannelPage = {
+  type tab =
+    | Measurables
+    | Members
+    | Options;
+
   module SubPage = {
     type t =
       | Measurables(measurablesSearchString)
@@ -27,6 +32,24 @@ module ChannelPage = {
       | Settings
       | NewSeries
       | Series(seriesId);
+
+    let toTab = (t: t): tab =>
+      switch (t) {
+      | Measurables(_) => Measurables
+      | NewMeasurable => Measurables
+      | Members => Members
+      | InviteNewMember => Members
+      | Settings => Options
+      | NewSeries => Measurables
+      | Series(_) => Measurables
+      };
+
+    let fromTab = (tab: tab): t =>
+      switch (tab) {
+      | Measurables => Measurables("")
+      | Members => Members
+      | Options => Settings
+      };
   };
 
   type t = {
@@ -121,8 +144,8 @@ module Url = {
     | Agent({agentId, subPage: AgentMeasurables}) =>
       "/agents/" ++ agentId ++ "/measurables"
     | ChannelNew => "/channels/" ++ "new"
-    | ChannelShow(id) => "/c/" ++ id
     | ChannelIndex => "/channels"
+    | ChannelShow(id) => "/c/" ++ id
     | ChannelEdit(id) => "/c/" ++ id ++ "/edit"
     | ChannelMembers(id) => "/c/" ++ id ++ "/members"
     | ChannelInvite(channel) => "/c/" ++ channel ++ "/invite"
@@ -133,4 +156,15 @@ module Url = {
     };
 
   let push = (r: t) => r |> toString |> ReasonReact.Router.push;
+
+  let fromChannelPage = (t: ChannelPage.t) =>
+    switch (t.subPage) {
+    | Measurables(_) => ChannelShow(t.channelId)
+    | NewMeasurable => MeasurableNew(t.channelId)
+    | Members => ChannelMembers(t.channelId)
+    | InviteNewMember => ChannelInvite(t.channelId)
+    | Settings => ChannelEdit(t.channelId)
+    | NewSeries => SeriesNew(t.channelId)
+    | Series(id) => SeriesShow(t.channelId, id)
+    };
 };

@@ -15,10 +15,7 @@ let make =
   render: _ => {
     let channelId = channelPage.channelId;
     let topOption =
-      ChannelTopLevelTabs.TabTypes.fromPage(channelPage)
-      |> E.O.toExn(
-           "The top option should always be SOME in Channel_Layout.make",
-         );
+      Context.Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
 
     let loadChannel =
       Foretold__GraphQL.Queries.Channel.component2(~id=channelId);
@@ -44,8 +41,7 @@ let make =
         </Div>
       </>;
 
-    let secondLevel = channel =>
-      ChannelTopLevelTabs.Component.tabs(topOption, channel);
+    let secondLevel = channel => ChannelTabs.make(topOption, channel);
 
     let headers =
       loadChannel(

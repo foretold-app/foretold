@@ -22,8 +22,7 @@ module Styles = {
       BaseStyles.floatRight,
       marginLeft(`em(2.)),
       marginTop(`em(0.2)),
-      borderRadius(`px(5)),
-      padding2(~v=`em(0.5), ~h=`em(2.0)),
+      padding2(~v=`em(0.4), ~h=`em(1.8)),
     ]);
 };
 

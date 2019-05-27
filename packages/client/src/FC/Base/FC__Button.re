@@ -42,7 +42,7 @@ let styles = (~isDisabled=false, ~variant: variant, ~heightPadding=4, ()) => {
     Css.(
       style([
         padding2(~v=`px(heightPadding), ~h=`px(14)),
-        FC__Base.BaseStyles.floatLeft,
+        FC__BaseStyles.floatLeft,
         borderRadius(FC__Colors.BorderRadius.medium),
         border(`px(1), `solid, `hex(colors.border)),
         color(`hex(colors.text)),

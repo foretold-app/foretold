@@ -106,6 +106,8 @@ module Route = {
     | ["c", channelId, "new"] => Channel({channelId, subPage: NewMeasurable})
     | ["c", channelId, "edit"] => Channel({channelId, subPage: Settings})
     | ["c", channelId, "members"] => Channel({channelId, subPage: Members})
+    | ["c", channelId, "invite"] =>
+      Channel({channelId, subPage: InviteNewMember})
     | ["c", channelId, "s", "new"] =>
       Channel({channelId, subPage: NewSeries})
     | ["c", channelId, "s", seriesId] =>

@@ -22,7 +22,34 @@ let make = (~channelId: string, ~layout, _children) => {
     let mutationMake =
       Mutation.Mutation.make(~onCompleted=_ => ()) ||> E.React.el;
 
-    let header = SLayout.Header.textDiv("Edit Channel");
+    let header =
+      <>
+        <FC.Base.Div float=`left>
+          <FC.PageCard.HeaderRow.Title>
+            {"Edit Channel" |> ste}
+          </FC.PageCard.HeaderRow.Title>
+        </FC.Base.Div>
+        <FC.Base.Div
+          float=`right
+          className={
+            Css.style([
+              FC.PageCard.HeaderRow.Styles.itemTopPadding,
+              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            ])
+          }>
+          <FC.Base.Button
+            variant=Primary
+            onClick={
+              e =>
+                Foretold__Components__Link.LinkType.onClick(
+                  Internal(SeriesNew(channelId)),
+                  e,
+                )
+            }>
+            {"New Series" |> ste}
+          </FC.Base.Button>
+        </FC.Base.Div>
+      </>;
 
     let form = (mutation, channel: Context.Primary.Channel.t) =>
       ChannelFormShower.make(

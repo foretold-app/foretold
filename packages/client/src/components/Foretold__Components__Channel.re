@@ -44,6 +44,7 @@ module SimpleHeader = {
   let leaveChannel = (channelId: string) =>
     Foretold__GraphQL.Mutations.ChannelLeave.Mutation.make((mutation, _) =>
       FC.GroupHeader.actionButton(
+        ~variant=Secondary,
         ~onClick=
           _ =>
             Foretold__GraphQL.Mutations.ChannelLeave.mutate(

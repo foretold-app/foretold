@@ -17,31 +17,20 @@ module Styles = {
       @ BaseStyles.fullWidthFloatLeft,
     );
 
-  let actionButton =
-    style([
-      border(`px(1), `solid, `hex("c7cfdb")),
-      background(Colors.white),
-      Css.transition(~duration=100, "background"),
-      selector(":hover", [background(Colors.lightGrayBackground)]),
-      color(Colors.link),
-      hover([color(Colors.link)]),
-    ]);
-
   let actionButtonPosition =
     style([
       BaseStyles.floatRight,
       marginLeft(`em(2.)),
       marginTop(`em(0.2)),
-      borderRadius(`px(5)),
-      padding2(~v=`em(0.5), ~h=`em(2.0)),
+      padding2(~v=`em(0.4), ~h=`em(1.8)),
     ]);
 };
 
-let actionButton =
-  Link.make(
+let actionButton = (~variant: FC__Button.variant=Primary) =>
+  FC__Button.make(
+    ~variant,
     ~isDisabled=false,
-    ~className=
-      Css.(merge([Styles.actionButtonPosition, Styles.actionButton])),
+    ~className=Css.(merge([Styles.actionButtonPosition])),
   );
 
 let component = ReasonReact.statelessComponent(__MODULE__);

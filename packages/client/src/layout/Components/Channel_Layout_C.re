@@ -30,13 +30,16 @@ let make =
         <Div float=`left> {channelink(channel)} </Div>
         <Div float=`right>
           {
-            Foretold__Components__Channel.SimpleHeader.newMeasurable(
-              channel.id,
-            )
-          }
-          {
             channel.myRole === Some(`NONE) ?
-              joinButton(channel.id) : leaveButton(channel.id)
+              joinButton(channel.id) :
+              <>
+                {
+                  Foretold__Components__Channel.SimpleHeader.newMeasurable(
+                    channel.id,
+                  )
+                }
+                {leaveButton(channel.id)}
+              </>
           }
         </Div>
       </>;

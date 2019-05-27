@@ -14,6 +14,7 @@ let textDarker = "#333333"->r;
 let textDark = "#5f6d7d"->r;
 let textMedium = "#9a9ea7"->r;
 let smokeWhite = "#F0F1F3"->r;
+let buttonHover = "#e4ecf5"->r;
 let lightGrayBackground = "#f4f6f9"->r;
 let lighterGrayBackground = "#fbfcfd"->r;
 let grayBackground = "#dcdee0"->r;
@@ -37,12 +38,16 @@ module FontWeights = {
   let veryHeavy = Css.fontWeight(`num(900));
 };
 
+module Transitions = {
+  let standardLength = 100;
+};
+
 module BorderRadius = {
   let medium = `px(5);
 };
 
 module Statuses = {
-  let green = "#689533"->r;
+  let green = "#81a952"->r;
   let yellow = "#C09C66"->r;
   let resolved = accentBlue;
 };

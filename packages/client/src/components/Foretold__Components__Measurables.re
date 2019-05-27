@@ -35,22 +35,10 @@ module BasicTable = {
         measurables |> E.A.length > 0,
         <>
           <FC.Table.HeaderRow>
-            <FC.Table.Cell
-              flex=4
-              styles=[
-                Css.(
-                  style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))])
-                ),
-              ]>
+            <FC.Table.Cell flex=3>
               {"Name & Status" |> ReasonReact.string}
             </FC.Table.Cell>
-            <FC.Table.Cell
-              flex=1
-              styles=[
-                Css.(
-                  style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))])
-                ),
-              ]>
+            <FC.Table.Cell flex=1>
               {"Details" |> ReasonReact.string}
             </FC.Table.Cell>
           </FC.Table.HeaderRow>
@@ -60,15 +48,13 @@ module BasicTable = {
                  let iAmOwner = m.iAmOwner == Some(true);
                  <FC.Table.RowLink onClick={_e => onSelect(m)} key={m.id}>
                    <FC.Table.Cell
-                     flex=4
-                     styles=[
-                       Css.(
-                         style([
-                           paddingTop(`em(1.0)),
-                           paddingBottom(`em(0.5)),
-                         ])
-                       ),
-                     ]>
+                     flex=3
+                     className=Css.(
+                       style([
+                         paddingTop(`em(1.0)),
+                         paddingBottom(`em(0.5)),
+                       ])
+                     )>
                      <div className=Styles.mainColumn>
                        <div className=Styles.mainColumnTop>
                          {Items.link(~m)}
@@ -81,7 +67,7 @@ module BasicTable = {
                      </div>
                    </FC.Table.Cell>
                    <FC.Table.Cell
-                     flex=1 styles=[Css.(style([paddingTop(`em(0.5))]))]>
+                     flex=1 className=Css.(style([paddingTop(`em(0.5))]))>
                      {
                        E.React.showIf(
                          showExtraData,

@@ -36,11 +36,6 @@ module Styles = {
       ])
     );
 
-  let position =
-    Css.(
-      style([BaseStyles.floatLeft, padding2(~v=`em(0.5), ~h=`em(1.5))])
-    );
-
   let rightButton = Css.(style([marginLeft(`em(0.3))]));
 };
 
@@ -51,10 +46,10 @@ let _directionLink = (t: directionButton, icon: string, positionStyles) =>
   </FC__Button>;
 
 let make = (t: t) =>
-  <Div styles=[Styles.position]>
+  <>
     <span className=Styles.buttonLabel>
       {_text(t) |> ReasonReact.string}
     </span>
     {_directionLink(t.pageLeft, "<", "")}
     {_directionLink(t.pageRight, ">", Styles.rightButton)}
-  </Div>;
+  </>;

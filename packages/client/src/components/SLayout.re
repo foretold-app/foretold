@@ -108,7 +108,8 @@ module LargeCard = {
 };
 module Header = {
   let component = ReasonReact.statelessComponent("Header");
-  let textDiv = text => <div className=Styles.headerText> {text |> ste} </div>;
+  let textDiv = text =>
+    <FC.PageCard.HeaderRow.Title> {text |> ste} </FC.PageCard.HeaderRow.Title>;
 
   let make = children => {
     ...component,

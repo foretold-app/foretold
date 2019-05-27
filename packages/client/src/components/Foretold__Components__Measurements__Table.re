@@ -245,16 +245,16 @@ let make = (ms: list(measurement)) => {
        )
     |> E.L.fmap((m: measurement) =>
          <FC.Table.Row key={m.id}>
-           <FC.Table.Cell flex=2 styles=[primaryCellStyle]>
+           <FC.Table.Cell flex=2 className=primaryCellStyle>
              {Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull}
            </FC.Table.Cell>
-           <FC.Table.Cell flex=1 styles=[primaryCellStyle]>
+           <FC.Table.Cell flex=1 className=primaryCellStyle>
              {Helpers.statSummary(m) |> E.O.React.defaultNull}
            </FC.Table.Cell>
-           <FC.Table.Cell flex=1 styles=[primaryCellStyle]>
+           <FC.Table.Cell flex=1 className=primaryCellStyle>
              {Helpers.measurerLink(~m)}
            </FC.Table.Cell>
-           <FC.Table.Cell flex=1 styles=[primaryCellStyle]>
+           <FC.Table.Cell flex=1 className=primaryCellStyle>
              {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
            </FC.Table.Cell>
          </FC.Table.Row>
@@ -265,18 +265,12 @@ let make = (ms: list(measurement)) => {
     ms |> E.L.length > 0,
     <>
       <FC.Table.HeaderRow>
-        <FC.Table.Cell flex=2 styles=[headerCellStyle]>
+        <FC.Table.Cell flex=2>
           {"Prediction Distribution" |> ste}
         </FC.Table.Cell>
-        <FC.Table.Cell flex=1 styles=[headerCellStyle]>
-          {"Prediction Value" |> ste}
-        </FC.Table.Cell>
-        <FC.Table.Cell flex=1 styles=[headerCellStyle]>
-          {"Agent" |> ste}
-        </FC.Table.Cell>
-        <FC.Table.Cell flex=1 styles=[headerCellStyle]>
-          {"Time" |> ste}
-        </FC.Table.Cell>
+        <FC.Table.Cell flex=1> {"Prediction Value" |> ste} </FC.Table.Cell>
+        <FC.Table.Cell flex=1> {"Agent" |> ste} </FC.Table.Cell>
+        <FC.Table.Cell flex=1> {"Time" |> ste} </FC.Table.Cell>
       </FC.Table.HeaderRow>
       items
     </>,

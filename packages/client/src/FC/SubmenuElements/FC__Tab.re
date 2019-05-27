@@ -24,12 +24,12 @@ let allStyles =
   ];
 
 let component = ReasonReact.statelessComponent("Tab");
-let make = (~isActive=false, ~onClick, children) => {
+let make = (~isActive=false, ~onClick=?, children) => {
   ...component,
   render: _self =>
     <Link
       isDisabled=false
-      onClick
+      ?onClick
       className={
         Css.style((isActive ? activeStyles : inactiveStyles) @ allStyles)
       }>

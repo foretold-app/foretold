@@ -1,27 +1,13 @@
 open FC__Base;
 
-module Styles = {
-  let defaultPadding = Css.padding2(~v=`em(0.0), ~h=`em(1.5));
-  let headerRow =
-    Css.(
-      style(
-        [
-          background(Colors.lightGrayBackground),
-          color(Colors.Text.LightBackground.main),
-          borderBottom(`px(1), `solid, Colors.accentBlueO8),
-          display(`flex),
-          flexDirection(`row),
-          defaultPadding,
-        ]
-        @ BaseStyles.fullWidthFloatLeft,
-      )
-    );
+let defaultRowHorizontalPadding = `em(1.5);
 
+module Styles = {
   let row =
     Css.(
       style(
         [
-          padding2(~v=`px(0), ~h=`em(1.5)),
+          padding2(~v=`zero, ~h=defaultRowHorizontalPadding),
           borderBottom(`px(1), `solid, Colors.accentBlue1a),
           display(`flex),
           flexDirection(`row),
@@ -38,6 +24,28 @@ module Styles = {
         cursor(`pointer),
       ])
     );
+
+  module Elements = {
+    let primaryText =
+      Css.style([
+        Css.fontSize(`em(1.05)),
+        Css.lineHeight(`em(1.5)),
+        Css.fontWeight(`num(600)),
+        Css.color(`hex("384e67")),
+      ]);
+
+    let link' =
+      Css.[
+        marginRight(`em(1.0)),
+        color(Colors.textMedium),
+        hover([color(Colors.textDark)]),
+      ];
+
+    let link = (~isUnderlined=false, ()) =>
+      Css.(
+        style(isUnderlined ? link' @ [textDecoration(`underline)] : link')
+      );
+  };
 };
 
 module Cell = {
@@ -45,15 +53,33 @@ module Cell = {
 
   let component = ReasonReact.statelessComponent("TABLE CELL");
 
-  let make = (~flex, ~styles, children) => {
+  let make = (~flex, ~className="", children) => {
     ...component,
     render: _self =>
-      <Div styles={[style(flex)] @ styles}> ...children </Div>,
+      <Div className={Css.merge([style(flex), className])}>
+        ...children
+      </Div>,
   };
 };
 
 module HeaderRow = {
   let component = ReasonReact.statelessComponent("TABLE HEADER ROW");
+  module Styles = {
+    let headerRow =
+      Css.(
+        style(
+          [
+            background(Colors.lightGrayBackground),
+            color(Colors.Text.LightBackground.main),
+            borderBottom(`px(1), `solid, Colors.accentBlueO8),
+            display(`flex),
+            flexDirection(`row),
+            padding2(~v=`em(0.7), ~h=defaultRowHorizontalPadding),
+          ]
+          @ BaseStyles.fullWidthFloatLeft,
+        )
+      );
+  };
 
   let make = children => {
     ...component,
@@ -62,14 +88,6 @@ module HeaderRow = {
 };
 
 module Row = {
-  let primaryText =
-    Css.style([
-      Css.fontSize(`em(1.05)),
-      Css.lineHeight(`em(1.5)),
-      Css.fontWeight(`num(600)),
-      Css.color(`hex("384e67")),
-    ]);
-
   let component = ReasonReact.statelessComponent("TABLE ROW");
 
   let make = children => {

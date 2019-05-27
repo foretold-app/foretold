@@ -99,7 +99,10 @@ let make =
               Css.(style([marginTop(`em(1.0)), marginRight(`em(2.0))])),
             ]
             flex=3>
-            <FC.PageCard> {FC.PageCard.header(head)} body </FC.PageCard>
+            <FC.PageCard>
+              <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
+              body
+            </FC.PageCard>
           </Div>
         </Div>
       </div>

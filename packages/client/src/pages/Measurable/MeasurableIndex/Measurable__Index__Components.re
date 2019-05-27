@@ -15,15 +15,23 @@ module LoadedAndSelected = {
   let header = (t: t, send: SelectWithPaginationReducer.Types.send) =>
     <>
       <Div
+        float=`left
         styles=[
           Css.style([
-            FC.Base.BaseStyles.floatLeft,
-            Css.padding2(~v=`em(0.6), ~h=`em(1.5)),
+            FC.PageCard.HeaderRow.Styles.itemTopPadding,
+            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
         {SelectWithPaginationReducer.Components.deselectButton(send)}
       </Div>
-      <Div float=`right>
+      <Div
+        float=`right
+        styles=[
+          Css.style([
+            FC.PageCard.HeaderRow.Styles.itemTopPadding,
+            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+          ]),
+        ]>
         {
           SelectWithPaginationReducer.Components.paginationItem(
             t.reducerParams,
@@ -68,7 +76,14 @@ module LoadedAndUnselected = {
         {
           switch (stats) {
           | Success(Some(r)) =>
-            <>
+            <Div
+              float=`left
+              styles=[
+                Css.style([
+                  FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                  FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+                ]),
+              ]>
               {stateLink(`OPEN, "Open", r.openTotal)}
               {
                 stateLink(
@@ -78,12 +93,19 @@ module LoadedAndUnselected = {
                 )
               }
               {stateLink(`JUDGED, "Closed", r.closedTotal)}
-            </>
+            </Div>
           | _ => <> </>
           }
         }
       </Div>
-      <Div float=`right>
+      <Div
+        float=`right
+        styles=[
+          Css.style([
+            FC.PageCard.HeaderRow.Styles.itemTopPadding,
+            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+          ]),
+        ]>
         {
           SelectWithPaginationReducer.Components.paginationPage(
             t.reducerParams,

@@ -51,14 +51,15 @@ module LoadedAndSelected = {
 module LoadedAndUnselected = {
   open Measurable__Index__Logic.LoadedAndUnselected;
 
-  let stateLink = (state, text, num: int) =>
+  let stateLink = (state, text, num: int, isActive) =>
     <FC.Tab2
-      isActive=false
+      isActive
       number=num
       onClick={
         Foretold__Components__Link.LinkType.onClick(
           External(
-            SearchResults.make(Some(state)) |> SearchResults.toUrlParams,
+            Context.QueryParams.MeasurableIndex.make(Some(state))
+            |> Context.QueryParams.MeasurableIndex.toUrlParams,
           ),
         )
       }>
@@ -69,7 +70,7 @@ module LoadedAndUnselected = {
       (
         t: t,
         stats: measurablesStateStats,
-        send: SelectWithPaginationReducer.Types.send,
+        query: Context.QueryParams.MeasurableIndex.query,
       ) =>
     <Div>
       <Div float=`left>
@@ -84,15 +85,30 @@ module LoadedAndUnselected = {
                   FC.PageCard.HeaderRow.Styles.itemBottomPadding,
                 ]),
               ]>
-              {stateLink(`OPEN, "Open", r.openTotal)}
+              {
+                stateLink(
+                  `OPEN,
+                  "Open",
+                  r.openTotal,
+                  query.state == Some(`OPEN),
+                )
+              }
               {
                 stateLink(
                   `JUDGEMENT_PENDING,
                   "Pending Resolution",
                   r.pendingTotal,
+                  query.state == Some(`JUDGEMENT_PENDING),
                 )
               }
-              {stateLink(`JUDGED, "Closed", r.closedTotal)}
+              {
+                stateLink(
+                  `JUDGED,
+                  "Closed",
+                  r.closedTotal,
+                  query.state == Some(`JUDGED),
+                )
+              }
             </Div>
           | _ => <> </>
           }
@@ -146,6 +162,7 @@ module MeasurableIndexDataState = {
   let toLayoutInput =
       (
         send: SelectWithPaginationReducer.Types.send,
+        selectedState: Context.QueryParams.MeasurableIndex.query,
         stats: measurablesStateStats,
         state: state,
       ) => {
@@ -157,7 +174,7 @@ module MeasurableIndexDataState = {
       lmake(~head=E.React.null, ~body="Loading Query..." |> ste)
     | LoadedAndUnselected(l) =>
       lmake(
-        ~head=LoadedAndUnselected.header(l, stats, send),
+        ~head=LoadedAndUnselected.header(l, stats, selectedState),
         ~body=LoadedAndUnselected.body(l, send),
       )
     | LoadedAndSelected(l) =>

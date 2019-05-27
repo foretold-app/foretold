@@ -25,7 +25,7 @@ module ChannelPage = {
 
   module SubPage = {
     type t =
-      | Measurables(measurablesSearchString)
+      | Measurables(Context__QueryParams.MeasurableIndex.query)
       | NewMeasurable
       | Members
       | InviteNewMember
@@ -46,7 +46,7 @@ module ChannelPage = {
 
     let fromTab = (tab: tab): t =>
       switch (tab) {
-      | Measurables => Measurables("")
+      | Measurables => Measurables({state: None})
       | Members => Members
       | Options => Settings
       };
@@ -95,7 +95,14 @@ module Route = {
     | ["measurables", id, "edit"] => MeasurableEdit(id)
     | ["c"] => ChannelIndex
     | ["c", channelId] =>
-      Channel({channelId, subPage: Measurables(url.search)})
+      Channel({
+        channelId,
+        subPage:
+          Measurables(
+            url.search
+            |> Context__QueryParams.MeasurableIndex.fromStringWithDefaults,
+          ),
+      })
     | ["c", channelId, "new"] => Channel({channelId, subPage: NewMeasurable})
     | ["c", channelId, "edit"] => Channel({channelId, subPage: Settings})
     | ["c", channelId, "members"] => Channel({channelId, subPage: Members})

@@ -10,7 +10,6 @@ let agentSection = (e: Queries.Agent.agent) =>
   switch (e) {
   | {user: Some(r)} =>
     <>
-      {SLayout.Header.textDiv(r.name ++ ": Bots")}
       {
         E.React.showIf(
           e.isMe,
@@ -65,7 +64,10 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
       Queries.Bots.component(bots =>
         SLayout.LayoutConfig.make(
           ~head=agentSection(agent),
-          ~body=Table.fromColumns(Columns.all, bots),
+          ~body=
+            <FC.PageCard.BodyPadding>
+              {Table.fromColumns(Columns.all, bots)}
+            </FC.PageCard.BodyPadding>,
         )
         |> layout
       )

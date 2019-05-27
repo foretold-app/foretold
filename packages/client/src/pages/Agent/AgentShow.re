@@ -5,6 +5,7 @@ open Css;
 let block = style([marginBottom(`em(1.0))]);
 let notFound = "Agent not found" |> ste |> E.React.inH3;
 
+/* TODO: Improve this bit */
 let agentSection = (e: Queries.Agent.agent) =>
   switch (e) {
   | {bot: Some(r)} =>
@@ -34,7 +35,7 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   render: _ =>
     Queries.Agent.component(~id=pageParams.id, ({agent, measurables}) =>
       SLayout.LayoutConfig.make(
-        ~head=agentSection(agent),
+        ~head="" |> ste,
         ~body=
           measurables
           |> E.L.fmap((m: Context.Primary.Measurable.t) => {

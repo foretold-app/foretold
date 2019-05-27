@@ -16,7 +16,7 @@ type variant =
   | Primary
   | Secondary;
 
-let vColor = (variant: variant) =>
+let varantColors = (variant: variant) =>
   FC__Colors.(
     switch (variant) {
     | Primary => {
@@ -24,7 +24,7 @@ let vColor = (variant: variant) =>
         textHover: white |> toS,
         border: link |> toS,
         background: link |> toS,
-        backgroundHover: linkAccent |> toS,
+        backgroundHover: linkHover |> toS,
       }
     | Secondary => {
         text: textDark |> toS,
@@ -37,7 +37,7 @@ let vColor = (variant: variant) =>
   );
 
 let styles = (~isDisabled=false, ~variant: variant, ~heightPadding=4, ()) => {
-  let colors = vColor(variant);
+  let colors = varantColors(variant);
   let main =
     Css.(
       style([

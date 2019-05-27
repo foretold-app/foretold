@@ -4,12 +4,23 @@ open Base;
 let make =
   <PageCard>
     <PageCard.HeaderRow>
-      <PageCard.HeaderRow.Title>
-        {"Pending Resolution" |> ReasonReact.string}
-      </PageCard.HeaderRow.Title>
-      <FC__Button variant=Primary>
-        {"< Back" |> ReasonReact.string}
-      </FC__Button>
+      <Div float=`left>
+        <PageCard.HeaderRow.Title>
+          {"Pending Resolution" |> ReasonReact.string}
+        </PageCard.HeaderRow.Title>
+      </Div>
+      <Div
+        float=`right
+        className={
+          Css.style([
+            PageCard.HeaderRow.Styles.itemTopPadding,
+            PageCard.HeaderRow.Styles.itemBottomPadding,
+          ])
+        }>
+        <FC__Button variant=Primary>
+          {"< Back" |> ReasonReact.string}
+        </FC__Button>
+      </Div>
     </PageCard.HeaderRow>
     <Table.HeaderRow>
       <Table.Cell flex=4> {"Name & Status" |> ReasonReact.string} </Table.Cell>

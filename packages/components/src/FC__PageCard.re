@@ -55,8 +55,8 @@ module HeaderRow = {
             Css.(
               style([
                 color(Colors.textDark),
-                Styles.itemBottomPadding,
-                Styles.itemTopPadding,
+                paddingTop(`em(1.2)),
+                paddingBottom(`em(1.2)),
                 FC__Colors.FontWeights.heavy,
               ])
             ),

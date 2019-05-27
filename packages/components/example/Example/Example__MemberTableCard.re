@@ -7,6 +7,9 @@ let make =
       <PageCard.HeaderRow.Title>
         {"Pending Resolution" |> ReasonReact.string}
       </PageCard.HeaderRow.Title>
+      <FC__Button variant=Primary>
+        {"< Back" |> ReasonReact.string}
+      </FC__Button>
     </PageCard.HeaderRow>
     <Table.HeaderRow>
       <Table.Cell flex=4> {"Name & Status" |> ReasonReact.string} </Table.Cell>

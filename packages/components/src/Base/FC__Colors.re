@@ -1,6 +1,12 @@
 /* // this is used to show hex color; */
 let removeHex = Js.String.sliceToEnd(~from=1);
 let r = c => c->removeHex->(e => `hex(e));
+type col = [ | `hex(Js.String.t)];
+
+let toS = (col: col) =>
+  switch (col) {
+  | `hex(c) => c
+  };
 
 let white = "#FFFFFF"->r;
 let black = "#000000"->r;

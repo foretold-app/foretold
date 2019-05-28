@@ -23,6 +23,25 @@ let allStyles =
     BaseStyles.floatLeft,
   ];
 
+let flexStyles =
+  Css.[textAlign(`center), flexGrow(1.), padding2(~v=`em(0.8), ~h=`zero), fontWeight(`bold)];
+
+module Flex = {
+  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Flex");
+  let make = (~isActive=false, ~onClick=?, children) => {
+    ...component,
+    render: _self =>
+      <Link
+        isDisabled=false
+        ?onClick
+        className={Css.style(
+          (isActive ? activeStyles : inactiveStyles) @ flexStyles
+        )}>
+        ...children
+      </Link>,
+  };
+};
+
 let component = ReasonReact.statelessComponent("Tab");
 let make = (~isActive=false, ~onClick=?, children) => {
   ...component,

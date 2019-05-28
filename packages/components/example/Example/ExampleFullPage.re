@@ -65,7 +65,12 @@ let make =
             Example__CardMeasurableMeasurements.make
           </Div>
         </Div>
-        <Div flex=2> Example__MeasurableTopCard.make </Div>
+        <Div flex=2>
+          Example__MeasurableTopCard.make
+          <Div styles=[Css.(style([clear(`both), paddingTop(`em(2.0))]))]>
+            <SidebarForm cdf=ExampleCdfs.Example1.cdf />
+          </Div>
+        </Div>
       </Div>
     </Div>
     <Div

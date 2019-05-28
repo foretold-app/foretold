@@ -17,6 +17,45 @@ module Styles = {
       )
     );
 
+  let textArea =
+    Css.(
+      style(
+        [
+          padding2(~v=`em(1.0), ~h=defaultRowHorizontalPadding),
+          color(Colors.Text.LightBackground.p),
+        ]
+        @ BaseStyles.fullWidthFloatLeft,
+      )
+    );
+  let topRow =
+    Css.(
+      style(
+        [
+          padding2(~v=`zero, ~h=defaultRowHorizontalPadding),
+          paddingTop(`em(0.4)),
+          display(`flex),
+          flexDirection(`row),
+        ]
+        @ BaseStyles.fullWidthFloatLeft,
+      )
+    );
+
+  let bottomRow =
+    Css.(
+      style(
+        [
+          padding2(~v=`zero, ~h=defaultRowHorizontalPadding),
+          paddingBottom(`em(0.4)),
+          borderBottom(`px(1), `solid, Colors.accentBlueO8),
+          display(`flex),
+          flexDirection(`row),
+          background(`hex("fafbfc")),
+          selector(":last-child", BaseStyles.borderNone),
+        ]
+        @ BaseStyles.fullWidthFloatLeft,
+      )
+    );
+
   let clickableRow =
     Css.(
       style([
@@ -90,9 +129,19 @@ module HeaderRow = {
 module Row = {
   let component = ReasonReact.statelessComponent("TABLE ROW");
 
-  let make = children => {
+  let textSection = text => <Div styles=[Styles.textArea]> text </Div>;
+
+  let make = (~bottomSubRow=?, children) => {
     ...component,
-    render: _self => <Div styles=[Styles.row]> ...children </Div>,
+    render: _self =>
+      switch (bottomSubRow) {
+      | Some(bottomSubRow) =>
+        <>
+          <Div styles=[Styles.topRow]> ...children </Div>
+          <Div styles=[Styles.bottomRow]> ...bottomSubRow </Div>
+        </>
+      | None => <Div styles=[Styles.row]> ...children </Div>
+      },
   };
 };
 

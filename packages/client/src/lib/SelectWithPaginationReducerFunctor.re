@@ -300,7 +300,7 @@ module Make = (Config: Config) => {
       switch (totalItems(t), selectionIndex(t)) {
       | (Some(count), Some(selection)) =>
         FC.PaginationButtons.make({
-          currentValue: Item(selection),
+          currentValue: Item(selection + 1),
           max: count,
           pageLeft: {
             isDisabled: !canDecrementSelection(t),
@@ -318,7 +318,7 @@ module Make = (Config: Config) => {
       switch (totalItems(t), upperBoundIndex(t), lowerBoundIndex(t)) {
       | (Some(count), Some(upper), Some(lower)) =>
         FC.PaginationButtons.make({
-          currentValue: Range(lower, upper),
+          currentValue: Range(lower + 1, upper + 1),
           max: count,
           pageLeft: {
             isDisabled: !canDecrementPage(t),

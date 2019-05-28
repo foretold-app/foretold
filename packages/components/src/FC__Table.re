@@ -21,12 +21,15 @@ module Styles = {
     Css.(
       style(
         [
-          padding2(~v=`em(1.0), ~h=defaultRowHorizontalPadding),
+          padding2(~v=`em(0.8), ~h=`em(1.4)),
+          background(Colors.lightGrayBackground),
+          borderRadius(Colors.BorderRadius.tight),
           color(Colors.Text.LightBackground.p),
         ]
         @ BaseStyles.fullWidthFloatLeft,
       )
     );
+
   let topRow =
     Css.(
       style(
@@ -44,12 +47,11 @@ module Styles = {
     Css.(
       style(
         [
-          padding2(~v=`zero, ~h=defaultRowHorizontalPadding),
+          padding2(~v=`zero, ~h=`em(0.4)),
           paddingBottom(`em(0.4)),
           borderBottom(`px(1), `solid, Colors.accentBlueO8),
           display(`flex),
           flexDirection(`row),
-          background(`hex("fafbfc")),
           selector(":last-child", BaseStyles.borderNone),
         ]
         @ BaseStyles.fullWidthFloatLeft,

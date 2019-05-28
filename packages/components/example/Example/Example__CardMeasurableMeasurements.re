@@ -10,7 +10,8 @@ let row =
   <Table.Row
     bottomSubRow=[|
       Table.Row.textSection(
-        "I think this value may be quite underrated. It's actually a very sensible phenomena if one sits down to think about it."
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vulputate tortor a sapien aliquet ullamcorper. Nunc non varius sapien, quis elementum sapien. Morbi ac tristique quam. Cras hendrerit accumsan pretium. Praesent id nisl sit amet eros imperdiet placerat. Vestibulum sodales posuere diam vel laoreet.
+        "
         |> ReasonReact.string,
       ),
     |]>

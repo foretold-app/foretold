@@ -2,15 +2,6 @@ open Utils;
 
 module Styles = {
   open Css;
-  let header =
-    style([
-      paddingLeft(`em(1.)),
-      paddingBottom(`em(0.8)),
-      paddingRight(`em(1.)),
-      paddingTop(`em(1.5)),
-      float(`left),
-      width(`percent(100.)),
-    ]);
   let width100 = style([width(`percent(100.))]);
   let headerText =
     style([
@@ -29,62 +20,7 @@ module Styles = {
   let channelText =
     style([color(`hex("242424")), fontSize(`em(1.4)), float(`left)]);
   let container = style([maxWidth(`px(1170)), margin(`auto)]);
-  let header1outer =
-    style([
-      width(`percent(100.0)),
-      float(`left),
-      backgroundColor(`hex("fff")),
-      borderBottom(`px(1), `solid, `hex("e6e9f0")),
-    ]);
-  let header1inner =
-    style([
-      width(`percent(100.0)),
-      float(`left),
-      fontWeight(`num(600)),
-      padding2(~v=`em(0.7), ~h=`em(1.0)),
-    ]);
-  let header2outer =
-    style([
-      width(`percent(100.0)),
-      float(`left),
-      backgroundColor(`hex("fbfcfd")),
-      borderBottom(`px(1), `solid, `hex("e6e9f0")),
-    ]);
-  let header2inner =
-    style([
-      width(`percent(100.0)),
-      float(`left),
-      paddingLeft(`em(1.)),
-      paddingRight(`em(1.)),
-      paddingTop(`em(0.5)),
-    ]);
-  let header2 = style([background(`hex("f0f"))]);
   let backHover = style([fontSize(`em(1.3))]);
-  let foo =
-    style([
-      color(`hex("333")),
-      fontSize(`em(2.0)),
-      fontWeight(`bold),
-      float(`left),
-    ]);
-  let largeCardOuter = style([padding(`em(0.3))]);
-  let largeCardInner =
-    style([
-      background(`hex("fff")),
-      border(`px(1), `solid, `hex("e1e5f0")),
-      borderRadius(`px(5)),
-      padding(`em(1.)),
-      width(`percent(100.)),
-      float(`left),
-    ]);
-  let mainSection =
-    style([
-      float(`left),
-      width(`percent(100.)),
-      paddingLeft(`px(10)),
-      paddingRight(`px(10)),
-      paddingTop(`px(10)),
-    ]);
   let dash =
     style([
       float(`left),
@@ -96,16 +32,6 @@ module Styles = {
     ]);
 };
 
-module LargeCard = {
-  let component = ReasonReact.statelessComponent("LargeCard");
-  let make = children => {
-    ...component,
-    render: _ =>
-      <div className=Styles.largeCardOuter>
-        <div className=Styles.largeCardInner> ...children </div>
-      </div>,
-  };
-};
 module Header = {
   let component = ReasonReact.statelessComponent("Header");
   let textDiv = text =>
@@ -113,18 +39,7 @@ module Header = {
 
   let make = children => {
     ...component,
-    render: _ => <div className=Styles.header> ...children </div>,
-  };
-};
-
-module MainSection = {
-  let component = ReasonReact.statelessComponent("MainSection");
-  let make = children => {
-    ...component,
-    render: _ =>
-      <div className=Styles.mainSection>
-        <LargeCard> ...children </LargeCard>
-      </div>,
+    render: _ => <FC.PageCard.HeaderRow> ...children </FC.PageCard.HeaderRow>,
   };
 };
 
@@ -141,10 +56,27 @@ module FullPage = {
   let make = ({head, body}: LayoutConfig.t) => {
     ...component,
     render: _ =>
-      <div className=Styles.container>
-        <Header> head </Header>
-        <MainSection> body </MainSection>
-      </div>,
+      <FC.Base.Div
+        className=Css.(
+          style(
+            [
+              marginTop(`em(2.0)),
+              marginTop(`em(2.)),
+              width(`percent(100.)),
+              paddingLeft(`em(2.)),
+              paddingRight(`em(2.)),
+              boxSizing(`borderBox),
+            ]
+            @ FC.Base.BaseStyles.fullWidthFloatLeft,
+          )
+        )>
+        <div className=Styles.container>
+          <FC.PageCard>
+            <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
+            <FC.PageCard.Body> body </FC.PageCard.Body>
+          </FC.PageCard>
+        </div>
+      </FC.Base.Div>,
   };
   let makeWithEl = (t: LayoutConfig.t) => t |> make |> E.React.el;
 };

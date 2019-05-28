@@ -72,7 +72,7 @@ let make =
     Queries.Channels.component(channels =>
       SLayout.LayoutConfig.make(
         ~head=SLayout.Header.textDiv("Channels"),
-        ~body=<div> <br /> {Table.fromColumns(Columns.all, channels)} </div>,
+        ~body=Table.fromColumns(Columns.all, channels),
       )
       |> layout
     ),

@@ -86,8 +86,19 @@ module HeaderRow = {
   };
 };
 
-module BodyPadding = {
+module Body = {
   let component = ReasonReact.statelessComponent("Card Body");
+  let make = children => {
+    ...component,
+    render: _self =>
+      <Div styles=[Css.style(BaseStyles.fullWidthFloatLeft)]>
+        ...children
+      </Div>,
+  };
+};
+
+module BodyPadding = {
+  let component = ReasonReact.statelessComponent("Card BodyPadding");
   let make = children => {
     ...component,
     render: _self =>

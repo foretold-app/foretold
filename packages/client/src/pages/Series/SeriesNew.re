@@ -251,21 +251,19 @@ let make =
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv("Make a New Series"),
       ~body=
-        Mutations.SeriesCreate.withMutation((mutation, data) => {
-          let agent = loggedInUser.agent;
-          let id = loggedInUser.id;
-          let name =
-            agent
-            |> E.O.bind(_, (r: Context.Primary.Agent.t) => r.name)
-            |> E.O.toExn("The logged in user needs an ID!");
-          withForm(mutation, channelId, ({send, state}) =>
-            CMutationForm.showWithLoading(
-              ~result=data.result,
-              ~form=formFields(state, send, () => send(Form.Submit)),
-              (),
+        <FC.PageCard.BodyPadding>
+          {
+            Mutations.SeriesCreate.withMutation((mutation, data) =>
+              withForm(mutation, channelId, ({send, state}) =>
+                CMutationForm.showWithLoading(
+                  ~result=data.result,
+                  ~form=formFields(state, send, () => send(Form.Submit)),
+                  (),
+                )
+              )
             )
-          );
-        }),
+          }
+        </FC.PageCard.BodyPadding>,
     )
     |> layout,
 };

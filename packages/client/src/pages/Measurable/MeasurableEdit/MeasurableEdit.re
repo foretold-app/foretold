@@ -108,11 +108,15 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _self =>
     SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("My Questions"),
+      ~head=SLayout.Header.textDiv("Edit Question"),
       ~body=
-        Queries.Measurable.component(~id=pageParams.id, m =>
-          formCreation(pageParams.id, m)
-        ),
+        <FC.PageCard.BodyPadding>
+          {
+            Queries.Measurable.component(~id=pageParams.id, m =>
+              formCreation(pageParams.id, m)
+            )
+          }
+        </FC.PageCard.BodyPadding>,
     )
     |> layout,
 };

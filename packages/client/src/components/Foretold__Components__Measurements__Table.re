@@ -16,37 +16,6 @@ module Styles = {
       color(`hex("7d7ea2")),
       marginTop(`px(6)),
     ]);
-  let mainColumn =
-    style([
-      flex(1),
-      display(`flex),
-      flexDirection(`column),
-      position(`relative),
-    ]);
-
-  let item =
-    style([
-      float(`left),
-      fontSize(`px(14)),
-      marginRight(`px(18)),
-      color(`hex("red")),
-    ]);
-
-  let rightColumn =
-    style([
-      flex(3),
-      display(`flex),
-      backgroundColor(`hex("f3f5f7")),
-      borderBottom(`px(1), `solid, `hex("e8eef3")),
-      borderTopRightRadius(`px(2)),
-      borderBottomRightRadius(`px(2)),
-    ]);
-
-  let rightColumnInner =
-    style([flex(1), padding2(~v=`px(4), ~h=`px(10))]);
-
-  let mainColumnTop = style([flex(1), paddingLeft(px(2))]);
-
   let descriptionStyle =
     style([
       marginTop(`px(5)),

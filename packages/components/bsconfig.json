@@ -27,6 +27,11 @@
       "dir": "example",
       "type": "dev",
       "subdirs": true
+    },
+    {
+      "dir": "complib",
+      "type": "dev",
+      "subdirs": true
     }
   ]
 }

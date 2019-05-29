@@ -24,6 +24,24 @@ let entries: list(compEntry) = [
   },
 ];
 
+module Styles = {
+  open Css;
+  let pageContainer = style([
+    display(`flex),
+    height(`vh(100.))
+  ]);
+  let leftNav = style([
+    padding(`em(2.)),
+    flexBasis(`px(200)),
+    backgroundColor(`hex("eaeff3")),
+    boxShadow(~x=`px(-1), ~blur=`px(1), ~inset=true, `rgba(0, 0, 0, 0.1))
+  ]);
+  let compContainer = style([
+    padding(`em(2.)),
+    flexGrow(1.)
+  ])
+};
+
 let baseUrl = "/complib/complib.html";
 
 module Index = {
@@ -61,21 +79,25 @@ module Index = {
       self.onUnmount(() => ReasonReactRouter.unwatchUrl(watcherID));
     },
     render: self =>
-      <div>
-        {(
-           entries
-           |> E.L.fmap(e =>
-                <div key={e.id} onClick={_e => self.send(ItemClick(e))}>
-                  e.title->React.string
-                </div>
-              )
-           |> E.L.toArray
-         )
-         ->React.array}
-        {switch (E.L.getBy(entries, e => e.id == self.state.route.hash)) {
-         | Some(e) => e.render()
-         | None => React.null
-         }}
+      <div className=Styles.pageContainer>
+        <div className=Styles.leftNav>
+          {(
+             entries
+             |> E.L.fmap(e =>
+                  <div key={e.id} onClick={_e => self.send(ItemClick(e))}>
+                    e.title->React.string
+                  </div>
+                )
+             |> E.L.toArray
+           )
+           ->React.array}
+        </div>
+        <div className=Styles.compContainer>
+          {switch (E.L.getBy(entries, e => e.id == self.state.route.hash)) {
+           | Some(e) => e.render()
+           | None => React.null
+           }}
+        </div>
       </div>,
   };
 };

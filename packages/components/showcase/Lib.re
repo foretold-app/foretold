@@ -47,7 +47,7 @@ let buildIds = entries => {
      );
 };
 
-let entries = Complib.entries;
+let entries = Entries.entries;
 buildIds(entries);
 
 module Styles = {
@@ -87,7 +87,7 @@ module Styles = {
   let compContainer = style([padding(`em(2.)), flexGrow(1.)]);
 };
 
-let baseUrl = "/complib/complib.html";
+let baseUrl = "/showcase/index.html";
 
 module Index = {
   type state = {route: ReasonReactRouter.url};
@@ -169,25 +169,29 @@ module Index = {
       <div className=Styles.pageContainer>
         <div className=Styles.leftNav> {buildNav(self)} </div>
         <div className=Styles.compContainer>
-          {switch (HS.get(entriesByPath, self.state.route.hash)) {
-           | Some(navEntry) =>
-             switch (navEntry) {
-             | CompEntry(c) => c.render()
-             | FolderEntry(f) =>
-               /* Rendering immediate children */
-               (
-                 f.children
-                 |> E.L.fmap(child =>
-                      switch (child) {
-                      | CompEntry(c) => <div key={c.id}> {c.render()} </div>
-                      | _ => React.null
-                      }
-                    )
-                 |> E.L.toArray
-               )
-               ->React.array
-             }
-           | None => <div> "Component not found"->React.string </div>
+          {if (self.state.route.hash == "") {
+             React.null;
+           } else {
+             switch (HS.get(entriesByPath, self.state.route.hash)) {
+             | Some(navEntry) =>
+               switch (navEntry) {
+               | CompEntry(c) => c.render()
+               | FolderEntry(f) =>
+                 /* Rendering immediate children */
+                 (
+                   f.children
+                   |> E.L.fmap(child =>
+                        switch (child) {
+                        | CompEntry(c) => <div key={c.id}> {c.render()} </div>
+                        | _ => React.null
+                        }
+                      )
+                   |> E.L.toArray
+                 )
+                 ->React.array
+               }
+             | None => <div> "Component not found"->React.string </div>
+             };
            }}
         </div>
       </div>,

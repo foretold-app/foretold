@@ -29,7 +29,7 @@
       "subdirs": true
     },
     {
-      "dir": "complib",
+      "dir": "showcase",
       "type": "dev",
       "subdirs": true
     }

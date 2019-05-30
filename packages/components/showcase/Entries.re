@@ -15,5 +15,5 @@ let entries =
           <Link> "Test link3"->React.string </Link>
         ),
       ],
-    ),
-  ];
+    ) ,
+  ] @ Showcase_Dropdown.entries;

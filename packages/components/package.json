@@ -29,6 +29,8 @@
         "lodash": "^4.17.11",
         "moment": "2.24.0",
         "rationale": "^0.1.6",
+        "rc-menu": "^7.4.20",
+        "rc-dropdown": "^2.4.1",
         "reason-react": "^0.7.0"
     },
     "devDependencies": {

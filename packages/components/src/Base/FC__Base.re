@@ -7,3 +7,4 @@ module Globals = FC__Globals;
 module BaseStyles = FC__BaseStyles;
 module Button = FC__Button;
 module Dropdown = FC__Dropdown;
+module Menu = FC__Menu;

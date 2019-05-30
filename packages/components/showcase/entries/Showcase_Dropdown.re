@@ -1,6 +1,6 @@
 open FC.Base;
 
-let staticOverlay = <div> {"Overlay" |> React.string} </div>;
+let staticOverlay = <div className=Css.(style([border(`px(1), `solid, Colors.grey1)]))> {"Overlay" |> React.string} </div>;
 
 let entries =
   EntryTypes.[

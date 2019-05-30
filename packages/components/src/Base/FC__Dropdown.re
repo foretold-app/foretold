@@ -1,5 +1,7 @@
 [@bs.module "rc-dropdown"] external rcDropDownClass: ReasonReact.reactClass = "default";
 
+[%bs.raw {|require("rc-dropdown/assets/index.css")|}];
+
 /** On what event to trigger dropdown
  * rc-trigger supports an array of triggers.
  * This is currently not encoded here currently as

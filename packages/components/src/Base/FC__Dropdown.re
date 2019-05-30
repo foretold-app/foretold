@@ -31,12 +31,12 @@ let triggerToString = trigger =>
 [@bs.deriving abstract]
 type jsProps = {
   overlay: ReasonReact.reactElement,
-  triggers: array(string),
+  trigger: array(string),
 };
 
-let make = (~overlay, ~trigger, children) =>
+let make = (~overlay, ~trigger=Hover, children) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=rcDropDownClass,
-    ~props=jsProps(~overlay, ~triggers=[|triggerToString(trigger)|]),
+    ~props=jsProps(~overlay, ~trigger=[|triggerToString(trigger)|]),
     children,
   );

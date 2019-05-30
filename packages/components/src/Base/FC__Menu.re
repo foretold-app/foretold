@@ -89,3 +89,5 @@ let make = (~onClick=?, children) =>
       ),
     children,
   );
+
+// Menu item group is not implemented (https://react-component.github.io/menu/examples/menuItemGroup.html)

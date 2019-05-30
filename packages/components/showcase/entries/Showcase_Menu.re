@@ -2,16 +2,16 @@ open FC.Base;
 
 let simpleMenu = () =>
   Menu.(
-    <Menu onClick=(e => Js.log(e.key))>
+    <Menu onClick={e => Js.log(e.key)}>
       <Item key="item1"> "Item1"->React.string </Item>
       <Item key="item2"> "Item2"->React.string </Item>
     </Menu>
   );
 
 let subMenu = () =>
-  Menu.(
-    <div className=Css.(style([width(`px(400))]))>
-      <Menu onClick=(e => Js.log(e.key))>
+  <div className=Css.(style([width(`px(400))]))>
+    Menu.(
+      <Menu onClick={e => Js.log(e.key)}>
         <Item key="item1"> "Item1"->React.string </Item>
         <Divider />
         <Item key="item2"> "Item2"->React.string </Item>
@@ -20,8 +20,8 @@ let subMenu = () =>
           <Item key="item4"> "Item3"->React.string </Item>
         </SubMenu>
       </Menu>
-    </div>
-  );
+    )
+  </div>;
 
 let entries =
   EntryTypes.[

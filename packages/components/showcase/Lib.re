@@ -85,6 +85,7 @@ module Styles = {
       hover([color(`hex("7089ad"))]),
     ]);
   let compContainer = style([padding(`em(2.)), flexGrow(1.)]);
+  let folderChildContainer = style([marginBottom(`em(2.))]);
 };
 
 let baseUrl = "/showcase/index.html";
@@ -182,7 +183,7 @@ module Index = {
                    f.children
                    |> E.L.fmap(child =>
                         switch (child) {
-                        | CompEntry(c) => <div key={c.id}> {c.render()} </div>
+                        | CompEntry(c) => <div className=Styles.folderChildContainer key={c.id}> {c.render()} </div>
                         | _ => React.null
                         }
                       )

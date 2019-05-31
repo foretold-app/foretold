@@ -77,12 +77,16 @@ module Helpers = {
     };
 
   let description = (~m: measurement) =>
-    m.description
-    |> E.O.fmap(text =>
-         <div className=Styles.descriptionStyle>
-           {text |> ste |> E.React.inP}
-         </div>
-       );
+    switch (m.description) {
+    | None
+    | Some("") => None
+    | Some(description) =>
+      Some(
+        <div className=Styles.descriptionStyle>
+          {description |> ste |> E.React.inP}
+        </div>,
+      )
+    };
 
   let relevantAt = (~m: measurement) =>
     m.relevantAt
@@ -214,22 +218,34 @@ let make = (ms: list(measurement)) => {
          | _ => 0
          }
        )
-    |> E.L.fmap((m: measurement) =>
-         <FC.Table.Row key={m.id}>
-           <FC.Table.Cell flex=2 className=primaryCellStyle>
-             {Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull}
-           </FC.Table.Cell>
-           <FC.Table.Cell flex=1 className=primaryCellStyle>
-             {Helpers.statSummary(m) |> E.O.React.defaultNull}
-           </FC.Table.Cell>
-           <FC.Table.Cell flex=1 className=primaryCellStyle>
-             {Helpers.measurerLink(~m)}
-           </FC.Table.Cell>
-           <FC.Table.Cell flex=1 className=primaryCellStyle>
-             {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
-           </FC.Table.Cell>
-         </FC.Table.Row>
-       )
+    |> E.L.fmap((m: measurement) => {
+         let inside =
+           <>
+             <FC.Table.Cell flex=2 className=primaryCellStyle>
+               {
+                 Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull
+               }
+             </FC.Table.Cell>
+             <FC.Table.Cell flex=1 className=primaryCellStyle>
+               {Helpers.statSummary(m) |> E.O.React.defaultNull}
+             </FC.Table.Cell>
+             <FC.Table.Cell flex=1 className=primaryCellStyle>
+               {Helpers.measurerLink(~m)}
+             </FC.Table.Cell>
+             <FC.Table.Cell flex=1 className=primaryCellStyle>
+               {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
+             </FC.Table.Cell>
+           </>;
+
+         switch (Helpers.description(~m)) {
+         | Some(description) =>
+           <FC.Table.Row
+             bottomSubRow=[|FC.Table.Row.textSection(description)|]>
+             inside
+           </FC.Table.Row>
+         | None => <FC.Table.Row> inside </FC.Table.Row>
+         };
+       })
     |> E.A.of_list
     |> ReasonReact.array;
   E.React.showIf(
@@ -247,3 +263,10 @@ let make = (ms: list(measurement)) => {
     </>,
   );
 };
+/* <FC.Table.Row
+   bottomSubRow=[|
+     FC.Table.Row.textSection(
+       Helpers.description(~m) |> E.O.React.defaultNull,
+     ),
+   |]
+   key={m.id}> */

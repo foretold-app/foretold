@@ -47,7 +47,7 @@ let userDropdown = agentId =>
     }
     {link(Internal(Agent({agentId, subPage: AgentBots})), "My Bots")}
     {link(Internal(Agent({agentId, subPage: AgentShow})), "My Predictions")}
-    {link(Internal(ChannelNew), "Make a new Channel")}
+    {link(Internal(ChannelNew), "Make a New Channel")}
     {link(Action(_ => Context.Auth.Actions.logout()), "Logout")}
   </div>;
 
@@ -57,7 +57,14 @@ let header = (loggedInUser: Context.Primary.User.t) =>
     <AntdDropdown
       overlay={userDropdown(agent.id)}
       overlayClassName=Layout__Dropdown.Styles.dropdown>
-      {agent.name |> E.O.default("") |> ste}
+      {
+        agent.name
+        |> (e => e == Some("") ? None : e)
+        |> E.O.default(
+             "Settings (Please add a Username on the Profile page)",
+           )
+        |> ste
+      }
       <Icon.Icon icon="CHEVRON_DOWN" />
     </AntdDropdown>
   | None => ReasonReact.null

@@ -27,6 +27,11 @@
       "dir": "example",
       "type": "dev",
       "subdirs": true
+    },
+    {
+      "dir": "showcase",
+      "type": "dev",
+      "subdirs": true
     }
   ]
 }

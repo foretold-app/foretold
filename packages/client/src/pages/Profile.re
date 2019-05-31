@@ -109,21 +109,25 @@ let make =
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv("Edit Profile Information"),
       ~body=
-        withUserMutation((mutation, data) => {
-          let agent = loggedInUser.agent;
-          let id = loggedInUser.id;
-          let name =
-            agent
-            |> E.O.bind(_, (r: Context.Primary.Agent.t) => r.name)
-            |> E.O.toExn("The logged in user needs an ID!");
-          withUserForm(id, name, mutation, ({send, state}) =>
-            CMutationForm.showWithLoading(
-              ~result=data.result,
-              ~form=formFields(state, send, () => send(Form.Submit)),
-              (),
-            )
-          );
-        }),
+        <FC.PageCard.BodyPadding>
+          {
+            withUserMutation((mutation, data) => {
+              let agent = loggedInUser.agent;
+              let id = loggedInUser.id;
+              let name =
+                agent
+                |> E.O.bind(_, (r: Context.Primary.Agent.t) => r.name)
+                |> E.O.toExn("The logged in user needs an ID!");
+              withUserForm(id, name, mutation, ({send, state}) =>
+                CMutationForm.showWithLoading(
+                  ~result=data.result,
+                  ~form=formFields(state, send, () => send(Form.Submit)),
+                  (),
+                )
+              );
+            })
+          }
+        </FC.PageCard.BodyPadding>,
     )
     |> layout,
 };

@@ -100,70 +100,104 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
       <Antd.Radio.Group
         value={form.values.showDescriptionProperty}
         defaultValue={form.values.showDescriptionProperty}
-        onChange={ReForm.Helpers.handleDomFormChange(
-          handleChange(`showDescriptionProperty),
-        )}>
+        onChange={
+          ReForm.Helpers.handleDomFormChange(
+            handleChange(`showDescriptionProperty),
+          )
+        }>
         <Antd.Radio value="FALSE"> {"Simple" |> ste} </Antd.Radio>
         <Antd.Radio value="TRUE">
           {"Subject-Property-Date" |> ste}
         </Antd.Radio>
       </Antd.Radio.Group>
     </Form.Item>
-    {E.React.showIf(
-       form.values.showDescriptionProperty == "TRUE",
-       <>
-         <Form.Item label="Subject" required=true>
-           <Antd.Input
-             value={form.values.labelSubject}
-             onChange={e =>
-               handleChange(`labelSubject, ReactEvent.Form.target(e)##value)
-             }
-           />
-         </Form.Item>
-         <Form.Item label="Property" required=true>
-           <Antd.Input
-             value={form.values.labelProperty}
-             onChange={e =>
-               handleChange(`labelProperty, ReactEvent.Form.target(e)##value)
-             }
-           />
-         </Form.Item>
-         <Form.Item label="Include a Specific Date in Name">
-           <AntdSwitch
-             checked={form.values.showDescriptionDate == "TRUE"}
-             onChange={e =>
-               handleChange(`showDescriptionDate, e ? "TRUE" : "FALSE")
-             }
-           />
-         </Form.Item>
-         {form.values.showDescriptionDate == "TRUE"
-            ? <Form.Item label="'On' Date">
+    {
+      E.React.showIf(
+        form.values.showDescriptionProperty == "TRUE",
+        <>
+          <p>
+            {
+              "Note: you must enter entity IDs in the Subject & Value fields. Example: @orgs/companies/tesla
+          "
+              |> ste
+            }
+          </p>
+          <p>
+            {
+              "It is currently not possible to add or modify entities. Contact Ozzie for information regarding these.
+          "
+              |> ste
+            }
+          </p>
+          <Form.Item label="Subject" required=true>
+            <Antd.Input
+              value={form.values.labelSubject}
+              onChange={
+                e =>
+                  handleChange(
+                    `labelSubject,
+                    ReactEvent.Form.target(e)##value,
+                  )
+              }
+            />
+          </Form.Item>
+          <Form.Item label="Property" required=true>
+            <Antd.Input
+              value={form.values.labelProperty}
+              onChange={
+                e =>
+                  handleChange(
+                    `labelProperty,
+                    ReactEvent.Form.target(e)##value,
+                  )
+              }
+            />
+          </Form.Item>
+          <Form.Item label="Include a Specific Date in Name">
+            <AntdSwitch
+              checked={form.values.showDescriptionDate == "TRUE"}
+              onChange={
+                e => handleChange(`showDescriptionDate, e ? "TRUE" : "FALSE")
+              }
+            />
+          </Form.Item>
+          {
+            form.values.showDescriptionDate == "TRUE" ?
+              <Form.Item label="'On' Date">
                 <DatePicker
                   value={form.values.labelOnDate |> MomentRe.moment}
-                  onChange={e => {
-                    handleChange(`labelOnDate, e |> formatDate);
-                    handleChange(`expectedResolutionDate, e |> formatDate);
-                  }}
+                  onChange={
+                    e => {
+                      handleChange(`labelOnDate, e |> formatDate);
+                      handleChange(`expectedResolutionDate, e |> formatDate);
+                    }
+                  }
                 />
-              </Form.Item>
-            : <div />}
-       </>,
-     )}
-    {E.React.showIf(
-       form.values.showDescriptionProperty == "FALSE",
-       <Form.Item label="Name" required=true>
-         <Input
-           value={form.values.name}
-           onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
-         />
-       </Form.Item>,
-     )}
+              </Form.Item> :
+              <div />
+          }
+        </>,
+      )
+    }
+    {
+      E.React.showIf(
+        form.values.showDescriptionProperty == "FALSE",
+        <Form.Item label="Name" required=true>
+          <Input
+            value={form.values.name}
+            onChange={
+              ReForm.Helpers.handleDomFormChange(handleChange(`name))
+            }
+          />
+        </Form.Item>,
+      )
+    }
     <Form.Item label="Description">
       <Input
         value={form.values.labelCustom}
-        onChange={ReForm.Helpers.handleDomFormChange(
-          handleChange(`labelCustom),
-        )}
+        onChange={
+          ReForm.Helpers.handleDomFormChange(handleChange(`labelCustom))
+        }
       />
     </Form.Item>
     <Form.Item
@@ -171,9 +205,11 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
       help="If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value.">
       <Input
         value={form.values.resolutionEndpoint}
-        onChange={ReForm.Helpers.handleDomFormChange(
-          handleChange(`resolutionEndpoint),
-        )}
+        onChange={
+          ReForm.Helpers.handleDomFormChange(
+            handleChange(`resolutionEndpoint),
+          )
+        }
       />
     </Form.Item>
     <Form.Item

@@ -37,16 +37,20 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
       )
       ||> E.React.el;
 
-    mutationMake((mutation, data) =>
-      form(mutation, ({handleSubmit, handleChange, form, _}) =>
-        CMutationForm.showWithLoading(
-          ~result=data.result,
-          ~form=ChannelForm.showForm(~form, ~handleSubmit, ~handleChange),
-          ~successMessage="Channel created successfully.",
-          (),
+    <FC.PageCard.BodyPadding>
+      {
+        mutationMake((mutation, data) =>
+          form(mutation, ({handleSubmit, handleChange, form, _}) =>
+            CMutationForm.showWithLoading(
+              ~result=data.result,
+              ~form=ChannelForm.showForm(~form, ~handleSubmit, ~handleChange),
+              ~successMessage="Channel created successfully.",
+              (),
+            )
+          )
         )
-      )
-    )
+      }
+    </FC.PageCard.BodyPadding>
     |> SLayout.LayoutConfig.make(
          ~head=SLayout.Header.textDiv("Create a New Channel"),
          ~body=_,

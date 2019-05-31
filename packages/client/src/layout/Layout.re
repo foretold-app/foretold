@@ -13,7 +13,7 @@ let defaultPage = (loggedInUser: option(Context.Primary.User.t)) =>
             <Home />;
           })
      )
-  |> E.O.default(<Home />);
+  |> E.O.default(ChannelIndex'.toEl(loggedInUser));
 
 let meToUser = (me: Context.Me.me) =>
   switch (me) {

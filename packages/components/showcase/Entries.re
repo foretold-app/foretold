@@ -16,4 +16,6 @@ let entries =
         ),
       ],
     ),
-  ];
+  ]
+  @ Showcase_Dropdown.entries
+  @ Showcase_Menu.entries;

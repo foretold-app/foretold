@@ -45,6 +45,16 @@ type jsProps = {
  * Dropdown component provides a way to show an overlay element
  * at a position relative to it's trigger element (the children given
  * to this element), on various triggers: Click, Hover, ContextMenu and Focus.
+ * Can be used for example with the Menu component as overlay
+ *
+ * Usage:
+ * ```
+ * let staticOverlay = <div> {"Todo: style" |> React.string} </div>;
+ *
+ * <Dropdown overlay=staticOverlay trigger=Dropdown.Click>
+ *   <div> {"Trigger element" |> React.string} </div>
+ * </Dropdown>
+ * ```
  */
 let make = (~overlay, ~trigger=Hover, children) =>
   ReasonReact.wrapJsForReason(

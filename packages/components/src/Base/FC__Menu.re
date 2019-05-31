@@ -1,13 +1,6 @@
 /**
  * Menu component and sibling components provides define menu items,
- * submenues and dividers. One can register an onClick callback on the
- * <Menu> element to receive information about clicks.
- * 
- * To resolve which menu item was clicked, the best way is probably
- * to provide a key attribute to the items, then use the key in
- * the callback. There is also a keyPath list with parents keys
- * in the case of a submenu, the dom Event and the react element
- * that was clicked.
+ * submenues and dividers. See make for usage.
  *
  * It is binding to https://github.com/react-component/menu
  *
@@ -84,7 +77,7 @@ type clickInfo = {
 };
 
 /**
- * Menu component and sibling components provides define menu items,
+ * Menu component and sibling components provides a way to define menu items,
  * submenues and dividers. One can register an onClick callback on the
  * <Menu> element to receive information about clicks.
  * 
@@ -93,6 +86,20 @@ type clickInfo = {
  * the callback. There is also a keyPath list with parents keys
  * in the case of a submenu, the dom Event and the react element
  * that was clicked.
+ *
+ * Usage:
+ * ```
+ * Menu.(
+ *   <Menu onClick={info => Js.log(info.key)}>
+ *     <Item key="item1"> { "Item 1" |> React.string } </Item>
+ *     <SubMenu title="Submenu">
+ *       <Item key="subitem1"> { "Subitem 1" |> React.string } </Item>
+ *       <Divider />
+ *       <Item key="subitem2"> { "Subitem 2" |> React.string } </Item>
+ *     </SubMenu>
+ *   </Menu>
+ * )
+ * ```
  */
 let make = (~onClick=?, children) =>
   ReasonReact.wrapJsForReason(

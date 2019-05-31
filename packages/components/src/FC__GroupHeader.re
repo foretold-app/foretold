@@ -44,7 +44,6 @@ let make = children => {
 };
 
 module SubHeader = {
-  open Colors.Text;
   let component = ReasonReact.statelessComponent(__MODULE__ ++ " Subheader");
 
   let make = children => {

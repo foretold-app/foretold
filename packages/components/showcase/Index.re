@@ -1,5 +1,3 @@
-open FC;
-
 ReactDOMRe.renderToElementWithId(
   <div
     className=Css.(

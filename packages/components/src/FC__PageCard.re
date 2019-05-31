@@ -114,6 +114,67 @@ module BodyPadding = {
   };
 };
 
+module Section = {
+  let component = ReasonReact.statelessComponent("Card Section");
+  module Styles = {
+    open Css;
+    let allStyle = style([clear(`both)]);
+    let greyStyle = style([backgroundColor(FC__Colors.smokeWhite)]);
+    let paddingStyle = style([padding2(~v=`em(1.5), ~h=`em(1.5))]);
+    let borderTStyle =
+      style([borderTop(`px(1), `solid, FC__Colors.accentBlue1a)]);
+    let borderBStyle =
+      style([borderBottom(`px(1), `solid, FC__Colors.accentBlue1a)]);
+    let flexStyle = style([display(`flex)]);
+
+    let getStyle = (grey, padding, borderTop, borderBottom, flex) => {
+      Belt.Array.reduce(
+        [|
+          (grey, greyStyle),
+          (padding, paddingStyle),
+          (borderTop, borderTStyle),
+          (borderBottom, borderBStyle),
+          (flex, flexStyle),
+        |],
+        allStyle,
+        (acc, (flag, style)) =>
+        flag ? acc ++ " " ++ style : acc
+      );
+    };
+  };
+  let make =
+      (
+        ~grey=false,
+        ~padding=true,
+        ~borderTop=false,
+        ~borderBottom=false,
+        ~flex=false,
+        children,
+      ) => {
+    ...component,
+    render: _self =>
+      <div
+        className={Styles.getStyle(
+          grey,
+          padding,
+          borderTop,
+          borderBottom,
+          flex,
+        )}>
+        ...children
+      </div>,
+  };
+};
+
+module Spacer = {
+  let component = ReasonReact.statelessComponent("Card Spacer");
+  let spaceStyle = Css.(style([marginTop(`em(1.5))]));
+  let make = _children => {
+    ...component,
+    render: _self => <div className=spaceStyle />,
+  };
+};
+
 module H1 = {
   let component = ReasonReact.statelessComponent("H1");
   let make = children => {

@@ -84,7 +84,6 @@ module L = {
   let toArray = Array.of_list;
   let fmapi = List.mapi;
   let concat = List.concat;
-  let append = List.append;
   let find = List.find;
   let filter = List.filter;
   let for_all = List.for_all;

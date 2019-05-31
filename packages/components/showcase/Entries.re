@@ -2,6 +2,8 @@ open FC.Base;
 
 let entries =
   EntryTypes.[
+    Showcase_PageCard.entry,
+    Showcase_MeasurableForm.entry,
     folder(
       ~title="Link",
       ~children=[

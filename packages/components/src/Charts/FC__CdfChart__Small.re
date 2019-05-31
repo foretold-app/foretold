@@ -38,7 +38,7 @@ let make =
         showVerticalLine=false
         showDistributionLines=false
         primaryDistribution={"xs": pdf.xs, "ys": pdf.ys}
-        onHover={r => ()}
+        onHover={_r => ()}
       />
     </div>;
   },

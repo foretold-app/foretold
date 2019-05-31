@@ -8,7 +8,7 @@ let entriesByPath: HS.t(navEntry) = HS.make(~hintSize=100);
 /* Creates unique id's per scope based on title */
 let buildIds = entries => {
   let genId = (title, path) => {
-    let noSpaces = Js.String.replaceByRe([%bs.re "/\s+/g"], "-", title);
+    let noSpaces = Js.String.replaceByRe([%bs.re "/\\s+/g"], "-", title);
     if (!HS.has(entriesByPath, path ++ "/" ++ noSpaces)) {
       noSpaces;
     } else {

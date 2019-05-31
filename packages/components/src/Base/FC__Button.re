@@ -36,7 +36,14 @@ let varantColors = (variant: variant) =>
     }
   );
 
-let styles = (~isDisabled=false, ~variant: variant, ~heightPadding=4, ()) => {
+let styles =
+    (
+      ~isDisabled=false,
+      ~variant: variant,
+      ~heightPadding=4,
+      ~fullWidth=false,
+      (),
+    ) => {
   let colors = varantColors(variant);
   let main =
     Css.(
@@ -59,7 +66,23 @@ let styles = (~isDisabled=false, ~variant: variant, ~heightPadding=4, ()) => {
     );
   let disabledStyles =
     Css.(style([background(FC__Colors.greydisabled), opacity(0.5)]));
-  isDisabled ? Css.merge([disabledStyles, main]) : main;
+  let fullWidthStyle =
+    Css.(
+      style([
+        width(`percent(100.)),
+        boxSizing(`borderBox),
+        textAlign(`center),
+        Css.float(`none),
+        display(`block)
+      ])
+    );
+
+  switch (isDisabled, fullWidth) {
+  | (false, false) => main
+  | (true, false) => Css.merge([main, disabledStyles])
+  | (false, true) => Css.merge([main, fullWidthStyle])
+  | (true, true) => Css.merge([main, disabledStyles, fullWidthStyle])
+  };
 };
 
 let component = ReasonReact.statelessComponent(__MODULE__);
@@ -70,6 +93,7 @@ let make =
       ~onClick=?,
       ~variant=Secondary,
       ~isDisabled=false,
+      ~fullWidth=false,
       ~className="",
       children,
     ) => {
@@ -79,7 +103,10 @@ let make =
       ?href
       ?onClick
       isDisabled
-      className={Css.merge([styles(~isDisabled, ~variant, ()), className])}>
+      className={Css.merge([
+        styles(~isDisabled, ~fullWidth, ~variant, ()),
+        className,
+      ])}>
       ...children
     </FC__Link>,
 };

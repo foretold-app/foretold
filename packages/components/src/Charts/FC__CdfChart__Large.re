@@ -11,7 +11,7 @@ module Styles = {
       selector(".chart .area-path", [SVG.fill(`hex("7e9db7"))]),
     ]);
 };
-let make = (~cdf: FC__Types.Dist.t, ~minX, ~maxX, ~width=Some(400), _children) => {
+let make = (~cdf: FC__Types.Dist.t, ~width=Some(400), _children) => {
   ...component,
   render: _ => {
     let pdf = cdf |> FC__Types.Dist.toPdf;
@@ -20,8 +20,6 @@ let make = (~cdf: FC__Types.Dist.t, ~minX, ~maxX, ~width=Some(400), _children) =
         marginBottom=25
         width=?width
         height=200
-        minX
-        maxX
         showVerticalLine=false
         showDistributionLines=false
         primaryDistribution={"xs": pdf.xs, "ys": pdf.ys}

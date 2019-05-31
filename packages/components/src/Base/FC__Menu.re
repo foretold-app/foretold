@@ -1,3 +1,18 @@
+/**
+ * Menu component and sibling components provides define menu items,
+ * submenues and dividers. One can register an onClick callback on the
+ * <Menu> element to receive information about clicks.
+ * 
+ * To resolve which menu item was clicked, the best way is probably
+ * to provide a key attribute to the items, then use the key in
+ * the callback. There is also a keyPath list with parents keys
+ * in the case of a submenu, the dom Event and the react element
+ * that was clicked.
+ *
+ * It is binding to https://github.com/react-component/menu
+ *
+ * Notable unimplemented things are selection of one or multiple items.
+ */
 [@bs.module "rc-menu"]
 external rcMenuClass: ReasonReact.reactClass = "default";
 [@bs.module "rc-menu"]
@@ -61,13 +76,24 @@ type jsProps = {
   selectable: bool,
 };
 
-type clickEvent = {
+type clickInfo = {
   key: string,
   item: React.element,
   domEvent: Dom.event,
   keyPath: array(string),
 };
 
+/**
+ * Menu component and sibling components provides define menu items,
+ * submenues and dividers. One can register an onClick callback on the
+ * <Menu> element to receive information about clicks.
+ * 
+ * To resolve which menu item was clicked, the best way is probably
+ * to provide a key attribute to the items, then use the key in
+ * the callback. There is also a keyPath list with parents keys
+ * in the case of a submenu, the dom Event and the react element
+ * that was clicked.
+ */
 let make = (~onClick=?, children) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=rcMenuClass,

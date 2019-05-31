@@ -1,3 +1,10 @@
+/**
+ * Dropdown component provides a way to show an overlay element
+ * at a position relative to it's trigger element (the children given
+ * to this element), on various triggers: Click, Hover, ContextMenu and Focus.
+ * 
+ * It is bindings to https://github.com/react-component/dropdown
+ */
 [@bs.module "rc-dropdown"] external rcDropDownClass: ReasonReact.reactClass = "default";
 
 [%bs.raw {|require("rc-dropdown/assets/index.css")|}];
@@ -34,6 +41,11 @@ type jsProps = {
   trigger: array(string),
 };
 
+/**
+ * Dropdown component provides a way to show an overlay element
+ * at a position relative to it's trigger element (the children given
+ * to this element), on various triggers: Click, Hover, ContextMenu and Focus.
+ */
 let make = (~overlay, ~trigger=Hover, children) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=rcDropDownClass,

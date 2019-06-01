@@ -23,16 +23,20 @@ let allStyles =
     BaseStyles.floatLeft,
   ];
 
+let flexStyles =
+  Css.[textAlign(`center), flexGrow(1.), padding2(~v=`em(0.8), ~h=`zero)];
+
 let component = ReasonReact.statelessComponent("Tab");
-let make = (~isActive=false, ~onClick=?, children) => {
+let make = (~isActive=false, ~onClick=?, ~flex=false, children) => {
   ...component,
   render: _self =>
     <Link
       isDisabled=false
       ?onClick
-      className={
-        Css.style((isActive ? activeStyles : inactiveStyles) @ allStyles)
-      }>
+      className={Css.style(
+        (isActive ? activeStyles : inactiveStyles)
+        @ (flex ? flexStyles : allStyles),
+      )}>
       ...children
     </Link>,
 };

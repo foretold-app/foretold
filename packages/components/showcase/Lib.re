@@ -8,7 +8,7 @@ let entriesByPath: HS.t(navEntry) = HS.make(~hintSize=100);
 /* Creates unique id's per scope based on title */
 let buildIds = entries => {
   let genId = (title, path) => {
-    let noSpaces = Js.String.replaceByRe([%bs.re "/\s+/g"], "-", title);
+    let noSpaces = Js.String.replaceByRe([%bs.re "/\\s+/g"], "-", title);
     if (!HS.has(entriesByPath, path ++ "/" ++ noSpaces)) {
       noSpaces;
     } else {
@@ -57,6 +57,7 @@ module Styles = {
     style([
       padding(`em(2.)),
       flexBasis(`px(200)),
+      flexShrink(0),
       backgroundColor(`hex("eaeff3")),
       boxShadow(
         ~x=`px(-1),
@@ -85,6 +86,8 @@ module Styles = {
       hover([color(`hex("7089ad"))]),
     ]);
   let compContainer = style([padding(`em(2.)), flexGrow(1.)]);
+  // Approximate sidebar container for entry
+  let sidebarContainer = style([maxWidth(`px(430))]);
   let folderChildContainer = style([marginBottom(`em(2.))]);
 };
 
@@ -150,6 +153,13 @@ module Index = {
     ->React.array;
   };
 
+  let renderEntry = e => {
+    switch (e.container) {
+    | FullWidth => e.render()
+    | Sidebar => <div className=Styles.sidebarContainer> {e.render()} </div>
+    };
+  };
+
   let make = _children => {
     ...component,
     initialState: () => {
@@ -176,14 +186,14 @@ module Index = {
              switch (HS.get(entriesByPath, self.state.route.hash)) {
              | Some(navEntry) =>
                switch (navEntry) {
-               | CompEntry(c) => c.render()
+               | CompEntry(c) => renderEntry(c)
                | FolderEntry(f) =>
                  /* Rendering immediate children */
                  (
                    f.children
                    |> E.L.fmap(child =>
                         switch (child) {
-                        | CompEntry(c) => <div className=Styles.folderChildContainer key={c.id}> {c.render()} </div>
+                        | CompEntry(c) => <div className=Styles.folderChildContainer key={c.id}> {renderEntry(c)} </div>
                         | _ => React.null
                         }
                       )

@@ -8,4 +8,4 @@ let cdf: FC__Types.Dist.t = {
 let measurableForm = () => <MeasurableForm cdf />;
 
 let entry =
-  EntryTypes.(entry(~title="Measurable form", ~render=measurableForm));
+  EntryTypes.(sidebar(~title="Measurable form", ~render=measurableForm));

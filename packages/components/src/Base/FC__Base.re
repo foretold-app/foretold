@@ -7,5 +7,6 @@ module Globals = FC__Globals;
 module BaseStyles = FC__BaseStyles;
 module Button = FC__Button;
 module InputHeader = FC__InputHeader;
-module InputText = FC__InputText;
+module TextInput = FC__TextInput;
 module Textarea = FC__Textarea;
+module Icon = FC__Icon;

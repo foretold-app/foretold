@@ -28,7 +28,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
       </PageCard.Section>
       <PageCard.Section>
         <InputHeader> "Comment"->React.string </InputHeader>
-        <Textarea fullWidth=true />
+        <TextArea fullWidth=true />
         <PageCard.Spacer />
         <Button variant=Button.Primary fullWidth=true>
           "Submit Prediction"->React.string

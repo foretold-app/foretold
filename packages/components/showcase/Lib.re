@@ -88,6 +88,7 @@ module Styles = {
   let compContainer = style([padding(`em(2.)), flexGrow(1.)]);
   // Approximate sidebar container for entry
   let sidebarContainer = style([maxWidth(`px(430))]);
+  let folderChildContainer = style([marginBottom(`em(2.))]);
 };
 
 let baseUrl = "/showcase/index.html";
@@ -192,7 +193,7 @@ module Index = {
                    f.children
                    |> E.L.fmap(child =>
                         switch (child) {
-                        | CompEntry(c) => <div key={c.id}> {renderEntry(c)} </div>
+                        | CompEntry(c) => <div className=Styles.folderChildContainer key={c.id}> {renderEntry(c)} </div>
                         | _ => React.null
                         }
                       )

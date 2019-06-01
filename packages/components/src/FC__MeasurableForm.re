@@ -7,7 +7,7 @@ module Tab = FC__Tab;
 
 let make = (~cdf: FC__Types.Dist.t, _children) => {
   ...component,
-  render: _self => {
+  render: _self =>
     <PageCard>
       <PageCard.HeaderRow>
         <PageCard.HeaderRow.Title>
@@ -27,13 +27,13 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
         <TextInput fullWidth=true placeholder="5 to 50" />
       </PageCard.Section>
       <PageCard.Section>
-        <InputHeader> "Comment"->React.string </InputHeader>
+        <InputLabel> "Comment"->React.string </InputLabel>
         <TextArea fullWidth=true />
         <PageCard.Spacer />
-        <Button variant=Button.Primary fullWidth=true>
+        <Button
+          variant=Button.Primary fullWidth=true verticalPadding={`px(10)}>
           "Submit Prediction"->React.string
         </Button>
       </PageCard.Section>
-    </PageCard>;
-  },
+    </PageCard>,
 };

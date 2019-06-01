@@ -127,7 +127,7 @@ module Section = {
       style([borderBottom(`px(1), `solid, FC__Colors.accentBlue1a)]);
     let flexStyle = style([display(`flex)]);
 
-    let getStyle = (grey, padding, borderTop, borderBottom, flex) => {
+    let getStyle = (grey, padding, borderTop, borderBottom, flex) =>
       Belt.Array.reduce(
         [|
           (grey, greyStyle),
@@ -140,7 +140,6 @@ module Section = {
         (acc, (flag, style)) =>
         flag ? acc ++ " " ++ style : acc
       );
-    };
   };
   let make =
       (
@@ -154,20 +153,17 @@ module Section = {
     ...component,
     render: _self =>
       <div
-        className={Styles.getStyle(
-          grey,
-          padding,
-          borderTop,
-          borderBottom,
-          flex,
-        )}>
+        className={
+          Styles.getStyle(grey, padding, borderTop, borderBottom, flex)
+        }>
         ...children
       </div>,
   };
 };
 
-module Spacer = {
-  let component = ReasonReact.statelessComponent("Card Spacer");
+module VerticalSpace = {
+  let component =
+    ReasonReact.statelessComponent("Card Vertical Padding Area");
   let spaceStyle = Css.(style([marginTop(`em(1.5))]));
   let make = _children => {
     ...component,

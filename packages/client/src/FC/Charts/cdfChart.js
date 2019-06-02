@@ -43,7 +43,8 @@ class CdfChart extends React.Component {
   }
         
   render(){
-    return <div id={this.state.divId} style={{width: this.props.width + "px"}}/>
+    /* An untruthy width prop makes chart expand to container size */
+    return <div id={this.state.divId} style={this.props.width ? {width: this.props.width + "px"} : {}}/>
   }
 }
 

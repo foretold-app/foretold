@@ -19,11 +19,11 @@ external rcDividerClass: ReasonReact.reactClass = "Divider";
 module SubMenu = {
   // https://github.com/react-component/menu#menusubmenu-props
   [@bs.deriving abstract]
-  type jsProps = {title: string};
+  type jsProps = {title: string, popupClassName:string};
   let make = (~title, children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=rcSubMenuClass,
-      ~props=jsProps(~title),
+      ~props=jsProps(~title, ~popupClassName="custom-submenu"),
       children,
     );
 };
@@ -34,11 +34,17 @@ module Item = {
   type jsProps = {
     disabled: bool,
     itemIcon: Js.Undefined.t(React.element),
+    className: string,
   };
   let make = (~disabled=false, ~itemIcon=None, children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=rcItemClass,
-      ~props=jsProps(~disabled, ~itemIcon=Js.Undefined.fromOption(itemIcon)),
+      ~props=
+        jsProps(
+          ~disabled,
+          ~itemIcon=Js.Undefined.fromOption(itemIcon),
+          ~className="custom-menu-item",
+        ),
       children,
     );
 };
@@ -67,6 +73,7 @@ type jsProps = {
     } =>
     unit,
   selectable: bool,
+  className: string,
 };
 
 type clickInfo = {
@@ -80,7 +87,7 @@ type clickInfo = {
  * Menu component and sibling components provides a way to define menu items,
  * submenues and dividers. One can register an onClick callback on the
  * <Menu> element to receive information about clicks.
- * 
+ *
  * To resolve which menu item was clicked, the best way is probably
  * to provide a key attribute to the items, then use the key in
  * the callback. There is also a keyPath list with parents keys
@@ -119,8 +126,7 @@ let make = (~onClick=?, children) =>
             | None => ()
             },
         ~selectable=false,
+        ~className="custom-menu",
       ),
     children,
-  );
-
-// Menu item group is not implemented (https://react-component.github.io/menu/examples/menuItemGroup.html)
+  ) /* Menu item group is not implemented (https://react-component.github.io/menu/examples/menuItemGroup.html*/;

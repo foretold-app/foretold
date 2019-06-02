@@ -12,3 +12,4 @@ module TextArea = FC__TextArea;
 module Icon = FC__Icon;
 module Dropdown = FC__Dropdown;
 module Menu = FC__Menu;
+module DropdownMenu = FC__DropdownMenu;

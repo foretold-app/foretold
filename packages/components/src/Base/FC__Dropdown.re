@@ -39,6 +39,7 @@ let triggerToString = trigger =>
 type jsProps = {
   overlay: ReasonReact.reactElement,
   trigger: array(string),
+  prefixCls: string
 };
 
 /**
@@ -56,9 +57,9 @@ type jsProps = {
  * </Dropdown>
  * ```
  */
-let make = (~overlay, ~trigger=Hover, children) =>
+let make = (~overlay, ~trigger=Hover, ~prefixCls="rc-dropdown", children) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=rcDropDownClass,
-    ~props=jsProps(~overlay, ~trigger=[|triggerToString(trigger)|]),
+    ~props=jsProps(~overlay, ~trigger=[|triggerToString(trigger)|], ~prefixCls),
     children,
   );

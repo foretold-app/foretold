@@ -13,27 +13,21 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
   render: _ =>
     <>
       <div className=Styles.mainText>
-        {
-          cdf
-          |> FC__Types.Dist.findX(0.5)
-          |> FC__E.Float.with3DigitsPrecision
-          |> ReasonReact.string
-        }
+        <FC__NumberShower
+          precision=3
+          number={cdf |> FC__Types.Dist.findX(0.5)}
+        />
       </div>
       <div className=Styles.secondaryText>
-        {
-          cdf
-          |> FC__Types.Dist.findX(0.05)
-          |> FC__E.Float.with3DigitsPrecision
-          |> ReasonReact.string
-        }
+        <FC__NumberShower
+          precision=3
+          number={cdf |> FC__Types.Dist.findX(0.05)}
+        />
         {" to " |> ReasonReact.string}
-        {
-          cdf
-          |> FC__Types.Dist.findX(0.95)
-          |> FC__E.Float.with3DigitsPrecision
-          |> ReasonReact.string
-        }
+        <FC__NumberShower
+          precision=3
+          number={cdf |> FC__Types.Dist.findX(0.95)}
+        />
       </div>
     </>,
 };

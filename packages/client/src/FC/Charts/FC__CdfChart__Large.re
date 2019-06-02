@@ -11,17 +11,20 @@ module Styles = {
       selector(".chart .area-path", [SVG.fill(`hex("7e9db7"))]),
     ]);
 };
-let make = (~data, _children) => {
+let make = (~cdf: FC__Types.Dist.t, ~width=Some(400), _children) => {
   ...component,
-  render: _ =>
+  render: _ => {
+    let pdf = cdf |> FC__Types.Dist.toPdf;
     <div className=Styles.graph>
       <FC__CdfChart__Base
         marginBottom=25
-        width=400
+        width=?width
         height=200
         showVerticalLine=false
         showDistributionLines=false
-        primaryDistribution=data
+        primaryDistribution={"xs": pdf.xs, "ys": pdf.ys}
+        onHover={_r => ()}
       />
-    </div>,
+    </div>
+  },
 };

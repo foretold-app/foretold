@@ -40,7 +40,7 @@ module NumbersDisplay = {
       <PageCard>
         <PageCard.HeaderRow>
           <PageCard.HeaderRow.Title>
-            "Numbers"->React.string
+            "NumberShower"->React.string
           </PageCard.HeaderRow.Title>
         </PageCard.HeaderRow>
         <div>
@@ -48,7 +48,7 @@ module NumbersDisplay = {
             numbers
             |> E.L.fmap(n =>
                  <div key={n |> Js.Float.toString}>
-                   <NumberShower number=n precision=3 />
+                   <FC__NumberShower number=n precision=3 />
                  </div>
                )
             |> E.L.toArray
@@ -60,4 +60,4 @@ module NumbersDisplay = {
 };
 
 let entry =
-  EntryTypes.(entry(~title="Numbers", ~render=() => <NumbersDisplay />));
+  EntryTypes.(entry(~title="NumberShower", ~render=() => <NumbersDisplay />));

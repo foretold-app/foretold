@@ -13,15 +13,18 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
   render: _ =>
     <>
       <div className=Styles.mainText>
-        <NumberShower precision=3 number={cdf |> FC__Types.Dist.findX(0.5)} />
+        <FC__NumberShower
+          precision=3
+          number={cdf |> FC__Types.Dist.findX(0.5)}
+        />
       </div>
       <div className=Styles.secondaryText>
-        <NumberShower
+        <FC__NumberShower
           precision=3
           number={cdf |> FC__Types.Dist.findX(0.05)}
         />
         {" to " |> ReasonReact.string}
-        <NumberShower
+        <FC__NumberShower
           precision=3
           number={cdf |> FC__Types.Dist.findX(0.95)}
         />

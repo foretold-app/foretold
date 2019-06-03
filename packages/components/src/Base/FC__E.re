@@ -105,6 +105,19 @@ module L = {
   let update = Rationale.RList.update;
   let iter = List.iter;
   let findIndex = Rationale.RList.findIndex;
+  module React = {
+    let map = (map: 'a => 'b, list: list('a)): React.element => {
+      let a = [||];
+      let rec loop = list =>
+        switch (list) {
+        | [first, ...rest] =>
+          let _ = Js.Array.push(map(first), a);
+          loop(rest);
+        | [] => React.array(a)
+        };
+      loop(list);
+    };
+  };
 };
 
 /* A for Array */

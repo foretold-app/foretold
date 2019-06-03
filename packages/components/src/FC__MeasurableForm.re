@@ -8,27 +8,23 @@ module TabList = {
   let make = (~selected, ~flex=false, ~onClick=?, ~list, _children) => {
     ...component,
     render: _self => {
-      (
-        list
-        |> E.L.fmap(((key, label)) =>
-             <Tab
-               key
-               onClick={e =>
-                 switch (onClick) {
-                 | Some(onClick) =>
-                   e->ReactEvent.Synthetic.preventDefault;
-                   onClick(key);
-                 | None => ()
-                 }
+      list
+      |> E.L.React.map(((key, label)) =>
+           <Tab
+             key
+             onClick={e =>
+               switch (onClick) {
+               | Some(onClick) =>
+                 e->ReactEvent.Synthetic.preventDefault;
+                 onClick(key);
+               | None => ()
                }
-               isActive={selected == key}
-               flex>
-               label->React.string
-             </Tab>
-           )
-      )
-      ->E.L.toArray
-      ->React.array;
+             }
+             isActive={selected == key}
+             flex>
+             label->React.string
+           </Tab>
+         );
     },
   };
 };

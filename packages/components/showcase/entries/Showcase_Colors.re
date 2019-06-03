@@ -80,7 +80,7 @@ module ColorDisplay = {
             "Colors"->React.string
           </PageCard.HeaderRow.Title>
         </PageCard.HeaderRow>
-        <PageCard.Section borderBottom=true>
+        <PageCard.Section border=`bottom>
           "Background: "->React.string
           <select
             value={self.state.bgName}

@@ -22,4 +22,5 @@ let entries =
   ]
   @ Showcase_Dropdown.entries
   @ Showcase_Menu.entries
-  @ Showcase_DropdownMenu.entries;
+  @ Showcase_DropdownMenu.entries
+  @ Showcase_Alerts.entry;

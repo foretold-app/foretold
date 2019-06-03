@@ -117,6 +117,17 @@ module L = {
         };
       loop(list);
     };
+    let mapi = (map: (int, 'a) => 'b, list: list('a)): React.element => {
+      let a = [||];
+      let rec loop = (list, i) =>
+        switch (list) {
+        | [first, ...rest] =>
+          let _ = Js.Array.push(map(i, first), a);
+          loop(rest, i + 1);
+        | [] => React.array(a)
+        };
+      loop(list, 0);
+    };
   };
 };
 

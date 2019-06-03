@@ -1,13 +1,53 @@
 open FC__Base;
 
-let component = ReasonReact.statelessComponent(__MODULE__);
-
 module PageCard = FC__PageCard;
 module Tab = FC__Tab;
 
+module TabList = {
+  let component = ReasonReact.statelessComponent(__MODULE__);
+  let make = (~selected, ~flex=false, ~onClick=?, ~list, _children) => {
+    ...component,
+    render: _self => {
+      (
+        list
+        |> E.L.fmap(((key, label)) =>
+             <Tab
+               key
+               onClick={e =>
+                 switch (onClick) {
+                 | Some(onClick) =>
+                   e->ReactEvent.Synthetic.preventDefault;
+                   onClick(key);
+                 | None => ()
+                 }
+               }
+               isActive={selected == key}
+               flex>
+               label->React.string
+             </Tab>
+           )
+      )
+      ->E.L.toArray
+      ->React.array;
+    },
+  };
+};
+
+type state = {tabSelected: string};
+
+type action =
+  | ChangeTab(string);
+
+let component = ReasonReact.reducerComponent(__MODULE__);
 let make = (~cdf: FC__Types.Dist.t, _children) => {
   ...component,
-  render: _self =>
+  initialState: () => {tabSelected: "simple"},
+  reducer: (action: action, _state: state) => {
+    switch (action) {
+    | ChangeTab(tabKey) => ReasonReact.Update({tabSelected: tabKey})
+    };
+  },
+  render: self =>
     <PageCard>
       <PageCard.HeaderRow>
         <PageCard.HeaderRow.Title>
@@ -16,9 +56,16 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
         </PageCard.HeaderRow.Title>
       </PageCard.HeaderRow>
       <PageCard.Section flex=true padding=false>
-        <Tab isActive=true flex=true> "Simple"->React.string </Tab>
-        <Tab flex=true> "Free-form"->React.string </Tab>
-        <Tab flex=true> "Custom"->React.string </Tab>
+        <TabList
+          selected={self.state.tabSelected}
+          onClick={key => self.send(ChangeTab(key))}
+          flex=true
+          list=[
+            ("simple", "Simple2"),
+            ("freeForm", "Free-form"),
+            ("custom", "Custom"),
+          ]
+        />
       </PageCard.Section>
       <PageCard.Section grey=true borderBottom=true padding=false>
         <FC__CdfChart__Large cdf width=None />

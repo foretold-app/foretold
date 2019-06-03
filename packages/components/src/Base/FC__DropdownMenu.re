@@ -7,10 +7,11 @@ module Styles = {
   let itemVerticalPadding = 5;
   let itemHorizontalPadding = 12;
   // Reverting to "rc-dropdown" brings back some styles from the original css file
-  let prefixCls = "fc-dropdown";
+  let prefixCls = "ft-dropdown";
   let prefixPlus = ext => "." ++ prefixCls ++ "-" ++ ext;
   let textColor = Colors.textDarker;
   let bgColor = Colors.white;
+  let textSize = `rem(0.8);
 
   let dropdownTrigger =
     style([
@@ -22,7 +23,7 @@ module Styles = {
         ~h=`px(itemHorizontalPadding - 2),
       ),
       backgroundColor(bgColor),
-      fontSize(`rem(0.8)),
+      fontSize(textSize),
       fontFamily("Lato"),
       color(textColor),
     ]);
@@ -31,18 +32,18 @@ module Styles = {
   // Dropdown root element. This, like submenu popups, are placed
   // in generated divs right inside document body element. Ie only
   // influenced by top level styles.
-  // Note that submenues get their own top level element, so this
-  // does not apply to submenues
+  // Note that submenus get their own top level element, so this
+  // does not apply to submenus
   global("." ++ prefixCls, [position(`absolute), zIndex(1070)]);
 
   // Menu ul
   // <ul> element that contain the menu items in it's <li>'s
-  // Both root menu and submenues have this class.
+  // Both root menu and submenus have this class.
   // This ul element will receive the hidden class when hidden
   global(
     prefixPlus("menu"),
     [
-      fontSize(`rem(0.8)),
+      fontSize(textSize),
       fontFamily("Lato"),
       lineHeight(`em(1.5)),
       outlineStyle(`none),
@@ -55,7 +56,6 @@ module Styles = {
       boxShadow(~x=`zero, ~y=`px(2), ~blur=`px(8), `rgba((0, 0, 0, 0.15))),
       margin(`zero),
       padding2(~v=`px(4), ~h=`zero),
-      fontSize(`rem(0.8)),
     ],
   );
 
@@ -80,6 +80,7 @@ module Styles = {
     [
       color(textColor),
       whiteSpace(`nowrap),
+      // Used to place icon in submenu item currently
       position(`relative),
       display(`block),
       cursor(`default),

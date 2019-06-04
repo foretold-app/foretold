@@ -46,7 +46,7 @@ let customSelect = () =>
       switch (v) {
       | Some(Option1) => Js.log("Option 1")
       | Some(Option2) => Js.log("Option 2")
-      | Some(Option3) => Js.log("Option 2")
+      | Some(Option3) => Js.log("Option 3")
       | None => Js.log("None")
       }
     }

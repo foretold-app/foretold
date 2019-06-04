@@ -6,8 +6,8 @@ module TabList = FC__TabList;
 
 // Could this be in some flexrow or part of Div component?
 let flexRowContainer =
-  Css.(style([margin2(~v=`zero, ~h=`px(-4)), alignItems(`flexEnd)]));
-let flexRowItem = Css.(style([margin2(~v=`zero, ~h=`px(4))]));
+  Css.(style([margin2(~v=`zero, ~h=`px(-6)), alignItems(`flexEnd)]));
+let flexRowItem = Css.(style([margin2(~v=`zero, ~h=`px(6))]));
 
 type tabs =
   | SimpleTab
@@ -72,11 +72,19 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
          | FreeformTab => <TextInput fullWidth=true placeholder="5 to 50" />
          | CustomTab =>
            <div>
-              <div>
-              </div>
+             <div>
+               <DropdownSelect.String
+                 initialValue={Some("CDF")}
+                 values=[("CDF", "CDF"), ("PDF", "PDF")]
+               />
+               <Icon.Questionmark />
+             </div>
+             <PageCard.VerticalSpace />
              <Alert type_=Alert.Error>
                "Input is not a valid PDF"->React.string
              </Alert>
+             <PageCard.VerticalSpace />
+             <TextArea rows=4 fullWidth=true />
            </div>
          }}
       </PageCard.Section>

@@ -85,6 +85,19 @@ module L = {
   let fmapi = List.mapi;
   let concat = List.concat;
   let find = List.find;
+  let findWithIndex = (pred: (int, 'a) => bool, list: list('a)) => {
+    let rec loop = (i, rest) =>
+      switch (rest) {
+      | [first, ...rest] =>
+        if (pred(i, first)) {
+          Some(first);
+        } else {
+          loop(i + 1, rest);
+        }
+      | [] => None
+      };
+    loop(0, list);
+  };
   let filter = List.filter;
   let for_all = List.for_all;
   let exists = List.exists;
@@ -117,7 +130,8 @@ module L = {
         };
       loop(list);
     };
-    let mapi = (map: (int, 'a) => React.element, list: list('a)): React.element => {
+    let mapi =
+        (map: (int, 'a) => React.element, list: list('a)): React.element => {
       let a = [||];
       let rec loop = (list, i) =>
         switch (list) {

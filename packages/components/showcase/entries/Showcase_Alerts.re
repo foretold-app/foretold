@@ -9,4 +9,4 @@ let alerts = () =>
     <Alert type_=Alert.Error> "Error alert"->React.string </Alert>
   </div>;
 
-let entry = EntryTypes.[entry(~title="Alerts", ~render=alerts)];
+let entry = EntryTypes.(entry(~title="Alerts", ~render=alerts));

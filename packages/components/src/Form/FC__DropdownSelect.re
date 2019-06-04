@@ -1,22 +1,3 @@
-// Helper to find by "key1", "key2" etc
-// where the number is the index in the list.
-// Was a little worried about using straight ints
-// as strings (if they would unintentionally be
-// converted to ints in some situations)
-// so prepended "key"
-let findByIndexKey = (key, values) => {
-  let rec loop = (i, rest) =>
-    switch (rest) {
-    | [first, ...rest] =>
-      if ("key" ++ string_of_int(i) == key) {
-        Some(first);
-      } else {
-        loop(i + 1, rest);
-      }
-    | [] => None
-    };
-  loop(0, values);
-};
 module type Template = {type keyType;};
 module Make = (T: Template) => {
   type state = {
@@ -55,7 +36,8 @@ module Make = (T: Template) => {
       (
         ~initialValue: option(T.keyType)=None,
         ~values: list((T.keyType, string)),
-        ~onSelect: option(T.keyType) => unit,
+        ~onSelect: option(option(T.keyType) => unit)=?,
+        ~trigger=FC__Dropdown.Click,
         _children,
       ) => {
     ...component,
@@ -65,7 +47,10 @@ module Make = (T: Template) => {
       | ChangeValue(value, label) =>
         ReasonReact.UpdateWithSideEffects(
           {...state, value, label},
-          _self => onSelect(value),
+          _self => switch (onSelect) {
+            | Some(onSelect) => onSelect(value)
+            | None => ()
+          }
         )
       | Initialize(value, label) =>
         ReasonReact.Update({value, label, isInitialized: true})
@@ -84,16 +69,24 @@ module Make = (T: Template) => {
       };
     },
     render: self => {
-      <FC__DropdownMenu title={self.state.label}>
+      <FC__DropdownMenu title={self.state.label} trigger>
         <FC__Menu
           selectable=true
           onSelect={info =>
-            switch (findByIndexKey(info.key, values)) {
+            switch (
+              FC__E.L.findWithIndex(
+                (i, _) => info.key == "key" ++ string_of_int(i),
+                values,
+              )
+            ) {
             | Some((key, label)) =>
               self.send(ChangeValue(Some(key), label))
             | None => () // Error, could not find selected key among values
             }
           }>
+          // Was a little worried about using a straight int as a key,
+          // in case some conversions may go wrong or something, so added
+          // "key" before
           {values
            |> FC__E.L.React.mapi((i, (_key, label)) =>
                 <FC__Menu.Item key={"key" ++ string_of_int(i)}>

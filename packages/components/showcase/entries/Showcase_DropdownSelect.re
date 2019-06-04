@@ -1,7 +1,7 @@
 open FC.Base;
 
 let stringSelect = () =>
-  <DropdownSelect.String
+  <DropdownSelect
     initialValue=None
     values=[("key1", "Label 1"), ("key2", "Label 2"), ("key3", "Label 3")]
     onSelect={v =>
@@ -13,7 +13,7 @@ let stringSelect = () =>
   />;
 
 let intSelect = () =>
-  <DropdownSelect.Int
+  <DropdownSelect
     initialValue={Some(2)}
     values=[(1, "Int label 1"), (2, "Int label 2"), (3, "Int label 3")]
     onSelect={v =>
@@ -29,13 +29,8 @@ type customType =
   | Option2
   | Option3;
 
-module CustomSelect =
-  DropdownSelect.Make({
-    type keyType = customType;
-  });
-
 let customSelect = () =>
-  <CustomSelect
+  <DropdownSelect
     initialValue={Some(Option3)}
     values=[
       (Option1, "Option1"),

@@ -73,7 +73,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
          | CustomTab =>
            <div>
              <div>
-               <DropdownSelect.String
+               <DropdownSelect
                  initialValue={Some("CDF")}
                  values=[("CDF", "CDF"), ("PDF", "PDF")]
                />

@@ -106,7 +106,7 @@ module L = {
   let iter = List.iter;
   let findIndex = Rationale.RList.findIndex;
   module React = {
-    let map = (map: 'a => 'b, list: list('a)): React.element => {
+    let map = (map: 'a => React.element, list: list('a)): React.element => {
       let a = [||];
       let rec loop = list =>
         switch (list) {
@@ -117,7 +117,7 @@ module L = {
         };
       loop(list);
     };
-    let mapi = (map: (int, 'a) => 'b, list: list('a)): React.element => {
+    let mapi = (map: (int, 'a) => React.element, list: list('a)): React.element => {
       let a = [||];
       let rec loop = (list, i) =>
         switch (list) {

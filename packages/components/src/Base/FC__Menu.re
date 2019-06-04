@@ -16,6 +16,44 @@ external rcDividerClass: ReasonReact.reactClass = "Divider";
 
 [%bs.raw {|require("rc-menu/assets/index.css")|}];
 
+module Styles = {
+  open Css;
+  let menuBorderRadius = `px(3);
+  // Menu general, applied to menu <ul> elements
+  global(".ft-menu-general, .ft-submenu-general>ul", [
+      fontFamily("Lato"),
+      listStyleType(`none),
+      position(`relative),
+      outlineStyle(`none),
+      borderRadius(menuBorderRadius),
+      borderStyle(`none),
+      boxShadow(~x=`zero, ~y=`px(2), ~blur=`px(8), `rgba((0, 0, 0, 0.15))),
+      margin(`zero),
+      padding2(~v=`px(4), ~h=`zero),
+      // This is applied to menu-items, submenu pointers, and dividers
+      selector(">li", [
+        // Used to place icon in submenu item currently
+        position(`relative),
+        display(`block),
+        clear(`both),
+        whiteSpace(`nowrap),
+        cursor(`default)
+      ]),
+      // Taken from default stylesheet, might prevent some small bug
+      // with border radius
+      selector(">li.ft-menu-item-general:first-child", [
+        borderTopLeftRadius(menuBorderRadius),
+        borderTopRightRadius(menuBorderRadius)
+      ])
+  ]);
+
+  // Applied to div of submenu
+  global(".ft-submenu-general", [
+    position(`absolute),
+    minWidth(`px(100))
+  ]);
+};
+
 module SubMenu = {
   // https://github.com/react-component/menu#menusubmenu-props
   [@bs.deriving abstract]
@@ -23,7 +61,7 @@ module SubMenu = {
   let make = (~title, children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=rcSubMenuClass,
-      ~props=jsProps(~title, ~popupClassName="custom-submenu"),
+      ~props=jsProps(~title, ~popupClassName="ft-submenu-general"),
       children,
     );
 };
@@ -43,7 +81,7 @@ module Item = {
         jsProps(
           ~disabled,
           ~itemIcon=Js.Undefined.fromOption(itemIcon),
-          ~className="custom-menu-item",
+          ~className="ft-menu-item-general",
         ),
       children,
     );
@@ -126,7 +164,7 @@ let make = (~onClick=?, children) =>
             | None => ()
             },
         ~selectable=false,
-        ~className="custom-menu",
+        ~className="ft-menu-general",
       ),
     children,
   ) /* Menu item group is not implemented (https://react-component.github.io/menu/examples/menuItemGroup.html*/;

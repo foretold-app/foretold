@@ -7,11 +7,12 @@ module Styles = {
   let itemVerticalPadding = 5;
   let itemHorizontalPadding = 12;
   // Reverting to "rc-dropdown" brings back some styles from the original css file
-  let prefixCls = "ft-dropdown";
+  let prefixCls = "rc-dropdown";
   let prefixPlus = ext => "." ++ prefixCls ++ "-" ++ ext;
   let textColor = Colors.textDarker;
   let bgColor = Colors.white;
   let textSize = `rem(0.8);
+  let textLineHeight = `em(1.5);
 
   let dropdownTrigger =
     style([
@@ -26,6 +27,11 @@ module Styles = {
       fontSize(textSize),
       fontFamily("Lato"),
       color(textColor),
+      // Selector for trigger element with overlay open
+      selector("&.rc-dropdown-open", [
+        borderColor(`hex("40a9ff")),
+        color(`hex("40a9ff"))
+      ])
     ]);
 
   // Root
@@ -34,28 +40,63 @@ module Styles = {
   // influenced by top level styles.
   // Note that submenus get their own top level element, so this
   // does not apply to submenus
-  global("." ++ prefixCls, [position(`absolute), zIndex(1070)]);
+  // Note: There is a style in FC__Dropdown that takes care
+  // of position absolute and zindex
+  //global("." ++ prefixCls, []);
 
   // Menu ul
   // <ul> element that contain the menu items in it's <li>'s
   // Both root menu and submenus have this class.
-  // This ul element will receive the hidden class when hidden
+  // This ul element will receive the -hidden class when hidden
+  // Move from FC__Menu.Styles > "ft-menu-general" when styles
+  // need variation
   global(
-    prefixPlus("menu"),
+    "ul" ++ prefixPlus("menu"),
     [
-      fontSize(textSize),
-      fontFamily("Lato"),
-      lineHeight(`em(1.5)),
-      outlineStyle(`none),
-      listStyleType(`none),
-      position(`relative),
+      lineHeight(textLineHeight),
       backgroundColor(bgColor),
-      borderRadius(`px(3)),
-      // Copied from default styles, not sure what it does
-      backgroundClip(`paddingBox),
-      boxShadow(~x=`zero, ~y=`px(2), ~blur=`px(8), `rgba((0, 0, 0, 0.15))),
-      margin(`zero),
-      padding2(~v=`px(4), ~h=`zero),
+      // Menu-item
+      selector("li" ++ prefixPlus("menu-item"), [
+        fontSize(textSize),
+        color(textColor),
+        selector(":hover", [backgroundColor(`hex("ebfaff"))]),
+        padding2(~v=`px(itemVerticalPadding), ~h=`px(itemHorizontalPadding)),
+        // Reversing outside element padding and adding it on the <a>
+        // Not sure how needed this will be (taken from ant)
+        selector(
+          ">a",
+          [
+            display(`block),
+            margin2(
+              ~v=`px(- itemVerticalPadding),
+              ~h=`px(- itemHorizontalPadding),
+            ),
+            padding2(
+              ~v=`px(itemVerticalPadding),
+              ~h=`px(itemHorizontalPadding),
+            ),
+          ],
+        ),
+      ]),
+      // Submenu <li> pointer
+      selector(">li" ++ prefixPlus("menu-submenu"), [
+        fontSize(textSize),
+        color(textColor),
+        selector(":hover", [backgroundColor(`hex("ebfaff"))]),
+      ]),
+      // Divider
+      // Can't move to general because the selector
+      // is prefix specific
+      selector(">li" ++ prefixPlus("menu-item-divider"),
+      [
+        margin2(~v=`px(4), ~h=`zero),
+        height(`px(1)),
+        backgroundColor(`hex("e5e5e5")), // A little lighter than border I think
+        lineHeight(`zero),
+        overflow(`hidden),
+        padding(`zero),
+      ]
+      )
     ],
   );
 
@@ -67,52 +108,6 @@ module Styles = {
   global(prefixPlus("menu-hidden"), [display(`none)]);
   // Hidden root menu
   global(prefixPlus("hidden"), [display(`none)]);
-
-  // Specifics for submenu popup
-  global(
-    prefixPlus("menu-submenu-popup"),
-    [position(`absolute), minWidth(`px(100))],
-  );
-
-  // Menu item + submenu item common (submenu, as in the li pointing to a submenu)
-  global(
-    prefixPlus("menu-item") ++ "," ++ "li" ++ prefixPlus("menu-submenu"),
-    [
-      color(textColor),
-      whiteSpace(`nowrap),
-      // Used to place icon in submenu item currently
-      position(`relative),
-      display(`block),
-      cursor(`default),
-      selector(":hover", [backgroundColor(`hex("ebfaff"))]),
-    ],
-  );
-
-  // Menu item
-  // Applied to <li> elements containing the element items.
-  // Does not apply to divider or submenu elements
-  global(
-    prefixPlus("menu-item"),
-    [
-      padding2(~v=`px(itemVerticalPadding), ~h=`px(itemHorizontalPadding)),
-      // Reversing outside element padding and adding it on the a
-      // Not sure how needed this will be (taken from ant)
-      selector(
-        ">a",
-        [
-          display(`block),
-          margin2(
-            ~v=`px(- itemVerticalPadding),
-            ~h=`px(- itemHorizontalPadding),
-          ),
-          padding2(
-            ~v=`px(itemVerticalPadding),
-            ~h=`px(itemHorizontalPadding),
-          ),
-        ],
-      ),
-    ],
-  );
 
   // Submenu
   // Submenu has a title element inside a div, and
@@ -147,19 +142,6 @@ module Styles = {
       ),
     ],
   );
-
-  // Divider
-  global(
-    prefixPlus("menu-item-divider"),
-    [
-      margin2(~v=`px(4), ~h=`zero),
-      height(`px(1)),
-      backgroundColor(`hex("e5e5e5")), // A little lighter than border I think
-      lineHeight(`zero),
-      overflow(`hidden),
-      padding(`zero),
-    ],
-  );
 };
 
 let make = (~title, ~trigger=FC__Dropdown.Hover, children) => {
@@ -168,7 +150,7 @@ let make = (~title, ~trigger=FC__Dropdown.Hover, children) => {
     let overlay =
       switch (Array.length(children)) {
       | 1 => children[0]
-      | _ => React.null
+      | _ => <div> ...children </div>
       };
     <FC__Dropdown trigger overlay prefixCls=Styles.prefixCls>
       <button className=Styles.dropdownTrigger>

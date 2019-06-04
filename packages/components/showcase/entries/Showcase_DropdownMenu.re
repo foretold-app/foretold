@@ -13,7 +13,7 @@ let simpleMenu = () =>
   </DropdownMenu>;
 
 let subMenu = () =>
-  <DropdownMenu title="Submenu">
+  <DropdownMenu title="Submenu" trigger=Dropdown.Click>
     Menu.(
       <Menu onClick={e => Js.log(e.key)}>
         <Item key="item1"> "Item1"->React.string </Item>

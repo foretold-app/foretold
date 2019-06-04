@@ -3,8 +3,6 @@
  * submenues and dividers. See make for usage.
  *
  * It is binding to https://github.com/react-component/menu
- *
- * Notable unimplemented things are selection of one or multiple items.
  */
 [@bs.module "rc-menu"]
 external rcMenuClass: ReasonReact.reactClass = "default";
@@ -255,11 +253,8 @@ module Divider = {
     );
 };
 
-// https://github.com/react-component/menu#menu-props
-[@bs.deriving abstract]
-type jsProps = {
-  [@bs.as "onClick"]
-  jsOnClick:
+type callbackType =
+  Js.Undefined.t(
     {
       .
       "key": string,
@@ -268,7 +263,20 @@ type jsProps = {
       "keyPath": array(string),
     } =>
     unit,
+  );
+
+// https://github.com/react-component/menu#menu-props
+[@bs.deriving abstract]
+type jsProps = {
+  // Gave some namespace confusion on some call site
+  // Possibly we could slim the callbacks a little
+  // if there are unneeded arguments
+  [@bs.as "onClick"]
+  jsOnClick: callbackType,
   selectable: bool,
+  selectedKeys: array(string),
+  [@bs.as "onSelect"]
+  jsOnSelect: callbackType,
   className: string,
 };
 
@@ -290,6 +298,9 @@ type clickInfo = {
  * in the case of a submenu, the dom Event and the react element
  * that was clicked.
  *
+ * The menu could also act more like a select element, as implemented
+ * in DropdownSelect.
+ *
  * Usage:
  * ```
  * Menu.(
@@ -304,24 +315,44 @@ type clickInfo = {
  * )
  * ```
  */
-let make = (~onClick=?, children) =>
+let make =
+    (~onClick=?, ~selectable=false, ~onSelect=?, ~selectedKey=?, children) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=rcMenuClass,
     ~props=
       jsProps(
         ~jsOnClick=
-          info =>
-            switch (onClick) {
-            | Some(onClick) =>
+          switch (onClick) {
+          | Some(onClick) =>
+            Js.Undefined.return(info =>
               onClick({
                 key: info##key,
                 item: info##item,
                 domEvent: info##domEvent,
                 keyPath: info##keyPath,
               })
-            | None => ()
-            },
-        ~selectable=false,
+            )
+          | None => Js.Undefined.empty
+          },
+        ~selectable,
+        ~jsOnSelect=
+          switch (onSelect) {
+          | Some(onSelect) =>
+            Js.Undefined.return(info =>
+              onSelect({
+                key: info##key,
+                item: info##item,
+                domEvent: info##domEvent,
+                keyPath: info##keyPath,
+              })
+            )
+          | None => Js.Undefined.empty
+          },
+        ~selectedKeys=
+          switch (selectedKey) {
+          | None => [||]
+          | Some(key) => [|key|]
+          },
         ~className="ft-menu-general",
       ),
     children,

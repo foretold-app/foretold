@@ -9,6 +9,7 @@ module Button = FC__Button;
 module InputLabel = FC__InputLabel;
 module TextInput = FC__TextInput;
 module TextArea = FC__TextArea;
+module DropdownSelect = FC__DropdownSelect;
 module Icon = FC__Icon;
 module Dropdown = FC__Dropdown;
 module Menu = FC__Menu;

@@ -54,7 +54,7 @@ module Styles = {
   // First overlay element, this doesn't apply to submenues, but
   // all kinds of direct overlays
   global(".ft-overlay", [
-    fontFamily("Lato"),
+    fontFamily(FC__Colors.Text.standardFont),
     fontSize(`rem(1.)),
     lineHeight(`rem(1.0)),
     zIndex(1070),

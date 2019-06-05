@@ -1,7 +1,7 @@
 ReactDOMRe.renderToElementWithId(
   <div
     className=Css.(
-      style([fontFamily("Lato")])
+      style([fontFamily(FC__Colors.Text.standardFont)])
     )>
     <Lib.Index />
   </div>,

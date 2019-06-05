@@ -21,7 +21,7 @@ module Styles = {
   global(
     ".ft-menu-general, .ft-submenu-general>ul",
     [
-      fontFamily("Lato"),
+      fontFamily(FC__Colors.Text.standardFont),
       listStyleType(`none),
       position(`relative),
       outlineStyle(`none),

@@ -38,7 +38,7 @@ module Styles = {
       backgroundColor(bgColor),
       fontSize(textSize),
       lineHeight(textLineHeight),
-      fontFamily("Lato"),
+      fontFamily(FC__Colors.Text.standardFont),
       color(textColor),
       // Selector for trigger element with overlay open
       selector(

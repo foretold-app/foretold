@@ -89,4 +89,5 @@ module Text = {
     let light = accentBlue;
     let active = "#3562AE"->r;
   };
+  let standardFont = "Lato";
 };

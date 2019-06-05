@@ -1,5 +1,5 @@
 module Questionmark = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "QuestionMark");
+  let component = ReasonReact.statelessComponent(__MODULE__ ++ " QuestionMark");
   // Adapted to pagecard title
   let iconStyle =
     Css.(
@@ -40,7 +40,7 @@ module Questionmark = {
 
 module DownArrow = {
   /* Down array from ant */
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "DownArrow");
+  let component = ReasonReact.statelessComponent(__MODULE__ ++ " DownArrow");
   let buttonStyle = Css.(style([
     marginLeft(`px(8)),
   ]));

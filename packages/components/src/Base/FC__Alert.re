@@ -4,10 +4,9 @@ module Styles = {
   open Css;
   let alertBox =
     style([
-      borderRadius(`px(4)),
-      padding2(~v=`em(1.0), ~h=`em(0.8)),
+      borderRadius(FC__Colors.BorderRadius.tight),
+      padding2(~v=`em(0.5), ~h=`em(0.8)),
       marginBottom(`em(0.75)),
-      fontWeight(`bold),
     ]);
 
   // Colors from https://getbootstrap.com/docs/4.0/components/alerts/
@@ -22,6 +21,8 @@ module Styles = {
     style([color(`hex("856404")), backgroundColor(`hex("fff3cd"))]);
   let errorStyle =
     style([color(`hex("721c24")), backgroundColor(`hex("f8d7da"))]);
+  
+  let itemStyle = (t: FC__Colors.Alert.t) => style([color(FC__Colors.Alert.color(t)), backgroundColor(FC__Colors.Alert.background(t))]);
 };
 
 /**
@@ -31,30 +32,16 @@ module Styles = {
  * Warning
  * Error
  */
-type alertType =
-  | Primary
-  | Info
-  | Success
-  | Warning
-  | Error;
 
 let component = ReasonReact.statelessComponent(__MODULE__);
 
-let make = (~type_=Info, children) => {
+let make = (~type_:FC__Colors.Alert.t=Info, children) => {
   ...component,
   render: _self => {
     let classes =
       Styles.alertBox
       ++ " "
-      ++ (
-        switch (type_) {
-        | Primary => Styles.primaryStyle
-        | Info => Styles.infoStyle
-        | Success => Styles.successStyle
-        | Warning => Styles.warningStyle
-        | Error => Styles.errorStyle
-        }
-      );
+      ++ Styles.itemStyle(type_);
     <div className=classes> ...children </div>;
   },
 };

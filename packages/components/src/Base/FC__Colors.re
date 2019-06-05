@@ -60,6 +60,33 @@ module Statuses = {
   let resolved = accentBlue;
 };
 
+module Alert = {
+  type t =
+    | Primary
+    | Info
+    | Success
+    | Warning
+    | Error;
+
+  let color = (t: t) =>
+    switch (t) {
+    | Primary => "#004085"->r
+    | Info => "#0c5460"->r
+    | Success => "#155724"->r
+    | Warning => "#856404"->r
+    | Error => "#721c24"->r
+    };
+
+  let background = (t: t) =>
+    switch (t) {
+    | Primary => "#cce5ff"->r
+    | Info => "#d1ecf1"->r
+    | Success => "#d4edda"->r
+    | Warning => "#fff3cd"->r
+    | Error => "#f8d7da"->r
+    };
+};
+
 module Text = {
   module LightBackground = {
     let main = textDark;

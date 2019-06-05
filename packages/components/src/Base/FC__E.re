@@ -119,29 +119,8 @@ module L = {
   let iter = List.iter;
   let findIndex = Rationale.RList.findIndex;
   module React = {
-    let map = (map: 'a => React.element, list: list('a)): React.element => {
-      let a = [||];
-      let rec loop = list =>
-        switch (list) {
-        | [first, ...rest] =>
-          let _ = Js.Array.push(map(first), a);
-          loop(rest);
-        | [] => React.array(a)
-        };
-      loop(list);
-    };
-    let mapi =
-        (map: (int, 'a) => React.element, list: list('a)): React.element => {
-      let a = [||];
-      let rec loop = (list, i) =>
-        switch (list) {
-        | [first, ...rest] =>
-          let _ = Js.Array.push(map(i, first), a);
-          loop(rest, i + 1);
-        | [] => React.array(a)
-        };
-      loop(list, 0);
-    };
+    let fmap = (f, xs) => xs |> fmap(f) |> toArray |> React.array;
+    let fmapi = (f, xs) => xs |> fmapi(f) |> toArray |> React.array;
   };
 };
 

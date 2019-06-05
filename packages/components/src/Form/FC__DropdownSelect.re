@@ -71,7 +71,7 @@ let make =
         // "key" before
 
           {values
-           |> FC__E.L.React.mapi((i, (_key, label)) =>
+           |> FC__E.L.React.fmapi((i, (_key, label)) =>
                 <FC__Menu.Item key={"key" ++ string_of_int(i)}>
                   label->React.string
                 </FC__Menu.Item>

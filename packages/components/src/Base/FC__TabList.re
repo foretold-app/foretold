@@ -3,7 +3,7 @@ let make = (~selected, ~flex=false, ~onClick=?, ~list, _children) => {
   ...component,
   render: _self => {
     list
-    |> FC__E.L.React.mapi((i, (key, label)) =>
+    |> FC__E.L.React.fmapi((i, (key, label)) =>
          <FC__Tab
            key={string_of_int(i)}
            onClick={e =>

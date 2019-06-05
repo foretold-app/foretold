@@ -1,4 +1,4 @@
-/* // this is used to show hex color; */
+/* this is used to show hex color; */
 let removeHex = Js.String.sliceToEnd(~from=1);
 let r = c => c->removeHex->(e => `hex(e));
 type col = [ | `hex(Js.String.t)];
@@ -61,29 +61,24 @@ module Statuses = {
 };
 
 module Alert = {
-  type t =
-    | Primary
-    | Info
-    | Success
-    | Warning
-    | Error;
+  type t = [ | `primary | `info | `success | `warning | `error];
 
   let color = (t: t) =>
     switch (t) {
-    | Primary => "#004085"->r
-    | Info => "#0c5460"->r
-    | Success => "#155724"->r
-    | Warning => "#856404"->r
-    | Error => "#721c24"->r
+    | `primary => "#004085"->r
+    | `info => "#0c5460"->r
+    | `success => "#155724"->r
+    | `warning => "#856404"->r
+    | `error => "#721c24"->r
     };
 
   let background = (t: t) =>
     switch (t) {
-    | Primary => "#cce5ff"->r
-    | Info => "#d1ecf1"->r
-    | Success => "#d4edda"->r
-    | Warning => "#fff3cd"->r
-    | Error => "#f8d7da"->r
+    | `primary => "#cce5ff"->r
+    | `info => "#d1ecf1"->r
+    | `success => "#d4edda"->r
+    | `warning => "#fff3cd"->r
+    | `error => "#f8d7da"->r
     };
 };
 

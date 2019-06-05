@@ -80,7 +80,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
                <Icon.Questionmark />
              </div>
              <PageCard.VerticalSpace />
-             <Alert type_=Colors.Alert.Error>
+             <Alert type_=`error>
                "Input is not a valid PDF"->React.string
              </Alert>
              <PageCard.VerticalSpace />

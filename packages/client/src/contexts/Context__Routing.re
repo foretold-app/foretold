@@ -61,6 +61,8 @@ module ChannelPage = {
 module Route = {
   type t =
     | Home
+    | Privacy
+    | Terms
     | AgentIndex
     | Redirect
     | Login
@@ -78,6 +80,8 @@ module Route = {
   let fromUrl = (url: ReasonReact.Router.url) =>
     switch (url.path) {
     | [] => Home
+    | ["privacy_policy"] => Privacy
+    | ["terms_and_conditions"] => Terms
     | ["login"] => Login
     | ["callback"] =>
       Context__Auth.CallbackUrlToAuth0Tokens.make(url)
@@ -123,6 +127,8 @@ module Route = {
 module Url = {
   type t =
     | Home
+    | Privacy
+    | Terms
     | AgentIndex
     | Profile
     | EntityIndex
@@ -143,6 +149,8 @@ module Url = {
   let toString = (r: t) =>
     switch ((r: t)) {
     | Home => "/"
+    | Privacy => "/privacy_policy"
+    | Terms => "/terms_and_conditions"
     | AgentIndex => "/agents"
     | Profile => "/profile/"
     | BotCreate => "/bots/new"

@@ -26,6 +26,8 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) => {
   switch (route) {
   | Home => defaultPage(loggedInUser)
   | Login => <Login />
+  | Privacy => <StaticPageInCard markdown=StaticMarkdown.privacyPolicy />
+  | Terms => <StaticPageInCard markdown=StaticMarkdown.termsAndConditions />
   | Channel(channel) => Channel_Layout.makeWithPage(channel, loggedInUser)
   | Agent(agentPage) => Agent_Layout.makeWithPage(agentPage, loggedInUser)
   | Redirect => Auth0Redirect'.toEl(loggedInUser)

@@ -1,4 +1,4 @@
-/* // this is used to show hex color; */
+/* this is used to show hex color; */
 let removeHex = Js.String.sliceToEnd(~from=1);
 let r = c => c->removeHex->(e => `hex(e));
 type col = [ | `hex(Js.String.t)];
@@ -60,6 +60,28 @@ module Statuses = {
   let resolved = accentBlue;
 };
 
+module Alert = {
+  type t = [ | `primary | `info | `success | `warning | `error];
+
+  let color = (t: t) =>
+    switch (t) {
+    | `primary => "#004085"->r
+    | `info => "#0c5460"->r
+    | `success => "#155724"->r
+    | `warning => "#856404"->r
+    | `error => "#721c24"->r
+    };
+
+  let background = (t: t) =>
+    switch (t) {
+    | `primary => "#cce5ff"->r
+    | `info => "#d1ecf1"->r
+    | `success => "#d4edda"->r
+    | `warning => "#fff3cd"->r
+    | `error => "#f8d7da"->r
+    };
+};
+
 module Text = {
   module LightBackground = {
     let main = textDark;
@@ -67,4 +89,5 @@ module Text = {
     let light = accentBlue;
     let active = "#3562AE"->r;
   };
+  let standardFont = "Lato";
 };

@@ -71,7 +71,7 @@ module ColorDisplay = {
   let component = ReasonReact.reducerComponent(__MODULE__);
   let make = _children => {
     ...component,
-    initialState: () => {bgColor: Colors.smokeWhite, bgName: "white"},
+    initialState: () => {bgColor: Colors.white, bgName: "white"},
     reducer,
     render: self =>
       <PageCard>
@@ -80,7 +80,7 @@ module ColorDisplay = {
             "Colors"->React.string
           </PageCard.HeaderRow.Title>
         </PageCard.HeaderRow>
-        <PageCard.Section borderBottom=true>
+        <PageCard.Section border=`bottom>
           "Background: "->React.string
           <select
             value={self.state.bgName}

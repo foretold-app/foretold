@@ -80,24 +80,12 @@ module JsDate = {
 
 /* List */
 module L = {
+  open Rationale;
   let fmap = List.map;
   let toArray = Array.of_list;
   let fmapi = List.mapi;
   let concat = List.concat;
   let find = List.find;
-  let findWithIndex = (pred: (int, 'a) => bool, list: list('a)) => {
-    let rec loop = (i, rest) =>
-      switch (rest) {
-      | [first, ...rest] =>
-        if (pred(i, first)) {
-          Some(first);
-        } else {
-          loop(i + 1, rest);
-        }
-      | [] => None
-      };
-    loop(0, list);
-  };
   let filter = List.filter;
   let for_all = List.for_all;
   let exists = List.exists;
@@ -118,6 +106,7 @@ module L = {
   let update = Rationale.RList.update;
   let iter = List.iter;
   let findIndex = Rationale.RList.findIndex;
+  let withIdx = xs => xs |> RList.zip(RList.times(Function.identity, length(xs)));
   module React = {
     let fmap = (f, xs) => xs |> fmap(f) |> toArray |> React.array;
     let fmapi = (f, xs) => xs |> fmapi(f) |> toArray |> React.array;

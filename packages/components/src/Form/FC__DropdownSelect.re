@@ -1,3 +1,5 @@
+module E = FC__E;
+
 type state = {label: string};
 
 type action =
@@ -40,7 +42,7 @@ let make =
     | Some(initKey) =>
       // Try to get pair of (key, value) from values to use as
       // initial value and label
-      switch (FC__E.L.getBy(values, ((key, _)) => initKey == key)) {
+      switch (E.L.getBy(values, ((key, _)) => initKey == key)) {
       | Some((_, label)) => self.send(ChangeLabel(label))
       | None => () // Error intial value pair not found
       }
@@ -52,12 +54,10 @@ let make =
         selectable=true
         onSelect={info =>
           switch (
-            FC__E.L.findWithIndex(
-              (i, _) => info.key == "key" ++ string_of_int(i),
-              values,
-            )
+            (values |> E.L.withIdx)
+            ->(E.L.getBy(((i, _)) => info.key == "key" ++ string_of_int(i)))
           ) {
-          | Some((key, label)) =>
+          | Some((_i, (key, label))) =>
             self.send(ChangeLabel(label));
             switch (onSelect) {
             | Some(onSelect) => onSelect(Some(key))
@@ -71,7 +71,7 @@ let make =
         // "key" before
 
           {values
-           |> FC__E.L.React.fmapi((i, (_key, label)) =>
+           |> E.L.React.fmapi((i, (_key, label)) =>
                 <FC__Menu.Item key={"key" ++ string_of_int(i)}>
                   label->React.string
                 </FC__Menu.Item>

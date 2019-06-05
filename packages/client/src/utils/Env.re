@@ -7,6 +7,7 @@
 let auth0Domain = auth0DomainEnv;
 let auth0ClientId = auth0ClientIdEnv;
 let redirectUrl = origin ++ "/callback";
+let logoutUrl = origin ++ "/";
 let serverUrl = apiUrlEnv;
 
 Js.log(serverUrl);

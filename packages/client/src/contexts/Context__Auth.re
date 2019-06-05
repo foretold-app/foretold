@@ -69,7 +69,18 @@ module Auth0Tokens = {
 };
 
 module Auth0Client = {
-  type t = {. "authorize": [@bs.meth] (unit => unit)};
+  type logoutType = {
+    .
+    "clientId": string,
+    "returnTo": string,
+  };
+
+  type t = {
+    .
+    "authorize": [@bs.meth] (unit => unit),
+    "logout": [@bs.meth] (logoutType => unit),
+  };
+
   type clientOptions = {
     .
     "domain": string,
@@ -92,6 +103,13 @@ module Auth0Client = {
 
   let triggerLoginScreen = () =>
     authOptions |> createClient |> (c => c##authorize());
+
+  let logoutOptions: logoutType = {
+    "clientId": Env.auth0ClientId,
+    "returnTo": Env.logoutUrl,
+  };
+  let logout = () =>
+    authOptions |> createClient |> (c => c##logout(logoutOptions));
 };
 
 module ServerJwt = {
@@ -149,6 +167,7 @@ module Actions = {
   let logout = () => {
     Auth0Tokens.destroy();
     ServerJwt.destroy();
+    Auth0Client.logout();
     ReasonReact.Router.push("/");
     ();
   };

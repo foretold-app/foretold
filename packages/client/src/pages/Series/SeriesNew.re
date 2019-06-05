@@ -100,134 +100,114 @@ let withForm = (mutation, channelId, innerComponentFn) =>
 let formFields = (form: Form.state, send, onSubmit) =>
   <Antd.Form onSubmit={e => onSubmit()}>
     <h3>
-      {
-        "Warning: You can not edit a Series after created it at this time."
-        |> ste
-      }
+      {"Warning: You can not edit a Series after created it at this time."
+       |> ste}
     </h3>
     <Antd.Form.Item>
       {"Name" |> ste |> E.React.inH3}
       <Input
         value={form.values.name}
-        onChange={
-          ReForm.Helpers.handleDomFormChange(e =>
-            send(Form.FieldChangeValue(Name, e))
-          )
-        }
+        onChange={ReForm.Helpers.handleDomFormChange(e =>
+          send(Form.FieldChangeValue(Name, e))
+        )}
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
       {"Description" |> ste |> E.React.inH3}
       <Input
         value={form.values.description}
-        onChange={
-          ReForm.Helpers.handleDomFormChange(e =>
-            send(Form.FieldChangeValue(Description, e))
-          )
-        }
+        onChange={ReForm.Helpers.handleDomFormChange(e =>
+          send(Form.FieldChangeValue(Description, e))
+        )}
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
       {"Subjects" |> ste |> E.React.inH3}
-      {
-        form.values.subjects
-        |> E.L.fmapi((i, r) =>
-             <Input
-               value=r
-               onChange={
-                 ReForm.Helpers.handleDomFormChange(e =>
-                   send(
-                     Form.FieldChangeValue(
-                       Subjects,
-                       form.values.subjects |> E.L.update(e, i),
-                     ),
-                   )
-                 )
-               }
-             />
-           )
-        |> E.L.toArray
-        |> ReasonReact.array
-      }
+      {form.values.subjects
+       |> E.L.fmapi((i, r) =>
+            <Input
+              value=r
+              onChange={ReForm.Helpers.handleDomFormChange(e =>
+                send(
+                  Form.FieldChangeValue(
+                    Subjects,
+                    form.values.subjects |> E.L.update(e, i),
+                  ),
+                )
+              )}
+            />
+          )
+       |> E.L.toArray
+       |> ReasonReact.array}
       <Button
-        onClick={
-          _ =>
-            send(
-              Form.FieldChangeValue(
-                Subjects,
-                form.values.subjects |> Rationale.RList.append(""),
-              ),
-            )
+        onClick={_ =>
+          send(
+            Form.FieldChangeValue(
+              Subjects,
+              form.values.subjects |> Rationale.RList.append(""),
+            ),
+          )
         }>
         {"Add Subject" |> ste}
       </Button>
     </Antd.Form.Item>
     <Antd.Form.Item>
       {"Properties" |> ste |> E.React.inH3}
-      {
-        form.values.properties
-        |> E.L.fmapi((i, r) =>
-             <Input
-               value=r
-               onChange={
-                 ReForm.Helpers.handleDomFormChange(e =>
-                   send(
-                     Form.FieldChangeValue(
-                       Properties,
-                       form.values.properties |> E.L.update(e, i),
-                     ),
-                   )
-                 )
-               }
-             />
-           )
-        |> E.L.toArray
-        |> ReasonReact.array
-      }
+      {form.values.properties
+       |> E.L.fmapi((i, r) =>
+            <Input
+              value=r
+              onChange={ReForm.Helpers.handleDomFormChange(e =>
+                send(
+                  Form.FieldChangeValue(
+                    Properties,
+                    form.values.properties |> E.L.update(e, i),
+                  ),
+                )
+              )}
+            />
+          )
+       |> E.L.toArray
+       |> ReasonReact.array}
       <Button
-        onClick={
-          _ =>
-            send(
-              Form.FieldChangeValue(
-                Properties,
-                form.values.properties |> Rationale.RList.append(""),
-              ),
-            )
+        onClick={_ =>
+          send(
+            Form.FieldChangeValue(
+              Properties,
+              form.values.properties |> Rationale.RList.append(""),
+            ),
+          )
         }>
         {"Add Property" |> ste}
       </Button>
     </Antd.Form.Item>
     <Antd.Form.Item>
       {"Dates" |> ste |> E.React.inH3}
-      {
-        form.values.dates
-        |> E.L.fmapi((i, r) =>
-             <DatePicker
-               value=r
-               onChange={
-                 e =>
-                   send(
-                     Form.FieldChangeValue(
-                       Dates,
-                       form.values.dates |> E.L.update(e, i),
-                     ),
-                   )
-               }
-             />
-           )
-        |> E.L.toArray
-        |> ReasonReact.array
-      }
+      {form.values.dates
+       |> E.L.fmapi((i, r) =>
+            <DatePicker
+              value=r
+              onChange={e =>
+                send(
+                  Form.FieldChangeValue(
+                    Dates,
+                    form.values.dates |> E.L.update(e, i),
+                  ),
+                )
+              }
+            />
+          )
+       |> E.L.toArray
+       |> ReasonReact.array}
       <Button
-        onClick={
-          _ =>
-            send(
-              Form.FieldChangeValue(
-                Dates,
-                form.values.dates
-                |> Rationale.RList.append(MomentRe.momentNow()),
-              ),
-            )
+        onClick={_ =>
+          send(
+            Form.FieldChangeValue(
+              Dates,
+              form.values.dates
+              |> Rationale.RList.append(MomentRe.momentNow()),
+            ),
+          )
         }>
         {"Add Date" |> ste}
       </Button>
@@ -252,17 +232,15 @@ let make =
       ~head=SLayout.Header.textDiv("Make a New Series"),
       ~body=
         <FC.PageCard.BodyPadding>
-          {
-            Mutations.SeriesCreate.withMutation((mutation, data) =>
-              withForm(mutation, channelId, ({send, state}) =>
-                CMutationForm.showWithLoading(
-                  ~result=data.result,
-                  ~form=formFields(state, send, () => send(Form.Submit)),
-                  (),
-                )
-              )
-            )
-          }
+          {Mutations.SeriesCreate.withMutation((mutation, data) =>
+             withForm(mutation, channelId, ({send, state}) =>
+               CMutationForm.showWithLoading(
+                 ~result=data.result,
+                 ~form=formFields(state, send, () => send(Form.Submit)),
+                 (),
+               )
+             )
+           )}
         </FC.PageCard.BodyPadding>,
     )
     |> layout,

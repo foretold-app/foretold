@@ -6,6 +6,7 @@ let entries =
     Showcase_NumberShower.entry,
     Showcase_MeasurableForm.entry,
     Showcase_Colors.entry,
+    Showcase_Alerts.entry,
     folder(
       ~title="Link",
       ~children=[
@@ -22,4 +23,6 @@ let entries =
     ),
   ]
   @ Showcase_Dropdown.entries
-  @ Showcase_Menu.entries;
+  @ Showcase_Menu.entries
+  @ Showcase_DropdownMenu.entries
+  @ Showcase_DropdownSelect.entries;

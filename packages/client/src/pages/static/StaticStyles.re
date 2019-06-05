@@ -25,5 +25,6 @@ let description =
     fontSize(`em(1.)),
     color(`hex("fff")),
     opacity(0.8),
+    selector("a", [color(`hex("fff")), textDecoration(`underline)]),
     fontWeight(`num(500)),
   ]);

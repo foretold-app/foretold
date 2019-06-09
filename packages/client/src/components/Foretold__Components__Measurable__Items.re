@@ -119,7 +119,8 @@ let measurements = (~m: measurable) =>
   | Some(0) => None
   | None => None
   | Some(count) =>
-    let popoverContent = "Count " ++ string_of_int(count) |> ste;
+    let popoverContent =
+      "Number of Predictions: " ++ string_of_int(count) |> ste;
     Some(
       <AntdPopover content=popoverContent trigger=`hover placement=`top>
         <div className=Shared.Item.item>

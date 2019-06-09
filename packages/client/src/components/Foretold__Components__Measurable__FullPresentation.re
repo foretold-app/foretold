@@ -23,7 +23,7 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
     |> E.F.apply(m =>
          <>
            <Div flexDirection=`row styles=[Styles.header]>
-             <Div flex=4>
+             <Div flex=3>
                <FC.PageCard.H1> {Items.link(~m)} </FC.PageCard.H1>
                <StatusDisplay measurable=m />
                <FC.PageCard.P>
@@ -35,6 +35,7 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                {Items.creatorLink(~m) |> E.O.React.defaultNull}
                {Items.resolutionEndpoint(~m) |> E.O.React.defaultNull}
                {Items.endpointResponse(~m) |> E.O.React.defaultNull}
+               {Items.id(~m, ())}
              </Div>
            </Div>
            <>

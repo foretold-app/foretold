@@ -143,6 +143,11 @@ let measurers = (~m: measurable) =>
     )
   };
 
+let id = (~m: measurable, ()) =>
+  <div className=Shared.Item.id>
+    {"ID:  " ++ m.id |> ReasonReact.string}
+  </div>;
+
 let series = (~m: measurable, ~channelId=None, ()) => {
   let channelId =
     switch (channelId, m.channel) {

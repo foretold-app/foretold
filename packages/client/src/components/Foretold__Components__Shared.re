@@ -1,6 +1,14 @@
 open Css;
 
 module Item = {
+  let id =
+    style([
+      float(`left),
+      marginTop(`em(0.3)),
+      color(`hex("b2b2b2")),
+      fontSize(`em(0.8)),
+    ]);
+
   let item =
     style([
       float(`left),

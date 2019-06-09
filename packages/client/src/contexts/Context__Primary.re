@@ -261,9 +261,9 @@ module Channel = {
   let showPush = showLink ||> Context__Routing.Url.push;
   module Styles = {
     open Css;
-    let hash = style([marginRight(`em(0.1))]);
+    let hash = style([marginRight(`px(4))]);
     let lock =
-      style([fontSize(`em(0.8)), float(`left), marginRight(`px(4))]);
+      style([fontSize(`em(0.8)), float(`left), marginRight(`px(0))]);
   };
   let present = (~hashClassName="", s: t) =>
     <span>

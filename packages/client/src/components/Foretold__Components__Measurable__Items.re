@@ -119,12 +119,15 @@ let measurements = (~m: measurable) =>
   | Some(0) => None
   | None => None
   | Some(count) =>
+    let popoverContent = "Count " ++ string_of_int(count) |> ste;
     Some(
-      <div className=Shared.Item.item>
-        <Icon.Icon icon="BULB" />
-        {count |> string_of_int |> ste}
-      </div>,
-    )
+      <AntdPopover content=popoverContent trigger=`hover placement=`top>
+        <div className=Shared.Item.item>
+          <Icon.Icon icon="BULB" />
+          {count |> string_of_int |> ste}
+        </div>
+      </AntdPopover>,
+    );
   };
 
 let measurers = (~m: measurable) =>

@@ -1,6 +1,7 @@
 const _ = require('lodash');
 
 /**
+ * @todo: rename "formatResponseIntoConnection"
  * @param {*[]} result
  * @param {object} root
  * @param {object} args
@@ -35,6 +36,7 @@ function connection(result, root, args, context, info) {
 }
 
 /**
+ * @todo: rename "clearConnectionArguments"
  * @param {object} root
  * @param {object} args
  * @param {Schema.Context} context

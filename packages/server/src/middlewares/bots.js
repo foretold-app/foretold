@@ -3,6 +3,7 @@ const _ = require('lodash');
 const data = require('../data');
 
 /**
+ * @todo: rename "setContextBot"
  * @param {object | null} root
  * @param {object} args
  * @param {object} args.id

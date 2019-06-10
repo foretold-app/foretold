@@ -1,7 +1,7 @@
 {
   "name": "@foretold/server",
   "version": "1.0.0",
-  "description": "Using latest JavaScript features on the server",
+  "description": "Foretold Server",
   "repository": "https://github.com/vmasto/express-babel",
   "author": "Vassilis Mastorostergios <vmasto@gmail.com>",
   "license": "MIT",
@@ -30,15 +30,9 @@
     "db:reset": "yarn run db:drop; yarn run db:create; yarn run db:migrate"
   },
   "keywords": [
-    "express",
-    "boilerplate",
-    "scaffold",
-    "es6",
-    "es2015",
-    "es2016",
-    "es2017",
-    "jest",
-    "eslint"
+    "foretold",
+    "predictions",
+    "cdf"
   ],
   "dependencies": {
     "@slack/client": "^4.8.0",

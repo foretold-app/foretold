@@ -38,6 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     valueType: {
+      // @todo: use literals
       type: DataTypes.ENUM(["FLOAT", "DATE", "PERCENTAGE"]),
       allowNull: false,
     },
@@ -114,7 +115,25 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+  }, {
+    hooks: {
+      beforeUpdate: async (instance) => {
+        await watchExpectedResolutionDate(instance);
+      },
+    },
   });
+
+  async function watchExpectedResolutionDate(instance) {
+    const isChanged = instance.changed('expectedResolutionDate');
+    if (!isChanged) return;
+    const current = instance.getDataValue('expectedResolutionDate');
+    if (!current) return;
+    const now = new Date();
+    const isResolutionDateInFuture = current >= now;
+    if (isResolutionDateInFuture) {
+      instance.set('state', MEASURABLE_STATE.OPEN);
+    }
+  }
 
   Model.needsResolutionResponse = async function needsResolutionResponse() {
     return await Model.findAll({
@@ -124,7 +143,7 @@ module.exports = (sequelize, DataTypes) => {
           [Sequelize.Op.lt]: Sequelize.fn('now'),
         }
       }
-    })
+    });
   };
 
   Model.needsToBePending = async function needsToBePending() {
@@ -140,7 +159,7 @@ module.exports = (sequelize, DataTypes) => {
           { expectedResolutionDate: null },
         ],
       }
-    })
+    });
   };
 
   Model.prototype.updateState = async function updateState(state) {

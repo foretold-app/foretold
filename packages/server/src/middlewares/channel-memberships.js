@@ -3,6 +3,7 @@ const _ = require('lodash');
 const data = require('../data');
 
 /**
+ * @todo: rename "setContextChannelMemberships"
  * @param {object | null} root
  * @param {object} args
  * @param {Schema.Context} context
@@ -33,6 +34,7 @@ async function channelMemberships(root, args, context, info) {
 }
 
 /**
+ * @todo: rename "setContextChannelMembershipsAdmins"
  * @param {object | null} root
  * @param {object} args
  * @param {Schema.Context} context

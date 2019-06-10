@@ -3,6 +3,7 @@ const _ = require('lodash');
 const data = require('../data');
 
 /**
+ * @todo: rename "setContextMeasurable"
  * @param {object | null} root
  * @param {object} args
  * @param {object} context

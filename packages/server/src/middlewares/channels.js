@@ -3,6 +3,7 @@ const _ = require('lodash');
 const data = require('../data');
 
 /**
+ * @todo: rename "setContextChannel"
  * @param {object | null} root
  * @param {{ channelId: string }} args
  * @param {object} context
@@ -24,6 +25,7 @@ async function channel(root, args, context, info) {
 }
 
 /**
+ * @todo: rename "setContextChannelByRoot"
  * @param {object | null} root
  * @param {object} args
  * @param {object} context

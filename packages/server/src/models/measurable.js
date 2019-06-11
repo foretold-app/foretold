@@ -211,7 +211,7 @@ module.exports = (sequelize, DataTypes) => {
       "attachments": [{
         "pretext": "New Measurable Created",
         "title": this.name,
-        "title_link": `${clientUrl}/measurables/${this.id}`,
+        "title_link": `${clientUrl}/c/${this.channelId}`,
         "author_name": creator.name,
         "author_link": `${clientUrl}/agents/${agent.id}`,
         "text": this.labelCustom,
@@ -249,7 +249,7 @@ module.exports = (sequelize, DataTypes) => {
       "attachments": [{
         "pretext": "Measurable Updated",
         "title": this.name,
-        "title_link": `${clientUrl}/measurables/${this.id}`,
+        "title_link": `${clientUrl}/c/${this.channelId}`,
         "author_name": creator.name,
         "author_link": `${clientUrl}/agents/${agent.id}`,
         "fields": changed.map(c => ({

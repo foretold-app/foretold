@@ -102,7 +102,7 @@ module.exports = (sequelize, DataTypes) => {
       "attachments": [{
         "pretext": "New Measurement Created",
         "title": measurable.name,
-        "title_link": `${clientUrl}/measurables/${measurable.id}`,
+        "title_link": `${clientUrl}/c/${measurable.channelId}`,
         "author_name": creator.name,
         "author_link": `${clientUrl}/agents/${agent.id}`,
         "text": this.description,

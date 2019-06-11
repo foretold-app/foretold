@@ -22,7 +22,7 @@ describe('tests Measurables Data layer', () => {
         expect(models.Measurable.findOne).toHaveBeenCalledWith({
           "where": {
             "channelId": {
-              [models.sequelize.Op.in]: "channelIdsLiteral"
+              [instance.model.Op.in]: "channelIdsLiteral"
             },
             "id": "id1"
           }

@@ -105,7 +105,7 @@ class ChannelsData extends DataBase {
       order: [['createdAt', 'DESC']],
       where: {
         id: {
-          [this.models.sequelize.Op.in]: this.ChannelModel.channelIdsLiteral(options.agentId),
+          [this.model.Op.in]: this.ChannelModel.channelIdsLiteral(options.agentId),
         },
       }
     });
@@ -125,12 +125,12 @@ class ChannelsData extends DataBase {
   async getOne(id, options = {}) {
     const restrictions = 'agentId' in options ? {
       id: {
-        [this.models.sequelize.Op.in]: this.ChannelModel.channelIdsLiteral(options.agentId),
+        [this.model.Op.in]: this.ChannelModel.channelIdsLiteral(options.agentId),
       }
     } : {};
     return await this.models.Channel.findOne({
       where: {
-        [this.models.sequelize.Op.and]: [
+        [this.model.Op.and]: [
           { id },
           restrictions
         ]

@@ -20,7 +20,7 @@ class AgentsData extends DataBase {
    * @return {Promise<Models.Agent>}
    */
   async getOne(id) {
-    return await this.models.Agent.findById(id);
+    return await this.models.Agent.findByPk(id);
   }
 }
 

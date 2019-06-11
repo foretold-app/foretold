@@ -68,10 +68,10 @@ class ChannelMembershipsData extends DataBase {
    * @return {Promise<*>}
    */
   async validate({ channelId, agentId }) {
-    if (!await this.models.Channel.findById(channelId)) {
+    if (!await this.models.Channel.findByPk(channelId)) {
       return Promise.reject(new Error(`Channel "${ channelId }" is not found.`));
     }
-    if (!await this.models.Agent.findById(agentId)) {
+    if (!await this.models.Agent.findByPk(agentId)) {
       return Promise.reject(new Error(`Agent "${ agentId }" is not found.`));
     }
     return true;

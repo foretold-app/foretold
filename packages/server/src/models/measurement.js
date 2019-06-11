@@ -93,12 +93,12 @@ module.exports = (sequelize, DataTypes) => {
    * @todo: move me
    * @public
    * @param {Models.Creator} creator
-   * @return {Promise<void>}
+   * @return {Promise<*>}
    */
   Model.prototype.creationNotification = async function creationNotification(creator) {
-    let agent = await creator.getAgent();
-    let measurable = await this.getMeasurable();
-    let notification = await {
+    const agent = await creator.getAgent();
+    const measurable = await this.getMeasurable();
+    return {
       "attachments": [{
         "pretext": "New Measurement Created",
         "title": measurable.name,
@@ -116,7 +116,6 @@ module.exports = (sequelize, DataTypes) => {
         "color": "#d2ebff"
       }]
     };
-    return notification;
   };
 
   Model.associate = function associate(models) {

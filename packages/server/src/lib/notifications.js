@@ -9,10 +9,12 @@ console.log(`SET UP WITH SLACK with webhook url: ${url}`);
  * @return {Promise.<*>}
  */
 function notify(message) {
+
   if (process.env.NODE_ENV === 'development') {
     console.log('Notification sent to Slack: ', message);
     return Promise.resolve(true);
   }
+
   return webhook.send(message)
     .then((res) => {
       console.log('Notification sent to Slack: ', res);

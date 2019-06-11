@@ -38,7 +38,7 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async archive(id) {
-    let measurable = await this.models.Measurable.findById(id);
+    const measurable = await this.models.Measurable.findById(id);
     return measurable.archive();
   }
 
@@ -49,7 +49,7 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async unArchive(id) {
-    let measurable = await this.models.Measurable.findById(id);
+    const measurable = await this.models.Measurable.findById(id);
     return measurable.unarchive();
   }
 
@@ -62,7 +62,7 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async updateOne(id, data, creator) {
-    let measurable = await this.models.Measurable.findById(id);
+    const measurable = await this.models.Measurable.findById(id);
     /** @type {Models.Measurable} */
     const notification = await measurable.updateNotifications(creator, data);
     notify(notification);

@@ -206,8 +206,8 @@ module.exports = (sequelize, DataTypes) => {
    * @return {Promise<*>}
    */
   Model.prototype.creationNotification = async function creationNotification(creator) {
-    let agent = await creator.getAgent();
-    let notification = {
+    const agent = await creator.getAgent();
+    return {
       "attachments": [{
         "pretext": "New Measurable Created",
         "title": this.name,
@@ -225,7 +225,6 @@ module.exports = (sequelize, DataTypes) => {
         "color": "#4a8ed8"
       }]
     };
-    return notification;
   };
 
   /**
@@ -244,9 +243,9 @@ module.exports = (sequelize, DataTypes) => {
    * @return {Promise<*>}
    */
   Model.prototype.updateNotifications = async function updateNotifications(creator, newData) {
-    let changed = this.changedFields(newData);
-    let agent = await creator.getAgent();
-    let notification = {
+    const changed = this.changedFields(newData);
+    const agent = await creator.getAgent();
+    return {
       "attachments": [{
         "pretext": "Measurable Updated",
         "title": this.name,
@@ -261,7 +260,6 @@ module.exports = (sequelize, DataTypes) => {
         "color": "#ffe75e"
       }]
     };
-    return notification;
   };
 
   Model.associate = function associate(models) {

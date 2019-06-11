@@ -45,6 +45,7 @@ async function creationNotification(entity, creator) {
  * @param entity.getUpdateNotifications
  * @param entity.getChannel
  * @param creator
+ * @param data
  * @return {Promise<boolean>}
  */
 async function updateNotification(entity, creator, data) {

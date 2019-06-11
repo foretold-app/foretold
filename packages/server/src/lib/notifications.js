@@ -47,7 +47,7 @@ async function creationNotification(entity, creator) {
  * @param creator
  * @return {Promise<boolean>}
  */
-async function updateNotification(entity, creator) {
+async function updateNotification(entity, creator, data) {
   const notification = await entity.getUpdateNotifications(creator, data);
   const channel = await entity.getChannel();
   if (channel.isPublic) await notify(notification);

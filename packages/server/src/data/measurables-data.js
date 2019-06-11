@@ -61,7 +61,7 @@ class MeasurablesData extends DataBase {
    */
   async updateOne(id, data, creator) {
     const measurable = await this.models.Measurable.findById(id);
-    notifications.updateNotification(measurable, creator);
+    notifications.updateNotification(measurable, creator, data);
     return measurable.update(data);
   }
 

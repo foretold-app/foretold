@@ -37,7 +37,7 @@ describe('SeriesData', () => {
         expect(models.Series.findOne).toHaveBeenCalledWith({
           "where": {
             "channelId": {
-              [models.sequelize.Op.in]: "channelIdsLiteral",
+              [instance.model.Op.in]: "channelIdsLiteral",
             },
             "id": "id3",
           }
@@ -59,7 +59,7 @@ describe('SeriesData', () => {
         expect(models.Series.findAll).toHaveBeenCalledWith({
           "where": {
             "channelId": {
-              [models.sequelize.Op.in]: "channelIdsLiteral"
+              [instance.model.Op.in]: "channelIdsLiteral"
             }
           },
         });

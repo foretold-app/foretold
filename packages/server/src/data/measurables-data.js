@@ -100,7 +100,7 @@ class MeasurablesData extends DataBase {
   async getOne(id, options = {}) {
     const restrictions = 'agentId' in options ? {
       channelId: {
-        [this.models.sequelize.Op.in]: this.MeasurableModel.channelIdsLiteral(options.agentId)
+        [this.model.Op.in]: this.MeasurableModel.channelIdsLiteral(options.agentId)
       }
     } : {};
     return await this.models.Measurable.findOne({

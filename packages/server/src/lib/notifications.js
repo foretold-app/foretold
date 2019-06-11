@@ -26,6 +26,36 @@ function notify(message) {
     });
 }
 
+/**
+ * @param entity
+ * @param entity.getCreationNotification
+ * @param entity.getChannel
+ * @param creator
+ * @return {Promise<boolean>}
+ */
+async function creationNotification(entity, creator) {
+  const notification = await entity.getCreationNotification(creator);
+  const channel = await entity.getChannel();
+  if (channel.isPublic) await notify(notification);
+  return true;
+}
+
+/**
+ * @param entity
+ * @param entity.getUpdateNotifications
+ * @param entity.getChannel
+ * @param creator
+ * @return {Promise<boolean>}
+ */
+async function updateNotification(entity, creator) {
+  const notification = await entity.getUpdateNotifications(creator, data);
+  const channel = await entity.getChannel();
+  if (channel.isPublic) await notify(notification);
+  return true;
+}
+
 module.exports = {
   notify,
+  updateNotification,
+  creationNotification,
 };

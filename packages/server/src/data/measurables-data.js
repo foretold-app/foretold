@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const { notify } = require("../lib/notifications");
+const notifications = require("../lib/notifications");
 const { MeasurableModel } = require('../models-abstract');
 
 const { DataBase } = require('./data-base');
@@ -25,9 +25,7 @@ class MeasurablesData extends DataBase {
    */
   async createOne(data, creator) {
     const measurable = await this.models.Measurable.create(data);
-    /** @type {Models.Measurable} */
-    const notification = await measurable.getCreationNotification(creator);
-    notify(notification);
+    notifications.creationNotification(measurable, creator);
     return measurable;
   }
 
@@ -63,9 +61,7 @@ class MeasurablesData extends DataBase {
    */
   async updateOne(id, data, creator) {
     const measurable = await this.models.Measurable.findById(id);
-    /** @type {Models.Measurable} */
-    const notification = await measurable.getUpdateNotifications(creator, data);
-    notify(notification);
+    notifications.updateNotification(measurable, creator);
     return measurable.update(data);
   }
 

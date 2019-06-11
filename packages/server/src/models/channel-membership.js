@@ -7,6 +7,14 @@ const { CHANNEL_MEMBERSHIP_ROLES } = require('./channel-membership-roles');
  */
 module.exports = (sequelize, DataTypes) => {
   const ChannelMemberships = sequelize.define('ChannelMemberships', {
+    channelId: {
+      type: DataTypes.UUID(),
+      allowNull: false,
+    },
+    agentId: {
+      type: DataTypes.UUID(),
+      allowNull: false,
+    },
     role: {
       type: DataTypes.STRING(8),
       allowNull: false,

@@ -10,27 +10,27 @@ const ChannelMemberships = {
 };
 
 const Channel = {
-  findById: jest.fn(() => Promise.resolve(true)),
+  findByPk: jest.fn(() => Promise.resolve(true)),
   findOne: jest.fn(() => Promise.resolve(true)),
   create: jest.fn(() => Promise.resolve(true)),
   findAll: jest.fn(() => Promise.resolve(true)),
 };
 
 const Agent = {
-  findById: jest.fn(() => Promise.resolve(true)),
+  findByPk: jest.fn(() => Promise.resolve(true)),
 };
 
 const User = {
   findOne: jest.fn(() => Promise.resolve(true)),
   create: jest.fn(() => Promise.resolve(true)),
-  findById: jest.fn(() => Promise.resolve(true)),
+  findByPk: jest.fn(() => Promise.resolve(true)),
   findOrCreate: jest.fn(() => Promise.resolve(true)),
 };
 
 const Measurable = {
   findOne: jest.fn(() => Promise.resolve(true)),
   create: jest.fn(() => Promise.resolve(true)),
-  findById: jest.fn(() => Promise.resolve(true)),
+  findByPk: jest.fn(() => Promise.resolve(true)),
   findOrCreate: jest.fn(() => Promise.resolve(true)),
   findAll: jest.fn(() => Promise.resolve(true)),
 };
@@ -38,7 +38,7 @@ const Measurable = {
 const Measurement = {
   findOne: jest.fn(() => Promise.resolve(true)),
   create: jest.fn(() => Promise.resolve(true)),
-  findById: jest.fn(() => Promise.resolve(true)),
+  findByPk: jest.fn(() => Promise.resolve(true)),
   findOrCreate: jest.fn(() => Promise.resolve(true)),
   findAll: jest.fn(() => Promise.resolve(true)),
 };
@@ -46,7 +46,7 @@ const Measurement = {
 const Series = {
   findOne: jest.fn(() => Promise.resolve(true)),
   create: jest.fn(() => Promise.resolve(true)),
-  findById: jest.fn(() => Promise.resolve(true)),
+  findByPk: jest.fn(() => Promise.resolve(true)),
   findOrCreate: jest.fn(() => Promise.resolve(true)),
   findAll: jest.fn(() => Promise.resolve(true)),
 };

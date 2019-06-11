@@ -1,6 +1,8 @@
 const { Model } = require('./model');
 const models = require('../models');
 
+const { Op } = require('sequelize');
+
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
  */
@@ -18,15 +20,15 @@ class ModelPostgres extends Model {
     this.models = models;
     this.sequelize = sequelize;
 
-    this.Op = this.sequelize.Op;
-    this.in = this.sequelize.Op.in;
-    this.gt = this.sequelize.Op.gt;
-    this.gte = this.sequelize.Op.gte;
-    this.lt = this.sequelize.Op.lt;
-    this.lte = this.sequelize.Op.lte;
-    this.and = this.sequelize.Op.and;
-    this.not = this.sequelize.Op.not;
-    this.notIn = this.sequelize.Op.notIn;
+    this.Op = Op;
+    this.in = Op.in;
+    this.gt = Op.gt;
+    this.gte = Op.gte;
+    this.lt = Op.lt;
+    this.lte = Op.lte;
+    this.and = Op.and;
+    this.not = Op.not;
+    this.notIn = Op.notIn;
 
     this.fn = this.sequelize.fn;
     this.col = this.sequelize.col;

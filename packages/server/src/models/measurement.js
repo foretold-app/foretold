@@ -46,11 +46,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     hooks: {
-        beforeValidate: async (instance) => {
-          if (instance.dataValues.relevantAt == null){
-            instance.relevantAt = Date.now();
-          }
-        },
+      beforeValidate: async (instance) => {
+        if (instance.dataValues.relevantAt == null) {
+          instance.relevantAt = Date.now();
+        }
+      },
       afterCreate: async (measurement) => {
         if (measurement.dataValues.competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE) {
           const measurable = await measurement.getMeasurable();

@@ -33,6 +33,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: true,
     },
+    creatorId: {
+      type: DataTypes.UUID(),
+      allowNull: false,
+    },
     membershipCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
@@ -47,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
   Channel.associate = function (models) {
     // Usage:
     //
-    // const ch = await models.Channel.findById('406da139-e440-4c74-bb3c-514ed1872cea');
+    // const ch = await models.Channel.findByPk('406da139-e440-4c74-bb3c-514ed1872cea');
     // const cr = await ch.getCreator();
     //
     // models.Channel.findAll({
@@ -62,7 +66,7 @@ module.exports = (sequelize, DataTypes) => {
       as: 'creator',
     });
 
-    // const ch = await models.Channel.findById('406da139-e440-4c74-bb3c-514ed1872cea');
+    // const ch = await models.Channel.findByPk('406da139-e440-4c74-bb3c-514ed1872cea');
     // const ag = await ch.getAgents();
     Channel.Agents = Channel.belongsToMany(models.Agent, {
       through: models.ChannelMemberships,

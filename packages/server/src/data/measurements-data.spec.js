@@ -23,7 +23,7 @@ describe('Measurement Data layer', () => {
           "where": {
             "id": "id2",
             "measurableId": {
-              [models.sequelize.Op.in]: "measurableIdsLiteral"
+              [instance.model.Op.in]: "measurableIdsLiteral"
             },
           }
         });

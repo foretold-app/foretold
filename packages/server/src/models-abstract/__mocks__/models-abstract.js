@@ -1,4 +1,13 @@
+const Op = {
+  or: 'orop',
+  ne: 'neop',
+  eq: 'eqop',
+  and: 'andop',
+  in: 'inop',
+};
+
 const ModelPostgres = {
+  Op,
   channelIdsLiteral: jest.fn(() => 'channelIdsLiteral'),
   measurableIdsLiteral: jest.fn(() => 'measurableIdsLiteral'),
   deleteOne: jest.fn(() => Promise.resolve(true)),

@@ -38,7 +38,7 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async archive(id) {
-    let measurable = await this.models.Measurable.findById(id);
+    let measurable = await this.models.Measurable.findByPk(id);
     return measurable.archive();
   }
 
@@ -49,7 +49,7 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async unArchive(id) {
-    let measurable = await this.models.Measurable.findById(id);
+    let measurable = await this.models.Measurable.findByPk(id);
     return measurable.unarchive();
   }
 
@@ -62,7 +62,7 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async updateOne(id, data, creator) {
-    let measurable = await this.models.Measurable.findById(id);
+    let measurable = await this.models.Measurable.findByPk(id);
     /** @type {Models.Measurable} */
     const notification = await measurable.updateNotifications(creator, data);
     notify(notification);
@@ -100,7 +100,7 @@ class MeasurablesData extends DataBase {
   async getOne(id, options = {}) {
     const restrictions = 'agentId' in options ? {
       channelId: {
-        [this.models.sequelize.Op.in]: this.MeasurableModel.channelIdsLiteral(options.agentId)
+        [this.model.Op.in]: this.MeasurableModel.channelIdsLiteral(options.agentId)
       }
     } : {};
     return await this.models.Measurable.findOne({

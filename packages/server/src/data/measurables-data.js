@@ -26,7 +26,7 @@ class MeasurablesData extends DataBase {
   async createOne(data, creator) {
     const measurable = await this.models.Measurable.create(data);
     /** @type {Models.Measurable} */
-    const notification = await measurable.creationNotification(creator);
+    const notification = await measurable.getCreationNotification(creator);
     notify(notification);
     return measurable;
   }
@@ -64,7 +64,7 @@ class MeasurablesData extends DataBase {
   async updateOne(id, data, creator) {
     const measurable = await this.models.Measurable.findById(id);
     /** @type {Models.Measurable} */
-    const notification = await measurable.updateNotifications(creator, data);
+    const notification = await measurable.getUpdateNotifications(creator, data);
     notify(notification);
     return measurable.update(data);
   }

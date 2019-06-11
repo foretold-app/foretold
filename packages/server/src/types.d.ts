@@ -28,13 +28,13 @@ export namespace Models {
   export interface Measurable extends Model {
     id: string;
     state: string;
-    creationNotification(creator: Models.Creator): any;
-    updateNotifications(creator: Models.Creator): any;
+    getCreationNotification(creator: Models.Creator): any;
+    getUpdateNotifications(creator: Models.Creator): any;
   }
 
   export interface Measurement extends Model {
     id: string;
-    creationNotification(creator: Models.Creator): any;
+    getCreationNotification(creator: Models.Creator): any;
   }
 
   export interface Agent extends Model {

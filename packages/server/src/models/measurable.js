@@ -205,7 +205,7 @@ module.exports = (sequelize, DataTypes) => {
    * @param {Models.Creator} creator
    * @return {Promise<*>}
    */
-  Model.prototype.creationNotification = async function creationNotification(creator) {
+  Model.prototype.getCreationNotification = async function getCreationNotification(creator) {
     const agent = await creator.getAgent();
     return {
       "attachments": [{
@@ -242,7 +242,7 @@ module.exports = (sequelize, DataTypes) => {
    * @param {object} newData
    * @return {Promise<*>}
    */
-  Model.prototype.updateNotifications = async function updateNotifications(creator, newData) {
+  Model.prototype.getUpdateNotifications = async function getUpdateNotifications(creator, newData) {
     const changed = this.changedFields(newData);
     const agent = await creator.getAgent();
     return {

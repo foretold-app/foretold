@@ -95,7 +95,7 @@ module.exports = (sequelize, DataTypes) => {
    * @param {Models.Creator} creator
    * @return {Promise<*>}
    */
-  Model.prototype.creationNotification = async function creationNotification(creator) {
+  Model.prototype.getCreationNotification = async function getCreationNotification(creator) {
     const agent = await creator.getAgent();
     const measurable = await this.getMeasurable();
     return {

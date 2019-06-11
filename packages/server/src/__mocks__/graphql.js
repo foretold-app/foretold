@@ -26,10 +26,6 @@ function GraphQLInputObjectType(x) {
   if (!(this instanceof GraphQLInputObjectType)) return new GraphQLInputObjectType(x);
 }
 
-function GraphQLList(x) {
-  if (!(this instanceof GraphQLList)) return new GraphQLList(x);
-}
-
 module.exports = {
   GraphQLSchema,
   GraphQLObjectType,

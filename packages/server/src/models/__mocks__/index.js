@@ -52,13 +52,6 @@ const Series = {
 };
 
 const sequelize = {
-  Op: {
-    or: 'orop',
-    ne: 'neop',
-    eq: 'eqop',
-    and: 'andop',
-    in: 'inop',
-  }
 };
 
 module.exports = {

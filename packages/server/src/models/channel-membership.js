@@ -10,10 +10,12 @@ module.exports = (sequelize, DataTypes) => {
     channelId: {
       type: DataTypes.UUID(),
       allowNull: false,
+      primaryKey: true,
     },
     agentId: {
       type: DataTypes.UUID(),
       allowNull: false,
+      primaryKey: true,
     },
     role: {
       type: DataTypes.STRING(8),
@@ -23,16 +25,16 @@ module.exports = (sequelize, DataTypes) => {
 
   ChannelMemberships.ROLE = CHANNEL_MEMBERSHIP_ROLES;
 
-  ChannelMemberships.associate = function (models) {
+  ChannelMemberships.associate = function associate(models) {
     models.Agent.belongsToMany(models.Channel, {
       through: ChannelMemberships,
-      foreignKey: 'id',
+      foreignKey: 'agentId',
       as: 'agentId',
     });
 
     models.Channel.belongsToMany(models.Agent, {
       through: ChannelMemberships,
-      foreignKey: 'id',
+      foreignKey: 'channelId',
       as: 'channelId',
     });
   };

@@ -69,6 +69,7 @@ module Types = {
     creator: option(agent),
     myRole: option(myMembershipRole),
     channelMemberships: option(Js.Array.t(channelMembership)),
+    openedMeasurablesCount: option(int),
   }
   and channelMembership = {
     channel: option(channel),
@@ -268,11 +269,9 @@ module Channel = {
   let present = (~hashClassName="", s: t) =>
     <span>
       <span className=hashClassName>
-        {
-          s.isPublic ?
-            <span className=Styles.hash> {"#" |> ste} </span> :
-            <span className=Styles.lock> <Icon.Icon icon="LOCK" /> </span>
-        }
+        {s.isPublic
+           ? <span className=Styles.hash> {"#" |> ste} </span>
+           : <span className=Styles.lock> <Icon.Icon icon="LOCK" /> </span>}
       </span>
       <span> {s.name |> ste} </span>
     </span>;
@@ -288,6 +287,7 @@ module Channel = {
         ~membershipCount=None,
         ~myRole=None,
         ~channelMemberships=None,
+        ~openedMeasurablesCount=None,
         (),
       )
       : t => {
@@ -300,6 +300,7 @@ module Channel = {
     creator,
     myRole,
     channelMemberships,
+    openedMeasurablesCount,
   };
 };
 

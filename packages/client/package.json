@@ -25,7 +25,7 @@
 		"serve-ws": "ws -d dist --spa index.html",
 		"build-t": "npm run clean && npm run build-bsb && npm run build",
 		"test": "jest --ci --bail --no-cache",
-		"update-gql": "yarn send-introspection-query http://localhost:4000/graphql",
+		"update-gql": "API_URL=${API_URL:-http://localhost:4000/graphql} yarn send-introspection-query ${API_URL}",
 		"webpack": "webpack -w",
 		"webpack:production": "NODE_ENV=production webpack",
 		"find-interface-for-file": "bsc -bs-re-out",

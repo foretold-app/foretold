@@ -38,6 +38,11 @@ const channel = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(graphql.GraphQLList(channelMemberships.channelsMembership)),
       resolve: resolvers.channelMemberships.allByChannelId,
     },
+
+    openedMeasurablesCount: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLInt),
+      resolve: resolvers.measurables.openedCount,
+    },
   }),
 });
 

@@ -81,7 +81,7 @@ class MeasurablesData extends DataBase {
       agentId: options.agentId,
       measuredByAgentId: options.measuredByAgentId,
     };
-    return await this.MeasurableModel.getAll(filter, pagination, restrictions);
+    return await this.model.getAll(filter, pagination, restrictions);
   }
 
   /**
@@ -96,7 +96,7 @@ class MeasurablesData extends DataBase {
   async getOne(id, options = {}) {
     const restrictions = 'agentId' in options ? {
       channelId: {
-        [this.model.Op.in]: this.MeasurableModel.channelIdsLiteral(options.agentId)
+        [this.model.Op.in]: this.model.channelIdsLiteral(options.agentId)
       }
     } : {};
     return await this.models.Measurable.findOne({
@@ -112,7 +112,15 @@ class MeasurablesData extends DataBase {
    * @return {Promise<boolean>}
    */
   needsToBePending() {
-    return this.MeasurableModel.needsToBePending();
+    return this.model.needsToBePending();
+  }
+
+  /**
+   * @param {Models.ObjectID} channelId
+   * @return {Promise<*>}
+   */
+  async getOpenedCount(channelId) {
+    return await this.model.getOpenedCount(channelId);
   }
 }
 

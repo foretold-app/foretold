@@ -92,6 +92,15 @@ class MeasurableModel extends ModelPostgres {
 
     return { data, total };
   }
+
+  async getOpenedCount(channelId) {
+    return this.model.count({
+      where: {
+        channelId,
+        state: MEASURABLE_STATE.OPEN,
+      },
+    });
+  }
 }
 
 MeasurableModel.MEASURABLE_STATE = MEASURABLE_STATE;

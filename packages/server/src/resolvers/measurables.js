@@ -113,6 +113,18 @@ async function update(root, args, context, info) {
   return await data.measurables.updateOne(id, datas, creator);
 }
 
+/**
+ * @param {*} root
+ * @param {Models.ObjectID} root.id
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function openedCount(root, args, context, info) {
+  const channelId = root.id;
+  return await data.measurables.getOpenedCount(channelId);
+}
 
 module.exports = {
   one,
@@ -121,4 +133,5 @@ module.exports = {
   unarchive,
   archive,
   create,
+  openedCount,
 };

@@ -71,7 +71,7 @@ async function test() {
 
   // 1
   {
-    const ch = await models.Channel.findById(channel1.id);
+    const ch = await models.Channel.findByPk(channel1.id);
     const cr = await ch.getCreator();
 
     console.log(cr.id, user1.agentId);
@@ -80,14 +80,14 @@ async function test() {
 
   // 2
   {
-    const ch = await models.Channel.findById(channel2.id);
+    const ch = await models.Channel.findByPk(channel2.id);
     const ag = await ch.getAgents();
     assert(ag[0].id === user2.agentId, 'Error 2');
   }
 
   // 3
   {
-    const ch = await (await models.Agent.findById(user3.agentId)).getChannels();
+    const ch = await (await models.Agent.findByPk(user3.agentId)).getChannels();
     assert(ch[0].id === channel3.id, 'Error 3');
   }
 

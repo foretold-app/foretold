@@ -1,7 +1,6 @@
 const _ = require('lodash');
 
 /**
- * @todo: rename "formatResponseIntoConnection"
  * @param {*[]} result
  * @param {object} root
  * @param {object} args
@@ -9,7 +8,7 @@ const _ = require('lodash');
  * @param {object} info
  * @return {{total: *, pageInfo: {hasNextPage: boolean, hasPreviousPage: boolean, endCursor: *, startCursor: *}, edges: *}}
  */
-function connection(result, root, args, context, info) {
+function formatResponseIntoConnection(result, root, args, context, info) {
   const total = _.get(result, 'total');
 
   const edges = result.map(node => ({ node, cursor: node.index }));
@@ -36,5 +35,5 @@ function connection(result, root, args, context, info) {
 }
 
 module.exports = {
-  connection,
+  formatResponseIntoConnection,
 };

@@ -3,14 +3,13 @@ const _ = require('lodash');
 const data = require('../data');
 
 /**
- * @todo: rename "setContextMeasurable"
  * @param {object | null} root
  * @param {object} args
  * @param {object} context
  * @param {object} info
  * @return {Promise<void>}
  */
-async function measurable(root, args, context, info) {
+async function setContextMeasurable(root, args, context, info) {
   const measurableId = _.get(args, 'measurableId')
     || _.get(args, 'input.measurableId')
     || _.get(root, 'measurableId')
@@ -26,19 +25,6 @@ async function measurable(root, args, context, info) {
   }
 }
 
-/**
- * @param {object | null} root
- * @param {object} args
- * @param {object} context
- * @param {object} info
- * @return {Promise<void>}
- */
-async function measurableByRoot(root, args, context, info) {
-  console.log('\x1b[36m ---> \x1b[0m Middleware (measurableByRoot)');
-  context.measurable = root || null;
-}
-
 module.exports = {
-  measurable,
-  measurableByRoot,
+  setContextMeasurable,
 };

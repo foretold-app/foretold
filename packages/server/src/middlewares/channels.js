@@ -3,14 +3,13 @@ const _ = require('lodash');
 const data = require('../data');
 
 /**
- * @todo: rename "setContextChannel"
  * @param {object | null} root
  * @param {{ channelId: string }} args
  * @param {object} context
  * @param {object} info
  * @return {Promise<void>}
  */
-async function channel(root, args, context, info) {
+async function setContextChannel(root, args, context, info) {
   const channelId = _.get(args, 'channelId')
     || _.get(args, 'input.channelId')
     || _.get(root, 'channelId')
@@ -25,19 +24,18 @@ async function channel(root, args, context, info) {
 }
 
 /**
- * @todo: rename "setContextChannelByRoot"
  * @param {object | null} root
  * @param {object} args
  * @param {object} context
  * @param {object} info
  * @return {Promise<void>}
  */
-async function channelByRoot(root, args, context, info) {
+async function setContextChannelByRoot(root, args, context, info) {
   console.log('\x1b[36m ---> \x1b[0m Middleware (channelByRoot)');
   context.channel = !!root ? root : null;
 }
 
 module.exports = {
-  channel,
-  channelByRoot,
+  setContextChannel,
+  setContextChannelByRoot,
 };

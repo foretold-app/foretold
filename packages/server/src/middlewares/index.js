@@ -6,7 +6,7 @@ const { channelMembershipsAdmins } = require('./channel-memberships');
 const { measurable, measurableByRoot } = require('./measurables');
 const { measurementValueValidation } = require('./measurements');
 const { measurableStateValidation } = require('./measurements');
-const { connection, connectionArguments } = require('./connections');
+const { connection } = require('./connections');
 const { bot } = require('./bots');
 
 /**
@@ -60,19 +60,16 @@ const middlewares = {
     },
 
     measurements: async (resolve, root, args, context, info) => {
-      await connectionArguments(root, args, context, info);
       const result = await resolve(root, args, context, info);
       return connection(result, root, args, context, info);
     },
 
     measurables: async (resolve, root, args, context, info) => {
-      await connectionArguments(root, args, context, info);
       const result = await resolve(root, args, context, info);
       return connection(result, root, args, context, info);
     },
 
     bots: async (resolve, root, args, context, info) => {
-      await connectionArguments(root, args, context, info);
       const result = await resolve(root, args, context, info);
       return connection(result, root, args, context, info);
     },

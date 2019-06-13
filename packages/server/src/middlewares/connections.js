@@ -35,23 +35,6 @@ function connection(result, root, args, context, info) {
   };
 }
 
-/**
- * @todo: rename "clearConnectionArguments"
- * @param {object} root
- * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
- */
-async function connectionArguments(root, args, context, info) {
-  args.before = _.get(args, 'before', 0) * 1;
-  args.after = _.get(args, 'after', 0) * 1;
-
-  args.last = _.get(args, 'last', 0);
-  args.first = _.get(args, 'first', 0);
-  return true;
-}
-
 module.exports = {
   connection,
-  connectionArguments,
 };

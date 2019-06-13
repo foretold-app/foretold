@@ -3,7 +3,8 @@ const _ = require('lodash');
 const { setContextChannel, setContextChannelByRoot } = require('./channels');
 const { setContextChannelMemberships } = require('./channel-memberships');
 const { setContextChannelMembershipsAdmins } = require('./channel-memberships');
-const { setContextMeasurable, measurableByRoot } = require('./measurables');
+const { setContextMeasurable } = require('./measurables');
+const { setContextMeasurableByRoot } = require('./measurables');
 const { measurementValueValidation } = require('./measurements');
 const { measurableStateValidation } = require('./measurements');
 const { formatResponseIntoConnection } = require('./connections');
@@ -23,7 +24,7 @@ const middlewares = {
 
   Measurable: {
     permissions: async (resolve, root, args, context, info) => {
-      await measurableByRoot(root, args, context, info);
+      await setContextMeasurableByRoot(root, args, context, info);
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
       return await resolve(root, args, context, info);

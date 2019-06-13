@@ -4,7 +4,6 @@ open Css;
 open Style.Grid;
 
 let block = style([marginBottom(`em(1.0))]);
-let notFound = "Agent not found" |> ste |> E.React.inH3;
 
 let agentSection = (e: Queries.Agent.agent) =>
   switch (e) {
@@ -23,7 +22,7 @@ let agentSection = (e: Queries.Agent.agent) =>
         )
       }
     </>
-  | _ => notFound
+  | _ => E.React.null
   };
 
 let component = ReasonReact.statelessComponent("AgentBots");
@@ -66,11 +65,21 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
     Queries.Agent.component(~id=pageParams.id, ({agent}) =>
       Queries.Bots.component(bots =>
         SLayout.LayoutConfig.make(
-          ~head=agentSection(agent),
+          ~head=
+            <FC.Base.Div
+              float=`right
+              className={
+                Css.style([
+                  FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                  FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+                ])
+              }>
+              {agentSection(agent)}
+            </FC.Base.Div>,
           ~body=
-            <FC.PageCard.BodyPadding>
+            <FC.PageCard.Body>
               {Table.fromColumns(Columns.all, bots)}
-            </FC.PageCard.BodyPadding>,
+            </FC.PageCard.Body>,
         )
         |> layout
       )

@@ -174,7 +174,7 @@ module Helpers = {
 
     if (isJudge) {
       <div className=judgementStyle>
-        {"Judgement" |> ste |> E.React.inH3}
+        {"Resolution" |> ste |> E.React.inH3}
         {
           switch (aLink) {
           | Some(name) => <> {"by " |> ste} name </>

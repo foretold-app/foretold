@@ -172,7 +172,7 @@ let make =
             </FC.Base.Button>
           </FC.Base.Div>
         </>,
-      ~body=<FC.PageCard.BodyPadding> table </FC.PageCard.BodyPadding>,
+      ~body=<FC.PageCard.Body> table </FC.PageCard.Body>,
     )
     |> layout;
   },

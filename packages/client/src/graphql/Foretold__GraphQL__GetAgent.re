@@ -132,39 +132,8 @@ let toMesuarements = (measurements: array(node)) => {
   standardMeasurements;
 };
 
-let toMeasurables = (measurements: array(node)) => {
-  let r = measurements;
-  let standardMeasurements = r |> toMesuarements;
-
-  let measurables =
-    r
-    |> E.A.fmap((t) => (t.measurable: option(measurable)))
-    |> E.A.to_list
-    |> E.L.filter_opt
-    |> E.L.uniqBy((t: measurable) => t.id)
-    |> E.L.fmap((e: measurable) =>
-         Context.Primary.Measurable.make(
-           ~id=e.id,
-           ~name=e.name,
-           ~expectedResolutionDate=e.expectedResolutionDate,
-           ~state=Some(e.state),
-           ~stateUpdatedAt=e.stateUpdatedAt,
-           ~measurements=
-             Some(
-               standardMeasurements
-               |> E.L.filter((s: Context.Primary.Measurement.t) =>
-                    s.measurableId == Some(e.id)
-                  ),
-             ),
-           (),
-         )
-       );
-  measurables;
-};
-
 type response = {
   agent,
-  measurables: list(Context.Primary.Measurable.t),
   measurementsList: list(Context.Primary.Measurement.t),
 };
 
@@ -179,17 +148,10 @@ let component = (~id, innerFn) => {
          let agent = e##agent;
          let measurementsEdges: option(array(node)) =
            agent |> E.O.fmap(agent => agent.measurements |> unpackEdges);
-
-         let measurables = measurementsEdges |> E.O.fmap(toMeasurables);
          let measurements = measurementsEdges |> E.O.fmap(toMesuarements);
 
-         Js.log("measurements");
-         Js.log(measurements);
-         //         Js.log(agent.measurements);
-
-         switch (agent, measurables, measurements) {
-         | (Some(a), Some(b), Some(c)) =>
-           Some({agent: a, measurables: b, measurementsList: c})
+         switch (agent, measurements) {
+         | (Some(a), Some(b)) => Some({agent: a, measurementsList: b})
          | _ => None
          };
        })

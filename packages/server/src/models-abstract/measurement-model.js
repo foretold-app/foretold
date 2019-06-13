@@ -28,7 +28,7 @@ class MeasurementModel extends ModelPostgres {
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {Promise<{data: Models.Measurement[], total: number}>}
    */
-  async getAll(filter, pagination, restrictions) {
+  async getAll(filter = {}, pagination = {}, restrictions = {}) {
     const { where, include, spacedLimit } = this.makeFilter(filter);
     this.applyRestrictions(where, restrictions);
 
@@ -60,7 +60,7 @@ class MeasurementModel extends ModelPostgres {
    * @param {object} filter
    * @return {{include: Array, spacedLimit: *, where: {}}}
    */
-  makeFilter(filter) {
+  makeFilter(filter = {}) {
     const where = { [this.and]: [] };
     const include = [];
 

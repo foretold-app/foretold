@@ -46,25 +46,29 @@ module Columns = {
       <Foretold__Components__Link linkType={Internal(ChannelShow(r.id))}>
         {r.name |> ste}
       </Foretold__Components__Link>,
+    flex: 2,
   };
   let descriptionColumn: column = {
     name: "Description" |> ste,
     render: (r: record) => r.description |> E.O.default("") |> ste,
+    flex: 3,
   };
 
   let memberCountColumn: column = {
     name: "Members" |> ste,
     render: (r: record) =>
       r.membershipCount |> E.O.fmap(string_of_int) |> E.O.default("") |> ste,
+    flex: 1,
   };
 
   let openedCountColumn: column = {
-    name: "Opened" |> ste,
+    name: "Open Questions" |> ste,
     render: (r: record) =>
       r.openedMeasurablesCount
       |> E.O.fmap(string_of_int)
       |> E.O.default("")
       |> ste,
+    flex: 1,
   };
 
   let all = [|

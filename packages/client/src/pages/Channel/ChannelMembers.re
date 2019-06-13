@@ -62,6 +62,7 @@ module Columns = {
            </Foretold__Components__Link>
          )
       |> E.O.React.defaultNull,
+    flex: 1,
   };
 
   let roleColumn: column = {
@@ -73,6 +74,7 @@ module Columns = {
       | `VIEWER =>
         <div className="ant-tag ant-tag-green"> {"Viewer" |> ste} </div>
       },
+    flex: 1,
   };
 
   let roleChangeColumn: string => column =
@@ -106,6 +108,7 @@ module Columns = {
             }
           }
         </div>,
+      flex: 1,
     };
 
   let removeFromChannelColumn: string => column =
@@ -116,6 +119,7 @@ module Columns = {
         | (Some(agent), true) => removeFromChannel(agent.id, channelId)
         | _ => ReasonReact.null
         },
+      flex: 1,
     };
 
   let all = channelId => [|

@@ -42,15 +42,18 @@ module Columns = {
         </Foretold__Components__Link>
       | _ => ReasonReact.null
       },
+    flex: 1,
   };
   let descriptionColumn: column = {
     name: "Description" |> ste,
     render: (r: record) => r.description |> E.O.default("") |> ste,
+    flex: 2,
   };
 
   let tokenColumn: column = {
     name: "Token" |> ste,
     render: (r: record) => <Antd.Input value={r.token |> E.O.default("")} />,
+    flex: 2,
   };
 
   let all = [|nameColumn, descriptionColumn, tokenColumn|];

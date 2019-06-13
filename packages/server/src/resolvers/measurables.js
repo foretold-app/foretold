@@ -1,5 +1,7 @@
 const _ = require('lodash');
+
 const data = require('../data');
+const { Pagination } = require('../pagination');
 
 /**
  * @param {*} root
@@ -27,12 +29,7 @@ async function all(root, args, context, info) {
     states: _.get(args, 'states'),
     isArchived: _.get(args, 'isArchived'),
   };
-  const pagination = {
-    last: _.get(args, 'last'),
-    first: _.get(args, 'first'),
-    after: _.get(args, 'after'),
-    before: _.get(args, 'before'),
-  };
+  const pagination = new Pagination(args);
   const options = {
     isAdmin: _.get(context, 'agent.isAdmin'),
     agentId: _.get(context, 'agent.id'),

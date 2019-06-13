@@ -6,9 +6,9 @@ const data = require('../data');
  * @param {object} args
  * @param {number} args.last
  * @param {number} args.first
- * @param {string} args.measurableId
- * @param {string} args.agentId
- * @param {string} args.notTaggedByAgent
+ * @param {Models.ObjectID} args.measurableId
+ * @param {Models.ObjectID} args.agentId
+ * @param {Models.ObjectID} args.notTaggedByAgent
  * @param {object} args.findInDateRange
  * @param {string} args.findInDateRange.startDate
  * @param {string} args.findInDateRange.endDate

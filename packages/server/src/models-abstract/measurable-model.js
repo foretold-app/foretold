@@ -41,9 +41,9 @@ class MeasurableModel extends ModelPostgres {
   /**
    * @public
    * @param {Layers.AbstractModelsLayer.filter} [filter]
-   * @param {string} [filter.channelId]
-   * @param {string} [filter.seriesId]
-   * @param {string} [filter.creatorId]
+   * @param {Models.ObjectID} [filter.channelId]
+   * @param {Models.ObjectID} [filter.seriesId]
+   * @param {Models.ObjectID} [filter.creatorId]
    * @param {string[]} [filter.states]
    * @param {string[]} [filter.isArchived]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]

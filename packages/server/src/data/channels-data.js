@@ -46,7 +46,7 @@ class ChannelsData extends DataBase {
   /**
    * @todo: fix interface (params, data, options)
    * @public
-   * @param {string} id
+   * @param {Models.ObjectID} id
    * @param {object} input
    * @return {Promise<Models.Channel>}
    */
@@ -61,7 +61,7 @@ class ChannelsData extends DataBase {
   /**
    * @todo: rework
    * @public
-   * @param {string} id
+   * @param {Models.ObjectID} id
    * @return {Promise<Model[]>}
    */
   async getAgentsByChannelId(id) {
@@ -75,7 +75,7 @@ class ChannelsData extends DataBase {
   /**
    * @todo: rework
    * @public
-   * @param {string} id
+   * @param {Models.ObjectID} id
    * @return {Promise<Model>}
    */
   async getCreatorByChannelId(id) {
@@ -93,7 +93,7 @@ class ChannelsData extends DataBase {
    * @param {object} options
    * @param {number} [options.offset]
    * @param {number} [options.limit]
-   * @param {string} [options.agentId]
+   * @param {Models.ObjectID} [options.agentId]
    * @return {Promise<Models.Channel[]>}
    */
   async getAll(options = {}) {
@@ -115,11 +115,11 @@ class ChannelsData extends DataBase {
    * @todo: fix interface (params, query, options)
    * @todo: move down (model abstraction)
    * @public
-   * @param {string} id
+   * @param {Models.ObjectID} id
    * @param {object} options
    * @param {number} [options.offset]
    * @param {number} [options.limit]
-   * @param {string} [options.agentId]
+   * @param {Models.ObjectID} [options.agentId]
    * @return {Promise<Models.Channel>}
    */
   async getOne(id, options = {}) {

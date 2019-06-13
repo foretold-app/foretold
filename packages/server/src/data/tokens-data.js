@@ -30,7 +30,7 @@ class TokensData extends DataBase {
   }
 
   /**
-   * @param {string} [agentId]
+   * @param {Models.ObjectID} [agentId]
    * @param {string} [token]
    * @return {Promise<Models.Token>}
    */
@@ -43,7 +43,7 @@ class TokensData extends DataBase {
   }
 
   /**
-   * @param {string} agentId
+   * @param {Models.ObjectID} agentId
    * @return {Promise<Models.Token>}
    */
   async createActiveToken(agentId) {

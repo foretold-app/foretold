@@ -39,8 +39,8 @@ class MeasurementsData extends DataBase {
    * @param {Layers.DataSourceLayer.filter} [filter]
    * @param {Layers.DataSourceLayer.pagination} [pagination]
    * @param {Layers.DataSourceLayer.options} [options]
-   * @param {boolean} [options.measurableId]
-   * @param {string} options.agentId
+   * @param {Models.ObjectID} [options.measurableId]
+   * @param {Models.ObjectID} options.agentId
    * @return {Promise<{data: Models.Measurement[], total: number}>}
    */
   async getAll(filter = {}, pagination = {}, options = {}) {
@@ -55,7 +55,7 @@ class MeasurementsData extends DataBase {
   /**
    * @todo: fix interface
    * @todo: move down
-   * @param {string} id
+   * @param {Models.ObjectID} id
    * @param {object} options
    * @param {string} [options.agentId]
    * @return {Promise<*>}
@@ -73,7 +73,7 @@ class MeasurementsData extends DataBase {
 
   /**
    * @param {Models.Measurable} measurable
-   * @param {string} agentId
+   * @param {Models.ObjectID} agentId
    * @return {Promise<Models.Measurement>}
    */
   async getLatest({ measurable, agentId } = {}) {

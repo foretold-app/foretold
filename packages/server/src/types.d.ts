@@ -1,44 +1,46 @@
 export namespace Models {
 
+  export type ObjectID = string;
+
   export interface Model {
-    id: string;
+    id: ObjectID;
     createdAt: string;
     updatedAt: string;
   }
 
   export interface Channel extends Model {
-    id: string;
+    id: ObjectID;
     isPublic: boolean;
   }
 
   export interface Bot extends Model {
-    id: string;
+    id: ObjectID;
     name: string;
     getAgent(): Models.Agent;
   }
 
   export interface User extends Model {
-    id: string;
+    id: ObjectID;
     name: string;
     auth0Id: string;
-    agentId: string;
+    agentId: ObjectID;
     getAgent(): Models.Agent;
   }
 
   export interface Measurable extends Model {
-    id: string;
+    id: ObjectID;
     state: string;
     getCreationNotification(creator: Models.Creator): any;
     getUpdateNotifications(creator: Models.Creator): any;
   }
 
   export interface Measurement extends Model {
-    id: string;
+    id: ObjectID;
     getCreationNotification(creator: Models.Creator): any;
   }
 
   export interface Agent extends Model {
-    id: string;
+    id: ObjectID;
     isAdmin: boolean;
     type: 'BOT' | 'USER';
     name: string;
@@ -48,14 +50,14 @@ export namespace Models {
   }
 
   export interface Series extends Model {
-    id: string;
+    id: ObjectID;
   }
 
   export type ChannelMembershipRole = "ADMIN" | "VIEWER";
 
   export interface ChannelMemberships {
-    agentId: string;
-    channelId: string;
+    agentId: ObjectID;
+    channelId: ObjectID;
     role: ChannelMembershipRole;
   }
 
@@ -95,15 +97,15 @@ export namespace Layers {
     type data = object;
     type options = {
       isAdmin?: boolean,
-      agentId?: string,
-      measuredByAgentId?: string,
+      agentId?: Models.ObjectID,
+      measuredByAgentId?: Models.ObjectID,
     };
     type filter = {
-      creatorId?: string,
-      seriesId?: string,
-      channelId?: string,
-      measurableId?: string,
-      agentId?: string,
+      creatorId?: Models.ObjectID,
+      seriesId?: Models.ObjectID,
+      channelId?: Models.ObjectID,
+      measurableId?: Models.ObjectID,
+      agentId?: Models.ObjectID,
       competitorType?: string,
       findInDateRange?: object,
       notTaggedByAgent?: string,
@@ -160,12 +162,12 @@ export namespace Layers {
 
     type data = object;
     type restrictions = {
-      agentId?: string,
+      agentId?: Models.ObjectID,
       isAdmin?: boolean,
-      userId?: string,
-      channelId?: boolean,
-      measurableId?: boolean,
-      measuredByAgentId?: string,
+      userId?: Models.ObjectID,
+      channelId?: Models.ObjectID,
+      measurableId?: Models.ObjectID,
+      measuredByAgentId?: Models.ObjectID,
     };
     type filter = object;
     type pagination = {

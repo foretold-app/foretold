@@ -4,10 +4,10 @@ const data = require('../data');
 /**
  * @param {*} root
  * @param {object} args
- * @param {string} args.creatorId
- * @param {string} args.seriesId
- * @param {string} args.channelId
- * @param {string} args.measuredByAgentId
+ * @param {Models.ObjectID} args.creatorId
+ * @param {Models.ObjectID} args.seriesId
+ * @param {Models.ObjectID} args.channelId
+ * @param {Models.ObjectID} args.measuredByAgentId
  * @param {string} args.resultOrLatestMeasurementForAgentId
  * @param {string[]} args.states
  * @param {string[]} args.isArchived
@@ -77,7 +77,7 @@ async function create(root, args, context, info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {string} args.id
+ * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<*|Array<Model>>}
@@ -90,7 +90,7 @@ async function archive(root, args, context, info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {string} args.id
+ * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<*|Array<Model>>}
@@ -103,7 +103,7 @@ async function unarchive(root, args, context, info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {string} args.id
+ * @param {Models.ObjectID} args.id
  * @param {object} args.input
  * @param {Schema.Context} context
  * @param {object} info

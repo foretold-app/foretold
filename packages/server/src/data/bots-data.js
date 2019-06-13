@@ -38,14 +38,14 @@ class BotsData extends DataBase {
    * @param {Layers.DataSourceLayer.filter} [filter]
    * @param {Layers.DataSourceLayer.pagination} [pagination]
    * @param {Layers.DataSourceLayer.options} [options]
-   * @param {string} options.agentId
-   * @return {Promise<{data: Models.Bot[], total: number}>}
+   * @param {Models.ObjectID} options.userId
+   * @return {Promise<{data: Models.Model[], total: number}>}
    */
   async getAll(filter = {}, pagination = {}, options = {}) {
     const restrictions = {
-      agentId: options.agentId,
+      userId: options.userId,
     };
-    return await this.model.getAll(filter, pagination, restrictions);
+    return await this.model.getAllWithConnections(filter, pagination, restrictions);
   }
 
   /**

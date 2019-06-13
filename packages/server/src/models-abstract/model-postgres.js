@@ -37,7 +37,7 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: Use ORM opportunities to join tables.
-   * @param {string} [agentId]
+   * @param {Models.ObjectID} [agentId]
    * @return {string}
    */
   channelIds(agentId) {
@@ -54,7 +54,7 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: see this.channelIds()
-   * @param {string} [agentId]
+   * @param {Models.ObjectID} [agentId]
    * @return {Sequelize.literal}
    */
   channelIdsLiteral(agentId) {
@@ -76,7 +76,7 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: see this.channelIds()
-   * @param {string} [agentId]
+   * @param {Models.ObjectID} [agentId]
    * @return {string}
    */
   taggedMeasurements(agentId) {
@@ -90,7 +90,7 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: see this.channelIds()
-   * @param {string} [agentId]
+   * @param {Models.ObjectID} [agentId]
    * @return {string}
    */
   taggedMeasurementsLiteral(agentId) {
@@ -99,7 +99,7 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: see this.channelIds()
-   * @param {string} [agentId]
+   * @param {Models.ObjectID} [agentId]
    * @return {Sequelize.literal}
    */
   measurableIdsLiteral(agentId) {
@@ -126,6 +126,12 @@ class ModelPostgres extends Model {
     if (restrictions.userId) {
       where[this.and].push({
         userId: restrictions.userId,
+      });
+    }
+
+    if (restrictions.agentId) {
+      where[this.and].push({
+        agentId: restrictions.agentId,
       });
     }
 
@@ -166,7 +172,7 @@ class ModelPostgres extends Model {
    * @param {number} pagination.limit
    * @param {number} pagination.offset
    * @param {number} total
-   * @return {{offset: *, limit: *, order: *}}
+   * @return {{offset: number, limit: number }}
    */
   getPagination(pagination = {}, total = 0) {
     pagination.before = Math.abs(pagination.before) || total;
@@ -291,6 +297,42 @@ class ModelPostgres extends Model {
       offset: pagination.offset,
       where,
     });
+  }
+
+  /**
+   * @public
+   * @param {Layers.AbstractModelsLayer.filter} [filter]
+   * @param {Layers.AbstractModelsLayer.pagination} [pagination]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @return {Promise<{data: Models.Model[], total: number}>}
+   */
+  async getAllWithConnections(filter = {}, pagination = {}, restrictions = {}) {
+    const where = {};
+    const include = [];
+
+    this.applyRestrictions(where, restrictions);
+    this.applyRestrictionsIncluding(include, restrictions);
+    this.applyFilter(where, filter);
+
+    const cond = { where, include };
+
+    /** @type {number} */
+    const total = await this.model.count(cond);
+    const edgePagination = this.getPagination(pagination, total);
+
+    const options = {
+      ...cond,
+      limit: edgePagination.limit,
+      offset: edgePagination.offset,
+      order: [['createdAt', 'DESC']],
+    };
+
+    /** @type {Models.Measurable[]} */
+    let data = await this.model.findAll(options);
+    data = this.setIndexes(data, edgePagination);
+    data.total = total;
+
+    return { data, total };
   }
 
   /**

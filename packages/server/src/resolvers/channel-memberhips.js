@@ -3,7 +3,7 @@ const data = require('../data');
 
 /**
  * @param {*} root
- * @param {{input: {channelId: string, agentId: string, role: string}}} args
+ * @param {{input: {channelId: Models.ObjectID, agentId: Models.ObjectID, role: string}}} args
  * @returns {Promise<Models.ChannelMemberships>}
  */
 async function create(root, args) {
@@ -17,7 +17,7 @@ async function create(root, args) {
 
 /**
  * @param {*} root
- * @param {{input: {channelId: string, agentId: string, role: string}}} args
+ * @param {{input: {channelId: Models.ObjectID, agentId: Models.ObjectID, role: string}}} args
  * @returns {Promise<Models.ChannelMemberships>}
  */
 async function update(root, args) {
@@ -31,7 +31,7 @@ async function update(root, args) {
 
 /**
  * @param root
- * @param {{input: {channelId: string, agentId: string}}} args
+ * @param {{input: {channelId: Models.ObjectID, agentId: Models.ObjectID}}} args
  * @returns {Promise<Models.ChannelMemberships | null>}
  */
 async function remove(root, args) {
@@ -46,7 +46,7 @@ async function remove(root, args) {
  * @param {object | null} root
  * @param {string} root.id
  * @param {object} args
- * @param {string} args.id
+ * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<Models.ChannelMemberships[]>}
@@ -60,7 +60,7 @@ async function allByAgentId(root, args, context, info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {string} args.id
+ * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<Models.ChannelMemberships[]>}
@@ -74,7 +74,7 @@ async function allByChannelId(root, args, context, info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {string} args.id
+ * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<Models.ChannelMemberships>}
@@ -91,7 +91,7 @@ async function join(root, args, context, info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {string} args.id
+ * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<Models.ChannelMemberships>}

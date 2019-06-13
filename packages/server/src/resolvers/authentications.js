@@ -5,7 +5,7 @@ const data = require('../data');
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {string} args.id
+ * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<{jwt: string}>}
@@ -19,7 +19,7 @@ async function getJwtByAuth0Jwt(root, args, context, info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {string} args.id
+ * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<*>}
@@ -32,7 +32,7 @@ async function getJwtByAgentId(root, args, context, info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {string} args.id
+ * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<*>}

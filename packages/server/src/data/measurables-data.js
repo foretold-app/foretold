@@ -43,7 +43,7 @@ class MeasurablesData extends DataBase {
   /**
    * @todo: rework
    * @public
-   * @param {string} id
+   * @param {Models.ObjectID} id
    * @return {Promise<Models.Measurable>}
    */
   async unArchive(id) {
@@ -54,7 +54,7 @@ class MeasurablesData extends DataBase {
   /**
    * @todo: fix interface (params, data, options)
    * @public
-   * @param {string} id
+   * @param {Models.ObjectID} id
    * @param {object} data
    * @param {Models.Creator} creator
    * @return {Promise<Models.Measurable>}
@@ -70,8 +70,8 @@ class MeasurablesData extends DataBase {
    * @param {Layers.DataSourceLayer.filter} [filter]
    * @param {Layers.DataSourceLayer.pagination} [pagination]
    * @param {Layers.DataSourceLayer.options} [options]
-   * @param {string} [options.agentId]
-   * @param {string} [options.measuredByAgentId]
+   * @param {Models.ObjectID} [options.agentId]
+   * @param {Models.ObjectID} [options.measuredByAgentId]
    * @return {Promise<{data: Models.Measurable[], total: number}>}
    */
   async getAll(filter = {}, pagination = {}, options = {}) {
@@ -88,9 +88,9 @@ class MeasurablesData extends DataBase {
    * @todo: move down
    * @todo: fix interface (params*, query, options*)
    * @public
-   * @param {string} id
+   * @param {Models.ObjectID} id
    * @param {object} options
-   * @param {string} options.agentId
+   * @param {Models.ObjectID} options.agentId
    * @return {Promise<*>}
    */
   async getOne(id, options = {}) {

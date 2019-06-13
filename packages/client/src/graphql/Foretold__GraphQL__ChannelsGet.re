@@ -8,6 +8,7 @@ module Query = [%graphql
         isArchived
         membershipCount
         isPublic
+        openedMeasurablesCount
       }
     }
   |}
@@ -15,7 +16,7 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let toChannel = m: Context.Primary.Channel.t =>
+let toChannel = (m): Context.Primary.Channel.t =>
   Context.Primary.Channel.make(
     ~id=m##id,
     ~name=m##name,
@@ -23,6 +24,7 @@ let toChannel = m: Context.Primary.Channel.t =>
     ~isArchived=m##isArchived,
     ~isPublic=m##isPublic,
     ~membershipCount=Some(m##membershipCount),
+    ~openedMeasurablesCount=Some(m##openedMeasurablesCount),
     (),
   );
 

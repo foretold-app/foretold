@@ -58,7 +58,21 @@ module Columns = {
       r.membershipCount |> E.O.fmap(string_of_int) |> E.O.default("") |> ste,
   };
 
-  let all = [|nameColumn, descriptionColumn, memberCountColumn|];
+  let openedCountColumn: column = {
+    name: "Opened" |> ste,
+    render: (r: record) =>
+      r.openedMeasurablesCount
+      |> E.O.fmap(string_of_int)
+      |> E.O.default("")
+      |> ste,
+  };
+
+  let all = [|
+    nameColumn,
+    descriptionColumn,
+    memberCountColumn,
+    openedCountColumn,
+  |];
 };
 
 let make =

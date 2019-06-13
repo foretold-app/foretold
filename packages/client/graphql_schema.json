@@ -438,21 +438,21 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "first",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
                   "name": "before",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -1846,6 +1846,22 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "openedMeasurablesCount",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -2669,7 +2685,7 @@
         {
           "kind": "SCALAR",
           "name": "Float",
-          "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). ",
+          "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point). ",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -3924,18 +3940,30 @@
         {
           "kind": "OBJECT",
           "name": "BotsConnection",
-          "description": "A connection to a list of items.",
+          "description": null,
           "fields": [
             {
+              "name": "total",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "pageInfo",
-              "description": "Information to aid in pagination.",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "PageInfo",
+                  "name": "PageInfoConnection",
                   "ofType": null
                 }
               },
@@ -3944,7 +3972,7 @@
             },
             {
               "name": "edges",
-              "description": "A list of edges.",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "LIST",
@@ -3954,18 +3982,6 @@
                   "name": "BotsEdge",
                   "ofType": null
                 }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "total",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -3979,11 +3995,11 @@
         {
           "kind": "OBJECT",
           "name": "BotsEdge",
-          "description": "An edge in a connection.",
+          "description": null,
           "fields": [
             {
               "name": "node",
-              "description": "The item at the end of the edge",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -3995,7 +4011,7 @@
             },
             {
               "name": "cursor",
-              "description": "A cursor for use in pagination",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "NON_NULL",

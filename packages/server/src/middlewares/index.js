@@ -70,6 +70,12 @@ const middlewares = {
       const result = await resolve(root, args, context, info);
       return connection(result, root, args, context, info);
     },
+
+    bots: async (resolve, root, args, context, info) => {
+      await connectionArguments(root, args, context, info);
+      const result = await resolve(root, args, context, info);
+      return connection(result, root, args, context, info);
+    },
   },
 
   Mutation: {

@@ -21,7 +21,7 @@ class BotsData extends DataBase {
    * @return {Promise<*>}
    */
   async createOne(data) {
-    return await this.BotModel.createOne(data);
+    return await this.model.createOne(data);
   }
 
   /**
@@ -30,16 +30,22 @@ class BotsData extends DataBase {
    * @return {Promise<*>}
    */
   async updateOne(params, data) {
-    return await this.BotModel.updateOne(params, data);
+    return await this.model.updateOne(params, data);
   }
 
   /**
-   * @todo: fix interface (filter, pagination, options)
-   * @param {object} options
-   * @return {Promise<*>}
+   * @public
+   * @param {Layers.DataSourceLayer.filter} [filter]
+   * @param {Layers.DataSourceLayer.pagination} [pagination]
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @param {string} options.agentId
+   * @return {Promise<{data: Models.Bot[], total: number}>}
    */
-  async getAll(options) {
-    return await this.BotModel.getAll(options);
+  async getAll(filter = {}, pagination = {}, options = {}) {
+    const restrictions = {
+      agentId: options.agentId,
+    };
+    return await this.model.getAll(filter, pagination, restrictions);
   }
 
   /**
@@ -50,7 +56,7 @@ class BotsData extends DataBase {
    * @return {Promise<*>}
    */
   async getOne(params = {}, query = {}, restrictions = {}) {
-    return await this.BotModel.getOne(params, query, restrictions);
+    return await this.model.getOne(params, query, restrictions);
   }
 
   /**

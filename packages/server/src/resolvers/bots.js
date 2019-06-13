@@ -35,13 +35,27 @@ async function update(root, args, options, info) {
 /**
  * @param {*} root
  * @param {object} args
+ * @param {string} args.after
+ * @param {string} args.before
+ * @param {number} args.last
+ * @param {number} args.first
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<*|Array<Model>>}
+ * @returns {Promise<Models.Measurable[]>}
  */
 async function all(root, args, context, info) {
-  const datas = { ...args };
-  return await data.bots.getAll(datas);
+  const filter = {};
+  const pagination = { // @todo: new Pagination(args);
+    last: _.get(args, 'last'),
+    first: _.get(args, 'first'),
+    after: _.get(args, 'after'),
+    before: _.get(args, 'before'),
+  };
+  const options = {
+    agentId: _.get(context, 'agent.id'),
+  };
+  const result = await data.bots.getAll(filter, pagination, options);
+  return result.data;
 }
 
 /**

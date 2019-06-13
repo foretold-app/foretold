@@ -10,8 +10,8 @@ describe('Measurables Resolvers', () => {
       seriesId: 'seriesId2',
       channelId: 'channelId2',
       states: 'states1',
-      after: 'after1',
-      before: 'before1',
+      after: 2,
+      before: 2,
       last: 'last1',
       first: 'first1',
       isArchived: 'isArchived1',
@@ -34,8 +34,8 @@ describe('Measurables Resolvers', () => {
             "states": "states1"
           },
           {
-            "after": "after1",
-            "before": "before1",
+            "after": 2,
+            "before": 2,
             "first": "first1",
             "last": "last1"
           },

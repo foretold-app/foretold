@@ -1,9 +1,9 @@
-const { measurable } = require('./measurables');
+const { setContextMeasurable } = require('./measurables');
 const data = require('../data');
 
 describe('Measurables Middleware', () => {
 
-  describe('measurable() sets measurable and channelId into context ', () => {
+  describe('setContextMeasurable() sets measurable and channelId into context ', () => {
     const measurableObj = { channelId: 'channelId1' };
     beforeEach(() => {
       jest.spyOn(data.measurables, 'getOne').mockReturnValue(
@@ -16,7 +16,7 @@ describe('Measurables Middleware', () => {
       const args = { measurableId: 'measurableId1' };
       const context = {};
       const info = {};
-      return measurable(root, args, context, info).then((result) => {
+      return setContextMeasurable(root, args, context, info).then((result) => {
         expect(data.measurables.getOne)
           .toHaveBeenCalledWith('measurableId1');
         expect(result).toBe(undefined);
@@ -29,7 +29,7 @@ describe('Measurables Middleware', () => {
       const args = {};
       const context = {};
       const info = {};
-      return measurable(root, args, context, info).then((result) => {
+      return setContextMeasurable(root, args, context, info).then((result) => {
         expect(data.measurables.getOne)
           .toHaveBeenCalledWith('measurableId1');
         expect(result).toBe(undefined);
@@ -42,7 +42,7 @@ describe('Measurables Middleware', () => {
       const args = {};
       const context = { measurableId: 'measurableId1' };
       const info = {};
-      return measurable(root, args, context, info).then((result) => {
+      return setContextMeasurable(root, args, context, info).then((result) => {
         expect(data.measurables.getOne)
           .toHaveBeenCalledWith('measurableId1');
         expect(result).toBe(undefined);
@@ -55,7 +55,7 @@ describe('Measurables Middleware', () => {
       const args = { id: 'measurableId1' };
       const context = {};
       const info = {};
-      return measurable(root, args, context, info).then((result) => {
+      return setContextMeasurable(root, args, context, info).then((result) => {
         expect(data.measurables.getOne)
           .toHaveBeenCalledWith('measurableId1');
         expect(result).toBe(undefined);
@@ -68,7 +68,7 @@ describe('Measurables Middleware', () => {
       const args = {};
       const context = {};
       const info = {};
-      return measurable(root, args, context, info).then((result) => {
+      return setContextMeasurable(root, args, context, info).then((result) => {
         expect(result).toBe(undefined);
       });
     });

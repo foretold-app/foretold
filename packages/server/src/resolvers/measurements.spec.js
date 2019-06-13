@@ -8,8 +8,8 @@ describe('Measurements Resolver', () => {
     const args = {
       measurableId: 'measurableId1',
       agentId: 'agentId2',
-      after: 'after3',
-      before: 'before4',
+      after: 3,
+      before: 4,
       last: 'last5',
       first: 'first5',
     };
@@ -28,8 +28,8 @@ describe('Measurements Resolver', () => {
         expect(data.measurements.getAll).toHaveBeenCalledWith(
           { "agentId": "agentId2", "measurableId": "measurableId1" },
           {
-            "after": "after3",
-            "before": "before4",
+            "after": 3,
+            "before": 4,
             "first": "first5",
             "last": "last5"
           },

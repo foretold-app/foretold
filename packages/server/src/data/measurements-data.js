@@ -29,8 +29,11 @@ class MeasurementsData extends DataBase {
     const measurement = await this.models.Measurement.create(data);
 
     const notification = await measurement.getCreationNotification(creator);
-    notify(notification);
-
+    const measurable = await measurement.getMeasurable();
+    const channel = await measurable.getChannel();
+    if (channel.isPublic){
+      await notify(notification);
+    }
     return measurement;
   }
 

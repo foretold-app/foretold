@@ -4,6 +4,8 @@ open Style.Grid;
 open Css;
 
 type measurement = Context.Primary.Measurement.t;
+type measurable = Context.Primary.Measurable.t;
+module Items = Foretold__Components__Measurable__Items;
 
 module Styles = {
   open Css;
@@ -48,8 +50,8 @@ module Helpers = {
               minX
               maxX
               color={
-                m.competitorType == `AGGREGATION ?
-                  `hex("b1b9c6") : `hex("487192")
+                m.competitorType == `AGGREGATION
+                  ? `hex("b1b9c6") : `hex("487192")
               }
             />,
           )
@@ -175,12 +177,10 @@ module Helpers = {
     if (isJudge) {
       <div className=judgementStyle>
         {"Judgement" |> ste |> E.React.inH3}
-        {
-          switch (aLink) {
-          | Some(name) => <> {"by " |> ste} name </>
-          | None => E.React.null
-          }
-        }
+        {switch (aLink) {
+         | Some(name) => <> {"by " |> ste} name </>
+         | None => E.React.null
+         }}
       </div>;
     } else {
       aLink |> E.O.React.defaultNull;
@@ -196,58 +196,56 @@ let primaryCellStyle =
 let headerCellStyle =
   Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))]));
 
-let make = (ms: list(measurement)) => {
-  let _bounds = Helpers.bounds(ms |> E.A.of_list);
-  let items =
-    ms
-    |> E.L.sort((a: measurement, b: measurement) =>
-         switch (
-           a.relevantAt,
-           b.relevantAt,
-           a.competitorType,
-           b.competitorType,
-         ) {
-         | (Some(c), Some(d), _, _) when Moment.toUnix(c) < Moment.toUnix(d) => 1
-         | (Some(c), Some(d), `AGGREGATION, `COMPETITIVE)
-             when Moment.toUnix(c) == Moment.toUnix(d) => (-1)
-         | (Some(c), Some(d), `COMPETITIVE, `AGGREGATION)
-             when Moment.toUnix(c) == Moment.toUnix(d) => 1
-         | (Some(c), Some(d), _, _)
-             when Moment.toUnix(c) == Moment.toUnix(d) => 0
-         | (Some(c), Some(d), _, _) when Moment.toUnix(c) > Moment.toUnix(d) => (-1)
-         | _ => 0
-         }
-       )
-    |> E.L.fmap((m: measurement) => {
-         let inside =
-           <>
-             <FC.Table.Cell flex=2 className=primaryCellStyle>
-               {
-                 Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull
-               }
-             </FC.Table.Cell>
-             <FC.Table.Cell flex=1 className=primaryCellStyle>
-               {Helpers.statSummary(m) |> E.O.React.defaultNull}
-             </FC.Table.Cell>
-             <FC.Table.Cell flex=1 className=primaryCellStyle>
-               {Helpers.measurerLink(~m)}
-             </FC.Table.Cell>
-             <FC.Table.Cell flex=1 className=primaryCellStyle>
-               {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
-             </FC.Table.Cell>
-           </>;
+let sort = (a: measurement, b: measurement) =>
+  switch (a.relevantAt, b.relevantAt, a.competitorType, b.competitorType) {
+  | (Some(c), Some(d), _, _) when Moment.toUnix(c) < Moment.toUnix(d) => 1
+  | (Some(c), Some(d), `AGGREGATION, `COMPETITIVE)
+      when Moment.toUnix(c) == Moment.toUnix(d) => (-1)
+  | (Some(c), Some(d), `COMPETITIVE, `AGGREGATION)
+      when Moment.toUnix(c) == Moment.toUnix(d) => 1
+  | (Some(c), Some(d), _, _) when Moment.toUnix(c) == Moment.toUnix(d) => 0
+  | (Some(c), Some(d), _, _) when Moment.toUnix(c) > Moment.toUnix(d) => (-1)
+  | _ => 0
+  };
 
-         switch (Helpers.description(~m)) {
-         | Some(description) =>
-           <FC.Table.Row
-             bottomSubRow=[|FC.Table.Row.textSection(description)|]>
-             inside
-           </FC.Table.Row>
-         | None => <FC.Table.Row> inside </FC.Table.Row>
-         };
-       })
-    |> E.A.of_list
-    |> ReasonReact.array;
+let getItems = (ms: list(measurement), ~makeItem) => {
+  let _bounds = Helpers.bounds(ms |> E.A.of_list);
+  ms
+  |> E.L.sort(sort)
+  |> E.L.fmap((m: measurement) => {
+       let inside = makeItem(m, _bounds);
+
+       switch (Helpers.description(~m)) {
+       | Some(description) =>
+         <FC.Table.Row
+           bottomSubRow=[|FC.Table.Row.textSection(description)|]>
+           inside
+         </FC.Table.Row>
+       | None => <FC.Table.Row> inside </FC.Table.Row>
+       };
+     })
+  |> E.A.of_list
+  |> ReasonReact.array;
+};
+
+let make = (ms: list(measurement)) => {
+  let makeItem = (m, _bounds) => {
+    <>
+      <FC.Table.Cell flex=2 className=primaryCellStyle>
+        {Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull}
+      </FC.Table.Cell>
+      <FC.Table.Cell flex=1 className=primaryCellStyle>
+        {Helpers.statSummary(m) |> E.O.React.defaultNull}
+      </FC.Table.Cell>
+      <FC.Table.Cell flex=1 className=primaryCellStyle>
+        {Helpers.measurerLink(~m)}
+      </FC.Table.Cell>
+      <FC.Table.Cell flex=1 className=primaryCellStyle>
+        {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
+      </FC.Table.Cell>
+    </>;
+  };
+  let items = ms |> getItems(~makeItem);
   E.React.showIf(
     ms |> E.L.length > 0,
     <>
@@ -263,10 +261,44 @@ let make = (ms: list(measurement)) => {
     </>,
   );
 };
-/* <FC.Table.Row
-   bottomSubRow=[|
-     FC.Table.Row.textSection(
-       Helpers.description(~m) |> E.O.React.defaultNull,
-     ),
-   |]
-   key={m.id}> */
+
+let make2 = (ms: list(measurement)) => {
+  let makeItem = (m: measurement, _bounds) => {
+    <>
+      <FC.Table.Cell flex=1 className=primaryCellStyle>
+        {switch (m.measurable) {
+         | None => "" |> ste
+         | Some(measurable) => Items.link(~m=measurable)
+         }}
+      </FC.Table.Cell>
+      <FC.Table.Cell flex=2 className=primaryCellStyle>
+        {Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull}
+      </FC.Table.Cell>
+      <FC.Table.Cell flex=1 className=primaryCellStyle>
+        {Helpers.statSummary(m) |> E.O.React.defaultNull}
+      </FC.Table.Cell>
+      <FC.Table.Cell flex=1 className=primaryCellStyle>
+        {Helpers.measurerLink(~m)}
+      </FC.Table.Cell>
+      <FC.Table.Cell flex=1 className=primaryCellStyle>
+        {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
+      </FC.Table.Cell>
+    </>;
+  };
+  let items = ms |> getItems(~makeItem);
+  E.React.showIf(
+    ms |> E.L.length > 0,
+    <>
+      <FC.Table.HeaderRow>
+        <FC.Table.Cell flex=1> {"Measurable" |> ste} </FC.Table.Cell>
+        <FC.Table.Cell flex=2>
+          {"Prediction Distribution" |> ste}
+        </FC.Table.Cell>
+        <FC.Table.Cell flex=1> {"Prediction Value" |> ste} </FC.Table.Cell>
+        <FC.Table.Cell flex=1> {"Agent" |> ste} </FC.Table.Cell>
+        <FC.Table.Cell flex=1> {"Time" |> ste} </FC.Table.Cell>
+      </FC.Table.HeaderRow>
+      items
+    </>,
+  );
+};

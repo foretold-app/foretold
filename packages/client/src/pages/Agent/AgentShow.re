@@ -11,17 +11,13 @@ let agentSection = (e: Queries.Agent.agent) =>
   | {bot: Some(r)} =>
     <>
       {r.name |> ste |> E.React.inH2}
-      {
-        r.description
-        |> E.O.fmap(r => r |> ste |> E.React.inH3)
-        |> E.O.React.defaultNull
-      }
-      {
-        r.competitorType
-        |> Context.Primary.CompetitorType.toString
-        |> ste
-        |> E.React.inH3
-      }
+      {r.description
+       |> E.O.fmap(r => r |> ste |> E.React.inH3)
+       |> E.O.React.defaultNull}
+      {r.competitorType
+       |> Context.Primary.CompetitorType.toString
+       |> ste
+       |> E.React.inH3}
     </>
   | {user: Some(r)} => r.name |> ste |> E.React.inH1
   | _ => notFound
@@ -33,23 +29,10 @@ type pageParams = {id: string};
 let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>
-    Queries.Agent.component(~id=pageParams.id, ({agent, measurables}) =>
+    Queries.Agent.component(~id=pageParams.id, ({measurementsList}) =>
       SLayout.LayoutConfig.make(
         ~head="" |> ste,
-        ~body=
-          measurables
-          |> E.L.fmap((m: Context.Primary.Measurable.t) => {
-               let measurements = m.measurements |> E.O.default([]);
-               <>
-                 <div className=block>
-                   {C.Measurable.Items.link(~m)}
-                   <C.Measurable.StatusDisplay measurable=m />
-                 </div>
-                 {measurements |> C.Measurements.Table.make}
-               </>;
-             })
-          |> E.A.of_list
-          |> ReasonReact.array,
+        ~body=measurementsList |> C.Measurements.Table.make2,
       )
       |> layout
     ),

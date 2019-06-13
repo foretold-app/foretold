@@ -1,6 +1,7 @@
 open Rationale.Function.Infix;
 open Utils;
 
+type valueType = [ | `DATE | `FLOAT | `PERCENTAGE];
 type channelMembershipRole = [ | `ADMIN | `VIEWER];
 type myMembershipRole = [ | `ADMIN | `VIEWER | `NONE];
 type permission = [
@@ -22,6 +23,43 @@ type permission = [
   | `USER_UPDATE
 ];
 
+module CompetitorType = {
+  type t = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
+  let toString = e =>
+    switch (e) {
+    | `AGGREGATION => "Aggregation"
+    | `COMPETITIVE => "Competitive"
+    | `OBJECTIVE => "Objective"
+    };
+};
+
+module MeasurableState = {
+  type t = [ | `OPEN | `JUDGEMENT_PENDING | `JUDGED];
+
+  let fromString = e =>
+    switch (e) {
+    | "OPEN" => `OPEN
+    | "JUDGED" => `JUDGED
+    | "JUDGEMENT_PENDING" => `JUDGEMENT_PENDING
+    | _ => Js.Exn.raiseError("Invalid GraphQL State: " ++ e)
+    };
+
+  let fromEnum = e =>
+    switch (e) {
+    | `OPEN => `OPEN
+    | `JUDGEMENT_PENDING => `JUDGEMENT_PENDING
+    | `JUDGED => `JUDGED
+    | _ => Js.Exn.raiseError("Invalid GraphQL State ")
+    };
+
+  let toInt = (status: t) =>
+    switch (status) {
+    | `OPEN => 2
+    | `JUDGEMENT_PENDING => 1
+    | `JUDGED => 0
+    };
+};
+
 module ChannelMembershipRole = {
   type t = channelMembershipRole;
   let toString = (t: t) =>
@@ -32,6 +70,7 @@ module ChannelMembershipRole = {
 };
 
 type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
+
 module Types = {
   type permissions = {allow: list(permission)};
   type user = {
@@ -76,6 +115,48 @@ module Types = {
     role: channelMembershipRole,
     agent: option(agent),
     permissions: option(permissions),
+  }
+  and measurable = {
+    id: string,
+    name: string,
+    valueType,
+    channel: option(string),
+    isArchived: option(bool),
+    resolutionEndpoint: option(string),
+    resolutionEndpointResponse: option(float),
+    measurementCount: option(int),
+    measurerCount: option(int),
+    state: option(MeasurableState.t),
+    labelSubject: option(string),
+    labelProperty: option(string),
+    labelOnDate: option(MomentRe.Moment.t),
+    labelCustom: option(string),
+    createdAt: option(MomentRe.Moment.t),
+    updatedAt: option(MomentRe.Moment.t),
+    expectedResolutionDate: option(MomentRe.Moment.t),
+    stateUpdatedAt: option(MomentRe.Moment.t),
+    creator: option(agent),
+    measurements: option(list(measurement)),
+    series: option(series),
+    iAmOwner: option(bool),
+  }
+  and measurement = {
+    id: string,
+    description: option(string),
+    value: Belt.Result.t(MeasurementValue.t, string),
+    competitorType: CompetitorType.t,
+    taggedMeasurementId: option(string),
+    createdAt: option(MomentRe.Moment.t),
+    relevantAt: option(MomentRe.Moment.t),
+    measurableId: option(string),
+    measurable: option(measurable),
+    agent: option(agent),
+  }
+  and series = {
+    id: string,
+    description: option(string),
+    name: option(string),
+    creator: option(agent),
   };
 
   type pageInfo = {
@@ -305,14 +386,9 @@ module Channel = {
 };
 
 module Series = {
-  type t = {
-    id: string,
-    description: option(string),
-    name: option(string),
-    creator: option(Agent.t),
-  };
+  type t = Types.series;
 
-  let make = (~id, ~name=None, ~description=None, ~creator=None, ()) => {
+  let make = (~id, ~name=None, ~description=None, ~creator=None, ()): t => {
     id,
     name,
     description,
@@ -320,57 +396,8 @@ module Series = {
   };
 };
 
-type valueType = [ | `DATE | `FLOAT | `PERCENTAGE];
-
-module MeasurableState = {
-  type t = [ | `OPEN | `JUDGEMENT_PENDING | `JUDGED];
-
-  let fromString = e =>
-    switch (e) {
-    | "OPEN" => `OPEN
-    | "JUDGED" => `JUDGED
-    | "JUDGEMENT_PENDING" => `JUDGEMENT_PENDING
-    | _ => Js.Exn.raiseError("Invalid GraphQL State: " ++ e)
-    };
-
-  let fromEnum = e =>
-    switch (e) {
-    | `OPEN => `OPEN
-    | `JUDGEMENT_PENDING => `JUDGEMENT_PENDING
-    | `JUDGED => `JUDGED
-    | _ => Js.Exn.raiseError("Invalid GraphQL State ")
-    };
-
-  let toInt = (status: t) =>
-    switch (status) {
-    | `OPEN => 2
-    | `JUDGEMENT_PENDING => 1
-    | `JUDGED => 0
-    };
-};
-
-module CompetitorType = {
-  type t = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
-  let toString = e =>
-    switch (e) {
-    | `AGGREGATION => "Aggregation"
-    | `COMPETITIVE => "Competitive"
-    | `OBJECTIVE => "Objective"
-    };
-};
-
 module Measurement = {
-  type t = {
-    id: string,
-    description: option(string),
-    value: Belt.Result.t(MeasurementValue.t, string),
-    competitorType: CompetitorType.t,
-    taggedMeasurementId: option(string),
-    createdAt: option(MomentRe.Moment.t),
-    relevantAt: option(MomentRe.Moment.t),
-    measurableId: option(string),
-    agent: option(Agent.t),
-  };
+  type t = Types.measurement;
 
   let isJudgement = (m: t) => m.competitorType == `OBJECTIVE;
 
@@ -385,8 +412,10 @@ module Measurement = {
         ~relevantAt=None,
         ~agent=None,
         ~measurableId=None,
+        ~measurable=None,
         (),
-      ) => {
+      )
+      : t => {
     id,
     value,
     description,
@@ -396,34 +425,12 @@ module Measurement = {
     relevantAt,
     agent,
     measurableId,
+    measurable,
   };
 };
 
 module Measurable = {
-  type t = {
-    id: string,
-    name: string,
-    valueType,
-    channel: option(string),
-    isArchived: option(bool),
-    resolutionEndpoint: option(string),
-    resolutionEndpointResponse: option(float),
-    measurementCount: option(int),
-    measurerCount: option(int),
-    state: option(MeasurableState.t),
-    labelSubject: option(string),
-    labelProperty: option(string),
-    labelOnDate: option(MomentRe.Moment.t),
-    labelCustom: option(string),
-    createdAt: option(MomentRe.Moment.t),
-    updatedAt: option(MomentRe.Moment.t),
-    expectedResolutionDate: option(MomentRe.Moment.t),
-    stateUpdatedAt: option(MomentRe.Moment.t),
-    creator: option(Agent.t),
-    measurements: option(list(Measurement.t)),
-    series: option(Series.t),
-    iAmOwner: option(bool),
-  };
+  type t = Types.measurable;
 
   let toStatus = (measurable: t) => {
     let state = measurable.state |> E.O.toExn("Needs state from GraphQL");
@@ -472,7 +479,8 @@ module Measurable = {
         ~isArchived=None,
         ~iAmOwner=None,
         (),
-      ) => {
+      )
+      : t => {
     id,
     name,
     channel,

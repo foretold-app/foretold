@@ -1,20 +1,20 @@
 const _ = require('lodash');
 
 const data = require('../data');
+const { Pagination } = require('../pagination');
 
 /**
  * @param {*} root
  * @param {object} args
  * @param {object} args.input
- * @param {Schema.Context} options
+ * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<Models.User>}
  */
-async function create(root, args, options, info) {
+async function create(root, args, context, info) {
   const datas = {
     ...args.input,
-    // required
-    userId: _.get(options, 'user.id'),
+    userId: _.get(context, 'user.id'),
   };
   return await data.bots.createOne(datas);
 }
@@ -22,26 +22,35 @@ async function create(root, args, options, info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {string} args.id
+ * @param {Models.ObjectID} args.id
  * @param {object} args.input
- * @param {Schema.Context} options
+ * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<Models.User>}
  */
-async function update(root, args, options, info) {
+async function update(root, args, context, info) {
   return await data.bots.updateOne({ id: args.id }, args.input);
 }
 
 /**
  * @param {*} root
  * @param {object} args
+ * @param {string} args.after
+ * @param {string} args.before
+ * @param {number} args.last
+ * @param {number} args.first
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<*|Array<Model>>}
+ * @returns {Promise<Models.Model[]>}
  */
 async function all(root, args, context, info) {
-  const datas = { ...args };
-  return await data.bots.getAll(datas);
+  const filter = {};
+  const pagination = new Pagination(args);
+  const options = {
+    userId: _.get(context, 'user.id'),
+  };
+  const result = await data.bots.getAll(filter, pagination, options);
+  return result.data;
 }
 
 /**

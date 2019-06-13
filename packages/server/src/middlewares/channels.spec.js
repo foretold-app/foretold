@@ -1,9 +1,9 @@
-const { channel } = require('./channels');
+const { setContextChannel } = require('./channels');
 const data = require('../data');
 
 describe('Channels Middleware', () => {
 
-  describe('channel() sets channel model into context', () => {
+  describe('setContextChannel() sets channel model into context', () => {
     const channelObj = {};
     beforeEach(() => {
       jest.spyOn(data.channels, 'getOne').mockReturnValue(
@@ -16,7 +16,7 @@ describe('Channels Middleware', () => {
       const args = { channelId: 'channelId1' };
       const context = {};
       const info = {};
-      return channel(root, args, context, info).then((result) => {
+      return setContextChannel(root, args, context, info).then((result) => {
         expect(data.channels.getOne).toHaveBeenCalledWith('channelId1');
         expect(result).toBe(undefined);
         expect(context.channel).toBe(channelObj);
@@ -28,7 +28,7 @@ describe('Channels Middleware', () => {
       const args = {};
       const context = {};
       const info = {};
-      return channel(root, args, context, info).then((result) => {
+      return setContextChannel(root, args, context, info).then((result) => {
         expect(data.channels.getOne).toHaveBeenCalledWith('channelId1');
         expect(result).toBe(undefined);
         expect(context.channel).toBe(channelObj);
@@ -40,7 +40,7 @@ describe('Channels Middleware', () => {
       const args = {};
       const context = { channelId: 'channelId1' };
       const info = {};
-      return channel(root, args, context, info).then((result) => {
+      return setContextChannel(root, args, context, info).then((result) => {
         expect(data.channels.getOne).toHaveBeenCalledWith('channelId1');
         expect(result).toBe(undefined);
         expect(context.channel).toBe(channelObj);

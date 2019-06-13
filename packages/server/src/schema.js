@@ -98,9 +98,9 @@ const schema = new graphql.GraphQLSchema({
       },
 
       bots: {
-        type: require('./connections').botsConnection.connectionType,
-        args: require('./connections').botsConnection.connectionArgs,
-        resolve: require('./connections').botsConnection.resolve,
+        type: types.bots.botsConnection,
+        args: types.common.connectionArguments,
+        resolve: resolvers.bots.all,
       },
 
       agent: {

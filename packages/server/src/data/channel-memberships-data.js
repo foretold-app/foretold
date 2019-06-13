@@ -18,8 +18,8 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @todo: fix interface (data, options)
-   * @param {string} channelId
-   * @param {string} agentId
+   * @param {Models.ObjectID} channelId
+   * @param {Models.ObjectID} agentId
    * @param {string} role
    * @returns {Promise<Models.ChannelMemberships>}
    */
@@ -33,8 +33,8 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @todo: fix interface (params, query, options)
-   * @param {string} channelId
-   * @param {string} agentId
+   * @param {Models.ObjectID} channelId
+   * @param {Models.ObjectID} agentId
    * @param {string} role
    * @returns {Promise<Models.ChannelMemberships>}
    */
@@ -49,8 +49,8 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @todo: fix interface (params, options)
-   * @param {string} channelId
-   * @param {string} agentId
+   * @param {Models.ObjectID} channelId
+   * @param {Models.ObjectID} agentId
    * @returns {Promise<Models.ChannelMemberships | null>}
    */
   async deleteOne(channelId, agentId) {
@@ -63,8 +63,8 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @protected
-   * @param {string} channelId
-   * @param {string} agentId
+   * @param {Models.ObjectID} channelId
+   * @param {Models.ObjectID} agentId
    * @return {Promise<*>}
    */
   async validate({ channelId, agentId }) {
@@ -86,8 +86,8 @@ class ChannelMembershipsData extends DataBase {
    *
    * @todo: fix interface (params, query, options)
    * @param {object} options
-   * @param {string} [options.agentId]
-   * @param {string} [options.channelId]
+   * @param {Models.ObjectID} [options.agentId]
+   * @param {Models.ObjectID} [options.channelId]
    * @returns {Promise<Models.ChannelMemberships>}
    */
   async getOne(options) {
@@ -97,8 +97,8 @@ class ChannelMembershipsData extends DataBase {
   /**
    * @todo: fix interface (filter, pagination, options)
    * @param {object} options
-   * @param {string} [options.agentId]
-   * @param {string} [options.channelId]
+   * @param {Models.ObjectID} [options.agentId]
+   * @param {Models.ObjectID} [options.channelId]
    * @returns {Promise<Models.ChannelMemberships[]>}
    */
   async getAll(options) {
@@ -107,8 +107,8 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @param {object} options
-   * @param {string} [options.agentId]
-   * @param {string} [options.channelId]
+   * @param {Models.ObjectID} [options.agentId]
+   * @param {Models.ObjectID} [options.channelId]
    * @returns {Promise<string[]>}
    */
   async getAllChannelIds(options) {

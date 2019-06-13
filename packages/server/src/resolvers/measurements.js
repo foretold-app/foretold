@@ -1,14 +1,16 @@
 const _ = require('lodash');
+
 const data = require('../data');
+const { Pagination } = require('../pagination');
 
 /**
  * @param {*} root
  * @param {object} args
  * @param {number} args.last
  * @param {number} args.first
- * @param {string} args.measurableId
- * @param {string} args.agentId
- * @param {string} args.notTaggedByAgent
+ * @param {Models.ObjectID} args.measurableId
+ * @param {Models.ObjectID} args.agentId
+ * @param {Models.ObjectID} args.notTaggedByAgent
  * @param {object} args.findInDateRange
  * @param {string} args.findInDateRange.startDate
  * @param {string} args.findInDateRange.endDate
@@ -26,12 +28,7 @@ async function all(root, args, context, info) {
     findInDateRange: _.get(args, 'findInDateRange'),
     notTaggedByAgent: _.get(args, 'notTaggedByAgent'),
   };
-  const pagination = {
-    after: _.get(args, 'after'),
-    before: _.get(args, 'before'),
-    last: _.get(args, 'last'),
-    first: _.get(args, 'first'),
-  };
+  const pagination = new Pagination(args);
   const options = {
     isAdmin: _.get(context, 'agent.isAdmin'),
     agentId: _.get(context, 'agent.id'),

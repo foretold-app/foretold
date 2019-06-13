@@ -4,7 +4,7 @@ const data = require('../data');
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {string} args.id
+ * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<Models.Agent>}

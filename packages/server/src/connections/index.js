@@ -51,22 +51,9 @@ const seriesMeasurablesConnection = createConnection({
   },
 });
 
-const botsConnection = createConnection({
-  name: 'Bots',
-  nodeType: require('../types').bots.bot,
-  target: models.Bot,
-  connectionFields: {
-    total: {
-      type: graphql.GraphQLInt,
-      resolve: ({ fullCount }) => fullCount
-    }
-  },
-});
-
 module.exports = {
   measurableMeasurementsConnection,
   agentMeasurementsConnection,
   channelAgentsConnection,
   seriesMeasurablesConnection,
-  botsConnection,
 };

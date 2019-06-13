@@ -37,7 +37,7 @@ async function all(root, args, context, info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {string} args.id
+ * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<Models.Channel>}
@@ -52,7 +52,7 @@ async function one(root, args, context, info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {string} args.id
+ * @param {Models.ObjectID} args.id
  * @param {object} args.input
  * @param {Schema.Context} context
  * @param {object} info

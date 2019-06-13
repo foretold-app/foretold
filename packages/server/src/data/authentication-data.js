@@ -113,7 +113,7 @@ class AuthenticationData {
 
   /**
    * @protected
-   * @param {string} agentId
+   * @param {Models.ObjectID} agentId
    * @return {Promise<{agent: Models.Agent, creator: *, bot, user}>}
    */
   async getContext(agentId) {

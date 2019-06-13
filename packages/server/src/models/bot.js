@@ -19,6 +19,14 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: "COMPETITIVE",
         allowNull: true,
       },
+      userId: {
+        type: DataTypes.UUID(),
+        // allowNull: false,
+      },
+      agentId: {
+        type: DataTypes.UUID(),
+        // allowNull: false,
+      },
     },
     {
       hooks: {

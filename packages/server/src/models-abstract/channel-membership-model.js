@@ -15,8 +15,8 @@ class ChannelMembershipModel extends ModelPostgres {
 
   /**
    * @todo: fix interface
-   * @param {string} channelId
-   * @param {string} agentId
+   * @param {Models.ObjectID} channelId
+   * @param {Models.ObjectID} agentId
    * @param {string} role
    * @returns {Promise<Models.ChannelMemberships>}
    */
@@ -32,8 +32,8 @@ class ChannelMembershipModel extends ModelPostgres {
 
   /**
    * @todo: fix interface
-   * @param {string} channelId
-   * @param {string} agentId
+   * @param {Models.ObjectID} channelId
+   * @param {Models.ObjectID} agentId
    * @returns {Promise<Models.ChannelMemberships | null>}
    */
   async deleteOne(channelId, agentId) {

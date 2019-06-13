@@ -26,7 +26,7 @@ class SeriesData extends DataBase {
    * @todo: move down
    * @todo: fix interface (filter, pagination, options*)
    * @param {object} options
-   * @param {string} [options.agentId]
+   * @param {Models.ObjectID} [options.agentId]
    * @return {Promise<*>}
    */
   async getAll(options) {
@@ -50,9 +50,9 @@ class SeriesData extends DataBase {
   /**
    * @todo: move down
    * @todo: fix interface (params, query, options)
-   * @param {string} id
+   * @param {Models.ObjectID} id
    * @param {object} options
-   * @param {string} [options.agentId]
+   * @param {Models.ObjectID} [options.agentId]
    * @return {Promise<*>}
    */
   async getOne(id, options = {}) {

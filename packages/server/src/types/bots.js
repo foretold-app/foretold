@@ -42,7 +42,26 @@ const botInput = new graphql.GraphQLInputObjectType({
   }),
 });
 
+const botsEdge = new graphql.GraphQLObjectType({
+  name: 'BotsEdge',
+  fields: () => ({
+    node: { type: require('./bots').bot },
+    cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+  }),
+});
+
+const botsConnection = new graphql.GraphQLObjectType({
+  name: 'BotsConnection',
+  fields: () => ({
+    total: { type: graphql.GraphQLInt },
+    pageInfo: { type: graphql.GraphQLNonNull(require('./common').pageInfoConnection) },
+    edges: { type: graphql.GraphQLList(require('./bots').botsEdge) },
+  }),
+});
+
 module.exports = {
   bot,
   botInput,
+  botsEdge,
+  botsConnection,
 };

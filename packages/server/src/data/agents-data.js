@@ -16,7 +16,7 @@ class AgentsData extends DataBase {
 
   /**
    * @todo: fix interface (params, query, options)
-   * @param {string} id
+   * @param {Models.ObjectID} id
    * @return {Promise<Models.Agent>}
    */
   async getOne(id) {

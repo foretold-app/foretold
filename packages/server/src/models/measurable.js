@@ -205,13 +205,13 @@ module.exports = (sequelize, DataTypes) => {
    * @param {Models.Creator} creator
    * @return {Promise<*>}
    */
-  Model.prototype.creationNotification = async function creationNotification(creator) {
-    let agent = await creator.getAgent();
-    let notification = {
+  Model.prototype.getCreationNotification = async function getCreationNotification(creator) {
+    const agent = await creator.getAgent();
+    return {
       "attachments": [{
         "pretext": "New Measurable Created",
         "title": this.name,
-        "title_link": `${clientUrl}/measurables/${this.id}`,
+        "title_link": `${clientUrl}/c/${this.channelId}`,
         "author_name": creator.name,
         "author_link": `${clientUrl}/agents/${agent.id}`,
         "text": this.labelCustom,
@@ -225,7 +225,6 @@ module.exports = (sequelize, DataTypes) => {
         "color": "#4a8ed8"
       }]
     };
-    return notification;
   };
 
   /**
@@ -243,14 +242,14 @@ module.exports = (sequelize, DataTypes) => {
    * @param {object} newData
    * @return {Promise<*>}
    */
-  Model.prototype.updateNotifications = async function updateNotifications(creator, newData) {
-    let changed = this.changedFields(newData);
-    let agent = await creator.getAgent();
-    let notification = {
+  Model.prototype.getUpdateNotifications = async function getUpdateNotifications(creator, newData) {
+    const changed = this.changedFields(newData);
+    const agent = await creator.getAgent();
+    return {
       "attachments": [{
         "pretext": "Measurable Updated",
         "title": this.name,
-        "title_link": `${clientUrl}/measurables/${this.id}`,
+        "title_link": `${clientUrl}/c/${this.channelId}`,
         "author_name": creator.name,
         "author_link": `${clientUrl}/agents/${agent.id}`,
         "fields": changed.map(c => ({
@@ -261,7 +260,6 @@ module.exports = (sequelize, DataTypes) => {
         "color": "#ffe75e"
       }]
     };
-    return notification;
   };
 
   Model.associate = function associate(models) {

@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const { notify } = require("../lib/notifications");
+const notifications = require("../lib/notifications");
 const { MeasurableModel } = require('../models-abstract');
 
 const { DataBase } = require('./data-base');
@@ -25,9 +25,7 @@ class MeasurablesData extends DataBase {
    */
   async createOne(data, creator) {
     const measurable = await this.models.Measurable.create(data);
-    /** @type {Models.Measurable} */
-    const notification = await measurable.creationNotification(creator);
-    notify(notification);
+    notifications.creationNotification(measurable, creator);
     return measurable;
   }
 
@@ -38,7 +36,7 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async archive(id) {
-    let measurable = await this.models.Measurable.findByPk(id);
+    const measurable = await this.models.Measurable.findByPk(id);
     return measurable.archive();
   }
 
@@ -49,7 +47,7 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async unArchive(id) {
-    let measurable = await this.models.Measurable.findByPk(id);
+    const measurable = await this.models.Measurable.findByPk(id);
     return measurable.unarchive();
   }
 
@@ -62,10 +60,8 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async updateOne(id, data, creator) {
-    let measurable = await this.models.Measurable.findByPk(id);
-    /** @type {Models.Measurable} */
-    const notification = await measurable.updateNotifications(creator, data);
-    notify(notification);
+    const measurable = await this.models.Measurable.findByPk(id);
+    notifications.updateNotification(measurable, creator, data);
     return measurable.update(data);
   }
 

@@ -93,16 +93,16 @@ module.exports = (sequelize, DataTypes) => {
    * @todo: move me
    * @public
    * @param {Models.Creator} creator
-   * @return {Promise<void>}
+   * @return {Promise<*>}
    */
-  Model.prototype.creationNotification = async function creationNotification(creator) {
-    let agent = await creator.getAgent();
-    let measurable = await this.getMeasurable();
-    let notification = await {
+  Model.prototype.getCreationNotification = async function getCreationNotification(creator) {
+    const agent = await creator.getAgent();
+    const measurable = await this.getMeasurable();
+    return {
       "attachments": [{
         "pretext": "New Measurement Created",
         "title": measurable.name,
-        "title_link": `${clientUrl}/measurables/${measurable.id}`,
+        "title_link": `${clientUrl}/c/${measurable.channelId}`,
         "author_name": creator.name,
         "author_link": `${clientUrl}/agents/${agent.id}`,
         "text": this.description,
@@ -116,7 +116,6 @@ module.exports = (sequelize, DataTypes) => {
         "color": "#d2ebff"
       }]
     };
-    return notification;
   };
 
   Model.associate = function associate(models) {

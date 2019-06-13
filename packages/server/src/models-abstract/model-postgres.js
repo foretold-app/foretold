@@ -129,12 +129,6 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (restrictions.agentId) {
-      where[this.and].push({
-        agentId: restrictions.agentId,
-      });
-    }
-
     if (restrictions.measurableId) {
       where[this.and].push({
         measurableId: {

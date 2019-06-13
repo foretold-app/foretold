@@ -45,13 +45,16 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                  |> E.O.fmap((r: Context.Primary.Agent.t) => r.id);
                let creatorId =
                  m.creator |> E.O.fmap((r: Context.Primary.Agent.t) => r.id);
-               <>
-                 {"Add a Prediction" |> ste |> E.React.inH2}
-                 <Foretold__Components__Measurement__Form
-                   measurableId=id
-                   isCreator={userAgentId == creatorId}
-                 />
-               </>;
+               userAgentId == creatorId
+               || Context.Primary.Measurable.toStatus(m) !== `JUDGED ?
+                 <>
+                   {"Add a Prediction" |> ste |> E.React.inH2}
+                   <Foretold__Components__Measurement__Form
+                     measurableId=id
+                     isCreator={userAgentId == creatorId}
+                   />
+                 </> :
+                 E.React.null;
              }
              {
                Queries.Measurements.component(

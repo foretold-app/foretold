@@ -17,34 +17,32 @@ class BotsData extends DataBase {
   }
 
   /**
-   * @param {object} data
+   * @param {object} [data]
    * @return {Promise<*>}
    */
-  async createOne(data) {
+  async createOne(data = {}) {
     return await this.model.createOne(data);
   }
 
   /**
-   * @param {object} params
-   * @param {object} data
+   * @param {object} [params]
+   * @param {object} [data]
    * @return {Promise<*>}
    */
-  async updateOne(params, data) {
+  async updateOne(params = {}, data = {}) {
     return await this.model.updateOne(params, data);
   }
 
   /**
    * @public
    * @param {Layers.DataSourceLayer.filter} [filter]
+   * @param {Models.ObjectID} filter.userId
    * @param {Layers.DataSourceLayer.pagination} [pagination]
    * @param {Layers.DataSourceLayer.options} [options]
-   * @param {Models.ObjectID} options.userId
    * @return {Promise<{data: Models.Model[], total: number}>}
    */
   async getAll(filter = {}, pagination = {}, options = {}) {
-    const restrictions = {
-      userId: options.userId,
-    };
+    const restrictions = {};
     return await this.model.getAllWithConnections(filter, pagination, restrictions);
   }
 
@@ -63,7 +61,7 @@ class BotsData extends DataBase {
    * @param {object} params
    * @return {Promise<string>}
    */
-  async tokenRefresh(params) {
+  async tokenRefresh(params = {}) {
     const bot = await this.BotModel.getOne(params);
     if (!bot) throw new Error('Bot is not found');
     return await this.tokens.revokeTokensAndGetTokenByAgentId(bot.agentId);

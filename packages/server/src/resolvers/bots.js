@@ -35,6 +35,7 @@ async function update(root, args, context, info) {
 /**
  * @param {*} root
  * @param {object} args
+ * @param {Models.ObjectID} args.ownerId
  * @param {string} args.after
  * @param {string} args.before
  * @param {number} args.last
@@ -44,7 +45,7 @@ async function update(root, args, context, info) {
  * @returns {Promise<Models.Model[]>}
  */
 async function all(root, args, context, info) {
-  const filter = {};
+  const filter = { userId: _.get(args, 'ownerId') };
   const pagination = new Pagination(args);
   const options = {};
   const result = await data.bots.getAll(filter, pagination, options);

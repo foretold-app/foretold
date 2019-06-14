@@ -155,6 +155,8 @@ class ModelPostgres extends Model {
         where: { agentId: restrictions.measuredByAgentId },
       });
     }
+
+    return include;
   }
 
   /**
@@ -211,10 +213,11 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @protectedo
+   * @protected
    * @param {object} [where]
    * @param {object} [filter]
    * @param {string[]} [filter.isArchived]
+   * @param {Models.ObjectID} [filter.userId]
    */
   applyFilter(where = {}, filter = {}) {
     if (!where) where = {};
@@ -224,6 +227,12 @@ class ModelPostgres extends Model {
         [this.in]: this.getBooleansOfList(filter.isArchived),
       };
     }
+
+    if (filter.userId) {
+      where.userId = filter.userId;
+    }
+
+    return where;
   }
 
   /**
@@ -321,7 +330,7 @@ class ModelPostgres extends Model {
       order: [['createdAt', 'DESC']],
     };
 
-    /** @type {Models.Measurable[]} */
+    /** @type {Models.Model[]} */
     let data = await this.model.findAll(options);
     data = this.setIndexes(data, edgePagination);
     data.total = total;

@@ -64,17 +64,20 @@ module LoadedAndUnselected = {
 
   let shouldShowSeriesCollection = (t: t) =>
     pageNumber(t) == 0 && filteredSeriesCollection(t) |> E.A.length > 0;
-  //  let findMeasurableIndexOfMeasurableId = (t: t, id) =>
-  //    Context.Primary.Measurable.(
-  //      switch (t.reducerParams.response) {
-  //      | Success(m) => m.edges |> E.A.findIndex(r => r.id == id)
-  //      | _ => None
-  //      }
-  //    );
-  //
-  //  let selectMeasurableOfMeasurableId = (t: t, id) =>
-  //    findMeasurableIndexOfMeasurableId(t, id)
-  //    |> E.O.fmap(e => ReducerTypes.SelectIndex(e));
+
+  let findMeasurableIndexOfMeasurableId = (t: t, id) =>
+    Context.Primary.Measurable.(
+      switch (t.reducerParams.response) {
+      | Success(m) =>
+        m.edges
+        |> E.A.findIndex((r: Context.Primary.Measurable.t) => r.id == id)
+      | _ => None
+      }
+    );
+
+  let selectMeasurableOfMeasurableId = (t: t, id) =>
+    findMeasurableIndexOfMeasurableId(t, id)
+    |> E.O.fmap(e => ReducerTypes.SelectIndex(e));
 };
 
 module WithChannelButNotQuery = {

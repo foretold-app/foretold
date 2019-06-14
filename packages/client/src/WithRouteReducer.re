@@ -22,8 +22,10 @@ let make = (componentForRoute, _children) => {
     ReasonReact.Router.dangerouslyGetInitialUrl()
     |> mapUrlToAction
     |> self.send;
+
     let watcherID =
       ReasonReact.Router.watchUrl(url => url |> mapUrlToAction |> self.send);
+
     self.onUnmount(() => ReasonReact.Router.unwatchUrl(watcherID));
   },
   render: self => self.state.route |> componentForRoute,

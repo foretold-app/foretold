@@ -31,6 +31,19 @@ module Styles = {
 
   let agentStyle =
     style([color(`rgb((102, 121, 134))), fontSize(`em(1.1))]);
+
+  let mainColumn =
+    style([flex(4), display(`flex), flexDirection(`column)]);
+
+  let mainColumnTop =
+    style([
+      flex(1),
+      paddingLeft(px(2)),
+      selector(" p", [marginTop(`px(3)), marginBottom(`px(8))]),
+    ]);
+  let rightColumn = style([flex(1)]);
+  let mainColumnBottom =
+    style([flex(1), padding(`px(2)), marginTop(`px(2))]);
 };
 
 module Helpers = {
@@ -262,14 +275,48 @@ let make = (ms: list(measurement)) => {
   );
 };
 
+let getMeasurableLink = (m: measurement) => {
+  switch (m.measurable) {
+  | None => "" |> ste
+  | Some(measurable) => Items.link(~m=measurable)
+  };
+};
+
+//module GetMeasurablesReducerConfig = {
+//  type itemType = Context.Primary.Measurable.t;
+//  type callFnParams = string;
+//
+//  let getId = (e: itemType) => e.id;
+//  let callFn = (e: callFnParams) =>
+//    Foretold__GraphQL.Queries.Measurables.componentWithSeries(~seriesId=e);
+//  let isEqual = (a: itemType, b: itemType) => a.id == b.id;
+//};
+//
+//module SelectWithPaginationReducer =
+//  SelectWithPaginationReducerFunctor.Make(GetMeasurablesReducerConfig);
+//
+//let onSelect = e => {
+//  Js.log(
+//    "onSelect",
+//    //  SelectWithPaginationReducer.Components.sendSelectItem(
+//    //    t.reducerParams,
+//    //    e.id,
+//    //  );
+//    //  "";
+//  );
+//};
+
 let make2 = (ms: list(measurement)) => {
   let makeItem = (m: measurement, _bounds) => {
-    <>
-      <FC.Table.Cell flex=1 className=primaryCellStyle>
-        {switch (m.measurable) {
-         | None => "" |> ste
-         | Some(measurable) => Items.link(~m=measurable)
-         }}
+    <FC.Table.RowLinkNoPadding onClick={_e => Js.log("hello")} key={m.id}>
+      <FC.Table.Cell
+        flex=1
+        className=Css.(
+          style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])
+        )>
+        <div className=Styles.mainColumn>
+          <div className=Styles.mainColumnTop> {getMeasurableLink(m)} </div>
+        </div>
       </FC.Table.Cell>
       <FC.Table.Cell flex=2 className=primaryCellStyle>
         {Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull}
@@ -283,9 +330,11 @@ let make2 = (ms: list(measurement)) => {
       <FC.Table.Cell flex=1 className=primaryCellStyle>
         {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
       </FC.Table.Cell>
-    </>;
+    </FC.Table.RowLinkNoPadding>;
   };
+
   let items = ms |> getItems(~makeItem);
+
   E.React.showIf(
     ms |> E.L.length > 0,
     <>

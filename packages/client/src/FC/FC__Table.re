@@ -17,6 +17,20 @@ module Styles = {
       )
     );
 
+  let rowNoPadding =
+    Css.(
+      style(
+        [
+          padding2(~v=`zero, ~h=`zero),
+          borderBottom(`px(1), `solid, Colors.accentBlue1a),
+          display(`flex),
+          flexDirection(`row),
+          selector(":last-child", BaseStyles.borderNone),
+        ]
+        @ BaseStyles.fullWidthFloatLeft,
+      )
+    );
+
   let textArea =
     Css.(
       style(
@@ -154,6 +168,18 @@ module RowLink = {
     ...component,
     render: _self =>
       <Div styles=[Styles.row, Styles.clickableRow] onClick>
+        ...children
+      </Div>,
+  };
+};
+
+module RowLinkNoPadding = {
+  let component = ReasonReact.statelessComponent("TABLE ROW NO PADDING");
+
+  let make = (~onClick, children) => {
+    ...component,
+    render: _self =>
+      <Div styles=[Styles.rowNoPadding, Styles.clickableRow] onClick>
         ...children
       </Div>,
   };

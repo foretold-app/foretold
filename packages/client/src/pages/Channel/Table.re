@@ -3,17 +3,7 @@ open Utils;
 module Styles = {
   open Css;
   let table = [display(`flex), flexDirection(`column)] |> style;
-  let row =
-    [
-      flex(1),
-      display(`flex),
-      borderBottom(`px(1), `solid, `hex("e7eaf0")),
-      selector(
-        ":last-child",
-        [borderBottom(`px(0), `solid, hex("e7eaf0"))],
-      ),
-    ]
-    |> style;
+  let row = [paddingTop(`em(0.5)), paddingBottom(`em(0.5))] |> style;
   let cell = [flex(1), padding2(~v=`em(0.6), ~h=`em(0.5))] |> style;
 };
 
@@ -53,18 +43,30 @@ module Row = {
 type column('a) = {
   name: ReasonReact.reactElement,
   render: 'a => ReasonReact.reactElement,
+  flex: int,
 };
 
 let fromColumns = (columns: array(column('a)), rows: array('a)) =>
   <Table>
-    <Row cells={columns |> E.A.fmap((c: column('a)) => c.name)} />
+    <FC.Table.HeaderRow>
+      {
+        columns
+        |> E.A.fmap((c: column('a)) => c.name)
+        |> E.A.fmap(r => <FC.Table.Cell flex=1> r </FC.Table.Cell>)
+        |> ReasonReact.array
+      }
+    </FC.Table.HeaderRow>
     {
       rows
       |> E.A.fmapi((i, r: 'a) =>
-           <Row
-             cells={columns |> E.A.fmap((c: column('a)) => c.render(r))}
-             key={i |> string_of_int}
-           />
+           <FC.Table.Row className=Styles.row key={i |> string_of_int}>
+             {
+               columns
+               |> E.A.fmap((c: column('a)) => c.render(r))
+               |> E.A.fmap(r => <FC.Table.Cell flex=1> r </FC.Table.Cell>)
+               |> ReasonReact.array
+             }
+           </FC.Table.Row>
          )
       |> ReasonReact.array
     }

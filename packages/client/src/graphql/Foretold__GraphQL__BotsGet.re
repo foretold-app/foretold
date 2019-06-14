@@ -1,7 +1,7 @@
 module Query = [%graphql
   {|
-    query bots {
-      bots(first: 200){
+    query bots ($ownerId: String) {
+      bots(first: 200, ownerId: $ownerId){
           edges{
               node{
                   id
@@ -21,7 +21,7 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let unpackEdges = a: array('a) => {
+let unpackEdges = (a): array('a) => {
   let response =
     a
     |> E.O.fmap(b => b##edges |> E.A.O.defaultEmpty |> E.A.O.concatSome)
@@ -53,8 +53,8 @@ let toBot = (m: bot) =>
     (),
   );
 
-let component = fn => {
-  let query = Query.make();
+let component = (~ownerId, fn) => {
+  let query = Query.make(~ownerId, ());
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
     |> ApolloUtils.apolloResponseToResult

@@ -277,7 +277,7 @@ module Bot = {
       switch (c) {
       | `AGGREGATION => "Aggregation"
       | `COMPETITIVE => "Prediction"
-      | `OBJECTIVE => "Judgement"
+      | `OBJECTIVE => "Resolution"
       };
   };
   let make =
@@ -350,9 +350,11 @@ module Channel = {
   let present = (~hashClassName="", s: t) =>
     <span>
       <span className=hashClassName>
-        {s.isPublic
-           ? <span className=Styles.hash> {"#" |> ste} </span>
-           : <span className=Styles.lock> <Icon.Icon icon="LOCK" /> </span>}
+        {
+          s.isPublic ?
+            <span className=Styles.hash> {"#" |> ste} </span> :
+            <span className=Styles.lock> <Icon.Icon icon="LOCK" /> </span>
+        }
       </span>
       <span> {s.name |> ste} </span>
     </span>;

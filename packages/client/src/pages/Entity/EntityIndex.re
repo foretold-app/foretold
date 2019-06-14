@@ -13,16 +13,19 @@ module Columns = {
         linkType={Internal(EntityShow(r |> Graph_T.Thing.id))}>
         {r |> EKen.Thing.getName |> ste}
       </Foretold__Components__Link>,
+    flex: 2,
   };
 
   let instanceOf: column = {
     name: "Instance Of" |> ste,
     render: (r: record) => r |> EKen.Thing.getInstanceOfName |> ste,
+    flex: 1,
   };
 
   let idColumn: column = {
     name: "Name" |> ste,
     render: (r: record) => r |> Graph_T.Thing.id |> ste,
+    flex: 1,
   };
 
   let all = [|nameColumn, instanceOf, idColumn|];

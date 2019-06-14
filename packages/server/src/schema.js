@@ -99,7 +99,10 @@ const schema = new graphql.GraphQLSchema({
 
       bots: {
         type: types.bots.botsConnection,
-        args: types.common.connectionArguments,
+        args: {
+          ...types.common.connectionArguments,
+          ownerId: { type: graphql.GraphQLString },
+        },
         resolve: resolvers.bots.all,
       },
 

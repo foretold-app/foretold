@@ -34,6 +34,7 @@ class MeasurementsData extends DataBase {
     if (channel.isPublic){
       await notify(notification);
     }
+
     return measurement;
   }
 

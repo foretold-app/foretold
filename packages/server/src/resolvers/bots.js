@@ -46,9 +46,7 @@ async function update(root, args, context, info) {
 async function all(root, args, context, info) {
   const filter = {};
   const pagination = new Pagination(args);
-  const options = {
-    userId: _.get(context, 'user.id'),
-  };
+  const options = {};
   const result = await data.bots.getAll(filter, pagination, options);
   return result.data;
 }

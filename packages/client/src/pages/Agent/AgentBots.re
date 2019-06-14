@@ -9,18 +9,16 @@ let agentSection = (e: Queries.Agent.agent) =>
   switch (e) {
   | {user: Some(r)} =>
     <>
-      {
-        E.React.showIf(
-          e.isMe,
-          <Div float=`right>
-            <Antd.Button
-              onClick={_ => Context.Routing.Url.push(BotCreate)}
-              _type=`primary>
-              {"New Bot" |> ste}
-            </Antd.Button>
-          </Div>,
-        )
-      }
+      {E.React.showIf(
+         e.isMe,
+         <Div float=`right>
+           <Antd.Button
+             onClick={_ => Context.Routing.Url.push(BotCreate)}
+             _type=`primary>
+             {"New Bot" |> ste}
+           </Antd.Button>
+         </Div>,
+       )}
     </>
   | _ => E.React.null
   };
@@ -59,21 +57,27 @@ module Columns = {
 };
 
 type pageParams = {id: string};
+
+let getUserId = (agent: Queries.Agent.agent) => {
+  switch (agent.user) {
+  | Some(user) => user.id
+  | None => ""
+  };
+};
+
 let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>
     Queries.Agent.component(~id=pageParams.id, ({agent}) =>
-      Queries.Bots.component(bots =>
+      Queries.Bots.component(~ownerId=getUserId(agent), bots =>
         SLayout.LayoutConfig.make(
           ~head=
             <FC.Base.Div
               float=`right
-              className={
-                Css.style([
-                  FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                  FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-                ])
-              }>
+              className={Css.style([
+                FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+              ])}>
               {agentSection(agent)}
             </FC.Base.Div>,
           ~body=

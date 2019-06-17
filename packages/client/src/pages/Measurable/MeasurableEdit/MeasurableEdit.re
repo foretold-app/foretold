@@ -93,7 +93,7 @@ let formCreation = (id, m) => {
         CMutationForm.showWithLoading(
           ~result=data.result,
           ~form=MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange),
-          ~successMessage="Measurable updated successfully.",
+          ~successMessage="Question updated successfully.",
           (),
         ),
     )

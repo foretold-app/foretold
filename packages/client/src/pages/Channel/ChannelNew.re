@@ -44,7 +44,7 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
             CMutationForm.showWithLoading(
               ~result=data.result,
               ~form=ChannelForm.showForm(~form, ~handleSubmit, ~handleChange),
-              ~successMessage="Channel created successfully.",
+              ~successMessage="Community created successfully.",
               (),
             )
           )
@@ -52,7 +52,7 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
       }
     </FC.PageCard.BodyPadding>
     |> SLayout.LayoutConfig.make(
-         ~head=SLayout.Header.textDiv("Create a New Channel"),
+         ~head=SLayout.Header.textDiv("Create a New Community"),
          ~body=_,
        )
     |> layout;

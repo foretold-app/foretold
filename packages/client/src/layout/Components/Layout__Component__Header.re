@@ -47,7 +47,7 @@ let userDropdown = agentId =>
     }
     {link(Internal(Agent({agentId, subPage: AgentBots})), "My Bots")}
     {link(Internal(Agent({agentId, subPage: AgentShow})), "My Predictions")}
-    {link(Internal(ChannelNew), "Make a New Channel")}
+    {link(Internal(ChannelNew), "Make a New Community")}
     {link(Action(_ => Context.Auth.Actions.logout()), "Logout")}
   </div>;
 
@@ -76,7 +76,7 @@ let make = (~loggedInUser: Context.Primary.User.t, _children) => {
     <Div styles=[Styles.outer]>
       <Div float=`left>
         <C.Link linkType={Internal(ChannelIndex)} className=Styles.headerLink>
-          {"Public Channels" |> ste}
+          {"Public Groups" |> ste}
         </C.Link>
       </Div>
       <Div float=`left>

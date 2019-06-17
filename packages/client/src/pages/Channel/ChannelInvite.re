@@ -31,7 +31,7 @@ let make =
                 ),
             )
           }>
-          {"Add to Channel" |> ste}
+          {"Add to Community" |> ste}
         </Foretold__Components__Link>
       )
       |> E.React.el;

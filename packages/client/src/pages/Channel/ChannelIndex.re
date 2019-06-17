@@ -89,7 +89,7 @@ let make =
   render: _ =>
     Queries.Channels.component(channels =>
       SLayout.LayoutConfig.make(
-        ~head=SLayout.Header.textDiv("Channels"),
+        ~head=SLayout.Header.textDiv("Groups"),
         ~body=Table.fromColumns(Columns.all, channels),
       )
       |> layout

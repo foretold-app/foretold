@@ -81,11 +81,6 @@ let make =
                    measurable=m
                  />
                </div>
-               <div className=Styles.column>
-                 <Foretold__Components__Measurable.StatusDisplay
-                   measurable=m
-                 />
-               </div>
              </div>
            )
         |> ReasonReact.array

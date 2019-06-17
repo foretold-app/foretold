@@ -66,7 +66,13 @@ let make =
         <Div flexDirection=`row styles=[SLayout.Styles.width100]>
           <Div
             styles=[
-              Css.(style([marginTop(`em(1.0)), marginRight(`em(2.0))])),
+              Css.(
+                style([
+                  marginTop(`em(1.0)),
+                  paddingRight(`em(1.0)),
+                  paddingLeft(`em(1.0)),
+                ])
+              ),
             ]
             flex=3>
             <FC.PageCard>

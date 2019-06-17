@@ -37,12 +37,17 @@ let make =
 
     <Layout__Component__FillWithSidebar channelId=None loggedInUser>
       top
-      /* <FC.GroupHeader.SubHeader> secondLevel </FC.GroupHeader.SubHeader> */
       <div className=Styles.container>
         <Div flexDirection=`row styles=[SLayout.Styles.width100]>
           <Div
             styles=[
-              Css.(style([marginTop(`em(1.0)), marginRight(`em(2.0))])),
+              Css.(
+                style([
+                  marginTop(`em(1.0)),
+                  paddingRight(`em(1.0)),
+                  paddingLeft(`em(1.0)),
+                ])
+              ),
             ]
             flex=3>
             <FC.PageCard>

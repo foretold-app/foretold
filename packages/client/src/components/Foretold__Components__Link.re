@@ -3,6 +3,7 @@ let component = ReasonReact.statelessComponent("Link");
 type linkType =
   | Action(ReactEvent.Mouse.t => unit)
   | Internal(Context.Routing.Url.t)
+  | Relative(string)
   | External(string);
 
 module LinkType = {
@@ -12,6 +13,7 @@ module LinkType = {
     switch (t) {
     | Internal(r) => r |> Context.Routing.Url.toString
     | External(s) => s
+    | Relative(s) => s
     | Action(_) => "#"
     };
 
@@ -26,6 +28,7 @@ module LinkType = {
     switch (t) {
     | Action(action) => action(event)
     | Internal(_) => handleStringUrlClick(event, t |> toString)
+    | Relative(_) => handleStringUrlClick(event, t |> toString)
     | External(_) => ()
     };
 };

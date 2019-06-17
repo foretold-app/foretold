@@ -14,7 +14,7 @@ module Styles = {
   /* Layout box for spacing in the page */
   let layoutBox =
     style(
-      [margin2(~v=`em(2.), ~h=`zero), padding2(~v=`zero, ~h=`em(2.))]
+      [margin2(~v=`em(1.), ~h=`zero), padding2(~v=`zero, ~h=`em(2.))]
       @ BaseStyles.fullWidthFloatLeft,
     );
 

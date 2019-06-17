@@ -25,7 +25,8 @@ module LinkType = {
   let onClick = (t: t, event) =>
     switch (t) {
     | Action(action) => action(event)
-    | _ => handleStringUrlClick(event, t |> toString)
+    | Internal(_) => handleStringUrlClick(event, t |> toString)
+    | External(_) => ()
     };
 };
 

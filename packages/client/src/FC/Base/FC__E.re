@@ -80,6 +80,7 @@ module JsDate = {
 
 /* List */
 module L = {
+  open Rationale;
   let fmap = List.map;
   let toArray = Array.of_list;
   let fmapi = List.mapi;
@@ -105,6 +106,11 @@ module L = {
   let update = Rationale.RList.update;
   let iter = List.iter;
   let findIndex = Rationale.RList.findIndex;
+  let withIdx = xs => xs |> RList.zip(RList.times(Function.identity, length(xs)));
+  module React = {
+    let fmap = (f, xs) => xs |> fmap(f) |> toArray |> React.array;
+    let fmapi = (f, xs) => xs |> fmapi(f) |> toArray |> React.array;
+  };
 };
 
 /* A for Array */

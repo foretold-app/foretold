@@ -133,7 +133,7 @@ module Row = {
 
   let textSection = text => <Div styles=[Styles.textArea]> text </Div>;
 
-  let make = (~bottomSubRow=?, ~className="", children) => {
+  let make = (~bottomSubRow=?, children) => {
     ...component,
     render: _self =>
       switch (bottomSubRow) {
@@ -142,7 +142,7 @@ module Row = {
           <Div styles=[Styles.topRow]> ...children </Div>
           <Div styles=[Styles.bottomRow]> ...bottomSubRow </Div>
         </>
-      | None => <Div styles=[Styles.row, className]> ...children </Div>
+      | None => <Div styles=[Styles.row]> ...children </Div>
       },
   };
 };

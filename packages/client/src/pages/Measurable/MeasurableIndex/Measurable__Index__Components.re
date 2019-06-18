@@ -57,7 +57,7 @@ module LoadedAndUnselected = {
       number=num
       onClick={
         Foretold__Components__Link.LinkType.onClick(
-          External(
+          Relative(
             Context.QueryParams.MeasurableIndex.make(Some(state))
             |> Context.QueryParams.MeasurableIndex.toUrlParams,
           ),

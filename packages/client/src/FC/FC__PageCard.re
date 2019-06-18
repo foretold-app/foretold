@@ -115,47 +115,83 @@ module BodyPadding = {
 };
 
 module Section = {
-  let component = ReasonReact.statelessComponent("Card Section");
-  module Styles = {
+  module StyleProps = {
     open Css;
-    let allStyle = style([clear(`both)]);
-    let greyStyle = style([backgroundColor(FC__Colors.smokeWhite)]);
-    let paddingStyle = style([padding2(~v=`em(1.5), ~h=`em(1.5))]);
-    let borderTStyle =
-      style([borderTop(`px(1), `solid, FC__Colors.accentBlue1a)]);
-    let borderBStyle =
-      style([borderBottom(`px(1), `solid, FC__Colors.accentBlue1a)]);
-    let flexStyle = style([display(`flex)]);
+    type background = [ | `white | `grey];
+    type padding = [ | `all | `none | `top | `bottom];
+    type border = [ | `none | `top | `bottom | `topBottom];
 
-    let getStyle = (grey, padding, borderTop, borderBottom, flex) =>
-      Belt.Array.reduce(
-        [|
-          (grey, greyStyle),
-          (padding, paddingStyle),
-          (borderTop, borderTStyle),
-          (borderBottom, borderBStyle),
-          (flex, flexStyle),
-        |],
-        allStyle,
-        (acc, (flag, style)) =>
-        flag ? acc ++ " " ++ style : acc
-      );
+    let baseClass = style([clear(`both)]);
+    let bgGrey = style([backgroundColor(FC__Colors.smokeWhite)]);
+    let paddingAll = style([padding(`em(1.5))]);
+    let paddingTop =
+      style([
+        padding4(~top=`em(1.5), ~right=`zero, ~bottom=`zero, ~left=`zero),
+      ]);
+    let paddingBottom =
+      style([
+        padding4(~top=`zero, ~right=`zero, ~bottom=`em(1.5), ~left=`zero),
+      ]);
+    let borderTop =
+      style([borderTop(`px(1), `solid, FC__Colors.accentBlue1a)]);
+    let borderBottom =
+      style([borderBottom(`px(1), `solid, FC__Colors.accentBlue1a)]);
+    let flexCls = style([display(`flex)]);
+
+    [@bs.send] external push: (Js.Array.t('a), 'a) => unit = "";
+    let toClasses =
+        (background: background, border: border, padding: padding, flex: bool) => {
+      // Array for more speed and some imperative ease
+      let cls = [|baseClass|];
+      // Background
+      switch (background) {
+      | `grey => push(cls, bgGrey)
+      | _ => ()
+      };
+      // Padding
+      switch (padding) {
+      | `all => push(cls, paddingAll)
+      | `none => ()
+      | `top => push(cls, paddingTop)
+      | `bottom => push(cls, paddingBottom)
+      };
+      // Border
+      switch (border) {
+      | `none => ()
+      | `top => push(cls, borderTop)
+      | `bottom => push(cls, borderBottom)
+      | `topBottom =>
+        push(cls, borderTop);
+        push(cls, borderBottom);
+      };
+      // Flex
+      if (flex) {
+        push(cls, flexCls);
+      };
+      Js.Array.joinWith(" ", cls);
+    };
   };
+
+  let component = ReasonReact.statelessComponent("Card Section");
+  /**
+   * Section of a PageCard
+   * background: `white (default) | `grey
+   * border: `top | `bottom | `none (default)
+   * padding: `none | `top | `bottom | `all (default)
+   * flex: true | false
+   */
   let make =
       (
-        ~grey=false,
-        ~padding=true,
-        ~borderTop=false,
-        ~borderBottom=false,
+        ~background: StyleProps.background=`white,
+        ~border: StyleProps.border=`none,
+        ~padding: StyleProps.padding=`all,
         ~flex=false,
         children,
       ) => {
     ...component,
     render: _self =>
       <div
-        className={
-          Styles.getStyle(grey, padding, borderTop, borderBottom, flex)
-        }>
+        className={StyleProps.toClasses(background, border, padding, flex)}>
         ...children
       </div>,
   };

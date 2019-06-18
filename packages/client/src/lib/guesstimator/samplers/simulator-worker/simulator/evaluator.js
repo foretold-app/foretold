@@ -5,6 +5,7 @@ import _ from "lodash";
 import {Filters, SAMPLE_FILTERED} from './filters/filters'
 import {ImpureConstructs} from './constructs/constructs'
 import {Distributions} from "./distributions/distributions"
+import {Multimodals} from './multimodals/multimodals';
 
 const finance = new Finance()
 
@@ -40,12 +41,16 @@ math.import(financeFunctions, {override: true})
 math.import(ImpureConstructs, {override: true, wrap: true})
 // Filters
 math.import(Filters, {override: true})
+// Multimodals
+math.import(Multimodals, {override: true})
 
 // All of jStat's functions are impure as they require sampling on pure inputs.
+export const STOCHASTIC_FUNCTIONS = ['pickRandom', 'randomInt', 'random'].concat(Object.keys(Distributions)).concat(Object.keys(ImpureConstructs)).concat(Object.keys(Multimodals))
 
 export function Evaluate(text, sampleCount, inputs) {
   try {
     const compiled = math.compile(text)
+
     return evaluate(compiled, inputs, sampleCount, text)
   } catch ({message}) {
     if (message.startsWith('Unexpected end of expression')) {
@@ -60,6 +65,7 @@ function sampleInputs(inputs, i) {
   const sample = {}
   for (let key of Object.keys(inputs)){
     sample[key] = inputs[key][i % inputs[key].length]
+    util.inspect(inputs)
   }
   return sample
 }
@@ -68,13 +74,14 @@ function evaluate(compiled, inputs, n, text){
   let values = []
   let errors = []
   let anyNotFiltered = false
+
   for (var i = 0; i < n; i++) {
     const sampledInputs = sampleInputs(inputs, i)
     const someInputFiltered = _.some(sampledInputs, val => _.isEqual(val, SAMPLE_FILTERED))
-
     let newSample = NaN
     try {
       newSample = someInputFiltered ? SAMPLE_FILTERED : compiled.eval(sampledInputs)
+
     } catch (rawError) {
       const isUnexpectedTypeError = rawError.message.includes('Unexpected type of argument in function')
       const containsFilterFn = _.some(Object.keys(Filters), f => text.includes(f))

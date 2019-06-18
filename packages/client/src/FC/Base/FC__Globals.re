@@ -3,7 +3,7 @@ let load = () => {
     global(
       "body",
       [
-        fontFamily("Lato"),
+        fontFamily(FC__Colors.Text.standardFont),
         margin(`zero),
         height(`percent(100.0)),
         background(`hex("F0F1F3")),

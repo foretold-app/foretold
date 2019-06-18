@@ -147,7 +147,7 @@ module Row = {
 
   let textSection = text => <Div styles=[Styles.textArea]> text </Div>;
 
-  let make = (~bottomSubRow=?, ~className="", children) => {
+  let make = (~className="", ~bottomSubRow=?, children) => {
     ...component,
     render: _self =>
       switch (bottomSubRow) {

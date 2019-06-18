@@ -1,5 +1,4 @@
-open FC__Base;
-open Colors.Text;
+open FC__Colors.Text;
 
 let activeStyles =
   Css.[
@@ -9,7 +8,7 @@ let activeStyles =
   ];
 let inactiveStyles =
   Css.[
-    borderBottom(`px(2), `solid, Colors.clear),
+    borderBottom(`px(2), `solid, FC__Colors.clear),
     color(LightBackground.main),
     hover([color(LightBackground.active)]),
   ];
@@ -20,7 +19,7 @@ let allStyles =
     paddingLeft(`em(0.4)),
     paddingRight(`em(0.4)),
     marginRight(`em(1.8)),
-    BaseStyles.floatLeft,
+    FC__BaseStyles.floatLeft,
   ];
 
 let flexStyles =
@@ -30,7 +29,7 @@ let component = ReasonReact.statelessComponent("Tab");
 let make = (~isActive=false, ~onClick=?, ~flex=false, children) => {
   ...component,
   render: _self =>
-    <Link
+    <FC__Link
       isDisabled=false
       ?onClick
       className={Css.style(
@@ -38,5 +37,5 @@ let make = (~isActive=false, ~onClick=?, ~flex=false, children) => {
         @ (flex ? flexStyles : allStyles),
       )}>
       ...children
-    </Link>,
+    </FC__Link>,
 };

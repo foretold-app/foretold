@@ -241,6 +241,15 @@ let getItems = (ms: list(measurement), ~makeItem) => {
   |> ReasonReact.array;
 };
 
+let getItems2 = (ms: list(measurement), ~makeItem) => {
+  let _bounds = Helpers.bounds(ms |> E.A.of_list);
+  ms
+  |> E.L.sort(sort)
+  |> E.L.fmap((m: measurement) => makeItem(m, _bounds))
+  |> E.A.of_list
+  |> ReasonReact.array;
+};
+
 let make = (ms: list(measurement)) => {
   let makeItem = (m, _bounds) => {
     <>
@@ -282,33 +291,9 @@ let getMeasurableLink = (m: measurement) => {
   };
 };
 
-//module GetMeasurablesReducerConfig = {
-//  type itemType = Context.Primary.Measurable.t;
-//  type callFnParams = string;
-//
-//  let getId = (e: itemType) => e.id;
-//  let callFn = (e: callFnParams) =>
-//    Foretold__GraphQL.Queries.Measurables.componentWithSeries(~seriesId=e);
-//  let isEqual = (a: itemType, b: itemType) => a.id == b.id;
-//};
-//
-//module SelectWithPaginationReducer =
-//  SelectWithPaginationReducerFunctor.Make(GetMeasurablesReducerConfig);
-//
-//let onSelect = e => {
-//  Js.log(
-//    "onSelect",
-//    //  SelectWithPaginationReducer.Components.sendSelectItem(
-//    //    t.reducerParams,
-//    //    e.id,
-//    //  );
-//    //  "";
-//  );
-//};
-
 let make2 = (ms: list(measurement)) => {
   let makeItem = (m: measurement, _bounds) => {
-    <FC.Table.RowLinkNoPadding onClick={_e => Js.log("hello")} key={m.id}>
+    <FC.Table.RowLinkNoPadding onClick={_e => Js.log("")} key={m.id}>
       <FC.Table.Cell
         flex=1
         className=Css.(
@@ -333,7 +318,7 @@ let make2 = (ms: list(measurement)) => {
     </FC.Table.RowLinkNoPadding>;
   };
 
-  let items = ms |> getItems(~makeItem);
+  let items = ms |> getItems2(~makeItem);
 
   E.React.showIf(
     ms |> E.L.length > 0,

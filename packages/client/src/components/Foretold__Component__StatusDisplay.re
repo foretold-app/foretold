@@ -21,7 +21,7 @@ let statusShow = (~measurable: Context.Primary.Measurable.t) =>
     ReasonReact.null;
   };
 
-let component = ReasonReact.statelessComponent("MeasurableShow");
+let component = ReasonReact.statelessComponent("StatusDisplay");
 
 let make = (~measurable: Context.Primary.Measurable.t, _children) => {
   ...component,

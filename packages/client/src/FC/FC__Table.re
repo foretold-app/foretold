@@ -21,7 +21,6 @@ module Styles = {
     Css.(
       style(
         [
-          padding2(~v=`zero, ~h=`zero),
           borderBottom(`px(1), `solid, Colors.accentBlue1a),
           display(`flex),
           flexDirection(`row),
@@ -162,7 +161,7 @@ module Row = {
 };
 
 module RowLink = {
-  let component = ReasonReact.statelessComponent("TABLE ROW");
+  let component = ReasonReact.statelessComponent("TABLE ROW LINK");
 
   let make = (~onClick, children) => {
     ...component,

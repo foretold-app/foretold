@@ -11,7 +11,9 @@ let makeWithPage =
     let layout = Agent_Layout_C.makeWithEl(agentPage, loggedInUser);
     let toEl = fn => fn |> E.React.makeToEl(~key=agentId);
     switch (agentPage.subPage) {
-    | AgentShow => AgentShow.make(~pageParams={id: agentId}, ~layout) |> toEl
+    | AgentShow =>
+      AgentShow.make(~pageParams={id: agentId}, ~loggedInUser, ~layout)
+      |> toEl
     | AgentMeasurables =>
       AgentMeasurables.make(
         ~pageParams={id: agentId},

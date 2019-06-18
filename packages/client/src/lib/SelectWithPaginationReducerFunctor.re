@@ -93,7 +93,7 @@ module Make = (Config: Config) => {
       let newState = (itemsPerPage, t: t, action: action) =>
         (
           switch (action) {
-          | Deselect => Some(((a, b) => deselect(a, b) |> E.O.some))
+          | Deselect => Some((a, b) => deselect(a, b) |> E.O.some)
           | NextSelection => Some(nextSelection)
           | LastSelection => Some(lastSelection)
           | _ => None
@@ -243,8 +243,8 @@ module Make = (Config: Config) => {
           ),
         ];
         let allStyles =
-          isDisabled ?
-            normalStyles : E.L.append(normalStyles, enabledOnlyStyles);
+          isDisabled
+            ? normalStyles : E.L.append(normalStyles, enabledOnlyStyles);
         style(allStyles);
       };
     };

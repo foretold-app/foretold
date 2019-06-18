@@ -1,39 +1,81 @@
-open Utils;
-open Foretold__GraphQL;
-open Css;
+module GetMeasurablesReducerConfig = {
+  type itemType = Context.Primary.Measurement.t;
+  type callFnParams = string;
 
-let block = style([marginBottom(`em(1.0))]);
-let notFound = "Agent not found" |> ste |> E.React.inH3;
+  let getId = (e: Context.Primary.Measurement.t) => e.id;
+  let callFn = (e: callFnParams) =>
+    Foretold__GraphQL.Queries.AgentMeasurements.componentWithMeasurementConnection(
+      ~id=e,
+    );
 
-/* TODO: Improve this bit */
-let agentSection = (e: Queries.Agent.agent) =>
-  switch (e) {
-  | {bot: Some(r)} =>
-    <>
-      {r.name |> ste |> E.React.inH2}
-      {r.description
-       |> E.O.fmap(r => r |> ste |> E.React.inH3)
-       |> E.O.React.defaultNull}
-      {r.competitorType
-       |> Context.Primary.CompetitorType.toString
-       |> ste
-       |> E.React.inH3}
-    </>
-  | {user: Some(r)} => r.name |> ste |> E.React.inH1
-  | _ => notFound
+  let isEqual = (a: itemType, b: itemType) => {
+    a.id == b.id;
   };
+};
 
-let component = ReasonReact.statelessComponent("AgentShow");
+module SelectWithPaginationReducer =
+  SelectWithPaginationReducerFunctor.Make(GetMeasurablesReducerConfig);
 
+let component = ReasonReact.statelessComponent("AgentMeasurables2");
 type pageParams = {id: string};
-let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
+
+let make =
+    (
+      ~pageParams: pageParams,
+      ~loggedInUser: Context.Primary.User.t,
+      ~layout=SLayout.FullPage.makeWithEl,
+      _children,
+    ) => {
   ...component,
-  render: _ =>
-    Queries.Agent.component(~id=pageParams.id, ({measurementsList}) =>
+  render: _ => {
+    SelectWithPaginationReducer.make(
+      ~itemsPerPage=20,
+      ~callFnParams=pageParams.id,
+      ~subComponent=selectWithPaginationParams =>
       SLayout.LayoutConfig.make(
-        ~head="" |> ste,
-        ~body=measurementsList |> C.Measurements.Table.make2,
+        ~head=
+          switch (selectWithPaginationParams.selection) {
+          | Some(_selection) =>
+            <>
+              {SelectWithPaginationReducer.Components.deselectButton(
+                 selectWithPaginationParams.send,
+               )}
+              {SelectWithPaginationReducer.Components.correctButtonDuo(
+                 selectWithPaginationParams,
+               )}
+            </>
+          | None => <div />
+          },
+        ~body=
+          switch (
+            selectWithPaginationParams.response,
+            selectWithPaginationParams.selection,
+          ) {
+          | (_, Some(measurement)) =>
+            switch (measurement.measurable) {
+            | Some(measurable) =>
+              <C.Measurable.FullPresentation id={measurable.id} loggedInUser />
+            | _ => <div />
+            }
+
+          | (Success(connection), None) =>
+            let onSelectClb = (e: Client.Context.Primary.Measurement.t) => {
+              SelectWithPaginationReducer.Components.sendSelectItem(
+                selectWithPaginationParams,
+                e.id,
+              );
+            };
+            let measurementsArray = connection.edges |> Array.to_list;
+            C.Measurements.Table.make2(
+              ~ms=measurementsArray,
+              ~onSelect=onSelectClb,
+              (),
+            );
+          | _ => <div />
+          },
       )
       |> layout
-    ),
+    )
+    |> E.React.makeToEl;
+  },
 };

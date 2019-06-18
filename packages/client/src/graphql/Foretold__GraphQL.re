@@ -3,6 +3,7 @@ module Queries = {
   module Agent = Foretold__GraphQL__GetAgent;
   module Bots = Foretold__GraphQL__BotsGet;
   module Agents = Foretold__GraphQL__GetAgents;
+  module AgentMeasurements = Foretold__GraphQL__GetAgentMeasurements;
   module Measurable = Foretold__GraphQL__GetMeasurable;
   module Measurables = Foretold__GraphQL__GetMeasurables;
   module Measurements = Foretold__GraphQL__MeasurementsGet;

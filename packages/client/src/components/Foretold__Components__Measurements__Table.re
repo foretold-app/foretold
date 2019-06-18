@@ -293,7 +293,7 @@ let getMeasurableLink = (m: measurement) => {
 
 let make2 = (ms: list(measurement)) => {
   let makeItem = (m: measurement, _bounds) => {
-    <FC.Table.RowLinkNoPadding onClick={_e => Js.log("")} key={m.id}>
+    <FC.Table.RowLink onClick={_e => Js.log("")} key={m.id}>
       <FC.Table.Cell
         flex=1
         className=Css.(
@@ -315,7 +315,7 @@ let make2 = (ms: list(measurement)) => {
       <FC.Table.Cell flex=1 className=primaryCellStyle>
         {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
       </FC.Table.Cell>
-    </FC.Table.RowLinkNoPadding>;
+    </FC.Table.RowLink>;
   };
 
   let items = ms |> getItems2(~makeItem);

@@ -293,8 +293,8 @@ let getMeasurableLink = (m: measurement) => {
 
 let make2 =
     (
-      ~ms: list(measurement),
-      ~onSelect=(m: Context.Primary.Measurement.t) => (),
+      ~measurementsList: list(measurement),
+      ~onSelect=(measurement: Context.Primary.Measurement.t) => (),
       (),
     ) => {
   let makeItem = (m: measurement, _bounds) => {
@@ -323,10 +323,10 @@ let make2 =
     </FC.Table.RowLink>;
   };
 
-  let items = ms |> getItems2(~makeItem);
+  let items = measurementsList |> getItems2(~makeItem);
 
   E.React.showIf(
-    ms |> E.L.length > 0,
+    measurementsList |> E.L.length > 0,
     <>
       <FC.Table.HeaderRow>
         <FC.Table.Cell flex=1> {"Measurable" |> ste} </FC.Table.Cell>

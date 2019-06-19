@@ -65,9 +65,9 @@ let make =
                 e.id,
               );
             };
-            let measurementsArray = connection.edges |> Array.to_list;
+            let measurementsList = connection.edges |> Array.to_list;
             C.Measurements.Table.make2(
-              ~ms=measurementsArray,
+              ~measurementsList,
               ~onSelect=onSelectClb,
               (),
             );

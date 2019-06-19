@@ -1,15 +1,4 @@
-type user = {
-  id: string,
-  name: string,
-};
-
 type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
-type bot = {
-  competitorType,
-  description: option(string),
-  id: string,
-  name: string,
-};
 
 type measurable = {
   id: string,
@@ -19,6 +8,7 @@ type measurable = {
   expectedResolutionDate: option(MomentRe.Moment.t),
 };
 
+// @todo:
 type connection('a) =
   option({
     .
@@ -100,7 +90,7 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let toMesuarements3 = (measurements: array(node)) => {
+let toMesuarements = (measurements: array(node)) => {
   measurements
   |> E.A.fmap(n =>
        Context.Primary.Measurement.make(
@@ -128,13 +118,16 @@ let toMesuarements3 = (measurements: array(node)) => {
      );
 };
 
-let unpackEdges2 = a => {
-  let agent = a##agent;
+let unpackConnection = responseResult => {
+  let agent = responseResult##agent;
+
   let measurementsEdges: option(array(node)) =
     agent |> E.O.fmap(agent => agent.measurements |> unpackEdges);
-  let measurements =
-    measurementsEdges |> E.O.fmap(toMesuarements3) |> E.A.O.defaultEmpty;
 
+  let measurements =
+    measurementsEdges |> E.O.fmap(toMesuarements) |> E.A.O.defaultEmpty;
+
+  // @todo:
   let pageInfo =
     Context.Primary.PageInfo.fromJson({
       "endCursor": Some("end"),
@@ -142,21 +135,19 @@ let unpackEdges2 = a => {
       "hasPreviousPage": false,
       "startCursor": Some("start"),
     });
-  let p =
-    Context.Primary.Connection.make(
-      ~pageInfo,
-      ~total=Some(10),
-      ~edges=measurements,
-    );
-  p;
+
+  Context.Primary.Connection.make(
+    ~pageInfo,
+    ~total=Some(10),
+    ~edges=measurements,
+  );
 };
 
 let componentMaker = (query, innerComponentFn) =>
   QueryComponent.make(~variables=query##variables, o =>
     o.result
     |> E.HttpResponse.fromApollo
-    |> E.HttpResponse.fmap(unpackEdges2)
-    //    |> E.HttpResponse.optionalToMissing
+    |> E.HttpResponse.fmap(unpackConnection)
     |> innerComponentFn
   )
   |> E.React.el;

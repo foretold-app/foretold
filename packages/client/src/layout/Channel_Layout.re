@@ -3,6 +3,7 @@ let makeWithPage =
     (channelPage: Context.Routing.ChannelPage.t, loggedInUser)
     : ReasonReact.reactElement => {
   let channelId = channelPage.channelId;
+
   switch (loggedInUser) {
   | Some(loggedInUser) =>
     let layout = Channel_Layout_C.makeWithEl(channelPage, loggedInUser);
@@ -28,6 +29,7 @@ let makeWithPage =
     | Settings => ChannelEdit.make(~channelId, ~layout) |> toEl
     | NewSeries => SeriesNew.make(~channelId, ~loggedInUser, ~layout) |> toEl
     };
+
   | None => <Home />
   };
 };

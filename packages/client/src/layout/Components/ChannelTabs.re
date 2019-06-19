@@ -6,10 +6,10 @@ let tab = (isActive, interalUrl, str) =>
     {str |> ste}
   </FC.Tab>;
 
-let tabToInternalUrl = (channelId, o: ChannelPage.tab): Url.t => {
+let tabToInternalUrl = (channelId, tabSelected: ChannelPage.tab): Url.t => {
   let channelPage: ChannelPage.t = {
     channelId,
-    subPage: ChannelPage.SubPage.fromTab(o),
+    subPage: ChannelPage.SubPage.fromTab(tabSelected),
   };
   channelPage |> Url.fromChannelPage;
 };

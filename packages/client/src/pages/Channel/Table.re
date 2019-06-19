@@ -47,7 +47,11 @@ let fromColumns = (columns: array(column('a)), rows: array('a)) =>
     <FC.Table.HeaderRow>
       {columns
        |> Array.map((c: column('a)) => c.name)
-       |> Array.map(r => <FC.Table.Cell flex=1> r </FC.Table.Cell>)
+       |> Array.mapi((i, name) =>
+            <FC.Table.Cell flex=1 key={i |> string_of_int}>
+              name
+            </FC.Table.Cell>
+          )
        |> ReasonReact.array}
     </FC.Table.HeaderRow>
     {rows
@@ -55,7 +59,9 @@ let fromColumns = (columns: array(column('a)), rows: array('a)) =>
           <FC.Table.Row className=Styles.row key={i |> string_of_int}>
             {columns
              |> Array.map((c: column('a)) => c.render(r))
-             |> Array.map(r => <FC.Table.Cell flex=1> r </FC.Table.Cell>)
+             |> Array.map(renderedRow =>
+                  <FC.Table.Cell flex=1> renderedRow </FC.Table.Cell>
+                )
              |> ReasonReact.array}
           </FC.Table.Row>
         )

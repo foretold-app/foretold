@@ -68,24 +68,25 @@ module BasicTable = {
                    </FC.Table.Cell>
                    <FC.Table.Cell
                      flex=1 className=Css.(style([paddingTop(`em(0.5))]))>
-                     {
-                       E.React.showIf(
-                         showExtraData,
-                         Items.series(~m, ~channelId, ())
-                         |> E.O.React.defaultNull,
-                       )
-                     }
-                     {
-                       E.React.showIf(
-                         showExtraData,
-                         Items.creatorLink(~m) |> E.O.React.defaultNull,
-                       )
-                     }
-                     {Items.measurements(~m) |> E.O.React.defaultNull}
-                     {Items.measurers(~m) |> E.O.React.defaultNull}
-                     {E.React.showIf(iAmOwner, Items.editLink(~m))}
-                     {E.React.showIf(iAmOwner, Items.archiveOption(~m))}
-                   </FC.Table.Cell>
+
+                       {
+                         E.React.showIf(
+                           showExtraData,
+                           Items.series(~m, ~channelId, ())
+                           |> E.O.React.defaultNull,
+                         )
+                       }
+                       {
+                         E.React.showIf(
+                           showExtraData,
+                           Items.creatorLink(~m) |> E.O.React.defaultNull,
+                         )
+                       }
+                       {Items.measurements(~m) |> E.O.React.defaultNull}
+                       {Items.measurers(~m) |> E.O.React.defaultNull}
+                       {E.React.showIf(iAmOwner, Items.editLink(~m))}
+                     </FC.Table.Cell>
+                     /* {E.React.showIf(iAmOwner, Items.archiveOption(~m))} */
                  </FC.Table.RowLink>;
                })
             |> ReasonReact.array

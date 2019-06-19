@@ -38,9 +38,11 @@ type agent = {measurements: connection(node)};
 
 let unpackEdges = (a: connection('a)): array('a) => {
   a
-  |> E.O.fmap(b => b##edges |> E.A.O.defaultEmpty |> E.A.O.concatSome)
+  |> Rationale.Option.fmap(b =>
+       b##edges |> E.A.O.defaultEmpty |> E.A.O.concatSome
+     )
   |> E.A.O.defaultEmpty
-  |> E.A.fmap(e => e##node)
+  |> Array.map(e => e##node)
   |> E.A.O.concatSome;
 };
 
@@ -92,7 +94,7 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let toMesuarements = (measurements: array(node)) => {
   measurements
-  |> E.A.fmap(n =>
+  |> Array.map(n =>
        Context.Primary.Measurement.make(
          ~id=n.id,
          ~value=n.value |> MeasurementValue.decodeGraphql,
@@ -122,10 +124,12 @@ let unpackConnection = responseResult => {
   let agent = responseResult##agent;
 
   let measurementsEdges: option(array(node)) =
-    agent |> E.O.fmap(agent => agent.measurements |> unpackEdges);
+    agent |> Rationale.Option.fmap(agent => agent.measurements |> unpackEdges);
 
   let measurements =
-    measurementsEdges |> E.O.fmap(toMesuarements) |> E.A.O.defaultEmpty;
+    measurementsEdges
+    |> Rationale.Option.fmap(toMesuarements)
+    |> E.A.O.defaultEmpty;
 
   // @todo:
   let pageInfo =

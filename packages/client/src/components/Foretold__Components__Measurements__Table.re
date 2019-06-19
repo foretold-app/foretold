@@ -241,11 +241,12 @@ let getItems = (ms: list(measurement), ~makeItem) => {
   |> ReasonReact.array;
 };
 
-let getItems2 = (measurementsList: list(measurement), ~makeItem) => {
+let getItemsSorted = (measurementsList: list(measurement), ~makeItem) => {
   let _bounds = Helpers.bounds(measurementsList |> E.A.of_list);
+
   measurementsList
   |> E.L.sort(sort)
-  |> E.L.fmap((m: measurement) => makeItem(m, _bounds))
+  |> E.L.fmap((measurement: measurement) => makeItem(measurement, _bounds))
   |> E.A.of_list
   |> ReasonReact.array;
 };
@@ -294,7 +295,7 @@ let getMeasurableLink = (m: measurement) => {
 let makeAgentPredictionsTable =
     (
       ~measurementsList: list(measurement),
-      ~onSelect=(measurement: Context.Primary.Measurement.t) => (),
+      ~onSelect=(_measurement: Context.Primary.Measurement.t) => (),
       (),
     ) => {
   let makeItem = (m: measurement, _bounds) => {
@@ -320,7 +321,7 @@ let makeAgentPredictionsTable =
     </FC.Table.RowLink>;
   };
 
-  let items = measurementsList |> getItems2(~makeItem);
+  let itemsMeasurements = measurementsList |> getItemsSorted(~makeItem);
 
   E.React.showIf(
     measurementsList |> E.L.length > 0,
@@ -333,7 +334,7 @@ let makeAgentPredictionsTable =
         <FC.Table.Cell flex=1> {"Prediction Value" |> ste} </FC.Table.Cell>
         <FC.Table.Cell flex=1> {"Time" |> ste} </FC.Table.Cell>
       </FC.Table.HeaderRow>
-      items
+      itemsMeasurements
     </>,
   );
 };

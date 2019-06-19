@@ -291,7 +291,7 @@ let getMeasurableLink = (m: measurement) => {
   };
 };
 
-let make2 =
+let makeAgentPredictionsTable =
     (
       ~measurementsList: list(measurement),
       ~onSelect=(measurement: Context.Primary.Measurement.t) => (),

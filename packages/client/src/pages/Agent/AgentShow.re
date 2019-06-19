@@ -1,4 +1,4 @@
-module GetMeasurablesReducerConfig = {
+module ReducerConfig = {
   type itemType = Context.Primary.Measurement.t;
   type callFnParams = string;
 
@@ -13,8 +13,7 @@ module GetMeasurablesReducerConfig = {
   };
 };
 
-module SelectWithPaginationReducer =
-  SelectWithPaginationReducerFunctor.Make(GetMeasurablesReducerConfig);
+module Reducer = SelectWithPaginationReducerFunctor.Make(ReducerConfig);
 
 let component = ReasonReact.statelessComponent("AgentShow");
 type pageParams = {id: string};
@@ -28,7 +27,7 @@ let make =
     ) => {
   ...component,
   render: _ => {
-    SelectWithPaginationReducer.make(
+    Reducer.make(
       ~itemsPerPage=20,
       ~callFnParams=pageParams.id,
       ~subComponent=selectWithPaginationParams =>
@@ -37,12 +36,10 @@ let make =
           switch (selectWithPaginationParams.selection) {
           | Some(_selection) =>
             <>
-              {SelectWithPaginationReducer.Components.deselectButton(
+              {Reducer.Components.deselectButton(
                  selectWithPaginationParams.send,
                )}
-              {SelectWithPaginationReducer.Components.correctButtonDuo(
-                 selectWithPaginationParams,
-               )}
+              {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
             </>
           | None => <div />
           },
@@ -60,13 +57,15 @@ let make =
 
           | (Success(connection), None) =>
             let onSelectClb = (e: Client.Context.Primary.Measurement.t) => {
-              SelectWithPaginationReducer.Components.sendSelectItem(
+              Reducer.Components.sendSelectItem(
                 selectWithPaginationParams,
                 e.id,
               );
             };
+
             let measurementsList = connection.edges |> Array.to_list;
-            C.Measurements.Table.make2(
+
+            C.Measurements.Table.makeAgentPredictionsTable(
               ~measurementsList,
               ~onSelect=onSelectClb,
               (),

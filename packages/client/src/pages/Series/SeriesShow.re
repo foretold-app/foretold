@@ -58,10 +58,9 @@ let make =
   ...component,
   render: _ => {
     let loadData = load2Queries(channelId, id, 50);
-    let lmake = SLayout.LayoutConfig.make;
 
     loadData(((selectWithPaginationParams, channel, series)) =>
-      lmake(
+      SLayout.LayoutConfig.make(
         ~head=
           switch (channel, series, selectWithPaginationParams.selection) {
           | (
@@ -71,16 +70,12 @@ let make =
             ) =>
             <>
               {SLayout.seriesHead(channel, series.name |> E.O.default(""))}
-              {
-                SelectWithPaginationReducer.Components.deselectButton(
-                  selectWithPaginationParams.send,
-                )
-              }
-              {
-                SelectWithPaginationReducer.Components.correctButtonDuo(
-                  selectWithPaginationParams,
-                )
-              }
+              {SelectWithPaginationReducer.Components.deselectButton(
+                 selectWithPaginationParams.send,
+               )}
+              {SelectWithPaginationReducer.Components.correctButtonDuo(
+                 selectWithPaginationParams,
+               )}
             </>
           | (
               Success(channel),
@@ -89,11 +84,9 @@ let make =
             ) =>
             <>
               {SLayout.seriesHead(channel, series.name |> E.O.default(""))}
-              {
-                SelectWithPaginationReducer.Components.correctButtonDuo(
-                  selectWithPaginationParams,
-                )
-              }
+              {SelectWithPaginationReducer.Components.correctButtonDuo(
+                 selectWithPaginationParams,
+               )}
             </>
           | _ => <div />
           },
@@ -108,13 +101,12 @@ let make =
             <C.Measurables.SeriesTable
               measurables={connection.edges}
               selected=None
-              onClick=(
-                id =>
-                  SelectWithPaginationReducer.Components.sendSelectItem(
-                    selectWithPaginationParams,
-                    id,
-                  )
-              )
+              onClick={id =>
+                SelectWithPaginationReducer.Components.sendSelectItem(
+                  selectWithPaginationParams,
+                  id,
+                )
+              }
             />
           | _ => <div />
           },

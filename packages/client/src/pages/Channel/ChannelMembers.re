@@ -129,23 +129,35 @@ module Columns = {
       flex: 1,
     };
 
-  let all = channelId => [|
-    agentColumn,
-    roleColumn,
-    roleChangeColumn(channelId),
-    removeFromChannelColumn(channelId),
-  |];
+  let all = (channelId, channel: Context.Primary.Types.channel) => {
+    switch (channel.myRole) {
+    | Some(`ADMIN) => [|
+        agentColumn,
+        roleColumn,
+        roleChangeColumn(channelId),
+        removeFromChannelColumn(channelId),
+      |]
+    | _ => [|agentColumn, roleColumn|]
+    };
+  };
 };
 
 let make =
     (~channelId: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
+    let load2Queries = (channelId, fn) =>
+      ((a, b) => (a, b) |> fn)
+      |> E.F.flatten2Callbacks(
+           Queries.Channel.component2(~id=channelId),
+           Queries.ChannelMemberships.component(~id=channelId),
+         );
+
     let table =
-      Queries.ChannelMemberships.component(~id=channelId, memberships =>
+      load2Queries(channelId, ((channel, memberships)) =>
         memberships
         |> E.HttpResponse.fmap(memberships =>
-             Table.fromColumns(Columns.all(channelId), memberships)
+             Table.fromColumns(Columns.all(channelId, channel), memberships)
            )
         |> E.HttpResponse.withReactDefaults
       );

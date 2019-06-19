@@ -40,14 +40,17 @@ module O = {
 /* Functions */
 module F = {
   let apply = (a, e) => a |> e;
+
   let flatten2Callbacks = (fn1, fn2, fnlast) =>
     fn1(response1 => fn2(response2 => fnlast(response1, response2)));
+
   let flatten3Callbacks = (fn1, fn2, fn3, fnlast) =>
     fn1(response1 =>
       fn2(response2 =>
         fn3(response3 => fnlast(response1, response2, response3))
       )
     );
+
   let flatten4Callbacks = (fn1, fn2, fn3, fn4, fnlast) =>
     fn1(response1 =>
       fn2(response2 =>

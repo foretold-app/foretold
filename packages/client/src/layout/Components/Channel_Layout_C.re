@@ -1,5 +1,4 @@
 open SLayout;
-open Utils;
 open Style.Grid;
 open Rationale.Function.Infix;
 
@@ -14,6 +13,7 @@ let make =
   ...component,
   render: _ => {
     let channelId = channelPage.channelId;
+
     let topOption =
       Context.Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
 
@@ -22,6 +22,7 @@ let make =
 
     let joinButton = channelId =>
       C.Channel.SimpleHeader.joinChannel(channelId);
+
     let leaveButton = channelId =>
       C.Channel.SimpleHeader.leaveChannel(channelId);
 
@@ -29,18 +30,14 @@ let make =
       <>
         <Div float=`left> {channelink(channel)} </Div>
         <Div float=`right>
-          {
-            channel.myRole === Some(`NONE) ?
-              joinButton(channel.id) :
-              <>
-                {
-                  Foretold__Components__Channel.SimpleHeader.newMeasurable(
+          {channel.myRole === Some(`NONE)
+             ? joinButton(channel.id)
+             : <>
+                 {Foretold__Components__Channel.SimpleHeader.newMeasurable(
                     channel.id,
-                  )
-                }
-                {leaveButton(channel.id)}
-              </>
-          }
+                  )}
+                 {leaveButton(channel.id)}
+               </>}
         </Div>
       </>;
 

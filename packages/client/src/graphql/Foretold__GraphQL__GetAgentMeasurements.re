@@ -1,5 +1,3 @@
-type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
-
 type measurable = {
   id: string,
   name: string,
@@ -26,7 +24,7 @@ type connection('a) =
 type node = {
   id: string,
   relevantAt: option(MomentRe.Moment.t),
-  competitorType,
+  competitorType: Context.Primary.CompetitorType.t,
   description: option(string),
   createdAt: MomentRe.Moment.t,
   taggedMeasurementId: option(string),

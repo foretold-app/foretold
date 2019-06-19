@@ -1,4 +1,3 @@
-open Utils;
 open Foretold__GraphQL;
 
 let ste = ReasonReact.string;
@@ -46,15 +45,22 @@ let removeFromChannel = (agentId, channelId) =>
 
 module Columns = {
   type column = Table.column(Context.Primary.Types.channelMembership);
-  let canX = (x, record: Context.Primary.Types.channelMembership) =>
+
+  let canX =
+      (
+        permission: Context.Primary.permission,
+        record: Context.Primary.Types.channelMembership,
+      ) =>
     record.permissions
-    |> E.O.fmap(r => Context.Primary.Permissions.canX(x, r))
+    |> E.O.fmap((permissions: Context.Primary.Permissions.t) =>
+         Context.Primary.Permissions.canX(permission, permissions)
+       )
     |> E.O.default(false);
 
   let agentColumn: column = {
     name: "Agent" |> ste,
-    render: m =>
-      m.agent
+    render: membership =>
+      membership.agent
       |> E.O.fmap((r: Context.Primary.Types.agent) =>
            <Foretold__Components__Link
              linkType={Internal(Agent({agentId: r.id, subPage: AgentShow}))}>
@@ -67,8 +73,8 @@ module Columns = {
 
   let roleColumn: column = {
     name: "Role" |> ste,
-    render: m =>
-      switch (m.role) {
+    render: membership =>
+      switch (membership.role) {
       | `ADMIN =>
         <div className="ant-tag ant-tag-blue"> {"Admin" |> ste} </div>
       | `VIEWER =>
@@ -80,33 +86,31 @@ module Columns = {
   let roleChangeColumn: string => column =
     channelId => {
       name: "Change Role" |> ste,
-      render: m =>
+      render: membership =>
         <div>
-          {
-            switch (m.role, m.agent) {
-            | (`VIEWER, Some(agent)) =>
-              E.React.showIf(
-                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
-                changeRoleAction(
-                  agent.id,
-                  channelId,
-                  `ADMIN,
-                  "Change to Admin",
-                ),
-              )
-            | (`ADMIN, Some(agent)) =>
-              E.React.showIf(
-                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
-                changeRoleAction(
-                  agent.id,
-                  channelId,
-                  `VIEWER,
-                  "Change to Viewer",
-                ),
-              )
-            | _ => <div />
-            }
-          }
+          {switch (membership.role, membership.agent) {
+           | (`VIEWER, Some(agent)) =>
+             E.React.showIf(
+               canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, membership),
+               changeRoleAction(
+                 agent.id,
+                 channelId,
+                 `ADMIN,
+                 "Change to Admin",
+               ),
+             )
+           | (`ADMIN, Some(agent)) =>
+             E.React.showIf(
+               canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, membership),
+               changeRoleAction(
+                 agent.id,
+                 channelId,
+                 `VIEWER,
+                 "Change to Viewer",
+               ),
+             )
+           | _ => <div />
+           }}
         </div>,
       flex: 1,
     };
@@ -114,8 +118,11 @@ module Columns = {
   let removeFromChannelColumn: string => column =
     channelId => {
       name: "Remove" |> ste,
-      render: m =>
-        switch (m.agent, canX(`CHANNEL_MEMBERSHIP_DELETE, m)) {
+      render: membership =>
+        switch (
+          membership.agent,
+          canX(`CHANNEL_MEMBERSHIP_DELETE, membership),
+        ) {
         | (Some(agent), true) => removeFromChannel(agent.id, channelId)
         | _ => ReasonReact.null
         },
@@ -153,20 +160,17 @@ let make =
           </FC.Base.Div>
           <FC.Base.Div
             float=`right
-            className={
-              Css.style([
-                FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-              ])
-            }>
+            className={Css.style([
+              FC.PageCard.HeaderRow.Styles.itemTopPadding,
+              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            ])}>
             <FC.Base.Button
               variant=Primary
-              onClick={
-                e =>
-                  Foretold__Components__Link.LinkType.onClick(
-                    Internal(ChannelInvite(channelId)),
-                    e,
-                  )
+              onClick={e =>
+                Foretold__Components__Link.LinkType.onClick(
+                  Internal(ChannelInvite(channelId)),
+                  e,
+                )
               }>
               {"Add Members" |> ste}
             </FC.Base.Button>

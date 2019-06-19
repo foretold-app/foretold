@@ -14,6 +14,7 @@ module Styles = {
       [padding2(~v=`em(1.5), ~h=`em(1.5))]
       @ FC.Base.BaseStyles.fullWidthFloatLeft,
     );
+  let description = style([paddingTop(`em(1.5))]);
 };
 
 let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
@@ -22,21 +23,28 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
     Queries.MeasurableWithMeasurements.component(~id)
     |> E.F.apply(m =>
          <>
-           <Div flexDirection=`row styles=[Styles.header]>
-             <Div flex=3>
-               <FC.PageCard.H1> {Items.link(~m)} </FC.PageCard.H1>
-               <StatusDisplay measurable=m />
-               <FC.PageCard.P>
-                 {Items.description(~m) |> E.O.React.defaultNull}
-               </FC.PageCard.P>
+           <Div styles=[Styles.header]>
+             <Div flexDirection=`row>
+               <Div flex=3>
+                 <FC.PageCard.H1> {Items.link(~m)} </FC.PageCard.H1>
+                 <StatusDisplay measurable=m />
+               </Div>
+               <Div flex=1>
+                 {Items.series(~m, ()) |> E.O.React.defaultNull}
+                 {Items.creatorLink(~m) |> E.O.React.defaultNull}
+                 {Items.resolutionEndpoint(~m) |> E.O.React.defaultNull}
+                 {Items.endpointResponse(~m) |> E.O.React.defaultNull}
+                 {Items.id(~m, ())}
+               </Div>
              </Div>
-             <Div flex=1>
-               {Items.series(~m, ()) |> E.O.React.defaultNull}
-               {Items.creatorLink(~m) |> E.O.React.defaultNull}
-               {Items.resolutionEndpoint(~m) |> E.O.React.defaultNull}
-               {Items.endpointResponse(~m) |> E.O.React.defaultNull}
-               {Items.id(~m, ())}
-             </Div>
+             {
+               Items.description(~m)
+               |> E.O.React.fmapOrNull(d =>
+                    <Div styles=[Styles.description]>
+                      <FC.PageCard.P> d </FC.PageCard.P>
+                    </Div>
+                  )
+             }
            </Div>
            <>
              {
@@ -48,7 +56,6 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                userAgentId == creatorId
                || Context.Primary.Measurable.toStatus(m) !== `JUDGED ?
                  <>
-                   {"Add a Prediction" |> ste |> E.React.inH2}
                    <Foretold__Components__Measurement__Form
                      measurableId=id
                      isCreator={userAgentId == creatorId}

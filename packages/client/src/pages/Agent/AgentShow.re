@@ -16,7 +16,7 @@ module GetMeasurablesReducerConfig = {
 module SelectWithPaginationReducer =
   SelectWithPaginationReducerFunctor.Make(GetMeasurablesReducerConfig);
 
-let component = ReasonReact.statelessComponent("AgentMeasurables2");
+let component = ReasonReact.statelessComponent("AgentShow");
 type pageParams = {id: string};
 
 let make =

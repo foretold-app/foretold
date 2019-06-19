@@ -46,7 +46,7 @@ let unpackEdges = (a: connection('a)): array('a) => {
 
 module Query = [%graphql
   {|
-    query getAgent ($id: String!, $first: Int, $last: Int, $after: String, $before: String) {
+    query getAgentMeasurements ($id: String!, $first: Int, $last: Int, $after: String, $before: String) {
         agent:
         agent(id: $id) @bsRecord{
             measurements: Measurements (first: $first, last: $last, after: $after, before: $before) {

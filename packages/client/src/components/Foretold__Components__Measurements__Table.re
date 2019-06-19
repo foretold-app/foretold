@@ -241,9 +241,9 @@ let getItems = (ms: list(measurement), ~makeItem) => {
   |> ReasonReact.array;
 };
 
-let getItems2 = (ms: list(measurement), ~makeItem) => {
-  let _bounds = Helpers.bounds(ms |> E.A.of_list);
-  ms
+let getItems2 = (measurementsList: list(measurement), ~makeItem) => {
+  let _bounds = Helpers.bounds(measurementsList |> E.A.of_list);
+  measurementsList
   |> E.L.sort(sort)
   |> E.L.fmap((m: measurement) => makeItem(m, _bounds))
   |> E.A.of_list
@@ -315,9 +315,6 @@ let make2 =
         {Helpers.statSummary(m) |> E.O.React.defaultNull}
       </FC.Table.Cell>
       <FC.Table.Cell flex=1 className=primaryCellStyle>
-        {Helpers.measurerLink(~m)}
-      </FC.Table.Cell>
-      <FC.Table.Cell flex=1 className=primaryCellStyle>
         {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
       </FC.Table.Cell>
     </FC.Table.RowLink>;
@@ -334,7 +331,6 @@ let make2 =
           {"Prediction Distribution" |> ste}
         </FC.Table.Cell>
         <FC.Table.Cell flex=1> {"Prediction Value" |> ste} </FC.Table.Cell>
-        <FC.Table.Cell flex=1> {"Agent" |> ste} </FC.Table.Cell>
         <FC.Table.Cell flex=1> {"Time" |> ste} </FC.Table.Cell>
       </FC.Table.HeaderRow>
       items

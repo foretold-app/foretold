@@ -33,10 +33,10 @@ module Types = {
   type measurements = option({. "edges": option(Js.Array.t(measurement))});
 };
 
-let toMeasurement = (m: Types.measurement): Context.Primary.Measurement.t => {
+let toMeasurement =
+    (measurement: Types.measurement): Context.Primary.Measurement.t => {
   open Context.Primary.Agent;
-  let measurement = m;
-  let agent = m##agent;
+  let agent = measurement##agent;
   let agentType: option(Context.Primary.AgentType.t) =
     agent
     |> E.O.bind(_, k =>
@@ -64,7 +64,9 @@ let toMeasurement = (m: Types.measurement): Context.Primary.Measurement.t => {
 
   let agent: option(Context.Primary.Agent.t) =
     agent
-    |> E.O.fmap(k => Context.Primary.Agent.make(~id=k##id, ~agentType, ()));
+    |> Rationale.Option.fmap(k =>
+         Context.Primary.Agent.make(~id=k##id, ~agentType, ())
+       );
 
   Context.Primary.Measurement.make(
     ~id=measurement##id,
@@ -81,8 +83,20 @@ let toMeasurement = (m: Types.measurement): Context.Primary.Measurement.t => {
 
 module Query = [%graphql
   {|
-    query getMeasurements($measurableId: String, $first: Int, $last: Int, $after: String, $before: String) {
-        measurements: measurements(measurableId: $measurableId,first: $first, last: $last, after: $after, before: $before) {
+    query getMeasurements(
+        $measurableId: String
+        $first: Int
+        $last: Int
+        $after: String
+        $before: String
+     ) {
+        measurements: measurements(
+            measurableId: $measurableId
+            first: $first
+            last: $last
+            after: $after
+            before: $before
+        ) {
           total
           pageInfo{
             hasPreviousPage
@@ -131,17 +145,19 @@ type measurementEdges =
   Client.Context.Primary.Connection.edges(Types.measurement);
 
 let queryToComponent = (query, innerComponentFn) =>
-  QueryComponent.make(~variables=query##variables, o =>
-    o.result
+  QueryComponent.make(~variables=query##variables, response =>
+    response.result
     |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(e =>
-         e##measurements
-         |> E.O.fmap(Context.Primary.Connection.fromJson(toMeasurement))
+    |> Rationale.Result.fmap(result =>
+         result##measurements
+         |> Rationale.Option.fmap(
+              Context.Primary.Connection.fromJson(toMeasurement),
+            )
          |> innerComponentFn
        )
     |> E.R.id
   )
-  |> E.React.el;
+  |> ReasonReact.element;
 
 type measurableStates = Context.Primary.MeasurableState.t;
 
@@ -159,17 +175,19 @@ let queryDirection = (~pageLimit, ~direction, ~fn: inputType('a), ()) =>
   };
 
 let componentMaker = (query, innerComponentFn) =>
-  QueryComponent.make(~variables=query##variables, o =>
-    o.result
+  QueryComponent.make(~variables=query##variables, response =>
+    response.result
     |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(e =>
-         e##measurements
-         |> E.O.fmap(Context.Primary.Connection.fromJson(toMeasurement))
+    |> Rationale.Result.fmap(result =>
+         result##measurements
+         |> Rationale.Option.fmap(
+              Context.Primary.Connection.fromJson(toMeasurement),
+            )
          |> innerComponentFn
        )
     |> E.R.id
   )
-  |> E.React.el;
+  |> ReasonReact.element;
 
 let component =
     (~measurableId, ~pageLimit, ~direction: direction, ~innerComponentFn) => {

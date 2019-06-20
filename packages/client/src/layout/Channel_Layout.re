@@ -56,10 +56,7 @@ let makeWithPage =
       let layout =
         Channel_Layout_C.makeWithEl(channelPage, loggedInUser, None);
 
-      SLayout.LayoutConfig.make(
-        ~head=<div />,
-        ~body=<div> {"Loading..." |> ReasonReact.string} </div>,
-      )
+      SLayout.LayoutConfig.make(~head=<div />, ~body=<SLayout.Spin />)
       |> layout;
     };
 

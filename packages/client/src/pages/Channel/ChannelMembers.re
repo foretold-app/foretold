@@ -205,11 +205,7 @@ let errorFn = (layout, _) => {
 };
 
 let loadingFn = (layout, _) => {
-  SLayout.LayoutConfig.make(
-    ~head=<div />,
-    ~body=<div> {"Loading..." |> ReasonReact.string} </div>,
-  )
-  |> layout;
+  SLayout.LayoutConfig.make(~head=<div />, ~body=<SLayout.Spin />) |> layout;
 };
 
 let make =

@@ -90,7 +90,7 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let toMesuarements = (measurements: array(node)) => {
+let toMeasurements = (measurements: array(node)) => {
   measurements
   |> Array.map(n =>
        Context.Primary.Measurement.make(
@@ -126,7 +126,7 @@ let unpackConnection = responseResult => {
 
   let measurements =
     measurementsEdges
-    |> Rationale.Option.fmap(toMesuarements)
+    |> Rationale.Option.fmap(toMeasurements)
     |> E.A.O.defaultEmpty;
 
   // @todo:

@@ -100,7 +100,7 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let toMesuarements = (measurements: array(node)) => {
+let toMeasurements = (measurements: array(node)) => {
   let r = measurements;
   let standardMeasurements =
     r
@@ -148,7 +148,7 @@ let component = (~id, innerFn) => {
          let agent = e##agent;
          let measurementsEdges: option(array(node)) =
            agent |> E.O.fmap(agent => agent.measurements |> unpackEdges);
-         let measurements = measurementsEdges |> E.O.fmap(toMesuarements);
+         let measurements = measurementsEdges |> E.O.fmap(toMeasurements);
 
          switch (agent, measurements) {
          | (Some(a), Some(b)) => Some({agent: a, measurementsList: b})

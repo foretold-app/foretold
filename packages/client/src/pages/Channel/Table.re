@@ -47,8 +47,8 @@ let fromColumns = (columns: array(column('a)), rows: array('a)) =>
     <FC.Table.HeaderRow>
       {columns
        |> Array.map((c: column('a)) => c.name)
-       |> Array.mapi((i, name) =>
-            <FC.Table.Cell flex=1 key={i |> string_of_int}>
+       |> Array.mapi((index, name) =>
+            <FC.Table.Cell flex=1 key={index |> string_of_int}>
               name
             </FC.Table.Cell>
           )

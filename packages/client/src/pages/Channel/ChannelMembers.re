@@ -153,19 +153,13 @@ let make =
            Queries.ChannelMemberships.component(~id=channelId),
          );
 
-    //        memberships
-    //        |> E.HttpResponse.fmap(memberships =>
-    //             Table.fromColumns(Columns.all(channelId, channel), memberships)
-    //           )
-    //        |> E.HttpResponse.withReactDefaults
-
     let table =
       load2Queries(channelId, ((channel, memberships)) =>
-        switch (channel, memberships) {
-        | (Success(channel), Success(memberships)) =>
-          <div> {"ok" |> ReasonReact.string} </div>
-        | _ => <div />
-        }
+        E.HttpResponse.merge2(channel, memberships)
+        |> E.HttpResponse.fmap(((channel, memberships)) =>
+             Table.fromColumns(Columns.all(channelId, channel), memberships)
+           )
+        |> E.HttpResponse.withReactDefaults
       );
 
     SLayout.LayoutConfig.make(

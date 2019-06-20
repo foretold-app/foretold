@@ -5,12 +5,12 @@ open Style.Grid;
 
 let block = style([marginBottom(`em(1.0))]);
 
-let agentSection = (e: Queries.Agent.agent) =>
-  switch (e) {
-  | {user: Some(r)} =>
+let agentSection = (agent: Queries.Agent.agent) =>
+  switch (agent) {
+  | {user: Some(_user)} =>
     <>
       {E.React.showIf(
-         e.isMe,
+         agent.isMe,
          <Div float=`right>
            <Antd.Button
              onClick={_ => Context.Routing.Url.push(BotCreate)}
@@ -28,6 +28,7 @@ let component = ReasonReact.statelessComponent("AgentBots");
 module Columns = {
   type record = Context.Primary.Bot.t;
   type column = Table.column(Context.Primary.Bot.t);
+
   let nameColumn: column = {
     name: "Name" |> ste,
     render: (r: record) =>
@@ -43,15 +44,18 @@ module Columns = {
       },
     flex: 1,
   };
+
   let descriptionColumn: column = {
     name: "Description" |> ste,
-    render: (r: record) => r.description |> E.O.default("") |> ste,
+    render: (r: record) =>
+      r.description |> Rationale.Option.default("") |> ste,
     flex: 2,
   };
 
   let tokenColumn: column = {
     name: "Token" |> ste,
-    render: (r: record) => <Antd.Input value={r.token |> E.O.default("")} />,
+    render: (r: record) =>
+      <Antd.Input value={r.token |> Rationale.Option.default("")} />,
     flex: 2,
   };
 

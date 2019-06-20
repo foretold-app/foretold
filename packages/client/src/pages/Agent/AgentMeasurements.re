@@ -15,7 +15,7 @@ module ReducerConfig = {
 
 module Reducer = SelectWithPaginationReducerFunctor.Make(ReducerConfig);
 
-let component = ReasonReact.statelessComponent("AgentShow");
+let component = ReasonReact.statelessComponent("AgentMeasurements");
 type pageParams = {id: string};
 
 let make =

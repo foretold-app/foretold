@@ -47,7 +47,10 @@ let make =
             <Foretold__Components__Link
               linkType={
                 Internal(
-                  Agent({agentId: record##agentId, subPage: AgentShow}),
+                  Agent({
+                    agentId: record##agentId,
+                    subPage: AgentMeasurements,
+                  }),
                 )
               }>
               {record##agentName |> ste}

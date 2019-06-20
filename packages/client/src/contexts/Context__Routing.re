@@ -6,7 +6,7 @@ type agentId = string;
 module AgentPage = {
   module SubPage = {
     type t =
-      | AgentShow
+      | AgentMeasurements
       | AgentMeasurables
       | AgentBots;
   };
@@ -116,7 +116,7 @@ module Route = {
       Channel({channelId, subPage: NewSeries})
     | ["c", channelId, "s", seriesId] =>
       Channel({channelId, subPage: Series(seriesId)})
-    | ["agents", agentId] => Agent({agentId, subPage: AgentShow})
+    | ["agents", agentId] => Agent({agentId, subPage: AgentMeasurements})
     | ["agents", agentId, "bots"] => Agent({agentId, subPage: AgentBots})
     | ["agents", agentId, "measurables"] =>
       Agent({agentId, subPage: AgentMeasurables})
@@ -156,7 +156,7 @@ module Url = {
     | BotCreate => "/bots/new"
     | EntityIndex => "/entities"
     | EntityShow(id) => "/entities/" ++ id
-    | Agent({agentId, subPage: AgentShow}) => "/agents/" ++ agentId
+    | Agent({agentId, subPage: AgentMeasurements}) => "/agents/" ++ agentId
     | Agent({agentId, subPage: AgentBots}) => "/agents/" ++ agentId ++ "/bots"
     | Agent({agentId, subPage: AgentMeasurables}) =>
       "/agents/" ++ agentId ++ "/measurables"

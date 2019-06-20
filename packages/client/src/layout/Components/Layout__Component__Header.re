@@ -39,14 +39,15 @@ let link = (linkType: C.Link.linkType, str) =>
 let userDropdown = agentId =>
   <div className=Layout__Dropdown.Styles.actions>
     {link(Internal(Profile), "Profile")}
-    {
-      link(
-        Internal(Agent({agentId, subPage: AgentMeasurables})),
-        "My Questions",
-      )
-    }
+    {link(
+       Internal(Agent({agentId, subPage: AgentMeasurables})),
+       "My Questions",
+     )}
     {link(Internal(Agent({agentId, subPage: AgentBots})), "My Bots")}
-    {link(Internal(Agent({agentId, subPage: AgentShow})), "My Predictions")}
+    {link(
+       Internal(Agent({agentId, subPage: AgentMeasurements})),
+       "My Predictions",
+     )}
     {link(Internal(ChannelNew), "Make a New Channel")}
     {link(Action(_ => Context.Auth.Actions.logout()), "Logout")}
   </div>;
@@ -57,14 +58,10 @@ let header = (loggedInUser: Context.Primary.User.t) =>
     <AntdDropdown
       overlay={userDropdown(agent.id)}
       overlayClassName=Layout__Dropdown.Styles.dropdown>
-      {
-        agent.name
-        |> (e => e == Some("") ? None : e)
-        |> E.O.default(
-             "Settings (Please add a Username on the Profile page)",
-           )
-        |> ste
-      }
+      {agent.name
+       |> (e => e == Some("") ? None : e)
+       |> E.O.default("Settings (Please add a Username on the Profile page)")
+       |> ste}
       <Icon.Icon icon="CHEVRON_DOWN" />
     </AntdDropdown>
   | None => ReasonReact.null

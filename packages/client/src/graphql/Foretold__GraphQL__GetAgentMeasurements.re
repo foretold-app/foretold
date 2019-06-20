@@ -6,7 +6,7 @@ type measurable = {
   expectedResolutionDate: option(MomentRe.Moment.t),
 };
 
-// @todo:
+// @todo: Use Context.Primary.Connection.t in a righ way
 type connection('a) =
   option({
     .
@@ -129,7 +129,7 @@ let unpackConnection = responseResult => {
     |> Rationale.Option.fmap(toMeasurements)
     |> E.A.O.defaultEmpty;
 
-  // @todo:
+  // @todo: Use Context.Primary.Connection.toJson() method.
   let pageInfo =
     Context.Primary.PageInfo.fromJson({
       "endCursor": Some("end"),

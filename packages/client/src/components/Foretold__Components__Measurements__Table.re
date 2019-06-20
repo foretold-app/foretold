@@ -21,7 +21,7 @@ module Styles = {
       marginTop(`px(5)),
       selector(
         " p",
-        [color(`rgba((80, 80, 80, 0.78))), marginBottom(`px(0))],
+        [color(`rgba((80, 80, 80, 0.78))), marginBottom(`px(10))],
       ),
     ]);
 
@@ -83,7 +83,7 @@ module Helpers = {
     | Some(description) =>
       Some(
         <div className=Styles.descriptionStyle>
-          {description |> ste |> E.React.inP}
+          <ReactMarkdown.Markdown source=description />
         </div>,
       )
     };

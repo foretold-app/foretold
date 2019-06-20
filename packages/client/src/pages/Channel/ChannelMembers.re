@@ -173,7 +173,7 @@ let make =
         <>
           <FC.Base.Div float=`left>
             <FC.PageCard.HeaderRow.Title>
-              {"Channel Members" |> ste}
+              {"Community Members" |> ste}
             </FC.PageCard.HeaderRow.Title>
           </FC.Base.Div>
           <FC.Base.Div

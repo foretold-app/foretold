@@ -24,7 +24,7 @@ module SimpleHeader = {
               mutation,
               channelId,
             ),
-        [|"Leave Channel" |> ReasonReact.string|],
+        [|"Leave Community" |> ReasonReact.string|],
       )
       |> E.React.el
     )
@@ -39,7 +39,7 @@ module SimpleHeader = {
               mutation,
               channelId,
             ),
-        [|"Join Channel" |> ReasonReact.string|],
+        [|"Join Community" |> ReasonReact.string|],
       )
       |> E.React.el
     )

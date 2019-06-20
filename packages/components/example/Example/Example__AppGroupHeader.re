@@ -14,7 +14,7 @@ let make =
               color(Colors.darkLink),
             ])
           )>
-          {"Great Group" |> ReasonReact.string}
+          {"Great Community" |> ReasonReact.string}
         </div>
         <p
           className=Css.(

@@ -7,7 +7,7 @@ let make =
         [|
           AppHeader.link(
             ~href="#",
-            [|"Public Channels" |> ReasonReact.string|],
+            [|"Public Groups" |> ReasonReact.string|],
           )
           |> ReasonReact.element,
           AppHeader.link(

@@ -146,13 +146,6 @@ module Columns = {
   };
 };
 
-let load2Queries = (channelId, fn) =>
-  ((channel, memberships) => (channel, memberships) |> fn)
-  |> E.F.flatten2Callbacks(
-       Queries.Channel.component2(~id=channelId),
-       Queries.ChannelMemberships.component(~id=channelId),
-     );
-
 let title = () =>
   <FC.Base.Div float=`left>
     <FC.PageCard.HeaderRow.Title>
@@ -181,9 +174,10 @@ let addMembersButtonSection = (channelId: string) =>
 
 let succesFn =
     (
-      channelId: string,
-      layout,
-      (channel: Context.Primary.Types.channel, memberships),
+      ~channelId: string,
+      ~layout,
+      ~channel: Context.Primary.Types.channel,
+      ~memberships,
     ) => {
   let head =
     switch (channel.myRole) {
@@ -219,13 +213,19 @@ let loadingFn = (layout, _) => {
 };
 
 let make =
-    (~channelId: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
+    (
+      ~channelId: string,
+      ~layout=SLayout.FullPage.makeWithEl,
+      ~channel: Context.Primary.Channel.t,
+      _children,
+    ) => {
   ...component,
   render: _ => {
-    load2Queries(channelId, ((channel, memberships)) =>
-      E.HttpResponse.merge2(channel, memberships)
+    Queries.ChannelMemberships.component(~id=channelId, result =>
+      result
       |> E.HttpResponse.flatten(
-           succesFn(channelId, layout),
+           memberships =>
+             succesFn(~channelId, ~layout, ~channel, ~memberships),
            errorFn(layout),
            loadingFn(layout),
          )

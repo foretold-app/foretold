@@ -61,7 +61,9 @@ module Columns = {
       membership.agent
       |> Rationale.Option.fmap((r: Context.Primary.Types.agent) =>
            <Foretold__Components__Link
-             linkType={Internal(Agent({agentId: r.id, subPage: AgentShow}))}>
+             linkType={
+               Internal(Agent({agentId: r.id, subPage: AgentMeasurements}))
+             }>
              {r.name
               |> Rationale.Option.default("Anonymous")
               |> ReasonReact.string}

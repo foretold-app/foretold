@@ -192,8 +192,9 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
         </Form.Item>,
       )
     }
-    <Form.Item label="Description">
-      <Input
+    <Form.Item label="Description" help="Markdown supported.">
+      <Input.TextArea
+        style={ReactDOMRe.Style.make(~minHeight="16em", ())}
         value={form.values.labelCustom}
         onChange={
           ReForm.Helpers.handleDomFormChange(handleChange(`labelCustom))

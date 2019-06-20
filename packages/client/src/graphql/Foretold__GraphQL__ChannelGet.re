@@ -39,7 +39,7 @@ let component = (~id, fn) => {
     |> E.R.bind(_, e =>
          switch (e##channel |> E.O.fmap(toChannel)) {
          | Some(r) => Ok(r)
-         | None => Error("Channel Not Found" |> ste)
+         | None => Error("Community Not Found" |> ste)
          }
        )
     |> E.R.fmap(fn)

@@ -70,7 +70,7 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
       <div className=Styles.minorHeader>
         <C.Link
           linkType={Internal(ChannelIndex)} className=Styles.minorHeaderLink>
-          {"Channels" |> ste}
+          {"Communities" |> ste}
         </C.Link>
       </div>
       <div className=Styles.over>

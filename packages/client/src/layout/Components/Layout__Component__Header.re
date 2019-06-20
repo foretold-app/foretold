@@ -73,7 +73,7 @@ let make = (~loggedInUser: Context.Primary.User.t, _children) => {
     <Div styles=[Styles.outer]>
       <Div float=`left>
         <C.Link linkType={Internal(ChannelIndex)} className=Styles.headerLink>
-          {"Public Channels" |> ste}
+          {"Public Groups" |> ste}
         </C.Link>
       </Div>
       <Div float=`left>

@@ -1,5 +1,6 @@
 open Utils;
 open Context.Primary;
+open ReactMarkdown;
 
 module Shared = Foretold__Components__Shared;
 
@@ -75,7 +76,7 @@ let description = (~m: measurable) =>
   switch (m.labelCustom) {
   | Some("")
   | None => None
-  | Some(text) => Some(text |> ste |> E.React.inP)
+  | Some(text) => Some(<Markdown source=text />)
   };
 
 let endpointResponse = (~m: measurable) =>

@@ -26,7 +26,7 @@ let make = (~channelId: string, ~layout, _children) => {
       <>
         <FC.Base.Div float=`left>
           <FC.PageCard.HeaderRow.Title>
-            {"Edit Channel" |> ste}
+            {"Edit Community" |> ste}
           </FC.PageCard.HeaderRow.Title>
         </FC.Base.Div>
         <FC.Base.Div
@@ -81,7 +81,7 @@ let make = (~channelId: string, ~layout, _children) => {
                   ~result=data.result,
                   ~form=
                     ChannelForm.showForm(~form, ~handleSubmit, ~handleChange),
-                  ~successMessage="Channel edited successfully.",
+                  ~successMessage="Community edited successfully.",
                   (),
                 )
               )

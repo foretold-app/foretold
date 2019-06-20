@@ -48,7 +48,7 @@ module Styles = {
       style(
         [
           padding2(~v=`zero, ~h=`em(0.4)),
-          paddingBottom(`em(0.4)),
+          paddingBottom(`em(0.3)),
           borderBottom(`px(1), `solid, Colors.accentBlueO8),
           display(`flex),
           flexDirection(`row),

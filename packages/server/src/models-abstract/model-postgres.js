@@ -36,6 +36,15 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @todo: see this.channelIds()
+   * @param {Models.ObjectID} [agentId]
+   * @return {Sequelize.literal}
+   */
+  channelIdsLiteral(agentId) {
+    return this.literal(this.channelIds(agentId));
+  }
+
+  /**
    * @todo: Use ORM opportunities to join tables.
    * @param {Models.ObjectID} [agentId]
    * @return {string}
@@ -54,11 +63,32 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: see this.channelIds()
+   * @param {Models.ObjectID} channelId
+   * @return {Sequelize.literal}
+   */
+  agentsIdsLiteral(channelId) {
+    return this.literal(this.agentsIds(channelId));
+  }
+
+  /**
+   * @todo: Use ORM opportunities to join tables.
+   * @param {Models.ObjectID} channelId
+   * @return {string}
+   */
+  agentsIds(channelId) {
+    return `(
+      SELECT "ChannelMemberships"."agentId" FROM "ChannelMemberships"
+      WHERE "ChannelMemberships"."channelId" = '${channelId}'
+    )`;
+  }
+
+  /**
+   * @todo: see this.channelIds()
    * @param {Models.ObjectID} [agentId]
    * @return {Sequelize.literal}
    */
-  channelIdsLiteral(agentId) {
-    return this.literal(this.channelIds(agentId));
+  measurableIdsLiteral(agentId) {
+    return this.literal(this.measurableIds(agentId));
   }
 
   /**
@@ -79,20 +109,6 @@ class ModelPostgres extends Model {
    * @param {Models.ObjectID} [agentId]
    * @return {string}
    */
-  taggedMeasurements(agentId) {
-    return `(
-      SELECT "taggedMeasurementId"
-      FROM "Measurements"
-      WHERE "agentId" = '${agentId}'
-      AND "taggedMeasurementId" IS NOT NULL
-    )`;
-  }
-
-  /**
-   * @todo: see this.channelIds()
-   * @param {Models.ObjectID} [agentId]
-   * @return {string}
-   */
   taggedMeasurementsLiteral(agentId) {
     return this.literal(this.taggedMeasurements(agentId));
   }
@@ -100,10 +116,15 @@ class ModelPostgres extends Model {
   /**
    * @todo: see this.channelIds()
    * @param {Models.ObjectID} [agentId]
-   * @return {Sequelize.literal}
+   * @return {string}
    */
-  measurableIdsLiteral(agentId) {
-    return this.literal(this.measurableIds(agentId));
+  taggedMeasurements(agentId) {
+    return `(
+      SELECT "taggedMeasurementId"
+      FROM "Measurements"
+      WHERE "agentId" = '${agentId}'
+      AND "taggedMeasurementId" IS NOT NULL
+    )`;
   }
 
   /**
@@ -157,6 +178,38 @@ class ModelPostgres extends Model {
     }
 
     return include;
+  }
+
+  /**
+   * @protected
+   * @param {object} [where]
+   * @param {Layers.AbstractModelsLayer.filter} [filter]
+   * @param {Models.ObjectID} [filter.userId]
+   */
+  applyFilter(where = {}, filter = {}) {
+    if (!where) where = {};
+    if (!where[this.and]) where[this.and] = [];
+
+    if (filter.isArchived) {
+      where.isArchived = {
+        [this.in]: this.getBooleansOfList(filter.isArchived),
+      };
+    }
+
+    // @todo: todo?
+    if (filter.excludeChannelId) {
+      where[this.and].push({
+        id: {
+          [this.notIn]: this.agentsIdsLiteral(filter.excludeChannelId),
+        },
+      });
+    }
+
+    if (filter.userId) {
+      where.userId = filter.userId;
+    }
+
+    return where;
   }
 
   /**
@@ -214,29 +267,6 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @param {object} [where]
-   * @param {object} [filter]
-   * @param {string[]} [filter.isArchived]
-   * @param {Models.ObjectID} [filter.userId]
-   */
-  applyFilter(where = {}, filter = {}) {
-    if (!where) where = {};
-
-    if (filter.isArchived) {
-      where.isArchived = {
-        [this.in]: this.getBooleansOfList(filter.isArchived),
-      };
-    }
-
-    if (filter.userId) {
-      where.userId = filter.userId;
-    }
-
-    return where;
-  }
-
-  /**
-   * @protected
    * @param {*[]} list
    * @return {*[]}
    */
@@ -287,14 +317,17 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param {object} filter
-   * @param {object} [pagination]
-   * @param {object} [restrictions]
+   * @param {Layers.AbstractModelsLayer.filter} filter
+   * @param {Layers.AbstractModelsLayer.pagination} [pagination]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {Promise<void>}
    */
   async getAll(filter = {}, pagination = {}, restrictions = {}) {
     const where = {};
+
     this.applyRestrictions(where, restrictions);
+    this.applyFilter(where, filter);
+
     return await this.model.findAll({
       limit: pagination.limit,
       offset: pagination.offset,
@@ -348,7 +381,9 @@ class ModelPostgres extends Model {
     const where = { ...params };
     const sort = query.sort === 1 ? 'ASC' : 'DESC';
     const order = [['createdAt', sort]];
+
     this.applyRestrictions(where, restrictions);
+
     return await this.model.findOne({
       where,
       order,

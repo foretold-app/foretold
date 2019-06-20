@@ -1,40 +1,36 @@
-module Types = {
-  type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
-  type measurement = {
-    .
-    "id": string,
-    "agent":
-      option({
-        .
-        "bot":
-          option({
-            .
-            "id": string,
-            "name": string,
-            "competitorType": competitorType,
-          }),
-        "id": string,
-        "name": option(string),
-        "user":
-          option({
-            .
-            "id": string,
-            "name": string,
-          }),
-      }),
-    "description": option(string),
-    "relevantAt": option(MomentRe.Moment.t),
-    "competitorType": competitorType,
-    "createdAt": MomentRe.Moment.t,
-    "taggedMeasurementId": option(string),
-    "value": MeasurementValue.graphQlResult,
-  };
-
-  type measurements = option({. "edges": option(Js.Array.t(measurement))});
+type measurement = {
+  .
+  "id": string,
+  "agent":
+    option({
+      .
+      "bot":
+        option({
+          .
+          "id": string,
+          "name": string,
+          "competitorType": Context.Primary.CompetitorType.t,
+        }),
+      "id": string,
+      "name": option(string),
+      "user":
+        option({
+          .
+          "id": string,
+          "name": string,
+        }),
+    }),
+  "description": option(string),
+  "relevantAt": option(MomentRe.Moment.t),
+  "competitorType": Context.Primary.CompetitorType.t,
+  "createdAt": MomentRe.Moment.t,
+  "taggedMeasurementId": option(string),
+  "value": MeasurementValue.graphQlResult,
 };
 
-let toMeasurement =
-    (measurement: Types.measurement): Context.Primary.Measurement.t => {
+type measurements = option({. "edges": option(Js.Array.t(measurement))});
+
+let toMeasurement = (measurement: measurement): Context.Primary.Measurement.t => {
   open Context.Primary.Agent;
   let agent = measurement##agent;
   let agentType: option(Context.Primary.AgentType.t) =
@@ -141,8 +137,7 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-type measurementEdges =
-  Client.Context.Primary.Connection.edges(Types.measurement);
+type measurementEdges = Client.Context.Primary.Connection.edges(measurement);
 
 let queryToComponent = (query, innerComponentFn) =>
   QueryComponent.make(~variables=query##variables, response =>

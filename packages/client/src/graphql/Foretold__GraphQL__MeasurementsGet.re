@@ -1,5 +1,3 @@
-open Rationale.Function.Infix;
-
 module Types = {
   type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
   type measurement = {
@@ -80,6 +78,7 @@ let toMeasurement = (m: Types.measurement): Context.Primary.Measurement.t => {
     (),
   );
 };
+
 module Query = [%graphql
   {|
     query getMeasurements($measurableId: String, $first: Int, $last: Int, $after: String, $before: String) {

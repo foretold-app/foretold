@@ -50,8 +50,12 @@ type agents = array(agent);
 
 module Query = [%graphql
   {|
-    query getAgents {
-      agents @bsRecord{
+    query getAgents (
+        $excludeChannelId: String
+    ) {
+      agents (
+        excludeChannelId: $excludeChannelId
+      ) @bsRecord {
         id
         name
         measurementCount
@@ -72,8 +76,8 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let component = innerFn => {
-  let query = Query.make();
+let component = (~excludeChannelId: string, innerFn) => {
+  let query = Query.make(~excludeChannelId, ());
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
     |> E.HttpResponse.fromApollo

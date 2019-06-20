@@ -1,9 +1,5 @@
 open Utils;
 
-module Types = {
-  type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
-};
-
 module Query = [%graphql
   {|
       query getMeasurable ($id: String!) {
@@ -61,7 +57,7 @@ type measurableQuery = {
       "id": string,
       "name": option(string),
     }),
-  "state": [ | `JUDGED | `JUDGEMENT_PENDING | `OPEN],
+  "state": Context.Primary.MeasurableState.t,
   "stateUpdatedAt": option(MomentRe.Moment.t),
   "updatedAt": MomentRe.Moment.t,
 };

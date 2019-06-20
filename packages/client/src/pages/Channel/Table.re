@@ -28,8 +28,8 @@ module Row = {
     render: _self =>
       <div className=Styles.row>
         {cells
-         |> Array.mapi((i, r: ReasonReact.reactElement) =>
-              <Cell key={i |> string_of_int}> r </Cell>
+         |> Array.mapi((index, cellBody: ReasonReact.reactElement) =>
+              <Cell key={index |> string_of_int}> cellBody </Cell>
             )
          |> ReasonReact.array}
       </div>,
@@ -55,8 +55,8 @@ let fromColumns = (columns: array(column('a)), rows: array('a)) =>
        |> ReasonReact.array}
     </FC.Table.HeaderRow>
     {rows
-     |> Array.mapi((i, r: 'a) =>
-          <FC.Table.Row className=Styles.row key={i |> string_of_int}>
+     |> Array.mapi((index, r: 'a) =>
+          <FC.Table.Row className=Styles.row key={index |> string_of_int}>
             {columns
              |> Array.map((c: column('a)) => c.render(r))
              |> Array.map(renderedRow =>

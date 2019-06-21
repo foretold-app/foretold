@@ -52,9 +52,11 @@ module Query = [%graphql
   {|
     query getAgents (
         $excludeChannelId: String
+        $types: [AgentType]
     ) {
       agents (
         excludeChannelId: $excludeChannelId
+        types: $types
       ) @bsRecord {
         id
         name
@@ -76,10 +78,10 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let component = (~excludeChannelId: string, innerFn) => {
-  let query = Query.make(~excludeChannelId, ());
-  QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
+let component = (~excludeChannelId: string, ~types=?, innerFn) => {
+  let query = Query.make(~excludeChannelId, ~types?, ());
+  QueryComponent.make(~variables=query##variables, response =>
+    response.result
     |> E.HttpResponse.fromApollo
     |> E.HttpResponse.fmap((e: Query.t) => {
          let agents = e##agents;
@@ -88,5 +90,7 @@ let component = (~excludeChannelId: string, innerFn) => {
        })
     |> innerFn
   )
-  |> E.React.el;
+  |> ReasonReact.element;
 };
+
+let componentUsers = component(~types=[|Some(`USER)|]);

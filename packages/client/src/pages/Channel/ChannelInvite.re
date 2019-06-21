@@ -64,7 +64,7 @@ let make =
     |];
 
     let table =
-      Foretold__GraphQL.Queries.Agents.component(
+      Foretold__GraphQL.Queries.Agents.componentUsers(
         ~excludeChannelId=channelId, agents =>
         agents
         |> E.HttpResponse.fmap(agents => {

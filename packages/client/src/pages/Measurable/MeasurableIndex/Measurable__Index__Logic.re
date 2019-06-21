@@ -18,9 +18,11 @@ module SelectWithPaginationReducer =
 
 module Types = {
   module ChannelQuery = Context.Primary.Channel;
+
   type channel = ChannelQuery.t;
 
   module SeriesCollectionQuery = Foretold__GraphQL.Queries.SeriesCollection;
+
   type seriesCollectionType = Js.Array.t(SeriesCollectionQuery.series);
 
   type loggedInUser = Context.Primary.User.t;
@@ -28,11 +30,14 @@ module Types = {
   type query = E.HttpResponse.t(seriesCollectionType);
 
   type page = int;
+
   module ReducerTypes = SelectWithPaginationReducer.Types;
+
   type reducerParams = ReducerTypes.reducerParams;
-  /* module ReducerItemState = SelectWithPaginationReducer.Reducers.ItemState; */
+
   module ReducerParams = SelectWithPaginationReducer.Reducers.ReducerParams;
 };
+
 open Types;
 
 module LoadedAndSelected = {
@@ -108,12 +113,12 @@ module MeasurableIndexDataState = {
     query,
   };
 
-  let make = (u: input) =>
+  let make = (input: input) =>
     switch (
-      u.reducerParams.itemState,
-      u.channel,
-      u.query,
-      u.reducerParams.response,
+      input.reducerParams.itemState,
+      input.channel,
+      input.query,
+      input.reducerParams.response,
     ) {
     | (
         ItemSelected({selectedIndex}),
@@ -121,12 +126,12 @@ module MeasurableIndexDataState = {
         Success(seriesCollection),
         Success(_),
       ) =>
-      switch (u.reducerParams.selection) {
+      switch (input.reducerParams.selection) {
       | Some(measurable) =>
         LoadedAndSelected({
           channel,
-          reducerParams: u.reducerParams,
-          loggedInUser: u.loggedInUser,
+          reducerParams: input.reducerParams,
+          loggedInUser: input.loggedInUser,
           itemState: {
             selectedIndex: selectedIndex,
           },
@@ -143,18 +148,18 @@ module MeasurableIndexDataState = {
       ) =>
       LoadedAndUnselected({
         channel,
-        reducerParams: u.reducerParams,
-        loggedInUser: u.loggedInUser,
+        reducerParams: input.reducerParams,
+        loggedInUser: input.loggedInUser,
         seriesCollection,
       })
     | (_, Success(channel), _, _) =>
       WithChannelButNotQuery({
         channel,
-        reducerParams: u.reducerParams,
-        loggedInUser: u.loggedInUser,
-        query: u.query,
+        reducerParams: input.reducerParams,
+        loggedInUser: input.loggedInUser,
+        query: input.query,
       })
-    | _ => WithoutChannel(u.channel)
+    | _ => WithoutChannel(input.channel)
     };
 };
 

@@ -41,13 +41,11 @@ type agent = {
 };
 
 let unpackEdges = (a: connection('a)): array('a) => {
-  let response =
-    a
-    |> E.O.fmap(b => b##edges |> E.A.O.defaultEmpty |> E.A.O.concatSome)
-    |> E.A.O.defaultEmpty
-    |> E.A.fmap(e => e##node)
-    |> E.A.O.concatSome;
-  response;
+  a
+  |> E.O.fmap(b => b##edges |> E.A.O.defaultEmpty |> E.A.O.concatSome)
+  |> E.A.O.defaultEmpty
+  |> E.A.fmap(e => e##node)
+  |> E.A.O.concatSome;
 };
 /* |> E.O.fmap(b => b##edges |> E.A.O.defaultEmpty)
    |> E.O.toExn("Expected items"); */
@@ -102,7 +100,7 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let toMeasurables = (measurements: array(node)) => {
+let toMeasurements = (measurements: array(node)) => {
   let r = measurements;
   let standardMeasurements =
     r
@@ -119,40 +117,24 @@ let toMeasurables = (measurements: array(node)) => {
              | Some(n) => Some(n.id)
              | None => None
              },
+           ~measurable=
+             switch (n.measurable) {
+             | Some(m) =>
+               Some(
+                 Context.Primary.Measurable.make(~id=m.id, ~name=m.name, ()),
+               )
+             | None => None
+             },
            (),
          )
        )
     |> E.A.to_list;
-
-  let measurables =
-    r
-    |> E.A.fmap(t => (t.measurable: option(measurable)))
-    |> E.A.to_list
-    |> E.L.filter_opt
-    |> E.L.uniqBy((t: measurable) => t.id)
-    |> E.L.fmap((e: measurable) =>
-         Context.Primary.Measurable.make(
-           ~id=e.id,
-           ~name=e.name,
-           ~expectedResolutionDate=e.expectedResolutionDate,
-           ~state=Some(e.state),
-           ~stateUpdatedAt=e.stateUpdatedAt,
-           ~measurements=
-             Some(
-               standardMeasurements
-               |> E.L.filter((s: Context.Primary.Measurement.t) =>
-                    s.measurableId == Some(e.id)
-                  ),
-             ),
-           (),
-         )
-       );
-  measurables;
+  standardMeasurements;
 };
 
 type response = {
   agent,
-  measurables: list(Context.Primary.Measurable.t),
+  measurementsList: list(Context.Primary.Measurement.t),
 };
 
 let component = (~id, innerFn) => {
@@ -164,11 +146,12 @@ let component = (~id, innerFn) => {
     |> ApolloUtils.apolloResponseToResult
     |> E.R.fmap(e => {
          let agent = e##agent;
-         let measurements: option(array(node)) =
+         let measurementsEdges: option(array(node)) =
            agent |> E.O.fmap(agent => agent.measurements |> unpackEdges);
-         let measurables = measurements |> E.O.fmap(toMeasurables);
-         switch (agent, measurables) {
-         | (Some(a), Some(b)) => Some({agent: a, measurables: b})
+         let measurements = measurementsEdges |> E.O.fmap(toMeasurements);
+
+         switch (agent, measurements) {
+         | (Some(a), Some(b)) => Some({agent: a, measurementsList: b})
          | _ => None
          };
        })

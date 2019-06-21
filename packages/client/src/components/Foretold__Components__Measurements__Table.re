@@ -4,6 +4,8 @@ open Style.Grid;
 open Css;
 
 type measurement = Context.Primary.Measurement.t;
+type measurable = Context.Primary.Measurable.t;
+module Items = Foretold__Components__Measurable__Items;
 
 module Styles = {
   open Css;
@@ -29,6 +31,19 @@ module Styles = {
 
   let agentStyle =
     style([color(`rgb((102, 121, 134))), fontSize(`em(1.1))]);
+
+  let mainColumn =
+    style([flex(4), display(`flex), flexDirection(`column)]);
+
+  let mainColumnTop =
+    style([
+      flex(1),
+      paddingLeft(px(2)),
+      selector(" p", [marginTop(`px(3)), marginBottom(`px(8))]),
+    ]);
+  let rightColumn = style([flex(1)]);
+  let mainColumnBottom =
+    style([flex(1), padding(`px(2)), marginTop(`px(2))]);
 };
 
 module Helpers = {
@@ -48,8 +63,8 @@ module Helpers = {
               minX
               maxX
               color={
-                m.competitorType == `AGGREGATION ?
-                  `hex("b1b9c6") : `hex("487192")
+                m.competitorType == `AGGREGATION
+                  ? `hex("b1b9c6") : `hex("487192")
               }
             />,
           )
@@ -148,7 +163,9 @@ module Helpers = {
         Some(
           <Foretold__Components__Link
             linkType={
-              Internal(Agent({agentId: agent.id, subPage: AgentShow}))
+              Internal(
+                Agent({agentId: agent.id, subPage: AgentMeasurements}),
+              )
             }
             className=Styles.agentStyle>
             {name |> ste}
@@ -175,12 +192,10 @@ module Helpers = {
     if (isJudge) {
       <div className=judgementStyle>
         {"Resolution" |> ste |> E.React.inH3}
-        {
-          switch (aLink) {
-          | Some(name) => <> {"by " |> ste} name </>
-          | None => E.React.null
-          }
-        }
+        {switch (aLink) {
+         | Some(name) => <> {"by " |> ste} name </>
+         | None => E.React.null
+         }}
       </div>;
     } else {
       aLink |> E.O.React.defaultNull;
@@ -196,58 +211,66 @@ let primaryCellStyle =
 let headerCellStyle =
   Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))]));
 
-let make = (ms: list(measurement)) => {
-  let _bounds = Helpers.bounds(ms |> E.A.of_list);
-  let items =
-    ms
-    |> E.L.sort((a: measurement, b: measurement) =>
-         switch (
-           a.relevantAt,
-           b.relevantAt,
-           a.competitorType,
-           b.competitorType,
-         ) {
-         | (Some(c), Some(d), _, _) when Moment.toUnix(c) < Moment.toUnix(d) => 1
-         | (Some(c), Some(d), `AGGREGATION, `COMPETITIVE)
-             when Moment.toUnix(c) == Moment.toUnix(d) => (-1)
-         | (Some(c), Some(d), `COMPETITIVE, `AGGREGATION)
-             when Moment.toUnix(c) == Moment.toUnix(d) => 1
-         | (Some(c), Some(d), _, _)
-             when Moment.toUnix(c) == Moment.toUnix(d) => 0
-         | (Some(c), Some(d), _, _) when Moment.toUnix(c) > Moment.toUnix(d) => (-1)
-         | _ => 0
-         }
-       )
-    |> E.L.fmap((m: measurement) => {
-         let inside =
-           <>
-             <FC.Table.Cell flex=2 className=primaryCellStyle>
-               {
-                 Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull
-               }
-             </FC.Table.Cell>
-             <FC.Table.Cell flex=1 className=primaryCellStyle>
-               {Helpers.statSummary(m) |> E.O.React.defaultNull}
-             </FC.Table.Cell>
-             <FC.Table.Cell flex=1 className=primaryCellStyle>
-               {Helpers.measurerLink(~m)}
-             </FC.Table.Cell>
-             <FC.Table.Cell flex=1 className=primaryCellStyle>
-               {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
-             </FC.Table.Cell>
-           </>;
+let sort = (a: measurement, b: measurement) =>
+  switch (a.relevantAt, b.relevantAt, a.competitorType, b.competitorType) {
+  | (Some(c), Some(d), _, _) when Moment.toUnix(c) < Moment.toUnix(d) => 1
+  | (Some(c), Some(d), `AGGREGATION, `COMPETITIVE)
+      when Moment.toUnix(c) == Moment.toUnix(d) => (-1)
+  | (Some(c), Some(d), `COMPETITIVE, `AGGREGATION)
+      when Moment.toUnix(c) == Moment.toUnix(d) => 1
+  | (Some(c), Some(d), _, _) when Moment.toUnix(c) == Moment.toUnix(d) => 0
+  | (Some(c), Some(d), _, _) when Moment.toUnix(c) > Moment.toUnix(d) => (-1)
+  | _ => 0
+  };
 
-         switch (Helpers.description(~m)) {
-         | Some(description) =>
-           <FC.Table.Row
-             bottomSubRow=[|FC.Table.Row.textSection(description)|]>
-             inside
-           </FC.Table.Row>
-         | None => <FC.Table.Row> inside </FC.Table.Row>
-         };
-       })
-    |> E.A.of_list
-    |> ReasonReact.array;
+let getItems = (ms: list(measurement), ~makeItem) => {
+  let _bounds = Helpers.bounds(ms |> E.A.of_list);
+  ms
+  |> E.L.sort(sort)
+  |> E.L.fmap((m: measurement) => {
+       let inside = makeItem(m, _bounds);
+
+       switch (Helpers.description(~m)) {
+       | Some(description) =>
+         <FC.Table.Row
+           bottomSubRow=[|FC.Table.Row.textSection(description)|]>
+           inside
+         </FC.Table.Row>
+       | None => <FC.Table.Row> inside </FC.Table.Row>
+       };
+     })
+  |> E.A.of_list
+  |> ReasonReact.array;
+};
+
+let getItemsSorted = (measurementsList: list(measurement), ~makeItem) => {
+  let _bounds = Helpers.bounds(measurementsList |> E.A.of_list);
+
+  measurementsList
+  |> E.L.sort(sort)
+  |> E.L.fmap((measurement: measurement) => makeItem(measurement, _bounds))
+  |> E.A.of_list
+  |> ReasonReact.array;
+};
+
+let make = (ms: list(measurement)) => {
+  let makeItem = (m, _bounds) => {
+    <>
+      <FC.Table.Cell flex=2 className=primaryCellStyle>
+        {Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull}
+      </FC.Table.Cell>
+      <FC.Table.Cell flex=1 className=primaryCellStyle>
+        {Helpers.statSummary(m) |> E.O.React.defaultNull}
+      </FC.Table.Cell>
+      <FC.Table.Cell flex=1 className=primaryCellStyle>
+        {Helpers.measurerLink(~m)}
+      </FC.Table.Cell>
+      <FC.Table.Cell flex=1 className=primaryCellStyle>
+        {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
+      </FC.Table.Cell>
+    </>;
+  };
+  let items = ms |> getItems(~makeItem);
   E.React.showIf(
     ms |> E.L.length > 0,
     <>
@@ -263,10 +286,57 @@ let make = (ms: list(measurement)) => {
     </>,
   );
 };
-/* <FC.Table.Row
-   bottomSubRow=[|
-     FC.Table.Row.textSection(
-       Helpers.description(~m) |> E.O.React.defaultNull,
-     ),
-   |]
-   key={m.id}> */
+
+let getMeasurableLink = (m: measurement) => {
+  switch (m.measurable) {
+  | None => "" |> ste
+  | Some(measurable) => Items.link(~m=measurable)
+  };
+};
+
+let makeAgentPredictionsTable =
+    (
+      ~measurementsList: list(measurement),
+      ~onSelect=(_measurement: Context.Primary.Measurement.t) => (),
+      (),
+    ) => {
+  let makeItem = (m: measurement, _bounds) => {
+    <FC.Table.RowLink onClick={_e => onSelect(m)} key={m.id}>
+      <FC.Table.Cell
+        flex=1
+        className=Css.(
+          style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])
+        )>
+        <div className=Styles.mainColumn>
+          <div className=Styles.mainColumnTop> {getMeasurableLink(m)} </div>
+        </div>
+      </FC.Table.Cell>
+      <FC.Table.Cell flex=2 className=primaryCellStyle>
+        {Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull}
+      </FC.Table.Cell>
+      <FC.Table.Cell flex=1 className=primaryCellStyle>
+        {Helpers.statSummary(m) |> E.O.React.defaultNull}
+      </FC.Table.Cell>
+      <FC.Table.Cell flex=1 className=primaryCellStyle>
+        {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
+      </FC.Table.Cell>
+    </FC.Table.RowLink>;
+  };
+
+  let itemsMeasurements = measurementsList |> getItemsSorted(~makeItem);
+
+  E.React.showIf(
+    measurementsList |> E.L.length > 0,
+    <>
+      <FC.Table.HeaderRow>
+        <FC.Table.Cell flex=1> {"Measurable" |> ste} </FC.Table.Cell>
+        <FC.Table.Cell flex=2>
+          {"Prediction Distribution" |> ste}
+        </FC.Table.Cell>
+        <FC.Table.Cell flex=1> {"Prediction Value" |> ste} </FC.Table.Cell>
+        <FC.Table.Cell flex=1> {"Time" |> ste} </FC.Table.Cell>
+      </FC.Table.HeaderRow>
+      itemsMeasurements
+    </>,
+  );
+};

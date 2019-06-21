@@ -61,10 +61,10 @@ module Columns = {
       membership.agent
       |> Rationale.Option.fmap((r: Context.Primary.Types.agent) =>
            <Foretold__Components__Link
-             linkType={Internal(Agent({agentId: r.id, subPage: AgentShow}))}>
-             {r.name
-              |> Rationale.Option.default("Anonymous")
-              |> ReasonReact.string}
+             linkType={
+               Internal(Agent({agentId: r.id, subPage: AgentMeasurements}))
+             }>
+             {r.name |> E.O.default("Anonymous") |> ReasonReact.string}
            </Foretold__Components__Link>
          )
       |> E.O.React.defaultNull,
@@ -92,29 +92,31 @@ module Columns = {
       name: "Change Role" |> ReasonReact.string,
       render: membership =>
         <div>
-          {switch (membership.role, membership.agent) {
-           | (`VIEWER, Some(agent)) =>
-             E.React.showIf(
-               canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, membership),
-               changeRoleAction(
-                 agent.id,
-                 channelId,
-                 `ADMIN,
-                 "Change to Admin",
-               ),
-             )
-           | (`ADMIN, Some(agent)) =>
-             E.React.showIf(
-               canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, membership),
-               changeRoleAction(
-                 agent.id,
-                 channelId,
-                 `VIEWER,
-                 "Change to Viewer",
-               ),
-             )
-           | _ => <div />
-           }}
+          {
+            switch (membership.role, membership.agent) {
+            | (`VIEWER, Some(agent)) =>
+              E.React.showIf(
+                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, membership),
+                changeRoleAction(
+                  agent.id,
+                  channelId,
+                  `ADMIN,
+                  "Change to Admin",
+                ),
+              )
+            | (`ADMIN, Some(agent)) =>
+              E.React.showIf(
+                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, membership),
+                changeRoleAction(
+                  agent.id,
+                  channelId,
+                  `VIEWER,
+                  "Change to Viewer",
+                ),
+              )
+            | _ => <div />
+            }
+          }
         </div>,
       flex: 1,
     };
@@ -133,7 +135,7 @@ module Columns = {
       flex: 1,
     };
 
-  let all = (channelId: string, channel: Context.Primary.Types.channel) => {
+  let all = (channelId: string, channel: Context.Primary.Types.channel) =>
     switch (channel.myRole) {
     | Some(`ADMIN) => [|
         agentColumn,
@@ -143,7 +145,6 @@ module Columns = {
       |]
     | _ => [|agentColumn, roleColumn|]
     };
-  };
 };
 
 let title = () =>
@@ -156,17 +157,20 @@ let title = () =>
 let addMembersButtonSection = (channelId: string) =>
   <FC.Base.Div
     float=`right
-    className={Css.style([
-      FC.PageCard.HeaderRow.Styles.itemTopPadding,
-      FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-    ])}>
+    className={
+      Css.style([
+        FC.PageCard.HeaderRow.Styles.itemTopPadding,
+        FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+      ])
+    }>
     <FC.Base.Button
       variant=Primary
-      onClick={e =>
-        Foretold__Components__Link.LinkType.onClick(
-          Internal(ChannelInvite(channelId)),
-          e,
-        )
+      onClick={
+        e =>
+          Foretold__Components__Link.LinkType.onClick(
+            Internal(ChannelInvite(channelId)),
+            e,
+          )
       }>
       {"Add Members" |> ReasonReact.string}
     </FC.Base.Button>
@@ -196,17 +200,15 @@ let succesFn =
   |> layout;
 };
 
-let errorFn = (layout, _) => {
+let errorFn = (layout, _) =>
   SLayout.LayoutConfig.make(
     ~head=<div />,
     ~body=<div> {"No channel." |> ReasonReact.string} </div>,
   )
   |> layout;
-};
 
-let loadingFn = (layout, _) => {
+let loadingFn = (layout, _) =>
   SLayout.LayoutConfig.make(~head=<div />, ~body=<SLayout.Spin />) |> layout;
-};
 
 let make =
     (
@@ -216,7 +218,7 @@ let make =
       _children,
     ) => {
   ...component,
-  render: _ => {
+  render: _ =>
     Queries.ChannelMemberships.component(~id=channelId, result =>
       result
       |> E.HttpResponse.flatten(
@@ -225,6 +227,5 @@ let make =
            errorFn(layout),
            loadingFn(layout),
          )
-    );
-  },
+    ),
 };

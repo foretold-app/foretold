@@ -35,16 +35,15 @@ let make =
       itemsPerPage,
     );
 
-  loadData(
-    ((selectWithPaginationParams, channel, query, measurablesStateStats)) =>
+  loadData(((reducerParams, channel, query, measurablesStateStats)) =>
     Measurable__Index__Logic.MeasurableIndexDataState.make({
-      reducerParams: selectWithPaginationParams,
+      reducerParams,
       loggedInUser,
       channel,
       query,
     })
     |> Components.MeasurableIndexDataState.toLayoutInput(
-         selectWithPaginationParams.send,
+         reducerParams.send,
          searchParams,
          measurablesStateStats,
        )

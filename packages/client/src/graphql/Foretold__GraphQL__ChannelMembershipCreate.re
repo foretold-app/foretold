@@ -22,7 +22,7 @@ let mutate = (mutation: Mutation.apolloMutation, agentId, channelId) => {
     );
   mutation(
     ~variables=m##variables,
-    ~refetchQueries=[|"getChannels", "user"|],
+    ~refetchQueries=[|"getChannels", "user", "getChannelMemberships"|],
     (),
   )
   |> ignore;

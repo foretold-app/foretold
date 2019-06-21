@@ -52,7 +52,7 @@ let make =
         (),
       ),
       Antd.Table.TableProps.make_column(
-        ~title="Remove",
+        ~title="Invite",
         ~dataIndex="role",
         ~key="actions2",
         ~width=2,

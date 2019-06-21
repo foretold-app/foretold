@@ -47,6 +47,14 @@ module MeasurableState = {
     | _ => Js.Exn.raiseError("Invalid GraphQL State: " ++ e)
     };
 
+  let toString = (e): string =>
+    switch (e) {
+    | Some(`OPEN) => "OPEN"
+    | Some(`JUDGED) => "JUDGED"
+    | Some(`JUDGEMENT_PENDING) => "JUDGEMENT_PENDING"
+    | _ => Js.Exn.raiseError("Invalid GraphQL State")
+    };
+
   let fromEnum = e =>
     switch (e) {
     | `OPEN => `OPEN

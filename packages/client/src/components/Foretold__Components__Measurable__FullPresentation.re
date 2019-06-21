@@ -1,6 +1,5 @@
 open Foretold__GraphQL;
 open Style.Grid;
-open Utils;
 
 module StatusDisplay = Foretold__Component__StatusDisplay;
 module Items = Foretold__Components__Measurable__Items;
@@ -50,12 +49,15 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                let userAgentId =
                  loggedInUser.agent
                  |> E.O.fmap((r: Context.Primary.Agent.t) => r.id);
+
                let creatorId =
                  m.creator |> E.O.fmap((r: Context.Primary.Agent.t) => r.id);
+
                userAgentId == creatorId
                || Context.Primary.Measurable.toStatus(m) !== `JUDGED
                  ? <>
                      <Foretold__Components__Measurement__Form
+                       measurable=m
                        measurableId=id
                        isCreator={userAgentId == creatorId}
                      />

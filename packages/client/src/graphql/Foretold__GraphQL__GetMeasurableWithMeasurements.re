@@ -62,41 +62,36 @@ type measurableQuery = {
   "updatedAt": MomentRe.Moment.t,
 };
 
-let queryMeasurable = (m: measurableQuery) => {
-  open Context.Primary;
-  let agent: option(Agent.t) =
-    m##creator |> E.O.fmap(r => Agent.make(~id=r##id, ~name=r##name, ()));
+let queryMeasurable = (m: measurableQuery): Context.Primary.Measurable.t => {
+  let agent: option(Context.Primary.Agent.t) =
+    m##creator
+    |> E.O.fmap(r => Context.Primary.Agent.make(~id=r##id, ~name=r##name, ()));
 
-  let series: option(Series.t) =
-    m##series |> E.O.fmap(r => Series.make(~id=r##id, ~name=r##name, ()));
+  let series: option(Context.Primary.Series.t) =
+    m##series
+    |> E.O.fmap(r =>
+         Context.Primary.Series.make(~id=r##id, ~name=r##name, ())
+       );
 
-  let unpackEdges =
-      (a: option({. "edges": option(Js.Array.t('a))})): Js.Array.t('a) =>
-    a
-    |> E.O.fmap(b => b##edges |> E.A.O.defaultEmpty)
-    |> E.O.toExn("Expected items");
-
-  let measurable: Measurable.t =
-    Measurable.make(
-      ~id=m##id,
-      ~name=m##name,
-      ~labelCustom=m##labelCustom,
-      ~resolutionEndpoint=m##resolutionEndpoint,
-      ~resolutionEndpointResponse=m##resolutionEndpointResponse,
-      ~createdAt=Some(m##createdAt),
-      ~updatedAt=Some(m##updatedAt),
-      ~expectedResolutionDate=m##expectedResolutionDate,
-      ~state=Some(m##state |> Context.Primary.MeasurableState.fromEnum),
-      ~stateUpdatedAt=m##stateUpdatedAt,
-      ~labelSubject=m##labelSubject,
-      ~labelOnDate=m##labelOnDate,
-      ~labelProperty=m##labelProperty,
-      ~measurements=None,
-      ~creator=agent,
-      ~series,
-      (),
-    );
-  measurable;
+  Context.Primary.Measurable.make(
+    ~id=m##id,
+    ~name=m##name,
+    ~labelCustom=m##labelCustom,
+    ~resolutionEndpoint=m##resolutionEndpoint,
+    ~resolutionEndpointResponse=m##resolutionEndpointResponse,
+    ~createdAt=Some(m##createdAt),
+    ~updatedAt=Some(m##updatedAt),
+    ~expectedResolutionDate=m##expectedResolutionDate,
+    ~state=Some(m##state |> Context.Primary.MeasurableState.fromEnum),
+    ~stateUpdatedAt=m##stateUpdatedAt,
+    ~labelSubject=m##labelSubject,
+    ~labelOnDate=m##labelOnDate,
+    ~labelProperty=m##labelProperty,
+    ~measurements=None,
+    ~creator=agent,
+    ~series,
+    (),
+  );
 };
 
 let component = (~id, fn) => {

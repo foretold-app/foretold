@@ -8,7 +8,7 @@ let load3Queries = (channelId, states, itemsPerPage, fn) =>
       (reducer, channel, series, stats) |> fn
   )
   |> E.F.flatten4Callbacks(
-       Measurable__Index__Logic.SelectWithPaginationReducer.make(
+       Measurable__Index__Logic.Reducer.make(
          ~itemsPerPage,
          ~callFnParams={channelId, states},
          ~subComponent=_,

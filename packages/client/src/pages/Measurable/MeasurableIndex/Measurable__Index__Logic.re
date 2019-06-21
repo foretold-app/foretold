@@ -161,5 +161,3 @@ module MeasurableIndexDataState = {
     | _ => WithoutChannel(input.channel)
     };
 };
-
-module Components = {};

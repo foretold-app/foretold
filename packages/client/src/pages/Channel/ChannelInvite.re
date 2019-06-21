@@ -28,7 +28,7 @@ let make =
           {"Add to Community" |> ste}
         </Foretold__Components__Link>
       )
-      |> E.React.el;
+      |> ReasonReact.element;
 
     let columns = [|
       Antd.Table.TableProps.make_column(
@@ -70,11 +70,11 @@ let make =
         |> E.HttpResponse.fmap(agents => {
              let dataSource =
                agents
-               |> E.A.fmap((r: Context.Primary.Agent.t) =>
+               |> Array.map((agent: Context.Primary.Agent.t) =>
                     {
-                      "key": r.id,
-                      "agentId": r.id,
-                      "agentName": r.name |> E.O.default(""),
+                      "key": agent.id,
+                      "agentId": agent.id,
+                      "agentName": agent.name |> E.O.default(""),
                     }
                   );
              <Antd.Table columns dataSource size=`small />;

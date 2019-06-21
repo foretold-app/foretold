@@ -349,23 +349,35 @@ module Agent = {
 
 module Channel = {
   type t = Types.channel;
-  let showLink = (t: t) => Context__Routing.Url.ChannelShow(t.id);
+  let showLink = (channel: t) =>
+    Context__Routing.Url.ChannelShow(channel.id);
+  let globalLik = () => Context__Routing.Url.ChannelGlobal;
   let showUrl = showLink ||> Context__Routing.Url.toString;
   let showPush = showLink ||> Context__Routing.Url.push;
+
   module Styles = {
     open Css;
     let hash = style([marginRight(`px(4))]);
     let lock =
       style([fontSize(`em(0.8)), float(`left), marginRight(`px(0))]);
   };
-  let present = (~hashClassName="", s: t) =>
+
+  let present = (~hashClassName="", channel: t) =>
     <span>
       <span className=hashClassName>
-        {s.isPublic
+        {channel.isPublic
            ? <span className=Styles.hash> {"#" |> ste} </span>
            : <span className=Styles.lock> <Icon.Icon icon="LOCK" /> </span>}
       </span>
-      <span> {s.name |> ste} </span>
+      <span> {channel.name |> ste} </span>
+    </span>;
+
+  let presentGlobal = (~hashClassName="") =>
+    <span>
+      <span className=hashClassName>
+        <span className=Styles.hash> {"#" |> ste} </span>
+      </span>
+      <span> {"global" |> ste} </span>
     </span>;
 
   let make =

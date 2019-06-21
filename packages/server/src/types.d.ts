@@ -112,6 +112,7 @@ export namespace Layers {
       notTaggedByAgent?: string,
       states?: string[],
       isArchived?: string[],
+      types?: string[],
     };
     type pagination = {
       limit?: number,
@@ -173,6 +174,7 @@ export namespace Layers {
     type filter = {
       excludeChannelId?: Models.ObjectID,
       isArchived?: string[],
+      types?: string[],
     };
     type pagination = {
       limit?: number,

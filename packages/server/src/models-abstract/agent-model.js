@@ -32,6 +32,14 @@ class AgentModel extends ModelPostgres {
       });
     }
 
+    if (filter.types) {
+      where[this.and].push({
+        type: {
+          [this.in]: filter.types,
+        },
+      });
+    }
+
     return where;
   }
 }

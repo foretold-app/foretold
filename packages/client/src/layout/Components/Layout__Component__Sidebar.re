@@ -76,8 +76,10 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
       <div className=Styles.over>
         <C.Link
           key="channel-global-item"
-          linkType={Internal(Context.Primary.Channel.globalLik())}
-          className=Styles.item>
+          linkType={Internal(Context.Primary.Channel.globalLink())}
+          className={
+            Some("global") == channelId ? Styles.selectedItem : Styles.item
+          }>
           {Context.Primary.Channel.presentGlobal(~hashClassName=Styles.hash)}
         </C.Link>
         {loggedInUser.agent

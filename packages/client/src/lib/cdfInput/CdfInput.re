@@ -37,15 +37,15 @@ let competitorType =
     (~state, ~send, ~measurable: Context.Primary.Measurable.t) => {
   let options =
     switch (measurable.state) {
-    | Some(`OPEN) => [|
-        <Select.Option value="COMPETITIVE">
-          {"Prediction" |> ste}
-        </Select.Option>,
+    | Some(`JUDGED) => [|
         <Select.Option value="OBJECTIVE">
           {"Resolution" |> ste}
         </Select.Option>,
       |]
     | _ => [|
+        <Select.Option value="COMPETITIVE">
+          {"Prediction" |> ste}
+        </Select.Option>,
         <Select.Option value="OBJECTIVE">
           {"Resolution" |> ste}
         </Select.Option>,
@@ -167,8 +167,8 @@ let make =
   initialState: () => {
     let competitorTypeInitValue =
       switch (measurable.state) {
-      | Some(`OPEN) => "COMPETITIVE"
-      | _ => "OBJECTIVE"
+      | Some(`JUDGED) => "OBJECTIVE"
+      | _ => "COMPETITIVE"
       };
 
     {

@@ -74,7 +74,6 @@ module Route = {
     | Agent(AgentPage.t)
     | ChannelIndex
     | ChannelNew
-    | ChannelGlobal
     | MeasurableEdit(string)
     | NotFound;
 
@@ -99,7 +98,6 @@ module Route = {
     | ["bots", "new"] => BotCreate
     | ["measurables", id, "edit"] => MeasurableEdit(id)
     | ["c"] => ChannelIndex
-    | ["c", "global"] => ChannelGlobal
     | ["c", channelId] =>
       Channel({
         channelId,
@@ -146,8 +144,7 @@ module Url = {
     | ChannelEdit(string)
     | ChannelMembers(string)
     | ChannelInvite(string)
-    | MeasurableNew(string)
-    | ChannelGlobal;
+    | MeasurableNew(string);
 
   let toString = (r: t) =>
     switch ((r: t)) {
@@ -165,7 +162,6 @@ module Url = {
       "/agents/" ++ agentId ++ "/measurables"
     | ChannelNew => "/communities/" ++ "new"
     | ChannelIndex => "/communities"
-    | ChannelGlobal => "/c/global"
     | ChannelShow(id) => "/c/" ++ id
     | ChannelEdit(id) => "/c/" ++ id ++ "/edit"
     | ChannelMembers(id) => "/c/" ++ id ++ "/members"

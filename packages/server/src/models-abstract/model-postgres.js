@@ -196,15 +196,6 @@ class ModelPostgres extends Model {
       };
     }
 
-    // @todo: todo?
-    if (filter.excludeChannelId) {
-      where[this.and].push({
-        id: {
-          [this.notIn]: this.agentsIdsLiteral(filter.excludeChannelId),
-        },
-      });
-    }
-
     if (filter.userId) {
       where.userId = filter.userId;
     }

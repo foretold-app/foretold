@@ -30,8 +30,6 @@ module Types = {
   module ReducerTypes = Reducer.Types;
 
   type reducerParams = Reducer.Types.reducerParams;
-
-  module ReducerParams = Reducer.Reducers.ReducerParams;
 };
 
 open Types;

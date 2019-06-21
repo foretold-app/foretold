@@ -15,6 +15,7 @@ module SelectWithPaginationReducer =
 
 let component = ReasonReact.statelessComponent("AgentMeasurables");
 type pageParams = {id: string};
+
 let make =
     (
       ~pageParams: pageParams,
@@ -34,24 +35,18 @@ let make =
           switch (selectWithPaginationParams.selection) {
           | Some(_selection) =>
             <>
-              {
-                SelectWithPaginationReducer.Components.deselectButton(
-                  selectWithPaginationParams.send,
-                )
-              }
-              {
-                SelectWithPaginationReducer.Components.correctButtonDuo(
-                  selectWithPaginationParams,
-                )
-              }
+              {SelectWithPaginationReducer.Components.deselectButton(
+                 selectWithPaginationParams.send,
+               )}
+              {SelectWithPaginationReducer.Components.correctButtonDuo(
+                 selectWithPaginationParams,
+               )}
             </>
           | None =>
             <>
-              {
-                SelectWithPaginationReducer.Components.correctButtonDuo(
-                  selectWithPaginationParams,
-                )
-              }
+              {SelectWithPaginationReducer.Components.correctButtonDuo(
+                 selectWithPaginationParams,
+               )}
             </>
           },
         ~body=
@@ -65,13 +60,12 @@ let make =
             <C.Measurables.BasicTable
               measurables={connection.edges}
               showExtraData=true
-              onSelect=(
-                e =>
-                  SelectWithPaginationReducer.Components.sendSelectItem(
-                    selectWithPaginationParams,
-                    e.id,
-                  )
-              )
+              onSelect={e =>
+                SelectWithPaginationReducer.Components.sendSelectItem(
+                  selectWithPaginationParams,
+                  e.id,
+                )
+              }
             />
           | _ => <div />
           },

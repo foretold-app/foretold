@@ -18,16 +18,16 @@ let make = (~loggedInUser: option(Context__Primary.User.t), _children) => {
       switch (name, agentId) {
       | ("", _) => Context.Routing.Url.push(Profile)
       | (_, Some(id)) =>
-        Context.Routing.Url.push(Agent({agentId: id, subPage: AgentShow}))
+        Context.Routing.Url.push(
+          Agent({agentId: id, subPage: AgentMeasurements}),
+        )
       | _ => ()
       };
       <>
         {"Redirecting..." |> ste |> E.React.inH1}
-        {
-          "If you are not redirected shortly, try refreshing the page or contacting Ozzie."
-          |> ste
-          |> E.React.inP
-        }
+        {"If you are not redirected shortly, try refreshing the page or contacting Ozzie."
+         |> ste
+         |> E.React.inP}
       </>;
     | _ =>
       Context.Routing.Url.push(Home);

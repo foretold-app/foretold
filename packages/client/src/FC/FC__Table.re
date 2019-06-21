@@ -148,7 +148,7 @@ module Row = {
 };
 
 module RowLink = {
-  let component = ReasonReact.statelessComponent("TABLE ROW");
+  let component = ReasonReact.statelessComponent("TABLE ROW LINK");
 
   let make = (~onClick, children) => {
     ...component,

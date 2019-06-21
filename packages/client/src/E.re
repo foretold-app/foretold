@@ -180,6 +180,7 @@ module A = {
         }
     );
   let filter = (o, e) => Js.Array.filter(o, e);
+
   module O = {
     let concatSomes = (optionals: Js.Array.t(option('a))): Js.Array.t('a) =>
       optionals

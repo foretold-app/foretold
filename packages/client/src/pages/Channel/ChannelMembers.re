@@ -57,7 +57,9 @@ module Columns = {
       m.agent
       |> E.O.fmap((r: Context.Primary.Types.agent) =>
            <Foretold__Components__Link
-             linkType={Internal(Agent({agentId: r.id, subPage: AgentShow}))}>
+             linkType={
+               Internal(Agent({agentId: r.id, subPage: AgentMeasurements}))
+             }>
              {r.name |> E.O.default("Anonymous") |> ste}
            </Foretold__Components__Link>
          )
@@ -82,31 +84,29 @@ module Columns = {
       name: "Change Role" |> ste,
       render: m =>
         <div>
-          {
-            switch (m.role, m.agent) {
-            | (`VIEWER, Some(agent)) =>
-              E.React.showIf(
-                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
-                changeRoleAction(
-                  agent.id,
-                  channelId,
-                  `ADMIN,
-                  "Change to Admin",
-                ),
-              )
-            | (`ADMIN, Some(agent)) =>
-              E.React.showIf(
-                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
-                changeRoleAction(
-                  agent.id,
-                  channelId,
-                  `VIEWER,
-                  "Change to Viewer",
-                ),
-              )
-            | _ => <div />
-            }
-          }
+          {switch (m.role, m.agent) {
+           | (`VIEWER, Some(agent)) =>
+             E.React.showIf(
+               canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
+               changeRoleAction(
+                 agent.id,
+                 channelId,
+                 `ADMIN,
+                 "Change to Admin",
+               ),
+             )
+           | (`ADMIN, Some(agent)) =>
+             E.React.showIf(
+               canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
+               changeRoleAction(
+                 agent.id,
+                 channelId,
+                 `VIEWER,
+                 "Change to Viewer",
+               ),
+             )
+           | _ => <div />
+           }}
         </div>,
       flex: 1,
     };
@@ -153,20 +153,17 @@ let make =
           </FC.Base.Div>
           <FC.Base.Div
             float=`right
-            className={
-              Css.style([
-                FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-              ])
-            }>
+            className={Css.style([
+              FC.PageCard.HeaderRow.Styles.itemTopPadding,
+              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            ])}>
             <FC.Base.Button
               variant=Primary
-              onClick={
-                e =>
-                  Foretold__Components__Link.LinkType.onClick(
-                    Internal(ChannelInvite(channelId)),
-                    e,
-                  )
+              onClick={e =>
+                Foretold__Components__Link.LinkType.onClick(
+                  Internal(ChannelInvite(channelId)),
+                  e,
+                )
               }>
               {"Add Members" |> ste}
             </FC.Base.Button>

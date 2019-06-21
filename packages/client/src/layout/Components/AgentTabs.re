@@ -4,7 +4,7 @@ open Utils;
 module Component = {
   let name = (page: Context.Routing.AgentPage.SubPage.t) =>
     switch (page) {
-    | AgentShow => "Predictions"
+    | AgentMeasurements => "Predictions"
     | AgentMeasurables => "Created Questions"
     | AgentBots => "Bots"
     };
@@ -13,11 +13,9 @@ module Component = {
     let isActive = currentPage == selectedPage;
     <FC.Tab
       isActive
-      onClick={
-        C.Link.LinkType.onClick(
-          Internal(Agent({agentId, subPage: selectedPage})),
-        )
-      }>
+      onClick={C.Link.LinkType.onClick(
+        Internal(Agent({agentId, subPage: selectedPage})),
+      )}>
       {name(selectedPage) |> ste}
     </FC.Tab>;
   };
@@ -26,7 +24,7 @@ module Component = {
     let agentId = page.agentId;
     let subPage = page.subPage;
     <>
-      {tab(agentId, subPage, AgentShow)}
+      {tab(agentId, subPage, AgentMeasurements)}
       {tab(agentId, subPage, AgentMeasurables)}
       {tab(agentId, subPage, AgentBots)}
     </>;

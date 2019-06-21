@@ -34,7 +34,9 @@ module Columns = {
       switch (r.name, r.agent) {
       | (Some(name), Some(agent)) =>
         <Foretold__Components__Link
-          linkType={Internal(Agent({agentId: agent.id, subPage: AgentShow}))}>
+          linkType={
+            Internal(Agent({agentId: agent.id, subPage: AgentMeasurements}))
+          }>
           {name |> ste}
         </Foretold__Components__Link>
       | _ => ReasonReact.null

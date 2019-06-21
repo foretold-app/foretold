@@ -1,44 +1,49 @@
-open Rationale.Function.Infix;
-
-module Types = {
-  type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
-  type measurement = {
-    .
-    "id": string,
-    "agent":
-      option({
-        .
-        "bot":
-          option({
-            .
-            "id": string,
-            "name": string,
-            "competitorType": competitorType,
-          }),
-        "id": string,
-        "name": option(string),
-        "user":
-          option({
-            .
-            "id": string,
-            "name": string,
-          }),
-      }),
-    "description": option(string),
-    "relevantAt": option(MomentRe.Moment.t),
-    "competitorType": competitorType,
-    "createdAt": MomentRe.Moment.t,
-    "taggedMeasurementId": option(string),
-    "value": MeasurementValue.graphQlResult,
-  };
-
-  type measurements = option({. "edges": option(Js.Array.t(measurement))});
+type measurable = {
+  .
+  "id": string,
+  "name": string,
+  "state": Context.Primary.MeasurableState.t,
+  "stateUpdatedAt": option(MomentRe.Moment.t),
+  "expectedResolutionDate": option(MomentRe.Moment.t),
 };
 
-let toMeasurement = (m: Types.measurement): Context.Primary.Measurement.t => {
+type measurement = {
+  .
+  "id": string,
+  "agent":
+    option({
+      .
+      "bot":
+        option({
+          .
+          "id": string,
+          "name": string,
+          "competitorType": Context.Primary.CompetitorType.t,
+        }),
+      "id": string,
+      "name": option(string),
+      "user":
+        option({
+          .
+          "id": string,
+          "name": string,
+        }),
+    }),
+  "description": option(string),
+  "relevantAt": option(MomentRe.Moment.t),
+  "competitorType": Context.Primary.CompetitorType.t,
+  "createdAt": MomentRe.Moment.t,
+  "taggedMeasurementId": option(string),
+  "measurable": option(measurable),
+  "value": MeasurementValue.graphQlResult,
+};
+
+type measurements = option({. "edges": option(Js.Array.t(measurement))});
+
+let toMeasurement = (measurement: measurement): Context.Primary.Measurement.t => {
   open Context.Primary.Agent;
-  let measurement = m;
-  let agent = m##agent;
+  let agent = measurement##agent;
+
   let agentType: option(Context.Primary.AgentType.t) =
     agent
     |> E.O.bind(_, k =>
@@ -66,7 +71,9 @@ let toMeasurement = (m: Types.measurement): Context.Primary.Measurement.t => {
 
   let agent: option(Context.Primary.Agent.t) =
     agent
-    |> E.O.fmap(k => Context.Primary.Agent.make(~id=k##id, ~agentType, ()));
+    |> Rationale.Option.fmap(k =>
+         Context.Primary.Agent.make(~id=k##id, ~agentType, ())
+       );
 
   Context.Primary.Measurement.make(
     ~id=measurement##id,
@@ -77,13 +84,40 @@ let toMeasurement = (m: Types.measurement): Context.Primary.Measurement.t => {
     ~createdAt=Some(measurement##createdAt),
     ~relevantAt=measurement##relevantAt,
     ~agent,
+    ~measurable=
+      switch (measurement##measurable) {
+      | Some(measurable) =>
+        Some(
+          Context.Primary.Measurable.make(
+            ~id=measurable##id,
+            ~name=measurable##name,
+            (),
+          ),
+        )
+      | None => None
+      },
     (),
   );
 };
+
 module Query = [%graphql
   {|
-    query getMeasurements($measurableId: String, $first: Int, $last: Int, $after: String, $before: String) {
-        measurements: measurements(measurableId: $measurableId,first: $first, last: $last, after: $after, before: $before) {
+    query getMeasurements(
+        $measurableId: String
+        $agentId: String
+        $first: Int
+        $last: Int
+        $after: String
+        $before: String
+     ) {
+        measurements: measurements(
+            measurableId: $measurableId
+            agentId: $agentId
+            first: $first
+            last: $last
+            after: $after
+            before: $before
+        ) {
           total
           pageInfo{
             hasPreviousPage
@@ -92,34 +126,42 @@ module Query = [%graphql
             endCursor
           }
           edges{
-            node{
-                id
-                createdAt @bsDecoder(fn: "E.J.toMoment")
-                value {
-                    floatCdf {
-                        xs
-                        ys
-                    }
-                    floatPoint
-                }
-                relevantAt @bsDecoder(fn: "E.J.O.toMoment")
-                competitorType
-                description
-                taggedMeasurementId
-                agent: Agent {
+              node{
+                  id
+                  createdAt @bsDecoder(fn: "E.J.toMoment")
+                  value {
+                      floatCdf {
+                          xs
+                          ys
+                      }
+                      floatPoint
+                  }
+                  relevantAt @bsDecoder(fn: "E.J.O.toMoment")
+                  competitorType
+                  description
+                  taggedMeasurementId
+                  agent: Agent {
+                      id
+                      name
+                      user: User {
+                          id
+                          name
+                      }
+                      bot: Bot {
+                          id
+                          name
+                          competitorType
+                      }
+                  }
+
+                  measurable: Measurable {
                     id
                     name
-                    user: User {
-                        id
-                        name
-                    }
-                    bot: Bot {
-                        id
-                        name
-                        competitorType
-                    }
-                }
-            }
+                    expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
+                    state
+                    stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
+                  }
+              }
           }
         }
     }
@@ -128,21 +170,22 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-type measurementEdges =
-  Client.Context.Primary.Connection.edges(Types.measurement);
+type measurementEdges = Client.Context.Primary.Connection.edges(measurement);
 
 let queryToComponent = (query, innerComponentFn) =>
-  QueryComponent.make(~variables=query##variables, o =>
-    o.result
+  QueryComponent.make(~variables=query##variables, response =>
+    response.result
     |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(e =>
-         e##measurements
-         |> E.O.fmap(Context.Primary.Connection.fromJson(toMeasurement))
+    |> Rationale.Result.fmap(result =>
+         result##measurements
+         |> Rationale.Option.fmap(
+              Context.Primary.Connection.fromJson(toMeasurement),
+            )
          |> innerComponentFn
        )
     |> E.R.id
   )
-  |> E.React.el;
+  |> ReasonReact.element;
 
 type measurableStates = Context.Primary.MeasurableState.t;
 
@@ -159,18 +202,32 @@ let queryDirection = (~pageLimit, ~direction, ~fn: inputType('a), ()) =>
   | Before(before) => fn(~last=pageLimit, ~before, ())
   };
 
+let unpackResults = result =>
+  result##measurements
+  |> Rationale.Option.fmap(
+       Context.Primary.Connection.fromJson(toMeasurement),
+     );
+
 let componentMaker = (query, innerComponentFn) =>
-  QueryComponent.make(~variables=query##variables, o =>
-    o.result
+  QueryComponent.make(~variables=query##variables, response =>
+    response.result
     |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(e =>
-         e##measurements
-         |> E.O.fmap(Context.Primary.Connection.fromJson(toMeasurement))
-         |> innerComponentFn
+    |> Rationale.Result.fmap(result =>
+         result |> unpackResults |> innerComponentFn
        )
     |> E.R.id
   )
-  |> E.React.el;
+  |> ReasonReact.element;
+
+let componentMakerMissingOptional = (query, innerComponentFn) =>
+  QueryComponent.make(~variables=query##variables, response =>
+    response.result
+    |> E.HttpResponse.fromApollo
+    |> E.HttpResponse.fmap(unpackResults)
+    |> E.HttpResponse.optionalToMissing
+    |> innerComponentFn
+  )
+  |> ReasonReact.element;
 
 let component =
     (~measurableId, ~pageLimit, ~direction: direction, ~innerComponentFn) => {
@@ -178,8 +235,20 @@ let component =
     queryDirection(
       ~pageLimit,
       ~direction,
-      ~fn=Query.make(~measurableId),
+      ~fn=Query.make(~measurableId, ~agentId=""),
       (),
     );
   componentMaker(query, innerComponentFn);
+};
+
+let componentWithAgent =
+    (~agentId, ~pageLimit, ~direction: direction, ~innerComponentFn) => {
+  let query =
+    queryDirection(
+      ~pageLimit,
+      ~direction,
+      ~fn=Query.make(~measurableId="", ~agentId),
+      (),
+    );
+  componentMakerMissingOptional(query, innerComponentFn);
 };

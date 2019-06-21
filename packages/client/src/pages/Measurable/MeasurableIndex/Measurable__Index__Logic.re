@@ -68,7 +68,9 @@ module LoadedAndUnselected = {
   let findMeasurableIndexOfMeasurableId = (t: t, id) =>
     Context.Primary.Measurable.(
       switch (t.reducerParams.response) {
-      | Success(m) => m.edges |> E.A.findIndex(r => r.id == id)
+      | Success(m) =>
+        m.edges
+        |> E.A.findIndex((r: Context.Primary.Measurable.t) => r.id == id)
       | _ => None
       }
     );

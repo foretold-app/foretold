@@ -16,13 +16,10 @@ module ReducerConfig = {
 module Reducer = SelectWithPaginationReducerFunctor.Make(ReducerConfig);
 
 module Types = {
-  module ChannelQuery = Context.Primary.Channel;
+  type channel = Context.Primary.Channel.t;
 
-  type channel = ChannelQuery.t;
-
-  module SeriesCollectionQuery = Foretold__GraphQL.Queries.SeriesCollection;
-
-  type seriesCollectionType = Js.Array.t(SeriesCollectionQuery.series);
+  type seriesCollectionType =
+    Js.Array.t(Foretold__GraphQL.Queries.SeriesCollection.series);
 
   type loggedInUser = Context.Primary.User.t;
 
@@ -32,7 +29,7 @@ module Types = {
 
   module ReducerTypes = Reducer.Types;
 
-  type reducerParams = ReducerTypes.reducerParams;
+  type reducerParams = Reducer.Types.reducerParams;
 
   module ReducerParams = Reducer.Reducers.ReducerParams;
 };
@@ -62,7 +59,7 @@ module LoadedAndUnselected = {
 
   let filteredSeriesCollection = (t: t) =>
     t.seriesCollection
-    |> E.A.filter((x: SeriesCollectionQuery.series) =>
+    |> E.A.filter((x: Foretold__GraphQL.Queries.SeriesCollection.series) =>
          x.measurableCount !== Some(0)
        );
 
@@ -94,13 +91,13 @@ module WithChannelButNotQuery = {
 };
 
 module WithoutChannel = {
-  type t = E.HttpResponse.t(ChannelQuery.t);
+  type t = E.HttpResponse.t(Context.Primary.Channel.t);
 };
 
 module MeasurableIndexDataState = {
   type state =
     | WithoutChannel(WithoutChannel.t)
-    | InvalidIndexError(ChannelQuery.t)
+    | InvalidIndexError(Context.Primary.Channel.t)
     | WithChannelButNotQuery(WithChannelButNotQuery.t)
     | LoadedAndUnselected(LoadedAndUnselected.t)
     | LoadedAndSelected(LoadedAndSelected.t);
@@ -108,7 +105,7 @@ module MeasurableIndexDataState = {
   type input = {
     reducerParams: ReducerTypes.reducerParams,
     loggedInUser,
-    channel: E.HttpResponse.t(ChannelQuery.t),
+    channel: E.HttpResponse.t(Context.Primary.Channel.t),
     query,
   };
 

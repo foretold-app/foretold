@@ -8,13 +8,15 @@ type state = {
   competitorType: string,
   dataType: string,
   description: string,
+  valueText: string,
 };
 
 type action =
   | UpdateFloatPdf(FloatCdf.t)
   | UpdateCompetitorType(string)
   | UpdateDataType(string)
-  | UpdateDescription(string);
+  | UpdateDescription(string)
+  | UpdateValueText(string);
 
 let component = ReasonReact.reducerComponent("CdfInput");
 
@@ -106,6 +108,7 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
              send(UpdateFloatPdf(asGroup))}
             |> ignore
           }
+          onChange={text => send(UpdateValueText(text))}
         />
       </div>
       <div className=Styles.inputBox>
@@ -143,6 +146,7 @@ let make =
     competitorType: "COMPETITIVE",
     dataType: "FLOAT_CDF",
     description: "",
+    valueText: "",
   },
   reducer: (action, state) =>
     switch (action) {
@@ -153,6 +157,7 @@ let make =
       ReasonReact.Update({...state, competitorType: e})
     | UpdateDataType(e) => ReasonReact.Update({...state, dataType: e})
     | UpdateDescription(e) => ReasonReact.Update({...state, description: e})
+    | UpdateValueText(e) => ReasonReact.Update({...state, valueText: e})
     },
   render: ({state, send}) => {
     let onSubmit = () => {
@@ -161,7 +166,7 @@ let make =
         value,
         getCompetitorType(state.competitorType),
         state.description,
-        "",
+        state.valueText,
       ));
       ();
     };

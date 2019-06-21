@@ -14,10 +14,7 @@ let make =
   render: _ => {
     let channelId = channelPage.channelId;
 
-    let topOption =
-      Context.Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
-
-    let top = channel => {
+    let topOrdinaryChannel = channel => {
       let joinButton = channelId =>
         C.Channel.SimpleHeader.joinChannel(channelId);
 
@@ -39,7 +36,19 @@ let make =
       </>;
     };
 
+    let topGlobalChannel = channel => {
+      <> <Div float=`left> {channelink(channel)} </Div> </>;
+    };
+
+    let top = channel =>
+      switch (channelId) {
+      | "" => topGlobalChannel(channel)
+      | _ => topOrdinaryChannel(channel)
+      };
+
     let headers = () => {
+      let topOption =
+        Context.Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
       let secondLevel = channel => ChannelTabs.make(topOption, channel);
 
       switch (channel) {

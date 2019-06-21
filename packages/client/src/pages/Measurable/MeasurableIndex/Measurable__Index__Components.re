@@ -144,25 +144,32 @@ module MeasurableIndexDataState = {
         stats: measurablesStateStats,
         state: state,
       ) => {
-    let lmake = SLayout.LayoutConfig.make;
-
     switch (state) {
     | InvalidIndexError(_) =>
-      lmake(~head=E.React.null, ~body="Item Not Valid" |> ste)
+      SLayout.LayoutConfig.make(
+        ~head=E.React.null,
+        ~body="Item Not Valid" |> ste,
+      )
     | WithChannelButNotQuery(c) =>
-      lmake(~head=E.React.null, ~body="Loading Query..." |> ste)
+      SLayout.LayoutConfig.make(
+        ~head=E.React.null,
+        ~body="Loading Query..." |> ste,
+      )
     | LoadedAndUnselected(l) =>
-      lmake(
+      SLayout.LayoutConfig.make(
         ~head=LoadedAndUnselected.header(l, stats, selectedState),
         ~body=LoadedAndUnselected.body(l, send),
       )
     | LoadedAndSelected(l) =>
-      lmake(
+      SLayout.LayoutConfig.make(
         ~head=LoadedAndSelected.header(l, send),
         ~body=LoadedAndSelected.body(l),
       )
     | WithoutChannel(_) =>
-      lmake(~head=E.React.null, ~body="No channel." |> ste)
+      SLayout.LayoutConfig.make(
+        ~head=E.React.null,
+        ~body="No channel." |> ste,
+      )
     };
   };
 };

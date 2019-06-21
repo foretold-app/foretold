@@ -18,16 +18,12 @@ module Reducer = SelectWithPaginationReducerFunctor.Make(ReducerConfig);
 module Types = {
   type channel = Context.Primary.Channel.t;
 
-  type seriesCollectionType =
+  type seriesCollection =
     Js.Array.t(Foretold__GraphQL.Queries.SeriesCollection.series);
 
   type loggedInUser = Context.Primary.User.t;
 
-  type query = E.HttpResponse.t(seriesCollectionType);
-
-  type page = int;
-
-  module ReducerTypes = Reducer.Types;
+  type query = E.HttpResponse.t(seriesCollection);
 
   type reducerParams = Reducer.Types.reducerParams;
 };
@@ -39,8 +35,8 @@ module LoadedAndSelected = {
     reducerParams,
     loggedInUser,
     channel,
-    seriesCollection: seriesCollectionType,
-    itemState: ReducerTypes.itemSelected,
+    seriesCollection,
+    itemState: Reducer.Types.itemSelected,
     selectedMeasurable: ReducerConfig.itemType,
   };
 };
@@ -50,7 +46,7 @@ module LoadedAndUnselected = {
     reducerParams,
     loggedInUser,
     channel,
-    seriesCollection: seriesCollectionType,
+    seriesCollection,
   };
 };
 
@@ -76,7 +72,7 @@ module MeasurableIndexDataState = {
     | LoadedAndSelected(LoadedAndSelected.t);
 
   type input = {
-    reducerParams: ReducerTypes.reducerParams,
+    reducerParams: Reducer.Types.reducerParams,
     loggedInUser,
     channel: E.HttpResponse.t(Context.Primary.Channel.t),
     query,

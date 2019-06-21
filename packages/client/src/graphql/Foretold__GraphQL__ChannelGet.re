@@ -49,6 +49,24 @@ let component = (~id, fn) => {
 };
 
 let component2 = (~id, innerFn) => {
+  switch (id) {
+  | "" =>
+    E.HttpResponse.Success(Context.Primary.Channel.getGlobalChannel())
+    |> innerFn
+  | _ =>
+    let query = Query.make(~id, ());
+    QueryComponent.make(~variables=query##variables, ({result}) =>
+      result
+      |> E.HttpResponse.fromApollo
+      |> E.HttpResponse.fmap(e => e##channel |> E.O.fmap(toChannel))
+      |> E.HttpResponse.optionalToMissing
+      |> innerFn
+    )
+    |> ReasonReact.element;
+  };
+};
+
+let component3 = (~id, innerFn) => {
   let query = Query.make(~id, ());
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result

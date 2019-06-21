@@ -20,6 +20,7 @@ let mutate =
       value: MeasurementValue.t,
       competitorType: competitorType,
       description: string,
+      valueText: string,
     ) => {
   let m =
     Query.make(
@@ -31,9 +32,11 @@ let mutate =
         "relevantAt": None,
         "taggedMeasurementId": None,
         "agentId": None,
+        "valueText": Some(valueText),
       },
       (),
     );
+
   mutation(
     ~variables=m##variables,
     ~refetchQueries=[|"getMeasurements"|],

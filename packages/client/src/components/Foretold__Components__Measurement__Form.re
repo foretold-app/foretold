@@ -9,15 +9,15 @@ let make = (~measurableId: string, ~isCreator: bool, _children) => {
       ~onCompleted=_ => Js.log("Request submitted"),
       (mutation, data) =>
         <CdfInput
-          onSubmit={
-            ((value, competitorType, description)) =>
-              Mutations.MeasurementCreate.mutate(
-                mutation,
-                measurableId,
-                value,
-                competitorType,
-                description,
-              )
+          onSubmit={((value, competitorType, description, valueText)) =>
+            Mutations.MeasurementCreate.mutate(
+              mutation,
+              measurableId,
+              value,
+              competitorType,
+              description,
+              valueText,
+            )
           }
           data
           isCreator

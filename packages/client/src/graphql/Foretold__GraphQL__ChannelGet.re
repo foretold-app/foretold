@@ -57,5 +57,5 @@ let component2 = (~id, innerFn) => {
     |> E.HttpResponse.optionalToMissing
     |> innerFn
   )
-  |> E.React.el;
+  |> ReasonReact.element;
 };

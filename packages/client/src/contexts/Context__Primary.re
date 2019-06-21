@@ -406,6 +406,18 @@ module Channel = {
     channelMemberships,
     openedMeasurablesCount,
   };
+
+  let getGlobalChannel = (): t =>
+    make(
+      ~id="global",
+      ~name="Global",
+      ~description=Some("Global Channel"),
+      ~isArchived=false,
+      ~isPublic=true,
+      ~myRole=Some(`VIEWER),
+      ~membershipCount=Some(0),
+      (),
+    );
 };
 
 module Series = {

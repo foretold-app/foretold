@@ -74,6 +74,7 @@ let getCompetitorType =
 
 let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
   let isValid = getIsValid(state);
+
   <div className=Styles.form>
     <div className=Styles.chartSection>
       {E.A.length(state.floatCdf.xs) > 1
@@ -141,6 +142,7 @@ let make =
       _children,
     ) => {
   ...component,
+
   initialState: () => {
     floatCdf: FloatCdf.empty,
     competitorType: "COMPETITIVE",
@@ -148,6 +150,7 @@ let make =
     description: "",
     valueText: "",
   },
+
   reducer: (action, state) =>
     switch (action) {
     | UpdateFloatPdf((e: FloatCdf.t)) =>
@@ -159,6 +162,7 @@ let make =
     | UpdateDescription(e) => ReasonReact.Update({...state, description: e})
     | UpdateValueText(e) => ReasonReact.Update({...state, valueText: e})
     },
+
   render: ({state, send}) => {
     let onSubmit = () => {
       let value = getValue(state);

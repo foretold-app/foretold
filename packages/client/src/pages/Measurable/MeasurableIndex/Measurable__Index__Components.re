@@ -152,6 +152,7 @@ module MeasurableIndexDataState = {
         state: state,
       ) => {
     let lmake = SLayout.LayoutConfig.make;
+
     switch (state) {
     | InvalidIndexError(_) =>
       lmake(~head=E.React.null, ~body="Item Not Valid" |> ste)

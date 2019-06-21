@@ -1,12 +1,11 @@
 open Foretold__GraphQL;
 
-module Types = Measurable__Index__Logic;
 module Components = Measurable__Index__Components;
 
 let load3Queries = (channelId, states, itemsPerPage, fn) =>
   ((a, b, c, d) => (a, b, c, d) |> fn)
   |> E.F.flatten4Callbacks(
-       Types.SelectWithPaginationReducer.make(
+       Measurable__Index__Logic.SelectWithPaginationReducer.make(
          ~itemsPerPage,
          ~callFnParams={channelId, states},
          ~subComponent=_,
@@ -34,7 +33,7 @@ let make =
     );
   loadData(
     ((selectWithPaginationParams, channel, query, measurablesStateStats)) =>
-    Types.MeasurableIndexDataState.make({
+    Measurable__Index__Logic.MeasurableIndexDataState.make({
       reducerParams: selectWithPaginationParams,
       loggedInUser,
       channel,

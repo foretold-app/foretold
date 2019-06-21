@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
       get: getMeasurementValue,
       set: setMeasurementValue,
     },
+    valueText: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
     competitorType: {
       type: DataTypes.ENUM([
         MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
@@ -79,6 +83,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
+  /**
+   * @return {{}|*}
+   */
   function getMeasurementValue() {
     const value = _.get(this, 'dataValues.value');
     const data = _.get(this, 'dataValues.value.data');

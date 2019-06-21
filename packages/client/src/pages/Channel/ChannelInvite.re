@@ -1,9 +1,3 @@
-open Utils;
-open E;
-open Css;
-open SLayout;
-open Foretold__GraphQL;
-
 let ste = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("ChannelMembers");

@@ -2562,6 +2562,18 @@
               "deprecationReason": null
             },
             {
+              "name": "valueText",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "Measurable",
               "description": null,
               "args": [],
@@ -4722,6 +4734,16 @@
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "MeasurementValueInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "valueText",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               },
               "defaultValue": null

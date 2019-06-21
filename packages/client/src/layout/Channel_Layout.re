@@ -60,9 +60,13 @@ let makeWithPage =
       |> layout;
     };
 
-    loadChannel(result =>
-      result |> E.HttpResponse.flatten(succesFn, errorFn, loadingFn)
-    );
+    switch (channelId) {
+    | "global" => Context.Primary.Channel.getGlobalChannel() |> succesFn
+    | _ =>
+      loadChannel(result =>
+        result |> E.HttpResponse.flatten(succesFn, errorFn, loadingFn)
+      )
+    };
 
   | None => <Home />
   };

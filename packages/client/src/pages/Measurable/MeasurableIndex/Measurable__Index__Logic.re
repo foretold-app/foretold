@@ -1,4 +1,4 @@
-module GetMeasurablesReducerConfig = {
+module ReducerConfig = {
   type itemType = Context.Primary.Measurable.t;
   type callFnParams = {
     channelId: string,
@@ -13,8 +13,7 @@ module GetMeasurablesReducerConfig = {
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
 };
 
-module SelectWithPaginationReducer =
-  SelectWithPaginationReducerFunctor.Make(GetMeasurablesReducerConfig);
+module Reducer = SelectWithPaginationReducerFunctor.Make(ReducerConfig);
 
 module Types = {
   module ChannelQuery = Context.Primary.Channel;
@@ -31,11 +30,11 @@ module Types = {
 
   type page = int;
 
-  module ReducerTypes = SelectWithPaginationReducer.Types;
+  module ReducerTypes = Reducer.Types;
 
   type reducerParams = ReducerTypes.reducerParams;
 
-  module ReducerParams = SelectWithPaginationReducer.Reducers.ReducerParams;
+  module ReducerParams = Reducer.Reducers.ReducerParams;
 };
 
 open Types;
@@ -47,7 +46,7 @@ module LoadedAndSelected = {
     channel,
     seriesCollection: seriesCollectionType,
     itemState: ReducerTypes.itemSelected,
-    selectedMeasurable: GetMeasurablesReducerConfig.itemType,
+    selectedMeasurable: ReducerConfig.itemType,
   };
 };
 

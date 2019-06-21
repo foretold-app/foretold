@@ -2,7 +2,7 @@ open Utils;
 open Style.Grid;
 open Measurable__Index__Logic;
 
-module ReducerParams = SelectWithPaginationReducer.Reducers.ReducerParams;
+module ReducerParams = Reducer.Reducers.ReducerParams;
 
 type measurablesStateStats =
   E.HttpResponse.t(
@@ -12,7 +12,7 @@ type measurablesStateStats =
 module LoadedAndSelected = {
   open Measurable__Index__Logic.LoadedAndSelected;
 
-  let header = (t: t, send: SelectWithPaginationReducer.Types.send) =>
+  let header = (t: t, send: Reducer.Types.send) =>
     <>
       <Div
         float=`left
@@ -22,7 +22,7 @@ module LoadedAndSelected = {
             FC.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
-        {SelectWithPaginationReducer.Components.deselectButton(send)}
+        {Reducer.Components.deselectButton(send)}
       </Div>
       <Div
         float=`right
@@ -32,9 +32,7 @@ module LoadedAndSelected = {
             FC.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
-        {SelectWithPaginationReducer.Components.paginationItem(
-           t.reducerParams,
-         )}
+        {Reducer.Components.paginationItem(t.reducerParams)}
       </Div>
     </>;
 
@@ -110,13 +108,11 @@ module LoadedAndUnselected = {
             FC.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
-        {SelectWithPaginationReducer.Components.paginationPage(
-           t.reducerParams,
-         )}
+        {Reducer.Components.paginationPage(t.reducerParams)}
       </Div>
     </Div>;
 
-  let body = (t: t, send: SelectWithPaginationReducer.Types.send) => {
+  let body = (t: t, send: Reducer.Types.send) => {
     let measurables =
       (
         switch (t.reducerParams.response) {
@@ -131,10 +127,7 @@ module LoadedAndUnselected = {
         showExtraData=true
         channelId={Some(t.channel.id)}
         onSelect={e =>
-          SelectWithPaginationReducer.Components.sendSelectItem(
-            t.reducerParams,
-            e.id,
-          )
+          Reducer.Components.sendSelectItem(t.reducerParams, e.id)
         }
       />
     </>;
@@ -146,7 +139,7 @@ module MeasurableIndexDataState = {
 
   let toLayoutInput =
       (
-        send: SelectWithPaginationReducer.Types.send,
+        send: Reducer.Types.send,
         selectedState: Context.QueryParams.MeasurableIndex.query,
         stats: measurablesStateStats,
         state: state,

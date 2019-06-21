@@ -98,6 +98,15 @@ module Route = {
     | ["bots", "new"] => BotCreate
     | ["measurables", id, "edit"] => MeasurableEdit(id)
     | ["c"] => ChannelIndex
+    | ["cg"] =>
+      Channel({
+        channelId: "",
+        subPage:
+          Measurables(
+            url.search
+            |> Context__QueryParams.MeasurableIndex.fromStringWithDefaults,
+          ),
+      })
     | ["c", channelId] =>
       Channel({
         channelId,
@@ -136,6 +145,7 @@ module Url = {
     | EntityShow(string)
     | Agent(AgentPage.t)
     | ChannelShow(string)
+    | ChannelGlobal
     | ChannelNew
     | ChannelIndex
     | SeriesShow(string, string)
@@ -163,6 +173,7 @@ module Url = {
     | ChannelNew => "/communities/" ++ "new"
     | ChannelIndex => "/communities"
     | ChannelShow(id) => "/c/" ++ id
+    | ChannelGlobal => "/cg/"
     | ChannelEdit(id) => "/c/" ++ id ++ "/edit"
     | ChannelMembers(id) => "/c/" ++ id ++ "/members"
     | ChannelInvite(channel) => "/c/" ++ channel ++ "/invite"

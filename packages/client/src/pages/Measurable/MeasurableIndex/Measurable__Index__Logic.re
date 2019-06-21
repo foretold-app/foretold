@@ -4,11 +4,12 @@ module ReducerConfig = {
     channelId: string,
     states: array(Context.Primary.MeasurableState.t),
   };
-  let getId = (e: Context.Primary.Measurable.t) => e.id;
-  let callFn = (e: callFnParams) =>
+
+  let getId = (params: Context.Primary.Measurable.t) => params.id;
+  let callFn = (params: callFnParams) =>
     Foretold__GraphQL.Queries.Measurables.component2(
-      ~channelId=e.channelId,
-      ~states=e.states |> E.A.fmap(r => Some(r)),
+      ~channelId=params.channelId,
+      ~states=params.states |> Array.map(r => Some(r)),
     );
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
 };
@@ -72,7 +73,7 @@ module MeasurableIndexDataState = {
     | LoadedAndSelected(LoadedAndSelected.t);
 
   type input = {
-    reducerParams: Reducer.Types.reducerParams,
+    reducerParams,
     loggedInUser,
     channel: E.HttpResponse.t(Context.Primary.Channel.t),
     query,

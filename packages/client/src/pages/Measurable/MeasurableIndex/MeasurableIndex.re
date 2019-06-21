@@ -1,7 +1,3 @@
-open Foretold__GraphQL;
-
-module Components = Measurable__Index__Components;
-
 let load3Queries = (channelId, states, itemsPerPage, fn) =>
   (
     (reducer, channel, series, stats) =>
@@ -13,9 +9,9 @@ let load3Queries = (channelId, states, itemsPerPage, fn) =>
          ~callFnParams={channelId, states},
          ~subComponent=_,
        ),
-       Queries.Channel.component2(~id=channelId),
-       Queries.SeriesCollection.component2(~channelId),
-       Queries.MeasurablesStateStats.component2(~channelId),
+       Foretold__GraphQL.Queries.Channel.component2(~id=channelId),
+       Foretold__GraphQL.Queries.SeriesCollection.component2(~channelId),
+       Foretold__GraphQL.Queries.MeasurablesStateStats.component2(~channelId),
      );
 
 let make =
@@ -42,7 +38,7 @@ let make =
       channel,
       query,
     })
-    |> Components.MeasurableIndexDataState.toLayoutInput(
+    |> Measurable__Index__Components.MeasurableIndexDataState.toLayoutInput(
          reducerParams.send,
          searchParams,
          measurablesStateStats,

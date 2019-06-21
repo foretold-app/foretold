@@ -70,11 +70,17 @@ let make =
         |> E.HttpResponse.fmap(agents => {
              let dataSource =
                agents
+               |> Js.Array.filter((agent: Context.Primary.Agent.t) =>
+                    switch (agent.name) {
+                    | Some(name) when name != "" => true
+                    | _ => false
+                    }
+                  )
                |> Array.map((agent: Context.Primary.Agent.t) =>
                     {
                       "key": agent.id,
                       "agentId": agent.id,
-                      "agentName": agent.name |> E.O.default(""),
+                      "agentName": agent.name |> Rationale.Option.default(""),
                     }
                   );
              <Antd.Table columns dataSource size=`small />;

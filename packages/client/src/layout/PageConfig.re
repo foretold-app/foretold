@@ -22,7 +22,6 @@ module Wrapper = {
             ~loggedInUser,
           ),
         );
-
 };
 
 module Renderer = {
@@ -41,44 +40,51 @@ module Renderer = {
   let toComponent = t =>
     switch (t) {
     | Channel(channelPage, loggedInUser) =>
-      channelLayout(channelPage, loggedInUser)
+      channelLayout(channelPage, loggedInUser, None)
     | NoChannel => normal
     };
 };
 
 module LayoutWrapper = {
-    let standardLayoutAndWrapper =
-        (
+  let standardLayoutAndWrapper =
+      (
         loggedInUser,
         make:
-            (
+          (
             ~layout: 'a => ReasonReact.reactElement=?,
-            ReasonReact.reactElement,
-            ) =>
-            'b
-        ) =>
+            ReasonReact.reactElement
+          ) =>
+          'b,
+      ) =>
     make(~layout=Renderer.normal)
     |> Wrapper.noChannelSidebar(~key="", loggedInUser);
-}
+};
 
 module LoggedInPage = {
-let justPageParams = (make, pageParams, loggedInUser) =>{
-    let makeWithUser = loggedInUser => (make(~pageParams) |> LayoutWrapper.standardLayoutAndWrapper(loggedInUser));
-    loggedInUser |> E.O.fmap(makeWithUser) |> E.O.default(<Home />)
+  let justPageParams = (make, pageParams, loggedInUser) => {
+    let makeWithUser = loggedInUser =>
+      make(~pageParams)
+      |> LayoutWrapper.standardLayoutAndWrapper(loggedInUser);
+    loggedInUser |> E.O.fmap(makeWithUser) |> E.O.default(<Home />);
   };
 
-let justLoggedInUser = (make, loggedInUser) =>{
-    let makeWithUser = loggedInUser => (make(~loggedInUser) |> LayoutWrapper.standardLayoutAndWrapper(loggedInUser));
-    loggedInUser |> E.O.fmap(makeWithUser) |> E.O.default(<Home />)
-  }
+  let justLoggedInUser = (make, loggedInUser) => {
+    let makeWithUser = loggedInUser =>
+      make(~loggedInUser)
+      |> LayoutWrapper.standardLayoutAndWrapper(loggedInUser);
+    loggedInUser |> E.O.fmap(makeWithUser) |> E.O.default(<Home />);
+  };
 
-let pageParamsAndUser = (make, pageParams, loggedInUser) =>{
-    let makeWithUser = loggedInUser => (make(~pageParams, ~loggedInUser) |> LayoutWrapper.standardLayoutAndWrapper(loggedInUser));
-    loggedInUser |> E.O.fmap(makeWithUser) |> E.O.default(<Home />)
-  }
+  let pageParamsAndUser = (make, pageParams, loggedInUser) => {
+    let makeWithUser = loggedInUser =>
+      make(~pageParams, ~loggedInUser)
+      |> LayoutWrapper.standardLayoutAndWrapper(loggedInUser);
+    loggedInUser |> E.O.fmap(makeWithUser) |> E.O.default(<Home />);
+  };
 
-let noParams = (make, loggedInUser) =>{
-    let makeWithUser = loggedInUser => (make |> LayoutWrapper.standardLayoutAndWrapper(loggedInUser));
-    loggedInUser |> E.O.fmap(makeWithUser) |> E.O.default(<Home />)
-  }
-}
+  let noParams = (make, loggedInUser) => {
+    let makeWithUser = loggedInUser =>
+      make |> LayoutWrapper.standardLayoutAndWrapper(loggedInUser);
+    loggedInUser |> E.O.fmap(makeWithUser) |> E.O.default(<Home />);
+  };
+};

@@ -1,7 +1,5 @@
 open SLayout;
-open Utils;
 open Style.Grid;
-open Rationale.Function.Infix;
 
 let component = ReasonReact.statelessComponent("Channel Layout Page");
 
@@ -9,19 +7,19 @@ let make =
     (
       channelPage: Context.Routing.ChannelPage.t,
       loggedInUser: Context.Primary.User.t,
+      channel: option(Context.Primary.Channel.t),
       {head, body}: LayoutConfig.t,
     ) => {
   ...component,
   render: _ => {
     let channelId = channelPage.channelId;
+
     let topOption =
       Context.Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
 
-    let loadChannel =
-      Foretold__GraphQL.Queries.Channel.component2(~id=channelId);
-
     let joinButton = channelId =>
       C.Channel.SimpleHeader.joinChannel(channelId);
+
     let leaveButton = channelId =>
       C.Channel.SimpleHeader.leaveChannel(channelId);
 
@@ -29,35 +27,30 @@ let make =
       <>
         <Div float=`left> {channelink(channel)} </Div>
         <Div float=`right>
-          {
-            channel.myRole === Some(`NONE) ?
-              joinButton(channel.id) :
-              <>
-                {
-                  Foretold__Components__Channel.SimpleHeader.newMeasurable(
+          {channel.myRole === Some(`NONE)
+             ? joinButton(channel.id)
+             : <>
+                 {Foretold__Components__Channel.SimpleHeader.newMeasurable(
                     channel.id,
-                  )
-                }
-                {leaveButton(channel.id)}
-              </>
-          }
+                  )}
+                 {leaveButton(channel.id)}
+               </>}
         </Div>
       </>;
 
     let secondLevel = channel => ChannelTabs.make(topOption, channel);
 
     let headers =
-      loadChannel(
-        E.HttpResponse.fmap((channel: Context.Primary.Channel.t) =>
-          <>
-            <FC.GroupHeader> {top(channel)} </FC.GroupHeader>
-            <FC.GroupHeader.SubHeader>
-              {secondLevel(channel)}
-            </FC.GroupHeader.SubHeader>
-          </>
-        )
-        ||> E.HttpResponse.withReactDefaults,
-      );
+      switch (channel) {
+      | Some(channel) =>
+        <>
+          <FC.GroupHeader> {top(channel)} </FC.GroupHeader>
+          <FC.GroupHeader.SubHeader>
+            {secondLevel(channel)}
+          </FC.GroupHeader.SubHeader>
+        </>
+      | _ => <div />
+      };
 
     <Layout__Component__FillWithSidebar
       channelId={Some(channelId)} loggedInUser>
@@ -90,6 +83,7 @@ let makeWithEl =
     (
       channelPage: Context.Routing.ChannelPage.t,
       loggedInUser,
-      t: LayoutConfig.t,
+      channel: option(Context.Primary.Channel.t),
+      layout: LayoutConfig.t,
     ) =>
-  make(channelPage, loggedInUser, t) |> E.React.el;
+  make(channelPage, loggedInUser, channel, layout) |> E.React.el;

@@ -3,7 +3,9 @@ open Utils;
 
 type valueType = [ | `DATE | `FLOAT | `PERCENTAGE];
 type channelMembershipRole = [ | `ADMIN | `VIEWER];
+
 type myMembershipRole = [ | `ADMIN | `VIEWER | `NONE];
+
 type permission = [
   | `BOT_CREATE
   | `BOT_UPDATE

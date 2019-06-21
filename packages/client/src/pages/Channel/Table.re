@@ -1,5 +1,3 @@
-open Utils;
-
 module Styles = {
   open Css;
   let table = [display(`flex), flexDirection(`column)] |> style;
@@ -29,13 +27,11 @@ module Row = {
     ...component,
     render: _self =>
       <div className=Styles.row>
-        {
-          cells
-          |> E.A.fmapi((i, r: ReasonReact.reactElement) =>
-               <Cell key={i |> string_of_int}> r </Cell>
-             )
-          |> ReasonReact.array
-        }
+        {cells
+         |> Array.mapi((index, cellBody: ReasonReact.reactElement) =>
+              <Cell key={index |> string_of_int}> cellBody </Cell>
+            )
+         |> ReasonReact.array}
       </div>,
   };
 };
@@ -49,25 +45,25 @@ type column('a) = {
 let fromColumns = (columns: array(column('a)), rows: array('a)) =>
   <Table>
     <FC.Table.HeaderRow>
-      {
-        columns
-        |> E.A.fmap((c: column('a)) => c.name)
-        |> E.A.fmap(r => <FC.Table.Cell flex=1> r </FC.Table.Cell>)
-        |> ReasonReact.array
-      }
+      {columns
+       |> Array.map((c: column('a)) => c.name)
+       |> Array.mapi((index, name) =>
+            <FC.Table.Cell flex=1 key={index |> string_of_int}>
+              name
+            </FC.Table.Cell>
+          )
+       |> ReasonReact.array}
     </FC.Table.HeaderRow>
-    {
-      rows
-      |> E.A.fmapi((i, r: 'a) =>
-           <FC.Table.Row className=Styles.row key={i |> string_of_int}>
-             {
-               columns
-               |> E.A.fmap((c: column('a)) => c.render(r))
-               |> E.A.fmap(r => <FC.Table.Cell flex=1> r </FC.Table.Cell>)
-               |> ReasonReact.array
-             }
-           </FC.Table.Row>
-         )
-      |> ReasonReact.array
-    }
+    {rows
+     |> Array.mapi((index, r: 'a) =>
+          <FC.Table.Row className=Styles.row key={index |> string_of_int}>
+            {columns
+             |> Array.map((c: column('a)) => c.render(r))
+             |> Array.map(renderedRow =>
+                  <FC.Table.Cell flex=1> renderedRow </FC.Table.Cell>
+                )
+             |> ReasonReact.array}
+          </FC.Table.Row>
+        )
+     |> ReasonReact.array}
   </Table>;

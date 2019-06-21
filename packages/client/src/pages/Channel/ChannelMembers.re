@@ -1,7 +1,4 @@
-open Utils;
 open Foretold__GraphQL;
-
-let ste = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("ChannelMembers");
 
@@ -20,10 +17,10 @@ let changeRoleAction = (agentId, channelId, role, text) =>
             ),
         )
       }>
-      {text |> ste}
+      {text |> ReasonReact.string}
     </Foretold__Components__Link>
   )
-  |> E.React.el;
+  |> ReasonReact.element;
 
 let removeFromChannel = (agentId, channelId) =>
   Foretold__GraphQL.Mutations.ChannelMembershipDelete.Mutation.make(
@@ -39,28 +36,35 @@ let removeFromChannel = (agentId, channelId) =>
             ),
         )
       }>
-      {"Remove" |> ste}
+      {"Remove" |> ReasonReact.string}
     </Foretold__Components__Link>
   )
-  |> E.React.el;
+  |> ReasonReact.element;
 
 module Columns = {
   type column = Table.column(Context.Primary.Types.channelMembership);
-  let canX = (x, record: Context.Primary.Types.channelMembership) =>
+
+  let canX =
+      (
+        permission: Context.Primary.permission,
+        record: Context.Primary.Types.channelMembership,
+      ) =>
     record.permissions
-    |> E.O.fmap(r => Context.Primary.Permissions.canX(x, r))
-    |> E.O.default(false);
+    |> Rationale.Option.fmap((permissions: Context.Primary.Permissions.t) =>
+         Context.Primary.Permissions.canX(permission, permissions)
+       )
+    |> Rationale.Option.default(false);
 
   let agentColumn: column = {
-    name: "Agent" |> ste,
-    render: m =>
-      m.agent
-      |> E.O.fmap((r: Context.Primary.Types.agent) =>
+    name: "Agent" |> ReasonReact.string,
+    render: membership =>
+      membership.agent
+      |> Rationale.Option.fmap((r: Context.Primary.Types.agent) =>
            <Foretold__Components__Link
              linkType={
                Internal(Agent({agentId: r.id, subPage: AgentMeasurements}))
              }>
-             {r.name |> E.O.default("Anonymous") |> ste}
+             {r.name |> E.O.default("Anonymous") |> ReasonReact.string}
            </Foretold__Components__Link>
          )
       |> E.O.React.defaultNull,
@@ -68,109 +72,160 @@ module Columns = {
   };
 
   let roleColumn: column = {
-    name: "Role" |> ste,
-    render: m =>
-      switch (m.role) {
+    name: "Role" |> ReasonReact.string,
+    render: membership =>
+      switch (membership.role) {
       | `ADMIN =>
-        <div className="ant-tag ant-tag-blue"> {"Admin" |> ste} </div>
+        <div className="ant-tag ant-tag-blue">
+          {"Admin" |> ReasonReact.string}
+        </div>
       | `VIEWER =>
-        <div className="ant-tag ant-tag-green"> {"Viewer" |> ste} </div>
+        <div className="ant-tag ant-tag-green">
+          {"Viewer" |> ReasonReact.string}
+        </div>
       },
     flex: 1,
   };
 
   let roleChangeColumn: string => column =
     channelId => {
-      name: "Change Role" |> ste,
-      render: m =>
+      name: "Change Role" |> ReasonReact.string,
+      render: membership =>
         <div>
-          {switch (m.role, m.agent) {
-           | (`VIEWER, Some(agent)) =>
-             E.React.showIf(
-               canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
-               changeRoleAction(
-                 agent.id,
-                 channelId,
-                 `ADMIN,
-                 "Change to Admin",
-               ),
-             )
-           | (`ADMIN, Some(agent)) =>
-             E.React.showIf(
-               canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, m),
-               changeRoleAction(
-                 agent.id,
-                 channelId,
-                 `VIEWER,
-                 "Change to Viewer",
-               ),
-             )
-           | _ => <div />
-           }}
+          {
+            switch (membership.role, membership.agent) {
+            | (`VIEWER, Some(agent)) =>
+              E.React.showIf(
+                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, membership),
+                changeRoleAction(
+                  agent.id,
+                  channelId,
+                  `ADMIN,
+                  "Change to Admin",
+                ),
+              )
+            | (`ADMIN, Some(agent)) =>
+              E.React.showIf(
+                canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, membership),
+                changeRoleAction(
+                  agent.id,
+                  channelId,
+                  `VIEWER,
+                  "Change to Viewer",
+                ),
+              )
+            | _ => <div />
+            }
+          }
         </div>,
       flex: 1,
     };
 
   let removeFromChannelColumn: string => column =
     channelId => {
-      name: "Remove" |> ste,
-      render: m =>
-        switch (m.agent, canX(`CHANNEL_MEMBERSHIP_DELETE, m)) {
+      name: "Remove" |> ReasonReact.string,
+      render: membership =>
+        switch (
+          membership.agent,
+          canX(`CHANNEL_MEMBERSHIP_DELETE, membership),
+        ) {
         | (Some(agent), true) => removeFromChannel(agent.id, channelId)
         | _ => ReasonReact.null
         },
       flex: 1,
     };
 
-  let all = channelId => [|
-    agentColumn,
-    roleColumn,
-    roleChangeColumn(channelId),
-    removeFromChannelColumn(channelId),
-  |];
+  let all = (channelId: string, channel: Context.Primary.Types.channel) =>
+    switch (channel.myRole) {
+    | Some(`ADMIN) => [|
+        agentColumn,
+        roleColumn,
+        roleChangeColumn(channelId),
+        removeFromChannelColumn(channelId),
+      |]
+    | _ => [|agentColumn, roleColumn|]
+    };
 };
 
-let make =
-    (~channelId: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
-  ...component,
-  render: _ => {
-    let table =
-      Queries.ChannelMemberships.component(~id=channelId, memberships =>
-        memberships
-        |> E.HttpResponse.fmap(memberships =>
-             Table.fromColumns(Columns.all(channelId), memberships)
-           )
-        |> E.HttpResponse.withReactDefaults
-      );
+let title = () =>
+  <FC.Base.Div float=`left>
+    <FC.PageCard.HeaderRow.Title>
+      {"Community Members" |> ReasonReact.string}
+    </FC.PageCard.HeaderRow.Title>
+  </FC.Base.Div>;
 
-    SLayout.LayoutConfig.make(
-      ~head=
-        <>
-          <FC.Base.Div float=`left>
-            <FC.PageCard.HeaderRow.Title>
-              {"Community Members" |> ste}
-            </FC.PageCard.HeaderRow.Title>
-          </FC.Base.Div>
-          <FC.Base.Div
-            float=`right
-            className={Css.style([
-              FC.PageCard.HeaderRow.Styles.itemTopPadding,
-              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-            ])}>
-            <FC.Base.Button
-              variant=Primary
-              onClick={e =>
-                Foretold__Components__Link.LinkType.onClick(
-                  Internal(ChannelInvite(channelId)),
-                  e,
-                )
-              }>
-              {"Add Members" |> ste}
-            </FC.Base.Button>
-          </FC.Base.Div>
-        </>,
-      ~body=<FC.PageCard.Body> table </FC.PageCard.Body>,
-    )
-    |> layout;
-  },
+let addMembersButtonSection = (channelId: string) =>
+  <FC.Base.Div
+    float=`right
+    className={
+      Css.style([
+        FC.PageCard.HeaderRow.Styles.itemTopPadding,
+        FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+      ])
+    }>
+    <FC.Base.Button
+      variant=Primary
+      onClick={
+        e =>
+          Foretold__Components__Link.LinkType.onClick(
+            Internal(ChannelInvite(channelId)),
+            e,
+          )
+      }>
+      {"Add Members" |> ReasonReact.string}
+    </FC.Base.Button>
+  </FC.Base.Div>;
+
+let succesFn =
+    (
+      ~channelId: string,
+      ~layout,
+      ~channel: Context.Primary.Types.channel,
+      ~memberships,
+    ) => {
+  let head =
+    switch (channel.myRole) {
+    | Some(`ADMIN) =>
+      <div> {title()} {addMembersButtonSection(channelId)} </div>
+    | _ => <div> {title()} </div>
+    };
+
+  let table =
+    Table.fromColumns(Columns.all(channelId, channel), memberships);
+
+  SLayout.LayoutConfig.make(
+    ~head,
+    ~body=<FC.PageCard.Body> table </FC.PageCard.Body>,
+  )
+  |> layout;
+};
+
+let errorFn = (layout, _) =>
+  SLayout.LayoutConfig.make(
+    ~head=<div />,
+    ~body=<div> {"No channel." |> ReasonReact.string} </div>,
+  )
+  |> layout;
+
+let loadingFn = (layout, _) =>
+  SLayout.LayoutConfig.make(~head=<div />, ~body=<SLayout.Spin />) |> layout;
+
+let make =
+    (
+      ~channelId: string,
+      ~layout=SLayout.FullPage.makeWithEl,
+      ~channel: Context.Primary.Channel.t,
+      _children,
+    ) => {
+  ...component,
+  render: _ =>
+    Queries.ChannelMemberships.component(~id=channelId, result =>
+      result
+      |> E.HttpResponse.flatten(
+           memberships =>
+             succesFn(~channelId, ~layout, ~channel, ~memberships),
+           errorFn(layout),
+           loadingFn(layout),
+         )
+    ),
 };

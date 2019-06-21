@@ -1,6 +1,5 @@
 open Context.Routing;
 open Foretold__GraphQL;
-open Rationale.Function.Infix;
 open Pages;
 
 let defaultPage = (loggedInUser: option(Context.Primary.User.t)) =>

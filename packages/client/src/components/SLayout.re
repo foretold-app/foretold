@@ -2,7 +2,9 @@ open Utils;
 
 module Styles = {
   open Css;
+
   let width100 = style([width(`percent(100.))]);
+
   let headerText =
     style([
       color(`hex("486474")),
@@ -10,6 +12,7 @@ module Styles = {
       fontWeight(`bold),
       float(`left),
     ]);
+
   let seriesText =
     style([
       color(`hex("3d547b")),
@@ -17,10 +20,14 @@ module Styles = {
       float(`left),
       fontWeight(`medium),
     ]);
+
   let channelText =
     style([color(`hex("242424")), fontSize(`em(1.4)), float(`left)]);
+
   let container = style([maxWidth(`px(1170)), margin(`auto)]);
+
   let backHover = style([fontSize(`em(1.3))]);
+
   let dash =
     style([
       float(`left),
@@ -40,6 +47,22 @@ module Header = {
   let make = children => {
     ...component,
     render: _ => <FC.PageCard.HeaderRow> ...children </FC.PageCard.HeaderRow>,
+  };
+};
+
+module Spin = {
+  module Styles = {
+    open Css;
+
+    let centerBlock = style([textAlign(`center), padding(`em(2.))]);
+  };
+
+  let component = ReasonReact.statelessComponent("Spin");
+
+  let make = _children => {
+    ...component,
+    render: _ =>
+      <div className=Styles.centerBlock> <Antd.Spin tip="Loading..." /> </div>,
   };
 };
 

@@ -17,7 +17,7 @@ let toBot = (bot: bot): Context.Primary.Bot.t =>
 module Query = [%graphql
   {|
       query getBot ($id: String!) {
-          bot: bot(id: $id) @bsRecord{
+          bot: bot(id: $id) @bsRecord {
            id
            name
            description
@@ -34,8 +34,8 @@ let component = (~id, innerFn) => {
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
     |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(e => e##bot |> E.O.fmap(toBot))
-    |> E.R.fmap(innerFn)
+    |> Rationale.Result.fmap(e => e##bot |> Rationale.Option.fmap(toBot))
+    |> Rationale.Result.fmap(innerFn)
     |> E.R.id
   )
   |> E.React.el;

@@ -22,8 +22,11 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
           ();
         };
 
+        let bot = None;
+
         BotForm.withForm(
           onSubmit,
+          bot,
           ({send, state}) => {
             let form =
               BotForm.formFields(state, send, () =>

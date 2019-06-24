@@ -31,14 +31,26 @@ module FormConfig = {
 
 module Form = ReFormNext.Make(FormConfig);
 
-let withForm = (onSubmit, innerComponentFn) =>
+let withForm =
+    (onSubmit, bot: option(Context.Primary.Bot.t), innerComponentFn) => {
+  let initialState: FormConfig.state =
+    switch (bot) {
+    | Some(bot) => {
+        name: bot.name |> Rationale.Option.default(""),
+        description: bot.description |> Rationale.Option.default(""),
+        competitorType: `COMPETITIVE,
+      }
+    | None => {name: "", description: "", competitorType: `COMPETITIVE}
+    };
+
   Form.make(
-    ~initialState={name: "", description: "", competitorType: `COMPETITIVE},
+    ~initialState,
     ~onSubmit,
     ~schema=Form.Validation.Schema([||]),
     innerComponentFn,
   )
   |> E.React.el;
+};
 
 let formFields = (form: Form.state, send, onSubmit) =>
   <Antd.Form onSubmit={e => onSubmit()}>

@@ -2,6 +2,7 @@ module Queries = {
   module Authentication = Foretold__GraphQL__Authentication;
   module Agent = Foretold__GraphQL__GetAgent;
   module Bots = Foretold__GraphQL__BotsGet;
+  module Bot = Foretold__GraphQL__BotGet;
   module Agents = Foretold__GraphQL__GetAgents;
   module Measurable = Foretold__GraphQL__GetMeasurable;
   module Measurables = Foretold__GraphQL__GetMeasurables;
@@ -29,4 +30,5 @@ module Mutations = {
   module ChannelMembershipRoleUpdate = Foretold__GraphQL__ChannelMembershipRoleUpdate;
   module SeriesCreate = Foretold__GraphQL__SeriesCreate;
   module BotCreate = Foretold__GraphQL__BotCreate;
+  module BotUpdate = Foretold__GraphQL__BotUpdate;
 };

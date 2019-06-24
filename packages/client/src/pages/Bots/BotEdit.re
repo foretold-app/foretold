@@ -4,7 +4,7 @@ let component = ReasonReact.statelessComponent("BotEdit");
 
 module CMutationForm =
   MutationForm.Make({
-    type queryType = Mutations.BotCreate.Query.t;
+    type queryType = Mutations.BotUpdate.Query.t;
   });
 
 let make =
@@ -15,10 +15,10 @@ let make =
     ) => {
   ...component,
   render: _ => {
-    let body =
-      Mutations.BotCreate.withMutation((mutation, data) => {
+    let getForm = (bot: option(Context.Primary.Bot.t)) =>
+      Mutations.BotUpdate.withMutation((mutation, data) => {
         let onSubmit = (values: BotForm.Form.onSubmitAPI): unit => {
-          Mutations.BotCreate.mutate(
+          Mutations.BotUpdate.mutate(
             mutation,
             values.state.values.name,
             values.state.values.description,
@@ -29,6 +29,7 @@ let make =
 
         BotForm.withForm(
           onSubmit,
+          bot,
           ({send, state}) => {
             let form =
               BotForm.formFields(state, send, () =>
@@ -39,6 +40,8 @@ let make =
           },
         );
       });
+
+    let body = Queries.Bot.component(~id=pageParams.id, bot => getForm(bot));
 
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv("Edit a Bot"),

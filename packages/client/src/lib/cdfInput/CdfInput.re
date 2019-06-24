@@ -8,13 +8,15 @@ type state = {
   competitorType: string,
   dataType: string,
   description: string,
+  valueText: string,
 };
 
 type action =
   | UpdateFloatPdf(FloatCdf.t)
   | UpdateCompetitorType(string)
   | UpdateDataType(string)
-  | UpdateDescription(string);
+  | UpdateDescription(string)
+  | UpdateValueText(string);
 
 let component = ReasonReact.reducerComponent("CdfInput");
 
@@ -74,49 +76,39 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
   let isValid = getIsValid(state);
   <div className=Styles.form>
     <div className=Styles.chartSection>
-      {
-        E.A.length(state.floatCdf.xs) > 1 ?
-          <LargeCdfChart
-            data={
-              state.floatCdf
-              |> (e => (e.xs, e.ys))
-              |> MeasurementValue.FloatCdf.fromArrays
-              |> MeasurementValue.toPdf
-              |> MeasurementValue.FloatCdf.toJs
-            }
-          /> :
-          <div />
-      }
+      {E.A.length(state.floatCdf.xs) > 1
+         ? <LargeCdfChart
+             data={
+               state.floatCdf
+               |> (e => (e.xs, e.ys))
+               |> MeasurementValue.FloatCdf.fromArrays
+               |> MeasurementValue.toPdf
+               |> MeasurementValue.FloatCdf.toJs
+             }
+           />
+         : <div />}
     </div>
     <div className=Styles.inputSection>
-      {
-        E.React.showIf(
-          isCreator,
-          <div className=Styles.select>
-            {competitorType(~state, ~send)}
-          </div>,
-        )
-      }
-      {
-        E.React.showIf(
-          state.competitorType == "OBJECTIVE",
-          <div className=Styles.select> {dataType(~state, ~send)} </div>,
-        )
-      }
+      {E.React.showIf(
+         isCreator,
+         <div className=Styles.select> {competitorType(~state, ~send)} </div>,
+       )}
+      {E.React.showIf(
+         state.competitorType == "OBJECTIVE",
+         <div className=Styles.select> {dataType(~state, ~send)} </div>,
+       )}
       <div className=Styles.inputBox>
         <h4 className=Styles.label> {"Value" |> ste} </h4>
         <GuesstimateInput
           focusOnRender=true
           sampleCount=30000
-          onUpdate={
-            e =>
-              {
-                let (ys, xs) = e;
-                let asGroup: FloatCdf.t = {xs, ys};
-                send(UpdateFloatPdf(asGroup));
-              }
-              |> ignore
+          onUpdate={event =>
+            {let (ys, xs) = event
+             let asGroup: FloatCdf.t = {xs, ys}
+             send(UpdateFloatPdf(asGroup))}
+            |> ignore
           }
+          onChange={text => send(UpdateValueText(text))}
         />
       </div>
       <div className=Styles.inputBox>
@@ -124,13 +116,11 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
       </div>
       <Input.TextArea
         value={state.description}
-        onChange={
-          event => {
-            let value =
-              ReactDOMRe.domElementToObj(ReactEventRe.Form.target(event))##value;
-            send(UpdateDescription(value));
-          }
-        }
+        onChange={event => {
+          let value =
+            ReactDOMRe.domElementToObj(ReactEventRe.Form.target(event))##value;
+          send(UpdateDescription(value));
+        }}
       />
       <div className=Styles.submitButton>
         <Antd.Button
@@ -156,6 +146,7 @@ let make =
     competitorType: "COMPETITIVE",
     dataType: "FLOAT_CDF",
     description: "",
+    valueText: "",
   },
   reducer: (action, state) =>
     switch (action) {
@@ -166,6 +157,7 @@ let make =
       ReasonReact.Update({...state, competitorType: e})
     | UpdateDataType(e) => ReasonReact.Update({...state, dataType: e})
     | UpdateDescription(e) => ReasonReact.Update({...state, description: e})
+    | UpdateValueText(e) => ReasonReact.Update({...state, valueText: e})
     },
   render: ({state, send}) => {
     let onSubmit = () => {
@@ -174,22 +166,22 @@ let make =
         value,
         getCompetitorType(state.competitorType),
         state.description,
+        state.valueText,
       ));
       ();
     };
+
     <Style.BorderedBox>
-      {
-        switch (data.result) {
-        | Loading => "Loading" |> ste
-        | Error(e) =>
-          <>
-            {"Error: " ++ e##message |> ste}
-            {mainn(~state, ~isCreator, ~send, ~onSubmit)}
-          </>
-        | Data(_) => "Form submitted successfully!" |> ste |> E.React.inH2
-        | NotCalled => mainn(~state, ~isCreator, ~send, ~onSubmit)
-        }
-      }
+      {switch (data.result) {
+       | Loading => "Loading" |> ste
+       | Error(e) =>
+         <>
+           {"Error: " ++ e##message |> ste}
+           {mainn(~state, ~isCreator, ~send, ~onSubmit)}
+         </>
+       | Data(_) => "Form submitted successfully!" |> ste |> E.React.inH2
+       | NotCalled => mainn(~state, ~isCreator, ~send, ~onSubmit)
+       }}
     </Style.BorderedBox>;
   },
 };

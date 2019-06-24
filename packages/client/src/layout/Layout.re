@@ -22,6 +22,7 @@ let meToUser = (me: Context.Me.me) =>
 
 let toRoutePage = (route: Route.t, me: Context.Me.me) => {
   let loggedInUser = meToUser(me);
+
   switch (route) {
   | Home => defaultPage(loggedInUser)
   | Login => <Login />

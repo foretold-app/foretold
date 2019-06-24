@@ -48,25 +48,7 @@ let component = (~id, fn) => {
   |> E.React.el;
 };
 
-let component2 = (~id, innerFn) => {
-  switch (id) {
-  | "" =>
-    E.HttpResponse.Success(Context.Primary.Channel.getGlobalChannel())
-    |> innerFn
-  | _ =>
-    let query = Query.make(~id, ());
-    QueryComponent.make(~variables=query##variables, ({result}) =>
-      result
-      |> E.HttpResponse.fromApollo
-      |> E.HttpResponse.fmap(e => e##channel |> E.O.fmap(toChannel))
-      |> E.HttpResponse.optionalToMissing
-      |> innerFn
-    )
-    |> ReasonReact.element;
-  };
-};
-
-let component3 = (~id, innerFn) => {
+let getChannelByIdAsComponent = (~id, innerFn) => {
   let query = Query.make(~id, ());
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
@@ -76,4 +58,13 @@ let component3 = (~id, innerFn) => {
     |> innerFn
   )
   |> ReasonReact.element;
+};
+
+let component2 = (~id, innerFn) => {
+  switch (id) {
+  | "" =>
+    E.HttpResponse.Success(Context.Primary.Channel.getGlobalChannel())
+    |> innerFn
+  | _ => getChannelByIdAsComponent(~id, innerFn)
+  };
 };

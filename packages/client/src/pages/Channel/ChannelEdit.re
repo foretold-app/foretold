@@ -17,7 +17,9 @@ let make = (~channelId: string, ~layout, _children) => {
   ...component,
   render: _ => {
     let loadChannel =
-      Foretold__GraphQL.Queries.Channel.component3(~id=channelId);
+      Foretold__GraphQL.Queries.Channel.getChannelByIdAsComponent(
+        ~id=channelId,
+      );
 
     let mutationMake =
       Mutation.Mutation.make(~onCompleted=_ => ()) ||> E.React.el;

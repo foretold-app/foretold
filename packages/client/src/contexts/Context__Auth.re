@@ -138,20 +138,18 @@ module ServerJwt = {
 };
 
 module CallbackUrlToAuth0Tokens = {
-  open Belt;
   open Utils;
 
   let matchAccessToken = [%re "/access_token=([^\$&]+)/g"];
-  let matchExpiresIn = [%re "/expires_in=([^\$&]+)/g"];
   let matchIdToken = [%re "/id_token=([^\$&]+)/g"];
 
   let make = (url: ReasonReact.Router.url) => {
     let accessToken = url.hash |> resolveRegex(matchAccessToken);
     let idToken = url.hash |> resolveRegex(matchIdToken);
-    let expiresIn = url.hash |> resolveRegex(matchExpiresIn);
-    let addedMs = expiresIn |> float_of_string |> (e => e *. 1000.);
+
+    let monthMs = 31.  *.  ( 24. *. 60.0 *. 60. *. 1000. );
     let currentTimeMs = E.JsDate.make() |> E.JsDate.valueOf;
-    let expiresAtInMs = currentTimeMs +. addedMs;
+    let expiresAtInMs = currentTimeMs +. monthMs;
     let expiresAt = expiresAtInMs |> Int64.of_float |> Int64.to_string;
 
     switch (accessToken, idToken, expiresAt) {

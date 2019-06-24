@@ -33,7 +33,7 @@ let unpackEdges = (a): array('a) => {
 
 type bot = {
   .
-  "competitorType": [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE],
+  "competitorType": Context.Primary.CompetitorType.t,
   "id": string,
   "description": option(string),
   "token": option(string),

@@ -80,8 +80,6 @@ module ChannelMembershipRole = {
     };
 };
 
-type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
-
 module Types = {
   type permissions = {allow: list(permission)};
   type user = {
@@ -91,7 +89,7 @@ module Types = {
     name: string,
   }
   and bot = {
-    competitorType,
+    competitorType: CompetitorType.t,
     description: option(string),
     id: string,
     name: option(string),
@@ -284,7 +282,7 @@ module User = {
 module Bot = {
   type t = Types.bot;
   module CompetitorType = {
-    let toString = (c: competitorType) =>
+    let toString = (c: CompetitorType.t) =>
       switch (c) {
       | `AGGREGATION => "Aggregation"
       | `COMPETITIVE => "Prediction"

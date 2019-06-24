@@ -7,7 +7,7 @@ let toUser = (u: user): Context.Primary.User.t =>
   Context.Primary.User.make(~id=u.id, ~name=u.name, ());
 
 type bot = {
-  competitorType: [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE],
+  competitorType: Context.Primary.CompetitorType.t,
   description: option(string),
   id: string,
   name: string,

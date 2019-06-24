@@ -2,17 +2,16 @@ open Utils;
 open MomentRe;
 open Foretold__GraphQL;
 
-type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
-
 module FormConfig = {
   type field(_) =
     | Name: field(string)
     | Description: field(string)
-    | CompetitorType: field(competitorType);
+    | CompetitorType: field(Context.Primary.CompetitorType.t);
+
   type state = {
     name: string,
     description: string,
-    competitorType,
+    competitorType: Context.Primary.CompetitorType.t,
   };
 
   let get: type value. (state, field(value)) => value =
@@ -66,22 +65,18 @@ let formFields = (form: Form.state, send, onSubmit) =>
       {"Name" |> ste |> E.React.inH3}
       <Antd.Input
         value={form.values.name}
-        onChange={
-          ReForm.Helpers.handleDomFormChange(e =>
-            send(Form.FieldChangeValue(Name, e))
-          )
-        }
+        onChange={ReForm.Helpers.handleDomFormChange(e =>
+          send(Form.FieldChangeValue(Name, e))
+        )}
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
       {"Description" |> ste |> E.React.inH3}
       <Antd.Input
         value={form.values.description}
-        onChange={
-          ReForm.Helpers.handleDomFormChange(e =>
-            send(Form.FieldChangeValue(Description, e))
-          )
-        }
+        onChange={ReForm.Helpers.handleDomFormChange(e =>
+          send(Form.FieldChangeValue(Description, e))
+        )}
       />
     </Antd.Form.Item>
     <Antd.Form.Item>

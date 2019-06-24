@@ -33,13 +33,31 @@ module Styles = {
   let label = style([color(hex("888"))]);
 };
 
-let competitorType = (~state, ~send) =>
+let competitorType =
+    (~state, ~send, ~measurable: Context.Primary.Measurable.t) => {
+  let options =
+    switch (measurable.state) {
+    | Some(`JUDGED) => [|
+        <Select.Option value="OBJECTIVE">
+          {"Resolution" |> ste}
+        </Select.Option>,
+      |]
+    | _ => [|
+        <Select.Option value="COMPETITIVE">
+          {"Prediction" |> ste}
+        </Select.Option>,
+        <Select.Option value="OBJECTIVE">
+          {"Resolution" |> ste}
+        </Select.Option>,
+      |]
+    };
+
   <Select
     value={state.competitorType}
     onChange={e => send(UpdateCompetitorType(e))}>
-    <Select.Option value="COMPETITIVE"> {"Prediction" |> ste} </Select.Option>
-    <Select.Option value="OBJECTIVE"> {"Resolution" |> ste} </Select.Option>
+    {options |> ReasonReact.array}
   </Select>;
+};
 
 let dataType = (~state, ~send) =>
   <Select value={state.dataType} onChange={e => send(UpdateDataType(e))}>
@@ -72,8 +90,9 @@ let getCompetitorType =
   | "OBJECTIVE" => `OBJECTIVE
   | _ => `OBJECTIVE;
 
-let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
+let mainn = (~state, ~isCreator, ~send, ~onSubmit, ~measurable) => {
   let isValid = getIsValid(state);
+
   <div className=Styles.form>
     <div className=Styles.chartSection>
       {E.A.length(state.floatCdf.xs) > 1
@@ -91,7 +110,9 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit) => {
     <div className=Styles.inputSection>
       {E.React.showIf(
          isCreator,
-         <div className=Styles.select> {competitorType(~state, ~send)} </div>,
+         <div className=Styles.select>
+           {competitorType(~state, ~send, ~measurable)}
+         </div>,
        )}
       {E.React.showIf(
          state.competitorType == "OBJECTIVE",
@@ -138,16 +159,27 @@ let make =
       ~onUpdate=_ => (),
       ~isCreator=false,
       ~onSubmit=_ => (),
+      ~measurable: Context.Primary.Measurable.t,
       _children,
     ) => {
   ...component,
+
   initialState: () => {
-    floatCdf: FloatCdf.empty,
-    competitorType: "COMPETITIVE",
-    dataType: "FLOAT_CDF",
-    description: "",
-    valueText: "",
+    let competitorTypeInitValue =
+      switch (measurable.state) {
+      | Some(`JUDGED) => "OBJECTIVE"
+      | _ => "COMPETITIVE"
+      };
+
+    {
+      floatCdf: FloatCdf.empty,
+      competitorType: competitorTypeInitValue,
+      dataType: "FLOAT_CDF",
+      description: "",
+      valueText: "",
+    };
   },
+
   reducer: (action, state) =>
     switch (action) {
     | UpdateFloatPdf((e: FloatCdf.t)) =>
@@ -159,6 +191,7 @@ let make =
     | UpdateDescription(e) => ReasonReact.Update({...state, description: e})
     | UpdateValueText(e) => ReasonReact.Update({...state, valueText: e})
     },
+
   render: ({state, send}) => {
     let onSubmit = () => {
       let value = getValue(state);
@@ -177,10 +210,10 @@ let make =
        | Error(e) =>
          <>
            {"Error: " ++ e##message |> ste}
-           {mainn(~state, ~isCreator, ~send, ~onSubmit)}
+           {mainn(~state, ~isCreator, ~send, ~onSubmit, ~measurable)}
          </>
        | Data(_) => "Form submitted successfully!" |> ste |> E.React.inH2
-       | NotCalled => mainn(~state, ~isCreator, ~send, ~onSubmit)
+       | NotCalled => mainn(~state, ~isCreator, ~send, ~onSubmit, ~measurable)
        }}
     </Style.BorderedBox>;
   },

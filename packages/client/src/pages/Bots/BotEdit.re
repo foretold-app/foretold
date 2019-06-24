@@ -86,7 +86,12 @@ let formFields = (form: Form.state, send, onSubmit) =>
     </Antd.Form.Item>
   </Antd.Form>;
 
-let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
+let make =
+    (
+      ~pageParams: PageConfig.LoggedInPage.pageParams,
+      ~layout=SLayout.FullPage.makeWithEl,
+      _children,
+    ) => {
   ...component,
   render: _ => {
     let body =

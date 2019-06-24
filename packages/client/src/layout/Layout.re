@@ -22,6 +22,7 @@ let meToUser = (me: Context.Me.me) =>
 
 let toRoutePage = (route: Route.t, me: Context.Me.me) => {
   let loggedInUser = meToUser(me);
+
   switch (route) {
   | Home => defaultPage(loggedInUser)
   | Login => <Login />
@@ -38,6 +39,7 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) => {
   | ChannelIndex => ChannelIndex'.toEl(loggedInUser)
   | ChannelNew => ChannelNew'.toEl(loggedInUser)
   | MeasurableEdit(id) => MeasurableEdit'.toEl({id: id}, loggedInUser)
+  | BotEdit(botId) => BotEdit'.toEl({id: botId}, loggedInUser)
   | _ => <Home />
   };
 };

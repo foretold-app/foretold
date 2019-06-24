@@ -61,10 +61,13 @@ module LayoutWrapper = {
 };
 
 module LoggedInPage = {
-  let justPageParams = (make, pageParams, loggedInUser) => {
+  type pageParams = {id: string};
+
+  let justPageParams = (make, pageParams: pageParams, loggedInUser) => {
     let makeWithUser = loggedInUser =>
       make(~pageParams)
       |> LayoutWrapper.standardLayoutAndWrapper(loggedInUser);
+
     loggedInUser |> E.O.fmap(makeWithUser) |> E.O.default(<Home />);
   };
 
@@ -72,19 +75,22 @@ module LoggedInPage = {
     let makeWithUser = loggedInUser =>
       make(~loggedInUser)
       |> LayoutWrapper.standardLayoutAndWrapper(loggedInUser);
+
     loggedInUser |> E.O.fmap(makeWithUser) |> E.O.default(<Home />);
   };
 
-  let pageParamsAndUser = (make, pageParams, loggedInUser) => {
+  let pageParamsAndUser = (make, pageParams: pageParams, loggedInUser) => {
     let makeWithUser = loggedInUser =>
       make(~pageParams, ~loggedInUser)
       |> LayoutWrapper.standardLayoutAndWrapper(loggedInUser);
+
     loggedInUser |> E.O.fmap(makeWithUser) |> E.O.default(<Home />);
   };
 
   let noParams = (make, loggedInUser) => {
     let makeWithUser = loggedInUser =>
       make |> LayoutWrapper.standardLayoutAndWrapper(loggedInUser);
+
     loggedInUser |> E.O.fmap(makeWithUser) |> E.O.default(<Home />);
   };
 };

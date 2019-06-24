@@ -103,19 +103,22 @@ let formCreation = (id, m) => {
 };
 
 let component = ReasonReact.statelessComponent("MeasurableEdit");
-type pageParams = {id: string};
-let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
+
+let make =
+    (
+      ~pageParams: PageConfig.LoggedInPage.pageParams,
+      ~layout=SLayout.FullPage.makeWithEl,
+      _children,
+    ) => {
   ...component,
   render: _self =>
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv("Edit Question"),
       ~body=
         <FC.PageCard.BodyPadding>
-          {
-            Queries.Measurable.component(~id=pageParams.id, m =>
-              formCreation(pageParams.id, m)
-            )
-          }
+          {Queries.Measurable.component(~id=pageParams.id, m =>
+             formCreation(pageParams.id, m)
+           )}
         </FC.PageCard.BodyPadding>,
     )
     |> layout,

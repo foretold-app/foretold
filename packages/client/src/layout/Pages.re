@@ -11,6 +11,10 @@ module BotCreate' = {
   let toEl = BotCreate.make |> LoggedInPage.noParams;
 };
 
+module BotEdit' = {
+  let toEl = BotEdit.make |> LoggedInPage.justPageParams;
+};
+
 module AgentIndex' = {
   let toEl = AgentIndex.make |> LoggedInPage.noParams;
 };

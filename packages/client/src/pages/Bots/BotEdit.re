@@ -37,7 +37,21 @@ let make =
                 send(BotForm.Form.Submit)
               );
 
-            CMutationForm.showWithLoading(~result=data.result, ~form, ());
+            CMutationForm.showWithLoading2(
+              ~result=data.result,
+              ~form,
+              ~onSuccess=
+                () => {
+                  Context.Routing.Url.push(
+                    Agent({
+                      agentId: "14810584-6ea2-48ab-9d85-3bb839b2f661",
+                      subPage: AgentBots,
+                    }),
+                  );
+                  ReasonReact.null;
+                },
+              (),
+            );
           },
         );
       });

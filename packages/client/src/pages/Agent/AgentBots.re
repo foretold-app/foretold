@@ -26,12 +26,11 @@ let agentSection = (agent: Queries.Agent.agent) =>
 let component = ReasonReact.statelessComponent("AgentBots");
 
 module Columns = {
-  type record = Context.Primary.Bot.t;
   type column = Table.column(Context.Primary.Bot.t);
 
   let nameColumn: column = {
     name: "Name" |> ste,
-    render: (r: record) =>
+    render: (r: Context.Primary.Bot.t) =>
       switch (r.name, r.agent) {
       | (Some(name), Some(agent)) =>
         <Foretold__Components__Link
@@ -47,19 +46,34 @@ module Columns = {
 
   let descriptionColumn: column = {
     name: "Description" |> ste,
-    render: (r: record) =>
+    render: (r: Context.Primary.Bot.t) =>
       r.description |> Rationale.Option.default("") |> ste,
     flex: 2,
   };
 
   let tokenColumn: column = {
     name: "Token" |> ste,
-    render: (r: record) =>
+    render: (r: Context.Primary.Bot.t) =>
       <Antd.Input value={r.token |> Rationale.Option.default("")} />,
     flex: 2,
   };
 
-  let all = [|nameColumn, descriptionColumn, tokenColumn|];
+  let editColumn: column = {
+    name: "Edit" |> ste,
+    render: (bot: Context.Primary.Bot.t) =>
+      <Foretold__Components__Link linkType={Internal(BotEdit(bot.id))}>
+        {"Edit Bot" |> ste}
+      </Foretold__Components__Link>,
+
+    flex: 1,
+  };
+
+  let all: array(column) = [|
+    nameColumn,
+    descriptionColumn,
+    tokenColumn,
+    editColumn,
+  |];
 };
 
 type pageParams = {id: string};

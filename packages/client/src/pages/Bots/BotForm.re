@@ -53,28 +53,30 @@ let withForm =
 };
 
 let formFields = (form: Form.state, send, onSubmit) =>
-  <Antd.Form onSubmit={e => onSubmit()}>
-    <Antd.Form.Item>
-      {"Name" |> ReasonReact.string |> E.React.inH3}
-      <Antd.Input
-        value={form.values.name}
-        onChange={ReForm.Helpers.handleDomFormChange(e =>
-          send(Form.FieldChangeValue(Name, e))
-        )}
-      />
-    </Antd.Form.Item>
-    <Antd.Form.Item>
-      {"Description" |> ReasonReact.string |> E.React.inH3}
-      <Antd.Input
-        value={form.values.description}
-        onChange={ReForm.Helpers.handleDomFormChange(e =>
-          send(Form.FieldChangeValue(Description, e))
-        )}
-      />
-    </Antd.Form.Item>
-    <Antd.Form.Item>
-      <Antd.Button _type=`primary onClick={_ => onSubmit()}>
-        {"Submit" |> ReasonReact.string}
-      </Antd.Button>
-    </Antd.Form.Item>
-  </Antd.Form>;
+  <FC.PageCard.BodyPadding>
+    <Antd.Form onSubmit={e => onSubmit()}>
+      <Antd.Form.Item>
+        {"Name" |> ReasonReact.string |> E.React.inH3}
+        <Antd.Input
+          value={form.values.name}
+          onChange={ReForm.Helpers.handleDomFormChange(e =>
+            send(Form.FieldChangeValue(Name, e))
+          )}
+        />
+      </Antd.Form.Item>
+      <Antd.Form.Item>
+        {"Description" |> ReasonReact.string |> E.React.inH3}
+        <Antd.Input
+          value={form.values.description}
+          onChange={ReForm.Helpers.handleDomFormChange(e =>
+            send(Form.FieldChangeValue(Description, e))
+          )}
+        />
+      </Antd.Form.Item>
+      <Antd.Form.Item>
+        <Antd.Button _type=`primary onClick={_ => onSubmit()}>
+          {"Submit" |> ReasonReact.string}
+        </Antd.Button>
+      </Antd.Form.Item>
+    </Antd.Form>
+  </FC.PageCard.BodyPadding>;

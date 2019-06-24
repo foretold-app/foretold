@@ -51,12 +51,14 @@ module LoadedAndUnselected = {
     <FC.Tab2
       isActive
       number=num
-      onClick={Foretold__Components__Link.LinkType.onClick(
-        Relative(
-          Context.QueryParams.MeasurableIndex.make(Some(state))
-          |> Context.QueryParams.MeasurableIndex.toUrlParams,
-        ),
-      )}>
+      onClick={
+        Foretold__Components__Link.LinkType.onClick(
+          Relative(
+            Context.QueryParams.MeasurableIndex.make(Some(state))
+            |> Context.QueryParams.MeasurableIndex.toUrlParams,
+          ),
+        )
+      }>
       {text |> ste}
     </FC.Tab2>;
 
@@ -68,37 +70,45 @@ module LoadedAndUnselected = {
       ) =>
     <Div>
       <Div float=`left>
-        {switch (stats) {
-         | Success(Some(r)) =>
-           <Div
-             float=`left
-             styles=[
-               Css.style([
-                 FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                 FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-               ]),
-             ]>
-             {stateLink(
-                `OPEN,
-                "Open",
-                r.openTotal,
-                query.state == Some(`OPEN),
-              )}
-             {stateLink(
-                `JUDGEMENT_PENDING,
-                "Pending Resolution",
-                r.pendingTotal,
-                query.state == Some(`JUDGEMENT_PENDING),
-              )}
-             {stateLink(
-                `JUDGED,
-                "Closed",
-                r.closedTotal,
-                query.state == Some(`JUDGED),
-              )}
-           </Div>
-         | _ => <> </>
-         }}
+        {
+          switch (stats) {
+          | Success(Some(r)) =>
+            <Div
+              float=`left
+              styles=[
+                Css.style([
+                  FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                  FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+                ]),
+              ]>
+              {
+                stateLink(
+                  `OPEN,
+                  "Open",
+                  r.openTotal,
+                  query.state == Some(`OPEN),
+                )
+              }
+              {
+                stateLink(
+                  `JUDGEMENT_PENDING,
+                  "Pending Resolution",
+                  r.pendingTotal,
+                  query.state == Some(`JUDGEMENT_PENDING),
+                )
+              }
+              {
+                stateLink(
+                  `JUDGED,
+                  "Closed",
+                  r.closedTotal,
+                  query.state == Some(`JUDGED),
+                )
+              }
+            </Div>
+          | _ => <> </>
+          }
+        }
       </Div>
       <Div
         float=`right
@@ -126,8 +136,8 @@ module LoadedAndUnselected = {
         measurables
         showExtraData=true
         channelId={Some(t.channel.id)}
-        onSelect={e =>
-          Reducer.Components.sendSelectItem(t.reducerParams, e.id)
+        onSelect={
+          e => Reducer.Components.sendSelectItem(t.reducerParams, e.id)
         }
       />
     </>;
@@ -143,7 +153,7 @@ module MeasurableIndexDataState = {
         selectedState: Context.QueryParams.MeasurableIndex.query,
         stats: measurablesStateStats,
         state: state,
-      ) => {
+      ) =>
     switch (state) {
     | InvalidIndexError(_) =>
       SLayout.LayoutConfig.make(
@@ -151,10 +161,7 @@ module MeasurableIndexDataState = {
         ~body="Item Not Valid" |> ste,
       )
     | WithChannelButNotQuery(c) =>
-      SLayout.LayoutConfig.make(
-        ~head=E.React.null,
-        ~body="Loading Query..." |> ste,
-      )
+      SLayout.LayoutConfig.make(~head=E.React.null, ~body=<SLayout.Spin />)
     | LoadedAndUnselected(l) =>
       SLayout.LayoutConfig.make(
         ~head=LoadedAndUnselected.header(l, stats, selectedState),
@@ -171,5 +178,4 @@ module MeasurableIndexDataState = {
         ~body="No channel." |> ste,
       )
     };
-  };
 };

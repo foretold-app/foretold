@@ -1,7 +1,7 @@
 module Query = [%graphql
   {|
-        mutation botUpdate($input: BotInput!) {
-            botUpdate(input: $input) {
+        mutation botUpdate($id: String!, $input: BotInput!) {
+            botUpdate(id: $id, input: $input) {
              id
             }
         }
@@ -11,9 +11,10 @@ module Query = [%graphql
 module Mutation = ReasonApollo.CreateMutation(Query);
 
 let mutate =
-    (mutation: Mutation.apolloMutation, name, description, competitorType) => {
+    (mutation: Mutation.apolloMutation, id, name, description, competitorType) => {
   let m =
     Query.make(
+      ~id,
       ~input={
         "name": name,
         "description": Some(description),
@@ -21,7 +22,8 @@ let mutate =
       },
       (),
     );
-  mutation(~variables=m##variables, ~refetchQueries=[|"user"|], ()) |> ignore;
+  mutation(~variables=m##variables, ~refetchQueries=[|"user", "bots"|], ())
+  |> ignore;
 };
 
 let withMutation = innerComponentFn =>

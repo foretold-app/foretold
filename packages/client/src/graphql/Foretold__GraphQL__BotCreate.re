@@ -21,7 +21,8 @@ let mutate =
       },
       (),
     );
-  mutation(~variables=m##variables, ~refetchQueries=[|"user"|], ()) |> ignore;
+  mutation(~variables=m##variables, ~refetchQueries=[|"user", "bots"|], ())
+  |> ignore;
 };
 
 let withMutation = innerComponentFn =>

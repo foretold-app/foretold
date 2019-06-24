@@ -20,6 +20,7 @@ let make =
         let onSubmit = (values: BotForm.Form.onSubmitAPI): unit => {
           Mutations.BotUpdate.mutate(
             mutation,
+            pageParams.id,
             values.state.values.name,
             values.state.values.description,
             values.state.values.competitorType,

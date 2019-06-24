@@ -64,9 +64,7 @@ module Columns = {
              linkType={
                Internal(Agent({agentId: r.id, subPage: AgentMeasurements}))
              }>
-             {r.name
-              |> Rationale.Option.default("Anonymous")
-              |> ReasonReact.string}
+             {r.name |> E.O.default("Anonymous") |> ReasonReact.string}
            </Foretold__Components__Link>
          )
       |> E.O.React.defaultNull,
@@ -198,17 +196,15 @@ let succesFn =
   |> layout;
 };
 
-let errorFn = (layout, _) => {
+let errorFn = (layout, _) =>
   SLayout.LayoutConfig.make(
     ~head=<div />,
     ~body=<div> {"No channel." |> ReasonReact.string} </div>,
   )
   |> layout;
-};
 
-let loadingFn = (layout, _) => {
+let loadingFn = (layout, _) =>
   SLayout.LayoutConfig.make(~head=<div />, ~body=<SLayout.Spin />) |> layout;
-};
 
 let make =
     (

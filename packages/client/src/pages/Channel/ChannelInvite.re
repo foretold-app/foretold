@@ -37,7 +37,7 @@ let make =
           linkType={
             Internal(Agent({agentId: agent.id, subPage: AgentMeasurements}))
           }>
-          {agent.name |> ReasonReact.string}
+          {agent.name |> Rationale.Option.default("") |> ReasonReact.string}
         </Foretold__Components__Link>,
       flex: 1,
     };
@@ -49,7 +49,7 @@ let make =
       flex: 1,
     };
 
-    let all: list(column) = [|agentColumn, inviteColumn|];
+    let all: array(column) = [|agentColumn, inviteColumn|];
 
     let title =
       <FC.Base.Div float=`left>

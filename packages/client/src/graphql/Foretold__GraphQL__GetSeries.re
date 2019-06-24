@@ -39,7 +39,6 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let component = (~id, innerFn) => {
-  open Rationale.Result.Infix;
   let query = Query.make(~id, ());
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result

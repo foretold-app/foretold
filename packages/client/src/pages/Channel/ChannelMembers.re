@@ -57,7 +57,7 @@ module Columns = {
 
   let agentColumn: column = {
     name: "Agent" |> ReasonReact.string,
-    render: membership =>
+    render: (membership: Context.Primary.Types.channelMembership) =>
       membership.agent
       |> Rationale.Option.fmap((r: Context.Primary.Types.agent) =>
            <Foretold__Components__Link
@@ -73,7 +73,7 @@ module Columns = {
 
   let roleColumn: column = {
     name: "Role" |> ReasonReact.string,
-    render: membership =>
+    render: (membership: Context.Primary.Types.channelMembership) =>
       switch (membership.role) {
       | `ADMIN =>
         <div className="ant-tag ant-tag-blue">
@@ -90,7 +90,7 @@ module Columns = {
   let roleChangeColumn: string => column =
     channelId => {
       name: "Change Role" |> ReasonReact.string,
-      render: membership =>
+      render: (membership: Context.Primary.Types.channelMembership) =>
         <div>
           {switch (membership.role, membership.agent) {
            | (`VIEWER, Some(agent)) =>

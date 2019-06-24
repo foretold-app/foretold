@@ -1,6 +1,6 @@
-let ste = ReasonReact.string;
-
 let component = ReasonReact.statelessComponent("ChannelMembers");
+
+type column = Table.column(Context.Primary.Agent.t);
 
 let make =
     (
@@ -11,7 +11,7 @@ let make =
     ) => {
   ...component,
   render: _ => {
-    let addToChannel = (agentId, channelId) =>
+    let addToChannelLink = (agentId: string, channelId: string) =>
       Foretold__GraphQL.Mutations.ChannelMembershipCreate.Mutation.make(
         (mutation, _) =>
         <Foretold__Components__Link
@@ -25,43 +25,38 @@ let make =
                 ),
             )
           }>
-          {"Add to Community" |> ste}
+          {"Add to Community" |> ReasonReact.string}
         </Foretold__Components__Link>
       )
       |> ReasonReact.element;
 
-    let columns = [|
-      Antd.Table.TableProps.make_column(
-        ~title="Agent",
-        ~dataIndex="agent",
-        ~key="agent",
-        ~width=2,
-        ~render=
-          (~text, ~record, ~index) =>
-            <Foretold__Components__Link
-              linkType={
-                Internal(
-                  Agent({
-                    agentId: record##agentId,
-                    subPage: AgentMeasurements,
-                  }),
-                )
-              }>
-              {record##agentName |> ste}
-            </Foretold__Components__Link>,
-        (),
-      ),
-      Antd.Table.TableProps.make_column(
-        ~title="Invite",
-        ~dataIndex="role",
-        ~key="actions2",
-        ~width=2,
-        ~render=
-          (~text, ~record, ~index) =>
-            addToChannel(record##agentId, channelId),
-        (),
-      ),
-    |];
+    let agentColumn: column = {
+      name: "Agent" |> ReasonReact.string,
+      render: (agent: Context.Primary.Agent.t) =>
+        <Foretold__Components__Link
+          linkType={
+            Internal(Agent({agentId: agent.id, subPage: AgentMeasurements}))
+          }>
+          {agent.name |> ReasonReact.string}
+        </Foretold__Components__Link>,
+      flex: 1,
+    };
+
+    let inviteColumn: column = {
+      name: "Invite" |> ReasonReact.string,
+      render: (agent: Context.Primary.Agent.t) =>
+        addToChannelLink(agent.id, channelId),
+      flex: 1,
+    };
+
+    let all: list(column) = [|agentColumn, inviteColumn|];
+
+    let title =
+      <FC.Base.Div float=`left>
+        <FC.PageCard.HeaderRow.Title>
+          {"Invite Agents" |> ReasonReact.string}
+        </FC.PageCard.HeaderRow.Title>
+      </FC.Base.Div>;
 
     let table =
       Foretold__GraphQL.Queries.Agents.componentUsers(
@@ -75,22 +70,16 @@ let make =
                     | Some(name) when name != "" => true
                     | _ => false
                     }
-                  )
-               |> Array.map((agent: Context.Primary.Agent.t) =>
-                    {
-                      "key": agent.id,
-                      "agentId": agent.id,
-                      "agentName": agent.name |> Rationale.Option.default(""),
-                    }
                   );
-             <Antd.Table columns dataSource size=`small />;
+
+             Table.fromColumns(all, dataSource);
            })
         |> E.HttpResponse.withReactDefaults
       );
 
     SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("Invite Agents"),
-      ~body=table,
+      ~head=<div> title </div>,
+      ~body=<FC.PageCard.Body> table </FC.PageCard.Body>,
     )
     |> layout;
   },

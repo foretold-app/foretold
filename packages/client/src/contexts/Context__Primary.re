@@ -2,6 +2,7 @@ open Rationale.Function.Infix;
 open Utils;
 
 type valueType = [ | `DATE | `FLOAT | `PERCENTAGE];
+type agentTypeEntity = [ | `USER | `BOT];
 type channelMembershipRole = [ | `ADMIN | `VIEWER];
 
 type myMembershipRole = [ | `ADMIN | `VIEWER | `NONE];

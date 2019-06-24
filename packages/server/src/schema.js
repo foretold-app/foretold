@@ -115,8 +115,12 @@ const schema = new graphql.GraphQLSchema({
       },
 
       agents: {
+        args: {
+          excludeChannelId: { type: graphql.GraphQLString },
+          types: { type: graphql.GraphQLList(types.agents.agentType) },
+        },
         type: graphql.GraphQLNonNull(graphql.GraphQLList(types.agents.agent)),
-        resolve: resolver(models.Agent),
+        resolve: resolvers.agents.all,
       },
 
       series: {

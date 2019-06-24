@@ -14,6 +14,24 @@ async function one(root, args, context, info) {
   return await data.agents.getOne(id);
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Models.ObjectID} args.excludeChannelId
+ * @param {string[]} args.types
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function all(root, args, context, info) {
+  const filter = {
+    excludeChannelId: _.get(args, 'excludeChannelId'),
+    types: _.get(args, 'types'),
+  };
+  return await data.agents.getAll(filter);
+}
+
 module.exports = {
   one,
+  all,
 };

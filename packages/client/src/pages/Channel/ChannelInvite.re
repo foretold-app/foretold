@@ -1,9 +1,3 @@
-open Utils;
-open E;
-open Css;
-open SLayout;
-open Foretold__GraphQL;
-
 let ste = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("ChannelMembers");
@@ -34,7 +28,7 @@ let make =
           {"Add to Community" |> ste}
         </Foretold__Components__Link>
       )
-      |> E.React.el;
+      |> ReasonReact.element;
 
     let columns = [|
       Antd.Table.TableProps.make_column(
@@ -58,7 +52,7 @@ let make =
         (),
       ),
       Antd.Table.TableProps.make_column(
-        ~title="Remove",
+        ~title="Invite",
         ~dataIndex="role",
         ~key="actions2",
         ~width=2,
@@ -70,16 +64,23 @@ let make =
     |];
 
     let table =
-      Foretold__GraphQL.Queries.Agents.component(agents =>
+      Foretold__GraphQL.Queries.Agents.componentUsers(
+        ~excludeChannelId=channelId, agents =>
         agents
         |> E.HttpResponse.fmap(agents => {
              let dataSource =
                agents
-               |> E.A.fmap((r: Context.Primary.Agent.t) =>
+               |> Js.Array.filter((agent: Context.Primary.Agent.t) =>
+                    switch (agent.name) {
+                    | Some(name) when name != "" => true
+                    | _ => false
+                    }
+                  )
+               |> Array.map((agent: Context.Primary.Agent.t) =>
                     {
-                      "key": r.id,
-                      "agentId": r.id,
-                      "agentName": r.name |> E.O.default(""),
+                      "key": agent.id,
+                      "agentId": agent.id,
+                      "agentName": agent.name |> Rationale.Option.default(""),
                     }
                   );
              <Antd.Table columns dataSource size=`small />;

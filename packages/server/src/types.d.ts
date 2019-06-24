@@ -106,11 +106,13 @@ export namespace Layers {
       channelId?: Models.ObjectID,
       measurableId?: Models.ObjectID,
       agentId?: Models.ObjectID,
+      excludeChannelId?: Models.ObjectID,
       competitorType?: string,
       findInDateRange?: object,
       notTaggedByAgent?: string,
       states?: string[],
       isArchived?: string[],
+      types?: string[],
     };
     type pagination = {
       limit?: number,
@@ -169,7 +171,11 @@ export namespace Layers {
       measurableId?: Models.ObjectID,
       measuredByAgentId?: Models.ObjectID,
     };
-    type filter = object;
+    type filter = {
+      excludeChannelId?: Models.ObjectID,
+      isArchived?: string[],
+      types?: string[],
+    };
     type pagination = {
       limit?: number,
       offset?: number,

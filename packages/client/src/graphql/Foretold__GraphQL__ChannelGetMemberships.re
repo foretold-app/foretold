@@ -39,32 +39,10 @@ type innerType = {
           .
           "mutations": {
             .
-            "allow":
-              Js.Array.t(
-                option(
-                  [
-                    | `BOT_CREATE
-                    | `BOT_UPDATE
-                    | `CHANNEL_CREATE
-                    | `CHANNEL_MEMBERSHIP_CREATE
-                    | `CHANNEL_MEMBERSHIP_DELETE
-                    | `CHANNEL_MEMBERSHIP_ROLE_UPDATE
-                    | `CHANNEL_UPDATE
-                    | `JOIN_CHANNEL
-                    | `LEAVE_CHANNEL
-                    | `MEASURABLE_ARCHIVE
-                    | `MEASURABLE_CREATE
-                    | `MEASURABLE_UNARCHIVE
-                    | `MEASURABLE_UPDATE
-                    | `MEASUREMENT_CREATE
-                    | `SERIES_CREATE
-                    | `USER_UPDATE
-                  ],
-                ),
-              ),
+            "allow": Js.Array.t(option(Context.Primary.permission)),
           },
         },
-        "role": [ | `ADMIN | `VIEWER],
+        "role": Context.Primary.channelMembershipRole,
       }),
     ),
   "id": string,

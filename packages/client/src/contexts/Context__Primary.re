@@ -95,6 +95,7 @@ module Types = {
     name: option(string),
     token: option(string),
     agent: option(agent),
+    permissions: option(permissions),
   }
   and agentType =
     | Bot(bot)
@@ -305,6 +306,7 @@ module Bot = {
         ~competitorType,
         ~token=None,
         ~agent=None,
+        ~permissions=None,
         (),
       )
       : t => {
@@ -314,6 +316,7 @@ module Bot = {
     name,
     token,
     agent,
+    permissions,
   };
 };
 

@@ -58,18 +58,22 @@ let toChannelMemberships =
         e
         |> E.A.fmap(r => {
              open Context.Primary.Types;
+
              let agent =
                Context.Primary.Agent.make(
                  ~id=r##agent |> E.O.fmap(r => r##id) |> E.O.default(""),
                  ~name=r##agent |> E.O.bind(_, r => r##name),
                  (),
                );
+
              let allowMutations =
                r##permissions##mutations##allow
                |> E.A.O.concatSome
                |> E.A.to_list;
+
              let permissions =
                Context.Primary.Permissions.make(allowMutations);
+
              Context.Primary.ChannelMembership.make(
                ~role=r##role,
                ~agent=Some(agent),

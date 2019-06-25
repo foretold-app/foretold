@@ -8,7 +8,7 @@ const data = require('../data');
  */
 async function create(root, args) {
   const input = args.input;
-  return await data.channelMemberships.createOne(
+  return data.channelMemberships.createOne(
     input.channelId,
     input.agentId,
     input.role
@@ -22,7 +22,7 @@ async function create(root, args) {
  */
 async function update(root, args) {
   const input = args.input;
-  return await data.channelMemberships.updateOne(
+  return data.channelMemberships.updateOne(
     input.channelId,
     input.agentId,
     input.role
@@ -36,7 +36,7 @@ async function update(root, args) {
  */
 async function remove(root, args) {
   const input = args.input;
-  return await data.channelMemberships.deleteOne(
+  return data.channelMemberships.deleteOne(
     input.channelId,
     input.agentId
   );
@@ -54,7 +54,7 @@ async function remove(root, args) {
 async function allByAgentId(root, args, context, info) {
   const agentId = root.id;
   const options = { agentId };
-  return await data.channelMemberships.getAll(options);
+  return data.channelMemberships.getAll(options);
 }
 
 /**
@@ -68,7 +68,7 @@ async function allByAgentId(root, args, context, info) {
 async function allByChannelId(root, args, context, info) {
   const channelId = root.id;
   const options = { channelId };
-  return await data.channelMemberships.getAll(options);
+  return data.channelMemberships.getAll(options);
 }
 
 /**
@@ -82,7 +82,7 @@ async function allByChannelId(root, args, context, info) {
 async function join(root, args, context, info) {
   const channelId = _.get(args, 'input.channelId');
   const agentId = _.get(context, 'agent.id');
-  return await data.channelMemberships.join({
+  return data.channelMemberships.join({
     channelId,
     agentId,
   });
@@ -99,7 +99,7 @@ async function join(root, args, context, info) {
 async function leave(root, args, context, info) {
   const channelId = _.get(args, 'input.channelId');
   const agentId = _.get(context, 'agent.id');
-  return await data.channelMemberships.leave({
+  return data.channelMemberships.leave({
     channelId,
     agentId,
   });
@@ -115,7 +115,7 @@ async function leave(root, args, context, info) {
 async function myRole(root, args, context, info) {
   const channelId = _.get(root, 'id');
   const agentId = _.get(context, 'agent.id');
-  return await data.channelMemberships.getOneOnlyRole({
+  return data.channelMemberships.getOneOnlyRole({
     channelId,
     agentId,
   });

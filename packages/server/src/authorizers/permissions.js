@@ -102,6 +102,16 @@ const rulesMeasurables = {
   }
 };
 
+const rulesBots = {
+  Query: {},
+  Mutation: {
+    botUpdate: and(
+      currentAgentIsAuthenticated,
+      botBelongsToCurrentUser,
+    ),
+  }
+};
+
 const rules = {
   Bot: {
     token: botBelongsToCurrentUser,
@@ -127,12 +137,8 @@ const rules = {
   },
   Mutation: {
     '*': currentAgentIsAuthenticated,
-    botCreate: currentAgentIsAuthenticated,
-    botUpdate: and(
-      currentAgentIsAuthenticated,
-      botBelongsToCurrentUser,
-    ),
     channelCreate: currentAgentIsAuthenticated,
+    botCreate: currentAgentIsAuthenticated,
     userUpdate: currentAgentIsAuthenticated,
     seriesCreate: and(
       currentAgentIsAuthenticated,
@@ -152,6 +158,7 @@ const rules = {
       ),
     ),
 
+    ...rulesBots.Mutation,
     ...rulesMeasurables.Mutation,
     ...rulesChannel.Mutation,
     ...rulesChannelMemberships.Mutation,
@@ -167,8 +174,11 @@ function getPermissions() {
 
 module.exports = {
   rules,
+
+  rulesBots,
   rulesChannel,
   rulesMeasurables,
   rulesChannelMemberships,
+
   getPermissions,
 };

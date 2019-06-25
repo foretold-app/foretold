@@ -50,7 +50,7 @@ async function all(root, args, context, info) {
  */
 async function one(root, args, context, info) {
   const agentId = _.get(context, 'agent.id');
-  return await data.measurables.getOne(args.id, { agentId });
+  return data.measurables.getOne(args.id, { agentId });
 }
 
 /**
@@ -68,7 +68,7 @@ async function create(root, args, context, info) {
     ...args.input,
     creatorId: agentId,
   };
-  return await data.measurables.createOne(datas, creator);
+  return data.measurables.createOne(datas, creator);
 }
 
 /**
@@ -81,7 +81,7 @@ async function create(root, args, context, info) {
  */
 async function archive(root, args, context, info) {
   const { id } = args;
-  return await data.measurables.archive(id);
+  return data.measurables.archive(id);
 }
 
 /**
@@ -94,7 +94,7 @@ async function archive(root, args, context, info) {
  */
 async function unarchive(root, args, context, info) {
   const { id } = args;
-  return await data.measurables.unArchive(id);
+  return data.measurables.unArchive(id);
 }
 
 /**
@@ -110,7 +110,7 @@ async function update(root, args, context, info) {
   const id = args.id;
   const datas = args.input;
   const creator = context.creator;
-  return await data.measurables.updateOne(id, datas, creator);
+  return data.measurables.updateOne(id, datas, creator);
 }
 
 /**
@@ -123,7 +123,7 @@ async function update(root, args, context, info) {
  */
 async function openedCount(root, args, context, info) {
   const channelId = root.id;
-  return await data.measurables.getOpenedCount(channelId);
+  return data.measurables.getOpenedCount(channelId);
 }
 
 module.exports = {

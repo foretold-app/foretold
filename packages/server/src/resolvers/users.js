@@ -13,7 +13,7 @@ async function update(root, args, options) {
   const datas = args.input;
   // @todo: user!
   const user = options.user;
-  return await data.users.updateOne(id, datas, user);
+  return data.users.updateOne(id, datas, user);
 }
 
 /**
@@ -27,9 +27,9 @@ async function one(root, args, options) {
   if (options.user) {
     return options.user;
   } else if (id) {
-    return await data.users.getOne({ id });
+    return data.users.getOne({ id });
   } else if (auth0Id) {
-    return await data.users.getUserByAuth0Id(auth0Id);
+    return data.users.getUserByAuth0Id(auth0Id);
   }
 }
 

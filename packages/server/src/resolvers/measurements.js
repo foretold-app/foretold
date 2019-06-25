@@ -46,7 +46,7 @@ async function all(root, args, context, info) {
  */
 async function one(root, args, context, info) {
   const agentId = _.get(context, 'agent.id');
-  return await data.measurements.getOne(args.id, { agentId });
+  return data.measurements.getOne(args.id, { agentId });
 }
 
 /**
@@ -61,7 +61,7 @@ async function create(root, args, context, info) {
   const creator = context.creator;
   const agentId = _.get(context, 'agent.id');
   const datas = { ...args.input, agentId };
-  return await data.measurements.createOne(datas, creator);
+  return data.measurements.createOne(datas, creator);
 }
 
 /**
@@ -76,7 +76,7 @@ async function latest(root, args, context, info) {
   const agentId = context.resultOrLatestMeasurementForAgentId;
   if (!measurable) return null;
   if (!agentId) return null;
-  return await data.measurements.getLatest({
+  return data.measurements.getLatest({
     measurable,
     agentId,
   });

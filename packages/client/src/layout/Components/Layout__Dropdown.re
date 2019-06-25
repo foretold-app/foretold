@@ -1,5 +1,6 @@
 module Styles = {
   open Css;
+
   let dropdown =
     style([
       border(`px(1), `solid, `hex("d5d2d2")),
@@ -14,8 +15,13 @@ module Styles = {
         ~inset=false,
         `hex("dfd7d7"),
       ),
+      maxWidth(`em(17.)),
     ]);
-  let actions = [float(`left), maxWidth(`em(17.))] |> style;
+
+  let actions = [maxWidth(`em(17.))] |> style;
+
+  let clear = [clear(`both)] |> style;
+
   let action =
     style([
       cursor(`pointer),

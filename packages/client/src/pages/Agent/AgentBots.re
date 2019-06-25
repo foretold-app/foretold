@@ -74,6 +74,7 @@ module Columns = {
           <div className=Styles.paddingRight>
             <Antd.Input value={bot.token |> Rationale.Option.default("")} />
           </div>,
+      ~show=(bot: Context.Primary.Bot.t) => bot.token != None,
       (),
     );
 

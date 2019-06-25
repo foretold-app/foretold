@@ -40,40 +40,27 @@ type column('a) = {
   name: ReasonReact.reactElement,
   render: 'a => ReasonReact.reactElement,
   flex: int,
-  mutable showRowsCount: int,
   show: 'a => bool,
 };
 
-let countRows = (columns: array(column('a)), rows: array('a)) => {
-  rows
-  |> Array.iter((row: 'a) =>
-       columns
-       |> Array.iter((column: column('a)) =>
-            column.showRowsCount =
-              column.show(row)
-                ? column.showRowsCount + 1 : column.showRowsCount
-          )
+let filterColums = (columns, rows) => {
+  columns
+  |> Js.Array.filter(column =>
+       rows |> Js.Array.find(column.show) |> E.O.toBool
      );
 };
 
 module Column = {
-  let make =
-      (~name, ~render, ~flex=1, ~showRowsCount=0, ~show=_ => true, ())
-      : column('b) => {
+  let make = (~name, ~render, ~flex=1, ~show=_ => true, ()): column('b) => {
     name,
     render,
     flex,
-    showRowsCount,
     show,
   };
 };
 
 let fromColumns = (columns: array(column('a)), rows: array('a)) => {
-  countRows(columns, rows);
-
-  let columns' =
-    columns
-    |> Js.Array.filter(column => column.showRowsCount === 0 ? false : true);
+  let columns' = filterColums(columns, rows);
 
   <Table>
     <FC.Table.HeaderRow>

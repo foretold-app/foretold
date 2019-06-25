@@ -1,5 +1,3 @@
-open Foretold__GraphQL;
-
 module FormConfig = {
   type field(_) =
     | Name: field(string)
@@ -50,6 +48,13 @@ let withForm =
     innerComponentFn,
   )
   |> E.React.el;
+};
+
+let onSuccess = (loggedInUser: Context.Primary.User.t, ()) => {
+  Context.Primary.User.getAgent(loggedInUser, agent =>
+    Context.Routing.Url.push(Agent({agentId: agent.id, subPage: AgentBots}))
+  );
+  ReasonReact.null;
 };
 
 let formFields = (form: Form.state, send, onSubmit) =>

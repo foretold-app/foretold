@@ -1,13 +1,18 @@
 open Foretold__GraphQL;
 
-let component = ReasonReact.statelessComponent("BotCreates");
+let component = ReasonReact.statelessComponent("BotCreate");
 
 module CMutationForm =
   MutationForm.Make({
     type queryType = Mutations.BotCreate.Query.t;
   });
 
-let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
+let make =
+    (
+      ~loggedInUser: Context.Primary.User.t,
+      ~layout=SLayout.FullPage.makeWithEl,
+      _children,
+    ) => {
   ...component,
   render: _ => {
     let body =
@@ -33,7 +38,12 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
                 send(BotForm.Form.Submit)
               );
 
-            CMutationForm.showWithLoading(~result=data.result, ~form, ());
+            CMutationForm.showWithLoading2(
+              ~result=data.result,
+              ~form,
+              ~onSuccess=BotForm.onSuccess(loggedInUser),
+              (),
+            );
           },
         );
       });

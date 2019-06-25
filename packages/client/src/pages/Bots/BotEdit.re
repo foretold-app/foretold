@@ -41,23 +41,15 @@ let make =
             CMutationForm.showWithLoading2(
               ~result=data.result,
               ~form,
-              ~onSuccess=
-                () => {
-                  Context.Routing.Url.push(
-                    Agent({
-                      agentId: "14810584-6ea2-48ab-9d85-3bb839b2f661",
-                      subPage: AgentBots,
-                    }),
-                  );
-                  ReasonReact.null;
-                },
+              ~onSuccess=BotForm.onSuccess(loggedInUser),
               (),
             );
           },
         );
       });
 
-    let body = Queries.Bot.component(~id=pageParams.id, bot => getForm(bot));
+    let botId = pageParams.id;
+    let body = Queries.Bot.component(~id=botId, getForm);
 
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv("Edit a Bot"),

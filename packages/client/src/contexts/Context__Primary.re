@@ -271,6 +271,12 @@ module AgentType = {
 
 module User = {
   type t = Types.user;
+
+  let getAgent = (user: t, clbFn) =>
+    switch (user.agent) {
+    | Some(agent) => clbFn(agent)
+    };
+
   let make = (~id, ~name="", ~auth0Id=None, ~agent=None, ()): t => {
     id,
     name,
@@ -281,6 +287,7 @@ module User = {
 
 module Bot = {
   type t = Types.bot;
+
   module CompetitorType = {
     let toString = (c: CompetitorType.t) =>
       switch (c) {
@@ -289,6 +296,7 @@ module Bot = {
       | `OBJECTIVE => "Resolution"
       };
   };
+
   let make =
       (
         ~id,

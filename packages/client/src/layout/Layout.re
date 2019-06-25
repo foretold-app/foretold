@@ -31,7 +31,6 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) => {
   | Channel(channel) => Channel_Layout.makeWithPage(channel, loggedInUser)
   | Agent(agentPage) => Agent_Layout.makeWithPage(agentPage, loggedInUser)
   | Redirect => Auth0Redirect'.toEl(loggedInUser)
-  | BotCreate => BotCreate'.toEl(loggedInUser)
   | AgentIndex => AgentIndex'.toEl(loggedInUser)
   | EntityShow(id) => EntityShow'.toEl({id: id}, loggedInUser)
   | EntityIndex => EntityIndex'.toEl(loggedInUser)
@@ -39,6 +38,7 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) => {
   | ChannelIndex => ChannelIndex'.toEl(loggedInUser)
   | ChannelNew => ChannelNew'.toEl(loggedInUser)
   | MeasurableEdit(id) => MeasurableEdit'.toEl({id: id}, loggedInUser)
+  | BotCreate => BotCreate'.toEl(loggedInUser)
   | BotEdit(botId) => BotEdit'.toEl({id: botId}, loggedInUser)
   | _ => <Home />
   };

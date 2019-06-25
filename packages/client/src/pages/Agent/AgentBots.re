@@ -128,9 +128,11 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
               </FC.Base.Div>
             </div>,
           ~body=
-            <FC.PageCard.Body>
-              {Table.fromColumns(Columns.all, bots)}
-            </FC.PageCard.Body>,
+            Array.length(bots) > 0
+              ? <FC.PageCard.Body>
+                  {Table.fromColumns(Columns.all, bots)}
+                </FC.PageCard.Body>
+              : <SLayout.NothingToShow />,
         )
         |> layout
       )

@@ -325,18 +325,17 @@ let makeAgentPredictionsTable =
 
   let itemsMeasurements = measurementsList |> getItemsSorted(~makeItem);
 
-  E.React.showIf(
-    measurementsList |> E.L.length > 0,
-    <>
-      <FC.Table.HeaderRow>
-        <FC.Table.Cell flex=1> {"Measurable" |> ste} </FC.Table.Cell>
-        <FC.Table.Cell flex=2>
-          {"Prediction Distribution" |> ste}
-        </FC.Table.Cell>
-        <FC.Table.Cell flex=1> {"Prediction Value" |> ste} </FC.Table.Cell>
-        <FC.Table.Cell flex=1> {"Time" |> ste} </FC.Table.Cell>
-      </FC.Table.HeaderRow>
-      itemsMeasurements
-    </>,
-  );
+  measurementsList |> E.L.length > 0
+    ? <>
+        <FC.Table.HeaderRow>
+          <FC.Table.Cell flex=1> {"Measurable" |> ste} </FC.Table.Cell>
+          <FC.Table.Cell flex=2>
+            {"Prediction Distribution" |> ste}
+          </FC.Table.Cell>
+          <FC.Table.Cell flex=1> {"Prediction Value" |> ste} </FC.Table.Cell>
+          <FC.Table.Cell flex=1> {"Time" |> ste} </FC.Table.Cell>
+        </FC.Table.HeaderRow>
+        itemsMeasurements
+      </>
+    : <SLayout.NothingToShow />;
 };

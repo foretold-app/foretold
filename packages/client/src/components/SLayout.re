@@ -68,12 +68,8 @@ module Spin = {
 module NothingToShow = {
   module Styles = {
     open Css;
-    let centerBlock =
-      style([
-        textAlign(`center),
-        paddingTop(`em(4.)),
-        paddingBottom(`em(2.)),
-      ]);
+    let centerBlock = style([textAlign(`center), margin(`em(2.))]);
+    let clear = style([clear(`both)]);
   };
 
   let component = ReasonReact.statelessComponent("NothingToShow");
@@ -81,9 +77,12 @@ module NothingToShow = {
   let make = _children => {
     ...component,
     render: _ =>
-      <div className=Styles.centerBlock>
-        {"Nothing to show" |> Utils.ste}
-      </div>,
+      <>
+        <div className=Styles.clear />
+        <div className=Styles.centerBlock>
+          {"Nothing to show" |> Utils.ste}
+        </div>
+      </>,
   };
 };
 

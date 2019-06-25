@@ -14,16 +14,13 @@ let make =
   render: _ => {
     let channelId = channelPage.channelId;
 
-    let topOption =
-      Context.Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
+    let topOrdinaryChannel = channel => {
+      let joinButton = channelId =>
+        C.Channel.SimpleHeader.joinChannel(channelId);
 
-    let joinButton = channelId =>
-      C.Channel.SimpleHeader.joinChannel(channelId);
+      let leaveButton = channelId =>
+        C.Channel.SimpleHeader.leaveChannel(channelId);
 
-    let leaveButton = channelId =>
-      C.Channel.SimpleHeader.leaveChannel(channelId);
-
-    let top = channel =>
       <>
         <Div float=`left> {channelink(channel)} </Div>
         <Div float=`right>
@@ -37,10 +34,23 @@ let make =
                </>}
         </Div>
       </>;
+    };
 
-    let secondLevel = channel => ChannelTabs.make(topOption, channel);
+    let topGlobalChannel = channel => {
+      <> <Div float=`left> {channelink(channel)} </Div> </>;
+    };
 
-    let headers =
+    let top = channel =>
+      switch (channelId) {
+      | "" => topGlobalChannel(channel)
+      | _ => topOrdinaryChannel(channel)
+      };
+
+    let headers = () => {
+      let topOption =
+        Context.Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
+      let secondLevel = channel => ChannelTabs.make(topOption, channel);
+
       switch (channel) {
       | Some(channel) =>
         <>
@@ -51,10 +61,11 @@ let make =
         </>
       | _ => <div />
       };
+    };
 
     <Layout__Component__FillWithSidebar
       channelId={Some(channelId)} loggedInUser>
-      headers
+      {headers()}
       <div className=Styles.container>
         <Div flexDirection=`row styles=[SLayout.Styles.width100]>
           <Div
@@ -86,4 +97,4 @@ let makeWithEl =
       channel: option(Context.Primary.Channel.t),
       layout: LayoutConfig.t,
     ) =>
-  make(channelPage, loggedInUser, channel, layout) |> E.React.el;
+  make(channelPage, loggedInUser, channel, layout) |> ReasonReact.element;

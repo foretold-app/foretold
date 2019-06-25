@@ -48,7 +48,7 @@ let component = (~id, fn) => {
   |> E.React.el;
 };
 
-let component2 = (~id, innerFn) => {
+let getChannelByIdAsComponent = (~id, innerFn) => {
   let query = Query.make(~id, ());
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
@@ -57,5 +57,14 @@ let component2 = (~id, innerFn) => {
     |> E.HttpResponse.optionalToMissing
     |> innerFn
   )
-  |> E.React.el;
+  |> ReasonReact.element;
+};
+
+let component2 = (~id, innerFn) => {
+  switch (id) {
+  | "" =>
+    E.HttpResponse.Success(Context.Primary.Channel.getGlobalChannel())
+    |> innerFn
+  | _ => getChannelByIdAsComponent(~id, innerFn)
+  };
 };

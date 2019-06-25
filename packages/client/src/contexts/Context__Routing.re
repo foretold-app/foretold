@@ -77,6 +77,12 @@ module Route = {
     | MeasurableEdit(string)
     | NotFound;
 
+  let getChannelId = channelId =>
+    switch (channelId) {
+    | "global" => ""
+    | _ => channelId
+    };
+
   let fromUrl = (url: ReasonReact.Router.url) =>
     switch (url.path) {
     | [] => Home
@@ -100,7 +106,7 @@ module Route = {
     | ["c"] => ChannelIndex
     | ["c", channelId] =>
       Channel({
-        channelId,
+        channelId: getChannelId(channelId),
         subPage:
           Measurables(
             url.search

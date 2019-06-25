@@ -25,16 +25,19 @@ let make =
        tabToInternalUrl(channel.id, Measurables),
        "Questions",
      )}
-    {tab(
-       tabSelected == Members,
-       tabToInternalUrl(channel.id, Members),
-       (
-         channel.membershipCount
-         |> E.O.fmap(string_of_int)
-         |> E.O.fmap(e => e ++ " ")
-         |> E.O.default("")
-       )
-       ++ "Members",
+    {E.React.showIf(
+       channel.id != "global",
+       tab(
+         tabSelected == Members,
+         tabToInternalUrl(channel.id, Members),
+         (
+           channel.membershipCount
+           |> E.O.fmap(string_of_int)
+           |> E.O.fmap(e => e ++ " ")
+           |> E.O.default("")
+         )
+         ++ "Members",
+       ),
      )}
     {E.React.showIf(
        channel.myRole === Some(`ADMIN),

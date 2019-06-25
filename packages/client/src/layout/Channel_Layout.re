@@ -63,7 +63,6 @@ let makeWithPage =
     loadChannel(result =>
       result |> E.HttpResponse.flatten(succesFn, errorFn, loadingFn)
     );
-
   | None => <Home />
   };
 };

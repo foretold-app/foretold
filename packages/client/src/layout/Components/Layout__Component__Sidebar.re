@@ -74,45 +74,49 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
         </C.Link>
       </div>
       <div className=Styles.over>
-        {
-          loggedInUser.agent
-          |> E.O.fmap((r: Context.Primary.Agent.t) =>
-               r.channelMemberships
-               |> E.A.O.defaultEmpty
-               |> E.A.fmap((r: Context.Primary.Types.channelMembership) =>
-                    r.channel
-                  )
-               |> E.A.O.concatSomes
-               |> E.A.fmapi((i, channel: Context.Primary.Channel.t) => {
-                    let _channel: Context.Primary.Channel.t =
-                      Context.Primary.Channel.make(
-                        ~id=channel.id,
-                        ~name=channel.name,
-                        ~isArchived=false,
-                        ~isPublic=channel.isPublic,
-                        (),
-                      );
-                    <C.Link
-                      key={i |> string_of_int}
-                      linkType={
-                        Internal(Context.Primary.Channel.showLink(_channel))
-                      }
-                      className={
-                        Some(_channel.id) == channelId ?
-                          Styles.selectedItem : Styles.item
-                      }>
-                      {
-                        Context.Primary.Channel.present(
-                          ~hashClassName=Styles.hash,
-                          _channel,
-                        )
-                      }
-                    </C.Link>;
-                  })
-               |> ReasonReact.array
-             )
-          |> E.O.React.defaultNull
-        }
+        <C.Link
+          key="channel-global-item"
+          linkType={Internal(Context.Primary.Channel.globalLink())}
+          className={
+            Some("global") == channelId ? Styles.selectedItem : Styles.item
+          }>
+          {Context.Primary.Channel.presentGlobal(~hashClassName=Styles.hash)}
+        </C.Link>
+        {loggedInUser.agent
+         |> E.O.fmap((r: Context.Primary.Agent.t) =>
+              r.channelMemberships
+              |> E.A.O.defaultEmpty
+              |> Array.map((r: Context.Primary.Types.channelMembership) =>
+                   r.channel
+                 )
+              |> E.A.O.concatSomes
+              |> Array.mapi((index, channel: Context.Primary.Channel.t) => {
+                   let _channel: Context.Primary.Channel.t =
+                     Context.Primary.Channel.make(
+                       ~id=channel.id,
+                       ~name=channel.name,
+                       ~isArchived=false,
+                       ~isPublic=channel.isPublic,
+                       (),
+                     );
+                   <C.Link
+                     key={index |> string_of_int}
+                     linkType={
+                       Internal(Context.Primary.Channel.showLink(_channel))
+                     }
+                     className={
+                       Some(_channel.id) == channelId
+                         ? Styles.selectedItem : Styles.item
+                     }>
+                     {Context.Primary.Channel.present(
+                        ~hashClassName=Styles.hash,
+                        _channel,
+                      )}
+                   </C.Link>;
+                 })
+              |> ReasonReact.array
+            )
+         |> E.O.React.defaultNull}
       </div>
     </div>,
 };

@@ -1,19 +1,17 @@
-open Foretold__GraphQL;
-
-module Types = Measurable__Index__Logic;
-module Components = Measurable__Index__Components;
-
 let load3Queries = (channelId, states, itemsPerPage, fn) =>
-  ((a, b, c, d) => (a, b, c, d) |> fn)
+  (
+    (reducer, channel, series, stats) =>
+      (reducer, channel, series, stats) |> fn
+  )
   |> E.F.flatten4Callbacks(
-       Types.SelectWithPaginationReducer.make(
+       Measurable__Index__Logic.Reducer.make(
          ~itemsPerPage,
          ~callFnParams={channelId, states},
          ~subComponent=_,
        ),
-       Queries.Channel.component2(~id=channelId),
-       Queries.SeriesCollection.component2(~channelId),
-       Queries.MeasurablesStateStats.component2(~channelId),
+       Foretold__GraphQL.Queries.Channel.component2(~id=channelId),
+       Foretold__GraphQL.Queries.SeriesCollection.component2(~channelId),
+       Foretold__GraphQL.Queries.MeasurablesStateStats.component2(~channelId),
      );
 
 let make =
@@ -32,16 +30,16 @@ let make =
       |],
       itemsPerPage,
     );
-  loadData(
-    ((selectWithPaginationParams, channel, query, measurablesStateStats)) =>
-    Types.MeasurableIndexDataState.make({
-      reducerParams: selectWithPaginationParams,
+
+  loadData(((reducerParams, channel, query, measurablesStateStats)) =>
+    Measurable__Index__Logic.MeasurableIndexDataState.make({
+      reducerParams,
       loggedInUser,
       channel,
       query,
     })
-    |> Components.MeasurableIndexDataState.toLayoutInput(
-         selectWithPaginationParams.send,
+    |> Measurable__Index__Components.MeasurableIndexDataState.toLayoutInput(
+         reducerParams.send,
          searchParams,
          measurablesStateStats,
        )

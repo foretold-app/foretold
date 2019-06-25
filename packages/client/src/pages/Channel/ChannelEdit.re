@@ -17,7 +17,9 @@ let make = (~channelId: string, ~layout, _children) => {
   ...component,
   render: _ => {
     let loadChannel =
-      Foretold__GraphQL.Queries.Channel.component2(~id=channelId);
+      Foretold__GraphQL.Queries.Channel.getChannelByIdAsComponent(
+        ~id=channelId,
+      );
 
     let mutationMake =
       Mutation.Mutation.make(~onCompleted=_ => ()) ||> E.React.el;
@@ -31,20 +33,17 @@ let make = (~channelId: string, ~layout, _children) => {
         </FC.Base.Div>
         <FC.Base.Div
           float=`right
-          className={
-            Css.style([
-              FC.PageCard.HeaderRow.Styles.itemTopPadding,
-              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-            ])
-          }>
+          className={Css.style([
+            FC.PageCard.HeaderRow.Styles.itemTopPadding,
+            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+          ])}>
           <FC.Base.Button
             variant=Primary
-            onClick={
-              e =>
-                Foretold__Components__Link.LinkType.onClick(
-                  Internal(SeriesNew(channelId)),
-                  e,
-                )
+            onClick={e =>
+              Foretold__Components__Link.LinkType.onClick(
+                Internal(SeriesNew(channelId)),
+                e,
+              )
             }>
             {"New Series" |> ste}
           </FC.Base.Button>
@@ -72,24 +71,22 @@ let make = (~channelId: string, ~layout, _children) => {
       ||> E.React.el;
 
     <FC.PageCard.BodyPadding>
-      {
-        loadChannel(
-          E.HttpResponse.fmap(result =>
-            mutationMake((mutation, data) =>
-              form(mutation, result, ({handleSubmit, handleChange, form, _}) =>
-                CMutationForm.showWithLoading(
-                  ~result=data.result,
-                  ~form=
-                    ChannelForm.showForm(~form, ~handleSubmit, ~handleChange),
-                  ~successMessage="Community edited successfully.",
-                  (),
-                )
-              )
-            )
-          )
-          ||> E.HttpResponse.withReactDefaults,
-        )
-      }
+      {loadChannel(
+         E.HttpResponse.fmap(result =>
+           mutationMake((mutation, data) =>
+             form(mutation, result, ({handleSubmit, handleChange, form, _}) =>
+               CMutationForm.showWithLoading(
+                 ~result=data.result,
+                 ~form=
+                   ChannelForm.showForm(~form, ~handleSubmit, ~handleChange),
+                 ~successMessage="Community edited successfully.",
+                 (),
+               )
+             )
+           )
+         )
+         ||> E.HttpResponse.withReactDefaults,
+       )}
     </FC.PageCard.BodyPadding>
     |> SLayout.LayoutConfig.make(~head=header, ~body=_)
     |> layout;

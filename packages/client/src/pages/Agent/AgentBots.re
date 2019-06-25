@@ -7,6 +7,13 @@ module Styles = {
   let paddingRight = [paddingRight(`em(1.))] |> style;
 };
 
+let title =
+  <FC.Base.Div float=`left>
+    <FC.PageCard.HeaderRow.Title>
+      {"Agent Bots" |> ReasonReact.string}
+    </FC.PageCard.HeaderRow.Title>
+  </FC.Base.Div>;
+
 let agentSection = (agent: Queries.Agent.agent) =>
   switch (agent) {
   | {user: Some(_user)} =>
@@ -108,14 +115,17 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
       Queries.Bots.component(~ownerId=getUserId(agent), bots =>
         SLayout.LayoutConfig.make(
           ~head=
-            <FC.Base.Div
-              float=`right
-              className={Css.style([
-                FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-              ])}>
-              {agentSection(agent)}
-            </FC.Base.Div>,
+            <div>
+              title
+              <FC.Base.Div
+                float=`right
+                className={Css.style([
+                  FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                  FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+                ])}>
+                {agentSection(agent)}
+              </FC.Base.Div>
+            </div>,
           ~body=
             <FC.PageCard.Body>
               {Table.fromColumns(Columns.all, bots)}

@@ -44,7 +44,13 @@ let withForm =
   Form.make(
     ~initialState,
     ~onSubmit,
-    ~schema=Form.Validation.Schema([||]),
+    ~schema=
+      Form.Validation.Schema([|
+        Custom(
+          Name,
+          values => values.name == "" ? Error("Can't be empty") : Valid,
+        ),
+      |]),
     innerComponentFn,
   )
   |> E.React.el;

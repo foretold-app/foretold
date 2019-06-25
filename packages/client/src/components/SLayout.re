@@ -68,7 +68,12 @@ module Spin = {
 module NothingToShow = {
   module Styles = {
     open Css;
-    let centerBlock = style([textAlign(`center), padding(`em(2.))]);
+    let centerBlock =
+      style([
+        textAlign(`center),
+        paddingTop(`em(4.)),
+        paddingBottom(`em(2.)),
+      ]);
   };
 
   let component = ReasonReact.statelessComponent("NothingToShow");

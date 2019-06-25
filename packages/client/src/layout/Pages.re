@@ -12,7 +12,7 @@ module BotCreate' = {
 };
 
 module BotEdit' = {
-  let toEl = BotEdit.make |> LoggedInPage.justPageParams;
+  let toEl = BotEdit.make |> LoggedInPage.pageParamsAndUser;
 };
 
 module AgentIndex' = {

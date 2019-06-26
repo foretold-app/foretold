@@ -1,10 +1,10 @@
-<scheme name="Darcula" version="142" parent_scheme="Darcula">
+<scheme name="Darcula copy" version="142" parent_scheme="Darcula">
   <metaInfo>
-    <property name="created">2019-06-24T08:22:09</property>
+    <property name="created">2019-06-26T08:43:54</property>
     <property name="ide">PhpStorm</property>
-    <property name="ideVersion">2019.1.3.0.0</property>
-    <property name="modified">2019-06-24T08:22:24</property>
-    <property name="originalScheme">_@user_Darcula</property>
+    <property name="ideVersion">2019.2.0.0</property>
+    <property name="modified">2019-06-26T08:44:05</property>
+    <property name="originalScheme">Darcula copy</property>
   </metaInfo>
   <attributes>
     <option name="REASONML_BRACKETS">
@@ -32,6 +32,12 @@
     <option name="REASONML_TYPE_ARGUMENT">
       <value>
         <option name="FOREGROUND" value="dbd402" />
+      </value>
+    </option>
+    <option name="REASONML_VARIANT_NAME">
+      <value>
+        <option name="FOREGROUND" value="bf76ba" />
+        <option name="FONT_TYPE" value="1" />
       </value>
     </option>
   </attributes>

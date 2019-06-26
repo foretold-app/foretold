@@ -23,6 +23,10 @@ type loggedInUser = Context.Primary.User.t;
 type reducerParams = Reducer.Types.reducerParams;
 type seriesQuery = E.HttpResponse.t(seriesCollection);
 type channelQuery = E.HttpResponse.t(channel);
+type measurablesStateStatsQuery =
+  E.HttpResponse.t(
+    option(Foretold__GraphQL.Queries.MeasurablesStateStats.stats),
+  );
 
 module LoadedAndSelected = {
   type t = {

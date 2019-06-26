@@ -4,11 +4,6 @@ open Measurable__Index__Logic;
 
 module ReducerParams = Reducer.Reducers.ReducerParams;
 
-type measurablesStateStats =
-  E.HttpResponse.t(
-    option(Foretold__GraphQL.Queries.MeasurablesStateStats.stats),
-  );
-
 module LoadedAndSelected = {
   open Measurable__Index__Logic.LoadedAndSelected;
 
@@ -63,7 +58,7 @@ module LoadedAndUnselected = {
   let header =
       (
         t: t,
-        stats: measurablesStateStats,
+        stats: measurablesStateStatsQuery,
         query: Context.QueryParams.MeasurableIndex.query,
       ) =>
     <Div>
@@ -141,7 +136,7 @@ module MeasurableIndexDataState = {
       (
         send: Reducer.Types.send,
         selectedState: Context.QueryParams.MeasurableIndex.query,
-        stats: measurablesStateStats,
+        stats: measurablesStateStatsQuery,
         state: state,
       ) => {
     switch (state) {

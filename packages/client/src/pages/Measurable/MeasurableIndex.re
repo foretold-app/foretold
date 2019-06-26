@@ -32,7 +32,7 @@ let make =
     );
 
   loadData(
-    ((reducerParams, channelQuery, seriesQuery, measurablesStateStats)) =>
+    ((reducerParams, channelQuery, seriesQuery, measurablesStateStatsQuery)) =>
     Measurable__Index__Logic.MeasurableIndexDataState.make({
       reducerParams,
       loggedInUser,
@@ -42,7 +42,7 @@ let make =
     |> Measurable__Index__Components.MeasurableIndexDataState.toLayoutInput(
          reducerParams.send,
          searchParams,
-         measurablesStateStats,
+         measurablesStateStatsQuery,
        )
     |> layout
   );

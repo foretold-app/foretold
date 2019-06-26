@@ -223,9 +223,9 @@ let sort = (a: measurement, b: measurement) =>
   | _ => 0
   };
 
-let getItems = (ms: list(measurement), ~makeItem) => {
-  let _bounds = Helpers.bounds(ms |> E.A.of_list);
-  ms
+let getItems = (measurementsList: list(measurement), ~makeItem) => {
+  let _bounds = Helpers.bounds(measurementsList |> E.A.of_list);
+  measurementsList
   |> E.L.sort(sort)
   |> E.L.fmap((m: measurement) => {
        let inside = makeItem(m, _bounds);
@@ -253,26 +253,29 @@ let getItemsSorted = (measurementsList: list(measurement), ~makeItem) => {
   |> ReasonReact.array;
 };
 
-let make = (ms: list(measurement)) => {
-  let makeItem = (m, _bounds) => {
+let make = (measurementsList: list(measurement)) => {
+  let makeItem = (measurement, _bounds) => {
     <>
       <FC.Table.Cell flex=2 className=primaryCellStyle>
-        {Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull}
+        {Helpers.smallDistribution(measurement, _bounds)
+         |> E.O.React.defaultNull}
       </FC.Table.Cell>
       <FC.Table.Cell flex=1 className=primaryCellStyle>
-        {Helpers.statSummary(m) |> E.O.React.defaultNull}
+        {Helpers.statSummary(measurement) |> E.O.React.defaultNull}
       </FC.Table.Cell>
       <FC.Table.Cell flex=1 className=primaryCellStyle>
-        {Helpers.measurerLink(~m)}
+        {Helpers.measurerLink(~m=measurement)}
       </FC.Table.Cell>
       <FC.Table.Cell flex=1 className=primaryCellStyle>
-        {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
+        {Helpers.relevantAt(~m=measurement) |> E.O.React.defaultNull}
       </FC.Table.Cell>
     </>;
   };
-  let items = ms |> getItems(~makeItem);
+
+  let items = measurementsList |> getItems(~makeItem);
+
   E.React.showIf(
-    ms |> E.L.length > 0,
+    measurementsList |> E.L.length > 0,
     <>
       <FC.Table.HeaderRow>
         <FC.Table.Cell flex=2>

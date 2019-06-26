@@ -24,6 +24,7 @@ module type Config = {
 
 module Make = (Config: Config) => {
   module Config = Config;
+
   module Types = {
     type pageConfig = {direction};
 
@@ -110,6 +111,7 @@ module Make = (Config: Config) => {
 
     module State = {
       type t = state;
+
       let selection = (t: t) =>
         switch (t.itemState, t.response) {
         | (ItemSelected({selectedIndex}), Success(m)) =>
@@ -217,9 +219,6 @@ module Make = (Config: Config) => {
   module Components = {
     open Reducers.ReducerParams;
 
-    let deselectButton = send =>
-      SLayout.channelBack(~onClick=_ => send(Types.Deselect), ());
-
     module Styles = {
       open Css;
       let header = (~isDisabled) => {
@@ -249,6 +248,19 @@ module Make = (Config: Config) => {
       };
     };
 
+    type buttonType =
+      | PageLast
+      | PageNext
+      | ItemLast
+      | ItemNext;
+
+    type buttonGroupType =
+      | Page
+      | Item;
+
+    let deselectButton = send =>
+      SLayout.channelBack(~onClick=_ => send(Types.Deselect), ());
+
     let pageButton' = (facesRight: bool, action, canMove, params) =>
       <div
         className={Styles.header(~isDisabled=!canMove(params))}
@@ -256,12 +268,6 @@ module Make = (Config: Config) => {
         disabled={!canMove(params)}>
         <Icon.Icon icon={facesRight ? "CHEVRON_RIGHT" : "CHEVRON_LEFT"} />
       </div>;
-
-    type buttonType =
-      | PageLast
-      | PageNext
-      | ItemLast
-      | ItemNext;
 
     let pageButton' = (buttonType: buttonType) =>
       switch (buttonType) {
@@ -273,9 +279,6 @@ module Make = (Config: Config) => {
         pageButton'(true, Types.NextSelection, canIncrementSelection)
       };
 
-    type buttonGroupType =
-      | Page
-      | Item;
     let buttonDuo = (buttonGroupType: buttonGroupType, params) =>
       switch (buttonGroupType) {
       | Page =>
@@ -345,7 +348,7 @@ module Make = (Config: Config) => {
       selectItemAction(t, id) |> E.O.fmap(t.send) |> E.O.default();
   };
 
-  let component = ReasonReact.reducerComponent("SelectWithPaginationReducer");
+  let component = ReasonReact.reducerComponent("PaginationReducer");
 
   let compareItems =
       (
@@ -362,6 +365,7 @@ module Make = (Config: Config) => {
         _children,
       ) => {
     ...component,
+
     initialState: () => {
       itemState: ItemUnselected,
       response: Loading,
@@ -369,6 +373,7 @@ module Make = (Config: Config) => {
         direction: None,
       },
     },
+
     reducer: (action, state: state) =>
       switch (action) {
       | UpdateResponse(response) =>
@@ -393,6 +398,7 @@ module Make = (Config: Config) => {
         | None => ReasonReact.NoUpdate
         };
       },
+
     render: ({state, send}) =>
       callFnParams
       |> Config.callFn(

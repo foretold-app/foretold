@@ -53,7 +53,7 @@ module Make = (Config: Config) => {
       | LastPage => "LastPage"
       | Deselect => "Deselect"
       | SelectIndex(int) => "SelectIndex"
-      | NextSelection => "nextSelection"
+      | NextSelection => "NextSelection"
       | LastSelection => "LastSelection"
       | _ => "Other"
       };
@@ -344,19 +344,26 @@ module Make = (Config: Config) => {
       | _ => "" |> ste
       };
 
-    let findIndexOfId = (reducerParams: Types.reducerParams, id: string) =>
+    let findIndexOfId =
+        (reducerParams: Types.reducerParams, id: string): option(int) =>
       switch (reducerParams.response) {
       | Success(m) => m.edges |> E.A.findIndex(r => Config.getId(r) == id)
       | _ => None
       };
 
-    let selectItemAction = (reducerParams: Types.reducerParams, id) =>
+    let selectItemAction =
+        (reducerParams: Types.reducerParams, id: string)
+        : option(Types.action) => {
       findIndexOfId(reducerParams, id) |> E.O.fmap(e => Types.SelectIndex(e));
+    };
 
-    let sendSelectItem = (reducerParams: Types.reducerParams, id) =>
+    let sendSelectItem =
+        (reducerParams: Types.reducerParams, id: string): unit => {
       selectItemAction(reducerParams, id)
       |> E.O.fmap(reducerParams.send)
       |> E.O.default();
+      ();
+    };
   };
 
   let component = ReasonReact.reducerComponent("PaginationReducer");
@@ -400,7 +407,9 @@ module Make = (Config: Config) => {
             Reducers.ItemUnselected.newState(itemsPerPage, state, action)
           | ({itemState: ItemSelected(s)}, _) =>
             Reducers.ItemSelected.newState(itemsPerPage, s, action)
-            |> E.O.fmap((r: Types.itemState) => (r, state.pageConfig))
+            |> E.O.fmap((itemState: Types.itemState) =>
+                 (itemState, state.pageConfig)
+               )
           };
 
         switch (newState) {

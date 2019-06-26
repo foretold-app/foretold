@@ -1,6 +1,6 @@
 open Foretold__GraphQL;
 
-module GetMeasurablesReducerConfig = {
+module Config = {
   type itemType = Context.Primary.Measurable.t;
   type callFnParams = string;
   let getId = (e: Context.Primary.Measurable.t) => e.id;
@@ -9,8 +9,7 @@ module GetMeasurablesReducerConfig = {
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
 };
 
-module SelectWithPaginationReducer =
-  PaginationReducerFunctor.Make(GetMeasurablesReducerConfig);
+module Reducer = PaginationReducerFunctor.Make(Config);
 
 module Styles = {
   open Css;
@@ -37,11 +36,7 @@ module Styles = {
 let load2Queries = (channelId, seriesId, itemsPerPage, fn) =>
   ((a, b, c) => (a, b, c) |> fn)
   |> E.F.flatten3Callbacks(
-       SelectWithPaginationReducer.make(
-         ~itemsPerPage,
-         ~callFnParams=seriesId,
-         ~subComponent=_,
-       ),
+       Reducer.make(~itemsPerPage, ~callFnParams=seriesId, ~subComponent=_),
        Queries.Channel.component2(~id=channelId),
        Queries.Series.component(~id=seriesId),
      );
@@ -70,12 +65,10 @@ let make =
             ) =>
             <>
               {SLayout.seriesHead(channel, series.name |> E.O.default(""))}
-              {SelectWithPaginationReducer.Components.deselectButton(
+              {Reducer.Components.deselectButton(
                  selectWithPaginationParams.send,
                )}
-              {SelectWithPaginationReducer.Components.correctButtonDuo(
-                 selectWithPaginationParams,
-               )}
+              {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
             </>
           | (
               Success(channel),
@@ -84,9 +77,7 @@ let make =
             ) =>
             <>
               {SLayout.seriesHead(channel, series.name |> E.O.default(""))}
-              {SelectWithPaginationReducer.Components.correctButtonDuo(
-                 selectWithPaginationParams,
-               )}
+              {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
             </>
           | _ => <div />
           },
@@ -102,7 +93,7 @@ let make =
               measurables={connection.edges}
               selected=None
               onClick={id =>
-                SelectWithPaginationReducer.Components.sendSelectItem(
+                Reducer.Components.sendSelectItem(
                   selectWithPaginationParams,
                   id,
                 )

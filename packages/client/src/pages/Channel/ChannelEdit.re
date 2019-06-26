@@ -11,7 +11,7 @@ module CMutationForm =
     type queryType = Mutation.Query.t;
   });
 
-let component = ReasonReact.statelessComponent("ChannelNewPage");
+let component = ReasonReact.statelessComponent("ChannelNew");
 
 let make = (~channelId: string, ~layout, _children) => {
   ...component,

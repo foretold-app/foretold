@@ -30,6 +30,8 @@ let makeWithPage =
           ~layout,
         )
         |> toEl
+      | Measurable(measurableId) =>
+        ChannelMeasurable.make(~measurableId, ~loggedInUser, ~layout) |> toEl
       | Series(id) =>
         SeriesShow.make(~id, ~channelId, ~loggedInUser, ~layout) |> toEl
       | NewMeasurable => MeasurableNew.make(~channelId, ~layout) |> toEl

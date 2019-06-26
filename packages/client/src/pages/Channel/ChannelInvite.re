@@ -1,4 +1,4 @@
-let component = ReasonReact.statelessComponent("ChannelMembers");
+let component = ReasonReact.statelessComponent("ChannelInvite");
 
 type column = Table.column(Context.Primary.Agent.t);
 

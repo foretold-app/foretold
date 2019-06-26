@@ -1,5 +1,3 @@
-open Utils;
-
 let statusShow = (~measurable: Context.Primary.Measurable.t) =>
   switch (
     Context.Primary.Measurable.toStatus(measurable),

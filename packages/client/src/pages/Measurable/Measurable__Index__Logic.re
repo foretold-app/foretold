@@ -20,11 +20,9 @@ module Types = {
   type channel = Context.Primary.Channel.t;
 
   type seriesCollection =
-    Js.Array.t(Foretold__GraphQL.Queries.SeriesCollection.series);
+    array(Foretold__GraphQL.Queries.SeriesCollection.series);
 
   type loggedInUser = Context.Primary.User.t;
-
-  type query = E.HttpResponse.t(seriesCollection);
 
   type reducerParams = Reducer.Types.reducerParams;
 };
@@ -56,17 +54,13 @@ module WithChannelButNotQuery = {
     reducerParams,
     loggedInUser,
     channel,
-    query,
+    query: E.HttpResponse.t(seriesCollection),
   };
-};
-
-module WithoutChannel = {
-  type t = E.HttpResponse.t(Context.Primary.Channel.t);
 };
 
 module MeasurableIndexDataState = {
   type state =
-    | WithoutChannel(WithoutChannel.t)
+    | WithoutChannel(E.HttpResponse.t(Context.Primary.Channel.t))
     | InvalidIndexError(Context.Primary.Channel.t)
     | WithChannelButNotQuery(WithChannelButNotQuery.t)
     | LoadedAndUnselected(LoadedAndUnselected.t)
@@ -76,7 +70,7 @@ module MeasurableIndexDataState = {
     reducerParams,
     loggedInUser,
     channel: E.HttpResponse.t(Context.Primary.Channel.t),
-    query,
+    query: E.HttpResponse.t(seriesCollection),
   };
 
   let make = (input: input) =>

@@ -16,22 +16,13 @@ module ReducerConfig = {
 
 module Reducer = PaginationReducerFunctor.Make(ReducerConfig);
 
-module Types = {
-  type channel = Context.Primary.Channel.t;
-
-  type seriesCollection =
-    array(Foretold__GraphQL.Queries.SeriesCollection.series);
-
-  type loggedInUser = Context.Primary.User.t;
-
-  type reducerParams = Reducer.Types.reducerParams;
-
-  type seriesQuery = E.HttpResponse.t(seriesCollection);
-
-  type channelQuery = E.HttpResponse.t(channel);
-};
-
-open Types;
+type channel = Context.Primary.Channel.t;
+type seriesCollection =
+  array(Foretold__GraphQL.Queries.SeriesCollection.series);
+type loggedInUser = Context.Primary.User.t;
+type reducerParams = Reducer.Types.reducerParams;
+type seriesQuery = E.HttpResponse.t(seriesCollection);
+type channelQuery = E.HttpResponse.t(channel);
 
 module LoadedAndSelected = {
   type t = {

@@ -30,6 +30,7 @@ type measurement = {
         }),
     }),
   "description": option(string),
+  "valueText": option(string),
   "relevantAt": option(MomentRe.Moment.t),
   "competitorType": Context.Primary.CompetitorType.t,
   "createdAt": MomentRe.Moment.t,
@@ -78,6 +79,7 @@ let toMeasurement = (measurement: measurement): Context.Primary.Measurement.t =>
   Context.Primary.Measurement.make(
     ~id=measurement##id,
     ~description=measurement##description,
+    ~valueText=measurement##valueText,
     ~value=measurement##value |> MeasurementValue.decodeGraphql,
     ~competitorType=measurement##competitorType,
     ~taggedMeasurementId=measurement##taggedMeasurementId,
@@ -139,6 +141,7 @@ module Query = [%graphql
                   relevantAt @bsDecoder(fn: "E.J.O.toMoment")
                   competitorType
                   description
+                  valueText
                   taggedMeasurementId
                   agent: Agent {
                       id

@@ -18,6 +18,7 @@ module Styles = {
       color(`hex("7d7ea2")),
       marginTop(`px(6)),
     ]);
+
   let descriptionStyle =
     style([
       marginTop(`px(5)),
@@ -41,14 +42,19 @@ module Styles = {
       paddingLeft(px(2)),
       selector(" p", [marginTop(`px(3)), marginBottom(`px(8))]),
     ]);
+
   let rightColumn = style([flex(1)]);
+
   let mainColumnBottom =
     style([flex(1), padding(`px(2)), marginTop(`px(2))]);
+
+  let secondaryText =
+    style([fontSize(`em(0.9)), color(FC__Colors.accentBlue)]);
 };
 
 module Helpers = {
-  let smallDistribution = (m: measurement, g: (float, float)) =>
-    switch (m.value) {
+  let smallDistribution = (measurement: measurement, g: (float, float)) =>
+    switch (measurement.value) {
     | Belt.Result.Ok(`FloatCdf(r)) =>
       let (minX, maxX) = g;
       r
@@ -63,7 +69,7 @@ module Helpers = {
               minX
               maxX
               color={
-                m.competitorType == `AGGREGATION
+                measurement.competitorType == `AGGREGATION
                   ? `hex("b1b9c6") : `hex("487192")
               }
             />,
@@ -78,8 +84,8 @@ module Helpers = {
     | _ => None
     };
 
-  let statSummary = (m: measurement) =>
-    switch (m.value) {
+  let statSummary = (measurement: measurement) =>
+    switch (measurement.value) {
     | Belt.Result.Ok(`FloatCdf(r)) =>
       r
       |> MeasurementValue.toChunks(~bucketSize=3)
@@ -88,6 +94,17 @@ module Helpers = {
       |> (cdf => Some(<FC__CdfChart__StatSummary cdf />))
     | Belt.Result.Ok(`FloatPoint(r)) =>
       Some(r |> E.Float.with3DigitsPrecision |> ste)
+    | _ => None
+    };
+
+  let getValueText = (measurement: measurement) =>
+    switch (measurement.value) {
+    | Belt.Result.Ok(`FloatCdf(_r)) =>
+      Some(
+        <div className=Styles.secondaryText>
+          {measurement.valueText |> E.O.default("") |> Utils.ste}
+        </div>,
+      )
     | _ => None
     };
 
@@ -115,9 +132,15 @@ module Helpers = {
     | _ => None
     };
 
-  let bounds = (m: Js_array.t(measurement)) => {
+  let floatCdf = e =>
+    switch (e##value) {
+    | Belt.Result.Ok(`FloatCdf(r)) => Some(r)
+    | _ => None
+    };
+
+  let bounds = (measurement: Js_array.t(measurement)) => {
     let itemBounds =
-      m
+      measurement
       |> E.A.keepMap(_, r => getFloatCdf(r.value))
       |> E.A.fmap(r =>
            (
@@ -125,25 +148,22 @@ module Helpers = {
              E.FloatCdf.firstAboveValue(0.95, r),
            )
          );
+
     let min =
       itemBounds
       |> E.A.keepMap(_, ((min, _)) => min)
       |> E.A.fold_left((a, b) => a < b ? a : b, max_float);
+
     let max =
       itemBounds
       |> E.A.keepMap(_, ((_, max)) => max)
       |> E.A.fold_left((a, b) => a > b ? a : b, min_float);
+
     (min, max);
   };
 
-  let floatCdf = e =>
-    switch (e##value) {
-    | Belt.Result.Ok(`FloatCdf(r)) => Some(r)
-    | _ => None
-    };
-
-  let toChartMeasurement = (m: measurement) =>
-    switch (m.value) {
+  let toChartMeasurement = (measurement: measurement) =>
+    switch (measurement.value) {
     | Belt.Result.Ok(`FloatCdf(r)) =>
       switch (
         E.FloatCdf.firstAboveValue(0.05, r),
@@ -155,10 +175,12 @@ module Helpers = {
     | _ => None
     };
 
-  let measurerLink = (~m: measurement) => {
-    let agent = m.agent;
+  let measurerLink = (~measurement: measurement) => {
     let aLink =
-      switch (agent, agent |> E.O.bind(_, Context.Primary.Agent.name)) {
+      switch (
+        measurement.agent,
+        measurement.agent |> E.O.bind(_, Context.Primary.Agent.name),
+      ) {
       | (Some(agent), Some(name)) =>
         Some(
           <Foretold__Components__Link
@@ -187,7 +209,8 @@ module Helpers = {
         ),
         selector(" a", [fontSize(`em(0.9))]),
       ]);
-    let isJudge = Context.Primary.Measurement.isJudgement(m);
+
+    let isJudge = Context.Primary.Measurement.isJudgement(measurement);
 
     if (isJudge) {
       <div className=judgementStyle>
@@ -262,9 +285,10 @@ let make = (measurementsList: list(measurement)) => {
       </FC.Table.Cell>
       <FC.Table.Cell flex=1 className=primaryCellStyle>
         {Helpers.statSummary(measurement) |> E.O.React.defaultNull}
+        {Helpers.getValueText(measurement) |> E.O.React.defaultNull}
       </FC.Table.Cell>
       <FC.Table.Cell flex=1 className=primaryCellStyle>
-        {Helpers.measurerLink(~m=measurement)}
+        {Helpers.measurerLink(~measurement)}
       </FC.Table.Cell>
       <FC.Table.Cell flex=1 className=primaryCellStyle>
         {Helpers.relevantAt(~m=measurement) |> E.O.React.defaultNull}
@@ -303,25 +327,30 @@ let makeAgentPredictionsTable =
       ~onSelect=(_measurement: Context.Primary.Measurement.t) => (),
       (),
     ) => {
-  let makeItem = (m: measurement, _bounds) => {
-    <FC.Table.RowLink onClick={_e => onSelect(m)} key={m.id}>
+  let makeItem = (measurement: measurement, _bounds) => {
+    <FC.Table.RowLink
+      onClick={_e => onSelect(measurement)} key={measurement.id}>
       <FC.Table.Cell
         flex=1
         className=Css.(
           style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])
         )>
         <div className=Styles.mainColumn>
-          <div className=Styles.mainColumnTop> {getMeasurableLink(m)} </div>
+          <div className=Styles.mainColumnTop>
+            {getMeasurableLink(measurement)}
+          </div>
         </div>
       </FC.Table.Cell>
       <FC.Table.Cell flex=2 className=primaryCellStyle>
-        {Helpers.smallDistribution(m, _bounds) |> E.O.React.defaultNull}
+        {Helpers.smallDistribution(measurement, _bounds)
+         |> E.O.React.defaultNull}
       </FC.Table.Cell>
       <FC.Table.Cell flex=1 className=primaryCellStyle>
-        {Helpers.statSummary(m) |> E.O.React.defaultNull}
+        {Helpers.statSummary(measurement) |> E.O.React.defaultNull}
+        {Helpers.getValueText(measurement) |> E.O.React.defaultNull}
       </FC.Table.Cell>
       <FC.Table.Cell flex=1 className=primaryCellStyle>
-        {Helpers.relevantAt(~m) |> E.O.React.defaultNull}
+        {Helpers.relevantAt(~m=measurement) |> E.O.React.defaultNull}
       </FC.Table.Cell>
     </FC.Table.RowLink>;
   };

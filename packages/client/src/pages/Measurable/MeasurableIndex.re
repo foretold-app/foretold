@@ -4,7 +4,7 @@ let load3Queries = (channelId, states, itemsPerPage, fn) =>
       (reducer, channel, series, stats) |> fn
   )
   |> E.F.flatten4Callbacks(
-       Measurable__Index__Logic.Reducer.make(
+       MeasurableIndex__Logic.Reducer.make(
          ~itemsPerPage,
          ~callFnParams={channelId, states},
          ~subComponent=_,
@@ -33,13 +33,13 @@ let make =
 
   loadData(
     ((reducerParams, channelQuery, seriesQuery, measurablesStateStatsQuery)) =>
-    Measurable__Index__Logic.MeasurableIndexDataState.make({
+    MeasurableIndex__Logic.MeasurableIndexDataState.make({
       reducerParams,
       loggedInUser,
       channelQuery,
       seriesQuery,
     })
-    |> Measurable__Index__Components.MeasurableIndexDataState.toLayoutInput(
+    |> MeasurableIndex__Components.MeasurableIndexDataState.toLayoutInput(
          reducerParams.send,
          searchParams,
          measurablesStateStatsQuery,

@@ -1,11 +1,11 @@
 open Utils;
 open Style.Grid;
-open Measurable__Index__Logic;
+open MeasurableIndex__Logic;
 
 module ReducerParams = Reducer.Reducers.ReducerParams;
 
 module LoadedAndSelected = {
-  open Measurable__Index__Logic.LoadedAndSelected;
+  open MeasurableIndex__Logic.LoadedAndSelected;
 
   let header = (t: t, send: Reducer.Types.send) =>
     <>
@@ -40,7 +40,7 @@ module LoadedAndSelected = {
 };
 
 module LoadedAndUnselected = {
-  open Measurable__Index__Logic.LoadedAndUnselected;
+  open MeasurableIndex__Logic.LoadedAndUnselected;
 
   let stateLink = (state, text, num: int, isActive) =>
     <FC.Tab2
@@ -130,7 +130,7 @@ module LoadedAndUnselected = {
 };
 
 module MeasurableIndexDataState = {
-  open Measurable__Index__Logic.MeasurableIndexDataState;
+  open MeasurableIndex__Logic.MeasurableIndexDataState;
 
   let toLayoutInput =
       (

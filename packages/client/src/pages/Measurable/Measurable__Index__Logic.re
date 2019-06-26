@@ -65,7 +65,7 @@ module WithChannelButNotQuery = {
 module MeasurableIndexDataState = {
   type state =
     | WithoutChannel(channelQuery)
-    | InvalidIndexError(Context.Primary.Channel.t)
+    | InvalidIndexError(channel)
     | WithChannelButNotQuery(WithChannelButNotQuery.t)
     | LoadedAndUnselected(LoadedAndUnselected.t)
     | LoadedAndSelected(LoadedAndSelected.t);

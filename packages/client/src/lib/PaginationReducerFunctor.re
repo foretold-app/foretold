@@ -350,11 +350,13 @@ module Make = (Config: Config) => {
       | _ => None
       };
 
-    let selectItemAction = (t: t, id) =>
-      findIndexOfId(t, id) |> E.O.fmap(e => Types.SelectIndex(e));
+    let selectItemAction = (reducerParams: Types.reducerParams, id) =>
+      findIndexOfId(reducerParams, id) |> E.O.fmap(e => Types.SelectIndex(e));
 
-    let sendSelectItem = (t: t, id) =>
-      selectItemAction(t, id) |> E.O.fmap(t.send) |> E.O.default();
+    let sendSelectItem = (reducerParams: Types.reducerParams, id) =>
+      selectItemAction(reducerParams, id)
+      |> E.O.fmap(reducerParams.send)
+      |> E.O.default();
   };
 
   let component = ReasonReact.reducerComponent("PaginationReducer");

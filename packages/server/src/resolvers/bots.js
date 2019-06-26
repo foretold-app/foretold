@@ -16,7 +16,7 @@ async function create(root, args, context, info) {
     ...args.input,
     userId: _.get(context, 'user.id'),
   };
-  return await data.bots.createOne(datas);
+  return data.bots.createOne(datas);
 }
 
 /**
@@ -29,7 +29,7 @@ async function create(root, args, context, info) {
  * @returns {Promise<Models.User>}
  */
 async function update(root, args, context, info) {
-  return await data.bots.updateOne({ id: args.id }, args.input);
+  return data.bots.updateOne({ id: args.id }, args.input);
 }
 
 /**
@@ -61,7 +61,7 @@ async function all(root, args, context, info) {
  */
 async function one(root, args, context, info) {
   const id = _.get(args, 'id');
-  return await data.bots.getOne({ id });
+  return data.bots.getOne({ id });
 }
 
 /**

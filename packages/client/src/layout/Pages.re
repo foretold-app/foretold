@@ -8,7 +8,11 @@ module EntityShow' = {
 };
 
 module BotCreate' = {
-  let toEl = BotCreate.make |> LoggedInPage.noParams;
+  let toEl = BotCreate.make |> LoggedInPage.justLoggedInUser;
+};
+
+module BotEdit' = {
+  let toEl = BotEdit.make |> LoggedInPage.pageParamsAndUser;
 };
 
 module AgentIndex' = {

@@ -11,7 +11,7 @@ const data = require('../data');
  */
 async function one(root, args, context, info) {
   const id = _.get(args, 'id') || _.get(root, 'agentId');
-  return await data.agents.getOne(id);
+  return data.agents.getOne(id);
 }
 
 /**
@@ -28,7 +28,7 @@ async function all(root, args, context, info) {
     excludeChannelId: _.get(args, 'excludeChannelId'),
     types: _.get(args, 'types'),
   };
-  return await data.agents.getAll(filter);
+  return data.agents.getAll(filter);
 }
 
 module.exports = {

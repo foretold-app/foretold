@@ -2,6 +2,7 @@ const graphql = require('graphql');
 const { resolver, DateType } = require('graphql-sequelize');
 
 const models = require('../models');
+const resolvers = require('../resolvers');
 
 const bot = new graphql.GraphQLObjectType({
   name: 'Bot',
@@ -15,6 +16,11 @@ const bot = new graphql.GraphQLObjectType({
     agentId: { type: graphql.GraphQLString },
     userId: { type: graphql.GraphQLString },
     iAmOwner: require('./common').iAmOwnerByUserId,
+
+    permissions: {
+      type: graphql.GraphQLNonNull(require('./permissions').permissions),
+      resolve: resolvers.permissions.botsPermissions,
+    },
 
     token: {
       type: graphql.GraphQLString,

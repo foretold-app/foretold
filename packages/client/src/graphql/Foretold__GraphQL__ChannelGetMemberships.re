@@ -39,32 +39,10 @@ type innerType = {
           .
           "mutations": {
             .
-            "allow":
-              Js.Array.t(
-                option(
-                  [
-                    | `BOT_CREATE
-                    | `BOT_UPDATE
-                    | `CHANNEL_CREATE
-                    | `CHANNEL_MEMBERSHIP_CREATE
-                    | `CHANNEL_MEMBERSHIP_DELETE
-                    | `CHANNEL_MEMBERSHIP_ROLE_UPDATE
-                    | `CHANNEL_UPDATE
-                    | `JOIN_CHANNEL
-                    | `LEAVE_CHANNEL
-                    | `MEASURABLE_ARCHIVE
-                    | `MEASURABLE_CREATE
-                    | `MEASURABLE_UNARCHIVE
-                    | `MEASURABLE_UPDATE
-                    | `MEASUREMENT_CREATE
-                    | `SERIES_CREATE
-                    | `USER_UPDATE
-                  ],
-                ),
-              ),
+            "allow": Js.Array.t(option(Context.Primary.permission)),
           },
         },
-        "role": [ | `ADMIN | `VIEWER],
+        "role": Context.Primary.channelMembershipRole,
       }),
     ),
   "id": string,
@@ -80,18 +58,22 @@ let toChannelMemberships =
         e
         |> E.A.fmap(r => {
              open Context.Primary.Types;
+
              let agent =
                Context.Primary.Agent.make(
                  ~id=r##agent |> E.O.fmap(r => r##id) |> E.O.default(""),
                  ~name=r##agent |> E.O.bind(_, r => r##name),
                  (),
                );
+
              let allowMutations =
                r##permissions##mutations##allow
                |> E.A.O.concatSome
                |> E.A.to_list;
+
              let permissions =
                Context.Primary.Permissions.make(allowMutations);
+
              Context.Primary.ChannelMembership.make(
                ~role=r##role,
                ~agent=Some(agent),

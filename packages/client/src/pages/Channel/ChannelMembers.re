@@ -55,83 +55,93 @@ module Columns = {
        )
     |> Rationale.Option.default(false);
 
-  let agentColumn: column = {
-    name: "Agent" |> ReasonReact.string,
-    render: (membership: Context.Primary.Types.channelMembership) =>
-      membership.agent
-      |> Rationale.Option.fmap((r: Context.Primary.Types.agent) =>
-           <Foretold__Components__Link
-             linkType={
-               Internal(Agent({agentId: r.id, subPage: AgentMeasurements}))
-             }>
-             {r.name |> E.O.default("Anonymous") |> ReasonReact.string}
-           </Foretold__Components__Link>
-         )
-      |> E.O.React.defaultNull,
-    flex: 1,
-  };
+  let agentColumn: column =
+    Table.Column.make(
+      ~name="Agent" |> ReasonReact.string,
+      ~render=
+        (membership: Context.Primary.Types.channelMembership) =>
+          membership.agent
+          |> Rationale.Option.fmap((r: Context.Primary.Types.agent) =>
+               <Foretold__Components__Link
+                 linkType={
+                   Internal(
+                     Agent({agentId: r.id, subPage: AgentMeasurements}),
+                   )
+                 }>
+                 {r.name |> E.O.default("Anonymous") |> ReasonReact.string}
+               </Foretold__Components__Link>
+             )
+          |> E.O.React.defaultNull,
+      (),
+    );
 
-  let roleColumn: column = {
-    name: "Role" |> ReasonReact.string,
-    render: (membership: Context.Primary.Types.channelMembership) =>
-      switch (membership.role) {
-      | `ADMIN =>
-        <div className="ant-tag ant-tag-blue">
-          {"Admin" |> ReasonReact.string}
-        </div>
-      | `VIEWER =>
-        <div className="ant-tag ant-tag-green">
-          {"Viewer" |> ReasonReact.string}
-        </div>
-      },
-    flex: 1,
-  };
+  let roleColumn: column =
+    Table.Column.make(
+      ~name="Role" |> ReasonReact.string,
+      ~render=
+        (membership: Context.Primary.Types.channelMembership) =>
+          switch (membership.role) {
+          | `ADMIN =>
+            <div className="ant-tag ant-tag-blue">
+              {"Admin" |> ReasonReact.string}
+            </div>
+          | `VIEWER =>
+            <div className="ant-tag ant-tag-green">
+              {"Viewer" |> ReasonReact.string}
+            </div>
+          },
+      (),
+    );
 
   let roleChangeColumn: string => column =
-    channelId => {
-      name: "Change Role" |> ReasonReact.string,
-      render: (membership: Context.Primary.Types.channelMembership) =>
-        <div>
-          {switch (membership.role, membership.agent) {
-           | (`VIEWER, Some(agent)) =>
-             E.React.showIf(
-               canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, membership),
-               changeRoleAction(
-                 agent.id,
-                 channelId,
-                 `ADMIN,
-                 "Change to Admin",
-               ),
-             )
-           | (`ADMIN, Some(agent)) =>
-             E.React.showIf(
-               canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, membership),
-               changeRoleAction(
-                 agent.id,
-                 channelId,
-                 `VIEWER,
-                 "Change to Viewer",
-               ),
-             )
-           | _ => <div />
-           }}
-        </div>,
-      flex: 1,
-    };
+    channelId =>
+      Table.Column.make(
+        ~name="Change Role" |> ReasonReact.string,
+        ~render=
+          (membership: Context.Primary.Types.channelMembership) =>
+            <div>
+              {switch (membership.role, membership.agent) {
+               | (`VIEWER, Some(agent)) =>
+                 E.React.showIf(
+                   canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, membership),
+                   changeRoleAction(
+                     agent.id,
+                     channelId,
+                     `ADMIN,
+                     "Change to Admin",
+                   ),
+                 )
+               | (`ADMIN, Some(agent)) =>
+                 E.React.showIf(
+                   canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, membership),
+                   changeRoleAction(
+                     agent.id,
+                     channelId,
+                     `VIEWER,
+                     "Change to Viewer",
+                   ),
+                 )
+               | _ => <div />
+               }}
+            </div>,
+        (),
+      );
 
   let removeFromChannelColumn: string => column =
-    channelId => {
-      name: "Remove" |> ReasonReact.string,
-      render: membership =>
-        switch (
-          membership.agent,
-          canX(`CHANNEL_MEMBERSHIP_DELETE, membership),
-        ) {
-        | (Some(agent), true) => removeFromChannel(agent.id, channelId)
-        | _ => ReasonReact.null
-        },
-      flex: 1,
-    };
+    channelId =>
+      Table.Column.make(
+        ~name="Remove" |> ReasonReact.string,
+        ~render=
+          (membership: Context.Primary.Types.channelMembership) =>
+            switch (
+              membership.agent,
+              canX(`CHANNEL_MEMBERSHIP_DELETE, membership),
+            ) {
+            | (Some(agent), true) => removeFromChannel(agent.id, channelId)
+            | _ => ReasonReact.null
+            },
+        (),
+      );
 
   let all = (channelId: string, channel: Context.Primary.Types.channel) => {
     switch (channel.myRole) {

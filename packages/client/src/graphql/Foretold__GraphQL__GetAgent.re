@@ -4,7 +4,7 @@ type user = {
 };
 
 type bot = {
-  competitorType: Context.Primary.competitorType,
+  competitorType: Context.Primary.CompetitorType.t,
   description: option(string),
   id: string,
   name: string,

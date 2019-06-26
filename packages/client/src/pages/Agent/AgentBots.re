@@ -1,9 +1,18 @@
 open Utils;
 open Foretold__GraphQL;
-open Css;
 open Style.Grid;
 
-let block = style([marginBottom(`em(1.0))]);
+module Styles = {
+  open Css;
+  let paddingRight = [paddingRight(`em(1.))] |> style;
+};
+
+let title =
+  <FC.Base.Div float=`left>
+    <FC.PageCard.HeaderRow.Title>
+      {"Agent Bots" |> ReasonReact.string}
+    </FC.PageCard.HeaderRow.Title>
+  </FC.Base.Div>;
 
 let agentSection = (agent: Queries.Agent.agent) =>
   switch (agent) {
@@ -26,45 +35,74 @@ let agentSection = (agent: Queries.Agent.agent) =>
 let component = ReasonReact.statelessComponent("AgentBots");
 
 module Columns = {
-  type record = Context.Primary.Bot.t;
   type column = Table.column(Context.Primary.Bot.t);
 
-  let nameColumn: column = {
-    name: "Name" |> ste,
-    render: (r: record) =>
-      switch (r.name, r.agent) {
-      | (Some(name), Some(agent)) =>
-        <Foretold__Components__Link
-          linkType={
-            Internal(Agent({agentId: agent.id, subPage: AgentMeasurements}))
-          }>
-          {name |> ste}
-        </Foretold__Components__Link>
-      | _ => ReasonReact.null
-      },
-    flex: 1,
-  };
+  let nameColumn: column =
+    Table.Column.make(
+      ~name="Name" |> ste,
+      ~render=
+        (bot: Context.Primary.Bot.t) =>
+          switch (bot.name, bot.agent) {
+          | (Some(name), Some(agent)) =>
+            <Foretold__Components__Link
+              linkType={
+                Internal(
+                  Agent({agentId: agent.id, subPage: AgentMeasurements}),
+                )
+              }>
+              {name |> ste}
+            </Foretold__Components__Link>
+          | _ => ReasonReact.null
+          },
+      (),
+    );
 
-  let descriptionColumn: column = {
-    name: "Description" |> ste,
-    render: (r: record) =>
-      r.description |> Rationale.Option.default("") |> ste,
-    flex: 2,
-  };
+  let descriptionColumn: column =
+    Table.Column.make(
+      ~name="Description" |> ste,
+      ~render=
+        (bot: Context.Primary.Bot.t) =>
+          bot.description |> Rationale.Option.default("") |> ste,
+      (),
+    );
 
-  let tokenColumn: column = {
-    name: "Token" |> ste,
-    render: (r: record) =>
-      <Antd.Input value={r.token |> Rationale.Option.default("")} />,
-    flex: 2,
-  };
+  let tokenColumn: column =
+    Table.Column.make(
+      ~name="Token" |> ste,
+      ~render=
+        (bot: Context.Primary.Bot.t) =>
+          <div className=Styles.paddingRight>
+            <Antd.Input value={bot.token |> Rationale.Option.default("")} />
+          </div>,
+      ~show=(bot: Context.Primary.Bot.t) => bot.token != None,
+      (),
+    );
 
-  let all = [|nameColumn, descriptionColumn, tokenColumn|];
+  let editColumn: column =
+    Table.Column.make(
+      ~name="Edit" |> ste,
+      ~render=
+        (bot: Context.Primary.Bot.t) =>
+          <Foretold__Components__Link linkType={Internal(BotEdit(bot.id))}>
+            {"Edit Bot" |> ste}
+          </Foretold__Components__Link>,
+      ~show=
+        (bot: Context.Primary.Bot.t) =>
+          Context.Primary.Permissions.can(`BOT_UPDATE, bot.permissions),
+      (),
+    );
+
+  let all: array(column) = [|
+    nameColumn,
+    descriptionColumn,
+    tokenColumn,
+    editColumn,
+  |];
 };
 
 type pageParams = {id: string};
 
-let getUserId = (agent: Queries.Agent.agent) => {
+let getUserId = (agent: Queries.Agent.agent): string => {
   switch (agent.user) {
   | Some(user) => user.id
   | None => ""
@@ -78,18 +116,23 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
       Queries.Bots.component(~ownerId=getUserId(agent), bots =>
         SLayout.LayoutConfig.make(
           ~head=
-            <FC.Base.Div
-              float=`right
-              className={Css.style([
-                FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-              ])}>
-              {agentSection(agent)}
-            </FC.Base.Div>,
+            <div>
+              title
+              <FC.Base.Div
+                float=`right
+                className={Css.style([
+                  FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                  FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+                ])}>
+                {agentSection(agent)}
+              </FC.Base.Div>
+            </div>,
           ~body=
-            <FC.PageCard.Body>
-              {Table.fromColumns(Columns.all, bots)}
-            </FC.PageCard.Body>,
+            Array.length(bots) > 0
+              ? <FC.PageCard.Body>
+                  {Table.fromColumns(Columns.all, bots)}
+                </FC.PageCard.Body>
+              : <SLayout.NothingToShow />,
         )
         |> layout
       )

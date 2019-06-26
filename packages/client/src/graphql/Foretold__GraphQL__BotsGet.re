@@ -12,6 +12,11 @@ module Query = [%graphql
                   agent: Agent{
                     id
                   }
+                  permissions {
+                    mutations {
+                      allow
+                    }
+                  }
               }
           }
       }
@@ -33,25 +38,42 @@ let unpackEdges = (a): array('a) => {
 
 type bot = {
   .
-  "competitorType": [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE],
+  "competitorType": Context.Primary.CompetitorType.t,
   "id": string,
   "description": option(string),
   "token": option(string),
   "agent": option({. "id": string}),
   "name": string,
+  "permissions": {
+    .
+    "mutations": {
+      .
+      "allow": Js.Array.t(option(Context.Primary.permission)),
+    },
+  },
 };
 
-let toBot = (m: bot) =>
+let toBot = (botJson: bot) => {
+  let allowMutations =
+    botJson##permissions##mutations##allow |> E.A.O.concatSome |> E.A.to_list;
+
+  let permissions = Context.Primary.Permissions.make(allowMutations);
+
   Context.Primary.Bot.make(
-    ~id=m##id,
-    ~name=Some(m##name),
-    ~description=m##description,
-    ~competitorType=m##competitorType,
-    ~token=m##token,
+    ~id=botJson##id,
+    ~name=Some(botJson##name),
+    ~description=botJson##description,
+    ~competitorType=botJson##competitorType,
+    ~token=botJson##token,
     ~agent=
-      m##agent |> E.O.fmap(r => Context.Primary.Agent.make(~id=r##id, ())),
+      botJson##agent
+      |> E.O.fmap(agentJson =>
+           Context.Primary.Agent.make(~id=agentJson##id, ())
+         ),
+    ~permissions=Some(permissions),
     (),
   );
+};
 
 let component = (~ownerId, fn) => {
   let query = Query.make(~ownerId, ());

@@ -30,24 +30,32 @@ let make =
       )
       |> ReasonReact.element;
 
-    let agentColumn: column = {
-      name: "Agent" |> ReasonReact.string,
-      render: (agent: Context.Primary.Agent.t) =>
-        <Foretold__Components__Link
-          linkType={
-            Internal(Agent({agentId: agent.id, subPage: AgentMeasurements}))
-          }>
-          {agent.name |> Rationale.Option.default("") |> ReasonReact.string}
-        </Foretold__Components__Link>,
-      flex: 1,
-    };
+    let agentColumn: column =
+      Table.Column.make(
+        ~name="Agent" |> ReasonReact.string,
+        ~render=
+          (agent: Context.Primary.Agent.t) =>
+            <Foretold__Components__Link
+              linkType={
+                Internal(
+                  Agent({agentId: agent.id, subPage: AgentMeasurements}),
+                )
+              }>
+              {agent.name
+               |> Rationale.Option.default("")
+               |> ReasonReact.string}
+            </Foretold__Components__Link>,
+        (),
+      );
 
-    let inviteColumn: column = {
-      name: "Invite" |> ReasonReact.string,
-      render: (agent: Context.Primary.Agent.t) =>
-        addToChannelLink(agent.id, channelId),
-      flex: 1,
-    };
+    let inviteColumn: column =
+      Table.Column.make(
+        ~name="Invite" |> ReasonReact.string,
+        ~render=
+          (agent: Context.Primary.Agent.t) =>
+            addToChannelLink(agent.id, channelId),
+        (),
+      );
 
     let all: array(column) = [|agentColumn, inviteColumn|];
 

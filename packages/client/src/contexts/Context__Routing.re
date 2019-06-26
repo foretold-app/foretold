@@ -68,6 +68,7 @@ module Route = {
     | Login
     | Profile
     | BotCreate
+    | BotEdit(string)
     | EntityShow(string)
     | EntityIndex
     | Channel(ChannelPage.t)
@@ -102,6 +103,7 @@ module Route = {
     | ["communities", "new"] => ChannelNew
     | ["communities"] => ChannelIndex
     | ["bots", "new"] => BotCreate
+    | ["bots", id, "edit"] => BotEdit(id)
     | ["measurables", id, "edit"] => MeasurableEdit(id)
     | ["c"] => ChannelIndex
     | ["c", channelId] =>
@@ -139,6 +141,7 @@ module Url = {
     | Profile
     | EntityIndex
     | BotCreate
+    | BotEdit(string)
     | EntityShow(string)
     | Agent(AgentPage.t)
     | ChannelShow(string)
@@ -160,6 +163,7 @@ module Url = {
     | AgentIndex => "/agents"
     | Profile => "/profile/"
     | BotCreate => "/bots/new"
+    | BotEdit(id) => "/bots/" ++ id ++ "/edit"
     | EntityIndex => "/entities"
     | EntityShow(id) => "/entities/" ++ id
     | Agent({agentId, subPage: AgentMeasurements}) => "/agents/" ++ agentId

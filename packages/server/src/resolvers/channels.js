@@ -46,7 +46,7 @@ async function one(root, args, context, info) {
   const id = _.get(args, 'id') || _.get(root, 'channelId');
   const agentId = _.get(context, 'agent.id');
   const options = { agentId };
-  return await data.channels.getOne(id, options);
+  return data.channels.getOne(id, options);
 }
 
 /**
@@ -59,7 +59,7 @@ async function one(root, args, context, info) {
  * @returns {Promise<Models.Channel>}
  */
 async function update(root, args, context, info) {
-  return await data.channels.updateOne(args.id, args.input);
+  return data.channels.updateOne(args.id, args.input);
 }
 
 /**
@@ -70,7 +70,7 @@ async function update(root, args, context, info) {
  * @returns {Promise<Models.Channel>}
  */
 async function create(root, args, context, info) {
-  return await data.channels.createOne(context.agent, args.input);
+  return data.channels.createOne(context.agent, args.input);
 }
 
 module.exports = {

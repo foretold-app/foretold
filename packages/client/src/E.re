@@ -24,6 +24,12 @@ module O = {
   let flatApply = (fn, b) =>
     Rationale.Option.apply(fn, Some(b)) |> Rationale.Option.flatten;
 
+  let toBool = opt =>
+    switch (opt) {
+    | Some(_) => true
+    | _ => false
+    };
+
   let toResult = (error, e) =>
     switch (e) {
     | Some(r) => Belt.Result.Ok(r)

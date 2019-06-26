@@ -40,25 +40,44 @@ type column('a) = {
   name: ReasonReact.reactElement,
   render: 'a => ReasonReact.reactElement,
   flex: int,
+  show: 'a => bool,
 };
 
-let fromColumns = (columns: array(column('a)), rows: array('a)) =>
+let filterColums = (columns, rows) => {
+  columns
+  |> Js.Array.filter(column =>
+       rows |> Js.Array.find(column.show) |> E.O.toBool
+     );
+};
+
+module Column = {
+  let make = (~name, ~render, ~flex=1, ~show=_ => true, ()): column('b) => {
+    name,
+    render,
+    flex,
+    show,
+  };
+};
+
+let fromColumns = (columns: array(column('a)), rows: array('a)) => {
+  let columns' = filterColums(columns, rows);
+
   <Table>
     <FC.Table.HeaderRow>
-      {columns
-       |> Array.map((c: column('a)) => c.name)
-       |> Array.mapi((index, name) =>
-            <FC.Table.Cell flex=1 key={index |> string_of_int}>
+      {columns'
+       |> Array.map((column: column('a)) => column.name)
+       |> Array.mapi((columenIndex, name) =>
+            <FC.Table.Cell flex=1 key={columenIndex |> string_of_int}>
               name
             </FC.Table.Cell>
           )
        |> ReasonReact.array}
     </FC.Table.HeaderRow>
     {rows
-     |> Array.mapi((index, r: 'a) =>
-          <FC.Table.Row className=Styles.row key={index |> string_of_int}>
-            {columns
-             |> Array.map((c: column('a)) => c.render(r))
+     |> Array.mapi((rowIndex, row: 'a) =>
+          <FC.Table.Row className=Styles.row key={rowIndex |> string_of_int}>
+            {columns'
+             |> Array.map((column: column('a)) => column.render(row))
              |> Array.map(renderedRow =>
                   <FC.Table.Cell flex=1> renderedRow </FC.Table.Cell>
                 )
@@ -67,3 +86,4 @@ let fromColumns = (columns: array(column('a)), rows: array('a)) =>
         )
      |> ReasonReact.array}
   </Table>;
+};

@@ -31,67 +31,59 @@ module BasicTable = {
       ) => {
     ...component,
     render: _self =>
-      E.React.showIf(
-        measurables |> E.A.length > 0,
-        <>
-          <FC.Table.HeaderRow>
-            <FC.Table.Cell flex=3>
-              {"Name & Status" |> ReasonReact.string}
-            </FC.Table.Cell>
-            <FC.Table.Cell flex=1>
-              {"Details" |> ReasonReact.string}
-            </FC.Table.Cell>
-          </FC.Table.HeaderRow>
-          {
-            measurables
-            |> E.A.fmap((m: Context.Primary.Measurable.t) => {
-                 let iAmOwner = m.iAmOwner == Some(true);
-                 <FC.Table.RowLink onClick={_e => onSelect(m)} key={m.id}>
-                   <FC.Table.Cell
-                     flex=3
-                     className=Css.(
-                       style([
-                         paddingTop(`em(1.0)),
-                         paddingBottom(`em(0.5)),
-                       ])
-                     )>
-                     <div className=Styles.mainColumn>
-                       <div className=Styles.mainColumnTop>
-                         {Items.link(~m)}
-                       </div>
-                     </div>
-                     <div className=Styles.rightColumn>
-                       <Foretold__Components__Measurable.StatusDisplay
-                         measurable=m
-                       />
-                     </div>
-                   </FC.Table.Cell>
-                   <FC.Table.Cell
-                     flex=1 className=Css.(style([paddingTop(`em(0.5))]))>
-
-                       {
-                         E.React.showIf(
-                           showExtraData,
-                           Items.series(~m, ~channelId, ())
-                           |> E.O.React.defaultNull,
-                         )
-                       }
-                       {
-                         E.React.showIf(
-                           showExtraData,
-                           Items.creatorLink(~m) |> E.O.React.defaultNull,
-                         )
-                       }
-                       {Items.measurements(~m) |> E.O.React.defaultNull}
-                       {Items.measurers(~m) |> E.O.React.defaultNull}
-                       {E.React.showIf(iAmOwner, Items.editLink(~m))}
-                     </FC.Table.Cell>
-                     /* {E.React.showIf(iAmOwner, Items.archiveOption(~m))} */
-                 </FC.Table.RowLink>;
-               })
-            |> ReasonReact.array
-          }
-        </>,
-      ),
+      measurables |> E.A.length > 0
+        ? <>
+            <FC.Table.HeaderRow>
+              <FC.Table.Cell flex=3>
+                {"Name & Status" |> ReasonReact.string}
+              </FC.Table.Cell>
+              <FC.Table.Cell flex=1>
+                {"Details" |> ReasonReact.string}
+              </FC.Table.Cell>
+            </FC.Table.HeaderRow>
+            {measurables
+             |> E.A.fmap((m: Context.Primary.Measurable.t) => {
+                  let iAmOwner = m.iAmOwner == Some(true);
+                  <FC.Table.RowLink onClick={_e => onSelect(m)} key={m.id}>
+                    <FC.Table.Cell
+                      flex=3
+                      className=Css.(
+                        style([
+                          paddingTop(`em(1.0)),
+                          paddingBottom(`em(0.5)),
+                        ])
+                      )>
+                      <div className=Styles.mainColumn>
+                        <div className=Styles.mainColumnTop>
+                          {Items.link(~m)}
+                        </div>
+                      </div>
+                      <div className=Styles.rightColumn>
+                        <Foretold__Components__Measurable.StatusDisplay
+                          measurable=m
+                        />
+                      </div>
+                    </FC.Table.Cell>
+                    <FC.Table.Cell
+                      flex=1 className=Css.(style([paddingTop(`em(0.5))]))>
+                      {E.React.showIf(
+                         showExtraData,
+                         Items.series(~m, ~channelId, ())
+                         |> E.O.React.defaultNull,
+                       )}
+                      {E.React.showIf(
+                         showExtraData,
+                         Items.creatorLink(~m) |> E.O.React.defaultNull,
+                       )}
+                      {Items.measurements(~m) |> E.O.React.defaultNull}
+                      {Items.measurers(~m) |> E.O.React.defaultNull}
+                      {E.React.showIf(iAmOwner, Items.editLink(~m))}
+                    </FC.Table.Cell>
+                  </FC.Table.RowLink>;
+                  /* {E.React.showIf(iAmOwner, Items.archiveOption(~m))} */
+                })
+             |> ReasonReact.array}
+          </>
+        : <SLayout.NothingToShow />,
   };
 };

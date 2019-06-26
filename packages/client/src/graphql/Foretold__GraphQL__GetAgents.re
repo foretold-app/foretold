@@ -3,23 +3,11 @@ type user = {
   name: string,
 };
 
-let toUser = (u: user): Context.Primary.User.t =>
-  Context.Primary.User.make(~id=u.id, ~name=u.name, ());
-
 type bot = {
-  competitorType: [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE],
+  competitorType: Context.Primary.CompetitorType.t,
   description: option(string),
   id: string,
   name: string,
-};
-
-let toBot = (a: bot): Context.Primary.Bot.t => {
-  competitorType: a.competitorType,
-  description: a.description,
-  id: a.id,
-  name: Some(a.name),
-  token: None,
-  agent: None,
 };
 
 type agent = {
@@ -30,17 +18,31 @@ type agent = {
   user: option(user),
 };
 
-let toAgent = (a: agent): Context.Primary.Agent.t => {
+let toUser = (user: user): Context.Primary.User.t =>
+  Context.Primary.User.make(~id=user.id, ~name=user.name, ());
+
+let toBot = (bot: bot): Context.Primary.Bot.t => {
+  competitorType: bot.competitorType,
+  description: bot.description,
+  id: bot.id,
+  name: Some(bot.name),
+  token: None,
+  agent: None,
+  permissions: None,
+};
+
+let toAgent = (agent: agent): Context.Primary.Agent.t => {
   let agentType: option(Context.Primary.AgentType.t) =
-    switch (a.bot, a.user) {
+    switch (agent.bot, agent.user) {
     | (Some(bot), None) => Some(Bot(toBot(bot)))
     | (None, Some(user)) => Some(User(toUser(user)))
     | _ => None
     };
+
   Context.Primary.Agent.make(
-    ~id=a.id,
-    ~name=a.name,
-    ~measurementCount=Some(a.measurementCount),
+    ~id=agent.id,
+    ~name=agent.name,
+    ~measurementCount=Some(agent.measurementCount),
     ~agentType,
     (),
   );

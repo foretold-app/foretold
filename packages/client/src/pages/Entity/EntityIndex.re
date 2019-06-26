@@ -6,27 +6,32 @@ module Columns = {
   type record = EKen.Thing.t;
   type column = Table.column(EKen.Thing.t);
 
-  let nameColumn: column = {
-    name: "Name" |> ste,
-    render: (r: record) =>
-      <Foretold__Components__Link
-        linkType={Internal(EntityShow(r |> Graph_T.Thing.id))}>
-        {r |> EKen.Thing.getName |> ste}
-      </Foretold__Components__Link>,
-    flex: 2,
-  };
+  let nameColumn: column =
+    Table.Column.make(
+      ~name="Name" |> ste,
+      ~render=
+        (r: record) =>
+          <Foretold__Components__Link
+            linkType={Internal(EntityShow(r |> Graph_T.Thing.id))}>
+            {r |> EKen.Thing.getName |> ste}
+          </Foretold__Components__Link>,
+      ~flex=2,
+      (),
+    );
 
-  let instanceOf: column = {
-    name: "Instance Of" |> ste,
-    render: (r: record) => r |> EKen.Thing.getInstanceOfName |> ste,
-    flex: 1,
-  };
+  let instanceOf: column =
+    Table.Column.make(
+      ~name="Instance Of" |> ste,
+      ~render=(r: record) => r |> EKen.Thing.getInstanceOfName |> ste,
+      (),
+    );
 
-  let idColumn: column = {
-    name: "Name" |> ste,
-    render: (r: record) => r |> Graph_T.Thing.id |> ste,
-    flex: 1,
-  };
+  let idColumn: column =
+    Table.Column.make(
+      ~name="Name" |> ste,
+      ~render=(r: record) => r |> Graph_T.Thing.id |> ste,
+      (),
+    );
 
   let all = [|nameColumn, instanceOf, idColumn|];
 };

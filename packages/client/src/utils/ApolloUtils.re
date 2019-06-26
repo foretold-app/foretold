@@ -3,7 +3,7 @@ open Belt.Result;
 
 let apolloResponseToResult = (result: ReasonApolloTypes.queryResponse('a)) =>
   switch (result) {
-  | Loading => Error(<div> {"Loading..." |> ste} </div>)
+  | Loading => Error(<div> <SLayout.Spin /> </div>)
   | Error(error) =>
     switch (error##message) {
     | "GraphQL error: JsonWebTokenError"

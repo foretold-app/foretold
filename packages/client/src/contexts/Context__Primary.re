@@ -80,8 +80,6 @@ module ChannelMembershipRole = {
     };
 };
 
-type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
-
 module Types = {
   type permissions = {allow: list(permission)};
   type user = {
@@ -91,12 +89,13 @@ module Types = {
     name: string,
   }
   and bot = {
-    competitorType,
+    competitorType: CompetitorType.t,
     description: option(string),
     id: string,
     name: option(string),
     token: option(string),
     agent: option(agent),
+    permissions: option(permissions),
   }
   and agentType =
     | Bot(bot)
@@ -252,9 +251,18 @@ module Connection = {
 
 module Permissions = {
   type t = Types.permissions;
+
   let make = (a: list(permission)): t => {allow: a};
-  let canX = (permission: permission, t: t): bool =>
-    t.allow |> E.L.exists(r => r == permission);
+
+  let canX = (permission: permission, permissions: t): bool =>
+    permissions.allow |> E.L.exists(r => r == permission);
+
+  let can = (permission: permission, permissions: option(t)): bool =>
+    switch (permissions) {
+    | Some(permissions) =>
+      permissions.allow |> E.L.exists(r => r == permission)
+    | _ => false
+    };
 };
 
 module ChannelMembership = {
@@ -273,6 +281,12 @@ module AgentType = {
 
 module User = {
   type t = Types.user;
+
+  let getAgent = (user: t, clbFn) =>
+    switch (user.agent) {
+    | Some(agent) => clbFn(agent)
+    };
+
   let make = (~id, ~name="", ~auth0Id=None, ~agent=None, ()): t => {
     id,
     name,
@@ -283,14 +297,16 @@ module User = {
 
 module Bot = {
   type t = Types.bot;
+
   module CompetitorType = {
-    let toString = (c: competitorType) =>
+    let toString = (c: CompetitorType.t) =>
       switch (c) {
       | `AGGREGATION => "Aggregation"
       | `COMPETITIVE => "Prediction"
       | `OBJECTIVE => "Resolution"
       };
   };
+
   let make =
       (
         ~id,
@@ -299,6 +315,7 @@ module Bot = {
         ~competitorType,
         ~token=None,
         ~agent=None,
+        ~permissions=None,
         (),
       )
       : t => {
@@ -308,6 +325,7 @@ module Bot = {
     name,
     token,
     agent,
+    permissions,
   };
 };
 

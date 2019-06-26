@@ -26,7 +26,7 @@ async function getJwtByAuth0Jwt(root, args, context, info) {
  */
 async function getJwtByAgentId(root, args, context, info) {
   const botAgentId = _.get(root, 'agentId');
-  return await data.authentication.getJwtForever(botAgentId);
+  return data.authentication.getJwtForever(botAgentId);
 }
 
 /**
@@ -39,7 +39,7 @@ async function getJwtByAgentId(root, args, context, info) {
  */
 async function getTokenByAgentId(root, args, context, info) {
   const agentId = _.get(root, 'agentId');
-  return await data.tokens.getOrCreateActiveTokenForAgentId(agentId);
+  return data.tokens.getOrCreateActiveTokenForAgentId(agentId);
 }
 
 module.exports = {

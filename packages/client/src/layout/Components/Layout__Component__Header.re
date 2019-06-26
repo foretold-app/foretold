@@ -50,6 +50,7 @@ let userDropdown = agentId =>
      )}
     {link(Internal(ChannelNew), "Make a New Channel")}
     {link(Action(_ => Context.Auth.Actions.logout()), "Logout")}
+    <div className=Layout__Dropdown.Styles.clear />
   </div>;
 
 let header = (loggedInUser: Context.Primary.User.t) =>

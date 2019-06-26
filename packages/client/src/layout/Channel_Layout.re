@@ -19,6 +19,7 @@ let makeWithPage =
           loggedInUser,
           Some(channel),
         );
+
       switch (channelPage.subPage) {
       | Measurables(searchParams) =>
         MeasurableIndex.make(

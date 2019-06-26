@@ -23,8 +23,6 @@ module type Config = {
 };
 
 module Make = (Config: Config) => {
-  module Config = Config;
-
   module Types = {
     type pageConfig = {direction};
 
@@ -388,6 +386,7 @@ module Make = (Config: Config) => {
             Reducers.ItemSelected.newState(itemsPerPage, s, action)
             |> E.O.fmap((r: Types.itemState) => (r, state.pageConfig))
           };
+
         switch (newState) {
         | Some((itemState, pageConfig)) =>
           ReasonReact.Update({

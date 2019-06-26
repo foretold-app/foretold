@@ -1,16 +1,19 @@
 module ReducerConfig = {
   type itemType = Context.Primary.Measurable.t;
+
   type callFnParams = {
     channelId: string,
     states: array(Context.Primary.MeasurableState.t),
   };
 
-  let getId = (params: Context.Primary.Measurable.t) => params.id;
+  let getId = (params: itemType) => params.id;
+
   let callFn = (params: callFnParams) =>
     Foretold__GraphQL.Queries.Measurables.component2(
       ~channelId=params.channelId,
       ~states=params.states |> Array.map(r => Some(r)),
     );
+
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
 };
 

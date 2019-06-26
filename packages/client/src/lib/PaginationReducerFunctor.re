@@ -375,8 +375,11 @@ module Make = (Config: Config) => {
     reducer: (action, state: state) =>
       switch (action) {
       | UpdateResponse(response) =>
-        {response, itemState: state.itemState, pageConfig: state.pageConfig}
-        ->ReasonReact.Update
+        ReasonReact.Update({
+          response,
+          itemState: state.itemState,
+          pageConfig: state.pageConfig,
+        })
       | _ =>
         let newState =
           switch (state, action) {

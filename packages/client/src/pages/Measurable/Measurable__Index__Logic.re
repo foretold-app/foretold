@@ -25,6 +25,10 @@ module Types = {
   type loggedInUser = Context.Primary.User.t;
 
   type reducerParams = Reducer.Types.reducerParams;
+
+  type seriesQuery = E.HttpResponse.t(seriesCollection);
+
+  type channelQuery = E.HttpResponse.t(channel);
 };
 
 open Types;
@@ -54,13 +58,13 @@ module WithChannelButNotQuery = {
     reducerParams,
     loggedInUser,
     channel,
-    query: E.HttpResponse.t(seriesCollection),
+    seriesQuery,
   };
 };
 
 module MeasurableIndexDataState = {
   type state =
-    | WithoutChannel(E.HttpResponse.t(Context.Primary.Channel.t))
+    | WithoutChannel(channelQuery)
     | InvalidIndexError(Context.Primary.Channel.t)
     | WithChannelButNotQuery(WithChannelButNotQuery.t)
     | LoadedAndUnselected(LoadedAndUnselected.t)
@@ -69,15 +73,15 @@ module MeasurableIndexDataState = {
   type input = {
     reducerParams,
     loggedInUser,
-    channel: E.HttpResponse.t(Context.Primary.Channel.t),
-    query: E.HttpResponse.t(seriesCollection),
+    channelQuery,
+    seriesQuery,
   };
 
   let make = (input: input) =>
     switch (
       input.reducerParams.itemState,
-      input.channel,
-      input.query,
+      input.channelQuery,
+      input.seriesQuery,
       input.reducerParams.response,
     ) {
     | (
@@ -117,8 +121,8 @@ module MeasurableIndexDataState = {
         channel,
         reducerParams: input.reducerParams,
         loggedInUser: input.loggedInUser,
-        query: input.query,
+        seriesQuery: input.seriesQuery,
       })
-    | _ => WithoutChannel(input.channel)
+    | _ => WithoutChannel(input.channelQuery)
     };
 };

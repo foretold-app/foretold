@@ -31,12 +31,13 @@ let make =
       itemsPerPage,
     );
 
-  loadData(((reducerParams, channel, query, measurablesStateStats)) =>
+  loadData(
+    ((reducerParams, channelQuery, seriesQuery, measurablesStateStats)) =>
     Measurable__Index__Logic.MeasurableIndexDataState.make({
       reducerParams,
       loggedInUser,
-      channel,
-      query,
+      channelQuery,
+      seriesQuery,
     })
     |> Measurable__Index__Components.MeasurableIndexDataState.toLayoutInput(
          reducerParams.send,

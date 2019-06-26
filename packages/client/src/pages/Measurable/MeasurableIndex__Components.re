@@ -92,7 +92,6 @@ module LoadedAndUnselected = {
                 query.state == Some(`JUDGED),
               )}
            </Div>
-         | _ => <> </>
          }}
       </Div>
       <Div

@@ -297,44 +297,48 @@ module Make = (Config: Config) => {
       | None => buttonDuo(Page, params)
       };
 
-    let paginationItem = (t: Types.reducerParams) =>
-      switch (totalItems(t), selectionIndex(t)) {
+    let paginationItem = (reducerParams: Types.reducerParams) =>
+      switch (totalItems(reducerParams), selectionIndex(reducerParams)) {
       | (Some(count), Some(selection)) =>
         FC.PaginationButtons.make({
           currentValue: Item(selection + 1),
           max: count,
           pageLeft: {
-            isDisabled: !canDecrementSelection(t),
-            onClick: _ => t.send(Types.LastSelection),
+            isDisabled: !canDecrementSelection(reducerParams),
+            onClick: _ => reducerParams.send(Types.LastSelection),
           },
           pageRight: {
-            isDisabled: !canIncrementSelection(t),
-            onClick: _ => t.send(Types.NextSelection),
+            isDisabled: !canIncrementSelection(reducerParams),
+            onClick: _ => reducerParams.send(Types.NextSelection),
           },
         })
       | _ => "" |> ste
       };
 
-    let paginationPage = (t: Types.reducerParams) =>
-      switch (totalItems(t), upperBoundIndex(t), lowerBoundIndex(t)) {
+    let paginationPage = (reducerParams: Types.reducerParams) =>
+      switch (
+        totalItems(reducerParams),
+        upperBoundIndex(reducerParams),
+        lowerBoundIndex(reducerParams),
+      ) {
       | (Some(count), Some(upper), Some(lower)) =>
         FC.PaginationButtons.make({
           currentValue: Range(lower + 1, upper + 1),
           max: count,
           pageLeft: {
-            isDisabled: !canDecrementPage(t),
-            onClick: _ => t.send(Types.LastPage),
+            isDisabled: !canDecrementPage(reducerParams),
+            onClick: _ => reducerParams.send(Types.LastPage),
           },
           pageRight: {
-            isDisabled: !canIncrementPage(t),
-            onClick: _ => t.send(Types.NextPage),
+            isDisabled: !canIncrementPage(reducerParams),
+            onClick: _ => reducerParams.send(Types.NextPage),
           },
         })
       | _ => "" |> ste
       };
 
-    let findIndexOfId = (t: Types.reducerParams, id: string) =>
-      switch (t.response) {
+    let findIndexOfId = (reducerParams: Types.reducerParams, id: string) =>
+      switch (reducerParams.response) {
       | Success(m) => m.edges |> E.A.findIndex(r => Config.getId(r) == id)
       | _ => None
       };

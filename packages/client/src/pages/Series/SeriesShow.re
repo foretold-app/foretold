@@ -10,7 +10,7 @@ module GetMeasurablesReducerConfig = {
 };
 
 module SelectWithPaginationReducer =
-  SelectWithPaginationReducerFunctor.Make(GetMeasurablesReducerConfig);
+  PaginationReducerFunctor.Make(GetMeasurablesReducerConfig);
 
 module Styles = {
   open Css;

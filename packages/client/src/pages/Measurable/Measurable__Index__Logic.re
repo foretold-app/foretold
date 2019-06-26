@@ -82,7 +82,7 @@ module MeasurableIndexDataState = {
         Success(_),
       ) =>
       switch (input.reducerParams.selection) {
-      | Some(measurable) =>
+      | Some(selectedMeasurable) =>
         LoadedAndSelected({
           channel,
           reducerParams: input.reducerParams,
@@ -90,7 +90,7 @@ module MeasurableIndexDataState = {
           itemState: {
             selectedIndex: selectedIndex,
           },
-          selectedMeasurable: measurable,
+          selectedMeasurable,
           seriesCollection,
         })
       | _ => InvalidIndexError(channel)

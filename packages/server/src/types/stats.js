@@ -8,31 +8,31 @@ const stats = new graphql.GraphQLObjectType({
     agentCount: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),
       resolve: async () => {
-        return await models.Agent.count();
+        return models.Agent.count();
       }
     },
     userCount: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),
       resolve: async () => {
-        return await models.User.count();
+        return models.User.count();
       }
     },
     botCount: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),
       resolve: async () => {
-        return await models.Bot.count();
+        return models.Bot.count();
       }
     },
     measurementCount: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),
       resolve: async () => {
-        return await models.Measurement.count();
+        return models.Measurement.count();
       }
     },
     measurableCount: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),
       resolve: async () => {
-        return await models.Measurable.count();
+        return models.Measurable.count();
       }
     }
   }

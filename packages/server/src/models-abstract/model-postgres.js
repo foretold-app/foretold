@@ -277,7 +277,7 @@ class ModelPostgres extends Model {
    * @return {Promise.<object>}
    */
   async createOne(data = {}) {
-    return await this.model.create(data);
+    return this.model.create(data);
   }
 
   /**

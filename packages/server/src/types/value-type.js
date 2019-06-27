@@ -5,7 +5,7 @@ let valueType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
   values: {
     FLOAT: { value: "FLOAT" },
     DATE: { value: "DATE" },
-    PERCENTAGE: { value: "PERCENTAGE" }
+    PERCENTAGE: { value: "PERCENTAGE" },
   }
 }));
 

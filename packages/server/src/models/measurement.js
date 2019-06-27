@@ -60,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
           const measurable = await measurement.getMeasurable();
           await measurable.judged();
         }
-      }
+      },
     }
   });
 

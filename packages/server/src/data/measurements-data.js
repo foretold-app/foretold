@@ -69,9 +69,9 @@ class MeasurementsData extends DataBase {
       where: {
         id,
         measurableId: {
-          [this.model.Op.in]: this.MeasurementModel.measurableIdsLiteral(options.agentId)
+          [this.model.Op.in]: this.MeasurementModel.measurableIdsLiteral(options.agentId),
         },
-      }
+      },
     });
   }
 

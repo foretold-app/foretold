@@ -55,7 +55,7 @@ const agent = new graphql.GraphQLObjectType({
     Channels: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./channels').channel)),
       resolve: resolver(models.Agent.Channels)
-    }
+    },
   })
 });
 

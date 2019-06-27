@@ -5,7 +5,7 @@ const competitor = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
   values: {
     COMPETITIVE: { value: "COMPETITIVE" },
     AGGREGATION: { value: "AGGREGATION" },
-    OBJECTIVE: { value: "OBJECTIVE" }
+    OBJECTIVE: { value: "OBJECTIVE" },
   }
 }));
 

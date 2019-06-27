@@ -10,8 +10,8 @@ const measurableMeasurementsConnection = createConnection({
   connectionFields: {
     total: {
       type: graphql.GraphQLInt,
-      resolve: ({ fullCount }) => fullCount
-    }
+      resolve: ({ fullCount }) => fullCount,
+    },
   },
 });
 
@@ -22,8 +22,8 @@ const agentMeasurementsConnection = createConnection({
   connectionFields: {
     total: {
       type: graphql.GraphQLInt,
-      resolve: ({ fullCount }) => fullCount
-    }
+      resolve: ({ fullCount }) => fullCount,
+    },
   },
 });
 
@@ -34,8 +34,8 @@ const channelAgentsConnection = createConnection({
   connectionFields: {
     total: {
       type: graphql.GraphQLInt,
-      resolve: ({ fullCount }) => fullCount
-    }
+      resolve: ({ fullCount }) => fullCount,
+    },
   },
 });
 
@@ -46,8 +46,8 @@ const seriesMeasurablesConnection = createConnection({
   connectionFields: {
     total: {
       type: graphql.GraphQLInt,
-      resolve: ({ fullCount }) => fullCount
-    }
+      resolve: ({ fullCount }) => fullCount,
+    },
   },
 });
 

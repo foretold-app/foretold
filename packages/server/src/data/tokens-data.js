@@ -83,7 +83,7 @@ class TokensData extends DataBase {
    */
   async revokeTokensAndGetTokenByAgentId(agentId) {
     await this.model.updateAll({
-      agentId
+      agentId,
     }, {
       isActive: false,
     });

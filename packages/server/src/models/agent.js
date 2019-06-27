@@ -29,15 +29,15 @@ module.exports = (sequelize, DataTypes) => {
           const bot = await this.getBot();
           return _.get(bot, 'name');
         }
-      }
+      },
     },
     measurementCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
       get: async function () {
         const items = await this.getMeasurements();
-        return items.length
-      }
+        return items.length;
+      },
     },
   });
 
@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Model.Measurements = Model.hasMany(models.Measurement, {
       foreignKey: 'agentId',
-      as: 'Measurements'
+      as: 'Measurements',
     });
 
     Model.Measurables = Model.hasMany(models.Measurable, {

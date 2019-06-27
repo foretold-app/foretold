@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
       get: async function () {
         const items = await this.getAgents();
         return items.length;
-      }
+      },
     },
   });
 

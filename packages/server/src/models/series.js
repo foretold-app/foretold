@@ -39,15 +39,15 @@ module.exports = (sequelize, DataTypes) => {
           // TODO: These queries are likely very slow,
           //  my guess is that this could be sped up a location.
           const items = await this.getMeasurables();
-          return items.length
-        }
+          return items.length;
+        },
       },
     },
     {
       hooks: {
         afterCreate: async (series) => {
-          await series.createMeasurables()
-        }
+          await series.createMeasurables();
+        },
       }
     });
 
@@ -65,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
             seriesId: this.id,
             creatorId: this.creatorId,
             channelId: this.channelId,
-            valueType: "FLOAT"
+            valueType: "FLOAT",
           });
         }
       }
@@ -75,12 +75,12 @@ module.exports = (sequelize, DataTypes) => {
   Model.associate = function (models) {
     Model.Creator = Model.belongsTo(models.Agent, {
       foreignKey: 'creatorId',
-      as: 'creator'
+      as: 'creator',
     });
 
     Model.Measurables = Model.hasMany(models.Measurable, {
       foreignKey: 'seriesId',
-      as: "Measurables"
+      as: "Measurables",
     });
 
     // Usage

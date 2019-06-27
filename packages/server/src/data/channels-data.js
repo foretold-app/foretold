@@ -107,7 +107,7 @@ class ChannelsData extends DataBase {
         id: {
           [this.model.Op.in]: this.ChannelModel.channelIdsLiteral(options.agentId),
         },
-      }
+      },
     });
   }
 
@@ -126,15 +126,15 @@ class ChannelsData extends DataBase {
     const restrictions = 'agentId' in options ? {
       id: {
         [this.model.Op.in]: this.ChannelModel.channelIdsLiteral(options.agentId),
-      }
+      },
     } : {};
     return this.models.Channel.findOne({
       where: {
         [this.model.Op.and]: [
           { id },
-          restrictions
-        ]
-      }
+          restrictions,
+        ],
+      },
     });
   }
 }

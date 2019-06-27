@@ -34,7 +34,7 @@ class UsersData extends DataBase {
    */
   async getOne(filter) {
     return this.models.User.findOne({
-      where: filter
+      where: filter,
     });
   }
 

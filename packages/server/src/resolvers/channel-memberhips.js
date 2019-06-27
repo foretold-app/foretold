@@ -11,7 +11,7 @@ async function create(root, args) {
   return data.channelMemberships.createOne(
     input.channelId,
     input.agentId,
-    input.role
+    input.role,
   );
 }
 
@@ -25,7 +25,7 @@ async function update(root, args) {
   return data.channelMemberships.updateOne(
     input.channelId,
     input.agentId,
-    input.role
+    input.role,
   );
 }
 
@@ -38,7 +38,7 @@ async function remove(root, args) {
   const input = args.input;
   return data.channelMemberships.deleteOne(
     input.channelId,
-    input.agentId
+    input.agentId,
   );
 }
 

@@ -10,10 +10,10 @@ function filterr(fields) {
   let newFields = { ...fields };
   // TODO: Refactor this. It's obviously quite hacky.
   if (!!newFields.competitorType) {
-    newFields.competitorType = { type: competitor }
+    newFields.competitorType = { type: competitor };
   }
   if (!!newFields.valueType) {
-    newFields.valueType = { type: valueType }
+    newFields.valueType = { type: valueType };
   }
   return newFields;
 }

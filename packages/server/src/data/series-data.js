@@ -35,13 +35,15 @@ class SeriesData extends DataBase {
     let where = {
       // Restrictions
       channelId: {
-        [this.model.Op.in]: this.SeriesModel.channelIdsLiteral(options.agentId)
+        [this.model.Op.in]: this.SeriesModel.channelIdsLiteral(options.agentId),
       },
     };
 
     if (channelId) {
       // @todo: It breaks restrictions.
-      where.channelId = { [this.model.Op.eq]: channelId };
+      where.channelId = {
+        [this.model.Op.eq]: channelId,
+      };
     }
 
     return this.models.Series.findAll({ where });
@@ -60,7 +62,7 @@ class SeriesData extends DataBase {
       where: {
         id,
         channelId: {
-          [this.model.Op.in]: this.SeriesModel.channelIdsLiteral(options.agentId)
+          [this.model.Op.in]: this.SeriesModel.channelIdsLiteral(options.agentId),
         },
       },
     });

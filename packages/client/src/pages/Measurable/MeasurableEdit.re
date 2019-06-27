@@ -25,6 +25,7 @@ module WithEditMutation = {
         labelOnDate: string,
         showDescriptionDate: string,
         labelProperty: string,
+        valueType: string,
       ) => {
     let date = showDescriptionDate == "TRUE" ? labelOnDate : "";
     let m =
@@ -32,13 +33,14 @@ module WithEditMutation = {
         ~id,
         ~input={
           "name": name,
-          "labelCustom": labelCustom |> E.O.some,
-          "labelProperty": labelProperty |> E.O.some,
-          "labelOnDate": date |> Js.Json.string |> E.O.some,
+          "labelCustom": labelCustom |> Rationale.Option.some,
+          "labelProperty": labelProperty |> Rationale.Option.some,
+          "labelOnDate": date |> Js.Json.string |> Rationale.Option.some,
           "expectedResolutionDate":
-            expectedResolutionDate |> Js.Json.string |> E.O.some,
-          "resolutionEndpoint": resolutionEndpoint |> E.O.some,
-          "labelSubject": labelSubject |> E.O.some,
+            expectedResolutionDate |> Js.Json.string |> Rationale.Option.some,
+          "resolutionEndpoint": resolutionEndpoint |> Rationale.Option.some,
+          "labelSubject": labelSubject |> Rationale.Option.some,
+          "valueType": valueType |> Rationale.Option.some,
         },
         (),
       );
@@ -69,6 +71,7 @@ let formCreation = (id, m) => {
             values.labelOnDate,
             values.showDescriptionDate,
             values.labelProperty,
+            values.valueType,
           ),
       ~initialState={
         name: measurable.name,
@@ -87,6 +90,7 @@ let formCreation = (id, m) => {
         resolutionEndpoint: measurable.resolutionEndpoint |> E.O.default(""),
         showDescriptionProperty: measurable.name == "" ? "TRUE" : "FALSE",
         labelProperty: measurable.labelProperty |> E.O.default(""),
+        valueType: "FLOAT",
       },
       ~schema=[(`name, Custom(_ => None))],
       ({handleSubmit, handleChange, form, _}) =>

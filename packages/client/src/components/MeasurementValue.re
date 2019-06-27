@@ -11,6 +11,8 @@ type valueResult = {
       "ys": Js.Array.t(float),
     }),
   "floatPoint": option(float),
+  "percentage": option(float),
+  "binary": option(bool),
 };
 
 let decodeResult = (fn, json) =>
@@ -198,7 +200,7 @@ module DateTimeCdf = MakeCdf(DateTimePoint);
 type t = [
   | `FloatPoint(float)
   | `Percentage(float)
-  | `Binary(int)
+  | `Binary(bool)
   | `DateTimePoint(string)
   | `FloatCdf(FloatCdf.t)
   | `DateTimeCdf(DateTimeCdf.t)
@@ -206,12 +208,11 @@ type t = [
 
 let hasQuartiles = (t: 'a): bool =>
   Belt.Map.has(t, 25.0) && Belt.Map.has(t, 50.0) && Belt.Map.has(t, 75.0);
-/* when ! hasQuartiles(i) => Some("Missing quartiles") */
+
 let error = (t: t): option(string) =>
   switch (t) {
   | `Percentage(i) when !(0.0 <= i && i <= 100.0) =>
     Some("Must be between 0 and 100")
-  | `Binary(i) when !(i == 0 || i == 1) => Some("Must be 0 or 1")
   | _ => None
   };
 
@@ -227,7 +228,7 @@ let typeToName = (t: t) =>
   | `FloatCdf(_) => "floatCdf"
   | `DateTimeCdf(_) => "dateTimeCdf"
   | `DateTimePoint(_) => "dateTimePoint"
-  | `Percentage(_) => "percentagePoint"
+  | `Percentage(_) => "percentage"
   | `Binary(_) => "binary"
   };
 
@@ -237,7 +238,7 @@ let nameToType =
   | "floatCdf" => Ok(`FloatCdf)
   | "dateTimePoint" => Ok(`DateTimePoint)
   | "dateTimeCdf" => Ok(`DateTimeCdf)
-  | "percentagePoint" => Ok(`Percentage)
+  | "percentage" => Ok(`Percentage)
   | "binary" => Ok(`Binary)
   | _ => Error("Not found");
 
@@ -254,7 +255,7 @@ let stringOfValue = (t: t) =>
   | `DateTimeCdf(k) => "Implement Me"
   | `DateTimePoint(k) => k
   | `Percentage(k) => string_of_float(k)
-  | `Binary(k) => string_of_int(k)
+  | `Binary(k) => string_of_bool(k)
   };
 
 let encode = (e: t) => {
@@ -265,7 +266,7 @@ let encode = (e: t) => {
   | `DateTimeCdf(k) => DateTimeCdf.encode(n, k)
   | `DateTimePoint(k) => makeEncode(Json.Encode.string, n, k)
   | `Percentage(k) => makeEncode(Json.Encode.float, n, k)
-  | `Binary(k) => makeEncode(Json.Encode.int, n, k)
+  | `Binary(k) => makeEncode(Json.Encode.bool, n, k)
   };
 };
 
@@ -281,7 +282,7 @@ let decoder = (a, j: Js.Json.t): Belt.Result.t(t, string) =>
   | `DateTimeCdf => j |> convert(DateTimeCdf.decode, e => `DateTimeCdf(e))
   | `Percentage =>
     j |> convert(makeDecode(Json.Decode.float), e => `Percentage(e))
-  | `Binary => j |> convert(makeDecode(Json.Decode.int), e => `Binary(e))
+  | `Binary => j |> convert(makeDecode(Json.Decode.bool), e => `Binary(e))
   };
 
 let decode = (j: Js.Json.t): Belt.Result.t(t, string) => {
@@ -302,19 +303,30 @@ type graphQlResult = {
       "ys": Js.Array.t(float),
     }),
   "floatPoint": option(float),
+  "percentage": option(float),
+  "binary": option(bool),
 };
 
 let decodeGraphql = (j: valueResult): Belt.Result.t(t, string) =>
-  switch (j##floatCdf, j##floatPoint) {
-  | (Some(r), _) => Ok(`FloatCdf(FloatCdf.fromArrays((r##xs, r##ys))))
-  | (_, Some(r)) => Ok(`FloatPoint(r))
+  switch (j##floatCdf, j##floatPoint, j##percentage, j##binary) {
+  | (Some(r), _, _, _) =>
+    Ok(`FloatCdf(FloatCdf.fromArrays((r##xs, r##ys))))
+  | (_, Some(r), _, _) => Ok(`FloatPoint(r))
+  | (_, _, Some(r), _) => Ok(`Percentage(r))
+  | (_, _, _, Some(r)) => Ok(`Binary(false))
   | _ => Error("Could not convert")
   };
 
 let encodeToGraphQLMutation = (e: t) => {
   let n = typeToName(e);
   switch (e) {
-  | `FloatPoint(k) => Some({"floatPoint": Some(k), "floatCdf": None})
+  | `FloatPoint(k) =>
+    Some({
+      "floatPoint": Some(k),
+      "floatCdf": None,
+      "percentage": None,
+      "binary": None,
+    })
   | `FloatCdf(k) =>
     Some({
       "floatPoint": None,
@@ -323,6 +335,8 @@ let encodeToGraphQLMutation = (e: t) => {
           "xs": FloatCdf.xs(k) |> Array.map(e => Some(e)),
           "ys": FloatCdf.ys(k) |> Array.map(e => Some(e)),
         }),
+      "percentage": None,
+      "binary": None,
     })
   | _ => None
   };

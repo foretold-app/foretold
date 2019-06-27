@@ -99,7 +99,7 @@ class ChannelsData extends DataBase {
   async getAll(options = {}) {
     const offset = _.get(options, 'offset', 0);
     const limit = _.get(options, 'limit', 10);
-    return await this.models.Channel.findAll({
+    return this.models.Channel.findAll({
       limit,
       offset,
       order: [['createdAt', 'DESC']],
@@ -128,7 +128,7 @@ class ChannelsData extends DataBase {
         [this.model.Op.in]: this.ChannelModel.channelIdsLiteral(options.agentId),
       }
     } : {};
-    return await this.models.Channel.findOne({
+    return this.models.Channel.findOne({
       where: {
         [this.model.Op.and]: [
           { id },

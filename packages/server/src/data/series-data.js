@@ -19,7 +19,7 @@ class SeriesData extends DataBase {
    * @return {Promise<*>}
    */
   async createOne(data) {
-    return await this.models.Series.create(data);
+    return this.models.Series.create(data);
   }
 
   /**
@@ -44,7 +44,7 @@ class SeriesData extends DataBase {
       where.channelId = { [this.model.Op.eq]: channelId };
     }
 
-    return await this.models.Series.findAll({ where });
+    return this.models.Series.findAll({ where });
   }
 
   /**
@@ -56,7 +56,7 @@ class SeriesData extends DataBase {
    * @return {Promise<*>}
    */
   async getOne(id, options = {}) {
-    return await this.models.Series.findOne({
+    return this.models.Series.findOne({
       where: {
         id,
         channelId: {

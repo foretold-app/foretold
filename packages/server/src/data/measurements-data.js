@@ -53,7 +53,7 @@ class MeasurementsData extends DataBase {
       isAdmin: options.isAdmin,
       agentId: options.agentId,
     };
-    return await this.MeasurementModel.getAll(filter, pagination, restrictions);
+    return this.MeasurementModel.getAll(filter, pagination, restrictions);
   }
 
   /**
@@ -65,7 +65,7 @@ class MeasurementsData extends DataBase {
    * @return {Promise<*>}
    */
   async getOne(id, options = {}) {
-    return await this.models.Measurement.findOne({
+    return this.models.Measurement.findOne({
       where: {
         id,
         measurableId: {
@@ -96,7 +96,7 @@ class MeasurementsData extends DataBase {
       return measurement;
     }
 
-    return await this.MeasurementModel.getOne({ measurableId, agentId });
+    return this.MeasurementModel.getOne({ measurableId, agentId });
   }
 }
 

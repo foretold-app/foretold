@@ -93,6 +93,10 @@ class MeasurableModel extends ModelPostgres {
     return { data, total };
   }
 
+  /**
+   * @param {string} channelId
+   * @return {Promise<*>}
+   */
   async getOpenedCount(channelId) {
     return this.model.count({
       where: {

@@ -81,17 +81,17 @@ module Make = (Config: Config) => {
     module ItemSelected = {
       type t = itemSelected;
 
-      let deselect = (_, itemSelected: t) => ItemUnselected;
+      let deselect = (_, _) => ItemUnselected;
 
-      let nextSelection = (itemsPerPage, itemSelected: t) =>
+      let nextSelection = (itemsPerPage: int, itemSelected: t) =>
         E.BoundedInt.increment(itemSelected.selectedIndex, itemsPerPage)
         <$> (selectedIndex => ItemSelected({selectedIndex: selectedIndex}));
 
-      let lastSelection = (itemsPerPage, itemSelected: t) =>
+      let lastSelection = (itemsPerPage: int, itemSelected: t) =>
         E.BoundedInt.decrement(itemSelected.selectedIndex, itemsPerPage)
         <$> (selectedIndex => ItemSelected({selectedIndex: selectedIndex}));
 
-      let newState = (itemsPerPage, itemSelected: t, action: action) =>
+      let newState = (itemsPerPage: int, itemSelected: t, action: action) =>
         (
           switch (action) {
           | Deselect => Some((a, b) => deselect(a, b) |> E.O.some)
@@ -405,6 +405,7 @@ module Make = (Config: Config) => {
           switch (state, action) {
           | ({itemState: ItemUnselected}, _) =>
             Reducers.ItemUnselected.newState(itemsPerPage, state, action)
+
           | ({itemState: ItemSelected(s)}, _) =>
             Reducers.ItemSelected.newState(itemsPerPage, s, action)
             |> E.O.fmap((itemState: Types.itemState) =>
@@ -419,6 +420,7 @@ module Make = (Config: Config) => {
             itemState,
             pageConfig,
           })
+
         | None => ReasonReact.NoUpdate
         };
       },
@@ -432,6 +434,7 @@ module Make = (Config: Config) => {
              if (!E.HttpResponse.isEq(state.response, response, compareItems)) {
                send(UpdateResponse(response));
              };
+
              subComponent({
                itemsPerPage,
                itemState: state.itemState,

@@ -32,6 +32,7 @@ let toAgent = (c: creator): Context.Primary.Agent.t =>
 type node = {
   id: string,
   name: string,
+  channelId: string,
   channel: option(channel),
   valueType: Context.Primary.valueType,
   labelCustom: option(string),
@@ -57,6 +58,7 @@ let toMeasurable = (m: node): Context.Primary.Measurable.t =>
   Context.Primary.Measurable.make(
     ~id=m.id,
     ~name=m.name,
+    ~channelId=m.channelId,
     ~channel=None,
     ~isArchived=Some(m.isArchived),
     ~valueType=m.valueType,
@@ -93,6 +95,7 @@ module Query = [%graphql
             node @bsRecord{
               id
               name
+              channelId
               isArchived
               channel: Channel @bsRecord {
                 id

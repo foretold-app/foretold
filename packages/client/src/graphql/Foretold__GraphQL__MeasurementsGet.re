@@ -2,6 +2,7 @@ type measurable = {
   .
   "id": string,
   "name": string,
+  "channelId": string,
   "state": Context.Primary.MeasurableState.t,
   "stateUpdatedAt": option(MomentRe.Moment.t),
   "expectedResolutionDate": option(MomentRe.Moment.t),
@@ -93,6 +94,7 @@ let toMeasurement = (measurement: measurement): Context.Primary.Measurement.t =>
           Context.Primary.Measurable.make(
             ~id=measurable##id,
             ~name=measurable##name,
+            ~channelId=measurable##channelId,
             (),
           ),
         )
@@ -160,6 +162,7 @@ module Query = [%graphql
                   measurable: Measurable {
                     id
                     name
+                    channelId
                     expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
                     state
                     stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")

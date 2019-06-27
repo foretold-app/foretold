@@ -55,7 +55,7 @@ module Styles = {
 module Helpers = {
   let smallDistribution = (measurement: measurement, g: (float, float)) =>
     switch (measurement.value) {
-    | Belt.Result.Ok(`FloatCdf(r)) =>
+    | Ok(`FloatCdf(r)) =>
       let (minX, maxX) = g;
       r
       |> MeasurementValue.toChunks(~bucketSize=3)
@@ -75,7 +75,7 @@ module Helpers = {
             />,
           )
       );
-    | Belt.Result.Ok(`FloatPoint(r)) =>
+    | Ok(`FloatPoint(r)) =>
       Some(
         <div className=Styles.middle>
           {r |> E.Float.with3DigitsPrecision |> ste}
@@ -86,20 +86,19 @@ module Helpers = {
 
   let statSummary = (measurement: measurement) =>
     switch (measurement.value) {
-    | Belt.Result.Ok(`FloatCdf(r)) =>
+    | Ok(`FloatCdf(r)) =>
       r
       |> MeasurementValue.toChunks(~bucketSize=3)
       |> MeasurementValue.FloatCdf.toJs
       |> FC.Base.Types.Dist.fromJson
       |> (cdf => Some(<FC__CdfChart__StatSummary cdf />))
-    | Belt.Result.Ok(`FloatPoint(r)) =>
-      Some(r |> E.Float.with3DigitsPrecision |> ste)
+    | Ok(`FloatPoint(r)) => Some(r |> E.Float.with3DigitsPrecision |> ste)
     | _ => None
     };
 
   let getValueText = (measurement: measurement) =>
     switch (measurement.value) {
-    | Belt.Result.Ok(`FloatCdf(_r)) =>
+    | Ok(`FloatCdf(_r)) =>
       Some(
         <div className=Styles.secondaryText>
           {measurement.valueText |> E.O.default("") |> Utils.ste}
@@ -128,13 +127,7 @@ module Helpers = {
 
   let getFloatCdf = (e: Belt.Result.t(MeasurementValue.t, string)) =>
     switch (e) {
-    | Belt.Result.Ok(`FloatCdf(r)) => Some(r)
-    | _ => None
-    };
-
-  let floatCdf = e =>
-    switch (e##value) {
-    | Belt.Result.Ok(`FloatCdf(r)) => Some(r)
+    | Ok(`FloatCdf(r)) => Some(r)
     | _ => None
     };
 
@@ -164,7 +157,7 @@ module Helpers = {
 
   let toChartMeasurement = (measurement: measurement) =>
     switch (measurement.value) {
-    | Belt.Result.Ok(`FloatCdf(r)) =>
+    | Ok(`FloatCdf(r)) =>
       switch (
         E.FloatCdf.firstAboveValue(0.05, r),
         E.FloatCdf.firstAboveValue(0.95, r),

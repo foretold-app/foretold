@@ -32,18 +32,21 @@ let make =
     );
 
   loadData(
-    ((reducerParams, channelQuery, seriesQuery, measurablesStateStatsQuery)) =>
-    MeasurableIndex__Logic.MeasurableIndexDataState.make({
-      reducerParams,
-      loggedInUser,
-      channelQuery,
-      seriesQuery,
-    })
-    |> MeasurableIndex__Components.MeasurableIndexDataState.toLayoutInput(
-         reducerParams.send,
-         searchParams,
-         measurablesStateStatsQuery,
-       )
-    |> layout
-  );
+    ((reducerParams, channelQuery, seriesQuery, measurablesStateStatsQuery)) => {
+    let state =
+      MeasurableIndex__Logic.MeasurableIndexDataState.make({
+        reducerParams,
+        loggedInUser,
+        channelQuery,
+        seriesQuery,
+      });
+
+    MeasurableIndex__Components.MeasurableIndexDataState.toLayoutInput(
+      reducerParams.send,
+      searchParams,
+      measurablesStateStatsQuery,
+      state,
+    )
+    |> layout;
+  });
 };

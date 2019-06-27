@@ -1,6 +1,7 @@
 open Context.Routing;
 
 type state = {route: Route.t};
+
 type action =
   | ChangeRoute(Route.t);
 

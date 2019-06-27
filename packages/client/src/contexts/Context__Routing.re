@@ -60,6 +60,12 @@ module ChannelPage = {
   };
 };
 
+let getChannelId = (channelId: string): string =>
+  switch (channelId) {
+  | "global" => ""
+  | _ => channelId
+  };
+
 module Route = {
   type t =
     | Home
@@ -79,12 +85,6 @@ module Route = {
     | ChannelNew
     | MeasurableEdit(string)
     | NotFound;
-
-  let getChannelId = (channelId: string): string =>
-    switch (channelId) {
-    | "global" => ""
-    | _ => channelId
-    };
 
   let fromUrl = (url: ReasonReact.Router.url) =>
     switch (url.path) {
@@ -188,7 +188,7 @@ module Url = {
     | MeasurableNew(channelId) => "/c/" ++ channelId ++ "/new"
     | SeriesNew(channelId) => "/c/" ++ channelId ++ "/s/new"
     | SeriesShow(channelId, id) => "/c/" ++ channelId ++ "/s/" ++ id
-    | MeasurableShow(channelId, id) => "/c/" ++ channelId ++ "/s/" ++ id
+    | MeasurableShow(channelId, id) => "/c/" ++ channelId ++ "/m/" ++ id
     };
 
   let push = (r: t) => r |> toString |> ReasonReact.Router.push;

@@ -400,14 +400,15 @@ module Make = (Config: Config) => {
           itemState: state.itemState,
           pageConfig: state.pageConfig,
         })
+
       | _ =>
         let newState =
           switch (state, action) {
           | ({itemState: ItemUnselected}, _) =>
             Reducers.ItemUnselected.newState(itemsPerPage, state, action)
 
-          | ({itemState: ItemSelected(s)}, _) =>
-            Reducers.ItemSelected.newState(itemsPerPage, s, action)
+          | ({itemState: ItemSelected(itemSelected)}, _) =>
+            Reducers.ItemSelected.newState(itemsPerPage, itemSelected, action)
             |> E.O.fmap((itemState: Types.itemState) =>
                  (itemState, state.pageConfig)
                )
@@ -425,24 +426,27 @@ module Make = (Config: Config) => {
         };
       },
 
-    render: ({state, send}) =>
-      callFnParams
-      |> Config.callFn(
-           ~direction=state.pageConfig.direction,
-           ~pageLimit=itemsPerPage,
-           ~innerComponentFn=response => {
-             if (!E.HttpResponse.isEq(state.response, response, compareItems)) {
-               send(UpdateResponse(response));
-             };
+    render: ({state, send}) => {
+      let innerComponentFn = response => {
+        if (!E.HttpResponse.isEq(state.response, response, compareItems)) {
+          send(UpdateResponse(response));
+        };
 
-             subComponent({
-               itemsPerPage,
-               itemState: state.itemState,
-               response: state.response,
-               selection: Reducers.State.selection(state),
-               send,
-             });
-           },
-         ),
+        subComponent({
+          itemsPerPage,
+          itemState: state.itemState,
+          response: state.response,
+          selection: Reducers.State.selection(state),
+          send,
+        });
+      };
+
+      Config.callFn(
+        callFnParams,
+        ~direction=state.pageConfig.direction,
+        ~pageLimit=itemsPerPage,
+        ~innerComponentFn,
+      );
+    },
   };
 };

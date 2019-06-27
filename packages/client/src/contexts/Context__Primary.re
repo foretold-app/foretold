@@ -159,6 +159,7 @@ module Types = {
     createdAt: option(MomentRe.Moment.t),
     relevantAt: option(MomentRe.Moment.t),
     measurableId: option(string),
+    valueText: option(string),
     measurable: option(measurable),
     agent: option(agent),
   }
@@ -466,6 +467,7 @@ module Measurement = {
         ~agent=None,
         ~measurableId=None,
         ~measurable=None,
+        ~valueText=None,
         (),
       )
       : t => {
@@ -479,6 +481,7 @@ module Measurement = {
     agent,
     measurableId,
     measurable,
+    valueText,
   };
 };
 

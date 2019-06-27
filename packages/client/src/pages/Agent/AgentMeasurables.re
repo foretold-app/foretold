@@ -1,7 +1,4 @@
-let make' = (_, measurables) =>
-  <C.Measurables.BasicTable measurables showExtraData=true />;
-
-module GetMeasurablesReducerConfig = {
+module ReducerConfig = {
   type itemType = Context.Primary.Measurable.t;
   type callFnParams = string;
   let getId = (e: Context.Primary.Measurable.t) => e.id;
@@ -10,8 +7,7 @@ module GetMeasurablesReducerConfig = {
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
 };
 
-module SelectWithPaginationReducer =
-  SelectWithPaginationReducerFunctor.Make(GetMeasurablesReducerConfig);
+module Reducer = SelectWithPaginationReducerFunctor.Make(ReducerConfig);
 
 let component = ReasonReact.statelessComponent("AgentMeasurables");
 type pageParams = {id: string};
@@ -26,7 +22,7 @@ let make =
   ...component,
   render: _ => {
     let lmake = SLayout.LayoutConfig.make;
-    SelectWithPaginationReducer.make(
+    Reducer.make(
       ~itemsPerPage=20,
       ~callFnParams=pageParams.id,
       ~subComponent=selectWithPaginationParams =>
@@ -35,18 +31,14 @@ let make =
           switch (selectWithPaginationParams.selection) {
           | Some(_selection) =>
             <>
-              {SelectWithPaginationReducer.Components.deselectButton(
+              {Reducer.Components.deselectButton(
                  selectWithPaginationParams.send,
                )}
-              {SelectWithPaginationReducer.Components.correctButtonDuo(
-                 selectWithPaginationParams,
-               )}
+              {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
             </>
           | None =>
             <>
-              {SelectWithPaginationReducer.Components.correctButtonDuo(
-                 selectWithPaginationParams,
-               )}
+              {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
             </>
           },
         ~body=
@@ -61,7 +53,7 @@ let make =
               measurables={connection.edges}
               showExtraData=true
               onSelect={e =>
-                SelectWithPaginationReducer.Components.sendSelectItem(
+                Reducer.Components.sendSelectItem(
                   selectWithPaginationParams,
                   e.id,
                 )

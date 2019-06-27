@@ -1,6 +1,3 @@
-open Utils;
-open Style.Grid;
-
 module SimpleHeader = {
   let newMeasurable = channelId =>
     FC.GroupHeader.actionButton(

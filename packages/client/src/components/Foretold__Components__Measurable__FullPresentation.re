@@ -65,13 +65,11 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
 
                userAgentId == creatorId
                || Context.Primary.Measurable.toStatus(m) !== `JUDGED
-                 ? <>
-                     <Foretold__Components__Measurement__Form
-                       measurable=m
-                       measurableId=id
-                       isCreator={userAgentId == creatorId}
-                     />
-                   </>
+                 ? <Foretold__Components__Measurement__Form
+                     measurable=m
+                     measurableId=id
+                     isCreator={userAgentId == creatorId}
+                   />
                  : E.React.null;
              }
              {Queries.Measurements.component(

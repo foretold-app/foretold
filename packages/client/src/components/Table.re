@@ -59,7 +59,13 @@ module Column = {
   };
 };
 
-let fromColumns = (columns: array(column('a)), rows: array('a)) => {
+let fromColumns =
+    (
+      columns: array(column('a)),
+      rows: array('a),
+      ~onRowClb=(row: 'a) => (),
+      (),
+    ) => {
   let columns' = filterColums(columns, rows);
 
   <Table>
@@ -75,7 +81,10 @@ let fromColumns = (columns: array(column('a)), rows: array('a)) => {
     </FC.Table.HeaderRow>
     {rows
      |> Array.mapi((rowIndex, row: 'a) =>
-          <FC.Table.Row className=Styles.row key={rowIndex |> string_of_int}>
+          <FC.Table.Row
+            onClick={_ => onRowClb(row)}
+            className=Styles.row
+            key={rowIndex |> string_of_int}>
             {columns'
              |> Array.map((column: column('a)) => column.render(row))
              |> Array.map(renderedRow =>

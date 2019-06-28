@@ -63,7 +63,7 @@ let make =
 
             let measurementsList = connection.edges |> Array.to_list;
 
-            C.Measurements.Table.makeAgentPredictionsTable(
+            C.Measurements.Table.makeAgentPredictionsTable_2(
               ~measurementsList,
               ~onSelect=onSelectClb,
               (),

@@ -106,7 +106,7 @@ let make =
     Queries.Channels.component(channels =>
       SLayout.LayoutConfig.make(
         ~head=SLayout.Header.textDiv("Groups"),
-        ~body=Table.fromColumns(Columns.all, channels),
+        ~body=Table.fromColumns(Columns.all, channels, ()),
       )
       |> layout
     ),

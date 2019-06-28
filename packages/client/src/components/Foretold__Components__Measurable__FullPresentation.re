@@ -94,7 +94,7 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                      ) =>
                      b.edges
                      |> E.A.to_list
-                     |> Foretold__Components__Measurements__Table.make
+                     |> Foretold__Components__Measurements__Table.make_2
                    )
               )}
            </>

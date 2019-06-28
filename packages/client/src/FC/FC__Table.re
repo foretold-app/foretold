@@ -133,16 +133,17 @@ module Row = {
 
   let textSection = text => <Div styles=[Styles.textArea]> text </Div>;
 
-  let make = (~className="", ~bottomSubRow=?, children) => {
+  let make = (~className="", ~bottomSubRow=?, ~onClick=_ => (), children) => {
     ...component,
     render: _self =>
       switch (bottomSubRow) {
       | Some(bottomSubRow) =>
-        <>
+        <div onClick>
           <Div styles=[Styles.topRow]> ...children </Div>
           <Div styles=[Styles.bottomRow]> ...bottomSubRow </Div>
-        </>
-      | None => <Div styles=[Styles.row, className]> ...children </Div>
+        </div>
+      | None =>
+        <Div styles=[Styles.row, className] onClick> ...children </Div>
       },
   };
 };

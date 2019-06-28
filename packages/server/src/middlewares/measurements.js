@@ -32,7 +32,7 @@ async function measurementValueValidation(root, args, context, info) {
 
   {
     const valuesEntered = [floatCdf, floatPoint, percentage, binary];
-    const values = valuesEntered.filter(item => !!item);
+    const values = valuesEntered.filter(item => item !== null);
     const countValues = values.length;
 
     if (countValues > 1) throw new Error(ERR_1());

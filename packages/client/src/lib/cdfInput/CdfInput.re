@@ -127,8 +127,6 @@ let mainBlock =
     )
     : ReasonReact.reactElement => {
   let isValid = getIsValid(state);
-  let dataType =
-    dataTypeFacade(state.competitorType, measurable, Some(state.dataType));
 
   let getDataTypeSelect: ReasonReact.reactElement =
     switch (state.competitorType, measurable.valueType) {
@@ -138,7 +136,7 @@ let mainBlock =
     };
 
   let getValueInput: ReasonReact.reactElement =
-    switch (dataType) {
+    switch (state.dataType) {
     | "FLOAT_CDF"
     | "FLOAT_POINT" =>
       <GuesstimateInput
@@ -255,26 +253,28 @@ let make =
 
   reducer: (action, state) =>
     switch (action) {
-    | UpdateFloatPdf((e: FloatCdf.t)) =>
-      onUpdate(e);
-      ReasonReact.Update({...state, floatCdf: e});
+    | UpdateFloatPdf((floatCdf: FloatCdf.t)) =>
+      onUpdate(floatCdf);
+      ReasonReact.Update({...state, floatCdf});
 
-    | UpdateCompetitorType(e) =>
-      ReasonReact.Update({...state, competitorType: e})
+    | UpdateCompetitorType(competitorType) =>
+      let dataType =
+        dataTypeFacade(competitorType, measurable, Some(state.dataType));
+      ReasonReact.Update({...state, competitorType, dataType});
 
-    | UpdateDataType((e: string)) =>
-      ReasonReact.Update({...state, dataType: e})
+    | UpdateDataType((dataType: string)) =>
+      ReasonReact.Update({...state, dataType})
 
-    | UpdateBinary((e: bool)) => ReasonReact.Update({...state, binary: e})
+    | UpdateBinary((binary: bool)) => ReasonReact.Update({...state, binary})
 
-    | UpdatePercentage((e: float)) =>
-      ReasonReact.Update({...state, percentage: e})
+    | UpdatePercentage((percentage: float)) =>
+      ReasonReact.Update({...state, percentage})
 
-    | UpdateDescription((e: string)) =>
-      ReasonReact.Update({...state, description: e})
+    | UpdateDescription((description: string)) =>
+      ReasonReact.Update({...state, description})
 
-    | UpdateValueText((e: string)) =>
-      ReasonReact.Update({...state, valueText: e})
+    | UpdateValueText((valueText: string)) =>
+      ReasonReact.Update({...state, valueText})
     },
 
   render: ({state, send}) => {

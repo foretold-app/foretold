@@ -313,7 +313,7 @@ let decodeGraphql = (j: valueResult): Belt.Result.t(t, string) =>
     Ok(`FloatCdf(FloatCdf.fromArrays((r##xs, r##ys))))
   | (_, Some(r), _, _) => Ok(`FloatPoint(r))
   | (_, _, Some(r), _) => Ok(`Percentage(r))
-  | (_, _, _, Some(r)) => Ok(`Binary(false))
+  | (_, _, _, Some(r)) => Ok(`Binary(r))
   | _ => Error("Could not convert")
   };
 
@@ -337,6 +337,20 @@ let encodeToGraphQLMutation = (e: t) => {
         }),
       "percentage": None,
       "binary": None,
+    })
+  | `Percentage(k) =>
+    Some({
+      "floatPoint": None,
+      "floatCdf": None,
+      "percentage": Some(k),
+      "binary": None,
+    })
+  | `Binary(k) =>
+    Some({
+      "floatPoint": None,
+      "floatCdf": None,
+      "percentage": None,
+      "binary": Some(k),
     })
   | _ => None
   };

@@ -6,6 +6,8 @@ open Foretold__GraphQL;
 type state = {
   // -> Measurement.value
   floatCdf: FloatCdf.t,
+  percentage: float,
+  binary: bool,
   dataType: string,
   // -> Measurement
   competitorType: string, // "FLOAT_CDF" | "FLOAT",
@@ -16,6 +18,8 @@ type state = {
 type action =
   // -> Measurement.value
   | UpdateFloatPdf(FloatCdf.t)
+  | UpdatePercentage(float)
+  | UpdateBinary(bool)
   | UpdateDataType(string)
   // -> Measurement
   | UpdateCompetitorType(string)
@@ -74,6 +78,8 @@ let getIsValid = (state: state): bool =>
   switch (state.dataType) {
   | "FLOAT_CDF" => E.A.length(state.floatCdf.xs) > 1
   | "FLOAT_POINT" => E.A.length(state.floatCdf.xs) == 1
+  | "PERCENTAGE_FLOAT" => true
+  | "BINARY_BOOL" => true
   };
 
 let getValue = (state: state): MeasurementValue.t =>
@@ -87,6 +93,8 @@ let getValue = (state: state): MeasurementValue.t =>
   | "FLOAT_POINT" =>
     let point = Array.unsafe_get(state.floatCdf.xs, 0);
     `FloatPoint(point);
+  | "PERCENTAGE_FLOAT" => `Percentage(state.percentage)
+  | "BINARY_BOOL" => `Binary(state.binary)
   };
 
 let getCompetitorType = (str: string) =>
@@ -131,7 +139,9 @@ let mainBlock =
         onChange={text => send(UpdateValueText(text))}
       />
     | ("OBJECTIVE", `PERCENTAGE) =>
-      <Select value={state.dataType} onChange={e => send(UpdateDataType(e))}>
+      <Select
+        value={state.binary |> E.Bool.toString}
+        onChange={e => send(UpdateBinary(e |> E.Bool.fromString))}>
         <Select.Option value="TRUE"> {"True" |> ste} </Select.Option>
         <Select.Option value="FALSE"> {"False" |> ste} </Select.Option>
       </Select>
@@ -207,6 +217,8 @@ let make =
     {
       floatCdf: FloatCdf.empty,
       competitorType: competitorTypeInitValue,
+      percentage: 0.,
+      binary: true,
       dataType: "FLOAT_CDF",
       description: "",
       valueText: "",
@@ -222,11 +234,19 @@ let make =
     | UpdateCompetitorType(e) =>
       ReasonReact.Update({...state, competitorType: e})
 
-    | UpdateDataType(e) => ReasonReact.Update({...state, dataType: e})
+    | UpdateDataType((e: string)) =>
+      ReasonReact.Update({...state, dataType: e})
 
-    | UpdateDescription(e) => ReasonReact.Update({...state, description: e})
+    | UpdateBinary((e: bool)) => ReasonReact.Update({...state, binary: e})
 
-    | UpdateValueText(e) => ReasonReact.Update({...state, valueText: e})
+    | UpdatePercentage((e: float)) =>
+      ReasonReact.Update({...state, percentage: e})
+
+    | UpdateDescription((e: string)) =>
+      ReasonReact.Update({...state, description: e})
+
+    | UpdateValueText((e: string)) =>
+      ReasonReact.Update({...state, valueText: e})
     },
 
   render: ({state, send}) => {

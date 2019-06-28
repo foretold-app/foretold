@@ -21,7 +21,7 @@ class BotsData extends DataBase {
    * @return {Promise<*>}
    */
   async createOne(data = {}) {
-    return await this.model.createOne(data);
+    return this.model.createOne(data);
   }
 
   /**
@@ -30,7 +30,7 @@ class BotsData extends DataBase {
    * @return {Promise<*>}
    */
   async updateOne(params = {}, data = {}) {
-    return await this.model.updateOne(params, data);
+    return this.model.updateOne(params, data);
   }
 
   /**
@@ -43,7 +43,7 @@ class BotsData extends DataBase {
    */
   async getAll(filter = {}, pagination = {}, options = {}) {
     const restrictions = {};
-    return await this.model.getAllWithConnections(filter, pagination, restrictions);
+    return this.model.getAllWithConnections(filter, pagination, restrictions);
   }
 
   /**
@@ -54,7 +54,7 @@ class BotsData extends DataBase {
    * @return {Promise<*>}
    */
   async getOne(params = {}, query = {}, restrictions = {}) {
-    return await this.model.getOne(params, query, restrictions);
+    return this.model.getOne(params, query, restrictions);
   }
 
   /**
@@ -64,7 +64,7 @@ class BotsData extends DataBase {
   async tokenRefresh(params = {}) {
     const bot = await this.BotModel.getOne(params);
     if (!bot) throw new Error('Bot is not found');
-    return await this.tokens.revokeTokensAndGetTokenByAgentId(bot.agentId);
+    return this.tokens.revokeTokensAndGetTokenByAgentId(bot.agentId);
   }
 }
 

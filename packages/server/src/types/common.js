@@ -39,7 +39,7 @@ const isArchived = new graphql.GraphQLEnumType({
   values: {
     TRUE: { value: "TRUE" },
     FALSE: { value: "FALSE" },
-  }
+  },
 });
 
 module.exports = {

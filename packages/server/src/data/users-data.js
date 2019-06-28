@@ -21,7 +21,7 @@ class UsersData extends DataBase {
    * @return {Promise<Models.User>}
    */
   async getUserByAuth0Id(auth0Id) {
-    return await this.upsertOne(
+    return this.upsertOne(
       { auth0Id },
       { auth0Id, name: '' },
     );
@@ -33,8 +33,8 @@ class UsersData extends DataBase {
    * @return {Promise<Models.User>}
    */
   async getOne(filter) {
-    return await this.models.User.findOne({
-      where: filter
+    return this.models.User.findOne({
+      where: filter,
     });
   }
 
@@ -44,7 +44,7 @@ class UsersData extends DataBase {
    * @return {Promise<Models.User>}
    */
   async createOne(data) {
-    return await this.models.User.create(data);
+    return this.models.User.create(data);
   }
 
   /**

@@ -19,7 +19,7 @@ class DataBase {
    * @return {Promise<*>}
    */
   async createOne(data, options) {
-    return await this.model.createOne(data, options);
+    return this.model.createOne(data, options);
   }
 
   /**
@@ -30,7 +30,7 @@ class DataBase {
    * @return {Promise<void>}
    */
   async getOne(params = {}, query = {}, options = {}) {
-    return await this.model.getOne(params, query, options);
+    return this.model.getOne(params, query, options);
   }
 
   /**
@@ -41,7 +41,7 @@ class DataBase {
    * @return {Promise<*>}
    */
   async updateOne(params, data, options) {
-    return await this.model.updateOne(params, data, options);
+    return this.model.updateOne(params, data, options);
   }
 
   /**
@@ -51,7 +51,7 @@ class DataBase {
    * @return {Promise<*>}
    */
   async deleteOne(params, options) {
-    return await this.model.deleteOne(params, options);
+    return this.model.deleteOne(params, options);
   }
 
   /**
@@ -61,7 +61,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    */
   async getAll(filter = {}, pagination = {}, options = {}) {
-    return await this.model.getAll(filter, pagination, options);
+    return this.model.getAll(filter, pagination, options);
   }
 
 }

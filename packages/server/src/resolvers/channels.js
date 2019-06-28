@@ -6,7 +6,7 @@ const data = require('../data');
  * @returns {Promise<Model[]>}
  */
 async function channelAgents(channel) {
-  return await data.channels.getAgentsByChannelId(channel.id);
+  return data.channels.getAgentsByChannelId(channel.id);
 }
 
 /**
@@ -14,7 +14,7 @@ async function channelAgents(channel) {
  * @returns {Promise<Model>}
  */
 async function channelCreator(channel) {
-  return await data.channels.getCreatorByChannelId(channel.id);
+  return data.channels.getCreatorByChannelId(channel.id);
 }
 
 /**
@@ -31,7 +31,7 @@ async function all(root, args, context, info) {
   const offset = args.offset;
   const limit = args.limit;
   const options = { offset, limit, agentId };
-  return await data.channels.getAll(options);
+  return data.channels.getAll(options);
 }
 
 /**

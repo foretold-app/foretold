@@ -277,7 +277,7 @@ class ModelPostgres extends Model {
    * @return {Promise.<object>}
    */
   async createOne(data = {}) {
-    return await this.model.create(data);
+    return this.model.create(data);
   }
 
   /**
@@ -319,7 +319,7 @@ class ModelPostgres extends Model {
     this.applyRestrictions(where, restrictions);
     this.applyFilter(where, filter);
 
-    return await this.model.findAll({
+    return this.model.findAll({
       limit: pagination.limit,
       offset: pagination.offset,
       where,
@@ -375,7 +375,7 @@ class ModelPostgres extends Model {
 
     this.applyRestrictions(where, restrictions);
 
-    return await this.model.findOne({
+    return this.model.findOne({
       where,
       order,
     });

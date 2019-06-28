@@ -156,7 +156,7 @@ const schema = new graphql.GraphQLSchema({
 
       stats: {
         type: new graphql.GraphQLNonNull(stats),
-        resolve: () => true
+        resolve: () => true,
       },
 
       authentication: {

@@ -27,7 +27,7 @@ const middlewares = {
       await setContextMeasurableByRoot(root, args, context, info);
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
   },
 
@@ -37,7 +37,7 @@ const middlewares = {
       await setContextChannelByRoot(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
       await setContextChannelMembershipsAdmins(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
   },
 
@@ -47,7 +47,7 @@ const middlewares = {
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
       await setContextChannelMembershipsAdmins(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
   },
 
@@ -57,7 +57,7 @@ const middlewares = {
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
       await setContextChannelMembershipsAdmins(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
 
     measurements: async (resolve, root, args, context, info) => {
@@ -80,7 +80,7 @@ const middlewares = {
     seriesCreate: async (resolve, root, args, context, info) => {
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
 
     measurementCreate: async (resolve, root, args, context, info) => {
@@ -89,80 +89,80 @@ const middlewares = {
       await measurableStateValidation(root, args, context, info);
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
 
     measurableCreate: async (resolve, root, args, context, info) => {
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
 
     channelUpdate: async (resolve, root, args, context, info) => {
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
 
     channelMembershipCreate: async (resolve, root, args, context, info) => {
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
       await setContextChannelMembershipsAdmins(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
 
     channelMembershipRoleUpdate: async (resolve, root, args, context, info) => {
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
       await setContextChannelMembershipsAdmins(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
 
     channelMembershipDelete: async (resolve, root, args, context, info) => {
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
       await setContextChannelMembershipsAdmins(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
 
     measurableArchive: async (resolve, root, args, context, info) => {
       await setContextMeasurable(root, args, context, info);
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
 
     measurableUnarchive: async (resolve, root, args, context, info) => {
       await setContextMeasurable(root, args, context, info);
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
 
     measurableUpdate: async (resolve, root, args, context, info) => {
       await setContextMeasurable(root, args, context, info);
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
 
     leaveChannel: async (resolve, root, args, context, info) => {
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
       await setContextChannelMembershipsAdmins(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
 
     joinChannel: async (resolve, root, args, context, info) => {
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
       await setContextChannelMembershipsAdmins(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
 
     botUpdate: async (resolve, root, args, context, info) => {
       await setContextBot(root, args, context, info);
-      return await resolve(root, args, context, info);
+      return resolve(root, args, context, info);
     },
   }
 };

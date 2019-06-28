@@ -17,6 +17,8 @@ const measurementValueInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     floatCdf: { type: measurementValueInputFloatCdf },
     floatPoint: { type: graphql.GraphQLFloat },
+    percentage: { type: graphql.GraphQLFloat },
+    binary: { type: graphql.GraphQLBoolean },
   }),
 });
 
@@ -57,6 +59,8 @@ const measurementValue = new graphql.GraphQLObjectType({
   fields: () => ({
     floatCdf: { type: measurementValueFloatCdf },
     floatPoint: { type: graphql.GraphQLFloat },
+    percentage: { type: graphql.GraphQLFloat },
+    binary: { type: graphql.GraphQLBoolean },
   }),
 });
 

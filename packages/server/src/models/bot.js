@@ -34,8 +34,8 @@ module.exports = (sequelize, DataTypes) => {
           let agent = await sequelize.models.Agent.create({
             type: "BOT",
           });
-          event.agentId = agent.dataValues.id
-        }
+          event.agentId = agent.dataValues.id;
+        },
       }
     });
 
@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Model.Agent = Model.belongsTo(models.Agent, {
       foreignKey: 'agentId',
-    })
+    });
   };
 
   return Model;

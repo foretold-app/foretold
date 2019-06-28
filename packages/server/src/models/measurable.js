@@ -83,16 +83,16 @@ module.exports = (sequelize, DataTypes) => {
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
       get: async function () {
         const items = await this.getMeasurements();
-        return items.length
-      }
+        return items.length;
+      },
     },
     measurerCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
       get: async function () {
         const items = await this.getMeasurements();
-        return _.uniq(items.map(i => i.agentId)).length
-      }
+        return _.uniq(items.map(i => i.agentId)).length;
+      },
     },
 
     // Satellite
@@ -113,7 +113,7 @@ module.exports = (sequelize, DataTypes) => {
           console.error(`Error getting response from endpoint. Url: ${endpoint}, error: ${e}`);
           return null;
         }
-      }
+      },
     },
   }, {
     hooks: {
@@ -136,29 +136,29 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   Model.needsResolutionResponse = async function needsResolutionResponse() {
-    return await Model.findAll({
+    return Model.findAll({
       where: {
         state: MEASURABLE_STATE.JUDGEMENT_PENDING,
         expectedResolutionDate: {
           [Sequelize.Op.lt]: Sequelize.fn('now'),
-        }
-      }
+        },
+      },
     });
   };
 
   Model.needsToBePending = async function needsToBePending() {
-    return await Model.findAll({
+    return Model.findAll({
       where: {
         state: MEASURABLE_STATE.OPEN,
         [Sequelize.Op.or]: [
           {
             expectedResolutionDate: {
               [Sequelize.Op.lt]: Sequelize.fn('now'),
-            }
+            },
           },
           { expectedResolutionDate: null },
         ],
-      }
+      },
     });
   };
 
@@ -219,11 +219,11 @@ module.exports = (sequelize, DataTypes) => {
           {
             "title": "Resolution Date",
             "value": moment(this.expectedResolutionDate).format("MMM DD, YYYY"),
-            "short": true
-          }
+            "short": true,
+          },
         ],
-        "color": "#4a8ed8"
-      }]
+        "color": "#4a8ed8",
+      }],
     };
   };
 
@@ -257,25 +257,25 @@ module.exports = (sequelize, DataTypes) => {
           "short": false,
           "value": `*From*: ${this[c]} \n*To*:  ${newData[c]}`
         })),
-        "color": "#ffe75e"
-      }]
+        "color": "#ffe75e",
+      }],
     };
   };
 
   Model.associate = function associate(models) {
     Model.Measurements = Model.hasMany(models.Measurement, {
       foreignKey: 'measurableId',
-      as: 'Measurements'
+      as: 'Measurements',
     });
 
     Model.Series = Model.belongsTo(models.Series, {
       foreignKey: 'seriesId',
-      as: "series"
+      as: "series",
     });
 
     Model.Creator = Model.belongsTo(models.Agent, {
       foreignKey: 'creatorId',
-      as: 'creator'
+      as: 'creator',
     });
 
     // Usage:

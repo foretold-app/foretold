@@ -39,7 +39,7 @@ class TokensData extends DataBase {
     if (agentId) cond.agentId = agentId;
     if (token) cond.token = token;
     const options = { sort: -1 };
-    return await this.model.getOne(cond, options);
+    return this.model.getOne(cond, options);
   }
 
   /**
@@ -47,7 +47,7 @@ class TokensData extends DataBase {
    * @return {Promise<Models.Token>}
    */
   async createActiveToken(agentId) {
-    return await this.model.createOne({
+    return this.model.createOne({
       agentId,
       token: this.getToken(),
       isActive: true,
@@ -83,11 +83,11 @@ class TokensData extends DataBase {
    */
   async revokeTokensAndGetTokenByAgentId(agentId) {
     await this.model.updateAll({
-      agentId
+      agentId,
     }, {
       isActive: false,
     });
-    return await this.getOrCreateActiveTokenForAgentId(agentId);
+    return this.getOrCreateActiveTokenForAgentId(agentId);
   }
 
   /**

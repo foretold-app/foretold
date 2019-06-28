@@ -19,7 +19,7 @@ class SeriesData extends DataBase {
    * @return {Promise<*>}
    */
   async createOne(data) {
-    return await this.models.Series.create(data);
+    return this.models.Series.create(data);
   }
 
   /**
@@ -35,16 +35,18 @@ class SeriesData extends DataBase {
     let where = {
       // Restrictions
       channelId: {
-        [this.model.Op.in]: this.SeriesModel.channelIdsLiteral(options.agentId)
+        [this.model.Op.in]: this.SeriesModel.channelIdsLiteral(options.agentId),
       },
     };
 
     if (channelId) {
       // @todo: It breaks restrictions.
-      where.channelId = { [this.model.Op.eq]: channelId };
+      where.channelId = {
+        [this.model.Op.eq]: channelId,
+      };
     }
 
-    return await this.models.Series.findAll({ where });
+    return this.models.Series.findAll({ where });
   }
 
   /**
@@ -56,11 +58,11 @@ class SeriesData extends DataBase {
    * @return {Promise<*>}
    */
   async getOne(id, options = {}) {
-    return await this.models.Series.findOne({
+    return this.models.Series.findOne({
       where: {
         id,
         channelId: {
-          [this.model.Op.in]: this.SeriesModel.channelIdsLiteral(options.agentId)
+          [this.model.Op.in]: this.SeriesModel.channelIdsLiteral(options.agentId),
         },
       },
     });

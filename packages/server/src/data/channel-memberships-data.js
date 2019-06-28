@@ -40,7 +40,7 @@ class ChannelMembershipsData extends DataBase {
    */
   async updateOne(channelId, agentId, role) {
     await this.validate({ channelId, agentId });
-    return await this.ChannelMembershipModel.updateOne(
+    return this.ChannelMembershipModel.updateOne(
       channelId,
       agentId,
       role,
@@ -55,7 +55,7 @@ class ChannelMembershipsData extends DataBase {
    */
   async deleteOne(channelId, agentId) {
     await this.validate({ channelId, agentId });
-    return await this.ChannelMembershipModel.deleteOne(
+    return this.ChannelMembershipModel.deleteOne(
       channelId,
       agentId,
     );
@@ -91,7 +91,7 @@ class ChannelMembershipsData extends DataBase {
    * @returns {Promise<Models.ChannelMemberships>}
    */
   async getOne(options) {
-    return await this.models.ChannelMemberships.findOne({ where: options });
+    return this.models.ChannelMemberships.findOne({ where: options });
   }
 
   /**
@@ -102,7 +102,7 @@ class ChannelMembershipsData extends DataBase {
    * @returns {Promise<Models.ChannelMemberships[]>}
    */
   async getAll(options) {
-    return await this.models.ChannelMemberships.findAll({ where: options });
+    return this.models.ChannelMemberships.findAll({ where: options });
   }
 
   /**
@@ -122,7 +122,7 @@ class ChannelMembershipsData extends DataBase {
    */
   async join(options) {
     const role = ChannelMembershipModel.ROLES.VIEWER;
-    return await this.createOne(
+    return this.createOne(
       options.channelId,
       options.agentId,
       role,
@@ -135,7 +135,7 @@ class ChannelMembershipsData extends DataBase {
    * @return {Promise<Models.ChannelMemberships|null>}
    */
   async leave(options) {
-    return await this.deleteOne(
+    return this.deleteOne(
       options.channelId,
       options.agentId,
     );
@@ -159,7 +159,7 @@ class ChannelMembershipsData extends DataBase {
    * @return {Promise<Models.ChannelMemberships[]>}
    */
   async getAllOnlyAdmins(options) {
-    return await this.getAll({
+    return this.getAll({
       ...options,
       role: ChannelMembershipModel.ROLES.ADMIN,
     });

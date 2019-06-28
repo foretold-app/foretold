@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     valueText: {
       type: DataTypes.TEXT,
-      allowNull: true
+      allowNull: true,
     },
     competitorType: {
       type: DataTypes.ENUM([
@@ -33,15 +33,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.TEXT,
-      allowNull: true
+      allowNull: true,
     },
     measurableId: {
       type: DataTypes.UUID(),
-      allowNull: false
+      allowNull: false,
     },
     agentId: {
       type: DataTypes.UUID(),
-      allowNull: true
+      allowNull: true,
     },
     relevantAt: {
       allowNull: false,
@@ -60,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
           const measurable = await measurement.getMeasurable();
           await measurable.judged();
         }
-      }
+      },
     }
   });
 
@@ -70,7 +70,13 @@ module.exports = (sequelize, DataTypes) => {
   function setMeasurementValue(value) {
     let data, dataType;
 
-    const types = ['floatCdf', 'floatPoint'];
+    const types = [
+      'floatCdf',
+      'floatPoint',
+      'percentage',
+      'binary',
+    ];
+
     for (const type of types) {
       if (_.get(value, type)) {
         data = _.get(value, type);
@@ -117,32 +123,32 @@ module.exports = (sequelize, DataTypes) => {
           {
             "title": "Type",
             "value": this.competitorType,
-            "short": true
-          }
+            "short": true,
+          },
         ],
-        "color": "#d2ebff"
-      }]
+        "color": "#d2ebff",
+      }],
     };
   };
 
   Model.associate = function associate(models) {
     Model.Measurable = Model.belongsTo(models.Measurable, {
-      foreignKey: 'measurableId'
+      foreignKey: 'measurableId',
     });
 
     Model.Agent = Model.belongsTo(models.Agent, {
-      foreignKey: 'agentId'
+      foreignKey: 'agentId',
     });
 
     Model.TaggedMeasurement = Model.belongsTo(models.Measurement, {
       foreignKey: 'taggedMeasurementId',
-      as: 'TaggedMeasurement'
+      as: 'TaggedMeasurement',
     });
 
     Model.TaggedBy = Model.hasMany(models.Measurement, {
       foreignKey: 'taggedMeasurementId',
-      as: 'TaggedBy'
-    })
+      as: 'TaggedBy',
+    });
   };
 
   return Model;

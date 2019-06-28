@@ -199,6 +199,5 @@ AuthenticationData.NoAgentIdError = class NoAgentIdError extends Error {
 };
 
 module.exports = {
-  AuthenticationData
+  AuthenticationData,
 };
-

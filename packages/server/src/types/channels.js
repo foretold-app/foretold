@@ -13,6 +13,7 @@ const channel = new graphql.GraphQLObjectType({
     isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     isPublic: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     membershipCount: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
+
     myRole: {
       type: graphql.GraphQLNonNull(require('./channel-memberhips').roleOutput),
       resolve: resolvers.channelMemberships.myRole,
@@ -31,7 +32,7 @@ const channel = new graphql.GraphQLObjectType({
     agents: {
       type: require('../connections').channelAgentsConnection.connectionType,
       args: require('../connections').channelAgentsConnection.connectionArgs,
-      resolve: require('../connections').channelAgentsConnection.resolve
+      resolve: require('../connections').channelAgentsConnection.resolve,
     },
 
     channelMemberships: {
@@ -51,7 +52,7 @@ const channelInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     name: { type: new graphql.GraphQLNonNull(graphql.GraphQLString) },
     isPublic: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
-    description: { type: graphql.GraphQLString }
+    description: { type: graphql.GraphQLString },
   }),
 });
 

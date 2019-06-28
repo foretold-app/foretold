@@ -40,10 +40,11 @@ module WithEditMutation = {
             expectedResolutionDate |> Js.Json.string |> Rationale.Option.some,
           "resolutionEndpoint": resolutionEndpoint |> Rationale.Option.some,
           "labelSubject": labelSubject |> Rationale.Option.some,
-          "valueType": valueType |> Rationale.Option.some,
+          "valueType": valueType |> Context.Primary.Measurable.valueTypeToEnum,
         },
         (),
       );
+
     mutation(~variables=m##variables, ~refetchQueries=[|"getAgent"|], ())
     |> ignore;
   };
@@ -56,6 +57,7 @@ module CMutationForm =
 
 let formCreation = (id, m) => {
   let measurable = Queries.Measurable.toMeasurable(m);
+
   WithEditMutation.Mutation.make((mutation, data) =>
     MeasurableForm.SignUpForm.make(
       ~onSubmit=
@@ -90,7 +92,8 @@ let formCreation = (id, m) => {
         resolutionEndpoint: measurable.resolutionEndpoint |> E.O.default(""),
         showDescriptionProperty: measurable.name == "" ? "TRUE" : "FALSE",
         labelProperty: measurable.labelProperty |> E.O.default(""),
-        valueType: "FLOAT",
+        valueType:
+          measurable.valueType |> Context.Primary.Measurable.valueTypeToStr,
       },
       ~schema=[(`name, Custom(_ => None))],
       ({handleSubmit, handleChange, form, _}) =>

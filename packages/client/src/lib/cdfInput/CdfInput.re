@@ -148,7 +148,7 @@ let mainBlock =
     | ("COMPETITIVE", `PERCENTAGE) =>
       <InputNumber
         min=1.
-        max=10.
+        max=100.
         defaultValue={state.percentage}
         step=0.01
         onChange={(value: float) => send(UpdatePercentage(value))}

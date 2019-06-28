@@ -8,7 +8,7 @@ type state = {
   floatCdf: FloatCdf.t,
   percentage: float,
   binary: bool,
-  dataType: string, // "FLOAT_CDF" | "FLOAT",
+  dataType: string,
   // -> Measurement
   competitorType: string,
   description: string,
@@ -25,8 +25,6 @@ type action =
   | UpdateCompetitorType(string)
   | UpdateDescription(string)
   | UpdateValueText(string);
-
-let component = ReasonReact.reducerComponent("CdfInput");
 
 module Styles = {
   open Css;
@@ -82,6 +80,21 @@ let getIsValid = (state: state): bool =>
   | "BINARY_BOOL" => true
   };
 
+let dataTypeFacade =
+    (
+      competitorType: string,
+      measurable: Context.Primary.Measurable.t,
+      dataType: option(string),
+    )
+    : string =>
+  switch (competitorType, measurable.valueType, dataType) {
+  | ("OBJECTIVE" | "COMPETITIVE", `FLOAT | `DATE, None) => "FLOAT_CDF"
+  | ("OBJECTIVE" | "COMPETITIVE", `FLOAT | `DATE, Some(dataType)) => dataType
+  | ("OBJECTIVE", `PERCENTAGE, _) => "BINARY_BOOL"
+  | ("COMPETITIVE", `PERCENTAGE, _) => "PERCENTAGE_FLOAT"
+  | _ => "FLOAT_CDF"
+  };
+
 let getValue = (state: state): MeasurementValue.t =>
   switch (state.dataType) {
   | "FLOAT_CDF" =>
@@ -114,17 +127,20 @@ let mainBlock =
     )
     : ReasonReact.reactElement => {
   let isValid = getIsValid(state);
+  let dataType =
+    dataTypeFacade(state.competitorType, measurable, Some(state.dataType));
 
-  let getDataTypeSelect = (): ReasonReact.reactElement =>
+  let getDataTypeSelect: ReasonReact.reactElement =
     switch (state.competitorType, measurable.valueType) {
     | ("OBJECTIVE", `FLOAT | `DATE) =>
       <div className=Styles.select> {dataTypeSelect(~state, ~send)} </div>
     | _ => ReasonReact.null
     };
 
-  let getValueInput = (): ReasonReact.reactElement =>
-    switch (state.competitorType, measurable.valueType) {
-    | ("OBJECTIVE" | "COMPETITIVE", `FLOAT | `DATE) =>
+  let getValueInput: ReasonReact.reactElement =
+    switch (dataType) {
+    | "FLOAT_CDF"
+    | "FLOAT_POINT" =>
       <GuesstimateInput
         focusOnRender=true
         sampleCount=30000
@@ -138,14 +154,16 @@ let mainBlock =
         }
         onChange={text => send(UpdateValueText(text))}
       />
-    | ("OBJECTIVE", `PERCENTAGE) =>
+
+    | "BINARY_BOOL" =>
       <Select
         value={state.binary |> E.Bool.toString}
         onChange={e => send(UpdateBinary(e |> E.Bool.fromString))}>
         <Select.Option value="TRUE"> {"True" |> ste} </Select.Option>
         <Select.Option value="FALSE"> {"False" |> ste} </Select.Option>
       </Select>
-    | ("COMPETITIVE", `PERCENTAGE) =>
+
+    | "PERCENTAGE_FLOAT" =>
       <InputNumber
         min=1.
         max=100.
@@ -153,6 +171,7 @@ let mainBlock =
         step=0.01
         onChange={(value: float) => send(UpdatePercentage(value))}
       />
+
     | _ => ReasonReact.null
     };
 
@@ -177,10 +196,10 @@ let mainBlock =
            {competitorTypeSelect(~state, ~send, ~measurable)}
          </div>,
        )}
-      {getDataTypeSelect()}
+      getDataTypeSelect
       <div className=Styles.inputBox>
         <h4 className=Styles.label> {"Value" |> ste} </h4>
-        {getValueInput()}
+        getValueInput
       </div>
       <div className=Styles.inputBox>
         <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
@@ -202,6 +221,8 @@ let mainBlock =
     </div>
   </div>;
 };
+
+let component = ReasonReact.reducerComponent("CdfInput");
 
 let make =
     (
@@ -226,7 +247,7 @@ let make =
       competitorType: competitorTypeInitValue,
       percentage: 0.,
       binary: true,
-      dataType: "FLOAT_CDF",
+      dataType: dataTypeFacade(competitorTypeInitValue, measurable, None),
       description: "",
       valueText: "",
     };

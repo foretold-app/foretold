@@ -1,35 +1,35 @@
 module ReducerConfig = {
   type itemType = Context.Primary.Measurable.t;
+
   type callFnParams = {
     channelId: string,
     states: array(Context.Primary.MeasurableState.t),
   };
 
-  let getId = (params: Context.Primary.Measurable.t) => params.id;
+  let getId = (params: itemType) => params.id;
+
   let callFn = (params: callFnParams) =>
     Foretold__GraphQL.Queries.Measurables.component2(
       ~channelId=params.channelId,
       ~states=params.states |> Array.map(r => Some(r)),
     );
+
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
 };
 
-module Reducer = SelectWithPaginationReducerFunctor.Make(ReducerConfig);
+module Reducer = PaginationReducerFunctor.Make(ReducerConfig);
 
-module Types = {
-  type channel = Context.Primary.Channel.t;
-
-  type seriesCollection =
-    Js.Array.t(Foretold__GraphQL.Queries.SeriesCollection.series);
-
-  type loggedInUser = Context.Primary.User.t;
-
-  type query = E.HttpResponse.t(seriesCollection);
-
-  type reducerParams = Reducer.Types.reducerParams;
-};
-
-open Types;
+type channel = Context.Primary.Channel.t;
+type seriesCollection =
+  array(Foretold__GraphQL.Queries.SeriesCollection.series);
+type loggedInUser = Context.Primary.User.t;
+type reducerParams = Reducer.Types.reducerParams;
+type seriesQuery = E.HttpResponse.t(seriesCollection);
+type channelQuery = E.HttpResponse.t(channel);
+type measurablesStateStatsQuery =
+  E.HttpResponse.t(
+    option(Foretold__GraphQL.Queries.MeasurablesStateStats.stats),
+  );
 
 module LoadedAndSelected = {
   type t = {
@@ -56,18 +56,14 @@ module WithChannelButNotQuery = {
     reducerParams,
     loggedInUser,
     channel,
-    query,
+    seriesQuery,
   };
-};
-
-module WithoutChannel = {
-  type t = E.HttpResponse.t(Context.Primary.Channel.t);
 };
 
 module MeasurableIndexDataState = {
   type state =
-    | WithoutChannel(WithoutChannel.t)
-    | InvalidIndexError(Context.Primary.Channel.t)
+    | WithoutChannel(channelQuery)
+    | InvalidIndexError(channel)
     | WithChannelButNotQuery(WithChannelButNotQuery.t)
     | LoadedAndUnselected(LoadedAndUnselected.t)
     | LoadedAndSelected(LoadedAndSelected.t);
@@ -75,15 +71,15 @@ module MeasurableIndexDataState = {
   type input = {
     reducerParams,
     loggedInUser,
-    channel: E.HttpResponse.t(Context.Primary.Channel.t),
-    query,
+    channelQuery,
+    seriesQuery,
   };
 
   let make = (input: input) =>
     switch (
       input.reducerParams.itemState,
-      input.channel,
-      input.query,
+      input.channelQuery,
+      input.seriesQuery,
       input.reducerParams.response,
     ) {
     | (
@@ -93,7 +89,7 @@ module MeasurableIndexDataState = {
         Success(_),
       ) =>
       switch (input.reducerParams.selection) {
-      | Some(measurable) =>
+      | Some(selectedMeasurable) =>
         LoadedAndSelected({
           channel,
           reducerParams: input.reducerParams,
@@ -101,7 +97,7 @@ module MeasurableIndexDataState = {
           itemState: {
             selectedIndex: selectedIndex,
           },
-          selectedMeasurable: measurable,
+          selectedMeasurable,
           seriesCollection,
         })
       | _ => InvalidIndexError(channel)
@@ -123,8 +119,8 @@ module MeasurableIndexDataState = {
         channel,
         reducerParams: input.reducerParams,
         loggedInUser: input.loggedInUser,
-        query: input.query,
+        seriesQuery: input.seriesQuery,
       })
-    | _ => WithoutChannel(input.channel)
+    | _ => WithoutChannel(input.channelQuery)
     };
 };

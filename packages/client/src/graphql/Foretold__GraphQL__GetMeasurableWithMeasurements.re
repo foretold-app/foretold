@@ -7,6 +7,7 @@ module Query = [%graphql
             measurable(id: $id){
               id
               name
+              channelId
               labelCustom
               resolutionEndpoint
               resolutionEndpointResponse
@@ -49,6 +50,7 @@ type measurableQuery = {
   "labelProperty": option(string),
   "labelSubject": option(string),
   "name": string,
+  "channelId": string,
   "resolutionEndpoint": option(string),
   "resolutionEndpointResponse": option(float),
   "series":
@@ -76,6 +78,7 @@ let queryMeasurable = (m: measurableQuery): Context.Primary.Measurable.t => {
   Context.Primary.Measurable.make(
     ~id=m##id,
     ~name=m##name,
+    ~channelId=m##channelId,
     ~labelCustom=m##labelCustom,
     ~resolutionEndpoint=m##resolutionEndpoint,
     ~resolutionEndpointResponse=m##resolutionEndpointResponse,

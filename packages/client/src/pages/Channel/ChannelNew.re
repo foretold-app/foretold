@@ -14,7 +14,7 @@ module CMutationForm =
     type queryType = Mutation.Query.t;
   });
 
-let component = ReasonReact.statelessComponent("ChannelNewPage");
+let component = ReasonReact.statelessComponent("ChannelNew");
 
 let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
@@ -38,18 +38,16 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
       ||> E.React.el;
 
     <FC.PageCard.BodyPadding>
-      {
-        mutationMake((mutation, data) =>
-          form(mutation, ({handleSubmit, handleChange, form, _}) =>
-            CMutationForm.showWithLoading(
-              ~result=data.result,
-              ~form=ChannelForm.showForm(~form, ~handleSubmit, ~handleChange),
-              ~successMessage="Community created successfully.",
-              (),
-            )
-          )
-        )
-      }
+      {mutationMake((mutation, data) =>
+         form(mutation, ({handleSubmit, handleChange, form, _}) =>
+           CMutationForm.showWithLoading(
+             ~result=data.result,
+             ~form=ChannelForm.showForm(~form, ~handleSubmit, ~handleChange),
+             ~successMessage="Community created successfully.",
+             (),
+           )
+         )
+       )}
     </FC.PageCard.BodyPadding>
     |> SLayout.LayoutConfig.make(
          ~head=SLayout.Header.textDiv("Create a New Community"),

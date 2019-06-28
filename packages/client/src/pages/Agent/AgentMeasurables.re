@@ -7,7 +7,7 @@ module ReducerConfig = {
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
 };
 
-module Reducer = SelectWithPaginationReducerFunctor.Make(ReducerConfig);
+module Reducer = PaginationReducerFunctor.Make(ReducerConfig);
 
 let component = ReasonReact.statelessComponent("AgentMeasurables");
 type pageParams = {id: string};

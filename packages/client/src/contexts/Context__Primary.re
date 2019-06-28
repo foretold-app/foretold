@@ -131,6 +131,7 @@ module Types = {
     name: string,
     valueType,
     channel: option(string),
+    channelId: string,
     isArchived: option(bool),
     resolutionEndpoint: option(string),
     resolutionEndpointResponse: option(float),
@@ -168,6 +169,8 @@ module Types = {
     description: option(string),
     name: option(string),
     creator: option(agent),
+    channel: option(channel),
+    measurableCount: option(int),
   };
 
   type pageInfo = {
@@ -442,11 +445,23 @@ module Channel = {
 module Series = {
   type t = Types.series;
 
-  let make = (~id, ~name=None, ~description=None, ~creator=None, ()): t => {
+  let make =
+      (
+        ~id,
+        ~name=None,
+        ~description=None,
+        ~creator=None,
+        ~measurableCount=None,
+        ~channel=None,
+        (),
+      )
+      : t => {
     id,
     name,
     description,
     creator,
+    measurableCount,
+    channel,
   };
 };
 
@@ -467,6 +482,7 @@ module Measurement = {
         ~agent=None,
         ~measurableId=None,
         ~measurable=None,
+        ~valueText=None,
         ~valueText=None,
         (),
       )
@@ -516,6 +532,7 @@ module Measurable = {
         ~name,
         ~valueType=`FLOAT,
         ~channel=None,
+        ~channelId,
         ~resolutionEndpoint=None,
         ~resolutionEndpointResponse=None,
         ~measurementCount=None,
@@ -540,6 +557,7 @@ module Measurable = {
     id,
     name,
     channel,
+    channelId,
     valueType,
     resolutionEndpoint,
     resolutionEndpointResponse,

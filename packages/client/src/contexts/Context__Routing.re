@@ -26,6 +26,7 @@ module ChannelPage = {
   module SubPage = {
     type t =
       | Measurables(Context__QueryParams.MeasurableIndex.query)
+      | Measurable(string)
       | NewMeasurable
       | Members
       | InviteNewMember
@@ -33,15 +34,16 @@ module ChannelPage = {
       | NewSeries
       | Series(seriesId);
 
-    let toTab = (t: t): tab =>
-      switch (t) {
+    let toTab = (subPage: t): tab =>
+      switch (subPage) {
       | Measurables(_) => Measurables
+      | Measurable(_) => Measurables
       | NewMeasurable => Measurables
+      | NewSeries => Measurables
+      | Series(_) => Measurables
       | Members => Members
       | InviteNewMember => Members
       | Settings => Options
-      | NewSeries => Measurables
-      | Series(_) => Measurables
       };
 
     let fromTab = (tab: tab): t =>
@@ -57,6 +59,12 @@ module ChannelPage = {
     subPage: SubPage.t,
   };
 };
+
+let getChannelId = (channelId: string): string =>
+  switch (channelId) {
+  | "global" => ""
+  | _ => channelId
+  };
 
 module Route = {
   type t =
@@ -77,12 +85,6 @@ module Route = {
     | ChannelNew
     | MeasurableEdit(string)
     | NotFound;
-
-  let getChannelId = channelId =>
-    switch (channelId) {
-    | "global" => ""
-    | _ => channelId
-    };
 
   let fromUrl = (url: ReasonReact.Router.url) =>
     switch (url.path) {
@@ -114,6 +116,11 @@ module Route = {
             url.search
             |> Context__QueryParams.MeasurableIndex.fromStringWithDefaults,
           ),
+      })
+    | ["c", channelId, "m", measurableId] =>
+      Channel({
+        channelId: getChannelId(channelId),
+        subPage: Measurable(measurableId),
       })
     | ["c", channelId, "new"] => Channel({channelId, subPage: NewMeasurable})
     | ["c", channelId, "edit"] => Channel({channelId, subPage: Settings})
@@ -148,6 +155,7 @@ module Url = {
     | ChannelNew
     | ChannelIndex
     | SeriesShow(string, string)
+    | MeasurableShow(string, string)
     | SeriesNew(string)
     | MeasurableEdit(string)
     | ChannelEdit(string)
@@ -175,23 +183,25 @@ module Url = {
     | ChannelShow(id) => "/c/" ++ id
     | ChannelEdit(id) => "/c/" ++ id ++ "/edit"
     | ChannelMembers(id) => "/c/" ++ id ++ "/members"
-    | ChannelInvite(channel) => "/c/" ++ channel ++ "/invite"
+    | ChannelInvite(channelId) => "/c/" ++ channelId ++ "/invite"
     | MeasurableEdit(id) => "/measurables/" ++ id ++ "/edit"
-    | MeasurableNew(channel) => "/c/" ++ channel ++ "/new"
-    | SeriesNew(channel) => "/c/" ++ channel ++ "/s/new"
-    | SeriesShow(channel, id) => "/c/" ++ channel ++ "/s/" ++ id
+    | MeasurableNew(channelId) => "/c/" ++ channelId ++ "/new"
+    | SeriesNew(channelId) => "/c/" ++ channelId ++ "/s/new"
+    | SeriesShow(channelId, id) => "/c/" ++ channelId ++ "/s/" ++ id
+    | MeasurableShow(channelId, id) => "/c/" ++ channelId ++ "/m/" ++ id
     };
 
   let push = (r: t) => r |> toString |> ReasonReact.Router.push;
 
-  let fromChannelPage = (t: ChannelPage.t) =>
-    switch (t.subPage) {
-    | Measurables(_) => ChannelShow(t.channelId)
-    | NewMeasurable => MeasurableNew(t.channelId)
-    | Members => ChannelMembers(t.channelId)
-    | InviteNewMember => ChannelInvite(t.channelId)
-    | Settings => ChannelEdit(t.channelId)
-    | NewSeries => SeriesNew(t.channelId)
-    | Series(id) => SeriesShow(t.channelId, id)
+  let fromChannelPage = (channelPage: ChannelPage.t) =>
+    switch (channelPage.subPage) {
+    | Measurables(_) => ChannelShow(channelPage.channelId)
+    | NewMeasurable => MeasurableNew(channelPage.channelId)
+    | Members => ChannelMembers(channelPage.channelId)
+    | InviteNewMember => ChannelInvite(channelPage.channelId)
+    | Settings => ChannelEdit(channelPage.channelId)
+    | NewSeries => SeriesNew(channelPage.channelId)
+    | Series(id) => SeriesShow(channelPage.channelId, id)
+    | Measurable(id) => MeasurableShow(channelPage.channelId, id)
     };
 };

@@ -1,16 +1,11 @@
 open Utils;
 open Style.Grid;
-open Measurable__Index__Logic;
+open MeasurableIndex__Logic;
 
 module ReducerParams = Reducer.Reducers.ReducerParams;
 
-type measurablesStateStats =
-  E.HttpResponse.t(
-    option(Foretold__GraphQL.Queries.MeasurablesStateStats.stats),
-  );
-
 module LoadedAndSelected = {
-  open Measurable__Index__Logic.LoadedAndSelected;
+  open MeasurableIndex__Logic.LoadedAndSelected;
 
   let header = (t: t, send: Reducer.Types.send) =>
     <>
@@ -45,7 +40,7 @@ module LoadedAndSelected = {
 };
 
 module LoadedAndUnselected = {
-  open Measurable__Index__Logic.LoadedAndUnselected;
+  open MeasurableIndex__Logic.LoadedAndUnselected;
 
   let stateLink = (state, text, num: int, isActive) =>
     <FC.Tab2
@@ -63,7 +58,7 @@ module LoadedAndUnselected = {
   let header =
       (
         t: t,
-        stats: measurablesStateStats,
+        stats: measurablesStateStatsQuery,
         query: Context.QueryParams.MeasurableIndex.query,
       ) =>
     <Div>
@@ -97,7 +92,6 @@ module LoadedAndUnselected = {
                 query.state == Some(`JUDGED),
               )}
            </Div>
-         | _ => <> </>
          }}
       </Div>
       <Div
@@ -135,13 +129,13 @@ module LoadedAndUnselected = {
 };
 
 module MeasurableIndexDataState = {
-  open Measurable__Index__Logic.MeasurableIndexDataState;
+  open MeasurableIndex__Logic.MeasurableIndexDataState;
 
   let toLayoutInput =
       (
         send: Reducer.Types.send,
         selectedState: Context.QueryParams.MeasurableIndex.query,
-        stats: measurablesStateStats,
+        stats: measurablesStateStatsQuery,
         state: state,
       ) => {
     switch (state) {

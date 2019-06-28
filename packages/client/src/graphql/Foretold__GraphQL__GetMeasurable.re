@@ -4,11 +4,13 @@ type creator = {
   id: string,
   name: option(string),
 };
+
 type measurable = {
   id: string,
   name: string,
   valueType: Context.Primary.valueType,
   labelCustom: option(string),
+  channelId: string,
   resolutionEndpoint: option(string),
   measurementCount: option(int),
   measurerCount: option(int),
@@ -41,6 +43,7 @@ let toMeasurable = (m: measurable): Context.Primary.Measurable.t =>
     ~labelSubject=m.labelSubject,
     ~labelOnDate=m.labelOnDate,
     ~labelProperty=m.labelProperty,
+    ~channelId=m.channelId,
     (),
   );
 
@@ -64,6 +67,7 @@ module Query = [%graphql
            expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
            createdAt @bsDecoder(fn: "E.J.toMoment")
            updatedAt @bsDecoder(fn: "E.J.toMoment")
+           channelId
            creator @bsRecord{
              id
              name

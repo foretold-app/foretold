@@ -8,11 +8,15 @@ let component = ReasonReact.statelessComponent("MeasurableFullPresentation");
 
 module Styles = {
   open Css;
+
   let header =
     style(
       [padding2(~v=`em(1.5), ~h=`em(1.5))]
       @ FC.Base.BaseStyles.fullWidthFloatLeft,
     );
+
+  let link = style([marginTop(em(1.))]);
+
   let description = style([paddingTop(`em(1.5))]);
 };
 
@@ -21,13 +25,19 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
 
   render: _self =>
     Queries.MeasurableWithMeasurements.component(~id)
-    |> E.F.apply(m =>
+    |> E.F.apply((m: Context.Primary.Measurable.t) =>
          <>
            <Div styles=[Styles.header]>
              <Div flexDirection=`row>
                <Div flex=3>
                  <FC.PageCard.H1> {Items.link(~m)} </FC.PageCard.H1>
                  <StatusDisplay measurable=m />
+                 <Div styles=[Styles.link]>
+                   <Foretold__Components__Link
+                     linkType={Internal(MeasurableShow(m.channelId, m.id))}>
+                     {"Go to Measurable" |> Utils.ste}
+                   </Foretold__Components__Link>
+                 </Div>
                </Div>
                <Div flex=1>
                  {Items.series(~m, ()) |> E.O.React.defaultNull}

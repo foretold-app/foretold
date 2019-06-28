@@ -8,9 +8,9 @@ type state = {
   floatCdf: FloatCdf.t,
   percentage: float,
   binary: bool,
-  dataType: string,
+  dataType: string, // "FLOAT_CDF" | "FLOAT",
   // -> Measurement
-  competitorType: string, // "FLOAT_CDF" | "FLOAT",
+  competitorType: string,
   description: string,
   valueText: string,
 };
@@ -145,7 +145,14 @@ let mainBlock =
         <Select.Option value="TRUE"> {"True" |> ste} </Select.Option>
         <Select.Option value="FALSE"> {"False" |> ste} </Select.Option>
       </Select>
-    | ("COMPETITIVE", `PERCENTAGE) => "Value 0. .. 100." |> Utils.ste
+    | ("COMPETITIVE", `PERCENTAGE) =>
+      <InputNumber
+        min=1.
+        max=10.
+        defaultValue={state.percentage}
+        step=0.01
+        onChange={(value: float) => send(UpdatePercentage(value))}
+      />
     | _ => ReasonReact.null
     };
 

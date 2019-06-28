@@ -33,7 +33,7 @@ module Styles = {
   let label = style([color(hex("888"))]);
 };
 
-let competitorType =
+let competitorTypeSelect =
     (~state, ~send, ~measurable: Context.Primary.Measurable.t) => {
   let options =
     switch (measurable.state) {
@@ -59,7 +59,7 @@ let competitorType =
   </Select>;
 };
 
-let dataType = (~state, ~send) =>
+let dataTypeSelect = (~state, ~send) =>
   <Select value={state.dataType} onChange={e => send(UpdateDataType(e))}>
     <Select.Option value="FLOAT_CDF"> {"Distribution" |> ste} </Select.Option>
     <Select.Option value="FLOAT"> {"Point" |> ste} </Select.Option>
@@ -90,7 +90,7 @@ let getCompetitorType =
   | "OBJECTIVE" => `OBJECTIVE
   | _ => `OBJECTIVE;
 
-let mainn = (~state, ~isCreator, ~send, ~onSubmit, ~measurable) => {
+let mainBlock = (~state, ~isCreator, ~send, ~onSubmit, ~measurable) => {
   let isValid = getIsValid(state);
 
   <div className=Styles.form>
@@ -111,12 +111,12 @@ let mainn = (~state, ~isCreator, ~send, ~onSubmit, ~measurable) => {
       {E.React.showIf(
          isCreator,
          <div className=Styles.select>
-           {competitorType(~state, ~send, ~measurable)}
+           {competitorTypeSelect(~state, ~send, ~measurable)}
          </div>,
        )}
       {E.React.showIf(
          state.competitorType == "OBJECTIVE",
-         <div className=Styles.select> {dataType(~state, ~send)} </div>,
+         <div className=Styles.select> {dataTypeSelect(~state, ~send)} </div>,
        )}
       <div className=Styles.inputBox>
         <h4 className=Styles.label> {"Value" |> ste} </h4>
@@ -210,10 +210,11 @@ let make =
        | Error(e) =>
          <>
            {"Error: " ++ e##message |> ste}
-           {mainn(~state, ~isCreator, ~send, ~onSubmit, ~measurable)}
+           {mainBlock(~state, ~isCreator, ~send, ~onSubmit, ~measurable)}
          </>
        | Data(_) => "Form submitted successfully!" |> ste |> E.React.inH2
-       | NotCalled => mainn(~state, ~isCreator, ~send, ~onSubmit, ~measurable)
+       | NotCalled =>
+         mainBlock(~state, ~isCreator, ~send, ~onSubmit, ~measurable)
        }}
     </Style.BorderedBox>;
   },

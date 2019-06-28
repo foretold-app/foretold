@@ -162,13 +162,22 @@ let mainBlock =
       </Select>
 
     | "PERCENTAGE_FLOAT" =>
-      <InputNumber
-        min=1.
-        max=100.
-        defaultValue={state.percentage}
-        step=0.01
-        onChange={(value: float) => send(UpdatePercentage(value))}
-      />
+      <>
+        <Slider
+          min=1.
+          max=100.
+          value={state.percentage}
+          step=0.01
+          onChange={(value: float) => send(UpdatePercentage(value))}
+        />
+        <InputNumber
+          min=1.
+          max=100.
+          value={state.percentage}
+          step=0.01
+          onChange={(value: float) => send(UpdatePercentage(value))}
+        />
+      </>
 
     | _ => ReasonReact.null
     };

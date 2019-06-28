@@ -1,7 +1,6 @@
-[@bs.module]
-external reactClass: ReasonReact.reactClass = "antd/lib/input-number";
+[@bs.module] external reactClass: ReasonReact.reactClass = "antd/lib/slider";
 
-[%bs.raw {|require("antd/lib/input-number/style")|}];
+[%bs.raw {|require("antd/lib/slider/style")|}];
 
 [@bs.obj]
 external makeProps:

@@ -1,5 +1,3 @@
-let ste = ReasonReact.string;
-
 module CreateMeasurableMutation = {
   module GraphQL = [%graphql
     {|
@@ -22,38 +20,38 @@ let mutate =
       values: MeasurableReForm.values,
       channelId: string,
     ) => {
-  let mutate =
-    values.showDescriptionDate == "TRUE"
-      ? CreateMeasurableMutation.GraphQL.make(
-          ~input={
-            "name": values.name,
-            "labelCustom": Some(values.labelCustom),
-            "labelProperty": Some(values.labelProperty),
-            "expectedResolutionDate":
-              values.expectedResolutionDate |> Js.Json.string |> E.O.some,
-            "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
-            "labelSubject": values.labelSubject |> E.O.some,
-            "labelOnDate": values.labelOnDate |> Js.Json.string |> E.O.some,
-            "valueType": `FLOAT,
-            "channelId": channelId,
-          },
-          (),
-        )
-      : CreateMeasurableMutation.GraphQL.make(
-          ~input={
-            "name": values.name,
-            "labelCustom": Some(values.labelCustom),
-            "labelProperty": Some(values.labelProperty),
-            "expectedResolutionDate":
-              values.expectedResolutionDate |> Js.Json.string |> E.O.some,
-            "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
-            "labelSubject": values.labelSubject |> E.O.some,
-            "labelOnDate": None,
-            "valueType": `FLOAT,
-            "channelId": channelId,
-          },
-          (),
-        );
+  let mutate = {
+    let input =
+      values.showDescriptionDate == "TRUE"
+        ? {
+          "name": values.name,
+          "labelCustom": Some(values.labelCustom),
+          "labelProperty": Some(values.labelProperty),
+          "expectedResolutionDate":
+            values.expectedResolutionDate |> Js.Json.string |> E.O.some,
+          "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
+          "labelSubject": values.labelSubject |> E.O.some,
+          "labelOnDate": values.labelOnDate |> Js.Json.string |> E.O.some,
+          "valueType": `FLOAT,
+          "channelId": channelId,
+        }
+        : {
+          "name": values.name,
+          "labelCustom": Some(values.labelCustom),
+          "labelProperty": Some(values.labelProperty),
+          "expectedResolutionDate":
+            values.expectedResolutionDate |> Js.Json.string |> E.O.some,
+          "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
+          "labelSubject": values.labelSubject |> E.O.some,
+          "labelOnDate": None,
+          "valueType":
+            values.valueType |> Context.Primary.Measurable.valueTypeToEnum,
+          "channelId": channelId,
+        };
+
+    CreateMeasurableMutation.GraphQL.make(~input, ());
+  };
+
   mutation(
     ~variables=mutate##variables,
     ~refetchQueries=[|"getMeasurables"|],

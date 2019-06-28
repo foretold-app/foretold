@@ -4,17 +4,21 @@ open Antd;
 open Foretold__GraphQL;
 
 type state = {
+  // -> Measurement.value
   floatCdf: FloatCdf.t,
-  competitorType: string,
   dataType: string,
+  // -> Measurement
+  competitorType: string, // "FLOAT_CDF" | "FLOAT",
   description: string,
   valueText: string,
 };
 
 type action =
+  // -> Measurement.value
   | UpdateFloatPdf(FloatCdf.t)
-  | UpdateCompetitorType(string)
   | UpdateDataType(string)
+  // -> Measurement
+  | UpdateCompetitorType(string)
   | UpdateDescription(string)
   | UpdateValueText(string);
 
@@ -34,7 +38,8 @@ module Styles = {
 };
 
 let competitorTypeSelect =
-    (~state, ~send, ~measurable: Context.Primary.Measurable.t) => {
+    (~state, ~send, ~measurable: Context.Primary.Measurable.t)
+    : ReasonReact.reactElement => {
   let options =
     switch (measurable.state) {
     | Some(`JUDGED) => [|
@@ -59,19 +64,19 @@ let competitorTypeSelect =
   </Select>;
 };
 
-let dataTypeSelect = (~state, ~send) =>
+let dataTypeSelect = (~state, ~send): ReasonReact.reactElement =>
   <Select value={state.dataType} onChange={e => send(UpdateDataType(e))}>
     <Select.Option value="FLOAT_CDF"> {"Distribution" |> ste} </Select.Option>
-    <Select.Option value="FLOAT"> {"Point" |> ste} </Select.Option>
+    <Select.Option value="FLOAT_POINT"> {"Point" |> ste} </Select.Option>
   </Select>;
 
-let getIsValid = state =>
+let getIsValid = (state: state): bool =>
   switch (state.dataType) {
   | "FLOAT_CDF" => E.A.length(state.floatCdf.xs) > 1
-  | _ => E.A.length(state.floatCdf.xs) == 1
+  | "FLOAT_POINT" => E.A.length(state.floatCdf.xs) == 1
   };
 
-let getValue = state =>
+let getValue = (state: state): MeasurementValue.t =>
   switch (state.dataType) {
   | "FLOAT_CDF" =>
     `FloatCdf(
@@ -79,19 +84,60 @@ let getValue = state =>
         state.floatCdf |> (e => (e.ys, e.xs)),
       ),
     )
-  | _ =>
+  | "FLOAT_POINT" =>
     let point = Array.unsafe_get(state.floatCdf.xs, 0);
     `FloatPoint(point);
   };
 
-let getCompetitorType =
-  fun
+let getCompetitorType = (str: string) =>
+  switch (str) {
   | "COMPETITIVE" => `COMPETITIVE
   | "OBJECTIVE" => `OBJECTIVE
-  | _ => `OBJECTIVE;
+  | _ => `OBJECTIVE
+  };
 
-let mainBlock = (~state, ~isCreator, ~send, ~onSubmit, ~measurable) => {
+let mainBlock =
+    (
+      ~state: state,
+      ~isCreator: bool,
+      ~send,
+      ~onSubmit,
+      ~measurable: Context.Primary.Measurable.t,
+    )
+    : ReasonReact.reactElement => {
   let isValid = getIsValid(state);
+
+  let getDataTypeSelect = (): ReasonReact.reactElement =>
+    switch (state.competitorType, measurable.valueType) {
+    | ("OBJECTIVE", `FLOAT | `DATE) =>
+      <div className=Styles.select> {dataTypeSelect(~state, ~send)} </div>
+    | _ => ReasonReact.null
+    };
+
+  let getValueInput = (): ReasonReact.reactElement =>
+    switch (state.competitorType, measurable.valueType) {
+    | ("OBJECTIVE" | "COMPETITIVE", `FLOAT | `DATE) =>
+      <GuesstimateInput
+        focusOnRender=true
+        sampleCount=30000
+        onUpdate={event =>
+          {
+            let (ys, xs) = event;
+            let asGroup: FloatCdf.t = {xs, ys};
+            send(UpdateFloatPdf(asGroup));
+          }
+          |> ignore
+        }
+        onChange={text => send(UpdateValueText(text))}
+      />
+    | ("OBJECTIVE", `PERCENTAGE) =>
+      <Select value={state.dataType} onChange={e => send(UpdateDataType(e))}>
+        <Select.Option value="TRUE"> {"True" |> ste} </Select.Option>
+        <Select.Option value="FALSE"> {"False" |> ste} </Select.Option>
+      </Select>
+    | ("COMPETITIVE", `PERCENTAGE) => "Value 0. .. 100." |> Utils.ste
+    | _ => ReasonReact.null
+    };
 
   <div className=Styles.form>
     <div className=Styles.chartSection>
@@ -114,23 +160,10 @@ let mainBlock = (~state, ~isCreator, ~send, ~onSubmit, ~measurable) => {
            {competitorTypeSelect(~state, ~send, ~measurable)}
          </div>,
        )}
-      {E.React.showIf(
-         state.competitorType == "OBJECTIVE",
-         <div className=Styles.select> {dataTypeSelect(~state, ~send)} </div>,
-       )}
+      {getDataTypeSelect()}
       <div className=Styles.inputBox>
         <h4 className=Styles.label> {"Value" |> ste} </h4>
-        <GuesstimateInput
-          focusOnRender=true
-          sampleCount=30000
-          onUpdate={event =>
-            {let (ys, xs) = event
-             let asGroup: FloatCdf.t = {xs, ys}
-             send(UpdateFloatPdf(asGroup))}
-            |> ignore
-          }
-          onChange={text => send(UpdateValueText(text))}
-        />
+        {getValueInput()}
       </div>
       <div className=Styles.inputBox>
         <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
@@ -185,10 +218,14 @@ let make =
     | UpdateFloatPdf((e: FloatCdf.t)) =>
       onUpdate(e);
       ReasonReact.Update({...state, floatCdf: e});
+
     | UpdateCompetitorType(e) =>
       ReasonReact.Update({...state, competitorType: e})
+
     | UpdateDataType(e) => ReasonReact.Update({...state, dataType: e})
+
     | UpdateDescription(e) => ReasonReact.Update({...state, description: e})
+
     | UpdateValueText(e) => ReasonReact.Update({...state, valueText: e})
     },
 

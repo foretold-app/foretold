@@ -10,7 +10,9 @@ let redirectUrl = origin ++ "/callback";
 let logoutUrl = origin ++ "/";
 let serverUrl = apiUrlEnv;
 
-Js.log(serverUrl);
-Js.log(auth0Domain);
-Js.log(auth0ClientId);
-Js.log(redirectUrl);
+Js.log("---");
+Js.log2("API URL:", serverUrl);
+Js.log2("Auth0 Domain:", auth0Domain);
+Js.log2("Auth0 Client Id:", auth0ClientId);
+Js.log2("Redirect URL:", redirectUrl);
+Js.log("---");

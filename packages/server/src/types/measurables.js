@@ -94,6 +94,7 @@ const measurableUpdateInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     labelCustom: { type: graphql.GraphQLString },
+    valueType: { type: require('./value-type').valueType },
     expectedResolutionDate: { type: DateType.default },
     resolutionEndpoint: { type: graphql.GraphQLString },
     labelSubject: { type: graphql.GraphQLString },

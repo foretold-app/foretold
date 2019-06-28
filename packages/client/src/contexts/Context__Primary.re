@@ -526,6 +526,20 @@ module Measurable = {
 
   let stableSort = m => E.A.stableSortBy(m, compare);
 
+  let valueTypeToStr = (valueType: valueType): string =>
+    switch (valueType) {
+    | `FLOAT => "FLOAT"
+    | `PERCENTAGE => "PERCENTAGE"
+    | `DATE => "DATE"
+    };
+
+  let valueTypeToEnum = (valueType: string): valueType =>
+    switch (valueType) {
+    | "FLOAT" => `FLOAT
+    | "PERCENTAGE" => `PERCENTAGE
+    | "DATE" => `DATE
+    };
+
   let make =
       (
         ~id,

@@ -139,6 +139,8 @@ module Query = [%graphql
                           ys
                       }
                       floatPoint
+                      percentage
+                      binary
                   }
                   relevantAt @bsDecoder(fn: "E.J.O.toMoment")
                   competitorType

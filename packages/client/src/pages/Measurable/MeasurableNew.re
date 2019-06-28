@@ -1,5 +1,3 @@
-let ste = ReasonReact.string;
-
 module CreateMeasurableMutation = {
   module GraphQL = [%graphql
     {|
@@ -14,18 +12,18 @@ module CreateMeasurableMutation = {
   module Mutation = ReasonApollo.CreateMutation(GraphQL);
 };
 
-module SignUpForm = ReForm.Create(MeasurableForm.SignUpParams);
+module MeasurableReForm = ReForm.Create(MeasurableForm.Params);
 
 let mutate =
     (
       mutation: CreateMeasurableMutation.Mutation.apolloMutation,
-      values: SignUpForm.values,
+      values: MeasurableReForm.values,
       channelId: string,
     ) => {
-  let mutate =
-    values.showDescriptionDate == "TRUE" ?
-      CreateMeasurableMutation.GraphQL.make(
-        ~input={
+  let mutate = {
+    let input =
+      values.showDescriptionDate == "TRUE"
+        ? {
           "name": values.name,
           "labelCustom": Some(values.labelCustom),
           "labelProperty": Some(values.labelProperty),
@@ -36,11 +34,8 @@ let mutate =
           "labelOnDate": values.labelOnDate |> Js.Json.string |> E.O.some,
           "valueType": `FLOAT,
           "channelId": channelId,
-        },
-        (),
-      ) :
-      CreateMeasurableMutation.GraphQL.make(
-        ~input={
+        }
+        : {
           "name": values.name,
           "labelCustom": Some(values.labelCustom),
           "labelProperty": Some(values.labelProperty),
@@ -49,11 +44,14 @@ let mutate =
           "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
           "labelSubject": values.labelSubject |> E.O.some,
           "labelOnDate": None,
-          "valueType": `FLOAT,
+          "valueType":
+            values.valueType |> Context.Primary.Measurable.valueTypeToEnum,
           "channelId": channelId,
-        },
-        (),
-      );
+        };
+
+    CreateMeasurableMutation.GraphQL.make(~input, ());
+  };
+
   mutation(
     ~variables=mutate##variables,
     ~refetchQueries=[|"getMeasurables"|],
@@ -73,7 +71,7 @@ let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
     let formCreator = mutation =>
-      SignUpForm.make(
+      MeasurableReForm.make(
         ~onSubmit=({values}) => mutate(mutation, values, channelId),
         ~initialState={
           name: "",
@@ -86,6 +84,7 @@ let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
           resolutionEndpoint: "",
           showDescriptionDate: "FALSE",
           showDescriptionProperty: "FALSE",
+          valueType: "FLOAT",
         },
         ~schema=[(`name, Custom(_ => None))],
       );
@@ -94,28 +93,25 @@ let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
       ~head=SLayout.Header.textDiv("New Question"),
       ~body=
         <FC.PageCard.BodyPadding>
-          {
-            CreateMeasurableMutation.Mutation.make(
-              ~onCompleted=
-                () => Context.Routing.Url.push(ChannelShow(channelId)),
-              (mutation, data) =>
-                formCreator(
-                  mutation, ({handleSubmit, handleChange, form, _}) =>
-                  CMutationForm.showWithLoading(
-                    ~result=data.result,
-                    ~form=
-                      MeasurableForm.showForm(
-                        ~form,
-                        ~handleSubmit,
-                        ~handleChange,
-                      ),
-                    (),
-                  )
-                )
-                |> E.React.el,
-            )
-            |> E.React.el
-          }
+          {CreateMeasurableMutation.Mutation.make(
+             ~onCompleted=
+               () => Context.Routing.Url.push(ChannelShow(channelId)),
+             (mutation, data) =>
+               formCreator(mutation, ({handleSubmit, handleChange, form, _}) =>
+                 CMutationForm.showWithLoading(
+                   ~result=data.result,
+                   ~form=
+                     MeasurableForm.showForm(
+                       ~form,
+                       ~handleSubmit,
+                       ~handleChange,
+                     ),
+                   (),
+                 )
+               )
+               |> E.React.el,
+           )
+           |> E.React.el}
         </FC.PageCard.BodyPadding>,
     )
     |> layout;

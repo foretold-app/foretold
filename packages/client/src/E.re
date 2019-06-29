@@ -116,7 +116,7 @@ module J = {
 module M = {
   open MomentRe;
   let format = Moment.format;
-  let format_standard = "MMM DD, YYYY HH:MM:SS";
+  let format_standard = "MMM DD, YYYY HH:mm";
   let format_simple = "L";
   /* TODO: Figure out better name */
   let goFormat_simple = format(format_simple);

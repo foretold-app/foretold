@@ -399,7 +399,7 @@ module Channel = {
       <span className=hashClassName>
         <span className=Styles.hash> {"#" |> ste} </span>
       </span>
-      <span> {"global" |> ste} </span>
+      <span> {"home" |> ste} </span>
     </span>;
 
   let make =

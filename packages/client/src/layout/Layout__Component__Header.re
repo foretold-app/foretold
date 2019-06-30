@@ -48,7 +48,7 @@ let userDropdown = agentId =>
        Internal(Agent({agentId, subPage: AgentMeasurements})),
        "My Predictions",
      )}
-    {link(Internal(ChannelNew), "Make a New Channel")}
+    {link(Internal(ChannelNew), "Make a New Community")}
     {link(Action(_ => Context.Auth.Actions.logout()), "Logout")}
     <div className=Layout__Dropdown.Styles.clear />
   </div>;

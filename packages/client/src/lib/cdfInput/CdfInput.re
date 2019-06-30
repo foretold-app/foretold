@@ -69,7 +69,7 @@ let competitorTypeSelect =
 let dataTypeSelect = (~state, ~send): ReasonReact.reactElement =>
   <Select value={state.dataType} onChange={e => send(UpdateDataType(e))}>
     <Select.Option value="FLOAT_CDF"> {"Distribution" |> ste} </Select.Option>
-    <Select.Option value="FLOAT_POINT"> {"Point" |> ste} </Select.Option>
+    <Select.Option value="FLOAT_POINT"> {"Exact Value" |> ste} </Select.Option>
   </Select>;
 
 let getIsValid = (state: state): bool =>
@@ -140,7 +140,7 @@ let mainBlock =
     | ("FLOAT_CDF", _)
     | ("FLOAT_POINT", _) =>
     <>
-      <h4 className=Styles.label> {(state.competitorType == ("OBJECTIVE") ? "Judgement" : "Prediction (Distribution)") |> ste} </h4>
+      {(state.competitorType == ("OBJECTIVE")) ? ReasonReact.null : <h4 className=Styles.label> {"Prediction (Distribution)" |> ste} </h4>}
       <GuesstimateInput
         focusOnRender=true
         sampleCount=30000

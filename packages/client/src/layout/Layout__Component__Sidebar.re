@@ -6,7 +6,7 @@ module Styles = {
   let sidebar = style([display(`flex), flexDirection(`column)]);
   let over = style([display(`flex), flexDirection(`column)]);
   let hash =
-    style([marginRight(`px(5)), color(`rgba((255, 255, 255, 0.3)))]);
+    style([marginRight(`px(5)), color(`rgba((255, 255, 255, 0.3))), float(`left)]);
   let minorHeader =
     style([
       color(`rgba((255, 255, 255, 0.6))),

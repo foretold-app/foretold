@@ -40,14 +40,12 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                  {Items.questionLink(~m)}
                </Div>
              </Div>
-             {
-               Items.description(~m)
-               |> E.O.React.fmapOrNull(d =>
-                    <Div styles=[Styles.description]>
-                      <FC.PageCard.P> d </FC.PageCard.P>
-                    </Div>
-                  )
-             }
+             {Items.description(~m)
+              |> E.O.React.fmapOrNull(d =>
+                   <Div styles=[Styles.description]>
+                     <FC.PageCard.P> d </FC.PageCard.P>
+                   </Div>
+                 )}
            </Div>
            <>
              {
@@ -59,41 +57,39 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                  m.creator |> E.O.fmap((r: Context.Primary.Agent.t) => r.id);
 
                userAgentId == creatorId
-               || Context.Primary.Measurable.toStatus(m) !== `JUDGED ?
-                 <Foretold__Components__Measurement__Form
-                   measurable=m
-                   measurableId=id
-                   isCreator={userAgentId == creatorId}
-                 /> :
-                 E.React.null;
+               || Context.Primary.Measurable.toStatus(m) !== `JUDGED
+                 ? <Foretold__Components__Measurement__Form
+                     measurable=m
+                     measurableId=id
+                     isCreator={userAgentId == creatorId}
+                   />
+                 : E.React.null;
              }
-             {
-               Queries.Measurements.component(
-                 ~measurableId=m.id,
-                 ~pageLimit=20,
-                 ~direction=None,
-                 ~innerComponentFn=(
-                                     m:
-                                       option(
-                                         Context.Primary.Connection.t(
-                                           Context.Primary.Measurement.t,
-                                         ),
-                                       ),
-                                   ) =>
-                 m
-                 |> E.O.React.fmapOrNull(
-                      (
-                        b:
-                          Context.Primary.Connection.t(
-                            Context.Primary.Measurement.t,
-                          ),
-                      ) =>
-                      b.edges
-                      |> E.A.to_list
-                      |> Foretold__Components__Measurements__Table.make
-                    )
-               )
-             }
+             {Queries.Measurements.component(
+                ~measurableId=m.id,
+                ~pageLimit=20,
+                ~direction=None,
+                ~innerComponentFn=(
+                                    m:
+                                      option(
+                                        Context.Primary.Connection.t(
+                                          Context.Primary.Measurement.t,
+                                        ),
+                                      ),
+                                  ) =>
+                m
+                |> E.O.React.fmapOrNull(
+                     (
+                       b:
+                         Context.Primary.Connection.t(
+                           Context.Primary.Measurement.t,
+                         ),
+                     ) =>
+                     b.edges
+                     |> E.A.to_list
+                     |> Foretold__Components__Measurements__Table.make
+                   )
+              )}
            </>
          </>
        ),

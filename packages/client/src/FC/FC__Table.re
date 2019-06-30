@@ -21,7 +21,7 @@ module Styles = {
     Css.(
       style(
         [
-          padding2(~v=`em(0.8), ~h=`em(1.4)),
+          padding3(~top=`em(0.4), ~bottom=`em(0.3), ~h=`em(1.1)),
           background(Colors.lightGrayBackground),
           borderRadius(Colors.BorderRadius.tight),
           color(Colors.Text.LightBackground.p),

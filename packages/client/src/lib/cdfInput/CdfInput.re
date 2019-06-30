@@ -13,11 +13,13 @@ type state = {
   competitorType: string,
   description: string,
   valueText: string,
+  hasLimitError: bool,
 };
 
 type action =
   // -> Measurement.value
   | UpdateFloatPdf(FloatCdf.t)
+  | UpdateHasLimitError(bool)
   | UpdatePercentage(float)
   | UpdateBinary(bool)
   | UpdateDataType(string)
@@ -141,12 +143,19 @@ let mainBlock =
            : <h4 className=Styles.label>
                {"Prediction (Distribution)" |> ste}
              </h4>}
+        {state.hasLimitError
+           ? <FC__Alert type_=`warning>
+               {"Warning: Foretold does not currently support ranges of this width, due to smoothing limitations."
+                |> ste}
+             </FC__Alert>
+           : ReasonReact.null}
         <GuesstimateInput
           focusOnRender=true
           sampleCount=30000
           onUpdate={event =>
-            {let (ys, xs) = event
+            {let (ys, xs, hasLimitError) = event
              let asGroup: FloatCdf.t = {xs, ys}
+             send(UpdateHasLimitError(hasLimitError))
              send(UpdateFloatPdf(asGroup))}
             |> ignore
           }
@@ -264,6 +273,7 @@ let make =
       dataType: dataTypeFacade(competitorTypeInitValue, measurable, None),
       description: "",
       valueText: "",
+      hasLimitError: false,
     };
   },
 
@@ -272,6 +282,8 @@ let make =
     | UpdateFloatPdf((floatCdf: FloatCdf.t)) =>
       onUpdate(floatCdf);
       ReasonReact.Update({...state, floatCdf});
+    | UpdateHasLimitError((hasLimitError: bool)) =>
+      ReasonReact.Update({...state, hasLimitError})
 
     | UpdateCompetitorType(competitorType) =>
       let dataType =

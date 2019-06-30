@@ -1,4 +1,4 @@
-let fn = (a: (array(float), array(float))) => ();
+let fn = (a: (array(float), array(float), bool)) => ();
 let fn2 = (a: string) => ();
 
 [@bs.module "./GuesstimateInput.js"]

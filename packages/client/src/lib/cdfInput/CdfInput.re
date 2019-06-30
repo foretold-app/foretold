@@ -46,15 +46,15 @@ let competitorTypeSelect =
     switch (measurable.state) {
     | Some(`JUDGED) => [|
         <Select.Option value="OBJECTIVE">
-          {"Resolution" |> ste}
+          {"Resolve" |> ste}
         </Select.Option>,
       |]
     | _ => [|
         <Select.Option value="COMPETITIVE">
-          {"Prediction" |> ste}
+          {"Predict" |> ste}
         </Select.Option>,
         <Select.Option value="OBJECTIVE">
-          {"Resolution" |> ste}
+          {"Resolve" |> ste}
         </Select.Option>,
       |]
     };
@@ -136,9 +136,11 @@ let mainBlock =
     };
 
   let getValueInput: ReasonReact.reactElement =
-    switch (state.dataType) {
-    | "FLOAT_CDF"
-    | "FLOAT_POINT" =>
+    switch (state.dataType, state.competitorType) {
+    | ("FLOAT_CDF", _)
+    | ("FLOAT_POINT", _) =>
+    <>
+      <h4 className=Styles.label> {(state.competitorType == ("OBJECTIVE") ? "Judgement" : "Prediction (Distribution)") |> ste} </h4>
       <GuesstimateInput
         focusOnRender=true
         sampleCount=30000
@@ -152,8 +154,9 @@ let mainBlock =
         }
         onChange={text => send(UpdateValueText(text))}
       />
+    </>
 
-    | "BINARY_BOOL" =>
+    | ("BINARY_BOOL", _) =>
       <Select
         value={state.binary |> E.Bool.toString}
         onChange={e => send(UpdateBinary(e |> E.Bool.fromString))}>
@@ -161,20 +164,21 @@ let mainBlock =
         <Select.Option value="FALSE"> {"False" |> ste} </Select.Option>
       </Select>
 
-    | "PERCENTAGE_FLOAT" =>
+    | ("PERCENTAGE_FLOAT", _) =>
       <>
+        <h4 className=Styles.label> {"Predicted Percentage Chance" |> ste} </h4>
         <Slider
-          min=1.
+          min=0.
           max=100.
           value={state.percentage}
-          step=0.01
+          step=0.1
           onChange={(value: float) => send(UpdatePercentage(value))}
         />
         <InputNumber
-          min=1.
+          min=0.
           max=100.
           value={state.percentage}
-          step=0.01
+          step=0.1
           onChange={(value: float) => send(UpdatePercentage(value))}
         />
       </>
@@ -205,7 +209,6 @@ let mainBlock =
        )}
       getDataTypeSelect
       <div className=Styles.inputBox>
-        <h4 className=Styles.label> {"Value" |> ste} </h4>
         getValueInput
       </div>
       <div className=Styles.inputBox>

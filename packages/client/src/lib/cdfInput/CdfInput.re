@@ -45,17 +45,13 @@ let competitorTypeSelect =
   let options =
     switch (measurable.state) {
     | Some(`JUDGED) => [|
-        <Select.Option value="OBJECTIVE">
-          {"Resolve" |> ste}
-        </Select.Option>,
+        <Select.Option value="OBJECTIVE"> {"Resolve" |> ste} </Select.Option>,
       |]
     | _ => [|
         <Select.Option value="COMPETITIVE">
           {"Predict" |> ste}
         </Select.Option>,
-        <Select.Option value="OBJECTIVE">
-          {"Resolve" |> ste}
-        </Select.Option>,
+        <Select.Option value="OBJECTIVE"> {"Resolve" |> ste} </Select.Option>,
       |]
     };
 
@@ -139,22 +135,24 @@ let mainBlock =
     switch (state.dataType, state.competitorType) {
     | ("FLOAT_CDF", _)
     | ("FLOAT_POINT", _) =>
-    <>
-      {(state.competitorType == ("OBJECTIVE")) ? ReasonReact.null : <h4 className=Styles.label> {"Prediction (Distribution)" |> ste} </h4>}
-      <GuesstimateInput
-        focusOnRender=true
-        sampleCount=30000
-        onUpdate={event =>
-          {
-            let (ys, xs) = event;
-            let asGroup: FloatCdf.t = {xs, ys};
-            send(UpdateFloatPdf(asGroup));
+      <>
+        {state.competitorType == "OBJECTIVE"
+           ? ReasonReact.null
+           : <h4 className=Styles.label>
+               {"Prediction (Distribution)" |> ste}
+             </h4>}
+        <GuesstimateInput
+          focusOnRender=true
+          sampleCount=30000
+          onUpdate={event =>
+            {let (ys, xs) = event
+             let asGroup: FloatCdf.t = {xs, ys}
+             send(UpdateFloatPdf(asGroup))}
+            |> ignore
           }
-          |> ignore
-        }
-        onChange={text => send(UpdateValueText(text))}
-      />
-    </>
+          onChange={text => send(UpdateValueText(text))}
+        />
+      </>
 
     | ("BINARY_BOOL", _) =>
       <Select
@@ -166,7 +164,9 @@ let mainBlock =
 
     | ("PERCENTAGE_FLOAT", _) =>
       <>
-        <h4 className=Styles.label> {"Predicted Percentage Chance" |> ste} </h4>
+        <h4 className=Styles.label>
+          {"Predicted Percentage Chance" |> ste}
+        </h4>
         <Slider
           min=0.
           max=100.
@@ -179,7 +179,13 @@ let mainBlock =
           max=100.
           value={state.percentage}
           step=0.1
-          onChange={(value: float) => send(UpdatePercentage(value))}
+          onChange={(value: float) =>
+            // This is to fix a bug. The value could actually be undefined, but the antd lib can't handle this.
+
+              if (value > (-0.001)) {
+                send(UpdatePercentage(value));
+              }
+            }
         />
       </>
 
@@ -208,9 +214,7 @@ let mainBlock =
          </div>,
        )}
       getDataTypeSelect
-      <div className=Styles.inputBox>
-        getValueInput
-      </div>
+      <div className=Styles.inputBox> getValueInput </div>
       <div className=Styles.inputBox>
         <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
       </div>

@@ -92,6 +92,13 @@ let endpointResponse = (~m: measurable) =>
   | _ => None
   };
 
+let questionLink = (~m: measurable) =>
+  <Foretold__Components__Link
+    className=Shared.Item.item
+    linkType={Internal(MeasurableShow(m.channelId, m.id))}>
+    {"Link to This Question" |> Utils.ste}
+  </Foretold__Components__Link>;
+
 let creatorLink = (~m: measurable) =>
   m.creator
   |> E.O.fmap((c: Agent.t) =>

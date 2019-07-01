@@ -59,7 +59,13 @@ module Column = {
   };
 };
 
-let fromColumns = (columns: array(column('a)), rows: array('a)) => {
+let fromColumns =
+    (
+      columns: array(column('a)),
+      rows: array('a),
+      ~onRowClb: option('a => unit)=None,
+      (),
+    ) => {
   let columns' = filterColums(columns, rows);
 
   <Table>
@@ -74,16 +80,33 @@ let fromColumns = (columns: array(column('a)), rows: array('a)) => {
        |> ReasonReact.array}
     </FC.Table.HeaderRow>
     {rows
-     |> Array.mapi((rowIndex, row: 'a) =>
-          <FC.Table.Row className=Styles.row key={rowIndex |> string_of_int}>
-            {columns'
-             |> Array.map((column: column('a)) => column.render(row))
-             |> Array.map(renderedRow =>
-                  <FC.Table.Cell flex=1> renderedRow </FC.Table.Cell>
-                )
-             |> ReasonReact.array}
-          </FC.Table.Row>
-        )
+     |> Array.mapi((rowIndex, row: 'a) => {
+          let columnsBody =
+            columns'
+            |> Array.map((column: column('a)) => column.render(row))
+            |> Array.map(renderedRow =>
+                 <FC.Table.Cell flex=1> renderedRow </FC.Table.Cell>
+               )
+            |> ReasonReact.array;
+
+          let key = rowIndex |> string_of_int;
+
+          switch (onRowClb) {
+          | Some(onRowClb) =>
+            <FC.Table.RowLink
+              onClick={_ => {
+                onRowClb(row);
+                ();
+              }}
+              className=Styles.row
+              key>
+              columnsBody
+            </FC.Table.RowLink>
+
+          | None =>
+            <FC.Table.Row className=Styles.row key> columnsBody </FC.Table.Row>
+          };
+        })
      |> ReasonReact.array}
   </Table>;
 };

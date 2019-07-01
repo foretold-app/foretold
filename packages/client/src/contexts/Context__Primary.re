@@ -373,7 +373,7 @@ module Channel = {
   type t = Types.channel;
   let showLink = (channel: t) =>
     Context__Routing.Url.ChannelShow(channel.id);
-  let globalLink = () => Context__Routing.Url.ChannelShow("global");
+  let globalLink = () => Context__Routing.Url.ChannelShow("home");
   let showUrl = showLink ||> Context__Routing.Url.toString;
   let showPush = showLink ||> Context__Routing.Url.push;
 
@@ -399,7 +399,7 @@ module Channel = {
       <span className=hashClassName>
         <span className=Styles.hash> {"#" |> ste} </span>
       </span>
-      <span> {"global" |> ste} </span>
+      <span> {"home" |> ste} </span>
     </span>;
 
   let make =
@@ -431,8 +431,8 @@ module Channel = {
 
   let getGlobalChannel = (): t =>
     make(
-      ~id="global",
-      ~name="Global",
+      ~id="home",
+      ~name="Home",
       ~description=Some("Global Channel"),
       ~isArchived=false,
       ~isPublic=true,
@@ -483,7 +483,6 @@ module Measurement = {
         ~measurableId=None,
         ~measurable=None,
         ~valueText=None,
-        ~valueText=None,
         (),
       )
       : t => {
@@ -525,6 +524,20 @@ module Measurable = {
     };
 
   let stableSort = m => E.A.stableSortBy(m, compare);
+
+  let valueTypeToStr = (valueType: valueType): string =>
+    switch (valueType) {
+    | `FLOAT => "FLOAT"
+    | `PERCENTAGE => "PERCENTAGE"
+    | `DATE => "DATE"
+    };
+
+  let valueTypeToEnum = (valueType: string): valueType =>
+    switch (valueType) {
+    | "FLOAT" => `FLOAT
+    | "PERCENTAGE" => `PERCENTAGE
+    | "DATE" => `DATE
+    };
 
   let make =
       (

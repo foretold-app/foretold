@@ -4,6 +4,7 @@ type measurable = {
   "name": string,
   "channelId": string,
   "state": Context.Primary.MeasurableState.t,
+  "valueType": Context.Primary.valueType,
   "stateUpdatedAt": option(MomentRe.Moment.t),
   "expectedResolutionDate": option(MomentRe.Moment.t),
 };
@@ -95,6 +96,7 @@ let toMeasurement = (measurement: measurement): Context.Primary.Measurement.t =>
             ~id=measurable##id,
             ~name=measurable##name,
             ~channelId=measurable##channelId,
+            ~valueType=measurable##valueType,
             (),
           ),
         )
@@ -139,6 +141,8 @@ module Query = [%graphql
                           ys
                       }
                       floatPoint
+                      percentage
+                      binary
                   }
                   relevantAt @bsDecoder(fn: "E.J.O.toMoment")
                   competitorType
@@ -165,6 +169,7 @@ module Query = [%graphql
                     channelId
                     expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
                     state
+                    valueType
                     stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
                   }
               }

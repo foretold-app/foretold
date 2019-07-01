@@ -130,7 +130,7 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
           ~body=
             Array.length(bots) > 0
               ? <FC.PageCard.Body>
-                  {Table.fromColumns(Columns.all, bots)}
+                  {Table.fromColumns(Columns.all, bots, ())}
                 </FC.PageCard.Body>
               : <SLayout.NothingToShow />,
         )

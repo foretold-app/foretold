@@ -66,23 +66,27 @@ let make =
         </FC.PageCard.HeaderRow.Title>
       </FC.Base.Div>;
 
+    let onSuccess = agents => {
+      let dataSource =
+        agents
+        |> Js.Array.filter((agent: Context.Primary.Agent.t) =>
+             switch (agent.name) {
+             | Some(name) when name != "" => true
+             | _ => false
+             }
+           );
+
+      Table.fromColumns(all, dataSource, ());
+    };
+
+    let onError = e => <SLayout.Error e />;
+
+    let loadingFn = () => <SLayout.Spin />;
+
     let table =
       Foretold__GraphQL.Queries.Agents.componentUsers(
         ~excludeChannelId=channelId, agents =>
-        agents
-        |> E.HttpResponse.fmap(agents => {
-             let dataSource =
-               agents
-               |> Js.Array.filter((agent: Context.Primary.Agent.t) =>
-                    switch (agent.name) {
-                    | Some(name) when name != "" => true
-                    | _ => false
-                    }
-                  );
-
-             Table.fromColumns(all, dataSource);
-           })
-        |> E.HttpResponse.withReactDefaults
+        agents |> E.HttpResponse.flatten(onSuccess, onError, loadingFn)
       );
 
     SLayout.LayoutConfig.make(

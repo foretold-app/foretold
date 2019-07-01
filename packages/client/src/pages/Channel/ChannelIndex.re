@@ -105,8 +105,8 @@ let make =
   render: _ =>
     Queries.Channels.component(channels =>
       SLayout.LayoutConfig.make(
-        ~head=SLayout.Header.textDiv("Groups"),
-        ~body=Table.fromColumns(Columns.all, channels),
+        ~head=SLayout.Header.textDiv("Communities"),
+        ~body=Table.fromColumns(Columns.all, channels, ()),
       )
       |> layout
     ),

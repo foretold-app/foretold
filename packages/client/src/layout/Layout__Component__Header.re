@@ -5,7 +5,7 @@ module Styles = {
   open Css;
   let outer =
     style([
-      padding2(~v=`em(1.0), ~h=`em(2.)),
+      padding2(~v=`em(0.6), ~h=`em(2.)),
       float(`left),
       backgroundColor(`rgb((255, 255, 255))),
       width(`percent(100.)),
@@ -48,7 +48,7 @@ let userDropdown = agentId =>
        Internal(Agent({agentId, subPage: AgentMeasurements})),
        "My Predictions",
      )}
-    {link(Internal(ChannelNew), "Make a New Channel")}
+    {link(Internal(ChannelNew), "Make a New Community")}
     {link(Action(_ => Context.Auth.Actions.logout()), "Logout")}
     <div className=Layout__Dropdown.Styles.clear />
   </div>;
@@ -74,7 +74,7 @@ let make = (~loggedInUser: Context.Primary.User.t, _children) => {
     <Div styles=[Styles.outer]>
       <Div float=`left>
         <C.Link linkType={Internal(ChannelIndex)} className=Styles.headerLink>
-          {"Public Groups" |> ste}
+          {"Communities" |> ste}
         </C.Link>
       </Div>
       <Div float=`left>

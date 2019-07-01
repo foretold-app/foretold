@@ -197,7 +197,7 @@ let succesFn =
     };
 
   let table =
-    Table.fromColumns(Columns.all(channelId, channel), memberships);
+    Table.fromColumns(Columns.all(channelId, channel), memberships, ());
 
   SLayout.LayoutConfig.make(
     ~head,

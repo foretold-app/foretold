@@ -22,7 +22,6 @@ module Styles = {
 
 let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
   ...component,
-
   render: _self =>
     Queries.MeasurableWithMeasurements.component(~id)
     |> E.F.apply((m: Context.Primary.Measurable.t) =>
@@ -32,26 +31,18 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                <Div flex=3>
                  <FC.PageCard.H1> {Items.link(~m)} </FC.PageCard.H1>
                  <StatusDisplay measurable=m />
-                 <Div styles=[Styles.link]>
-                   <Foretold__Components__Link
-                     linkType={Internal(MeasurableShow(m.channelId, m.id))}>
-                     {"Go to Measurable" |> Utils.ste}
-                   </Foretold__Components__Link>
-                 </Div>
                </Div>
                <Div flex=1>
                  {Items.series(~m, ()) |> E.O.React.defaultNull}
                  {Items.creatorLink(~m) |> E.O.React.defaultNull}
                  {Items.resolutionEndpoint(~m) |> E.O.React.defaultNull}
                  {Items.endpointResponse(~m) |> E.O.React.defaultNull}
-                 {Items.id(~m, ())}
+                 {Items.questionLink(~m)}
                </Div>
              </Div>
              {Items.description(~m)
               |> E.O.React.fmapOrNull(d =>
-                   <Div styles=[Styles.description]>
-                     <FC.PageCard.P> d </FC.PageCard.P>
-                   </Div>
+                   <Div styles=[Styles.description]> d </Div>
                  )}
            </Div>
            <>
@@ -65,13 +56,11 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
 
                userAgentId == creatorId
                || Context.Primary.Measurable.toStatus(m) !== `JUDGED
-                 ? <>
-                     <Foretold__Components__Measurement__Form
-                       measurable=m
-                       measurableId=id
-                       isCreator={userAgentId == creatorId}
-                     />
-                   </>
+                 ? <Foretold__Components__Measurement__Form
+                     measurable=m
+                     measurableId=id
+                     isCreator={userAgentId == creatorId}
+                   />
                  : E.React.null;
              }
              {Queries.Measurements.component(

@@ -5186,6 +5186,20 @@
               "defaultValue": null
             },
             {
+              "name": "valueType",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "valueType",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "expectedResolutionDate",
               "description": null,
               "type": {

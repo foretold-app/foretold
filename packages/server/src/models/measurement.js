@@ -78,13 +78,13 @@ module.exports = (sequelize, DataTypes) => {
     ];
 
     for (const type of types) {
-      if (_.get(value, type)) {
+      if (_.get(value, type) !== null) {
         data = _.get(value, type);
         dataType = type;
       }
     }
 
-    if (data && dataType) {
+    if (data !== undefined && dataType !== undefined) {
       this.dataValues.value = { data, dataType };
     }
   }

@@ -22,7 +22,13 @@ module Styles = {
     ]);
 
   let channelText =
-    style([color(`hex("242424")), fontSize(`em(1.4)), float(`left)]);
+    style([
+      color(`hex("2c436e")),
+      fontSize(`em(1.15)),
+      fontWeight(`num(600)),
+      marginTop(`px(3)),
+      float(`left),
+    ]);
 
   let container = style([maxWidth(`px(1170)), margin(`auto)]);
 
@@ -54,6 +60,7 @@ module Spin = {
   module Styles = {
     open Css;
     let centerBlock = style([textAlign(`center), padding(`em(2.))]);
+    let clear = style([clear(`both)]);
   };
 
   let component = ReasonReact.statelessComponent("Spin");
@@ -61,7 +68,27 @@ module Spin = {
   let make = _children => {
     ...component,
     render: _ =>
-      <div className=Styles.centerBlock> <Antd.Spin tip="Loading..." /> </div>,
+      <>
+        <div className=Styles.clear />
+        <div className=Styles.centerBlock>
+          <Antd.Spin tip="Loading..." />
+        </div>
+      </>,
+  };
+};
+
+module Error = {
+  module Styles = {
+    open Css;
+    let centerBlock = style([textAlign(`center), padding(`em(2.))]);
+    let clear = style([clear(`both)]);
+  };
+
+  let component = ReasonReact.statelessComponent("Error");
+
+  let make = (~e, _children) => {
+    ...component,
+    render: _ => <> <div> {"Error: " ++ e |> Utils.ste} </div> </>,
   };
 };
 

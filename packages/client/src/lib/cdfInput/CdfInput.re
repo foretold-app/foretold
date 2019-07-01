@@ -13,11 +13,13 @@ type state = {
   competitorType: string,
   description: string,
   valueText: string,
+  hasLimitError: bool,
 };
 
 type action =
   // -> Measurement.value
   | UpdateFloatPdf(FloatCdf.t)
+  | UpdateHasLimitError(bool)
   | UpdatePercentage(float)
   | UpdateBinary(bool)
   | UpdateDataType(string)
@@ -45,17 +47,13 @@ let competitorTypeSelect =
   let options =
     switch (measurable.state) {
     | Some(`JUDGED) => [|
-        <Select.Option value="OBJECTIVE">
-          {"Resolution" |> ste}
-        </Select.Option>,
+        <Select.Option value="OBJECTIVE"> {"Resolve" |> ste} </Select.Option>,
       |]
     | _ => [|
         <Select.Option value="COMPETITIVE">
-          {"Prediction" |> ste}
+          {"Predict" |> ste}
         </Select.Option>,
-        <Select.Option value="OBJECTIVE">
-          {"Resolution" |> ste}
-        </Select.Option>,
+        <Select.Option value="OBJECTIVE"> {"Resolve" |> ste} </Select.Option>,
       |]
     };
 
@@ -69,7 +67,7 @@ let competitorTypeSelect =
 let dataTypeSelect = (~state, ~send): ReasonReact.reactElement =>
   <Select value={state.dataType} onChange={e => send(UpdateDataType(e))}>
     <Select.Option value="FLOAT_CDF"> {"Distribution" |> ste} </Select.Option>
-    <Select.Option value="FLOAT_POINT"> {"Point" |> ste} </Select.Option>
+    <Select.Option value="FLOAT_POINT"> {"Exact Value" |> ste} </Select.Option>
   </Select>;
 
 let getIsValid = (state: state): bool =>
@@ -136,24 +134,36 @@ let mainBlock =
     };
 
   let getValueInput: ReasonReact.reactElement =
-    switch (state.dataType) {
-    | "FLOAT_CDF"
-    | "FLOAT_POINT" =>
-      <GuesstimateInput
-        focusOnRender=true
-        sampleCount=30000
-        onUpdate={event =>
-          {
-            let (ys, xs) = event;
-            let asGroup: FloatCdf.t = {xs, ys};
-            send(UpdateFloatPdf(asGroup));
+    switch (state.dataType, state.competitorType) {
+    | ("FLOAT_CDF", _)
+    | ("FLOAT_POINT", _) =>
+      <>
+        {state.competitorType == "OBJECTIVE"
+           ? ReasonReact.null
+           : <h4 className=Styles.label>
+               {"Prediction (Distribution)" |> ste}
+             </h4>}
+        {state.hasLimitError
+           ? <FC__Alert type_=`warning>
+               {"Warning: Foretold does not currently support ranges of this width, due to smoothing limitations."
+                |> ste}
+             </FC__Alert>
+           : ReasonReact.null}
+        <GuesstimateInput
+          focusOnRender=true
+          sampleCount=30000
+          onUpdate={event =>
+            {let (ys, xs, hasLimitError) = event
+             let asGroup: FloatCdf.t = {xs, ys}
+             send(UpdateHasLimitError(hasLimitError))
+             send(UpdateFloatPdf(asGroup))}
+            |> ignore
           }
-          |> ignore
-        }
-        onChange={text => send(UpdateValueText(text))}
-      />
+          onChange={text => send(UpdateValueText(text))}
+        />
+      </>
 
-    | "BINARY_BOOL" =>
+    | ("BINARY_BOOL", _) =>
       <Select
         value={state.binary |> E.Bool.toString}
         onChange={e => send(UpdateBinary(e |> E.Bool.fromString))}>
@@ -161,21 +171,30 @@ let mainBlock =
         <Select.Option value="FALSE"> {"False" |> ste} </Select.Option>
       </Select>
 
-    | "PERCENTAGE_FLOAT" =>
+    | ("PERCENTAGE_FLOAT", _) =>
       <>
+        <h4 className=Styles.label>
+          {"Predicted Percentage Chance" |> ste}
+        </h4>
         <Slider
-          min=1.
+          min=0.
           max=100.
           value={state.percentage}
-          step=0.01
+          step=0.1
           onChange={(value: float) => send(UpdatePercentage(value))}
         />
         <InputNumber
-          min=1.
+          min=0.
           max=100.
           value={state.percentage}
-          step=0.01
-          onChange={(value: float) => send(UpdatePercentage(value))}
+          step=0.1
+          onChange={(value: float) =>
+            // This is to fix a bug. The value could actually be undefined, but the antd lib can't handle this.
+
+              if (value > (-0.001)) {
+                send(UpdatePercentage(value));
+              }
+            }
         />
       </>
 
@@ -204,10 +223,7 @@ let mainBlock =
          </div>,
        )}
       getDataTypeSelect
-      <div className=Styles.inputBox>
-        <h4 className=Styles.label> {"Value" |> ste} </h4>
-        getValueInput
-      </div>
+      <div className=Styles.inputBox> getValueInput </div>
       <div className=Styles.inputBox>
         <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
       </div>
@@ -257,6 +273,7 @@ let make =
       dataType: dataTypeFacade(competitorTypeInitValue, measurable, None),
       description: "",
       valueText: "",
+      hasLimitError: false,
     };
   },
 
@@ -265,6 +282,8 @@ let make =
     | UpdateFloatPdf((floatCdf: FloatCdf.t)) =>
       onUpdate(floatCdf);
       ReasonReact.Update({...state, floatCdf});
+    | UpdateHasLimitError((hasLimitError: bool)) =>
+      ReasonReact.Update({...state, hasLimitError})
 
     | UpdateCompetitorType(competitorType) =>
       let dataType =

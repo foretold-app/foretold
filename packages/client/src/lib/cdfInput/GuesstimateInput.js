@@ -2,11 +2,26 @@ import React from "react";
 import {Guesstimator} from '../guesstimator/index';
 import {Input} from "antd";
 import {Samples} from "@foretold/cdf";
+import _ from "lodash"
+
+const minMaxRatio = (ratio) => {
+    if (ratio < 100000){
+        return "SMALL"
+    } else if (ratio < 10000000){
+        return "MEDIUM"
+    } else {
+        return "LARGE"
+    }
+};
 
 const toCdf = (values) => {
     const samples = new Samples(values);
-    const cdf = samples.toCdf({size:1000, width:20});
-    return [cdf.ys, cdf.xs];
+    let min = _.min(values);
+    let max = _.max(values);
+    let ratioSize = minMaxRatio(max/min);
+    let width = ratioSize == "SMALL" ? 20 : 1;
+    const cdf = samples.toCdf({size:1000, width});
+    return [cdf.ys, cdf.xs, ratioSize == "LARGE"];
 };
 
 export class GuesstimateInput extends React.Component {
@@ -38,7 +53,7 @@ export class GuesstimateInput extends React.Component {
             this.setState({value: event.target.value, items: []});
         }
 
-        this.props.onUpdate(!!values ? toCdf(values): [[], []]);
+        this.props.onUpdate(!!values ? toCdf(values): [[], [], false]);
         this.props.onChange(text);
       }
     

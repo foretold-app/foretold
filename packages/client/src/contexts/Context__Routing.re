@@ -62,7 +62,7 @@ module ChannelPage = {
 
 let getChannelId = (channelId: string): string =>
   switch (channelId) {
-  | "global" => ""
+  | "home" => ""
   | _ => channelId
   };
 

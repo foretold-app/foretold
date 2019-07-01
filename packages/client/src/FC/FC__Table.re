@@ -17,19 +17,6 @@ module Styles = {
       )
     );
 
-  let textArea =
-    Css.(
-      style(
-        [
-          padding2(~v=`em(0.8), ~h=`em(1.4)),
-          background(Colors.lightGrayBackground),
-          borderRadius(Colors.BorderRadius.tight),
-          color(Colors.Text.LightBackground.p),
-        ]
-        @ BaseStyles.fullWidthFloatLeft,
-      )
-    );
-
   let topRow =
     Css.(
       style(
@@ -131,7 +118,7 @@ module HeaderRow = {
 module Row = {
   let component = ReasonReact.statelessComponent("TABLE ROW");
 
-  let textSection = text => <Div styles=[Styles.textArea]> text </Div>;
+  let textSection = text => <FC__Quote> text </FC__Quote>;
 
   let make = (~className="", ~bottomSubRow=?, ~onClick=_ => (), children) => {
     ...component,

@@ -26,7 +26,7 @@ let make =
        "Questions",
      )}
     {E.React.showIf(
-       channel.id != "global",
+       channel.id != "home",
        tab(
          tabSelected == Members,
          tabToInternalUrl(channel.id, Members),

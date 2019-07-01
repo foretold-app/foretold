@@ -327,22 +327,33 @@ let mesurableColumn: column =
     (),
   );
 
-let make = (measurementsList: list(measurement)) => {
-  let _bounds = Helpers.bounds(measurementsList |> E.A.of_list);
+let getPredictionDistributionColumn = (bounds): column =>
+  Table.Column.make(
+    ~name="Prediction Distribution" |> ste,
+    ~render=
+      (measurement: Context.Primary.Measurement.t) =>
+        Helpers.smallDistribution(measurement, bounds)
+        |> E.O.React.defaultNull,
+    ~show=
+      (measurement: Context.Primary.Measurement.t) =>
+        switch (measurement.measurable) {
+        | Some(measurable) =>
+          Js.log2(
+            "measurable.valueType !== `PERCENTAGE",
+            measurable.valueType |> Context.Primary.Measurable.valueTypeToStr,
+          );
+          measurable.valueType !== `PERCENTAGE;
+        | _ => true
+        },
+    ~flex=2,
+    (),
+  );
 
-  let predictionDistributionColumn: column =
-    Table.Column.make(
-      ~name="Prediction Distribution" |> ste,
-      ~render=
-        (measurement: Context.Primary.Measurement.t) =>
-          Helpers.smallDistribution(measurement, _bounds)
-          |> E.O.React.defaultNull,
-      ~flex=2,
-      (),
-    );
+let make = (measurementsList: list(measurement)) => {
+  let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
   let all: array(column) = [|
-    predictionDistributionColumn,
+    getPredictionDistributionColumn(bounds),
     predictionValueColumn,
     agentColumn,
     timeColumn,
@@ -363,22 +374,11 @@ let makeAgentPredictionsTable =
       ~onSelect=(_measurement: Context.Primary.Measurement.t) => (),
       (),
     ) => {
-  let _bounds = Helpers.bounds(measurementsList |> E.A.of_list);
-
-  let predictionDistributionColumn: column =
-    Table.Column.make(
-      ~name="Prediction Distribution" |> ste,
-      ~render=
-        (measurement: Context.Primary.Measurement.t) =>
-          Helpers.smallDistribution(measurement, _bounds)
-          |> E.O.React.defaultNull,
-      ~flex=2,
-      (),
-    );
+  let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
   let all: array(column) = [|
     mesurableColumn,
-    predictionDistributionColumn,
+    getPredictionDistributionColumn(bounds),
     predictionValueColumn,
     timeColumn,
   |];

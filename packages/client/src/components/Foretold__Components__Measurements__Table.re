@@ -1,6 +1,5 @@
 open Utils;
 open MomentRe;
-open Style.Grid;
 open Css;
 
 type measurement = Context.Primary.Measurement.t;
@@ -53,7 +52,8 @@ module Styles = {
 };
 
 module Helpers = {
-  let smallDistribution = (measurement: measurement, g: (float, float)) =>
+  let smallDistribution =
+      (measurement: measurement, g: (float, float)): option(React.element) =>
     switch (measurement.value) {
     | Ok(`FloatCdf(r)) =>
       let (minX, maxX) = g;
@@ -84,7 +84,7 @@ module Helpers = {
     | _ => None
     };
 
-  let statSummary = (measurement: measurement) =>
+  let statSummary = (measurement: measurement): option(React.element) =>
     switch (measurement.value) {
     | Ok(`FloatCdf(r)) =>
       r
@@ -93,10 +93,12 @@ module Helpers = {
       |> FC.Base.Types.Dist.fromJson
       |> (cdf => Some(<FC__CdfChart__StatSummary cdf />))
     | Ok(`FloatPoint(r)) => Some(r |> E.Float.with3DigitsPrecision |> ste)
+    | Ok(`Percentage(r)) => Some(r |> E.Float.with3DigitsPrecision |> ste)
+    | Ok(`Binary(r)) => Some(r ? "Yes" |> Utils.ste : "No" |> Utils.ste)
     | _ => None
     };
 
-  let getValueText = (measurement: measurement) =>
+  let getValueText = (measurement: measurement): option(React.element) =>
     switch (measurement.value) {
     | Ok(`FloatCdf(_r)) =>
       Some(
@@ -107,7 +109,7 @@ module Helpers = {
     | _ => None
     };
 
-  let description = (~m: measurement) =>
+  let description = (~m: measurement): option(React.element) =>
     switch (m.description) {
     | None
     | Some("") => None
@@ -119,7 +121,7 @@ module Helpers = {
       )
     };
 
-  let relevantAt = (~m: measurement) =>
+  let relevantAt = (~m: measurement): option(React.element) =>
     m.relevantAt
     |> E.O.fmap(d =>
          <div className=Styles.date> {d |> E.M.goFormat_standard |> ste} </div>
@@ -168,7 +170,7 @@ module Helpers = {
     | _ => None
     };
 
-  let measurerLink = (~measurement: measurement) => {
+  let measurerLink = (~measurement: measurement): ReasonReact.reactElement => {
     let aLink =
       switch (
         measurement.agent,
@@ -269,44 +271,6 @@ let getItemsSorted = (measurementsList: list(measurement), ~makeItem) => {
   |> ReasonReact.array;
 };
 
-let make = (measurementsList: list(measurement)) => {
-  let makeItem = (measurement, _bounds) => {
-    <>
-      <FC.Table.Cell flex=2 className=primaryCellStyle>
-        {Helpers.smallDistribution(measurement, _bounds)
-         |> E.O.React.defaultNull}
-      </FC.Table.Cell>
-      <FC.Table.Cell flex=1 className=primaryCellStyle>
-        {Helpers.statSummary(measurement) |> E.O.React.defaultNull}
-        {Helpers.getValueText(measurement) |> E.O.React.defaultNull}
-      </FC.Table.Cell>
-      <FC.Table.Cell flex=1 className=primaryCellStyle>
-        {Helpers.measurerLink(~measurement)}
-      </FC.Table.Cell>
-      <FC.Table.Cell flex=1 className=primaryCellStyle>
-        {Helpers.relevantAt(~m=measurement) |> E.O.React.defaultNull}
-      </FC.Table.Cell>
-    </>;
-  };
-
-  let items = measurementsList |> getItems(~makeItem);
-
-  E.React.showIf(
-    measurementsList |> E.L.length > 0,
-    <>
-      <FC.Table.HeaderRow>
-        <FC.Table.Cell flex=2>
-          {"Prediction Distribution" |> ste}
-        </FC.Table.Cell>
-        <FC.Table.Cell flex=1> {"Prediction Value" |> ste} </FC.Table.Cell>
-        <FC.Table.Cell flex=1> {"Agent" |> ste} </FC.Table.Cell>
-        <FC.Table.Cell flex=1> {"Time" |> ste} </FC.Table.Cell>
-      </FC.Table.HeaderRow>
-      items
-    </>,
-  );
-};
-
 let getMeasurableLink = (m: measurement) => {
   switch (m.measurable) {
   | None => "" |> ste
@@ -314,53 +278,124 @@ let getMeasurableLink = (m: measurement) => {
   };
 };
 
+type column = Table.column(Context.Primary.Measurement.t);
+
+let predictionValueColumn: column =
+  Table.Column.make(
+    ~name="Prediction Value" |> ste,
+    ~render=
+      (measurement: Context.Primary.Measurement.t) =>
+        <div>
+          {Helpers.statSummary(measurement) |> E.O.React.defaultNull}
+          {Helpers.getValueText(measurement) |> E.O.React.defaultNull}
+        </div>,
+    (),
+  );
+
+let agentColumn: column =
+  Table.Column.make(
+    ~name="Agent" |> ste,
+    ~render=
+      (measurement: Context.Primary.Measurement.t) =>
+        Helpers.measurerLink(~measurement),
+    (),
+  );
+
+let timeColumn: column =
+  Table.Column.make(
+    ~name="Time" |> ste,
+    ~render=
+      (measurement: Context.Primary.Measurement.t) =>
+        Helpers.relevantAt(~m=measurement) |> E.O.React.defaultNull,
+    (),
+  );
+
+let mesurableColumn: column =
+  Table.Column.make(
+    ~name="Measurable" |> ste,
+    ~render=
+      (measurement: Context.Primary.Measurement.t) =>
+        <div
+          className=Css.(
+            style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])
+          )>
+          <div className=Styles.mainColumn>
+            <div className=Styles.mainColumnTop>
+              {getMeasurableLink(measurement)}
+            </div>
+          </div>
+        </div>,
+    ~flex=2,
+    (),
+  );
+
+let getPredictionDistributionColumn = (bounds): column =>
+  Table.Column.make(
+    ~name="Prediction Distribution" |> ste,
+    ~render=
+      (measurement: Context.Primary.Measurement.t) =>
+        Helpers.smallDistribution(measurement, bounds)
+        |> E.O.React.defaultNull,
+    ~show=
+      (measurement: Context.Primary.Measurement.t) =>
+        switch (measurement.measurable) {
+        | Some(measurable) => measurable.valueType !== `PERCENTAGE
+        | _ => true
+        },
+    ~flex=2,
+    (),
+  );
+
+let make = (measurementsList: list(measurement)): ReasonReact.reactElement => {
+  let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
+
+  let all: array(column) = [|
+    getPredictionDistributionColumn(bounds),
+    predictionValueColumn,
+    agentColumn,
+    timeColumn,
+  |];
+
+  let measurementsList' = measurementsList |> E.L.sort(sort);
+
+  measurementsList' |> E.L.length > 0
+    ? <FC.PageCard.Body>
+        {Table.fromColumns(all, measurementsList' |> Array.of_list, ())}
+      </FC.PageCard.Body>
+    : <SLayout.NothingToShow />;
+};
+
 let makeAgentPredictionsTable =
     (
       ~measurementsList: list(measurement),
       ~onSelect=(_measurement: Context.Primary.Measurement.t) => (),
       (),
-    ) => {
-  let makeItem = (measurement: measurement, _bounds) => {
-    <FC.Table.RowLink
-      onClick={_e => onSelect(measurement)} key={measurement.id}>
-      <FC.Table.Cell
-        flex=1
-        className=Css.(
-          style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])
-        )>
-        <div className=Styles.mainColumn>
-          <div className=Styles.mainColumnTop>
-            {getMeasurableLink(measurement)}
-          </div>
-        </div>
-      </FC.Table.Cell>
-      <FC.Table.Cell flex=2 className=primaryCellStyle>
-        {Helpers.smallDistribution(measurement, _bounds)
-         |> E.O.React.defaultNull}
-      </FC.Table.Cell>
-      <FC.Table.Cell flex=1 className=primaryCellStyle>
-        {Helpers.statSummary(measurement) |> E.O.React.defaultNull}
-        {Helpers.getValueText(measurement) |> E.O.React.defaultNull}
-      </FC.Table.Cell>
-      <FC.Table.Cell flex=1 className=primaryCellStyle>
-        {Helpers.relevantAt(~m=measurement) |> E.O.React.defaultNull}
-      </FC.Table.Cell>
-    </FC.Table.RowLink>;
+    )
+    : ReasonReact.reactElement => {
+  let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
+
+  let all: array(column) = [|
+    mesurableColumn,
+    getPredictionDistributionColumn(bounds),
+    predictionValueColumn,
+    timeColumn,
+  |];
+
+  let measurementsList' = measurementsList |> E.L.sort(sort);
+
+  let onRowClb = (measurement: Context.Primary.Measurement.t) => {
+    onSelect(measurement);
+    ();
   };
 
-  let itemsMeasurements = measurementsList |> getItemsSorted(~makeItem);
-
-  measurementsList |> E.L.length > 0
-    ? <>
-        <FC.Table.HeaderRow>
-          <FC.Table.Cell flex=1> {"Measurable" |> ste} </FC.Table.Cell>
-          <FC.Table.Cell flex=2>
-            {"Prediction Distribution" |> ste}
-          </FC.Table.Cell>
-          <FC.Table.Cell flex=1> {"Prediction Value" |> ste} </FC.Table.Cell>
-          <FC.Table.Cell flex=1> {"Time" |> ste} </FC.Table.Cell>
-        </FC.Table.HeaderRow>
-        itemsMeasurements
-      </>
+  measurementsList' |> E.L.length > 0
+    ? <FC.PageCard.Body>
+        {Table.fromColumns(
+           all,
+           measurementsList' |> Array.of_list,
+           ~onRowClb=Some(onRowClb),
+           (),
+         )}
+      </FC.PageCard.Body>
     : <SLayout.NothingToShow />;
 };

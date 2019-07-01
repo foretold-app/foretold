@@ -120,16 +120,17 @@ module Row = {
 
   let textSection = text => <FC__Quote> text </FC__Quote>;
 
-  let make = (~className="", ~bottomSubRow=?, children) => {
+  let make = (~className="", ~bottomSubRow=?, ~onClick=_ => (), children) => {
     ...component,
     render: _self =>
       switch (bottomSubRow) {
       | Some(bottomSubRow) =>
-        <>
+        <div onClick>
           <Div styles=[Styles.topRow]> ...children </Div>
           <Div styles=[Styles.bottomRow]> ...bottomSubRow </Div>
-        </>
-      | None => <Div styles=[Styles.row, className]> ...children </Div>
+        </div>
+      | None =>
+        <Div styles=[Styles.row, className] onClick> ...children </Div>
       },
   };
 };
@@ -137,10 +138,10 @@ module Row = {
 module RowLink = {
   let component = ReasonReact.statelessComponent("TABLE ROW LINK");
 
-  let make = (~onClick, children) => {
+  let make = (~className="", ~onClick, children) => {
     ...component,
     render: _self =>
-      <Div styles=[Styles.row, Styles.clickableRow] onClick>
+      <Div styles=[Styles.row, Styles.clickableRow, className] onClick>
         ...children
       </Div>,
   };

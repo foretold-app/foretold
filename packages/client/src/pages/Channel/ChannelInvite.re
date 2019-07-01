@@ -80,7 +80,7 @@ let make =
                     }
                   );
 
-             Table.fromColumns(all, dataSource);
+             Table.fromColumns(all, dataSource, ());
            })
         |> E.HttpResponse.withReactDefaults
       );

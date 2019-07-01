@@ -63,10 +63,10 @@ class API {
    * @public
    * @return {*}
    */
-  async measurementCreate({ floatCdf, ...rest}) {
+  async measurementCreate({ floatCdf, percentage, ...rest}) {
     const result = await this.query(this.queries.measurementCreate, {
       input: {
-        value: { floatCdf },
+        value: { floatCdf, percentage },
         ...rest,
       },
     });

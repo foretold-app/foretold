@@ -3,6 +3,8 @@ const _ = require('lodash');
 const { Cdf } = require('@foretold/cdf/cdf');
 const { CdfCombination } = require('@foretold/cdf/cdf-combination');
 
+const config = require('../config');
+
 class Aggregation {
   constructor(measurements) {
     this.measurements = measurements;

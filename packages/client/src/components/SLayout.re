@@ -22,7 +22,13 @@ module Styles = {
     ]);
 
   let channelText =
-    style([color(`hex("242424")), fontSize(`em(1.4)), float(`left)]);
+    style([
+      color(`hex("2c436e")),
+      fontSize(`em(1.15)),
+      fontWeight(`num(600)),
+      marginTop(`px(3)),
+      float(`left),
+    ]);
 
   let container = style([maxWidth(`px(1170)), margin(`auto)]);
 

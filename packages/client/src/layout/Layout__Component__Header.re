@@ -5,7 +5,7 @@ module Styles = {
   open Css;
   let outer =
     style([
-      padding2(~v=`em(1.0), ~h=`em(2.)),
+      padding2(~v=`em(0.6), ~h=`em(2.)),
       float(`left),
       backgroundColor(`rgb((255, 255, 255))),
       width(`percent(100.)),

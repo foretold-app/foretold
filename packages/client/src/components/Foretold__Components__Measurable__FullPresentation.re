@@ -42,9 +42,7 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
              </Div>
              {Items.description(~m)
               |> E.O.React.fmapOrNull(d =>
-                   <Div styles=[Styles.description]>
-                     <FC.PageCard.P> d </FC.PageCard.P>
-                   </Div>
+                   <Div styles=[Styles.description]> d </Div>
                  )}
            </Div>
            <>

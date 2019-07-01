@@ -373,7 +373,7 @@ module Channel = {
   type t = Types.channel;
   let showLink = (channel: t) =>
     Context__Routing.Url.ChannelShow(channel.id);
-  let globalLink = () => Context__Routing.Url.ChannelShow("global");
+  let globalLink = () => Context__Routing.Url.ChannelShow("home");
   let showUrl = showLink ||> Context__Routing.Url.toString;
   let showPush = showLink ||> Context__Routing.Url.push;
 
@@ -431,8 +431,8 @@ module Channel = {
 
   let getGlobalChannel = (): t =>
     make(
-      ~id="global",
-      ~name="Global",
+      ~id="home",
+      ~name="Home",
       ~description=Some("Global Channel"),
       ~isArchived=false,
       ~isPublic=true,

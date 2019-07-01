@@ -53,7 +53,10 @@ class AggregationBot {
 
       const aggregation = new Aggregation(lastMeasurementOfEachAgent);
       const aggregated = await aggregation.main();
-      if (!aggregated) continue;
+      if (!aggregated) {
+        console.log(`Nothing to aggregate.`);
+        continue;
+      }
 
       const measurementIds = lastMeasurementOfEachAgent.map(item => item.id);
       console.log(`Measurement IDs "${measurementIds.join(', ')}".`);

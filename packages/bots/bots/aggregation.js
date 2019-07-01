@@ -40,7 +40,7 @@ class Aggregation {
     return {
       floatCdf: {
         xs: combined.xs,
-        ys: combined.ys
+        ys: combined.ys,
       },
     };
   }

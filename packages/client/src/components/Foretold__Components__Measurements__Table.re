@@ -385,16 +385,17 @@ let makeAgentPredictionsTable =
 
   let measurementsList' = measurementsList |> E.L.sort(sort);
 
+  let onRowClb = (measurement: Context.Primary.Measurement.t) => {
+    onSelect(measurement);
+    ();
+  };
+
   measurementsList' |> E.L.length > 0
     ? <FC.PageCard.Body>
         {Table.fromColumns(
            all,
            measurementsList' |> Array.of_list,
-           ~onRowClb=
-             (measurement: Context.Primary.Measurement.t) => {
-               onSelect(measurement);
-               ();
-             },
+           ~onRowClb=Some(onRowClb),
            (),
          )}
       </FC.PageCard.Body>

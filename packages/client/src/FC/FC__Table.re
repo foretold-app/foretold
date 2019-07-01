@@ -151,10 +151,10 @@ module Row = {
 module RowLink = {
   let component = ReasonReact.statelessComponent("TABLE ROW LINK");
 
-  let make = (~onClick, children) => {
+  let make = (~className="", ~onClick, children) => {
     ...component,
     render: _self =>
-      <Div styles=[Styles.row, Styles.clickableRow] onClick>
+      <Div styles=[Styles.row, Styles.clickableRow, className] onClick>
         ...children
       </Div>,
   };

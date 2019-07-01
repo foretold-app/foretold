@@ -1,6 +1,5 @@
 open Utils;
 open MomentRe;
-open Style.Grid;
 open Css;
 
 type measurement = Context.Primary.Measurement.t;
@@ -53,7 +52,8 @@ module Styles = {
 };
 
 module Helpers = {
-  let smallDistribution = (measurement: measurement, g: (float, float)) =>
+  let smallDistribution =
+      (measurement: measurement, g: (float, float)): option(React.element) =>
     switch (measurement.value) {
     | Ok(`FloatCdf(r)) =>
       let (minX, maxX) = g;
@@ -84,7 +84,7 @@ module Helpers = {
     | _ => None
     };
 
-  let statSummary = (measurement: measurement) =>
+  let statSummary = (measurement: measurement): option(React.element) =>
     switch (measurement.value) {
     | Ok(`FloatCdf(r)) =>
       r
@@ -93,10 +93,12 @@ module Helpers = {
       |> FC.Base.Types.Dist.fromJson
       |> (cdf => Some(<FC__CdfChart__StatSummary cdf />))
     | Ok(`FloatPoint(r)) => Some(r |> E.Float.with3DigitsPrecision |> ste)
+    | Ok(`Percentage(r)) => Some(r |> E.Float.with3DigitsPrecision |> ste)
+    | Ok(`Binary(r)) => Some(r ? "Yes" |> Utils.ste : "No" |> Utils.ste)
     | _ => None
     };
 
-  let getValueText = (measurement: measurement) =>
+  let getValueText = (measurement: measurement): option(React.element) =>
     switch (measurement.value) {
     | Ok(`FloatCdf(_r)) =>
       Some(
@@ -107,7 +109,7 @@ module Helpers = {
     | _ => None
     };
 
-  let description = (~m: measurement) =>
+  let description = (~m: measurement): option(React.element) =>
     switch (m.description) {
     | None
     | Some("") => None
@@ -119,7 +121,7 @@ module Helpers = {
       )
     };
 
-  let relevantAt = (~m: measurement) =>
+  let relevantAt = (~m: measurement): option(React.element) =>
     m.relevantAt
     |> E.O.fmap(d =>
          <div className=Styles.date> {d |> E.M.goFormat_standard |> ste} </div>
@@ -168,7 +170,7 @@ module Helpers = {
     | _ => None
     };
 
-  let measurerLink = (~measurement: measurement) => {
+  let measurerLink = (~measurement: measurement): ReasonReact.reactElement => {
     let aLink =
       switch (
         measurement.agent,
@@ -337,19 +339,14 @@ let getPredictionDistributionColumn = (bounds): column =>
     ~show=
       (measurement: Context.Primary.Measurement.t) =>
         switch (measurement.measurable) {
-        | Some(measurable) =>
-          Js.log2(
-            "measurable.valueType !== `PERCENTAGE",
-            measurable.valueType |> Context.Primary.Measurable.valueTypeToStr,
-          );
-          measurable.valueType !== `PERCENTAGE;
+        | Some(measurable) => measurable.valueType !== `PERCENTAGE
         | _ => true
         },
     ~flex=2,
     (),
   );
 
-let make = (measurementsList: list(measurement)) => {
+let make = (measurementsList: list(measurement)): ReasonReact.reactElement => {
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
   let all: array(column) = [|
@@ -373,7 +370,8 @@ let makeAgentPredictionsTable =
       ~measurementsList: list(measurement),
       ~onSelect=(_measurement: Context.Primary.Measurement.t) => (),
       (),
-    ) => {
+    )
+    : ReasonReact.reactElement => {
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
   let all: array(column) = [|

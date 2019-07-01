@@ -327,7 +327,7 @@ let mesurableColumn: column =
     (),
   );
 
-let make_2 = (measurementsList: list(measurement)) => {
+let make = (measurementsList: list(measurement)) => {
   let _bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
   let predictionDistributionColumn: column =
@@ -357,16 +357,13 @@ let make_2 = (measurementsList: list(measurement)) => {
     : <SLayout.NothingToShow />;
 };
 
-let makeAgentPredictionsTable_2 =
+let makeAgentPredictionsTable =
     (
       ~measurementsList: list(measurement),
       ~onSelect=(_measurement: Context.Primary.Measurement.t) => (),
       (),
     ) => {
   let _bounds = Helpers.bounds(measurementsList |> E.A.of_list);
-
-  // FC.Table.RowLink
-  //      onClick={_e => onSelect(measurement)} key={measurement.id}
 
   let predictionDistributionColumn: column =
     Table.Column.make(
@@ -393,10 +390,12 @@ let makeAgentPredictionsTable_2 =
         {Table.fromColumns(
            all,
            measurementsList' |> Array.of_list,
-           ~onRowClb=measurement => {
-             onSelect(measurement);
-             ();
-           },
+           ~onRowClb=
+             (measurement: Context.Primary.Measurement.t) => {
+               onSelect(measurement);
+               ();
+             },
+           (),
          )}
       </FC.PageCard.Body>
     : <SLayout.NothingToShow />;

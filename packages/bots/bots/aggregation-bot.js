@@ -1,10 +1,9 @@
 const _ = require('lodash');
-const { Cdf } = require('@foretold/cdf/cdf');
-const { CdfCombination } = require('@foretold/cdf/cdf-combination');
 
 const { API } = require('../api');
-
 const config = require('../config');
+
+const { Aggregation } = require('./aggregation');
 
 class AggregationBot {
   constructor() {
@@ -52,7 +51,8 @@ class AggregationBot {
       console.log(`Got "${lastMeasurementOfEachAgent.length}" for aggregation.`);
       if (lastMeasurementOfEachAgent.length === 0) continue;
 
-      const aggregated = await this.aggregate(lastMeasurementOfEachAgent);
+      const aggregation = new Aggregation(lastMeasurementOfEachAgent);
+      const aggregated = await aggregation.main();
       if (!aggregated) continue;
 
       const measurementIds = lastMeasurementOfEachAgent.map(item => item.id);
@@ -67,32 +67,6 @@ class AggregationBot {
     }
 
     return true;
-  }
-
-  /**
-   * Need to aggregate only "floatCdf".
-   * @param {object[]} measurements
-   * @return {Promise<{floatCdf: {xs: number[], ys: number[]}} | null>}
-   */
-  async aggregate(measurements) {
-    const cdfs = measurements.filter((measurement) => {
-      return !!_.get(measurement, 'value.floatCdf');
-    }).map((measurement) => {
-      const xs = _.get(measurement, 'value.floatCdf.xs');
-      const ys = _.get(measurement, 'value.floatCdf.ys');
-      return new Cdf(xs, ys);
-    });
-
-    if (cdfs.length === 0) return null;
-
-    const combined = new CdfCombination(cdfs).combine(config.CDF_COMBINE_SIZE);
-
-    return {
-      floatCdf: {
-        xs: combined.xs,
-        ys: combined.ys
-      },
-    };
   }
 }
 

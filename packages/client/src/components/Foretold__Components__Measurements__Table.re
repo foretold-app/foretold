@@ -98,16 +98,10 @@ module Helpers = {
     | _ => None
     };
 
-  let getValueText = (measurement: measurement): option(React.element) =>
-    switch (measurement.value) {
-    | Ok(`FloatCdf(_r)) =>
-      Some(
-        <div className=Styles.secondaryText>
-          {measurement.valueText |> E.O.default("") |> Utils.ste}
-        </div>,
-      )
-    | _ => None
-    };
+  let getValueText = (measurement: measurement): React.element =>
+    <div className=Styles.secondaryText>
+      {measurement.valueText |> E.O.default("") |> Utils.ste}
+    </div>;
 
   let description = (~m: measurement): option(React.element) =>
     switch (m.description) {
@@ -287,7 +281,7 @@ let predictionValueColumn: column =
       (measurement: Context.Primary.Measurement.t) =>
         <div>
           {Helpers.statSummary(measurement) |> E.O.React.defaultNull}
-          {Helpers.getValueText(measurement) |> E.O.React.defaultNull}
+          {Helpers.getValueText(measurement)}
         </div>,
     (),
   );

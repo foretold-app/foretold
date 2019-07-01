@@ -483,7 +483,6 @@ module Measurement = {
         ~measurableId=None,
         ~measurable=None,
         ~valueText=None,
-        ~valueText=None,
         (),
       )
       : t => {

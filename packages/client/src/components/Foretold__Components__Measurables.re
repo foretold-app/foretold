@@ -14,8 +14,6 @@ module Styles = {
       selector(" p", [marginTop(`px(3)), marginBottom(`px(8))]),
     ]);
   let rightColumn = style([flex(1)]);
-  let mainColumnBottom =
-    style([flex(1), padding(`px(2)), marginTop(`px(2))]);
 };
 
 module BasicTable = {

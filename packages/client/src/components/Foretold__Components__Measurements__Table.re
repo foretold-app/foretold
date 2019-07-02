@@ -30,21 +30,6 @@ module Styles = {
   let agentStyle =
     style([color(`rgb((102, 121, 134))), fontSize(`em(1.1))]);
 
-  let mainColumn =
-    style([flex(4), display(`flex), flexDirection(`column)]);
-
-  let mainColumnTop =
-    style([
-      flex(1),
-      paddingLeft(px(2)),
-      selector(" p", [marginTop(`px(3)), marginBottom(`px(8))]),
-    ]);
-
-  let rightColumn = style([flex(1)]);
-
-  let mainColumnBottom =
-    style([flex(1), padding(`px(2)), marginTop(`px(2))]);
-
   let secondaryText =
     style([fontSize(`em(0.9)), color(FC__Colors.accentBlue)]);
 
@@ -306,7 +291,7 @@ let predictionValueColumn: column =
 let agentColumn: column =
   Table.Column.make(
     ~name="Agent" |> ste,
-    ~flex=2,
+    ~flex=1,
     ~render=
       (measurement: Primary.Measurement.t) =>
         Helpers.measurerLink(~measurement),
@@ -335,6 +320,7 @@ let measurableColumn: column =
 let getPredictionDistributionColumn = (bounds): column =>
   Table.Column.make(
     ~name="Prediction Distribution" |> ste,
+    ~flex=2,
     ~render=
       (measurement: Primary.Measurement.t) =>
         Helpers.smallDistribution(measurement, bounds)
@@ -345,7 +331,6 @@ let getPredictionDistributionColumn = (bounds): column =>
         | Some(measurable) => measurable.valueType !== `PERCENTAGE
         | _ => true
         },
-    ~flex=2,
     (),
   );
 

@@ -14,8 +14,6 @@ module Styles = {
       selector(" p", [marginTop(`px(3)), marginBottom(`px(8))]),
     ]);
   let rightColumn = style([flex(1)]);
-  let mainColumnBottom =
-    style([flex(1), padding(`px(2)), marginTop(`px(2))]);
 };
 
 module BasicTable = {
@@ -44,7 +42,7 @@ module BasicTable = {
             {measurables
              |> E.A.fmap((m: Primary.Measurable.t) => {
                   let iAmOwner = m.iAmOwner == Some(true);
-                  <FC.Table.RowLink onClick={_e => onSelect(m)} key={m.id}>
+                  <FC.Table.Row onClick={_e => onSelect(m)} key={m.id}>
                     <FC.Table.Cell
                       flex=3
                       className=Css.(
@@ -83,8 +81,7 @@ module BasicTable = {
                       {Items.measurers(~m) |> E.O.React.defaultNull}
                       {E.React.showIf(iAmOwner, Items.editLink(~m))}
                     </FC.Table.Cell>
-                  </FC.Table.RowLink>;
-                  /* {E.React.showIf(iAmOwner, Items.archiveOption(~m))} */
+                  </FC.Table.Row>;
                 })
              |> ReasonReact.array}
           </>

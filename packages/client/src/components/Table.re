@@ -63,6 +63,7 @@ let fromColumns =
     (
       columns: array(column('a)),
       rows: array('a),
+      ~bottomSubRowFn: option('a => option(array(ReasonReact.reactElement)))=None,
       ~onRowClb: option('a => unit)=None,
       (),
     ) => {
@@ -71,10 +72,10 @@ let fromColumns =
   <Table>
     <FC.Table.HeaderRow>
       {columns'
-       |> Array.map((column: column('a)) => column.name)
-       |> Array.mapi((columenIndex, name) =>
-            <FC.Table.Cell flex=1 key={columenIndex |> string_of_int}>
-              name
+       |> Array.mapi((columnIndex, column: column('a)) =>
+            <FC.Table.Cell
+              flex={column.flex} key={columnIndex |> string_of_int}>
+              {column.name}
             </FC.Table.Cell>
           )
        |> ReasonReact.array}
@@ -83,17 +84,20 @@ let fromColumns =
      |> Array.mapi((rowIndex, row: 'a) => {
           let columnsBody =
             columns'
-            |> Array.map((column: column('a)) => column.render(row))
-            |> Array.map(renderedRow =>
-                 <FC.Table.Cell flex=1> renderedRow </FC.Table.Cell>
+            |> Array.mapi((columnIndex, column: column('a)) =>
+                 <FC.Table.Cell
+                   flex={column.flex} key={columnIndex |> string_of_int}>
+                   {column.render(row)}
+                 </FC.Table.Cell>
                )
             |> ReasonReact.array;
 
           let key = rowIndex |> string_of_int;
+          let bottomSubRow = bottomSubRowFn |> E.O.bind(_, r => r(row));
 
           switch (onRowClb) {
           | Some(onRowClb) =>
-            <FC.Table.RowLink
+            <FC.Table.Row
               onClick={_ => {
                 onRowClb(row);
                 ();
@@ -101,10 +105,12 @@ let fromColumns =
               className=Styles.row
               key>
               columnsBody
-            </FC.Table.RowLink>
+            </FC.Table.Row>
 
           | None =>
-            <FC.Table.Row className=Styles.row key> columnsBody </FC.Table.Row>
+            <FC.Table.Row className=Styles.row ?bottomSubRow key>
+              columnsBody
+            </FC.Table.Row>
           };
         })
      |> ReasonReact.array}

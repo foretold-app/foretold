@@ -9,15 +9,6 @@ module Items = Foretold__Components__Measurable__Items;
 module Styles = {
   open Css;
 
-  let middle =
-    style([
-      textAlign(`center),
-      fontSize(`em(1.4)),
-      fontWeight(`num(800)),
-      color(`hex("7d7ea2")),
-      marginTop(`px(6)),
-    ]);
-
   let descriptionStyle =
     style([
       marginTop(`px(5)),
@@ -32,23 +23,17 @@ module Styles = {
   let agentStyle =
     style([color(`rgb((102, 121, 134))), fontSize(`em(1.1))]);
 
-  let mainColumn =
-    style([flex(4), display(`flex), flexDirection(`column)]);
-
-  let mainColumnTop =
-    style([
-      flex(1),
-      paddingLeft(px(2)),
-      selector(" p", [marginTop(`px(3)), marginBottom(`px(8))]),
-    ]);
-
-  let rightColumn = style([flex(1)]);
-
-  let mainColumnBottom =
-    style([flex(1), padding(`px(2)), marginTop(`px(2))]);
-
   let secondaryText =
     style([fontSize(`em(0.9)), color(FC__Colors.accentBlue)]);
+
+  let percentage = style([fontSize(`em(1.15))]);
+
+  let result =
+    style([
+      fontSize(`em(1.15)),
+      fontWeight(`num(800)),
+      color(`hex("7d7ea2")),
+    ]);
 };
 
 module Helpers = {
@@ -58,7 +43,6 @@ module Helpers = {
     | Ok(`FloatCdf(r)) =>
       let (minX, maxX) = g;
       r
-      |> MeasurementValue.toChunks(~bucketSize=3)
       |> MeasurementValue.toPdf
       |> MeasurementValue.FloatCdf.toJs
       |> (
@@ -77,7 +61,7 @@ module Helpers = {
       );
     | Ok(`FloatPoint(r)) =>
       Some(
-        <div className=Styles.middle>
+        <div className=Styles.result>
           {r |> E.Float.with3DigitsPrecision |> ste}
         </div>,
       )
@@ -88,13 +72,22 @@ module Helpers = {
     switch (measurement.value) {
     | Ok(`FloatCdf(r)) =>
       r
-      |> MeasurementValue.toChunks(~bucketSize=3)
       |> MeasurementValue.FloatCdf.toJs
       |> FC.Base.Types.Dist.fromJson
       |> (cdf => Some(<FC__CdfChart__StatSummary cdf />))
-    | Ok(`FloatPoint(r)) => Some(r |> E.Float.with3DigitsPrecision |> ste)
-    | Ok(`Percentage(r)) => Some(r |> E.Float.with3DigitsPrecision |> ste)
-    | Ok(`Binary(r)) => Some(r ? "Yes" |> Utils.ste : "No" |> Utils.ste)
+    | Ok(`FloatPoint(r)) => Some(<FC__NumberShower precision=8 number=r />)
+    | Ok(`Percentage(r)) =>
+      Some(
+        <span className=Styles.percentage>
+          <FC__PercentageShower precision=8 percentage=r />
+        </span>,
+      )
+    | Ok(`Binary(r)) =>
+      Some(
+        <span className=Styles.result>
+          {(r ? "Yes" : "No") |> Utils.ste}
+        </span>,
+      )
     | _ => None
     };
 
@@ -103,7 +96,7 @@ module Helpers = {
       {measurement.valueText |> E.O.default("") |> Utils.ste}
     </div>;
 
-  let description = (~m: measurement): option(React.element) =>
+  let getDescription = (~m: measurement): option(React.element) => {
     switch (m.description) {
     | None
     | Some("") => None
@@ -114,6 +107,7 @@ module Helpers = {
         </div>,
       )
     };
+  };
 
   let relevantAt = (~m: measurement): option(React.element) =>
     m.relevantAt
@@ -242,7 +236,7 @@ let getItems = (measurementsList: list(measurement), ~makeItem) => {
   |> E.L.fmap((m: measurement) => {
        let inside = makeItem(m, _bounds);
 
-       switch (Helpers.description(~m)) {
+       switch (Helpers.getDescription(~m)) {
        | Some(description) =>
          <FC.Table.Row
            bottomSubRow=[|FC.Table.Row.textSection(description)|]>
@@ -276,7 +270,8 @@ type column = Table.column(Primary.Measurement.t);
 
 let predictionValueColumn: column =
   Table.Column.make(
-    ~name="Prediction Value" |> ste,
+    ~name="Prediction" |> ste,
+    ~flex=1,
     ~render=
       (measurement: Primary.Measurement.t) =>
         <div>
@@ -289,6 +284,7 @@ let predictionValueColumn: column =
 let agentColumn: column =
   Table.Column.make(
     ~name="Agent" |> ste,
+    ~flex=1,
     ~render=
       (measurement: Primary.Measurement.t) =>
         Helpers.measurerLink(~measurement),
@@ -298,27 +294,18 @@ let agentColumn: column =
 let timeColumn: column =
   Table.Column.make(
     ~name="Time" |> ste,
+    ~flex=1,
     ~render=
       (measurement: Primary.Measurement.t) =>
         Helpers.relevantAt(~m=measurement) |> E.O.React.defaultNull,
     (),
   );
 
-let mesurableColumn: column =
+let measurableColumn: column =
   Table.Column.make(
     ~name="Measurable" |> ste,
     ~render=
-      (measurement: Primary.Measurement.t) =>
-        <div
-          className=Css.(
-            style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])
-          )>
-          <div className=Styles.mainColumn>
-            <div className=Styles.mainColumnTop>
-              {getMeasurableLink(measurement)}
-            </div>
-          </div>
-        </div>,
+      (measurement: Primary.Measurement.t) => getMeasurableLink(measurement),
     ~flex=2,
     (),
   );
@@ -326,6 +313,7 @@ let mesurableColumn: column =
 let getPredictionDistributionColumn = (bounds): column =>
   Table.Column.make(
     ~name="Prediction Distribution" |> ste,
+    ~flex=2,
     ~render=
       (measurement: Primary.Measurement.t) =>
         Helpers.smallDistribution(measurement, bounds)
@@ -336,7 +324,6 @@ let getPredictionDistributionColumn = (bounds): column =>
         | Some(measurable) => measurable.valueType !== `PERCENTAGE
         | _ => true
         },
-    ~flex=2,
     (),
   );
 
@@ -354,7 +341,19 @@ let make = (measurementsList: list(measurement)): ReasonReact.reactElement => {
 
   measurementsList' |> E.L.length > 0
     ? <FC.PageCard.Body>
-        {Table.fromColumns(all, measurementsList' |> Array.of_list, ())}
+        {Table.fromColumns(
+           all,
+           measurementsList' |> Array.of_list,
+           ~bottomSubRowFn=
+             Some(
+               m =>
+                 Helpers.getDescription(~m)
+                 |> E.O.fmap((c: React.element) =>
+                      [|FC.Table.Row.textSection(c)|]
+                    ),
+             ),
+           (),
+         )}
       </FC.PageCard.Body>
     : <SLayout.NothingToShow />;
 };
@@ -369,7 +368,7 @@ let makeAgentPredictionsTable =
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
   let all: array(column) = [|
-    mesurableColumn,
+    measurableColumn,
     getPredictionDistributionColumn(bounds),
     predictionValueColumn,
     timeColumn,
@@ -387,6 +386,14 @@ let makeAgentPredictionsTable =
         {Table.fromColumns(
            all,
            measurementsList' |> Array.of_list,
+           ~bottomSubRowFn=
+             Some(
+               m =>
+                 Helpers.getDescription(~m)
+                 |> E.O.fmap((c: React.element) =>
+                      [|FC.Table.Row.textSection(c)|]
+                    ),
+             ),
            ~onRowClb=Some(onRowClb),
            (),
          )}

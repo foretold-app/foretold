@@ -130,7 +130,10 @@ module Route = {
     | ["c", channelId, "s", "new"] =>
       Channel({channelId, subPage: NewSeries})
     | ["c", channelId, "s", seriesId] =>
-      Channel({channelId, subPage: Series(seriesId)})
+      Channel({
+        channelId: getChannelId(channelId),
+        subPage: Series(seriesId),
+      })
     | ["agents", agentId] => Agent({agentId, subPage: AgentMeasurements})
     | ["agents", agentId, "bots"] => Agent({agentId, subPage: AgentBots})
     | ["agents", agentId, "measurables"] =>

@@ -120,6 +120,18 @@ let editLink = (~m: measurable) =>
     </Foretold__Components__Link>
   </div>;
 
+let channelLink = (~m: measurable) =>
+  <div className=Shared.Item.item>
+    <Foretold__Components__Link
+      linkType={Internal(ChannelShow(m.channelId))}
+      className=Shared.Item.item>
+      {switch (m.channel) {
+       | Some(channel) => "#" ++ channel.name |> ste
+       | _ => "#channel" |> ste
+       }}
+    </Foretold__Components__Link>
+  </div>;
+
 let measurements = (~m: measurable) =>
   switch (m.measurementCount) {
   | Some(0) => None
@@ -156,12 +168,6 @@ let id = (~m: measurable, ()) =>
   </div>;
 
 let series = (~m: measurable, ~channelId=None, ()) => {
-  let channelId =
-    switch (channelId, m.channel) {
-    | (Some(c), _) => c
-    | (_, Some(c)) => c
-    | (_, _) => ""
-    };
   m.series
   |> E.O.bind(_, r =>
        switch (r.name) {
@@ -169,7 +175,7 @@ let series = (~m: measurable, ~channelId=None, ()) => {
          Some(
            <div className=Shared.Item.item>
              <Foretold__Components__Link
-               linkType={Internal(SeriesShow(channelId, r.id))}>
+               linkType={Internal(SeriesShow(m.channelId, r.id))}>
                <Icon.Icon icon="LAYERS" />
                {name |> ste}
              </Foretold__Components__Link>

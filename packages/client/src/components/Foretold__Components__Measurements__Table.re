@@ -97,7 +97,6 @@ module Helpers = {
     </div>;
 
   let getDescription = (~m: measurement): option(React.element) => {
-    Js.log(m.description);
     switch (m.description) {
     | None
     | Some("") => None
@@ -342,7 +341,20 @@ let make = (measurementsList: list(measurement)): ReasonReact.reactElement => {
 
   measurementsList' |> E.L.length > 0
     ? <FC.PageCard.Body>
-        {Table.fromColumns(all, measurementsList' |> Array.of_list, ())}
+        {Table.fromColumns(
+           all,
+           measurementsList' |> Array.of_list,
+           ~bottomSubRowFn=
+             Some(
+               m =>
+                 Helpers.getDescription(~m)
+                 |> E.O.fmap((c: React.element) =>
+                      [|FC.Table.Row.textSection(c)|]
+                    )
+                 |> E.O.default([||]),
+             ),
+           (),
+         )}
       </FC.PageCard.Body>
     : <SLayout.NothingToShow />;
 };
@@ -379,9 +391,9 @@ let makeAgentPredictionsTable =
              Some(
                m =>
                  Helpers.getDescription(~m)
-                 |> E.O.fmap((c: React.element)
-                      // [|FC.Table.Row.textSection(c)|]
-                      => [|"sdf" |> ste|])
+                 |> E.O.fmap((c: React.element) =>
+                      [|FC.Table.Row.textSection(c)|]
+                    )
                  |> E.O.default([||]),
              ),
            ~onRowClb=Some(onRowClb),

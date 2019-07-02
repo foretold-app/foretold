@@ -8,6 +8,7 @@ module Query = [%graphql
         isArchived
         membershipCount
         isPublic
+        isCurated
         openedMeasurablesCount
       }
     }
@@ -23,6 +24,7 @@ let toChannel = (m): Context.Primary.Channel.t =>
     ~description=m##description,
     ~isArchived=m##isArchived,
     ~isPublic=m##isPublic,
+    ~isCurated=m##isCurated,
     ~membershipCount=Some(m##membershipCount),
     ~openedMeasurablesCount=Some(m##openedMeasurablesCount),
     (),

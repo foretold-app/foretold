@@ -1,7 +1,4 @@
-open Utils;
-open E;
 open Css;
-open SLayout;
 open Foretold__GraphQL;
 
 let ste = ReasonReact.string;
@@ -87,11 +84,27 @@ module Columns = {
       (),
     );
 
+  let curatedColumn: column =
+    Table.Column.make(
+      ~name="Labels" |> ste,
+      ~render=
+        (r: record) =>
+          r.isCurated
+            ? <div className="ant-tag ant-tag-blue">
+                {"Curated" |> ReasonReact.string}
+              </div>
+            : ReasonReact.null,
+      ~show=(r: record) => r.isCurated,
+      ~flex=1,
+      (),
+    );
+
   let all = [|
     nameColumn,
     descriptionColumn,
     memberCountColumn,
     openedCountColumn,
+    curatedColumn,
   |];
 };
 

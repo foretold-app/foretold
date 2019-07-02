@@ -41,7 +41,7 @@ let make =
             CMutationForm.showWithLoading2(
               ~result=data.result,
               ~form,
-              ~onSuccess=BotForm.onSuccess(loggedInUser),
+              ~onSuccess=_ => BotForm.onSuccess(loggedInUser, ()),
               (),
             );
           },

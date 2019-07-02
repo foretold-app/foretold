@@ -26,7 +26,7 @@ module Make = (Config: Config) => {
     switch (result) {
     | Loading => <SLayout.Spin />
     | Error(e) => <> {"Error: " ++ e##message |> ste} form </>
-    | Data(_) => onSuccess()
+    | Data(r) => onSuccess(r)
     | NotCalled => form
     };
 };

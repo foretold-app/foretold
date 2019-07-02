@@ -94,6 +94,7 @@ module Helpers = {
   let getValueText = (measurement: measurement): React.element =>
     <div className=Styles.secondaryText>
       {measurement.valueText
+       |> E.O.bind(_, r => r == "" ? None : Some(r))
        |> E.O.fmap(r => {|"|} ++ r ++ {|"|})
        |> E.O.default("")
        |> Utils.ste}

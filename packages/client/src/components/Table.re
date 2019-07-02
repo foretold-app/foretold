@@ -71,10 +71,10 @@ let fromColumns =
   <Table>
     <FC.Table.HeaderRow>
       {columns'
-       |> Array.map((column: column('a)) => column.name)
-       |> Array.mapi((columenIndex, name) =>
-            <FC.Table.Cell flex=1 key={columenIndex |> string_of_int}>
-              name
+       |> Array.mapi((columnIndex, column: column('a)) =>
+            <FC.Table.Cell
+              flex={column.flex} key={columnIndex |> string_of_int}>
+              {column.name}
             </FC.Table.Cell>
           )
        |> ReasonReact.array}
@@ -83,9 +83,11 @@ let fromColumns =
      |> Array.mapi((rowIndex, row: 'a) => {
           let columnsBody =
             columns'
-            |> Array.map((column: column('a)) => column.render(row))
-            |> Array.map(renderedRow =>
-                 <FC.Table.Cell flex=1> renderedRow </FC.Table.Cell>
+            |> Array.mapi((columnIndex, column: column('a)) =>
+                 <FC.Table.Cell
+                   flex={column.flex} key={columnIndex |> string_of_int}>
+                   {column.render(row)}
+                 </FC.Table.Cell>
                )
             |> ReasonReact.array;
 

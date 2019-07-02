@@ -11,11 +11,9 @@ module Styles = {
 
   let middle =
     style([
-      textAlign(`center),
-      fontSize(`em(1.4)),
+      fontSize(`em(1.3)),
       fontWeight(`num(800)),
       color(`hex("7d7ea2")),
-      marginTop(`px(6)),
     ]);
 
   let descriptionStyle =
@@ -49,6 +47,16 @@ module Styles = {
 
   let secondaryText =
     style([fontSize(`em(0.9)), color(FC__Colors.accentBlue)]);
+
+  let percentage = style([fontSize(`em(1.15))]);
+
+  let booleanResult =
+    style([
+      fontSize(`em(1.3)),
+      fontWeight(`num(800)),
+      color(`hex("7d7ea2")),
+      marginTop(`px(6)),
+    ]);
 };
 
 module Helpers = {
@@ -58,7 +66,6 @@ module Helpers = {
     | Ok(`FloatCdf(r)) =>
       let (minX, maxX) = g;
       r
-      |> MeasurementValue.toChunks(~bucketSize=3)
       |> MeasurementValue.toPdf
       |> MeasurementValue.FloatCdf.toJs
       |> (
@@ -88,13 +95,22 @@ module Helpers = {
     switch (measurement.value) {
     | Ok(`FloatCdf(r)) =>
       r
-      |> MeasurementValue.toChunks(~bucketSize=3)
       |> MeasurementValue.FloatCdf.toJs
       |> FC.Base.Types.Dist.fromJson
       |> (cdf => Some(<FC__CdfChart__StatSummary cdf />))
-    | Ok(`FloatPoint(r)) => Some(r |> E.Float.with3DigitsPrecision |> ste)
-    | Ok(`Percentage(r)) => Some(r |> E.Float.with3DigitsPrecision |> ste)
-    | Ok(`Binary(r)) => Some(r ? "Yes" |> Utils.ste : "No" |> Utils.ste)
+    | Ok(`FloatPoint(r)) => Some(<FC__NumberShower precision=8 number=r />)
+    | Ok(`Percentage(r)) =>
+      Some(
+        <span className=Styles.percentage>
+          <FC__PercentageShower precision=8 percentage=r />
+        </span>,
+      )
+    | Ok(`Binary(r)) =>
+      Some(
+        <span className=Styles.booleanResult>
+          {(r ? "Yes" : "No") |> Utils.ste}
+        </span>,
+      )
     | _ => None
     };
 
@@ -276,7 +292,8 @@ type column = Table.column(Primary.Measurement.t);
 
 let predictionValueColumn: column =
   Table.Column.make(
-    ~name="Prediction Value" |> ste,
+    ~name="Prediction" |> ste,
+    ~flex=1,
     ~render=
       (measurement: Primary.Measurement.t) =>
         <div>
@@ -289,6 +306,7 @@ let predictionValueColumn: column =
 let agentColumn: column =
   Table.Column.make(
     ~name="Agent" |> ste,
+    ~flex=2,
     ~render=
       (measurement: Primary.Measurement.t) =>
         Helpers.measurerLink(~measurement),
@@ -298,27 +316,18 @@ let agentColumn: column =
 let timeColumn: column =
   Table.Column.make(
     ~name="Time" |> ste,
+    ~flex=1,
     ~render=
       (measurement: Primary.Measurement.t) =>
         Helpers.relevantAt(~m=measurement) |> E.O.React.defaultNull,
     (),
   );
 
-let mesurableColumn: column =
+let measurableColumn: column =
   Table.Column.make(
     ~name="Measurable" |> ste,
     ~render=
-      (measurement: Primary.Measurement.t) =>
-        <div
-          className=Css.(
-            style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])
-          )>
-          <div className=Styles.mainColumn>
-            <div className=Styles.mainColumnTop>
-              {getMeasurableLink(measurement)}
-            </div>
-          </div>
-        </div>,
+      (measurement: Primary.Measurement.t) => getMeasurableLink(measurement),
     ~flex=2,
     (),
   );
@@ -369,7 +378,7 @@ let makeAgentPredictionsTable =
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
   let all: array(column) = [|
-    mesurableColumn,
+    measurableColumn,
     getPredictionDistributionColumn(bounds),
     predictionValueColumn,
     timeColumn,

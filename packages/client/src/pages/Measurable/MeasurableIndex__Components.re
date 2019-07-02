@@ -92,6 +92,7 @@ module LoadedAndUnselected = {
                 query.state == Some(`JUDGED),
               )}
            </Div>
+         | _ => "Error" |> ste
          }}
       </Div>
       <Div

@@ -112,29 +112,35 @@ let getUserId = (agent: Queries.Agent.agent): string => {
 let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>
-    Queries.Agent.component(~id=pageParams.id, ({agent}) =>
-      Queries.Bots.component(~ownerId=getUserId(agent), bots =>
-        SLayout.LayoutConfig.make(
-          ~head=
-            <div>
-              title
-              <FC.Base.Div
-                float=`right
-                className={Css.style([
-                  FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                  FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-                ])}>
-                {agentSection(agent)}
-              </FC.Base.Div>
-            </div>,
-          ~body=
-            Array.length(bots) > 0
-              ? <FC.PageCard.Body>
-                  {Table.fromColumns(Columns.all, bots, ())}
-                </FC.PageCard.Body>
-              : <SLayout.NothingToShow />,
-        )
-        |> layout
-      )
+    Queries.Agent.component(
+      ~id=pageParams.id,
+      ({agent}) => {
+        let showBots = bots =>
+          Array.length(bots) > 0
+            ? <FC.PageCard.Body>
+                {Table.fromColumns(Columns.all, bots, ())}
+              </FC.PageCard.Body>
+            : <SLayout.NothingToShow />;
+
+        let body =
+          getUserId(agent) !== ""
+            ? Queries.Bots.component(~ownerId=getUserId(agent), showBots)
+            : <SLayout.NothingToShow />;
+
+        let head =
+          <div>
+            title
+            <FC.Base.Div
+              float=`right
+              className={Css.style([
+                FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+              ])}>
+              {agentSection(agent)}
+            </FC.Base.Div>
+          </div>;
+
+        SLayout.LayoutConfig.make(~head, ~body) |> layout;
+      },
     ),
 };

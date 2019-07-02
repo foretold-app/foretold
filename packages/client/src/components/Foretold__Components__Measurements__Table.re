@@ -93,7 +93,10 @@ module Helpers = {
 
   let getValueText = (measurement: measurement): React.element =>
     <div className=Styles.secondaryText>
-      {measurement.valueText |> E.O.default("") |> Utils.ste}
+      {measurement.valueText
+       |> E.O.fmap(r => {|"|} ++ r ++ {|"|})
+       |> E.O.default("")
+       |> Utils.ste}
     </div>;
 
   let getDescription = (~m: measurement): option(React.element) => {

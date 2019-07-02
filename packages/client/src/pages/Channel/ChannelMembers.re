@@ -42,13 +42,9 @@ let removeFromChannel = (agentId, channelId) =>
   |> ReasonReact.element;
 
 module Columns = {
-  type column = Table.column(Context.Primary.Types.channelMembership);
+  type column = Table.column(Types.channelMembership);
 
-  let canX =
-      (
-        permission: Context.Primary.permission,
-        record: Context.Primary.Types.channelMembership,
-      ) =>
+  let canX = (permission: Types.permission, record: Types.channelMembership) =>
     record.permissions
     |> Rationale.Option.fmap((permissions: Context.Primary.Permissions.t) =>
          Context.Primary.Permissions.canX(permission, permissions)
@@ -59,9 +55,9 @@ module Columns = {
     Table.Column.make(
       ~name="Agent" |> ReasonReact.string,
       ~render=
-        (membership: Context.Primary.Types.channelMembership) =>
+        (membership: Types.channelMembership) =>
           membership.agent
-          |> Rationale.Option.fmap((r: Context.Primary.Types.agent) =>
+          |> Rationale.Option.fmap((r: Types.agent) =>
                <Foretold__Components__Link
                  linkType={
                    Internal(
@@ -79,7 +75,7 @@ module Columns = {
     Table.Column.make(
       ~name="Role" |> ReasonReact.string,
       ~render=
-        (membership: Context.Primary.Types.channelMembership) =>
+        (membership: Types.channelMembership) =>
           switch (membership.role) {
           | `ADMIN =>
             <div className="ant-tag ant-tag-blue">
@@ -98,7 +94,7 @@ module Columns = {
       Table.Column.make(
         ~name="Change Role" |> ReasonReact.string,
         ~render=
-          (membership: Context.Primary.Types.channelMembership) =>
+          (membership: Types.channelMembership) =>
             <div>
               {switch (membership.role, membership.agent) {
                | (`VIEWER, Some(agent)) =>
@@ -132,7 +128,7 @@ module Columns = {
       Table.Column.make(
         ~name="Remove" |> ReasonReact.string,
         ~render=
-          (membership: Context.Primary.Types.channelMembership) =>
+          (membership: Types.channelMembership) =>
             switch (
               membership.agent,
               canX(`CHANNEL_MEMBERSHIP_DELETE, membership),
@@ -143,7 +139,7 @@ module Columns = {
         (),
       );
 
-  let all = (channelId: string, channel: Context.Primary.Types.channel) => {
+  let all = (channelId: string, channel: Types.channel) => {
     switch (channel.myRole) {
     | Some(`ADMIN) => [|
         agentColumn,
@@ -183,12 +179,7 @@ let addMembersButtonSection = (channelId: string) =>
   </FC.Base.Div>;
 
 let succesFn =
-    (
-      ~channelId: string,
-      ~layout,
-      ~channel: Context.Primary.Types.channel,
-      ~memberships,
-    ) => {
+    (~channelId: string, ~layout, ~channel: Types.channel, ~memberships) => {
   let head =
     switch (channel.myRole) {
     | Some(`ADMIN) =>

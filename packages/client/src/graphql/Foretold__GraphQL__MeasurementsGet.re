@@ -4,7 +4,7 @@ type measurable = {
   "name": string,
   "channelId": string,
   "state": Context.Primary.MeasurableState.t,
-  "valueType": Context.Primary.valueType,
+  "valueType": Types.valueType,
   "stateUpdatedAt": option(MomentRe.Moment.t),
   "expectedResolutionDate": option(MomentRe.Moment.t),
 };
@@ -53,7 +53,7 @@ let toMeasurement = (measurement: measurement): Context.Primary.Measurement.t =>
          switch (k##bot, k##user) {
          | (Some(bot), None) =>
            Some(
-             Context.Primary.Types.Bot(
+             Types.Bot(
                Context.Primary.Bot.make(
                  ~id=bot##id,
                  ~name=Some(bot##name),
@@ -64,7 +64,7 @@ let toMeasurement = (measurement: measurement): Context.Primary.Measurement.t =>
            )
          | (None, Some(user)) =>
            Some(
-             Context.Primary.Types.User(
+             Types.User(
                Context.Primary.User.make(~id=user##id, ~name=user##name, ()),
              ),
            )

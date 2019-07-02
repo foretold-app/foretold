@@ -35,7 +35,7 @@ type node = {
   name: string,
   channelId: string,
   channel: option(channel),
-  valueType: Context.Primary.valueType,
+  valueType: Types.valueType,
   labelCustom: option(string),
   resolutionEndpoint: option(string),
   measurementCount: option(int),

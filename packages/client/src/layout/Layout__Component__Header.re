@@ -55,7 +55,7 @@ let userDropdown = agentId =>
 
 let header = (loggedInUser: Context.Primary.User.t) =>
   switch (loggedInUser.agent) {
-  | Some((agent: Context.Primary.Types.agent)) =>
+  | Some((agent: Types.agent)) =>
     <AntdDropdown
       overlay={userDropdown(agent.id)}
       overlayClassName=Layout__Dropdown.Styles.dropdown>

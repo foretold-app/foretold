@@ -90,9 +90,7 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
          |> E.O.fmap((r: Context.Primary.Agent.t) =>
               r.channelMemberships
               |> E.A.O.defaultEmpty
-              |> Array.map((r: Context.Primary.Types.channelMembership) =>
-                   r.channel
-                 )
+              |> Array.map((r: Types.channelMembership) => r.channel)
               |> E.A.O.concatSomes
               |> Array.mapi((index, channel: Context.Primary.Channel.t) => {
                    let _channel: Context.Primary.Channel.t =

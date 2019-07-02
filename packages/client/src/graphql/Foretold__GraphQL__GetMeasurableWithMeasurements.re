@@ -61,7 +61,7 @@ type measurableQuery = {
       "name": option(string),
     }),
   "state": Context.Primary.MeasurableState.t,
-  "valueType": Context.Primary.valueType,
+  "valueType": Types.valueType,
   "stateUpdatedAt": option(MomentRe.Moment.t),
   "updatedAt": MomentRe.Moment.t,
 };

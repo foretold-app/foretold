@@ -7,7 +7,7 @@ let defaultPage = (loggedInUser: option(Context.Primary.User.t)) =>
   |> E.O.bind(_, loggedInUser =>
        loggedInUser.agent
        |> E.O.bind(_, Context.Primary.Agent.firstChannel)
-       |> E.O.fmap((channel: Context.Primary.Types.channel) => {
+       |> E.O.fmap((channel: Types.channel) => {
             Context.Routing.Url.push(ChannelShow(channel.id));
             <Home />;
           })

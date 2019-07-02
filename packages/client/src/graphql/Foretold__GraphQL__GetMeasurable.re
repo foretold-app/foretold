@@ -8,7 +8,7 @@ type creator = {
 type measurable = {
   id: string,
   name: string,
-  valueType: Context.Primary.valueType,
+  valueType: Types.valueType,
   labelCustom: option(string),
   channelId: string,
   resolutionEndpoint: option(string),

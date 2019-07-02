@@ -5,7 +5,7 @@ type channel = {
 };
 
 type channelMembership = {
-  role: Context.Primary.channelMembershipRole,
+  role: Types.channelMembershipRole,
   channel: option(channel),
 };
 
@@ -20,8 +20,7 @@ let toChannel = (ch: channel) =>
     (),
   );
 
-let toChannelMembership =
-    (ch: channelMembership): Context.Primary.Types.channelMembership =>
+let toChannelMembership = (ch: channelMembership): Types.channelMembership =>
   Context.Primary.ChannelMembership.make(
     ~channel=ch.channel |> E.O.fmap(toChannel),
     ~role=`ADMIN,

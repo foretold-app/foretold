@@ -46,10 +46,7 @@ type bot = {
   "name": string,
   "permissions": {
     .
-    "mutations": {
-      .
-      "allow": Js.Array.t(option(Context.Primary.permission)),
-    },
+    "mutations": {. "allow": Js.Array.t(option(Types.permission))},
   },
 };
 

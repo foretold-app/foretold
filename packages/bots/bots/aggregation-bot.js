@@ -1,10 +1,9 @@
 const _ = require('lodash');
-const { Cdf } = require('@foretold/cdf/cdf');
-const { CdfCombination } = require('@foretold/cdf/cdf-combination');
 
 const { API } = require('../api');
-
 const config = require('../config');
+
+const { Aggregation } = require('./aggregation');
 
 class AggregationBot {
   constructor() {
@@ -21,24 +20,28 @@ class AggregationBot {
     });
 
     if (measurementsNotTagged.length === 0) {
-      console.log(`Measurements (not tagged) are empty.`);
+      console.log(`\x1b[43mMeasurements (not tagged) are empty.\x1b[0m`);
       return true;
     }
 
+    console.log(`\x1b[43m --------------------------------- \x1b[0m`);
     console.log(
-      `Got "${measurementsNotTagged.length}" not tagged measurements ` +
-      `for an aggregation.`
+      `\x1b[43mGot "${measurementsNotTagged.length}" not tagged measurements ` +
+      `for an aggregation.\x1b[0m`
     );
 
     for (const measurement of measurementsNotTagged) {
+
+      console.log(`\x1b[43m --- \x1b[0m`);
+
       const measurableId = measurement.measurableId;
       const createdAt = measurement.createdAt;
       const relevantAt = measurement.createdAt;
       const taggedMeasurementId = measurement.id;
 
       console.log(
-        `Measurable id = "${measurableId}", ` +
-        `created at = "${createdAt}".`
+        `\x1b[43mMeasurable id = "${measurableId}", ` +
+        `created at = "${createdAt}".\x1b[0m`
       );
 
       const measurements = await this.api.measurementsCompetitive({
@@ -46,17 +49,22 @@ class AggregationBot {
         findInDateRange: { endDate: createdAt },
       });
 
-      let inOrder = _.orderBy(measurements, ['createdAt'], ['desc']);
-      let lastOfEachAgent = _.uniqBy(inOrder, r => r.agentId);
+      const measurementsInOrder = _.orderBy(measurements, ['createdAt'], ['desc']);
+      const lastMeasurementOfEachAgent = _.uniqBy(measurementsInOrder, r => r.agentId);
 
-      console.log(`Got "${lastOfEachAgent.length}" for aggregation.`);
-      if (lastOfEachAgent.length === 0) continue;
+      console.log(`\x1b[43mGot "${measurementsInOrder.length}" after sorting.\x1b[0m`);
+      console.log(`\x1b[43mGot "${lastMeasurementOfEachAgent.length}" for aggregation.\x1b[0m`);
+      if (lastMeasurementOfEachAgent.length === 0) continue;
 
-      const aggregated = await this.aggregate(lastOfEachAgent);
-      if (!aggregated) continue;
+      const aggregation = new Aggregation(lastMeasurementOfEachAgent);
+      const aggregated = await aggregation.main();
+      if (!aggregated) {
+        console.log(`\x1b[43mNothing to aggregate.\x1b[0m`);
+        continue;
+      }
 
-      const measurementIds = lastOfEachAgent.map(item => item.id);
-      console.log(`Measurement IDs "${measurementIds.join(', ')}".`);
+      const measurementIds = lastMeasurementOfEachAgent.map(item => item.id);
+      console.log(`\x1b[43mMeasurement IDs "${measurementIds.join(', ')}".\x1b[0m`);
 
       await this.api.measurementCreateAggregation({
         measurableId,
@@ -69,31 +77,6 @@ class AggregationBot {
     return true;
   }
 
-  /**
-   * Need to aggregate only "floatCdf".
-   * @param {object[]} measurements
-   * @return {Promise<{floatCdf: {xs: number[], ys: number[]}} | null>}
-   */
-  async aggregate(measurements) {
-    const cdfs = measurements.filter((measurement) => {
-      return !!_.get(measurement, 'value.floatCdf');
-    }).map((measurement) => {
-      const xs = _.get(measurement, 'value.floatCdf.xs');
-      const ys = _.get(measurement, 'value.floatCdf.ys');
-      return new Cdf(xs, ys);
-    });
-
-    if (cdfs.length === 0) return null;
-
-    const combined = new CdfCombination(cdfs).combine(config.CDF_COMBINE_SIZE);
-
-    return {
-      floatCdf: {
-        xs: combined.xs,
-        ys: combined.ys
-      },
-    };
-  }
 }
 
 module.exports = {

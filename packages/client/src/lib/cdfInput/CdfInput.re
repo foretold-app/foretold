@@ -42,7 +42,7 @@ module Styles = {
 };
 
 let competitorTypeSelect =
-    (~state, ~send, ~measurable: Context.Primary.Measurable.t)
+    (~state, ~send, ~measurable: Primary.Measurable.t)
     : ReasonReact.reactElement => {
   let options =
     switch (measurable.state) {
@@ -81,7 +81,7 @@ let getIsValid = (state: state): bool =>
 let dataTypeFacade =
     (
       competitorType: string,
-      measurable: Context.Primary.Measurable.t,
+      measurable: Primary.Measurable.t,
       dataType: option(string),
     )
     : string =>
@@ -121,7 +121,7 @@ let mainBlock =
       ~isCreator: bool,
       ~send,
       ~onSubmit,
-      ~measurable: Context.Primary.Measurable.t,
+      ~measurable: Primary.Measurable.t,
     )
     : ReasonReact.reactElement => {
   let isValid = getIsValid(state);
@@ -253,7 +253,7 @@ let make =
       ~onUpdate=_ => (),
       ~isCreator=false,
       ~onSubmit=_ => (),
-      ~measurable: Context.Primary.Measurable.t,
+      ~measurable: Primary.Measurable.t,
       _children,
     ) => {
   ...component,

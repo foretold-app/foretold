@@ -1,4 +1,4 @@
-open Context.Primary;
+open Primary;
 
 let component = ReasonReact.statelessComponent("MeasurablesSeriesTable");
 
@@ -42,48 +42,38 @@ let make =
   ...component,
   render: _self =>
     <div className=Styles.group>
-      {
-        measurables
-        |> Array.map((m: Measurable.t) =>
-             <div
-               className={Styles.row(Some(m.id) == selected)}
-               onClick={_e => onClick(m.id)}>
-               <div className=Styles.column>
-                 {
-                   MeasurableItems.MeasurableEntityLinks.nameEntityLink(
-                     ~m,
-                     ~className=Shared.TagLink.item,
-                   )
-                   |> E.O.React.defaultNull
-                 }
-               </div>
-               <div className=Styles.column>
-                 {
-                   MeasurableItems.MeasurableEntityLinks.propertyEntityLink(
-                     ~m,
-                     ~className=Shared.TagLink.property,
-                   )
-                   |> E.O.React.defaultNull
-                 }
-               </div>
-               <div className=Styles.column>
-                 {
-                   MeasurableItems.dateItem(~m, ~showOn=false, ())
-                   |> E.O.React.defaultNull
-                 }
-               </div>
-               <div className=Styles.column>
-                 {MeasurableItems.measurements(~m) |> E.O.React.defaultNull}
-                 {MeasurableItems.measurers(~m) |> E.O.React.defaultNull}
-               </div>
-               <div className=Styles.column>
-                 <Foretold__Components__Measurable.StatusDisplay
-                   measurable=m
-                 />
-               </div>
-             </div>
-           )
-        |> ReasonReact.array
-      }
+      {measurables
+       |> Array.map((m: Measurable.t) =>
+            <div
+              className={Styles.row(Some(m.id) == selected)}
+              onClick={_e => onClick(m.id)}>
+              <div className=Styles.column>
+                {MeasurableItems.MeasurableEntityLinks.nameEntityLink(
+                   ~m,
+                   ~className=Shared.TagLink.item,
+                 )
+                 |> E.O.React.defaultNull}
+              </div>
+              <div className=Styles.column>
+                {MeasurableItems.MeasurableEntityLinks.propertyEntityLink(
+                   ~m,
+                   ~className=Shared.TagLink.property,
+                 )
+                 |> E.O.React.defaultNull}
+              </div>
+              <div className=Styles.column>
+                {MeasurableItems.dateItem(~m, ~showOn=false, ())
+                 |> E.O.React.defaultNull}
+              </div>
+              <div className=Styles.column>
+                {MeasurableItems.measurements(~m) |> E.O.React.defaultNull}
+                {MeasurableItems.measurers(~m) |> E.O.React.defaultNull}
+              </div>
+              <div className=Styles.column>
+                <Foretold__Components__Measurable.StatusDisplay measurable=m />
+              </div>
+            </div>
+          )
+       |> ReasonReact.array}
     </div>,
 };

@@ -2,12 +2,12 @@ module FormConfig = {
   type field(_) =
     | Name: field(string)
     | Description: field(string)
-    | CompetitorType: field(Context.Primary.CompetitorType.t);
+    | CompetitorType: field(Primary.CompetitorType.t);
 
   type state = {
     name: string,
     description: string,
-    competitorType: Context.Primary.CompetitorType.t,
+    competitorType: Primary.CompetitorType.t,
   };
 
   let get: type value. (state, field(value)) => value =
@@ -29,8 +29,7 @@ module FormConfig = {
 
 module Form = ReFormNext.Make(FormConfig);
 
-let withForm =
-    (onSubmit, bot: option(Context.Primary.Bot.t), innerComponentFn) => {
+let withForm = (onSubmit, bot: option(Primary.Bot.t), innerComponentFn) => {
   let initialState: FormConfig.state =
     switch (bot) {
     | Some(bot) => {
@@ -56,8 +55,8 @@ let withForm =
   |> E.React.el;
 };
 
-let onSuccess = (loggedInUser: Context.Primary.User.t, ()) => {
-  Context.Primary.User.getAgent(loggedInUser, agent =>
+let onSuccess = (loggedInUser: Primary.User.t, ()) => {
+  Primary.User.getAgent(loggedInUser, agent =>
     Context.Routing.Url.push(Agent({agentId: agent.id, subPage: AgentBots}))
   );
   ReasonReact.null;

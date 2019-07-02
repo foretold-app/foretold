@@ -1,9 +1,9 @@
 module ReducerConfig = {
-  type itemType = Context.Primary.Measurable.t;
+  type itemType = Primary.Measurable.t;
 
   type callFnParams = {
     channelId: string,
-    states: array(Context.Primary.MeasurableState.t),
+    states: array(Primary.MeasurableState.t),
   };
 
   let getId = (params: itemType) => params.id;
@@ -19,10 +19,10 @@ module ReducerConfig = {
 
 module Reducer = PaginationReducerFunctor.Make(ReducerConfig);
 
-type channel = Context.Primary.Channel.t;
+type channel = Primary.Channel.t;
 type seriesCollection =
   array(Foretold__GraphQL.Queries.SeriesCollection.series);
-type loggedInUser = Context.Primary.User.t;
+type loggedInUser = Primary.User.t;
 type reducerParams = Reducer.Types.reducerParams;
 type seriesQuery = E.HttpResponse.t(seriesCollection);
 type channelQuery = E.HttpResponse.t(channel);

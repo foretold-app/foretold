@@ -1,14 +1,13 @@
 open SLayout;
 open Utils;
 open Style.Grid;
-open Rationale.Function.Infix;
 
 let component = ReasonReact.statelessComponent("Channel Layout Page");
 
 let make =
     (
       agentPage: Context.Routing.AgentPage.t,
-      loggedInUser: Context.Primary.User.t,
+      loggedInUser: Primary.User.t,
       {head, body}: LayoutConfig.t,
     ) => {
   ...component,
@@ -26,7 +25,7 @@ let make =
             | _ => ""
             };
 
-          let secondLevel = AgentTabs.Component.tabs(agentPage);
+          let secondLevel = AgentTabs.Component.tabs(agentPage, agent);
 
           <>
             <FC.GroupHeader> {name |> ste} </FC.GroupHeader>

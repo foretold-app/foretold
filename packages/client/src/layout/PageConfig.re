@@ -4,7 +4,7 @@ open Rationale.Function.Infix;
 
 module Wrapper = {
   type channelId = string;
-  type loggedInUser = Client.Context.Primary.User.t;
+  type loggedInUser = Primary.User.t;
 
   type t =
     | Channel(channelId)
@@ -27,7 +27,7 @@ module Wrapper = {
 module Renderer = {
   type channelId = string;
   type channelPage = Context.Routing.ChannelPage.t;
-  type loggedInUser = Context.Primary.User.t;
+  type loggedInUser = Primary.User.t;
 
   type t =
     | Channel(channelPage, loggedInUser)

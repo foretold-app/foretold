@@ -2,8 +2,8 @@ open Utils;
 open MomentRe;
 open Css;
 
-type measurement = Context.Primary.Measurement.t;
-type measurable = Context.Primary.Measurable.t;
+type measurement = Primary.Measurement.t;
+type measurable = Primary.Measurable.t;
 module Items = Foretold__Components__Measurable__Items;
 
 module Styles = {
@@ -168,7 +168,7 @@ module Helpers = {
     let aLink =
       switch (
         measurement.agent,
-        measurement.agent |> E.O.bind(_, Context.Primary.Agent.name),
+        measurement.agent |> E.O.bind(_, Primary.Agent.name),
       ) {
       | (Some(agent), Some(name)) =>
         Some(
@@ -199,7 +199,7 @@ module Helpers = {
         selector(" a", [fontSize(`em(0.9))]),
       ]);
 
-    let isJudge = Context.Primary.Measurement.isJudgement(measurement);
+    let isJudge = Primary.Measurement.isJudgement(measurement);
 
     if (isJudge) {
       <div className=judgementStyle>
@@ -272,13 +272,13 @@ let getMeasurableLink = (m: measurement) => {
   };
 };
 
-type column = Table.column(Context.Primary.Measurement.t);
+type column = Table.column(Primary.Measurement.t);
 
 let predictionValueColumn: column =
   Table.Column.make(
     ~name="Prediction Value" |> ste,
     ~render=
-      (measurement: Context.Primary.Measurement.t) =>
+      (measurement: Primary.Measurement.t) =>
         <div>
           {Helpers.statSummary(measurement) |> E.O.React.defaultNull}
           {Helpers.getValueText(measurement)}
@@ -290,7 +290,7 @@ let agentColumn: column =
   Table.Column.make(
     ~name="Agent" |> ste,
     ~render=
-      (measurement: Context.Primary.Measurement.t) =>
+      (measurement: Primary.Measurement.t) =>
         Helpers.measurerLink(~measurement),
     (),
   );
@@ -299,7 +299,7 @@ let timeColumn: column =
   Table.Column.make(
     ~name="Time" |> ste,
     ~render=
-      (measurement: Context.Primary.Measurement.t) =>
+      (measurement: Primary.Measurement.t) =>
         Helpers.relevantAt(~m=measurement) |> E.O.React.defaultNull,
     (),
   );
@@ -308,7 +308,7 @@ let mesurableColumn: column =
   Table.Column.make(
     ~name="Measurable" |> ste,
     ~render=
-      (measurement: Context.Primary.Measurement.t) =>
+      (measurement: Primary.Measurement.t) =>
         <div
           className=Css.(
             style([paddingTop(`em(1.0)), paddingBottom(`em(0.5))])
@@ -327,11 +327,11 @@ let getPredictionDistributionColumn = (bounds): column =>
   Table.Column.make(
     ~name="Prediction Distribution" |> ste,
     ~render=
-      (measurement: Context.Primary.Measurement.t) =>
+      (measurement: Primary.Measurement.t) =>
         Helpers.smallDistribution(measurement, bounds)
         |> E.O.React.defaultNull,
     ~show=
-      (measurement: Context.Primary.Measurement.t) =>
+      (measurement: Primary.Measurement.t) =>
         switch (measurement.measurable) {
         | Some(measurable) => measurable.valueType !== `PERCENTAGE
         | _ => true
@@ -362,7 +362,7 @@ let make = (measurementsList: list(measurement)): ReasonReact.reactElement => {
 let makeAgentPredictionsTable =
     (
       ~measurementsList: list(measurement),
-      ~onSelect=(_measurement: Context.Primary.Measurement.t) => (),
+      ~onSelect=(_measurement: Primary.Measurement.t) => (),
       (),
     )
     : ReasonReact.reactElement => {
@@ -377,7 +377,7 @@ let makeAgentPredictionsTable =
 
   let measurementsList' = measurementsList |> E.L.sort(sort);
 
-  let onRowClb = (measurement: Context.Primary.Measurement.t) => {
+  let onRowClb = (measurement: Primary.Measurement.t) => {
     onSelect(measurement);
     ();
   };

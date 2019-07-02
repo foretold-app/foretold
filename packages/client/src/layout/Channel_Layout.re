@@ -12,7 +12,7 @@ let makeWithPage =
 
     let toEl = fn => fn |> E.React.makeToEl(~key=channelId);
 
-    let successFn = (channel: Context.Primary.Channel.t) => {
+    let successFn = (channel: Primary.Channel.t) => {
       let layout =
         Channel_Layout_C.makeWithEl(
           channelPage,

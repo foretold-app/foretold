@@ -3,8 +3,8 @@ type measurable = {
   "id": string,
   "name": string,
   "channelId": string,
-  "state": Context.Primary.MeasurableState.t,
-  "valueType": Context.Primary.valueType,
+  "state": Primary.MeasurableState.t,
+  "valueType": Types.valueType,
   "stateUpdatedAt": option(MomentRe.Moment.t),
   "expectedResolutionDate": option(MomentRe.Moment.t),
 };
@@ -20,7 +20,7 @@ type measurement = {
           .
           "id": string,
           "name": string,
-          "competitorType": Context.Primary.CompetitorType.t,
+          "competitorType": Primary.CompetitorType.t,
         }),
       "id": string,
       "name": option(string),
@@ -34,7 +34,7 @@ type measurement = {
   "description": option(string),
   "valueText": option(string),
   "relevantAt": option(MomentRe.Moment.t),
-  "competitorType": Context.Primary.CompetitorType.t,
+  "competitorType": Primary.CompetitorType.t,
   "createdAt": MomentRe.Moment.t,
   "taggedMeasurementId": option(string),
   "measurable": option(measurable),
@@ -43,18 +43,18 @@ type measurement = {
 
 type measurements = option({. "edges": option(Js.Array.t(measurement))});
 
-let toMeasurement = (measurement: measurement): Context.Primary.Measurement.t => {
-  open Context.Primary.Agent;
+let toMeasurement = (measurement: measurement): Primary.Measurement.t => {
+  open Primary.Agent;
   let agent = measurement##agent;
 
-  let agentType: option(Context.Primary.AgentType.t) =
+  let agentType: option(Primary.AgentType.t) =
     agent
     |> E.O.bind(_, k =>
          switch (k##bot, k##user) {
          | (Some(bot), None) =>
            Some(
-             Context.Primary.Types.Bot(
-               Context.Primary.Bot.make(
+             Types.Bot(
+               Primary.Bot.make(
                  ~id=bot##id,
                  ~name=Some(bot##name),
                  ~competitorType=bot##competitorType,
@@ -64,21 +64,21 @@ let toMeasurement = (measurement: measurement): Context.Primary.Measurement.t =>
            )
          | (None, Some(user)) =>
            Some(
-             Context.Primary.Types.User(
-               Context.Primary.User.make(~id=user##id, ~name=user##name, ()),
+             Types.User(
+               Primary.User.make(~id=user##id, ~name=user##name, ()),
              ),
            )
          | (_, _) => None
          }
        );
 
-  let agent: option(Context.Primary.Agent.t) =
+  let agent: option(Primary.Agent.t) =
     agent
     |> Rationale.Option.fmap(k =>
-         Context.Primary.Agent.make(~id=k##id, ~agentType, ())
+         Primary.Agent.make(~id=k##id, ~agentType, ())
        );
 
-  Context.Primary.Measurement.make(
+  Primary.Measurement.make(
     ~id=measurement##id,
     ~description=measurement##description,
     ~valueText=measurement##valueText,
@@ -92,7 +92,7 @@ let toMeasurement = (measurement: measurement): Context.Primary.Measurement.t =>
       switch (measurement##measurable) {
       | Some(measurable) =>
         Some(
-          Context.Primary.Measurable.make(
+          Primary.Measurable.make(
             ~id=measurable##id,
             ~name=measurable##name,
             ~channelId=measurable##channelId,
@@ -181,7 +181,7 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-type measurementEdges = Client.Context.Primary.Connection.edges(measurement);
+type measurementEdges = Primary.Connection.edges(measurement);
 
 let queryToComponent = (query, innerComponentFn) =>
   QueryComponent.make(~variables=query##variables, response =>
@@ -190,7 +190,7 @@ let queryToComponent = (query, innerComponentFn) =>
     |> Rationale.Result.fmap(result =>
          result##measurements
          |> Rationale.Option.fmap(
-              Context.Primary.Connection.fromJson(toMeasurement),
+              Primary.Connection.fromJson(toMeasurement),
             )
          |> innerComponentFn
        )
@@ -198,13 +198,13 @@ let queryToComponent = (query, innerComponentFn) =>
   )
   |> ReasonReact.element;
 
-type measurableStates = Context.Primary.MeasurableState.t;
+type measurableStates = Primary.MeasurableState.t;
 
 type inputType('a) =
   (~first: int=?, ~last: int=?, ~after: string=?, ~before: string=?, unit) =>
   'a;
 
-type direction = Context.Primary.Connection.direction;
+type direction = Primary.Connection.direction;
 
 let queryDirection = (~pageLimit, ~direction, ~fn: inputType('a), ()) =>
   switch ((direction: direction)) {
@@ -215,9 +215,7 @@ let queryDirection = (~pageLimit, ~direction, ~fn: inputType('a), ()) =>
 
 let unpackResults = result =>
   result##measurements
-  |> Rationale.Option.fmap(
-       Context.Primary.Connection.fromJson(toMeasurement),
-     );
+  |> Rationale.Option.fmap(Primary.Connection.fromJson(toMeasurement));
 
 let componentMaker = (query, innerComponentFn) =>
   QueryComponent.make(~variables=query##variables, response =>

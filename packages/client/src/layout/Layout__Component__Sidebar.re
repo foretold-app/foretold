@@ -65,7 +65,7 @@ module Styles = {
 };
 
 let component = ReasonReact.statelessComponent("Sidebar");
-let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
+let make = (~channelId, ~loggedInUser: Primary.User.t, _children) => {
   ...component,
   render: _self =>
     <div className=Styles.sidebar>
@@ -80,23 +80,21 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
       <div className=Styles.over>
         <C.Link
           key="channel-global-item"
-          linkType={Internal(Context.Primary.Channel.globalLink())}
+          linkType={Internal(Primary.Channel.globalLink())}
           className={
             Some("home") == channelId ? Styles.selectedItem : Styles.item
           }>
-          {Context.Primary.Channel.presentGlobal(~hashClassName=Styles.hash)}
+          {Primary.Channel.presentGlobal(~hashClassName=Styles.hash)}
         </C.Link>
         {loggedInUser.agent
-         |> E.O.fmap((r: Context.Primary.Agent.t) =>
+         |> E.O.fmap((r: Primary.Agent.t) =>
               r.channelMemberships
               |> E.A.O.defaultEmpty
-              |> Array.map((r: Context.Primary.Types.channelMembership) =>
-                   r.channel
-                 )
+              |> Array.map((r: Types.channelMembership) => r.channel)
               |> E.A.O.concatSomes
-              |> Array.mapi((index, channel: Context.Primary.Channel.t) => {
-                   let _channel: Context.Primary.Channel.t =
-                     Context.Primary.Channel.make(
+              |> Array.mapi((index, channel: Primary.Channel.t) => {
+                   let _channel: Primary.Channel.t =
+                     Primary.Channel.make(
                        ~id=channel.id,
                        ~name=channel.name,
                        ~isArchived=false,
@@ -105,14 +103,12 @@ let make = (~channelId, ~loggedInUser: Context.Primary.User.t, _children) => {
                      );
                    <C.Link
                      key={index |> string_of_int}
-                     linkType={
-                       Internal(Context.Primary.Channel.showLink(_channel))
-                     }
+                     linkType={Internal(Primary.Channel.showLink(_channel))}
                      className={
                        Some(_channel.id) == channelId
                          ? Styles.selectedItem : Styles.item
                      }>
-                     {Context.Primary.Channel.present(
+                     {Primary.Channel.present(
                         ~hashClassName=Styles.hash,
                         _channel,
                       )}

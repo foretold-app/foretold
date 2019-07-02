@@ -1,6 +1,6 @@
-let statusShow = (~measurable: Context.Primary.Measurable.t) =>
+let statusShow = (~measurable: Primary.Measurable.t) =>
   switch (
-    Context.Primary.Measurable.toStatus(measurable),
+    Primary.Measurable.toStatus(measurable),
     measurable.expectedResolutionDate,
     measurable.stateUpdatedAt,
   ) {
@@ -21,7 +21,7 @@ let statusShow = (~measurable: Context.Primary.Measurable.t) =>
 
 let component = ReasonReact.statelessComponent("StatusDisplay");
 
-let make = (~measurable: Context.Primary.Measurable.t, _children) => {
+let make = (~measurable: Primary.Measurable.t, _children) => {
   ...component,
   render: _self => statusShow(~measurable),
 };

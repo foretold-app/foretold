@@ -1,7 +1,7 @@
 module ReducerConfig = {
-  type itemType = Context.Primary.Measurable.t;
+  type itemType = Primary.Measurable.t;
   type callFnParams = string;
-  let getId = (e: Context.Primary.Measurable.t) => e.id;
+  let getId = (e: Primary.Measurable.t) => e.id;
   let callFn = (e: callFnParams) =>
     Foretold__GraphQL.Queries.Measurables.componentWithCreator(~creatorId=e);
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
@@ -15,7 +15,7 @@ type pageParams = {id: string};
 let make =
     (
       ~pageParams: pageParams,
-      ~loggedInUser: Context.Primary.User.t,
+      ~loggedInUser: Primary.User.t,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {

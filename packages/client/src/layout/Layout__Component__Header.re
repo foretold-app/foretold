@@ -53,9 +53,9 @@ let userDropdown = agentId =>
     <div className=Layout__Dropdown.Styles.clear />
   </div>;
 
-let header = (loggedInUser: Context.Primary.User.t) =>
+let header = (loggedInUser: Primary.User.t) =>
   switch (loggedInUser.agent) {
-  | Some((agent: Context.Primary.Types.agent)) =>
+  | Some((agent: Types.agent)) =>
     <AntdDropdown
       overlay={userDropdown(agent.id)}
       overlayClassName=Layout__Dropdown.Styles.dropdown>
@@ -68,7 +68,7 @@ let header = (loggedInUser: Context.Primary.User.t) =>
   | None => ReasonReact.null
   };
 
-let make = (~loggedInUser: Context.Primary.User.t, _children) => {
+let make = (~loggedInUser: Primary.User.t, _children) => {
   ...component,
   render: _self =>
     <Div styles=[Styles.outer]>

@@ -38,7 +38,7 @@ let unpackEdges = (a): array('a) => {
 
 type bot = {
   .
-  "competitorType": Context.Primary.CompetitorType.t,
+  "competitorType": Primary.CompetitorType.t,
   "id": string,
   "description": option(string),
   "token": option(string),
@@ -46,10 +46,7 @@ type bot = {
   "name": string,
   "permissions": {
     .
-    "mutations": {
-      .
-      "allow": Js.Array.t(option(Context.Primary.permission)),
-    },
+    "mutations": {. "allow": Js.Array.t(option(Types.permission))},
   },
 };
 
@@ -57,9 +54,9 @@ let toBot = (botJson: bot) => {
   let allowMutations =
     botJson##permissions##mutations##allow |> E.A.O.concatSome |> E.A.to_list;
 
-  let permissions = Context.Primary.Permissions.make(allowMutations);
+  let permissions = Primary.Permissions.make(allowMutations);
 
-  Context.Primary.Bot.make(
+  Primary.Bot.make(
     ~id=botJson##id,
     ~name=Some(botJson##name),
     ~description=botJson##description,
@@ -67,9 +64,7 @@ let toBot = (botJson: bot) => {
     ~token=botJson##token,
     ~agent=
       botJson##agent
-      |> E.O.fmap(agentJson =>
-           Context.Primary.Agent.make(~id=agentJson##id, ())
-         ),
+      |> E.O.fmap(agentJson => Primary.Agent.make(~id=agentJson##id, ())),
     ~permissions=Some(permissions),
     (),
   );

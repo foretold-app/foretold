@@ -5,14 +5,14 @@ type channel = {
 };
 
 type channelMembership = {
-  role: Context.Primary.channelMembershipRole,
+  role: Types.channelMembershipRole,
   channel: option(channel),
 };
 
 type channelMemberships = Js.Array.t(option(channelMembership));
 
 let toChannel = (ch: channel) =>
-  Context.Primary.Channel.make(
+  Primary.Channel.make(
     ~id=ch.id,
     ~name=ch.name,
     ~isArchived=false,
@@ -20,9 +20,8 @@ let toChannel = (ch: channel) =>
     (),
   );
 
-let toChannelMembership =
-    (ch: channelMembership): Context.Primary.Types.channelMembership =>
-  Context.Primary.ChannelMembership.make(
+let toChannelMembership = (ch: channelMembership): Types.channelMembership =>
+  Primary.ChannelMembership.make(
     ~channel=ch.channel |> E.O.fmap(toChannel),
     ~role=`ADMIN,
     ~agent=None,
@@ -36,7 +35,7 @@ type agent = {
 };
 
 let toAgent = (a: agent) =>
-  Context.Primary.Agent.make(
+  Primary.Agent.make(
     ~id=a.id,
     ~name=a.name,
     ~channelMemberships=
@@ -58,7 +57,7 @@ type user = {
 type t = option(user);
 
 let toUser = (a: user) =>
-  Context.Primary.User.make(
+  Primary.User.make(
     ~id=a.id,
     ~auth0Id=a.auth0Id,
     ~agent=a.agent |> E.O.fmap(toAgent),

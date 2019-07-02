@@ -42,7 +42,7 @@ module WithEditMutation = {
             expectedResolutionDate |> Js.Json.string |> Rationale.Option.some,
           "resolutionEndpoint": resolutionEndpoint |> Rationale.Option.some,
           "labelSubject": labelSubject |> Rationale.Option.some,
-          "valueType": valueType |> Context.Primary.Measurable.valueTypeToEnum,
+          "valueType": valueType |> Primary.Measurable.valueTypeToEnum,
         },
         (),
       );
@@ -59,8 +59,7 @@ module CMutationForm =
 
 let formCreation =
     (id: string, m: Queries.Measurable.measurable): React.element => {
-  let measurable: Context.Primary.Measurable.t =
-    Queries.Measurable.toMeasurable(m);
+  let measurable: Primary.Measurable.t = Queries.Measurable.toMeasurable(m);
 
   WithEditMutation.Mutation.make((mutation, data) =>
     MeasurableForm.SignUpForm.make(
@@ -96,8 +95,7 @@ let formCreation =
         resolutionEndpoint: measurable.resolutionEndpoint |> E.O.default(""),
         showDescriptionProperty: measurable.name == "" ? "TRUE" : "FALSE",
         labelProperty: measurable.labelProperty |> E.O.default(""),
-        valueType:
-          measurable.valueType |> Context.Primary.Measurable.valueTypeToStr,
+        valueType: measurable.valueType |> Primary.Measurable.valueTypeToStr,
       },
       ~schema=[(`name, Custom(_ => None))],
       ({handleSubmit, handleChange, form, _}) =>

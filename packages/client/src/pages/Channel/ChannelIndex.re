@@ -35,8 +35,8 @@ let table =
 let nameS = style([fontWeight(`black), fontSize(`em(1.2))]);
 
 module Columns = {
-  type record = Context.Primary.Channel.t;
-  type column = Table.column(Context.Primary.Channel.t);
+  type record = Primary.Channel.t;
+  type column = Table.column(Primary.Channel.t);
 
   let nameColumn: column =
     Table.Column.make(
@@ -110,7 +110,7 @@ module Columns = {
 
 let make =
     (
-      ~loggedInUser: Context.Primary.User.t,
+      ~loggedInUser: Primary.User.t,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {

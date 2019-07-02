@@ -2,12 +2,12 @@ open Context.Routing;
 open Foretold__GraphQL;
 open Pages;
 
-let defaultPage = (loggedInUser: option(Context.Primary.User.t)) =>
+let defaultPage = (loggedInUser: option(Primary.User.t)) =>
   loggedInUser
   |> E.O.bind(_, loggedInUser =>
        loggedInUser.agent
-       |> E.O.bind(_, Context.Primary.Agent.firstChannel)
-       |> E.O.fmap((channel: Context.Primary.Types.channel) => {
+       |> E.O.bind(_, Primary.Agent.firstChannel)
+       |> E.O.fmap((channel: Types.channel) => {
             Context.Routing.Url.push(ChannelShow(channel.id));
             <Home />;
           })

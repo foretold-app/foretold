@@ -20,13 +20,29 @@ module Component = {
     </FC.Tab>;
   };
 
-  let tabs = (page: Context.Routing.AgentPage.t) => {
+  let tabs =
+      (
+        page: Context.Routing.AgentPage.t,
+        agent: Foretold__GraphQL.Queries.Agent.agent,
+      ) => {
     let agentId = page.agentId;
     let subPage = page.subPage;
-    <>
-      {tab(agentId, subPage, AgentMeasurements)}
-      {tab(agentId, subPage, AgentMeasurables)}
-      {tab(agentId, subPage, AgentBots)}
-    </>;
+
+    let agentType =
+      switch (agent) {
+      | {bot: Some(_)} => `BOT
+      | _ => `USER
+      };
+
+    agentType == `USER
+      ? <>
+          {tab(agentId, subPage, AgentMeasurements)}
+          {tab(agentId, subPage, AgentMeasurables)}
+          {tab(agentId, subPage, AgentBots)}
+        </>
+      : <>
+          {tab(agentId, subPage, AgentMeasurements)}
+          {tab(agentId, subPage, AgentMeasurables)}
+        </>;
   };
 };

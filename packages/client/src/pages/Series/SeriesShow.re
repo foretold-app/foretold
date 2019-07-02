@@ -1,9 +1,9 @@
 open Foretold__GraphQL;
 
 module Config = {
-  type itemType = Context.Primary.Measurable.t;
+  type itemType = Primary.Measurable.t;
   type callFnParams = string;
-  let getId = (e: Context.Primary.Measurable.t) => e.id;
+  let getId = (e: Primary.Measurable.t) => e.id;
   let callFn = (e: callFnParams) =>
     Foretold__GraphQL.Queries.Measurables.componentWithSeries(~seriesId=e);
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
@@ -46,7 +46,7 @@ let make =
     (
       ~channelId: string,
       ~id: string,
-      ~loggedInUser: Context.Primary.User.t,
+      ~loggedInUser: Primary.User.t,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {
@@ -60,7 +60,7 @@ let make =
           switch (channel, series, selectWithPaginationParams.selection) {
           | (
               Success(channel),
-              Some((series: Context.Primary.Series.t)),
+              Some((series: Primary.Series.t)),
               Some(selection),
             ) =>
             <>
@@ -70,11 +70,7 @@ let make =
                )}
               {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
             </>
-          | (
-              Success(channel),
-              Some((series: Context.Primary.Series.t)),
-              None,
-            ) =>
+          | (Success(channel), Some((series: Primary.Series.t)), None) =>
             <>
               {SLayout.seriesHead(channel, series.name |> E.O.default(""))}
               {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}

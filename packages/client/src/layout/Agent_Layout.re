@@ -2,7 +2,7 @@
 let makeWithPage =
     (
       agentPage: Context.Routing.AgentPage.t,
-      loggedInUser: option(Client.Context.Primary.User.t),
+      loggedInUser: option(Primary.User.t),
     )
     : ReasonReact.reactElement => {
   let agentId = agentPage.agentId;

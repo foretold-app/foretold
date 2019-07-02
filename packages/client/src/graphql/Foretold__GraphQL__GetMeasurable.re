@@ -8,7 +8,7 @@ type creator = {
 type measurable = {
   id: string,
   name: string,
-  valueType: Context.Primary.valueType,
+  valueType: Types.valueType,
   labelCustom: option(string),
   channelId: string,
   resolutionEndpoint: option(string),
@@ -17,7 +17,7 @@ type measurable = {
   createdAt: MomentRe.Moment.t,
   updatedAt: MomentRe.Moment.t,
   expectedResolutionDate: option(MomentRe.Moment.t),
-  state: Context.Primary.MeasurableState.t,
+  state: Primary.MeasurableState.t,
   stateUpdatedAt: option(MomentRe.Moment.t),
   creator: option(creator),
   labelSubject: option(string),
@@ -25,8 +25,8 @@ type measurable = {
   labelProperty: option(string),
 };
 
-let toMeasurable = (m: measurable): Context.Primary.Measurable.t =>
-  Context.Primary.Measurable.make(
+let toMeasurable = (m: measurable): Primary.Measurable.t =>
+  Primary.Measurable.make(
     ~id=m.id,
     ~name=m.name,
     ~valueType=m.valueType,
@@ -62,7 +62,7 @@ module Query = [%graphql
            labelSubject
            labelProperty
            labelOnDate @bsDecoder(fn: "E.J.O.toMoment")
-           state @bsDecoder(fn: "Context.Primary.MeasurableState.fromEnum")
+           state @bsDecoder(fn: "Primary.MeasurableState.fromEnum")
            stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
            expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
            createdAt @bsDecoder(fn: "E.J.toMoment")

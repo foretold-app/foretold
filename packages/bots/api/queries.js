@@ -34,7 +34,12 @@ query search (
     edges {
       node {
         id
-        value { floatCdf { xs ys } floatPoint }
+        value {
+          floatCdf { xs ys } 
+          floatPoint 
+          percentage 
+          binary
+        }
         measurableId
         createdAt
         agentId

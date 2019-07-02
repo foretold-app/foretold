@@ -32,7 +32,7 @@ class AggregationBot {
 
     for (const measurement of measurementsNotTagged) {
 
-      console.log(`\x1b[43m ---> \x1b[0m`);
+      console.log(`\x1b[43m --- \x1b[0m`);
 
       const measurableId = measurement.measurableId;
       const createdAt = measurement.createdAt;

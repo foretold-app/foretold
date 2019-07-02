@@ -65,8 +65,10 @@ class Aggregation {
    * @return {Promise<{percentage: number} | null>}
    */
   async _aggregatePercentage(measurements) {
-    const values = measurements.filter((measurement) => {
-      return !!_.get(measurement, 'value.percentage');
+    const values = measurements.map((measurement) => {
+      return _.get(measurement, 'value.percentage');
+    }).filter((value) => {
+      return value !== null && value !== undefined;
     });
 
     if (values.length === 0) return null;

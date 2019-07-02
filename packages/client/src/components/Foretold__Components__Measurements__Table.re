@@ -9,13 +9,6 @@ module Items = Foretold__Components__Measurable__Items;
 module Styles = {
   open Css;
 
-  let middle =
-    style([
-      fontSize(`em(1.3)),
-      fontWeight(`num(800)),
-      color(`hex("7d7ea2")),
-    ]);
-
   let descriptionStyle =
     style([
       marginTop(`px(5)),
@@ -35,12 +28,11 @@ module Styles = {
 
   let percentage = style([fontSize(`em(1.15))]);
 
-  let booleanResult =
+  let result =
     style([
-      fontSize(`em(1.3)),
+      fontSize(`em(1.15)),
       fontWeight(`num(800)),
       color(`hex("7d7ea2")),
-      marginTop(`px(6)),
     ]);
 };
 
@@ -69,7 +61,7 @@ module Helpers = {
       );
     | Ok(`FloatPoint(r)) =>
       Some(
-        <div className=Styles.middle>
+        <div className=Styles.result>
           {r |> E.Float.with3DigitsPrecision |> ste}
         </div>,
       )
@@ -92,7 +84,7 @@ module Helpers = {
       )
     | Ok(`Binary(r)) =>
       Some(
-        <span className=Styles.booleanResult>
+        <span className=Styles.result>
           {(r ? "Yes" : "No") |> Utils.ste}
         </span>,
       )
@@ -104,7 +96,8 @@ module Helpers = {
       {measurement.valueText |> E.O.default("") |> Utils.ste}
     </div>;
 
-  let description = (~m: measurement): option(React.element) =>
+  let getDescription = (~m: measurement): option(React.element) => {
+    Js.log(m.description);
     switch (m.description) {
     | None
     | Some("") => None
@@ -115,6 +108,7 @@ module Helpers = {
         </div>,
       )
     };
+  };
 
   let relevantAt = (~m: measurement): option(React.element) =>
     m.relevantAt
@@ -243,7 +237,7 @@ let getItems = (measurementsList: list(measurement), ~makeItem) => {
   |> E.L.fmap((m: measurement) => {
        let inside = makeItem(m, _bounds);
 
-       switch (Helpers.description(~m)) {
+       switch (Helpers.getDescription(~m)) {
        | Some(description) =>
          <FC.Table.Row
            bottomSubRow=[|FC.Table.Row.textSection(description)|]>
@@ -381,6 +375,15 @@ let makeAgentPredictionsTable =
         {Table.fromColumns(
            all,
            measurementsList' |> Array.of_list,
+           ~bottomSubRowFn=
+             Some(
+               m =>
+                 Helpers.getDescription(~m)
+                 |> E.O.fmap((c: React.element)
+                      // [|FC.Table.Row.textSection(c)|]
+                      => [|"sdf" |> ste|])
+                 |> E.O.default([||]),
+             ),
            ~onRowClb=Some(onRowClb),
            (),
          )}

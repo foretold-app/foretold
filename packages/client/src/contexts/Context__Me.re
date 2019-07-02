@@ -1,11 +1,11 @@
 type meWithTokensAndUserLoading = {
   authTokens: Context__Auth.Auth0Tokens.t,
-  loadingUserData: E.HttpResponse.t(Context__Primary.User.t),
+  loadingUserData: E.HttpResponse.t(Primary.User.t),
 };
 
 type meWithTokensAndUserData = {
   authTokens: Context__Auth.Auth0Tokens.t,
-  userData: Context__Primary.User.t,
+  userData: Primary.User.t,
 };
 
 type me =

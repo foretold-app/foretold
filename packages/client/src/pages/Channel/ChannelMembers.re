@@ -46,8 +46,8 @@ module Columns = {
 
   let canX = (permission: Types.permission, record: Types.channelMembership) =>
     record.permissions
-    |> Rationale.Option.fmap((permissions: Context.Primary.Permissions.t) =>
-         Context.Primary.Permissions.canX(permission, permissions)
+    |> Rationale.Option.fmap((permissions: Primary.Permissions.t) =>
+         Primary.Permissions.canX(permission, permissions)
        )
     |> Rationale.Option.default(false);
 
@@ -211,7 +211,7 @@ let make =
     (
       ~channelId: string,
       ~layout=SLayout.FullPage.makeWithEl,
-      ~channel: Context.Primary.Channel.t,
+      ~channel: Primary.Channel.t,
       _children,
     ) => {
   ...component,

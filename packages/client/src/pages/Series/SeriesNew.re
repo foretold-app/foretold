@@ -222,7 +222,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
 let make =
     (
       ~channelId: string,
-      ~loggedInUser: Context.Primary.User.t,
+      ~loggedInUser: Primary.User.t,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {

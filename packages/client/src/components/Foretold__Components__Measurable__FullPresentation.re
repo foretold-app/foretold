@@ -20,11 +20,11 @@ module Styles = {
   let description = style([paddingTop(`em(1.5))]);
 };
 
-let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
+let make = (~id: string, ~loggedInUser: Primary.User.t, _children) => {
   ...component,
   render: _self =>
     Queries.MeasurableWithMeasurements.component(~id)
-    |> E.F.apply((m: Context.Primary.Measurable.t) =>
+    |> E.F.apply((m: Primary.Measurable.t) =>
          <>
            <Div styles=[Styles.header]>
              <Div flexDirection=`row>
@@ -48,14 +48,13 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
            <>
              {
                let userAgentId =
-                 loggedInUser.agent
-                 |> E.O.fmap((r: Context.Primary.Agent.t) => r.id);
+                 loggedInUser.agent |> E.O.fmap((r: Primary.Agent.t) => r.id);
 
                let creatorId =
-                 m.creator |> E.O.fmap((r: Context.Primary.Agent.t) => r.id);
+                 m.creator |> E.O.fmap((r: Primary.Agent.t) => r.id);
 
                userAgentId == creatorId
-               || Context.Primary.Measurable.toStatus(m) !== `JUDGED
+               || Primary.Measurable.toStatus(m) !== `JUDGED
                  ? <Foretold__Components__Measurement__Form
                      measurable=m
                      measurableId=id
@@ -70,19 +69,14 @@ let make = (~id: string, ~loggedInUser: Context.Primary.User.t, _children) => {
                 ~innerComponentFn=(
                                     m:
                                       option(
-                                        Context.Primary.Connection.t(
-                                          Context.Primary.Measurement.t,
+                                        Primary.Connection.t(
+                                          Primary.Measurement.t,
                                         ),
                                       ),
                                   ) =>
                 m
                 |> E.O.React.fmapOrNull(
-                     (
-                       b:
-                         Context.Primary.Connection.t(
-                           Context.Primary.Measurement.t,
-                         ),
-                     ) =>
+                     (b: Primary.Connection.t(Primary.Measurement.t)) =>
                      b.edges
                      |> E.A.to_list
                      |> Foretold__Components__Measurements__Table.make

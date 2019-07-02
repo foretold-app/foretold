@@ -4,7 +4,7 @@ type user = {
 };
 
 type bot = {
-  competitorType: Context.Primary.CompetitorType.t,
+  competitorType: Primary.CompetitorType.t,
   description: option(string),
   id: string,
   name: string,
@@ -18,10 +18,10 @@ type agent = {
   user: option(user),
 };
 
-let toUser = (user: user): Context.Primary.User.t =>
-  Context.Primary.User.make(~id=user.id, ~name=user.name, ());
+let toUser = (user: user): Primary.User.t =>
+  Primary.User.make(~id=user.id, ~name=user.name, ());
 
-let toBot = (bot: bot): Context.Primary.Bot.t => {
+let toBot = (bot: bot): Primary.Bot.t => {
   competitorType: bot.competitorType,
   description: bot.description,
   id: bot.id,
@@ -31,15 +31,15 @@ let toBot = (bot: bot): Context.Primary.Bot.t => {
   permissions: None,
 };
 
-let toAgent = (agent: agent): Context.Primary.Agent.t => {
-  let agentType: option(Context.Primary.AgentType.t) =
+let toAgent = (agent: agent): Primary.Agent.t => {
+  let agentType: option(Primary.AgentType.t) =
     switch (agent.bot, agent.user) {
     | (Some(bot), None) => Some(Bot(toBot(bot)))
     | (None, Some(user)) => Some(User(toUser(user)))
     | _ => None
     };
 
-  Context.Primary.Agent.make(
+  Primary.Agent.make(
     ~id=agent.id,
     ~name=agent.name,
     ~measurementCount=Some(agent.measurementCount),

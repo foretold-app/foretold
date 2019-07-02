@@ -1,5 +1,5 @@
 open Utils;
-open Context.Primary;
+open Primary;
 open ReactMarkdown;
 
 module Shared = Foretold__Components__Shared;

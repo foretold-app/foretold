@@ -1,8 +1,8 @@
 module ReducerConfig = {
-  type itemType = Context.Primary.Measurement.t;
+  type itemType = Primary.Measurement.t;
   type callFnParams = string;
 
-  let getId = (e: Context.Primary.Measurement.t) => e.id;
+  let getId = (e: Primary.Measurement.t) => e.id;
   let callFn = (agentId: callFnParams) =>
     Foretold__GraphQL.Queries.Measurements.componentWithAgent(~agentId);
 
@@ -19,7 +19,7 @@ type pageParams = {id: string};
 let make =
     (
       ~pageParams: pageParams,
-      ~loggedInUser: Context.Primary.User.t,
+      ~loggedInUser: Primary.User.t,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {
@@ -54,7 +54,7 @@ let make =
             }
 
           | (Success(connection), None) =>
-            let onSelectClb = (e: Client.Context.Primary.Measurement.t) => {
+            let onSelectClb = (e: Primary.Measurement.t) => {
               Reducer.Components.sendSelectItem(
                 selectWithPaginationParams,
                 e.id,

@@ -19,8 +19,8 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let toChannel = (channel): Context.Primary.Channel.t =>
-  Context.Primary.Channel.make(
+let toChannel = (channel): Primary.Channel.t =>
+  Primary.Channel.make(
     ~id=channel##id,
     ~name=channel##name,
     ~description=channel##description,
@@ -63,8 +63,7 @@ let getChannelByIdAsComponent = (~id, innerFn) => {
 let component2 = (~id, innerFn) => {
   switch (id) {
   | "" =>
-    E.HttpResponse.Success(Context.Primary.Channel.getGlobalChannel())
-    |> innerFn
+    E.HttpResponse.Success(Primary.Channel.getGlobalChannel()) |> innerFn
   | _ => getChannelByIdAsComponent(~id, innerFn)
   };
 };

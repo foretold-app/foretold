@@ -2,7 +2,7 @@ open Utils;
 open Rationale.Function.Infix;
 open Rationale.Option.Infix;
 
-type direction = Context.Primary.Connection.direction;
+type direction = Primary.Connection.direction;
 
 module type Config = {
   type itemType;
@@ -17,7 +17,7 @@ module type Config = {
       ~pageLimit: int,
       ~direction: direction,
       ~innerComponentFn: Client.E.HttpResponse.t(
-                           Context.Primary.Connection.t(itemType),
+                           Primary.Connection.t(itemType),
                          ) =>
                          ReasonReact.reactElement
     ) =>
@@ -34,7 +34,7 @@ module Make = (Config: Config) => {
       | ItemUnselected
       | ItemSelected(itemSelected);
 
-    type connection = Context.Primary.Connection.t(Config.itemType);
+    type connection = Primary.Connection.t(Config.itemType);
 
     type response = Client.E.HttpResponse.t(connection);
 
@@ -132,14 +132,14 @@ module Make = (Config: Config) => {
       let canDecrementPage = (reducerParams: t) =>
         reducerParams.response
         |> E.HttpResponse.fmap((r: connection) =>
-             Context.Primary.Connection.hasPreviousPage(r)
+             Primary.Connection.hasPreviousPage(r)
            )
         |> E.HttpResponse.flattenDefault(false, a => a);
 
       let canIncrementPage = (reducerParams: t) =>
         reducerParams.response
         |> E.HttpResponse.fmap((r: connection) =>
-             Context.Primary.Connection.hasNextPage(r)
+             Primary.Connection.hasNextPage(r)
            )
         |> E.HttpResponse.flattenDefault(false, a => a);
 
@@ -189,17 +189,17 @@ module Make = (Config: Config) => {
     module ItemUnselected = {
       let changePage = (state: state, pageDirection) =>
         state.response
-        |> E.HttpResponse.fmap((r: Context.Primary.Connection.t('a)) =>
+        |> E.HttpResponse.fmap((r: Primary.Connection.t('a)) =>
              pageDirection(r) |> E.O.fmap(d => {direction: d})
            )
         |> E.HttpResponse.flattenDefault(None, a => a)
         |> E.O.default(state.pageConfig);
 
       let nextPage = (state: state) =>
-        changePage(state, Context.Primary.Connection.nextPageDirection);
+        changePage(state, Primary.Connection.nextPageDirection);
 
       let lastPage = (state: state): pageConfig =>
-        changePage(state, Context.Primary.Connection.lastPageDirection);
+        changePage(state, Primary.Connection.lastPageDirection);
 
       let selectIndex = (i, itemsPerPage) =>
         E.BoundedInt.make(i, itemsPerPage)
@@ -370,8 +370,8 @@ module Make = (Config: Config) => {
 
   let compareItems =
       (
-        connectionA: Context.Primary.Connection.t('a),
-        connectionB: Context.Primary.Connection.t('a),
+        connectionA: Primary.Connection.t('a),
+        connectionB: Primary.Connection.t('a),
       ) =>
     Belt.Array.eq(connectionA.edges, connectionB.edges, Config.isEqual);
 

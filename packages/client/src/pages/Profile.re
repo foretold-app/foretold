@@ -98,7 +98,7 @@ module CMutationForm =
 
 let make =
     (
-      ~loggedInUser: Context.Primary.User.t,
+      ~loggedInUser: Primary.User.t,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {
@@ -113,7 +113,7 @@ let make =
              let id = loggedInUser.id;
              let name =
                agent
-               |> E.O.bind(_, (r: Context.Primary.Agent.t) => r.name)
+               |> E.O.bind(_, (r: Primary.Agent.t) => r.name)
                |> E.O.toExn("The logged in user needs an ID!");
              withUserForm(id, name, mutation, ({send, state}) =>
                CMutationForm.showWithLoading(

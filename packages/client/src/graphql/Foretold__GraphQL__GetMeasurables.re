@@ -6,13 +6,8 @@ type series = {
   name: option(string),
 };
 
-let toSeries = (c: series): Context.Primary.Series.t =>
-  Context.Primary.Series.make(
-    ~id=c.id,
-    ~description=c.description,
-    ~name=c.name,
-    (),
-  );
+let toSeries = (c: series): Primary.Series.t =>
+  Primary.Series.make(~id=c.id, ~description=c.description, ~name=c.name, ());
 
 type creator = {
   id: string,
@@ -27,8 +22,8 @@ type channel = {
   isArchived: bool,
 };
 
-let toAgent = (c: creator): Context.Primary.Agent.t =>
-  Context.Primary.Agent.make(~id=c.id, ~name=c.name, ());
+let toAgent = (c: creator): Primary.Agent.t =>
+  Primary.Agent.make(~id=c.id, ~name=c.name, ());
 
 type node = {
   id: string,
@@ -45,7 +40,7 @@ type node = {
   createdAt: MomentRe.Moment.t,
   updatedAt: MomentRe.Moment.t,
   expectedResolutionDate: option(MomentRe.Moment.t),
-  state: Context.Primary.MeasurableState.t,
+  state: Primary.MeasurableState.t,
   stateUpdatedAt: option(MomentRe.Moment.t),
   creator: option(creator),
   series: option(series),
@@ -55,12 +50,12 @@ type node = {
 };
 
 /* TODO: Fix channel */
-let toMeasurable = (m: node): Context.Primary.Measurable.t => {
+let toMeasurable = (m: node): Primary.Measurable.t => {
   let channel =
     switch (m.channel) {
     | Some(channel) =>
       Some(
-        Context.Primary.Channel.make(
+        Primary.Channel.make(
           ~id=channel.id,
           ~name=channel.name,
           ~isArchived=channel.isArchived,
@@ -71,7 +66,7 @@ let toMeasurable = (m: node): Context.Primary.Measurable.t => {
     | _ => None
     };
 
-  Context.Primary.Measurable.make(
+  Primary.Measurable.make(
     ~id=m.id,
     ~name=m.name,
     ~channelId=m.channelId,
@@ -130,7 +125,7 @@ module Query = [%graphql
               labelProperty
               iAmOwner
               labelOnDate @bsDecoder(fn: "E.J.O.toMoment")
-              state @bsDecoder(fn: "Context.Primary.MeasurableState.fromEnum")
+              state @bsDecoder(fn: "Primary.MeasurableState.fromEnum")
               stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
               expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
               createdAt @bsDecoder(fn: "E.J.toMoment")
@@ -160,8 +155,7 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let unpackEdges = a =>
-  a##measurables
-  |> E.O.fmap(Context.Primary.Connection.fromJson(toMeasurable));
+  a##measurables |> E.O.fmap(Primary.Connection.fromJson(toMeasurable));
 
 let queryToComponent = (query, innerComponentFn) =>
   QueryComponent.make(~variables=query##variables, o =>
@@ -172,7 +166,7 @@ let queryToComponent = (query, innerComponentFn) =>
   )
   |> E.React.el;
 
-type measurableStates = Context.Primary.MeasurableState.t;
+type measurableStates = Primary.MeasurableState.t;
 
 type inputType('a) =
   (
@@ -188,7 +182,7 @@ type inputType('a) =
   ) =>
   'a;
 
-type direction = Context.Primary.Connection.direction;
+type direction = Primary.Connection.direction;
 
 let queryDirection =
     (

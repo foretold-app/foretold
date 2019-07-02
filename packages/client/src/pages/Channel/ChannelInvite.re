@@ -1,11 +1,11 @@
 let component = ReasonReact.statelessComponent("ChannelInvite");
 
-type column = Table.column(Context.Primary.Agent.t);
+type column = Table.column(Primary.Agent.t);
 
 let make =
     (
       ~channelId: string,
-      ~loggedInUser: Context.Primary.User.t,
+      ~loggedInUser: Primary.User.t,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {
@@ -34,7 +34,7 @@ let make =
       Table.Column.make(
         ~name="Agent" |> ReasonReact.string,
         ~render=
-          (agent: Context.Primary.Agent.t) =>
+          (agent: Primary.Agent.t) =>
             <Foretold__Components__Link
               linkType={
                 Internal(
@@ -52,8 +52,7 @@ let make =
       Table.Column.make(
         ~name="Invite" |> ReasonReact.string,
         ~render=
-          (agent: Context.Primary.Agent.t) =>
-            addToChannelLink(agent.id, channelId),
+          (agent: Primary.Agent.t) => addToChannelLink(agent.id, channelId),
         (),
       );
 
@@ -69,7 +68,7 @@ let make =
     let onSuccess = agents => {
       let dataSource =
         agents
-        |> Js.Array.filter((agent: Context.Primary.Agent.t) =>
+        |> Js.Array.filter((agent: Primary.Agent.t) =>
              switch (agent.name) {
              | Some(name) when name != "" => true
              | _ => false

@@ -10,11 +10,11 @@ type series = {
   creator: option(creator),
 };
 
-let toAgent = (m: creator): Context.Primary.Agent.t =>
-  Context.Primary.Agent.make(~id=m.id, ~name=m.name, ());
+let toAgent = (m: creator): Primary.Agent.t =>
+  Primary.Agent.make(~id=m.id, ~name=m.name, ());
 
-let toSeries = (m: series): Context.Primary.Series.t =>
-  Context.Primary.Series.make(
+let toSeries = (m: series): Primary.Series.t =>
+  Primary.Series.make(
     ~id=m.id,
     ~name=m.name,
     ~creator=m.creator |> E.O.fmap(toAgent),

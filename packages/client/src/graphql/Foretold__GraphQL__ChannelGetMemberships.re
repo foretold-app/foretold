@@ -56,7 +56,7 @@ let toChannelMemberships = (m: innerType): array(Types.channelMembership) => {
              open Types;
 
              let agent =
-               Context.Primary.Agent.make(
+               Primary.Agent.make(
                  ~id=r##agent |> E.O.fmap(r => r##id) |> E.O.default(""),
                  ~name=r##agent |> E.O.bind(_, r => r##name),
                  (),
@@ -67,10 +67,9 @@ let toChannelMemberships = (m: innerType): array(Types.channelMembership) => {
                |> E.A.O.concatSome
                |> E.A.to_list;
 
-             let permissions =
-               Context.Primary.Permissions.make(allowMutations);
+             let permissions = Primary.Permissions.make(allowMutations);
 
-             Context.Primary.ChannelMembership.make(
+             Primary.ChannelMembership.make(
                ~role=r##role,
                ~agent=Some(agent),
                ~permissions=Some(permissions),

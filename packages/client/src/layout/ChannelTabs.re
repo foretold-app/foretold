@@ -15,10 +15,7 @@ let tabToInternalUrl = (channelId, tabSelected: ChannelPage.tab): Url.t => {
 };
 
 let make =
-    (
-      tabSelected: Context.Routing.ChannelPage.tab,
-      channel: Context.Primary.Channel.t,
-    ) =>
+    (tabSelected: Context.Routing.ChannelPage.tab, channel: Primary.Channel.t) =>
   <>
     {tab(
        tabSelected == Measurables,

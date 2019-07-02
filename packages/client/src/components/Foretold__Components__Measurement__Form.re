@@ -4,7 +4,7 @@ let component = ReasonReact.statelessComponent("MeasurableShowForm");
 
 let make =
     (
-      ~measurable: Context.Primary.Measurable.t,
+      ~measurable: Primary.Measurable.t,
       ~measurableId: string,
       ~isCreator: bool,
       _children,

@@ -60,24 +60,22 @@ type measurableQuery = {
       "id": string,
       "name": option(string),
     }),
-  "state": Context.Primary.MeasurableState.t,
+  "state": Primary.MeasurableState.t,
   "valueType": Types.valueType,
   "stateUpdatedAt": option(MomentRe.Moment.t),
   "updatedAt": MomentRe.Moment.t,
 };
 
-let queryMeasurable = (m: measurableQuery): Context.Primary.Measurable.t => {
-  let agent: option(Context.Primary.Agent.t) =
+let queryMeasurable = (m: measurableQuery): Primary.Measurable.t => {
+  let agent: option(Primary.Agent.t) =
     m##creator
-    |> E.O.fmap(r => Context.Primary.Agent.make(~id=r##id, ~name=r##name, ()));
+    |> E.O.fmap(r => Primary.Agent.make(~id=r##id, ~name=r##name, ()));
 
-  let series: option(Context.Primary.Series.t) =
+  let series: option(Primary.Series.t) =
     m##series
-    |> E.O.fmap(r =>
-         Context.Primary.Series.make(~id=r##id, ~name=r##name, ())
-       );
+    |> E.O.fmap(r => Primary.Series.make(~id=r##id, ~name=r##name, ()));
 
-  Context.Primary.Measurable.make(
+  Primary.Measurable.make(
     ~id=m##id,
     ~name=m##name,
     ~channelId=m##channelId,
@@ -87,7 +85,7 @@ let queryMeasurable = (m: measurableQuery): Context.Primary.Measurable.t => {
     ~createdAt=Some(m##createdAt),
     ~updatedAt=Some(m##updatedAt),
     ~expectedResolutionDate=m##expectedResolutionDate,
-    ~state=Some(m##state |> Context.Primary.MeasurableState.fromEnum),
+    ~state=Some(m##state |> Primary.MeasurableState.fromEnum),
     ~stateUpdatedAt=m##stateUpdatedAt,
     ~labelSubject=m##labelSubject,
     ~labelOnDate=m##labelOnDate,

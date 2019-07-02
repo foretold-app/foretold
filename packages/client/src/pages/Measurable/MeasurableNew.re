@@ -44,8 +44,7 @@ let mutate =
           "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
           "labelSubject": values.labelSubject |> E.O.some,
           "labelOnDate": None,
-          "valueType":
-            values.valueType |> Context.Primary.Measurable.valueTypeToEnum,
+          "valueType": values.valueType |> Primary.Measurable.valueTypeToEnum,
           "channelId": channelId,
         };
 

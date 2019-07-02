@@ -26,11 +26,7 @@ module Styles = {
 
 let component = ReasonReact.statelessComponent("SidebarFill");
 let make =
-    (
-      ~channelId: option(string),
-      ~loggedInUser: Context.Primary.User.t,
-      _children,
-    ) => {
+    (~channelId: option(string), ~loggedInUser: Primary.User.t, _children) => {
   ...component,
   render: _self =>
     <div className=Styles.outer>

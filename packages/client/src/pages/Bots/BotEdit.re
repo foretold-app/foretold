@@ -10,13 +10,13 @@ module CMutationForm =
 let make =
     (
       ~pageParams: PageConfig.LoggedInPage.pageParams,
-      ~loggedInUser: Context.Primary.User.t,
+      ~loggedInUser: Primary.User.t,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {
   ...component,
   render: _ => {
-    let getForm = (bot: option(Context.Primary.Bot.t)) =>
+    let getForm = (bot: option(Primary.Bot.t)) =>
       Mutations.BotUpdate.withMutation((mutation, data) => {
         let onSubmit = (values: BotForm.Form.onSubmitAPI): unit => {
           Mutations.BotUpdate.mutate(

@@ -24,6 +24,7 @@ type channel = {
   name: string,
   description: option(string),
   isPublic: bool,
+  isArchived: bool,
 };
 
 let toAgent = (c: creator): Context.Primary.Agent.t =>
@@ -54,12 +55,27 @@ type node = {
 };
 
 /* TODO: Fix channel */
-let toMeasurable = (m: node): Context.Primary.Measurable.t =>
+let toMeasurable = (m: node): Context.Primary.Measurable.t => {
+  let channel =
+    switch (m.channel) {
+    | Some(channel) =>
+      Some(
+        Context.Primary.Channel.make(
+          ~id=channel.id,
+          ~name=channel.name,
+          ~isArchived=channel.isArchived,
+          ~isPublic=channel.isPublic,
+          (),
+        ),
+      )
+    | _ => None
+    };
+
   Context.Primary.Measurable.make(
     ~id=m.id,
     ~name=m.name,
     ~channelId=m.channelId,
-    ~channel=None,
+    ~channel,
     ~isArchived=Some(m.isArchived),
     ~valueType=m.valueType,
     ~labelCustom=m.labelCustom,
@@ -79,6 +95,7 @@ let toMeasurable = (m: node): Context.Primary.Measurable.t =>
     ~iAmOwner=Some(m.iAmOwner),
     (),
   );
+};
 
 module Query = [%graphql
   {|
@@ -102,6 +119,7 @@ module Query = [%graphql
                 name
                 description
                 isPublic
+                isArchived
               }
               labelCustom
               resolutionEndpoint

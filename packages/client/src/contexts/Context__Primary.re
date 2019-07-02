@@ -130,7 +130,7 @@ module Types = {
     id: string,
     name: string,
     valueType,
-    channel: option(string),
+    channel: option(channel),
     channelId: string,
     isArchived: option(bool),
     resolutionEndpoint: option(string),

@@ -114,6 +114,7 @@ module Types = {
     description: option(string),
     isArchived: bool,
     isPublic: bool,
+    isCurated: bool,
     membershipCount: option(int),
     creator: option(agent),
     myRole: option(myMembershipRole),
@@ -414,6 +415,7 @@ module Channel = {
         ~myRole=None,
         ~channelMemberships=None,
         ~openedMeasurablesCount=None,
+        ~isCurated=false,
         (),
       )
       : t => {
@@ -427,6 +429,7 @@ module Channel = {
     myRole,
     channelMemberships,
     openedMeasurablesCount,
+    isCurated,
   };
 
   let getGlobalChannel = (): t =>

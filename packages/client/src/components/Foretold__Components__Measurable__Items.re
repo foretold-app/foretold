@@ -120,6 +120,15 @@ let editLink = (~m: measurable) =>
     </Foretold__Components__Link>
   </div>;
 
+let channelLink = (~m: measurable) =>
+  <div className=Shared.Item.item>
+    <Foretold__Components__Link
+      linkType={Internal(ChannelShow(m.channelId))}
+      className=Shared.Item.item>
+      {"#channel" |> ste}
+    </Foretold__Components__Link>
+  </div>;
+
 let measurements = (~m: measurable) =>
   switch (m.measurementCount) {
   | Some(0) => None

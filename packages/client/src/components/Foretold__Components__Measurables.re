@@ -67,6 +67,10 @@ module BasicTable = {
                     <FC.Table.Cell
                       flex=1 className=Css.(style([paddingTop(`em(0.5))]))>
                       {E.React.showIf(
+                         channelId == Some("home"),
+                         Items.channelLink(~m),
+                       )}
+                      {E.React.showIf(
                          showExtraData,
                          Items.series(~m, ~channelId, ())
                          |> E.O.React.defaultNull,

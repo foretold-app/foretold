@@ -1,5 +1,6 @@
 open Foretold__GraphQL;
 
+// @todo: Move this module into "graphql" folder.
 module WithEditMutation = {
   module GraphQL = [%graphql
     {|
@@ -28,6 +29,7 @@ module WithEditMutation = {
         valueType: string,
       ) => {
     let date = showDescriptionDate == "TRUE" ? labelOnDate : "";
+
     let m =
       GraphQL.make(
         ~id,
@@ -55,8 +57,10 @@ module CMutationForm =
     type queryType = WithEditMutation.GraphQL.t;
   });
 
-let formCreation = (id, m) => {
-  let measurable = Queries.Measurable.toMeasurable(m);
+let formCreation =
+    (id: string, m: Queries.Measurable.measurable): React.element => {
+  let measurable: Context.Primary.Measurable.t =
+    Queries.Measurable.toMeasurable(m);
 
   WithEditMutation.Mutation.make((mutation, data) =>
     MeasurableForm.SignUpForm.make(
@@ -97,10 +101,16 @@ let formCreation = (id, m) => {
       },
       ~schema=[(`name, Custom(_ => None))],
       ({handleSubmit, handleChange, form, _}) =>
-        CMutationForm.showWithLoading(
+        CMutationForm.showWithLoading2(
           ~result=data.result,
           ~form=MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange),
-          ~successMessage="Question updated successfully.",
+          ~onSuccess=
+            _ => {
+              Context.Routing.Url.push(
+                MeasurableShow(measurable.channelId, id),
+              );
+              ReasonReact.null;
+            },
           (),
         ),
     )
@@ -123,7 +133,8 @@ let make =
       ~head=SLayout.Header.textDiv("Edit Question"),
       ~body=
         <FC.PageCard.BodyPadding>
-          {Queries.Measurable.component(~id=pageParams.id, m =>
+          {Queries.Measurable.component(
+             ~id=pageParams.id, (m: Queries.Measurable.measurable) =>
              formCreation(pageParams.id, m)
            )}
         </FC.PageCard.BodyPadding>,

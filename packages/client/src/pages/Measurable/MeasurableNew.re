@@ -93,23 +93,30 @@ let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
       ~head=SLayout.Header.textDiv("New Question"),
       ~body=
         <FC.PageCard.BodyPadding>
-          {CreateMeasurableMutation.Mutation.make(
-             ~onCompleted=
-               () => Context.Routing.Url.push(ChannelShow(channelId)),
-             (mutation, data) =>
-               formCreator(mutation, ({handleSubmit, handleChange, form, _}) =>
-                 CMutationForm.showWithLoading(
-                   ~result=data.result,
-                   ~form=
-                     MeasurableForm.showForm(
-                       ~form,
-                       ~handleSubmit,
-                       ~handleChange,
-                     ),
-                   (),
-                 )
+          {CreateMeasurableMutation.Mutation.make((mutation, data) =>
+             formCreator(mutation, ({handleSubmit, handleChange, form, _}) =>
+               CMutationForm.showWithLoading2(
+                 ~result=data.result,
+                 ~form=
+                   MeasurableForm.showForm(
+                     ~form,
+                     ~handleSubmit,
+                     ~handleChange,
+                   ),
+                 ~onSuccess=
+                   (response: CreateMeasurableMutation.GraphQL.t) => {
+                     switch (response##measurableCreate) {
+                     | Some(m) =>
+                       Context.Routing.Url.push(
+                         MeasurableShow(channelId, m##id),
+                       )
+                     };
+                     ReasonReact.null;
+                   },
+                 (),
                )
-               |> E.React.el,
+             )
+             |> E.React.el
            )
            |> E.React.el}
         </FC.PageCard.BodyPadding>,

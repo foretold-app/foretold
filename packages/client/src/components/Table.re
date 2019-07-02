@@ -63,7 +63,7 @@ let fromColumns =
     (
       columns: array(column('a)),
       rows: array('a),
-      ~bottomSubRowFn: option('a => array(ReasonReact.reactElement))=None,
+      ~bottomSubRowFn: option('a => option(array(ReasonReact.reactElement)))=None,
       ~onRowClb: option('a => unit)=None,
       (),
     ) => {
@@ -93,11 +93,11 @@ let fromColumns =
             |> ReasonReact.array;
 
           let key = rowIndex |> string_of_int;
-          let bottomSubRow = bottomSubRowFn |> E.O.fmap(r => r(row));
+          let bottomSubRow = bottomSubRowFn |> E.O.bind(_, r => r(row));
 
           switch (onRowClb) {
           | Some(onRowClb) =>
-            <FC.Table.RowLink
+            <FC.Table.Row
               onClick={_ => {
                 onRowClb(row);
                 ();
@@ -105,7 +105,7 @@ let fromColumns =
               className=Styles.row
               key>
               columnsBody
-            </FC.Table.RowLink>
+            </FC.Table.Row>
 
           | None =>
             <FC.Table.Row className=Styles.row ?bottomSubRow key>

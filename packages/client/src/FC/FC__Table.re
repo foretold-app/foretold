@@ -39,7 +39,6 @@ module Styles = {
           borderBottom(`px(1), `solid, Colors.accentBlueO8),
           display(`flex),
           flexDirection(`row),
-          selector(":last-child", BaseStyles.borderNone),
         ]
         @ BaseStyles.fullWidthFloatLeft,
       )
@@ -120,29 +119,23 @@ module Row = {
 
   let textSection = text => <FC__Quote> text </FC__Quote>;
 
-  let make = (~className="", ~bottomSubRow=?, ~onClick=_ => (), children) => {
+  let make = (~className="", ~bottomSubRow=?, ~onClick=?, children) => {
     ...component,
-    render: _self =>
+    render: _self => {
+      let commonClasses =
+        onClick |> E.O.isSome
+          ? [Styles.clickableRow, className] : [className];
       switch (bottomSubRow) {
       | Some(bottomSubRow) =>
-        <div onClick>
+        <Div styles=commonClasses ?onClick>
           <Div styles=[Styles.topRow]> ...children </Div>
           <Div styles=[Styles.bottomRow]> ...bottomSubRow </Div>
-        </div>
+        </Div>
       | None =>
-        <Div styles=[Styles.row, className] onClick> ...children </Div>
-      },
-  };
-};
-
-module RowLink = {
-  let component = ReasonReact.statelessComponent("TABLE ROW LINK");
-
-  let make = (~className="", ~onClick, children) => {
-    ...component,
-    render: _self =>
-      <Div styles=[Styles.row, Styles.clickableRow, className] onClick>
-        ...children
-      </Div>,
+        <Div styles=[Styles.row, ...commonClasses] ?onClick>
+          ...children
+        </Div>
+      };
+    },
   };
 };

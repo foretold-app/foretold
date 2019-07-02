@@ -350,8 +350,7 @@ let make = (measurementsList: list(measurement)): ReasonReact.reactElement => {
                  Helpers.getDescription(~m)
                  |> E.O.fmap((c: React.element) =>
                       [|FC.Table.Row.textSection(c)|]
-                    )
-                 |> E.O.default([||]),
+                    ),
              ),
            (),
          )}
@@ -393,8 +392,7 @@ let makeAgentPredictionsTable =
                  Helpers.getDescription(~m)
                  |> E.O.fmap((c: React.element) =>
                       [|FC.Table.Row.textSection(c)|]
-                    )
-                 |> E.O.default([||]),
+                    ),
              ),
            ~onRowClb=Some(onRowClb),
            (),

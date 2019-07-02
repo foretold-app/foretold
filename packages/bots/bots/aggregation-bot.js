@@ -9,7 +9,6 @@ class AggregationBot {
   constructor() {
     this.api = new API(config.BOT_TOKEN);
   }
-
   /**
    * @public
    * @return {Promise<boolean>}
@@ -48,6 +47,7 @@ class AggregationBot {
       const measurementsInOrder = _.orderBy(measurements, ['createdAt'], ['desc']);
       const lastMeasurementOfEachAgent = _.uniqBy(measurementsInOrder, r => r.agentId);
 
+      console.log(`Got "${measurementsInOrder.length}" after sorting.`);
       console.log(`Got "${lastMeasurementOfEachAgent.length}" for aggregation.`);
       if (lastMeasurementOfEachAgent.length === 0) continue;
 
@@ -71,6 +71,7 @@ class AggregationBot {
 
     return true;
   }
+
 }
 
 module.exports = {

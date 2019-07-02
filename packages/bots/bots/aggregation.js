@@ -14,8 +14,15 @@ class Aggregation {
    * @return {Promise<{floatCdf: {xs: number[], ys: number[]}}|{percentage: number}>}
    */
   async main() {
-    return await this.aggregateFloatCdf(this.measurements)
-      || await this.aggregatePercentage(this.measurements);
+    return await this.aggregateFloatCdf()
+      || await this.aggregatePercentage();
+  }
+
+  /**
+   * @return {Promise<{floatCdf: {xs: number[], ys: number[]}} | null>}
+   */
+  async aggregateFloatCdf() {
+    return this._aggregateFloatCdf(this.measurements);
   }
 
   /**
@@ -23,7 +30,7 @@ class Aggregation {
    * @param {object[]} measurements
    * @return {Promise<{floatCdf: {xs: number[], ys: number[]}} | null>}
    */
-  async aggregateFloatCdf(measurements) {
+  async _aggregateFloatCdf(measurements) {
     const values = measurements.filter((measurement) => {
       return !!_.get(measurement, 'value.floatCdf');
     }).map((measurement) => {
@@ -46,11 +53,18 @@ class Aggregation {
   }
 
   /**
+   * @return {Promise<{percentage: number} | null>}
+   */
+  async aggregatePercentage() {
+    return this._aggregatePercentage(this.measurements);
+  }
+
+  /**
    * Need to aggregate only "percentages".
    * @param {object[]} measurements
    * @return {Promise<{percentage: number} | null>}
    */
-  async aggregatePercentage(measurements) {
+  async _aggregatePercentage(measurements) {
     const values = measurements.filter((measurement) => {
       return !!_.get(measurement, 'value.percentage');
     });

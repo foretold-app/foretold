@@ -180,14 +180,17 @@ let mainBlock =
           min=0.
           max=100.
           value={state.percentage}
-          step=0.1
+          tipFormatter={(v: string) => v ++ "%"}
+          step=1.
           onChange={(value: float) => send(UpdatePercentage(value))}
         />
         <InputNumber
+          formatter={v => v ++ "%"}
+          parser={v => Js.String.replace("%", "", v)}
           min=0.
           max=100.
           value={state.percentage}
-          step=0.1
+          step=1.
           onChange={(value: float) =>
             // This is to fix a bug. The value could actually be undefined, but the antd lib can't handle this.
 

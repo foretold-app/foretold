@@ -328,7 +328,7 @@ let make =
            {"Error: " ++ e##message |> ste}
            {mainBlock(~state, ~isCreator, ~send, ~onSubmit, ~measurable)}
          </>
-       | Data(_) => "Form submitted successfully!" |> ste |> E.React.inH2
+       | Data(_) => "Form submitted successfully." |> ste |> E.React.inH2
        | NotCalled =>
          mainBlock(~state, ~isCreator, ~send, ~onSubmit, ~measurable)
        }}

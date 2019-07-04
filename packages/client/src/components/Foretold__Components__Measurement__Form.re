@@ -1,6 +1,6 @@
 open Foretold__GraphQL;
 
-let component = ReasonReact.statelessComponent("MeasurableShowForm");
+let component = ReasonReact.statelessComponent("MeasurementForm");
 
 let make =
     (

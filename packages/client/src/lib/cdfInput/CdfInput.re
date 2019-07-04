@@ -285,6 +285,7 @@ let make =
     | UpdateFloatPdf((floatCdf: FloatCdf.t)) =>
       onUpdate(floatCdf);
       ReasonReact.Update({...state, floatCdf});
+
     | UpdateHasLimitError((hasLimitError: bool)) =>
       ReasonReact.Update({...state, hasLimitError})
 

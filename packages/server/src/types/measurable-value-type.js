@@ -2,7 +2,7 @@ const graphql = require('graphql');
 
 const { MEASURABLE_VALUE_TYPE } = require('../models/enums/measurable-value-type');
 
-const valueType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
+const measurableValueType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
   name: 'valueType',
   values: {
     [MEASURABLE_VALUE_TYPE.FLOAT]: {
@@ -14,9 +14,12 @@ const valueType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
     [MEASURABLE_VALUE_TYPE.PERCENTAGE]: {
       value: MEASURABLE_VALUE_TYPE.PERCENTAGE,
     },
+    [MEASURABLE_VALUE_TYPE.UNRESOLVED]: {
+      value: MEASURABLE_VALUE_TYPE.UNRESOLVED,
+    },
   }
 }));
 
 module.exports = {
-  valueType,
+  measurableValueType,
 };

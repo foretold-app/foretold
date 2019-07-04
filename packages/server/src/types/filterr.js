@@ -1,5 +1,5 @@
 const { competitorType } = require('./competitor-type');
-const { valueType } = require('./value-type');
+const { measurableValueType } = require('./measurable-value-type');
 
 /**
  * @deprecated
@@ -13,7 +13,7 @@ function filterr(fields) {
     newFields.competitorType = { type: competitorType };
   }
   if (!!newFields.valueType) {
-    newFields.valueType = { type: valueType };
+    newFields.valueType = { type: measurableValueType };
   }
   return newFields;
 }

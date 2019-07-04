@@ -27,7 +27,7 @@ const measurementCreateInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     value: { type: measurementValueInput },
     valueText: { type: graphql.GraphQLString },
-    competitorType: { type: require('./competitor').competitor },
+    competitorType: { type: require('./competitor-type').competitorType },
     measurableId: { type: graphql.GraphQLString },
     agentId: { type: graphql.GraphQLString },
     description: { type: graphql.GraphQLString },
@@ -69,7 +69,7 @@ const measurement = new graphql.GraphQLObjectType({
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     value: { type: graphql.GraphQLNonNull(measurementValue) },
-    competitorType: { type: require('./competitor').competitor },
+    competitorType: { type: require('./competitor-type').competitorType },
     description: { type: graphql.GraphQLString },
     measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     agentId: { type: graphql.GraphQLString },

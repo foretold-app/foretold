@@ -1,4 +1,4 @@
-const { competitor } = require('./competitor');
+const { competitorType } = require('./competitor-type');
 const { valueType } = require('./value-type');
 
 /**
@@ -10,7 +10,7 @@ function filterr(fields) {
   let newFields = { ...fields };
   // TODO: Refactor this. It's obviously quite hacky.
   if (!!newFields.competitorType) {
-    newFields.competitorType = { type: competitor };
+    newFields.competitorType = { type: competitorType };
   }
   if (!!newFields.valueType) {
     newFields.valueType = { type: valueType };

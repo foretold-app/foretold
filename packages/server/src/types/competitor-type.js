@@ -1,6 +1,6 @@
 const graphql = require("graphql");
 
-const competitor = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
+const competitorType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
   name: 'competitorType',
   values: {
     COMPETITIVE: { value: "COMPETITIVE" },
@@ -10,5 +10,5 @@ const competitor = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
 }));
 
 module.exports = {
-  competitor,
+  competitorType,
 };

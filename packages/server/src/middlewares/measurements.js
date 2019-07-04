@@ -30,9 +30,19 @@ async function measurementValueValidation(root, args, context, info) {
   const floatPoint = _.get(args, ['input', 'value', MEASUREMENT_VALUE.floatPoint]);
   const percentage = _.get(args, ['input', 'value', MEASUREMENT_VALUE.percentage]);
   const binary = _.get(args, ['input', 'value', MEASUREMENT_VALUE.binary]);
+  const unresolvableResolution = _.get(args, [
+    'input', 'value', MEASUREMENT_VALUE.unresolvableResolution,
+  ]);
 
   {
-    const valuesEntered = [floatCdf, floatPoint, percentage, binary];
+    const valuesEntered = [
+      floatCdf,
+      floatPoint,
+      percentage,
+      binary,
+      unresolvableResolution,
+    ];
+
     const values = valuesEntered
       .filter(item => item !== null)
       .filter(item => item !== undefined);

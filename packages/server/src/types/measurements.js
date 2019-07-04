@@ -3,6 +3,25 @@ const { resolver, DateType } = require('graphql-sequelize');
 
 const models = require('../models');
 const { MEASUREMENT_VALUE } = require('../models/enums/measurement-value');
+const { UNRESOLVABLE_RESOLUTIONS } = require('../models/enums/unresolvable-resolutions');
+
+const unresolvableResolution = new graphql.GraphQLEnumType({
+  name: 'unresolvableResolution',
+  values: {
+    [UNRESOLVABLE_RESOLUTIONS.AMBIGUOUS]: {
+      value: UNRESOLVABLE_RESOLUTIONS.AMBIGUOUS,
+    },
+    [UNRESOLVABLE_RESOLUTIONS.RESULT_NOT_AVAILABLE]: {
+      value: UNRESOLVABLE_RESOLUTIONS.RESULT_NOT_AVAILABLE,
+    },
+    [UNRESOLVABLE_RESOLUTIONS.FALSE_CONDITIONAL]: {
+      value: UNRESOLVABLE_RESOLUTIONS.FALSE_CONDITIONAL,
+    },
+    [UNRESOLVABLE_RESOLUTIONS.OTHER]: {
+      value: UNRESOLVABLE_RESOLUTIONS.OTHER,
+    },
+  }
+});
 
 // Input
 const measurementValueInputFloatCdf = new graphql.GraphQLInputObjectType({
@@ -20,6 +39,7 @@ const measurementValueInput = new graphql.GraphQLInputObjectType({
     [MEASUREMENT_VALUE.floatPoint]: { type: graphql.GraphQLFloat },
     [MEASUREMENT_VALUE.percentage]: { type: graphql.GraphQLFloat },
     [MEASUREMENT_VALUE.binary]: { type: graphql.GraphQLBoolean },
+    [MEASUREMENT_VALUE.unresolvableResolution]: { type: unresolvableResolution },
   }),
 });
 
@@ -62,6 +82,7 @@ const measurementValue = new graphql.GraphQLObjectType({
     [MEASUREMENT_VALUE.floatPoint]: { type: graphql.GraphQLFloat },
     [MEASUREMENT_VALUE.percentage]: { type: graphql.GraphQLFloat },
     [MEASUREMENT_VALUE.binary]: { type: graphql.GraphQLBoolean },
+    [MEASUREMENT_VALUE.unresolvableResolution]: { type: unresolvableResolution },
   }),
 });
 

@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       hooks: {
         beforeCreate: async (event) => {
           let agent = await sequelize.models.Agent.create({
-            type: "USER",
+            type: 'USER',
           });
           event.agentId = agent.dataValues.id
         }

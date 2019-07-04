@@ -56,7 +56,8 @@ module.exports = (sequelize, DataTypes) => {
         }
       },
       afterCreate: async (measurement) => {
-        if (measurement.dataValues.competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE) {
+        const competitorType = measurement.dataValues.competitorType;
+        if (competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE) {
           const measurable = await measurement.getMeasurable();
           await measurable.judged();
         }
@@ -111,28 +112,29 @@ module.exports = (sequelize, DataTypes) => {
    * @param {Models.Creator} creator
    * @return {Promise<*>}
    */
-  Model.prototype.getCreationNotification = async function getCreationNotification(creator) {
-    const agent = await creator.getAgent();
-    const measurable = await this.getMeasurable();
-    return {
-      "attachments": [{
-        "pretext": "New Measurement Created",
-        "title": measurable.name,
-        "title_link": `${clientUrl}/c/${measurable.channelId}`,
-        "author_name": creator.name,
-        "author_link": `${clientUrl}/agents/${agent.id}`,
-        "text": this.description,
-        "fields": [
-          {
-            "title": "Type",
-            "value": this.competitorType,
-            "short": true,
-          },
-        ],
-        "color": "#d2ebff",
-      }],
+  Model.prototype.getCreationNotification =
+    async function getCreationNotification(creator) {
+      const agent = await creator.getAgent();
+      const measurable = await this.getMeasurable();
+      return {
+        attachments: [{
+          pretext: "New Measurement Created",
+          title: measurable.name,
+          title_link: `${clientUrl}/c/${measurable.channelId}`,
+          author_name: creator.name,
+          author_link: `${clientUrl}/agents/${agent.id}`,
+          text: this.description,
+          fields: [
+            {
+              title: "Type",
+              value: this.competitorType,
+              short: true,
+            },
+          ],
+          color: "#d2ebff",
+        }],
+      };
     };
-  };
 
   Model.associate = function associate(models) {
     Model.Measurable = Model.belongsTo(models.Measurable, {

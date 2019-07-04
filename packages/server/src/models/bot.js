@@ -1,3 +1,5 @@
+const { MEASUREMENT_COMPETITOR_TYPE } = require('./measurement-competitor-type');
+
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Bot', {
       id: {
@@ -15,8 +17,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       competitorType: {
-        type: DataTypes.ENUM(["COMPETITIVE", "AGGREGATION", "OBJECTIVE"]),
-        defaultValue: "COMPETITIVE",
+        type: DataTypes.ENUM([
+          MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
+          MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE,
+          MEASUREMENT_COMPETITOR_TYPE.AGGREGATION,
+        ]),
+        defaultValue: MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE,
         allowNull: true,
       },
       userId: {
@@ -32,14 +38,14 @@ module.exports = (sequelize, DataTypes) => {
       hooks: {
         beforeCreate: async (event) => {
           let agent = await sequelize.models.Agent.create({
-            type: "BOT",
+            type: 'BOT',
           });
           event.agentId = agent.dataValues.id;
         },
       }
     });
 
-  Model.associate = function (models) {
+  Model.associate = function associate(models) {
     Model.User = Model.belongsTo(models.User, {
       foreignKey: 'userId',
     });

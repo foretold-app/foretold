@@ -9,6 +9,7 @@ type state = {
   percentage: float,
   binary: bool,
   dataType: string,
+  unresolvableResolution: string,
   // -> Measurement
   competitorType: string,
   description: string,
@@ -23,6 +24,7 @@ type action =
   | UpdatePercentage(float)
   | UpdateBinary(bool)
   | UpdateDataType(string)
+  | UpdateUnresolvableResolution(string)
   // -> Measurement
   | UpdateCompetitorType(string)
   | UpdateDescription(string)
@@ -79,6 +81,7 @@ let getIsValid = (state: state): bool =>
   | "FLOAT_POINT" => E.A.length(state.floatCdf.xs) == 1
   | "PERCENTAGE_FLOAT" => true
   | "BINARY_BOOL" => true
+  | "UNRESOLVABLE_RESOLUTION" => true
   };
 
 let dataTypeFacade =
@@ -89,6 +92,7 @@ let dataTypeFacade =
     )
     : string =>
   switch (competitorType, measurable.valueType, dataType) {
+  | ("OBJECTIVE" | "COMPETITIVE", `UNRESOLVED, _) => "UNRESOLVABLE_RESOLUTION"
   | ("OBJECTIVE" | "COMPETITIVE", `FLOAT | `DATE, None) => "FLOAT_CDF"
   | ("OBJECTIVE" | "COMPETITIVE", `FLOAT | `DATE, Some(dataType)) => dataType
   | ("OBJECTIVE", `PERCENTAGE, _) => "BINARY_BOOL"
@@ -109,6 +113,11 @@ let getValue = (state: state): MeasurementValue.t =>
     `FloatPoint(point);
   | "PERCENTAGE_FLOAT" => `Percentage(state.percentage)
   | "BINARY_BOOL" => `Binary(state.binary)
+  | "UNRESOLVABLE_RESOLUTION" =>
+    `UnresolvableResolution(
+      state.unresolvableResolution
+      |> MeasurementValue.UnresolvableResolution.fromString,
+    )
   };
 
 let getCompetitorType = (str: string) =>
@@ -136,10 +145,10 @@ let mainBlock =
     | _ => ReasonReact.null
     };
 
-  let getValueInput: ReasonReact.reactElement =
-    switch (state.dataType, state.competitorType) {
-    | ("FLOAT_CDF", _)
-    | ("FLOAT_POINT", _) =>
+  let valueInput: ReasonReact.reactElement =
+    switch (state.dataType) {
+    | "FLOAT_CDF"
+    | "FLOAT_POINT" =>
       <>
         {state.competitorType == "OBJECTIVE"
            ? ReasonReact.null
@@ -166,7 +175,7 @@ let mainBlock =
         />
       </>
 
-    | ("BINARY_BOOL", _) =>
+    | "BINARY_BOOL" =>
       <Select
         value={state.binary |> E.Bool.toString}
         onChange={e => send(UpdateBinary(e |> E.Bool.fromString))}>
@@ -174,7 +183,7 @@ let mainBlock =
         <Select.Option value="FALSE"> {"False" |> ste} </Select.Option>
       </Select>
 
-    | ("PERCENTAGE_FLOAT", _) =>
+    | "PERCENTAGE_FLOAT" =>
       <>
         <h4 className=Styles.label>
           {"Predicted Percentage Chance" |> ste}
@@ -204,6 +213,20 @@ let mainBlock =
         />
       </>
 
+    | "UNRESOLVABLE_RESOLUTION" =>
+      <Select
+        value={state.unresolvableResolution}
+        onChange={e => send(UpdateUnresolvableResolution(e))}>
+        <Select.Option value="AMBIGUOUS"> {"Ambiguous" |> ste} </Select.Option>
+        <Select.Option value="FALSE_CONDITIONAL">
+          {"False Conditional" |> ste}
+        </Select.Option>
+        <Select.Option value="OTHER"> {"Other" |> ste} </Select.Option>
+        <Select.Option value="RESULT_NOT_AVAILABLE">
+          {"Result Not Available" |> ste}
+        </Select.Option>
+      </Select>
+
     | _ => ReasonReact.null
     };
 
@@ -229,7 +252,7 @@ let mainBlock =
          </div>,
        )}
       getDataTypeSelect
-      <div className=Styles.inputBox> getValueInput </div>
+      <div className=Styles.inputBox> valueInput </div>
       <div className=Styles.inputBox>
         <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
       </div>
@@ -279,6 +302,7 @@ let make =
       dataType: dataTypeFacade(competitorTypeInitValue, measurable, None),
       description: "",
       valueText: "",
+      unresolvableResolution: "",
       hasLimitError: false,
     };
   },
@@ -299,6 +323,9 @@ let make =
 
     | UpdateDataType((dataType: string)) =>
       ReasonReact.Update({...state, dataType})
+
+    | UpdateUnresolvableResolution((unresolvableResolution: string)) =>
+      ReasonReact.Update({...state, unresolvableResolution})
 
     | UpdateBinary((binary: bool)) => ReasonReact.Update({...state, binary})
 

@@ -5,14 +5,16 @@ const resolvers = require('../resolvers');
 const channelMemberships = require('./channel-memberhips');
 const models = require("../models");
 
+const { AGENT_TYPE } = require('../models/agent-type');
+
 const agentType = new graphql.GraphQLEnumType({
   name: 'AgentType',
   values: {
-    USER: {
-      value: 'USER',
+    [AGENT_TYPE.USER]: {
+      value: AGENT_TYPE.USER,
     },
-    BOT: {
-      value: 'BOT',
+    [AGENT_TYPE.BOT]: {
+      value: AGENT_TYPE.BOT,
     },
   },
 });

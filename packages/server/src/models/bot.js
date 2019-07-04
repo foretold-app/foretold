@@ -1,4 +1,5 @@
 const { MEASUREMENT_COMPETITOR_TYPE } = require('./measurement-competitor-type');
+const { AGENT_TYPE } = require('./agent-type');
 
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Bot', {
@@ -27,18 +28,16 @@ module.exports = (sequelize, DataTypes) => {
       },
       userId: {
         type: DataTypes.UUID(),
-        // allowNull: false,
       },
       agentId: {
         type: DataTypes.UUID(),
-        // allowNull: false,
       },
     },
     {
       hooks: {
         beforeCreate: async (event) => {
           let agent = await sequelize.models.Agent.create({
-            type: 'BOT',
+            type: AGENT_TYPE.BOT,
           });
           event.agentId = agent.dataValues.id;
         },

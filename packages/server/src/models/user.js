@@ -1,3 +1,5 @@
+const { AGENT_TYPE } = require('./agent-type');
+
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('User', {
       id: {
@@ -19,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       hooks: {
         beforeCreate: async (event) => {
           let agent = await sequelize.models.Agent.create({
-            type: 'USER',
+            type: AGENT_TYPE.USER,
           });
           event.agentId = agent.dataValues.id
         }

@@ -3,6 +3,7 @@ const MEASUREMENT_VALUE = {
   floatPoint: 'floatPoint',
   percentage: 'percentage',
   binary: 'binary',
+  unresolvableResolution: 'unresolvableResolution',
 };
 
 module.exports = {

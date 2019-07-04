@@ -3,6 +3,7 @@ const Sequelize = require('sequelize');
 const { clientUrl } = require('../lib/urls');
 
 const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-type');
+const { MEASUREMENT_VALUE } = require('./enums/measurement-value');
 
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Measurement', {
@@ -71,12 +72,7 @@ module.exports = (sequelize, DataTypes) => {
   function setMeasurementValue(value) {
     let data, dataType;
 
-    const types = [
-      'floatCdf',
-      'floatPoint',
-      'percentage',
-      'binary',
-    ];
+    const types = Object.values(MEASUREMENT_VALUE);
 
     for (const type of types) {
       const valueOfType = _.get(value, type);
@@ -118,7 +114,7 @@ module.exports = (sequelize, DataTypes) => {
       const measurable = await this.getMeasurable();
       return {
         attachments: [{
-          pretext: "New Measurement Created",
+          pretext: 'New Measurement Created',
           title: measurable.name,
           title_link: `${clientUrl}/c/${measurable.channelId}`,
           author_name: creator.name,
@@ -126,12 +122,12 @@ module.exports = (sequelize, DataTypes) => {
           text: this.description,
           fields: [
             {
-              title: "Type",
+              title: 'Type',
               value: this.competitorType,
               short: true,
             },
           ],
-          color: "#d2ebff",
+          color: '#d2ebff',
         }],
       };
     };

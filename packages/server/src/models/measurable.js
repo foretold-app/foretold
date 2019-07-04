@@ -8,6 +8,7 @@ const { clientUrl } = require('../lib/urls');
 const { MEASURABLE_STATE } = require('./enums/measurable-state');
 const { MEASURABLE_VALUE_TYPE } = require('./enums/measurable-value-type');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-type');
+const { MEASUREMENT_VALUE } = require('./enums/measurement-value');
 
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Measurable', {
@@ -202,7 +203,7 @@ module.exports = (sequelize, DataTypes) => {
           competitorType: MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
           measurableId: this.dataValues.id,
           value: {
-            dataType: "floatPoint",
+            dataType: MEASUREMENT_VALUE.floatPoint,
             data: asFloat,
           },
         });

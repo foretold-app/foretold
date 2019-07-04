@@ -2,6 +2,7 @@ const _ = require('lodash');
 
 const { MEASURABLE_STATE } = require('../models/enums/measurable-state');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../models/enums/measurement-competitor-type');
+const { MEASUREMENT_VALUE } = require('../models/enums/measurement-value');
 
 const MAX_XS = 1000;
 
@@ -25,10 +26,10 @@ const ERR_5 = () => 'Measurable should be in an Open state.';
  * @return {Promise<boolean>}
  */
 async function measurementValueValidation(root, args, context, info) {
-  const floatCdf = _.get(args, 'input.value.floatCdf');
-  const floatPoint = _.get(args, 'input.value.floatPoint');
-  const percentage = _.get(args, 'input.value.percentage');
-  const binary = _.get(args, 'input.value.binary');
+  const floatCdf = _.get(args, ['input', 'value', MEASUREMENT_VALUE.floatCdf]);
+  const floatPoint = _.get(args, ['input', 'value', MEASUREMENT_VALUE.floatPoint]);
+  const percentage = _.get(args, ['input', 'value', MEASUREMENT_VALUE.percentage]);
+  const binary = _.get(args, ['input', 'value', MEASUREMENT_VALUE.binary]);
 
   {
     const valuesEntered = [floatCdf, floatPoint, percentage, binary];

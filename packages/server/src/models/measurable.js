@@ -6,6 +6,7 @@ const moment = require('moment');
 const { clientUrl } = require('../lib/urls');
 
 const { MEASURABLE_STATE } = require('./measurable-state');
+const { MEASURABLE_VALUE_TYPE } = require('./measurable-value-type');
 
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Measurable', {
@@ -38,8 +39,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     valueType: {
-      // @todo: use literals
-      type: DataTypes.ENUM(["FLOAT", "DATE", "PERCENTAGE"]),
+      type: DataTypes.ENUM([
+        MEASURABLE_VALUE_TYPE.FLOAT,
+        MEASURABLE_VALUE_TYPE.DATE,
+        MEASURABLE_VALUE_TYPE.PERCENTAGE,
+      ]),
       allowNull: false,
     },
 

@@ -1,11 +1,19 @@
-const graphql = require("graphql");
+const graphql = require('graphql');
 
-let valueType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
+const { MEASURABLE_VALUE_TYPE } = require('../models/measurable-value-type');
+
+const valueType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
   name: 'valueType',
   values: {
-    FLOAT: { value: "FLOAT" },
-    DATE: { value: "DATE" },
-    PERCENTAGE: { value: "PERCENTAGE" },
+    [MEASURABLE_VALUE_TYPE.FLOAT]: {
+      value: MEASURABLE_VALUE_TYPE.FLOAT,
+    },
+    [MEASURABLE_VALUE_TYPE.DATE]: {
+      value: MEASURABLE_VALUE_TYPE.DATE,
+    },
+    [MEASURABLE_VALUE_TYPE.PERCENTAGE]: {
+      value: MEASURABLE_VALUE_TYPE.PERCENTAGE,
+    },
   }
 }));
 

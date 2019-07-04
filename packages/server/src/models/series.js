@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize');
 
+const { MEASURABLE_VALUE_TYPE } = require('./measurable-value-type');
+
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Series', {
       id: {
@@ -65,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
             seriesId: this.id,
             creatorId: this.creatorId,
             channelId: this.channelId,
-            valueType: "FLOAT",
+            valueType: MEASURABLE_VALUE_TYPE.FLOAT,
           });
         }
       }

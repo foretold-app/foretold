@@ -7,6 +7,7 @@ const { clientUrl } = require('../lib/urls');
 
 const { MEASURABLE_STATE } = require('./measurable-state');
 const { MEASURABLE_VALUE_TYPE } = require('./measurable-value-type');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('./measurement-competitor-type');
 
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Measurable', {
@@ -111,10 +112,12 @@ module.exports = (sequelize, DataTypes) => {
           const json = await response.json();
           const match = JSON.stringify(json).match(/[-+]?[0-9]*\.?[0-9]+/);
           const asFloat = parseFloat(match[0]);
-          console.log(`got response from endpoint. Url: ${endpoint}, Response: ${JSON.stringify(json)}, Float: ${asFloat}`);
+          console.log(`got response from endpoint. Url: ${endpoint}, ` +
+            `Response: ${JSON.stringify(json)}, Float: ${asFloat}`);
           return asFloat;
         } catch (e) {
-          console.error(`Error getting response from endpoint. Url: ${endpoint}, error: ${e}`);
+          console.error(`Error getting response from endpoint. ` +
+            `Url: ${endpoint}, error: ${e}`);
           return null;
         }
       },
@@ -190,18 +193,22 @@ module.exports = (sequelize, DataTypes) => {
    * @param {Models.Agent.id} agentId
    * @return {Promise<void>}
    */
-  Model.prototype.processResolution = async function processResolution(agentId) {
-    const asFloat = await this.resolutionEndpointResponse;
-    if (asFloat) {
-      await sequelize.models.Measurement.create({
-        agentId,
-        competitorType: "OBJECTIVE",
-        measurableId: this.dataValues.id,
-        value: { "dataType": "floatPoint", "data": asFloat }
-      });
-    }
-    await this.judged();
-  };
+  Model.prototype.processResolution =
+    async function processResolution(agentId) {
+      const asFloat = await this.resolutionEndpointResponse;
+      if (asFloat) {
+        await sequelize.models.Measurement.create({
+          agentId,
+          competitorType: MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
+          measurableId: this.dataValues.id,
+          value: {
+            dataType: "floatPoint",
+            data: asFloat,
+          },
+        });
+      }
+      await this.judged();
+    };
 
   /**
    * @todo: move me
@@ -209,34 +216,37 @@ module.exports = (sequelize, DataTypes) => {
    * @param {Models.Creator} creator
    * @return {Promise<*>}
    */
-  Model.prototype.getCreationNotification = async function getCreationNotification(creator) {
-    const agent = await creator.getAgent();
-    return {
-      "attachments": [{
-        "pretext": "New Measurable Created",
-        "title": this.name,
-        "title_link": `${clientUrl}/c/${this.channelId}`,
-        "author_name": creator.name,
-        "author_link": `${clientUrl}/agents/${agent.id}`,
-        "text": this.labelCustom,
-        "fields": [
-          {
-            "title": "Resolution Date",
-            "value": moment(this.expectedResolutionDate).format("MMM DD, YYYY"),
-            "short": true,
-          },
-        ],
-        "color": "#4a8ed8",
-      }],
+  Model.prototype.getCreationNotification =
+    async function getCreationNotification(creator) {
+      const agent = await creator.getAgent();
+      return {
+        attachments: [{
+          pretext: "New Measurable Created",
+          title: this.name,
+          title_link: `${clientUrl}/c/${this.channelId}`,
+          author_name: creator.name,
+          author_link: `${clientUrl}/agents/${agent.id}`,
+          text: this.labelCustom,
+          fields: [
+            {
+              title: "Resolution Date",
+              value: moment(this.expectedResolutionDate).format("MMM DD, YYYY"),
+              short: true,
+            },
+          ],
+          color: "#4a8ed8",
+        }],
+      };
     };
-  };
 
   /**
    * @param {object} ops
    * @return {string[]}
    */
   Model.prototype.changedFields = function changedFields(ops) {
-    return Object.keys(ops).filter(r => r !== "expectedResolutionDate").filter(r => this[r] !== ops[r]);
+    return Object.keys(ops)
+      .filter(r => r !== "expectedResolutionDate")
+      .filter(r => this[r] !== ops[r]);
   };
 
   /**
@@ -246,25 +256,26 @@ module.exports = (sequelize, DataTypes) => {
    * @param {object} newData
    * @return {Promise<*>}
    */
-  Model.prototype.getUpdateNotifications = async function getUpdateNotifications(creator, newData) {
-    const changed = this.changedFields(newData);
-    const agent = await creator.getAgent();
-    return {
-      "attachments": [{
-        "pretext": "Measurable Updated",
-        "title": this.name,
-        "title_link": `${clientUrl}/c/${this.channelId}`,
-        "author_name": creator.name,
-        "author_link": `${clientUrl}/agents/${agent.id}`,
-        "fields": changed.map(c => ({
-          "title": c,
-          "short": false,
-          "value": `*From*: ${this[c]} \n*To*:  ${newData[c]}`
-        })),
-        "color": "#ffe75e",
-      }],
+  Model.prototype.getUpdateNotifications =
+    async function getUpdateNotifications(creator, newData) {
+      const changed = this.changedFields(newData);
+      const agent = await creator.getAgent();
+      return {
+        attachments: [{
+          pretext: "Measurable Updated",
+          title: this.name,
+          title_link: `${clientUrl}/c/${this.channelId}`,
+          author_name: creator.name,
+          author_link: `${clientUrl}/agents/${agent.id}`,
+          fields: changed.map(c => ({
+            title: c,
+            short: false,
+            value: `*From*: ${this[c]} \n*To*:  ${newData[c]}`
+          })),
+          color: "#ffe75e",
+        }],
+      };
     };
-  };
 
   Model.associate = function associate(models) {
     Model.Measurements = Model.hasMany(models.Measurement, {
@@ -274,7 +285,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Model.Series = Model.belongsTo(models.Series, {
       foreignKey: 'seriesId',
-      as: "series",
+      as: 'series',
     });
 
     Model.Creator = Model.belongsTo(models.Agent, {

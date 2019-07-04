@@ -2,7 +2,7 @@ const _ = require('lodash');
 const { rule } = require('graphql-shield');
 
 const models = require('../models');
-const { CHANNEL_MEMBERSHIP_ROLES } = require('../models/channel-membership-roles');
+const { CHANNEL_MEMBERSHIP_ROLES } = require('../models/enums/channel-membership-roles');
 
 /**
  * @param {*} root

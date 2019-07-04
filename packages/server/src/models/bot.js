@@ -1,3 +1,6 @@
+const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-type');
+const { AGENT_TYPE } = require('./enums/agent-type');
+
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Bot', {
       id: {
@@ -15,31 +18,33 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       competitorType: {
-        type: DataTypes.ENUM(["COMPETITIVE", "AGGREGATION", "OBJECTIVE"]),
-        defaultValue: "COMPETITIVE",
+        type: DataTypes.ENUM([
+          MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
+          MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE,
+          MEASUREMENT_COMPETITOR_TYPE.AGGREGATION,
+        ]),
+        defaultValue: MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE,
         allowNull: true,
       },
       userId: {
         type: DataTypes.UUID(),
-        // allowNull: false,
       },
       agentId: {
         type: DataTypes.UUID(),
-        // allowNull: false,
       },
     },
     {
       hooks: {
         beforeCreate: async (event) => {
           let agent = await sequelize.models.Agent.create({
-            type: "BOT",
+            type: AGENT_TYPE.BOT,
           });
           event.agentId = agent.dataValues.id;
         },
       }
     });
 
-  Model.associate = function (models) {
+  Model.associate = function associate(models) {
     Model.User = Model.belongsTo(models.User, {
       foreignKey: 'userId',
     });

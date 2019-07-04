@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize');
 
+const { MEASURABLE_VALUE_TYPE } = require('./enums/measurable-value-type');
+
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Series', {
       id: {
@@ -51,13 +53,13 @@ module.exports = (sequelize, DataTypes) => {
       }
     });
 
-  Model.prototype.createMeasurables = async function () {
+  Model.prototype.createMeasurables = async function createMeasurables() {
     for (let subject of this.subjects) {
       for (let property of this.properties) {
         for (let date of this.dates) {
           console.log("Making Measurable for Series:", subject, property, date);
           await sequelize.models.Measurable.create({
-            name: "",
+            name: '',
             labelSubject: subject,
             labelProperty: property,
             labelOnDate: date,
@@ -65,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
             seriesId: this.id,
             creatorId: this.creatorId,
             channelId: this.channelId,
-            valueType: "FLOAT",
+            valueType: MEASURABLE_VALUE_TYPE.FLOAT,
           });
         }
       }
@@ -80,7 +82,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Model.Measurables = Model.hasMany(models.Measurable, {
       foreignKey: 'seriesId',
-      as: "Measurables",
+      as: 'Measurables',
     });
 
     // Usage

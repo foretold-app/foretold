@@ -1,4 +1,4 @@
-const { CHANNEL_MEMBERSHIP_ROLES } = require('./channel-membership-roles');
+const { CHANNEL_MEMBERSHIP_ROLES } = require('./enums/channel-membership-roles');
 
 /**
  * @param sequelize

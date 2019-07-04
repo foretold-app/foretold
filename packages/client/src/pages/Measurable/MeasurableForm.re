@@ -88,19 +88,6 @@ let dataSource =
 
 let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
   <AntdForm onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
-    <Form.Item label="Question Type">
-      <Antd.Radio.Group
-        value={form.values.showDescriptionProperty}
-        defaultValue={form.values.showDescriptionProperty}
-        onChange={ReForm.Helpers.handleDomFormChange(
-          handleChange(`showDescriptionProperty),
-        )}>
-        <Antd.Radio value="FALSE"> {"Simple" |> ste} </Antd.Radio>
-        <Antd.Radio value="TRUE">
-          {"Subject-Property-Date" |> ste}
-        </Antd.Radio>
-      </Antd.Radio.Group>
-    </Form.Item>
     {E.React.showIf(
        form.values.showDescriptionProperty == "TRUE",
        <>
@@ -154,7 +141,7 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
     {E.React.showIf(
        form.values.showDescriptionProperty == "FALSE",
        <>
-         <Form.Item label="Result Type">
+         <Form.Item label="Question Type">
            <Antd.Radio.Group
              value={form.values.valueType}
              defaultValue={form.values.valueType}
@@ -204,6 +191,17 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
         onChange={e => handleChange(`expectedResolutionDate, e |> formatDate)}
         disabled={form.values.showDescriptionDate == "TRUE"}
       />
+    </Form.Item>
+    <Form.Item label="Use Entities in Title">
+      <Antd.Radio.Group
+        value={form.values.showDescriptionProperty}
+        defaultValue={form.values.showDescriptionProperty}
+        onChange={ReForm.Helpers.handleDomFormChange(
+          handleChange(`showDescriptionProperty),
+        )}>
+        <Antd.Radio value="FALSE"> {"No" |> ste} </Antd.Radio>
+        <Antd.Radio value="TRUE"> {"Yes (Experimental)" |> ste} </Antd.Radio>
+      </Antd.Radio.Group>
     </Form.Item>
     <Form.Item>
       <Button _type=`primary onClick={_ => handleSubmit()}>

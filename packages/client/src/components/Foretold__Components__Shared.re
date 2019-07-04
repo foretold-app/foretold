@@ -70,19 +70,14 @@ module Item = {
 
 module TagLink = {
   let _linkCommonAttributes = [
-    padding2(~v=`px(1), ~h=`px(4)),
-    borderRadius(`px(2)),
-    fontSize(`em(0.95)),
-    fontWeight(`num(800)),
+    fontSize(`em(1.0)),
+    textDecoration(`underline),
+    fontWeight(`num(600)),
   ];
 
   let primarylinkColors = [
     color(`hex("0e2b68")),
-    backgroundColor(`hex("dbdbe5")),
-    selector(
-      ":hover",
-      [backgroundColor(`hex("c7defe")), color(`hex("0e2b68"))],
-    ),
+    selector(":hover", [color(`hex("666"))]),
     ..._linkCommonAttributes,
   ];
 
@@ -94,9 +89,8 @@ module TagLink = {
 
   let dateItem =
     style([
-      color(`hex("505050")),
-      backgroundColor(`hex("ececec")),
-      marginRight(`px(2)),
+      color(`hex("666")),
+      important(textDecorationColor(`hex("ccc"))),
       ..._linkCommonAttributes,
     ]);
 };

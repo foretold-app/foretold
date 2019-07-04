@@ -54,6 +54,9 @@ let competitorTypeSelect =
           {"Predict" |> ste}
         </Select.Option>,
         <Select.Option value="OBJECTIVE"> {"Resolve" |> ste} </Select.Option>,
+        <Select.Option value="UNRESOLVED">
+          {"Close without Answer" |> ste}
+        </Select.Option>,
       |]
     };
 

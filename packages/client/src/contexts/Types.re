@@ -1,9 +1,15 @@
-type valueType = [ | `DATE | `FLOAT | `PERCENTAGE];
+type valueType = [ | `DATE | `FLOAT | `PERCENTAGE | `UNRESOLVED];
+
 type agentTypeEntity = [ | `USER | `BOT];
+
 type channelMembershipRole = [ | `ADMIN | `VIEWER];
+
 type myMembershipRole = [ | `ADMIN | `VIEWER | `NONE];
+
 type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
+
 type measurableState = [ | `OPEN | `JUDGEMENT_PENDING | `JUDGED];
+
 type permission = [
   | `BOT_CREATE
   | `BOT_UPDATE
@@ -24,6 +30,7 @@ type permission = [
 ];
 
 type permissions = {allow: list(permission)};
+
 type user = {
   id: string,
   auth0Id: option(string),

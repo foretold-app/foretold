@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
-const { MEASURABLE_STATE } = require('../models/measurable-state');
-const { MEASUREMENT_COMPETITOR_TYPE } = require('../models/measurement-competitor-type');
+const { MEASURABLE_STATE } = require('../models/enums/measurable-state');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../models/enums/measurement-competitor-type');
 
 const MAX_XS = 1000;
 

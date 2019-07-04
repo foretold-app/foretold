@@ -1,5 +1,5 @@
-const { MEASUREMENT_COMPETITOR_TYPE } = require('./measurement-competitor-type');
-const { AGENT_TYPE } = require('./agent-type');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-type');
+const { AGENT_TYPE } = require('./enums/agent-type');
 
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Bot', {

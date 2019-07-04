@@ -1,6 +1,6 @@
 const graphql = require('graphql');
 
-const { MEASURABLE_VALUE_TYPE } = require('../models/measurable-value-type');
+const { MEASURABLE_VALUE_TYPE } = require('../models/enums/measurable-value-type');
 
 const valueType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
   name: 'valueType',

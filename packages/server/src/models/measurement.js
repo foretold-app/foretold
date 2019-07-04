@@ -2,7 +2,7 @@ const _ = require('lodash');
 const Sequelize = require('sequelize');
 const { clientUrl } = require('../lib/urls');
 
-const { MEASUREMENT_COMPETITOR_TYPE } = require('./measurement-competitor-type');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-type');
 
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Measurement', {

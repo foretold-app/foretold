@@ -5,9 +5,9 @@ const moment = require('moment');
 
 const { clientUrl } = require('../lib/urls');
 
-const { MEASURABLE_STATE } = require('./measurable-state');
-const { MEASURABLE_VALUE_TYPE } = require('./measurable-value-type');
-const { MEASUREMENT_COMPETITOR_TYPE } = require('./measurement-competitor-type');
+const { MEASURABLE_STATE } = require('./enums/measurable-state');
+const { MEASURABLE_VALUE_TYPE } = require('./enums/measurable-value-type');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-type');
 
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Measurable', {

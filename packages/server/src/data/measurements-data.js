@@ -3,8 +3,8 @@ const { notify } = require("../lib/notifications");
 const { DataBase } = require('./data-base');
 
 const { MeasurementModel } = require('../models-abstract');
-const { MEASURABLE_STATE } = require('../models/measurable-state');
-const { MEASUREMENT_COMPETITOR_TYPE } = require('../models/measurement-competitor-type');
+const { MEASURABLE_STATE } = require('../models/enums/measurable-state');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../models/enums/measurement-competitor-type');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

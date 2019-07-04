@@ -2,7 +2,7 @@ const graphql = require("graphql");
 
 const resolvers = require('../resolvers');
 
-const { CHANNEL_MEMBERSHIP_ROLES } = require('../models/channel-membership-roles');
+const { CHANNEL_MEMBERSHIP_ROLES } = require('../models/enums/channel-membership-roles');
 
 const role = new graphql.GraphQLEnumType({
   name: 'ChannelMembershipRoles',

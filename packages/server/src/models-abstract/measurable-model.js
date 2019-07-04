@@ -3,7 +3,7 @@ const _ = require('lodash');
 const models = require('../models');
 const { ModelPostgres } = require('./model-postgres');
 
-const { MEASURABLE_STATE } = require('../models/measurable-state');
+const { MEASURABLE_STATE } = require('../models/enums/measurable-state');
 
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}

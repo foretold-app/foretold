@@ -1,4 +1,4 @@
-const index = require('./value-type');
+const index = require('./measurable-value-type');
 
 describe('index', () => {
   it('A', () => {

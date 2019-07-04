@@ -2,6 +2,7 @@ const graphql = require('graphql');
 const { resolver, DateType } = require('graphql-sequelize');
 
 const models = require('../models');
+const { MEASUREMENT_VALUE } = require('../models/enums/measurement-value');
 
 // Input
 const measurementValueInputFloatCdf = new graphql.GraphQLInputObjectType({
@@ -15,10 +16,10 @@ const measurementValueInputFloatCdf = new graphql.GraphQLInputObjectType({
 const measurementValueInput = new graphql.GraphQLInputObjectType({
   name: 'MeasurementValueInput',
   fields: () => ({
-    floatCdf: { type: measurementValueInputFloatCdf },
-    floatPoint: { type: graphql.GraphQLFloat },
-    percentage: { type: graphql.GraphQLFloat },
-    binary: { type: graphql.GraphQLBoolean },
+    [MEASUREMENT_VALUE.floatCdf]: { type: measurementValueInputFloatCdf },
+    [MEASUREMENT_VALUE.floatPoint]: { type: graphql.GraphQLFloat },
+    [MEASUREMENT_VALUE.percentage]: { type: graphql.GraphQLFloat },
+    [MEASUREMENT_VALUE.binary]: { type: graphql.GraphQLBoolean },
   }),
 });
 
@@ -27,7 +28,7 @@ const measurementCreateInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     value: { type: measurementValueInput },
     valueText: { type: graphql.GraphQLString },
-    competitorType: { type: require('./competitor').competitor },
+    competitorType: { type: require('./competitor-type').competitorType },
     measurableId: { type: graphql.GraphQLString },
     agentId: { type: graphql.GraphQLString },
     description: { type: graphql.GraphQLString },
@@ -57,10 +58,10 @@ const measurementValueFloatCdf = new graphql.GraphQLObjectType({
 const measurementValue = new graphql.GraphQLObjectType({
   name: 'MeasurementValue',
   fields: () => ({
-    floatCdf: { type: measurementValueFloatCdf },
-    floatPoint: { type: graphql.GraphQLFloat },
-    percentage: { type: graphql.GraphQLFloat },
-    binary: { type: graphql.GraphQLBoolean },
+    [MEASUREMENT_VALUE.floatCdf]: { type: measurementValueFloatCdf },
+    [MEASUREMENT_VALUE.floatPoint]: { type: graphql.GraphQLFloat },
+    [MEASUREMENT_VALUE.percentage]: { type: graphql.GraphQLFloat },
+    [MEASUREMENT_VALUE.binary]: { type: graphql.GraphQLBoolean },
   }),
 });
 
@@ -69,7 +70,7 @@ const measurement = new graphql.GraphQLObjectType({
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     value: { type: graphql.GraphQLNonNull(measurementValue) },
-    competitorType: { type: require('./competitor').competitor },
+    competitorType: { type: require('./competitor-type').competitorType },
     description: { type: graphql.GraphQLString },
     measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     agentId: { type: graphql.GraphQLString },

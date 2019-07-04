@@ -1,6 +1,8 @@
 const _ = require('lodash');
 const Sequelize = require('sequelize');
 
+const { AGENT_TYPE } = require('./enums/agent-type');
+
 module.exports = (sequelize, DataTypes) => {
   const Model = sequelize.define('Agent', {
     id: {
@@ -10,7 +12,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     type: {
-      type: DataTypes.ENUM(["USER", "BOT"]),
+      type: DataTypes.ENUM([
+        AGENT_TYPE.USER,
+        AGENT_TYPE.BOT,
+      ]),
       allowNull: false,
     },
     isAdmin: {
@@ -22,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.STRING),
       get: async function () {
-        if (this.type == "USER") {
+        if (this.type === AGENT_TYPE.USER) {
           const user = await this.getUser();
           return _.get(user, 'name');
         } else {

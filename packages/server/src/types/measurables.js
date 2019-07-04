@@ -2,10 +2,10 @@ const graphql = require('graphql');
 const { resolver, DateType } = require('graphql-sequelize');
 
 const models = require('../models');
-const { MEASURABLE_STATE } = require('../models/measurable-state');
+const { MEASURABLE_STATE } = require('../models/enums/measurable-state');
 const resolvers = require('../resolvers');
 
-const { valueType } = require('./value-type');
+const { measurableValueType } = require('./measurable-value-type');
 
 const measurableState = new graphql.GraphQLEnumType({
   name: 'measurableState',
@@ -25,7 +25,7 @@ const measurable = new graphql.GraphQLObjectType({
     labelOnDate: { type: DateType.default },
     labelProperty: { type: graphql.GraphQLString },
     labelCustom: { type: graphql.GraphQLString },
-    valueType: { type: valueType },
+    valueType: { type: measurableValueType },
     state: { type: graphql.GraphQLNonNull(measurableState) },
     stateUpdatedAt: { type: DateType.default },
     isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
@@ -79,7 +79,7 @@ const measurableCreateInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     labelCustom: { type: graphql.GraphQLString },
-    valueType: { type: require('./value-type').valueType },
+    valueType: { type: require('./measurable-value-type').measurableValueType },
     expectedResolutionDate: { type: DateType.default },
     resolutionEndpoint: { type: graphql.GraphQLString },
     labelSubject: { type: graphql.GraphQLString },
@@ -94,7 +94,7 @@ const measurableUpdateInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     labelCustom: { type: graphql.GraphQLString },
-    valueType: { type: require('./value-type').valueType },
+    valueType: { type: require('./measurable-value-type').measurableValueType },
     expectedResolutionDate: { type: DateType.default },
     resolutionEndpoint: { type: graphql.GraphQLString },
     labelSubject: { type: graphql.GraphQLString },

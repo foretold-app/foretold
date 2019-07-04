@@ -1,12 +1,12 @@
 const graphql = require("graphql");
 
-const competitors = require('./competitor');
+const competitors = require('./competitor-type');
 
 describe('competitors types', () => {
   it('class should be object', () => {
     expect(competitors).toBeInstanceOf(Object);
   });
   it('channel', () => {
-    expect(competitors.competitor).toBeInstanceOf(graphql.GraphQLNonNull);
+    expect(competitors.competitorType).toBeInstanceOf(graphql.GraphQLNonNull);
   });
 });

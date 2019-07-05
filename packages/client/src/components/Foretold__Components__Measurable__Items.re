@@ -6,6 +6,31 @@ module Shared = Foretold__Components__Shared;
 
 type measurable = Measurable.t;
 
+let kenDisplay = id => {
+  let names = Foretold__Components__Ken.names(id);
+  names
+  |> E.A.of_list
+  |> E.A.fmapi((i, r: Graph_T.T.fact) =>
+       <div key={i |> string_of_int}>
+         {Foretold__Components__Ken.findName(r.propertyId)
+          |> E.O.default("no-name")
+          |> ste
+          |> E.React.inH3}
+         Graph_T.T.(
+           switch (r.value.valueType) {
+           | String(s) => s |> ste
+           | ThingId(s) =>
+             <Foretold__Components__Link linkType={Internal(EntityShow(s))}>
+               {s |> ste}
+             </Foretold__Components__Link>
+           | _ => "no-name" |> ste
+           }
+         )
+       </div>
+     )
+  |> ReasonReact.array;
+};
+
 module MeasurableEntityLinks = {
   let xEntityLink = (attribute, ~m: measurable, ~className: string) =>
     m
@@ -15,11 +40,12 @@ module MeasurableEntityLinks = {
          m
          |> attribute
          |> E.O.fmap(d =>
-              <Foretold__Components__Link
-                linkType={External(d |> Foretold__Components__Ken.itemUrl)}
-                className>
-                {r |> ste}
-              </Foretold__Components__Link>
+              <AntdPopover
+                content={kenDisplay(attribute(m) |> E.O.default(""))}
+                trigger=`hover
+                placement=`top>
+                <span className> {r |> ste} </span>
+              </AntdPopover>
             )
        );
 
@@ -33,7 +59,7 @@ let formatDate = e =>
 let dateOnStyle =
   Css.(
     style([
-      marginLeft(`em(0.3)),
+      marginLeft(`em(0.2)),
       lineHeight(`em(1.56)),
       fontSize(`em(1.1)),
     ])
@@ -58,7 +84,7 @@ let dateItem = (~m: measurable, ~showOn=true, ~onStyle=dateOnStyle, ()) =>
 
 let link = (~m: measurable) => {
   open Css;
-  let name = style([fontSize(`em(1.2)), color(`hex("333"))]);
+  let name = style([fontSize(`em(1.1)), color(`hex("333"))]);
   <>
     {MeasurableEntityLinks.nameEntityLink(~m, ~className=Shared.TagLink.item)
      |> E.O.React.defaultNull}

@@ -13,10 +13,11 @@ class Jwt {
   }
 
   /**
+   * @public
    * @param {string} token
    * @return {boolean}
    */
-  validateJwt(token) {
+  validate(token = '') {
     const pattern = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/;
     return pattern.test(token);
   }

@@ -13,44 +13,53 @@ class AuthenticationData {
     this.tokens = new TokensData();
   }
 
-
-  /**
-   * @param {string} token
-   * @return {Promise<boolean | Models.User>}
-   */
-  async authenticationByAuth0JwtToken(token) {
-    try {
-      const decoded = this.Jwt.decodeAuth0JwtToken(token);
-      if (!decoded.sub) throw new AuthenticationData.NoUserIdError;
-      return await this.users.getUserByAuth0Id(decoded.sub);
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  /**
-   * @param {string} token
-   * @return {Promise<Schema.Context>}
-   */
-  async authenticationByJwtToken(token) {
-    try {
-      const decoded = this.Jwt.decodeJwtToken(token);
-      const agentId = decoded.sub;
-      return await this.getContext(agentId);
-    } catch (err) {
-      throw err;
-    }
-  }
-
   /**
    * @public
    * @param {string} token
+   * @return {Promise<*>}
+   */
+  async authenticate(token = '') {
+    try {
+
+      if (this.tokens.validate(token)) {
+        return await this._byToken(token);
+      }
+
+      if (this.Jwt.validate(token)) {
+        return await this._byJwt(token);
+      }
+
+      throw new AuthenticationData.TokenIsInvalidError;
+
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * @protected
+   * @param {string} token
    * @return {Promise<Schema.Context>}
    */
-  async authenticationByToken(token) {
+  async _byJwt(token) {
+    try {
+      const decoded = this.Jwt.decodeJwtToken(token);
+      const agentId = decoded.sub;
+      return await this._getContext(agentId);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * @protected
+   * @param {string} token
+   * @return {Promise<Schema.Context>}
+   */
+  async _byToken(token) {
     try {
       const agentId = await this.tokens.getAgentIdByToken(token);
-      return await this.getContext(agentId);
+      return await this._getContext(agentId);
     } catch (err) {
       throw err;
     }
@@ -61,7 +70,7 @@ class AuthenticationData {
    * @param {Models.ObjectID} agentId
    * @return {Promise<{agent: Models.Agent, creator: *, bot, user}>}
    */
-  async getContext(agentId) {
+  async _getContext(agentId) {
     if (!agentId) throw new AuthenticationData.NoAgentIdError;
 
     const agent = await this.agents.getOne(agentId);
@@ -75,6 +84,7 @@ class AuthenticationData {
   }
 
   /**
+   * @public
    * @param {string} token
    * @return {Promise<string>}
    */
@@ -90,16 +100,13 @@ class AuthenticationData {
 
   /**
    * @param {string} token
-   * @return {Promise<*>}
+   * @return {Promise<boolean | Models.User>}
    */
-  async authenticate(token) {
+  async authenticationByAuth0JwtToken(token) {
     try {
-      if (this.tokens.validate(token)) {
-        return await this.authenticationByToken(token);
-      } else if (this.Jwt.validateJwt(token)) {
-        return await this.authenticationByJwtToken(token);
-      }
-      throw new AuthenticationData.TokenIsInvalidError;
+      const decoded = this.Jwt.decodeAuth0JwtToken(token);
+      if (!decoded.sub) throw new AuthenticationData.NoUserIdError;
+      return await this.users.getUserByAuth0Id(decoded.sub);
     } catch (err) {
       throw err;
     }

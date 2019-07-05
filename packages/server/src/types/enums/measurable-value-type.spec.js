@@ -1,7 +1,7 @@
 const index = require('./measurable-value-type');
 
-describe('index', () => {
-  it('A', () => {
+describe('Measurable Value type', () => {
+  it('returns an object', () => {
     expect(index).toBeInstanceOf(Object);
   });
 });

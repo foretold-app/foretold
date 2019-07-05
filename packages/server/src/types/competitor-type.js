@@ -14,6 +14,9 @@ const competitorType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
     [MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE]: {
       value: MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
     },
+    [MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED]: {
+      value: MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED,
+    },
   }
 }));
 

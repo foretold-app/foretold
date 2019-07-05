@@ -1,4 +1,4 @@
-const enumTypeName = 'enum_Measurables_valueType';
+const enumTypeName = 'enum_Measurements_competitorType';
 const newValue = 'UNRESOLVED';
 
 module.exports = {

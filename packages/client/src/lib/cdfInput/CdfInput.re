@@ -84,7 +84,7 @@ let getIsValid = (state: state): bool =>
   | "UNRESOLVABLE_RESOLUTION" => true
   };
 
-let dataTypeFacade =
+let getDataTypeAsString =
     (
       competitorType: string,
       measurable: Primary.Measurable.t,
@@ -92,7 +92,7 @@ let dataTypeFacade =
     )
     : string =>
   switch (competitorType, measurable.valueType, dataType) {
-  | ("OBJECTIVE" | "COMPETITIVE", `UNRESOLVED, _) => "UNRESOLVABLE_RESOLUTION"
+  | ("UNRESOLVED", _, _) => "UNRESOLVABLE_RESOLUTION"
   | ("OBJECTIVE" | "COMPETITIVE", `FLOAT | `DATE, None) => "FLOAT_CDF"
   | ("OBJECTIVE" | "COMPETITIVE", `FLOAT | `DATE, Some(dataType)) => dataType
   | ("OBJECTIVE", `PERCENTAGE, _) => "BINARY_BOOL"
@@ -100,7 +100,7 @@ let dataTypeFacade =
   | _ => "FLOAT_CDF"
   };
 
-let getValue = (state: state): MeasurementValue.t =>
+let getValueFromState = (state: state): MeasurementValue.t =>
   switch (state.dataType) {
   | "FLOAT_CDF" =>
     `FloatCdf(
@@ -120,7 +120,7 @@ let getValue = (state: state): MeasurementValue.t =>
     )
   };
 
-let getCompetitorType = (str: string) =>
+let getCompetitorTypeFromString = (str: string): Types.competitorType =>
   switch (str) {
   | "COMPETITIVE" => `COMPETITIVE
   | "OBJECTIVE" => `OBJECTIVE
@@ -204,12 +204,14 @@ let mainBlock =
           value={state.percentage}
           step=1.
           onChange={(value: float) =>
-            // This is to fix a bug. The value could actually be undefined, but the antd lib can't handle this.
-
-              if (value > (-0.001)) {
-                send(UpdatePercentage(value));
-              }
+            if (value > (-0.001)) {
+              // This is to fix a bug. The value could actually be undefined,
+              // but the antd lib can't handle this.
+              send(
+                UpdatePercentage(value),
+              );
             }
+          }
         />
       </>
 
@@ -295,14 +297,23 @@ let make =
       };
 
     {
+      // Values
       floatCdf: FloatCdf.empty,
-      competitorType: competitorTypeInitValue,
       percentage: 0.,
       binary: true,
-      dataType: dataTypeFacade(competitorTypeInitValue, measurable, None),
+      unresolvableResolution: "",
+
+      // OBJECTIVE, COMPETITIVE, AGGREGATION (not used here), UNRESOLVED
+      competitorType: competitorTypeInitValue,
+      // Used to transform Form Data Type to Measurement Type
+      dataType:
+        getDataTypeAsString(competitorTypeInitValue, measurable, None),
+
+      // Strings
       description: "",
       valueText: "",
-      unresolvableResolution: "",
+
+      // Form State Only
       hasLimitError: false,
     };
   },
@@ -318,7 +329,11 @@ let make =
 
     | UpdateCompetitorType(competitorType) =>
       let dataType =
-        dataTypeFacade(competitorType, measurable, Some(state.dataType));
+        getDataTypeAsString(
+          competitorType,
+          measurable,
+          Some(state.dataType),
+        );
       ReasonReact.Update({...state, competitorType, dataType});
 
     | UpdateDataType((dataType: string)) =>
@@ -341,13 +356,15 @@ let make =
 
   render: ({state, send}) => {
     let onSubmit = () => {
-      let value = getValue(state);
+      let value = getValueFromState(state);
+
       onSubmit((
         value,
-        getCompetitorType(state.competitorType),
+        getCompetitorTypeFromString(state.competitorType),
         state.description,
         state.valueText,
       ));
+
       ();
     };
 

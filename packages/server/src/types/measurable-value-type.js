@@ -14,9 +14,6 @@ const measurableValueType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
     [MEASURABLE_VALUE_TYPE.PERCENTAGE]: {
       value: MEASURABLE_VALUE_TYPE.PERCENTAGE,
     },
-    [MEASURABLE_VALUE_TYPE.UNRESOLVED]: {
-      value: MEASURABLE_VALUE_TYPE.UNRESOLVED,
-    },
   }
 }));
 

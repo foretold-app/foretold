@@ -9,6 +9,7 @@ type state = {
   percentage: float,
   binary: bool,
   dataType: string,
+  unresolvableResolution: string,
   // -> Measurement
   competitorType: string,
   description: string,
@@ -23,6 +24,7 @@ type action =
   | UpdatePercentage(float)
   | UpdateBinary(bool)
   | UpdateDataType(string)
+  | UpdateUnresolvableResolution(string)
   // -> Measurement
   | UpdateCompetitorType(string)
   | UpdateDescription(string)
@@ -48,12 +50,18 @@ let competitorTypeSelect =
     switch (measurable.state) {
     | Some(`JUDGED) => [|
         <Select.Option value="OBJECTIVE"> {"Resolve" |> ste} </Select.Option>,
+        <Select.Option value="UNRESOLVED">
+          {"Close without Answer" |> ste}
+        </Select.Option>,
       |]
     | _ => [|
         <Select.Option value="COMPETITIVE">
           {"Predict" |> ste}
         </Select.Option>,
         <Select.Option value="OBJECTIVE"> {"Resolve" |> ste} </Select.Option>,
+        <Select.Option value="UNRESOLVED">
+          {"Close without Answer" |> ste}
+        </Select.Option>,
       |]
     };
 
@@ -76,24 +84,25 @@ let getIsValid = (state: state): bool =>
   | "FLOAT_POINT" => E.A.length(state.floatCdf.xs) == 1
   | "PERCENTAGE_FLOAT" => true
   | "BINARY_BOOL" => true
+  | "UNRESOLVABLE_RESOLUTION" => true
   };
 
-let dataTypeFacade =
+let getDataTypeAsString =
     (
       competitorType: string,
       measurable: Primary.Measurable.t,
       dataType: option(string),
     )
-    : string =>
+    : string => {
   switch (competitorType, measurable.valueType, dataType) {
-  | ("OBJECTIVE" | "COMPETITIVE", `FLOAT | `DATE, None) => "FLOAT_CDF"
-  | ("OBJECTIVE" | "COMPETITIVE", `FLOAT | `DATE, Some(dataType)) => dataType
+  | ("UNRESOLVED", _, _) => "UNRESOLVABLE_RESOLUTION"
   | ("OBJECTIVE", `PERCENTAGE, _) => "BINARY_BOOL"
   | ("COMPETITIVE", `PERCENTAGE, _) => "PERCENTAGE_FLOAT"
   | _ => "FLOAT_CDF"
   };
+};
 
-let getValue = (state: state): MeasurementValue.t =>
+let getValueFromState = (state: state): MeasurementValue.t =>
   switch (state.dataType) {
   | "FLOAT_CDF" =>
     `FloatCdf(
@@ -106,12 +115,18 @@ let getValue = (state: state): MeasurementValue.t =>
     `FloatPoint(point);
   | "PERCENTAGE_FLOAT" => `Percentage(state.percentage)
   | "BINARY_BOOL" => `Binary(state.binary)
+  | "UNRESOLVABLE_RESOLUTION" =>
+    `UnresolvableResolution(
+      state.unresolvableResolution
+      |> MeasurementValue.UnresolvableResolution.fromString,
+    )
   };
 
-let getCompetitorType = (str: string) =>
+let getCompetitorTypeFromString = (str: string): Types.competitorType =>
   switch (str) {
   | "COMPETITIVE" => `COMPETITIVE
   | "OBJECTIVE" => `OBJECTIVE
+  | "UNRESOLVED" => `UNRESOLVED
   | _ => `OBJECTIVE
   };
 
@@ -133,10 +148,10 @@ let mainBlock =
     | _ => ReasonReact.null
     };
 
-  let getValueInput: ReasonReact.reactElement =
-    switch (state.dataType, state.competitorType) {
-    | ("FLOAT_CDF", _)
-    | ("FLOAT_POINT", _) =>
+  let valueInput: ReasonReact.reactElement =
+    switch (state.dataType) {
+    | "FLOAT_CDF"
+    | "FLOAT_POINT" =>
       <>
         {state.competitorType == "OBJECTIVE"
            ? ReasonReact.null
@@ -163,7 +178,7 @@ let mainBlock =
         />
       </>
 
-    | ("BINARY_BOOL", _) =>
+    | "BINARY_BOOL" =>
       <Select
         value={state.binary |> E.Bool.toString}
         onChange={e => send(UpdateBinary(e |> E.Bool.fromString))}>
@@ -171,7 +186,7 @@ let mainBlock =
         <Select.Option value="FALSE"> {"False" |> ste} </Select.Option>
       </Select>
 
-    | ("PERCENTAGE_FLOAT", _) =>
+    | "PERCENTAGE_FLOAT" =>
       <>
         <h4 className=Styles.label>
           {"Predicted Percentage Chance" |> ste}
@@ -192,14 +207,30 @@ let mainBlock =
           value={state.percentage}
           step=1.
           onChange={(value: float) =>
-            // This is to fix a bug. The value could actually be undefined, but the antd lib can't handle this.
-
-              if (value > (-0.001)) {
-                send(UpdatePercentage(value));
-              }
+            if (value > (-0.001)) {
+              // This is to fix a bug. The value could actually be undefined,
+              // but the antd lib can't handle this.
+              send(
+                UpdatePercentage(value),
+              );
             }
+          }
         />
       </>
+
+    | "UNRESOLVABLE_RESOLUTION" =>
+      <Select
+        value={state.unresolvableResolution}
+        onChange={e => send(UpdateUnresolvableResolution(e))}>
+        <Select.Option value="AMBIGUOUS"> {"Ambiguous" |> ste} </Select.Option>
+        <Select.Option value="FALSE_CONDITIONAL">
+          {"False Conditional" |> ste}
+        </Select.Option>
+        <Select.Option value="OTHER"> {"Other" |> ste} </Select.Option>
+        <Select.Option value="RESULT_NOT_AVAILABLE">
+          {"Result Not Available" |> ste}
+        </Select.Option>
+      </Select>
 
     | _ => ReasonReact.null
     };
@@ -226,7 +257,7 @@ let mainBlock =
          </div>,
        )}
       getDataTypeSelect
-      <div className=Styles.inputBox> getValueInput </div>
+      <div className=Styles.inputBox> valueInput </div>
       <div className=Styles.inputBox>
         <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
       </div>
@@ -269,13 +300,23 @@ let make =
       };
 
     {
+      // Values
       floatCdf: FloatCdf.empty,
-      competitorType: competitorTypeInitValue,
       percentage: 0.,
       binary: true,
-      dataType: dataTypeFacade(competitorTypeInitValue, measurable, None),
+      unresolvableResolution: "AMBIGUOUS",
+
+      // OBJECTIVE, COMPETITIVE, AGGREGATION (not used here), UNRESOLVED
+      competitorType: competitorTypeInitValue,
+      // Used to transform Form Data Type to Measurement Type
+      dataType:
+        getDataTypeAsString(competitorTypeInitValue, measurable, None),
+
+      // Strings
       description: "",
       valueText: "",
+
+      // Form State Only
       hasLimitError: false,
     };
   },
@@ -291,11 +332,18 @@ let make =
 
     | UpdateCompetitorType(competitorType) =>
       let dataType =
-        dataTypeFacade(competitorType, measurable, Some(state.dataType));
+        getDataTypeAsString(
+          competitorType,
+          measurable,
+          Some(state.dataType),
+        );
       ReasonReact.Update({...state, competitorType, dataType});
 
     | UpdateDataType((dataType: string)) =>
       ReasonReact.Update({...state, dataType})
+
+    | UpdateUnresolvableResolution((unresolvableResolution: string)) =>
+      ReasonReact.Update({...state, unresolvableResolution})
 
     | UpdateBinary((binary: bool)) => ReasonReact.Update({...state, binary})
 
@@ -311,13 +359,15 @@ let make =
 
   render: ({state, send}) => {
     let onSubmit = () => {
-      let value = getValue(state);
+      let value = getValueFromState(state);
+
       onSubmit((
         value,
-        getCompetitorType(state.competitorType),
+        getCompetitorTypeFromString(state.competitorType),
         state.description,
         state.valueText,
       ));
+
       ();
     };
 

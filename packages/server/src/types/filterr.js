@@ -1,4 +1,4 @@
-const { competitorType } = require('./competitor-type');
+const { measurementCompetitorType } = require('./measurement-competitor-type');
 const { measurableValueType } = require('./measurable-value-type');
 
 /**
@@ -10,7 +10,7 @@ function filterr(fields) {
   let newFields = { ...fields };
   // TODO: Refactor this. It's obviously quite hacky.
   if (!!newFields.competitorType) {
-    newFields.competitorType = { type: competitorType };
+    newFields.competitorType = { type: measurementCompetitorType };
   }
   if (!!newFields.valueType) {
     newFields.valueType = { type: measurableValueType };

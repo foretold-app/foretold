@@ -10,15 +10,13 @@ module Query = [%graphql
 
 module Mutation = ReasonApollo.CreateMutation(Query);
 
-type competitorType = [ | `COMPETITIVE | `OBJECTIVE];
-
 /* TODO: Finish this so that value returns the actually correct results. */
 let mutate =
     (
       mutation: Mutation.apolloMutation,
       measurableId: string,
       value: MeasurementValue.t,
-      competitorType: competitorType,
+      competitorType: Types.competitorType,
       description: string,
       valueText: string,
     ) => {

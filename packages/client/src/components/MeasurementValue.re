@@ -2,6 +2,33 @@ open Rationale.Function.Infix;
 open Rationale.Result.Infix;
 open Belt.Result;
 
+module UnresolvableResolution = {
+  type t = [
+    | `AMBIGUOUS
+    | `FALSE_CONDITIONAL
+    | `OTHER
+    | `RESULT_NOT_AVAILABLE
+  ];
+
+  let fromString = e =>
+    switch (e) {
+    | "AMBIGUOUS" => `AMBIGUOUS
+    | "FALSE_CONDITIONAL" => `FALSE_CONDITIONAL
+    | "OTHER" => `OTHER
+    | "RESULT_NOT_AVAILABLE" => `RESULT_NOT_AVAILABLE
+    | _ => Js.Exn.raiseError("Invalid GraphQL Unresolvable Resolution: " ++ e)
+    };
+
+  let toString = (e: t): string =>
+    switch (e) {
+    | `AMBIGUOUS => "AMBIGUOUS"
+    | `FALSE_CONDITIONAL => "FALSE_CONDITIONAL"
+    | `OTHER => "OTHER"
+    | `RESULT_NOT_AVAILABLE => "RESULT_NOT_AVAILABLE"
+    | _ => Js.Exn.raiseError("Invalid GraphQL Unresolvable Resolution")
+    };
+};
+
 type valueResult = {
   .
   "floatCdf":
@@ -13,7 +40,10 @@ type valueResult = {
   "floatPoint": option(float),
   "percentage": option(float),
   "binary": option(bool),
+  "unresolvableResolution": option(UnresolvableResolution.t),
 };
+
+type graphQlResult = valueResult;
 
 let decodeResult = (fn, json) =>
   try (Ok(json |> fn)) {
@@ -196,6 +226,7 @@ type t = [
   | `DateTimePoint(string)
   | `FloatCdf(FloatCdf.t)
   | `DateTimeCdf(DateTimeCdf.t)
+  | `UnresolvableResolution(UnresolvableResolution.t)
 ];
 
 let hasQuartiles = (t: 'a): bool =>
@@ -222,6 +253,7 @@ let typeToName = (t: t) =>
   | `DateTimePoint(_) => "dateTimePoint"
   | `Percentage(_) => "percentage"
   | `Binary(_) => "binary"
+  | `UnresolvableResolution(_) => "unresolvableResolution"
   };
 
 let nameToType =
@@ -232,6 +264,7 @@ let nameToType =
   | "dateTimeCdf" => Ok(`DateTimeCdf)
   | "percentage" => Ok(`Percentage)
   | "binary" => Ok(`Binary)
+  | "unresolvableResolution" => Ok(`UnresolvableResolution)
   | _ => Error("Not found");
 
 let stringOfValue = (t: t) =>
@@ -248,6 +281,7 @@ let stringOfValue = (t: t) =>
   | `DateTimePoint(k) => k
   | `Percentage(k) => string_of_float(k)
   | `Binary(k) => string_of_bool(k)
+  | `UnresolvableResolution(k) => UnresolvableResolution.toString(k)
   };
 
 let encode = (e: t) => {
@@ -259,6 +293,8 @@ let encode = (e: t) => {
   | `DateTimePoint(k) => makeEncode(Json.Encode.string, n, k)
   | `Percentage(k) => makeEncode(Json.Encode.float, n, k)
   | `Binary(k) => makeEncode(Json.Encode.bool, n, k)
+  | `UnresolvableResolution(k) =>
+    makeEncode(Json.Encode.string, n, stringOfValue(e))
   };
 };
 
@@ -275,6 +311,11 @@ let decoder = (a, j: Js.Json.t): Belt.Result.t(t, string) =>
   | `Percentage =>
     j |> convert(makeDecode(Json.Decode.float), e => `Percentage(e))
   | `Binary => j |> convert(makeDecode(Json.Decode.bool), e => `Binary(e))
+  | `UnresolvableResolution =>
+    j
+    |> convert(makeDecode(Json.Decode.string), e =>
+         `UnresolvableResolution(UnresolvableResolution.fromString(e))
+       )
   };
 
 let decode = (j: Js.Json.t): Belt.Result.t(t, string) => {
@@ -286,26 +327,20 @@ let decode = (j: Js.Json.t): Belt.Result.t(t, string) => {
   };
 };
 
-type graphQlResult = {
-  .
-  "floatCdf":
-    option({
-      .
-      "xs": Js.Array.t(float),
-      "ys": Js.Array.t(float),
-    }),
-  "floatPoint": option(float),
-  "percentage": option(float),
-  "binary": option(bool),
-};
-
 let decodeGraphql = (j: valueResult): Belt.Result.t(t, string) =>
-  switch (j##floatCdf, j##floatPoint, j##percentage, j##binary) {
-  | (Some(r), _, _, _) =>
+  switch (
+    j##floatCdf,
+    j##floatPoint,
+    j##percentage,
+    j##binary,
+    j##unresolvableResolution,
+  ) {
+  | (Some(r), _, _, _, _) =>
     Ok(`FloatCdf(FloatCdf.fromArrays((r##xs, r##ys))))
-  | (_, Some(r), _, _) => Ok(`FloatPoint(r))
-  | (_, _, Some(r), _) => Ok(`Percentage(r))
-  | (_, _, _, Some(r)) => Ok(`Binary(r))
+  | (_, Some(r), _, _, _) => Ok(`FloatPoint(r))
+  | (_, _, Some(r), _, _) => Ok(`Percentage(r))
+  | (_, _, _, Some(r), _) => Ok(`Binary(r))
+  | (_, _, _, _, Some(r)) => Ok(`UnresolvableResolution(r))
   | _ => Error("Could not convert")
   };
 
@@ -318,6 +353,7 @@ let encodeToGraphQLMutation = (e: t) => {
       "floatCdf": None,
       "percentage": None,
       "binary": None,
+      "unresolvableResolution": None,
     })
   | `FloatCdf(k) =>
     Some({
@@ -329,6 +365,7 @@ let encodeToGraphQLMutation = (e: t) => {
         }),
       "percentage": None,
       "binary": None,
+      "unresolvableResolution": None,
     })
   | `Percentage(k) =>
     Some({
@@ -336,6 +373,7 @@ let encodeToGraphQLMutation = (e: t) => {
       "floatCdf": None,
       "percentage": Some(k),
       "binary": None,
+      "unresolvableResolution": None,
     })
   | `Binary(k) =>
     Some({
@@ -343,6 +381,15 @@ let encodeToGraphQLMutation = (e: t) => {
       "floatCdf": None,
       "percentage": None,
       "binary": Some(k),
+      "unresolvableResolution": None,
+    })
+  | `UnresolvableResolution(k) =>
+    Some({
+      "floatPoint": None,
+      "floatCdf": None,
+      "percentage": None,
+      "binary": None,
+      "unresolvableResolution": Some(k),
     })
   | _ => None
   };

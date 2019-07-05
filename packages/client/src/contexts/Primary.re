@@ -9,6 +9,7 @@ module CompetitorType = {
     | `AGGREGATION => "Aggregation"
     | `COMPETITIVE => "Competitive"
     | `OBJECTIVE => "Objective"
+    | `UNRESOLVED => "Unresolved"
     };
 };
 

@@ -45,6 +45,7 @@ module.exports = (sequelize, DataTypes) => {
         MEASURABLE_VALUE_TYPE.FLOAT,
         MEASURABLE_VALUE_TYPE.DATE,
         MEASURABLE_VALUE_TYPE.PERCENTAGE,
+        MEASURABLE_VALUE_TYPE.UNRESOLVED,
       ]),
       allowNull: false,
     },

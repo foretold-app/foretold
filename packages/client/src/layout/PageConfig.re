@@ -1,5 +1,3 @@
-open Context.Routing;
-open Foretold__GraphQL;
 open Rationale.Function.Infix;
 
 module Wrapper = {

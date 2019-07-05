@@ -64,7 +64,7 @@ let fromColumns =
       columns: array(column('a)),
       rows: array('a),
       ~bottomSubRowFn: option('a => option(array(ReasonReact.reactElement)))=None,
-      ~onRowClb: option('a => unit)=None,
+      ~onRowClb: 'a => unit=_ => (),
       (),
     ) => {
   let columns' = filterColums(columns, rows);
@@ -95,23 +95,16 @@ let fromColumns =
           let key = rowIndex |> string_of_int;
           let bottomSubRow = bottomSubRowFn |> E.O.bind(_, r => r(row));
 
-          switch (onRowClb) {
-          | Some(onRowClb) =>
-            <FC.Table.Row
-              onClick={_ => {
-                onRowClb(row);
-                ();
-              }}
-              className=Styles.row
-              key>
-              columnsBody
-            </FC.Table.Row>
-
-          | None =>
-            <FC.Table.Row className=Styles.row ?bottomSubRow key>
-              columnsBody
-            </FC.Table.Row>
-          };
+          <FC.Table.Row
+            onClick={_ => {
+              onRowClb(row);
+              ();
+            }}
+            className=Styles.row
+            ?bottomSubRow
+            key>
+            columnsBody
+          </FC.Table.Row>;
         })
      |> ReasonReact.array}
   </Table>;

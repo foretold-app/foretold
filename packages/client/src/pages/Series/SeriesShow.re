@@ -61,7 +61,7 @@ let make =
           | (
               Success(channel),
               Some((series: Primary.Series.t)),
-              Some(selection),
+              Some(_selection),
             ) =>
             <>
               {SLayout.seriesHead(channel, series.name |> E.O.default(""))}

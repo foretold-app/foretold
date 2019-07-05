@@ -27,6 +27,15 @@ module UnresolvableResolution = {
     | `RESULT_NOT_AVAILABLE => "RESULT_NOT_AVAILABLE"
     | _ => Js.Exn.raiseError("Invalid GraphQL Unresolvable Resolution")
     };
+
+  let toPublicString = (e: t): string =>
+    switch (e) {
+    | `AMBIGUOUS => "Ambiguous"
+    | `FALSE_CONDITIONAL => "False Conditional"
+    | `OTHER => "Other"
+    | `RESULT_NOT_AVAILABLE => "Result Not Available"
+    | _ => Js.Exn.raiseError("Invalid GraphQL Unresolvable Resolution")
+    };
 };
 
 type valueResult = {

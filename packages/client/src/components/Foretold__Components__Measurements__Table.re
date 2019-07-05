@@ -88,6 +88,14 @@ module Helpers = {
           {(r ? "Yes" : "No") |> Utils.ste}
         </span>,
       )
+    | Ok(`UnresolvableResolution(r)) =>
+      Some(
+        <span className=Styles.result>
+          {r
+           |> MeasurementValue.UnresolvableResolution.toPublicString
+           |> Utils.ste}
+        </span>,
+      )
     | _ => None
     };
 

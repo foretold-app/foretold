@@ -1,7 +1,7 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
     await queryInterface.addColumn('Users', 'nickname', {
-      type: Sequelize.STRING(30),
+      type: Sequelize.STRING(32),
       allowNull: true,
     });
     await queryInterface.addColumn('Users', 'email', {

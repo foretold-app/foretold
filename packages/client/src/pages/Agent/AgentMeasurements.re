@@ -68,7 +68,7 @@ let make =
               ~onSelect=onSelectClb,
               (),
             );
-          | _ => <div />
+          | _ => <SLayout.Spin />
           },
       )
       |> layout

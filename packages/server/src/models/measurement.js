@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
         MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE,
         MEASUREMENT_COMPETITOR_TYPE.AGGREGATION,
+        MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED,
       ]),
       defaultValue: MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE,
       allowNull: true,
@@ -58,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       afterCreate: async (measurement) => {
         const competitorType = measurement.dataValues.competitorType;
-        if (competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE) {
+        if (competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE || competitorType === MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED) {
           const measurable = await measurement.getMeasurable();
           await measurable.judged();
         }

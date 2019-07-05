@@ -85,12 +85,12 @@ class AuthenticationData {
 
   /**
    * @public
-   * @param {string} token
+   * @param {string} jwt
    * @return {Promise<string>}
    */
-  async getJwtByAuth0Jwt(token) {
+  async exchangeAuthComToken(jwt) {
     try {
-      const decoded = this.Jwt.decodeAuth0JwtToken(token);
+      const decoded = this.Jwt.decodeAuth0Jwt(jwt);
       if (!decoded.sub) throw new AuthenticationData.NoUserIdError;
 
       const user = await this.users.getUserByAuth0Id(decoded.sub);

@@ -26,7 +26,7 @@ class Jwt {
    * @param {string} token
    * @return {boolean}
    */
-  decodeAuth0JwtToken(token) {
+  decodeAuth0Jwt(token) {
     try {
       return this.jwt.verify(token, this.AUTH0_SECRET);
     } catch (err) {

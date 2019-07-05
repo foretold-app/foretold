@@ -11,6 +11,7 @@ type competitorType = [
   | `COMPETITIVE
   | `OBJECTIVE
   | `UNRESOLVED
+  | `COMMENT
 ];
 
 type measurableState = [ | `OPEN | `JUDGEMENT_PENDING | `JUDGED];

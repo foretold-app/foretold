@@ -1,6 +1,6 @@
 const graphql = require("graphql");
 
-const { MEASUREMENT_COMPETITOR_TYPE } = require('../models/enums/measurement-competitor-type');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../../models/enums/measurement-competitor-type');
 
 const measurementCompetitorType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
   name: 'competitorType',
@@ -16,6 +16,9 @@ const measurementCompetitorType = graphql.GraphQLNonNull(new graphql.GraphQLEnum
     },
     [MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED]: {
       value: MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED,
+    },
+    [MEASUREMENT_COMPETITOR_TYPE.COMMENT]: {
+      value: MEASUREMENT_COMPETITOR_TYPE.COMMENT,
     },
   }
 }));

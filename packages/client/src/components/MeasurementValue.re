@@ -38,6 +38,34 @@ module UnresolvableResolution = {
     };
 };
 
+module Comment = {
+  type t = [ | `GENERIC | `QUESTION_FEEDBACK | `UPDATE];
+
+  let fromString = e =>
+    switch (e) {
+    | "GENERIC" => `GENERIC
+    | "QUESTION_FEEDBACK" => `QUESTION_FEEDBACK
+    | "UPDATE" => `UPDATE
+    | _ => Js.Exn.raiseError("Invalid GraphQL Comment: " ++ e)
+    };
+
+  let toString = (e: t): string =>
+    switch (e) {
+    | `GENERIC => "GENERIC"
+    | `QUESTION_FEEDBACK => "QUESTION_FEEDBACK"
+    | `UPDATE => "UPDATE"
+    | _ => Js.Exn.raiseError("Invalid GraphQL Comment")
+    };
+
+  let toPublicString = (e: t): string =>
+    switch (e) {
+    | `GENERIC => "Generic"
+    | `QUESTION_FEEDBACK => "Question Feedback"
+    | `UPDATE => "Update"
+    | _ => Js.Exn.raiseError("Invalid GraphQL Unresolvable Resolution")
+    };
+};
+
 type valueResult = {
   .
   "floatCdf":
@@ -50,6 +78,7 @@ type valueResult = {
   "percentage": option(float),
   "binary": option(bool),
   "unresolvableResolution": option(UnresolvableResolution.t),
+  "comment": option(Comment.t),
 };
 
 type graphQlResult = valueResult;
@@ -236,6 +265,7 @@ type t = [
   | `FloatCdf(FloatCdf.t)
   | `DateTimeCdf(DateTimeCdf.t)
   | `UnresolvableResolution(UnresolvableResolution.t)
+  | `Comment(Comment.t)
 ];
 
 let hasQuartiles = (t: 'a): bool =>
@@ -263,6 +293,7 @@ let typeToName = (t: t) =>
   | `Percentage(_) => "percentage"
   | `Binary(_) => "binary"
   | `UnresolvableResolution(_) => "unresolvableResolution"
+  | `Comment(_) => "comment"
   };
 
 let nameToType =
@@ -274,6 +305,7 @@ let nameToType =
   | "percentage" => Ok(`Percentage)
   | "binary" => Ok(`Binary)
   | "unresolvableResolution" => Ok(`UnresolvableResolution)
+  | "comment" => Ok(`Comment)
   | _ => Error("Not found");
 
 let stringOfValue = (t: t) =>
@@ -291,6 +323,7 @@ let stringOfValue = (t: t) =>
   | `Percentage(k) => string_of_float(k)
   | `Binary(k) => string_of_bool(k)
   | `UnresolvableResolution(k) => UnresolvableResolution.toString(k)
+  | `Comment(k) => Comment.toString(k)
   };
 
 let encode = (e: t) => {
@@ -304,6 +337,7 @@ let encode = (e: t) => {
   | `Binary(k) => makeEncode(Json.Encode.bool, n, k)
   | `UnresolvableResolution(k) =>
     makeEncode(Json.Encode.string, n, stringOfValue(e))
+  | `Comment(k) => makeEncode(Json.Encode.string, n, stringOfValue(e))
   };
 };
 
@@ -325,6 +359,11 @@ let decoder = (a, j: Js.Json.t): Belt.Result.t(t, string) =>
     |> convert(makeDecode(Json.Decode.string), e =>
          `UnresolvableResolution(UnresolvableResolution.fromString(e))
        )
+  | `Comment =>
+    j
+    |> convert(makeDecode(Json.Decode.string), e =>
+         `Comment(Comment.fromString(e))
+       )
   };
 
 let decode = (j: Js.Json.t): Belt.Result.t(t, string) => {
@@ -343,13 +382,15 @@ let decodeGraphql = (j: valueResult): Belt.Result.t(t, string) =>
     j##percentage,
     j##binary,
     j##unresolvableResolution,
+    j##comment,
   ) {
-  | (Some(r), _, _, _, _) =>
+  | (Some(r), _, _, _, _, _) =>
     Ok(`FloatCdf(FloatCdf.fromArrays((r##xs, r##ys))))
-  | (_, Some(r), _, _, _) => Ok(`FloatPoint(r))
-  | (_, _, Some(r), _, _) => Ok(`Percentage(r))
-  | (_, _, _, Some(r), _) => Ok(`Binary(r))
-  | (_, _, _, _, Some(r)) => Ok(`UnresolvableResolution(r))
+  | (_, Some(r), _, _, _, _) => Ok(`FloatPoint(r))
+  | (_, _, Some(r), _, _, _) => Ok(`Percentage(r))
+  | (_, _, _, Some(r), _, _) => Ok(`Binary(r))
+  | (_, _, _, _, Some(r), _) => Ok(`UnresolvableResolution(r))
+  | (_, _, _, _, _, Some(r)) => Ok(`Comment(r))
   | _ => Error("Could not convert")
   };
 
@@ -363,6 +404,7 @@ let encodeToGraphQLMutation = (e: t) => {
       "percentage": None,
       "binary": None,
       "unresolvableResolution": None,
+      "comment": None,
     })
   | `FloatCdf(k) =>
     Some({
@@ -375,6 +417,7 @@ let encodeToGraphQLMutation = (e: t) => {
       "percentage": None,
       "binary": None,
       "unresolvableResolution": None,
+      "comment": None,
     })
   | `Percentage(k) =>
     Some({
@@ -383,6 +426,7 @@ let encodeToGraphQLMutation = (e: t) => {
       "percentage": Some(k),
       "binary": None,
       "unresolvableResolution": None,
+      "comment": None,
     })
   | `Binary(k) =>
     Some({
@@ -391,6 +435,7 @@ let encodeToGraphQLMutation = (e: t) => {
       "percentage": None,
       "binary": Some(k),
       "unresolvableResolution": None,
+      "comment": None,
     })
   | `UnresolvableResolution(k) =>
     Some({
@@ -399,6 +444,16 @@ let encodeToGraphQLMutation = (e: t) => {
       "percentage": None,
       "binary": None,
       "unresolvableResolution": Some(k),
+      "comment": None,
+    })
+  | `Comment(k) =>
+    Some({
+      "floatPoint": None,
+      "floatCdf": None,
+      "percentage": None,
+      "binary": None,
+      "unresolvableResolution": None,
+      "comment": Some(k),
     })
   | _ => None
   };

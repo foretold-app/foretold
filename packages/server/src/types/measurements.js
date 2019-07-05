@@ -3,32 +3,23 @@ const { resolver, DateType } = require('graphql-sequelize');
 
 const models = require('../models');
 const { MEASUREMENT_VALUE } = require('../models/enums/measurement-value');
-const { UNRESOLVABLE_RESOLUTIONS } = require('../models/enums/unresolvable-resolutions');
 
-const unresolvableResolution = new graphql.GraphQLEnumType({
-  name: 'unresolvableResolution',
-  values: {
-    [UNRESOLVABLE_RESOLUTIONS.AMBIGUOUS]: {
-      value: UNRESOLVABLE_RESOLUTIONS.AMBIGUOUS,
-    },
-    [UNRESOLVABLE_RESOLUTIONS.RESULT_NOT_AVAILABLE]: {
-      value: UNRESOLVABLE_RESOLUTIONS.RESULT_NOT_AVAILABLE,
-    },
-    [UNRESOLVABLE_RESOLUTIONS.FALSE_CONDITIONAL]: {
-      value: UNRESOLVABLE_RESOLUTIONS.FALSE_CONDITIONAL,
-    },
-    [UNRESOLVABLE_RESOLUTIONS.OTHER]: {
-      value: UNRESOLVABLE_RESOLUTIONS.OTHER,
-    },
-  }
-});
+const { measurementUnresolvableResolution } = require('./enums/measurement-unresolvable-resolution');
+const { measurementCommentType } = require('./enums/measurement-comment-type');
 
-// Input
 const measurementValueInputFloatCdf = new graphql.GraphQLInputObjectType({
   name: 'MeasurementValueInputFloatCdf',
   fields: () => ({
     xs: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLFloat)) },
     ys: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLFloat)) },
+  }),
+});
+
+const measurementValueFloatCdf = new graphql.GraphQLObjectType({
+  name: 'MeasurementValueFloatCdf',
+  fields: () => ({
+    xs: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLNonNull(graphql.GraphQLFloat))) },
+    ys: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLNonNull(graphql.GraphQLFloat))) },
   }),
 });
 
@@ -39,7 +30,20 @@ const measurementValueInput = new graphql.GraphQLInputObjectType({
     [MEASUREMENT_VALUE.floatPoint]: { type: graphql.GraphQLFloat },
     [MEASUREMENT_VALUE.percentage]: { type: graphql.GraphQLFloat },
     [MEASUREMENT_VALUE.binary]: { type: graphql.GraphQLBoolean },
-    [MEASUREMENT_VALUE.unresolvableResolution]: { type: unresolvableResolution },
+    [MEASUREMENT_VALUE.unresolvableResolution]: { type: measurementUnresolvableResolution },
+    [MEASUREMENT_VALUE.comment]: { type: measurementCommentType },
+  }),
+});
+
+const measurementValue = new graphql.GraphQLObjectType({
+  name: 'MeasurementValue',
+  fields: () => ({
+    [MEASUREMENT_VALUE.floatCdf]: { type: measurementValueFloatCdf },
+    [MEASUREMENT_VALUE.floatPoint]: { type: graphql.GraphQLFloat },
+    [MEASUREMENT_VALUE.percentage]: { type: graphql.GraphQLFloat },
+    [MEASUREMENT_VALUE.binary]: { type: graphql.GraphQLBoolean },
+    [MEASUREMENT_VALUE.unresolvableResolution]: { type: measurementUnresolvableResolution },
+    [MEASUREMENT_VALUE.comment]: { type: measurementCommentType },
   }),
 });
 
@@ -48,7 +52,7 @@ const measurementCreateInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     value: { type: measurementValueInput },
     valueText: { type: graphql.GraphQLString },
-    competitorType: { type: require('./measurement-competitor-type').measurementCompetitorType },
+    competitorType: { type: require('./enums/measurement-competitor-type').measurementCompetitorType },
     measurableId: { type: graphql.GraphQLString },
     agentId: { type: graphql.GraphQLString },
     description: { type: graphql.GraphQLString },
@@ -66,32 +70,12 @@ const measurementsInDateRangeInput = new graphql.GraphQLInputObjectType({
   }),
 });
 
-// Output
-const measurementValueFloatCdf = new graphql.GraphQLObjectType({
-  name: 'MeasurementValueFloatCdf',
-  fields: () => ({
-    xs: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLNonNull(graphql.GraphQLFloat))) },
-    ys: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLNonNull(graphql.GraphQLFloat))) },
-  }),
-});
-
-const measurementValue = new graphql.GraphQLObjectType({
-  name: 'MeasurementValue',
-  fields: () => ({
-    [MEASUREMENT_VALUE.floatCdf]: { type: measurementValueFloatCdf },
-    [MEASUREMENT_VALUE.floatPoint]: { type: graphql.GraphQLFloat },
-    [MEASUREMENT_VALUE.percentage]: { type: graphql.GraphQLFloat },
-    [MEASUREMENT_VALUE.binary]: { type: graphql.GraphQLBoolean },
-    [MEASUREMENT_VALUE.unresolvableResolution]: { type: unresolvableResolution },
-  }),
-});
-
 const measurement = new graphql.GraphQLObjectType({
   name: 'Measurement',
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     value: { type: graphql.GraphQLNonNull(measurementValue) },
-    competitorType: { type: require('./measurement-competitor-type').measurementCompetitorType },
+    competitorType: { type: require('./enums/measurement-competitor-type').measurementCompetitorType },
     description: { type: graphql.GraphQLString },
     measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     agentId: { type: graphql.GraphQLString },

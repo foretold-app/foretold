@@ -90,23 +90,13 @@ class AuthenticationData {
    */
   async getJwtByAuth0Jwt(token) {
     try {
-      const user = await this.authenticationByAuth0JwtToken(token);
-      const agentId = user.agentId;
-      return this.Jwt.encodeJWT({}, agentId);
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  /**
-   * @param {string} token
-   * @return {Promise<boolean | Models.User>}
-   */
-  async authenticationByAuth0JwtToken(token) {
-    try {
       const decoded = this.Jwt.decodeAuth0JwtToken(token);
       if (!decoded.sub) throw new AuthenticationData.NoUserIdError;
-      return await this.users.getUserByAuth0Id(decoded.sub);
+
+      const user = await this.users.getUserByAuth0Id(decoded.sub);
+      const agentId = user.agentId;
+
+      return this.Jwt.encodeJWT({}, agentId);
     } catch (err) {
       throw err;
     }

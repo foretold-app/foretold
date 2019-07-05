@@ -60,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       afterCreate: async (measurement) => {
         const competitorType = measurement.dataValues.competitorType;
-        if (competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE) {
+        if (competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE || competitorType === MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED) {
           const measurable = await measurement.getMeasurable();
           await measurable.judged();
         }

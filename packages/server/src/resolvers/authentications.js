@@ -16,18 +16,6 @@ async function getJwtByAuth0Jwt(root, args, context, info) {
   return { jwt };
 }
 
-/**
- * @param {object | null} root
- * @param {object} args
- * @param {Models.ObjectID} args.id
- * @param {Schema.Context} context
- * @param {object} info
- * @returns {Promise<*>}
- */
-async function getJwtByAgentId(root, args, context, info) {
-  const botAgentId = _.get(root, 'agentId');
-  return data.authentication.getJwtForever(botAgentId);
-}
 
 /**
  * @param {object | null} root
@@ -44,6 +32,5 @@ async function getTokenByAgentId(root, args, context, info) {
 
 module.exports = {
   getJwtByAuth0Jwt,
-  getJwtByAgentId,
   getTokenByAgentId,
 };

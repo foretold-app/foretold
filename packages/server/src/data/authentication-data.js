@@ -1,6 +1,4 @@
-const jwt = require('jsonwebtoken');
-
-const config = require('../config');
+const { Jwt } = require('../lib/jwt');
 
 const { UsersData } = require('./users-data');
 const { AgentsData } = require('./agents-data');
@@ -9,65 +7,12 @@ const { TokensData } = require('./tokens-data');
 class AuthenticationData {
 
   constructor() {
-    this.jwt = jwt;
-
-    this.AUTH0_SECRET = config.AUTH0_SECRET;
-    this.JWT_SECRET = config.JWT_SECRET;
-    this.JWT_ISSUER = config.JWT_ISSUER;
-    this.JWT_EXPIN = config.JWT_EXPIN;
-
+    this.Jwt = new Jwt();
     this.users = new UsersData();
     this.agents = new AgentsData();
     this.tokens = new TokensData();
   }
 
-  /**
-   * @param {string} token
-   * @return {boolean}
-   */
-  validateJwt(token) {
-    const pattern = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/;
-    return pattern.test(token);
-  }
-
-  /**
-   * @param {string} token
-   * @return {Promise<boolean>}
-   */
-  decodeAuth0JwtToken(token) {
-    try {
-      return this.jwt.verify(token, this.AUTH0_SECRET);
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  /**
-   * @param {string} token
-   * @return {Promise<boolean>}
-   */
-  decodeJwtToken(token) {
-    try {
-      return this.jwt.verify(token, this.JWT_SECRET);
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  /**
-   * @param {object} [payload]
-   * @param {string} subject
-   * @param {string | null} [expiresIn]
-   * @return {string}
-   */
-  encodeJWT(payload = {}, subject, expiresIn = this.JWT_EXPIN) {
-    const options = {
-      subject,
-      issuer: this.JWT_ISSUER,
-    };
-    if (expiresIn) options.expiresIn = expiresIn;
-    return this.jwt.sign(payload, this.JWT_SECRET, options);
-  }
 
   /**
    * @param {string} token
@@ -75,7 +20,7 @@ class AuthenticationData {
    */
   async authenticationByAuth0JwtToken(token) {
     try {
-      const decoded = this.decodeAuth0JwtToken(token);
+      const decoded = this.Jwt.decodeAuth0JwtToken(token);
       if (!decoded.sub) throw new AuthenticationData.NoUserIdError;
       return await this.users.getUserByAuth0Id(decoded.sub);
     } catch (err) {
@@ -89,7 +34,7 @@ class AuthenticationData {
    */
   async authenticationByJwtToken(token) {
     try {
-      const decoded = this.decodeJwtToken(token);
+      const decoded = this.Jwt.decodeJwtToken(token);
       const agentId = decoded.sub;
       return await this.getContext(agentId);
     } catch (err) {
@@ -137,7 +82,7 @@ class AuthenticationData {
     try {
       const user = await this.authenticationByAuth0JwtToken(token);
       const agentId = user.agentId;
-      return this.encodeJWT({}, agentId);
+      return this.Jwt.encodeJWT({}, agentId);
     } catch (err) {
       throw err;
     }
@@ -151,7 +96,7 @@ class AuthenticationData {
     try {
       if (this.tokens.validate(token)) {
         return await this.authenticationByToken(token);
-      } else if (this.validateJwt(token)) {
+      } else if (this.Jwt.validateJwt(token)) {
         return await this.authenticationByJwtToken(token);
       }
       throw new AuthenticationData.TokenIsInvalidError;

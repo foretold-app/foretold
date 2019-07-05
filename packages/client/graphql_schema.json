@@ -2330,6 +2330,12 @@
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "UNRESOLVED",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "possibleTypes": null
@@ -3280,12 +3286,6 @@
             },
             {
               "name": "PERCENTAGE",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "UNRESOLVED",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null

@@ -50,6 +50,9 @@ let competitorTypeSelect =
     switch (measurable.state) {
     | Some(`JUDGED) => [|
         <Select.Option value="OBJECTIVE"> {"Resolve" |> ste} </Select.Option>,
+        <Select.Option value="UNRESOLVED">
+          {"Close without Answer" |> ste}
+        </Select.Option>,
       |]
     | _ => [|
         <Select.Option value="COMPETITIVE">
@@ -90,15 +93,14 @@ let getDataTypeAsString =
       measurable: Primary.Measurable.t,
       dataType: option(string),
     )
-    : string =>
+    : string => {
   switch (competitorType, measurable.valueType, dataType) {
   | ("UNRESOLVED", _, _) => "UNRESOLVABLE_RESOLUTION"
-  | ("OBJECTIVE" | "COMPETITIVE", `FLOAT | `DATE, None) => "FLOAT_CDF"
-  | ("OBJECTIVE" | "COMPETITIVE", `FLOAT | `DATE, Some(dataType)) => dataType
   | ("OBJECTIVE", `PERCENTAGE, _) => "BINARY_BOOL"
   | ("COMPETITIVE", `PERCENTAGE, _) => "PERCENTAGE_FLOAT"
   | _ => "FLOAT_CDF"
   };
+};
 
 let getValueFromState = (state: state): MeasurementValue.t =>
   switch (state.dataType) {
@@ -124,6 +126,7 @@ let getCompetitorTypeFromString = (str: string): Types.competitorType =>
   switch (str) {
   | "COMPETITIVE" => `COMPETITIVE
   | "OBJECTIVE" => `OBJECTIVE
+  | "UNRESOLVED" => `UNRESOLVED
   | _ => `OBJECTIVE
   };
 
@@ -301,7 +304,7 @@ let make =
       floatCdf: FloatCdf.empty,
       percentage: 0.,
       binary: true,
-      unresolvableResolution: "",
+      unresolvableResolution: "AMBIGUOUS",
 
       // OBJECTIVE, COMPETITIVE, AGGREGATION (not used here), UNRESOLVED
       competitorType: competitorTypeInitValue,

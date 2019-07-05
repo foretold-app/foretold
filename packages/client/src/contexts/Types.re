@@ -1,4 +1,4 @@
-type valueType = [ | `DATE | `FLOAT | `PERCENTAGE | `UNRESOLVED];
+type valueType = [ | `DATE | `FLOAT | `PERCENTAGE];
 
 type agentTypeEntity = [ | `USER | `BOT];
 
@@ -6,7 +6,12 @@ type channelMembershipRole = [ | `ADMIN | `VIEWER];
 
 type myMembershipRole = [ | `ADMIN | `VIEWER | `NONE];
 
-type competitorType = [ | `AGGREGATION | `COMPETITIVE | `OBJECTIVE];
+type competitorType = [
+  | `AGGREGATION
+  | `COMPETITIVE
+  | `OBJECTIVE
+  | `UNRESOLVED
+];
 
 type measurableState = [ | `OPEN | `JUDGEMENT_PENDING | `JUDGED];
 

@@ -2336,6 +2336,12 @@
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "COMMENT",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "possibleTypes": null
@@ -2737,6 +2743,18 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "comment",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "ENUM",
+                "name": "commentType",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -2841,6 +2859,35 @@
             },
             {
               "name": "OTHER",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "commentType",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": [
+            {
+              "name": "GENERIC",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "QUESTION_FEEDBACK",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "UPDATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -4978,6 +5025,16 @@
               "type": {
                 "kind": "ENUM",
                 "name": "unresolvableResolution",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "comment",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "commentType",
                 "ofType": null
               },
               "defaultValue": null

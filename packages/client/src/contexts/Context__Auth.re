@@ -108,6 +108,7 @@ module Auth0Client = {
     "clientId": Env.auth0ClientId,
     "returnTo": Env.logoutUrl,
   };
+
   let logout = () =>
     authOptions |> createClient |> (c => c##logout(logoutOptions));
 };

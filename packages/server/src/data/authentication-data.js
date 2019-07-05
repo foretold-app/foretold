@@ -144,18 +144,6 @@ class AuthenticationData {
   }
 
   /**
-   * @param {string} subject
-   * @return {Promise<string>}
-   */
-  async getJwtForever(subject) {
-    try {
-      return this.encodeJWT({}, subject, null);
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  /**
    * @param {string} token
    * @return {Promise<*>}
    */

@@ -10,7 +10,7 @@ const bot = new graphql.GraphQLObjectType({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     description: { type: graphql.GraphQLString },
-    competitorType: { type: require('./competitor-type').competitorType },
+    competitorType: { type: require('./measurement-competitor-type').measurementCompetitorType },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     agentId: { type: graphql.GraphQLString },
@@ -44,7 +44,7 @@ const botInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     description: { type: graphql.GraphQLString },
-    competitorType: { type: require('./competitor-type').competitorType },
+    competitorType: { type: require('./measurement-competitor-type').measurementCompetitorType },
   }),
 });
 

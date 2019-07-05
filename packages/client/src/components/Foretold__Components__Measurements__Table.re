@@ -88,6 +88,14 @@ module Helpers = {
           {(r ? "Yes" : "No") |> Utils.ste}
         </span>,
       )
+    | Ok(`UnresolvableResolution(r)) =>
+      Some(
+        <span className=Styles.result>
+          {r
+           |> MeasurementValue.UnresolvableResolution.toPublicString
+           |> Utils.ste}
+        </span>,
+      )
     | _ => None
     };
 
@@ -331,6 +339,13 @@ let getPredictionDistributionColumn = (bounds): column =>
     (),
   );
 
+let bottomSubRowFn =
+  Some(
+    (measurement: Primary.Measurement.t) =>
+      Helpers.getDescription(~m=measurement)
+      |> E.O.fmap((c: React.element) => [|FC.Table.Row.textSection(c)|]),
+  );
+
 let make = (measurementsList: list(measurement)): ReasonReact.reactElement => {
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
@@ -348,14 +363,7 @@ let make = (measurementsList: list(measurement)): ReasonReact.reactElement => {
         {Table.fromColumns(
            all,
            measurementsList' |> Array.of_list,
-           ~bottomSubRowFn=
-             Some(
-               m =>
-                 Helpers.getDescription(~m)
-                 |> E.O.fmap((c: React.element) =>
-                      [|FC.Table.Row.textSection(c)|]
-                    ),
-             ),
+           ~bottomSubRowFn,
            (),
          )}
       </FC.PageCard.Body>
@@ -390,15 +398,8 @@ let makeAgentPredictionsTable =
         {Table.fromColumns(
            all,
            measurementsList' |> Array.of_list,
-           ~bottomSubRowFn=
-             Some(
-               m =>
-                 Helpers.getDescription(~m)
-                 |> E.O.fmap((c: React.element) =>
-                      [|FC.Table.Row.textSection(c)|]
-                    ),
-             ),
-           ~onRowClb=Some(onRowClb),
+           ~bottomSubRowFn,
+           ~onRowClb,
            (),
          )}
       </FC.PageCard.Body>

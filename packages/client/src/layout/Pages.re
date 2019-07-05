@@ -1,6 +1,3 @@
-open Context.Routing;
-open Foretold__GraphQL;
-open Rationale.Function.Infix;
 open PageConfig;
 
 module EntityShow' = {

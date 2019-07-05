@@ -4,6 +4,7 @@ const MEASUREMENT_VALUE = {
   percentage: 'percentage',
   binary: 'binary',
   unresolvableResolution: 'unresolvableResolution',
+  comment: 'comment',
 };
 
 module.exports = {

@@ -33,6 +33,7 @@ async function measurementValueValidation(root, args, context, info) {
   const unresolvableResolution = _.get(args, [
     'input', 'value', MEASUREMENT_VALUE.unresolvableResolution,
   ]);
+  const comment = _.get(args, ['input', 'value', MEASUREMENT_VALUE.comment]);
 
   {
     const valuesEntered = [
@@ -41,6 +42,7 @@ async function measurementValueValidation(root, args, context, info) {
       percentage,
       binary,
       unresolvableResolution,
+      comment,
     ];
 
     const values = valuesEntered

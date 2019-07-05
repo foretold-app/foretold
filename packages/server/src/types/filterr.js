@@ -1,5 +1,5 @@
-const { measurementCompetitorType } = require('./measurement-competitor-type');
-const { measurableValueType } = require('./measurable-value-type');
+const { measurementCompetitorType } = require('./enums/measurement-competitor-type');
+const { measurableValueType } = require('./enums/measurable-value-type');
 
 /**
  * @deprecated

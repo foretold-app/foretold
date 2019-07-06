@@ -45,7 +45,7 @@ export class GuesstimateInput extends React.Component {
         let parsedInput = item.parsedInput;
         let what = new Guesstimator({parsedInput: parsedInput});
         let foo = what.sample(this.props.sampleCount);
-        let values = foo.values;
+        let values = _.filter(foo.values, _.isFinite);
 
         if (!!values) {
             this.setState({value: event.target.value, items: values});

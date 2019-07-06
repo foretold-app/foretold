@@ -47,7 +47,11 @@ module WithEditMutation = {
         (),
       );
 
-    mutation(~variables=m##variables, ~refetchQueries=[|"getAgent"|], ())
+    mutation(
+      ~variables=m##variables,
+      ~refetchQueries=[|"getAgent", "getMeasurable", "getMeasurements"|],
+      (),
+    )
     |> ignore;
   };
 };

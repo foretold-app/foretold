@@ -91,9 +91,17 @@ class UsersData extends DataBase {
     const nickname = _.toString(nicknameIn).substr(0, 32);
     const picture = _.toString(pictureIn).substr(0, 128);
 
-    if (email !== '' && emailVerifiedIn === true) user.set('email', email);
-    if (nickname !== '') user.set('nickname', nickname);
-    if (picture !== '') user.set('picture', picture);
+    const emailValid = email !== '' && emailVerifiedIn === true;
+
+    if (user.email === null && emailValid) {
+      user.set('email', email);
+    }
+    if (user.nickname === null && nickname !== '') {
+      user.set('nickname', nickname);
+    }
+    if (user.picture === null && picture !== '') {
+      user.set('picture', picture);
+    }
 
     await user.save();
 

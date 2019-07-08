@@ -88,7 +88,7 @@ class UsersData extends DataBase {
     const pictureIn = _.get(userInfo, 'picture');
 
     const email = _.toString(emailIn).substr(0, 64);
-    const nickname = _.toString(nicknameIn).substr(0, 32);
+    const nickname = _.toString(nicknameIn).substr(0, 30);
     const picture = _.toString(pictureIn).substr(0, 128);
 
     const emailValid = email !== '' && emailVerifiedIn === true;
@@ -96,8 +96,8 @@ class UsersData extends DataBase {
     if (user.email === null && emailValid) {
       user.set('email', email);
     }
-    if (user.nickname === null && nickname !== '') {
-      user.set('nickname', nickname);
+    if (user.name === null && nickname !== '') {
+      user.set('name', nickname);
     }
     if (user.picture === null && picture !== '') {
       user.set('picture', picture);

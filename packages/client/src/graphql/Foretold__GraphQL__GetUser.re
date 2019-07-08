@@ -49,6 +49,7 @@ let toAgent = (a: agent) =>
 type user = {
   id: string,
   name: string,
+  email: option(string),
   auth0Id: option(string),
   agentId: option(string),
   agent: option(agent),
@@ -60,6 +61,7 @@ let toUser = (a: user) =>
   Primary.User.make(
     ~id=a.id,
     ~auth0Id=a.auth0Id,
+    ~email=a.email,
     ~agent=a.agent |> E.O.fmap(toAgent),
     (),
   );
@@ -70,6 +72,7 @@ module Query = [%graphql
         user:
           user(auth0Id: $auth0Id)  @bsRecord{
             name
+            email
             id
             auth0Id
             agentId

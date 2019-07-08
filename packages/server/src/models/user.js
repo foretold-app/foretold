@@ -9,8 +9,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       name: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(30),
         allowNull: false,
+        validate: {
+          isAlphanumeric: true,
+          len: [3, 30],
+        }
       },
       auth0Id: {
         type: DataTypes.STRING,

@@ -54,7 +54,8 @@ class UsersData extends DataBase {
    * @return {Promise<Models.User>}
    */
   async upsertOne(filter, data) {
-    return await this.getOne(filter) || await this.createOne(data);
+    return await this.getOne(filter)
+      || await this.createOne(data);
   }
 
   /**
@@ -66,11 +67,36 @@ class UsersData extends DataBase {
    * @return {Promise<Models.User>}
    */
   async updateOne(id, data, _user) {
-    let user = await this.models.User.findByPk(id);
-    // @todo: move it into permissions
+    const user = await this.models.User.findByPk(id);
     if (user && user.auth0Id === _user.auth0Id) {
       user.update(data);
     }
+    return user;
+  }
+
+  /**
+   * @param {string} id
+   * @param {Auth0UserInfoResponse} userInfo
+   * @return {Promise<Models.User>}
+   */
+  async updateUserInfo(id, userInfo) {
+    const user = await this.models.User.findByPk(id);
+
+    const emailIn = _.get(userInfo, 'email');
+    const emailVerifiedIn = _.get(userInfo, 'email_verified') || false;
+    const nicknameIn = _.get(userInfo, 'nickname');
+    const pictureIn = _.get(userInfo, 'picture');
+
+    const email = _.toString(emailIn).substr(0, 64);
+    const nickname = _.toString(nicknameIn).substr(0, 32);
+    const picture = _.toString(pictureIn).substr(0, 128);
+
+    if (email !== '' && emailVerifiedIn === true) user.set('email', email);
+    if (nickname !== '') user.set('nickname', nickname);
+    if (picture !== '') user.set('picture', picture);
+
+    await user.save();
+
     return user;
   }
 }

@@ -1,4 +1,5 @@
 const { Jwt } = require('../lib/jwt');
+const { Auth0 } = require('../lib/auth0');
 
 const { UsersData } = require('./users-data');
 const { AgentsData } = require('./agents-data');
@@ -8,6 +9,8 @@ class AuthenticationData {
 
   constructor() {
     this.Jwt = new Jwt();
+    this.auth0 = new Auth0();
+
     this.users = new UsersData();
     this.agents = new AgentsData();
     this.tokens = new TokensData();
@@ -86,15 +89,19 @@ class AuthenticationData {
   /**
    * @public
    * @param {string} jwt
+   * @param {string} accessToken
    * @return {Promise<string>}
    */
-  async exchangeAuthComToken(jwt) {
+  async exchangeAuthComToken(jwt, accessToken) {
     try {
       const decoded = this.Jwt.decodeAuth0Jwt(jwt);
       if (!decoded.sub) throw new AuthenticationData.NoUserIdError;
 
       const user = await this.users.getUserByAuth0Id(decoded.sub);
       const agentId = user.agentId;
+
+      const userInfo = await this.auth0.getUserInfo(accessToken);
+      await this.users.updateUserInfo(user.id, userInfo);
 
       return this.Jwt.encodeJWT({}, agentId);
     } catch (err) {

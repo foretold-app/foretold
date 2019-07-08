@@ -3,8 +3,14 @@ external reload: unit => unit = "reload";
 
 module Query = [%graphql
   {|
-    query authentication ($auth0jwt: String!) {
-        authentication(auth0jwt: $auth0jwt) {
+    query authentication (
+        $auth0jwt: String!
+        $auth0accessToken: String!
+    ) {
+        authentication(
+            auth0jwt: $auth0jwt
+            auth0accessToken: $auth0accessToken
+        ) {
             jwt
         }
     }
@@ -20,8 +26,12 @@ let component = (auth0Tokens: Context.Auth.Auth0Tokens.t, _innerComponent) =>
   switch (Context.Auth.ServerJwt.make_from_storage()) {
   | Some(_) => _innerComponent
   | None =>
-    let query = Query.make(~auth0jwt=auth0Tokens.id_token, ());
-    Js.log("Getting jwt token from Server");
+    let query =
+      Query.make(
+        ~auth0jwt=auth0Tokens.id_token,
+        ~auth0accessToken=auth0Tokens.access_token,
+        (),
+      );
     QueryComponent.make(~variables=query##variables, ({result}) =>
       result
       |> E.HttpResponse.fromApollo

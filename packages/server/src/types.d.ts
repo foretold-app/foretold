@@ -16,6 +16,7 @@ export namespace Models {
   export interface Bot extends Model {
     id: ObjectID;
     name: string;
+
     getAgent(): Models.Agent;
   }
 
@@ -24,18 +25,22 @@ export namespace Models {
     name: string;
     auth0Id: string;
     agentId: ObjectID;
+
     getAgent(): Models.Agent;
   }
 
   export interface Measurable extends Model {
     id: ObjectID;
     state: string;
+
     getCreationNotification(creator: Models.Creator): any;
+
     getUpdateNotifications(creator: Models.Creator): any;
   }
 
   export interface Measurement extends Model {
     id: ObjectID;
+
     getCreationNotification(creator: Models.Creator): any;
   }
 
@@ -45,7 +50,9 @@ export namespace Models {
     type: 'BOT' | 'USER';
     name: string;
     measurementCount: number;
+
     getBot(): Models.Bot;
+
     getUser(): Models.User;
   }
 
@@ -224,4 +231,12 @@ export namespace Layers {
       ): boolean;
     }
   }
+}
+
+export type Auth0UserInfoResponse = {
+  sub: string,
+  email?: string,
+  email_verified?: boolean,
+  nickname?: string,
+  picture?: string,
 }

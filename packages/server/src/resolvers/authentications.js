@@ -12,7 +12,11 @@ const data = require('../data');
  */
 async function getJwtByAuth0Jwt(root, args, context, info) {
   const auth0jwt = _.get(args, 'auth0jwt');
-  const jwt = await data.authentication.exchangeAuthComToken(auth0jwt);
+  const auth0accessToken = _.get(args, 'auth0accessToken');
+  const jwt = await data.authentication.exchangeAuthComToken(
+    auth0jwt,
+    auth0accessToken,
+  );
   return { jwt };
 }
 

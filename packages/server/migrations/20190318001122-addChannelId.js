@@ -2,12 +2,13 @@ const _ = require('lodash');
 
 module.exports = {
   up: async function (queryInterface) {
-    const [channels] = await queryInterface.sequelize.query(
-      `SELECT "id" FROM "Channels" WHERE "name"='unlisted' LIMIT 1`
-    );
-    const channelId = _.get(channels, [0, 'id']);
+    try {
+      const [channels] = await queryInterface.sequelize.query(
+          `SELECT "id" FROM "Channels" WHERE "name"='unlisted' LIMIT 1`
+      );
+      const channelId = _.get(channels, [0, 'id']);
 
-    await queryInterface.sequelize.query(`
+      await queryInterface.sequelize.query(`
         ALTER TABLE "Measurables" ADD COLUMN "channelId" uuid;
         UPDATE "Measurables" SET "channelId" = '${channelId}';
         ALTER TABLE "Measurables" ALTER COLUMN "channelId" SET NOT NULL;
@@ -17,7 +18,7 @@ module.exports = {
         on update cascade on delete set null;
     `);
 
-    await queryInterface.sequelize.query(`
+      await queryInterface.sequelize.query(`
         ALTER TABLE "Series" ADD COLUMN "channelId" uuid;
         UPDATE "Series" SET "channelId" = '${channelId}';
         ALTER TABLE "Series" ALTER COLUMN "channelId" SET NOT NULL;
@@ -26,10 +27,19 @@ module.exports = {
         FOREIGN KEY ("channelId") REFERENCES "Channels" ("id")
         on update cascade on delete set null;
     `);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   },
 
   down: async function (queryInterface) {
-    await queryInterface.removeColumn('Measurables', 'channelId');
-    await queryInterface.removeColumn('Series', 'channelId');
+    try {
+      await queryInterface.removeColumn('Measurables', 'channelId');
+      await queryInterface.removeColumn('Series', 'channelId');
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 };

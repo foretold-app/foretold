@@ -69,7 +69,7 @@ class UsersData extends DataBase {
   async updateOne(id, data, _user) {
     const user = await this.models.User.findByPk(id);
     if (user && user.auth0Id === _user.auth0Id) {
-      user.update(data);
+      await user.update(data);
     }
     return user;
   }

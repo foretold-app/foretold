@@ -1,12 +1,22 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
-    await queryInterface.addColumn("Measurables", "channel", {
-      type: Sequelize.STRING,
-      allowNull: true
-    });
+    try {
+      await queryInterface.addColumn("Measurables", "channel", {
+        type: Sequelize.STRING,
+        allowNull: true
+      });
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   },
 
   down: async function (queryInterface) {
-    await queryInterface.removeColumn("Measurables", "channel");
+    try {
+      await queryInterface.removeColumn("Measurables", "channel");
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 };

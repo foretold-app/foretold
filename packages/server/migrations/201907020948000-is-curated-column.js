@@ -1,13 +1,23 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
-    await queryInterface.addColumn('Channels', 'isCurated', {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    });
+    try {
+      await queryInterface.addColumn('Channels', 'isCurated', {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      });
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   },
 
   down: async function (queryInterface) {
-    await queryInterface.removeColumn('Channels', 'isCurated');
+    try {
+      await queryInterface.removeColumn('Channels', 'isCurated');
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 };

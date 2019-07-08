@@ -14,6 +14,7 @@ const measurement = db.sequelize.import('./measurement');
 const series = db.sequelize.import('./series');
 const user = db.sequelize.import('./user');
 const token = db.sequelize.import('./token');
+const preference = db.sequelize.import('./preference');
 
 db.Agent = agent;
 db.Bot = bot;
@@ -24,6 +25,7 @@ db.Measurement = measurement;
 db.Series = series;
 db.User = user;
 db.Token = token;
+db.Preference = preference;
 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {

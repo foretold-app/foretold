@@ -43,6 +43,11 @@ const agent = new graphql.GraphQLObjectType({
       resolve: resolver(models.Agent.Bot)
     },
 
+    Preference: {
+      type: require('./preferences').preference,
+      resolve: resolver(models.Agent.Preference)
+    },
+
     Measurements: {
       type: require('../connections').agentMeasurementsConnection.connectionType,
       args: require('../connections').agentMeasurementsConnection.connectionArgs,

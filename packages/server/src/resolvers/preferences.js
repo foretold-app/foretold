@@ -10,7 +10,7 @@ const data = require('../data');
  * @returns {Promise<*>}
  */
 async function getOne(root, args, context, info) {
-  const agentId = _.get(root, 'agentId');
+  const agentId = _.get(root, 'id');
   const params = { agentId };
   return data.preferences.getCreateOne(params);
 }

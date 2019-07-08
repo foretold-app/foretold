@@ -1,7 +1,7 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
     try {
-      await queryInterface.createTable('Preference', {
+      await queryInterface.createTable('Preferences', {
         id: {
           allowNull: false,
           primaryKey: true,
@@ -37,7 +37,7 @@ module.exports = {
 
   down: async function (queryInterface) {
     try {
-      await queryInterface.dropTable('Preference');
+      await queryInterface.dropTable('Preferences');
     } catch (e) {
       console.error(e);
       throw e;

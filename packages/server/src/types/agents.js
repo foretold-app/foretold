@@ -45,7 +45,8 @@ const agent = new graphql.GraphQLObjectType({
 
     Preference: {
       type: require('./preferences').preference,
-      resolve: require('../resolvers').preferences.getOne,
+      // resolve: require('../resolvers').preferences.getOne,
+      resolve: resolver(models.Agent.Preference),
     },
 
     Measurements: {

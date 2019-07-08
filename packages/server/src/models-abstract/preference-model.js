@@ -8,7 +8,7 @@ class PreferencesModel extends ModelPostgres {
 
   constructor() {
     super({
-      model: models.Agent,
+      model: models.Preference,
       sequelize: models.sequelize,
     });
   }

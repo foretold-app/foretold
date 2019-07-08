@@ -407,8 +407,8 @@ class ModelPostgres extends Model {
    * @return {Promise<Models.Model>}
    */
   async getCreateOne(params = {}, query = {}, data = {}, restrictions = {}) {
-    return await this.model.getOne(params, query, restrictions)
-      || await this.model.createOne(data, restrictions);
+    return await this.getOne(params, query, restrictions)
+      || await this.createOne(data, restrictions);
   }
 }
 

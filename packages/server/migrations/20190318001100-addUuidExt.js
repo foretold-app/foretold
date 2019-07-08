@@ -1,7 +1,7 @@
 module.exports = {
   up: async function (queryInterface) {
     try {
-    return queryInterface.sequelize.query(`CREATE EXTENSION "uuid-ossp"`);
+      return queryInterface.sequelize.query(`CREATE EXTENSION "uuid-ossp"`);
     } catch (e) {
       console.error(e);
       throw e;
@@ -10,7 +10,7 @@ module.exports = {
 
   down: async function (queryInterface) {
     try {
-    return queryInterface.sequelize.query(`DROP EXTENSION "uuid-ossp"`);
+      return queryInterface.sequelize.query(`DROP EXTENSION "uuid-ossp"`);
     } catch (e) {
       console.error(e);
       throw e;

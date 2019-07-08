@@ -1,7 +1,7 @@
 module.exports = {
   up: async function (queryInterface) {
     try {
-    await queryInterface.sequelize.query(`
+      await queryInterface.sequelize.query(`
         BEGIN;
         
         DROP TABLE IF EXISTS "ChannelMemberships";
@@ -30,7 +30,7 @@ module.exports = {
 
   down: async function (queryInterface) {
     try {
-    await queryInterface.sequelize.query(`
+      await queryInterface.sequelize.query(`
         BEGIN;
         
         DROP TABLE IF EXISTS "AgentsChannels";

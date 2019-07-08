@@ -1,5 +1,6 @@
 module.exports = {
   up: async function (queryInterface) {
+    try {
     await queryInterface.sequelize.query(`
         BEGIN;
         
@@ -21,9 +22,14 @@ module.exports = {
         
         COMMIT;
     `);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   },
 
   down: async function (queryInterface) {
+    try {
     await queryInterface.sequelize.query(`
         BEGIN;
         
@@ -45,5 +51,9 @@ module.exports = {
     
         COMMIT;
     `);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 };

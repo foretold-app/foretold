@@ -1,5 +1,6 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
+    try {
     await queryInterface.addColumn("Measurables", "isJudged", {
       type: Sequelize.BOOLEAN,
       allowNull: false,
@@ -16,9 +17,14 @@ module.exports = {
     });
     await queryInterface.removeColumn("Measurables", "isLocked");
     await queryInterface.removeColumn("Measurables", "lockedAt");
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   },
 
   down: async function (queryInterface, Sequelize) {
+    try {
     await queryInterface.removeColumn("Measurables", "isJudged");
     await queryInterface.removeColumn("Measurables", "state");
     await queryInterface.removeColumn("Measurables", "stateUpdatedAt");
@@ -31,6 +37,10 @@ module.exports = {
       allowNull: true,
       type: Sequelize.DATE
     });
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 };
 

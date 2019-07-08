@@ -1,5 +1,6 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
+    try {
     var ID_TYPE = Sequelize.UUID;
 
     const ID = {
@@ -122,11 +123,20 @@ module.exports = {
         type: Sequelize.DATE
       },
     });
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   },
 
   down: async function (queryInterface) {
+    try {
     await queryInterface.dropTable('Measurements');
     await queryInterface.dropTable('Measureables');
     await queryInterface.dropTable('Users');
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 };

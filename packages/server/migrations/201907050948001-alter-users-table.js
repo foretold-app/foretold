@@ -1,5 +1,6 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
+    try {
     // Columns
     await queryInterface.addColumn('Users', 'email', {
       type: Sequelize.STRING(64),
@@ -20,14 +21,23 @@ module.exports = {
         },
       },
     });
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   },
 
   down: async function (queryInterface) {
+    try {
     // Columns
     await queryInterface.removeColumn('Users', 'email');
     await queryInterface.removeColumn('Users', 'picture');
 
     // Indexes
     await queryInterface.removeIndex('Users', 'Users_email_unique');
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 };

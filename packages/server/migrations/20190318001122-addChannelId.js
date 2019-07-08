@@ -2,6 +2,7 @@ const _ = require('lodash');
 
 module.exports = {
   up: async function (queryInterface) {
+    try {
     const [channels] = await queryInterface.sequelize.query(
       `SELECT "id" FROM "Channels" WHERE "name"='unlisted' LIMIT 1`
     );
@@ -26,10 +27,19 @@ module.exports = {
         FOREIGN KEY ("channelId") REFERENCES "Channels" ("id")
         on update cascade on delete set null;
     `);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   },
 
   down: async function (queryInterface) {
+    try {
     await queryInterface.removeColumn('Measurables', 'channelId');
     await queryInterface.removeColumn('Series', 'channelId');
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 };

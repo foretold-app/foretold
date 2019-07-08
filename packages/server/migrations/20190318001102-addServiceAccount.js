@@ -2,6 +2,7 @@ const _ = require('lodash');
 
 module.exports = {
   up: async function (queryInterface) {
+    try {
     const [users] = await queryInterface.sequelize.query(
         `SELECT "id" FROM "Users" WHERE "name"='Service Account' LIMIT 1`
     );
@@ -18,11 +19,20 @@ module.exports = {
         `(uuid_generate_v4(), 'Service Account', uuid_generate_v4(), '${agentId}', now(), now())`
       );
     }
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   },
 
   down: async function (queryInterface) {
+    try {
     await queryInterface.sequelize.query(
         `DELETE FROM "Users" WHERE "name"='Service Account' LIMIT 1`
     );
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 };

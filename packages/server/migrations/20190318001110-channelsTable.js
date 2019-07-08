@@ -1,5 +1,6 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
+    try {
     await queryInterface.createTable('Channels', {
       id: {
         type: Sequelize.UUID,
@@ -43,10 +44,19 @@ module.exports = {
         defaultValue: Sequelize.NOW,
       },
     });
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   },
 
   down: async function (queryInterface) {
+    try {
     await queryInterface.dropTable('Channels');
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 };
 

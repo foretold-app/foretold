@@ -1,5 +1,6 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
+    try {
     var ID_TYPE = Sequelize.UUID;
     const ID = {
       allowNull: false,
@@ -56,11 +57,20 @@ module.exports = {
     await queryInterface.addColumn("Measurables", "seriesId",
       referenceTo("Series", true),
     );
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   },
 
   down: async function (queryInterface) {
+    try {
     await queryInterface.removeColumn("Measurables", "series");
     await queryInterface.dropTable('Series');
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 };
 

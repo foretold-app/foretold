@@ -1,5 +1,6 @@
 module.exports = {
   up: async function (queryInterface) {
+    try {
     await queryInterface.renameColumn(
       'Measurables',
       'descriptionEntity',
@@ -20,9 +21,14 @@ module.exports = {
       'description',
       'labelCustom',
     );
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   },
 
   down: async function (queryInterface) {
+    try {
     await queryInterface.renameColumn(
       'Measurables',
       'labelSubject',
@@ -43,5 +49,9 @@ module.exports = {
       'labelCustom',
       'description',
     );
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 };

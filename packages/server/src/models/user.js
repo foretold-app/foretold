@@ -15,7 +15,18 @@ module.exports = (sequelize, DataTypes) => {
       auth0Id: {
         type: DataTypes.STRING,
         allowNull: true,
-      }
+      },
+      email: {
+        type: DataTypes.STRING(64),
+        allowNull: true,
+        validate: {
+          isEmail: true,
+        }
+      },
+      picture: {
+        type: DataTypes.STRING(128),
+        allowNull: true,
+      },
     },
     {
       hooks: {

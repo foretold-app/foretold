@@ -3,7 +3,7 @@ const _ = require('lodash');
 module.exports = {
   up: async function (queryInterface) {
     const [channels] = await queryInterface.sequelize.query(
-        `SELECT "id" FROM "Channels" WHERE "name"='unlisted' LIMIT 1`
+      `SELECT "id" FROM "Channels" WHERE "name"='unlisted' LIMIT 1`
     );
     const channelId = _.get(channels, [0, 'id']);
 

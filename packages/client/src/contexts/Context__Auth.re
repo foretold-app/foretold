@@ -98,7 +98,7 @@ module Auth0Client = {
     "clientID": Env.auth0ClientId,
     "redirectUri": Env.redirectUrl,
     "responseType": "token id_token",
-    "scope": "openid",
+    "scope": "openid picture nickname email_verified email",
   };
 
   let triggerLoginScreen = () =>
@@ -108,6 +108,7 @@ module Auth0Client = {
     "clientId": Env.auth0ClientId,
     "returnTo": Env.logoutUrl,
   };
+
   let logout = () =>
     authOptions |> createClient |> (c => c##logout(logoutOptions));
 };

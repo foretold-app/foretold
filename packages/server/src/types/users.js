@@ -7,6 +7,7 @@ const userUpdateInput = new graphql.GraphQLInputObjectType({
   name: 'UserUpdateInput',
   fields: () => ({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    email: { type: graphql.GraphQLString },
   })
 });
 
@@ -15,6 +16,7 @@ const user = new graphql.GraphQLObjectType({
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    email: { type: graphql.GraphQLString },
     auth0Id: { type: graphql.GraphQLString },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },

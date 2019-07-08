@@ -1,4 +1,3 @@
-open Utils;
 open Antd;
 open Foretold__GraphQL;
 
@@ -6,39 +5,59 @@ let ste = ReasonReact.string;
 
 module EditUser = [%graphql
   {|
-             mutation userUpdate($id: String!, $input:UserUpdateInput!) {
-                 userUpdate(id: $id, input: $input) {
-                   id
-                 }
-             }
-     |}
+    mutation userUpdate(
+        $id: String!
+        $input: UserUpdateInput!
+    ) {
+        userUpdate(
+            id: $id
+            input: $input
+        ) {
+            id
+        }
+    }
+ |}
 ];
 
 module EditUserMutation = ReasonApollo.CreateMutation(EditUser);
 
 module FormConfig = {
   type field(_) =
-    | Name: field(string);
-  type state = {name: string};
+    | Name: field(string)
+    | Email: field(string);
+
+  type state = {
+    name: string,
+    email: string,
+  };
 
   let get: type value. (state, field(value)) => value =
     (state, field) =>
       switch (field) {
       | Name => state.name
+      | Email => state.email
       };
 
   let set: type value. (state, field(value), value) => state =
     (state, field, value) =>
       switch (field) {
       | Name => {...state, name: value}
+      | Email => {...state, email: value}
       };
 };
 
-/* ReFormNext */
 module Form = ReFormNext.Make(FormConfig);
 
-let mutate = (mutation: EditUserMutation.apolloMutation, values, id: string) => {
-  let mutate = EditUser.make(~id, ~input={"name": values}, ());
+let mutate =
+    (
+      mutation: EditUserMutation.apolloMutation,
+      name: string,
+      email: string,
+      id: string,
+    ) => {
+  let email' = email === "" ? None : Some(email);
+  let mutate =
+    EditUser.make(~id, ~input={"name": name, "email": email'}, ());
   mutation(~variables=mutate##variables, ~refetchQueries=[|"user"|], ())
   |> ignore;
 };
@@ -64,10 +83,17 @@ let withUserMutation = innerComponentFn =>
   )
   |> E.React.el;
 
-let withUserForm = (id, name, mutation, innerComponentFn) =>
+let withUserForm = (id, name, email, mutation, innerComponentFn) =>
   Form.make(
-    ~initialState={name: name},
-    ~onSubmit=values => mutate(mutation, values.state.values.name, id),
+    ~initialState={name, email},
+    ~onSubmit=
+      values =>
+        mutate(
+          mutation,
+          values.state.values.name,
+          values.state.values.email,
+          id,
+        ),
     ~schema=Form.Validation.Schema([||]),
     innerComponentFn,
   )
@@ -81,6 +107,15 @@ let formFields = (form: Form.state, send, onSubmit) =>
         value={form.values.name}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
           send(Form.FieldChangeValue(Name, e))
+        )}
+      />
+    </Antd.Form.Item>
+    <Antd.Form.Item>
+      {"E-mail" |> ste |> E.React.inH3}
+      <Input
+        value={form.values.email}
+        onChange={ReForm.Helpers.handleDomFormChange(e =>
+          send(Form.FieldChangeValue(Email, e))
         )}
       />
     </Antd.Form.Item>
@@ -111,11 +146,13 @@ let make =
           {withUserMutation((mutation, data) => {
              let agent = loggedInUser.agent;
              let id = loggedInUser.id;
+             let email = loggedInUser.email |> E.O.default("");
              let name =
                agent
                |> E.O.bind(_, (r: Primary.Agent.t) => r.name)
                |> E.O.toExn("The logged in user needs an ID!");
-             withUserForm(id, name, mutation, ({send, state}) =>
+
+             withUserForm(id, name, email, mutation, ({send, state}) =>
                CMutationForm.showWithLoading(
                  ~result=data.result,
                  ~form=formFields(state, send, () => send(Form.Submit)),

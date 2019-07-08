@@ -42,6 +42,7 @@ type user = {
   auth0Id: option(string),
   agent: option(agent),
   name: string,
+  email: option(string),
 }
 and bot = {
   competitorType,

@@ -93,7 +93,7 @@ let link = (~m: measurable) => {
        ~className=Shared.TagLink.property,
      )
      |> E.O.React.defaultNull}
-    <span className=name> {m.name |> ste} </span>
+    <span className=name> <Markdown source={m.name} /> </span>
     {dateItem(~m, ()) |> E.O.React.defaultNull}
   </>;
 };

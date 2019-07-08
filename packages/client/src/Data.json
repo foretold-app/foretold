@@ -1,10 +1,8 @@
-[
-  {
+[{
     "config": {
       "baseId": "base",
       "resourceId": "properties",
-      "aliases": {
-      }
+      "aliases": {}
     },
     "p-instance-of": {
       "p-name": "Instance of"
@@ -23,6 +21,9 @@
     },
     "n-movie": {
       "p-name": "Movie"
+    },
+    "p-author": {
+      "p-name": "Author"
     }
   },
   {
@@ -157,7 +158,7 @@
     "karma": {
       "name": "Karma"
     },
-    "Comments": {
+    "comments": {
       "name": "Comments(Non-Author)",
       "description": "Comments, minus those from the author"
     }
@@ -185,6 +186,50 @@
   },
   {
     "config": {
+      "baseId": "lesswrong",
+      "resourceId": "posts",
+      "aliases": {
+        "name": "@base/properties/p-name",
+        "author": "@base/properties/p-author",
+        "description": "@base/properties/p-description",
+        "url": "@base/properties/p-url",
+        "n-ozzie-gooen": "@foretold/main/n-ozzie-gooen"
+      }
+    },
+    "FGJKj6sxx9q4FAmbS": {
+      "name": "Predictive Reasoning Systems",
+      "description": "The Prediction Pyramid: Why Fundamental Work is Needed for Prediction Work",
+      "url": "https://www.lesswrong.com/posts/FGJKj6sxx9q4FAmbS"
+    },
+    "kMmNdHpQPcnJgnAQF": {
+      "name": "Prediction-Augmented Evaluation Systems",
+      "author": "n-ozzie-gooen"
+    },
+    "DCkHSrD53Methoxu6": {
+      "name": "What if people simply forecasted your future choices?",
+      "author": "n-ozzie-gooen"
+    },
+    "HB6aGCPjtvpLk4K9t": {
+      "name": "Can We Place Trust in Post-AGI Forecasting Evaluations?",
+      "author": "n-ozzie-gooen"
+    },
+    "vAzWfi5kDjZb27zD2": {
+      "name": "Ideas for Next Generation Prediction Technologies",
+      "author": "n-ozzie-gooen"
+    },
+    "zuAj86jcB5JB4dgqm": {
+      "name": "The Prediction Pyramid: Why Fundamental Work is Needed for Prediction Work",
+      "author": "n-ozzie-gooen"
+    },
+    "rain": {
+      "name": "RAIN Framework",
+      "description": "The RAIN Framework for Informational Effectiveness",
+      "author": "n-ozzie-gooen",
+      "url": "https://www.lesswrong.com/posts/s4TrCbCXvvWfkT2o6/the-rain-framework-for-informational-effectiveness"
+    }
+  },
+  {
+    "config": {
       "baseId": "orgs",
       "resourceId": "companies",
       "aliases": {
@@ -205,6 +250,26 @@
     },
     "market-cap": {
       "name": "Market Cap"
+    }
+  },
+  {
+    "config": {
+      "baseId": "internet-intellectual-infrastructure-retreat",
+      "resourceId": "main",
+      "aliases": {
+        "name": "@base/properties/p-name"
+      }
+    },
+    "n-2019-retreat": {
+      "name": "IIIR 2019 Retreat",
+      "Description": "Internet Intellectual Infrastructure Retreat, 2019"
+    },
+    "p-attendance": {
+      "name": "Attendance"
+    },
+    "p-counterfactual-value": {
+      "name": "Counterfactual Value",
+      "Description": "The counterfactual monetary value of a thing happening."
     }
   }
 ]

@@ -35,6 +35,7 @@ let make = (~id: string, ~loggedInUser: Primary.User.t, _children) => {
                <Div flex=1>
                  {Items.series(~m, ()) |> E.O.React.defaultNull}
                  {Items.creatorLink(~m) |> E.O.React.defaultNull}
+                 {Items.editLink(~m)}
                  {Items.resolutionEndpoint(~m) |> E.O.React.defaultNull}
                  {Items.endpointResponse(~m) |> E.O.React.defaultNull}
                  {Items.questionLink(~m)}

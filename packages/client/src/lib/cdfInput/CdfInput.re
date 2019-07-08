@@ -10,6 +10,7 @@ type state = {
   binary: bool,
   dataType: string,
   unresolvableResolution: string,
+  comment: string,
   // -> Measurement
   competitorType: string,
   description: string,
@@ -25,6 +26,7 @@ type action =
   | UpdateBinary(bool)
   | UpdateDataType(string)
   | UpdateUnresolvableResolution(string)
+  | UpdateComment(string)
   // -> Measurement
   | UpdateCompetitorType(string)
   | UpdateDescription(string)
@@ -46,29 +48,33 @@ module Styles = {
 let competitorTypeSelect =
     (~state, ~send, ~measurable: Primary.Measurable.t)
     : ReasonReact.reactElement => {
-  let options =
+  let options: array(ReasonReact.reactElement) =
     switch (measurable.state) {
     | Some(`JUDGED) => [|
         <Select.Option value="OBJECTIVE"> {"Resolve" |> ste} </Select.Option>,
-        <Select.Option value="UNRESOLVED">
-          {"Close without Answer" |> ste}
-        </Select.Option>,
       |]
     | _ => [|
         <Select.Option value="COMPETITIVE">
           {"Predict" |> ste}
         </Select.Option>,
-        <Select.Option value="OBJECTIVE"> {"Resolve" |> ste} </Select.Option>,
+      |]
+    };
+
+  let options': array(ReasonReact.reactElement) =
+    Array.append(
+      options,
+      [|
         <Select.Option value="UNRESOLVED">
           {"Close without Answer" |> ste}
         </Select.Option>,
-      |]
-    };
+        <Select.Option value="COMMENT"> {"Comment" |> ste} </Select.Option>,
+      |],
+    );
 
   <Select
     value={state.competitorType}
     onChange={e => send(UpdateCompetitorType(e))}>
-    {options |> ReasonReact.array}
+    {options' |> ReasonReact.array}
   </Select>;
 };
 
@@ -85,6 +91,7 @@ let getIsValid = (state: state): bool =>
   | "PERCENTAGE_FLOAT" => true
   | "BINARY_BOOL" => true
   | "UNRESOLVABLE_RESOLUTION" => true
+  | "COMMENT" => true
   };
 
 let getDataTypeAsString =
@@ -95,6 +102,7 @@ let getDataTypeAsString =
     )
     : string => {
   switch (competitorType, measurable.valueType, dataType) {
+  | ("COMMENT", _, _) => "COMMENT"
   | ("UNRESOLVED", _, _) => "UNRESOLVABLE_RESOLUTION"
   | ("OBJECTIVE", `PERCENTAGE, _) => "BINARY_BOOL"
   | ("COMPETITIVE", `PERCENTAGE, _) => "PERCENTAGE_FLOAT"
@@ -120,6 +128,8 @@ let getValueFromState = (state: state): MeasurementValue.t =>
       state.unresolvableResolution
       |> MeasurementValue.UnresolvableResolution.fromString,
     )
+  | "COMMENT" =>
+    `Comment(state.comment |> MeasurementValue.Comment.fromString)
   };
 
 let getCompetitorTypeFromString = (str: string): Types.competitorType =>
@@ -127,6 +137,7 @@ let getCompetitorTypeFromString = (str: string): Types.competitorType =>
   | "COMPETITIVE" => `COMPETITIVE
   | "OBJECTIVE" => `OBJECTIVE
   | "UNRESOLVED" => `UNRESOLVED
+  | "COMMENT" => `COMMENT
   | _ => `OBJECTIVE
   };
 
@@ -232,6 +243,15 @@ let mainBlock =
         </Select.Option>
       </Select>
 
+    | "COMMENT" =>
+      <Select value={state.comment} onChange={e => send(UpdateComment(e))}>
+        <Select.Option value="GENERIC"> {"Generic" |> ste} </Select.Option>
+        <Select.Option value="QUESTION_FEEDBACK">
+          {"Question Feedback" |> ste}
+        </Select.Option>
+        <Select.Option value="UPDATE"> {"Update" |> ste} </Select.Option>
+      </Select>
+
     | _ => ReasonReact.null
     };
 
@@ -305,6 +325,7 @@ let make =
       percentage: 0.,
       binary: true,
       unresolvableResolution: "AMBIGUOUS",
+      comment: "GENERIC",
 
       // OBJECTIVE, COMPETITIVE, AGGREGATION (not used here), UNRESOLVED
       competitorType: competitorTypeInitValue,
@@ -344,6 +365,9 @@ let make =
 
     | UpdateUnresolvableResolution((unresolvableResolution: string)) =>
       ReasonReact.Update({...state, unresolvableResolution})
+
+    | UpdateComment((comment: string)) =>
+      ReasonReact.Update({...state, comment})
 
     | UpdateBinary((binary: bool)) => ReasonReact.Update({...state, binary})
 

@@ -1,7 +1,6 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
     try {
-      // Indexes
       await queryInterface.addIndex('Users', ['name'], {
         name: 'Users_name_unique',
         unique: true,

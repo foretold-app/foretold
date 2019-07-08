@@ -162,6 +162,13 @@ export namespace Layers {
         pagination: pagination,
         options: options,
       ): responseList;
+
+      getCreateOne(
+        params: params,
+        query: query,
+        data: data,
+        options: options,
+      ): response;
     }
   }
 
@@ -229,6 +236,13 @@ export namespace Layers {
         params: params,
         data: data,
       ): boolean;
+
+      getCreateOne(
+        params: params,
+        query: query,
+        data: data,
+        restrictions: restrictions,
+      ): response;
     }
   }
 }

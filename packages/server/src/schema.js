@@ -16,6 +16,7 @@ const schema = new graphql.GraphQLSchema({
     types.channels.channel,
     types.channelMemberships.channelsMembership,
     types.bots.bot,
+    types.users.user,
   ],
 
   query: new graphql.GraphQLObjectType({

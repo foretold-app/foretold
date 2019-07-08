@@ -100,8 +100,12 @@ class AuthenticationData {
       const user = await this.users.getUserByAuth0Id(decoded.sub);
       const agentId = user.agentId;
 
-      const userInfo = await this.auth0.getUserInfo(accessToken);
-      await this.users.updateUserInfo(user.id, userInfo);
+      try {
+        const userInfo = await this.auth0.getUserInfo(accessToken);
+        await this.users.updateUserInfo(user.id, userInfo);
+      }catch (e) {
+        console.log(`Saving user info is failed.`);
+      }
 
       return this.Jwt.encodeJWT({}, agentId);
     } catch (err) {

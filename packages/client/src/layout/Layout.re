@@ -35,6 +35,7 @@ let toRoutePage = (route: Route.t, me: Context.Me.me) => {
   | EntityShow(id) => EntityShow'.toEl({id: id}, loggedInUser)
   | EntityIndex => EntityIndex'.toEl(loggedInUser)
   | Profile => Profile'.toEl(loggedInUser)
+  | Preferences => Preferences'.toEl(loggedInUser)
   | ChannelIndex => ChannelIndex'.toEl(loggedInUser)
   | ChannelNew => ChannelNew'.toEl(loggedInUser)
   | MeasurableEdit(id) => MeasurableEdit'.toEl({id: id}, loggedInUser)

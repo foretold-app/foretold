@@ -20,6 +20,10 @@ module Profile' = {
   let toEl = Profile.make |> LoggedInPage.justLoggedInUser;
 };
 
+module Preferences' = {
+  let toEl = Preferences.make |> LoggedInPage.justLoggedInUser;
+};
+
 module ChannelIndex' = {
   let toEl = ChannelIndex.make |> LoggedInPage.justLoggedInUser;
 };

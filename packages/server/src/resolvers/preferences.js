@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../data');
+const datas = require('../data');
 
 /**
  * @param {object | null} root
@@ -12,7 +12,9 @@ const data = require('../data');
 async function getOne(root, args, context, info) {
   const agentId = _.get(root, 'id');
   const params = { agentId };
-  return data.preferences.getCreateOne(params);
+  const query = {};
+  const data = { agentId };
+  return datas.preferences.getCreateOne(params, query, data);
 }
 
 module.exports = {

@@ -274,6 +274,7 @@ module Agent = {
         ~agentType=None,
         ~channels=[||],
         ~channelMemberships=None,
+        ~preference=None,
         (),
       )
       : t => {
@@ -283,6 +284,7 @@ module Agent = {
     agentType,
     channels,
     channelMemberships,
+    preference,
   };
 };
 

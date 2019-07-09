@@ -1,13 +1,13 @@
 open Antd;
 open Foretold__GraphQL;
 
-module EditUser = [%graphql
+module EditPreference = [%graphql
   {|
-    mutation userUpdate(
+    mutation preferenceUpdate(
         $id: String!
-        $input: UserUpdateInput!
+        $input: PreferenceUpdateInput!
     ) {
-        userUpdate(
+        preferenceUpdate(
             id: $id
             input: $input
         ) {
@@ -17,30 +17,24 @@ module EditUser = [%graphql
  |}
 ];
 
-module EditUserMutation = ReasonApollo.CreateMutation(EditUser);
+module EditPreferenceMutation = ReasonApollo.CreateMutation(EditPreference);
 
 module FormConfig = {
   type field(_) =
-    | Name: field(string)
-    | Email: field(string);
+    | Emails: field(bool);
 
-  type state = {
-    name: string,
-    email: string,
-  };
+  type state = {emails: bool};
 
   let get: type value. (state, field(value)) => value =
     (state, field) =>
       switch (field) {
-      | Name => state.name
-      | Email => state.email
+      | Emails => state.emails
       };
 
   let set: type value. (state, field(value), value) => state =
     (state, field, value) =>
       switch (field) {
-      | Name => {...state, name: value}
-      | Email => {...state, email: value}
+      | Emails => {...state, emails: value}
       };
 };
 
@@ -48,19 +42,16 @@ module Form = ReFormNext.Make(FormConfig);
 
 let mutate =
     (
-      mutation: EditUserMutation.apolloMutation,
-      name: string,
-      email: string,
+      mutation: EditPreferenceMutation.apolloMutation,
+      emails: bool,
       id: string,
     ) => {
-  let email' = email === "" ? None : Some(email);
   let mutate =
-    EditUser.make(~id, ~input={"name": name, "email": email'}, ());
-  mutation(~variables=mutate##variables, ~refetchQueries=[|"user"|], ())
-  |> ignore;
+    EditPreference.make(~id, ~input={"emails": Some(emails)}, ());
+  mutation(~variables=mutate##variables, ~refetchQueries=[||], ()) |> ignore;
 };
 
-let component = ReasonReact.statelessComponent("Profile");
+let component = ReasonReact.statelessComponent("Preference");
 
 let withUserQuery =
     (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
@@ -74,24 +65,17 @@ let withUserQuery =
   |> E.React.el;
 };
 
-let withUserMutation = innerComponentFn =>
-  EditUserMutation.make(
+let withPreferenceMutation = innerComponentFn =>
+  EditPreferenceMutation.make(
     ~onError=e => Js.log2("Graphql Error:", e),
     innerComponentFn,
   )
   |> E.React.el;
 
-let withUserForm = (id, name, email, mutation, innerComponentFn) =>
+let withUserForm = (id, emails, mutation, innerComponentFn) =>
   Form.make(
-    ~initialState={name, email},
-    ~onSubmit=
-      values =>
-        mutate(
-          mutation,
-          values.state.values.name,
-          values.state.values.email,
-          id,
-        ),
+    ~initialState={emails: emails},
+    ~onSubmit=values => mutate(mutation, values.state.values.emails, id),
     ~schema=Form.Validation.Schema([||]),
     innerComponentFn,
   )
@@ -100,21 +84,10 @@ let withUserForm = (id, name, email, mutation, innerComponentFn) =>
 let formFields = (form: Form.state, send, onSubmit) =>
   <Antd.Form onSubmit={e => onSubmit()}>
     <Antd.Form.Item>
-      {"Username" |> Utils.ste |> E.React.inH3}
-      <Input
-        value={form.values.name}
-        onChange={ReForm.Helpers.handleDomFormChange(e =>
-          send(Form.FieldChangeValue(Name, e))
-        )}
-      />
-    </Antd.Form.Item>
-    <Antd.Form.Item>
-      {"E-mail" |> Utils.ste |> E.React.inH3}
-      <Input
-        value={form.values.email}
-        onChange={ReForm.Helpers.handleDomFormChange(e =>
-          send(Form.FieldChangeValue(Email, e))
-        )}
+      {"Do not send me emails" |> Utils.ste |> E.React.inH3}
+      <AntdSwitch
+        checked={form.values.emails}
+        onChange={e => send(Form.FieldChangeValue(Emails, true))}
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
@@ -126,7 +99,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
 
 module CMutationForm =
   MutationForm.Make({
-    type queryType = EditUser.t;
+    type queryType = EditPreference.t;
   });
 
 let make =
@@ -138,19 +111,19 @@ let make =
   ...component,
   render: _ =>
     SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("Edit Profile Information"),
+      ~head=SLayout.Header.textDiv("Preferences"),
       ~body=
         <FC.PageCard.BodyPadding>
-          {withUserMutation((mutation, data) => {
+          {withPreferenceMutation((mutation, data) => {
              let agent = loggedInUser.agent;
              let id = loggedInUser.id;
-             let email = loggedInUser.email |> E.O.default("");
-             let name =
+             let emails =
                agent
-               |> E.O.bind(_, (r: Primary.Agent.t) => r.name)
-               |> E.O.toExn("The logged in user needs an ID!");
+               |> E.O.bind(_, (r: Primary.Agent.t) => r.preference)
+               |> E.O.bind(_, (r: Types.preference) => r.emails)
+               |> E.O.default(true);
 
-             withUserForm(id, name, email, mutation, ({send, state}) =>
+             withUserForm(id, emails, mutation, ({send, state}) =>
                CMutationForm.showWithLoading(
                  ~result=data.result,
                  ~form=formFields(state, send, () => send(Form.Submit)),

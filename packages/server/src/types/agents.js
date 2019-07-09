@@ -35,28 +35,33 @@ const agent = new graphql.GraphQLObjectType({
 
     User: {
       type: require('./users').user,
-      resolve: resolver(models.Agent.User)
+      resolve: resolver(models.Agent.User),
     },
 
     Bot: {
       type: require('./bots').bot,
-      resolve: resolver(models.Agent.Bot)
+      resolve: resolver(models.Agent.Bot),
+    },
+
+    Preference: {
+      type: require('./preferences').preference,
+      resolve: require('../resolvers').preferences.getOne,
     },
 
     Measurements: {
       type: require('../connections').agentMeasurementsConnection.connectionType,
       args: require('../connections').agentMeasurementsConnection.connectionArgs,
-      resolve: require('../connections').agentMeasurementsConnection.resolve
+      resolve: require('../connections').agentMeasurementsConnection.resolve,
     },
 
     Measurables: {
       type: graphql.GraphQLNonNull(require('./measurables').measurable),
-      resolve: resolver(models.Agent.Measurables)
+      resolve: resolver(models.Agent.Measurables),
     },
 
     Channels: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./channels').channel)),
-      resolve: resolver(models.Agent.Channels)
+      resolve: resolver(models.Agent.Channels),
     },
   })
 });

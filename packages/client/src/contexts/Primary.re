@@ -10,7 +10,53 @@ module CompetitorType = {
     | `COMPETITIVE => "Competitive"
     | `OBJECTIVE => "Objective"
     | `UNRESOLVED => "Unresolved"
+    | `COMMENT => "Comment"
     };
+
+  let fromString = str =>
+    switch (str) {
+    | "Aggregation" => `AGGREGATION
+    | "Competitive" => `COMPETITIVE
+    | "Objective" => `OBJECTIVE
+    | "Unresolved" => `UNRESOLVED
+    | "Comment" => `COMMENT
+    | _ => Js.Exn.raiseError("Invalid Competitor Type: " ++ str)
+    };
+
+  let availableInputs =
+      (~isOwner: bool, ~state: option(Types.measurableState)) => {
+    switch (isOwner, state) {
+    | (true, Some(`JUDGED)) => [|`COMMENT, `OBJECTIVE, `UNRESOLVED|]
+    | (true, _) => [|`COMMENT, `COMPETITIVE, `OBJECTIVE, `UNRESOLVED|]
+    | (false, Some(`JUDGED)) => [|`COMMENT|]
+    | (false, _) => [|`COMMENT, `COMPETITIVE|]
+    };
+  };
+
+  let toSelection = (t: t) =>
+    switch (t) {
+    | `COMPETITIVE =>
+      <Antd.Select.Option value="COMPETITIVE">
+        {"Predict" |> ste}
+      </Antd.Select.Option>
+    | `OBJECTIVE =>
+      <Antd.Select.Option value="OBJECTIVE">
+        {"Resolve" |> ste}
+      </Antd.Select.Option>
+    | `COMMENT =>
+      <Antd.Select.Option value="COMMENT">
+        {"Comment" |> ste}
+      </Antd.Select.Option>
+    | `UNRESOLVED =>
+      <Antd.Select.Option value="UNRESOLVED">
+        {"Close without Answer" |> ste}
+      </Antd.Select.Option>
+    | `AGGREGATION => E.React.null
+    };
+
+  let availableSelections =
+      (~isOwner: bool, ~state: option(Types.measurableState)) =>
+    availableInputs(~isOwner, ~state) |> E.A.fmap(toSelection);
 };
 
 module MeasurableState = {
@@ -228,6 +274,7 @@ module Agent = {
         ~agentType=None,
         ~channels=[||],
         ~channelMemberships=None,
+        ~preference=None,
         (),
       )
       : t => {
@@ -237,7 +284,14 @@ module Agent = {
     agentType,
     channels,
     channelMemberships,
+    preference,
   };
+};
+
+module Preference = {
+  type t = Types.preference;
+
+  let make = (~id, ~emails=None, ()): t => {id, emails};
 };
 
 module Channel = {

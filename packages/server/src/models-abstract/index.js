@@ -7,6 +7,7 @@ const { SeriesModel } = require('./series-model');
 const { UserModel } = require('./user-model');
 const { BotModel } = require('./bot-model');
 const { TokenModel } = require('./token-model');
+const { PreferenceModel } = require('./preference-model');
 const { Model } = require('./model');
 
 module.exports = {
@@ -19,5 +20,6 @@ module.exports = {
   UserModel,
   BotModel,
   TokenModel,
+  PreferenceModel,
   Model,
 };

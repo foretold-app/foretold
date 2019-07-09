@@ -46,12 +46,16 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Model.associate = function (models) {
+  Model.associate = function associate(models) {
     Model.User = Model.hasOne(models.User, {
       foreignKey: 'agentId',
     });
 
     Model.Bot = Model.hasOne(models.Bot, {
+      foreignKey: 'agentId',
+    });
+
+    Model.Preference = Model.hasOne(models.Preference, {
       foreignKey: 'agentId',
     });
 

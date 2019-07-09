@@ -1,8 +1,6 @@
 open Antd;
 open Foretold__GraphQL;
 
-let ste = ReasonReact.string;
-
 module EditUser = [%graphql
   {|
     mutation userUpdate(
@@ -62,7 +60,7 @@ let mutate =
   |> ignore;
 };
 
-let component = ReasonReact.statelessComponent("Measurables");
+let component = ReasonReact.statelessComponent("Profile");
 
 let withUserQuery =
     (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
@@ -102,7 +100,7 @@ let withUserForm = (id, name, email, mutation, innerComponentFn) =>
 let formFields = (form: Form.state, send, onSubmit) =>
   <Antd.Form onSubmit={e => onSubmit()}>
     <Antd.Form.Item>
-      {"Username" |> ste |> E.React.inH3}
+      {"Username" |> Utils.ste |> E.React.inH3}
       <Input
         value={form.values.name}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -111,7 +109,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"E-mail" |> ste |> E.React.inH3}
+      {"E-mail" |> Utils.ste |> E.React.inH3}
       <Input
         value={form.values.email}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -121,7 +119,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
     </Antd.Form.Item>
     <Antd.Form.Item>
       <Button _type=`primary onClick={_ => onSubmit()}>
-        {"Submit" |> ste}
+        {"Submit" |> Utils.ste}
       </Button>
     </Antd.Form.Item>
   </Antd.Form>;

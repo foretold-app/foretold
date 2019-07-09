@@ -10,6 +10,7 @@ const permissions = require('./permissions');
 const authentications = require('./authentications');
 const common = require('./common');
 const measurementCompetitorType = require('./enums/measurement-competitor-type');
+const preferences = require('./preferences');
 
 module.exports = {
   bots,
@@ -24,4 +25,5 @@ module.exports = {
   authentications,
   common,
   measurementCompetitorType,
+  preferences,
 };

@@ -37,6 +37,11 @@ type permission = [
 
 type permissions = {allow: list(permission)};
 
+type preference = {
+  id: string,
+  emails: option(bool),
+};
+
 type user = {
   id: string,
   auth0Id: option(string),
@@ -63,6 +68,7 @@ and agent = {
   agentType: option(agentType),
   channels: Js.Array.t(channel),
   channelMemberships: option(Js.Array.t(channelMembership)),
+  preference: option(preference),
 }
 and channel = {
   id: string,

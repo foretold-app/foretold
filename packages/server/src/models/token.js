@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Model.associate = function (models) {
+  Model.associate = function associate(models) {
     Model.Agent = Model.belongsTo(models.Agent, {
       foreignKey: 'agentId',
     });

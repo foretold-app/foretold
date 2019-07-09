@@ -9,6 +9,7 @@ const common = require('./common');
 const permissions = require('./permissions');
 const authentications = require('./authentications');
 const bots = require('./bots');
+const preferences = require('./preferences');
 
 module.exports = {
   channels,
@@ -22,4 +23,5 @@ module.exports = {
   permissions,
   authentications,
   bots,
+  preferences,
 };

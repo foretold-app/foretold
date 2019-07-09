@@ -53,6 +53,10 @@ const TokenModel = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
 
+const PreferenceModel = jest.fn().mockImplementation(() => ({
+  ...ModelPostgres,
+}));
+
 const Model = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
@@ -67,5 +71,6 @@ module.exports = {
   UserModel,
   BotModel,
   TokenModel,
+  PreferenceModel,
   Model,
 };

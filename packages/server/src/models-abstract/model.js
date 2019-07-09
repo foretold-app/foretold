@@ -19,8 +19,12 @@ class Model {
     return Promise.reject(new Error('updateOne is not implemented.'));
   }
 
-  deleteOne() {
-    return Promise.reject(new Error('deleteOne is not implemented.'));
+  updateAll() {
+    return Promise.reject(new Error('updateAll is not implemented.'));
+  }
+
+  getCreateOne() {
+    return Promise.reject(new Error('getCreateOne is not implemented.'));
   }
 }
 

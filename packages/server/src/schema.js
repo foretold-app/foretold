@@ -315,6 +315,15 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.bots.tokenRefresh,
       },
 
+      preferenceUpdate: {
+        type: types.preferences.preference,
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          input: { type: graphql.GraphQLNonNull(types.preferences.preferenceUpdateInput) },
+        },
+        resolve: resolvers.preferences.update,
+      },
+
     }
   })
 });

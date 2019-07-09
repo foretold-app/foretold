@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
 
-  Channel.associate = function (models) {
+  Channel.associate = function associate(models) {
     // Usage:
     //
     // const ch = await models.Channel.findByPk('406da139-e440-4c74-bb3c-514ed1872cea');

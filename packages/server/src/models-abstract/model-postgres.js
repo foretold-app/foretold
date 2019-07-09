@@ -37,6 +37,7 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: see this.channelIds()
+   * @protected
    * @param {Models.ObjectID} [agentId]
    * @return {Sequelize.literal}
    */
@@ -46,6 +47,7 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: Use ORM opportunities to join tables.
+   * @protected
    * @param {Models.ObjectID} [agentId]
    * @return {string}
    */
@@ -63,6 +65,7 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: see this.channelIds()
+   * @protected
    * @param {Models.ObjectID} channelId
    * @return {Sequelize.literal}
    */
@@ -72,6 +75,7 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: Use ORM opportunities to join tables.
+   * @protected
    * @param {Models.ObjectID} channelId
    * @return {string}
    */
@@ -115,6 +119,7 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: see this.channelIds()
+   * @protected
    * @param {Models.ObjectID} [agentId]
    * @return {string}
    */
@@ -129,6 +134,7 @@ class ModelPostgres extends Model {
 
   /**
    * @param {object} [where]
+   * @protected
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {object}
    */
@@ -163,6 +169,7 @@ class ModelPostgres extends Model {
 
   /**
    * @param {object} [include]
+   * @protected
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    */
   applyRestrictionsIncluding(include = [], restrictions = {}) {
@@ -204,6 +211,7 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @protected
    * @param {object} [pagination]
    * @param {number} pagination.first
    * @param {string} pagination.after
@@ -245,6 +253,7 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @protected
    * @param {*[]} [data]
    * @param {object} [edgePagination]
    * @return {*[]}
@@ -273,19 +282,23 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @public
    * @param {object} [data]
+   * @param {object} [_restrictions]
    * @return {Promise.<object>}
    */
-  async createOne(data = {}) {
+  async createOne(data = {}, _restrictions = {}) {
     return this.model.create(data);
   }
 
   /**
+   * @public
    * @param {object} [params]
    * @param {object} [data]
+   * @param {object} [_restrictions]
    * @return {Promise.<object>}
    */
-  async updateOne(params = {}, data = {}) {
+  async updateOne(params = {}, data = {}, _restrictions = {}) {
     const entity = await this.model.findOne({
       where: params,
     });
@@ -296,11 +309,13 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @public
    * @param {object} params
    * @param {object} data
+   * @param {object} _restrictions
    * @return {boolean}
    */
-  async updateAll(params = {}, data = {}) {
+  async updateAll(params = {}, data = {}, _restrictions = {}) {
     return !!(await this.model.update(
       data,
       { where: params },
@@ -308,6 +323,7 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @public
    * @param {Layers.AbstractModelsLayer.filter} filter
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
@@ -363,6 +379,7 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @public
    * @param {object} params
    * @param {object} [query]
    * @param {object} [restrictions]
@@ -379,6 +396,19 @@ class ModelPostgres extends Model {
       where,
       order,
     });
+  }
+
+  /**
+   * @public
+   * @param {object} params
+   * @param {object} [query]
+   * @param {object} [data]
+   * @param {object} [restrictions]
+   * @return {Promise<Models.Model>}
+   */
+  async getCreateOne(params = {}, query = {}, data = {}, restrictions = {}) {
+    return await this.getOne(params, query, restrictions)
+      || await this.createOne(data, restrictions);
   }
 }
 

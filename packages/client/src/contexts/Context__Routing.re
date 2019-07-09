@@ -75,6 +75,7 @@ module Route = {
     | Redirect
     | Login
     | Profile
+    | Preferences
     | BotCreate
     | BotEdit(string)
     | EntityShow(string)
@@ -100,6 +101,7 @@ module Route = {
     | ["redirect"] => Redirect
     | ["agents"] => AgentIndex
     | ["profile"] => Profile
+    | ["preferences"] => Preferences
     | ["entities"] => EntityIndex
     | ["entities", ...id] => EntityShow(String.concat("/", id))
     | ["communities", "new"] => ChannelNew
@@ -149,6 +151,7 @@ module Url = {
     | Terms
     | AgentIndex
     | Profile
+    | Preferences
     | EntityIndex
     | BotCreate
     | BotEdit(string)
@@ -173,6 +176,7 @@ module Url = {
     | Terms => "/terms_and_conditions"
     | AgentIndex => "/agents"
     | Profile => "/profile/"
+    | Preferences => "/preferences/"
     | BotCreate => "/bots/new"
     | BotEdit(id) => "/bots/" ++ id ++ "/edit"
     | EntityIndex => "/entities"

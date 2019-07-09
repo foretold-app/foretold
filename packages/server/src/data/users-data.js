@@ -65,7 +65,7 @@ class UsersData extends DataBase {
     if (user.email === null && emailValid) {
       user.set('email', email);
     }
-    if (user.name === null && nickname !== '') {
+    if (user.name === '' && nickname !== '') {
       user.set('name', nickname);
     }
     if (user.picture === null && picture !== '') {

@@ -316,7 +316,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       preferenceUpdate: {
-        type: types.bots.bot,
+        type: types.preferences.preference,
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
           input: { type: graphql.GraphQLNonNull(types.preferences.preferenceUpdateInput) },

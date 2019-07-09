@@ -169,7 +169,7 @@ export namespace Layers {
         options: options,
       ): responseList;
 
-      getCreateOne(
+      upsertOne(
         params: params,
         query: query,
         data: data,
@@ -243,7 +243,7 @@ export namespace Layers {
         data: data,
       ): boolean;
 
-      getCreateOne(
+      upsertOne(
         params: params,
         query: query,
         data: data,

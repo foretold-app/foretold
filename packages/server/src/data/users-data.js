@@ -26,17 +26,6 @@ class UsersData extends DataBase {
     return this.upsertOne(filter, data);
   }
 
-  /**
-   * @todo: fix interface
-   * @todo: upsertOne ---> getCreateOne
-   * @param {object} filter
-   * @param {object} data
-   * @return {Promise<Models.User>}
-   */
-  async upsertOne(filter, data) {
-    return await this.getOne(filter)
-      || await this.createOne(data);
-  }
 
   /**
    * @todo: fix interface

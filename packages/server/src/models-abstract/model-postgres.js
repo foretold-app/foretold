@@ -267,7 +267,7 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @param {*[]} list
+   * @param {*[]} [list]
    * @return {*[]}
    */
   getBooleansOfList(list = []) {
@@ -380,7 +380,7 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {object} params
+   * @param {object} [params]
    * @param {object} [query]
    * @param {object} [restrictions]
    * @return {Promise<Models.Model>}
@@ -406,7 +406,7 @@ class ModelPostgres extends Model {
    * @param {object} [restrictions]
    * @return {Promise<Models.Model>}
    */
-  async getCreateOne(params = {}, query = {}, data = {}, restrictions = {}) {
+  async upsertOne(params = {}, query = {}, data = {}, restrictions = {}) {
     return await this.getOne(params, query, restrictions)
       || await this.createOne(data, restrictions);
   }

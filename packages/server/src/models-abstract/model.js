@@ -23,8 +23,8 @@ class Model {
     return Promise.reject(new Error('updateAll is not implemented.'));
   }
 
-  getCreateOne() {
-    return Promise.reject(new Error('getCreateOne is not implemented.'));
+  upsertOne() {
+    return Promise.reject(new Error('upsertOne is not implemented.'));
   }
 }
 

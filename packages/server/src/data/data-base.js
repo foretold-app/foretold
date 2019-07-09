@@ -77,9 +77,9 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Promise<*>}
    */
-  async getCreateOne(params = {}, query = {}, data = {}, options = {}) {
+  async upsertOne(params = {}, query = {}, data = {}, options = {}) {
     const restrictions = { ...options };
-    return this.model.getCreateOne(params, query, data, restrictions);
+    return this.model.upsertOne(params, query, data, restrictions);
   }
 
 }

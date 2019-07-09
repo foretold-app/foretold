@@ -48,6 +48,7 @@ type user = {
   agent: option(agent),
   name: string,
   email: option(string),
+  picture: option(string),
 }
 and bot = {
   competitorType,

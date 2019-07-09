@@ -8,6 +8,7 @@ const userUpdateInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     email: { type: graphql.GraphQLString },
+    picture: { type: graphql.GraphQLString },
   })
 });
 

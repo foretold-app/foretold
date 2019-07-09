@@ -207,10 +207,21 @@ module User = {
     | Some(agent) => clbFn(agent)
     };
 
-  let make = (~id, ~name="", ~email=None, ~auth0Id=None, ~agent=None, ()): t => {
+  let make =
+      (
+        ~id,
+        ~name="",
+        ~email=None,
+        ~picture=None,
+        ~auth0Id=None,
+        ~agent=None,
+        (),
+      )
+      : t => {
     id,
     name,
     email,
+    picture,
     auth0Id,
     agent,
   };

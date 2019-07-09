@@ -13,7 +13,7 @@ const preference = new graphql.GraphQLObjectType({
 });
 
 const preferenceUpdateInput = new graphql.GraphQLInputObjectType({
-  name: 'PreferenceInput',
+  name: 'PreferenceUpdateInput',
   fields: () => ({
     emails: { type: graphql.GraphQLBoolean },
   }),

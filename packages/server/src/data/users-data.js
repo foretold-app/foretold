@@ -21,34 +21,14 @@ class UsersData extends DataBase {
    * @return {Promise<Models.User>}
    */
   async getUserByAuth0Id(auth0Id) {
-    return this.upsertOne(
-      { auth0Id },
-      { auth0Id, name: '' },
-    );
-  }
-
-  /**
-   * @todo: fix interface (params, query, options)
-   * @param {object} filter
-   * @return {Promise<Models.User>}
-   */
-  async getOne(filter) {
-    return this.models.User.findOne({
-      where: filter,
-    });
+    const filter = { auth0Id };
+    const data = { auth0Id };
+    return this.upsertOne(filter, data);
   }
 
   /**
    * @todo: fix interface
-   * @param {object} data
-   * @return {Promise<Models.User>}
-   */
-  async createOne(data) {
-    return this.models.User.create(data);
-  }
-
-  /**
-   * @todo: fix interface
+   * @todo: upsertOne ---> getCreateOne
    * @param {object} filter
    * @param {object} data
    * @return {Promise<Models.User>}

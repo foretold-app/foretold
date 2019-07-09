@@ -11,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING(30),
         allowNull: false,
+        defaultValue: '',
         validate: {
-          isAlphanumeric: true,
-          len: [3, 30],
+          is: ['^[a-z0-9]{0,30}$', 'i'],
         }
       },
       auth0Id: {

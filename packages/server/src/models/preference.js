@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
     agentId: {
       type: DataTypes.UUID(),
       allowNull: false,
-      primaryKey: true,
     },
     emails: {
       type: DataTypes.BOOLEAN,

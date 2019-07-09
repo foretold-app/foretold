@@ -288,6 +288,12 @@ module Agent = {
   };
 };
 
+module Preference = {
+  type t = Types.preference;
+
+  let make = (~id, ~emails=None, ()): t => {id, emails};
+};
+
 module Channel = {
   type t = Types.channel;
   let showLink = (channel: t) =>

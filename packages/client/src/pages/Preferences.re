@@ -87,7 +87,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
       {"Do not send me emails" |> Utils.ste |> E.React.inH3}
       <AntdSwitch
         checked={form.values.emails}
-        onChange={e => send(Form.FieldChangeValue(Emails, true))}
+        onChange={e => send(Form.FieldChangeValue(Emails, e))}
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
@@ -104,7 +104,7 @@ module CMutationForm =
 
 let make =
     (
-      ~loggedInUser: Primary.User.t,
+      ~loggedInUser: Types.user,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {
@@ -116,10 +116,14 @@ let make =
         <FC.PageCard.BodyPadding>
           {withPreferenceMutation((mutation, data) => {
              let agent = loggedInUser.agent;
-             let id = loggedInUser.id;
+             let id =
+               agent
+               |> E.O.bind(_, (r: Types.agent) => r.preference)
+               |> E.O.fmap((r: Types.preference) => r.id)
+               |> E.O.toExn("The preference needs an ID!");
              let emails =
                agent
-               |> E.O.bind(_, (r: Primary.Agent.t) => r.preference)
+               |> E.O.bind(_, (r: Types.agent) => r.preference)
                |> E.O.bind(_, (r: Types.preference) => r.emails)
                |> E.O.default(true);
 

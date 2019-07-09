@@ -9,7 +9,30 @@ type channelMembership = {
   channel: option(channel),
 };
 
+type preference = {
+  id: string,
+  emails: option(bool),
+};
+
 type channelMemberships = Js.Array.t(option(channelMembership));
+
+type agent = {
+  id: string,
+  name: option(string),
+  channelMemberships,
+  preference: option(preference),
+};
+
+type user = {
+  id: string,
+  name: string,
+  email: option(string),
+  auth0Id: option(string),
+  agentId: option(string),
+  agent: option(agent),
+};
+
+type t = option(user);
 
 let toChannel = (ch: channel) =>
   Primary.Channel.make(
@@ -28,11 +51,8 @@ let toChannelMembership = (ch: channelMembership): Types.channelMembership =>
     (),
   );
 
-type agent = {
-  id: string,
-  name: option(string),
-  channelMemberships,
-};
+let toPreference = (a: preference) =>
+  Primary.Preference.make(~id=a.id, ~emails=a.emails, ());
 
 let toAgent = (a: agent) =>
   Primary.Agent.make(
@@ -43,19 +63,9 @@ let toAgent = (a: agent) =>
       |> E.A.O.concatSomes
       |> E.A.fmap(toChannelMembership)
       |> E.O.some,
+    ~preference=a.preference |> E.O.fmap(toPreference),
     (),
   );
-
-type user = {
-  id: string,
-  name: string,
-  email: option(string),
-  auth0Id: option(string),
-  agentId: option(string),
-  agent: option(agent),
-};
-
-type t = option(user);
 
 let toUser = (a: user) =>
   Primary.User.make(
@@ -86,6 +96,10 @@ module Query = [%graphql
                   id
                   isPublic
                 }
+              }
+              preference: Preference @bsRecord{
+                id
+                emails
               }
             }
         }

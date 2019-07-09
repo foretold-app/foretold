@@ -43,43 +43,31 @@ module Styles = {
   let submitButton = style([marginTop(px(20))]);
   let select = style([marginBottom(px(7))]);
   let label = style([color(hex("888"))]);
+  let fullWidth = style([minWidth(`percent(100.))]);
 };
 
 let competitorTypeSelect =
-    (~state, ~send, ~measurable: Primary.Measurable.t)
+    (~isOwner: bool, ~state: state, ~send, ~measurable: Primary.Measurable.t)
     : ReasonReact.reactElement => {
-  let options: array(ReasonReact.reactElement) =
-    switch (measurable.state) {
-    | Some(`JUDGED) => [|
-        <Select.Option value="OBJECTIVE"> {"Resolve" |> ste} </Select.Option>,
-      |]
-    | _ => [|
-        <Select.Option value="COMPETITIVE">
-          {"Predict" |> ste}
-        </Select.Option>,
-      |]
-    };
-
-  let options': array(ReasonReact.reactElement) =
-    Array.append(
-      options,
-      [|
-        <Select.Option value="UNRESOLVED">
-          {"Close without Answer" |> ste}
-        </Select.Option>,
-        <Select.Option value="COMMENT"> {"Comment" |> ste} </Select.Option>,
-      |],
+  let options =
+    Primary.CompetitorType.availableSelections(
+      ~isOwner,
+      ~state=measurable.state,
     );
 
   <Select
     value={state.competitorType}
+    className=Styles.fullWidth
     onChange={e => send(UpdateCompetitorType(e))}>
-    {options' |> ReasonReact.array}
+    {options |> ReasonReact.array}
   </Select>;
 };
 
 let dataTypeSelect = (~state, ~send): ReasonReact.reactElement =>
-  <Select value={state.dataType} onChange={e => send(UpdateDataType(e))}>
+  <Select
+    value={state.dataType}
+    onChange={e => send(UpdateDataType(e))}
+    className=Styles.fullWidth>
     <Select.Option value="FLOAT_CDF"> {"Distribution" |> ste} </Select.Option>
     <Select.Option value="FLOAT_POINT"> {"Exact Value" |> ste} </Select.Option>
   </Select>;
@@ -141,6 +129,95 @@ let getCompetitorTypeFromString = (str: string): Types.competitorType =>
   | _ => `OBJECTIVE
   };
 
+module ValueInput = {
+  let floatPoint = send =>
+    <GuesstimateInput
+      focusOnRender=true
+      sampleCount=30000
+      onUpdate={event =>
+        {
+          let (ys, xs, hasLimitError) = event;
+          let asGroup: FloatCdf.t = {xs, ys};
+          send(UpdateHasLimitError(hasLimitError));
+          send(UpdateFloatPdf(asGroup));
+        }
+        |> ignore
+      }
+      onChange={text => send(UpdateValueText(text))}
+    />;
+
+  let boolean = (binaryValue, send) =>
+    <Select
+      value={binaryValue |> E.Bool.toString}
+      className=Styles.fullWidth
+      onChange={e => send(UpdateBinary(e |> E.Bool.fromString))}>
+      <Select.Option value="TRUE"> {"True" |> ste} </Select.Option>
+      <Select.Option value="FALSE"> {"False" |> ste} </Select.Option>
+    </Select>;
+
+  let percentage = (percentageValue, send) =>
+    <>
+      <Slider
+        min=0.
+        max=100.
+        value=percentageValue
+        tipFormatter={(v: string) => v ++ "%"}
+        step=1.
+        onChange={(value: float) => send(UpdatePercentage(value))}
+      />
+      <InputNumber
+        formatter={v => v ++ "%"}
+        parser={v => Js.String.replace("%", "", v)}
+        min=0.
+        max=100.
+        value=percentageValue
+        step=1.
+        onChange={(value: float) =>
+          if (value > (-0.001)) {
+            // This is to fix a bug. The value could actually be undefined,
+            // but the antd lib can't handle this.
+            send(
+              UpdatePercentage(value),
+            );
+          }
+        }
+      />
+    </>;
+
+  let unresolvable = (unresolvableResolution, send) =>
+    <Select
+      value=unresolvableResolution
+      className=Styles.fullWidth
+      onChange={e => send(UpdateUnresolvableResolution(e))}>
+      <Select.Option value="AMBIGUOUS">
+        {"Result Ambiguous" |> ste}
+      </Select.Option>
+      <Select.Option value="RESULT_NOT_AVAILABLE">
+        {"Result Not Available" |> ste}
+      </Select.Option>
+      <Select.Option value="FALSE_CONDITIONAL">
+        {"Necessary Conditional was False" |> ste}
+      </Select.Option>
+      <Select.Option value="OTHER"> {"Other" |> ste} </Select.Option>
+    </Select>;
+
+  let comment = (comment, send) =>
+    <Select
+      value=comment
+      onChange={e => send(UpdateComment(e))}
+      className=Styles.fullWidth>
+      <Select.Option value="GENERIC">
+        {"Generic Comment" |> ste}
+      </Select.Option>
+      <Select.Option value="QUESTION_FEEDBACK">
+        {"Question Feedback" |> ste}
+      </Select.Option>
+      <Select.Option value="UPDATE">
+        {"Relevant Information Update" |> ste}
+      </Select.Option>
+    </Select>;
+};
+
 let mainBlock =
     (
       ~state: state,
@@ -164,93 +241,65 @@ let mainBlock =
     | "FLOAT_CDF"
     | "FLOAT_POINT" =>
       <>
-        {state.competitorType == "OBJECTIVE"
-           ? ReasonReact.null
-           : <h4 className=Styles.label>
-               {"Prediction (Distribution)" |> ste}
-             </h4>}
+        <h4 className=Styles.label>
+          {(
+             state.competitorType == "OBJECTIVE"
+               ? "Result" : "Prediction (Distribution)"
+           )
+           |> ste}
+        </h4>
         {state.hasLimitError
            ? <FC__Alert type_=`warning>
                {"Warning: Foretold does not currently support ranges of this width, due to smoothing limitations."
                 |> ste}
              </FC__Alert>
            : ReasonReact.null}
-        <GuesstimateInput
-          focusOnRender=true
-          sampleCount=30000
-          onUpdate={event =>
-            {let (ys, xs, hasLimitError) = event
-             let asGroup: FloatCdf.t = {xs, ys}
-             send(UpdateHasLimitError(hasLimitError))
-             send(UpdateFloatPdf(asGroup))}
-            |> ignore
-          }
-          onChange={text => send(UpdateValueText(text))}
-        />
+        {ValueInput.floatPoint(send)}
+        <div className=Styles.inputBox>
+          <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
+        </div>
       </>
 
     | "BINARY_BOOL" =>
-      <Select
-        value={state.binary |> E.Bool.toString}
-        onChange={e => send(UpdateBinary(e |> E.Bool.fromString))}>
-        <Select.Option value="TRUE"> {"True" |> ste} </Select.Option>
-        <Select.Option value="FALSE"> {"False" |> ste} </Select.Option>
-      </Select>
-
+      <>
+        <h4 className=Styles.label> {"Result" |> ste} </h4>
+        {ValueInput.boolean(state.binary, send)}
+        <div className=Styles.inputBox>
+          <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
+        </div>
+      </>
     | "PERCENTAGE_FLOAT" =>
       <>
         <h4 className=Styles.label>
           {"Predicted Percentage Chance" |> ste}
         </h4>
-        <Slider
-          min=0.
-          max=100.
-          value={state.percentage}
-          tipFormatter={(v: string) => v ++ "%"}
-          step=1.
-          onChange={(value: float) => send(UpdatePercentage(value))}
-        />
-        <InputNumber
-          formatter={v => v ++ "%"}
-          parser={v => Js.String.replace("%", "", v)}
-          min=0.
-          max=100.
-          value={state.percentage}
-          step=1.
-          onChange={(value: float) =>
-            if (value > (-0.001)) {
-              // This is to fix a bug. The value could actually be undefined,
-              // but the antd lib can't handle this.
-              send(
-                UpdatePercentage(value),
-              );
-            }
-          }
-        />
+        {ValueInput.percentage(state.percentage, send)}
+        <div className=Styles.inputBox>
+          <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
+        </div>
       </>
 
     | "UNRESOLVABLE_RESOLUTION" =>
-      <Select
-        value={state.unresolvableResolution}
-        onChange={e => send(UpdateUnresolvableResolution(e))}>
-        <Select.Option value="AMBIGUOUS"> {"Ambiguous" |> ste} </Select.Option>
-        <Select.Option value="FALSE_CONDITIONAL">
-          {"False Conditional" |> ste}
-        </Select.Option>
-        <Select.Option value="OTHER"> {"Other" |> ste} </Select.Option>
-        <Select.Option value="RESULT_NOT_AVAILABLE">
-          {"Result Not Available" |> ste}
-        </Select.Option>
-      </Select>
+      <>
+        <div className=Styles.inputBox>
+          <h4 className=Styles.label> {"Reason for closing" |> ste} </h4>
+        </div>
+        {ValueInput.unresolvable(state.unresolvableResolution, send)}
+        <div className=Styles.inputBox>
+          <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
+        </div>
+      </>
 
     | "COMMENT" =>
-      <Select value={state.comment} onChange={e => send(UpdateComment(e))}>
-        <Select.Option value="GENERIC"> {"Generic" |> ste} </Select.Option>
-        <Select.Option value="QUESTION_FEEDBACK">
-          {"Question Feedback" |> ste}
-        </Select.Option>
-        <Select.Option value="UPDATE"> {"Update" |> ste} </Select.Option>
-      </Select>
+      <>
+        <div className=Styles.inputBox>
+          <h4 className=Styles.label> {"Comment Type" |> ste} </h4>
+        </div>
+        {ValueInput.comment(state.comment, send)}
+        <div className=Styles.inputBox>
+          <h4 className=Styles.label> {"Comment" |> ste} </h4>
+        </div>
+      </>
 
     | _ => ReasonReact.null
     };
@@ -270,17 +319,11 @@ let mainBlock =
          : <div />}
     </div>
     <div className=Styles.inputSection>
-      {E.React.showIf(
-         isCreator,
-         <div className=Styles.select>
-           {competitorTypeSelect(~state, ~send, ~measurable)}
-         </div>,
-       )}
-      getDataTypeSelect
-      <div className=Styles.inputBox> valueInput </div>
-      <div className=Styles.inputBox>
-        <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
+      <div className=Styles.select>
+        {competitorTypeSelect(~isOwner=isCreator, ~state, ~send, ~measurable)}
       </div>
+      getDataTypeSelect
+      valueInput
       <Input.TextArea
         value={state.description}
         onChange={event => {

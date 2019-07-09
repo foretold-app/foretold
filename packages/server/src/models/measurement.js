@@ -51,6 +51,10 @@ module.exports = (sequelize, DataTypes) => {
       type: Sequelize.DATE,
       defaultValue: DataTypes.NOW,
     },
+    taggedMeasurementId: {
+      type: DataTypes.UUID(),
+      allowNull: true,
+    },
   }, {
     hooks: {
       beforeValidate: async (instance) => {

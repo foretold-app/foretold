@@ -83,10 +83,15 @@ export namespace Models {
 
 export namespace Schema {
   export interface Context {
+    // Authentication/authorization section
+    // @todo: add prefix
     user?: Models.User;
     bot?: Models.Bot;
-    preference?: Models.Preference;
     agent: Models.Agent;
+
+    // After Middleware Interceptions
+    userAsObject?: Models.User;
+    preference?: Models.Preference;
     creator?: Models.User | Models.Bot;
     channel?: Models.Channel;
     channelMembership?: Models.ChannelMemberships;

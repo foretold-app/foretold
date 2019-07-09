@@ -83,6 +83,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID(),
       allowNull: false,
     },
+    seriesId: {
+      type: DataTypes.UUID(),
+      allowNull: true,
+    },
+    creatorId: {
+      type: DataTypes.UUID(),
+      allowNull: true,
+    },
 
     // Counts
     measurementCount: {

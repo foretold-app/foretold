@@ -35,6 +35,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         allowNull: true,
       },
+      agentId: {
+        type: DataTypes.UUID(),
+        allowNull: true,
+      },
     },
     {
       hooks: {

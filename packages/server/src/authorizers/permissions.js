@@ -144,7 +144,10 @@ const rules = {
     '*': currentAgentIsAuthenticated,
     channelCreate: currentAgentIsAuthenticated,
     botCreate: currentAgentIsAuthenticated,
-    userUpdate: currentAgentIsAuthenticated,
+    userUpdate: and(
+      currentAgentIsAuthenticated,
+      userIsOwnedByCurrentAgent,
+    ),
     preferenceUpdate: and(
       currentAgentIsAuthenticated,
       preferenceIsOwnedByCurrentAgent,

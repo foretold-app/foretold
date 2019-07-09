@@ -27,6 +27,7 @@ type user = {
   id: string,
   name: string,
   email: option(string),
+  picture: option(string),
   auth0Id: option(string),
   agentId: option(string),
   agent: option(agent),
@@ -72,6 +73,7 @@ let toUser = (a: user) =>
     ~id=a.id,
     ~auth0Id=a.auth0Id,
     ~email=a.email,
+    ~picture=a.picture,
     ~agent=a.agent |> E.O.fmap(toAgent),
     (),
   );
@@ -81,9 +83,10 @@ module Query = [%graphql
     query user ($auth0Id: String) {
         user:
           user(auth0Id: $auth0Id)  @bsRecord{
+            id
             name
             email
-            id
+            picture
             auth0Id
             agentId
             agent: Agent  @bsRecord{

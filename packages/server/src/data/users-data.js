@@ -52,7 +52,7 @@ class UsersData extends DataBase {
     const user = await this.models.User.findByPk(id);
 
     const emailIn = _.get(userInfo, 'email');
-    const emailVerifiedIn = _.get(userInfo, 'email_verified') || false;
+    const isEmailVerifiedIn = !!_.get(userInfo, 'email_verified');
     const nicknameIn = _.get(userInfo, 'nickname');
     const pictureIn = _.get(userInfo, 'picture');
 
@@ -60,7 +60,7 @@ class UsersData extends DataBase {
     const nickname = _.toString(nicknameIn).substr(0, 30);
     const picture = _.toString(pictureIn).substr(0, 128);
 
-    const emailValid = email !== '' && emailVerifiedIn === true;
+    const emailValid = email !== '' && isEmailVerifiedIn === true;
 
     if (user.email === null && emailValid) {
       user.set('email', email);
@@ -71,9 +71,9 @@ class UsersData extends DataBase {
     if (user.picture === null && picture !== '') {
       user.set('picture', picture);
     }
+    user.set('isEmailVerified', isEmailVerifiedIn);
 
     await user.save();
-
     return user;
   }
 }

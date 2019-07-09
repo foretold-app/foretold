@@ -21,42 +21,11 @@ class UsersData extends DataBase {
    * @return {Promise<Models.User>}
    */
   async getUserByAuth0Id(auth0Id) {
-    return this.upsertOne(
-      { auth0Id },
-      { auth0Id, name: '' },
-    );
+    const filter = { auth0Id };
+    const data = { auth0Id };
+    return this.upsertOne(filter, data);
   }
 
-  /**
-   * @todo: fix interface (params, query, options)
-   * @param {object} filter
-   * @return {Promise<Models.User>}
-   */
-  async getOne(filter) {
-    return this.models.User.findOne({
-      where: filter,
-    });
-  }
-
-  /**
-   * @todo: fix interface
-   * @param {object} data
-   * @return {Promise<Models.User>}
-   */
-  async createOne(data) {
-    return this.models.User.create(data);
-  }
-
-  /**
-   * @todo: fix interface
-   * @param {object} filter
-   * @param {object} data
-   * @return {Promise<Models.User>}
-   */
-  async upsertOne(filter, data) {
-    return await this.getOne(filter)
-      || await this.createOne(data);
-  }
 
   /**
    * @todo: fix interface
@@ -79,7 +48,7 @@ class UsersData extends DataBase {
    * @param {Auth0UserInfoResponse} userInfo
    * @return {Promise<Models.User>}
    */
-  async updateUserInfo(id, userInfo) {
+  async updateUserInfoFromAuth0(id, userInfo) {
     const user = await this.models.User.findByPk(id);
 
     const emailIn = _.get(userInfo, 'email');
@@ -96,7 +65,7 @@ class UsersData extends DataBase {
     if (user.email === null && emailValid) {
       user.set('email', email);
     }
-    if (user.name === null && nickname !== '') {
+    if (user.name === '' && nickname !== '') {
       user.set('name', nickname);
     }
     if (user.picture === null && picture !== '') {

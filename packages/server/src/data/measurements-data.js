@@ -21,11 +21,11 @@ class MeasurementsData extends DataBase {
   /**
    * @todo: fix interface
    * @todo: rename, move down
-   * @param {object} data
+   * @param {object} [data]
    * @param {Models.Creator} creator
    * @return {Promise<Models.Measurement>}
    */
-  async createOne(data, creator) {
+  async createOne(data = {}, creator) {
     const measurement = await this.models.Measurement.create(data);
 
     const notification = await measurement.getCreationNotification(creator);
@@ -60,7 +60,7 @@ class MeasurementsData extends DataBase {
    * @todo: fix interface
    * @todo: move down
    * @param {Models.ObjectID} id
-   * @param {object} options
+   * @param {object} [options]
    * @param {string} [options.agentId]
    * @return {Promise<*>}
    */

@@ -102,7 +102,7 @@ class AuthenticationData {
 
       try {
         const userInfo = await this.auth0.getUserInfo(accessToken);
-        await this.users.updateUserInfo(user.id, userInfo);
+        await this.users.updateUserInfoFromAuth0(user.id, userInfo);
       }catch (e) {
         console.log(`Saving user info is failed.`);
       }

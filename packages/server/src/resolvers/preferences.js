@@ -14,7 +14,7 @@ async function getOne(root, args, context, info) {
   const params = { agentId };
   const query = {};
   const data = { agentId };
-  return datas.preferences.getCreateOne(params, query, data);
+  return datas.preferences.upsertOne(params, query, data);
 }
 
 /**

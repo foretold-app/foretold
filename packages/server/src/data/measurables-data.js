@@ -19,11 +19,11 @@ class MeasurablesData extends DataBase {
   /**
    * @todo: fix interface (data, options)
    * @public
-   * @param {object} data
-   * @param {Models.Creator} creator
+   * @param {object} [data]
+   * @param {Models.Creator} [creator]
    * @return {Promise<Models.Measurable>}
    */
-  async createOne(data, creator) {
+  async createOne(data = {}, creator = {}) {
     const measurable = await this.models.Measurable.create(data);
     notifications.creationNotification(measurable, creator);
     return measurable;

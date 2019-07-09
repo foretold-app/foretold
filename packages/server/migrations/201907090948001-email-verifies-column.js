@@ -3,8 +3,7 @@ module.exports = {
     try {
       await queryInterface.addColumn('Users', 'isEmailVerified', {
         type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
+        allowNull: true,
       });
     } catch (e) {
       console.error('Migration Up Error', e);

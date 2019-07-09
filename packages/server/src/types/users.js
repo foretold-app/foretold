@@ -18,7 +18,7 @@ const user = new graphql.GraphQLObjectType({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     email: { type: graphql.GraphQLString },
     picture: { type: graphql.GraphQLString },
-    isEmailVerified: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
+    isEmailVerified: { type: graphql.GraphQLBoolean },
     auth0Id: { type: graphql.GraphQLString },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },

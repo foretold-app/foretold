@@ -79,7 +79,7 @@ class UsersData extends DataBase {
    * @param {Auth0UserInfoResponse} userInfo
    * @return {Promise<Models.User>}
    */
-  async updateUserInfo(id, userInfo) {
+  async updateUserInfoFromAuth0(id, userInfo) {
     const user = await this.models.User.findByPk(id);
 
     const emailIn = _.get(userInfo, 'email');

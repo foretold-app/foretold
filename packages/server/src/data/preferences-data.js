@@ -1,17 +1,17 @@
 const { DataBase } = require('./data-base');
 
-const { PreferencesModel } = require('../models-abstract');
+const { PreferenceModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {PreferencesModel} PreferencesModel
+ * @property {PreferenceModel} PreferencesModel
  */
 class PreferencesData extends DataBase {
 
   constructor() {
     super();
-    this.PreferencesModel = new PreferencesModel();
-    this.model = this.PreferencesModel;
+    this.PreferenceModel = new PreferenceModel();
+    this.model = this.PreferenceModel;
   }
 
 }

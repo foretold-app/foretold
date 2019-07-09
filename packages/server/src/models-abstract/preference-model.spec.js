@@ -1,7 +1,7 @@
-const { PreferencesModel } = require('./preference-model');
+const { PreferenceModel } = require('./preference-model');
 
 describe('Preference Model', () => {
   it('class should be a constructor', () => {
-    expect(PreferencesModel).toBeInstanceOf(Function);
+    expect(PreferenceModel).toBeInstanceOf(Function);
   });
 });

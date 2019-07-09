@@ -4,7 +4,7 @@ const { ModelPostgres } = require('./model-postgres');
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
  */
-class PreferencesModel extends ModelPostgres {
+class PreferenceModel extends ModelPostgres {
 
   constructor() {
     super({
@@ -16,5 +16,5 @@ class PreferencesModel extends ModelPostgres {
 }
 
 module.exports = {
-  PreferencesModel,
+  PreferenceModel,
 };

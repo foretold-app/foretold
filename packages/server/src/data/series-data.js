@@ -25,17 +25,19 @@ class SeriesData extends DataBase {
   /**
    * @todo: move down
    * @todo: fix interface (filter, pagination, options*)
-   * @param {object} options
-   * @param {Models.ObjectID} [options.agentId]
+   * @param {object} [filter]
+   * @param {Models.ObjectID} [filter.agentId]
+   * @param {object} [_pagination]
+   * @param {object} [_options]
    * @return {Promise<*>}
    */
-  async getAll(options) {
-    const { channelId } = options;
+  async getAll(filter = {}, _pagination = {}, _options = {}) {
+    const { channelId } = filter;
 
     let where = {
       // Restrictions
       channelId: {
-        [this.model.Op.in]: this.SeriesModel.channelIdsLiteral(options.agentId),
+        [this.model.Op.in]: this.SeriesModel.channelIdsLiteral(filter.agentId),
       },
     };
 
@@ -53,7 +55,7 @@ class SeriesData extends DataBase {
    * @todo: move down
    * @todo: fix interface (params, query, options)
    * @param {Models.ObjectID} id
-   * @param {object} options
+   * @param {object} [options]
    * @param {Models.ObjectID} [options.agentId]
    * @return {Promise<*>}
    */

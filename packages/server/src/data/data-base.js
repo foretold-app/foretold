@@ -14,11 +14,11 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSourceLayer.data} data
-   * @param {Layers.DataSourceLayer.options} options
+   * @param {Layers.DataSourceLayer.data} [data]
+   * @param {Layers.DataSourceLayer.options} [options]
    * @return {Promise<*>}
    */
-  async createOne(data, options) {
+  async createOne(data = {}, options = {}) {
     const restrictions = { ...options };
     return this.model.createOne(data, restrictions);
   }
@@ -37,23 +37,23 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSourceLayer.params} params
-   * @param {Layers.DataSourceLayer.data} data
+   * @param {Layers.DataSourceLayer.params} [params]
+   * @param {Layers.DataSourceLayer.data} [data]
    * @param {Layers.DataSourceLayer.options} options
    * @return {Promise<*>}
    */
-  async updateOne(params, data, options) {
+  async updateOne(params = {}, data = {}, options = {}) {
     const restrictions = { ...options };
     return this.model.updateOne(params, data, restrictions);
   }
 
   /**
    * @public
-   * @param {Layers.DataSourceLayer.params} params
-   * @param {Layers.DataSourceLayer.options} options
+   * @param {Layers.DataSourceLayer.params} [params]
+   * @param {Layers.DataSourceLayer.options} [options]
    * @return {Promise<*>}
    */
-  async deleteOne(params, options) {
+  async deleteOne(params = {}, options = {}) {
     const restrictions = { ...options };
     return this.model.deleteOne(params, restrictions);
   }
@@ -73,7 +73,7 @@ class DataBase {
    * @public
    * @param {Layers.DataSourceLayer.params} [params]
    * @param {Layers.DataSourceLayer.query} [query]
-   * @param {Layers.DataSourceLayer.data} data
+   * @param {Layers.DataSourceLayer.data} [data]
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Promise<*>}
    */

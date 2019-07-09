@@ -20,10 +20,10 @@ class TokensData extends DataBase {
 
   /**
    * @public
-   * @param {string} token
+   * @param {string} [token]
    * @return {boolean}
    */
-  validate(token) {
+  validate(token = '') {
     const length = token.length === this.MAX_BOT_TOKEN_SIZE_INCOMIN;
     const pattern = /^([0-9a-z]+)$/.test(token);
     return length && pattern;

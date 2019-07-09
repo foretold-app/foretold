@@ -98,7 +98,7 @@ module Auth0Client = {
     "clientID": Env.auth0ClientId,
     "redirectUri": Env.redirectUrl,
     "responseType": "token id_token",
-    "scope": "openid picture nickname email_verified email",
+    "scope": "openid email profile",
   };
 
   let triggerLoginScreen = () =>

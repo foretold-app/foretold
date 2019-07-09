@@ -20,6 +20,11 @@ export namespace Models {
     getAgent(): Models.Agent;
   }
 
+  export interface Preference extends Model {
+    id: ObjectID;
+    emails: boolean;
+  }
+
   export interface User extends Model {
     id: ObjectID;
     name: string;
@@ -80,6 +85,7 @@ export namespace Schema {
   export interface Context {
     user?: Models.User;
     bot?: Models.Bot;
+    preference?: Models.Preference;
     agent: Models.Agent;
     creator?: Models.User | Models.Bot;
     channel?: Models.Channel;

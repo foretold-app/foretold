@@ -14,6 +14,7 @@ const { measurableIsOwnedByCurrentAgent } = require('./measurables');
 const { measurableIsArchived } = require('./measurables');
 const { botBelongsToCurrentUser } = require('./bots');
 const { userIsOwnedByCurrentAgent } = require('./users');
+const { preferenceIsOwnedByCurrentAgent } = require('./preferences');
 
 const currentAgentIsApplicationAdminOrChannelAdmin = or(
   currentAgentIsApplicationAdmin,
@@ -144,6 +145,10 @@ const rules = {
     channelCreate: currentAgentIsAuthenticated,
     botCreate: currentAgentIsAuthenticated,
     userUpdate: currentAgentIsAuthenticated,
+    preferenceUpdate: and(
+      currentAgentIsAuthenticated,
+      preferenceIsOwnedByCurrentAgent,
+    ),
     seriesCreate: and(
       currentAgentIsAuthenticated,
       or(

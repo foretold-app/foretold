@@ -10,6 +10,7 @@ const { measurableStateValidation } = require('./measurements');
 const { formatResponseIntoConnection } = require('./connections');
 const { setContextBot } = require('./bots');
 const { setContextPreference } = require('./preferences');
+const { setContextUser } = require('./users');
 
 /**
  * Do not try to use DRY principle here.
@@ -175,6 +176,11 @@ const middlewares = {
 
     preferenceUpdate: async (resolve, root, args, context, info) => {
       await setContextPreference(root, args, context, info);
+      return resolve(root, args, context, info);
+    },
+
+    userUpdate: async (resolve, root, args, context, info) => {
+      await setContextUser(root, args, context, info);
       return resolve(root, args, context, info);
     },
   }

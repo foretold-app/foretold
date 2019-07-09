@@ -9,7 +9,10 @@ const { rule } = require('graphql-shield');
  * @return {Promise<boolean>}
  */
 async function userIsOwnedByCurrentAgentRule(root, args, context, info) {
-  const agentIdIn = _.get(root, 'agentId');
+  const agentIdIn =
+    _.get(root, 'agentId') ||
+    _.get(context, 'userAsObject.agentId')
+  ;
   const contextAgentIdIn = _.get(context, 'agent.id');
 
   const agentId = _.toString(agentIdIn);

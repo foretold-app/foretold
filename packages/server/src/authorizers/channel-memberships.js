@@ -14,10 +14,12 @@ async function currentAgentIsChannelAdminRule(root, args, context) {
   const roleName = models.ChannelMemberships.ROLE.ADMIN;
   const role = _.get(context, 'channelMembershipsRole', []);
   const result = role === roleName;
+
   console.log(
     `\x1b[33m Rule Channel Memberships (currentAgentIsChannelAdminRule) ` +
     `role "${role}" = "${roleName}", result = "${result}"\x1b[0m`
   );
+
   return result;
 }
 
@@ -31,10 +33,12 @@ async function currentAgentIsChannelViewerRule(root, args, context) {
   const roleName = models.ChannelMemberships.ROLE.VIEWER;
   const role = _.get(context, 'channelMembershipsRole', []);
   const result = role === roleName;
+
   console.log(
     `\x1b[33m Rule Channel Memberships (currentAgentIsChannelViewerRule) ` +
     `role "${role}" = "${roleName}", result = "${result}"\x1b[0m`
   );
+
   return result;
 }
 
@@ -49,9 +53,13 @@ async function channelHasMembershipWithCurrentAgentRule(root, args, context, inf
   const channelMembership = _.get(context, 'channelMembership');
   const agentId = _.get(context, 'agent.id');
   const result = !!channelMembership;
-  console.log(`\x1b[33m Rule Channel Memberships ` +
+
+  console.log(
+    `\x1b[33m Rule Channel Memberships ` +
     `(channelHasMembershipWithCurrentAgentRule) ` +
-    `agentId "${agentId}", result = "${result}"\x1b[0m`);
+    `agentId "${agentId}", result = "${result}"\x1b[0m`
+  );
+
   return result;
 }
 
@@ -67,8 +75,12 @@ async function channelHasMultipleAdminsRule(root, args, context, info) {
   const result =
     _.isArray(channelMembershipsAdmins) &&
     _.size(channelMembershipsAdmins) > 1;
-  console.log(`\x1b[33m Rule Channel Memberships ` +
-    `(channelHasMultipleAdminsRule) result = "${result}"\x1b[0m`);
+
+  console.log(
+    `\x1b[33m Rule Channel Memberships ` +
+    `(channelHasMultipleAdminsRule) result = "${result}"\x1b[0m`
+  );
+
   return result;
 }
 
@@ -84,10 +96,14 @@ async function membershipBelongsToCurrentAgentRule(root, args, context, info) {
     || _.get(root, 'agentId');
   const subjectAgentId = _.get(context, 'agent.id');
   const result = !!objectAgentId && objectAgentId === subjectAgentId;
-  console.log(`\x1b[33m Rule Channel Memberships ` +
+
+  console.log(
+    `\x1b[33m Rule Channel Memberships ` +
     `(membershipBelongsToCurrentAgentRule) objectAgentId = ` +
     `"${objectAgentId}", subjectAgentId = "${subjectAgentId}", ` +
-    `result = "${result}"\x1b[0m`);
+    `result = "${result}"\x1b[0m`
+  );
+
   return result;
 }
 
@@ -103,9 +119,13 @@ async function membershipHasAdminRoleRule(root, args, context, info) {
     || _.get(root, 'role')
     || _.get(context, 'channelMembershipsRole');
   const result = !!role && role === CHANNEL_MEMBERSHIP_ROLES.ADMIN;
-  console.log(`\x1b[33m Rule Channel Memberships ` +
+
+  console.log(
+    `\x1b[33m Rule Channel Memberships ` +
     `(membershipHasAdminRoleRule) ` +
-    `role = "${role}", result = "${result}"\x1b[0m`);
+    `role = "${role}", result = "${result}"\x1b[0m`
+  );
+
   return result;
 }
 

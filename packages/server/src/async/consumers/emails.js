@@ -2,7 +2,10 @@ const assert = require('assert');
 const _ = require('lodash');
 
 const { Consumer } = require('./consumer');
-const { Pagination } = require('../../pagination');
+
+const { Pagination } = require('../../data/classes/pagination');
+const { Filter } = require('../../data/classes/filter');
+const { Options } = require('../../data/classes/options');
 
 class Emails extends Consumer {
   constructor() {
@@ -13,9 +16,9 @@ class Emails extends Consumer {
     try {
       const transaction = await this.data.notifications.getTransaction();
 
-      const filter = { type: this.NOTIFICATION_TYPE.EMAIL };
+      const filter = new Filter({ type: this.NOTIFICATION_TYPE.EMAIL });
       const pagination = new Pagination({ limit: 10 });
-      const options = { transaction };
+      const options = new Options({ transaction });
       const notifications = await this.data.notifications.getAll(filter, pagination, options);
 
     } catch (e) {

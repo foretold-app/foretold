@@ -117,6 +117,7 @@ export namespace Layers {
       isAdmin?: boolean,
       agentId?: Models.ObjectID,
       measuredByAgentId?: Models.ObjectID,
+      transaction?: object,
     };
     type filter = {
       creatorId?: Models.ObjectID,

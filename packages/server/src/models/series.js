@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const { MEASURABLE_VALUE_TYPE } = require('./enums/measurable-value-type');
 
 module.exports = (sequelize, DataTypes) => {
-  const Model = sequelize.define('Series', {
+  const Series = sequelize.define('Series', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Model.addHook('afterCreate', async (series) => {
+  Series.addHook('afterCreate', async (series) => {
     await series.createMeasurables();
   });
 
@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
     return items.length;
   }
 
-  Model.prototype.createMeasurables = async function createMeasurables() {
+  Series.prototype.createMeasurables = async function createMeasurables() {
     for (let subject of this.subjects) {
       for (let property of this.properties) {
         for (let date of this.dates) {
@@ -77,13 +77,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
 
-  Model.associate = function associate(models) {
-    Model.Creator = Model.belongsTo(models.Agent, {
+  Series.associate = function associate(models) {
+    Series.Creator = Series.belongsTo(models.Agent, {
       foreignKey: 'creatorId',
       as: 'creator',
     });
 
-    Model.Measurables = Model.hasMany(models.Measurable, {
+    Series.Measurables = Series.hasMany(models.Measurable, {
       foreignKey: 'seriesId',
       as: 'Measurables',
     });
@@ -91,10 +91,10 @@ module.exports = (sequelize, DataTypes) => {
     // Usage
     // const se = await models.Series.find();
     // const ch = await se.getChannel();
-    Model.Channel = Model.belongsTo(models.Channel, {
+    Series.Channel = Series.belongsTo(models.Channel, {
       foreignKey: 'channelId',
     });
   };
 
-  return Model;
+  return Series;
 };

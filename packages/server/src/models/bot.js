@@ -2,7 +2,7 @@ const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-
 const { AGENT_TYPE } = require('./enums/agent-type');
 
 module.exports = (sequelize, DataTypes) => {
-  const Model = sequelize.define('Bot', {
+  const Bot = sequelize.define('Bot', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
@@ -34,22 +34,22 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Model.addHook('beforeCreate', async (event) => {
+  Bot.addHook('beforeCreate', async (event) => {
     let agent = await sequelize.models.Agent.create({
       type: AGENT_TYPE.BOT,
     });
     event.agentId = agent.dataValues.id;
   });
 
-  Model.associate = function associate(models) {
-    Model.User = Model.belongsTo(models.User, {
+  Bot.associate = function associate(models) {
+    Bot.User = Bot.belongsTo(models.User, {
       foreignKey: 'userId',
     });
 
-    Model.Agent = Model.belongsTo(models.Agent, {
+    Bot.Agent = Bot.belongsTo(models.Agent, {
       foreignKey: 'agentId',
     });
   };
 
-  return Model;
+  return Bot;
 };

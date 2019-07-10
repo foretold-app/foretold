@@ -11,7 +11,7 @@ type channelMembership = {
 
 type preference = {
   id: string,
-  emails: option(bool),
+  stopAllEmails: option(bool),
 };
 
 type channelMemberships = Js.Array.t(option(channelMembership));
@@ -53,7 +53,7 @@ let toChannelMembership = (ch: channelMembership): Types.channelMembership =>
   );
 
 let toPreference = (a: preference) =>
-  Primary.Preference.make(~id=a.id, ~emails=a.emails, ());
+  Primary.Preference.make(~id=a.id, ~stopAllEmails=a.stopAllEmails, ());
 
 let toAgent = (a: agent) =>
   Primary.Agent.make(
@@ -102,7 +102,7 @@ module Query = [%graphql
               }
               preference: Preference @bsRecord{
                 id
-                emails
+                stopAllEmails
               }
             }
         }

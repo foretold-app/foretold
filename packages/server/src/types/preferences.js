@@ -6,7 +6,7 @@ const preference = new graphql.GraphQLObjectType({
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     agentId: { type: graphql.GraphQLString },
-    emails: { type: graphql.GraphQLBoolean },
+    stopAllEmails: { type: graphql.GraphQLBoolean },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
   })
@@ -15,7 +15,7 @@ const preference = new graphql.GraphQLObjectType({
 const preferenceUpdateInput = new graphql.GraphQLInputObjectType({
   name: 'PreferenceUpdateInput',
   fields: () => ({
-    emails: { type: graphql.GraphQLBoolean },
+    stopAllEmails: { type: graphql.GraphQLBoolean },
   }),
 });
 

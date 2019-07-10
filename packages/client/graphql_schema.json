@@ -2442,7 +2442,7 @@
               "deprecationReason": null
             },
             {
-              "name": "emails",
+              "name": "stopAllEmails",
               "description": null,
               "args": [],
               "type": {
@@ -5850,7 +5850,7 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "emails",
+              "name": "stopAllEmails",
               "description": null,
               "type": {
                 "kind": "SCALAR",

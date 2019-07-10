@@ -21,20 +21,20 @@ module EditPreferenceMutation = ReasonApollo.CreateMutation(EditPreference);
 
 module FormConfig = {
   type field(_) =
-    | Emails: field(bool);
+    | StopAllEmails: field(bool);
 
-  type state = {emails: bool};
+  type state = {stopAllEmails: bool};
 
   let get: type value. (state, field(value)) => value =
     (state, field) =>
       switch (field) {
-      | Emails => state.emails
+      | StopAllEmails => state.stopAllEmails
       };
 
   let set: type value. (state, field(value), value) => state =
     (state, field, value) =>
       switch (field) {
-      | Emails => {...state, emails: value}
+      | StopAllEmails => {...state, stopAllEmails: value}
       };
 };
 
@@ -43,11 +43,15 @@ module Form = ReFormNext.Make(FormConfig);
 let mutate =
     (
       mutation: EditPreferenceMutation.apolloMutation,
-      emails: bool,
+      stopAllEmails: bool,
       id: string,
     ) => {
   let mutate =
-    EditPreference.make(~id, ~input={"emails": Some(emails)}, ());
+    EditPreference.make(
+      ~id,
+      ~input={"stopAllEmails": Some(stopAllEmails)},
+      (),
+    );
   mutation(~variables=mutate##variables, ~refetchQueries=[||], ()) |> ignore;
 };
 
@@ -72,10 +76,11 @@ let withPreferenceMutation = innerComponentFn =>
   )
   |> E.React.el;
 
-let withUserForm = (id, emails, mutation, innerComponentFn) =>
+let withUserForm = (id, stopAllEmails, mutation, innerComponentFn) =>
   Form.make(
-    ~initialState={emails: emails},
-    ~onSubmit=values => mutate(mutation, values.state.values.emails, id),
+    ~initialState={stopAllEmails: stopAllEmails},
+    ~onSubmit=
+      values => mutate(mutation, values.state.values.stopAllEmails, id),
     ~schema=Form.Validation.Schema([||]),
     innerComponentFn,
   )
@@ -86,8 +91,8 @@ let formFields = (form: Form.state, send, onSubmit) =>
     <Antd.Form.Item>
       {"Do not send me emails" |> Utils.ste |> E.React.inH3}
       <AntdSwitch
-        checked={form.values.emails}
-        onChange={e => send(Form.FieldChangeValue(Emails, e))}
+        checked={form.values.stopAllEmails}
+        onChange={e => send(Form.FieldChangeValue(StopAllEmails, e))}
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
@@ -121,13 +126,13 @@ let make =
                |> E.O.bind(_, (r: Types.agent) => r.preference)
                |> E.O.fmap((r: Types.preference) => r.id)
                |> E.O.toExn("The preference needs an ID!");
-             let emails =
+             let stopAllEmails =
                agent
                |> E.O.bind(_, (r: Types.agent) => r.preference)
-               |> E.O.bind(_, (r: Types.preference) => r.emails)
+               |> E.O.bind(_, (r: Types.preference) => r.stopAllEmails)
                |> E.O.default(true);
 
-             withUserForm(id, emails, mutation, ({send, state}) =>
+             withUserForm(id, stopAllEmails, mutation, ({send, state}) =>
                CMutationForm.showWithLoading(
                  ~result=data.result,
                  ~form=formFields(state, send, () => send(Form.Submit)),

@@ -39,7 +39,7 @@ type permissions = {allow: list(permission)};
 
 type preference = {
   id: string,
-  emails: option(bool),
+  stopAllEmails: option(bool),
 };
 
 type user = {

@@ -10,10 +10,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID(),
       allowNull: false,
     },
-    emails: {
+    stopAllEmails: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: true,
+      defaultValue: false,
     },
   });
 

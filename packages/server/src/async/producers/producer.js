@@ -34,6 +34,7 @@ class Producer {
     envelope = new this.EmailEnvelope(),
     type = this.NOTIFICATION_TYPE.EMAIL,
   ) {
+    assert(envelope instanceof this.EmailEnvelope, 'Envelope is not EmailEnvelope');
     const data = { type, envelope: envelope };
     return this.data.notifications.createOne(data);
   }

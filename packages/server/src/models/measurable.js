@@ -5,9 +5,6 @@ const moment = require('moment');
 
 const { clientUrl } = require('../lib/urls');
 
-const events = require('../async/events');
-const emitter = require('../async/emitter');
-
 const { MEASURABLE_STATE } = require('./enums/measurable-state');
 const { MEASURABLE_VALUE_TYPE } = require('./enums/measurable-value-type');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-type');

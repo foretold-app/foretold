@@ -8,6 +8,9 @@ const { UserModel } = require('./user-model');
 const { BotModel } = require('./bot-model');
 const { TokenModel } = require('./token-model');
 const { PreferenceModel } = require('./preference-model');
+const { NotificationModel } = require('./notification-model');
+const { TemplateModel } = require('./template-model');
+const { AgentNotificationModel } = require('./agent-notification-model');
 const { Model } = require('./model');
 
 module.exports = {
@@ -21,5 +24,8 @@ module.exports = {
   BotModel,
   TokenModel,
   PreferenceModel,
+  NotificationModel,
+  TemplateModel,
+  AgentNotificationModel,
   Model,
 };

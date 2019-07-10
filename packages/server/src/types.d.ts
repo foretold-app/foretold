@@ -120,6 +120,7 @@ export namespace Layers {
       transaction?: object,
     };
     type filter = {
+      id?: Models.ObjectID,
       creatorId?: Models.ObjectID,
       seriesId?: Models.ObjectID,
       channelId?: Models.ObjectID,
@@ -145,6 +146,7 @@ export namespace Layers {
     };
     type query = object;
     type params = {
+      id?: Models.ObjectID,
       agentId?: Models.ObjectID,
     };
     type response = { data: any };

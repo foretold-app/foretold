@@ -5,6 +5,7 @@ class Filter {
    * @param {Layers.DataSourceLayer.filter} [filter]
    */
   constructor(filter = {}) {
+    this.id = _.get(filter, 'id');
     this.type = _.get(filter, 'type');
     this.creatorId = _.get(filter, 'creatorId');
     this.seriesId = _.get(filter, 'seriesId');

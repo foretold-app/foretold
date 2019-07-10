@@ -16,11 +16,15 @@ class Emails extends Consumer {
   async main() {
     try {
       const transaction = await this.notifications.getTransaction();
-      const notifications = await this._getNotifications(transaction);
+      const agentNotifications = await this._getAgentsNotifications(transaction);
 
-      for (let i = 0; i < notifications.length; i++) {
-        const notification = notifications[i];
-        this._proceedAgents(notification, transaction);
+      for (let i = 0; i < agentNotifications.length; i++) {
+        const agentNotification = agentNotifications[i];
+
+        const notification = await this._getNotification(agentNotification);
+        const agent = await this._getAgent(agentNotification);
+
+        console.log(` ----> Notification ID = "${notification.id}", Agent ID = "${agent.id}".`);
       }
 
       await this.notifications.commit(transaction);
@@ -30,26 +34,16 @@ class Emails extends Consumer {
     return true;
   }
 
-  async _proceedAgents(notification, transaction) {
-    const agentNotifications = await this._getAgentsNotifications(notification, transaction);
-    for (let i = 0; i < agentNotifications.length; i) {
-      const agentNotification = agentNotifications[i];
-      const agent = await this._getAgent(agentNotification);
-    }
-  }
-
-  async _getNotifications(transaction) {
-    const filter = new Filter({ type: this.NOTIFICATION_TYPE.EMAIL });
-    const pagination = new Pagination({ limit: 10 });
-    const options = new Options({ transaction });
-    return this.notifications.getAll(filter, pagination, options);
-  }
-
-  async _getAgentsNotifications(notification, transaction) {
-    const filter = new Filter({ notificationId: notification.id });
+  async _getAgentsNotifications(transaction) {
+    const filter = new Filter();
     const pagination = new Pagination({ limit: 10 });
     const options = new Options({ transaction });
     return this.agentNotifications.getAll(filter, pagination, options);
+  }
+
+  async _getNotification(agentNotification) {
+    const params = new Params({ id: agentNotification.notificationId });
+    return this.notifications.getOne(params);
   }
 
   async _getAgent(agentNotification) {

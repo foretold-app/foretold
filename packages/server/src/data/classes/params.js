@@ -5,8 +5,13 @@ class Params {
    * @param {Layers.DataSourceLayer.params} [params]
    */
   constructor(params = {}) {
-    this.id = _.get(params, 'id');
-    this.agentId = _.get(params, 'agentId');
+    const list = ['id', 'agentId'];
+
+    _.each(list, (name) => {
+      if (_.has(params, name)) {
+        this[name] = _.get(params, name);
+      }
+    });
   }
 }
 

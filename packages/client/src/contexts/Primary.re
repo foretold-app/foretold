@@ -302,7 +302,7 @@ module Agent = {
 module Preference = {
   type t = Types.preference;
 
-  let make = (~id, ~emails=None, ()): t => {id, emails};
+  let make = (~id, ~stopAllEmails=None, ()): t => {id, stopAllEmails};
 };
 
 module Channel = {

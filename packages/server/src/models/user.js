@@ -40,17 +40,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
     },
-    {
-      hooks: {
-        beforeCreate: async (event) => {
-          let agent = await sequelize.models.Agent.create({
-            type: AGENT_TYPE.USER,
-          });
-          event.agentId = agent.dataValues.id
-        }
-      }
-    }
   );
+
+  Model.addHook('beforeCreate', async (event) => {
+    const agent = await sequelize.models.Agent.create({
+      type: AGENT_TYPE.USER,
+    });
+    event.agentId = agent.dataValues.id
+  });
 
   Model.associate = function associate(models) {
     Model.Agent = Model.belongsTo(models.Agent, {

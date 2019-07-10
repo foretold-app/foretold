@@ -55,25 +55,24 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID(),
       allowNull: true,
     },
-  }, {
-    hooks: {
-      beforeValidate: async (instance) => {
-        if (instance.dataValues.relevantAt == null) {
-          instance.relevantAt = Date.now();
-        }
-      },
-      afterCreate: async (measurement) => {
-        const competitorType = measurement.dataValues.competitorType;
-        const isJudgable = [
-          MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
-          MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED,
-        ].includes(competitorType);
+  });
 
-        if (isJudgable) {
-          const measurable = await measurement.getMeasurable();
-          await measurable.judged();
-        }
-      },
+  Model.addHook('beforeValidate', async (instance) => {
+    if (instance.dataValues.relevantAt == null) {
+      instance.relevantAt = Date.now();
+    }
+  });
+
+  Model.addHook('afterCreate', async (measurement) => {
+    const competitorType = measurement.dataValues.competitorType;
+    const isJudgable = [
+      MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
+      MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED,
+    ].includes(competitorType);
+
+    if (isJudgable) {
+      const measurable = await measurement.getMeasurable();
+      await measurable.judged();
     }
   });
 

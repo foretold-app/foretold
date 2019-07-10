@@ -26,25 +26,29 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.STRING),
-      get: async function () {
-        if (this.type === AGENT_TYPE.USER) {
-          const user = await this.getUser();
-          return _.get(user, 'name');
-        } else {
-          const bot = await this.getBot();
-          return _.get(bot, 'name');
-        }
-      },
+      get: getName,
     },
     measurementCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
-      get: async function () {
-        const items = await this.getMeasurements();
-        return items.length;
-      },
+      get: getMeasurementCount,
     },
   });
+
+  async function getName() {
+    if (this.type === AGENT_TYPE.USER) {
+      const user = await this.getUser();
+      return _.get(user, 'name');
+    } else {
+      const bot = await this.getBot();
+      return _.get(bot, 'name');
+    }
+  }
+
+  async function getMeasurementCount() {
+    const items = await this.getMeasurements();
+    return items.length;
+  }
 
   Model.associate = function associate(models) {
     Model.User = Model.hasOne(models.User, {

@@ -1,4 +1,4 @@
-class Emails {
+class Producer {
   constructor(options = {}) {
 
   }
@@ -9,5 +9,5 @@ class Emails {
 }
 
 module.exports = {
-  Emails,
+  Producer,
 };

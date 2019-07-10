@@ -1,9 +1,8 @@
-const  { Emails } = require('./emails');
+const  { Producer } = require('./producer');
 
-class MeasurableState extends Emails {
+class MeasurableState extends Producer {
   constructor(measurable = {}) {
-    const options = {};
-    super(options);
+    super({});
 
     this.measurable = measurable;
   }

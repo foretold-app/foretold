@@ -135,6 +135,7 @@ export namespace Layers {
       types?: string[],
       type?: string,
       notificationId?: Models.ObjectID,
+      sentAt?: string | null,
     };
     type pagination = {
       limit?: number,

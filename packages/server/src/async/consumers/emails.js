@@ -1,5 +1,6 @@
 const assert = require('assert');
 const _ = require('lodash');
+const moment = require('moment');
 
 const { Consumer } = require('./consumer');
 
@@ -24,7 +25,12 @@ class Emails extends Consumer {
         const notification = await this._getNotification(agentNotification);
         const agent = await this._getAgent(agentNotification);
 
-        console.log(` ----> Notification ID = "${notification.id}", Agent ID = "${agent.id}".`);
+        console.log(
+          `Notification ID = "${notification.id}", ` +
+          `Agent ID = "${agent.id}".`
+        );
+
+        await this._markNotificationAsSent(agentNotification, transaction);
       }
 
       await this.notifications.commit(transaction);
@@ -35,7 +41,7 @@ class Emails extends Consumer {
   }
 
   async _getAgentsNotifications(transaction) {
-    const filter = new Filter();
+    const filter = new Filter({ sentAt: null });
     const pagination = new Pagination({ limit: 10 });
     const options = new Options({ transaction });
     return this.agentNotifications.getAll(filter, pagination, options);
@@ -49,6 +55,13 @@ class Emails extends Consumer {
   async _getAgent(agentNotification) {
     const params = new Params({ id: agentNotification.agentId });
     return this.agents.getOne(params);
+  }
+
+  async _markNotificationAsSent(agentNotification, transaction) {
+    const params = new Params({ id: agentNotification.id });
+    const data = { sentAt: moment.utc().toDate() };
+    const options = new Options({ transaction });
+    return this.agentNotifications.updateOne(params, data, options);
   }
 }
 

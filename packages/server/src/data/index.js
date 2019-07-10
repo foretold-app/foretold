@@ -9,6 +9,9 @@ const { BotsData } = require('./bots-data');
 const { AuthenticationData } = require('./authentication-data');
 const { TokensData } = require('./tokens-data');
 const { PreferencesData } = require('./preferences-data');
+const { NotificationsData } = require('./notifications-data');
+const { TemplatesData } = require('./templates-data');
+const { AgentNotificationsData } = require('./agent-notifications-data');
 
 module.exports = {
   measurables: new MeasurablesData(),
@@ -22,4 +25,7 @@ module.exports = {
   authentication: new AuthenticationData(),
   tokens: new TokensData(),
   preferences: new PreferencesData(),
+  notifications: new NotificationsData(),
+  templates: new TemplatesData(),
+  agentNotifications: new AgentNotificationsData(),
 };

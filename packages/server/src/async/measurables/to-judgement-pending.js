@@ -9,9 +9,11 @@ class ToJudgementPending {
 
   async main() {
     const measurables = await this.data.measurables.needsToBePending();
+
     _.each(measurables, (measurable) => {
       measurable.judgementPending();
     });
+
     return true;
   }
 }

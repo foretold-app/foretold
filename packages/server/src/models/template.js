@@ -25,9 +25,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Template.associate = function associate(_models) {
-    //
-  };
-
   return Template;
 };

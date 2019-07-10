@@ -31,9 +31,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Notification.associate = function associate(_models) {
-    //
-  };
-
   return Notification;
 };

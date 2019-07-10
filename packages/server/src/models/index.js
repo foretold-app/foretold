@@ -15,6 +15,9 @@ const series = db.sequelize.import('./series');
 const user = db.sequelize.import('./user');
 const token = db.sequelize.import('./token');
 const preference = db.sequelize.import('./preference');
+const template = db.sequelize.import('./template');
+const notification = db.sequelize.import('./notification');
+const agentNotification = db.sequelize.import('./agent-notification');
 
 db.Agent = agent;
 db.Bot = bot;
@@ -26,6 +29,9 @@ db.Series = series;
 db.User = user;
 db.Token = token;
 db.Preference = preference;
+db.Template = template;
+db.Notification = notification;
+db.AgentNotification = agentNotification;
 
 // Associate All Models
 Object.keys(db).forEach((modelName) => {

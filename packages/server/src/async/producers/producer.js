@@ -42,6 +42,21 @@ class Producer {
     const data = { agentId, notificationId };
     return this.data.agentNotifications.createOne(data);
   }
+
+  async _queueEmail(agent) {
+    const template = await this._getTemplate();
+    assert(!!_.get(template, 'id'), 'Template ID is required');
+    assert(!!_.get(template, 'envelopeTemplate'), 'Envelope Template ID is required');
+
+    const emailEnvelope = new this.EmailEnvelope(template.envelopeTemplate);
+    const notification = await this._createEmailNotification(emailEnvelope);
+    assert(!!_.get(notification, 'id'), 'Notification ID is required');
+
+    const assignment = await this._assignNotification(agent.id, notification.id);
+    assert(!!_.get(assignment, 'id'), 'Assignment ID is required');
+
+    return assignment;
+  }
 }
 
 module.exports = {

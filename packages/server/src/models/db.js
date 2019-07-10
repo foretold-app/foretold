@@ -9,6 +9,5 @@ const sequelize = config.use_env_variable
   : new Sequelize(config.database, config.username, config.password, config);
 
 db.sequelize = sequelize;
-db.Sequelize = Sequelize;
 
 module.exports = db;

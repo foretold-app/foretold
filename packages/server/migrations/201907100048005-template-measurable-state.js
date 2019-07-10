@@ -11,7 +11,7 @@ module.exports = {
 
       await queryInterface.bulkInsert('Templates', [{
         id: Sequelize.fn('uuid_generate_v4'),
-        envelopeTemplate: envelopeTemplate.toJSON(),
+        envelopeTemplate: JSON.stringify(envelopeTemplate),
         name: TEMPLATE_NAME.MEASURABLE_STATE_IS_CHANGED,
         createdAt: new Date(),
         updatedAt: new Date(),

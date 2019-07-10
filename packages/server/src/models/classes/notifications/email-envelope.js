@@ -5,15 +5,6 @@ class EmailEnvelope {
     this.to = options.to;
     this.from = options.from;
   }
-
-  toJSON() {
-    return JSON.stringify({
-      subject: this.subject,
-      body: this.body,
-      to: this.to,
-      from: this.from,
-    });
-  }
 }
 
 module.exports = {

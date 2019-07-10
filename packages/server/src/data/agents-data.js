@@ -14,14 +14,6 @@ class AgentsData extends DataBase {
     this.model = this.AgentModel;
   }
 
-  /**
-   * @todo: fix interface (params, query, options)
-   * @param {Models.ObjectID} id
-   * @return {Promise<Models.Agent>}
-   */
-  async getOne(id) {
-    return this.models.Agent.findByPk(id);
-  }
 }
 
 module.exports = {

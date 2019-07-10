@@ -76,7 +76,7 @@ class AuthenticationData {
   async _getContext(agentId) {
     if (!agentId) throw new AuthenticationData.NoAgentIdError;
 
-    const agent = await this.agents.getOne(agentId);
+    const agent = await this.agents.getOne({id: agentId});
     if (!agent) throw new AuthenticationData.NotAuthenticatedError;
 
     const bot = await agent.getBot();

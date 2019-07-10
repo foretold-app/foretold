@@ -53,7 +53,7 @@ class Emails extends Consumer {
   }
 
   async _getAgent(agentNotification) {
-    const params = new Params({ agentId: agentNotification.agentId });
+    const params = new Params({ id: agentNotification.agentId });
     return this.agents.getOne(params);
   }
 }

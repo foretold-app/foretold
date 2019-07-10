@@ -31,6 +31,15 @@ class DataBase {
 
   /**
    * @public
+   * @param {*} transaction
+   * @return {Promise<*>}
+   */
+  async commit(transaction) {
+    return this.model.commit(transaction);
+  }
+
+  /**
+   * @public
    * @param {Layers.DataSourceLayer.data} [data]
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Promise<*>}

@@ -21,6 +21,8 @@ class Emails extends Consumer {
       const options = new Options({ transaction });
       const notifications = await this.data.notifications.getAll(filter, pagination, options);
 
+      await this.data.notifications.commit(transaction);
+
     } catch (e) {
       console.log(`Emails Consumer`, e.message, e);
     }

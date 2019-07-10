@@ -325,20 +325,22 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.filter} filter
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [_options]
+   * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise<void>}
    */
-  async getAll(filter = {}, pagination = {}, restrictions = {}, _options = {}) {
+  async getAll(filter = {}, pagination = {}, restrictions = {}, options = {}) {
     const where = {};
 
     this.applyRestrictions(where, restrictions);
     this.applyFilter(where, filter);
 
-    return this.model.findAll({
+    const query = {
       limit: pagination.limit,
       offset: pagination.offset,
       where,
-    });
+    };
+
+    return this.model.findAll(query, options);
   }
 
   /**
@@ -419,6 +421,15 @@ class ModelPostgres extends Model {
    */
   async getTransaction() {
     return this.sequelize.transaction();
+  }
+
+  /**
+   * @public
+   * @param {object} transaction
+   * @return {Promise<*>}
+   */
+  async commit(transaction) {
+    return transaction.commit();
   }
 }
 

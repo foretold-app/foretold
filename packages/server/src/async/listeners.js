@@ -2,6 +2,7 @@ const emitter = require('./emitter');
 const events = require('./events');
 
 const measurables = require('./measurables');
+const emails = require('./emails');
 
 async function toJudgementPendingTransition() {
   const name = 'Job::toJudgementPendingTransition';
@@ -18,12 +19,13 @@ async function toJudgementPendingTransition() {
   return true;
 }
 
-async function measurableState(_measurableInstance) {
+async function measurableState(measurableInstance) {
   const name = 'Job::measurableState';
   console.log(name);
 
   try {
-    const result = true;
+    const producer = new emails.MeasurableState(measurableInstance);
+    const result = await producer.main();
     console.log(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);

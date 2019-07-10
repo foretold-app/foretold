@@ -5,6 +5,9 @@ const moment = require('moment');
 
 const { clientUrl } = require('../lib/urls');
 
+const events = require('../async/events');
+const emitter = require('../async/emitter');
+
 const { MEASURABLE_STATE } = require('./enums/measurable-state');
 const { MEASURABLE_VALUE_TYPE } = require('./enums/measurable-value-type');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-type');
@@ -78,7 +81,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     },
 
-    // Link
+    // Links
     channelId: {
       type: DataTypes.UUID(),
       allowNull: false,
@@ -96,49 +99,53 @@ module.exports = (sequelize, DataTypes) => {
     measurementCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
-      get: async function () {
-        const items = await this.getMeasurements();
-        return items.length;
-      },
+      get: getMeasurementCount,
     },
     measurerCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
-      get: async function () {
-        const items = await this.getMeasurements();
-        return _.uniq(items.map(i => i.agentId)).length;
-      },
+      get: getMeasurerCount,
     },
 
     // Satellite
     resolutionEndpointResponse: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.FLOAT),
-      get: async function resolutionEndpointResponseGetter() {
-        const endpoint = await this.dataValues.resolutionEndpoint;
-        if (!endpoint) return false;
-        try {
-          const response = await fetch(endpoint);
-          const json = await response.json();
-          const match = JSON.stringify(json).match(/[-+]?[0-9]*\.?[0-9]+/);
-          const asFloat = parseFloat(match[0]);
-          console.log(`got response from endpoint. Url: ${endpoint}, ` +
-            `Response: ${JSON.stringify(json)}, Float: ${asFloat}`);
-          return asFloat;
-        } catch (e) {
-          console.error(`Error getting response from endpoint. ` +
-            `Url: ${endpoint}, error: ${e}`);
-          return null;
-        }
-      },
-    },
-  }, {
-    hooks: {
-      beforeUpdate: async (instance) => {
-        await watchExpectedResolutionDate(instance);
-      },
+      get: resolutionEndpointResponseGetter,
     },
   });
+
+  Model.addHook('beforeUpdate', async (instance) => {
+    await watchExpectedResolutionDate(instance);
+  });
+
+  async function getMeasurementCount() {
+    const items = await this.getMeasurements();
+    return items.length;
+  }
+
+  async function getMeasurerCount() {
+    const items = await this.getMeasurements();
+    return _.uniq(items.map(i => i.agentId)).length;
+  }
+
+  async function resolutionEndpointResponseGetter() {
+    const endpoint = await this.dataValues.resolutionEndpoint;
+    if (!endpoint) return false;
+    try {
+      const response = await fetch(endpoint);
+      const json = await response.json();
+      const match = JSON.stringify(json).match(/[-+]?[0-9]*\.?[0-9]+/);
+      const asFloat = parseFloat(match[0]);
+      console.log(`got response from endpoint. Url: ${endpoint}, ` +
+        `Response: ${JSON.stringify(json)}, Float: ${asFloat}`);
+      return asFloat;
+    } catch (e) {
+      console.error(`Error getting response from endpoint. ` +
+        `Url: ${endpoint}, error: ${e}`);
+      return null;
+    }
+  }
 
   async function watchExpectedResolutionDate(instance) {
     const isChanged = instance.changed('expectedResolutionDate');
@@ -200,6 +207,8 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   /**
+   * @todo: implement client for this code
+   * @todo: do not remove
    * @param {Models.Agent.id} agentId
    * @return {Promise<void>}
    */

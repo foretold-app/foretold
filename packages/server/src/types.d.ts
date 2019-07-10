@@ -131,6 +131,7 @@ export namespace Layers {
       states?: string[],
       isArchived?: string[],
       types?: string[],
+      type?: string,
     };
     type pagination = {
       limit?: number,
@@ -196,6 +197,9 @@ export namespace Layers {
       measurableId?: Models.ObjectID,
       measuredByAgentId?: Models.ObjectID,
     };
+    type options = {
+      transaction?: object,
+    };
     type filter = {
       excludeChannelId?: Models.ObjectID,
       isArchived?: string[],
@@ -218,12 +222,14 @@ export namespace Layers {
       deleteOne(
         params: params,
         restrictions: restrictions,
+        options: options,
       ): response;
 
       updateOne(
         params: params,
         data: data,
         restrictions: restrictions,
+        options: options,
       ): response;
 
       createOne(
@@ -235,17 +241,20 @@ export namespace Layers {
         params: params,
         query: query,
         restrictions: restrictions,
+        options: options,
       ): response;
 
       getAll(
         filter: filter,
         pagination: pagination,
         restrictions: restrictions,
+        options: options,
       ): responseList;
 
       updateAll(
         params: params,
         data: data,
+        options: options,
       ): boolean;
 
       upsertOne(
@@ -253,6 +262,7 @@ export namespace Layers {
         query: query,
         data: data,
         restrictions: restrictions,
+        options: options,
       ): response;
     }
   }

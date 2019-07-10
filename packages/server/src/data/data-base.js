@@ -1,5 +1,6 @@
-const models = require('../models');
+const _ = require('lodash');
 
+const models = require('../models');
 const { Model } = require('../models-abstract');
 
 class DataBase {
@@ -10,6 +11,22 @@ class DataBase {
   constructor() {
     this.models = models;
     this.model = new Model();
+    this.modelOptionsList = [
+      'transaction',
+    ];
+    this.modelRestrictionsList = [
+      'isAdmin', 'agentId', 'measuredByAgentId',
+      'userId', 'channelId', 'measurableId',
+      'measuredByAgentId',
+    ];
+  }
+
+  /**
+   * @public
+   * @return {Promise<*>}
+   */
+  async getTransaction() {
+    return this.model.getTransaction();
   }
 
   /**
@@ -19,8 +36,9 @@ class DataBase {
    * @return {Promise<*>}
    */
   async createOne(data = {}, options = {}) {
-    const restrictions = { ...options };
-    return this.model.createOne(data, restrictions);
+    const option$ = this._getModelOptions(options);
+    const restrictions = this._getModelRestrictions(options);
+    return this.model.createOne(data, restrictions, option$);
   }
 
   /**
@@ -31,8 +49,9 @@ class DataBase {
    * @return {Promise<void>}
    */
   async getOne(params = {}, query = {}, options = {}) {
-    const restrictions = { ...options };
-    return this.model.getOne(params, query, restrictions);
+    const option$ = this._getModelOptions(options);
+    const restrictions = this._getModelRestrictions(options);
+    return this.model.getOne(params, query, restrictions, option$);
   }
 
   /**
@@ -43,8 +62,9 @@ class DataBase {
    * @return {Promise<*>}
    */
   async updateOne(params = {}, data = {}, options = {}) {
-    const restrictions = { ...options };
-    return this.model.updateOne(params, data, restrictions);
+    const option$ = this._getModelOptions(options);
+    const restrictions = this._getModelRestrictions(options);
+    return this.model.updateOne(params, data, restrictions, option$);
   }
 
   /**
@@ -54,8 +74,9 @@ class DataBase {
    * @return {Promise<*>}
    */
   async deleteOne(params = {}, options = {}) {
-    const restrictions = { ...options };
-    return this.model.deleteOne(params, restrictions);
+    const option$ = this._getModelOptions(options);
+    const restrictions = this._getModelRestrictions(options);
+    return this.model.deleteOne(params, restrictions, option$);
   }
 
   /**
@@ -65,8 +86,9 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    */
   async getAll(filter = {}, pagination = {}, options = {}) {
-    const restrictions = { ...options };
-    return this.model.getAll(filter, pagination, restrictions);
+    const option$ = this._getModelOptions(options);
+    const restrictions = this._getModelRestrictions(options);
+    return this.model.getAll(filter, pagination, restrictions, option$);
   }
 
   /**
@@ -78,10 +100,28 @@ class DataBase {
    * @return {Promise<*>}
    */
   async upsertOne(params = {}, query = {}, data = {}, options = {}) {
-    const restrictions = { ...options };
-    return this.model.upsertOne(params, query, data, restrictions);
+    const option$ = this._getModelOptions(options);
+    const restrictions = this._getModelRestrictions(options);
+    return this.model.upsertOne(params, query, data, restrictions, option$);
   }
 
+  /**
+   * @protected
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Layers.AbstractModelsLayer.options}
+   */
+  _getModelOptions(options = {}) {
+    return _.pick(options, this.modelOptionsList);
+  }
+
+  /**
+   * @protected
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Layers.AbstractModelsLayer.options}
+   */
+  _getModelRestrictions(options = {}) {
+    return _.pick(options, this.modelRestrictionsList);
+  }
 }
 
 module.exports = {

@@ -10,7 +10,7 @@ module.exports = {
           type: Sequelize.UUID
         },
         type: {
-          type: DataTypes.ENUM([
+          type: Sequelize.ENUM([
             NOTIFICATION_TYPE.EMAIL,
             NOTIFICATION_TYPE.PUSH,
             NOTIFICATION_TYPE.WEB_PUSH,

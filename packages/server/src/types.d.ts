@@ -128,11 +128,12 @@ export namespace Layers {
       excludeChannelId?: Models.ObjectID,
       competitorType?: string,
       findInDateRange?: object,
-      notTaggedByAgent?: string,
+      notTaggedByAgent?: Models.ObjectID,
       states?: string[],
       isArchived?: string[],
       types?: string[],
       type?: string,
+      notificationId?: Models.ObjectID,
     };
     type pagination = {
       limit?: number,
@@ -143,7 +144,9 @@ export namespace Layers {
       before?: string,
     };
     type query = object;
-    type params = object;
+    type params = {
+      agentId?: Models.ObjectID,
+    };
     type response = { data: any };
     type responseList = { data: any[], total: number };
 

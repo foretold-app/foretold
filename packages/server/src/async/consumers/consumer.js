@@ -13,6 +13,9 @@ class Consumer {
 
     this.options = options;
     this.data = data;
+    this.notifications = data.notifications;
+    this.agentNotifications = data.agentNotifications;
+    this.agents = data.agents;
 
     this.TEMPLATE_NAME = TEMPLATE_NAME;
     this.NOTIFICATION_TYPE = NOTIFICATION_TYPE;

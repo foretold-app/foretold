@@ -19,6 +19,7 @@ class Filter {
     this.isArchived = _.get(filter, 'isArchived');
     this.types = _.get(filter, 'types');
     this.type = _.get(filter, 'type');
+    this.notificationId = _.get(filter, 'notificationId');
   }
 }
 

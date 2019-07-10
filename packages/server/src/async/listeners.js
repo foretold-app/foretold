@@ -3,25 +3,27 @@ const events = require('./events');
 
 const measurables = require('./measurables');
 
-function toJudgementPendingTransition() {
+async function toJudgementPendingTransition() {
   const name = 'Job::toJudgementPendingTransition';
+  console.log(name);
+
   try {
-    console.log(name);
-
-    new measurables.ToJudgementPending().main().then((result) => {
-      console.log(name, 'all done', result);
-    }).catch((err) => {
-      console.error(name, err.message, err);
-    });
-
+    const reducer = new measurables.Reducer();
+    const result = await reducer.toJudgementPending();
+    console.log(name, 'all done', result);
   } catch (e) {
-    console.error(name, 'error', e);
+    console.error(name, e.message, e);
   }
+
+  return true;
 }
 
 function runListeners() {
   try {
-    emitter.on(events.MEASURABLE_STATE_TRANSITIONS, toJudgementPendingTransition);
+    emitter.on(
+      events.MEASURABLE_STATE_TRANSITIONS,
+      toJudgementPendingTransition,
+    );
   } catch (e) {
     console.error('Listener error', e);
   }

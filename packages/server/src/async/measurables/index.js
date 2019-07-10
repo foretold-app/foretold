@@ -1,5 +1,5 @@
-const { ToJudgementPending } = require('./to-judgement-pending');
+const { Reducer } = require('./reducer');
 
 module.exports = {
-  ToJudgementPending,
+  Reducer,
 };

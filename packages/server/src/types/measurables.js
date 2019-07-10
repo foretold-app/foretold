@@ -100,6 +100,8 @@ const measurableUpdateInput = new graphql.GraphQLInputObjectType({
     labelSubject: { type: graphql.GraphQLString },
     labelOnDate: { type: DateType.default },
     labelProperty: { type: graphql.GraphQLString },
+    // remove me then after feature/354
+    state: { type: measurableState },
   })
 });
 

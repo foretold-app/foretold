@@ -52,7 +52,7 @@ class Emails extends Consumer {
 
   async _getAgentsNotifications(transaction) {
     const filter = new Filter({ sentAt: null });
-    const pagination = new Pagination({ limit: 1 });
+    const pagination = new Pagination({ limit: 10 });
     const options = new Options({ transaction, lock: true, skipLocked: true });
     return this.agentNotifications.getAll(filter, pagination, options);
   }

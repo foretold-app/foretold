@@ -16,9 +16,15 @@ class Emails extends Consumer {
   }
 
   async main() {
-    // try{}
+    let transaction;
     try {
-      const transaction = await this.notifications.getTransaction();
+      transaction = await this.notifications.getTransaction();
+    } catch (e) {
+      console.log(`Emails Consumer Transaction Error`, e.message, e);
+      throw e;
+    }
+
+    try {
       const agentNotifications = await this._getAgentsNotifications(transaction);
 
       for (let i = 0; i < agentNotifications.length; i++) {
@@ -40,12 +46,13 @@ class Emails extends Consumer {
     } catch (e) {
       console.log(`Emails Consumer`, e.message, e);
     }
+
     return true;
   }
 
   async _getAgentsNotifications(transaction) {
     const filter = new Filter({ sentAt: null });
-    const pagination = new Pagination({ limit: 10 });
+    const pagination = new Pagination({ limit: 1 });
     const options = new Options({ transaction, lock: true, skipLocked: true });
     return this.agentNotifications.getAll(filter, pagination, options);
   }

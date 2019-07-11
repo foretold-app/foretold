@@ -36,18 +36,15 @@ class Emails extends Consumer {
         const agent = await this._getAgent(agentNotification, transaction);
         const agentPreferences = await this._getPreferences(agentNotification);
         const user = await this._getUser(agent);
-        const email = user.email;
 
-        const result = await this._emitEmail(notification, agentPreferences, email);
+        const result = await this._emitEmail(notification, agentPreferences, user);
 
         console.log(
           `\x1b[35mNotification ID = "${notification.id}", ` +
           `Transaction ID = "${transaction.id}", ` +
-          `User ID = "${user.id}", ` +
           `Agent Preferences ID = "${agentPreferences.id}", ` +
           `Agent ID = "${agent.id}", ` +
-          `Result = "${result}", ` +
-          `Email = "${email}".\x1b[0m`
+          `Result = "${result}".\x1b[0m`
         );
 
         await this._markNotificationAsSent(agentNotification, transaction);
@@ -103,15 +100,16 @@ class Emails extends Consumer {
     return user;
   }
 
-  async _emitEmail(notification, agentPreferences, email) {
+  async _emitEmail(notification, agentPreferences, user) {
+    if (!user) return false;
+    if (!user.email) return false;
     if (agentPreferences.stopAllEmails === true) return false;
-    if (!email) return false;
 
     const envelope = {
-      to: notification.envelope.to || email,
-      body: notification.envelope.body,
-      subject: notification.envelope.subject,
-      replacements: {},
+      to: notification.envelope.to || user.email,
+      body: notification.envelope.body || '',
+      subject: notification.envelope.subject || '',
+      replacements: notification.envelope.replacements || {},
     };
 
     try {

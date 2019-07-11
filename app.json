@@ -31,6 +31,21 @@
     },
     "BOT_AGENT_ID": {
       "required": true
+    },
+    "SMTP_HOST": {
+      "required": true
+    },
+    "SMTP_PORT": {
+      "required": true
+    },
+    "SMTP_USER": {
+      "required": true
+    },
+    "SMTP_PASS": {
+      "required": true
+    },
+    "SMTP_FROM": {
+      "required": true
     }
   },
   "formation": {

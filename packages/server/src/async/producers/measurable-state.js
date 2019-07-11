@@ -1,7 +1,7 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const  { Producer } = require('./producer');
+const { Producer } = require('./producer');
 
 class MeasurableState extends Producer {
   constructor(measurable = {}) {

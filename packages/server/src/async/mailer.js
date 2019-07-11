@@ -1,3 +1,4 @@
+const assert = require('assert');
 const { MailHelper } = require('../mails/mail-helper');
 
 class Mailer {
@@ -8,6 +9,11 @@ class Mailer {
     this.body = envelope.body;
     this.subject = envelope.subject;
     this.replacements = envelope.replacements;
+
+    assert(!!this.to, 'Email recipient is required');
+    assert(!!this.body, 'Email body is required');
+    assert(!!this.subject, 'Email subject is required');
+    assert(!!this.replacements, 'Email replacements is required');
   }
 
   async main() {

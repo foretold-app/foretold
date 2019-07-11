@@ -31,12 +31,10 @@ function transportFakeFactory(confIn) {
   console.log('Transporter is ready for development version');
 
   return new class {
-    sendMail(options, clb) {
-      clb(null, { ok: true });
+    sendMail(options) {
     }
 
     close() {
-
     }
   };
 }

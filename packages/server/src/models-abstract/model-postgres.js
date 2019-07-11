@@ -144,7 +144,7 @@ class ModelPostgres extends Model {
     if (restrictions.isAdmin) return where;
     if (!where[this.and]) where[this.and] = [];
 
-    if (restrictions.channelId) {
+    if (_.has(restrictions, 'channelId')) {
       where[this.and].push({
         channelId: {
           [this.in]: this.channelIdsLiteral(restrictions.agentId),
@@ -152,13 +152,13 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (restrictions.userId) {
+    if (_.has(restrictions, 'userId')) {
       where[this.and].push({
         userId: restrictions.userId,
       });
     }
 
-    if (restrictions.measurableId) {
+    if (_.has(restrictions, 'measurableId')) {
       where[this.and].push({
         measurableId: {
           [this.in]: this.measurableIdsLiteral(restrictions.agentId),
@@ -170,15 +170,16 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param {object} [include]
    * @protected
+   * @param {object} [include]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @return {*}
    */
   applyRestrictionsIncluding(include = [], restrictions = {}) {
     if (!include) include = [];
 
     // @todo: It is a filter, but not restriction
-    if (restrictions.measuredByAgentId) {
+    if (_.has(restrictions, 'measuredByAgentId')) {
       include.push({
         model: this.models.Measurement,
         as: 'Measurements',
@@ -191,6 +192,7 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
+   * Extend this method in child classes.
    * @param {object} [where]
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Models.ObjectID} [filter.userId]
@@ -199,13 +201,13 @@ class ModelPostgres extends Model {
     if (!where) where = {};
     if (!where[this.and]) where[this.and] = [];
 
-    if (filter.isArchived) {
+    if (_.has(filter, 'isArchived')) {
       where.isArchived = {
         [this.in]: this.getBooleansOfList(filter.isArchived),
       };
     }
 
-    if (filter.userId) {
+    if (_.has(filter, 'userId')) {
       where.userId = filter.userId;
     }
 

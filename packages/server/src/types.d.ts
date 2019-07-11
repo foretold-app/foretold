@@ -213,8 +213,11 @@ export namespace Layers {
     };
     type filter = {
       excludeChannelId?: Models.ObjectID,
+      userId?: Models.ObjectID,
       isArchived?: string[],
       types?: string[],
+      sentAt?: string[],
+      notificationId?: string[],
     };
     type pagination = {
       limit?: number,

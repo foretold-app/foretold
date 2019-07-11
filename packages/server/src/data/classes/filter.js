@@ -5,22 +5,46 @@ class Filter {
    * @param {Layers.DataSourceLayer.filter} [filter]
    */
   constructor(filter = {}) {
-    this.id = _.get(filter, 'id');
-    this.type = _.get(filter, 'type');
-    this.creatorId = _.get(filter, 'creatorId');
-    this.seriesId = _.get(filter, 'seriesId');
-    this.channelId = _.get(filter, 'channelId');
-    this.measurableId = _.get(filter, 'measurableId');
-    this.agentId = _.get(filter, 'agentId');
-    this.excludeChannelId = _.get(filter, 'excludeChannelId');
-    this.competitorType = _.get(filter, 'competitorType');
-    this.findInDateRange = _.get(filter, 'findInDateRange');
-    this.notTaggedByAgent = _.get(filter, 'notTaggedByAgent');
-    this.states = _.get(filter, 'states');
-    this.isArchived = _.get(filter, 'isArchived');
-    this.types = _.get(filter, 'types');
-    this.notificationId = _.get(filter, 'notificationId');
-    this.sentAt = _.get(filter, 'sentAt');
+    const common = ['id'];
+    const measurable = [];
+    const measurement = [];
+    const agentChannel = [];
+    const bot = [];
+    const user = [];
+    const series = [];
+    const template = [];
+    const token = [];
+    const channel = ['isArchived'];
+    const agent = ['excludeChannelId', 'types'];
+    const notification = [];
+    const agentNotification = ['notificationId', 'sentAt'];
+
+    const list = [
+      'type', 'creatorId',
+      'seriesId', 'channelId', 'measurableId',
+      'agentId', 'competitorType',
+      'findInDateRange', 'notTaggedByAgent', 'states',
+      'userId',
+      ...common,
+      ...measurable,
+      ...measurement,
+      ...agentChannel,
+      ...bot,
+      ...user,
+      ...series,
+      ...template,
+      ...token,
+      ...channel,
+      ...agent,
+      ...notification,
+      ...agentNotification,
+    ];
+
+    _.each(list, (name) => {
+      if (_.has(filter, name)) {
+        this[name] = _.get(filter, name);
+      }
+    });
   }
 }
 

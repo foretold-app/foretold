@@ -26,9 +26,10 @@ class MeasurementModel extends ModelPostgres {
    * @param {Models.ObjectID} [filter.notTaggedByAgent]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [_options]
    * @return {Promise<{data: Models.Measurement[], total: number}>}
    */
-  async getAll(filter = {}, pagination = {}, restrictions = {}) {
+  async getAll(filter = {}, pagination = {}, restrictions = {}, _options = {}) {
     const { where, include, spacedLimit } = this.makeFilter(filter);
     this.applyRestrictions(where, restrictions);
 

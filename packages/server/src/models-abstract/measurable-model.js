@@ -48,9 +48,10 @@ class MeasurableModel extends ModelPostgres {
    * @param {string[]} [filter.isArchived]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [_options]
    * @return {Promise<{data: Models.Measurable[], total: number}>}
    */
-  async getAll(filter = {}, pagination = {}, restrictions = {}) {
+  async getAll(filter = {}, pagination = {}, restrictions = {}, _options = {}) {
     const where = {};
     const include = [];
 

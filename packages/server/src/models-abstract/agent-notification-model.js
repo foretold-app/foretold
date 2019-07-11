@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const models = require('../models');
 const { ModelPostgres } = require('./model-postgres');
 
@@ -13,6 +14,29 @@ class AgentNotificationModel extends ModelPostgres {
     });
   }
 
+
+  /**
+   * @protected
+   * @param {object} [where]
+   * @param {Layers.AbstractModelsLayer.filter} [filter]
+   */
+  applyFilter(where = {}, filter = {}) {
+    super.applyFilter(where, filter);
+
+    if (_.has(filter, 'sentAt')) {
+      where[this.and].push({
+        sentAt: filter.sentAt,
+      });
+    }
+
+    if (_.has(filter, 'notificationId')) {
+      where[this.and].push({
+        sentAt: filter.notificationId,
+      });
+    }
+
+    return where;
+  }
 }
 
 module.exports = {

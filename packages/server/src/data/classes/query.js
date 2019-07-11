@@ -1,4 +1,4 @@
-class Filter {
+class Query {
   /**
    * @param {Layers.DataSourceLayer.query} [query]
    */
@@ -7,5 +7,5 @@ class Filter {
 }
 
 module.exports = {
-  Filter,
+  Query,
 };

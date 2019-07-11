@@ -118,6 +118,8 @@ export namespace Layers {
       agentId?: Models.ObjectID,
       measuredByAgentId?: Models.ObjectID,
       transaction?: object,
+      lock?: boolean,
+      skipLocked?: boolean,
     };
     type filter = {
       id?: Models.ObjectID,
@@ -206,6 +208,8 @@ export namespace Layers {
     };
     type options = {
       transaction?: object,
+      lock?: boolean,
+      skipLocked?: boolean,
     };
     type filter = {
       excludeChannelId?: Models.ObjectID,

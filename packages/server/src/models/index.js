@@ -46,9 +46,9 @@ const events = require('../async/events');
 const emitter = require('../async/emitter');
 
 db.sequelize.addHook('afterUpdate', (instance) => {
-  console.log('Global Hook "afterUpdate"');
+  // console.log('Global Hook "afterUpdate"');
   if (instance instanceof measurable && instance.changed('state')) {
-    console.log('Measurable.state is changed');
+    // console.log('Measurable.state is changed');
     emitter.emit(events.MEASURABLE_STATE_IS_CHANGED, instance);
   }
 });

@@ -12,7 +12,7 @@ class DataBase {
     this.models = models;
     this.model = new Model();
     this.modelOptionsList = [
-      'transaction',
+      'transaction', 'lock', 'skipLocked',
     ];
     this.modelRestrictionsList = [
       'isAdmin', 'agentId', 'measuredByAgentId',

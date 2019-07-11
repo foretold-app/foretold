@@ -36,7 +36,7 @@ async function measurableState(measurableInstance) {
 }
 
 async function sendEmails() {
-  const name = 'Job::sendEmails';
+  const name = '\x1b[35mJob::sendEmails\x1b[0m';
   console.log(name);
 
   try {
@@ -54,6 +54,8 @@ function runListeners() {
   try {
     emitter.on(events.EVERY_HOUR, toJudgementPendingTransition);
     emitter.on(events.EVERY_TEN_MINUTES, sendEmails);
+    emitter.on(events.EVERY_MINUTE, sendEmails);
+    emitter.on(events.EVERY_MINUTE, sendEmails);
     emitter.on(events.EVERY_MINUTE, sendEmails);
     emitter.on(events.MEASURABLE_STATE_IS_CHANGED, measurableState);
   } catch (e) {

@@ -19,7 +19,6 @@ class Filter {
     this.states = _.get(filter, 'states');
     this.isArchived = _.get(filter, 'isArchived');
     this.types = _.get(filter, 'types');
-    this.type = _.get(filter, 'type');
     this.notificationId = _.get(filter, 'notificationId');
     this.sentAt = _.get(filter, 'sentAt');
   }

@@ -8,6 +8,7 @@ const { Pagination } = require('../../data/classes/pagination');
 const { Filter } = require('../../data/classes/filter');
 const { Options } = require('../../data/classes/options');
 const { Params } = require('../../data/classes/params');
+const { Query } = require('../../data/classes/query');
 
 class Emails extends Consumer {
   constructor() {
@@ -15,6 +16,7 @@ class Emails extends Consumer {
   }
 
   async main() {
+    // try{}
     try {
       const transaction = await this.notifications.getTransaction();
       const agentNotifications = await this._getAgentsNotifications(transaction);
@@ -22,12 +24,13 @@ class Emails extends Consumer {
       for (let i = 0; i < agentNotifications.length; i++) {
         const agentNotification = agentNotifications[i];
 
-        const notification = await this._getNotification(agentNotification);
-        const agent = await this._getAgent(agentNotification);
+        const notification = await this._getNotification(agentNotification, transaction);
+        const agent = await this._getAgent(agentNotification, transaction);
 
         console.log(
-          `Notification ID = "${notification.id}", ` +
-          `Agent ID = "${agent.id}".`
+          `\x1b[35mNotification ID = "${notification.id}", ` +
+          `Transaction ID = "${transaction.id}", ` +
+          `Agent ID = "${agent.id}".\x1b[0m`
         );
 
         await this._markNotificationAsSent(agentNotification, transaction);
@@ -43,18 +46,22 @@ class Emails extends Consumer {
   async _getAgentsNotifications(transaction) {
     const filter = new Filter({ sentAt: null });
     const pagination = new Pagination({ limit: 10 });
-    const options = new Options({ transaction });
+    const options = new Options({ transaction, lock: true, skipLocked: true });
     return this.agentNotifications.getAll(filter, pagination, options);
   }
 
-  async _getNotification(agentNotification) {
+  async _getNotification(agentNotification, transaction) {
     const params = new Params({ id: agentNotification.notificationId });
-    return this.notifications.getOne(params);
+    const query = new Query();
+    const options = new Options({ transaction });
+    return this.notifications.getOne(params, query, options);
   }
 
-  async _getAgent(agentNotification) {
+  async _getAgent(agentNotification, transaction) {
     const params = new Params({ id: agentNotification.agentId });
-    return this.agents.getOne(params);
+    const query = new Query();
+    const options = new Options({ transaction });
+    return this.agents.getOne(params, query, options);
   }
 
   async _markNotificationAsSent(agentNotification, transaction) {

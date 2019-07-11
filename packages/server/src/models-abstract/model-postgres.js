@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const { Model } = require('./model');
 const models = require('../models');
 
@@ -292,16 +294,17 @@ class ModelPostgres extends Model {
    * @param {object} [params]
    * @param {object} [data]
    * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [_options]
+   * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise.<object>}
    */
-  async updateOne(params = {}, data = {}, _restrictions = {}, _options = {}) {
-    const entity = await this.model.findOne({
-      where: params,
-    });
-    if (entity) {
-      await entity.update(data);
-    }
+  async updateOne(params = {}, data = {}, _restrictions = {}, options = {}) {
+    const findCond = { where: params };
+    const updateCond = {};
+    this._extendConditions(findCond, options);
+    this._extendConditions(updateCond, options);
+
+    const entity = await this.model.findOne(findCond);
+    if (entity) await entity.update(data, updateCond);
     return entity;
   }
 
@@ -310,14 +313,13 @@ class ModelPostgres extends Model {
    * @param {object} [params]
    * @param {object} [data]
    * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [_options]
+   * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {boolean}
    */
-  async updateAll(params = {}, data = {}, _restrictions = {}, _options = {}) {
-    return !!(await this.model.update(
-      data,
-      { where: params },
-    ));
+  async updateAll(params = {}, data = {}, _restrictions = {}, options = {}) {
+    const cond = { where: params };
+    this._extendConditions(cond, options);
+    return !!(await this.model.update(data, cond));
   }
 
   /**
@@ -334,13 +336,15 @@ class ModelPostgres extends Model {
     this.applyRestrictions(where, restrictions);
     this.applyFilter(where, filter);
 
-    const query = {
+    const cond = {
       limit: pagination.limit,
       offset: pagination.offset,
       where,
     };
 
-    return this.model.findAll(query, options);
+    this._extendConditions(cond, options);
+
+    return this.model.findAll(cond);
   }
 
   /**
@@ -385,20 +389,24 @@ class ModelPostgres extends Model {
    * @param {object} [params]
    * @param {object} [query]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [_options]
+   * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise<Models.Model>}
    */
-  async getOne(params = {}, query = {}, restrictions = {}, _options = {}) {
+  async getOne(params = {}, query = {}, restrictions = {}, options = {}) {
     const where = { ...params };
     const sort = query.sort === 1 ? 'ASC' : 'DESC';
     const order = [['createdAt', sort]];
 
     this.applyRestrictions(where, restrictions);
 
-    return this.model.findOne({
+    const cond = {
       where,
       order,
-    });
+    };
+
+    this._extendConditions(cond, options);
+
+    return this.model.findOne(cond);
   }
 
   /**
@@ -430,6 +438,24 @@ class ModelPostgres extends Model {
    */
   async commit(transaction) {
     return transaction.commit();
+  }
+
+  /**
+   * @protected
+   * @param cond
+   * @param {Layers.AbstractModelsLayer.options} options
+   */
+  _extendConditions(cond = {}, options = {}) {
+    if (_.has(options, 'transaction')) {
+      cond.transaction = options.transaction;
+    }
+    if (_.has(options, 'lock')) {
+      cond.lock = options.lock;
+    }
+    if (_.has(options, 'skipLocked')) {
+      cond.skipLocked = options.skipLocked;
+    }
+    return cond;
   }
 }
 

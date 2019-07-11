@@ -1,5 +1,8 @@
 const _ = require('lodash');
 
+/**
+ * See "filter.js" comments.
+ */
 class Params {
   /**
    * @param {Layers.DataSourceLayer.params} [params]

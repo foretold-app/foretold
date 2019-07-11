@@ -1,5 +1,8 @@
 const _ = require('lodash');
 
+/**
+ * See "filter.js" comments.
+ */
 class Pagination {
   constructor(options = {}) {
     this.last = _.get(options, 'last', 0);

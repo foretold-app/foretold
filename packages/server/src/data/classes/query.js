@@ -1,3 +1,6 @@
+/**
+ * See "filter.js" comments.
+ */
 class Query {
   /**
    * @param {Layers.DataSourceLayer.query} [query]

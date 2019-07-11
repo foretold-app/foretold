@@ -57,17 +57,17 @@ class Emails extends Consumer {
     return this.agentNotifications.getAll(filter, pagination, options);
   }
 
-  async _getNotification(agentNotification, transaction) {
+  async _getNotification(agentNotification) {
     const params = new Params({ id: agentNotification.notificationId });
     const query = new Query();
-    const options = new Options({ transaction });
+    const options = new Options();
     return this.notifications.getOne(params, query, options);
   }
 
-  async _getAgent(agentNotification, transaction) {
+  async _getAgent(agentNotification) {
     const params = new Params({ id: agentNotification.agentId });
     const query = new Query();
-    const options = new Options({ transaction });
+    const options = new Options();
     return this.agents.getOne(params, query, options);
   }
 

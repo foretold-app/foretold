@@ -300,7 +300,7 @@ class ModelPostgres extends Model {
    * @return {Promise.<object>}
    */
   async updateOne(params = {}, data = {}, _restrictions = {}, options = {}) {
-    const findCond = { where: params };
+    const findCond = { where: { ...params } };
     const updateCond = {};
     this._extendConditions(findCond, options);
     this._extendConditions(updateCond, options);
@@ -319,7 +319,7 @@ class ModelPostgres extends Model {
    * @return {boolean}
    */
   async updateAll(params = {}, data = {}, _restrictions = {}, options = {}) {
-    const cond = { where: params };
+    const cond = { where: { ...params} };
     this._extendConditions(cond, options);
     return !!(await this.model.update(data, cond));
   }

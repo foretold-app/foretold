@@ -54,9 +54,6 @@ function runListeners() {
   try {
     emitter.on(events.EVERY_HOUR, toJudgementPendingTransition);
     emitter.on(events.EVERY_TEN_MINUTES, sendEmails);
-    emitter.on(events.EVERY_MINUTE, sendEmails);
-    emitter.on(events.EVERY_MINUTE, sendEmails);
-    emitter.on(events.EVERY_MINUTE, sendEmails);
     emitter.on(events.MEASURABLE_STATE_IS_CHANGED, measurableState);
   } catch (e) {
     console.error('Listener error', e);

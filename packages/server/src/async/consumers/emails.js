@@ -4,11 +4,13 @@ const moment = require('moment');
 
 const { Consumer } = require('./consumer');
 
+const events = require('../events');
+const emitter = require('../emitter');
+
 const { Pagination } = require('../../data/classes/pagination');
 const { Filter } = require('../../data/classes/filter');
 const { Options } = require('../../data/classes/options');
 const { Params } = require('../../data/classes/params');
-const { Query } = require('../../data/classes/query');
 
 class Emails extends Consumer {
   constructor() {
@@ -32,10 +34,24 @@ class Emails extends Consumer {
 
         const notification = await this._getNotification(agentNotification, transaction);
         const agent = await this._getAgent(agentNotification, transaction);
+        const agentPreferences = await this._getPreferences(agentNotification);
+        const user = await this._getUser(agent);
+        const email = user.email;
+
+        if(!agentPreferences.stopAllEmails && email) {
+          const envelope = {
+            to: email,
+            body: notification.envelope.body,
+            subject: notification.envelope.subject,
+          };
+          emitter.emit(events.MAIL, envelope);
+        }
 
         console.log(
           `\x1b[35mNotification ID = "${notification.id}", ` +
           `Transaction ID = "${transaction.id}", ` +
+          `User ID = "${user.id}", ` +
+          `Agent Preferences ID = "${agentPreferences.id}", ` +
           `Agent ID = "${agent.id}".\x1b[0m`
         );
 
@@ -59,16 +75,16 @@ class Emails extends Consumer {
 
   async _getNotification(agentNotification) {
     const params = new Params({ id: agentNotification.notificationId });
-    const query = new Query();
-    const options = new Options();
-    return this.notifications.getOne(params, query, options);
+    const notification = await this.notifications.getOne(params);
+    assert(!!notification, 'Notification is required');
+    return notification;
   }
 
   async _getAgent(agentNotification) {
     const params = new Params({ id: agentNotification.agentId });
-    const query = new Query();
-    const options = new Options();
-    return this.agents.getOne(params, query, options);
+    const agent = await this.agents.getOne(params);
+    assert(!!agent, 'Agent is required');
+    return this.agents.getOne(params);
   }
 
   async _markNotificationAsSent(agentNotification, transaction) {
@@ -76,6 +92,20 @@ class Emails extends Consumer {
     const data = { sentAt: moment.utc().toDate() };
     const options = new Options({ transaction });
     return this.agentNotifications.updateOne(params, data, options);
+  }
+
+  async _getPreferences(agentNotification) {
+    const agentId = agentNotification.agentId;
+    const preferences = await this.preferences.getOneByAgentId(agentId);
+    assert(!!preferences, 'Preferences is required');
+    return this.preferences.getOneByAgentId(agentId);
+  }
+
+  async _getUser(agent) {
+    const params = new Params({ agentId: agent.id });
+    const user = await this.users.getOne(params);
+    assert(!!user, 'User is required');
+    return user;
   }
 }
 

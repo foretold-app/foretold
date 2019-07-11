@@ -16,12 +16,8 @@ class Consumer {
     this.notifications = data.notifications;
     this.agentNotifications = data.agentNotifications;
     this.agents = data.agents;
-
-    this.TEMPLATE_NAME = TEMPLATE_NAME;
-    this.NOTIFICATION_TYPE = NOTIFICATION_TYPE;
-
-    this.EmailEnvelope = EmailEnvelope;
-    this.templateName = TEMPLATE_NAME.MEASURABLE_STATE_IS_CHANGED;
+    this.preferences = data.preferences;
+    this.users = data.users;
   }
 }
 

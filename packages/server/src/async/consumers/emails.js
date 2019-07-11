@@ -14,9 +14,12 @@ const { Params } = require('../../data/classes/params');
 
 class Emails extends Consumer {
   constructor() {
-    super({});
+    super();
   }
 
+  /**
+   * @return {Promise<boolean>}
+   */
   async main() {
     let transaction;
     try {
@@ -32,8 +35,8 @@ class Emails extends Consumer {
       for (let i = 0; i < agentNotifications.length; i++) {
         const agentNotification = agentNotifications[i];
 
-        const notification = await this._getNotification(agentNotification, transaction);
-        const agent = await this._getAgent(agentNotification, transaction);
+        const notification = await this._getNotification(agentNotification);
+        const agent = await this._getAgent(agentNotification);
         const agentPreferences = await this._getPreferences(agentNotification);
         const user = await this._getUser(agent);
 
@@ -58,6 +61,11 @@ class Emails extends Consumer {
     return true;
   }
 
+  /**
+   * @param {object} transaction
+   * @return {Promise<*>}
+   * @private
+   */
   async _getAgentsNotifications(transaction) {
     const filter = new Filter({ sentAt: null });
     const pagination = new Pagination({ limit: 10 });
@@ -65,6 +73,11 @@ class Emails extends Consumer {
     return this.agentNotifications.getAll(filter, pagination, options);
   }
 
+  /**
+   * @param {object} agentNotification
+   * @return {Promise<void>}
+   * @private
+   */
   async _getNotification(agentNotification) {
     const params = new Params({ id: agentNotification.notificationId });
     const notification = await this.notifications.getOne(params);
@@ -72,6 +85,11 @@ class Emails extends Consumer {
     return notification;
   }
 
+  /**
+   * @param {object} agentNotification
+   * @return {Promise<void>}
+   * @private
+   */
   async _getAgent(agentNotification) {
     const params = new Params({ id: agentNotification.agentId });
     const agent = await this.agents.getOne(params);
@@ -79,6 +97,12 @@ class Emails extends Consumer {
     return this.agents.getOne(params);
   }
 
+  /**
+   * @param {object} agentNotification
+   * @param {object} transaction
+   * @return {Promise<*>}
+   * @private
+   */
   async _markNotificationAsSent(agentNotification, transaction) {
     const params = new Params({ id: agentNotification.id });
     const data = { sentAt: moment.utc().toDate() };
@@ -86,6 +110,11 @@ class Emails extends Consumer {
     return this.agentNotifications.updateOne(params, data, options);
   }
 
+  /**
+   * @param {object} agentNotification
+   * @return {Promise<*>}
+   * @private
+   */
   async _getPreferences(agentNotification) {
     const agentId = agentNotification.agentId;
     const preferences = await this.preferences.getOneByAgentId(agentId);
@@ -93,6 +122,11 @@ class Emails extends Consumer {
     return this.preferences.getOneByAgentId(agentId);
   }
 
+  /**
+   * @param {object} agent
+   * @return {Promise<void>}
+   * @private
+   */
   async _getUser(agent) {
     const params = new Params({ agentId: agent.id });
     const user = await this.users.getOne(params);
@@ -100,6 +134,13 @@ class Emails extends Consumer {
     return user;
   }
 
+  /**
+   * @param {object} notification
+   * @param {object} agentPreferences
+   * @param {object} user
+   * @return {Promise<boolean>}
+   * @private
+   */
   async _emitEmail(notification, agentPreferences, user) {
     if (!user) return false;
     if (!user.email) return false;

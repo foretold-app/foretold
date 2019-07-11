@@ -21,15 +21,30 @@ class Producer {
     this.templateName = TEMPLATE_NAME.MEASURABLE_STATE_IS_CHANGED;
   }
 
+  /**
+   * @return {Promise<void>}
+   * @private
+   */
   async _getTemplate() {
     const params = { name: this.templateName };
     return this.data.templates.getOne(params);
   }
 
+  /**
+   * @param emailEnvelope
+   * @return {Promise<*>}
+   * @private
+   */
   async _createEmailNotification(emailEnvelope) {
     return this._createNotification(emailEnvelope);
   }
 
+  /**
+   * @param envelope
+   * @param type
+   * @return {Promise<*>}
+   * @private
+   */
   async _createNotification(
     envelope = new this.EmailEnvelope(),
     type = this.NOTIFICATION_TYPE.EMAIL,
@@ -39,11 +54,22 @@ class Producer {
     return this.data.notifications.createOne(data);
   }
 
+  /**
+   * @param {string} agentId
+   * @param {string} notificationId
+   * @return {Promise<*>}
+   * @private
+   */
   async _assignNotification(agentId, notificationId) {
     const data = { agentId, notificationId };
     return this.data.agentNotifications.createOne(data);
   }
 
+  /**
+   * @param {object} agent
+   * @return {Promise<*>}
+   * @private
+   */
   async _queueEmail(agent) {
     const template = await this._getTemplate();
     assert(!!_.get(template, 'id'), 'Template ID is required');

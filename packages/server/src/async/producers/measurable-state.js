@@ -9,6 +9,9 @@ class MeasurableState extends Producer {
     this.measurable = measurable;
   }
 
+  /**
+   * @return {Promise<boolean>}
+   */
   async main() {
     try {
       const creator = await this.measurable.getCreator();

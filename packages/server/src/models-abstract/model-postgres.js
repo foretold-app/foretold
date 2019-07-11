@@ -144,7 +144,7 @@ class ModelPostgres extends Model {
     if (restrictions.isAdmin) return where;
     if (!where[this.and]) where[this.and] = [];
 
-    if (_.has(restrictions, 'channelId')) {
+    if (restrictions.channelId) {
       where[this.and].push({
         channelId: {
           [this.in]: this.channelIdsLiteral(restrictions.agentId),
@@ -152,13 +152,13 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (_.has(restrictions, 'userId')) {
+    if (restrictions.userId) {
       where[this.and].push({
         userId: restrictions.userId,
       });
     }
 
-    if (_.has(restrictions, 'measurableId')) {
+    if (restrictions.measurableId) {
       where[this.and].push({
         measurableId: {
           [this.in]: this.measurableIdsLiteral(restrictions.agentId),
@@ -179,7 +179,7 @@ class ModelPostgres extends Model {
     if (!include) include = [];
 
     // @todo: It is a filter, but not restriction
-    if (_.has(restrictions, 'measuredByAgentId')) {
+    if (restrictions.measuredByAgentId) {
       include.push({
         model: this.models.Measurement,
         as: 'Measurements',
@@ -201,13 +201,13 @@ class ModelPostgres extends Model {
     if (!where) where = {};
     if (!where[this.and]) where[this.and] = [];
 
-    if (_.has(filter, 'isArchived')) {
+    if (filter.isArchived) {
       where.isArchived = {
         [this.in]: this.getBooleansOfList(filter.isArchived),
       };
     }
 
-    if (_.has(filter, 'userId')) {
+    if (filter.userId) {
       where.userId = filter.userId;
     }
 

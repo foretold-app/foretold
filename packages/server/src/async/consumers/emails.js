@@ -38,14 +38,7 @@ class Emails extends Consumer {
         const user = await this._getUser(agent);
         const email = user.email;
 
-        if(!agentPreferences.stopAllEmails && email) {
-          const envelope = {
-            to: email,
-            body: notification.envelope.body,
-            subject: notification.envelope.subject,
-          };
-          emitter.emit(events.MAIL, envelope);
-        }
+        await this._emitEmail(notification, agentPreferences, email);
 
         console.log(
           `\x1b[35mNotification ID = "${notification.id}", ` +
@@ -106,6 +99,25 @@ class Emails extends Consumer {
     const user = await this.users.getOne(params);
     assert(!!user, 'User is required');
     return user;
+  }
+
+  async _emitEmail(notification, agentPreferences, email) {
+    if (agentPreferences.stopAllEmails) return true;
+    if (!!email) return true;
+
+    const envelope = {
+      to: notification.envelope.to || email,
+      body: notification.envelope.body,
+      subject: notification.envelope.subject,
+      replacements: {},
+    };
+
+    try {
+      emitter.emit(events.MAIL, envelope);
+    } catch (e) {
+      console.log(`Emails Consumer Emit Email`, e.message, e);
+    }
+    return true;
   }
 }
 

@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const pug = require('pug');
+const Mustache = require('mustache');
 
 const { emailConfig } = require('./email-config');
 const { transporter } = require('./transporter');
@@ -28,7 +28,7 @@ class MailHelper {
     this.template = template;
     this.to = to;
     this.subject = subject;
-    this.html = pug.compile(template)(replacements);
+    this.html = Mustache.render(template, replacements);
 
     this.config = emailConfig;
     this.gateway = new SmtpGateways(emailConfig).getDefault();

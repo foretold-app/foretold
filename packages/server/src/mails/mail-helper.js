@@ -28,7 +28,7 @@ class MailHelper {
     this.template = template;
     this.to = to;
     this.subject = subject;
-    this.html = '';
+    this.html = pug.compile(template)(replacements);
 
     this.config = emailConfig;
     this.gateway = new SmtpGateways(emailConfig).getDefault();
@@ -38,28 +38,13 @@ class MailHelper {
   }
 
   /**
-   * @returns {Promise<* | never>}
-   */
-  main() {
-    this.buildTemplate();
-    return this.sendMail();
-  }
-
-  /**
-   * @returns {void}
-   */
-  buildTemplate() {
-    this.html = pug.compile(this.template)(this.replacements);
-  }
-
-  /**
    * @tested
    * @param {string} [target]
    * @param {string} [subject]
    * @param {string} [contentHtml]
    * @return {Promise<*>}
    */
-  sendMail(
+  main(
     target = this.to,
     subject = this.subject,
     contentHtml = this.html,

@@ -38,14 +38,16 @@ class Emails extends Consumer {
         const user = await this._getUser(agent);
         const email = user.email;
 
-        await this._emitEmail(notification, agentPreferences, email);
+        const result = await this._emitEmail(notification, agentPreferences, email);
 
         console.log(
           `\x1b[35mNotification ID = "${notification.id}", ` +
           `Transaction ID = "${transaction.id}", ` +
           `User ID = "${user.id}", ` +
           `Agent Preferences ID = "${agentPreferences.id}", ` +
-          `Agent ID = "${agent.id}".\x1b[0m`
+          `Agent ID = "${agent.id}", ` +
+          `Result = "${result}", ` +
+          `Email = "${email}".\x1b[0m`
         );
 
         await this._markNotificationAsSent(agentNotification, transaction);
@@ -102,8 +104,8 @@ class Emails extends Consumer {
   }
 
   async _emitEmail(notification, agentPreferences, email) {
-    if (agentPreferences.stopAllEmails) return true;
-    if (!!email) return true;
+    if (agentPreferences.stopAllEmails === true) return false;
+    if (!email) return false;
 
     const envelope = {
       to: notification.envelope.to || email,
@@ -116,7 +118,9 @@ class Emails extends Consumer {
       emitter.emit(events.MAIL, envelope);
     } catch (e) {
       console.log(`Emails Consumer Emit Email`, e.message, e);
+      return false;
     }
+
     return true;
   }
 }

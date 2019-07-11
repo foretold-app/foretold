@@ -6,7 +6,7 @@ const nodemailer = require('nodemailer');
  * @return {object}
  */
 function transportFactory(confIn) {
-  console.log('Transporter is ready for production version', { confIn });
+  console.log('Transporter is ready for production version');
 
   return nodemailer.createTransport({
     host: confIn.host,
@@ -24,11 +24,11 @@ function transportFactory(confIn) {
 
 /**
  * @tested
- * @param {ConfigEmailSmtp} confIn
+ * @param {SmtpGateway} confIn
  * @return {{close(), sendMail(*, *): void}}
  */
 function transportFakeFactory(confIn) {
-  console.log('Transporter is ready for development version', { confIn });
+  console.log('Transporter is ready for development version');
 
   return new class {
     sendMail(options, clb) {
@@ -47,6 +47,4 @@ const transporter = process.env.NODE_ENV === "development"
 
 module.exports = {
   transporter,
-  transportFactory,
-  transportFakeFactory,
 };

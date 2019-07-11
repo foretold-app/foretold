@@ -62,7 +62,7 @@ class MailHelper {
 
     console.log(
       `mailOptions.body: ***********\n` +
-      JSON.stringify(mailOptions, null, '\n') +
+      JSON.stringify(mailOptions) +
       `\n***********`
     );
 

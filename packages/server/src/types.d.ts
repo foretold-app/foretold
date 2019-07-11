@@ -289,3 +289,23 @@ export type Auth0UserInfoResponse = {
   nickname?: string,
   picture?: string,
 }
+
+export type EmailConfig = {
+  emailHostGenerator: string,
+  emailHelp: string,
+  unsubscribeLink: string,
+  unsubscribeComment: string,
+  subscribeEmail: string,
+  subscribeLink: string,
+  subscribeComment: string,
+
+  gateways: SmtpGateway[],
+}
+
+export type SmtpGateway = {
+  host: string,
+  port: string,
+  user: string,
+  pass: string,
+  from: string,
+}

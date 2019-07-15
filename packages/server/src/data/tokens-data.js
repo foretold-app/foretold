@@ -73,15 +73,11 @@ class TokensData extends DataBase {
    * @param {Models.ObjectID} [agentId]
    * @param {string} [token]
    * @param {string} [type]
+   * @param {number} [usageCount]
    * @return {Promise<Models.Token>}
    */
-  async getToken({ agentId, token, type }) {
-    type = type || TOKEN_TYPE.ACCESS_TOKEN;
-    const cond = { isActive: true, type };
-    if (agentId) cond.agentId = agentId;
-    if (token) cond.token = token;
-    const options = { sort: -1 };
-    return this.model.getOne(cond, options);
+  async getToken({ agentId, token, type, usageCount }) {
+    return this.model.getToken({ agentId, token, type, usageCount });
   }
 
   /**
@@ -90,7 +86,7 @@ class TokensData extends DataBase {
    * @return {Promise<Models.Token>}
    */
   async createToken(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
-    return this.model.createOne({
+    return this.createOne({
       type,
       agentId,
       token: this._getToken(),

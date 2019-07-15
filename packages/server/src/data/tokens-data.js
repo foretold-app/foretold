@@ -96,24 +96,28 @@ class TokensData extends DataBase {
   async createAuthToken(agentId) {
     const type = TOKEN_TYPE.AUTH_TOKEN;
     const expiresAt = moment.utc().add(3, 'days').toDate();
-    return this.createToken(agentId, type, expiresAt);
+    const usageCount = 0;
+    return this.createToken(agentId, type, expiresAt, usageCount);
   }
 
   /**
    * @param {Models.ObjectID} agentId
    * @param {string} [type]
    * @param {Date | null} [expiresAt]
+   * @param {number | null} [usageCount]
    * @return {Promise<Models.Token>}
    */
   async createToken(
     agentId,
     type = TOKEN_TYPE.ACCESS_TOKEN,
     expiresAt = null,
+    usageCount = null,
   ) {
     return this.createOne({
       type,
       agentId,
       expiresAt,
+      usageCount,
       token: this._getToken(),
       isActive: true,
     });

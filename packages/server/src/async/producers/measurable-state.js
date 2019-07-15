@@ -25,7 +25,7 @@ class MeasurableState extends Producer {
       const channel = await this.measurable.getChannel();
       assert(!!_.get(channel, 'id'), 'Channel ID is required.');
 
-      const replacements = this.getReplacements(channel, this.measurable);
+      const replacements = this._getReplacements(channel, this.measurable);
       this._queueEmail(creator, replacements);
 
     } catch (e) {
@@ -34,7 +34,13 @@ class MeasurableState extends Producer {
     return true;
   }
 
-  getReplacements(channel, measurable) {
+  /**
+   * @param {object} channel
+   * @param {object} measurable
+   * @return {{measurable: {name: *, link: *}}}
+   * @protected
+   */
+  _getReplacements(channel, measurable) {
     return {
       measurable: {
         name: _.get(measurable, 'name'),

@@ -32,6 +32,7 @@ module.exports = {
   },
 
   down: async function (queryInterface) {
-    //
+    // No need to make down migration,
+    // it does not have a sense.
   }
 };

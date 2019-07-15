@@ -36,9 +36,11 @@ class MeasurableState extends Producer {
 
   getReplacements(channel, measurable) {
     return {
-      'measurable.name': _.get(measurable, 'name'),
-      'measurable.link': getMeasurableLink(channel, measurable),
-    };
+      measurable: {
+        name: _.get(measurable, 'name'),
+        link: getMeasurableLink(channel, measurable),
+      },
+    }
   }
 }
 

@@ -1,11 +1,11 @@
 /** @type {EmailConfig} */
 const emailConfig = {
-  emailHostGenerator: process.env.EMAIL_HOST_GENERATOR || 'foretold.com',
-  emailHelp: process.env.EMAIL_HELP || 'admin@foretold.com?subject=help',
-  unsubscribeLink: process.env.UNSUBSCRIBE_LINK || 'https://foretold.com/unsubscribe?token={{token}}',
+  emailHostGenerator: process.env.EMAIL_HOST_GENERATOR || 'foretold.io',
+  emailHelp: process.env.EMAIL_HELP || 'admin@foretold.io?subject=help',
+  unsubscribeLink: process.env.UNSUBSCRIBE_LINK || 'https://foretold.io/unsubscribe?token={{token}}',
   unsubscribeComment: process.env.UNSUBSCRIBE_COMMENT || 'Unsubscribe',
-  subscribeEmail: process.env.SUBSCRIBE_EMAIL || 'admin@foretold.com?subject=subscribe',
-  subscribeLink: process.env.SUBSCRIBE_LINK || 'https://foretold.com/subscribe?token={{token}}',
+  subscribeEmail: process.env.SUBSCRIBE_EMAIL || 'admin@foretold.io?subject=subscribe',
+  subscribeLink: process.env.SUBSCRIBE_LINK || 'https://foretold.io/subscribe?token={{token}}',
   subscribeComment: process.env.SUBSCRIBE_COMMENT || 'Subscribe',
 
   gateways: [

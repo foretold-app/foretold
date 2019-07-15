@@ -1,6 +1,8 @@
 const assert = require('assert');
 const _ = require('lodash');
 
+const { getMeasurableLink } = require('../../lib/urls');
+
 const { Producer } = require('./producer');
 
 /**
@@ -18,14 +20,25 @@ class MeasurableState extends Producer {
   async main() {
     try {
       const creator = await this.measurable.getCreator();
-      assert(!!_.get(creator, 'id'), 'Creator ID is required');
+      assert(!!_.get(creator, 'id'), 'Creator ID is required.');
 
-      this._queueEmail(creator);
+      const channel = await this.measurable.getChannel();
+      assert(!!_.get(channel, 'id'), 'Channel ID is required.');
+
+      const replacements = this.getReplacements(channel, this.measurable);
+      this._queueEmail(creator, replacements);
 
     } catch (e) {
       console.log(`MeasurableState`, e.message, e);
     }
     return true;
+  }
+
+  getReplacements(channel, measurable) {
+    return {
+      'measurable.name': _.get(measurable, 'name'),
+      'measurable.link': getMeasurableLink(channel, measurable),
+    };
   }
 }
 

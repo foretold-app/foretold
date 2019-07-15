@@ -31,12 +31,51 @@ class TokensData extends DataBase {
   }
 
   /**
+   * @param {string} tokenIn
+   * @return {Promise<null | string>}
+   */
+  async getAgentIdByToken(tokenIn) {
+    const token = await this.getToken({ token: tokenIn });
+    if (!token) return null;
+    return token.agentId;
+  }
+
+  /**
+   * @todo: add transaction
+   * @public
+   * @param {string} agentId
+   * @param {string} [type]
+   * @return {Promise<string>}
+   */
+  async revokeTokensGetTokenByAgentId(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
+    await this.model.updateAll({
+      type,
+      agentId,
+    }, {
+      isActive: false,
+    });
+    return this.getCreateTokenByAgentId(agentId, type);
+  }
+
+  /**
+   * @public
+   * @param {string} agentId
+   * @param {string} [type]
+   * @return {Promise<string>}
+   */
+  async getCreateTokenByAgentId(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
+    let token = await this.getToken({ agentId, type });
+    if (!token) token = await this.createToken(agentId, type);
+    return token.token;
+  }
+
+  /**
    * @param {Models.ObjectID} [agentId]
    * @param {string} [token]
    * @param {string} [type]
    * @return {Promise<Models.Token>}
    */
-  async getActiveToken({ agentId, token, type }) {
+  async getToken({ agentId, token, type }) {
     type = type || TOKEN_TYPE.ACCESS_TOKEN;
     const cond = { isActive: true, type };
     if (agentId) cond.agentId = agentId;
@@ -50,56 +89,13 @@ class TokensData extends DataBase {
    * @param {string} [type]
    * @return {Promise<Models.Token>}
    */
-  async createActiveToken(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
+  async createToken(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
     return this.model.createOne({
       type,
       agentId,
       token: this._getToken(),
       isActive: true,
     });
-  }
-
-  /**
-   * @param {string} tokenIn
-   * @param {string} [type]
-   * @return {Promise<null | string>}
-   */
-  async getAgentIdByToken(tokenIn, type = TOKEN_TYPE.ACCESS_TOKEN) {
-    const token = await this.getActiveToken({
-      type,
-      token: tokenIn,
-    });
-    if (!token) return null;
-    return token.agentId;
-  }
-
-  /**
-   * @public
-   * @param {string} agentId
-   * @param {string} [type]
-   * @return {Promise<string>}
-   */
-  async getOrCreateActiveTokenForAgentId(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
-    let token = await this.getActiveToken({ agentId, type });
-    if (!token) token = await this.createActiveToken(agentId, type);
-    return token.token;
-  }
-
-  /**
-   * @todo: add transaction
-   * @public
-   * @param {string} agentId
-   * @param {string} [type]
-   * @return {Promise<string>}
-   */
-  async revokeTokensAndGetTokenByAgentId(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
-    await this.model.updateAll({
-      type,
-      agentId,
-    }, {
-      isActive: false,
-    });
-    return this.getOrCreateActiveTokenForAgentId(agentId, type);
   }
 
   /**

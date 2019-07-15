@@ -36,7 +36,7 @@ class BotsData extends DataBase {
   async tokenRefresh(params = {}) {
     const bot = await this.BotModel.getOne(params);
     if (!bot) throw new Error('Bot is not found');
-    return this.tokens.revokeTokensAndGetTokenByAgentId(bot.agentId);
+    return this.tokens.revokeTokensGetTokenByAgentId(bot.agentId);
   }
 }
 

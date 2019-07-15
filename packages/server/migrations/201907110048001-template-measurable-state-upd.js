@@ -7,11 +7,11 @@ module.exports = {
       const envelopeTemplate = new EmailEnvelopeTemplate({
         subject: 'Question "{{ measurable.name }}" is changed',
         body: 'Your question, ' +
-          '<a href="{{ measurable.link }}">{{ measurable.name }}</a>, ' +
+          '<a href="{{{ measurable.link }}}">{{ measurable.name }}</a>, ' +
           'has reached its expected ' +
           'resolution date. We recommend either resolving the question or ' +
           'moving the expected resolution date to another time. ' +
-          'You can do that <a href="{{ measurable.link }}">here</a>.',
+          'You can do that <a href="{{{ measurable.link }}}">here</a>.',
       });
 
 

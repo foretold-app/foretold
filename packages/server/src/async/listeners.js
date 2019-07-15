@@ -68,7 +68,6 @@ async function mailer(envelop = {}) {
 function runListeners() {
   try {
     emitter.on(events.EVERY_HOUR, toJudgementPendingTransition);
-    emitter.on(events.EVERY_TEN_MINUTES, emailConsumer);
     emitter.on(events.EVERY_MINUTE, emailConsumer);
     emitter.on(events.MAIL, mailer);
     emitter.on(events.MEASURABLE_STATE_IS_CHANGED, measurableState);

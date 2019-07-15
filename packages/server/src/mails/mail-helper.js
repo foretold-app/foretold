@@ -60,11 +60,7 @@ class MailHelper {
       list: this._ListHeaders(),
     };
 
-    console.log(
-      `mailOptions.body: ***********\n` +
-      JSON.stringify(mailOptions) +
-      `\n***********`
-    );
+    console.log(`mailOptions.body`, JSON.stringify(mailOptions));
 
     return new Promise((resolve, reject) => {
       this.transporter.sendMail(mailOptions, (error, response) => {

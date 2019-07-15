@@ -134,8 +134,12 @@ module.exports = (sequelize, DataTypes) => {
       const json = await response.json();
       const match = JSON.stringify(json).match(/[-+]?[0-9]*\.?[0-9]+/);
       const asFloat = parseFloat(match[0]);
-      console.log(`got response from endpoint. Url: ${endpoint}, ` +
-        `Response: ${JSON.stringify(json)}, Float: ${asFloat}`);
+
+      console.log(
+        `got response from endpoint. Url: ${endpoint}, ` +
+        `Response: ${JSON.stringify(json)}, Float: ${asFloat}`
+      );
+
       return asFloat;
     } catch (e) {
       console.error(`Error getting response from endpoint. ` +

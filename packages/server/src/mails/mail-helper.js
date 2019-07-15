@@ -94,7 +94,7 @@ class MailHelper {
       // List-Subscribe: <mailto:admin@example.com?subject=subscribe>
       // List-Subscribe: <http://example.com> (Subscribe)
       subscribe: [
-        this._compileStr(this.config.subscribeEmail),
+        // this._compileStr(this.config.subscribeEmail),
         {
           url: this._compileStr(this.config.subscribeLink),
           comment: this._compileStr(this.config.subscribeComment)

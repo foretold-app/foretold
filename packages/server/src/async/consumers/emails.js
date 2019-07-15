@@ -43,7 +43,7 @@ class Emails extends Consumer {
         const agentPreferences = await this._getPreferences(agentNotification);
         const user = await this._getUser(agent);
 
-        const result = await this._emitEmail(notification, agentPreferences, user);
+        const result = await this._emitEmail(notification, agentPreferences, user, agent);
 
         console.log(
           `\x1b[35mNotification ID = "${notification.id}", ` +
@@ -67,7 +67,7 @@ class Emails extends Consumer {
   /**
    * @param {object} transaction
    * @return {Promise<*>}
-   * @private
+   * @protected
    */
   async _getAgentsNotifications(transaction) {
     const filter = new Filter({ sentAt: null });
@@ -79,7 +79,7 @@ class Emails extends Consumer {
   /**
    * @param {object} agentNotification
    * @return {Promise<void>}
-   * @private
+   * @protected
    */
   async _getNotification(agentNotification) {
     const params = new Params({ id: agentNotification.notificationId });
@@ -104,7 +104,7 @@ class Emails extends Consumer {
    * @param {object} agentNotification
    * @param {object} transaction
    * @return {Promise<*>}
-   * @private
+   * @protected
    */
   async _markNotificationAsSent(agentNotification, transaction) {
     const params = new Params({ id: agentNotification.id });
@@ -116,7 +116,7 @@ class Emails extends Consumer {
   /**
    * @param {object} agentNotification
    * @return {Promise<*>}
-   * @private
+   * @protected
    */
   async _getPreferences(agentNotification) {
     const agentId = agentNotification.agentId;
@@ -141,19 +141,23 @@ class Emails extends Consumer {
    * @param {object} notification
    * @param {object} agentPreferences
    * @param {object} user
+   * @param {object} agent
    * @return {Promise<boolean>}
-   * @private
+   * @protected
    */
-  async _emitEmail(notification, agentPreferences, user) {
+  async _emitEmail(notification, agentPreferences, user, agent) {
     if (!user) return false;
     if (!user.email) return false;
     if (agentPreferences.stopAllEmails === true) return false;
+
+    const token = await this._getAuthToken(agent);
 
     const envelope = {
       to: notification.envelope.to || user.email,
       body: notification.envelope.body || '',
       subject: notification.envelope.subject || '',
       replacements: notification.envelope.replacements || {},
+      authToken: token,
     };
 
     try {
@@ -164,6 +168,19 @@ class Emails extends Consumer {
     }
 
     return true;
+  }
+
+  /**
+   * @param {object} agent
+   * @return {Promise<string>}
+   * @protected
+   */
+  async _getAuthToken(agent) {
+    const agentId = agent.id;
+    const token = await this.tokens.createAuthToken(agentId);
+    assert(!!token, 'Token is required');
+    assert(!!token.token, 'Token is required #2');
+    return token.token;
   }
 }
 

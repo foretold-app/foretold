@@ -1,8 +1,9 @@
 const crypto = require('crypto');
+const moment = require('moment');
+
 const { DataBase } = require('./data-base');
 
 const config = require('../config');
-
 const { TokenModel } = require('../models-abstract');
 const { TOKEN_TYPE } = require('../models/enums/token-type');
 
@@ -16,7 +17,7 @@ class TokensData extends DataBase {
     super();
     this.model = new TokenModel();
     this.MAX_BOT_TOKEN_SIZE = config.MAX_BOT_TOKEN_SIZE;
-    this.MAX_BOT_TOKEN_SIZE_INCOMIN = this.MAX_BOT_TOKEN_SIZE * 2;
+    this.MAX_BOT_TOKEN_SIZE_INCOMING = this.MAX_BOT_TOKEN_SIZE * 2;
   }
 
   /**
@@ -25,7 +26,7 @@ class TokensData extends DataBase {
    * @return {boolean}
    */
   validate(token = '') {
-    const length = token.length === this.MAX_BOT_TOKEN_SIZE_INCOMIN;
+    const length = token.length === this.MAX_BOT_TOKEN_SIZE_INCOMING;
     const pattern = /^([0-9a-z]+)$/.test(token);
     return length && pattern;
   }
@@ -65,7 +66,7 @@ class TokensData extends DataBase {
    */
   async getCreateTokenByAgentId(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
     let token = await this.getToken({ agentId, type });
-    if (!token) token = await this.createToken(agentId, type);
+    if (!token) token = await this.createAccessToken(agentId, type);
     return token.token;
   }
 
@@ -82,13 +83,37 @@ class TokensData extends DataBase {
 
   /**
    * @param {Models.ObjectID} agentId
-   * @param {string} [type]
    * @return {Promise<Models.Token>}
    */
-  async createToken(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
+  async createAccessToken(agentId) {
+    return this.createToken(agentId);
+  }
+
+  /**
+   * @param {Models.ObjectID} agentId
+   * @return {Promise<Models.Token>}
+   */
+  async createAuthToken(agentId) {
+    const type = TOKEN_TYPE.AUTH_TOKEN;
+    const expiresAt = moment.utc().add(3, 'days').toDate();
+    return this.createToken(agentId, type, expiresAt);
+  }
+
+  /**
+   * @param {Models.ObjectID} agentId
+   * @param {string} [type]
+   * @param {Date | null} [expiresAt]
+   * @return {Promise<Models.Token>}
+   */
+  async createToken(
+    agentId,
+    type = TOKEN_TYPE.ACCESS_TOKEN,
+    expiresAt = null,
+  ) {
     return this.createOne({
       type,
       agentId,
+      expiresAt,
       token: this._getToken(),
       isActive: true,
     });

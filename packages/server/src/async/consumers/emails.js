@@ -10,6 +10,9 @@ const { Options } = require('../../data/classes/options');
 const { Params } = require('../../data/classes/params');
 const { Query } = require('../../data/classes/query');
 
+/**
+ * @todo: Rename into "EmailsConsumer".
+ */
 class Emails extends Consumer {
   constructor() {
     super({});

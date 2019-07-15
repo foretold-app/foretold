@@ -7,6 +7,10 @@ const { TEMPLATE_NAME } = require('../../models/enums/template-name');
 const { NOTIFICATION_TYPE } = require('../../models/enums/notification-type');
 const { EmailEnvelope } = require('../../models/classes/notifications');
 
+/**
+ * Here "consumer" class is a parent class of all another "consumers",
+ * for instance "EmailsConsumer", "PushConsumer" and another ones.
+ */
 class Consumer {
   constructor(options = {}) {
     assert(_.isObject(options), 'Options is not an object');

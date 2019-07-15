@@ -19,12 +19,11 @@ class AgentModel extends ModelPostgres {
    * @protected
    * @param {object} [where]
    * @param {Layers.AbstractModelsLayer.filter} [filter]
-   * @param {Models.ObjectID} [filter.userId]
    */
   applyFilter(where = {}, filter = {}) {
     super.applyFilter(where, filter);
 
-    if (filter.excludeChannelId) {
+    if (_.has(filter, 'excludeChannelId')) {
       where[this.and].push({
         id: {
           [this.notIn]: this.agentsIdsLiteral(filter.excludeChannelId),
@@ -32,7 +31,7 @@ class AgentModel extends ModelPostgres {
       });
     }
 
-    if (filter.types) {
+    if (_.has(filter, 'types')) {
       where[this.and].push({
         type: {
           [this.in]: filter.types,

@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const { Model } = require('./model');
 const models = require('../models');
 
@@ -168,9 +170,10 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param {object} [include]
    * @protected
+   * @param {object} [include]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @return {*}
    */
   applyRestrictionsIncluding(include = [], restrictions = {}) {
     if (!include) include = [];
@@ -189,6 +192,7 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
+   * Extend this method in child classes.
    * @param {object} [where]
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Models.ObjectID} [filter.userId]
@@ -212,19 +216,14 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @param {object} [pagination]
-   * @param {number} pagination.first
-   * @param {string} pagination.after
-   * @param {number} pagination.last
-   * @param {string} pagination.before
-   * @param {number} pagination.limit
-   * @param {number} pagination.offset
+   * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {number} total
    * @return {{offset: number, limit: number }}
    */
   getPagination(pagination = {}, total = 0) {
     pagination.before = Math.abs(pagination.before) || total;
     pagination.after = Math.abs(pagination.after) || 0;
+
     pagination.last = Math.abs(pagination.last) || 0;
     pagination.first = Math.abs(pagination.first) || 0;
 
@@ -284,10 +283,11 @@ class ModelPostgres extends Model {
   /**
    * @public
    * @param {object} [data]
-   * @param {object} [_restrictions]
+   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [_options]
    * @return {Promise.<object>}
    */
-  async createOne(data = {}, _restrictions = {}) {
+  async createOne(data = {}, _restrictions = {}, _options = {}) {
     return this.model.create(data);
   }
 
@@ -295,31 +295,33 @@ class ModelPostgres extends Model {
    * @public
    * @param {object} [params]
    * @param {object} [data]
-   * @param {object} [_restrictions]
+   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise.<object>}
    */
-  async updateOne(params = {}, data = {}, _restrictions = {}) {
-    const entity = await this.model.findOne({
-      where: params,
-    });
-    if (entity) {
-      await entity.update(data);
-    }
+  async updateOne(params = {}, data = {}, _restrictions = {}, options = {}) {
+    const findCond = { where: { ...params } };
+    const updateCond = {};
+    this._extendConditions(findCond, options);
+    this._extendConditions(updateCond, options);
+
+    const entity = await this.model.findOne(findCond);
+    if (entity) await entity.update(data, updateCond);
     return entity;
   }
 
   /**
    * @public
-   * @param {object} params
-   * @param {object} data
-   * @param {object} _restrictions
+   * @param {object} [params]
+   * @param {object} [data]
+   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {boolean}
    */
-  async updateAll(params = {}, data = {}, _restrictions = {}) {
-    return !!(await this.model.update(
-      data,
-      { where: params },
-    ));
+  async updateAll(params = {}, data = {}, _restrictions = {}, options = {}) {
+    const cond = { where: { ...params} };
+    this._extendConditions(cond, options);
+    return !!(await this.model.update(data, cond));
   }
 
   /**
@@ -327,19 +329,24 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.filter} filter
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise<void>}
    */
-  async getAll(filter = {}, pagination = {}, restrictions = {}) {
+  async getAll(filter = {}, pagination = {}, restrictions = {}, options = {}) {
     const where = {};
 
     this.applyRestrictions(where, restrictions);
     this.applyFilter(where, filter);
 
-    return this.model.findAll({
+    const cond = {
       limit: pagination.limit,
       offset: pagination.offset,
       where,
-    });
+    };
+
+    this._extendConditions(cond, options);
+
+    return this.model.findAll(cond);
   }
 
   /**
@@ -347,9 +354,10 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [_options]
    * @return {Promise<{data: Models.Model[], total: number}>}
    */
-  async getAllWithConnections(filter = {}, pagination = {}, restrictions = {}) {
+  async getAllWithConnections(filter = {}, pagination = {}, restrictions = {}, _options = {}) {
     const where = {};
     const include = [];
 
@@ -382,33 +390,74 @@ class ModelPostgres extends Model {
    * @public
    * @param {object} [params]
    * @param {object} [query]
-   * @param {object} [restrictions]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise<Models.Model>}
    */
-  async getOne(params = {}, query = {}, restrictions = {}) {
+  async getOne(params = {}, query = {}, restrictions = {}, options = {}) {
     const where = { ...params };
     const sort = query.sort === 1 ? 'ASC' : 'DESC';
     const order = [['createdAt', sort]];
 
     this.applyRestrictions(where, restrictions);
 
-    return this.model.findOne({
+    const cond = {
       where,
       order,
-    });
+    };
+
+    this._extendConditions(cond, options);
+
+    return this.model.findOne(cond);
   }
 
   /**
    * @public
    * @param {object} params
-   * @param {object} [query]
-   * @param {object} [data]
-   * @param {object} [restrictions]
+   * @param {object} query
+   * @param {object} data
+   * @param {Layers.AbstractModelsLayer.restrictions} restrictions
+   * @param {Layers.AbstractModelsLayer.options} options
    * @return {Promise<Models.Model>}
    */
-  async upsertOne(params = {}, query = {}, data = {}, restrictions = {}) {
-    return await this.getOne(params, query, restrictions)
-      || await this.createOne(data, restrictions);
+  async upsertOne(params, query, data, restrictions, options) {
+    return await this.getOne(params, query, restrictions, options)
+      || await this.createOne(data, restrictions, options);
+  }
+
+  /**
+   * @public
+   * @return {Promise<*>}
+   */
+  async getTransaction() {
+    return this.sequelize.transaction();
+  }
+
+  /**
+   * @public
+   * @param {object} transaction
+   * @return {Promise<*>}
+   */
+  async commit(transaction) {
+    return transaction.commit();
+  }
+
+  /**
+   * @protected
+   * @param cond
+   * @param {Layers.AbstractModelsLayer.options} options
+   */
+  _extendConditions(cond = {}, options = {}) {
+    if (_.has(options, 'transaction')) {
+      cond.transaction = options.transaction;
+    }
+    if (_.has(options, 'lock')) {
+      cond.lock = options.lock;
+    }
+    if (_.has(options, 'skipLocked')) {
+      cond.skipLocked = options.skipLocked;
+    }
+    return cond;
   }
 }
 

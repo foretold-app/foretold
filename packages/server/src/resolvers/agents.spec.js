@@ -14,7 +14,7 @@ describe('Agents Resolvers', () => {
     const args = { id: 'id1' };
     it('returns an agent by id', () => {
       return agents.one(root, args).then((result) => {
-        expect(data.agents.getOne).toHaveBeenCalledWith('id1');
+        expect(data.agents.getOne).toHaveBeenCalledWith({ id: 'id1' });
         expect(result).toBe(true);
       });
     });
@@ -25,7 +25,7 @@ describe('Agents Resolvers', () => {
     const args = {};
     it('returns an agent by agentId', () => {
       return agents.one(root, args).then((result) => {
-        expect(data.agents.getOne).toHaveBeenCalledWith('agentId1');
+        expect(data.agents.getOne).toHaveBeenCalledWith({ id: 'agentId1' });
         expect(result).toBe(true);
       });
     });

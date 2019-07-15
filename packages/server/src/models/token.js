@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Model = sequelize.define('Token', {
+  const Token = sequelize.define('Token', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
@@ -21,11 +21,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Model.associate = function associate(models) {
-    Model.Agent = Model.belongsTo(models.Agent, {
+  Token.associate = function associate(models) {
+    Token.Agent = Token.belongsTo(models.Agent, {
       foreignKey: 'agentId',
     });
   };
 
-  return Model;
+  return Token;
 };

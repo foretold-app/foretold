@@ -15,6 +15,9 @@ const series = db.sequelize.import('./series');
 const user = db.sequelize.import('./user');
 const token = db.sequelize.import('./token');
 const preference = db.sequelize.import('./preference');
+const template = db.sequelize.import('./template');
+const notification = db.sequelize.import('./notification');
+const agentNotification = db.sequelize.import('./agent-notification');
 
 db.Agent = agent;
 db.Bot = bot;
@@ -26,11 +29,27 @@ db.Series = series;
 db.User = user;
 db.Token = token;
 db.Preference = preference;
+db.Template = template;
+db.Notification = notification;
+db.AgentNotification = agentNotification;
 
-Object.keys(db).forEach(modelName => {
+// Associate All Models
+Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     console.log('Build association for model:', modelName);
     db[modelName].associate(db);
+  }
+});
+
+// Add Global Hooks
+const events = require('../async/events');
+const emitter = require('../async/emitter');
+
+db.sequelize.addHook('afterUpdate', (instance) => {
+  // console.log('Global Hook "afterUpdate"');
+  if (instance instanceof measurable && instance.changed('state')) {
+    // console.log('Measurable.state is changed');
+    emitter.emit(events.MEASURABLE_STATE_IS_CHANGED, instance);
   }
 });
 

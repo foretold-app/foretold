@@ -6,7 +6,7 @@ const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-
 const { MEASUREMENT_VALUE } = require('./enums/measurement-value');
 
 module.exports = (sequelize, DataTypes) => {
-  const Model = sequelize.define('Measurement', {
+  const Measurement = sequelize.define('Measurement', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
@@ -55,25 +55,24 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID(),
       allowNull: true,
     },
-  }, {
-    hooks: {
-      beforeValidate: async (instance) => {
-        if (instance.dataValues.relevantAt == null) {
-          instance.relevantAt = Date.now();
-        }
-      },
-      afterCreate: async (measurement) => {
-        const competitorType = measurement.dataValues.competitorType;
-        const isJudgable = [
-          MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
-          MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED,
-        ].includes(competitorType);
+  });
 
-        if (isJudgable) {
-          const measurable = await measurement.getMeasurable();
-          await measurable.judged();
-        }
-      },
+  Measurement.addHook('beforeValidate', async (instance) => {
+    if (instance.dataValues.relevantAt == null) {
+      instance.relevantAt = Date.now();
+    }
+  });
+
+  Measurement.addHook('afterCreate', async (measurement) => {
+    const competitorType = measurement.dataValues.competitorType;
+    const isJudgable = [
+      MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
+      MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED,
+    ].includes(competitorType);
+
+    if (isJudgable) {
+      const measurable = await measurement.getMeasurable();
+      await measurable.judged();
     }
   });
 
@@ -119,7 +118,7 @@ module.exports = (sequelize, DataTypes) => {
    * @param {Models.Creator} creator
    * @return {Promise<*>}
    */
-  Model.prototype.getCreationNotification =
+  Measurement.prototype.getCreationNotification =
     async function getCreationNotification(creator) {
       const agent = await creator.getAgent();
       const measurable = await this.getMeasurable();
@@ -143,25 +142,25 @@ module.exports = (sequelize, DataTypes) => {
       };
     };
 
-  Model.associate = function associate(models) {
-    Model.Measurable = Model.belongsTo(models.Measurable, {
+  Measurement.associate = function associate(models) {
+    Measurement.Measurable = Measurement.belongsTo(models.Measurable, {
       foreignKey: 'measurableId',
     });
 
-    Model.Agent = Model.belongsTo(models.Agent, {
+    Measurement.Agent = Measurement.belongsTo(models.Agent, {
       foreignKey: 'agentId',
     });
 
-    Model.TaggedMeasurement = Model.belongsTo(models.Measurement, {
+    Measurement.TaggedMeasurement = Measurement.belongsTo(models.Measurement, {
       foreignKey: 'taggedMeasurementId',
       as: 'TaggedMeasurement',
     });
 
-    Model.TaggedBy = Model.hasMany(models.Measurement, {
+    Measurement.TaggedBy = Measurement.hasMany(models.Measurement, {
       foreignKey: 'taggedMeasurementId',
       as: 'TaggedBy',
     });
   };
 
-  return Model;
+  return Measurement;
 };

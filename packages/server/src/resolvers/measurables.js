@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const data = require('../data');
-const { Pagination } = require('../pagination');
+const { Pagination } = require('../data/classes/pagination');
 
 /**
  * @param {*} root

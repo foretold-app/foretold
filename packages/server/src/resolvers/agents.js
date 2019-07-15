@@ -11,7 +11,7 @@ const data = require('../data');
  */
 async function one(root, args, context, info) {
   const id = _.get(args, 'id') || _.get(root, 'agentId');
-  return data.agents.getOne(id);
+  return data.agents.getOne({ id });
 }
 
 /**

@@ -11,7 +11,7 @@ const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-
 const { MEASUREMENT_VALUE } = require('./enums/measurement-value');
 
 module.exports = (sequelize, DataTypes) => {
-  const Model = sequelize.define('Measurable', {
+  const Measurable = sequelize.define('Measurable', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
@@ -78,7 +78,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     },
 
-    // Link
+    // Links
     channelId: {
       type: DataTypes.UUID(),
       allowNull: false,
@@ -96,49 +96,53 @@ module.exports = (sequelize, DataTypes) => {
     measurementCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
-      get: async function () {
-        const items = await this.getMeasurements();
-        return items.length;
-      },
+      get: getMeasurementCount,
     },
     measurerCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
-      get: async function () {
-        const items = await this.getMeasurements();
-        return _.uniq(items.map(i => i.agentId)).length;
-      },
+      get: getMeasurerCount,
     },
 
     // Satellite
     resolutionEndpointResponse: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.FLOAT),
-      get: async function resolutionEndpointResponseGetter() {
-        const endpoint = await this.dataValues.resolutionEndpoint;
-        if (!endpoint) return false;
-        try {
-          const response = await fetch(endpoint);
-          const json = await response.json();
-          const match = JSON.stringify(json).match(/[-+]?[0-9]*\.?[0-9]+/);
-          const asFloat = parseFloat(match[0]);
-          console.log(`got response from endpoint. Url: ${endpoint}, ` +
-            `Response: ${JSON.stringify(json)}, Float: ${asFloat}`);
-          return asFloat;
-        } catch (e) {
-          console.error(`Error getting response from endpoint. ` +
-            `Url: ${endpoint}, error: ${e}`);
-          return null;
-        }
-      },
-    },
-  }, {
-    hooks: {
-      beforeUpdate: async (instance) => {
-        await watchExpectedResolutionDate(instance);
-      },
+      get: resolutionEndpointResponseGetter,
     },
   });
+
+  Measurable.addHook('beforeUpdate', async (instance) => {
+    await watchExpectedResolutionDate(instance);
+  });
+
+  async function getMeasurementCount() {
+    const items = await this.getMeasurements();
+    return items.length;
+  }
+
+  async function getMeasurerCount() {
+    const items = await this.getMeasurements();
+    return _.uniq(items.map(i => i.agentId)).length;
+  }
+
+  async function resolutionEndpointResponseGetter() {
+    const endpoint = await this.dataValues.resolutionEndpoint;
+    if (!endpoint) return false;
+    try {
+      const response = await fetch(endpoint);
+      const json = await response.json();
+      const match = JSON.stringify(json).match(/[-+]?[0-9]*\.?[0-9]+/);
+      const asFloat = parseFloat(match[0]);
+      console.log(`got response from endpoint. Url: ${endpoint}, ` +
+        `Response: ${JSON.stringify(json)}, Float: ${asFloat}`);
+      return asFloat;
+    } catch (e) {
+      console.error(`Error getting response from endpoint. ` +
+        `Url: ${endpoint}, error: ${e}`);
+      return null;
+    }
+  }
 
   async function watchExpectedResolutionDate(instance) {
     const isChanged = instance.changed('expectedResolutionDate');
@@ -152,8 +156,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  Model.needsResolutionResponse = async function needsResolutionResponse() {
-    return Model.findAll({
+  Measurable.needsResolutionResponse = async function needsResolutionResponse() {
+    return Measurable.findAll({
       where: {
         state: MEASURABLE_STATE.JUDGEMENT_PENDING,
         expectedResolutionDate: {
@@ -163,8 +167,8 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  Model.needsToBePending = async function needsToBePending() {
-    return Model.findAll({
+  Measurable.needsToBePending = async function needsToBePending() {
+    return Measurable.findAll({
       where: {
         state: MEASURABLE_STATE.OPEN,
         [Sequelize.Op.or]: [
@@ -179,31 +183,33 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  Model.prototype.updateState = async function updateState(state) {
+  Measurable.prototype.updateState = async function updateState(state) {
     await this.update({ state, stateUpdatedAt: Sequelize.fn('now') });
   };
 
-  Model.prototype.archive = async function archive() {
+  Measurable.prototype.archive = async function archive() {
     await this.update({ isArchived: true });
   };
 
-  Model.prototype.unarchive = async function unarchive() {
+  Measurable.prototype.unarchive = async function unarchive() {
     await this.update({ isArchived: false });
   };
 
-  Model.prototype.judged = async function judged() {
+  Measurable.prototype.judged = async function judged() {
     await this.updateState(MEASURABLE_STATE.JUDGED);
   };
 
-  Model.prototype.judgementPending = async function judgementPending() {
+  Measurable.prototype.judgementPending = async function judgementPending() {
     await this.updateState(MEASURABLE_STATE.JUDGEMENT_PENDING);
   };
 
   /**
+   * @todo: implement client for this code
+   * @todo: do not remove
    * @param {Models.Agent.id} agentId
    * @return {Promise<void>}
    */
-  Model.prototype.processResolution =
+  Measurable.prototype.processResolution =
     async function processResolution(agentId) {
       const asFloat = await this.resolutionEndpointResponse;
       if (asFloat) {
@@ -226,7 +232,7 @@ module.exports = (sequelize, DataTypes) => {
    * @param {Models.Creator} creator
    * @return {Promise<*>}
    */
-  Model.prototype.getCreationNotification =
+  Measurable.prototype.getCreationNotification =
     async function getCreationNotification(creator) {
       const agent = await creator.getAgent();
       return {
@@ -253,7 +259,7 @@ module.exports = (sequelize, DataTypes) => {
    * @param {object} ops
    * @return {string[]}
    */
-  Model.prototype.changedFields = function changedFields(ops) {
+  Measurable.prototype.changedFields = function changedFields(ops) {
     return Object.keys(ops)
       .filter(r => r !== "expectedResolutionDate")
       .filter(r => this[r] !== ops[r]);
@@ -266,7 +272,7 @@ module.exports = (sequelize, DataTypes) => {
    * @param {object} newData
    * @return {Promise<*>}
    */
-  Model.prototype.getUpdateNotifications =
+  Measurable.prototype.getUpdateNotifications =
     async function getUpdateNotifications(creator, newData) {
       const changed = this.changedFields(newData);
       const agent = await creator.getAgent();
@@ -287,18 +293,18 @@ module.exports = (sequelize, DataTypes) => {
       };
     };
 
-  Model.associate = function associate(models) {
-    Model.Measurements = Model.hasMany(models.Measurement, {
+  Measurable.associate = function associate(models) {
+    Measurable.Measurements = Measurable.hasMany(models.Measurement, {
       foreignKey: 'measurableId',
       as: 'Measurements',
     });
 
-    Model.Series = Model.belongsTo(models.Series, {
+    Measurable.Series = Measurable.belongsTo(models.Series, {
       foreignKey: 'seriesId',
       as: 'series',
     });
 
-    Model.Creator = Model.belongsTo(models.Agent, {
+    Measurable.Creator = Measurable.belongsTo(models.Agent, {
       foreignKey: 'creatorId',
       as: 'creator',
     });
@@ -306,10 +312,10 @@ module.exports = (sequelize, DataTypes) => {
     // Usage:
     // const me = await models.Measurable.find();
     // const ch = await me.getChannel();
-    Model.Channel = Model.belongsTo(models.Channel, {
+    Measurable.Channel = Measurable.belongsTo(models.Channel, {
       foreignKey: 'channelId',
     });
   };
 
-  return Model;
+  return Measurable;
 };

@@ -2,20 +2,22 @@ const _ = require('lodash');
 
 const data = require('../../data');
 
-class ToJudgementPending {
+class Reducer {
   constructor() {
     this.data = data;
   }
 
-  async main() {
+  async toJudgementPending() {
     const measurables = await this.data.measurables.needsToBePending();
+
     _.each(measurables, (measurable) => {
       measurable.judgementPending();
     });
+
     return true;
   }
 }
 
 module.exports = {
-  ToJudgementPending,
+  Reducer,
 };

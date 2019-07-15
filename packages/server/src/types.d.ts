@@ -117,8 +117,12 @@ export namespace Layers {
       isAdmin?: boolean,
       agentId?: Models.ObjectID,
       measuredByAgentId?: Models.ObjectID,
+      transaction?: object,
+      lock?: boolean,
+      skipLocked?: boolean,
     };
     type filter = {
+      id?: Models.ObjectID,
       creatorId?: Models.ObjectID,
       seriesId?: Models.ObjectID,
       channelId?: Models.ObjectID,
@@ -127,10 +131,13 @@ export namespace Layers {
       excludeChannelId?: Models.ObjectID,
       competitorType?: string,
       findInDateRange?: object,
-      notTaggedByAgent?: string,
+      notTaggedByAgent?: Models.ObjectID,
       states?: string[],
       isArchived?: string[],
       types?: string[],
+      type?: string,
+      notificationId?: Models.ObjectID,
+      sentAt?: string | null,
     };
     type pagination = {
       limit?: number,
@@ -141,7 +148,10 @@ export namespace Layers {
       before?: string,
     };
     type query = object;
-    type params = object;
+    type params = {
+      id?: Models.ObjectID,
+      agentId?: Models.ObjectID,
+    };
     type response = { data: any };
     type responseList = { data: any[], total: number };
 
@@ -196,10 +206,18 @@ export namespace Layers {
       measurableId?: Models.ObjectID,
       measuredByAgentId?: Models.ObjectID,
     };
+    type options = {
+      transaction?: object,
+      lock?: boolean,
+      skipLocked?: boolean,
+    };
     type filter = {
       excludeChannelId?: Models.ObjectID,
+      userId?: Models.ObjectID,
       isArchived?: string[],
       types?: string[],
+      sentAt?: string[],
+      notificationId?: string[],
     };
     type pagination = {
       limit?: number,
@@ -218,12 +236,14 @@ export namespace Layers {
       deleteOne(
         params: params,
         restrictions: restrictions,
+        options: options,
       ): response;
 
       updateOne(
         params: params,
         data: data,
         restrictions: restrictions,
+        options: options,
       ): response;
 
       createOne(
@@ -235,17 +255,20 @@ export namespace Layers {
         params: params,
         query: query,
         restrictions: restrictions,
+        options: options,
       ): response;
 
       getAll(
         filter: filter,
         pagination: pagination,
         restrictions: restrictions,
+        options: options,
       ): responseList;
 
       updateAll(
         params: params,
         data: data,
+        options: options,
       ): boolean;
 
       upsertOne(
@@ -253,6 +276,7 @@ export namespace Layers {
         query: query,
         data: data,
         restrictions: restrictions,
+        options: options,
       ): response;
     }
   }

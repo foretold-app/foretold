@@ -45,13 +45,14 @@ module.exports = (sequelize, DataTypes) => {
     membershipCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
-      get: async function () {
-        const items = await this.getAgents();
-        return items.length;
-      },
+      get: getMembershipCount,
     },
   });
 
+  async function getMembershipCount() {
+    const items = await this.getAgents();
+    return items.length;
+  }
 
   Channel.associate = function associate(models) {
     // Usage:

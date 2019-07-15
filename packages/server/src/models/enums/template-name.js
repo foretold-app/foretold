@@ -1,0 +1,7 @@
+const TEMPLATE_NAME = {
+  MEASURABLE_STATE_IS_CHANGED: 'MEASURABLE_STATE_IS_CHANGED',
+};
+
+module.exports = {
+  TEMPLATE_NAME,
+};

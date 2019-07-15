@@ -57,6 +57,18 @@ const PreferenceModel = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
 
+const TemplateModel = jest.fn().mockImplementation(() => ({
+  ...ModelPostgres,
+}));
+
+const NotificationModel = jest.fn().mockImplementation(() => ({
+  ...ModelPostgres,
+}));
+
+const AgentNotificationModel = jest.fn().mockImplementation(() => ({
+  ...ModelPostgres,
+}));
+
 const Model = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
@@ -72,5 +84,8 @@ module.exports = {
   BotModel,
   TokenModel,
   PreferenceModel,
+  TemplateModel,
+  NotificationModel,
+  AgentNotificationModel,
   Model,
 };

@@ -61,7 +61,7 @@ class AuthenticationData {
    */
   async _byToken(token) {
     try {
-      const agentId = await this.tokens.getAgentIdByToken(token);
+      const agentId = await this.tokens.getAgentIdByAccessToken(token);
       return await this._getContext(agentId);
     } catch (err) {
       throw err;

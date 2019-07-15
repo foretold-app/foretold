@@ -35,8 +35,11 @@ class TokensData extends DataBase {
    * @param {string} tokenIn
    * @return {Promise<null | string>}
    */
-  async getAgentIdByToken(tokenIn) {
-    const token = await this.getToken({ token: tokenIn });
+  async getAgentIdByAccessToken(tokenIn) {
+    const token = await this.getToken({
+      token: tokenIn,
+      type: TOKEN_TYPE.ACCESS_TOKEN
+    });
     if (!token) return null;
     return token.agentId;
   }
@@ -66,7 +69,7 @@ class TokensData extends DataBase {
    */
   async getCreateTokenByAgentId(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
     let token = await this.getToken({ agentId, type });
-    if (!token) token = await this.createAccessToken(agentId, type);
+    if (!token) token = await this.createAccessToken(agentId);
     return token.token;
   }
 

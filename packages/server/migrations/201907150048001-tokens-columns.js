@@ -37,6 +37,7 @@ module.exports = {
       await queryInterface.removeColumn('Tokens', 'expiresAt');
       await queryInterface.removeColumn('Tokens', 'type');
       await queryInterface.removeColumn('Tokens', 'usageCount');
+      await queryInterface.sequelize.query(`DROP TYPE "enum_Tokens_type"`);
       await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {
       console.error('Migration Down Error', e);

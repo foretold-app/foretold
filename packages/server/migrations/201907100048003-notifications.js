@@ -43,6 +43,7 @@ module.exports = {
     try {
       await queryInterface.sequelize.query(`BEGIN`);
       await queryInterface.dropTable('Notifications');
+      await queryInterface.sequelize.query(`DROP TYPE "enum_Notifications_type"`);
       await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {
       console.error('Migration Down Error', e);

@@ -50,7 +50,7 @@ class TokenModel extends ModelPostgres {
     if (token) cond.token = token;
 
     const options = { sort: -1 };
-    return this.model.findOne(cond, options);
+    return this.model.findOne({ where: cond }, options);
   }
 }
 

@@ -4,6 +4,7 @@ const { EmailEnvelopeTemplate } = require('../src/models/classes/templates');
 module.exports = {
   up: async function (queryInterface) {
     try {
+      await queryInterface.sequelize.query(`BEGIN`);
       const envelopeTemplate = new EmailEnvelopeTemplate({
         subject: 'Question "{{ measurable.name }}" is changed',
         body: 'Your question, ' +
@@ -25,8 +26,10 @@ module.exports = {
 
       await queryInterface.bulkUpdate('Templates', values, cond);
 
+      await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {
-      console.error(e);
+      console.error('Migration Up Error', e);
+      await queryInterface.sequelize.query(`ROLLBACK`);
       throw e;
     }
   },

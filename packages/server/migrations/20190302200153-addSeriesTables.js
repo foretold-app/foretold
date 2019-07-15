@@ -1,6 +1,7 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
     try {
+      await queryInterface.sequelize.query(`BEGIN`);
       var ID_TYPE = Sequelize.UUID;
       const ID = {
         allowNull: false,
@@ -57,18 +58,23 @@ module.exports = {
       await queryInterface.addColumn("Measurables", "seriesId",
         referenceTo("Series", true),
       );
+      await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {
       console.error(e);
+      await queryInterface.sequelize.query(`ROLLBACK`);
       throw e;
     }
   },
 
   down: async function (queryInterface) {
     try {
+      await queryInterface.sequelize.query(`BEGIN`);
       await queryInterface.removeColumn("Measurables", "series");
       await queryInterface.dropTable('Series');
+      await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {
       console.error(e);
+      await queryInterface.sequelize.query(`ROLLBACK`);
       throw e;
     }
   }

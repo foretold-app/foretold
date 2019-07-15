@@ -12,6 +12,9 @@ const { Filter } = require('../../data/classes/filter');
 const { Options } = require('../../data/classes/options');
 const { Params } = require('../../data/classes/params');
 
+/**
+ * @todo: Rename into "EmailsConsumer".
+ */
 class Emails extends Consumer {
   constructor() {
     super();

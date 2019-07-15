@@ -3,6 +3,10 @@ const _ = require('lodash')
 
 const data = require('../../data');
 
+/**
+ * Here "consumer" class is a parent class of all another "consumers",
+ * for instance "EmailsConsumer", "PushConsumer" and another ones.
+ */
 class Consumer {
   constructor(options = {}) {
     assert(_.isObject(options), 'Options is not an object');

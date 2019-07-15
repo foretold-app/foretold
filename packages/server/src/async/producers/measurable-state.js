@@ -3,6 +3,9 @@ const _ = require('lodash');
 
 const { Producer } = require('./producer');
 
+/**
+ * @todo: Rename into "MeasurableStateProducer".
+ */
 class MeasurableState extends Producer {
   constructor(measurable = {}) {
     super({});

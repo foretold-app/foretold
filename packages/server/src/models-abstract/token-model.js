@@ -62,7 +62,7 @@ class TokenModel extends ModelPostgres {
    * @return {Promise<boolean>}
    */
   async increaseUsageCount(token, type) {
-    await this.model.increment(['usageCount', '1'], {
+    await this.model.increment(['usageCount'], {
       where: {
         token,
         type,

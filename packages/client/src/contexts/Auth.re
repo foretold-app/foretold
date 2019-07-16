@@ -1,16 +1,19 @@
 type error = string;
 
-module CallbackUrlToAuth0Tokens = {
+module UrlToAuth0Tokens = {
   open Utils;
 
-  // Always use fresh RegExp object
+  // Always use fresh RegExp objects
   let matchAccessToken = () => [%re "/access_token=([^\$&]+)/g"];
   let matchIdToken = () => [%re "/id_token=([^\$&]+)/g"];
 
-  let monthMs = 31.  *.  ( 24. *. 60.0 *. 60. *. 1000. );
-  let currentTimeMs = E.JsDate.make() |> E.JsDate.valueOf;
-  let expiresAtInMs = currentTimeMs +. monthMs;
-  let expiresAt = expiresAtInMs |> Int64.of_float |> Int64.to_string;
+  let expiresAt = {
+      let monthMs = 31.  *.  ( 24. *. 60.0 *. 60. *. 1000. );
+      let currentTimeMs = E.JsDate.make() |> E.JsDate.valueOf;
+      let expiresAtInMs = currentTimeMs +. monthMs;
+
+      expiresAtInMs |> Int64.of_float |> Int64.to_string
+  };
 
   let make = (url: ReasonReact.Router.url) => {
     let accessToken = url.hash |> resolveRegex(matchAccessToken());
@@ -24,10 +27,10 @@ module CallbackUrlToAuth0Tokens = {
   };
 };
 
-module CallbackUrlToTokens = {
+module UrlToTokens = {
   open Utils;
 
-  let matchToken = () => [%re "/token=([^\$&]+)/g"];
+  let matchToken = () => [%re "/authToken=([^\$&]+)/g"];
 
   let make = (url: ReasonReact.Router.url) => {
     let token = url.hash |> resolveRegex(matchToken());

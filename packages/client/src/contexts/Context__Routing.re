@@ -94,7 +94,7 @@ module Route = {
     | ["terms_and_conditions"] => Terms
     | ["login"] => Login
     | ["callback"] =>
-      Auth.CallbackUrlToAuth0Tokens.make(url)
+      Auth.UrlToAuth0Tokens.make(url)
       |> E.O.fmap(Auth0Tokens.set)
       |> E.O.default();
       Redirect;

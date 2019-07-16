@@ -27,20 +27,6 @@ module AppContextProvider =
     let defaultValue = {authToken: None};
   });
 
-//module ThemedButton = {
-//  let component = "ThemedButton" |> ReasonReact.statelessComponent;
-//
-//  let make = _children => {
-//    ...component,
-//    render: _self =>
-//      <AppContextProvider.Consumer>
-//        ...{context =>
-//          <div> {context.authToken |> E.O.default("s") |> Utils.ste} </div>
-//        }
-//      </AppContextProvider.Consumer>,
-//  };
-//};
-
 let make = (componentForRoute, _children) => {
   let component = "App" |> ReasonReact.reducerComponent;
   {
@@ -53,17 +39,12 @@ let make = (componentForRoute, _children) => {
       initUrl |> mapUrlToAction |> self.send;
 
       initUrl
-      |> Auth.CallbackUrlToTokens.make
+      |> Auth.UrlToTokens.make
       |> E.O.fmap((r: Tokens.t) => self.send(ChangeAuthToken(r.token)))
       |> ignore;
 
       let watcherID =
         ReasonReact.Router.watchUrl(url => {
-          url
-          |> Auth.CallbackUrlToTokens.make
-          |> E.O.fmap((r: Tokens.t) => self.send(ChangeAuthToken(r.token)))
-          |> ignore;
-
           url |> mapUrlToAction |> self.send;
           ();
         });

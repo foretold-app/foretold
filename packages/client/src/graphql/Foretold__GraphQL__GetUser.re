@@ -112,7 +112,7 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let inner = (tokens: Auth0Tokens.t, innerComponentFn) => {
+let inner = innerComponentFn => {
   let query = Query.make();
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
@@ -123,18 +123,10 @@ let inner = (tokens: Auth0Tokens.t, innerComponentFn) => {
       e =>
         switch (e) {
         | Success(c) =>
-          innerComponentFn(
-            Context.Me.WithTokensAndUserData({
-              authTokens: tokens,
-              userData: c,
-            }),
-          )
+          innerComponentFn(Context.Me.WithTokensAndUserData({userData: c}))
         | _ =>
           innerComponentFn(
-            Context.Me.WithTokensAndUserLoading({
-              authTokens: tokens,
-              loadingUserData: e,
-            }),
+            Context.Me.WithTokensAndUserLoading({loadingUserData: e}),
           )
         }
     )
@@ -152,13 +144,13 @@ let withLoggedInUserQuery = innerComponentFn => {
         Foretold__GraphQL__Authentication.component(
           Auth0Tokens.make("", "", ""),
           authToken,
-          inner(Auth0Tokens.make("", "", ""), innerComponentFn),
+          inner(innerComponentFn),
         )
       | (_, Some(auth0tokens)) =>
         Foretold__GraphQL__Authentication.component(
           auth0tokens,
           "",
-          inner(auth0tokens, innerComponentFn),
+          inner(innerComponentFn),
         )
       | _ => innerComponentFn(Context.Me.WithoutTokens)
       }

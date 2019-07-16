@@ -80,9 +80,9 @@ let toUser = (a: user) =>
 
 module Query = [%graphql
   {|
-    query user ($auth0Id: String) {
+    query user {
         user:
-          user(auth0Id: $auth0Id)  @bsRecord{
+          user @bsRecord{
             id
             name
             email
@@ -112,8 +112,8 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let inner = (tokens: Auth0Tokens.t, auth0Id: string, innerComponentFn) => {
-  let query = Query.make(~auth0Id, ());
+let inner = (tokens: Auth0Tokens.t, innerComponentFn) => {
+  let query = Query.make();
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
     |> E.HttpResponse.fromApollo
@@ -150,13 +150,10 @@ let logOutIfTokensObsolete = t => {
 let withLoggedInUserQuery = innerComponentFn =>
   Auth0Tokens.make_from_storage()
   |> E.O.fmap(logOutIfTokensObsolete)
-  |> E.O.bind(_, (tokens: Auth0Tokens.t) =>
-       tokens |> Auth0Tokens.auth0Id |> E.O.fmap(auth0Id => (tokens, auth0Id))
-     )
-  |> E.O.fmap(((tokens, auth0Id)) =>
+  |> E.O.fmap((tokens: Auth0Tokens.t) =>
        Foretold__GraphQL__Authentication.component(
          tokens,
-         inner(tokens, auth0Id, innerComponentFn),
+         inner(tokens, innerComponentFn),
        )
      )
   |> E.O.default(innerComponentFn(Context.Me.WithoutTokens));

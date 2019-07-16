@@ -4,13 +4,11 @@ type error = string;
 type access_token = string;
 type id_token = string;
 type expires_at = string;
-type token = string;
 
 type t = {
   access_token,
   id_token,
   expires_at,
-  token,
 };
 
 let jwt = (t: t) => Jwt.make(t.id_token);
@@ -21,7 +19,6 @@ let set = (t: t) => {
   localStorage |> setItem("access_token", t.access_token);
   localStorage |> setItem("id_token", t.id_token);
   localStorage |> setItem("expires_at", t.expires_at);
-  localStorage |> setItem("token", t.token);
   ();
 };
 
@@ -30,7 +27,6 @@ let destroy = () => {
   localStorage |> removeItem("access_token");
   localStorage |> removeItem("id_token");
   localStorage |> removeItem("expires_at");
-  localStorage |> removeItem("token");
   ();
 };
 
@@ -46,21 +42,15 @@ let isObsolete = (t: t) => {
 let make_from_storage = () => {
   open Dom.Storage;
   let get = e => localStorage |> getItem(e);
-  switch (
-    get("access_token"),
-    get("id_token"),
-    get("expires_at"),
-    get("token"),
-  ) {
-  | (Some(a), Some(b), Some(c), Some(d)) =>
-    Some({access_token: a, id_token: b, expires_at: c, token: d})
+  switch (get("access_token"), get("id_token"), get("expires_at")) {
+  | (Some(a), Some(b), Some(c)) =>
+    Some({access_token: a, id_token: b, expires_at: c})
   | _ => None
   };
 };
 
-let make = (access_token, id_token, expires_at, token) => {
+let make = (access_token, id_token, expires_at) => {
   access_token,
   id_token,
   expires_at,
-  token,
 };

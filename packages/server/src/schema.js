@@ -165,6 +165,7 @@ const schema = new graphql.GraphQLSchema({
         args: {
           auth0jwt: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
           auth0accessToken: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          // @todo: rename to "authToken"
           accessToken: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
         resolve: resolvers.authentications.exchangeToken,

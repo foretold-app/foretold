@@ -145,14 +145,23 @@ let inner = (tokens: Auth0Tokens.t, innerComponentFn) => {
 let withLoggedInUserQuery = innerComponentFn => {
   let auth0tokens = Auth0Tokens.make_from_storage();
 
-  auth0tokens |> E.O.fmap(Auth.Actions.logoutIfTokenIsObsolete) |> ignore;
-
-  auth0tokens
-  |> E.O.fmap((auth0tokens: Auth0Tokens.t) =>
-       Foretold__GraphQL__Authentication.component(
-         auth0tokens,
-         inner(auth0tokens, innerComponentFn),
-       )
-     )
-  |> E.O.default(innerComponentFn(Context.Me.WithoutTokens));
+  <App.AppContextProvider.Consumer>
+    ...{context =>
+      switch (context.authToken, auth0tokens) {
+      | (Some(authToken), _) =>
+        Foretold__GraphQL__Authentication.component(
+          Auth0Tokens.make("", "", ""),
+          authToken,
+          inner(Auth0Tokens.make("", "", ""), innerComponentFn),
+        )
+      | (_, Some(auth0tokens)) =>
+        Foretold__GraphQL__Authentication.component(
+          auth0tokens,
+          "",
+          inner(auth0tokens, innerComponentFn),
+        )
+      | _ => innerComponentFn(Context.Me.WithoutTokens)
+      }
+    }
+  </App.AppContextProvider.Consumer>;
 };

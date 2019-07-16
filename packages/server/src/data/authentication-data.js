@@ -61,7 +61,7 @@ class AuthenticationData {
    */
   async _byToken(token) {
     try {
-      const agentId = await this.tokens.getAgentIdByAccessToken(token);
+      const agentId = await this.tokens.getAgentId(token);
       return await this._getContext(agentId);
     } catch (err) {
       throw err;
@@ -71,7 +71,7 @@ class AuthenticationData {
   /**
    * @protected
    * @param {Models.ObjectID} agentId
-   * @return {Promise<{agent: Models.Agent, creator: *, bot, user}>}
+   * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
    */
   async _getContext(agentId) {
     if (!agentId) throw new AuthenticationData.NoAgentIdError;

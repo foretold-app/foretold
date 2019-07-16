@@ -68,7 +68,7 @@ async function _exchangeAuthToken(root, args, context, info) {
  */
 async function getTokenByAgentId(root, args, context, info) {
   const agentId = _.get(root, 'agentId');
-  return data.tokens.getCreateTokenByAgentId(agentId);
+  return data.tokens.getCreate(agentId);
 }
 
 module.exports = {

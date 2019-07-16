@@ -31,13 +31,11 @@ class TokensData extends DataBase {
 
   /**
    * @param {string} tokenIn
+   * @param {string} [type]
    * @return {Promise<null | string>}
    */
-  async getAgentIdByAccessToken(tokenIn) {
-    const token = await this._getToken({
-      token: tokenIn,
-      type: TOKEN_TYPE.ACCESS_TOKEN
-    });
+  async getAgentId(tokenIn, type = TOKEN_TYPE.ACCESS_TOKEN) {
+    const token = await this._getToken({ type, token: tokenIn });
     if (!token) return null;
     return token.agentId;
   }
@@ -49,14 +47,14 @@ class TokensData extends DataBase {
    * @param {string} [type]
    * @return {Promise<string>}
    */
-  async revokeTokensGetTokenByAgentId(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
+  async revokeGet(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
     await this.model.updateAll({
       type,
       agentId,
     }, {
       isActive: false,
     });
-    return this.getCreateTokenByAgentId(agentId, type);
+    return this.getCreate(agentId, type);
   }
 
   /**
@@ -65,9 +63,9 @@ class TokensData extends DataBase {
    * @param {string} [type]
    * @return {Promise<string>}
    */
-  async getCreateTokenByAgentId(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
+  async getCreate(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
     let token = await this._getToken({ agentId, type });
-    if (!token) token = await this.createAccessToken(agentId);
+    if (!token) token = await this._createToken(agentId, type);
     return token.token;
   }
 
@@ -78,15 +76,6 @@ class TokensData extends DataBase {
   async getAuthToken(token) {
     const type = TOKEN_TYPE.AUTH_TOKEN;
     return this._getToken({ token, type });
-  }
-
-  /**
-   * @public
-   * @param {Models.ObjectID} agentId
-   * @return {Promise<Models.Token>}
-   */
-  async createAccessToken(agentId) {
-    return this._createToken(agentId);
   }
 
   /**

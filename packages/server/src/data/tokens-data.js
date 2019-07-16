@@ -16,8 +16,6 @@ class TokensData extends DataBase {
   constructor() {
     super();
     this.model = new TokenModel();
-    this.MAX_BOT_TOKEN_SIZE = config.MAX_BOT_TOKEN_SIZE;
-    this.MAX_BOT_TOKEN_SIZE_INCOMING = this.MAX_BOT_TOKEN_SIZE * 2;
   }
 
   /**
@@ -26,7 +24,7 @@ class TokensData extends DataBase {
    * @return {boolean}
    */
   validate(token = '') {
-    const length = token.length === this.MAX_BOT_TOKEN_SIZE_INCOMING;
+    const length = token.length === TokensData.MAX_BOT_TOKEN_SIZE_INCOMING;
     const pattern = /^([0-9a-z]+)$/.test(token);
     return length && pattern;
   }
@@ -36,7 +34,7 @@ class TokensData extends DataBase {
    * @return {Promise<null | string>}
    */
   async getAgentIdByAccessToken(tokenIn) {
-    const token = await this.getToken({
+    const token = await this._getToken({
       token: tokenIn,
       type: TOKEN_TYPE.ACCESS_TOKEN
     });
@@ -68,31 +66,31 @@ class TokensData extends DataBase {
    * @return {Promise<string>}
    */
   async getCreateTokenByAgentId(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
-    let token = await this.getToken({ agentId, type });
+    let token = await this._getToken({ agentId, type });
     if (!token) token = await this.createAccessToken(agentId);
     return token.token;
   }
 
   /**
-   * @param {Models.ObjectID} [agentId]
    * @param {string} [token]
-   * @param {string} [type]
-   * @param {number} [usageCount]
    * @return {Promise<Models.Token>}
    */
-  async getToken({ agentId, token, type, usageCount }) {
-    return this.model.getToken({ agentId, token, type, usageCount });
+  async getAuthToken(token) {
+    const type = TOKEN_TYPE.AUTH_TOKEN;
+    return this._getToken({ token, type });
   }
 
   /**
+   * @public
    * @param {Models.ObjectID} agentId
    * @return {Promise<Models.Token>}
    */
   async createAccessToken(agentId) {
-    return this.createToken(agentId);
+    return this._createToken(agentId);
   }
 
   /**
+   * @public
    * @param {Models.ObjectID} agentId
    * @return {Promise<Models.Token>}
    */
@@ -100,17 +98,40 @@ class TokensData extends DataBase {
     const type = TOKEN_TYPE.AUTH_TOKEN;
     const expiresAt = moment.utc().add(3, 'days').toDate();
     const usageCount = 0;
-    return this.createToken(agentId, type, expiresAt, usageCount);
+    return this._createToken(agentId, type, expiresAt, usageCount);
   }
 
   /**
+   * @public
+   * @param {string} [token]
+   * @param {string} [type]
+   * @return {Promise<*>}
+   */
+  async increaseUsageCount(token, type = TOKEN_TYPE.AUTH_TOKEN) {
+    return this.model.increaseUsageCount(token, type);
+  }
+
+  /**
+   * @protected
+   * @param {Models.ObjectID} [agentId]
+   * @param {string} [token]
+   * @param {string} [type]
+   * @param {number} [usageCount]
+   * @return {Promise<Models.Token>}
+   */
+  async _getToken({ agentId, token, type, usageCount }) {
+    return this.model.getToken({ agentId, token, type, usageCount });
+  }
+
+  /**
+   * @protected
    * @param {Models.ObjectID} agentId
    * @param {string} [type]
    * @param {Date | null} [expiresAt]
    * @param {number | null} [usageCount]
    * @return {Promise<Models.Token>}
    */
-  async createToken(
+  async _createToken(
     agentId,
     type = TOKEN_TYPE.ACCESS_TOKEN,
     expiresAt = null,
@@ -121,7 +142,7 @@ class TokensData extends DataBase {
       agentId,
       expiresAt,
       usageCount,
-      token: this._getToken(),
+      token: this._generateToken(),
       isActive: true,
     });
   }
@@ -130,10 +151,13 @@ class TokensData extends DataBase {
    * @protected
    * @return {string}
    */
-  _getToken() {
-    return crypto.randomBytes(this.MAX_BOT_TOKEN_SIZE).toString('hex');
+  _generateToken() {
+    return crypto.randomBytes(TokensData.MAX_BOT_TOKEN_SIZE).toString('hex');
   }
 }
+
+TokensData.MAX_BOT_TOKEN_SIZE = config.MAX_BOT_TOKEN_SIZE;
+TokensData.MAX_BOT_TOKEN_SIZE_INCOMING = TokensData.MAX_BOT_TOKEN_SIZE * 2;
 
 module.exports = {
   TokensData,

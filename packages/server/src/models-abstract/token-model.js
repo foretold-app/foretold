@@ -26,11 +26,14 @@ class TokenModel extends ModelPostgres {
    */
   async getToken({ agentId, token, type, usageCount }) {
     type = type || TOKEN_TYPE.ACCESS_TOKEN;
-    usageCount = usageCount || 3;
+    usageCount = usageCount || TokenModel.MAX_USAGE_COUNT;
 
     const cond = {
       [this.and]: [
-        { type, isActive: true, },
+        {
+          type,
+          isActive: true,
+        },
         {
           [this.or]: [
             { expiresAt: null },
@@ -52,7 +55,27 @@ class TokenModel extends ModelPostgres {
     const options = { sort: -1 };
     return this.model.findOne({ where: cond }, options);
   }
+
+  /**
+   * @param {string} [token]
+   * @param {string} [type]
+   * @return {Promise<boolean>}
+   */
+  async increaseUsageCount(token, type) {
+    await this.model.increment(['usageCount', '1'], {
+      where: {
+        token,
+        type,
+        usageCount: {
+          [this.not]: null,
+        },
+      },
+    });
+    return true;
+  }
 }
+
+TokenModel.MAX_USAGE_COUNT = 3;
 
 module.exports = {
   TokenModel,

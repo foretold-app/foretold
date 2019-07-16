@@ -113,6 +113,23 @@ class AuthenticationData {
     }
   }
 
+  /**
+   * @public
+   * @param {string} authToken
+   * @return {Promise<string>}
+   */
+  async exchangeAuthToken(authToken) {
+    try {
+      const token = await this.tokens.getAuthToken(authToken);
+      if (!token) throw new AuthenticationData.NotAuthenticatedError;
+      await this.tokens.increaseUsageCount(authToken);
+      const agentId = token.agentId;
+      return this.Jwt.encodeJWT({}, agentId);
+    } catch (err) {
+      throw err;
+    }
+  }
+
 }
 
 AuthenticationData.NoUserIdError = class NoUserIdError extends Error {

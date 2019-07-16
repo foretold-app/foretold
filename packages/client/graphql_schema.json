@@ -5584,16 +5584,6 @@
                 "ofType": null
               },
               "defaultValue": null
-            },
-            {
-              "name": "state",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "measurableState",
-                "ofType": null
-              },
-              "defaultValue": null
             }
           ],
           "interfaces": null,

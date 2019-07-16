@@ -22,8 +22,8 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 let redirectingMessage =
   <h3> {"You are being redirected..." |> Utils.ste} </h3>;
 
-let component = (auth0Tokens: Context.Auth.Auth0Tokens.t, _innerComponent) =>
-  switch (Context.Auth.ServerJwt.make_from_storage()) {
+let component = (auth0Tokens: Auth0Tokens.t, _innerComponent) =>
+  switch (ServerJwt.make_from_storage()) {
   | Some(_) => _innerComponent
   | None =>
     let query =
@@ -40,7 +40,7 @@ let component = (auth0Tokens: Context.Auth.Auth0Tokens.t, _innerComponent) =>
         e =>
           switch (e) {
           | Success(c) =>
-            Context.Auth.ServerJwt.set(c);
+            ServerJwt.set(c);
             reload();
             _innerComponent;
           | _ => redirectingMessage

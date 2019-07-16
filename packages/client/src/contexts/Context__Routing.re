@@ -95,7 +95,7 @@ module Route = {
     | ["login"] => Login
     | ["callback"] =>
       Context__Auth.CallbackUrlToAuth0Tokens.make(url)
-      |> E.O.fmap(Context__Auth.Auth0Tokens.set)
+      |> E.O.fmap(Auth0Tokens.set)
       |> E.O.default();
       Redirect;
     | ["redirect"] => Redirect

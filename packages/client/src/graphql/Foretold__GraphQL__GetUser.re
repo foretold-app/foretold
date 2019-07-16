@@ -143,7 +143,7 @@ let inner = (tokens: Auth0Tokens.t, auth0Id: string, innerComponentFn) => {
 };
 
 let logOutIfTokensObsolete = t => {
-  Context.Auth.Actions.logoutIfTokenIsObsolete(t);
+  Auth.Actions.logoutIfTokenIsObsolete(t);
   t;
 };
 

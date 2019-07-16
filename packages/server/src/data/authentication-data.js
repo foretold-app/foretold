@@ -115,6 +115,8 @@ class AuthenticationData {
 
   /**
    * @public
+   * @todo: To figure out why "NotAuthenticatedError" is not being passed
+   * @todo: and is showed as internal error.
    * @param {string} authToken
    * @return {Promise<string>}
    */

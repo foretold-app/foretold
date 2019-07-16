@@ -80,9 +80,9 @@ let toUser = (a: user) =>
 
 module Query = [%graphql
   {|
-    query user {
+    query user ($auth0Id: String) {
         user:
-          user @bsRecord{
+          user(auth0Id: $auth0Id)  @bsRecord{
             id
             name
             email
@@ -142,18 +142,17 @@ let inner = (tokens: Auth0Tokens.t, innerComponentFn) => {
   |> E.React.el;
 };
 
-let logOutIfTokensObsolete = t => {
-  Auth.Actions.logoutIfTokenIsObsolete(t);
-  t;
-};
+let withLoggedInUserQuery = innerComponentFn => {
+  let auth0tokens = Auth0Tokens.make_from_storage();
 
-let withLoggedInUserQuery = innerComponentFn =>
-  Auth0Tokens.make_from_storage()
-  |> E.O.fmap(logOutIfTokensObsolete)
-  |> E.O.fmap((tokens: Auth0Tokens.t) =>
+  auth0tokens |> E.O.fmap(Auth.Actions.logoutIfTokenIsObsolete) |> ignore;
+
+  auth0tokens
+  |> E.O.fmap((auth0tokens: Auth0Tokens.t) =>
        Foretold__GraphQL__Authentication.component(
-         tokens,
-         inner(tokens, innerComponentFn),
+         auth0tokens,
+         inner(auth0tokens, innerComponentFn),
        )
      )
   |> E.O.default(innerComponentFn(Context.Me.WithoutTokens));
+};

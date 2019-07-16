@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(127),
       allowNull: false,
     },
+    // add "type" enum column (email, push etc)
     envelopeTemplate: {
       type: DataTypes.JSON,
       allowNull: false,

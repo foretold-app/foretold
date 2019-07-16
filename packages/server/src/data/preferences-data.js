@@ -14,6 +14,16 @@ class PreferencesData extends DataBase {
     this.model = this.PreferenceModel;
   }
 
+  /**
+   * @param {string} agentId
+   * @return {Promise<*>}
+   */
+  async getOneByAgentId(agentId) {
+    const params = { agentId };
+    const query = {};
+    const data = { agentId };
+    return this.upsertOne(params, query, data);
+  }
 }
 
 module.exports = {

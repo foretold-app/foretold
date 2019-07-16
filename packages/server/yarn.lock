@@ -471,6 +471,11 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/bluebird@*":
+  version "3.5.27"
+  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.27.tgz#61eb4d75dc6bfbce51cf49ee9bbebe941b2cb5d0"
+  integrity sha512-6BmYWSBea18+tSjjSC3QIyV93ZKAeNWGM7R6aYt1ryTZXrlHF+QLV0G2yV0viEGVyRkyQsWfMoJ0k/YghBX5sQ==
+
 "@types/body-parser@*", "@types/body-parser@1.17.0":
   version "1.17.0"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.17.0.tgz#9f5c9d9bd04bb54be32d5eb9fc0d8c974e6cf58c"
@@ -483,6 +488,13 @@
   version "3.4.32"
   resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.32.tgz#aa0e9616b9435ccad02bc52b5b454ffc2c70ba28"
   integrity sha512-4r8qa0quOvh7lGD0pre62CAb1oni1OO6ecJLGCezTmhQ8Fz50Arx9RUszryR8KlgK6avuSXvviL6yWyViQABOg==
+  dependencies:
+    "@types/node" "*"
+
+"@types/continuation-local-storage@*":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@types/continuation-local-storage/-/continuation-local-storage-3.2.1.tgz#a33e0df9dce9b424d1c98fc4fdebd8578dceec7e"
+  integrity sha1-oz4N+dzptCTRyY/E/evYV43O7H4=
   dependencies:
     "@types/node" "*"
 
@@ -525,6 +537,15 @@
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
 
+"@types/express@^4.17.0":
+  version "4.17.0"
+  resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.0.tgz#49eaedb209582a86f12ed9b725160f12d04ef287"
+  integrity sha512-CjaMu57cjgjuZbh9DpkloeGxV45CnMGlVd+XpG7Gm9QgVrd7KFq+X4HY0vM+2v0bczS48Wg7bvnMY5TN+Xmcfw==
+  dependencies:
+    "@types/body-parser" "*"
+    "@types/express-serve-static-core" "*"
+    "@types/serve-static" "*"
+
 "@types/form-data@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@types/form-data/-/form-data-2.2.1.tgz#ee2b3b8eaa11c0938289953606b745b738c54b1e"
@@ -559,6 +580,11 @@
     "@types/istanbul-lib-coverage" "*"
     "@types/istanbul-lib-report" "*"
 
+"@types/lodash@*", "@types/lodash@^4.14.136":
+  version "4.14.136"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.136.tgz#413e85089046b865d960c9ff1d400e04c31ab60f"
+  integrity sha512-0GJhzBdvsW2RUccNHOBkabI8HZVdOXmXbXhuKlDEd5Vv12P7oAVGfomGp3Ne21o5D/qu1WmthlNKFaoZJJeErA==
+
 "@types/long@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/long/-/long-4.0.0.tgz#719551d2352d301ac8b81db732acb6bdc28dbdef"
@@ -568,6 +594,13 @@
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.0.tgz#5a7306e367c539b9f6543499de8dd519fac37a8b"
   integrity sha512-A2TAGbTFdBw9azHbpVd+/FkdW2T6msN1uct1O9bH3vTerEHKZhTXJUQXy+hNq1B0RagfU8U+KBdqiZpxjhOUQA==
+
+"@types/moment@^2.13.0":
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/@types/moment/-/moment-2.13.0.tgz#604ebd189bc3bc34a1548689404e61a2a4aac896"
+  integrity sha1-YE69GJvDvDShVIaJQE5hoqSqyJY=
+  dependencies:
+    moment "*"
 
 "@types/node@*", "@types/node@^10.1.0":
   version "10.11.4"
@@ -579,10 +612,22 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.7.tgz#4f2563bad652b2acb1722d7e7aae2b0ff62d192c"
   integrity sha512-1YKeT4JitGgE4SOzyB9eMwO0nGVNkNEsm9qlIt1Lqm/tG2QEiSMTD4kS3aO6L+w5SClLVxALmIBESK6Mk5wX0A==
 
+"@types/node@^12.6.2":
+  version "12.6.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.6.2.tgz#a5ccec6abb6060d5f20d256fb03ed743e9774999"
+  integrity sha512-gojym4tX0FWeV2gsW4Xmzo5wxGjXGm550oVUII7f7G5o4BV6c7DBdiG1RRQd+y1bvqRyYtPfMK85UM95vsapqQ==
+
 "@types/node@^8.0.7":
   version "8.10.50"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.50.tgz#f3d68482b1f54b5f4fba8daaac385db12bb6a706"
   integrity sha512-+ZbcUwJdaBgOZpwXeT0v+gHC/jQbEfzoc9s4d0rN0JIKeQbuTrT+A2n1aQY6LpZjrLXJT7avVUqiCecCJeeZxA==
+
+"@types/nodemailer@^6.2.0":
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/@types/nodemailer/-/nodemailer-6.2.0.tgz#369d3c6ff51201670f3e5469b00c1d204ec8f894"
+  integrity sha512-WGGEk/BGRLuYF3gyoTwbtKg5tCexZzb5lkTsis2k7GkAzlg4x2299/SC6Ssdj3X/5TzT1BHVc8zcFg/7KSzBLw==
+  dependencies:
+    "@types/node" "*"
 
 "@types/p-queue@^2.3.2":
   version "2.3.2"
@@ -599,6 +644,16 @@
   resolved "https://registry.yarnpkg.com/@types/retry/-/retry-0.12.0.tgz#2b35eccfcee7d38cd72ad99232fbd58bffb3c84d"
   integrity sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==
 
+"@types/sequelize@^4.28.3":
+  version "4.28.3"
+  resolved "https://registry.yarnpkg.com/@types/sequelize/-/sequelize-4.28.3.tgz#c393bf3cbfea2e18786ce43267e5921d91e27d4e"
+  integrity sha512-Z+gbWsLmGnqnAz91I8Wtfbe+4D1aUyQ4aawYfohpvar4Azr8aSNwzS1rFQYO2dk6zcClt5k9n0qCek/YAq4WNw==
+  dependencies:
+    "@types/bluebird" "*"
+    "@types/continuation-local-storage" "*"
+    "@types/lodash" "*"
+    "@types/validator" "*"
+
 "@types/serve-static@*":
   version "1.13.2"
   resolved "https://registry.yarnpkg.com/@types/serve-static/-/serve-static-1.13.2.tgz#f5ac4d7a6420a99a6a45af4719f4dcd8cd907a48"
@@ -611,6 +666,11 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
   integrity sha512-l42BggppR6zLmpfU6fq9HEa2oGPEI8yrSPL3GITjfRInppYFahObbIQOQK3UGxEnyQpltZLaPe75046NOZQikw==
+
+"@types/validator@*":
+  version "10.11.1"
+  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-10.11.1.tgz#76e983ce155261838463b73728856cf8bc628d53"
+  integrity sha512-bVhLqvb+5xUNWRFnuuecRVISTvsG6AdhrB2kb/tChgtuTTqARqlQ3rLhOPy8cINZEUB8PkR+goyWF6fWxg4iSw==
 
 "@types/ws@^5.1.1":
   version "5.1.2"
@@ -4905,15 +4965,15 @@ moment-timezone@^0.5.21, moment-timezone@^0.5.23:
   dependencies:
     moment ">= 2.9.0"
 
+moment@*, moment@^2.24.0:
+  version "2.24.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+  integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
+
 "moment@>= 2.9.0":
   version "2.22.2"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
   integrity sha1-PCV/mDn8DpP/UxSWMiOeuQeD/2Y=
-
-moment@^2.24.0:
-  version "2.24.0"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
-  integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
 
 ms@0.7.2:
   version "0.7.2"
@@ -4929,6 +4989,11 @@ ms@2.1.1, ms@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
   integrity sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
+
+mustache@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/mustache/-/mustache-3.0.1.tgz#873855f23aa8a95b150fb96d9836edbc5a1d248a"
+  integrity sha512-jFI/4UVRsRYdUbuDTKT7KzfOp7FiD5WzYmmwNwXyUVypC0xjoTL78Fqc0jHUPIvvGD+6DQSPHIt1NE7D1ArsqA==
 
 mute-stream@0.0.7:
   version "0.0.7"
@@ -5076,6 +5141,11 @@ node-schedule@^1.3.2:
     cron-parser "^2.7.3"
     long-timeout "0.1.1"
     sorted-array-functions "^1.0.0"
+
+nodemailer@^6.2.1:
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.2.1.tgz#20d773925eb8f7a06166a0b62c751dc8290429f3"
+  integrity sha512-TagB7iuIi9uyNgHExo8lUDq3VK5/B0BpbkcjIgNvxbtVrjNqq0DwAOTuzALPVkK76kMhTSzIgHqg8X1uklVs6g==
 
 nodemon@^1.19.1:
   version "1.19.1"

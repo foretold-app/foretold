@@ -4,6 +4,7 @@ const events = require('./events');
 const measurables = require('./measurables');
 const producers = require('./producers');
 const consumers = require('./consumers');
+const { Mailer } = require('./mailer');
 
 async function toJudgementPendingTransition() {
   const name = 'Job::toJudgementPendingTransition';
@@ -35,8 +36,8 @@ async function measurableState(measurableInstance) {
   return true;
 }
 
-async function sendEmails() {
-  const name = '\x1b[35mJob::sendEmails\x1b[0m';
+async function emailConsumer() {
+  const name = '\x1b[35mJob::emailConsumer\x1b[0m';
   console.log(name);
 
   try {
@@ -50,10 +51,25 @@ async function sendEmails() {
   return true;
 }
 
+async function mailer(envelop = {}) {
+  const name = '\x1b[35mJob::mailer\x1b[0m';
+  console.log(name);
+
+  try {
+    const result = await new Mailer(envelop).main();
+    console.log(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
 function runListeners() {
   try {
     emitter.on(events.EVERY_HOUR, toJudgementPendingTransition);
-    emitter.on(events.EVERY_TEN_MINUTES, sendEmails);
+    emitter.on(events.EVERY_MINUTE, emailConsumer);
+    emitter.on(events.MAIL, mailer);
     emitter.on(events.MEASURABLE_STATE_IS_CHANGED, measurableState);
   } catch (e) {
     console.error('Listener error', e);

@@ -25,15 +25,52 @@ class Producer {
     this.templateName = TEMPLATE_NAME.MEASURABLE_STATE_IS_CHANGED;
   }
 
+  /**
+   * @param {object} agent
+   * @param {object} replacements
+   * @return {Promise<*>}
+   * @protected
+   */
+  async _queueEmail(agent, replacements) {
+    const template = await this._getTemplate();
+    assert(!!_.get(template, 'id'), 'Template ID is required');
+    assert(!!_.get(template, 'envelopeTemplate'), 'Envelope Template ID is required');
+
+    const emailEnvelope = new this.EmailEnvelope(template.envelopeTemplate);
+    const emailEnvelope$ = emailEnvelope.mutate(replacements);
+    const notification = await this._createEmailNotification(emailEnvelope$);
+    assert(!!_.get(notification, 'id'), 'Notification ID is required');
+
+    const assignment = await this._assignNotification(agent.id, notification.id);
+    assert(!!_.get(assignment, 'id'), 'Assignment ID is required');
+
+    return assignment;
+  }
+
+  /**
+   * @return {Promise<void>}
+   * @protected
+   */
   async _getTemplate() {
     const params = { name: this.templateName };
     return this.data.templates.getOne(params);
   }
 
+  /**
+   * @param emailEnvelope
+   * @return {Promise<*>}
+   * @protected
+   */
   async _createEmailNotification(emailEnvelope) {
     return this._createNotification(emailEnvelope);
   }
 
+  /**
+   * @param envelope
+   * @param type
+   * @return {Promise<*>}
+   * @protected
+   */
   async _createNotification(
     envelope = new this.EmailEnvelope(),
     type = this.NOTIFICATION_TYPE.EMAIL,
@@ -43,24 +80,15 @@ class Producer {
     return this.data.notifications.createOne(data);
   }
 
+  /**
+   * @param {string} agentId
+   * @param {string} notificationId
+   * @return {Promise<*>}
+   * @protected
+   */
   async _assignNotification(agentId, notificationId) {
     const data = { agentId, notificationId };
     return this.data.agentNotifications.createOne(data);
-  }
-
-  async _queueEmail(agent) {
-    const template = await this._getTemplate();
-    assert(!!_.get(template, 'id'), 'Template ID is required');
-    assert(!!_.get(template, 'envelopeTemplate'), 'Envelope Template ID is required');
-
-    const emailEnvelope = new this.EmailEnvelope(template.envelopeTemplate);
-    const notification = await this._createEmailNotification(emailEnvelope);
-    assert(!!_.get(notification, 'id'), 'Notification ID is required');
-
-    const assignment = await this._assignNotification(agent.id, notification.id);
-    assert(!!_.get(assignment, 'id'), 'Assignment ID is required');
-
-    return assignment;
   }
 }
 

@@ -7,6 +7,9 @@ class Reducer {
     this.data = data;
   }
 
+  /**
+   * @return {Promise<boolean>}
+   */
   async toJudgementPending() {
     const measurables = await this.data.measurables.needsToBePending();
 

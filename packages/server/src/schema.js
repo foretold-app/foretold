@@ -167,7 +167,7 @@ const schema = new graphql.GraphQLSchema({
           auth0accessToken: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
           accessToken: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
-        resolve: resolvers.authentications.authentication,
+        resolve: resolvers.authentications.exchangeToken,
       },
     }
   }),

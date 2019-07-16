@@ -12,7 +12,7 @@ const data = require('../data');
  * @param {object} info
  * @returns {Promise<{jwt: string}>}
  */
-async function authentication(root, args, context, info) {
+async function exchangeToken(root, args, context, info) {
   const auth0jwt = _.get(args, 'auth0jwt');
   const auth0accessToken = _.get(args, 'auth0accessToken');
 
@@ -72,6 +72,6 @@ async function getTokenByAgentId(root, args, context, info) {
 }
 
 module.exports = {
-  authentication,
+  exchangeToken,
   getTokenByAgentId,
 };

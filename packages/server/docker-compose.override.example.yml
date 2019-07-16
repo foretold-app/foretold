@@ -16,7 +16,7 @@ services:
       - SMTP_PORT=465
       - SMTP_USER=user@host.com
       - SMTP_PASS=pass
-      - SMTP_FROM="User <user@host.com>"
+      - SMTP_FROM=User <user@host.com>
 
   database:
     environment:

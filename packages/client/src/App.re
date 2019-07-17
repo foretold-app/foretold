@@ -31,6 +31,7 @@ let tokenToState = (url: ReasonReact.Router.url, send) => {
 };
 
 let component = "App" |> ReasonReact.reducerComponent;
+let appApolloClient = AppApolloClient.instance();
 
 let make = _children => {
   ...component,
@@ -53,8 +54,10 @@ let make = _children => {
     let state: state = self.state;
     let value: Providers.appContext = {authToken: state.authToken};
 
-    <Providers.AppContext.Provider value>
-      {Layout.make(self.state.route)}
-    </Providers.AppContext.Provider>;
+    <ReasonApollo.Provider client=appApolloClient>
+      <Providers.AppContext.Provider value>
+        {Layout.make(self.state.route)}
+      </Providers.AppContext.Provider>
+    </ReasonApollo.Provider>;
   },
 };

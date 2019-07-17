@@ -1,5 +1,3 @@
-type error = string;
-
 module UrlToAuth0Tokens = {
   open Utils;
 
@@ -28,17 +26,13 @@ module UrlToAuth0Tokens = {
 };
 
 module UrlToTokens = {
-  open Utils;
+  let make = (url: ReasonReact.Router.url): option(string) => {
+    let keyValuePairs = url.hash |> KeyValuePairs.fromSearchParam;
 
-  let matchToken = () => [%re "/authToken=([^\$&]+)/g"];
-
-  let make = (url: ReasonReact.Router.url) => {
-    let token = url.hash |> resolveRegex(matchToken());
-
-    switch (token) {
-    | "" => None
-    | _ => Some(Tokens.make(token))
-    }
+    switch (keyValuePairs |> KeyValuePairs.get("token")) {
+      | Some(s) => Some(s)
+      | _ => None
+    };
   };
 };
 

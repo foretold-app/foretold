@@ -1,5 +1,4 @@
 open Rationale.Function.Infix;
-type error = string;
 
 type access_token = string;
 type id_token = string;

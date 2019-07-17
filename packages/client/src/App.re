@@ -40,7 +40,7 @@ let make = (componentForRoute, _children) => {
 
       initUrl
       |> Auth.UrlToTokens.make
-      |> E.O.fmap((r: Tokens.t) => self.send(ChangeAuthToken(r.token)))
+      |> E.O.fmap((token: string) => self.send(ChangeAuthToken(token)))
       |> ignore;
 
       let watcherID =

@@ -1,5 +1,3 @@
-type error = string;
-
 type logoutType = {
   .
   "clientId": string,

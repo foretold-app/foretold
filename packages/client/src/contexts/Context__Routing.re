@@ -25,7 +25,7 @@ module ChannelPage = {
 
   module SubPage = {
     type t =
-      | Measurables(Context__QueryParams.MeasurableIndex.query)
+      | Measurables(MeasurableQueryIndex.query)
       | Measurable(string)
       | NewMeasurable
       | Members
@@ -115,8 +115,7 @@ module Route = {
         channelId: getChannelId(channelId),
         subPage:
           Measurables(
-            url.search
-            |> Context__QueryParams.MeasurableIndex.fromStringWithDefaults,
+            url.search |> MeasurableQueryIndex.fromStringWithDefaults,
           ),
       })
     | ["c", channelId, "m", measurableId] =>

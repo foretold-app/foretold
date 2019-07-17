@@ -1,7 +1,10 @@
 let instance = AppApolloClient.instance();
 
 FC.Base.Globals.load();
-Layout.make
-|> E.React.takeParameterFrom(App.make)
-|> E.React.withParent(ReasonApollo.Provider.make(~client=instance))
-|> ReactDOMRe.renderToElementWithId(_, "app");
+
+let app =
+  App.make(Layout.make, ReasonReact.null)
+  |> ReasonReact.element(~key="")
+  |> E.React.withParent(ReasonApollo.Provider.make(~client=instance));
+
+ReactDOMRe.renderToElementWithId(app, "app");

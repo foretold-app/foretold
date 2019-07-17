@@ -108,9 +108,7 @@ let formCreation =
           ~form=MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange),
           ~onSuccess=
             _ => {
-              Context.Routing.Url.push(
-                MeasurableShow(measurable.channelId, id),
-              );
+              Routing.Url.push(MeasurableShow(measurable.channelId, id));
               ReasonReact.null;
             },
           (),

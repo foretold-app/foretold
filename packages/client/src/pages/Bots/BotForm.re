@@ -57,7 +57,7 @@ let withForm = (onSubmit, bot: option(Primary.Bot.t), innerComponentFn) => {
 
 let onSuccess = (loggedInUser: Primary.User.t, ()) => {
   Primary.User.getAgent(loggedInUser, agent =>
-    Context.Routing.Url.push(Agent({agentId: agent.id, subPage: AgentBots}))
+    Routing.Url.push(Agent({agentId: agent.id, subPage: AgentBots}))
   );
   ReasonReact.null;
 };

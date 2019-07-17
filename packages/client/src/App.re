@@ -1,4 +1,4 @@
-open Context.Routing;
+open Routing;
 
 type state = {
   route: Route.t,

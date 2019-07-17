@@ -2,16 +2,16 @@ let component = ReasonReact.statelessComponent("Link");
 
 type linkType =
   | Action(ReactEvent.Mouse.t => unit)
-  | Internal(Context.Routing.Url.t)
+  | Internal(Routing.Url.t)
   | Relative(string)
   | External(string);
 
 module LinkType = {
   type t = linkType;
 
-  let toString = t: string =>
+  let toString = (t): string =>
     switch (t) {
-    | Internal(r) => r |> Context.Routing.Url.toString
+    | Internal(r) => r |> Routing.Url.toString
     | External(s) => s
     | Relative(s) => s
     | Action(_) => "#"

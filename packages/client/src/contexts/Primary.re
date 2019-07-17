@@ -307,11 +307,10 @@ module Preference = {
 
 module Channel = {
   type t = Types.channel;
-  let showLink = (channel: t) =>
-    Context__Routing.Url.ChannelShow(channel.id);
-  let globalLink = () => Context__Routing.Url.ChannelShow("home");
-  let showUrl = showLink ||> Context__Routing.Url.toString;
-  let showPush = showLink ||> Context__Routing.Url.push;
+  let showLink = (channel: t) => Routing.Url.ChannelShow(channel.id);
+  let globalLink = () => Routing.Url.ChannelShow("home");
+  let showUrl = showLink ||> Routing.Url.toString;
+  let showPush = showLink ||> Routing.Url.push;
 
   module Styles = {
     open Css;

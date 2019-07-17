@@ -1,7 +1,7 @@
 type measurable = Primary.Measurable.t;
 let graph = Data.make;
 
-let itemUrl = id => Context.Routing.Url.toString(EntityShow(id));
+let itemUrl = id => Routing.Url.toString(EntityShow(id));
 
 let findName = propertyId =>
   graph

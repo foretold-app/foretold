@@ -26,19 +26,15 @@ module SeriesCards = {
 
   let make = (channelId, list: ts) =>
     <div className=Styles.items>
-      {
-        list
-        |> E.A.fmapi((i, x: t) =>
-             <div
-               key={i |> string_of_int}
-               className=Styles.itemPositioning
-               onClick={
-                 _e => Context.Routing.Url.push(SeriesShow(channelId, x.id))
-               }>
-               <Foretold__Components__Series.Card series=x />
-             </div>
-           )
-        |> ReasonReact.array
-      }
+      {list
+       |> E.A.fmapi((i, x: t) =>
+            <div
+              key={i |> string_of_int}
+              className=Styles.itemPositioning
+              onClick={_e => Routing.Url.push(SeriesShow(channelId, x.id))}>
+              <Foretold__Components__Series.Card series=x />
+            </div>
+          )
+       |> ReasonReact.array}
     </div>;
 };

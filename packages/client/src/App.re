@@ -34,6 +34,7 @@ let tokenToState = (url: ReasonReact.Router.url, send) => {
   | Some(s) =>
     KeyValuePairs.clearHash(url, "token") |> ReasonReact.Router.replace;
     send(ChangeAuthToken(s));
+  | _ => ()
   };
 };
 

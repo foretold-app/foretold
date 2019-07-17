@@ -213,6 +213,7 @@ module User = {
         ~name="",
         ~email=None,
         ~picture=None,
+        ~description=None,
         ~auth0Id=None,
         ~agent=None,
         (),
@@ -222,6 +223,7 @@ module User = {
     name,
     email,
     picture,
+    description,
     auth0Id,
     agent,
   };

@@ -5,13 +5,9 @@ module Styles = {
 
   let width100 = style([width(`percent(100.))]);
 
-  let headerText =
-    style([
-      color(`hex("486474")),
-      fontSize(`em(1.8)),
-      fontWeight(`bold),
-      float(`left),
-    ]);
+  let headerText = style([color(`hex("486474"))]);
+
+  let descriptionText = style([color(`hex("aaa"))]);
 
   let seriesText =
     style([

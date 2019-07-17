@@ -1,6 +1,7 @@
 type user = {
   id: string,
   name: string,
+  description: option(string),
 };
 
 type bot = {
@@ -25,6 +26,7 @@ module Query = [%graphql
             user: User @bsRecord{
               id
               name
+              description
             }
             bot: Bot @bsRecord{
               id

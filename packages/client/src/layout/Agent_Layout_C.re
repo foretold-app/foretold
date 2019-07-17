@@ -2,7 +2,7 @@ open SLayout;
 open Utils;
 open Style.Grid;
 
-let component = ReasonReact.statelessComponent("Channel Layout Page");
+let component = ReasonReact.statelessComponent("AgentLayoutPage");
 
 let make =
     (
@@ -25,10 +25,25 @@ let make =
             | _ => ""
             };
 
+          let description =
+            (
+              switch (agent) {
+              | {bot: Some(r)} => r.description
+              | {user: Some(r)} => r.description
+              | _ => Some("")
+              }
+            )
+            |> E.O.default("");
+
           let secondLevel = AgentTabs.Component.tabs(agentPage, agent);
 
           <>
-            <FC.GroupHeader> {name |> ste} </FC.GroupHeader>
+            <FC.GroupHeader>
+              <div> {name |> ste} </div>
+              <Div styles=[SLayout.Styles.descriptionText]>
+                {description |> ste}
+              </Div>
+            </FC.GroupHeader>
             <FC.GroupHeader.SubHeader> secondLevel </FC.GroupHeader.SubHeader>
           </>;
         },

@@ -135,25 +135,22 @@ let inner = innerComponentFn => {
 };
 
 let withLoggedInUserQuery = innerComponentFn => {
-  let auth0tokens = Auth0Tokens.make_from_storage();
-
   <App.AppContextProvider.Consumer>
-    ...{context =>
-      switch (context.authToken, auth0tokens) {
-      | (Some(authToken), _) =>
+    ...{context => {
+      let serverJwt = ServerJwt.make_from_storage();
+      let auth0tokens = Auth0Tokens.make_from_storage();
+      let authToken = context.authToken;
+
+      switch (serverJwt, authToken, auth0tokens) {
+      | (Some(_), _, _) => inner(innerComponentFn)
+      | (_, None, None) => innerComponentFn(Context.Me.WithoutTokens)
+      | (_, _, _) =>
         Foretold__GraphQL__Authentication.component(
-          Auth0Tokens.make("", "", ""),
+          auth0tokens,
           authToken,
           inner(innerComponentFn),
         )
-      | (_, Some(auth0tokens)) =>
-        Foretold__GraphQL__Authentication.component(
-          auth0tokens,
-          "",
-          inner(innerComponentFn),
-        )
-      | _ => innerComponentFn(Context.Me.WithoutTokens)
-      }
-    }
+      };
+    }}
   </App.AppContextProvider.Consumer>;
 };

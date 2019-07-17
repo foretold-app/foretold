@@ -14,13 +14,13 @@ let defaultPage = (loggedInUser: option(Primary.User.t)) =>
      )
   |> E.O.default(ChannelIndex'.toEl(loggedInUser));
 
-let meToUser = (me: Context.Me.me) =>
+let meToUser = (me: Me.me) =>
   switch (me) {
   | WithTokensAndUserData({userData}) => Some(userData)
   | _ => None
   };
 
-let toRoutePage = (route: Route.t, me: Context.Me.me) => {
+let toRoutePage = (route: Route.t, me: Me.me) => {
   let loggedInUser = meToUser(me);
 
   switch (route) {

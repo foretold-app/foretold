@@ -123,11 +123,9 @@ let inner = innerComponentFn => {
       e =>
         switch (e) {
         | Success(c) =>
-          innerComponentFn(Context.Me.WithTokensAndUserData({userData: c}))
+          innerComponentFn(Me.WithTokensAndUserData({userData: c}))
         | _ =>
-          innerComponentFn(
-            Context.Me.WithTokensAndUserLoading({loadingUserData: e}),
-          )
+          innerComponentFn(Me.WithTokensAndUserLoading({loadingUserData: e}))
         }
     )
   )
@@ -143,7 +141,7 @@ let withLoggedInUserQuery = innerComponentFn => {
 
       switch (serverJwt, authToken, auth0tokens) {
       | (Some(_), _, _) => inner(innerComponentFn)
-      | (_, None, None) => innerComponentFn(Context.Me.WithoutTokens)
+      | (_, None, None) => innerComponentFn(Me.WithoutTokens)
       | (_, _, _) =>
         Foretold__GraphQL__Authentication.component(
           auth0tokens,

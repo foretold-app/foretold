@@ -25,7 +25,7 @@ module ChannelPage = {
 
   module SubPage = {
     type t =
-      | Measurables(Context__QueryParams.MeasurableIndex.query)
+      | Measurables(MeasurableQueryIndex.query)
       | Measurable(string)
       | NewMeasurable
       | Members
@@ -94,8 +94,8 @@ module Route = {
     | ["terms_and_conditions"] => Terms
     | ["login"] => Login
     | ["callback"] =>
-      Context__Auth.CallbackUrlToAuth0Tokens.make(url)
-      |> E.O.fmap(Context__Auth.Auth0Tokens.set)
+      Auth.UrlToAuth0Tokens.make(url)
+      |> E.O.fmap(Auth0Tokens.set)
       |> E.O.default();
       Redirect;
     | ["redirect"] => Redirect
@@ -115,8 +115,7 @@ module Route = {
         channelId: getChannelId(channelId),
         subPage:
           Measurables(
-            url.search
-            |> Context__QueryParams.MeasurableIndex.fromStringWithDefaults,
+            url.search |> MeasurableQueryIndex.fromStringWithDefaults,
           ),
       })
     | ["c", channelId, "m", measurableId] =>

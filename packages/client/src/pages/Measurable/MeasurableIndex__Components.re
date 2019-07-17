@@ -48,8 +48,8 @@ module LoadedAndUnselected = {
       number=num
       onClick={Foretold__Components__Link.LinkType.onClick(
         Relative(
-          Context.QueryParams.MeasurableIndex.make(Some(state))
-          |> Context.QueryParams.MeasurableIndex.toUrlParams,
+          MeasurableQueryIndex.make(Some(state))
+          |> MeasurableQueryIndex.toUrlParams,
         ),
       )}>
       {text |> ste}
@@ -59,7 +59,7 @@ module LoadedAndUnselected = {
       (
         t: t,
         stats: measurablesStateStatsQuery,
-        query: Context.QueryParams.MeasurableIndex.query,
+        query: MeasurableQueryIndex.query,
       ) =>
     <Div>
       <Div float=`left>
@@ -135,7 +135,7 @@ module MeasurableIndexDataState = {
   let toLayoutInput =
       (
         send: Reducer.Types.send,
-        selectedState: Context.QueryParams.MeasurableIndex.query,
+        selectedState: MeasurableQueryIndex.query,
         stats: measurablesStateStatsQuery,
         state: state,
       ) => {

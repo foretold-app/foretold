@@ -733,7 +733,7 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "accessToken",
+                  "name": "authToken",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -5581,16 +5581,6 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "state",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "measurableState",
                 "ofType": null
               },
               "defaultValue": null

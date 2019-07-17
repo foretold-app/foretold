@@ -112,9 +112,8 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let inner =
-    (tokens: Context.Auth.Auth0Tokens.t, auth0Id: string, innerComponentFn) => {
-  let query = Query.make(~auth0Id, ());
+let inner = innerComponentFn => {
+  let query = Query.make();
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
     |> E.HttpResponse.fromApollo
@@ -124,18 +123,10 @@ let inner =
       e =>
         switch (e) {
         | Success(c) =>
-          innerComponentFn(
-            Context.Me.WithTokensAndUserData({
-              authTokens: tokens,
-              userData: c,
-            }),
-          )
+          innerComponentFn(Context.Me.WithTokensAndUserData({userData: c}))
         | _ =>
           innerComponentFn(
-            Context.Me.WithTokensAndUserLoading({
-              authTokens: tokens,
-              loadingUserData: e,
-            }),
+            Context.Me.WithTokensAndUserLoading({loadingUserData: e}),
           )
         }
     )
@@ -143,23 +134,23 @@ let inner =
   |> E.React.el;
 };
 
-let logOutIfTokensObsolete = t => {
-  Context.Auth.Actions.logoutIfTokenIsObsolete(t);
-  t;
-};
+let withLoggedInUserQuery = innerComponentFn => {
+  <App.AppContextProvider.Consumer>
+    ...{context => {
+      let serverJwt = ServerJwt.make_from_storage();
+      let auth0tokens = Auth0Tokens.make_from_storage();
+      let authToken = context.authToken;
 
-let withLoggedInUserQuery = innerComponentFn =>
-  Context.Auth.Auth0Tokens.make_from_storage()
-  |> E.O.fmap(logOutIfTokensObsolete)
-  |> E.O.bind(_, (tokens: Context.Auth.Auth0Tokens.t) =>
-       tokens
-       |> Context.Auth.Auth0Tokens.auth0Id
-       |> E.O.fmap(auth0Id => (tokens, auth0Id))
-     )
-  |> E.O.fmap(((tokens, auth0Id)) =>
-       Foretold__GraphQL__Authentication.component(
-         tokens,
-         inner(tokens, auth0Id, innerComponentFn),
-       )
-     )
-  |> E.O.default(innerComponentFn(Context.Me.WithoutTokens));
+      switch (serverJwt, authToken, auth0tokens) {
+      | (Some(_), _, _) => inner(innerComponentFn)
+      | (_, None, None) => innerComponentFn(Context.Me.WithoutTokens)
+      | (_, _, _) =>
+        Foretold__GraphQL__Authentication.component(
+          auth0tokens,
+          authToken,
+          inner(innerComponentFn),
+        )
+      };
+    }}
+  </App.AppContextProvider.Consumer>;
+};

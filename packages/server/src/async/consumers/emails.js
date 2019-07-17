@@ -150,14 +150,17 @@ class Emails extends Consumer {
     if (!user.email) return false;
     if (agentPreferences.stopAllEmails === true) return false;
 
+    const envelopeReplacements = notification.envelope.replacements || {};
+
     const token = await this._getAuthToken(agent);
+    const replacements = {...envelopeReplacements, token};
 
     const envelope = {
+      replacements,
+      authToken: token,
       to: notification.envelope.to || user.email,
       body: notification.envelope.body || '',
       subject: notification.envelope.subject || '',
-      replacements: notification.envelope.replacements || {},
-      authToken: token,
     };
 
     try {

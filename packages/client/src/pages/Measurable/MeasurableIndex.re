@@ -17,7 +17,7 @@ let load3Queries = (channelId, states, itemsPerPage, fn) =>
 let make =
     (
       ~channelId: string,
-      ~searchParams: Context.QueryParams.MeasurableIndex.query,
+      ~searchParams: MeasurableQueryIndex.query,
       ~loggedInUser: Primary.User.t,
       ~itemsPerPage: int=20,
       ~layout,

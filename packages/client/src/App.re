@@ -7,13 +7,6 @@ type action =
   | ChangeRoute(Routing.Route.t)
   | ChangeAuthToken(string);
 
-let reducer = (action, state) =>
-  switch (action) {
-  | ChangeRoute(route) => ReasonReact.Update({...state, route})
-  | ChangeAuthToken(authToken) =>
-    ReasonReact.Update({...state, authToken: Some(authToken)})
-  };
-
 let mapUrlToAction = (url: ReasonReact.Router.url) =>
   ChangeRoute(url |> Routing.Route.fromUrl);
 
@@ -35,8 +28,15 @@ let appApolloClient = AppApolloClient.instance();
 
 let make = _children => {
   ...component,
-  reducer,
+  reducer: (action, state) =>
+    switch (action) {
+    | ChangeRoute(route) => ReasonReact.Update({...state, route})
+    | ChangeAuthToken(authToken) =>
+      ReasonReact.Update({...state, authToken: Some(authToken)})
+    },
+
   initialState: () => {route: Home, authToken: None},
+
   didMount: self => {
     let initUrl = ReasonReact.Router.dangerouslyGetInitialUrl();
     urlToRoute(initUrl, self.send);
@@ -50,6 +50,7 @@ let make = _children => {
 
     self.onUnmount(() => ReasonReact.Router.unwatchUrl(watcherID));
   },
+
   render: self => {
     let state: state = self.state;
     let value: Providers.appContext = {authToken: state.authToken};

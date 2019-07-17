@@ -1,5 +1,3 @@
-open E;
-
 let component = ReasonReact.statelessComponent("Redirecting");
 
 let make = (~loggedInUser: option(Primary.User.t), _children) => {
@@ -8,7 +6,7 @@ let make = (~loggedInUser: option(Primary.User.t), _children) => {
     switch (loggedInUser) {
     | Some(userData) =>
       let user = userData;
-      let agentId = user.agent |> O.fmap((e: Primary.Agent.t) => e.id);
+      let agentId = user.agent |> E.O.fmap((e: Primary.Agent.t) => e.id);
       let name = user.name;
 
       switch (name, agentId) {

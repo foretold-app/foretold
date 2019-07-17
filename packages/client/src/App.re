@@ -32,7 +32,7 @@ let tokenToState = (url: ReasonReact.Router.url, send) => {
 
 let component = "App" |> ReasonReact.reducerComponent;
 
-let make = () => {
+let make = _children => {
   ...component,
   reducer,
   initialState: () => {route: Home, authToken: None},

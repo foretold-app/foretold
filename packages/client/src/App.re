@@ -17,14 +17,6 @@ let reducer = (action, state) =>
 let mapUrlToAction = (url: ReasonReact.Router.url) =>
   ChangeRoute(url |> Routing.Route.fromUrl);
 
-type appContext = {authToken: option(string)};
-
-module AppContextProvider =
-  Contexts.MakePair({
-    type t = appContext;
-    let defaultValue = {authToken: None};
-  });
-
 let urlToRoute = (url: ReasonReact.Router.url, send) =>
   url |> mapUrlToAction |> send;
 
@@ -59,10 +51,10 @@ let make = (componentForRoute, _children) => {
   },
   render: self => {
     let state: state = self.state;
-    let value = {authToken: state.authToken};
+    let value: Providers.appContext = {authToken: state.authToken};
 
-    <AppContextProvider.Provider value>
+    <Providers.AppContext.Provider value>
       {self.state.route |> componentForRoute}
-    </AppContextProvider.Provider>;
+    </Providers.AppContext.Provider>;
   },
 };

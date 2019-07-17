@@ -136,7 +136,7 @@ let inner = innerComponentFn => {
 };
 
 let withLoggedInUserQuery = innerComponentFn => {
-  <App.AppContextProvider.Consumer>
+  <Providers.AppContext.Consumer>
     ...{context => {
       let serverJwt = ServerJwt.make_from_storage();
       let auth0tokens = Auth0Tokens.make_from_storage();
@@ -153,5 +153,5 @@ let withLoggedInUserQuery = innerComponentFn => {
         )
       };
     }}
-  </App.AppContextProvider.Consumer>;
+  </Providers.AppContext.Consumer>;
 };

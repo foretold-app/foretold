@@ -1,6 +1,3 @@
-open Utils;
-open Antd;
-open MomentRe;
 open Rationale.Function.Infix;
 
 module ChannelFormShower = ReForm.Create(ChannelForm.NewChannelParams);

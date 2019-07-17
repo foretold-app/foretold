@@ -44,12 +44,4 @@ module Actions = {
     ReasonReact.Router.push("/");
     ();
   };
-
-  let logoutIfTokenIsObsolete = (tokens: Auth0Tokens.t): bool =>
-    if (tokens |> Auth0Tokens.isObsolete) {
-      logout();
-      true
-    } else {
-      false
-    }
 };

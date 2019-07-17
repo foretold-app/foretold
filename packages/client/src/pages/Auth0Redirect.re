@@ -15,11 +15,9 @@ let make = (~loggedInUser: option(Primary.User.t), _children) => {
       let agentId = user.agent |> O.fmap((e: Primary.Agent.t) => e.id);
       let name = user.name;
       switch (name, agentId) {
-      | ("", _) => Context.Routing.Url.push(Profile)
+      | ("", _) => Routing.Url.push(Profile)
       | (_, Some(id)) =>
-        Context.Routing.Url.push(
-          Agent({agentId: id, subPage: AgentMeasurements}),
-        )
+        Routing.Url.push(Agent({agentId: id, subPage: AgentMeasurements}))
       | _ => ()
       };
       <>
@@ -29,7 +27,7 @@ let make = (~loggedInUser: option(Primary.User.t), _children) => {
          |> E.React.inP}
       </>;
     | _ =>
-      Context.Routing.Url.push(Home);
+      Routing.Url.push(Home);
       <div />;
     },
 };

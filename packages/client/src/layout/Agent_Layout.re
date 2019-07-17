@@ -1,9 +1,6 @@
 /* TODO: Allow for cases where user is not logged in */
 let makeWithPage =
-    (
-      agentPage: Context.Routing.AgentPage.t,
-      loggedInUser: option(Primary.User.t),
-    )
+    (agentPage: Routing.AgentPage.t, loggedInUser: option(Primary.User.t))
     : ReasonReact.reactElement => {
   let agentId = agentPage.agentId;
 

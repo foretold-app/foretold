@@ -1,12 +1,10 @@
-open Context.Routing;
-
 type state = {
-  route: Route.t,
+  route: Routing.Route.t,
   authToken: option(string),
 };
 
 type action =
-  | ChangeRoute(Route.t)
+  | ChangeRoute(Routing.Route.t)
   | ChangeAuthToken(string);
 
 let reducer = (action, state) =>
@@ -17,7 +15,7 @@ let reducer = (action, state) =>
   };
 
 let mapUrlToAction = (url: ReasonReact.Router.url) =>
-  ChangeRoute(url |> Route.fromUrl);
+  ChangeRoute(url |> Routing.Route.fromUrl);
 
 type appContext = {authToken: option(string)};
 
@@ -27,6 +25,19 @@ module AppContextProvider =
     let defaultValue = {authToken: None};
   });
 
+let urlToRoute = (url: ReasonReact.Router.url, send) =>
+  url |> mapUrlToAction |> send;
+
+let tokenToState = (url: ReasonReact.Router.url, send) => {
+  let token = url |> Auth.UrlToTokens.make;
+  switch (token) {
+  | Some(s) =>
+    KeyValuePairs.clearHash(url, "token") |> ReasonReact.Router.replace;
+    send(ChangeAuthToken(s));
+  | _ => ()
+  };
+};
+
 let make = (componentForRoute, _children) => {
   let component = "App" |> ReasonReact.reducerComponent;
   {
@@ -35,17 +46,12 @@ let make = (componentForRoute, _children) => {
     initialState: () => {route: Home, authToken: None},
     didMount: self => {
       let initUrl = ReasonReact.Router.dangerouslyGetInitialUrl();
-
-      initUrl |> mapUrlToAction |> self.send;
-
-      initUrl
-      |> Auth.UrlToTokens.make
-      |> E.O.fmap((token: string) => self.send(ChangeAuthToken(token)))
-      |> ignore;
+      urlToRoute(initUrl, self.send);
+      tokenToState(initUrl, self.send);
 
       let watcherID =
         ReasonReact.Router.watchUrl(url => {
-          url |> mapUrlToAction |> self.send;
+          urlToRoute(url, self.send);
           ();
         });
 

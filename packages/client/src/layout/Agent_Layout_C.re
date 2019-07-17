@@ -6,7 +6,7 @@ let component = ReasonReact.statelessComponent("Channel Layout Page");
 
 let make =
     (
-      agentPage: Context.Routing.AgentPage.t,
+      agentPage: Routing.AgentPage.t,
       loggedInUser: Primary.User.t,
       {head, body}: LayoutConfig.t,
     ) => {
@@ -61,5 +61,5 @@ let make =
 };
 
 let makeWithEl =
-    (agentPage: Context.Routing.AgentPage.t, loggedInUser, t: LayoutConfig.t) =>
+    (agentPage: Routing.AgentPage.t, loggedInUser, t: LayoutConfig.t) =>
   make(agentPage, loggedInUser, t) |> E.React.el;

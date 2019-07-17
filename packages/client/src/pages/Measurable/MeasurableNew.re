@@ -106,9 +106,7 @@ let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
                    (response: CreateMeasurableMutation.GraphQL.t) => {
                      switch (response##measurableCreate) {
                      | Some(m) =>
-                       Context.Routing.Url.push(
-                         MeasurableShow(channelId, m##id),
-                       )
+                       Routing.Url.push(MeasurableShow(channelId, m##id))
                      };
                      ReasonReact.null;
                    },

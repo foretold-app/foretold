@@ -4,7 +4,7 @@ type meWithTokensAndUserLoading = {
 
 type meWithTokensAndUserData = {userData: Primary.User.t};
 
-type me =
+type t =
   | WithoutTokens
   | WithTokensAndUserLoading(meWithTokensAndUserLoading)
   | WithTokensAndUserData(meWithTokensAndUserData);

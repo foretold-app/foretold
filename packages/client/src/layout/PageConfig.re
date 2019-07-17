@@ -24,7 +24,7 @@ module Wrapper = {
 
 module Renderer = {
   type channelId = string;
-  type channelPage = Context.Routing.ChannelPage.t;
+  type channelPage = Routing.ChannelPage.t;
   type loggedInUser = Primary.User.t;
 
   type t =

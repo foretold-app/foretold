@@ -22,8 +22,7 @@ let agentSection = (agent: Queries.Agent.agent) =>
          agent.isMe,
          <Div float=`right>
            <Antd.Button
-             onClick={_ => Context.Routing.Url.push(BotCreate)}
-             _type=`primary>
+             onClick={_ => Routing.Url.push(BotCreate)} _type=`primary>
              {"New Bot" |> ste}
            </Antd.Button>
          </Div>,

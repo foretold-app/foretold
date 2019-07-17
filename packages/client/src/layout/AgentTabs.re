@@ -2,7 +2,7 @@
 open Utils;
 
 module Component = {
-  let name = (page: Context.Routing.AgentPage.SubPage.t) =>
+  let name = (page: Routing.AgentPage.SubPage.t) =>
     switch (page) {
     | AgentMeasurements => "Predictions"
     | AgentMeasurables => "Created Questions"
@@ -22,7 +22,7 @@ module Component = {
 
   let tabs =
       (
-        page: Context.Routing.AgentPage.t,
+        page: Routing.AgentPage.t,
         agent: Foretold__GraphQL.Queries.Agent.agent,
       ) => {
     let agentId = page.agentId;

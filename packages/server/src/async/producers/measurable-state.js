@@ -1,7 +1,7 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const { getMeasurableLink } = require('../../lib/urls');
+const { getMeasurableLinkWithToken } = require('../../lib/urls');
 
 const { Producer } = require('./producer');
 
@@ -44,7 +44,7 @@ class MeasurableState extends Producer {
     return {
       measurable: {
         name: _.get(measurable, 'name'),
-        link: getMeasurableLink(channel, measurable),
+        link: getMeasurableLinkWithToken(channel, measurable),
       },
     }
   }

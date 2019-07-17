@@ -2,11 +2,11 @@ const clientUrl = process.env.NODE_ENV === "development"
   ? "http://localhost:1234"
   : "https://www.foretold.io";
 
-const getMeasurableLink = (channel, measurable) => {
-  return `${clientUrl}/c/${channel.id}/m/${measurable.id}`;
+const getMeasurableLinkWithToken = (channel, measurable) => {
+  return `${clientUrl}/c/${channel.id}/m/${measurable.id}#token={{token}}`;
 };
 
 module.exports = {
   clientUrl,
-  getMeasurableLink,
+  getMeasurableLinkWithToken,
 };

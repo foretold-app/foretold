@@ -16,9 +16,7 @@ module type Config = {
       callFnParams,
       ~pageLimit: int,
       ~direction: direction,
-      ~innerComponentFn: Client.HttpResponse.t(
-                           Primary.Connection.t(itemType),
-                         ) =>
+      ~innerComponentFn: HttpResponse.t(Primary.Connection.t(itemType)) =>
                          ReasonReact.reactElement
     ) =>
     ReasonReact.reactElement;
@@ -36,7 +34,7 @@ module Make = (Config: Config) => {
 
     type connection = Primary.Connection.t(Config.itemType);
 
-    type response = Client.HttpResponse.t(connection);
+    type response = HttpResponse.t(connection);
 
     type action =
       | UpdateResponse(response)

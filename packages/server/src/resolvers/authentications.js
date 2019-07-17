@@ -7,7 +7,7 @@ const data = require('../data');
  * @param {object} args
  * @param {Models.ObjectID} args.auth0jwt
  * @param {Models.ObjectID} args.auth0accessToken
- * @param {Models.ObjectID} args.accessToken
+ * @param {Models.ObjectID} args.authToken
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<{jwt: string}>}
@@ -47,14 +47,14 @@ async function _exchangeAuthComToken(root, args, context, info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {Models.ObjectID} args.accessToken
+ * @param {Models.ObjectID} args.authToken
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<{jwt: string}>}
  */
 async function _exchangeAuthToken(root, args, context, info) {
-  const accessToken = _.get(args, 'accessToken');
-  const jwt = await data.authentication.exchangeAuthToken(accessToken);
+  const authToken = _.get(args, 'authToken');
+  const jwt = await data.authentication.exchangeAuthToken(authToken);
   return { jwt };
 }
 

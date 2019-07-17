@@ -6,12 +6,12 @@ module Query = [%graphql
     query authentication (
         $auth0jwt: String!
         $auth0accessToken: String!
-        $accessToken: String!
+        $authToken: String!
     ) {
         authentication(
             auth0jwt: $auth0jwt
             auth0accessToken: $auth0accessToken
-            accessToken: $accessToken
+            authToken: $authToken
         ) {
             jwt
         }
@@ -40,9 +40,9 @@ let component =
     |> E.O.fmap((r: Auth0Tokens.t) => r.access_token)
     |> E.O.default("");
 
-  let accessToken = authToken |> E.O.default("");
+  let authToken = authToken |> E.O.default("");
 
-  let query = Query.make(~auth0jwt, ~auth0accessToken, ~accessToken, ());
+  let query = Query.make(~auth0jwt, ~auth0accessToken, ~authToken, ());
 
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result

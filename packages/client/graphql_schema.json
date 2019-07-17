@@ -733,7 +733,7 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "accessToken",
+                  "name": "authToken",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",

@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
         is: ['^[a-z0-9]{0,30}$', 'i'],
       }
     },
+    description: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
     auth0Id: {
       type: DataTypes.STRING,
       allowNull: true,

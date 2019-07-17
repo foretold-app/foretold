@@ -64,7 +64,7 @@ let make = (~route: Route.t, _children) => {
         | (Some(_), _, _) => Queries.User.inner(innerComponentFn)
         | (_, None, None) => innerComponentFn(Me.WithoutTokens)
         | (_, _, _) =>
-          Foretold__GraphQL__Authentication.component(
+          Queries.Authentication.component(
             auth0tokens,
             authToken,
             Queries.User.inner(innerComponentFn),

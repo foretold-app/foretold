@@ -116,8 +116,7 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let inner = innerComponentFn => {
-  let query = Query.make();
-  QueryComponent.make(~variables=query##variables, ({result}) =>
+  QueryComponent.make(({result}) =>
     result
     |> HttpResponse.fromApollo
     |> HttpResponse.fmap(e => e##user |> E.O.fmap(toUser))
@@ -132,5 +131,5 @@ let inner = innerComponentFn => {
         }
     )
   )
-  |> E.React.el;
+  |> ReasonReact.element;
 };

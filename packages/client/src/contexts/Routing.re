@@ -85,6 +85,8 @@ module Route = {
     | ChannelIndex
     | ChannelNew
     | MeasurableEdit(string)
+    | Subscribe
+    | Unsubscribe
     | NotFound;
 
   let fromUrl = (url: ReasonReact.Router.url) =>
@@ -139,6 +141,8 @@ module Route = {
     | ["agents", agentId, "bots"] => Agent({agentId, subPage: AgentBots})
     | ["agents", agentId, "measurables"] =>
       Agent({agentId, subPage: AgentMeasurables})
+    | ["subscribe"] => Subscribe
+    | ["unsubscribe"] => Unsubscribe
     | _ => NotFound
     };
 };
@@ -166,7 +170,9 @@ module Url = {
     | ChannelEdit(string)
     | ChannelMembers(string)
     | ChannelInvite(string)
-    | MeasurableNew(string);
+    | MeasurableNew(string)
+    | Subscribe
+    | Unsubscribe;
 
   let toString = (r: t) =>
     switch ((r: t)) {
@@ -195,6 +201,8 @@ module Url = {
     | SeriesNew(channelId) => "/c/" ++ channelId ++ "/s/new"
     | SeriesShow(channelId, id) => "/c/" ++ channelId ++ "/s/" ++ id
     | MeasurableShow(channelId, id) => "/c/" ++ channelId ++ "/m/" ++ id
+    | Subscribe => "/subscribe"
+    | Unsubscribe => "/unsubscribe"
     };
 
   let push = (r: t) => r |> toString |> ReasonReact.Router.push;

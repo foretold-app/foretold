@@ -14,13 +14,13 @@ let defaultPage = (loggedInUser: option(Primary.User.t)) =>
      )
   |> E.O.default(ChannelIndex'.toEl(loggedInUser));
 
-let meToUser = (me: Me.me) =>
+let meToUser = (me: Me.t) =>
   switch (me) {
   | WithTokensAndUserData({userData}) => Some(userData)
   | _ => None
   };
 
-let toRoutePage = (route: Route.t, me: Me.me) => {
+let toRoutePage = (route: Route.t, me: Me.t) => {
   let loggedInUser = meToUser(me);
 
   switch (route) {
@@ -36,6 +36,8 @@ let toRoutePage = (route: Route.t, me: Me.me) => {
   | EntityIndex => EntityIndex'.toEl(loggedInUser)
   | Profile => Profile'.toEl(loggedInUser)
   | Preferences => Preferences'.toEl(loggedInUser)
+  | Subscribe => Preferences'.toEl(loggedInUser)
+  | Unsubscribe => Preferences'.toEl(loggedInUser)
   | ChannelIndex => ChannelIndex'.toEl(loggedInUser)
   | ChannelNew => ChannelNew'.toEl(loggedInUser)
   | MeasurableEdit(id) => MeasurableEdit'.toEl({id: id}, loggedInUser)

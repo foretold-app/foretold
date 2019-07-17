@@ -1,5 +1,4 @@
 open Utils;
-open Foretold__GraphQL;
 
 module Styles = {
   open Css;

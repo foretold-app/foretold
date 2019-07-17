@@ -53,11 +53,11 @@ let make = _children => {
 
   render: self => {
     let state: state = self.state;
-    let value: Providers.appContext = {authToken: state.authToken};
+    let appContext: Providers.appContext = {authToken: state.authToken};
 
     <ReasonApollo.Provider client=appApolloClient>
-      <Providers.AppContext.Provider value>
-        {Layout.make(self.state.route)}
+      <Providers.AppContext.Provider value=appContext>
+        <Layout route={self.state.route} />
       </Providers.AppContext.Provider>
     </ReasonApollo.Provider>;
   },

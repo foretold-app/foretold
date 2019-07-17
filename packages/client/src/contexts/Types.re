@@ -49,6 +49,7 @@ type user = {
   name: string,
   email: option(string),
   picture: option(string),
+  description: option(string),
 }
 and bot = {
   competitorType,

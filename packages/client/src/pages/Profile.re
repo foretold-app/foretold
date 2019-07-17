@@ -23,12 +23,14 @@ module FormConfig = {
   type field(_) =
     | Name: field(string)
     | Email: field(string)
-    | Picture: field(string);
+    | Picture: field(string)
+    | Description: field(string);
 
   type state = {
     name: string,
     email: string,
     picture: string,
+    description: string,
   };
 
   let get: type value. (state, field(value)) => value =
@@ -37,6 +39,7 @@ module FormConfig = {
       | Name => state.name
       | Email => state.email
       | Picture => state.picture
+      | Description => state.description
       };
 
   let set: type value. (state, field(value), value) => state =
@@ -45,6 +48,7 @@ module FormConfig = {
       | Name => {...state, name: value}
       | Email => {...state, email: value}
       | Picture => {...state, picture: value}
+      | Description => {...state, description: value}
       };
 };
 
@@ -56,16 +60,25 @@ let mutate =
       name: string,
       email: string,
       picture: string,
+      description: string,
       id: string,
     ) => {
   let email' = email === "" ? None : Some(email);
   let picture' = picture === "" ? None : Some(picture);
+  let description' = picture === "" ? None : Some(description);
+
   let mutate =
     EditUser.make(
       ~id,
-      ~input={"name": name, "email": email', "picture": picture'},
+      ~input={
+        "name": name,
+        "email": email',
+        "picture": picture',
+        "description": description',
+      },
       (),
     );
+
   mutation(~variables=mutate##variables, ~refetchQueries=[|"user"|], ())
   |> ignore;
 };
@@ -91,9 +104,10 @@ let withUserMutation = innerComponentFn =>
   )
   |> E.React.el;
 
-let withUserForm = (id, name, email, picture, mutation, innerComponentFn) =>
+let withUserForm =
+    (id, name, email, picture, description, mutation, innerComponentFn) =>
   Form.make(
-    ~initialState={name, email, picture},
+    ~initialState={name, email, picture, description},
     ~onSubmit=
       values =>
         mutate(
@@ -101,6 +115,7 @@ let withUserForm = (id, name, email, picture, mutation, innerComponentFn) =>
           values.state.values.name,
           values.state.values.email,
           values.state.values.picture,
+          values.state.values.description,
           id,
         ),
     ~schema=Form.Validation.Schema([||]),
@@ -116,6 +131,15 @@ let formFields = (form: Form.state, send, onSubmit) =>
         value={form.values.name}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
           send(Form.FieldChangeValue(Name, e))
+        )}
+      />
+    </Antd.Form.Item>
+    <Antd.Form.Item>
+      {"Description" |> Utils.ste |> E.React.inH3}
+      <Input
+        value={form.values.description}
+        onChange={ReForm.Helpers.handleDomFormChange(e =>
+          send(Form.FieldChangeValue(Description, e))
         )}
       />
     </Antd.Form.Item>
@@ -166,13 +190,20 @@ let make =
              let id = loggedInUser.id;
              let email = loggedInUser.email |> E.O.default("");
              let picture = loggedInUser.picture |> E.O.default("");
+             let description = loggedInUser.description |> E.O.default("");
              let name =
                agent
                |> E.O.bind(_, (r: Primary.Agent.t) => r.name)
                |> E.O.toExn("The logged in user needs an ID!");
 
              withUserForm(
-               id, name, email, picture, mutation, ({send, state}) =>
+               id,
+               name,
+               email,
+               picture,
+               description,
+               mutation,
+               ({send, state}) =>
                CMutationForm.showWithLoading(
                  ~result=data.result,
                  ~form=formFields(state, send, () => send(Form.Submit)),

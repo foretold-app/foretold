@@ -17,6 +17,7 @@ class Mailer {
     this.body = envelope.body;
     this.subject = envelope.subject;
     this.replacements = envelope.replacements;
+    this.authToken = envelope.authToken || '';
   }
 
   async main() {
@@ -25,6 +26,7 @@ class Mailer {
       template: this.body,
       subject: this.subject,
       replacements: this.replacements,
+      authToken: this.authToken,
     });
     await mailHelper.main();
     return true;

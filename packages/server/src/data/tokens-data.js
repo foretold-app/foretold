@@ -1,9 +1,11 @@
 const crypto = require('crypto');
+const moment = require('moment');
+
 const { DataBase } = require('./data-base');
 
 const config = require('../config');
-
 const { TokenModel } = require('../models-abstract');
+const { TOKEN_TYPE } = require('../models/enums/token-type');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -14,8 +16,6 @@ class TokensData extends DataBase {
   constructor() {
     super();
     this.model = new TokenModel();
-    this.MAX_BOT_TOKEN_SIZE = config.MAX_BOT_TOKEN_SIZE;
-    this.MAX_BOT_TOKEN_SIZE_INCOMIN = this.MAX_BOT_TOKEN_SIZE * 2;
   }
 
   /**
@@ -24,80 +24,129 @@ class TokensData extends DataBase {
    * @return {boolean}
    */
   validate(token = '') {
-    const length = token.length === this.MAX_BOT_TOKEN_SIZE_INCOMIN;
+    const length = token.length === TokensData.MAX_BOT_TOKEN_SIZE_INCOMING;
     const pattern = /^([0-9a-z]+)$/.test(token);
     return length && pattern;
   }
 
   /**
-   * @param {Models.ObjectID} [agentId]
-   * @param {string} [token]
-   * @return {Promise<Models.Token>}
-   */
-  async getActiveToken({ agentId, token }) {
-    const cond = { isActive: true };
-    if (agentId) cond.agentId = agentId;
-    if (token) cond.token = token;
-    const options = { sort: -1 };
-    return this.model.getOne(cond, options);
-  }
-
-  /**
-   * @param {Models.ObjectID} agentId
-   * @return {Promise<Models.Token>}
-   */
-  async createActiveToken(agentId) {
-    return this.model.createOne({
-      agentId,
-      token: this.getToken(),
-      isActive: true,
-    });
-  }
-
-  /**
    * @param {string} tokenIn
+   * @param {string} [type]
    * @return {Promise<null | string>}
    */
-  async getAgentIdByToken(tokenIn) {
-    const token = await this.getActiveToken({ token: tokenIn });
+  async getAgentId(tokenIn, type = TOKEN_TYPE.ACCESS_TOKEN) {
+    const token = await this._getToken({ type, token: tokenIn });
     if (!token) return null;
     return token.agentId;
-  }
-
-  /**
-   * @public
-   * @param {string} agentId
-   * @return {Promise<string>}
-   */
-  async getOrCreateActiveTokenForAgentId(agentId) {
-    let token = await this.getActiveToken({ agentId });
-    if (!token) token = await this.createActiveToken(agentId);
-    return token.token;
   }
 
   /**
    * @todo: add transaction
    * @public
    * @param {string} agentId
+   * @param {string} [type]
    * @return {Promise<string>}
    */
-  async revokeTokensAndGetTokenByAgentId(agentId) {
+  async revokeGet(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
     await this.model.updateAll({
+      type,
       agentId,
     }, {
       isActive: false,
     });
-    return this.getOrCreateActiveTokenForAgentId(agentId);
+    return this.getCreate(agentId, type);
+  }
+
+  /**
+   * @public
+   * @param {string} agentId
+   * @param {string} [type]
+   * @return {Promise<string>}
+   */
+  async getCreate(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
+    let token = await this._getToken({ agentId, type });
+    if (!token) token = await this._createToken(agentId, type);
+    return token.token;
+  }
+
+  /**
+   * @param {string} [token]
+   * @return {Promise<Models.Token>}
+   */
+  async getAuthToken(token) {
+    const type = TOKEN_TYPE.AUTH_TOKEN;
+    return this._getToken({ token, type });
+  }
+
+  /**
+   * @public
+   * @param {Models.ObjectID} agentId
+   * @return {Promise<Models.Token>}
+   */
+  async createAuthToken(agentId) {
+    const type = TOKEN_TYPE.AUTH_TOKEN;
+    const expiresAt = moment.utc().add(3, 'days').toDate();
+    const usageCount = 0;
+    return this._createToken(agentId, type, expiresAt, usageCount);
+  }
+
+  /**
+   * @public
+   * @param {string} [token]
+   * @param {string} [type]
+   * @return {Promise<*>}
+   */
+  async increaseUsageCount(token, type = TOKEN_TYPE.AUTH_TOKEN) {
+    return this.model.increaseUsageCount(token, type);
+  }
+
+  /**
+   * @protected
+   * @param {Models.ObjectID} [agentId]
+   * @param {string} [token]
+   * @param {string} [type]
+   * @param {number} [usageCount]
+   * @return {Promise<Models.Token>}
+   */
+  async _getToken({ agentId, token, type, usageCount }) {
+    return this.model.getToken({ agentId, token, type, usageCount });
+  }
+
+  /**
+   * @protected
+   * @param {Models.ObjectID} agentId
+   * @param {string} [type]
+   * @param {Date | null} [expiresAt]
+   * @param {number | null} [usageCount]
+   * @return {Promise<Models.Token>}
+   */
+  async _createToken(
+    agentId,
+    type = TOKEN_TYPE.ACCESS_TOKEN,
+    expiresAt = null,
+    usageCount = null,
+  ) {
+    return this.createOne({
+      type,
+      agentId,
+      expiresAt,
+      usageCount,
+      token: this._generateToken(),
+      isActive: true,
+    });
   }
 
   /**
    * @protected
    * @return {string}
    */
-  getToken() {
-    return crypto.randomBytes(this.MAX_BOT_TOKEN_SIZE).toString('hex');
+  _generateToken() {
+    return crypto.randomBytes(TokensData.MAX_BOT_TOKEN_SIZE).toString('hex');
   }
 }
+
+TokensData.MAX_BOT_TOKEN_SIZE = config.MAX_BOT_TOKEN_SIZE;
+TokensData.MAX_BOT_TOKEN_SIZE_INCOMING = TokensData.MAX_BOT_TOKEN_SIZE * 2;
 
 module.exports = {
   TokensData,

@@ -3,6 +3,7 @@ const _ = require('lodash');
 module.exports = {
   up: async function (queryInterface) {
     try {
+      await queryInterface.sequelize.query(`BEGIN`);
       const [users] = await queryInterface.sequelize.query(
           `SELECT "agentId" FROM "Users"  WHERE "name"='Service Account' LIMIT 1`
       );
@@ -25,19 +26,24 @@ module.exports = {
           `VALUES ('${agentId}', '${channelId}')`
         );
       }
+      await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {
       console.error(e);
+      await queryInterface.sequelize.query(`ROLLBACK`);
       throw e;
     }
   },
 
   down: async function (queryInterface) {
     try {
+      await queryInterface.sequelize.query(`BEGIN`);
       await queryInterface.sequelize.query(
           `DELETE FROM "Channels" WHERE "name"='unlisted' LIMIT 1`
       );
+      await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {
       console.error(e);
+      await queryInterface.sequelize.query(`ROLLBACK`);
       throw e;
     }
   }

@@ -110,6 +110,15 @@ module.exports = (sequelize, DataTypes) => {
       type: Sequelize.VIRTUAL(DataTypes.FLOAT),
       get: resolutionEndpointResponseGetter,
     },
+
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
   });
 
   Measurable.addHook('beforeUpdate', async (instance) => {

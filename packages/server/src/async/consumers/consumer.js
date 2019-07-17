@@ -18,6 +18,7 @@ class Consumer {
     this.agents = data.agents;
     this.preferences = data.preferences;
     this.users = data.users;
+    this.tokens = data.tokens;
   }
 }
 

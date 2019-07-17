@@ -1,3 +1,5 @@
+const { TOKEN_TYPE } = require('./enums/token-type');
+
 module.exports = (sequelize, DataTypes) => {
   const Token = sequelize.define('Token', {
     id: {
@@ -18,6 +20,29 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true,
+    },
+    type: {
+      type: DataTypes.ENUM([
+        TOKEN_TYPE.ACCESS_TOKEN,
+        TOKEN_TYPE.AUTH_TOKEN,
+      ]),
+      defaultValue: TOKEN_TYPE.ACCESS_TOKEN,
+    },
+    usageCount: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    expiresAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
     },
   });
 

@@ -43,6 +43,14 @@ module.exports = (sequelize, DataTypes) => {
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
       get: getMeasurableCount,
     },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
   });
 
   Series.addHook('afterCreate', async (series) => {

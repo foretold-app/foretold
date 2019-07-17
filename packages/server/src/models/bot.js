@@ -32,6 +32,14 @@ module.exports = (sequelize, DataTypes) => {
     agentId: {
       type: DataTypes.UUID(),
     },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
   });
 
   Bot.addHook('beforeCreate', async (event) => {

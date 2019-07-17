@@ -24,6 +24,7 @@ module.exports = {
     `);
     } catch (e) {
       console.error(e);
+      await queryInterface.sequelize.query(`ROLLBACK`);
       throw e;
     }
   },
@@ -53,6 +54,7 @@ module.exports = {
     `);
     } catch (e) {
       console.error(e);
+      await queryInterface.sequelize.query(`ROLLBACK`);
       throw e;
     }
   }

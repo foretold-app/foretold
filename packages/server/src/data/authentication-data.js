@@ -61,7 +61,7 @@ class AuthenticationData {
    */
   async _byToken(token) {
     try {
-      const agentId = await this.tokens.getAgentIdByToken(token);
+      const agentId = await this.tokens.getAgentId(token);
       return await this._getContext(agentId);
     } catch (err) {
       throw err;
@@ -71,7 +71,7 @@ class AuthenticationData {
   /**
    * @protected
    * @param {Models.ObjectID} agentId
-   * @return {Promise<{agent: Models.Agent, creator: *, bot, user}>}
+   * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
    */
   async _getContext(agentId) {
     if (!agentId) throw new AuthenticationData.NoAgentIdError;
@@ -107,6 +107,25 @@ class AuthenticationData {
         console.log(`Saving user info is failed.`);
       }
 
+      return this.Jwt.encodeJWT({}, agentId);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  /**
+   * @public
+   * @todo: To figure out why "NotAuthenticatedError" is not being passed
+   * @todo: and is showed as internal error.
+   * @param {string} authToken
+   * @return {Promise<string>}
+   */
+  async exchangeAuthToken(authToken) {
+    try {
+      const token = await this.tokens.getAuthToken(authToken);
+      if (!token) throw new AuthenticationData.NotAuthenticatedError;
+      await this.tokens.increaseUsageCount(authToken);
+      const agentId = token.agentId;
       return this.Jwt.encodeJWT({}, agentId);
     } catch (err) {
       throw err;

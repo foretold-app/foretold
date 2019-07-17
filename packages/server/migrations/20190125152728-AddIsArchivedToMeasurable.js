@@ -1,6 +1,7 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
     try {
+      await queryInterface.sequelize.query(`BEGIN`);
       await queryInterface.addColumn("Measurables", "isJudged", {
         type: Sequelize.BOOLEAN,
         allowNull: false,
@@ -17,14 +18,17 @@ module.exports = {
       });
       await queryInterface.removeColumn("Measurables", "isLocked");
       await queryInterface.removeColumn("Measurables", "lockedAt");
+      await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {
       console.error(e);
+      await queryInterface.sequelize.query(`ROLLBACK`);
       throw e;
     }
   },
 
   down: async function (queryInterface, Sequelize) {
     try {
+      await queryInterface.sequelize.query(`BEGIN`);
       await queryInterface.removeColumn("Measurables", "isJudged");
       await queryInterface.removeColumn("Measurables", "state");
       await queryInterface.removeColumn("Measurables", "stateUpdatedAt");
@@ -37,8 +41,10 @@ module.exports = {
         allowNull: true,
         type: Sequelize.DATE
       });
+      await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {
       console.error(e);
+      await queryInterface.sequelize.query(`ROLLBACK`);
       throw e;
     }
   }

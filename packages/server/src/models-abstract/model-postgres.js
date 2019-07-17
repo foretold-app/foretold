@@ -31,6 +31,7 @@ class ModelPostgres extends Model {
     this.and = Op.and;
     this.not = Op.not;
     this.notIn = Op.notIn;
+    this.or = Op.or;
 
     this.fn = this.sequelize.fn;
     this.col = this.sequelize.col;

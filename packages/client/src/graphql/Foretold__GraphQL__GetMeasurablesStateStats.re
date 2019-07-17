@@ -38,8 +38,8 @@ let toStats = (r: Query.t) =>
 let componentMaker = (query, innerComponentFn) =>
   QueryComponent.make(~variables=query##variables, o =>
     o.result
-    |> E.HttpResponse.fromApollo
-    |> E.HttpResponse.fmap(toStats)
+    |> HttpResponse.fromApollo
+    |> HttpResponse.fmap(toStats)
     |> innerComponentFn
   )
   |> E.React.el;

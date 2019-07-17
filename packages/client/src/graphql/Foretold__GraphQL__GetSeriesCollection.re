@@ -61,8 +61,8 @@ let component2 = (~channelId, innerFn) => {
   let query = Query.make(~channelId, ());
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
-    |> E.HttpResponse.fromApollo
-    |> E.HttpResponse.fmap(e => e##seriesCollection |> E.JsArray.concatSomes)
+    |> HttpResponse.fromApollo
+    |> HttpResponse.fmap(e => e##seriesCollection |> E.JsArray.concatSomes)
     |> innerFn
   )
   |> E.React.el;

@@ -38,32 +38,31 @@ let tokenToState = (url: ReasonReact.Router.url, send) => {
   };
 };
 
+let component = "App" |> ReasonReact.reducerComponent;
+
 let make = (componentForRoute, _children) => {
-  let component = "App" |> ReasonReact.reducerComponent;
-  {
-    ...component,
-    reducer,
-    initialState: () => {route: Home, authToken: None},
-    didMount: self => {
-      let initUrl = ReasonReact.Router.dangerouslyGetInitialUrl();
-      urlToRoute(initUrl, self.send);
-      tokenToState(initUrl, self.send);
+  ...component,
+  reducer,
+  initialState: () => {route: Home, authToken: None},
+  didMount: self => {
+    let initUrl = ReasonReact.Router.dangerouslyGetInitialUrl();
+    urlToRoute(initUrl, self.send);
+    tokenToState(initUrl, self.send);
 
-      let watcherID =
-        ReasonReact.Router.watchUrl(url => {
-          urlToRoute(url, self.send);
-          ();
-        });
+    let watcherID =
+      ReasonReact.Router.watchUrl(url => {
+        urlToRoute(url, self.send);
+        ();
+      });
 
-      self.onUnmount(() => ReasonReact.Router.unwatchUrl(watcherID));
-    },
-    render: self => {
-      let state: state = self.state;
-      let value = {authToken: state.authToken};
+    self.onUnmount(() => ReasonReact.Router.unwatchUrl(watcherID));
+  },
+  render: self => {
+    let state: state = self.state;
+    let value = {authToken: state.authToken};
 
-      <AppContextProvider.Provider value>
-        {self.state.route |> componentForRoute}
-      </AppContextProvider.Provider>;
-    },
-  };
+    <AppContextProvider.Provider value>
+      {self.state.route |> componentForRoute}
+    </AppContextProvider.Provider>;
+  },
 };

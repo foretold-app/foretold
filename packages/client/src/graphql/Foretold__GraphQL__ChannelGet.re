@@ -52,9 +52,9 @@ let getChannelByIdAsComponent = (~id, innerFn) => {
   let query = Query.make(~id, ());
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
-    |> E.HttpResponse.fromApollo
-    |> E.HttpResponse.fmap(e => e##channel |> E.O.fmap(toChannel))
-    |> E.HttpResponse.optionalToMissing
+    |> HttpResponse.fromApollo
+    |> HttpResponse.fmap(e => e##channel |> E.O.fmap(toChannel))
+    |> HttpResponse.optionalToMissing
     |> innerFn
   )
   |> ReasonReact.element;
@@ -62,8 +62,7 @@ let getChannelByIdAsComponent = (~id, innerFn) => {
 
 let component2 = (~id, innerFn) => {
   switch (id) {
-  | "" =>
-    E.HttpResponse.Success(Primary.Channel.getGlobalChannel()) |> innerFn
+  | "" => HttpResponse.Success(Primary.Channel.getGlobalChannel()) |> innerFn
   | _ => getChannelByIdAsComponent(~id, innerFn)
   };
 };

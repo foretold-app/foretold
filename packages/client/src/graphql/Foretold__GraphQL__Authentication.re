@@ -46,8 +46,8 @@ let component =
 
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
-    |> E.HttpResponse.fromApollo
-    |> E.HttpResponse.fmap(e => e##authentication##jwt)
+    |> HttpResponse.fromApollo
+    |> HttpResponse.fmap(e => e##authentication##jwt)
     |> (
       e =>
         switch (e) {

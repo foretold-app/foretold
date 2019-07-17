@@ -119,9 +119,9 @@ let inner = innerComponentFn => {
   let query = Query.make();
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
-    |> E.HttpResponse.fromApollo
-    |> E.HttpResponse.fmap(e => e##user |> E.O.fmap(toUser))
-    |> E.HttpResponse.optionalToMissing
+    |> HttpResponse.fromApollo
+    |> HttpResponse.fmap(e => e##user |> E.O.fmap(toUser))
+    |> HttpResponse.optionalToMissing
     |> (
       e =>
         switch (e) {

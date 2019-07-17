@@ -70,7 +70,7 @@ let make = (~channelId: string, ~layout, _children) => {
 
     <FC.PageCard.BodyPadding>
       {loadChannel(
-         E.HttpResponse.fmap(result =>
+         HttpResponse.fmap(result =>
            mutationMake((mutation, data) =>
              form(mutation, result, ({handleSubmit, handleChange, form, _}) =>
                CMutationForm.showWithLoading(
@@ -83,7 +83,7 @@ let make = (~channelId: string, ~layout, _children) => {
              )
            )
          )
-         ||> E.HttpResponse.withReactDefaults,
+         ||> HttpResponse.withReactDefaults,
        )}
     </FC.PageCard.BodyPadding>
     |> SLayout.LayoutConfig.make(~head=header, ~body=_)

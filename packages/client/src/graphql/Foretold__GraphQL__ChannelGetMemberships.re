@@ -84,11 +84,11 @@ let component = (~id, innerFn) => {
   let query = Query.make(~id, ());
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
-    |> E.HttpResponse.fromApollo
-    |> E.HttpResponse.fmap(e =>
+    |> HttpResponse.fromApollo
+    |> HttpResponse.fmap(e =>
          e##channelWithMemberships |> E.O.fmap(toChannelMemberships)
        )
-    |> E.HttpResponse.optionalToMissing
+    |> HttpResponse.optionalToMissing
     |> innerFn
   )
   |> E.React.el;

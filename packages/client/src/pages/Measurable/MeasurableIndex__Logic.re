@@ -24,10 +24,10 @@ type seriesCollection =
   array(Foretold__GraphQL.Queries.SeriesCollection.series);
 type loggedInUser = Primary.User.t;
 type reducerParams = Reducer.Types.reducerParams;
-type seriesQuery = E.HttpResponse.t(seriesCollection);
-type channelQuery = E.HttpResponse.t(channel);
+type seriesQuery = HttpResponse.t(seriesCollection);
+type channelQuery = HttpResponse.t(channel);
 type measurablesStateStatsQuery =
-  E.HttpResponse.t(
+  HttpResponse.t(
     option(Foretold__GraphQL.Queries.MeasurablesStateStats.stats),
   );
 

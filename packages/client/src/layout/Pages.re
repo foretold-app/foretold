@@ -40,7 +40,7 @@ module EntityIndex' = {
   let toEl = EntityIndex.make |> LoggedInPage.noParams;
 };
 
-module Auth0Redirect' = {
+module Redirecting' = {
   let toEl = loggedInUser =>
-    Auth0Redirect.make(~loggedInUser) |> E.React.makeToEl;
+    Redirecting.make(~loggedInUser) |> E.React.makeToEl;
 };

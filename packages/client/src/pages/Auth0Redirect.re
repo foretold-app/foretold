@@ -1,10 +1,6 @@
-open Utils;
 open E;
-open Foretold__GraphQL;
 
-let ste = ReasonReact.string;
-
-let component = ReasonReact.statelessComponent("Redirecting...");
+let component = ReasonReact.statelessComponent("Redirecting");
 
 let make = (~loggedInUser: option(Primary.User.t), _children) => {
   ...component,
@@ -21,9 +17,9 @@ let make = (~loggedInUser: option(Primary.User.t), _children) => {
       | _ => ()
       };
       <>
-        {"Redirecting..." |> ste |> E.React.inH1}
+        {"Redirecting..." |> Utils.ste |> E.React.inH1}
         {"If you are not redirected shortly, try refreshing the page or contacting Ozzie."
-         |> ste
+         |> Utils.ste
          |> E.React.inP}
       </>;
     | _ =>

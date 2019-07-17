@@ -1,7 +1,5 @@
 open Rationale.Function.Infix;
 
-let ste = ReasonReact.string;
-
 module ChannelFormShower = ReForm.Create(ChannelForm.NewChannelParams);
 
 module Mutation = Foretold__GraphQL.Mutations.ChannelUpdate;
@@ -28,7 +26,7 @@ let make = (~channelId: string, ~layout, _children) => {
       <>
         <FC.Base.Div float=`left>
           <FC.PageCard.HeaderRow.Title>
-            {"Edit Community" |> ste}
+            {"Edit Community" |> Utils.ste}
           </FC.PageCard.HeaderRow.Title>
         </FC.Base.Div>
         <FC.Base.Div
@@ -45,7 +43,7 @@ let make = (~channelId: string, ~layout, _children) => {
                 e,
               )
             }>
-            {"New Series" |> ste}
+            {"New Series" |> Utils.ste}
           </FC.Base.Button>
         </FC.Base.Div>
       </>;

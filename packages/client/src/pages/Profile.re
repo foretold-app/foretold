@@ -145,8 +145,9 @@ let formFields = (form: Form.state, send, onSubmit) =>
     </Antd.Form.Item>
     <Antd.Form.Item>
       {"E-mail" |> Utils.ste |> E.React.inH3}
-      <Input
+      <AntdInput
         value={form.values.email}
+        disabled=true
         onChange={ReForm.Helpers.handleDomFormChange(e =>
           send(Form.FieldChangeValue(Email, e))
         )}

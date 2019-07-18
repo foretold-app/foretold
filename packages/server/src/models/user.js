@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: '',
       validate: {
-        is: ['^[a-z0-9]{0,30}$', 'i'],
+        is: ['^[a-z0-9._]{0,30}$', 'i'],
       }
     },
     description: {
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     auth0Id: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     email: {
       type: DataTypes.STRING(64),

@@ -29,7 +29,7 @@ class MeasurementModel extends ModelPostgres {
   /**
    * @todo: see this.channelIds()
    * @protected
-   * @param {Models.ObjectID} [agentId]
+   * @param {Models.ObjectID} agentId
    * @return {string}
    */
   taggedMeasurements(agentId) {
@@ -38,6 +38,59 @@ class MeasurementModel extends ModelPostgres {
       FROM "Measurements"
       WHERE "agentId" = '${agentId}'
       AND "taggedMeasurementId" IS NOT NULL
+    )`;
+  }
+
+  /**
+   * @todo: see this.channelIds()
+   * @param {Models.ObjectID} [agentId]
+   * @return {string}
+   */
+  _binaryPercentagesLiteral(agentId) {
+    return this.literal(this.b(agentId));
+  }
+
+  /**
+   * @todo: see this.channelIds()
+   * @protected
+   * @param {Models.ObjectID} [agentId]
+   * @return {string}
+   */
+  _binaryPercentages(agentId) {
+    const agentMeasurements =
+      this._agentMeasurementsJudgedPercentageCompetitive(agentId);
+
+    return `(
+      WITH "AgentMeasurements" AS ${agentMeasurements}
+      SELECT "AgentMeasurements".*, "Measurements"."value" ->> 'data' as "data"
+      FROM "AgentMeasurements"
+               LEFT JOIN "Measurements"
+                         ON "Measurements"."measurableId" =
+                            "AgentMeasurements"."measurableId" AND
+                            "Measurements"."competitorType" = 'OBJECTIVE' AND
+                            "Measurements"."value" ->> 'dataType' = 'binary'
+    )`;
+  }
+
+  /**
+   * @todo: see this.channelIds()
+   * @protected
+   * @param {Models.ObjectID} agentId
+   * @return {string}
+   */
+  _agentMeasurementsJudgedPercentageCompetitive(agentId) {
+    return `(
+      SELECT "Measurements"."measurableId",
+             "Measurements"."agentId",
+             array_agg("Measurements"."value" ->> 'data') as "datas"
+      FROM "Measurements"
+               LEFT JOIN "Measurables"
+                         ON "Measurements"."measurableId" = "Measurables".id
+      WHERE "Measurables"."state" = 'JUDGED'
+        AND "Measurables"."valueType" = 'PERCENTAGE'
+        AND "Measurements"."competitorType" = 'COMPETITIVE'
+        AND "Measurements"."agentId" = '${agentId}'
+      GROUP BY "Measurements"."measurableId", "Measurements"."agentId"
     )`;
   }
 

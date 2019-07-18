@@ -21,9 +21,10 @@ class UsersData extends DataBase {
    * @return {Promise<Models.User>}
    */
   async getUserByAuth0Id(auth0Id) {
-    const filter = { auth0Id };
+    const params = { auth0Id };
+    const query = {};
     const data = { auth0Id };
-    return this.upsertOne(filter, data);
+    return this.upsertOne(params, query, data);
   }
 
 

@@ -151,6 +151,7 @@ export namespace Layers {
     type params = {
       id?: Models.ObjectID,
       agentId?: Models.ObjectID,
+      auth0Id?: string;
     };
     type response = { data: any };
     type responseList = { data: any[], total: number };

@@ -49,7 +49,7 @@ let make =
             <FC.GroupHeader>
               <div> {name |> ste} </div>
               <Div styles=[SLayout.Styles.descriptionText]>
-                {"Score: " |> ste}
+                {"Percentage Question Brier Score: " |> ste}
                 {score |> ste}
               </Div>
               <Div styles=[SLayout.Styles.descriptionText]>

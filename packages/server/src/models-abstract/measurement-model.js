@@ -41,13 +41,25 @@ class MeasurementModel extends ModelPostgres {
     )`;
   }
 
+  async getBrierScore(agentId) {
+    const raw = await this.getBinaryPercentages(agentId);
+
+  }
+
   /**
-   * @todo: see this._channelIds()
-   * @param {Models.ObjectID} [agentId]
-   * @return {string}
+   * @public
+   * @param {Models.ObjectID} agentId
+   * @return {Promise.<{
+   *   measurableId: string,
+   *   agentId: string,
+   *   datas: number[],
+   *   data: string
+   * }[]>}
    */
-  _binaryPercentagesLiteral(agentId) {
-    return this.literal(this.b(agentId));
+  async getBinaryPercentages(agentId) {
+    const query = this._binaryPercentages(agentId);
+    const result = await this.sequelize.query(query);
+    return _.head(result);
   }
 
   /**

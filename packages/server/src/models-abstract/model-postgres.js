@@ -39,13 +39,13 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @todo: see this.channelIds()
+   * @todo: see this._channelIds()
    * @protected
    * @param {Models.ObjectID} [agentId]
    * @return {Sequelize.literal}
    */
-  channelIdsLiteral(agentId) {
-    return this.literal(this.channelIds(agentId));
+  _channelIdsLiteral(agentId) {
+    return this.literal(this._channelIds(agentId));
   }
 
   /**
@@ -54,7 +54,7 @@ class ModelPostgres extends Model {
    * @param {Models.ObjectID} [agentId]
    * @return {string}
    */
-  channelIds(agentId) {
+  _channelIds(agentId) {
     return agentId ? `(
       SELECT "Channels"."id" FROM "Channels"
       LEFT OUTER JOIN 
@@ -71,22 +71,22 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @todo: see this.channelIds()
+   * @todo: see this._channelIds()
    * @param {Models.ObjectID} [agentId]
    * @return {Sequelize.literal}
    */
-  measurableIdsLiteral(agentId) {
-    return this.literal(this.measurableIds(agentId));
+  _measurableIdsLiteral(agentId) {
+    return this.literal(this._measurableIds(agentId));
   }
 
   /**
-   * @todo: see this.channelIds()
+   * @todo: see this._channelIds()
    * @param {string} [agentId]
    * @return {string}
    */
-  measurableIds(agentId) {
+  _measurableIds(agentId) {
     return `(
-      WITH channelIds AS (${this.channelIds(agentId)})
+      WITH channelIds AS (${this._channelIds(agentId)})
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
     )`;
@@ -105,7 +105,7 @@ class ModelPostgres extends Model {
     if (restrictions.channelId) {
       where[this.and].push({
         channelId: {
-          [this.in]: this.channelIdsLiteral(restrictions.agentId),
+          [this.in]: this._channelIdsLiteral(restrictions.agentId),
         },
       });
     }
@@ -119,7 +119,7 @@ class ModelPostgres extends Model {
     if (restrictions.measurableId) {
       where[this.and].push({
         measurableId: {
-          [this.in]: this.measurableIdsLiteral(restrictions.agentId),
+          [this.in]: this._measurableIdsLiteral(restrictions.agentId),
         },
       });
     }

@@ -18,21 +18,21 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this.channelIds()
+   * @todo: see this._channelIds()
    * @param {Models.ObjectID} [agentId]
    * @return {string}
    */
-  taggedMeasurementsLiteral(agentId) {
-    return this.literal(this.taggedMeasurements(agentId));
+  _taggedMeasurementsLiteral(agentId) {
+    return this.literal(this._taggedMeasurements(agentId));
   }
 
   /**
-   * @todo: see this.channelIds()
+   * @todo: see this._channelIds()
    * @protected
    * @param {Models.ObjectID} agentId
    * @return {string}
    */
-  taggedMeasurements(agentId) {
+  _taggedMeasurements(agentId) {
     return `(
       SELECT "taggedMeasurementId"
       FROM "Measurements"
@@ -42,7 +42,7 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this.channelIds()
+   * @todo: see this._channelIds()
    * @param {Models.ObjectID} [agentId]
    * @return {string}
    */
@@ -51,7 +51,7 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this.channelIds()
+   * @todo: see this._channelIds()
    * @protected
    * @param {Models.ObjectID} [agentId]
    * @return {string}
@@ -73,7 +73,7 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this.channelIds()
+   * @todo: see this._channelIds()
    * @protected
    * @param {Models.ObjectID} agentId
    * @return {string}
@@ -156,7 +156,7 @@ class MeasurementModel extends ModelPostgres {
     });
     if (endDate) where[this.and].push({ createdAt: { [this.lte]: endDate } });
     if (filter.notTaggedByAgent) where.id = {
-      [this.notIn]: this.taggedMeasurementsLiteral(filter.notTaggedByAgent),
+      [this.notIn]: this._taggedMeasurementsLiteral(filter.notTaggedByAgent),
     };
 
     return { where, include, spacedLimit };

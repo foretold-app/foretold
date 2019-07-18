@@ -21,7 +21,7 @@ class MeasurableModel extends ModelPostgres {
    * @protected
    * @return {Sequelize.literal|*}
    */
-  getStateOrderField() {
+  _getStateOrderField() {
     const {
       OPEN,
       JUDGEMENT_PENDING,
@@ -88,7 +88,7 @@ class MeasurableModel extends ModelPostgres {
         ['createdAt', 'DESC'],
       ],
       attributes: {
-        include: [this.getStateOrderField()],
+        include: [this._getStateOrderField()],
       },
     };
 

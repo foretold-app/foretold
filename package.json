@@ -22,7 +22,7 @@
         "migrate": "npm run server/db:migrate;",
         "_build": "npm run client/build;",
         "preinstall": "printenv",
-        "postinstall": "npm run bootstrap; npm run migrate; npm run _build;"
+        "postinstall": "npm run bootstrap && npm run migrate && npm run _build;"
     },
     "author": "Foretold",
     "license": "MIT",

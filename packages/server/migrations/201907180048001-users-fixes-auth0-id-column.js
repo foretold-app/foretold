@@ -3,7 +3,7 @@ module.exports = {
     try {
       await queryInterface.sequelize.query(`BEGIN`);
 
-      await queryInterface.addColumn('Users', 'auth0id', {
+      await queryInterface.changeColumn('Users', 'auth0Id', {
         type: Sequelize.STRING,
         allowNull: false,
       });
@@ -20,7 +20,7 @@ module.exports = {
     try {
       await queryInterface.sequelize.query(`BEGIN`);
 
-      await queryInterface.addColumn('Users', 'auth0id', {
+      await queryInterface.changeColumn('Users', 'auth0Id', {
         type: Sequelize.STRING,
         allowNull: true,
       });

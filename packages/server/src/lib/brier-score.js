@@ -38,15 +38,6 @@ class BrierScore {
    * @return {number}
    */
   _brierScore(probability, result) {
-    if (probability === BrierScore.PERCENTAGES_50) {
-      return BrierScore.REGARDLESS_SCORE;
-    }
-    if (probability === BrierScore.PERCENTAGES_100) {
-      return result === true
-        ? BrierScore.BEST_SCORE
-        : BrierScore.WORST_SCORE;
-    }
-
     const score = result === true
       ? ((probability / 100) - 1) ** 2
       : (probability / 100) ** 2;
@@ -54,12 +45,6 @@ class BrierScore {
     return _.round(score, 2);
   }
 }
-
-BrierScore.BEST_SCORE = 0;
-BrierScore.WORST_SCORE = 1;
-BrierScore.REGARDLESS_SCORE = 0.25;
-BrierScore.PERCENTAGES_100 = 100;
-BrierScore.PERCENTAGES_50 = 50;
 
 module.exports = {
   BrierScore,

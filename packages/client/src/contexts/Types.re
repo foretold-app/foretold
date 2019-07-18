@@ -50,6 +50,7 @@ type user = {
   email: option(string),
   picture: option(string),
   description: option(string),
+  score: option(float),
 }
 and bot = {
   competitorType,

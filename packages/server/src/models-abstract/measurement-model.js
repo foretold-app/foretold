@@ -4,6 +4,7 @@ const models = require('../models');
 const { splitBy } = require('../lib/functions');
 
 const { ModelPostgres } = require('./model-postgres');
+const { BrierScore } = require('../lib/brier-score');
 
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
@@ -41,9 +42,19 @@ class MeasurementModel extends ModelPostgres {
     )`;
   }
 
+  /**
+   * @param {string} agentId
+   * @return {Promise<number>}
+   */
   async getBrierScore(agentId) {
     const raw = await this.getBinaryPercentages(agentId);
 
+    const brierScores = raw.map(item => {
+      return new BrierScore(item.probabilities, item.questionResult).mean();
+    });
+
+    const mean = _.mean(brierScores);
+    return _.round(mean, 2);
   }
 
   /**
@@ -52,14 +63,19 @@ class MeasurementModel extends ModelPostgres {
    * @return {Promise.<{
    *   measurableId: string,
    *   agentId: string,
-   *   datas: number[],
-   *   data: string
+   *   probabilities: number[],
+   *   questionResult: boolean
    * }[]>}
    */
   async getBinaryPercentages(agentId) {
     const query = this._binaryPercentages(agentId);
-    const result = await this.sequelize.query(query);
-    return _.head(result);
+    const response = await this.sequelize.query(query);
+    const result = _.head(response);
+    return result.map((item) => {
+      item.probabilities = item.probabilities.map(_.toNumber);
+      item.questionResult = item.questionResult === 'true';
+      return item;
+    });
   }
 
   /**
@@ -74,7 +90,9 @@ class MeasurementModel extends ModelPostgres {
 
     return `(
       WITH "AgentMeasurements" AS ${agentMeasurements}
-      SELECT "AgentMeasurements".*, "Measurements"."value" ->> 'data' as "data"
+      SELECT 
+        "AgentMeasurements".*, 
+        "Measurements"."value" ->> 'data' as "questionResult"
       FROM "AgentMeasurements"
                LEFT JOIN "Measurements"
                          ON "Measurements"."measurableId" =
@@ -94,7 +112,7 @@ class MeasurementModel extends ModelPostgres {
     return `(
       SELECT "Measurements"."measurableId",
              "Measurements"."agentId",
-             array_agg("Measurements"."value" ->> 'data') as "datas"
+             array_agg("Measurements"."value" ->> 'data') as "probabilities"
       FROM "Measurements"
                LEFT JOIN "Measurables"
                          ON "Measurements"."measurableId" = "Measurables".id

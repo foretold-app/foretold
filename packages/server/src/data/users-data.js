@@ -1,6 +1,7 @@
 const _ = require('lodash');
 
 const { DataBase } = require('./data-base');
+const { MeasurementsData } = require('./measurements-data');
 
 const { UserModel } = require('../models-abstract');
 
@@ -14,6 +15,8 @@ class UsersData extends DataBase {
     super();
     this.UserModel = new UserModel();
     this.model = this.UserModel;
+
+    this.measurements = new MeasurementsData();
   }
 
   /**
@@ -76,6 +79,14 @@ class UsersData extends DataBase {
 
     await user.save();
     return user;
+  }
+
+  /**
+   * @param {Models.ObjectID} agentId
+   * @return {Promise<number>}
+   */
+  async getScore(agentId) {
+    return this.measurements.getBrierScore(agentId);
   }
 }
 

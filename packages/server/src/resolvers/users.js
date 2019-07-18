@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const data = require('../data');
 
 /**
@@ -32,7 +34,20 @@ async function one(root, args, context) {
   }
 }
 
+/**
+ * @param {*} root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<number>}
+ */
+async function score(root, _args, _context, _info) {
+  const agentId = _.get(root, 'agentId');
+  return data.users.getScore(agentId);
+}
+
 module.exports = {
   one,
   update,
+  score,
 };

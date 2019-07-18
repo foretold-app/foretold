@@ -98,6 +98,14 @@ class MeasurementsData extends DataBase {
 
     return this.MeasurementModel.getOne({ measurableId, agentId });
   }
+
+  /**
+   * @param {Models.ObjectID} agentId
+   * @return {Promise<number>}
+   */
+  async getBrierScore(agentId) {
+    return this.model.getBrierScore(agentId);
+  }
 }
 
 module.exports = {

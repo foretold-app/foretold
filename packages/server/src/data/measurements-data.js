@@ -69,7 +69,7 @@ class MeasurementsData extends DataBase {
       where: {
         id,
         measurableId: {
-          [this.model.Op.in]: this.MeasurementModel.measurableIdsLiteral(options.agentId),
+          [this.model.Op.in]: this.MeasurementModel._measurableIdsLiteral(options.agentId),
         },
       },
     });
@@ -97,6 +97,14 @@ class MeasurementsData extends DataBase {
     }
 
     return this.MeasurementModel.getOne({ measurableId, agentId });
+  }
+
+  /**
+   * @param {Models.ObjectID} agentId
+   * @return {Promise<number>}
+   */
+  async getBrierScore(agentId) {
+    return this.model.getBrierScore(agentId);
   }
 }
 

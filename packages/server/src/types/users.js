@@ -2,6 +2,7 @@ const graphql = require('graphql');
 const { resolver, DateType } = require('graphql-sequelize');
 
 const models = require('../models');
+const resolvers = require('../resolvers')
 
 const userUpdateInput = new graphql.GraphQLInputObjectType({
   name: 'UserUpdateInput',
@@ -27,6 +28,11 @@ const user = new graphql.GraphQLObjectType({
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     agentId: { type: graphql.GraphQLString },
     isMe: require('./common').isMe,
+
+    score: {
+      type: graphql.GraphQLFloat,
+      resolve: resolvers.users.score,
+    },
 
     Agent: {
       type: require('./agents').agent,

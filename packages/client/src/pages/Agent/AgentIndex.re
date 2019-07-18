@@ -1,8 +1,7 @@
-open Utils;
 open Foretold__GraphQL;
 
 /* We currently don't use this file */
-let component = ReasonReact.statelessComponent("Measurables");
+let component = ReasonReact.statelessComponent("AgentIndex");
 let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>

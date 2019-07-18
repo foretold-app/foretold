@@ -16,6 +16,29 @@ class AgentModel extends ModelPostgres {
   }
 
   /**
+   * @todo: see this._channelIds()
+   * @protected
+   * @param {Models.ObjectID} channelId
+   * @return {Sequelize.literal}
+   */
+  _agentsIdsLiteral(channelId) {
+    return this.literal(this._agentsIds(channelId));
+  }
+
+  /**
+   * @todo: Use ORM opportunities to join tables.
+   * @protected
+   * @param {Models.ObjectID} channelId
+   * @return {string}
+   */
+  _agentsIds(channelId) {
+    return `(
+      SELECT "ChannelMemberships"."agentId" FROM "ChannelMemberships"
+      WHERE "ChannelMemberships"."channelId" = '${channelId}'
+    )`;
+  }
+
+  /**
    * @protected
    * @param {object} [where]
    * @param {Layers.AbstractModelsLayer.filter} [filter]
@@ -26,7 +49,7 @@ class AgentModel extends ModelPostgres {
     if (_.has(filter, 'excludeChannelId')) {
       where[this.and].push({
         id: {
-          [this.notIn]: this.agentsIdsLiteral(filter.excludeChannelId),
+          [this.notIn]: this._agentsIdsLiteral(filter.excludeChannelId),
         },
       });
     }

@@ -35,11 +35,23 @@ let make =
             )
             |> E.O.default("");
 
+          let score =
+            switch (agent) {
+            | {user: Some(r)} =>
+              r.score == None
+                ? "(none)" : r.score |> E.O.default(0.) |> string_of_float
+            | _ => "(none)"
+            };
+
           let secondLevel = AgentTabs.Component.tabs(agentPage, agent);
 
           <>
             <FC.GroupHeader>
               <div> {name |> ste} </div>
+              <Div styles=[SLayout.Styles.descriptionText]>
+                {"Score: " |> ste}
+                {score |> ste}
+              </Div>
               <Div styles=[SLayout.Styles.descriptionText]>
                 {description |> ste}
               </Div>

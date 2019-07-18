@@ -2,6 +2,7 @@ type user = {
   id: string,
   name: string,
   description: option(string),
+  score: option(float),
 };
 
 type bot = {
@@ -27,6 +28,7 @@ module Query = [%graphql
               id
               name
               description
+              score
             }
             bot: Bot @bsRecord{
               id

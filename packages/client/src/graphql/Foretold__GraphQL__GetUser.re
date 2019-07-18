@@ -116,12 +116,11 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let inner = innerComponentFn => {
-  let query = Query.make();
-  QueryComponent.make(~variables=query##variables, ({result}) =>
+  QueryComponent.make(({result}) =>
     result
-    |> E.HttpResponse.fromApollo
-    |> E.HttpResponse.fmap(e => e##user |> E.O.fmap(toUser))
-    |> E.HttpResponse.optionalToMissing
+    |> HttpResponse.fromApollo
+    |> HttpResponse.fmap(e => e##user |> E.O.fmap(toUser))
+    |> HttpResponse.optionalToMissing
     |> (
       e =>
         switch (e) {
@@ -132,26 +131,5 @@ let inner = innerComponentFn => {
         }
     )
   )
-  |> E.React.el;
-};
-
-let withLoggedInUserQuery = innerComponentFn => {
-  <App.AppContextProvider.Consumer>
-    ...{context => {
-      let serverJwt = ServerJwt.make_from_storage();
-      let auth0tokens = Auth0Tokens.make_from_storage();
-      let authToken = context.authToken;
-
-      switch (serverJwt, authToken, auth0tokens) {
-      | (Some(_), _, _) => inner(innerComponentFn)
-      | (_, None, None) => innerComponentFn(Me.WithoutTokens)
-      | (_, _, _) =>
-        Foretold__GraphQL__Authentication.component(
-          auth0tokens,
-          authToken,
-          inner(innerComponentFn),
-        )
-      };
-    }}
-  </App.AppContextProvider.Consumer>;
+  |> ReasonReact.element;
 };

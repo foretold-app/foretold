@@ -7,23 +7,8 @@ type action =
   | ChangeRoute(Routing.Route.t)
   | ChangeAuthToken(string);
 
-let reducer = (action, state) =>
-  switch (action) {
-  | ChangeRoute(route) => ReasonReact.Update({...state, route})
-  | ChangeAuthToken(authToken) =>
-    ReasonReact.Update({...state, authToken: Some(authToken)})
-  };
-
 let mapUrlToAction = (url: ReasonReact.Router.url) =>
   ChangeRoute(url |> Routing.Route.fromUrl);
-
-type appContext = {authToken: option(string)};
-
-module AppContextProvider =
-  Contexts.MakePair({
-    type t = appContext;
-    let defaultValue = {authToken: None};
-  });
 
 let urlToRoute = (url: ReasonReact.Router.url, send) =>
   url |> mapUrlToAction |> send;
@@ -38,32 +23,42 @@ let tokenToState = (url: ReasonReact.Router.url, send) => {
   };
 };
 
-let make = (componentForRoute, _children) => {
-  let component = "App" |> ReasonReact.reducerComponent;
-  {
-    ...component,
-    reducer,
-    initialState: () => {route: Home, authToken: None},
-    didMount: self => {
-      let initUrl = ReasonReact.Router.dangerouslyGetInitialUrl();
-      urlToRoute(initUrl, self.send);
-      tokenToState(initUrl, self.send);
+let component = "App" |> ReasonReact.reducerComponent;
+let appApolloClient = AppApolloClient.instance();
 
-      let watcherID =
-        ReasonReact.Router.watchUrl(url => {
-          urlToRoute(url, self.send);
-          ();
-        });
-
-      self.onUnmount(() => ReasonReact.Router.unwatchUrl(watcherID));
+let make = _children => {
+  ...component,
+  reducer: (action, state) =>
+    switch (action) {
+    | ChangeRoute(route) => ReasonReact.Update({...state, route})
+    | ChangeAuthToken(authToken) =>
+      ReasonReact.Update({...state, authToken: Some(authToken)})
     },
-    render: self => {
-      let state: state = self.state;
-      let value = {authToken: state.authToken};
 
-      <AppContextProvider.Provider value>
-        {self.state.route |> componentForRoute}
-      </AppContextProvider.Provider>;
-    },
-  };
+  initialState: () => {route: Home, authToken: None},
+
+  didMount: self => {
+    let initUrl = ReasonReact.Router.dangerouslyGetInitialUrl();
+    urlToRoute(initUrl, self.send);
+    tokenToState(initUrl, self.send);
+
+    let watcherID =
+      ReasonReact.Router.watchUrl(url => {
+        urlToRoute(url, self.send);
+        ();
+      });
+
+    self.onUnmount(() => ReasonReact.Router.unwatchUrl(watcherID));
+  },
+
+  render: self => {
+    let state: state = self.state;
+    let appContext: Providers.appContext = {authToken: state.authToken};
+
+    <ReasonApollo.Provider client=appApolloClient>
+      <Providers.AppContext.Provider value=appContext>
+        <Layout route={self.state.route} />
+      </Providers.AppContext.Provider>
+    </ReasonApollo.Provider>;
+  },
 };

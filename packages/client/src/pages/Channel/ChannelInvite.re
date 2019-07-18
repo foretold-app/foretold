@@ -85,7 +85,7 @@ let make =
     let table =
       Foretold__GraphQL.Queries.Agents.componentUsers(
         ~excludeChannelId=channelId, agents =>
-        agents |> E.HttpResponse.flatten(onSuccess, onError, loadingFn)
+        agents |> HttpResponse.flatten(onSuccess, onError, loadingFn)
       );
 
     SLayout.LayoutConfig.make(

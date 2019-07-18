@@ -1,10 +1,4 @@
-open Utils;
-open E;
-open Foretold__GraphQL;
-
-let ste = ReasonReact.string;
-
-let component = ReasonReact.statelessComponent("Redirecting...");
+let component = ReasonReact.statelessComponent("Redirecting");
 
 let make = (~loggedInUser: option(Primary.User.t), _children) => {
   ...component,
@@ -12,18 +6,20 @@ let make = (~loggedInUser: option(Primary.User.t), _children) => {
     switch (loggedInUser) {
     | Some(userData) =>
       let user = userData;
-      let agentId = user.agent |> O.fmap((e: Primary.Agent.t) => e.id);
+      let agentId = user.agent |> E.O.fmap((e: Primary.Agent.t) => e.id);
       let name = user.name;
+
       switch (name, agentId) {
       | ("", _) => Routing.Url.push(Profile)
       | (_, Some(id)) =>
         Routing.Url.push(Agent({agentId: id, subPage: AgentMeasurements}))
       | _ => ()
       };
+
       <>
-        {"Redirecting..." |> ste |> E.React.inH1}
+        {"Redirecting..." |> Utils.ste |> E.React.inH1}
         {"If you are not redirected shortly, try refreshing the page or contacting Ozzie."
-         |> ste
+         |> Utils.ste
          |> E.React.inP}
       </>;
     | _ =>

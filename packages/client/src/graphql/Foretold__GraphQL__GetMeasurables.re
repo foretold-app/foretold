@@ -206,9 +206,9 @@ let queryDirection =
 let componentMaker = (query, innerComponentFn) =>
   QueryComponent.make(~variables=query##variables, o =>
     o.result
-    |> E.HttpResponse.fromApollo
-    |> E.HttpResponse.fmap(unpackEdges)
-    |> E.HttpResponse.optionalToMissing
+    |> HttpResponse.fromApollo
+    |> HttpResponse.fmap(unpackEdges)
+    |> HttpResponse.optionalToMissing
     |> innerComponentFn
   )
   |> E.React.el;

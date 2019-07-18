@@ -233,9 +233,9 @@ let componentMaker = (query, innerComponentFn) =>
 let componentMakerMissingOptional = (query, innerComponentFn) =>
   QueryComponent.make(~variables=query##variables, response =>
     response.result
-    |> E.HttpResponse.fromApollo
-    |> E.HttpResponse.fmap(unpackResults)
-    |> E.HttpResponse.optionalToMissing
+    |> HttpResponse.fromApollo
+    |> HttpResponse.fmap(unpackResults)
+    |> HttpResponse.optionalToMissing
     |> innerComponentFn
   )
   |> ReasonReact.element;

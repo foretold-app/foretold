@@ -1,5 +1,5 @@
 type meWithTokensAndUserLoading = {
-  loadingUserData: E.HttpResponse.t(Primary.User.t),
+  loadingUserData: HttpResponse.t(Primary.User.t),
 };
 
 type meWithTokensAndUserData = {userData: Primary.User.t};

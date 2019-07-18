@@ -218,7 +218,7 @@ let make =
   render: _ => {
     Queries.ChannelMemberships.component(~id=channelId, result =>
       result
-      |> E.HttpResponse.flatten(
+      |> HttpResponse.flatten(
            memberships =>
              succesFn(~channelId, ~layout, ~channel, ~memberships),
            errorFn(layout),

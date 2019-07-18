@@ -30,7 +30,7 @@ let toRoutePage = (route: Route.t, me: Me.t) => {
   | Terms => <StaticPageInCard markdown=StaticMarkdown.termsAndConditions />
   | Channel(channel) => Channel_Layout.makeWithPage(channel, loggedInUser)
   | Agent(agentPage) => Agent_Layout.makeWithPage(agentPage, loggedInUser)
-  | Redirect => Auth0Redirect'.toEl(loggedInUser)
+  | Redirect => Redirecting'.toEl(loggedInUser)
   | AgentIndex => AgentIndex'.toEl(loggedInUser)
   | EntityShow(id) => EntityShow'.toEl({id: id}, loggedInUser)
   | EntityIndex => EntityIndex'.toEl(loggedInUser)
@@ -47,5 +47,30 @@ let toRoutePage = (route: Route.t, me: Me.t) => {
   };
 };
 
-let make = (route: Route.t) =>
-  toRoutePage(route) |> Queries.User.withLoggedInUserQuery;
+let component = "Layout" |> ReasonReact.statelessComponent;
+
+let make = (~route: Route.t, _children) => {
+  ...component,
+  render: _ => {
+    let innerComponentFn = toRoutePage(route);
+
+    <Providers.AppContext.Consumer>
+      ...{context => {
+        let serverJwt = ServerJwt.make_from_storage();
+        let auth0tokens = Auth0Tokens.make_from_storage();
+        let authToken = context.authToken;
+
+        switch (serverJwt, authToken, auth0tokens) {
+        | (Some(_), _, _) => Queries.User.inner(innerComponentFn)
+        | (_, None, None) => innerComponentFn(Me.WithoutTokens)
+        | (_, _, _) =>
+          Queries.Authentication.component(
+            auth0tokens,
+            authToken,
+            Queries.User.inner(innerComponentFn),
+          )
+        };
+      }}
+    </Providers.AppContext.Consumer>;
+  },
+};

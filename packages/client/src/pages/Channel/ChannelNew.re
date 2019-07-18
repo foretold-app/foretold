@@ -1,9 +1,4 @@
-open Utils;
-open Antd;
-open MomentRe;
 open Rationale.Function.Infix;
-
-let ste = ReasonReact.string;
 
 module ChannelFormShower = ReForm.Create(ChannelForm.NewChannelParams);
 

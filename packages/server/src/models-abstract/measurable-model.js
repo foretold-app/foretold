@@ -22,10 +22,16 @@ class MeasurableModel extends ModelPostgres {
    * @return {Sequelize.literal|*}
    */
   getStateOrderField() {
+    const {
+      OPEN,
+      JUDGEMENT_PENDING,
+      JUDGED,
+    } = MeasurableModel.MEASURABLE_STATE;
+
     return this.sequelize.literal(
-      `(CASE WHEN "state"='${MeasurableModel.MEASURABLE_STATE.OPEN}' THEN 1 ` +
-      `WHEN "state"='${MeasurableModel.MEASURABLE_STATE.JUDGEMENT_PENDING}' THEN 2 ` +
-      `WHEN "state"='${MeasurableModel.MEASURABLE_STATE.JUDGED}' THEN 3 ` +
+      `(CASE WHEN "state"='${OPEN}' THEN 1 ` +
+      `WHEN "state"='${JUDGEMENT_PENDING}' THEN 2 ` +
+      `WHEN "state"='${JUDGED}' THEN 3 ` +
       `ELSE 5 END) AS "stateOrder"`,
     );
   }

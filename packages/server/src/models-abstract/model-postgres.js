@@ -57,9 +57,13 @@ class ModelPostgres extends Model {
   channelIds(agentId) {
     return agentId ? `(
       SELECT "Channels"."id" FROM "Channels"
-      LEFT OUTER JOIN "ChannelMemberships" ON "Channels".id = "ChannelMemberships"."channelId"
+      LEFT OUTER JOIN 
+        "ChannelMemberships" 
+        ON "Channels".id = "ChannelMemberships"."channelId"
         AND "ChannelMemberships"."agentId" = '${agentId}'
-      WHERE "Channels"."isPublic" = TRUE OR "ChannelMemberships"."agentId" IS NOT NULL
+      WHERE 
+        "Channels"."isPublic" = TRUE 
+        OR "ChannelMemberships"."agentId" IS NOT NULL
     )` : `(
       SELECT "Channels"."id" FROM "Channels"
       WHERE "Channels"."isPublic" = TRUE
@@ -273,7 +277,7 @@ class ModelPostgres extends Model {
    * @return {boolean}
    */
   async updateAll(params = {}, data = {}, _restrictions = {}, options = {}) {
-    const cond = { where: { ...params} };
+    const cond = { where: { ...params } };
     this._extendConditions(cond, options);
     return !!(await this.model.update(data, cond));
   }
@@ -311,7 +315,12 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.options} [_options]
    * @return {Promise<{data: Models.Model[], total: number}>}
    */
-  async getAllWithConnections(filter = {}, pagination = {}, restrictions = {}, _options = {}) {
+  async getAllWithConnections(
+    filter = {},
+    pagination = {},
+    restrictions = {},
+    _options = {},
+  ) {
     const where = {};
     const include = [];
 

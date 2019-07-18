@@ -3,7 +3,9 @@ const _ = require('lodash');
 const models = require('../models');
 const { ModelPostgres } = require('./model-postgres');
 
-const { CHANNEL_MEMBERSHIP_ROLES } = require('../models/enums/channel-membership-roles');
+const {
+  CHANNEL_MEMBERSHIP_ROLES,
+} = require('../models/enums/channel-membership-roles');
 
 class ChannelMembershipModel extends ModelPostgres {
   constructor() {

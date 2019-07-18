@@ -98,7 +98,9 @@ class MeasurementModel extends ModelPostgres {
     if (filter.competitorType) where.competitorType = {
       [this.in]: filter.competitorType,
     };
-    if (startDate) where[this.and].push({ createdAt: { [this.gte]: startDate } });
+    if (startDate) where[this.and].push({
+      createdAt: { [this.gte]: startDate },
+    });
     if (endDate) where[this.and].push({ createdAt: { [this.lte]: endDate } });
     if (filter.notTaggedByAgent) where.id = {
       [this.notIn]: this.taggedMeasurementsLiteral(filter.notTaggedByAgent),

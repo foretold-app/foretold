@@ -18,6 +18,30 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
+   * @todo: see this.channelIds()
+   * @param {Models.ObjectID} [agentId]
+   * @return {string}
+   */
+  taggedMeasurementsLiteral(agentId) {
+    return this.literal(this.taggedMeasurements(agentId));
+  }
+
+  /**
+   * @todo: see this.channelIds()
+   * @protected
+   * @param {Models.ObjectID} [agentId]
+   * @return {string}
+   */
+  taggedMeasurements(agentId) {
+    return `(
+      SELECT "taggedMeasurementId"
+      FROM "Measurements"
+      WHERE "agentId" = '${agentId}'
+      AND "taggedMeasurementId" IS NOT NULL
+    )`;
+  }
+
+  /**
    * @public
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Models.ObjectID} [filter.measurableId]

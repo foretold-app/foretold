@@ -68,29 +68,6 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: see this.channelIds()
-   * @protected
-   * @param {Models.ObjectID} channelId
-   * @return {Sequelize.literal}
-   */
-  agentsIdsLiteral(channelId) {
-    return this.literal(this.agentsIds(channelId));
-  }
-
-  /**
-   * @todo: Use ORM opportunities to join tables.
-   * @protected
-   * @param {Models.ObjectID} channelId
-   * @return {string}
-   */
-  agentsIds(channelId) {
-    return `(
-      SELECT "ChannelMemberships"."agentId" FROM "ChannelMemberships"
-      WHERE "ChannelMemberships"."channelId" = '${channelId}'
-    )`;
-  }
-
-  /**
-   * @todo: see this.channelIds()
    * @param {Models.ObjectID} [agentId]
    * @return {Sequelize.literal}
    */
@@ -108,30 +85,6 @@ class ModelPostgres extends Model {
       WITH channelIds AS (${this.channelIds(agentId)})
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
-    )`;
-  }
-
-  /**
-   * @todo: see this.channelIds()
-   * @param {Models.ObjectID} [agentId]
-   * @return {string}
-   */
-  taggedMeasurementsLiteral(agentId) {
-    return this.literal(this.taggedMeasurements(agentId));
-  }
-
-  /**
-   * @todo: see this.channelIds()
-   * @protected
-   * @param {Models.ObjectID} [agentId]
-   * @return {string}
-   */
-  taggedMeasurements(agentId) {
-    return `(
-      SELECT "taggedMeasurementId"
-      FROM "Measurements"
-      WHERE "agentId" = '${agentId}'
-      AND "taggedMeasurementId" IS NOT NULL
     )`;
   }
 

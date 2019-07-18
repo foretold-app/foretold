@@ -16,6 +16,29 @@ class AgentModel extends ModelPostgres {
   }
 
   /**
+   * @todo: see this.channelIds()
+   * @protected
+   * @param {Models.ObjectID} channelId
+   * @return {Sequelize.literal}
+   */
+  agentsIdsLiteral(channelId) {
+    return this.literal(this.agentsIds(channelId));
+  }
+
+  /**
+   * @todo: Use ORM opportunities to join tables.
+   * @protected
+   * @param {Models.ObjectID} channelId
+   * @return {string}
+   */
+  agentsIds(channelId) {
+    return `(
+      SELECT "ChannelMemberships"."agentId" FROM "ChannelMemberships"
+      WHERE "ChannelMemberships"."channelId" = '${channelId}'
+    )`;
+  }
+
+  /**
    * @protected
    * @param {object} [where]
    * @param {Layers.AbstractModelsLayer.filter} [filter]

@@ -4,8 +4,8 @@
     "description": "Simple prediction service",
     "main": "index.js",
     "engines": {
-        "node": ">=9.7.1",
-        "yarn": ">=1.15.0"
+        "node": ">=12.6.0",
+        "yarn": ">=1.17.3"
     },
     "private": true,
     "scripts": {

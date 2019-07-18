@@ -26,12 +26,9 @@ class BrierScore {
    * @return {number[]}
    */
   brierScores() {
-    const brierScores = [];
-    _.each(this.probabilities, (probability) => {
-      const brierScore = this._brierScore(probability, this.result);
-      brierScore.push(brierScore);
+    return this.probabilities.map((probability) => {
+      return this._brierScore(probability, this.result);
     });
-    return brierScores;
   }
 
   /**
@@ -44,19 +41,17 @@ class BrierScore {
     if (probability === BrierScore.PERCENTAGES_50) {
       return BrierScore.REGARDLESS_SCORE;
     }
-    if (result === true) {
-      if (probability === BrierScore.PERCENTAGES_100) {
-        return BrierScore.BEST_SCORE;
-      }
-      return ((probability / 100) - 1) ** 2;
+    if (probability === BrierScore.PERCENTAGES_100) {
+      return result === true
+        ? BrierScore.BEST_SCORE
+        : BrierScore.WORST_SCORE;
     }
-    if (result === false) {
-      if (probability === BrierScore.PERCENTAGES_100) {
-        return BrierScore.WORST_SCORE;
-      }
-      return ((probability / 100) - 0) ** 2;
-    }
-    return BrierScore.WORST_SCORE;
+
+    const score = result === true
+      ? ((probability / 100) - 1) ** 2
+      : (probability / 100) ** 2;
+
+    return _.round(score, 2);
   }
 }
 

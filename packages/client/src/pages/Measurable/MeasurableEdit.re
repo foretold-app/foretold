@@ -67,7 +67,7 @@ let formCreation = (id: string, m: MeasurableGet.measurable): React.element => {
   let measurable: Primary.Measurable.t = MeasurableGet.toMeasurable(m);
 
   WithEditMutation.Mutation.make((mutation, data) =>
-    MeasurableForm.SignUpForm.make(
+    MeasurableForm.MeasurableReForm.make(
       ~onSubmit=
         ({values}) =>
           WithEditMutation.mutate(

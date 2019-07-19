@@ -207,7 +207,7 @@ let make =
     ) => {
   ...component,
   render: _ => {
-    ChannelGetMemberships.component(~id=channelId, result =>
+    ChannelMembershipsGet.component(~id=channelId, result =>
       result
       |> HttpResponse.flatten(
            memberships =>

@@ -15,7 +15,7 @@ let make =
     let agentId = agentPage.agentId;
 
     let top =
-      GetAgent.component(
+      AgenGet.component(
         ~id=agentId,
         ({agent}) => {
           let name =

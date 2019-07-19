@@ -3,7 +3,7 @@ module Config = {
   type callFnParams = string;
   let getId = (e: Primary.Measurable.t) => e.id;
   let callFn = (e: callFnParams) =>
-    GetMeasurables.componentWithSeries(~seriesId=e);
+    MeasurablesGet.componentWithSeries(~seriesId=e);
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
 };
 
@@ -36,7 +36,7 @@ let load2Queries = (channelId, seriesId, itemsPerPage, fn) =>
   |> E.F.flatten3Callbacks(
        Reducer.make(~itemsPerPage, ~callFnParams=seriesId, ~subComponent=_),
        ChannelGet.component2(~id=channelId),
-       GetSeries.component(~id=seriesId),
+       SeriesGet.component(~id=seriesId),
      );
 
 let component = ReasonReact.statelessComponent("SeriesShowPage");

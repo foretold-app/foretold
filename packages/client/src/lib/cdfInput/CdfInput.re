@@ -345,7 +345,7 @@ let component = ReasonReact.reducerComponent("CdfInput");
 
 let make =
     (
-      ~data: CreateMeasurement.Mutation.renderPropObj,
+      ~data: MeasurementCreate.Mutation.renderPropObj,
       ~onUpdate=_ => (),
       ~isCreator=false,
       ~onSubmit=_ => (),

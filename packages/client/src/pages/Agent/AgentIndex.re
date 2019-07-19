@@ -3,7 +3,7 @@ let component = ReasonReact.statelessComponent("AgentIndex");
 let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>
-    GetAgents.QueryComponent.make(({result}) =>
+    AgentsGet.QueryComponent.make(({result}) =>
       result
       |> ApolloUtils.apolloResponseToResult
       |> E.R.fmap(d => d##agents)

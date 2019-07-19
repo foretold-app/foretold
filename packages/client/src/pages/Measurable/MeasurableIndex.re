@@ -10,8 +10,8 @@ let load3Queries = (channelId, states, itemsPerPage, fn) =>
          ~subComponent=_,
        ),
        ChannelGet.component2(~id=channelId),
-       GetSeriesCollection.component2(~channelId),
-       GetMeasurablesStateStats.component2(~channelId),
+       SeriesCollectionGet.component2(~channelId),
+       MeasurablesStateStatsGet.component2(~channelId),
      );
 
 let make =

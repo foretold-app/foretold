@@ -27,7 +27,7 @@ module Card = {
       ]);
   };
 
-  let make = (~series: GetSeriesCollection.series, _children) => {
+  let make = (~series: SeriesCollectionGet.series, _children) => {
     ...component,
     render: _self =>
       <div

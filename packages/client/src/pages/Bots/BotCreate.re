@@ -2,7 +2,7 @@ let component = ReasonReact.statelessComponent("BotCreate");
 
 module CMutationForm =
   MutationForm.Make({
-    type queryType = BotCreateQuery.Query.t;
+    type queryType = BotCreateMutation.Query.t;
   });
 
 let make =
@@ -14,9 +14,9 @@ let make =
   ...component,
   render: _ => {
     let body =
-      BotCreateQuery.withMutation((mutation, data) => {
+      BotCreateMutation.withMutation((mutation, data) => {
         let onSubmit = (values: BotForm.Form.onSubmitAPI): unit => {
-          BotCreateQuery.mutate(
+          BotCreateMutation.mutate(
             mutation,
             values.state.values.name,
             values.state.values.description,

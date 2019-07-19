@@ -22,7 +22,7 @@ module Styles = {
 let make = (~id: string, ~loggedInUser: Primary.User.t, _children) => {
   ...component,
   render: _self =>
-    GetMeasurableWithMeasurements.component(~id)
+    MeasurableWithMeasurementsGet.component(~id)
     |> E.F.apply((m: Primary.Measurable.t) =>
          <>
            <Div styles=[Styles.header]>

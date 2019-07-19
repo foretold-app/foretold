@@ -60,13 +60,13 @@ let make = (~route: Route.t, _children) => {
         let authToken = context.authToken;
 
         switch (serverJwt, authToken, auth0tokens) {
-        | (Some(_), _, _) => GetUser.inner(innerComponentFn)
+        | (Some(_), _, _) => UserGet.inner(innerComponentFn)
         | (_, None, None) => innerComponentFn(Me.WithoutTokens)
         | (_, _, _) =>
           Authentication.component(
             auth0tokens,
             authToken,
-            GetUser.inner(innerComponentFn),
+            UserGet.inner(innerComponentFn),
           )
         };
       }}

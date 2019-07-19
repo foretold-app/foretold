@@ -9,13 +9,13 @@ let make =
     ) => {
   ...component,
   render: _ =>
-    CreateMeasurement.Mutation.make(
+    MeasurementCreate.Mutation.make(
       ~onCompleted=_ => Js.log("Request submitted"),
       (mutation, data) =>
         <CdfInput
           measurable
           onSubmit={((value, competitorType, description, valueText)) =>
-            CreateMeasurement.mutate(
+            MeasurementCreate.mutate(
               mutation,
               measurableId,
               value,

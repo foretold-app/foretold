@@ -78,7 +78,7 @@ let make =
     let loadingFn = () => <SLayout.Spin />;
 
     let table =
-      GetAgents.componentUsers(~excludeChannelId=channelId, agents =>
+      AgentsGet.componentUsers(~excludeChannelId=channelId, agents =>
         agents |> HttpResponse.flatten(onSuccess, onError, loadingFn)
       );
 

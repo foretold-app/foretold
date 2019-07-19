@@ -63,8 +63,8 @@ module CMutationForm =
     type queryType = WithEditMutation.GraphQL.t;
   });
 
-let formCreation = (id: string, m: GetMeasurable.measurable): React.element => {
-  let measurable: Primary.Measurable.t = GetMeasurable.toMeasurable(m);
+let formCreation = (id: string, m: MeasurableGet.measurable): React.element => {
+  let measurable: Primary.Measurable.t = MeasurableGet.toMeasurable(m);
 
   WithEditMutation.Mutation.make((mutation, data) =>
     MeasurableForm.SignUpForm.make(
@@ -138,8 +138,8 @@ let make =
       ~head=SLayout.Header.textDiv("Edit Question"),
       ~body=
         <FC.PageCard.BodyPadding>
-          {GetMeasurable.component(
-             ~id=pageParams.id, (m: GetMeasurable.measurable) =>
+          {MeasurableGet.component(
+             ~id=pageParams.id, (m: MeasurableGet.measurable) =>
              formCreation(pageParams.id, m)
            )}
         </FC.PageCard.BodyPadding>,

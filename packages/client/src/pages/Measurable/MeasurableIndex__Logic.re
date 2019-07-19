@@ -9,7 +9,7 @@ module ReducerConfig = {
   let getId = (params: itemType) => params.id;
 
   let callFn = (params: callFnParams) =>
-    GetMeasurables.component2(
+    MeasurablesGet.component2(
       ~channelId=params.channelId,
       ~states=params.states |> Array.map(r => Some(r)),
     );
@@ -20,13 +20,13 @@ module ReducerConfig = {
 module Reducer = PaginationReducerFunctor.Make(ReducerConfig);
 
 type channel = Primary.Channel.t;
-type seriesCollection = array(GetSeriesCollection.series);
+type seriesCollection = array(SeriesCollectionGet.series);
 type loggedInUser = Primary.User.t;
 type reducerParams = Reducer.Types.reducerParams;
 type seriesQuery = HttpResponse.t(seriesCollection);
 type channelQuery = HttpResponse.t(channel);
 type measurablesStateStatsQuery =
-  HttpResponse.t(option(GetMeasurablesStateStats.stats));
+  HttpResponse.t(option(MeasurablesStateStatsGet.stats));
 
 module LoadedAndSelected = {
   type t = {

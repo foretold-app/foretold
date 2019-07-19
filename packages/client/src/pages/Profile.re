@@ -86,8 +86,8 @@ let component = ReasonReact.statelessComponent("Profile");
 
 let withUserQuery =
     (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = GetUser.Query.make(~auth0Id, ());
-  GetUser.QueryComponent.make(~variables=query##variables, ({result}) =>
+  let query = UserGet.Query.make(~auth0Id, ());
+  UserGet.QueryComponent.make(~variables=query##variables, ({result}) =>
     result
     |> ApolloUtils.apolloResponseToResult
     |> E.R.fmap(innerComponentFn)

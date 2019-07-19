@@ -5,7 +5,7 @@ export class Dropdown extends React.Component {
   render() {
     return (
       <Drop
-        trigger="click"
+        trigger={['click']}
         overlayClassName={this.props.overlayClassName}
         overlay={<div>{this.props.overlay}</div>}
         placement="bottomRight"

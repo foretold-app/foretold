@@ -34,12 +34,14 @@ db.Notification = notification;
 db.AgentNotification = agentNotification;
 
 // Associate All Models
+console.log(' --- ');
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
-    console.log('Build association for model:', modelName);
+    console.log(' > Build association for model:', modelName);
     db[modelName].associate(db);
   }
 });
+console.log(' --- ');
 
 // Add Global Hooks
 const events = require('../async/events');

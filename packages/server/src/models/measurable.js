@@ -49,6 +49,14 @@ module.exports = (sequelize, DataTypes) => {
       ]),
       allowNull: false,
     },
+    min: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    max: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
 
     // State
     state: {
@@ -111,6 +119,7 @@ module.exports = (sequelize, DataTypes) => {
       get: resolutionEndpointResponseGetter,
     },
 
+    // Object Dates
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,

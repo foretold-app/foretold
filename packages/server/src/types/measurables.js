@@ -40,6 +40,8 @@ const measurable = new graphql.GraphQLObjectType({
     creatorId: { type: graphql.GraphQLString },
     seriesId: { type: graphql.GraphQLString },
     iAmOwner: require('./common').iAmOwner,
+    min: { type: graphql.GraphQLFloat },
+    max: { type: graphql.GraphQLFloat },
 
     permissions: {
       type: graphql.GraphQLNonNull(require('./permissions').permissions),
@@ -86,6 +88,8 @@ const measurableCreateInput = new graphql.GraphQLInputObjectType({
     labelOnDate: { type: DateType.default },
     labelProperty: { type: graphql.GraphQLString },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    min: { type: graphql.GraphQLFloat },
+    max: { type: graphql.GraphQLFloat },
   })
 });
 
@@ -100,8 +104,8 @@ const measurableUpdateInput = new graphql.GraphQLInputObjectType({
     labelSubject: { type: graphql.GraphQLString },
     labelOnDate: { type: DateType.default },
     labelProperty: { type: graphql.GraphQLString },
-    // remove me then after feature/354
-    // state: { type: measurableState },
+    min: { type: graphql.GraphQLFloat },
+    max: { type: graphql.GraphQLFloat },
   })
 });
 

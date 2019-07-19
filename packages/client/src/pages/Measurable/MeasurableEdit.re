@@ -27,6 +27,8 @@ module WithEditMutation = {
         showDescriptionDate: string,
         labelProperty: string,
         valueType: string,
+        min: string,
+        max: string,
       ) => {
     let date = showDescriptionDate == "TRUE" ? labelOnDate : "";
 
@@ -43,6 +45,8 @@ module WithEditMutation = {
           "resolutionEndpoint": resolutionEndpoint |> Rationale.Option.some,
           "labelSubject": labelSubject |> Rationale.Option.some,
           "valueType": valueType |> Primary.Measurable.valueTypeToEnum,
+          "min": min |> Js.Float.fromString |> Rationale.Option.some,
+          "max": max |> Js.Float.fromString |> Rationale.Option.some,
         },
         (),
       );
@@ -81,6 +85,8 @@ let formCreation =
             values.showDescriptionDate,
             values.labelProperty,
             values.valueType,
+            values.min,
+            values.max,
           ),
       ~initialState={
         name: measurable.name,
@@ -100,6 +106,8 @@ let formCreation =
         showDescriptionProperty: measurable.name == "" ? "TRUE" : "FALSE",
         labelProperty: measurable.labelProperty |> E.O.default(""),
         valueType: measurable.valueType |> Primary.Measurable.valueTypeToStr,
+        min: measurable.min |> E.O.dimap(Js.Float.toString, () => ""),
+        max: measurable.max |> E.O.dimap(Js.Float.toString, () => ""),
       },
       ~schema=[(`name, Custom(_ => None))],
       ({handleSubmit, handleChange, form, _}) =>

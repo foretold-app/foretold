@@ -23,6 +23,8 @@ type measurable = {
   labelSubject: option(string),
   labelOnDate: option(MomentRe.Moment.t),
   labelProperty: option(string),
+  min: option(float),
+  max: option(float),
 };
 
 let toMeasurable = (m: measurable): Primary.Measurable.t =>
@@ -44,6 +46,8 @@ let toMeasurable = (m: measurable): Primary.Measurable.t =>
     ~labelOnDate=m.labelOnDate,
     ~labelProperty=m.labelProperty,
     ~channelId=m.channelId,
+    ~min=m.min,
+    ~max=m.max,
     (),
   );
 
@@ -72,6 +76,8 @@ module Query = [%graphql
              id
              name
            }
+           min
+           max
           }
       }
     |}

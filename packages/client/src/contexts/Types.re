@@ -116,6 +116,8 @@ and measurable = {
   measurements: option(list(measurement)),
   series: option(series),
   iAmOwner: option(bool),
+  min: option(float),
+  max: option(float),
 }
 and measurement = {
   id: string,

@@ -12,15 +12,10 @@ module SimpleHeader = {
     |> ReasonReact.element;
 
   let leaveChannel = (channelId: string) =>
-    Foretold__GraphQL.Mutations.ChannelLeave.Mutation.make((mutation, _) =>
+    ChannelLeave.Mutation.make((mutation, _) =>
       FC.GroupHeader.actionButton(
         ~variant=Secondary,
-        ~onClick=
-          _ =>
-            Foretold__GraphQL.Mutations.ChannelLeave.mutate(
-              mutation,
-              channelId,
-            ),
+        ~onClick=_ => ChannelLeave.mutate(mutation, channelId),
         [|"Leave Community" |> ReasonReact.string|],
       )
       |> E.React.el
@@ -28,14 +23,9 @@ module SimpleHeader = {
     |> E.React.el;
 
   let joinChannel = channelId =>
-    Foretold__GraphQL.Mutations.ChannelJoin.Mutation.make((mutation, _) =>
+    ChannelJoin.Mutation.make((mutation, _) =>
       FC.GroupHeader.actionButton(
-        ~onClick=
-          _ =>
-            Foretold__GraphQL.Mutations.ChannelJoin.mutate(
-              mutation,
-              channelId,
-            ),
+        ~onClick=_ => ChannelJoin.mutate(mutation, channelId),
         [|"Join Community" |> ReasonReact.string|],
       )
       |> E.React.el

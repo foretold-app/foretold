@@ -3,7 +3,7 @@ module ReducerConfig = {
   type callFnParams = string;
   let getId = (e: Primary.Measurable.t) => e.id;
   let callFn = (e: callFnParams) =>
-    Foretold__GraphQL.Queries.Measurables.componentWithCreator(~creatorId=e);
+    MeasurablesGet.componentWithCreator(~creatorId=e);
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
 };
 

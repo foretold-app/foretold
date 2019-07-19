@@ -1,85 +1,18 @@
-module CreateMeasurableMutation = {
-  module GraphQL = [%graphql
-    {|
-             mutation measurableCreate($input: MeasurableCreateInput!) {
-                 measurableCreate(input: $input) {
-                   id
-                 }
-             }
-     |}
-  ];
-
-  module Mutation = ReasonApollo.CreateMutation(GraphQL);
-};
-
-module MeasurableReForm = ReForm.Create(MeasurableForm.Params);
-
-let mutate =
-    (
-      mutation: CreateMeasurableMutation.Mutation.apolloMutation,
-      values: MeasurableReForm.values,
-      channelId: string,
-    ) => {
-  let mutate = {
-    let input =
-      values.showDescriptionDate == "TRUE"
-        ? {
-          "name": values.name,
-          "labelCustom": Some(values.labelCustom),
-          "labelProperty": Some(values.labelProperty),
-          "expectedResolutionDate":
-            values.expectedResolutionDate |> Js.Json.string |> E.O.some,
-          "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
-          "labelSubject": values.labelSubject |> E.O.some,
-          "labelOnDate": values.labelOnDate |> Js.Json.string |> E.O.some,
-          "valueType": `FLOAT,
-          "channelId": channelId,
-          "min":
-            values.min == "" ? None : Some(values.min |> float_of_string),
-          "max":
-            values.max == "" ? None : Some(values.max |> float_of_string),
-        }
-        : {
-          "name": values.name,
-          "labelCustom": Some(values.labelCustom),
-          "labelProperty": Some(values.labelProperty),
-          "expectedResolutionDate":
-            values.expectedResolutionDate |> Js.Json.string |> E.O.some,
-          "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
-          "labelSubject": values.labelSubject |> E.O.some,
-          "labelOnDate": None,
-          "valueType": values.valueType |> Primary.Measurable.valueTypeToEnum,
-          "channelId": channelId,
-          "min":
-            values.min == "" ? None : Some(values.min |> float_of_string),
-          "max":
-            values.max == "" ? None : Some(values.max |> float_of_string),
-        };
-
-    CreateMeasurableMutation.GraphQL.make(~input, ());
-  };
-
-  mutation(
-    ~variables=mutate##variables,
-    ~refetchQueries=[|"getMeasurables"|],
-    (),
-  )
-  |> ignore;
-};
-
-let component = ReasonReact.statelessComponent("Measurables");
+let component = ReasonReact.statelessComponent("MeasurableNew");
 
 module CMutationForm =
   MutationForm.Make({
-    type queryType = CreateMeasurableMutation.GraphQL.t;
+    type queryType = MeasurableCreate.GraphQL.t;
   });
 
 let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
     let formCreator = mutation =>
-      MeasurableReForm.make(
-        ~onSubmit=({values}) => mutate(mutation, values, channelId),
+      MeasurableForm.MeasurableReForm.make(
+        ~onSubmit=
+          ({values}) =>
+            MeasurableCreate.mutate(mutation, values, channelId),
         ~initialState={
           name: "",
           labelCustom: "",
@@ -102,7 +35,7 @@ let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
       ~head=SLayout.Header.textDiv("New Question"),
       ~body=
         <FC.PageCard.BodyPadding>
-          {CreateMeasurableMutation.Mutation.make((mutation, data) =>
+          {MeasurableCreate.Mutation.make((mutation, data) =>
              formCreator(mutation, ({handleSubmit, handleChange, form, _}) =>
                CMutationForm.showWithLoading2(
                  ~result=data.result,
@@ -113,7 +46,7 @@ let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
                      ~handleChange,
                    ),
                  ~onSuccess=
-                   (response: CreateMeasurableMutation.GraphQL.t) => {
+                   (response: MeasurableCreate.GraphQL.t) => {
                      switch (response##measurableCreate) {
                      | Some(m) =>
                        Routing.Url.push(MeasurableShow(channelId, m##id))

@@ -1,11 +1,9 @@
-open Foretold__GraphQL;
-
 /* We currently don't use this file */
 let component = ReasonReact.statelessComponent("AgentIndex");
 let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>
-    Queries.Agents.QueryComponent.make(({result}) =>
+    AgentsGet.QueryComponent.make(({result}) =>
       result
       |> ApolloUtils.apolloResponseToResult
       |> E.R.fmap(d => d##agents)

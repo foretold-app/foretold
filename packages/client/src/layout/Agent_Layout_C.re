@@ -15,7 +15,7 @@ let make =
     let agentId = agentPage.agentId;
 
     let top =
-      Foretold__GraphQL.Queries.Agent.component(
+      AgenGet.component(
         ~id=agentId,
         ({agent}) => {
           let name =

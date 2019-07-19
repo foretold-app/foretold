@@ -1,10 +1,8 @@
-open Foretold__GraphQL;
-
 let component = ReasonReact.statelessComponent("BotCreate");
 
 module CMutationForm =
   MutationForm.Make({
-    type queryType = Mutations.BotCreate.Query.t;
+    type queryType = BotCreateMutation.Query.t;
   });
 
 let make =
@@ -16,9 +14,9 @@ let make =
   ...component,
   render: _ => {
     let body =
-      Mutations.BotCreate.withMutation((mutation, data) => {
+      BotCreateMutation.withMutation((mutation, data) => {
         let onSubmit = (values: BotForm.Form.onSubmitAPI): unit => {
-          Mutations.BotCreate.mutate(
+          BotCreateMutation.mutate(
             mutation,
             values.state.values.name,
             values.state.values.description,

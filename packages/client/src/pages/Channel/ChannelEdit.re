@@ -2,11 +2,9 @@ open Rationale.Function.Infix;
 
 module ChannelFormShower = ReForm.Create(ChannelForm.NewChannelParams);
 
-module Mutation = Foretold__GraphQL.Mutations.ChannelUpdate;
-
 module CMutationForm =
   MutationForm.Make({
-    type queryType = Mutation.Query.t;
+    type queryType = ChannelUpdate.Query.t;
   });
 
 let component = ReasonReact.statelessComponent("ChannelNew");
@@ -14,13 +12,10 @@ let component = ReasonReact.statelessComponent("ChannelNew");
 let make = (~channelId: string, ~layout, _children) => {
   ...component,
   render: _ => {
-    let loadChannel =
-      Foretold__GraphQL.Queries.Channel.getChannelByIdAsComponent(
-        ~id=channelId,
-      );
+    let loadChannel = ChannelGet.getChannelByIdAsComponent(~id=channelId);
 
     let mutationMake =
-      Mutation.Mutation.make(~onCompleted=_ => ()) ||> E.React.el;
+      ChannelUpdate.Mutation.make(~onCompleted=_ => ()) ||> E.React.el;
 
     let header =
       <>
@@ -52,7 +47,7 @@ let make = (~channelId: string, ~layout, _children) => {
       ChannelFormShower.make(
         ~onSubmit=
           ({values}) =>
-            Mutation.mutate(
+            ChannelUpdate.mutate(
               mutation,
               channelId,
               values.name,

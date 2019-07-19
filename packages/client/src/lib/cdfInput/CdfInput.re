@@ -1,7 +1,6 @@
 open E;
 open Utils;
 open Antd;
-open Foretold__GraphQL;
 
 type state = {
   // -> Measurement.value
@@ -346,7 +345,7 @@ let component = ReasonReact.reducerComponent("CdfInput");
 
 let make =
     (
-      ~data: Mutations.MeasurementCreate.Mutation.renderPropObj,
+      ~data: MeasurementCreate.Mutation.renderPropObj,
       ~onUpdate=_ => (),
       ~isCreator=false,
       ~onSubmit=_ => (),

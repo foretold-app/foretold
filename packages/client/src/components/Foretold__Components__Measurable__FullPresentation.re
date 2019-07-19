@@ -1,4 +1,3 @@
-open Foretold__GraphQL;
 open Style.Grid;
 
 module StatusDisplay = Foretold__Component__StatusDisplay;
@@ -23,7 +22,7 @@ module Styles = {
 let make = (~id: string, ~loggedInUser: Primary.User.t, _children) => {
   ...component,
   render: _self =>
-    Queries.MeasurableWithMeasurements.component(~id)
+    MeasurableWithMeasurementsGet.component(~id)
     |> E.F.apply((m: Primary.Measurable.t) =>
          <>
            <Div styles=[Styles.header]>
@@ -63,7 +62,7 @@ let make = (~id: string, ~loggedInUser: Primary.User.t, _children) => {
                    />
                  : E.React.null;
              }
-             {Queries.Measurements.component(
+             {MeasurementsGet.component(
                 ~measurableId=m.id,
                 ~pageLimit=20,
                 ~direction=None,

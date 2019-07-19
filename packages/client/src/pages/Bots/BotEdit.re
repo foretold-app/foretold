@@ -1,10 +1,8 @@
-open Foretold__GraphQL;
-
 let component = ReasonReact.statelessComponent("BotEdit");
 
 module CMutationForm =
   MutationForm.Make({
-    type queryType = Mutations.BotUpdate.Query.t;
+    type queryType = BotUpdate.Query.t;
   });
 
 let make =
@@ -17,9 +15,9 @@ let make =
   ...component,
   render: _ => {
     let getForm = (bot: option(Primary.Bot.t)) =>
-      Mutations.BotUpdate.withMutation((mutation, data) => {
+      BotUpdate.withMutation((mutation, data) => {
         let onSubmit = (values: BotForm.Form.onSubmitAPI): unit => {
-          Mutations.BotUpdate.mutate(
+          BotUpdate.mutate(
             mutation,
             pageParams.id,
             values.state.values.name,
@@ -49,7 +47,7 @@ let make =
       });
 
     let botId = pageParams.id;
-    let body = Queries.Bot.component(~id=botId, getForm);
+    let body = BotGet.component(~id=botId, getForm);
 
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv("Edit a Bot"),

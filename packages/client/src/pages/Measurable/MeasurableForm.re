@@ -90,7 +90,7 @@ module Params = {
   ];
 };
 
-module SignUpForm = ReForm.Create(Params);
+module MeasurableReForm = ReForm.Create(Params);
 
 let dataSource =
   EKen.Things.getAll
@@ -99,7 +99,7 @@ let dataSource =
        {"key": r |> Graph_T.Thing.id, "id": r |> Graph_T.Thing.id}
      );
 
-let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
+let showForm = (~form: MeasurableReForm.state, ~handleSubmit, ~handleChange) =>
   <AntdForm onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
     {E.React.showIf(
        form.values.showDescriptionProperty == "TRUE",

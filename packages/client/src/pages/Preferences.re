@@ -1,23 +1,4 @@
 open Antd;
-open Foretold__GraphQL;
-
-module EditPreference = [%graphql
-  {|
-    mutation preferenceUpdate(
-        $id: String!
-        $input: PreferenceUpdateInput!
-    ) {
-        preferenceUpdate(
-            id: $id
-            input: $input
-        ) {
-            id
-        }
-    }
- |}
-];
-
-module EditPreferenceMutation = ReasonApollo.CreateMutation(EditPreference);
 
 module FormConfig = {
   type field(_) =
@@ -40,51 +21,22 @@ module FormConfig = {
 
 module Form = ReFormNext.Make(FormConfig);
 
-let mutate =
-    (
-      mutation: EditPreferenceMutation.apolloMutation,
-      stopAllEmails: bool,
-      id: string,
-    ) => {
-  let mutate =
-    EditPreference.make(
-      ~id,
-      ~input={"stopAllEmails": Some(stopAllEmails)},
-      (),
-    );
-  mutation(~variables=mutate##variables, ~refetchQueries=[||], ()) |> ignore;
-};
-
-let component = ReasonReact.statelessComponent("Preference");
-
-let withUserQuery =
-    (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = Queries.User.Query.make(~auth0Id, ());
-  Queries.User.QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(innerComponentFn)
-    |> E.R.id
-  )
-  |> E.React.el;
-};
-
-let withPreferenceMutation = innerComponentFn =>
-  EditPreferenceMutation.make(
-    ~onError=e => Js.log2("Graphql Error:", e),
-    innerComponentFn,
-  )
-  |> E.React.el;
-
 let withUserForm = (id, stopAllEmails, mutation, innerComponentFn) =>
   Form.make(
     ~initialState={stopAllEmails: stopAllEmails},
     ~onSubmit=
-      values => mutate(mutation, values.state.values.stopAllEmails, id),
+      values =>
+        PreferenceUpdate.mutate(
+          mutation,
+          values.state.values.stopAllEmails,
+          id,
+        ),
     ~schema=Form.Validation.Schema([||]),
     innerComponentFn,
   )
   |> E.React.el;
+
+let component = ReasonReact.statelessComponent("Preference");
 
 let formFields = (form: Form.state, send, onSubmit) =>
   <Antd.Form onSubmit={e => onSubmit()}>
@@ -104,7 +56,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
 
 module CMutationForm =
   MutationForm.Make({
-    type queryType = EditPreference.t;
+    type queryType = PreferenceUpdate.EditPreference.t;
   });
 
 let make =
@@ -119,7 +71,7 @@ let make =
       ~head=SLayout.Header.textDiv("Preferences"),
       ~body=
         <FC.PageCard.BodyPadding>
-          {withPreferenceMutation((mutation, data) => {
+          {PreferenceUpdate.withPreferenceMutation((mutation, data) => {
              let agent = loggedInUser.agent;
              let id =
                agent

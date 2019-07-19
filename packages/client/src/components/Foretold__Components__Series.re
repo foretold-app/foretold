@@ -27,8 +27,7 @@ module Card = {
       ]);
   };
 
-  let make =
-      (~series: Foretold__GraphQL.Queries.SeriesCollection.series, _children) => {
+  let make = (~series: SeriesCollectionGet.series, _children) => {
     ...component,
     render: _self =>
       <div

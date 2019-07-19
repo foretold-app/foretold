@@ -28,6 +28,8 @@ module Query = [%graphql
                 id
                 name
               }
+              min
+              max
           }
       }
     |}
@@ -64,6 +66,8 @@ type measurableQuery = {
   "valueType": Types.valueType,
   "stateUpdatedAt": option(MomentRe.Moment.t),
   "updatedAt": MomentRe.Moment.t,
+  "min": option(float),
+  "max": option(float),
 };
 
 let queryMeasurable = (m: measurableQuery): Primary.Measurable.t => {
@@ -93,6 +97,8 @@ let queryMeasurable = (m: measurableQuery): Primary.Measurable.t => {
     ~valueType=m##valueType,
     ~measurements=None,
     ~creator=agent,
+    ~min=m##min,
+    ~max=m##max,
     ~series,
     (),
   );

@@ -1,11 +1,9 @@
-open Foretold__GraphQL;
-
 module Config = {
   type itemType = Primary.Measurable.t;
   type callFnParams = string;
   let getId = (e: Primary.Measurable.t) => e.id;
   let callFn = (e: callFnParams) =>
-    Foretold__GraphQL.Queries.Measurables.componentWithSeries(~seriesId=e);
+    GetMeasurables.componentWithSeries(~seriesId=e);
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
 };
 
@@ -37,8 +35,8 @@ let load2Queries = (channelId, seriesId, itemsPerPage, fn) =>
   ((a, b, c) => (a, b, c) |> fn)
   |> E.F.flatten3Callbacks(
        Reducer.make(~itemsPerPage, ~callFnParams=seriesId, ~subComponent=_),
-       Queries.Channel.component2(~id=channelId),
-       Queries.Series.component(~id=seriesId),
+       ChannelGet.component2(~id=channelId),
+       GetSeries.component(~id=seriesId),
      );
 
 let component = ReasonReact.statelessComponent("SeriesShowPage");

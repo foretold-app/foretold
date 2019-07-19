@@ -20,11 +20,7 @@ module Component = {
     </FC.Tab>;
   };
 
-  let tabs =
-      (
-        page: Routing.AgentPage.t,
-        agent: Foretold__GraphQL.Queries.Agent.agent,
-      ) => {
+  let tabs = (page: Routing.AgentPage.t, agent: GetAgent.agent) => {
     let agentId = page.agentId;
     let subPage = page.subPage;
 

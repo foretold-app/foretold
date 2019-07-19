@@ -1,5 +1,4 @@
 open Css;
-open Foretold__GraphQL;
 
 let component = ReasonReact.statelessComponent("ChannelIndex");
 
@@ -114,7 +113,7 @@ let make =
     ) => {
   ...component,
   render: _ =>
-    Queries.Channels.component(channels =>
+    ChannelsGet.component(channels =>
       SLayout.LayoutConfig.make(
         ~head=SLayout.Header.textDiv("Communities"),
         ~body=Table.fromColumns(Columns.all, channels, ()),

@@ -21,7 +21,7 @@ module SeriesCards = {
       ]);
   };
 
-  type t = Foretold__GraphQL.Queries.SeriesCollection.series;
+  type t = GetSeriesCollection.series;
   type ts = Js.Array.t(t);
 
   let make = (channelId, list: ts) =>

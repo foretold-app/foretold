@@ -1,5 +1,3 @@
-open Foretold__GraphQL;
-
 // @todo: Move this module into "graphql" folder.
 module WithEditMutation = {
   module GraphQL = [%graphql
@@ -65,9 +63,8 @@ module CMutationForm =
     type queryType = WithEditMutation.GraphQL.t;
   });
 
-let formCreation =
-    (id: string, m: Queries.Measurable.measurable): React.element => {
-  let measurable: Primary.Measurable.t = Queries.Measurable.toMeasurable(m);
+let formCreation = (id: string, m: GetMeasurable.measurable): React.element => {
+  let measurable: Primary.Measurable.t = GetMeasurable.toMeasurable(m);
 
   WithEditMutation.Mutation.make((mutation, data) =>
     MeasurableForm.SignUpForm.make(
@@ -141,8 +138,8 @@ let make =
       ~head=SLayout.Header.textDiv("Edit Question"),
       ~body=
         <FC.PageCard.BodyPadding>
-          {Queries.Measurable.component(
-             ~id=pageParams.id, (m: Queries.Measurable.measurable) =>
+          {GetMeasurable.component(
+             ~id=pageParams.id, (m: GetMeasurable.measurable) =>
              formCreation(pageParams.id, m)
            )}
         </FC.PageCard.BodyPadding>,

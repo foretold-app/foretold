@@ -1,5 +1,4 @@
 open Antd;
-open Foretold__GraphQL;
 
 module EditUser = [%graphql
   {|
@@ -87,8 +86,8 @@ let component = ReasonReact.statelessComponent("Profile");
 
 let withUserQuery =
     (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = Queries.User.Query.make(~auth0Id, ());
-  Queries.User.QueryComponent.make(~variables=query##variables, ({result}) =>
+  let query = GetUser.Query.make(~auth0Id, ());
+  GetUser.QueryComponent.make(~variables=query##variables, ({result}) =>
     result
     |> ApolloUtils.apolloResponseToResult
     |> E.R.fmap(innerComponentFn)

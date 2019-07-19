@@ -7,8 +7,7 @@ let makeWithPage =
 
   switch (loggedInUser) {
   | Some(loggedInUser) =>
-    let loadChannel =
-      Foretold__GraphQL.Queries.Channel.component2(~id=channelId);
+    let loadChannel = ChannelGet.component2(~id=channelId);
 
     let toEl = fn => fn |> E.React.makeToEl(~key=channelId);
 

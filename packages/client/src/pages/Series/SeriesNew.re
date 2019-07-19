@@ -1,6 +1,5 @@
 open Utils;
 open Antd;
-open Foretold__GraphQL;
 open Rationale.Function.Infix;
 
 module FormConfig = {
@@ -45,8 +44,8 @@ let component = ReasonReact.statelessComponent("Measurables");
 
 let withUserQuery =
     (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = Queries.User.Query.make(~auth0Id, ());
-  Queries.User.QueryComponent.make(~variables=query##variables, ({result}) =>
+  let query = GetUser.Query.make(~auth0Id, ());
+  GetUser.QueryComponent.make(~variables=query##variables, ({result}) =>
     result
     |> ApolloUtils.apolloResponseToResult
     |> E.R.fmap(innerComponentFn)
@@ -57,7 +56,7 @@ let withUserQuery =
 
 module CMutationForm =
   MutationForm.Make({
-    type queryType = Mutations.SeriesCreate.Query.t;
+    type queryType = SeriesCreate.Query.t;
   });
 
 let formatDate = E.M.format(E.M.format_standard);
@@ -77,7 +76,7 @@ let withForm = (mutation, channelId, innerComponentFn) =>
     ~onSubmit=
       values => {
         let mutate =
-          Mutations.SeriesCreate.mutate(
+          SeriesCreate.mutate(
             mutation,
             values.state.values.name,
             values.state.values.description,
@@ -230,7 +229,7 @@ let make =
       ~head=SLayout.Header.textDiv("Make a New Series"),
       ~body=
         <FC.PageCard.BodyPadding>
-          {Mutations.SeriesCreate.withMutation((mutation, data) =>
+          {SeriesCreate.withMutation((mutation, data) =>
              withForm(mutation, channelId, ({send, state}) =>
                CMutationForm.showWithLoading(
                  ~result=data.result,

@@ -4,7 +4,7 @@ module ReducerConfig = {
 
   let getId = (e: Primary.Measurement.t) => e.id;
   let callFn = (agentId: callFnParams) =>
-    Foretold__GraphQL.Queries.Measurements.componentWithAgent(~agentId);
+    MeasurementsGet.componentWithAgent(~agentId);
 
   let isEqual = (a: itemType, b: itemType) => {
     a.id == b.id;

@@ -227,15 +227,12 @@ let resolutionEndpoint = (~m: measurable) =>
   };
 
 let archiveButton = (~m: measurable) =>
-  Foretold__GraphQL.Mutations.MeasurableArchive.Mutation.make((mutation, _) =>
+  MeasurableArchive.Mutation.make((mutation, _) =>
     <div className=Shared.Item.item>
       <div
         className={Shared.Item.itemButton(DANGER)}
         onClick={e => {
-          Foretold__GraphQL.Mutations.MeasurableArchive.mutate(
-            mutation,
-            m.id,
-          );
+          MeasurableArchive.mutate(mutation, m.id);
           ReactEvent.Synthetic.stopPropagation(e);
         }}>
         {"Archive" |> ste}
@@ -245,15 +242,12 @@ let archiveButton = (~m: measurable) =>
   |> E.React.el;
 
 let unArchiveButton = (~m: measurable) =>
-  Foretold__GraphQL.Mutations.MeasurableUnarchive.Mutation.make((mutation, _) =>
+  MeasurableUnarchive.Mutation.make((mutation, _) =>
     <div className=Shared.Item.item>
       <div
         className={Shared.Item.itemButton(DANGER)}
         onClick={e => {
-          Foretold__GraphQL.Mutations.MeasurableUnarchive.mutate(
-            mutation,
-            m.id,
-          );
+          MeasurableUnarchive.mutate(mutation, m.id);
           ReactEvent.Synthetic.stopPropagation(e);
         }}>
         {"Unarchive" |> ste}

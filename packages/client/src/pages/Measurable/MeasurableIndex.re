@@ -9,9 +9,9 @@ let load3Queries = (channelId, states, itemsPerPage, fn) =>
          ~callFnParams={channelId, states},
          ~subComponent=_,
        ),
-       Foretold__GraphQL.Queries.Channel.component2(~id=channelId),
-       Foretold__GraphQL.Queries.SeriesCollection.component2(~channelId),
-       Foretold__GraphQL.Queries.MeasurablesStateStats.component2(~channelId),
+       ChannelGet.component2(~id=channelId),
+       GetSeriesCollection.component2(~channelId),
+       GetMeasurablesStateStats.component2(~channelId),
      );
 
 let make =

@@ -1,5 +1,3 @@
-open Foretold__GraphQL;
-
 let component = ReasonReact.statelessComponent("MeasurementForm");
 
 let make =
@@ -11,13 +9,13 @@ let make =
     ) => {
   ...component,
   render: _ =>
-    Mutations.MeasurementCreate.Mutation.make(
+    CreateMeasurement.Mutation.make(
       ~onCompleted=_ => Js.log("Request submitted"),
       (mutation, data) =>
         <CdfInput
           measurable
           onSubmit={((value, competitorType, description, valueText)) =>
-            Mutations.MeasurementCreate.mutate(
+            CreateMeasurement.mutate(
               mutation,
               measurableId,
               value,

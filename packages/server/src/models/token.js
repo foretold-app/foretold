@@ -1,5 +1,7 @@
+const { TOKEN_TYPE } = require('./enums/token-type');
+
 module.exports = (sequelize, DataTypes) => {
-  const Model = sequelize.define('Token', {
+  const Token = sequelize.define('Token', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
@@ -19,13 +21,36 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: true,
     },
+    type: {
+      type: DataTypes.ENUM([
+        TOKEN_TYPE.ACCESS_TOKEN,
+        TOKEN_TYPE.AUTH_TOKEN,
+      ]),
+      defaultValue: TOKEN_TYPE.ACCESS_TOKEN,
+    },
+    usageCount: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    expiresAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
   });
 
-  Model.associate = function (models) {
-    Model.Agent = Model.belongsTo(models.Agent, {
+  Token.associate = function associate(models) {
+    Token.Agent = Token.belongsTo(models.Agent, {
       foreignKey: 'agentId',
     });
   };
 
-  return Model;
+  return Token;
 };

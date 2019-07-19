@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const { Model } = require('./model');
 const models = require('../models');
 
@@ -29,6 +31,7 @@ class ModelPostgres extends Model {
     this.and = Op.and;
     this.not = Op.not;
     this.notIn = Op.notIn;
+    this.or = Op.or;
 
     this.fn = this.sequelize.fn;
     this.col = this.sequelize.col;
@@ -36,25 +39,31 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @todo: see this.channelIds()
+   * @todo: see this._channelIds()
+   * @protected
    * @param {Models.ObjectID} [agentId]
    * @return {Sequelize.literal}
    */
-  channelIdsLiteral(agentId) {
-    return this.literal(this.channelIds(agentId));
+  _channelIdsLiteral(agentId) {
+    return this.literal(this._channelIds(agentId));
   }
 
   /**
    * @todo: Use ORM opportunities to join tables.
+   * @protected
    * @param {Models.ObjectID} [agentId]
    * @return {string}
    */
-  channelIds(agentId) {
+  _channelIds(agentId) {
     return agentId ? `(
       SELECT "Channels"."id" FROM "Channels"
-      LEFT OUTER JOIN "ChannelMemberships" ON "Channels".id = "ChannelMemberships"."channelId"
+      LEFT OUTER JOIN 
+        "ChannelMemberships" 
+        ON "Channels".id = "ChannelMemberships"."channelId"
         AND "ChannelMemberships"."agentId" = '${agentId}'
-      WHERE "Channels"."isPublic" = TRUE OR "ChannelMemberships"."agentId" IS NOT NULL
+      WHERE 
+        "Channels"."isPublic" = TRUE 
+        OR "ChannelMemberships"."agentId" IS NOT NULL
     )` : `(
       SELECT "Channels"."id" FROM "Channels"
       WHERE "Channels"."isPublic" = TRUE
@@ -62,73 +71,30 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @todo: see this.channelIds()
-   * @param {Models.ObjectID} channelId
-   * @return {Sequelize.literal}
-   */
-  agentsIdsLiteral(channelId) {
-    return this.literal(this.agentsIds(channelId));
-  }
-
-  /**
-   * @todo: Use ORM opportunities to join tables.
-   * @param {Models.ObjectID} channelId
-   * @return {string}
-   */
-  agentsIds(channelId) {
-    return `(
-      SELECT "ChannelMemberships"."agentId" FROM "ChannelMemberships"
-      WHERE "ChannelMemberships"."channelId" = '${channelId}'
-    )`;
-  }
-
-  /**
-   * @todo: see this.channelIds()
+   * @todo: see this._channelIds()
    * @param {Models.ObjectID} [agentId]
    * @return {Sequelize.literal}
    */
-  measurableIdsLiteral(agentId) {
-    return this.literal(this.measurableIds(agentId));
+  _measurableIdsLiteral(agentId) {
+    return this.literal(this._measurableIds(agentId));
   }
 
   /**
-   * @todo: see this.channelIds()
+   * @todo: see this._channelIds()
    * @param {string} [agentId]
    * @return {string}
    */
-  measurableIds(agentId) {
+  _measurableIds(agentId) {
     return `(
-      WITH channelIds AS (${this.channelIds(agentId)})
+      WITH channelIds AS (${this._channelIds(agentId)})
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
     )`;
   }
 
   /**
-   * @todo: see this.channelIds()
-   * @param {Models.ObjectID} [agentId]
-   * @return {string}
-   */
-  taggedMeasurementsLiteral(agentId) {
-    return this.literal(this.taggedMeasurements(agentId));
-  }
-
-  /**
-   * @todo: see this.channelIds()
-   * @param {Models.ObjectID} [agentId]
-   * @return {string}
-   */
-  taggedMeasurements(agentId) {
-    return `(
-      SELECT "taggedMeasurementId"
-      FROM "Measurements"
-      WHERE "agentId" = '${agentId}'
-      AND "taggedMeasurementId" IS NOT NULL
-    )`;
-  }
-
-  /**
    * @param {object} [where]
+   * @protected
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {object}
    */
@@ -139,7 +105,7 @@ class ModelPostgres extends Model {
     if (restrictions.channelId) {
       where[this.and].push({
         channelId: {
-          [this.in]: this.channelIdsLiteral(restrictions.agentId),
+          [this.in]: this._channelIdsLiteral(restrictions.agentId),
         },
       });
     }
@@ -153,7 +119,7 @@ class ModelPostgres extends Model {
     if (restrictions.measurableId) {
       where[this.and].push({
         measurableId: {
-          [this.in]: this.measurableIdsLiteral(restrictions.agentId),
+          [this.in]: this._measurableIdsLiteral(restrictions.agentId),
         },
       });
     }
@@ -162,8 +128,10 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @protected
    * @param {object} [include]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @return {*}
    */
   applyRestrictionsIncluding(include = [], restrictions = {}) {
     if (!include) include = [];
@@ -182,6 +150,7 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
+   * Extend this method in child classes.
    * @param {object} [where]
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Models.ObjectID} [filter.userId]
@@ -204,19 +173,15 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param {object} [pagination]
-   * @param {number} pagination.first
-   * @param {string} pagination.after
-   * @param {number} pagination.last
-   * @param {string} pagination.before
-   * @param {number} pagination.limit
-   * @param {number} pagination.offset
+   * @protected
+   * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {number} total
    * @return {{offset: number, limit: number }}
    */
   getPagination(pagination = {}, total = 0) {
     pagination.before = Math.abs(pagination.before) || total;
     pagination.after = Math.abs(pagination.after) || 0;
+
     pagination.last = Math.abs(pagination.last) || 0;
     pagination.first = Math.abs(pagination.first) || 0;
 
@@ -245,6 +210,7 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @protected
    * @param {*[]} [data]
    * @param {object} [edgePagination]
    * @return {*[]}
@@ -258,7 +224,7 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @param {*[]} list
+   * @param {*[]} [list]
    * @return {*[]}
    */
   getBooleansOfList(list = []) {
@@ -273,57 +239,72 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @public
    * @param {object} [data]
+   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [_options]
    * @return {Promise.<object>}
    */
-  async createOne(data = {}) {
+  async createOne(data = {}, _restrictions = {}, _options = {}) {
     return this.model.create(data);
   }
 
   /**
+   * @public
    * @param {object} [params]
    * @param {object} [data]
+   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise.<object>}
    */
-  async updateOne(params = {}, data = {}) {
-    const entity = await this.model.findOne({
-      where: params,
-    });
-    if (entity) {
-      await entity.update(data);
-    }
+  async updateOne(params = {}, data = {}, _restrictions = {}, options = {}) {
+    const findCond = { where: { ...params } };
+    const updateCond = {};
+    this._extendConditions(findCond, options);
+    this._extendConditions(updateCond, options);
+
+    const entity = await this.model.findOne(findCond);
+    if (entity) await entity.update(data, updateCond);
     return entity;
   }
 
   /**
-   * @param {object} params
-   * @param {object} data
+   * @public
+   * @param {object} [params]
+   * @param {object} [data]
+   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {boolean}
    */
-  async updateAll(params = {}, data = {}) {
-    return !!(await this.model.update(
-      data,
-      { where: params },
-    ));
+  async updateAll(params = {}, data = {}, _restrictions = {}, options = {}) {
+    const cond = { where: { ...params } };
+    this._extendConditions(cond, options);
+    return !!(await this.model.update(data, cond));
   }
 
   /**
+   * @public
    * @param {Layers.AbstractModelsLayer.filter} filter
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise<void>}
    */
-  async getAll(filter = {}, pagination = {}, restrictions = {}) {
+  async getAll(filter = {}, pagination = {}, restrictions = {}, options = {}) {
     const where = {};
 
     this.applyRestrictions(where, restrictions);
     this.applyFilter(where, filter);
 
-    return this.model.findAll({
+    const cond = {
       limit: pagination.limit,
       offset: pagination.offset,
       where,
-    });
+    };
+
+    this._extendConditions(cond, options);
+
+    return this.model.findAll(cond);
   }
 
   /**
@@ -331,9 +312,15 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [_options]
    * @return {Promise<{data: Models.Model[], total: number}>}
    */
-  async getAllWithConnections(filter = {}, pagination = {}, restrictions = {}) {
+  async getAllWithConnections(
+    filter = {},
+    pagination = {},
+    restrictions = {},
+    _options = {},
+  ) {
     const where = {};
     const include = [];
 
@@ -363,22 +350,77 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param {object} params
+   * @public
+   * @param {object} [params]
    * @param {object} [query]
-   * @param {object} [restrictions]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise<Models.Model>}
    */
-  async getOne(params = {}, query = {}, restrictions = {}) {
+  async getOne(params = {}, query = {}, restrictions = {}, options = {}) {
     const where = { ...params };
     const sort = query.sort === 1 ? 'ASC' : 'DESC';
     const order = [['createdAt', sort]];
 
     this.applyRestrictions(where, restrictions);
 
-    return this.model.findOne({
+    const cond = {
       where,
       order,
-    });
+    };
+
+    this._extendConditions(cond, options);
+
+    return this.model.findOne(cond);
+  }
+
+  /**
+   * @public
+   * @param {object} params
+   * @param {object} query
+   * @param {object} data
+   * @param {Layers.AbstractModelsLayer.restrictions} restrictions
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @return {Promise<Models.Model>}
+   */
+  async upsertOne(params, query, data, restrictions, options) {
+    return await this.getOne(params, query, restrictions, options)
+      || await this.createOne(data, restrictions, options);
+  }
+
+  /**
+   * @public
+   * @return {Promise<*>}
+   */
+  async getTransaction() {
+    return this.sequelize.transaction();
+  }
+
+  /**
+   * @public
+   * @param {object} transaction
+   * @return {Promise<*>}
+   */
+  async commit(transaction) {
+    return transaction.commit();
+  }
+
+  /**
+   * @protected
+   * @param cond
+   * @param {Layers.AbstractModelsLayer.options} options
+   */
+  _extendConditions(cond = {}, options = {}) {
+    if (_.has(options, 'transaction')) {
+      cond.transaction = options.transaction;
+    }
+    if (_.has(options, 'lock')) {
+      cond.lock = options.lock;
+    }
+    if (_.has(options, 'skipLocked')) {
+      cond.skipLocked = options.skipLocked;
+    }
+    return cond;
   }
 }
 

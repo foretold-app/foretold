@@ -1,6 +1,7 @@
 module.exports = {
   up: async function (queryInterface) {
-    await queryInterface.sequelize.query(`
+    try {
+      await queryInterface.sequelize.query(`
         BEGIN;
         
         DROP TABLE IF EXISTS "ChannelMemberships";
@@ -21,10 +22,16 @@ module.exports = {
         
         COMMIT;
     `);
+    } catch (e) {
+      console.error(e);
+      await queryInterface.sequelize.query(`ROLLBACK`);
+      throw e;
+    }
   },
 
   down: async function (queryInterface) {
-    await queryInterface.sequelize.query(`
+    try {
+      await queryInterface.sequelize.query(`
         BEGIN;
         
         DROP TABLE IF EXISTS "AgentsChannels";
@@ -45,5 +52,10 @@ module.exports = {
     
         COMMIT;
     `);
+    } catch (e) {
+      console.error(e);
+      await queryInterface.sequelize.query(`ROLLBACK`);
+      throw e;
+    }
   }
 };

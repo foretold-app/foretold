@@ -12,17 +12,12 @@ let make =
   ...component,
   render: _ => {
     let addToChannelLink = (agentId: string, channelId: string) =>
-      Foretold__GraphQL.Mutations.ChannelMembershipCreate.Mutation.make(
-        (mutation, _) =>
+      ChannelMembershipCreate.Mutation.make((mutation, _) =>
         <Foretold__Components__Link
           linkType={
             Action(
               _ =>
-                Foretold__GraphQL.Mutations.ChannelMembershipCreate.mutate(
-                  mutation,
-                  agentId,
-                  channelId,
-                ),
+                ChannelMembershipCreate.mutate(mutation, agentId, channelId),
             )
           }>
           {"Add to Community" |> ReasonReact.string}
@@ -83,9 +78,8 @@ let make =
     let loadingFn = () => <SLayout.Spin />;
 
     let table =
-      Foretold__GraphQL.Queries.Agents.componentUsers(
-        ~excludeChannelId=channelId, agents =>
-        agents |> E.HttpResponse.flatten(onSuccess, onError, loadingFn)
+      AgentsGet.componentUsers(~excludeChannelId=channelId, agents =>
+        agents |> HttpResponse.flatten(onSuccess, onError, loadingFn)
       );
 
     SLayout.LayoutConfig.make(

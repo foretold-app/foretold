@@ -8,8 +8,8 @@ const Op = {
 
 const ModelPostgres = {
   Op,
-  channelIdsLiteral: jest.fn(() => 'channelIdsLiteral'),
-  measurableIdsLiteral: jest.fn(() => 'measurableIdsLiteral'),
+  _channelIdsLiteral: jest.fn(() => 'channelIdsLiteral'),
+  _measurableIdsLiteral: jest.fn(() => 'measurableIdsLiteral'),
   deleteOne: jest.fn(() => Promise.resolve(true)),
   updateOne: jest.fn(() => Promise.resolve(true)),
   getAll: jest.fn(() => Promise.resolve(true)),
@@ -53,6 +53,22 @@ const TokenModel = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
 
+const PreferenceModel = jest.fn().mockImplementation(() => ({
+  ...ModelPostgres,
+}));
+
+const TemplateModel = jest.fn().mockImplementation(() => ({
+  ...ModelPostgres,
+}));
+
+const NotificationModel = jest.fn().mockImplementation(() => ({
+  ...ModelPostgres,
+}));
+
+const AgentNotificationModel = jest.fn().mockImplementation(() => ({
+  ...ModelPostgres,
+}));
+
 const Model = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
@@ -67,5 +83,9 @@ module.exports = {
   UserModel,
   BotModel,
   TokenModel,
+  PreferenceModel,
+  TemplateModel,
+  NotificationModel,
+  AgentNotificationModel,
   Model,
 };

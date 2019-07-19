@@ -1,7 +1,6 @@
 open E;
 open Utils;
 open Antd;
-open Foretold__GraphQL;
 
 type state = {
   // -> Measurement.value
@@ -248,6 +247,8 @@ let mainBlock =
            )
            |> ste}
         </h4>
+        {Primary.Measurable.toMinMaxDescription(measurable)
+         |> E.O.React.fmapOrNull(r => <p> {r |> ste} </p>)}
         {state.hasLimitError
            ? <FC__Alert type_=`warning>
                {"Warning: Foretold does not currently support ranges of this width, due to smoothing limitations."
@@ -346,7 +347,7 @@ let component = ReasonReact.reducerComponent("CdfInput");
 
 let make =
     (
-      ~data: Mutations.MeasurementCreate.Mutation.renderPropObj,
+      ~data: MeasurementCreate.Mutation.renderPropObj,
       ~onUpdate=_ => (),
       ~isCreator=false,
       ~onSubmit=_ => (),

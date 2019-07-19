@@ -16,9 +16,7 @@ module type Config = {
       callFnParams,
       ~pageLimit: int,
       ~direction: direction,
-      ~innerComponentFn: Client.E.HttpResponse.t(
-                           Primary.Connection.t(itemType),
-                         ) =>
+      ~innerComponentFn: HttpResponse.t(Primary.Connection.t(itemType)) =>
                          ReasonReact.reactElement
     ) =>
     ReasonReact.reactElement;
@@ -36,7 +34,7 @@ module Make = (Config: Config) => {
 
     type connection = Primary.Connection.t(Config.itemType);
 
-    type response = Client.E.HttpResponse.t(connection);
+    type response = HttpResponse.t(connection);
 
     type action =
       | UpdateResponse(response)
@@ -131,17 +129,17 @@ module Make = (Config: Config) => {
 
       let canDecrementPage = (reducerParams: t) =>
         reducerParams.response
-        |> E.HttpResponse.fmap((r: connection) =>
+        |> HttpResponse.fmap((r: connection) =>
              Primary.Connection.hasPreviousPage(r)
            )
-        |> E.HttpResponse.flattenDefault(false, a => a);
+        |> HttpResponse.flattenDefault(false, a => a);
 
       let canIncrementPage = (reducerParams: t) =>
         reducerParams.response
-        |> E.HttpResponse.fmap((r: connection) =>
+        |> HttpResponse.fmap((r: connection) =>
              Primary.Connection.hasNextPage(r)
            )
-        |> E.HttpResponse.flattenDefault(false, a => a);
+        |> HttpResponse.flattenDefault(false, a => a);
 
       let itemExistsAtIndex = (reducerParams: t, index) =>
         switch (reducerParams.response) {
@@ -189,10 +187,10 @@ module Make = (Config: Config) => {
     module ItemUnselected = {
       let changePage = (state: state, pageDirection) =>
         state.response
-        |> E.HttpResponse.fmap((r: Primary.Connection.t('a)) =>
+        |> HttpResponse.fmap((r: Primary.Connection.t('a)) =>
              pageDirection(r) |> E.O.fmap(d => {direction: d})
            )
-        |> E.HttpResponse.flattenDefault(None, a => a)
+        |> HttpResponse.flattenDefault(None, a => a)
         |> E.O.default(state.pageConfig);
 
       let nextPage = (state: state) =>
@@ -428,7 +426,7 @@ module Make = (Config: Config) => {
 
     render: ({state, send}) => {
       let innerComponentFn = response => {
-        if (!E.HttpResponse.isEq(state.response, response, compareItems)) {
+        if (!HttpResponse.isEq(state.response, response, compareItems)) {
           send(UpdateResponse(response));
         };
 

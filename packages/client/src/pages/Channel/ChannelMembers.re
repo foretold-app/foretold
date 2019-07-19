@@ -1,15 +1,12 @@
-open Foretold__GraphQL;
-
 let component = ReasonReact.statelessComponent("ChannelMembers");
 
 let changeRoleAction = (agentId, channelId, role, text) =>
-  Foretold__GraphQL.Mutations.ChannelMembershipRoleUpdate.Mutation.make(
-    (mutation, _) =>
+  ChannelMembershipRoleUpdate.Mutation.make((mutation, _) =>
     <Foretold__Components__Link
       linkType={
         Action(
           _ =>
-            Foretold__GraphQL.Mutations.ChannelMembershipRoleUpdate.mutate(
+            ChannelMembershipRoleUpdate.mutate(
               mutation,
               ~agentId,
               ~channelId,
@@ -23,17 +20,11 @@ let changeRoleAction = (agentId, channelId, role, text) =>
   |> ReasonReact.element;
 
 let removeFromChannel = (agentId, channelId) =>
-  Foretold__GraphQL.Mutations.ChannelMembershipDelete.Mutation.make(
-    (mutation, _) =>
+  ChannelMembershipDelete.Mutation.make((mutation, _) =>
     <Foretold__Components__Link
       linkType={
         Action(
-          _ =>
-            Foretold__GraphQL.Mutations.ChannelMembershipDelete.mutate(
-              mutation,
-              agentId,
-              channelId,
-            ),
+          _ => ChannelMembershipDelete.mutate(mutation, agentId, channelId),
         )
       }>
       {"Remove" |> ReasonReact.string}
@@ -216,9 +207,9 @@ let make =
     ) => {
   ...component,
   render: _ => {
-    Queries.ChannelMemberships.component(~id=channelId, result =>
+    ChannelMembershipsGet.component(~id=channelId, result =>
       result
-      |> E.HttpResponse.flatten(
+      |> HttpResponse.flatten(
            memberships =>
              succesFn(~channelId, ~layout, ~channel, ~memberships),
            errorFn(layout),

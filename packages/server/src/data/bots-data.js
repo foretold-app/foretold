@@ -17,23 +17,6 @@ class BotsData extends DataBase {
   }
 
   /**
-   * @param {object} [data]
-   * @return {Promise<*>}
-   */
-  async createOne(data = {}) {
-    return this.model.createOne(data);
-  }
-
-  /**
-   * @param {object} [params]
-   * @param {object} [data]
-   * @return {Promise<*>}
-   */
-  async updateOne(params = {}, data = {}) {
-    return this.model.updateOne(params, data);
-  }
-
-  /**
    * @public
    * @param {Layers.DataSourceLayer.filter} [filter]
    * @param {Models.ObjectID} filter.userId
@@ -47,24 +30,13 @@ class BotsData extends DataBase {
   }
 
   /**
-   * @todo: fix interface (params, query, options*)
-   * @param {object} [params]
-   * @param {object} [query]
-   * @param {object} [restrictions]
-   * @return {Promise<*>}
-   */
-  async getOne(params = {}, query = {}, restrictions = {}) {
-    return this.model.getOne(params, query, restrictions);
-  }
-
-  /**
    * @param {object} params
    * @return {Promise<string>}
    */
   async tokenRefresh(params = {}) {
     const bot = await this.BotModel.getOne(params);
     if (!bot) throw new Error('Bot is not found');
-    return this.tokens.revokeTokensAndGetTokenByAgentId(bot.agentId);
+    return this.tokens.revokeGet(bot.agentId);
   }
 }
 

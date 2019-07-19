@@ -13,6 +13,8 @@ const { membershipHasAdminRole } = require('./channel-memberships');
 const { measurableIsOwnedByCurrentAgent } = require('./measurables');
 const { measurableIsArchived } = require('./measurables');
 const { botBelongsToCurrentUser } = require('./bots');
+const { userIsOwnedByCurrentAgent } = require('./users');
+const { preferenceIsOwnedByCurrentAgent } = require('./preferences');
 
 const currentAgentIsApplicationAdminOrChannelAdmin = or(
   currentAgentIsApplicationAdmin,
@@ -116,6 +118,9 @@ const rules = {
   Bot: {
     token: botBelongsToCurrentUser,
   },
+  User: {
+    email: userIsOwnedByCurrentAgent,
+  },
   Query: {
     '*': allow,
     permissions: allow,
@@ -139,7 +144,14 @@ const rules = {
     '*': currentAgentIsAuthenticated,
     channelCreate: currentAgentIsAuthenticated,
     botCreate: currentAgentIsAuthenticated,
-    userUpdate: currentAgentIsAuthenticated,
+    userUpdate: and(
+      currentAgentIsAuthenticated,
+      userIsOwnedByCurrentAgent,
+    ),
+    preferenceUpdate: and(
+      currentAgentIsAuthenticated,
+      preferenceIsOwnedByCurrentAgent,
+    ),
     seriesCreate: and(
       currentAgentIsAuthenticated,
       or(

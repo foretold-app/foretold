@@ -11,6 +11,12 @@ services:
       - JWT_ISSUER=Foretold
       - API_URL=http://chane-me/graphql
       - BOT_TOKEN=<change-me>
+      # SMTP
+      - SMTP_HOST=smtp.host.com
+      - SMTP_PORT=465
+      - SMTP_USER=user@host.com
+      - SMTP_PASS=pass
+      - SMTP_FROM=User <user@host.com>
 
   database:
     environment:

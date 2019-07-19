@@ -1,9 +1,6 @@
 open Utils;
 open Antd;
-open Foretold__GraphQL;
 open Rationale.Function.Infix;
-
-let ste = ReasonReact.string;
 
 module FormConfig = {
   type field(_) =
@@ -47,8 +44,8 @@ let component = ReasonReact.statelessComponent("Measurables");
 
 let withUserQuery =
     (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = Queries.User.Query.make(~auth0Id, ());
-  Queries.User.QueryComponent.make(~variables=query##variables, ({result}) =>
+  let query = UserGet.Query.make(~auth0Id, ());
+  UserGet.QueryComponent.make(~variables=query##variables, ({result}) =>
     result
     |> ApolloUtils.apolloResponseToResult
     |> E.R.fmap(innerComponentFn)
@@ -59,7 +56,7 @@ let withUserQuery =
 
 module CMutationForm =
   MutationForm.Make({
-    type queryType = Mutations.SeriesCreate.Query.t;
+    type queryType = SeriesCreate.Query.t;
   });
 
 let formatDate = E.M.format(E.M.format_standard);
@@ -79,7 +76,7 @@ let withForm = (mutation, channelId, innerComponentFn) =>
     ~onSubmit=
       values => {
         let mutate =
-          Mutations.SeriesCreate.mutate(
+          SeriesCreate.mutate(
             mutation,
             values.state.values.name,
             values.state.values.description,
@@ -101,10 +98,10 @@ let formFields = (form: Form.state, send, onSubmit) =>
   <Antd.Form onSubmit={e => onSubmit()}>
     <h3>
       {"Warning: You can not edit a Series after created it at this time."
-       |> ste}
+       |> Utils.ste}
     </h3>
     <Antd.Form.Item>
-      {"Name" |> ste |> E.React.inH3}
+      {"Name" |> Utils.ste |> E.React.inH3}
       <Input
         value={form.values.name}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -113,7 +110,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"Description" |> ste |> E.React.inH3}
+      {"Description" |> Utils.ste |> E.React.inH3}
       <Input
         value={form.values.description}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -122,7 +119,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"Subjects" |> ste |> E.React.inH3}
+      {"Subjects" |> Utils.ste |> E.React.inH3}
       {form.values.subjects
        |> E.L.fmapi((i, r) =>
             <Input
@@ -148,11 +145,11 @@ let formFields = (form: Form.state, send, onSubmit) =>
             ),
           )
         }>
-        {"Add Subject" |> ste}
+        {"Add Subject" |> Utils.ste}
       </Button>
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"Properties" |> ste |> E.React.inH3}
+      {"Properties" |> Utils.ste |> E.React.inH3}
       {form.values.properties
        |> E.L.fmapi((i, r) =>
             <Input
@@ -178,11 +175,11 @@ let formFields = (form: Form.state, send, onSubmit) =>
             ),
           )
         }>
-        {"Add Property" |> ste}
+        {"Add Property" |> Utils.ste}
       </Button>
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"Dates" |> ste |> E.React.inH3}
+      {"Dates" |> Utils.ste |> E.React.inH3}
       {form.values.dates
        |> E.L.fmapi((i, r) =>
             <DatePicker
@@ -209,12 +206,12 @@ let formFields = (form: Form.state, send, onSubmit) =>
             ),
           )
         }>
-        {"Add Date" |> ste}
+        {"Add Date" |> Utils.ste}
       </Button>
     </Antd.Form.Item>
     <Antd.Form.Item>
       <Button _type=`primary onClick={_ => onSubmit()}>
-        {"Submit" |> ste}
+        {"Submit" |> Utils.ste}
       </Button>
     </Antd.Form.Item>
   </Antd.Form>;
@@ -232,7 +229,7 @@ let make =
       ~head=SLayout.Header.textDiv("Make a New Series"),
       ~body=
         <FC.PageCard.BodyPadding>
-          {Mutations.SeriesCreate.withMutation((mutation, data) =>
+          {SeriesCreate.withMutation((mutation, data) =>
              withForm(mutation, channelId, ({send, state}) =>
                CMutationForm.showWithLoading(
                  ~result=data.result,

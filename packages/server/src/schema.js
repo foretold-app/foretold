@@ -16,6 +16,7 @@ const schema = new graphql.GraphQLSchema({
     types.channels.channel,
     types.channelMemberships.channelsMembership,
     types.bots.bot,
+    types.users.user,
   ],
 
   query: new graphql.GraphQLObjectType({
@@ -163,8 +164,10 @@ const schema = new graphql.GraphQLSchema({
         type: graphql.GraphQLNonNull(types.authentications.authenticationJwt),
         args: {
           auth0jwt: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          auth0accessToken: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          authToken: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
-        resolve: resolvers.authentications.getJwtByAuth0Jwt,
+        resolve: resolvers.authentications.exchangeToken,
       },
     }
   }),
@@ -311,6 +314,15 @@ const schema = new graphql.GraphQLSchema({
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
         resolve: resolvers.bots.tokenRefresh,
+      },
+
+      preferenceUpdate: {
+        type: types.preferences.preference,
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          input: { type: graphql.GraphQLNonNull(types.preferences.preferenceUpdateInput) },
+        },
+        resolve: resolvers.preferences.update,
       },
 
     }

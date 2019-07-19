@@ -14,8 +14,12 @@ async function botBelongsToCurrentUserRule(root, args, context, info) {
     || _.get(context, 'bot.userId');
   const userId = _.get(context, 'user.id');
   const result = !!botUserId && botUserId === userId;
-  console.log(`\x1b[33m Rule Bots (botBelongsToCurrentUser), ` +
-    `result = "${result}"\x1b[0m`);
+
+  console.log(
+    `\x1b[33m Rule Bots (botBelongsToCurrentUser), ` +
+    `result = "${result}"\x1b[0m`
+  );
+
   return result;
 }
 

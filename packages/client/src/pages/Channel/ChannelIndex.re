@@ -1,7 +1,4 @@
 open Css;
-open Foretold__GraphQL;
-
-let ste = ReasonReact.string;
 
 let component = ReasonReact.statelessComponent("ChannelIndex");
 
@@ -40,11 +37,11 @@ module Columns = {
 
   let nameColumn: column =
     Table.Column.make(
-      ~name="Name" |> ste,
+      ~name="Name" |> Utils.ste,
       ~render=
         (r: record) =>
           <Foretold__Components__Link linkType={Internal(ChannelShow(r.id))}>
-            {r.name |> ste}
+            {r.name |> Utils.ste}
           </Foretold__Components__Link>,
       ~flex=2,
       (),
@@ -52,41 +49,41 @@ module Columns = {
 
   let descriptionColumn: column =
     Table.Column.make(
-      ~name="Description" |> ste,
-      ~render=(r: record) => r.description |> E.O.default("") |> ste,
+      ~name="Description" |> Utils.ste,
+      ~render=(r: record) => r.description |> E.O.default("") |> Utils.ste,
       ~flex=3,
       (),
     );
 
   let memberCountColumn: column =
     Table.Column.make(
-      ~name="Members" |> ste,
+      ~name="Members" |> Utils.ste,
       ~render=
         (r: record) =>
           r.membershipCount
           |> E.O.fmap(string_of_int)
           |> E.O.default("")
-          |> ste,
+          |> Utils.ste,
       ~flex=1,
       (),
     );
 
   let openedCountColumn: column =
     Table.Column.make(
-      ~name="Open Questions" |> ste,
+      ~name="Open Questions" |> Utils.ste,
       ~render=
         (r: record) =>
           r.openedMeasurablesCount
           |> E.O.fmap(string_of_int)
           |> E.O.default("")
-          |> ste,
+          |> Utils.ste,
       ~flex=1,
       (),
     );
 
   let curatedColumn: column =
     Table.Column.make(
-      ~name="Labels" |> ste,
+      ~name="Labels" |> Utils.ste,
       ~render=
         (r: record) =>
           r.isCurated
@@ -116,7 +113,7 @@ let make =
     ) => {
   ...component,
   render: _ =>
-    Queries.Channels.component(channels =>
+    ChannelsGet.component(channels =>
       SLayout.LayoutConfig.make(
         ~head=SLayout.Header.textDiv("Communities"),
         ~body=Table.fromColumns(Columns.all, channels, ()),

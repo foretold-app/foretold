@@ -1,4 +1,4 @@
-FROM node:11.13.0
+FROM node:11.15.0
 
 RUN env
 ENV NODE_ENV=development

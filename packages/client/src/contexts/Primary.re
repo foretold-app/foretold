@@ -207,10 +207,26 @@ module User = {
     | Some(agent) => clbFn(agent)
     };
 
-  let make = (~id, ~name="", ~auth0Id=None, ~agent=None, ()): t => {
+  let make =
+      (
+        ~id,
+        ~name="",
+        ~email=None,
+        ~picture=None,
+        ~description=None,
+        ~auth0Id=None,
+        ~score=None,
+        ~agent=None,
+        (),
+      )
+      : t => {
     id,
     name,
+    email,
+    picture,
+    description,
     auth0Id,
+    score,
     agent,
   };
 };
@@ -273,6 +289,7 @@ module Agent = {
         ~agentType=None,
         ~channels=[||],
         ~channelMemberships=None,
+        ~preference=None,
         (),
       )
       : t => {
@@ -282,16 +299,22 @@ module Agent = {
     agentType,
     channels,
     channelMemberships,
+    preference,
   };
+};
+
+module Preference = {
+  type t = Types.preference;
+
+  let make = (~id, ~stopAllEmails=None, ()): t => {id, stopAllEmails};
 };
 
 module Channel = {
   type t = Types.channel;
-  let showLink = (channel: t) =>
-    Context__Routing.Url.ChannelShow(channel.id);
-  let globalLink = () => Context__Routing.Url.ChannelShow("home");
-  let showUrl = showLink ||> Context__Routing.Url.toString;
-  let showPush = showLink ||> Context__Routing.Url.push;
+  let showLink = (channel: t) => Routing.Url.ChannelShow(channel.id);
+  let globalLink = () => Routing.Url.ChannelShow("home");
+  let showUrl = showLink ||> Routing.Url.toString;
+  let showPush = showLink ||> Routing.Url.push;
 
   module Styles = {
     open Css;
@@ -457,6 +480,21 @@ module Measurable = {
     | "DATE" => `DATE
     };
 
+  let toMinMaxDescription = (measurable: t) => {
+    switch (
+      measurable.min |> E.O.fmap(E.Float.with3DigitsPrecision),
+      measurable.max |> E.O.fmap(E.Float.with3DigitsPrecision),
+    ) {
+    | (Some(min), Some(max)) =>
+      Some(
+        "This has a minimum of " ++ min ++ " and a maximum of " ++ max ++ ".",
+      )
+    | (Some(min), None) => Some("This has a minimum of " ++ min ++ ".")
+    | (None, Some(max)) => Some("This has a maximum of " ++ max ++ ".")
+    | (None, None) => None
+    };
+  };
+
   let make =
       (
         ~id,
@@ -482,6 +520,8 @@ module Measurable = {
         ~series=None,
         ~isArchived=None,
         ~iAmOwner=None,
+        ~min=None,
+        ~max=None,
         (),
       )
       : t => {
@@ -508,5 +548,7 @@ module Measurable = {
     series,
     isArchived,
     iAmOwner,
+    min,
+    max,
   };
 };

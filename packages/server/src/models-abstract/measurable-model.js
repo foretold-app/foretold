@@ -21,11 +21,17 @@ class MeasurableModel extends ModelPostgres {
    * @protected
    * @return {Sequelize.literal|*}
    */
-  getStateOrderField() {
+  _getStateOrderField() {
+    const {
+      OPEN,
+      JUDGEMENT_PENDING,
+      JUDGED,
+    } = MeasurableModel.MEASURABLE_STATE;
+
     return this.sequelize.literal(
-      `(CASE WHEN "state"='${MeasurableModel.MEASURABLE_STATE.OPEN}' THEN 1 ` +
-      `WHEN "state"='${MeasurableModel.MEASURABLE_STATE.JUDGEMENT_PENDING}' THEN 2 ` +
-      `WHEN "state"='${MeasurableModel.MEASURABLE_STATE.JUDGED}' THEN 3 ` +
+      `(CASE WHEN "state"='${OPEN}' THEN 1 ` +
+      `WHEN "state"='${JUDGEMENT_PENDING}' THEN 2 ` +
+      `WHEN "state"='${JUDGED}' THEN 3 ` +
       `ELSE 5 END) AS "stateOrder"`,
     );
   }
@@ -48,9 +54,10 @@ class MeasurableModel extends ModelPostgres {
    * @param {string[]} [filter.isArchived]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [_options]
    * @return {Promise<{data: Models.Measurable[], total: number}>}
    */
-  async getAll(filter = {}, pagination = {}, restrictions = {}) {
+  async getAll(filter = {}, pagination = {}, restrictions = {}, _options = {}) {
     const where = {};
     const include = [];
 
@@ -81,7 +88,7 @@ class MeasurableModel extends ModelPostgres {
         ['createdAt', 'DESC'],
       ],
       attributes: {
-        include: [this.getStateOrderField()],
+        include: [this._getStateOrderField()],
       },
     };
 

@@ -27,31 +27,24 @@ module Card = {
       ]);
   };
 
-  let make =
-      (~series: Foretold__GraphQL.Queries.SeriesCollection.series, _children) => {
+  let make = (~series: SeriesCollectionGet.series, _children) => {
     ...component,
     render: _self =>
       <div
         className=Styles.card
-        onClick={
-          _e => Context.Routing.Url.push(SeriesShow("general", series.id))
-        }>
+        onClick={_e => Routing.Url.push(SeriesShow("general", series.id))}>
         <span className=Styles.heading>
           <Icon.Icon icon="LAYERS" />
           {series.name |> E.O.default("") |> ste}
         </span>
-        {
-          series.description
-          |> E.O.fmap(d => d |> ste |> E.React.inP)
-          |> E.O.React.defaultNull
-        }
-        {
-          series.measurableCount
-          |> E.O.fmap(d =>
-               d |> string_of_int |> (e => e ++ " items") |> ste |> E.React.inP
-             )
-          |> E.O.React.defaultNull
-        }
+        {series.description
+         |> E.O.fmap(d => d |> ste |> E.React.inP)
+         |> E.O.React.defaultNull}
+        {series.measurableCount
+         |> E.O.fmap(d =>
+              d |> string_of_int |> (e => e ++ " items") |> ste |> E.React.inP
+            )
+         |> E.O.React.defaultNull}
       </div>,
   };
 };

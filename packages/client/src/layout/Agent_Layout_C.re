@@ -2,11 +2,11 @@ open SLayout;
 open Utils;
 open Style.Grid;
 
-let component = ReasonReact.statelessComponent("Channel Layout Page");
+let component = ReasonReact.statelessComponent("AgentLayoutPage");
 
 let make =
     (
-      agentPage: Context.Routing.AgentPage.t,
+      agentPage: Routing.AgentPage.t,
       loggedInUser: Primary.User.t,
       {head, body}: LayoutConfig.t,
     ) => {
@@ -15,7 +15,7 @@ let make =
     let agentId = agentPage.agentId;
 
     let top =
-      Foretold__GraphQL.Queries.Agent.component(
+      AgenGet.component(
         ~id=agentId,
         ({agent}) => {
           let name =
@@ -25,10 +25,37 @@ let make =
             | _ => ""
             };
 
+          let description =
+            (
+              switch (agent) {
+              | {bot: Some(r)} => r.description
+              | {user: Some(r)} => r.description
+              | _ => Some("")
+              }
+            )
+            |> E.O.default("");
+
+          let score =
+            switch (agent) {
+            | {user: Some(r)} =>
+              r.score == None
+                ? "(none)" : r.score |> E.O.default(0.) |> string_of_float
+            | _ => "(none)"
+            };
+
           let secondLevel = AgentTabs.Component.tabs(agentPage, agent);
 
           <>
-            <FC.GroupHeader> {name |> ste} </FC.GroupHeader>
+            <FC.GroupHeader>
+              <div> {name |> ste} </div>
+              <Div styles=[SLayout.Styles.descriptionText]>
+                {"Percentage Question Brier Score: " |> ste}
+                {score |> ste}
+              </Div>
+              <Div styles=[SLayout.Styles.descriptionText]>
+                {description |> ste}
+              </Div>
+            </FC.GroupHeader>
             <FC.GroupHeader.SubHeader> secondLevel </FC.GroupHeader.SubHeader>
           </>;
         },
@@ -61,5 +88,5 @@ let make =
 };
 
 let makeWithEl =
-    (agentPage: Context.Routing.AgentPage.t, loggedInUser, t: LayoutConfig.t) =>
+    (agentPage: Routing.AgentPage.t, loggedInUser, t: LayoutConfig.t) =>
   make(agentPage, loggedInUser, t) |> E.React.el;

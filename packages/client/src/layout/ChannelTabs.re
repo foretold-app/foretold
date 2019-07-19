@@ -1,5 +1,5 @@
 open Utils;
-open Context.Routing;
+open Routing;
 
 let tab = (isActive, interalUrl, str) =>
   <FC.Tab isActive onClick={C.Link.LinkType.onClick(Internal(interalUrl))}>
@@ -14,8 +14,7 @@ let tabToInternalUrl = (channelId, tabSelected: ChannelPage.tab): Url.t => {
   channelPage |> Url.fromChannelPage;
 };
 
-let make =
-    (tabSelected: Context.Routing.ChannelPage.tab, channel: Primary.Channel.t) =>
+let make = (tabSelected: Routing.ChannelPage.tab, channel: Primary.Channel.t) =>
   <>
     {tab(
        tabSelected == Measurables,

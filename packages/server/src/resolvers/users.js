@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const data = require('../data');
 
 /**
@@ -5,27 +7,26 @@ const data = require('../data');
  * @param {object} args
  * @param {Models.ObjectID} args.id
  * @param {object} args.input
- * @param {Schema.Context} options
+ * @param {Schema.Context} context
  * @returns {Promise<Models.User>}
  */
-async function update(root, args, options) {
+async function update(root, args, context) {
   const { id } = args;
   const datas = args.input;
-  // @todo: user!
-  const user = options.user;
+  const user = context.user;
   return data.users.updateOne(id, datas, user);
 }
 
 /**
  * @param {*} root
  * @param {object} args
- * @param {Schema.Context} options
+ * @param {Schema.Context} context
  * @returns {Promise<Models.User>}
  */
-async function one(root, args, options) {
+async function one(root, args, context) {
   const { id, auth0Id } = args;
-  if (options.user) {
-    return options.user;
+  if (context.user) {
+    return context.user;
   } else if (id) {
     return data.users.getOne({ id });
   } else if (auth0Id) {
@@ -33,7 +34,20 @@ async function one(root, args, options) {
   }
 }
 
+/**
+ * @param {*} root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<number>}
+ */
+async function score(root, _args, _context, _info) {
+  const agentId = _.get(root, 'agentId');
+  return data.users.getScore(agentId);
+}
+
 module.exports = {
   one,
   update,
+  score,
 };

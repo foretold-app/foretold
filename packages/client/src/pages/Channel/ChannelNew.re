@@ -1,17 +1,10 @@
-open Utils;
-open Antd;
-open MomentRe;
 open Rationale.Function.Infix;
-
-let ste = ReasonReact.string;
 
 module ChannelFormShower = ReForm.Create(ChannelForm.NewChannelParams);
 
-module Mutation = Foretold__GraphQL.Mutations.ChannelCreate;
-
 module CMutationForm =
   MutationForm.Make({
-    type queryType = Mutation.Query.t;
+    type queryType = ChannelCreate.Query.t;
   });
 
 let component = ReasonReact.statelessComponent("ChannelNew");
@@ -20,13 +13,14 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
     let mutationMake =
-      Mutation.Mutation.make(~onCompleted=e => Js.log("HI")) ||> E.React.el;
+      ChannelCreate.Mutation.make(~onCompleted=e => Js.log("HI"))
+      ||> E.React.el;
 
     let form = mutation =>
       ChannelFormShower.make(
         ~onSubmit=
           ({values}) =>
-            Mutation.mutate(
+            ChannelCreate.mutate(
               mutation,
               values.name,
               Some(values.description),

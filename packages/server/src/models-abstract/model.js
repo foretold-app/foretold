@@ -3,24 +3,32 @@
  */
 class Model {
 
-  getAll() {
+  getAll(filter, pagination, restrictions, options) {
     return Promise.reject(new Error('getAll is not implemented.'));
   }
 
-  getOne() {
+  getOne(params, query, restrictions, options) {
     return Promise.reject(new Error('getOne is not implemented.'));
   }
 
-  createOne() {
+  createOne(data, restrictions, options) {
     return Promise.reject(new Error('createOne is not implemented.'));
   }
 
-  updateOne() {
+  updateOne(params, data, restrictions, options) {
     return Promise.reject(new Error('updateOne is not implemented.'));
   }
 
-  deleteOne() {
+  deleteOne(params, restrictions, options) {
     return Promise.reject(new Error('deleteOne is not implemented.'));
+  }
+
+  updateAll(params, data, restrictions, options) {
+    return Promise.reject(new Error('updateAll is not implemented.'));
+  }
+
+  upsertOne(params, query, data, restrictions, options) {
+    return Promise.reject(new Error('upsertOne is not implemented.'));
   }
 }
 

@@ -2,11 +2,15 @@ const graphql = require('graphql');
 const { resolver, DateType } = require('graphql-sequelize');
 
 const models = require('../models');
+const resolvers = require('../resolvers')
 
 const userUpdateInput = new graphql.GraphQLInputObjectType({
   name: 'UserUpdateInput',
   fields: () => ({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    email: { type: graphql.GraphQLString },
+    picture: { type: graphql.GraphQLString },
+    description: { type: graphql.GraphQLString },
   })
 });
 
@@ -15,11 +19,20 @@ const user = new graphql.GraphQLObjectType({
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    description: { type: graphql.GraphQLString },
+    email: { type: graphql.GraphQLString },
+    picture: { type: graphql.GraphQLString },
+    isEmailVerified: { type: graphql.GraphQLBoolean },
     auth0Id: { type: graphql.GraphQLString },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     agentId: { type: graphql.GraphQLString },
     isMe: require('./common').isMe,
+
+    score: {
+      type: graphql.GraphQLFloat,
+      resolve: resolvers.users.score,
+    },
 
     Agent: {
       type: require('./agents').agent,

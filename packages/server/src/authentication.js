@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const data = require('./data');
 
 /**
@@ -5,10 +7,13 @@ const data = require('./data');
  * @return {string | null}
  */
 function getQueryToken(req) {
-  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-    return req.headers.authorization.split(' ')[1];
-  } else if (req.query && req.query.token) {
-    return req.query.token;
+  const authorization = _.get(req, 'headers.authorization');
+  const token = _.get(req, 'query.token');
+
+  if (authorization && authorization.split(' ')[0] === 'Bearer') {
+    return authorization.split(' ')[1];
+  } else if (!!token) {
+    return token;
   }
   return null;
 }

@@ -1,11 +1,11 @@
 open SLayout;
 open Style.Grid;
 
-let component = ReasonReact.statelessComponent("Channel Layout Page");
+let component = ReasonReact.statelessComponent("ChannelLayoutPage");
 
 let make =
     (
-      channelPage: Context.Routing.ChannelPage.t,
+      channelPage: Routing.ChannelPage.t,
       loggedInUser: Primary.User.t,
       channel: option(Primary.Channel.t),
       {head, body}: LayoutConfig.t,
@@ -47,8 +47,7 @@ let make =
       };
 
     let headers = () => {
-      let topOption =
-        Context.Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
+      let topOption = Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
       let secondLevel = channel => ChannelTabs.make(topOption, channel);
 
       switch (channel) {
@@ -92,7 +91,7 @@ let make =
 
 let makeWithEl =
     (
-      channelPage: Context.Routing.ChannelPage.t,
+      channelPage: Routing.ChannelPage.t,
       loggedInUser,
       channel: option(Primary.Channel.t),
       layout: LayoutConfig.t,

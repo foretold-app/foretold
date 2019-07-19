@@ -4,7 +4,7 @@ const Sequelize = require('sequelize');
 const { AGENT_TYPE } = require('./enums/agent-type');
 
 module.exports = (sequelize, DataTypes) => {
-  const Model = sequelize.define('Agent', {
+  const Agent = sequelize.define('Agent', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
@@ -26,53 +26,69 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.STRING),
-      get: async function () {
-        if (this.type === AGENT_TYPE.USER) {
-          const user = await this.getUser();
-          return _.get(user, 'name');
-        } else {
-          const bot = await this.getBot();
-          return _.get(bot, 'name');
-        }
-      },
+      get: getName,
     },
     measurementCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
-      get: async function () {
-        const items = await this.getMeasurements();
-        return items.length;
-      },
+      get: getMeasurementCount,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
     },
   });
 
-  Model.associate = function (models) {
-    Model.User = Model.hasOne(models.User, {
+  async function getName() {
+    if (this.type === AGENT_TYPE.USER) {
+      const user = await this.getUser();
+      return _.get(user, 'name');
+    } else {
+      const bot = await this.getBot();
+      return _.get(bot, 'name');
+    }
+  }
+
+  async function getMeasurementCount() {
+    const items = await this.getMeasurements();
+    return items.length;
+  }
+
+  Agent.associate = function associate(models) {
+    Agent.User = Agent.hasOne(models.User, {
       foreignKey: 'agentId',
     });
 
-    Model.Bot = Model.hasOne(models.Bot, {
+    Agent.Bot = Agent.hasOne(models.Bot, {
       foreignKey: 'agentId',
     });
 
-    Model.Measurements = Model.hasMany(models.Measurement, {
+    Agent.Preference = Agent.hasOne(models.Preference, {
+      foreignKey: 'agentId',
+    });
+
+    Agent.Measurements = Agent.hasMany(models.Measurement, {
       foreignKey: 'agentId',
       as: 'Measurements',
     });
 
-    Model.Measurables = Model.hasMany(models.Measurable, {
+    Agent.Measurables = Agent.hasMany(models.Measurable, {
       foreignKey: 'creatorId',
     });
 
     // await (await models.Agent.findByPk('4897a0f7-6b30-4ad3-a3d1-21c487a435ce')).getChannels()
     // models.Agent.findAll({ include: [models.Channel] })
     // await (await models.Agent.find({where: { id: '4897a0f7-6b30-4ad3-a3d1-21c487a435ce' } } )).getChannels();
-    Model.Channels = Model.belongsToMany(models.Channel, {
+    Agent.Channels = Agent.belongsToMany(models.Channel, {
       through: models.ChannelMemberships,
       foreignKey: 'agentId',
       otherKey: 'channelId',
     });
   };
 
-  return Model;
+  return Agent;
 };

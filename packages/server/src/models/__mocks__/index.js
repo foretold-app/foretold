@@ -51,6 +51,14 @@ const Series = {
   findAll: jest.fn(() => Promise.resolve(true)),
 };
 
+const Preference = {
+  findOne: jest.fn(() => Promise.resolve(true)),
+  create: jest.fn(() => Promise.resolve(true)),
+  findByPk: jest.fn(() => Promise.resolve(true)),
+  findOrCreate: jest.fn(() => Promise.resolve(true)),
+  findAll: jest.fn(() => Promise.resolve(true)),
+};
+
 const sequelize = {
 };
 
@@ -62,5 +70,6 @@ module.exports = {
   Measurable,
   Measurement,
   Series,
+  Preference,
   sequelize,
 };

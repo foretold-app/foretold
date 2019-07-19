@@ -90,22 +90,24 @@ class ChannelsData extends DataBase {
    * @todo: fix interface (filter, pagination, options)
    * @todo: move down (model abstraction)
    * @public
-   * @param {object} options
-   * @param {number} [options.offset]
-   * @param {number} [options.limit]
-   * @param {Models.ObjectID} [options.agentId]
+   * @param {object} [filter]
+   * @param {number} [filter.offset]
+   * @param {number} [filter.limit]
+   * @param {Models.ObjectID} [filter.agentId]
+   * @param {object} [_pagination]
+   * @param {object} [_options]
    * @return {Promise<Models.Channel[]>}
    */
-  async getAll(options = {}) {
-    const offset = _.get(options, 'offset', 0);
-    const limit = _.get(options, 'limit', 10);
+  async getAll(filter = {}, _pagination = {}, _options = {}) {
+    const offset = _.get(filter, 'offset', 0);
+    const limit = _.get(filter, 'limit', 10);
     return this.models.Channel.findAll({
       limit,
       offset,
       order: [['createdAt', 'DESC']],
       where: {
         id: {
-          [this.model.Op.in]: this.ChannelModel.channelIdsLiteral(options.agentId),
+          [this.model.Op.in]: this.ChannelModel._channelIdsLiteral(filter.agentId),
         },
       },
     });
@@ -125,7 +127,7 @@ class ChannelsData extends DataBase {
   async getOne(id, options = {}) {
     const restrictions = 'agentId' in options ? {
       id: {
-        [this.model.Op.in]: this.ChannelModel.channelIdsLiteral(options.agentId),
+        [this.model.Op.in]: this.ChannelModel._channelIdsLiteral(options.agentId),
       },
     } : {};
     return this.models.Channel.findOne({

@@ -1,5 +1,4 @@
 open Utils;
-open Foretold__GraphQL;
 open Style.Grid;
 
 module Styles = {
@@ -14,7 +13,7 @@ let title =
     </FC.PageCard.HeaderRow.Title>
   </FC.Base.Div>;
 
-let agentSection = (agent: Queries.Agent.agent) =>
+let agentSection = (agent: AgenGet.agent) =>
   switch (agent) {
   | {user: Some(_user)} =>
     <>
@@ -22,8 +21,7 @@ let agentSection = (agent: Queries.Agent.agent) =>
          agent.isMe,
          <Div float=`right>
            <Antd.Button
-             onClick={_ => Context.Routing.Url.push(BotCreate)}
-             _type=`primary>
+             onClick={_ => Routing.Url.push(BotCreate)} _type=`primary>
              {"New Bot" |> ste}
            </Antd.Button>
          </Div>,
@@ -102,7 +100,7 @@ module Columns = {
 
 type pageParams = {id: string};
 
-let getUserId = (agent: Queries.Agent.agent): string => {
+let getUserId = (agent: AgenGet.agent): string => {
   switch (agent.user) {
   | Some(user) => user.id
   | None => ""
@@ -112,7 +110,7 @@ let getUserId = (agent: Queries.Agent.agent): string => {
 let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>
-    Queries.Agent.component(
+    AgenGet.component(
       ~id=pageParams.id,
       ({agent}) => {
         let showBots = bots =>
@@ -124,7 +122,7 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
 
         let body =
           getUserId(agent) !== ""
-            ? Queries.Bots.component(~ownerId=getUserId(agent), showBots)
+            ? BotsGet.component(~ownerId=getUserId(agent), showBots)
             : <SLayout.NothingToShow />;
 
         let head =

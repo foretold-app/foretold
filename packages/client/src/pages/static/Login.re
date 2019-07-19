@@ -9,8 +9,7 @@ let make = _children => {
       <div className=StaticStyles.title> {"Foretold" |> ste} </div>
       <div className=StaticStyles.description>
         <Antd.Button
-          _type=`primary
-          onClick={_e => Context.Auth.Auth0Client.triggerLoginScreen()}>
+          _type=`primary onClick={_e => Auth0Client.triggerLoginScreen()}>
           {"Login" |> ste}
         </Antd.Button>
       </div>

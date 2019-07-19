@@ -1,14 +1,13 @@
 /* TODO: Allow for cases where user is not logged in */
 
 let makeWithPage =
-    (channelPage: Context.Routing.ChannelPage.t, loggedInUser)
+    (channelPage: Routing.ChannelPage.t, loggedInUser)
     : ReasonReact.reactElement => {
   let channelId = channelPage.channelId;
 
   switch (loggedInUser) {
   | Some(loggedInUser) =>
-    let loadChannel =
-      Foretold__GraphQL.Queries.Channel.component2(~id=channelId);
+    let loadChannel = ChannelGet.component2(~id=channelId);
 
     let toEl = fn => fn |> E.React.makeToEl(~key=channelId);
 
@@ -64,7 +63,7 @@ let makeWithPage =
     };
 
     loadChannel(result =>
-      result |> E.HttpResponse.flatten(successFn, errorFn, loadingFn)
+      result |> HttpResponse.flatten(successFn, errorFn, loadingFn)
     );
   | None => <Home />
   };

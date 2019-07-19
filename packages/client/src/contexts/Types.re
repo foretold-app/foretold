@@ -37,11 +37,20 @@ type permission = [
 
 type permissions = {allow: list(permission)};
 
+type preference = {
+  id: string,
+  stopAllEmails: option(bool),
+};
+
 type user = {
   id: string,
   auth0Id: option(string),
   agent: option(agent),
   name: string,
+  email: option(string),
+  picture: option(string),
+  description: option(string),
+  score: option(float),
 }
 and bot = {
   competitorType,
@@ -62,6 +71,7 @@ and agent = {
   agentType: option(agentType),
   channels: Js.Array.t(channel),
   channelMemberships: option(Js.Array.t(channelMembership)),
+  preference: option(preference),
 }
 and channel = {
   id: string,
@@ -106,6 +116,8 @@ and measurable = {
   measurements: option(list(measurement)),
   series: option(series),
   iAmOwner: option(bool),
+  min: option(float),
+  max: option(float),
 }
 and measurement = {
   id: string,

@@ -480,6 +480,21 @@ module Measurable = {
     | "DATE" => `DATE
     };
 
+  let toMinMaxDescription = (measurable: t) => {
+    switch (
+      measurable.min |> E.O.fmap(E.Float.with3DigitsPrecision),
+      measurable.max |> E.O.fmap(E.Float.with3DigitsPrecision),
+    ) {
+    | (Some(min), Some(max)) =>
+      Some(
+        "This has a minimum of " ++ min ++ " and a maximum of " ++ max ++ ".",
+      )
+    | (Some(min), None) => Some("This has a minimum of " ++ min ++ ".")
+    | (None, Some(max)) => Some("This has a maximum of " ++ max ++ ".")
+    | (None, None) => None
+    };
+  };
+
   let make =
       (
         ~id,

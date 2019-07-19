@@ -247,6 +247,8 @@ let mainBlock =
            )
            |> ste}
         </h4>
+        {Primary.Measurable.toMinMaxDescription(measurable)
+         |> E.O.React.fmapOrNull(r => <p> {r |> ste} </p>)}
         {state.hasLimitError
            ? <FC__Alert type_=`warning>
                {"Warning: Foretold does not currently support ranges of this width, due to smoothing limitations."

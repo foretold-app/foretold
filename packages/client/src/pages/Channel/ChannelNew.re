@@ -2,11 +2,9 @@ open Rationale.Function.Infix;
 
 module ChannelFormShower = ReForm.Create(ChannelForm.NewChannelParams);
 
-module Mutation = ChannelCreate;
-
 module CMutationForm =
   MutationForm.Make({
-    type queryType = Mutation.Query.t;
+    type queryType = ChannelCreate.Query.t;
   });
 
 let component = ReasonReact.statelessComponent("ChannelNew");
@@ -22,7 +20,7 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
       ChannelFormShower.make(
         ~onSubmit=
           ({values}) =>
-            Mutation.mutate(
+            ChannelCreate.mutate(
               mutation,
               values.name,
               Some(values.description),

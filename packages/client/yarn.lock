@@ -722,11 +722,6 @@
   resolved "https://registry.yarnpkg.com/@emotion/utils/-/utils-0.8.2.tgz#576ff7fb1230185b619a75d258cbc98f0867a8dc"
   integrity sha512-rLu3wcBWH4P5q1CGoSSH/i9hrXs7SlbRLkoq9IGuoPYNGQvDJ3pt/wmOM+XgYjIDRMVIdkUWt0RsfzF50JfnCw==
 
-"@foretold/cdf@^1.0.7":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@foretold/cdf/-/cdf-1.0.6.tgz#fca94d7c0d41fe134299e4d669f2890918f1dbe2"
-  integrity sha512-FzRVb/XEbPpFW6dSdrEddfu+CuXqTlOwtfjLbSycTkWY3vLA4ID+fyUnYI5lHGzVQK150SMZQVW7fTL807wzog==
-
 "@glennsl/bs-jest@^0.4.7":
   version "0.4.8"
   resolved "https://registry.yarnpkg.com/@glennsl/bs-jest/-/bs-jest-0.4.8.tgz#e756ae5b43edc1cdcb4b5592021e50984566dafb"

@@ -7,6 +7,8 @@ external guesstimateInput: ReasonReact.reactClass = "GuesstimateInput";
 let make =
     (
       ~sampleCount=10000,
+      ~min=None,
+      ~max=None,
       ~onUpdate=fn,
       ~onChange=fn2,
       ~focusOnRender=true,
@@ -18,6 +20,8 @@ let make =
       "sampleCount": sampleCount,
       "onUpdate": onUpdate,
       "onChange": onChange,
+      "min": min,
+      "max": max,
       "focusOnRender": focusOnRender,
     },
     children,

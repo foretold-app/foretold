@@ -129,10 +129,12 @@ let getCompetitorTypeFromString = (str: string): Types.competitorType =>
   };
 
 module ValueInput = {
-  let floatPoint = send =>
+  let floatPoint = (measurable: Primary.Measurable.t, send) =>
     <GuesstimateInput
       focusOnRender=true
       sampleCount=30000
+      min={measurable.min}
+      max={measurable.max}
       onUpdate={event =>
         {
           let (ys, xs, hasLimitError) = event;
@@ -255,7 +257,7 @@ let mainBlock =
                 |> ste}
              </FC__Alert>
            : ReasonReact.null}
-        {ValueInput.floatPoint(send)}
+        {ValueInput.floatPoint(measurable, send)}
         <div className=Styles.inputBox>
           <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
         </div>

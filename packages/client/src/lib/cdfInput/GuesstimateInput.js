@@ -14,13 +14,20 @@ const minMaxRatio = (ratio) => {
     }
 };
 
-const toCdf = (values) => {
-    const samples = new Samples(values);
-    let min = _.min(values);
-    let max = _.max(values);
-    let ratioSize = minMaxRatio(max/min);
-    let width = ratioSize == "SMALL" ? 20 : 1;
-    const cdf = samples.toCdf({size:1000, width});
+let ratioSize = samples => {
+    samples.sort();
+    const minValue = samples.getPercentile(2);
+    const maxValue = samples.getPercentile(98);
+    return minMaxRatio(maxValue/minValue);
+}
+
+const toCdf = (values, min, max) => {
+    let _values = values;
+    if (_.isFinite(min)){_values = _.filter(_values, r => r > min)};
+    if (_.isFinite(max)){_values = _.filter(_values, r => r < max)};
+    const samples = new Samples(_values);
+    const width = ratioSize(samples) == "SMALL" ? 20 : 1;
+    const cdf = samples.toCdf({size:1000, width, min, max});
     return [cdf.ys, cdf.xs, ratioSize == "LARGE"];
 };
 
@@ -53,7 +60,7 @@ export class GuesstimateInput extends React.Component {
             this.setState({value: event.target.value, items: []});
         }
 
-        this.props.onUpdate(!!values ? toCdf(values): [[], [], false]);
+        this.props.onUpdate((!!values && values.length > 1) ? toCdf(values, this.props.min, this.props.max): [[], [], false]);
         this.props.onChange(text);
       }
     

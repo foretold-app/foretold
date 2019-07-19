@@ -2,7 +2,14 @@ open Utils;
 open MomentRe;
 open Antd;
 
+open Style.Grid;
+
 let formatDate = E.M.format(E.M.format_standard);
+
+module Styles = {
+  open Css;
+  let shortInput = [width(`em(6.))] |> style;
+};
 
 module Params = {
   type state = {
@@ -16,6 +23,8 @@ module Params = {
     showDescriptionDate: string,
     showDescriptionProperty: string,
     valueType: string,
+    min: string,
+    max: string,
   };
 
   type fields = [
@@ -29,6 +38,8 @@ module Params = {
     | `showDescriptionDate
     | `showDescriptionProperty
     | `valueType
+    | `min
+    | `max
   ];
 
   let lens = [
@@ -74,6 +85,8 @@ module Params = {
       (s, resolutionEndpoint) => {...s, resolutionEndpoint},
     ),
     (`valueType, s => s.valueType, (s, valueType) => {...s, valueType}),
+    (`min, s => s.min, (s, min) => {...s, min}),
+    (`max, s => s.max, (s, max) => {...s, max}),
   ];
 };
 
@@ -164,6 +177,42 @@ let showForm = (~form: SignUpForm.state, ~handleSubmit, ~handleChange) =>
              )}
            />
          </Form.Item>
+       </>,
+     )}
+    {E.React.showIf(
+       form.values.valueType == "FLOAT",
+       <>
+         <Div flexDirection=`row>
+           <Div flex=1>
+             <Div flexDirection=`row>
+               <Div flex=1>
+                 <Form.Item label="Min">
+                   <Antd.Input
+                     className=Styles.shortInput
+                     htmlType="number"
+                     value={form.values.min}
+                     onChange={e =>
+                       handleChange(`min, ReactEvent.Form.target(e)##value)
+                     }
+                   />
+                 </Form.Item>
+               </Div>
+               <Div flex=1>
+                 <Form.Item label="Max">
+                   <Antd.Input
+                     className=Styles.shortInput
+                     htmlType="number"
+                     value={form.values.max}
+                     onChange={e =>
+                       handleChange(`max, ReactEvent.Form.target(e)##value)
+                     }
+                   />
+                 </Form.Item>
+               </Div>
+             </Div>
+           </Div>
+           <Div flex=3 />
+         </Div>
        </>,
      )}
     <Form.Item label="Description" help="Markdown supported.">

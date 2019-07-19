@@ -47,6 +47,8 @@ type node = {
   isArchived: bool,
   labelOnDate: option(MomentRe.Moment.t),
   labelProperty: option(string),
+  min: option(float),
+  max: option(float),
 };
 
 /* TODO: Fix channel */
@@ -88,6 +90,8 @@ let toMeasurable = (m: node): Primary.Measurable.t => {
     ~creator=E.O.fmap(toAgent, m.creator),
     ~series=E.O.fmap(toSeries, m.series),
     ~iAmOwner=Some(m.iAmOwner),
+    ~min=m.min,
+    ~max=m.max,
     (),
   );
 };
@@ -139,6 +143,8 @@ module Query = [%graphql
                 name
                 description
               }
+              min
+              max
             }
           }
         }

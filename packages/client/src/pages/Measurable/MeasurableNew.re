@@ -34,6 +34,10 @@ let mutate =
           "labelOnDate": values.labelOnDate |> Js.Json.string |> E.O.some,
           "valueType": `FLOAT,
           "channelId": channelId,
+          "min":
+            values.min == "" ? None : Some(values.min |> float_of_string),
+          "max":
+            values.max == "" ? None : Some(values.max |> float_of_string),
         }
         : {
           "name": values.name,
@@ -46,6 +50,10 @@ let mutate =
           "labelOnDate": None,
           "valueType": values.valueType |> Primary.Measurable.valueTypeToEnum,
           "channelId": channelId,
+          "min":
+            values.min == "" ? None : Some(values.min |> float_of_string),
+          "max":
+            values.max == "" ? None : Some(values.max |> float_of_string),
         };
 
     CreateMeasurableMutation.GraphQL.make(~input, ());
@@ -84,6 +92,8 @@ let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
           showDescriptionDate: "FALSE",
           showDescriptionProperty: "FALSE",
           valueType: "FLOAT",
+          min: "",
+          max: "",
         },
         ~schema=[(`name, Custom(_ => None))],
       );

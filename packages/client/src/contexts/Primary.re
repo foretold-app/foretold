@@ -505,6 +505,8 @@ module Measurable = {
         ~series=None,
         ~isArchived=None,
         ~iAmOwner=None,
+        ~min=None,
+        ~max=None,
         (),
       )
       : t => {
@@ -531,5 +533,7 @@ module Measurable = {
     series,
     isArchived,
     iAmOwner,
+    min,
+    max,
   };
 };

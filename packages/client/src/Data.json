@@ -62,6 +62,39 @@
   },
   {
     "config": {
+      "baseId": "foretold",
+      "resourceId": "development",
+      "aliases": {
+        "name": "@base/properties/p-name",
+        "description": "@base/properties/p-description",
+        "url": "@base/properties/p-url"
+      }
+    },
+    "p-completion-date": {
+      "name": "Date of Completion",
+      "description": "When will this be deployed and available to users?"
+    },
+    "p-total-commits": {
+      "name": "Total Commits",
+      "description": "How many commits is this feature?"
+    },
+    "n-issue-323": {
+      "name": "Email Epic",
+      "description": "For this epic, we want to set up email infrastructure so that users can be emailed when important things happen. We'll test this with just one single transactional email.",
+      "url": "https://github.com/OAGr/foretold/issues/329"
+    },
+    "n-issue-328": {
+      "name": "Measurement Scoring Epic",
+      "description": "The goal of this epic is to have simple 'scores' that can be used to show how good & useful agents are at predicting things. These will act as gamification to encourage users to do better.",
+      "url": "https://github.com/OAGr/foretold/issues/328"
+    },
+    "n-functionality-brier-scrore": {
+      "name": "Simple-Brier-Score",
+      "description": "Implement a simple brier score system, so that users can see their brier scores on binary questions."
+    }
+  },
+  {
+    "config": {
       "baseId": "media",
       "resourceId": "movies",
       "aliases": {

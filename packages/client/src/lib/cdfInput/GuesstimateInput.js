@@ -60,7 +60,13 @@ export class GuesstimateInput extends React.Component {
             this.setState({value: event.target.value, items: []});
         }
 
-        this.props.onUpdate((!!values && values.length > 1) ? toCdf(values, this.props.min, this.props.max): [[], [], false]);
+        if (!values){
+            this.props.onUpdate([[], [], false]);
+        } else if (values.length === 1){
+            this.props.onUpdate([[1], values, false]);
+        } else {
+            this.props.onUpdate(toCdf(values, this.props.min, this.props.max));
+        }
         this.props.onChange(text);
       }
     

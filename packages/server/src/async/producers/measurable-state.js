@@ -1,6 +1,8 @@
+const assert = require('assert');
 const _ = require('lodash');
 
 const { getMeasurableLinkWithToken } = require('../../lib/urls');
+const { MEASURABLE_STATE } = require('../../models/enums/measurable-state');
 
 const { Producer } = require('./producer');
 
@@ -23,6 +25,21 @@ class MeasurableState extends Producer {
         link: getMeasurableLinkWithToken(channel, measurable),
       },
     }
+  }
+
+  /**
+   * @todo: Fix ".super"
+   * @return {Promise<void>}
+   * @protected
+   */
+  async _getLastResolvedMeasurement() {
+    assert(!!this.measurable.id, 'Measurable ID is required');
+    const params = {
+      measurableId: this.measurable.id,
+      state: MEASURABLE_STATE.JUDGED,
+    };
+    const options = await this._getOptions();
+    return Producer.data.measurables.super.getOne(params, options);
   }
 }
 

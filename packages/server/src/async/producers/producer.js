@@ -125,9 +125,8 @@ class Producer {
   }
 
   /**
-   *
    * @return {Promise<{transaction: *}>}
-   * @private
+   * @protected
    */
   async _getOptions() {
     const transaction = await this._getTransaction();

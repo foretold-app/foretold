@@ -26,8 +26,8 @@ async function measurableStateIsChanged(measurableInstance) {
   console.log(name);
 
   try {
-    const producer = new producers.MeasurableState(measurableInstance);
-    const result = await producer.stateChanged();
+    const producer = new producers.MeasurableStateChanged(measurableInstance);
+    const result = await producer.main();
     console.log(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -41,8 +41,8 @@ async function measurableStateIsResolved(measurableInstance) {
   console.log(name);
 
   try {
-    const producer = new producers.MeasurableState(measurableInstance);
-    const result = await producer.stateResolved();
+    const producer = new producers.MeasurableStateResolved(measurableInstance);
+    const result = await producer.main();
     console.log(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);

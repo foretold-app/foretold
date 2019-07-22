@@ -2,7 +2,7 @@ const { TEMPLATE_NAME } = require('../src/models/enums/template-name');
 const { EmailEnvelopeTemplate } = require('../src/models/classes/templates');
 
 module.exports = {
-  up: async function (queryInterface) {
+  up: async function (queryInterface, Sequelize) {
     try {
       await queryInterface.sequelize.query(`BEGIN`);
       const envelopeTemplate = new EmailEnvelopeTemplate({
@@ -12,16 +12,13 @@ module.exports = {
           'Click here to see the result.',
       });
 
-
-      const values = {
+      await queryInterface.bulkInsert('Templates', [{
+        id: Sequelize.fn('uuid_generate_v4'),
         envelopeTemplate: JSON.stringify(envelopeTemplate),
-      };
-
-      const cond = {
         name: TEMPLATE_NAME.MEASURABLE_STATE_IS_RESOLVED,
-      };
-
-      await queryInterface.bulkUpdate('Templates', values, cond);
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }]);
 
       await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {

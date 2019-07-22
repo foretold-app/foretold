@@ -28,7 +28,6 @@ class MeasurableState extends Producer {
   }
 
   /**
-   * @todo: Fix ".super"
    * @return {Promise<void>}
    * @protected
    */
@@ -39,7 +38,7 @@ class MeasurableState extends Producer {
       state: MEASURABLE_STATE.JUDGED,
     };
     const options = await this._getOptions();
-    return Producer.data.measurables.super.getOne(params, options);
+    return Producer.data.measurables.getOne(params, options);
   }
 }
 

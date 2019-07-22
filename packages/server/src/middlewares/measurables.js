@@ -19,7 +19,7 @@ async function setContextMeasurable(root, args, context, info) {
   console.log('\x1b[36m ---> \x1b[0m Middleware (measurable)', { measurableId });
 
   if (measurableId) {
-    context.measurable = await data.measurables.getOne(measurableId);
+    context.measurable = await data.measurables.getOne2(measurableId);
   } else {
     context.measurable = null;
   }

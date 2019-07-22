@@ -93,7 +93,7 @@ class MeasurablesData extends DataBase {
    * @param {Models.ObjectID} options.agentId
    * @return {Promise<*>}
    */
-  async getOne(id, options = {}) {
+  async getOne2(id, options = {}) {
     const restrictions = 'agentId' in options ? {
       channelId: {
         [this.model.Op.in]: this.model._channelIdsLiteral(options.agentId),

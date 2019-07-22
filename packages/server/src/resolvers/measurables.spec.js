@@ -58,7 +58,7 @@ describe('Measurables Resolvers', () => {
     });
     it('returns a measurable', () => {
       return measurables.one(root, args, context, info).then((result) => {
-        expect(data.measurables.getOne).toHaveBeenCalledWith(
+        expect(data.measurables.getOne2).toHaveBeenCalledWith(
           'id1',
           { "agentId": "agentId2" },
         );

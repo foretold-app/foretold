@@ -35,11 +35,11 @@ class MeasurableStateResolved extends MeasurableState {
         await this._assignNotification(agent, notification);
       }
     } catch (e) {
-      await this._commit();
+      await this._rollback();
       console.log(`stateResolved`, e.message, e);
       return false;
     }
-    await this._rollback();
+    await this._commit();
     return true;
   }
 }

@@ -26,7 +26,7 @@ class Producer {
    */
   async _getTransaction() {
     if (!!this.transaction) return this.transaction;
-    this.transaction = await Producer.data.users.getTransaction();
+    this.transaction = await Producer.data.notifications.getTransaction();
     return this.transaction;
   }
 
@@ -36,7 +36,7 @@ class Producer {
    */
   async _commit() {
     const transaction = await this._getTransaction();
-    return Producer.data.users.commit(transaction);
+    return Producer.data.notifications.commit(transaction);
   }
 
   /**
@@ -45,7 +45,7 @@ class Producer {
    */
   async _rollback() {
     const transaction = await this._getTransaction();
-    return Producer.data.users.rollback(transaction);
+    return Producer.data.notifications.rollback(transaction);
   }
 
   /**

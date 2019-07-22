@@ -26,12 +26,11 @@ class Producer {
   }
 
   /**
-   * @param {object} agent
    * @param {object} replacements
    * @return {Promise<*>}
    * @protected
    */
-  async _queueEmail(agent, replacements) {
+  async _queueEmail(replacements) {
     const template = await this._getTemplate();
     assert(!!_.get(template, 'id'), 'Template ID is required');
     assert(!!_.get(template, 'envelopeTemplate'), 'Envelope Template ID is required');
@@ -41,9 +40,19 @@ class Producer {
     const notification = await this._createEmailNotification(emailEnvelope$);
     assert(!!_.get(notification, 'id'), 'Notification ID is required');
 
-    const assignment = await this._assignNotification(agent.id, notification.id);
-    assert(!!_.get(assignment, 'id'), 'Assignment ID is required');
+    return notification;
+  }
 
+  /**
+   * @param {object} agent
+   * @param {object} notification
+   * @return {Promise<*>}
+   * @protected
+   */
+  async _assignNotification(agent, notification) {
+    const data = { agentId: agent.id, notificationId: notification.id };
+    const assignment = await this.data.agentNotifications.createOne(data);
+    assert(!!_.get(assignment, 'id'), 'Assignment ID is required');
     return assignment;
   }
 
@@ -78,17 +87,6 @@ class Producer {
     assert(envelope instanceof this.EmailEnvelope, 'Envelope is not EmailEnvelope');
     const data = { type, envelope: envelope };
     return this.data.notifications.createOne(data);
-  }
-
-  /**
-   * @param {string} agentId
-   * @param {string} notificationId
-   * @return {Promise<*>}
-   * @protected
-   */
-  async _assignNotification(agentId, notificationId) {
-    const data = { agentId, notificationId };
-    return this.data.agentNotifications.createOne(data);
   }
 }
 

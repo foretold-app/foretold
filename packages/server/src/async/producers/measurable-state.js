@@ -26,11 +26,15 @@ class MeasurableState extends Producer {
       const channel = await this.measurable.getChannel();
       assert(!!_.get(channel, 'id'), 'Channel ID is required.');
 
-      const replacements = this._getReplacements(channel, this.measurable);
-      this._queueEmail(creator, replacements);
+      const replacements = MeasurableState._getReplacements(
+        channel,
+        this.measurable,
+      );
+      const notification = this._queueEmail(replacements);
+      this._assignNotification(creator, notification);
 
     } catch (e) {
-      console.log(`MeasurableState`, e.message, e);
+      console.log(`stateChanged`, e.message, e);
     }
     return true;
   }
@@ -41,17 +45,26 @@ class MeasurableState extends Producer {
    */
   async stateResolved() {
     try {
-      const creator = await this.measurable.getCreator();
-      assert(!!_.get(creator, 'id'), 'Creator ID is required.');
-
       const channel = await this.measurable.getChannel();
       assert(!!_.get(channel, 'id'), 'Channel ID is required.');
 
-      const replacements = this._getReplacements(channel, this.measurable);
-      this._queueEmail(creator, replacements);
+      const agents = await channel.getAgents();
+      assert(_.isArray(agents), 'Channel Members are required.');
+      assert(agents !== 0, 'Channel Members list is empty.');
+
+      const replacements = MeasurableState._getReplacements(
+        channel,
+        this.measurable,
+      );
+      const notification = this._queueEmail(replacements);
+
+      for (let i = 0, max = agents.length; i < max; i++) {
+        const agent = agents[i];
+        await this._assignNotification(agent, notification);
+      }
 
     } catch (e) {
-      console.log(`MeasurableState`, e.message, e);
+      console.log(`stateResolved`, e.message, e);
     }
     return true;
   }
@@ -62,7 +75,7 @@ class MeasurableState extends Producer {
    * @return {{measurable: {name: *, link: *}}}
    * @protected
    */
-  _getReplacements(channel, measurable) {
+  static _getReplacements(channel, measurable) {
     return {
       measurable: {
         name: _.get(measurable, 'name'),

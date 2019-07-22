@@ -5623,7 +5623,7 @@ hoek@2.x.x:
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"
   integrity sha1-ILt0A9POo5jpHcRxCo/xuCdKJe0=
 
-hoist-non-react-statics@^2.3.1, hoist-non-react-statics@^2.5.0:
+hoist-non-react-statics@^2.3.1:
   version "2.5.5"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.5.tgz#c5903cf409c0dfd908f388e619d86b9c1174cb47"
   integrity sha512-rqcy4pJo55FTTLWt+bU8ukscqHeE/e9KWvsOW2b/a3afxQZhwkQdT1rPPCJ0rYXdj4vNcasY8zHTH+jF/qStxw==
@@ -6969,10 +6969,10 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-jstat@1.7.1:
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/jstat/-/jstat-1.7.1.tgz#b1f4577ef86fa9a7d606141affefb95bce632ee8"
-  integrity sha512-lcWi9NKovcx8jdCvgsIzua3KB5rs+TK9cyH1NWyctj+e09jKZTk70vv/EdYSG5mp8MiID2TdepavXn4LUr8rZQ==
+jstat@1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/jstat/-/jstat-1.9.0.tgz#96a625f5697566f6ba3b15832fb371f9451b8614"
+  integrity sha512-xSsSJ3qY4rS+u8+dAwRcJ0LQGxNdibdW6rSalNPZDbLYkW1C7b0/j79IxXtQjrweqMNI3asN7FCIPceNSIJr2g==
 
 jwt-decode@2.2.0:
   version "2.2.0"
@@ -9711,17 +9711,6 @@ re-classnames@^3.0.0:
   resolved "https://registry.yarnpkg.com/re-classnames/-/re-classnames-3.0.0.tgz#34ae947bfbd57eadd29f855256336d628a242d1e"
   integrity sha512-gErGogzPy9LuJBYx9pNtWXjvFPrSnjk3R8d+TNa1PHpMoPcJKBITaCvVi9wLFtYTBiFW5KaHEvZhKx61DSW40A==
 
-react-apollo@2.1.11:
-  version "2.1.11"
-  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.1.11.tgz#ef4805f07af1d732ec94caebf7ba0728e2d162ca"
-  integrity sha512-WRoSOuZiQYgieXTgep4v3YwtVlxRnPHdcLEJBLX5+zq2atLmonvEkuFLJNjhAAOW/mYM8XhbLrbaC5NPrFrn0w==
-  dependencies:
-    fbjs "^0.8.16"
-    hoist-non-react-statics "^2.5.0"
-    invariant "^2.2.2"
-    lodash "^4.17.10"
-    prop-types "^15.6.0"
-
 react-apollo@2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.3.2.tgz#b8e287d2813722b9e0a886cabf8149ab3b84a3b7"
@@ -9734,17 +9723,20 @@ react-apollo@2.3.2:
     lodash.isequal "^4.5.0"
     prop-types "^15.6.0"
 
-react-dom@16.2.0:
-  version "16.2.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.2.0.tgz#69003178601c0ca19b709b33a83369fe6124c044"
-  integrity sha512-zpGAdwHVn9K0091d+hr+R0qrjoJ84cIBFL2uU60KvWBPfZ7LPSrfqviTxGHWN0sjPZb2hxWzMexwrvJdKePvjg==
+react-apollo@2.5.8:
+  version "2.5.8"
+  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.5.8.tgz#c7a593b027efeefdd8399885e0ac6bec3b32623c"
+  integrity sha512-60yOQrnNosxU/tRbOxGDaYNLFcOKmQqxHPhxyvKTlGIaF/rRCXQRKixUgWVffpEupSHHD7psY5k5ZOuZsdsSGQ==
   dependencies:
-    fbjs "^0.8.16"
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.0"
+    apollo-utilities "^1.3.0"
+    fast-json-stable-stringify "^2.0.0"
+    hoist-non-react-statics "^3.3.0"
+    lodash.isequal "^4.5.0"
+    prop-types "^15.7.2"
+    ts-invariant "^0.4.2"
+    tslib "^1.9.3"
 
-react-dom@>=16.8.1:
+react-dom@16.8.6, react-dom@>=16.8.1:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.6.tgz#71d6303f631e8b0097f56165ef608f051ff6e10f"
   integrity sha512-1nL7PIq9LTL3fthPqwkvr2zY7phIPjYrT0jp4HjyEQrEROnw4dG41VVwi/wfoCneoleqrNX7iAD+pXebJZwrwA==
@@ -9754,10 +9746,10 @@ react-dom@>=16.8.1:
     prop-types "^15.6.2"
     scheduler "^0.13.6"
 
-react-icons-kit@1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/react-icons-kit/-/react-icons-kit-1.2.1.tgz#8c4ff22fbe70a6e014f1952eac0494bca4b006b5"
-  integrity sha512-H9R9nudQKdGT8j69kamUh8OVDfhV061+pYe6fxjstQZIvylJkQQ7m6AJMu4tg6gK8UK8s5q+YG2ahmY7fLIcyg==
+react-icons-kit@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/react-icons-kit/-/react-icons-kit-1.3.1.tgz#fbe56ce4379fc4391b4c6dfc1aa96e2b31e23623"
+  integrity sha512-9Xy81M+Vgt5DO9qAL0jIazNmjelcKWn+uNvChDAMYvawm4yaIecr5I8i/jDEEHgQcEqHpB848AitvRKKNAoljA==
   dependencies:
     camel-case "^3.0.0"
     prop-types "^15.5.8"
@@ -9782,10 +9774,10 @@ react-lifecycles-compat@^3.0.2, react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-markdown@4.0.8:
-  version "4.0.8"
-  resolved "https://registry.yarnpkg.com/react-markdown/-/react-markdown-4.0.8.tgz#e3621b5becaac82a651008d7bc8390d3e4e438c0"
-  integrity sha512-Z6oa648rufvzyO0KwYJ/9p9AsdYGIluqK6OlpJ35ouJ8HPF0Ko1WDNdyymjDSHxNrkb7HDyEcIDJCQs8NlET5A==
+react-markdown@4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-markdown/-/react-markdown-4.1.0.tgz#7fdf840ecbabc803f28156f7411c726b58f25a73"
+  integrity sha512-EOHsEAN+aoP8UVz7vTHx6Z63GJfhrO9KItKlfsiBtVVS9tmSWtUaBTw73+2SObrWiOiE2Cs9qUBL7ORsvVhOrA==
   dependencies:
     html-to-react "^1.3.4"
     mdast-add-list-metadata "1.0.1"
@@ -9818,17 +9810,7 @@ react-slick@~0.24.0:
     lodash.debounce "^4.0.8"
     resize-observer-polyfill "^1.5.0"
 
-react@>=15:
-  version "16.8.4"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.8.4.tgz#fdf7bd9ae53f03a9c4cd1a371432c206be1c4768"
-  integrity sha512-0GQ6gFXfUH7aZcjGVymlPOASTuSjlQL4ZtVC5YKH+3JL6bBLCVO21DknzmaPlI90LN253ojj02nsapy+j7wIjg==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.2"
-    scheduler "^0.13.4"
-
-react@>=16.8.1:
+react@16.8.6, react@>=16.8.1:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react/-/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"
   integrity sha512-pC0uMkhLaHm11ZSJULfOBqV4tIZkx87ZLvbbQYunNixAAvjnC+snJCg0XQXn9VIsttVsbZP/H/ewzgsd5fxKXw==
@@ -9902,10 +9884,10 @@ realpath-native@^1.0.0:
   dependencies:
     util.promisify "^1.0.0"
 
-reason-apollo@0.15.0:
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/reason-apollo/-/reason-apollo-0.15.0.tgz#e1ec06044b2b3bdbd24a5f7c210b07550b698196"
-  integrity sha512-OfHkaBjZ53dtjedyM6CDN7PzDqjMKEPvxvMEfre2uuYI3sezTTi9H0SHhF0o//WTJj65v06eg7XlgqVuYMHgDg==
+reason-apollo@0.15.2:
+  version "0.15.2"
+  resolved "https://registry.yarnpkg.com/reason-apollo/-/reason-apollo-0.15.2.tgz#0452196fc07915907cc0d629679aa56a8c16933c"
+  integrity sha512-L0S6u2yHrBOgnZGz4WY2svjCXgbqM9+h8uirPEAj9mWLMuUGszmiR0aO/77ZNpfTrQL9JZ3Dxu6zyVUWdM5xuQ==
   dependencies:
     apollo-cache-inmemory "1.3.11"
     apollo-client "2.4.7"
@@ -10343,14 +10325,6 @@ sax@^1.2.4, sax@~1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
-
-scheduler@^0.13.4:
-  version "0.13.4"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.4.tgz#8fef05e7a3580c76c0364d2df5e550e4c9140298"
-  integrity sha512-cvSOlRPxOHs5dAhP9yiS/6IDmVAVxmk33f0CtTJRkmUWcb1Us+t7b1wqdzoC0REw2muC9V5f1L/w5R5uKGaepA==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
 
 scheduler@^0.13.6:
   version "0.13.6"
@@ -11409,7 +11383,7 @@ ts-invariant@^0.3.2:
   dependencies:
     tslib "^1.9.3"
 
-ts-invariant@^0.4.0:
+ts-invariant@^0.4.0, ts-invariant@^0.4.2:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/ts-invariant/-/ts-invariant-0.4.4.tgz#97a523518688f93aafad01b0e80eb803eb2abd86"
   integrity sha512-uEtWkFM/sdZvRNNDL3Ehu4WVpwaulhwQszV8mrtcdeE8nN00BV9mAmQ88RkrBhFgl9gMgvjJLAQcZbnPXI9mlA==

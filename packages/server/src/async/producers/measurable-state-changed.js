@@ -28,11 +28,13 @@ class MeasurableStateChanged extends MeasurableState {
         this.measurable,
       );
       const notification = this._queueEmail(replacements);
-      this._assignNotification(creator, notification);
-
+      await this._assignNotification(creator, notification);
     } catch (e) {
+      await this._rollback();
       console.log(`stateChanged`, e.message, e);
+      return false;
     }
+    await this._commit();
     return true;
   }
 }

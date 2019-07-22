@@ -40,6 +40,15 @@ class DataBase {
 
   /**
    * @public
+   * @param {*} transaction
+   * @return {Promise<*>}
+   */
+  async rollback(transaction) {
+    return this.model.rollback(transaction);
+  }
+
+  /**
+   * @public
    * @param {Layers.DataSourceLayer.data} [data]
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Promise<*>}

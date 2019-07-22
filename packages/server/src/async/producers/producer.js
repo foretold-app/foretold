@@ -17,6 +17,35 @@ class Producer {
 
     this.options = options;
     this.templateName = undefined;
+    this.transaction = undefined;
+  }
+
+  /**
+   * @return {Promise<undefined>}
+   * @protected
+   */
+  async _getTransaction() {
+    if (!!this.transaction) return this.transaction;
+    this.transaction = await Producer.data.users.getTransaction();
+    return this.transaction;
+  }
+
+  /**
+   * @return {Promise<object>}
+   * @protected
+   */
+  async _commit() {
+    const transaction = await this.transaction;
+    return Producer.data.users.commit(transaction);
+  }
+
+  /**
+   * @return {Promise<object>}
+   * @protected
+   */
+  async _rollback() {
+    const transaction = await this.transaction;
+    return Producer.data.users.rollback(transaction);
   }
 
   /**
@@ -48,7 +77,11 @@ class Producer {
    */
   async _assignNotification(agent, notification) {
     const data = { agentId: agent.id, notificationId: notification.id };
-    const assignment = await Producer.data.agentNotifications.createOne(data);
+    const options = await this._getOptions();
+    const assignment = await Producer.data.agentNotifications.createOne(
+      data,
+      options,
+    );
     assert(!!_.get(assignment, 'id'), 'Assignment ID is required');
     return assignment;
   }
@@ -73,7 +106,7 @@ class Producer {
   }
 
   /**
-   * @param {Producer.EmailEnvelope} envelope
+   * @param {EmailEnvelope} envelope
    * @param {string} type
    * @return {Promise<*>}
    * @protected
@@ -87,7 +120,18 @@ class Producer {
       'Envelope is not EmailEnvelope'
     );
     const data = { type, envelope: envelope };
-    return Producer.data.notifications.createOne(data);
+    const options = await this._getOptions();
+    return Producer.data.notifications.createOne(data, options);
+  }
+
+  /**
+   *
+   * @return {Promise<{transaction: *}>}
+   * @private
+   */
+  async _getOptions() {
+    const transaction = await this._getTransaction();
+    return { transaction };
   }
 }
 

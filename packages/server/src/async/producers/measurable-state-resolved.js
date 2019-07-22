@@ -28,16 +28,18 @@ class MeasurableStateResolved extends MeasurableState {
         channel,
         this.measurable,
       );
-      const notification = this._queueEmail(replacements);
+      const notification = await this._queueEmail(replacements);
 
       for (let i = 0, max = agents.length; i < max; i++) {
         const agent = agents[i];
         await this._assignNotification(agent, notification);
       }
-
     } catch (e) {
+      await this._commit();
       console.log(`stateResolved`, e.message, e);
+      return false;
     }
+    await this._rollback();
     return true;
   }
 }

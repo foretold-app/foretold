@@ -406,6 +406,15 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @public
+   * @param {object} transaction
+   * @return {Promise<*>}
+   */
+  async rollback(transaction) {
+    return transaction.rollback();
+  }
+
+  /**
    * @protected
    * @param cond
    * @param {Layers.AbstractModelsLayer.options} options

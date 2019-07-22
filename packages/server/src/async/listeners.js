@@ -21,13 +21,28 @@ async function toJudgementPendingTransition() {
   return true;
 }
 
-async function measurableState(measurableInstance) {
-  const name = 'Job::measurableState';
+async function measurableStateIsChanged(measurableInstance) {
+  const name = 'Job::measurableStateIsChanged';
   console.log(name);
 
   try {
     const producer = new producers.MeasurableState(measurableInstance);
-    const result = await producer.main();
+    const result = await producer.stateChanged();
+    console.log(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
+async function measurableStateIsResolved(measurableInstance) {
+  const name = 'Job::measurableStateIsResolved';
+  console.log(name);
+
+  try {
+    const producer = new producers.MeasurableState(measurableInstance);
+    const result = await producer.stateResolved();
     console.log(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -70,7 +85,8 @@ function runListeners() {
     emitter.on(events.EVERY_HOUR, toJudgementPendingTransition);
     emitter.on(events.EVERY_MINUTE, emailConsumer);
     emitter.on(events.MAIL, mailer);
-    emitter.on(events.MEASURABLE_STATE_IS_CHANGED, measurableState);
+    emitter.on(events.MEASURABLE_STATE_IS_CHANGED, measurableStateIsChanged);
+    emitter.on(events.MEASURABLE_STATE_IS_RESOLVED, measurableStateIsResolved);
   } catch (e) {
     console.error('Listener error', e);
   }

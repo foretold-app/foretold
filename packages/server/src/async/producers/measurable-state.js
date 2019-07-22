@@ -15,9 +15,31 @@ class MeasurableState extends Producer {
   }
 
   /**
+   * @public
    * @return {Promise<boolean>}
    */
-  async main() {
+  async stateChanged() {
+    try {
+      const creator = await this.measurable.getCreator();
+      assert(!!_.get(creator, 'id'), 'Creator ID is required.');
+
+      const channel = await this.measurable.getChannel();
+      assert(!!_.get(channel, 'id'), 'Channel ID is required.');
+
+      const replacements = this._getReplacements(channel, this.measurable);
+      this._queueEmail(creator, replacements);
+
+    } catch (e) {
+      console.log(`MeasurableState`, e.message, e);
+    }
+    return true;
+  }
+
+  /**
+   * @public
+   * @return {Promise<boolean>}
+   */
+  async stateResolved() {
     try {
       const creator = await this.measurable.getCreator();
       assert(!!_.get(creator, 'id'), 'Creator ID is required.');

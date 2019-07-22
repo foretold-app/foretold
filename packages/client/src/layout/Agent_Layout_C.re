@@ -75,7 +75,7 @@ let make =
                 ])
               ),
             ]
-            flex=3>
+            flex={`num(3.)}>
             <FC.PageCard>
               <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
               body

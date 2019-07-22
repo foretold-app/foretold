@@ -27,11 +27,11 @@ let make = (~id: string, ~loggedInUser: Primary.User.t, _children) => {
          <>
            <Div styles=[Styles.header]>
              <Div flexDirection=`row>
-               <Div flex=3>
+               <Div flex={`num(3.)}>
                  <FC.PageCard.H1> {Items.link(~m)} </FC.PageCard.H1>
                  <StatusDisplay measurable=m />
                </Div>
-               <Div flex=1>
+               <Div flex={`num(1.)}>
                  {Items.series(~m, ()) |> E.O.React.defaultNull}
                  {Items.creatorLink(~m) |> E.O.React.defaultNull}
                  {Items.editLink(~m)}

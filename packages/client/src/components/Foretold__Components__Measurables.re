@@ -5,15 +5,15 @@ module Styles = {
   open Css;
 
   let mainColumn =
-    style([flex(4), display(`flex), flexDirection(`column)]);
+    style([flex(`num(4.)), display(`flex), flexDirection(`column)]);
 
   let mainColumnTop =
     style([
-      flex(1),
+      flex(`num(1.)),
       paddingLeft(px(2)),
       selector(" p", [marginTop(`px(3)), marginBottom(`px(8))]),
     ]);
-  let rightColumn = style([flex(1)]);
+  let rightColumn = style([flex(`num(1.))]);
 };
 
 module BasicTable = {
@@ -32,10 +32,10 @@ module BasicTable = {
       measurables |> E.A.length > 0
         ? <>
             <FC.Table.HeaderRow>
-              <FC.Table.Cell flex=3>
+              <FC.Table.Cell flex={`num(3.)}>
                 {"Name & Status" |> ReasonReact.string}
               </FC.Table.Cell>
-              <FC.Table.Cell flex=1>
+              <FC.Table.Cell flex={`num(1.)}>
                 {"Details" |> ReasonReact.string}
               </FC.Table.Cell>
             </FC.Table.HeaderRow>
@@ -44,7 +44,7 @@ module BasicTable = {
                   let iAmOwner = m.iAmOwner == Some(true);
                   <FC.Table.Row onClick={_e => onSelect(m)} key={m.id}>
                     <FC.Table.Cell
-                      flex=3
+                      flex={`num(3.)}
                       className=Css.(
                         style([
                           paddingTop(`em(1.0)),
@@ -63,7 +63,8 @@ module BasicTable = {
                       </div>
                     </FC.Table.Cell>
                     <FC.Table.Cell
-                      flex=1 className=Css.(style([paddingTop(`em(0.5))]))>
+                      flex={`num(1.)}
+                      className=Css.(style([paddingTop(`em(0.5))]))>
                       {E.React.showIf(
                          channelId == Some("home"),
                          Items.channelLink(~m),

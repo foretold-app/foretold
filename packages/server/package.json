@@ -2,13 +2,12 @@
   "name": "@foretold/server",
   "version": "1.0.0",
   "description": "Foretold Server",
-  "repository": "https://github.com/vmasto/express-babel",
-  "author": "Vassilis Mastorostergios <vmasto@gmail.com>",
+  "author": "Ozzie Gooen <ozzieagooen@gmail.com>",
   "license": "MIT",
   "main": "src/index.js",
   "engines": {
-    "node": ">=9.7.1",
-    "yarn": ">=1.15.0"
+    "node": ">=12.6.0",
+    "yarn": ">=1.17.3"
   },
   "scripts": {
     "start": "node src/index.js",

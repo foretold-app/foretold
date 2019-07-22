@@ -24,7 +24,7 @@ module Styles = {
       selector(":hover", [backgroundColor(`hex("eef0f3"))]),
     ]);
 
-  let column = style([flex(1)]);
+  let column = style([flex(`num(1.))]);
   let group =
     style([
       border(`px(1), `solid, hex("eee")),

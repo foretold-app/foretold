@@ -13,11 +13,11 @@ module Styles = {
     ]);
   let left =
     style([
-      flex(1),
+      flex(`num(1.)),
       backgroundColor(`hex("2c436e")),
       minWidth(`px(200)),
     ]);
-  let right = style([flex(7), width(`percent(100.0))]);
+  let right = style([flex(`num(7.)), width(`percent(100.0))]);
   let headerLink =
     style([
       cursor(`pointer),

@@ -36,7 +36,7 @@ module Styles = {
   let sectionPadding = style([height(`em(1.0)), width(`percent(100.0))]);
   let item =
     style([
-      flex(1),
+      flex(`num(1.)),
       color(`rgba((255, 255, 255, 0.6))),
       fontSize(`em(1.2)),
       padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
@@ -51,7 +51,7 @@ module Styles = {
     ]);
   let selectedItem =
     style([
-      flex(1),
+      flex(`num(1.)),
       color(`rgba((255, 255, 255, 0.8))),
       background(`hex("3192ff")),
       fontSize(`em(1.2)),

@@ -55,11 +55,11 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
         {switch (self.state.selectedTab) {
          | SimpleTab =>
            <Div flexDirection=`row styles=[flexRowContainer]>
-             <Div flex=1 styles=[flexRowItem]>
+             <Div flex={`num(1.)} styles=[flexRowItem]>
                <InputLabel> "Min"->React.string </InputLabel>
                <TextInput fullWidth=true />
              </Div>
-             <Div flex=1 styles=[flexRowItem]>
+             <Div flex={`num(1.)} styles=[flexRowItem]>
                <InputLabel> "Max"->React.string </InputLabel>
                <TextInput fullWidth=true />
              </Div>

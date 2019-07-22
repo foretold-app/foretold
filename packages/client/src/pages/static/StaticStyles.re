@@ -3,8 +3,11 @@ let body =
   style([
     backgroundImage(
       `linearGradient((
-        `deg(60),
-        [(0, `hex("1f6698")), (100, `hex("1f9298"))],
+        `deg(60.),
+        [
+          (`percent(0.), `hex("1f6698")),
+          (`percent(100.), `hex("1f9298")),
+        ],
       )),
     ),
     textAlign(`center),

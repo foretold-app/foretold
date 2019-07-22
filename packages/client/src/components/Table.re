@@ -2,7 +2,8 @@ module Styles = {
   open Css;
   let table = [display(`flex), flexDirection(`column)] |> style;
   let row = [paddingTop(`em(0.5)), paddingBottom(`em(0.5))] |> style;
-  let cell = [flex(1), padding2(~v=`em(0.6), ~h=`em(0.5))] |> style;
+  let cell =
+    [flex(`num(1.)), padding2(~v=`em(0.6), ~h=`em(0.5))] |> style;
 };
 
 module Table = {
@@ -74,7 +75,8 @@ let fromColumns =
       {columns'
        |> Array.mapi((columnIndex, column: column('a)) =>
             <FC.Table.Cell
-              flex={column.flex} key={columnIndex |> string_of_int}>
+              flex={`num(column.flex |> float_of_int)}
+              key={columnIndex |> string_of_int}>
               {column.name}
             </FC.Table.Cell>
           )
@@ -86,7 +88,8 @@ let fromColumns =
             columns'
             |> Array.mapi((columnIndex, column: column('a)) =>
                  <FC.Table.Cell
-                   flex={column.flex} key={columnIndex |> string_of_int}>
+                   flex={`num(column.flex |> float_of_int)}
+                   key={columnIndex |> string_of_int}>
                    {column.render(row)}
                  </FC.Table.Cell>
                )

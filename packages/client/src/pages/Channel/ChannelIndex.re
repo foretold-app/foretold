@@ -18,7 +18,7 @@ let row =
     selector(":hover", [backgroundColor(`hex("eef0f3"))]),
   ]);
 
-let column = style([flex(1)]);
+let column = style([flex(`num(1.))]);
 
 let table =
   style([

@@ -9,7 +9,7 @@ module.exports = {
         subject: 'Question "{{ measurable.name }}" was resolved',
         body:
           'The question [{{ measurable.name }}] was resolved. ' +
-          'Click here to see the result.',
+          'Click <a href="{{{ measurable.link }}}">here</a> to see the result.',
       });
 
       await queryInterface.bulkInsert('Templates', [{

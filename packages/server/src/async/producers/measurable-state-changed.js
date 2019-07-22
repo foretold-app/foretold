@@ -27,7 +27,7 @@ class MeasurableStateChanged extends MeasurableState {
         channel,
         this.measurable,
       );
-      const notification = this._queueEmail(replacements);
+      const notification = await this._queueEmail(replacements);
       await this._assignNotification(creator, notification);
     } catch (e) {
       await this._rollback();

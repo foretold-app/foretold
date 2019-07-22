@@ -35,7 +35,7 @@ class Producer {
    * @protected
    */
   async _commit() {
-    const transaction = await this.transaction;
+    const transaction = await this._getTransaction();
     return Producer.data.users.commit(transaction);
   }
 
@@ -44,7 +44,7 @@ class Producer {
    * @protected
    */
   async _rollback() {
-    const transaction = await this.transaction;
+    const transaction = await this._getTransaction();
     return Producer.data.users.rollback(transaction);
   }
 
@@ -64,7 +64,6 @@ class Producer {
     const emailEnvelope = new Producer.EmailEnvelope(template.envelopeTemplate);
     const emailEnvelope$ = emailEnvelope.mutate(replacements);
     const notification = await this._createEmailNotification(emailEnvelope$);
-    assert(!!_.get(notification, 'id'), 'Notification ID is required');
 
     return notification;
   }
@@ -76,13 +75,14 @@ class Producer {
    * @protected
    */
   async _assignNotification(agent, notification) {
+    assert(!!agent.id, 'Agent ID is required');
+    assert(!!notification.id, 'Notification ID is required');
     const data = { agentId: agent.id, notificationId: notification.id };
     const options = await this._getOptions();
     const assignment = await Producer.data.agentNotifications.createOne(
       data,
       options,
     );
-    assert(!!_.get(assignment, 'id'), 'Assignment ID is required');
     return assignment;
   }
 

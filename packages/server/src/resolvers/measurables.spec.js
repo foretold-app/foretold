@@ -52,7 +52,7 @@ describe('Measurables Resolvers', () => {
     const context = { agent: { id: 'agentId2' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurables, 'getOne').mockReturnValue(
+      jest.spyOn(data.measurables, 'getOne2').mockReturnValue(
         Promise.resolve(true),
       );
     });

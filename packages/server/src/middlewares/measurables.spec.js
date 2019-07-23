@@ -6,7 +6,7 @@ describe('Measurables Middleware', () => {
   describe('setContextMeasurable() sets measurable and channelId into context ', () => {
     const measurableObj = { channelId: 'channelId1' };
     beforeEach(() => {
-      jest.spyOn(data.measurables, 'getOne').mockReturnValue(
+      jest.spyOn(data.measurables, 'getOne2').mockReturnValue(
         Promise.resolve(measurableObj),
       );
     });

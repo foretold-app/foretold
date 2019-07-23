@@ -46,7 +46,7 @@ describe('Measurements Resolver', () => {
     const context = { agent: { id: 'agentId2' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurements, 'getOne').mockReturnValue(
+      jest.spyOn(data.measurements, 'getOne2').mockReturnValue(
         Promise.resolve(true),
       );
     });

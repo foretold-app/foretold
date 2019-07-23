@@ -18,7 +18,7 @@ describe('tests Measurables Data layer', () => {
       );
     });
     it('finds a measurable', () => {
-      return instance.getOne(id, options).then((result) => {
+      return instance.getOne2(id, options).then((result) => {
         expect(models.Measurable.findOne).toHaveBeenCalledWith({
           "where": {
             "channelId": {

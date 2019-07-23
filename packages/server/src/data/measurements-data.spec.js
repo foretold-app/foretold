@@ -18,7 +18,7 @@ describe('Measurement Data layer', () => {
       );
     });
     it('finds a measurement', () => {
-      return instance.getOne(id, options).then((result) => {
+      return instance.getOne2(id, options).then((result) => {
         expect(models.Measurement.findOne).toHaveBeenCalledWith({
           "where": {
             "id": "id2",

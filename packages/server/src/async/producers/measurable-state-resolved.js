@@ -32,7 +32,7 @@ class MeasurableStateResolved extends MeasurableState {
       const notification = await this._queueEmail(replacements);
 
       const agentsWithoutAuthor = agents.filter((agent) => {
-        return agent.id === lastMeasurement.agentId;
+        return agent.id !== lastMeasurement.agentId;
       });
 
       for (let i = 0, max = agentsWithoutAuthor.length; i < max; i++) {

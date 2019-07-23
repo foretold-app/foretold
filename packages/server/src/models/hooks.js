@@ -17,10 +17,8 @@ function addHooks(db) {
       instance.changed('state') &&
       instance.get('state') === MEASURABLE_STATE.JUDGED
     ) {
-      // @todo: Do it only for the first time
       emitter.emit(events.MEASURABLE_STATE_IS_RESOLVED, instance);
     }
-
   });
 }
 

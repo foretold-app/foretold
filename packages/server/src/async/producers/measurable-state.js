@@ -2,7 +2,7 @@ const assert = require('assert');
 const _ = require('lodash');
 
 const { getMeasurableLinkWithToken } = require('../../lib/urls');
-const { MEASURABLE_STATE } = require('../../models/enums/measurable-state');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../../models/enums/measurement-competitor-type');
 
 const { Producer } = require('./producer');
 
@@ -28,6 +28,8 @@ class MeasurableState extends Producer {
   }
 
   /**
+   * @todo: Is there more better way to understand how to filter out
+   * @todo: the author?
    * @return {Promise<void>}
    * @protected
    */
@@ -35,10 +37,10 @@ class MeasurableState extends Producer {
     assert(!!this.measurable.id, 'Measurable ID is required');
     const params = {
       measurableId: this.measurable.id,
-      state: MEASURABLE_STATE.JUDGED,
+      competitorType: MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
     };
     const options = await this._getOptions();
-    return Producer.data.measurables.getOne(params, options);
+    return Producer.data.measurements.getOne(params, options);
   }
 }
 

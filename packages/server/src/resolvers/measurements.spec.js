@@ -52,7 +52,7 @@ describe('Measurements Resolver', () => {
     });
     it('return a measurement', () => {
       return measurements.one(root, args, context, info).then((result) => {
-        expect(data.measurements.getOne).toHaveBeenCalledWith(
+        expect(data.measurements.getOne2).toHaveBeenCalledWith(
           'id1',
           { agentId: 'agentId2' },
         );

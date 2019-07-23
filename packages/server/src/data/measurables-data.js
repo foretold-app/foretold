@@ -85,7 +85,7 @@ class MeasurablesData extends DataBase {
   }
 
   /**
-   * @todo: move down
+   * @todo: move aspects down into Model Layer
    * @todo: fix interface (params*, query, options*)
    * @public
    * @param {Models.ObjectID} id

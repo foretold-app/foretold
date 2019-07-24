@@ -29,15 +29,53 @@ module Styles = {
     ]);
 };
 
-let component = ReasonReact.statelessComponent("Header");
+module StylesDropdown = {
+  open Css;
 
-let action = Layout__Dropdown.Styles.action;
+  let dropdown =
+    style([
+      border(`px(1), `solid, `hex("d5d2d2")),
+      padding2(~v=`em(0.5), ~h=`em(0.)),
+      borderRadius(`px(5)),
+      background(`hex("fff")),
+      boxShadow(
+        ~x=`px(1),
+        ~y=`px(1),
+        ~blur=`px(5),
+        ~spread=`px(1),
+        ~inset=false,
+        `hex("dfd7d7"),
+      ),
+      maxWidth(`em(17.)),
+    ]);
+
+  let actions = [maxWidth(`em(17.))] |> style;
+
+  let clear = [clear(`both)] |> style;
+
+  let action =
+    style([
+      cursor(`pointer),
+      padding2(~v=`em(0.3), ~h=`em(1.4)),
+      minWidth(`px(200)),
+      fontSize(`em(1.2)),
+      width(`percent(100.)),
+      float(`left),
+      color(`hex("666")),
+      selector(
+        ":hover",
+        [color(`hex("666")), backgroundColor(`hex("eef0f3"))],
+      ),
+    ]);
+};
+
+let action = StylesDropdown.action;
 
 let link = (linkType: LinkType.linkType, str) =>
   <Link.Jsx2 linkType className=action> {str |> ste} </Link.Jsx2>;
 
 let userDropdown = agentId =>
-  <div className=Layout__Dropdown.Styles.actions>
+  <div className=StylesDropdown.actions>
     {link(Internal(Profile), "Profile")}
     {link(
        Internal(Agent({agentId, subPage: AgentMeasurables})),
@@ -51,7 +89,7 @@ let userDropdown = agentId =>
     {link(Internal(ChannelNew), "Make a New Community")}
     {link(Internal(Preferences), "Preferences")}
     {link(Action(_ => Auth.Actions.logout()), "Logout")}
-    <div className=Layout__Dropdown.Styles.clear />
+    <div className=StylesDropdown.clear />
   </div>;
 
 let header = (loggedInUser: Primary.User.t) =>
@@ -59,7 +97,7 @@ let header = (loggedInUser: Primary.User.t) =>
   | Some((agent: Types.agent)) =>
     <AntdDropdown
       overlay={userDropdown(agent.id)}
-      overlayClassName=Layout__Dropdown.Styles.dropdown>
+      overlayClassName=StylesDropdown.dropdown>
       {agent.name
        |> (e => e == Some("") ? None : e)
        |> E.O.default("Settings (Please add a Username on the Profile page)")
@@ -69,6 +107,7 @@ let header = (loggedInUser: Primary.User.t) =>
   | None => ReasonReact.null
   };
 
+let component = ReasonReact.statelessComponent("Header");
 let make = (~loggedInUser: Primary.User.t, _children) => {
   ...component,
   render: _self =>

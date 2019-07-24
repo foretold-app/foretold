@@ -43,9 +43,7 @@ let toRoutePage = (route: Route.t, me: Me.t) => {
   | (Terms, _) =>
     <StaticPageInCard markdown=StaticMarkdown.termsAndConditions />
   | (ChannelIndex, Some(loggedInUser)) =>
-    <FillWithSidebar channelId=None loggedInUser>
-      <ChannelIndex.Jsx2 pageParams={id: "sd"} />
-    </FillWithSidebar>
+    <FillWithSidebar loggedInUser> <ChannelIndex.Jsx2 /> </FillWithSidebar>
   | (Login, _) => <Login />
   | (_, _) => <Home />
   };

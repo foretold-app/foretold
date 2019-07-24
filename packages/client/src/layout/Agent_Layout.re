@@ -7,25 +7,14 @@ let makeWithPage =
   switch (loggedInUser) {
   | Some(loggedInUser) =>
     let layout = Agent_Layout_C.makeWithEl(agentPage, loggedInUser);
-    let toEl = fn => fn |> E.React.makeToEl(~key=agentId);
+
     switch (agentPage.subPage) {
     | AgentMeasurements =>
-      AgentMeasurements.make(
-        ~pageParams={id: agentId},
-        ~loggedInUser,
-        ~layout,
-      )
-      |> toEl
+      <AgentMeasurements pageParams={id: agentId} loggedInUser layout />
     | AgentMeasurables =>
-      AgentMeasurables.make(
-        ~pageParams={id: agentId},
-        ~loggedInUser,
-        ~layout,
-      )
-      |> toEl
-    | AgentBots => AgentBots.make(~pageParams={id: agentId}, ~layout) |> toEl
-    | AgentCommunities =>
-      AgentBots.make(~pageParams={id: agentId}, ~layout) |> toEl
+      <AgentMeasurables pageParams={id: agentId} loggedInUser layout />
+    | AgentBots => <AgentBots pageParams={id: agentId} layout />
+    | AgentCommunities => <AgentCommunities pageParams={id: agentId} layout />
     };
 
   | None => <Home />

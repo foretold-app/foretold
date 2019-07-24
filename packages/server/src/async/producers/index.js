@@ -1,5 +1,7 @@
-const { MeasurableState } = require('./measurable-state');
+const { MeasurableStateChanged } = require('./measurable-state-changed');
+const { MeasurableStateResolved } = require('./measurable-state-resolved');
 
 module.exports = {
-  MeasurableState,
+  MeasurableStateChanged,
+  MeasurableStateResolved,
 };

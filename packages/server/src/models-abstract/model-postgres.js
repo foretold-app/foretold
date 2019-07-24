@@ -242,11 +242,11 @@ class ModelPostgres extends Model {
    * @public
    * @param {object} [data]
    * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [_options]
+   * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise.<object>}
    */
-  async createOne(data = {}, _restrictions = {}, _options = {}) {
-    return this.model.create(data);
+  async createOne(data = {}, _restrictions = {}, options = {}) {
+    return this.model.create(data, options);
   }
 
   /**
@@ -403,6 +403,15 @@ class ModelPostgres extends Model {
    */
   async commit(transaction) {
     return transaction.commit();
+  }
+
+  /**
+   * @public
+   * @param {object} transaction
+   * @return {Promise<*>}
+   */
+  async rollback(transaction) {
+    return transaction.rollback();
   }
 
   /**

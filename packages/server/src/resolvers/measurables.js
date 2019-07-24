@@ -50,7 +50,7 @@ async function all(root, args, context, info) {
  */
 async function one(root, args, context, info) {
   const agentId = _.get(context, 'agent.id');
-  return data.measurables.getOne(args.id, { agentId });
+  return data.measurables.getOne2(args.id, { agentId });
 }
 
 /**

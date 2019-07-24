@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module Columns = {
   type record = Primary.Channel.t;
   type column = Table.column(Primary.Channel.t);
@@ -8,7 +10,7 @@ module Columns = {
       ~render=
         (r: record) =>
           <Foretold__Components__Link linkType={Internal(ChannelShow(r.id))}>
-            {r.name |> Utils.ste}
+            [|r.name |> Utils.ste|]
           </Foretold__Components__Link>,
       ~flex=2,
       (),
@@ -72,20 +74,23 @@ module Columns = {
   |];
 };
 
-let component = ReasonReact.statelessComponent("ChannelIndex");
-let make =
-    (
-      ~loggedInUser: Primary.User.t,
-      ~layout=SLayout.FullPage.makeWithEl,
-      _children,
-    ) => {
-  ...component,
-  render: _ =>
-    ChannelsGet.component(channels =>
-      SLayout.LayoutConfig.make(
-        ~head=SLayout.Header.textDiv("Communities"),
-        ~body=Table.fromColumns(Columns.all, channels, ()),
-      )
-      |> layout
-    ),
+[@react.component]
+let make = (~loggedInUser: Primary.User.t, ~layout, ~children) =>
+  ChannelsGet.component(channels =>
+    SLayout.LayoutConfig.make(
+      ~head=SLayout.Header.textDiv("Communities"),
+      ~body=Table.fromColumns(Columns.all, channels, ()),
+    )
+    |> layout
+  );
+
+module Jsx2 = {
+  let component = ReasonReact.statelessComponent("ChannelIndex");
+  /* `children` is not labelled, as it is a regular parameter in version 2 of JSX */
+  let make = (~loggedInUser, ~layout=SLayout.FullPage.makeWithEl, children) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~loggedInUser, ~layout, ~children, ()),
+      children,
+    );
 };

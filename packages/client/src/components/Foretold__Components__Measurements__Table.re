@@ -178,7 +178,7 @@ module Helpers = {
       ) {
       | (Some(agent), Some(name)) =>
         Some(
-          <Foretold__Components__Link
+          <Foretold__Components__Link.Jsx2
             linkType={
               Internal(
                 Agent({agentId: agent.id, subPage: AgentMeasurements}),
@@ -186,7 +186,7 @@ module Helpers = {
             }
             className=Styles.agentStyle>
             {name |> ste}
-          </Foretold__Components__Link>,
+          </Foretold__Components__Link.Jsx2>,
         )
       | _ => None
       };

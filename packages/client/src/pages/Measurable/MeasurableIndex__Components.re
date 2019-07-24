@@ -46,7 +46,7 @@ module LoadedAndUnselected = {
     <FC.Tab2
       isActive
       number=num
-      onClick={Foretold__Components__Link.LinkType.onClick(
+      onClick={LinkType.onClick(
         Relative(
           MeasurableQueryIndex.make(Some(state))
           |> MeasurableQueryIndex.toUrlParams,

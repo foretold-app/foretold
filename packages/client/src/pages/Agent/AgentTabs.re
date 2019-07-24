@@ -13,7 +13,7 @@ module Component = {
     let isActive = currentPage == selectedPage;
     <FC.Tab
       isActive
-      onClick={C.Link.LinkType.onClick(
+      onClick={LinkType.onClick(
         Internal(Agent({agentId, subPage: selectedPage})),
       )}>
       {name(selectedPage) |> ste}

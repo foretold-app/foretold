@@ -25,7 +25,7 @@ module Preferences' = {
 };
 
 module ChannelIndex' = {
-  let toEl = ChannelIndex.make |> LoggedInPage.justLoggedInUser;
+  let toEl = ChannelIndex.Jsx2.make |> LoggedInPage.justLoggedInUser;
 };
 
 module ChannelNew' = {

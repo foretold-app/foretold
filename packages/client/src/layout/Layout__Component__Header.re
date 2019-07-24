@@ -33,7 +33,7 @@ let component = ReasonReact.statelessComponent("Header");
 
 let action = Layout__Dropdown.Styles.action;
 
-let link = (linkType: C.Link.linkType, str) =>
+let link = (linkType: LinkType.linkType, str) =>
   <C.Link linkType className=action> {str |> ste} </C.Link>;
 
 let userDropdown = agentId =>

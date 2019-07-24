@@ -1,45 +1,31 @@
-let component = ReasonReact.statelessComponent("Link");
+[@bs.config {jsx: 3}];
 
-type linkType =
-  | Action(ReactEvent.Mouse.t => unit)
-  | Internal(Routing.Url.t)
-  | Relative(string)
-  | External(string);
+[@react.component]
+let make =
+    (
+      ~linkType: LinkType.t,
+      ~className: option(string)=?,
+      ~children: array(ReasonReact.reactElement),
+    ) =>
+  <a
+    href={LinkType.toString(linkType)}
+    ?className
+    onClick={LinkType.onClick(linkType)}>
+    {children |> ReasonReact.array}
+  </a>;
 
-module LinkType = {
-  type t = linkType;
+module Jsx2 = {
+  let component = ReasonReact.statelessComponent("Link");
 
-  let toString = (t): string =>
-    switch (t) {
-    | Internal(r) => r |> Routing.Url.toString
-    | External(s) => s
-    | Relative(s) => s
-    | Action(_) => "#"
-    };
-
-  let handleStringUrlClick = (event: ReactEvent.Mouse.t, href) =>
-    /* This needed to make sure the page isn't reloaded */
-    if (!ReactEvent.Mouse.defaultPrevented(event)) {
-      ReactEvent.Mouse.preventDefault(event);
-      ReasonReact.Router.push(href);
-    };
-
-  let onClick = (t: t, event) =>
-    switch (t) {
-    | Action(action) => action(event)
-    | Internal(_) => handleStringUrlClick(event, t |> toString)
-    | Relative(_) => handleStringUrlClick(event, t |> toString)
-    | External(_) => ()
-    };
-};
-
-let make = (~linkType: linkType, ~className: option(string)=?, children) => {
-  ...component,
-  render: _self =>
-    <a
-      href={LinkType.toString(linkType)}
-      ?className
-      onClick={LinkType.onClick(linkType)}>
-      ...children
-    </a>,
+  let make =
+      (
+        ~linkType: LinkType.t,
+        ~className: option(string)=?,
+        children: array(ReasonReact.reactElement),
+      ) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~linkType, ~className?, ~children, ()),
+      children,
+    );
 };

@@ -13,7 +13,7 @@ let make =
   render: _ => {
     let addToChannelLink = (agentId: string, channelId: string) =>
       ChannelMembershipCreate.Mutation.make((mutation, _) =>
-        <Foretold__Components__Link
+        <Foretold__Components__Link.Jsx2
           linkType={
             Action(
               _ =>
@@ -21,7 +21,7 @@ let make =
             )
           }>
           {"Add to Community" |> ReasonReact.string}
-        </Foretold__Components__Link>
+        </Foretold__Components__Link.Jsx2>
       )
       |> ReasonReact.element;
 
@@ -30,7 +30,7 @@ let make =
         ~name="Agent" |> ReasonReact.string,
         ~render=
           (agent: Primary.Agent.t) =>
-            <Foretold__Components__Link
+            <Foretold__Components__Link.Jsx2
               linkType={
                 Internal(
                   Agent({agentId: agent.id, subPage: AgentMeasurements}),
@@ -39,7 +39,7 @@ let make =
               {agent.name
                |> Rationale.Option.default("")
                |> ReasonReact.string}
-            </Foretold__Components__Link>,
+            </Foretold__Components__Link.Jsx2>,
         (),
       );
 

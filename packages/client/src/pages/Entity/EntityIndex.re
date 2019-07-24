@@ -11,10 +11,10 @@ module Columns = {
       ~name="Name" |> ste,
       ~render=
         (r: record) =>
-          <Foretold__Components__Link
+          <Foretold__Components__Link.Jsx2
             linkType={Internal(EntityShow(r |> Graph_T.Thing.id))}>
             {r |> EKen.Thing.getName |> ste}
-          </Foretold__Components__Link>,
+          </Foretold__Components__Link.Jsx2>,
       ~flex=2,
       (),
     );

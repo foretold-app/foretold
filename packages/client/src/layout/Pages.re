@@ -24,10 +24,6 @@ module Preferences' = {
   let toEl = Preferences.make |> LoggedInPage.justLoggedInUser;
 };
 
-module ChannelIndex' = {
-  let toEl = ChannelIndex.Jsx2.make |> LoggedInPage.justLoggedInUser;
-};
-
 module ChannelNew' = {
   let toEl = ChannelNew.make |> LoggedInPage.noParams;
 };

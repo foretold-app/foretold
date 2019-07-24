@@ -75,7 +75,7 @@ module Columns = {
 };
 
 [@react.component]
-let make = (~loggedInUser: Primary.User.t, ~layout, ~children) =>
+let make = (~pageParams, ~layout) =>
   ChannelsGet.component(channels =>
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv("Communities"),
@@ -86,11 +86,10 @@ let make = (~loggedInUser: Primary.User.t, ~layout, ~children) =>
 
 module Jsx2 = {
   let component = ReasonReact.statelessComponent("ChannelIndex");
-  /* `children` is not labelled, as it is a regular parameter in version 2 of JSX */
-  let make = (~loggedInUser, ~layout=SLayout.FullPage.makeWithEl, children) =>
+  let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
-      makeProps(~loggedInUser, ~layout, ~children, ()),
+      makeProps(~pageParams, ~layout, ()),
       children,
     );
 };

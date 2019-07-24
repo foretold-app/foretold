@@ -1,4 +1,3 @@
-/* TODO: Finish me */
 open Utils;
 
 module Component = {
@@ -7,6 +6,7 @@ module Component = {
     | AgentMeasurements => "Predictions"
     | AgentMeasurables => "Created Questions"
     | AgentBots => "Bots"
+    | AgentCommunities => "Communities"
     };
 
   let tab = (agentId, currentPage, selectedPage) => {
@@ -35,6 +35,7 @@ module Component = {
           {tab(agentId, subPage, AgentMeasurements)}
           {tab(agentId, subPage, AgentMeasurables)}
           {tab(agentId, subPage, AgentBots)}
+          {tab(agentId, subPage, AgentCommunities)}
         </>
       : <>
           {tab(agentId, subPage, AgentMeasurements)}

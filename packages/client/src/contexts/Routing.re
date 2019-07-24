@@ -8,7 +8,8 @@ module AgentPage = {
     type t =
       | AgentMeasurements
       | AgentMeasurables
-      | AgentBots;
+      | AgentBots
+      | AgentCommunities;
   };
 
   type t = {
@@ -141,6 +142,8 @@ module Route = {
     | ["agents", agentId, "bots"] => Agent({agentId, subPage: AgentBots})
     | ["agents", agentId, "measurables"] =>
       Agent({agentId, subPage: AgentMeasurables})
+    | ["agents", agentId, "communities"] =>
+      Agent({agentId, subPage: AgentCommunities})
     | ["subscribe"] => Subscribe
     | ["unsubscribe"] => Unsubscribe
     | _ => NotFound
@@ -190,6 +193,8 @@ module Url = {
     | Agent({agentId, subPage: AgentBots}) => "/agents/" ++ agentId ++ "/bots"
     | Agent({agentId, subPage: AgentMeasurables}) =>
       "/agents/" ++ agentId ++ "/measurables"
+    | Agent({agentId, subPage: AgentCommunities}) =>
+      "/agents/" ++ agentId ++ "/communities"
     | ChannelNew => "/communities/" ++ "new"
     | ChannelIndex => "/communities"
     | ChannelShow(id) => "/c/" ++ id

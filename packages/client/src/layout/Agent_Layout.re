@@ -24,6 +24,8 @@ let makeWithPage =
       )
       |> toEl
     | AgentBots => AgentBots.make(~pageParams={id: agentId}, ~layout) |> toEl
+    | AgentCommunities =>
+      AgentBots.make(~pageParams={id: agentId}, ~layout) |> toEl
     };
 
   | None => <Home />

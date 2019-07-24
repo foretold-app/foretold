@@ -93,8 +93,8 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param {object} [where]
    * @protected
+   * @param {object} [where]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {object}
    */
@@ -102,9 +102,17 @@ class ModelPostgres extends Model {
     if (restrictions.isAdmin) return where;
     if (!where[this.and]) where[this.and] = [];
 
-    if (restrictions.channelId) {
+    if (restrictions.channelId && restrictions.agentId) {
       where[this.and].push({
         channelId: {
+          [this.in]: this._channelIdsLiteral(restrictions.agentId),
+        },
+      });
+    }
+
+    if (restrictions.channelIdAsId && restrictions.agentId) {
+      where[this.and].push({
+        id: {
           [this.in]: this._channelIdsLiteral(restrictions.agentId),
         },
       });
@@ -116,7 +124,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (restrictions.measurableId) {
+    if (restrictions.measurableId && restrictions.agentId) {
       where[this.and].push({
         measurableId: {
           [this.in]: this._measurableIdsLiteral(restrictions.agentId),
@@ -288,7 +296,7 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @param {Layers.AbstractModelsLayer.options} [options]
-   * @return {Promise<void>}
+   * @return {Promise<*[]>}
    */
   async getAll(filter = {}, pagination = {}, restrictions = {}, options = {}) {
     const where = {};

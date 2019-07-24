@@ -202,6 +202,7 @@ export namespace Layers {
     type restrictions = {
       agentId?: Models.ObjectID,
       isAdmin?: boolean,
+      channelIdAsId?: boolean,
       userId?: Models.ObjectID,
       channelId?: Models.ObjectID,
       measurableId?: Models.ObjectID,

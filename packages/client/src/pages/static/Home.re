@@ -14,13 +14,11 @@ let make = _children => {
       </div>
       <div className=StaticStyles.description>
         {"Our Privacy Policy is " |> ste}
-        <Foretold__Components__Link.Jsx2 linkType={Internal(Privacy)}>
+        <Link.Jsx2 linkType={Internal(Privacy)}>
           {"here, " |> ste}
-        </Foretold__Components__Link.Jsx2>
+        </Link.Jsx2>
         {"and our Terms of Service is " |> ste}
-        <Foretold__Components__Link.Jsx2 linkType={Internal(Terms)}>
-          {"here" |> ste}
-        </Foretold__Components__Link.Jsx2>
+        <Link.Jsx2 linkType={Internal(Terms)}> {"here" |> ste} </Link.Jsx2>
         {"." |> ste}
       </div>
     </div>,

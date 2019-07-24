@@ -10,18 +10,18 @@ let make = _children => {
     <FC__Footer
       logo={React.string({js|Foretold|js})}
       links=[|
-        <C.Link linkType={External(documentationUrl)}>
+        <Link.Jsx2 linkType={External(documentationUrl)}>
           {"Documentation" |> ste}
-        </C.Link>,
-        <C.Link linkType={External(feedbackUrl)}>
+        </Link.Jsx2>,
+        <Link.Jsx2 linkType={External(feedbackUrl)}>
           {"Feedback" |> ste}
-        </C.Link>,
-        <C.Link linkType={Internal(Terms)}>
+        </Link.Jsx2>,
+        <Link.Jsx2 linkType={Internal(Terms)}>
           {"Terms and Conditions" |> ste}
-        </C.Link>,
-        <C.Link linkType={Internal(Privacy)}>
+        </Link.Jsx2>,
+        <Link.Jsx2 linkType={Internal(Privacy)}>
           {"Privacy Policy" |> ste}
-        </C.Link>,
+        </Link.Jsx2>,
       |]
     />,
 };

@@ -20,10 +20,9 @@ let kenDisplay = id => {
            switch (r.value.valueType) {
            | String(s) => s |> ste
            | ThingId(s) =>
-             <Foretold__Components__Link.Jsx2
-               linkType={Internal(EntityShow(s))}>
+             <Link.Jsx2 linkType={Internal(EntityShow(s))}>
                {s |> ste}
-             </Foretold__Components__Link.Jsx2>
+             </Link.Jsx2>
            | _ => "no-name" |> ste
            }
          )
@@ -120,43 +119,43 @@ let endpointResponse = (~m: measurable) =>
   };
 
 let questionLink = (~m: measurable) =>
-  <Foretold__Components__Link.Jsx2
+  <Link.Jsx2
     className=Shared.Item.item
     linkType={Internal(MeasurableShow(m.channelId, m.id))}>
     {"Link to This Question" |> Utils.ste}
-  </Foretold__Components__Link.Jsx2>;
+  </Link.Jsx2>;
 
 let creatorLink = (~m: measurable) =>
   m.creator
   |> E.O.fmap((c: Agent.t) =>
-       <Foretold__Components__Link.Jsx2
+       <Link.Jsx2
          linkType={
            Internal(Agent({agentId: c.id, subPage: AgentMeasurements}))
          }
          className=Shared.Item.item>
          {c.name |> E.O.default("") |> ste}
-       </Foretold__Components__Link.Jsx2>
+       </Link.Jsx2>
      );
 
 let editLink = (~m: measurable) =>
   <div className=Shared.Item.item>
-    <Foretold__Components__Link.Jsx2
+    <Link.Jsx2
       linkType={Internal(MeasurableEdit(m.id))}
       className={Shared.Item.itemButton(NORMAL)}>
       {"Edit" |> ste}
-    </Foretold__Components__Link.Jsx2>
+    </Link.Jsx2>
   </div>;
 
 let channelLink = (~m: measurable) =>
   <div className=Shared.Item.item>
-    <Foretold__Components__Link.Jsx2
+    <Link.Jsx2
       linkType={Internal(ChannelShow(m.channelId))}
       className=Shared.Item.item>
       {switch (m.channel) {
        | Some(channel) => "#" ++ channel.name |> ste
        | _ => "#channel" |> ste
        }}
-    </Foretold__Components__Link.Jsx2>
+    </Link.Jsx2>
   </div>;
 
 let measurements = (~m: measurable) =>
@@ -201,11 +200,10 @@ let series = (~m: measurable, ~channelId=None, ()) => {
        | Some(name) =>
          Some(
            <div className=Shared.Item.item>
-             <Foretold__Components__Link.Jsx2
-               linkType={Internal(SeriesShow(m.channelId, r.id))}>
+             <Link.Jsx2 linkType={Internal(SeriesShow(m.channelId, r.id))}>
                <Icon.Icon icon="LAYERS" />
                {name |> ste}
-             </Foretold__Components__Link.Jsx2>
+             </Link.Jsx2>
            </div>,
          )
        | None => None

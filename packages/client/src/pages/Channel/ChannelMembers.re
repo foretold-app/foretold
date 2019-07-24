@@ -2,7 +2,7 @@ let component = ReasonReact.statelessComponent("ChannelMembers");
 
 let changeRoleAction = (agentId, channelId, role, text) =>
   ChannelMembershipRoleUpdate.Mutation.make((mutation, _) =>
-    <Foretold__Components__Link.Jsx2
+    <Link.Jsx2
       linkType={
         Action(
           _ =>
@@ -15,20 +15,20 @@ let changeRoleAction = (agentId, channelId, role, text) =>
         )
       }>
       {text |> ReasonReact.string}
-    </Foretold__Components__Link.Jsx2>
+    </Link.Jsx2>
   )
   |> ReasonReact.element;
 
 let removeFromChannel = (agentId, channelId) =>
   ChannelMembershipDelete.Mutation.make((mutation, _) =>
-    <Foretold__Components__Link.Jsx2
+    <Link.Jsx2
       linkType={
         Action(
           _ => ChannelMembershipDelete.mutate(mutation, agentId, channelId),
         )
       }>
       {"Remove" |> ReasonReact.string}
-    </Foretold__Components__Link.Jsx2>
+    </Link.Jsx2>
   )
   |> ReasonReact.element;
 
@@ -49,14 +49,14 @@ module Columns = {
         (membership: Types.channelMembership) =>
           membership.agent
           |> Rationale.Option.fmap((r: Types.agent) =>
-               <Foretold__Components__Link.Jsx2
+               <Link.Jsx2
                  linkType={
                    Internal(
                      Agent({agentId: r.id, subPage: AgentMeasurements}),
                    )
                  }>
                  {r.name |> E.O.default("Anonymous") |> ReasonReact.string}
-               </Foretold__Components__Link.Jsx2>
+               </Link.Jsx2>
              )
           |> E.O.React.defaultNull,
       (),

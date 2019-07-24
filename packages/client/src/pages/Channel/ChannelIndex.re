@@ -9,9 +9,9 @@ module Columns = {
       ~name="Name" |> Utils.ste,
       ~render=
         (r: record) =>
-          <Foretold__Components__Link linkType={Internal(ChannelShow(r.id))}>
+          <Link linkType={Internal(ChannelShow(r.id))}>
             [|r.name |> Utils.ste|]
-          </Foretold__Components__Link>,
+          </Link>,
       ~flex=2,
       (),
     );

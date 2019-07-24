@@ -16,10 +16,9 @@ let display = id => {
            switch (r.value.valueType) {
            | String(s) => s |> ste
            | ThingId(s) =>
-             <Foretold__Components__Link.Jsx2
-               linkType={Internal(EntityShow(s))}>
+             <Link.Jsx2 linkType={Internal(EntityShow(s))}>
                {s |> ste}
-             </Foretold__Components__Link.Jsx2>
+             </Link.Jsx2>
            | _ => "no-name" |> ste
            }
          )

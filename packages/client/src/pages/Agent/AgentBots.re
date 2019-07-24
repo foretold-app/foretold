@@ -42,14 +42,14 @@ module Columns = {
         (bot: Primary.Bot.t) =>
           switch (bot.name, bot.agent) {
           | (Some(name), Some(agent)) =>
-            <Foretold__Components__Link.Jsx2
+            <Link.Jsx2
               linkType={
                 Internal(
                   Agent({agentId: agent.id, subPage: AgentMeasurements}),
                 )
               }>
               {name |> ste}
-            </Foretold__Components__Link.Jsx2>
+            </Link.Jsx2>
           | _ => ReasonReact.null
           },
       (),
@@ -81,10 +81,9 @@ module Columns = {
       ~name="Edit" |> ste,
       ~render=
         (bot: Primary.Bot.t) =>
-          <Foretold__Components__Link.Jsx2
-            linkType={Internal(BotEdit(bot.id))}>
+          <Link.Jsx2 linkType={Internal(BotEdit(bot.id))}>
             {"Edit Bot" |> ste}
-          </Foretold__Components__Link.Jsx2>,
+          </Link.Jsx2>,
       ~show=
         (bot: Primary.Bot.t) =>
           Primary.Permissions.can(`BOT_UPDATE, bot.permissions),

@@ -34,7 +34,7 @@ let component = ReasonReact.statelessComponent("Header");
 let action = Layout__Dropdown.Styles.action;
 
 let link = (linkType: LinkType.linkType, str) =>
-  <C.Link linkType className=action> {str |> ste} </C.Link>;
+  <Link.Jsx2 linkType className=action> {str |> ste} </Link.Jsx2>;
 
 let userDropdown = agentId =>
   <div className=Layout__Dropdown.Styles.actions>
@@ -74,14 +74,16 @@ let make = (~loggedInUser: Primary.User.t, _children) => {
   render: _self =>
     <Div styles=[Styles.outer]>
       <Div float=`left>
-        <C.Link linkType={Internal(ChannelIndex)} className=Styles.headerLink>
+        <Link.Jsx2
+          linkType={Internal(ChannelIndex)} className=Styles.headerLink>
           {"Communities" |> ste}
-        </C.Link>
+        </Link.Jsx2>
       </Div>
       <Div float=`left>
-        <C.Link linkType={Internal(EntityIndex)} className=Styles.headerLink>
+        <Link.Jsx2
+          linkType={Internal(EntityIndex)} className=Styles.headerLink>
           {"Entity Explorer" |> ste}
-        </C.Link>
+        </Link.Jsx2>
       </Div>
       <Div float=`right> {header(loggedInUser)} </Div>
     </Div>,

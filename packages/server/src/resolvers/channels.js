@@ -24,14 +24,15 @@ async function channelCreator(channel) {
  * @param {object} args
  * @param {number} args.offset
  * @param {number} args.limit
- * @param {number} args.agentId
+ * @param {number} args.channelMemberId
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<Models.Channel[]>}
  */
 async function all(root, args, context, info) {
   const agentId = _.get(context, 'agent.id');
-  const filter = {};
+  const channelMemberId = _.get(args, 'channelMemberId');
+  const filter = { channelMemberId };
   const pagination = new Pagination(args);
   const options = { agentId };
   return data.channels.getAll(filter, pagination, options);

@@ -137,6 +137,7 @@ export namespace Layers {
       types?: string[],
       type?: string,
       notificationId?: Models.ObjectID,
+      channelMemberId?: Models.ObjectID,
       sentAt?: string | null,
     };
     type pagination = {
@@ -215,6 +216,7 @@ export namespace Layers {
     };
     type filter = {
       excludeChannelId?: Models.ObjectID,
+      channelMemberId?: Models.ObjectID,
       userId?: Models.ObjectID,
       isArchived?: string[],
       types?: string[],

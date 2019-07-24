@@ -45,21 +45,6 @@ class ChannelsData extends DataBase {
   }
 
   /**
-   * @todo: fix interface (params, data, options)
-   * @public
-   * @param {Models.ObjectID} id
-   * @param {object} input
-   * @return {Promise<Models.Channel>}
-   */
-  async updateOne(id, input) {
-    const channel = await this.models.Channel.findOne({
-      where: { id },
-    });
-    if (channel) await channel.update(input);
-    return channel;
-  }
-
-  /**
    * @todo: rework
    * @public
    * @param {Models.ObjectID} id

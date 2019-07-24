@@ -64,7 +64,8 @@ async function one(root, args, context, info) {
  * @returns {Promise<Models.Channel>}
  */
 async function update(root, args, context, info) {
-  return data.channels.updateOne(args.id, args.input);
+  const params = { id: args.id };
+  return data.channels.updateOne(params, args.input);
 }
 
 /**

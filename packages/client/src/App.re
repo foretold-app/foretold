@@ -57,7 +57,7 @@ let make = _children => {
 
     <ReasonApollo.Provider client=appApolloClient>
       <Providers.AppContext.Provider value=appContext>
-        <Layout route={self.state.route} />
+        <Navigator route={self.state.route} />
       </Providers.AppContext.Provider>
     </ReasonApollo.Provider>;
   },

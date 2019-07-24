@@ -17,7 +17,7 @@ describe('Channels Middleware', () => {
       const context = {};
       const info = {};
       return setContextChannel(root, args, context, info).then((result) => {
-        expect(data.channels.getOne).toHaveBeenCalledWith('channelId1');
+        expect(data.channels.getOne).toHaveBeenCalledWith({ id: 'channelId1' });
         expect(result).toBe(undefined);
         expect(context.channel).toBe(channelObj);
       });
@@ -29,7 +29,7 @@ describe('Channels Middleware', () => {
       const context = {};
       const info = {};
       return setContextChannel(root, args, context, info).then((result) => {
-        expect(data.channels.getOne).toHaveBeenCalledWith('channelId1');
+        expect(data.channels.getOne).toHaveBeenCalledWith({ id: 'channelId1' });
         expect(result).toBe(undefined);
         expect(context.channel).toBe(channelObj);
       });
@@ -41,7 +41,7 @@ describe('Channels Middleware', () => {
       const context = { channelId: 'channelId1' };
       const info = {};
       return setContextChannel(root, args, context, info).then((result) => {
-        expect(data.channels.getOne).toHaveBeenCalledWith('channelId1');
+        expect(data.channels.getOne).toHaveBeenCalledWith({ id: 'channelId1' });
         expect(result).toBe(undefined);
         expect(context.channel).toBe(channelObj);
       });

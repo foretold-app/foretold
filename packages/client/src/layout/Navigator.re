@@ -8,7 +8,9 @@ let defaultPage = (loggedInUser: Primary.User.t) =>
        Routing.Url.push(ChannelShow(channel.id));
        ReasonReact.null;
      })
-  |> E.O.default(<Home />);
+  |> {
+    Primary.Channel.globalLink() |> Routing.Url.toString |> ReasonReact.Router.push;
+    E.O.default(<Home />)}
 
 let meToUser = (me: Me.t) =>
   switch (me) {

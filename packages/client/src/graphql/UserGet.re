@@ -4,22 +4,14 @@ type channel = {
   isPublic: bool,
 };
 
-type channelMembership = {
-  role: Types.channelMembershipRole,
-  channel: option(channel),
-};
-
 type preference = {
   id: string,
   stopAllEmails: option(bool),
 };
 
-type channelMemberships = Js.Array.t(option(channelMembership));
-
 type agent = {
   id: string,
   name: option(string),
-  channelMemberships,
   preference: option(preference),
 };
 
@@ -46,14 +38,6 @@ let toChannel = (ch: channel) =>
     (),
   );
 
-let toChannelMembership = (ch: channelMembership): Types.channelMembership =>
-  Primary.ChannelMembership.make(
-    ~channel=ch.channel |> E.O.fmap(toChannel),
-    ~role=`ADMIN,
-    ~agent=None,
-    (),
-  );
-
 let toPreference = (a: preference) =>
   Primary.Preference.make(~id=a.id, ~stopAllEmails=a.stopAllEmails, ());
 
@@ -61,11 +45,7 @@ let toAgent = (a: agent) =>
   Primary.Agent.make(
     ~id=a.id,
     ~name=a.name,
-    ~channelMemberships=
-      a.channelMemberships
-      |> E.A.O.concatSomes
-      |> E.A.fmap(toChannelMembership)
-      |> E.O.some,
+    ~channelMemberships=None,
     ~preference=a.preference |> E.O.fmap(toPreference),
     (),
   );
@@ -98,14 +78,6 @@ module Query = [%graphql
             agent: Agent  @bsRecord{
               id
               name
-              channelMemberships @bsRecord{
-                role
-                channel @bsRecord{
-                  name
-                  id
-                  isPublic
-                }
-              }
               preference: Preference @bsRecord{
                 id
                 stopAllEmails

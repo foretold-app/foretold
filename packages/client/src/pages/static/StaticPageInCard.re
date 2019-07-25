@@ -3,7 +3,7 @@ open ReactMarkdown;
 open Utils;
 open E;
 
-let component = ReasonReact.statelessComponent("Home");
+let component = ReasonReact.statelessComponent("StaticPageInCard");
 
 let make = (~markdown, _children) => {
   ...component,

@@ -138,7 +138,7 @@ export namespace Layers {
       type?: string,
       notificationId?: Models.ObjectID,
       channelMemberId?: Models.ObjectID,
-      sentAt?: string | null,
+      sentAt?: string | null
     };
     type pagination = {
       limit?: number,

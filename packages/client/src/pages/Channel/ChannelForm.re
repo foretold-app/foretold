@@ -2,13 +2,14 @@ open Utils;
 open MomentRe;
 open Antd;
 
-module NewChannelParams = {
+module Params = {
   type state = {
     name: string,
     description: string,
     isPublic: string,
+    isArchived: string,
   };
-  type fields = [ | `name | `description | `isPublic];
+  type fields = [ | `name | `description | `isPublic | `isArchived];
   let lens = [
     (`name, s => s.name, (s, name) => {...s, name}),
     (
@@ -17,12 +18,14 @@ module NewChannelParams = {
       (s, description) => {...s, description},
     ),
     (`isPublic, s => s.isPublic, (s, isPublic) => {...s, isPublic}),
+    (`isArchived, s => s.isArchived, (s, isArchived) => {...s, isArchived}),
   ];
 };
 
-module NewChannelForm = ReForm.Create(NewChannelParams);
+module FormUI = ReForm.Create(Params);
 
-let showForm = (~form: NewChannelForm.state, ~handleSubmit, ~handleChange) =>
+let showForm =
+    (~form: FormUI.state, ~handleSubmit, ~handleChange, ~creating=true, ()) =>
   <Form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
     <Form.Item>
       {"Name" |> ste |> E.React.inH3}
@@ -35,9 +38,9 @@ let showForm = (~form: NewChannelForm.state, ~handleSubmit, ~handleChange) =>
       {"Description" |> ste |> E.React.inH3}
       <Input
         value={form.values.description}
-        onChange={
-          ReForm.Helpers.handleDomFormChange(handleChange(`description))
-        }
+        onChange={ReForm.Helpers.handleDomFormChange(
+          handleChange(`description),
+        )}
       />
     </Form.Item>
     <Form.Item>
@@ -47,6 +50,16 @@ let showForm = (~form: NewChannelForm.state, ~handleSubmit, ~handleChange) =>
         onChange={e => handleChange(`isPublic, e ? "TRUE" : "FALSE")}
       />
     </Form.Item>
+    {E.React.showIf(
+       !creating,
+       <Form.Item>
+         {"Make Archived?" |> ste |> E.React.inH3}
+         <AntdSwitch
+           checked={form.values.isArchived == "TRUE"}
+           onChange={e => handleChange(`isArchived, e ? "TRUE" : "FALSE")}
+         />
+       </Form.Item>,
+     )}
     <Form.Item>
       <Button _type=`primary onClick={_ => handleSubmit()}>
         {"Submit" |> ste}

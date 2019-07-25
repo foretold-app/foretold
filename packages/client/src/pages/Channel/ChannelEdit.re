@@ -1,6 +1,6 @@
 open Rationale.Function.Infix;
 
-module ChannelFormShower = ReForm.Create(ChannelForm.NewChannelParams);
+module ChannelFormShower = ReForm.Create(ChannelForm.Params);
 
 module CMutationForm =
   MutationForm.Make({
@@ -50,11 +50,13 @@ let make = (~channelId: string, ~layout, _children) => {
               values.name,
               Some(values.description),
               values.isPublic |> E.Bool.fromString,
+              values.isArchived |> E.Bool.fromString,
             ),
         ~initialState={
           name: channel.name,
           description: channel.description |> E.O.default(""),
           isPublic: channel.isPublic |> E.Bool.toString,
+          isArchived: channel.isArchived |> E.Bool.toString,
         },
         ~schema=[(`name, Custom(_ => None))],
       )
@@ -68,7 +70,13 @@ let make = (~channelId: string, ~layout, _children) => {
                CMutationForm.showWithLoading(
                  ~result=data.result,
                  ~form=
-                   ChannelForm.showForm(~form, ~handleSubmit, ~handleChange),
+                   ChannelForm.showForm(
+                     ~form,
+                     ~handleSubmit,
+                     ~handleChange,
+                     ~creating=false,
+                     (),
+                   ),
                  ~successMessage="Community edited successfully.",
                  (),
                )

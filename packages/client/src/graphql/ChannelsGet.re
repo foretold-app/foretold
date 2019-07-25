@@ -1,7 +1,13 @@
 module Query = [%graphql
   {|
-    query getChannels ($channelMemberId: String){
-      channels (channelMemberId: $channelMemberId){
+    query getChannels (
+        $channelMemberId: String
+        $isArchived: [isArchived]
+    ){
+      channels (
+        channelMemberId: $channelMemberId
+        isArchived: $isArchived
+      ){
         id
         name
         description
@@ -30,8 +36,8 @@ let toChannel = (m): Primary.Channel.t =>
     (),
   );
 
-let component = (~channelMemberId: option(string), fn) => {
-  let query = Query.make(~channelMemberId?, ());
+let component = (~channelMemberId: option(string)=?, ~isArchived=?, fn) => {
+  let query = Query.make(~channelMemberId?, ~isArchived?, ());
 
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result

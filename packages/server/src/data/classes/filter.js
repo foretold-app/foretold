@@ -22,8 +22,8 @@ class Filter {
    * @param {Layers.DataSourceLayer.filter} [filter]
    */
   constructor(filter = {}) {
-    const common = ['id'];
-    const channel = ['isArchived'];
+    const common = ['id', 'isArchived'];
+    const channel = [];
     const agent = ['excludeChannelId', 'types'];
     const agentNotification = ['notificationId', 'sentAt'];
     const channels = ['channelMemberId'];

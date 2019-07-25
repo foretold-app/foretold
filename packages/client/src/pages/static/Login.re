@@ -1,6 +1,6 @@
 open Utils;
 
-let component = ReasonReact.statelessComponent("Home");
+let component = ReasonReact.statelessComponent("Login");
 
 let make = _children => {
   ...component,

@@ -10,10 +10,22 @@ module Query = [%graphql
 
 module Mutation = ReasonApollo.CreateMutation(Query);
 
-let mutate = (mutation: Mutation.apolloMutation, name, description, isPublic) => {
+let mutate =
+    (
+      mutation: Mutation.apolloMutation,
+      name,
+      description,
+      isPublic,
+      isArchived,
+    ) => {
   let m =
     Query.make(
-      ~input={"name": name, "description": description, "isPublic": isPublic},
+      ~input={
+        "name": name,
+        "description": description,
+        "isPublic": isPublic,
+        "isArchived": isArchived,
+      },
       (),
     );
   mutation(

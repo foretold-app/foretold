@@ -107,7 +107,7 @@ module LoadedAndUnselected = {
       </Div>
     </Div>;
 
-  let body = (t: t, send: Reducer.Types.send) => {
+  let body = (t: t, _send: Reducer.Types.send) => {
     let measurables =
       (
         switch (t.reducerParams.response) {
@@ -145,7 +145,7 @@ module MeasurableIndexDataState = {
         ~head=E.React.null,
         ~body="Item Not Valid" |> ste,
       )
-    | WithChannelButNotQuery(c) =>
+    | WithChannelButNotQuery(_c) =>
       SLayout.LayoutConfig.make(~head=E.React.null, ~body=<SLayout.Spin />)
     | LoadedAndUnselected(l) =>
       SLayout.LayoutConfig.make(

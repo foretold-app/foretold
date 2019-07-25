@@ -86,6 +86,10 @@ let userDropdown = agentId =>
        Internal(Agent({agentId, subPage: AgentMeasurements})),
        "My Predictions",
      )}
+    {link(
+       Internal(Agent({agentId, subPage: AgentCommunities})),
+       "My Communities",
+     )}
     {link(Internal(ChannelNew), "Make a New Community")}
     {link(Internal(Preferences), "Preferences")}
     {link(Action(_ => Auth.Actions.logout()), "Logout")}

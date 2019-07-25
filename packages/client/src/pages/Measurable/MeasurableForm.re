@@ -1,5 +1,4 @@
 open Utils;
-open MomentRe;
 open Antd;
 
 open Style.Grid;

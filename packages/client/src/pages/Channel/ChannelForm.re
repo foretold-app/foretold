@@ -24,7 +24,8 @@ module Params = {
 
 module FormUI = ReForm.Create(Params);
 
-let showForm = (~form: FormUI.state, ~handleSubmit, ~handleChange) =>
+let showForm =
+    (~form: FormUI.state, ~handleSubmit, ~handleChange, ~creating=true, ()) =>
   <Form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
     <Form.Item>
       {"Name" |> ste |> E.React.inH3}
@@ -49,13 +50,16 @@ let showForm = (~form: FormUI.state, ~handleSubmit, ~handleChange) =>
         onChange={e => handleChange(`isPublic, e ? "TRUE" : "FALSE")}
       />
     </Form.Item>
-    <Form.Item>
-      {"Make Archived?" |> ste |> E.React.inH3}
-      <AntdSwitch
-        checked={form.values.isArchived == "TRUE"}
-        onChange={e => handleChange(`isArchived, e ? "TRUE" : "FALSE")}
-      />
-    </Form.Item>
+    {E.React.showIf(
+       !creating,
+       <Form.Item>
+         {"Make Archived?" |> ste |> E.React.inH3}
+         <AntdSwitch
+           checked={form.values.isArchived == "TRUE"}
+           onChange={e => handleChange(`isArchived, e ? "TRUE" : "FALSE")}
+         />
+       </Form.Item>,
+     )}
     <Form.Item>
       <Button _type=`primary onClick={_ => handleSubmit()}>
         {"Submit" |> ste}

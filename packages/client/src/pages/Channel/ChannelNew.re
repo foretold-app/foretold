@@ -42,7 +42,8 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
          form(mutation, ({handleSubmit, handleChange, form, _}) =>
            CMutationForm.showWithLoading(
              ~result=data.result,
-             ~form=ChannelForm.showForm(~form, ~handleSubmit, ~handleChange),
+             ~form=
+               ChannelForm.showForm(~form, ~handleSubmit, ~handleChange, ()),
              ~successMessage="Community created successfully.",
              (),
            )

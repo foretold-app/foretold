@@ -152,6 +152,7 @@ const schema = new graphql.GraphQLSchema({
           offset: { type: graphql.GraphQLInt },
           limit: { type: graphql.GraphQLInt },
           channelMemberId: { type: graphql.GraphQLString },
+          isArchived: { type: graphql.GraphQLList(types.common.isArchived) },
         },
         resolve: resolvers.channels.all,
       },

@@ -70,7 +70,13 @@ let make = (~channelId: string, ~layout, _children) => {
                CMutationForm.showWithLoading(
                  ~result=data.result,
                  ~form=
-                   ChannelForm.showForm(~form, ~handleSubmit, ~handleChange),
+                   ChannelForm.showForm(
+                     ~form,
+                     ~handleSubmit,
+                     ~handleChange,
+                     ~creating=false,
+                     (),
+                   ),
                  ~successMessage="Community edited successfully.",
                  (),
                )

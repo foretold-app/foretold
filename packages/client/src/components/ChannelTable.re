@@ -50,17 +50,24 @@ module Columns = {
       (),
     );
 
-  let curatedColumn: column =
+  let labelsColumn: column =
     Table.Column.make(
       ~name="Labels" |> Utils.ste,
       ~render=
         (r: record) =>
-          r.isCurated
-            ? <div className="ant-tag ant-tag-blue">
-                {"Curated" |> ReasonReact.string}
-              </div>
-            : ReasonReact.null,
-      ~show=(r: record) => r.isCurated,
+          <>
+            {r.isCurated
+               ? <div className="ant-tag ant-tag-blue">
+                   {"Curated" |> ReasonReact.string}
+                 </div>
+               : ReasonReact.null}
+            {r.isArchived
+               ? <div className="ant-tag ant-tag-gold">
+                   {"Archived" |> ReasonReact.string}
+                 </div>
+               : ReasonReact.null}
+          </>,
+      ~show=(r: record) => r.isCurated || r.isArchived,
       ~flex=1,
       (),
     );
@@ -70,7 +77,7 @@ module Columns = {
     descriptionColumn,
     memberCountColumn,
     openedCountColumn,
-    curatedColumn,
+    labelsColumn,
   |];
 };
 

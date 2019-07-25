@@ -100,9 +100,36 @@ let dataSource =
 
 let showForm = (~form: MeasurableReForm.state, ~handleSubmit, ~handleChange) =>
   <AntdForm onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
+    <Form.Item
+      label="Question Type"
+      help="Number example: 'How many inches of rain will there be tomorrow?' Yes/No example: 'Will it rain tomorrow?'">
+      <Antd.Radio.Group
+        value={form.values.valueType}
+        defaultValue={form.values.valueType}
+        onChange={ReForm.Helpers.handleDomFormChange(
+          handleChange(`valueType),
+        )}>
+        <Antd.Radio value="FLOAT"> {"Number" |> ste} </Antd.Radio>
+        <Antd.Radio value="PERCENTAGE"> {"Yes/No Event" |> ste} </Antd.Radio>
+      </Antd.Radio.Group>
+    </Form.Item>
+    {E.React.showIf(
+       form.values.showDescriptionProperty == "FALSE",
+       <>
+         <Form.Item label="Name" required=true>
+           <Input
+             value={form.values.name}
+             onChange={ReForm.Helpers.handleDomFormChange(
+               handleChange(`name),
+             )}
+           />
+         </Form.Item>
+       </>,
+     )}
     {E.React.showIf(
        form.values.showDescriptionProperty == "TRUE",
        <>
+         <p />
          <p>
            {"Note: you must enter entity IDs in the Subject & Value fields. "
             ++ "Example: @orgs/companies/tesla"
@@ -148,34 +175,6 @@ let showForm = (~form: MeasurableReForm.state, ~handleSubmit, ~handleChange) =>
                 />
               </Form.Item>
             : <div />}
-       </>,
-     )}
-    {E.React.showIf(
-       form.values.showDescriptionProperty == "FALSE",
-       <>
-         <Form.Item
-           label="Question Type"
-           help="Number example: 'How many inches of rain will there be tomorrow?' Yes/No example: 'Will it rain tomorrow?'">
-           <Antd.Radio.Group
-             value={form.values.valueType}
-             defaultValue={form.values.valueType}
-             onChange={ReForm.Helpers.handleDomFormChange(
-               handleChange(`valueType),
-             )}>
-             <Antd.Radio value="FLOAT"> {"Number" |> ste} </Antd.Radio>
-             <Antd.Radio value="PERCENTAGE">
-               {"Yes/No Event" |> ste}
-             </Antd.Radio>
-           </Antd.Radio.Group>
-         </Form.Item>
-         <Form.Item label="Name" required=true>
-           <Input
-             value={form.values.name}
-             onChange={ReForm.Helpers.handleDomFormChange(
-               handleChange(`name),
-             )}
-           />
-         </Form.Item>
        </>,
      )}
     {E.React.showIf(

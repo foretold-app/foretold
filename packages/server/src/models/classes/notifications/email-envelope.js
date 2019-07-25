@@ -4,7 +4,7 @@ const Mustache = require('mustache');
 
 class EmailEnvelope {
   /**
-   * @param options
+   * @param {object} options
    * @param {string} options.subject
    * @param {string} options.body
    * @param {object} options.replacements
@@ -20,6 +20,10 @@ class EmailEnvelope {
     this.to = options.to;
   }
 
+  /**
+   * @param {object} replacements
+   * @return {EmailEnvelope}
+   */
   mutate(replacements) {
     const subject = Mustache.render(this.subject, replacements);
     const body = Mustache.render(this.body, replacements);

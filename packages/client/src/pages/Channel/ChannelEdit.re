@@ -33,10 +33,7 @@ let make = (~channelId: string, ~layout, _children) => {
           <FC.Base.Button
             variant=Primary
             onClick={e =>
-              Foretold__Components__Link.LinkType.onClick(
-                Internal(SeriesNew(channelId)),
-                e,
-              )
+              LinkType.onClick(Internal(SeriesNew(channelId)), e)
             }>
             {"New Series" |> Utils.ste}
           </FC.Base.Button>

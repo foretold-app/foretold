@@ -46,7 +46,7 @@ async function all(root, args, context, info) {
  */
 async function one(root, args, context, info) {
   const agentId = _.get(context, 'agent.id');
-  return data.measurements.getOne(args.id, { agentId });
+  return data.measurements.getOne2(args.id, { agentId });
 }
 
 /**

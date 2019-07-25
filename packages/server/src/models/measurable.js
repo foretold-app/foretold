@@ -52,10 +52,12 @@ module.exports = (sequelize, DataTypes) => {
     min: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      set: setFieldLimit('min'),
     },
     max: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      set: setFieldLimit('max'),
     },
 
     // State
@@ -133,6 +135,15 @@ module.exports = (sequelize, DataTypes) => {
   Measurable.addHook('beforeUpdate', async (instance) => {
     await watchExpectedResolutionDate(instance);
   });
+
+  function setFieldLimit(field) {
+    return function (value) {
+      const previousValues = this.previous(field);
+      const isPreviousEmpty = [null, undefined].includes(previousValues);
+      const isCleaned = !isPreviousEmpty && value === null;
+      this.dataValues[field] = isCleaned ? 0 : value;
+    }
+  }
 
   async function getMeasurementCount() {
     const items = await this.getMeasurements();

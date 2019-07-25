@@ -1,5 +1,4 @@
 open Utils;
-open MomentRe;
 open Antd;
 
 open Style.Grid;
@@ -183,9 +182,9 @@ let showForm = (~form: MeasurableReForm.state, ~handleSubmit, ~handleChange) =>
        form.values.valueType == "FLOAT",
        <>
          <Div flexDirection=`row>
-           <Div flex=1>
+           <Div flex={`num(1.)}>
              <Div flexDirection=`row>
-               <Div flex=1>
+               <Div flex={`num(1.)}>
                  <Form.Item label="Min">
                    <Antd.Input
                      className=Styles.shortInput
@@ -197,7 +196,7 @@ let showForm = (~form: MeasurableReForm.state, ~handleSubmit, ~handleChange) =>
                    />
                  </Form.Item>
                </Div>
-               <Div flex=1>
+               <Div flex={`num(1.)}>
                  <Form.Item label="Max">
                    <Antd.Input
                      className=Styles.shortInput
@@ -211,7 +210,7 @@ let showForm = (~form: MeasurableReForm.state, ~handleSubmit, ~handleChange) =>
                </Div>
              </Div>
            </Div>
-           <Div flex=3 />
+           <Div flex={`num(3.)} />
          </Div>
        </>,
      )}

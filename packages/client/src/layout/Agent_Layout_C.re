@@ -61,7 +61,7 @@ let make =
         },
       );
 
-    <Layout__Component__FillWithSidebar channelId=None loggedInUser>
+    <FillWithSidebar loggedInUser>
       top
       <div className=Styles.container>
         <Div flexDirection=`row styles=[SLayout.Styles.width100]>
@@ -75,7 +75,7 @@ let make =
                 ])
               ),
             ]
-            flex=3>
+            flex={`num(3.)}>
             <FC.PageCard>
               <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
               body
@@ -83,7 +83,7 @@ let make =
           </Div>
         </Div>
       </div>
-    </Layout__Component__FillWithSidebar>;
+    </FillWithSidebar>;
   },
 };
 

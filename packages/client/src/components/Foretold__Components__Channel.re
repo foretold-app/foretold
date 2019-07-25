@@ -1,12 +1,7 @@
 module SimpleHeader = {
   let newMeasurable = channelId =>
     FC.GroupHeader.actionButton(
-      ~onClick=
-        e =>
-          Foretold__Components__Link.LinkType.onClick(
-            Internal(MeasurableNew(channelId)),
-            e,
-          ),
+      ~onClick=e => LinkType.onClick(Internal(MeasurableNew(channelId)), e),
       [|"New Question" |> ReasonReact.string|],
     )
     |> ReasonReact.element;

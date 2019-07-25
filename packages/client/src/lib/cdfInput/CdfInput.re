@@ -35,9 +35,9 @@ module Styles = {
   open Css;
   let form =
     style([display(`flex), flexDirection(`row), width(`percent(100.))]);
-  let chartSection = style([flex(1)]);
+  let chartSection = style([flex(`num(1.))]);
   let inputSection =
-    style([flex(1), marginTop(px(10)), marginRight(px(5))]);
+    style([flex(`num(1.)), marginTop(px(10)), marginRight(px(5))]);
   let inputBox = style([]);
   let submitButton = style([marginTop(px(20))]);
   let select = style([marginBottom(px(7))]);

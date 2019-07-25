@@ -3,6 +3,18 @@
  */
 class Model {
 
+  getTransaction() {
+    return Promise.reject(new Error('getTransaction is not implemented.'));
+  }
+
+  commit(_transaction) {
+    return Promise.reject(new Error('getTransaction is not implemented.'));
+  }
+
+  rollback(_transaction) {
+    return Promise.reject(new Error('rollback is not implemented.'));
+  }
+
   getAll(filter, pagination, restrictions, options) {
     return Promise.reject(new Error('getAll is not implemented.'));
   }

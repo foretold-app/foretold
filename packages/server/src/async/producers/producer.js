@@ -16,34 +16,73 @@ class Producer {
     assert(_.isObject(options), 'Options is not an object');
 
     this.options = options;
-    this.data = data;
-
-    this.TEMPLATE_NAME = TEMPLATE_NAME;
-    this.NOTIFICATION_TYPE = NOTIFICATION_TYPE;
-
-    this.EmailEnvelope = EmailEnvelope;
-    this.templateName = TEMPLATE_NAME.MEASURABLE_STATE_IS_CHANGED;
+    this.templateName = undefined;
+    this.transaction = undefined;
   }
 
   /**
-   * @param {object} agent
+   * @return {Promise<undefined>}
+   * @protected
+   */
+  async _getTransaction() {
+    if (!!this.transaction) return this.transaction;
+    this.transaction = await Producer.data.notifications.getTransaction();
+    return this.transaction;
+  }
+
+  /**
+   * @return {Promise<object>}
+   * @protected
+   */
+  async _commit() {
+    const transaction = await this._getTransaction();
+    return Producer.data.notifications.commit(transaction);
+  }
+
+  /**
+   * @return {Promise<object>}
+   * @protected
+   */
+  async _rollback() {
+    const transaction = await this._getTransaction();
+    return Producer.data.notifications.rollback(transaction);
+  }
+
+  /**
    * @param {object} replacements
    * @return {Promise<*>}
    * @protected
    */
-  async _queueEmail(agent, replacements) {
+  async _queueEmail(replacements) {
     const template = await this._getTemplate();
     assert(!!_.get(template, 'id'), 'Template ID is required');
-    assert(!!_.get(template, 'envelopeTemplate'), 'Envelope Template ID is required');
+    assert(
+      !!_.get(template, 'envelopeTemplate'),
+      'Envelope Template ID is required',
+    );
 
-    const emailEnvelope = new this.EmailEnvelope(template.envelopeTemplate);
+    const emailEnvelope = new Producer.EmailEnvelope(template.envelopeTemplate);
     const emailEnvelope$ = emailEnvelope.mutate(replacements);
     const notification = await this._createEmailNotification(emailEnvelope$);
-    assert(!!_.get(notification, 'id'), 'Notification ID is required');
 
-    const assignment = await this._assignNotification(agent.id, notification.id);
-    assert(!!_.get(assignment, 'id'), 'Assignment ID is required');
+    return notification;
+  }
 
+  /**
+   * @param {object} agent
+   * @param {object} notification
+   * @return {Promise<*>}
+   * @protected
+   */
+  async _assignNotification(agent, notification) {
+    assert(!!agent.id, 'Agent ID is required');
+    assert(!!notification.id, 'Notification ID is required');
+    const data = { agentId: agent.id, notificationId: notification.id };
+    const options = await this._getOptions();
+    const assignment = await Producer.data.agentNotifications.createOne(
+      data,
+      options,
+    );
     return assignment;
   }
 
@@ -52,12 +91,13 @@ class Producer {
    * @protected
    */
   async _getTemplate() {
+    assert(!!this.templateName, 'Template Name is required');
     const params = { name: this.templateName };
-    return this.data.templates.getOne(params);
+    return Producer.data.templates.getOne(params);
   }
 
   /**
-   * @param emailEnvelope
+   * @param {Producer.EmailEnvelope} emailEnvelope
    * @return {Promise<*>}
    * @protected
    */
@@ -66,31 +106,39 @@ class Producer {
   }
 
   /**
-   * @param envelope
-   * @param type
+   * @param {EmailEnvelope} envelope
+   * @param {string} type
    * @return {Promise<*>}
    * @protected
    */
   async _createNotification(
-    envelope = new this.EmailEnvelope(),
-    type = this.NOTIFICATION_TYPE.EMAIL,
+    envelope = new Producer.EmailEnvelope(),
+    type = Producer.NOTIFICATION_TYPE.EMAIL,
   ) {
-    assert(envelope instanceof this.EmailEnvelope, 'Envelope is not EmailEnvelope');
+    assert(
+      envelope instanceof Producer.EmailEnvelope,
+      'Envelope is not EmailEnvelope'
+    );
     const data = { type, envelope: envelope };
-    return this.data.notifications.createOne(data);
+    const options = await this._getOptions();
+    return Producer.data.notifications.createOne(data, options);
   }
 
   /**
-   * @param {string} agentId
-   * @param {string} notificationId
-   * @return {Promise<*>}
+   * @return {Promise<{transaction: *}>}
    * @protected
    */
-  async _assignNotification(agentId, notificationId) {
-    const data = { agentId, notificationId };
-    return this.data.agentNotifications.createOne(data);
+  async _getOptions() {
+    const transaction = await this._getTransaction();
+    return { transaction };
   }
 }
+
+Producer.data = data;
+Producer.TEMPLATE_NAME = TEMPLATE_NAME;
+Producer.TEMPLATE_NAME = TEMPLATE_NAME;
+Producer.NOTIFICATION_TYPE = NOTIFICATION_TYPE;
+Producer.EmailEnvelope = EmailEnvelope;
 
 module.exports = {
   Producer,

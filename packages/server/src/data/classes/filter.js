@@ -26,6 +26,7 @@ class Filter {
     const channel = ['isArchived'];
     const agent = ['excludeChannelId', 'types'];
     const agentNotification = ['notificationId', 'sentAt'];
+    const channels = ['channelMemberId'];
 
     const list = [
       'type', 'creatorId', ' userId',
@@ -34,6 +35,7 @@ class Filter {
       'findInDateRange', 'notTaggedByAgent', 'states',
       ...common,
       ...channel,
+      ...channels,
       ...agent,
       ...agentNotification,
     ];

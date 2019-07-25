@@ -86,34 +86,28 @@ let make = (~channelId, ~loggedInUser: Primary.User.t, _children) => {
           {Primary.Channel.presentGlobal(~hashClassName=Styles.hash)}
         </Link.Jsx2>
         {loggedInUser.agent
-         |> E.O.fmap((r: Primary.Agent.t) =>
-              r.channelMemberships
-              |> E.A.O.defaultEmpty
-              |> Array.map((r: Types.channelMembership) => r.channel)
-              |> E.A.O.concatSomes
-              |> Array.mapi((index, channel: Primary.Channel.t) => {
-                   let _channel: Primary.Channel.t =
-                     Primary.Channel.make(
-                       ~id=channel.id,
-                       ~name=channel.name,
-                       ~isArchived=false,
-                       ~isPublic=channel.isPublic,
-                       (),
-                     );
-                   <Link.Jsx2
-                     key={index |> string_of_int}
-                     linkType={Internal(Primary.Channel.showLink(_channel))}
-                     className={
-                       Some(_channel.id) == channelId
-                         ? Styles.selectedItem : Styles.item
-                     }>
-                     {Primary.Channel.present(
-                        ~hashClassName=Styles.hash,
-                        _channel,
-                      )}
-                   </Link.Jsx2>;
-                 })
-              |> ReasonReact.array
+         |> E.O.fmap((agent: Primary.Agent.t) =>
+              ChannelsGet.component(
+                ~channelMemberId=?Some(agent.id),
+                ~isArchived=[|Some(`FALSE)|],
+                channels =>
+                channels
+                |> Array.mapi((index, channel: Primary.Channel.t) =>
+                     <Link.Jsx2
+                       key={index |> string_of_int}
+                       linkType={Internal(Primary.Channel.showLink(channel))}
+                       className={
+                         Some(channel.id) == channelId
+                           ? Styles.selectedItem : Styles.item
+                       }>
+                       {Primary.Channel.present(
+                          ~hashClassName=Styles.hash,
+                          channel,
+                        )}
+                     </Link.Jsx2>
+                   )
+                |> ReasonReact.array
+              )
             )
          |> E.O.React.defaultNull}
       </div>

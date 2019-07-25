@@ -36,7 +36,7 @@ let toChannel = (m): Primary.Channel.t =>
     (),
   );
 
-let component = (~channelMemberId: option(string), ~isArchived=?, fn) => {
+let component = (~channelMemberId: option(string)=?, ~isArchived=?, fn) => {
   let query = Query.make(~channelMemberId?, ~isArchived?, ());
 
   QueryComponent.make(~variables=query##variables, ({result}) =>

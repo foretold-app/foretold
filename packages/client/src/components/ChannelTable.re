@@ -76,7 +76,7 @@ module Columns = {
 
 [@react.component]
 let make = (~agentId=None, ~isArchived=?) =>
-  ChannelsGet.component(~channelMemberId=agentId, ~isArchived?, channels =>
+  ChannelsGet.component(~channelMemberId=?agentId, ~isArchived?, channels =>
     Table.fromColumns(Columns.all, channels, ())
   );
 

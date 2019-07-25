@@ -53,6 +53,7 @@ const channelInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     name: { type: new graphql.GraphQLNonNull(graphql.GraphQLString) },
     isPublic: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
+    isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     description: { type: graphql.GraphQLString },
   }),
 });

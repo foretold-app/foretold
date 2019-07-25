@@ -23,7 +23,7 @@ module BasicTable = {
       (
         ~measurables: array(Primary.Measurable.t),
         ~showExtraData: bool,
-        ~onSelect=(m: Primary.Measurable.t) => (),
+        ~onSelect=(_m: Primary.Measurable.t) => (),
         ~channelId: option(string)=None,
         _children,
       ) => {

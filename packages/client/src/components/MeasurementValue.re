@@ -335,9 +335,9 @@ let encode = (e: t) => {
   | `DateTimePoint(k) => makeEncode(Json.Encode.string, n, k)
   | `Percentage(k) => makeEncode(Json.Encode.float, n, k)
   | `Binary(k) => makeEncode(Json.Encode.bool, n, k)
-  | `UnresolvableResolution(k) =>
+  | `UnresolvableResolution(_k) =>
     makeEncode(Json.Encode.string, n, stringOfValue(e))
-  | `Comment(k) => makeEncode(Json.Encode.string, n, stringOfValue(e))
+  | `Comment(_k) => makeEncode(Json.Encode.string, n, stringOfValue(e))
   };
 };
 
@@ -395,7 +395,6 @@ let decodeGraphql = (j: valueResult): Belt.Result.t(t, string) =>
   };
 
 let encodeToGraphQLMutation = (e: t) => {
-  let n = typeToName(e);
   switch (e) {
   | `FloatPoint(k) =>
     Some({

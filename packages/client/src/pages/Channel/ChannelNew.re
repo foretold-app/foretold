@@ -1,6 +1,6 @@
 open Rationale.Function.Infix;
 
-module ChannelFormShower = ReForm.Create(ChannelForm.NewChannelParams);
+module ChannelFormShower = ReForm.Create(ChannelForm.Params);
 
 module CMutationForm =
   MutationForm.Make({
@@ -25,8 +25,14 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
               values.name,
               Some(values.description),
               values.isPublic == "TRUE" ? true : false,
+              values.isArchived == "TRUE" ? true : false,
             ),
-        ~initialState={name: "", description: "", isPublic: "TRUE"},
+        ~initialState={
+          name: "",
+          description: "",
+          isPublic: "TRUE",
+          isArchived: "FALSE",
+        },
         ~schema=[(`name, Custom(_ => None))],
       )
       ||> E.React.el;

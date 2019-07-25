@@ -75,17 +75,17 @@ module Columns = {
 };
 
 [@react.component]
-let make = (~agentId=None) =>
-  ChannelsGet.component(~channelMemberId=agentId, channels =>
+let make = (~agentId=None, ~isArchived=?) =>
+  ChannelsGet.component(~channelMemberId=agentId, ~isArchived?, channels =>
     Table.fromColumns(Columns.all, channels, ())
   );
 
 module Jsx2 = {
   let component = ReasonReact.statelessComponent("ChannelTable");
-  let make = (~agentId=None, children) =>
+  let make = (~agentId=None, ~isArchived=?, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
-      makeProps(~agentId, ()),
+      makeProps(~agentId, ~isArchived?, ()),
       children,
     );
 };

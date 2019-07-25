@@ -98,8 +98,26 @@ let toMeasurable = (m: node): Primary.Measurable.t => {
 
 module Query = [%graphql
   {|
-    query getMeasurables ( $states: [measurableState]!, $channelId: String, $seriesId: String, $creatorId: String,$first: Int, $last: Int, $after: String, $before: String) {
-        measurables: measurables(states: $states, channelId: $channelId, seriesId: $seriesId, creatorId: $creatorId, first: $first, last: $last, after: $after, before: $before) {
+    query getMeasurables (
+        $states: [measurableState]!
+        $channelId: String
+        $seriesId: String
+        $creatorId: String
+        $first: Int
+        $last: Int
+        $after: String
+        $before: String
+    ) {
+        measurables: measurables(
+            states: $states
+            channelId: $channelId
+            seriesId: $seriesId
+            creatorId: $creatorId
+            first: $first
+            last: $last
+            after: $after
+            before: $before
+        ) {
           total
           pageInfo{
             hasPreviousPage

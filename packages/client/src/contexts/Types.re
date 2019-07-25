@@ -16,6 +16,8 @@ type competitorType = [
 
 type measurableState = [ | `OPEN | `JUDGEMENT_PENDING | `JUDGED];
 
+type isArchived = [ | `TRUE | `FALSE];
+
 type permission = [
   | `BOT_CREATE
   | `BOT_UPDATE

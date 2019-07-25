@@ -6,4 +6,3 @@ module Measurements = Foretold__Components__Measurements;
 module Channel = Foretold__Components__Channel;
 module Shared = Foretold__Components__Shared;
 module Ken = Foretold__Components__Ken;
-module Link = Foretold__Components__Link;

@@ -1,4 +1,3 @@
-/* We currently don't use this file */
 let component = ReasonReact.statelessComponent("AgentIndex");
 let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,

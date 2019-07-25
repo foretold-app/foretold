@@ -60,39 +60,6 @@ describe('Channels Data Layer', () => {
     });
   });
 
-  describe('updateOne()', () => {
-    const update = jest.fn(() => Promise.resolve(true));
-    beforeEach(() => {
-      jest.spyOn(models.Channel, 'findOne').mockReturnValue(
-        Promise.resolve({ update }),
-      );
-    });
-    it('finds channel', () => {
-      return instance.updateOne(id, input).then(() => {
-        expect(models.Channel.findOne).toHaveBeenCalledWith({ where: { id } });
-        expect(update).toHaveBeenCalledTimes(1);
-      });
-    });
-  });
-
-  describe('updateOne() if there is no channel', () => {
-    const update = jest.fn(() => Promise.resolve(true));
-    beforeEach(() => {
-      jest.spyOn(models.Channel, 'findOne').mockReturnValue(
-        Promise.resolve(false),
-      );
-    });
-    it('does not update channel when it is not found', () => {
-      return instance.updateOne(id, input).then((result) => {
-        expect(models.Channel.findOne).toHaveBeenCalledWith({
-          where: { id },
-        });
-        expect(update).toHaveBeenCalledTimes(0);
-        expect(result).toBe(false);
-      });
-    });
-  });
-
   describe('getAgentsByChannelId()', () => {
     const agents = [];
     beforeEach(() => {
@@ -119,57 +86,6 @@ describe('Channels Data Layer', () => {
       return instance.getCreatorByChannelId(id).then((result) => {
         expect(models.Channel.findOne).toHaveBeenCalledTimes(1);
         expect(result).toBe(creator);
-      });
-    });
-  });
-
-  describe('getAll()', () => {
-    const options = { limit: 1, offset: 2 };
-    beforeEach(() => {
-      jest.spyOn(models.Channel, 'findAll').mockReturnValue(
-        Promise.resolve(true),
-      );
-    });
-    it('formats restrictions and finds all channels', () => {
-      return instance.getAll(options).then((result) => {
-        expect(models.Channel.findAll).toHaveBeenCalledWith({
-          "limit": 1,
-          "offset": 2,
-          "order": [["createdAt", "DESC"]],
-          "where": {
-            "id": {
-              [instance.model.Op.in]: "channelIdsLiteral"
-            }
-          }
-        });
-        expect(result).toBe(true);
-      });
-    });
-  });
-
-  describe('getOne()', () => {
-    const id = 'id1';
-    const options = { agentId: undefined };
-    beforeEach(() => {
-      jest.spyOn(models.Channel, 'findOne').mockReturnValue(
-        Promise.resolve(true),
-      );
-    });
-    it('finds channel', () => {
-      return instance.getOne(id, options).then((result) => {
-        expect(models.Channel.findOne).toHaveBeenCalledWith({
-          "where": {
-            [instance.model.Op.and]: [
-              { "id": "id1" },
-              {
-                "id": {
-                  [instance.model.Op.in]: "channelIdsLiteral"
-                }
-              }
-            ]
-          }
-        });
-        expect(result).toBe(true);
       });
     });
   });

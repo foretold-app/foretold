@@ -24,18 +24,20 @@ module Styles = {
   let rightInner = style([flex(`num(1.))]);
 };
 
-let component = ReasonReact.statelessComponent("SidebarFill");
+let component = ReasonReact.statelessComponent("FillWithSidebar");
 let make =
-    (~channelId: option(string), ~loggedInUser: Primary.User.t, _children) => {
+    (
+      ~channelId: option(string)=None,
+      ~loggedInUser: Primary.User.t,
+      _children,
+    ) => {
   ...component,
   render: _self =>
     <div className=Styles.outer>
-      <div className=Styles.left>
-        <Layout__Component__Sidebar channelId loggedInUser />
-      </div>
+      <div className=Styles.left> <Sidebar channelId loggedInUser /> </div>
       <div className=Styles.right>
         <div className=Styles.rightInner>
-          <Layout__Component__Header loggedInUser />
+          <Header loggedInUser />
           <div> ..._children </div>
         </div>
         <Footer />

@@ -15,10 +15,7 @@ module Wrapper = {
     E.React.makeToEl
     ||> E.React.withParent(
           ~key,
-          Layout__Component__FillWithSidebar.make(
-            ~channelId=None,
-            ~loggedInUser,
-          ),
+          FillWithSidebar.make(~channelId=None, ~loggedInUser),
         );
 };
 

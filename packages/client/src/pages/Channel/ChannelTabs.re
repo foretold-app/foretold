@@ -2,7 +2,7 @@ open Utils;
 open Routing;
 
 let tab = (isActive, interalUrl, str) =>
-  <FC.Tab isActive onClick={C.Link.LinkType.onClick(Internal(interalUrl))}>
+  <FC.Tab isActive onClick={LinkType.onClick(Internal(interalUrl))}>
     {str |> ste}
   </FC.Tab>;
 

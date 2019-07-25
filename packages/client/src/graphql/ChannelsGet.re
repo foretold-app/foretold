@@ -1,7 +1,7 @@
 module Query = [%graphql
   {|
-    query getChannels {
-      channels{
+    query getChannels ($channelMemberId: String){
+      channels (channelMemberId: $channelMemberId){
         id
         name
         description
@@ -30,8 +30,9 @@ let toChannel = (m): Primary.Channel.t =>
     (),
   );
 
-let component = fn => {
-  let query = Query.make();
+let component = (~channelMemberId: option(string), fn) => {
+  let query = Query.make(~channelMemberId?, ());
+
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
     |> ApolloUtils.apolloResponseToResult

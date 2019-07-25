@@ -151,16 +151,16 @@ let channelBack = (~onClick, ()) =>
   <FC__Button onClick> {"< Back" |> ReasonReact.string} </FC__Button>;
 
 let channelink = (c: Primary.Channel.t) =>
-  <Foretold__Components__Link
+  <Link.Jsx2
     linkType={Internal(ChannelShow(c.id))} className=Styles.channelText>
     {c |> Primary.Channel.present}
-  </Foretold__Components__Link>;
+  </Link.Jsx2>;
 
 let channelEditLink = (c: Primary.Channel.t) =>
-  <Foretold__Components__Link
+  <Link.Jsx2
     linkType={Internal(ChannelEdit(c.id))} className=Styles.headerText>
     {"edit" |> ste}
-  </Foretold__Components__Link>;
+  </Link.Jsx2>;
 
 let seriesHead = (channel: Primary.Channel.t, seriesName) =>
   <>

@@ -15,6 +15,7 @@ const ModelPostgres = {
   getAll: jest.fn(() => Promise.resolve(true)),
   findAll: jest.fn(() => Promise.resolve(true)),
   updateAll: jest.fn(() => Promise.resolve(true)),
+  getOne: jest.fn(() => Promise.resolve(true)),
 };
 
 const AgentModel = jest.fn().mockImplementation(() => ({

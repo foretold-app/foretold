@@ -62,8 +62,7 @@ let make =
       };
     };
 
-    <Layout__Component__FillWithSidebar
-      channelId={Some(channelId)} loggedInUser>
+    <FillWithSidebar channelId={Some(channelId)} loggedInUser>
       {headers()}
       <div className=Styles.container>
         <Div flexDirection=`row styles=[SLayout.Styles.width100]>
@@ -85,7 +84,7 @@ let make =
           </Div>
         </Div>
       </div>
-    </Layout__Component__FillWithSidebar>;
+    </FillWithSidebar>;
   },
 };
 

@@ -39,8 +39,8 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @todo: see this._channelIds()
    * @protected
+   * @todo: see this._channelIds()
    * @param {Models.ObjectID} [agentId]
    * @return {Sequelize.literal}
    */
@@ -49,29 +49,70 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @todo: Use ORM opportunities to join tables.
    * @protected
    * @param {Models.ObjectID} [agentId]
    * @return {string}
    */
   _channelIds(agentId) {
-    return agentId ? `(
+    return `(
       SELECT "Channels"."id" FROM "Channels"
       LEFT OUTER JOIN 
         "ChannelMemberships" 
         ON "Channels".id = "ChannelMemberships"."channelId"
         AND "ChannelMemberships"."agentId" = '${agentId}'
       WHERE 
-        "Channels"."isPublic" = TRUE 
-        OR "ChannelMemberships"."agentId" IS NOT NULL
-    )` : `(
+        "ChannelMemberships"."agentId" IS NOT NULL
+        OR "Channels"."isPublic" = TRUE 
+    )`;
+  }
+
+  /**
+   * @protected
+   * @return {Sequelize.literal}
+   */
+  _channelIdsPublicLiteral() {
+    return this.literal(this._channelIdsPublic());
+  }
+
+  /**
+   * @protected
+   * @return {string}
+   */
+  _channelIdsPublic() {
+    return `(
       SELECT "Channels"."id" FROM "Channels"
       WHERE "Channels"."isPublic" = TRUE
     )`;
   }
 
   /**
-   * @todo: see this._channelIds()
+   * @protected
+   * @param {Models.ObjectID} [agentId]
+   * @return {Sequelize.literal}
+   */
+  _channelIdsByMembersLiteral(agentId) {
+    return this.literal(this._channelIdsByMembers(agentId));
+  }
+
+  /**
+   * @protected
+   * @param {Models.ObjectID} [agentId]
+   * @return {string}
+   */
+  _channelIdsByMembers(agentId) {
+    return  `(
+      SELECT "Channels"."id" FROM "Channels"
+      LEFT OUTER JOIN 
+        "ChannelMemberships" 
+        ON "Channels".id = "ChannelMemberships"."channelId"
+        AND "ChannelMemberships"."agentId" = '${agentId}'
+      WHERE 
+        "ChannelMemberships"."agentId" IS NOT NULL
+    )`;
+  }
+
+  /**
+   * @protected
    * @param {Models.ObjectID} [agentId]
    * @return {Sequelize.literal}
    */
@@ -80,7 +121,7 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @todo: see this._channelIds()
+   * @protected
    * @param {string} [agentId]
    * @return {string}
    */
@@ -93,8 +134,8 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param {object} [where]
    * @protected
+   * @param {object} [where]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {object}
    */
@@ -102,9 +143,25 @@ class ModelPostgres extends Model {
     if (restrictions.isAdmin) return where;
     if (!where[this.and]) where[this.and] = [];
 
-    if (restrictions.channelId) {
+    if (restrictions.channelId && !restrictions.agentId) {
       where[this.and].push({
         channelId: {
+          [this.in]: this._channelIdsPublicLiteral(),
+        },
+      });
+    }
+
+    if (restrictions.channelId && restrictions.agentId) {
+      where[this.and].push({
+        channelId: {
+          [this.in]: this._channelIdsLiteral(restrictions.agentId),
+        },
+      });
+    }
+
+    if (restrictions.channelIdAsId && restrictions.agentId) {
+      where[this.and].push({
+        id: {
           [this.in]: this._channelIdsLiteral(restrictions.agentId),
         },
       });
@@ -116,7 +173,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (restrictions.measurableId) {
+    if (restrictions.measurableId && restrictions.agentId) {
       where[this.and].push({
         measurableId: {
           [this.in]: this._measurableIdsLiteral(restrictions.agentId),
@@ -160,13 +217,25 @@ class ModelPostgres extends Model {
     if (!where[this.and]) where[this.and] = [];
 
     if (filter.isArchived) {
-      where.isArchived = {
-        [this.in]: this.getBooleansOfList(filter.isArchived),
-      };
+      where[this.and].push({
+        isArchived: {
+          [this.in]: this.getBooleansOfList(filter.isArchived),
+        }
+      });
+    }
+
+    if (filter.channelMemberId) {
+      where[this.and].push({
+        id: {
+          [this.in]: this._channelIdsByMembersLiteral(filter.channelMemberId),
+        }
+      });
     }
 
     if (filter.userId) {
-      where.userId = filter.userId;
+      where[this.and].push({
+        userId: filter.userId,
+      });
     }
 
     return where;
@@ -288,7 +357,7 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @param {Layers.AbstractModelsLayer.options} [options]
-   * @return {Promise<void>}
+   * @return {Promise<*[]>}
    */
   async getAll(filter = {}, pagination = {}, restrictions = {}, options = {}) {
     const where = {};

@@ -17,8 +17,10 @@ class DataBase {
     this.modelRestrictionsList = [
       'isAdmin', 'agentId', 'measuredByAgentId',
       'userId', 'channelId', 'measurableId',
-      'measuredByAgentId',
+      'measuredByAgentId', 'channelIdAsId',
     ];
+    this.defaultOptions = {};
+    this.defaultRestrictions = {};
   }
 
   /**
@@ -64,7 +66,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.params} [params]
    * @param {Layers.DataSourceLayer.query} [query]
    * @param {Layers.DataSourceLayer.options} [options]
-   * @return {Promise<void>}
+   * @return {Promise<*>}
    */
   async getOne(params = {}, query = {}, options = {}) {
     const option$ = this._getModelOptions(options);
@@ -129,7 +131,8 @@ class DataBase {
    * @return {Layers.AbstractModelsLayer.options}
    */
   _getModelOptions(options = {}) {
-    return _.pick(options, this.modelOptionsList);
+    const option$ = _.pick(options, this.modelOptionsList);
+    return { ...this.defaultOptions, ...option$ };
   }
 
   /**
@@ -138,7 +141,8 @@ class DataBase {
    * @return {Layers.AbstractModelsLayer.options}
    */
   _getModelRestrictions(options = {}) {
-    return _.pick(options, this.modelRestrictionsList);
+    const restriction$ = _.pick(options, this.modelRestrictionsList);
+    return { ...this.defaultRestrictions, ...restriction$ };
   }
 }
 

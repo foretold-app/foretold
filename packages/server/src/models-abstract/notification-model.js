@@ -14,16 +14,6 @@ class NotificationModel extends ModelPostgres {
     });
   }
 
-  /**
-   * @protected
-   * @param {object} [where]
-   * @param {Layers.AbstractModelsLayer.filter} [filter]
-   */
-  applyFilter(where = {}, filter = {}) {
-    super.applyFilter(where, filter);
-
-    return where;
-  }
 }
 
 module.exports = {

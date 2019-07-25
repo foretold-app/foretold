@@ -71,20 +71,20 @@ let make = (~channelId, ~loggedInUser: Primary.User.t, _children) => {
       <div className=Styles.over />
       <div className=Styles.sectionPadding />
       <div className=Styles.minorHeader>
-        <C.Link
+        <Link.Jsx2
           linkType={Internal(ChannelIndex)} className=Styles.minorHeaderLink>
           {"Communities" |> ste}
-        </C.Link>
+        </Link.Jsx2>
       </div>
       <div className=Styles.over>
-        <C.Link
+        <Link.Jsx2
           key="channel-global-item"
           linkType={Internal(Primary.Channel.globalLink())}
           className={
             Some("home") == channelId ? Styles.selectedItem : Styles.item
           }>
           {Primary.Channel.presentGlobal(~hashClassName=Styles.hash)}
-        </C.Link>
+        </Link.Jsx2>
         {loggedInUser.agent
          |> E.O.fmap((r: Primary.Agent.t) =>
               r.channelMemberships
@@ -100,7 +100,7 @@ let make = (~channelId, ~loggedInUser: Primary.User.t, _children) => {
                        ~isPublic=channel.isPublic,
                        (),
                      );
-                   <C.Link
+                   <Link.Jsx2
                      key={index |> string_of_int}
                      linkType={Internal(Primary.Channel.showLink(_channel))}
                      className={
@@ -111,7 +111,7 @@ let make = (~channelId, ~loggedInUser: Primary.User.t, _children) => {
                         ~hashClassName=Styles.hash,
                         _channel,
                       )}
-                   </C.Link>;
+                   </Link.Jsx2>;
                  })
               |> ReasonReact.array
             )

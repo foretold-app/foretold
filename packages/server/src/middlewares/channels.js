@@ -19,7 +19,7 @@ async function setContextChannel(root, args, context, info) {
 
   console.log('\x1b[36m ---> \x1b[0m Middleware (channel)', { channelId });
   context.channel = channelId
-    ? await data.channels.getOne(channelId)
+    ? await data.channels.getOne({ id: channelId })
     : null;
 }
 

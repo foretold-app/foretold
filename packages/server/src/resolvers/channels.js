@@ -1,6 +1,12 @@
 const _ = require('lodash');
 const data = require('../data');
 
+const { Pagination } = require('../data/classes/pagination');
+const { Filter } = require('../data/classes/filter');
+const { Options } = require('../data/classes/options');
+const { Params } = require('../data/classes/params');
+const { Query } = require('../data/classes/query');
+
 /**
  * @param {Models.Channel} channel
  * @returns {Promise<Model[]>}
@@ -22,16 +28,18 @@ async function channelCreator(channel) {
  * @param {object} args
  * @param {number} args.offset
  * @param {number} args.limit
+ * @param {number} args.channelMemberId
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<Models.Channel[]>}
  */
 async function all(root, args, context, info) {
   const agentId = _.get(context, 'agent.id');
-  const offset = args.offset;
-  const limit = args.limit;
-  const options = { offset, limit, agentId };
-  return data.channels.getAll(options);
+  const channelMemberId = _.get(args, 'channelMemberId');
+  const filter = new Filter({ channelMemberId });
+  const pagination = new Pagination(args);
+  const options = new Options({ agentId });
+  return data.channels.getAll(filter, pagination, options);
 }
 
 /**
@@ -45,8 +53,10 @@ async function all(root, args, context, info) {
 async function one(root, args, context, info) {
   const id = _.get(args, 'id') || _.get(root, 'channelId');
   const agentId = _.get(context, 'agent.id');
-  const options = { agentId };
-  return data.channels.getOne(id, options);
+  const params = new Params({ id });
+  const query = new Query();
+  const options = new Options({ agentId });
+  return data.channels.getOne(params, query, options);
 }
 
 /**
@@ -59,7 +69,8 @@ async function one(root, args, context, info) {
  * @returns {Promise<Models.Channel>}
  */
 async function update(root, args, context, info) {
-  return data.channels.updateOne(args.id, args.input);
+  const params = new Params({ id: args.id });
+  return data.channels.updateOne(params, args.input);
 }
 
 /**

@@ -41,8 +41,12 @@ let mutate =
         "resolutionEndpoint": resolutionEndpoint |> Rationale.Option.some,
         "labelSubject": labelSubject |> Rationale.Option.some,
         "valueType": valueType |> Primary.Measurable.valueTypeToEnum,
-        "min": min |> Js.Float.fromString |> Rationale.Option.some,
-        "max": max |> Js.Float.fromString |> Rationale.Option.some,
+        "min":
+          min != ""
+            ? min |> Js.Float.fromString |> Rationale.Option.some : None,
+        "max":
+          max != ""
+            ? max |> Js.Float.fromString |> Rationale.Option.some : None,
       },
       (),
     );

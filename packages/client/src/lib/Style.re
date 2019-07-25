@@ -23,7 +23,7 @@ module Grid = {
   open Css;
 
   module Div = {
-    let component = ReasonReact.statelessComponent("divWithStyles");
+    let component = ReasonReact.statelessComponent("DivWithStyles");
     let make = (~styles=[], ~flex=?, ~flexDirection=?, ~float=?, children) => {
       ...component,
       render: _ => {

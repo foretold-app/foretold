@@ -90,7 +90,7 @@ let make = (~channelId, ~loggedInUser: Primary.User.t, _children) => {
               ChannelsGet.component(
                 ~channelMemberId=?Some(agent.id),
                 ~isArchived=[|Some(`FALSE)|],
-                ~sortFn=Sorting.sortAsc,
+                ~sortFn=ChannelsGet.sortAsc,
                 channels =>
                 channels
                 |> Array.mapi((index, channel: Primary.Channel.t) =>

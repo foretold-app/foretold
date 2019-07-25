@@ -36,11 +36,21 @@ let toChannel = (m): Primary.Channel.t =>
     (),
   );
 
+let sortDefault = arr => arr;
+
+let sortAsc = (arr: array(Types.channel)) => {
+  Array.sort(
+    (a: Types.channel, b: Types.channel) => String.compare(a.name, b.name),
+    arr,
+  );
+  arr;
+};
+
 let component =
     (
       ~channelMemberId: option(string)=?,
       ~isArchived=?,
-      ~sortFn=Sorting.sortDefault,
+      ~sortFn=sortDefault,
       fn,
     ) => {
   let query = Query.make(~channelMemberId?, ~isArchived?, ());

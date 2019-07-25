@@ -76,7 +76,7 @@ module Columns = {
 
 [@react.component]
 let make = (~agentId=None) =>
-  ChannelsGet.component(channels =>
+  ChannelsGet.component(~channelMemberId=agentId, channels =>
     Table.fromColumns(Columns.all, channels, ())
   );
 

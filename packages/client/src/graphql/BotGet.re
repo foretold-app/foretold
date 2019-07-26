@@ -31,12 +31,13 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let component = (~id, innerFn) => {
   let query = Query.make(~id, ());
-  QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> ApolloUtils.apolloResponseToResult
-    |> Rationale.Result.fmap(e => e##bot |> Rationale.Option.fmap(toBot))
-    |> Rationale.Result.fmap(innerFn)
-    |> E.R.id
-  )
-  |> E.React.el;
+  <QueryComponent variables=query##variables>
+    ...{({result}) =>
+      result
+      |> ApolloUtils.apolloResponseToResult
+      |> Rationale.Result.fmap(e => e##bot |> Rationale.Option.fmap(toBot))
+      |> Rationale.Result.fmap(innerFn)
+      |> E.R.id
+    }
+  </QueryComponent>;
 };

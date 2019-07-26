@@ -15,6 +15,8 @@ type state = {
   description: string,
   valueText: string,
   hasLimitError: bool,
+  // another
+  asAgent: string,
 };
 
 type action =
@@ -29,7 +31,8 @@ type action =
   // -> Measurement
   | UpdateCompetitorType(string)
   | UpdateDescription(string)
-  | UpdateValueText(string);
+  | UpdateValueText(string)
+  | UpdateAsAgent(string);
 
 module Styles = {
   open Css;
@@ -79,6 +82,7 @@ let getIsValid = (state: state): bool => {
   | "BINARY_BOOL" => true
   | "UNRESOLVABLE_RESOLUTION" => true
   | "COMMENT" => true
+  | _ => true
   };
 };
 
@@ -128,6 +132,27 @@ let getCompetitorTypeFromString = (str: string): Types.competitorType =>
   | "COMMENT" => `COMMENT
   | _ => `OBJECTIVE
   };
+
+let botsSelect =
+    (~state, ~send, ~bots: array(Types.bot)): ReasonReact.reactElement =>
+  <>
+    <div className=Styles.inputBox>
+      <h4 className=Styles.label> {"Do this as:" |> ste} </h4>
+    </div>
+    <Select
+      value={state.asAgent}
+      onChange={e => send(UpdateAsAgent(e))}
+      className=Styles.fullWidth>
+      <Select.Option value=""> {"Me" |> ste} </Select.Option>
+      {bots
+       |> Array.map((bot: Types.bot) =>
+            <Select.Option value={bot.id}>
+              {bot.name |> E.O.default(bot.id) |> ste}
+            </Select.Option>
+          )
+       |> ReasonReact.array}
+    </Select>
+  </>;
 
 module ValueInput = {
   let floatPoint = (measurable: Types.measurable, send) =>
@@ -239,6 +264,12 @@ let mainBlock =
     | _ => ReasonReact.null
     };
 
+  let getBotSelect: ReasonReact.reactElement =
+    switch (bots) {
+    | Some(bots) => botsSelect(~state, ~send, ~bots)
+    | _ => ReasonReact.null
+    };
+
   let valueInput: ReasonReact.reactElement =
     switch (state.dataType) {
     | "FLOAT_CDF"
@@ -337,6 +368,7 @@ let mainBlock =
           send(UpdateDescription(value));
         }}
       />
+      getBotSelect
       <div className=Styles.submitButton>
         <Antd.Button
           _type=`primary onClick={_ => onSubmit()} disabled={!isValid}>
@@ -388,6 +420,7 @@ let make =
 
       // Form State Only
       hasLimitError: false,
+      asAgent: "",
     };
   },
 
@@ -428,6 +461,9 @@ let make =
 
     | UpdateValueText((valueText: string)) =>
       ReasonReact.Update({...state, valueText})
+
+    | UpdateAsAgent((asAgent: string)) =>
+      ReasonReact.Update({...state, asAgent})
     },
 
   render: ({state, send}) => {

@@ -36,13 +36,31 @@ let toChannel = (m): Primary.Channel.t =>
     (),
   );
 
-let component = (~channelMemberId: option(string)=?, ~isArchived=?, fn) => {
+let sortDefault = arr => arr;
+
+let sortAsc = (arr: array(Types.channel)) => {
+  Array.sort(
+    (a: Types.channel, b: Types.channel) => String.compare(a.name, b.name),
+    arr,
+  );
+  arr;
+};
+
+let component =
+    (
+      ~channelMemberId: option(string)=?,
+      ~isArchived=?,
+      ~sortFn=sortDefault,
+      fn,
+    ) => {
   let query = Query.make(~channelMemberId?, ~isArchived?, ());
 
   QueryComponent.make(~variables=query##variables, ({result}) =>
     result
     |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(e => e##channels |> E.A.O.concatSomes |> E.A.fmap(toChannel))
+    |> E.R.fmap(e =>
+         e##channels |> E.A.O.concatSomes |> E.A.fmap(toChannel) |> sortFn
+       )
     |> E.R.fmap(fn)
     |> E.R.id
   )

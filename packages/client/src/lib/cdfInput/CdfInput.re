@@ -271,8 +271,9 @@ let mainBlock =
 
   let getBotSelect: ReasonReact.reactElement =
     switch (bots) {
+    | Some([||])
+    | None => ReasonReact.null
     | Some(bots) => botsSelect(~state, ~send, ~bots)
-    | _ => ReasonReact.null
     };
 
   let valueInput: ReasonReact.reactElement =

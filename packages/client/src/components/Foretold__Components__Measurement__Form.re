@@ -9,9 +9,8 @@ let make =
     ) => {
   ...component,
   render: _ =>
-    MeasurementCreate.Mutation.make(
-      ~onCompleted=_ => Js.log("Request submitted"),
-      (mutation, data) =>
+    <MeasurementCreate.Mutation>
+      ...{(mutation, data) =>
         <CdfInput
           measurable
           onSubmit={((value, competitorType, description, valueText)) =>
@@ -26,7 +25,7 @@ let make =
           }
           data
           isCreator
-        />,
-    )
-    |> E.React.el,
+        />
+      }
+    </MeasurementCreate.Mutation>,
 };

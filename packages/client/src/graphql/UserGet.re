@@ -22,7 +22,9 @@ let toAgent = a =>
 let toBots = bots =>
   bots
   |> E.A.O.concatSome
-  |> Array.map(bot => Primary.Bot.make(~id=bot##id, ()))
+  |> Array.map(bot =>
+       Primary.Bot.make(~id=bot##id, ~name=Some(bot##name), ())
+     )
   |> E.O.some;
 
 let toUser = a =>
@@ -61,6 +63,7 @@ module Query = [%graphql
             }
             bots: Bots {
               id
+              name
             }
         }
     }

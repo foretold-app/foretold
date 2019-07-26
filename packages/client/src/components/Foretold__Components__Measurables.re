@@ -21,9 +21,9 @@ module BasicTable = {
 
   let make =
       (
-        ~measurables: array(Primary.Measurable.t),
+        ~measurables: array(Types.measurable),
         ~showExtraData: bool,
-        ~onSelect=(_m: Primary.Measurable.t) => (),
+        ~onSelect=(_m: Types.measurable) => (),
         ~channelId: option(string)=None,
         _children,
       ) => {
@@ -40,7 +40,7 @@ module BasicTable = {
               </FC.Table.Cell>
             </FC.Table.HeaderRow>
             {measurables
-             |> E.A.fmap((m: Primary.Measurable.t) => {
+             |> E.A.fmap((m: Types.measurable) => {
                   let iAmOwner = m.iAmOwner == Some(true);
                   <FC.Table.Row onClick={_e => onSelect(m)} key={m.id}>
                     <FC.Table.Cell

@@ -18,7 +18,7 @@ let make =
     (
       ~channelId: string,
       ~searchParams: MeasurableQueryIndex.query,
-      ~loggedInUser: Primary.User.t,
+      ~loggedInUser: Types.user,
       ~itemsPerPage: int=20,
       ~layout,
     ) => {

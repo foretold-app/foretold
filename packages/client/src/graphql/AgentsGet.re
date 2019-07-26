@@ -18,7 +18,7 @@ type agent = {
   user: option(user),
 };
 
-let toUser = (user: user): Primary.User.t =>
+let toUser = (user: user): Types.user =>
   Primary.User.make(~id=user.id, ~name=user.name, ());
 
 let toBot = (bot: bot): Primary.Bot.t => {

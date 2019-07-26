@@ -1,4 +1,4 @@
-type measurable = Primary.Measurable.t;
+type measurable = Types.measurable;
 let graph = Data.make;
 
 let itemUrl = id => Routing.Url.toString(EntityShow(id));

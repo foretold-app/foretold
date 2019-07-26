@@ -64,7 +64,7 @@ module Styles = {
 };
 
 let component = ReasonReact.statelessComponent("Sidebar");
-let make = (~channelId, ~loggedInUser: Primary.User.t, _children) => {
+let make = (~channelId, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _self =>
     <div className=Styles.sidebar>

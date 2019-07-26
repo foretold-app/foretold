@@ -46,7 +46,7 @@ module Styles = {
 };
 
 let competitorTypeSelect =
-    (~isOwner: bool, ~state: state, ~send, ~measurable: Primary.Measurable.t)
+    (~isOwner: bool, ~state: state, ~send, ~measurable: Types.measurable)
     : ReasonReact.reactElement => {
   let options =
     Primary.CompetitorType.availableSelections(
@@ -71,7 +71,7 @@ let dataTypeSelect = (~state, ~send): ReasonReact.reactElement =>
     <Select.Option value="FLOAT_POINT"> {"Exact Value" |> ste} </Select.Option>
   </Select>;
 
-let getIsValid = (state: state): bool =>{
+let getIsValid = (state: state): bool => {
   switch (state.dataType) {
   | "FLOAT_CDF" => E.A.length(state.floatCdf.xs) > 1
   | "FLOAT_POINT" => E.A.length(state.floatCdf.xs) == 1
@@ -80,12 +80,12 @@ let getIsValid = (state: state): bool =>{
   | "UNRESOLVABLE_RESOLUTION" => true
   | "COMMENT" => true
   };
-}
+};
 
 let getDataTypeAsString =
     (
       competitorType: string,
-      measurable: Primary.Measurable.t,
+      measurable: Types.measurable,
       dataType: option(string),
     )
     : string => {
@@ -130,7 +130,7 @@ let getCompetitorTypeFromString = (str: string): Types.competitorType =>
   };
 
 module ValueInput = {
-  let floatPoint = (measurable: Primary.Measurable.t, send) =>
+  let floatPoint = (measurable: Types.measurable, send) =>
     <GuesstimateInput
       focusOnRender=true
       sampleCount=30000
@@ -226,7 +226,8 @@ let mainBlock =
       ~isCreator: bool,
       ~send,
       ~onSubmit,
-      ~measurable: Primary.Measurable.t,
+      ~measurable: Types.measurable,
+      ~bots: option(array(Types.bot)),
     )
     : ReasonReact.reactElement => {
   let isValid = getIsValid(state);
@@ -354,7 +355,8 @@ let make =
       ~onUpdate=_ => (),
       ~isCreator=false,
       ~onSubmit=_ => (),
-      ~measurable: Primary.Measurable.t,
+      ~measurable: Types.measurable,
+      ~bots: option(array(Types.bot)),
       _children,
     ) => {
   ...component,
@@ -448,11 +450,18 @@ let make =
        | Error(e) =>
          <>
            {"Error: " ++ e##message |> ste}
-           {mainBlock(~state, ~isCreator, ~send, ~onSubmit, ~measurable)}
+           {mainBlock(
+              ~state,
+              ~isCreator,
+              ~send,
+              ~onSubmit,
+              ~measurable,
+              ~bots,
+            )}
          </>
        | Data(_) => "Form submitted successfully." |> ste |> E.React.inH2
        | NotCalled =>
-         mainBlock(~state, ~isCreator, ~send, ~onSubmit, ~measurable)
+         mainBlock(~state, ~isCreator, ~send, ~onSubmit, ~measurable, ~bots)
        }}
     </Style.BorderedBox>;
   },

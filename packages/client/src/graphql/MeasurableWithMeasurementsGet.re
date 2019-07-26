@@ -70,7 +70,7 @@ type measurableQuery = {
   "max": option(float),
 };
 
-let queryMeasurable = (m: measurableQuery): Primary.Measurable.t => {
+let queryMeasurable = (m: measurableQuery): Types.measurable => {
   let agent: option(Primary.Agent.t) =
     m##creator
     |> E.O.fmap(r => Primary.Agent.make(~id=r##id, ~name=r##name, ()));

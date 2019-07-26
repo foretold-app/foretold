@@ -1,7 +1,7 @@
 open Routing;
 open Pages;
 
-let defaultPage = (loggedInUser: Primary.User.t) =>
+let defaultPage = (loggedInUser: Types.user) =>
   loggedInUser.agent
   |> E.O.bind(_, Primary.Agent.firstChannel)
   |> E.O.fmap((channel: Types.channel) => {

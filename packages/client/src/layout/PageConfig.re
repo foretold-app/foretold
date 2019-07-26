@@ -2,7 +2,7 @@ open Rationale.Function.Infix;
 
 module Wrapper = {
   type channelId = string;
-  type loggedInUser = Primary.User.t;
+  type loggedInUser = Types.user;
 
   type t =
     | Channel(channelId)
@@ -22,7 +22,7 @@ module Wrapper = {
 module Renderer = {
   type channelId = string;
   type channelPage = Routing.ChannelPage.t;
-  type loggedInUser = Primary.User.t;
+  type loggedInUser = Types.user;
 
   type t =
     | Channel(channelPage, loggedInUser)

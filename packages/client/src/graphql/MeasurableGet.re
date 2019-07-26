@@ -27,7 +27,7 @@ type measurable = {
   max: option(float),
 };
 
-let toMeasurable = (m: measurable): Primary.Measurable.t =>
+let toMeasurable = (m: measurable): Types.measurable =>
   Primary.Measurable.make(
     ~id=m.id,
     ~name=m.name,

@@ -3,7 +3,7 @@ open MomentRe;
 open Css;
 
 type measurement = Primary.Measurement.t;
-type measurable = Primary.Measurable.t;
+type measurable = Types.measurable;
 module Items = Foretold__Components__Measurable__Items;
 
 module Styles = {

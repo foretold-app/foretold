@@ -2,7 +2,8 @@ let component = ReasonReact.statelessComponent("MeasurementForm");
 
 let make =
     (
-      ~measurable: Primary.Measurable.t,
+      ~loggedInUser: Types.user,
+      ~measurable: Types.measurable,
       ~measurableId: string,
       ~isCreator: bool,
       _children,
@@ -23,6 +24,7 @@ let make =
               valueText,
             )
           }
+          bots={loggedInUser.bots}
           data
           isCreator
         />

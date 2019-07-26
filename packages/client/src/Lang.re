@@ -1,0 +1,1 @@
+let wrongName = "Name should be alphanumeric, special symbols \".\" and \"_\" are available.";

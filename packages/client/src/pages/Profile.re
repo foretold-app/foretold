@@ -73,10 +73,18 @@ let withUserForm =
 
 let formFields = (form: Form.state, send, onSubmit, getFieldState) => {
   let stateName: Form.fieldState = getFieldState(Form.Field(Name));
-  let errorName = state =>
+
+  let error = state =>
     switch (state) {
     | Form.Error(s) => <AntdAlert message=s type_="warning" />
     | _ => ReasonReact.null
+    };
+
+  let isFormValid =
+    switch (stateName) {
+    | Form.Valid => true
+    | Form.Pristine => false
+    | _ => false
     };
 
   <Antd.Form onSubmit={e => onSubmit()}>
@@ -90,7 +98,7 @@ let formFields = (form: Form.state, send, onSubmit, getFieldState) => {
           ();
         })}
       />
-      {errorName(stateName)}
+      {error(stateName)}
     </Antd.Form.Item>
     <Antd.Form.Item>
       {"Description" |> Utils.ste |> E.React.inH3}
@@ -121,9 +129,10 @@ let formFields = (form: Form.state, send, onSubmit, getFieldState) => {
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
-      <Button _type=`primary onClick={_ => onSubmit()}>
+      <Antd.Button
+        _type=`primary onClick={_ => onSubmit()} disabled={!isFormValid}>
         {"Submit" |> Utils.ste}
-      </Button>
+      </Antd.Button>
     </Antd.Form.Item>
   </Antd.Form>;
 };

@@ -91,20 +91,23 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let inner = innerComponentFn => {
-  QueryComponent.make(({result}) =>
-    result
-    |> HttpResponse.fromApollo
-    |> HttpResponse.fmap(e => e##user |> E.O.fmap(toUser))
-    |> HttpResponse.optionalToMissing
-    |> (
-      e =>
-        switch (e) {
-        | Success(c) =>
-          innerComponentFn(Me.WithTokensAndUserData({userData: c}))
-        | _ =>
-          innerComponentFn(Me.WithTokensAndUserLoading({loadingUserData: e}))
-        }
-    )
-  )
-  |> ReasonReact.element;
+  <QueryComponent>
+    ...{({result}) =>
+      result
+      |> HttpResponse.fromApollo
+      |> HttpResponse.fmap(e => e##user |> E.O.fmap(toUser))
+      |> HttpResponse.optionalToMissing
+      |> (
+        e =>
+          switch (e) {
+          | Success(c) =>
+            innerComponentFn(Me.WithTokensAndUserData({userData: c}))
+          | _ =>
+            innerComponentFn(
+              Me.WithTokensAndUserLoading({loadingUserData: e}),
+            )
+          }
+      )
+    }
+  </QueryComponent>;
 };

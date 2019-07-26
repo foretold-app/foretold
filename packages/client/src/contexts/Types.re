@@ -53,6 +53,7 @@ type user = {
   picture: option(string),
   description: option(string),
   score: option(float),
+  bots: option(array(bot)),
 }
 and bot = {
   competitorType,

@@ -19,6 +19,12 @@ let toAgent = a =>
     (),
   );
 
+let toBots = bots =>
+  bots
+  |> E.A.O.concatSome
+  |> Array.map(bot => Primary.Bot.make(~id=bot##id, ()))
+  |> E.O.some;
+
 let toUser = a =>
   Primary.User.make(
     ~id=a##id,
@@ -28,6 +34,7 @@ let toUser = a =>
     ~description=a##description,
     ~score=a##score,
     ~agent=a##agent |> E.O.fmap(toAgent),
+    ~bots=a##bots |> toBots,
     (),
   );
 
@@ -52,9 +59,8 @@ module Query = [%graphql
                 stopAllEmails
               }
             }
-            Bots {
+            bots: Bots {
               id
-              name
             }
         }
     }

@@ -37,6 +37,15 @@ module Form = ReFormNext.Make(FormConfig);
 
 let component = ReasonReact.statelessComponent("Profile");
 
+let testName = (str: string) => {
+  let exp = () => [%re "/^[a-z0-9._]{0,30}$/i"];
+  let res = exp() |> Js.Re.exec(str);
+  switch (res) {
+  | Some(_) => true
+  | _ => false
+  };
+};
+
 let withUserForm =
     (id, name, email, picture, description, mutation, innerComponentFn) =>
   Form.make(
@@ -51,21 +60,37 @@ let withUserForm =
           values.state.values.description,
           id,
         ),
-    ~schema=Form.Validation.Schema([||]),
+    ~schema=
+      Form.Validation.Schema([|
+        Custom(
+          Name,
+          values => testName(values.name) ? Valid : Error(Lang.wrongName),
+        ),
+      |]),
     innerComponentFn,
   )
   |> E.React.el;
 
-let formFields = (form: Form.state, send, onSubmit) =>
+let formFields = (form: Form.state, send, onSubmit, getFieldState) => {
+  let stateName: Form.fieldState = getFieldState(Form.Field(Name));
+  let errorName = state =>
+    switch (state) {
+    | Form.Error(s) => <AntdAlert message=s type_="warning" />
+    | _ => ReasonReact.null
+    };
+
   <Antd.Form onSubmit={e => onSubmit()}>
     <Antd.Form.Item>
       {"Username" |> Utils.ste |> E.React.inH3}
       <Input
         value={form.values.name}
-        onChange={ReForm.Helpers.handleDomFormChange(e =>
-          send(Form.FieldChangeValue(Name, e))
-        )}
+        onChange={ReForm.Helpers.handleDomFormChange(e => {
+          send(Form.FieldChangeValue(Name, e));
+
+          ();
+        })}
       />
+      {errorName(stateName)}
     </Antd.Form.Item>
     <Antd.Form.Item>
       {"Description" |> Utils.ste |> E.React.inH3}
@@ -101,6 +126,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
       </Button>
     </Antd.Form.Item>
   </Antd.Form>;
+};
 
 module CMutationForm =
   MutationForm.Make({
@@ -137,10 +163,16 @@ let make =
                picture,
                description,
                mutation,
-               ({send, state}) =>
+               ({send, state, getFieldState}) =>
                CMutationForm.showWithLoading(
                  ~result=data.result,
-                 ~form=formFields(state, send, () => send(Form.Submit)),
+                 ~form=
+                   formFields(
+                     state,
+                     send,
+                     () => send(Form.Submit),
+                     getFieldState,
+                   ),
                  (),
                )
              );

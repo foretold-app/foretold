@@ -146,7 +146,12 @@ let botsSelect =
       <Select.Option value=""> {"Me" |> ste} </Select.Option>
       {bots
        |> Array.map((bot: Types.bot) =>
-            <Select.Option value={bot.id}>
+            <Select.Option
+              value={
+                bot.agent
+                |> E.O.fmap((agent: Types.agent) => agent.id)
+                |> E.O.default("")
+              }>
               {bot.name |> E.O.default(bot.id) |> ste}
             </Select.Option>
           )
@@ -475,6 +480,7 @@ let make =
         getCompetitorTypeFromString(state.competitorType),
         state.description,
         state.valueText,
+        state.asAgent,
       ));
 
       ();

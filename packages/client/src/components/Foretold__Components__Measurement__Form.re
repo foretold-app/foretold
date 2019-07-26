@@ -14,7 +14,9 @@ let make =
       ...{(mutation, data) =>
         <CdfInput
           measurable
-          onSubmit={((value, competitorType, description, valueText)) =>
+          onSubmit={(
+            (value, competitorType, description, valueText, asAgent),
+          ) =>
             MeasurementCreate.mutate(
               mutation,
               measurableId,
@@ -22,6 +24,7 @@ let make =
               competitorType,
               description,
               valueText,
+              asAgent,
             )
           }
           bots={loggedInUser.bots}

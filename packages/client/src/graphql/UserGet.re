@@ -23,7 +23,16 @@ let toBots = bots =>
   bots
   |> E.A.O.concatSome
   |> Array.map(bot =>
-       Primary.Bot.make(~id=bot##id, ~name=Some(bot##name), ())
+       Primary.Bot.make(
+         ~id=bot##id,
+         ~name=Some(bot##name),
+         ~agent=
+           bot##agent
+           |> E.O.fmap(agent =>
+                Primary.Agent.make(~id=agent##id, ~name=agent##name, ())
+              ),
+         (),
+       )
      )
   |> E.O.some;
 
@@ -64,6 +73,10 @@ module Query = [%graphql
             bots: Bots {
               id
               name
+              agent: Agent {
+                id
+                name
+              }
             }
         }
     }

@@ -59,7 +59,9 @@ async function one(root, args, context, info) {
  */
 async function create(root, args, context, info) {
   const creator = context.creator;
-  const agentId = _.get(context, 'agent.id');
+  const agentId =
+    _.get(args, 'input.agentId') ||
+    _.get(context, 'agent.id');
   const datas = { ...args.input, agentId };
   return data.measurements.createOne(datas, creator);
 }

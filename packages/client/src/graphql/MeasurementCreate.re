@@ -10,7 +10,6 @@ module Query = [%graphql
 
 module Mutation = ReasonApollo.CreateMutation(Query);
 
-/* TODO: Finish this so that value returns the actually correct results. */
 let mutate =
     (
       mutation: Mutation.apolloMutation,
@@ -19,6 +18,7 @@ let mutate =
       competitorType: Types.competitorType,
       description: string,
       valueText: string,
+      agentId: string,
     ) => {
   let m =
     Query.make(
@@ -29,7 +29,7 @@ let mutate =
         "competitorType": competitorType,
         "relevantAt": None,
         "taggedMeasurementId": None,
-        "agentId": None,
+        "agentId": agentId == "" ? None : Some(agentId),
         "valueText": Some(valueText),
       },
       (),

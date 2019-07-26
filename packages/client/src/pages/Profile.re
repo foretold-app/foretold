@@ -1,5 +1,3 @@
-open Antd;
-
 module FormConfig = {
   type field(_) =
     | Name: field(string)
@@ -90,7 +88,7 @@ let formFields = (form: Form.state, send, onSubmit, getFieldState) => {
   <Antd.Form onSubmit={e => onSubmit()}>
     <Antd.Form.Item>
       {"Username" |> Utils.ste |> E.React.inH3}
-      <Input
+      <Antd.Input
         value={form.values.name}
         onChange={ReForm.Helpers.handleDomFormChange(e => {
           send(Form.FieldChangeValue(Name, e));
@@ -102,7 +100,7 @@ let formFields = (form: Form.state, send, onSubmit, getFieldState) => {
     </Antd.Form.Item>
     <Antd.Form.Item>
       {"Description" |> Utils.ste |> E.React.inH3}
-      <Input
+      <Antd.Input
         value={form.values.description}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
           send(Form.FieldChangeValue(Description, e))
@@ -121,7 +119,7 @@ let formFields = (form: Form.state, send, onSubmit, getFieldState) => {
     </Antd.Form.Item>
     <Antd.Form.Item>
       {"Picture URL" |> Utils.ste |> E.React.inH3}
-      <Input
+      <Antd.Input
         value={form.values.picture}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
           send(Form.FieldChangeValue(Picture, e))

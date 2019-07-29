@@ -15,6 +15,8 @@ type state = {
   description: string,
   valueText: string,
   hasLimitError: bool,
+  // another
+  asAgent: string,
 };
 
 type action =
@@ -29,7 +31,8 @@ type action =
   // -> Measurement
   | UpdateCompetitorType(string)
   | UpdateDescription(string)
-  | UpdateValueText(string);
+  | UpdateValueText(string)
+  | UpdateAsAgent(string);
 
 module Styles = {
   open Css;
@@ -46,7 +49,7 @@ module Styles = {
 };
 
 let competitorTypeSelect =
-    (~isOwner: bool, ~state: state, ~send, ~measurable: Primary.Measurable.t)
+    (~isOwner: bool, ~state: state, ~send, ~measurable: Types.measurable)
     : ReasonReact.reactElement => {
   let options =
     Primary.CompetitorType.availableSelections(
@@ -71,7 +74,7 @@ let dataTypeSelect = (~state, ~send): ReasonReact.reactElement =>
     <Select.Option value="FLOAT_POINT"> {"Exact Value" |> ste} </Select.Option>
   </Select>;
 
-let getIsValid = (state: state): bool =>{
+let getIsValid = (state: state): bool => {
   switch (state.dataType) {
   | "FLOAT_CDF" => E.A.length(state.floatCdf.xs) > 1
   | "FLOAT_POINT" => E.A.length(state.floatCdf.xs) == 1
@@ -79,13 +82,14 @@ let getIsValid = (state: state): bool =>{
   | "BINARY_BOOL" => true
   | "UNRESOLVABLE_RESOLUTION" => true
   | "COMMENT" => true
+  | _ => true
   };
-}
+};
 
 let getDataTypeAsString =
     (
       competitorType: string,
-      measurable: Primary.Measurable.t,
+      measurable: Types.measurable,
       dataType: option(string),
     )
     : string => {
@@ -129,8 +133,40 @@ let getCompetitorTypeFromString = (str: string): Types.competitorType =>
   | _ => `OBJECTIVE
   };
 
+let botsSelect =
+    (~state, ~send, ~bots: array(Types.bot), ~loggedInUser: Types.user)
+    : ReasonReact.reactElement => {
+  let name =
+    loggedInUser.agent
+    |> E.O.fmap((agent: Types.agent) => agent.name |> E.O.default("Me"))
+    |> E.O.default("Me");
+  <>
+    <div className=Styles.inputBox>
+      <h4 className=Styles.label> {"Do this as:" |> ste} </h4>
+    </div>
+    <Select
+      value={state.asAgent}
+      onChange={e => send(UpdateAsAgent(e))}
+      className=Styles.fullWidth>
+      <Select.Option value=""> {name |> ste} </Select.Option>
+      {bots
+       |> Array.map((bot: Types.bot) =>
+            <Select.Option
+              value={
+                bot.agent
+                |> E.O.fmap((agent: Types.agent) => agent.id)
+                |> E.O.default("")
+              }>
+              {bot.name |> E.O.default(bot.id) |> ste}
+            </Select.Option>
+          )
+       |> ReasonReact.array}
+    </Select>
+  </>;
+};
+
 module ValueInput = {
-  let floatPoint = (measurable: Primary.Measurable.t, send) =>
+  let floatPoint = (measurable: Types.measurable, send) =>
     <GuesstimateInput
       focusOnRender=true
       sampleCount=30000
@@ -226,7 +262,9 @@ let mainBlock =
       ~isCreator: bool,
       ~send,
       ~onSubmit,
-      ~measurable: Primary.Measurable.t,
+      ~measurable: Types.measurable,
+      ~bots: option(array(Types.bot)),
+      ~loggedInUser: Types.user,
     )
     : ReasonReact.reactElement => {
   let isValid = getIsValid(state);
@@ -236,6 +274,13 @@ let mainBlock =
     | ("OBJECTIVE", `FLOAT | `DATE) =>
       <div className=Styles.select> {dataTypeSelect(~state, ~send)} </div>
     | _ => ReasonReact.null
+    };
+
+  let getBotSelect: ReasonReact.reactElement =
+    switch (bots) {
+    | Some([||])
+    | None => ReasonReact.null
+    | Some(bots) => botsSelect(~state, ~send, ~bots, ~loggedInUser)
     };
 
   let valueInput: ReasonReact.reactElement =
@@ -336,6 +381,7 @@ let mainBlock =
           send(UpdateDescription(value));
         }}
       />
+      getBotSelect
       <div className=Styles.submitButton>
         <Antd.Button
           _type=`primary onClick={_ => onSubmit()} disabled={!isValid}>
@@ -354,7 +400,9 @@ let make =
       ~onUpdate=_ => (),
       ~isCreator=false,
       ~onSubmit=_ => (),
-      ~measurable: Primary.Measurable.t,
+      ~measurable: Types.measurable,
+      ~bots: option(array(Types.bot)),
+      ~loggedInUser: Types.user,
       _children,
     ) => {
   ...component,
@@ -386,6 +434,7 @@ let make =
 
       // Form State Only
       hasLimitError: false,
+      asAgent: "",
     };
   },
 
@@ -426,6 +475,9 @@ let make =
 
     | UpdateValueText((valueText: string)) =>
       ReasonReact.Update({...state, valueText})
+
+    | UpdateAsAgent((asAgent: string)) =>
+      ReasonReact.Update({...state, asAgent})
     },
 
   render: ({state, send}) => {
@@ -437,22 +489,29 @@ let make =
         getCompetitorTypeFromString(state.competitorType),
         state.description,
         state.valueText,
+        state.asAgent,
       ));
 
       ();
     };
 
+    let block =
+      mainBlock(
+        ~state,
+        ~isCreator,
+        ~send,
+        ~onSubmit,
+        ~measurable,
+        ~bots,
+        ~loggedInUser,
+      );
+
     <Style.BorderedBox>
       {switch (data.result) {
        | Loading => "Loading" |> ste
-       | Error(e) =>
-         <>
-           {"Error: " ++ e##message |> ste}
-           {mainBlock(~state, ~isCreator, ~send, ~onSubmit, ~measurable)}
-         </>
+       | Error(e) => <> {"Error: " ++ e##message |> ste} block </>
        | Data(_) => "Form submitted successfully." |> ste |> E.React.inH2
-       | NotCalled =>
-         mainBlock(~state, ~isCreator, ~send, ~onSubmit, ~measurable)
+       | NotCalled => block
        }}
     </Style.BorderedBox>;
   },

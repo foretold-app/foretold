@@ -7,7 +7,7 @@ let component = ReasonReact.statelessComponent("AgentLayoutPage");
 let make =
     (
       agentPage: Routing.AgentPage.t,
-      loggedInUser: Primary.User.t,
+      loggedInUser: Types.user,
       {head, body}: LayoutConfig.t,
     ) => {
   ...component,

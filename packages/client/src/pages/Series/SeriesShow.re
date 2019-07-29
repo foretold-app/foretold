@@ -1,7 +1,7 @@
 module Config = {
-  type itemType = Primary.Measurable.t;
+  type itemType = Types.measurable;
   type callFnParams = string;
-  let getId = (e: Primary.Measurable.t) => e.id;
+  let getId = (e: Types.measurable) => e.id;
   let callFn = (e: callFnParams) =>
     MeasurablesGet.componentWithSeries(~seriesId=e);
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
@@ -44,7 +44,7 @@ let make =
     (
       ~channelId: string,
       ~id: string,
-      ~loggedInUser: Primary.User.t,
+      ~loggedInUser: Types.user,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {

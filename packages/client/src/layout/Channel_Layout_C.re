@@ -6,7 +6,7 @@ let component = ReasonReact.statelessComponent("ChannelLayoutPage");
 let make =
     (
       channelPage: Routing.ChannelPage.t,
-      loggedInUser: Primary.User.t,
+      loggedInUser: Types.user,
       channel: option(Primary.Channel.t),
       {head, body}: LayoutConfig.t,
     ) => {

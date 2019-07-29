@@ -19,7 +19,7 @@ type pageParams = {id: string};
 let make =
     (
       ~pageParams: pageParams,
-      ~loggedInUser: Primary.User.t,
+      ~loggedInUser: Types.user,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {

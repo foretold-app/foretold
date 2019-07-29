@@ -217,6 +217,7 @@ module User = {
         ~auth0Id=None,
         ~score=None,
         ~agent=None,
+        ~bots=None,
         (),
       )
       : t => {
@@ -228,6 +229,7 @@ module User = {
     auth0Id,
     score,
     agent,
+    bots,
   };
 };
 
@@ -248,7 +250,7 @@ module Bot = {
         ~id,
         ~name=None,
         ~description=None,
-        ~competitorType,
+        ~competitorType=`AGGREGATION,
         ~token=None,
         ~agent=None,
         ~permissions=None,

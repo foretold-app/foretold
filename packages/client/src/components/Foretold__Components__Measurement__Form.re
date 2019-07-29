@@ -2,19 +2,21 @@ let component = ReasonReact.statelessComponent("MeasurementForm");
 
 let make =
     (
-      ~measurable: Primary.Measurable.t,
+      ~loggedInUser: Types.user,
+      ~measurable: Types.measurable,
       ~measurableId: string,
       ~isCreator: bool,
       _children,
     ) => {
   ...component,
   render: _ =>
-    MeasurementCreate.Mutation.make(
-      ~onCompleted=_ => Js.log("Request submitted"),
-      (mutation, data) =>
+    <MeasurementCreate.Mutation>
+      ...{(mutation, data) =>
         <CdfInput
           measurable
-          onSubmit={((value, competitorType, description, valueText)) =>
+          onSubmit={(
+            (value, competitorType, description, valueText, asAgent),
+          ) =>
             MeasurementCreate.mutate(
               mutation,
               measurableId,
@@ -22,11 +24,14 @@ let make =
               competitorType,
               description,
               valueText,
+              asAgent,
             )
           }
+          bots={loggedInUser.bots}
           data
           isCreator
-        />,
-    )
-    |> E.React.el,
+          loggedInUser
+        />
+      }
+    </MeasurementCreate.Mutation>,
 };

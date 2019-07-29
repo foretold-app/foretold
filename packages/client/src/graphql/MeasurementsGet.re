@@ -44,7 +44,6 @@ type measurement = {
 type measurements = option({. "edges": option(Js.Array.t(measurement))});
 
 let toMeasurement = (measurement: measurement): Primary.Measurement.t => {
-  open Primary.Agent;
   let agent = measurement##agent;
 
   let agentType: option(Primary.AgentType.t) =

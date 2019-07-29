@@ -4,7 +4,7 @@ module CMutationForm =
   });
 
 let formCreation = (id: string, m: MeasurableGet.measurable): React.element => {
-  let measurable: Primary.Measurable.t = MeasurableGet.toMeasurable(m);
+  let measurable: Types.measurable = MeasurableGet.toMeasurable(m);
 
   MeasurableUpdate.Mutation.make((mutation, data) =>
     MeasurableForm.MeasurableReForm.make(

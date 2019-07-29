@@ -1,7 +1,7 @@
 open Routing;
 open Pages;
 
-let defaultPage = (loggedInUser: Primary.User.t) =>
+let defaultPage = (loggedInUser: Types.user) =>
   loggedInUser.agent
   |> E.O.bind(_, Primary.Agent.firstChannel)
   |> E.O.fmap((channel: Types.channel) => {
@@ -9,8 +9,11 @@ let defaultPage = (loggedInUser: Primary.User.t) =>
        ReasonReact.null;
      })
   |> {
-    Primary.Channel.globalLink() |> Routing.Url.toString |> ReasonReact.Router.push;
-    E.O.default(<Home />)}
+    Primary.Channel.globalLink()
+    |> Routing.Url.toString
+    |> ReasonReact.Router.push;
+    E.O.default(<Home />);
+  };
 
 let meToUser = (me: Me.t) =>
   switch (me) {
@@ -51,7 +54,7 @@ let toRoutePage = (route: Route.t, me: Me.t) => {
   };
 };
 
-let component = "Layout" |> ReasonReact.statelessComponent;
+let component = "Navigator" |> ReasonReact.statelessComponent;
 
 let make = (~route: Route.t, _children) => {
   ...component,

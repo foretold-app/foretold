@@ -1,6 +1,6 @@
 let component = ReasonReact.statelessComponent("Redirecting");
 
-let make = (~loggedInUser: option(Primary.User.t), _children) => {
+let make = (~loggedInUser: option(Types.user), _children) => {
   ...component,
   render: _ =>
     switch (loggedInUser) {

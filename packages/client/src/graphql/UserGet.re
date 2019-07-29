@@ -1,64 +1,51 @@
-type channel = {
-  id: string,
-  name: string,
-  isPublic: bool,
-};
-
-type preference = {
-  id: string,
-  stopAllEmails: option(bool),
-};
-
-type agent = {
-  id: string,
-  name: option(string),
-  preference: option(preference),
-};
-
-type user = {
-  id: string,
-  name: string,
-  email: option(string),
-  picture: option(string),
-  description: option(string),
-  auth0Id: option(string),
-  agentId: option(string),
-  score: option(float),
-  agent: option(agent),
-};
-
-type t = option(user);
-
-let toChannel = (ch: channel) =>
+let toChannel = ch =>
   Primary.Channel.make(
-    ~id=ch.id,
-    ~name=ch.name,
+    ~id=ch##id,
+    ~name=ch##name,
     ~isArchived=false,
-    ~isPublic=ch.isPublic,
+    ~isPublic=ch##isPublic,
     (),
   );
 
-let toPreference = (a: preference) =>
-  Primary.Preference.make(~id=a.id, ~stopAllEmails=a.stopAllEmails, ());
+let toPreference = a =>
+  Primary.Preference.make(~id=a##id, ~stopAllEmails=a##stopAllEmails, ());
 
-let toAgent = (a: agent) =>
+let toAgent = a =>
   Primary.Agent.make(
-    ~id=a.id,
-    ~name=a.name,
+    ~id=a##id,
+    ~name=a##name,
     ~channelMemberships=None,
-    ~preference=a.preference |> E.O.fmap(toPreference),
+    ~preference=a##preference |> E.O.fmap(toPreference),
     (),
   );
 
-let toUser = (a: user) =>
+let toBots = bots =>
+  bots
+  |> E.A.O.concatSome
+  |> Array.map(bot =>
+       Primary.Bot.make(
+         ~id=bot##id,
+         ~name=Some(bot##name),
+         ~agent=
+           bot##agent
+           |> E.O.fmap(agent =>
+                Primary.Agent.make(~id=agent##id, ~name=agent##name, ())
+              ),
+         (),
+       )
+     )
+  |> E.O.some;
+
+let toUser = a =>
   Primary.User.make(
-    ~id=a.id,
-    ~auth0Id=a.auth0Id,
-    ~email=a.email,
-    ~picture=a.picture,
-    ~description=a.description,
-    ~score=a.score,
-    ~agent=a.agent |> E.O.fmap(toAgent),
+    ~id=a##id,
+    ~auth0Id=a##auth0Id,
+    ~email=a##email,
+    ~picture=a##picture,
+    ~description=a##description,
+    ~score=a##score,
+    ~agent=a##agent |> E.O.fmap(toAgent),
+    ~bots=a##bots |> toBots,
     (),
   );
 
@@ -66,7 +53,7 @@ module Query = [%graphql
   {|
     query user ($auth0Id: String) {
         user:
-          user(auth0Id: $auth0Id)  @bsRecord{
+          user(auth0Id: $auth0Id) {
             id
             name
             email
@@ -75,12 +62,20 @@ module Query = [%graphql
             auth0Id
             agentId
             score
-            agent: Agent  @bsRecord{
+            agent: Agent {
               id
               name
-              preference: Preference @bsRecord{
+              preference: Preference {
                 id
                 stopAllEmails
+              }
+            }
+            bots: Bots {
+              id
+              name
+              agent: Agent {
+                id
+                name
               }
             }
         }
@@ -91,20 +86,23 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let inner = innerComponentFn => {
-  QueryComponent.make(({result}) =>
-    result
-    |> HttpResponse.fromApollo
-    |> HttpResponse.fmap(e => e##user |> E.O.fmap(toUser))
-    |> HttpResponse.optionalToMissing
-    |> (
-      e =>
-        switch (e) {
-        | Success(c) =>
-          innerComponentFn(Me.WithTokensAndUserData({userData: c}))
-        | _ =>
-          innerComponentFn(Me.WithTokensAndUserLoading({loadingUserData: e}))
-        }
-    )
-  )
-  |> ReasonReact.element;
+  <QueryComponent>
+    ...{({result}) =>
+      result
+      |> HttpResponse.fromApollo
+      |> HttpResponse.fmap(e => e##user |> E.O.fmap(toUser))
+      |> HttpResponse.optionalToMissing
+      |> (
+        e =>
+          switch (e) {
+          | Success(c) =>
+            innerComponentFn(Me.WithTokensAndUserData({userData: c}))
+          | _ =>
+            innerComponentFn(
+              Me.WithTokensAndUserLoading({loadingUserData: e}),
+            )
+          }
+      )
+    }
+  </QueryComponent>;
 };

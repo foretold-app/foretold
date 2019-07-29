@@ -5,7 +5,7 @@ type column = Table.column(Primary.Agent.t);
 let make =
     (
       ~channelId: string,
-      ~loggedInUser: Primary.User.t,
+      ~loggedInUser: Types.user,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {

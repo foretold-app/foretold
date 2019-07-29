@@ -3,7 +3,7 @@ let component = ReasonReact.statelessComponent("ChannelMeasurable");
 let make =
     (
       ~measurableId: string,
-      ~loggedInUser: Primary.User.t,
+      ~loggedInUser: Types.user,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {

@@ -52,7 +52,7 @@ type node = {
 };
 
 /* TODO: Fix channel */
-let toMeasurable = (m: node): Primary.Measurable.t => {
+let toMeasurable = (m: node): Types.measurable => {
   let channel =
     switch (m.channel) {
     | Some(channel) =>

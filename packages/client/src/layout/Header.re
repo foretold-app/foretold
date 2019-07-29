@@ -96,7 +96,7 @@ let userDropdown = agentId =>
     <div className=StylesDropdown.clear />
   </div>;
 
-let header = (loggedInUser: Primary.User.t) =>
+let header = (loggedInUser: Types.user) =>
   switch (loggedInUser.agent) {
   | Some((agent: Types.agent)) =>
     <AntdDropdown
@@ -112,7 +112,7 @@ let header = (loggedInUser: Primary.User.t) =>
   };
 
 let component = ReasonReact.statelessComponent("Header");
-let make = (~loggedInUser: Primary.User.t, _children) => {
+let make = (~loggedInUser: Types.user, _children) => {
   ...component,
   render: _self =>
     <Div styles=[Styles.outer]>

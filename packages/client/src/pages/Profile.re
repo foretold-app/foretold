@@ -142,7 +142,7 @@ module CMutationForm =
 
 let make =
     (
-      ~loggedInUser: Primary.User.t,
+      ~loggedInUser: Types.user,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {

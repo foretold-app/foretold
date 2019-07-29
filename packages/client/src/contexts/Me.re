@@ -1,8 +1,8 @@
 type meWithTokensAndUserLoading = {
-  loadingUserData: HttpResponse.t(Primary.User.t),
+  loadingUserData: HttpResponse.t(Types.user),
 };
 
-type meWithTokensAndUserData = {userData: Primary.User.t};
+type meWithTokensAndUserData = {userData: Types.user};
 
 type t =
   | WithoutTokens

@@ -19,11 +19,16 @@ module Styles = {
   let description = style([paddingTop(`em(1.5))]);
 };
 
-let make = (~id: string, ~loggedInUser: Primary.User.t, _children) => {
+let make = (~id: string, ~loggedInUser: Types.user, _children) => {
   ...component,
-  render: _self =>
+  render: _self => {
     MeasurableWithMeasurementsGet.component(~id)
-    |> E.F.apply((m: Primary.Measurable.t) =>
+    |> E.F.apply((m: Types.measurable) => {
+         let userAgentId =
+           loggedInUser.agent |> E.O.fmap((r: Primary.Agent.t) => r.id);
+
+         let creatorId = m.creator |> E.O.fmap((r: Primary.Agent.t) => r.id);
+
          <>
            <Div styles=[Styles.header]>
              <Div flexDirection=`row>
@@ -46,22 +51,15 @@ let make = (~id: string, ~loggedInUser: Primary.User.t, _children) => {
                  )}
            </Div>
            <>
-             {
-               let userAgentId =
-                 loggedInUser.agent |> E.O.fmap((r: Primary.Agent.t) => r.id);
-
-               let creatorId =
-                 m.creator |> E.O.fmap((r: Primary.Agent.t) => r.id);
-
-               userAgentId == creatorId
-               || Primary.Measurable.toStatus(m) !== `JUDGED
-                 ? <Foretold__Components__Measurement__Form
-                     measurable=m
-                     measurableId=id
-                     isCreator={userAgentId == creatorId}
-                   />
-                 : E.React.null;
-             }
+             {userAgentId == creatorId
+              || Primary.Measurable.toStatus(m) !== `JUDGED
+                ? <Foretold__Components__Measurement__Form
+                    measurable=m
+                    measurableId=id
+                    isCreator={userAgentId == creatorId}
+                    loggedInUser
+                  />
+                : E.React.null}
              {MeasurementsGet.component(
                 ~measurableId=m.id,
                 ~pageLimit=20,
@@ -83,6 +81,7 @@ let make = (~id: string, ~loggedInUser: Primary.User.t, _children) => {
                    )
               )}
            </>
-         </>
-       ),
+         </>;
+       });
+  },
 };

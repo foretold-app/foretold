@@ -8,7 +8,7 @@ module CMutationForm =
 let make =
     (
       ~pageParams: PageConfig.LoggedInPage.pageParams,
-      ~loggedInUser: Primary.User.t,
+      ~loggedInUser: Types.user,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {

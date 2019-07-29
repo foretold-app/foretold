@@ -1,5 +1,5 @@
 module ReducerConfig = {
-  type itemType = Primary.Measurable.t;
+  type itemType = Types.measurable;
 
   type callFnParams = {
     channelId: string,
@@ -21,7 +21,7 @@ module Reducer = PaginationReducerFunctor.Make(ReducerConfig);
 
 type channel = Primary.Channel.t;
 type seriesCollection = array(SeriesCollectionGet.series);
-type loggedInUser = Primary.User.t;
+type loggedInUser = Types.user;
 type reducerParams = Reducer.Types.reducerParams;
 type seriesQuery = HttpResponse.t(seriesCollection);
 type channelQuery = HttpResponse.t(channel);

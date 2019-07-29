@@ -72,15 +72,13 @@ let toBot = (botJson: bot) => {
 
 let component = (~ownerId, fn) => {
   let query = Query.make(~ownerId, ());
-  QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(e => {
-         let bots = e##bots |> unpackEdges |> E.A.fmap(toBot);
-         bots;
-       })
-    |> E.R.fmap(fn)
-    |> E.R.id
-  )
-  |> E.React.el;
+  <QueryComponent variables=query##variables>
+    ...{({result}) =>
+      result
+      |> ApolloUtils.apolloResponseToResult
+      |> E.R.fmap(e => e##bots |> unpackEdges |> E.A.fmap(toBot))
+      |> E.R.fmap(fn)
+      |> E.R.id
+    }
+  </QueryComponent>;
 };

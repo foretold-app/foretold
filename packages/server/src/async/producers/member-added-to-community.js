@@ -7,15 +7,10 @@ const { getAgentLinkWithToken } = require('../../lib/urls');
 const { Producer } = require('./producer');
 
 class MemberAddedToCommunity extends Producer {
-  constructor(channelMembership = {}, inviterAgent = {}) {
+  constructor(channelMembership = {}) {
     super({});
-
     assert(_.isObject(channelMembership), 'Channel Membership is not an object');
-    assert(_.isObject(inviterAgent), 'Inviter Agent is not an object');
-
     this.channelMembership = channelMembership;
-    this.inviterAgent = inviterAgent;
-
     this.templateName = Producer.TEMPLATE_NAME.MEMBER_ADDED_TO_COMMUNITY;
   }
 
@@ -50,8 +45,11 @@ class MemberAddedToCommunity extends Producer {
       const agent = await this.channelMembership.getAgent();
       assert(!!_.get(agent, 'id'), 'Agent ID is required.');
 
+      const inviterAgent = await this.channelMembership.getInviterAgent();
+      assert(!!_.get(inviterAgent, 'id'), 'Inviter ID is required.');
+
       const replacements = MemberAddedToCommunity._getReplacements(
-        this.inviterAgent,
+        inviterAgent,
         channel,
       );
 
@@ -59,7 +57,7 @@ class MemberAddedToCommunity extends Producer {
       await this._assignNotification(agent, notification);
     } catch (e) {
       await this._rollback();
-      console.log(`stateChanged`, e.message, e);
+      console.log(`memberAddedToCommunity`, e.message, e);
       return false;
     }
     await this._commit();

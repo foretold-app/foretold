@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
 
     models.Channel.hasOne(models.Agent, {
       foreignKey: 'inviterAgentId',
-      as: 'inviterAgentId',
+      as: 'inviterAgent',
     });
   };
 

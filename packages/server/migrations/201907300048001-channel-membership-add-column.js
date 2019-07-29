@@ -5,7 +5,7 @@ module.exports = {
     try {
       await queryInterface.sequelize.query(`BEGIN`);
 
-      await queryInterface.addColumn('ChannelsMemberships', 'inviterAgentId', {
+      await queryInterface.addColumn('ChannelMemberships', 'inviterAgentId', {
         type: Sequelize.UUID,
         references: {
           model: 'Agents',
@@ -25,7 +25,7 @@ module.exports = {
   down: async function (queryInterface) {
     try {
       await queryInterface.sequelize.query(`BEGIN`);
-      await queryInterface.removeColumn('ChannelsMemberships', 'inviterAgentId');
+      await queryInterface.removeColumn('ChannelMemberships', 'inviterAgentId');
       await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {
       console.error('Migration Down Error', e);

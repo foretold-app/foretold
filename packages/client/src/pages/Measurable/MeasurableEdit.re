@@ -50,7 +50,13 @@ let formCreation = (id: string, m: MeasurableGet.measurable): React.element => {
       ({handleSubmit, handleChange, form, _}) =>
         CMutationForm.showWithLoading2(
           ~result=data.result,
-          ~form=MeasurableForm.showForm(~form, ~handleSubmit, ~handleChange),
+          ~form=
+            MeasurableForm.showForm(
+              ~form,
+              ~handleSubmit,
+              ~handleChange,
+              ~creating=false,
+            ),
           ~onSuccess=
             _ => {
               Routing.Url.push(MeasurableShow(measurable.channelId, id));

@@ -98,21 +98,32 @@ let dataSource =
        {"key": r |> Graph_T.Thing.id, "id": r |> Graph_T.Thing.id}
      );
 
-let showForm = (~form: MeasurableReForm.state, ~handleSubmit, ~handleChange) =>
+let showForm =
+    (
+      ~form: MeasurableReForm.state,
+      ~handleSubmit,
+      ~handleChange,
+      ~creating: bool=true,
+    ) =>
   <AntdForm onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
-    <Form.Item
-      label="Question Type"
-      help="Number example: 'How many inches of rain will there be tomorrow?' Yes/No example: 'Will it rain tomorrow?'">
-      <Antd.Radio.Group
-        value={form.values.valueType}
-        defaultValue={form.values.valueType}
-        onChange={ReForm.Helpers.handleDomFormChange(
-          handleChange(`valueType),
-        )}>
-        <Antd.Radio value="FLOAT"> {"Number" |> ste} </Antd.Radio>
-        <Antd.Radio value="PERCENTAGE"> {"Yes/No Event" |> ste} </Antd.Radio>
-      </Antd.Radio.Group>
-    </Form.Item>
+    {E.React.showIf(
+       creating,
+       <Form.Item
+         label="Question Type"
+         help="Number example: 'How many inches of rain will there be tomorrow?' Yes/No example: 'Will it rain tomorrow?'">
+         <Antd.Radio.Group
+           value={form.values.valueType}
+           defaultValue={form.values.valueType}
+           onChange={ReForm.Helpers.handleDomFormChange(
+             handleChange(`valueType),
+           )}>
+           <Antd.Radio value="FLOAT"> {"Number" |> ste} </Antd.Radio>
+           <Antd.Radio value="PERCENTAGE">
+             {"Yes/No Event" |> ste}
+           </Antd.Radio>
+         </Antd.Radio.Group>
+       </Form.Item>,
+     )}
     {E.React.showIf(
        form.values.showDescriptionProperty == "FALSE",
        <>

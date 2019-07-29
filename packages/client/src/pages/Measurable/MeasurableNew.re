@@ -44,6 +44,7 @@ let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
                      ~form,
                      ~handleSubmit,
                      ~handleChange,
+                     ~creating=true,
                    ),
                  ~onSuccess=
                    (response: MeasurableCreate.GraphQL.t) => {

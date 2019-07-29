@@ -9,9 +9,9 @@ module.exports = {
       const envelopeTemplate = new EmailEnvelopeTemplate({
         subject: 'You is added to the Foretold community',
         body:
-          '<a href="{{{ agent.link }}}">{{ agent.name }}</a> has ' +
+          '<a href="{{{ inviterAgent.link }}}">{{ inviterAgent.name }}</a> has ' +
           'added you to the Foretold community, ' +
-          '[<a href="{{{ measurable.link }}}">{{ measurable.name }}</a>]'
+          '[<a href="{{{ channel.link }}}">{{ channel.name }}</a>]'
       });
 
       await queryInterface.bulkInsert('Templates', [{

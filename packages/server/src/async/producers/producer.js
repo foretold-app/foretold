@@ -63,9 +63,7 @@ class Producer {
 
     const emailEnvelope = new Producer.EmailEnvelope(template.envelopeTemplate);
     const emailEnvelope$ = emailEnvelope.mutate(replacements);
-    const notification = await this._createEmailNotification(emailEnvelope$);
-
-    return notification;
+    return await this._createEmailNotification(emailEnvelope$);
   }
 
   /**
@@ -77,13 +75,13 @@ class Producer {
   async _assignNotification(agent, notification) {
     assert(!!agent.id, 'Agent ID is required');
     assert(!!notification.id, 'Notification ID is required');
+
     const data = { agentId: agent.id, notificationId: notification.id };
     const options = await this._getOptions();
-    const assignment = await Producer.data.agentNotifications.createOne(
+    return await Producer.data.agentNotifications.createOne(
       data,
       options,
     );
-    return assignment;
   }
 
   /**

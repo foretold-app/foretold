@@ -4,6 +4,7 @@ const data = require('../data');
 /**
  * @param {*} root
  * @param {{input: {channelId: Models.ObjectID, agentId: Models.ObjectID, role: string}}} args
+ * @param {*} context
  * @returns {Promise<Models.ChannelMemberships>}
  */
 async function create(root, args, context) {

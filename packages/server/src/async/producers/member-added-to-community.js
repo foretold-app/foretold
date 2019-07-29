@@ -15,41 +15,28 @@ class MemberAddedToCommunity extends Producer {
   }
 
   /**
-   * @protected
-   * @param {object} inviterAgent
-   * @param {object} channel
-   * @return {{measurable: {name: *, link: *}}}
-   */
-  static _getReplacements(inviterAgent, channel) {
-    return {
-      channel: {
-        name: _.get(channel, 'name'),
-        link: getChannelLinkWithToken(channel),
-      },
-      inviterAgent: {
-        name: _.get(inviterAgent, 'name'),
-        link: getAgentLinkWithToken(inviterAgent),
-      },
-    }
-  }
-
-  /**
    * @public
    * @return {Promise<boolean>}
    */
   async main() {
     try {
-      const channel = await this.channelMembership.getChannel();
+      const channel = await Producer.data.channels.getOne({
+        id: this.channelMembership.channelId,
+      });
       assert(!!_.get(channel, 'id'), 'Channel ID is required.');
 
-      const agent = await this.channelMembership.getAgent();
+      const agent = await Producer.data.agents.getOne({
+        id: this.channelMembership.agentId,
+      });
       assert(!!_.get(agent, 'id'), 'Agent ID is required.');
 
-      const inviterAgent = await this.channelMembership.getInviterAgent();
-      assert(!!_.get(inviterAgent, 'id'), 'Inviter ID is required.');
+      const inviter = await Producer.data.users.getOne({
+        agentId: this.channelMembership.inviterAgentId,
+      });
+      assert(!!_.get(inviter, 'id'), 'Inviter ID is required.');
 
       const replacements = MemberAddedToCommunity._getReplacements(
-        inviterAgent,
+        inviter,
         channel,
       );
 
@@ -62,6 +49,25 @@ class MemberAddedToCommunity extends Producer {
     }
     await this._commit();
     return true;
+  }
+
+  /**
+   * @protected
+   * @param {object} inviter
+   * @param {object} channel
+   * @return {*}
+   */
+  static _getReplacements(inviter, channel) {
+    return {
+      inviterAgent: {
+        name: _.get(inviter, 'name'),
+        link: getAgentLinkWithToken(inviter),
+      },
+      channel: {
+        name: _.get(channel, 'name'),
+        link: getChannelLinkWithToken(channel),
+      },
+    }
   }
 }
 

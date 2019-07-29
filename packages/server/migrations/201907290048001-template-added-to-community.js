@@ -7,7 +7,7 @@ module.exports = {
       await queryInterface.sequelize.query(`BEGIN`);
 
       const envelopeTemplate = new EmailEnvelopeTemplate({
-        subject: 'You is added to the Foretold community',
+        subject: 'You are added to the Foretold community',
         body:
           '<a href="{{{ inviterAgent.link }}}">{{ inviterAgent.name }}</a> has ' +
           'added you to the Foretold community, ' +

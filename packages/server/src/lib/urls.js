@@ -20,11 +20,11 @@ const getChannelLinkWithToken = (channel) => {
 };
 
 /**
- * @param agent
+ * @param user
  * @returns {string}
  */
-const getAgentLinkWithToken = (agent) => {
-  return `${clientUrl}/c/${agent.id}#token={{token}}`;
+const getAgentLinkWithToken = (user) => {
+  return `${clientUrl}/agents/${user.agentId}#token={{token}}`;
 };
 
 module.exports = {

@@ -30,6 +30,7 @@ let make =
           bots={loggedInUser.bots}
           data
           isCreator
+          loggedInUser
         />
       }
     </MeasurementCreate.Mutation>,

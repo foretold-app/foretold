@@ -134,7 +134,12 @@ let getCompetitorTypeFromString = (str: string): Types.competitorType =>
   };
 
 let botsSelect =
-    (~state, ~send, ~bots: array(Types.bot)): ReasonReact.reactElement =>
+    (~state, ~send, ~bots: array(Types.bot), ~loggedInUser: Types.user)
+    : ReasonReact.reactElement => {
+  let name =
+    loggedInUser.agent
+    |> E.O.fmap((agent: Types.agent) => agent.name |> E.O.default("Me"))
+    |> E.O.default("Me");
   <>
     <div className=Styles.inputBox>
       <h4 className=Styles.label> {"Do this as:" |> ste} </h4>
@@ -143,7 +148,7 @@ let botsSelect =
       value={state.asAgent}
       onChange={e => send(UpdateAsAgent(e))}
       className=Styles.fullWidth>
-      <Select.Option value=""> {"Me" |> ste} </Select.Option>
+      <Select.Option value=""> {name |> ste} </Select.Option>
       {bots
        |> Array.map((bot: Types.bot) =>
             <Select.Option
@@ -158,6 +163,7 @@ let botsSelect =
        |> ReasonReact.array}
     </Select>
   </>;
+};
 
 module ValueInput = {
   let floatPoint = (measurable: Types.measurable, send) =>
@@ -258,6 +264,7 @@ let mainBlock =
       ~onSubmit,
       ~measurable: Types.measurable,
       ~bots: option(array(Types.bot)),
+      ~loggedInUser: Types.user,
     )
     : ReasonReact.reactElement => {
   let isValid = getIsValid(state);
@@ -273,7 +280,7 @@ let mainBlock =
     switch (bots) {
     | Some([||])
     | None => ReasonReact.null
-    | Some(bots) => botsSelect(~state, ~send, ~bots)
+    | Some(bots) => botsSelect(~state, ~send, ~bots, ~loggedInUser)
     };
 
   let valueInput: ReasonReact.reactElement =
@@ -395,6 +402,7 @@ let make =
       ~onSubmit=_ => (),
       ~measurable: Types.measurable,
       ~bots: option(array(Types.bot)),
+      ~loggedInUser: Types.user,
       _children,
     ) => {
   ...component,
@@ -487,24 +495,23 @@ let make =
       ();
     };
 
+    let block =
+      mainBlock(
+        ~state,
+        ~isCreator,
+        ~send,
+        ~onSubmit,
+        ~measurable,
+        ~bots,
+        ~loggedInUser,
+      );
+
     <Style.BorderedBox>
       {switch (data.result) {
        | Loading => "Loading" |> ste
-       | Error(e) =>
-         <>
-           {"Error: " ++ e##message |> ste}
-           {mainBlock(
-              ~state,
-              ~isCreator,
-              ~send,
-              ~onSubmit,
-              ~measurable,
-              ~bots,
-            )}
-         </>
+       | Error(e) => <> {"Error: " ++ e##message |> ste} block </>
        | Data(_) => "Form submitted successfully." |> ste |> E.React.inH2
-       | NotCalled =>
-         mainBlock(~state, ~isCreator, ~send, ~onSubmit, ~measurable, ~bots)
+       | NotCalled => block
        }}
     </Style.BorderedBox>;
   },

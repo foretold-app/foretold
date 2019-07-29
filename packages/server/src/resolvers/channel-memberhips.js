@@ -6,11 +6,13 @@ const data = require('../data');
  * @param {{input: {channelId: Models.ObjectID, agentId: Models.ObjectID, role: string}}} args
  * @returns {Promise<Models.ChannelMemberships>}
  */
-async function create(root, args) {
+async function create(root, args, context) {
   const input = args.input;
+  const inviterAgentId = _.get(context, 'agent.id');
   return data.channelMemberships.createOne(
     input.channelId,
     input.agentId,
+    inviterAgentId,
     input.role,
   );
 }

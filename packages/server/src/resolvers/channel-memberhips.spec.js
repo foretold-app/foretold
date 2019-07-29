@@ -12,16 +12,18 @@ describe('ChannelMemberships Resolvers', () => {
         role: 'ADMIN'
       },
     };
+    const context = { agent: 'agentId' };
     beforeEach(() => {
       jest.spyOn(data.channelMemberships, 'createOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('creates agent-channel row', () => {
-      return channelMemberships.create(root, args).then((result) => {
+      return channelMemberships.create(root, args, context).then((result) => {
         expect(data.channelMemberships.createOne).toHaveBeenCalledWith(
           'channelId1',
           'agentId2',
+          'agentId',
           args.input.role,
         );
         expect(result).toBe(true);

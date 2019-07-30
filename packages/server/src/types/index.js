@@ -10,6 +10,7 @@ const permissions = require('./permissions');
 const authentications = require('./authentications');
 const common = require('./common');
 const measurementCompetitorType = require('./enums/measurement-competitor-type');
+const invitationStatus = require('./enums/invatation-status');
 const preferences = require('./preferences');
 
 module.exports = {
@@ -26,4 +27,5 @@ module.exports = {
   common,
   measurementCompetitorType,
   preferences,
+  invitationStatus,
 };

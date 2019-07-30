@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
     },
+    inviterAgentId: {
+      type: DataTypes.UUID(),
+      allowNull: true,
+    },
     role: {
       type: DataTypes.STRING(8),
       allowNull: false,
@@ -44,6 +48,11 @@ module.exports = (sequelize, DataTypes) => {
       through: ChannelMemberships,
       foreignKey: 'channelId',
       as: 'channelId',
+    });
+
+    models.ChannelMemberships.belongsTo(models.Agent, {
+      foreignKey: 'inviterAgentId',
+      as: 'inviterAgent',
     });
   };
 

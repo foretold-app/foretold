@@ -20,14 +20,15 @@ class ChannelMembershipsData extends DataBase {
    * @todo: fix interface (data, options)
    * @param {Models.ObjectID} channelId
    * @param {Models.ObjectID} agentId
+   * @param {Models.ObjectID} inviterAgentId
    * @param {string} role
    * @returns {Promise<Models.ChannelMemberships>}
    */
-  async createOne(channelId, agentId, role) {
+  async createOne(channelId, agentId, inviterAgentId, role) {
     await this.validate({ channelId, agentId });
     const channelMembership =
       await this.models.ChannelMemberships.findOne({ where: { channelId, agentId } }) ||
-      await this.models.ChannelMemberships.create({ channelId, agentId, role });
+      await this.models.ChannelMemberships.create({ channelId, agentId, inviterAgentId, role });
     return channelMembership;
   }
 

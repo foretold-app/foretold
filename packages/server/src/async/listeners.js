@@ -6,6 +6,10 @@ const producers = require('./producers');
 const consumers = require('./consumers');
 const { Mailer } = require('./mailer');
 
+/**
+ * @todo: To avoid code duplicates.
+ */
+
 async function toJudgementPendingTransition() {
   const name = 'Job::toJudgementPendingTransition';
   console.log(name);
@@ -51,6 +55,21 @@ async function measurableStateIsResolved(measurableInstance) {
   return true;
 }
 
+async function memberAddedToCommunity(channelMembershipInstance) {
+  const name = 'Job::memberAddedToCommunity';
+  console.log(name);
+
+  try {
+    const producer = new producers.MemberAddedToCommunity(channelMembershipInstance);
+    const result = await producer.main();
+    console.log(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
 async function emailConsumer() {
   const name = '\x1b[35mJob::emailConsumer\x1b[0m';
   console.log(name);
@@ -87,6 +106,7 @@ function runListeners() {
     emitter.on(events.MAIL, mailer);
     emitter.on(events.MEASURABLE_STATE_IS_CHANGED, measurableStateIsChanged);
     emitter.on(events.MEASURABLE_STATE_IS_RESOLVED, measurableStateIsResolved);
+    emitter.on(events.MEMBER_ADDED_TO_COMMUNITY, memberAddedToCommunity);
   } catch (e) {
     console.error('Listener error', e);
   }

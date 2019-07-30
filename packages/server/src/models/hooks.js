@@ -20,6 +20,12 @@ function addHooks(db) {
       emitter.emit(events.MEASURABLE_STATE_IS_RESOLVED, instance);
     }
   });
+
+  db.sequelize.addHook('afterCreate', (instance) => {
+    if (instance instanceof db.ChannelMemberships) {
+      emitter.emit(events.MEMBER_ADDED_TO_COMMUNITY, instance);
+    }
+  });
 }
 
 module.exports = {

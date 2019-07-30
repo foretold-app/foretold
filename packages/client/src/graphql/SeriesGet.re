@@ -40,12 +40,13 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let component = (~id, innerFn) => {
   let query = Query.make(~id, ());
-  QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(e => e##series |> E.O.fmap(toSeries))
-    |> E.R.fmap(innerFn)
-    |> E.R.id
-  )
-  |> E.React.el;
+  <QueryComponent variables=query##variables>
+    ...{({result}) =>
+      result
+      |> ApolloUtils.apolloResponseToResult
+      |> E.R.fmap(e => e##series |> E.O.fmap(toSeries))
+      |> E.R.fmap(innerFn)
+      |> E.R.id
+    }
+  </QueryComponent>;
 };

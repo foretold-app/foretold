@@ -1,7 +1,6 @@
 const events = require('../async/events');
 const emitter = require('../async/emitter');
 
-const { MEASURABLE_STATE } = require('./enums/measurable-state');
 const { AGENT_TYPE } = require('./enums/agent-type');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-type');
 
@@ -13,19 +12,26 @@ function addHooks(db) {
     ) {
       emitter.emit(events.MEASURABLE_STATE_IS_CHANGED, instance);
     }
+  });
 
+  db.sequelize.addHook('afterUpdate', (instance) => {
     if (
       instance instanceof db.Measurable &&
-      instance.changed('state') &&
-      instance.get('state') === MEASURABLE_STATE.JUDGED
+      instance.changed('state')
     ) {
-      emitter.emit(events.MEASURABLE_STATE_IS_RESOLVED, instance);
+      emitter.emit(events.MEASURABLE_STATE_IS_CHANGED, instance);
     }
   });
 
   db.sequelize.addHook('afterCreate', (instance) => {
     if (instance instanceof db.ChannelMemberships) {
       emitter.emit(events.MEMBER_ADDED_TO_COMMUNITY, instance);
+    }
+  });
+
+  db.sequelize.addHook('afterCreate', (instance) => {
+    if (instance instanceof db.Invitation) {
+      emitter.emit(events.MEMBER_INVITED_TO_COMMUNITY, instance);
     }
   });
 

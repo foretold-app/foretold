@@ -38,6 +38,8 @@ class InvitationsData extends DataBase {
       assert(_.isString(input.inviterAgentId), 'Inviter Agent Id should be an string');
 
       const user = await this.users.getOne({ email: input.email });
+      assert(!!_.get(user, 'isEmailVerified'), 'Email is not verified.');
+
       if (user) {
         await this.memberships.createOne(
           input.channelId,

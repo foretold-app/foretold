@@ -59,6 +59,14 @@ const Preference = {
   findAll: jest.fn(() => Promise.resolve(true)),
 };
 
+const Invitation = {
+  findOne: jest.fn(() => Promise.resolve(true)),
+  create: jest.fn(() => Promise.resolve(true)),
+  findByPk: jest.fn(() => Promise.resolve(true)),
+  findOrCreate: jest.fn(() => Promise.resolve(true)),
+  findAll: jest.fn(() => Promise.resolve(true)),
+};
+
 const sequelize = {
 };
 
@@ -71,5 +79,6 @@ module.exports = {
   Measurement,
   Series,
   Preference,
+  Invitation,
   sequelize,
 };

@@ -1,7 +1,7 @@
 const models = require('../models');
 const { ChannelMembershipsData } = require('./channel-memberships-data');
 
-describe('data layer of agent-channels', () => {
+describe('Data Layer - Channel Memberships Data', () => {
 
   it('class should be a constructor', () => {
     expect(ChannelMembershipsData).toBeInstanceOf(Function);
@@ -162,7 +162,7 @@ describe('data layer of agent-channels', () => {
       jest.spyOn(instance.ChannelMembershipModel, 'updateOne').mockReturnValue(
         Promise.resolve(true),
       );
-      jest.spyOn(instance, 'validate').mockReturnValue(
+      jest.spyOn(instance, '_validate').mockReturnValue(
         Promise.resolve(true),
       );
     });

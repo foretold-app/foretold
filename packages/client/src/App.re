@@ -1,6 +1,7 @@
 type state = {
   route: Routing.Route.t,
   authToken: option(string),
+  routingCount: int,
 };
 
 type action =
@@ -30,12 +31,17 @@ let make = _children => {
   ...component,
   reducer: (action, state) =>
     switch (action) {
-    | ChangeRoute(route) => ReasonReact.Update({...state, route})
+    | ChangeRoute(route) =>
+      ReasonReact.Update({
+        ...state,
+        route,
+        routingCount: state.routingCount + 1,
+      })
     | ChangeAuthToken(authToken) =>
       ReasonReact.Update({...state, authToken: Some(authToken)})
     },
 
-  initialState: () => {route: Home, authToken: None},
+  initialState: () => {route: Home, authToken: None, routingCount: 0},
 
   didMount: self => {
     let initUrl = ReasonReact.Router.dangerouslyGetInitialUrl();
@@ -83,13 +89,16 @@ let make = _children => {
          let loggedInUser = meToUser(Some(me));
 
          let appContext: Providers.appContext = {
+           route: state.route,
            authToken: state.authToken,
            me: Some(me),
            loggedInUser,
+           routingCount: state.routingCount,
          };
 
          <Providers.AppContext.Provider value=appContext>
            <Navigator route={self.state.route} loggedInUser />
+           <Redirect />
          </Providers.AppContext.Provider>;
        })}
     </ReasonApollo.Provider>;

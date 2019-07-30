@@ -15,7 +15,11 @@ let make = _children => {
                switch (agent.name) {
                | Some("") =>
                  Routing.Url.push(Profile);
-                 Antd.Message.info(~content=Lang.nameIsEmpty |> Utils.ste, ())
+                 Antd.Message.info(
+                   ~content=Lang.nameIsEmpty |> Utils.ste,
+                   ~duration=30.,
+                   (),
+                 )
                  |> ignore;
                  ();
                | _ => ()

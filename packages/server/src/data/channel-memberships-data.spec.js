@@ -67,9 +67,9 @@ describe('data layer of agent-channels', () => {
     });
   });
 
-  describe('validate() if all input is present', () => {
+  describe('_validate() if all input is present', () => {
     it('finds channel and agent', () => {
-      return instance.validate(input).then((result) => {
+      return instance._validate(input).then((result) => {
         expect(models.Channel.findByPk).toHaveBeenCalledWith(channelId);
         expect(models.Agent.findByPk).toHaveBeenCalledWith(agentId);
         expect(result).toBe(true);
@@ -77,20 +77,20 @@ describe('data layer of agent-channels', () => {
     });
   });
 
-  describe('validate() if there is channel', () => {
+  describe('_validate() if there is channel', () => {
     beforeEach(() => {
       jest.spyOn(models.Channel, 'findByPk').mockReturnValue(
         Promise.resolve(false),
       );
     });
     it('throws an error ', () => {
-      return instance.validate(input).catch((err) => {
+      return instance._validate(input).catch((err) => {
         expect(err).toBeInstanceOf(Error)
       });
     });
   });
 
-  describe('validate() if there are channel and agent', () => {
+  describe('_validate() if there are channel and agent', () => {
     beforeEach(() => {
       jest.spyOn(models.Channel, 'findByPk').mockReturnValue(
         Promise.resolve(false),
@@ -100,7 +100,7 @@ describe('data layer of agent-channels', () => {
       );
     });
     it('does not find agent', () => {
-      return instance.validate({ agentId }).catch((err) => {
+      return instance._validate({ agentId }).catch((err) => {
         expect(models.Channel.findByPk).toHaveBeenCalledTimes(1);
         expect(models.Agent.findByPk).toHaveBeenCalledTimes(0);
         expect(err).toBeInstanceOf(Error)

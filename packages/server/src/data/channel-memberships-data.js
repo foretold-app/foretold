@@ -3,6 +3,7 @@ const _ = require('lodash');
 const { DataBase } = require('./data-base');
 
 const { ChannelMembershipModel } = require('../models-abstract');
+const { CHANNEL_MEMBERSHIP_ROLES } = require('../models/enums/channel-membership-roles');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -20,16 +21,28 @@ class ChannelMembershipsData extends DataBase {
    * @todo: fix interface (data, options)
    * @param {Models.ObjectID} channelId
    * @param {Models.ObjectID} agentId
-   * @param {Models.ObjectID} inviterAgentId
-   * @param {string} role
+   * @param {Models.ObjectID} [inviterAgentId]
+   * @param {string} [role]
    * @returns {Promise<Models.ChannelMemberships>}
    */
-  async createOne(channelId, agentId, inviterAgentId, role) {
-    await this.validate({ channelId, agentId });
-    const channelMembership =
-      await this.models.ChannelMemberships.findOne({ where: { channelId, agentId } }) ||
-      await this.models.ChannelMemberships.create({ channelId, agentId, inviterAgentId, role });
-    return channelMembership;
+  async createOne(
+    channelId,
+    agentId,
+    inviterAgentId = null,
+    role = CHANNEL_MEMBERSHIP_ROLES.VIEWER,
+  ) {
+    await this._validate({ channelId, agentId });
+    return await this.models.ChannelMemberships.findOne({
+        where: {
+          channelId,
+          agentId
+        }
+      }) || await this.models.ChannelMemberships.create({
+        channelId,
+        agentId,
+        inviterAgentId,
+        role
+      });
   }
 
   /**
@@ -40,7 +53,7 @@ class ChannelMembershipsData extends DataBase {
    * @returns {Promise<Models.ChannelMemberships>}
    */
   async updateOne(channelId, agentId, role) {
-    await this.validate({ channelId, agentId });
+    await this._validate({ channelId, agentId });
     return this.ChannelMembershipModel.updateOne(
       channelId,
       agentId,
@@ -55,7 +68,7 @@ class ChannelMembershipsData extends DataBase {
    * @returns {Promise<Models.ChannelMemberships | null>}
    */
   async deleteOne(channelId, agentId) {
-    await this.validate({ channelId, agentId });
+    await this._validate({ channelId, agentId });
     return this.ChannelMembershipModel.deleteOne(
       channelId,
       agentId,
@@ -68,12 +81,12 @@ class ChannelMembershipsData extends DataBase {
    * @param {Models.ObjectID} agentId
    * @return {Promise<*>}
    */
-  async validate({ channelId, agentId }) {
+  async _validate({ channelId, agentId }) {
     if (!await this.models.Channel.findByPk(channelId)) {
-      return Promise.reject(new Error(`Channel "${ channelId }" is not found.`));
+      return Promise.reject(new Error(`Channel "${channelId}" is not found.`));
     }
     if (!await this.models.Agent.findByPk(agentId)) {
-      return Promise.reject(new Error(`Agent "${ agentId }" is not found.`));
+      return Promise.reject(new Error(`Agent "${agentId}" is not found.`));
     }
     return true;
   }
@@ -122,11 +135,9 @@ class ChannelMembershipsData extends DataBase {
    * @return {Promise<Models.ChannelMemberships>}
    */
   async join(options) {
-    const role = ChannelMembershipModel.ROLES.VIEWER;
     return this.createOne(
       options.channelId,
       options.agentId,
-      role,
     );
   }
 

@@ -51,7 +51,6 @@ function addHooks(db) {
     await instance.watchExpectedResolutionDate(instance);
   });
 
-
   db.Measurement.addHook('beforeValidate', async (instance) => {
     if (instance.dataValues.relevantAt == null) {
       instance.relevantAt = Date.now();

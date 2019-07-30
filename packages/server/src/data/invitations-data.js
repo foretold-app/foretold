@@ -4,6 +4,7 @@ const assert = require('assert');
 const { DataBase } = require('./data-base');
 const { UsersData } = require('./users-data');
 const { AgentsData } = require('./agents-data');
+const { ChannelMembershipsData } = require('./channel-memberships-data');
 
 const { InvitationModel } = require('../models-abstract');
 
@@ -19,6 +20,7 @@ class InvitationsData extends DataBase {
     this.model = this.InvitationModel;
     this.users = new UsersData();
     this.agents = new AgentsData();
+    this.memberships = new ChannelMembershipsData();
   }
 
   /**
@@ -33,6 +35,13 @@ class InvitationsData extends DataBase {
     assert(_.isString(datas.email), 'Email should be an string');
     assert(_.isString(datas.channelId), 'Channel Id should be an string');
     assert(_.isString(datas.inviterAgentId), 'Inviter Agent Id should be an string');
+
+    const user = await this.users.getOne({ email: datas.email });
+    if (user) {
+      await this.memberships.createOne(datas.channelId, user.agentId, datas.inviterAgentId);
+      return true;
+    }
+
   }
 
 }

@@ -46,6 +46,7 @@ let make = _children => {
   didMount: self => {
     let initUrl = ReasonReact.Router.dangerouslyGetInitialUrl();
 
+    // @todo: use one step of state updating
     urlToRoute(initUrl, self.send);
     tokenToState(initUrl, self.send);
 

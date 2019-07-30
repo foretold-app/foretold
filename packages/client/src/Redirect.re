@@ -1,4 +1,4 @@
-let component = ReasonReact.statelessComponent("RedirectForAgentName");
+let component = ReasonReact.statelessComponent("Redirect");
 
 let make = _children => {
   ...component,
@@ -13,7 +13,14 @@ let make = _children => {
           loggedInUser.agent
           |> E.O.fmap((agent: Types.agent) =>
                switch (agent.name) {
-               | Some("") => Routing.Url.push(Profile)
+               | Some("") =>
+                 Routing.Url.push(Profile);
+                 Antd.Message.info(
+                   ~content="This is a normal message" |> Utils.ste,
+                   (),
+                 )
+                 |> ignore;
+                 ();
                | _ => ()
                }
              )

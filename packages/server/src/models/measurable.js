@@ -130,10 +130,6 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Measurable.addHook('beforeUpdate', async (instance) => {
-    await watchExpectedResolutionDate(instance);
-  });
-
   async function getMeasurementCount() {
     const items = await this.getMeasurements();
     return items.length;
@@ -166,17 +162,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  async function watchExpectedResolutionDate(instance) {
-    const isChanged = instance.changed('expectedResolutionDate');
-    if (!isChanged) return;
-    const current = instance.getDataValue('expectedResolutionDate');
-    if (!current) return;
-    const now = new Date();
-    const isResolutionDateInFuture = current >= now;
-    if (isResolutionDateInFuture) {
-      instance.set('state', MEASURABLE_STATE.OPEN);
-    }
-  }
+  Measurable.prototype.watchExpectedResolutionDate =
+    async function watchExpectedResolutionDate() {
+      const isChanged = this.changed('expectedResolutionDate');
+      if (!isChanged) return;
+      const current = this.getDataValue('expectedResolutionDate');
+      if (!current) return;
+      const now = new Date();
+      const isResolutionDateInFuture = current >= now;
+      if (isResolutionDateInFuture) {
+        this.set('state', MEASURABLE_STATE.OPEN);
+      }
+    };
 
   Measurable.needsResolutionResponse = async function needsResolutionResponse() {
     return Measurable.findAll({

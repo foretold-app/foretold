@@ -53,10 +53,6 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Series.addHook('afterCreate', async (series) => {
-    await series.createMeasurables();
-  });
-
   // TODO: These queries are likely very slow,
   //  my guess is that this could be sped up a location.
   async function getMeasurableCount() {

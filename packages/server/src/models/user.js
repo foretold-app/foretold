@@ -1,5 +1,3 @@
-const { AGENT_TYPE } = require('./enums/agent-type');
-
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     id: {
@@ -51,13 +49,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
-  });
-
-  User.addHook('beforeCreate', async (event) => {
-    const agent = await sequelize.models.Agent.create({
-      type: AGENT_TYPE.USER,
-    });
-    event.agentId = agent.dataValues.id
   });
 
   User.associate = function associate(models) {

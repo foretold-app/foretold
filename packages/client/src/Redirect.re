@@ -1,5 +1,6 @@
 let component = ReasonReact.statelessComponent("Redirect");
 
+// @todo: fix this duplicated ligic(#rederectings)
 let make = (~appContext: Providers.appContext, _children) => {
   ...component,
   didUpdate: self => {

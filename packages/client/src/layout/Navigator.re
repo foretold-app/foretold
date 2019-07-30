@@ -1,6 +1,7 @@
 open Routing;
 open Pages;
 
+// @todo: fix this duplicated ligic(#rederectings)
 let defaultPage = (loggedInUser: Types.user) =>
   loggedInUser.agent
   |> E.O.bind(_, Primary.Agent.firstChannel)

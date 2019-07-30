@@ -1,5 +1,7 @@
 let component = ReasonReact.statelessComponent("Redirecting");
 
+// @todo: fix this duplicated ligic(#rederectings)
+// @todo: use only didMount (or samilar)
 let make = (~loggedInUser: option(Types.user), _children) => {
   ...component,
   render: _ =>

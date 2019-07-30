@@ -1,11 +1,14 @@
 type state = {
   route: Routing.Route.t,
   authToken: option(string),
+  me: option(Me.t),
+  loggedInUser: option(Types.user),
 };
 
 type action =
   | ChangeRoute(Routing.Route.t)
-  | ChangeAuthToken(string);
+  | ChangeAuthToken(string)
+  | ChangeState(state);
 
 let mapUrlToAction = (url: ReasonReact.Router.url) =>
   ChangeRoute(url |> Routing.Route.fromUrl);
@@ -23,7 +26,7 @@ let tokenToState = (url: ReasonReact.Router.url, send) => {
   };
 };
 
-let component = "App" |> ReasonReact.reducerComponent;
+let component = ReasonReact.reducerComponent("App");
 let appApolloClient = AppApolloClient.instance();
 
 let make = _children => {
@@ -33,15 +36,20 @@ let make = _children => {
     | ChangeRoute(route) => ReasonReact.Update({...state, route})
     | ChangeAuthToken(authToken) =>
       ReasonReact.Update({...state, authToken: Some(authToken)})
+    | ChangeState(state) => ReasonReact.Update(state)
     },
 
-  initialState: () => {route: Home, authToken: None},
+  initialState: () => {
+    route: Home,
+    authToken: None,
+    me: None,
+    loggedInUser: None,
+  },
 
   didMount: self => {
     let initUrl = ReasonReact.Router.dangerouslyGetInitialUrl();
     urlToRoute(initUrl, self.send);
     tokenToState(initUrl, self.send);
-
     let watcherID =
       ReasonReact.Router.watchUrl(url => {
         urlToRoute(url, self.send);
@@ -53,12 +61,45 @@ let make = _children => {
 
   render: self => {
     let state: state = self.state;
-    let appContext: Providers.appContext = {authToken: state.authToken};
+
+    let appContext: Providers.appContext = {
+      authToken: state.authToken,
+      me: state.me,
+      loggedInUser: state.loggedInUser,
+    };
+
+    let meToUser = (me: option(Me.t)) =>
+      switch (me) {
+      | Some(WithTokensAndUserData({userData})) => Some(userData)
+      | _ => None
+      };
+
+    let getUser = innerComponentFn => {
+      let serverJwt = ServerJwt.make_from_storage();
+      let auth0tokens = Auth0Tokens.make_from_storage();
+      let authToken = state.authToken;
+
+      switch (serverJwt, authToken, auth0tokens) {
+      | (Some(_), _, _) => UserGet.inner(innerComponentFn)
+      | (_, None, None) => innerComponentFn(Me.WithoutTokens)
+      | (_, _, _) =>
+        Authentication.component(
+          auth0tokens,
+          authToken,
+          UserGet.inner(innerComponentFn),
+        )
+      };
+    };
 
     <ReasonApollo.Provider client=appApolloClient>
-      <Providers.AppContext.Provider value=appContext>
-        <Navigator route={self.state.route} />
-      </Providers.AppContext.Provider>
+      {getUser((me: Me.t) => {
+         let loggedInUser = meToUser(Some(me));
+
+         <Providers.AppContext.Provider
+           value={...appContext, me: Some(me), loggedInUser}>
+           <Navigator route={self.state.route} loggedInUser />
+         </Providers.AppContext.Provider>;
+       })}
     </ReasonApollo.Provider>;
   },
 };

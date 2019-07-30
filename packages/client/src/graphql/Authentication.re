@@ -28,7 +28,7 @@ let component =
     (
       auth0Tokens: option(Auth0Tokens.t),
       authToken: option(string),
-      _innerComponent,
+      innerComponent,
     ) => {
   let auth0jwt =
     auth0Tokens
@@ -44,20 +44,21 @@ let component =
 
   let query = Query.make(~auth0jwt, ~auth0accessToken, ~authToken, ());
 
-  QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> HttpResponse.fromApollo
-    |> HttpResponse.fmap(e => e##authentication##jwt)
-    |> (
-      e =>
-        switch (e) {
-        | Success(c) =>
-          ServerJwt.set(c);
-          reload();
-          _innerComponent;
-        | _ => redirectingMessage
-        }
-    )
-  )
-  |> E.React.el;
+  <QueryComponent variables=query##variables>
+    ...{({result}) =>
+      result
+      |> HttpResponse.fromApollo
+      |> HttpResponse.fmap(e => e##authentication##jwt)
+      |> (
+        e =>
+          switch (e) {
+          | Success(c) =>
+            ServerJwt.set(c);
+            reload();
+            innerComponent;
+          | _ => redirectingMessage
+          }
+      )
+    }
+  </QueryComponent>;
 };

@@ -1,14 +1,11 @@
 type state = {
   route: Routing.Route.t,
   authToken: option(string),
-  me: option(Me.t),
-  loggedInUser: option(Types.user),
 };
 
 type action =
   | ChangeRoute(Routing.Route.t)
-  | ChangeAuthToken(string)
-  | ChangeState(state);
+  | ChangeAuthToken(string);
 
 let mapUrlToAction = (url: ReasonReact.Router.url) =>
   ChangeRoute(url |> Routing.Route.fromUrl);
@@ -36,20 +33,16 @@ let make = _children => {
     | ChangeRoute(route) => ReasonReact.Update({...state, route})
     | ChangeAuthToken(authToken) =>
       ReasonReact.Update({...state, authToken: Some(authToken)})
-    | ChangeState(state) => ReasonReact.Update(state)
     },
 
-  initialState: () => {
-    route: Home,
-    authToken: None,
-    me: None,
-    loggedInUser: None,
-  },
+  initialState: () => {route: Home, authToken: None},
 
   didMount: self => {
     let initUrl = ReasonReact.Router.dangerouslyGetInitialUrl();
+
     urlToRoute(initUrl, self.send);
     tokenToState(initUrl, self.send);
+
     let watcherID =
       ReasonReact.Router.watchUrl(url => {
         urlToRoute(url, self.send);
@@ -61,12 +54,6 @@ let make = _children => {
 
   render: self => {
     let state: state = self.state;
-
-    let appContext: Providers.appContext = {
-      authToken: state.authToken,
-      me: state.me,
-      loggedInUser: state.loggedInUser,
-    };
 
     let meToUser = (me: option(Me.t)) =>
       switch (me) {
@@ -95,8 +82,13 @@ let make = _children => {
       {getUser((me: Me.t) => {
          let loggedInUser = meToUser(Some(me));
 
-         <Providers.AppContext.Provider
-           value={...appContext, me: Some(me), loggedInUser}>
+         let appContext: Providers.appContext = {
+           authToken: state.authToken,
+           me: Some(me),
+           loggedInUser,
+         };
+
+         <Providers.AppContext.Provider value=appContext>
            <Navigator route={self.state.route} loggedInUser />
          </Providers.AppContext.Provider>;
        })}

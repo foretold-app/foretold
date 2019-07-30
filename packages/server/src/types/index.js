@@ -10,7 +10,7 @@ const permissions = require('./permissions');
 const authentications = require('./authentications');
 const common = require('./common');
 const measurementCompetitorType = require('./enums/measurement-competitor-type');
-const invitationStatus = require('./enums/invatation-status');
+const invitationStatus = require('./enums/invitation-status');
 const preferences = require('./preferences');
 const invitations = require('./invitations');
 

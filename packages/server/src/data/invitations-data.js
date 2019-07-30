@@ -25,23 +25,44 @@ class InvitationsData extends DataBase {
 
   /**
    * @public
-   * @param {object} datas
-   * @param {string} datas.email
-   * @param {string} datas.channelId
-   * @param {string} datas.inviterAgentId
-   * @return {Promise<*>}
+   * @param {object} input
+   * @param {string} input.email
+   * @param {string} input.channelId
+   * @param {string} input.inviterAgentId
+   * @return {Promise<boolean>}
    */
-  async invite(datas) {
-    assert(_.isString(datas.email), 'Email should be an string');
-    assert(_.isString(datas.channelId), 'Channel Id should be an string');
-    assert(_.isString(datas.inviterAgentId), 'Inviter Agent Id should be an string');
+  async invite(input) {
+    try {
+      assert(_.isString(input.email), 'Email should be an string');
+      assert(_.isString(input.channelId), 'Channel Id should be an string');
+      assert(_.isString(input.inviterAgentId), 'Inviter Agent Id should be an string');
 
-    const user = await this.users.getOne({ email: datas.email });
-    if (user) {
-      await this.memberships.createOne(datas.channelId, user.agentId, datas.inviterAgentId);
+      const user = await this.users.getOne({ email: input.email });
+      if (user) {
+        await this.memberships.createOne(
+          input.channelId,
+          user.agentId,
+          input.inviterAgentId
+        );
+        return true;
+      }
+
+      const createdUser = await this.users.createOne({
+        email: input.email,
+        auth0Id: "gengen",
+      });
+
+      const invitation = await this.createOne({
+        agentId: createdUser.agentId,
+        channelId: input.channelId,
+        inviterAgentId: input.inviterAgentId,
+      });
+
       return true;
+    } catch (e) {
+      console.error('Invitation Err', e.message);
+      return false;
     }
-
   }
 
 }

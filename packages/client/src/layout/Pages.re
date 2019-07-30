@@ -35,8 +35,3 @@ module MeasurableEdit' = {
 module EntityIndex' = {
   let toEl = EntityIndex.make |> LoggedInPage.noParams;
 };
-
-module Redirecting' = {
-  let toEl = loggedInUser =>
-    Redirecting.make(~loggedInUser) |> E.React.makeToEl;
-};

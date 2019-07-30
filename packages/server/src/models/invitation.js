@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    inviterAgentId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     channelId: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -36,6 +40,12 @@ module.exports = (sequelize, DataTypes) => {
   Invitation.associate = function associate(models) {
     Invitation.Agent = Invitation.belongsTo(models.Agent, {
       foreignKey: 'agentId',
+    });
+    Invitation.Inviter = Invitation.belongsTo(models.Agent, {
+      foreignKey: 'inviterAgentId',
+    });
+    Invitation.Channel = Invitation.belongsTo(models.Channel, {
+      foreignKey: 'channelId',
     });
   };
 

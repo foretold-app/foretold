@@ -97,7 +97,8 @@ class AuthenticationData {
       const decoded = this.Jwt.decodeAuth0Jwt(jwt);
       if (!decoded.sub) throw new AuthenticationData.NoUserIdError;
 
-      const user = await this.users.getUserByAuth0Id(decoded.sub);
+      const auth0Id = decoded.sub;
+      const user = await this.users.getUserByAuth0Id(auth0Id);
       const agentId = user.agentId;
 
       try {

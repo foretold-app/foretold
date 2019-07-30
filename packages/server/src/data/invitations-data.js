@@ -2,6 +2,8 @@ const _ = require('lodash');
 const assert = require('assert');
 
 const { DataBase } = require('./data-base');
+const { UsersData } = require('./users-data');
+const { AgentsData } = require('./agents-data');
 
 const { InvitationModel } = require('../models-abstract');
 
@@ -15,6 +17,8 @@ class InvitationsData extends DataBase {
     super();
     this.InvitationModel = new InvitationModel();
     this.model = this.InvitationModel;
+    this.users = new UsersData();
+    this.agents = new AgentsData();
   }
 
   /**

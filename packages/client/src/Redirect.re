@@ -15,10 +15,7 @@ let make = _children => {
                switch (agent.name) {
                | Some("") =>
                  Routing.Url.push(Profile);
-                 Antd.Message.info(
-                   ~content="This is a normal message" |> Utils.ste,
-                   (),
-                 )
+                 Antd.Message.info(~content=Lang.nameIsEmpty |> Utils.ste, ())
                  |> ignore;
                  ();
                | _ => ()

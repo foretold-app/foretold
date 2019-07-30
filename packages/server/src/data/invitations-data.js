@@ -32,7 +32,7 @@ class InvitationsData extends DataBase {
    * @param {string} input.email
    * @param {string} input.channelId
    * @param {string} input.inviterAgentId
-   * @return {Promise<boolean>}
+   * @return {Promise<Object>}
    */
   async invite(input) {
     try {
@@ -44,7 +44,6 @@ class InvitationsData extends DataBase {
 
       if (user) {
         assert(!!_.get(user, 'isEmailVerified'), 'Email is not verified.');
-
         await this.memberships.createOne(
           input.channelId,
           user.agentId,

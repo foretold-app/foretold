@@ -219,7 +219,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       invitationCreate: {
-        type: types.measurables.measurable,
+        type: graphql.GraphQLNonNull(graphql.GraphQLBoolean),
         args: {
           input: { type: graphql.GraphQLNonNull(types.invitations.invitationCreateInput) },
         },

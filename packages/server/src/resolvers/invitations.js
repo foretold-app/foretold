@@ -10,7 +10,7 @@ const data = require('../data');
  * @param {object} args.input.channelId
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<*|Array<Model>>}
+ * @returns {Promise<boolean>}
  */
 async function create(root, args, context, info) {
   const datas = {

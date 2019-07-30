@@ -218,6 +218,14 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.measurables.unarchive,
       },
 
+      invitationCreate: {
+        type: types.measurables.measurable,
+        args: {
+          input: { type: graphql.GraphQLNonNull(types.invitations.invitationCreateInput) },
+        },
+        resolve: resolvers.invitations.create,
+      },
+
       measurableUpdate: {
         type: types.measurables.measurable,
         args: {

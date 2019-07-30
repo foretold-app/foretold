@@ -12,6 +12,7 @@ const common = require('./common');
 const measurementCompetitorType = require('./enums/measurement-competitor-type');
 const invitationStatus = require('./enums/invatation-status');
 const preferences = require('./preferences');
+const invitations = require('./invitations');
 
 module.exports = {
   bots,
@@ -28,4 +29,5 @@ module.exports = {
   measurementCompetitorType,
   preferences,
   invitationStatus,
+  invitations,
 };

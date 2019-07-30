@@ -32,7 +32,7 @@ module.exports = {
             INVITATION_STATUS.AWAITING,
             INVITATION_STATUS.ACCEPTED,
           ]),
-          defaultValue: TOKEN_TYPE.ACCESS_TOKEN,
+          defaultValue: INVITATION_STATUS.ACCESS_TOKEN,
         },
         createdAt: {
           type: Sequelize.DATE,

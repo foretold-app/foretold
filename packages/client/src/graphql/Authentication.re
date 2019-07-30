@@ -49,6 +49,7 @@ let component =
         e =>
           switch (e) {
           | Success(c) =>
+            // @todo: rapir this hard logic
             ServerJwt.set(c);
             reload();
             ReasonReact.null;

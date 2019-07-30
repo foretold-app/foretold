@@ -5,23 +5,19 @@ type state = {
 };
 
 type action =
-  | ChangeRoute(Routing.Route.t)
-  | ChangeAuthToken(string);
+  | ChangeState(state);
 
-let mapUrlToAction = (url: ReasonReact.Router.url) =>
-  ChangeRoute(url |> Routing.Route.fromUrl);
+let mapUrlToAction = (state, url: ReasonReact.Router.url) => {
+  let route = url |> Routing.Route.fromUrl;
+  ChangeState({...state, route});
+};
 
-let urlToRoute = (url: ReasonReact.Router.url, send) =>
-  url |> mapUrlToAction |> send;
-
-let tokenToState = (url: ReasonReact.Router.url, send) => {
-  let token = url |> Auth.UrlToTokens.make;
-  switch (token) {
-  | Some(s) =>
-    KeyValuePairs.clearHash(url, "token") |> ReasonReact.Router.replace;
-    send(ChangeAuthToken(s));
-  | _ => ()
-  };
+let firstStateUpdate = (state, url: ReasonReact.Router.url) => {
+  let route = url |> Routing.Route.fromUrl;
+  let authToken = url |> Auth.UrlToTokens.make;
+  // @todo: remove side effect
+  //  KeyValuePairs.clearHash(url, "token") |> ReasonReact.Router.replace;
+  ChangeState({...state, authToken, route});
 };
 
 let component = ReasonReact.reducerComponent("App");
@@ -29,16 +25,10 @@ let appApolloClient = AppApolloClient.instance();
 
 let make = _children => {
   ...component,
-  reducer: (action, state) =>
+  reducer: (action, _state) =>
     switch (action) {
-    | ChangeRoute(route) =>
-      ReasonReact.Update({
-        ...state,
-        route,
-        routingCount: state.routingCount + 1,
-      })
-    | ChangeAuthToken(authToken) =>
-      ReasonReact.Update({...state, authToken: Some(authToken)})
+    | ChangeState(state) =>
+      ReasonReact.Update({...state, routingCount: _state.routingCount + 1})
     },
 
   initialState: () => {route: Home, authToken: None, routingCount: 0},
@@ -46,13 +36,11 @@ let make = _children => {
   didMount: self => {
     let initUrl = ReasonReact.Router.dangerouslyGetInitialUrl();
 
-    // @todo: use one step of state updating
-    urlToRoute(initUrl, self.send);
-    tokenToState(initUrl, self.send);
+    firstStateUpdate(self.state, initUrl) |> self.send;
 
     let watcherID =
       ReasonReact.Router.watchUrl(url => {
-        urlToRoute(url, self.send);
+        mapUrlToAction(self.state, url) |> self.send;
         ();
       });
 
@@ -99,7 +87,7 @@ let make = _children => {
 
          <Providers.AppContext.Provider value=appContext>
            <Navigator route={self.state.route} loggedInUser />
-           <Redirect />
+           <Redirect appContext />
          </Providers.AppContext.Provider>;
        })}
     </ReasonApollo.Provider>;

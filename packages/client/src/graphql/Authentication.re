@@ -25,11 +25,7 @@ let redirectingMessage =
   <h3> {"You are being redirected..." |> Utils.ste} </h3>;
 
 let component =
-    (
-      auth0Tokens: option(Auth0Tokens.t),
-      authToken: option(string),
-      innerComponent,
-    ) => {
+    (auth0Tokens: option(Auth0Tokens.t), authToken: option(string)) => {
   let auth0jwt =
     auth0Tokens
     |> E.O.fmap((r: Auth0Tokens.t) => r.id_token)
@@ -55,7 +51,7 @@ let component =
           | Success(c) =>
             ServerJwt.set(c);
             reload();
-            innerComponent;
+            ReasonReact.null;
           | _ => redirectingMessage
           }
       )

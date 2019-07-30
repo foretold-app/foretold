@@ -64,12 +64,7 @@ let make = _children => {
       switch (serverJwt, authToken, auth0tokens) {
       | (Some(_), _, _) => UserGet.inner(innerComponentFn)
       | (_, None, None) => innerComponentFn(Me.WithoutTokens)
-      | (_, _, _) =>
-        Authentication.component(
-          auth0tokens,
-          authToken,
-          UserGet.inner(innerComponentFn),
-        )
+      | (_, _, _) => Authentication.component(auth0tokens, authToken)
       };
     };
 

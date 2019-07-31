@@ -1,7 +1,6 @@
 type state = {
   route: Routing.Route.t,
   authToken: option(string),
-  routingCount: int,
 };
 
 type action =
@@ -17,7 +16,7 @@ let firstStateUpdate = (state, url: ReasonReact.Router.url) => {
   let authToken = url |> Auth.UrlToTokens.make;
   // @todo: remove side effect
   //  KeyValuePairs.clearHash(url, "token") |> ReasonReact.Router.replace;
-  ChangeState({...state, authToken, route});
+  ChangeState({authToken, route});
 };
 
 let component = ReasonReact.reducerComponent("App");
@@ -27,11 +26,10 @@ let make = _children => {
   ...component,
   reducer: (action, _state) =>
     switch (action) {
-    | ChangeState(state) =>
-      ReasonReact.Update({...state, routingCount: _state.routingCount + 1})
+    | ChangeState(state) => ReasonReact.Update(state)
     },
 
-  initialState: () => {route: Home, authToken: None, routingCount: 0},
+  initialState: () => {route: Home, authToken: None},
 
   didMount: self => {
     let initUrl = ReasonReact.Router.dangerouslyGetInitialUrl();
@@ -77,7 +75,6 @@ let make = _children => {
            authToken: state.authToken,
            me: Some(me),
            loggedInUser,
-           routingCount: state.routingCount,
          };
 
          <Providers.AppContext.Provider value=appContext>

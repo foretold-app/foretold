@@ -37,44 +37,63 @@ class InvitationsData extends DataBase {
    */
   async invite(input) {
     try {
-      assert(_.isString(input.email), 'Email should be a string');
-      assert(_.isString(input.channelId), 'Channel Id should be a string');
-      assert(_.isString(input.inviterAgentId), 'Inviter Agent Id should be a string');
+      const channelId = _.get(input, 'channelId');
+      const email = _.get(input, 'email');
+      const inviterAgentId = _.get(input, 'inviterAgentId');
 
-      const user = await this.users.getOne({ email: input.email });
+      assert(_.isString(email), 'Email should be a string');
+      assert(_.isString(channelId), 'Channel Id should be a string');
+      assert(_.isString(inviterAgentId), 'Inviter Agent Id should be a string');
+
+      const user = await this.users.getOne({ email });
 
       if (user) {
-        assert(!!_.get(user, 'isEmailVerified'), 'Email is not verified');
-
         const invitation = await this.getOne({ agentId: user.agentId });
+        const agentId = _.get(invitation, 'agentId');
+
+        assert(!!_.get(user, 'isEmailVerified'), 'Email is not verified');
         assert(!!invitation, 'User is already invited.');
 
-        await this.memberships.createOne2(
-          input.channelId,
-          user.agentId,
-          input.inviterAgentId
-        );
-
+        await this._addMembership({ channelId, agentId, inviterAgentId });
         return true;
       }
 
-      const createdUser = await this.users.createOne({
-        email: input.email,
-        auth0Id: new ForetoldAuthId(input.email).toString(),
-        isEmailVerified: false,
-      });
-
-      const invitation = await this.createOne({
-        agentId: createdUser.agentId,
-        channelId: input.channelId,
-        inviterAgentId: input.inviterAgentId,
-      });
-
+      const createdUser = await this._addUser(email);
+      await this._addInvitation(channelId, inviterAgentId, createdUser);
       return true;
     } catch (e) {
       console.error('Invitation Err', e.message);
       return false;
     }
+  }
+
+  /**
+   * @param {Models.ObjectID} channelId
+   * @param {Models.ObjectID} inviterAgentId
+   * @param {object} createdUser
+   * @return {Promise<*>}
+   * @protected
+   */
+  async _addInvitation(channelId, inviterAgentId, createdUser) {
+    return this.createOne({
+      channelId,
+      inviterAgentId,
+      agentId: createdUser.agentId
+    });
+  }
+
+  /**
+   * @protected
+   * @param {string} email
+   * @return {Promise<*>}
+   */
+  async _addUser(email) {
+    const auth0Id = new ForetoldAuthId(email).toString();
+    return this.users.createOne({
+      email,
+      auth0Id,
+      isEmailVerified: false,
+    });
   }
 
   /**
@@ -126,16 +145,21 @@ class InvitationsData extends DataBase {
   }
 
   /**
-   * @param {Models.Invitation} invitation
+   * @param {Models.Invitation | {
+   *   channelId: Models.ObjectID,
+   *   agentId: Models.ObjectID,
+   *   inviterAgentId: Models.ObjectID,
+   * }} options
    * @return {Promise<*>}
    * @protected
    */
-  async _addMembership(invitation) {
-    return this.memberships.createOne2(
-      invitation.channelId,
-      invitation.agentId,
-      invitation.inviterAgentId
-    );
+  async _addMembership(options) {
+    const data = {
+      channelId: options.channelId,
+      agentId: options.agentId,
+      inviterAgentId: options.inviterAgentId
+    };
+    return this.memberships.createOne(data);
   }
 }
 

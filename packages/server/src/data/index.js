@@ -12,6 +12,7 @@ const { PreferencesData } = require('./preferences-data');
 const { NotificationsData } = require('./notifications-data');
 const { TemplatesData } = require('./templates-data');
 const { AgentNotificationsData } = require('./agent-notifications-data');
+const { InvitationsData } = require('./invitations-data');
 
 module.exports = {
   measurables: new MeasurablesData(),
@@ -28,4 +29,5 @@ module.exports = {
   notifications: new NotificationsData(),
   templates: new TemplatesData(),
   agentNotifications: new AgentNotificationsData(),
+  invitations: new InvitationsData(),
 };

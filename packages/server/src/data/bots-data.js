@@ -30,6 +30,7 @@ class BotsData extends DataBase {
   }
 
   /**
+   * @public
    * @param {object} params
    * @return {Promise<string>}
    */

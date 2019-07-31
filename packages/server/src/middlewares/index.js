@@ -134,6 +134,13 @@ const middlewares = {
       return resolve(root, args, context, info);
     },
 
+    invitationCreate: async (resolve, root, args, context, info) => {
+      await setContextChannel(root, args, context, info);
+      await setContextChannelMemberships(root, args, context, info);
+      await setContextChannelMembershipsAdmins(root, args, context, info);
+      return resolve(root, args, context, info);
+    },
+
     measurableArchive: async (resolve, root, args, context, info) => {
       await setContextMeasurable(root, args, context, info);
       await setContextChannel(root, args, context, info);

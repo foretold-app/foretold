@@ -1,6 +1,7 @@
 export namespace Models {
 
   export type ObjectID = string;
+  export type ChannelMembershipRole = "ADMIN" | "VIEWER";
 
   export interface Model {
     id: ObjectID;
@@ -9,24 +10,20 @@ export namespace Models {
   }
 
   export interface Channel extends Model {
-    id: ObjectID;
     isPublic: boolean;
   }
 
   export interface Bot extends Model {
-    id: ObjectID;
     name: string;
 
     getAgent(): Models.Agent;
   }
 
   export interface Preference extends Model {
-    id: ObjectID;
     emails: boolean;
   }
 
   export interface User extends Model {
-    id: ObjectID;
     name: string;
     auth0Id: string;
     agentId: ObjectID;
@@ -35,7 +32,6 @@ export namespace Models {
   }
 
   export interface Measurable extends Model {
-    id: ObjectID;
     state: string;
 
     getCreationNotification(creator: Models.Creator): any;
@@ -44,13 +40,10 @@ export namespace Models {
   }
 
   export interface Measurement extends Model {
-    id: ObjectID;
-
     getCreationNotification(creator: Models.Creator): any;
   }
 
   export interface Agent extends Model {
-    id: ObjectID;
     isAdmin: boolean;
     type: 'BOT' | 'USER';
     name: string;
@@ -62,10 +55,7 @@ export namespace Models {
   }
 
   export interface Series extends Model {
-    id: ObjectID;
   }
-
-  export type ChannelMembershipRole = "ADMIN" | "VIEWER";
 
   export interface ChannelMemberships {
     agentId: ObjectID;
@@ -73,12 +63,28 @@ export namespace Models {
     role: ChannelMembershipRole;
   }
 
-  export type Creator = Models.User | Models.Bot;
-
-  export interface Token {
+  export interface Token extends Model {
     token: string;
     isActive: boolean;
   }
+
+  export interface AgentNotification extends Model {
+  }
+
+  export interface Template extends Model {
+  }
+
+  export interface Notification extends Model {
+  }
+
+  export interface Invitation extends Model {
+    agentId: ObjectID;
+    channelId: ObjectID;
+    inviterAgentId: ObjectID;
+    status: 'AWAITING' | 'ACCEPTED';
+  }
+
+  export type Creator = Models.User | Models.Bot;
 }
 
 export namespace Schema {

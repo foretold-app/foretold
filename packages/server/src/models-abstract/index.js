@@ -11,6 +11,7 @@ const { PreferenceModel } = require('./preference-model');
 const { NotificationModel } = require('./notification-model');
 const { TemplateModel } = require('./template-model');
 const { AgentNotificationModel } = require('./agent-notification-model');
+const { InvitationModel } = require('./invitation-model');
 const { Model } = require('./model');
 
 module.exports = {
@@ -27,5 +28,6 @@ module.exports = {
   NotificationModel,
   TemplateModel,
   AgentNotificationModel,
+  InvitationModel,
   Model,
 };

@@ -65,25 +65,6 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Measurement.addHook('beforeValidate', async (instance) => {
-    if (instance.dataValues.relevantAt == null) {
-      instance.relevantAt = Date.now();
-    }
-  });
-
-  Measurement.addHook('afterCreate', async (measurement) => {
-    const competitorType = measurement.dataValues.competitorType;
-    const isJudgable = [
-      MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
-      MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED,
-    ].includes(competitorType);
-
-    if (isJudgable) {
-      const measurable = await measurement.getMeasurable();
-      await measurable.judged();
-    }
-  });
-
   /**
    * @param {object} value
    */

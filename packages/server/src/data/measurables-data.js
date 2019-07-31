@@ -19,6 +19,7 @@ class MeasurablesData extends DataBase {
   /**
    * @todo: fix interface (data, options)
    * @public
+   * @deprecated: use createOne
    * @param {object} [data]
    * @param {Models.Creator} [creator]
    * @return {Promise<Models.Measurable>}
@@ -54,6 +55,7 @@ class MeasurablesData extends DataBase {
   /**
    * @todo: fix interface (params, data, options)
    * @public
+   * @deprecated: use updateOne
    * @param {Models.ObjectID} id
    * @param {object} data
    * @param {Models.Creator} creator
@@ -88,6 +90,7 @@ class MeasurablesData extends DataBase {
    * @todo: move aspects down into Model Layer
    * @todo: fix interface (params*, query, options*)
    * @public
+   * @deprecated: use getOne
    * @param {Models.ObjectID} id
    * @param {object} options
    * @param {Models.ObjectID} options.agentId

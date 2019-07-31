@@ -15,6 +15,8 @@ class SeriesData extends DataBase {
   }
 
   /**
+   * @public
+   * @deprecated: use createdOne
    * @param {object} data
    * @return {Promise<*>}
    */
@@ -25,6 +27,8 @@ class SeriesData extends DataBase {
   /**
    * @todo: move down
    * @todo: fix interface (filter, pagination, options*)
+   * @public
+   * @deprecated: use getAll
    * @param {object} [filter]
    * @param {Models.ObjectID} [filter.agentId]
    * @param {object} [_pagination]
@@ -54,6 +58,8 @@ class SeriesData extends DataBase {
   /**
    * @todo: move down
    * @todo: fix interface (params, query, options)
+   * @public
+   * @deprecated: use getOne
    * @param {Models.ObjectID} id
    * @param {object} [options]
    * @param {Models.ObjectID} [options.agentId]

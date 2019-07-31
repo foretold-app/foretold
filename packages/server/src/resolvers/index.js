@@ -10,6 +10,7 @@ const permissions = require('./permissions');
 const authentications = require('./authentications');
 const bots = require('./bots');
 const preferences = require('./preferences');
+const invitations = require('./invitations');
 
 module.exports = {
   channels,
@@ -24,4 +25,5 @@ module.exports = {
   authentications,
   bots,
   preferences,
+  invitations,
 };

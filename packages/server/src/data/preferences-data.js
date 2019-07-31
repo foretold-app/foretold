@@ -15,6 +15,7 @@ class PreferencesData extends DataBase {
   }
 
   /**
+   * @public
    * @param {string} agentId
    * @return {Promise<*>}
    */

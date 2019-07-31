@@ -4,6 +4,7 @@ const { Auth0 } = require('../lib/auth0');
 const { UsersData } = require('./users-data');
 const { AgentsData } = require('./agents-data');
 const { TokensData } = require('./tokens-data');
+const { InvitationsData } = require('./invitations-data');
 
 class AuthenticationData {
 
@@ -14,6 +15,7 @@ class AuthenticationData {
     this.users = new UsersData();
     this.agents = new AgentsData();
     this.tokens = new TokensData();
+    this.invitations = new InvitationsData();
   }
 
   /**
@@ -97,7 +99,8 @@ class AuthenticationData {
       const decoded = this.Jwt.decodeAuth0Jwt(jwt);
       if (!decoded.sub) throw new AuthenticationData.NoUserIdError;
 
-      const user = await this.users.getUserByAuth0Id(decoded.sub);
+      const auth0Id = decoded.sub;
+      const user = await this.users.getUserByAuth0Id(auth0Id);
       const agentId = user.agentId;
 
       try {
@@ -126,6 +129,13 @@ class AuthenticationData {
       if (!token) throw new AuthenticationData.NotAuthenticatedError;
       await this.tokens.increaseUsageCount(authToken);
       const agentId = token.agentId;
+
+      try {
+        await this.invitations.activateAgent(agentId);
+      }catch (e) {
+        console.log(`Cannot call a transition for ${agentId}`);
+      }
+
       return this.Jwt.encodeJWT({}, agentId);
     } catch (err) {
       throw err;

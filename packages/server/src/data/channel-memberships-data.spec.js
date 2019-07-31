@@ -50,14 +50,14 @@ describe('Data Layer - Channel Memberships Data', () => {
     });
   });
 
-  describe('deleteOne()', () => {
+  describe('deleteOne2()', () => {
     beforeEach(() => {
       jest.spyOn(instance.ChannelMembershipModel, 'deleteOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('finds and destroys user', () => {
-      return instance.deleteOne(channelId, agentId).then((result) => {
+      return instance.deleteOne2(channelId, agentId).then((result) => {
         expect(instance.ChannelMembershipModel.deleteOne).toHaveBeenCalledWith(
           channelId,
           agentId,

@@ -66,12 +66,12 @@ describe('ChannelMemberships Resolvers', () => {
       }
     };
     beforeEach(() => {
-      jest.spyOn(data.channelMemberships, 'deleteOne')
+      jest.spyOn(data.channelMemberships, 'deleteOne2')
         .mockReturnValue(Promise.resolve(true));
     });
     it('removes agent-channel row', () => {
       return channelMemberships.remove(root, args).then((result) => {
-        expect(data.channelMemberships.deleteOne).toHaveBeenCalledWith(
+        expect(data.channelMemberships.deleteOne2).toHaveBeenCalledWith(
           'channelId1',
           'agentId2',
         );

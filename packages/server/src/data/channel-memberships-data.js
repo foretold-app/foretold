@@ -67,7 +67,7 @@ class ChannelMembershipsData extends DataBase {
    * @param {Models.ObjectID} agentId
    * @returns {Promise<Models.ChannelMemberships | null>}
    */
-  async deleteOne(channelId, agentId) {
+  async deleteOne2(channelId, agentId) {
     await this._validate({ channelId, agentId });
     return this.ChannelMembershipModel.deleteOne(
       channelId,
@@ -147,7 +147,7 @@ class ChannelMembershipsData extends DataBase {
    * @return {Promise<Models.ChannelMemberships|null>}
    */
   async leave(options) {
-    return this.deleteOne(
+    return this.deleteOne2(
       options.channelId,
       options.agentId,
     );

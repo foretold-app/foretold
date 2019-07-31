@@ -39,7 +39,7 @@ async function update(root, args) {
  */
 async function remove(root, args) {
   const input = args.input;
-  return data.channelMemberships.deleteOne(
+  return data.channelMemberships.deleteOne2(
     input.channelId,
     input.agentId,
   );

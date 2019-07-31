@@ -56,7 +56,7 @@ let make =
     let title =
       <FC.Base.Div float=`left>
         <FC.PageCard.HeaderRow.Title>
-          {"Invite Agents" |> ReasonReact.string}
+          {"Add Agents" |> ReasonReact.string}
         </FC.PageCard.HeaderRow.Title>
       </FC.Base.Div>;
 

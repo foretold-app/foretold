@@ -1,6 +1,6 @@
 open Antd;
 
-module FormConfig = {
+module Config = {
   type field(_) =
     | Email: field(string);
 
@@ -19,26 +19,19 @@ module FormConfig = {
       };
 };
 
-module Form = ReFormNext.Make(FormConfig);
+module Form = ReFormNext.Make(Config);
 
 let withForm = (channelId, email, mutation, innerComponentFn) =>
-  Form.make(
-    ~initialState={email: email},
-    ~onSubmit=
-      values =>
-        InvitationCreate.mutate(
-          mutation,
-          values.state.values.email,
-          channelId,
-        ),
-    ~schema=Form.Validation.Schema([||]),
-    innerComponentFn,
-  )
-  |> E.React.el;
+  <Form
+    initialState={email: email}
+    onSubmit={values =>
+      InvitationCreate.mutate(mutation, values.state.values.email, channelId)
+    }
+    schema={Form.Validation.Schema([||])}>
+    ...innerComponentFn
+  </Form>;
 
-let component = ReasonReact.statelessComponent("ChannelInviteMember");
-
-let formFields = (form: Form.state, send, onSubmit) =>
+let fields = (form: Form.state, send, onSubmit) =>
   <Antd.Form onSubmit={e => onSubmit()}>
     <Antd.Form.Item>
       {"E-mail" |> Utils.ste |> E.React.inH3}
@@ -50,7 +43,10 @@ let formFields = (form: Form.state, send, onSubmit) =>
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
-      <Button _type=`primary onClick={_ => onSubmit()}>
+      <Button
+        _type=`primary
+        onClick={_ => onSubmit()}
+        icon=Antd.IconName.usergroupAdd>
         {"Submit" |> Utils.ste}
       </Button>
     </Antd.Form.Item>
@@ -61,6 +57,7 @@ module CMutationForm =
     type queryType = InvitationCreate.Query.t;
   });
 
+let component = ReasonReact.statelessComponent("ChannelInviteMember");
 let make =
     (
       ~channelId: string,
@@ -78,7 +75,7 @@ let make =
              withForm(channelId, "", mutation, ({send, state}) =>
                CMutationForm.showWithLoading(
                  ~result=data.result,
-                 ~form=formFields(state, send, () => send(Form.Submit)),
+                 ~form=fields(state, send, () => send(Form.Submit)),
                  (),
                )
              )

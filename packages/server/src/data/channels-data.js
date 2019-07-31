@@ -36,7 +36,7 @@ class ChannelsData extends DataBase {
       ...input,
       creatorId: agent.id,
     });
-    await this.channelMembershipsData.createOne(
+    await this.channelMembershipsData.createOne2(
       channel.id,
       agent.id,
       this.models.ChannelMemberships.ROLE.ADMIN,

@@ -28,7 +28,6 @@ class InvitationsData extends DataBase {
   /**
    * @public
    * @todo: Use transactions here.
-   * @todo: For the first time lets throw an error if user are already invited?
    * @param {object} input
    * @param {string} input.email
    * @param {string} input.channelId
@@ -37,19 +36,24 @@ class InvitationsData extends DataBase {
    */
   async invite(input) {
     try {
-      assert(_.isString(input.email), 'Email should be an string');
-      assert(_.isString(input.channelId), 'Channel Id should be an string');
-      assert(_.isString(input.inviterAgentId), 'Inviter Agent Id should be an string');
+      assert(_.isString(input.email), 'Email should be a string');
+      assert(_.isString(input.channelId), 'Channel Id should be a string');
+      assert(_.isString(input.inviterAgentId), 'Inviter Agent Id should be a string');
 
       const user = await this.users.getOne({ email: input.email });
 
       if (user) {
-        assert(!!_.get(user, 'isEmailVerified'), 'Email is not verified.');
-        await this.memberships.createOne(
+        assert(!!_.get(user, 'isEmailVerified'), 'Email is not verified');
+
+        const invitation = await this.getOne({ agentId: user.agentId });
+        assert(!!invitation, 'User is already invited.');
+
+        await this.memberships.createOne2(
           input.channelId,
           user.agentId,
           input.inviterAgentId
         );
+
         return true;
       }
 

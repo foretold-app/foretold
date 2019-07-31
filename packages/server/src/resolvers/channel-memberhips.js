@@ -10,7 +10,7 @@ const data = require('../data');
 async function create(root, args, context) {
   const input = args.input;
   const inviterAgentId = _.get(context, 'agent.id');
-  return data.channelMemberships.createOne(
+  return data.channelMemberships.createOne2(
     input.channelId,
     input.agentId,
     inviterAgentId,

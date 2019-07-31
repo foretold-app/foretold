@@ -14,13 +14,13 @@ describe('ChannelMemberships Resolvers', () => {
     };
     const context = { agent: { id: 'agentId' } };
     beforeEach(() => {
-      jest.spyOn(data.channelMemberships, 'createOne').mockReturnValue(
+      jest.spyOn(data.channelMemberships, 'createOne2').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('creates agent-channel row', () => {
       return channelMemberships.create(root, args, context).then((result) => {
-        expect(data.channelMemberships.createOne).toHaveBeenCalledWith(
+        expect(data.channelMemberships.createOne2).toHaveBeenCalledWith(
           'channelId1',
           'agentId2',
           'agentId',
@@ -42,13 +42,13 @@ describe('ChannelMemberships Resolvers', () => {
     };
     const context = { agent: { id: 'agentId' } };
     beforeEach(() => {
-      jest.spyOn(data.channelMemberships, 'createOne').mockReturnValue(
+      jest.spyOn(data.channelMemberships, 'createOne2').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('updates agent-channel row', () => {
       return channelMemberships.create(root, args, context).then((result) => {
-        expect(data.channelMemberships.createOne).toHaveBeenCalledWith(
+        expect(data.channelMemberships.createOne2).toHaveBeenCalledWith(
           'channelId1',
           'agentId2',
           'agentId',

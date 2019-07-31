@@ -25,7 +25,7 @@ class ChannelMembershipsData extends DataBase {
    * @param {string} [role]
    * @returns {Promise<Models.ChannelMemberships>}
    */
-  async createOne(
+  async createOne2(
     channelId,
     agentId,
     inviterAgentId = null,
@@ -135,7 +135,7 @@ class ChannelMembershipsData extends DataBase {
    * @return {Promise<Models.ChannelMemberships>}
    */
   async join(options) {
-    return this.createOne(
+    return this.createOne2(
       options.channelId,
       options.agentId,
     );

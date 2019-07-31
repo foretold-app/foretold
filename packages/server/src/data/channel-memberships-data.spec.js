@@ -14,14 +14,14 @@ describe('Data Layer - Channel Memberships Data', () => {
   const input = { channelId, agentId };
   const role = 'VIEWER';
 
-  describe('createOne() when there is user', () => {
+  describe('createOne2() when there is user', () => {
     beforeEach(() => {
       jest.spyOn(models.ChannelMemberships, 'findOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('finds user without creating new one', () => {
-      return instance.createOne(channelId, agentId, inviterAgentId, role).then((result) => {
+      return instance.createOne2(channelId, agentId, inviterAgentId, role).then((result) => {
         expect(models.ChannelMemberships.findOne).toHaveBeenCalledWith({
           where: input,
         });
@@ -31,14 +31,14 @@ describe('Data Layer - Channel Memberships Data', () => {
     });
   });
 
-  describe('createOne() when there is no user', () => {
+  describe('createOne2() when there is no user', () => {
     beforeEach(() => {
       jest.spyOn(models.ChannelMemberships, 'findOne').mockReturnValue(
         Promise.resolve(false),
       );
     });
     it('creates new user', () => {
-      return instance.createOne(channelId, agentId, inviterAgentId, role).then((result) => {
+      return instance.createOne2(channelId, agentId, inviterAgentId, role).then((result) => {
         expect(models.ChannelMemberships.findOne).toHaveBeenCalledWith({
           where: input,
         });

@@ -35,8 +35,10 @@ let makeWithPage =
         SeriesShow.make(~id, ~channelId, ~loggedInUser, ~layout) |> toEl
       | NewMeasurable => MeasurableNew.make(~channelId, ~layout) |> toEl
       | Members => ChannelMembers.make(~channelId, ~layout, ~channel) |> toEl
-      | InviteNewMember =>
+      | AddMember =>
         ChannelAddMember.make(~channelId, ~loggedInUser, ~layout) |> toEl
+      | InviteMember =>
+        ChannelInviteMember.make(~channelId, ~loggedInUser, ~layout) |> toEl
       | Settings => ChannelEdit.make(~channelId, ~layout) |> toEl
       | NewSeries =>
         SeriesNew.make(~channelId, ~loggedInUser, ~layout) |> toEl

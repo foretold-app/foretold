@@ -27,30 +27,48 @@ let withForm = (channelId, email, mutation, innerComponentFn) =>
     onSubmit={values =>
       InvitationCreate.mutate(mutation, values.state.values.email, channelId)
     }
-    schema={Form.Validation.Schema([||])}>
+    schema={Form.Validation.Schema([|Email(Email)|])}>
     ...innerComponentFn
   </Form>;
 
-let fields = (form: Form.state, send, onSubmit) =>
+let fields = (form: Form.state, send, onSubmit, getFieldState) => {
+  let stateEmail: Form.fieldState = getFieldState(Form.Field(Email));
+
+  let error = state =>
+    switch (state) {
+    | Form.Error(s) => <AntdAlert message=s type_="warning" />
+    | _ => ReasonReact.null
+    };
+
+  let isFormValid =
+    switch (stateEmail) {
+    | Form.Valid => true
+    | Form.Pristine => false
+    | _ => false
+    };
+
   <Antd.Form onSubmit={e => onSubmit()}>
     <Antd.Form.Item>
-      {"E-mail" |> Utils.ste |> E.React.inH3}
+      {"E-mail*:" |> Utils.ste |> E.React.inH3}
       <AntdInput
         value={form.values.email}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
           send(Form.FieldChangeValue(Email, e))
         )}
       />
+      {error(stateEmail)}
     </Antd.Form.Item>
     <Antd.Form.Item>
       <Button
         _type=`primary
         onClick={_ => onSubmit()}
-        icon=Antd.IconName.usergroupAdd>
+        icon=Antd.IconName.usergroupAdd
+        disabled={!isFormValid}>
         {"Submit" |> Utils.ste}
       </Button>
     </Antd.Form.Item>
   </Antd.Form>;
+};
 
 module CMutationForm =
   MutationForm.Make({
@@ -72,10 +90,17 @@ let make =
       ~body=
         <FC.PageCard.BodyPadding>
           {InvitationCreate.withMutation((mutation, data) =>
-             withForm(channelId, "", mutation, ({send, state}) =>
+             withForm(
+               channelId, "", mutation, ({send, state, getFieldState}) =>
                CMutationForm.showWithLoading(
                  ~result=data.result,
-                 ~form=fields(state, send, () => send(Form.Submit)),
+                 ~form=
+                   fields(
+                     state,
+                     send,
+                     () => send(Form.Submit),
+                     getFieldState,
+                   ),
                  (),
                )
              )

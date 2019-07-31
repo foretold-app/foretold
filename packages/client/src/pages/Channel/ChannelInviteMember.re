@@ -1,6 +1,65 @@
-let component = ReasonReact.statelessComponent("ChannelIntiveMember");
+open Antd;
 
-type column = Table.column(Primary.Agent.t);
+module FormConfig = {
+  type field(_) =
+    | Email: field(string);
+
+  type state = {email: string};
+
+  let get: type value. (state, field(value)) => value =
+    (state, field) =>
+      switch (field) {
+      | Email => state.email
+      };
+
+  let set: type value. (state, field(value), value) => state =
+    (state, field, value) =>
+      switch (field) {
+      | Email => {...state, email: value}
+      };
+};
+
+module Form = ReFormNext.Make(FormConfig);
+
+let withForm = (channelId, email, mutation, innerComponentFn) =>
+  Form.make(
+    ~initialState={email: email},
+    ~onSubmit=
+      values =>
+        InvitationCreate.mutate(
+          mutation,
+          values.state.values.email,
+          channelId,
+        ),
+    ~schema=Form.Validation.Schema([||]),
+    innerComponentFn,
+  )
+  |> E.React.el;
+
+let component = ReasonReact.statelessComponent("ChannelInviteMember");
+
+let formFields = (form: Form.state, send, onSubmit) =>
+  <Antd.Form onSubmit={e => onSubmit()}>
+    <Antd.Form.Item>
+      {"E-mail" |> Utils.ste |> E.React.inH3}
+      <AntdInput
+        value={form.values.email}
+        onChange={ReForm.Helpers.handleDomFormChange(e =>
+          send(Form.FieldChangeValue(Email, e))
+        )}
+      />
+    </Antd.Form.Item>
+    <Antd.Form.Item>
+      <Button _type=`primary onClick={_ => onSubmit()}>
+        {"Submit" |> Utils.ste}
+      </Button>
+    </Antd.Form.Item>
+  </Antd.Form>;
+
+module CMutationForm =
+  MutationForm.Make({
+    type queryType = InvitationCreate.Query.t;
+  });
 
 let make =
     (
@@ -10,82 +69,21 @@ let make =
       _children,
     ) => {
   ...component,
-  render: _ => {
-    let addToChannelLink = (agentId: string, channelId: string) =>
-      ChannelMembershipCreate.Mutation.make((mutation, _) =>
-        <Link.Jsx2
-          linkType={
-            Action(
-              _ =>
-                ChannelMembershipCreate.mutate(mutation, agentId, channelId),
-            )
-          }>
-          {"Add to Community" |> ReasonReact.string}
-        </Link.Jsx2>
-      )
-      |> ReasonReact.element;
-
-    let agentColumn: column =
-      Table.Column.make(
-        ~name="Agent" |> ReasonReact.string,
-        ~render=
-          (agent: Primary.Agent.t) =>
-            <Link.Jsx2
-              linkType={
-                Internal(
-                  Agent({agentId: agent.id, subPage: AgentMeasurements}),
-                )
-              }>
-              {agent.name
-               |> Rationale.Option.default("")
-               |> ReasonReact.string}
-            </Link.Jsx2>,
-        (),
-      );
-
-    let inviteColumn: column =
-      Table.Column.make(
-        ~name="Invite" |> ReasonReact.string,
-        ~render=
-          (agent: Primary.Agent.t) => addToChannelLink(agent.id, channelId),
-        (),
-      );
-
-    let all: array(column) = [|agentColumn, inviteColumn|];
-
-    let title =
-      <FC.Base.Div float=`left>
-        <FC.PageCard.HeaderRow.Title>
-          {"Invite Agents" |> ReasonReact.string}
-        </FC.PageCard.HeaderRow.Title>
-      </FC.Base.Div>;
-
-    let onSuccess = agents => {
-      let dataSource =
-        agents
-        |> Js.Array.filter((agent: Primary.Agent.t) =>
-             switch (agent.name) {
-             | Some(name) when name != "" => true
-             | _ => false
-             }
-           );
-
-      Table.fromColumns(all, dataSource, ());
-    };
-
-    let onError = e => <SLayout.Error e />;
-
-    let loadingFn = () => <SLayout.Spin />;
-
-    let table =
-      AgentsGet.componentUsers(~excludeChannelId=channelId, agents =>
-        agents |> HttpResponse.flatten(onSuccess, onError, loadingFn)
-      );
-
+  render: _ =>
     SLayout.LayoutConfig.make(
-      ~head=<div> title </div>,
-      ~body=<FC.PageCard.Body> table </FC.PageCard.Body>,
+      ~head=SLayout.Header.textDiv("Invite Member"),
+      ~body=
+        <FC.PageCard.BodyPadding>
+          {InvitationCreate.withMutation((mutation, data) =>
+             withForm(channelId, "", mutation, ({send, state}) =>
+               CMutationForm.showWithLoading(
+                 ~result=data.result,
+                 ~form=formFields(state, send, () => send(Form.Submit)),
+                 (),
+               )
+             )
+           )}
+        </FC.PageCard.BodyPadding>,
     )
-    |> layout;
-  },
+    |> layout,
 };

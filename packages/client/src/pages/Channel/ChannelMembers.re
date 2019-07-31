@@ -172,6 +172,7 @@ let inviteMemberButtonSection = (channelId: string) =>
     className={Css.style([
       FC.PageCard.HeaderRow.Styles.itemTopPadding,
       FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+      FC.PageCard.HeaderRow.Styles.itemRightPadding,
     ])}>
     <FC.Base.Button
       variant=Primary

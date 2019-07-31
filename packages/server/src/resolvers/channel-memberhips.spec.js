@@ -1,7 +1,7 @@
 const channelMemberships = require('./channel-memberhips');
 const data = require('../data');
 
-describe('ChannelMemberships Resolvers', () => {
+describe('Channel Memberships Resolvers', () => {
 
   describe('create()', () => {
     const root = {};

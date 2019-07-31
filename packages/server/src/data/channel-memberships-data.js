@@ -19,6 +19,7 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @todo: fix interface (data, options)
+   * @public
    * @param {Models.ObjectID} channelId
    * @param {Models.ObjectID} agentId
    * @param {Models.ObjectID} [inviterAgentId]
@@ -47,6 +48,7 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @todo: fix interface (params, query, options)
+   * @public
    * @param {Models.ObjectID} channelId
    * @param {Models.ObjectID} agentId
    * @param {string} role
@@ -63,6 +65,7 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @todo: fix interface (params, options)
+   * @public
    * @param {Models.ObjectID} channelId
    * @param {Models.ObjectID} agentId
    * @returns {Promise<Models.ChannelMemberships | null>}
@@ -92,13 +95,8 @@ class ChannelMembershipsData extends DataBase {
   }
 
   /**
-   *
-   * @todo: Call "getOne()" of "model" layer.
-   * @todo: Pass "id", "restrictions" and "filter" params
-   * @todo: right into model call.
-   * @todo: Then do the same everywhere on data layer.
-   *
    * @todo: fix interface (params, query, options)
+   * @public
    * @param {object} options
    * @param {Models.ObjectID} [options.agentId]
    * @param {Models.ObjectID} [options.channelId]
@@ -110,23 +108,26 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @todo: fix interface (filter, pagination, options)
+   * @public
    * @param {object} options
    * @param {Models.ObjectID} [options.agentId]
    * @param {Models.ObjectID} [options.channelId]
+   * @param {string} [options.role]
    * @returns {Promise<Models.ChannelMemberships[]>}
    */
-  async getAll(options) {
+  async getAll2(options) {
     return this.models.ChannelMemberships.findAll({ where: options });
   }
 
   /**
+   * @public
    * @param {object} options
    * @param {Models.ObjectID} [options.agentId]
    * @param {Models.ObjectID} [options.channelId]
    * @returns {Promise<string[]>}
    */
   async getAllChannelIds(options) {
-    return (await this.getAll(options)).map(o => o.channelId);
+    return (await this.getAll2(options)).map(o => o.channelId);
   }
 
   /**
@@ -142,7 +143,7 @@ class ChannelMembershipsData extends DataBase {
   }
 
   /**
-   * @todo: updateOneAs?
+   * @public
    * @param {object} options
    * @return {Promise<Models.ChannelMemberships|null>}
    */
@@ -154,6 +155,7 @@ class ChannelMembershipsData extends DataBase {
   }
 
   /**
+   * @public
    * @param {object} options
    * @return {Promise<string>}
    */
@@ -167,11 +169,12 @@ class ChannelMembershipsData extends DataBase {
   }
 
   /**
+   * @public
    * @param {object} options
    * @return {Promise<Models.ChannelMemberships[]>}
    */
   async getAllOnlyAdmins(options) {
-    return this.getAll({
+    return this.getAll2({
       ...options,
       role: ChannelMembershipModel.ROLES.ADMIN,
     });

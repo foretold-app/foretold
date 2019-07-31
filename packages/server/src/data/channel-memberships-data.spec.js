@@ -125,7 +125,7 @@ describe('Data Layer - Channel Memberships Data', () => {
     });
   });
 
-  describe('getAll()', () => {
+  describe('getAll2()', () => {
     const options = {};
     beforeEach(() => {
       jest.spyOn(models.ChannelMemberships, 'findAll').mockReturnValue(
@@ -133,7 +133,7 @@ describe('Data Layer - Channel Memberships Data', () => {
       );
     });
     it('find agents-channels notes', () => {
-      return instance.getAll(options).then((result) => {
+      return instance.getAll2(options).then((result) => {
         expect(models.ChannelMemberships.findAll).toHaveBeenCalledWith({
           where: options,
         });
@@ -145,13 +145,13 @@ describe('Data Layer - Channel Memberships Data', () => {
   describe('getAllChannelIds()', () => {
     const options = {};
     beforeEach(() => {
-      jest.spyOn(instance, 'getAll').mockReturnValue(Promise.resolve([
+      jest.spyOn(instance, 'getAll2').mockReturnValue(Promise.resolve([
         { channelId: 'channelId1' }
       ]));
     });
     it('calls getAll()', () => {
       return instance.getAllChannelIds(options).then((result) => {
-        expect(instance.getAll).toHaveBeenCalledWith(options);
+        expect(instance.getAll2).toHaveBeenCalledWith(options);
         expect(result).toEqual(['channelId1']);
       });
     });

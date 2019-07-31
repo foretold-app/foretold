@@ -57,7 +57,7 @@ async function remove(root, args) {
 async function allByAgentId(root, args, context, info) {
   const agentId = root.id;
   const options = { agentId };
-  return data.channelMemberships.getAll(options);
+  return data.channelMemberships.getAll2(options);
 }
 
 /**
@@ -71,7 +71,7 @@ async function allByAgentId(root, args, context, info) {
 async function allByChannelId(root, args, context, info) {
   const channelId = root.id;
   const options = { channelId };
-  return data.channelMemberships.getAll(options);
+  return data.channelMemberships.getAll2(options);
 }
 
 /**

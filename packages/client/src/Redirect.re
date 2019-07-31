@@ -11,7 +11,7 @@ let make = (~appContext: Providers.appContext, _children) => {
 
     switch (appContext.loggedInUser, appContext.route, countOfRedicrectings^) {
     | (_, Profile, _) => ()
-    | (Some(loggedInUser), _, 1) =>
+    | (Some(loggedInUser), _, 2) =>
       loggedInUser.agent
       |> E.O.fmap((agent: Types.agent) =>
            switch (agent.name) {

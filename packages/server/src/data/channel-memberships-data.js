@@ -20,6 +20,7 @@ class ChannelMembershipsData extends DataBase {
   /**
    * @todo: fix interface (data, options)
    * @public
+   * @deprecated: use createdOne
    * @param {Models.ObjectID} channelId
    * @param {Models.ObjectID} agentId
    * @param {Models.ObjectID} [inviterAgentId]
@@ -49,6 +50,7 @@ class ChannelMembershipsData extends DataBase {
   /**
    * @todo: fix interface (params, query, options)
    * @public
+   * @deprecated: use updatedOne
    * @param {Models.ObjectID} channelId
    * @param {Models.ObjectID} agentId
    * @param {string} role
@@ -66,6 +68,7 @@ class ChannelMembershipsData extends DataBase {
   /**
    * @todo: fix interface (params, options)
    * @public
+   * @deprecated: use deleteOne
    * @param {Models.ObjectID} channelId
    * @param {Models.ObjectID} agentId
    * @returns {Promise<Models.ChannelMemberships | null>}
@@ -97,18 +100,20 @@ class ChannelMembershipsData extends DataBase {
   /**
    * @todo: fix interface (params, query, options)
    * @public
+   * @deprecated: use getOne
    * @param {object} options
    * @param {Models.ObjectID} [options.agentId]
    * @param {Models.ObjectID} [options.channelId]
    * @returns {Promise<Models.ChannelMemberships>}
    */
-  async getOne(options) {
+  async getOne2(options) {
     return this.models.ChannelMemberships.findOne({ where: options });
   }
 
   /**
    * @todo: fix interface (filter, pagination, options)
    * @public
+   * @deprecated: use getAll
    * @param {object} options
    * @param {Models.ObjectID} [options.agentId]
    * @param {Models.ObjectID} [options.channelId]
@@ -160,7 +165,7 @@ class ChannelMembershipsData extends DataBase {
    * @return {Promise<string>}
    */
   async getOneOnlyRole(options) {
-    const channelMembership = await this.getOne(options);
+    const channelMembership = await this.getOne2(options);
     return _.get(
       channelMembership,
       'role',

@@ -108,7 +108,7 @@ describe('Data Layer - Channel Memberships Data', () => {
     });
   });
 
-  describe('getOne()', () => {
+  describe('getOne2()', () => {
     const options = {};
     beforeEach(() => {
       jest.spyOn(models.ChannelMemberships, 'findOne').mockReturnValue(
@@ -116,7 +116,7 @@ describe('Data Layer - Channel Memberships Data', () => {
       );
     });
     it('finds agent-channel note ', () => {
-      return instance.getOne(options).then((result) => {
+      return instance.getOne2(options).then((result) => {
         expect(models.ChannelMemberships.findOne).toHaveBeenCalledWith({
           where: options,
         });

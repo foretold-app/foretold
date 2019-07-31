@@ -108,10 +108,9 @@ class InvitationsData extends DataBase {
   }
 
   /**
-   *
-   * @param invitations
+   * @param {Models.Invitation[]} invitations
    * @return {Promise<boolean>}
-   * @private
+   * @protected
    */
   async _activateInvitations(invitations) {
     if (invitations.length === 0) return false;

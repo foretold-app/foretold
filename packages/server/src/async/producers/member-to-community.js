@@ -12,8 +12,8 @@ class MemberToCommunity extends Producer {
 
     assert(_.isObject(input), 'Input is not an object');
     assert(!!_.get(input, 'channelId'), 'Channel ID is required.');
-    assert(!!_.get(input, 'agentId'), 'Channel ID is required.');
-    assert(!!_.get(input, 'inviterAgentId'), 'Channel ID is required.');
+    assert(!!_.get(input, 'agentId'), 'Agent ID is required.');
+    assert(!!_.get(input, 'inviterAgentId'), 'Inviter Agent ID is required.');
 
     this.input = input;
     this.templateName = Producer.TEMPLATE_NAME.MEMBER_ADDED_TO_COMMUNITY;

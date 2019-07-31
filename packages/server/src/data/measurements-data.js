@@ -21,6 +21,8 @@ class MeasurementsData extends DataBase {
   /**
    * @todo: fix interface
    * @todo: rename, move down
+   * @public
+   * @deprecated: use createOne
    * @param {object} [data]
    * @param {Models.Creator} creator
    * @return {Promise<Models.Measurement>}
@@ -59,6 +61,8 @@ class MeasurementsData extends DataBase {
   /**
    * @todo: fix interface
    * @todo: move down
+   * @public
+   * @deprecated: use getOne
    * @param {Models.ObjectID} id
    * @param {object} [options]
    * @param {string} [options.agentId]
@@ -76,6 +80,7 @@ class MeasurementsData extends DataBase {
   }
 
   /**
+   * @public
    * @param {Models.Measurable} measurable
    * @param {Models.ObjectID} agentId
    * @return {Promise<Models.Measurement>}
@@ -100,6 +105,7 @@ class MeasurementsData extends DataBase {
   }
 
   /**
+   * @public
    * @param {Models.ObjectID} agentId
    * @return {Promise<number>}
    */

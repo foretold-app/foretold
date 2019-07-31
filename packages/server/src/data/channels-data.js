@@ -21,6 +21,7 @@ class ChannelsData extends DataBase {
   /**
    * @todo: fix interface (data, options)
    * @public
+   * @deprecated: use createOne
    * @param {Models.Agent} agent
    * @param {Schema.ChannelsInput} input
    * @return {Promise<Models.Channel>}

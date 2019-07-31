@@ -55,6 +55,7 @@ module LayoutWrapper = {
     |> Wrapper.noChannelSidebar(~key="", loggedInUser);
 };
 
+// @todo: do not use these wrappers it is not readable
 module LoggedInPage = {
   type pageParams = {id: string};
 

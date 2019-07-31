@@ -20,7 +20,9 @@ let contextLink = (tokens: ServerJwt.t) =>
   ApolloLinks.createContextLink(() => {"headers": storageToHeaders(tokens)});
 
 let errorLink =
-  ApolloLinks.apolloLinkOnError(error => Js.log2("GraphQL Error!", error));
+  ApolloLinks.apolloLinkOnError(error =>
+    Js.log2("GraphQL Error!", Js.Json.stringifyAny(error))
+  );
 
 let link = () =>
   switch (ServerJwt.make_from_storage()) {

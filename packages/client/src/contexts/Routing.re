@@ -172,7 +172,7 @@ module Url = {
     | MeasurableEdit(string)
     | ChannelEdit(string)
     | ChannelMembers(string)
-    | ChannelInvite(string)
+    | ChannelAddMember(string)
     | MeasurableNew(string)
     | Subscribe
     | Unsubscribe;
@@ -200,7 +200,7 @@ module Url = {
     | ChannelShow(id) => "/c/" ++ id
     | ChannelEdit(id) => "/c/" ++ id ++ "/edit"
     | ChannelMembers(id) => "/c/" ++ id ++ "/members"
-    | ChannelInvite(channelId) => "/c/" ++ channelId ++ "/invite"
+    | ChannelAddMember(channelId) => "/c/" ++ channelId ++ "/invite"
     | MeasurableEdit(id) => "/measurables/" ++ id ++ "/edit"
     | MeasurableNew(channelId) => "/c/" ++ channelId ++ "/new"
     | SeriesNew(channelId) => "/c/" ++ channelId ++ "/s/new"
@@ -217,7 +217,7 @@ module Url = {
     | Measurables(_) => ChannelShow(channelPage.channelId)
     | NewMeasurable => MeasurableNew(channelPage.channelId)
     | Members => ChannelMembers(channelPage.channelId)
-    | InviteNewMember => ChannelInvite(channelPage.channelId)
+    | InviteNewMember => ChannelAddMember(channelPage.channelId)
     | Settings => ChannelEdit(channelPage.channelId)
     | NewSeries => SeriesNew(channelPage.channelId)
     | Series(id) => SeriesShow(channelPage.channelId, id)

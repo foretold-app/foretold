@@ -159,7 +159,9 @@ let addMembersButtonSection = (channelId: string) =>
     ])}>
     <FC.Base.Button
       variant=Primary
-      onClick={e => LinkType.onClick(Internal(ChannelInvite(channelId)), e)}>
+      onClick={e =>
+        LinkType.onClick(Internal(ChannelAddMember(channelId)), e)
+      }>
       {"Add Members" |> ReasonReact.string}
     </FC.Base.Button>
   </FC.Base.Div>;

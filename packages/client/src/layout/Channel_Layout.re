@@ -36,7 +36,7 @@ let makeWithPage =
       | NewMeasurable => MeasurableNew.make(~channelId, ~layout) |> toEl
       | Members => ChannelMembers.make(~channelId, ~layout, ~channel) |> toEl
       | InviteNewMember =>
-        ChannelInvite.make(~channelId, ~loggedInUser, ~layout) |> toEl
+        ChannelAddMember.make(~channelId, ~loggedInUser, ~layout) |> toEl
       | Settings => ChannelEdit.make(~channelId, ~layout) |> toEl
       | NewSeries =>
         SeriesNew.make(~channelId, ~loggedInUser, ~layout) |> toEl

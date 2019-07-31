@@ -25,7 +25,7 @@ module Make = (Config: Config) => {
       ) =>
     switch (result) {
     | Loading => <SLayout.Spin />
-    | Error(e) => <> {"Error: " ++ e##message |> ste} form </>
+    | Error(e) => <> <AntdAlert message=e##message type_="warning" /> form </>
     | Data(r) => onSuccess(r)
     | NotCalled => form
     };

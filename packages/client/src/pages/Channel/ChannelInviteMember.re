@@ -91,18 +91,31 @@ let make =
         <FC.PageCard.BodyPadding>
           {InvitationCreate.withMutation((mutation, data) =>
              withForm(
-               channelId, "", mutation, ({send, state, getFieldState}) =>
-               CMutationForm.showWithLoading(
-                 ~result=data.result,
-                 ~form=
+               channelId,
+               "",
+               mutation,
+               ({send, state, getFieldState}) => {
+                 let form =
                    fields(
                      state,
                      send,
                      () => send(Form.Submit),
                      getFieldState,
-                   ),
-                 (),
-               )
+                   );
+
+                 let onSuccess = _ =>
+                   <>
+                     <AntdAlert message=Lang.memberInvited type_="success" />
+                     form
+                   </>;
+
+                 CMutationForm.showWithLoading2(
+                   ~result=data.result,
+                   ~form,
+                   ~onSuccess,
+                   (),
+                 );
+               },
              )
            )}
         </FC.PageCard.BodyPadding>,

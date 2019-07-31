@@ -9,8 +9,6 @@ let makeWithPage =
   | Some(loggedInUser) =>
     let loadChannel = ChannelGet.component2(~id=channelId);
 
-    let toEl = fn => fn |> E.React.makeToEl(~key=channelId);
-
     let successFn = (channel: Primary.Channel.t) => {
       let layout =
         Channel_Layout_C.makeWithEl(
@@ -21,27 +19,22 @@ let makeWithPage =
 
       switch (channelPage.subPage) {
       | Measurables(searchParams) =>
-        MeasurableIndex.make(
-          ~channelId,
-          ~searchParams,
-          ~loggedInUser,
-          ~itemsPerPage=20,
-          ~layout,
-        )
-        |> toEl
+        <MeasurableIndex
+          channelId
+          searchParams
+          loggedInUser
+          itemsPerPage=20
+          layout
+        />
       | Measurable(measurableId) =>
-        ChannelMeasurable.make(~measurableId, ~loggedInUser, ~layout) |> toEl
-      | Series(id) =>
-        SeriesShow.make(~id, ~channelId, ~loggedInUser, ~layout) |> toEl
-      | NewMeasurable => MeasurableNew.make(~channelId, ~layout) |> toEl
-      | Members => ChannelMembers.make(~channelId, ~layout, ~channel) |> toEl
-      | AddMember =>
-        ChannelAddMember.make(~channelId, ~loggedInUser, ~layout) |> toEl
-      | InviteMember =>
-        ChannelInviteMember.make(~channelId, ~loggedInUser, ~layout) |> toEl
-      | Settings => ChannelEdit.make(~channelId, ~layout) |> toEl
-      | NewSeries =>
-        SeriesNew.make(~channelId, ~loggedInUser, ~layout) |> toEl
+        <ChannelMeasurable measurableId loggedInUser layout />
+      | Series(id) => <SeriesShow id channelId loggedInUser layout />
+      | NewMeasurable => <MeasurableNew channelId layout />
+      | Members => <ChannelMembers channelId layout channel />
+      | AddMember => <ChannelAddMember channelId loggedInUser layout />
+      | InviteMember => <ChannelInviteMember channelId loggedInUser layout />
+      | Settings => <ChannelEdit channelId layout />
+      | NewSeries => <SeriesNew channelId loggedInUser layout />
       };
     };
 

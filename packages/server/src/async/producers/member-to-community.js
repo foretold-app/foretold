@@ -39,7 +39,7 @@ class MemberToCommunity extends Producer {
       assert(!!_.get(agent, 'id'), 'Agent ID is required.');
       assert(!!_.get(inviter, 'id'), 'Inviter ID is required.');
 
-      const replacements = MemberAddedToCommunity._getReplacements(
+      const replacements = MemberToCommunity._getReplacements(
         inviter,
         channel,
       );

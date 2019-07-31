@@ -9,6 +9,7 @@ const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { InvitationModel } = require('../models-abstract');
 
 const { ForetoldAuthId } = require('../models/classes/foretold-auth-id');
+const { INVITATION_STATUS } = require('../models/enums/invitation-status');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -76,6 +77,60 @@ class InvitationsData extends DataBase {
     }
   }
 
+  /**
+   * @public
+   * @param {Models.ObjectID} agentId
+   * @return {Promise<boolean>}
+   */
+  async activateAgent(agentId) {
+    assert(_.isString(agentId), 'Agent Id should be a string');
+
+    const invitation = await this._getInvitation(agentId);
+    if (!invitation) return false;
+
+    await this._changeStatus(invitation);
+    await this._addMembership(invitation);
+
+    return true;
+  }
+
+  /**
+   * @param {Models.ObjectID} agentId
+   * @return {Promise<Models.Invitation>}
+   * @protected
+   */
+  async _getInvitation(agentId) {
+    return this.getOne({
+      agentId,
+      status: INVITATION_STATUS.AWAITING,
+    });
+  }
+
+  /**
+   * @param {Models.Invitation} invitation
+   * @return {Promise<*>}
+   * @protected
+   */
+  async _changeStatus(invitation) {
+    return this.updateOne({
+      id: invitation.id,
+    }, {
+      status: INVITATION_STATUS.ACCEPTED,
+    });
+  }
+
+  /**
+   * @param {Models.Invitation} invitation
+   * @return {Promise<*>}
+   * @protected
+   */
+  async _addMembership(invitation) {
+    return this.memberships.createOne2(
+      invitation.channelId,
+      invitation.agentId,
+      invitation.inviterAgentId
+    );
+  }
 }
 
 module.exports = {

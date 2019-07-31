@@ -166,10 +166,30 @@ module Query = [%graphql
             }
           }
         }
-        open: measurables(states: [OPEN], channelId: $channelId, seriesId: $seriesId, creatorId: $creatorId, first: $first, last: $last, after: $after, before: $before) {
+
+        open: measurables(
+            states: [OPEN]
+            channelId: $channelId
+            seriesId: $seriesId
+            creatorId: $creatorId
+            first: $first
+            last: $last
+            after: $after
+            before: $before
+        ) {
           total
         }
-        closed: measurables(states: [JUDGED], channelId: $channelId, seriesId: $seriesId, creatorId: $creatorId, first: $first, last: $last, after: $after, before: $before) {
+
+        closed: measurables(
+            states: [JUDGED]
+            channelId: $channelId
+            seriesId: $seriesId
+            creatorId: $creatorId
+            first: $first
+            last: $last
+            after: $after
+            before: $before
+        ) {
           total
         }
     }
@@ -182,13 +202,14 @@ let unpackEdges = a =>
   a##measurables |> E.O.fmap(Primary.Connection.fromJson(toMeasurable));
 
 let queryToComponent = (query, innerComponentFn) =>
-  QueryComponent.make(~variables=query##variables, o =>
-    o.result
-    |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(unpackEdges ||> innerComponentFn)
-    |> E.R.id
-  )
-  |> E.React.el;
+  <QueryComponent variables=query##variables>
+    ...{o =>
+      o.result
+      |> ApolloUtils.apolloResponseToResult
+      |> E.R.fmap(unpackEdges ||> innerComponentFn)
+      |> E.R.id
+    }
+  </QueryComponent>;
 
 type measurableStates = Primary.MeasurableState.t;
 
@@ -228,14 +249,15 @@ let queryDirection =
 };
 
 let componentMaker = (query, innerComponentFn) =>
-  QueryComponent.make(~variables=query##variables, o =>
-    o.result
-    |> HttpResponse.fromApollo
-    |> HttpResponse.fmap(unpackEdges)
-    |> HttpResponse.optionalToMissing
-    |> innerComponentFn
-  )
-  |> E.React.el;
+  <QueryComponent variables=query##variables>
+    ...{o =>
+      o.result
+      |> HttpResponse.fromApollo
+      |> HttpResponse.fmap(unpackEdges)
+      |> HttpResponse.optionalToMissing
+      |> innerComponentFn
+    }
+  </QueryComponent>;
 
 /* TODO: I'm sure there is a dryer way to do this but couldn't figure out quickly. */
 let component2 =

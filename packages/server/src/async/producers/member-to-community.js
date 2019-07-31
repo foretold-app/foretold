@@ -65,11 +65,11 @@ class MemberToCommunity extends Producer {
   static _getReplacements(inviter, channel) {
     return {
       inviterAgent: {
-        name: _.get(inviter, 'name'),
+        name: _.get(inviter, 'name', 'Somebody'),
         link: getAgentLinkWithToken(inviter),
       },
       channel: {
-        name: _.get(channel, 'name'),
+        name: _.get(channel, 'name', 'Channel'),
         link: getChannelLinkWithToken(channel),
       },
     }

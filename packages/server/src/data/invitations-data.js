@@ -84,13 +84,23 @@ class InvitationsData extends DataBase {
    */
   async activateAgent(agentId) {
     assert(_.isString(agentId), 'Agent Id should be a string');
+    const invitations = await this._getInvitations(agentId);
+    return await this._activateInvitations(invitations);
+  }
 
-    const invitation = await this._getInvitation(agentId);
-    if (!invitation) return false;
-
-    await this._changeStatus(invitation);
-    await this._addMembership(invitation);
-
+  /**
+   *
+   * @param invitations
+   * @return {Promise<boolean>}
+   * @private
+   */
+  async _activateInvitations(invitations) {
+    if (invitations.length === 0) return false;
+    for (let i = 0, max = invitations.length; i < max; i++) {
+      const invitation = invitations[i];
+      await this._changeStatus(invitation);
+      await this._addMembership(invitation);
+    }
     return true;
   }
 
@@ -99,11 +109,9 @@ class InvitationsData extends DataBase {
    * @return {Promise<Models.Invitation>}
    * @protected
    */
-  async _getInvitation(agentId) {
-    return this.getOne({
-      agentId,
-      status: INVITATION_STATUS.AWAITING,
-    });
+  async _getInvitations(agentId) {
+    const filter = { agentId, status: INVITATION_STATUS.AWAITING };
+    return this.getAll(filter);
   }
 
   /**
@@ -112,11 +120,9 @@ class InvitationsData extends DataBase {
    * @protected
    */
   async _changeStatus(invitation) {
-    return this.updateOne({
-      id: invitation.id,
-    }, {
-      status: INVITATION_STATUS.ACCEPTED,
-    });
+    const params = { id: invitation.id };
+    const data = { status: INVITATION_STATUS.ACCEPTED };
+    return this.updateOne(params, data);
   }
 
   /**

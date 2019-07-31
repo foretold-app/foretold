@@ -82,17 +82,18 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let component = (~excludeChannelId: string, ~types=?, innerFn) => {
   let query = Query.make(~excludeChannelId, ~types?, ());
-  QueryComponent.make(~variables=query##variables, response =>
-    response.result
-    |> HttpResponse.fromApollo
-    |> HttpResponse.fmap((e: Query.t) => {
-         let agents = e##agents;
-         let foo = agents |> E.A.O.concatSomes |> E.A.fmap(toAgent);
-         foo;
-       })
-    |> innerFn
-  )
-  |> ReasonReact.element;
+  <QueryComponent variables=query##variables>
+    ...{response =>
+      response.result
+      |> HttpResponse.fromApollo
+      |> HttpResponse.fmap((e: Query.t) => {
+           let agents = e##agents;
+           let foo = agents |> E.A.O.concatSomes |> E.A.fmap(toAgent);
+           foo;
+         })
+      |> innerFn
+    }
+  </QueryComponent>;
 };
 
 let componentUsers = component(~types=[|Some(`USER)|]);

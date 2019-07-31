@@ -51,25 +51,26 @@ let component = (~id, innerFn) => {
   let notFound = "Agent not found" |> ste;
   let query = Query.make(~id, ());
 
-  QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(e => {
-         let agent = e##agent;
+  <QueryComponent variables=query##variables>
+    ...{({result}) =>
+      result
+      |> ApolloUtils.apolloResponseToResult
+      |> E.R.fmap(e => {
+           let agent = e##agent;
 
-         switch (agent) {
-         | Some(a) => Some({agent: a})
-         | _ => None
-         };
-       })
-    |> E.R.bind(_, e =>
-         switch (e) {
-         | Some(a) => Ok(a)
-         | None => Error(notFound |> E.React.inH3)
-         }
-       )
-    |> E.R.fmap(innerFn)
-    |> E.R.id
-  )
-  |> E.React.el;
+           switch (agent) {
+           | Some(a) => Some({agent: a})
+           | _ => None
+           };
+         })
+      |> E.R.bind(_, e =>
+           switch (e) {
+           | Some(a) => Ok(a)
+           | None => Error(notFound |> E.React.inH3)
+           }
+         )
+      |> E.R.fmap(innerFn)
+      |> E.R.id
+    }
+  </QueryComponent>;
 };

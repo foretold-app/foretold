@@ -82,14 +82,15 @@ let toChannelMemberships = (m: innerType): array(Types.channelMembership) => {
 
 let component = (~id, innerFn) => {
   let query = Query.make(~id, ());
-  QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> HttpResponse.fromApollo
-    |> HttpResponse.fmap(e =>
-         e##channelWithMemberships |> E.O.fmap(toChannelMemberships)
-       )
-    |> HttpResponse.optionalToMissing
-    |> innerFn
-  )
-  |> E.React.el;
+  <QueryComponent variables=query##variables>
+    ...{({result}) =>
+      result
+      |> HttpResponse.fromApollo
+      |> HttpResponse.fmap(e =>
+           e##channelWithMemberships |> E.O.fmap(toChannelMemberships)
+         )
+      |> HttpResponse.optionalToMissing
+      |> innerFn
+    }
+  </QueryComponent>;
 };

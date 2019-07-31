@@ -1,15 +1,15 @@
 let component = ReasonReact.statelessComponent("Redirect");
 
 // This var need to prevent when "a user cannot go from profile page".
-let countOfRedicrectings = ref(0);
+let redirectionCount = ref(0);
 
 // @todo: fix this duplicated ligic(#rederectings)
 let make = (~appContext: Providers.appContext, _children) => {
   ...component,
   didUpdate: _self => {
-    countOfRedicrectings := countOfRedicrectings^ + 1;
+    redirectionCount := redirectionCount^ + 1;
 
-    switch (appContext.loggedInUser, appContext.route, countOfRedicrectings^) {
+    switch (appContext.loggedInUser, appContext.route, redirectionCount^) {
     | (_, Profile, _) => ()
     | (Some(loggedInUser), _, 2) =>
       loggedInUser.agent

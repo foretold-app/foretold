@@ -37,22 +37,20 @@ describe('ChannelMemberships Resolvers', () => {
       input: {
         channelId: 'channelId1',
         agentId: 'agentId2',
-        role: ['admin']
+        role: 'ADMIN'
       }
     };
-    const context = { agent: { id: 'agentId' } };
     beforeEach(() => {
-      jest.spyOn(data.channelMemberships, 'createOne2').mockReturnValue(
+      jest.spyOn(data.channelMemberships, 'updateOne2').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('updates agent-channel row', () => {
-      return channelMemberships.create(root, args, context).then((result) => {
-        expect(data.channelMemberships.createOne2).toHaveBeenCalledWith(
+      return channelMemberships.update(root, args).then((result) => {
+        expect(data.channelMemberships.updateOne2).toHaveBeenCalledWith(
           'channelId1',
           'agentId2',
-          'agentId',
-          args.input.role,
+          'ADMIN',
         );
         expect(result).toBe(true);
       });

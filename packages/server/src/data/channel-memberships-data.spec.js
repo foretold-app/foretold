@@ -157,7 +157,7 @@ describe('Data Layer - Channel Memberships Data', () => {
     });
   });
 
-  describe('updateOne()', () => {
+  describe('updateOne2()', () => {
     beforeEach(() => {
       jest.spyOn(instance.ChannelMembershipModel, 'updateOne').mockReturnValue(
         Promise.resolve(true),
@@ -167,7 +167,7 @@ describe('Data Layer - Channel Memberships Data', () => {
       );
     });
     it('updates user', () => {
-      return instance.updateOne(channelId, agentId, role).then((result) => {
+      return instance.updateOne2(channelId, agentId, role).then((result) => {
         expect(instance.ChannelMembershipModel.updateOne).toHaveBeenCalledWith(
           channelId,
           agentId,

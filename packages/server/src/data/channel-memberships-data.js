@@ -52,7 +52,7 @@ class ChannelMembershipsData extends DataBase {
    * @param {string} role
    * @returns {Promise<Models.ChannelMemberships>}
    */
-  async updateOne(channelId, agentId, role) {
+  async updateOne2(channelId, agentId, role) {
     await this._validate({ channelId, agentId });
     return this.ChannelMembershipModel.updateOne(
       channelId,

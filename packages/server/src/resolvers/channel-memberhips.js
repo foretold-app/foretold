@@ -25,7 +25,7 @@ async function create(root, args, context) {
  */
 async function update(root, args) {
   const input = args.input;
-  return data.channelMemberships.updateOne(
+  return data.channelMemberships.updateOne2(
     input.channelId,
     input.agentId,
     input.role,

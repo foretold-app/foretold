@@ -1,16 +1,14 @@
 let component = ReasonReact.statelessComponent("Redirect");
 
+let countOfRedicrectings = ref(0);
+
 // @todo: fix this duplicated ligic(#rederectings)
 let make = (~appContext: Providers.appContext, _children) => {
   ...component,
-  didUpdate: self => {
-    Js.log2("Rounting Count:", appContext.routingCount);
+  didUpdate: _self => {
+    countOfRedicrectings := countOfRedicrectings^ + 1;
 
-    switch (
-      appContext.loggedInUser,
-      appContext.route,
-      appContext.routingCount,
-    ) {
+    switch (appContext.loggedInUser, appContext.route, countOfRedicrectings^) {
     | (_, Profile, _) => ()
     | (Some(loggedInUser), _, 1) =>
       loggedInUser.agent

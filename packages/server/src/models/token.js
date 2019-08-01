@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM([
         TOKEN_TYPE.ACCESS_TOKEN,
         TOKEN_TYPE.AUTH_TOKEN,
+        TOKEN_TYPE.INVITE_TOKEN,
       ]),
       defaultValue: TOKEN_TYPE.ACCESS_TOKEN,
     },

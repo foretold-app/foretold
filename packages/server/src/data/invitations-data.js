@@ -5,10 +5,10 @@ const { DataBase } = require('./data-base');
 const { UsersData } = require('./users-data');
 const { AgentsData } = require('./agents-data');
 const { ChannelMembershipsData } = require('./channel-memberships-data');
+const { TokensData } = require('./tokens-data');
 
 const { InvitationModel } = require('../models-abstract');
 
-const { ForetoldAuthId } = require('../models/classes/foretold-auth-id');
 const { INVITATION_STATUS } = require('../models/enums/invitation-status');
 
 /**
@@ -24,6 +24,7 @@ class InvitationsData extends DataBase {
     this.users = new UsersData();
     this.agents = new AgentsData();
     this.memberships = new ChannelMembershipsData();
+    this.tokens = new TokensData();
   }
 
   /**
@@ -45,21 +46,9 @@ class InvitationsData extends DataBase {
       assert(_.isString(channelId), 'Channel Id should be a string');
       assert(_.isString(inviterAgentId), 'Inviter Agent Id should be a string');
 
-      const user = await this.users.getOne({ email });
+      const token = await this.tokens.generateToken();
+      await this._addInvitation(channelId, inviterAgentId, token, email);
 
-      if (user) {
-        const invitation = await this.getOne({ agentId: user.agentId });
-        const agentId = _.get(invitation, 'agentId');
-
-        assert(!!_.get(user, 'isEmailVerified'), 'Email is not verified');
-        assert(!!invitation, 'User is already invited.');
-
-        await this._addMembership({ channelId, agentId, inviterAgentId });
-        return true;
-      }
-
-      const createdUser = await this._addUser(email);
-      await this._addInvitation(channelId, inviterAgentId, createdUser);
       return true;
     } catch (e) {
       console.error('Invitation Err', e.message);
@@ -70,66 +59,42 @@ class InvitationsData extends DataBase {
   /**
    * @param {Models.ObjectID} channelId
    * @param {Models.ObjectID} inviterAgentId
-   * @param {object} createdUser
+   * @param {string} token
+   * @param {string} email
    * @return {Promise<*>}
    * @protected
    */
-  async _addInvitation(channelId, inviterAgentId, createdUser) {
+  async _addInvitation(channelId, inviterAgentId, token, email) {
     return this.createOne({
       channelId,
       inviterAgentId,
-      agentId: createdUser.agentId
-    });
-  }
-
-  /**
-   * @protected
-   * @param {string} email
-   * @return {Promise<*>}
-   */
-  async _addUser(email) {
-    const auth0Id = new ForetoldAuthId(email).toString();
-    return this.users.createOne({
+      token,
       email,
-      auth0Id,
-      isEmailVerified: false,
     });
   }
 
   /**
    * @public
-   * @param {Models.ObjectID} agentId
+   * @param {string} token
+   * @param {Models.User} user
    * @return {Promise<boolean>}
    */
-  async activateAgent(agentId) {
-    assert(_.isString(agentId), 'Agent Id should be a string');
-    const invitations = await this._getInvitations(agentId);
-    return await this._activateInvitations(invitations);
-  }
-
-  /**
-   * @param {Models.Invitation[]} invitations
-   * @return {Promise<boolean>}
-   * @protected
-   */
-  async _activateInvitations(invitations) {
-    if (invitations.length === 0) return false;
-    for (let i = 0, max = invitations.length; i < max; i++) {
-      const invitation = invitations[i];
-      await this._changeStatus(invitation);
-      await this._addMembership(invitation);
-    }
+  async activate(token, user) {
+    assert(_.isString(token), 'Token should be a string');
+    const invitation = await this._getInvitation(token);
+    await this._changeStatus(invitation);
+    await this._addMembership(invitation, user);
     return true;
   }
 
   /**
-   * @param {Models.ObjectID} agentId
+   * @param {string} token
    * @return {Promise<Models.Invitation>}
    * @protected
    */
-  async _getInvitations(agentId) {
-    const filter = { agentId, status: INVITATION_STATUS.AWAITING };
-    return this.getAll(filter);
+  async _getInvitation(token) {
+    const params = { token, status: INVITATION_STATUS.AWAITING };
+    return this.getOne(params);
   }
 
   /**
@@ -144,19 +109,16 @@ class InvitationsData extends DataBase {
   }
 
   /**
-   * @param {Models.Invitation | {
-   *   channelId: Models.ObjectID,
-   *   agentId: Models.ObjectID,
-   *   inviterAgentId: Models.ObjectID,
-   * }} options
-   * @return {Promise<*>}
+   * @param {Models.Invitation} invitation
+   * @param {Models.User} user
+   * @return {Promise<Models.ChannelMembership>}
    * @protected
    */
-  async _addMembership(options) {
+  async _addMembership(invitation, user) {
     const data = {
-      channelId: options.channelId,
-      agentId: options.agentId,
-      inviterAgentId: options.inviterAgentId
+      channelId: invitation.channelId,
+      agentId: user.agentId,
+      inviterAgentId: invitation.inviterAgentId
     };
     return this.memberships.createOne(data);
   }

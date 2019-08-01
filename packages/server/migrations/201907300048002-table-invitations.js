@@ -11,12 +11,12 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.UUID
         },
-        tokenId: {
-          type: Sequelize.UUID,
-          references: {
-            model: 'Tokens',
-            key: 'id',
-          },
+        token: {
+          type: Sequelize.STRING,
+          allowNull: false,
+        },
+        email: {
+          type: Sequelize.STRING,
           allowNull: false,
         },
         inviterAgentId: {

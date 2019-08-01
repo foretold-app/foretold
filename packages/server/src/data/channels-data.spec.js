@@ -53,6 +53,7 @@ describe('Channels Data Layer', () => {
         expect(ChannelMembershipsData.prototype.createOne2).toHaveBeenCalledWith(
           "id1",
           "agentId1",
+          null,
           "ADMIN"
         );
         expect(result).toEqual({ id: 'id1' });

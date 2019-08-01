@@ -78,7 +78,7 @@ export namespace Models {
   }
 
   export interface Invitation extends Model {
-    agentId: ObjectID;
+    token: string;
     channelId: ObjectID;
     inviterAgentId: ObjectID;
     status: 'AWAITING' | 'ACCEPTED';

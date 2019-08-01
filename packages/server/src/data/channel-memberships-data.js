@@ -126,6 +126,7 @@ class ChannelMembershipsData extends DataBase {
     return this.createOne(
       options.channelId,
       options.agentId,
+      null,
       role,
     );
   }

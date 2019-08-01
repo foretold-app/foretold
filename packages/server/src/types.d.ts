@@ -298,6 +298,12 @@ export type Auth0UserInfoResponse = {
   email_verified?: boolean,
   nickname?: string,
   picture?: string,
+  given_name?: string,
+  family_name?: string,
+  name?: string,
+  gender?: string,
+  locale?: string,
+  updated_at?: string,
 }
 
 export type EmailConfig = {

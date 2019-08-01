@@ -19,9 +19,14 @@ then attached with "Auth0 User";
 - Association Description
 - Brier Score
 - CDF
-- JWT
+- **Server Side JWT** - is used in API calls;
+- **One-time Token** - has an limit of life time;
+- **Long-term Token** - has no life time limits;
 - Migration
 - Seed
+- **Auth0 JWT** - is used ...;
+- **Auth0 Access Token** - is used ...;
+- **Auth0.com** - is an external system to identify users; 
 
 ### Graphql Terms
 - Connection - edges, nodes;
@@ -30,7 +35,7 @@ then attached with "Auth0 User";
 - Resolver
 
 ### Objects
-- Agent
+- **Agent** - is an abstraction of User, Bot objects;
 - User
 - Bot
 - Channel
@@ -67,3 +72,10 @@ descriptions;
 ### External System Requirements
 - Auth0.com
 - Amazon AWS SES
+
+### Authentication Flow
+1. Get "Server Side JWT" using (one of):
+- "Auth0 JWT", "Auth0 Access Token"
+- "One-time Token"
+- "Long-term Token"
+2. Get API responses with "Server Side JWT".

@@ -89,6 +89,7 @@ class AuthenticationData {
   }
 
   /**
+   * @todo: To adds "Late User Binding" (with an email).
    * @public
    * @param {string} jwt
    * @param {string} accessToken

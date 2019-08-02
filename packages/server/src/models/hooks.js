@@ -49,11 +49,11 @@ function addHooks(db) {
     }
   });
 
-  db.sequelize.addHook('afterCreate', (instance) => {
-    if (instance instanceof db.Invitation) {
-      emitter.emit(events.MEMBER_INVITED_TO_COMMUNITY, instance);
-    }
-  });
+  // db.sequelize.addHook('afterCreate', (instance) => {
+  //   if (instance instanceof db.Invitation) {
+  //     emitter.emit(events.MEMBER_INVITED_TO_COMMUNITY, instance);
+  //   }
+  // });
 
   db.Bot.addHook('beforeCreate', async (event) => {
     const agent = await db.sequelize.models.Agent.create({

@@ -49,6 +49,25 @@ class Producer {
   }
 
   /**
+   * @return {Promise<void>}
+   * @protected
+   */
+  async _getTemplate() {
+    assert(!!this.templateName, 'Template Name is required');
+    const params = { name: this.templateName };
+    return Producer.data.templates.getOne(params);
+  }
+
+  /**
+   * @return {Promise<{transaction: *}>}
+   * @protected
+   */
+  async _getOptions() {
+    const transaction = await this._getTransaction();
+    return { transaction };
+  }
+
+  /**
    * @param {object} replacements
    * @return {Promise<*>}
    * @protected
@@ -85,16 +104,6 @@ class Producer {
   }
 
   /**
-   * @return {Promise<void>}
-   * @protected
-   */
-  async _getTemplate() {
-    assert(!!this.templateName, 'Template Name is required');
-    const params = { name: this.templateName };
-    return Producer.data.templates.getOne(params);
-  }
-
-  /**
    * @param {Producer.EmailEnvelope} emailEnvelope
    * @return {Promise<*>}
    * @protected
@@ -120,15 +129,6 @@ class Producer {
     const data = { type, envelope: envelope };
     const options = await this._getOptions();
     return Producer.data.notifications.createOne(data, options);
-  }
-
-  /**
-   * @return {Promise<{transaction: *}>}
-   * @protected
-   */
-  async _getOptions() {
-    const transaction = await this._getTransaction();
-    return { transaction };
   }
 }
 

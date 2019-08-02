@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     role: {
       type: DataTypes.STRING(8),
       allowNull: false,
+      defaultValue: CHANNEL_MEMBERSHIP_ROLES.VIEWER,
     },
     type: {
       type: DataTypes.ENUM([

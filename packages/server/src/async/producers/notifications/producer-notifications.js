@@ -1,8 +1,6 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const data = require('../../../data');
-
 const { EmailEnvelope } = require('../../../models/classes/notifications');
 
 const { Producer } = require('../producer');

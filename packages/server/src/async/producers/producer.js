@@ -18,6 +18,14 @@ class Producer {
   }
 
   /**
+   * @public
+   * @return {Promise<boolean>}
+   */
+  async main() {
+    return true;
+  }
+
+  /**
    * @return {Promise<undefined>}
    * @protected
    */

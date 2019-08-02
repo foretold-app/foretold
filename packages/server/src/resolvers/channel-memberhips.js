@@ -10,7 +10,7 @@ const data = require('../data');
 async function create(root, args, context) {
   const input = args.input;
   const inviterAgentId = _.get(context, 'agent.id');
-  return data.channelMemberships.createOne(
+  return data.channelMemberships.createOne2(
     input.channelId,
     input.agentId,
     inviterAgentId,
@@ -25,7 +25,7 @@ async function create(root, args, context) {
  */
 async function update(root, args) {
   const input = args.input;
-  return data.channelMemberships.updateOne(
+  return data.channelMemberships.updateOne2(
     input.channelId,
     input.agentId,
     input.role,
@@ -39,7 +39,7 @@ async function update(root, args) {
  */
 async function remove(root, args) {
   const input = args.input;
-  return data.channelMemberships.deleteOne(
+  return data.channelMemberships.deleteOne2(
     input.channelId,
     input.agentId,
   );
@@ -57,7 +57,7 @@ async function remove(root, args) {
 async function allByAgentId(root, args, context, info) {
   const agentId = root.id;
   const options = { agentId };
-  return data.channelMemberships.getAll(options);
+  return data.channelMemberships.getAll2(options);
 }
 
 /**
@@ -71,7 +71,7 @@ async function allByAgentId(root, args, context, info) {
 async function allByChannelId(root, args, context, info) {
   const channelId = root.id;
   const options = { channelId };
-  return data.channelMemberships.getAll(options);
+  return data.channelMemberships.getAll2(options);
 }
 
 /**

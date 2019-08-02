@@ -20,6 +20,7 @@ class UsersData extends DataBase {
   }
 
   /**
+   * @public
    * @param {string} auth0Id
    * @return {Promise<Models.User>}
    */
@@ -34,9 +35,11 @@ class UsersData extends DataBase {
   /**
    * @todo: fix interface
    * @todo: move to permissions
-   * @param id
-   * @param data
-   * @param _user
+   * @public
+   * @deprecated: use updateOne
+   * @param {Models.ObjectID} id
+   * @param {object} data
+   * @param {object} _user
    * @return {Promise<Models.User>}
    */
   async updateOne(id, data, _user) {
@@ -48,6 +51,7 @@ class UsersData extends DataBase {
   }
 
   /**
+   * @public
    * @param {string} id
    * @param {Auth0UserInfoResponse} userInfo
    * @return {Promise<Models.User>}
@@ -82,6 +86,7 @@ class UsersData extends DataBase {
   }
 
   /**
+   * @public
    * @param {Models.ObjectID} agentId
    * @return {Promise<number>}
    */

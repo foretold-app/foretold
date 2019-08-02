@@ -1,4 +1,4 @@
-let component = ReasonReact.statelessComponent("ChannelInvite");
+let component = ReasonReact.statelessComponent("ChannelAddMember");
 
 type column = Table.column(Primary.Agent.t);
 
@@ -56,7 +56,7 @@ let make =
     let title =
       <FC.Base.Div float=`left>
         <FC.PageCard.HeaderRow.Title>
-          {"Invite Agents" |> ReasonReact.string}
+          {"Add Agents" |> ReasonReact.string}
         </FC.PageCard.HeaderRow.Title>
       </FC.Base.Div>;
 

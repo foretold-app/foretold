@@ -33,31 +33,33 @@ let toChannel = (channel): Primary.Channel.t =>
 
 let component = (~id, fn) => {
   let query = Query.make(~id, ());
-  QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> ApolloUtils.apolloResponseToResult
-    |> E.R.bind(_, e =>
-         switch (e##channel |> E.O.fmap(toChannel)) {
-         | Some(r) => Ok(r)
-         | None => Error("Community Not Found" |> ste)
-         }
-       )
-    |> E.R.fmap(fn)
-    |> E.R.id
-  )
-  |> E.React.el;
+  <QueryComponent variables=query##variables>
+    ...{({result}) =>
+      result
+      |> ApolloUtils.apolloResponseToResult
+      |> E.R.bind(_, e =>
+           switch (e##channel |> E.O.fmap(toChannel)) {
+           | Some(r) => Ok(r)
+           | None => Error("Community Not Found" |> ste)
+           }
+         )
+      |> E.R.fmap(fn)
+      |> E.R.id
+    }
+  </QueryComponent>;
 };
 
 let getChannelByIdAsComponent = (~id, innerFn) => {
   let query = Query.make(~id, ());
-  QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> HttpResponse.fromApollo
-    |> HttpResponse.fmap(e => e##channel |> E.O.fmap(toChannel))
-    |> HttpResponse.optionalToMissing
-    |> innerFn
-  )
-  |> ReasonReact.element;
+  <QueryComponent variables=query##variables>
+    ...{({result}) =>
+      result
+      |> HttpResponse.fromApollo
+      |> HttpResponse.fmap(e => e##channel |> E.O.fmap(toChannel))
+      |> HttpResponse.optionalToMissing
+      |> innerFn
+    }
+  </QueryComponent>;
 };
 
 let component2 = (~id, innerFn) => {

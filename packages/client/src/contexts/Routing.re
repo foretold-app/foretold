@@ -30,7 +30,8 @@ module ChannelPage = {
       | Measurable(string)
       | NewMeasurable
       | Members
-      | InviteNewMember
+      | AddMember
+      | InviteMember
       | Settings
       | NewSeries
       | Series(seriesId);
@@ -43,7 +44,8 @@ module ChannelPage = {
       | NewSeries => Measurables
       | Series(_) => Measurables
       | Members => Members
-      | InviteNewMember => Members
+      | AddMember => Members
+      | InviteMember => Members
       | Settings => Options
       };
 
@@ -129,8 +131,9 @@ module Route = {
     | ["c", channelId, "new"] => Channel({channelId, subPage: NewMeasurable})
     | ["c", channelId, "edit"] => Channel({channelId, subPage: Settings})
     | ["c", channelId, "members"] => Channel({channelId, subPage: Members})
+    | ["c", channelId, "add"] => Channel({channelId, subPage: AddMember})
     | ["c", channelId, "invite"] =>
-      Channel({channelId, subPage: InviteNewMember})
+      Channel({channelId, subPage: InviteMember})
     | ["c", channelId, "s", "new"] =>
       Channel({channelId, subPage: NewSeries})
     | ["c", channelId, "s", seriesId] =>
@@ -172,7 +175,8 @@ module Url = {
     | MeasurableEdit(string)
     | ChannelEdit(string)
     | ChannelMembers(string)
-    | ChannelInvite(string)
+    | ChannelAddMember(string)
+    | ChannelInviteMember(string)
     | MeasurableNew(string)
     | Subscribe
     | Unsubscribe;
@@ -200,7 +204,8 @@ module Url = {
     | ChannelShow(id) => "/c/" ++ id
     | ChannelEdit(id) => "/c/" ++ id ++ "/edit"
     | ChannelMembers(id) => "/c/" ++ id ++ "/members"
-    | ChannelInvite(channelId) => "/c/" ++ channelId ++ "/invite"
+    | ChannelAddMember(channelId) => "/c/" ++ channelId ++ "/add"
+    | ChannelInviteMember(channelId) => "/c/" ++ channelId ++ "/invite"
     | MeasurableEdit(id) => "/measurables/" ++ id ++ "/edit"
     | MeasurableNew(channelId) => "/c/" ++ channelId ++ "/new"
     | SeriesNew(channelId) => "/c/" ++ channelId ++ "/s/new"
@@ -217,7 +222,8 @@ module Url = {
     | Measurables(_) => ChannelShow(channelPage.channelId)
     | NewMeasurable => MeasurableNew(channelPage.channelId)
     | Members => ChannelMembers(channelPage.channelId)
-    | InviteNewMember => ChannelInvite(channelPage.channelId)
+    | AddMember => ChannelAddMember(channelPage.channelId)
+    | InviteMember => ChannelInviteMember(channelPage.channelId)
     | Settings => ChannelEdit(channelPage.channelId)
     | NewSeries => SeriesNew(channelPage.channelId)
     | Series(id) => SeriesShow(channelPage.channelId, id)

@@ -3,6 +3,7 @@ const _ = require('lodash');
 const { DataBase } = require('./data-base');
 
 const { ChannelMembershipModel } = require('../models-abstract');
+const { CHANNEL_MEMBERSHIP_ROLES } = require('../models/enums/channel-membership-roles');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -18,29 +19,45 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @todo: fix interface (data, options)
+   * @public
+   * @deprecated: use createdOne
    * @param {Models.ObjectID} channelId
    * @param {Models.ObjectID} agentId
-   * @param {Models.ObjectID} inviterAgentId
-   * @param {string} role
+   * @param {Models.ObjectID} [inviterAgentId]
+   * @param {string} [role]
    * @returns {Promise<Models.ChannelMemberships>}
    */
-  async createOne(channelId, agentId, inviterAgentId, role) {
-    await this.validate({ channelId, agentId });
-    const channelMembership =
-      await this.models.ChannelMemberships.findOne({ where: { channelId, agentId } }) ||
-      await this.models.ChannelMemberships.create({ channelId, agentId, inviterAgentId, role });
-    return channelMembership;
+  async createOne2(
+    channelId,
+    agentId,
+    inviterAgentId = null,
+    role = CHANNEL_MEMBERSHIP_ROLES.VIEWER,
+  ) {
+    await this._validate({ channelId, agentId });
+    return await this.models.ChannelMemberships.findOne({
+        where: {
+          channelId,
+          agentId
+        }
+      }) || await this.models.ChannelMemberships.create({
+        channelId,
+        agentId,
+        inviterAgentId,
+        role
+      });
   }
 
   /**
    * @todo: fix interface (params, query, options)
+   * @public
+   * @deprecated: use updatedOne
    * @param {Models.ObjectID} channelId
    * @param {Models.ObjectID} agentId
    * @param {string} role
    * @returns {Promise<Models.ChannelMemberships>}
    */
-  async updateOne(channelId, agentId, role) {
-    await this.validate({ channelId, agentId });
+  async updateOne2(channelId, agentId, role) {
+    await this._validate({ channelId, agentId });
     return this.ChannelMembershipModel.updateOne(
       channelId,
       agentId,
@@ -50,12 +67,14 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @todo: fix interface (params, options)
+   * @public
+   * @deprecated: use deleteOne
    * @param {Models.ObjectID} channelId
    * @param {Models.ObjectID} agentId
    * @returns {Promise<Models.ChannelMemberships | null>}
    */
-  async deleteOne(channelId, agentId) {
-    await this.validate({ channelId, agentId });
+  async deleteOne2(channelId, agentId) {
+    await this._validate({ channelId, agentId });
     return this.ChannelMembershipModel.deleteOne(
       channelId,
       agentId,
@@ -68,52 +87,52 @@ class ChannelMembershipsData extends DataBase {
    * @param {Models.ObjectID} agentId
    * @return {Promise<*>}
    */
-  async validate({ channelId, agentId }) {
+  async _validate({ channelId, agentId }) {
     if (!await this.models.Channel.findByPk(channelId)) {
-      return Promise.reject(new Error(`Channel "${ channelId }" is not found.`));
+      return Promise.reject(new Error(`Channel "${channelId}" is not found.`));
     }
     if (!await this.models.Agent.findByPk(agentId)) {
-      return Promise.reject(new Error(`Agent "${ agentId }" is not found.`));
+      return Promise.reject(new Error(`Agent "${agentId}" is not found.`));
     }
     return true;
   }
 
   /**
-   *
-   * @todo: Call "getOne()" of "model" layer.
-   * @todo: Pass "id", "restrictions" and "filter" params
-   * @todo: right into model call.
-   * @todo: Then do the same everywhere on data layer.
-   *
    * @todo: fix interface (params, query, options)
+   * @public
+   * @deprecated: use getOne
    * @param {object} options
    * @param {Models.ObjectID} [options.agentId]
    * @param {Models.ObjectID} [options.channelId]
    * @returns {Promise<Models.ChannelMemberships>}
    */
-  async getOne(options) {
+  async getOne2(options) {
     return this.models.ChannelMemberships.findOne({ where: options });
   }
 
   /**
    * @todo: fix interface (filter, pagination, options)
+   * @public
+   * @deprecated: use getAll
    * @param {object} options
    * @param {Models.ObjectID} [options.agentId]
    * @param {Models.ObjectID} [options.channelId]
+   * @param {string} [options.role]
    * @returns {Promise<Models.ChannelMemberships[]>}
    */
-  async getAll(options) {
+  async getAll2(options) {
     return this.models.ChannelMemberships.findAll({ where: options });
   }
 
   /**
+   * @public
    * @param {object} options
    * @param {Models.ObjectID} [options.agentId]
    * @param {Models.ObjectID} [options.channelId]
    * @returns {Promise<string[]>}
    */
   async getAllChannelIds(options) {
-    return (await this.getAll(options)).map(o => o.channelId);
+    return (await this.getAll2(options)).map(o => o.channelId);
   }
 
   /**
@@ -122,33 +141,31 @@ class ChannelMembershipsData extends DataBase {
    * @return {Promise<Models.ChannelMemberships>}
    */
   async join(options) {
-    const role = ChannelMembershipModel.ROLES.VIEWER;
-    return this.createOne(
+    return this.createOne2(
       options.channelId,
       options.agentId,
-      null,
-      role,
     );
   }
 
   /**
-   * @todo: updateOneAs?
+   * @public
    * @param {object} options
    * @return {Promise<Models.ChannelMemberships|null>}
    */
   async leave(options) {
-    return this.deleteOne(
+    return this.deleteOne2(
       options.channelId,
       options.agentId,
     );
   }
 
   /**
+   * @public
    * @param {object} options
    * @return {Promise<string>}
    */
   async getOneOnlyRole(options) {
-    const channelMembership = await this.getOne(options);
+    const channelMembership = await this.getOne2(options);
     return _.get(
       channelMembership,
       'role',
@@ -157,11 +174,12 @@ class ChannelMembershipsData extends DataBase {
   }
 
   /**
+   * @public
    * @param {object} options
    * @return {Promise<Models.ChannelMemberships[]>}
    */
   async getAllOnlyAdmins(options) {
-    return this.getAll({
+    return this.getAll2({
       ...options,
       role: ChannelMembershipModel.ROLES.ADMIN,
     });

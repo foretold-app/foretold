@@ -33,8 +33,6 @@ module FormConfig = {
 
 module Form = ReFormNext.Make(FormConfig);
 
-let component = ReasonReact.statelessComponent("Profile");
-
 let testName = (str: string) => {
   let exp = () => [%re "/^[a-z0-9._]{0,30}$/i"];
   let res = exp() |> Js.Re.exec(str);
@@ -140,6 +138,7 @@ module CMutationForm =
     type queryType = UserUpdate.EditUser.t;
   });
 
+let component = ReasonReact.statelessComponent("Profile");
 let make =
     (
       ~loggedInUser: Types.user,

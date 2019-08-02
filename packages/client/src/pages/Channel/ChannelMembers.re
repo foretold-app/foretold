@@ -159,17 +159,42 @@ let addMembersButtonSection = (channelId: string) =>
     ])}>
     <FC.Base.Button
       variant=Primary
-      onClick={e => LinkType.onClick(Internal(ChannelInvite(channelId)), e)}>
+      onClick={e =>
+        LinkType.onClick(Internal(ChannelAddMember(channelId)), e)
+      }>
       {"Add Members" |> ReasonReact.string}
     </FC.Base.Button>
   </FC.Base.Div>;
+
+let inviteMemberButtonSection = (channelId: string) =>
+  true
+    ? ReasonReact.null
+    : <FC.Base.Div
+        float=`right
+        className={Css.style([
+          FC.PageCard.HeaderRow.Styles.itemTopPadding,
+          FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+          FC.PageCard.HeaderRow.Styles.itemRightPadding,
+        ])}>
+        <FC.Base.Button
+          variant=Primary
+          onClick={e =>
+            LinkType.onClick(Internal(ChannelInviteMember(channelId)), e)
+          }>
+          {"Invite Member" |> ReasonReact.string}
+        </FC.Base.Button>
+      </FC.Base.Div>;
 
 let succesFn =
     (~channelId: string, ~layout, ~channel: Types.channel, ~memberships) => {
   let head =
     switch (channel.myRole) {
     | Some(`ADMIN) =>
-      <div> {title()} {addMembersButtonSection(channelId)} </div>
+      <div>
+        {title()}
+        {addMembersButtonSection(channelId)}
+        {inviteMemberButtonSection(channelId)}
+      </div>
     | _ => <div> {title()} </div>
     };
 

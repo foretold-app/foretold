@@ -82,17 +82,21 @@ module Query = [%graphql
       }
     |}
 ];
+
 module QueryComponent = ReasonApollo.CreateQuery(Query);
+
 let component = (~id, fn) => {
   let query = Query.make(~id, ());
-  QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> ApolloUtils.apolloResponseToResult
-    |> E.R.bind(_, e =>
-         e##measurable |> filterOptionalResult("Measurable not found" |> ste)
-       )
-    |> E.R.fmap(fn)
-    |> E.R.id
-  )
-  |> E.React.el;
+  <QueryComponent variables=query##variables>
+    ...{({result}) =>
+      result
+      |> ApolloUtils.apolloResponseToResult
+      |> E.R.bind(_, e =>
+           e##measurable
+           |> filterOptionalResult("Measurable not found" |> ste)
+         )
+      |> E.R.fmap(fn)
+      |> E.R.id
+    }
+  </QueryComponent>;
 };

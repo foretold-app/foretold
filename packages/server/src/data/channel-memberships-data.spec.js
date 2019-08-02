@@ -1,7 +1,7 @@
 const models = require('../models');
 const { ChannelMembershipsData } = require('./channel-memberships-data');
 
-describe('data layer of agent-channels', () => {
+describe('Data Layer - Channel Memberships Data', () => {
 
   it('class should be a constructor', () => {
     expect(ChannelMembershipsData).toBeInstanceOf(Function);
@@ -14,14 +14,14 @@ describe('data layer of agent-channels', () => {
   const input = { channelId, agentId };
   const role = 'VIEWER';
 
-  describe('createOne() when there is user', () => {
+  describe('createOne2() when there is user', () => {
     beforeEach(() => {
       jest.spyOn(models.ChannelMemberships, 'findOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('finds user without creating new one', () => {
-      return instance.createOne(channelId, agentId, inviterAgentId, role).then((result) => {
+      return instance.createOne2(channelId, agentId, inviterAgentId, role).then((result) => {
         expect(models.ChannelMemberships.findOne).toHaveBeenCalledWith({
           where: input,
         });
@@ -31,14 +31,14 @@ describe('data layer of agent-channels', () => {
     });
   });
 
-  describe('createOne() when there is no user', () => {
+  describe('createOne2() when there is no user', () => {
     beforeEach(() => {
       jest.spyOn(models.ChannelMemberships, 'findOne').mockReturnValue(
         Promise.resolve(false),
       );
     });
     it('creates new user', () => {
-      return instance.createOne(channelId, agentId, inviterAgentId, role).then((result) => {
+      return instance.createOne2(channelId, agentId, inviterAgentId, role).then((result) => {
         expect(models.ChannelMemberships.findOne).toHaveBeenCalledWith({
           where: input,
         });
@@ -50,14 +50,14 @@ describe('data layer of agent-channels', () => {
     });
   });
 
-  describe('deleteOne()', () => {
+  describe('deleteOne2()', () => {
     beforeEach(() => {
       jest.spyOn(instance.ChannelMembershipModel, 'deleteOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('finds and destroys user', () => {
-      return instance.deleteOne(channelId, agentId).then((result) => {
+      return instance.deleteOne2(channelId, agentId).then((result) => {
         expect(instance.ChannelMembershipModel.deleteOne).toHaveBeenCalledWith(
           channelId,
           agentId,
@@ -67,9 +67,9 @@ describe('data layer of agent-channels', () => {
     });
   });
 
-  describe('validate() if all input is present', () => {
+  describe('_validate() if all input is present', () => {
     it('finds channel and agent', () => {
-      return instance.validate(input).then((result) => {
+      return instance._validate(input).then((result) => {
         expect(models.Channel.findByPk).toHaveBeenCalledWith(channelId);
         expect(models.Agent.findByPk).toHaveBeenCalledWith(agentId);
         expect(result).toBe(true);
@@ -77,20 +77,20 @@ describe('data layer of agent-channels', () => {
     });
   });
 
-  describe('validate() if there is channel', () => {
+  describe('_validate() if there is channel', () => {
     beforeEach(() => {
       jest.spyOn(models.Channel, 'findByPk').mockReturnValue(
         Promise.resolve(false),
       );
     });
     it('throws an error ', () => {
-      return instance.validate(input).catch((err) => {
+      return instance._validate(input).catch((err) => {
         expect(err).toBeInstanceOf(Error)
       });
     });
   });
 
-  describe('validate() if there are channel and agent', () => {
+  describe('_validate() if there are channel and agent', () => {
     beforeEach(() => {
       jest.spyOn(models.Channel, 'findByPk').mockReturnValue(
         Promise.resolve(false),
@@ -100,7 +100,7 @@ describe('data layer of agent-channels', () => {
       );
     });
     it('does not find agent', () => {
-      return instance.validate({ agentId }).catch((err) => {
+      return instance._validate({ agentId }).catch((err) => {
         expect(models.Channel.findByPk).toHaveBeenCalledTimes(1);
         expect(models.Agent.findByPk).toHaveBeenCalledTimes(0);
         expect(err).toBeInstanceOf(Error)
@@ -108,7 +108,7 @@ describe('data layer of agent-channels', () => {
     });
   });
 
-  describe('getOne()', () => {
+  describe('getOne2()', () => {
     const options = {};
     beforeEach(() => {
       jest.spyOn(models.ChannelMemberships, 'findOne').mockReturnValue(
@@ -116,7 +116,7 @@ describe('data layer of agent-channels', () => {
       );
     });
     it('finds agent-channel note ', () => {
-      return instance.getOne(options).then((result) => {
+      return instance.getOne2(options).then((result) => {
         expect(models.ChannelMemberships.findOne).toHaveBeenCalledWith({
           where: options,
         });
@@ -125,7 +125,7 @@ describe('data layer of agent-channels', () => {
     });
   });
 
-  describe('getAll()', () => {
+  describe('getAll2()', () => {
     const options = {};
     beforeEach(() => {
       jest.spyOn(models.ChannelMemberships, 'findAll').mockReturnValue(
@@ -133,7 +133,7 @@ describe('data layer of agent-channels', () => {
       );
     });
     it('find agents-channels notes', () => {
-      return instance.getAll(options).then((result) => {
+      return instance.getAll2(options).then((result) => {
         expect(models.ChannelMemberships.findAll).toHaveBeenCalledWith({
           where: options,
         });
@@ -145,29 +145,29 @@ describe('data layer of agent-channels', () => {
   describe('getAllChannelIds()', () => {
     const options = {};
     beforeEach(() => {
-      jest.spyOn(instance, 'getAll').mockReturnValue(Promise.resolve([
+      jest.spyOn(instance, 'getAll2').mockReturnValue(Promise.resolve([
         { channelId: 'channelId1' }
       ]));
     });
     it('calls getAll()', () => {
       return instance.getAllChannelIds(options).then((result) => {
-        expect(instance.getAll).toHaveBeenCalledWith(options);
+        expect(instance.getAll2).toHaveBeenCalledWith(options);
         expect(result).toEqual(['channelId1']);
       });
     });
   });
 
-  describe('updateOne()', () => {
+  describe('updateOne2()', () => {
     beforeEach(() => {
       jest.spyOn(instance.ChannelMembershipModel, 'updateOne').mockReturnValue(
         Promise.resolve(true),
       );
-      jest.spyOn(instance, 'validate').mockReturnValue(
+      jest.spyOn(instance, '_validate').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('updates user', () => {
-      return instance.updateOne(channelId, agentId, role).then((result) => {
+      return instance.updateOne2(channelId, agentId, role).then((result) => {
         expect(instance.ChannelMembershipModel.updateOne).toHaveBeenCalledWith(
           channelId,
           agentId,

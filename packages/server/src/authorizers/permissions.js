@@ -114,6 +114,16 @@ const rulesBots = {
   }
 };
 
+const rulesInvitations = {
+  Query: {},
+  Mutation: {
+    invitationCreate: and(
+      currentAgentIsAuthenticated,
+      currentAgentIsApplicationAdminOrChannelAdmin,
+    ),
+  }
+};
+
 const rules = {
   Bot: {
     token: botBelongsToCurrentUser,
@@ -139,6 +149,8 @@ const rules = {
     channel: allow,
     channels: allow,
     stats: allow,
+
+    ...rulesInvitations.Query,
   },
   Mutation: {
     '*': currentAgentIsAuthenticated,
@@ -174,6 +186,7 @@ const rules = {
     ...rulesMeasurables.Mutation,
     ...rulesChannel.Mutation,
     ...rulesChannelMemberships.Mutation,
+    ...rulesInvitations.Mutation,
   }
 };
 

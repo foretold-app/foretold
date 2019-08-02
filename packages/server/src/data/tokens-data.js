@@ -30,6 +30,7 @@ class TokensData extends DataBase {
   }
 
   /**
+   * @public
    * @param {string} tokenIn
    * @param {string} [type]
    * @return {Promise<null | string>}
@@ -70,6 +71,7 @@ class TokensData extends DataBase {
   }
 
   /**
+   * @public
    * @param {string} [token]
    * @return {Promise<Models.Token>}
    */

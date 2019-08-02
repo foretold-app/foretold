@@ -55,14 +55,15 @@ let component =
     ) => {
   let query = Query.make(~channelMemberId?, ~isArchived?, ());
 
-  QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(e =>
-         e##channels |> E.A.O.concatSomes |> E.A.fmap(toChannel) |> sortFn
-       )
-    |> E.R.fmap(fn)
-    |> E.R.id
-  )
-  |> E.React.el;
+  <QueryComponent variables=query##variables>
+    ...{({result}) =>
+      result
+      |> ApolloUtils.apolloResponseToResult
+      |> E.R.fmap(e =>
+           e##channels |> E.A.O.concatSomes |> E.A.fmap(toChannel) |> sortFn
+         )
+      |> E.R.fmap(fn)
+      |> E.R.id
+    }
+  </QueryComponent>;
 };

@@ -1,5 +1,4 @@
 const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-type');
-const { AGENT_TYPE } = require('./enums/agent-type');
 
 module.exports = (sequelize, DataTypes) => {
   const Bot = sequelize.define('Bot', {
@@ -40,13 +39,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
-  });
-
-  Bot.addHook('beforeCreate', async (event) => {
-    let agent = await sequelize.models.Agent.create({
-      type: AGENT_TYPE.BOT,
-    });
-    event.agentId = agent.dataValues.id;
   });
 
   Bot.associate = function associate(models) {

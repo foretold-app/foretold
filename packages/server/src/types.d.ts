@@ -85,6 +85,11 @@ export namespace Models {
     status: 'AWAITING' | 'ACCEPTED';
   }
 
+  export interface FeedItem extends Model {
+    channelId: ObjectID;
+    body: { item: string, description: string };
+  }
+
   export type Creator = Models.User | Models.Bot;
 }
 

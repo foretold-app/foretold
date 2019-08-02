@@ -6,6 +6,7 @@ const data = require('../../data');
 const { TEMPLATE_NAME } = require('../../models/enums/template-name');
 const { NOTIFICATION_TYPE } = require('../../models/enums/notification-type');
 const { EmailEnvelope } = require('../../models/classes/notifications');
+const { FeedItem } = require('../../models/classes/feed-items');
 
 class Producer {
 
@@ -54,13 +55,21 @@ class Producer {
   }
 
   /**
-   * @return {Promise<void>}
+   * @return {Promise<Models.Template>}
    * @protected
    */
   async _getTemplate() {
     assert(!!this.templateName, 'Template Name is required');
     const params = { name: this.templateName };
-    return Producer.data.templates.getOne(params);
+    const template = await Producer.data.templates.getOne(params);
+
+    assert(!!_.get(template, 'id'), 'Template ID is required');
+    assert(
+      !!_.get(template, 'envelopeTemplate'),
+      'Envelope Template ID is required',
+    );
+
+    return template;
   }
 
   /**
@@ -78,6 +87,7 @@ Producer.TEMPLATE_NAME = TEMPLATE_NAME;
 Producer.TEMPLATE_NAME = TEMPLATE_NAME;
 Producer.NOTIFICATION_TYPE = NOTIFICATION_TYPE;
 Producer.EmailEnvelope = EmailEnvelope;
+Producer.FeedItem = FeedItem;
 
 module.exports = {
   Producer,

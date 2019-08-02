@@ -8,7 +8,7 @@ module.exports = {
 
       const envelopeTemplate = new FeedItemTemplate({
         item: '',
-        body: '{{ agent.name }} joined to community',
+        description: '{{ agent.name }} joined to community',
       });
 
       await queryInterface.bulkInsert('Templates', [{

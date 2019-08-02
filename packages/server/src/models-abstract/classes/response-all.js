@@ -4,7 +4,7 @@ class ResponseAll {
     this.total = total;
   }
 
-  getDate() {
+  getData() {
     return this.data;
   }
 

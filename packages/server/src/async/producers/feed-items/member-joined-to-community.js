@@ -40,7 +40,7 @@ class MemberJoinedToCommunity extends ProducerFeedItems {
       });
       assert(!!_.get(agent, 'id'), 'Agent ID is required.');
 
-      const replacements = this._getReplacements(agent);
+      const replacements = await this._getReplacements(agent);
       const channelId = this.channelMembership.channelId;
       await this._queueFeedItem(replacements, channelId);
 
@@ -58,10 +58,10 @@ class MemberJoinedToCommunity extends ProducerFeedItems {
    * @return {{agent: {name: string}}}
    * @protected
    */
-  _getReplacements(agent) {
+  async _getReplacements(agent) {
     return {
       agent: {
-        name: _.get(agent, 'name') || 'Somebody',
+        name: (await _.get(agent, 'name')) || 'Somebody',
       },
     }
   }

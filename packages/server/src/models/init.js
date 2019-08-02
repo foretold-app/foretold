@@ -17,7 +17,7 @@ function init(db) {
   const template = db.sequelize.import('./template');
   const notification = db.sequelize.import('./notification');
   const agentNotification = db.sequelize.import('./agent-notification');
-  const invitation = db.sequelize.import('./invitation');
+  // const invitation = db.sequelize.import('./invitation');
 
   db.Agent = agent;
   db.Bot = bot;
@@ -32,9 +32,9 @@ function init(db) {
   db.Template = template;
   db.Notification = notification;
   db.AgentNotification = agentNotification;
-  db.Invitation = invitation;
+  // db.Invitation = invitation;
 
-// Associate All Models
+  // Associate All Models
   console.log(' --- ');
   Object.keys(db).forEach((modelName) => {
     if (db[modelName].associate) {

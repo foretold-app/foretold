@@ -1,6 +1,8 @@
 const measurements = require('./measurements');
 const data = require('../data');
 
+const { ResponseAll } = require('../models-abstract/classes/response-all');
+
 describe('Measurements Resolver', () => {
 
   describe('all()', () => {
@@ -17,10 +19,7 @@ describe('Measurements Resolver', () => {
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.measurements, 'getAll').mockReturnValue(
-        Promise.resolve({
-          data: true,
-          total: 1
-        }),
+        Promise.resolve(new ResponseAll(true, 1)),
       );
     });
     it('returns measurements', () => {

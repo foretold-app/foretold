@@ -71,7 +71,7 @@ class MemberToCommunity extends ProducerNotifications {
   static _getReplacements(inviter, channel) {
     return {
       inviterAgent: {
-        name: _.get(inviter, 'name') || 'Somebody',
+        name: _.get(inviter, 'name') || 'Somebody', // @todo: await!
         link: getAgentLinkWithToken(inviter),
       },
       channel: {

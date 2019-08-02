@@ -152,7 +152,7 @@ class DataBase {
   /**
    * @protected
    * @param {Layers.DataSourceLayer.options} [options]
-   * @return {Layers.AbstractModelsLayer.options}
+   * @return {Layers.AbstractModelsLayer.restrictions}
    */
   _getModelRestrictions(options = {}) {
     const restriction$ = _.pick(options, this.modelRestrictionsList);

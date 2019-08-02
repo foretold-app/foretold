@@ -34,8 +34,8 @@ async function all(root, args, context, info) {
     agentId: _.get(context, 'agent.id'),
   };
 
-  const result = await data.measurements.getAll(filter, pagination, options);
-  return result.data;
+  const connection = await data.measurements.getAll(filter, pagination, options);
+  return connection.getData();
 }
 
 /**

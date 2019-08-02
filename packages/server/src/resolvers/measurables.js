@@ -38,8 +38,8 @@ async function all(root, args, context, info) {
 
   // tricky
   context.resultOrLatestMeasurementForAgentId = args.resultOrLatestMeasurementForAgentId;
-  const result = await data.measurables.getAll(filter, pagination, options);
-  return result.data;
+  const connection = await data.measurables.getAll(filter, pagination, options);
+  return connection.getData();
 }
 
 /**

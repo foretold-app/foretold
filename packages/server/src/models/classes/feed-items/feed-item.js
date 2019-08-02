@@ -9,6 +9,7 @@ class FeedItem {
    * @param {string} options.description
    */
   constructor(options = {}) {
+    assert(_.isObject(options), 'Options should be an object');
     assert(!!_.get(options, 'item'), 'Item is required');
     assert(!!_.get(options, 'description'), 'Description is required');
 

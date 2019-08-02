@@ -28,7 +28,7 @@ class MeasurableStateChanged extends MeasurableState {
         this.measurable,
       );
       const notification = await this._queueEmail(replacements);
-      await this._assignNotification(creator, notification);
+      await this._assignAgentToNotification(creator, notification);
     } catch (e) {
       await this._rollback();
       console.log(`stateChanged`, e.message, e);

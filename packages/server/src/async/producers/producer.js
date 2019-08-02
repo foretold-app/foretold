@@ -72,7 +72,7 @@ class Producer {
    * @return {Promise<*>}
    * @protected
    */
-  async _assignNotification(agent, notification) {
+  async _assignAgentToNotification(agent, notification) {
     assert(!!agent.id, 'Agent ID is required');
     assert(!!notification.id, 'Notification ID is required');
 

@@ -37,7 +37,7 @@ class MeasurableStateResolved extends MeasurableState {
 
       for (let i = 0, max = agentsWithoutAuthor.length; i < max; i++) {
         const agent = agentsWithoutAuthor[i];
-        await this._assignNotification(agent, notification);
+        await this._assignAgentToNotification(agent, notification);
       }
 
     } catch (e) {

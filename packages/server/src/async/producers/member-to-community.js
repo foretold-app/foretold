@@ -45,7 +45,7 @@ class MemberToCommunity extends Producer {
       );
 
       const notification = await this._queueEmail(replacements);
-      await this._assignNotification(agent, notification);
+      await this._assignAgentToNotification(agent, notification);
 
       await this._commit();
       return true;

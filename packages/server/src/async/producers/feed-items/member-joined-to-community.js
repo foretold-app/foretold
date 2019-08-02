@@ -2,6 +2,7 @@ const assert = require('assert');
 const _ = require('lodash');
 
 const { ProducerFeedItems } = require('./producer-feed-items');
+const { CHANNEL_MEMBERSHIP_TYPE } = require('../../../models/enums/channel-membership-type');
 
 class MemberJoinedToCommunity extends ProducerFeedItems {
 
@@ -25,6 +26,11 @@ class MemberJoinedToCommunity extends ProducerFeedItems {
    * @return {Promise<boolean>}
    */
   async main() {
+    if (this.channelMembership.type !== CHANNEL_MEMBERSHIP_TYPE.JOINED) {
+      console.log(this.name, 'Channel Membership is not JOINED');
+      return true;
+    }
+
     try {
       const agent = await Producer.data.agents.getOne({
         id: this.channelMembership.agentId,

@@ -26,73 +26,113 @@ const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-
 
 function addHooks(db) {
   db.sequelize.addHook('afterUpdate', (instance) => {
-    if (
-      instance instanceof db.Measurable &&
-      instance.changed('state')
-    ) {
-      emitter.emit(events.MEASURABLE_STATE_IS_CHANGED, instance);
+    try {
+      if (
+        instance instanceof db.Measurable &&
+        instance.changed('state')
+      ) {
+        emitter.emit(events.MEASURABLE_STATE_IS_CHANGED, instance);
+      }
+    } catch (e) {
+      console.log('Hook', e);
     }
   });
 
   db.sequelize.addHook('afterUpdate', (instance) => {
-    if (
-      instance instanceof db.Measurable &&
-      instance.changed('state')
-    ) {
-      emitter.emit(events.MEASURABLE_STATE_IS_CHANGED, instance);
+    try {
+      if (
+        instance instanceof db.Measurable &&
+        instance.changed('state')
+      ) {
+        emitter.emit(events.MEASURABLE_STATE_IS_CHANGED, instance);
+      }
+    } catch (e) {
+      console.log('Hook', e);
     }
   });
 
   db.sequelize.addHook('afterCreate', (instance) => {
-    if (instance instanceof db.ChannelMemberships) {
-      emitter.emit(events.MEMBER_ADDED_TO_COMMUNITY, instance);
+    try {
+      if (instance instanceof db.ChannelMemberships) {
+        emitter.emit(events.MEMBER_ADDED_TO_COMMUNITY, instance);
+      }
+    } catch (e) {
+      console.log('Hook', e);
     }
   });
 
-  db.sequelize.addHook('afterCreate', (instance) => {
-    if (instance instanceof db.Invitation) {
-      emitter.emit(events.MEMBER_INVITED_TO_COMMUNITY, instance);
-    }
-  });
+  // db.sequelize.addHook('afterCreate', (instance) => {
+  //   try {
+  //     if (instance instanceof db.Invitation) {
+  //       emitter.emit(events.MEMBER_INVITED_TO_COMMUNITY, instance);
+  //     }
+  //   } catch (e) {
+  //     console.log('Hook', e);
+  //   }
+  // });
 
   db.Bot.addHook('beforeCreate', async (event) => {
-    const agent = await db.sequelize.models.Agent.create({
-      type: AGENT_TYPE.BOT,
-    });
-    event.agentId = agent.dataValues.id;
+    try {
+      const agent = await db.sequelize.models.Agent.create({
+        type: AGENT_TYPE.BOT,
+      });
+      event.agentId = agent.dataValues.id;
+    } catch (e) {
+      console.log('Hook', e);
+    }
   });
 
   db.User.addHook('beforeCreate', async (event) => {
-    const agent = await db.sequelize.models.Agent.create({
-      type: AGENT_TYPE.USER,
-    });
-    event.agentId = agent.dataValues.id
+    try {
+      const agent = await db.sequelize.models.Agent.create({
+        type: AGENT_TYPE.USER,
+      });
+      event.agentId = agent.dataValues.id
+    } catch (e) {
+      console.log('Hook', e);
+    }
   });
 
   db.Series.addHook('afterCreate', async (series) => {
-    await series.createMeasurables();
+    try {
+      await series.createMeasurables();
+    } catch (e) {
+      console.log('Hook', e);
+    }
   });
 
   db.Measurable.addHook('beforeUpdate', async (instance) => {
-    await instance.watchExpectedResolutionDate(instance);
+    try {
+      await instance.watchExpectedResolutionDate(instance);
+    } catch (e) {
+      console.log('Hook', e);
+    }
   });
 
   db.Measurement.addHook('beforeValidate', async (instance) => {
-    if (instance.dataValues.relevantAt == null) {
-      instance.relevantAt = Date.now();
+    try {
+      if (instance.dataValues.relevantAt == null) {
+        instance.relevantAt = Date.now();
+      }
+    } catch (e) {
+      console.log('Hook', e);
     }
   });
 
   db.Measurement.addHook('afterCreate', async (instance) => {
-    const competitorType = instance.dataValues.competitorType;
-    const isJudgable = [
-      MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
-      MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED,
-    ].includes(competitorType);
+    try {
+      const competitorType = instance.dataValues.competitorType;
+      const isJudgable = [
+        MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
+        MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED,
+      ].includes(competitorType);
 
-    if (isJudgable) {
-      const measurable = await instance.getMeasurable();
-      await measurable.judged();
+      if (isJudgable) {
+        const measurable = await instance.getMeasurable();
+        await measurable.judged();
+      }
+    } catch (e) {
+      console.log('Hook', e);
     }
   });
 }

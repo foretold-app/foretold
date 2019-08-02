@@ -1,3 +1,5 @@
+const assert = require('assert');
+
 const { Producer } = require('../producer');
 
 class ProducerFeedItems extends Producer {
@@ -30,7 +32,7 @@ class ProducerFeedItems extends Producer {
       feedItem instanceof Producer.FeedItem,
       'feedItem is not FeedItem'
     );
-    const data = { body: feedItem, channelId };
+    const data = { body: { common: feedItem }, channelId };
     const options = await this._getOptions();
     return Producer.data.feedItems.createOne(data, options);
   }

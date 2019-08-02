@@ -31,5 +31,5 @@ module.exports = {
   templates: new TemplatesData(),
   agentNotifications: new AgentNotificationsData(),
   invitations: new InvitationsData(),
-  feedItemsData: new FeedItemsData(),
+  feedItems: new FeedItemsData(),
 };

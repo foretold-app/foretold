@@ -21,7 +21,7 @@ async function all(root, args, context, info) {
   const filter = { channelId };
   const pagination = new Pagination(args);
   const options = new Options();
-  const connection = await data.feedItemsData.getConnection(
+  const connection = await data.feedItems.getConnection(
     filter,
     pagination,
     options,

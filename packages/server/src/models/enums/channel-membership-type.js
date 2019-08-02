@@ -1,0 +1,9 @@
+const CHANNEL_MEMBERSHIP_TYPE = {
+  ADDED: 'ADDED',
+  JOINED: 'JOINED',
+  INVITED: 'INVITED',
+};
+
+module.exports = {
+  CHANNEL_MEMBERSHIP_TYPE,
+};

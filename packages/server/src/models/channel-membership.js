@@ -1,4 +1,5 @@
 const { CHANNEL_MEMBERSHIP_ROLES } = require('./enums/channel-membership-roles');
+const { CHANNEL_MEMBERSHIP_TYPE } = require('./enums/channel-membership-type');
 
 /**
  * @param sequelize
@@ -24,6 +25,14 @@ module.exports = (sequelize, DataTypes) => {
     role: {
       type: DataTypes.STRING(8),
       allowNull: false,
+    },
+    type: {
+      type: DataTypes.ENUM([
+        CHANNEL_MEMBERSHIP_TYPE.ADDED,
+        CHANNEL_MEMBERSHIP_TYPE.JOINED,
+        CHANNEL_MEMBERSHIP_TYPE.INVITED,
+      ]),
+      defaultValue: CHANNEL_MEMBERSHIP_TYPE.ADDED,
     },
     createdAt: {
       type: DataTypes.DATE,

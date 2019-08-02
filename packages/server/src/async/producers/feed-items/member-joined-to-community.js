@@ -7,9 +7,10 @@ const { ProducerFeedItems } = require('./producer-feed-items');
 
 class MemberJoinedToCommunity extends ProducerFeedItems {
 
-  constructor(measurable = {}) {
+  constructor(channelMembership = {}) {
     super({});
-    this.measurable = measurable;
+    assert(_.isObject(channelMembership), 'Channel Membership should be an object');
+    this.channelMembership = channelMembership;
   }
 
   /**

@@ -11,10 +11,10 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.UUID
         },
-        tokenId: {
+        agentId: {
           type: Sequelize.UUID,
           references: {
-            model: 'Tokens',
+            model: 'Agents',
             key: 'id',
           },
           allowNull: false,
@@ -40,7 +40,7 @@ module.exports = {
             INVITATION_STATUS.AWAITING,
             INVITATION_STATUS.ACCEPTED,
           ]),
-          defaultValue: INVITATION_STATUS.AWAITING,
+          defaultValue: INVITATION_STATUS.ACCESS_TOKEN,
         },
         createdAt: {
           type: Sequelize.DATE,

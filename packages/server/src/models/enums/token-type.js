@@ -1,7 +1,6 @@
 const TOKEN_TYPE = {
   ACCESS_TOKEN: 'ACCESS_TOKEN',
   AUTH_TOKEN: 'AUTH_TOKEN',
-  INVITE_TOKEN: 'INVITE_TOKEN',
 };
 
 module.exports = {

@@ -11,7 +11,7 @@ module.exports = {
         body:
           '<a href="{{{ inviterAgent.link }}}">{{ inviterAgent.name }}</a> has ' +
           'invited you to the Foretold community, ' +
-          '[<a href="{{{ invitation.link }}}">click here to accept invitation</a>]'
+          '[<a href="{{{ channel.link }}}">{{ channel.name }}</a>]'
       });
 
       await queryInterface.bulkInsert('Templates', [{

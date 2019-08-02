@@ -7,9 +7,6 @@
 - **Application** - is the Foretold application;
 - **System** (Application System) - is a group of Objects, Subjects, Process 
 and Flows which works together and allows the application to work as expected;
-- **Late User Binding** - it is a process with binding application "User" with 
-a "Auth0 User", first of all "User" is added in the application and only 
-then attached with "Auth0 User";
 - **Authorization**
 - **Authentication**
 - **Identification**

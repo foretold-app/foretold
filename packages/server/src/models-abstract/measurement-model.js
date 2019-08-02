@@ -126,6 +126,8 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @public
+   * @todo: use getConnection
+   * @deprecated
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Models.ObjectID} [filter.measurableId]
    * @param {Models.ObjectID} [filter.agentId]

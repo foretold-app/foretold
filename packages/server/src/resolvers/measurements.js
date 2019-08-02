@@ -33,6 +33,7 @@ async function all(root, args, context, info) {
     isAdmin: _.get(context, 'agent.isAdmin'),
     agentId: _.get(context, 'agent.id'),
   };
+
   const result = await data.measurements.getAll(filter, pagination, options);
   return result.data;
 }

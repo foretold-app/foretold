@@ -29,6 +29,25 @@ const feedItem = new graphql.GraphQLObjectType({
   })
 });
 
+const feedItemEdge = new graphql.GraphQLObjectType({
+  name: 'FeedItemEdge',
+  fields: () => ({
+    node: { type: require('./feed-items').feedItem },
+    cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+  }),
+});
+
+const feedItemsConnection = new graphql.GraphQLObjectType({
+  name: 'FeedItemsConnection',
+  fields: () => ({
+    total: { type: graphql.GraphQLInt },
+    pageInfo: { type: graphql.GraphQLNonNull(require('./common').pageInfoConnection) },
+    edges: { type: graphql.GraphQLList(require('./feed-items').feedItemEdge) },
+  }),
+});
+
 module.exports = {
   feedItem,
+  feedItemEdge,
+  feedItemsConnection,
 };

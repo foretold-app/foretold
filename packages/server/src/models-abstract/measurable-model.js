@@ -46,6 +46,8 @@ class MeasurableModel extends ModelPostgres {
 
   /**
    * @public
+   * @todo: use getConnection
+   * @deprecated
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Models.ObjectID} [filter.channelId]
    * @param {Models.ObjectID} [filter.seriesId]

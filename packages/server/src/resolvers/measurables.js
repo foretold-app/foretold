@@ -35,6 +35,7 @@ async function all(root, args, context, info) {
     agentId: _.get(context, 'agent.id'),
     measuredByAgentId: _.get(args, 'measuredByAgentId'),
   };
+
   // tricky
   context.resultOrLatestMeasurementForAgentId = args.resultOrLatestMeasurementForAgentId;
   const result = await data.measurables.getAll(filter, pagination, options);

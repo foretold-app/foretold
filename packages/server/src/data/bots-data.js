@@ -18,19 +18,6 @@ class BotsData extends DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSourceLayer.filter} [filter]
-   * @param {Models.ObjectID} filter.userId
-   * @param {Layers.DataSourceLayer.pagination} [pagination]
-   * @param {Layers.DataSourceLayer.options} [options]
-   * @return {Promise<{data: Models.Model[], total: number}>}
-   */
-  async getAll(filter = {}, pagination = {}, options = {}) {
-    const restrictions = {};
-    return this.model.getAllWithConnections(filter, pagination, restrictions);
-  }
-
-  /**
-   * @public
    * @param {object} params
    * @return {Promise<string>}
    */

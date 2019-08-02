@@ -4,6 +4,7 @@ const { DataBase } = require('./data-base');
 
 const { ChannelMembershipModel } = require('../models-abstract');
 const { CHANNEL_MEMBERSHIP_ROLES } = require('../models/enums/channel-membership-roles');
+const { CHANNEL_MEMBERSHIP_TYPE } = require('../models/enums/channel-membership-type');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -138,13 +139,17 @@ class ChannelMembershipsData extends DataBase {
   /**
    * @todo: createOneAs?
    * @param {object} options
+   * @param {Models.ObjectID} options.channelId
+   * @param {object} options.agentId
    * @return {Promise<Models.ChannelMemberships>}
    */
   async join(options) {
-    return this.createOne2(
-      options.channelId,
-      options.agentId,
-    );
+    const data = {
+      channelId: options.channelId,
+      agentId: options.agentId,
+      type: CHANNEL_MEMBERSHIP_TYPE.JOINED,
+    };
+    return this.createOne(data);
   }
 
   /**
@@ -161,7 +166,8 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @public
-   * @param {object} options
+   * @param {object} options.agentId
+   * @param {object} options.channelId
    * @return {Promise<string>}
    */
   async getOneOnlyRole(options) {

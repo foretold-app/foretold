@@ -61,6 +61,7 @@ export namespace Models {
     agentId: ObjectID;
     channelId: ObjectID;
     role: ChannelMembershipRole;
+    type: 'ADDED' | 'JOINED' | 'INVITED';
   }
 
   export interface Token extends Model {

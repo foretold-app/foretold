@@ -1,11 +1,13 @@
-const { CHANNEL_MEMBERSHIP_TYPE } = require('../src/models/enums/channel-membership-roles');
+const {
+  CHANNEL_MEMBERSHIP_TYPE,
+} = require('../src/models/enums/channel-membership-type');
 
 module.exports = {
   up: async function (queryInterface, Sequelize) {
     try {
       await queryInterface.sequelize.query(`BEGIN`);
 
-      await queryInterface.addColumn('ChannelMembership', 'type', {
+      await queryInterface.addColumn('ChannelMemberships', 'type', {
         type: Sequelize.ENUM([
           CHANNEL_MEMBERSHIP_TYPE.ADDED,
           CHANNEL_MEMBERSHIP_TYPE.JOINED,
@@ -26,6 +28,7 @@ module.exports = {
     try {
       await queryInterface.sequelize.query(`BEGIN`);
       await queryInterface.removeColumn('ChannelMemberships', 'type');
+      await queryInterface.sequelize.query(`DROP TYPE "enum_ChannelMemberships_type"`);
       await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {
       console.error('Migration Down Error', e);

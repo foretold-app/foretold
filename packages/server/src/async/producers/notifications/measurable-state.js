@@ -1,12 +1,14 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const { getMeasurableLinkWithToken } = require('../../lib/urls');
-const { MEASUREMENT_COMPETITOR_TYPE } = require('../../models/enums/measurement-competitor-type');
+const { getMeasurableLinkWithToken } = require('../../../lib/urls');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../../../models/enums/measurement-competitor-type');
 
-const { Producer } = require('./producer');
+const { Producer } = require('../producer');
+const { ProducerNotifications } = require('./producer-notifications');
 
-class MeasurableState extends Producer {
+class MeasurableState extends ProducerNotifications {
+
   constructor(measurable = {}) {
     super({});
     this.measurable = measurable;

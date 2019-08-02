@@ -1,6 +1,7 @@
-const { Producer } = require('./producer');
+const { Producer } = require('../producer');
+const { ProducerNotifications } = require('./producer-notifications');
 
-class MemberInvitedToCommunity extends Producer {
+class MemberInvitedToCommunity extends ProducerNotifications {
   constructor(input = {}) {
     super({});
 

@@ -1,12 +1,14 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const { getChannelLinkWithToken } = require('../../lib/urls');
-const { getAgentLinkWithToken } = require('../../lib/urls');
+const { getChannelLinkWithToken } = require('../../../lib/urls');
+const { getAgentLinkWithToken } = require('../../../lib/urls');
 
-const { Producer } = require('./producer');
+const { Producer } = require('../producer');
+const { ProducerNotifications } = require('./producer-notifications');
 
-class MemberToCommunity extends Producer {
+class MemberToCommunity extends ProducerNotifications {
+
   constructor(input = {}) {
     super({});
 

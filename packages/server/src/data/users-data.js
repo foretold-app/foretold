@@ -5,6 +5,8 @@ const { MeasurementsData } = require('./measurements-data');
 
 const { UserModel } = require('../models-abstract');
 
+const { ForetoldAuthId } = require('../models/classes/foretold-auth-id');
+
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
  * @property {UserModel} UserModel
@@ -63,12 +65,15 @@ class UsersData extends DataBase {
     const isEmailVerifiedIn = !!_.get(userInfo, 'email_verified');
     const nicknameIn = _.get(userInfo, 'nickname');
     const pictureIn = _.get(userInfo, 'picture');
+    const auth0IdIn = _.get(userInfo, 'sub');
 
     const email = _.toString(emailIn).substr(0, 64);
     const nickname = _.toString(nicknameIn).substr(0, 30);
     const picture = _.toString(pictureIn).substr(0, 255);
+    const auth0Id = _.toString(auth0IdIn).substr(0, 255);
 
     const emailValid = email !== '' && isEmailVerifiedIn === true;
+    const foretoldAuthId = new ForetoldAuthId(email).toString();
 
     if (user.email === null && emailValid) {
       user.set('email', email);
@@ -79,6 +84,9 @@ class UsersData extends DataBase {
     }
     if (user.picture === null && picture !== '') {
       user.set('picture', picture);
+    }
+    if (user.auth0Id === foretoldAuthId && auth0Id !== '') {
+      user.set('auth0Id', auth0Id);
     }
 
     await user.save();

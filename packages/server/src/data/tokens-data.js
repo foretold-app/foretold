@@ -145,14 +145,6 @@ class TokensData extends DataBase {
   _generateToken() {
     return crypto.randomBytes(TokensData.MAX_BOT_TOKEN_SIZE).toString('hex');
   }
-
-  /**
-   * @public
-   * @return {string}
-   */
-  generateToken() {
-    return this._generateToken();
-  }
 }
 
 TokensData.MAX_BOT_TOKEN_SIZE = config.MAX_BOT_TOKEN_SIZE;

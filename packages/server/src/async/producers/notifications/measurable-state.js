@@ -11,6 +11,7 @@ class MeasurableState extends ProducerNotifications {
 
   constructor(measurable = {}) {
     super({});
+    assert(!!_.get(measurable, 'id'), 'Measurable ID is required');
     this.measurable = measurable;
   }
 
@@ -36,7 +37,6 @@ class MeasurableState extends ProducerNotifications {
    * @protected
    */
   async _getLastResolvedMeasurement() {
-    assert(!!this.measurable.id, 'Measurable ID is required');
     const params = {
       measurableId: this.measurable.id,
       competitorType: MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,

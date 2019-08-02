@@ -4,6 +4,7 @@ const data = require('../data');
 const { Pagination } = require('../data/classes/pagination');
 
 /**
+ * @todo: update input of getAll
  * @param {*} root
  * @param {object} args
  * @param {number} args.last

@@ -25,10 +25,7 @@ class ProducerFeedItems extends Producer {
    * @return {Promise<*>}
    * @protected
    */
-  async _createFeedItem(
-    feedItem = new Producer.FeedItem(),
-    channelId,
-  ) {
+  async _createFeedItem(feedItem, channelId) {
     assert(
       feedItem instanceof Producer.FeedItem,
       'feedItem is not FeedItem'

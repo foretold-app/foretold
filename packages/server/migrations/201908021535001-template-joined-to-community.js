@@ -1,19 +1,19 @@
 const { TEMPLATE_NAME } = require('../src/models/enums/template-name');
-const { FeedItemTemplate } = require('../src/models/classes/templates');
+const { FeedItem } = require('../src/models/classes');
 
 module.exports = {
   up: async function (queryInterface, Sequelize) {
     try {
       await queryInterface.sequelize.query(`BEGIN`);
 
-      const envelopeTemplate = new FeedItemTemplate({
+      const template = new FeedItem({
         item: '',
         description: '{{ agent.name }} joined to community',
       });
 
       await queryInterface.bulkInsert('Templates', [{
         id: Sequelize.fn('uuid_generate_v4'),
-        envelopeTemplate: JSON.stringify(envelopeTemplate),
+        envelopeTemplate: JSON.stringify(template),
         name: TEMPLATE_NAME.MEMBER_JOINED_TO_COMMUNITY_FEED_ITEM,
         createdAt: new Date(),
         updatedAt: new Date(),

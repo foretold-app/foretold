@@ -6,7 +6,7 @@ const data = require('../../data');
 const { TEMPLATE_NAME } = require('../../models/enums/template-name');
 const { NOTIFICATION_TYPE } = require('../../models/enums/notification-type');
 const { EmailEnvelope } = require('../../models/classes/notifications');
-const { FeedItem } = require('../../models/classes/feed-items');
+const { FeedItem } = require('../../models/classes');
 
 class Producer {
 

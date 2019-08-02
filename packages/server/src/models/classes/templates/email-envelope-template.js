@@ -1,5 +1,6 @@
 class EmailEnvelopeTemplate {
   /**
+   * @todo: use one file of two (notification, template)
    * @param {object} options
    * @param {string} options.subject
    * @param {string} options.body

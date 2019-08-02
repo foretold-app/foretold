@@ -4,6 +4,8 @@ const _ = require('lodash');
 const { ProducerFeedItems } = require('./producer-feed-items');
 const { CHANNEL_MEMBERSHIP_TYPE } = require('../../../models/enums/channel-membership-type');
 
+const { Producer } = require('../producer');
+
 class MemberJoinedToCommunity extends ProducerFeedItems {
 
   /**
@@ -13,12 +15,13 @@ class MemberJoinedToCommunity extends ProducerFeedItems {
     super({});
 
     assert(_.isObject(channelMembership), 'Channel Membership should be an object');
-    assert(!!_.get(channelMembership, 'id'), 'Channel Membership ID is required');
     assert(!!_.get(channelMembership, 'agentId'), 'Channel Membership Agent Id is required');
     assert(!!_.get(channelMembership, 'channelId'), 'Channel Membership Channel Id is required');
     assert(!!_.get(channelMembership, 'type'), 'Channel Membership Type is required');
 
     this.channelMembership = channelMembership;
+    this.templateName =
+      Producer.TEMPLATE_NAME.MEMBER_JOINED_TO_COMMUNITY_FEED_ITEM;
   }
 
   /**

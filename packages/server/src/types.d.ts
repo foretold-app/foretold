@@ -61,7 +61,10 @@ export namespace Models {
     agentId: ObjectID;
     channelId: ObjectID;
     role: ChannelMembershipRole;
-    methodCreatedBy: 'ADDED' | 'JOINED' | 'INVITED';
+    methodCreatedBy:
+      'ADDED_IN_APP_BY_ADMIN' |
+      'AGENT_JOINED_DIRECTLY' |
+      'ADDED_BY_EMAIL_BY_ADMIN';
   }
 
   export interface Token extends Model {

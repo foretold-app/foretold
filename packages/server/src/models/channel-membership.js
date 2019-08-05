@@ -29,11 +29,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     methodCreatedBy: {
       type: DataTypes.ENUM([
-        CHANNEL_MEMBERSHIP_TYPE.ADDED,
-        CHANNEL_MEMBERSHIP_TYPE.JOINED,
-        CHANNEL_MEMBERSHIP_TYPE.INVITED,
+        CHANNEL_MEMBERSHIP_TYPE.ADDED_IN_APP_BY_ADMIN,
+        CHANNEL_MEMBERSHIP_TYPE.AGENT_JOINED_DIRECTLY,
+        CHANNEL_MEMBERSHIP_TYPE.ADDED_BY_EMAIL_BY_ADMIN,
       ]),
-      defaultValue: CHANNEL_MEMBERSHIP_TYPE.ADDED,
+      defaultValue: CHANNEL_MEMBERSHIP_TYPE.ADDED_IN_APP_BY_ADMIN,
     },
     createdAt: {
       type: DataTypes.DATE,

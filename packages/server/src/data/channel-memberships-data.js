@@ -147,7 +147,7 @@ class ChannelMembershipsData extends DataBase {
     const data = {
       channelId: options.channelId,
       agentId: options.agentId,
-      type: CHANNEL_MEMBERSHIP_TYPE.JOINED,
+      methodCreatedBy: CHANNEL_MEMBERSHIP_TYPE.AGENT_JOINED_DIRECTLY,
     };
     return this.createOne(data);
   }

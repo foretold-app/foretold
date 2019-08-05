@@ -4,16 +4,17 @@ module Columns = {
   type record = Types.feedItem;
   type column = Table.column(Types.feedItem);
 
+  let getName = (r: record): string =>
+    r.body.common
+    |> E.O.fmap((common: FeedItemBody.Common.t) => common.item)
+    |> E.O.default("");
+
   let nameColumn: column =
     Table.Column.make(
       ~name="Item" |> Utils.ste,
-      ~render=
-        (r: record) =>
-          r.body.common
-          |> E.O.fmap((common: FeedItemBody.Common.t) => common.item)
-          |> E.O.default("")
-          |> Utils.ste,
+      ~render=(r: record) => r |> getName |> Utils.ste,
       ~flex=2,
+      ~show=(r: record) => r |> getName != "",
       (),
     );
 

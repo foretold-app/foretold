@@ -142,6 +142,10 @@ and series = {
   creator: option(agent),
   channel: option(channel),
   measurableCount: option(int),
+}
+and feedItem = {
+  id: string,
+  channelId: string,
 };
 
 type pageInfo = {

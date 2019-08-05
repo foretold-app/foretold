@@ -554,3 +554,9 @@ module Measurable = {
     max,
   };
 };
+
+module FeedItem = {
+  type t = Types.feedItem;
+
+  let make = (~id, ~channelId, ()): t => {id, channelId};
+};

@@ -4,7 +4,7 @@ const {
 const { Producer } = require('../producer');
 const { NewMeasurement } = require('./new-measurement');
 
-class NewMeasurementPrediction extends NewMeasurement {
+class NewMeasurementNotAvailable extends NewMeasurement {
 
   /**
    * @param {Models.Measurement} measurement
@@ -26,5 +26,5 @@ class NewMeasurementPrediction extends NewMeasurement {
 }
 
 module.exports = {
-  NewMeasurementPrediction,
+  NewMeasurementNotAvailable,
 };

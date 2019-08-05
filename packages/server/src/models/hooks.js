@@ -35,7 +35,6 @@ function addHooks(db) {
       console.log('Hook MEASURABLE_STATE_IS_CHANGED', e);
     }
   });
-
   db.Measurable.addHook('afterUpdate', (instance) => {
     try {
       if (
@@ -56,7 +55,6 @@ function addHooks(db) {
       console.log('Hook NEW_MEASUREMENT', e);
     }
   });
-
   db.Measurable.addHook('afterCreate', (instance) => {
     try {
       emitter.emit(events.NEW_MEASURABLE, instance);
@@ -64,18 +62,9 @@ function addHooks(db) {
       console.log('Hook NEW_MEASURABLE', e);
     }
   });
-
-  // @todo: Combine
   db.ChannelMemberships.addHook('afterCreate', (instance) => {
     try {
-      emitter.emit(events.MEMBER_ADDED_TO_COMMUNITY, instance);
-    } catch (e) {
-      console.log('Hook', e);
-    }
-  });
-  db.ChannelMemberships.addHook('afterCreate', (instance) => {
-    try {
-      emitter.emit(events.MEMBER_JOINED_COMMUNITY, instance);
+      emitter.emit(events.NEW_MEMBERSHIP, instance);
     } catch (e) {
       console.log('Hook', e);
     }

@@ -79,26 +79,19 @@ function runListeners() {
     emitter.on(events.EVERY_MINUTE, emailConsumer);
     emitter.on(events.MAIL, mailer);
 
-    emitter.on(
-      events.MEASURABLE_STATE_IS_CHANGED,
-      listenFor(producers.notifications.MeasurableStateChanged),
-    );
-    emitter.on(
-      events.MEASURABLE_STATE_IS_RESOLVED,
-      listenFor(producers.notifications.MeasurableStateResolved),
-    );
-    emitter.on(
-      events.MEMBER_ADDED_TO_COMMUNITY,
-      listenFor(producers.notifications.MemberAddedToCommunity),
-    );
-    emitter.on(
-      events.MEMBER_INVITED_TO_COMMUNITY,
-      listenFor(producers.notifications.MemberInvitedToCommunity),
-    );
-    emitter.on(
-      events.MEMBER_JOINED_COMMUNITY,
-      listenFor(producers.feedItems.MemberJoinedCommunity),
-    );
+    emitter.on(events.MEASURABLE_STATE_IS_CHANGED, listenFor(producers.notifications.MeasurableStateChanged));
+    emitter.on(events.MEASURABLE_STATE_IS_RESOLVED, listenFor(producers.notifications.MeasurableStateResolved));
+
+    emitter.on(events.NEW_MEMBERSHIP, listenFor(producers.notifications.MemberAddedToCommunity));
+    emitter.on(events.NEW_MEMBERSHIP, listenFor(producers.notifications.MemberInvitedToCommunity));
+    emitter.on(events.NEW_MEMBERSHIP, listenFor(producers.feedItems.MemberJoinedCommunity));
+
+    emitter.on(events.NEW_MEASUREMENT, listenFor(producers.feedItems.NewMeasurementPrediction));
+    emitter.on(events.NEW_MEASUREMENT, listenFor(producers.feedItems.NewMeasurementComment));
+    emitter.on(events.NEW_MEASUREMENT, listenFor(producers.feedItems.NewMeasurementResolution));
+    emitter.on(events.NEW_MEASUREMENT, listenFor(producers.feedItems.NewMeasurementNotAvailable));
+
+    emitter.on(events.NEW_MEASURABLE, listenFor(producers.feedItems.NewMeasurable));
 
   } catch (e) {
     console.error('Listener error', e);

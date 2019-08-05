@@ -1,11 +1,7 @@
 const _ = require('lodash');
 
-const {
-  MEASUREMENT_VALUE,
-} = require('../../../models/enums/measurement-value');
-
+const { MEASUREMENT_VALUE } = require('../../../models/enums/measurement-value');
 const { Producer } = require('../producer');
-
 const { NewMeasurement } = require('./new-measurement');
 
 class NewMeasurementComment extends NewMeasurement {

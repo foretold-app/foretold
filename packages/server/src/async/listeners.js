@@ -25,66 +25,6 @@ async function toJudgementPendingTransition() {
   return true;
 }
 
-async function measurableStateIsChanged(measurableInstance) {
-  const name = 'Job::measurableStateIsChanged';
-  console.log(name);
-
-  try {
-    const producer = new producers.MeasurableStateChanged(measurableInstance);
-    const result = await producer.main();
-    console.log(name, 'all done', result);
-  } catch (e) {
-    console.error(name, e.message, e);
-  }
-
-  return true;
-}
-
-async function measurableStateIsResolved(measurableInstance) {
-  const name = 'Job::measurableStateIsResolved';
-  console.log(name);
-
-  try {
-    const producer = new producers.MeasurableStateResolved(measurableInstance);
-    const result = await producer.main();
-    console.log(name, 'all done', result);
-  } catch (e) {
-    console.error(name, e.message, e);
-  }
-
-  return true;
-}
-
-async function memberAddedToCommunity(channelMembershipInstance) {
-  const name = 'Job::memberAddedToCommunity';
-  console.log(name);
-
-  try {
-    const producer = new producers.MemberAddedToCommunity(channelMembershipInstance);
-    const result = await producer.main();
-    console.log(name, 'all done', result);
-  } catch (e) {
-    console.error(name, e.message, e);
-  }
-
-  return true;
-}
-
-async function memberInvitedToCommunity(invitationInstance) {
-  const name = 'Job::memberInvitedToCommunity';
-  console.log(name);
-
-  try {
-    const producer = new producers.MemberInvitedToCommunity(invitationInstance);
-    const result = await producer.main();
-    console.log(name, 'all done', result);
-  } catch (e) {
-    console.error(name, e.message, e);
-  }
-
-  return true;
-}
-
 async function emailConsumer() {
   const name = '\x1b[35mJob::emailConsumer\x1b[0m';
   console.log(name);
@@ -114,15 +54,52 @@ async function mailer(envelop = {}) {
   return true;
 }
 
+function listenFor(Producer) {
+  const name = `${Producer.name}`;
+  console.log(`Listen for: ${name}`);
+
+  return async function (input) {
+    console.log(`Run listener: ${name}`);
+
+    try {
+      const producer = new Producer(input);
+      const result = await producer.main();
+      console.log(name, 'all done', result);
+    } catch (e) {
+      console.error(name, e.message, e);
+    }
+
+    return true;
+  };
+}
+
 function runListeners() {
   try {
     emitter.on(events.EVERY_HOUR, toJudgementPendingTransition);
     emitter.on(events.EVERY_MINUTE, emailConsumer);
     emitter.on(events.MAIL, mailer);
-    emitter.on(events.MEASURABLE_STATE_IS_CHANGED, measurableStateIsChanged);
-    emitter.on(events.MEASURABLE_STATE_IS_RESOLVED, measurableStateIsResolved);
-    emitter.on(events.MEMBER_ADDED_TO_COMMUNITY, memberAddedToCommunity);
-    emitter.on(events.MEMBER_INVITED_TO_COMMUNITY, memberInvitedToCommunity);
+
+    emitter.on(
+      events.MEASURABLE_STATE_IS_CHANGED,
+      listenFor(producers.notifications.MeasurableStateChanged),
+    );
+    emitter.on(
+      events.MEASURABLE_STATE_IS_RESOLVED,
+      listenFor(producers.notifications.MeasurableStateResolved),
+    );
+    emitter.on(
+      events.MEMBER_ADDED_TO_COMMUNITY,
+      listenFor(producers.notifications.MemberAddedToCommunity),
+    );
+    emitter.on(
+      events.MEMBER_INVITED_TO_COMMUNITY,
+      listenFor(producers.notifications.MemberInvitedToCommunity),
+    );
+    emitter.on(
+      events.MEMBER_JOINED_COMMUNITY,
+      listenFor(producers.feedItems.MemberJoinedCommunity),
+    );
+
   } catch (e) {
     console.error('Listener error', e);
   }

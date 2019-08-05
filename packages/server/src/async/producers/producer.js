@@ -6,18 +6,24 @@ const data = require('../../data');
 const { TEMPLATE_NAME } = require('../../models/enums/template-name');
 const { NOTIFICATION_TYPE } = require('../../models/enums/notification-type');
 const { EmailEnvelope } = require('../../models/classes/notifications');
+const { FeedItem } = require('../../models/classes');
 
-/**
- * Here "producer" class is a parent class of all another "producers",
- * for instance "MeasurableStateProducer", and another ones.
- */
 class Producer {
+
   constructor(options = {}) {
     assert(_.isObject(options), 'Options is not an object');
 
     this.options = options;
     this.templateName = undefined;
     this.transaction = undefined;
+  }
+
+  /**
+   * @public
+   * @return {Promise<boolean>}
+   */
+  async main() {
+    return true;
   }
 
   /**
@@ -49,77 +55,21 @@ class Producer {
   }
 
   /**
-   * @param {object} replacements
-   * @return {Promise<*>}
+   * @return {Promise<Models.Template>}
    * @protected
    */
-  async _queueEmail(replacements) {
-    const template = await this._getTemplate();
+  async _getTemplate() {
+    assert(!!this.templateName, 'Template Name is required');
+    const params = { name: this.templateName };
+    const template = await Producer.data.templates.getOne(params);
+
     assert(!!_.get(template, 'id'), 'Template ID is required');
     assert(
       !!_.get(template, 'envelopeTemplate'),
       'Envelope Template ID is required',
     );
 
-    const emailEnvelope = new Producer.EmailEnvelope(template.envelopeTemplate);
-    const emailEnvelope$ = emailEnvelope.mutate(replacements);
-    return await this._createEmailNotification(emailEnvelope$);
-  }
-
-  /**
-   * @param {object} agent
-   * @param {object} notification
-   * @return {Promise<*>}
-   * @protected
-   */
-  async _assignNotification(agent, notification) {
-    assert(!!agent.id, 'Agent ID is required');
-    assert(!!notification.id, 'Notification ID is required');
-
-    const data = { agentId: agent.id, notificationId: notification.id };
-    const options = await this._getOptions();
-    return await Producer.data.agentNotifications.createOne(
-      data,
-      options,
-    );
-  }
-
-  /**
-   * @return {Promise<void>}
-   * @protected
-   */
-  async _getTemplate() {
-    assert(!!this.templateName, 'Template Name is required');
-    const params = { name: this.templateName };
-    return Producer.data.templates.getOne(params);
-  }
-
-  /**
-   * @param {Producer.EmailEnvelope} emailEnvelope
-   * @return {Promise<*>}
-   * @protected
-   */
-  async _createEmailNotification(emailEnvelope) {
-    return this._createNotification(emailEnvelope);
-  }
-
-  /**
-   * @param {EmailEnvelope} envelope
-   * @param {string} type
-   * @return {Promise<*>}
-   * @protected
-   */
-  async _createNotification(
-    envelope = new Producer.EmailEnvelope(),
-    type = Producer.NOTIFICATION_TYPE.EMAIL,
-  ) {
-    assert(
-      envelope instanceof Producer.EmailEnvelope,
-      'Envelope is not EmailEnvelope'
-    );
-    const data = { type, envelope: envelope };
-    const options = await this._getOptions();
-    return Producer.data.notifications.createOne(data, options);
+    return template;
   }
 
   /**
@@ -137,6 +87,7 @@ Producer.TEMPLATE_NAME = TEMPLATE_NAME;
 Producer.TEMPLATE_NAME = TEMPLATE_NAME;
 Producer.NOTIFICATION_TYPE = NOTIFICATION_TYPE;
 Producer.EmailEnvelope = EmailEnvelope;
+Producer.FeedItem = FeedItem;
 
 module.exports = {
   Producer,

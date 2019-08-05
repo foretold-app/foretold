@@ -83,6 +83,11 @@ const middlewares = {
       const result = await resolve(root, args, context, info);
       return formatResponseIntoConnection(result, root, args, context, info);
     },
+
+    feedItems: async (resolve, root, args, context, info) => {
+      const result = await resolve(root, args, context, info);
+      return formatResponseIntoConnection(result, root, args, context, info);
+    },
   },
 
   Mutation: {

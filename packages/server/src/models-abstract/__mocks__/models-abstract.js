@@ -74,6 +74,11 @@ const InvitationModel = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
 
+
+const FeedItemModel = jest.fn().mockImplementation(() => ({
+  ...ModelPostgres,
+}));
+
 const Model = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
@@ -93,5 +98,6 @@ module.exports = {
   NotificationModel,
   AgentNotificationModel,
   InvitationModel,
+  FeedItemModel,
   Model,
 };

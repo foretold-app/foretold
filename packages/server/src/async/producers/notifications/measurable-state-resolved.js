@@ -1,7 +1,7 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const { Producer } = require('./producer');
+const { Producer } = require('./../producer');
 const { MeasurableState } = require('./measurable-state');
 
 class MeasurableStateResolved extends MeasurableState {
@@ -37,16 +37,16 @@ class MeasurableStateResolved extends MeasurableState {
 
       for (let i = 0, max = agentsWithoutAuthor.length; i < max; i++) {
         const agent = agentsWithoutAuthor[i];
-        await this._assignNotification(agent, notification);
+        await this._assignAgentToNotification(agent, notification);
       }
 
+      await this._commit();
+      return true;
     } catch (e) {
       await this._rollback();
       console.log(`stateResolved`, e.message, e);
       return false;
     }
-    await this._commit();
-    return true;
   }
 }
 

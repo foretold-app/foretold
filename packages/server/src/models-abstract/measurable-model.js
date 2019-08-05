@@ -1,9 +1,10 @@
 const _ = require('lodash');
 
 const models = require('../models');
-const { ModelPostgres } = require('./model-postgres');
-
 const { MEASURABLE_STATE } = require('../models/enums/measurable-state');
+
+const { ModelPostgres } = require('./model-postgres');
+const { ResponseAll } = require('./classes/response-all');
 
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
@@ -46,6 +47,8 @@ class MeasurableModel extends ModelPostgres {
 
   /**
    * @public
+   * @todo: use getConnection
+   * @deprecated
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Models.ObjectID} [filter.channelId]
    * @param {Models.ObjectID} [filter.seriesId]
@@ -97,7 +100,7 @@ class MeasurableModel extends ModelPostgres {
     data = this.setIndexes(data, edgePagination);
     data.total = total;
 
-    return { data, total };
+    return new ResponseAll(data, total);
   }
 
   /**

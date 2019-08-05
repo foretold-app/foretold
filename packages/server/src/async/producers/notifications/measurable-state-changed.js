@@ -1,7 +1,7 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const { Producer } = require('./producer');
+const { Producer } = require('./../producer');
 const { MeasurableState } = require('./measurable-state');
 
 class MeasurableStateChanged extends MeasurableState {
@@ -28,14 +28,15 @@ class MeasurableStateChanged extends MeasurableState {
         this.measurable,
       );
       const notification = await this._queueEmail(replacements);
-      await this._assignNotification(creator, notification);
+      await this._assignAgentToNotification(creator, notification);
+
+      await this._commit();
+      return true;
     } catch (e) {
       await this._rollback();
       console.log(`stateChanged`, e.message, e);
       return false;
     }
-    await this._commit();
-    return true;
   }
 }
 

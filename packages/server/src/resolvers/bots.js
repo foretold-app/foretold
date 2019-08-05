@@ -2,6 +2,7 @@ const _ = require('lodash');
 
 const data = require('../data');
 const { Pagination } = require('../data/classes/pagination');
+const { Options } = require('../data/classes/options');
 
 /**
  * @param {*} root
@@ -47,9 +48,9 @@ async function update(root, args, context, info) {
 async function all(root, args, context, info) {
   const filter = { userId: _.get(args, 'ownerId') };
   const pagination = new Pagination(args);
-  const options = {};
-  const result = await data.bots.getAll(filter, pagination, options);
-  return result.data;
+  const options = new Options();
+  const connection = await data.bots.getConnection(filter, pagination, options);
+  return connection.getData();
 }
 
 /**

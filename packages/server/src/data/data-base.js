@@ -102,6 +102,20 @@ class DataBase {
   /**
    * @public
    * @param {Layers.DataSourceLayer.filter} [filter]
+   * @param {Models.ObjectID} filter.userId
+   * @param {Layers.DataSourceLayer.pagination} [pagination]
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Promise<{data: Models.Model[], total: number}>}
+   */
+  async getConnection(filter = {}, pagination = {}, options = {}) {
+    const option$ = this._getModelOptions(options);
+    const restrictions = this._getModelRestrictions(options);
+    return this.model.getAllWithConnections(filter, pagination, restrictions, option$);
+  }
+
+  /**
+   * @public
+   * @param {Layers.DataSourceLayer.filter} [filter]
    * @param {Layers.DataSourceLayer.pagination} [pagination]
    * @param {Layers.DataSourceLayer.options} [options]
    */
@@ -138,7 +152,7 @@ class DataBase {
   /**
    * @protected
    * @param {Layers.DataSourceLayer.options} [options]
-   * @return {Layers.AbstractModelsLayer.options}
+   * @return {Layers.AbstractModelsLayer.restrictions}
    */
   _getModelRestrictions(options = {}) {
     const restriction$ = _.pick(options, this.modelRestrictionsList);

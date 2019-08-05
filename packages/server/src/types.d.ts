@@ -61,6 +61,10 @@ export namespace Models {
     agentId: ObjectID;
     channelId: ObjectID;
     role: ChannelMembershipRole;
+    methodCreatedBy:
+      'ADDED_IN_APP_BY_ADMIN' |
+      'AGENT_JOINED_DIRECTLY' |
+      'ADDED_BY_EMAIL_BY_ADMIN';
   }
 
   export interface Token extends Model {
@@ -82,6 +86,11 @@ export namespace Models {
     channelId: ObjectID;
     inviterAgentId: ObjectID;
     status: 'AWAITING' | 'ACCEPTED';
+  }
+
+  export interface FeedItem extends Model {
+    channelId: ObjectID;
+    body: { item: string, description: string };
   }
 
   export type Creator = Models.User | Models.Bot;

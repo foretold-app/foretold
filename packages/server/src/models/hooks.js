@@ -32,7 +32,7 @@ function addHooks(db) {
         emitter.emit(events.MEASURABLE_STATE_IS_CHANGED, instance);
       }
     } catch (e) {
-      console.log('Hook', e);
+      console.log('Hook MEASURABLE_STATE_IS_CHANGED', e);
     }
   });
 
@@ -45,7 +45,23 @@ function addHooks(db) {
         emitter.emit(events.MEASURABLE_STATE_IS_RESOLVED, instance);
       }
     } catch (e) {
-      console.log('Hook', e);
+      console.log('Hook MEASURABLE_STATE_IS_RESOLVED', e);
+    }
+  });
+
+  db.Measurement.addHook('afterCreate', (instance) => {
+    try {
+      emitter.emit(events.NEW_MEASUREMENT, instance);
+    } catch (e) {
+      console.log('Hook NEW_MEASUREMENT', e);
+    }
+  });
+
+  db.Measurable.addHook('afterCreate', (instance) => {
+    try {
+      emitter.emit(events.NEW_MEASURABLE, instance);
+    } catch (e) {
+      console.log('Hook NEW_MEASURABLE', e);
     }
   });
 

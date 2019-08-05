@@ -14,7 +14,7 @@ class NewMeasurementPrediction extends NewMeasurement {
   constructor(measurement) {
     super(measurement);
     this.templateName =
-      Producer.TEMPLATE_NAME.NEW_MEASUREMENT_PREDICTION_FEED_ITEM;
+      Producer.TEMPLATE_NAME.NEW_MEASUREMENT_RESOLUTION_FEED_ITEM;
   }
 
   /**
@@ -22,7 +22,7 @@ class NewMeasurementPrediction extends NewMeasurement {
    */
   async _isActual() {
     const competitorType = this.measurement.competitorType;
-    return competitorType === MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE;
+    return competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE;
   }
 
 }

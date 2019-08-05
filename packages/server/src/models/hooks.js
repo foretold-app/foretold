@@ -64,7 +64,7 @@ function addHooks(db) {
   db.sequelize.addHook('afterCreate', (instance) => {
     try {
       if (instance instanceof db.ChannelMemberships) {
-        emitter.emit(events.MEMBER_JOINED_TO_COMMUNITY, instance);
+        emitter.emit(events.MEMBER_JOINED_COMMUNITY, instance);
       }
     } catch (e) {
       console.log('Hook', e);

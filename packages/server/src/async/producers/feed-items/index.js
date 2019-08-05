@@ -1,5 +1,5 @@
-const { MemberJoinedToCommunity } = require('./member-joined-to-community');
+const { MemberJoinedCommunity } = require('./member-joined-community');
 
 module.exports = {
-  MemberJoinedToCommunity,
+  MemberJoinedCommunity,
 };

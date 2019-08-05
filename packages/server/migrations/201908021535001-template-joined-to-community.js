@@ -14,7 +14,7 @@ module.exports = {
       await queryInterface.bulkInsert('Templates', [{
         id: Sequelize.fn('uuid_generate_v4'),
         envelopeTemplate: JSON.stringify(template),
-        name: TEMPLATE_NAME.MEMBER_JOINED_TO_COMMUNITY_FEED_ITEM,
+        name: TEMPLATE_NAME.MEMBER_JOINED_COMMUNITY_FEED_ITEM,
         createdAt: new Date(),
         updatedAt: new Date(),
       }]);
@@ -33,7 +33,7 @@ module.exports = {
       await queryInterface.sequelize.query(`BEGIN`);
 
       await queryInterface.bulkDelete('Templates', {
-        name: TEMPLATE_NAME.MEMBER_JOINED_TO_COMMUNITY_FEED_ITEM,
+        name: TEMPLATE_NAME.MEMBER_JOINED_COMMUNITY_FEED_ITEM,
       });
 
       await queryInterface.sequelize.query(`COMMIT`);

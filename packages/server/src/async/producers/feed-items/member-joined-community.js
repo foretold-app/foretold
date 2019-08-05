@@ -6,7 +6,7 @@ const { CHANNEL_MEMBERSHIP_TYPE } = require('../../../models/enums/channel-membe
 
 const { Producer } = require('../producer');
 
-class MemberJoinedToCommunity extends ProducerFeedItems {
+class MemberJoinedCommunity extends ProducerFeedItems {
 
   /**
    * @param {Models.ChannelMembership} channelMembership
@@ -33,7 +33,7 @@ class MemberJoinedToCommunity extends ProducerFeedItems {
 
     this.channelMembership = channelMembership;
     this.templateName =
-      Producer.TEMPLATE_NAME.MEMBER_JOINED_TO_COMMUNITY_FEED_ITEM;
+      Producer.TEMPLATE_NAME.MEMBER_JOINED_COMMUNITY_FEED_ITEM;
   }
 
   /**
@@ -68,7 +68,7 @@ class MemberJoinedToCommunity extends ProducerFeedItems {
 
   /**
    * @param {Models.Agent} agent
-   * @return {{agent: {name: string}}}
+   * @return {Promise.<{agent: {name: string}}>}
    * @protected
    */
   async _getReplacements(agent) {
@@ -82,5 +82,5 @@ class MemberJoinedToCommunity extends ProducerFeedItems {
 }
 
 module.exports = {
-  MemberJoinedToCommunity,
+  MemberJoinedCommunity,
 };

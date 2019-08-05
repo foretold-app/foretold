@@ -96,8 +96,8 @@ function runListeners() {
       listenFor(producers.notifications.MemberInvitedToCommunity),
     );
     emitter.on(
-      events.MEMBER_JOINED_TO_COMMUNITY,
-      listenFor(producers.feedItems.MemberJoinedToCommunity),
+      events.MEMBER_JOINED_COMMUNITY,
+      listenFor(producers.feedItems.MemberJoinedCommunity),
     );
 
   } catch (e) {

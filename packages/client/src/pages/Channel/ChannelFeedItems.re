@@ -1,3 +1,5 @@
+open Style.Grid;
+
 module ReducerConfig = {
   type itemType = Types.feedItem;
   type callFnParams = string;
@@ -20,38 +22,37 @@ let make =
     (~channelId: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
-    Reducer.make(
-      ~itemsPerPage=20,
-      ~callFnParams=channelId,
-      ~subComponent=selectWithPaginationParams =>
+    let subComponent = selectWithPaginationParams =>
       SLayout.LayoutConfig.make(
         ~head=
-          switch (selectWithPaginationParams.selection) {
-          | Some(_selection) =>
-            <>
-              {Reducer.Components.deselectButton(
-                 selectWithPaginationParams.send,
-               )}
-              {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
-            </>
-          | None => <div />
-          },
+          <Div>
+            <Div
+              float=`right
+              styles=[
+                Css.style([
+                  FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                  FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+                ]),
+              ]>
+              {Reducer.Components.paginationPage(selectWithPaginationParams)}
+            </Div>
+          </Div>,
         ~body=
           switch (
             selectWithPaginationParams.response,
             selectWithPaginationParams.selection,
           ) {
-          | (_, Some(_)) => "Selected something" |> Utils.ste
-
-          | (Success(connection), None) =>
+          | (Success(connection), _) =>
             let feedItems = connection.edges;
 
-            <FeedItemsTable.Jsx2 feedItems />;
+            <FC.PageCard.Body>
+              <FeedItemsTable.Jsx2 feedItems />
+            </FC.PageCard.Body>;
           | _ => <SLayout.Spin />
           },
       )
-      |> layout
-    )
-    |> E.React.makeToEl;
+      |> layout;
+
+    <Reducer itemsPerPage=1 callFnParams=channelId subComponent />;
   },
 };

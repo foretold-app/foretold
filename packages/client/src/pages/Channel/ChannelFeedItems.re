@@ -22,36 +22,46 @@ let make =
     (~channelId: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
-    let subComponent = selectWithPaginationParams =>
-      SLayout.LayoutConfig.make(
-        ~head=
-          <Div>
-            <Div
-              float=`right
-              styles=[
-                Css.style([
-                  FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                  FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-                ]),
-              ]>
-              {Reducer.Components.paginationPage(selectWithPaginationParams)}
-            </Div>
-          </Div>,
-        ~body=
-          switch (
-            selectWithPaginationParams.response,
-            selectWithPaginationParams.selection,
-          ) {
-          | (Success(connection), _) =>
-            let feedItems = connection.edges;
+    let pagination = (reducerParams: Reducer.Types.reducerParams) =>
+      <Div>
+        <Div
+          float=`right
+          styles=[
+            Css.style([
+              FC.PageCard.HeaderRow.Styles.itemTopPadding,
+              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            ]),
+          ]>
+          {Reducer.Components.paginationPage(reducerParams)}
+        </Div>
+      </Div>;
 
-            <FC.PageCard.Body>
-              <FeedItemsTable.Jsx2 feedItems />
-            </FC.PageCard.Body>;
-          | _ => <SLayout.Spin />
-          },
+    let subComponent = (reducerParams: Reducer.Types.reducerParams) => {
+      let feedItems =
+        switch (reducerParams.response) {
+        | Success(connection) => connection.edges
+        | _ => [||]
+        };
+
+      let isFound = Array.length(feedItems) > 0;
+
+      let body =
+        switch (reducerParams.response) {
+        | Success(_) =>
+          isFound
+            ? <FC.PageCard.Body>
+                <FeedItemsTable.Jsx2 feedItems />
+              </FC.PageCard.Body>
+            : <SLayout.NothingToShow />
+        | _ => <SLayout.Spin />
+        };
+
+      SLayout.LayoutConfig.make(
+        ~head=isFound ? pagination(reducerParams) : ReasonReact.null,
+        ~body,
       )
       |> layout;
+    };
 
     <Reducer itemsPerPage=20 callFnParams=channelId subComponent />;
   },

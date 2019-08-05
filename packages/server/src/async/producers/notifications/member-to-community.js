@@ -29,7 +29,7 @@ class MemberToCommunity extends ProducerNotifications {
    */
   async main() {
     if (!this.channelMembership.inviterAgentId) {
-      console.log(this.name, 'There is no "inviterAgentId"');
+      console.log(this.constructor.name, 'There is no "inviterAgentId"');
       return true;
     }
 

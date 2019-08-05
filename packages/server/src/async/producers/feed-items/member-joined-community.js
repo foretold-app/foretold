@@ -43,7 +43,8 @@ class MemberJoinedCommunity extends ProducerFeedItems {
   async main() {
     const methodCreatedBy = this.channelMembership.methodCreatedBy;
     if (methodCreatedBy !== CHANNEL_MEMBERSHIP_TYPE.AGENT_JOINED_DIRECTLY) {
-      console.log(this.name, 'Channel Membership is not AGENT_JOINED_DIRECTLY');
+      console.log(this.constructor.name,
+        'Channel Membership is not AGENT_JOINED_DIRECTLY');
       return true;
     }
 

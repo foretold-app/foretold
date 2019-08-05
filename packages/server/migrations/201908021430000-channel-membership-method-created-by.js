@@ -28,7 +28,7 @@ module.exports = {
     try {
       await queryInterface.sequelize.query(`BEGIN`);
       await queryInterface.removeColumn('ChannelMemberships', 'methodCreatedBy');
-      await queryInterface.sequelize.query(`DROP TYPE "enum_ChannelMemberships_type"`);
+      await queryInterface.sequelize.query(`DROP TYPE "enum_ChannelMemberships_methodCreatedBy"`);
       await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {
       console.error('Migration Down Error', e);

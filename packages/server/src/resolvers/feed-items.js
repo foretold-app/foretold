@@ -3,6 +3,7 @@ const _ = require('lodash');
 const data = require('../data');
 const { Pagination } = require('../data/classes/pagination');
 const { Options } = require('../data/classes/options');
+const { Filter } = require('../data/classes/filter');
 
 /**
  * @param {*} root
@@ -18,7 +19,8 @@ const { Options } = require('../data/classes/options');
  */
 async function all(root, args, context, info) {
   const channelId = _.get(args, 'channelId');
-  const filter = { channelId };
+
+  const filter = new Filter({ channelId });
   const pagination = new Pagination(args);
   const options = new Options();
   const connection = await data.feedItems.getConnection(
@@ -26,6 +28,7 @@ async function all(root, args, context, info) {
     pagination,
     options,
   );
+
   return connection.getData();
 }
 

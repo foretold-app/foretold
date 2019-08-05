@@ -239,6 +239,12 @@ class ModelPostgres extends Model {
       });
     }
 
+    if (filter.channelId) {
+      where[this.and].push({
+        channelId: filter.channelId,
+      });
+    }
+
     return where;
   }
 

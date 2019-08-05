@@ -233,6 +233,7 @@ export namespace Layers {
       excludeChannelId?: Models.ObjectID,
       channelMemberId?: Models.ObjectID,
       userId?: Models.ObjectID,
+      channelId?: Models.ObjectID,
       isArchived?: string[],
       types?: string[],
       sentAt?: string[],

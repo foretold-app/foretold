@@ -7,11 +7,13 @@ class ProducerFeedItems extends Producer {
 
   constructor(input) {
     super({});
+    this.agentId = _.get(input, 'agentId') || _.get(input, 'creatorId');
+    this.input = input;
+
     assert(_.isObject(input), 'Input should be an object.');
     assert(!!_.get(input, 'id'), 'Measurable Id is required.');
-    assert(!!_.get(input, 'agentId'), 'Agent Id is required.');
+    assert(!this.agentId, 'Agent Id is required.');
     assert(!!_.get(input, 'channelId'), 'Agent Id is required.');
-    this.input = input;
   }
 
   /**
@@ -30,9 +32,7 @@ class ProducerFeedItems extends Producer {
     }
 
     try {
-      const agent = await Producer.data.agents.getOne({
-        id: this.input.agentId,
-      });
+      const agent = await Producer.data.agents.getOne({ id: this.agentId });
       assert(!!_.get(agent, 'id'), 'Agent ID is required.');
 
       const replacements = await this._getReplacements(agent);
@@ -66,7 +66,7 @@ class ProducerFeedItems extends Producer {
    * @return {Promise<boolean>}
    */
   async _isActual() {
-    return false;
+    return true;
   }
 
   /**

@@ -14,10 +14,22 @@ class MemberJoinedToCommunity extends ProducerFeedItems {
   constructor(channelMembership) {
     super({});
 
-    assert(_.isObject(channelMembership), 'Channel Membership should be an object');
-    assert(!!_.get(channelMembership, 'agentId'), 'Channel Membership Agent Id is required');
-    assert(!!_.get(channelMembership, 'channelId'), 'Channel Membership Channel Id is required');
-    assert(!!_.get(channelMembership, 'type'), 'Channel Membership Type is required');
+    assert(
+      _.isObject(channelMembership),
+      'Channel Membership should be an object',
+    );
+    assert(
+      !!_.get(channelMembership, 'agentId'),
+      'Channel Membership Agent Id is required',
+    );
+    assert(
+      !!_.get(channelMembership, 'channelId'),
+      'Channel Membership Channel Id is required',
+    );
+    assert(
+      !!_.get(channelMembership, 'methodCreatedBy'),
+      'Channel Membership "Method Created By" is required',
+    );
 
     this.channelMembership = channelMembership;
     this.templateName =
@@ -29,7 +41,8 @@ class MemberJoinedToCommunity extends ProducerFeedItems {
    * @return {Promise<boolean>}
    */
   async main() {
-    if (this.channelMembership.type !== CHANNEL_MEMBERSHIP_TYPE.JOINED) {
+    const methodCreatedBy = this.channelMembership.methodCreatedBy;
+    if (methodCreatedBy !== CHANNEL_MEMBERSHIP_TYPE.JOINED) {
       console.log(this.name, 'Channel Membership is not JOINED');
       return true;
     }

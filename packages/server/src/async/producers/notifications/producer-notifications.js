@@ -13,7 +13,7 @@ class ProducerNotifications extends Producer {
 
   /**
    * @param {object} replacements
-   * @return {Promise<*>}
+   * @return {Promise<Models.Notification>}
    * @protected
    */
   async _queueEmail(replacements) {
@@ -25,7 +25,7 @@ class ProducerNotifications extends Producer {
 
   /**
    * @param {EmailEnvelope} emailEnvelope
-   * @return {Promise<*>}
+   * @return {Promise<Models.Notification>}
    * @protected
    */
   async _createEmailNotification(emailEnvelope) {
@@ -35,7 +35,7 @@ class ProducerNotifications extends Producer {
   /**
    * @param {EmailEnvelope} envelope
    * @param {string} type
-   * @return {Promise<*>}
+   * @return {Promise<Models.Notification>}
    * @protected
    */
   async _createNotification(
@@ -54,7 +54,7 @@ class ProducerNotifications extends Producer {
   /**
    * @param {object} agent
    * @param {object} notification
-   * @return {Promise<*>}
+   * @return {Promise<Models.AgentNotification>}
    * @protected
    */
   async _assignAgentToNotification(agent, notification) {

@@ -9,16 +9,19 @@ const { ProducerNotifications } = require('./producer-notifications');
 
 class MeasurableState extends ProducerNotifications {
 
-  constructor(measurable = {}) {
+  /**
+   * @param {Models.Measurable} measurable
+   */
+  constructor(measurable) {
     super({});
     assert(!!_.get(measurable, 'id'), 'Measurable ID is required');
     this.measurable = measurable;
   }
 
   /**
-   * @param {object} channel
-   * @param {object} measurable
-   * @return {{measurable: {name: *, link: *}}}
+   * @param {Models.Channel} channel
+   * @param {Models.Measurable} measurable
+   * @return {{measurable: {name: string, link: string}}}
    * @protected
    */
   static _getReplacements(channel, measurable) {
@@ -33,7 +36,7 @@ class MeasurableState extends ProducerNotifications {
   /**
    * @todo: Is there more better way to understand how to filter out
    * @todo: the author?
-   * @return {Promise<void>}
+   * @return {Promise<Models.Measurement>}
    * @protected
    */
   async _getLastResolvedMeasurement() {

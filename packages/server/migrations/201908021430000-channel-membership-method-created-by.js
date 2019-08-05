@@ -7,7 +7,7 @@ module.exports = {
     try {
       await queryInterface.sequelize.query(`BEGIN`);
 
-      await queryInterface.addColumn('ChannelMemberships', 'type', {
+      await queryInterface.addColumn('ChannelMemberships', 'methodCreatedBy', {
         type: Sequelize.ENUM([
           CHANNEL_MEMBERSHIP_TYPE.ADDED,
           CHANNEL_MEMBERSHIP_TYPE.JOINED,
@@ -27,7 +27,7 @@ module.exports = {
   down: async function (queryInterface) {
     try {
       await queryInterface.sequelize.query(`BEGIN`);
-      await queryInterface.removeColumn('ChannelMemberships', 'type');
+      await queryInterface.removeColumn('ChannelMemberships', 'methodCreatedBy');
       await queryInterface.sequelize.query(`DROP TYPE "enum_ChannelMemberships_type"`);
       await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {

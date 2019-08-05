@@ -9,14 +9,17 @@ const { ProducerNotifications } = require('./producer-notifications');
 
 class MemberToCommunity extends ProducerNotifications {
 
-  constructor(input = {}) {
+  /**
+   * @param {Models.ChannelMembership} channelMembership
+   */
+  constructor(channelMembership) {
     super({});
 
-    assert(_.isObject(input), 'Input is not an object');
-    assert(!!_.get(input, 'channelId'), 'Channel ID is required.');
-    assert(!!_.get(input, 'agentId'), 'Agent ID is required.');
+    assert(_.isObject(channelMembership), 'Channel Membership is not an object');
+    assert(!!_.get(channelMembership, 'channelId'), 'Channel ID is required.');
+    assert(!!_.get(channelMembership, 'agentId'), 'Agent ID is required.');
 
-    this.input = input;
+    this.channelMembership = channelMembership;
     this.templateName = Producer.TEMPLATE_NAME.MEMBER_ADDED_TO_COMMUNITY;
   }
 
@@ -25,27 +28,27 @@ class MemberToCommunity extends ProducerNotifications {
    * @return {Promise<boolean>}
    */
   async main() {
-    if (!this.input.inviterAgentId) {
+    if (!this.channelMembership.inviterAgentId) {
       console.log(this.name, 'There is no "inviterAgentId"');
       return true;
     }
 
     try {
       const channel = await Producer.data.channels.getOne({
-        id: this.input.channelId,
+        id: this.channelMembership.channelId,
       });
       const agent = await Producer.data.agents.getOne({
-        id: this.input.agentId,
+        id: this.channelMembership.agentId,
       });
       const inviter = await Producer.data.users.getOne({
-        agentId: this.input.inviterAgentId,
+        agentId: this.channelMembership.inviterAgentId,
       });
 
       assert(!!_.get(channel, 'id'), 'Channel ID is required.');
       assert(!!_.get(agent, 'id'), 'Agent ID is required.');
       assert(!!_.get(inviter, 'id'), 'Inviter ID is required.');
 
-      const replacements = MemberToCommunity._getReplacements(
+      const replacements = await this._getReplacements(
         inviter,
         channel,
       );
@@ -64,14 +67,14 @@ class MemberToCommunity extends ProducerNotifications {
 
   /**
    * @protected
-   * @param {object} inviter
-   * @param {object} channel
-   * @return {*}
+   * @param {Models.Agent} inviter
+   * @param {Models.Channel} channel
+   * @return {object}
    */
-  static _getReplacements(inviter, channel) {
+  async _getReplacements(inviter, channel) {
     return {
       inviterAgent: {
-        name: _.get(inviter, 'name') || 'Somebody', // @todo: await!
+        name: (await _.get(inviter, 'name')) || 'Somebody',
         link: getAgentLinkWithToken(inviter),
       },
       channel: {

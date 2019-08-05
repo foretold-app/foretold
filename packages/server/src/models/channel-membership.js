@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: CHANNEL_MEMBERSHIP_ROLES.VIEWER,
     },
-    type: {
+    methodCreatedBy: {
       type: DataTypes.ENUM([
         CHANNEL_MEMBERSHIP_TYPE.ADDED,
         CHANNEL_MEMBERSHIP_TYPE.JOINED,

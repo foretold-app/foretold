@@ -16,7 +16,7 @@ const tpsl = [
     '{{ agent.name }} has marked this question as unresolved',
   ], [
     TEMPLATE_NAME.MEASURABLE_REACHED_RESOLUTION_DATE_FEED_ITEM,
-    `Question has reached it's expected resolution date`,
+    `{{ measurable.name }} has reached it's expected resolution date`,
   ], [
     TEMPLATE_NAME.NEW_MEASURABLE_FEED_ITEM,
     '{{ agent.name }} made a new question',

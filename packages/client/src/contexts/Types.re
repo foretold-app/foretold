@@ -146,6 +146,7 @@ and series = {
 and feedItem = {
   id: string,
   channelId: string,
+  body: FeedItemBody.t,
 };
 
 type pageInfo = {

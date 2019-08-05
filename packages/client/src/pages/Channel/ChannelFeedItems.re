@@ -53,6 +53,6 @@ let make =
       )
       |> layout;
 
-    <Reducer itemsPerPage=1 callFnParams=channelId subComponent />;
+    <Reducer itemsPerPage=20 callFnParams=channelId subComponent />;
   },
 };

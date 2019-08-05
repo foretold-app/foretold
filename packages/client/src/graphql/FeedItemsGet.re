@@ -1,12 +1,42 @@
 open Rationale.Function.Infix;
 
+type common = {
+  item: string,
+  description: string,
+};
+
+type body = {common: option(common)};
+
 type node = {
   id: string,
   channelId: string,
+  body,
+};
+
+let toCommon = (m: option(common)): option(FeedItemBody.Common.t) => {
+  switch (m) {
+  | Some(common) =>
+    FeedItemBody.Common.make(
+      ~item=common.item,
+      ~description=common.description,
+      (),
+    )
+    |> E.O.some
+  | _ => None
+  };
+};
+
+let toBody = (m: body): FeedItemBody.t => {
+  FeedItemBody.make(~common=toCommon(m.common), ());
 };
 
 let toFeedItem = (m: node): Types.feedItem => {
-  Primary.FeedItem.make(~id=m.id, ~channelId=m.channelId, ());
+  Primary.FeedItem.make(
+    ~id=m.id,
+    ~channelId=m.channelId,
+    ~body=toBody(m.body),
+    (),
+  );
 };
 
 module Query = [%graphql
@@ -36,6 +66,12 @@ module Query = [%graphql
             node @bsRecord{
               id
               channelId
+              body @bsRecord {
+                common @bsRecord {
+                  item
+                  description
+                 }
+              }
             }
           }
         }

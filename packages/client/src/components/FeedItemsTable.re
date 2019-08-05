@@ -6,8 +6,13 @@ module Columns = {
 
   let nameColumn: column =
     Table.Column.make(
-      ~name="Id" |> Utils.ste,
-      ~render=(r: record) => r.id |> Utils.ste,
+      ~name="Item" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          r.body.common
+          |> E.O.fmap((common: FeedItemBody.Common.t) => common.item)
+          |> E.O.default("")
+          |> Utils.ste,
       ~flex=2,
       (),
     );
@@ -15,7 +20,12 @@ module Columns = {
   let descriptionColumn: column =
     Table.Column.make(
       ~name="Description" |> Utils.ste,
-      ~render=(r: record) => r.channelId |> Utils.ste,
+      ~render=
+        (r: record) =>
+          r.body.common
+          |> E.O.fmap((common: FeedItemBody.Common.t) => common.description)
+          |> E.O.default("")
+          |> Utils.ste,
       ~flex=3,
       (),
     );

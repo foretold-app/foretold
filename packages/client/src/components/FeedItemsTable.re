@@ -30,7 +30,22 @@ module Columns = {
       (),
     );
 
-  let all = [|nameColumn, descriptionColumn|];
+  let timeColumn: column =
+    Table.Column.make(
+      ~name="Time" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          r.createdAt
+          |> E.O.fmap((createdAt: MomentRe.Moment.t) =>
+               createdAt |> MomentRe.Moment.format("LLL")
+             )
+          |> E.O.default("")
+          |> Utils.ste,
+      ~flex=1,
+      (),
+    );
+
+  let all = [|nameColumn, descriptionColumn, timeColumn|];
 };
 
 [@react.component]

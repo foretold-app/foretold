@@ -11,6 +11,8 @@ type node = {
   id: string,
   channelId: string,
   body,
+  createdAt: MomentRe.Moment.t,
+  updatedAt: MomentRe.Moment.t,
 };
 
 let toCommon = (m: option(common)): option(FeedItemBody.Common.t) => {
@@ -35,6 +37,8 @@ let toFeedItem = (m: node): Types.feedItem => {
     ~id=m.id,
     ~channelId=m.channelId,
     ~body=toBody(m.body),
+    ~createdAt=Some(m.createdAt),
+    ~updatedAt=Some(m.updatedAt),
     (),
   );
 };
@@ -72,6 +76,8 @@ module Query = [%graphql
                   description
                  }
               }
+              createdAt @bsDecoder(fn: "E.J.toMoment")
+              updatedAt @bsDecoder(fn: "E.J.toMoment")
             }
           }
         }

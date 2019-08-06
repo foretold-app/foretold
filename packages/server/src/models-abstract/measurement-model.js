@@ -2,9 +2,10 @@ const _ = require('lodash');
 
 const models = require('../models');
 const { splitBy } = require('../lib/functions');
+const { BrierScore } = require('../lib/brier-score');
 
 const { ModelPostgres } = require('./model-postgres');
-const { BrierScore } = require('../lib/brier-score');
+const { ResponseAll } = require('./classes/response-all');
 
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
@@ -126,6 +127,8 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @public
+   * @todo: use getConnection
+   * @deprecated
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Models.ObjectID} [filter.measurableId]
    * @param {Models.ObjectID} [filter.agentId]
@@ -160,7 +163,7 @@ class MeasurementModel extends ModelPostgres {
     // tricky
     if (spacedLimit) data = splitBy(data, spacedLimit);
 
-    return { data, total };
+    return new ResponseAll(data, total);
   }
 
   /**

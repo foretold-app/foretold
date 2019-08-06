@@ -11,6 +11,7 @@ const authentications = require('./authentications');
 const bots = require('./bots');
 const preferences = require('./preferences');
 const invitations = require('./invitations');
+const feedItems = require('./feed-items');
 
 module.exports = {
   channels,
@@ -26,4 +27,5 @@ module.exports = {
   bots,
   preferences,
   invitations,
+  feedItems,
 };

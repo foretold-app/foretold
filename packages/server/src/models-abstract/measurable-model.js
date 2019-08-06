@@ -1,9 +1,10 @@
 const _ = require('lodash');
 
 const models = require('../models');
-const { ModelPostgres } = require('./model-postgres');
-
 const { MEASURABLE_STATE } = require('../models/enums/measurable-state');
+
+const { ModelPostgres } = require('./model-postgres');
+const { ResponseAll } = require('./classes/response-all');
 
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
@@ -38,14 +39,43 @@ class MeasurableModel extends ModelPostgres {
 
   /**
    * @public
-   * @return {Promise<boolean>}
+   * @return {Promise<Models.Measurable[]>}
    */
-  needsToBePending() {
-    return this.model.needsToBePending();
+  async needsToBePending() {
+    return this.model.findAll({
+      where: {
+        state: MEASURABLE_STATE.OPEN,
+        [this.or]: [
+          {
+            expectedResolutionDate: {
+              [this.lt]: this.fn('now'),
+            },
+          },
+          { expectedResolutionDate: null },
+        ],
+      },
+    });
   }
 
   /**
    * @public
+   * @return {Promise<Models.Measurable[]>}
+   */
+  async needsResolutionResponse() {
+    return this.model.findAll({
+      where: {
+        state: MEASURABLE_STATE.JUDGEMENT_PENDING,
+        expectedResolutionDate: {
+          [this.lt]: this.fn('now'),
+        },
+      },
+    });
+  }
+
+  /**
+   * @public
+   * @todo: use getConnection
+   * @deprecated
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Models.ObjectID} [filter.channelId]
    * @param {Models.ObjectID} [filter.seriesId]
@@ -97,7 +127,7 @@ class MeasurableModel extends ModelPostgres {
     data = this.setIndexes(data, edgePagination);
     data.total = total;
 
-    return { data, total };
+    return new ResponseAll(data, total);
   }
 
   /**

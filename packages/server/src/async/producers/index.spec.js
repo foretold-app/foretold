@@ -1,7 +1,7 @@
-const index = require('./');
+const index = require('./index');
 
-describe('Producers Module', () => {
-  it('returns an constructor', () => {
+describe('Producers', () => {
+  it('returns an object', () => {
     expect(index).toBeInstanceOf(Object);
   });
 });

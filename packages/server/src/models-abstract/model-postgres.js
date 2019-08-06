@@ -1,11 +1,13 @@
 const _ = require('lodash');
-
-const { Model } = require('./model');
-const models = require('../models');
-
 const { Op } = require('sequelize');
 
+const models = require('../models');
+
+const { Model } = require('./model');
+const { ResponseAll } = require('./classes/response-all');
+
 /**
+ * @abstract
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
  */
 class ModelPostgres extends Model {
@@ -238,6 +240,12 @@ class ModelPostgres extends Model {
       });
     }
 
+    if (filter.channelId) {
+      where[this.and].push({
+        channelId: filter.channelId,
+      });
+    }
+
     return where;
   }
 
@@ -381,14 +389,14 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [_options]
+   * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise<{data: Models.Model[], total: number}>}
    */
   async getAllWithConnections(
     filter = {},
     pagination = {},
     restrictions = {},
-    _options = {},
+    options = {},
   ) {
     const where = {};
     const include = [];
@@ -398,12 +406,13 @@ class ModelPostgres extends Model {
     this.applyFilter(where, filter);
 
     const cond = { where, include };
+    this._extendConditions(cond, options);
 
     /** @type {number} */
     const total = await this.model.count(cond);
     const edgePagination = this.getPagination(pagination, total);
 
-    const options = {
+    const findCond = {
       ...cond,
       limit: edgePagination.limit,
       offset: edgePagination.offset,
@@ -411,11 +420,11 @@ class ModelPostgres extends Model {
     };
 
     /** @type {Models.Model[]} */
-    let data = await this.model.findAll(options);
+    let data = await this.model.findAll(findCond);
     data = this.setIndexes(data, edgePagination);
     data.total = total;
 
-    return { data, total };
+    return new ResponseAll(data, total);
   }
 
   /**

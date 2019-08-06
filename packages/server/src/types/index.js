@@ -13,6 +13,7 @@ const measurementCompetitorType = require('./enums/measurement-competitor-type')
 const invitationStatus = require('./enums/invitation-status');
 const preferences = require('./preferences');
 const invitations = require('./invitations');
+const feedItems = require('./feed-items');
 
 module.exports = {
   bots,
@@ -30,4 +31,5 @@ module.exports = {
   preferences,
   invitationStatus,
   invitations,
+  feedItems,
 };

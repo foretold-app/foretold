@@ -22,7 +22,8 @@ module ChannelPage = {
   type tab =
     | Measurables
     | Members
-    | Options;
+    | Options
+    | Updates;
 
   module SubPage = {
     type t =
@@ -34,7 +35,8 @@ module ChannelPage = {
       | InviteMember
       | Settings
       | NewSeries
-      | Series(seriesId);
+      | Series(seriesId)
+      | FeedItems;
 
     let toTab = (subPage: t): tab =>
       switch (subPage) {
@@ -47,6 +49,7 @@ module ChannelPage = {
       | AddMember => Members
       | InviteMember => Members
       | Settings => Options
+      | FeedItems => Updates
       };
 
     let fromTab = (tab: tab): t =>
@@ -54,6 +57,7 @@ module ChannelPage = {
       | Measurables => Measurables({state: None})
       | Members => Members
       | Options => Settings
+      | Updates => FeedItems
       };
   };
 
@@ -131,6 +135,8 @@ module Route = {
     | ["c", channelId, "new"] => Channel({channelId, subPage: NewMeasurable})
     | ["c", channelId, "edit"] => Channel({channelId, subPage: Settings})
     | ["c", channelId, "members"] => Channel({channelId, subPage: Members})
+    | ["c", channelId, "updates"] =>
+      Channel({channelId: getChannelId(channelId), subPage: FeedItems})
     | ["c", channelId, "add"] => Channel({channelId, subPage: AddMember})
     | ["c", channelId, "invite"] =>
       Channel({channelId, subPage: InviteMember})
@@ -175,6 +181,7 @@ module Url = {
     | MeasurableEdit(string)
     | ChannelEdit(string)
     | ChannelMembers(string)
+    | ChannelFeedItems(string)
     | ChannelAddMember(string)
     | ChannelInviteMember(string)
     | MeasurableNew(string)
@@ -201,9 +208,10 @@ module Url = {
       "/agents/" ++ agentId ++ "/communities"
     | ChannelNew => "/communities/" ++ "new"
     | ChannelIndex => "/communities"
-    | ChannelShow(id) => "/c/" ++ id
-    | ChannelEdit(id) => "/c/" ++ id ++ "/edit"
-    | ChannelMembers(id) => "/c/" ++ id ++ "/members"
+    | ChannelShow(channelId) => "/c/" ++ channelId
+    | ChannelEdit(channelId) => "/c/" ++ channelId ++ "/edit"
+    | ChannelMembers(channelId) => "/c/" ++ channelId ++ "/members"
+    | ChannelFeedItems(channelId) => "/c/" ++ channelId ++ "/updates"
     | ChannelAddMember(channelId) => "/c/" ++ channelId ++ "/add"
     | ChannelInviteMember(channelId) => "/c/" ++ channelId ++ "/invite"
     | MeasurableEdit(id) => "/measurables/" ++ id ++ "/edit"
@@ -222,6 +230,7 @@ module Url = {
     | Measurables(_) => ChannelShow(channelPage.channelId)
     | NewMeasurable => MeasurableNew(channelPage.channelId)
     | Members => ChannelMembers(channelPage.channelId)
+    | FeedItems => ChannelFeedItems(channelPage.channelId)
     | AddMember => ChannelAddMember(channelPage.channelId)
     | InviteMember => ChannelInviteMember(channelPage.channelId)
     | Settings => ChannelEdit(channelPage.channelId)

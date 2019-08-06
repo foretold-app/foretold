@@ -3,6 +3,7 @@ const emitter = require('../async/emitter');
 
 const { AGENT_TYPE } = require('./enums/agent-type');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-type');
+const { MEASURABLE_STATE } = require('./enums/measurable-state');
 
 /**
  * Try to keep all "async" hooks in one place.
@@ -25,51 +26,34 @@ const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-
  */
 
 function addHooks(db) {
-  db.sequelize.addHook('afterUpdate', (instance) => {
+  db.Measurable.addHook('afterUpdate', (instance) => {
     try {
-      if (
-        instance instanceof db.Measurable &&
-        instance.changed('state')
-      ) {
-        emitter.emit(events.MEASURABLE_STATE_IS_CHANGED, instance);
-      }
+      emitter.emit(events.MEASURABLE_CHANGED, instance);
+    } catch (e) {
+      console.log('Hook MEASURABLE_CHANGED', e);
+    }
+  });
+  db.Measurement.addHook('afterCreate', (instance) => {
+    try {
+      emitter.emit(events.NEW_MEASUREMENT, instance);
+    } catch (e) {
+      console.log('Hook NEW_MEASUREMENT', e);
+    }
+  });
+  db.Measurable.addHook('afterCreate', (instance) => {
+    try {
+      emitter.emit(events.NEW_MEASURABLE, instance);
+    } catch (e) {
+      console.log('Hook NEW_MEASURABLE', e);
+    }
+  });
+  db.ChannelMemberships.addHook('afterCreate', (instance) => {
+    try {
+      emitter.emit(events.NEW_MEMBERSHIP, instance);
     } catch (e) {
       console.log('Hook', e);
     }
   });
-
-  db.sequelize.addHook('afterUpdate', (instance) => {
-    try {
-      if (
-        instance instanceof db.Measurable &&
-        instance.changed('state')
-      ) {
-        emitter.emit(events.MEASURABLE_STATE_IS_CHANGED, instance);
-      }
-    } catch (e) {
-      console.log('Hook', e);
-    }
-  });
-
-  db.sequelize.addHook('afterCreate', (instance) => {
-    try {
-      if (instance instanceof db.ChannelMemberships) {
-        emitter.emit(events.MEMBER_ADDED_TO_COMMUNITY, instance);
-      }
-    } catch (e) {
-      console.log('Hook', e);
-    }
-  });
-
-  // db.sequelize.addHook('afterCreate', (instance) => {
-  //   try {
-  //     if (instance instanceof db.Invitation) {
-  //       emitter.emit(events.MEMBER_INVITED_TO_COMMUNITY, instance);
-  //     }
-  //   } catch (e) {
-  //     console.log('Hook', e);
-  //   }
-  // });
 
   db.Bot.addHook('beforeCreate', async (event) => {
     try {

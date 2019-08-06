@@ -4,6 +4,7 @@ const data = require('../data');
 const { Pagination } = require('../data/classes/pagination');
 
 /**
+ * @todo: update input of getAll
  * @param {*} root
  * @param {object} args
  * @param {Models.ObjectID} args.creatorId
@@ -35,10 +36,11 @@ async function all(root, args, context, info) {
     agentId: _.get(context, 'agent.id'),
     measuredByAgentId: _.get(args, 'measuredByAgentId'),
   };
+
   // tricky
   context.resultOrLatestMeasurementForAgentId = args.resultOrLatestMeasurementForAgentId;
-  const result = await data.measurables.getAll(filter, pagination, options);
-  return result.data;
+  const connection = await data.measurables.getAll(filter, pagination, options);
+  return connection.getData();
 }
 
 /**

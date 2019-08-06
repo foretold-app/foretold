@@ -162,6 +162,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
+  /**
+   * @return {Promise<void>}
+   */
   Measurable.prototype.watchExpectedResolutionDate =
     async function watchExpectedResolutionDate() {
       const isChanged = this.changed('expectedResolutionDate');
@@ -171,62 +174,59 @@ module.exports = (sequelize, DataTypes) => {
       const now = new Date();
       const isResolutionDateInFuture = current >= now;
       if (isResolutionDateInFuture) {
+        // @todo: this.open()?
         this.set('state', MEASURABLE_STATE.OPEN);
       }
     };
 
-  Measurable.needsResolutionResponse = async function needsResolutionResponse() {
-    return Measurable.findAll({
-      where: {
-        state: MEASURABLE_STATE.JUDGEMENT_PENDING,
-        expectedResolutionDate: {
-          [Sequelize.Op.lt]: Sequelize.fn('now'),
-        },
-      },
-    });
-  };
-
-  Measurable.needsToBePending = async function needsToBePending() {
-    return Measurable.findAll({
-      where: {
-        state: MEASURABLE_STATE.OPEN,
-        [Sequelize.Op.or]: [
-          {
-            expectedResolutionDate: {
-              [Sequelize.Op.lt]: Sequelize.fn('now'),
-            },
-          },
-          { expectedResolutionDate: null },
-        ],
-      },
-    });
-  };
-
-  Measurable.prototype.updateState = async function updateState(state) {
-    await this.update({ state, stateUpdatedAt: Sequelize.fn('now') });
-  };
-
+  /**
+   * @return {Promise<Models.Measurable>}
+   */
   Measurable.prototype.archive = async function archive() {
     await this.update({ isArchived: true });
   };
 
+  /**
+   * @return {Promise<Models.Measurable>}
+   */
   Measurable.prototype.unarchive = async function unarchive() {
     await this.update({ isArchived: false });
   };
 
+  /**
+   * @return {Promise<Models.Measurable>}
+   */
+  Measurable.prototype.open = async function open() {
+    await this.updateState(MEASURABLE_STATE.OPEN);
+  };
+
+  /**
+   * @return {Promise<Models.Measurable>}
+   */
   Measurable.prototype.judged = async function judged() {
     await this.updateState(MEASURABLE_STATE.JUDGED);
   };
 
+  /**
+   * @return {Promise<Models.Measurable>}
+   */
   Measurable.prototype.judgementPending = async function judgementPending() {
     await this.updateState(MEASURABLE_STATE.JUDGEMENT_PENDING);
+  };
+
+  /**
+   * @param {string} state
+   * @return {Promise<Models.Measurable>}
+   */
+  Measurable.prototype.updateState = async function updateState(state) {
+    await this.update({ state, stateUpdatedAt: Sequelize.fn('now') });
   };
 
   /**
    * @todo: implement client for this code
    * @todo: do not remove
    * @param {Models.Agent.id} agentId
-   * @return {Promise<void>}
+   * @return {Promise<Models.Measurable>}
    */
   Measurable.prototype.processResolution =
     async function processResolution(agentId) {

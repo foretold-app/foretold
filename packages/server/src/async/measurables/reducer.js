@@ -8,6 +8,7 @@ class Reducer {
   }
 
   /**
+   * @public
    * @return {Promise<boolean>}
    */
   async toJudgementPending() {

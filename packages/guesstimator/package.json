@@ -11,5 +11,15 @@
     "javascript",
     "prediction",
     "trends"
-  ]
+  ],
+  "dependencies": {
+    "lodash": "4.17.15",
+    "mathjs": "5.10.3",
+    "jstat": "1.9.0",
+    "discrete-sampling": "1.0.3",
+    "financejs": "4.1.0"
+  },
+  "devDependencies": {
+    "chai": "4.2.0"
+  }
 }

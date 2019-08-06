@@ -1,0 +1,15 @@
+{
+  "name": "@foretold/guesstimator",
+  "version": "1.0.0",
+  "description": "Guesstimator",
+  "author": "Ozzie Gooen",
+  "license": "MIT",
+  "private": false,
+  "keywords": [
+    "foretold",
+    "cdf",
+    "javascript",
+    "prediction",
+    "trends"
+  ]
+}

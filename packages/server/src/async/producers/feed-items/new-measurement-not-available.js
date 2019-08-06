@@ -19,7 +19,7 @@ class NewMeasurementNotAvailable extends NewMeasurement {
    * @return {Promise<boolean>}
    */
   async _isActual() {
-    const competitorType = this.measurement.competitorType;
+    const competitorType = this.input.competitorType;
     return competitorType === MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED;
   }
 

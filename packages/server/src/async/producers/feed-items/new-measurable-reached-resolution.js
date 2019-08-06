@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const { ProducerFeedItems } = require('./producer-feed-items');
 const { Producer } = require('../producer');
 const { MEASURABLE_STATE } = require('../../../models/enums/measurable-state');

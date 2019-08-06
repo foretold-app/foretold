@@ -41,6 +41,7 @@ export namespace Models {
 
   export interface Measurement extends Model {
     getCreationNotification(creator: Models.Creator): any;
+    getMeasurable(): Measurable;
   }
 
   export interface Agent extends Model {

@@ -22,13 +22,13 @@ class ProducerFeedItems extends Producer {
   async main() {
     try {
       if (await this._isActual() === false) {
-        console.log(this.name, 'Hook is not actual');
+        console.log(this.constructor.name, 'Hook is not actual');
         return true;
       }
       await this._preload();
       await this._validateInput();
     } catch (e) {
-      console.error(this.name, e.message, e);
+      console.error(this.constructor.name, e.message, e);
       return false;
     }
 
@@ -37,14 +37,13 @@ class ProducerFeedItems extends Producer {
       assert(!!_.get(agent, 'id'), 'Agent ID is required.');
 
       const replacements = await this._getReplacements(agent);
-      const channelId = this.input.channelId;
-      await this._queueFeedItem(replacements, channelId);
+      await this._queueFeedItem(replacements, this.channelId);
 
       await this._commit();
       return true;
     } catch (e) {
       await this._rollback();
-      console.error(this.name, e.message, e);
+      console.error(this.constructor.name, e.message, e);
       return false;
     }
   }

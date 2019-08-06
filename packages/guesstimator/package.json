@@ -19,7 +19,18 @@
     "discrete-sampling": "1.0.3",
     "financejs": "4.1.0"
   },
+  "scripts": {
+    "start": "nodemon --exec babel-node ./index.js",
+    "test": "mocha --compilers js:@babel/register"
+  },
   "devDependencies": {
-    "chai": "4.2.0"
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/register": "^7.5.5",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.0",
+    "nodemon": "^1.19.1"
   }
 }

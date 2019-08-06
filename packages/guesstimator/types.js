@@ -7,12 +7,12 @@ import {Sampler as FunctionSampler} from './samplers/Function.js'
 import {Sampler as DataSampler} from './samplers/Data.js'
 import {Sampler as NoneSampler} from './samplers/None.js'
 
-import NormalIcon from '../../assets/distribution-icons/normal.png'
-import LogNormalIcon from '../../assets/distribution-icons/lognormal.png'
-import ExponentialIcon from '../../assets/distribution-icons/exponential.png'
-import PointIcon from '../../assets/distribution-icons/point.png'
-import UniformIcon from '../../assets/distribution-icons/uniform.png'
-import FunctionIcon from '../../assets/distribution-icons/function.png'
+import NormalIcon from './assets/distribution-icons/normal.png'
+import LogNormalIcon from './assets/distribution-icons/lognormal.png'
+import ExponentialIcon from './assets/distribution-icons/exponential.png'
+import PointIcon from './assets/distribution-icons/point.png'
+import UniformIcon from './assets/distribution-icons/uniform.png'
+import FunctionIcon from './assets/distribution-icons/function.png'
 
 export const Funct = {
   referenceName: 'FUNCTION',

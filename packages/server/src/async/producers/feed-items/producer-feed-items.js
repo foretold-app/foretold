@@ -3,6 +3,9 @@ const _ = require('lodash');
 
 const { Producer } = require('../producer');
 
+/**
+ * @abstract
+ */
 class ProducerFeedItems extends Producer {
 
   constructor(input) {

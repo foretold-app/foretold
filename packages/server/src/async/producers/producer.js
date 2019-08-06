@@ -8,6 +8,9 @@ const { NOTIFICATION_TYPE } = require('../../models/enums/notification-type');
 const { EmailEnvelope } = require('../../models/classes/notifications');
 const { FeedItem } = require('../../models/classes');
 
+/**
+ * @abstract
+ */
 class Producer {
 
   constructor(options = {}) {

@@ -3,6 +3,9 @@ const _ = require('lodash');
 const models = require('../models');
 const { Model } = require('../models-abstract');
 
+/**
+ * @abstract
+ */
 class DataBase {
 
   /**

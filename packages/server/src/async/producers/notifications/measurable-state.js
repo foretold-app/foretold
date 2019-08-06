@@ -7,6 +7,9 @@ const { MEASUREMENT_COMPETITOR_TYPE } = require('../../../models/enums/measureme
 const { Producer } = require('../producer');
 const { ProducerNotifications } = require('./producer-notifications');
 
+/**
+ * @abstract
+ */
 class MeasurableState extends ProducerNotifications {
 
   /**

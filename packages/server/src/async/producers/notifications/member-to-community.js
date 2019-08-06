@@ -7,6 +7,9 @@ const { getAgentLinkWithToken } = require('../../../lib/urls');
 const { Producer } = require('../producer');
 const { ProducerNotifications } = require('./producer-notifications');
 
+/**
+ * @abstract
+ */
 class MemberToCommunity extends ProducerNotifications {
 
   /**

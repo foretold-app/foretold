@@ -3,6 +3,9 @@ const _ = require('lodash');
 
 const { ProducerFeedItems } = require('./producer-feed-items');
 
+/**
+ * @abstract
+ */
 class NewMeasurement extends ProducerFeedItems {
 
   /**

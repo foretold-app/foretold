@@ -162,6 +162,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
+  /**
+   * @return {Promise<void>}
+   */
   Measurable.prototype.watchExpectedResolutionDate =
     async function watchExpectedResolutionDate() {
       const isChanged = this.changed('expectedResolutionDate');
@@ -175,31 +178,47 @@ module.exports = (sequelize, DataTypes) => {
       }
     };
 
-  Measurable.prototype.updateState = async function updateState(state) {
-    await this.update({ state, stateUpdatedAt: Sequelize.fn('now') });
-  };
-
+  /**
+   * @return {Promise<Models.Measurable>}
+   */
   Measurable.prototype.archive = async function archive() {
     await this.update({ isArchived: true });
   };
 
+  /**
+   * @return {Promise<Models.Measurable>}
+   */
   Measurable.prototype.unarchive = async function unarchive() {
     await this.update({ isArchived: false });
   };
 
+  /**
+   * @return {Promise<Models.Measurable>}
+   */
   Measurable.prototype.judged = async function judged() {
     await this.updateState(MEASURABLE_STATE.JUDGED);
   };
 
+  /**
+   * @return {Promise<Models.Measurable>}
+   */
   Measurable.prototype.judgementPending = async function judgementPending() {
     await this.updateState(MEASURABLE_STATE.JUDGEMENT_PENDING);
+  };
+
+  /**
+   * @param {string} state
+   * @return {Promise<Models.Measurable>}
+   */
+  Measurable.prototype.updateState = async function updateState(state) {
+    await this.update({ state, stateUpdatedAt: Sequelize.fn('now') });
   };
 
   /**
    * @todo: implement client for this code
    * @todo: do not remove
    * @param {Models.Agent.id} agentId
-   * @return {Promise<void>}
+   * @return {Promise<Models.Measurable>}
    */
   Measurable.prototype.processResolution =
     async function processResolution(agentId) {

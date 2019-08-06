@@ -20,6 +20,22 @@ class Reducer {
 
     return true;
   }
+
+  /**
+   * @todo: implementation
+   * @public
+   * @param {Models.Agent.id} agentId
+   * @return {Promise<boolean>}
+   */
+  async resolving(agentId) {
+    const measurables = await this.data.measurables.needsResolutionResponse();
+
+    _.each(measurables, (measurable) => {
+      measurable.processResolution(agentId);
+    });
+
+    return true;
+  }
 }
 
 module.exports = {

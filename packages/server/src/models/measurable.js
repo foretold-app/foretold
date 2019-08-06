@@ -175,17 +175,6 @@ module.exports = (sequelize, DataTypes) => {
       }
     };
 
-  Measurable.needsResolutionResponse = async function needsResolutionResponse() {
-    return Measurable.findAll({
-      where: {
-        state: MEASURABLE_STATE.JUDGEMENT_PENDING,
-        expectedResolutionDate: {
-          [Sequelize.Op.lt]: Sequelize.fn('now'),
-        },
-      },
-    });
-  };
-
   Measurable.prototype.updateState = async function updateState(state) {
     await this.update({ state, stateUpdatedAt: Sequelize.fn('now') });
   };

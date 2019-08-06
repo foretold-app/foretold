@@ -112,10 +112,18 @@ class MeasurablesData extends DataBase {
 
   /**
    * @public
-   * @return {Promise<boolean>}
+   * @return {Promise<Models.Measurable[]>}
    */
-  needsToBePending() {
+  async needsToBePending() {
     return this.model.needsToBePending();
+  }
+
+  /**
+   * @public
+   * @return {Promise<Models.Measurable[]>}
+   */
+  async needsResolutionResponse() {
+    return this.model.needsResolutionResponse();
   }
 
   /**

@@ -39,9 +39,9 @@ class MeasurableModel extends ModelPostgres {
 
   /**
    * @public
-   * @return {Promise<boolean>}
+   * @return {Promise<Models.Measurable[]>}
    */
-  needsToBePending() {
+  async needsToBePending() {
     return this.model.findAll({
       where: {
         state: MEASURABLE_STATE.OPEN,
@@ -53,6 +53,21 @@ class MeasurableModel extends ModelPostgres {
           },
           { expectedResolutionDate: null },
         ],
+      },
+    });
+  }
+
+  /**
+   * @public
+   * @return {Promise<Models.Measurable[]>}
+   */
+  async needsResolutionResponse() {
+    return this.model.findAll({
+      where: {
+        state: MEASURABLE_STATE.JUDGEMENT_PENDING,
+        expectedResolutionDate: {
+          [this.lt]: this.fn('now'),
+        },
       },
     });
   }

@@ -7,6 +7,9 @@ const { MEASUREMENT_COMPETITOR_TYPE } = require('../../../models/enums/measureme
 const { Producer } = require('../producer');
 const { ProducerNotifications } = require('./producer-notifications');
 
+/**
+ * @abstract
+ */
 class MeasurableState extends ProducerNotifications {
 
   /**
@@ -15,6 +18,7 @@ class MeasurableState extends ProducerNotifications {
   constructor(measurable) {
     super({});
     assert(!!_.get(measurable, 'id'), 'Measurable ID is required');
+    assert(!!_.get(measurable, 'changed'), 'Measurable "changed" is required');
     this.measurable = measurable;
   }
 

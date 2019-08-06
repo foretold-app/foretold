@@ -5,6 +5,9 @@ const { EmailEnvelope } = require('../../../models/classes/notifications');
 
 const { Producer } = require('../producer');
 
+/**
+ * @abstract
+ */
 class ProducerNotifications extends Producer {
 
   constructor(options = {}) {

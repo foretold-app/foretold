@@ -7,12 +7,12 @@ class ProducerFeedItems extends Producer {
 
   constructor(input) {
     super({});
-    this.agentId = _.get(input, 'agentId') || _.get(input, 'creatorId');
-    this.input = input;
 
     assert(_.isObject(input), 'Input should be an object.');
-    assert(!!this.agentId, 'Agent Id is required.');
-    assert(!!_.get(input, 'channelId'), 'Channel Id is required.');
+
+    this.input = input;
+    this.agentId = null;
+    this.channelId = null;
   }
 
   /**
@@ -25,6 +25,8 @@ class ProducerFeedItems extends Producer {
         console.log(this.name, 'Hook is not actual');
         return true;
       }
+      await this._preload();
+      await this._validateInput();
     } catch (e) {
       console.error(this.name, e.message, e);
       return false;
@@ -48,6 +50,35 @@ class ProducerFeedItems extends Producer {
   }
 
   /**
+   * @protected
+   * @return {Promise<boolean>}
+   */
+  async _isActual() {
+    return true;
+  }
+
+  /**
+   * @protected
+   * @return {Promise<boolean>}
+   */
+  async _preload() {
+    this.agentId = _.get(this.input, 'agentId')
+      || _.get(this.input, 'creatorId');
+    this.channelId = _.get(this.input, 'channelId');
+    return true;
+  }
+
+  /**
+   * @protected
+   * @return {Promise<boolean>}
+   */
+  async _validateInput() {
+    assert(!!this.agentId, 'Agent Id is required.');
+    assert(!!this.channelId, 'Channel Id is required.');
+    return true;
+  }
+
+  /**
    * @param {Models.Agent} agent
    * @return {Promise.<{agent: {name: string}}>}
    * @protected
@@ -58,14 +89,6 @@ class ProducerFeedItems extends Producer {
         name: (await _.get(agent, 'name')) || 'Somebody',
       },
     }
-  }
-
-  /**
-   * @protected
-   * @return {Promise<boolean>}
-   */
-  async _isActual() {
-    return true;
   }
 
   /**

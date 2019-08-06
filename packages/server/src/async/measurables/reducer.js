@@ -8,6 +8,7 @@ class Reducer {
   }
 
   /**
+   * @public
    * @return {Promise<boolean>}
    */
   async toJudgementPending() {
@@ -15,6 +16,22 @@ class Reducer {
 
     _.each(measurables, (measurable) => {
       measurable.judgementPending();
+    });
+
+    return true;
+  }
+
+  /**
+   * @todo: implementation
+   * @public
+   * @param {Models.Agent.id} agentId
+   * @return {Promise<boolean>}
+   */
+  async resolving(agentId) {
+    const measurables = await this.data.measurables.needsResolutionResponse();
+
+    _.each(measurables, (measurable) => {
+      measurable.processResolution(agentId);
     });
 
     return true;

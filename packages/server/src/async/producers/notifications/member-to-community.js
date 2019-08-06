@@ -7,6 +7,9 @@ const { getAgentLinkWithToken } = require('../../../lib/urls');
 const { Producer } = require('../producer');
 const { ProducerNotifications } = require('./producer-notifications');
 
+/**
+ * @abstract
+ */
 class MemberToCommunity extends ProducerNotifications {
 
   /**
@@ -60,7 +63,7 @@ class MemberToCommunity extends ProducerNotifications {
       return true;
     } catch (e) {
       await this._rollback();
-      console.log(`memberAddedToCommunity`, e.message, e);
+      console.log(this.constructor.name, e.message, e);
       return false;
     }
   }

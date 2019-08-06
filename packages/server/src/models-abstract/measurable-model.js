@@ -39,10 +39,37 @@ class MeasurableModel extends ModelPostgres {
 
   /**
    * @public
-   * @return {Promise<boolean>}
+   * @return {Promise<Models.Measurable[]>}
    */
-  needsToBePending() {
-    return this.model.needsToBePending();
+  async needsToBePending() {
+    return this.model.findAll({
+      where: {
+        state: MEASURABLE_STATE.OPEN,
+        [this.or]: [
+          {
+            expectedResolutionDate: {
+              [this.lt]: this.fn('now'),
+            },
+          },
+          { expectedResolutionDate: null },
+        ],
+      },
+    });
+  }
+
+  /**
+   * @public
+   * @return {Promise<Models.Measurable[]>}
+   */
+  async needsResolutionResponse() {
+    return this.model.findAll({
+      where: {
+        state: MEASURABLE_STATE.JUDGEMENT_PENDING,
+        expectedResolutionDate: {
+          [this.lt]: this.fn('now'),
+        },
+      },
+    });
   }
 
   /**

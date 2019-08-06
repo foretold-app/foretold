@@ -7,6 +7,7 @@ const { Model } = require('./model');
 const { ResponseAll } = require('./classes/response-all');
 
 /**
+ * @abstract
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
  */
 class ModelPostgres extends Model {

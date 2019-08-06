@@ -2,7 +2,11 @@ const { Producer } = require('../producer');
 const { ProducerNotifications } = require('./producer-notifications');
 
 class MemberInvitedToCommunity extends ProducerNotifications {
-  constructor(input = {}) {
+
+  /**
+   * @param {Models.ChannelMembership} input
+   */
+  constructor(input) {
     super({});
 
     this.input = input;
@@ -17,7 +21,7 @@ class MemberInvitedToCommunity extends ProducerNotifications {
     try {
       return true;
     } catch (e) {
-      console.log(`MemberInvitedToCommunity`, e.message, e);
+      console.log(this.constructor.name, e.message, e);
       return false;
     }
   }

@@ -1,7 +1,7 @@
 import {parse} from './formatter/index'
 import {samplerTypes} from './types'
 import _ from "lodash";
-//Guesstimator.parse({text: '3+123+FA'}]})
+
 //TODO(fix this class)
 
 export class Guesstimator {
@@ -37,3 +37,5 @@ export class Guesstimator {
     return samplerType.sampler.sample(this.parsedInput, n, externalInputs)
   }
 }
+
+// console.log(Guesstimator.parse({text: '3+123+FA'}));

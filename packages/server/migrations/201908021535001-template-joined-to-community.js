@@ -8,7 +8,7 @@ module.exports = {
 
       const template = new FeedItem({
         item: '',
-        description: '{{ agent.name }} joined the community',
+        description: '{{{ agent.name }}} joined the community',
       });
 
       await queryInterface.bulkInsert('Templates', [{

@@ -60,7 +60,7 @@ class MemberToCommunity extends ProducerNotifications {
       return true;
     } catch (e) {
       await this._rollback();
-      console.log(`memberAddedToCommunity`, e.message, e);
+      console.log(this.constructor.name, e.message, e);
       return false;
     }
   }

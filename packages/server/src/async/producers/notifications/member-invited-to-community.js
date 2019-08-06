@@ -17,7 +17,7 @@ class MemberInvitedToCommunity extends ProducerNotifications {
     try {
       return true;
     } catch (e) {
-      console.log(`MemberInvitedToCommunity`, e.message, e);
+      console.log(this.constructor.name, e.message, e);
       return false;
     }
   }

@@ -32,11 +32,11 @@ class MeasurableStateResolved extends MeasurableState {
   async main() {
     try {
       if (await this._isActual() === false) {
-        console.log(this.name, 'Hook is not actual');
+        console.log(this.constructor.name, 'Hook is not actual');
         return true;
       }
     } catch (e) {
-      console.error(this.name, e.message, e);
+      console.error(this.constructor.name, e.message, e);
       return false;
     }
 
@@ -68,7 +68,7 @@ class MeasurableStateResolved extends MeasurableState {
       return true;
     } catch (e) {
       await this._rollback();
-      console.log(`stateResolved`, e.message, e);
+      console.log(this.constructor.name, e.message, e);
       return false;
     }
   }

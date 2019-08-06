@@ -81,6 +81,7 @@ function runListeners() {
 
     emitter.on(events.MEASURABLE_CHANGED, listenFor(producers.notifications.MeasurableStateChanged));
     emitter.on(events.MEASURABLE_CHANGED, listenFor(producers.notifications.MeasurableStateResolved));
+    emitter.on(events.MEASURABLE_CHANGED, listenFor(producers.feedItems.NewMeasurableReachedResolution));
 
     emitter.on(events.NEW_MEMBERSHIP, listenFor(producers.notifications.MemberAddedToCommunity));
     emitter.on(events.NEW_MEMBERSHIP, listenFor(producers.notifications.MemberInvitedToCommunity));

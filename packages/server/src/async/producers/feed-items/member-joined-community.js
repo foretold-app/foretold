@@ -26,7 +26,7 @@ class MemberJoinedCommunity extends ProducerFeedItems {
    * @return {Promise<boolean>}
    */
   async _isActual() {
-    const methodCreatedBy = this.channelMembership.methodCreatedBy;
+    const methodCreatedBy = this.input.methodCreatedBy;
     return methodCreatedBy === CHANNEL_MEMBERSHIP_TYPE.AGENT_JOINED_DIRECTLY;
   }
 

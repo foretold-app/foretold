@@ -11,9 +11,8 @@ class ProducerFeedItems extends Producer {
     this.input = input;
 
     assert(_.isObject(input), 'Input should be an object.');
-    assert(!!_.get(input, 'id'), 'Measurable Id is required.');
-    assert(!this.agentId, 'Agent Id is required.');
-    assert(!!_.get(input, 'channelId'), 'Agent Id is required.');
+    assert(!!this.agentId, 'Agent Id is required.');
+    assert(!!_.get(input, 'channelId'), 'Channel Id is required.');
   }
 
   /**

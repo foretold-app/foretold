@@ -28,26 +28,11 @@ const { MEASURABLE_STATE } = require('./enums/measurable-state');
 function addHooks(db) {
   db.Measurable.addHook('afterUpdate', (instance) => {
     try {
-      if (instance.changed('state')) {
-        emitter.emit(events.MEASURABLE_STATE_IS_CHANGED, instance);
-      }
+      emitter.emit(events.MEASURABLE_CHANGED, instance);
     } catch (e) {
-      console.log('Hook MEASURABLE_STATE_IS_CHANGED', e);
+      console.log('Hook MEASURABLE_CHANGED', e);
     }
   });
-  db.Measurable.addHook('afterUpdate', (instance) => {
-    try {
-      if (
-        instance.changed('state') &&
-        instance.get('state') === MEASURABLE_STATE.JUDGED
-      ) {
-        emitter.emit(events.MEASURABLE_STATE_IS_RESOLVED, instance);
-      }
-    } catch (e) {
-      console.log('Hook MEASURABLE_STATE_IS_RESOLVED', e);
-    }
-  });
-
   db.Measurement.addHook('afterCreate', (instance) => {
     try {
       emitter.emit(events.NEW_MEASUREMENT, instance);

@@ -79,8 +79,8 @@ function runListeners() {
     emitter.on(events.EVERY_MINUTE, emailConsumer);
     emitter.on(events.MAIL, mailer);
 
-    emitter.on(events.MEASURABLE_STATE_IS_CHANGED, listenFor(producers.notifications.MeasurableStateChanged));
-    emitter.on(events.MEASURABLE_STATE_IS_RESOLVED, listenFor(producers.notifications.MeasurableStateResolved));
+    emitter.on(events.MEASURABLE_CHANGED, listenFor(producers.notifications.MeasurableStateChanged));
+    emitter.on(events.MEASURABLE_CHANGED, listenFor(producers.notifications.MeasurableStateResolved));
 
     emitter.on(events.NEW_MEMBERSHIP, listenFor(producers.notifications.MemberAddedToCommunity));
     emitter.on(events.NEW_MEMBERSHIP, listenFor(producers.notifications.MemberInvitedToCommunity));

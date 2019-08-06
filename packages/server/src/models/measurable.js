@@ -174,6 +174,7 @@ module.exports = (sequelize, DataTypes) => {
       const now = new Date();
       const isResolutionDateInFuture = current >= now;
       if (isResolutionDateInFuture) {
+        // @todo: this.open()?
         this.set('state', MEASURABLE_STATE.OPEN);
       }
     };
@@ -190,6 +191,13 @@ module.exports = (sequelize, DataTypes) => {
    */
   Measurable.prototype.unarchive = async function unarchive() {
     await this.update({ isArchived: false });
+  };
+
+  /**
+   * @return {Promise<Models.Measurable>}
+   */
+  Measurable.prototype.open = async function open() {
+    await this.updateState(MEASURABLE_STATE.OPEN);
   };
 
   /**

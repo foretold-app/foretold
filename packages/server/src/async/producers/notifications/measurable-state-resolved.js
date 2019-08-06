@@ -3,19 +3,43 @@ const _ = require('lodash');
 
 const { Producer } = require('./../producer');
 const { MeasurableState } = require('./measurable-state');
+const { MEASURABLE_STATE } = require('../../../models/enums/measurable-state');
 
 class MeasurableStateResolved extends MeasurableState {
 
-  constructor(options) {
-    super(options);
+  /**
+   * @param {Models.Measurable} measurable
+   */
+  constructor(measurable) {
+    super(measurable);
     this.templateName = Producer.TEMPLATE_NAME.MEASURABLE_STATE_IS_RESOLVED;
   }
+
+  /**
+   * @protected
+   * @return {Promise<boolean>}
+   */
+  async _isActual() {
+    return this.measurable.changed('state')
+      && this.measurable.get('state') === MEASURABLE_STATE.JUDGED;
+  }
+
 
   /**
    * @public
    * @return {Promise<boolean>}
    */
   async main() {
+    try {
+      if (await this._isActual() === false) {
+        console.log(this.name, 'Hook is not actual');
+        return true;
+      }
+    } catch (e) {
+      console.error(this.name, e.message, e);
+      return false;
+    }
+
     try {
       const channel = await this.measurable.getChannel();
       assert(!!_.get(channel, 'id'), 'Channel ID is required.');

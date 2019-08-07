@@ -6,9 +6,9 @@ module.exports = {
     try {
       await queryInterface.sequelize.query(`BEGIN`);
       const envelopeTemplate = new EmailEnvelopeTemplate({
-        subject: 'Question "{{ measurable.name }}" was resolved',
+        subject: 'Question "{{{ measurable.name }}}" was resolved',
         body:
-          'The question [{{ measurable.name }}] was resolved. ' +
+          'The question [{{{ measurable.name }}}] was resolved. ' +
           'Click <a href="{{{ measurable.link }}}">here</a> to see the result.',
       });
 

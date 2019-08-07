@@ -4,22 +4,22 @@ const { FeedItem } = require('../src/models/classes');
 const tpsl = [
   [
     TEMPLATE_NAME.NEW_MEASUREMENT_PREDICTION_FEED_ITEM,
-    '{{ agent.name }} made a prediction',
+    '{{{ agent.name }}} made a prediction',
   ], [
     TEMPLATE_NAME.NEW_MEASUREMENT_COMMENT_FEED_ITEM,
-    '{{ agent.name }} made a new comment',
+    '{{{ agent.name }}} made a new comment',
   ], [
     TEMPLATE_NAME.NEW_MEASUREMENT_RESOLUTION_FEED_ITEM,
-    '{{ agent.name }} resolved the question with an answer',
+    '{{{ agent.name }}} resolved the question with an answer',
   ], [
     TEMPLATE_NAME.NEW_MEASUREMENT_RESOLUTION_NOT_AVAILABLE_FEED_ITEM,
-    '{{ agent.name }} has marked this question as unresolved',
+    '{{{ agent.name }}} has marked this question as unresolved',
   ], [
     TEMPLATE_NAME.MEASURABLE_REACHED_RESOLUTION_DATE_FEED_ITEM,
-    `{{ measurable.name }} has reached it's expected resolution date`,
+    `{{{ measurable.name }}} has reached it's expected resolution date`,
   ], [
     TEMPLATE_NAME.NEW_MEASURABLE_FEED_ITEM,
-    '{{ agent.name }} made a new question',
+    '{{{ agent.name }}} made a new question',
   ],
 ];
 

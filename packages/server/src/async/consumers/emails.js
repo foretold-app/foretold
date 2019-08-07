@@ -21,6 +21,13 @@ class Emails extends Consumer {
   }
 
   /**
+   * @todo: Either into "AgentNotifications" or into "Notifications" to add
+   * @todo: "attemptCounter", "errorAt", "errorReason" columns
+   * @todo: and logic for it.
+   * @todo: I think, that each consumer should take only one notification
+   * @todo: to send in transaction mode. Because there can happen some error,
+   * @todo: in this case we should add one to "attemptCounter" and pass these
+   * @todo: notifications (with "attemptCounter" more then 3).
    * @return {Promise<boolean>}
    */
   async main() {

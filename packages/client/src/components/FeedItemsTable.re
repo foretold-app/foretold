@@ -59,17 +59,19 @@ module Columns = {
     );
 
   let all = [|channel, item, description, time|];
+  let short = [|item, description, time|];
 };
 
 [@react.component]
-let make = (~feedItems) => Table.fromColumns(Columns.all, feedItems, ());
+let make = (~feedItems, ~columns=Columns.all) =>
+  Table.fromColumns(columns, feedItems, ());
 
 module Jsx2 = {
   let component = ReasonReact.statelessComponent("FeedItemsTable");
-  let make = (~feedItems, children) =>
+  let make = (~feedItems, ~columns=Columns.all, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
-      makeProps(~feedItems, ()),
+      makeProps(~feedItems, ~columns, ()),
       children,
     );
 };

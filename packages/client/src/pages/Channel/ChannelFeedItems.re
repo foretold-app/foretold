@@ -43,15 +43,23 @@ let make =
         | _ => [||]
         };
 
+      let table =
+        switch (channelId) {
+        | "" => <FeedItemsTable.Jsx2 feedItems />
+        | _ =>
+          <FeedItemsTable.Jsx2
+            feedItems
+            columns=FeedItemsTable.Columns.short
+          />
+        };
+
       let isFound = Array.length(feedItems) > 0;
 
       let body =
         switch (reducerParams.response) {
         | Success(_) =>
           isFound
-            ? <FC.PageCard.Body>
-                <FeedItemsTable.Jsx2 feedItems />
-              </FC.PageCard.Body>
+            ? <FC.PageCard.Body> table </FC.PageCard.Body>
             : <SLayout.NothingToShow />
         | _ => <SLayout.Spin />
         };

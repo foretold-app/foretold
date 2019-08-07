@@ -9,7 +9,19 @@ module Columns = {
     |> E.O.fmap((common: FeedItemBody.Common.t) => common.item)
     |> E.O.default("");
 
-  let nameColumn: column =
+  let channel: column =
+    Table.Column.make(
+      ~name="Channel" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          <Link linkType={Internal(ChannelShow(r.channelId))}>
+            [|"name" |> Utils.ste|]
+          </Link>,
+      ~flex=2,
+      (),
+    );
+
+  let item: column =
     Table.Column.make(
       ~name="Item" |> Utils.ste,
       ~render=(r: record) => r |> getName |> Utils.ste,
@@ -18,7 +30,7 @@ module Columns = {
       (),
     );
 
-  let descriptionColumn: column =
+  let description: column =
     Table.Column.make(
       ~name="Description" |> Utils.ste,
       ~render=
@@ -31,7 +43,7 @@ module Columns = {
       (),
     );
 
-  let timeColumn: column =
+  let time: column =
     Table.Column.make(
       ~name="Time" |> Utils.ste,
       ~render=
@@ -46,7 +58,7 @@ module Columns = {
       (),
     );
 
-  let all = [|nameColumn, descriptionColumn, timeColumn|];
+  let all = [|channel, item, description, time|];
 };
 
 [@react.component]

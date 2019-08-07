@@ -1,5 +1,7 @@
 const graphql = require('graphql');
-const { DateType } = require('graphql-sequelize');
+const { DateType, resolver } = require('graphql-sequelize');
+
+const models = require('../models');
 
 const { FEED_ITEM_BODY } = require('../models/enums/feed-item-body');
 
@@ -26,6 +28,11 @@ const feedItem = new graphql.GraphQLObjectType({
     body: { type: graphql.GraphQLNonNull(feedItemBody) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
+
+    Channel: {
+      type: require('./channels').channel,
+      resolve: resolver(models.FeedItem.Channel),
+    },
   })
 });
 

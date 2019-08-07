@@ -11,7 +11,7 @@ module Columns = {
 
   let channel: column =
     Table.Column.make(
-      ~name="Channel" |> Utils.ste,
+      ~name="Community" |> Utils.ste,
       ~render=
         (r: record) =>
           <Link linkType={Internal(ChannelShow(r.channelId))}>

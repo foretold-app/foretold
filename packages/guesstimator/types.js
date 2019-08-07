@@ -7,19 +7,11 @@ import {Sampler as FunctionSampler} from './samplers/Function.js'
 import {Sampler as DataSampler} from './samplers/Data.js'
 import {Sampler as NoneSampler} from './samplers/None.js'
 
-// import NormalIcon from './assets/distribution-icons/normal.png'
-// import LogNormalIcon from './assets/distribution-icons/lognormal.png'
-// import ExponentialIcon from './assets/distribution-icons/exponential.png'
-// import PointIcon from './assets/distribution-icons/point.png'
-// import UniformIcon from './assets/distribution-icons/uniform.png'
-// import FunctionIcon from './assets/distribution-icons/function.png'
-
 export const Funct = {
   referenceName: 'FUNCTION',
   types: ['FUNCTION'],
   displayName: 'Function',
   sampler: FunctionSampler,
-  // icon: FunctionIcon
 }
 
 export const DistributionNormal = {
@@ -28,7 +20,6 @@ export const DistributionNormal = {
   displayName: 'Normal',
   sampler: DistributionNormalSampler,
   isRangeDistribution: true,
-  // icon: NormalIcon
 }
 
 export const DistributionPoint = {
@@ -36,7 +27,6 @@ export const DistributionPoint = {
   types: ['DISTRIBUTION', 'POINT'],
   displayName: 'Point',
   sampler: DistributionPointSampler,
-  // icon: PointIcon
 }
 
 export const DistributionLognormal = {
@@ -45,7 +35,6 @@ export const DistributionLognormal = {
   displayName: 'LogNormal',
   isRangeDistribution: true,
   sampler: DistributionLognormalSampler,
-  // icon: LogNormalIcon
 }
 
 export const DistributionBeta = {
@@ -54,7 +43,6 @@ export const DistributionBeta = {
   displayName: 'Beta',
   isRangeDistribution: false,
   sampler: DistributionBetaSampler,
-  // icon: LogNormalIcon // Update
 }
 
 
@@ -64,7 +52,6 @@ export const DistributionUniform = {
   displayName: 'Uniform',
   isRangeDistribution: true,
   sampler: DistributionUniformSampler,
-  // icon: UniformIcon
 }
 
 export const Data = {
@@ -73,7 +60,6 @@ export const Data = {
   displayName: 'Data',
   isRangeDistribution: false,
   sampler: DataSampler,
-  // icon: UniformIcon
 }
 
 // Change to null Guesstimate for sampler
@@ -81,7 +67,7 @@ export const None = {
   referenceName: 'NONE',
   types: [],
   displayName: 'NONE',
-  // sampler: NoneSampler
+  sampler: NoneSampler
 }
 
 const all = [

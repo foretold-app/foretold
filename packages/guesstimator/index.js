@@ -1,5 +1,5 @@
-import {parse} from './formatter/index'
-import {samplerTypes} from './types'
+import { parse } from './formatter/index'
+import { samplerTypes } from './types'
 import _ from "lodash";
 
 //TODO(fix this class)
@@ -7,11 +7,11 @@ import _ from "lodash";
 export class Guesstimator {
   static parse(unparsedInput) {
     const [parsedError, parsedInput] = parse(unparsedInput)
-    const newItem = new this({parsedError, parsedInput})
+    const newItem = new this({ parsedError, parsedInput })
     return [parsedError, newItem]
   }
 
-  constructor({parsedError, parsedInput}){
+  constructor({ parsedError, parsedInput }) {
     this.parsedError = parsedError || {}
     this.parsedInput = parsedInput
   }
@@ -29,8 +29,8 @@ export class Guesstimator {
   }
 
   sample(n, externalInputs = []) {
-    if (!_.isEmpty(this.parsedError)){
-      return Promise.resolve({errors: [this.parsedError], values: []})
+    if (!_.isEmpty(this.parsedError)) {
+      return Promise.resolve({ errors: [this.parsedError], values: [] })
     }
 
     const samplerType = this.samplerType()
@@ -38,4 +38,4 @@ export class Guesstimator {
   }
 }
 
-// console.log(Guesstimator.parse({text: '3+123+FA'}));
+// console.log(new Guesstimator({ parsedInput: Guesstimator.parse({ text: '3 to 40' })[1].parsedInput }).sample(5));

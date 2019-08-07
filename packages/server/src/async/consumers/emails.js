@@ -21,6 +21,13 @@ class Emails extends Consumer {
   }
 
   /**
+   * @todo: Either into "AgentNotifications" or into "Notifications" to add
+   * @todo: "attemptCounter", "errorAt", "errorReason" columns
+   * @todo: and logic for it.
+   * @todo: I think, that each consumer should take only one notification
+   * @todo: to send in transaction mode. Because there can happen some error,
+   * @todo: in this case we should add one to "attemptCounter" and pass these
+   * @todo: notifications (with "attemptCounter" more then 3).
    * @return {Promise<boolean>}
    */
   async main() {
@@ -38,27 +45,30 @@ class Emails extends Consumer {
       for (let i = 0; i < agentNotifications.length; i++) {
         const agentNotification = agentNotifications[i];
 
-        const notification = await this._getNotification(agentNotification);
-        const agent = await this._getAgent(agentNotification);
-        const agentPreferences = await this._getPreferences(agentNotification);
-        const user = await this._getUser(agent);
-
-        const result = await this._emitEmail(notification, agentPreferences, user, agent);
-
-        console.log(
-          `\x1b[35mNotification ID = "${notification.id}", ` +
-          `Transaction ID = "${transaction.id}", ` +
-          `Agent Preferences ID = "${agentPreferences.id}", ` +
-          `Agent ID = "${agent.id}", ` +
-          `Result = "${result}".\x1b[0m`
-        );
-
         await this._markNotificationAsSent(agentNotification, transaction);
+
+        try {
+          const notification = await this._getNotification(agentNotification);
+          const agent = await this._getAgent(agentNotification);
+          const agentPreferences = await this._getPreferences(agentNotification);
+          const user = await this._getUser(agent);
+          const result = await this._emitEmail(notification, agentPreferences, user, agent);
+          console.log(
+            `\x1b[35mNotification ID = "${notification.id}", ` +
+            `Transaction ID = "${transaction.id}", ` +
+            `Agent Preferences ID = "${agentPreferences.id}", ` +
+            `Agent ID = "${agent.id}", ` +
+            `Result = "${result}".\x1b[0m`
+          );
+        } catch (err) {
+          console.log(`Emails Consumer, pass sending due to`, err.message);
+        }
       }
 
       await this.notifications.commit(transaction);
     } catch (e) {
       console.log(`Emails Consumer`, e.message, e);
+      await this.notifications.rollback(transaction);
     }
 
     return true;
@@ -91,13 +101,13 @@ class Emails extends Consumer {
   /**
    * @param {object} agentNotification
    * @return {Promise<void>}
-   * @private
+   * @protected
    */
   async _getAgent(agentNotification) {
     const params = new Params({ id: agentNotification.agentId });
     const agent = await this.agents.getOne(params);
     assert(!!agent, 'Agent is required');
-    return this.agents.getOne(params);
+    return agent;
   }
 
   /**
@@ -122,18 +132,18 @@ class Emails extends Consumer {
     const agentId = agentNotification.agentId;
     const preferences = await this.preferences.getOneByAgentId(agentId);
     assert(!!preferences, 'Preferences is required');
-    return this.preferences.getOneByAgentId(agentId);
+    return preferences;
   }
 
   /**
    * @param {object} agent
    * @return {Promise<void>}
-   * @private
+   * @protected
    */
   async _getUser(agent) {
     const params = new Params({ agentId: agent.id });
     const user = await this.users.getOne(params);
-    assert(!!user, 'User is required');
+    assert(!!user, `User is required for an agent "${agent.id}".`);
     return user;
   }
 

@@ -38,6 +38,7 @@ class Emails extends Consumer {
       for (let i = 0; i < agentNotifications.length; i++) {
         const agentNotification = agentNotifications[i];
 
+        await this._markNotificationAsSent(agentNotification, transaction);
         const notification = await this._getNotification(agentNotification);
         const agent = await this._getAgent(agentNotification);
         const agentPreferences = await this._getPreferences(agentNotification);
@@ -52,13 +53,12 @@ class Emails extends Consumer {
           `Agent ID = "${agent.id}", ` +
           `Result = "${result}".\x1b[0m`
         );
-
-        await this._markNotificationAsSent(agentNotification, transaction);
       }
 
       await this.notifications.commit(transaction);
     } catch (e) {
       console.log(`Emails Consumer`, e.message, e);
+      await this.notifications.rollback(transaction);
     }
 
     return true;

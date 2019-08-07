@@ -91,13 +91,13 @@ class Emails extends Consumer {
   /**
    * @param {object} agentNotification
    * @return {Promise<void>}
-   * @private
+   * @protected
    */
   async _getAgent(agentNotification) {
     const params = new Params({ id: agentNotification.agentId });
     const agent = await this.agents.getOne(params);
     assert(!!agent, 'Agent is required');
-    return this.agents.getOne(params);
+    return agent;
   }
 
   /**
@@ -122,13 +122,13 @@ class Emails extends Consumer {
     const agentId = agentNotification.agentId;
     const preferences = await this.preferences.getOneByAgentId(agentId);
     assert(!!preferences, 'Preferences is required');
-    return this.preferences.getOneByAgentId(agentId);
+    return preferences;
   }
 
   /**
    * @param {object} agent
    * @return {Promise<void>}
-   * @private
+   * @protected
    */
   async _getUser(agent) {
     const params = new Params({ agentId: agent.id });

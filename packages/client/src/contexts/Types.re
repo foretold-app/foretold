@@ -147,6 +147,7 @@ and feedItem = {
   id: string,
   channelId: string,
   body: FeedItemBody.t,
+  channel,
   createdAt: option(MomentRe.Moment.t),
   updatedAt: option(MomentRe.Moment.t),
 };

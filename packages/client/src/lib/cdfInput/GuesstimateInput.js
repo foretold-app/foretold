@@ -1,5 +1,5 @@
 import React from "react";
-import {Guesstimator} from '../guesstimator/index';
+import {Guesstimator} from '@foretold/guesstimator/index';
 import {Input} from "antd";
 import {Samples} from "@foretold/cdf";
 import _ from "lodash"

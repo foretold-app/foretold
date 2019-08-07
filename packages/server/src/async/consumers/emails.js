@@ -39,20 +39,23 @@ class Emails extends Consumer {
         const agentNotification = agentNotifications[i];
 
         await this._markNotificationAsSent(agentNotification, transaction);
-        const notification = await this._getNotification(agentNotification);
-        const agent = await this._getAgent(agentNotification);
-        const agentPreferences = await this._getPreferences(agentNotification);
-        const user = await this._getUser(agent);
 
-        const result = await this._emitEmail(notification, agentPreferences, user, agent);
-
-        console.log(
-          `\x1b[35mNotification ID = "${notification.id}", ` +
-          `Transaction ID = "${transaction.id}", ` +
-          `Agent Preferences ID = "${agentPreferences.id}", ` +
-          `Agent ID = "${agent.id}", ` +
-          `Result = "${result}".\x1b[0m`
-        );
+        try {
+          const notification = await this._getNotification(agentNotification);
+          const agent = await this._getAgent(agentNotification);
+          const agentPreferences = await this._getPreferences(agentNotification);
+          const user = await this._getUser(agent);
+          const result = await this._emitEmail(notification, agentPreferences, user, agent);
+          console.log(
+            `\x1b[35mNotification ID = "${notification.id}", ` +
+            `Transaction ID = "${transaction.id}", ` +
+            `Agent Preferences ID = "${agentPreferences.id}", ` +
+            `Agent ID = "${agent.id}", ` +
+            `Result = "${result}".\x1b[0m`
+          );
+        } catch (err) {
+          console.log(`Emails Consumer, pass sending due to`, err.message);
+        }
       }
 
       await this.notifications.commit(transaction);
@@ -133,7 +136,7 @@ class Emails extends Consumer {
   async _getUser(agent) {
     const params = new Params({ agentId: agent.id });
     const user = await this.users.getOne(params);
-    assert(!!user, 'User is required');
+    assert(!!user, `User is required for an agent "${agent.id}".`);
     return user;
   }
 

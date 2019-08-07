@@ -30,7 +30,7 @@ const feedItem = new graphql.GraphQLObjectType({
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
 
     Channel: {
-      type: require('./channels').channel,
+      type: graphql.GraphQLNonNull(require('./channels').channel),
       resolve: resolver(models.FeedItem.Channel),
     },
   })

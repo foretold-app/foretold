@@ -15,7 +15,7 @@ module Columns = {
       ~render=
         (r: record) =>
           <Link linkType={Internal(ChannelShow(r.channelId))}>
-            [|"name" |> Utils.ste|]
+            [|r.channel.name |> Utils.ste|]
           </Link>,
       ~flex=2,
       (),

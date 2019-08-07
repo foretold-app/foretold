@@ -7,10 +7,18 @@ type common = {
 
 type body = {common: option(common)};
 
+type channel = {
+  id: string,
+  name: string,
+  isArchived: bool,
+  isPublic: bool,
+};
+
 type node = {
   id: string,
   channelId: string,
   body,
+  channel,
   createdAt: MomentRe.Moment.t,
   updatedAt: MomentRe.Moment.t,
 };
@@ -32,11 +40,22 @@ let toBody = (m: body): FeedItemBody.t => {
   FeedItemBody.make(~common=toCommon(m.common), ());
 };
 
+let toChannel = (m: channel): Types.channel => {
+  Primary.Channel.make(
+    ~id=m.id,
+    ~name=m.name,
+    ~isArchived=m.isArchived,
+    ~isPublic=m.isPublic,
+    (),
+  );
+};
+
 let toFeedItem = (m: node): Types.feedItem => {
   Primary.FeedItem.make(
     ~id=m.id,
     ~channelId=m.channelId,
     ~body=toBody(m.body),
+    ~channel=toChannel(m.channel),
     ~createdAt=Some(m.createdAt),
     ~updatedAt=Some(m.updatedAt),
     (),
@@ -75,6 +94,12 @@ module Query = [%graphql
                   item
                   description
                  }
+              }
+              channel: Channel @bsRecord {
+                id
+                name
+                isArchived
+                isPublic
               }
               createdAt @bsDecoder(fn: "E.J.toMoment")
               updatedAt @bsDecoder(fn: "E.J.toMoment")

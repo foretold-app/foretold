@@ -558,10 +558,13 @@ module Measurable = {
 module FeedItem = {
   type t = Types.feedItem;
 
-  let make = (~id, ~channelId, ~body, ~createdAt=None, ~updatedAt=None, ()): t => {
+  let make =
+      (~id, ~channelId, ~body, ~channel, ~createdAt=None, ~updatedAt=None, ())
+      : t => {
     id,
     channelId,
     body,
+    channel,
     createdAt,
     updatedAt,
   };

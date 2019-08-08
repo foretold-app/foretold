@@ -12,6 +12,10 @@ const { Filter } = require('../../data/classes/filter');
 const { Options } = require('../../data/classes/options');
 const { Params } = require('../../data/classes/params');
 
+const {
+  NOTIFICATION_ERROR_REASON,
+} = require('../../models/enums/notification-error-reason');
+
 /**
  * @todo: Rename into "EmailsConsumer".
  */
@@ -21,13 +25,6 @@ class Emails extends Consumer {
   }
 
   /**
-   * @todo: Either into "AgentNotifications" or into "Notifications" to add
-   * @todo: "attemptCounter", "errorAt", "errorReason" columns
-   * @todo: and logic for it.
-   * @todo: I think, that each consumer should take only one notification
-   * @todo: to send in transaction mode. Because there can happen some error,
-   * @todo: in this case we should add one to "attemptCounter" and pass these
-   * @todo: notifications (with "attemptCounter" more then 3).
    * @return {Promise<boolean>}
    */
   async main() {
@@ -45,14 +42,19 @@ class Emails extends Consumer {
       for (let i = 0; i < agentNotifications.length; i++) {
         const agentNotification = agentNotifications[i];
 
-        await this._markNotificationAsSent(agentNotification, transaction);
-
         try {
           const notification = await this._getNotification(agentNotification);
           const agent = await this._getAgent(agentNotification);
           const agentPreferences = await this._getPreferences(agentNotification);
           const user = await this._getUser(agent);
           const result = await this._emitEmail(notification, agentPreferences, user, agent);
+
+          if (result === true) {
+            await this._markNotificationAsSent(agentNotification, transaction);
+          } else {
+            throw new Error('Email is not sent');
+          }
+
           console.log(
             `\x1b[35mNotification ID = "${notification.id}", ` +
             `Transaction ID = "${transaction.id}", ` +
@@ -62,6 +64,7 @@ class Emails extends Consumer {
           );
         } catch (err) {
           console.log(`Emails Consumer, pass sending due to`, err.message);
+          await this._notificationError(agentNotification, transaction);
         }
       }
 
@@ -80,7 +83,7 @@ class Emails extends Consumer {
    * @protected
    */
   async _getAgentsNotifications(transaction) {
-    const filter = new Filter({ sentAt: null });
+    const filter = new Filter({ sentAt: null, attemptCounterMax: 3 });
     const pagination = new Pagination({ limit: 10 });
     const options = new Options({ transaction, lock: true, skipLocked: true });
     return this.agentNotifications.getAll(filter, pagination, options);
@@ -125,6 +128,24 @@ class Emails extends Consumer {
 
   /**
    * @param {object} agentNotification
+   * @param {object} transaction
+   * @return {Promise<*>}
+   * @protected
+   */
+  async _notificationError(agentNotification, transaction) {
+    const attemptCounterPrev = _.get(agentNotification, 'attemptCounter') || 0;
+    const attemptCounter = attemptCounterPrev + 1;
+    const errorAt = moment.utc().toDate();
+
+    const params = new Params({ id: agentNotification.id });
+    const data = { errorAt, attemptCounter };
+    const options = new Options({ transaction });
+
+    return this.agentNotifications.updateOne(params, data, options);
+  }
+
+  /**
+   * @param {object} agentNotification
    * @return {Promise<*>}
    * @protected
    */
@@ -163,7 +184,7 @@ class Emails extends Consumer {
     const envelopeReplacements = notification.envelope.replacements || {};
 
     const token = await this._getAuthToken(agent);
-    const replacements = {...envelopeReplacements, token};
+    const replacements = { ...envelopeReplacements, token };
 
     const envelope = {
       replacements,

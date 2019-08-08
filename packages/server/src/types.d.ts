@@ -160,7 +160,8 @@ export namespace Layers {
       type?: string,
       notificationId?: Models.ObjectID,
       channelMemberId?: Models.ObjectID,
-      sentAt?: string | null
+      sentAt?: string | null,
+      attemptCounterMax?: number,
     };
     type pagination = {
       limit?: number,
@@ -247,6 +248,7 @@ export namespace Layers {
       types?: string[],
       sentAt?: string[],
       notificationId?: string[],
+      attemptCounterMax?: number,
     };
     type pagination = {
       limit?: number,

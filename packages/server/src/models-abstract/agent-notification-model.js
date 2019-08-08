@@ -35,6 +35,14 @@ class AgentNotificationModel extends ModelPostgres {
       });
     }
 
+    if (_.has(filter, 'attemptCounterMax')) {
+      where[this.and].push({
+        attemptCounter: {
+          [this.lte]: filter.attemptCounterMax,
+        },
+      });
+    }
+
     return where;
   }
 }

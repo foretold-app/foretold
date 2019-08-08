@@ -238,6 +238,7 @@ export namespace Layers {
       skipLocked?: boolean,
     };
     type filter = {
+      agentId?: Models.ObjectID,
       excludeChannelId?: Models.ObjectID,
       channelMemberId?: Models.ObjectID,
       userId?: Models.ObjectID,

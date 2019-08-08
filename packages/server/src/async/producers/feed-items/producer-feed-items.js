@@ -42,7 +42,7 @@ class ProducerFeedItems extends Producer {
       assert(!!_.get(agent, 'id'), 'Agent ID is required.');
 
       const replacements = await this._getReplacements(agent);
-      await this._queueFeedItem(replacements, this.channelId);
+      await this._queueFeedItem(replacements, this.channelId, this.agentId);
 
       await this._commit();
       return true;
@@ -98,29 +98,32 @@ class ProducerFeedItems extends Producer {
   /**
    * @param {object} replacements
    * @param {Models.ObjectID} channelId
+   * @param {Models.ObjectID | null} agentId
    * @return {Promise<Models.FeedItem>}
    * @protected
    */
-  async _queueFeedItem(replacements, channelId) {
+  async _queueFeedItem(replacements, channelId, agentId) {
     const template = await this._getTemplate();
     const feedItem = new this.FeedItem(template.envelopeTemplate);
     const feedItem$ = feedItem.instanceFactory(replacements);
-    return await this._createFeedItem(feedItem$, channelId);
+    return await this._createFeedItem(feedItem$, channelId, agentId);
   }
 
   /**
    * @param {FeedItem} feedItem
    * @param {Models.ObjectID} channelId
-   * @return {Promise<*>}
+   * @param {Models.ObjectID | null} agentId
+   * @return {Promise<Models.FeedItem>}
    * @protected
    */
-  async _createFeedItem(feedItem, channelId) {
+  async _createFeedItem(feedItem, channelId, agentId) {
     assert(
       feedItem instanceof Producer.FeedItem,
       'feedItem is not FeedItem'
     );
     const feedItemBodyName = feedItem.getName();
-    const data = { body: { [feedItemBodyName]: feedItem }, channelId };
+    const body = { [feedItemBodyName]: feedItem };
+    const data = { body, channelId, agentId };
     const options = await this._getOptions();
     return Producer.data.feedItems.createOne(data, options);
   }

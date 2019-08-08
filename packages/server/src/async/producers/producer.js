@@ -6,7 +6,10 @@ const data = require('../../data');
 const { TEMPLATE_NAME } = require('../../models/enums/template-name');
 const { NOTIFICATION_TYPE } = require('../../models/enums/notification-type');
 const { EmailEnvelope } = require('../../models/classes/notifications');
+
 const { FeedItem } = require('../../models/classes');
+const { FeedItemCommon } = require('../../models/classes');
+const { FeedItemMeasurable } = require('../../models/classes');
 
 /**
  * @abstract
@@ -87,10 +90,12 @@ class Producer {
 
 Producer.data = data;
 Producer.TEMPLATE_NAME = TEMPLATE_NAME;
-Producer.TEMPLATE_NAME = TEMPLATE_NAME;
 Producer.NOTIFICATION_TYPE = NOTIFICATION_TYPE;
 Producer.EmailEnvelope = EmailEnvelope;
+
 Producer.FeedItem = FeedItem;
+Producer.FeedItemCommon = FeedItemCommon;
+Producer.FeedItemMeasurable = FeedItemMeasurable;
 
 module.exports = {
   Producer,

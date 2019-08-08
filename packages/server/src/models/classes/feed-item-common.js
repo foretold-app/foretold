@@ -1,22 +1,22 @@
-const assert = require('assert');
-const _ = require('lodash');
-const Mustache = require('mustache');
-
-const { FeedItemCommon } = require('./feed-item-common');
+const { FeedItem } = require('./feed-item');
 const { FEED_ITEM_BODY } = require('../enums/feed-item-body');
 
-class FeedItemMeasurable extends FeedItemCommon {
+class FeedItemCommon extends FeedItem {
+
   /**
-   * @public
    * @param {object} options
    * @param {string} options.item
    * @param {string} options.description
-   * @param {string} options.measurableId
    */
   constructor(options) {
     super(options);
-    assert(_.isString(options.measurableId), 'MeasurableId should be a string');
-    this.measurableId = options.measurableId;
+    assert(!!_.has(options, 'item'), 'Item is required');
+    assert(!!_.has(options, 'description'), 'Description is required');
+    assert(_.isString(options.item), 'Item should be a string');
+    assert(_.isString(options.description), 'Item should be a string');
+
+    this.item = options.item;
+    this.description = options.description;
   }
 
   /**
@@ -24,15 +24,23 @@ class FeedItemMeasurable extends FeedItemCommon {
    * @return {string}
    */
   getName() {
-    return FEED_ITEM_BODY.measurable;
+    return FEED_ITEM_BODY.common;
   }
 
   /**
    * @public
    * @return {string}
    */
-  getMeasurableId() {
-    return this.measurableId;
+  getItem() {
+    return this.item;
+  }
+
+  /**
+   * @public
+   * @return {string}
+   */
+  getDescription() {
+    return this.description;
   }
 
   /**
@@ -43,16 +51,14 @@ class FeedItemMeasurable extends FeedItemCommon {
   mutate(replacements) {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
-    const measurableId = Mustache.render(this.measurableId, replacements);
 
-    return new FeedItemMeasurable({
+    return new FeedItemCommon({
       item,
       description,
-      measurableId,
     });
   }
 }
 
 module.exports = {
-  FeedItemMeasurable,
+  FeedItemCommon,
 };

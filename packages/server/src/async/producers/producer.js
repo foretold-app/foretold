@@ -94,7 +94,7 @@ Producer.NOTIFICATION_TYPE = NOTIFICATION_TYPE;
 Producer.EmailEnvelope = EmailEnvelope;
 
 Producer.FeedItem = FeedItem;
-Producer.FeedItemCommon = FeedItemGeneric;
+Producer.FeedItemGeneric = FeedItemGeneric;
 Producer.FeedItemMeasurable = FeedItemMeasurable;
 
 module.exports = {

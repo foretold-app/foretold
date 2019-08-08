@@ -17,7 +17,7 @@ class ProducerFeedItems extends Producer {
     this.agentId = null;
     this.channelId = null;
 
-    this.FeedItem = Producer.FeedItemCommon;
+    this.FeedItem = Producer.FeedItemGeneric;
   }
 
   /**

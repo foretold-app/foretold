@@ -2,37 +2,27 @@ const assert = require('assert');
 const _ = require('lodash');
 const Mustache = require('mustache');
 
-class FeedItem {
+const { FeedItem } = require('./feed-item');
+
+class FeedItemMeasurable extends FeedItem {
   /**
    * @param {object} options
    * @param {string} options.item
    * @param {string} options.description
+   * @param {string} options.measurableId
    */
   constructor(options) {
-    assert(_.isObject(options), 'Options should be an object');
-    assert(!!_.has(options, 'item'), 'Item is required');
-    assert(!!_.has(options, 'description'), 'Description is required');
-    assert(_.isString(options.item), 'Item should be a string');
-    assert(_.isString(options.description), 'Item should be a string');
-
-    this.item = options.item;
-    this.description = options.description;
+    super(options);
+    assert(_.isString(options.measurableId), 'MeasurableId should be a string');
+    this.measurableId = options.measurableId;
   }
 
   /**
    * @public
    * @return {string}
    */
-  getItem() {
-    return this.item;
-  }
-
-  /**
-   * @public
-   * @return {string}
-   */
-  getDescription() {
-    return this.description;
+  getMeasurableId() {
+    return this.measurableId;
   }
 
   /**
@@ -43,14 +33,16 @@ class FeedItem {
   mutate(replacements) {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
+    const measurableId = Mustache.render(this.measurableId, replacements);
 
-    return new FeedItem({
+    return new FeedItemMeasurable({
       item,
       description,
+      measurableId,
     });
   }
 }
 
 module.exports = {
-  FeedItem,
+  FeedItemMeasurable,
 };

@@ -136,6 +136,7 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @todo: To add mind map from Params to DB query.
    * @protected
    * @param {object} [where]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
@@ -183,11 +184,12 @@ class ModelPostgres extends Model {
       });
     }
 
-    // @todo: in the filter this condition is existed too
     if (restrictions.channelMemberId) {
       where[this.and].push({
-        id: {
-          [this.in]: this._channelIdsByMembersLiteral(restrictions.channelMemberId),
+        channelId: {
+          [this.in]: this._channelIdsByMembersLiteral(
+            restrictions.channelMemberId,
+          ),
         }
       });
     }

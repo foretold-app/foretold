@@ -4,13 +4,19 @@ const _ = require('lodash');
  * See "filter.js" comments.
  */
 class Options {
+
   /**
+   * @todo: add type tests (assertion)
    * @param {Layers.DataSourceLayer.options} [options]
    */
   constructor(options = {}) {
     const list = [
-      'transaction', 'lock', ' skipLocked',
-      'isAdmin', 'agentId', 'measuredByAgentId',
+      'transaction', // object
+      'lock', // bool
+      'skipLocked', // bool
+      'isAdmin',  // bool
+      'agentId',  // string
+      'measuredByAgentId', // string
     ];
 
     _.each(list, (name) => {

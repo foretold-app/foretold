@@ -15,12 +15,19 @@ class DataBase {
     this.models = models;
     this.model = new Model();
     this.modelOptionsList = [
-      'transaction', 'lock', 'skipLocked',
+      'transaction', // object
+      'lock', // bool
+      'skipLocked', // bool
     ];
     this.modelRestrictionsList = [
-      'isAdmin', 'agentId', 'measuredByAgentId',
-      'userId', 'channelId', 'measurableId',
-      'measuredByAgentId', 'channelIdAsId',
+      'isAdmin', // bool
+      'agentId', // string
+      'measuredByAgentId', // string
+      'userId', // string
+      'channelId', // bool !!! not a string
+      'measurableId', // string
+      'measuredByAgentId', // string
+      'channelIdAsId', // bool ?
     ];
     this.defaultOptions = {};
     this.defaultRestrictions = {};

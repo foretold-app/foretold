@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    agentId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     body: {
       type: DataTypes.JSON,
       allowNull: false,
@@ -28,6 +32,9 @@ module.exports = (sequelize, DataTypes) => {
   FeedItem.associate = function associate(models) {
     FeedItem.Channel = FeedItem.belongsTo(models.Channel, {
       foreignKey: 'channelId',
+    });
+    FeedItem.Agent = FeedItem.belongsTo(models.Agent, {
+      foreignKey: 'agentId',
     });
   };
 

@@ -6,7 +6,6 @@ module.exports = {
       await queryInterface.addColumn('FeedItems', 'agentId', {
         type: Sequelize.UUID,
         allowNull: true,
-        after: 'channelId',
         references: {
           model: 'Agents',
           key: 'id',

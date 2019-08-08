@@ -26,8 +26,7 @@ class DataBase {
       'userId', // string
       'channelId', // bool !!! not a string
       'measurableId', // string
-      'measuredByAgentId', // string
-      'channelIdAsId', // bool ?
+      'channelIdAsId', // bool
     ];
     this.defaultOptions = {};
     this.defaultRestrictions = {};

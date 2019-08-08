@@ -39,7 +39,7 @@ module.exports = [
     "name": "NEW_MEASUREMENT_COMMENT_FEED_ITEM",
     "envelopeTemplate": {
       "item": "{{{ measurable.name }}}",
-      "description": "{{{ agent.name }}} made a new comment",
+      "description": "{{{ agent.name }}} made a comment",
       "measurableId": "{{{ measurable.id }}}"
     }
   },
@@ -71,7 +71,7 @@ module.exports = [
     "name": "NEW_MEASURABLE_FEED_ITEM",
     "envelopeTemplate": {
       "item": "{{{ measurable.name }}}",
-      "description": "{{{ agent.name }}} made a new question",
+      "description": "{{{ agent.name }}} made a question",
       "measurableId": "{{{ measurable.id }}}"
     }
   }

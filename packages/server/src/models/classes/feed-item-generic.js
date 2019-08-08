@@ -28,7 +28,7 @@ class FeedItemGeneric extends FeedItem {
    * @return {string}
    */
   getName() {
-    return FEED_ITEM_BODY.common;
+    return FEED_ITEM_BODY.generic;
   }
 
   /**

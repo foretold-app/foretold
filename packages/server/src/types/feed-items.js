@@ -5,8 +5,8 @@ const models = require('../models');
 
 const { FEED_ITEM_BODY } = require('../models/enums/feed-item-body');
 
-const feedItemBodyCommon = new graphql.GraphQLObjectType({
-  name: 'FeedItemBodyCommon',
+const feedItemBodyGeneric = new graphql.GraphQLObjectType({
+  name: 'FeedItemBodyGeneric',
   fields: () => ({
     item: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     description: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
@@ -25,7 +25,7 @@ const feedItemBodyMeasurable = new graphql.GraphQLObjectType({
 const feedItemBody = new graphql.GraphQLObjectType({
   name: 'FeedItemBody',
   fields: () => ({
-    [FEED_ITEM_BODY.common]: { type: feedItemBodyCommon },
+    [FEED_ITEM_BODY.generic]: { type: feedItemBodyGeneric },
     [FEED_ITEM_BODY.measurable]: { type: feedItemBodyMeasurable },
   }),
 });

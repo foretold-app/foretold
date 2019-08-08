@@ -2,7 +2,7 @@ module.exports = [
   {
     "name": "MEASURABLE_STATE_IS_CHANGED",
     "envelopeTemplate": {
-      "subject": "Question \"{{{ measurable.name }}}\" is changed",
+      "subject": "Question \"{{{ measurable.name }}}\" has reached its expected resolution date.",
       "body": "Your question, <a href=\"{{{ measurable.link }}}\">{{{ measurable.name }}}</a>, has reached its expected resolution date. We recommend either resolving the question or moving the expected resolution date to another time. You can do that <a href=\"{{{ measurable.link }}}\">here</a>."
     }
   },
@@ -16,7 +16,7 @@ module.exports = [
   {
     "name": "MEMBER_ADDED_TO_COMMUNITY",
     "envelopeTemplate": {
-      "subject": "You is added to the Foretold community",
+      "subject": "You have been added to a community on Foretold",
       "body": "<a href=\"{{{ inviterAgent.link }}}\">{{{ inviterAgent.name }}}</a> has added you to the Foretold community, [<a href=\"{{{ channel.link }}}\">{{ channel.name }}</a>]"
     }
   },
@@ -24,7 +24,7 @@ module.exports = [
     "name": "MEMBER_JOINED_COMMUNITY_FEED_ITEM",
     "envelopeTemplate": {
       "item": "",
-      "description": "{{{ agent.name }}} joined to community"
+      "description": "{{{ agent.name }}} joined the community"
     }
   },
   {

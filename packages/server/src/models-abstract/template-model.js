@@ -2,7 +2,7 @@ const _ = require('lodash');
 
 const models = require('../models');
 const { ModelPostgres } = require('./model-postgres');
-const templates = require('../../config/temapltes.json5');
+const templates = require('../../config/temapltes');
 
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}

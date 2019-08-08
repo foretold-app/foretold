@@ -1,4 +1,4 @@
-[
+module.exports = [
   {
     "name": "MEASURABLE_STATE_IS_CHANGED",
     "envelopeTemplate": {
@@ -75,4 +75,4 @@
       "measurableId": "{{{ measurable.id }}}"
     }
   }
-]
+];

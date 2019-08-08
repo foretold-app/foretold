@@ -2,6 +2,8 @@ const _ = require('lodash');
 
 const models = require('../models');
 const { Model } = require('../models-abstract');
+const { Options } = require('../models-abstract/classes/options');
+const { Restrictions } = require('../models-abstract/classes/restrictions');
 
 /**
  * @abstract
@@ -14,14 +16,6 @@ class DataBase {
   constructor() {
     this.models = models;
     this.model = new Model();
-    this.modelOptionsList = [
-      'transaction', 'lock', 'skipLocked',
-    ];
-    this.modelRestrictionsList = [
-      'isAdmin', 'agentId', 'measuredByAgentId',
-      'userId', 'channelId', 'measurableId',
-      'measuredByAgentId', 'channelIdAsId',
-    ];
     this.defaultOptions = {};
     this.defaultRestrictions = {};
   }
@@ -148,8 +142,7 @@ class DataBase {
    * @return {Layers.AbstractModelsLayer.options}
    */
   _getModelOptions(options = {}) {
-    const option$ = _.pick(options, this.modelOptionsList);
-    return { ...this.defaultOptions, ...option$ };
+    return new Options({ ...options, ...this.defaultOptions });
   }
 
   /**
@@ -158,8 +151,7 @@ class DataBase {
    * @return {Layers.AbstractModelsLayer.restrictions}
    */
   _getModelRestrictions(options = {}) {
-    const restriction$ = _.pick(options, this.modelRestrictionsList);
-    return { ...this.defaultRestrictions, ...restriction$ };
+    return new Restrictions({ ...options, ...this.defaultRestrictions });
   }
 }
 

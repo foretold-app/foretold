@@ -4,6 +4,16 @@ const _ = require('lodash');
  * See "filter.js" comments.
  */
 class Pagination {
+  /**
+   * @public
+   * @param {object} [options]
+   * @param {number} [options.last]
+   * @param {number} [options.first]
+   * @param {string} [options.after]
+   * @param {string} [options.before]
+   * @param {number} [options.limit]
+   * @param {number} [options.offset]
+   */
   constructor(options = {}) {
     if (_.has(options, 'last')) {
       this.last = _.get(options, 'last', 0);

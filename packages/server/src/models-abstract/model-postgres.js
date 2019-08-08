@@ -136,6 +136,7 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @todo: To add mind map from Params to DB query.
    * @protected
    * @param {object} [where]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
@@ -183,6 +184,16 @@ class ModelPostgres extends Model {
       });
     }
 
+    if (restrictions.channelMemberId) {
+      where[this.and].push({
+        channelId: {
+          [this.in]: this._channelIdsByMembersLiteral(
+            restrictions.channelMemberId,
+          ),
+        }
+      });
+    }
+
     return where;
   }
 
@@ -226,6 +237,9 @@ class ModelPostgres extends Model {
       });
     }
 
+    // @todo: is ok if this block will two times appeared?
+    // @todo: see restrictions, and do not forget
+    // @todo: that filter/restrictions are not the same
     if (filter.channelMemberId) {
       where[this.and].push({
         id: {
@@ -494,7 +508,7 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @param cond
+   * @param {object} cond
    * @param {Layers.AbstractModelsLayer.options} options
    */
   _extendConditions(cond = {}, options = {}) {

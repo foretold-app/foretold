@@ -18,7 +18,7 @@ class FeedItem {
    * @return {string}
    */
   getName() {
-    return throw AssertionError('Name is required.');
+    throw AssertionError('Name is required.');
   }
 }
 

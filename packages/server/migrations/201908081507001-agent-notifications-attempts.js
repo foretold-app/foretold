@@ -20,13 +20,12 @@ module.exports = {
 
       await queryInterface.addColumn('AgentNotifications', 'errorReason', {
         type: Sequelize.ENUM([
-          NOTIFICATION_ERROR_REASON.NONE,
           NOTIFICATION_ERROR_REASON.INTERNAL_ERROR,
           NOTIFICATION_ERROR_REASON.EXTERNAL_ERROR,
           NOTIFICATION_ERROR_REASON.PREFERENCES_ERROR,
           NOTIFICATION_ERROR_REASON.EMAIL_ADDRESS_ERROR,
         ]),
-        defaultValue: NOTIFICATION_ERROR_REASON.NONE,
+        allowNull: true,
       });
 
       await queryInterface.sequelize.query(`COMMIT`);

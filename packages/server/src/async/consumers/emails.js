@@ -1,4 +1,3 @@
-const assert = require('assert');
 const _ = require('lodash');
 const moment = require('moment');
 
@@ -12,9 +11,7 @@ const { Filter } = require('../../data/classes/filter');
 const { Options } = require('../../data/classes/options');
 const { Params } = require('../../data/classes/params');
 
-const {
-  NOTIFICATION_ERROR_REASON,
-} = require('../../models/enums/notification-error-reason');
+const { assert, errs, NOTIFICATION_ERROR_REASON } = require('./errors');
 
 /**
  * @todo: Rename into "EmailsConsumer".
@@ -47,12 +44,13 @@ class Emails extends Consumer {
           const agent = await this._getAgent(agentNotification);
           const agentPreferences = await this._getPreferences(agentNotification);
           const user = await this._getUser(agent);
-          const result = await this._emitEmail(notification, agentPreferences, user, agent);
+          const _test = await this._test(agentPreferences, user);
+          const result = await this._emitEmail(notification, user, agent);
 
           if (result === true) {
             await this._markNotificationAsSent(agentNotification, transaction);
           } else {
-            throw new Error('Email is not sent');
+            throw new errs.ExternalError('Email is not sent');
           }
 
           console.log(
@@ -64,7 +62,7 @@ class Emails extends Consumer {
           );
         } catch (err) {
           console.log(`Emails Consumer, pass sending due to`, err.message);
-          await this._notificationError(agentNotification, transaction);
+          await this._notificationError(agentNotification, err, transaction);
         }
       }
 
@@ -128,17 +126,20 @@ class Emails extends Consumer {
 
   /**
    * @param {object} agentNotification
+   * @param {CustomError} err
    * @param {object} transaction
    * @return {Promise<*>}
    * @protected
    */
-  async _notificationError(agentNotification, transaction) {
+  async _notificationError(agentNotification, err, transaction) {
+    const weightError = err.weight || 1;
     const attemptCounterPrev = _.get(agentNotification, 'attemptCounter') || 0;
-    const attemptCounter = attemptCounterPrev + 1;
+    const attemptCounter = attemptCounterPrev + weightError;
     const errorAt = moment.utc().toDate();
+    const errorReason = err.type || NOTIFICATION_ERROR_REASON.INTERNAL_ERROR;
 
     const params = new Params({ id: agentNotification.id });
-    const data = { errorAt, attemptCounter };
+    const data = { errorAt, attemptCounter, errorReason };
     const options = new Options({ transaction });
 
     return this.agentNotifications.updateOne(params, data, options);
@@ -169,18 +170,26 @@ class Emails extends Consumer {
   }
 
   /**
-   * @param {object} notification
    * @param {object} agentPreferences
+   * @param {object} user
+   * @return {Promise<boolean>}
+   * @protected
+   */
+  async _test(agentPreferences, user) {
+    assert(!!user, 'Users is required');
+    assert(!!_.get(user, 'email'), 'User Email is required', errs.EmailAddressError);
+    assert(!agentPreferences.stopAllEmails, 'Stop Email Flag is true', errs.PreferencesError);
+    return true;
+  }
+
+  /**
+   * @param {object} notification
    * @param {object} user
    * @param {object} agent
    * @return {Promise<boolean>}
    * @protected
    */
-  async _emitEmail(notification, agentPreferences, user, agent) {
-    if (!user) return false;
-    if (!user.email) return false;
-    if (agentPreferences.stopAllEmails === true) return false;
-
+  async _emitEmail(notification, user, agent) {
     const envelopeReplacements = notification.envelope.replacements || {};
 
     const token = await this._getAuthToken(agent);
@@ -189,7 +198,7 @@ class Emails extends Consumer {
     const envelope = {
       replacements,
       authToken: token,
-      to: notification.envelope.to || user.email,
+      to: notification.envelope.to || _.get(user, 'email'),
       body: notification.envelope.body || '',
       subject: notification.envelope.subject || '',
     };

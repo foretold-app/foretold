@@ -135,7 +135,7 @@ module Route = {
     | ["c", channelId, "new"] => Channel({channelId, subPage: NewMeasurable})
     | ["c", channelId, "edit"] => Channel({channelId, subPage: Settings})
     | ["c", channelId, "members"] => Channel({channelId, subPage: Members})
-    | ["c", channelId, "updates"] =>
+    | ["c", channelId, "activity"] =>
       Channel({channelId: getChannelId(channelId), subPage: FeedItems})
     | ["c", channelId, "add"] => Channel({channelId, subPage: AddMember})
     | ["c", channelId, "invite"] =>
@@ -211,7 +211,7 @@ module Url = {
     | ChannelShow(channelId) => "/c/" ++ channelId
     | ChannelEdit(channelId) => "/c/" ++ channelId ++ "/edit"
     | ChannelMembers(channelId) => "/c/" ++ channelId ++ "/members"
-    | ChannelFeedItems(channelId) => "/c/" ++ channelId ++ "/updates"
+    | ChannelFeedItems(channelId) => "/c/" ++ channelId ++ "/activity"
     | ChannelAddMember(channelId) => "/c/" ++ channelId ++ "/add"
     | ChannelInviteMember(channelId) => "/c/" ++ channelId ++ "/invite"
     | MeasurableEdit(id) => "/measurables/" ++ id ++ "/edit"

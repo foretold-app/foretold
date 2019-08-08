@@ -376,7 +376,7 @@ module Channel = {
     make(
       ~id="home",
       ~name="Home",
-      ~description=Some("Global Channel"),
+      ~description=Some("Global Community"),
       ~isArchived=false,
       ~isPublic=true,
       ~myRole=Some(`VIEWER),

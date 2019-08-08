@@ -1,3 +1,7 @@
+const {
+  NOTIFICATION_ERROR_REASON,
+} = require('./enums/notification-error-reason');
+
 module.exports = (sequelize, DataTypes) => {
 
   const AgentNotification = sequelize.define('AgentNotification', {
@@ -16,6 +20,25 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     sentAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    attemptCounter: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    errorReason: {
+      type: DataTypes.ENUM([
+        NOTIFICATION_ERROR_REASON.NONE,
+        NOTIFICATION_ERROR_REASON.INTERNAL_ERROR,
+        NOTIFICATION_ERROR_REASON.EXTERNAL_ERROR,
+        NOTIFICATION_ERROR_REASON.PREFERENCES_ERROR,
+        NOTIFICATION_ERROR_REASON.EMAIL_ADDRESS_ERROR,
+      ]),
+      defaultValue: NOTIFICATION_ERROR_REASON.NONE,
+    },
+    errorAt: {
       type: DataTypes.DATE,
       allowNull: true,
     },

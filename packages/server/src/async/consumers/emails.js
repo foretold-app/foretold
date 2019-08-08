@@ -11,7 +11,7 @@ const { Filter } = require('../../data/classes/filter');
 const { Options } = require('../../data/classes/options');
 const { Params } = require('../../data/classes/params');
 
-const { assert, errs, NOTIFICATION_ERROR_REASON } = require('./errors');
+const { assert, errs } = require('./errors');
 
 /**
  * @todo: Rename into "EmailsConsumer".
@@ -136,7 +136,7 @@ class Emails extends Consumer {
     const attemptCounterPrev = _.get(agentNotification, 'attemptCounter') || 0;
     const attemptCounter = attemptCounterPrev + weightError;
     const errorAt = moment.utc().toDate();
-    const errorReason = err.type || NOTIFICATION_ERROR_REASON.INTERNAL_ERROR;
+    const errorReason = err.type;
 
     const params = new Params({ id: agentNotification.id });
     const data = { errorAt, attemptCounter, errorReason };

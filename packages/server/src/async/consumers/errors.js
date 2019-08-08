@@ -42,8 +42,8 @@ class EmailAddressError extends CustomError {
   }
 }
 
-function assert(predicateFn, msg, ErrorClass = InternalError) {
-  if (predicateFn() === false) {
+function assert(predicate, msg, ErrorClass = InternalError) {
+  if (predicate === false) {
     throw new ErrorClass(msg);
   }
 }

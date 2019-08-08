@@ -41,6 +41,7 @@ export namespace Models {
 
   export interface Measurement extends Model {
     getCreationNotification(creator: Models.Creator): any;
+
     getMeasurable(): Measurable;
   }
 
@@ -91,7 +92,11 @@ export namespace Models {
 
   export interface FeedItem extends Model {
     channelId: ObjectID;
-    body: { item: string, description: string };
+    agentId: ObjectID;
+    body: {
+      generic?: { item: string, description: string },
+      measurable?: { item: string, description: string, measurableId: string },
+    };
   }
 
   export type Creator = Models.User | Models.Bot;
@@ -233,6 +238,7 @@ export namespace Layers {
       skipLocked?: boolean,
     };
     type filter = {
+      agentId?: Models.ObjectID,
       excludeChannelId?: Models.ObjectID,
       channelMemberId?: Models.ObjectID,
       userId?: Models.ObjectID,

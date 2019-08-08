@@ -237,9 +237,6 @@ class ModelPostgres extends Model {
       });
     }
 
-    // @todo: is ok if this block will two times appeared?
-    // @todo: see restrictions, and do not forget
-    // @todo: that filter/restrictions are not the same
     if (filter.channelMemberId) {
       where[this.and].push({
         id: {
@@ -251,6 +248,12 @@ class ModelPostgres extends Model {
     if (filter.userId) {
       where[this.and].push({
         userId: filter.userId,
+      });
+    }
+
+    if (filter.agentId) {
+      where[this.and].push({
+        agentId: filter.agentId,
       });
     }
 

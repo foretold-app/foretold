@@ -112,6 +112,7 @@ const schema = new graphql.GraphQLSchema({
         args: {
           ...types.common.connectionArguments,
           channelId: { type: graphql.GraphQLString },
+          agentId: { type: graphql.GraphQLString },
         },
         resolve: resolvers.feedItems.all,
       },

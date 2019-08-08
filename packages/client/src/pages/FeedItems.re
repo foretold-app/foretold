@@ -2,11 +2,11 @@ open Style.Grid;
 
 module ReducerConfig = {
   type itemType = Types.feedItem;
-  type callFnParams = string;
+  type callFnParams = (string, string);
 
   let getId = (e: itemType) => e.id;
-  let callFn = (channelId: callFnParams) =>
-    FeedItemsGet.component2(~channelId);
+  let callFn = ((channelId, agentId): callFnParams) =>
+    FeedItemsGet.component2(~channelId, ~agentId);
 
   let isEqual = (a: itemType, b: itemType) => {
     a.id == b.id;
@@ -19,7 +19,12 @@ let component = ReasonReact.statelessComponent("ChannelFeedItems");
 type pageParams = {id: string};
 
 let make =
-    (~channelId: string, ~layout=SLayout.FullPage.makeWithEl, _children) => {
+    (
+      ~channelId: string="",
+      ~agentId: string="",
+      ~layout=SLayout.FullPage.makeWithEl,
+      _children,
+    ) => {
   ...component,
   render: _ => {
     let pagination = (reducerParams: Reducer.Types.reducerParams) =>
@@ -71,6 +76,10 @@ let make =
       |> layout;
     };
 
-    <Reducer itemsPerPage=20 callFnParams=channelId subComponent />;
+    <Reducer
+      itemsPerPage=20
+      callFnParams=(channelId, agentId)
+      subComponent
+    />;
   },
 };

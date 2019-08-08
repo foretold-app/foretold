@@ -7,6 +7,7 @@ module Component = {
     | AgentMeasurables => "Created Questions"
     | AgentBots => "Bots"
     | AgentCommunities => "Communities"
+    | AgentUpdates => "Activity"
     };
 
   let tab = (agentId, currentPage, selectedPage) => {
@@ -36,10 +37,12 @@ module Component = {
           {tab(agentId, subPage, AgentMeasurables)}
           {tab(agentId, subPage, AgentBots)}
           {tab(agentId, subPage, AgentCommunities)}
+          {tab(agentId, subPage, AgentUpdates)}
         </>
       : <>
           {tab(agentId, subPage, AgentMeasurements)}
           {tab(agentId, subPage, AgentMeasurables)}
+          {tab(agentId, subPage, AgentUpdates)}
         </>;
   };
 };

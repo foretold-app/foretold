@@ -94,6 +94,7 @@ module Query = [%graphql
   {|
     query getFeedItems (
         $channelId: String
+        $agentId: String
         $first: Int
         $last: Int
         $after: String
@@ -101,6 +102,7 @@ module Query = [%graphql
     ) {
         feedItems: feedItems (
             channelId: $channelId
+            agentId: $agentId
             first: $first
             last: $last
             after: $after
@@ -148,19 +150,10 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 let unpackEdges = a =>
   a##feedItems |> E.O.fmap(Primary.Connection.fromJson(toFeedItem));
 
-let queryToComponent = (query, innerComponentFn) =>
-  <QueryComponent variables=query##variables>
-    ...{o =>
-      o.result
-      |> ApolloUtils.apolloResponseToResult
-      |> E.R.fmap(unpackEdges ||> innerComponentFn)
-      |> E.R.id
-    }
-  </QueryComponent>;
-
 type inputType('a) =
   (
     ~channelId: string=?,
+    ~agentId: string=?,
     ~first: int=?,
     ~last: int=?,
     ~after: string=?,
@@ -172,8 +165,15 @@ type inputType('a) =
 type direction = Primary.Connection.direction;
 
 let queryDirection =
-    (~channelId=?, ~pageLimit, ~direction, ~fn: inputType('a), ()) => {
-  let fn = fn(~channelId?);
+    (
+      ~channelId=?,
+      ~agentId=?,
+      ~pageLimit,
+      ~direction,
+      ~fn: inputType('a),
+      (),
+    ) => {
+  let fn = fn(~channelId?, ~agentId?);
   switch ((direction: direction)) {
   | None => fn(~first=pageLimit, ())
   | After(after) => fn(~first=pageLimit, ~after, ())
@@ -182,7 +182,7 @@ let queryDirection =
 };
 
 let componentMaker = (query, innerComponentFn) =>
-  <QueryComponent variables=query##variables>
+  <QueryComponent variables=query##variables fetchPolicy="no-cache">
     ...{o =>
       o.result
       |> HttpResponse.fromApollo
@@ -193,8 +193,21 @@ let componentMaker = (query, innerComponentFn) =>
   </QueryComponent>;
 
 let component2 =
-    (~channelId, ~pageLimit, ~direction: direction, ~innerComponentFn) => {
+    (
+      ~channelId,
+      ~agentId,
+      ~pageLimit,
+      ~direction: direction,
+      ~innerComponentFn,
+    ) => {
   let query =
-    queryDirection(~channelId, ~pageLimit, ~direction, ~fn=Query.make, ());
+    queryDirection(
+      ~channelId,
+      ~agentId,
+      ~pageLimit,
+      ~direction,
+      ~fn=Query.make,
+      (),
+    );
   componentMaker(query, innerComponentFn);
 };

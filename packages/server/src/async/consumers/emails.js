@@ -176,9 +176,9 @@ class Emails extends Consumer {
    * @protected
    */
   async _test(agentPreferences, user) {
-    assert(!!user, 'Users is required');
-    assert(!!_.get(user, 'email'), 'User Email is required', errs.EmailAddressError);
-    assert(!agentPreferences.stopAllEmails, 'Stop Email Flag is true', errs.PreferencesError);
+    assert(!!user, 'User is not found.');
+    assert(!!_.get(user, 'email'), 'Email is required.', errs.EmailAddressError);
+    assert(!agentPreferences.stopAllEmails, 'Emails are turned off.', errs.PreferencesError);
     return true;
   }
 

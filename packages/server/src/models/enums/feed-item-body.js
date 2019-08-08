@@ -1,5 +1,6 @@
 const FEED_ITEM_BODY = {
-  common: 'common',
+  generic: 'generic',
+  measurable: 'measurable',
 };
 
 module.exports = {

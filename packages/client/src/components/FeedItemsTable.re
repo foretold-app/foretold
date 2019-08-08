@@ -4,10 +4,23 @@ module Columns = {
   type record = Types.feedItem;
   type column = Table.column(Types.feedItem);
 
-  let getName = (r: record): string =>
-    r.body.common
-    |> E.O.fmap((common: FeedItemBody.Common.t) => common.item)
-    |> E.O.default("");
+  let getName = (r: record): ReasonReact.reactElement =>
+    switch (r.body.generic, r.body.measurable) {
+    | (Some(row), _) => row.item |> Utils.ste
+    | (_, Some(row)) =>
+      <Link
+        linkType={Internal(MeasurableShow(r.channelId, row.measurableId))}>
+        [|row.item |> Utils.ste|]
+      </Link>
+    | _ => "" |> Utils.ste
+    };
+
+  let getDescription = (r: record): string =>
+    switch (r.body.generic, r.body.measurable) {
+    | (Some(row), _) => row.description
+    | (_, Some(row)) => row.description
+    | _ => ""
+    };
 
   let channel: column =
     Table.Column.make(
@@ -24,21 +37,15 @@ module Columns = {
   let item: column =
     Table.Column.make(
       ~name="Item" |> Utils.ste,
-      ~render=(r: record) => r |> getName |> Utils.ste,
+      ~render=(r: record) => r |> getName,
       ~flex=2,
-      ~show=(r: record) => r |> getName != "",
       (),
     );
 
   let description: column =
     Table.Column.make(
       ~name="Description" |> Utils.ste,
-      ~render=
-        (r: record) =>
-          r.body.common
-          |> E.O.fmap((common: FeedItemBody.Common.t) => common.description)
-          |> E.O.default("")
-          |> Utils.ste,
+      ~render=(r: record) => r |> getDescription |> Utils.ste,
       ~flex=3,
       (),
     );

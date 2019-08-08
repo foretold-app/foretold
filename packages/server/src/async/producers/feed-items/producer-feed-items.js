@@ -16,6 +16,8 @@ class ProducerFeedItems extends Producer {
     this.input = input;
     this.agentId = null;
     this.channelId = null;
+
+    this.FeedItem = Producer.FeedItemGeneric;
   }
 
   /**
@@ -101,8 +103,8 @@ class ProducerFeedItems extends Producer {
    */
   async _queueFeedItem(replacements, channelId) {
     const template = await this._getTemplate();
-    const feedItem = new Producer.FeedItem(template.envelopeTemplate);
-    const feedItem$ = feedItem.mutate(replacements);
+    const feedItem = new this.FeedItem(template.envelopeTemplate);
+    const feedItem$ = feedItem.instanceFactory(replacements);
     return await this._createFeedItem(feedItem$, channelId);
   }
 
@@ -117,7 +119,8 @@ class ProducerFeedItems extends Producer {
       feedItem instanceof Producer.FeedItem,
       'feedItem is not FeedItem'
     );
-    const data = { body: { common: feedItem }, channelId };
+    const feedItemBodyName = feedItem.getName();
+    const data = { body: { [feedItemBodyName]: feedItem }, channelId };
     const options = await this._getOptions();
     return Producer.data.feedItems.createOne(data, options);
   }

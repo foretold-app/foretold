@@ -4735,12 +4735,24 @@
           "description": null,
           "fields": [
             {
-              "name": "common",
+              "name": "generic",
               "description": null,
               "args": [],
               "type": {
                 "kind": "OBJECT",
-                "name": "FeedItemBodyCommon",
+                "name": "FeedItemBodyGeneric",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "measurable",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "FeedItemBodyMeasurable",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -4754,7 +4766,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "FeedItemBodyCommon",
+          "name": "FeedItemBodyGeneric",
           "description": null,
           "fields": [
             {
@@ -4775,6 +4787,65 @@
             },
             {
               "name": "description",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "FeedItemBodyMeasurable",
+          "description": null,
+          "fields": [
+            {
+              "name": "item",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "description",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "measurableId",
               "description": null,
               "args": [],
               "type": {

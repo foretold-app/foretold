@@ -1,11 +1,20 @@
 open Rationale.Function.Infix;
 
-type common = {
+type generic = {
   item: string,
   description: string,
 };
 
-type body = {common: option(common)};
+type measurable = {
+  item: string,
+  description: string,
+  measurableId: string,
+};
+
+type body = {
+  generic: option(generic),
+  measurable: option(measurable),
+};
 
 type channel = {
   id: string,
@@ -23,12 +32,27 @@ type node = {
   updatedAt: MomentRe.Moment.t,
 };
 
-let toCommon = (m: option(common)): option(FeedItemBody.Common.t) => {
+let toCommon = (m: option(generic)): option(FeedItemBody.Generic.t) => {
   switch (m) {
-  | Some(common) =>
-    FeedItemBody.Common.make(
-      ~item=common.item,
-      ~description=common.description,
+  | Some(generic) =>
+    FeedItemBody.Generic.make(
+      ~item=generic.item,
+      ~description=generic.description,
+      (),
+    )
+    |> E.O.some
+  | _ => None
+  };
+};
+
+let toMeasurable =
+    (m: option(measurable)): option(FeedItemBody.Measurable.t) => {
+  switch (m) {
+  | Some(measurable) =>
+    FeedItemBody.Measurable.make(
+      ~item=measurable.item,
+      ~description=measurable.description,
+      ~measurableId=measurable.measurableId,
       (),
     )
     |> E.O.some
@@ -37,7 +61,11 @@ let toCommon = (m: option(common)): option(FeedItemBody.Common.t) => {
 };
 
 let toBody = (m: body): FeedItemBody.t => {
-  FeedItemBody.make(~common=toCommon(m.common), ());
+  FeedItemBody.make(
+    ~generic=toCommon(m.generic),
+    ~measurable=toMeasurable(m.measurable),
+    (),
+  );
 };
 
 let toChannel = (m: channel): Types.channel => {
@@ -90,9 +118,14 @@ module Query = [%graphql
               id
               channelId
               body @bsRecord {
-                common @bsRecord {
+                generic @bsRecord {
                   item
                   description
+                 }
+                measurable @bsRecord {
+                  item
+                  description
+                  measurableId
                  }
               }
               channel: Channel @bsRecord {

@@ -11,6 +11,8 @@ class NewMeasurable extends ProducerFeedItems {
     super(measurement);
     this.templateName =
       Producer.TEMPLATE_NAME.NEW_MEASURABLE_FEED_ITEM;
+
+    this.FeedItem = Producer.FeedItemMeasurable;
   }
 
   /**
@@ -25,6 +27,7 @@ class NewMeasurable extends ProducerFeedItems {
       },
       measurable: {
         name: this.input.name || 'Question',
+        id: this.input.id,
       },
     }
   }

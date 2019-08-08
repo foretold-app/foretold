@@ -22,7 +22,7 @@ class ProducerNotifications extends Producer {
   async _queueEmail(replacements) {
     const template = await this._getTemplate();
     const emailEnvelope = new Producer.EmailEnvelope(template.envelopeTemplate);
-    const emailEnvelope$ = emailEnvelope.mutate(replacements);
+    const emailEnvelope$ = emailEnvelope.instanceFactory(replacements);
     return await this._createEmailNotification(emailEnvelope$);
   }
 

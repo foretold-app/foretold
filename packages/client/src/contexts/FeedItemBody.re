@@ -1,12 +1,31 @@
-type common = {
+type generic = {
   item: string,
   description: string,
 };
-type t = {common: option(common)};
 
-let make = (~common, ()): t => {common: common};
+type measurable = {
+  item: string,
+  description: string,
+  measurableId: string,
+};
 
-module Common = {
-  type t = common;
+type t = {
+  generic: option(generic),
+  measurable: option(measurable),
+};
+
+let make = (~generic, ~measurable, ()): t => {generic, measurable};
+
+module Generic = {
+  type t = generic;
   let make = (~item, ~description, ()): t => {item, description};
+};
+
+module Measurable = {
+  type t = measurable;
+  let make = (~item, ~description, ~measurableId, ()): t => {
+    item,
+    description,
+    measurableId,
+  };
 };

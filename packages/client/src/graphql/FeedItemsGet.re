@@ -5,7 +5,16 @@ type common = {
   description: string,
 };
 
-type body = {common: option(common)};
+type measurable = {
+  item: string,
+  description: string,
+  measurableId: string,
+};
+
+type body = {
+  common: option(common),
+  measurable: option(measurable),
+};
 
 type channel = {
   id: string,
@@ -36,8 +45,27 @@ let toCommon = (m: option(common)): option(FeedItemBody.Common.t) => {
   };
 };
 
+let toMeasurable =
+    (m: option(measurable)): option(FeedItemBody.Measurable.t) => {
+  switch (m) {
+  | Some(measurable) =>
+    FeedItemBody.Measurable.make(
+      ~item=measurable.item,
+      ~description=measurable.description,
+      ~measurableId=measurable.measurableId,
+      (),
+    )
+    |> E.O.some
+  | _ => None
+  };
+};
+
 let toBody = (m: body): FeedItemBody.t => {
-  FeedItemBody.make(~common=toCommon(m.common), ());
+  FeedItemBody.make(
+    ~common=toCommon(m.common),
+    ~measurable=toMeasurable(m.measurable),
+    (),
+  );
 };
 
 let toChannel = (m: channel): Types.channel => {
@@ -93,6 +121,11 @@ module Query = [%graphql
                 common @bsRecord {
                   item
                   description
+                 }
+                measurable @bsRecord {
+                  item
+                  description
+                  measurableId
                  }
               }
               channel: Channel @bsRecord {

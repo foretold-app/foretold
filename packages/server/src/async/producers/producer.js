@@ -66,7 +66,7 @@ class Producer {
     const params = { name: this.templateName };
     const template = await Producer.data.templates.getOne(params);
 
-    assert(!!_.get(template, 'id'), 'Template ID is required');
+    assert(!!_.get(template, 'name'), 'Template name is required');
     assert(
       !!_.get(template, 'envelopeTemplate'),
       'Envelope Template ID is required',

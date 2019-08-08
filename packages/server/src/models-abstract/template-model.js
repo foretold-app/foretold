@@ -18,6 +18,7 @@ class TemplateModel extends ModelPostgres {
 
 
   /**
+   * It is a temporary solution.
    * @public
    * @param {object} [params]
    * @param {string} params.name

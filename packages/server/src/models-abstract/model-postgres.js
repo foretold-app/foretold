@@ -494,7 +494,7 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @param cond
+   * @param {object} cond
    * @param {Layers.AbstractModelsLayer.options} options
    */
   _extendConditions(cond = {}, options = {}) {

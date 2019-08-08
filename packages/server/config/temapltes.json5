@@ -30,43 +30,49 @@
   {
     "name": "NEW_MEASUREMENT_PREDICTION_FEED_ITEM",
     "envelopeTemplate": {
-      "item": "",
-      "description": "{{ agent.name }} made a prediction"
+      "item": "{{{ measurable.name }}}",
+      "description": "{{ agent.name }} made a prediction",
+      "measurableId": "{{{ measurable.id }}}"
     }
   },
   {
     "name": "NEW_MEASUREMENT_COMMENT_FEED_ITEM",
     "envelopeTemplate": {
-      "item": "",
-      "description": "{{ agent.name }} made a new comment"
+      "item": "{{{ measurable.name }}}",
+      "description": "{{ agent.name }} made a new comment",
+      "measurableId": "{{{ measurable.id }}}"
     }
   },
   {
     "name": "NEW_MEASUREMENT_RESOLUTION_FEED_ITEM",
     "envelopeTemplate": {
-      "item": "",
-      "description": "{{ agent.name }} resolved the question with an answer"
+      "item": "{{{ measurable.name }}}",
+      "description": "{{ agent.name }} resolved the question with an answer",
+      "measurableId": "{{{ measurable.id }}}"
     }
   },
   {
     "name": "NEW_MEASUREMENT_RESOLUTION_NOT_AVAILABLE_FEED_ITEM",
     "envelopeTemplate": {
-      "item": "",
-      "description": "{{ agent.name }} has marked this question as unresolved"
+      "item": "{{{ measurable.name }}}",
+      "description": "{{ agent.name }} has marked this question as unresolved",
+      "measurableId": "{{{ measurable.id }}}"
     }
   },
   {
     "name": "MEASURABLE_REACHED_RESOLUTION_DATE_FEED_ITEM",
     "envelopeTemplate": {
-      "item": "",
-      "description": "{{ measurable.name }} has reached it's expected resolution date"
+      "item": "{{{ measurable.name }}}",
+      "description": "{{ measurable.name }} has reached it's expected resolution date",
+      "measurableId": "{{{ measurable.id }}}"
     }
   },
   {
     "name": "NEW_MEASURABLE_FEED_ITEM",
     "envelopeTemplate": {
-      "item": "",
-      "description": "{{ agent.name }} made a new question"
+      "item": "{{{ measurable.name }}}",
+      "description": "{{ agent.name }} made a new question",
+      "measurableId": "{{{ measurable.id }}}"
     }
   }
 ]

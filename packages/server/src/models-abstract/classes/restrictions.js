@@ -14,6 +14,7 @@ class Restrictions {
       'channelId': v => _.isBoolean(v),
       'measurableId': v => _.isString(v),
       'channelIdAsId': v => _.isBoolean(v),
+      'channelMemberId': v => _.isString(v),
     };
 
     _.each(list, (_test, name) => {

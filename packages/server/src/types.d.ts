@@ -133,6 +133,7 @@ export namespace Layers {
       isAdmin?: boolean,
       agentId?: Models.ObjectID,
       measuredByAgentId?: Models.ObjectID,
+      channelMemberId?: Models.ObjectID,
       transaction?: object,
       lock?: boolean,
       skipLocked?: boolean,
@@ -224,6 +225,7 @@ export namespace Layers {
       channelId?: Models.ObjectID,
       measurableId?: Models.ObjectID,
       measuredByAgentId?: Models.ObjectID,
+      channelMemberId?: Models.ObjectID,
     };
     type options = {
       transaction?: object,

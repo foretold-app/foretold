@@ -17,6 +17,7 @@ class Options {
       'isAdmin',  // bool
       'agentId',  // string
       'measuredByAgentId', // string
+      'channelMemberId', // string
     ];
 
     _.each(list, (name) => {

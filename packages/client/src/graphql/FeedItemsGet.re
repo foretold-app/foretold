@@ -150,16 +150,6 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 let unpackEdges = a =>
   a##feedItems |> E.O.fmap(Primary.Connection.fromJson(toFeedItem));
 
-let queryToComponent = (query, innerComponentFn) =>
-  <QueryComponent variables=query##variables>
-    ...{o =>
-      o.result
-      |> ApolloUtils.apolloResponseToResult
-      |> E.R.fmap(unpackEdges ||> innerComponentFn)
-      |> E.R.id
-    }
-  </QueryComponent>;
-
 type inputType('a) =
   (
     ~channelId: string=?,

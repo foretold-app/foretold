@@ -25,7 +25,7 @@ class EmailEnvelope {
    * @param {object} replacements
    * @return {EmailEnvelope}
    */
-  mutate(replacements) {
+  instanceFactory(replacements) {
     const subject = Mustache.render(this.subject, replacements);
     const body = Mustache.render(this.body, replacements);
 

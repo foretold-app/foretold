@@ -52,7 +52,7 @@ class FeedItemCommon extends FeedItem {
    * @param {object} replacements
    * @return {FeedItem}
    */
-  mutate(replacements) {
+  instanceFactory(replacements) {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
 

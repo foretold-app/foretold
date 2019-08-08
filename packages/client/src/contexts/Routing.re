@@ -214,11 +214,13 @@ module Url = {
     | ChannelFeedItems(channelId) => "/c/" ++ channelId ++ "/activity"
     | ChannelAddMember(channelId) => "/c/" ++ channelId ++ "/add"
     | ChannelInviteMember(channelId) => "/c/" ++ channelId ++ "/invite"
-    | MeasurableEdit(id) => "/measurables/" ++ id ++ "/edit"
+    | MeasurableEdit(measurableId) =>
+      "/measurables/" ++ measurableId ++ "/edit"
     | MeasurableNew(channelId) => "/c/" ++ channelId ++ "/new"
     | SeriesNew(channelId) => "/c/" ++ channelId ++ "/s/new"
     | SeriesShow(channelId, id) => "/c/" ++ channelId ++ "/s/" ++ id
-    | MeasurableShow(channelId, id) => "/c/" ++ channelId ++ "/m/" ++ id
+    | MeasurableShow(channelId, measurableId) =>
+      "/c/" ++ channelId ++ "/m/" ++ measurableId
     | Subscribe => "/subscribe"
     | Unsubscribe => "/unsubscribe"
     };

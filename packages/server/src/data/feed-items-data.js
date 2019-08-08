@@ -11,6 +11,7 @@ class FeedItemsData extends DataBase {
     super();
     this.FeedItemModel = new FeedItemModel();
     this.model = this.FeedItemModel;
+    this.defaultRestrictions = { channelId: true };
   }
 
 }

@@ -25,7 +25,11 @@ class Filter {
     const common = ['id', 'isArchived'];
     const channel = [];
     const agent = ['excludeChannelId', 'types'];
-    const agentNotification = ['notificationId', 'sentAt'];
+    const agentNotification = [
+      'notificationId', // string
+      'sentAt', // Date | null
+      'attemptCounterMax', // number
+    ];
     const channels = ['channelMemberId'];
 
     const list = [

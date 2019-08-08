@@ -1,4 +1,3 @@
-const assert = require('assert');
 const _ = require('lodash');
 const moment = require('moment');
 
@@ -12,6 +11,8 @@ const { Filter } = require('../../data/classes/filter');
 const { Options } = require('../../data/classes/options');
 const { Params } = require('../../data/classes/params');
 
+const { assert, errs } = require('./errors');
+
 /**
  * @todo: Rename into "EmailsConsumer".
  */
@@ -21,13 +22,6 @@ class Emails extends Consumer {
   }
 
   /**
-   * @todo: Either into "AgentNotifications" or into "Notifications" to add
-   * @todo: "attemptCounter", "errorAt", "errorReason" columns
-   * @todo: and logic for it.
-   * @todo: I think, that each consumer should take only one notification
-   * @todo: to send in transaction mode. Because there can happen some error,
-   * @todo: in this case we should add one to "attemptCounter" and pass these
-   * @todo: notifications (with "attemptCounter" more then 3).
    * @return {Promise<boolean>}
    */
   async main() {
@@ -45,14 +39,20 @@ class Emails extends Consumer {
       for (let i = 0; i < agentNotifications.length; i++) {
         const agentNotification = agentNotifications[i];
 
-        await this._markNotificationAsSent(agentNotification, transaction);
-
         try {
           const notification = await this._getNotification(agentNotification);
           const agent = await this._getAgent(agentNotification);
           const agentPreferences = await this._getPreferences(agentNotification);
           const user = await this._getUser(agent);
-          const result = await this._emitEmail(notification, agentPreferences, user, agent);
+          const _test = await this._test(agentPreferences, user);
+          const result = await this._emitEmail(notification, user, agent);
+
+          if (result === true) {
+            await this._markNotificationAsSent(agentNotification, transaction);
+          } else {
+            throw new errs.ExternalError('Email is not sent');
+          }
+
           console.log(
             `\x1b[35mNotification ID = "${notification.id}", ` +
             `Transaction ID = "${transaction.id}", ` +
@@ -62,6 +62,7 @@ class Emails extends Consumer {
           );
         } catch (err) {
           console.log(`Emails Consumer, pass sending due to`, err.message);
+          await this._notificationError(agentNotification, err, transaction);
         }
       }
 
@@ -80,7 +81,7 @@ class Emails extends Consumer {
    * @protected
    */
   async _getAgentsNotifications(transaction) {
-    const filter = new Filter({ sentAt: null });
+    const filter = new Filter({ sentAt: null, attemptCounterMax: 3 });
     const pagination = new Pagination({ limit: 10 });
     const options = new Options({ transaction, lock: true, skipLocked: true });
     return this.agentNotifications.getAll(filter, pagination, options);
@@ -125,6 +126,27 @@ class Emails extends Consumer {
 
   /**
    * @param {object} agentNotification
+   * @param {CustomError} err
+   * @param {object} transaction
+   * @return {Promise<*>}
+   * @protected
+   */
+  async _notificationError(agentNotification, err, transaction) {
+    const weightError = err.weight || 1;
+    const attemptCounterPrev = _.get(agentNotification, 'attemptCounter') || 0;
+    const attemptCounter = attemptCounterPrev + weightError;
+    const errorAt = moment.utc().toDate();
+    const errorReason = err.type;
+
+    const params = new Params({ id: agentNotification.id });
+    const data = { errorAt, attemptCounter, errorReason };
+    const options = new Options({ transaction });
+
+    return this.agentNotifications.updateOne(params, data, options);
+  }
+
+  /**
+   * @param {object} agentNotification
    * @return {Promise<*>}
    * @protected
    */
@@ -148,27 +170,35 @@ class Emails extends Consumer {
   }
 
   /**
-   * @param {object} notification
    * @param {object} agentPreferences
+   * @param {object} user
+   * @return {Promise<boolean>}
+   * @protected
+   */
+  async _test(agentPreferences, user) {
+    assert(!!user, 'User is not found.');
+    assert(!!_.get(user, 'email'), 'Email is required.', errs.EmailAddressError);
+    assert(!agentPreferences.stopAllEmails, 'Emails are turned off.', errs.PreferencesError);
+    return true;
+  }
+
+  /**
+   * @param {object} notification
    * @param {object} user
    * @param {object} agent
    * @return {Promise<boolean>}
    * @protected
    */
-  async _emitEmail(notification, agentPreferences, user, agent) {
-    if (!user) return false;
-    if (!user.email) return false;
-    if (agentPreferences.stopAllEmails === true) return false;
-
+  async _emitEmail(notification, user, agent) {
     const envelopeReplacements = notification.envelope.replacements || {};
 
     const token = await this._getAuthToken(agent);
-    const replacements = {...envelopeReplacements, token};
+    const replacements = { ...envelopeReplacements, token };
 
     const envelope = {
       replacements,
       authToken: token,
-      to: notification.envelope.to || user.email,
+      to: notification.envelope.to || _.get(user, 'email'),
       body: notification.envelope.body || '',
       subject: notification.envelope.subject || '',
     };

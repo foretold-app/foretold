@@ -8,7 +8,7 @@ const { NOTIFICATION_TYPE } = require('../../models/enums/notification-type');
 const { EmailEnvelope } = require('../../models/classes/notifications');
 
 const { FeedItem } = require('../../models/classes');
-const { FeedItemCommon } = require('../../models/classes');
+const { FeedItemGeneric } = require('../../models/classes');
 const { FeedItemMeasurable } = require('../../models/classes');
 
 /**
@@ -94,7 +94,7 @@ Producer.NOTIFICATION_TYPE = NOTIFICATION_TYPE;
 Producer.EmailEnvelope = EmailEnvelope;
 
 Producer.FeedItem = FeedItem;
-Producer.FeedItemCommon = FeedItemCommon;
+Producer.FeedItemGeneric = FeedItemGeneric;
 Producer.FeedItemMeasurable = FeedItemMeasurable;
 
 module.exports = {

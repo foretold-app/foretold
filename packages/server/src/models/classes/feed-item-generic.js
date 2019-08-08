@@ -5,7 +5,7 @@ const Mustache = require('mustache');
 const { FeedItem } = require('./feed-item');
 const { FEED_ITEM_BODY } = require('../enums/feed-item-body');
 
-class FeedItemCommon extends FeedItem {
+class FeedItemGeneric extends FeedItem {
 
   /**
    * @param {object} options
@@ -28,7 +28,7 @@ class FeedItemCommon extends FeedItem {
    * @return {string}
    */
   getName() {
-    return FEED_ITEM_BODY.common;
+    return FEED_ITEM_BODY.generic;
   }
 
   /**
@@ -52,11 +52,11 @@ class FeedItemCommon extends FeedItem {
    * @param {object} replacements
    * @return {FeedItem}
    */
-  mutate(replacements) {
+  instanceFactory(replacements) {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
 
-    return new FeedItemCommon({
+    return new FeedItemGeneric({
       item,
       description,
     });
@@ -64,5 +64,5 @@ class FeedItemCommon extends FeedItem {
 }
 
 module.exports = {
-  FeedItemCommon,
+  FeedItemGeneric,
 };

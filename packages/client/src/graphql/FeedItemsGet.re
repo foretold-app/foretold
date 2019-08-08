@@ -1,6 +1,6 @@
 open Rationale.Function.Infix;
 
-type common = {
+type generic = {
   item: string,
   description: string,
 };
@@ -12,7 +12,7 @@ type measurable = {
 };
 
 type body = {
-  common: option(common),
+  generic: option(generic),
   measurable: option(measurable),
 };
 
@@ -32,12 +32,12 @@ type node = {
   updatedAt: MomentRe.Moment.t,
 };
 
-let toCommon = (m: option(common)): option(FeedItemBody.Common.t) => {
+let toCommon = (m: option(generic)): option(FeedItemBody.Generic.t) => {
   switch (m) {
-  | Some(common) =>
-    FeedItemBody.Common.make(
-      ~item=common.item,
-      ~description=common.description,
+  | Some(generic) =>
+    FeedItemBody.Generic.make(
+      ~item=generic.item,
+      ~description=generic.description,
       (),
     )
     |> E.O.some
@@ -62,7 +62,7 @@ let toMeasurable =
 
 let toBody = (m: body): FeedItemBody.t => {
   FeedItemBody.make(
-    ~common=toCommon(m.common),
+    ~generic=toCommon(m.generic),
     ~measurable=toMeasurable(m.measurable),
     (),
   );
@@ -118,7 +118,7 @@ module Query = [%graphql
               id
               channelId
               body @bsRecord {
-                common @bsRecord {
+                generic @bsRecord {
                   item
                   description
                  }

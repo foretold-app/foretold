@@ -17,7 +17,7 @@ class ProducerFeedItems extends Producer {
     this.agentId = null;
     this.channelId = null;
 
-    this.FeedItem = Producer.FeedItemCommon;
+    this.FeedItem = Producer.FeedItemGeneric;
   }
 
   /**
@@ -104,7 +104,7 @@ class ProducerFeedItems extends Producer {
   async _queueFeedItem(replacements, channelId) {
     const template = await this._getTemplate();
     const feedItem = new this.FeedItem(template.envelopeTemplate);
-    const feedItem$ = feedItem.mutate(replacements);
+    const feedItem$ = feedItem.instanceFactory(replacements);
     return await this._createFeedItem(feedItem$, channelId);
   }
 

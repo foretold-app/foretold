@@ -5,7 +5,7 @@ module Columns = {
   type column = Table.column(Types.feedItem);
 
   let getName = (r: record): ReasonReact.reactElement =>
-    switch (r.body.common, r.body.measurable) {
+    switch (r.body.generic, r.body.measurable) {
     | (Some(row), _) => row.item |> Utils.ste
     | (_, Some(row)) =>
       <Link
@@ -16,7 +16,7 @@ module Columns = {
     };
 
   let getDescription = (r: record): string =>
-    switch (r.body.common, r.body.measurable) {
+    switch (r.body.generic, r.body.measurable) {
     | (Some(row), _) => row.description
     | (_, Some(row)) => row.description
     | _ => ""

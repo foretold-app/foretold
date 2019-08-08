@@ -2,10 +2,10 @@ const assert = require('assert');
 const _ = require('lodash');
 const Mustache = require('mustache');
 
-const { FeedItemCommon } = require('./feed-item-common');
+const { FeedItemGeneric } = require('./feed-item-generic');
 const { FEED_ITEM_BODY } = require('../enums/feed-item-body');
 
-class FeedItemMeasurable extends FeedItemCommon {
+class FeedItemMeasurable extends FeedItemGeneric {
   /**
    * @public
    * @param {object} options
@@ -40,7 +40,7 @@ class FeedItemMeasurable extends FeedItemCommon {
    * @param {object} replacements
    * @return {FeedItem}
    */
-  mutate(replacements) {
+  instanceFactory(replacements) {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
     const measurableId = Mustache.render(this.measurableId, replacements);

@@ -25,7 +25,7 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let toChannel = (channel): Primary.Channel.t => {
+let toChannel = (channel): Types.channel => {
   let allowMutations =
     channel##permissions##mutations##allow |> E.A.O.concatSome |> E.A.to_list;
 

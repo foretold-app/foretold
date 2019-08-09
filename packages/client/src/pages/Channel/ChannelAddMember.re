@@ -1,6 +1,6 @@
 let component = ReasonReact.statelessComponent("ChannelAddMember");
 
-type column = Table.column(Primary.Agent.t);
+type column = Table.column(Types.agent);
 
 let make =
     (
@@ -29,7 +29,7 @@ let make =
       Table.Column.make(
         ~name="Agent" |> ReasonReact.string,
         ~render=
-          (agent: Primary.Agent.t) =>
+          (agent: Types.agent) =>
             <Link.Jsx2
               linkType={
                 Internal(
@@ -47,7 +47,7 @@ let make =
       Table.Column.make(
         ~name="Invite" |> ReasonReact.string,
         ~render=
-          (agent: Primary.Agent.t) => addToChannelLink(agent.id, channelId),
+          (agent: Types.agent) => addToChannelLink(agent.id, channelId),
         (),
       );
 
@@ -63,7 +63,7 @@ let make =
     let onSuccess = agents => {
       let dataSource =
         agents
-        |> Js.Array.filter((agent: Primary.Agent.t) =>
+        |> Js.Array.filter((agent: Types.agent) =>
              switch (agent.name) {
              | Some(name) when name != "" => true
              | _ => false

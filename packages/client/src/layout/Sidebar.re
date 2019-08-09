@@ -86,14 +86,14 @@ let make = (~channelId, ~loggedInUser: Types.user, _children) => {
           {Primary.Channel.presentGlobal(~hashClassName=Styles.hash)}
         </Link.Jsx2>
         {loggedInUser.agent
-         |> E.O.fmap((agent: Primary.Agent.t) =>
+         |> E.O.fmap((agent: Types.agent) =>
               ChannelsGet.component(
                 ~channelMemberId=?Some(agent.id),
                 ~isArchived=[|Some(`FALSE)|],
                 ~sortFn=ChannelsGet.sortAsc,
                 channels =>
                 channels
-                |> Array.mapi((index, channel: Primary.Channel.t) =>
+                |> Array.mapi((index, channel: Types.channel) =>
                      <Link.Jsx2
                        key={index |> string_of_int}
                        linkType={Internal(Primary.Channel.showLink(channel))}

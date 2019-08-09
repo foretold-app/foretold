@@ -222,7 +222,7 @@ let make =
     (
       ~channelId: string,
       ~layout=SLayout.FullPage.makeWithEl,
-      ~channel: Primary.Channel.t,
+      ~channel: Types.channel,
       _children,
     ) => {
   ...component,

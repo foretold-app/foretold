@@ -58,7 +58,7 @@ let make =
           switch (channel, series, selectWithPaginationParams.selection) {
           | (
               Success(channel),
-              Some((series: Primary.Series.t)),
+              Some((series: Types.series)),
               Some(_selection),
             ) =>
             <>
@@ -68,7 +68,7 @@ let make =
                )}
               {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
             </>
-          | (Success(channel), Some((series: Primary.Series.t)), None) =>
+          | (Success(channel), Some((series: Types.series)), None) =>
             <>
               {SLayout.seriesHead(channel, series.name |> E.O.default(""))}
               {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}

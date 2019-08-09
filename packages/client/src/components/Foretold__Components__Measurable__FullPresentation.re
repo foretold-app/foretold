@@ -25,9 +25,9 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
     MeasurableWithMeasurementsGet.component(~id)
     |> E.F.apply((m: Types.measurable) => {
          let userAgentId =
-           loggedInUser.agent |> E.O.fmap((r: Primary.Agent.t) => r.id);
+           loggedInUser.agent |> E.O.fmap((r: Types.agent) => r.id);
 
-         let creatorId = m.creator |> E.O.fmap((r: Primary.Agent.t) => r.id);
+         let creatorId = m.creator |> E.O.fmap((r: Types.agent) => r.id);
 
          <>
            <Div styles=[Styles.header]>
@@ -68,13 +68,13 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
                                     m:
                                       option(
                                         Primary.Connection.t(
-                                          Primary.Measurement.t,
+                                          Types.measurement,
                                         ),
                                       ),
                                   ) =>
                 m
                 |> E.O.React.fmapOrNull(
-                     (b: Primary.Connection.t(Primary.Measurement.t)) =>
+                     (b: Primary.Connection.t(Types.measurement)) =>
                      b.edges
                      |> E.A.to_list
                      |> Foretold__Components__Measurements__Table.make

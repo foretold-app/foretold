@@ -2,12 +2,12 @@ module FormConfig = {
   type field(_) =
     | Name: field(string)
     | Description: field(string)
-    | CompetitorType: field(Primary.CompetitorType.t);
+    | CompetitorType: field(Types.competitorType);
 
   type state = {
     name: string,
     description: string,
-    competitorType: Primary.CompetitorType.t,
+    competitorType: Types.competitorType,
   };
 
   let get: type value. (state, field(value)) => value =
@@ -29,7 +29,7 @@ module FormConfig = {
 
 module Form = ReFormNext.Make(FormConfig);
 
-let withForm = (onSubmit, bot: option(Primary.Bot.t), innerComponentFn) => {
+let withForm = (onSubmit, bot: option(Types.bot), innerComponentFn) => {
   let initialState: FormConfig.state =
     switch (bot) {
     | Some(bot) => {

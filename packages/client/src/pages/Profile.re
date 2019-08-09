@@ -159,7 +159,7 @@ let make =
              let description = loggedInUser.description |> E.O.default("");
              let name =
                agent
-               |> E.O.bind(_, (r: Primary.Agent.t) => r.name)
+               |> E.O.bind(_, (r: Types.agent) => r.name)
                |> E.O.toExn("The logged in user needs an ID!");
 
              withUserForm(

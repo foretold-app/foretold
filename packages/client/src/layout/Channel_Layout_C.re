@@ -14,7 +14,7 @@ let make =
     (
       channelPage: Routing.ChannelPage.t,
       loggedInUser: Types.user,
-      channel: option(Primary.Channel.t),
+      channel: option(Types.channel),
       {head, body}: LayoutConfig.t,
     ) => {
   ...component,
@@ -105,7 +105,7 @@ let makeWithEl =
     (
       channelPage: Routing.ChannelPage.t,
       loggedInUser,
-      channel: option(Primary.Channel.t),
+      channel: option(Types.channel),
       layout: LayoutConfig.t,
     ) =>
   make(channelPage, loggedInUser, channel, layout) |> ReasonReact.element;

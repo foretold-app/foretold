@@ -14,7 +14,7 @@ let make =
     ) => {
   ...component,
   render: _ => {
-    let getForm = (bot: option(Primary.Bot.t)) =>
+    let getForm = (bot: option(Types.bot)) =>
       BotUpdate.withMutation((mutation, data) => {
         let onSubmit = (values: BotForm.Form.onSubmitAPI): unit => {
           BotUpdate.mutate(

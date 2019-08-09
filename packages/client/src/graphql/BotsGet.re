@@ -38,7 +38,7 @@ let unpackEdges = (a): array('a) => {
 
 type bot = {
   .
-  "competitorType": Primary.CompetitorType.t,
+  "competitorType": Types.competitorType,
   "id": string,
   "description": option(string),
   "token": option(string),

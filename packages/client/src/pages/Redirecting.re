@@ -8,7 +8,7 @@ let make = (~loggedInUser: option(Types.user), _children) => {
     switch (loggedInUser) {
     | Some(userData) =>
       let user = userData;
-      let agentId = user.agent |> E.O.fmap((e: Primary.Agent.t) => e.id);
+      let agentId = user.agent |> E.O.fmap((e: Types.agent) => e.id);
       let name = user.name;
 
       switch (name, agentId) {

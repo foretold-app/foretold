@@ -24,7 +24,6 @@ class MeasurableStateResolved extends MeasurableState {
       && this.measurable.get('state') === MEASURABLE_STATE.JUDGED;
   }
 
-
   /**
    * @public
    * @return {Promise<boolean>}
@@ -41,14 +40,17 @@ class MeasurableStateResolved extends MeasurableState {
     }
 
     try {
+      /** @type {Models.Channel} */
       const channel = await this.measurable.getChannel();
       assert(!!_.get(channel, 'id'), 'Channel ID is required.');
 
+      /** @type {Models.Agent[]} */
       const agents = await channel.getAgents();
       assert(_.isArray(agents), 'Channel Members are required.');
-      assert(agents !== 0, 'Channel Members list is empty.');
+      assert(agents.length !== 0, 'Channel Members list is empty.');
       assert(_.every(agents, agent => _.get(agent, 'id')), 'Agent ID is required');
 
+      /** @type {Models.Measurement} */
       const lastMeasurement = await this._getLastResolvedMeasurement();
       assert(!!_.get(lastMeasurement, 'agentId'), 'Agent ID is required');
 

@@ -44,7 +44,7 @@ let showForm =
       />
     </Form.Item>
     <Form.Item>
-      {"Make Public?" |> ste |> E.React.inH3}
+      {"Make Community Public?" |> ste |> E.React.inH3}
       <AntdSwitch
         checked={form.values.isPublic == "TRUE"}
         onChange={e => handleChange(`isPublic, e ? "TRUE" : "FALSE")}
@@ -53,7 +53,7 @@ let showForm =
     {E.React.showIf(
        !creating,
        <Form.Item>
-         {"Make Archived?" |> ste |> E.React.inH3}
+         {"Archive Community?" |> ste |> E.React.inH3}
          <AntdSwitch
            checked={form.values.isArchived == "TRUE"}
            onChange={e => handleChange(`isArchived, e ? "TRUE" : "FALSE")}

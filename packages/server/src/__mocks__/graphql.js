@@ -26,6 +26,10 @@ function GraphQLInputObjectType(x) {
   if (!(this instanceof GraphQLInputObjectType)) return new GraphQLInputObjectType(x);
 }
 
+function GraphQLScalarType(x) {
+  if (!(this instanceof GraphQLScalarType)) return new GraphQLScalarType(x);
+}
+
 module.exports = {
   GraphQLSchema,
   GraphQLObjectType,
@@ -34,6 +38,7 @@ module.exports = {
   GraphQLNonNull,
   GraphQLEnumType,
   GraphQLInputObjectType,
+  GraphQLScalarType,
   parse: () => {
   },
 };

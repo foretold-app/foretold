@@ -4,9 +4,9 @@ external reload: unit => unit = "reload";
 module Query = [%graphql
   {|
     query authentication (
-        $auth0jwt: String!
-        $auth0accessToken: String!
-        $authToken: String!
+        $auth0jwt: JWT
+        $auth0accessToken: String
+        $authToken: String
     ) {
         authentication(
             auth0jwt: $auth0jwt
@@ -28,17 +28,15 @@ let component =
     (auth0Tokens: option(Auth0Tokens.t), authToken: option(string)) => {
   let auth0jwt =
     auth0Tokens
-    |> E.O.fmap((r: Auth0Tokens.t) => r.id_token)
-    |> E.O.default("");
+    |> E.O.fmap((r: Auth0Tokens.t) => Some(Js.Json.string(r.id_token)))
+    |> E.O.default(None);
 
   let auth0accessToken =
     auth0Tokens
-    |> E.O.fmap((r: Auth0Tokens.t) => r.access_token)
-    |> E.O.default("");
+    |> E.O.fmap((r: Auth0Tokens.t) => Some(r.access_token))
+    |> E.O.default(None);
 
-  let authToken = authToken |> E.O.default("");
-
-  let query = Query.make(~auth0jwt, ~auth0accessToken, ~authToken, ());
+  let query = Query.make(~auth0jwt?, ~auth0accessToken?, ~authToken?, ());
 
   <QueryComponent variables=query##variables>
     ...{({result}) =>

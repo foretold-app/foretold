@@ -12,7 +12,6 @@ const { setContextBot } = require('./bots');
 const { setContextPreference } = require('./preferences');
 const { setContextUser } = require('./users');
 const { authenticationInputValidation } = require('./authentications');
-const { authenticationInputJwtValidation } = require('./authentications');
 
 /**
  * Do not try to use DRY principle here.
@@ -65,7 +64,6 @@ const middlewares = {
   Query: {
     authentication: async (resolve, root, args, context, info) => {
       await authenticationInputValidation(root, args, context, info);
-      await authenticationInputJwtValidation(root, args, context, info);
       return resolve(root, args, context, info);
     },
 

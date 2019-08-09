@@ -3,6 +3,13 @@ open Style.Grid;
 
 let component = ReasonReact.statelessComponent("ChannelLayoutPage");
 
+let canX = (permission: Types.permission, record: Types.channel) =>
+  record.permissions
+  |> Rationale.Option.fmap((permissions: Primary.Permissions.t) =>
+       Primary.Permissions.canX(permission, permissions)
+     )
+  |> Rationale.Option.default(false);
+
 let make =
     (
       channelPage: Routing.ChannelPage.t,
@@ -16,10 +23,16 @@ let make =
 
     let topOrdinaryChannel = channel => {
       let joinButton = channelId =>
-        C.Channel.SimpleHeader.joinChannel(channelId);
+        E.React.showIf(
+          canX(`JOIN_CHANNEL, channel),
+          C.Channel.SimpleHeader.joinChannel(channelId),
+        );
 
       let leaveButton = channelId =>
-        C.Channel.SimpleHeader.leaveChannel(channelId);
+        E.React.showIf(
+          canX(`LEAVE_CHANNEL, channel),
+          C.Channel.SimpleHeader.leaveChannel(channelId),
+        );
 
       <>
         <Div float=`left> {channelink(channel)} </Div>

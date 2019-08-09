@@ -3,8 +3,6 @@ open Style.Grid;
 module StatusDisplay = Foretold__Component__StatusDisplay;
 module Items = Foretold__Components__Measurable__Items;
 
-let component = ReasonReact.statelessComponent("MeasurableFullPresentation");
-
 module Styles = {
   open Css;
 
@@ -19,6 +17,7 @@ module Styles = {
   let description = style([paddingTop(`em(1.5))]);
 };
 
+let component = ReasonReact.statelessComponent("MeasurableFullPresentation");
 let make = (~id: string, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _self => {
@@ -39,7 +38,13 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
                <Div flex={`num(1.)}>
                  {Items.series(~m, ()) |> E.O.React.defaultNull}
                  {Items.creatorLink(~m) |> E.O.React.defaultNull}
-                 {Items.editLink(~m)}
+                 {E.React.showIf(
+                    Primary.Permissions.can(
+                      `MEASURABLE_UPDATE,
+                      m.permissions,
+                    ),
+                    Items.editLink(~m),
+                  )}
                  {Items.resolutionEndpoint(~m) |> E.O.React.defaultNull}
                  {Items.endpointResponse(~m) |> E.O.React.defaultNull}
                  {Items.questionLink(~m)}

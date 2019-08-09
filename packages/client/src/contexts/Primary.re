@@ -174,9 +174,6 @@ module Permissions = {
 
   let make = (a: list(permission)): t => {allow: a};
 
-  let canX = (permission: permission, permissions: t): bool =>
-    permissions.allow |> E.L.exists(r => r == permission);
-
   let can = (permission: permission, permissions: option(t)): bool =>
     switch (permissions) {
     | Some(permissions) =>
@@ -526,6 +523,7 @@ module Measurable = {
         ~iAmOwner=None,
         ~min=None,
         ~max=None,
+        ~permissions=None,
         (),
       )
       : t => {
@@ -554,6 +552,7 @@ module Measurable = {
     iAmOwner,
     min,
     max,
+    permissions,
   };
 };
 

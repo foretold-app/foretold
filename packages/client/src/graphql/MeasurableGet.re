@@ -17,7 +17,7 @@ type measurable = {
   createdAt: MomentRe.Moment.t,
   updatedAt: MomentRe.Moment.t,
   expectedResolutionDate: option(MomentRe.Moment.t),
-  state: Primary.MeasurableState.t,
+  state: Types.measurableState,
   stateUpdatedAt: option(MomentRe.Moment.t),
   creator: option(creator),
   labelSubject: option(string),

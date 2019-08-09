@@ -12,6 +12,12 @@ module Query = [%graphql
         isPublic
         membershipCount
         myRole
+        permissions {
+          mutations {
+            allow
+            deny
+          }
+        }
       }
     }
   |}
@@ -19,7 +25,12 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let toChannel = (channel): Primary.Channel.t =>
+let toChannel = (channel): Types.channel => {
+  let allowMutations =
+    channel##permissions##mutations##allow |> E.A.O.concatSome |> E.A.to_list;
+
+  let permissions = Primary.Permissions.make(allowMutations);
+
   Primary.Channel.make(
     ~id=channel##id,
     ~name=channel##name,
@@ -28,8 +39,10 @@ let toChannel = (channel): Primary.Channel.t =>
     ~isPublic=channel##isPublic,
     ~myRole=Some(channel##myRole),
     ~membershipCount=Some(channel##membershipCount),
+    ~permissions=Some(permissions),
     (),
   );
+};
 
 let component = (~id, fn) => {
   let query = Query.make(~id, ());

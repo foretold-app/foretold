@@ -4,7 +4,7 @@ type user = {
 };
 
 type bot = {
-  competitorType: Primary.CompetitorType.t,
+  competitorType: Types.competitorType,
   description: option(string),
   id: string,
   name: string,
@@ -21,7 +21,7 @@ type agent = {
 let toUser = (user: user): Types.user =>
   Primary.User.make(~id=user.id, ~name=user.name, ());
 
-let toBot = (bot: bot): Primary.Bot.t => {
+let toBot = (bot: bot): Types.bot => {
   competitorType: bot.competitorType,
   description: bot.description,
   id: bot.id,
@@ -31,7 +31,7 @@ let toBot = (bot: bot): Primary.Bot.t => {
   permissions: None,
 };
 
-let toAgent = (agent: agent): Primary.Agent.t => {
+let toAgent = (agent: agent): Types.agent => {
   let agentType: option(Primary.AgentType.t) =
     switch (agent.bot, agent.user) {
     | (Some(bot), None) => Some(Bot(toBot(bot)))

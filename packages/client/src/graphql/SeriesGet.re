@@ -10,10 +10,10 @@ type series = {
   creator: option(creator),
 };
 
-let toAgent = (m: creator): Primary.Agent.t =>
+let toAgent = (m: creator): Types.agent =>
   Primary.Agent.make(~id=m.id, ~name=m.name, ());
 
-let toSeries = (m: series): Primary.Series.t =>
+let toSeries = (m: series): Types.series =>
   Primary.Series.make(
     ~id=m.id,
     ~name=m.name,

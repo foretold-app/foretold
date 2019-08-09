@@ -2,7 +2,7 @@ open Utils;
 open MomentRe;
 open Css;
 
-type measurement = Primary.Measurement.t;
+type measurement = Types.measurement;
 type measurable = Types.measurable;
 module Items = Foretold__Components__Measurable__Items;
 
@@ -278,14 +278,14 @@ let getMeasurableLink = (m: measurement) => {
   };
 };
 
-type column = Table.column(Primary.Measurement.t);
+type column = Table.column(Types.measurement);
 
 let predictionValueColumn: column =
   Table.Column.make(
     ~name="Prediction" |> ste,
     ~flex=1,
     ~render=
-      (measurement: Primary.Measurement.t) =>
+      (measurement: Types.measurement) =>
         <div>
           {Helpers.statSummary(measurement) |> E.O.React.defaultNull}
           {Helpers.getValueText(measurement)}
@@ -298,8 +298,7 @@ let agentColumn: column =
     ~name="Agent" |> ste,
     ~flex=1,
     ~render=
-      (measurement: Primary.Measurement.t) =>
-        Helpers.measurerLink(~measurement),
+      (measurement: Types.measurement) => Helpers.measurerLink(~measurement),
     (),
   );
 
@@ -308,7 +307,7 @@ let timeColumn: column =
     ~name="Time" |> ste,
     ~flex=1,
     ~render=
-      (measurement: Primary.Measurement.t) =>
+      (measurement: Types.measurement) =>
         Helpers.relevantAt(~m=measurement) |> E.O.React.defaultNull,
     (),
   );
@@ -317,7 +316,7 @@ let measurableColumn: column =
   Table.Column.make(
     ~name="Measurable" |> ste,
     ~render=
-      (measurement: Primary.Measurement.t) => getMeasurableLink(measurement),
+      (measurement: Types.measurement) => getMeasurableLink(measurement),
     ~flex=2,
     (),
   );
@@ -327,11 +326,11 @@ let getPredictionDistributionColumn = (bounds): column =>
     ~name="Prediction Distribution" |> ste,
     ~flex=2,
     ~render=
-      (measurement: Primary.Measurement.t) =>
+      (measurement: Types.measurement) =>
         Helpers.smallDistribution(measurement, bounds)
         |> E.O.React.defaultNull,
     ~show=
-      (measurement: Primary.Measurement.t) =>
+      (measurement: Types.measurement) =>
         switch (measurement.measurable) {
         | Some(measurable) => measurable.valueType !== `PERCENTAGE
         | _ => true
@@ -341,7 +340,7 @@ let getPredictionDistributionColumn = (bounds): column =>
 
 let bottomSubRowFn =
   Some(
-    (measurement: Primary.Measurement.t) =>
+    (measurement: Types.measurement) =>
       Helpers.getDescription(~m=measurement)
       |> E.O.fmap((c: React.element) => [|FC.Table.Row.textSection(c)|]),
   );
@@ -373,7 +372,7 @@ let make = (measurementsList: list(measurement)): ReasonReact.reactElement => {
 let makeAgentPredictionsTable =
     (
       ~measurementsList: list(measurement),
-      ~onSelect=(_measurement: Primary.Measurement.t) => (),
+      ~onSelect=(_measurement: Types.measurement) => (),
       (),
     )
     : ReasonReact.reactElement => {
@@ -388,7 +387,7 @@ let makeAgentPredictionsTable =
 
   let measurementsList' = measurementsList |> E.L.sort(sort);
 
-  let onRowClb = (measurement: Primary.Measurement.t) => {
+  let onRowClb = (measurement: Types.measurement) => {
     onSelect(measurement);
     ();
   };

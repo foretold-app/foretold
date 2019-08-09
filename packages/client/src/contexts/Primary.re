@@ -356,6 +356,7 @@ module Channel = {
         ~channelMemberships=None,
         ~openedMeasurablesCount=None,
         ~isCurated=false,
+        ~permissions=None,
         (),
       )
       : t => {
@@ -370,6 +371,7 @@ module Channel = {
     channelMemberships,
     openedMeasurablesCount,
     isCurated,
+    permissions,
   };
 
   let getGlobalChannel = (): t =>

@@ -1,11 +1,11 @@
 type bot = {
   id: string,
   name: string,
-  competitorType: Primary.CompetitorType.t,
+  competitorType: Types.competitorType,
   description: option(string),
 };
 
-let toBot = (bot: bot): Primary.Bot.t =>
+let toBot = (bot: bot): Types.bot =>
   Primary.Bot.make(
     ~id=bot.id,
     ~name=Some(bot.name),

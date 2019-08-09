@@ -88,6 +88,7 @@ and channel = {
   myRole: option(myMembershipRole),
   channelMemberships: option(Js.Array.t(channelMembership)),
   openedMeasurablesCount: option(int),
+  permissions: option(permissions),
 }
 and channelMembership = {
   channel: option(channel),

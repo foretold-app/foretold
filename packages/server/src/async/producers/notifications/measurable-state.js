@@ -19,6 +19,8 @@ class MeasurableState extends ProducerNotifications {
     super({});
     assert(!!_.get(measurable, 'id'), 'Measurable ID is required');
     assert(!!_.get(measurable, 'changed'), 'Measurable "changed" is required');
+    assert(!!_.get(measurable, 'get'), 'Measurable "get" is required');
+    assert(!!_.get(measurable, 'previous'), 'Measurable "previous" is required');
     this.measurable = measurable;
   }
 

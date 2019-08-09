@@ -37,12 +37,15 @@ class MemberToCommunity extends ProducerNotifications {
     }
 
     try {
+      /** @type {Models.Channel} */
       const channel = await Producer.data.channels.getOne({
         id: this.channelMembership.channelId,
       });
+      /** @type {Models.Agent} */
       const agent = await Producer.data.agents.getOne({
         id: this.channelMembership.agentId,
       });
+      /** @type {Models.Agent} */
       const inviter = await Producer.data.users.getOne({
         agentId: this.channelMembership.inviterAgentId,
       });
@@ -56,6 +59,7 @@ class MemberToCommunity extends ProducerNotifications {
         channel,
       );
 
+      /** @type {Models.Notification} */
       const notification = await this._queueEmail(replacements);
       await this._assignAgentToNotification(agent, notification);
 

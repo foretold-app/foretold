@@ -7,10 +7,18 @@ export namespace Models {
     id: ObjectID;
     createdAt: string;
     updatedAt: string;
+
+    changed(name: string): boolean;
+
+    previous(name: string): boolean;
+
+    get(name: string): any;
   }
 
   export interface Channel extends Model {
     isPublic: boolean;
+
+    getAgents(): Models.Agent[];
   }
 
   export interface Bot extends Model {
@@ -20,26 +28,58 @@ export namespace Models {
   }
 
   export interface Preference extends Model {
-    emails: boolean;
+    stopAllEmails: boolean;
   }
 
   export interface User extends Model {
     name: string;
     auth0Id: string;
     agentId: ObjectID;
+    email?: string;
+    picture?: string;
+    isEmailVerified: boolean;
+    descriptions?: string;
 
     getAgent(): Models.Agent;
   }
 
   export interface Measurable extends Model {
+    name: string;
+    labelCustom: string;
+    valueType: string;
+    expectedResolutionDate: string;
+    creatorId: ObjectID;
+    resolutionEndpoint: string;
+    stateUpdatedAt: string;
+    labelSubject: string;
+    labelOnDate: string;
+    labelProperty: string;
+    seriesId: string;
+    channelId: string;
+    isArchived: boolean;
     state: string;
+    min: number;
+    max: number;
 
     getCreationNotification(creator: Models.Creator): any;
 
     getUpdateNotifications(creator: Models.Creator): any;
+
+    getCreator(): Models.Agent;
+
+    getChannel(): Models.Channel;
   }
 
   export interface Measurement extends Model {
+    value: any;
+    competitorType: string;
+    measurableId: ObjectID;
+    agentId: ObjectID;
+    relevantAt: string;
+    taggedMeasurementId: ObjectID;
+    description: string;
+    valueText: string;
+
     getCreationNotification(creator: Models.Creator): any;
 
     getMeasurable(): Measurable;

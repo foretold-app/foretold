@@ -33,16 +33,10 @@ module Component = {
 
     agentType == `USER
       ? <>
-          {tab(agentId, subPage, AgentMeasurements)}
-          {tab(agentId, subPage, AgentMeasurables)}
-          {tab(agentId, subPage, AgentBots)}
+          {tab(agentId, subPage, AgentUpdates)}
           {tab(agentId, subPage, AgentCommunities)}
-          {tab(agentId, subPage, AgentUpdates)}
+          {tab(agentId, subPage, AgentBots)}
         </>
-      : <>
-          {tab(agentId, subPage, AgentMeasurements)}
-          {tab(agentId, subPage, AgentMeasurables)}
-          {tab(agentId, subPage, AgentUpdates)}
-        </>;
+      : <> {tab(agentId, subPage, AgentUpdates)} </>;
   };
 };

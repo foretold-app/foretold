@@ -76,26 +76,15 @@ let link = (linkType: LinkType.linkType, str) =>
 
 let userDropdown = agentId =>
   <div className=StylesDropdown.actions>
-    {link(Internal(Profile), "Profile")}
-    {link(
-       Internal(Agent({agentId, subPage: AgentMeasurables})),
-       "My Questions",
-     )}
-    {link(Internal(Agent({agentId, subPage: AgentBots})), "My Bots")}
-    {link(
-       Internal(Agent({agentId, subPage: AgentMeasurements})),
-       "My Predictions",
-     )}
+    {link(Internal(Agent({agentId, subPage: AgentUpdates})), "My Profile")}
     {link(
        Internal(Agent({agentId, subPage: AgentCommunities})),
        "My Communities",
      )}
-    {link(
-       Internal(Agent({agentId, subPage: AgentUpdates})),
-       "My Activities",
-     )}
+    {link(Internal(Agent({agentId, subPage: AgentBots})), "My Bots")}
+    {link(Internal(Profile), "User Settings")}
+    {link(Internal(Preferences), "Email Preferences")}
     {link(Internal(ChannelNew), "Make a New Community")}
-    {link(Internal(Preferences), "Preferences")}
     {link(Action(_ => Auth.Actions.logout()), "Logout")}
     <div className=StylesDropdown.clear />
   </div>;
@@ -120,12 +109,6 @@ let make = (~loggedInUser: Types.user, _children) => {
   ...component,
   render: _self =>
     <Div styles=[Styles.outer]>
-      <Div float=`left>
-        <Link.Jsx2
-          linkType={Internal(ChannelIndex)} className=Styles.headerLink>
-          {"Communities" |> ste}
-        </Link.Jsx2>
-      </Div>
       <Div float=`left>
         <Link.Jsx2
           linkType={Internal(EntityIndex)} className=Styles.headerLink>

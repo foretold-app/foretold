@@ -9,7 +9,7 @@ module Styles = {
 let title =
   <FC.Base.Div float=`left>
     <FC.PageCard.HeaderRow.Title>
-      {"Agent Bots" |> ReasonReact.string}
+      {"Bots" |> ReasonReact.string}
     </FC.PageCard.HeaderRow.Title>
   </FC.Base.Div>;
 

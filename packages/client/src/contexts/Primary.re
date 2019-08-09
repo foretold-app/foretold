@@ -99,7 +99,7 @@ module ChannelMembershipRole = {
   let toString = (t: t) =>
     switch (t) {
     | `ADMIN => "Admin"
-    | `VIEWER => "Viewer"
+    | `VIEWER => "Member"
     };
 };
 

@@ -36,7 +36,7 @@ module Columns = {
 
   let item: column =
     Table.Column.make(
-      ~name="Item" |> Utils.ste,
+      ~name="Question" |> Utils.ste,
       ~render=(r: record) => r |> getName,
       ~flex=2,
       (),

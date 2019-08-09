@@ -67,7 +67,7 @@ module Columns = {
             </div>
           | `VIEWER =>
             <div className="ant-tag ant-tag-green">
-              {"Viewer" |> ReasonReact.string}
+              {"Member" |> ReasonReact.string}
             </div>
           },
       (),
@@ -104,7 +104,7 @@ module Columns = {
                      agent.id,
                      channelId,
                      `VIEWER,
-                     "Change to Viewer",
+                     "Change to Member",
                    ),
                  )
                | _ => <div />

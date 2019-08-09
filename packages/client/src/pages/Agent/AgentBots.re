@@ -33,13 +33,13 @@ let agentSection = (agent: AgenGet.agent) =>
 let component = ReasonReact.statelessComponent("AgentBots");
 
 module Columns = {
-  type column = Table.column(Primary.Bot.t);
+  type column = Table.column(Types.bot);
 
   let nameColumn: column =
     Table.Column.make(
       ~name="Name" |> ste,
       ~render=
-        (bot: Primary.Bot.t) =>
+        (bot: Types.bot) =>
           switch (bot.name, bot.agent) {
           | (Some(name), Some(agent)) =>
             <Link.Jsx2
@@ -59,7 +59,7 @@ module Columns = {
     Table.Column.make(
       ~name="Description" |> ste,
       ~render=
-        (bot: Primary.Bot.t) =>
+        (bot: Types.bot) =>
           bot.description |> Rationale.Option.default("") |> ste,
       (),
     );
@@ -68,11 +68,11 @@ module Columns = {
     Table.Column.make(
       ~name="Token" |> ste,
       ~render=
-        (bot: Primary.Bot.t) =>
+        (bot: Types.bot) =>
           <div className=Styles.paddingRight>
             <Antd.Input value={bot.token |> Rationale.Option.default("")} />
           </div>,
-      ~show=(bot: Primary.Bot.t) => bot.token != None,
+      ~show=(bot: Types.bot) => bot.token != None,
       (),
     );
 
@@ -80,12 +80,12 @@ module Columns = {
     Table.Column.make(
       ~name="Edit" |> ste,
       ~render=
-        (bot: Primary.Bot.t) =>
+        (bot: Types.bot) =>
           <Link.Jsx2 linkType={Internal(BotEdit(bot.id))}>
             {"Edit Bot" |> ste}
           </Link.Jsx2>,
       ~show=
-        (bot: Primary.Bot.t) =>
+        (bot: Types.bot) =>
           Primary.Permissions.can(`BOT_UPDATE, bot.permissions),
       (),
     );

@@ -30,6 +30,11 @@ module Query = [%graphql
               }
               min
               max
+              permissions {
+                mutations {
+                  allow
+                }
+              }
           }
       }
     |}
@@ -62,22 +67,31 @@ type measurableQuery = {
       "id": string,
       "name": option(string),
     }),
-  "state": Primary.MeasurableState.t,
+  "state": Types.measurableState,
   "valueType": Types.valueType,
   "stateUpdatedAt": option(MomentRe.Moment.t),
   "updatedAt": MomentRe.Moment.t,
   "min": option(float),
   "max": option(float),
+  "permissions": {
+    .
+    "mutations": {. "allow": Js.Array.t(option(Types.permission))},
+  },
 };
 
 let queryMeasurable = (m: measurableQuery): Types.measurable => {
-  let agent: option(Primary.Agent.t) =
+  let agent: option(Types.agent) =
     m##creator
     |> E.O.fmap(r => Primary.Agent.make(~id=r##id, ~name=r##name, ()));
 
-  let series: option(Primary.Series.t) =
+  let series: option(Types.series) =
     m##series
     |> E.O.fmap(r => Primary.Series.make(~id=r##id, ~name=r##name, ()));
+
+  let allowMutations =
+    m##permissions##mutations##allow |> E.A.O.concatSome |> E.A.to_list;
+
+  let permissions = Primary.Permissions.make(allowMutations);
 
   Primary.Measurable.make(
     ~id=m##id,
@@ -100,6 +114,7 @@ let queryMeasurable = (m: measurableQuery): Types.measurable => {
     ~min=m##min,
     ~max=m##max,
     ~series,
+    ~permissions=Some(permissions),
     (),
   );
 };

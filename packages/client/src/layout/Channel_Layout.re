@@ -9,7 +9,7 @@ let makeWithPage =
   | Some(loggedInUser) =>
     let loadChannel = ChannelGet.component2(~id=channelId);
 
-    let successFn = (channel: Primary.Channel.t) => {
+    let successFn = (channel: Types.channel) => {
       let layout =
         Channel_Layout_C.makeWithEl(
           channelPage,

@@ -35,13 +35,6 @@ let removeFromChannel = (agentId, channelId) =>
 module Columns = {
   type column = Table.column(Types.channelMembership);
 
-  let canX = (permission: Types.permission, record: Types.channelMembership) =>
-    record.permissions
-    |> Rationale.Option.fmap((permissions: Primary.Permissions.t) =>
-         Primary.Permissions.canX(permission, permissions)
-       )
-    |> Rationale.Option.default(false);
-
   let agentColumn: column =
     Table.Column.make(
       ~name="Agent" |> ReasonReact.string,
@@ -90,7 +83,10 @@ module Columns = {
               {switch (membership.role, membership.agent) {
                | (`VIEWER, Some(agent)) =>
                  E.React.showIf(
-                   canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, membership),
+                   Primary.Permissions.can(
+                     `CHANNEL_MEMBERSHIP_ROLE_UPDATE,
+                     membership.permissions,
+                   ),
                    changeRoleAction(
                      agent.id,
                      channelId,
@@ -100,7 +96,10 @@ module Columns = {
                  )
                | (`ADMIN, Some(agent)) =>
                  E.React.showIf(
-                   canX(`CHANNEL_MEMBERSHIP_ROLE_UPDATE, membership),
+                   Primary.Permissions.can(
+                     `CHANNEL_MEMBERSHIP_ROLE_UPDATE,
+                     membership.permissions,
+                   ),
                    changeRoleAction(
                      agent.id,
                      channelId,
@@ -122,7 +121,10 @@ module Columns = {
           (membership: Types.channelMembership) =>
             switch (
               membership.agent,
-              canX(`CHANNEL_MEMBERSHIP_DELETE, membership),
+              Primary.Permissions.can(
+                `CHANNEL_MEMBERSHIP_DELETE,
+                membership.permissions,
+              ),
             ) {
             | (Some(agent), true) => removeFromChannel(agent.id, channelId)
             | _ => ReasonReact.null
@@ -222,7 +224,7 @@ let make =
     (
       ~channelId: string,
       ~layout=SLayout.FullPage.makeWithEl,
-      ~channel: Primary.Channel.t,
+      ~channel: Types.channel,
       _children,
     ) => {
   ...component,

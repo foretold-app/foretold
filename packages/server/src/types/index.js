@@ -14,6 +14,7 @@ const invitationStatus = require('./enums/invitation-status');
 const preferences = require('./preferences');
 const invitations = require('./invitations');
 const feedItems = require('./feed-items');
+const jwt = require('./jwt');
 
 module.exports = {
   bots,
@@ -32,4 +33,5 @@ module.exports = {
   invitationStatus,
   invitations,
   feedItems,
+  jwt,
 };

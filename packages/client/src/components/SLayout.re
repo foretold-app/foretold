@@ -150,19 +150,19 @@ module FullPage = {
 let channelBack = (~onClick, ()) =>
   <FC__Button onClick> {"< Back" |> ReasonReact.string} </FC__Button>;
 
-let channelink = (c: Primary.Channel.t) =>
+let channelink = (c: Types.channel) =>
   <Link.Jsx2
     linkType={Internal(ChannelShow(c.id))} className=Styles.channelText>
     {c |> Primary.Channel.present}
   </Link.Jsx2>;
 
-let channelEditLink = (c: Primary.Channel.t) =>
+let channelEditLink = (c: Types.channel) =>
   <Link.Jsx2
     linkType={Internal(ChannelEdit(c.id))} className=Styles.headerText>
     {"edit" |> ste}
   </Link.Jsx2>;
 
-let seriesHead = (channel: Primary.Channel.t, seriesName) =>
+let seriesHead = (channel: Types.channel, seriesName) =>
   <>
     <div className=Styles.seriesText>
       <Icon.Icon icon="LAYERS" />

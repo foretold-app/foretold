@@ -3,7 +3,7 @@ module ReducerConfig = {
 
   type callFnParams = {
     channelId: string,
-    states: array(Primary.MeasurableState.t),
+    states: array(Types.measurableState),
   };
 
   let getId = (params: itemType) => params.id;
@@ -19,7 +19,7 @@ module ReducerConfig = {
 
 module Reducer = PaginationReducerFunctor.Make(ReducerConfig);
 
-type channel = Primary.Channel.t;
+type channel = Types.channel;
 type seriesCollection = array(SeriesCollectionGet.series);
 type loggedInUser = Types.user;
 type reducerParams = Reducer.Types.reducerParams;

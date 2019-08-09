@@ -175,9 +175,9 @@ const schema = new graphql.GraphQLSchema({
       authentication: {
         type: graphql.GraphQLNonNull(types.authentications.authenticationJwt),
         args: {
-          auth0jwt: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-          auth0accessToken: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-          authToken: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          auth0jwt: { type: types.jwt },
+          auth0accessToken: { type: graphql.GraphQLString },
+          authToken: { type: graphql.GraphQLString },
         },
         resolve: resolvers.authentications.exchangeToken,
       },

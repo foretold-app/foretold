@@ -1,8 +1,8 @@
 [@bs.config {jsx: 3}];
 
 module Columns = {
-  type record = Primary.Channel.t;
-  type column = Table.column(Primary.Channel.t);
+  type record = Types.channel;
+  type column = Table.column(Types.channel);
 
   let nameColumn: column =
     Table.Column.make(

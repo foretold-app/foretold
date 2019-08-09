@@ -16,6 +16,22 @@ right on PostreSQL side. But do not forget that to migrate an old data we should
 order it with "createdAt" field and only then give each object new ID (if it will
 need).
 
+### Application Flows
+1. "Measurables" have "states". Some part of the app moves "Open" measurables
+to "Judgement Pending" measurables. Another part moves from "Judgement Pending"
+to "Judged" or "Agent" does it. 
+
+2. "Measurements" are being made by "Agents" though the client. They are called
+"Competitive". If them make "Bots" these are "Aggregation" measurements. So each
+time period some "Bots" make "Aggregations" of previous "Measurements".
+
+### Authentication Flow
+1. Get "Server Side JWT" using (one of):
+- "Auth0 JWT", "Auth0 Access Token"
+- "One-time Token"
+- "Long-term Token"
+2. Get API responses with "Server Side JWT".
+
 ### Application
 - Server Side Part
 - Client Part (UI)
@@ -48,7 +64,10 @@ the application works;
 - **Auth0.com** - is an external system to identify users; 
 - **Association** - it is a link between objects represents real world objects
 associations, for instance Each School has its own Students ("has many" in 
-this case).
+this case);
+- **Competitive Measurement** - "Agents" do it thought the client;
+- **Aggregation Measurement** - result of "Bots" work;
+- **Unresolved Measurement** - ...;
 
 ### Graphql Terms
 - Connection - edges, nodes;
@@ -125,13 +144,6 @@ descriptions;
 ### External System Requirements
 - Auth0.com
 - Amazon AWS SES
-
-### Authentication Flow
-1. Get "Server Side JWT" using (one of):
-- "Auth0 JWT", "Auth0 Access Token"
-- "One-time Token"
-- "Long-term Token"
-2. Get API responses with "Server Side JWT".
 
 ### Some Words About Hooks
 

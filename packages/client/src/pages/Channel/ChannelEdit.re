@@ -40,7 +40,7 @@ let make = (~channelId: string, ~layout, _children) => {
         </FC.Base.Div>
       </>;
 
-    let form = (mutation, channel: Primary.Channel.t) =>
+    let form = (mutation, channel: Types.channel) =>
       ChannelFormShower.make(
         ~onSubmit=
           ({values}) =>

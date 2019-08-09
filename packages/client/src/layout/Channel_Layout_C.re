@@ -7,19 +7,25 @@ let make =
     (
       channelPage: Routing.ChannelPage.t,
       loggedInUser: Types.user,
-      channel: option(Primary.Channel.t),
+      channel: option(Types.channel),
       {head, body}: LayoutConfig.t,
     ) => {
   ...component,
   render: _ => {
     let channelId = channelPage.channelId;
 
-    let topOrdinaryChannel = channel => {
+    let topOrdinaryChannel = (channel: Types.channel) => {
       let joinButton = channelId =>
-        C.Channel.SimpleHeader.joinChannel(channelId);
+        E.React.showIf(
+          Primary.Permissions.can(`JOIN_CHANNEL, channel.permissions),
+          C.Channel.SimpleHeader.joinChannel(channelId),
+        );
 
       let leaveButton = channelId =>
-        C.Channel.SimpleHeader.leaveChannel(channelId);
+        E.React.showIf(
+          Primary.Permissions.can(`LEAVE_CHANNEL, channel.permissions),
+          C.Channel.SimpleHeader.leaveChannel(channelId),
+        );
 
       <>
         <Div float=`left> {channelink(channel)} </Div>
@@ -92,7 +98,7 @@ let makeWithEl =
     (
       channelPage: Routing.ChannelPage.t,
       loggedInUser,
-      channel: option(Primary.Channel.t),
+      channel: option(Types.channel),
       layout: LayoutConfig.t,
     ) =>
   make(channelPage, loggedInUser, channel, layout) |> ReasonReact.element;

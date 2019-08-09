@@ -6,7 +6,7 @@ type series = {
   name: option(string),
 };
 
-let toSeries = (c: series): Primary.Series.t =>
+let toSeries = (c: series): Types.series =>
   Primary.Series.make(~id=c.id, ~description=c.description, ~name=c.name, ());
 
 type creator = {
@@ -22,7 +22,7 @@ type channel = {
   isArchived: bool,
 };
 
-let toAgent = (c: creator): Primary.Agent.t =>
+let toAgent = (c: creator): Types.agent =>
   Primary.Agent.make(~id=c.id, ~name=c.name, ());
 
 type node = {
@@ -40,7 +40,7 @@ type node = {
   createdAt: MomentRe.Moment.t,
   updatedAt: MomentRe.Moment.t,
   expectedResolutionDate: option(MomentRe.Moment.t),
-  state: Primary.MeasurableState.t,
+  state: Types.measurableState,
   stateUpdatedAt: option(MomentRe.Moment.t),
   creator: option(creator),
   series: option(series),
@@ -211,7 +211,7 @@ let queryToComponent = (query, innerComponentFn) =>
     }
   </QueryComponent>;
 
-type measurableStates = Primary.MeasurableState.t;
+type measurableStates = Types.measurableState;
 
 type inputType('a) =
   (

@@ -3,7 +3,7 @@ type measurable = {
   "id": string,
   "name": string,
   "channelId": string,
-  "state": Primary.MeasurableState.t,
+  "state": Types.measurableState,
   "valueType": Types.valueType,
   "stateUpdatedAt": option(MomentRe.Moment.t),
   "expectedResolutionDate": option(MomentRe.Moment.t),
@@ -20,7 +20,7 @@ type measurement = {
           .
           "id": string,
           "name": string,
-          "competitorType": Primary.CompetitorType.t,
+          "competitorType": Types.competitorType,
         }),
       "id": string,
       "name": option(string),
@@ -34,7 +34,7 @@ type measurement = {
   "description": option(string),
   "valueText": option(string),
   "relevantAt": option(MomentRe.Moment.t),
-  "competitorType": Primary.CompetitorType.t,
+  "competitorType": Types.competitorType,
   "createdAt": MomentRe.Moment.t,
   "taggedMeasurementId": option(string),
   "measurable": option(measurable),
@@ -43,7 +43,7 @@ type measurement = {
 
 type measurements = option({. "edges": option(Js.Array.t(measurement))});
 
-let toMeasurement = (measurement: measurement): Primary.Measurement.t => {
+let toMeasurement = (measurement: measurement): Types.measurement => {
   let agent = measurement##agent;
 
   let agentType: option(Primary.AgentType.t) =
@@ -71,7 +71,7 @@ let toMeasurement = (measurement: measurement): Primary.Measurement.t => {
          }
        );
 
-  let agent: option(Primary.Agent.t) =
+  let agent: option(Types.agent) =
     agent
     |> Rationale.Option.fmap(k =>
          Primary.Agent.make(~id=k##id, ~agentType, ())
@@ -199,7 +199,7 @@ let queryToComponent = (query, innerComponentFn) =>
   )
   |> ReasonReact.element;
 
-type measurableStates = Primary.MeasurableState.t;
+type measurableStates = Types.measurableState;
 
 type inputType('a) =
   (~first: int=?, ~last: int=?, ~after: string=?, ~before: string=?, unit) =>

@@ -1,8 +1,8 @@
 module ReducerConfig = {
-  type itemType = Primary.Measurement.t;
+  type itemType = Types.measurement;
   type callFnParams = string;
 
-  let getId = (e: Primary.Measurement.t) => e.id;
+  let getId = (e: Types.measurement) => e.id;
   let callFn = (agentId: callFnParams) =>
     MeasurementsGet.componentWithAgent(~agentId);
 
@@ -54,7 +54,7 @@ let make =
             }
 
           | (Success(connection), None) =>
-            let onSelectClb = (e: Primary.Measurement.t) => {
+            let onSelectClb = (e: Types.measurement) => {
               Reducer.Components.sendSelectItem(
                 selectWithPaginationParams,
                 e.id,

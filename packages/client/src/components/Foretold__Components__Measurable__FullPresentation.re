@@ -3,8 +3,6 @@ open Style.Grid;
 module StatusDisplay = Foretold__Component__StatusDisplay;
 module Items = Foretold__Components__Measurable__Items;
 
-let component = ReasonReact.statelessComponent("MeasurableFullPresentation");
-
 module Styles = {
   open Css;
 
@@ -19,15 +17,16 @@ module Styles = {
   let description = style([paddingTop(`em(1.5))]);
 };
 
+let component = ReasonReact.statelessComponent("MeasurableFullPresentation");
 let make = (~id: string, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _self => {
     MeasurableWithMeasurementsGet.component(~id)
     |> E.F.apply((m: Types.measurable) => {
          let userAgentId =
-           loggedInUser.agent |> E.O.fmap((r: Primary.Agent.t) => r.id);
+           loggedInUser.agent |> E.O.fmap((r: Types.agent) => r.id);
 
-         let creatorId = m.creator |> E.O.fmap((r: Primary.Agent.t) => r.id);
+         let creatorId = m.creator |> E.O.fmap((r: Types.agent) => r.id);
 
          <>
            <Div styles=[Styles.header]>
@@ -39,7 +38,13 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
                <Div flex={`num(1.)}>
                  {Items.series(~m, ()) |> E.O.React.defaultNull}
                  {Items.creatorLink(~m) |> E.O.React.defaultNull}
-                 {Items.editLink(~m)}
+                 {E.React.showIf(
+                    Primary.Permissions.can(
+                      `MEASURABLE_UPDATE,
+                      m.permissions,
+                    ),
+                    Items.editLink(~m),
+                  )}
                  {Items.resolutionEndpoint(~m) |> E.O.React.defaultNull}
                  {Items.endpointResponse(~m) |> E.O.React.defaultNull}
                  {Items.questionLink(~m)}
@@ -68,13 +73,13 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
                                     m:
                                       option(
                                         Primary.Connection.t(
-                                          Primary.Measurement.t,
+                                          Types.measurement,
                                         ),
                                       ),
                                   ) =>
                 m
                 |> E.O.React.fmapOrNull(
-                     (b: Primary.Connection.t(Primary.Measurement.t)) =>
+                     (b: Primary.Connection.t(Types.measurement)) =>
                      b.edges
                      |> E.A.to_list
                      |> Foretold__Components__Measurements__Table.make

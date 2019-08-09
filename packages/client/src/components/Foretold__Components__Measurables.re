@@ -47,8 +47,8 @@ module BasicTable = {
                       flex={`num(3.)}
                       className=Css.(
                         style([
-                          paddingTop(`em(1.0)),
-                          paddingBottom(`em(0.5)),
+                          paddingTop(`em(0.3)),
+                          paddingBottom(`em(0.3)),
                         ])
                       )>
                       <div className=Styles.mainColumn>

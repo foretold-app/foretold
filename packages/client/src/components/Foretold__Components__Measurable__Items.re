@@ -84,7 +84,7 @@ let dateItem = (~m: measurable, ~showOn=true, ~onStyle=dateOnStyle, ()) =>
 
 let link = (~m: measurable) => {
   open Css;
-  let name = style([fontSize(`em(1.1)), color(`hex("333"))]);
+  let name = style([fontSize(`em(1.)), color(`hex("333"))]);
   <>
     {MeasurableEntityLinks.nameEntityLink(~m, ~className=Shared.TagLink.item)
      |> E.O.React.defaultNull}
@@ -93,7 +93,7 @@ let link = (~m: measurable) => {
        ~className=Shared.TagLink.property,
      )
      |> E.O.React.defaultNull}
-    <span className=name> <Markdown source={m.name} /> </span>
+    <span className=name> {m.name |> ste} </span>
     {dateItem(~m, ()) |> E.O.React.defaultNull}
   </>;
 };

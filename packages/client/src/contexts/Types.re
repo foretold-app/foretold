@@ -122,6 +122,7 @@ and measurable = {
   iAmOwner: option(bool),
   min: option(float),
   max: option(float),
+  permissions: option(permissions),
 }
 and measurement = {
   id: string,

@@ -526,6 +526,7 @@ module Measurable = {
         ~iAmOwner=None,
         ~min=None,
         ~max=None,
+        ~permissions=None,
         (),
       )
       : t => {
@@ -554,6 +555,7 @@ module Measurable = {
     iAmOwner,
     min,
     max,
+    permissions,
   };
 };
 

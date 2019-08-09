@@ -71,7 +71,7 @@ export class GuesstimateInput extends React.Component {
       }
     
     render() {
-        return (<Input type="text" value={this.state.value} onChange={this.handleChange} ref={input => this.textInput = input}/>
+        return (<Input type="text" placeholder="10 to 100" value={this.state.value} onChange={this.handleChange} ref={input => this.textInput = input}/>
         )
     }
 }

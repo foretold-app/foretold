@@ -36,7 +36,7 @@
     "file-loader": "^0.8.4",
     "json-loader": "^0.5.3",
     "ejs-compiled-loader": "^2.1.1",
-    "babel-loader": "^5.3.2",
+    "babel-loader": "^8.0.6",
     "css-loader": "^0.23.1",
     "jsx-loader": "^0.13.2",
     "postcss-loader": "^0.8.1",

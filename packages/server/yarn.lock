@@ -509,6 +509,14 @@
   resolved "https://registry.yarnpkg.com/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"
   integrity sha512-KEIlhXnIutzKwRbQkGWb/I4HFqBuUykAdHgDED6xqwXJfONCjF5VoE0cXEiurh3XauygxzeDzgtXUqvLkxFzzA==
 
+"@types/express-jwt@0.0.42":
+  version "0.0.42"
+  resolved "https://registry.yarnpkg.com/@types/express-jwt/-/express-jwt-0.0.42.tgz#4f04e1fadf9d18725950dc041808a4a4adf7f5ae"
+  integrity sha512-WszgUddvM1t5dPpJ3LhWNH8kfNN8GPIBrAGxgIYXVCEGx6Bx4A036aAuf/r5WH9DIEdlmp7gHOYvSM6U87B0ag==
+  dependencies:
+    "@types/express" "*"
+    "@types/express-unless" "*"
+
 "@types/express-serve-static-core@*":
   version "4.16.0"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.16.0.tgz#fdfe777594ddc1fe8eb8eccce52e261b496e43e7"
@@ -517,6 +525,13 @@
     "@types/events" "*"
     "@types/node" "*"
     "@types/range-parser" "*"
+
+"@types/express-unless@*":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@types/express-unless/-/express-unless-0.5.1.tgz#4f440b905e42bbf53382b8207bc337dc5ff9fd1f"
+  integrity sha512-5fuvg7C69lemNgl0+v+CUxDYWVPSfXHhJPst4yTLcqi4zKJpORCxnDrnnilk3k0DTq/WrAUdvXFs01+vUqUZHw==
+  dependencies:
+    "@types/express" "*"
 
 "@types/express@*":
   version "4.16.0"
@@ -1151,18 +1166,18 @@ atob@^2.1.1:
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
 auth0@^2.18.0:
-  version "2.18.0"
-  resolved "https://registry.yarnpkg.com/auth0/-/auth0-2.18.0.tgz#9360d7b2cb7bb201dc44c774032cfeefd8762a98"
-  integrity sha512-ke++pr8Iaq1niuNQt0CLj+RlEoOFwk1LeTgsI30StvL4bYHT+rO0kaFr7QdWdXON5dDHxqtaVDE9p7OvxBcF5Q==
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/auth0/-/auth0-2.19.0.tgz#b5c153fe774be663cc5221289db21b7a6a757f56"
+  integrity sha512-mfOKmmJl+IUnv7bcvtaFh21ki8FQaALbcm1XYqkqrlNlDrq73uQVRiGtiAP/lpVWInPR+X8TQH6phYXMsrBPlw==
   dependencies:
-    bluebird "^2.10.2"
-    jsonwebtoken "^8.3.0"
-    jwks-rsa "^1.4.0"
-    lru-memoizer "^1.12.0"
-    object.assign "^4.0.4"
+    bluebird "^3.5.5"
+    jsonwebtoken "^8.5.1"
+    jwks-rsa "^1.6.0"
+    lru-memoizer "^2.0.1"
+    object.assign "^4.1.0"
     request "^2.88.0"
-    rest-facade "^1.10.1"
-    retry "^0.10.1"
+    rest-facade "^1.11.0"
+    retry "^0.12.0"
 
 aws-sign2@~0.7.0:
   version "0.7.0"
@@ -1267,17 +1282,7 @@ binary-extensions@^1.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-1.8.0.tgz#48ec8d16df4377eae5fa5884682480af4d95c774"
   integrity sha1-SOyNFt9Dd+rl+liEaCSAr02Vx3Q=
 
-bluebird@^2.10.2:
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-2.11.0.tgz#534b9033c022c9579c56ba3b3e5a5caafbb650e1"
-  integrity sha1-U0uQM8AiyVecVro7Plpcqvu2UOE=
-
-bluebird@^3.4.0, bluebird@^3.4.1, bluebird@^3.5.0:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.2.tgz#1be0908e054a751754549c270489c1505d4ab15a"
-  integrity sha512-dhHTWMI7kMx5whMQntl7Vr9C6BvV10lFXDAasnqnrMYhXVCzzk6IO9Fo2L75jXHT07WrOngL1WDXOp+yYS91Yg==
-
-bluebird@^3.5.3:
+bluebird@^3.4.0, bluebird@^3.4.1, bluebird@^3.5.0, bluebird@^3.5.3, bluebird@^3.5.5:
   version "3.5.5"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.5.tgz#a8d0afd73251effbbd5fe384a77d73003c17a71f"
   integrity sha512-5am6HnnfN+urzt4yfg7IgTbotDjIT/u8AJpEt0sIU9FtXfVeezXAPKswrG+xKUCOYAINpSdgZVDU6QFh+cuH3w==
@@ -4445,7 +4450,7 @@ jsonfile@^4.0.0:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
-jsonwebtoken@^8.3.0, jsonwebtoken@^8.5.1:
+jsonwebtoken@^8.5.1:
   version "8.5.1"
   resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.5.1.tgz#00e71e0b8df54c2121a1f26137df2280673bcc0d"
   integrity sha512-XjwVfRS6jTMsqYs0EsuJ4LGxXV14zQybNd4L2r0UvbVnSF9Af8x7p5MzbJ90Ioz/9TI41/hTCvznF/loiSzn8w==
@@ -4479,11 +4484,12 @@ jwa@^1.4.1:
     ecdsa-sig-formatter "1.0.11"
     safe-buffer "^5.0.1"
 
-jwks-rsa@^1.4.0:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/jwks-rsa/-/jwks-rsa-1.5.1.tgz#05b7f1ba4e9829162e2aa3ab6a79d539416de200"
-  integrity sha512-FcH0mrrfS/5CDArzw7y4AIsNJ15SkAb8XTmfEnpUDmEsUf/4KfSQifff7hYEyrZuKnhisn4L9Pme4fb/ZoHKqQ==
+jwks-rsa@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/jwks-rsa/-/jwks-rsa-1.6.0.tgz#d36356398a67619b237becfe8f2db2b66829b10f"
+  integrity sha512-gLhpd7Ka7Jy8ofm9OVj0PFPtSdx3+W2dncF3UCA1wDTAbvfiB1GhHbbyQlz8bqLF5+rge7pgD/DALRfgZi8Fgg==
   dependencies:
+    "@types/express-jwt" "0.0.42"
     debug "^2.6.9"
     jsonwebtoken "^8.5.1"
     limiter "^1.1.4"
@@ -4629,6 +4635,11 @@ lock@~0.1.2:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/lock/-/lock-0.1.4.tgz#fec7deaef17e7c3a0a55e1da042803e25d91745d"
   integrity sha1-/sfervF+fDoKVeHaBCgD4l2RdF0=
+
+lodash.clonedeep@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+  integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
 
 lodash.debounce@^4.0.8:
   version "4.0.8"
@@ -4794,6 +4805,14 @@ lru-memoizer@^1.12.0:
     lodash "^4.17.4"
     lru-cache "~4.0.0"
     very-fast-args "^1.1.0"
+
+lru-memoizer@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/lru-memoizer/-/lru-memoizer-2.0.1.tgz#f21e015bb6856483f574070be11ca16b0c010693"
+  integrity sha512-kGl+zlIqdQL24f0Q9IUSUZeSvA7nqXPFLA7suFh00v4KVqfXkZJtkPfTfXV/oQMSPfNr6VT4xGkRAUPhFnGyxQ==
+  dependencies:
+    lodash.clonedeep "^4.5.0"
+    lru-cache "~4.0.0"
 
 lru-queue@0.1:
   version "0.1.0"
@@ -5364,7 +5383,7 @@ object-visit@^1.0.0:
   dependencies:
     isobject "^3.0.0"
 
-object.assign@^4.0.4:
+object.assign@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/object.assign/-/object.assign-4.1.0.tgz#968bf1100d7956bb3ca086f006f846b3bc4008da"
   integrity sha512-exHJeq6kBKj58mqGyTQ9DFvrZC/eR6OwxzoM9YRoGBqrXYonaFyGiFMuc9VZrXf7DarreEwMpurG3dd+CNyW5w==
@@ -6347,7 +6366,7 @@ resolve@^1.11.0, resolve@^1.3.2:
   dependencies:
     path-parse "^1.0.6"
 
-rest-facade@^1.10.1:
+rest-facade@^1.11.0:
   version "1.11.0"
   resolved "https://registry.yarnpkg.com/rest-facade/-/rest-facade-1.11.0.tgz#96c99f3051ae3ea87600f90227d5ca7e1496f91d"
   integrity sha512-/LtQhugC4zRc+3qDF9gvyQCMbejeviYCPCpTT1Dj9/ty+eCLeUX1iUOR//iLGJvg3wikQShvphRB1MOufEmB0w==
@@ -6382,11 +6401,6 @@ retry@0.12.0, retry@^0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/retry/-/retry-0.12.0.tgz#1b42a6266a21f07421d1b0b54b7dc167b01c013b"
   integrity sha1-G0KmJmoh8HQh0bC1S33BZ7AcATs=
-
-retry@^0.10.1:
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/retry/-/retry-0.10.1.tgz#e76388d217992c252750241d3d3956fed98d8ff4"
-  integrity sha1-52OI0heZLCUnUCQdPTlW/tmNj/Q=
 
 rimraf@2.6.3, rimraf@^2.5.4, rimraf@^2.6.3:
   version "2.6.3"

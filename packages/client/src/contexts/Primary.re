@@ -275,14 +275,15 @@ module Channel = {
   module Styles = {
     open Css;
     let hash = style([marginRight(`px(4))]);
-    let globe = style([marginRight(`px(1)), marginLeft(`px(-5))]);
+    let globeList = style([marginRight(`px(1)), marginLeft(`px(-4))]);
+    let globe = style([marginRight(`px(4))]);
     let lock =
       style([fontSize(`em(0.8)), float(`left), marginRight(`px(0))]);
   };
 
-  let present = (~hashClassName="", channel: t) =>
+  let present = (~className="", channel: t) =>
     <span>
-      <span className=hashClassName>
+      <span className>
         {channel.isPublic
            ? <span className=Styles.hash> {"#" |> ste} </span>
            : <span className=Styles.lock> <Icon.Icon icon="LOCK" /> </span>}
@@ -290,10 +291,10 @@ module Channel = {
       <span> {channel.name |> ste} </span>
     </span>;
 
-  let presentGlobal = (~hashClassName="") =>
+  let presentGlobal = (~className="", ~symbolClassName=Styles.globeList, ()) =>
     <span>
-      <span className=hashClassName>
-        <span className=Styles.globe> {{js|🌎|js} |> ste} </span>
+      <span className>
+        <span className=symbolClassName> {{js|🌎|js} |> ste} </span>
       </span>
       <span> {"Home" |> ste} </span>
     </span>;

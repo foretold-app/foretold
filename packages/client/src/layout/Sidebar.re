@@ -83,7 +83,7 @@ let make = (~channelId, ~loggedInUser: Types.user, _children) => {
           className={
             Some("home") == channelId ? Styles.selectedItem : Styles.item
           }>
-          {Primary.Channel.presentGlobal(~hashClassName=Styles.hash)}
+          {Primary.Channel.presentGlobal(~className=Styles.hash, ())}
         </Link.Jsx2>
         {loggedInUser.agent
          |> E.O.fmap((agent: Types.agent) =>
@@ -102,7 +102,7 @@ let make = (~channelId, ~loggedInUser: Types.user, _children) => {
                            ? Styles.selectedItem : Styles.item
                        }>
                        {Primary.Channel.present(
-                          ~hashClassName=Styles.hash,
+                          ~className=Styles.hash,
                           channel,
                         )}
                      </Link.Jsx2>

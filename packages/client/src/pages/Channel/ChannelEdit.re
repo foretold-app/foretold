@@ -7,9 +7,9 @@ module CMutationForm =
     type queryType = ChannelUpdate.Query.t;
   });
 
-let component = ReasonReact.statelessComponent("ChannelNew");
+let component = ReasonReact.statelessComponent("ChannelEdit");
 
-let make = (~channelId: string, ~layout, _children) => {
+let make = (~channelId: string, ~loggedInUser: Types.user, ~layout, _children) => {
   ...component,
   render: _ => {
     let loadChannel = ChannelGet.getChannelByIdAsComponent(~id=channelId);
@@ -30,13 +30,16 @@ let make = (~channelId: string, ~layout, _children) => {
             FC.PageCard.HeaderRow.Styles.itemTopPadding,
             FC.PageCard.HeaderRow.Styles.itemBottomPadding,
           ])}>
-          <FC.Base.Button
-            variant=Primary
-            onClick={e =>
-              LinkType.onClick(Internal(SeriesNew(channelId)), e)
-            }>
-            {"New Series" |> Utils.ste}
-          </FC.Base.Button>
+          {Primary.User.show(
+             loggedInUser,
+             <FC.Base.Button
+               variant=Primary
+               onClick={e =>
+                 LinkType.onClick(Internal(SeriesNew(channelId)), e)
+               }>
+               {"New Series" |> Utils.ste}
+             </FC.Base.Button>,
+           )}
         </FC.Base.Div>
       </>;
 

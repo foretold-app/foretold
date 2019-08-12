@@ -34,7 +34,7 @@ let makeWithPage =
       | FeedItems => <FeedItems channelId layout />
       | AddMember => <ChannelAddMember channelId loggedInUser layout />
       | InviteMember => <ChannelInviteMember channelId loggedInUser layout />
-      | Settings => <ChannelEdit channelId layout />
+      | Settings => <ChannelEdit channelId loggedInUser layout />
       | NewSeries => <SeriesNew channelId loggedInUser layout />
       };
     };

@@ -1,5 +1,5 @@
-const { AggregationBot } = require('./aggregation-bot');
+const { Bot } = require('./bot');
 
 module.exports = {
-  AggregationBot,
+  Bot,
 };

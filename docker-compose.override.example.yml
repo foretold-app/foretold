@@ -9,7 +9,6 @@ services:
       - SLACK_WEBHOOK_URL=<change-me>
       - JWT_SECRET=<change-me>
       - BOT_TOKEN=<change-me>
-      - BOT_AGENT_ID=<change-me>
       # SMTP
       - SMTP_HOST=smtp.host.com
       - SMTP_PORT=465

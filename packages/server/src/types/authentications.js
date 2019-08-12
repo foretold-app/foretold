@@ -14,7 +14,17 @@ const authenticationToken = new graphql.GraphQLObjectType({
   }),
 });
 
+const authenticated = new graphql.GraphQLObjectType({
+  name: 'Authenticated',
+  fields: () => ({
+    user: { type: require('./users').user },
+    bot: { type: require('./bots').bot },
+    agent: { type: require('./agents').agent },
+  }),
+});
+
 module.exports = {
+  authenticated,
   authenticationJwt,
   authenticationToken,
 };

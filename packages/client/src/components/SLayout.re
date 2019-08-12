@@ -153,7 +153,14 @@ let channelBack = (~onClick, ()) =>
 let channelink = (c: Types.channel) =>
   <Link.Jsx2
     linkType={Internal(ChannelShow(c.id))} className=Styles.channelText>
-    {c |> Primary.Channel.present}
+    {switch (c.id) {
+     | "home" =>
+       Primary.Channel.presentGlobal(
+         ~symbolClassName=Primary.Channel.Styles.globe,
+         (),
+       )
+     | _ => c |> Primary.Channel.present
+     }}
   </Link.Jsx2>;
 
 let channelEditLink = (c: Types.channel) =>

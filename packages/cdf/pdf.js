@@ -1,4 +1,4 @@
-const { Cdf } = require('./cdf');
+const { Cdf } = require('./');
 
 class Pdf {
   /**
@@ -63,7 +63,7 @@ class Pdf {
     for (let i = 1; i < this.ys.length; i++) {
       newYs.push(newYs[i - 1] + this.ys[i])
     }
-    return new Cdf(this.xs, newYs);
+    return new (require('./cdf').Cdf)(this.xs, newYs);
   }
 }
 

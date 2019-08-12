@@ -74,27 +74,22 @@ export class GuesstimateInput extends React.Component {
     let foo = what.sample(this.props.sampleCount);
     let values = _.filter(foo.values, _.isFinite);
 
-    console.log("parsedInput", {parsedInput})
-
-    // Ok, do it here.
     if (!!values) {
       this.setState({ value: event.target.value, items: values });
     } else {
       this.setState({ value: event.target.value, items: [] });
     }
 
-    // But the following part please do in "didUpdate"
-    // or similar.
-    const min = this.props.min || parsedInput.params[0];
-    const max = this.props.max || parsedInput.params[1];
-
-    if (!values) {
+    if (!values || values.length === 0) {
       this.props.onUpdate([[], [], false]);
     } else if (values.length === 1) {
       this.props.onUpdate([[1], values, false]);
     } else {
+      const min = this.props.min || parsedInput.params[0];
+      const max = this.props.max || parsedInput.params[1];
       this.props.onUpdate(toCdf(values, min, max));
     }
+
     this.props.onChange(text);
   }
 

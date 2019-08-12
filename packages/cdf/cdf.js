@@ -1,5 +1,4 @@
 const { interpolate, range, min, max } = require('./functions');
-const { Pdf } = require('./pdf');
 
 class Cdf {
   /**
@@ -142,7 +141,7 @@ class Cdf {
     for (let i = 1; i < this.ys.length; i++) {
       newYs.push(this.ys[i] - this.ys[i - 1])
     }
-    return new Pdf(this.xs, newYs);
+    return new (require('./pdf').Pdf)(this.xs, newYs);
   }
 
   /**

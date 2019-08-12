@@ -2,41 +2,56 @@ open Antd;
 
 module FormConfig = {
   type field(_) =
-    | StopAllEmails: field(bool);
+    | StopAllEmails: field(bool)
+    | EnableExperimentalFeatures: field(bool);
 
-  type state = {stopAllEmails: bool};
+  type state = {
+    stopAllEmails: bool,
+    enableExperimentalFeatures: bool,
+  };
 
   let get: type value. (state, field(value)) => value =
     (state, field) =>
       switch (field) {
       | StopAllEmails => state.stopAllEmails
+      | EnableExperimentalFeatures => state.enableExperimentalFeatures
       };
 
   let set: type value. (state, field(value), value) => state =
     (state, field, value) =>
       switch (field) {
       | StopAllEmails => {...state, stopAllEmails: value}
+      | EnableExperimentalFeatures => {
+          ...state,
+          enableExperimentalFeatures: value,
+        }
       };
 };
 
 module Form = ReFormNext.Make(FormConfig);
 
-let withUserForm = (id, stopAllEmails, mutation, innerComponentFn) =>
+let withUserForm =
+    (
+      id,
+      stopAllEmails,
+      enableExperimentalFeatures,
+      mutation,
+      innerComponentFn,
+    ) =>
   Form.make(
-    ~initialState={stopAllEmails: stopAllEmails},
+    ~initialState={stopAllEmails, enableExperimentalFeatures},
     ~onSubmit=
       values =>
         PreferenceUpdate.mutate(
           mutation,
           values.state.values.stopAllEmails,
+          values.state.values.enableExperimentalFeatures,
           id,
         ),
     ~schema=Form.Validation.Schema([||]),
     innerComponentFn,
   )
   |> E.React.el;
-
-let component = ReasonReact.statelessComponent("Preference");
 
 let formFields = (form: Form.state, send, onSubmit) =>
   <Antd.Form onSubmit={e => onSubmit()}>
@@ -45,6 +60,15 @@ let formFields = (form: Form.state, send, onSubmit) =>
       <AntdSwitch
         checked={form.values.stopAllEmails}
         onChange={e => send(Form.FieldChangeValue(StopAllEmails, e))}
+      />
+    </Antd.Form.Item>
+    <Antd.Form.Item>
+      {"Enable experimental features" |> Utils.ste |> E.React.inH3}
+      <AntdSwitch
+        checked={form.values.enableExperimentalFeatures}
+        onChange={e =>
+          send(Form.FieldChangeValue(EnableExperimentalFeatures, e))
+        }
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
@@ -59,6 +83,7 @@ module CMutationForm =
     type queryType = PreferenceUpdate.EditPreference.t;
   });
 
+let component = ReasonReact.statelessComponent("Preference");
 let make =
     (
       ~loggedInUser: Types.user,
@@ -83,8 +108,20 @@ let make =
                |> E.O.bind(_, (r: Types.agent) => r.preference)
                |> E.O.bind(_, (r: Types.preference) => r.stopAllEmails)
                |> E.O.default(true);
+             let enableExperimentalFeatures =
+               agent
+               |> E.O.bind(_, (r: Types.agent) => r.preference)
+               |> E.O.fmap((r: Types.preference) =>
+                    r.enableExperimentalFeatures
+                  )
+               |> E.O.default(true);
 
-             withUserForm(id, stopAllEmails, mutation, ({send, state}) =>
+             withUserForm(
+               id,
+               stopAllEmails,
+               enableExperimentalFeatures,
+               mutation,
+               ({send, state}) =>
                CMutationForm.showWithLoading(
                  ~result=data.result,
                  ~form=formFields(state, send, () => send(Form.Submit)),

@@ -28,7 +28,9 @@ export namespace Models {
   }
 
   export interface Preference extends Model {
+    agentId: ObjectID;
     stopAllEmails: boolean;
+    enableExperimentalFeatures: boolean;
   }
 
   export interface User extends Model {

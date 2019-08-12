@@ -305,7 +305,12 @@ module Agent = {
 module Preference = {
   type t = Types.preference;
 
-  let make = (~id, ~stopAllEmails=None, ()): t => {id, stopAllEmails};
+  let make =
+      (~id, ~stopAllEmails=None, ~enableExperimentalFeatures=false, ()): t => {
+    id,
+    stopAllEmails,
+    enableExperimentalFeatures,
+  };
 };
 
 module Channel = {

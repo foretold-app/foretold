@@ -8,7 +8,12 @@ let toChannel = ch =>
   );
 
 let toPreference = a =>
-  Primary.Preference.make(~id=a##id, ~stopAllEmails=a##stopAllEmails, ());
+  Primary.Preference.make(
+    ~id=a##id,
+    ~stopAllEmails=a##stopAllEmails,
+    ~enableExperimentalFeatures=a##enableExperimentalFeatures,
+    (),
+  );
 
 let toAgent = a =>
   Primary.Agent.make(
@@ -68,6 +73,7 @@ module Query = [%graphql
               preference: Preference {
                 id
                 stopAllEmails
+                enableExperimentalFeatures
               }
             }
             bots: Bots {

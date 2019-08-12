@@ -49,20 +49,29 @@ module Styles = {
 };
 
 let competitorTypeSelect =
-    (~isOwner: bool, ~state: state, ~send, ~measurable: Types.measurable)
+    (
+      ~isOwner: bool,
+      ~state: state,
+      ~send,
+      ~measurable: Types.measurable,
+      ~loggedInUser: Types.user,
+    )
     : ReasonReact.reactElement => {
   let options =
     Primary.CompetitorType.availableSelections(
       ~isOwner,
       ~state=measurable.state,
+      ~loggedInUser,
     );
 
-  <Select
-    value={state.competitorType}
-    className=Styles.fullWidth
-    onChange={e => send(UpdateCompetitorType(e))}>
-    {options |> ReasonReact.array}
-  </Select>;
+  options == [||]
+    ? ReasonReact.null
+    : <Select
+        value={state.competitorType}
+        className=Styles.fullWidth
+        onChange={e => send(UpdateCompetitorType(e))}>
+        {options |> ReasonReact.array}
+      </Select>;
 };
 
 let dataTypeSelect = (~state, ~send): ReasonReact.reactElement =>
@@ -369,7 +378,13 @@ let mainBlock =
     </div>
     <div className=Styles.inputSection>
       <div className=Styles.select>
-        {competitorTypeSelect(~isOwner=isCreator, ~state, ~send, ~measurable)}
+        {competitorTypeSelect(
+           ~isOwner=isCreator,
+           ~state,
+           ~send,
+           ~measurable,
+           ~loggedInUser,
+         )}
       </div>
       getDataTypeSelect
       valueInput

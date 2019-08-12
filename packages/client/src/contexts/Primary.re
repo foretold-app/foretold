@@ -2,63 +2,6 @@ open Rationale.Function.Infix;
 open Utils;
 open Types;
 
-module CompetitorType = {
-  type t = competitorType;
-  let toString = e =>
-    switch (e) {
-    | `AGGREGATION => "Aggregation"
-    | `COMPETITIVE => "Competitive"
-    | `OBJECTIVE => "Objective"
-    | `UNRESOLVED => "Unresolved"
-    | `COMMENT => "Comment"
-    };
-
-  let fromString = str =>
-    switch (str) {
-    | "Aggregation" => `AGGREGATION
-    | "Competitive" => `COMPETITIVE
-    | "Objective" => `OBJECTIVE
-    | "Unresolved" => `UNRESOLVED
-    | "Comment" => `COMMENT
-    | _ => Js.Exn.raiseError("Invalid Competitor Type: " ++ str)
-    };
-
-  let availableInputs =
-      (~isOwner: bool, ~state: option(Types.measurableState)) => {
-    switch (isOwner, state) {
-    | (true, Some(`JUDGED)) => [|`COMMENT, `OBJECTIVE, `UNRESOLVED|]
-    | (true, _) => [|`COMMENT, `COMPETITIVE, `OBJECTIVE, `UNRESOLVED|]
-    | (false, Some(`JUDGED)) => [|`COMMENT|]
-    | (false, _) => [|`COMMENT, `COMPETITIVE|]
-    };
-  };
-
-  let toSelection = (t: t) =>
-    switch (t) {
-    | `COMPETITIVE =>
-      <Antd.Select.Option value="COMPETITIVE">
-        {"Predict" |> ste}
-      </Antd.Select.Option>
-    | `OBJECTIVE =>
-      <Antd.Select.Option value="OBJECTIVE">
-        {"Resolve" |> ste}
-      </Antd.Select.Option>
-    | `COMMENT =>
-      <Antd.Select.Option value="COMMENT">
-        {"Comment" |> ste}
-      </Antd.Select.Option>
-    | `UNRESOLVED =>
-      <Antd.Select.Option value="UNRESOLVED">
-        {"Close without Answer" |> ste}
-      </Antd.Select.Option>
-    | `AGGREGATION => E.React.null
-    };
-
-  let availableSelections =
-      (~isOwner: bool, ~state: option(Types.measurableState)) =>
-    availableInputs(~isOwner, ~state) |> E.A.fmap(toSelection);
-};
-
 module MeasurableState = {
   type t = measurableState;
 
@@ -243,7 +186,7 @@ module Bot = {
   type t = Types.bot;
 
   module CompetitorType = {
-    let toString = (c: CompetitorType.t) =>
+    let toString = (c: Types.competitorType) =>
       switch (c) {
       | `AGGREGATION => "Aggregation"
       | `COMPETITIVE => "Prediction"
@@ -583,4 +526,70 @@ module FeedItem = {
     createdAt,
     updatedAt,
   };
+};
+
+module CompetitorType = {
+  type t = competitorType;
+  let toString = e =>
+    switch (e) {
+    | `AGGREGATION => "Aggregation"
+    | `COMPETITIVE => "Competitive"
+    | `OBJECTIVE => "Objective"
+    | `UNRESOLVED => "Unresolved"
+    | `COMMENT => "Comment"
+    };
+
+  let fromString = str =>
+    switch (str) {
+    | "Aggregation" => `AGGREGATION
+    | "Competitive" => `COMPETITIVE
+    | "Objective" => `OBJECTIVE
+    | "Unresolved" => `UNRESOLVED
+    | "Comment" => `COMMENT
+    | _ => Js.Exn.raiseError("Invalid Competitor Type: " ++ str)
+    };
+
+  let availableInputs =
+      (~isOwner: bool, ~state: option(Types.measurableState)) => {
+    switch (isOwner, state) {
+    | (true, Some(`JUDGED)) => [|`COMMENT, `OBJECTIVE, `UNRESOLVED|]
+    | (true, _) => [|`COMMENT, `COMPETITIVE, `OBJECTIVE, `UNRESOLVED|]
+    | (false, Some(`JUDGED)) => [|`COMMENT|]
+    | (false, _) => [|`COMMENT, `COMPETITIVE|]
+    };
+  };
+
+  let toSelection = (loggedInUser: Types.user, t: t) =>
+    switch (t) {
+    | `COMPETITIVE =>
+      <Antd.Select.Option value="COMPETITIVE">
+        {"Predict" |> ste}
+      </Antd.Select.Option>
+    | `OBJECTIVE =>
+      <Antd.Select.Option value="OBJECTIVE">
+        {"Resolve" |> ste}
+      </Antd.Select.Option>
+    | `COMMENT =>
+      User.show(
+        loggedInUser,
+        <Antd.Select.Option value="COMMENT">
+          {"Comment" |> ste}
+        </Antd.Select.Option>,
+      )
+    | `UNRESOLVED =>
+      <Antd.Select.Option value="UNRESOLVED">
+        {"Close without Answer" |> ste}
+      </Antd.Select.Option>
+    | `AGGREGATION => E.React.null
+    };
+
+  let availableSelections =
+      (
+        ~isOwner: bool,
+        ~state: option(Types.measurableState),
+        ~loggedInUser: Types.user,
+      ) =>
+    availableInputs(~isOwner, ~state)
+    |> E.A.fmap(toSelection(loggedInUser))
+    |> E.A.filter(r => r != ReasonReact.null);
 };

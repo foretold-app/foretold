@@ -204,6 +204,15 @@ module User = {
     | Some(agent) => clbFn(agent)
     };
 
+  let show = (user: t, component: ReasonReact.reactElement) => {
+    let enableExperimentalFeatures =
+      user.agent
+      |> E.O.bind(_, (r: Types.agent) => r.preference)
+      |> E.O.fmap((r: Types.preference) => r.enableExperimentalFeatures)
+      |> E.O.default(false);
+    enableExperimentalFeatures ? ReasonReact.null : component;
+  };
+
   let make =
       (
         ~id,

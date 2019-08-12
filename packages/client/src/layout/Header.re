@@ -110,10 +110,13 @@ let make = (~loggedInUser: Types.user, _children) => {
   render: _self =>
     <Div styles=[Styles.outer]>
       <Div float=`left>
-        <Link.Jsx2
-          linkType={Internal(EntityIndex)} className=Styles.headerLink>
-          {"Entity Explorer" |> ste}
-        </Link.Jsx2>
+        {Primary.User.show(
+           loggedInUser,
+           <Link.Jsx2
+             linkType={Internal(EntityIndex)} className=Styles.headerLink>
+             {"Entity Explorer" |> ste}
+           </Link.Jsx2>,
+         )}
       </Div>
       <Div float=`right> {header(loggedInUser)} </Div>
     </Div>,

@@ -29,7 +29,7 @@ module ChannelNew' = {
 };
 
 module MeasurableEdit' = {
-  let toEl = MeasurableEdit.make |> LoggedInPage.justPageParams;
+  let toEl = MeasurableEdit.make |> LoggedInPage.pageParamsAndUser;
 };
 
 module EntityIndex' = {

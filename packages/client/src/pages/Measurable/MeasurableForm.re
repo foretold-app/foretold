@@ -100,6 +100,7 @@ let dataSource =
 
 let showForm =
     (
+      ~loggedInUser: Types.user,
       ~form: MeasurableReForm.state,
       ~handleSubmit,
       ~handleChange,
@@ -234,16 +235,19 @@ let showForm =
         )}
       />
     </Form.Item>
-    <Form.Item
-      label="Resolution Endpoint"
-      help="If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value.">
-      <Input
-        value={form.values.resolutionEndpoint}
-        onChange={ReForm.Helpers.handleDomFormChange(
-          handleChange(`resolutionEndpoint),
-        )}
-      />
-    </Form.Item>
+    {Primary.User.show(
+       loggedInUser,
+       <Form.Item
+         label="Resolution Endpoint"
+         help="If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value.">
+         <Input
+           value={form.values.resolutionEndpoint}
+           onChange={ReForm.Helpers.handleDomFormChange(
+             handleChange(`resolutionEndpoint),
+           )}
+         />
+       </Form.Item>,
+     )}
     <Form.Item
       label="Expected Resolution Date"
       help="When do you expect this will be resolvable by? You will get a notification when this date occurs.">
@@ -255,17 +259,22 @@ let showForm =
         disabled={form.values.showDescriptionDate == "TRUE"}
       />
     </Form.Item>
-    <Form.Item label="Use Entities in Title">
-      <Antd.Radio.Group
-        value={form.values.showDescriptionProperty}
-        defaultValue={form.values.showDescriptionProperty}
-        onChange={ReForm.Helpers.handleDomFormChange(
-          handleChange(`showDescriptionProperty),
-        )}>
-        <Antd.Radio value="FALSE"> {"No" |> ste} </Antd.Radio>
-        <Antd.Radio value="TRUE"> {"Yes (Experimental)" |> ste} </Antd.Radio>
-      </Antd.Radio.Group>
-    </Form.Item>
+    {Primary.User.show(
+       loggedInUser,
+       <Form.Item label="Use Entities in Title">
+         <Antd.Radio.Group
+           value={form.values.showDescriptionProperty}
+           defaultValue={form.values.showDescriptionProperty}
+           onChange={ReForm.Helpers.handleDomFormChange(
+             handleChange(`showDescriptionProperty),
+           )}>
+           <Antd.Radio value="FALSE"> {"No" |> ste} </Antd.Radio>
+           <Antd.Radio value="TRUE">
+             {"Yes (Experimental)" |> ste}
+           </Antd.Radio>
+         </Antd.Radio.Group>
+       </Form.Item>,
+     )}
     <Form.Item>
       <Button _type=`primary onClick={_ => handleSubmit()}>
         {"Submit" |> ste}

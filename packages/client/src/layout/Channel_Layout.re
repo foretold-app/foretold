@@ -29,12 +29,12 @@ let makeWithPage =
       | Measurable(measurableId) =>
         <ChannelMeasurable measurableId loggedInUser layout />
       | Series(id) => <SeriesShow id channelId loggedInUser layout />
-      | NewMeasurable => <MeasurableNew channelId layout />
+      | NewMeasurable => <MeasurableNew channelId loggedInUser layout />
       | Members => <ChannelMembers channelId layout channel />
       | FeedItems => <FeedItems channelId layout />
       | AddMember => <ChannelAddMember channelId loggedInUser layout />
       | InviteMember => <ChannelInviteMember channelId loggedInUser layout />
-      | Settings => <ChannelEdit channelId layout />
+      | Settings => <ChannelEdit channelId loggedInUser layout />
       | NewSeries => <SeriesNew channelId loggedInUser layout />
       };
     };

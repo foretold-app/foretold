@@ -193,37 +193,50 @@ let showForm =
     {E.React.showIf(
        form.values.valueType == "FLOAT",
        <>
-         <Div flexDirection=`row>
-           <Div flex={`num(1.)}>
-             <Div flexDirection=`row>
-               <Div flex={`num(1.)}>
-                 <Form.Item label="Min">
-                   <Antd.Input
-                     className=Styles.shortInput
-                     htmlType="number"
-                     value={form.values.min}
-                     onChange={e =>
-                       handleChange(`min, ReactEvent.Form.target(e)##value)
-                     }
-                   />
-                 </Form.Item>
-               </Div>
-               <Div flex={`num(1.)}>
-                 <Form.Item label="Max">
-                   <Antd.Input
-                     className=Styles.shortInput
-                     htmlType="number"
-                     value={form.values.max}
-                     onChange={e =>
-                       handleChange(`max, ReactEvent.Form.target(e)##value)
-                     }
-                   />
-                 </Form.Item>
+         <Form.Item
+           help="What are the most extreme values this could possibly take? For example, inches of rain tomorrow has a minimum of 0.">
+           <Div flexDirection=`row>
+             <Div flex={`num(1.)}>
+               <Div flexDirection=`row>
+                 <Div flex={`num(1.)}>
+                   <div className="ant-form-item-label">
+                     <label className="" title="Min">
+                       {"Min" |> Utils.ste}
+                     </label>
+                   </div>
+                   <div className="ant-form-item-control">
+                     <Antd.Input
+                       className=Styles.shortInput
+                       htmlType="number"
+                       value={form.values.min}
+                       onChange={e =>
+                         handleChange(`min, ReactEvent.Form.target(e)##value)
+                       }
+                     />
+                   </div>
+                 </Div>
+                 <Div flex={`num(1.)}>
+                   <div className="ant-form-item-label">
+                     <label className="" title="Max">
+                       {"Max" |> Utils.ste}
+                     </label>
+                   </div>
+                   <div className="ant-form-item-control">
+                     <Antd.Input
+                       className=Styles.shortInput
+                       htmlType="number"
+                       value={form.values.max}
+                       onChange={e =>
+                         handleChange(`max, ReactEvent.Form.target(e)##value)
+                       }
+                     />
+                   </div>
+                 </Div>
                </Div>
              </Div>
+             <Div flex={`num(3.)} />
            </Div>
-           <Div flex={`num(3.)} />
-         </Div>
+         </Form.Item>
        </>,
      )}
     <Form.Item label="Description" help="Markdown supported.">

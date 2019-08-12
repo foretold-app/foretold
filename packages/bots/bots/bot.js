@@ -1,3 +1,4 @@
+const assert = require('assert');
 const _ = require('lodash');
 
 const { API } = require('../api');
@@ -5,9 +6,18 @@ const config = require('../config');
 
 const { Aggregation } = require('./aggregation');
 
-class AggregationBot {
+class Bot {
   constructor() {
     this.api = new API(config.BOT_TOKEN);
+  }
+
+  /**
+   * @protected
+   * @return {Promise<string>}
+   */
+  async _getAgentId() {
+    const authenticated = await this.api.queryAuthenticated();
+    return _.get(authenticated, 'agent.id');
   }
 
   /**
@@ -15,8 +25,11 @@ class AggregationBot {
    * @return {Promise<boolean>}
    */
   async main() {
+    const agentId = await this._getAgentId();
+    assert(!_.isEmpty(agentId), 'Agent ID is required.');
+
     const measurementsNotTagged = await this.api.measurementsCompetitive({
-      notTaggedByAgent: config.BOT_AGENT_ID,
+      notTaggedByAgent: agentId,
     });
 
     if (measurementsNotTagged.length === 0) {
@@ -80,5 +93,5 @@ class AggregationBot {
 }
 
 module.exports = {
-  AggregationBot,
+  Bot,
 };

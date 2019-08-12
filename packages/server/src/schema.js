@@ -181,6 +181,11 @@ const schema = new graphql.GraphQLSchema({
         },
         resolve: resolvers.authentications.exchangeToken,
       },
+
+      authenticated: {
+        type: graphql.GraphQLNonNull(types.authentications.authenticated),
+        resolve: resolvers.authentications.authenticated,
+      },
     }
   }),
 

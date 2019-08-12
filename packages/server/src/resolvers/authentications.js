@@ -71,7 +71,22 @@ async function getTokenByAgentId(root, args, context, info) {
   return data.tokens.getCreate(agentId);
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} _info
+ * @returns {Promise<{user: Models.User, bot: Models.Bot, agent: Models.Agent}>}
+ */
+async function authenticated(root, args, context, _info) {
+  const user = _.get(context, 'user', null);
+  const bot = _.get(context, 'bot', null);
+  const agent = _.get(context, 'agent', null);
+  return { user, bot, agent };
+}
+
 module.exports = {
+  authenticated,
   exchangeToken,
   getTokenByAgentId,
 };

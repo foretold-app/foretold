@@ -45,7 +45,7 @@ class API {
       // console.log(query, variables, body);
       return body;
     }).catch((err) => {
-      console.log(err.message);
+      console.log('Query Error', err.message);
       return Promise.reject(err);
     });
   }
@@ -56,7 +56,7 @@ class API {
    * @return {*}
    */
   async measurables() {
-    await this.query(this.queries.measurables);
+    return this.query(this.queries.measurables);
   }
 
   /**
@@ -106,6 +106,15 @@ class API {
   }
 
   /**
+   * @public
+   * @return {object}
+   */
+  async queryAuthenticated() {
+    const result = await this.query(this.queries.authenticated);
+    return this.getEntity('authenticated')(result);
+  }
+
+  /**
    * @protected
    * @param {string} alias
    * @return {Function}
@@ -115,6 +124,18 @@ class API {
       this.proceedErrors(result);
       const edges = _.get(result, ['data', alias, 'edges'], []);
       return edges.map(edge => edge.node);
+    }
+  }
+
+  /**
+   * @protected
+   * @param {string} alias
+   * @return {Function}
+   */
+  getEntity(alias) {
+    return (result) => {
+      this.proceedErrors(result);
+      return _.get(result, ['data', alias]);
     }
   }
 

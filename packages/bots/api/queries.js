@@ -1,3 +1,11 @@
+const authenticated = `
+query {
+  authenticated {
+    agent { id }
+  }
+}
+`;
+
 const measurables = `
 query measurables {
   measurables(
@@ -61,6 +69,7 @@ mutation measurementCreate(
 `;
 
 module.exports = {
+  authenticated,
   measurables,
   measurements,
   measurementCreate,

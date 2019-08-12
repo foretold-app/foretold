@@ -6,7 +6,7 @@ const bots = require('../bots');
 function runAggregationBot() {
   try {
     console.log('Job::runAggregationBot');
-    new bots.AggregationBot().main().then((result) => {
+    new bots.Bot().main().then((result) => {
       console.log('Job::runAggregationBot', 'all done', result);
     }).catch((err) => {
       console.error('Job::runAggregationBot', err);

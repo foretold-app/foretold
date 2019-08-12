@@ -259,17 +259,22 @@ let showForm =
         disabled={form.values.showDescriptionDate == "TRUE"}
       />
     </Form.Item>
-    <Form.Item label="Use Entities in Title">
-      <Antd.Radio.Group
-        value={form.values.showDescriptionProperty}
-        defaultValue={form.values.showDescriptionProperty}
-        onChange={ReForm.Helpers.handleDomFormChange(
-          handleChange(`showDescriptionProperty),
-        )}>
-        <Antd.Radio value="FALSE"> {"No" |> ste} </Antd.Radio>
-        <Antd.Radio value="TRUE"> {"Yes (Experimental)" |> ste} </Antd.Radio>
-      </Antd.Radio.Group>
-    </Form.Item>
+    {Primary.User.show(
+       loggedInUser,
+       <Form.Item label="Use Entities in Title">
+         <Antd.Radio.Group
+           value={form.values.showDescriptionProperty}
+           defaultValue={form.values.showDescriptionProperty}
+           onChange={ReForm.Helpers.handleDomFormChange(
+             handleChange(`showDescriptionProperty),
+           )}>
+           <Antd.Radio value="FALSE"> {"No" |> ste} </Antd.Radio>
+           <Antd.Radio value="TRUE">
+             {"Yes (Experimental)" |> ste}
+           </Antd.Radio>
+         </Antd.Radio.Group>
+       </Form.Item>,
+     )}
     <Form.Item>
       <Button _type=`primary onClick={_ => handleSubmit()}>
         {"Submit" |> ste}

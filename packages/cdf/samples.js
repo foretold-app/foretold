@@ -16,32 +16,36 @@ class Samples {
     this.sorted = sortDescending(this.samples);
   }
 
+  /**
+   * @param {number} perc
+   * @return {*}
+   */
   getPercentile(perc) {
     const length = this.sorted.length;
     if (length === 0) {
-      console.error("Samples Percentile: You must sort samples before finding the percentile.")
+      console.error(
+        "Samples Percentile: You must sort " +
+        "samples before finding the percentile."
+      );
     }
     return percentile(this.sorted, length, perc);
   }
 
   /**
-   * @param min
-   * @param max
-   * @param size
-   * @param width
-   * @return {Pdf|*}
+   * @param {number} min
+   * @param {number} max
+   * @param {number} size
+   * @param {number} width
+   * @return {Pdf}
    */
   toPdf({ min, max, size, width }) {
-    let args = { size, width };
+    const args = { size, width };
 
     if (!!min) args.min = min;
     if (!!max) args.max = max;
 
-    let kde = this._kde(args);
-    console.log("KDE Samples", this.samples);
-    console.log("KDE", kde);
-    let pdf = new Pdf(kde.map(r => r.x), kde.map(r => r.y));
-    return pdf;
+    const kde = this._kde(args);
+    return new Pdf(kde.map(r => r.x), kde.map(r => r.y));
   }
 
   /**
@@ -52,9 +56,8 @@ class Samples {
    * @return {Cdf}
    */
   toCdf({ min, max, size, width }) {
-    let pdf = this.toPdf({ min, max, size, width });
-    let cdf = pdf.toCdf();
-    return cdf;
+    const pdf = this.toPdf({ min, max, size, width });
+    return pdf.toCdf();
   }
 
   /**

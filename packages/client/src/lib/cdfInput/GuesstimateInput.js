@@ -1,11 +1,12 @@
 import React from "react";
-import { Guesstimator } from '@foretold/guesstimator/index';
+import _ from "lodash";
 import { Input } from "antd";
+
+import { Guesstimator } from '@foretold/guesstimator/index';
 import { Samples } from "../../../../cdf";
-import _ from "lodash"
 
 /**
- * @param ratio
+ * @param {number} ratio
  * @return {string}
  */
 const minMaxRatio = (ratio) => {
@@ -22,7 +23,7 @@ const minMaxRatio = (ratio) => {
  * @param samples
  * @return {string}
  */
-let ratioSize = samples => {
+const ratioSize = samples => {
   samples.sort();
   const minValue = samples.getPercentile(2);
   const maxValue = samples.getPercentile(98);
@@ -30,28 +31,20 @@ let ratioSize = samples => {
 };
 
 /**
- * @param values
- * @param min
- * @param max
- * @return {*[]}
+ * @param {number[]} values
+ * @param {number} min
+ * @param {number} max
+ * @return {[number[], number[], boolean]}
  */
 const toCdf = (values, min, max) => {
   let _values = values;
   if (_.isFinite(min)) _values = _.filter(_values, r => r > min);
   if (_.isFinite(max)) _values = _.filter(_values, r => r < max);
 
-  console.log("values toCdf", { _values });
   const samples = new Samples(_values);
-  console.log("toCdf::samples", { samples });
-
   const ratioSize$ = ratioSize(samples);
   const width = ratioSize$ === "SMALL" ? 20 : 1;
-  console.log("toCdf::width", { width });
-
   const cdf = samples.toCdf({ size: 1000, width, min, max });
-  console.log("toCdf::toCdf",{ size: 1000, width, min, max });
-  console.log("toCdf::cdf", { cdf });
-
   return [cdf.ys, cdf.xs, ratioSize$ === "LARGE"];
 };
 
@@ -75,29 +68,32 @@ export class GuesstimateInput extends React.Component {
   handleChange(event) {
     const text = event.target.value;
 
-    let [error, item] = Guesstimator.parse({ text });
-    console.log("A", { error, item });
+    let [_error, item] = Guesstimator.parse({ text });
     let parsedInput = item.parsedInput;
-    console.log("B", { parsedInput });
     let what = new Guesstimator({ parsedInput: parsedInput });
-    console.log("c", { what });
     let foo = what.sample(this.props.sampleCount);
-    console.log("D", { foo });
     let values = _.filter(foo.values, _.isFinite);
-    console.log("E", { values });
 
+    console.log("parsedInput", {parsedInput})
+
+    // Ok, do it here.
     if (!!values) {
       this.setState({ value: event.target.value, items: values });
     } else {
       this.setState({ value: event.target.value, items: [] });
     }
 
+    // But the following part please do in "didUpdate"
+    // or similar.
+    const min = this.props.min || parsedInput.params[0];
+    const max = this.props.max || parsedInput.params[1];
+
     if (!values) {
       this.props.onUpdate([[], [], false]);
     } else if (values.length === 1) {
       this.props.onUpdate([[1], values, false]);
     } else {
-      this.props.onUpdate(toCdf(values, this.props.min, this.props.max));
+      this.props.onUpdate(toCdf(values, min, max));
     }
     this.props.onChange(text);
   }

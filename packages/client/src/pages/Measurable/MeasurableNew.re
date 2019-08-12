@@ -5,7 +5,13 @@ module CMutationForm =
     type queryType = MeasurableCreate.GraphQL.t;
   });
 
-let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
+let make =
+    (
+      ~channelId,
+      ~layout=SLayout.FullPage.makeWithEl,
+      ~loggedInUser: Types.user,
+      _children,
+    ) => {
   ...component,
   render: _ => {
     let formCreator = mutation =>
@@ -41,6 +47,7 @@ let make = (~channelId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
                  ~result=data.result,
                  ~form=
                    MeasurableForm.showForm(
+                     ~loggedInUser,
                      ~form,
                      ~handleSubmit,
                      ~handleChange,

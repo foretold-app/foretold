@@ -3,7 +3,9 @@ module CMutationForm =
     type queryType = MeasurableUpdate.GraphQL.t;
   });
 
-let formCreation = (id: string, m: MeasurableGet.measurable): React.element => {
+let formCreation =
+    (id: string, m: MeasurableGet.measurable, loggedInUser: Types.user)
+    : React.element => {
   let measurable: Types.measurable = MeasurableGet.toMeasurable(m);
 
   MeasurableUpdate.Mutation.make((mutation, data) =>
@@ -52,6 +54,7 @@ let formCreation = (id: string, m: MeasurableGet.measurable): React.element => {
           ~result=data.result,
           ~form=
             MeasurableForm.showForm(
+              ~loggedInUser,
               ~form,
               ~handleSubmit,
               ~handleChange,
@@ -76,6 +79,7 @@ let component = ReasonReact.statelessComponent("MeasurableEdit");
 let make =
     (
       ~pageParams: PageConfig.LoggedInPage.pageParams,
+      ~loggedInUser: Types.user,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {
@@ -87,7 +91,7 @@ let make =
         <FC.PageCard.BodyPadding>
           {MeasurableGet.component(
              ~id=pageParams.id, (m: MeasurableGet.measurable) =>
-             formCreation(pageParams.id, m)
+             formCreation(pageParams.id, m, loggedInUser)
            )}
         </FC.PageCard.BodyPadding>,
     )

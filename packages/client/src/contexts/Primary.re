@@ -294,7 +294,7 @@ module Channel = {
   let presentGlobal = (~className="", ~symbolClassName=Styles.globeList, ()) =>
     <span>
       <span className>
-        <span className=symbolClassName> {{js|🌎|js} |> ste} </span>
+        <span className=symbolClassName> <Icon.Icon icon="HOME" /> </span>
       </span>
       <span> {"Home" |> ste} </span>
     </span>;

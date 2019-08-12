@@ -51,6 +51,9 @@ let component =
             ServerJwt.set(c);
             reload();
             ReasonReact.null;
+          | Error(_) =>
+            Routing.Url.push(Login);
+            ReasonReact.null;
           | _ => redirectingMessage
           }
       )

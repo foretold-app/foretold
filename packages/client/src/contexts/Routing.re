@@ -80,7 +80,6 @@ module Route = {
     | Privacy
     | Terms
     | AgentIndex
-    | Redirect
     | Login
     | Profile
     | Preferences
@@ -107,8 +106,7 @@ module Route = {
       Auth.UrlToAuth0Tokens.make(url)
       |> E.O.fmap(Auth0Tokens.set)
       |> E.O.default();
-      Redirect;
-    | ["redirect"] => Redirect
+      Home;
     | ["agents"] => AgentIndex
     | ["profile"] => Profile
     | ["preferences"] => Preferences
@@ -189,6 +187,7 @@ module Url = {
     | ChannelInviteMember(string)
     | MeasurableNew(string)
     | Subscribe
+    | Login
     | Unsubscribe;
 
   let toString = (r: t) =>
@@ -228,6 +227,7 @@ module Url = {
       "/c/" ++ channelId ++ "/m/" ++ measurableId
     | Subscribe => "/subscribe"
     | Unsubscribe => "/unsubscribe"
+    | Login => "/login"
     };
 
   let push = (r: t) => r |> toString |> ReasonReact.Router.push;

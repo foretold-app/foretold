@@ -29,7 +29,6 @@ let make = (~route: Route.t, ~loggedInUser: option(Types.user), _children) => {
       Channel_Layout.makeWithPage(channel, loggedInUser)
     | (Agent(agentPage), _) =>
       Agent_Layout.makeWithPage(agentPage, loggedInUser)
-    | (Redirect, _) => <Redirecting loggedInUser />
     | (AgentIndex, _) => AgentIndex'.toEl(loggedInUser)
     | (EntityShow(id), _) => EntityShow'.toEl({id: id}, loggedInUser)
     | (EntityIndex, _) => EntityIndex'.toEl(loggedInUser)

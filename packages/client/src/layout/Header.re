@@ -83,7 +83,7 @@ let userDropdown = agentId =>
      )}
     {link(Internal(Agent({agentId, subPage: AgentBots})), "My Bots")}
     {link(Internal(Profile), "User Settings")}
-    {link(Internal(Preferences), "Email Preferences")}
+    {link(Internal(Preferences), "User Preferences")}
     {link(Internal(ChannelNew), "Make a New Community")}
     {link(Action(_ => Auth.Actions.logout()), "Logout")}
     <div className=StylesDropdown.clear />

@@ -17,6 +17,7 @@ const preferenceUpdateInput = new graphql.GraphQLInputObjectType({
   name: 'PreferenceUpdateInput',
   fields: () => ({
     stopAllEmails: { type: graphql.GraphQLBoolean },
+    enableExperimentalFeatures: { type: graphql.GraphQLBoolean },
   }),
 });
 

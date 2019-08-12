@@ -20,12 +20,16 @@ let mutate =
     (
       mutation: EditPreferenceMutation.apolloMutation,
       stopAllEmails: bool,
+      enableExperimentalFeatures: bool,
       id: string,
     ) => {
   let mutate =
     EditPreference.make(
       ~id,
-      ~input={"stopAllEmails": Some(stopAllEmails)},
+      ~input={
+        "stopAllEmails": Some(stopAllEmails),
+        "enableExperimentalFeatures": Some(enableExperimentalFeatures),
+      },
       (),
     );
   mutation(~variables=mutate##variables, ~refetchQueries=[||], ()) |> ignore;

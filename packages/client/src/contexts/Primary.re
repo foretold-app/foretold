@@ -275,6 +275,7 @@ module Channel = {
   module Styles = {
     open Css;
     let hash = style([marginRight(`px(4))]);
+    let globe = style([marginRight(`px(1)), marginLeft(`px(-5))]);
     let lock =
       style([fontSize(`em(0.8)), float(`left), marginRight(`px(0))]);
   };
@@ -292,7 +293,7 @@ module Channel = {
   let presentGlobal = (~hashClassName="") =>
     <span>
       <span className=hashClassName>
-        <span className=Styles.hash> {"#" |> ste} </span>
+        <span className=Styles.globe> {{js|🌎|js} |> ste} </span>
       </span>
       <span> {"Home" |> ste} </span>
     </span>;

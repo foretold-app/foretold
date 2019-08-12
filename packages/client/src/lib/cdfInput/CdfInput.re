@@ -381,7 +381,7 @@ let mainBlock =
           send(UpdateDescription(value));
         }}
       />
-      getBotSelect
+      {Primary.User.show(loggedInUser, getBotSelect)}
       <div className=Styles.submitButton>
         <Antd.Button
           _type=`primary onClick={_ => onSubmit()} disabled={!isValid}>

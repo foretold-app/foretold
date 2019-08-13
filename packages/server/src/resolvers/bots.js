@@ -35,8 +35,8 @@ async function create(root, args, context, info) {
  */
 async function update(root, args, context, info) {
   const params = new Params({ id: args.id });
-  const data = new Data(args.input);
-  return data.bots.updateOne(params, data);
+  const data$ = new Data(args.input);
+  return data.bots.updateOne(params, data$);
 }
 
 /**

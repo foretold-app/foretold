@@ -141,6 +141,10 @@ export namespace Models {
     };
   }
 
+  export interface GlobalSetting extends Model {
+    entity: null | object;
+  }
+
   export type Creator = Models.User | Models.Bot;
 }
 

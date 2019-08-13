@@ -29,7 +29,7 @@ class MeasurementsData extends DataBase {
    * @return {Promise<Models.Measurement>}
    */
   async createOne(data = {}, creator) {
-    const measurement = await this.super.createOne(data);
+    const measurement = await super.createOne(data);
 
     const notification = await measurement.getCreationNotification(creator);
     const measurable = await measurement.getMeasurable();

@@ -1,9 +1,13 @@
+const assert = require('assert');
 const _ = require('lodash');
 
 const { DataBase } = require('./data-base');
 const { MeasurementsData } = require('./measurements-data');
 
 const { UserModel } = require('../models-abstract');
+const { Params } = require('./classes/params');
+const { Query } = require('./classes/query');
+const { Data } = require('./classes/data');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -25,9 +29,9 @@ class UsersData extends DataBase {
    * @return {Promise<Models.User>}
    */
   async getUserByAuth0Id(auth0Id) {
-    const params = { auth0Id };
-    const query = {};
-    const data = { auth0Id };
+    const params = new Params({ auth0Id });
+    const query = new Query();
+    const data = new Data({ auth0Id });
     return this.upsertOne(params, query, data);
   }
 
@@ -43,7 +47,8 @@ class UsersData extends DataBase {
    * @return {Promise<Models.User>}
    */
   async updateOne(id, data, _user) {
-    const user = await this.models.User.findByPk(id);
+    const params = new Params({ id });
+    const user = await this.getOne(params);
     if (user && user.auth0Id === _user.auth0Id) {
       await user.update(data);
     }
@@ -57,7 +62,10 @@ class UsersData extends DataBase {
    * @return {Promise<Models.User>}
    */
   async updateUserInfoFromAuth0(id, userInfo) {
-    const user = await this.models.User.findByPk(id);
+    const params = new Params({ id });
+    const user = await this.getOne(params);
+
+    assert(!!user, 'User is required.');
 
     const emailIn = _.get(userInfo, 'email');
     const isEmailVerifiedIn = !!_.get(userInfo, 'email_verified');

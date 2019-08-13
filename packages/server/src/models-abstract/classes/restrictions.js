@@ -12,7 +12,7 @@ class Restrictions {
       'measuredByAgentId': v => _.isString(v),
       'userId': v => _.isString(v),
       'channelId': v => _.isBoolean(v),
-      'measurableId': v => _.isString(v),
+      'measurableId': v => _.isBoolean(v),
       'channelIdAsId': v => _.isBoolean(v),
       'channelMemberId': v => _.isString(v),
     };

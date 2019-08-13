@@ -1,3 +1,4 @@
+const moment = require('moment');
 const _ = require('lodash');
 
 const { NewMeasurable } = require('./new-measurable');
@@ -19,11 +20,11 @@ class NewMeasurableReachedResolution extends NewMeasurable {
    * @return {Promise<boolean>}
    */
   async _isActual() {
-    return this.input.changed('state') &&
-      this.input.previous('state') === MEASURABLE_STATE.JUDGEMENT_PENDING &&
-      this.input.get('state') === MEASURABLE_STATE.JUDGED &&
-      this.input.get('expectedResolutionDate') !== null &&
-      this.input.get('expectedResolutionDate') < new Date();
+    return this.input.changed('state')
+      && this.input.changed('stateUpdatedAt')
+      && this.input.previous('state') === MEASURABLE_STATE.OPEN
+      && this.input.get('state') === MEASURABLE_STATE.JUDGEMENT_PENDING
+      ;
   }
 
 }

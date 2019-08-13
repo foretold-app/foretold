@@ -232,7 +232,7 @@ class ModelPostgres extends Model {
     if (filter.isArchived) {
       where[this.and].push({
         isArchived: {
-          [this.in]: this.getBooleansOfList(filter.isArchived),
+          [this.in]: this._getBooleansOfList(filter.isArchived),
         }
       });
     }
@@ -321,7 +321,7 @@ class ModelPostgres extends Model {
    * @param {*[]} [list]
    * @return {*[]}
    */
-  getBooleansOfList(list = []) {
+  _getBooleansOfList(list = []) {
     return list.map(item => {
       if (item === 'TRUE') {
         return true;

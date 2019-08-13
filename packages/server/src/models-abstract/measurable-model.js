@@ -124,7 +124,7 @@ class MeasurableModel extends ModelPostgres {
 
     /** @type {Models.Measurable[]} */
     let data = await this.model.findAll(options);
-    data = this.setIndexes(data, edgePagination);
+    data = this._setIndexes(data, edgePagination);
     data.total = total;
 
     return new ResponseAll(data, total);

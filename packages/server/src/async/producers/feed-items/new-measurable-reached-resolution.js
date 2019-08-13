@@ -1,10 +1,11 @@
+const moment = require('moment');
 const _ = require('lodash');
 
-const { ProducerFeedItems } = require('./producer-feed-items');
+const { NewMeasurable } = require('./new-measurable');
 const { Producer } = require('../producer');
 const { MEASURABLE_STATE } = require('../../../models/enums/measurable-state');
 
-class NewMeasurableReachedResolution extends ProducerFeedItems {
+class NewMeasurableReachedResolution extends NewMeasurable {
   /**
    * @param {Models.Measurable} measurable
    */
@@ -19,28 +20,13 @@ class NewMeasurableReachedResolution extends ProducerFeedItems {
    * @return {Promise<boolean>}
    */
   async _isActual() {
-    return this.input.changed('state') &&
-      this.input.previous('state') === MEASURABLE_STATE.JUDGEMENT_PENDING &&
-      this.input.get('state') === MEASURABLE_STATE.JUDGED &&
-      this.input.get('expectedResolutionDate') !== null &&
-      this.input.get('expectedResolutionDate') < new Date();
+    return this.input.changed('state')
+      && this.input.changed('stateUpdatedAt')
+      && this.input.previous('state') === MEASURABLE_STATE.OPEN
+      && this.input.get('state') === MEASURABLE_STATE.JUDGEMENT_PENDING
+      ;
   }
 
-  /**
-   * @param {Models.Agent} agent
-   * @return {Promise.<{agent: {name: string}}>}
-   * @protected
-   */
-  async _getReplacements(agent) {
-    return {
-      agent: {
-        name: (await _.get(agent, 'name')) || 'Somebody',
-      },
-      measurable: {
-        name: this.input.name || 'Question',
-      },
-    }
-  }
 }
 
 module.exports = {

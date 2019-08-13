@@ -309,7 +309,7 @@ class ModelPostgres extends Model {
    * @param {object} [edgePagination]
    * @return {*[]}
    */
-  setIndexes(data = [], edgePagination = {}) {
+  _setIndexes(data = [], edgePagination = {}) {
     return data.map((item, index) => {
       item.index = edgePagination.offset + index;
       return item;
@@ -438,7 +438,7 @@ class ModelPostgres extends Model {
 
     /** @type {Models.Model[]} */
     let data = await this.model.findAll(findCond);
-    data = this.setIndexes(data, edgePagination);
+    data = this._setIndexes(data, edgePagination);
     data.total = total;
 
     return new ResponseAll(data, total);

@@ -85,8 +85,8 @@ export class GuesstimateInput extends React.Component {
     } else if (values.length === 1) {
       this.props.onUpdate([[1], values, false]);
     } else {
-      const min = this.props.min || parsedInput.params[0];
-      const max = this.props.max || parsedInput.params[1];
+      const min = this.props.min;
+      const max = this.props.max;
       this.props.onUpdate(toCdf(values, min, max));
     }
 
@@ -94,9 +94,12 @@ export class GuesstimateInput extends React.Component {
   }
 
   render() {
-    return (<Input type="text" placeholder="10 to 100" value={this.state.value}
-                   onChange={this.handleChange}
-                   ref={input => this.textInput = input}/>
-    )
+    return <Input
+      type="text"
+      placeholder="10 to 100"
+      value={this.state.value}
+      onChange={this.handleChange}
+      ref={input => this.textInput = input}
+    />;
   }
 }

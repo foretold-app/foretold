@@ -5,10 +5,10 @@ const { Producer } = require('../producer');
 
 class NewMeasurable extends ProducerFeedItems {
   /**
-   * @param {Models.Measurement} measurement
+   * @param {Models.Measurable} measurable
    */
-  constructor(measurement) {
-    super(measurement);
+  constructor(measurable) {
+    super(measurable);
     this.templateName =
       Producer.TEMPLATE_NAME.NEW_MEASURABLE_FEED_ITEM;
 
@@ -17,7 +17,7 @@ class NewMeasurable extends ProducerFeedItems {
 
   /**
    * @param {Models.Agent} agent
-   * @return {Promise.<{agent: {name: string}}>}
+   * @return {Promise.<{agent: {name: string}, measurable: {name: string, id: string}}>}
    * @protected
    */
   async _getReplacements(agent) {

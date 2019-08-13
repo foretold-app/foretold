@@ -49,29 +49,20 @@ module Styles = {
 };
 
 let competitorTypeSelect =
-    (
-      ~isOwner: bool,
-      ~state: state,
-      ~send,
-      ~measurable: Types.measurable,
-      ~loggedInUser: Types.user,
-    )
+    (~isOwner: bool, ~state: state, ~send, ~measurable: Types.measurable)
     : ReasonReact.reactElement => {
   let options =
     Primary.CompetitorType.availableSelections(
       ~isOwner,
       ~state=measurable.state,
-      ~loggedInUser,
     );
 
-  options == [||]
-    ? ReasonReact.null
-    : <Select
-        value={state.competitorType}
-        className=Styles.fullWidth
-        onChange={e => send(UpdateCompetitorType(e))}>
-        {options |> ReasonReact.array}
-      </Select>;
+  <Select
+    value={state.competitorType}
+    className=Styles.fullWidth
+    onChange={e => send(UpdateCompetitorType(e))}>
+    {options |> ReasonReact.array}
+  </Select>;
 };
 
 let dataTypeSelect = (~state, ~send): ReasonReact.reactElement =>
@@ -350,10 +341,15 @@ let mainBlock =
 
     | "COMMENT" =>
       <>
-        <div className=Styles.inputBox>
-          <h4 className=Styles.label> {"Comment Type" |> ste} </h4>
-        </div>
-        {ValueInput.comment(state.comment, send)}
+        {Primary.User.show(
+           loggedInUser,
+           <>
+             <div className=Styles.inputBox>
+               <h4 className=Styles.label> {"Comment Type" |> ste} </h4>
+             </div>
+             {ValueInput.comment(state.comment, send)}
+           </>,
+         )}
         <div className=Styles.inputBox>
           <h4 className=Styles.label> {"Comment" |> ste} </h4>
         </div>
@@ -378,13 +374,7 @@ let mainBlock =
     </div>
     <div className=Styles.inputSection>
       <div className=Styles.select>
-        {competitorTypeSelect(
-           ~isOwner=isCreator,
-           ~state,
-           ~send,
-           ~measurable,
-           ~loggedInUser,
-         )}
+        {competitorTypeSelect(~isOwner=isCreator, ~state, ~send, ~measurable)}
       </div>
       getDataTypeSelect
       valueInput

@@ -28,7 +28,7 @@ let make =
         );
 
       <>
-        <Div float=`left> {channelink(channel)} </Div>
+        <Div float=`left> {channelLink(channel)} </Div>
         <Div float=`right>
           {channel.myRole === Some(`NONE)
              ? joinButton(channel.id)
@@ -43,7 +43,7 @@ let make =
     };
 
     let topGlobalChannel = channel => {
-      <> <Div float=`left> {channelink(channel)} </Div> </>;
+      <> <Div float=`left> {channelLink(channel)} </Div> </>;
     };
 
     let top = channel =>

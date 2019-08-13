@@ -150,7 +150,7 @@ module FullPage = {
 let channelBack = (~onClick, ()) =>
   <FC__Button onClick> {"< Back" |> ReasonReact.string} </FC__Button>;
 
-let channelink = (c: Types.channel) =>
+let channelLink = (c: Types.channel) =>
   <Link.Jsx2
     linkType={Internal(ChannelShow(c.id))} className=Styles.channelText>
     {switch (c.id) {

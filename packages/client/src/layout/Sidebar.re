@@ -38,7 +38,7 @@ module Styles = {
     style([
       flex(`num(1.)),
       color(`rgba((255, 255, 255, 0.6))),
-      fontSize(`em(1.2)),
+      fontSize(`em(1.1)),
       padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
       cursor(`pointer),
       textDecoration(`none),
@@ -54,7 +54,7 @@ module Styles = {
       flex(`num(1.)),
       color(`rgba((255, 255, 255, 0.8))),
       background(`hex("3192ff")),
-      fontSize(`em(1.2)),
+      fontSize(`em(1.1)),
       cursor(`pointer),
       padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
       focus([textDecoration(`none)]),

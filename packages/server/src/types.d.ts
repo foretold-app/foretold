@@ -195,6 +195,7 @@ export namespace Layers {
       seriesId?: Models.ObjectID,
       channelId?: Models.ObjectID,
       measurableId?: Models.ObjectID,
+      userId?: Models.ObjectID,
       agentId?: Models.ObjectID,
       excludeChannelId?: Models.ObjectID,
       competitorType?: string,

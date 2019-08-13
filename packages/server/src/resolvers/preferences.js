@@ -2,6 +2,11 @@ const _ = require('lodash');
 
 const datas = require('../data');
 
+const { Options } = require('../data/classes/options');
+const { Params } = require('../data/classes/params');
+const { Query } = require('../data/classes/query');
+const { Data } = require('../data/classes/data');
+
 /**
  * @param {object | null} root
  * @param {object} args
@@ -11,9 +16,9 @@ const datas = require('../data');
  */
 async function getOne(root, args, context, info) {
   const agentId = _.get(root, 'id');
-  const params = { agentId };
-  const query = {};
-  const data = { agentId };
+  const params = new Params({ agentId });
+  const query = new Query();
+  const data = new Data({ agentId });
   return datas.preferences.upsertOne(params, query, data);
 }
 
@@ -27,9 +32,9 @@ async function getOne(root, args, context, info) {
  * @returns {Promise<Models.User>}
  */
 async function update(root, args, context, info) {
-  const params = { id: args.id };
-  const data = args.input;
-  const options = {};
+  const params = new Params({ id: args.id });
+  const data = new Data(args.input);
+  const options = new Options();
   return datas.preferences.updateOne(params, data, options);
 }
 

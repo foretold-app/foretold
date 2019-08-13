@@ -1,8 +1,12 @@
 const _ = require('lodash');
 
 const data = require('../data');
+
 const { Pagination } = require('../data/classes/pagination');
+const { Params } = require('../data/classes/params');
+const { Data } = require('../data/classes/data');
 const { Options } = require('../data/classes/options');
+const { Filter } = require('../data/classes/filter');
 
 /**
  * @param {*} root
@@ -13,10 +17,10 @@ const { Options } = require('../data/classes/options');
  * @returns {Promise<Models.User>}
  */
 async function create(root, args, context, info) {
-  const datas = {
+  const datas = new Data({
     ...args.input,
     userId: _.get(context, 'user.id'),
-  };
+  });
   return data.bots.createOne(datas);
 }
 
@@ -30,7 +34,9 @@ async function create(root, args, context, info) {
  * @returns {Promise<Models.User>}
  */
 async function update(root, args, context, info) {
-  return data.bots.updateOne({ id: args.id }, args.input);
+  const params = new Params({ id: args.id });
+  const data = new Data(args.input);
+  return data.bots.updateOne(params, data);
 }
 
 /**
@@ -46,9 +52,10 @@ async function update(root, args, context, info) {
  * @returns {Promise<Models.Model[]>}
  */
 async function all(root, args, context, info) {
-  const filter = { userId: _.get(args, 'ownerId') };
+  const filter = new Filter({ userId: _.get(args, 'ownerId') });
   const pagination = new Pagination(args);
   const options = new Options();
+
   const connection = await data.bots.getConnection(filter, pagination, options);
   return connection.getData();
 }
@@ -62,7 +69,8 @@ async function all(root, args, context, info) {
  */
 async function one(root, args, context, info) {
   const id = _.get(args, 'id');
-  return data.bots.getOne({ id });
+  const params = new Params({ id });
+  return data.bots.getOne(params);
 }
 
 /**

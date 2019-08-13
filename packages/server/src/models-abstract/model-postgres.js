@@ -272,7 +272,7 @@ class ModelPostgres extends Model {
    * @param {number} total
    * @return {{offset: number, limit: number }}
    */
-  getPagination(pagination = {}, total = 0) {
+  _getPagination(pagination = {}, total = 0) {
     pagination.before = Math.abs(pagination.before) || total;
     pagination.after = Math.abs(pagination.after) || 0;
 
@@ -427,7 +427,7 @@ class ModelPostgres extends Model {
 
     /** @type {number} */
     const total = await this.model.count(cond);
-    const edgePagination = this.getPagination(pagination, total);
+    const edgePagination = this._getPagination(pagination, total);
 
     const findCond = {
       ...cond,

@@ -145,7 +145,7 @@ class MeasurementModel extends ModelPostgres {
 
     /** @type {number} */
     const total = await this.model.count({ where, include });
-    const edgePagination = this.getPagination(pagination, total);
+    const edgePagination = this._getPagination(pagination, total);
 
     const cond = {
       limit: edgePagination.limit,

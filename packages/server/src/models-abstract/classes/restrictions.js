@@ -9,7 +9,7 @@ class Restrictions {
     const list = {
       'isAdmin': v => _.isBoolean(v),
       'agentId': v => _.isString(v),
-      'measuredByAgentId': v => _.isString(v),
+      'measuredByAgentId': v => _.isString(v) || _.isUndefined(v),
       'userId': v => _.isString(v),
       'channelId': v => _.isBoolean(v),
       'measurableId': v => _.isBoolean(v),
@@ -25,7 +25,10 @@ class Restrictions {
 
     _.each(list, (test, name) => {
       if (_.has(this, name)) {
-        assert(test(this[name]), `Restrictions."${name}" assert failed.`);
+        assert(
+          test(this[name]),
+          `Restrictions."${name}" assert failed, ` +
+          `type is "${typeof _.get(this, name)}".`);
       }
     });
   }

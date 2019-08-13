@@ -27,7 +27,7 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async createOne(data = {}, creator = {}) {
-    const measurable = await this.super.createOne(data);
+    const measurable = await super.createOne(data);
     measurable && notifications.creationNotification(measurable, creator);
     return measurable;
   }

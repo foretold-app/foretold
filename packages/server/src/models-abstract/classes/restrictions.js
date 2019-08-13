@@ -7,7 +7,7 @@ class Restrictions {
    */
   constructor(options) {
     const list = {
-      'isAdmin': v => _.isBoolean(v),
+      'isAdmin': v => _.isBoolean(v) || _.isUndefined(v),
       'agentId': v => _.isString(v),
       'measuredByAgentId': v => _.isString(v) || _.isUndefined(v),
       'userId': v => _.isString(v),

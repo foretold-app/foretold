@@ -35,13 +35,13 @@ describe('Measurement Data layer', () => {
   describe('getAll()', () => {
     const options = { agentId: 'agentId1' };
     beforeEach(() => {
-      jest.spyOn(instance.MeasurementModel, 'getAll').mockReturnValue(
+      jest.spyOn(instance.model, 'getAll').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('finds a measurement', () => {
       return instance.getAll({}, {}, options).then((result) => {
-        expect(instance.MeasurementModel.getAll).toHaveBeenCalledWith(
+        expect(instance.model.getAll).toHaveBeenCalledWith(
           {},
           {},
           { "agentId": "agentId1", "measurableId": true },

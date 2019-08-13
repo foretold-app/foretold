@@ -1,10 +1,10 @@
 const _ = require('lodash');
 
-const { ProducerFeedItems } = require('./producer-feed-items');
+const { NewMeasurable } = require('./new-measurable');
 const { Producer } = require('../producer');
 const { MEASURABLE_STATE } = require('../../../models/enums/measurable-state');
 
-class NewMeasurableReachedResolution extends ProducerFeedItems {
+class NewMeasurableReachedResolution extends NewMeasurable {
   /**
    * @param {Models.Measurable} measurable
    */
@@ -26,21 +26,6 @@ class NewMeasurableReachedResolution extends ProducerFeedItems {
       this.input.get('expectedResolutionDate') < new Date();
   }
 
-  /**
-   * @param {Models.Agent} agent
-   * @return {Promise.<{agent: {name: string}}>}
-   * @protected
-   */
-  async _getReplacements(agent) {
-    return {
-      agent: {
-        name: (await _.get(agent, 'name')) || 'Somebody',
-      },
-      measurable: {
-        name: this.input.name || 'Question',
-      },
-    }
-  }
 }
 
 module.exports = {

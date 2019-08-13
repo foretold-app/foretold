@@ -561,7 +561,7 @@ module CompetitorType = {
     };
   };
 
-  let toSelection = (loggedInUser: Types.user, t: t) =>
+  let toSelection = (t: t) =>
     switch (t) {
     | `COMPETITIVE =>
       <Antd.Select.Option value="COMPETITIVE">
@@ -572,12 +572,9 @@ module CompetitorType = {
         {"Resolve" |> ste}
       </Antd.Select.Option>
     | `COMMENT =>
-      User.show(
-        loggedInUser,
-        <Antd.Select.Option value="COMMENT">
-          {"Comment" |> ste}
-        </Antd.Select.Option>,
-      )
+      <Antd.Select.Option value="COMMENT">
+        {"Comment" |> ste}
+      </Antd.Select.Option>
     | `UNRESOLVED =>
       <Antd.Select.Option value="UNRESOLVED">
         {"Close without Answer" |> ste}
@@ -586,12 +583,6 @@ module CompetitorType = {
     };
 
   let availableSelections =
-      (
-        ~isOwner: bool,
-        ~state: option(Types.measurableState),
-        ~loggedInUser: Types.user,
-      ) =>
-    availableInputs(~isOwner, ~state)
-    |> E.A.fmap(toSelection(loggedInUser))
-    |> E.A.filter(r => r != ReasonReact.null);
+      (~isOwner: bool, ~state: option(Types.measurableState)) =>
+    availableInputs(~isOwner, ~state) |> E.A.fmap(toSelection);
 };

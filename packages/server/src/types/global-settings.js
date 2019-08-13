@@ -9,7 +9,7 @@ const globalSetting = new graphql.GraphQLObjectType({
     entity: { type: GraphQLJSON },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    removedAt: { type: graphql.GraphQLNonNull(DateType.default) },
+    removedAt: { type: DateType.default },
   })
 });
 

@@ -120,7 +120,7 @@ const schema = new graphql.GraphQLSchema({
       globalSetting: {
         type: types.globalSettings.globalSetting,
         args: {
-          name: { type: graphql.GraphQLString },
+          name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
         resolve: resolvers.globalSettings.one,
       },

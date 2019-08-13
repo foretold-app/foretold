@@ -7,6 +7,11 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: sequelize.fn('uuid_generate_v4'),
       allowNull: false,
     },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
     entity: {
       type: DataTypes.JSON,
       allowNull: true,

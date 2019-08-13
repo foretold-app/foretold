@@ -117,6 +117,14 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.feedItems.all,
       },
 
+      globalSetting: {
+        type: types.globalSettings.globalSetting,
+        args: {
+          name: { type: graphql.GraphQLString },
+        },
+        resolve: resolvers.globalSettings.one,
+      },
+
       agent: {
         type: types.agents.agent,
         args: {

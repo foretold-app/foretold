@@ -3,7 +3,7 @@ let toGlobalSetting = a =>
 
 module Query = [%graphql
   {|
-    query globalSetting ($name: String) {
+    query globalSetting ($name: String!) {
       globalSetting(name: $name) {
         id
         entityGraph
@@ -15,15 +15,14 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let inner = innerComponentFn => {
-  <QueryComponent>
+  let query = Query.make(~name="main", ());
+  <QueryComponent variables=query##variables>
     ...{({result}) =>
       result
-      |> HttpResponse.fromApollo
-      |> HttpResponse.fmap(e =>
-           e##globalSetting |> E.O.fmap(toGlobalSetting)
-         )
-      |> HttpResponse.optionalToMissing
-      |> innerComponentFn
+      |> ApolloUtils.apolloResponseToResult
+      |> E.R.fmap(e => e##globalSetting |> E.O.fmap(toGlobalSetting))
+      |> E.R.fmap(innerComponentFn)
+      |> E.R.id
     }
   </QueryComponent>;
 };

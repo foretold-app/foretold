@@ -82,6 +82,10 @@ let make = _children => {
            <Redirect appContext />
          </Providers.AppContext.Provider>;
        })}
+      {GlobalSettingGet.inner((globalSetting: option(Types.globalSetting)) => {
+         Js.log2("settings", globalSetting);
+         ReasonReact.null;
+       })}
     </ReasonApollo.Provider>;
   },
 };

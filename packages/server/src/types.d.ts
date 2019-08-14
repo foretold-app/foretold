@@ -141,6 +141,10 @@ export namespace Models {
     };
   }
 
+  export interface GlobalSetting extends Model {
+    entityGraph: null | object;
+  }
+
   export type Creator = Models.User | Models.Bot;
 }
 
@@ -218,6 +222,7 @@ export namespace Layers {
       id?: Models.ObjectID,
       agentId?: Models.ObjectID,
       auth0Id?: string;
+      name?: string;
     };
     type response = { data: any };
     type responseList = { data: any[], total: number };

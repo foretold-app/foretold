@@ -40,20 +40,25 @@ const server = new ApolloServer({
 const app = express();
 app.use(cors());
 
+{
+  const fallbackFile = path.resolve(__dirname, '../../client/dist/index.html');
+  const distDir = path.resolve(__dirname, '../../client/dist');
 
-const fallbackFile = path.resolve(__dirname, '../../client/dist/index.html');
-const distDir = path.resolve(__dirname, '../../client/dist');
+  console.log('Fallback file', fallbackFile);
+  console.log('Dist dir', distDir);
 
-console.log('Fallback file', fallbackFile);
-console.log('Dist dir', distDir);
+  // Returns all routes excluding "/graphql" as static files
+  // or returns fallback page.
+  app.get(/^((?!(graphql|hooks)).)*$/,
+    express.static(distDir),
+    (req, res) => res.sendFile(fallbackFile),
+  );
+}
 
-// Returns all routes excluding "/graphql" as static files
-// or returns fallback page.
-app.get(/^((?!graphql).)*$/,
-  express.static(distDir),
-  (req, res) => res.sendFile(fallbackFile),
-);
-
+{
+  const { app: subApp } = require('./github/app');
+  app.use('/hooks', subApp);
+}
 
 app.use(bodyParser.graphql());
 server.applyMiddleware({ app });

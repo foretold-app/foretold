@@ -593,3 +593,11 @@ module CompetitorType = {
       (~isOwner: bool, ~state: option(Types.measurableState)) =>
     availableInputs(~isOwner, ~state) |> E.A.fmap(toSelection);
 };
+
+module GlobalSetting = {
+  type t = Types.globalSetting;
+  let make = (~id: string, ~entityGraph: option(Js.Json.t)=None, ()): t => {
+    id,
+    entityGraph,
+  };
+};

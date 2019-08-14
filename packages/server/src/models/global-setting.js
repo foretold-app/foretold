@@ -7,6 +7,8 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: sequelize.fn('uuid_generate_v4'),
       allowNull: false,
     },
+    // Always use this field
+    // since UUID4 is not ordered.
     name: {
       type: DataTypes.STRING,
       allowNull: false,

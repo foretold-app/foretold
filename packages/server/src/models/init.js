@@ -18,6 +18,7 @@ function init(db) {
   const notification = db.sequelize.import('./notification');
   const agentNotification = db.sequelize.import('./agent-notification');
   const feedItem = db.sequelize.import('./feed-item');
+  const globalSetting = db.sequelize.import('./global-setting');
   // const invitation = db.sequelize.import('./invitation');
 
   db.Agent = agent;
@@ -34,14 +35,23 @@ function init(db) {
   db.Notification = notification;
   db.AgentNotification = agentNotification;
   db.FeedItem = feedItem;
+  db.GlobalSetting = globalSetting;
   // db.Invitation = invitation;
+
+  const initList = [
+    'Agent', 'Bot', 'ChannelMemberships', 'Channel', 'Measurable',
+    'Series', 'User', 'Token', 'Preference', 'Template', 'Notification',
+    'AgentNotification', 'FeedItem', 'GlobalSetting', 'Measurement',
+  ];
 
   // Associate All Models
   console.log(' --- ');
-  Object.keys(db).forEach((modelName) => {
+  initList.forEach((modelName) => {
     if (db[modelName].associate) {
       console.log(' > Build association for model:', modelName);
       db[modelName].associate(db);
+    } else {
+      console.log(' > Pass association for model:', modelName);
     }
   });
   console.log(' --- ');

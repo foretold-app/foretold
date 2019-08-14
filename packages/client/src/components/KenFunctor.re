@@ -1,8 +1,15 @@
-module KenFunctor = (Config: {
-                       type t = Js.Json.t;
-                       let entityGraph: t;
-                     }) => {
-  type measurable = Types.measurable;
+module type KenModule = {
+  type t;
+  let graph: Graph_Dirs.t;
+  let itemUrl: string => string;
+  let findName: string => option(string);
+  let names: string => list(Graph_T.T.fact);
+  let findInstanceOfName: string => option(Graph_T.T.thingIdString);
+  let things: array(Graph_T.T.thing);
+};
+
+module KenFunctor = (Config: {let entityGraph: Js.Json.t;}) : KenModule => {
+  type t = string;
   let graph = Ken_Interface.Graph.fromJson(Config.entityGraph);
 
   let itemUrl = id => Routing.Url.toString(EntityShow(id));

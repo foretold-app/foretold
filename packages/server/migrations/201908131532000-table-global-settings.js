@@ -14,7 +14,7 @@ module.exports = {
           allowNull: false,
           unique: true,
         },
-        entity: {
+        entityGraph: {
           type: Sequelize.JSON,
           allowNull: true,
         },
@@ -25,10 +25,6 @@ module.exports = {
         updatedAt: {
           type: Sequelize.DATE,
           defaultValue: Sequelize.NOW,
-        },
-        removedAt: {
-          type: Sequelize.DATE,
-          allowNull: true,
         },
       });
 

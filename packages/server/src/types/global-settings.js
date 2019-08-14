@@ -6,10 +6,9 @@ const globalSetting = new graphql.GraphQLObjectType({
   name: 'GlobalSetting',
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    entity: { type: GraphQLJSON },
+    entityGraph: { type: GraphQLJSON },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    removedAt: { type: DateType.default },
   })
 });
 

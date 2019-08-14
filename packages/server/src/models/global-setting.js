@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
     },
-    entity: {
+    entityGraph: {
       type: DataTypes.JSON,
       allowNull: true,
     },
@@ -23,10 +23,6 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
-    },
-    removedAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
     },
   });
 

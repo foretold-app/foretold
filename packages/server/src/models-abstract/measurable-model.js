@@ -107,7 +107,7 @@ class MeasurableModel extends ModelPostgres {
 
     /** @type {number} */
     const total = await this.model.count(cond);
-    const edgePagination = this.getPagination(pagination, total);
+    const edgePagination = this._getPagination(pagination, total);
 
     const options = {
       ...cond,
@@ -124,7 +124,7 @@ class MeasurableModel extends ModelPostgres {
 
     /** @type {Models.Measurable[]} */
     let data = await this.model.findAll(options);
-    data = this.setIndexes(data, edgePagination);
+    data = this._setIndexes(data, edgePagination);
     data.total = total;
 
     return new ResponseAll(data, total);

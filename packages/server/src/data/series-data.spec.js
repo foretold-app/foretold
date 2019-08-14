@@ -9,21 +9,6 @@ describe('SeriesData', () => {
 
   const instance = new SeriesData();
 
-  describe('createOne()', () => {
-    const data = {};
-    beforeEach(() => {
-      jest.spyOn(models.Series, 'create').mockReturnValue(
-        Promise.resolve(true),
-      );
-    });
-    it('creates series', () => {
-      return instance.createOne(data).then((result) => {
-        expect(models.Series.create).toHaveBeenCalledWith(data);
-        expect(result).toBe(true);
-      });
-    });
-  });
-
   describe('getOne()', () => {
     const id = 'id3';
     const options = { agentId: 'agentId1' };

@@ -1,7 +1,10 @@
 const _ = require('lodash');
 
 const data = require('../data');
+
 const { Pagination } = require('../data/classes/pagination');
+const { Filter } = require('../data/classes/filter');
+const { Options } = require('../data/classes/options');
 
 /**
  * @todo: update input of getAll
@@ -23,19 +26,19 @@ const { Pagination } = require('../data/classes/pagination');
  * @returns {Promise<Models.Measurable[]>}
  */
 async function all(root, args, context, info) {
-  const filter = {
+  const filter = new Filter({
     creatorId: _.get(args, 'creatorId'),
     seriesId: _.get(args, 'seriesId'),
     channelId: _.get(args, 'channelId'),
     states: _.get(args, 'states'),
     isArchived: _.get(args, 'isArchived'),
-  };
+  });
   const pagination = new Pagination(args);
-  const options = {
+  const options = new Options({
     isAdmin: _.get(context, 'agent.isAdmin'),
     agentId: _.get(context, 'agent.id'),
     measuredByAgentId: _.get(args, 'measuredByAgentId'),
-  };
+  });
 
   // tricky
   context.resultOrLatestMeasurementForAgentId = args.resultOrLatestMeasurementForAgentId;

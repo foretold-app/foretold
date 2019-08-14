@@ -8,7 +8,7 @@ class Params {
    * @param {Layers.DataSourceLayer.params} [params]
    */
   constructor(params = {}) {
-    const list = ['id', 'agentId', 'name'];
+    const list = ['id', 'agentId', 'name', 'auth0Id'];
 
     _.each(list, (name) => {
       if (_.has(params, name)) {

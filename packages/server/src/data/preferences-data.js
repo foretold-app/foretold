@@ -1,6 +1,9 @@
 const { DataBase } = require('./data-base');
 
 const { PreferenceModel } = require('../models-abstract');
+const { Params } = require('./classes/params');
+const { Query } = require('./classes/query');
+const { Data } = require('./classes/data');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -20,9 +23,9 @@ class PreferencesData extends DataBase {
    * @return {Promise<*>}
    */
   async getOneByAgentId(agentId) {
-    const params = { agentId };
-    const query = {};
-    const data = { agentId };
+    const params = new Params({ agentId });
+    const query = new Query();
+    const data = new Data({ agentId });
     return this.upsertOne(params, query, data);
   }
 }

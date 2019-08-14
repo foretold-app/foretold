@@ -20,6 +20,7 @@ class MeasurementsData extends DataBase {
   }
 
   /**
+   * @todo: move logic
    * @todo: fix interface
    * @todo: rename, move down
    * @public
@@ -81,6 +82,7 @@ class MeasurementsData extends DataBase {
   }
 
   /**
+   * @todo: move it into Model Abstraction layer
    * @public
    * @param {Models.Measurable} measurable
    * @param {Models.ObjectID} agentId

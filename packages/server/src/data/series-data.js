@@ -21,7 +21,7 @@ class SeriesData extends DataBase {
    * @return {Promise<*>}
    */
   async createOne(data) {
-    return this.models.Series.create(data);
+    return super.createOne(data);
   }
 
   /**

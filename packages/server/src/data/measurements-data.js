@@ -5,6 +5,7 @@ const { DataBase } = require('./data-base');
 const { MeasurementModel } = require('../models-abstract');
 const { MEASURABLE_STATE } = require('../models/enums/measurable-state');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../models/enums/measurement-competitor-type');
+const { Restrictions } = require('../models-abstract/classes/restrictions');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -19,6 +20,7 @@ class MeasurementsData extends DataBase {
   }
 
   /**
+   * @todo: move logic
    * @todo: fix interface
    * @todo: rename, move down
    * @public
@@ -28,12 +30,12 @@ class MeasurementsData extends DataBase {
    * @return {Promise<Models.Measurement>}
    */
   async createOne(data = {}, creator) {
-    const measurement = await this.models.Measurement.create(data);
+    const measurement = await super.createOne(data);
 
     const notification = await measurement.getCreationNotification(creator);
     const measurable = await measurement.getMeasurable();
     const channel = await measurable.getChannel();
-    if (channel.isPublic){
+    if (channel.isPublic) {
       await notify(notification);
     }
 
@@ -50,12 +52,12 @@ class MeasurementsData extends DataBase {
    * @return {Promise<{data: Models.Measurement[], total: number}>}
    */
   async getAll(filter = {}, pagination = {}, options = {}) {
-    const restrictions = {
+    const restrictions = new Restrictions({
       measurableId: true,
       isAdmin: options.isAdmin,
       agentId: options.agentId,
-    };
-    return this.MeasurementModel.getAll(filter, pagination, restrictions);
+    });
+    return this.model.getAll(filter, pagination, restrictions);
   }
 
   /**
@@ -73,24 +75,25 @@ class MeasurementsData extends DataBase {
       where: {
         id,
         measurableId: {
-          [this.model.Op.in]: this.MeasurementModel._measurableIdsLiteral(options.agentId),
+          [this.model.Op.in]: this.model._measurableIdsLiteral(options.agentId),
         },
       },
     });
   }
 
   /**
+   * @todo: move it into Model Abstraction layer
    * @public
    * @param {Models.Measurable} measurable
    * @param {Models.ObjectID} agentId
-   * @return {Promise<Models.Measurement>}
+   * @return {Promise<Models.Model>}
    */
   async getLatest({ measurable, agentId } = {}) {
     const measurableId = measurable.id;
     const competitorType = MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE;
 
     if (measurable.state === MEASURABLE_STATE.JUDGED) {
-      const measurement = await this.MeasurementModel.getOne({
+      const measurement = await this.model.getOne({
         measurableId,
         agentId,
         competitorType,
@@ -101,7 +104,7 @@ class MeasurementsData extends DataBase {
       return measurement;
     }
 
-    return this.MeasurementModel.getOne({ measurableId, agentId });
+    return this.model.getOne({ measurableId, agentId });
   }
 
   /**

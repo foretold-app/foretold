@@ -1,6 +1,7 @@
 const _ = require('lodash');
 
 const data = require('../data');
+const { Data } = require('../data/classes/data');
 
 /**
  * @param {*} root
@@ -13,11 +14,11 @@ const data = require('../data');
  * @returns {Promise<boolean>}
  */
 async function create(root, args, context, info) {
-  const datas = {
+  const datas = new Data({
     inviterAgentId: _.get(context, 'agent.id'),
     email: _.get(args, 'input.email'),
     channelId: _.get(args, 'input.channelId'),
-  };
+  });
   return data.invitations.invite(datas);
 }
 

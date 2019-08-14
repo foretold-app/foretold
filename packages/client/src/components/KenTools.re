@@ -22,7 +22,7 @@ module Functor =
     |> E.O.fmap((globalSetting: Types.globalSetting) =>
          globalSetting.entityGraph |> E.O.default(Js.Json.null)
        )
-    |> E.O.default(Js.Json.null)
+    |> E.O.default(Js.Json.array([||]))
     |> (e => Ken_Interface.Graph.fromJson(e));
 
   let itemUrl = id => Routing.Url.toString(EntityShow(id));

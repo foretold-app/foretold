@@ -38,17 +38,30 @@ let dateItem = (~m: measurable, ~showOn=true, ~onStyle=dateOnStyle, ()) =>
 let link = (~m: measurable) => {
   open Css;
   let name = style([fontSize(`em(1.)), color(`hex("333"))]);
-  <>
-    {MeasurableEntityLinks.nameEntityLink(~m, ~className=Shared.TagLink.item)
-     |> E.O.React.defaultNull}
-    {MeasurableEntityLinks.propertyEntityLink(
-       ~m,
-       ~className=Shared.TagLink.property,
-     )
-     |> E.O.React.defaultNull}
-    <span className=name> {m.name |> ste} </span>
-    {dateItem(~m, ()) |> E.O.React.defaultNull}
-  </>;
+
+  <Providers.AppContext.Consumer>
+    ...{context => {
+      module Ken =
+        KenTools.Functor({
+          let globalSetting = context.globalSetting;
+        });
+      module MeasurableEntityLinks = MeasurableEntityLinks.Functor(Ken);
+      <>
+        {MeasurableEntityLinks.nameEntityLink(
+           ~m,
+           ~className=Shared.TagLink.item,
+         )
+         |> E.O.React.defaultNull}
+        {MeasurableEntityLinks.propertyEntityLink(
+           ~m,
+           ~className=Shared.TagLink.property,
+         )
+         |> E.O.React.defaultNull}
+        <span className=name> {m.name |> ste} </span>
+        {dateItem(~m, ()) |> E.O.React.defaultNull}
+      </>;
+    }}
+  </Providers.AppContext.Consumer>;
 };
 
 let description = (~m: measurable) =>

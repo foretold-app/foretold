@@ -1,4 +1,4 @@
-module Functor = (Ken: KenFunctor.KenModule) => {
+module Functor = (Ken: KenTools.KenModule) => {
   let kenDisplay = id => {
     Ken.names(id)
     |> E.A.of_list

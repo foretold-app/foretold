@@ -2,9 +2,9 @@ open Utils;
 
 let component = ReasonReact.statelessComponent("EntityShow");
 
-module Columns = {
-  type record = EKen.Thing.t;
-  type column = Table.column(EKen.Thing.t);
+module ColumnsFunctor = (Ken: KenTools.KenModule) => {
+  type record = Graph_T.T.thing;
+  type column = Table.column(Graph_T.T.thing);
 
   let nameColumn: column =
     Table.Column.make(
@@ -12,7 +12,7 @@ module Columns = {
       ~render=
         (r: record) =>
           <Link.Jsx2 linkType={Internal(EntityShow(r |> Graph_T.Thing.id))}>
-            {r |> EKen.Thing.getName |> ste}
+            {r |> Ken.getName |> ste}
           </Link.Jsx2>,
       ~flex=2,
       (),
@@ -21,7 +21,7 @@ module Columns = {
   let instanceOf: column =
     Table.Column.make(
       ~name="Instance Of" |> ste,
-      ~render=(r: record) => r |> EKen.Thing.getInstanceOfName |> ste,
+      ~render=(r: record) => r |> Ken.getInstanceOfName |> ste,
       (),
     );
 
@@ -35,14 +35,25 @@ module Columns = {
   let all = [|nameColumn, instanceOf, idColumn|];
 };
 
-let dataSource = EKen.Things.getAll |> EKen.Things.withNames;
-
 let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>
-    SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("All Entities"),
-      ~body=Table.fromColumns(Columns.all, dataSource, ()),
-    )
-    |> layout,
+    <Providers.AppContext.Consumer>
+      ...{context => {
+        module Ken =
+          KenTools.Functor({
+            let globalSetting = context.globalSetting;
+          });
+
+        let dataSource = Ken.things |> Ken.withNames;
+
+        module Columns = ColumnsFunctor(Ken);
+
+        SLayout.LayoutConfig.make(
+          ~head=SLayout.Header.textDiv("All Entities"),
+          ~body=Table.fromColumns(Columns.all, dataSource, ()),
+        )
+        |> layout;
+      }}
+    </Providers.AppContext.Consumer>,
 };

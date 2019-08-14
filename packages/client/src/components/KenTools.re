@@ -1,20 +1,21 @@
 module type KenModule = {
-  type t;
+  type t = Graph_T.T.thing;
   let graph: Graph_Dirs.t;
   let itemUrl: string => string;
   let findName: string => option(string);
   let names: string => list(Graph_T.T.fact);
   let findInstanceOfName: string => option(Graph_T.T.thingIdString);
-  let things: array(Graph_T.T.thing);
-  let getName: Graph_T.T.thing => string;
-  let getInstanceOfName: Graph_T.T.thing => string;
-  let withNames: Js.Array.t(Graph_T.T.thing) => Js.Array.t(Graph_T.T.thing);
+  let things: array(t);
+  let getName: t => string;
+  let getInstanceOfName: t => string;
+  let withNames: Js.Array.t(t) => Js.Array.t(t);
+  let dataSource: Js.Array.t(t);
 };
 
 module Functor =
        (Config: {let globalSetting: option(Types.globalSetting);})
        : KenModule => {
-  type t = string;
+  type t = Graph_T.T.thing;
 
   let graph =
     Config.globalSetting
@@ -62,13 +63,14 @@ module Functor =
 
   let things = graph |> Graph_T.F.thingArray;
 
-  let getName = (t: Graph_T.T.thing) =>
-    t |> Graph_T.Thing.id |> findName |> E.O.default("");
+  let getName = t => t |> Graph_T.Thing.id |> findName |> E.O.default("");
 
-  let getInstanceOfName = (t: Graph_T.T.thing) =>
+  let getInstanceOfName = t =>
     t |> Graph_T.Thing.id |> findInstanceOfName |> E.O.default("");
 
-  let hasName = (t: Graph_T.T.thing) => getName(t) != "";
+  let hasName = t => getName(t) != "";
 
   let withNames = E.A.filter(hasName);
+
+  let dataSource = things |> withNames;
 };

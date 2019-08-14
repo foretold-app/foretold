@@ -42,10 +42,10 @@ let make =
   render: _self =>
     <Providers.AppContext.Consumer>
       ...{context => {
-        module Ken =
-          KenTools.Functor({
-            let globalSetting = context.globalSetting;
-          });
+        module Config = {
+          let globalSetting = context.globalSetting;
+        };
+        module Ken = KenTools.Functor(Config);
         module MeasurableEntityLinks = MeasurableEntityLinks.Functor(Ken);
 
         <div className=Styles.group>

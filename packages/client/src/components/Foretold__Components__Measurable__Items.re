@@ -41,10 +41,10 @@ let link = (~m: measurable) => {
 
   <Providers.AppContext.Consumer>
     ...{context => {
-      module Ken =
-        KenTools.Functor({
-          let globalSetting = context.globalSetting;
-        });
+      module Config = {
+        let globalSetting = context.globalSetting;
+      };
+      module Ken = KenTools.Functor(Config);
       module MeasurableEntityLinks = MeasurableEntityLinks.Functor(Ken);
       <>
         {MeasurableEntityLinks.nameEntityLink(

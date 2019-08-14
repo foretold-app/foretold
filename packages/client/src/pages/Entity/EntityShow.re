@@ -5,10 +5,10 @@ let component = ReasonReact.statelessComponent("EntityShow");
 let display = id => {
   <Providers.AppContext.Consumer>
     ...{context => {
-      module Ken =
-        KenTools.Functor({
-          let globalSetting = context.globalSetting;
-        });
+      module Config = {
+        let globalSetting = context.globalSetting;
+      };
+      module Ken = KenTools.Functor(Config);
       module MeasurableEntityLinks = MeasurableEntityLinks.Functor(Ken);
 
       Ken.names(id)

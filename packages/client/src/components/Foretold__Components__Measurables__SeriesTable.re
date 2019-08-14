@@ -48,14 +48,14 @@ let make =
               className={Styles.row(Some(m.id) == selected)}
               onClick={_e => onClick(m.id)}>
               <div className=Styles.column>
-                {MeasurableItems.MeasurableEntityLinks.nameEntityLink(
+                {MeasurableEntityLinks.nameEntityLink(
                    ~m,
                    ~className=Shared.TagLink.item,
                  )
                  |> E.O.React.defaultNull}
               </div>
               <div className=Styles.column>
-                {MeasurableItems.MeasurableEntityLinks.propertyEntityLink(
+                {MeasurableEntityLinks.propertyEntityLink(
                    ~m,
                    ~className=Shared.TagLink.property,
                  )

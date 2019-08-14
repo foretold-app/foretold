@@ -8,9 +8,18 @@ module type KenModule = {
   let things: array(Graph_T.T.thing);
 };
 
-module KenFunctor = (Config: {let entityGraph: Js.Json.t;}) : KenModule => {
+module Functor =
+       (Config: {let globalSetting: option(Types.globalSetting);})
+       : KenModule => {
   type t = string;
-  let graph = Ken_Interface.Graph.fromJson(Config.entityGraph);
+
+  let graph =
+    Config.globalSetting
+    |> E.O.fmap((globalSetting: Types.globalSetting) =>
+         globalSetting.entityGraph |> E.O.default(Js.Json.null)
+       )
+    |> E.O.default(Js.Json.null)
+    |> (e => Ken_Interface.Graph.fromJson(e));
 
   let itemUrl = id => Routing.Url.toString(EntityShow(id));
 

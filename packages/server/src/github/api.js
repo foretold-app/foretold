@@ -100,11 +100,13 @@ class API {
 
   async getDataJson(pullRequestNumber = 7) {
     const files = await this.getPullFiles(pullRequestNumber);
-    const file = _.find(files, ['filename', 'data.json']);
+    const file = _.find(files, ['filename', 'data.json'])
+      || _.find(files, ['filename', 'Data.json']);
     if (!file) {
       console.log('GitHub data.json file is not found');
       return false;
     }
+
     const contents_url = _.get(file, 'contents_url');
     console.log('GitHub contents_url', contents_url);
     const contents = await this.query(contents_url);
@@ -112,6 +114,7 @@ class API {
       console.log('GitHub data.json content file is not found');
       return false;
     }
+
     const download_url = _.get(contents, 'download_url');
     console.log('GitHub download_url', contents_url);
     if (!download_url) {

@@ -8,13 +8,16 @@ class Trigger {
   /**
    * @param {object} webhook
    */
-  constructor(webhook) {
+  constructor(webhook, xHubSignature) {
     this.webhook = webhook;
+    this.xHubSignature = xHubSignature;
     this.api = new API();
     this.globalSetting = new GlobalSettingsData();
 
+    assert(_.isObject(webhook), 'WebHook should be an object');
     assert(_.has(webhook, 'pull_request.merged'), 'WebHook is not in format #1');
     assert(_.has(webhook, 'number'), 'WebHook is not in format #2');
+    assert(_.isString(xHubSignature), 'GitHub signature is required.');
   }
 
   /**
@@ -22,17 +25,23 @@ class Trigger {
    * @return {Promise<boolean>}
    */
   async main() {
-    const merged = _.get(this.webhook, 'pull_request.merged');
-    if (merged !== true) {
-      console.log('PullRequest is not merged yet.');
+    const isTested = this.api.verifySignature(this.webhook, this.xHubSignature);
+    if (isTested !== true) {
+      console.log(`GitHub signature is not valid.`);
       return false;
     }
 
-    console.log('PullRequest is merged');
+    const merged = _.get(this.webhook, 'pull_request.merged');
+    if (merged !== true) {
+      console.warn('PullRequest is not merged yet.');
+      return false;
+    } else {
+      console.log('PullRequest is merged');
+    }
 
     const pullRequestNumber = _.get(this.webhook, 'number');
     if (!pullRequestNumber) {
-      console.log('Pull Request number is required.');
+      console.warn('Pull Request number is required.');
       return false;
     }
 
@@ -41,7 +50,7 @@ class Trigger {
       console.log('Data.json', dataJson);
       await this.globalSetting.updateEntityGraph(dataJson);
     } else {
-      console.log(`Data.json file is not found in the PR ${pullRequestNumber}`);
+      console.warn(`Data.json file is not found in the PR ${pullRequestNumber}`);
     }
 
     return true;

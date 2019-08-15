@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -10,11 +11,18 @@ app.post('/', (req, res) => {
   console.log('GitHub incoming hook.');
   console.log('Req.url', req.url);
 
+  const xHubSignature = req.header('X-Hub-Signature');
+  if (!xHubSignature) {
+    console.warn('X-Hub-Signature is empty');
+    res.send('ERR');
+    return;
+  }
+
   const webhook = req.body;
-  new Trigger(webhook).main().then((result) => {
+  new Trigger(webhook, xHubSignature).main().then((result) => {
     console.log(`GitHub trigger result`, result);
   }, (err) => {
-    console.log(`GitHut trigger error`, err.message);
+    console.warn(`GitHut trigger error`, err.message);
   });
 
   res.send('OK');

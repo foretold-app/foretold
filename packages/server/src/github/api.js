@@ -1,6 +1,7 @@
 const assert = require('assert');
 const _ = require('lodash');
 const request = require('request');
+const crypto = require('crypto');
 
 const config = require('../config');
 
@@ -124,7 +125,7 @@ class API {
     await this._checkIfAllIsReady();
 
     if (await this._checkUrl() !== null) {
-      console.log(`GitHub web hook is already added.`);
+      console.warn(`GitHub web hook is already added.`);
       return false;
     }
 
@@ -176,7 +177,7 @@ class API {
     const file = _.find(files, ['filename', 'data.json'])
       || _.find(files, ['filename', 'Data.json']);
     if (!file) {
-      console.log('GitHub data.json file is not found');
+      console.warn('GitHub data.json file is not found');
       return false;
     }
 
@@ -184,14 +185,14 @@ class API {
     console.log('GitHub contents_url', contents_url);
     const contents = await this._query(contents_url);
     if (!contents) {
-      console.log('GitHub data.json content file is not found');
+      console.warn('GitHub data.json content file is not found');
       return false;
     }
 
     const download_url = _.get(contents, 'download_url');
     console.log('GitHub download_url', download_url);
     if (!download_url) {
-      console.log('GitHub download url is not found.');
+      console.warn('GitHub download url is not found.');
       return false;
     }
     return await this._query(download_url);
@@ -207,6 +208,22 @@ class API {
     }
     return true;
   }
+
+  /**
+   * @param {object} payload of webhook
+   * @param {string} comparedHash
+   * @return {boolean}
+   */
+  verifySignature(payload, comparedHash) {
+    const payloadAsStr = JSON.stringify(payload);
+    const hash = crypto
+      .createHmac('sha1', config.GITHUB_WEBHOOK_SECRET)
+      .update(payloadAsStr)
+      .digest('hex');
+    const hasWithPrefix = `sha1=${hash}`;
+    return hasWithPrefix === comparedHash;
+  }
+
 }
 
 module.exports = {

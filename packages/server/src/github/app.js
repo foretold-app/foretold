@@ -3,11 +3,22 @@ const app = express();
 
 const { api } = require('./api');
 
-app.get('/', (req, res, next) => {
+app.get('/list', (req, res) => {
   console.log('Get for Hooks App.');
-  // res.send('OK');
+
   api.getListOfHooks().then((list) => {
     res.send(list);
+  }).catch((err) => {
+    console.error(err);
+    res.send('ERR');
+  })
+});
+
+app.get('/add', (req, res) => {
+  console.log('Add Hook');
+
+  api.addHook().then((result) => {
+    res.send(result);
   }).catch((err) => {
     console.error(err);
     res.send('ERR');

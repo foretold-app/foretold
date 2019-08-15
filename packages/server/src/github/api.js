@@ -1,16 +1,83 @@
-const GitHub = require('github-api');
+const request = require('request');
 
-class API extends GitHub {
+const config = require('../config');
+
+class API {
+
+  constructor(repoOwner, repoName, token) {
+    this.repoOwner = repoOwner;
+    this.repoName = repoName;
+    this.token = token;
+    this.apiURL = `https://api.github.com`;
+
+    if (!repoOwner) console.warn(`GitHub repo owner is not set.`);
+    if (!repoName) console.warn(`GitHub repo name is not set.`);
+    if (!token) console.warn(
+      `GitHub personal access token is not set, ` +
+      `see https://github.com/settings/tokens.`
+    );
+  }
+
+  async query(uri, method = 'GET', body = null) {
+    const options = {
+      uri,
+      method,
+      body,
+      headers: this.getHeaders(),
+      json: true
+    };
+    return new Promise((resolve, reject) => {
+      request(options, (error, response, body) => {
+        if (error) return reject(error);
+        resolve(body)
+      });
+    });
+  }
+
+  getHeaders() {
+    return {
+      'Authorization': `bearer ${this.token}`,
+      'User-Agent': 'Foretold App',
+      'Accept': 'application/vnd.github.v3+json',
+    };
+  }
+
+  getHooks() {
+    return `${this.getRepo()}/hooks`;
+  }
+
+  getRepo() {
+    return `${this.apiURL}/repos/${this.repoOwner}/${this.repoName}`;
+  }
+
   async getListOfHooks() {
-    const repo = await super.getRepo('foretold-app', 'ken-data');
-    const list = await repo.listHooks();
-    return list;
+    const url = this.getHooks();
+    return this.query(url);
+  }
+
+  async addHook() {
+    const hook = {
+      "name": "web",
+      "active": true,
+      "events": [
+        "pull_request"
+      ],
+      "config": {
+        "url": "http://dev.wirnex.com:31000/hooks",
+        "content_type": "json",
+        "insecure_ssl": "1"
+      }
+    };
+    const url = this.getHooks();
+    return this.query(url, 'POST', hook);
   }
 }
 
-const api = new API({
-  token: '0e869ed656bb78c73a085c1442bc6db75d110160'
-});
+const api = new API(
+  config.GITHUB_REPO_OWNER,
+  config.GITHUB_REPO_NAME,
+  config.GITHUB_PERSONAL_ACCESS_TOKEN,
+);
 
 module.exports = {
   api,

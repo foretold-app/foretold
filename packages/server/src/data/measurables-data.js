@@ -2,6 +2,8 @@ const _ = require('lodash');
 
 const notifications = require("../lib/notifications");
 const { MeasurableModel } = require('../models-abstract');
+const { Restrictions } = require('../models-abstract/classes/restrictions');
+const { Params } = require('./classes/params');
 
 const { DataBase } = require('./data-base');
 
@@ -25,8 +27,8 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async createOne(data = {}, creator = {}) {
-    const measurable = await this.models.Measurable.create(data);
-    notifications.creationNotification(measurable, creator);
+    const measurable = await super.createOne(data);
+    measurable && notifications.creationNotification(measurable, creator);
     return measurable;
   }
 
@@ -37,8 +39,9 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async archive(id) {
-    const measurable = await this.models.Measurable.findByPk(id);
-    return measurable.archive();
+    const params = new Params({ id });
+    const measurable = await this.getOne(params);
+    return measurable && measurable.archive();
   }
 
   /**
@@ -48,8 +51,9 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async unArchive(id) {
-    const measurable = await this.models.Measurable.findByPk(id);
-    return measurable.unarchive();
+    const params = new Params({ id });
+    const measurable = await this.getOne(params);
+    return measurable && measurable.unarchive();
   }
 
   /**
@@ -62,9 +66,10 @@ class MeasurablesData extends DataBase {
    * @return {Promise<Models.Measurable>}
    */
   async updateOne(id, data, creator) {
-    const measurable = await this.models.Measurable.findByPk(id);
-    notifications.updateNotification(measurable, creator, data);
-    return measurable.update(data);
+    const params = new Params({ id });
+    const measurable = await this.getOne(params);
+    measurable && notifications.updateNotification(measurable, creator, data);
+    return measurable && measurable.update(data);
   }
 
   /**
@@ -73,16 +78,17 @@ class MeasurablesData extends DataBase {
    * @param {Layers.DataSourceLayer.pagination} [pagination]
    * @param {Layers.DataSourceLayer.options} [options]
    * @param {Models.ObjectID} [options.agentId]
+   * @param {boolean} [options.isAdmin]
    * @param {Models.ObjectID} [options.measuredByAgentId]
    * @return {Promise<{data: Models.Measurable[], total: number}>}
    */
   async getAll(filter = {}, pagination = {}, options = {}) {
-    const restrictions = {
+    const restrictions = new Restrictions({
       channelId: true,
       isAdmin: options.isAdmin,
       agentId: options.agentId,
       measuredByAgentId: options.measuredByAgentId,
-    };
+    });
     return this.model.getAll(filter, pagination, restrictions);
   }
 

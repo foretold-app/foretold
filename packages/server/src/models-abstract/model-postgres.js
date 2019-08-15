@@ -232,7 +232,7 @@ class ModelPostgres extends Model {
     if (filter.isArchived) {
       where[this.and].push({
         isArchived: {
-          [this.in]: this.getBooleansOfList(filter.isArchived),
+          [this.in]: this._getBooleansOfList(filter.isArchived),
         }
       });
     }
@@ -272,7 +272,7 @@ class ModelPostgres extends Model {
    * @param {number} total
    * @return {{offset: number, limit: number }}
    */
-  getPagination(pagination = {}, total = 0) {
+  _getPagination(pagination = {}, total = 0) {
     pagination.before = Math.abs(pagination.before) || total;
     pagination.after = Math.abs(pagination.after) || 0;
 
@@ -309,7 +309,7 @@ class ModelPostgres extends Model {
    * @param {object} [edgePagination]
    * @return {*[]}
    */
-  setIndexes(data = [], edgePagination = {}) {
+  _setIndexes(data = [], edgePagination = {}) {
     return data.map((item, index) => {
       item.index = edgePagination.offset + index;
       return item;
@@ -321,7 +321,7 @@ class ModelPostgres extends Model {
    * @param {*[]} [list]
    * @return {*[]}
    */
-  getBooleansOfList(list = []) {
+  _getBooleansOfList(list = []) {
     return list.map(item => {
       if (item === 'TRUE') {
         return true;
@@ -427,7 +427,7 @@ class ModelPostgres extends Model {
 
     /** @type {number} */
     const total = await this.model.count(cond);
-    const edgePagination = this.getPagination(pagination, total);
+    const edgePagination = this._getPagination(pagination, total);
 
     const findCond = {
       ...cond,
@@ -438,7 +438,7 @@ class ModelPostgres extends Model {
 
     /** @type {Models.Model[]} */
     let data = await this.model.findAll(findCond);
-    data = this.setIndexes(data, edgePagination);
+    data = this._setIndexes(data, edgePagination);
     data.total = total;
 
     return new ResponseAll(data, total);

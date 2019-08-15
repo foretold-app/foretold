@@ -6,6 +6,7 @@ const { Filter } = require('../data/classes/filter');
 const { Options } = require('../data/classes/options');
 const { Params } = require('../data/classes/params');
 const { Query } = require('../data/classes/query');
+const { Data } = require('../data/classes/data');
 
 /**
  * @param {Models.Channel} channel
@@ -38,9 +39,11 @@ async function all(root, args, context, info) {
   const agentId = _.get(context, 'agent.id');
   const channelMemberId = _.get(args, 'channelMemberId');
   const isArchived = _.get(args, 'isArchived');
+
   const filter = new Filter({ channelMemberId, isArchived });
   const pagination = new Pagination(args);
   const options = new Options({ agentId });
+
   return data.channels.getAll(filter, pagination, options);
 }
 
@@ -55,9 +58,11 @@ async function all(root, args, context, info) {
 async function one(root, args, context, info) {
   const id = _.get(args, 'id') || _.get(root, 'channelId');
   const agentId = _.get(context, 'agent.id');
+
   const params = new Params({ id });
   const query = new Query();
   const options = new Options({ agentId });
+
   return data.channels.getOne(params, query, options);
 }
 
@@ -72,7 +77,8 @@ async function one(root, args, context, info) {
  */
 async function update(root, args, context, info) {
   const params = new Params({ id: args.id });
-  return data.channels.updateOne(params, args.input);
+  const data$ = new Data(args.input);
+  return data.channels.updateOne(params, data$);
 }
 
 /**

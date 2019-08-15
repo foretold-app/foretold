@@ -7,11 +7,11 @@ class Model {
     return Promise.reject(new Error('getTransaction is not implemented.'));
   }
 
-  commit(_transaction) {
+  commit(transaction) {
     return Promise.reject(new Error('getTransaction is not implemented.'));
   }
 
-  rollback(_transaction) {
+  rollback(transaction) {
     return Promise.reject(new Error('rollback is not implemented.'));
   }
 

@@ -1,7 +1,10 @@
 const _ = require('lodash');
 
 const data = require('../data');
+
 const { Pagination } = require('../data/classes/pagination');
+const { Filter } = require('../data/classes/filter');
+const { Options } = require('../data/classes/options');
 
 /**
  * @todo: update input of getAll
@@ -22,18 +25,18 @@ const { Pagination } = require('../data/classes/pagination');
  * @returns {Promise<Models.Measurement[]>}
  */
 async function all(root, args, context, info) {
-  const filter = {
+  const filter = new Filter({
     measurableId: _.get(args, 'measurableId'),
     agentId: _.get(args, 'agentId'),
     competitorType: _.get(args, 'competitorType'),
     findInDateRange: _.get(args, 'findInDateRange'),
     notTaggedByAgent: _.get(args, 'notTaggedByAgent'),
-  };
+  });
   const pagination = new Pagination(args);
-  const options = {
+  const options = new Options({
     isAdmin: _.get(context, 'agent.isAdmin'),
     agentId: _.get(context, 'agent.id'),
-  };
+  });
 
   const connection = await data.measurements.getAll(filter, pagination, options);
   return connection.getData();

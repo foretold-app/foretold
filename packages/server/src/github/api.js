@@ -23,6 +23,12 @@ class API {
     if (!this.webhookSecret) console.warn(`GitHub webhook secret is not set`);
   }
 
+  /**
+   * @param {string} uri
+   * @param {string} method
+   * @param {null | object} body
+   * @return {Promise<object>}
+   */
   async query(uri, method = 'GET', body = null) {
     const options = {
       uri,
@@ -116,7 +122,7 @@ class API {
     }
 
     const download_url = _.get(contents, 'download_url');
-    console.log('GitHub download_url', contents_url);
+    console.log('GitHub download_url', download_url);
     if (!download_url) {
       console.log('GitHub download url is not found.');
       return false;

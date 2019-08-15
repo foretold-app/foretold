@@ -1,11 +1,13 @@
 const _ = require('lodash');
 
 const { API } = require('./api');
+const { GlobalSettingsData } = require('../data/global-settings-data');
 
 class Trigger {
   constructor(webhook) {
     this.webhook = webhook;
     this.api = new API();
+    this.globalSetting = new GlobalSettingsData();
   }
 
   async main() {
@@ -22,9 +24,10 @@ class Trigger {
       return false;
     }
 
-    const data = await this.api.getDataJson(pullRequestNumber);
-    if (data) {
-      console.log('Data.json', data);
+    const dataJson = await this.api.getDataJson(pullRequestNumber);
+    if (dataJson) {
+      console.log('Data.json', dataJson);
+      await this.globalSetting.updateEntityGraph(dataJson);
     } else {
       console.log(`Data.json file is not found in the PR ${pullRequestNumber}`);
     }

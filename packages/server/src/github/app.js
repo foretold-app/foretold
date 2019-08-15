@@ -54,11 +54,9 @@ app.get('/add', (req, res) => {
 app.post('/', (req, res, next) => {
   console.log('GitHub incoming hook.');
   console.log('Req.url', req.url);
-  console.log('Req.body', req.body);
-  console.log('Req.body', JSON.stringify(req.body));
 
   const webhook = req.body;
-  new Trigger(webhook).then((result) => {
+  new Trigger(webhook).main().then((result) => {
     console.log(`GitHub trigger result`, result);
   }, (err) => {
     console.log(`GitHut trigger error`, err.message);

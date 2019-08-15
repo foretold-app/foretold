@@ -58,6 +58,9 @@
     },
     "GITHUB_REPO_NAME": {
       "required": true
+    },
+    "SERVER_URL": {
+      "required": true
     }
   },
   "formation": {

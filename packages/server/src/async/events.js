@@ -1,4 +1,7 @@
 module.exports = {
+  // Server is ready
+  SERVER_IS_READY: 'SERVER_IS_READY',
+
   // Sync Signals
   EVERY_HOUR: 'EVERY_HOUR',
   EVERY_TEN_MINUTES: 'EVERY_TEN_MINUTES',

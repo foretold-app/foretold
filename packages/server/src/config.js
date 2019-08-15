@@ -1,3 +1,4 @@
+const PORT = process.env.PORT || 4000;
 const NODE_ENV = process.env.NODE_ENV;
 const SERVER_URL = process.env.SERVER_URL;
 
@@ -27,6 +28,7 @@ if (!AUTH0_DOMAIN) throw new ReferenceError('AUTH0_DOMAIN is not defined');
 if (!AUTH0_CLIENT_ID) throw new ReferenceError('AUTH0_CLIENT_ID is not defined');
 
 const conf = {
+  PORT,
   NODE_ENV,
   SERVER_URL,
 

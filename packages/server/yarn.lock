@@ -3246,6 +3246,11 @@ graphql-tools@^4.0.5:
     iterall "^1.1.3"
     uuid "^3.1.0"
 
+graphql-type-json@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/graphql-type-json/-/graphql-type-json-0.3.0.tgz#bb32e1b74bf52ebc690f9df12b4067bc061f818a"
+  integrity sha512-lnxg5HiB95yxy+/5cDKtP6pZo0zgntsOmqsjeCBXFGJ4YoMF3+1YaSEKWJntNTu+VsAm3zf6lPxFpp1kxzofLA==
+
 graphql-upload@^8.0.2:
   version "8.0.6"
   resolved "https://registry.yarnpkg.com/graphql-upload/-/graphql-upload-8.0.6.tgz#90fb6246962d953b64d9ddabd6472d8e8b116ee0"

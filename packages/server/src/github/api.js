@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const request = require('request');
 
 const config = require('../config');
@@ -11,6 +12,7 @@ class API {
     this.webhookSecret = config.GITHUB_WEBHOOK_SECRET;
     this.apiURL = `https://api.github.com`;
     this.serverURL = config.SERVER_URL;
+    this.hookUrl = `${this.serverURL}/hooks`;
 
     if (!this.repoOwner) console.warn(`GitHub repo owner is not set.`);
     if (!this.repoName) console.warn(`GitHub repo name is not set.`);
@@ -29,7 +31,7 @@ class API {
       headers: this.getHeaders(),
       json: true
     };
-    console.log('GitHut query options', options);
+    // console.log('GitHut query options', options);
     return new Promise((resolve, reject) => {
       request(options, (error, response, body) => {
         if (error) return reject(error);
@@ -60,14 +62,18 @@ class API {
   }
 
   async addHook() {
+    if (await this.checkUrl() !== null) {
+      console.log(`GitHub web hook is already added.`);
+      return false;
+    }
     const hook = {
-      "name": "foretoldHook",
+      "name": "web",
       "active": true,
       "events": [
         "pull_request"
       ],
       "config": {
-        "url": `${this.serverURL}/hooks`,
+        "url": this.hookUrl,
         "secret": this.webhookSecret,
         "content_type": "json",
         "insecure_ssl": "1"
@@ -75,6 +81,11 @@ class API {
     };
     const url = this.getHooks();
     return this.query(url, 'POST', hook);
+  }
+
+  async checkUrl() {
+    const listHooks = await this.getListOfHooks();
+    return _.find(listHooks, ['config.url', this.hookUrl]);
   }
 }
 

@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const { ApolloServer } = require('apollo-server-express');
 
 const { schemaWithMiddlewares } = require('./schema');

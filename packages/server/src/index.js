@@ -7,7 +7,7 @@ const bodyParser = require('body-parser-graphql');
 const config = require('./config');
 const { runJobs } = require('./async');
 const { runListeners } = require('./async/listeners');
-const SERVER_IS_READY = require('./async/events');
+const events = require('./async/events');
 const emitter = require('./async/emitter');
 const { apolloServer } = require('./apollo-server');
 
@@ -46,5 +46,5 @@ app.use(cors());
 
 app.listen({ port: config.PORT }, () => {
   console.log(`Server ready at http://localhost:${config.PORT}`);
-  emitter.emit(SERVER_IS_READY, app);
+  emitter.emit(events.SERVER_IS_READY, app);
 });

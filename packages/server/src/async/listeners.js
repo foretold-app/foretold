@@ -5,6 +5,7 @@ const measurables = require('./measurables');
 const producers = require('./producers');
 const consumers = require('./consumers');
 const { Mailer } = require('./mailer');
+const { API: GitHubApi } = require('../github/api');
 
 /**
  * @todo: To avoid code duplicates.
@@ -73,8 +74,26 @@ function listenFor(Producer) {
   };
 }
 
-function runListeners() {
+async function addGitHubWebHook() {
+  const name = 'Job::addGitHubWebHook';
+  console.log(name);
+
   try {
+    const gitHubApi = new GitHubApi();
+    const result = await gitHubApi.addHook();
+    console.log(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
+function runListeners() {
+  console.log('Listeners are in a queue.');
+  try {
+    emitter.on(events.SERVER_IS_READY, addGitHubWebHook);
+
     emitter.on(events.EVERY_HOUR, toJudgementPendingTransition);
     emitter.on(events.EVERY_MINUTE, emailConsumer);
     emitter.on(events.MAIL, mailer);

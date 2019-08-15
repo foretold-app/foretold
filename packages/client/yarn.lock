@@ -8269,6 +8269,13 @@ parcel-bundler@1.12.3, parcel-bundler@^1.12.3:
     v8-compile-cache "^2.0.0"
     ws "^5.1.1"
 
+parcel-plugin-html-externals@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/parcel-plugin-html-externals/-/parcel-plugin-html-externals-0.1.2.tgz#130ef16855b700599d6d2b0d797f3eabdfb64d5f"
+  integrity sha512-ngyIlta99E7UvHTYQA3cKDUhj3aVfZO9+MmEwrMU9pD4paWvPvqfNRhUQg/xk2Alo+VwEMbZFmaONkrwI47tgg==
+  dependencies:
+    minimatch "^3.0.4"
+
 parcel-plugin-less-js-enabled@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/parcel-plugin-less-js-enabled/-/parcel-plugin-less-js-enabled-1.0.2.tgz#77d74166b406e6a516106653471b2fd619564af3"

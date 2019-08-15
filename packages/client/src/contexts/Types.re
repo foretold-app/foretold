@@ -167,3 +167,8 @@ type connection('a) = {
   total: option(int),
   edges: array('a),
 };
+
+type globalSetting = {
+  id: string,
+  entityGraph: option(Js.Json.t),
+};

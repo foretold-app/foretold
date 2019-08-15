@@ -91,13 +91,6 @@ module Params = {
 
 module MeasurableReForm = ReForm.Create(Params);
 
-let dataSource =
-  EKen.Things.getAll
-  |> EKen.Things.withNames
-  |> E.A.fmap((r: Graph_T.T.thing) =>
-       {"key": r |> Graph_T.Thing.id, "id": r |> Graph_T.Thing.id}
-     );
-
 let showForm =
     (
       ~loggedInUser: Types.user,

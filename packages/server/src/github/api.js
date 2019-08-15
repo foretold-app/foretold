@@ -5,7 +5,9 @@ const request = require('request');
 const config = require('../config');
 
 class API {
-
+  /**
+   * @public
+   */
   constructor() {
     this.repoOwner = config.GITHUB_REPO_OWNER;
     this.repoName = config.GITHUB_REPO_NAME;
@@ -38,12 +40,13 @@ class API {
   }
 
   /**
+   * @protected
    * @param {string} uri
    * @param {string} method
    * @param {null | object} body
    * @return {Promise<object>}
    */
-  async query(uri, method = 'GET', body = null) {
+  async _query(uri, method = 'GET', body = null) {
     assert(_.isString(uri), 'URI should be a string');
     assert(_.isString(method), 'Method should be a string');
     assert(_.isObject(body) || _.isNull(body), 'Method should be a string');
@@ -52,7 +55,7 @@ class API {
       uri,
       method,
       body,
-      headers: this.getHeaders(),
+      headers: this._getHeaders(),
       json: true,
       followAllRedirects: true
     };
@@ -66,9 +69,10 @@ class API {
   }
 
   /**
+   * @protected
    * @return {{Authorization: string, Accept: string, "User-Agent": string}}
    */
-  getHeaders() {
+  _getHeaders() {
     assert(_.isString(this.token),
       'GitHub personal access token should be a string');
     return {
@@ -79,33 +83,37 @@ class API {
   }
 
   /**
+   * @protected
    * @param {number} pullRequestNumber
    * @return {string}
    */
-  getPullFilesUrl(pullRequestNumber) {
-    return `${this.getRepo()}/pulls/${pullRequestNumber}/files`
+  _getPullFilesUrl(pullRequestNumber) {
+    return `${this._getRepo()}/pulls/${pullRequestNumber}/files`
   }
 
   /**
+   * @protected
    * @return {string}
    */
-  getHooks() {
-    return `${this.getRepo()}/hooks`;
+  _getHooks() {
+    return `${this._getRepo()}/hooks`;
   }
 
   /**
+   * @protected
    * @return {string}
    */
-  getRepo() {
+  _getRepo() {
     return `${this.apiURL}/repos/${this.repoOwner}/${this.repoName}`;
   }
 
   /**
+   * @protected
    * @return {Promise<Object>}
    */
   async getListOfHooks() {
-    const url = this.getHooks();
-    return this.query(url);
+    const url = this._getHooks();
+    return this._query(url);
   }
 
   /**
@@ -113,9 +121,9 @@ class API {
    * @return {Promise<boolean|Object>}
    */
   async addHook() {
-    await this.checkIfAllIsReady();
+    await this._checkIfAllIsReady();
 
-    if (await this.checkUrl() !== null) {
+    if (await this._checkUrl() !== null) {
       console.log(`GitHub web hook is already added.`);
       return false;
     }
@@ -133,25 +141,27 @@ class API {
         "insecure_ssl": "1"
       }
     };
-    const url = this.getHooks();
-    return this.query(url, 'POST', hook);
+    const url = this._getHooks();
+    return this._query(url, 'POST', hook);
   }
 
   /**
+   * @protected
    * @return {Promise<object>}
    */
-  async checkUrl() {
+  async _checkUrl() {
     const listHooks = await this.getListOfHooks();
     return _.find(listHooks, ['config.url', this.hookUrl]);
   }
 
   /**
+   * @protected
    * @param {number} pullRequestNumber
    * @return {Promise<Object[]>}
    */
-  async getPullFiles(pullRequestNumber) {
-    const url = this.getPullFilesUrl(pullRequestNumber);
-    return this.query(url);
+  async _getPullFiles(pullRequestNumber) {
+    const url = this._getPullFilesUrl(pullRequestNumber);
+    return this._query(url);
   }
 
   /**
@@ -160,9 +170,9 @@ class API {
    * @return {Promise<Object|boolean>}
    */
   async getDataJson(pullRequestNumber) {
-    await this.checkIfAllIsReady();
+    await this._checkIfAllIsReady();
 
-    const files = await this.getPullFiles(pullRequestNumber);
+    const files = await this._getPullFiles(pullRequestNumber);
     const file = _.find(files, ['filename', 'data.json'])
       || _.find(files, ['filename', 'Data.json']);
     if (!file) {
@@ -172,7 +182,7 @@ class API {
 
     const contents_url = _.get(file, 'contents_url');
     console.log('GitHub contents_url', contents_url);
-    const contents = await this.query(contents_url);
+    const contents = await this._query(contents_url);
     if (!contents) {
       console.log('GitHub data.json content file is not found');
       return false;
@@ -184,10 +194,14 @@ class API {
       console.log('GitHub download url is not found.');
       return false;
     }
-    return await this.query(download_url);
+    return await this._query(download_url);
   }
 
-  async checkIfAllIsReady() {
+  /**
+   * @return {Promise<boolean>}
+   * @protected
+   */
+  async _checkIfAllIsReady() {
     if (this.isReady === false) {
       throw new Error(`GitHub integration is turned off`);
     }

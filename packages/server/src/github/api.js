@@ -1,3 +1,4 @@
+const assert = require('assert');
 const _ = require('lodash');
 const request = require('request');
 
@@ -13,14 +14,27 @@ class API {
     this.apiURL = `https://api.github.com`;
     this.serverURL = config.SERVER_URL;
     this.hookUrl = `${this.serverURL}/hooks`;
+    this.isReady = true;
 
-    if (!this.repoOwner) console.warn(`GitHub repo owner is not set.`);
-    if (!this.repoName) console.warn(`GitHub repo name is not set.`);
-    if (!this.token) console.warn(
-      `GitHub personal access token is not set, ` +
-      `see https://github.com/settings/tokens.`
-    );
-    if (!this.webhookSecret) console.warn(`GitHub webhook secret is not set`);
+    if (!this.repoOwner) {
+      console.warn(`GitHub repo owner is not set.`);
+      this.isReady = false;
+    }
+    if (!this.repoName) {
+      console.warn(`GitHub repo name is not set.`);
+      this.isReady = false;
+    }
+    if (!this.token) {
+      console.warn(
+        `GitHub personal access token is not set, ` +
+        `see https://github.com/settings/tokens.`
+      );
+      this.isReady = false;
+    }
+    if (!this.webhookSecret) {
+      console.warn(`GitHub webhook secret is not set`);
+      this.isReady = false;
+    }
   }
 
   /**
@@ -30,6 +44,10 @@ class API {
    * @return {Promise<object>}
    */
   async query(uri, method = 'GET', body = null) {
+    assert(_.isString(uri), 'URI should be a string');
+    assert(_.isString(method), 'Method should be a string');
+    assert(_.isObject(body) || _.isNull(body), 'Method should be a string');
+
     const options = {
       uri,
       method,
@@ -47,7 +65,12 @@ class API {
     });
   }
 
+  /**
+   * @return {{Authorization: string, Accept: string, "User-Agent": string}}
+   */
   getHeaders() {
+    assert(_.isString(this.token),
+      'GitHub personal access token should be a string');
     return {
       'Authorization': `bearer ${this.token}`,
       'User-Agent': 'Foretold App',
@@ -55,28 +78,48 @@ class API {
     };
   }
 
+  /**
+   * @param {number} pullRequestNumber
+   * @return {string}
+   */
   getPullFilesUrl(pullRequestNumber) {
     return `${this.getRepo()}/pulls/${pullRequestNumber}/files`
   }
 
+  /**
+   * @return {string}
+   */
   getHooks() {
     return `${this.getRepo()}/hooks`;
   }
 
+  /**
+   * @return {string}
+   */
   getRepo() {
     return `${this.apiURL}/repos/${this.repoOwner}/${this.repoName}`;
   }
 
+  /**
+   * @return {Promise<Object>}
+   */
   async getListOfHooks() {
     const url = this.getHooks();
     return this.query(url);
   }
 
+  /**
+   * @public
+   * @return {Promise<boolean|Object>}
+   */
   async addHook() {
+    await this.checkIfAllIsReady();
+
     if (await this.checkUrl() !== null) {
       console.log(`GitHub web hook is already added.`);
       return false;
     }
+
     const hook = {
       "name": "web",
       "active": true,
@@ -94,17 +137,31 @@ class API {
     return this.query(url, 'POST', hook);
   }
 
+  /**
+   * @return {Promise<object>}
+   */
   async checkUrl() {
     const listHooks = await this.getListOfHooks();
     return _.find(listHooks, ['config.url', this.hookUrl]);
   }
 
+  /**
+   * @param {number} pullRequestNumber
+   * @return {Promise<Object[]>}
+   */
   async getPullFiles(pullRequestNumber) {
     const url = this.getPullFilesUrl(pullRequestNumber);
     return this.query(url);
   }
 
-  async getDataJson(pullRequestNumber = 7) {
+  /**
+   * @public
+   * @param {number} pullRequestNumber
+   * @return {Promise<Object|boolean>}
+   */
+  async getDataJson(pullRequestNumber) {
+    await this.checkIfAllIsReady();
+
     const files = await this.getPullFiles(pullRequestNumber);
     const file = _.find(files, ['filename', 'data.json'])
       || _.find(files, ['filename', 'Data.json']);
@@ -129,11 +186,15 @@ class API {
     }
     return await this.query(download_url);
   }
+
+  async checkIfAllIsReady() {
+    if (this.isReady === false) {
+      throw new Error(`GitHub integration is turned off`);
+    }
+    return true;
+  }
 }
 
-const api = new API();
-
 module.exports = {
-  api,
   API,
 };

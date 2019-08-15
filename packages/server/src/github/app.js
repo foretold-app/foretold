@@ -1,57 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const { api } = require('./api');
 const { Trigger } = require('./trigger');
 
 const app = express();
 app.use(bodyParser.json());
 
-app.get('/list', (req, res) => {
-  console.log('Get for Hooks App.');
-
-  api.getListOfHooks().then((list) => {
-    res.send(list);
-  }).catch((err) => {
-    console.error(err);
-    res.send('ERR');
-  })
-});
-
-app.get('/files', (req, res) => {
-  console.log('Get for Hooks App.');
-
-  api.getPullFiles().then((list) => {
-    res.send(list);
-  }).catch((err) => {
-    console.error(err);
-    res.send('ERR');
-  })
-});
-
-app.get('/file', (req, res) => {
-  console.log('Get for Hooks App.');
-
-  api.getDataJson().then((result) => {
-    res.send(result);
-  }).catch((err) => {
-    console.error(err);
-    res.send('ERR');
-  })
-});
-
-app.get('/add', (req, res) => {
-  console.log('Add Hook');
-
-  api.addHook().then((result) => {
-    res.send(result);
-  }).catch((err) => {
-    console.error(err);
-    res.send('ERR');
-  })
-});
-
-app.post('/', (req, res, next) => {
+app.post('/', (req, res) => {
   console.log('GitHub incoming hook.');
   console.log('Req.url', req.url);
 

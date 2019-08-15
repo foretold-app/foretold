@@ -46,6 +46,18 @@
     },
     "SMTP_FROM": {
       "required": true
+    },
+    "GITHUB_PERSONAL_ACCESS_TOKEN": {
+      "required": true
+    },
+    "GITHUB_WEBHOOK_SECRET": {
+      "required": true
+    },
+    "GITHUB_REPO_OWNER": {
+      "required": true
+    },
+    "GITHUB_REPO_NAME": {
+      "required": true
     }
   },
   "formation": {

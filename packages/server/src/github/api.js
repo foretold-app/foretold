@@ -29,7 +29,8 @@ class API {
       method,
       body,
       headers: this.getHeaders(),
-      json: true
+      json: true,
+      followAllRedirects: true
     };
     // console.log('GitHut query options', options);
     return new Promise((resolve, reject) => {
@@ -46,6 +47,10 @@ class API {
       'User-Agent': 'Foretold App',
       'Accept': 'application/vnd.github.v3+json',
     };
+  }
+
+  getPullFilesUrl(pullRequestNumber) {
+    return `${this.getRepo()}/pulls/${pullRequestNumber}/files`
   }
 
   getHooks() {
@@ -86,6 +91,34 @@ class API {
   async checkUrl() {
     const listHooks = await this.getListOfHooks();
     return _.find(listHooks, ['config.url', this.hookUrl]);
+  }
+
+  async getPullFiles(pullRequestNumber) {
+    const url = this.getPullFilesUrl(pullRequestNumber);
+    return this.query(url);
+  }
+
+  async getDataJson(pullRequestNumber = 7) {
+    const files = await this.getPullFiles(pullRequestNumber);
+    const file = _.find(files, ['filename', 'data.json']);
+    if (!file) {
+      console.log('GitHub data.json file is not found');
+      return false;
+    }
+    const contents_url = _.get(file, 'contents_url');
+    console.log('GitHub contents_url', contents_url);
+    const contents = await this.query(contents_url);
+    if (!contents) {
+      console.log('GitHub data.json content file is not found');
+      return false;
+    }
+    const download_url = _.get(contents, 'download_url');
+    console.log('GitHub download_url', contents_url);
+    if (!download_url) {
+      console.log('GitHub download url is not found.');
+      return false;
+    }
+    return await this.query(download_url);
   }
 }
 

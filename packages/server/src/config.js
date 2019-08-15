@@ -1,4 +1,5 @@
 const NODE_ENV = process.env.NODE_ENV;
+const SERVER_URL = process.env.SERVER_URL;
 
 const AUTH0_SECRET = process.env.AUTH0_SECRET;
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN;
@@ -15,6 +16,8 @@ const GITHUB_REPO_OWNER = process.env.GITHUB_REPO_OWNER;
 const GITHUB_REPO_NAME = process.env.GITHUB_REPO_NAME;
 const GITHUB_WEBHOOK_SECRET = process.env.GITHUB_WEBHOOK_SECRET;
 
+if (!SERVER_URL) throw new ReferenceError('SERVER_URL is not defined');
+
 if (!AUTH0_SECRET) throw new ReferenceError('AUTH0_SECRET is not defined');
 if (!JWT_SECRET) throw new ReferenceError('JWT_SECRET is not defined');
 if (!JWT_ISSUER) throw new ReferenceError('JWT_ISSUER is not defined');
@@ -25,6 +28,7 @@ if (!AUTH0_CLIENT_ID) throw new ReferenceError('AUTH0_CLIENT_ID is not defined')
 
 const conf = {
   NODE_ENV,
+  SERVER_URL,
 
   AUTH0_SECRET,
   AUTH0_DOMAIN,

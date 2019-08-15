@@ -4,20 +4,21 @@ const config = require('../config');
 
 class API {
 
-  constructor(repoOwner, repoName, token, webhookSecret) {
-    this.repoOwner = repoOwner;
-    this.repoName = repoName;
-    this.token = token;
-    this.webhookSecret = webhookSecret;
+  constructor() {
+    this.repoOwner = config.GITHUB_REPO_OWNER;
+    this.repoName = config.GITHUB_REPO_NAME;
+    this.token = config.GITHUB_PERSONAL_ACCESS_TOKEN;
+    this.webhookSecret = config.GITHUB_WEBHOOK_SECRET;
     this.apiURL = `https://api.github.com`;
+    this.serverURL = config.SERVER_URL;
 
-    if (!repoOwner) console.warn(`GitHub repo owner is not set.`);
-    if (!repoName) console.warn(`GitHub repo name is not set.`);
-    if (!token) console.warn(
+    if (!this.repoOwner) console.warn(`GitHub repo owner is not set.`);
+    if (!this.repoName) console.warn(`GitHub repo name is not set.`);
+    if (!this.token) console.warn(
       `GitHub personal access token is not set, ` +
       `see https://github.com/settings/tokens.`
     );
-    if (!webhookSecret) console.warn(`GitHub webhook secret is not set`);
+    if (!this.webhookSecret) console.warn(`GitHub webhook secret is not set`);
   }
 
   async query(uri, method = 'GET', body = null) {
@@ -60,13 +61,13 @@ class API {
 
   async addHook() {
     const hook = {
-      "name": "web",
+      "name": "foretoldHook",
       "active": true,
       "events": [
         "pull_request"
       ],
       "config": {
-        "url": "http://dev.wirnex.com:31000/hooks",
+        "url": `${this.serverURL}/hooks`,
         "secret": this.webhookSecret,
         "content_type": "json",
         "insecure_ssl": "1"
@@ -77,12 +78,7 @@ class API {
   }
 }
 
-const api = new API(
-  config.GITHUB_REPO_OWNER,
-  config.GITHUB_REPO_NAME,
-  config.GITHUB_PERSONAL_ACCESS_TOKEN,
-  config.GITHUB_WEBHOOK_SECRET,
-);
+const api = new API();
 
 module.exports = {
   api,

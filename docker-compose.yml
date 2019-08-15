@@ -23,6 +23,7 @@ services:
       - AUTH0_CLIENT_ID=<change-me> # 2.3
       # 3. Main
       - API_URL=<change-me> # 3.1
+      - SERVER_URL=<change-me> # 3.1.1
       - CDF_COMBINE_SIZE=1000 # 3.2
       - AGGR_SCHEDULE=0 * * * * # 3.3
       - SLACK_WEBHOOK_URL=<change-me> # 3.4
@@ -35,10 +36,11 @@ services:
       - SMTP_USER=<change-me> # 4.3
       - SMTP_PASS=<change-me> # 4.4
       - SMTP_FROM=<change-me> # 4.5
-      # 5. GitHub
+      # 5. GitHub. You must be owner of the repo.
       - GITHUB_PERSONAL_ACCESS_TOKEN=<change-me> # 5.1
       - GITHUB_REPO_OWNER=foretold-app # 5.2
       - GITHUB_REPO_NAME=ken-data # 5.3
+      - GITHUB_WEBHOOK_SECRET=<change-me> # 5.4
     command: npm start
     links:
       - database

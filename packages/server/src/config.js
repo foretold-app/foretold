@@ -13,6 +13,7 @@ const MAX_BOT_TOKEN_SIZE = process.env.MAX_BOT_TOKEN_SIZE * 1 || 32;
 const GITHUB_PERSONAL_ACCESS_TOKEN = process.env.GITHUB_PERSONAL_ACCESS_TOKEN;
 const GITHUB_REPO_OWNER = process.env.GITHUB_REPO_OWNER;
 const GITHUB_REPO_NAME = process.env.GITHUB_REPO_NAME;
+const GITHUB_WEBHOOK_SECRET = process.env.GITHUB_WEBHOOK_SECRET;
 
 if (!AUTH0_SECRET) throw new ReferenceError('AUTH0_SECRET is not defined');
 if (!JWT_SECRET) throw new ReferenceError('JWT_SECRET is not defined');
@@ -38,6 +39,7 @@ const conf = {
   GITHUB_PERSONAL_ACCESS_TOKEN,
   GITHUB_REPO_OWNER,
   GITHUB_REPO_NAME,
+  GITHUB_WEBHOOK_SECRET,
 };
 
 if (NODE_ENV === 'development') {

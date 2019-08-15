@@ -4,10 +4,11 @@ const config = require('../config');
 
 class API {
 
-  constructor(repoOwner, repoName, token) {
+  constructor(repoOwner, repoName, token, webhookSecret) {
     this.repoOwner = repoOwner;
     this.repoName = repoName;
     this.token = token;
+    this.webhookSecret = webhookSecret;
     this.apiURL = `https://api.github.com`;
 
     if (!repoOwner) console.warn(`GitHub repo owner is not set.`);
@@ -16,6 +17,7 @@ class API {
       `GitHub personal access token is not set, ` +
       `see https://github.com/settings/tokens.`
     );
+    if (!webhookSecret) console.warn(`GitHub webhook secret is not set`);
   }
 
   async query(uri, method = 'GET', body = null) {
@@ -26,6 +28,7 @@ class API {
       headers: this.getHeaders(),
       json: true
     };
+    console.log('GitHut query options', options);
     return new Promise((resolve, reject) => {
       request(options, (error, response, body) => {
         if (error) return reject(error);
@@ -64,6 +67,7 @@ class API {
       ],
       "config": {
         "url": "http://dev.wirnex.com:31000/hooks",
+        "secret": this.webhookSecret,
         "content_type": "json",
         "insecure_ssl": "1"
       }
@@ -77,6 +81,7 @@ const api = new API(
   config.GITHUB_REPO_OWNER,
   config.GITHUB_REPO_NAME,
   config.GITHUB_PERSONAL_ACCESS_TOKEN,
+  config.GITHUB_WEBHOOK_SECRET,
 );
 
 module.exports = {

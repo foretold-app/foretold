@@ -28,11 +28,22 @@ app.use(cors());
 
   // Returns all routes excluding "/graphql" as static files
   // or returns fallback page.
-  app.get(/^((?!(graphql|hooks)).)*$/,
+  app.get(/^((?!(graphql|hooks|env\.js)).)*$/,
     express.static(distDir),
     (req, res) => res.sendFile(fallbackFile),
   );
 }
+
+{
+  app.get('/env.js', (_req, res) => res.send(
+    `window.ENV = { ` +
+    `API_URL: "${process.env.API_URL}", ` +
+    `AUTH0_DOMAIN: "${process.env.AUTH0_DOMAIN}", ` +
+    `AUTH0_CLIENT_ID: "${process.env.AUTH0_CLIENT_ID}", ` +
+    `}`
+  ));
+}
+
 
 {
   const { app: subApp } = require('./github/app');

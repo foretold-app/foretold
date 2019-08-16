@@ -16,6 +16,8 @@ const GITHUB_PERSONAL_ACCESS_TOKEN = process.env.GITHUB_PERSONAL_ACCESS_TOKEN;
 const GITHUB_REPO_OWNER = process.env.GITHUB_REPO_OWNER;
 const GITHUB_REPO_NAME = process.env.GITHUB_REPO_NAME;
 const GITHUB_WEBHOOK_SECRET = process.env.GITHUB_WEBHOOK_SECRET;
+const GITHUB_API_URL = process.env.GITHUB_API_URL || 'https://api.github.com';
+const GITHUB_QUERY_USER_AGENT = process.env.GITHUB_QUERY_USER_AGENT || 'Foretold App';
 
 if (!SERVER_URL) throw new ReferenceError('SERVER_URL is not defined');
 
@@ -46,6 +48,8 @@ const conf = {
   GITHUB_REPO_OWNER,
   GITHUB_REPO_NAME,
   GITHUB_WEBHOOK_SECRET,
+  GITHUB_API_URL,
+  GITHUB_QUERY_USER_AGENT,
 };
 
 if (NODE_ENV === 'development') {

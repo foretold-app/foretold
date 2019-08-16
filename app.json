@@ -8,9 +8,6 @@
     "SLACK_WEBHOOK_URL": {
       "required": true
     },
-    "API_URL": {
-      "required": true
-    },
     "AUTH0_DOMAIN": {
       "required": true
     },

@@ -100,6 +100,10 @@
 		"webpack-dev-server": "3.7.2"
 	},
 	"devDependencies": {
-		"babel-preset-react": "^6.24.1"
+		"babel-preset-react": "^6.24.1",
+		"parcel-plugin-html-externals": "^0.1.2"
+	},
+	"externals": {
+		"/env.js": false
 	}
 }

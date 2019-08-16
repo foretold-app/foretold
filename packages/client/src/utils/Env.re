@@ -1,7 +1,6 @@
-/* [@bs.val] external environment: string = "DEVELOPMENT"; */
-[@bs.val] external apiUrlEnv: string = "process.env.API_URL";
-[@bs.val] external auth0DomainEnv: string = "process.env.AUTH0_DOMAIN";
-[@bs.val] external auth0ClientIdEnv: string = "process.env.AUTH0_CLIENT_ID";
+[@bs.val] external apiUrlEnv: string = "window.ENV.API_URL";
+[@bs.val] external auth0DomainEnv: string = "window.ENV.AUTH0_DOMAIN";
+[@bs.val] external auth0ClientIdEnv: string = "window.ENV.AUTH0_CLIENT_ID";
 [@bs.val] external origin: string = "window.location.origin";
 
 let auth0Domain = auth0DomainEnv;

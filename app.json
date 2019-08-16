@@ -2,13 +2,11 @@
   "name": "foretold",
   "scripts": {},
   "env": {
+    "API_URL": {},
     "AUTH0_SECRET": {
       "required": true
     },
     "SLACK_WEBHOOK_URL": {
-      "required": true
-    },
-    "API_URL": {
       "required": true
     },
     "AUTH0_DOMAIN": {
@@ -27,9 +25,6 @@
       "required": true
     },
     "BOT_TOKEN": {
-      "required": true
-    },
-    "BOT_AGENT_ID": {
       "required": true
     },
     "SMTP_HOST": {
@@ -59,7 +54,10 @@
     "GITHUB_REPO_NAME": {
       "required": true
     },
-    "SERVER_URL": {
+    "HEROKU_APP_NAME": {
+      "required": true
+    },
+    "HEROKU_PARENT_APP_NAME": {
       "required": true
     }
   },

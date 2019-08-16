@@ -28,10 +28,24 @@ app.use(cors());
 
   // Returns all routes excluding "/graphql" as static files
   // or returns fallback page.
-  app.get(/^((?!(graphql|hooks)).)*$/,
+  app.get(/^((?!(graphql|hooks|env)).)*$/,
     express.static(distDir),
     (req, res) => res.sendFile(fallbackFile),
   );
+}
+
+{
+  // Set API_URL only in "Netlify.com" to Backend.
+  // Do not set API_URL in "Heroku.com" for Staging
+  // (this env is used for PR building too).
+  // Do not set API_URL in "Heroku.com" for Production.
+  app.get(/^\/env\.([0-9a-z]+)\.js$/, (_req, res) => res.send(
+    `window.ENV = { ` +
+    `API_URL: "${config.API_URL}", ` +
+    `AUTH0_DOMAIN: "${config.AUTH0_DOMAIN}", ` +
+    `AUTH0_CLIENT_ID: "${config.AUTH0_CLIENT_ID}", ` +
+    `}`
+  ));
 }
 
 {

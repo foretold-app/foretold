@@ -1,6 +1,8 @@
 const PORT = process.env.PORT || 4000;
 const NODE_ENV = process.env.NODE_ENV;
 const SERVER_URL = process.env.SERVER_URL;
+const API_URL = process.env.API_URL ||
+  `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/graphql`;
 
 const AUTH0_SECRET = process.env.AUTH0_SECRET;
 const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN;
@@ -33,6 +35,7 @@ const conf = {
   PORT,
   NODE_ENV,
   SERVER_URL,
+  API_URL,
 
   AUTH0_SECRET,
   AUTH0_DOMAIN,

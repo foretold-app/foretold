@@ -35,6 +35,10 @@ app.use(cors());
 }
 
 {
+  // Set API_URL only in "Netlify.com" to Backend.
+  // Do not set API_URL in "Heroku.com" for Staging
+  // (this env is used for PR building too).
+  // Do not set API_URL in "Heroku.com" for Production.
   const url = process.env.API_URL
     || `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/graphql`;
   app.get('/env.js', (_req, res) => res.send(

@@ -39,13 +39,11 @@ app.use(cors());
   // Do not set API_URL in "Heroku.com" for Staging
   // (this env is used for PR building too).
   // Do not set API_URL in "Heroku.com" for Production.
-  const url = process.env.API_URL
-    || `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/graphql`;
   app.get('/env.js', (_req, res) => res.send(
     `window.ENV = { ` +
-    `API_URL: "${url}", ` +
-    `AUTH0_DOMAIN: "${process.env.AUTH0_DOMAIN}", ` +
-    `AUTH0_CLIENT_ID: "${process.env.AUTH0_CLIENT_ID}", ` +
+    `API_URL: "${config.API_URL}", ` +
+    `AUTH0_DOMAIN: "${config.AUTH0_DOMAIN}", ` +
+    `AUTH0_CLIENT_ID: "${config.AUTH0_CLIENT_ID}", ` +
     `}`
   ));
 }

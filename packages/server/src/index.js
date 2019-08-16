@@ -35,10 +35,11 @@ app.use(cors());
 }
 
 {
-  const url = `https://${process.env.HEROKU_APP_NAME}.herokuapp.com`;
+  const url = process.env.API_URL
+    || `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/graphql`;
   app.get('/env.js', (_req, res) => res.send(
     `window.ENV = { ` +
-    `API_URL: "${url}/graphql", ` +
+    `API_URL: "${url}", ` +
     `AUTH0_DOMAIN: "${process.env.AUTH0_DOMAIN}", ` +
     `AUTH0_CLIENT_ID: "${process.env.AUTH0_CLIENT_ID}", ` +
     `}`

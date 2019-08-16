@@ -136,7 +136,8 @@ descriptions;
 - **Data Subsystem**
 
 ### Server Side Requirements
-- Heroku.com
+- Heroku.com (backend CI)
+- https://www.netlify.com/ (client CI)
 - Backup / Restore
 - **Platforms** - Node.js 12.6.0;
 - **DBS** - PostresQL 11

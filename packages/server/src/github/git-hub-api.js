@@ -31,7 +31,7 @@ class GitHubApi {
     if (!this.repoName) console.warn(`GitHub repo name is not set.`);
     if (!this.token) console.warn(`GitHub personal access token is not set, ` +
       `see https://github.com/settings/tokens.`);
-    if (!this.webhookSecret) console.warn(`GitHub webhook secret is not set`);
+    if (!this.webhookSecret) console.warn(`GitHub webhook secret is not set.`);
   }
 
   /**
@@ -73,7 +73,7 @@ class GitHubApi {
     const file = _.find(files, ['filename', 'data.json'])
       || _.find(files, ['filename', 'Data.json']);
     if (!file) {
-      console.warn('GitHub data.json file is not found');
+      console.warn('GitHub "data.json" file is not found.');
       return false;
     }
 
@@ -81,7 +81,7 @@ class GitHubApi {
     console.log('GitHub contents_url', contents_url);
     const contents = await this._query(contents_url);
     if (!contents) {
-      console.warn('GitHub data.json content file is not found');
+      console.warn('GitHub "data.json" content file is not found.');
       return false;
     }
 
@@ -118,9 +118,10 @@ class GitHubApi {
    * @return {Promise<object>}
    */
   async _query(uri, method = 'GET', body = null) {
-    assert(_.isString(uri), 'URI should be a string');
-    assert(_.isString(method), 'Method should be a string');
-    assert(_.isObject(body) || _.isNull(body), 'Method should be a string');
+    assert(_.isString(uri), 'GitHub Request URI should be a string.');
+    assert(_.isString(method), 'GitHub Request Method should be a string.');
+    assert(_.isObject(body) || _.isNull(body),
+      'GitHub Request Body should be an object.');
 
     const options = {
       uri,
@@ -130,7 +131,6 @@ class GitHubApi {
       json: true,
       followAllRedirects: true
     };
-    // console.log('GitHut query options', options);
     return new Promise((resolve, reject) => {
       request(options, (error, response, body) => {
         if (error) return reject(error);
@@ -145,7 +145,7 @@ class GitHubApi {
    */
   _getHeaders() {
     assert(_.isString(this.token),
-      'GitHub personal access token should be a string');
+      'GitHub "personal access token" should be a string.');
     return {
       'Authorization': `bearer ${this.token}`,
       'User-Agent': this.userAgent,
@@ -196,7 +196,8 @@ class GitHubApi {
    */
   async _checkIfAllIsReady() {
     if (this.isReady === false) {
-      throw new Error(`GitHub integration is turned off`);
+      throw new Error(`GitHub integration is turned off. ` +
+        `Since env is not ready.`);
     }
     return true;
   }

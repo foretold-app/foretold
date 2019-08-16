@@ -27,9 +27,6 @@
     "BOT_TOKEN": {
       "required": true
     },
-    "BOT_AGENT_ID": {
-      "required": true
-    },
     "SMTP_HOST": {
       "required": true
     },

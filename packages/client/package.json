@@ -14,15 +14,15 @@
 		"build-bsb": "bsb -make-world",
 		"clean": "bsb -clean-world",
 		"bsb-watch": "bsb -make-world -w",
-		"parcel": "API_URL=${API_URL:-http://localhost:4000/graphql} AUTH0_DOMAIN=${AUTH0_DOMAIN:-guesstimate.auth0.com} AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID:-gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT} STATIC_URL=${STATIC_URL:-http://localhost:4000} parcel ./src/index.html --public-url /",
+		"parcel": "API_URL=${API_URL:-http://localhost:4000/graphql} AUTH0_DOMAIN=${AUTH0_DOMAIN:-guesstimate.auth0.com} AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID:-gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT} parcel ./src/index.html --public-url /",
 		"parcel-staging": "parcel ./src/index.html --public-url /",
 		"parcel-production": "parcel ./src/index.html --public-url /",
 		"prepare-dist": "mkdir -p dist && cp _redirects dist/_redirects",
 		"replace-dist": "rm -rf .cache && rm -rf dist && yarn prepare-dist",
 		"build": "parcel build ./src/index.html --no-cache --no-minify",
-		"build-for-server": "API_URL=https://api.foretold.io/graphql AUTH0_DOMAIN=foretold.auth0.com AUTH0_CLIENT_ID=oIh53ohBnA4xqhaO8vZXa7PiW6TCXjMV STATIC_URL=https://api.foretold.io yarn run build",
+		"build-for-server": "API_URL=https://api.foretold.io/graphql AUTH0_DOMAIN=foretold.auth0.com AUTH0_CLIENT_ID=oIh53ohBnA4xqhaO8vZXa7PiW6TCXjMV yarn run build",
 		"build-for-staging": "API_URL=https://prediction-backend-staging.herokuapp.com/graphql AUTH0_DOMAIN=${AUTH0_DOMAIN:-foretold.auth0.com} AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID:-oIh53ohBnA4xqhaO8vZXa7PiW6TCXjMV} yarn run build",
-		"build-for-development": "API_URL=${API_URL:-http://localhost:4000/graphql} AUTH0_DOMAIN=${AUTH0_DOMAIN:-guesstimate.auth0.com} AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID:-gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT} STATIC_URL=${STATIC_URL:-http://localhost:4000} yarn run build",
+		"build-for-development": "API_URL=${API_URL:-http://localhost:4000/graphql} AUTH0_DOMAIN=${AUTH0_DOMAIN:-guesstimate.auth0.com} AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID:-gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT} yarn run build",
 		"server-deploy": "netlify deploy --dir=dist --prod",
 		"build-and-deploy": "yarn run clean && yarn run build-bsb && yarn run build-for-server && yarn run server-deploy",
 		"serve": "static-server ./dist -p ${PORT} -d -n ./dist/index.html",
@@ -104,6 +104,6 @@
 		"parcel-plugin-html-externals": "^0.1.2"
 	},
 	"externals": {
-		"env.js": false
+		"/env.js": false
 	}
 }

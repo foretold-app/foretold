@@ -57,9 +57,6 @@
     "GITHUB_REPO_NAME": {
       "required": true
     },
-    "SERVER_URL": {
-      "required": true
-    },
     "HEROKU_APP_NAME": {
       "required": true
     },

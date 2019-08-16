@@ -1,7 +1,7 @@
-const { API } = require('./gitHubAPI');
+const { GitHubApi } = require('./git-hub-api');
 
 describe('GitHub API', () => {
   it('class should be a constructor', () => {
-    expect(API).toBeInstanceOf(Function);
+    expect(GitHubApi).toBeInstanceOf(Function);
   });
 });

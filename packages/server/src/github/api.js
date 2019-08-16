@@ -15,27 +15,23 @@ class API {
     this.token = config.GITHUB_PERSONAL_ACCESS_TOKEN;
     this.webhookSecret = config.GITHUB_WEBHOOK_SECRET;
     this.serverURL = config.SERVER_URL;
-
-    this.apiURL = `https://api.github.com`;
-    this.hookUrl = `${this.serverURL}/hooks`;
+    this.apiURL = config.GITHUB_API_URL;
+    this.userAgent = config.GITHUB_QUERY_USER_AGENT;
 
     this.isReady =
       !!this.repoOwner && !!this.repoName &&
       !!this.token && !!this.webhookSecret;
 
-    if (!this.repoOwner) {
-      console.warn(`GitHub repo owner is not set.`);
-    }
-    if (!this.repoName) {
-      console.warn(`GitHub repo name is not set.`);
-    }
-    if (!this.token) {
-      console.warn(`GitHub personal access token is not set, ` +
-        `see https://github.com/settings/tokens.`);
-    }
-    if (!this.webhookSecret) {
-      console.warn(`GitHub webhook secret is not set`);
-    }
+    this.hookUrl = `${this.serverURL}/hooks`;
+    this.gitHubRepoUrl =
+      `${this.apiURL}/repos/${this.repoOwner}/${this.repoName}`;
+    this.gitHubHooksUrl = `${this.gitHubRepoUrl}/hooks`;
+
+    if (!this.repoOwner) console.warn(`GitHub repo owner is not set.`);
+    if (!this.repoName) console.warn(`GitHub repo name is not set.`);
+    if (!this.token) console.warn(`GitHub personal access token is not set, ` +
+      `see https://github.com/settings/tokens.`);
+    if (!this.webhookSecret) console.warn(`GitHub webhook secret is not set`);
   }
 
   /**
@@ -76,7 +72,7 @@ class API {
       'GitHub personal access token should be a string');
     return {
       'Authorization': `bearer ${this.token}`,
-      'User-Agent': 'Foretold App',
+      'User-Agent': this.userAgent,
       'Accept': 'application/vnd.github.v3+json',
     };
   }
@@ -87,23 +83,7 @@ class API {
    * @return {string}
    */
   _getPullFilesUrl(pullRequestNumber) {
-    return `${this._getRepo()}/pulls/${pullRequestNumber}/files`
-  }
-
-  /**
-   * @protected
-   * @return {string}
-   */
-  _getHooks() {
-    return `${this._getRepo()}/hooks`;
-  }
-
-  /**
-   * @protected
-   * @return {string}
-   */
-  _getRepo() {
-    return `${this.apiURL}/repos/${this.repoOwner}/${this.repoName}`;
+    return `${this.gitHubRepoUrl}/pulls/${pullRequestNumber}/files`
   }
 
   /**
@@ -111,7 +91,7 @@ class API {
    * @return {Promise<Object>}
    */
   async getListOfHooks() {
-    const url = this._getHooks();
+    const url = this.gitHubHooksUrl;
     return this._query(url);
   }
 
@@ -128,19 +108,17 @@ class API {
     }
 
     const hook = {
-      "name": "web",
-      "active": true,
-      "events": [
-        "pull_request"
-      ],
-      "config": {
-        "url": this.hookUrl,
-        "secret": this.webhookSecret,
-        "content_type": "json",
-        "insecure_ssl": "1"
-      }
+      name: 'web',
+      active: true,
+      events: ['pull_request'],
+      config: {
+        url: this.hookUrl,
+        secret: this.webhookSecret,
+        content_type: 'json',
+        insecure_ssl: '1',
+      },
     };
-    const url = this._getHooks();
+    const url = this.gitHubHooksUrl;
     return this._query(url, 'POST', hook);
   }
 

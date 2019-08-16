@@ -14,29 +14,27 @@ class API {
     this.repoName = config.GITHUB_REPO_NAME;
     this.token = config.GITHUB_PERSONAL_ACCESS_TOKEN;
     this.webhookSecret = config.GITHUB_WEBHOOK_SECRET;
-    this.apiURL = `https://api.github.com`;
     this.serverURL = config.SERVER_URL;
+
+    this.apiURL = `https://api.github.com`;
     this.hookUrl = `${this.serverURL}/hooks`;
-    this.isReady = true;
+
+    this.isReady =
+      !!this.repoOwner && !!this.repoName &&
+      !!this.token && !!this.webhookSecret;
 
     if (!this.repoOwner) {
       console.warn(`GitHub repo owner is not set.`);
-      this.isReady = false;
     }
     if (!this.repoName) {
       console.warn(`GitHub repo name is not set.`);
-      this.isReady = false;
     }
     if (!this.token) {
-      console.warn(
-        `GitHub personal access token is not set, ` +
-        `see https://github.com/settings/tokens.`
-      );
-      this.isReady = false;
+      console.warn(`GitHub personal access token is not set, ` +
+        `see https://github.com/settings/tokens.`);
     }
     if (!this.webhookSecret) {
       console.warn(`GitHub webhook secret is not set`);
-      this.isReady = false;
     }
   }
 

@@ -14,13 +14,14 @@
     };
     let script = document.createElement('script');
     script.src = (process.env.STATIC_URL || "") + "/env.js";
+    script.defer = true;
     document.head.appendChild(script);
   </script>
 </head>
 
 <body>
 <div id="app" style="height: 100%"></div>
-<script src="./Index.re"></script>
+<script src="./Index.re" defer></script>
 </body>
 
 </html>

@@ -2,6 +2,7 @@
   "name": "foretold",
   "scripts": {},
   "env": {
+    "API_URL": {},
     "AUTH0_SECRET": {
       "required": true
     },

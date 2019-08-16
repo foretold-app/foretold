@@ -138,7 +138,7 @@ descriptions;
 ### Server Side Requirements
 - Heroku.com (backend CI)
 - https://www.netlify.com/ (client CI)
-- Travis.com (CD/CI tests)
+- https://travis-ci.org/ (CD/CI tests)
 - Backup / Restore
 - **Platforms** - Node.js 12.6.0;
 - **DBS** - PostresQL 11

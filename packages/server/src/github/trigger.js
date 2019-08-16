@@ -1,17 +1,18 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const { API } = require('./api');
+const { GitHubApi } = require('./git-hub-api');
 const { GlobalSettingsData } = require('../data/global-settings-data');
 
 class Trigger {
   /**
    * @param {object} webhook
+   * @param {string} xHubSignature
    */
   constructor(webhook, xHubSignature) {
     this.webhook = webhook;
     this.xHubSignature = xHubSignature;
-    this.api = new API();
+    this.api = new GitHubApi();
     this.globalSetting = new GlobalSettingsData();
 
     assert(_.isObject(webhook), 'WebHook should be an object');

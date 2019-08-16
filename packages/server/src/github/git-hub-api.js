@@ -5,7 +5,7 @@ const crypto = require('crypto');
 
 const config = require('../config');
 
-class API {
+class GitHubApi {
   /**
    * @public
    */
@@ -204,5 +204,5 @@ class API {
 }
 
 module.exports = {
-  API,
+  GitHubApi,
 };

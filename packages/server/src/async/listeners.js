@@ -5,7 +5,7 @@ const measurables = require('./measurables');
 const producers = require('./producers');
 const consumers = require('./consumers');
 const { Mailer } = require('./mailer');
-const { API: GitHubApi } = require('../github/api');
+const { GitHubApi } = require('../github/git-hub-api');
 
 /**
  * @todo: To avoid code duplicates.

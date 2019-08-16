@@ -1,4 +1,4 @@
-const { API } = require('./api');
+const { API } = require('./gitHubAPI');
 
 describe('GitHub API', () => {
   it('class should be a constructor', () => {

@@ -1,3 +1,5 @@
+const { AuthenticationError } = require('apollo-server');
+
 const jwt = require('jsonwebtoken');
 
 const config = require('../config');
@@ -30,7 +32,7 @@ class Jwt {
     try {
       return this.jwt.verify(token, this.AUTH0_SECRET);
     } catch (err) {
-      throw err;
+      throw new Jwt.JwtAuth0Invalid();
     }
   }
 
@@ -42,7 +44,7 @@ class Jwt {
     try {
       return this.jwt.verify(token, this.JWT_SECRET);
     } catch (err) {
-      throw err;
+      throw new Jwt.JwtInvalid();
     }
   }
 
@@ -61,6 +63,18 @@ class Jwt {
     return this.jwt.sign(payload, this.JWT_SECRET, options);
   }
 }
+
+Jwt.JwtAuth0Invalid = class JwtAuth0Invalid extends AuthenticationError {
+  constructor() {
+    super('JWT of Auth0.com is invalid');
+  }
+};
+
+Jwt.JwtInvalid = class JwtInvalid extends AuthenticationError {
+  constructor() {
+    super('JWT is invalid');
+  }
+};
 
 module.exports = {
   Jwt,

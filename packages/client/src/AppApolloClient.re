@@ -1,13 +1,7 @@
-/* Create an InMemoryCache */
 let inMemoryCache = ApolloInMemoryCache.createInMemoryCache();
-
-type headers = Js.t({. "authorization": string});
 
 [@bs.deriving abstract]
 type data = {name: string};
-
-[@bs.scope "JSON"] [@bs.val]
-external parseIntoMyData: string => data = "parse";
 
 let storageToHeaders = (jwt: ServerJwt.t) =>
   Json.Encode.(
@@ -19,10 +13,34 @@ let httpLink = ApolloLinks.createHttpLink(~uri=Env.serverUrl, ());
 let contextLink = (tokens: ServerJwt.t) =>
   ApolloLinks.createContextLink(() => {"headers": storageToHeaders(tokens)});
 
+let isUnauthenticated = error =>
+  error##graphQLErrors
+  |> Js.Nullable.toOption
+  |> E.O.fmap(graphQLErrors =>
+       graphQLErrors
+       |> Js.Array.find(err =>
+            err##extensions
+            |> Js.Nullable.toOption
+            |> E.O.fmap(extensions =>
+                 extensions##code
+                 |> Js.Nullable.toOption
+                 |> E.O.fmap(code => code === "UNAUTHENTICATED")
+                 |> E.O.default(false)
+               )
+            |> E.O.default(false)
+          )
+     )
+  |> E.O.toBool;
+
 let errorLink =
-  ApolloLinks.apolloLinkOnError(error =>
-    Js.log2("GraphQL Error!", Js.Json.stringifyAny(error))
-  );
+  ApolloLinks.apolloLinkOnError(error => {
+    Js.log2("GraphQL Error!", Js.Json.stringifyAny(error));
+
+    switch (error |> isUnauthenticated) {
+    | true => Auth.Actions.logout()
+    | _ => ()
+    };
+  });
 
 let link = () =>
   switch (ServerJwt.make_from_storage()) {

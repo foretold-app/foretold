@@ -8,12 +8,12 @@ const apolloServer = new ApolloServer({
   introspection: true,
   playground: true,
   schema: schemaWithMiddlewares,
-  formatError: error => {
+  formatError: (error) => {
     console.error("Error!", error);
     console.error(error.extensions.exception.stacktrace);
     return error;
   },
-  formatResponse: response => {
+  formatResponse: (response) => {
     return response;
   },
   context: async ({ req }) => {

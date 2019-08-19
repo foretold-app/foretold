@@ -42,7 +42,6 @@ module Actions = {
     Auth0Tokens.destroy();
     ServerJwt.destroy();
     Auth0Client.logout();
-    ReasonReact.Router.push("/login");
     ();
   };
 };

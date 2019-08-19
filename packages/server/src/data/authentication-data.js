@@ -1,3 +1,5 @@
+const { AuthenticationError } = require('apollo-server');
+
 const { Jwt } = require('../lib/jwt');
 const { Auth0 } = require('../lib/auth0');
 
@@ -136,25 +138,25 @@ class AuthenticationData {
 
 }
 
-AuthenticationData.NoUserIdError = class NoUserIdError extends Error {
+AuthenticationData.NoUserIdError = class NoUserIdError extends AuthenticationError {
   constructor() {
     super('No User Id');
   }
 };
 
-AuthenticationData.NotAuthenticatedError = class NotAuthenticatedError extends Error {
+AuthenticationData.NotAuthenticatedError = class NotAuthenticatedError extends AuthenticationError {
   constructor() {
     super('Not authenticated');
   }
 };
 
-AuthenticationData.TokenIsInvalidError = class TokenIsInvalidError extends Error {
+AuthenticationData.TokenIsInvalidError = class TokenIsInvalidError extends AuthenticationError {
   constructor() {
     super('Token is invalid');
   }
 };
 
-AuthenticationData.NoAgentIdError = class NoAgentIdError extends Error {
+AuthenticationData.NoAgentIdError = class NoAgentIdError extends AuthenticationError {
   constructor() {
     super('No Agent Id');
   }

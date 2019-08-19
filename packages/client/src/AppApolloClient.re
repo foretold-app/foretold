@@ -1,4 +1,3 @@
-/* Create an InMemoryCache */
 let inMemoryCache = ApolloInMemoryCache.createInMemoryCache();
 
 type headers = Js.t({. "authorization": string});

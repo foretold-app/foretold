@@ -38,10 +38,11 @@ module UrlToTokens = {
 
 module Actions = {
   let logout = () => {
+    Js.log("Logout");
     Auth0Tokens.destroy();
     ServerJwt.destroy();
     Auth0Client.logout();
-    ReasonReact.Router.push("/");
+    ReasonReact.Router.push("/login");
     ();
   };
 };

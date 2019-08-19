@@ -1,12 +1,7 @@
 let inMemoryCache = ApolloInMemoryCache.createInMemoryCache();
 
-type headers = Js.t({. "authorization": string});
-
 [@bs.deriving abstract]
 type data = {name: string};
-
-[@bs.scope "JSON"] [@bs.val]
-external parseIntoMyData: string => data = "parse";
 
 let storageToHeaders = (jwt: ServerJwt.t) =>
   Json.Encode.(

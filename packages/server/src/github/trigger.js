@@ -41,7 +41,7 @@ class Trigger {
     const merged = _.get(this.webhook, 'pull_request.merged');
     if (merged !== true) {
       console.warn('PullRequest is not merged yet.');
-      // return false;
+      return false;
     } else {
       console.log('PullRequest is merged.');
     }

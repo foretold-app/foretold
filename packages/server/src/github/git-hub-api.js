@@ -41,7 +41,7 @@ class GitHubApi {
   async addHook() {
     await this._checkIfAllIsReady();
 
-    if (await this._checkUrl() !== null) {
+    if (!!(await this._checkUrl())) {
       console.warn(`GitHub web hook is already added.`);
       return false;
     }

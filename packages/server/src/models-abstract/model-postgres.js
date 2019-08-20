@@ -248,8 +248,6 @@ class ModelPostgres extends Model {
       });
     }
 
-    // @todo: Rename it to "within Joined Channels by c͟h͟a͟n͟n͟e͟l͟ ͟i͟d͟".
-    // @todo: Use object structures.
     if (filter.withinJoinedChannels) {
       const { as, agentId } = filter.withinJoinedChannels;
       where[this.and].push({

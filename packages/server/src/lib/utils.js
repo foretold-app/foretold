@@ -9,7 +9,7 @@ const _ = require('lodash');
  */
 module.exports.diff = function diff(className, options, list) {
   const difference = _.difference(_.keys(options), list);
-  if (difference > 0) {
+  if (difference.length > 0) {
     console.warn(`${className} don't expect "${difference.join(', ')}".`);
   }
   return difference;
@@ -23,7 +23,7 @@ module.exports.diff = function diff(className, options, list) {
  */
 module.exports.diff2 = function diff2(className, options, list) {
   const difference = _.difference(_.keys(options), _.keys(list));
-  if (difference > 0) {
+  if (difference.length > 0) {
     console.warn(`${className} don't expect "${difference.join(', ')}".`);
   }
   return difference;

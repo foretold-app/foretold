@@ -14,7 +14,6 @@ class Restrictions {
       'channelId': v => _.isBoolean(v),
       'measurableId': v => _.isBoolean(v),
       'channelIdAsId': v => _.isBoolean(v),
-      'channelMemberId': v => _.isString(v),
     };
     utils.extend(this.constructor.name, options, list, this);
     utils.test(this.constructor.name, list, this);

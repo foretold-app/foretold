@@ -35,7 +35,6 @@ class Filter {
       'sentAt', // Date | null
       'attemptCounterMax', // number
     ];
-    const channels = ['channelMemberId'];
 
     const list = [
       'type', 'creatorId', ' userId',
@@ -44,7 +43,6 @@ class Filter {
       'findInDateRange', 'notTaggedByAgent', 'states',
       ...common,
       ...channel,
-      ...channels,
       ...agent,
       ...agentNotification,
     ];
@@ -60,6 +58,15 @@ class Filter {
    */
   static withinJoinedChannelsByChannelId(agentId) {
     return { as: 'channelId', agentId };
+  }
+
+  /**
+   * Look at this literal as on a structure.
+   * @param {string} agentId
+   * @return {Layers.withinJoinedChannels}
+   */
+  static withinJoinedChannelsById(agentId) {
+    return { as: 'id', agentId };
   }
 }
 

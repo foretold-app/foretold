@@ -190,7 +190,6 @@ export namespace Layers {
       isAdmin?: boolean,
       agentId?: Models.ObjectID,
       measuredByAgentId?: Models.ObjectID,
-      channelMemberId?: Models.ObjectID,
       transaction?: object,
       lock?: boolean,
       skipLocked?: boolean,
@@ -206,7 +205,6 @@ export namespace Layers {
       excludeChannelId?: Models.ObjectID,
       notTaggedByAgent?: Models.ObjectID,
       notificationId?: Models.ObjectID,
-      channelMemberId?: Models.ObjectID,
 
       competitorType?: string,
       type?: string,
@@ -289,7 +287,6 @@ export namespace Layers {
       channelId?: Models.ObjectID,
       measurableId?: boolean,
       measuredByAgentId?: Models.ObjectID,
-      channelMemberId?: Models.ObjectID,
     };
     type options = {
       transaction?: object,
@@ -299,7 +296,6 @@ export namespace Layers {
     type filter = {
       agentId?: Models.ObjectID,
       excludeChannelId?: Models.ObjectID,
-      channelMemberId?: Models.ObjectID,
       userId?: Models.ObjectID,
       channelId?: Models.ObjectID,
       isArchived?: string[],

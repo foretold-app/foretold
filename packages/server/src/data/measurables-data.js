@@ -87,6 +87,7 @@ class MeasurablesData extends DataBase {
       channelId: true,
       isAdmin: options.isAdmin,
       agentId: options.agentId,
+      // @todo: move to filter
       measuredByAgentId: options.measuredByAgentId,
     });
     return this.model.getAll(filter, pagination, restrictions);

@@ -35,8 +35,7 @@ async function all(root, args, context, info) {
   const currentAgentId = _.get(context, 'agent.id');
 
   const withinJoinedChannels = _.isEmpty(channelId)
-    ? Filter.withinJoinedChannelsByChannelId(currentAgentId)
-    : null;
+    ? Filter.withinJoinedChannelsByChannelId(currentAgentId) : null;
 
   const filter = new Filter({
     channelId,
@@ -50,6 +49,7 @@ async function all(root, args, context, info) {
   const options = new Options({
     isAdmin: _.get(context, 'agent.isAdmin'),
     agentId: currentAgentId,
+    // @todo: move to filter
     measuredByAgentId: _.get(args, 'measuredByAgentId'),
   });
 

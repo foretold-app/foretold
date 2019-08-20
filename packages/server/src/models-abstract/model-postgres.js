@@ -190,18 +190,6 @@ class ModelPostgres extends Model {
       });
     }
 
-    // @todo: Rename it to "within Joined Channels by c͟h͟a͟n͟n͟e͟l͟ ͟i͟d͟".
-    // @todo: Use object structures.
-    if (restrictions.channelMemberId) {
-      where[this.and].push({
-        channelId: {
-          [this.in]: this._channelIdsByMembersLiteral(
-            restrictions.channelMemberId,
-          ),
-        }
-      });
-    }
-
     return where;
   }
 
@@ -237,16 +225,6 @@ class ModelPostgres extends Model {
   applyFilter(where = {}, filter = {}) {
     if (!where) where = {};
     if (!where[this.and]) where[this.and] = [];
-
-    // @todo: Rename it to "within Joined Channels by i͟d͟".
-    // @todo: Use object structures.
-    if (filter.channelMemberId) {
-      where[this.and].push({
-        id: {
-          [this.in]: this._channelIdsByMembersLiteral(filter.channelMemberId),
-        }
-      });
-    }
 
     // OK
     if (filter.withinJoinedChannels) {

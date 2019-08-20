@@ -147,6 +147,7 @@ class ModelPostgres extends Model {
     if (!where[this.and]) where[this.and] = [];
 
     // @todo: Rename it to "within Public Channels by c͟h͟a͟n͟n͟e͟l͟ ͟i͟d͟"
+    // @todo: Use object structures.
     if (restrictions.channelId && !restrictions.agentId) {
       where[this.and].push({
         channelId: {
@@ -156,6 +157,7 @@ class ModelPostgres extends Model {
     }
 
     // @todo: Rename it to "within Public and Joined Channels by c͟h͟a͟n͟n͟e͟l͟ ͟i͟d͟"
+    // @todo: Use object structures.
     if (restrictions.channelId && restrictions.agentId) {
       where[this.and].push({
         channelId: {
@@ -165,6 +167,7 @@ class ModelPostgres extends Model {
     }
 
     // @todo: Rename it to "within Public and Joined Channels by i͟d͟"
+    // @todo: Use object structures.
     if (restrictions.channelIdAsId && restrictions.agentId) {
       where[this.and].push({
         id: {
@@ -188,6 +191,7 @@ class ModelPostgres extends Model {
     }
 
     // @todo: Rename it to "within Joined Channels by c͟h͟a͟n͟n͟e͟l͟ ͟i͟d͟".
+    // @todo: Use object structures.
     if (restrictions.channelMemberId) {
       where[this.and].push({
         channelId: {
@@ -211,6 +215,7 @@ class ModelPostgres extends Model {
     if (!include) include = [];
 
     // @todo: It is a filter, b͟u͟t͟ ͟n͟o͟t͟ ͟r͟e͟s͟t͟r͟i͟c͟t͟i͟o͟n͟
+    // @todo: Use object structures.
     if (restrictions.measuredByAgentId) {
       include.push({
         model: this.models.Measurement,
@@ -234,6 +239,7 @@ class ModelPostgres extends Model {
     if (!where[this.and]) where[this.and] = [];
 
     // @todo: Rename it to "within Joined Channels by i͟d͟".
+    // @todo: Use object structures.
     if (filter.channelMemberId) {
       where[this.and].push({
         id: {

@@ -16,9 +16,9 @@ class Restrictions {
       'channelIdAsId': v => _.isBoolean(v),
       'channelMemberId': v => _.isString(v),
     };
-    utils.extend2(this.constructor.name, options, list, this);
-    utils.test2(this.constructor.name, list, this);
-    utils.diff2(this.constructor.name, options, list);
+    utils.extend(this.constructor.name, options, list, this);
+    utils.test(this.constructor.name, list, this);
+    utils.diff(this.constructor.name, options, list);
   }
 }
 

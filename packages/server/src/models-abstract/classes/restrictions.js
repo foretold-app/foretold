@@ -1,5 +1,5 @@
-const assert = require('assert');
 const _ = require('lodash');
+const utils = require('../../lib/utils');
 
 class Restrictions {
   /**
@@ -16,21 +16,9 @@ class Restrictions {
       'channelIdAsId': v => _.isBoolean(v),
       'channelMemberId': v => _.isString(v),
     };
-
-    _.each(list, (_test, name) => {
-      if (_.has(options, name)) {
-        this[name] = _.get(options, name);
-      }
-    });
-
-    _.each(list, (test, name) => {
-      if (_.has(this, name)) {
-        assert(
-          test(this[name]),
-          `Restrictions."${name}" assert failed, ` +
-          `type is "${typeof _.get(this, name)}".`);
-      }
-    });
+    utils.extend2(this.constructor.name, options, list, this);
+    utils.test2(this.constructor.name, list, this);
+    utils.diff2(this.constructor.name, options, list);
   }
 }
 

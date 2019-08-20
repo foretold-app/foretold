@@ -1,23 +1,18 @@
-const assert = require('assert');
-const _ = require('lodash');
+const utils = require('../../lib/utils');
 
 class Options {
   /**
    * @todo: add type tests (assertion)
    * @param {Layers.AbstractModelsLayer.options} [options]
    */
-  constructor(options) {
+  constructor(options = {}) {
     const list = [
       'transaction', // object
       'lock', // bool
       'skipLocked', // bool
     ];
-
-    _.each(list, (name) => {
-      if (_.has(options, name)) {
-        this[name] = _.get(options, name);
-      }
-    });
+    utils.extend(this.constructor.name, options, list, this);
+    utils.diff(this.constructor.name, options, list);
   }
 }
 

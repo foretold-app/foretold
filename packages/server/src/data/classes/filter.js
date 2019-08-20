@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const utils = require('../../lib/utils');
 
 /**
  * This class is used as a simple
@@ -49,11 +49,8 @@ class Filter {
       ...agentNotification,
     ];
 
-    _.each(list, (name) => {
-      if (_.has(filter, name)) {
-        this[name] = _.get(filter, name);
-      }
-    });
+    utils.extend(this.constructor.name, filter, list, this);
+    utils.diff(this.constructor.name, filter, list);
   }
 
   /**

@@ -6,6 +6,9 @@
     "AUTH0_SECRET": {
       "required": true
     },
+    "SERVER_URL": {
+      "required": true
+    },
     "SLACK_WEBHOOK_URL": {
       "required": true
     },

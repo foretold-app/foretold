@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const utils = require('../../lib/utils');
 
 /**
  * This class is used as a simple
@@ -22,7 +22,12 @@ class Filter {
    * @param {Layers.DataSourceLayer.filter} [filter]
    */
   constructor(filter = {}) {
-    const common = ['id', 'isArchived'];
+    const common = [
+      'id',
+      'isArchived',
+      /** @type {Layers.withinJoinedChannels | null} */
+      'withinJoinedChannels',
+    ];
     const channel = [];
     const agent = ['excludeChannelId', 'types'];
     const agentNotification = [
@@ -44,11 +49,17 @@ class Filter {
       ...agentNotification,
     ];
 
-    _.each(list, (name) => {
-      if (_.has(filter, name)) {
-        this[name] = _.get(filter, name);
-      }
-    });
+    utils.extend(this.constructor.name, filter, list, this);
+    utils.diff(this.constructor.name, filter, list);
+  }
+
+  /**
+   * Look at this literal as on a structure.
+   * @param {string} agentId
+   * @return {Layers.withinJoinedChannels}
+   */
+  static withinJoinedChannelsByChannelId(agentId) {
+    return { as: 'channelId', agentId };
   }
 }
 

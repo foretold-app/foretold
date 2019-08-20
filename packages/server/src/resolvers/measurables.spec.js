@@ -33,7 +33,8 @@ describe('Measurables Resolvers', () => {
             "creatorId": "creatorId1",
             "isArchived": "isArchived1",
             "seriesId": "seriesId2",
-            "states": "states1"
+            "states": "states1",
+            "withinJoinedChannels": null
           },
           {
             "after": 2,

@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const utils = require('../../lib/utils');
 
 /**
  * See "filter.js" comments.
@@ -8,9 +8,7 @@ class Data {
    * @param {Layers.DataSourceLayer.data} [data]
    */
   constructor(data) {
-    _.each(data, (value, key) => {
-      this[key] = value;
-    });
+    utils.copy(this.constructor.name, data, this);
   }
 }
 

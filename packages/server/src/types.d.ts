@@ -1,3 +1,4 @@
+
 export namespace Models {
 
   export type ObjectID = string;
@@ -176,6 +177,11 @@ export namespace Schema {
 }
 
 export namespace Layers {
+  export type withinJoinedChannels = {
+    as: string,
+    agentId: Models.ObjectID,
+  }
+
   namespace DataSourceLayer {
     type compoundId = object;
     type id = string | compoundId;
@@ -198,17 +204,21 @@ export namespace Layers {
       userId?: Models.ObjectID,
       agentId?: Models.ObjectID,
       excludeChannelId?: Models.ObjectID,
-      competitorType?: string,
-      findInDateRange?: object,
       notTaggedByAgent?: Models.ObjectID,
+      notificationId?: Models.ObjectID,
+      channelMemberId?: Models.ObjectID,
+
+      competitorType?: string,
+      type?: string,
+      attemptCounterMax?: number,
+      sentAt?: string | null,
+
+      findInDateRange?: object, // @todo: Object? Give definition!
+      withinJoinedChannels?: withinJoinedChannels | null,
+
       states?: string[],
       isArchived?: string[],
       types?: string[],
-      type?: string,
-      notificationId?: Models.ObjectID,
-      channelMemberId?: Models.ObjectID,
-      sentAt?: string | null,
-      attemptCounterMax?: number,
     };
     type pagination = {
       limit?: number,
@@ -297,6 +307,7 @@ export namespace Layers {
       sentAt?: string[],
       notificationId?: string[],
       attemptCounterMax?: number,
+      withinJoinedChannels?: withinJoinedChannels | null,
     };
     type pagination = {
       limit?: number,

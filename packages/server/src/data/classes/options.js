@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const utils = require('../../lib/utils');
 
 /**
  * See "filter.js" comments.
@@ -19,12 +19,8 @@ class Options {
       'measuredByAgentId', // string
       'channelMemberId', // string
     ];
-
-    _.each(list, (name) => {
-      if (_.has(options, name)) {
-        this[name] = _.get(options, name);
-      }
-    });
+    utils.extend(this.constructor.name, options, list, this);
+    utils.diff(this.constructor.name, options, list);
   }
 }
 

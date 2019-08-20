@@ -4,28 +4,28 @@ const _ = require('lodash');
  * @param className
  * @param options
  * @param list
- * @return {function(*, *=, *=)}
+ * @return {string[]}
  */
 module.exports.diff = function diff(className, options, list) {
   const difference = _.difference(_.keys(options), list);
   if (difference > 0) {
     console.warn(`${className} don't expect "${difference.join(', ')}".`);
   }
-  return diff;
+  return difference;
 };
 
 /**
  * @param className
  * @param options
  * @param list
- * @return {(function(*, *=, *=): function(*, *=, *=))|*}
+ * @return {string[]}
  */
 module.exports.diff2 = function diff2(className, options, list) {
   const difference = _.difference(_.keys(options), _.keys(list));
   if (difference > 0) {
     console.warn(`${className} don't expect "${difference.join(', ')}".`);
   }
-  return diff;
+  return difference;
 };
 
 /**

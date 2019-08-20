@@ -21,19 +21,20 @@ const { Filter } = require('../data/classes/filter');
  */
 async function all(root, args, context, info) {
   const channelId = _.get(args, 'channelId');
+  const agentId = _.get(args, 'agentId');
   const currentAgentId = _.get(context, 'agent.id');
 
   const withinJoinedChannels = _.isEmpty(channelId)
     ? Filter.withinJoinedChannelsByChannelId(currentAgentId) : null;
 
   const filter = new Filter({
+    agentId,
     channelId,
     withinJoinedChannels,
-    agentId: currentAgentId,
   });
   const pagination = new Pagination(args);
   const options = new Options({
-    agentId: currentAgentId,
+    agentId,
   });
 
   const connection = await data.feedItems.getConnection(

@@ -248,6 +248,7 @@ class ModelPostgres extends Model {
       });
     }
 
+    // OK
     if (filter.withinJoinedChannels) {
       const { as, agentId } = filter.withinJoinedChannels;
       where[this.and].push({

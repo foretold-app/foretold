@@ -35,8 +35,8 @@ async function all(root, args, context, info) {
   const currentAgentId = _.get(context, 'agent.id');
 
   const withinJoinedChannels = _.isEmpty(channelId)
-    ? null
-    : Filter.withinJoinedChannelsByChannelId(currentAgentId);
+    ? Filter.withinJoinedChannelsByChannelId(currentAgentId)
+    : null;
 
   const filter = new Filter({
     channelId,

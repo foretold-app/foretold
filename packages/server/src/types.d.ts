@@ -306,11 +306,17 @@ export namespace Layers {
       excludeChannelId?: Models.ObjectID,
       userId?: Models.ObjectID,
       channelId?: Models.ObjectID,
+      measurableId?: Models.ObjectID,
+      notTaggedByAgent?: Models.ObjectID,
+
       isArchived?: string[],
       types?: string[],
       sentAt?: string[],
       notificationId?: string[],
+      competitorType?: string[],
+
       attemptCounterMax?: number,
+
       withinJoinedChannels?: withinJoinedChannels | null,
       withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
     };
@@ -321,6 +327,7 @@ export namespace Layers {
       first?: number,
       after?: string,
       before?: string,
+      order: [string, string][],
     };
     type query = object;
     type params = object;

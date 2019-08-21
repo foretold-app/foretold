@@ -6,6 +6,8 @@ const models = require('../models');
 const { Model } = require('./model');
 const { ResponseAll } = require('./classes/response-all');
 
+const { splitBy } = require('../lib/functions');
+
 /**
  * @abstract
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
@@ -271,6 +273,22 @@ class ModelPostgres extends Model {
       });
     }
 
+    // OK?
+    const startDate = _.get(filter, 'findInDateRange.startDate');
+    const endDate = _.get(filter, 'findInDateRange.endDate');
+
+    if (filter.measurableId) where.measurableId = filter.measurableId;
+    if (filter.competitorType) where.competitorType = {
+      [this.in]: filter.competitorType,
+    };
+    if (startDate) where[this.and].push({
+      createdAt: { [this.gte]: startDate },
+    });
+    if (endDate) where[this.and].push({ createdAt: { [this.lte]: endDate } });
+    if (filter.notTaggedByAgent) where.id = {
+      [this.notIn]: this._taggedMeasurementsLiteral(filter.notTaggedByAgent),
+    };
+
     return where;
   }
 
@@ -485,13 +503,17 @@ class ModelPostgres extends Model {
       ...cond,
       limit: edgePagination.limit,
       offset: edgePagination.offset,
-      order: [['createdAt', 'DESC']],
+      order: pagination.order,
     };
 
     /** @type {Models.Model[]} */
     let data = await this.model.findAll(findCond);
     data = this._setIndexes(data, edgePagination);
     data.total = total;
+
+    // @todo: tricky, rework
+    const spacedLimit = _.get(filter, 'findInDateRange.spacedLimit');
+    if (spacedLimit) data = splitBy(data, spacedLimit);
 
     return new ResponseAll(data, total);
   }

@@ -28,7 +28,10 @@ class Filter {
       /** @type {Layers.withinJoinedChannels | null} */
       'withinJoinedChannels',
     ];
-    const agent = ['excludeChannelId', 'types'];
+    const agent = [
+      'excludeChannelId',
+      'types',
+    ];
     const agentNotification = [
       'notificationId', // string
       'sentAt', // Date | null
@@ -36,10 +39,17 @@ class Filter {
     ];
 
     const list = [
-      'type', 'creatorId', 'userId',
-      'seriesId', 'channelId', 'measurableId',
-      'agentId', 'competitorType',
-      'findInDateRange', 'notTaggedByAgent', 'states',
+      'type',
+      'creatorId',
+      'userId',
+      'seriesId',
+      'channelId',
+      'measurableId', // string
+      'agentId',
+      'competitorType', // string[]
+      'findInDateRange', // object
+      'notTaggedByAgent',
+      'states',
       ...common,
       ...agent,
       ...agentNotification,

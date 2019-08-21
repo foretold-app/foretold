@@ -32,13 +32,16 @@ async function all(root, args, context, info) {
     findInDateRange: _.get(args, 'findInDateRange'),
     notTaggedByAgent: _.get(args, 'notTaggedByAgent'),
   });
-  const pagination = new Pagination(args);
+  const pagination = new Pagination({
+    ...args,
+    order: [['relevantAt', 'DESC']],
+  });
   const options = new Options({
     isAdmin: _.get(context, 'agent.isAdmin'),
     agentId: _.get(context, 'agent.id'),
   });
 
-  const connection = await data.measurements.getAll(filter, pagination, options);
+  const connection = await data.measurements.getConnection(filter, pagination, options);
   return connection.getData();
 }
 

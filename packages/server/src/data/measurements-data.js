@@ -51,13 +51,13 @@ class MeasurementsData extends DataBase {
    * @param {Models.ObjectID} options.agentId
    * @return {Promise<{data: Models.Measurement[], total: number}>}
    */
-  async getAll(filter = {}, pagination = {}, options = {}) {
+  async getConnection(filter = {}, pagination = {}, options = {}) {
     const restrictions = new Restrictions({
       measurableId: true,
       isAdmin: options.isAdmin,
       agentId: options.agentId,
     });
-    return this.model.getAll(filter, pagination, restrictions);
+    return this.model.getAllWithConnections(filter, pagination, restrictions);
   }
 
   /**

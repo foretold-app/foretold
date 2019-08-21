@@ -37,7 +37,7 @@ class Filter {
     ];
 
     const list = [
-      'type', 'creatorId', ' userId',
+      'type', 'creatorId', 'userId',
       'seriesId', 'channelId', 'measurableId',
       'agentId', 'competitorType',
       'findInDateRange', 'notTaggedByAgent', 'states',

@@ -15,7 +15,15 @@ class ChannelsData extends DataBase {
     this.channelMembershipsData = new ChannelMembershipsData();
     this.ChannelModel = new ChannelModel();
     this.model = this.ChannelModel;
-    this.defaultRestrictions = { channelIdAsId: true };
+  }
+
+  /**
+   * @protected
+   * @param {Layers.DataSourceLayer.options} [_options]
+   * @return {Layers.AbstractModelsLayer.restrictions}
+   */
+  _getDefaultRestrictions(_options = {}) {
+    return { channelIdAsId: true };
   }
 
   /**

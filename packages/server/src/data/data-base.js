@@ -16,8 +16,6 @@ class DataBase {
   constructor() {
     this.models = models;
     this.model = new Model();
-    this.defaultOptions = {};
-    this.defaultRestrictions = {};
   }
 
   /**
@@ -142,7 +140,16 @@ class DataBase {
    * @return {Layers.AbstractModelsLayer.options}
    */
   _getModelOptions(options = {}) {
-    return new Options({ ...options, ...this.defaultOptions });
+    return new Options({ ...options, ...this._getDefaultOptions(options) });
+  }
+
+  /**
+   * @protected
+   * @param {Layers.DataSourceLayer.options} [_options]
+   * @return {Layers.AbstractModelsLayer.options}
+   */
+  _getDefaultOptions(_options = {}) {
+    return {};
   }
 
   /**
@@ -151,7 +158,16 @@ class DataBase {
    * @return {Layers.AbstractModelsLayer.restrictions}
    */
   _getModelRestrictions(options = {}) {
-    return new Restrictions({ ...options, ...this.defaultRestrictions });
+    return new Restrictions({ ...options, ...this._getDefaultRestrictions(options) });
+  }
+
+  /**
+   * @protected
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Layers.AbstractModelsLayer.restrictions}
+   */
+  _getDefaultRestrictions(options = {}) {
+    return {};
   }
 }
 

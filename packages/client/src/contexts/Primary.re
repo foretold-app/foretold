@@ -160,6 +160,7 @@ module User = {
       (
         ~id,
         ~name="",
+        ~agentId,
         ~email=None,
         ~picture=None,
         ~description=None,
@@ -172,6 +173,7 @@ module User = {
       : t => {
     id,
     name,
+    agentId,
     email,
     picture,
     description,

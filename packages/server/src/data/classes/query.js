@@ -10,6 +10,10 @@ class Query {
   constructor(query = {}) {
     utils.copy(this.constructor.name, query, this);
   }
+
+  inspect() {
+    utils.inspect(this);
+  }
 }
 
 module.exports = {

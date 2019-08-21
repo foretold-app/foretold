@@ -8,6 +8,8 @@ const { Params } = require('../data/classes/params');
 const { Query } = require('../data/classes/query');
 const { Data } = require('../data/classes/data');
 
+const structures = require('../structures');
+
 /**
  * @param {Models.Channel} channel
  * @returns {Promise<Model[]>}
@@ -29,7 +31,7 @@ async function channelCreator(channel) {
  * @param {object} args
  * @param {number} args.offset
  * @param {number} args.limit
- * @param {number} args.channelMemberId
+ * @param {Models.ObjectID} args.channelMemberId
  * @param {string[]} args.isArchived
  * @param {Schema.Context} context
  * @param {object} info
@@ -40,7 +42,10 @@ async function all(root, args, context, info) {
   const channelMemberId = _.get(args, 'channelMemberId');
   const isArchived = _.get(args, 'isArchived');
 
-  const filter = new Filter({ channelMemberId, isArchived });
+  const withinJoinedChannels = _.isEmpty(channelMemberId)
+    ? null : structures.withinJoinedChannelsById(channelMemberId);
+
+  const filter = new Filter({ withinJoinedChannels, isArchived });
   const pagination = new Pagination(args);
   const options = new Options({ agentId });
 

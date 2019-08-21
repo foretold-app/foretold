@@ -14,13 +14,18 @@ class Options {
       'transaction', // object
       'lock', // bool
       'skipLocked', // bool
+
       'isAdmin',  // bool
       'agentId',  // string
       'measuredByAgentId', // string
-      'channelMemberId', // string
+      'currentAgentId', // string
     ];
     utils.extend(this.constructor.name, options, list, this);
     utils.diff(this.constructor.name, options, list);
+  }
+
+  inspect() {
+    utils.inspect(this);
   }
 }
 

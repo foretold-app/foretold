@@ -28,23 +28,19 @@ class Filter {
       /** @type {Layers.withinJoinedChannels | null} */
       'withinJoinedChannels',
     ];
-    const channel = [];
     const agent = ['excludeChannelId', 'types'];
     const agentNotification = [
       'notificationId', // string
       'sentAt', // Date | null
       'attemptCounterMax', // number
     ];
-    const channels = ['channelMemberId'];
 
     const list = [
-      'type', 'creatorId', ' userId',
+      'type', 'creatorId', 'userId',
       'seriesId', 'channelId', 'measurableId',
       'agentId', 'competitorType',
       'findInDateRange', 'notTaggedByAgent', 'states',
       ...common,
-      ...channel,
-      ...channels,
       ...agent,
       ...agentNotification,
     ];
@@ -53,13 +49,8 @@ class Filter {
     utils.diff(this.constructor.name, filter, list);
   }
 
-  /**
-   * Look at this literal as on a structure.
-   * @param {string} agentId
-   * @return {Layers.withinJoinedChannels}
-   */
-  static withinJoinedChannelsByChannelId(agentId) {
-    return { as: 'channelId', agentId };
+  inspect() {
+    utils.inspect(this);
   }
 }
 

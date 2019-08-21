@@ -2,7 +2,7 @@ open Style.Grid;
 
 module ReducerConfig = {
   type itemType = Types.feedItem;
-  type callFnParams = (string, string);
+  type callFnParams = (option(string), option(string));
 
   let getId = (e: itemType) => e.id;
   let callFn = ((channelId, agentId): callFnParams) =>
@@ -20,8 +20,8 @@ type pageParams = {id: string};
 
 let make =
     (
-      ~channelId: string="",
-      ~agentId: string="",
+      ~channelId: option(string)=None,
+      ~agentId: option(string)=None,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {
@@ -50,7 +50,8 @@ let make =
 
       let table =
         switch (channelId) {
-        | "" => <FeedItemsTable.Jsx2 feedItems />
+        | Some("")
+        | None => <FeedItemsTable.Jsx2 feedItems />
         | _ =>
           <FeedItemsTable.Jsx2
             feedItems

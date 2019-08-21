@@ -10,6 +10,10 @@ class Data {
   constructor(data) {
     utils.copy(this.constructor.name, data, this);
   }
+
+  inspect() {
+    utils.inspect(this);
+  }
 }
 
 module.exports = {

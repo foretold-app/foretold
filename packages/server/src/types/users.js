@@ -26,7 +26,7 @@ const user = new graphql.GraphQLObjectType({
     auth0Id: { type: graphql.GraphQLString },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    agentId: { type: graphql.GraphQLString },
+    agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     isMe: require('./common').isMe,
 
     score: {

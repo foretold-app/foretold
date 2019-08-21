@@ -1,6 +1,7 @@
 type user = {
   id: string,
   name: string,
+  agentId: string,
 };
 
 type bot = {
@@ -19,7 +20,7 @@ type agent = {
 };
 
 let toUser = (user: user): Types.user =>
-  Primary.User.make(~id=user.id, ~name=user.name, ());
+  Primary.User.make(~id=user.id, ~name=user.name, ~agentId=user.agentId, ());
 
 let toBot = (bot: bot): Types.bot => {
   competitorType: bot.competitorType,
@@ -66,6 +67,7 @@ module Query = [%graphql
         user: User @bsRecord{
           id
           name
+          agentId
         }
         bot: Bot @bsRecord{
           id

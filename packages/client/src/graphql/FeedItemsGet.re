@@ -150,30 +150,10 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 let unpackEdges = a =>
   a##feedItems |> E.O.fmap(Primary.Connection.fromJson(toFeedItem));
 
-type inputType('a) =
-  (
-    ~channelId: string=?,
-    ~agentId: string=?,
-    ~first: int=?,
-    ~last: int=?,
-    ~after: string=?,
-    ~before: string=?,
-    unit
-  ) =>
-  'a;
-
 type direction = Primary.Connection.direction;
 
-let queryDirection =
-    (
-      ~channelId=?,
-      ~agentId=?,
-      ~pageLimit,
-      ~direction,
-      ~fn: inputType('a),
-      (),
-    ) => {
-  let fn = fn(~channelId?, ~agentId?);
+let queryDirection = (~channelId=?, ~agentId=?, ~pageLimit, ~direction, ()) => {
+  let fn = Query.make(~channelId?, ~agentId?);
   switch ((direction: direction)) {
   | None => fn(~first=pageLimit, ())
   | After(after) => fn(~first=pageLimit, ~after, ())
@@ -201,13 +181,6 @@ let component2 =
       ~innerComponentFn,
     ) => {
   let query =
-    queryDirection(
-      ~channelId,
-      ~agentId,
-      ~pageLimit,
-      ~direction,
-      ~fn=Query.make,
-      (),
-    );
+    queryDirection(~channelId?, ~agentId?, ~pageLimit, ~direction, ());
   componentMaker(query, innerComponentFn);
 };

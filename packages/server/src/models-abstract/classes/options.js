@@ -14,6 +14,10 @@ class Options {
     utils.extend(this.constructor.name, options, list, this);
     utils.diff(this.constructor.name, options, list);
   }
+
+  inspect() {
+    utils.inspect(this);
+  }
 }
 
 module.exports = {

@@ -1,4 +1,3 @@
-
 export namespace Models {
 
   export type ObjectID = string;
@@ -182,6 +181,11 @@ export namespace Layers {
     agentId: Models.ObjectID,
   }
 
+  export type withinPublicAndJoinedChannels = {
+    as: string,
+    agentId: Models.ObjectID,
+  }
+
   namespace DataSourceLayer {
     type compoundId = object;
     type id = string | compoundId;
@@ -190,10 +194,10 @@ export namespace Layers {
       isAdmin?: boolean,
       agentId?: Models.ObjectID,
       measuredByAgentId?: Models.ObjectID,
-      channelMemberId?: Models.ObjectID,
       transaction?: object,
       lock?: boolean,
       skipLocked?: boolean,
+      currentAgentId?: Models.ObjectID,
     };
     type filter = {
       id?: Models.ObjectID,
@@ -206,7 +210,6 @@ export namespace Layers {
       excludeChannelId?: Models.ObjectID,
       notTaggedByAgent?: Models.ObjectID,
       notificationId?: Models.ObjectID,
-      channelMemberId?: Models.ObjectID,
 
       competitorType?: string,
       type?: string,
@@ -215,6 +218,7 @@ export namespace Layers {
 
       findInDateRange?: object, // @todo: Object? Give definition!
       withinJoinedChannels?: withinJoinedChannels | null,
+      withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
 
       states?: string[],
       isArchived?: string[],
@@ -289,7 +293,8 @@ export namespace Layers {
       channelId?: Models.ObjectID,
       measurableId?: boolean,
       measuredByAgentId?: Models.ObjectID,
-      channelMemberId?: Models.ObjectID,
+      withinJoinedChannels?: withinJoinedChannels | null,
+      withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
     };
     type options = {
       transaction?: object,
@@ -299,7 +304,6 @@ export namespace Layers {
     type filter = {
       agentId?: Models.ObjectID,
       excludeChannelId?: Models.ObjectID,
-      channelMemberId?: Models.ObjectID,
       userId?: Models.ObjectID,
       channelId?: Models.ObjectID,
       isArchived?: string[],
@@ -308,6 +312,7 @@ export namespace Layers {
       notificationId?: string[],
       attemptCounterMax?: number,
       withinJoinedChannels?: withinJoinedChannels | null,
+      withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
     };
     type pagination = {
       limit?: number,

@@ -50,6 +50,7 @@ type user = {
   auth0Id: option(string),
   agent: option(agent),
   name: string,
+  agentId: string,
   email: option(string),
   picture: option(string),
   description: option(string),

@@ -1,9 +1,13 @@
 const _ = require('lodash');
 
 const data = require('../data');
+
 const { Pagination } = require('../data/classes/pagination');
 const { Options } = require('../data/classes/options');
 const { Filter } = require('../data/classes/filter');
+
+const { HOME_CHANNEL_ID } = require('../well-known');
+const structures = require('../structures');
 
 /**
  * @param {*} root
@@ -21,11 +25,15 @@ const { Filter } = require('../data/classes/filter');
 async function all(root, args, context, info) {
   const channelId = _.get(args, 'channelId');
   const agentId = _.get(args, 'agentId');
-  const channelMemberId = _.get(context, 'agent.id');
+  const currentAgentId = _.get(context, 'agent.id');
 
-  const filter = new Filter({ channelId, agentId });
+  const withinJoinedChannels = channelId === HOME_CHANNEL_ID
+    ? structures.withinJoinedChannelsByChannelId(currentAgentId) : null;
+
+  const filter = new Filter({ agentId, channelId, withinJoinedChannels });
   const pagination = new Pagination(args);
-  const options = new Options({ channelMemberId });
+  const options = new Options({ currentAgentId });
+
   const connection = await data.feedItems.getConnection(
     filter,
     pagination,

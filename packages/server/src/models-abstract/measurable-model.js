@@ -91,6 +91,10 @@ class MeasurableModel extends ModelPostgres {
     const where = {};
     const include = [];
 
+    if ('inspect' in filter) filter.inspect();
+    if ('inspect' in pagination) pagination.inspect();
+    if ('inspect' in restrictions) restrictions.inspect();
+
     this.applyRestrictions(where, restrictions);
     this.applyRestrictionsIncluding(include, restrictions);
     this.applyFilter(where, filter);

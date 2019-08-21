@@ -7,6 +7,7 @@ const { Options } = require('../data/classes/options');
 const { Filter } = require('../data/classes/filter');
 
 const { HOME_CHANNEL_ID } = require('../well-known');
+const structures = require('../structures');
 
 /**
  * @param {*} root
@@ -27,13 +28,9 @@ async function all(root, args, context, info) {
   const currentAgentId = _.get(context, 'agent.id');
 
   const withinJoinedChannels = channelId === HOME_CHANNEL_ID
-    ? Filter.withinJoinedChannelsByChannelId(currentAgentId) : null;
+    ? structures.withinJoinedChannelsByChannelId(currentAgentId) : null;
 
-  const filter = new Filter({
-    agentId,
-    channelId,
-    withinJoinedChannels,
-  });
+  const filter = new Filter({ agentId, channelId, withinJoinedChannels });
   const pagination = new Pagination(args);
   const options = new Options({ currentAgentId });
 

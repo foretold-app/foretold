@@ -8,6 +8,8 @@ const { Params } = require('../data/classes/params');
 const { Query } = require('../data/classes/query');
 const { Data } = require('../data/classes/data');
 
+const structures = require('../structures');
+
 /**
  * @param {Models.Channel} channel
  * @returns {Promise<Model[]>}
@@ -41,7 +43,7 @@ async function all(root, args, context, info) {
   const isArchived = _.get(args, 'isArchived');
 
   const withinJoinedChannels = _.isEmpty(channelMemberId)
-    ? null : Filter.withinJoinedChannelsById(channelMemberId);
+    ? null : structures.withinJoinedChannelsById(channelMemberId);
 
   const filter = new Filter({ withinJoinedChannels, isArchived });
   const pagination = new Pagination(args);

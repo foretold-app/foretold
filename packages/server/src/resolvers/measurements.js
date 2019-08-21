@@ -22,12 +22,12 @@ const { Options } = require('../data/classes/options');
  * @param {string[]} args.competitorType
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<Models.Measurement[]>}
+ * @returns {Promise<*>}
  */
 async function all(root, args, context, info) {
   const filter = new Filter({
     measurableId: _.get(args, 'measurableId'),
-    agentId: _.get(args, 'agentId'),
+    agentId: _.get(args, 'agentId') || _.get(root, 'id'),
     competitorType: _.get(args, 'competitorType'),
     findInDateRange: _.get(args, 'findInDateRange'),
     notTaggedByAgent: _.get(args, 'notTaggedByAgent'),
@@ -38,8 +38,7 @@ async function all(root, args, context, info) {
     agentId: _.get(context, 'agent.id'),
   });
 
-  const connection = await data.measurements.getConnection(filter, pagination, options);
-  return connection.getData();
+  return data.measurements.getConnection(filter, pagination, options);
 }
 
 /**

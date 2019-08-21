@@ -516,8 +516,8 @@ class ModelPostgres extends Model {
 
     /** @type {Models.Model[]} */
     let data = await this.model.findAll(findCond);
-    data = this._setIndexes(data, edgePagination);
-    data.total = total;
+    data = this._setIndexes(data, edgePagination); // @todo
+    data.total = total; // @todo
 
     // @todo: tricky, rework
     const spacedLimit = _.get(filter, 'findInDateRange.spacedLimit');

@@ -7,7 +7,6 @@ const { setContextMeasurable } = require('./measurables');
 const { setContextMeasurableByRoot } = require('./measurables');
 const { measurementValueValidation } = require('./measurements');
 const { measurableStateValidation } = require('./measurements');
-const { formatResponseIntoConnection } = require('./connections');
 const { setContextBot } = require('./bots');
 const { setContextPreference } = require('./preferences');
 const { setContextUser } = require('./users');
@@ -73,26 +72,6 @@ const middlewares = {
       await setContextChannelMemberships(root, args, context, info);
       await setContextChannelMembershipsAdmins(root, args, context, info);
       return resolve(root, args, context, info);
-    },
-
-    measurements: async (resolve, root, args, context, info) => {
-      const result = await resolve(root, args, context, info);
-      return formatResponseIntoConnection(result, root, args, context, info);
-    },
-
-    measurables: async (resolve, root, args, context, info) => {
-      const result = await resolve(root, args, context, info);
-      return formatResponseIntoConnection(result, root, args, context, info);
-    },
-
-    bots: async (resolve, root, args, context, info) => {
-      const result = await resolve(root, args, context, info);
-      return formatResponseIntoConnection(result, root, args, context, info);
-    },
-
-    feedItems: async (resolve, root, args, context, info) => {
-      const result = await resolve(root, args, context, info);
-      return formatResponseIntoConnection(result, root, args, context, info);
     },
   },
 

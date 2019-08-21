@@ -20,7 +20,7 @@ const structures = require('../structures');
  * @param {number} args.first
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<Models.Model[]>}
+ * @returns {Promise<*>}
  */
 async function all(root, args, context, info) {
   const channelId = _.get(args, 'channelId');
@@ -34,13 +34,11 @@ async function all(root, args, context, info) {
   const pagination = new Pagination(args);
   const options = new Options({ currentAgentId });
 
-  const connection = await data.feedItems.getConnection(
+  return data.feedItems.getConnection(
     filter,
     pagination,
     options,
   );
-
-  return connection.getData();
 }
 
 module.exports = {

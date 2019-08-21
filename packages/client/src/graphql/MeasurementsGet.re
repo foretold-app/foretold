@@ -29,6 +29,7 @@ type measurement = {
           .
           "id": string,
           "name": string,
+          "agentId": string,
         }),
     }),
   "description": option(string),
@@ -64,7 +65,12 @@ let toMeasurement = (measurement: measurement): Types.measurement => {
          | (None, Some(user)) =>
            Some(
              Types.User(
-               Primary.User.make(~id=user##id, ~name=user##name, ()),
+               Primary.User.make(
+                 ~id=user##id,
+                 ~name=user##name,
+                 ~agentId=user##agentId,
+                 (),
+               ),
              ),
            )
          | (_, _) => None
@@ -156,6 +162,7 @@ module Query = [%graphql
                       user: User {
                           id
                           name
+                          agentId
                       }
                       bot: Bot {
                           id

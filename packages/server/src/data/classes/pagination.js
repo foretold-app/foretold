@@ -1,5 +1,7 @@
 const _ = require('lodash');
 
+const utils = require('../../lib/utils');
+
 /**
  * See "filter.js" comments.
  */
@@ -35,6 +37,10 @@ class Pagination {
     if (_.has(options, 'offset')) {
       this.offset = _.get(options, 'offset');
     }
+  }
+
+  inspect() {
+    utils.inspect(this);
   }
 }
 

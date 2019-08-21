@@ -1,5 +1,6 @@
 const assert = require('assert');
 const _ = require('lodash');
+const util = require("util");
 
 /**
  * @param {string} className
@@ -56,5 +57,22 @@ module.exports.copy = function copy(className, options, context) {
   _.each(options, (value, name) => {
     context[name] = value;
   });
+};
+
+/**
+ * @param {undefined | null} v
+ * @return {boolean}
+ */
+module.exports.none = function none(v) {
+  return _.isUndefined(v) || _.isNull(v);
+};
+
+/**
+ * @param {object} context
+ */
+module.exports.inspect = function inspect(context) {
+  console.log(
+    util.inspect(context, { showHidden: false, depth: null, colors: true }),
+  );
 };
 

@@ -45,6 +45,7 @@ let toUser = a =>
   Primary.User.make(
     ~id=a##id,
     ~auth0Id=a##auth0Id,
+    ~agentId=a##agentId,
     ~email=a##email,
     ~picture=a##picture,
     ~description=a##description,

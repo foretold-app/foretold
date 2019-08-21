@@ -1,3 +1,5 @@
+const utils = require('../../lib/utils');
+
 class ResponseAll {
   /**
    * @public
@@ -23,6 +25,10 @@ class ResponseAll {
    */
   getTotal() {
     return this.total;
+  }
+
+  inspect() {
+    utils.inspect(this);
   }
 }
 

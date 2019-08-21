@@ -6,6 +6,8 @@ const { Pagination } = require('../data/classes/pagination');
 const { Options } = require('../data/classes/options');
 const { Filter } = require('../data/classes/filter');
 
+const { HOME_CHANNEL_ID } = require('../well-known');
+
 /**
  * @param {*} root
  * @param {object} args
@@ -24,8 +26,11 @@ async function all(root, args, context, info) {
   const agentId = _.get(args, 'agentId');
   const currentAgentId = _.get(context, 'agent.id');
 
-  const withinJoinedChannels = _.isEmpty(channelId)
+  const withinJoinedChannels = channelId === HOME_CHANNEL_ID
     ? Filter.withinJoinedChannelsByChannelId(currentAgentId) : null;
+
+  const withinPublicAndJoinedChannels =
+    Filter.withinPublicAndJoinedChannelsByChannelId(currentAgentId);
 
   const filter = new Filter({
     agentId,
@@ -34,7 +39,7 @@ async function all(root, args, context, info) {
   });
   const pagination = new Pagination(args);
   const options = new Options({
-    agentId,
+    withinPublicAndJoinedChannels,
   });
 
   const connection = await data.feedItems.getConnection(

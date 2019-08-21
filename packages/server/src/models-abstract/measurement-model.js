@@ -22,20 +22,23 @@ class MeasurementModel extends ModelPostgres {
   /**
    * @todo: see this._channelIds()
    * @param {Models.ObjectID} [agentId]
+   * @param {string} [name]
    * @return {string}
    */
-  _taggedMeasurementsLiteral(agentId) {
-    return this.literal(this._taggedMeasurements(agentId));
+  _taggedMeasurementsLiteral(agentId, name = '') {
+    return this.literal(this._taggedMeasurements(agentId, name));
   }
 
   /**
    * @todo: see this._channelIds()
    * @protected
    * @param {Models.ObjectID} agentId
+   * @param {string} name
    * @return {string}
    */
-  _taggedMeasurements(agentId) {
+  _taggedMeasurements(agentId, name = '') {
     return `(
+      /* T͟a͟g͟g͟e͟d͟ ͟M͟e͟a͟s͟u͟r͟e͟m͟e͟n͟t͟s͟ ͟O͟n͟l͟y͟ (${name}) */
       SELECT "taggedMeasurementId"
       FROM "Measurements"
       WHERE "agentId" = '${agentId}'
@@ -90,6 +93,7 @@ class MeasurementModel extends ModelPostgres {
       this._agentMeasurementsJudgedPercentageCompetitive(agentId);
 
     return `(
+      /* B͟i͟n͟a͟r͟y͟ ͟P͟e͟r͟c͟e͟n͟t͟a͟g͟e͟s͟ */
       WITH "AgentMeasurements" AS ${agentMeasurements}
       SELECT 
         "AgentMeasurements".*, 
@@ -111,6 +115,7 @@ class MeasurementModel extends ModelPostgres {
    */
   _agentMeasurementsJudgedPercentageCompetitive(agentId) {
     return `(
+      /* Returns arrays of predictions */
       SELECT "Measurements"."measurableId",
              "Measurements"."agentId",
              array_agg("Measurements"."value" ->> 'data') as "probabilities"
@@ -140,6 +145,10 @@ class MeasurementModel extends ModelPostgres {
    * @return {Promise<{data: Models.Measurement[], total: number}>}
    */
   async getAll(filter = {}, pagination = {}, restrictions = {}, _options = {}) {
+    if ('inspect' in filter) filter.inspect();
+    if ('inspect' in pagination) pagination.inspect();
+    if ('inspect' in restrictions) restrictions.inspect();
+
     const { where, include, spacedLimit } = this.makeFilter(filter);
     this.applyRestrictions(where, restrictions);
 

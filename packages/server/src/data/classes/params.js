@@ -17,6 +17,10 @@ class Params {
     utils.extend(this.constructor.name, params, list, this);
     utils.diff(this.constructor.name, params, list);
   }
+
+  inspect() {
+    utils.inspect(this);
+  }
 }
 
 module.exports = {

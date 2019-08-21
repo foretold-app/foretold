@@ -75,7 +75,10 @@ class MeasurementsData extends DataBase {
       where: {
         id,
         measurableId: {
-          [this.model.Op.in]: this.model._measurableIdsLiteral(options.agentId),
+          [this.model.Op.in]: this.model._measurableIdsLiteral(
+            options.agentId,
+            'Filter',
+          ),
         },
       },
     });

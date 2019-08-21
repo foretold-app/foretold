@@ -7,17 +7,22 @@ class Restrictions {
    */
   constructor(options) {
     const list = {
-      'isAdmin': v => _.isBoolean(v) || _.isUndefined(v),
-      'agentId': v => _.isString(v),
-      'measuredByAgentId': v => _.isString(v) || _.isUndefined(v),
-      'userId': v => _.isString(v),
-      'channelId': v => _.isBoolean(v),
-      'measurableId': v => _.isBoolean(v),
-      'channelIdAsId': v => _.isBoolean(v),
+      'isAdmin': v => _.isBoolean(v) || utils.none(v),
+      'agentId': v => _.isString(v) || utils.none(v),
+      'measuredByAgentId': v => _.isString(v) || utils.none(v),
+      'userId': v => _.isString(v) || utils.none(v),
+      'channelId': v => _.isBoolean(v) || utils.none(v),
+      'measurableId': v => _.isBoolean(v) || utils.none(v),
+      'channelIdAsId': v => _.isBoolean(v) || utils.none(v),
+      'withinPublicAndJoinedChannels': v => _.isObject(v) || utils.none(v),
     };
     utils.extend(this.constructor.name, options, list, this);
     utils.test(this.constructor.name, list, this);
     utils.diff(this.constructor.name, options, list);
+  }
+
+  inspect() {
+    utils.inspect(this);
   }
 }
 

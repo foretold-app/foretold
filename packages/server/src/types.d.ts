@@ -1,4 +1,3 @@
-
 export namespace Models {
 
   export type ObjectID = string;
@@ -182,6 +181,11 @@ export namespace Layers {
     agentId: Models.ObjectID,
   }
 
+  export type withinPublicAndJoinedChannels = {
+    as: string,
+    agentId: Models.ObjectID,
+  }
+
   namespace DataSourceLayer {
     type compoundId = object;
     type id = string | compoundId;
@@ -193,6 +197,8 @@ export namespace Layers {
       transaction?: object,
       lock?: boolean,
       skipLocked?: boolean,
+      withinJoinedChannels?: withinJoinedChannels | null,
+      withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
     };
     type filter = {
       id?: Models.ObjectID,
@@ -213,6 +219,7 @@ export namespace Layers {
 
       findInDateRange?: object, // @todo: Object? Give definition!
       withinJoinedChannels?: withinJoinedChannels | null,
+      withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
 
       states?: string[],
       isArchived?: string[],
@@ -287,6 +294,8 @@ export namespace Layers {
       channelId?: Models.ObjectID,
       measurableId?: boolean,
       measuredByAgentId?: Models.ObjectID,
+      withinJoinedChannels?: withinJoinedChannels | null,
+      withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
     };
     type options = {
       transaction?: object,
@@ -304,6 +313,7 @@ export namespace Layers {
       notificationId?: string[],
       attemptCounterMax?: number,
       withinJoinedChannels?: withinJoinedChannels | null,
+      withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
     };
     type pagination = {
       limit?: number,

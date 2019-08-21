@@ -44,19 +44,22 @@ class ModelPostgres extends Model {
    * @protected
    * @todo: see this._channelIds()
    * @param {Models.ObjectID} [agentId]
+   * @param {string} [name]
    * @return {Sequelize.literal}
    */
-  _channelIdsLiteral(agentId) {
-    return this.literal(this._channelIds(agentId));
+  _channelIdsLiteral(agentId, name = '') {
+    return this.literal(this._channelIds(agentId, name));
   }
 
   /**
    * @protected
    * @param {Models.ObjectID} [agentId]
+   * @param {string} [name]
    * @return {string}
    */
-  _channelIds(agentId) {
+  _channelIds(agentId, name = '') {
     return `(
+      /* P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
       LEFT OUTER JOIN 
         "ChannelMemberships" 
@@ -70,39 +73,47 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
+   * @para {string} [name]
    * @return {Sequelize.literal}
    */
-  _channelIdsPublicLiteral() {
-    return this.literal(this._channelIdsPublic());
+  _channelIdsPublicLiteral(name = '') {
+    return this.literal(this._channelIdsPublic(name));
   }
 
   /**
    * @protected
+   * @param {string} [name]
    * @return {string}
    */
-  _channelIdsPublic() {
+  _channelIdsPublic(name = '') {
     return `(
+      /* P͟u͟b͟l͟i͟c͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
       WHERE "Channels"."isPublic" = TRUE
     )`;
   }
 
   /**
+   * @todo: Rename to "withinJoinedChannels" + "Literal"?
    * @protected
    * @param {Models.ObjectID} [agentId]
+   * @param {string} [name]
    * @return {Sequelize.literal}
    */
-  _channelIdsByMembersLiteral(agentId) {
-    return this.literal(this._channelIdsByMembers(agentId));
+  _channelIdsByMembersLiteral(agentId, name = '') {
+    return this.literal(this._channelIdsByMembers(agentId, name));
   }
 
   /**
+   * @todo: Rename to "withinJoinedChannels"?
    * @protected
    * @param {Models.ObjectID} [agentId]
+   * @param {string} [name]
    * @return {string}
    */
-  _channelIdsByMembers(agentId) {
+  _channelIdsByMembers(agentId, name = '') {
     return `(
+      /* J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
       LEFT OUTER JOIN 
         "ChannelMemberships" 
@@ -116,20 +127,23 @@ class ModelPostgres extends Model {
   /**
    * @protected
    * @param {Models.ObjectID} [agentId]
+   * @param {string} [name]
    * @return {Sequelize.literal}
    */
-  _measurableIdsLiteral(agentId) {
-    return this.literal(this._measurableIds(agentId));
+  _measurableIdsLiteral(agentId, name = '') {
+    return this.literal(this._measurableIds(agentId, name));
   }
 
   /**
    * @protected
    * @param {string} [agentId]
+   * @param {string} [name]
    * @return {string}
    */
-  _measurableIds(agentId) {
+  _measurableIds(agentId, name = '') {
     return `(
-      WITH channelIds AS (${this._channelIds(agentId)})
+      /* Description (${name}) */
+      WITH channelIds AS (${this._channelIds(agentId, name)})
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
     )`;
@@ -146,32 +160,31 @@ class ModelPostgres extends Model {
     if (restrictions.isAdmin) return where;
     if (!where[this.and]) where[this.and] = [];
 
-    // @todo: Rename it to "within Public Channels by c͟h͟a͟n͟n͟e͟l͟ ͟i͟d͟"
-    // @todo: Use object structures.
+    this.applyAbstracts(where, restrictions);
+
+    // @todo: Use "withinPublicChannels" as "channelId"
     if (restrictions.channelId && !restrictions.agentId) {
       where[this.and].push({
         channelId: {
-          [this.in]: this._channelIdsPublicLiteral(),
+          [this.in]: this._channelIdsPublicLiteral('Restrictions'),
         },
       });
     }
 
-    // @todo: Rename it to "within Public and Joined Channels by c͟h͟a͟n͟n͟e͟l͟ ͟i͟d͟"
-    // @todo: Use object structures.
+    // @todo: Use "withinPublicAndJoinedChannels" as "channelId"
     if (restrictions.channelId && restrictions.agentId) {
       where[this.and].push({
         channelId: {
-          [this.in]: this._channelIdsLiteral(restrictions.agentId),
+          [this.in]: this._channelIdsLiteral(restrictions.agentId, 'Restrictions'),
         },
       });
     }
 
-    // @todo: Rename it to "within Public and Joined Channels by i͟d͟"
-    // @todo: Use object structures.
+    // @todo: Use "withinPublicAndJoinedChannels" as "id"
     if (restrictions.channelIdAsId && restrictions.agentId) {
       where[this.and].push({
         id: {
-          [this.in]: this._channelIdsLiteral(restrictions.agentId),
+          [this.in]: this._channelIdsLiteral(restrictions.agentId, 'Restrictions'),
         },
       });
     }
@@ -185,7 +198,7 @@ class ModelPostgres extends Model {
     if (restrictions.measurableId && restrictions.agentId) {
       where[this.and].push({
         measurableId: {
-          [this.in]: this._measurableIdsLiteral(restrictions.agentId),
+          [this.in]: this._measurableIdsLiteral(restrictions.agentId, 'Restrictions'),
         },
       });
     }
@@ -226,15 +239,7 @@ class ModelPostgres extends Model {
     if (!where) where = {};
     if (!where[this.and]) where[this.and] = [];
 
-    // OK
-    if (filter.withinJoinedChannels) {
-      const { as, agentId } = filter.withinJoinedChannels;
-      where[this.and].push({
-        [as]: {
-          [this.in]: this._channelIdsByMembersLiteral(agentId),
-        },
-      });
-    }
+    this.applyAbstracts(where, filter);
 
     // OK
     if (filter.isArchived) {
@@ -263,6 +268,42 @@ class ModelPostgres extends Model {
     if (filter.channelId) {
       where[this.and].push({
         channelId: filter.channelId,
+      });
+    }
+
+    return where;
+  }
+
+  /**
+   * @protected
+   * Extend this method in child classes.
+   * @param {object} [where]
+   * @param {Layers.AbstractModelsLayer.filter
+   * | Layers.AbstractModelsLayer.restrictions} [abstractions]
+   */
+  applyAbstracts(where = {}, abstractions = {}) {
+    if (!where) where = {};
+    if (!where[this.and]) where[this.and] = [];
+
+    const name = _.get(abstractions, 'constructor.name', 'Abstraction');
+
+    // OK
+    if (abstractions.withinJoinedChannels) {
+      const { as, agentId } = abstractions.withinJoinedChannels;
+      where[this.and].push({
+        [as]: {
+          [this.in]: this._channelIdsByMembersLiteral(agentId, name),
+        },
+      });
+    }
+
+    // OK
+    if (abstractions.withinPublicAndJoinedChannels) {
+      const { as, agentId } = abstractions.withinPublicAndJoinedChannels;
+      where[this.and].push({
+        [as]: {
+          [this.in]: this._channelIdsLiteral(agentId, name),
+        },
       });
     }
 
@@ -390,6 +431,10 @@ class ModelPostgres extends Model {
   async getAll(filter = {}, pagination = {}, restrictions = {}, options = {}) {
     const where = {};
 
+    if ('inspect' in filter) filter.inspect();
+    if ('inspect' in pagination) pagination.inspect();
+    if ('inspect' in restrictions) restrictions.inspect();
+
     this.applyRestrictions(where, restrictions);
     this.applyFilter(where, filter);
 
@@ -420,6 +465,10 @@ class ModelPostgres extends Model {
   ) {
     const where = {};
     const include = [];
+
+    if ('inspect' in filter) filter.inspect();
+    if ('inspect' in pagination) pagination.inspect();
+    if ('inspect' in restrictions) restrictions.inspect();
 
     this.applyRestrictions(where, restrictions);
     this.applyRestrictionsIncluding(include, restrictions);

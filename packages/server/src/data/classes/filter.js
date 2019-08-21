@@ -1,3 +1,4 @@
+const assert = require('assert');
 const utils = require('../../lib/utils');
 
 /**
@@ -57,16 +58,39 @@ class Filter {
    * @return {Layers.withinJoinedChannels}
    */
   static withinJoinedChannelsByChannelId(agentId) {
+    assert(!!agentId, 'AgentId is required');
     return { as: 'channelId', agentId };
   }
 
   /**
-   * Look at this literal as on a structure.
    * @param {string} agentId
    * @return {Layers.withinJoinedChannels}
    */
   static withinJoinedChannelsById(agentId) {
+    assert(!!agentId, 'AgentId is required');
     return { as: 'id', agentId };
+  }
+
+  /**
+   * @param {string} agentId
+   * @return {Layers.withinJoinedChannels}
+   */
+  static withinPublicAndJoinedChannelsByChannelId(agentId) {
+    assert(!!agentId, 'AgentId is required');
+    return { as: 'channelId', agentId };
+  }
+
+  /**
+   * @param {string} agentId
+   * @return {Layers.withinJoinedChannels}
+   */
+  static withinPublicAndJoinedChannelsById(agentId) {
+    assert(!!agentId, 'AgentId is required');
+    return { as: 'id', agentId };
+  }
+
+  inspect() {
+    utils.inspect(this);
   }
 }
 

@@ -73,27 +73,6 @@ class MeasurablesData extends DataBase {
   }
 
   /**
-   * @public
-   * @param {Layers.DataSourceLayer.filter} [filter]
-   * @param {Layers.DataSourceLayer.pagination} [pagination]
-   * @param {Layers.DataSourceLayer.options} [options]
-   * @param {Models.ObjectID} [options.agentId]
-   * @param {boolean} [options.isAdmin]
-   * @param {Models.ObjectID} [options.measuredByAgentId]
-   * @return {Promise<{data: Models.Measurable[], total: number}>}
-   */
-  async getAll(filter = {}, pagination = {}, options = {}) {
-    const restrictions = new Restrictions({
-      channelId: true,
-      isAdmin: options.isAdmin,
-      agentId: options.agentId,
-      // @todo: move to filter
-      measuredByAgentId: options.measuredByAgentId,
-    });
-    return this.model.getAll(filter, pagination, restrictions);
-  }
-
-  /**
    * @todo: move aspects down into Model Layer
    * @todo: fix interface (params*, query, options*)
    * @public
@@ -139,6 +118,21 @@ class MeasurablesData extends DataBase {
    */
   async getOpenedCount(channelId) {
     return this.model.getOpenedCount(channelId);
+  }
+
+  /**
+   * @protected
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Layers.AbstractModelsLayer.restrictions}
+   */
+  _getDefaultRestrictions(options = {}) {
+    return {
+      channelId: true,
+      isAdmin: options.isAdmin,
+      agentId: options.agentId,
+      // @todo: move to filter
+      measuredByAgentId: options.measuredByAgentId,
+    };
   }
 }
 

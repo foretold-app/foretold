@@ -42,14 +42,14 @@ class Filter {
       'type',
       'creatorId',
       'userId',
-      'seriesId',
-      'channelId',
+      'seriesId', // string
+      'channelId', // string
       'measurableId', // string
       'agentId',
       'competitorType', // string[]
       'findInDateRange', // object
-      'notTaggedByAgent',
-      'states',
+      'notTaggedByAgent', // string | null
+      'states', // string[] | null
       ...common,
       ...agent,
       ...agentNotification,

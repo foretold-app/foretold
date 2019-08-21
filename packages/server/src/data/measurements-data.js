@@ -112,7 +112,6 @@ class MeasurementsData extends DataBase {
       agentId: options.agentId,
     };
   }
-
 }
 
 module.exports = {

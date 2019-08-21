@@ -4,7 +4,6 @@ const models = require('../models');
 const { MEASURABLE_STATE } = require('../models/enums/measurable-state');
 
 const { ModelPostgres } = require('./model-postgres');
-const { ResponseAll } = require('./classes/response-all');
 
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
@@ -73,68 +72,6 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
-   * @public
-   * @todo: use getConnection
-   * @deprecated
-   * @param {Layers.AbstractModelsLayer.filter} [filter]
-   * @param {Models.ObjectID} [filter.channelId]
-   * @param {Models.ObjectID} [filter.seriesId]
-   * @param {Models.ObjectID} [filter.creatorId]
-   * @param {string[]} [filter.states]
-   * @param {string[]} [filter.isArchived]
-   * @param {Layers.AbstractModelsLayer.pagination} [pagination]
-   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [_options]
-   * @return {Promise<{data: Models.Measurable[], total: number}>}
-   */
-  async getAll(filter = {}, pagination = {}, restrictions = {}, _options = {}) {
-    const where = {};
-    const include = [];
-
-    if ('inspect' in filter) filter.inspect();
-    if ('inspect' in pagination) pagination.inspect();
-    if ('inspect' in restrictions) restrictions.inspect();
-
-    this.applyRestrictions(where, restrictions);
-    this.applyRestrictionsIncluding(include, restrictions);
-    this.applyFilter(where, filter);
-
-    // Filter
-    if (_.isArray(filter.states)) {
-      where.state = { [this.in]: filter.states };
-    }
-    if (filter.channelId) where.channelId = filter.channelId;
-    if (filter.seriesId) where.seriesId = filter.seriesId;
-    if (filter.creatorId) where.creatorId = filter.creatorId;
-
-    const cond = { where, include };
-
-    /** @type {number} */
-    const total = await this.model.count(cond);
-    const edgePagination = this._getPagination(pagination, total);
-
-    const options = {
-      ...cond,
-      limit: edgePagination.limit,
-      offset: edgePagination.offset,
-      order: [
-        [this.sequelize.col('stateOrder'), 'ASC'],
-        ['createdAt', 'DESC'],
-      ],
-      attributes: {
-        include: [this._getStateOrderField()],
-      },
-    };
-
-    /** @type {Models.Measurable[]} */
-    let data = await this.model.findAll(options);
-    data = this._setIndexes(data, edgePagination);
-    data.total = total;
-
-    return new ResponseAll(data, total);
-  }
-
-  /**
    * @param {string} channelId
    * @return {Promise<*>}
    */
@@ -145,6 +82,28 @@ class MeasurableModel extends ModelPostgres {
         state: MEASURABLE_STATE.OPEN,
       },
     });
+  }
+
+  /**
+   * @return {*[]}
+   * @private
+   */
+  _getOrder() {
+    return [
+      [this.sequelize.col('stateOrder'), 'ASC'],
+      ['createdAt', 'DESC'],
+    ];
+  }
+
+  /**
+   *
+   * @return {{include: Sequelize.literal|*[]}}
+   * @private
+   */
+  _getAttributes() {
+    return {
+      include: [this._getStateOrderField()],
+    };
   }
 }
 

@@ -308,12 +308,15 @@ export namespace Layers {
       channelId?: Models.ObjectID,
       measurableId?: Models.ObjectID,
       notTaggedByAgent?: Models.ObjectID,
+      seriesId?: Models.ObjectID,
+      creatorId?: Models.ObjectID,
 
       isArchived?: string[],
       types?: string[],
       sentAt?: string[],
       notificationId?: string[],
       competitorType?: string[],
+      states?: string[],
 
       attemptCounterMax?: number,
 
@@ -327,7 +330,6 @@ export namespace Layers {
       first?: number,
       after?: string,
       before?: string,
-      order: [string, string][],
     };
     type query = object;
     type params = object;

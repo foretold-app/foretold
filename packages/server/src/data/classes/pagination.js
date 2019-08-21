@@ -15,7 +15,6 @@ class Pagination {
    * @param {string} [options.before]
    * @param {number} [options.limit]
    * @param {number} [options.offset]
-   * @param {[string, string][]} [options.order]
    */
   constructor(options = {}) {
     if (_.has(options, 'last')) {
@@ -37,12 +36,6 @@ class Pagination {
     }
     if (_.has(options, 'offset')) {
       this.offset = _.get(options, 'offset');
-    }
-
-    if (_.has(options, 'order')) {
-      this.order = _.get(options, 'order');
-    } else {
-      this.order = [['createdAt', 'DESC']];
     }
   }
 

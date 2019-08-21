@@ -127,6 +127,14 @@ class MeasurementModel extends ModelPostgres {
       GROUP BY "Measurements"."measurableId", "Measurements"."agentId"
     )`;
   }
+
+  /**
+   * @return {*[] | null}
+   * @private
+   */
+  _getOrder() {
+    return [['relevantAt', 'DESC']];
+  }
 }
 
 module.exports = {

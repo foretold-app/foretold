@@ -289,6 +289,13 @@ class ModelPostgres extends Model {
       [this.notIn]: this._taggedMeasurementsLiteral(filter.notTaggedByAgent),
     };
 
+    // OK?
+    if (_.isArray(filter.states)) {
+      where.state = { [this.in]: filter.states };
+    }
+    if (filter.seriesId) where.seriesId = filter.seriesId;
+    if (filter.creatorId) where.creatorId = filter.creatorId;
+
     return where;
   }
 
@@ -503,7 +510,8 @@ class ModelPostgres extends Model {
       ...cond,
       limit: edgePagination.limit,
       offset: edgePagination.offset,
-      order: pagination.order,
+      order: this._getOrder(),
+      attributes: this._getAttributes(),
     };
 
     /** @type {Models.Model[]} */
@@ -516,6 +524,23 @@ class ModelPostgres extends Model {
     if (spacedLimit) data = splitBy(data, spacedLimit);
 
     return new ResponseAll(data, total);
+  }
+
+  /**
+   * @return {*[] | null}
+   * @private
+   */
+  _getOrder() {
+    return [['createdAt', 'DESC']];
+  }
+
+  /**
+   *
+   * @return {{include: Sequelize.literal|*[]} | null}
+   * @private
+   */
+  _getAttributes() {
+    return null;
   }
 
   /**

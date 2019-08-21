@@ -28,7 +28,6 @@ class Filter {
       /** @type {Layers.withinJoinedChannels | null} */
       'withinJoinedChannels',
     ];
-    const channel = [];
     const agent = ['excludeChannelId', 'types'];
     const agentNotification = [
       'notificationId', // string
@@ -42,7 +41,6 @@ class Filter {
       'agentId', 'competitorType',
       'findInDateRange', 'notTaggedByAgent', 'states',
       ...common,
-      ...channel,
       ...agent,
       ...agentNotification,
     ];

@@ -14,10 +14,11 @@ class Options {
       'transaction', // object
       'lock', // bool
       'skipLocked', // bool
+
       'isAdmin',  // bool
       'agentId',  // string
       'measuredByAgentId', // string
-      'withinPublicAndJoinedChannels', // object
+      'currentAgentId', // string
     ];
     utils.extend(this.constructor.name, options, list, this);
     utils.diff(this.constructor.name, options, list);

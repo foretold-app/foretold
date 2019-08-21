@@ -29,18 +29,13 @@ async function all(root, args, context, info) {
   const withinJoinedChannels = channelId === HOME_CHANNEL_ID
     ? Filter.withinJoinedChannelsByChannelId(currentAgentId) : null;
 
-  const withinPublicAndJoinedChannels =
-    Filter.withinPublicAndJoinedChannelsByChannelId(currentAgentId);
-
   const filter = new Filter({
     agentId,
     channelId,
     withinJoinedChannels,
   });
   const pagination = new Pagination(args);
-  const options = new Options({
-    withinPublicAndJoinedChannels,
-  });
+  const options = new Options({ currentAgentId });
 
   const connection = await data.feedItems.getConnection(
     filter,

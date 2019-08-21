@@ -197,8 +197,7 @@ export namespace Layers {
       transaction?: object,
       lock?: boolean,
       skipLocked?: boolean,
-      withinJoinedChannels?: withinJoinedChannels | null,
-      withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
+      currentAgentId?: Models.ObjectID,
     };
     type filter = {
       id?: Models.ObjectID,

@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const { DataBase } = require('./data-base');
 const { FeedItemModel } = require('../models-abstract');
 
@@ -11,6 +13,21 @@ class FeedItemsData extends DataBase {
     super();
     this.FeedItemModel = new FeedItemModel();
     this.model = this.FeedItemModel;
+  }
+
+  /**
+   * @protected
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Layers.AbstractModelsLayer.restrictions}
+   */
+  _getDefaultRestrictions(options = {}) {
+    const currentAgentId = _.get(options, 'currentAgentId');
+
+    const withinPublicAndJoinedChannels = currentAgentId
+      ? Filter.withinPublicAndJoinedChannelsByChannelId(currentAgentId)
+      : null;
+
+    return { withinPublicAndJoinedChannels };
   }
 
 }

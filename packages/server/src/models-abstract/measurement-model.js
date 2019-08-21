@@ -1,11 +1,9 @@
 const _ = require('lodash');
 
 const models = require('../models');
-const { splitBy } = require('../lib/functions');
 const { BrierScore } = require('../lib/brier-score');
 
 const { ModelPostgres } = require('./model-postgres');
-const { ResponseAll } = require('./classes/response-all');
 
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
@@ -115,7 +113,7 @@ class MeasurementModel extends ModelPostgres {
    */
   _agentMeasurementsJudgedPercentageCompetitive(agentId) {
     return `(
-      /* Returns arrays of predictions */
+      /* R͟e͟t͟u͟r͟n͟s͟ ͟a͟r͟r͟a͟y͟s͟ ͟o͟f͟ ͟p͟r͟e͟d͟i͟c͟t͟i͟o͟n͟s͟ */
       SELECT "Measurements"."measurableId",
              "Measurements"."agentId",
              array_agg("Measurements"."value" ->> 'data') as "probabilities"

@@ -7,6 +7,7 @@ const models = require("../models");
 
 const { AGENT_TYPE } = require('../models/enums/agent-type');
 
+// @todo: move to enums
 const agentType = new graphql.GraphQLEnumType({
   name: 'AgentType',
   values: {

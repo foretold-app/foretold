@@ -10,6 +10,7 @@ module MeasurableState = {
     | "OPEN" => `OPEN
     | "JUDGED" => `JUDGED
     | "JUDGEMENT_PENDING" => `JUDGEMENT_PENDING
+    | "CLOSED_AS_UNRESOLVED" => `CLOSED_AS_UNRESOLVED
     | _ => Js.Exn.raiseError("Invalid GraphQL State: " ++ e)
     };
 
@@ -18,6 +19,7 @@ module MeasurableState = {
     | Some(`OPEN) => "OPEN"
     | Some(`JUDGED) => "JUDGED"
     | Some(`JUDGEMENT_PENDING) => "JUDGEMENT_PENDING"
+    | Some(`CLOSED_AS_UNRESOLVED) => "CLOSED_AS_UNRESOLVED"
     | _ => Js.Exn.raiseError("Invalid GraphQL State")
     };
 
@@ -26,14 +28,16 @@ module MeasurableState = {
     | `OPEN => `OPEN
     | `JUDGEMENT_PENDING => `JUDGEMENT_PENDING
     | `JUDGED => `JUDGED
+    | `CLOSED_AS_UNRESOLVED => `CLOSED_AS_UNRESOLVED
     | _ => Js.Exn.raiseError("Invalid GraphQL State ")
     };
 
   let toInt = (status: t) =>
     switch (status) {
-    | `OPEN => 2
-    | `JUDGEMENT_PENDING => 1
-    | `JUDGED => 0
+    | `OPEN => 3
+    | `JUDGEMENT_PENDING => 2
+    | `JUDGED => 1
+    | `CLOSED_AS_UNRESOLVED => 0
     };
 };
 

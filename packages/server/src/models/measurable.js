@@ -130,16 +130,27 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  /**
+   * @todo: optimize it
+   * @return {Promise<*>}
+   */
   async function getMeasurementCount() {
     const items = await this.getMeasurements();
     return items.length;
   }
 
+  /**
+   * @todo: optimize it
+   * @return {Promise<*>}
+   */
   async function getMeasurerCount() {
     const items = await this.getMeasurements();
     return _.uniq(items.map(i => i.agentId)).length;
   }
 
+  /**
+   * @return {Promise<null|boolean|number>}
+   */
   async function resolutionEndpointResponseGetter() {
     const endpoint = await this.dataValues.resolutionEndpoint;
     if (!endpoint) return false;
@@ -249,6 +260,7 @@ module.exports = (sequelize, DataTypes) => {
           },
         });
       }
+      // @todo: Do we really need it if we have hooks?
       await this.judged();
     };
 

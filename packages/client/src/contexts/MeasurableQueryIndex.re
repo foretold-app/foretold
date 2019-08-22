@@ -1,4 +1,4 @@
-type state = [ | `OPEN | `JUDGEMENT_PENDING | `JUDGED];
+type state = [ | `OPEN | `JUDGEMENT_PENDING | `JUDGED | `CLOSED_AS_UNRESOLVED];
 
 type query = {state: option(state)};
 
@@ -9,6 +9,7 @@ let stateFromString = (r: string): option(state) =>
   | "open" => Some(`OPEN)
   | "closed" => Some(`JUDGED)
   | "pending" => Some(`JUDGEMENT_PENDING)
+  | "closedAsUnresolved" => Some(`CLOSED_AS_UNRESOLVED)
   | _ => None
   };
 
@@ -17,6 +18,7 @@ let statetoString = (s: state) =>
   | `OPEN => "open"
   | `JUDGED => "closed"
   | `JUDGEMENT_PENDING => "pending"
+  | `CLOSED_AS_UNRESOLVED => "closedAsUnresolved"
   };
 
 let fromString = (r: string): query => {

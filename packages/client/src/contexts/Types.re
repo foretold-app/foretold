@@ -14,7 +14,12 @@ type competitorType = [
   | `COMMENT
 ];
 
-type measurableState = [ | `OPEN | `JUDGEMENT_PENDING | `JUDGED];
+type measurableState = [
+  | `OPEN
+  | `JUDGEMENT_PENDING
+  | `JUDGED
+  | `CLOSED_AS_UNRESOLVED
+];
 
 type isArchived = [ | `TRUE | `FALSE];
 

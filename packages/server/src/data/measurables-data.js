@@ -85,7 +85,9 @@ class MeasurablesData extends DataBase {
   async getOne2(id, options = {}) {
     const restrictions = 'agentId' in options ? {
       channelId: {
-        [this.model.Op.in]: this.model._channelIdsLiteral(options.agentId),
+        [this.model.Op.in]: this.model._publicAndJoinedChannelsLiteral(
+          options.agentId,
+        ),
       },
     } : {};
     return this.models.Measurable.findOne({

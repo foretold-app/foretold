@@ -44,13 +44,13 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @todo: see this._channelIds()
+   * @todo: see this._publicAndJoinedChannels()
    * @param {Models.ObjectID} [agentId]
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
-  _channelIdsLiteral(agentId, name = '') {
-    return this.literal(this._channelIds(agentId, name));
+  _publicAndJoinedChannelsLiteral(agentId, name = '') {
+    return this.literal(this._publicAndJoinedChannels(agentId, name));
   }
 
   /**
@@ -59,7 +59,7 @@ class ModelPostgres extends Model {
    * @param {string} [name]
    * @return {string}
    */
-  _channelIds(agentId, name = '') {
+  _publicAndJoinedChannels(agentId, name = '') {
     return `(
       /* P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
@@ -78,8 +78,8 @@ class ModelPostgres extends Model {
    * @para {string} [name]
    * @return {Sequelize.literal}
    */
-  _channelIdsPublicLiteral(name = '') {
-    return this.literal(this._channelIdsPublic(name));
+  _publicChannelsLiteral(name = '') {
+    return this.literal(this._publicChannels(name));
   }
 
   /**
@@ -87,7 +87,7 @@ class ModelPostgres extends Model {
    * @param {string} [name]
    * @return {string}
    */
-  _channelIdsPublic(name = '') {
+  _publicChannels(name = '') {
     return `(
       /* P͟u͟b͟l͟i͟c͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
@@ -132,20 +132,49 @@ class ModelPostgres extends Model {
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
-  _measurableIdsLiteral(agentId, name = '') {
-    return this.literal(this._measurableIds(agentId, name));
+  _measurablesInPublicAndJoinedChannelsLiteral(agentId, name = '') {
+    return this.literal(
+      this._measurablesInPublicAndJoinedChannels(agentId, name),
+    );
   }
 
   /**
    * @protected
-   * @param {string} [agentId]
+   * @param {Models.ObjectID} [agentId]
    * @param {string} [name]
    * @return {string}
    */
-  _measurableIds(agentId, name = '') {
+  _measurablesInPublicAndJoinedChannels(agentId, name = '') {
     return `(
-      /* Description (${name}) */
-      WITH channelIds AS (${this._channelIds(agentId, name)})
+      /* Measurables in Public and Joined Channels (${name}) */
+      WITH channelIds AS (${this._publicAndJoinedChannels(agentId, name)})
+      SELECT "Measurables"."id" FROM "Measurables"
+      WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
+    )`;
+  }
+
+  /**
+   * @protected
+   * @param {Models.ObjectID} [agentId]
+   * @param {string} [name]
+   * @return {Sequelize.literal}
+   */
+  _measurablesInPublicChannelsLiteral(agentId, name = '') {
+    return this.literal(
+      this._measurablesInPublicChannels(agentId, name),
+    );
+  }
+
+  /**
+   * @protected
+   * @param {Models.ObjectID} [agentId]
+   * @param {string} [name]
+   * @return {string}
+   */
+  _measurablesInPublicChannels(agentId, name = '') {
+    return `(
+      /* Measurables in Public Channels (${name}) */
+      WITH channelIds AS (${this._publicChannels(name)})
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
     )`;
@@ -168,7 +197,7 @@ class ModelPostgres extends Model {
     if (restrictions.channelId && !restrictions.agentId) {
       where[this.and].push({
         channelId: {
-          [this.in]: this._channelIdsPublicLiteral('Restrictions'),
+          [this.in]: this._publicChannelsLiteral('Restrictions'),
         },
       });
     }
@@ -177,7 +206,10 @@ class ModelPostgres extends Model {
     if (restrictions.channelId && restrictions.agentId) {
       where[this.and].push({
         channelId: {
-          [this.in]: this._channelIdsLiteral(restrictions.agentId, 'Restrictions'),
+          [this.in]: this._publicAndJoinedChannelsLiteral(
+            restrictions.agentId,
+            'Restrictions',
+          ),
         },
       });
     }
@@ -186,7 +218,10 @@ class ModelPostgres extends Model {
     if (restrictions.channelIdAsId && restrictions.agentId) {
       where[this.and].push({
         id: {
-          [this.in]: this._channelIdsLiteral(restrictions.agentId, 'Restrictions'),
+          [this.in]: this._publicAndJoinedChannelsLiteral(
+            restrictions.agentId,
+            'Restrictions',
+          ),
         },
       });
     }
@@ -197,10 +232,26 @@ class ModelPostgres extends Model {
       });
     }
 
+    // @todo: Use structures.
     if (restrictions.measurableId && restrictions.agentId) {
       where[this.and].push({
         measurableId: {
-          [this.in]: this._measurableIdsLiteral(restrictions.agentId, 'Restrictions'),
+          [this.in]: this._measurablesInPublicAndJoinedChannelsLiteral(
+            restrictions.agentId,
+            'Restrictions',
+          ),
+        },
+      });
+    }
+
+    // @todo: Use structures.
+    if (restrictions.measurableId && !restrictions.agentId) {
+      where[this.and].push({
+        measurableId: {
+          [this.in]: this._measurablesInPublicChannelsLiteral(
+            restrictions.agentId,
+            'Restrictions',
+          ),
         },
       });
     }
@@ -274,27 +325,40 @@ class ModelPostgres extends Model {
     }
 
     // OK?
+    if (filter.measurableId) {
+      where.measurableId = filter.measurableId;
+    }
+    if (filter.competitorType) {
+      where.competitorType = {
+        [this.in]: filter.competitorType,
+      };
+    }
+    if (filter.notTaggedByAgent) {
+      where.id = {
+        [this.notIn]: this._taggedMeasurementsLiteral(filter.notTaggedByAgent),
+      };
+    }
     const startDate = _.get(filter, 'findInDateRange.startDate');
+    if (startDate) {
+      where[this.and].push({
+        createdAt: { [this.gte]: startDate },
+      });
+    }
     const endDate = _.get(filter, 'findInDateRange.endDate');
-
-    if (filter.measurableId) where.measurableId = filter.measurableId;
-    if (filter.competitorType) where.competitorType = {
-      [this.in]: filter.competitorType,
-    };
-    if (startDate) where[this.and].push({
-      createdAt: { [this.gte]: startDate },
-    });
-    if (endDate) where[this.and].push({ createdAt: { [this.lte]: endDate } });
-    if (filter.notTaggedByAgent) where.id = {
-      [this.notIn]: this._taggedMeasurementsLiteral(filter.notTaggedByAgent),
-    };
+    if (endDate) {
+      where[this.and].push({ createdAt: { [this.lte]: endDate } });
+    }
 
     // OK?
     if (_.isArray(filter.states)) {
       where.state = { [this.in]: filter.states };
     }
-    if (filter.seriesId) where.seriesId = filter.seriesId;
-    if (filter.creatorId) where.creatorId = filter.creatorId;
+    if (filter.seriesId) {
+      where.seriesId = filter.seriesId;
+    }
+    if (filter.creatorId) {
+      where.creatorId = filter.creatorId;
+    }
 
     return where;
   }
@@ -327,7 +391,7 @@ class ModelPostgres extends Model {
       const { as, agentId } = abstractions.withinPublicAndJoinedChannels;
       where[this.and].push({
         [as]: {
-          [this.in]: this._channelIdsLiteral(agentId, name),
+          [this.in]: this._publicAndJoinedChannelsLiteral(agentId, name),
         },
       });
     }

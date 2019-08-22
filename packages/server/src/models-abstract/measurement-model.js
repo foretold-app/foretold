@@ -18,7 +18,7 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this._channelIds()
+   * @todo: see this._publicAndJoinedChannels()
    * @param {Models.ObjectID} [agentId]
    * @param {string} [name]
    * @return {string}
@@ -28,7 +28,7 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this._channelIds()
+   * @todo: see this._publicAndJoinedChannels()
    * @protected
    * @param {Models.ObjectID} agentId
    * @param {string} name
@@ -36,7 +36,7 @@ class MeasurementModel extends ModelPostgres {
    */
   _taggedMeasurements(agentId, name = '') {
     return `(
-      /* T͟a͟g͟g͟e͟d͟ ͟M͟e͟a͟s͟u͟r͟e͟m͟e͟n͟t͟s͟ ͟O͟n͟l͟y͟ (${name}) */
+      /* T͟a͟g͟g͟e͟d͟ ͟M͟e͟a͟s͟u͟r͟e͟m͟e͟n͟t͟s͟ (${name}) */
       SELECT "taggedMeasurementId"
       FROM "Measurements"
       WHERE "agentId" = '${agentId}'
@@ -81,7 +81,7 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this._channelIds()
+   * @todo: see this._publicAndJoinedChannels()
    * @protected
    * @param {Models.ObjectID} [agentId]
    * @return {string}
@@ -106,7 +106,7 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this._channelIds()
+   * @todo: see this._publicAndJoinedChannels()
    * @protected
    * @param {Models.ObjectID} agentId
    * @return {string}

@@ -52,6 +52,7 @@ const agent = new graphql.GraphQLObjectType({
       resolve: require('../resolvers').preferences.getOne,
     },
 
+    // OK
     Measurements: {
       type: require('./measurements').agentMeasurementsConnection,
       args: require('./common').connectionArguments,

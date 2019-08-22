@@ -1,8 +1,6 @@
 const measurables = require('./measurables');
 const data = require('../data');
 
-const { ResponseAll } = require('../models-abstract/classes/response-all');
-
 describe('Measurables Resolvers', () => {
 
   describe('all()', () => {
@@ -22,7 +20,7 @@ describe('Measurables Resolvers', () => {
     const info = {};
     beforeEach(() => {
       jest.spyOn(data.measurables, 'getConnection').mockReturnValue(
-        Promise.resolve(new ResponseAll(true, 0)),
+        Promise.resolve(true),
       );
     });
     it('returns measurables', () => {
@@ -44,7 +42,7 @@ describe('Measurables Resolvers', () => {
           },
           { "agentId": "agentId2" },
         );
-        expect(result).toEqual({"_total": 0, "data": true});
+        expect(result).toEqual(true);
       });
     });
   });

@@ -215,6 +215,13 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   /**
+   * @return {Promise<Models.Measurable>}
+   */
+  Measurable.prototype.closedAsUnresolved = async function closedAsUnresolved() {
+    await this.updateState(MEASURABLE_STATE.CLOSED_AS_UNRESOLVED);
+  };
+
+  /**
    * @param {string} state
    * @return {Promise<Models.Measurable>}
    */

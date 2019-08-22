@@ -1,11 +1,9 @@
 const _ = require('lodash');
 
 const models = require('../models');
-const { splitBy } = require('../lib/functions');
 const { BrierScore } = require('../lib/brier-score');
 
 const { ModelPostgres } = require('./model-postgres');
-const { ResponseAll } = require('./classes/response-all');
 
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
@@ -20,7 +18,7 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this._channelIds()
+   * @todo: see this._publicAndJoinedChannels()
    * @param {Models.ObjectID} [agentId]
    * @param {string} [name]
    * @return {string}
@@ -30,7 +28,7 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this._channelIds()
+   * @todo: see this._publicAndJoinedChannels()
    * @protected
    * @param {Models.ObjectID} agentId
    * @param {string} name
@@ -38,7 +36,7 @@ class MeasurementModel extends ModelPostgres {
    */
   _taggedMeasurements(agentId, name = '') {
     return `(
-      /* T͟a͟g͟g͟e͟d͟ ͟M͟e͟a͟s͟u͟r͟e͟m͟e͟n͟t͟s͟ ͟O͟n͟l͟y͟ (${name}) */
+      /* T͟a͟g͟g͟e͟d͟ ͟M͟e͟a͟s͟u͟r͟e͟m͟e͟n͟t͟s͟ (${name}) */
       SELECT "taggedMeasurementId"
       FROM "Measurements"
       WHERE "agentId" = '${agentId}'
@@ -83,7 +81,7 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this._channelIds()
+   * @todo: see this._publicAndJoinedChannels()
    * @protected
    * @param {Models.ObjectID} [agentId]
    * @return {string}
@@ -108,14 +106,14 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this._channelIds()
+   * @todo: see this._publicAndJoinedChannels()
    * @protected
    * @param {Models.ObjectID} agentId
    * @return {string}
    */
   _agentMeasurementsJudgedPercentageCompetitive(agentId) {
     return `(
-      /* Returns arrays of predictions */
+      /* R͟e͟t͟u͟r͟n͟s͟ ͟a͟r͟r͟a͟y͟s͟ ͟o͟f͟ ͟p͟r͟e͟d͟i͟c͟t͟i͟o͟n͟s͟ */
       SELECT "Measurements"."measurableId",
              "Measurements"."agentId",
              array_agg("Measurements"."value" ->> 'data') as "probabilities"
@@ -131,77 +129,11 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @public
-   * @todo: use getConnection
-   * @deprecated
-   * @param {Layers.AbstractModelsLayer.filter} [filter]
-   * @param {Models.ObjectID} [filter.measurableId]
-   * @param {Models.ObjectID} [filter.agentId]
-   * @param {string[]} [filter.competitorType]
-   * @param {Models.ObjectID} [filter.notTaggedByAgent]
-   * @param {Layers.AbstractModelsLayer.pagination} [pagination]
-   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [_options]
-   * @return {Promise<{data: Models.Measurement[], total: number}>}
+   * @return {*[] | null}
+   * @private
    */
-  async getAll(filter = {}, pagination = {}, restrictions = {}, _options = {}) {
-    if ('inspect' in filter) filter.inspect();
-    if ('inspect' in pagination) pagination.inspect();
-    if ('inspect' in restrictions) restrictions.inspect();
-
-    const { where, include, spacedLimit } = this.makeFilter(filter);
-    this.applyRestrictions(where, restrictions);
-
-    /** @type {number} */
-    const total = await this.model.count({ where, include });
-    const edgePagination = this._getPagination(pagination, total);
-
-    const cond = {
-      limit: edgePagination.limit,
-      offset: edgePagination.offset,
-      order: [['relevantAt', 'DESC']],
-      where,
-      include,
-    };
-
-    /** @type {Models.Measurement[]} */
-    let data = await this.model.findAll(cond);
-    data = this._setIndexes(data, edgePagination);
-    data.total = total;
-
-    // tricky
-    if (spacedLimit) data = splitBy(data, spacedLimit);
-
-    return new ResponseAll(data, total);
-  }
-
-  /**
-   * @protected
-   * @param {object} filter
-   * @return {{include: Array, spacedLimit: *, where: {}}}
-   */
-  makeFilter(filter = {}) {
-    const where = { [this.and]: [] };
-    const include = [];
-
-    const startDate = _.get(filter, 'findInDateRange.startDate');
-    const endDate = _.get(filter, 'findInDateRange.endDate');
-    const spacedLimit = _.get(filter, 'findInDateRange.spacedLimit');
-
-    if (filter.measurableId) where.measurableId = filter.measurableId;
-    if (filter.agentId) where.agentId = filter.agentId;
-    if (filter.competitorType) where.competitorType = {
-      [this.in]: filter.competitorType,
-    };
-    if (startDate) where[this.and].push({
-      createdAt: { [this.gte]: startDate },
-    });
-    if (endDate) where[this.and].push({ createdAt: { [this.lte]: endDate } });
-    if (filter.notTaggedByAgent) where.id = {
-      [this.notIn]: this._taggedMeasurementsLiteral(filter.notTaggedByAgent),
-    };
-
-    return { where, include, spacedLimit };
+  _getOrder() {
+    return [['relevantAt', 'DESC']];
   }
 }
 

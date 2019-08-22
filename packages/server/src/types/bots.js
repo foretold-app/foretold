@@ -17,21 +17,25 @@ const bot = new graphql.GraphQLObjectType({
     userId: { type: graphql.GraphQLString },
     iAmOwner: require('./common').iAmOwnerByUserId,
 
+    // @todo: security?
     permissions: {
       type: graphql.GraphQLNonNull(require('./permissions').permissions),
       resolve: resolvers.permissions.botsPermissions,
     },
 
+    // @todo: security?
     token: {
       type: graphql.GraphQLString,
       resolve: require('../resolvers/authentications').getTokenByAgentId,
     },
 
+    // @todo: security?
     Agent: {
       type: require('./agents').agent,
       resolve: resolver(models.Bot.Agent),
     },
 
+    // @todo: security?
     User: {
       type: require('./users').user,
       resolve: resolver(models.Bot.User),

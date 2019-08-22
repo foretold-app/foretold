@@ -49,15 +49,14 @@ async function update(root, args, context, info) {
  * @param {number} args.first
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<Models.Model[]>}
+ * @returns {Promise<*>}
  */
 async function all(root, args, context, info) {
   const filter = new Filter({ userId: _.get(args, 'ownerId') });
   const pagination = new Pagination(args);
   const options = new Options();
 
-  const connection = await data.bots.getConnection(filter, pagination, options);
-  return connection.getData();
+  return data.bots.getConnection(filter, pagination, options);
 }
 
 /**

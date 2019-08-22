@@ -30,7 +30,7 @@ const structures = require('../structures');
  * @param {number} args.first
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<Models.Measurable[]>}
+ * @returns {Promise<*>}
  */
 async function all(root, args, context, info) {
   const channelId = _.get(args, 'channelId');
@@ -57,8 +57,7 @@ async function all(root, args, context, info) {
 
   // @todo: tricky, rework it.
   context.resultOrLatestMeasurementForAgentId = args.resultOrLatestMeasurementForAgentId;
-  const connection = await data.measurables.getAll(filter, pagination, options);
-  return connection.getData();
+  return data.measurables.getConnection(filter, pagination, options);
 }
 
 /**

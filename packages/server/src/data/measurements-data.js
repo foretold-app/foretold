@@ -5,7 +5,6 @@ const { DataBase } = require('./data-base');
 const { MeasurementModel } = require('../models-abstract');
 const { MEASURABLE_STATE } = require('../models/enums/measurable-state');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../models/enums/measurement-competitor-type');
-const { Restrictions } = require('../models-abstract/classes/restrictions');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -43,24 +42,6 @@ class MeasurementsData extends DataBase {
   }
 
   /**
-   * @public
-   * @param {Layers.DataSourceLayer.filter} [filter]
-   * @param {Layers.DataSourceLayer.pagination} [pagination]
-   * @param {Layers.DataSourceLayer.options} [options]
-   * @param {Models.ObjectID} [options.measurableId]
-   * @param {Models.ObjectID} options.agentId
-   * @return {Promise<{data: Models.Measurement[], total: number}>}
-   */
-  async getAll(filter = {}, pagination = {}, options = {}) {
-    const restrictions = new Restrictions({
-      measurableId: true,
-      isAdmin: options.isAdmin,
-      agentId: options.agentId,
-    });
-    return this.model.getAll(filter, pagination, restrictions);
-  }
-
-  /**
    * @todo: fix interface
    * @todo: move down
    * @public
@@ -75,7 +56,7 @@ class MeasurementsData extends DataBase {
       where: {
         id,
         measurableId: {
-          [this.model.Op.in]: this.model._measurableIdsLiteral(
+          [this.model.Op.in]: this.model._measurablesInPublicAndJoinedChannelsLiteral(
             options.agentId,
             'Filter',
           ),
@@ -117,6 +98,19 @@ class MeasurementsData extends DataBase {
    */
   async getBrierScore(agentId) {
     return this.model.getBrierScore(agentId);
+  }
+
+  /**
+   * @protected
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Layers.AbstractModelsLayer.restrictions}
+   */
+  _getDefaultRestrictions(options = {}) {
+    return {
+      measurableId: true,
+      isAdmin: options.isAdmin,
+      agentId: options.agentId,
+    };
   }
 }
 

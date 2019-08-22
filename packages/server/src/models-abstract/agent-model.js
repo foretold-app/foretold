@@ -16,7 +16,7 @@ class AgentModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this._channelIds()
+   * @todo: see this._publicAndJoinedChannels()
    * @protected
    * @param {Models.ObjectID} channelId
    * @return {Sequelize.literal}

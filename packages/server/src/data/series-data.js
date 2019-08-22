@@ -41,7 +41,9 @@ class SeriesData extends DataBase {
     let where = {
       // Restrictions
       channelId: {
-        [this.model.Op.in]: this.SeriesModel._channelIdsLiteral(filter.agentId),
+        [this.model.Op.in]: this.SeriesModel._publicAndJoinedChannelsLiteral(
+          filter.agentId,
+        ),
       },
     };
 
@@ -70,7 +72,7 @@ class SeriesData extends DataBase {
       where: {
         id,
         channelId: {
-          [this.model.Op.in]: this.SeriesModel._channelIdsLiteral(options.agentId),
+          [this.model.Op.in]: this.SeriesModel._publicAndJoinedChannelsLiteral(options.agentId),
         },
       },
     });

@@ -14,6 +14,8 @@ class Restrictions {
       'channelId': v => _.isBoolean(v) || utils.none(v),
       'measurableId': v => _.isBoolean(v) || utils.none(v),
       'channelIdAsId': v => _.isBoolean(v) || utils.none(v),
+      'withinJoinedChannels': v => _.isObject(v) || utils.none(v),
+      'withinPublicChannels': v => _.isObject(v) || utils.none(v),
       'withinPublicAndJoinedChannels': v => _.isObject(v) || utils.none(v),
     };
     utils.extend(this.constructor.name, options, list, this);

@@ -31,17 +31,20 @@ const series = new graphql.GraphQLObjectType({
     creatorId: { type: graphql.GraphQLString },
     iAmOwner: require('./common').iAmOwner,
 
+    // @todo: security?
     creator: {
       type: require('./agents').agent,
       resolve: resolver(models.Series.Creator),
     },
 
+    // @todo: security?
     Measurables: {
       type: require('../connections').seriesMeasurablesConnection.connectionType,
       args: require('../connections').seriesMeasurablesConnection.connectionArgs,
       resolve: require('../connections').seriesMeasurablesConnection.resolve
     },
 
+    // @todo: security?
     Channel: {
       type: require('./channels').channel,
       resolve: resolver(models.Series.Channel),

@@ -26,42 +26,44 @@ const agent = new graphql.GraphQLObjectType({
     type: { type: graphql.GraphQLNonNull(agentType) },
     name: { type: graphql.GraphQLString },
     measurementCount: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
-    channelMemberships: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(channelMemberships.channelsMembership)),
-      resolve: resolvers.channelMemberships.allByAgentId,
-    },
     isMe: require('./common').isMe,
     isAdmin: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
 
+    // @todo: security
     User: {
       type: require('./users').user,
       resolve: resolver(models.Agent.User),
     },
 
+    // @todo: security
     Bot: {
       type: require('./bots').bot,
       resolve: resolver(models.Agent.Bot),
     },
 
+    // @todo: security
     Preference: {
       type: require('./preferences').preference,
       resolve: require('../resolvers').preferences.getOne,
     },
 
+    // OK
     Measurements: {
-      type: require('../connections').agentMeasurementsConnection.connectionType,
-      args: require('../connections').agentMeasurementsConnection.connectionArgs,
-      resolve: require('../connections').agentMeasurementsConnection.resolve,
+      type: require('./measurements').agentMeasurementsConnection,
+      args: require('./common').connectionArguments,
+      resolve: require('../resolvers/measurements').all,
     },
 
-    Measurables: {
-      type: graphql.GraphQLNonNull(require('./measurables').measurable),
-      resolve: resolver(models.Agent.Measurables),
-    },
-
+    // OK
     Channels: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./channels').channel)),
-      resolve: resolver(models.Agent.Channels),
+      resolve: require('../resolvers/channels').all,
+    },
+
+    // OK
+    channelMemberships: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(channelMemberships.channelsMembership)),
+      resolve: resolvers.channelMemberships.allByAgentId,
     },
   })
 });

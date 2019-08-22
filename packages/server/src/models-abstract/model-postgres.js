@@ -42,13 +42,13 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @todo: see this._channelIds()
+   * @todo: see this._publicAndJoinedChannels()
    * @param {Models.ObjectID} [agentId]
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
-  _channelIdsLiteral(agentId, name = '') {
-    return this.literal(this._channelIds(agentId, name));
+  _publicAndJoinedChannelsLiteral(agentId, name = '') {
+    return this.literal(this._publicAndJoinedChannels(agentId, name));
   }
 
   /**
@@ -57,7 +57,7 @@ class ModelPostgres extends Model {
    * @param {string} [name]
    * @return {string}
    */
-  _channelIds(agentId, name = '') {
+  _publicAndJoinedChannels(agentId, name = '') {
     return `(
       /* P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
@@ -76,8 +76,8 @@ class ModelPostgres extends Model {
    * @para {string} [name]
    * @return {Sequelize.literal}
    */
-  _channelIdsPublicLiteral(name = '') {
-    return this.literal(this._channelIdsPublic(name));
+  _publicChannelsLiteral(name = '') {
+    return this.literal(this._publicChannels(name));
   }
 
   /**
@@ -85,7 +85,7 @@ class ModelPostgres extends Model {
    * @param {string} [name]
    * @return {string}
    */
-  _channelIdsPublic(name = '') {
+  _publicChannels(name = '') {
     return `(
       /* P͟u͟b͟l͟i͟c͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
@@ -100,8 +100,8 @@ class ModelPostgres extends Model {
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
-  _channelIdsByMembersLiteral(agentId, name = '') {
-    return this.literal(this._channelIdsByMembers(agentId, name));
+  _joinedChannelsLiteral(agentId, name = '') {
+    return this.literal(this._joinedChannels(agentId, name));
   }
 
   /**
@@ -111,7 +111,7 @@ class ModelPostgres extends Model {
    * @param {string} [name]
    * @return {string}
    */
-  _channelIdsByMembers(agentId, name = '') {
+  _joinedChannels(agentId, name = '') {
     return `(
       /* J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
@@ -130,20 +130,49 @@ class ModelPostgres extends Model {
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
-  _measurableIdsLiteral(agentId, name = '') {
-    return this.literal(this._measurableIds(agentId, name));
+  _measurablesInPublicAndJoinedChannelsLiteral(agentId, name = '') {
+    return this.literal(
+      this._measurablesInPublicAndJoinedChannels(agentId, name),
+    );
   }
 
   /**
    * @protected
-   * @param {string} [agentId]
+   * @param {Models.ObjectID} [agentId]
    * @param {string} [name]
    * @return {string}
    */
-  _measurableIds(agentId, name = '') {
+  _measurablesInPublicAndJoinedChannels(agentId, name = '') {
     return `(
-      /* Description (${name}) */
-      WITH channelIds AS (${this._channelIds(agentId, name)})
+      /* Measurables in Public and Joined Channels (${name}) */
+      WITH channelIds AS (${this._publicAndJoinedChannels(agentId, name)})
+      SELECT "Measurables"."id" FROM "Measurables"
+      WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
+    )`;
+  }
+
+  /**
+   * @protected
+   * @param {Models.ObjectID} [agentId]
+   * @param {string} [name]
+   * @return {Sequelize.literal}
+   */
+  _measurablesInPublicChannelsLiteral(agentId, name = '') {
+    return this.literal(
+      this._measurablesInPublicChannels(agentId, name),
+    );
+  }
+
+  /**
+   * @protected
+   * @param {Models.ObjectID} [agentId]
+   * @param {string} [name]
+   * @return {string}
+   */
+  _measurablesInPublicChannels(agentId, name = '') {
+    return `(
+      /* Measurables in Public Channels (${name}) */
+      WITH channelIds AS (${this._publicChannels(name)})
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
     )`;
@@ -166,7 +195,7 @@ class ModelPostgres extends Model {
     if (restrictions.channelId && !restrictions.agentId) {
       where[this.and].push({
         channelId: {
-          [this.in]: this._channelIdsPublicLiteral('Restrictions'),
+          [this.in]: this._publicChannelsLiteral('Restrictions'),
         },
       });
     }
@@ -175,7 +204,10 @@ class ModelPostgres extends Model {
     if (restrictions.channelId && restrictions.agentId) {
       where[this.and].push({
         channelId: {
-          [this.in]: this._channelIdsLiteral(restrictions.agentId, 'Restrictions'),
+          [this.in]: this._publicAndJoinedChannelsLiteral(
+            restrictions.agentId,
+            'Restrictions',
+          ),
         },
       });
     }
@@ -184,7 +216,19 @@ class ModelPostgres extends Model {
     if (restrictions.channelIdAsId && restrictions.agentId) {
       where[this.and].push({
         id: {
-          [this.in]: this._channelIdsLiteral(restrictions.agentId, 'Restrictions'),
+          [this.in]: this._publicAndJoinedChannelsLiteral(
+            restrictions.agentId,
+            'Restrictions',
+          ),
+        },
+      });
+    }
+
+    // @todo: Use "withinPublicAndJoinedChannels" as "id"
+    if (restrictions.channelIdAsId && !restrictions.agentId) {
+      where[this.and].push({
+        id: {
+          [this.in]: this._publicChannelsLiteral('Restrictions'),
         },
       });
     }
@@ -195,10 +239,26 @@ class ModelPostgres extends Model {
       });
     }
 
+    // @todo: Use structures.
     if (restrictions.measurableId && restrictions.agentId) {
       where[this.and].push({
         measurableId: {
-          [this.in]: this._measurableIdsLiteral(restrictions.agentId, 'Restrictions'),
+          [this.in]: this._measurablesInPublicAndJoinedChannelsLiteral(
+            restrictions.agentId,
+            'Restrictions',
+          ),
+        },
+      });
+    }
+
+    // @todo: Use structures.
+    if (restrictions.measurableId && !restrictions.agentId) {
+      where[this.and].push({
+        measurableId: {
+          [this.in]: this._measurablesInPublicChannelsLiteral(
+            restrictions.agentId,
+            'Restrictions',
+          ),
         },
       });
     }
@@ -271,6 +331,42 @@ class ModelPostgres extends Model {
       });
     }
 
+    // OK?
+    if (filter.measurableId) {
+      where.measurableId = filter.measurableId;
+    }
+    if (filter.competitorType) {
+      where.competitorType = {
+        [this.in]: filter.competitorType,
+      };
+    }
+    if (filter.notTaggedByAgent) {
+      where.id = {
+        [this.notIn]: this._taggedMeasurementsLiteral(filter.notTaggedByAgent),
+      };
+    }
+    const startDate = _.get(filter, 'findInDateRange.startDate');
+    if (startDate) {
+      where[this.and].push({
+        createdAt: { [this.gte]: startDate },
+      });
+    }
+    const endDate = _.get(filter, 'findInDateRange.endDate');
+    if (endDate) {
+      where[this.and].push({ createdAt: { [this.lte]: endDate } });
+    }
+
+    // OK?
+    if (_.isArray(filter.states)) {
+      where.state = { [this.in]: filter.states };
+    }
+    if (filter.seriesId) {
+      where.seriesId = filter.seriesId;
+    }
+    if (filter.creatorId) {
+      where.creatorId = filter.creatorId;
+    }
+
     return where;
   }
 
@@ -288,11 +384,21 @@ class ModelPostgres extends Model {
     const name = _.get(abstractions, 'constructor.name', 'Abstraction');
 
     // OK
+    if (abstractions.withinPublicChannels) {
+      const { as } = abstractions.withinPublicChannels;
+      where[this.and].push({
+        [as]: {
+          [this.in]: this._publicChannelsLiteral(name),
+        },
+      });
+    }
+
+    // OK
     if (abstractions.withinJoinedChannels) {
       const { as, agentId } = abstractions.withinJoinedChannels;
       where[this.and].push({
         [as]: {
-          [this.in]: this._channelIdsByMembersLiteral(agentId, name),
+          [this.in]: this._joinedChannelsLiteral(agentId, name),
         },
       });
     }
@@ -302,62 +408,12 @@ class ModelPostgres extends Model {
       const { as, agentId } = abstractions.withinPublicAndJoinedChannels;
       where[this.and].push({
         [as]: {
-          [this.in]: this._channelIdsLiteral(agentId, name),
+          [this.in]: this._publicAndJoinedChannelsLiteral(agentId, name),
         },
       });
     }
 
     return where;
-  }
-
-  /**
-   * @protected
-   * @param {Layers.AbstractModelsLayer.pagination} [pagination]
-   * @param {number} total
-   * @return {{offset: number, limit: number }}
-   */
-  _getPagination(pagination = {}, total = 0) {
-    pagination.before = Math.abs(pagination.before) || total;
-    pagination.after = Math.abs(pagination.after) || 0;
-
-    pagination.last = Math.abs(pagination.last) || 0;
-    pagination.first = Math.abs(pagination.first) || 0;
-
-    let offset, limit;
-    if (pagination.first) limit = pagination.first;
-    if (pagination.after) offset = pagination.after + 1;
-
-    if (!offset && !limit) {
-      if (pagination.last) {
-        limit = pagination.last;
-        offset = pagination.before - pagination.last;
-      } else if (pagination.before !== total) {
-        limit = pagination.before;
-      }
-    }
-
-    offset = offset || 0;
-    if (limit > total) limit = total;
-    if (offset < 0) {
-      limit += offset;
-      offset = 0;
-    }
-    if (limit < 0) limit = 0;
-
-    return { limit, offset };
-  }
-
-  /**
-   * @protected
-   * @param {*[]} [data]
-   * @param {object} [edgePagination]
-   * @return {*[]}
-   */
-  _setIndexes(data = [], edgePagination = {}) {
-    return data.map((item, index) => {
-      item.index = edgePagination.offset + index;
-      return item;
-    });
   }
 
   /**
@@ -428,7 +484,12 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise<*[]>}
    */
-  async getAll(filter = {}, pagination = {}, restrictions = {}, options = {}) {
+  async getAll(
+    filter = {},
+    pagination = {},
+    restrictions = {},
+    options = {},
+  ) {
     const where = {};
 
     if ('inspect' in filter) filter.inspect();
@@ -479,21 +540,42 @@ class ModelPostgres extends Model {
 
     /** @type {number} */
     const total = await this.model.count(cond);
-    const edgePagination = this._getPagination(pagination, total);
+    const { limit, offset } = pagination.getPagination(total);
 
     const findCond = {
       ...cond,
-      limit: edgePagination.limit,
-      offset: edgePagination.offset,
-      order: [['createdAt', 'DESC']],
+      limit,
+      offset,
+      order: this._getOrder(),
+      attributes: this._getAttributes(),
     };
 
     /** @type {Models.Model[]} */
-    let data = await this.model.findAll(findCond);
-    data = this._setIndexes(data, edgePagination);
-    data.total = total;
+    const data = await this.model.findAll(findCond);
 
-    return new ResponseAll(data, total);
+    return new ResponseAll(
+      data,
+      total,
+      offset,
+      filter.getSpacedLimit(),
+    );
+  }
+
+  /**
+   * @return {*[] | null}
+   * @private
+   */
+  _getOrder() {
+    return [['createdAt', 'DESC']];
+  }
+
+  /**
+   *
+   * @return {{include: Sequelize.literal|*[]} | null}
+   * @private
+   */
+  _getAttributes() {
+    return null;
   }
 
   /**

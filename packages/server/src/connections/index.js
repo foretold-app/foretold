@@ -15,18 +15,6 @@ const measurableMeasurementsConnection = createConnection({
   },
 });
 
-const agentMeasurementsConnection = createConnection({
-  name: 'AgentMeasurements',
-  nodeType: require('../types').measurements.measurement,
-  target: models.Agent.Measurements,
-  connectionFields: {
-    total: {
-      type: graphql.GraphQLInt,
-      resolve: ({ fullCount }) => fullCount,
-    },
-  },
-});
-
 const channelAgentsConnection = createConnection({
   name: 'ChannelAgents',
   nodeType: require('../types').agents.agent,
@@ -53,7 +41,6 @@ const seriesMeasurablesConnection = createConnection({
 
 module.exports = {
   measurableMeasurementsConnection,
-  agentMeasurementsConnection,
   channelAgentsConnection,
   seriesMeasurablesConnection,
 };

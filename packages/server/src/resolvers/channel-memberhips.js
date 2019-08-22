@@ -1,6 +1,10 @@
 const _ = require('lodash');
 const data = require('../data');
 
+const { Pagination } = require('../data/classes/pagination');
+const { Options } = require('../data/classes/options');
+const { Filter } = require('../data/classes/filter');
+
 /**
  * @param {*} root
  * @param {{input: {channelId: Models.ObjectID, agentId: Models.ObjectID, role: string}}} args
@@ -8,7 +12,7 @@ const data = require('../data');
  * @returns {Promise<Models.ChannelMemberships>}
  */
 async function create(root, args, context) {
-  const input = args.input;
+  const input = _.get(args, 'input');
   const inviterAgentId = _.get(context, 'agent.id');
   return data.channelMemberships.createOne2(
     input.channelId,
@@ -24,7 +28,7 @@ async function create(root, args, context) {
  * @returns {Promise<Models.ChannelMemberships>}
  */
 async function update(root, args) {
-  const input = args.input;
+  const input = _.get(args, 'input');
   return data.channelMemberships.updateOne2(
     input.channelId,
     input.agentId,
@@ -38,7 +42,7 @@ async function update(root, args) {
  * @returns {Promise<Models.ChannelMemberships | null>}
  */
 async function remove(root, args) {
-  const input = args.input;
+  const input = _.get(args, 'input');
   return data.channelMemberships.deleteOne2(
     input.channelId,
     input.agentId,
@@ -55,9 +59,14 @@ async function remove(root, args) {
  * @returns {Promise<Models.ChannelMemberships[]>}
  */
 async function allByAgentId(root, args, context, info) {
-  const agentId = root.id;
-  const options = { agentId };
-  return data.channelMemberships.getAll2(options);
+  const agentId = _.get(root, 'id');
+  const currentAgentId = _.get(context, 'agent.id');
+
+  const filter = new Filter({ agentId });
+  const pagination = new Pagination();
+  const options = new Options({ currentAgentId });
+
+  return data.channelMemberships.getAll(filter, pagination, options);
 }
 
 /**
@@ -69,9 +78,9 @@ async function allByAgentId(root, args, context, info) {
  * @returns {Promise<Models.ChannelMemberships[]>}
  */
 async function allByChannelId(root, args, context, info) {
-  const channelId = root.id;
-  const options = { channelId };
-  return data.channelMemberships.getAll2(options);
+  const channelId = _.get(root, 'id');
+  const filter = new Filter({ channelId });
+  return data.channelMemberships.getAll(filter);
 }
 
 /**

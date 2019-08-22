@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const utils = require('../../lib/utils');
 
 /**
@@ -28,7 +29,10 @@ class Filter {
       /** @type {Layers.withinJoinedChannels | null} */
       'withinJoinedChannels',
     ];
-    const agent = ['excludeChannelId', 'types'];
+    const agent = [
+      'excludeChannelId',
+      'types',
+    ];
     const agentNotification = [
       'notificationId', // string
       'sentAt', // Date | null
@@ -36,10 +40,17 @@ class Filter {
     ];
 
     const list = [
-      'type', 'creatorId', 'userId',
-      'seriesId', 'channelId', 'measurableId',
-      'agentId', 'competitorType',
-      'findInDateRange', 'notTaggedByAgent', 'states',
+      'type',
+      'creatorId',
+      'userId',
+      'seriesId', // string
+      'channelId', // string
+      'measurableId', // string
+      'agentId',
+      'competitorType', // string[]
+      'findInDateRange', // object
+      'notTaggedByAgent', // string | null
+      'states', // string[] | null
       ...common,
       ...agent,
       ...agentNotification,
@@ -47,6 +58,10 @@ class Filter {
 
     utils.extend(this.constructor.name, filter, list, this);
     utils.diff(this.constructor.name, filter, list);
+  }
+
+  getSpacedLimit() {
+    return _.get(this, 'findInDateRange.spacedLimit');
   }
 
   inspect() {

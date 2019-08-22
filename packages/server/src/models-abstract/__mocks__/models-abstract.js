@@ -8,11 +8,12 @@ const Op = {
 
 const ModelPostgres = {
   Op,
-  _channelIdsLiteral: jest.fn(() => 'channelIdsLiteral'),
-  _measurableIdsLiteral: jest.fn(() => 'measurableIdsLiteral'),
+  _publicAndJoinedChannelsLiteral: jest.fn(() => 'channelIdsLiteral'),
+  _measurablesInPublicAndJoinedChannelsLiteral: jest.fn(() => 'measurableIdsLiteral'),
   deleteOne: jest.fn(() => Promise.resolve(true)),
   updateOne: jest.fn(() => Promise.resolve(true)),
   getAll: jest.fn(() => Promise.resolve(true)),
+  getAllWithConnections: jest.fn(() => Promise.resolve(true)),
   findAll: jest.fn(() => Promise.resolve(true)),
   updateAll: jest.fn(() => Promise.resolve(true)),
   getOne: jest.fn(() => Promise.resolve(true)),

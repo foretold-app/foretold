@@ -125,10 +125,32 @@ const measurementsConnection = new graphql.GraphQLObjectType({
   }),
 });
 
+const agentMeasurementsEdge = new graphql.GraphQLObjectType({
+  name: 'AgentMeasurementsEdge',
+  fields: () => ({
+    node: { type: require('./measurements').measurement },
+    cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+  }),
+});
+
+const agentMeasurementsConnection = new graphql.GraphQLObjectType({
+  name: 'AgentMeasurementsConnection',
+  fields: () => ({
+    total: { type: graphql.GraphQLInt },
+    pageInfo: { type: graphql.GraphQLNonNull(require('./common').pageInfoConnection) },
+    edges: { type: graphql.GraphQLList(require('./measurements').agentMeasurementsEdge) },
+  }),
+});
+
 module.exports = {
   measurement,
   measurementCreateInput,
+
   measurementsEdge,
   measurementsConnection,
+
+  agentMeasurementsEdge,
+  agentMeasurementsConnection,
+
   measurementsInDateRangeInput,
 };

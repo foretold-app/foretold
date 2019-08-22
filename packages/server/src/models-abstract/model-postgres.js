@@ -226,6 +226,15 @@ class ModelPostgres extends Model {
       });
     }
 
+    // @todo: Use "withinPublicAndJoinedChannels" as "id"
+    if (restrictions.channelIdAsId && !restrictions.agentId) {
+      where[this.and].push({
+        id: {
+          [this.in]: this._publicChannelsLiteral('Restrictions'),
+        },
+      });
+    }
+
     if (restrictions.userId) {
       where[this.and].push({
         userId: restrictions.userId,

@@ -59,10 +59,10 @@ const agent = new graphql.GraphQLObjectType({
       resolve: require('../resolvers/measurements').all,
     },
 
-    // @todo: security
+    // OK
     Channels: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./channels').channel)),
-      resolve: resolver(models.Agent.Channels),
+      resolve: require('../resolvers/channels').all,
     },
   })
 });

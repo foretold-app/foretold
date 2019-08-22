@@ -39,7 +39,7 @@ async function channelCreator(channel) {
  */
 async function all(root, args, context, info) {
   const agentId = _.get(context, 'agent.id');
-  const channelMemberId = _.get(args, 'channelMemberId');
+  const channelMemberId = _.get(args, 'channelMemberId') || _.get(root, 'id');
   const isArchived = _.get(args, 'isArchived');
 
   const withinJoinedChannels = _.isEmpty(channelMemberId)

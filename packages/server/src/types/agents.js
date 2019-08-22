@@ -60,12 +60,6 @@ const agent = new graphql.GraphQLObjectType({
     },
 
     // @todo: security
-    Measurables: {
-      type: graphql.GraphQLNonNull(require('./measurables').measurable),
-      resolve: resolver(models.Agent.Measurables),
-    },
-
-    // @todo: security
     Channels: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./channels').channel)),
       resolve: resolver(models.Agent.Channels),

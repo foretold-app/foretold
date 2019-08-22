@@ -1671,21 +1671,21 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "first",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
                   "name": "before",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
                     "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -1705,22 +1705,6 @@
                 "kind": "OBJECT",
                 "name": "AgentMeasurementsConnection",
                 "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "Measurables",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Measurable",
-                  "ofType": null
-                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -2690,18 +2674,30 @@
         {
           "kind": "OBJECT",
           "name": "AgentMeasurementsConnection",
-          "description": "A connection to a list of items.",
+          "description": null,
           "fields": [
             {
+              "name": "total",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "pageInfo",
-              "description": "Information to aid in pagination.",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "PageInfo",
+                  "name": "PageInfoConnection",
                   "ofType": null
                 }
               },
@@ -2710,7 +2706,7 @@
             },
             {
               "name": "edges",
-              "description": "A list of edges.",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "LIST",
@@ -2723,14 +2719,69 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "PageInfoConnection",
+          "description": null,
+          "fields": [
+            {
+              "name": "hasNextPage",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             },
             {
-              "name": "total",
+              "name": "hasPreviousPage",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "startCursor",
               "description": null,
               "args": [],
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "endCursor",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -2745,11 +2796,11 @@
         {
           "kind": "OBJECT",
           "name": "AgentMeasurementsEdge",
-          "description": "An edge in a connection.",
+          "description": null,
           "fields": [
             {
               "name": "node",
-              "description": "The item at the end of the edge",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -2761,7 +2812,7 @@
             },
             {
               "name": "cursor",
-              "description": "A cursor for use in pagination",
+              "description": null,
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -4262,73 +4313,6 @@
                   "name": "MeasurementsEdge",
                   "ofType": null
                 }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "OBJECT",
-          "name": "PageInfoConnection",
-          "description": null,
-          "fields": [
-            {
-              "name": "hasNextPage",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "hasPreviousPage",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "startCursor",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "endCursor",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null

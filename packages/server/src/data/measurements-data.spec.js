@@ -9,7 +9,7 @@ describe('Measurement Data layer', () => {
 
   const instance = new MeasurementsData();
 
-  describe('getOne()', () => {
+  describe('getOne2()', () => {
     const id = 'id2';
     const options = { agentId: 'agentId1' };
     beforeEach(() => {
@@ -27,25 +27,6 @@ describe('Measurement Data layer', () => {
             },
           }
         });
-        expect(result).toBe(true);
-      });
-    });
-  });
-
-  describe('getAll()', () => {
-    const options = { agentId: 'agentId1' };
-    beforeEach(() => {
-      jest.spyOn(instance.model, 'getAll').mockReturnValue(
-        Promise.resolve(true),
-      );
-    });
-    it('finds a measurement', () => {
-      return instance.getAll({}, {}, options).then((result) => {
-        expect(instance.model.getAll).toHaveBeenCalledWith(
-          {},
-          {},
-          { "agentId": "agentId1", "measurableId": true },
-        );
         expect(result).toBe(true);
       });
     });

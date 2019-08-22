@@ -59,6 +59,10 @@ class Filter {
     utils.diff(this.constructor.name, filter, list);
   }
 
+  getSpacedLimit() {
+    return _.get(this, 'findInDateRange.spacedLimit');
+  }
+
   inspect() {
     utils.inspect(this);
   }

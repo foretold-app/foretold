@@ -6,8 +6,6 @@ const models = require('../models');
 const { Model } = require('./model');
 const { ResponseAll } = require('./classes/response-all');
 
-const { splitBy } = require('../lib/functions');
-
 /**
  * @abstract
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
@@ -420,56 +418,6 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @param {Layers.AbstractModelsLayer.pagination} [pagination]
-   * @param {number} total
-   * @return {{offset: number, limit: number }}
-   */
-  _getPagination(pagination = {}, total = 0) {
-    pagination.before = Math.abs(pagination.before) || total;
-    pagination.after = Math.abs(pagination.after) || 0;
-
-    pagination.last = Math.abs(pagination.last) || 0;
-    pagination.first = Math.abs(pagination.first) || 0;
-
-    let offset, limit;
-    if (pagination.first) limit = pagination.first;
-    if (pagination.after) offset = pagination.after + 1;
-
-    if (!offset && !limit) {
-      if (pagination.last) {
-        limit = pagination.last;
-        offset = pagination.before - pagination.last;
-      } else if (pagination.before !== total) {
-        limit = pagination.before;
-      }
-    }
-
-    offset = offset || 0;
-    if (limit > total) limit = total;
-    if (offset < 0) {
-      limit += offset;
-      offset = 0;
-    }
-    if (limit < 0) limit = 0;
-
-    return { limit, offset };
-  }
-
-  /**
-   * @protected
-   * @param {*[]} [data]
-   * @param {object} [edgePagination]
-   * @return {*[]}
-   */
-  _setIndexes(data = [], edgePagination = {}) {
-    return data.map((item, index) => {
-      item.index = edgePagination.offset + index;
-      return item;
-    });
-  }
-
-  /**
-   * @protected
    * @param {*[]} [list]
    * @return {*[]}
    */
@@ -536,7 +484,12 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise<*[]>}
    */
-  async getAll(filter = {}, pagination = {}, restrictions = {}, options = {}) {
+  async getAll(
+    filter = {},
+    pagination = {},
+    restrictions = {},
+    options = {},
+  ) {
     const where = {};
 
     if ('inspect' in filter) filter.inspect();
@@ -587,26 +540,25 @@ class ModelPostgres extends Model {
 
     /** @type {number} */
     const total = await this.model.count(cond);
-    const edgePagination = this._getPagination(pagination, total);
+    const { limit, offset } = pagination.getPagination(total);
 
     const findCond = {
       ...cond,
-      limit: edgePagination.limit,
-      offset: edgePagination.offset,
+      limit,
+      offset,
       order: this._getOrder(),
       attributes: this._getAttributes(),
     };
 
     /** @type {Models.Model[]} */
-    let data = await this.model.findAll(findCond);
-    data = this._setIndexes(data, edgePagination); // @todo
-    data.total = total; // @todo
+    const data = await this.model.findAll(findCond);
 
-    // @todo: tricky, rework
-    const spacedLimit = _.get(filter, 'findInDateRange.spacedLimit');
-    if (spacedLimit) data = splitBy(data, spacedLimit);
-
-    return new ResponseAll(data, total);
+    return new ResponseAll(
+      data,
+      total,
+      offset,
+      filter.getSpacedLimit(),
+    );
   }
 
   /**

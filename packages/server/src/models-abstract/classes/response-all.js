@@ -1,23 +1,34 @@
 const _ = require('lodash');
 const utils = require('../../lib/utils');
 
+const { splitBy } = require('../../lib/functions');
+
 class ResponseAll {
   /**
    * @public
    * @param {*[]} data
    * @param {number} total
+   * @param {number} offset
+   * @param {number} spacedLimit
    */
-  constructor(data, total) {
-    this.data = data;
+  constructor(data, total, offset, spacedLimit) {
+    this._data = data;
     this._total = total;
+    this._offset = offset;
+    this._spacedLimit = spacedLimit;
+
+    if (this._spacedLimit) {
+      this._data = splitBy(this._data, this._spacedLimit);
+    }
+
+    this._data.map((item, index) => {
+      item.index = this._offset + index;
+      return item;
+    });
   }
 
-  /**
-   * @public
-   * @return {*[]}
-   */
-  getData() {
-    return this.data;
+  get data() {
+    return this._total;
   }
 
   get total() {
@@ -25,7 +36,7 @@ class ResponseAll {
   }
 
   get edges() {
-    return this.data.map(node => ({ node, cursor: node.index }));
+    return this._data.map(node => ({ node, cursor: node.index }));
   }
 
   get pageInfo() {

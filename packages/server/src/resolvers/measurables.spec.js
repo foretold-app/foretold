@@ -21,13 +21,13 @@ describe('Measurables Resolvers', () => {
     const context = { agent: { id: 'agentId2' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurables, 'getAll').mockReturnValue(
+      jest.spyOn(data.measurables, 'getConnection').mockReturnValue(
         Promise.resolve(new ResponseAll(true, 0)),
       );
     });
     it('returns measurables', () => {
       return measurables.all(root, args, context, info).then((result) => {
-        expect(data.measurables.getAll).toHaveBeenCalledWith(
+        expect(data.measurables.getConnection).toHaveBeenCalledWith(
           {
             "channelId": "channelId2",
             "creatorId": "creatorId1",
@@ -44,7 +44,7 @@ describe('Measurables Resolvers', () => {
           },
           { "agentId": "agentId2" },
         );
-        expect(result).toBe(true);
+        expect(result).toEqual({"_total": 0, "data": true});
       });
     });
   });

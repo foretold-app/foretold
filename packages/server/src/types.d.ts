@@ -329,6 +329,8 @@ export namespace Layers {
 
       withinJoinedChannels?: withinJoinedChannels | null,
       withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
+
+      getSpacedLimit(): number | undefined;
     };
     type pagination = {
       limit?: number,
@@ -337,6 +339,8 @@ export namespace Layers {
       first?: number,
       after?: string,
       before?: string,
+
+      getPagination(total: number): { limit: number, offset: number };
     };
     type query = object;
     type params = object;

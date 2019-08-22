@@ -39,6 +39,42 @@ class Pagination {
     }
   }
 
+  /**
+   * @public
+   * @param {number} total
+   * @return {{offset: number, limit: number }}
+   */
+  getPagination(total = 0) {
+    this.before = Math.abs(this.before) || total;
+    this.after = Math.abs(this.after) || 0;
+
+    this.last = Math.abs(this.last) || 0;
+    this.first = Math.abs(this.first) || 0;
+
+    let offset, limit;
+    if (this.first) limit = this.first;
+    if (this.after) offset = this.after + 1;
+
+    if (!offset && !limit) {
+      if (this.last) {
+        limit = this.last;
+        offset = this.before - this.last;
+      } else if (this.before !== total) {
+        limit = this.before;
+      }
+    }
+
+    offset = offset || 0;
+    if (limit > total) limit = total;
+    if (offset < 0) {
+      limit += offset;
+      offset = 0;
+    }
+    if (limit < 0) limit = 0;
+
+    return { limit, offset };
+  }
+
   inspect() {
     utils.inspect(this);
   }

@@ -19,6 +19,7 @@ async function setContextUser(root, args, context, info) {
     { id },
   );
 
+  // @todo: Don't understand what this means.
   context.userAsObject = !!id
     ? await data.users.getOne({ id })
     : null;

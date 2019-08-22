@@ -130,6 +130,8 @@ const rules = {
   },
   User: {
     email: userIsOwnedByCurrentAgent,
+    auth0Id: userIsOwnedByCurrentAgent,
+    isEmailVerified: userIsOwnedByCurrentAgent,
   },
   Query: {
     '*': allow,

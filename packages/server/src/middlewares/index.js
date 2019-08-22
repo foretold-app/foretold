@@ -29,6 +29,14 @@ const middlewares = {
       const result = await resolve(root, args, context, info);
       return (result instanceof Error) ? null : result;
     },
+    auth0Id: async (resolve, root, args, context, info) => {
+      const result = await resolve(root, args, context, info);
+      return (result instanceof Error) ? null : result;
+    },
+    isEmailVerified: async (resolve, root, args, context, info) => {
+      const result = await resolve(root, args, context, info);
+      return (result instanceof Error) ? null : result;
+    },
   },
 
   Measurable: {

@@ -79,8 +79,13 @@ async function allByAgentId(root, args, context, info) {
  */
 async function allByChannelId(root, args, context, info) {
   const channelId = _.get(root, 'id');
+  const currentAgentId = _.get(context, 'agent.id');
+
   const filter = new Filter({ channelId });
-  return data.channelMemberships.getAll(filter);
+  const pagination = new Pagination();
+  const options = new Options({ currentAgentId });
+
+  return data.channelMemberships.getAll(filter, pagination, options);
 }
 
 /**

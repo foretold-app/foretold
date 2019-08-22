@@ -15,6 +15,9 @@ const { measurableIsArchived } = require('./measurables');
 const { botBelongsToCurrentUser } = require('./bots');
 const { userIsOwnedByCurrentAgent } = require('./users');
 const { preferenceIsOwnedByCurrentAgent } = require('./preferences');
+const { agentIdFromRootId} = require('./predicates');
+const { agentIdFromContext} = require('./predicates');
+const { agentIdFromRootAgentId} = require('./predicates');
 
 const currentAgentIsApplicationAdminOrChannelAdmin = or(
   currentAgentIsApplicationAdmin,
@@ -129,7 +132,12 @@ const rules = {
     token: botBelongsToCurrentUser,
   },
   User: {
-    email: userIsOwnedByCurrentAgent,
+    email: userIsOwnedByCurrentAgent(agentIdFromRootAgentId),
+    auth0Id: userIsOwnedByCurrentAgent(agentIdFromRootAgentId),
+    isEmailVerified: userIsOwnedByCurrentAgent(agentIdFromRootAgentId),
+  },
+  Agent: {
+    Preference: userIsOwnedByCurrentAgent(agentIdFromRootId),
   },
   Query: {
     '*': allow,
@@ -158,7 +166,7 @@ const rules = {
     botCreate: currentAgentIsAuthenticated,
     userUpdate: and(
       currentAgentIsAuthenticated,
-      userIsOwnedByCurrentAgent,
+      userIsOwnedByCurrentAgent(agentIdFromContext),
     ),
     preferenceUpdate: and(
       currentAgentIsAuthenticated,

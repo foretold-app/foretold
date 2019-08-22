@@ -7,9 +7,9 @@ const { rule } = require('graphql-shield');
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} info
- * @return {Promise<boolean>}
+ * @return {boolean}
  */
-async function botBelongsToCurrentUserRule(root, args, context, info) {
+function botBelongsToCurrentUserRule(root, args, context, info) {
   const botUserId = _.get(root, 'userId')
     || _.get(context, 'bot.userId');
   const userId = _.get(context, 'user.id');
@@ -17,7 +17,7 @@ async function botBelongsToCurrentUserRule(root, args, context, info) {
 
   console.log(
     `\x1b[33m Rule Bots (botBelongsToCurrentUser), ` +
-    `result = "${result}"\x1b[0m`
+    `result = "${result}".\x1b[0m`
   );
 
   return result;

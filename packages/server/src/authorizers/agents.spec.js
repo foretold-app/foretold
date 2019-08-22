@@ -8,20 +8,16 @@ describe('Agents Authorizers', () => {
       const args = {};
       const context = { agent: { id: 'id1' } };
       const info = {};
-      return currentAgentIsAuthenticatedRule(root, args, context, info)
-        .then((result) => {
-          expect(result).toBe(true);
-        });
+      const result = currentAgentIsAuthenticatedRule(root, args, context, info);
+      expect(result).toBe(true);
     });
     it('returns false when user model does not exist within context', () => {
       const root = {};
       const args = {};
       const context = {};
       const info = {};
-      return currentAgentIsAuthenticatedRule(root, args, context, info)
-        .then((result) => {
-          expect(result).toBe(false);
-        });
+      const result = currentAgentIsAuthenticatedRule(root, args, context, info);
+      expect(result).toBe(false);
     });
   });
 

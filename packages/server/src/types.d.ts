@@ -176,6 +176,10 @@ export namespace Schema {
 }
 
 export namespace Layers {
+  export type withinPublicChannels = {
+    as: string,
+  }
+
   export type withinJoinedChannels = {
     as: string,
     agentId: Models.ObjectID,
@@ -217,6 +221,7 @@ export namespace Layers {
       sentAt?: string | null,
 
       findInDateRange?: object, // @todo: Object? Give definition!
+      withinPublicChannels?: withinPublicChannels | null,
       withinJoinedChannels?: withinJoinedChannels | null,
       withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
 
@@ -293,6 +298,8 @@ export namespace Layers {
       channelId?: Models.ObjectID,
       measurableId?: boolean,
       measuredByAgentId?: Models.ObjectID,
+
+      withinPublicChannels?: withinPublicChannels | null,
       withinJoinedChannels?: withinJoinedChannels | null,
       withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
     };

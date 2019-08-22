@@ -6,6 +6,8 @@ const { ChannelMembershipModel } = require('../models-abstract');
 const { CHANNEL_MEMBERSHIP_ROLES } = require('../models/enums/channel-membership-roles');
 const { CHANNEL_MEMBERSHIP_TYPE } = require('../models/enums/channel-membership-type');
 
+const structures = require('../structures');
+
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
  * @property {ChannelMembershipModel} ChannelMembershipModel
@@ -36,16 +38,16 @@ class ChannelMembershipsData extends DataBase {
   ) {
     await this._validate({ channelId, agentId });
     return await this.models.ChannelMemberships.findOne({
-        where: {
-          channelId,
-          agentId
-        }
-      }) || await this.models.ChannelMemberships.create({
+      where: {
         channelId,
-        agentId,
-        inviterAgentId,
-        role
-      });
+        agentId
+      }
+    }) || await this.models.ChannelMemberships.create({
+      channelId,
+      agentId,
+      inviterAgentId,
+      role
+    });
   }
 
   /**
@@ -189,6 +191,28 @@ class ChannelMembershipsData extends DataBase {
       ...options,
       role: ChannelMembershipModel.ROLES.ADMIN,
     });
+  }
+
+  /**
+   * @protected
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Layers.AbstractModelsLayer.restrictions}
+   */
+  _getDefaultRestrictions(options = {}) {
+    const currentAgentId = _.get(options, 'currentAgentId');
+
+    const withinPublicChannels = currentAgentId
+      ? null
+      : structures.withinPublicChannelsByChannelId();
+
+    const withinPublicAndJoinedChannels = currentAgentId
+      ? structures.withinPublicAndJoinedChannelsByChannelId(currentAgentId)
+      : null;
+
+    return {
+      withinPublicChannels,
+      withinPublicAndJoinedChannels,
+    };
   }
 }
 

@@ -2,7 +2,7 @@ const assert = require('assert');
 
 /**
  * Look at this literal as on a structure.
- * @param {string} agentId
+ * @param {Models.ObjectID} agentId
  * @return {Layers.withinJoinedChannels}
  */
 module.exports.withinJoinedChannelsByChannelId = (agentId) => {
@@ -11,7 +11,7 @@ module.exports.withinJoinedChannelsByChannelId = (agentId) => {
 };
 
 /**
- * @param {string} agentId
+ * @param {Models.ObjectID} agentId
  * @return {Layers.withinJoinedChannels}
  */
 module.exports.withinJoinedChannelsById = (agentId) => {
@@ -20,8 +20,8 @@ module.exports.withinJoinedChannelsById = (agentId) => {
 };
 
 /**
- * @param {string} agentId
- * @return {Layers.withinJoinedChannels}
+ * @param {Models.ObjectID} agentId
+ * @return {Layers.withinPublicAndJoinedChannels}
  */
 module.exports.withinPublicAndJoinedChannelsByChannelId = (agentId) => {
   assert(!!agentId, 'AgentId is required');
@@ -29,10 +29,24 @@ module.exports.withinPublicAndJoinedChannelsByChannelId = (agentId) => {
 };
 
 /**
- * @param {string} agentId
- * @return {Layers.withinJoinedChannels}
+ * @param {Models.ObjectID} agentId
+ * @return {Layers.withinPublicAndJoinedChannels}
  */
 module.exports.withinPublicAndJoinedChannelsById = (agentId) => {
   assert(!!agentId, 'AgentId is required');
   return { as: 'id', agentId };
+};
+
+/**
+ * @return {Layers.withinPublicChannels}
+ */
+module.exports.withinPublicChannelsByChannelId = () => {
+  return { as: 'channelId' };
+};
+
+/**
+ * @return {Layers.withinPublicChannels}
+ */
+module.exports.withinPublicChannelsById = () => {
+  return { as: 'id' };
 };

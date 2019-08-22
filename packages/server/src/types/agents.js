@@ -26,11 +26,6 @@ const agent = new graphql.GraphQLObjectType({
     type: { type: graphql.GraphQLNonNull(agentType) },
     name: { type: graphql.GraphQLString },
     measurementCount: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
-    // @todo: security
-    channelMemberships: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(channelMemberships.channelsMembership)),
-      resolve: resolvers.channelMemberships.allByAgentId,
-    },
     isMe: require('./common').isMe,
     isAdmin: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
 
@@ -63,6 +58,12 @@ const agent = new graphql.GraphQLObjectType({
     Channels: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./channels').channel)),
       resolve: require('../resolvers/channels').all,
+    },
+
+    // @todo: security
+    channelMemberships: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(channelMemberships.channelsMembership)),
+      resolve: resolvers.channelMemberships.allByAgentId,
     },
   })
 });

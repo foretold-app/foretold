@@ -102,8 +102,8 @@ class ModelPostgres extends Model {
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
-  _channelIdsByMembersLiteral(agentId, name = '') {
-    return this.literal(this._channelIdsByMembers(agentId, name));
+  _joinedChannelsLiteral(agentId, name = '') {
+    return this.literal(this._joinedChannels(agentId, name));
   }
 
   /**
@@ -113,7 +113,7 @@ class ModelPostgres extends Model {
    * @param {string} [name]
    * @return {string}
    */
-  _channelIdsByMembers(agentId, name = '') {
+  _joinedChannels(agentId, name = '') {
     return `(
       /* J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
@@ -386,11 +386,21 @@ class ModelPostgres extends Model {
     const name = _.get(abstractions, 'constructor.name', 'Abstraction');
 
     // OK
+    if (abstractions.withinPublicChannels) {
+      const { as } = abstractions.withinPublicChannels;
+      where[this.and].push({
+        [as]: {
+          [this.in]: this._publicChannelsLiteral(name),
+        },
+      });
+    }
+
+    // OK
     if (abstractions.withinJoinedChannels) {
       const { as, agentId } = abstractions.withinJoinedChannels;
       where[this.and].push({
         [as]: {
-          [this.in]: this._channelIdsByMembersLiteral(agentId, name),
+          [this.in]: this._joinedChannelsLiteral(agentId, name),
         },
       });
     }

@@ -3,7 +3,7 @@ module ReducerConfig = {
 
   type callFnParams = {
     channelId: string,
-    states: array(Types.measurableState),
+    states: option(array(Types.measurableState)),
   };
 
   let getId = (params: itemType) => params.id;
@@ -11,7 +11,7 @@ module ReducerConfig = {
   let callFn = (params: callFnParams) =>
     MeasurablesGet.component2(
       ~channelId=params.channelId,
-      ~states=params.states |> Array.map(r => Some(r)),
+      ~states=params.states |> E.O.default([||]) |> Array.map(r => Some(r)),
     );
 
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;

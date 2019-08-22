@@ -106,15 +106,15 @@ function addHooks(db) {
   db.Measurement.addHook('afterCreate', async (instance) => {
     try {
       const competitorType = instance.dataValues.competitorType;
-      const isJudgable = [
-        MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
-        MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED,
-      ].includes(competitorType);
 
-      if (isJudgable) {
+      if (competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE) {
         const measurable = await instance.getMeasurable();
         await measurable.judged();
+      } else if (competitorType === MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED) {
+        const measurable = await instance.getMeasurable();
+        await measurable.closedAsUnresolved();
       }
+
     } catch (e) {
       console.log('Hook', e);
     }

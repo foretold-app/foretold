@@ -26,12 +26,14 @@ class MeasurableModel extends ModelPostgres {
       OPEN,
       JUDGEMENT_PENDING,
       JUDGED,
+      CLOSED_AS_UNRESOLVED,
     } = MeasurableModel.MEASURABLE_STATE;
 
     return this.sequelize.literal(
       `(CASE WHEN "state"='${OPEN}' THEN 1 ` +
       `WHEN "state"='${JUDGEMENT_PENDING}' THEN 2 ` +
       `WHEN "state"='${JUDGED}' THEN 3 ` +
+      `WHEN "state"='${CLOSED_AS_UNRESOLVED}' THEN 3 ` +
       `ELSE 5 END) AS "stateOrder"`,
     );
   }

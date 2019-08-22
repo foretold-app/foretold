@@ -181,7 +181,7 @@ module Query = [%graphql
         }
 
         closed: measurables(
-            states: [JUDGED]
+            states: [JUDGED, CLOSED_AS_UNRESOLVED]
             channelId: $channelId
             seriesId: $seriesId
             creatorId: $creatorId
@@ -213,20 +213,6 @@ let queryToComponent = (query, innerComponentFn) =>
 
 type measurableStates = Types.measurableState;
 
-type inputType('a) =
-  (
-    ~states: Js.Array.t(option(measurableStates)),
-    ~channelId: string=?,
-    ~seriesId: string=?,
-    ~creatorId: string=?,
-    ~first: int=?,
-    ~last: int=?,
-    ~after: string=?,
-    ~before: string=?,
-    unit
-  ) =>
-  'a;
-
 type direction = Primary.Connection.direction;
 
 let queryDirection =
@@ -237,10 +223,9 @@ let queryDirection =
       ~creatorId=?,
       ~pageLimit,
       ~direction,
-      ~fn: inputType('a),
       (),
     ) => {
-  let fn = fn(~seriesId?, ~channelId?, ~creatorId?, ~states);
+  let fn = Query.make(~seriesId?, ~channelId?, ~creatorId?, ~states);
   switch ((direction: direction)) {
   | None => fn(~first=pageLimit, ())
   | After(after) => fn(~first=pageLimit, ~after, ())
@@ -268,15 +253,7 @@ let component2 =
       ~direction: direction,
       ~innerComponentFn,
     ) => {
-  let query =
-    queryDirection(
-      ~channelId,
-      ~pageLimit,
-      ~direction,
-      ~states,
-      ~fn=Query.make,
-      (),
-    );
+  let query = queryDirection(~channelId, ~pageLimit, ~direction, ~states, ());
   componentMaker(query, innerComponentFn);
 };
 
@@ -288,7 +265,6 @@ let componentWithSeries =
       ~pageLimit,
       ~direction,
       ~states=[|Some(`OPEN)|],
-      ~fn=Query.make,
       (),
     );
   componentMaker(query, innerComponentFn);
@@ -302,7 +278,6 @@ let componentWithCreator =
       ~pageLimit,
       ~direction,
       ~states=[|Some(`OPEN)|],
-      ~fn=Query.make,
       (),
     );
   componentMaker(query, innerComponentFn);

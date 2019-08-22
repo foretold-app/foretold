@@ -74,22 +74,22 @@ module LoadedAndUnselected = {
                ]),
              ]>
              {stateLink(
-                `OPEN,
+                [|`OPEN|],
                 "Open",
                 r.openTotal,
-                query.state == Some(`OPEN),
+                query.state == Some([|`OPEN|]),
               )}
              {stateLink(
-                `JUDGEMENT_PENDING,
+                [|`JUDGEMENT_PENDING|],
                 "Pending Resolution",
                 r.pendingTotal,
-                query.state == Some(`JUDGEMENT_PENDING),
+                query.state == Some([|`JUDGEMENT_PENDING|]),
               )}
              {stateLink(
-                `JUDGED,
+                [|`JUDGED, `CLOSED_AS_UNRESOLVED|],
                 "Closed",
                 r.closedTotal,
-                query.state == Some(`JUDGED),
+                query.state == Some([|`JUDGED, `CLOSED_AS_UNRESOLVED|]),
               )}
            </Div>
          | _ => "Error" |> ste

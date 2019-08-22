@@ -2,19 +2,10 @@ const graphql = require('graphql');
 const { resolver, DateType } = require('graphql-sequelize');
 
 const models = require('../models');
-const { MEASURABLE_STATE } = require('../models/enums/measurable-state');
 const resolvers = require('../resolvers');
 
 const { measurableValueType } = require('./enums/measurable-value-type');
-
-const measurableState = new graphql.GraphQLEnumType({
-  name: 'measurableState',
-  values: {
-    [MEASURABLE_STATE.OPEN]: { value: MEASURABLE_STATE.OPEN },
-    [MEASURABLE_STATE.JUDGED]: { value: MEASURABLE_STATE.JUDGED },
-    [MEASURABLE_STATE.JUDGEMENT_PENDING]: { value: MEASURABLE_STATE.JUDGEMENT_PENDING },
-  }
-});
+const { measurableState } = require('./enums/measurable-state');
 
 const measurable = new graphql.GraphQLObjectType({
   name: 'Measurable',

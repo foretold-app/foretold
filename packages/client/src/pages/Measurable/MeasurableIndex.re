@@ -22,14 +22,7 @@ let make =
       ~itemsPerPage: int=20,
       ~layout,
     ) => {
-  let loadData =
-    load3Queries(
-      channelId,
-      [|
-        searchParams.state |> E.O.toExn("This should not have been possible."),
-      |],
-      itemsPerPage,
-    );
+  let loadData = load3Queries(channelId, searchParams.state, itemsPerPage);
 
   loadData(
     ((reducerParams, channelQuery, seriesQuery, measurablesStateStatsQuery)) => {

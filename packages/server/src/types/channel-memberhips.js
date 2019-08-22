@@ -4,6 +4,7 @@ const resolvers = require('../resolvers');
 
 const { CHANNEL_MEMBERSHIP_ROLES } = require('../models/enums/channel-membership-roles');
 
+// @todo: move to enums
 const role = new graphql.GraphQLEnumType({
   name: 'ChannelMembershipRoles',
   values: {
@@ -12,6 +13,7 @@ const role = new graphql.GraphQLEnumType({
   },
 });
 
+// @todo: move to enums
 const roleOutput = new graphql.GraphQLEnumType({
   name: 'ChannelMembershipRolesOutput',
   values: {

@@ -25,7 +25,7 @@ let fromString = (r: string): query => {
   let state =
     switch (keyValuePairs |> KeyValuePairs.get("state")) {
     | Some(state) => stateFromString(state)
-    | _ => [||]
+    | _ => [|`OPEN|]
     };
   make(Some(state));
 };

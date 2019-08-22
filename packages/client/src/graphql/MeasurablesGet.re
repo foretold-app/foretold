@@ -181,7 +181,7 @@ module Query = [%graphql
         }
 
         closed: measurables(
-            states: [JUDGED]
+            states: [JUDGED, CLOSED_AS_UNRESOLVED]
             channelId: $channelId
             seriesId: $seriesId
             creatorId: $creatorId

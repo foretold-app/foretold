@@ -5,16 +5,20 @@ and **Objects**.
 Some solutions are made to give ability in the future to grow application and
 prepare it to work in multi-instance mode (DB - PostgreSQL, Data/Models Layers,
 Async/Sync parts, Notifications Subsystem and so on), to be ready to scale application
-by X, Y, Z axes of scaling model. Where X axis scaling is horizontal duplication 
-(scale by cloning), Y axis - functional decomposition (splitting different things),
-Z axis - data partitioning (scale by splitting similar things).
+**by X, Y, Z** axes of scaling model. Where **X axis** scaling is horizontal duplication 
+(scale by cloning), **Y axis** - functional decomposition (splitting different things),
+**Z axis** - data partitioning (scale by splitting similar things).
 
 Talking about Z axis. In DB application uses "UUIDV4" as ID of Objects. It is not
 sortable since it is not sequence, but it is useful in splitting data by 
 shards. Maybe in the future we are going to use "MongoDB Object ID" as ID of objects
-right on PostreSQL side. But do not forget that to migrate an old data we should
+right on PostreSQL side. But do not forget that to migrate old data we should
 order it with "createdAt" field and only then give each object new ID (if it will
 need).
+
+Using UUID as ID of DB tables rows is a brilliant idea. Because each row
+represents Objects. Hence each Object has its own an identificator (ID). Do really
+like this aspect.
 
 ### Application Flows
 1. "Measurables" have "states". Some part of the app moves "Open" measurables

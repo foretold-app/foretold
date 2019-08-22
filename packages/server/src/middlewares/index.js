@@ -39,6 +39,13 @@ const middlewares = {
     },
   },
 
+  Agent: {
+    Preference: async (resolve, root, args, context, info) => {
+      const result = await resolve(root, args, context, info);
+      return (result instanceof Error) ? null : result;
+    },
+  },
+
   Measurable: {
     permissions: async (resolve, root, args, context, info) => {
       await setContextMeasurableByRoot(root, args, context, info);

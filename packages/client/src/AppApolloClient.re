@@ -29,8 +29,10 @@ let isUnauthenticated = error =>
                )
             |> E.O.default(false)
           )
+       |> E.O.fmap(_ => true)
+       |> E.O.default(false)
      )
-  |> E.O.toBool;
+  |> E.O.default(false);
 
 let errorLink =
   ApolloLinks.apolloLinkOnError(error => {

@@ -253,11 +253,6 @@ let component2 =
       ~direction: direction,
       ~innerComponentFn,
     ) => {
-  let states =
-    switch (states) {
-    | [|Some(`JUDGED)|] => [|Some(`JUDGED), Some(`CLOSED_AS_UNRESOLVED)|]
-    | s => s
-    };
   let query = queryDirection(~channelId, ~pageLimit, ~direction, ~states, ());
   componentMaker(query, innerComponentFn);
 };

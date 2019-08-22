@@ -60,7 +60,7 @@ const agent = new graphql.GraphQLObjectType({
       resolve: require('../resolvers/channels').all,
     },
 
-    // @todo: security
+    // OK
     channelMemberships: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(channelMemberships.channelsMembership)),
       resolve: resolvers.channelMemberships.allByAgentId,

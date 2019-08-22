@@ -22,7 +22,7 @@ function preferenceIsOwnedByCurrentAgentRule(root, args, context, info) {
   console.log(
     `\x1b[33m Rule Preferences (preferenceIsOwnedByCurrentAgentRule) ` +
     `agentId "${agentId}", contextAgentId "${contextAgentId}", ` +
-    `result = "${result}"\x1b[0m`
+    `result = "${result}".\x1b[0m`
   );
 
   return result;

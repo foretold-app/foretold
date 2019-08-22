@@ -18,7 +18,7 @@ function measurableIsOwnedByCurrentAgentRule(root, args, context, info) {
 
   console.log(
     `\x1b[33m Rule Measurables (measurableIsOwnedByCurrentAgent) ` +
-    `"${result}" \x1b[0m`
+    `"${result}".\x1b[0m`
   );
 
   return result;
@@ -36,7 +36,7 @@ function measurableIsArchivedRule(root, args, context, info) {
 
   console.log(
     `\x1b[33m Rule Measurables ` +
-    `(measurableIsArchivedRule) "${result}"\x1b[0m`
+    `(measurableIsArchivedRule) "${result}".\x1b[0m`
   );
 
   return result;

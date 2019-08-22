@@ -17,7 +17,7 @@ function botBelongsToCurrentUserRule(root, args, context, info) {
 
   console.log(
     `\x1b[33m Rule Bots (botBelongsToCurrentUser), ` +
-    `result = "${result}"\x1b[0m`
+    `result = "${result}".\x1b[0m`
   );
 
   return result;

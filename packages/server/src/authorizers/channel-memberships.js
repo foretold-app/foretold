@@ -20,7 +20,7 @@ function currentAgentIsChannelAdminRule(root, args, context) {
 
   console.log(
     `\x1b[33m Rule Channel Memberships (currentAgentIsChannelAdminRule) ` +
-    `role "${role}" = "${roleName}", result = "${result}"\x1b[0m`
+    `role "${role}" = "${roleName}", result = "${result}".\x1b[0m`
   );
 
   return result;
@@ -42,7 +42,7 @@ function currentAgentIsChannelViewerRule(root, args, context) {
 
   console.log(
     `\x1b[33m Rule Channel Memberships (currentAgentIsChannelViewerRule) ` +
-    `role "${role}" = "${roleName}", result = "${result}"\x1b[0m`
+    `role "${role}" = "${roleName}", result = "${result}".\x1b[0m`
   );
 
   return result;
@@ -64,7 +64,7 @@ function channelHasMembershipWithCurrentAgentRule(root, args, context, info) {
   console.log(
     `\x1b[33m Rule Channel Memberships ` +
     `(channelHasMembershipWithCurrentAgentRule) ` +
-    `agentId "${agentId}", result = "${result}"\x1b[0m`
+    `agentId "${agentId}", result = "${result}".\x1b[0m`
   );
 
   return result;
@@ -86,7 +86,7 @@ function channelHasMultipleAdminsRule(root, args, context, info) {
 
   console.log(
     `\x1b[33m Rule Channel Memberships ` +
-    `(channelHasMultipleAdminsRule) result = "${result}"\x1b[0m`
+    `(channelHasMultipleAdminsRule) result = "${result}".\x1b[0m`
   );
 
   return result;
@@ -110,7 +110,7 @@ function membershipBelongsToCurrentAgentRule(root, args, context, info) {
     `\x1b[33m Rule Channel Memberships ` +
     `(membershipBelongsToCurrentAgentRule) objectAgentId = ` +
     `"${objectAgentId}", subjectAgentId = "${subjectAgentId}", ` +
-    `result = "${result}"\x1b[0m`
+    `result = "${result}".\x1b[0m`
   );
 
   return result;
@@ -133,7 +133,7 @@ function membershipHasAdminRoleRule(root, args, context, info) {
   console.log(
     `\x1b[33m Rule Channel Memberships ` +
     `(membershipHasAdminRoleRule) ` +
-    `role = "${role}", result = "${result}"\x1b[0m`
+    `role = "${role}", result = "${result}".\x1b[0m`
   );
 
   return result;

@@ -15,9 +15,9 @@ const { measurableIsArchived } = require('./measurables');
 const { botBelongsToCurrentUser } = require('./bots');
 const { userIsOwnedByCurrentAgent } = require('./users');
 const { preferenceIsOwnedByCurrentAgent } = require('./preferences');
-const { agentIdFromRootId} = require('./users');
-const { agentIdFromContext} = require('./users');
-const { agentIdFromRootAgentId} = require('./users');
+const { agentIdFromRootId} = require('./predicates');
+const { agentIdFromContext} = require('./predicates');
+const { agentIdFromRootAgentId} = require('./predicates');
 
 const currentAgentIsApplicationAdminOrChannelAdmin = or(
   currentAgentIsApplicationAdmin,

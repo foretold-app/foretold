@@ -1,10 +1,6 @@
 const _ = require('lodash');
 const { rule } = require('graphql-shield');
 
-const agentIdFromRootId = (root, args, context, info) => _.get(root, 'id');
-const agentIdFromContext = (root, args, context, info) => _.get(context, 'userAsObject.agentId');
-const agentIdFromRootAgentId = (root, args, context, info) => _.get(root, 'agentId');
-
 /**
  * @param {function} predicateAgentId
  * @return {function(*=, *=, *=, *=): boolean}
@@ -48,8 +44,5 @@ const userIsOwnedByCurrentAgent = (predicateAgentId) => {
 };
 
 module.exports = {
-  agentIdFromRootId,
-  agentIdFromRootAgentId,
-  agentIdFromContext,
   userIsOwnedByCurrentAgent,
 };

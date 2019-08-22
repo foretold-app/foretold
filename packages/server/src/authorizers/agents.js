@@ -6,9 +6,9 @@ const { rule } = require('graphql-shield');
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} info
- * @return {Promise<boolean>}
+ * @return {boolean}
  */
-async function currentAgentIsAuthenticatedRule(root, args, context, info) {
+function currentAgentIsAuthenticatedRule(root, args, context, info) {
   const agentId = _.get(context, 'agent.id');
   const result = !!agentId;
 
@@ -25,9 +25,9 @@ async function currentAgentIsAuthenticatedRule(root, args, context, info) {
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} info
- * @return {Promise<boolean>}
+ * @return {boolean}
  */
-async function currentAgentIsApplicationAdminRule(root, args, context, info) {
+function currentAgentIsApplicationAdminRule(root, args, context, info) {
   const isAdmin = _.get(context, 'agent.isAdmin', false);
   const result = !!isAdmin;
 

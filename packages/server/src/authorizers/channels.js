@@ -6,9 +6,9 @@ const { rule } = require('graphql-shield');
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} info
- * @return {Promise<boolean>}
+ * @return {boolean}
  */
-async function channelIsPublicRule(root, args, context, info) {
+function channelIsPublicRule(root, args, context, info) {
   const result = !!_.get(context, 'channel.isPublic');
 
   console.log(

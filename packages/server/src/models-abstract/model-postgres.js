@@ -193,16 +193,17 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @param {string[]} statesIn
-   * @param {Models.ObjectID} channelIdIn
+   * @param {string[] | null} statesIn
+   * @param {Models.ObjectID | null} channelIdIn
    * @param {string} [name]
    * @return {string}
    */
   _withinMeasurables(statesIn, channelIdIn, name = '') {
     const cond = [];
-    const states = statesIn.map(state => `'${state}'`).join(', ');
+    const states = _.isArray(statesIn)
+      ? statesIn.map(state => `'${state}'`).join(', ') : [];
 
-    if (states.length > 0) cond.push(`("states" IN (${states}))`);
+    if (states.length > 0) cond.push(`("state" IN (${states}))`);
     if (!!channelIdIn) cond.push(`("channelId" = '${channelIdIn}')`);
 
     const where = cond.length > 0 ? `WHERE (${cond.join(' AND ')})` : '';

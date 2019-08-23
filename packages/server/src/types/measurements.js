@@ -85,7 +85,12 @@ const measurement = new graphql.GraphQLObjectType({
     taggedMeasurementId: { type: graphql.GraphQLString },
     iAmOwner: require('./common').iAmOwner,
     valueText: { type: graphql.GraphQLString },
-    measurementScoreSet: { type: require('./measurements').measurementScoreSet },
+    measurementScoreSet: {
+      type: require('./measurements').measurementScoreSet,
+      resolve: () => ({
+        primaryPointScore: null
+      }),
+    },
 
     Measurable: {
       type: require('./measurables').measurable,

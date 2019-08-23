@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const assert = require('assert');
 const { Op } = require('sequelize');
 
 const models = require('../models');
@@ -58,6 +59,7 @@ class ModelPostgres extends Model {
    * @return {string}
    */
   _publicAndJoinedChannels(agentId, name = '') {
+    assert(!!agentId, 'Agent ID is required.');
     return `(
       /* P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
@@ -112,6 +114,7 @@ class ModelPostgres extends Model {
    * @return {string}
    */
   _joinedChannels(agentId, name = '') {
+    assert(!!agentId, 'Agent ID is required.');
     return `(
       /* J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
@@ -143,6 +146,7 @@ class ModelPostgres extends Model {
    * @return {string}
    */
   _measurablesInPublicAndJoinedChannels(agentId, name = '') {
+    assert(!!agentId, 'Agent ID is required.');
     return `(
       /* Measurables in Public and Joined Channels (${name}) */
       WITH channelIds AS (${this._publicAndJoinedChannels(agentId, name)})
@@ -153,28 +157,63 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @param {Models.ObjectID} [agentId]
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
-  _measurablesInPublicChannelsLiteral(agentId, name = '') {
+  _measurablesInPublicChannelsLiteral(name = '') {
     return this.literal(
-      this._measurablesInPublicChannels(agentId, name),
+      this._measurablesInPublicChannels(name),
     );
   }
 
   /**
    * @protected
-   * @param {Models.ObjectID} [agentId]
    * @param {string} [name]
    * @return {string}
    */
-  _measurablesInPublicChannels(agentId, name = '') {
+  _measurablesInPublicChannels(name = '') {
     return `(
       /* Measurables in Public Channels (${name}) */
       WITH channelIds AS (${this._publicChannels(name)})
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
+    )`;
+  }
+
+  /**
+   * @protected
+   * @param {string[]} statesIn
+   * @param {Models.ObjectID} channelIdIn
+   * @param {string} [name]
+   * @return {Sequelize.literal}
+   */
+  _withinMeasurablesLiteral(statesIn, channelIdIn, name = '') {
+    return this.literal(
+      this._withinMeasurables(statesIn, channelIdIn, name),
+    );
+  }
+
+  /**
+   * @protected
+   * @param {string[] | null} statesIn
+   * @param {Models.ObjectID | null} channelIdIn
+   * @param {string} [name]
+   * @return {string}
+   */
+  _withinMeasurables(statesIn, channelIdIn, name = '') {
+    const cond = [];
+    const states = _.isArray(statesIn)
+      ? statesIn.map(state => `'${state}'`).join(', ') : [];
+
+    if (states.length > 0) cond.push(`("state" IN (${states}))`);
+    if (!!channelIdIn) cond.push(`("channelId" = '${channelIdIn}')`);
+
+    const where = cond.length > 0 ? `WHERE (${cond.join(' AND ')})` : '';
+
+    return `(
+      /* Within Measurables (${name}) */
+      SELECT "id" FROM "Measurables"
+      ${where}
     )`;
   }
 
@@ -256,7 +295,6 @@ class ModelPostgres extends Model {
       where[this.and].push({
         measurableId: {
           [this.in]: this._measurablesInPublicChannelsLiteral(
-            restrictions.agentId,
             'Restrictions',
           ),
         },
@@ -289,6 +327,12 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * If you define filters in the generic type Filter
+   * then write code only in this parent method.
+   * Do not place pieces of code in child classes.
+   * Since all child classes should have access to these
+   * filters.
+   *
    * @protected
    * Extend this method in child classes.
    * @param {object} [where]
@@ -367,6 +411,44 @@ class ModelPostgres extends Model {
       where.creatorId = filter.creatorId;
     }
 
+    // OK?
+    if (_.has(filter, 'excludeChannelId')) {
+      where[this.and].push({
+        id: {
+          [this.notIn]: this._agentsIdsLiteral(filter.excludeChannelId),
+        },
+      });
+    }
+
+    if (_.has(filter, 'types')) {
+      where[this.and].push({
+        type: {
+          [this.in]: filter.types,
+        },
+      });
+    }
+
+    // OK?
+    if (_.has(filter, 'sentAt')) {
+      where[this.and].push({
+        sentAt: filter.sentAt,
+      });
+    }
+
+    if (_.has(filter, 'notificationId')) {
+      where[this.and].push({
+        sentAt: filter.notificationId,
+      });
+    }
+
+    if (_.has(filter, 'attemptCounterMax')) {
+      where[this.and].push({
+        attemptCounter: {
+          [this.lt]: filter.attemptCounterMax,
+        },
+      });
+    }
+
     return where;
   }
 
@@ -409,6 +491,16 @@ class ModelPostgres extends Model {
       where[this.and].push({
         [as]: {
           [this.in]: this._publicAndJoinedChannelsLiteral(agentId, name),
+        },
+      });
+    }
+
+    // OK
+    if (abstractions.withinMeasurables) {
+      const { as, states, channelId } = abstractions.withinMeasurables;
+      where[this.and].push({
+        [as]: {
+          [this.in]: this._withinMeasurablesLiteral(states, channelId, name),
         },
       });
     }

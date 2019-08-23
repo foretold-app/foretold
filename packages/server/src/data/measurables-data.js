@@ -2,7 +2,6 @@ const _ = require('lodash');
 
 const notifications = require("../lib/notifications");
 const { MeasurableModel } = require('../models-abstract');
-const { Restrictions } = require('../models-abstract/classes/restrictions');
 const { Params } = require('./classes/params');
 
 const { DataBase } = require('./data-base');
@@ -70,32 +69,6 @@ class MeasurablesData extends DataBase {
     const measurable = await this.getOne(params);
     measurable && notifications.updateNotification(measurable, creator, data);
     return measurable && measurable.update(data);
-  }
-
-  /**
-   * @todo: move aspects down into Model Layer
-   * @todo: fix interface (params*, query, options*)
-   * @public
-   * @deprecated: use getOne
-   * @param {Models.ObjectID} id
-   * @param {object} options
-   * @param {Models.ObjectID} options.agentId
-   * @return {Promise<*>}
-   */
-  async getOne2(id, options = {}) {
-    const restrictions = 'agentId' in options ? {
-      channelId: {
-        [this.model.Op.in]: this.model._publicAndJoinedChannelsLiteral(
-          options.agentId,
-        ),
-      },
-    } : {};
-    return this.models.Measurable.findOne({
-      where: {
-        id,
-        ...restrictions,
-      },
-    });
   }
 
   /**

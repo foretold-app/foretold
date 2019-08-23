@@ -14,37 +14,6 @@ class AgentNotificationModel extends ModelPostgres {
     });
   }
 
-
-  /**
-   * @protected
-   * @param {object} [where]
-   * @param {Layers.AbstractModelsLayer.filter} [filter]
-   */
-  applyFilter(where = {}, filter = {}) {
-    super.applyFilter(where, filter);
-
-    if (_.has(filter, 'sentAt')) {
-      where[this.and].push({
-        sentAt: filter.sentAt,
-      });
-    }
-
-    if (_.has(filter, 'notificationId')) {
-      where[this.and].push({
-        sentAt: filter.notificationId,
-      });
-    }
-
-    if (_.has(filter, 'attemptCounterMax')) {
-      where[this.and].push({
-        attemptCounter: {
-          [this.lt]: filter.attemptCounterMax,
-        },
-      });
-    }
-
-    return where;
-  }
 }
 
 module.exports = {

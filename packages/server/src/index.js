@@ -12,6 +12,7 @@ const emitter = require('./async/emitter');
 const { apolloServer } = require('./apollo-server');
 
 {
+  // Makes sync flows possible
   runJobs();
   runListeners();
 }
@@ -20,13 +21,14 @@ const app = express();
 app.use(cors());
 
 {
+  // Returns the client's files
   const fallbackFile = path.resolve(__dirname, '../../client/dist/index.html');
   const distDir = path.resolve(__dirname, '../../client/dist');
 
   console.log('Fallback file', fallbackFile);
   console.log('Dist dir', distDir);
 
-  // Returns all routes excluding "/graphql" as static files
+  // Returns all routes excluding "/graphql", "/hooks", "/env" as static files
   // or returns fallback page.
   app.get(/^((?!(graphql|hooks|env)).)*$/,
     express.static(distDir),
@@ -49,11 +51,13 @@ app.use(cors());
 }
 
 {
+  // Supporting of GitHub integration
   const { app: subApp } = require('./github/app');
   app.use('/hooks', subApp);
 }
 
 {
+  // Supporting of Graphql server
   app.use(bodyParser.graphql());
   apolloServer.applyMiddleware({ app });
 }

@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const assert = require('assert');
 
 const models = require('../models');
 const { BrierScore } = require('../lib/brier-score');
@@ -35,11 +36,12 @@ class MeasurementModel extends ModelPostgres {
    * @return {string}
    */
   _taggedMeasurements(agentId, name = '') {
+    assert(!!agentId, 'Agent ID is required.');
     return `(
-      /* T͟a͟g͟g͟e͟d͟ ͟M͟e͟a͟s͟u͟r͟e͟m͟e͟n͟t͟s͟ (${name}) */
+      /* T͟a͟g͟g͟e͟d͟ ͟M͟e͟a͟s͟u͟r͟e͟m͟e͟n͟t͟s͟ (${ name }) */
       SELECT "taggedMeasurementId"
       FROM "Measurements"
-      WHERE "agentId" = '${agentId}'
+      WHERE "agentId" = '${ agentId }'
       AND "taggedMeasurementId" IS NOT NULL
     )`;
   }
@@ -87,12 +89,14 @@ class MeasurementModel extends ModelPostgres {
    * @return {string}
    */
   _binaryPercentages(agentId) {
+    assert(!!agentId, 'Agent ID is required.');
+
     const agentMeasurements =
       this._agentMeasurementsJudgedPercentageCompetitive(agentId);
 
     return `(
       /* B͟i͟n͟a͟r͟y͟ ͟P͟e͟r͟c͟e͟n͟t͟a͟g͟e͟s͟ */
-      WITH "AgentMeasurements" AS ${agentMeasurements}
+      WITH "AgentMeasurements" AS ${ agentMeasurements }
       SELECT 
         "AgentMeasurements".*, 
         "Measurements"."value" ->> 'data' as "questionResult"
@@ -112,6 +116,7 @@ class MeasurementModel extends ModelPostgres {
    * @return {string}
    */
   _agentMeasurementsJudgedPercentageCompetitive(agentId) {
+    assert(!!agentId, 'Agent ID is required.');
     return `(
       /* R͟e͟t͟u͟r͟n͟s͟ ͟a͟r͟r͟a͟y͟s͟ ͟o͟f͟ ͟p͟r͟e͟d͟i͟c͟t͟i͟o͟n͟s͟ */
       SELECT "Measurements"."measurableId",
@@ -123,7 +128,7 @@ class MeasurementModel extends ModelPostgres {
       WHERE "Measurables"."state" = 'JUDGED'
         AND "Measurables"."valueType" = 'PERCENTAGE'
         AND "Measurements"."competitorType" = 'COMPETITIVE'
-        AND "Measurements"."agentId" = '${agentId}'
+        AND "Measurements"."agentId" = '${ agentId }'
       GROUP BY "Measurements"."measurableId", "Measurements"."agentId"
     )`;
   }

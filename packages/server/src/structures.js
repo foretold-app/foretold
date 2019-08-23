@@ -1,7 +1,11 @@
+const _ = require('lodash');
 const assert = require('assert');
 
 /**
- * Look at this literal as on a structure.
+ * Look at these literals as on structures.
+ */
+
+/**
  * @param {Models.ObjectID} agentId
  * @return {Layers.withinJoinedChannels}
  */
@@ -49,4 +53,18 @@ module.exports.withinPublicChannelsByChannelId = () => {
  */
 module.exports.withinPublicChannelsById = () => {
   return { as: 'id' };
+};
+
+/**
+ * @param {string[] | null} states
+ * @param {Models.ObjectID | null} channelId
+ * @return {Layers.withinMeasurables | null}
+ */
+module.exports.withinMeasurables = (states, channelId) => {
+  if (!!states) assert(_.isArray(states), 'States should be an array.');
+  if (!_.size(states) && !channelId) return null;
+  const structure = { as: 'measurableId' };
+  if (!!states) structure.states = states;
+  if (!!channelId) structure.channelId = channelId;
+  return structure;
 };

@@ -23,7 +23,14 @@ describe('Measurements Resolver', () => {
     it('returns measurements', () => {
       return measurements.all(root, args, context, info).then((result) => {
         expect(data.measurements.getConnection).toHaveBeenCalledWith(
-          { "agentId": "agentId2", "measurableId": "measurableId1" },
+          {
+            "agentId": "agentId2",
+            "competitorType": undefined,
+            "findInDateRange": undefined,
+            "measurableId": "measurableId1",
+            "notTaggedByAgent": undefined,
+            "withinMeasurables": null
+          },
           {
             "after": 3,
             "before": 4,
@@ -43,14 +50,15 @@ describe('Measurements Resolver', () => {
     const context = { agent: { id: 'agentId2' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurements, 'getOne2').mockReturnValue(
+      jest.spyOn(data.measurements, 'getOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('return a measurement', () => {
       return measurements.one(root, args, context, info).then((result) => {
-        expect(data.measurements.getOne2).toHaveBeenCalledWith(
-          'id1',
+        expect(data.measurements.getOne).toHaveBeenCalledWith(
+          { id: 'id1' },
+          {},
           { agentId: 'agentId2' },
         );
         expect(result).toEqual(true);

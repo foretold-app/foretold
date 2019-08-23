@@ -176,6 +176,12 @@ export namespace Schema {
 }
 
 export namespace Layers {
+  export type withinMeasurables = {
+    as: string,
+    states?: string[],
+    channelId?: Models.ObjectID,
+  }
+
   export type withinPublicChannels = {
     as: string,
   }
@@ -221,6 +227,7 @@ export namespace Layers {
       sentAt?: string | null,
 
       findInDateRange?: object, // @todo: Object? Give definition!
+      withinMeasurables?: withinMeasurables | null,
       withinPublicChannels?: withinPublicChannels | null,
       withinJoinedChannels?: withinJoinedChannels | null,
       withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
@@ -292,13 +299,15 @@ export namespace Layers {
     type data = object;
     type restrictions = {
       agentId?: Models.ObjectID,
-      isAdmin?: boolean,
-      channelIdAsId?: boolean,
       userId?: Models.ObjectID,
       channelId?: Models.ObjectID,
-      measurableId?: boolean,
       measuredByAgentId?: Models.ObjectID,
 
+      isAdmin?: boolean,
+      channelIdAsId?: boolean,
+      measurableId?: boolean,
+
+      withinMeasurables?: withinMeasurables | null,
       withinPublicChannels?: withinPublicChannels | null,
       withinJoinedChannels?: withinJoinedChannels | null,
       withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
@@ -324,9 +333,10 @@ export namespace Layers {
       notificationId?: string[],
       competitorType?: string[],
       states?: string[],
-
       attemptCounterMax?: number,
 
+      withinMeasurables?: withinMeasurables | null,
+      withinPublicChannels?: withinPublicChannels | null,
       withinJoinedChannels?: withinJoinedChannels | null,
       withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
 

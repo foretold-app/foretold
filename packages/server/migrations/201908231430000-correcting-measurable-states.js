@@ -6,7 +6,7 @@
 
 const sql = (state) => `
   WITH "unresolvedMeasurements" AS (
-      SELECT "id"
+      SELECT "measurableId"
       FROM "Measurements"
       WHERE "competitorType" = 'UNRESOLVED'
       ORDER BY "createdAt" DESC

@@ -3,8 +3,10 @@ const _ = require('lodash');
 const data = require('../data');
 
 const { Pagination } = require('../data/classes/pagination');
+const { Params } = require('../data/classes/params');
 const { Filter } = require('../data/classes/filter');
 const { Options } = require('../data/classes/options');
+const { Query } = require('../data/classes/query');
 
 const structures = require('../structures');
 
@@ -68,8 +70,17 @@ async function all(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function one(root, args, context, info) {
-  const agentId = _.get(context, 'agent.id');
-  return data.measurables.getOne2(args.id, { agentId });
+  const id = _.get(args, 'id');
+  const currentAgentId = _.get(context, 'agent.id');
+
+  const params = new Params({ id });
+  const query = new Query();
+  const options = new Options({
+    isAdmin: _.get(context, 'agent.isAdmin'),
+    agentId: currentAgentId,
+  });
+
+  return data.measurables.getOne(params, query, options);
 }
 
 /**

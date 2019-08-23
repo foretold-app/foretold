@@ -59,11 +59,16 @@ const schema = new graphql.GraphQLSchema({
         type: types.measurements.measurementsConnection,
         args: {
           ...types.common.connectionArguments,
+
+          // IDs
           measurableId: { type: graphql.GraphQLString },
           agentId: { type: graphql.GraphQLString },
+          channelId: { type: graphql.GraphQLString },
+          notTaggedByAgent: { type: graphql.GraphQLString },
+
           competitorType: { type: graphql.GraphQLList(types.measurementCompetitorType.measurementCompetitorType) },
           findInDateRange: { type: types.measurements.measurementsInDateRangeInput },
-          notTaggedByAgent: { type: graphql.GraphQLString },
+          measurableState: { type: graphql.GraphQLList(types.measurables.measurableState) },
         },
         resolve: resolvers.measurements.all,
       },

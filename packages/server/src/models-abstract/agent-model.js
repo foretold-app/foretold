@@ -1,3 +1,4 @@
+const assert = require('assert');
 const _ = require('lodash');
 
 const models = require('../models');
@@ -32,37 +33,11 @@ class AgentModel extends ModelPostgres {
    * @return {string}
    */
   _agentsIds(channelId) {
+    assert(!!channelId, 'Channel ID is required.');
     return `(
       SELECT "ChannelMemberships"."agentId" FROM "ChannelMemberships"
       WHERE "ChannelMemberships"."channelId" = '${channelId}'
     )`;
-  }
-
-  /**
-   * @protected
-   * @param {object} [where]
-   * @param {Layers.AbstractModelsLayer.filter} [filter]
-   */
-  applyFilter(where = {}, filter = {}) {
-    super.applyFilter(where, filter);
-
-    if (_.has(filter, 'excludeChannelId')) {
-      where[this.and].push({
-        id: {
-          [this.notIn]: this._agentsIdsLiteral(filter.excludeChannelId),
-        },
-      });
-    }
-
-    if (_.has(filter, 'types')) {
-      where[this.and].push({
-        type: {
-          [this.in]: filter.types,
-        },
-      });
-    }
-
-    return where;
   }
 }
 

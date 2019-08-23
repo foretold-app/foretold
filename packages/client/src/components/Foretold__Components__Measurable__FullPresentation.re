@@ -71,19 +71,18 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
                 ~direction=None,
                 ~innerComponentFn=(
                                     m:
-                                      option(
+                                      HttpResponse.t(
                                         Primary.Connection.t(
                                           Types.measurement,
                                         ),
                                       ),
                                   ) =>
-                m
-                |> E.O.React.fmapOrNull(
-                     (b: Primary.Connection.t(Types.measurement)) =>
-                     b.edges
-                     |> E.A.to_list
-                     |> Foretold__Components__Measurements__Table.make
-                   )
+                switch (m) {
+                | Success(m) =>
+                  m.edges
+                  |> E.A.to_list
+                  |> Foretold__Components__Measurements__Table.make
+                }
               )}
            </>
          </>;

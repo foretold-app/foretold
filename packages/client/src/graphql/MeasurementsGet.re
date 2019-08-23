@@ -255,7 +255,7 @@ let component =
       ~fn=Query.make(~measurableId, ~agentId=""),
       (),
     );
-  componentMaker(query, innerComponentFn);
+  componentMakerMissingOptional(query, innerComponentFn);
 };
 
 let componentWithAgent =

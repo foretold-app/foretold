@@ -15,7 +15,7 @@ module ReducerConfig = {
 
 module Reducer = PaginationReducerFunctor.Make(ReducerConfig);
 
-let component = ReasonReact.statelessComponent("ChannelFeedItems");
+let component = ReasonReact.statelessComponent("FeedItems");
 type pageParams = {id: string};
 
 let make =

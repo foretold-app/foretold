@@ -191,21 +191,6 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 type measurementEdges = Primary.Connection.edges(measurement);
 
-let queryToComponent = (query, innerComponentFn) =>
-  QueryComponent.make(~variables=query##variables, response =>
-    response.result
-    |> ApolloUtils.apolloResponseToResult
-    |> Rationale.Result.fmap(result =>
-         result##measurements
-         |> Rationale.Option.fmap(
-              Primary.Connection.fromJson(toMeasurement),
-            )
-         |> innerComponentFn
-       )
-    |> E.R.id
-  )
-  |> ReasonReact.element;
-
 type measurableStates = Types.measurableState;
 
 type inputType('a) =
@@ -228,17 +213,6 @@ let unpackResults = result =>
 let componentMaker = (query, innerComponentFn) =>
   QueryComponent.make(~variables=query##variables, response =>
     response.result
-    |> ApolloUtils.apolloResponseToResult
-    |> Rationale.Result.fmap(result =>
-         result |> unpackResults |> innerComponentFn
-       )
-    |> E.R.id
-  )
-  |> ReasonReact.element;
-
-let componentMakerMissingOptional = (query, innerComponentFn) =>
-  QueryComponent.make(~variables=query##variables, response =>
-    response.result
     |> HttpResponse.fromApollo
     |> HttpResponse.fmap(unpackResults)
     |> HttpResponse.optionalToMissing
@@ -255,7 +229,7 @@ let component =
       ~fn=Query.make(~measurableId, ~agentId=""),
       (),
     );
-  componentMakerMissingOptional(query, innerComponentFn);
+  componentMaker(query, innerComponentFn);
 };
 
 let componentWithAgent =
@@ -267,5 +241,5 @@ let componentWithAgent =
       ~fn=Query.make(~measurableId="", ~agentId),
       (),
     );
-  componentMakerMissingOptional(query, innerComponentFn);
+  componentMaker(query, innerComponentFn);
 };

@@ -201,16 +201,6 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 let unpackEdges = a =>
   a##measurables |> E.O.fmap(Primary.Connection.fromJson(toMeasurable));
 
-let queryToComponent = (query, innerComponentFn) =>
-  <QueryComponent variables=query##variables>
-    ...{o =>
-      o.result
-      |> ApolloUtils.apolloResponseToResult
-      |> E.R.fmap(unpackEdges ||> innerComponentFn)
-      |> E.R.id
-    }
-  </QueryComponent>;
-
 type measurableStates = Types.measurableState;
 
 type direction = Primary.Connection.direction;

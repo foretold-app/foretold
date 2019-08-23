@@ -3,7 +3,6 @@ const emitter = require('../async/emitter');
 
 const { AGENT_TYPE } = require('./enums/agent-type');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-type');
-const { MEASURABLE_STATE } = require('./enums/measurable-state');
 
 /**
  * Try to keep all "async" hooks in one place.

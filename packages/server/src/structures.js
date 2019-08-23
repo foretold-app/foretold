@@ -2,7 +2,10 @@ const _ = require('lodash');
 const assert = require('assert');
 
 /**
- * Look at this literal as on a structure.
+ * Look at these literals as on structures.
+ */
+
+/**
  * @param {Models.ObjectID} agentId
  * @return {Layers.withinJoinedChannels}
  */

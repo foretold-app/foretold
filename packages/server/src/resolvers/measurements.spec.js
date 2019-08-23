@@ -23,7 +23,14 @@ describe('Measurements Resolver', () => {
     it('returns measurements', () => {
       return measurements.all(root, args, context, info).then((result) => {
         expect(data.measurements.getConnection).toHaveBeenCalledWith(
-          { "agentId": "agentId2", "measurableId": "measurableId1" },
+          {
+            "agentId": "agentId2",
+            "competitorType": undefined,
+            "findInDateRange": undefined,
+            "measurableId": "measurableId1",
+            "notTaggedByAgent": undefined,
+            "withinMeasurables": null
+          },
           {
             "after": 3,
             "before": 4,

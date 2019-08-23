@@ -23,23 +23,15 @@ class Filter {
    * @param {Layers.DataSourceLayer.filter} [filter]
    */
   constructor(filter = {}) {
-    const common = [
+    const list = [
       'id',
-      'isArchived',
-      /** @type {Layers.withinJoinedChannels | null} */
-      'withinJoinedChannels',
-    ];
-    const agent = [
+      'isArchived', // string[] | null
+      'withinJoinedChannels', // Layers.withinJoinedChannels | null
       'excludeChannelId',
-      'types',
-    ];
-    const agentNotification = [
       'notificationId', // string
       'sentAt', // Date | null
       'attemptCounterMax', // number
-    ];
-
-    const list = [
+      'types', // string[] | null
       'type',
       'creatorId',
       'userId',
@@ -51,19 +43,23 @@ class Filter {
       'findInDateRange', // object
       'notTaggedByAgent', // string | null
       'states', // string[] | null
-      ...common,
-      ...agent,
-      ...agentNotification,
+      'measurableState', // string[] | null
     ];
-
     utils.extend(this.constructor.name, filter, list, this);
     utils.diff(this.constructor.name, filter, list);
   }
 
+  /**
+   * @public
+   * @returns {any}
+   */
   getSpacedLimit() {
     return _.get(this, 'findInDateRange.spacedLimit');
   }
 
+  /**
+   * @public
+   */
   inspect() {
     utils.inspect(this);
   }

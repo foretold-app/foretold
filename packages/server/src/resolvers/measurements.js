@@ -20,6 +20,7 @@ const { Options } = require('../data/classes/options');
  * @param {string} args.findInDateRange.endDate
  * @param {number} args.findInDateRange.spacedLimit
  * @param {string[]} args.competitorType
+ * @param {string[]} args.measurableState
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<*>}
@@ -27,10 +28,12 @@ const { Options } = require('../data/classes/options');
 async function all(root, args, context, info) {
   const filter = new Filter({
     measurableId: _.get(args, 'measurableId'),
+    // @todo: use predicates!
     agentId: _.get(args, 'agentId') || _.get(root, 'id'),
     competitorType: _.get(args, 'competitorType'),
     findInDateRange: _.get(args, 'findInDateRange'),
     notTaggedByAgent: _.get(args, 'notTaggedByAgent'),
+    measurableState: _.get(args, 'measurableState'),
   });
   const pagination = new Pagination(args);
   const options = new Options({

@@ -64,6 +64,7 @@ const schema = new graphql.GraphQLSchema({
           competitorType: { type: graphql.GraphQLList(types.measurementCompetitorType.measurementCompetitorType) },
           findInDateRange: { type: types.measurements.measurementsInDateRangeInput },
           notTaggedByAgent: { type: graphql.GraphQLString },
+          measurableState: { type: graphql.GraphQLList(types.measurables.measurableState) },
         },
         resolve: resolvers.measurements.all,
       },

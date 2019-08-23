@@ -228,6 +228,7 @@ export namespace Layers {
       states?: string[],
       isArchived?: string[],
       types?: string[],
+      measurableState?: string[],
     };
     type pagination = {
       limit?: number,

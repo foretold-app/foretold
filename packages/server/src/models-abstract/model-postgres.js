@@ -330,6 +330,7 @@ class ModelPostgres extends Model {
    * Do not place pieces of code in child classes.
    * Since all child classes should have access to these
    * filters.
+   *
    * @protected
    * Extend this method in child classes.
    * @param {object} [where]

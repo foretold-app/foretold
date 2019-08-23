@@ -50,14 +50,15 @@ describe('Measurements Resolver', () => {
     const context = { agent: { id: 'agentId2' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurements, 'getOne2').mockReturnValue(
+      jest.spyOn(data.measurements, 'getOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('return a measurement', () => {
       return measurements.one(root, args, context, info).then((result) => {
-        expect(data.measurements.getOne2).toHaveBeenCalledWith(
-          'id1',
+        expect(data.measurements.getOne).toHaveBeenCalledWith(
+          { id: 'id1' },
+          {},
           { agentId: 'agentId2' },
         );
         expect(result).toEqual(true);

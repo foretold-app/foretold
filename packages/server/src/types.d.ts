@@ -178,8 +178,8 @@ export namespace Schema {
 export namespace Layers {
   export type withinMeasurables = {
     as: string,
-    states: string[],
-    channelId: Models.ObjectID,
+    states?: string[],
+    channelId?: Models.ObjectID,
   }
 
   export type withinPublicChannels = {

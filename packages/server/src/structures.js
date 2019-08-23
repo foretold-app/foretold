@@ -56,12 +56,15 @@ module.exports.withinPublicChannelsById = () => {
 };
 
 /**
- * @param {string[]} states
- * @param {Models.ObjectID} channelId
+ * @param {string[] | null} states
+ * @param {Models.ObjectID | null} channelId
  * @return {Layers.withinMeasurables | null}
  */
 module.exports.withinMeasurables = (states, channelId) => {
   if (!!states) assert(_.isArray(states), 'States should be an array.');
   if (!_.size(states) && !channelId) return null;
-  return { as: 'measurableId', states, channelId };
+  const structure = { as: 'measurableId' };
+  if (!!states) structure.states = states;
+  if (!!channelId) structure.channelId = channelId;
+  return structure;
 };

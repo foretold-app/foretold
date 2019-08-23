@@ -25,57 +25,16 @@ class SeriesData extends DataBase {
   }
 
   /**
-   * @todo: move down
-   * @todo: fix interface (filter, pagination, options*)
-   * @public
-   * @deprecated: use getAll
-   * @param {object} [filter]
-   * @param {Models.ObjectID} [filter.agentId]
-   * @param {object} [_pagination]
-   * @param {object} [_options]
-   * @return {Promise<*>}
+   * @protected
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Layers.AbstractModelsLayer.restrictions}
    */
-  async getAll(filter = {}, _pagination = {}, _options = {}) {
-    const { channelId } = filter;
-
-    let where = {
-      // Restrictions
-      channelId: {
-        [this.model.Op.in]: this.SeriesModel._publicAndJoinedChannelsLiteral(
-          filter.agentId,
-        ),
-      },
+  _getDefaultRestrictions(options = {}) {
+    return {
+      channelId: true,
+      isAdmin: options.isAdmin,
+      agentId: options.agentId,
     };
-
-    if (channelId) {
-      // @todo: It breaks restrictions.
-      where.channelId = {
-        [this.model.Op.eq]: channelId,
-      };
-    }
-
-    return this.models.Series.findAll({ where });
-  }
-
-  /**
-   * @todo: move down
-   * @todo: fix interface (params, query, options)
-   * @public
-   * @deprecated: use getOne
-   * @param {Models.ObjectID} id
-   * @param {object} [options]
-   * @param {Models.ObjectID} [options.agentId]
-   * @return {Promise<*>}
-   */
-  async getOne(id, options = {}) {
-    return this.models.Series.findOne({
-      where: {
-        id,
-        channelId: {
-          [this.model.Op.in]: this.SeriesModel._publicAndJoinedChannelsLiteral(options.agentId),
-        },
-      },
-    });
   }
 }
 

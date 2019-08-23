@@ -50,3 +50,11 @@ module.exports.withinPublicChannelsByChannelId = () => {
 module.exports.withinPublicChannelsById = () => {
   return { as: 'id' };
 };
+
+/**
+ * @param {string[]} states
+ * @return {Layers.measurableState}
+ */
+module.exports.measurableStateByMeasurableId = (states) => {
+  return { as: 'measurableId', states };
+};

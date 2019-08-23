@@ -176,6 +176,11 @@ export namespace Schema {
 }
 
 export namespace Layers {
+  export type measurableState = {
+    as: string,
+    states: string[],
+  }
+
   export type withinPublicChannels = {
     as: string,
   }
@@ -293,13 +298,15 @@ export namespace Layers {
     type data = object;
     type restrictions = {
       agentId?: Models.ObjectID,
-      isAdmin?: boolean,
-      channelIdAsId?: boolean,
       userId?: Models.ObjectID,
       channelId?: Models.ObjectID,
-      measurableId?: boolean,
       measuredByAgentId?: Models.ObjectID,
 
+      isAdmin?: boolean,
+      channelIdAsId?: boolean,
+      measurableId?: boolean,
+
+      measurableState?: measurableState | null,
       withinPublicChannels?: withinPublicChannels | null,
       withinJoinedChannels?: withinJoinedChannels | null,
       withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
@@ -325,9 +332,10 @@ export namespace Layers {
       notificationId?: string[],
       competitorType?: string[],
       states?: string[],
-
       attemptCounterMax?: number,
 
+      measurableState?: measurableState | null,
+      withinPublicChannels?: withinPublicChannels | null,
       withinJoinedChannels?: withinJoinedChannels | null,
       withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
 

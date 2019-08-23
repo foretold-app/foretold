@@ -179,6 +179,33 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @protected
+   * @param {string[]} statesIn
+   * @param {string} [name]
+   * @return {Sequelize.literal}
+   */
+  _measurableStatesLiteral(statesIn, name = '') {
+    return this.literal(
+      this._measurableStates(statesIn, name),
+    );
+  }
+
+  /**
+   * @protected
+   * @param {string[]} statesIn
+   * @param {string} [name]
+   * @return {string}
+   */
+  _measurableStates(statesIn, name = '') {
+    const states = statesIn.map(state => `'${state}'`).join(', ');
+    return `(
+      /* Measurables With Specific States (${name}) */
+      SELECT "id" FROM "Measurables"
+      WHERE "states" IN (${states})
+    )`;
+  }
+
+  /**
    * @todo: To add mind map from Params to DB query.
    * @protected
    * @param {object} [where]
@@ -289,6 +316,11 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * If you define filters in the generic type Filter
+   * then write code only in this parent method.
+   * Do not place pieces of code in child classes.
+   * Since all child classes should have access to these
+   * filters.
    * @protected
    * Extend this method in child classes.
    * @param {object} [where]
@@ -367,6 +399,44 @@ class ModelPostgres extends Model {
       where.creatorId = filter.creatorId;
     }
 
+    // OK?
+    if (_.has(filter, 'excludeChannelId')) {
+      where[this.and].push({
+        id: {
+          [this.notIn]: this._agentsIdsLiteral(filter.excludeChannelId),
+        },
+      });
+    }
+
+    if (_.has(filter, 'types')) {
+      where[this.and].push({
+        type: {
+          [this.in]: filter.types,
+        },
+      });
+    }
+
+    // OK?
+    if (_.has(filter, 'sentAt')) {
+      where[this.and].push({
+        sentAt: filter.sentAt,
+      });
+    }
+
+    if (_.has(filter, 'notificationId')) {
+      where[this.and].push({
+        sentAt: filter.notificationId,
+      });
+    }
+
+    if (_.has(filter, 'attemptCounterMax')) {
+      where[this.and].push({
+        attemptCounter: {
+          [this.lt]: filter.attemptCounterMax,
+        },
+      });
+    }
+
     return where;
   }
 
@@ -409,6 +479,16 @@ class ModelPostgres extends Model {
       where[this.and].push({
         [as]: {
           [this.in]: this._publicAndJoinedChannelsLiteral(agentId, name),
+        },
+      });
+    }
+
+    // OK
+    if (abstractions.measurableState) {
+      const { as, states } = abstractions.measurableState;
+      where[this.and].push({
+        [as]: {
+          [this.in]: this._measurableStatesLiteral(states, name),
         },
       });
     }

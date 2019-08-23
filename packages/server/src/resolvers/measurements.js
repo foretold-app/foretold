@@ -6,6 +6,8 @@ const { Pagination } = require('../data/classes/pagination');
 const { Filter } = require('../data/classes/filter');
 const { Options } = require('../data/classes/options');
 
+const structures = require('../structures');
+
 /**
  * @todo: update input of getAll
  * @param {*} root
@@ -26,14 +28,19 @@ const { Options } = require('../data/classes/options');
  * @returns {Promise<*>}
  */
 async function all(root, args, context, info) {
+  const measurableState$ = _.get(args, 'measurableState');
+
+  const measurableState = !!measurableState$
+  ? structures.measurableStateByMeasurableId(measurableState$) : null;
+
   const filter = new Filter({
+    measurableState,
     measurableId: _.get(args, 'measurableId'),
     // @todo: use predicates!
     agentId: _.get(args, 'agentId') || _.get(root, 'id'),
     competitorType: _.get(args, 'competitorType'),
     findInDateRange: _.get(args, 'findInDateRange'),
     notTaggedByAgent: _.get(args, 'notTaggedByAgent'),
-    measurableState: _.get(args, 'measurableState'),
   });
   const pagination = new Pagination(args);
   const options = new Options({

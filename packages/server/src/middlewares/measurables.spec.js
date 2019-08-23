@@ -6,7 +6,7 @@ describe('Measurables Middleware', () => {
   describe('setContextMeasurable() sets measurable and channelId into context ', () => {
     const measurableObj = { channelId: 'channelId1' };
     beforeEach(() => {
-      jest.spyOn(data.measurables, 'getOne2').mockReturnValue(
+      jest.spyOn(data.measurables, 'getOne').mockReturnValue(
         Promise.resolve(measurableObj),
       );
     });
@@ -17,8 +17,8 @@ describe('Measurables Middleware', () => {
       const context = {};
       const info = {};
       return setContextMeasurable(root, args, context, info).then((result) => {
-        expect(data.measurables.getOne2)
-          .toHaveBeenCalledWith('measurableId1');
+        expect(data.measurables.getOne)
+          .toHaveBeenCalledWith({ id: 'measurableId1' });
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
       });
@@ -30,8 +30,8 @@ describe('Measurables Middleware', () => {
       const context = {};
       const info = {};
       return setContextMeasurable(root, args, context, info).then((result) => {
-        expect(data.measurables.getOne2)
-          .toHaveBeenCalledWith('measurableId1');
+        expect(data.measurables.getOne)
+          .toHaveBeenCalledWith({ id: 'measurableId1' });
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
       });
@@ -43,8 +43,8 @@ describe('Measurables Middleware', () => {
       const context = { measurableId: 'measurableId1' };
       const info = {};
       return setContextMeasurable(root, args, context, info).then((result) => {
-        expect(data.measurables.getOne2)
-          .toHaveBeenCalledWith('measurableId1');
+        expect(data.measurables.getOne)
+          .toHaveBeenCalledWith({ id: 'measurableId1' });
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
       });
@@ -56,8 +56,8 @@ describe('Measurables Middleware', () => {
       const context = {};
       const info = {};
       return setContextMeasurable(root, args, context, info).then((result) => {
-        expect(data.measurables.getOne2)
-          .toHaveBeenCalledWith('measurableId1');
+        expect(data.measurables.getOne)
+          .toHaveBeenCalledWith({ id: 'measurableId1' });
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
       });

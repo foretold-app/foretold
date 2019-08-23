@@ -53,15 +53,16 @@ describe('Measurables Resolvers', () => {
     const context = { agent: { id: 'agentId2' } };
     const info = {};
     beforeEach(() => {
-      jest.spyOn(data.measurables, 'getOne2').mockReturnValue(
+      jest.spyOn(data.measurables, 'getOne').mockReturnValue(
         Promise.resolve(true),
       );
     });
     it('returns a measurable', () => {
       return measurables.one(root, args, context, info).then((result) => {
-        expect(data.measurables.getOne2).toHaveBeenCalledWith(
-          'id1',
+        expect(data.measurables.getOne).toHaveBeenCalledWith(
+          { id: 'id1' },
           { "agentId": "agentId2" },
+          { "agentId": "agentId2", "isAdmin": undefined }
         );
         expect(result).toBe(true);
       });

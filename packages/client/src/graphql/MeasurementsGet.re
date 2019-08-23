@@ -221,24 +221,18 @@ let componentMaker = (query, innerComponentFn) =>
   |> ReasonReact.element;
 
 let component =
-    (~measurableId, ~pageLimit, ~direction: direction, ~innerComponentFn) => {
+    (
+      ~measurableId=None,
+      ~agentId=None,
+      ~pageLimit,
+      ~direction: direction,
+      ~innerComponentFn,
+    ) => {
   let query =
     queryDirection(
       ~pageLimit,
       ~direction,
-      ~fn=Query.make(~measurableId, ~agentId=""),
-      (),
-    );
-  componentMaker(query, innerComponentFn);
-};
-
-let componentWithAgent =
-    (~agentId, ~pageLimit, ~direction: direction, ~innerComponentFn) => {
-  let query =
-    queryDirection(
-      ~pageLimit,
-      ~direction,
-      ~fn=Query.make(~measurableId="", ~agentId),
+      ~fn=Query.make(~measurableId?, ~agentId?),
       (),
     );
   componentMaker(query, innerComponentFn);

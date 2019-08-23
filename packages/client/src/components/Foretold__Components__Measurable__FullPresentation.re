@@ -66,9 +66,10 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
                   />
                 : E.React.null}
              {MeasurementsGet.component(
-                ~measurableId=m.id,
+                ~measurableId=Some(m.id),
                 ~pageLimit=20,
                 ~direction=None,
+                ~agentId=None,
                 ~innerComponentFn=(
                                     m:
                                       HttpResponse.t(

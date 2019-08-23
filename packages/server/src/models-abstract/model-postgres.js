@@ -157,24 +157,21 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @param {Models.ObjectID} [agentId]
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
-  _measurablesInPublicChannelsLiteral(agentId, name = '') {
+  _measurablesInPublicChannelsLiteral(name = '') {
     return this.literal(
-      this._measurablesInPublicChannels(agentId, name),
+      this._measurablesInPublicChannels(name),
     );
   }
 
   /**
    * @protected
-   * @param {Models.ObjectID} [agentId]
    * @param {string} [name]
    * @return {string}
    */
-  _measurablesInPublicChannels(agentId, name = '') {
-    assert(!!agentId, 'Agent ID is required.');
+  _measurablesInPublicChannels(name = '') {
     return `(
       /* Measurables in Public Channels (${name}) */
       WITH channelIds AS (${this._publicChannels(name)})
@@ -298,7 +295,6 @@ class ModelPostgres extends Model {
       where[this.and].push({
         measurableId: {
           [this.in]: this._measurablesInPublicChannelsLiteral(
-            restrictions.agentId,
             'Restrictions',
           ),
         },

@@ -40,6 +40,11 @@ let make = (tabSelected: Routing.ChannelPage.tab, channel: Types.channel) =>
          ++ "Members",
        ),
      )}
+    {tab(
+       tabSelected == Leaderboard,
+       tabToInternalUrl(channel.id, Leaderboard),
+       "Leaderboard",
+     )}
     {E.React.showIf(
        channel.myRole === Some(`ADMIN),
        tab(

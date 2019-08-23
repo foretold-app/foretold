@@ -1,3 +1,4 @@
+const assert = require('assert');
 const _ = require('lodash');
 
 const models = require('../models');
@@ -32,6 +33,7 @@ class AgentModel extends ModelPostgres {
    * @return {string}
    */
   _agentsIds(channelId) {
+    assert(!!channelId, 'Channel ID is required.');
     return `(
       SELECT "ChannelMemberships"."agentId" FROM "ChannelMemberships"
       WHERE "ChannelMemberships"."channelId" = '${channelId}'

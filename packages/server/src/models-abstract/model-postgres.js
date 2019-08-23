@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const assert = require('assert');
 const { Op } = require('sequelize');
 
 const models = require('../models');
@@ -58,6 +59,7 @@ class ModelPostgres extends Model {
    * @return {string}
    */
   _publicAndJoinedChannels(agentId, name = '') {
+    assert(!!agentId, 'Agent ID is required.');
     return `(
       /* P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
@@ -112,6 +114,7 @@ class ModelPostgres extends Model {
    * @return {string}
    */
   _joinedChannels(agentId, name = '') {
+    assert(!!agentId, 'Agent ID is required.');
     return `(
       /* J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
@@ -143,6 +146,7 @@ class ModelPostgres extends Model {
    * @return {string}
    */
   _measurablesInPublicAndJoinedChannels(agentId, name = '') {
+    assert(!!agentId, 'Agent ID is required.');
     return `(
       /* Measurables in Public and Joined Channels (${name}) */
       WITH channelIds AS (${this._publicAndJoinedChannels(agentId, name)})
@@ -153,23 +157,21 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @param {Models.ObjectID} [agentId]
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
-  _measurablesInPublicChannelsLiteral(agentId, name = '') {
+  _measurablesInPublicChannelsLiteral(name = '') {
     return this.literal(
-      this._measurablesInPublicChannels(agentId, name),
+      this._measurablesInPublicChannels(name),
     );
   }
 
   /**
    * @protected
-   * @param {Models.ObjectID} [agentId]
    * @param {string} [name]
    * @return {string}
    */
-  _measurablesInPublicChannels(agentId, name = '') {
+  _measurablesInPublicChannels(name = '') {
     return `(
       /* Measurables in Public Channels (${name}) */
       WITH channelIds AS (${this._publicChannels(name)})
@@ -293,7 +295,6 @@ class ModelPostgres extends Model {
       where[this.and].push({
         measurableId: {
           [this.in]: this._measurablesInPublicChannelsLiteral(
-            restrictions.agentId,
             'Restrictions',
           ),
         },

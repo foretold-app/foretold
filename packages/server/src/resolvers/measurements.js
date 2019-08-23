@@ -5,6 +5,8 @@ const data = require('../data');
 const { Pagination } = require('../data/classes/pagination');
 const { Filter } = require('../data/classes/filter');
 const { Options } = require('../data/classes/options');
+const { Params } = require('../data/classes/params');
+const { Query } = require('../data/classes/query');
 
 const { withinMeasurables } = require('../structures');
 
@@ -61,8 +63,17 @@ async function all(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function one(root, args, context, info) {
-  const agentId = _.get(context, 'agent.id');
-  return data.measurements.getOne2(args.id, { agentId });
+  const id = _.get(args, 'id');
+  const currentAgentId = _.get(context, 'agent.id');
+
+  const params = new Params({ id });
+  const query = new Query();
+  const options = new Options({
+    isAdmin: _.get(context, 'agent.isAdmin'),
+    agentId: currentAgentId,
+  });
+
+  return data.measurements.getOne(params, query, options);
 }
 
 /**

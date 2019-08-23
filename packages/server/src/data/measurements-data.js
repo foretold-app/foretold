@@ -42,30 +42,6 @@ class MeasurementsData extends DataBase {
   }
 
   /**
-   * @todo: fix interface
-   * @todo: move down
-   * @public
-   * @deprecated: use getOne
-   * @param {Models.ObjectID} id
-   * @param {object} [options]
-   * @param {string} [options.agentId]
-   * @return {Promise<*>}
-   */
-  async getOne2(id, options = {}) {
-    return this.models.Measurement.findOne({
-      where: {
-        id,
-        measurableId: {
-          [this.model.Op.in]: this.model._measurablesInPublicAndJoinedChannelsLiteral(
-            options.agentId,
-            'Filter',
-          ),
-        },
-      },
-    });
-  }
-
-  /**
    * @todo: move it into Model Abstraction layer
    * @public
    * @param {Models.Measurable} measurable

@@ -1,6 +1,7 @@
 const _ = require('lodash');
 
 const data = require('../data');
+const { Params } = require('../data/classes/params');
 
 /**
  * @param {object | null} root
@@ -19,7 +20,8 @@ async function setContextMeasurable(root, args, context, info) {
   console.log('\x1b[36m ---> \x1b[0m Middleware (measurable)', { measurableId });
 
   if (measurableId) {
-    context.measurable = await data.measurables.getOne2(measurableId);
+    const params = new Params({ id: measurableId });
+    context.measurable = await data.measurables.getOne(params);
   } else {
     context.measurable = null;
   }

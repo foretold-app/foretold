@@ -150,10 +150,21 @@ const agentMeasurementsConnection = new graphql.GraphQLObjectType({
 const measurementScoreSet = new graphql.GraphQLObjectType({
   name: 'MeasurementScoreSet',
   fields: () => ({
-    prediction: { type: graphql.GraphQLNonNull(require('./measurements').measurement) },
-    outcome: { type: graphql.GraphQLNonNull(require('./measurements').measurement) },
-    previousAggregate: { type: require('./measurements').measurement },
-    primaryPointScore: { type: graphql.GraphQLFloat },
+    prediction: {
+      // competitive
+      type: graphql.GraphQLNonNull(require('./measurements').measurement),
+    },
+    outcome: {
+      // objective
+      type: graphql.GraphQLNonNull(require('./measurements').measurement),
+    },
+    previousAggregate: {
+      // aggregate
+      type: require('./measurements').measurement,
+    },
+    primaryPointScore: {
+      type: graphql.GraphQLFloat,
+    },
   }),
 });
 

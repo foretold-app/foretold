@@ -59,15 +59,15 @@ module Columns = {
 };
 
 [@react.component]
-let make = (~feedItems, ~columns=Columns.all) =>
-  Table.fromColumns(columns, feedItems, ());
+let make = (~items, ~columns=Columns.all) =>
+  Table.fromColumns(columns, items, ());
 
 module Jsx2 = {
   let component = ReasonReact.statelessComponent("LeaderboardTable");
-  let make = (~feedItems, ~columns=Columns.all, children) =>
+  let make = (~items, ~columns=Columns.all, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
-      makeProps(~feedItems, ~columns, ()),
+      makeProps(~items, ~columns, ()),
       children,
     );
 };

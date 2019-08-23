@@ -1,12 +1,12 @@
 open Style.Grid;
 
 module ReducerConfig = {
-  type itemType = Types.feedItem;
-  type callFnParams = (option(string), option(string));
+  type itemType = Types.measurement;
+  type callFnParams = option(string);
 
   let getId = (e: itemType) => e.id;
-  let callFn = ((channelId, agentId): callFnParams) =>
-    FeedItemsGet.component2(~channelId, ~agentId);
+  let callFn = (channelId: callFnParams) =>
+    MeasurementsGet.componentWithAgent(~agentId="");
 
   let isEqual = (a: itemType, b: itemType) => {
     a.id == b.id;
@@ -21,7 +21,6 @@ type pageParams = {id: string};
 let make =
     (
       ~channelId: option(string)=None,
-      ~agentId: option(string)=None,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {
@@ -42,24 +41,15 @@ let make =
       </Div>;
 
     let subComponent = (reducerParams: Reducer.Types.reducerParams) => {
-      let feedItems =
+      let items =
         switch (reducerParams.response) {
         | Success(connection) => connection.edges
         | _ => [||]
         };
 
-      let table =
-        switch (channelId) {
-        | Some("")
-        | None => <FeedItemsTable.Jsx2 feedItems />
-        | _ =>
-          <FeedItemsTable.Jsx2
-            feedItems
-            columns=FeedItemsTable.Columns.short
-          />
-        };
+      let table = <LeaderboardTable.Jsx2 items />;
 
-      let isFound = Array.length(feedItems) > 0;
+      let isFound = Array.length(items) > 0;
 
       let body =
         switch (reducerParams.response) {
@@ -77,10 +67,6 @@ let make =
       |> layout;
     };
 
-    <Reducer
-      itemsPerPage=20
-      callFnParams=(channelId, agentId)
-      subComponent
-    />;
+    <Reducer itemsPerPage=20 callFnParams=channelId subComponent />;
   },
 };

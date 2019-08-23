@@ -85,6 +85,7 @@ const measurement = new graphql.GraphQLObjectType({
     taggedMeasurementId: { type: graphql.GraphQLString },
     iAmOwner: require('./common').iAmOwner,
     valueText: { type: graphql.GraphQLString },
+    measurementScoreSet: { type: require('./measurements').measurementScoreSet },
 
     Measurable: {
       type: require('./measurables').measurable,
@@ -142,15 +143,26 @@ const agentMeasurementsConnection = new graphql.GraphQLObjectType({
   }),
 });
 
+const measurementScoreSet = new graphql.GraphQLObjectType({
+  name: 'MeasurementScoreSet',
+  fields: () => ({
+    prediction: { type: graphql.GraphQLNonNull(require('./measurements').measurement) },
+    outcome: { type: graphql.GraphQLNonNull(require('./measurements').measurement) },
+    previousAggregate: { type: require('./measurements').measurement },
+    primaryPointScore: { type: graphql.GraphQLFloat, resolve: () => 0.1 },
+  }),
+});
+
 module.exports = {
   measurement,
   measurementCreateInput,
 
   measurementsEdge,
   measurementsConnection,
-
   agentMeasurementsEdge,
   agentMeasurementsConnection,
 
   measurementsInDateRangeInput,
+
+  measurementScoreSet,
 };

@@ -111,9 +111,23 @@ async function latest(root, args, context, info) {
   });
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function scoreSet(root, args, context, info) {
+  return {
+    primaryPointScore: 0.1,
+  };
+}
+
 module.exports = {
   one,
   all,
   create,
   latest,
+  scoreSet,
 };

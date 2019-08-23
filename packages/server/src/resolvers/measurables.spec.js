@@ -61,7 +61,7 @@ describe('Measurables Resolvers', () => {
       return measurables.one(root, args, context, info).then((result) => {
         expect(data.measurables.getOne).toHaveBeenCalledWith(
           { id: 'id1' },
-          { "agentId": "agentId2" },
+          {},
           { "agentId": "agentId2", "isAdmin": undefined }
         );
         expect(result).toBe(true);

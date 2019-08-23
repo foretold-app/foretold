@@ -181,27 +181,36 @@ class ModelPostgres extends Model {
   /**
    * @protected
    * @param {string[]} statesIn
+   * @param {Models.ObjectID} channelIdIn
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
-  _measurableStatesLiteral(statesIn, name = '') {
+  _withinMeasurablesLiteral(statesIn, channelIdIn, name = '') {
     return this.literal(
-      this._measurableStates(statesIn, name),
+      this._withinMeasurables(statesIn, channelIdIn, name),
     );
   }
 
   /**
    * @protected
    * @param {string[]} statesIn
+   * @param {Models.ObjectID} channelIdIn
    * @param {string} [name]
    * @return {string}
    */
-  _measurableStates(statesIn, name = '') {
+  _withinMeasurables(statesIn, channelIdIn, name = '') {
+    const cond = [];
     const states = statesIn.map(state => `'${state}'`).join(', ');
+
+    if (states.length > 0) cond.push(`("states" IN (${states}))`);
+    if (!!channelIdIn) cond.push(`("channelId" = '${channelIdIn}')`);
+
+    const where = cond.length > 0 ? `WHERE (${cond.join(' AND ')})` : '';
+
     return `(
-      /* Measurables With Specific States (${name}) */
+      /* Within Measurables (${name}) */
       SELECT "id" FROM "Measurables"
-      WHERE "states" IN (${states})
+      ${where}
     )`;
   }
 
@@ -484,11 +493,11 @@ class ModelPostgres extends Model {
     }
 
     // OK
-    if (abstractions.measurableState) {
-      const { as, states } = abstractions.measurableState;
+    if (abstractions.withinMeasurables) {
+      const { as, states, channelId } = abstractions.withinMeasurables;
       where[this.and].push({
         [as]: {
-          [this.in]: this._measurableStatesLiteral(states, name),
+          [this.in]: this._withinMeasurablesLiteral(states, channelId, name),
         },
       });
     }

@@ -176,9 +176,10 @@ export namespace Schema {
 }
 
 export namespace Layers {
-  export type measurableState = {
+  export type withinMeasurables = {
     as: string,
     states: string[],
+    channelId: Models.ObjectID,
   }
 
   export type withinPublicChannels = {
@@ -226,6 +227,7 @@ export namespace Layers {
       sentAt?: string | null,
 
       findInDateRange?: object, // @todo: Object? Give definition!
+      withinMeasurables?: withinMeasurables | null,
       withinPublicChannels?: withinPublicChannels | null,
       withinJoinedChannels?: withinJoinedChannels | null,
       withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
@@ -233,7 +235,6 @@ export namespace Layers {
       states?: string[],
       isArchived?: string[],
       types?: string[],
-      measurableState?: string[],
     };
     type pagination = {
       limit?: number,
@@ -306,7 +307,7 @@ export namespace Layers {
       channelIdAsId?: boolean,
       measurableId?: boolean,
 
-      measurableState?: measurableState | null,
+      withinMeasurables?: withinMeasurables | null,
       withinPublicChannels?: withinPublicChannels | null,
       withinJoinedChannels?: withinJoinedChannels | null,
       withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
@@ -334,7 +335,7 @@ export namespace Layers {
       states?: string[],
       attemptCounterMax?: number,
 
-      measurableState?: measurableState | null,
+      withinMeasurables?: withinMeasurables | null,
       withinPublicChannels?: withinPublicChannels | null,
       withinJoinedChannels?: withinJoinedChannels | null,
       withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,

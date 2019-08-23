@@ -43,7 +43,7 @@ class Filter {
       'findInDateRange', // object
       'notTaggedByAgent', // string | null
       'states', // string[] | null
-      'measurableState', // Layers.measurableState | null
+      'withinMeasurables', // Layers.withinMeasurables | null
     ];
     utils.extend(this.constructor.name, filter, list, this);
     utils.diff(this.constructor.name, filter, list);

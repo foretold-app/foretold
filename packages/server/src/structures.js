@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const assert = require('assert');
 
 /**
@@ -53,8 +54,11 @@ module.exports.withinPublicChannelsById = () => {
 
 /**
  * @param {string[]} states
- * @return {Layers.measurableState}
+ * @param {Models.ObjectID} channelId
+ * @return {Layers.withinMeasurables | null}
  */
-module.exports.measurableStateByMeasurableId = (states) => {
-  return { as: 'measurableId', states };
+module.exports.withinMeasurables = (states, channelId) => {
+  if (!!states) assert(_.isArray(states), 'States should be an array.');
+  if (!_.size(states) && !channelId) return null;
+  return { as: 'measurableId', states, channelId };
 };

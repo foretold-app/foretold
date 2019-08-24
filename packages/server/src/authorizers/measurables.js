@@ -21,6 +21,14 @@ function measurableIsOwnedByCurrentAgentRule(root, args, context, info) {
     `"${result}".\x1b[0m`
   );
 
+  console.log(
+    `The parameters were: [creatorId: ${creatorId}, agentId: ${agentId}]`
+  );
+
+  const compoundId = { creatorId, agentId };
+  console.log('\x1b[36m ---> \x1b[0m Rule Measurable ' +
+    '(measurableIsOwnedByCurrentAgent parameters)', compoundId);
+
   return result;
 }
 

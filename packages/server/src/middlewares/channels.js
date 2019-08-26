@@ -17,10 +17,16 @@ async function setContextChannel(root, args, context, info) {
     || _.get(context, 'measurable.channelId')
     || _.get(args, 'id');
 
-  console.log('\x1b[36m ---> \x1b[0m Middleware (channel)', { channelId });
-  context.channel = channelId
-    ? await data.channels.getOne({ id: channelId })
-    : null;
+  console.log(
+    '\x1b[36m ---> \x1b[0m Middleware (setContextChannel)',
+    { channelId },
+  );
+
+  if (channelId) {
+    context.channel = await data.channels.getOne({ id: channelId });
+  } else {
+    context.channel = null;
+  }
 }
 
 /**
@@ -31,7 +37,7 @@ async function setContextChannel(root, args, context, info) {
  * @return {Promise<void>}
  */
 async function setContextChannelByRoot(root, args, context, info) {
-  console.log('\x1b[36m ---> \x1b[0m Middleware (channelByRoot)');
+  console.log('\x1b[36m ---> \x1b[0m Middleware (setContextChannelByRoot)');
   context.channel = !!root ? root : null;
 }
 

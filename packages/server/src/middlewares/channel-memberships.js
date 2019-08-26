@@ -20,7 +20,7 @@ async function setContextChannelMemberships(root, args, context, info) {
 
   const compoundId = { agentId, channelId };
   console.log('\x1b[36m ---> \x1b[0m Middleware ' +
-    '(channelMemberships)', compoundId);
+    '(setContextChannelMemberships)', compoundId);
 
   if (channelId && agentId) {
     const channelMembership = await data.channelMemberships.getOne2(compoundId);

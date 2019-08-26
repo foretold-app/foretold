@@ -9,7 +9,7 @@ module ReducerConfig = {
     MeasurementsGet.component(
       ~channelId,
       ~measurableState=Some([|Some(`JUDGED)|]),
-      ~competitorType=Some([|Some(`COMPETITIVE)|]),
+      ~competitorType=Some([|`COMPETITIVE|]),
       (),
     );
 

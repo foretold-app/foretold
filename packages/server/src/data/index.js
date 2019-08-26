@@ -15,6 +15,7 @@ const { AgentNotificationsData } = require('./agent-notifications-data');
 const { InvitationsData } = require('./invitations-data');
 const { FeedItemsData } = require('./feed-items-data');
 const { GlobalSettingsData } = require('./global-settings-data');
+const { AgentMeasurablesData } = require('./agent-measurables-data');
 
 module.exports = {
   measurables: new MeasurablesData(),
@@ -34,4 +35,5 @@ module.exports = {
   invitations: new InvitationsData(),
   feedItems: new FeedItemsData(),
   globalSettings: new GlobalSettingsData(),
+  agentMeasurables: new AgentMeasurablesData(),
 };

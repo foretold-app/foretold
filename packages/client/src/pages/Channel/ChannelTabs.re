@@ -14,7 +14,12 @@ let tabToInternalUrl = (channelId, tabSelected: ChannelPage.tab): Url.t => {
   channelPage |> Url.fromChannelPage;
 };
 
-let make = (tabSelected: Routing.ChannelPage.tab, channel: Types.channel) =>
+let make =
+    (
+      loggedInUser: Types.user,
+      tabSelected: Routing.ChannelPage.tab,
+      channel: Types.channel,
+    ) =>
   <>
     {tab(
        tabSelected == Measurables,
@@ -42,10 +47,13 @@ let make = (tabSelected: Routing.ChannelPage.tab, channel: Types.channel) =>
      )}
     {E.React.showIf(
        channel.id != "home",
-       tab(
-         tabSelected == Leaderboard,
-         tabToInternalUrl(channel.id, Leaderboard),
-         "Leaderboard",
+       Primary.User.show(
+         loggedInUser,
+         tab(
+           tabSelected == Leaderboard,
+           tabToInternalUrl(channel.id, Leaderboard),
+           "Leaderboard",
+         ),
        ),
      )}
     {E.React.showIf(

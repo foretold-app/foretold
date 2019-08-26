@@ -54,7 +54,8 @@ let make =
 
     let headers = () => {
       let topOption = Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
-      let secondLevel = channel => ChannelTabs.make(topOption, channel);
+      let secondLevel = channel =>
+        ChannelTabs.make(loggedInUser, topOption, channel);
 
       switch (channel) {
       | Some(channel) =>

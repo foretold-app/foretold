@@ -13,13 +13,13 @@ const agentMeasurable = new graphql.GraphQLObjectType({
 
     // OK
     agent: {
-      type: require('./agents').agent,
+      type: graphql.GraphQLNonNull(require('./agents').agent),
       resolve: require('../resolvers').agents.one,
     },
 
     // OK
     measurable: {
-      type: require('./measurables').measurable,
+      type: graphql.GraphQLNonNull(require('./measurables').measurable),
       resolve: require('../resolvers').measurables.one,
     },
 

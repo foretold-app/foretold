@@ -81,6 +81,7 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
                       m.edges
                       |> E.A.to_list
                       |> Foretold__Components__Measurements__Table.make
+                    | _ => "" |> Utils.ste
                     },
                 (),
               )}

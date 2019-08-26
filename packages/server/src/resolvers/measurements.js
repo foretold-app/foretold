@@ -40,7 +40,7 @@ async function all(root, args, context, info) {
 
   const filter = new Filter({
     withinMeasurables: withinMeasurables(measurableState, channelId),
-    measurableId: _.get(args, 'measurableId'),
+    measurableId: _.get(args, 'measurableId') || _.get(root, 'measurableId'),
     agentId: _.get(args, 'agentId') || _.get(root, 'id'),
     competitorType: _.get(args, 'competitorType'),
     findInDateRange: _.get(args, 'findInDateRange'),

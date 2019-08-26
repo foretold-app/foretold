@@ -63,6 +63,7 @@ async function all(root, args, context, info) {
 }
 
 /**
+ * @todo: Use predicates!
  * @param {*} root
  * @param {object} args
  * @param {Schema.Context} context
@@ -70,7 +71,8 @@ async function all(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function one(root, args, context, info) {
-  const id = _.get(args, 'id');
+  const id = _.get(args, 'id')
+    || _.get(root, 'measurableId');
   const currentAgentId = _.get(context, 'agent.id');
 
   const params = new Params({ id });

@@ -27,7 +27,24 @@ module Columns = {
   let agent: column =
     Table.Column.make(
       ~name="Agent" |> Utils.ste,
-      ~render=(r: record) => "Agent here" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          switch (r.agent) {
+          | Some(agent) =>
+            <Link
+              linkType={
+                Internal(
+                  Agent({agentId: agent.id, subPage: AgentCommunities}),
+                )
+              }>
+              [|
+                agent.name
+                |> E.O.fmap(name => name |> Utils.ste)
+                |> E.O.default("Agent" |> Utils.ste),
+              |]
+            </Link>
+          | _ => "" |> Utils.ste
+          },
       ~flex=3,
       (),
     );

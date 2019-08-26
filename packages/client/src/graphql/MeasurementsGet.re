@@ -80,7 +80,7 @@ let toMeasurement = (measurement: measurement): Types.measurement => {
   let agent: option(Types.agent) =
     agent
     |> Rationale.Option.fmap(k =>
-         Primary.Agent.make(~id=k##id, ~agentType, ())
+         Primary.Agent.make(~id=k##id, ~agentType, ~name=k##name, ())
        );
 
   Primary.Measurement.make(

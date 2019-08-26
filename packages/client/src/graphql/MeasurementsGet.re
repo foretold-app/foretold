@@ -127,18 +127,24 @@ module Query = [%graphql
     query getMeasurements(
         $measurableId: String
         $agentId: String
+        $channelId: String
         $first: Int
         $last: Int
         $after: String
         $before: String
+        $measurableState: [measurableState]
+        $competitorType: [competitorType]
      ) {
         measurements: measurements(
             measurableId: $measurableId
             agentId: $agentId
+            channelId: $channelId
             first: $first
             last: $last
             after: $after
             before: $before
+            measurableState: $measurableState
+            competitorType: $competitorType
         ) {
           total
           pageInfo{
@@ -241,6 +247,8 @@ let component =
       ~measurableId=None,
       ~agentId=None,
       ~channelId=None,
+      ~measurableState=None,
+      ~competitorType=None,
       ~pageLimit,
       ~direction: direction,
       ~innerComponentFn,
@@ -250,7 +258,14 @@ let component =
     queryDirection(
       ~pageLimit,
       ~direction,
-      ~fn=Query.make(~measurableId?, ~agentId?),
+      ~fn=
+        Query.make(
+          ~measurableId?,
+          ~agentId?,
+          ~measurableState?,
+          ~competitorType?,
+          ~channelId?,
+        ),
       (),
     );
   componentMaker(query, innerComponentFn);

@@ -6,7 +6,12 @@ module ReducerConfig = {
 
   let getId = (e: itemType) => e.id;
   let callFn = (channelId: callFnParams) =>
-    MeasurementsGet.component(~channelId, ());
+    MeasurementsGet.component(
+      ~channelId,
+      ~measurableState=Some([|Some(`JUDGED)|]),
+      ~competitorType=Some([|Some(`COMPETITIVE)|]),
+      (),
+    );
 
   let isEqual = (a: itemType, b: itemType) => {
     a.id == b.id;

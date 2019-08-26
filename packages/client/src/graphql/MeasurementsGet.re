@@ -9,6 +9,8 @@ type measurable = {
   "expectedResolutionDate": option(MomentRe.Moment.t),
 };
 
+type measurementScoreSet = {. "primaryPointScore": option(float)};
+
 type measurement = {
   .
   "id": string,
@@ -40,15 +42,14 @@ type measurement = {
   "taggedMeasurementId": option(string),
   "measurable": option(measurable),
   "value": MeasurementValue.graphQlResult,
+  "measurementScoreSet": option(measurementScoreSet),
 };
 
 type measurements = option({. "edges": option(Js.Array.t(measurement))});
 
 let toMeasurement = (measurement: measurement): Types.measurement => {
-  let agent = measurement##agent;
-
   let agentType: option(Primary.AgentType.t) =
-    agent
+    measurement##agent
     |> E.O.bind(_, k =>
          switch (k##bot, k##user) {
          | (Some(bot), None) =>
@@ -77,10 +78,19 @@ let toMeasurement = (measurement: measurement): Types.measurement => {
          }
        );
 
-  let agent: option(Types.agent) =
-    agent
+  let agent =
+    measurement##agent
     |> Rationale.Option.fmap(k =>
          Primary.Agent.make(~id=k##id, ~agentType, ~name=k##name, ())
+       );
+
+  let measurementScoreSet =
+    measurement##measurementScoreSet
+    |> Rationale.Option.fmap(k =>
+         Primary.MeasurementScoreSet.make(
+           ~primaryPointScore=k##primaryPointScore,
+           (),
+         )
        );
 
   Primary.Measurement.make(
@@ -93,6 +103,7 @@ let toMeasurement = (measurement: measurement): Types.measurement => {
     ~createdAt=Some(measurement##createdAt),
     ~relevantAt=measurement##relevantAt,
     ~agent,
+    ~measurementScoreSet,
     ~measurable=
       switch (measurement##measurable) {
       | Some(measurable) =>
@@ -156,6 +167,7 @@ module Query = [%graphql
                   description
                   valueText
                   taggedMeasurementId
+
                   agent: Agent {
                       id
                       name
@@ -179,6 +191,10 @@ module Query = [%graphql
                     state
                     valueType
                     stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
+                  }
+
+                  measurementScoreSet {
+                    primaryPointScore
                   }
               }
           }

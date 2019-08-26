@@ -52,7 +52,17 @@ module Columns = {
   let score: column =
     Table.Column.make(
       ~name="Score" |> Utils.ste,
-      ~render=(r: record) => "Score here" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          switch (r.measurementScoreSet) {
+          | Some(measurementScoreSet) =>
+            measurementScoreSet.primaryPointScore
+            |> E.O.fmap(primaryPointScore =>
+                 primaryPointScore |> string_of_float |> Utils.ste
+               )
+            |> E.O.default("0.0" |> Utils.ste)
+          | _ => "0.0" |> Utils.ste
+          },
       ~flex=3,
       (),
     );

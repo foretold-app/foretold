@@ -131,6 +131,7 @@ and measurable = {
   max: option(float),
   permissions: option(permissions),
 }
+and measurementScoreSet = {primaryPointScore: option(float)}
 and measurement = {
   id: string,
   description: option(string),
@@ -143,6 +144,7 @@ and measurement = {
   valueText: option(string),
   measurable: option(measurable),
   agent: option(agent),
+  measurementScoreSet: option(measurementScoreSet),
 }
 and series = {
   id: string,

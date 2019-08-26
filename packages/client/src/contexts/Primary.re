@@ -397,6 +397,7 @@ module Measurement = {
         ~measurableId=None,
         ~measurable=None,
         ~valueText=None,
+        ~measurementScoreSet=None,
         (),
       )
       : t => {
@@ -411,6 +412,15 @@ module Measurement = {
     measurableId,
     measurable,
     valueText,
+    measurementScoreSet,
+  };
+};
+
+module MeasurementScoreSet = {
+  type t = Types.measurementScoreSet;
+
+  let make = (~primaryPointScore, ()): t => {
+    primaryPointScore: primaryPointScore,
   };
 };
 

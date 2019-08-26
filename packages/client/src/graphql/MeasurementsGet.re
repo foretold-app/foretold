@@ -9,6 +9,8 @@ type measurable = {
   "expectedResolutionDate": option(MomentRe.Moment.t),
 };
 
+type measurementScoreSet = {. "primaryPointScore": option(float)};
+
 type measurement = {
   .
   "id": string,
@@ -40,15 +42,14 @@ type measurement = {
   "taggedMeasurementId": option(string),
   "measurable": option(measurable),
   "value": MeasurementValue.graphQlResult,
+  "measurementScoreSet": option(measurementScoreSet),
 };
 
 type measurements = option({. "edges": option(Js.Array.t(measurement))});
 
 let toMeasurement = (measurement: measurement): Types.measurement => {
-  let agent = measurement##agent;
-
   let agentType: option(Primary.AgentType.t) =
-    agent
+    measurement##agent
     |> E.O.bind(_, k =>
          switch (k##bot, k##user) {
          | (Some(bot), None) =>
@@ -77,10 +78,19 @@ let toMeasurement = (measurement: measurement): Types.measurement => {
          }
        );
 
-  let agent: option(Types.agent) =
-    agent
+  let agent =
+    measurement##agent
     |> Rationale.Option.fmap(k =>
-         Primary.Agent.make(~id=k##id, ~agentType, ())
+         Primary.Agent.make(~id=k##id, ~agentType, ~name=k##name, ())
+       );
+
+  let measurementScoreSet =
+    measurement##measurementScoreSet
+    |> Rationale.Option.fmap(k =>
+         Primary.MeasurementScoreSet.make(
+           ~primaryPointScore=k##primaryPointScore,
+           (),
+         )
        );
 
   Primary.Measurement.make(
@@ -93,6 +103,7 @@ let toMeasurement = (measurement: measurement): Types.measurement => {
     ~createdAt=Some(measurement##createdAt),
     ~relevantAt=measurement##relevantAt,
     ~agent,
+    ~measurementScoreSet,
     ~measurable=
       switch (measurement##measurable) {
       | Some(measurable) =>
@@ -116,18 +127,24 @@ module Query = [%graphql
     query getMeasurements(
         $measurableId: String
         $agentId: String
+        $channelId: String
         $first: Int
         $last: Int
         $after: String
         $before: String
+        $measurableState: [measurableState]
+        $competitorType: [competitorType!]
      ) {
         measurements: measurements(
             measurableId: $measurableId
             agentId: $agentId
+            channelId: $channelId
             first: $first
             last: $last
             after: $after
             before: $before
+            measurableState: $measurableState
+            competitorType: $competitorType
         ) {
           total
           pageInfo{
@@ -156,6 +173,7 @@ module Query = [%graphql
                   description
                   valueText
                   taggedMeasurementId
+
                   agent: Agent {
                       id
                       name
@@ -180,6 +198,10 @@ module Query = [%graphql
                     valueType
                     stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
                   }
+
+                  measurementScoreSet {
+                    primaryPointScore
+                  }
               }
           }
         }
@@ -190,21 +212,6 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 type measurementEdges = Primary.Connection.edges(measurement);
-
-let queryToComponent = (query, innerComponentFn) =>
-  QueryComponent.make(~variables=query##variables, response =>
-    response.result
-    |> ApolloUtils.apolloResponseToResult
-    |> Rationale.Result.fmap(result =>
-         result##measurements
-         |> Rationale.Option.fmap(
-              Primary.Connection.fromJson(toMeasurement),
-            )
-         |> innerComponentFn
-       )
-    |> E.R.id
-  )
-  |> ReasonReact.element;
 
 type measurableStates = Types.measurableState;
 
@@ -228,17 +235,6 @@ let unpackResults = result =>
 let componentMaker = (query, innerComponentFn) =>
   QueryComponent.make(~variables=query##variables, response =>
     response.result
-    |> ApolloUtils.apolloResponseToResult
-    |> Rationale.Result.fmap(result =>
-         result |> unpackResults |> innerComponentFn
-       )
-    |> E.R.id
-  )
-  |> ReasonReact.element;
-
-let componentMakerMissingOptional = (query, innerComponentFn) =>
-  QueryComponent.make(~variables=query##variables, response =>
-    response.result
     |> HttpResponse.fromApollo
     |> HttpResponse.fmap(unpackResults)
     |> HttpResponse.optionalToMissing
@@ -247,25 +243,30 @@ let componentMakerMissingOptional = (query, innerComponentFn) =>
   |> ReasonReact.element;
 
 let component =
-    (~measurableId, ~pageLimit, ~direction: direction, ~innerComponentFn) => {
+    (
+      ~measurableId=None,
+      ~agentId=None,
+      ~channelId=None,
+      ~measurableState=None,
+      ~competitorType=None,
+      ~pageLimit,
+      ~direction: direction,
+      ~innerComponentFn,
+      (),
+    ) => {
   let query =
     queryDirection(
       ~pageLimit,
       ~direction,
-      ~fn=Query.make(~measurableId, ~agentId=""),
+      ~fn=
+        Query.make(
+          ~measurableId?,
+          ~agentId?,
+          ~measurableState?,
+          ~competitorType?,
+          ~channelId?,
+        ),
       (),
     );
   componentMaker(query, innerComponentFn);
-};
-
-let componentWithAgent =
-    (~agentId, ~pageLimit, ~direction: direction, ~innerComponentFn) => {
-  let query =
-    queryDirection(
-      ~pageLimit,
-      ~direction,
-      ~fn=Query.make(~measurableId="", ~agentId),
-      (),
-    );
-  componentMakerMissingOptional(query, innerComponentFn);
 };

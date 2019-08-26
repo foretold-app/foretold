@@ -1,6 +1,6 @@
 const assert = require('assert');
 const _ = require('lodash');
-const util = require("util");
+const util = require('util');
 
 /**
  * @param {string} className

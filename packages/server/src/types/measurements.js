@@ -151,19 +151,20 @@ const measurementScoreSet = new graphql.GraphQLObjectType({
   name: 'MeasurementScoreSet',
   fields: () => ({
     prediction: {
-      // competitive
       type: graphql.GraphQLNonNull(require('./measurements').measurement),
+      resolve: require('../resolvers/measurements').prediction,
     },
     outcome: {
-      // objective
-      type: graphql.GraphQLNonNull(require('./measurements').measurement),
+      type: require('./measurements').measurement,
+      resolve: require('../resolvers/measurements').outcome,
     },
     previousAggregate: {
-      // aggregate
       type: require('./measurements').measurement,
+      resolve: require('../resolvers/measurements').previousAggregate,
     },
     primaryPointScore: {
       type: graphql.GraphQLFloat,
+      resolve: require('../resolvers/measurements').primaryPointScore,
     },
   }),
 });

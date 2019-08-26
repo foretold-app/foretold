@@ -1,6 +1,7 @@
 const _ = require('lodash');
 
 const data = require('../data');
+
 const { Params } = require('../data/classes/params');
 
 /**
@@ -17,7 +18,10 @@ async function setContextMeasurable(root, args, context, info) {
     || _.get(context, 'measurableId')
     || _.get(args, 'id');
 
-  console.log('\x1b[36m ---> \x1b[0m Middleware (measurable)', { measurableId });
+  console.log(
+    '\x1b[36m ---> \x1b[0m Middleware (setContextMeasurable)',
+    { measurableId },
+  );
 
   if (measurableId) {
     const params = new Params({ id: measurableId });
@@ -36,7 +40,7 @@ async function setContextMeasurable(root, args, context, info) {
  * @return {Promise<void>}
  */
 async function setContextMeasurableByRoot(root, args, context, info) {
-  console.log('\x1b[36m ---> \x1b[0m Middleware (measurableByRoot)');
+  console.log('\x1b[36m ---> \x1b[0m Middleware (setContextMeasurableByRoot)');
   context.measurable = root || null;
 }
 

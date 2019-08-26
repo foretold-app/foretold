@@ -12,7 +12,7 @@ const data = require('../data');
  */
 async function setContextBot(root, args, context, info) {
   const id = _.get(args, 'id');
-  console.log('\x1b[36m ---> \x1b[0m Middleware (bot)', { id });
+  console.log('\x1b[36m ---> \x1b[0m Middleware (setContextBot)', { id });
   context.bot = id ? await data.bots.getOne({ id }) : null;
 }
 

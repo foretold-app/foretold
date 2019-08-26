@@ -683,6 +683,9 @@ class ModelPostgres extends Model {
     const sort = query.sort === 1 ? 'ASC' : 'DESC';
     const order = [['createdAt', sort]];
 
+    if ('inspect' in params) params.inspect();
+    if ('inspect' in restrictions) restrictions.inspect();
+
     this.applyRestrictions(where, restrictions);
 
     const cond = {

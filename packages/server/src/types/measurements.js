@@ -86,6 +86,11 @@ const measurement = new graphql.GraphQLObjectType({
     iAmOwner: require('./common').iAmOwner,
     valueText: { type: graphql.GraphQLString },
 
+    measurementScoreSet: {
+      type: require('./measurements').measurementScoreSet,
+      resolve: require('../resolvers/measurements').scoreSet,
+    },
+
     Measurable: {
       type: require('./measurables').measurable,
       resolve: resolver(models.Measurement.Measurable),
@@ -142,15 +147,38 @@ const agentMeasurementsConnection = new graphql.GraphQLObjectType({
   }),
 });
 
+const measurementScoreSet = new graphql.GraphQLObjectType({
+  name: 'MeasurementScoreSet',
+  fields: () => ({
+    prediction: {
+      type: graphql.GraphQLNonNull(require('./measurements').measurement),
+      resolve: require('../resolvers/measurements').prediction,
+    },
+    outcome: {
+      type: require('./measurements').measurement,
+      resolve: require('../resolvers/measurements').outcome,
+    },
+    previousAggregate: {
+      type: require('./measurements').measurement,
+      resolve: require('../resolvers/measurements').previousAggregate,
+    },
+    primaryPointScore: {
+      type: graphql.GraphQLFloat,
+      resolve: require('../resolvers/measurements').primaryPointScore,
+    },
+  }),
+});
+
 module.exports = {
   measurement,
   measurementCreateInput,
 
   measurementsEdge,
   measurementsConnection,
-
   agentMeasurementsEdge,
   agentMeasurementsConnection,
 
   measurementsInDateRangeInput,
+
+  measurementScoreSet,
 };

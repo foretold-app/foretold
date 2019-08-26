@@ -111,9 +111,80 @@ async function latest(root, args, context, info) {
   });
 }
 
+/**
+ * I feel something strange doing it.
+ * The time will show.
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function scoreSet(root, args, context, info) {
+  return {
+    id: _.get(root, 'id'),
+    measurableId: _.get(root, 'measurableId'),
+  };
+}
+
+/**
+ * Do not optimize.
+ * Do not return "root".
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function prediction(root, args, context, info) {
+  const id = _.get(root, 'id');
+  const params = new Params({ id });
+  return data.measurements.getOne(params);
+}
+
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function outcome(root, args, context, info) {
+  const measurableId = _.get(root, 'measurableId');
+  return data.measurements.getOutcome(measurableId);
+}
+
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function previousAggregate(root, args, context, info) {
+  const measurableId = _.get(root, 'measurableId');
+  return data.measurements.getPreviousAggregate(measurableId);
+}
+
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function primaryPointScore(root, args, context, info) {
+  return 0.3;
+}
+
 module.exports = {
   one,
   all,
   create,
   latest,
+  scoreSet,
+  prediction,
+  outcome,
+  previousAggregate,
+  primaryPointScore,
 };

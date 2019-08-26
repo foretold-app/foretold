@@ -14,6 +14,16 @@ class AgentMeasurablesData extends DataBase {
     this.model = this.AgentMeasurableModel;
   }
 
+  /**
+   * @protected
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Layers.AbstractModelsLayer.restrictions}
+   */
+  _getDefaultRestrictions(options = {}) {
+    return {
+      ...super._getDefaultRestrictionsForIncludedIntoChannel(options),
+    };
+  }
 }
 
 module.exports = {

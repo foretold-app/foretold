@@ -5,6 +5,8 @@ const { Model } = require('../models-abstract');
 const { Options } = require('../models-abstract/classes/options');
 const { Restrictions } = require('../models-abstract/classes/restrictions');
 
+const structures = require('../structures');
+
 /**
  * @abstract
  */
@@ -176,6 +178,28 @@ class DataBase {
    */
   _getDefaultRestrictions(options = {}) {
     return {};
+  }
+
+  /**
+   * @protected
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Layers.AbstractModelsLayer.restrictions}
+   */
+  _getDefaultRestrictionsForIncludedIntoChannel(options = {}) {
+    const currentAgentId = _.get(options, 'currentAgentId');
+
+    const withinPublicChannels = currentAgentId
+      ? null
+      : structures.withinPublicChannelsByChannelId();
+
+    const withinPublicAndJoinedChannels = currentAgentId
+      ? structures.withinPublicAndJoinedChannelsByChannelId(currentAgentId)
+      : null;
+
+    return {
+      withinPublicChannels,
+      withinPublicAndJoinedChannels,
+    };
   }
 }
 

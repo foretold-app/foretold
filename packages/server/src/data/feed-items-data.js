@@ -23,13 +23,9 @@ class FeedItemsData extends DataBase {
    * @return {Layers.AbstractModelsLayer.restrictions}
    */
   _getDefaultRestrictions(options = {}) {
-    const currentAgentId = _.get(options, 'currentAgentId');
-
-    const withinPublicAndJoinedChannels = currentAgentId
-      ? structures.withinPublicAndJoinedChannelsByChannelId(currentAgentId)
-      : null;
-
-    return { withinPublicAndJoinedChannels };
+    return {
+      ...super._getDefaultRestrictionsForIncludedIntoChannel(options),
+    };
   }
 
 }

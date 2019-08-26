@@ -4,7 +4,7 @@ module ReducerConfig = {
 
   let getId = (e: Types.measurement) => e.id;
   let callFn = (agentId: callFnParams) =>
-    MeasurementsGet.component(~agentId=Some(agentId), ~measurableId=None);
+    MeasurementsGet.component(~agentId=Some(agentId), ());
 
   let isEqual = (a: itemType, b: itemType) => {
     a.id == b.id;

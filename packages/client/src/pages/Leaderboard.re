@@ -6,7 +6,7 @@ module ReducerConfig = {
 
   let getId = (e: itemType) => e.id;
   let callFn = (channelId: callFnParams) =>
-    MeasurementsGet.component(~agentId=None, ~measurableId=None);
+    MeasurementsGet.component(~channelId, ());
 
   let isEqual = (a: itemType, b: itemType) => {
     a.id == b.id;
@@ -67,6 +67,6 @@ let make =
       |> layout;
     };
 
-    <Reducer itemsPerPage=20 callFnParams=channelId subComponent />;
+    <Reducer callFnParams=channelId subComponent />;
   },
 };

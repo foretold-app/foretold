@@ -69,21 +69,20 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
                 ~measurableId=Some(m.id),
                 ~pageLimit=20,
                 ~direction=None,
-                ~agentId=None,
-                ~innerComponentFn=(
-                                    m:
-                                      HttpResponse.t(
-                                        Primary.Connection.t(
-                                          Types.measurement,
-                                        ),
-                                      ),
-                                  ) =>
-                switch (m) {
-                | Success(m) =>
-                  m.edges
-                  |> E.A.to_list
-                  |> Foretold__Components__Measurements__Table.make
-                }
+                ~innerComponentFn=
+                  (
+                    m:
+                      HttpResponse.t(
+                        Primary.Connection.t(Types.measurement),
+                      ),
+                  ) =>
+                    switch (m) {
+                    | Success(m) =>
+                      m.edges
+                      |> E.A.to_list
+                      |> Foretold__Components__Measurements__Table.make
+                    },
+                (),
               )}
            </>
          </>;

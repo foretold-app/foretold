@@ -224,9 +224,11 @@ let component =
     (
       ~measurableId=None,
       ~agentId=None,
+      ~channelId=None,
       ~pageLimit,
       ~direction: direction,
       ~innerComponentFn,
+      (),
     ) => {
   let query =
     queryDirection(

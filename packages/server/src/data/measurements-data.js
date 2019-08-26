@@ -88,6 +88,24 @@ class MeasurementsData extends DataBase {
       agentId: options.agentId,
     };
   }
+
+  /**
+   * @public
+   * @param {Models.ObjectID} measurableId
+   * @returns {Promise<Model>}
+   */
+  async getOutcome(measurableId) {
+    return this.model.getOutcome(measurableId);
+  }
+
+  /**
+   * @public
+   * @param {Models.ObjectID} measurableId
+   * @returns {Promise<Model>}
+   */
+  async getPreviousAggregate(measurableId) {
+    return this.model.getPreviousAggregate(measurableId);
+  }
 }
 
 module.exports = {

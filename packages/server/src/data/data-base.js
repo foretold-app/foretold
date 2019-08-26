@@ -140,7 +140,7 @@ class DataBase {
    * @return {Layers.AbstractModelsLayer.options}
    */
   _getModelOptions(options = {}) {
-    if (!options) return new Options({});
+    if (_.isEmpty(options)) return new Options({});
     return new Options({
       ...options,
       ...this._getDefaultOptions(options),
@@ -162,7 +162,7 @@ class DataBase {
    * @return {Layers.AbstractModelsLayer.restrictions}
    */
   _getModelRestrictions(options = {}) {
-    if (!options) return new Restrictions({});
+    if (_.isEmpty(options)) return new Restrictions({});
     return new Restrictions({
       ...options,
       ...this._getDefaultRestrictions(options),

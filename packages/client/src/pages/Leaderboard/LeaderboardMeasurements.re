@@ -39,12 +39,10 @@ let make =
         items
         |> E.A.fmap(node => Primary.LeaderboardItem.fromMeasurement(node));
 
-      let isFound = Array.length(items) > 0;
-
       let body =
         switch (reducerParams.response) {
         | Success(_) =>
-          isFound
+          Array.length(items) > 0
             ? <FC.PageCard.Body>
                 <LeaderboardTable.Jsx2 items />
               </FC.PageCard.Body>
@@ -59,8 +57,7 @@ let make =
           subTab,
         );
 
-      SLayout.LayoutConfig.make(~head=E.React.showIf(isFound, head), ~body)
-      |> layout;
+      SLayout.LayoutConfig.make(~head, ~body) |> layout;
     };
 
     <Reducer callFnParams=channelId subComponent />;

@@ -50,9 +50,20 @@ let make =
        Primary.User.show(
          loggedInUser,
          tab(
-           tabSelected == Leaderboard,
-           tabToInternalUrl(channel.id, Leaderboard),
-           "Leaderboard",
+           tabSelected == LeaderboardByMeasurament,
+           tabToInternalUrl(channel.id, LeaderboardByMeasurament),
+           "Leaderboard (by prediction)",
+         ),
+       ),
+     )}
+    {E.React.showIf(
+       channel.id != "home",
+       Primary.User.show(
+         loggedInUser,
+         tab(
+           tabSelected == LeaderboardByMeasurable,
+           tabToInternalUrl(channel.id, LeaderboardByMeasurable),
+           "Leaderboard (by question)",
          ),
        ),
      )}

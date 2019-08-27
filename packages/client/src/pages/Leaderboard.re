@@ -20,9 +20,21 @@ module ReducerConfig = {
 
 module Reducer = PaginationReducerFunctor.Make(ReducerConfig);
 
-let component = ReasonReact.statelessComponent("Leaderboard");
-type pageParams = {id: string};
+let pagination = (reducerParams: Reducer.Types.reducerParams) =>
+  <Div>
+    <Div
+      float=`right
+      styles=[
+        Css.style([
+          FC.PageCard.HeaderRow.Styles.itemTopPadding,
+          FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+        ]),
+      ]>
+      {Reducer.Components.paginationPage(reducerParams)}
+    </Div>
+  </Div>;
 
+let component = ReasonReact.statelessComponent("Leaderboard");
 let make =
     (
       ~channelId: option(string)=None,
@@ -31,24 +43,12 @@ let make =
     ) => {
   ...component,
   render: _ => {
-    let pagination = (reducerParams: Reducer.Types.reducerParams) =>
-      <Div>
-        <Div
-          float=`right
-          styles=[
-            Css.style([
-              FC.PageCard.HeaderRow.Styles.itemTopPadding,
-              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-            ]),
-          ]>
-          {Reducer.Components.paginationPage(reducerParams)}
-        </Div>
-      </Div>;
-
     let subComponent = (reducerParams: Reducer.Types.reducerParams) => {
       let items =
         switch (reducerParams.response) {
-        | Success(connection) => connection.edges
+        | Success(connection) =>
+          connection.edges
+          |> E.A.fmap(node => Primary.LeaderboardItem.fromMeasurement(node))
         | _ => [||]
         };
 

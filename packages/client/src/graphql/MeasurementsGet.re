@@ -211,8 +211,6 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-type measurementEdges = Primary.Connection.edges(measurement);
-
 type measurableStates = Types.measurableState;
 
 type inputType('a) =

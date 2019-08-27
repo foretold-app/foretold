@@ -153,6 +153,14 @@ and agentMeasurable = {
   primaryPointScore: float,
   predictionCountTotal: int,
 }
+and leaderboardItem = {
+  id: string,
+  measurable: option(measurable),
+  agent: option(agent),
+  pointScore: option(float),
+  createdAt: option(MomentRe.Moment.t),
+  predictionCountTotal: option(int),
+}
 and series = {
   id: string,
   description: option(string),

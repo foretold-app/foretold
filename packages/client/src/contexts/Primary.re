@@ -637,3 +637,40 @@ module AgentMeasurable = {
     predictionCountTotal,
   };
 };
+
+module LeaderboardItem = {
+  type t = Types.leaderboardItem;
+
+  let make =
+      (
+        ~id: string,
+        ~measurable=None,
+        ~agent=None,
+        ~pointScore=None,
+        ~createdAt=None,
+        ~predictionCountTotal=None,
+        (),
+      )
+      : t => {
+    id,
+    measurable,
+    agent,
+    pointScore,
+    createdAt,
+    predictionCountTotal,
+  };
+
+  let fromMeasurement = (measurement: Types.measurement) =>
+    make(
+      ~id=measurement.id,
+      ~agent=measurement.agent,
+      ~measurable=measurement.measurable,
+      ~pointScore=
+        measurement.measurementScoreSet
+        |> E.O.fmap((a: Types.measurementScoreSet) =>
+             a.primaryPointScore |> E.O.default(0.0)
+           ),
+      ~createdAt=measurement.createdAt,
+      (),
+    );
+};

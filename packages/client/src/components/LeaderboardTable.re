@@ -1,8 +1,8 @@
 [@bs.config {jsx: 3}];
 
 module Columns = {
-  type record = Types.measurement;
-  type column = Table.column(Types.measurement);
+  type record = Types.leaderboardItem;
+  type column = Table.column(record);
 
   let getName = (r: record): ReasonReact.reactElement =>
     switch (r.measurable) {
@@ -16,7 +16,7 @@ module Columns = {
     | _ => "" |> Utils.ste
     };
 
-  let measurable: column =
+  let measurable =
     Table.Column.make(
       ~name="Question" |> Utils.ste,
       ~render=(r: record) => r |> getName,
@@ -24,7 +24,7 @@ module Columns = {
       (),
     );
 
-  let agent: column =
+  let agent =
     Table.Column.make(
       ~name="Agent" |> Utils.ste,
       ~render=
@@ -49,25 +49,20 @@ module Columns = {
       (),
     );
 
-  let score: column =
+  let score =
     Table.Column.make(
       ~name="Score" |> Utils.ste,
       ~render=
         (r: record) =>
-          switch (r.measurementScoreSet) {
-          | Some(measurementScoreSet) =>
-            measurementScoreSet.primaryPointScore
-            |> E.O.fmap(primaryPointScore =>
-                 primaryPointScore |> string_of_float |> Utils.ste
-               )
-            |> E.O.default("0.0" |> Utils.ste)
+          switch (r.pointScore) {
+          | Some(pointScore) => pointScore |> string_of_float |> Utils.ste
           | _ => "0.0" |> Utils.ste
           },
       ~flex=3,
       (),
     );
 
-  let time: column =
+  let time =
     Table.Column.make(
       ~name="Time" |> Utils.ste,
       ~render=

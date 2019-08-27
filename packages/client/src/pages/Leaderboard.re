@@ -20,8 +20,34 @@ module ReducerConfig = {
 
 module Reducer = PaginationReducerFunctor.Make(ReducerConfig);
 
+let subTab = (state, text, num: int, isActive) =>
+  <FC.Tab2
+    isActive
+    number=num
+    onClick={LinkType.onClick(
+      Relative(
+        MeasurableQueryIndex.make(Some(state))
+        |> MeasurableQueryIndex.toUrlParams,
+      ),
+    )}>
+    {text |> Utils.ste}
+  </FC.Tab2>;
+
 let pagination = (reducerParams: Reducer.Types.reducerParams) =>
   <Div>
+    <Div float=`left>
+      <Div
+        float=`left
+        styles=[
+          Css.style([
+            FC.PageCard.HeaderRow.Styles.itemTopPadding,
+            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+          ]),
+        ]>
+        {subTab([|`OPEN|], "Open", 1, true)}
+        {subTab([|`OPEN|], "Another", 10, false)}
+      </Div>
+    </Div>
     <Div
       float=`right
       styles=[

@@ -139,10 +139,6 @@ module ChannelMembership = {
   };
 };
 
-module AgentType = {
-  type t = Types.agentType;
-};
-
 module User = {
   type t = Types.user;
 
@@ -686,4 +682,35 @@ module LeaderboardItem = {
       ~createdAt=Some(agentMeasurable.createdAt),
       (),
     );
+};
+
+module AgentType = {
+  type t = Types.agentType;
+
+  let getAgentType = (agent: Types.agentTypeJs) =>
+    switch (agent##bot, agent##user) {
+    | (Some(bot), None) =>
+      Some(
+        Types.Bot(
+          Bot.make(
+            ~id=bot##id,
+            ~name=Some(bot##name),
+            ~competitorType=bot##competitorType,
+            (),
+          ),
+        ),
+      )
+    | (None, Some(user)) =>
+      Some(
+        Types.User(
+          User.make(
+            ~id=user##id,
+            ~name=user##name,
+            ~agentId=user##agentId,
+            (),
+          ),
+        ),
+      )
+    | (_, _) => None
+    };
 };

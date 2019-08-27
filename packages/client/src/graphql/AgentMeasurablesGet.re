@@ -10,25 +10,7 @@ type measurements = {. "total": option(int)};
 type node = {
   .
   "id": string,
-  "agent": {
-    .
-    "bot":
-      option({
-        .
-        "id": string,
-        "name": string,
-        "competitorType": Types.competitorType,
-      }),
-    "id": string,
-    "name": option(string),
-    "user":
-      option({
-        .
-        "id": string,
-        "name": string,
-        "agentId": string,
-      }),
-  },
+  "agent": option(Types.agentTypeJs),
   "measurable": measurable,
   "createdAt": MomentRe.Moment.t,
   "primaryPointScore": float,
@@ -40,34 +22,7 @@ type edges = option({. "edges": option(Js.Array.t(node))});
 let toNode = node => {
   let measurable = node##measurable;
   let agent = node##agent;
-
-  // @todo: duplicated
-  let agentType =
-    switch (agent##bot, agent##user) {
-    | (Some(bot), None) =>
-      Some(
-        Types.Bot(
-          Primary.Bot.make(
-            ~id=bot##id,
-            ~name=Some(bot##name),
-            ~competitorType=bot##competitorType,
-            (),
-          ),
-        ),
-      )
-    | (None, Some(user)) =>
-      Some(
-        Types.User(
-          Primary.User.make(
-            ~id=user##id,
-            ~name=user##name,
-            ~agentId=user##agentId,
-            (),
-          ),
-        ),
-      )
-    | (_, _) => None
-    };
+  let agentType = Primary.AgentType.getAgentType(agent);
 
   let agent =
     Primary.Agent.make(~id=agent##id, ~agentType, ~name=agent##name, ());

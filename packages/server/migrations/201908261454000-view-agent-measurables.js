@@ -28,6 +28,10 @@ module.exports = {
        * |4. Another solutions.  | 2     |
        * ---------------------------------
        *
+       * Why are DB trigger bad? They are not bad but they are isolated on
+       * a higher layer. So when DB changes a table (adds, removes rows) it
+       * should notify the application to turn actions and events. It is messy.
+       *
        * We just want to try future features before doing
        * much work.
        */

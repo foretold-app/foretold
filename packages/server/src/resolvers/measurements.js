@@ -35,7 +35,7 @@ const predicateFilterGeneric = (root, args, context, info) => {
 
   return new Filter({
     withinMeasurables: withinMeasurables(measurableState, channelId),
-    measurableId: _.get(args, 'measurableId') ,
+    measurableId: _.get(args, 'measurableId'),
     agentId: _.get(args, 'agentId') || _.get(root, 'id'),
     competitorType: _.get(args, 'competitorType'),
     findInDateRange: _.get(args, 'findInDateRange'),
@@ -54,7 +54,25 @@ const predicateFilterGeneric = (root, args, context, info) => {
  */
 const predicateFilterRelation = (root, args, context, info) => {
   return new Filter({
-    measurableId: _.get(root, 'measurableId') ,
+    measurableId: _.get(root, 'measurableId'),
+    agentId: _.get(root, 'agentId'),
+  });
+};
+
+/**
+ * @param {*} root
+ * @param {Models.ObjectID} root.channelId
+ * @param {Models.ObjectID} root.agentId
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+const predicateFilterRelationAgentChannel = (root, args, context, info) => {
+  const channelId = _.get(root, 'channelId');
+  const measurableState = null;
+  return new Filter({
+    withinMeasurables: withinMeasurables(measurableState, channelId),
     agentId: _.get(root, 'agentId'),
   });
 };
@@ -105,6 +123,7 @@ async function all(root, args, context, info) {
 }
 
 /**
+ * @todo: rename
  * @param {*} root
  * @param {Models.ObjectID} root.measurableId
  * @param {Models.ObjectID} root.agentId
@@ -115,6 +134,19 @@ async function all(root, args, context, info) {
  */
 async function allByRelation(root, args, context, info) {
   return allPredicated(predicateFilterRelation)(root, args, context, info);
+}
+
+/**
+ * @param {*} root
+ * @param {Models.ObjectID} root.channelId
+ * @param {Models.ObjectID} root.agentId
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+async function allByRelationAgentChannel(root, args, context, info) {
+  return allPredicated(predicateFilterRelationAgentChannel)(root, args, context, info);
 }
 
 /**
@@ -243,6 +275,7 @@ module.exports = {
   one,
   all,
   allByRelation,
+  allByRelationAgentChannel,
   create,
   latest,
   scoreSet,

@@ -89,6 +89,10 @@ const AgentMeasurableModel = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
 
+const AgentChannelModel = jest.fn().mockImplementation(() => ({
+  ...ModelPostgres,
+}));
+
 const Model = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
@@ -111,5 +115,6 @@ module.exports = {
   FeedItemModel,
   GlobalSettingModel,
   AgentMeasurableModel,
+  AgentChannelModel,
   Model,
 };

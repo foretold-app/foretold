@@ -24,7 +24,7 @@ async function all(root, args, context, info) {
 
   const filter = new Filter({ channelId });
   const pagination = new Pagination(args);
-  const options = new Options({ agentId: currentAgentId });
+  const options = new Options({ currentAgentId });
 
   return data.agentMeasurables.getConnection(filter, pagination, options);
 }

@@ -201,6 +201,19 @@ class DataBase {
       withinPublicAndJoinedChannels,
     };
   }
+
+  /**
+   * @protected
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Layers.AbstractModelsLayer.restrictions}
+   */
+  _getDefaultRestrictionsForIncludedIntoMeasurables(options = {}) {
+    const currentAgentId = _.get(options, 'currentAgentId');
+    return {
+      measurableId: true,
+      agentId: currentAgentId,
+    };
+  }
 }
 
 module.exports = {

@@ -6,7 +6,7 @@ const { Pagination } = require('../data/classes/pagination');
 const { Filter } = require('../data/classes/filter');
 const { Options } = require('../data/classes/options');
 
-const { withinMeasurables } = require('../structures');
+const structures = require('../structures');
 
 /**
  * @param {*} root
@@ -26,7 +26,10 @@ async function all(root, args, context, info) {
   const measurableState = _.get(args, 'measurableState');
   const currentAgentId = _.get(context, 'agent.id');
 
-  const withinMeasurables = withinMeasurables(measurableState, channelId);
+  const withinMeasurables = structures.withinMeasurables(
+    measurableState,
+    channelId,
+  );
 
   const filter = new Filter({ withinMeasurables });
   const pagination = new Pagination(args);

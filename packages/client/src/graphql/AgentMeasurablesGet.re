@@ -56,18 +56,20 @@ let toNode = node => {
 module Query = [%graphql
   {|
     query getMeasurements(
-        $channelId: String
         $first: Int
         $last: Int
         $after: String
         $before: String
+        $channelId: String
+        $measurableState: [measurableState]
      ) {
         edges: agentMeasurables (
-            channelId: $channelId
             first: $first
             last: $last
             after: $after
             before: $before
+            channelId: $channelId
+            measurableState: $measurableState
         ) {
           total
           pageInfo{
@@ -141,12 +143,18 @@ let componentMaker = (query, innerComponentFn) =>
 let component =
     (
       ~channelId=None,
+      ~measurableState=None,
       ~pageLimit,
       ~direction: direction,
       ~innerComponentFn,
       (),
     ) => {
   let query =
-    queryDirection(~pageLimit, ~direction, ~fn=Query.make(~channelId?), ());
+    queryDirection(
+      ~pageLimit,
+      ~direction,
+      ~fn=Query.make(~channelId?, ~measurableState?),
+      (),
+    );
   componentMaker(query, innerComponentFn);
 };

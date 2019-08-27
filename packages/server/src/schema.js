@@ -101,6 +101,7 @@ const schema = new graphql.GraphQLSchema({
         args: {
           ...types.common.connectionArguments,
           channelId: { type: graphql.GraphQLString },
+          measurableState: { type: graphql.GraphQLList(types.measurables.measurableState) },
         },
         resolve: resolvers.agentMeasurables.all,
       },

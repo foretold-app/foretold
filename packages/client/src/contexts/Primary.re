@@ -617,3 +617,23 @@ module GlobalSetting = {
     entityGraph,
   };
 };
+
+module AgentMeasurable = {
+  type t = Types.agentMeasurable;
+  let make =
+      (
+        ~id: string,
+        ~measurable,
+        ~agent,
+        ~primaryPointScore,
+        ~predictionCountTotal,
+        (),
+      )
+      : t => {
+    id,
+    measurable,
+    agent,
+    primaryPointScore,
+    predictionCountTotal,
+  };
+};

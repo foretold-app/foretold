@@ -146,6 +146,13 @@ and measurement = {
   agent: option(agent),
   measurementScoreSet: option(measurementScoreSet),
 }
+and agentMeasurable = {
+  id: string,
+  measurable,
+  agent,
+  primaryPointScore: float,
+  predictionCountTotal: int,
+}
 and series = {
   id: string,
   description: option(string),

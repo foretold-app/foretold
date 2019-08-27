@@ -25,8 +25,7 @@ module ChannelPage = {
     | Members
     | Options
     | Updates
-    | LeaderboardByMeasurable
-    | LeaderboardByMeasurament;
+    | Leaderboard;
 
   type leaderboard =
     | ByMeasurement
@@ -58,8 +57,7 @@ module ChannelPage = {
       | InviteMember => Members
       | Settings => Options
       | FeedItems => Updates
-      | Leaderboard(ByMeasurement) => LeaderboardByMeasurament
-      | Leaderboard(ByMeasurable) => LeaderboardByMeasurable
+      | Leaderboard(_) => Leaderboard
       };
 
     let fromTab = (tab: tab): t =>
@@ -68,8 +66,7 @@ module ChannelPage = {
       | Members => Members
       | Options => Settings
       | Updates => FeedItems
-      | LeaderboardByMeasurament => Leaderboard(ByMeasurement)
-      | LeaderboardByMeasurable => Leaderboard(ByMeasurable)
+      | Leaderboard => Leaderboard(ByMeasurement)
       };
   };
 

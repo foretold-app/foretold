@@ -627,6 +627,7 @@ module AgentMeasurable = {
         ~agent,
         ~primaryPointScore,
         ~predictionCountTotal,
+        ~createdAt,
         (),
       )
       : t => {
@@ -635,6 +636,7 @@ module AgentMeasurable = {
     agent,
     primaryPointScore,
     predictionCountTotal,
+    createdAt,
   };
 };
 
@@ -671,6 +673,17 @@ module LeaderboardItem = {
              a.primaryPointScore |> E.O.default(0.0)
            ),
       ~createdAt=measurement.createdAt,
+      (),
+    );
+
+  let fromAgentMeasurable = (agentMeasurable: Types.agentMeasurable) =>
+    make(
+      ~id=agentMeasurable.id,
+      ~agent=Some(agentMeasurable.agent),
+      ~measurable=Some(agentMeasurable.measurable),
+      ~pointScore=Some(agentMeasurable.primaryPointScore),
+      ~predictionCountTotal=Some(agentMeasurable.predictionCountTotal),
+      ~createdAt=Some(agentMeasurable.createdAt),
       (),
     );
 };

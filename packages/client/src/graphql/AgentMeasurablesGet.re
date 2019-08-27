@@ -90,6 +90,7 @@ let toNode = node => {
   Primary.AgentMeasurable.make(
     ~id=node##id,
     ~primaryPointScore=node##primaryPointScore,
+    ~createdAt=node##createdAt,
     ~predictionCountTotal,
     ~agent,
     ~measurable,

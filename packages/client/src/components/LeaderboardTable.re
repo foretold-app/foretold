@@ -62,6 +62,33 @@ module Columns = {
       (),
     );
 
+  let totalScore =
+    Table.Column.make(
+      ~name="Total Score" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          switch (r.pointScore) {
+          | Some(pointScore) => pointScore |> Js.Float.toString |> Utils.ste
+          | _ => "0.0" |> Utils.ste
+          },
+      ~flex=3,
+      (),
+    );
+
+  let predictionCount =
+    Table.Column.make(
+      ~name="Prediction Count" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          switch (r.predictionCountTotal) {
+          | Some(predictionCountTotal) =>
+            predictionCountTotal |> string_of_int |> Utils.ste
+          | _ => "0" |> Utils.ste
+          },
+      ~flex=3,
+      (),
+    );
+
   let time =
     Table.Column.make(
       ~name="Time" |> Utils.ste,
@@ -77,16 +104,17 @@ module Columns = {
       (),
     );
 
-  let all = [|measurable, agent, score, time|];
+  let default = [|measurable, agent, score, time|];
+  let measurables = [|measurable, agent, totalScore, predictionCount, time|];
 };
 
 [@react.component]
-let make = (~items, ~columns=Columns.all) =>
+let make = (~items, ~columns=Columns.default) =>
   Table.fromColumns(columns, items, ());
 
 module Jsx2 = {
   let component = ReasonReact.statelessComponent("LeaderboardTable");
-  let make = (~items, ~columns=Columns.all, children) =>
+  let make = (~items, ~columns=Columns.default, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
       makeProps(~items, ~columns, ()),

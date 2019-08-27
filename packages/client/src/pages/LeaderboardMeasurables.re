@@ -1,17 +1,12 @@
 open Style.Grid;
 
 module ReducerConfig = {
-  type itemType = Types.measurement;
+  type itemType = Types.agentMeasurable;
   type callFnParams = option(string);
 
   let getId = (e: itemType) => e.id;
   let callFn = (channelId: callFnParams) =>
-    MeasurementsGet.component(
-      ~channelId,
-      ~measurableState=Some([|Some(`JUDGED)|]),
-      ~competitorType=Some([|`COMPETITIVE|]),
-      (),
-    );
+    AgentMeasurablesGet.component(~channelId, ());
 
   let isEqual = (a: itemType, b: itemType) => {
     a.id == b.id;
@@ -64,7 +59,7 @@ let pagination =
     </Div>
   </Div>;
 
-let component = ReasonReact.statelessComponent("Leaderboard");
+let component = ReasonReact.statelessComponent("LeaderboardMeasurables");
 let make =
     (
       ~channelId: option(string)=None,
@@ -78,11 +73,17 @@ let make =
         switch (reducerParams.response) {
         | Success(connection) =>
           connection.edges
-          |> E.A.fmap(node => Primary.LeaderboardItem.fromMeasurement(node))
+          |> E.A.fmap(node =>
+               Primary.LeaderboardItem.fromAgentMeasurable(node)
+             )
         | _ => [||]
         };
 
-      let table = <LeaderboardTable.Jsx2 items />;
+      let table =
+        <LeaderboardTable.Jsx2
+          items
+          columns=LeaderboardTable.Columns.measurables
+        />;
 
       let isFound = Array.length(items) > 0;
 

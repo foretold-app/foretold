@@ -152,6 +152,7 @@ and agentMeasurable = {
   agent,
   primaryPointScore: float,
   predictionCountTotal: int,
+  createdAt: MomentRe.Moment.t,
 }
 and leaderboardItem = {
   id: string,

@@ -19,13 +19,7 @@ let makeWithPage =
 
       switch (channelPage.subPage) {
       | Measurables(searchParams) =>
-        <MeasurableIndex
-          channelId
-          searchParams
-          loggedInUser
-          itemsPerPage=20
-          layout
-        />
+        <MeasurableIndex channelId searchParams loggedInUser layout />
       | Measurable(measurableId) =>
         <ChannelMeasurable measurableId loggedInUser layout />
       | Series(id) => <SeriesShow id channelId loggedInUser layout />
@@ -42,7 +36,7 @@ let makeWithPage =
         <LeaderboardMeasurables
           channelId={Some(channelId)}
           layout
-          subTab=ByMeasurement
+          subTab=ByMeasurable
         />
       | AddMember => <ChannelAddMember channelId loggedInUser layout />
       | InviteMember => <ChannelInviteMember channelId loggedInUser layout />

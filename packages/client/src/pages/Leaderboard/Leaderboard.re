@@ -17,7 +17,7 @@ let pagination =
           ]),
         ]>
         <FC.Tab2
-          isActive={subTab == ByMeasurement}
+          isActive={subTab === ByMeasurement}
           onClick={LinkType.onClick(
             Internal(
               ChannelLeaderboard(channelId |> E.O.toString, ByMeasurement),
@@ -26,7 +26,7 @@ let pagination =
           {"By Prediction" |> Utils.ste}
         </FC.Tab2>
         <FC.Tab2
-          isActive={subTab == ByMeasurable}
+          isActive={subTab === ByMeasurable}
           onClick={LinkType.onClick(
             Internal(
               ChannelLeaderboard(channelId |> E.O.toString, ByMeasurable),

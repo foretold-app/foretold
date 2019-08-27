@@ -20,7 +20,7 @@ module Columns = {
     Table.Column.make(
       ~name="Question" |> Utils.ste,
       ~render=(r: record) => r |> getName,
-      ~flex=2,
+      ~flex=4,
       (),
     );
 
@@ -33,9 +33,7 @@ module Columns = {
           | Some(agent) =>
             <Link
               linkType={
-                Internal(
-                  Agent({agentId: agent.id, subPage: AgentCommunities}),
-                )
+                Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
               }>
               [|
                 agent.name
@@ -45,7 +43,7 @@ module Columns = {
             </Link>
           | _ => "" |> Utils.ste
           },
-      ~flex=3,
+      ~flex=1,
       (),
     );
 
@@ -58,7 +56,7 @@ module Columns = {
           | Some(pointScore) => pointScore |> string_of_float |> Utils.ste
           | _ => "0.0" |> Utils.ste
           },
-      ~flex=3,
+      ~flex=1,
       (),
     );
 
@@ -71,7 +69,7 @@ module Columns = {
           | Some(pointScore) => pointScore |> Js.Float.toString |> Utils.ste
           | _ => "0.0" |> Utils.ste
           },
-      ~flex=3,
+      ~flex=1,
       (),
     );
 
@@ -85,7 +83,7 @@ module Columns = {
             predictionCountTotal |> string_of_int |> Utils.ste
           | _ => "0" |> Utils.ste
           },
-      ~flex=3,
+      ~flex=1,
       (),
     );
 

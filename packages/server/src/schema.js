@@ -106,7 +106,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       agentChannels: {
-        type: types.agentChannels.agentMeasurablesConnection,
+        type: types.agentChannels.agentChannelsConnection,
         args: {
           ...types.common.connectionArguments,
           channelId: { type: graphql.GraphQLString },

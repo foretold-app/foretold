@@ -33,7 +33,7 @@ let makeWithPage =
       | Members => <ChannelMembers channelId layout channel />
       | FeedItems => <FeedItems channelId={Some(channelId)} layout />
       | Leaderboard(ByMeasurement) =>
-        <Leaderboard channelId={Some(channelId)} layout />
+        <LeaderboardMeasurements channelId={Some(channelId)} layout />
       | Leaderboard(ByMeasurable) =>
         <LeaderboardMeasurables channelId={Some(channelId)} layout />
       | AddMember => <ChannelAddMember channelId loggedInUser layout />

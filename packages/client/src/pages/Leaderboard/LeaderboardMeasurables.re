@@ -50,17 +50,14 @@ let make =
         | _ => <SLayout.Spin />
         };
 
-      SLayout.LayoutConfig.make(
-        ~head=
-          isFound
-            ? Leaderboard.pagination(
-                channelId,
-                Reducer.Components.paginationPage(reducerParams),
-                subTab,
-              )
-            : ReasonReact.null,
-        ~body,
-      )
+      let head =
+        Leaderboard.pagination(
+          channelId,
+          Reducer.Components.paginationPage(reducerParams),
+          subTab,
+        );
+
+      SLayout.LayoutConfig.make(~head=E.React.showIf(isFound, head), ~body)
       |> layout;
     };
 

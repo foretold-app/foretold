@@ -105,6 +105,15 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.agentMeasurables.all,
       },
 
+      agentChannels: {
+        type: types.agentChannels.agentMeasurablesConnection,
+        args: {
+          ...types.common.connectionArguments,
+          channelId: { type: graphql.GraphQLString },
+        },
+        resolve: resolvers.agentChannels.all,
+      },
+
       bot: {
         type: types.bots.bot,
         args: {

@@ -2,7 +2,7 @@ const graphql = require("graphql");
 
 const agents = require('./agent-measurables');
 
-describe('agents types', () => {
+describe('Agents Measurables Types', () => {
   it('class should be object', () => {
     expect(agents).toBeInstanceOf(Object);
   });

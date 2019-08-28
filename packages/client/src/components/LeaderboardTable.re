@@ -26,7 +26,7 @@ module Columns = {
 
   let agent =
     Table.Column.make(
-      ~name="Agent" |> Utils.ste,
+      ~name="Member" |> Utils.ste,
       ~render=
         (r: record) =>
           switch (r.agent) {
@@ -38,7 +38,7 @@ module Columns = {
               [|
                 agent.name
                 |> E.O.fmap(name => name |> Utils.ste)
-                |> E.O.default("Agent" |> Utils.ste),
+                |> E.O.default("Member" |> Utils.ste),
               |]
             </Link>
           | _ => "" |> Utils.ste
@@ -75,7 +75,7 @@ module Columns = {
 
   let predictionCount =
     Table.Column.make(
-      ~name="Prediction Count" |> Utils.ste,
+      ~name="Predictions" |> Utils.ste,
       ~render=
         (r: record) =>
           switch (r.predictionCountTotal) {
@@ -89,7 +89,7 @@ module Columns = {
 
   let predictedMeasurablesCount =
     Table.Column.make(
-      ~name="Predicted Question Count" |> Utils.ste,
+      ~name="Predicted Questions" |> Utils.ste,
       ~render=
         (r: record) =>
           switch (r.numberOfQuestionsScored) {
@@ -116,9 +116,14 @@ module Columns = {
       (),
     );
 
-  let default = [|measurable, agent, score, time|];
-  let measurables = [|measurable, agent, totalScore, predictionCount, time|];
-  let members = [|agent, score, predictedMeasurablesCount, predictionCount|];
+  let default = [|agent, measurable, score, time|];
+  let measurables = [|agent, measurable, totalScore, predictionCount, time|];
+  let members = [|
+    agent,
+    totalScore,
+    predictedMeasurablesCount,
+    predictionCount,
+  |];
 };
 
 [@react.component]

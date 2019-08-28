@@ -23,16 +23,7 @@ let pagination =
               ChannelLeaderboard(channelId |> E.O.toString, ByMember),
             ),
           )}>
-          {"By Member" |> Utils.ste}
-        </FC.Tab2>
-        <FC.Tab2
-          isActive={subTab === ByMeasurement}
-          onClick={LinkType.onClick(
-            Internal(
-              ChannelLeaderboard(channelId |> E.O.toString, ByMeasurement),
-            ),
-          )}>
-          {"By Prediction" |> Utils.ste}
+          {"Member Scores" |> Utils.ste}
         </FC.Tab2>
         <FC.Tab2
           isActive={subTab === ByMeasurable}
@@ -41,7 +32,16 @@ let pagination =
               ChannelLeaderboard(channelId |> E.O.toString, ByMeasurable),
             ),
           )}>
-          {"By Question" |> Utils.ste}
+          {"Question Scores" |> Utils.ste}
+        </FC.Tab2>
+        <FC.Tab2
+          isActive={subTab === ByMeasurement}
+          onClick={LinkType.onClick(
+            Internal(
+              ChannelLeaderboard(channelId |> E.O.toString, ByMeasurement),
+            ),
+          )}>
+          {"Prediction Scores" |> Utils.ste}
         </FC.Tab2>
       </Div>
     </Div>

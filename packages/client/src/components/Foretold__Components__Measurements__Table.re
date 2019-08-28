@@ -295,7 +295,7 @@ let predictionValueColumn: column =
 
 let agentColumn: column =
   Table.Column.make(
-    ~name="Agent" |> ste,
+    ~name="Member" |> ste,
     ~flex=1,
     ~render=
       (measurement: Types.measurement) => Helpers.measurerLink(~measurement),

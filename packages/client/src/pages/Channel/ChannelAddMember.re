@@ -27,7 +27,7 @@ let make =
 
     let agentColumn: column =
       Table.Column.make(
-        ~name="Agent" |> ReasonReact.string,
+        ~name="Member" |> ReasonReact.string,
         ~render=
           (agent: Types.agent) =>
             <Link.Jsx2

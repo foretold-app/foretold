@@ -263,7 +263,9 @@ export namespace Layers {
       after?: string,
       before?: string,
     };
-    type query = object;
+    type query = {
+      sort?: number,
+    };
     type params = {
       id?: Models.ObjectID,
       agentId?: Models.ObjectID,
@@ -362,7 +364,7 @@ export namespace Layers {
       withinJoinedChannels?: withinJoinedChannels | null,
       withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
 
-      getSpacedLimit(): number | undefined;
+      getSpacedLimit?(): number | undefined;
     };
     type pagination = {
       limit?: number,
@@ -374,8 +376,15 @@ export namespace Layers {
 
       getPagination(total: number): { limit: number, offset: number };
     };
-    type query = object;
-    type params = object;
+    type query = {
+      sort?: number,
+    };
+    type params = {
+      id?: Models.ObjectID
+      agentId?: Models.ObjectID
+      name?: string,
+      auth0Id?: string,
+    };
     type response = { data: any };
     type responseList = { data: any[], total: number };
 

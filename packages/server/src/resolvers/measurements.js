@@ -11,6 +11,10 @@ const { Query } = require('../data/classes/query');
 const { withinMeasurables } = require('../structures');
 
 /**
+ * @todo: to think about "predicates"
+ */
+
+/**
  * @param {*} root
  * @param {object} args
  * @param {Models.ObjectID} args.measurableId
@@ -43,28 +47,104 @@ const predicateFilterGeneric = (root, args, context, info) => {
   });
 };
 
+/**
+ * @todo: How to name?
+ * @param {*} root
+ * @param {*} root.measurableId
+ * @param {*} root.agentId
+ * @param {object} args
+ * @param {string[]} args.competitorType
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+const predicateFilterA = (root, args, context, info) => {
+  const agentId = _.get(root, 'agentId');
+  const measurableId = _.get(root, 'measurableId');
+  const competitorType = _.get(args, 'competitorType');
+
+  return new Filter({ measurableId, agentId, competitorType });
+};
+
+/**
+ * @todo: How to name?
+ * @param {*} root
+ * @param {*} root.measurableId
+ * @param {object} args
+ * @param {string[]} args.competitorType
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+const predicateFilterB = (root, args, context, info) => {
+  const measurableId = _.get(root, 'measurableId');
+  const competitorType = _.get(args, 'competitorType');
+
+  return new Filter({ measurableId, competitorType });
+};
+
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {number} args.last
+ * @param {number} args.first
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+const predicatePaginationGeneric = (root, args, context, info) => {
+  return new Pagination(args);
+};
+
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+const predicatePaginationFirst = (root, args, context, info) => {
+  return new Pagination({ first: 1 });
+};
+
+/**
+ * @param {*} result
+ * @returns {*}
+ */
+const resultGeneric = result => result;
+
+/**
+ * @param {ResponseAll} result
+ * @returns {*}
+ */
+const resultFirst = result => result.getFirst();
 
 /**
  * @param {function} filterPredicate
+ * @param {function} paginationPredicate
+ * @param {function} resultCallback
  * @returns {function(*=, *=, *=, *=): Promise<{data: Models.Model[], total: number}>}
  */
-function allPredicated(filterPredicate) {
+function allPredicated(filterPredicate, paginationPredicate, resultCallback) {
   return async function all(root, args, context, info) {
     const filter = filterPredicate(root, args, context, info);
-    const pagination = new Pagination(args);
+    const pagination = paginationPredicate(root, args, context, info);
     const options = new Options({
       isAdmin: _.get(context, 'agent.isAdmin'),
       agentId: _.get(context, 'agent.id'),
     });
 
-    return data.measurements.getConnection(filter, pagination, options);
+    const result = await data.measurements.getConnection(
+      filter,
+      pagination,
+      options,
+    );
+
+    return resultCallback(result);
   };
 }
 
 /**
- * @todo: update input of getAll
- * @todo: use predicates!
- *
  * @param {*} root
  * @param {object} args
  * @param {number} args.last
@@ -86,12 +166,58 @@ function allPredicated(filterPredicate) {
  * @returns {Promise<*>}
  */
 async function all(root, args, context, info) {
-  return allPredicated(predicateFilterGeneric)(root, args, context, info);
+  return allPredicated(
+    predicateFilterGeneric,
+    predicatePaginationGeneric,
+    resultGeneric,
+  )(root, args, context, info);
+}
+
+/**
+ * @todo: How to name?
+ * @param {*} root
+ * @param {object} args
+ * @param {number} args.last
+ * @param {number} args.first
+ * @param {string[]} args.isLinkedWithAgent
+ * @param {string[]} args.competitorType
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+async function firstA(root, args, context, info) {
+  return allPredicated(
+    predicateFilterA,
+    predicatePaginationFirst,
+    resultFirst,
+  )(root, args, context, info);
+}
+
+/**
+ * @todo: How to name?
+ * @param {*} root
+ * @param {object} args
+ * @param {number} args.last
+ * @param {number} args.first
+ * @param {string[]} args.isLinkedWithAgent
+ * @param {string[]} args.competitorType
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+async function firstB(root, args, context, info) {
+  return allPredicated(
+    predicateFilterB,
+    predicatePaginationFirst,
+    resultFirst,
+  )(root, args, context, info);
 }
 
 /**
  * @param {*} root
  * @param {object} args
+ * @param {Models.ObjectID} args.id
+ * @param {string[]} args.competitorType
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<*|Array<Model>>}
@@ -221,4 +347,6 @@ module.exports = {
   outcome,
   previousAggregate,
   primaryPointScore,
+  firstA,
+  firstB,
 };

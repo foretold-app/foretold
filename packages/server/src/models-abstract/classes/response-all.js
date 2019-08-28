@@ -58,6 +58,14 @@ class ResponseAll {
     };
   }
 
+  /**
+   * @public
+   * @returns {* | null}
+   */
+  getFirst() {
+    return _.head(this._data) || null;
+  }
+
   inspect() {
     utils.inspect(this);
   }

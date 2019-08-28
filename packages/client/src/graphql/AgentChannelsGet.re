@@ -1,49 +1,54 @@
 let toNode = node => {
-  let measurable = node##measurable;
+  let channel = node##channel;
   let agent = node##agent;
   let agentType = Primary.AgentType.getAgentType(agent);
 
   let agent =
     Primary.Agent.make(~id=agent##id, ~agentType, ~name=agent##name, ());
 
-  let measurable =
-    Primary.Measurable.make(
-      ~id=measurable##id,
-      ~name=measurable##name,
-      ~channelId=measurable##channelId,
+  let channel =
+    Primary.Channel.make(
+      ~id=channel##id,
+      ~name=channel##name,
+      ~isArchived=channel##isArchived,
+      ~isPublic=channel##isPublic,
       (),
     );
 
-  Primary.AgentMeasurable.make(
+  Primary.AgentChannel.make(
     ~id=node##id,
+    ~agentId=node##agentId,
+    ~channelId=node##channelId,
     ~primaryPointScore=node##primaryPointScore,
+    ~numberOfPredictions=node##numberOfPredictions,
+    ~numberOfQuestionsScored=node##numberOfQuestionsScored,
     ~createdAt=node##createdAt,
-    ~predictionCountTotal=node##predictionCountTotal,
+    ~updatedAt=node##updatedAt,
     ~agent,
-    ~measurable,
+    ~channel,
     (),
   );
 };
 
 module Query = [%graphql
   {|
-    query getAgentMeasurables(
+    query getAgentChannels(
         $first: Int
         $last: Int
         $after: String
         $before: String
         $channelId: String
-        $minPredictionCountTotal: Int
-        $measurableState: [measurableState]
+        $minNumberOfPredictions: Int
+        $minNumberOfQuestionsScored: Int
      ) {
-        edges: agentMeasurables (
+        edges: agentChannels (
             first: $first
             last: $last
             after: $after
             before: $before
             channelId: $channelId
-            minPredictionCountTotal: $minPredictionCountTotal
-            measurableState: $measurableState
+            minNumberOfPredictions: $minNumberOfPredictions
+            minNumberOfQuestionsScored: $minNumberOfQuestionsScored
         ) {
           total
           pageInfo{
@@ -53,31 +58,36 @@ module Query = [%graphql
             endCursor
           }
           edges{
-              node{
-                  id
-                  createdAt @bsDecoder(fn: "E.J.toMoment")
-                  primaryPointScore
-                  predictionCountTotal
-                  agent {
-                      id
-                      name
-                      user: User {
-                          id
-                          name
-                          agentId
-                      }
-                      bot: Bot {
-                          id
-                          name
-                          competitorType
-                      }
-                  }
-                  measurable {
+            node{
+                id
+                agentId
+                channelId
+                primaryPointScore
+                numberOfPredictions
+                numberOfQuestionsScored
+                createdAt @bsDecoder(fn: "E.J.toMoment")
+                updatedAt @bsDecoder(fn: "E.J.toMoment")
+                agent {
                     id
                     name
-                    channelId
-                  }
-              }
+                    user: User {
+                        id
+                        name
+                        agentId
+                    }
+                    bot: Bot {
+                        id
+                        name
+                        competitorType
+                    }
+                }
+                channel {
+                    id
+                    name
+                    isArchived
+                    isPublic
+                }
+            }
           }
         }
     }
@@ -115,8 +125,8 @@ let componentMaker = (query, innerComponentFn) =>
 let component =
     (
       ~channelId=None,
-      ~measurableState=None,
-      ~minPredictionCountTotal=None,
+      ~minNumberOfPredictions=None,
+      ~minNumberOfQuestionsScored=None,
       ~pageLimit,
       ~direction: direction,
       ~innerComponentFn,
@@ -127,7 +137,11 @@ let component =
       ~pageLimit,
       ~direction,
       ~fn=
-        Query.make(~channelId?, ~measurableState?, ~minPredictionCountTotal?),
+        Query.make(
+          ~channelId?,
+          ~minNumberOfPredictions?,
+          ~minNumberOfQuestionsScored?,
+        ),
       (),
     );
   componentMaker(query, innerComponentFn);

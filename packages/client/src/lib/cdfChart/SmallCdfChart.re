@@ -19,13 +19,22 @@ module Styles = {
     ]);
 };
 
-let make = (~data, ~minX, ~maxX, ~color=`hex("7e9db7"), _children) => {
+let make =
+    (
+      ~data,
+      ~minX,
+      ~maxX,
+      ~width=300,
+      ~height=50,
+      ~color=`hex("7e9db7"),
+      _children,
+    ) => {
   ...component,
   render: _ =>
     <div className={Styles.graph(color)}>
       <CdfChart
-        width=300
-        height=50
+        width
+        height
         minX
         maxX
         marginBottom=15

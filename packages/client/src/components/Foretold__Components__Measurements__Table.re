@@ -38,10 +38,17 @@ module Styles = {
 
 module Helpers = {
   let smallDistribution =
-      (measurement: measurement, g: (float, float)): option(React.element) =>
+      (
+        ~measurement: measurement,
+        ~bounds: (float, float),
+        ~width=300,
+        ~height=50,
+        (),
+      )
+      : option(React.element) =>
     switch (measurement.value) {
     | Ok(`FloatCdf(r)) =>
-      let (minX, maxX) = g;
+      let (minX, maxX) = bounds;
       r
       |> MeasurementValue.toPdf
       |> MeasurementValue.FloatCdf.toJs
@@ -52,6 +59,8 @@ module Helpers = {
               data
               minX
               maxX
+              width
+              height
               color={
                 measurement.competitorType == `AGGREGATION
                   ? `hex("b1b9c6") : `hex("487192")
@@ -327,7 +336,7 @@ let getPredictionDistributionColumn = (bounds): column =>
     ~flex=2,
     ~render=
       (measurement: Types.measurement) =>
-        Helpers.smallDistribution(measurement, bounds)
+        Helpers.smallDistribution(~measurement, ~bounds, ())
         |> E.O.React.defaultNull,
     ~show=
       (measurement: Types.measurement) =>

@@ -122,8 +122,11 @@ module Columns = {
         measurement,
       |]);
     Foretold__Components__Measurements__Table.Helpers.smallDistribution(
-      measurement,
-      bounds,
+      ~measurement,
+      ~bounds,
+      ~width=75,
+      ~height=30,
+      (),
     )
     |> E.O.default("No" |> Utils.ste);
   };
@@ -168,12 +171,12 @@ module Columns = {
   let measurables = [|
     measurable,
     agent,
-    totalScore,
-    predictionCount,
-    time,
     competitiveMeasurement,
     aggregationMeasurement,
     objectiveMeasurement,
+    totalScore,
+    predictionCount,
+    time,
   |];
   let members = [|agent, score, predictedMeasurablesCount, predictionCount|];
 };

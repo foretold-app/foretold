@@ -27,13 +27,6 @@ const agentChannel = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(require('./channels').channel),
       resolve: require('../resolvers').channels.one,
     },
-
-    // OK
-    measurements: {
-      type: require('./measurements').agentMeasurementsConnection,
-      args: require('./common').connectionArguments,
-      resolve: require('../resolvers').measurements.allByRelationAgentChannel,
-    },
   })
 });
 

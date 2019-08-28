@@ -26,13 +26,6 @@ const agentMeasurable = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(require('./measurables').measurable),
       resolve: require('../resolvers').measurables.one,
     },
-
-    // OK
-    measurements: {
-      type: require('./measurements').agentMeasurementsConnection,
-      args: require('./common').connectionArguments,
-      resolve: require('../resolvers').measurements.allByRelation,
-    },
   })
 });
 

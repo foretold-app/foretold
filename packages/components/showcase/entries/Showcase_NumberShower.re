@@ -44,16 +44,16 @@ module NumbersDisplay = {
           </PageCard.HeaderRow.Title>
         </PageCard.HeaderRow>
         <div>
-          (
-            numbers
-            |> E.L.fmap(n =>
-                 <div key={n |> Js.Float.toString}>
-                   <FC__NumberShower number=n precision=3 />
-                 </div>
-               )
-            |> E.L.toArray
-          )
-          ->React.array
+          {(
+             numbers
+             |> E.L.fmap(n =>
+                  <div key={n |> Js.Float.toString}>
+                    <FC__NumberShower number=n precision=3 />
+                  </div>
+                )
+             |> E.L.toArray
+           )
+           ->React.array}
         </div>
       </PageCard>,
   };

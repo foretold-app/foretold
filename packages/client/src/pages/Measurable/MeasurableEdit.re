@@ -45,8 +45,8 @@ let formCreation =
         showDescriptionProperty: measurable.name == "" ? "TRUE" : "FALSE",
         labelProperty: measurable.labelProperty |> E.O.default(""),
         valueType: measurable.valueType |> Primary.Measurable.valueTypeToStr,
-        min: measurable.min |> E.O.dimap(Js.Float.toString, () => ""),
-        max: measurable.max |> E.O.dimap(Js.Float.toString, () => ""),
+        min: measurable.min |> E.O.dimap(E.Float.toString, () => ""),
+        max: measurable.max |> E.O.dimap(E.Float.toString, () => ""),
       },
       ~schema=[(`name, Custom(_ => None))],
       ({handleSubmit, handleChange, form, _}) =>

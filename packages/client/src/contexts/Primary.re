@@ -636,6 +636,36 @@ module AgentMeasurable = {
   };
 };
 
+module AgentChannel = {
+  type t = Types.agentChannel;
+  let make =
+      (
+        ~id: string,
+        ~channel,
+        ~agent,
+        ~agentId,
+        ~channelId,
+        ~primaryPointScore,
+        ~numberOfPredictions,
+        ~numberOfQuestionsScored,
+        ~createdAt,
+        ~updatedAt,
+        (),
+      )
+      : t => {
+    id,
+    channel,
+    agent,
+    agentId,
+    channelId,
+    primaryPointScore,
+    numberOfPredictions,
+    numberOfQuestionsScored,
+    createdAt,
+    updatedAt,
+  };
+};
+
 module LeaderboardItem = {
   type t = Types.leaderboardItem;
 

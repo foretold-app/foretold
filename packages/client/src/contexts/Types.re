@@ -154,6 +154,18 @@ and agentMeasurable = {
   predictionCountTotal: int,
   createdAt: MomentRe.Moment.t,
 }
+and agentChannel = {
+  id: string,
+  agentId: string,
+  channelId: string,
+  primaryPointScore: float,
+  numberOfPredictions: int,
+  numberOfQuestionsScored: int,
+  createdAt: MomentRe.Moment.t,
+  updatedAt: MomentRe.Moment.t,
+  agent,
+  channel,
+}
 and leaderboardItem = {
   id: string,
   measurable: option(measurable),

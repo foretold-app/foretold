@@ -1,34 +1,4 @@
-type measurable = {
-  .
-  "id": string,
-  "name": string,
-  "channelId": string,
-  "state": Types.measurableState,
-  "valueType": Types.valueType,
-  "stateUpdatedAt": option(MomentRe.Moment.t),
-  "expectedResolutionDate": option(MomentRe.Moment.t),
-};
-
-type measurementScoreSet = {. "primaryPointScore": option(float)};
-
-type measurement = {
-  .
-  "id": string,
-  "agent": option(Types.agentTypeJs),
-  "description": option(string),
-  "valueText": option(string),
-  "relevantAt": option(MomentRe.Moment.t),
-  "competitorType": Types.competitorType,
-  "createdAt": MomentRe.Moment.t,
-  "taggedMeasurementId": option(string),
-  "measurable": option(measurable),
-  "value": MeasurementValue.graphQlResult,
-  "measurementScoreSet": option(measurementScoreSet),
-};
-
-type measurements = option({. "edges": option(Js.Array.t(measurement))});
-
-let toMeasurement = (measurement: measurement): Types.measurement => {
+let toMeasurement = (measurement): Types.measurement => {
   let agentType =
     measurement##agent |> E.O.bind(_, Primary.AgentType.getAgentType);
 
@@ -185,14 +155,15 @@ let unpackResults = result =>
   |> Rationale.Option.fmap(Primary.Connection.fromJson(toMeasurement));
 
 let componentMaker = (query, innerComponentFn) =>
-  QueryComponent.make(~variables=query##variables, response =>
-    response.result
-    |> HttpResponse.fromApollo
-    |> HttpResponse.fmap(unpackResults)
-    |> HttpResponse.optionalToMissing
-    |> innerComponentFn
-  )
-  |> ReasonReact.element;
+  <QueryComponent variables=query##variables fetchPolicy="no-cache">
+    ...{o =>
+      o.result
+      |> HttpResponse.fromApollo
+      |> HttpResponse.fmap(unpackResults)
+      |> HttpResponse.optionalToMissing
+      |> innerComponentFn
+    }
+  </QueryComponent>;
 
 let component =
     (

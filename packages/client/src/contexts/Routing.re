@@ -29,7 +29,8 @@ module ChannelPage = {
 
   type leaderboard =
     | ByMeasurement
-    | ByMeasurable;
+    | ByMeasurable
+    | ByMember;
 
   module SubPage = {
     type t =
@@ -66,7 +67,7 @@ module ChannelPage = {
       | Members => Members
       | Options => Settings
       | Updates => FeedItems
-      | Leaderboard => Leaderboard(ByMeasurement)
+      | Leaderboard => Leaderboard(ByMember)
       };
   };
 
@@ -154,6 +155,11 @@ module Route = {
         channelId: getChannelId(channelId),
         subPage: Leaderboard(ByMeasurable),
       })
+    | ["c", channelId, "leaderboard", "members"] =>
+      Channel({
+        channelId: getChannelId(channelId),
+        subPage: Leaderboard(ByMember),
+      })
     | ["c", channelId, "add"] => Channel({channelId, subPage: AddMember})
     | ["c", channelId, "invite"] =>
       Channel({channelId, subPage: InviteMember})
@@ -239,6 +245,8 @@ module Url = {
       "/c/" ++ channelId ++ "/leaderboard/predictions"
     | ChannelLeaderboard(channelId, ByMeasurable) =>
       "/c/" ++ channelId ++ "/leaderboard/questions"
+    | ChannelLeaderboard(channelId, ByMember) =>
+      "/c/" ++ channelId ++ "/leaderboard/members"
     | ChannelAddMember(channelId) => "/c/" ++ channelId ++ "/add"
     | ChannelInviteMember(channelId) => "/c/" ++ channelId ++ "/invite"
     | MeasurableEdit(measurableId) =>

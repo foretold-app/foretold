@@ -1,8 +1,8 @@
 [@bs.config {jsx: 3}];
 
 module Columns = {
-  type record = Types.measurement;
-  type column = Table.column(Types.measurement);
+  type record = Types.leaderboardItem;
+  type column = Table.column(record);
 
   let getName = (r: record): ReasonReact.reactElement =>
     switch (r.measurable) {
@@ -16,15 +16,15 @@ module Columns = {
     | _ => "" |> Utils.ste
     };
 
-  let measurable: column =
+  let measurable =
     Table.Column.make(
       ~name="Question" |> Utils.ste,
       ~render=(r: record) => r |> getName,
-      ~flex=2,
+      ~flex=4,
       (),
     );
 
-  let agent: column =
+  let agent =
     Table.Column.make(
       ~name="Agent" |> Utils.ste,
       ~render=
@@ -33,9 +33,7 @@ module Columns = {
           | Some(agent) =>
             <Link
               linkType={
-                Internal(
-                  Agent({agentId: agent.id, subPage: AgentCommunities}),
-                )
+                Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
               }>
               [|
                 agent.name
@@ -45,29 +43,51 @@ module Columns = {
             </Link>
           | _ => "" |> Utils.ste
           },
-      ~flex=3,
+      ~flex=1,
       (),
     );
 
-  let score: column =
+  let score =
     Table.Column.make(
       ~name="Score" |> Utils.ste,
       ~render=
         (r: record) =>
-          switch (r.measurementScoreSet) {
-          | Some(measurementScoreSet) =>
-            measurementScoreSet.primaryPointScore
-            |> E.O.fmap(primaryPointScore =>
-                 primaryPointScore |> string_of_float |> Utils.ste
-               )
-            |> E.O.default("0.0" |> Utils.ste)
+          switch (r.pointScore) {
+          | Some(pointScore) => pointScore |> string_of_float |> Utils.ste
           | _ => "0.0" |> Utils.ste
           },
-      ~flex=3,
+      ~flex=1,
       (),
     );
 
-  let time: column =
+  let totalScore =
+    Table.Column.make(
+      ~name="Total Score" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          switch (r.pointScore) {
+          | Some(pointScore) => pointScore |> Js.Float.toString |> Utils.ste
+          | _ => "0.0" |> Utils.ste
+          },
+      ~flex=1,
+      (),
+    );
+
+  let predictionCount =
+    Table.Column.make(
+      ~name="Prediction Count" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          switch (r.predictionCountTotal) {
+          | Some(predictionCountTotal) =>
+            predictionCountTotal |> string_of_int |> Utils.ste
+          | _ => "0" |> Utils.ste
+          },
+      ~flex=1,
+      (),
+    );
+
+  let time =
     Table.Column.make(
       ~name="Time" |> Utils.ste,
       ~render=
@@ -82,16 +102,17 @@ module Columns = {
       (),
     );
 
-  let all = [|measurable, agent, score, time|];
+  let default = [|measurable, agent, score, time|];
+  let measurables = [|measurable, agent, totalScore, predictionCount, time|];
 };
 
 [@react.component]
-let make = (~items, ~columns=Columns.all) =>
+let make = (~items, ~columns=Columns.default) =>
   Table.fromColumns(columns, items, ());
 
 module Jsx2 = {
   let component = ReasonReact.statelessComponent("LeaderboardTable");
-  let make = (~items, ~columns=Columns.all, children) =>
+  let make = (~items, ~columns=Columns.default, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
       makeProps(~items, ~columns, ()),

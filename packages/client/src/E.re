@@ -30,6 +30,12 @@ module O = {
     | _ => false
     };
 
+  let toString = opt =>
+    switch (opt) {
+    | Some(s) => s
+    | _ => ""
+    };
+
   let toResult = (error, e) =>
     switch (e) {
     | Some(r) => Belt.Result.Ok(r)

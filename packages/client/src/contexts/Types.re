@@ -146,6 +146,22 @@ and measurement = {
   agent: option(agent),
   measurementScoreSet: option(measurementScoreSet),
 }
+and agentMeasurable = {
+  id: string,
+  measurable,
+  agent,
+  primaryPointScore: float,
+  predictionCountTotal: int,
+  createdAt: MomentRe.Moment.t,
+}
+and leaderboardItem = {
+  id: string,
+  measurable: option(measurable),
+  agent: option(agent),
+  pointScore: option(float),
+  createdAt: option(MomentRe.Moment.t),
+  predictionCountTotal: option(int),
+}
 and series = {
   id: string,
   description: option(string),
@@ -161,22 +177,38 @@ and feedItem = {
   channel,
   createdAt: option(MomentRe.Moment.t),
   updatedAt: option(MomentRe.Moment.t),
-};
-
-type pageInfo = {
+}
+and pageInfo = {
   hasNextPage: bool,
   hasPreviousPage: bool,
   endCursor: option(string),
   startCursor: option(string),
-};
-
-type connection('a) = {
+}
+and connection('a) = {
   pageInfo,
   total: option(int),
   edges: array('a),
-};
-
-type globalSetting = {
+}
+and globalSetting = {
   id: string,
   entityGraph: option(Js.Json.t),
+}
+and agentTypeJs = {
+  .
+  "bot":
+    option({
+      .
+      "id": string,
+      "name": string,
+      "competitorType": competitorType,
+    }),
+  "id": string,
+  "name": option(string),
+  "user":
+    option({
+      .
+      "id": string,
+      "name": string,
+      "agentId": string,
+    }),
 };

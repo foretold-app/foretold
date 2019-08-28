@@ -139,10 +139,6 @@ module ChannelMembership = {
   };
 };
 
-module AgentType = {
-  type t = Types.agentType;
-};
-
 module User = {
   type t = Types.user;
 
@@ -616,4 +612,105 @@ module GlobalSetting = {
     id,
     entityGraph,
   };
+};
+
+module AgentMeasurable = {
+  type t = Types.agentMeasurable;
+  let make =
+      (
+        ~id: string,
+        ~measurable,
+        ~agent,
+        ~primaryPointScore,
+        ~predictionCountTotal,
+        ~createdAt,
+        (),
+      )
+      : t => {
+    id,
+    measurable,
+    agent,
+    primaryPointScore,
+    predictionCountTotal,
+    createdAt,
+  };
+};
+
+module LeaderboardItem = {
+  type t = Types.leaderboardItem;
+
+  let make =
+      (
+        ~id: string,
+        ~measurable=None,
+        ~agent=None,
+        ~pointScore=None,
+        ~createdAt=None,
+        ~predictionCountTotal=None,
+        (),
+      )
+      : t => {
+    id,
+    measurable,
+    agent,
+    pointScore,
+    createdAt,
+    predictionCountTotal,
+  };
+
+  let fromMeasurement = (measurement: Types.measurement) =>
+    make(
+      ~id=measurement.id,
+      ~agent=measurement.agent,
+      ~measurable=measurement.measurable,
+      ~pointScore=
+        measurement.measurementScoreSet
+        |> E.O.fmap((a: Types.measurementScoreSet) =>
+             a.primaryPointScore |> E.O.default(0.0)
+           ),
+      ~createdAt=measurement.createdAt,
+      (),
+    );
+
+  let fromAgentMeasurable = (agentMeasurable: Types.agentMeasurable) =>
+    make(
+      ~id=agentMeasurable.id,
+      ~agent=Some(agentMeasurable.agent),
+      ~measurable=Some(agentMeasurable.measurable),
+      ~pointScore=Some(agentMeasurable.primaryPointScore),
+      ~predictionCountTotal=Some(agentMeasurable.predictionCountTotal),
+      ~createdAt=Some(agentMeasurable.createdAt),
+      (),
+    );
+};
+
+module AgentType = {
+  type t = Types.agentType;
+
+  let getAgentType = (agent: Types.agentTypeJs) =>
+    switch (agent##bot, agent##user) {
+    | (Some(bot), None) =>
+      Some(
+        Types.Bot(
+          Bot.make(
+            ~id=bot##id,
+            ~name=Some(bot##name),
+            ~competitorType=bot##competitorType,
+            (),
+          ),
+        ),
+      )
+    | (None, Some(user)) =>
+      Some(
+        Types.User(
+          User.make(
+            ~id=user##id,
+            ~name=user##name,
+            ~agentId=user##agentId,
+            (),
+          ),
+        ),
+      )
+    | (_, _) => None
+    };
 };

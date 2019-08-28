@@ -1,15 +1,13 @@
-open Style.Grid;
-
 module ReducerConfig = {
-  type itemType = Types.measurement;
+  type itemType = Types.agentMeasurable;
   type callFnParams = option(string);
 
   let getId = (e: itemType) => e.id;
   let callFn = (channelId: callFnParams) =>
-    MeasurementsGet.component(
+    AgentMeasurablesGet.component(
       ~channelId,
+      ~minPredictionCountTotal=Some(1),
       ~measurableState=Some([|Some(`JUDGED)|]),
-      ~competitorType=Some([|`COMPETITIVE|]),
       (),
     );
 
@@ -20,31 +18,16 @@ module ReducerConfig = {
 
 module Reducer = PaginationReducerFunctor.Make(ReducerConfig);
 
-let component = ReasonReact.statelessComponent("Leaderboard");
-type pageParams = {id: string};
-
+let component = ReasonReact.statelessComponent("LeaderboardMeasurables");
 let make =
     (
       ~channelId: option(string)=None,
       ~layout=SLayout.FullPage.makeWithEl,
+      ~subTab: Routing.ChannelPage.leaderboard,
       _children,
     ) => {
   ...component,
   render: _ => {
-    let pagination = (reducerParams: Reducer.Types.reducerParams) =>
-      <Div>
-        <Div
-          float=`right
-          styles=[
-            Css.style([
-              FC.PageCard.HeaderRow.Styles.itemTopPadding,
-              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-            ]),
-          ]>
-          {Reducer.Components.paginationPage(reducerParams)}
-        </Div>
-      </Div>;
-
     let subComponent = (reducerParams: Reducer.Types.reducerParams) => {
       let items =
         switch (reducerParams.response) {
@@ -52,24 +35,32 @@ let make =
         | _ => [||]
         };
 
-      let table = <LeaderboardTable.Jsx2 items />;
-
-      let isFound = Array.length(items) > 0;
+      let items =
+        items
+        |> E.A.fmap(node => Primary.LeaderboardItem.fromAgentMeasurable(node));
 
       let body =
         switch (reducerParams.response) {
         | Success(_) =>
-          isFound
-            ? <FC.PageCard.Body> table </FC.PageCard.Body>
+          Array.length(items) > 0
+            ? <FC.PageCard.Body>
+                <LeaderboardTable.Jsx2
+                  items
+                  columns=LeaderboardTable.Columns.measurables
+                />
+              </FC.PageCard.Body>
             : <SLayout.NothingToShow />
         | _ => <SLayout.Spin />
         };
 
-      SLayout.LayoutConfig.make(
-        ~head=isFound ? pagination(reducerParams) : ReasonReact.null,
-        ~body,
-      )
-      |> layout;
+      let head =
+        Leaderboard.pagination(
+          channelId,
+          Reducer.Components.paginationPage(reducerParams),
+          subTab,
+        );
+
+      SLayout.LayoutConfig.make(~head, ~body) |> layout;
     };
 
     <Reducer callFnParams=channelId subComponent />;

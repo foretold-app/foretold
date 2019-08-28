@@ -14,26 +14,7 @@ type measurementScoreSet = {. "primaryPointScore": option(float)};
 type measurement = {
   .
   "id": string,
-  "agent":
-    option({
-      .
-      "bot":
-        option({
-          .
-          "id": string,
-          "name": string,
-          "competitorType": Types.competitorType,
-        }),
-      "id": string,
-      "name": option(string),
-      "user":
-        option({
-          .
-          "id": string,
-          "name": string,
-          "agentId": string,
-        }),
-    }),
+  "agent": option(Types.agentTypeJs),
   "description": option(string),
   "valueText": option(string),
   "relevantAt": option(MomentRe.Moment.t),
@@ -48,35 +29,8 @@ type measurement = {
 type measurements = option({. "edges": option(Js.Array.t(measurement))});
 
 let toMeasurement = (measurement: measurement): Types.measurement => {
-  let agentType: option(Primary.AgentType.t) =
-    measurement##agent
-    |> E.O.bind(_, k =>
-         switch (k##bot, k##user) {
-         | (Some(bot), None) =>
-           Some(
-             Types.Bot(
-               Primary.Bot.make(
-                 ~id=bot##id,
-                 ~name=Some(bot##name),
-                 ~competitorType=bot##competitorType,
-                 (),
-               ),
-             ),
-           )
-         | (None, Some(user)) =>
-           Some(
-             Types.User(
-               Primary.User.make(
-                 ~id=user##id,
-                 ~name=user##name,
-                 ~agentId=user##agentId,
-                 (),
-               ),
-             ),
-           )
-         | (_, _) => None
-         }
-       );
+  let agentType =
+    measurement##agent |> E.O.bind(_, Primary.AgentType.getAgentType);
 
   let agent =
     measurement##agent
@@ -210,8 +164,6 @@ module Query = [%graphql
 ];
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
-
-type measurementEdges = Primary.Connection.edges(measurement);
 
 type measurableStates = Types.measurableState;
 

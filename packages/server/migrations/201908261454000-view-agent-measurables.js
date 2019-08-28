@@ -36,17 +36,22 @@ module.exports = {
        * much work.
        */
       await queryInterface.sequelize.query(`
-      CREATE VIEW "AgentMeasurables" AS
-      SELECT uuid_generate_v4() AS "id",
-             "ChannelMemberships"."agentId",
-             "Measurables"."id" AS "measurableId",
-             0.0                AS "primaryPointScore",
-             "ChannelMemberships"."createdAt",
-             "ChannelMemberships"."updatedAt"
-      FROM "ChannelMemberships",
-           "Measurables"
-      WHERE "ChannelMemberships"."channelId" = "Measurables"."channelId"
-    `);
+        CREATE VIEW "AgentMeasurables" AS
+          SELECT
+            DISTINCT ON ("Measurables"."id", "ChannelMemberships"."agentId")
+            uuid_generate_v4() AS "id",
+            0.0 AS "primaryPointScore",
+            "Measurables"."id" AS "measurableId",
+            "ChannelMemberships"."agentId",
+            "ChannelMemberships"."createdAt",
+            "ChannelMemberships"."updatedAt",
+            (SELECT count(*) FROM "Measurements"
+                WHERE "Measurements"."measurableId"  = "Measurables" ."id"
+                AND "Measurements"."agentId" = "ChannelMemberships"."agentId"
+            ) AS "predictionCountTotal"
+          FROM "ChannelMemberships", "Measurables"
+          WHERE "ChannelMemberships"."channelId" = "Measurables"."channelId";
+      `);
       await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {
       console.error('Migration Up Error', e);

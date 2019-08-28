@@ -27,6 +27,10 @@ module ChannelPage = {
     | Updates
     | Leaderboard;
 
+  type leaderboard =
+    | ByMeasurement
+    | ByMeasurable;
+
   module SubPage = {
     type t =
       | Measurables(MeasurableQueryIndex.query)
@@ -39,7 +43,7 @@ module ChannelPage = {
       | NewSeries
       | Series(seriesId)
       | FeedItems
-      | Leaderboard;
+      | Leaderboard(leaderboard);
 
     let toTab = (subPage: t): tab =>
       switch (subPage) {
@@ -53,7 +57,7 @@ module ChannelPage = {
       | InviteMember => Members
       | Settings => Options
       | FeedItems => Updates
-      | Leaderboard => Leaderboard
+      | Leaderboard(_) => Leaderboard
       };
 
     let fromTab = (tab: tab): t =>
@@ -62,7 +66,7 @@ module ChannelPage = {
       | Members => Members
       | Options => Settings
       | Updates => FeedItems
-      | Leaderboard => Leaderboard
+      | Leaderboard => Leaderboard(ByMeasurement)
       };
   };
 
@@ -140,8 +144,16 @@ module Route = {
     | ["c", channelId, "members"] => Channel({channelId, subPage: Members})
     | ["c", channelId, "activity"] =>
       Channel({channelId: getChannelId(channelId), subPage: FeedItems})
-    | ["c", channelId, "leaderboard"] =>
-      Channel({channelId: getChannelId(channelId), subPage: Leaderboard})
+    | ["c", channelId, "leaderboard", "predictions"] =>
+      Channel({
+        channelId: getChannelId(channelId),
+        subPage: Leaderboard(ByMeasurement),
+      })
+    | ["c", channelId, "leaderboard", "questions"] =>
+      Channel({
+        channelId: getChannelId(channelId),
+        subPage: Leaderboard(ByMeasurable),
+      })
     | ["c", channelId, "add"] => Channel({channelId, subPage: AddMember})
     | ["c", channelId, "invite"] =>
       Channel({channelId, subPage: InviteMember})
@@ -189,7 +201,7 @@ module Url = {
     | ChannelEdit(string)
     | ChannelMembers(string)
     | ChannelFeedItems(string)
-    | ChannelLeaderboard(string)
+    | ChannelLeaderboard(string, ChannelPage.leaderboard)
     | ChannelAddMember(string)
     | ChannelInviteMember(string)
     | MeasurableNew(string)
@@ -223,7 +235,10 @@ module Url = {
     | ChannelEdit(channelId) => "/c/" ++ channelId ++ "/edit"
     | ChannelMembers(channelId) => "/c/" ++ channelId ++ "/members"
     | ChannelFeedItems(channelId) => "/c/" ++ channelId ++ "/activity"
-    | ChannelLeaderboard(channelId) => "/c/" ++ channelId ++ "/leaderboard"
+    | ChannelLeaderboard(channelId, ByMeasurement) =>
+      "/c/" ++ channelId ++ "/leaderboard/predictions"
+    | ChannelLeaderboard(channelId, ByMeasurable) =>
+      "/c/" ++ channelId ++ "/leaderboard/questions"
     | ChannelAddMember(channelId) => "/c/" ++ channelId ++ "/add"
     | ChannelInviteMember(channelId) => "/c/" ++ channelId ++ "/invite"
     | MeasurableEdit(measurableId) =>
@@ -246,7 +261,8 @@ module Url = {
     | NewMeasurable => MeasurableNew(channelPage.channelId)
     | Members => ChannelMembers(channelPage.channelId)
     | FeedItems => ChannelFeedItems(channelPage.channelId)
-    | Leaderboard => ChannelLeaderboard(channelPage.channelId)
+    | Leaderboard(subTab) =>
+      ChannelLeaderboard(channelPage.channelId, subTab)
     | AddMember => ChannelAddMember(channelPage.channelId)
     | InviteMember => ChannelInviteMember(channelPage.channelId)
     | Settings => ChannelEdit(channelPage.channelId)

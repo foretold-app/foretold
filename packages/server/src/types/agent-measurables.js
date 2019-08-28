@@ -11,6 +11,7 @@ const agentMeasurable = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(graphql.GraphQLFloat),
       resolve: () => 0.7
     },
+    predictionCountTotal: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
 

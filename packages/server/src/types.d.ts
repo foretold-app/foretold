@@ -2,6 +2,7 @@ export namespace Models {
 
   export type ObjectID = string;
   export type ChannelMembershipRole = "ADMIN" | "VIEWER";
+  export type float = number;
 
   export interface Model {
     id: ObjectID;
@@ -145,6 +146,13 @@ export namespace Models {
     entityGraph: null | object;
   }
 
+  export interface AgentMeasurable extends Model {
+    agentId: ObjectID;
+    measurableId: ObjectID;
+    primaryPointScore: float;
+    predictionCountTotal: number;
+  }
+
   export type Creator = Models.User | Models.Bot;
 }
 
@@ -225,6 +233,7 @@ export namespace Layers {
       type?: string,
       attemptCounterMax?: number,
       sentAt?: string | null,
+      minPredictionCountTotal?: number | null,
 
       findInDateRange?: object, // @todo: Object? Give definition!
       withinMeasurables?: withinMeasurables | null,
@@ -334,6 +343,7 @@ export namespace Layers {
       competitorType?: string[],
       states?: string[],
       attemptCounterMax?: number,
+      minPredictionCountTotal?: number | null,
 
       withinMeasurables?: withinMeasurables | null,
       withinPublicChannels?: withinPublicChannels | null,

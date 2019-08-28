@@ -44,6 +44,7 @@ class Filter {
       'notTaggedByAgent', // string | null
       'states', // string[] | null
       'withinMeasurables', // Layers.withinMeasurables | null
+      'minPredictionCountTotal', // number | null
     ];
     utils.extend(this.constructor.name, filter, list, this);
     utils.diff(this.constructor.name, filter, list);

@@ -449,6 +449,14 @@ class ModelPostgres extends Model {
       });
     }
 
+    if (_.isNumber(filter.minPredictionCountTotal)) {
+      where[this.and].push({
+        predictionCountTotal: {
+          [this.gte]: filter.minPredictionCountTotal,
+        },
+      });
+    }
+
     return where;
   }
 

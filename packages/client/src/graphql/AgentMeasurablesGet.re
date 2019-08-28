@@ -14,7 +14,7 @@ type node = {
   "measurable": measurable,
   "createdAt": MomentRe.Moment.t,
   "primaryPointScore": float,
-  "measurements": option(measurements),
+  "predictionCountTotal": int,
 };
 
 type edges = option({. "edges": option(Js.Array.t(node))});
@@ -35,18 +35,11 @@ let toNode = node => {
       (),
     );
 
-  let predictionCountTotal =
-    node##measurements
-    |> E.O.fmap(measurements =>
-         measurements##total |> E.O.fmap(total => total) |> E.O.default(0)
-       )
-    |> E.O.default(0);
-
   Primary.AgentMeasurable.make(
     ~id=node##id,
     ~primaryPointScore=node##primaryPointScore,
     ~createdAt=node##createdAt,
-    ~predictionCountTotal,
+    ~predictionCountTotal=node##predictionCountTotal,
     ~agent,
     ~measurable,
     (),
@@ -56,18 +49,22 @@ let toNode = node => {
 module Query = [%graphql
   {|
     query getMeasurements(
-        $channelId: String
         $first: Int
         $last: Int
         $after: String
         $before: String
+        $channelId: String
+        $minPredictionCountTotal: Int
+        $measurableState: [measurableState]
      ) {
         edges: agentMeasurables (
-            channelId: $channelId
             first: $first
             last: $last
             after: $after
             before: $before
+            channelId: $channelId
+            minPredictionCountTotal: $minPredictionCountTotal
+            measurableState: $measurableState
         ) {
           total
           pageInfo{
@@ -81,6 +78,7 @@ module Query = [%graphql
                   id
                   createdAt @bsDecoder(fn: "E.J.toMoment")
                   primaryPointScore
+                  predictionCountTotal
                   agent {
                       id
                       name
@@ -99,9 +97,6 @@ module Query = [%graphql
                     id
                     name
                     channelId
-                  }
-                  measurements {
-                    total
                   }
               }
           }
@@ -141,12 +136,20 @@ let componentMaker = (query, innerComponentFn) =>
 let component =
     (
       ~channelId=None,
+      ~measurableState=None,
+      ~minPredictionCountTotal=None,
       ~pageLimit,
       ~direction: direction,
       ~innerComponentFn,
       (),
     ) => {
   let query =
-    queryDirection(~pageLimit, ~direction, ~fn=Query.make(~channelId?), ());
+    queryDirection(
+      ~pageLimit,
+      ~direction,
+      ~fn=
+        Query.make(~channelId?, ~measurableState?, ~minPredictionCountTotal?),
+      (),
+    );
   componentMaker(query, innerComponentFn);
 };

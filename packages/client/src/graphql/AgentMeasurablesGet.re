@@ -61,6 +61,7 @@ module Query = [%graphql
         $after: String
         $before: String
         $channelId: String
+        $minPredictionCountTotal: Int
         $measurableState: [measurableState]
      ) {
         edges: agentMeasurables (
@@ -69,6 +70,7 @@ module Query = [%graphql
             after: $after
             before: $before
             channelId: $channelId
+            minPredictionCountTotal: $minPredictionCountTotal
             measurableState: $measurableState
         ) {
           total
@@ -144,6 +146,7 @@ let component =
     (
       ~channelId=None,
       ~measurableState=None,
+      ~minPredictionCountTotal=None,
       ~pageLimit,
       ~direction: direction,
       ~innerComponentFn,
@@ -153,7 +156,8 @@ let component =
     queryDirection(
       ~pageLimit,
       ~direction,
-      ~fn=Query.make(~channelId?, ~measurableState?),
+      ~fn=
+        Query.make(~channelId?, ~measurableState?, ~minPredictionCountTotal?),
       (),
     );
   componentMaker(query, innerComponentFn);

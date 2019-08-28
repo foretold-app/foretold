@@ -487,6 +487,16 @@
                     }
                   },
                   "defaultValue": null
+                },
+                {
+                  "name": "minPredictionCountTotal",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
                 }
               ],
               "type": {
@@ -4818,6 +4828,22 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "Float",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "predictionCountTotal",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
                   "ofType": null
                 }
               },

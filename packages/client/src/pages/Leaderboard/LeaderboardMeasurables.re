@@ -6,6 +6,7 @@ module ReducerConfig = {
   let callFn = (channelId: callFnParams) =>
     AgentMeasurablesGet.component(
       ~channelId,
+      ~minPredictionCountTotal=Some(1),
       ~measurableState=Some([|Some(`JUDGED)|]),
       (),
     );

@@ -116,11 +116,8 @@ module Columns = {
     );
 
   let getMeasurement = measurement => {
-    let bounds =
-      Foretold__Components__Measurements__Table.Helpers.bounds([|
-        measurement,
-      |]);
-    Foretold__Components__Measurements__Table.Helpers.smallDistribution(
+    let bounds = C.Measurements.Table.Helpers.bounds([|measurement|]);
+    C.Measurements.Table.Helpers.smallDistribution(
       ~measurement,
       ~bounds,
       ~width=75,

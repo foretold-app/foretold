@@ -10,6 +10,8 @@ const { Options } = require('../data/classes/options');
  * @param {*} root
  * @param {object} args
  * @param {Models.ObjectID} args.channelId
+ * @param {number} args.minNumberOfPredictions
+ * @param {number} args.minNumberOfQuestionsScored
  * @param {string} args.after
  * @param {string} args.before
  * @param {number} args.last
@@ -21,8 +23,14 @@ const { Options } = require('../data/classes/options');
 async function all(root, args, context, info) {
   const channelId = _.get(args, 'channelId');
   const currentAgentId = _.get(context, 'agent.id');
+  const minNumberOfPredictions = _.get(args, 'minNumberOfPredictions');
+  const minNumberOfQuestionsScored = _.get(args, 'minNumberOfQuestionsScored');
 
-  const filter = new Filter({ channelId });
+  const filter = new Filter({
+    channelId,
+    minNumberOfPredictions,
+    minNumberOfQuestionsScored
+  });
   const pagination = new Pagination(args);
   const options = new Options({ currentAgentId });
 

@@ -111,6 +111,8 @@ const schema = new graphql.GraphQLSchema({
         type: types.agentChannels.agentChannelsConnection,
         args: {
           ...types.common.connectionArguments,
+          minNumberOfPredictions: { type: graphql.GraphQLInt },
+          minNumberOfQuestionsScored: { type: graphql.GraphQLInt },
           channelId: { type: graphql.GraphQLString },
         },
         resolve: resolvers.agentChannels.all,

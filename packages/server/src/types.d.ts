@@ -242,6 +242,8 @@ export namespace Layers {
       attemptCounterMax?: number,
       sentAt?: string | null,
       minPredictionCountTotal?: number | null,
+      minNumberOfPredictions?: number | null,
+      minNumberOfQuestionsScored?: number | null,
 
       findInDateRange?: object, // @todo: Object? Give definition!
       withinMeasurables?: withinMeasurables | null,
@@ -352,6 +354,8 @@ export namespace Layers {
       states?: string[],
       attemptCounterMax?: number,
       minPredictionCountTotal?: number | null,
+      minNumberOfPredictions?: number | null,
+      minNumberOfQuestionsScored?: number | null,
 
       withinMeasurables?: withinMeasurables | null,
       withinPublicChannels?: withinPublicChannels | null,

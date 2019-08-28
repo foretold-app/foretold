@@ -457,6 +457,22 @@ class ModelPostgres extends Model {
       });
     }
 
+    if (_.isNumber(filter.minNumberOfPredictions)) {
+      where[this.and].push({
+        numberOfPredictions: {
+          [this.gte]: filter.minNumberOfPredictions,
+        },
+      });
+    }
+
+    if (_.isNumber(filter.minNumberOfQuestionsScored)) {
+      where[this.and].push({
+        numberOfQuestionsScored: {
+          [this.gte]: filter.minNumberOfQuestionsScored,
+        },
+      });
+    }
+
     return where;
   }
 

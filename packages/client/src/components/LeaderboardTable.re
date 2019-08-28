@@ -56,7 +56,7 @@ module Columns = {
       ~render=
         (r: record) =>
           r.pointScore
-          |> E.O.fmap(Js.Float.toString)
+          |> E.O.fmap(E.Float.toString)
           |> E.O.default("0.0.")
           |> Utils.ste,
       ~flex=1,
@@ -69,7 +69,7 @@ module Columns = {
       ~render=
         (r: record) =>
           r.pointScore
-          |> E.O.fmap(Js.Float.toString)
+          |> E.O.fmap(E.Float.toString)
           |> E.O.default("0.0.")
           |> Utils.ste,
       ~flex=1,

@@ -44,6 +44,14 @@ class Cdf {
     return xs.length === ys.length;
   }
 
+  minX(){
+    return this.xs[0]
+  }
+
+  maxX(){
+    return this.xs[this.xs.length - 1]
+  }
+
   /**
    * If xs=[1,2,3], and ys=[5,6,7],
    * then findY(1) = 5, findY(3) = 7, findY(1.5) = 5.5

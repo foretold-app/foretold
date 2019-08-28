@@ -31,7 +31,7 @@ function nextDistinctValueSearch(sortedValues, start, end) {
  * @param cutoff
  * @return {number}
  */
-export function numDistinctValues(sortedValues, cutoff = Infinity) {
+function numDistinctValues(sortedValues, cutoff = Infinity) {
   if (_.isEmpty(sortedValues)) {
     return 0;
   }
@@ -56,7 +56,7 @@ export function numDistinctValues(sortedValues, cutoff = Infinity) {
  * @param samples
  * @return {Array<TestRunner.Test> | number | * | void}
  */
-export function sortDescending(samples) {
+function sortDescending(samples) {
   return Object.assign([], samples).sort((a, b) => a - b)
 }
 
@@ -67,7 +67,7 @@ export function sortDescending(samples) {
  * @param samples
  * @return {number|{mean: *, stdev: *}}
  */
-export function sampleMeanAndStdev(samples) {
+function sampleMeanAndStdev(samples) {
   if (samples.length === 0) {
     return 0
   }
@@ -96,7 +96,7 @@ export function sampleMeanAndStdev(samples) {
  * @param percentage
  * @return {*}
  */
-export function percentile(samples, length, percentage) {
+function percentile(samples, length, percentage) {
   return samples[Math.floor(length * (percentage / 100))];
 }
 
@@ -110,7 +110,7 @@ export function percentile(samples, length, percentage) {
  * @param end
  * @return {number|*}
  */
-export function cutoff(sortedValues, value, start = 0, end = sortedValues.length) {
+function cutoff(sortedValues, value, start = 0, end = sortedValues.length) {
   if (sortedValues[end - 1] <= value) {
     return -1;
   }
@@ -125,3 +125,11 @@ export function cutoff(sortedValues, value, start = 0, end = sortedValues.length
   }
   return end;
 }
+
+module.exports = {
+  numDistinctValues,
+  sortDescending,
+  sampleMeanAndStdev,
+  percentile,
+  cutoff
+};

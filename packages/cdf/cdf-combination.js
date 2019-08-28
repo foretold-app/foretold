@@ -13,14 +13,14 @@ class CdfCombination {
    * @return {number}
    */
   minBounds() {
-    return min(this.cdfs.map(e => e.xs[0]))
+    return min(this.cdfs.map(e => e.minX()))
   }
 
   /**
    * @return {number}
    */
   maxBounds() {
-    return max(this.cdfs.map(e => e.xs[e.xs.length - 1]))
+    return max(this.cdfs.map(e => e.maxX()))
   }
 
   /**

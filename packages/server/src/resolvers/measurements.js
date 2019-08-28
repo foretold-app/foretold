@@ -57,7 +57,6 @@ async function all(root, args, context, info) {
  * @param {object} args
  * @param {number} args.last
  * @param {number} args.first
- * @param {string[]} args.isLinkedWithAgent
  * @param {string[]} args.competitorType
  * @param {Schema.Context} context
  * @param {object} info
@@ -84,7 +83,6 @@ async function agentMeasurement(root, args, context, info) {
  * @param {object} args
  * @param {number} args.last
  * @param {number} args.first
- * @param {string[]} args.isLinkedWithAgent
  * @param {string[]} args.competitorType
  * @param {Schema.Context} context
  * @param {object} info

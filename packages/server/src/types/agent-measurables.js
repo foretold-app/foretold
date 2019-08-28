@@ -36,7 +36,6 @@ const agentMeasurable = new graphql.GraphQLObjectType({
               .measurementCompetitorType,
           ),
         },
-        isLinkedWithAgent: { type: graphql.GraphQLBoolean },
       },
       resolve: require('../resolvers').measurements.agentMeasurement,
     },

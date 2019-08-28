@@ -11,9 +11,9 @@ module Columns = {
         linkType={
           Internal(MeasurableShow(measurable.channelId, measurable.id))
         }>
-        [|measurable.name |> Utils.ste|]
+        [|measurable.name |> E.S.default("Question") |> Utils.ste|]
       </Link>
-    | _ => "" |> Utils.ste
+    | _ => "Question" |> Utils.ste
     };
 
   let measurable =
@@ -37,11 +37,13 @@ module Columns = {
               }>
               [|
                 agent.name
-                |> E.O.fmap(name => name |> Utils.ste)
+                |> E.O.fmap(name =>
+                     name |> E.S.default("Agent") |> Utils.ste
+                   )
                 |> E.O.default("Agent" |> Utils.ste),
               |]
             </Link>
-          | _ => "" |> Utils.ste
+          | _ => "Agent" |> Utils.ste
           },
       ~flex=1,
       (),

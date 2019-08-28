@@ -106,6 +106,7 @@ module S = {
   let safe_float = float_of_string->safe_fn_of_string;
   let safe_int = int_of_string->safe_fn_of_string;
   let toMoment = e => MomentRe.moment(e);
+  let default = (defaultStr, str) => str == "" ? defaultStr : str;
   module O = {
     let toMoment = O.fmap(toMoment);
   };

@@ -70,7 +70,7 @@ module Columns = {
         (r: record) =>
           r.pointScore
           |> E.O.fmap(E.Float.toString)
-          |> E.O.default("0.0.")
+          |> E.O.default("0.0")
           |> Utils.ste,
       ~flex=1,
       (),
@@ -82,8 +82,8 @@ module Columns = {
       ~render=
         (r: record) =>
           r.predictionCountTotal
-          |> E.O.fmap(Js.Int.toString)
-          |> E.O.default("0")
+          |> E.O.fmap(E.I.toString)
+          |> E.O.default("")
           |> Utils.ste,
       ~flex=1,
       (),
@@ -95,7 +95,7 @@ module Columns = {
       ~render=
         (r: record) =>
           r.numberOfQuestionsScored
-          |> E.O.fmap(Js.Int.toString)
+          |> E.O.fmap(E.I.toString)
           |> E.O.default("0")
           |> Utils.ste,
       ~flex=1,
@@ -158,7 +158,7 @@ module Columns = {
         (r: record) =>
           r.objectiveMeasurement
           |> E.O.fmap(getMeasurement)
-          |> E.O.default("_" |> Utils.ste),
+          |> E.O.default("-" |> Utils.ste),
       ~flex=1,
       (),
     );

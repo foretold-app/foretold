@@ -38,7 +38,7 @@ const agentMeasurable = new graphql.GraphQLObjectType({
         },
         isLinkedWithAgent: { type: graphql.GraphQLBoolean },
       },
-      resolve: require('../resolvers').measurements.firstA,
+      resolve: require('../resolvers').measurements.agentMeasurement,
     },
 
     measurement: {
@@ -51,7 +51,7 @@ const agentMeasurable = new graphql.GraphQLObjectType({
           ),
         },
       },
-      resolve: require('../resolvers').measurements.firstB,
+      resolve: require('../resolvers').measurements.measurableMeasurement,
     },
   })
 });

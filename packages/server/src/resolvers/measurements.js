@@ -63,7 +63,7 @@ async function all(root, args, context, info) {
  * @param {object} info
  * @returns {Promise<*>}
  */
-async function firstA(root, args, context, info) {
+async function agentMeasurement(root, args, context, info) {
   const agentId = _.get(root, 'agentId');
   const measurableId = _.get(root, 'measurableId');
   const competitorType = _.get(args, 'competitorType');
@@ -90,7 +90,7 @@ async function firstA(root, args, context, info) {
  * @param {object} info
  * @returns {Promise<*>}
  */
-async function firstB(root, args, context, info) {
+async function measurableMeasurement(root, args, context, info) {
   const measurableId = _.get(root, 'measurableId');
   const competitorType = _.get(args, 'competitorType');
 
@@ -239,6 +239,6 @@ module.exports = {
   outcome,
   previousAggregate,
   primaryPointScore,
-  firstA,
-  firstB,
+  agentMeasurement,
+  measurableMeasurement,
 };

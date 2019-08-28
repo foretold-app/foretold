@@ -53,7 +53,7 @@ module Columns = {
       ~render=
         (r: record) =>
           switch (r.pointScore) {
-          | Some(pointScore) => pointScore |> Js.Float.toString |> Utils.ste
+          | Some(pointScore) => pointScore |> E.Float.toString |> Utils.ste
           | _ => "0.0" |> Utils.ste
           },
       ~flex=1,
@@ -66,7 +66,7 @@ module Columns = {
       ~render=
         (r: record) =>
           switch (r.pointScore) {
-          | Some(pointScore) => pointScore |> Js.Float.toString |> Utils.ste
+          | Some(pointScore) => pointScore |> E.Float.toString |> Utils.ste
           | _ => "0.0" |> Utils.ste
           },
       ~flex=1,

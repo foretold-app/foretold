@@ -19,21 +19,17 @@ let make = (~number, ~precision, _children) => {
     let numberWithPresentation = JS.numberShow(number, precision);
     <span>
       {JS.valueGet(numberWithPresentation) |> ReasonReact.string}
-      {
-        JS.symbolGet(numberWithPresentation)
-        |> FC__E.O.React.fmapOrNull(ReasonReact.string)
-      }
-      {
-        JS.powerGet(numberWithPresentation)
-        |> FC__E.O.React.fmapOrNull(e =>
-             <span>
-               {{j|\u00b710|j} |> ReasonReact.string}
-               <span className=sup>
-                 {e |> Js.Float.toString |> ReasonReact.string}
-               </span>
-             </span>
-           )
-      }
+      {JS.symbolGet(numberWithPresentation)
+       |> FC__E.O.React.fmapOrNull(ReasonReact.string)}
+      {JS.powerGet(numberWithPresentation)
+       |> FC__E.O.React.fmapOrNull(e =>
+            <span>
+              {{j|\u00b710|j} |> ReasonReact.string}
+              <span className=sup>
+                {e |> E.Float.toString |> ReasonReact.string}
+              </span>
+            </span>
+          )}
     </span>;
   },
 };

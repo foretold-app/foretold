@@ -11,29 +11,23 @@ const { Query } = require('../data/classes/query');
 const { withinMeasurables } = require('../structures');
 
 /**
- * @todo: to think about "predicates"
- */
-
-/**
  * @param {*} root
  * @param {object} args
  * @param {Models.ObjectID} args.measurableId
  * @param {Models.ObjectID} args.agentId
  * @param {Models.ObjectID} args.notTaggedByAgent
  * @param {Models.ObjectID} args.channelId
- *
  * @param {object} args.findInDateRange
  * @param {string} args.findInDateRange.startDate
  * @param {string} args.findInDateRange.endDate
  * @param {number} args.findInDateRange.spacedLimit
- *
  * @param {string[]} args.competitorType
  * @param {string[]} args.measurableState
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*>}
  */
-const predicateFilterGeneric = (root, args, context, info) => {
+const filterGeneric = (root, args, _context, _info) => {
   const measurableState = _.get(args, 'measurableState');
   const channelId = _.get(args, 'channelId');
 
@@ -48,7 +42,6 @@ const predicateFilterGeneric = (root, args, context, info) => {
 };
 
 /**
- * @todo: How to name?
  * @param {*} root
  * @param {*} root.measurableId
  * @param {*} root.agentId
@@ -58,16 +51,14 @@ const predicateFilterGeneric = (root, args, context, info) => {
  * @param {object} info
  * @returns {Promise<*>}
  */
-const predicateFilterA = (root, args, context, info) => {
+const filterA = (root, args, context, info) => {
   const agentId = _.get(root, 'agentId');
   const measurableId = _.get(root, 'measurableId');
   const competitorType = _.get(args, 'competitorType');
-
   return new Filter({ measurableId, agentId, competitorType });
 };
 
 /**
- * @todo: How to name?
  * @param {*} root
  * @param {*} root.measurableId
  * @param {object} args
@@ -76,10 +67,9 @@ const predicateFilterA = (root, args, context, info) => {
  * @param {object} info
  * @returns {Promise<*>}
  */
-const predicateFilterB = (root, args, context, info) => {
+const filterB = (root, args, context, info) => {
   const measurableId = _.get(root, 'measurableId');
   const competitorType = _.get(args, 'competitorType');
-
   return new Filter({ measurableId, competitorType });
 };
 
@@ -90,9 +80,9 @@ const predicateFilterB = (root, args, context, info) => {
  * @param {number} args.first
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<*>}
+ * @returns {Pagination}
  */
-const predicatePaginationGeneric = (root, args, context, info) => {
+const paginationGeneric = (root, args, context, info) => {
   return new Pagination(args);
 };
 
@@ -101,9 +91,9 @@ const predicatePaginationGeneric = (root, args, context, info) => {
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<*>}
+ * @returns {Pagination}
  */
-const predicatePaginationFirst = (root, args, context, info) => {
+const paginationFirst = (root, args, context, info) => {
   return new Pagination({ first: 1 });
 };
 
@@ -120,15 +110,17 @@ const resultGeneric = result => result;
 const resultFirst = result => result.getFirst();
 
 /**
- * @param {function} filterPredicate
- * @param {function} paginationPredicate
- * @param {function} resultCallback
+ * @param {object} predicates
  * @returns {function(*=, *=, *=, *=): Promise<{data: Models.Model[], total: number}>}
  */
-function allPredicated(filterPredicate, paginationPredicate, resultCallback) {
+function all$(predicates = {
+  filter: filterGeneric,
+  pagination: paginationGeneric,
+  result: resultGeneric
+}) {
   return async function all(root, args, context, info) {
-    const filter = filterPredicate(root, args, context, info);
-    const pagination = paginationPredicate(root, args, context, info);
+    const filter = predicates.filter(root, args, context, info);
+    const pagination = predicates.pagination(root, args, context, info);
     const options = new Options({
       isAdmin: _.get(context, 'agent.isAdmin'),
       agentId: _.get(context, 'agent.id'),
@@ -140,7 +132,7 @@ function allPredicated(filterPredicate, paginationPredicate, resultCallback) {
       options,
     );
 
-    return resultCallback(result);
+    return predicates.result(result);
   };
 }
 
@@ -165,16 +157,9 @@ function allPredicated(filterPredicate, paginationPredicate, resultCallback) {
  * @param {object} info
  * @returns {Promise<*>}
  */
-async function all(root, args, context, info) {
-  return allPredicated(
-    predicateFilterGeneric,
-    predicatePaginationGeneric,
-    resultGeneric,
-  )(root, args, context, info);
-}
+const all = all$();
 
 /**
- * @todo: How to name?
  * @param {*} root
  * @param {object} args
  * @param {number} args.last
@@ -185,16 +170,13 @@ async function all(root, args, context, info) {
  * @param {object} info
  * @returns {Promise<*>}
  */
-async function firstA(root, args, context, info) {
-  return allPredicated(
-    predicateFilterA,
-    predicatePaginationFirst,
-    resultFirst,
-  )(root, args, context, info);
-}
+const firstA = all$({
+  filter: filterA,
+  pagination: paginationFirst,
+  result: resultFirst,
+});
 
 /**
- * @todo: How to name?
  * @param {*} root
  * @param {object} args
  * @param {number} args.last
@@ -205,13 +187,11 @@ async function firstA(root, args, context, info) {
  * @param {object} info
  * @returns {Promise<*>}
  */
-async function firstB(root, args, context, info) {
-  return allPredicated(
-    predicateFilterB,
-    predicatePaginationFirst,
-    resultFirst,
-  )(root, args, context, info);
-}
+const firstB = all$({
+  filter: filterB,
+  pagination: paginationFirst,
+  result: resultFirst,
+});
 
 /**
  * @param {*} root

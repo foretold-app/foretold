@@ -116,8 +116,65 @@ module Columns = {
       (),
     );
 
+  let getMeasurement = measurement => {
+    let bounds =
+      Foretold__Components__Measurements__Table.Helpers.bounds([|
+        measurement,
+      |]);
+    Foretold__Components__Measurements__Table.Helpers.smallDistribution(
+      measurement,
+      bounds,
+    )
+    |> E.O.default("No" |> Utils.ste);
+  };
+
+  let competitiveMeasurement =
+    Table.Column.make(
+      ~name="Prediction" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          r.competitiveMeasurement
+          |> E.O.fmap(getMeasurement)
+          |> E.O.default("_" |> Utils.ste),
+      ~flex=1,
+      (),
+    );
+
+  let aggregationMeasurement =
+    Table.Column.make(
+      ~name="Recent Aggregate" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          r.aggregationMeasurement
+          |> E.O.fmap(getMeasurement)
+          |> E.O.default("_" |> Utils.ste),
+      ~flex=1,
+      (),
+    );
+
+  let objectiveMeasurement =
+    Table.Column.make(
+      ~name="Final Answer" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          r.objectiveMeasurement
+          |> E.O.fmap(getMeasurement)
+          |> E.O.default("_" |> Utils.ste),
+      ~flex=1,
+      (),
+    );
+
   let default = [|measurable, agent, score, time|];
-  let measurables = [|measurable, agent, totalScore, predictionCount, time|];
+  let measurables = [|
+    measurable,
+    agent,
+    totalScore,
+    predictionCount,
+    time,
+    competitiveMeasurement,
+    aggregationMeasurement,
+    objectiveMeasurement,
+  |];
   let members = [|agent, score, predictedMeasurablesCount, predictionCount|];
 };
 

@@ -133,9 +133,9 @@ module Helpers = {
     | _ => None
     };
 
-  let bounds = (measurement: Js_array.t(measurement)) => {
+  let bounds = (measurements: Js_array.t(measurement)) => {
     let itemBounds =
-      measurement
+      measurements
       |> E.A.keepMap(_, r => getFloatCdf(r.value))
       |> E.A.fmap(r =>
            (

@@ -177,6 +177,9 @@ and leaderboardItem = {
   createdAt: option(MomentRe.Moment.t),
   predictionCountTotal: option(int),
   numberOfQuestionsScored: option(int),
+  competitiveMeasurement: option(measurement),
+  aggregationMeasurement: option(measurement),
+  objectiveMeasurement: option(measurement),
 }
 and series = {
   id: string,
@@ -208,23 +211,4 @@ and connection('a) = {
 and globalSetting = {
   id: string,
   entityGraph: option(Js.Json.t),
-}
-and agentTypeJs = {
-  .
-  "bot":
-    option({
-      .
-      "id": string,
-      "name": string,
-      "competitorType": competitorType,
-    }),
-  "id": string,
-  "name": option(string),
-  "user":
-    option({
-      .
-      "id": string,
-      "name": string,
-      "agentId": string,
-    }),
 };

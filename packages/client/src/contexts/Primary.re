@@ -684,6 +684,9 @@ module LeaderboardItem = {
         ~createdAt=None,
         ~predictionCountTotal=None,
         ~numberOfQuestionsScored=None,
+        ~competitiveMeasurement=None,
+        ~aggregationMeasurement=None,
+        ~objectiveMeasurement=None,
         (),
       )
       : t => {
@@ -694,6 +697,9 @@ module LeaderboardItem = {
     createdAt,
     predictionCountTotal,
     numberOfQuestionsScored,
+    competitiveMeasurement,
+    aggregationMeasurement,
+    objectiveMeasurement,
   };
 
   let fromMeasurement = (measurement: Types.measurement) =>
@@ -718,6 +724,9 @@ module LeaderboardItem = {
       ~pointScore=Some(agentMeasurable.primaryPointScore),
       ~predictionCountTotal=Some(agentMeasurable.predictionCountTotal),
       ~createdAt=Some(agentMeasurable.createdAt),
+      ~competitiveMeasurement=agentMeasurable.competitiveMeasurement,
+      ~aggregationMeasurement=agentMeasurable.aggregationMeasurement,
+      ~objectiveMeasurement=agentMeasurable.objectiveMeasurement,
       (),
     );
 
@@ -735,7 +744,7 @@ module LeaderboardItem = {
 module AgentType = {
   type t = Types.agentType;
 
-  let getAgentType = (agent: Types.agentTypeJs) =>
+  let getAgentType = agent =>
     switch (agent##bot, agent##user) {
     | (Some(bot), None) =>
       Some(

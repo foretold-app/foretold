@@ -19,7 +19,7 @@ module.exports = {
              WHERE "Measurables"."channelId" = "ChannelMemberships"."channelId"
                AND "Measurements"."agentId" = "ChannelMemberships"."agentId"
                AND "Measurements"."competitorType" IN 
-                 ('OBJECTIVE', 'COMPETITIVE', 'AGGREGATION')
+                 ('OBJECTIVE', 'COMPETITIVE')
           ) AS "numberOfPredictions",
           (
              SELECT count(*)
@@ -29,7 +29,7 @@ module.exports = {
              WHERE "Measurables"."channelId" = "ChannelMemberships"."channelId"
                AND "Measurements"."agentId" = "ChannelMemberships"."agentId"
                AND "Measurements"."competitorType" IN 
-                 ('OBJECTIVE', 'COMPETITIVE', 'AGGREGATION')
+                 ('OBJECTIVE', 'COMPETITIVE')
                AND "Measurables"."state" = 'JUDGED'
           ) AS "numberOfQuestionsScored"
           FROM "ChannelMemberships"

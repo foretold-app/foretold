@@ -124,7 +124,7 @@ module Columns = {
       ~height=30,
       (),
     )
-    |> E.O.default("No" |> Utils.ste);
+    |> E.O.default("-" |> Utils.ste);
   };
 
   let competitiveMeasurement =
@@ -134,7 +134,7 @@ module Columns = {
         (r: record) =>
           r.competitiveMeasurement
           |> E.O.fmap(getMeasurement)
-          |> E.O.default("_" |> Utils.ste),
+          |> E.O.default("-" |> Utils.ste),
       ~flex=1,
       (),
     );
@@ -146,7 +146,7 @@ module Columns = {
         (r: record) =>
           r.aggregationMeasurement
           |> E.O.fmap(getMeasurement)
-          |> E.O.default("_" |> Utils.ste),
+          |> E.O.default("-" |> Utils.ste),
       ~flex=1,
       (),
     );

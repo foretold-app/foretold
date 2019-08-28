@@ -677,6 +677,7 @@ module LeaderboardItem = {
         ~pointScore=None,
         ~createdAt=None,
         ~predictionCountTotal=None,
+        ~numberOfQuestionsScored=None,
         (),
       )
       : t => {
@@ -686,6 +687,7 @@ module LeaderboardItem = {
     pointScore,
     createdAt,
     predictionCountTotal,
+    numberOfQuestionsScored,
   };
 
   let fromMeasurement = (measurement: Types.measurement) =>
@@ -710,6 +712,16 @@ module LeaderboardItem = {
       ~pointScore=Some(agentMeasurable.primaryPointScore),
       ~predictionCountTotal=Some(agentMeasurable.predictionCountTotal),
       ~createdAt=Some(agentMeasurable.createdAt),
+      (),
+    );
+
+  let fromAgentChannel = (agentChannel: Types.agentChannel) =>
+    make(
+      ~id=agentChannel.id,
+      ~agent=Some(agentChannel.agent),
+      ~pointScore=Some(agentChannel.primaryPointScore),
+      ~predictionCountTotal=Some(agentChannel.numberOfPredictions),
+      ~numberOfQuestionsScored=Some(agentChannel.numberOfQuestionsScored),
       (),
     );
 };

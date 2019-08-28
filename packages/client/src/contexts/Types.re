@@ -173,6 +173,7 @@ and leaderboardItem = {
   pointScore: option(float),
   createdAt: option(MomentRe.Moment.t),
   predictionCountTotal: option(int),
+  numberOfQuestionsScored: option(int),
 }
 and series = {
   id: string,

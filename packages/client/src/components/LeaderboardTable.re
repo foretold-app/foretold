@@ -87,6 +87,20 @@ module Columns = {
       (),
     );
 
+  let predictedMeasurablesCount =
+    Table.Column.make(
+      ~name="Predicted Question Count" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          switch (r.numberOfQuestionsScored) {
+          | Some(numberOfQuestionsScored) =>
+            numberOfQuestionsScored |> string_of_int |> Utils.ste
+          | _ => "0" |> Utils.ste
+          },
+      ~flex=1,
+      (),
+    );
+
   let time =
     Table.Column.make(
       ~name="Time" |> Utils.ste,
@@ -104,6 +118,7 @@ module Columns = {
 
   let default = [|measurable, agent, score, time|];
   let measurables = [|measurable, agent, totalScore, predictionCount, time|];
+  let members = [|agent, score, predictedMeasurablesCount, predictionCount|];
 };
 
 [@react.component]

@@ -81,7 +81,7 @@ module Columns = {
           switch (r.predictionCountTotal) {
           | Some(predictionCountTotal) =>
             predictionCountTotal |> Js.Int.toString |> Utils.ste
-          | _ => "0" |> Utils.ste
+          | _ => "" |> Utils.ste
           },
       ~flex=1,
       (),

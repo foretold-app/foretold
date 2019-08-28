@@ -38,6 +38,12 @@ let makeWithPage =
           layout
           subTab=ByMeasurable
         />
+      | Leaderboard(ByMember) =>
+        <LeaderboardMembers
+          channelId={Some(channelId)}
+          layout
+          subTab=ByMember
+        />
       | AddMember => <ChannelAddMember channelId loggedInUser layout />
       | InviteMember => <ChannelInviteMember channelId loggedInUser layout />
       | Settings => <ChannelEdit channelId loggedInUser layout />

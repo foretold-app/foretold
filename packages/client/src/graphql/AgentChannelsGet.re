@@ -113,14 +113,15 @@ let unpackResults = result =>
   result##edges |> Rationale.Option.fmap(Primary.Connection.fromJson(toNode));
 
 let componentMaker = (query, innerComponentFn) =>
-  QueryComponent.make(~variables=query##variables, response =>
-    response.result
-    |> HttpResponse.fromApollo
-    |> HttpResponse.fmap(unpackResults)
-    |> HttpResponse.optionalToMissing
-    |> innerComponentFn
-  )
-  |> ReasonReact.element;
+  <QueryComponent variables=query##variables fetchPolicy="no-cache">
+    ...{o =>
+      o.result
+      |> HttpResponse.fromApollo
+      |> HttpResponse.fmap(unpackResults)
+      |> HttpResponse.optionalToMissing
+      |> innerComponentFn
+    }
+  </QueryComponent>;
 
 let component =
     (

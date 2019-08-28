@@ -53,7 +53,7 @@ module Columns = {
       ~render=
         (r: record) =>
           switch (r.pointScore) {
-          | Some(pointScore) => pointScore |> string_of_float |> Utils.ste
+          | Some(pointScore) => pointScore |> Js.Float.toString |> Utils.ste
           | _ => "0.0" |> Utils.ste
           },
       ~flex=1,
@@ -80,7 +80,7 @@ module Columns = {
         (r: record) =>
           switch (r.predictionCountTotal) {
           | Some(predictionCountTotal) =>
-            predictionCountTotal |> string_of_int |> Utils.ste
+            predictionCountTotal |> Js.Int.toString |> Utils.ste
           | _ => "0" |> Utils.ste
           },
       ~flex=1,
@@ -94,7 +94,7 @@ module Columns = {
         (r: record) =>
           switch (r.numberOfQuestionsScored) {
           | Some(numberOfQuestionsScored) =>
-            numberOfQuestionsScored |> string_of_int |> Utils.ste
+            numberOfQuestionsScored |> Js.Int.toString |> Utils.ste
           | _ => "0" |> Utils.ste
           },
       ~flex=1,

@@ -57,7 +57,7 @@ module Columns = {
         (r: record) =>
           r.pointScore
           |> E.O.fmap(E.Float.toString)
-          |> E.O.default("0.0.")
+          |> E.O.default("0.0")
           |> Utils.ste,
       ~flex=1,
       (),

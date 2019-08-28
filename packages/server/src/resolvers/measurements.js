@@ -13,25 +13,29 @@ const { withinMeasurables } = require('../structures');
 /**
  * @param {*} root
  * @param {object} args
+ * @param {number} args.last
+ * @param {number} args.first
  * @param {Models.ObjectID} args.measurableId
  * @param {Models.ObjectID} args.agentId
  * @param {Models.ObjectID} args.notTaggedByAgent
  * @param {Models.ObjectID} args.channelId
+ *
  * @param {object} args.findInDateRange
  * @param {string} args.findInDateRange.startDate
  * @param {string} args.findInDateRange.endDate
  * @param {number} args.findInDateRange.spacedLimit
+ *
  * @param {string[]} args.competitorType
  * @param {string[]} args.measurableState
- * @param {Schema.Context} _context
- * @param {object} _info
+ * @param {Schema.Context} context
+ * @param {object} info
  * @returns {Promise<*>}
  */
-const filterGeneric = (root, args, _context, _info) => {
+async function all(root, args, context, info) {
   const measurableState = _.get(args, 'measurableState');
   const channelId = _.get(args, 'channelId');
 
-  return new Filter({
+  const filter = new Filter({
     withinMeasurables: withinMeasurables(measurableState, channelId),
     measurableId: _.get(args, 'measurableId'),
     agentId: _.get(args, 'agentId') || _.get(root, 'id'),
@@ -39,101 +43,13 @@ const filterGeneric = (root, args, _context, _info) => {
     findInDateRange: _.get(args, 'findInDateRange'),
     notTaggedByAgent: _.get(args, 'notTaggedByAgent'),
   });
-};
+  const pagination = new Pagination(args);
+  const options = new Options({
+    isAdmin: _.get(context, 'agent.isAdmin'),
+    agentId: _.get(context, 'agent.id'),
+  });
 
-/**
- * @param {*} root
- * @param {*} root.measurableId
- * @param {*} root.agentId
- * @param {object} args
- * @param {string[]} args.competitorType
- * @param {Schema.Context} context
- * @param {object} info
- * @returns {Promise<*>}
- */
-const filterA = (root, args, context, info) => {
-  const agentId = _.get(root, 'agentId');
-  const measurableId = _.get(root, 'measurableId');
-  const competitorType = _.get(args, 'competitorType');
-  return new Filter({ measurableId, agentId, competitorType });
-};
-
-/**
- * @param {*} root
- * @param {*} root.measurableId
- * @param {object} args
- * @param {string[]} args.competitorType
- * @param {Schema.Context} context
- * @param {object} info
- * @returns {Promise<*>}
- */
-const filterB = (root, args, context, info) => {
-  const measurableId = _.get(root, 'measurableId');
-  const competitorType = _.get(args, 'competitorType');
-  return new Filter({ measurableId, competitorType });
-};
-
-/**
- * @param {*} root
- * @param {object} args
- * @param {number} args.last
- * @param {number} args.first
- * @param {Schema.Context} context
- * @param {object} info
- * @returns {Pagination}
- */
-const paginationGeneric = (root, args, context, info) => {
-  return new Pagination(args);
-};
-
-/**
- * @param {*} root
- * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
- * @returns {Pagination}
- */
-const paginationFirst = (root, args, context, info) => {
-  return new Pagination({ first: 1 });
-};
-
-/**
- * @param {*} result
- * @returns {*}
- */
-const resultGeneric = result => result;
-
-/**
- * @param {ResponseAll} result
- * @returns {*}
- */
-const resultFirst = result => result.getFirst();
-
-/**
- * @param {object} predicates
- * @returns {function(*=, *=, *=, *=): Promise<{data: Models.Model[], total: number}>}
- */
-function all$(predicates = {
-  filter: filterGeneric,
-  pagination: paginationGeneric,
-  result: resultGeneric
-}) {
-  return async function all(root, args, context, info) {
-    const filter = predicates.filter(root, args, context, info);
-    const pagination = predicates.pagination(root, args, context, info);
-    const options = new Options({
-      isAdmin: _.get(context, 'agent.isAdmin'),
-      agentId: _.get(context, 'agent.id'),
-    });
-
-    const result = await data.measurements.getConnection(
-      filter,
-      pagination,
-      options,
-    );
-
-    return predicates.result(result);
-  };
+  return data.measurements.getConnection(filter, pagination, options);
 }
 
 /**
@@ -141,23 +57,27 @@ function all$(predicates = {
  * @param {object} args
  * @param {number} args.last
  * @param {number} args.first
- * @param {Models.ObjectID} args.measurableId
- * @param {Models.ObjectID} args.agentId
- * @param {Models.ObjectID} args.notTaggedByAgent
- * @param {Models.ObjectID} args.channelId
- *
- * @param {object} args.findInDateRange
- * @param {string} args.findInDateRange.startDate
- * @param {string} args.findInDateRange.endDate
- * @param {number} args.findInDateRange.spacedLimit
- *
+ * @param {string[]} args.isLinkedWithAgent
  * @param {string[]} args.competitorType
- * @param {string[]} args.measurableState
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<*>}
  */
-const all = all$();
+async function firstA(root, args, context, info) {
+  const agentId = _.get(root, 'agentId');
+  const measurableId = _.get(root, 'measurableId');
+  const competitorType = _.get(args, 'competitorType');
+
+  const filter = new Filter({ measurableId, agentId, competitorType });
+  const pagination = new Pagination({ first: 1 });
+  const options = new Options({
+    isAdmin: _.get(context, 'agent.isAdmin'),
+    agentId: _.get(context, 'agent.id'),
+  });
+
+  const result = await data.measurements.getConnection(filter, pagination, options);
+  return result.getFirst();
+}
 
 /**
  * @param {*} root
@@ -170,28 +90,20 @@ const all = all$();
  * @param {object} info
  * @returns {Promise<*>}
  */
-const firstA = all$({
-  filter: filterA,
-  pagination: paginationFirst,
-  result: resultFirst,
-});
+async function firstB(root, args, context, info) {
+  const measurableId = _.get(root, 'measurableId');
+  const competitorType = _.get(args, 'competitorType');
 
-/**
- * @param {*} root
- * @param {object} args
- * @param {number} args.last
- * @param {number} args.first
- * @param {string[]} args.isLinkedWithAgent
- * @param {string[]} args.competitorType
- * @param {Schema.Context} context
- * @param {object} info
- * @returns {Promise<*>}
- */
-const firstB = all$({
-  filter: filterB,
-  pagination: paginationFirst,
-  result: resultFirst,
-});
+  const filter = new Filter({ measurableId, competitorType });
+  const pagination = new Pagination({ first: 1 });
+  const options = new Options({
+    isAdmin: _.get(context, 'agent.isAdmin'),
+    agentId: _.get(context, 'agent.id'),
+  });
+
+  const result = await data.measurements.getConnection(filter, pagination, options);
+  return result.getFirst();
+}
 
 /**
  * @param {*} root

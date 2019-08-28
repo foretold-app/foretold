@@ -14,7 +14,7 @@ type node = {
   "measurable": measurable,
   "createdAt": MomentRe.Moment.t,
   "primaryPointScore": float,
-  "measurements": option(measurements),
+  "predictionCountTotal": int,
 };
 
 type edges = option({. "edges": option(Js.Array.t(node))});
@@ -35,18 +35,11 @@ let toNode = node => {
       (),
     );
 
-  let predictionCountTotal =
-    node##measurements
-    |> E.O.fmap(measurements =>
-         measurements##total |> E.O.fmap(total => total) |> E.O.default(0)
-       )
-    |> E.O.default(0);
-
   Primary.AgentMeasurable.make(
     ~id=node##id,
     ~primaryPointScore=node##primaryPointScore,
     ~createdAt=node##createdAt,
-    ~predictionCountTotal,
+    ~predictionCountTotal=node##predictionCountTotal,
     ~agent,
     ~measurable,
     (),
@@ -85,6 +78,7 @@ module Query = [%graphql
                   id
                   createdAt @bsDecoder(fn: "E.J.toMoment")
                   primaryPointScore
+                  predictionCountTotal
                   agent {
                       id
                       name
@@ -103,9 +97,6 @@ module Query = [%graphql
                     id
                     name
                     channelId
-                  }
-                  measurements {
-                    total
                   }
               }
           }

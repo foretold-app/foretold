@@ -233,6 +233,7 @@ export namespace Layers {
       type?: string,
       attemptCounterMax?: number,
       sentAt?: string | null,
+      minPredictionCountTotal?: number | null,
 
       findInDateRange?: object, // @todo: Object? Give definition!
       withinMeasurables?: withinMeasurables | null,
@@ -342,6 +343,7 @@ export namespace Layers {
       competitorType?: string[],
       states?: string[],
       attemptCounterMax?: number,
+      minPredictionCountTotal?: number | null,
 
       withinMeasurables?: withinMeasurables | null,
       withinPublicChannels?: withinPublicChannels | null,

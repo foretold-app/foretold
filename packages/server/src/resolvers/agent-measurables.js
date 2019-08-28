@@ -13,6 +13,7 @@ const structures = require('../structures');
  * @param {object} args
  * @param {Models.ObjectID} args.channelId
  * @param {string[]} args.measurableState
+ * @param {string[]} args.minPredictionCountTotal
  * @param {string} args.after
  * @param {string} args.before
  * @param {number} args.last
@@ -25,13 +26,14 @@ async function all(root, args, context, info) {
   const channelId = _.get(args, 'channelId');
   const measurableState = _.get(args, 'measurableState');
   const currentAgentId = _.get(context, 'agent.id');
+  const minPredictionCountTotal = _.get(args, 'minPredictionCountTotal');
 
   const withinMeasurables = structures.withinMeasurables(
     measurableState,
     channelId,
   );
 
-  const filter = new Filter({ withinMeasurables });
+  const filter = new Filter({ withinMeasurables, minPredictionCountTotal });
   const pagination = new Pagination(args);
   const options = new Options({ currentAgentId });
 

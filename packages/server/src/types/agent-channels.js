@@ -1,17 +1,18 @@
 const graphql = require("graphql");
 const { DateType } = require('graphql-sequelize');
 
-const agentMeasurable = new graphql.GraphQLObjectType({
-  name: 'AgentMeasurable',
+const agentChannel = new graphql.GraphQLObjectType({
+  name: 'AgentChannel',
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     primaryPointScore: {
       type: graphql.GraphQLNonNull(graphql.GraphQLFloat),
-      resolve: () => 0.7
+      resolve: () => 0
     },
-    predictionCountTotal: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
+    numberOfPredictions: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
+    numberOfQuestionsScored: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
 
@@ -22,32 +23,32 @@ const agentMeasurable = new graphql.GraphQLObjectType({
     },
 
     // OK
-    measurable: {
-      type: graphql.GraphQLNonNull(require('./measurables').measurable),
-      resolve: require('../resolvers').measurables.one,
+    channel: {
+      type: graphql.GraphQLNonNull(require('./channels').channel),
+      resolve: require('../resolvers').channels.one,
     },
   })
 });
 
-const agentMeasurablesEdge = new graphql.GraphQLObjectType({
-  name: 'AgentMeasurablesEdge',
+const agentChannelsEdge = new graphql.GraphQLObjectType({
+  name: 'AgentChannelsEdge',
   fields: () => ({
-    node: { type: require('./agent-measurables').agentMeasurable },
+    node: { type: require('./agent-channels').agentChannel },
     cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
   }),
 });
 
-const agentMeasurablesConnection = new graphql.GraphQLObjectType({
-  name: 'AgentMeasurablesConnection',
+const agentChannelsConnection = new graphql.GraphQLObjectType({
+  name: 'AgentChannelsConnection',
   fields: () => ({
     total: { type: graphql.GraphQLInt },
     pageInfo: { type: graphql.GraphQLNonNull(require('./common').pageInfoConnection) },
-    edges: { type: graphql.GraphQLList(require('./agent-measurables').agentMeasurablesEdge) },
+    edges: { type: graphql.GraphQLList(require('./agent-channels').agentChannelsEdge) },
   }),
 });
 
 module.exports = {
-  agentMeasurable,
-  agentMeasurablesEdge,
-  agentMeasurablesConnection,
+  agentChannel,
+  agentChannelsEdge,
+  agentChannelsConnection,
 };

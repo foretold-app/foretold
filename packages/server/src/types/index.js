@@ -16,6 +16,7 @@ const invitations = require('./invitations');
 const feedItems = require('./feed-items');
 const globalSettings = require('./global-settings');
 const agentMeasurables = require('./agent-measurables');
+const agentChannels = require('./agent-channels');
 const jwt = require('./jwt');
 
 module.exports = {
@@ -37,5 +38,6 @@ module.exports = {
   feedItems,
   globalSettings,
   agentMeasurables,
+  agentChannels,
   jwt,
 };

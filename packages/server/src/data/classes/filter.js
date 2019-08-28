@@ -45,6 +45,8 @@ class Filter {
       'states', // string[] | null
       'withinMeasurables', // Layers.withinMeasurables | null
       'minPredictionCountTotal', // number | null
+      'minNumberOfPredictions', // number | null
+      'minNumberOfQuestionsScored', // number | null
     ];
     utils.extend(this.constructor.name, filter, list, this);
     utils.diff(this.constructor.name, filter, list);

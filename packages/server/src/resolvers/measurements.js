@@ -35,7 +35,7 @@ const predicateFilterGeneric = (root, args, context, info) => {
 
   return new Filter({
     withinMeasurables: withinMeasurables(measurableState, channelId),
-    measurableId: _.get(args, 'measurableId') ,
+    measurableId: _.get(args, 'measurableId'),
     agentId: _.get(args, 'agentId') || _.get(root, 'id'),
     competitorType: _.get(args, 'competitorType'),
     findInDateRange: _.get(args, 'findInDateRange'),
@@ -43,21 +43,6 @@ const predicateFilterGeneric = (root, args, context, info) => {
   });
 };
 
-/**
- * @param {*} root
- * @param {Models.ObjectID} root.measurableId
- * @param {Models.ObjectID} root.agentId
- * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
- * @returns {Promise<*>}
- */
-const predicateFilterRelation = (root, args, context, info) => {
-  return new Filter({
-    measurableId: _.get(root, 'measurableId') ,
-    agentId: _.get(root, 'agentId'),
-  });
-};
 
 /**
  * @param {function} filterPredicate
@@ -102,19 +87,6 @@ function allPredicated(filterPredicate) {
  */
 async function all(root, args, context, info) {
   return allPredicated(predicateFilterGeneric)(root, args, context, info);
-}
-
-/**
- * @param {*} root
- * @param {Models.ObjectID} root.measurableId
- * @param {Models.ObjectID} root.agentId
- * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
- * @returns {Promise<*>}
- */
-async function allByRelation(root, args, context, info) {
-  return allPredicated(predicateFilterRelation)(root, args, context, info);
 }
 
 /**
@@ -242,7 +214,6 @@ async function primaryPointScore(root, args, context, info) {
 module.exports = {
   one,
   all,
-  allByRelation,
   create,
   latest,
   scoreSet,

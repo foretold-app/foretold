@@ -47,6 +47,7 @@ module.exports = {
             "ChannelMemberships"."updatedAt",
             (SELECT count(*) FROM "Measurements"
                 WHERE "Measurements"."measurableId"  = "Measurables" ."id"
+                AND "Measurements"."agentId" = "ChannelMemberships"."agentId"
             ) AS "predictionCountTotal"
           FROM "ChannelMemberships", "Measurables"
           WHERE "ChannelMemberships"."channelId" = "Measurables"."channelId";

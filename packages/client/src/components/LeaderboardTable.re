@@ -29,22 +29,23 @@ module Columns = {
       ~name="Agent" |> Utils.ste,
       ~render=
         (r: record) =>
-          switch (r.agent) {
-          | Some(agent) =>
-            <Link
-              linkType={
-                Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
-              }>
-              [|
-                agent.name
-                |> E.O.fmap(name =>
-                     name |> E.S.default("Agent") |> Utils.ste
+          r.agent
+          |> E.O.fmap((agent: Types.agent) =>
+               <Link
+                 linkType={
+                   Internal(
+                     Agent({agentId: agent.id, subPage: AgentUpdates}),
                    )
-                |> E.O.default("Agent" |> Utils.ste),
-              |]
-            </Link>
-          | _ => "Agent" |> Utils.ste
-          },
+                 }>
+                 [|
+                   agent.name
+                   |> E.O.fmap(E.S.default("Agent"))
+                   |> E.O.default("Agent")
+                   |> Utils.ste,
+                 |]
+               </Link>
+             )
+          |> E.O.default("Agent" |> Utils.ste),
       ~flex=1,
       (),
     );
@@ -54,10 +55,10 @@ module Columns = {
       ~name="Score" |> Utils.ste,
       ~render=
         (r: record) =>
-          switch (r.pointScore) {
-          | Some(pointScore) => pointScore |> Js.Float.toString |> Utils.ste
-          | _ => "0.0" |> Utils.ste
-          },
+          r.pointScore
+          |> E.O.fmap(Js.Float.toString)
+          |> E.O.default("0.0.")
+          |> Utils.ste,
       ~flex=1,
       (),
     );
@@ -67,10 +68,10 @@ module Columns = {
       ~name="Total Score" |> Utils.ste,
       ~render=
         (r: record) =>
-          switch (r.pointScore) {
-          | Some(pointScore) => pointScore |> Js.Float.toString |> Utils.ste
-          | _ => "0.0" |> Utils.ste
-          },
+          r.pointScore
+          |> E.O.fmap(Js.Float.toString)
+          |> E.O.default("0.0.")
+          |> Utils.ste,
       ~flex=1,
       (),
     );
@@ -80,11 +81,10 @@ module Columns = {
       ~name="Prediction Count" |> Utils.ste,
       ~render=
         (r: record) =>
-          switch (r.predictionCountTotal) {
-          | Some(predictionCountTotal) =>
-            predictionCountTotal |> Js.Int.toString |> Utils.ste
-          | _ => "0" |> Utils.ste
-          },
+          r.predictionCountTotal
+          |> E.O.fmap(Js.Int.toString)
+          |> E.O.default("0")
+          |> Utils.ste,
       ~flex=1,
       (),
     );
@@ -94,11 +94,10 @@ module Columns = {
       ~name="Predicted Question Count" |> Utils.ste,
       ~render=
         (r: record) =>
-          switch (r.numberOfQuestionsScored) {
-          | Some(numberOfQuestionsScored) =>
-            numberOfQuestionsScored |> Js.Int.toString |> Utils.ste
-          | _ => "0" |> Utils.ste
-          },
+          r.numberOfQuestionsScored
+          |> E.O.fmap(Js.Int.toString)
+          |> E.O.default("0")
+          |> Utils.ste,
       ~flex=1,
       (),
     );
@@ -109,9 +108,7 @@ module Columns = {
       ~render=
         (r: record) =>
           r.createdAt
-          |> E.O.fmap((createdAt: MomentRe.Moment.t) =>
-               createdAt |> MomentRe.Moment.format("LLL")
-             )
+          |> E.O.fmap(MomentRe.Moment.format("LLL"))
           |> E.O.default("")
           |> Utils.ste,
       ~flex=1,

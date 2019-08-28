@@ -14,6 +14,39 @@ let toNode = node => {
       (),
     );
 
+  let competitiveMeasurement =
+    node##competitiveMeasurement
+    |> E.O.fmap(measurement =>
+         Primary.Measurement.make(
+           ~id=measurement##id,
+           ~valueText=measurement##valueText,
+           ~value=measurement##value |> MeasurementValue.decodeGraphql,
+           (),
+         )
+       );
+
+  let aggregationMeasurement =
+    node##aggregationMeasurement
+    |> E.O.fmap(measurement =>
+         Primary.Measurement.make(
+           ~id=measurement##id,
+           ~valueText=measurement##valueText,
+           ~value=measurement##value |> MeasurementValue.decodeGraphql,
+           (),
+         )
+       );
+
+  let objectiveMeasurement =
+    node##objectiveMeasurement
+    |> E.O.fmap(measurement =>
+         Primary.Measurement.make(
+           ~id=measurement##id,
+           ~valueText=measurement##valueText,
+           ~value=measurement##value |> MeasurementValue.decodeGraphql,
+           (),
+         )
+       );
+
   Primary.AgentMeasurable.make(
     ~id=node##id,
     ~primaryPointScore=node##primaryPointScore,
@@ -21,6 +54,9 @@ let toNode = node => {
     ~predictionCountTotal=node##predictionCountTotal,
     ~agent,
     ~measurable,
+    ~competitiveMeasurement,
+    ~aggregationMeasurement,
+    ~objectiveMeasurement,
     (),
   );
 };
@@ -76,6 +112,42 @@ module Query = [%graphql
                     id
                     name
                     channelId
+                  }
+                  competitiveMeasurement: agentMeasurement(competitorType: [COMPETITIVE]) {
+                    id
+                    valueText
+                    value {
+                        floatCdf { xs ys }
+                        floatPoint
+                        percentage
+                        binary
+                        unresolvableResolution
+                        comment
+                    }
+                  }
+                  aggregationMeasurement: measurement(competitorType: [AGGREGATION]) {
+                    id
+                    valueText
+                    value {
+                        floatCdf { xs ys }
+                        floatPoint
+                        percentage
+                        binary
+                        unresolvableResolution
+                        comment
+                    }
+                  }
+                  objectiveMeasurement: measurement(competitorType: [OBJECTIVE]) {
+                    id
+                    valueText
+                    value {
+                        floatCdf { xs ys }
+                        floatPoint
+                        percentage
+                        binary
+                        unresolvableResolution
+                        comment
+                    }
                   }
               }
           }

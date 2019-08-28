@@ -42,44 +42,7 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-type measurableQuery = {
-  .
-  "createdAt": MomentRe.Moment.t,
-  "creator":
-    option({
-      .
-      "id": string,
-      "name": option(string),
-    }),
-  "expectedResolutionDate": option(MomentRe.Moment.t),
-  "id": string,
-  "labelCustom": option(string),
-  "labelOnDate": option(MomentRe.Moment.t),
-  "labelProperty": option(string),
-  "labelSubject": option(string),
-  "name": string,
-  "channelId": string,
-  "resolutionEndpoint": option(string),
-  "resolutionEndpointResponse": option(float),
-  "series":
-    option({
-      .
-      "id": string,
-      "name": option(string),
-    }),
-  "state": Types.measurableState,
-  "valueType": Types.valueType,
-  "stateUpdatedAt": option(MomentRe.Moment.t),
-  "updatedAt": MomentRe.Moment.t,
-  "min": option(float),
-  "max": option(float),
-  "permissions": {
-    .
-    "mutations": {. "allow": Js.Array.t(option(Types.permission))},
-  },
-};
-
-let queryMeasurable = (m: measurableQuery): Types.measurable => {
+let queryMeasurable = (m): Types.measurable => {
   let agent: option(Types.agent) =
     m##creator
     |> E.O.fmap(r => Primary.Agent.make(~id=r##id, ~name=r##name, ()));

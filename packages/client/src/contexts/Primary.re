@@ -624,6 +624,9 @@ module AgentMeasurable = {
         ~primaryPointScore,
         ~predictionCountTotal,
         ~createdAt,
+        ~competitiveMeasurement=None,
+        ~aggregationMeasurement=None,
+        ~objectiveMeasurement=None,
         (),
       )
       : t => {
@@ -633,6 +636,9 @@ module AgentMeasurable = {
     primaryPointScore,
     predictionCountTotal,
     createdAt,
+    competitiveMeasurement,
+    aggregationMeasurement,
+    objectiveMeasurement,
   };
 };
 

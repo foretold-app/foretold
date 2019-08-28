@@ -153,6 +153,9 @@ and agentMeasurable = {
   primaryPointScore: float,
   predictionCountTotal: int,
   createdAt: MomentRe.Moment.t,
+  competitiveMeasurement: option(measurement),
+  aggregationMeasurement: option(measurement),
+  objectiveMeasurement: option(measurement),
 }
 and agentChannel = {
   id: string,

@@ -153,6 +153,14 @@ export namespace Models {
     predictionCountTotal: number;
   }
 
+  export interface AgentChannel extends Model {
+    agentId: ObjectID;
+    channelId: ObjectID;
+    primaryPointScore: float;
+    numberOfPredictions: number;
+    numberOfQuestionsScored: number;
+  }
+
   export type Creator = Models.User | Models.Bot;
 }
 

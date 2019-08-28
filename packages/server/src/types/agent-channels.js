@@ -11,6 +11,8 @@ const agentChannel = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(graphql.GraphQLFloat),
       resolve: () => 0
     },
+    numberOfPredictions: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
+    numberOfQuestionsScored: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
 

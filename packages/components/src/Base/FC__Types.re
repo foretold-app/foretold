@@ -29,9 +29,13 @@ module Dist = {
     external findY: (float, distJs) => float = "findY";
     [@bs.module "./stats.js"]
     external findX: (float, distJs) => float = "findX";
+
+    [@bs.module "./stats.js"]
+    external mean: (distJs, distJs) => distJs = "mean";
   };
 
   let toPdf = (dist: t) => dist |> JS.doAsDist(JS.cdfToPdf);
+  let mean = (dist1: t, dist2: t) => JS.mean(JS.fromDist(dist1), JS.fromDist(dist2)) |> JS.toDist;
   let findX = (y: float, dist: t) => dist |> JS.fromDist |> JS.findX(y);
   let findY = (x: float, dist: t) => dist |> JS.fromDist |> JS.findY(x);
 };

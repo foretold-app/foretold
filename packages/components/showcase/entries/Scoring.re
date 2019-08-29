@@ -22,16 +22,16 @@ module Scoring = {
 
     initialState: () => {
       varA: {
-        xs: [||],
-        ys: [||],
+        xs: [|1.0|],
+        ys: [|1.0|],
       },
       varB: {
-        xs: [||],
-        ys: [||],
+        xs: [|1.|],
+        ys: [|1.|],
       },
       varC: {
-        xs: [||],
-        ys: [||],
+        xs: [|1.|],
+        ys: [|1.|],
       },
     },
     /* State transitions */
@@ -90,6 +90,19 @@ module Scoring = {
         {self.state.varC.xs |> E.A.length > 0
            ? <FC__CdfChart__Large cdf={self.state.varC} width=None />
            : "" |> ReasonReact.string}
+        <h3> {"Mean of 2" |> ReasonReact.string} </h3>
+        {switch (
+           self.state.varA.xs |> E.A.length,
+           self.state.varB.xs |> E.A.length,
+         ) {
+         | (_, 0) => "" |> ReasonReact.string
+         | (0, _) => "" |> ReasonReact.string
+         | _ =>
+           let mean = FC__Types.Dist.mean(self.state.varA, self.state.varB);
+           mean.xs |> E.A.length > 0
+             ? <FC__CdfChart__Large cdf=mean width=None />
+             : "" |> ReasonReact.string;
+         }}
       </div>;
     },
   };

@@ -5,6 +5,7 @@ const { NewMeasurementResolution } = require('./new-measurement-resolution');
 const { NewMeasurementNotAvailable } = require('./new-measurement-not-available');
 const { NewMeasurableReachedResolution } = require('./new-measurable-reached-resolution');
 const { NewMeasurable } = require('./new-measurable');
+const { NewChannel } = require('./new-channel');
 
 module.exports = {
   MemberJoinedCommunity,
@@ -14,4 +15,5 @@ module.exports = {
   NewMeasurementNotAvailable,
   NewMeasurableReachedResolution,
   NewMeasurable,
+  NewChannel,
 };

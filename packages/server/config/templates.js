@@ -74,5 +74,12 @@ module.exports = [
       "description": "{{{ agent.name }}} made a question",
       "measurableId": "{{{ measurable.id }}}"
     }
+  },
+  {
+    "name": "NEW_CHANNEL_FEED_ITEM",
+    "envelopeTemplate": {
+      "item": "",
+      "description": "{{{ agent.name }}} has created a community",
+    }
   }
 ];

@@ -26,6 +26,7 @@
         "bs-moment": "^0.4.4",
         "d3": "^5.9.2",
         "emotion": "^10.0.7",
+        "@foretold/guesstimator": "1.0.0",
         "lodash": "^4.17.11",
         "moment": "2.24.0",
         "rationale": "^0.1.6",

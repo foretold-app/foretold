@@ -20,7 +20,7 @@ class NewChannel extends ProducerFeedItems {
    * @return {Promise<boolean>}
    */
   async _preload() {
-    this.agentId = _.get(this.input, 'agentId');
+    this.agentId = _.get(this.input, 'creatorId');
     this.channelId = _.get(this.input, 'id');
     return true;
   }

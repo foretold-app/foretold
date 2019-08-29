@@ -21,11 +21,6 @@ function fnToCdf(cdfs, fn, sampleCount) {
     return pdf;
 }
 
-function integrate(cdf, sampleCount){
-    sum(cdf.sample(sampleCount));
-}
-
 module.exports = {
   fnToCdf,
-  integrate
 };

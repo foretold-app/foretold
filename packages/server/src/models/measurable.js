@@ -50,11 +50,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     min: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: true,
     },
     max: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: true,
     },
 

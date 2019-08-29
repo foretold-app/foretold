@@ -1,4 +1,4 @@
-const  {Pdf, Cdf, CdfCombination} = require("@foretold/cdf");
+const  {Pdf, Cdf} = require("@foretold/cdf");
 
 function cdfToPdf({xs, ys}){
     let cdf = new Cdf(xs, ys);

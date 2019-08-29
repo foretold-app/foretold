@@ -25,7 +25,6 @@ module UnresolvableResolution = {
     | `FALSE_CONDITIONAL => "FALSE_CONDITIONAL"
     | `OTHER => "OTHER"
     | `RESULT_NOT_AVAILABLE => "RESULT_NOT_AVAILABLE"
-    | _ => Js.Exn.raiseError("Invalid GraphQL Unresolvable Resolution")
     };
 
   let toPublicString = (e: t): string =>
@@ -34,7 +33,6 @@ module UnresolvableResolution = {
     | `FALSE_CONDITIONAL => "False Conditional"
     | `OTHER => "Other"
     | `RESULT_NOT_AVAILABLE => "Result Not Available"
-    | _ => Js.Exn.raiseError("Invalid GraphQL Unresolvable Resolution")
     };
 };
 
@@ -54,7 +52,6 @@ module Comment = {
     | `GENERIC => "GENERIC"
     | `QUESTION_FEEDBACK => "QUESTION_FEEDBACK"
     | `UPDATE => "UPDATE"
-    | _ => Js.Exn.raiseError("Invalid GraphQL Comment")
     };
 
   let toPublicString = (e: t): string =>
@@ -62,26 +59,8 @@ module Comment = {
     | `GENERIC => "Generic"
     | `QUESTION_FEEDBACK => "Question Feedback"
     | `UPDATE => "Update"
-    | _ => Js.Exn.raiseError("Invalid GraphQL Unresolvable Resolution")
     };
 };
-
-type valueResult = {
-  .
-  "floatCdf":
-    option({
-      .
-      "xs": Js.Array.t(float),
-      "ys": Js.Array.t(float),
-    }),
-  "floatPoint": option(float),
-  "percentage": option(float),
-  "binary": option(bool),
-  "unresolvableResolution": option(UnresolvableResolution.t),
-  "comment": option(Comment.t),
-};
-
-type graphQlResult = valueResult;
 
 let decodeResult = (fn, json) =>
   try (Ok(json |> fn)) {
@@ -375,7 +354,7 @@ let decode = (j: Js.Json.t): Belt.Result.t(t, string) => {
   };
 };
 
-let decodeGraphql = (j: valueResult): Belt.Result.t(t, string) =>
+let decodeGraphql = (j): Belt.Result.t(t, string) =>
   switch (
     j##floatCdf,
     j##floatPoint,

@@ -31,7 +31,6 @@ async function setContextMeasurable(root, args, context, info) {
   }
 }
 
-
 /**
  * @param {object | null} root
  * @param {object} args

@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const { CdfCombination } = require('./cdf-combination');
+const { ContinuousDistributionCombination } = require('./continuousDistributionCombination');
 const { Cdf } = require('./cdf');
 const { Pdf } = require('./pdf');
 const { sum } = require("./functions")
@@ -16,8 +16,8 @@ const { sum } = require("./functions")
  */
 function fnToCdf(cdfs, fn, sampleCount) {
     let pdfs = cdfs.map(c => c.toPdf());
-    let combination = new CdfCombination(pdfs);
-    let xs = combination.xsToAnalyze(sampleCount);
+    let combination = new ContinuousDistributionCombination(pdfs);
+    let xs = combination.equallyDividedXs(sampleCount);
     let cdfValues = xs.map(x => combination.allYsAtXPoint(x));
     let newYs = cdfValues.map(v => fn(v));
     let pdf =new Pdf(xs, newYs); 

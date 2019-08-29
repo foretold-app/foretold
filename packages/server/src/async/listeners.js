@@ -7,10 +7,6 @@ const consumers = require('./consumers');
 const { Mailer } = require('./mailer');
 const { GitHubApi } = require('../github/git-hub-api');
 
-/**
- * @todo: To avoid code duplicates.
- */
-
 async function toJudgementPendingTransition() {
   const name = 'Job::toJudgementPendingTransition';
   console.log(name);
@@ -112,6 +108,7 @@ function runListeners() {
     emitter.on(events.NEW_MEASUREMENT, listenFor(producers.feedItems.NewMeasurementNotAvailable));
 
     emitter.on(events.NEW_MEASURABLE, listenFor(producers.feedItems.NewMeasurable));
+    emitter.on(events.NEW_CHANNEL, listenFor(producers.feedItems.NewChannel));
 
   } catch (e) {
     console.error('Listener error', e);

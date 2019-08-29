@@ -53,6 +53,13 @@ function addHooks(db) {
       console.log('Hook', e);
     }
   });
+  db.Channel.addHook('afterCreate', (instance) => {
+    try {
+      emitter.emit(events.NEW_CHANNEL, instance);
+    } catch (e) {
+      console.log('Hook', e);
+    }
+  });
 
   db.Bot.addHook('beforeCreate', async (event) => {
     try {
@@ -86,7 +93,7 @@ function addHooks(db) {
 
   db.Measurable.addHook('beforeUpdate', async (instance) => {
     try {
-      await instance.watchExpectedResolutionDate(instance);
+      await instance.watchExpectedResolutionDate();
     } catch (e) {
       console.log('Hook', e);
     }

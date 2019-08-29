@@ -52,7 +52,7 @@ let make =
          tab(
            tabSelected == Leaderboard,
            tabToInternalUrl(channel.id, Leaderboard),
-           "Leaderboard",
+           "Scoring",
          ),
        ),
      )}

@@ -26,7 +26,7 @@ module Columns = {
 
   let agent =
     Table.Column.make(
-      ~name="Agent" |> Utils.ste,
+      ~name="Member" |> Utils.ste,
       ~render=
         (r: record) =>
           r.agent
@@ -39,13 +39,13 @@ module Columns = {
                  }>
                  [|
                    agent.name
-                   |> E.O.fmap(E.S.default("Agent"))
-                   |> E.O.default("Agent")
+                   |> E.O.fmap(E.S.default("Member"))
+                   |> E.O.default("Member")
                    |> Utils.ste,
                  |]
                </Link>
              )
-          |> E.O.default("Agent" |> Utils.ste),
+          |> E.O.default("Member" |> Utils.ste),
       ~flex=1,
       (),
     );
@@ -78,7 +78,7 @@ module Columns = {
 
   let predictionCount =
     Table.Column.make(
-      ~name="Prediction Count" |> Utils.ste,
+      ~name="Predictions" |> Utils.ste,
       ~render=
         (r: record) =>
           r.predictionCountTotal
@@ -91,7 +91,7 @@ module Columns = {
 
   let predictedMeasurablesCount =
     Table.Column.make(
-      ~name="Predicted Question Count" |> Utils.ste,
+      ~name="Predicted Questions" |> Utils.ste,
       ~render=
         (r: record) =>
           r.numberOfQuestionsScored
@@ -163,18 +163,21 @@ module Columns = {
       (),
     );
 
-  let default = [|measurable, agent, score, time|];
+  let default = [|agent, measurable, score, time|];
   let measurables = [|
-    measurable,
     agent,
-    competitiveMeasurement,
-    aggregationMeasurement,
+    measurable,
     objectiveMeasurement,
     totalScore,
     predictionCount,
     time,
   |];
-  let members = [|agent, score, predictedMeasurablesCount, predictionCount|];
+  let members = [|
+    agent,
+    totalScore,
+    predictedMeasurablesCount,
+    predictionCount,
+  |];
 };
 
 [@react.component]

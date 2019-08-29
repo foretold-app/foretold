@@ -37,7 +37,7 @@ module Columns = {
 
   let agentColumn: column =
     Table.Column.make(
-      ~name="Agent" |> ReasonReact.string,
+      ~name="Member" |> ReasonReact.string,
       ~render=
         (membership: Types.channelMembership) =>
           membership.agent

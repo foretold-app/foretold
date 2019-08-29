@@ -145,17 +145,17 @@ module Route = {
     | ["c", channelId, "members"] => Channel({channelId, subPage: Members})
     | ["c", channelId, "activity"] =>
       Channel({channelId: getChannelId(channelId), subPage: FeedItems})
-    | ["c", channelId, "leaderboard", "predictions"] =>
+    | ["c", channelId, "scoring", "predictions"] =>
       Channel({
         channelId: getChannelId(channelId),
         subPage: Leaderboard(ByMeasurement),
       })
-    | ["c", channelId, "leaderboard", "questions"] =>
+    | ["c", channelId, "scoring", "questions"] =>
       Channel({
         channelId: getChannelId(channelId),
         subPage: Leaderboard(ByMeasurable),
       })
-    | ["c", channelId, "leaderboard", "members"] =>
+    | ["c", channelId, "scoring", "members"] =>
       Channel({
         channelId: getChannelId(channelId),
         subPage: Leaderboard(ByMember),
@@ -242,11 +242,11 @@ module Url = {
     | ChannelMembers(channelId) => "/c/" ++ channelId ++ "/members"
     | ChannelFeedItems(channelId) => "/c/" ++ channelId ++ "/activity"
     | ChannelLeaderboard(channelId, ByMeasurement) =>
-      "/c/" ++ channelId ++ "/leaderboard/predictions"
+      "/c/" ++ channelId ++ "/scoring/predictions"
     | ChannelLeaderboard(channelId, ByMeasurable) =>
-      "/c/" ++ channelId ++ "/leaderboard/questions"
+      "/c/" ++ channelId ++ "/scoring/questions"
     | ChannelLeaderboard(channelId, ByMember) =>
-      "/c/" ++ channelId ++ "/leaderboard/members"
+      "/c/" ++ channelId ++ "/scoring/members"
     | ChannelAddMember(channelId) => "/c/" ++ channelId ++ "/add"
     | ChannelInviteMember(channelId) => "/c/" ++ channelId ++ "/invite"
     | MeasurableEdit(measurableId) =>

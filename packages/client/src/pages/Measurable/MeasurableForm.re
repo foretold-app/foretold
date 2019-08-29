@@ -200,7 +200,6 @@ let showForm =
                    <div className="ant-form-item-control">
                      <Antd.Input
                        className=Styles.shortInput
-                       htmlType="number"
                        value={form.values.min}
                        onChange={e =>
                          handleChange(`min, ReactEvent.Form.target(e)##value)
@@ -217,7 +216,6 @@ let showForm =
                    <div className="ant-form-item-control">
                      <Antd.Input
                        className=Styles.shortInput
-                       htmlType="number"
                        value={form.values.max}
                        onChange={e =>
                          handleChange(`max, ReactEvent.Form.target(e)##value)

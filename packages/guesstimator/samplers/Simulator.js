@@ -1,6 +1,6 @@
-import {STOCHASTIC_FUNCTIONS} from './simulator-worker/simulator/evaluator.js'
+import {STOCHASTIC_FUNCTIONS} from './simulator-worker/simulator/evaluator'
 import _ from "lodash";
-import {Evaluate} from "./simulator-worker/simulator/evaluator.js"
+import {Evaluate} from "./simulator-worker/simulator/evaluator"
 
 const MIN_SAMPLES_PER_WINDOW = 100
 
@@ -14,7 +14,6 @@ function LCM(a, b) {
 
 export function simulate(expr, inputs, maxSamples) {
   const s = Evaluate(expr, maxSamples, [])
-  let foo = Evaluate
   return s
 }
 

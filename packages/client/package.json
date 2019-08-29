@@ -37,7 +37,7 @@
 	},
 	"dependencies": {
 		"@babel/preset-react": "7.0.0",
-		"@foretold/cdf": "1.0.7",
+		"@foretold/cdf": "1.0.8",
 		"@foretold/guesstimator": "1.0.0",
 		"@glennsl/bs-jest": "0.4.8",
 		"@glennsl/bs-json": "4.0.0",

@@ -9,6 +9,7 @@ const SUFFIXES = {
 
 const parenthesize = str => `(?:${str})`
 //TODO
+const escSpecialChars = str => str.replace(/\$|\{|\}|\_/g, e => `\\${e}`)
 export const isPresent = e => (!!e && !_.isEmpty(e)) || (typeof e === 'number') || (e === true)
 const toSource = re => re instanceof RegExp ? re.source : escSpecialChars(re)
 function or(res) {

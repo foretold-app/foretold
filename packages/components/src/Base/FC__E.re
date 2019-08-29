@@ -44,6 +44,7 @@ module Bool = {
 };
 
 module Float = {
+  let toString = Js.Float.toFixed;
   let with3DigitsPrecision = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
 };
 
@@ -106,7 +107,8 @@ module L = {
   let update = Rationale.RList.update;
   let iter = List.iter;
   let findIndex = Rationale.RList.findIndex;
-  let withIdx = xs => xs |> RList.zip(RList.times(Function.identity, length(xs)));
+  let withIdx = xs =>
+    xs |> RList.zip(RList.times(Function.identity, length(xs)));
   module React = {
     let fmap = (f, xs) => xs |> fmap(f) |> toArray |> React.array;
     let fmapi = (f, xs) => xs |> fmapi(f) |> toArray |> React.array;

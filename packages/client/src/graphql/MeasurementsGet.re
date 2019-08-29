@@ -4,18 +4,55 @@ let toMeasurement = (measurement): Types.measurement => {
 
   let agent =
     measurement##agent
-    |> Rationale.Option.fmap(k =>
+    |> E.O.fmap(k =>
          Primary.Agent.make(~id=k##id, ~agentType, ~name=k##name, ())
        );
 
   let measurementScoreSet =
     measurement##measurementScoreSet
-    |> Rationale.Option.fmap(k =>
+    |> E.O.fmap(measurementScoreSet => {
+         let prediction =
+           measurementScoreSet##prediction
+           |> (
+             measurement =>
+               Primary.Measurement.make(
+                 ~id=measurement##id,
+                 ~valueText=measurement##valueText,
+                 ~value=measurement##value |> MeasurementValue.decodeGraphql,
+                 (),
+               )
+           );
+
+         let outcome =
+           measurementScoreSet##outcome
+           |> E.O.fmap(measurement =>
+                Primary.Measurement.make(
+                  ~id=measurement##id,
+                  ~valueText=measurement##valueText,
+                  ~value=measurement##value |> MeasurementValue.decodeGraphql,
+                  (),
+                )
+              );
+
+         let previousAggregate =
+           measurementScoreSet##previousAggregate
+           |> E.O.fmap(measurement =>
+                Primary.Measurement.make(
+                  ~id=measurement##id,
+                  ~valueText=measurement##valueText,
+                  ~value=measurement##value |> MeasurementValue.decodeGraphql,
+                  (),
+                )
+              );
+
          Primary.MeasurementScoreSet.make(
-           ~primaryPointScore=k##primaryPointScore,
+           ~primaryPointScore=measurementScoreSet##primaryPointScore,
+           ~prediction,
+           ~outcome,
+           ~previousAggregate,
            (),
-         )
-       );
+         );
+       });
 
   Primary.Measurement.make(
     ~id=measurement##id,
@@ -124,6 +161,42 @@ module Query = [%graphql
                   }
 
                   measurementScoreSet {
+                    prediction {
+                        id
+                        valueText
+                        value {
+                            floatCdf { xs ys }
+                            floatPoint
+                            percentage
+                            binary
+                            unresolvableResolution
+                            comment
+                        }
+                    }
+                    outcome {
+                        id
+                        valueText
+                        value {
+                            floatCdf { xs ys }
+                            floatPoint
+                            percentage
+                            binary
+                            unresolvableResolution
+                            comment
+                        }
+                    }
+                    previousAggregate {
+                        id
+                        valueText
+                        value {
+                            floatCdf { xs ys }
+                            floatPoint
+                            percentage
+                            binary
+                            unresolvableResolution
+                            comment
+                        }
+                    }
                     primaryPointScore
                   }
               }

@@ -14,6 +14,17 @@ let toNode = node => {
       (),
     );
 
+  let objectiveMeasurement =
+    node##objectiveMeasurement
+    |> E.O.fmap(measurement =>
+         Primary.Measurement.make(
+           ~id=measurement##id,
+           ~valueText=measurement##valueText,
+           ~value=measurement##value |> MeasurementValue.decodeGraphql,
+           (),
+         )
+       );
+
   Primary.AgentMeasurable.make(
     ~id=node##id,
     ~primaryPointScore=node##primaryPointScore,
@@ -21,6 +32,7 @@ let toNode = node => {
     ~predictionCountTotal=node##predictionCountTotal,
     ~agent,
     ~measurable,
+    ~objectiveMeasurement,
     (),
   );
 };
@@ -76,6 +88,18 @@ module Query = [%graphql
                     id
                     name
                     channelId
+                  }
+                  objectiveMeasurement: measurement(competitorType: [OBJECTIVE]) {
+                    id
+                    valueText
+                    value {
+                        floatCdf { xs ys }
+                        floatPoint
+                        percentage
+                        binary
+                        unresolvableResolution
+                        comment
+                    }
                   }
               }
           }

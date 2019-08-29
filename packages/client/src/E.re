@@ -30,6 +30,12 @@ module O = {
     | _ => false
     };
 
+  let ffmap = (fn, r) =>
+    switch (r) {
+    | Some(sm) => fn(sm)
+    | _ => None
+    };
+
   let toString = opt =>
     switch (opt) {
     | Some(s) => s
@@ -87,6 +93,7 @@ module Float = {
 module I = {
   let increment = n => n + 1;
   let decrement = n => n - 1;
+  let toString = Js.Int.toString;
 };
 
 /* R for Result */
@@ -107,6 +114,7 @@ module S = {
   let safe_float = float_of_string->safe_fn_of_string;
   let safe_int = int_of_string->safe_fn_of_string;
   let toMoment = e => MomentRe.moment(e);
+  let default = (defaultStr, str) => str == "" ? defaultStr : str;
   module O = {
     let toMoment = O.fmap(toMoment);
   };

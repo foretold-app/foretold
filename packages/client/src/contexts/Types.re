@@ -131,7 +131,12 @@ and measurable = {
   max: option(float),
   permissions: option(permissions),
 }
-and measurementScoreSet = {primaryPointScore: option(float)}
+and measurementScoreSet = {
+  primaryPointScore: option(float),
+  prediction: measurement,
+  outcome: option(measurement),
+  previousAggregate: option(measurement),
+}
 and measurement = {
   id: string,
   description: option(string),
@@ -153,6 +158,9 @@ and agentMeasurable = {
   primaryPointScore: float,
   predictionCountTotal: int,
   createdAt: MomentRe.Moment.t,
+  competitiveMeasurement: option(measurement),
+  aggregationMeasurement: option(measurement),
+  objectiveMeasurement: option(measurement),
 }
 and agentChannel = {
   id: string,
@@ -174,6 +182,9 @@ and leaderboardItem = {
   createdAt: option(MomentRe.Moment.t),
   predictionCountTotal: option(int),
   numberOfQuestionsScored: option(int),
+  competitiveMeasurement: option(measurement),
+  aggregationMeasurement: option(measurement),
+  objectiveMeasurement: option(measurement),
 }
 and series = {
   id: string,
@@ -205,23 +216,4 @@ and connection('a) = {
 and globalSetting = {
   id: string,
   entityGraph: option(Js.Json.t),
-}
-and agentTypeJs = {
-  .
-  "bot":
-    option({
-      .
-      "id": string,
-      "name": string,
-      "competitorType": competitorType,
-    }),
-  "id": string,
-  "name": option(string),
-  "user":
-    option({
-      .
-      "id": string,
-      "name": string,
-      "agentId": string,
-    }),
 };

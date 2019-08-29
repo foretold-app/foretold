@@ -11,9 +11,9 @@ module Columns = {
         linkType={
           Internal(MeasurableShow(measurable.channelId, measurable.id))
         }>
-        [|measurable.name |> Utils.ste|]
+        [|measurable.name |> E.S.default("Question") |> Utils.ste|]
       </Link>
-    | _ => "" |> Utils.ste
+    | _ => "Question" |> Utils.ste
     };
 
   let measurable =
@@ -29,20 +29,23 @@ module Columns = {
       ~name="Member" |> Utils.ste,
       ~render=
         (r: record) =>
-          switch (r.agent) {
-          | Some(agent) =>
-            <Link
-              linkType={
-                Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
-              }>
-              [|
-                agent.name
-                |> E.O.fmap(name => name |> Utils.ste)
-                |> E.O.default("Member" |> Utils.ste),
-              |]
-            </Link>
-          | _ => "" |> Utils.ste
-          },
+          r.agent
+          |> E.O.fmap((agent: Types.agent) =>
+               <Link
+                 linkType={
+                   Internal(
+                     Agent({agentId: agent.id, subPage: AgentUpdates}),
+                   )
+                 }>
+                 [|
+                   agent.name
+                   |> E.O.fmap(E.S.default("Member"))
+                   |> E.O.default("Member")
+                   |> Utils.ste,
+                 |]
+               </Link>
+             )
+          |> E.O.default("Member" |> Utils.ste),
       ~flex=1,
       (),
     );
@@ -52,10 +55,10 @@ module Columns = {
       ~name="Score" |> Utils.ste,
       ~render=
         (r: record) =>
-          switch (r.pointScore) {
-          | Some(pointScore) => pointScore |> E.Float.toString |> Utils.ste
-          | _ => "0.0" |> Utils.ste
-          },
+          r.pointScore
+          |> E.O.fmap(E.Float.toString)
+          |> E.O.default("0.0")
+          |> Utils.ste,
       ~flex=1,
       (),
     );
@@ -65,10 +68,10 @@ module Columns = {
       ~name="Total Score" |> Utils.ste,
       ~render=
         (r: record) =>
-          switch (r.pointScore) {
-          | Some(pointScore) => pointScore |> E.Float.toString |> Utils.ste
-          | _ => "0.0" |> Utils.ste
-          },
+          r.pointScore
+          |> E.O.fmap(E.Float.toString)
+          |> E.O.default("0.0")
+          |> Utils.ste,
       ~flex=1,
       (),
     );
@@ -78,11 +81,10 @@ module Columns = {
       ~name="Predictions" |> Utils.ste,
       ~render=
         (r: record) =>
-          switch (r.predictionCountTotal) {
-          | Some(predictionCountTotal) =>
-            predictionCountTotal |> Js.Int.toString |> Utils.ste
-          | _ => "" |> Utils.ste
-          },
+          r.predictionCountTotal
+          |> E.O.fmap(E.I.toString)
+          |> E.O.default("")
+          |> Utils.ste,
       ~flex=1,
       (),
     );
@@ -92,11 +94,10 @@ module Columns = {
       ~name="Predicted Questions" |> Utils.ste,
       ~render=
         (r: record) =>
-          switch (r.numberOfQuestionsScored) {
-          | Some(numberOfQuestionsScored) =>
-            numberOfQuestionsScored |> Js.Int.toString |> Utils.ste
-          | _ => "0" |> Utils.ste
-          },
+          r.numberOfQuestionsScored
+          |> E.O.fmap(E.I.toString)
+          |> E.O.default("0")
+          |> Utils.ste,
       ~flex=1,
       (),
     );
@@ -107,17 +108,78 @@ module Columns = {
       ~render=
         (r: record) =>
           r.createdAt
-          |> E.O.fmap((createdAt: MomentRe.Moment.t) =>
-               createdAt |> MomentRe.Moment.format("LLL")
-             )
+          |> E.O.fmap(MomentRe.Moment.format("LLL"))
           |> E.O.default("")
           |> Utils.ste,
       ~flex=1,
       (),
     );
 
-  let default = [|agent, measurable, score, time|];
-  let measurables = [|agent, measurable, totalScore, predictionCount, time|];
+  let getMeasurement = measurement => {
+    let bounds = C.Measurements.Table.Helpers.bounds([|measurement|]);
+    C.Measurements.Table.Helpers.smallDistribution(
+      ~measurement,
+      ~bounds,
+      ~width=75,
+      ~height=30,
+      (),
+    )
+    |> E.O.default("-" |> Utils.ste);
+  };
+
+  let competitiveMeasurement =
+    Table.Column.make(
+      ~name="Prediction" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          r.competitiveMeasurement
+          |> E.O.fmap(getMeasurement)
+          |> E.O.default("-" |> Utils.ste),
+      ~flex=1,
+      (),
+    );
+
+  let aggregationMeasurement =
+    Table.Column.make(
+      ~name="Recent Aggregate" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          r.aggregationMeasurement
+          |> E.O.fmap(getMeasurement)
+          |> E.O.default("-" |> Utils.ste),
+      ~flex=1,
+      (),
+    );
+
+  let objectiveMeasurement =
+    Table.Column.make(
+      ~name="Final Answer" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          r.objectiveMeasurement
+          |> E.O.fmap(getMeasurement)
+          |> E.O.default("-" |> Utils.ste),
+      ~flex=1,
+      (),
+    );
+
+  let default = [|
+    agent,
+    measurable,
+    competitiveMeasurement,
+    aggregationMeasurement,
+    objectiveMeasurement,
+    score,
+    time,
+  |];
+  let measurables = [|
+    agent,
+    measurable,
+    objectiveMeasurement,
+    totalScore,
+    predictionCount,
+    time,
+  |];
   let members = [|
     agent,
     totalScore,

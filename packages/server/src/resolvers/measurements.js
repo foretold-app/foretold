@@ -13,60 +13,6 @@ const { withinMeasurables } = require('../structures');
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.ObjectID} args.measurableId
- * @param {Models.ObjectID} args.agentId
- * @param {Models.ObjectID} args.notTaggedByAgent
- * @param {Models.ObjectID} args.channelId
- *
- * @param {object} args.findInDateRange
- * @param {string} args.findInDateRange.startDate
- * @param {string} args.findInDateRange.endDate
- * @param {number} args.findInDateRange.spacedLimit
- *
- * @param {string[]} args.competitorType
- * @param {string[]} args.measurableState
- * @param {Schema.Context} context
- * @param {object} info
- * @returns {Promise<*>}
- */
-const predicateFilterGeneric = (root, args, context, info) => {
-  const measurableState = _.get(args, 'measurableState');
-  const channelId = _.get(args, 'channelId');
-
-  return new Filter({
-    withinMeasurables: withinMeasurables(measurableState, channelId),
-    measurableId: _.get(args, 'measurableId'),
-    agentId: _.get(args, 'agentId') || _.get(root, 'id'),
-    competitorType: _.get(args, 'competitorType'),
-    findInDateRange: _.get(args, 'findInDateRange'),
-    notTaggedByAgent: _.get(args, 'notTaggedByAgent'),
-  });
-};
-
-
-/**
- * @param {function} filterPredicate
- * @returns {function(*=, *=, *=, *=): Promise<{data: Models.Model[], total: number}>}
- */
-function allPredicated(filterPredicate) {
-  return async function all(root, args, context, info) {
-    const filter = filterPredicate(root, args, context, info);
-    const pagination = new Pagination(args);
-    const options = new Options({
-      isAdmin: _.get(context, 'agent.isAdmin'),
-      agentId: _.get(context, 'agent.id'),
-    });
-
-    return data.measurements.getConnection(filter, pagination, options);
-  };
-}
-
-/**
- * @todo: update input of getAll
- * @todo: use predicates!
- *
- * @param {*} root
- * @param {object} args
  * @param {number} args.last
  * @param {number} args.first
  * @param {Models.ObjectID} args.measurableId
@@ -86,12 +32,56 @@ function allPredicated(filterPredicate) {
  * @returns {Promise<*>}
  */
 async function all(root, args, context, info) {
-  return allPredicated(predicateFilterGeneric)(root, args, context, info);
+  const measurableState = _.get(args, 'measurableState');
+  const channelId = _.get(args, 'channelId');
+
+  const filter = new Filter({
+    withinMeasurables: withinMeasurables(measurableState, channelId),
+    measurableId: _.get(args, 'measurableId'),
+    agentId: _.get(args, 'agentId') || _.get(root, 'id'),
+    competitorType: _.get(args, 'competitorType'),
+    findInDateRange: _.get(args, 'findInDateRange'),
+    notTaggedByAgent: _.get(args, 'notTaggedByAgent'),
+  });
+  const pagination = new Pagination(args);
+  const options = new Options({
+    isAdmin: _.get(context, 'agent.isAdmin'),
+    agentId: _.get(context, 'agent.id'),
+  });
+
+  return data.measurements.getConnection(filter, pagination, options);
 }
 
 /**
  * @param {*} root
  * @param {object} args
+ * @param {number} args.last
+ * @param {number} args.first
+ * @param {string[]} args.competitorType
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+async function measurableMeasurement(root, args, context, info) {
+  const measurableId = _.get(root, 'measurableId');
+  const competitorType = _.get(args, 'competitorType');
+
+  const filter = new Filter({ measurableId, competitorType });
+  const pagination = new Pagination({ first: 1 });
+  const options = new Options({
+    isAdmin: _.get(context, 'agent.isAdmin'),
+    agentId: _.get(context, 'agent.id'),
+  });
+
+  const result = await data.measurements.getConnection(filter, pagination, options);
+  return result.getFirst();
+}
+
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Models.ObjectID} args.id
+ * @param {string[]} args.competitorType
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<*|Array<Model>>}
@@ -221,4 +211,5 @@ module.exports = {
   outcome,
   previousAggregate,
   primaryPointScore,
+  measurableMeasurement,
 };

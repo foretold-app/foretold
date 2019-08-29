@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const utils = require('../../lib/utils');
 
 /**
@@ -8,7 +9,12 @@ class Query {
    * @param {Layers.DataSourceLayer.query} [query]
    */
   constructor(query = {}) {
+    const list = {
+      sort: v => _.isNumber(v) || utils.none(v),
+    };
     utils.copy(this.constructor.name, query, this);
+    utils.test(this.constructor.name, list, this);
+    utils.diff(this.constructor.name, query, list);
   }
 
   inspect() {

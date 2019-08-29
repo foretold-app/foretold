@@ -415,8 +415,19 @@ module Measurement = {
 module MeasurementScoreSet = {
   type t = Types.measurementScoreSet;
 
-  let make = (~primaryPointScore, ()): t => {
-    primaryPointScore: primaryPointScore,
+  let make =
+      (
+        ~primaryPointScore,
+        ~prediction,
+        ~outcome=None,
+        ~previousAggregate=None,
+        (),
+      )
+      : t => {
+    primaryPointScore,
+    prediction,
+    outcome,
+    previousAggregate,
   };
 };
 
@@ -624,6 +635,9 @@ module AgentMeasurable = {
         ~primaryPointScore,
         ~predictionCountTotal,
         ~createdAt,
+        ~competitiveMeasurement=None,
+        ~aggregationMeasurement=None,
+        ~objectiveMeasurement=None,
         (),
       )
       : t => {
@@ -633,6 +647,9 @@ module AgentMeasurable = {
     primaryPointScore,
     predictionCountTotal,
     createdAt,
+    competitiveMeasurement,
+    aggregationMeasurement,
+    objectiveMeasurement,
   };
 };
 
@@ -678,6 +695,9 @@ module LeaderboardItem = {
         ~createdAt=None,
         ~predictionCountTotal=None,
         ~numberOfQuestionsScored=None,
+        ~competitiveMeasurement=None,
+        ~aggregationMeasurement=None,
+        ~objectiveMeasurement=None,
         (),
       )
       : t => {
@@ -688,6 +708,9 @@ module LeaderboardItem = {
     createdAt,
     predictionCountTotal,
     numberOfQuestionsScored,
+    competitiveMeasurement,
+    aggregationMeasurement,
+    objectiveMeasurement,
   };
 
   let fromMeasurement = (measurement: Types.measurement) =>
@@ -697,9 +720,13 @@ module LeaderboardItem = {
       ~measurable=measurement.measurable,
       ~pointScore=
         measurement.measurementScoreSet
-        |> E.O.fmap((a: Types.measurementScoreSet) =>
-             a.primaryPointScore |> E.O.default(0.0)
-           ),
+        |> E.O.ffmap((a: Types.measurementScoreSet) => a.primaryPointScore),
+      ~competitiveMeasurement=
+        measurement.measurementScoreSet |> E.O.fmap(a => a.prediction),
+      ~aggregationMeasurement=
+        measurement.measurementScoreSet |> E.O.ffmap(a => a.previousAggregate),
+      ~objectiveMeasurement=
+        measurement.measurementScoreSet |> E.O.ffmap(a => a.outcome),
       ~createdAt=measurement.createdAt,
       (),
     );
@@ -712,6 +739,7 @@ module LeaderboardItem = {
       ~pointScore=Some(agentMeasurable.primaryPointScore),
       ~predictionCountTotal=Some(agentMeasurable.predictionCountTotal),
       ~createdAt=Some(agentMeasurable.createdAt),
+      ~objectiveMeasurement=agentMeasurable.objectiveMeasurement,
       (),
     );
 
@@ -729,7 +757,7 @@ module LeaderboardItem = {
 module AgentType = {
   type t = Types.agentType;
 
-  let getAgentType = (agent: Types.agentTypeJs) =>
+  let getAgentType = agent =>
     switch (agent##bot, agent##user) {
     | (Some(bot), None) =>
       Some(

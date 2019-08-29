@@ -26,6 +26,20 @@ const agentMeasurable = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(require('./measurables').measurable),
       resolve: require('../resolvers').measurables.one,
     },
+
+    // OK
+    measurement: {
+      type: require('./measurements').measurement,
+      args: {
+        competitorType: {
+          type: graphql.GraphQLList(
+            require('./enums/measurement-competitor-type')
+              .measurementCompetitorType,
+          ),
+        },
+      },
+      resolve: require('../resolvers').measurements.measurableMeasurement,
+    },
   })
 });
 

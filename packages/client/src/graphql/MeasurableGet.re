@@ -54,8 +54,7 @@ let toMeasurable = (m: measurable): Types.measurable =>
 module Query = [%graphql
   {|
       query getMeasurable ($id: String!) {
-          measurable:
-            measurable(id: $id) @bsRecord{
+        measurable: measurable(id: $id) @bsRecord{
            id
            name
            labelCustom
@@ -78,7 +77,7 @@ module Query = [%graphql
            }
            min
            max
-          }
+        }
       }
     |}
 ];

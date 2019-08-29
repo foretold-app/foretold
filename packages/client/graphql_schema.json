@@ -4998,37 +4998,6 @@
               "deprecationReason": null
             },
             {
-              "name": "agentMeasurement",
-              "description": null,
-              "args": [
-                {
-                  "name": "competitorType",
-                  "description": null,
-                  "type": {
-                    "kind": "LIST",
-                    "name": null,
-                    "ofType": {
-                      "kind": "NON_NULL",
-                      "name": null,
-                      "ofType": {
-                        "kind": "ENUM",
-                        "name": "competitorType",
-                        "ofType": null
-                      }
-                    }
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "OBJECT",
-                "name": "Measurement",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "measurement",
               "description": null,
               "args": [

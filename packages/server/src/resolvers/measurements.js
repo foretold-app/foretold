@@ -62,32 +62,6 @@ async function all(root, args, context, info) {
  * @param {object} info
  * @returns {Promise<*>}
  */
-async function agentMeasurement(root, args, context, info) {
-  const agentId = _.get(root, 'agentId');
-  const measurableId = _.get(root, 'measurableId');
-  const competitorType = _.get(args, 'competitorType');
-
-  const filter = new Filter({ measurableId, agentId, competitorType });
-  const pagination = new Pagination({ first: 1 });
-  const options = new Options({
-    isAdmin: _.get(context, 'agent.isAdmin'),
-    agentId: _.get(context, 'agent.id'),
-  });
-
-  const result = await data.measurements.getConnection(filter, pagination, options);
-  return result.getFirst();
-}
-
-/**
- * @param {*} root
- * @param {object} args
- * @param {number} args.last
- * @param {number} args.first
- * @param {string[]} args.competitorType
- * @param {Schema.Context} context
- * @param {object} info
- * @returns {Promise<*>}
- */
 async function measurableMeasurement(root, args, context, info) {
   const measurableId = _.get(root, 'measurableId');
   const competitorType = _.get(args, 'competitorType');
@@ -237,6 +211,5 @@ module.exports = {
   outcome,
   previousAggregate,
   primaryPointScore,
-  agentMeasurement,
   measurableMeasurement,
 };

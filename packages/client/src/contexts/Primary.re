@@ -739,8 +739,6 @@ module LeaderboardItem = {
       ~pointScore=Some(agentMeasurable.primaryPointScore),
       ~predictionCountTotal=Some(agentMeasurable.predictionCountTotal),
       ~createdAt=Some(agentMeasurable.createdAt),
-      ~competitiveMeasurement=agentMeasurable.competitiveMeasurement,
-      ~aggregationMeasurement=agentMeasurable.aggregationMeasurement,
       ~objectiveMeasurement=agentMeasurable.objectiveMeasurement,
       (),
     );

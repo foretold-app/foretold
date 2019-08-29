@@ -1,26 +1,26 @@
-const { Cdf } = require('./cdf');
 const { range, min, max, mean } = require('./functions');
+const { ContinuousDistribution } = require('./continuousDistribution');
 
 class CdfCombination {
   /**
-   * @param {Cdf[]} cdfs
+   * @param {Cdf[]} distributions
    */
-  constructor(cdfs) {
-    this.cdfs = cdfs;
+  constructor(distributions) {
+    this.distributions = distributions;
   }
 
   /**
    * @return {number}
    */
   minBounds() {
-    return min(this.cdfs.map(e => e.minX()))
+    return min(this.distributions.map(e => {return e.minX()}))
   }
 
   /**
    * @return {number}
    */
   maxBounds() {
-    return max(this.cdfs.map(e => e.maxX()))
+    return max(this.distributions.map(e => e.maxX()))
   }
 
   /**
@@ -36,7 +36,7 @@ class CdfCombination {
    * @return {number[]}
    */
   allYsAtXPoint(xPoint) {
-    return this.cdfs.map(r => r.findY(xPoint));
+    return this.distributions.map(r => r.findY(xPoint));
   }
 
   /**
@@ -55,7 +55,7 @@ class CdfCombination {
   combine(sampleCount) {
     const xs = this.xsToAnalyze(sampleCount);
     const means = xs.map(xPoint => this.meanOfYsAtXPoint(xPoint));
-    return new Cdf(xs, means);
+    return new ContinuousDistribution(xs, means);
   }
 }
 

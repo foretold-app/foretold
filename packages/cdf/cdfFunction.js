@@ -17,10 +17,7 @@ const { sum } = require("./functions")
 function fnToCdf(cdfs, fn, sampleCount) {
     let pdfs = cdfs.map(c => c.toPdf());
     let combination = new ContinuousDistributionCombination(pdfs);
-    let xs = combination.equallyDividedXs(sampleCount);
-    let cdfValues = xs.map(x => combination.allYsAtXPoint(x));
-    let newYs = cdfValues.map(v => fn(v));
-    let pdf =new Pdf(xs, newYs); 
+    let pdf = combination.combineYsWithFn(sampleCount, fn);
     return pdf;
 }
 

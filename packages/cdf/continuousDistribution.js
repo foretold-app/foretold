@@ -7,6 +7,9 @@ class ContinuousDistribution {
    * @param {number[]} ys
    */
   constructor(xs, ys) {
+    if (!this.validateHasLength(xs)) {
+      throw new Error('You need at least one element.');
+    }
     if (!this.validateSize(xs, ys)) {
       throw new Error('Arrays of "xs" and "ys" have different sizes.');
     }
@@ -43,6 +46,10 @@ class ContinuousDistribution {
    */
   validateSize(xs, ys) {
     return xs.length === ys.length;
+  }
+
+  validateHasLength(xs) {
+    return xs.length > 0;
   }
 
   minX(){

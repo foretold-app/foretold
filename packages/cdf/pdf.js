@@ -11,17 +11,6 @@ function validateHasLength(xs) {
 
 class Pdf extends ContinuousDistribution{
   /**
-   * @param {number[]} xs
-   * @param {number[]} ys
-   */
-  constructor(xs, ys) {
-    if (!validateHasLength(xs)) {
-      throw new Error('You need at least one element.');
-    }
-    super(xs, ys);
-  }
-
-  /**
    * @return {Cdf}
    */
   toCdf() {

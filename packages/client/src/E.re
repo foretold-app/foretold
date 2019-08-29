@@ -30,6 +30,12 @@ module O = {
     | _ => false
     };
 
+  let ffmap = (fn, r) =>
+    switch (r) {
+    | Some(sm) => fn(sm)
+    | _ => None
+    };
+
   let toString = opt =>
     switch (opt) {
     | Some(s) => s

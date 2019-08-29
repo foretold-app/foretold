@@ -163,7 +163,15 @@ module Columns = {
       (),
     );
 
-  let default = [|agent, measurable, score, time|];
+  let default = [|
+    agent,
+    measurable,
+    competitiveMeasurement,
+    aggregationMeasurement,
+    objectiveMeasurement,
+    score,
+    time,
+  |];
   let measurables = [|
     agent,
     measurable,

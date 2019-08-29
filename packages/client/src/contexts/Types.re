@@ -131,7 +131,12 @@ and measurable = {
   max: option(float),
   permissions: option(permissions),
 }
-and measurementScoreSet = {primaryPointScore: option(float)}
+and measurementScoreSet = {
+  primaryPointScore: option(float),
+  prediction: measurement,
+  outcome: option(measurement),
+  previousAggregate: option(measurement),
+}
 and measurement = {
   id: string,
   description: option(string),

@@ -415,8 +415,19 @@ module Measurement = {
 module MeasurementScoreSet = {
   type t = Types.measurementScoreSet;
 
-  let make = (~primaryPointScore, ()): t => {
-    primaryPointScore: primaryPointScore,
+  let make =
+      (
+        ~primaryPointScore,
+        ~prediction,
+        ~outcome=None,
+        ~previousAggregate=None,
+        (),
+      )
+      : t => {
+    primaryPointScore,
+    prediction,
+    outcome,
+    previousAggregate,
   };
 };
 
@@ -709,9 +720,13 @@ module LeaderboardItem = {
       ~measurable=measurement.measurable,
       ~pointScore=
         measurement.measurementScoreSet
-        |> E.O.fmap((a: Types.measurementScoreSet) =>
-             a.primaryPointScore |> E.O.default(0.0)
-           ),
+        |> E.O.ffmap((a: Types.measurementScoreSet) => a.primaryPointScore),
+      ~competitiveMeasurement=
+        measurement.measurementScoreSet |> E.O.fmap(a => a.prediction),
+      ~aggregationMeasurement=
+        measurement.measurementScoreSet |> E.O.ffmap(a => a.previousAggregate),
+      ~objectiveMeasurement=
+        measurement.measurementScoreSet |> E.O.ffmap(a => a.outcome),
       ~createdAt=measurement.createdAt,
       (),
     );

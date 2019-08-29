@@ -6,6 +6,7 @@ const { MEASUREMENT_VALUE } = require('../models/enums/measurement-value');
 
 const MAX_XS = 1000;
 
+// @todo: move to lang.js
 const ERR_1 = () => 'You can only submit one type of value. ';
 const ERR_2 = () => 'Xs and Ys should be the same size.';
 const ERR_3 = (xsEntered) => `Xs of length (${xsEntered}) exceeds maximum of length ${MAX_XS}.`;

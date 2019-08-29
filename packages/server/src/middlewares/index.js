@@ -5,6 +5,7 @@ const { setContextChannelMemberships } = require('./channel-memberships');
 const { setContextChannelMembershipsAdmins } = require('./channel-memberships');
 const { setContextMeasurable } = require('./measurables');
 const { setContextMeasurableByRoot } = require('./measurables');
+const { measurableNameValidation } = require('./measurables');
 const { measurementValueValidation } = require('./measurements');
 const { measurableStateValidation } = require('./measurements');
 const { setContextBot } = require('./bots');
@@ -107,6 +108,7 @@ const middlewares = {
     },
 
     measurableCreate: async (resolve, root, args, context, info) => {
+      await measurableNameValidation(root, args, context, info);
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
       return resolve(root, args, context, info);

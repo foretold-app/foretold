@@ -1,8 +1,8 @@
 const _ = require('lodash');
 
 const data = require('../data');
-
 const { Params } = require('../data/classes/params');
+const { measurableEmptyName } = require('../lang');
 
 /**
  * @param {object | null} root
@@ -44,7 +44,25 @@ async function setContextMeasurableByRoot(root, args, context, info) {
   context.measurable = root || null;
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @return {Promise<boolean>}
+ */
+async function measurableNameValidation(root, args, context, info) {
+  const name = _.get(args, 'input.name');
+  const labelSubject = _.get(args, 'input.labelSubject');
+  const isName = !!name || !!labelSubject;
+
+  if (!isName) throw new Error(measurableEmptyName());
+
+  return true;
+}
+
 module.exports = {
+  measurableNameValidation,
   setContextMeasurable,
   setContextMeasurableByRoot,
 };

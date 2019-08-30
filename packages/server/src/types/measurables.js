@@ -66,6 +66,18 @@ const measurable = new graphql.GraphQLObjectType({
       type: require('./measurements').measurement,
       resolve: resolvers.measurements.latest,
     },
+
+    outcome: {
+      description: 'Returns latest objective measurement.',
+      type: require('./measurements').measurement,
+      resolve: require('../resolvers/measurements').outcomeByRootId,
+    },
+
+    previousAggregate: {
+      description: 'Returns latest aggregation measurement.',
+      type: require('./measurements').measurement,
+      resolve: require('../resolvers/measurements').previousAggregateByRootId,
+    },
   })
 });
 

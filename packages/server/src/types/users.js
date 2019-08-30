@@ -2,7 +2,7 @@ const graphql = require('graphql');
 const { resolver, DateType } = require('graphql-sequelize');
 
 const models = require('../models');
-const resolvers = require('../resolvers')
+const resolvers = require('../resolvers');
 
 const userUpdateInput = new graphql.GraphQLInputObjectType({
   name: 'UserUpdateInput',
@@ -34,11 +34,13 @@ const user = new graphql.GraphQLObjectType({
       resolve: resolvers.users.score,
     },
 
+    // security?
     Agent: {
       type: require('./agents').agent,
       resolve: resolver(models.User.Agent),
     },
 
+    // security?
     Bots: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./bots').bot)),
       resolve: resolver(models.User.Bots),

@@ -154,7 +154,9 @@ async function scoreSet(root, args, context, info) {
 /**
  * Do not optimize.
  * Do not return "root".
- * @param {*} root
+ * @todo: rename to "predictionByRootId"
+ * @param {object} root
+ * @param {Models.ObjectID} root.id
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} info
@@ -167,7 +169,9 @@ async function prediction(root, args, context, info) {
 }
 
 /**
- * @param {*} root
+ * @todo: rename to "outcomeByRootMeasurableId"
+ * @param {object} root
+ * @param {Models.ObjectID} root.measurableId
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} info
@@ -179,7 +183,22 @@ async function outcome(root, args, context, info) {
 }
 
 /**
- * @param {*} root
+ * @param {object} root
+ * @param {Models.ObjectID} root.id
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function outcomeByRootId(root, _args, _context, _info) {
+  const measurableId = _.get(root, 'id');
+  return data.measurements.getOutcome(measurableId);
+}
+
+/**
+ * @todo: rename to "previousAggregateByRootMeasurableId"
+ * @param {object} root
+ * @param {Models.ObjectID} root.measurableId
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} info
@@ -187,6 +206,19 @@ async function outcome(root, args, context, info) {
  */
 async function previousAggregate(root, args, context, info) {
   const measurableId = _.get(root, 'measurableId');
+  return data.measurements.getPreviousAggregate(measurableId);
+}
+
+/**
+ * @param {object} root
+ * @param {Models.ObjectID} root.id
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function previousAggregateByRootId(root, _args, _context, _info) {
+  const measurableId = _.get(root, 'id');
   return data.measurements.getPreviousAggregate(measurableId);
 }
 
@@ -209,7 +241,9 @@ module.exports = {
   scoreSet,
   prediction,
   outcome,
+  outcomeByRootId,
   previousAggregate,
+  previousAggregateByRootId,
   primaryPointScore,
   measurableMeasurement,
 };

@@ -116,8 +116,8 @@ module Columns = {
     );
 
   let getMeasurement = measurement => {
-    let bounds = C.Measurements.Table.Helpers.bounds([|measurement|]);
-    C.Measurements.Table.Helpers.smallDistribution(
+    let bounds = C.MeasurementsTable.Helpers.bounds([|measurement|]);
+    C.MeasurementsTable.Helpers.smallDistribution(
       ~measurement,
       ~bounds,
       ~width=75,

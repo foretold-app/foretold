@@ -117,7 +117,7 @@ module LoadedAndUnselected = {
       )
       |> E.O.toExn("");
     <>
-      <C.Measurables.BasicTable
+      <MeasurableIndexTable
         measurables
         showExtraData=true
         channelId={Some(t.channel.id)}

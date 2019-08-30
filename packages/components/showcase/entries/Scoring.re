@@ -90,15 +90,42 @@ module Scoring = {
         {self.state.varC.xs |> E.A.length > 0
            ? <FC__CdfChart__Large cdf={self.state.varC} width=None />
            : "" |> ReasonReact.string}
-        <h3> {"Mean of 2" |> ReasonReact.string} </h3>
+        <h3> {"Mean of 3" |> ReasonReact.string} </h3>
         {switch (
            self.state.varA.xs |> E.A.length,
            self.state.varB.xs |> E.A.length,
+           self.state.varC.xs |> E.A.length,
          ) {
-         | (_, 0) => "" |> ReasonReact.string
-         | (0, _) => "" |> ReasonReact.string
+         | (0, _, _) => "" |> ReasonReact.string
+         | (_, 0, _) => "" |> ReasonReact.string
+         | (_, _, 0) => "" |> ReasonReact.string
          | _ =>
-           let mean = FC__Types.Dist.mean(self.state.varA, self.state.varB);
+           let mean =
+             FC__Types.Dist.mean([|
+               self.state.varA,
+               self.state.varB,
+               self.state.varC,
+             |]);
+           mean.xs |> E.A.length > 0
+             ? <FC__CdfChart__Large cdf=mean width=None />
+             : "" |> ReasonReact.string;
+         }}
+        <h3> {"(A + B) * C" |> ReasonReact.string} </h3>
+        {switch (
+           self.state.varA.xs |> E.A.length,
+           self.state.varB.xs |> E.A.length,
+           self.state.varC.xs |> E.A.length,
+         ) {
+         | (0, _, _) => "" |> ReasonReact.string
+         | (_, 0, _) => "" |> ReasonReact.string
+         | (_, _, 0) => "" |> ReasonReact.string
+         | _ =>
+           let mean =
+             FC__Types.Dist.divideBy([|
+               self.state.varA,
+               self.state.varB,
+               self.state.varC,
+             |]);
            mean.xs |> E.A.length > 0
              ? <FC__CdfChart__Large cdf=mean width=None />
              : "" |> ReasonReact.string;

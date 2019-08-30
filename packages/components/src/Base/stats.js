@@ -6,11 +6,18 @@ function cdfToPdf({xs, ys}){
     return {xs: pdf.xs, ys: pdf.ys}
 }
 
-function mean(var1, var2){
-    let cdf1= new Cdf(var1.xs, var1.ys);
-    let cdf2 = new Cdf(var2.xs, var2.ys);
-    let comb = new ContinuousDistributionCombination([cdf1, cdf2]);
+function mean(vars){
+    let cdfs = vars.map(r => new Cdf(r.xs, r.ys));
+    let comb = new ContinuousDistributionCombination(cdfs);
     let newCdf = comb.combineYsWithMean(1000);
+    return {xs: newCdf.xs, ys: newCdf.ys}
+}
+
+function divideBy(vars){
+    let cdfs = vars.map(r => (new Cdf(r.xs, r.ys)).toPdf());
+    let comb = new ContinuousDistributionCombination(cdfs);
+    let newPdf = comb.combineYsWithFn(1000, r => (r[0] + r[1]) * r[2]);
+    let newCdf = (new Pdf(newPdf.xs, newPdf.ys)).toCdf();
     return {xs: newCdf.xs, ys: newCdf.ys}
 }
 
@@ -26,4 +33,4 @@ function findX(y, {xs, ys}){
     return result
 }
 
-module.exports = {cdfToPdf, findY, findX, mean};
+module.exports = {cdfToPdf, findY, findX, mean, divideBy};

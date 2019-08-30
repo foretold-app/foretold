@@ -166,32 +166,6 @@ module Query = [%graphql
             }
           }
         }
-
-        open: measurables(
-            states: [OPEN]
-            channelId: $channelId
-            seriesId: $seriesId
-            creatorId: $creatorId
-            first: $first
-            last: $last
-            after: $after
-            before: $before
-        ) {
-          total
-        }
-
-        closed: measurables(
-            states: [JUDGED, CLOSED_AS_UNRESOLVED]
-            channelId: $channelId
-            seriesId: $seriesId
-            creatorId: $creatorId
-            first: $first
-            last: $last
-            after: $after
-            before: $before
-        ) {
-          total
-        }
     }
   |}
 ];

@@ -68,7 +68,6 @@ function chart() {
         var xAxis = d3.axisBottom(xScale).ticks(5);
         
         var yAxis = d3.axisLeft(yScale).ticks(5);
-        console.log("AXIS", xAxis, yAxis);
 
         if (attrs.scale  ===  'log') {
             xAxis
@@ -159,6 +158,15 @@ function chart() {
             .attr('stroke-width', 1.5)
             .attr('stroke-dasharray', '6 6')
             .attr('stroke', '#22313F')
+
+        chart.patternify({ tag: 'line', selector: 'v-line' })
+            .attr('x1', 0)
+            .attr('x2', calc.chartWidth)
+            .attr('y1', yScale(0))
+            .attr('y2', yScale(0))
+            .attr('stroke-width', 1.5)
+            .attr('stroke-dasharray', '6 6')
+            .attr('stroke', 'steelblue')
 
         //Add drawing rectangle
         var drawRect = chart.patternify({ tag: 'rect', selector: 'mouse-rect' })

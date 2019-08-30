@@ -67,7 +67,7 @@ let make =
                   <FC.Table.Cell
                     flex={`num(1.)}
                     className=Css.(style([paddingTop(`em(0.5))]))>
-                    {Items.aggregationResolution(~m)}
+                    <Items.AggregationResolution measurable=m />
                   </FC.Table.Cell>
                   <FC.Table.Cell
                     flex={`num(1.)}

@@ -1,8 +1,12 @@
 open Utils;
 open ReactMarkdown;
 open Style.Grid;
-
 module Shared = Foretold__Components__Shared;
+
+/**
+ * Using <Components /> style in React.js is preferable then
+ * functions. Try first of all to create new component.
+ **/
 
 let formatDate = e =>
   e |> E.O.fmap(E.M.format(E.M.format_simple)) |> E.O.default("");
@@ -222,54 +226,106 @@ let unArchiveButton = (~m: Types.measurable) =>
 let archiveOption = (~m: Types.measurable) =>
   m.isArchived == Some(true) ? unArchiveButton(~m) : archiveButton(~m);
 
-let aggregationResolution = (~m: Types.measurable) =>
-  switch (m.previousAggregate, m.outcome) {
-  | (_, Some(outcome)) =>
-    switch (outcome.value) {
-    | Ok(`FloatPoint(r)) =>
+module FloatPoint = {
+  let component = ReasonReact.statelessComponent("FloatPoint");
+  let make = (~value: float, _children) => {
+    ...component,
+    render: _self => {
       <Div flexDirection=`column>
-        <Div flex={`num(1.)}> {"25" |> Utils.ste} </Div>
-      </Div>
-    | Ok(`FloatCdf(r)) =>
-      <Div flexDirection=`column>
+        <Div flex={`num(1.)}> {value |> E.Float.toFixed |> Utils.ste} </Div>
+      </Div>;
+    },
+  };
+};
+
+module FloatCdf = {
+  let component = ReasonReact.statelessComponent("FloatCdf");
+  let make =
+      (
+        ~value: MeasurementValue.FloatCdf.t,
+        ~valueText: option(string),
+        _children,
+      ) => {
+    ...component,
+    render: _self => {
+      <Div flexDirection=`row>
         <Div flex={`num(1.)}>
           <Div flexDirection=`column>
             <Div flex={`num(1.)}> {"25" |> Utils.ste} </Div>
-            <Div flex={`num(1.)}> {"10 to 80" |> Utils.ste} </Div>
+            <Div flex={`num(1.)}>
+              {valueText |> E.O.default("") |> Utils.ste}
+            </Div>
           </Div>
         </Div>
         <Div flex={`num(1.)}> {"Dist" |> Utils.ste} </Div>
-      </Div>
-    | Ok(`Binary(r)) =>
+      </Div>;
+    },
+  };
+};
+
+module Binary = {
+  let component = ReasonReact.statelessComponent("Binary");
+  let make = (~value: bool, _children) => {
+    ...component,
+    render: _self => {
       <Div flexDirection=`column>
-        <Div flex={`num(1.)}> {"True" |> Utils.ste} </Div>
-      </Div>
-    | Ok(`UnresolvableResolution(r)) =>
+        <Div flex={`num(1.)}> {(value ? "True" : "False") |> Utils.ste} </Div>
+      </Div>;
+    },
+  };
+};
+
+module UnresolvableResolution = {
+  let component = ReasonReact.statelessComponent("UnresolvableResolution");
+  let make = _children => {
+    ...component,
+    render: _self => {
       <Div flexDirection=`column>
         <Div flex={`num(1.)}> {"Closed Without Answer" |> Utils.ste} </Div>
-      </Div>
-    | _ => ReasonReact.null
-    }
+      </Div>;
+    },
+  };
+};
 
-  | (Some(previousAggregate), None) =>
-    switch (previousAggregate.value) {
-    | Ok(`FloatCdf(r)) =>
-      <Div flexDirection=`column>
-        <Div flex={`num(1.)}>
-          <Div flexDirection=`column>
-            <Div flex={`num(1.)}> {"25" |> Utils.ste} </Div>
-            <Div flex={`num(1.)}> {"10 to 80" |> Utils.ste} </Div>
-          </Div>
-        </Div>
-        <Div flex={`num(1.)}> {"Dist" |> Utils.ste} </Div>
-      </Div>
-    | Ok(`Percentage(r)) =>
+module Percentage = {
+  let component = ReasonReact.statelessComponent("Percentage");
+  let make = (~value: float, _children) => {
+    ...component,
+    render: _self => {
       <Div flexDirection=`column>
         <Div flex={`num(1.)}> {"20%" |> Utils.ste} </Div>
         <Div flex={`num(1.)}> {"Median" |> Utils.ste} </Div>
-      </Div>
-    | _ => ReasonReact.null
-    }
-
-  | _ => ReasonReact.null
+      </Div>;
+    },
   };
+};
+
+module AggregationResolution = {
+  let component = ReasonReact.statelessComponent("AggregationResolution");
+  let make = (~measurable: Types.measurable, _children) => {
+    ...component,
+    render: _self => {
+      switch (measurable.previousAggregate, measurable.outcome) {
+      | (_, Some(measurement)) =>
+        switch (measurement.value) {
+        | Ok(`FloatPoint(r)) => <FloatPoint value=r />
+        | Ok(`FloatCdf(r)) =>
+          <FloatCdf value=r valueText={measurement.valueText} />
+        | Ok(`Binary(r)) => <Binary value=r />
+        | Ok(`UnresolvableResolution(r)) => <UnresolvableResolution />
+        | _ => ReasonReact.null
+        }
+
+      | (Some(measurement), None) =>
+        switch (measurement.value) {
+        | Ok(`FloatCdf(r)) =>
+          <FloatCdf value=r valueText={measurement.valueText} />
+        | Ok(`Percentage(r)) => <Percentage value=r />
+        | _ => ReasonReact.null
+        }
+
+      | _ => ReasonReact.null
+      };
+    },
+  };
+};

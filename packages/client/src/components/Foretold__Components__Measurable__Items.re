@@ -1,5 +1,6 @@
 open Utils;
 open ReactMarkdown;
+open Style.Grid;
 
 module Shared = Foretold__Components__Shared;
 
@@ -221,37 +222,54 @@ let unArchiveButton = (~m: Types.measurable) =>
 let archiveOption = (~m: Types.measurable) =>
   m.isArchived == Some(true) ? unArchiveButton(~m) : archiveButton(~m);
 
-//  | `FloatCdf(FloatCdf.t)
-//  | `FloatPoint(float)
-
-//  | `Percentage(float)
-//  | `Binary(bool)
-
-//  | `UnresolvableResolution(UnresolvableResolution.t)
-//  | `Comment(Comment.t)
-
 let aggregationResolution = (~m: Types.measurable) =>
   switch (m.previousAggregate, m.outcome) {
   | (_, Some(outcome)) =>
     switch (outcome.value) {
     | Ok(`FloatPoint(r)) =>
-      "Numeric Question - Answer as Point (Resolved with Answer)" |> Utils.ste
+      <Div flexDirection=`column>
+        <Div flex={`num(1.)}> {"25" |> Utils.ste} </Div>
+      </Div>
     | Ok(`FloatCdf(r)) =>
-      "Numeric Question - Answer as Distribution (Resolved with Answer)"
-      |> Utils.ste
-    | Ok(`Binary(r)) => "Binary Question (Resolved with Answer)" |> Utils.ste
-    | Ok(`UnresolvableResolution(r)) => "Closed Without Answer" |> Utils.ste
-    | _ => "None (Resolved with Answer)" |> Utils.ste
+      <Div flexDirection=`column>
+        <Div flex={`num(1.)}>
+          <Div flexDirection=`column>
+            <Div flex={`num(1.)}> {"25" |> Utils.ste} </Div>
+            <Div flex={`num(1.)}> {"10 to 80" |> Utils.ste} </Div>
+          </Div>
+        </Div>
+        <Div flex={`num(1.)}> {"Dist" |> Utils.ste} </Div>
+      </Div>
+    | Ok(`Binary(r)) =>
+      <Div flexDirection=`column>
+        <Div flex={`num(1.)}> {"True" |> Utils.ste} </Div>
+      </Div>
+    | Ok(`UnresolvableResolution(r)) =>
+      <Div flexDirection=`column>
+        <Div flex={`num(1.)}> {"Closed Without Answer" |> Utils.ste} </Div>
+      </Div>
+    | _ => ReasonReact.null
     }
 
   | (Some(previousAggregate), None) =>
     switch (previousAggregate.value) {
     | Ok(`FloatCdf(r)) =>
-      "Numeric Question (1+ Responses, No Answer)" |> Utils.ste
+      <Div flexDirection=`column>
+        <Div flex={`num(1.)}>
+          <Div flexDirection=`column>
+            <Div flex={`num(1.)}> {"25" |> Utils.ste} </Div>
+            <Div flex={`num(1.)}> {"10 to 80" |> Utils.ste} </Div>
+          </Div>
+        </Div>
+        <Div flex={`num(1.)}> {"Dist" |> Utils.ste} </Div>
+      </Div>
     | Ok(`Percentage(r)) =>
-      "Binary Question (1+ Responses, No Answer)" |> Utils.ste
-    | _ => "None (1+ Responses, No Answer)" |> Utils.ste
+      <Div flexDirection=`column>
+        <Div flex={`num(1.)}> {"20%" |> Utils.ste} </Div>
+        <Div flex={`num(1.)}> {"Median" |> Utils.ste} </Div>
+      </Div>
+    | _ => ReasonReact.null
     }
 
-  | _ => "No Responses Yet" |> Utils.ste
+  | _ => ReasonReact.null
   };

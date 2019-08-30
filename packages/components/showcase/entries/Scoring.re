@@ -6,37 +6,23 @@ module Scoring = {
   type dist = FC__Types.Dist.t;
 
   type state = {
-    varA: dist,
-    varB: dist,
-    varC: dist,
+    varA: option(dist),
+    varB: option(dist),
+    varC: option(dist),
   };
 
   type action =
-    | ChangeA(dist)
-    | ChangeB(dist)
-    | ChangeC(dist);
+    | ChangeA(option(dist))
+    | ChangeB(option(dist))
+    | ChangeC(option(dist));
 
   let component = ReasonReact.reducerComponent("Example");
 
   let make = _children => {
-    /* spread the other default fields of component here and override a few */
     ...component,
 
-    initialState: () => {
-      varA: {
-        xs: [|1.0|],
-        ys: [|1.0|],
-      },
-      varB: {
-        xs: [|1.|],
-        ys: [|1.|],
-      },
-      varC: {
-        xs: [|1.|],
-        ys: [|1.|],
-      },
-    },
-    /* State transitions */
+    initialState: () => {varA: None, varB: None, varC: None},
+
     reducer: (action, state) =>
       switch (action) {
       | ChangeA(dist) => ReasonReact.Update({...state, varA: dist})
@@ -45,7 +31,11 @@ module Scoring = {
       },
 
     render: self => {
-      Js.log(self.state.varA);
+      let divideByDistribution =
+        switch (self.state.varA, self.state.varB, self.state.varC) {
+        | (Some(a), Some(b), Some(c)) => FC__Types.Dist.divideBy([|a, b, c|])
+        | _ => None
+        };
       <div>
         <h3> {"Variable A" |> ReasonReact.string} </h3>
         <FC_GuesstimateInput
@@ -54,14 +44,13 @@ module Scoring = {
           sampleCount=50000
           onUpdate={event =>
             {let (ys, xs, hasLimitError) = event
-             self.send(ChangeA({ys, xs}))
+             self.send(ChangeA(FC__Types.Dist.requireLength({ys, xs})))
              Js.log2(xs, ys)}
             |> ignore
           }
         />
-        {self.state.varA.xs |> E.A.length > 0
-           ? <FC__CdfChart__Large cdf={self.state.varA} width=None />
-           : "" |> ReasonReact.string}
+        {self.state.varA
+         |> E.O.React.fmapOrNull(v => <FC__CdfChart__Large cdf=v width=None />)}
         <h3> {"Variable B" |> ReasonReact.string} </h3>
         <FC_GuesstimateInput
           focusOnRender=true
@@ -69,14 +58,12 @@ module Scoring = {
           initialValue={Some(multimodal)}
           onUpdate={event =>
             {let (ys, xs, hasLimitError) = event
-             Js.log2(xs, ys)
-             self.send(ChangeB({ys, xs}))}
+             self.send(ChangeB(FC__Types.Dist.requireLength({ys, xs})))}
             |> ignore
           }
         />
-        {self.state.varB.xs |> E.A.length > 0
-           ? <FC__CdfChart__Large cdf={self.state.varB} width=None />
-           : "" |> ReasonReact.string}
+        {self.state.varB
+         |> E.O.React.fmapOrNull(v => <FC__CdfChart__Large cdf=v width=None />)}
         <h3> {"Variable C" |> ReasonReact.string} </h3>
         <FC_GuesstimateInput
           focusOnRender=true
@@ -84,54 +71,16 @@ module Scoring = {
           initialValue={Some("10 to 20")}
           onUpdate={event =>
             {let (ys, xs, hasLimitError) = event
-             self.send(ChangeC({ys, xs}))
-             Js.log2(xs, ys)}
+             self.send(ChangeC(FC__Types.Dist.requireLength({ys, xs})))}
             |> ignore
           }
         />
-        {self.state.varC.xs |> E.A.length > 0
-           ? <FC__CdfChart__Large cdf={self.state.varC} width=None />
-           : "" |> ReasonReact.string}
-        <h3> {"Mean of 3" |> ReasonReact.string} </h3>
-        // {switch (
-        //    self.state.varA.xs |> E.A.length,
-        //    self.state.varB.xs |> E.A.length,
-        //    self.state.varC.xs |> E.A.length,
-        //  ) {
-        //  | (0, _, _) => "" |> ReasonReact.string
-        //  | (_, 0, _) => "" |> ReasonReact.string
-        //  | (_, _, 0) => "" |> ReasonReact.string
-        //  | _ =>
-        //    let mean =
-        //      FC__Types.Dist.mean([|
-        //        self.state.varA,
-        //        self.state.varB,
-        //        self.state.varC,
-        //      |]);
-        //    mean.xs |> E.A.length > 0
-        //      ? <FC__CdfChart__Large cdf=mean width=None />
-        //      : "" |> ReasonReact.string;
-        //  }}
+        {self.state.varC
+         |> E.O.React.fmapOrNull(v => <FC__CdfChart__Large cdf=v width=None />)}
         <h3> {"(A + B) * C" |> ReasonReact.string} </h3>
-        {switch (
-           self.state.varA.xs |> E.A.length,
-           self.state.varB.xs |> E.A.length,
-           self.state.varC.xs |> E.A.length,
-         ) {
-         | (0, _, _) => "" |> ReasonReact.string
-         | (_, 0, _) => "" |> ReasonReact.string
-         | (_, _, 0) => "" |> ReasonReact.string
-         | _ =>
-           let mean =
-             FC__Types.Dist.divideBy([|
-               self.state.varA,
-               self.state.varB,
-               self.state.varC,
-             |]);
-           Js.log2("Mean", mean);
-           mean.xs |> E.A.length > 0
-             ? <FC__CdfChart__Large cdf=mean width=None />
-             : "" |> ReasonReact.string;
+        {switch (divideByDistribution) {
+         | None => ReasonReact.null
+         | Some(divideBy) => <FC__CdfChart__Large cdf=divideBy width=None />
          }}
       </div>;
     },

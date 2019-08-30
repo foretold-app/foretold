@@ -174,3 +174,8 @@ module JsArray = {
        );
   let filter = Js.Array.filter;
 };
+
+module FloatArray = {
+  let min = r => r |> A.fold_left((a, b) => a < b ? a : b, max_float);
+  let max = r => r |> A.fold_left((a, b) => a > b ? a : b, min_float);
+};

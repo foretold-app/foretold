@@ -16,7 +16,7 @@ function mean(vars){
 function divideBy(vars){
     let cdfs = vars.map(r => (new Cdf(r.xs, r.ys)).toPdf());
     let comb = new ContinuousDistributionCombination(cdfs);
-    let newPdf = comb.combineYsWithFn(10000, r => r[0] / r[1]);
+    let newPdf = comb.combineYsWithFn(10000, r => r[0] - r[1]);
     let newCdf = (new Pdf(newPdf.xs, newPdf.ys)).toCdf();
     return {xs: newCdf.xs, ys: newCdf.ys}
 }

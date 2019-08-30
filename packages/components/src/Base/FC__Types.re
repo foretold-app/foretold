@@ -10,6 +10,10 @@ module Dist = {
     "ys": array(float),
   };
 
+  let hasLength = (t: t): bool => t.xs |> FC__E.A.length > 0;
+
+  let empty: t = {xs: [||], ys: [||]};
+
   let toJson = (t: t): asJson => {"xs": t.xs, "ys": t.ys};
   let fromJson = (json: asJson): t => {xs: json##xs, ys: json##ys};
 
@@ -37,10 +41,26 @@ module Dist = {
   };
 
   let toPdf = (dist: t) => dist |> JS.doAsDist(JS.cdfToPdf);
+
+  let requireLength = (dist: t) => dist |> hasLength ? Some(dist) : None;
+
   let mean = (dists: array(t)) =>
     JS.mean(dists |> Array.map(JS.fromDist)) |> JS.toDist;
-  let divideBy = (dists: array(t)) =>
-    JS.divideBy(dists |> Array.map(JS.fromDist)) |> JS.toDist;
+
+  let divideBy = (dists: array(t)) => {
+    JS.divideBy(dists |> Array.map(JS.fromDist))
+    |> JS.toDist
+    |> requireLength;
+  };
+
   let findX = (y: float, dist: t) => dist |> JS.fromDist |> JS.findX(y);
   let findY = (x: float, dist: t) => dist |> JS.fromDist |> JS.findY(x);
+};
+
+module Dists = {
+  type t = array(Dist.t);
+  let minX = (x: float, dists: t) =>
+    dists |> Array.map(Dist.findX(x)) |> FC__E.FloatArray.min;
+  let maxX = (x: float, dists: t) =>
+    dists |> Array.map(Dist.findX(x)) |> FC__E.FloatArray.max;
 };

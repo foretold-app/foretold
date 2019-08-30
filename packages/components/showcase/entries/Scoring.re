@@ -49,7 +49,7 @@ module Scoring = {
         <FC_GuesstimateInput
           focusOnRender=true
           initialValue={Some("10 to 20")}
-          sampleCount=10000
+          sampleCount=50000
           onUpdate={event =>
             {let (ys, xs, hasLimitError) = event
              self.send(ChangeA({ys, xs}))
@@ -63,7 +63,7 @@ module Scoring = {
         <h3> {"Variable B" |> ReasonReact.string} </h3>
         <FC_GuesstimateInput
           focusOnRender=true
-          sampleCount=10000
+          sampleCount=50000
           initialValue={Some("20 to 40")}
           onUpdate={event =>
             {let (ys, xs, hasLimitError) = event
@@ -78,7 +78,7 @@ module Scoring = {
         <h3> {"Variable C" |> ReasonReact.string} </h3>
         <FC_GuesstimateInput
           focusOnRender=true
-          sampleCount=10000
+          sampleCount=50000
           initialValue={Some("30 to 60")}
           onUpdate={event =>
             {let (ys, xs, hasLimitError) = event

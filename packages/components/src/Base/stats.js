@@ -9,14 +9,14 @@ function cdfToPdf({xs, ys}){
 function mean(vars){
     let cdfs = vars.map(r => new Cdf(r.xs, r.ys));
     let comb = new ContinuousDistributionCombination(cdfs);
-    let newCdf = comb.combineYsWithMean(1000);
+    let newCdf = comb.combineYsWithMean(10000);
     return {xs: newCdf.xs, ys: newCdf.ys}
 }
 
 function divideBy(vars){
     let cdfs = vars.map(r => (new Cdf(r.xs, r.ys)).toPdf());
     let comb = new ContinuousDistributionCombination(cdfs);
-    let newPdf = comb.combineYsWithFn(1000, r => (r[0] + r[1]) * r[2]);
+    let newPdf = comb.combineYsWithFn(10000, r => (r[0] + r[1]) * r[2]);
     let newCdf = (new Pdf(newPdf.xs, newPdf.ys)).toCdf();
     return {xs: newCdf.xs, ys: newCdf.ys}
 }

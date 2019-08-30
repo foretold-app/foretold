@@ -103,10 +103,10 @@ function chart() {
             .patternify({ tag: 'g', selector: 'chart' })
             .attr('transform', 'translate(' + calc.chartLeftMargin + ',' + calc.chartTopMargin + ')');
 
-        //Add axis
-        // chart.patternify({ tag: 'g', selector: 'axis' })
-        //     .attr('transform', 'translate(' + 0 + ',' + calc.chartHeight + ')')
-        //     .call(xAxis);
+        // Add axis
+        chart.patternify({ tag: 'g', selector: 'axis' })
+            .attr('transform', 'translate(' + 0 + ',' + calc.chartHeight + ')')
+            .call(xAxis);
 
         //Draw area
         areaPath = chart.patternify({ tag: 'path', selector: 'area-path', data: dataPoints })

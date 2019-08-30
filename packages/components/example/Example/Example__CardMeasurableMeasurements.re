@@ -16,37 +16,35 @@ let row =
       ),
     |]>
     <Table.Cell
-      flex=2
+      flex={`num(2.0)}
       className=Css.(
         style([paddingTop(`em(0.6)), paddingBottom(`em(0.0))])
       )>
       <FC__CdfChart__Plain cdf minX=2.0 color={`hex("#d9dcdf")} maxX=12.0 />
     </Table.Cell>
     <Table.Cell
-      flex=1
+      flex={`num(1.0)}
       className=Css.(
         style([paddingTop(`em(0.2)), paddingBottom(`em(0.3))])
       )>
       <FC__CdfChart__StatSummary cdf />
     </Table.Cell>
     <Table.Cell
-      flex=1
+      flex={`num(1.0)}
       className=Css.(
         style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])
       )>
       <FC__AgentLink> {"Roger Adams" |> ReasonReact.string} </FC__AgentLink>
     </Table.Cell>
     <Table.Cell
-      flex=1
+      flex={`num(1.0)}
       className=Css.(
         style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])
       )>
       <span className=Css.(style([color(FC__Colors.textMedium)]))>
-        {
-          MomentRe.momentWithUnix(pastTime)
-          |> MomentRe.Moment.format(format_standard)
-          |> ReasonReact.string
-        }
+        {MomentRe.momentWithUnix(pastTime)
+         |> MomentRe.Moment.format(format_standard)
+         |> ReasonReact.string}
       </span>
     </Table.Cell>
   </Table.Row>;
@@ -54,37 +52,35 @@ let row =
 let row2 =
   <Table.Row>
     <Table.Cell
-      flex=2
+      flex={`num(2.0)}
       className=Css.(
         style([paddingTop(`em(0.6)), paddingBottom(`em(0.0))])
       )>
       <FC__CdfChart__Plain cdf minX=2.0 color={`hex("#d9dcdf")} maxX=12.0 />
     </Table.Cell>
     <Table.Cell
-      flex=1
+      flex={`num(1.0)}
       className=Css.(
         style([paddingTop(`em(0.2)), paddingBottom(`em(0.3))])
       )>
       <FC__CdfChart__StatSummary cdf />
     </Table.Cell>
     <Table.Cell
-      flex=1
+      flex={`num(1.0)}
       className=Css.(
         style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])
       )>
       <FC__AgentLink> {"Samantha Hope" |> ReasonReact.string} </FC__AgentLink>
     </Table.Cell>
     <Table.Cell
-      flex=1
+      flex={`num(1.0)}
       className=Css.(
         style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])
       )>
       <span className=Css.(style([color(FC__Colors.textMedium)]))>
-        {
-          MomentRe.momentWithUnix(pastTime)
-          |> MomentRe.Moment.format(format_standard)
-          |> ReasonReact.string
-        }
+        {MomentRe.momentWithUnix(pastTime)
+         |> MomentRe.Moment.format(format_standard)
+         |> ReasonReact.string}
       </span>
     </Table.Cell>
   </Table.Row>;
@@ -105,33 +101,35 @@ let make =
         <Div
           float=`right
           styles=[Css.style([PageCard.HeaderRow.Styles.itemTopPadding])]>
-          {
-            PaginationButtons.make({
-              currentValue: Range(3, 10),
-              max: 100,
-              pageLeft: {
-                isDisabled: false,
-                onClick: _ => (),
-              },
-              pageRight: {
-                isDisabled: true,
-                onClick: _ => (),
-              },
-            })
-          }
+          {PaginationButtons.make({
+             currentValue: Range(3, 10),
+             max: 100,
+             pageLeft: {
+               isDisabled: false,
+               onClick: _ => (),
+             },
+             pageRight: {
+               isDisabled: true,
+               onClick: _ => (),
+             },
+           })}
         </Div>
       </Div>
     </PageCard.HeaderRow>
     <Div styles=[Css.style(BaseStyles.fullWidthFloatLeft)]>
       <Table.HeaderRow>
-        <Table.Cell flex=2>
+        <Table.Cell flex={`num(2.0)}>
           {"Prediction Distribution" |> ReasonReact.string}
         </Table.Cell>
-        <Table.Cell flex=1>
+        <Table.Cell flex={`num(1.0)}>
           {"Prediction Value" |> ReasonReact.string}
         </Table.Cell>
-        <Table.Cell flex=1> {"Agent" |> ReasonReact.string} </Table.Cell>
-        <Table.Cell flex=1> {"Time" |> ReasonReact.string} </Table.Cell>
+        <Table.Cell flex={`num(1.0)}>
+          {"Agent" |> ReasonReact.string}
+        </Table.Cell>
+        <Table.Cell flex={`num(1.0)}>
+          {"Time" |> ReasonReact.string}
+        </Table.Cell>
       </Table.HeaderRow>
       row
       row2

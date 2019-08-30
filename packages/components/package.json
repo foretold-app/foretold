@@ -22,7 +22,7 @@
     "license": "MIT",
     "dependencies": {
         "@foretold/cdf": "^1.0.8",
-        "bs-css": "^8.0.2",
+        "bs-css": "^9.0.1",
         "bs-moment": "^0.4.4",
         "d3": "^5.9.2",
         "emotion": "^10.0.7",

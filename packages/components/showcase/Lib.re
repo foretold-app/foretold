@@ -57,7 +57,7 @@ module Styles = {
     style([
       padding(`em(2.)),
       flexBasis(`px(200)),
-      flexShrink(0),
+      flexShrink(0.),
       backgroundColor(`hex("eaeff3")),
       boxShadow(
         ~x=`px(-1),
@@ -193,7 +193,11 @@ module Index = {
                    f.children
                    |> E.L.fmap(child =>
                         switch (child) {
-                        | CompEntry(c) => <div className=Styles.folderChildContainer key={c.id}> {renderEntry(c)} </div>
+                        | CompEntry(c) =>
+                          <div
+                            className=Styles.folderChildContainer key={c.id}>
+                            {renderEntry(c)}
+                          </div>
                         | _ => React.null
                         }
                       )

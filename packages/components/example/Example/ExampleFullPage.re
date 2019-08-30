@@ -52,7 +52,8 @@ let make =
         ),
       ]>
       <Div flexDirection=`row>
-        <Div flex=5 styles=[Css.(style([paddingRight(`em(2.0))]))]>
+        <Div
+          flex={`num(5.0)} styles=[Css.(style([paddingRight(`em(2.0))]))]>
           <Div> Example__MeasurableTopCard.make </Div>
           <Div
             styles=[
@@ -65,7 +66,7 @@ let make =
             Example__CardMeasurableMeasurements.make
           </Div>
         </Div>
-        <Div flex=2>
+        <Div flex={`num(2.0)}>
           Example__MeasurableTopCard.make
           <Div styles=[Css.(style([clear(`both), paddingTop(`em(2.0))]))]>
             <MeasurableForm cdf=ExampleCdfs.Example1.cdf />
@@ -89,10 +90,11 @@ let make =
         ),
       ]>
       <Div flexDirection=`row>
-        <Div flex=5 styles=[Css.(style([paddingRight(`em(2.0))]))]>
+        <Div
+          flex={`num(5.0)} styles=[Css.(style([paddingRight(`em(2.0))]))]>
           <Div> Example__MemberTableCard.make </Div>
         </Div>
-        <Div flex=2 />
+        <Div flex={`num(2.0)} />
       </Div>
     </Div>
     <Footer

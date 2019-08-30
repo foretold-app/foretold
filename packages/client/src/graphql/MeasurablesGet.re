@@ -208,40 +208,25 @@ let componentMaker = (query, innerComponentFn) =>
     }
   </QueryComponent>;
 
-/* TODO: I'm sure there is a dryer way to do this but couldn't figure out quickly. */
-let component2 =
+let component =
     (
-      ~channelId,
+      ~creatorId=None,
+      ~seriesId=None,
+      ~channelId=None,
       ~pageLimit,
       ~states,
       ~direction: direction,
       ~innerComponentFn,
-    ) => {
-  let query = queryDirection(~channelId, ~pageLimit, ~direction, ~states, ());
-  componentMaker(query, innerComponentFn);
-};
-
-let componentWithSeries =
-    (~seriesId, ~pageLimit, ~direction: direction, ~innerComponentFn) => {
-  let query =
-    queryDirection(
-      ~seriesId,
-      ~pageLimit,
-      ~direction,
-      ~states=[|Some(`OPEN)|],
       (),
-    );
-  componentMaker(query, innerComponentFn);
-};
-
-let componentWithCreator =
-    (~creatorId, ~pageLimit, ~direction: direction, ~innerComponentFn) => {
+    ) => {
   let query =
     queryDirection(
-      ~creatorId,
+      ~channelId?,
+      ~seriesId?,
+      ~creatorId?,
       ~pageLimit,
       ~direction,
-      ~states=[|Some(`OPEN)|],
+      ~states,
       (),
     );
   componentMaker(query, innerComponentFn);

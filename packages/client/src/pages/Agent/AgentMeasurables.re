@@ -1,9 +1,16 @@
 module ReducerConfig = {
   type itemType = Types.measurable;
   type callFnParams = string;
+
   let getId = (e: Types.measurable) => e.id;
-  let callFn = (e: callFnParams) =>
-    MeasurablesGet.componentWithCreator(~creatorId=e);
+
+  let callFn = (creatorId: callFnParams) =>
+    MeasurablesGet.component(
+      ~creatorId=Some(creatorId),
+      ~states=[|Some(`OPEN)|],
+      (),
+    );
+
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
 };
 

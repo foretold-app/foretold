@@ -130,6 +130,8 @@ and measurable = {
   min: option(float),
   max: option(float),
   permissions: option(permissions),
+  outcome: option(measurement),
+  previousAggregate: option(measurement),
 }
 and measurementScoreSet = {
   primaryPointScore: option(float),

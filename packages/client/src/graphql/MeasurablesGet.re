@@ -67,6 +67,8 @@ let toMeasurable = m => {
     ~iAmOwner=Some(m##iAmOwner),
     ~min=m##min,
     ~max=m##max,
+    ~outcome,
+    ~previousAggregate,
     (),
   );
 };

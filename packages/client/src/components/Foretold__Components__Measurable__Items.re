@@ -4,8 +4,6 @@ open ReactMarkdown;
 
 module Shared = Foretold__Components__Shared;
 
-type measurable = Measurable.t;
-
 let formatDate = e =>
   e |> E.O.fmap(E.M.format(E.M.format_simple)) |> E.O.default("");
 
@@ -18,7 +16,7 @@ let dateOnStyle =
     ])
   );
 
-let dateItem = (~m: measurable, ~showOn=true, ~onStyle=dateOnStyle, ()) =>
+let dateItem = (~m: Types.measurable, ~showOn=true, ~onStyle=dateOnStyle, ()) =>
   switch (m.labelOnDate |> E.O.fmap(E.M.goFormat_simple), showOn) {
   | (None, _) => None
   | (Some(e), true) =>
@@ -35,7 +33,7 @@ let dateItem = (~m: measurable, ~showOn=true, ~onStyle=dateOnStyle, ()) =>
     Some(<span className=Shared.TagLink.dateItem> {e |> ste} </span>)
   };
 
-let link = (~m: measurable) => {
+let link = (~m: Types.measurable) => {
   open Css;
   let name = style([fontSize(`em(1.)), color(`hex("333"))]);
 
@@ -64,14 +62,14 @@ let link = (~m: measurable) => {
   </Providers.AppContext.Consumer>;
 };
 
-let description = (~m: measurable) =>
+let description = (~m: Types.measurable) =>
   switch (m.labelCustom) {
   | Some("")
   | None => None
   | Some(text) => Some(<Markdown source=text />)
   };
 
-let endpointResponse = (~m: measurable) =>
+let endpointResponse = (~m: Types.measurable) =>
   switch (
     m.resolutionEndpoint |> E.O.default(""),
     m.resolutionEndpointResponse,
@@ -84,14 +82,14 @@ let endpointResponse = (~m: measurable) =>
   | _ => None
   };
 
-let questionLink = (~m: measurable) =>
+let questionLink = (~m: Types.measurable) =>
   <Link.Jsx2
     className=Shared.Item.item
     linkType={Internal(MeasurableShow(m.channelId, m.id))}>
     {"Link to This Question" |> Utils.ste}
   </Link.Jsx2>;
 
-let creatorLink = (~m: measurable) =>
+let creatorLink = (~m: Types.measurable) =>
   m.creator
   |> E.O.fmap((c: Agent.t) =>
        <Link.Jsx2
@@ -103,7 +101,7 @@ let creatorLink = (~m: measurable) =>
        </Link.Jsx2>
      );
 
-let editLink = (~m: measurable) =>
+let editLink = (~m: Types.measurable) =>
   <div className=Shared.Item.item>
     <Link.Jsx2
       linkType={Internal(MeasurableEdit(m.id))}
@@ -112,7 +110,7 @@ let editLink = (~m: measurable) =>
     </Link.Jsx2>
   </div>;
 
-let channelLink = (~m: measurable) =>
+let channelLink = (~m: Types.measurable) =>
   <div className=Shared.Item.item>
     <Link.Jsx2
       linkType={Internal(ChannelShow(m.channelId))}
@@ -124,7 +122,7 @@ let channelLink = (~m: measurable) =>
     </Link.Jsx2>
   </div>;
 
-let measurements = (~m: measurable) =>
+let measurements = (~m: Types.measurable) =>
   switch (m.measurementCount) {
   | Some(0) => None
   | None => None
@@ -141,7 +139,7 @@ let measurements = (~m: measurable) =>
     );
   };
 
-let measurers = (~m: measurable) =>
+let measurers = (~m: Types.measurable) =>
   switch (m.measurerCount) {
   | Some(0) => None
   | None => None
@@ -154,12 +152,12 @@ let measurers = (~m: measurable) =>
     )
   };
 
-let id = (~m: measurable, ()) =>
+let id = (~m: Types.measurable, ()) =>
   <div className=Shared.Item.id>
     {"ID:  " ++ m.id |> ReasonReact.string}
   </div>;
 
-let series = (~m: measurable, ~channelId=None, ()) => {
+let series = (~m: Types.measurable, ~channelId=None, ()) => {
   m.series
   |> E.O.bind(_, r =>
        switch (r.name) {
@@ -177,12 +175,12 @@ let series = (~m: measurable, ~channelId=None, ()) => {
      );
 };
 
-let expectedResolutionDate = (~m: measurable) =>
+let expectedResolutionDate = (~m: Types.measurable) =>
   <div className=Shared.Item.item>
     {"Resolves on " ++ (m.expectedResolutionDate |> formatDate) |> ste}
   </div>;
 
-let resolutionEndpoint = (~m: measurable) =>
+let resolutionEndpoint = (~m: Types.measurable) =>
   switch (m.resolutionEndpoint |> E.O.default("")) {
   | "" => None
   | text =>
@@ -191,7 +189,7 @@ let resolutionEndpoint = (~m: measurable) =>
     )
   };
 
-let archiveButton = (~m: measurable) =>
+let archiveButton = (~m: Types.measurable) =>
   MeasurableArchive.Mutation.make((mutation, _) =>
     <div className=Shared.Item.item>
       <div
@@ -206,7 +204,7 @@ let archiveButton = (~m: measurable) =>
   )
   |> E.React.el;
 
-let unArchiveButton = (~m: measurable) =>
+let unArchiveButton = (~m: Types.measurable) =>
   MeasurableUnarchive.Mutation.make((mutation, _) =>
     <div className=Shared.Item.item>
       <div
@@ -221,5 +219,5 @@ let unArchiveButton = (~m: measurable) =>
   )
   |> E.React.el;
 
-let archiveOption = (~m: measurable) =>
+let archiveOption = (~m: Types.measurable) =>
   m.isArchived == Some(true) ? unArchiveButton(~m) : archiveButton(~m);

@@ -34,12 +34,23 @@ let make =
               {"Name & Status" |> ReasonReact.string}
             </FC.Table.Cell>
             <FC.Table.Cell flex={`num(1.)}>
+              {"Aggregate and resolution" |> ReasonReact.string}
+            </FC.Table.Cell>
+            <FC.Table.Cell flex={`num(1.)}>
               {"Details" |> ReasonReact.string}
             </FC.Table.Cell>
           </FC.Table.HeaderRow>
           {measurables
            |> E.A.fmap((m: Types.measurable) => {
                 let iAmOwner = m.iAmOwner == Some(true);
+
+                let aggregationResolution =
+                  switch (m.previousAggregate, m.outcome) {
+                  | (_, Some(outcome)) => "Outcome" |> Utils.ste
+                  | (Some(previousAggregate), _) =>
+                    "previousAggregate" |> Utils.ste
+                  };
+
                 <FC.Table.Row onClick={_e => onSelect(m)} key={m.id}>
                   <FC.Table.Cell
                     flex={`num(3.)}
@@ -59,6 +70,11 @@ let make =
                         measurable=m
                       />
                     </div>
+                  </FC.Table.Cell>
+                  <FC.Table.Cell
+                    flex={`num(1.)}
+                    className=Css.(style([paddingTop(`em(0.5))]))>
+                    aggregationResolution
                   </FC.Table.Cell>
                   <FC.Table.Cell
                     flex={`num(1.)}

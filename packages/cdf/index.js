@@ -1,11 +1,11 @@
 const { Cdf } = require('./cdf');
 const { Pdf } = require('./pdf');
 const { Samples } = require('./samples');
-const { CdfCombination } = require('./cdf-combination');
+const { ContinuousDistributionCombination } = require('./continuousDistributionCombination');
 
 module.exports = {
   Pdf,
   Cdf,
   Samples,
-  CdfCombination,
+  ContinuousDistributionCombination,
 };

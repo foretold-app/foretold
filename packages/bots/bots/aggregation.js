@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const { Cdf } = require('@foretold/cdf/cdf');
-const { CdfCombination } = require('@foretold/cdf/cdf-combination');
+const { ContinuousDistributionCombination } = require('@foretold/cdf/continuousDistributionCombination');
 
 const config = require('../config');
 
@@ -41,8 +41,8 @@ class Aggregation {
 
     if (values.length === 0) return null;
 
-    const combined = new CdfCombination(values)
-      .combine(config.CDF_COMBINE_SIZE);
+    const combined = new ContinuousDistributionCombination(values)
+      .combineYsWithMean(config.CDF_COMBINE_SIZE);
 
     return {
       floatCdf: {

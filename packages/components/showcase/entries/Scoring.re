@@ -36,6 +36,26 @@ module Scoring = {
         | (Some(a), Some(b), Some(c)) => FC__Types.Dist.divideBy([|a, b, c|])
         | _ => None
         };
+
+      let minX =
+        [|
+          self.state.varA,
+          self.state.varB,
+          self.state.varC,
+          divideByDistribution,
+        |]
+        |> E.A.O.concatSome
+        |> FC__Types.Dists.minX(0.01);
+      let maxX =
+        [|
+          self.state.varA,
+          self.state.varB,
+          self.state.varC,
+          divideByDistribution,
+        |]
+        |> E.A.O.concatSome
+        |> FC__Types.Dists.maxX(0.99);
+      Js.log2("MIN", min);
       <div>
         <h3> {"Variable A" |> ReasonReact.string} </h3>
         <FC_GuesstimateInput
@@ -50,7 +70,9 @@ module Scoring = {
           }
         />
         {self.state.varA
-         |> E.O.React.fmapOrNull(v => <FC__CdfChart__Large cdf=v width=None />)}
+         |> E.O.React.fmapOrNull(v =>
+              <FC__CdfChart__Large cdf=v minX maxX width=None />
+            )}
         <h3> {"Variable B" |> ReasonReact.string} </h3>
         <FC_GuesstimateInput
           focusOnRender=true
@@ -63,7 +85,9 @@ module Scoring = {
           }
         />
         {self.state.varB
-         |> E.O.React.fmapOrNull(v => <FC__CdfChart__Large cdf=v width=None />)}
+         |> E.O.React.fmapOrNull(v =>
+              <FC__CdfChart__Large minX maxX cdf=v width=None />
+            )}
         <h3> {"Variable C" |> ReasonReact.string} </h3>
         <FC_GuesstimateInput
           focusOnRender=true
@@ -76,11 +100,14 @@ module Scoring = {
           }
         />
         {self.state.varC
-         |> E.O.React.fmapOrNull(v => <FC__CdfChart__Large cdf=v width=None />)}
+         |> E.O.React.fmapOrNull(v =>
+              <FC__CdfChart__Large minX maxX cdf=v width=None />
+            )}
         <h3> {"(A + B) * C" |> ReasonReact.string} </h3>
         {switch (divideByDistribution) {
          | None => ReasonReact.null
-         | Some(divideBy) => <FC__CdfChart__Large cdf=divideBy width=None />
+         | Some(divideBy) =>
+           <FC__CdfChart__Large minX maxX cdf=divideBy width=None />
          }}
       </div>;
     },

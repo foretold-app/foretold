@@ -22,8 +22,8 @@ module Styles = {
 let make =
     (
       ~data,
-      ~minX,
-      ~maxX,
+      ~minX=None,
+      ~maxX=None,
       ~width=300,
       ~height=50,
       ~color=`hex("7e9db7"),
@@ -35,8 +35,8 @@ let make =
       <CdfChart
         width
         height
-        minX
-        maxX
+        ?minX
+        ?maxX
         marginBottom=15
         showVerticalLine=false
         showDistributionLines=false

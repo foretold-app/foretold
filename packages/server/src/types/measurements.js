@@ -151,18 +151,22 @@ const measurementScoreSet = new graphql.GraphQLObjectType({
   name: 'MeasurementScoreSet',
   fields: () => ({
     prediction: {
+      description: 'Returns itself.',
       type: graphql.GraphQLNonNull(require('./measurements').measurement),
       resolve: require('../resolvers/measurements').prediction,
     },
     outcome: {
+      description: 'Returns latest objective measurement.',
       type: require('./measurements').measurement,
       resolve: require('../resolvers/measurements').outcome,
     },
     previousAggregate: {
+      description: 'Returns latest aggregation measurement.',
       type: require('./measurements').measurement,
       resolve: require('../resolvers/measurements').previousAggregate,
     },
     primaryPointScore: {
+      description: 'Not fully implemented yet.',
       type: graphql.GraphQLFloat,
       resolve: require('../resolvers/measurements').primaryPointScore,
     },

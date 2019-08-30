@@ -1,9 +1,16 @@
 module Config = {
   type itemType = Types.measurable;
   type callFnParams = string;
+
   let getId = (e: Types.measurable) => e.id;
-  let callFn = (e: callFnParams) =>
-    MeasurablesGet.componentWithSeries(~seriesId=e);
+
+  let callFn = (seriesId: callFnParams) =>
+    MeasurablesGet.component(
+      ~seriesId=Some(seriesId),
+      ~states=[|Some(`OPEN)|],
+      (),
+    );
+
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
 };
 
@@ -83,7 +90,7 @@ let make =
           | (_, Some(measurable)) =>
             <C.Measurable.FullPresentation id={measurable.id} loggedInUser />
           | (Success(connection), None) =>
-            <C.Measurables.SeriesTable
+            <MeasurablesSeriesTable
               measurables={connection.edges}
               selected=None
               onClick={id =>

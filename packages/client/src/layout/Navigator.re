@@ -1,30 +1,13 @@
 open Routing;
 open Pages;
 
-// @todo: fix this duplicated ligic(#rederectings)
-let defaultPage = (loggedInUser: Types.user) =>
-  loggedInUser.agent
-  |> E.O.bind(_, Primary.Agent.firstChannel)
-  |> E.O.fmap((channel: Types.channel) => {
-       Routing.Url.push(ChannelShow(channel.id));
-       ReasonReact.null;
-     })
-  |> {
-    Primary.Channel.globalLink()
-    |> Routing.Url.toString
-    |> ReasonReact.Router.push;
-    E.O.default(<Home />);
-  };
-
-type pageParams = {id: string};
-
 let component = ReasonReact.statelessComponent("Navigator");
 
 let make = (~route: Route.t, ~loggedInUser: option(Types.user), _children) => {
   ...component,
   render: _ => {
     switch (route, loggedInUser) {
-    | (Home, Some(loggedInUser)) => defaultPage(loggedInUser)
+    | (Home, Some(loggedInUser)) => Redirect.defaultPage(loggedInUser)
     | (Channel(channel), _) =>
       Channel_Layout.makeWithPage(channel, loggedInUser)
     | (Agent(agentPage), _) =>

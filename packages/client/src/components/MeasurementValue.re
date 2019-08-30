@@ -25,7 +25,6 @@ module UnresolvableResolution = {
     | `FALSE_CONDITIONAL => "FALSE_CONDITIONAL"
     | `OTHER => "OTHER"
     | `RESULT_NOT_AVAILABLE => "RESULT_NOT_AVAILABLE"
-    | _ => Js.Exn.raiseError("Invalid GraphQL Unresolvable Resolution")
     };
 
   let toPublicString = (e: t): string =>
@@ -34,7 +33,6 @@ module UnresolvableResolution = {
     | `FALSE_CONDITIONAL => "False Conditional"
     | `OTHER => "Other"
     | `RESULT_NOT_AVAILABLE => "Result Not Available"
-    | _ => Js.Exn.raiseError("Invalid GraphQL Unresolvable Resolution")
     };
 };
 
@@ -54,7 +52,6 @@ module Comment = {
     | `GENERIC => "GENERIC"
     | `QUESTION_FEEDBACK => "QUESTION_FEEDBACK"
     | `UPDATE => "UPDATE"
-    | _ => Js.Exn.raiseError("Invalid GraphQL Comment")
     };
 
   let toPublicString = (e: t): string =>
@@ -62,26 +59,8 @@ module Comment = {
     | `GENERIC => "Generic"
     | `QUESTION_FEEDBACK => "Question Feedback"
     | `UPDATE => "Update"
-    | _ => Js.Exn.raiseError("Invalid GraphQL Unresolvable Resolution")
     };
 };
-
-type valueResult = {
-  .
-  "floatCdf":
-    option({
-      .
-      "xs": Js.Array.t(float),
-      "ys": Js.Array.t(float),
-    }),
-  "floatPoint": option(float),
-  "percentage": option(float),
-  "binary": option(bool),
-  "unresolvableResolution": option(UnresolvableResolution.t),
-  "comment": option(Comment.t),
-};
-
-type graphQlResult = valueResult;
 
 let decodeResult = (fn, json) =>
   try (Ok(json |> fn)) {
@@ -223,17 +202,8 @@ module FloatPoint = {
   let equal = (a: t, b: t) => a == b;
   let compare = (a: t, b: t) => a > b ? 1 : (-1);
 
-  let decodeFn = Json.Decode.float;
   let encodeFn = Json.Encode.float;
-};
-
-module DateTimePoint = {
-  type t = string;
-  let equal = (a: t, b: t) => a == b;
-  let compare = (a: t, b: t) => a > b ? 1 : (-1);
-
-  let encodeFn = Json.Encode.string;
-  let decodeFn = Json.Decode.string;
+  let decodeFn = Json.Decode.float;
 };
 
 module FloatCdf = MakeCdf(FloatPoint);
@@ -255,15 +225,11 @@ let toPdf = (t: FloatCdf.t): FloatCdf.t => {
   |> FloatCdf.fromArray;
 };
 
-module DateTimeCdf = MakeCdf(DateTimePoint);
-
 type t = [
+  | `FloatCdf(FloatCdf.t)
   | `FloatPoint(float)
   | `Percentage(float)
   | `Binary(bool)
-  | `DateTimePoint(string)
-  | `FloatCdf(FloatCdf.t)
-  | `DateTimeCdf(DateTimeCdf.t)
   | `UnresolvableResolution(UnresolvableResolution.t)
   | `Comment(Comment.t)
 ];
@@ -288,8 +254,6 @@ let typeToName = (t: t) =>
   switch (t) {
   | `FloatPoint(_) => "floatPoint"
   | `FloatCdf(_) => "floatCdf"
-  | `DateTimeCdf(_) => "dateTimeCdf"
-  | `DateTimePoint(_) => "dateTimePoint"
   | `Percentage(_) => "percentage"
   | `Binary(_) => "binary"
   | `UnresolvableResolution(_) => "unresolvableResolution"
@@ -300,8 +264,6 @@ let nameToType =
   fun
   | "floatPoint" => Ok(`FloatPoint)
   | "floatCdf" => Ok(`FloatCdf)
-  | "dateTimePoint" => Ok(`DateTimePoint)
-  | "dateTimeCdf" => Ok(`DateTimeCdf)
   | "percentage" => Ok(`Percentage)
   | "binary" => Ok(`Binary)
   | "unresolvableResolution" => Ok(`UnresolvableResolution)
@@ -318,8 +280,6 @@ let stringOfValue = (t: t) =>
     let p50 = per(50.0);
     let p75 = per(75.0);
     {j|{25: $(p25), 50: $(p50), 75: $(p75)} |j};
-  | `DateTimeCdf(k) => "Implement Me"
-  | `DateTimePoint(k) => k
   | `Percentage(k) => string_of_float(k)
   | `Binary(k) => string_of_bool(k)
   | `UnresolvableResolution(k) => UnresolvableResolution.toString(k)
@@ -331,8 +291,6 @@ let encode = (e: t) => {
   switch (e) {
   | `FloatPoint(k) => makeEncode(Json.Encode.float, n, k)
   | `FloatCdf(k) => FloatCdf.encode(n, k)
-  | `DateTimeCdf(k) => DateTimeCdf.encode(n, k)
-  | `DateTimePoint(k) => makeEncode(Json.Encode.string, n, k)
   | `Percentage(k) => makeEncode(Json.Encode.float, n, k)
   | `Binary(k) => makeEncode(Json.Encode.bool, n, k)
   | `UnresolvableResolution(_k) =>
@@ -348,9 +306,6 @@ let decoder = (a, j: Js.Json.t): Belt.Result.t(t, string) =>
   | `FloatPoint =>
     j |> convert(makeDecode(Json.Decode.float), e => `FloatPoint(e))
   | `FloatCdf => j |> convert(FloatCdf.decode, e => `FloatCdf(e))
-  | `DateTimePoint =>
-    j |> convert(makeDecode(Json.Decode.string), e => `DateTimePoint(e))
-  | `DateTimeCdf => j |> convert(DateTimeCdf.decode, e => `DateTimeCdf(e))
   | `Percentage =>
     j |> convert(makeDecode(Json.Decode.float), e => `Percentage(e))
   | `Binary => j |> convert(makeDecode(Json.Decode.bool), e => `Binary(e))
@@ -375,7 +330,7 @@ let decode = (j: Js.Json.t): Belt.Result.t(t, string) => {
   };
 };
 
-let decodeGraphql = (j: valueResult): Belt.Result.t(t, string) =>
+let decodeGraphql = (j): Belt.Result.t(t, string) =>
   switch (
     j##floatCdf,
     j##floatPoint,

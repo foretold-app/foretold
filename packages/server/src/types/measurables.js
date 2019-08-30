@@ -61,6 +61,8 @@ const measurable = new graphql.GraphQLObjectType({
     },
 
     recentMeasurement: {
+      description: 'Returns either objective measurement for a judged' +
+        ' measurable or latest measurement of an agent.',
       type: require('./measurements').measurement,
       resolve: resolvers.measurements.latest,
     },

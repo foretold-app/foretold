@@ -154,7 +154,12 @@ class MeasurementModel extends ModelPostgres {
     return this.model.findOne({
       where: {
         measurableId,
-        competitorType: MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
+        competitorType: {
+          [this.in]: [
+            MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
+            MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED,
+          ],
+        },
       },
       order: [
         ['createdAt', 'DESC'],

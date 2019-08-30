@@ -240,12 +240,11 @@ let aggregationResolution = (~m: Types.measurable) =>
       "Numeric Question - Answer as Distribution (Resolved with Answer)"
       |> Utils.ste
     | Ok(`Binary(r)) => "Binary Question (Resolved with Answer)" |> Utils.ste
-    | Ok(`UnresolvableResolution(r)) =>
-      "Binary Question (Closed Without Answer)" |> Utils.ste
+    | Ok(`UnresolvableResolution(r)) => "Closed Without Answer" |> Utils.ste
     | _ => "None (Resolved with Answer)" |> Utils.ste
     }
 
-  | (Some(previousAggregate), _) =>
+  | (Some(previousAggregate), None) =>
     switch (previousAggregate.value) {
     | Ok(`FloatCdf(r)) =>
       "Numeric Question (1+ Responses, No Answer)" |> Utils.ste

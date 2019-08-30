@@ -1,4 +1,4 @@
-const { Cdf } = require('./');
+const { Cdf } = require('./cdf');
 const { ContinuousDistribution } = require('./continuousDistribution');
 const _ = require('lodash');
 
@@ -20,7 +20,7 @@ class Pdf extends ContinuousDistribution{
       let newValue = _.isFinite(this.ys[i]) ? newYs[i - 1] + this.ys[i] : newYs[i - 1];
       newYs.push(newValue);
     }
-    return new (require('./cdf').Cdf)(this.xs, newYs);
+    return new (Cdf(this.xs, newYs));
   }
 }
 

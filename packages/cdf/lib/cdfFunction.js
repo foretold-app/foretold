@@ -4,7 +4,6 @@ const { Cdf } = require('./cdf');
 const { Pdf } = require('./pdf');
 const { sum } = require("./functions")
 
-
 // Returns the cutoff value of the specified percentile,
 // considering the samples array to be 'length' long.
 // samples must be sorted.

@@ -26,6 +26,6 @@ describe('CDF Class', () => {
     const pdf = cdf.toPdf();
     expect(pdf.xs).toStrictEqual(cdf.xs);
     expect(pdf.ys[1]).toBeCloseTo(0.4);
-    expect(pdf.ys[2]).toBeCloseTo(0.4);
+    expect(pdf.ys[2]).toBeCloseTo(0.13);
   });
 });

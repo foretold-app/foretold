@@ -1,6 +1,5 @@
 const pdfast = require('pdfast');
-
-const { percentile, sortDescending } = require('./dataAnalysis.js');
+const { percentile, sortDescending } = require('./lib/dataAnalysis.js/index.js');
 const { Pdf } = require('./pdf');
 
 class Samples {

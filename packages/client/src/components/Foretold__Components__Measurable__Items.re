@@ -221,9 +221,38 @@ let unArchiveButton = (~m: Types.measurable) =>
 let archiveOption = (~m: Types.measurable) =>
   m.isArchived == Some(true) ? unArchiveButton(~m) : archiveButton(~m);
 
+//  | `FloatCdf(FloatCdf.t)
+//  | `FloatPoint(float)
+
+//  | `Percentage(float)
+//  | `Binary(bool)
+
+//  | `UnresolvableResolution(UnresolvableResolution.t)
+//  | `Comment(Comment.t)
+
 let aggregationResolution = (~m: Types.measurable) =>
   switch (m.previousAggregate, m.outcome) {
-  | (_, Some(outcome)) => "Outcome" |> Utils.ste
-  | (Some(previousAggregate), _) => "previousAggregate" |> Utils.ste
-  | _ => ReasonReact.null
+  | (_, Some(outcome)) =>
+    switch (outcome.value) {
+    | Ok(`FloatPoint(r)) =>
+      "Numeric Question - Answer as Point (Resolved with Answer)" |> Utils.ste
+    | Ok(`FloatCdf(r)) =>
+      "Numeric Question - Answer as Distribution (Resolved with Answer)"
+      |> Utils.ste
+    | Ok(`Binary(r)) => "Binary Question (Resolved with Answer)" |> Utils.ste
+    | Ok(`UnresolvableResolution(r)) =>
+      "Binary Question (Closed Without Answer)" |> Utils.ste
+    | _ => "None (Resolved with Answer)" |> Utils.ste
+    }
+
+  | (Some(previousAggregate), _) =>
+    switch (previousAggregate.value) {
+    | Ok(`FloatCdf(r)) =>
+      "Numeric Question (1+ Responses, No Answer)" |> Utils.ste
+    | Ok(`Percentage(r)) =>
+      "Binary Question (1+ Responses, No Answer)" |> Utils.ste
+    | _ => "None (1+ Responses, No Answer)" |> Utils.ste
+    }
+
+  | _ => "No Responses Yet" |> Utils.ste
   };

@@ -258,11 +258,11 @@ let toPdf = (t: FloatCdf.t): FloatCdf.t => {
 module DateTimeCdf = MakeCdf(DateTimePoint);
 
 type t = [
+  | `FloatCdf(FloatCdf.t)
   | `FloatPoint(float)
   | `Percentage(float)
   | `Binary(bool)
   | `DateTimePoint(string)
-  | `FloatCdf(FloatCdf.t)
   | `DateTimeCdf(DateTimeCdf.t)
   | `UnresolvableResolution(UnresolvableResolution.t)
   | `Comment(Comment.t)

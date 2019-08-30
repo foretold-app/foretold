@@ -1,4 +1,4 @@
-import {Pdf, Cdf, CdfCombination} from "@foretold/cdf";
+import {Pdf, Cdf} from "@foretold/cdf";
 
 function cdfToPdf({xs, ys}){
     let cdf = new Cdf(xs, ys);

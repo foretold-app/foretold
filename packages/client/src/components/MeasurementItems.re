@@ -9,8 +9,18 @@ module FloatPoint = {
   let make = (~value: float, _children) => {
     ...component,
     render: _self => {
+      let mainText =
+        Css.style([
+          Css.fontSize(`em(1.1)),
+          Css.color(FC__Colors.darkLink),
+        ]);
+
       <Div flexDirection=`column>
-        <Div flex={`num(1.)}> {value |> E.Float.toFixed |> Utils.ste} </Div>
+        <Div flex={`num(1.)}>
+          <div className=mainText>
+            {value |> E.Float.toFixed |> Utils.ste}
+          </div>
+        </Div>
       </Div>;
     },
   };
@@ -23,7 +33,7 @@ module FloatCdf = {
         ~value: MeasurementValue.FloatCdf.t,
         ~competitorType: Types.competitorType,
         ~valueText: option(string)=None,
-        ~width=175,
+        ~width=150,
         ~height=30,
         _children,
       ) => {
@@ -76,8 +86,18 @@ module UnresolvableResolution = {
   let make = _children => {
     ...component,
     render: _self => {
+      let secondaryText =
+        Css.style([
+          Css.fontSize(`em(0.9)),
+          Css.color(FC__Colors.accentBlue),
+        ]);
+
       <Div flexDirection=`column>
-        <Div flex={`num(1.)}> {"Closed Without Answer" |> Utils.ste} </Div>
+        <Div flex={`num(1.)}>
+          <div className=secondaryText>
+            {"Closed Without Answer" |> Utils.ste}
+          </div>
+        </Div>
       </Div>;
     },
   };
@@ -88,11 +108,27 @@ module Percentage = {
   let make = (~value: float, _children) => {
     ...component,
     render: _self => {
+      let mainText =
+        Css.style([
+          Css.fontSize(`em(1.1)),
+          Css.color(FC__Colors.darkLink),
+        ]);
+
+      let secondaryText =
+        Css.style([
+          Css.fontSize(`em(0.9)),
+          Css.color(FC__Colors.accentBlue),
+        ]);
+
       <Div flexDirection=`column>
         <Div flex={`num(1.)}>
-          <FC__PercentageShower precision=8 percentage=value />
+          <div className=mainText>
+            <FC__PercentageShower precision=8 percentage=value />
+          </div>
         </Div>
-        <Div flex={`num(1.)}> {"Median" |> Utils.ste} </Div>
+        <Div flex={`num(1.)}>
+          <div className=secondaryText> {"Median" |> Utils.ste} </div>
+        </Div>
       </Div>;
     },
   };

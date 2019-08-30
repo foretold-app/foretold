@@ -1,5 +1,4 @@
 open Utils;
-open Primary;
 open ReactMarkdown;
 
 module Shared = Foretold__Components__Shared;
@@ -91,7 +90,7 @@ let questionLink = (~m: Types.measurable) =>
 
 let creatorLink = (~m: Types.measurable) =>
   m.creator
-  |> E.O.fmap((c: Agent.t) =>
+  |> E.O.fmap((c: Types.agent) =>
        <Link.Jsx2
          linkType={
            Internal(Agent({agentId: c.id, subPage: AgentMeasurements}))
@@ -221,3 +220,10 @@ let unArchiveButton = (~m: Types.measurable) =>
 
 let archiveOption = (~m: Types.measurable) =>
   m.isArchived == Some(true) ? unArchiveButton(~m) : archiveButton(~m);
+
+let aggregationResolution = (~m: Types.measurable) =>
+  switch (m.previousAggregate, m.outcome) {
+  | (_, Some(outcome)) => "Outcome" |> Utils.ste
+  | (Some(previousAggregate), _) => "previousAggregate" |> Utils.ste
+  | _ => ReasonReact.null
+  };

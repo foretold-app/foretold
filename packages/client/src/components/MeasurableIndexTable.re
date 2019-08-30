@@ -44,13 +44,6 @@ let make =
            |> E.A.fmap((m: Types.measurable) => {
                 let iAmOwner = m.iAmOwner == Some(true);
 
-                let aggregationResolution =
-                  switch (m.previousAggregate, m.outcome) {
-                  | (_, Some(outcome)) => "Outcome" |> Utils.ste
-                  | (Some(previousAggregate), _) =>
-                    "previousAggregate" |> Utils.ste
-                  };
-
                 <FC.Table.Row onClick={_e => onSelect(m)} key={m.id}>
                   <FC.Table.Cell
                     flex={`num(3.)}
@@ -74,7 +67,7 @@ let make =
                   <FC.Table.Cell
                     flex={`num(1.)}
                     className=Css.(style([paddingTop(`em(0.5))]))>
-                    aggregationResolution
+                    {Items.aggregationResolution(~m)}
                   </FC.Table.Cell>
                   <FC.Table.Cell
                     flex={`num(1.)}

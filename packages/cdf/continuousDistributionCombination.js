@@ -45,7 +45,9 @@ class ContinuousDistributionCombination {
    */
   combineYsWithFn(sampleCount, fn) {
     const xs = this.equallyDividedXs(sampleCount);
+    console.log("Initial Points", xs.map(xPoint => (this.allYsAtXPoint(xPoint))));
     const result = xs.map(xPoint => fn(this.allYsAtXPoint(xPoint)));
+    console.log("Calculations", result)
     return new ContinuousDistribution(xs, result);
   }
 

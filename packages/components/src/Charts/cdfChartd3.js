@@ -66,6 +66,9 @@ function chart() {
 
         //Axis generator
         var xAxis = d3.axisBottom(xScale).ticks(5);
+        
+        var yAxis = d3.axisLeft(yScale).ticks(5);
+        console.log("AXIS", xAxis, yAxis);
 
         if (attrs.scale  ===  'log') {
             xAxis
@@ -107,6 +110,15 @@ function chart() {
         chart.patternify({ tag: 'g', selector: 'axis' })
             .attr('transform', 'translate(' + 0 + ',' + calc.chartHeight + ')')
             .call(xAxis);
+
+        // Add axis
+        // chart.patternify({ tag: 'g', selector: 'axis' })
+        //     .call(yAxis);
+        chart.append("g")
+        svg
+        .append("g")
+        .attr("transform", "translate(50,0)")      // This controls the vertical position of the Axis
+        .call((yAxis));
 
         //Draw area
         areaPath = chart.patternify({ tag: 'path', selector: 'area-path', data: dataPoints })

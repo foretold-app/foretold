@@ -1,5 +1,7 @@
 open FC.Base;
 
+let multimodal = "=mm(uniform(0,100), uniform(10,20), [.33,0.9])";
+
 module Scoring = {
   type dist = FC__Types.Dist.t;
 
@@ -48,7 +50,7 @@ module Scoring = {
         <h3> {"Variable A" |> ReasonReact.string} </h3>
         <FC_GuesstimateInput
           focusOnRender=true
-          initialValue={Some("10 to 20")}
+          initialValue={Some("15 to 22")}
           sampleCount=50000
           onUpdate={event =>
             {let (ys, xs, hasLimitError) = event
@@ -64,7 +66,7 @@ module Scoring = {
         <FC_GuesstimateInput
           focusOnRender=true
           sampleCount=50000
-          initialValue={Some("20 to 40")}
+          initialValue={Some(multimodal)}
           onUpdate={event =>
             {let (ys, xs, hasLimitError) = event
              Js.log2(xs, ys)
@@ -79,7 +81,7 @@ module Scoring = {
         <FC_GuesstimateInput
           focusOnRender=true
           sampleCount=50000
-          initialValue={Some("30 to 60")}
+          initialValue={Some("10 to 20")}
           onUpdate={event =>
             {let (ys, xs, hasLimitError) = event
              self.send(ChangeC({ys, xs}))
@@ -91,25 +93,25 @@ module Scoring = {
            ? <FC__CdfChart__Large cdf={self.state.varC} width=None />
            : "" |> ReasonReact.string}
         <h3> {"Mean of 3" |> ReasonReact.string} </h3>
-        {switch (
-           self.state.varA.xs |> E.A.length,
-           self.state.varB.xs |> E.A.length,
-           self.state.varC.xs |> E.A.length,
-         ) {
-         | (0, _, _) => "" |> ReasonReact.string
-         | (_, 0, _) => "" |> ReasonReact.string
-         | (_, _, 0) => "" |> ReasonReact.string
-         | _ =>
-           let mean =
-             FC__Types.Dist.mean([|
-               self.state.varA,
-               self.state.varB,
-               self.state.varC,
-             |]);
-           mean.xs |> E.A.length > 0
-             ? <FC__CdfChart__Large cdf=mean width=None />
-             : "" |> ReasonReact.string;
-         }}
+        // {switch (
+        //    self.state.varA.xs |> E.A.length,
+        //    self.state.varB.xs |> E.A.length,
+        //    self.state.varC.xs |> E.A.length,
+        //  ) {
+        //  | (0, _, _) => "" |> ReasonReact.string
+        //  | (_, 0, _) => "" |> ReasonReact.string
+        //  | (_, _, 0) => "" |> ReasonReact.string
+        //  | _ =>
+        //    let mean =
+        //      FC__Types.Dist.mean([|
+        //        self.state.varA,
+        //        self.state.varB,
+        //        self.state.varC,
+        //      |]);
+        //    mean.xs |> E.A.length > 0
+        //      ? <FC__CdfChart__Large cdf=mean width=None />
+        //      : "" |> ReasonReact.string;
+        //  }}
         <h3> {"(A + B) * C" |> ReasonReact.string} </h3>
         {switch (
            self.state.varA.xs |> E.A.length,
@@ -126,6 +128,7 @@ module Scoring = {
                self.state.varB,
                self.state.varC,
              |]);
+           Js.log2("Mean", mean);
            mean.xs |> E.A.length > 0
              ? <FC__CdfChart__Large cdf=mean width=None />
              : "" |> ReasonReact.string;

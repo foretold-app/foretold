@@ -14,18 +14,17 @@ module Styles = {
 let make = (~cdf: FC__Types.Dist.t, ~width=Some(400), _children) => {
   ...component,
   render: _ => {
-    Js.log2("HIHI", cdf);
     let pdf = cdf |> FC__Types.Dist.toPdf;
     <div className=Styles.graph>
       <FC__CdfChart__Base
         marginBottom=25
-        width=?width
+        ?width
         height=200
         showVerticalLine=false
         showDistributionLines=false
         primaryDistribution={"xs": pdf.xs, "ys": pdf.ys}
         onHover={_r => ()}
       />
-    </div>
+    </div>;
   },
 };

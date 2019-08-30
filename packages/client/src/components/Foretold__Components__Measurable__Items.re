@@ -243,11 +243,23 @@ module FloatCdf = {
   let make =
       (
         ~value: MeasurementValue.FloatCdf.t,
-        ~valueText: option(string),
+        ~competitorType: Types.competitorType,
+        ~valueText: option(string)=None,
+        ~width=175,
+        ~height=30,
         _children,
       ) => {
     ...component,
     render: _self => {
+      let color =
+        competitorType == `AGGREGATION ? `hex("b1b9c6") : `hex("487192");
+
+      let dist =
+        value
+        |> MeasurementValue.toPdf
+        |> MeasurementValue.FloatCdf.toJs
+        |> (data => <SmallCdfChart data width height color />);
+
       <Div flexDirection=`row>
         <Div flex={`num(1.)}>
           <Div flexDirection=`column>
@@ -257,7 +269,7 @@ module FloatCdf = {
             </Div>
           </Div>
         </Div>
-        <Div flex={`num(1.)}> {"Dist" |> Utils.ste} </Div>
+        <Div flex={`num(1.)}> dist </Div>
       </Div>;
     },
   };
@@ -293,7 +305,9 @@ module Percentage = {
     ...component,
     render: _self => {
       <Div flexDirection=`column>
-        <Div flex={`num(1.)}> {"20%" |> Utils.ste} </Div>
+        <Div flex={`num(1.)}>
+          <FC__PercentageShower precision=8 percentage=value />
+        </Div>
         <Div flex={`num(1.)}> {"Median" |> Utils.ste} </Div>
       </Div>;
     },
@@ -310,7 +324,11 @@ module AggregationResolution = {
         switch (measurement.value) {
         | Ok(`FloatPoint(r)) => <FloatPoint value=r />
         | Ok(`FloatCdf(r)) =>
-          <FloatCdf value=r valueText={measurement.valueText} />
+          <FloatCdf
+            value=r
+            valueText={measurement.valueText}
+            competitorType={measurement.competitorType}
+          />
         | Ok(`Binary(r)) => <Binary value=r />
         | Ok(`UnresolvableResolution(r)) => <UnresolvableResolution />
         | _ => ReasonReact.null
@@ -319,7 +337,11 @@ module AggregationResolution = {
       | (Some(measurement), None) =>
         switch (measurement.value) {
         | Ok(`FloatCdf(r)) =>
-          <FloatCdf value=r valueText={measurement.valueText} />
+          <FloatCdf
+            value=r
+            valueText={measurement.valueText}
+            competitorType={measurement.competitorType}
+          />
         | Ok(`Percentage(r)) => <Percentage value=r />
         | _ => ReasonReact.null
         }

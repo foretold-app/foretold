@@ -1,4 +1,4 @@
-let component = ReasonReact.statelessComponent("SmallCdfChart");
+let component = ReasonReact.statelessComponent("SmallCdfChartSmall");
 
 module Styles = {
   open Css;
@@ -19,7 +19,13 @@ module Styles = {
 };
 
 let make =
-    (~cdf: FC__Types.Dist.t, ~minX, ~maxX, ~color=`hex("7e9db7"), _children) => {
+    (
+      ~cdf: FC__Types.Dist.t,
+      ~minX=None,
+      ~maxX=None,
+      ~color=`hex("7e9db7"),
+      _children,
+    ) => {
   ...component,
   render: _ => {
     let pdf = cdf |> FC__Types.Dist.toPdf;
@@ -31,8 +37,8 @@ let make =
       <FC__CdfChart__Base
         width=200
         height=40
-        minX
-        maxX
+        ?minX
+        ?maxX
         marginBottom=0
         marginTop=0
         showVerticalLine=false

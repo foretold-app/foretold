@@ -33,7 +33,7 @@ let make =
             <FC.Table.Cell flex={`num(3.)}>
               {"Name & Status" |> ReasonReact.string}
             </FC.Table.Cell>
-            <FC.Table.Cell flex={`num(1.)}>
+            <FC.Table.Cell flex={`num(1.5)}>
               {"Aggregate and resolution" |> ReasonReact.string}
             </FC.Table.Cell>
             <FC.Table.Cell flex={`num(1.)}>
@@ -65,7 +65,7 @@ let make =
                     </div>
                   </FC.Table.Cell>
                   <FC.Table.Cell
-                    flex={`num(1.)}
+                    flex={`num(1.5)}
                     className=Css.(style([paddingTop(`em(0.5))]))>
                     <Items.AggregationResolution measurable=m />
                   </FC.Table.Cell>

@@ -1,4 +1,4 @@
-import {Pdf, Cdf, ContinuousDistributionCombination} from "@foretold/cdf";
+import {Pdf, Cdf, ContinuousDistribution, ContinuousDistributionCombination} from "@foretold/cdf";
 
 function cdfToPdf({xs, ys}){
     let cdf = new Cdf(xs, ys);
@@ -33,4 +33,9 @@ function findX(y, {xs, ys}){
     return result
 }
 
-module.exports = {cdfToPdf, findY, findX, mean, divideBy};
+function integral({xs, ys}){
+    let distribution = new ContinuousDistribution(xs, ys);
+    return distribution.integral();
+}
+
+module.exports = {cdfToPdf, findY, findX, mean, divideBy, integral};

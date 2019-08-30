@@ -38,6 +38,8 @@ module Dist = {
 
     [@bs.module "./stats.js"]
     external divideBy: array(distJs) => distJs = "divideBy";
+
+    [@bs.module "./stats.js"] external integral: distJs => float = "integral";
   };
 
   let toPdf = (dist: t) => dist |> JS.doAsDist(JS.cdfToPdf);
@@ -55,6 +57,7 @@ module Dist = {
 
   let findX = (y: float, dist: t) => dist |> JS.fromDist |> JS.findX(y);
   let findY = (x: float, dist: t) => dist |> JS.fromDist |> JS.findY(x);
+  let integral = (dist: t) => dist |> JS.fromDist |> JS.integral;
 };
 
 module Dists = {

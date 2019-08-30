@@ -9,7 +9,7 @@ class Cdf extends ContinuousDistribution{
   toPdf() {
     let newYs = [this.ys[0]];
     for (let i = 1; i < this.ys.length; i++) {
-      newYs.push(this.ys[i] - this.ys[i - 1])
+      newYs.push((this.ys[i] - this.ys[i - 1]) / (this.xs[i] - this.xs[i - 1]))
     }
     return new (require('./pdf').Pdf)(this.xs, newYs);
   }

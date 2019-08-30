@@ -1,6 +1,8 @@
 open FC.Base;
 
 let multimodal = "=mm(uniform(0,100), uniform(10,20), [.33,0.9])";
+let mm1 = "=mm(uniform(1,100), normal(50, 5), [.01, .99])";
+let mm2 = "=mm(uniform(1,100), normal(50, 8), [.01, .99])";
 
 module Scoring = {
   type dist = FC__Types.Dist.t;
@@ -60,7 +62,7 @@ module Scoring = {
         <h3> {"Variable A" |> ReasonReact.string} </h3>
         <FC_GuesstimateInput
           focusOnRender=true
-          initialValue={Some("15 to 22")}
+          initialValue={Some(mm1)}
           sampleCount=50000
           onUpdate={event =>
             {let (ys, xs, hasLimitError) = event
@@ -77,7 +79,7 @@ module Scoring = {
         <FC_GuesstimateInput
           focusOnRender=true
           sampleCount=50000
-          initialValue={Some(multimodal)}
+          initialValue={Some(mm2)}
           onUpdate={event =>
             {let (ys, xs, hasLimitError) = event
              self.send(ChangeB(FC__Types.Dist.requireLength({ys, xs})))}
@@ -92,7 +94,7 @@ module Scoring = {
         <FC_GuesstimateInput
           focusOnRender=true
           sampleCount=50000
-          initialValue={Some("10 to 20")}
+          initialValue={Some("20 to 60")}
           onUpdate={event =>
             {let (ys, xs, hasLimitError) = event
              self.send(ChangeC(FC__Types.Dist.requireLength({ys, xs})))}
@@ -108,6 +110,16 @@ module Scoring = {
          | None => ReasonReact.null
          | Some(divideBy) =>
            <FC__CdfChart__Large minX maxX cdf=divideBy width=None />
+         }}
+        {switch (divideByDistribution) {
+         | None => ReasonReact.null
+         | Some(divideBy) =>
+           Js.log(divideBy);
+           divideBy
+           |> FC__Types.Dist.toPdf
+           |> FC__Types.Dist.integral
+           |> E.Float.toString
+           |> ReasonReact.string;
          }}
       </div>;
     },

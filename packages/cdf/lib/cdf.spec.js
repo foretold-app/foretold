@@ -1,5 +1,5 @@
 const { Cdf } = require('./cdf');
-const { up, down } = require('./functions');
+const { up } = require('./functions');
 
 describe('CDF Class', () => {
   it('convertWithAlternativeXs() when "XS" within "xs"', () => {

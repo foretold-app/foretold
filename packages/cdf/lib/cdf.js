@@ -1,4 +1,3 @@
-const { interpolate, range, min, max } = require('./functions');
 const { ContinuousDistribution } = require('./continuousDistribution');
 
 class Cdf extends ContinuousDistribution{

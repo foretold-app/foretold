@@ -6,7 +6,7 @@ let scoreFunctionWithResult = ({prediction, aggregate, result}) => scoreFunction
 function distributionInputPointOutput({predictionCdf, aggregateCdf, resultPoint}){
     let _predictionPdfValue = (predictionCdf).toPdf().findY(resultPoint);
     let _aggregatePdfValue = (aggregateCdf).toPdf().findY(resultPoint);
-    return genericScoringFunction({prediction: _predictionPdfValue, aggregate: _aggregatePdfValue});
+    return scoreFunctionWithoutResult({prediction: _predictionPdfValue, aggregate: _aggregatePdfValue});
 }
 
 function distributionInputDistributionOutputDistribution({predictionCdf, aggregateCdf, resultCdf, sampleCount=10000}){

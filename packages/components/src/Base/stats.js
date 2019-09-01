@@ -15,14 +15,14 @@ function mean(vars){
 
 function distributionScoreDistribution(vars){
     let cdfs = vars.map(r => (new Cdf(r.xs, r.ys)));
-    let newDist = scoringFunctions.distributionInputDistributionOutputDistribution({predictionCdf: cdfs[0], aggregateCdf: cdfs[1], resultCdf: cdfs[2]})
+    let newDist = scoringFunctions.distributionInputDistributionOutputDistribution({predictionCdf: cdfs[0], aggregateCdf: cdfs[1], resultCdf: cdfs[2], sampleCount: 10000})
     let newCdf = (new Pdf(newDist.xs, newDist.ys)).toCdf();
     return {xs: newCdf.xs, ys: newCdf.ys}
 }
 
 function distributionScoreNumber(vars){
     let cdfs = vars.map(r => (new Cdf(r.xs, r.ys)));
-    return scoringFunctions.distributionInputDistributionOutput({predictionCdf: cdfs[0], aggregateCdf: cdfs[1], resultCdf: cdfs[2]});
+    return scoringFunctions.distributionInputDistributionOutput({predictionCdf: cdfs[0], aggregateCdf: cdfs[1], resultCdf: cdfs[2], sampleCount: 10000});
 }
 
 function findY(x, {xs, ys}){

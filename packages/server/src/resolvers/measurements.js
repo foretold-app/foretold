@@ -7,6 +7,7 @@ const { Filter } = require('../data/classes/filter');
 const { Options } = require('../data/classes/options');
 const { Params } = require('../data/classes/params');
 const { Query } = require('../data/classes/query');
+const { Cdf, scoringFunctions } = require('@foretold/cdf');
 
 const { withinMeasurables } = require('../structures');
 
@@ -190,6 +191,63 @@ async function previousAggregate(root, args, context, info) {
   return data.measurements.getPreviousAggregate(measurableId);
 }
 
+function getDataType(measurement){
+  return measurement.dataValues.value.dataType;
+}
+
+function dataValue(measurement){
+  return measurement.dataValues.value.data;
+}
+
+function matcher({prediction, aggregate, outcome}){
+  if (prediction === "percentage" && aggregate === "percentage" && outcome === "binary"){
+    return "percentage"
+  } else if (prediction === "floatCdf" && aggregate === "floatCdf" && outcome === "floatCdf"){
+    return "floatCdf"
+  } else if (prediction === "floatCdf" && aggregate === "floatCdf" && outcome === "floatPoint"){
+    return "floatPoint"
+  } else {
+    return "invalid"
+  }
+}
+
+function measurementScore({prediction, aggregate, outcome}){
+  // It should really return null or false if one of these doesn't exist.
+  if (!prediction || !aggregate || !outcome){ return 0 };
+  let combinationType = matcher({
+    prediction: getDataType(prediction),
+    aggregate: getDataType(aggregate),
+    outcome: getDataType(outcome)
+  });
+  switch(combinationType){
+    case "percentage":
+      return scoringFunctions.percentageInputPercentageOutput({
+        predictionPercentage: dataValue(prediction),
+        aggregatePercentage: dataValue(aggregate),
+        resultPercentage: !!dataValue(outcome) ? 100.0 : 0.0
+      })
+      break;
+    case "floatCdf":
+      return scoringFunctions.distributionInputDistributionOutput({
+        predictionCdf: new Cdf(dataValue(prediction).xs, dataValue(prediction).ys),
+        aggregateCdf: new Cdf(dataValue(aggregate).xs, dataValue(aggregate).ys),
+        resultCdf: new Cdf(dataValue(outcome).xs, dataValue(outcome).ys)
+      })
+      break;
+    case "floatPoint":
+      return scoringFunctions.distributionInputPointOutput({
+        predictionCdf: new Cdf(dataValue(prediction).xs, dataValue(prediction).ys),
+        aggregateCdf: new Cdf(dataValue(aggregate).xs, dataValue(aggregate).ys),
+        resultPoint: dataValue(outcome)
+      })
+      break;
+    case "invalid":
+    // It should really return null or false if invalid.
+      return 0
+      break;
+  }
+}
+
 /**
  * @param {*} root
  * @param {object} args
@@ -198,7 +256,12 @@ async function previousAggregate(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function primaryPointScore(root, args, context, info) {
-  return 0.3;
+  const _prediction = await prediction(root, args, context, info);
+  const _previousAggregate = await previousAggregate(root, args, context, info);
+  const _outcome = await outcome(root, args, context, info);
+  let combinationType = {prediction: (_prediction), aggregate:(_previousAggregate), outcome: (_outcome)};
+  let score = measurementScore(combinationType);
+  return score;
 }
 
 module.exports = {

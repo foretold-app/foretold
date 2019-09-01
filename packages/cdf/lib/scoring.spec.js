@@ -1,4 +1,4 @@
-const { distributionInputPointOutput, distributionInputDistributionOutput, percentageInputBinaryOutput } = require('./scoring');
+const { distributionInputPointOutput, distributionInputDistributionOutput, percentageInputPercentageOutput } = require('./scoring');
 const { Cdf } = require('./cdf');
 
 describe('scoring', () => {
@@ -23,12 +23,12 @@ describe('scoring', () => {
     let result = distributionInputDistributionOutput({predictionCdf, aggregateCdf, resultCdf});
     expect(result).toBeCloseTo(2.006);
   })
-  it('distributionInputDistributionOutput()', () => {
-    let result = percentageInputBinaryOutput({predictionPercentage:.3, aggregatePercentage:.8, resultIsSuccess:true});
-    expect(result).toBeCloseTo(-1.415);
+  it('percentageInputBinaryOutput() with low result', () => {
+    let result = percentageInputPercentageOutput({predictionPercentage:.3, aggregatePercentage:.6, resultPercentage:.2});
+    expect(result).toBeCloseTo(0.445);
   })
-  it('distributionInputDistributionOutput False()', () => {
-    let result = percentageInputBinaryOutput({predictionPercentage:.3, aggregatePercentage:.8, resultIsSuccess:false});
-    expect(result).toBeCloseTo(1.807);
+  it('percentageInputBinaryOutput() with high result', () => {
+    let result = percentageInputPercentageOutput({predictionPercentage:.3, aggregatePercentage:.8, resultPercentage:.9});
+    expect(result).toBeCloseTo(-1.09);
   })
 })

@@ -16,20 +16,19 @@ function distributionInputDistributionOutput({predictionCdf, aggregateCdf, resul
     let combination = new ContinuousDistributionCombination([_predictionPdf, _aggregatePdf, _resultPdf]);
     let pdfResult = combination.combineYsWithFn(sampleCount,
         r => genericScoringFunction({prediction: r[0], aggregate: r[1]}) * r[2]
-    );
+    )
     return pdfResult.integral();
 }
 
-function percentageInputBinaryOutput({predictionPercentage, aggregatePercentage, resultIsSuccess=true}){
-    let switchIfFalse = (e) => (resultIsSuccess == true) ? e : (1 - e);
-    return genericScoringFunction({
-        prediction: switchIfFalse(predictionPercentage),
-        aggregate: switchIfFalse(aggregatePercentage)
-    });
+function percentageInputPercentageOutput({predictionPercentage, aggregatePercentage, resultPercentage}){
+    let inverse = (e) => (1 - e);
+    let isFalseFactor = resultPercentage * genericScoringFunction({prediction: predictionPercentage, aggregate:aggregatePercentage});
+    let isTrueFactor = inverse(resultPercentage) * genericScoringFunction({prediction: inverse(predictionPercentage), aggregate:inverse(aggregatePercentage)});
+    return isFalseFactor + isTrueFactor;
 }
 
 module.exports = {
   distributionInputPointOutput,
   distributionInputDistributionOutput,
-  percentageInputBinaryOutput
+  percentageInputPercentageOutput
 };

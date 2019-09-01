@@ -21,7 +21,7 @@
     "author": "Ozzie Gooen <ozzieagooen@gmail.com>",
     "license": "MIT",
     "dependencies": {
-        "@foretold/cdf": "^1.0.8",
+        "@foretold/cdf": "^1.0.9",
         "bs-css": "^9.0.1",
         "bs-moment": "^0.4.4",
         "d3": "^5.9.2",

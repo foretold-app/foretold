@@ -33,9 +33,17 @@ module Scoring = {
       },
 
     render: self => {
-      let divideByDistribution =
+      let distributionScoreDistribution =
         switch (self.state.varA, self.state.varB, self.state.varC) {
-        | (Some(a), Some(b), Some(c)) => FC__Types.Dist.divideBy([|a, b, c|])
+        | (Some(a), Some(b), Some(c)) =>
+          FC__Types.Dist.distributionScoreDistribution([|a, b, c|])
+        | _ => None
+        };
+
+      let distributionScoreNumber =
+        switch (self.state.varA, self.state.varB, self.state.varC) {
+        | (Some(a), Some(b), Some(c)) =>
+          Some(FC__Types.Dist.distributionScoreNumber([|a, b, c|]))
         | _ => None
         };
 
@@ -44,7 +52,7 @@ module Scoring = {
           self.state.varA,
           self.state.varB,
           self.state.varC,
-          divideByDistribution,
+          distributionScoreDistribution,
         |]
         |> E.A.O.concatSome
         |> FC__Types.Dists.minX(0.01);
@@ -53,7 +61,7 @@ module Scoring = {
           self.state.varA,
           self.state.varB,
           self.state.varC,
-          divideByDistribution,
+          distributionScoreDistribution,
         |]
         |> E.A.O.concatSome
         |> FC__Types.Dists.maxX(0.99);
@@ -106,20 +114,17 @@ module Scoring = {
               <FC__CdfChart__Large minX maxX cdf=v width=None />
             )}
         <h3> {"(A + B) * C" |> ReasonReact.string} </h3>
-        {switch (divideByDistribution) {
+        {switch (distributionScoreDistribution) {
          | None => ReasonReact.null
          | Some(divideBy) =>
            <FC__CdfChart__Large minX maxX cdf=divideBy width=None />
          }}
-        {switch (divideByDistribution) {
+        {switch (distributionScoreNumber) {
          | None => ReasonReact.null
-         | Some(divideBy) =>
-           Js.log(divideBy);
-           divideBy
-           |> FC__Types.Dist.toPdf
-           |> FC__Types.Dist.integral
-           |> E.Float.toString
-           |> ReasonReact.string;
+         | Some(scoreNumber) =>
+           scoreNumber
+           |> FC__E.Float.with3DigitsPrecision
+           |> ReasonReact.string
          }}
       </div>;
     },

@@ -37,7 +37,12 @@ module Dist = {
     [@bs.module "./stats.js"] external mean: array(distJs) => distJs = "mean";
 
     [@bs.module "./stats.js"]
-    external divideBy: array(distJs) => distJs = "divideBy";
+    external distributionScoreDistribution: array(distJs) => distJs =
+      "distributionScoreDistribution";
+
+    [@bs.module "./stats.js"]
+    external distributionScoreNumber: array(distJs) => float =
+      "distributionScoreNumber";
 
     [@bs.module "./stats.js"] external integral: distJs => float = "integral";
   };
@@ -49,10 +54,14 @@ module Dist = {
   let mean = (dists: array(t)) =>
     JS.mean(dists |> Array.map(JS.fromDist)) |> JS.toDist;
 
-  let divideBy = (dists: array(t)) => {
-    JS.divideBy(dists |> Array.map(JS.fromDist))
+  let distributionScoreDistribution = (dists: array(t)) => {
+    JS.distributionScoreDistribution(dists |> Array.map(JS.fromDist))
     |> JS.toDist
     |> requireLength;
+  };
+
+  let distributionScoreNumber = (dists: array(t)) => {
+    JS.distributionScoreNumber(dists |> Array.map(JS.fromDist));
   };
 
   let findX = (y: float, dist: t) => dist |> JS.fromDist |> JS.findX(y);

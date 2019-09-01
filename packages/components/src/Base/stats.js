@@ -1,4 +1,4 @@
-import {Pdf, Cdf, ContinuousDistribution, ContinuousDistributionCombination} from "@foretold/cdf";
+import {Pdf, Cdf, ContinuousDistribution, ContinuousDistributionCombination, scoringFunctions} from "@foretold/cdf";
 
 function cdfToPdf({xs, ys}){
     let cdf = new Cdf(xs, ys);
@@ -13,12 +13,16 @@ function mean(vars){
     return {xs: newCdf.xs, ys: newCdf.ys}
 }
 
-function divideBy(vars){
-    let cdfs = vars.map(r => (new Cdf(r.xs, r.ys)).toPdf());
-    let comb = new ContinuousDistributionCombination(cdfs);
-    let newPdf = comb.combineYsWithFn(10000, r => Math.log2(r[0] / r[1]) * r[2]);
-    let newCdf = (new Pdf(newPdf.xs, newPdf.ys)).toCdf();
+function distributionScoreDistribution(vars){
+    let cdfs = vars.map(r => (new Cdf(r.xs, r.ys)));
+    let newDist = scoringFunctions.distributionInputDistributionOutputDistribution({predictionCdf: cdfs[0], aggregateCdf: cdfs[1], resultCdf: cdfs[2]})
+    let newCdf = (new Pdf(newDist.xs, newDist.ys)).toCdf();
     return {xs: newCdf.xs, ys: newCdf.ys}
+}
+
+function distributionScoreNumber(vars){
+    let cdfs = vars.map(r => (new Cdf(r.xs, r.ys)));
+    return scoringFunctions.distributionInputDistributionOutput({predictionCdf: cdfs[0], aggregateCdf: cdfs[1], resultCdf: cdfs[2]});
 }
 
 function findY(x, {xs, ys}){
@@ -38,4 +42,4 @@ function integral({xs, ys}){
     return distribution.integral();
 }
 
-module.exports = {cdfToPdf, findY, findX, mean, divideBy, integral};
+module.exports = {cdfToPdf, findY, findX, mean, distributionScoreDistribution, distributionScoreNumber, integral};

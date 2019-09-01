@@ -3,6 +3,7 @@ const { Pdf } = require('./lib/pdf');
 const { Samples } = require('./lib/samples');
 const { ContinuousDistributionCombination } = require('./lib/continuousDistributionCombination');
 const { ContinuousDistribution } = require('./lib/continuousDistribution');
+const { scoringFunctions } = require('./lib/scoring');
 
 module.exports = {
   Pdf,
@@ -10,4 +11,5 @@ module.exports = {
   Samples,
   ContinuousDistribution,
   ContinuousDistributionCombination,
+  scoringFunctions
 };

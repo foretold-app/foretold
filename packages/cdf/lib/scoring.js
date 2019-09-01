@@ -1,7 +1,7 @@
-const { Cdf } = require('./cdf');
 const { ContinuousDistributionCombination } = require('./continuousDistributionCombination');
 
-let genericScoringFunction = ({prediction, aggregate}) => Math.log2(prediction / aggregate);
+let scoreFunctionWithoutResult = ({prediction, aggregate}) => Math.log2(prediction / aggregate);
+let scoreFunctionWithResult = ({prediction, aggregate, result}) => scoreFunctionWithoutResult({prediction, aggregate}) * result;
 
 function distributionInputPointOutput({predictionCdf, aggregateCdf, resultPoint}){
     let _predictionPdfValue = (predictionCdf).toPdf().findY(resultPoint);
@@ -9,26 +9,46 @@ function distributionInputPointOutput({predictionCdf, aggregateCdf, resultPoint}
     return genericScoringFunction({prediction: _predictionPdfValue, aggregate: _aggregatePdfValue});
 }
 
-function distributionInputDistributionOutput({predictionCdf, aggregateCdf, resultCdf, sampleCount=10000}){
+function distributionInputDistributionOutputDistribution({predictionCdf, aggregateCdf, resultCdf, sampleCount=10000}){
     let _predictionPdf = predictionCdf.toPdf();
     let _aggregatePdf = aggregateCdf.toPdf();
     let _resultPdf = resultCdf.toPdf();
     let combination = new ContinuousDistributionCombination([_predictionPdf, _aggregatePdf, _resultPdf]);
-    let pdfResult = combination.combineYsWithFn(sampleCount,
-        r => genericScoringFunction({prediction: r[0], aggregate: r[1]}) * r[2]
-    )
+    let continuousResult = combination.combineYsWithFn(sampleCount,
+        r => scoreFunctionWithResult({prediction: r[0], aggregate: r[1], result: r[2]})
+    );
+    return continuousResult;
+}
+
+function distributionInputDistributionOutput({predictionCdf, aggregateCdf, resultCdf, sampleCount=10000}){
+    let pdfResult = distributionInputDistributionOutputDistribution({predictionCdf, aggregateCdf, resultCdf, sampleCount});
     return pdfResult.integral();
 }
 
 function percentageInputPercentageOutput({predictionPercentage, aggregatePercentage, resultPercentage}){
     let inverse = (e) => (1 - e);
-    let isFalseFactor = resultPercentage * genericScoringFunction({prediction: predictionPercentage, aggregate:aggregatePercentage});
-    let isTrueFactor = inverse(resultPercentage) * genericScoringFunction({prediction: inverse(predictionPercentage), aggregate:inverse(aggregatePercentage)});
+    let isFalseFactor = scoreFunctionWithResult({
+        prediction: predictionPercentage,
+        aggregate: aggregatePercentage,
+        result: resultPercentage
+    });
+    let isTrueFactor = scoreFunctionWithResult({
+        prediction: inverse(predictionPercentage),
+        aggregate: inverse(aggregatePercentage),
+        result: inverse(resultPercentage)
+    });
     return isFalseFactor + isTrueFactor;
 }
 
-module.exports = {
+let scoringFunctions = {
   distributionInputPointOutput,
+  distributionInputDistributionOutputDistribution,
   distributionInputDistributionOutput,
-  percentageInputPercentageOutput
+  percentageInputPercentageOutput,
+  scoreFunctionWithoutResult,
+  scoreFunctionWithResult
+};
+
+module.exports = {
+  scoringFunctions
 };

@@ -9,9 +9,10 @@ module ReducerConfig = {
   let getId = (params: itemType) => params.id;
 
   let callFn = (params: callFnParams) =>
-    MeasurablesGet.component2(
-      ~channelId=params.channelId,
+    MeasurablesGet.component(
+      ~channelId=Some(params.channelId),
       ~states=params.states |> E.O.default([||]) |> Array.map(r => Some(r)),
+      (),
     );
 
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;

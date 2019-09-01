@@ -1,1 +1,0 @@
-module Series = Foretold__Components__Series;

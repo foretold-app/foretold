@@ -2922,7 +2922,7 @@
           "fields": [
             {
               "name": "prediction",
-              "description": null,
+              "description": "Returns itself.",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -2938,7 +2938,7 @@
             },
             {
               "name": "outcome",
-              "description": null,
+              "description": "Returns latest objective measurement.",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -2950,7 +2950,7 @@
             },
             {
               "name": "previousAggregate",
-              "description": null,
+              "description": "Returns latest aggregation measurement.",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -2962,7 +2962,7 @@
             },
             {
               "name": "primaryPointScore",
-              "description": null,
+              "description": "Not fully implemented yet.",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -3402,7 +3402,31 @@
             },
             {
               "name": "recentMeasurement",
-              "description": null,
+              "description": "Returns either objective measurement for a judged measurable or latest measurement of an agent.",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Measurement",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "outcome",
+              "description": "Returns latest objective measurement.",
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Measurement",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "previousAggregate",
+              "description": "Returns latest aggregation measurement.",
               "args": [],
               "type": {
                 "kind": "OBJECT",

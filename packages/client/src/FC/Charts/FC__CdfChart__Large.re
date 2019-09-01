@@ -1,4 +1,4 @@
-let component = ReasonReact.statelessComponent("SmallCdfChart");
+let component = ReasonReact.statelessComponent("SmallCdfChartLarge");
 
 module Styles = {
   open Css;
@@ -18,13 +18,13 @@ let make = (~cdf: FC__Types.Dist.t, ~width=Some(400), _children) => {
     <div className=Styles.graph>
       <FC__CdfChart__Base
         marginBottom=25
-        width=?width
+        ?width
         height=200
         showVerticalLine=false
         showDistributionLines=false
         primaryDistribution={"xs": pdf.xs, "ys": pdf.ys}
         onHover={_r => ()}
       />
-    </div>
+    </div>;
   },
 };

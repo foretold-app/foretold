@@ -513,6 +513,8 @@ module Measurable = {
         ~min=None,
         ~max=None,
         ~permissions=None,
+        ~outcome=None,
+        ~previousAggregate=None,
         (),
       )
       : t => {
@@ -542,6 +544,8 @@ module Measurable = {
     min,
     max,
     permissions,
+    outcome,
+    previousAggregate,
   };
 };
 

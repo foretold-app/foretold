@@ -56,9 +56,9 @@ module Helpers = {
         data =>
           Some(
             <SmallCdfChart
+              minX={Some(minX)}
+              maxX={Some(maxX)}
               data
-              minX
-              maxX
               width
               height
               color={

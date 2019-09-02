@@ -37,10 +37,10 @@ class AgentMeasurablesData extends DataBase {
       measurableId,
     );
 
-    const numberOfCompetitiveMeasurements = _.size(measurements) || 0;
+    const numberOfCompetitiveMeasurements = _.size(measurements);
 
     const numberOfAggregatesAfter = measurements
-      .map(v => _.size(v.aggregations) || 0)
+      .map(v => _.size(v.aggregations))
       .reduce((a, c) => a + c, 0);
 
     const numberOfAggregatesBefore = measurements

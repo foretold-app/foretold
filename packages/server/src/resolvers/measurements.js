@@ -1,15 +1,14 @@
 const _ = require('lodash');
+const { Cdf, scoringFunctions } = require('@foretold/cdf');
 
 const data = require('../data');
+const { withinMeasurables } = require('../structures');
 
 const { Pagination } = require('../data/classes/pagination');
 const { Filter } = require('../data/classes/filter');
 const { Options } = require('../data/classes/options');
 const { Params } = require('../data/classes/params');
 const { Query } = require('../data/classes/query');
-const { Cdf, scoringFunctions } = require('@foretold/cdf');
-
-const { withinMeasurables } = require('../structures');
 
 /**
  * @param {*} root
@@ -74,7 +73,11 @@ async function measurableMeasurement(root, args, context, info) {
     agentId: _.get(context, 'agent.id'),
   });
 
-  const result = await data.measurements.getConnection(filter, pagination, options);
+  const result = await data.measurements.getConnection(
+    filter,
+    pagination,
+    options,
+  );
   return result.getFirst();
 }
 
@@ -210,60 +213,107 @@ async function previousAggregate(root, args, context, info) {
   return data.measurements.getPreviousAggregate(measurableId);
 }
 
-function getDataType(measurement){
+/**
+ * @todo: remove later
+ * @param measurement
+ * @returns {*}
+ */
+function _getDataType(measurement) {
   return measurement.dataValues.value.dataType;
 }
 
-function dataValue(measurement){
+/**
+ * @todo: remove later
+ * @param measurement
+ * @returns {*}
+ */
+function _getDataValue(measurement) {
   return measurement.dataValues.value.data;
 }
 
-function matcher({prediction, aggregate, outcome}){
-  if (prediction === "percentage" && aggregate === "percentage" && outcome === "binary"){
-    return "percentage"
-  } else if (prediction === "floatCdf" && aggregate === "floatCdf" && outcome === "floatCdf"){
-    return "floatCdf"
-  } else if (prediction === "floatCdf" && aggregate === "floatCdf" && outcome === "floatPoint"){
-    return "floatPoint"
+/**
+ * @param {string} prediction
+ * @param {string} aggregate
+ * @param {string} outcome
+ * @returns {string}
+ */
+function matcher({ prediction, aggregate, outcome }) {
+  if (
+    prediction === "percentage" &&
+    aggregate === "percentage" &&
+    outcome === "binary"
+  ) {
+    return "percentage";
+  } else if (
+    prediction === "floatCdf" &&
+    aggregate === "floatCdf" &&
+    outcome === "floatCdf"
+  ) {
+    return "floatCdf";
+  } else if (
+    prediction === "floatCdf" &&
+    aggregate === "floatCdf" &&
+    outcome === "floatPoint"
+  ) {
+    return "floatPoint";
   } else {
-    return "invalid"
+    return "invalid";
   }
 }
 
-function measurementScore({prediction, aggregate, outcome}){
+/**
+ * @param prediction
+ * @param aggregate
+ * @param outcome
+ * @returns {number|*}
+ */
+function measurementScore({ prediction, aggregate, outcome }) {
   // It should really return null or false if one of these doesn't exist.
-  if (!prediction || !aggregate || !outcome){ return 0 };
-  let combinationType = matcher({
-    prediction: getDataType(prediction),
-    aggregate: getDataType(aggregate),
-    outcome: getDataType(outcome)
+  if (!prediction || !aggregate || !outcome) return 0;
+
+  const combinationType = matcher({
+    prediction: _getDataType(prediction),
+    aggregate: _getDataType(aggregate),
+    outcome: _getDataType(outcome)
   });
-  switch(combinationType){
+
+  switch (combinationType) {
     case "percentage":
       return scoringFunctions.percentageInputPercentageOutput({
-        predictionPercentage: dataValue(prediction),
-        aggregatePercentage: dataValue(aggregate),
-        resultPercentage: !!dataValue(outcome) ? 100.0 : 0.0
-      })
-      break;
+        predictionPercentage: _getDataValue(prediction),
+        aggregatePercentage: _getDataValue(aggregate),
+        resultPercentage: !!_getDataValue(outcome) ? 100.0 : 0.0
+      });
     case "floatCdf":
       return scoringFunctions.distributionInputDistributionOutput({
-        predictionCdf: new Cdf(dataValue(prediction).xs, dataValue(prediction).ys),
-        aggregateCdf: new Cdf(dataValue(aggregate).xs, dataValue(aggregate).ys),
-        resultCdf: new Cdf(dataValue(outcome).xs, dataValue(outcome).ys)
-      })
-      break;
+        predictionCdf: new Cdf(
+          _getDataValue(prediction).xs,
+          _getDataValue(prediction).ys,
+        ),
+        aggregateCdf: new Cdf(
+          _getDataValue(aggregate).xs,
+          _getDataValue(aggregate).ys,
+        ),
+        resultCdf: new Cdf(
+          _getDataValue(outcome).xs,
+          _getDataValue(outcome).ys,
+        ),
+      });
     case "floatPoint":
       return scoringFunctions.distributionInputPointOutput({
-        predictionCdf: new Cdf(dataValue(prediction).xs, dataValue(prediction).ys),
-        aggregateCdf: new Cdf(dataValue(aggregate).xs, dataValue(aggregate).ys),
-        resultPoint: dataValue(outcome)
-      })
-      break;
+        predictionCdf: new Cdf(
+          _getDataValue(prediction).xs,
+          _getDataValue(prediction).ys,
+        ),
+        aggregateCdf: new Cdf(
+          _getDataValue(aggregate).xs,
+          _getDataValue(aggregate).ys,
+        ),
+        resultPoint: _getDataValue(outcome),
+      });
     case "invalid":
-    // It should really return null or false if invalid.
-      return 0
-      break;
+      // It should really return null or false if invalid.
+      return 0;
   }
 }
 
@@ -288,12 +338,11 @@ async function previousAggregateByRootId(root, _args, _context, _info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function primaryPointScore(root, args, context, info) {
-  const _prediction = await prediction(root, args, context, info);
-  const _previousAggregate = await previousAggregate(root, args, context, info);
-  const _outcome = await outcome(root, args, context, info);
-  let combinationType = {prediction: (_prediction), aggregate:(_previousAggregate), outcome: (_outcome)};
-  let score = measurementScore(combinationType);
-  return score;
+  return measurementScore({
+    prediction: await prediction(root, args, context, info),
+    aggregate: await previousAggregate(root, args, context, info),
+    outcome: await outcome(root, args, context, info),
+  });
 }
 
 module.exports = {

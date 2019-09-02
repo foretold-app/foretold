@@ -1,4 +1,4 @@
-const graphql = require("graphql");
+const graphql = require('graphql');
 
 const mutations = new graphql.GraphQLEnumType({
   name: 'mutations',

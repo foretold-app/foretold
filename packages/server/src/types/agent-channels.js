@@ -1,4 +1,4 @@
-const graphql = require("graphql");
+const graphql = require('graphql');
 const { DateType } = require('graphql-sequelize');
 
 const agentChannel = new graphql.GraphQLObjectType({

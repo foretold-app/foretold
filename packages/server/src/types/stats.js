@@ -1,6 +1,6 @@
-const graphql = require("graphql");
+const graphql = require('graphql');
 
-const models = require("../models");
+const models = require('../models');
 
 /**
  * @todo: use resolvers! never use models this way.

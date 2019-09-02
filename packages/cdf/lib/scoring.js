@@ -1,12 +1,28 @@
 const { ContinuousDistributionCombination } = require('./continuousDistributionCombination');
+const _ = require('lodash');
 
 let scoreFunctionWithoutResult = ({prediction, aggregate}) => Math.log2(prediction / aggregate);
 let scoreFunctionWithResult = ({prediction, aggregate, result}) => scoreFunctionWithoutResult({prediction, aggregate}) * result;
 
+let maxScore = 20;
+let minScore = -20;
+
+let ensureScoreInBounds = score => {
+    if (score === Infinity || (score > maxScore)){
+        return maxScore
+    } else if (score === -Infinity || (score < minScore)){
+        return minScore
+    } else if (!_.isFinite(score)){
+        return 0
+    } else {
+        return score
+    }
+}
+
 function distributionInputPointOutput({predictionCdf, aggregateCdf, resultPoint}){
     let _predictionPdfValue = (predictionCdf).toPdf().findY(resultPoint);
     let _aggregatePdfValue = (aggregateCdf).toPdf().findY(resultPoint);
-    return scoreFunctionWithoutResult({prediction: _predictionPdfValue, aggregate: _aggregatePdfValue});
+    return ensureScoreInBounds(scoreFunctionWithoutResult({prediction: _predictionPdfValue, aggregate: _aggregatePdfValue}));
 }
 
 function distributionInputDistributionOutputDistribution({predictionCdf, aggregateCdf, resultCdf, sampleCount=10000}){
@@ -22,7 +38,7 @@ function distributionInputDistributionOutputDistribution({predictionCdf, aggrega
 
 function distributionInputDistributionOutput({predictionCdf, aggregateCdf, resultCdf, sampleCount=10000}){
     let pdfResult = distributionInputDistributionOutputDistribution({predictionCdf, aggregateCdf, resultCdf, sampleCount});
-    return pdfResult.integral();
+    return ensureScoreInBounds(pdfResult.integral());
 }
 
 function percentageInputPercentageOutput({predictionPercentage, aggregatePercentage, resultPercentage}){
@@ -37,7 +53,7 @@ function percentageInputPercentageOutput({predictionPercentage, aggregatePercent
         aggregate: inverse(aggregatePercentage),
         result: inverse(resultPercentage)
     });
-    return isFalseFactor + isTrueFactor;
+    return ensureScoreInBounds(isFalseFactor + isTrueFactor);
 }
 
 let scoringFunctions = {

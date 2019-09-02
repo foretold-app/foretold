@@ -3,6 +3,7 @@ const { Cdf, scoringFunctions } = require('@foretold/cdf');
 
 const data = require('../data');
 const { withinMeasurables } = require('../structures');
+const { MEASUREMENT_VALUE } = require('../models/enums/measurement-value');
 
 const { Pagination } = require('../data/classes/pagination');
 const { Filter } = require('../data/classes/filter');
@@ -235,29 +236,29 @@ function _getDataValue(measurement) {
  * @param {string} prediction
  * @param {string} aggregate
  * @param {string} outcome
- * @returns {string}
+ * @returns {string | null}
  */
 function matcher({ prediction, aggregate, outcome }) {
   if (
-    prediction === "percentage" &&
-    aggregate === "percentage" &&
-    outcome === "binary"
+    prediction === MEASUREMENT_VALUE.percentage &&
+    aggregate === MEASUREMENT_VALUE.percentage &&
+    outcome === MEASUREMENT_VALUE.binary
   ) {
-    return "percentage";
+    return MEASUREMENT_VALUE.percentage;
   } else if (
-    prediction === "floatCdf" &&
-    aggregate === "floatCdf" &&
-    outcome === "floatCdf"
+    prediction === MEASUREMENT_VALUE.floatCdf &&
+    aggregate === MEASUREMENT_VALUE.floatCdf &&
+    outcome === MEASUREMENT_VALUE.floatCdf
   ) {
-    return "floatCdf";
+    return MEASUREMENT_VALUE.floatCdf;
   } else if (
-    prediction === "floatCdf" &&
-    aggregate === "floatCdf" &&
-    outcome === "floatPoint"
+    prediction === MEASUREMENT_VALUE.floatCdf &&
+    aggregate === MEASUREMENT_VALUE.floatCdf &&
+    outcome === MEASUREMENT_VALUE.floatPoint
   ) {
-    return "floatPoint";
+    return MEASUREMENT_VALUE.floatPoint;
   } else {
-    return "invalid";
+    return null;
   }
 }
 
@@ -278,13 +279,13 @@ function measurementScore({ prediction, aggregate, outcome }) {
   });
 
   switch (combinationType) {
-    case "percentage":
+    case MEASUREMENT_VALUE.percentage:
       return scoringFunctions.percentageInputPercentageOutput({
         predictionPercentage: _getDataValue(prediction),
         aggregatePercentage: _getDataValue(aggregate),
         resultPercentage: !!_getDataValue(outcome) ? 100.0 : 0.0
       });
-    case "floatCdf":
+    case MEASUREMENT_VALUE.floatCdf:
       return scoringFunctions.distributionInputDistributionOutput({
         predictionCdf: new Cdf(
           _getDataValue(prediction).xs,
@@ -299,7 +300,7 @@ function measurementScore({ prediction, aggregate, outcome }) {
           _getDataValue(outcome).ys,
         ),
       });
-    case "floatPoint":
+    case MEASUREMENT_VALUE.floatPoint:
       return scoringFunctions.distributionInputPointOutput({
         predictionCdf: new Cdf(
           _getDataValue(prediction).xs,
@@ -311,7 +312,7 @@ function measurementScore({ prediction, aggregate, outcome }) {
         ),
         resultPoint: _getDataValue(outcome),
       });
-    case "invalid":
+    case null:
       // It should really return null or false if invalid.
       return 0;
   }

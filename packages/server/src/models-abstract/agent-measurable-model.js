@@ -20,12 +20,20 @@ class AgentMeasurableModel extends ModelPostgres {
    * @param {Models.ObjectID} agentId
    * @param {Models.ObjectID} measurableId
    * @param {string} [name]
-   * @return {string}
+   * @return {{
+   *   id: string,
+   *   agentId: string,
+   *   createdAt: string,
+   *   measurableCreatedAt: string,
+   *   aggregations: {id: string, createdAt: string, value: *, type: string}[]
+   *   previousAggregation: {id: string, createdAt: string, value: *, type: string},
+   *   recentResult: {id: string, createdAt: string, value: *, type: string},
+   * }}
    */
   async getAgentMeasurableScoring(agentId, measurableId, name = '') {
     const query = this._agentMeasurableScoring(agentId, measurableId);
     const response = await this.sequelize.query(query);
-    return response;
+    return _.head(response);
   }
 
   /**
@@ -61,7 +69,8 @@ class AgentMeasurableModel extends ModelPostgres {
               SELECT json_build_object(
                 'id', "Measurements2"."id",
                 'createdAt', "Measurements2"."createdAt",
-                'value', ("Measurements2"."value" ->> 'data')::json
+                'value', ("Measurements2"."value" ->> 'data')::json,
+                'type', "Measurements2"."value" ->> 'dataType'
               )
               FROM "Measurements" AS "Measurements2"
               WHERE "Measurements2"."competitorType" = 'AGGREGATION'
@@ -76,7 +85,8 @@ class AgentMeasurableModel extends ModelPostgres {
           SELECT json_build_object(
             'id', "Measurements3"."id",
             'createdAt', "Measurements3"."createdAt",
-            'value', ("Measurements3"."value" ->> 'data')::json
+            'value', ("Measurements3"."value" ->> 'data')::json,
+            'type', "Measurements3"."value" ->> 'dataType'
           )
           FROM "Measurements" AS "Measurements3"
           WHERE "Measurements3"."competitorType" = 'AGGREGATION'
@@ -91,7 +101,8 @@ class AgentMeasurableModel extends ModelPostgres {
           SELECT json_build_object(
               'id', "Measurements4"."id",
               'createdAt', "Measurements4"."createdAt",
-              'value', ("Measurements4"."value" ->> 'data')::json
+              'value', ("Measurements4"."value" ->> 'data')::json,
+              'type', "Measurements4"."value" ->> 'dataType'
             )
           FROM "Measurements" AS "Measurements4"
           WHERE "Measurements4"."competitorType" = 'OBJECTIVE'

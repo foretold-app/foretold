@@ -30,8 +30,8 @@ class AgentMeasurableModel extends ModelPostgres {
    *   recentResult: {id: string, createdAt: string, value: *, type: string},
    * }}
    */
-  async getAgentMeasurableScoring(agentId, measurableId, name = '') {
-    const query = this._agentMeasurableScoring(agentId, measurableId);
+  async getMeasurementsForScoring(agentId, measurableId, name = '') {
+    const query = this._measurementsForScoring(agentId, measurableId);
     const response = await this.sequelize.query(query);
     return _.head(response);
   }
@@ -42,7 +42,7 @@ class AgentMeasurableModel extends ModelPostgres {
    * @param {string} [name]
    * @return {string}
    */
-  _agentMeasurableScoring(agentId, measurableId, name = '') {
+  _measurementsForScoring(agentId, measurableId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     assert(!!measurableId, 'Measurable ID is required.');
     return `(

@@ -10,7 +10,7 @@ const agentMeasurable = new graphql.GraphQLObjectType({
     measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     primaryPointScore: {
       type: graphql.GraphQLNonNull(graphql.GraphQLFloat),
-      resolve: () => 0.7
+      resolve: require('../resolvers').agentMeasurables.primaryPointScore,
     },
     predictionCountTotal: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
@@ -40,11 +40,6 @@ const agentMeasurable = new graphql.GraphQLObjectType({
         },
       },
       resolve: require('../resolvers').measurements.measurableMeasurement,
-    },
-
-    scoring: {
-      type: GraphQLJSON,
-      resolve: require('../resolvers').agentMeasurables.scoring,
     },
   })
 });

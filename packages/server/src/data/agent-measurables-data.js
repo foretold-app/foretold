@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const { DataBase } = require('./data-base');
 
 const { AgentMeasurableModel } = require('../models-abstract');
@@ -26,12 +27,32 @@ class AgentMeasurablesData extends DataBase {
   }
 
   /**
-   * @param agentId
-   * @param measurableId
-   * @returns {*}
+   * @param {Models.ObjectID} agentId
+   * @param {Models.ObjectID} measurableId
+   * @returns {Promise<*>}
    */
-  getAgentMeasurableScoring(agentId, measurableId) {
-    return this.model.getAgentMeasurableScoring(agentId, measurableId);
+  async primaryPointScore(agentId, measurableId) {
+    const measurements = await this.model.getMeasurementsForScoring(
+      agentId,
+      measurableId,
+    );
+
+    const numberOfCompetitiveMeasurements = _.size(measurements) || 0;
+
+    const numberOfAggregatesAfter = measurements
+      .map(v => _.size(v.aggregations) || 0)
+      .reduce((a, c) => a + c, 0);
+
+    const numberOfAggregatesBefore = measurements
+      .map(v => !!v.previousAggregation ? 1 : 0)
+      .reduce((a, c) => a + c, 0);
+
+    const result =
+      numberOfCompetitiveMeasurements * 10 +
+      numberOfAggregatesAfter +
+      numberOfAggregatesBefore;
+
+    return result;
   }
 }
 

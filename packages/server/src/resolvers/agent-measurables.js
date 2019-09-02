@@ -47,13 +47,13 @@ async function all(root, args, context, info) {
  * @param {object} info
  * @returns {Promise<*>}
  */
-async function scoring(root, args, context, info) {
+async function primaryPointScore(root, args, context, info) {
   const agentId = _.get(root, 'agentId');
   const measurableId = _.get(root, 'measurableId');
-  return data.agentMeasurables.getAgentMeasurableScoring(agentId, measurableId);
+  return data.agentMeasurables.primaryPointScore(agentId, measurableId);
 }
 
 module.exports = {
   all,
-  scoring,
+  primaryPointScore,
 };

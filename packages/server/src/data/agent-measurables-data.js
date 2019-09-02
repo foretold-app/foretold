@@ -52,6 +52,15 @@ class AgentMeasurablesData extends DataBase {
       numberOfAggregatesAfter +
       numberOfAggregatesBefore;
 
+    console.log({
+      agentId,
+      measurableId
+    }, {
+      numberOfCompetitiveMeasurements,
+      numberOfAggregatesAfter,
+      numberOfAggregatesBefore
+    }, result);
+
     return result;
   }
 }

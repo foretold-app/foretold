@@ -238,7 +238,7 @@ function _getDataValue(measurement) {
  * @param {string} outcome
  * @returns {string | null}
  */
-function matcher({ prediction, aggregate, outcome }) {
+function _matcher({ prediction, aggregate, outcome }) {
   if (
     prediction === MEASUREMENT_VALUE.percentage &&
     aggregate === MEASUREMENT_VALUE.percentage &&
@@ -272,7 +272,7 @@ function measurementScore({ prediction, aggregate, outcome }) {
   // It should really return null or false if one of these doesn't exist.
   if (!prediction || !aggregate || !outcome) return 0;
 
-  const combinationType = matcher({
+  const combinationType = _matcher({
     prediction: _getDataType(prediction),
     aggregate: _getDataType(aggregate),
     outcome: _getDataType(outcome)

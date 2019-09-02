@@ -1,14 +1,15 @@
 const _ = require('lodash');
+const { Cdf, scoringFunctions } = require('@foretold/cdf');
 
 const data = require('../data');
+const { withinMeasurables } = require('../structures');
+const { MEASUREMENT_VALUE } = require('../models/enums/measurement-value');
 
 const { Pagination } = require('../data/classes/pagination');
 const { Filter } = require('../data/classes/filter');
 const { Options } = require('../data/classes/options');
 const { Params } = require('../data/classes/params');
 const { Query } = require('../data/classes/query');
-
-const { withinMeasurables } = require('../structures');
 
 /**
  * @param {*} root
@@ -73,7 +74,11 @@ async function measurableMeasurement(root, args, context, info) {
     agentId: _.get(context, 'agent.id'),
   });
 
-  const result = await data.measurements.getConnection(filter, pagination, options);
+  const result = await data.measurements.getConnection(
+    filter,
+    pagination,
+    options,
+  );
   return result.getFirst();
 }
 
@@ -210,6 +215,110 @@ async function previousAggregate(root, args, context, info) {
 }
 
 /**
+ * @todo: remove later
+ * @param measurement
+ * @returns {*}
+ */
+function _getDataType(measurement) {
+  return measurement.dataValues.value.dataType;
+}
+
+/**
+ * @todo: remove later
+ * @param measurement
+ * @returns {*}
+ */
+function _getDataValue(measurement) {
+  return measurement.dataValues.value.data;
+}
+
+/**
+ * @param {string} prediction
+ * @param {string} aggregate
+ * @param {string} outcome
+ * @returns {string | null}
+ */
+function _matcher({ prediction, aggregate, outcome }) {
+  if (
+    prediction === MEASUREMENT_VALUE.percentage &&
+    aggregate === MEASUREMENT_VALUE.percentage &&
+    outcome === MEASUREMENT_VALUE.binary
+  ) {
+    return MEASUREMENT_VALUE.percentage;
+  } else if (
+    prediction === MEASUREMENT_VALUE.floatCdf &&
+    aggregate === MEASUREMENT_VALUE.floatCdf &&
+    outcome === MEASUREMENT_VALUE.floatCdf
+  ) {
+    return MEASUREMENT_VALUE.floatCdf;
+  } else if (
+    prediction === MEASUREMENT_VALUE.floatCdf &&
+    aggregate === MEASUREMENT_VALUE.floatCdf &&
+    outcome === MEASUREMENT_VALUE.floatPoint
+  ) {
+    return MEASUREMENT_VALUE.floatPoint;
+  } else {
+    return null;
+  }
+}
+
+/**
+ * @param prediction
+ * @param aggregate
+ * @param outcome
+ * @returns {number|*}
+ */
+function measurementScore({ prediction, aggregate, outcome }) {
+  // It should really return null or false if one of these doesn't exist.
+  if (!prediction || !aggregate || !outcome) return 0;
+
+  const combinationType = _matcher({
+    prediction: _getDataType(prediction),
+    aggregate: _getDataType(aggregate),
+    outcome: _getDataType(outcome)
+  });
+
+  switch (combinationType) {
+    case MEASUREMENT_VALUE.percentage:
+      return scoringFunctions.percentageInputPercentageOutput({
+        predictionPercentage: _getDataValue(prediction),
+        aggregatePercentage: _getDataValue(aggregate),
+        resultPercentage: !!_getDataValue(outcome) ? 100.0 : 0.0
+      });
+    case MEASUREMENT_VALUE.floatCdf:
+      return scoringFunctions.distributionInputDistributionOutput({
+        predictionCdf: new Cdf(
+          _getDataValue(prediction).xs,
+          _getDataValue(prediction).ys,
+        ),
+        aggregateCdf: new Cdf(
+          _getDataValue(aggregate).xs,
+          _getDataValue(aggregate).ys,
+        ),
+        resultCdf: new Cdf(
+          _getDataValue(outcome).xs,
+          _getDataValue(outcome).ys,
+        ),
+      });
+    case MEASUREMENT_VALUE.floatPoint:
+      return scoringFunctions.distributionInputPointOutput({
+        predictionCdf: new Cdf(
+          _getDataValue(prediction).xs,
+          _getDataValue(prediction).ys,
+        ),
+        aggregateCdf: new Cdf(
+          _getDataValue(aggregate).xs,
+          _getDataValue(aggregate).ys,
+        ),
+        resultPoint: _getDataValue(outcome),
+      });
+    case null:
+      // It should really return null or false if invalid.
+      return 0;
+  }
+}
+
+/**
  * @param {object} root
  * @param {Models.ObjectID} root.id
  * @param {object} _args
@@ -230,7 +339,11 @@ async function previousAggregateByRootId(root, _args, _context, _info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function primaryPointScore(root, args, context, info) {
-  return 0.3;
+  return measurementScore({
+    prediction: await prediction(root, args, context, info),
+    aggregate: await previousAggregate(root, args, context, info),
+    outcome: await outcome(root, args, context, info),
+  });
 }
 
 module.exports = {

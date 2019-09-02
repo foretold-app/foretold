@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
-const { Cdf } = require('@foretold/cdf/cdf');
-const { ContinuousDistributionCombination } = require('@foretold/cdf/continuousDistributionCombination');
+const { Cdf } = require('@foretold/cdf');
+const { ContinuousDistributionCombination } = require('@foretold/cdf');
 
 const config = require('../config');
 

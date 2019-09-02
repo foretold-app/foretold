@@ -5,7 +5,7 @@
     "main": "index.js",
     "engines": {
         "node": ">=12.6.0",
-        "yarn": ">=1.17.3"
+        "yarn": ">=1.16.0"
     },
     "private": true,
     "scripts": {
@@ -19,6 +19,7 @@
         "server/db:migrate:undo": "cd packages/server && npm run db:migrate:undo cd ../..",
         "server/db:reset": "cd packages/server && npm run db:reset && cd ../..",
         "server/db:seed": "cd packages/server && npm run db:seed && cd ../..",
+        "server/test:ci": "cd packages/server && npm run test:ci && cd ../..",
         "migrate": "npm run server/db:migrate;",
         "_build": "npm run client/build;",
         "preinstall": "printenv",

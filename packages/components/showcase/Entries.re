@@ -6,6 +6,7 @@ let entries =
     Showcase_NumberShower.entry,
     Showcase_MeasurableForm.entry,
     Showcase_Colors.entry,
+    Scoring.entry,
     Showcase_Alerts.entry,
     folder(
       ~title="Link",

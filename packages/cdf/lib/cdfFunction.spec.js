@@ -1,6 +1,5 @@
 const { fnToCdf, integrate } = require('./cdfFunction');
 const { Cdf } = require('./cdf');
-const { Samples } = require('./samples');
 
 describe('cdfFunction', () => {
   it('fnToCdf()', () => {

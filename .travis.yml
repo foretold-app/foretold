@@ -22,13 +22,8 @@ before_script:
   - echo Before-Script-OK
 
 install:
-  - docker build -t main ./packages/server
+  - docker build -t main ./
 
 script:
   - printenv
-  - docker run main npm run test:ci
-
-notifications:
-  email: never
-  slack:
-    secure: <secret>
+  - docker run main npm run server/test:ci

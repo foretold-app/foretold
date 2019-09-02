@@ -1,5 +1,6 @@
 const { range, min, max, mean } = require('./functions');
 const { ContinuousDistribution } = require('./continuousDistribution');
+const _ = require('lodash');
 
 class ContinuousDistributionCombination {
   /**
@@ -46,7 +47,9 @@ class ContinuousDistributionCombination {
   combineYsWithFn(sampleCount, fn) {
     const xs = this.equallyDividedXs(sampleCount);
     const result = xs.map(xPoint => fn(this.allYsAtXPoint(xPoint)));
-    return new ContinuousDistribution(xs, result);
+    let filtered = _.filter(_.zip(xs, result), z => _.isFinite(z[1]));
+    let [xss,ys] = _.unzip(filtered);
+    return new ContinuousDistribution(xss, ys);
   }
 
   /**

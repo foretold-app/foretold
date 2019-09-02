@@ -26,20 +26,18 @@ let make =
               PageCard.HeaderRow.Styles.itemBottomPadding,
             ]),
           ]>
-          {
-            PaginationButtons.make({
-              currentValue: Range(3, 10),
-              max: 100,
-              pageLeft: {
-                isDisabled: false,
-                onClick: _ => (),
-              },
-              pageRight: {
-                isDisabled: true,
-                onClick: _ => (),
-              },
-            })
-          }
+          {PaginationButtons.make({
+             currentValue: Range(3, 10),
+             max: 100,
+             pageLeft: {
+               isDisabled: false,
+               onClick: _ => (),
+             },
+             pageRight: {
+               isDisabled: true,
+               onClick: _ => (),
+             },
+           })}
         </Div>
       </Div>
     </PageCard.HeaderRow>
@@ -51,19 +49,17 @@ let make =
         ),
       ]>
       <Div flexDirection=`row>
-        <Div flex=5>
+        <Div flex={`num(5.)}>
           <PageCard.H1>
             {"What would the US GDP Be in 2020?" |> ReasonReact.string}
           </PageCard.H1>
-          {
-            FC__StateStatus.make(
-              ~state=RESOLVED(MomentRe.momentWithUnix(pastTime)),
-              ~fontSize=`em(1.0),
-              (),
-            )
-          }
+          {FC__StateStatus.make(
+             ~state=RESOLVED(MomentRe.momentWithUnix(pastTime)),
+             ~fontSize=`em(1.0),
+             (),
+           )}
         </Div>
-        <Div flex=1>
+        <Div flex={`num(1.)}>
           <FC__AgentLink>
             {"Roger Adams" |> ReasonReact.string}
           </FC__AgentLink>
@@ -71,10 +67,8 @@ let make =
       </Div>
       <Div styles=[Css.style([Css.marginTop(`em(2.0))])]>
         <PageCard.P>
-          {
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vulputate tortor a sapien aliquet ullamcorper. Nunc non varius sapien, quis elementum sapien. Morbi ac tristique quam. Cras hendrerit accumsan pretium. Praesent id nisl sit amet eros imperdiet placerat. Vestibulum sodales posuere diam vel laoreet."
-            |> ReasonReact.string
-          }
+          {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vulputate tortor a sapien aliquet ullamcorper. Nunc non varius sapien, quis elementum sapien. Morbi ac tristique quam. Cras hendrerit accumsan pretium. Praesent id nisl sit amet eros imperdiet placerat. Vestibulum sodales posuere diam vel laoreet."
+           |> ReasonReact.string}
         </PageCard.P>
       </Div>
     </Div>

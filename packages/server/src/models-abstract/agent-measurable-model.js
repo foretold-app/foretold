@@ -42,20 +42,6 @@ class AgentMeasurableModel extends ModelPostgres {
    * @param {string} [name]
    * @return {string}
    */
-  _agentMeasurableScoringLiteral(agentId, measurableId, name = '') {
-    return this.literal(this._agentMeasurableScoring(
-      agentId,
-      measurableId,
-      name,
-    ));
-  }
-
-  /**
-   * @param {Models.ObjectID} agentId
-   * @param {Models.ObjectID} measurableId
-   * @param {string} [name]
-   * @return {string}
-   */
   _agentMeasurableScoring(agentId, measurableId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     assert(!!measurableId, 'Measurable ID is required.');

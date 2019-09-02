@@ -27,10 +27,11 @@ class AgentMeasurablesData extends DataBase {
 
   /**
    * @param agentId
+   * @param measurableId
    * @returns {*}
    */
-  getAgentMeasurableScoring(agentId) {
-    return this.model.getAgentMeasurableScoring(agentId);
+  getAgentMeasurableScoring(agentId, measurableId) {
+    return this.model.getAgentMeasurableScoring(agentId, measurableId);
   }
 }
 

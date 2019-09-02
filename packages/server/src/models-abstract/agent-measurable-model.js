@@ -56,24 +56,27 @@ class AgentMeasurableModel extends ModelPostgres {
       SELECT
         /* all of the aggregates made after that */
         (
-          SELECT ARRAY(
-            SELECT (
-              "Measurements2"."id", 
-              "Measurements2"."value" ->> 'data',
-              "Measurements2"."createdAt"
+          SELECT array_to_json(
+            ARRAY(
+              SELECT json_build_object(
+                'id', "Measurements2"."id",
+                'createdAt', "Measurements2"."createdAt",
+                'value', ("Measurements2"."value" ->> 'data')::json
+              )
+              FROM "Measurements" AS "Measurements2"
+              WHERE "Measurements2"."competitorType" = 'AGGREGATION'
+                AND "Measurements2"."measurableId" = "Measurements"."measurableId"
+                AND "Measurements2"."createdAt" > "Measurements"."createdAt"
             )
-            FROM "Measurements" AS "Measurements2"
-            WHERE "Measurements2"."competitorType" = 'AGGREGATION'
-              AND "Measurements2"."measurableId" = "Measurements"."measurableId"
-              AND "Measurements2"."createdAt" > "Measurements"."createdAt"
           )
         ) AS "aggregations",
     
         /* and the aggregate made immediately before that, with timestamps */
         (
-          SELECT (
-            "Measurements3"."id", "Measurements3"."createdAt",
-            "Measurements3"."value" ->> 'data'
+          SELECT json_build_object(
+            'id', "Measurements3"."id",
+            'createdAt', "Measurements3"."createdAt",
+            'value', ("Measurements3"."value" ->> 'data')::json
           )
           FROM "Measurements" AS "Measurements3"
           WHERE "Measurements3"."competitorType" = 'AGGREGATION'
@@ -85,10 +88,11 @@ class AgentMeasurableModel extends ModelPostgres {
     
         /* the most recent result, with a timestamp */
         (
-          SELECT (
-            "Measurements4"."id", "Measurements4"."createdAt",
-            "Measurements4"."value" ->> 'data'
-          )
+          SELECT json_build_object(
+              'id', "Measurements4"."id",
+              'createdAt', "Measurements4"."createdAt",
+              'value', ("Measurements4"."value" ->> 'data')::json
+            )
           FROM "Measurements" AS "Measurements4"
           WHERE "Measurements4"."competitorType" = 'OBJECTIVE'
             AND "Measurements4"."measurableId" = "Measurements"."measurableId"

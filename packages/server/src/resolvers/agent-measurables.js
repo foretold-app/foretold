@@ -40,6 +40,19 @@ async function all(root, args, context, info) {
   return data.agentMeasurables.getConnection(filter, pagination, options);
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+async function scoring(root, args, context, info) {
+  const agentId = _.get(root, 'agent.id');
+  return data.agentMeasurables.getAgentMeasurableScoring(agentId);
+}
+
 module.exports = {
   all,
+  scoring,
 };

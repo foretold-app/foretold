@@ -24,6 +24,14 @@ class AgentMeasurablesData extends DataBase {
       ...super._getDefaultRestrictionsForIncludedIntoMeasurables(options),
     };
   }
+
+  /**
+   * @param agentId
+   * @returns {*}
+   */
+  getAgentMeasurableScoring(agentId) {
+    return this.model.getAgentMeasurableScoring(agentId);
+  }
 }
 
 module.exports = {

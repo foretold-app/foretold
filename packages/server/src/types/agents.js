@@ -1,9 +1,9 @@
-const graphql = require("graphql");
-const { resolver } = require("graphql-sequelize");
+const graphql = require('graphql');
+const { resolver } = require('graphql-sequelize');
 
 const resolvers = require('../resolvers');
 const channelMemberships = require('./channel-memberhips');
-const models = require("../models");
+const models = require('../models');
 
 const { AGENT_TYPE } = require('../models/enums/agent-type');
 

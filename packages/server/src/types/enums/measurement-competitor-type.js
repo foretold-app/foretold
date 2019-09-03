@@ -1,4 +1,4 @@
-const graphql = require("graphql");
+const graphql = require('graphql');
 
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../../models/enums/measurement-competitor-type');
 

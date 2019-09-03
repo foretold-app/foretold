@@ -1,4 +1,4 @@
-const { notify } = require("../lib/notifications");
+const { notify } = require('../lib/notifications');
 
 const { DataBase } = require('./data-base');
 

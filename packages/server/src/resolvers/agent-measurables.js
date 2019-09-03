@@ -40,6 +40,20 @@ async function all(root, args, context, info) {
   return data.agentMeasurables.getConnection(filter, pagination, options);
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+async function primaryPointScore(root, args, context, info) {
+  const agentId = _.get(root, 'agentId');
+  const measurableId = _.get(root, 'measurableId');
+  return data.agentMeasurables.primaryPointScore(agentId, measurableId);
+}
+
 module.exports = {
   all,
+  primaryPointScore,
 };

@@ -62,6 +62,7 @@ class AgentMeasurableModel extends ModelPostgres {
               WHERE "Measurements2"."competitorType" = 'AGGREGATION'
                 AND "Measurements2"."measurableId" = "Measurements"."measurableId"
                 AND "Measurements2"."createdAt" > "Measurements"."createdAt"
+              ORDER BY "Measurements2"."createdAt" DESC
             )
           )
         ) AS "aggregations",
@@ -105,8 +106,8 @@ class AgentMeasurableModel extends ModelPostgres {
         "Measurables"."createdAt" AS "measurableCreatedAt"
       
       FROM "Measurements"
-               LEFT JOIN "Measurables"
-                         ON "Measurables"."id" = "Measurements"."measurableId"
+      LEFT JOIN "Measurables"
+      ON "Measurables"."id" = "Measurements"."measurableId"
       
       WHERE "Measurements"."competitorType" = 'COMPETITIVE'
         AND "Measurements"."agentId" = '${ agentId }'

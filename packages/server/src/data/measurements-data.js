@@ -1,4 +1,4 @@
-const { notify } = require("../lib/notifications");
+const { notify } = require('../lib/notifications');
 
 const { DataBase } = require('./data-base');
 
@@ -101,10 +101,20 @@ class MeasurementsData extends DataBase {
   /**
    * @public
    * @param {Models.ObjectID} measurableId
+   * @param {Date} relevantAt
    * @returns {Promise<Model>}
    */
-  async getPreviousAggregate(measurableId) {
-    return this.model.getPreviousAggregate(measurableId);
+  async getPreviousRelevantAggregate(measurableId, relevantAt) {
+    return this.model.getPreviousRelevantAggregate(measurableId, relevantAt);
+  }
+
+  /**
+   * @public
+   * @param {Models.ObjectID} measurableId
+   * @returns {Promise<Model>}
+   */
+  async getLatestAggregate(measurableId) {
+    return this.model.getLatestAggregate(measurableId);
   }
 }
 

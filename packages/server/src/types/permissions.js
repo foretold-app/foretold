@@ -1,4 +1,4 @@
-const graphql = require("graphql");
+const graphql = require('graphql');
 
 const permissionQueries = new graphql.GraphQLObjectType({
   name: 'PermissionQueries',

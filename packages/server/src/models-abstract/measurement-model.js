@@ -22,8 +22,7 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this._publicAndJoinedChannels()
-   * @param {Models.ObjectID} [agentId]
+   * @param {Models.ObjectID} agentId
    * @param {string} [name]
    * @return {string}
    */
@@ -32,7 +31,6 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this._publicAndJoinedChannels()
    * @protected
    * @param {Models.ObjectID} agentId
    * @param {string} name
@@ -170,9 +168,30 @@ class MeasurementModel extends ModelPostgres {
   /**
    * @public
    * @param {Models.ObjectID} measurableId
+   * @param {Date} relevantAt
    * @returns {Promise<Model>}
    */
-  async getPreviousAggregate(measurableId) {
+  async getPreviousRelevantAggregate(measurableId, relevantAt) {
+    assert(!!measurableId, 'Measurable ID is required.');
+    assert(!!relevantAt, 'RelevantAt is required.');
+    return this.model.findOne({
+      where: {
+        measurableId,
+        competitorType: MEASUREMENT_COMPETITOR_TYPE.AGGREGATION,
+        relevantAt: { [this.lt]: relevantAt },
+      },
+      order: [
+        ['relevantAt', 'DESC'],
+      ],
+    });
+  }
+
+  /**
+   * @public
+   * @param {Models.ObjectID} measurableId
+   * @returns {Promise<Model>}
+   */
+  async getLatestAggregate(measurableId) {
     assert(!!measurableId, 'Measurable ID is required.');
     return this.model.findOne({
       where: {

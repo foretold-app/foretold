@@ -550,7 +550,7 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {object} [data]
+   * @param {Layers.AbstractModelsLayer.data} [data]
    * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise.<object>}
@@ -561,8 +561,8 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {object} [params]
-   * @param {object} [data]
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.data} [data]
    * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise.<object>}
@@ -580,8 +580,8 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {object} [params]
-   * @param {object} [data]
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.data} [data]
    * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {boolean}
@@ -696,8 +696,8 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {object} [params]
-   * @param {object} [query]
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise<Models.Model>}
@@ -724,9 +724,9 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {object} params
-   * @param {object} query
-   * @param {object} data
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.data} data
    * @param {Layers.AbstractModelsLayer.restrictions} restrictions
    * @param {Layers.AbstractModelsLayer.options} options
    * @return {Promise<Models.Model>}

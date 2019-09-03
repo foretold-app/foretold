@@ -13,6 +13,8 @@ class Params {
       'agentId',
       'name',
       'auth0Id',
+      'measurableId',
+      'competitorType',
     ];
     utils.extend(this.constructor.name, params, list, this);
     utils.diff(this.constructor.name, params, list);

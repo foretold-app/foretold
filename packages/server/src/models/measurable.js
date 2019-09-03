@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const _ = require('lodash');
-const fetch = require("node-fetch");
+const fetch = require('node-fetch');
 const moment = require('moment');
 
 const { clientUrl } = require('../lib/urls');

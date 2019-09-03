@@ -271,6 +271,8 @@ export namespace Layers {
       agentId?: Models.ObjectID,
       auth0Id?: string;
       name?: string;
+      measurableId?: Models.ObjectID,
+      competitorType?: string,
     };
     type response = { data: any };
     type responseList = { data: any[], total: number };

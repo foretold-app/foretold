@@ -22,8 +22,7 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this._publicAndJoinedChannels()
-   * @param {Models.ObjectID} [agentId]
+   * @param {Models.ObjectID} agentId
    * @param {string} [name]
    * @return {string}
    */
@@ -32,7 +31,6 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this._publicAndJoinedChannels()
    * @protected
    * @param {Models.ObjectID} agentId
    * @param {string} name

@@ -9,7 +9,6 @@ const { DataBase } = require('./data-base');
 const { MeasurementsData } = require('./measurements-data');
 const { MeasurablesData } = require('./measurables-data');
 const { Filter } = require('./classes/filter');
-const { Params } = require('./classes/params');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -42,36 +41,13 @@ class AgentMeasurablesData extends DataBase {
    * @returns {Promise<*>}
    */
   async primaryPointScore(agentId, measurableId) {
-
-    // const measurements = await this.model.getMeasurementsForScoring(
-    //   agentId,
-    //   measurableId,
-    // );
-    //
-    // const numberOfCompetitiveMeasurements = _.size(measurements);
-    //
-    // const numberOfAggregatesAfter = measurements
-    //   .map(v => _.size(v.aggregations))
-    //   .reduce((a, c) => a + c, 0);
-    //
-    // const numberOfAggregatesBefore = measurements
-    //   .map(v => !!v.previousAggregation ? 1 : 0)
-    //   .reduce((a, c) => a + c, 0);
-    //
-    // const result =
-    //   numberOfCompetitiveMeasurements * 10 +
-    //   numberOfAggregatesAfter +
-    //   numberOfAggregatesBefore;
-    //
-    // console.log({
-    //   agentId,
-    //   measurableId
-    // }, {
-    //   numberOfCompetitiveMeasurements,
-    //   numberOfAggregatesAfter,
-    //   numberOfAggregatesBefore
-    // }, result);
-
+    const {
+      recentResult,
+      allAggregations,
+      predictions,
+      measurableCreatedAt
+    } = this._getMeasurementsToScoring(agentId, measurableId);
+    // implement logic here
     return 0;
   }
 
@@ -89,19 +65,22 @@ class AgentMeasurablesData extends DataBase {
       predictions,
     } = await this._getPrefetchedMeasurements(measurableId);
 
-    const proceededPredictions = predictions
+    const prediction$ = predictions
       .filter(measurement => measurement.agentId === agentId);
 
-    return proceededPredictions;
+    return {
+      recentResult,
+      allAggregations,
+      predictions: prediction$,
+      measurableCreatedAt: measurable.createdAt,
+    };
   }
-
-
 
   /**
    * @param {Models.ObjectID} measurableId
    * @returns {Promise<*>}
    */
-  async _getPrefetchedMeasurements( measurableId) {
+  async _getPrefetchedMeasurements(measurableId) {
     const measurements = this._getMeasurements(measurableId);
 
     const allAggregations = _.filter(measurements, [
@@ -114,40 +93,21 @@ class AgentMeasurablesData extends DataBase {
       'competitorType', MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE,
     ]);
 
-    const proceededPredictions = predictions
-      .map((measurement) => {
-        const aggregatesAfter = _.filter(allAggregations, (aggregate) => {
-          return aggregate.createdAt > measurement.createdAt;
-        });
-        const aggregateBefore = _.find(allAggregations, (aggregate) => {
-          return measurement.createdAt > aggregate.createdAt;
-        });
-        return {
-          aggregatesAfter,
-          aggregateBefore,
-          measurement,
-        };
-      });
-
     return {
       allAggregations,
       recentResult,
       predictions,
-      proceededPredictions,
     };
   }
-
-
 
   /**
    * @param {Models.ObjectID} measurableId
    * @returns {Promise<*>}
    */
   async _getMeasurements(measurableId) {
-    const measurements = this.measurements.getAll(new Filter({
+    return this.measurements.getAll(new Filter({
       measurableId,
     }));
-    return measurements;
   }
 
   /**
@@ -155,10 +115,9 @@ class AgentMeasurablesData extends DataBase {
    * @returns {Promise<*>}
    */
   async _getMeasurable(measurableId) {
-    const measurable = this.measurables.getOne(new Filter({
+    return this.measurables.getOne(new Filter({
       id: measurableId,
     }));
-    return measurable;
   }
 }
 

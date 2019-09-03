@@ -168,9 +168,30 @@ class MeasurementModel extends ModelPostgres {
   /**
    * @public
    * @param {Models.ObjectID} measurableId
+   * @param {Date} createdAt
    * @returns {Promise<Model>}
    */
-  async getPreviousAggregate(measurableId) {
+  async getPreviousAggregate(measurableId, createdAt) {
+    assert(!!measurableId, 'Measurable ID is required.');
+    assert(!!createdAt, 'CreatedAt is required.');
+    return this.model.findOne({
+      where: {
+        measurableId,
+        competitorType: MEASUREMENT_COMPETITOR_TYPE.AGGREGATION,
+        createdAt: { [this.lt]: createdAt },
+      },
+      order: [
+        ['createdAt', 'DESC'],
+      ],
+    });
+  }
+
+  /**
+   * @public
+   * @param {Models.ObjectID} measurableId
+   * @returns {Promise<Model>}
+   */
+  async getLatestAggregate(measurableId) {
     assert(!!measurableId, 'Measurable ID is required.');
     return this.model.findOne({
       where: {

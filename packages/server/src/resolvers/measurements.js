@@ -150,10 +150,7 @@ async function latest(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function scoreSet(root, args, context, info) {
-  return {
-    id: _.get(root, 'id'),
-    measurableId: _.get(root, 'measurableId'),
-  };
+  return root;
 }
 
 /**
@@ -201,9 +198,9 @@ async function outcomeByRootId(root, _args, _context, _info) {
 }
 
 /**
- * @todo: rename to "previousAggregateByRootMeasurableId"
  * @param {object} root
  * @param {Models.ObjectID} root.measurableId
+ * @param {Date} root.createdAt
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} info
@@ -211,7 +208,21 @@ async function outcomeByRootId(root, _args, _context, _info) {
  */
 async function previousAggregate(root, args, context, info) {
   const measurableId = _.get(root, 'measurableId');
-  return data.measurements.getPreviousAggregate(measurableId);
+  const createdAt = _.get(root, 'createdAt');
+  return data.measurements.getPreviousAggregate(measurableId, createdAt);
+}
+
+/**
+ * @param {object} root
+ * @param {Models.ObjectID} root.id
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function latestAggregateByRootId(root, _args, _context, _info) {
+  const measurableId = _.get(root, 'id');
+  return data.measurements.getLatestAggregate(measurableId);
 }
 
 /**
@@ -319,19 +330,6 @@ function measurementScore({ prediction, aggregate, outcome }) {
 }
 
 /**
- * @param {object} root
- * @param {Models.ObjectID} root.id
- * @param {object} _args
- * @param {Schema.Context} _context
- * @param {object} _info
- * @returns {Promise<*|Array<Model>>}
- */
-async function previousAggregateByRootId(root, _args, _context, _info) {
-  const measurableId = _.get(root, 'id');
-  return data.measurements.getPreviousAggregate(measurableId);
-}
-
-/**
  * @param {*} root
  * @param {object} args
  * @param {Schema.Context} context
@@ -339,11 +337,13 @@ async function previousAggregateByRootId(root, _args, _context, _info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function primaryPointScore(root, args, context, info) {
-  return measurementScore({
+  const result = measurementScore({
     prediction: await prediction(root, args, context, info),
     aggregate: await previousAggregate(root, args, context, info),
     outcome: await outcome(root, args, context, info),
   });
+
+  return _.round(result, 2);
 }
 
 module.exports = {
@@ -356,7 +356,7 @@ module.exports = {
   outcome,
   outcomeByRootId,
   previousAggregate,
-  previousAggregateByRootId,
+  latestAggregateByRootId,
   primaryPointScore,
   measurableMeasurement,
 };

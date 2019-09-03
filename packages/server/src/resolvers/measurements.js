@@ -340,11 +340,13 @@ function measurementScore({ prediction, aggregate, outcome }) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function primaryPointScore(root, args, context, info) {
-  return measurementScore({
+  const result = measurementScore({
     prediction: await prediction(root, args, context, info),
     aggregate: await previousAggregate(root, args, context, info),
     outcome: await outcome(root, args, context, info),
   });
+
+  return _.round(result, 2);
 }
 
 module.exports = {

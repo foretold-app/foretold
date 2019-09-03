@@ -209,7 +209,7 @@ async function outcomeByRootId(root, _args, _context, _info) {
 async function previousAggregate(root, args, context, info) {
   const measurableId = _.get(root, 'measurableId');
   const createdAt = _.get(root, 'createdAt');
-  return data.measurements.getPreviousAggregate(measurableId, createdAt);
+  return data.measurements.getPreviousRelevantAggregate(measurableId, createdAt);
 }
 
 /**

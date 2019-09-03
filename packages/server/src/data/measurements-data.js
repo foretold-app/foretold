@@ -101,11 +101,11 @@ class MeasurementsData extends DataBase {
   /**
    * @public
    * @param {Models.ObjectID} measurableId
-   * @param {Date} createdAt
+   * @param {Date} relevantAt
    * @returns {Promise<Model>}
    */
-  async getPreviousAggregate(measurableId, createdAt) {
-    return this.model.getPreviousAggregate(measurableId, createdAt);
+  async getPreviousRelevantAggregate(measurableId, relevantAt) {
+    return this.model.getPreviousRelevantAggregate(measurableId, relevantAt);
   }
 
   /**

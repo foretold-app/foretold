@@ -150,10 +150,7 @@ async function latest(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function scoreSet(root, args, context, info) {
-  return {
-    id: _.get(root, 'id'),
-    measurableId: _.get(root, 'measurableId'),
-  };
+  return root;
 }
 
 /**

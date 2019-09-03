@@ -166,6 +166,21 @@ class ContinuousDistribution {
     }
     return integral
   }
+
+  integral2(){
+    let integral = 0
+    for (let i = 1; i < this.ys.length; i++) {
+      let thisY = this.ys[i];
+      let lastY = this.ys[i-1];
+      let thisX = this.xs[i];
+      let lastX = this.xs[i-1];
+      if (_.isFinite(thisY) && _.isFinite(lastY) && _.isFinite(thisX) && _.isFinite(lastX)){
+        let sectionInterval = lastY*(thisX-lastX);
+        integral = integral + sectionInterval
+      }
+    }
+    return integral
+  }
 }
 
 module.exports = {

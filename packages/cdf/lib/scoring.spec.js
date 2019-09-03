@@ -1,4 +1,4 @@
-const { distributionInputPointOutput, distributionInputDistributionOutput, percentageInputPercentageOutput } = require('./scoring');
+const { scoringFunctions: { distributionInputPointOutput, distributionInputDistributionOutput, percentageInputPercentageOutput } } = require('./scoring');
 const { Cdf } = require('./cdf');
 
 describe('scoring', () => {

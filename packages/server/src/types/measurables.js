@@ -74,9 +74,10 @@ const measurable = new graphql.GraphQLObjectType({
     },
 
     previousAggregate: {
+      deprecated: 'Will be renamed on latestAggregate.',
       description: 'Returns latest aggregation measurement.',
       type: require('./measurements').measurement,
-      resolve: require('../resolvers/measurements').previousAggregateByRootId,
+      resolve: require('../resolvers/measurements').latestAggregateByRootId,
     },
   })
 });

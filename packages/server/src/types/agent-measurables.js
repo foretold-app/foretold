@@ -1,6 +1,5 @@
 const graphql = require('graphql');
 const { DateType } = require('graphql-sequelize');
-const { GraphQLJSON } = require('graphql-type-json');
 
 const agentMeasurable = new graphql.GraphQLObjectType({
   name: 'AgentMeasurable',

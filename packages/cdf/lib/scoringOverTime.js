@@ -10,16 +10,17 @@
 // function predictionInputToPointValues({startTime, stopTime, predictions, aggregations, result}){
 // }
 
-function distsToPairing({predictions, aggregations}){
+// list of relevant timestamps
+// For each timestamp, relevant score.
 
+// function distsToPairing({predictions, aggregations}){
 
-}
+// }
 
-function pointValueDistributionToTotalScore({startTime, stopTime, values, totalValue}){
+function pointValueDistributionToTotalScore({startTime, stopTime, values}){
   let predictionLength = values.maxX() - values.minX();
   let fullLength = stopTime - startTime;
   let percentageOfFullLength = predictionLength / fullLength;
-  console.log("HI", percentageOfFullLength, totalValue)
   return values.integral2() * percentageOfFullLength;
 }
 

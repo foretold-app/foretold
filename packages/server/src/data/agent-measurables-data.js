@@ -36,19 +36,30 @@ class AgentMeasurablesData extends DataBase {
   }
 
   /**
+   * Do not make any optimization here, it is early for this.
+   * For each optimization we need to do a researching of the performance.
    * @param {Models.ObjectID} agentId
    * @param {Models.ObjectID} measurableId
    * @returns {Promise<*>}
    */
   async primaryPointScore(agentId, measurableId) {
     const {
-      recentResult,
-      allAggregations,
       predictions,
-      measurableCreatedAt
-    } = this._getMeasurementsToScoring(agentId, measurableId);
-    // implement logic here
-    return 0;
+    } = await this._getMeasurementsToScoring(agentId, measurableId);
+
+    const numCompetitiveMeasurements = _.size(predictions);
+
+    const numAggregatesAfter = predictions
+      .map(v => _.size(v.aggregatesAfter))
+      .reduce((a, c) => a + c, 0);
+
+    const numAggregatesBefore = predictions
+      .map(v => !!v.aggregateBefore ? 1 : 0)
+      .reduce((a, c) => a + c, 0);
+
+    return numCompetitiveMeasurements * 10 +
+      numAggregatesAfter +
+      numAggregatesBefore;
   }
 
   /**
@@ -60,18 +71,20 @@ class AgentMeasurablesData extends DataBase {
     const measurable = await this._getMeasurable(measurableId);
 
     const {
-      allAggregations,
       recentResult,
-      predictions,
-    } = await this._getPrefetchedMeasurements(measurableId);
+      allAggregations,
+      proceededPredictions,
+    } = await this._getProceededMeasurements(measurableId);
 
-    const prediction$ = predictions
-      .filter(measurement => measurement.agentId === agentId);
+    const predictions = _.filter(
+      proceededPredictions,
+      ['measurement.agentId', agentId],
+    );
 
     return {
+      predictions,
       recentResult,
       allAggregations,
-      predictions: prediction$,
       measurableCreatedAt: measurable.createdAt,
     };
   }
@@ -80,8 +93,8 @@ class AgentMeasurablesData extends DataBase {
    * @param {Models.ObjectID} measurableId
    * @returns {Promise<*>}
    */
-  async _getPrefetchedMeasurements(measurableId) {
-    const measurements = this._getMeasurements(measurableId);
+  async _getProceededMeasurements(measurableId) {
+    const measurements = await this._getMeasurements(measurableId);
 
     const allAggregations = _.filter(measurements, [
       'competitorType', MEASUREMENT_COMPETITOR_TYPE.AGGREGATION,
@@ -93,14 +106,30 @@ class AgentMeasurablesData extends DataBase {
       'competitorType', MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE,
     ]);
 
+    const proceededPredictions = predictions.map((measurement) => {
+      const aggregatesAfter = _.filter(allAggregations, (aggregate) => {
+        return aggregate.createdAt > measurement.createdAt;
+      });
+      const aggregateBefore = _.find(allAggregations, (aggregate) => {
+        return measurement.createdAt > aggregate.createdAt;
+      });
+      return {
+        measurement,
+        aggregatesAfter,
+        aggregateBefore,
+      };
+    });
+
     return {
-      allAggregations,
-      recentResult,
       predictions,
+      recentResult,
+      allAggregations,
+      proceededPredictions,
     };
   }
 
   /**
+   * Should return sorted measurements by the createdAt field.
    * @param {Models.ObjectID} measurableId
    * @returns {Promise<*>}
    */

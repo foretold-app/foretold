@@ -51,7 +51,7 @@ module NonMarketScores = {
   };
 };
 
-let run = ({measurements}: ScoringCombination.t) => {
+let run = ({measurements}: Types.ScoringCombination.t) => {
   switch (
     {
       measurements;

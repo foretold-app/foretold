@@ -52,3 +52,24 @@ module Measurement = {
     | `Comment(commentTypes)
   ];
 };
+
+module ScoringCombination = {
+  type marketScoreMeasurements = {
+    prediction: Measurement.t,
+    market: Measurement.t,
+    resolution: Measurement.t,
+  };
+
+  type nonMarketScoreMeasurements = {
+    prediction: Measurement.t,
+    resolution: Measurement.t,
+  };
+
+  type t = {
+    measurements: [
+      | `marketScoreMeasurements(marketScoreMeasurements)
+      | `nonMarketScoreMeasurements(nonMarketScoreMeasurements)
+    ],
+    sampleCount: int,
+  };
+};

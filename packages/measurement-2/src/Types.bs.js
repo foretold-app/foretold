@@ -69,7 +69,10 @@ var Percentage = /* module */[
 
 var Measurement = /* module */[];
 
+var ScoringCombination = /* module */[];
+
 exports.Cdf = Cdf;
 exports.Percentage = Percentage;
 exports.Measurement = Measurement;
+exports.ScoringCombination = ScoringCombination;
 /* Result-Rationale Not a pure module */

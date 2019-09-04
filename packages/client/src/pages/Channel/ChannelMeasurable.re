@@ -13,7 +13,7 @@ let make =
       ~head=ReasonReact.null,
       ~body=
         <FC.PageCard.Body>
-          <C.Measurable.FullPresentation id=measurableId loggedInUser />
+          <MeasurableFullPresentation id=measurableId loggedInUser />
         </FC.PageCard.Body>,
     )
     |> layout;

@@ -330,7 +330,7 @@ let measurableColumn: column =
     (),
   );
 
-let scoreColumn: column =
+let scoreColumn = (loggedInUser: Types.user): column =>
   Table.Column.make(
     ~name="Score" |> ste,
     ~render=
@@ -341,6 +341,7 @@ let scoreColumn: column =
            )
         |> E.O.default("0.0")
         |> Utils.ste,
+    ~show=_ => Primary.User.showif(loggedInUser),
     ~flex=1,
     (),
   );
@@ -369,14 +370,16 @@ let bottomSubRowFn =
       |> E.O.fmap((c: React.element) => [|FC.Table.Row.textSection(c)|]),
   );
 
-let make = (measurementsList: list(measurement)): ReasonReact.reactElement => {
+let make =
+    (loggedInUser: Types.user, measurementsList: list(measurement))
+    : ReasonReact.reactElement => {
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
   let all: array(column) = [|
     getPredictionDistributionColumn(bounds),
     predictionValueColumn,
     agentColumn,
-    scoreColumn,
+    scoreColumn(loggedInUser),
     timeColumn,
   |];
 

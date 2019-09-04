@@ -21,7 +21,7 @@ let component = ReasonReact.statelessComponent("MeasurableFullPresentation");
 let make = (~id: string, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _self => {
-    MeasurableWithMeasurementsGet.component(~id)
+    MeasurableGet2.component(~id)
     |> E.F.apply((m: Types.measurable) => {
          let userAgentId =
            loggedInUser.agent |> E.O.fmap((r: Types.agent) => r.id);
@@ -78,7 +78,9 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
                   ) =>
                     switch (m) {
                     | Success(m) =>
-                      m.edges |> E.A.to_list |> MeasurementsTable.make
+                      m.edges
+                      |> E.A.to_list
+                      |> MeasurementsTable.make(loggedInUser)
                     | _ => ReasonReact.null
                     },
                 (),

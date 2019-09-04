@@ -1,9 +1,11 @@
 const _ = require('lodash');
 const { Cdf, scoringFunctions } = require('@foretold/cdf');
+const {
+  MEASUREMENT_VALUE,
+} = require('@foretold/measurement-value/enums/measurement-value');
 
 const data = require('../data');
 const { withinMeasurables } = require('../structures');
-const { MEASUREMENT_VALUE } = require('../models/enums/measurement-value');
 
 const { Pagination } = require('../data/classes/pagination');
 const { Filter } = require('../data/classes/filter');
@@ -209,7 +211,10 @@ async function outcomeByRootId(root, _args, _context, _info) {
 async function previousAggregate(root, args, context, info) {
   const measurableId = _.get(root, 'measurableId');
   const createdAt = _.get(root, 'createdAt');
-  return data.measurements.getPreviousRelevantAggregate(measurableId, createdAt);
+  return data.measurements.getPreviousRelevantAggregate(
+    measurableId,
+    createdAt,
+  );
 }
 
 /**

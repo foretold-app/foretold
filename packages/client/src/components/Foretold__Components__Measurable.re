@@ -1,3 +1,2 @@
 module Items = Foretold__Components__Measurable__Items;
 module StatusDisplay = Foretold__Component__StatusDisplay;
-module FullPresentation = Foretold__Components__Measurable__FullPresentation;

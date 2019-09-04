@@ -52,7 +52,7 @@ function distributionInputDistributionOutputMarketless({predictionCdf, resultCdf
     let _resultPdf = resultCdf.toPdf();
     let combination = new ContinuousDistributionCombination([_predictionPdf, _resultPdf]);
     let continuousResult = combination.combineYsWithFn(sampleCount,
-        r => (r[1] * Math.log2(r[0]))
+        r => (r[1] * Math.log2(r[0] / r[1]))
     );
     return continuousResult.integral();
 }

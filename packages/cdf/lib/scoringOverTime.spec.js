@@ -7,7 +7,7 @@ describe('scoringOverTime', () => {
     const ys = [1,1];
     let values = new ContinuousDistribution(xs, ys)
     let totalScore = pointValueDistributionToTotalScore({startTime: 0, stopTime: 10, values});
-    expect(totalScore).toEqual(25);
+    expect(totalScore).toEqual(2.5);
   })
 
   it('pointValuesToTotalScore2()', () => {
@@ -15,6 +15,6 @@ describe('scoringOverTime', () => {
     const ys = [2,2,-2];
     let values = new ContinuousDistribution(xs, ys);
     let totalScore = pointValueDistributionToTotalScore({startTime: 0, stopTime: 10, values});
-    expect(totalScore).toEqual(128);
+    expect(totalScore).toEqual(12.8);
   })
 })

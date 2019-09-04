@@ -1,28 +1,35 @@
 const { ContinuousDistributionCombination } = require('./continuousDistributionCombination');
 const _ = require('lodash');
 
-let scoreFunctionWithoutResult = ({prediction, aggregate}) => Math.log2(prediction / aggregate);
+let scoreFunctionWithoutAggregateOrResult = ({prediction}) => Math.log2(prediction);
+let scoreFunctionWithoutResult = ({prediction, aggregate}) => Math.log2(prediction) - Math.log2(aggregate);
 let scoreFunctionWithResult = ({prediction, aggregate, result}) => scoreFunctionWithoutResult({prediction, aggregate}) * result;
 
 let maxScore = 20;
 let minScore = -20;
 
 let ensureScoreInBounds = score => {
-    if (score === Infinity || (score > maxScore)){
+    if (score > maxScore){
         return maxScore
-    } else if (score === -Infinity || (score < minScore)){
+    } else if (score < minScore){
         return minScore
     } else if (!_.isFinite(score)){
-        return 0
+        console.error(`Score is not valid: ${score}. Submitting as NaN.`);
+        return NaN
     } else {
         return score
     }
 }
 
+function _distributionInputPointOutputSingle({predictionCdf, resultPoint}){
+    let yAtPoint = predictionCdf.toPdf().findY(resultPoint);
+    return scoreFunctionWithoutAggregateOrResult({prediction: yAtPoint});
+}
+
 function distributionInputPointOutput({predictionCdf, aggregateCdf, resultPoint}){
-    let _predictionPdfValue = (predictionCdf).toPdf().findY(resultPoint);
-    let _aggregatePdfValue = (aggregateCdf).toPdf().findY(resultPoint);
-    return ensureScoreInBounds(scoreFunctionWithoutResult({prediction: _predictionPdfValue, aggregate: _aggregatePdfValue}));
+    let predictionError = _distributionInputPointOutputSingle({predictionCdf, resultPoint});
+    let aggregateError = _distributionInputPointOutputSingle({predictionCdf: aggregateCdf, resultPoint});
+    return ensureScoreInBounds(predictionError - aggregateError);
 }
 
 function distributionInputDistributionOutputDistribution({predictionCdf, aggregateCdf, resultCdf, sampleCount=10000}){

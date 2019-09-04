@@ -16,19 +16,14 @@ module Cdf = {
   };
 
   let verifyHasLength = ({xs, ys}) =>
-    if (Array.length(xs) != Array.length(ys)) {
-      Error("Array length must be the same");
-    } else {
-      Ok({xs, ys});
-    };
+    Array.length(xs) != Array.length(ys)
+      ? Error("Arrays must have more than 0 elements.") : Ok({xs, ys});
 
   let verifySameLength = ({xs, ys}) =>
-    if (Array.length(xs) == 0 || Array.length(ys) == 0) {
-      Error("Arrays must have more than 0 elements.");
-    } else {
-      Ok({xs, ys});
-    };
+    Array.length(xs) == 0 || Array.length(ys) == 0
+      ? Error("Array length must be the same.") : Ok({xs, ys});
 
+  // todo: verify is increasing
   let make = ({xs, ys}) =>
     {xs, ys} |> verifyHasLength |> Rationale.Result.bind(_, verifySameLength);
 };
@@ -38,7 +33,7 @@ module Percentage = {
 
   let verifyInRange = (f: float) =>
     if (f < 0. || f > 1.) {
-      Error("Arrays must have more than 0 elements.");
+      Error("Percentage must be between 0 and 1.");
     } else {
       Ok(f);
     };
@@ -46,11 +41,13 @@ module Percentage = {
   let make = (t: t) => verifyInRange(t);
 };
 
-type measurement = [
-  | `Cdf(Cdf.t)
-  | `Float(float)
-  | `Percentage(Percentage.t)
-  | `Binary(bool)
-  | `UnresolvableResolution(unresolvableTypes)
-  | `Comment(commentTypes)
-];
+module Measurement = {
+  type t = [
+    | `Cdf(Cdf.t)
+    | `Float(float)
+    | `Percentage(Percentage.t)
+    | `Binary(bool)
+    | `UnresolvableResolution(unresolvableTypes)
+    | `Comment(commentTypes)
+  ];
+};

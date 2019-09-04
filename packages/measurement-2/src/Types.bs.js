@@ -8,8 +8,9 @@ var Result$Rationale = require("rationale/src/Result.js");
 function verifyHasLength(param) {
   var ys = param[/* ys */1];
   var xs = param[/* xs */0];
-  if (xs.length !== ys.length) {
-    return /* Error */Block.__(1, ["Array length must be the same"]);
+  var match = xs.length !== ys.length;
+  if (match) {
+    return /* Error */Block.__(1, ["Arrays must have more than 0 elements."]);
   } else {
     return /* Ok */Block.__(0, [/* record */[
                 /* xs */xs,
@@ -21,8 +22,9 @@ function verifyHasLength(param) {
 function verifySameLength(param) {
   var ys = param[/* ys */1];
   var xs = param[/* xs */0];
-  if (xs.length === 0 || ys.length === 0) {
-    return /* Error */Block.__(1, ["Arrays must have more than 0 elements."]);
+  var match = xs.length === 0 || ys.length === 0;
+  if (match) {
+    return /* Error */Block.__(1, ["Array length must be the same."]);
   } else {
     return /* Ok */Block.__(0, [/* record */[
                 /* xs */xs,
@@ -47,7 +49,7 @@ var Cdf = /* module */[
 
 function verifyInRange(f) {
   if (f < 0 || f > 1) {
-    return /* Error */Block.__(1, ["Arrays must have more than 0 elements."]);
+    return /* Error */Block.__(1, ["Percentage must be between 0 and 1."]);
   } else {
     return /* Ok */Block.__(0, [f]);
   }
@@ -60,6 +62,9 @@ var Percentage = /* module */[
   /* make */make$1
 ];
 
+var Measurement = /* module */[];
+
 exports.Cdf = Cdf;
 exports.Percentage = Percentage;
+exports.Measurement = Measurement;
 /* Result-Rationale Not a pure module */

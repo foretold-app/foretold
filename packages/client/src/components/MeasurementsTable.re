@@ -232,12 +232,6 @@ module Helpers = {
 
 let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
 
-let primaryCellStyle =
-  Css.(style([paddingTop(`em(0.6)), paddingBottom(`em(0.0))]));
-
-let headerCellStyle =
-  Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.7))]));
-
 let sort = (a: measurement, b: measurement) =>
   switch (a.relevantAt, b.relevantAt, a.competitorType, b.competitorType) {
   | (Some(c), Some(d), _, _) when Moment.toUnix(c) < Moment.toUnix(d) => 1
@@ -289,7 +283,7 @@ let getMeasurableLink = (m: measurement) => {
 
 type column = Table.column(Types.measurement);
 
-let predictionValueColumn: column =
+let predictionValueColumn =
   Table.Column.make(
     ~name="Prediction" |> ste,
     ~flex=1,
@@ -302,7 +296,7 @@ let predictionValueColumn: column =
     (),
   );
 
-let agentColumn: column =
+let agentColumn =
   Table.Column.make(
     ~name="Member" |> ste,
     ~flex=1,
@@ -311,7 +305,7 @@ let agentColumn: column =
     (),
   );
 
-let timeColumn: column =
+let timeColumn =
   Table.Column.make(
     ~name="Time" |> ste,
     ~flex=1,
@@ -321,7 +315,7 @@ let timeColumn: column =
     (),
   );
 
-let measurableColumn: column =
+let measurableColumn =
   Table.Column.make(
     ~name="Measurable" |> ste,
     ~render=
@@ -330,7 +324,7 @@ let measurableColumn: column =
     (),
   );
 
-let scoreColumn = (loggedInUser: Types.user): column =>
+let scoreColumn = (loggedInUser: Types.user) =>
   Table.Column.make(
     ~name="Score" |> ste,
     ~render=
@@ -346,7 +340,7 @@ let scoreColumn = (loggedInUser: Types.user): column =>
     (),
   );
 
-let getPredictionDistributionColumn = (bounds): column =>
+let getPredictionDistributionColumn = bounds =>
   Table.Column.make(
     ~name="Prediction Distribution" |> ste,
     ~flex=2,
@@ -370,12 +364,35 @@ let bottomSubRowFn =
       |> E.O.fmap((c: React.element) => [|FC.Table.Row.textSection(c)|]),
   );
 
-let make =
-    (loggedInUser: Types.user, measurementsList: list(measurement))
-    : ReasonReact.reactElement => {
+let make = (_loggedInUser: Types.user, measurementsList: list(measurement)) => {
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
-  let all: array(column) = [|
+  let all = [|
+    getPredictionDistributionColumn(bounds),
+    predictionValueColumn,
+    agentColumn,
+    timeColumn,
+  |];
+
+  let measurementsList' = measurementsList |> E.L.sort(sort);
+
+  measurementsList' |> E.L.length > 0
+    ? <FC.PageCard.Body>
+        {Table.fromColumns(
+           all,
+           measurementsList' |> Array.of_list,
+           ~bottomSubRowFn,
+           (),
+         )}
+      </FC.PageCard.Body>
+    : <SLayout.NothingToShow />;
+};
+
+let makeExtended =
+    (loggedInUser: Types.user, measurementsList: list(measurement)) => {
+  let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
+
+  let all = [|
     getPredictionDistributionColumn(bounds),
     predictionValueColumn,
     agentColumn,
@@ -402,11 +419,10 @@ let makeAgentPredictionsTable =
       ~measurementsList: list(measurement),
       ~onSelect=(_measurement: Types.measurement) => (),
       (),
-    )
-    : ReasonReact.reactElement => {
+    ) => {
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
-  let all: array(column) = [|
+  let all = [|
     measurableColumn,
     getPredictionDistributionColumn(bounds),
     predictionValueColumn,

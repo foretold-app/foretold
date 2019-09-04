@@ -21,64 +21,74 @@ let component = ReasonReact.statelessComponent("MeasurableFullPresentation");
 let make = (~id: string, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _self => {
-    MeasurableGet2.component(~id)
-    |> E.F.apply((m: Types.measurable) => {
-         let userAgentId =
-           loggedInUser.agent |> E.O.fmap((r: Types.agent) => r.id);
+    let userAgentId =
+      loggedInUser.agent |> E.O.fmap((r: Types.agent) => r.id);
 
-         let creatorId = m.creator |> E.O.fmap((r: Types.agent) => r.id);
+    MeasurableGet2.component(~id)
+    |> E.F.apply((measurable: Types.measurable) => {
+         let creatorId =
+           measurable.creator |> E.O.fmap((r: Types.agent) => r.id);
+
+         let form =
+           userAgentId == creatorId
+           || Primary.Measurable.toStatus(measurable) !== `JUDGED
+             ? <Foretold__Components__Measurement__Form
+                 measurable
+                 measurableId=id
+                 isCreator={userAgentId == creatorId}
+                 loggedInUser
+               />
+             : E.React.null;
 
          <>
            <Div styles=[Styles.header]>
              <Div flexDirection=`row>
                <Div flex={`num(3.)}>
-                 <FC.PageCard.H1> {Items.link(~m)} </FC.PageCard.H1>
-                 <StatusDisplay measurable=m />
+                 <FC.PageCard.H1>
+                   {Items.link(~m=measurable)}
+                 </FC.PageCard.H1>
+                 <StatusDisplay measurable />
                </Div>
                <Div flex={`num(1.)}>
-                 {Items.series(~m, ()) |> E.O.React.defaultNull}
-                 {Items.creatorLink(~m) |> E.O.React.defaultNull}
+                 {Items.series(~m=measurable, ()) |> E.O.React.defaultNull}
+                 {Items.creatorLink(~m=measurable) |> E.O.React.defaultNull}
                  {E.React.showIf(
                     Primary.Permissions.can(
                       `MEASURABLE_UPDATE,
-                      m.permissions,
+                      measurable.permissions,
                     ),
-                    Items.editLink(~m),
+                    Items.editLink(~m=measurable),
                   )}
-                 {Items.resolutionEndpoint(~m) |> E.O.React.defaultNull}
-                 {Items.endpointResponse(~m) |> E.O.React.defaultNull}
-                 {Items.questionLink(~m)}
+                 {Items.resolutionEndpoint(~m=measurable)
+                  |> E.O.React.defaultNull}
+                 {Items.endpointResponse(~m=measurable)
+                  |> E.O.React.defaultNull}
+                 {Items.questionLink(~m=measurable)}
                </Div>
              </Div>
-             {Items.description(~m)
+             {Items.description(~m=measurable)
               |> E.O.React.fmapOrNull(d =>
                    <Div styles=[Styles.description]> d </Div>
                  )}
            </Div>
            <>
-             {userAgentId == creatorId
-              || Primary.Measurable.toStatus(m) !== `JUDGED
-                ? <Foretold__Components__Measurement__Form
-                    measurable=m
-                    measurableId=id
-                    isCreator={userAgentId == creatorId}
-                    loggedInUser
-                  />
-                : E.React.null}
+             form
              {MeasurementsGet.component(
-                ~measurableId=Some(m.id),
+                ~measurableId=Some(measurable.id),
                 ~pageLimit=20,
                 ~direction=None,
                 ~innerComponentFn=
-                  (
-                    m:
-                      HttpResponse.t(
-                        Primary.Connection.t(Types.measurement),
-                      ),
-                  ) =>
-                    switch (m) {
-                    | Success(m) =>
-                      m.edges
+                  measurement =>
+                    switch (
+                      measurement,
+                      Primary.Measurable.toStatus(measurable),
+                    ) {
+                    | (Success(measurement), `JUDGED | `CLOSED_AS_UNRESOLVED) =>
+                      measurement.edges
+                      |> E.A.to_list
+                      |> MeasurementsTable.makeExtended(loggedInUser)
+                    | (Success(measurement), _) =>
+                      measurement.edges
                       |> E.A.to_list
                       |> MeasurementsTable.make(loggedInUser)
                     | _ => ReasonReact.null

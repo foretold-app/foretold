@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const { MEASUREMENT_VALUE } = require('../../models/enums/measurement-value');
+const { MEASUREMENT_VALUE } = require('./enums/measurement-value');
 
 const { Binary } = require('./binary');
 const { Comment } = require('./comment');

@@ -1,0 +1,13 @@
+{
+    "name": "@foretold/measurement-value",
+    "version": "1.0.0",
+    "description": "",
+    "keywords": [
+        "foretold"
+    ],
+    "author": "Ozzie Gooen <ozzieagooen@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "lodash": "^4.17.11"
+    }
+}

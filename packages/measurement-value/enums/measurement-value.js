@@ -1,4 +1,3 @@
-// @todo: import this from package
 const MEASUREMENT_VALUE = {
   floatCdf: 'floatCdf',
   floatPoint: 'floatPoint',

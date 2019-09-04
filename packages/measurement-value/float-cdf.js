@@ -3,16 +3,12 @@ const _ = require('lodash');
 const { MeasurementValue } = require('./measurement-value');
 
 class FloatCdf extends MeasurementValue {
-  xs(v) {
-    return v === undefined
-      ? _.get(this.input, 'xs')
-      : _.set(this.input, 'xs', v);
+  xs() {
+    return _.get(this.input, 'xs');
   }
 
-  ys(v) {
-    return v === undefined
-      ? _.get(this.input, 'ys')
-      : _.set(this.input, 'ys', v);
+  ys() {
+    return _.get(this.input, 'ys');
   }
 
   sizeXs() {

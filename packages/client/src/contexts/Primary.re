@@ -420,6 +420,7 @@ module MeasurementScoreSet = {
   let make =
       (
         ~primaryPointScore,
+        ~nonMarketLogScore,
         ~prediction,
         ~outcome=None,
         ~previousAggregate=None,
@@ -427,6 +428,7 @@ module MeasurementScoreSet = {
       )
       : t => {
     primaryPointScore,
+    nonMarketLogScore,
     prediction,
     outcome,
     previousAggregate,

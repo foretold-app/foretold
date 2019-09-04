@@ -2961,6 +2961,18 @@
               "deprecationReason": null
             },
             {
+              "name": "nonMarketLogScore",
+              "description": "Not fully implemented yet.",
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "primaryPointScore",
               "description": "Not fully implemented yet.",
               "args": [],

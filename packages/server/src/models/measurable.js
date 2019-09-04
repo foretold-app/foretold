@@ -2,13 +2,17 @@ const Sequelize = require('sequelize');
 const _ = require('lodash');
 const fetch = require('node-fetch');
 const moment = require('moment');
+const {
+  MEASUREMENT_VALUE,
+} = require('@foretold/measurement-value/enums/measurement-value');
 
 const { clientUrl } = require('../lib/urls');
 
 const { MEASURABLE_STATE } = require('./enums/measurable-state');
 const { MEASURABLE_VALUE_TYPE } = require('./enums/measurable-value-type');
-const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-type');
-const { MEASUREMENT_VALUE } = require('./enums/measurement-value');
+const {
+  MEASUREMENT_COMPETITOR_TYPE,
+} = require('./enums/measurement-competitor-type');
 
 module.exports = (sequelize, DataTypes) => {
   const Measurable = sequelize.define('Measurable', {

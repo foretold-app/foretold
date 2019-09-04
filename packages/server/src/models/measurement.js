@@ -1,9 +1,14 @@
 const _ = require('lodash');
 const Sequelize = require('sequelize');
+const {
+  MEASUREMENT_VALUE,
+} = require('@foretold/measurement-value/enums/measurement-value');
+
 const { clientUrl } = require('../lib/urls');
 
-const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-type');
-const { MEASUREMENT_VALUE } = require('./enums/measurement-value');
+const {
+  MEASUREMENT_COMPETITOR_TYPE,
+} = require('./enums/measurement-competitor-type');
 
 module.exports = (sequelize, DataTypes) => {
   const Measurement = sequelize.define('Measurement', {
@@ -115,9 +120,9 @@ module.exports = (sequelize, DataTypes) => {
         attachments: [{
           pretext: 'New Measurement Created',
           title: measurable.name,
-          title_link: `${clientUrl}/c/${measurable.channelId}`,
+          title_link: `${ clientUrl }/c/${ measurable.channelId }`,
           author_name: creator.name,
-          author_link: `${clientUrl}/agents/${agent.id}`,
+          author_link: `${ clientUrl }/agents/${ agent.id }`,
           text: this.description,
           fields: [
             {

@@ -169,6 +169,11 @@ const measurementScoreSet = new graphql.GraphQLObjectType({
       type: require('./measurements').measurement,
       resolve: require('../resolvers/measurements').previousAggregate,
     },
+    nonMarketLogScore: {
+      description: 'Not fully implemented yet.',
+      type: graphql.GraphQLFloat,
+      resolve: require('../resolvers/measurements').primaryPointScore,
+    },
     primaryPointScore: {
       description: 'Not fully implemented yet.',
       type: graphql.GraphQLFloat,

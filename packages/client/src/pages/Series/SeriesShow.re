@@ -88,7 +88,7 @@ let make =
             selectWithPaginationParams.selection,
           ) {
           | (_, Some(measurable)) =>
-            <C.Measurable.FullPresentation id={measurable.id} loggedInUser />
+            <MeasurableFullPresentation id={measurable.id} loggedInUser />
           | (Success(connection), None) =>
             <MeasurablesSeriesTable
               measurables={connection.edges}

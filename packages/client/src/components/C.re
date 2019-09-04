@@ -5,4 +5,3 @@ module Measurables = Foretold__Components__Measurables;
 module Channel = Foretold__Components__Channel;
 module Shared = Foretold__Components__Shared;
 module Ken = Foretold__Components__Ken;
-module MeasurementsTable = Foretold__Components__Measurements__Table;

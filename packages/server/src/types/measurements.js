@@ -1,10 +1,14 @@
 const graphql = require('graphql');
 const { resolver, DateType } = require('graphql-sequelize');
+const {
+  MEASUREMENT_VALUE,
+} = require('@foretold/measurement-value/enums/measurement-value');
 
 const models = require('../models');
-const { MEASUREMENT_VALUE } = require('../models/enums/measurement-value');
 
-const { measurementUnresolvableResolution } = require('./enums/measurement-unresolvable-resolution');
+const {
+  measurementUnresolvableResolution,
+} = require('./enums/measurement-unresolvable-resolution');
 const { measurementCommentType } = require('./enums/measurement-comment-type');
 
 const measurementValueInputFloatCdf = new graphql.GraphQLInputObjectType({
@@ -164,6 +168,11 @@ const measurementScoreSet = new graphql.GraphQLObjectType({
       description: 'Returns latest aggregation measurement.',
       type: require('./measurements').measurement,
       resolve: require('../resolvers/measurements').previousAggregate,
+    },
+    nonMarketLogScore: {
+      description: 'Not fully implemented yet.',
+      type: graphql.GraphQLFloat,
+      resolve: require('../resolvers/measurements').primaryPointScore,
     },
     primaryPointScore: {
       description: 'Not fully implemented yet.',

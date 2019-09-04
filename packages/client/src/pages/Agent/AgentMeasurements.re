@@ -49,7 +49,7 @@ let make =
           | (_, Some(measurement)) =>
             switch (measurement.measurable) {
             | Some(measurable) =>
-              <C.Measurable.FullPresentation id={measurable.id} loggedInUser />
+              <MeasurableFullPresentation id={measurable.id} loggedInUser />
             | _ => <div />
             }
 
@@ -63,7 +63,7 @@ let make =
 
             let measurementsList = connection.edges |> Array.to_list;
 
-            C.MeasurementsTable.makeAgentPredictionsTable(
+            MeasurementsTable.makeAgentPredictionsTable(
               ~measurementsList,
               ~onSelect=onSelectClb,
               (),

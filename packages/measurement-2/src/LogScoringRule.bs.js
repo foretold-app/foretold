@@ -8,112 +8,44 @@ function logError(prim) {
   return Math.log2(prim);
 }
 
-function cdfCdfCdf(prediction, market, resolution) {
+function marketCdfCdf(param) {
   return /* Ok */Block.__(0, [3.0]);
 }
 
-function cdfCdfFloat(prediction, market, resolution) {
+function marketCdfFloat(param) {
   return /* Ok */Block.__(0, [3.0]);
 }
 
-function percentagePercentagePercentage(prediction, market, resolution) {
+function marketPercentagePercentage(param) {
+  var resolution = param[/* resolution */2];
+  var market = param[/* market */1];
+  var prediction = param[/* prediction */0];
   var positive = resolution * Math.log2(prediction / market);
   var negative = Types$Measurement.Percentage[/* inverse */0](resolution) * Math.log2(Types$Measurement.Percentage[/* inverse */0](prediction) / Types$Measurement.Percentage[/* inverse */0](market));
   return /* Ok */Block.__(0, [positive + negative]);
 }
 
-var MarketScores = /* module */[
-  /* cdfCdfCdf */cdfCdfCdf,
-  /* cdfCdfFloat */cdfCdfFloat,
-  /* percentagePercentagePercentage */percentagePercentagePercentage
-];
-
-function cdfCdf(prediction, resolution) {
+function nonMarketCdfCdf(param) {
   return /* Ok */Block.__(0, [3.0]);
 }
 
-function cdfFloat(prediction, resolution) {
+function nonMarketCdfFloat(param) {
   return /* Ok */Block.__(0, [3.0]);
 }
 
-function percentagePercentage(prediction, resolution) {
+function nonMarketPercentagePercentage(param) {
+  var resolution = param[/* resolution */1];
+  var prediction = param[/* prediction */0];
   var positive = resolution * Math.log2(prediction / resolution);
   var negative = Types$Measurement.Percentage[/* inverse */0](resolution) * Math.log2(Types$Measurement.Percentage[/* inverse */0](prediction) / Types$Measurement.Percentage[/* inverse */0](resolution));
   return /* Ok */Block.__(0, [positive + negative]);
 }
 
-var NonMarketScores = /* module */[
-  /* cdfCdf */cdfCdf,
-  /* cdfFloat */cdfFloat,
-  /* percentagePercentage */percentagePercentage
-];
-
-function run(param) {
-  var measurements = param[/* measurements */0];
-  if (measurements[0] >= -831439347) {
-    var match = measurements[1];
-    var resolution = match[/* resolution */2];
-    var market = match[/* market */1];
-    var prediction = match[/* prediction */0];
-    if (typeof prediction === "number") {
-      return /* Error */Block.__(1, ["Combination not supported"]);
-    } else {
-      var variant = prediction[0];
-      if (variant !== -488794310) {
-        if (variant !== 3354245 || typeof market === "number" || market[0] !== 3354245 || typeof resolution === "number") {
-          return /* Error */Block.__(1, ["Combination not supported"]);
-        } else {
-          var variant$1 = resolution[0];
-          if (variant$1 !== 3354245) {
-            if (variant$1 !== 365180284) {
-              return /* Error */Block.__(1, ["Combination not supported"]);
-            } else {
-              return /* Ok */Block.__(0, [3.0]);
-            }
-          } else {
-            return /* Ok */Block.__(0, [3.0]);
-          }
-        }
-      } else if (typeof market === "number" || market[0] !== -488794310 || typeof resolution === "number" || resolution[0] !== -488794310) {
-        return /* Error */Block.__(1, ["Combination not supported"]);
-      } else {
-        return percentagePercentagePercentage(prediction[1], market[1], resolution[1]);
-      }
-    }
-  } else {
-    var match$1 = measurements[1];
-    var resolution$1 = match$1[/* resolution */1];
-    var prediction$1 = match$1[/* prediction */0];
-    if (typeof prediction$1 === "number") {
-      return /* Error */Block.__(1, ["Combination not supported"]);
-    } else {
-      var variant$2 = prediction$1[0];
-      if (variant$2 !== -488794310) {
-        if (variant$2 !== 3354245 || typeof resolution$1 === "number") {
-          return /* Error */Block.__(1, ["Combination not supported"]);
-        } else {
-          var variant$3 = resolution$1[0];
-          if (variant$3 !== 3354245) {
-            if (variant$3 !== 365180284) {
-              return /* Error */Block.__(1, ["Combination not supported"]);
-            } else {
-              return /* Ok */Block.__(0, [3.0]);
-            }
-          } else {
-            return /* Ok */Block.__(0, [3.0]);
-          }
-        }
-      } else if (typeof resolution$1 === "number" || resolution$1[0] !== -488794310) {
-        return /* Error */Block.__(1, ["Combination not supported"]);
-      } else {
-        return percentagePercentage(prediction$1[1], resolution$1[1]);
-      }
-    }
-  }
-}
-
 exports.logError = logError;
-exports.MarketScores = MarketScores;
-exports.NonMarketScores = NonMarketScores;
-exports.run = run;
+exports.marketCdfCdf = marketCdfCdf;
+exports.marketCdfFloat = marketCdfFloat;
+exports.marketPercentagePercentage = marketPercentagePercentage;
+exports.nonMarketCdfCdf = nonMarketCdfCdf;
+exports.nonMarketCdfFloat = nonMarketCdfFloat;
+exports.nonMarketPercentagePercentage = nonMarketPercentagePercentage;
 /* Types-Measurement Not a pure module */

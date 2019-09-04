@@ -69,10 +69,122 @@ var Percentage = /* module */[
 
 var Measurement = /* module */[];
 
-var ScoringCombination = /* module */[];
+var ValidScoringCombination = /* module */[];
+
+function toValidScoringCombination(param) {
+  var sampleCount = param[/* sampleCount */3];
+  var resolution = param[/* resolution */2];
+  var market = param[/* market */1];
+  var prediction = param[/* prediction */0];
+  if (typeof prediction === "number") {
+    return undefined;
+  } else {
+    var variant = prediction[0];
+    if (variant !== -488794310) {
+      if (variant !== 3354245) {
+        return undefined;
+      } else {
+        var prediction$1 = prediction[1];
+        if (market !== undefined) {
+          var match = market;
+          if (typeof match === "number" || match[0] !== 3354245 || typeof resolution === "number") {
+            return undefined;
+          } else {
+            var variant$1 = resolution[0];
+            var market$1 = match[1];
+            if (variant$1 !== 3354245) {
+              if (variant$1 !== 365180284) {
+                return undefined;
+              } else {
+                return /* `MarketCdfFloat */[
+                        667773619,
+                        /* record */[
+                          /* prediction */prediction$1,
+                          /* market */market$1,
+                          /* resolution */resolution[1]
+                        ]
+                      ];
+              }
+            } else if (sampleCount !== undefined) {
+              return /* `MarketCdfCdf */[
+                      -249178116,
+                      /* record */[
+                        /* prediction */prediction$1,
+                        /* market */market$1,
+                        /* resolution */resolution[1],
+                        /* sampleCount */sampleCount
+                      ]
+                    ];
+            } else {
+              return undefined;
+            }
+          }
+        } else if (typeof resolution === "number") {
+          return undefined;
+        } else {
+          var variant$2 = resolution[0];
+          if (variant$2 !== 3354245) {
+            if (variant$2 !== 365180284) {
+              return undefined;
+            } else {
+              return /* `nonMarketCdfFloat */[
+                      -829284224,
+                      /* record */[
+                        /* prediction */prediction$1,
+                        /* resolution */resolution[1]
+                      ]
+                    ];
+            }
+          } else if (sampleCount !== undefined) {
+            return /* `nonMarketCdfCdf */[
+                    -685666167,
+                    /* record */[
+                      /* prediction */prediction$1,
+                      /* resolution */resolution[1],
+                      /* sampleCount */sampleCount
+                    ]
+                  ];
+          } else {
+            return undefined;
+          }
+        }
+      }
+    } else {
+      var prediction$2 = prediction[1];
+      if (market !== undefined) {
+        var match$1 = market;
+        if (typeof match$1 === "number" || match$1[0] !== -488794310 || typeof resolution === "number" || resolution[0] !== -488794310) {
+          return undefined;
+        } else {
+          return /* `MarketPercentagePercentage */[
+                  -130172208,
+                  /* record */[
+                    /* prediction */prediction$2,
+                    /* market */match$1[1],
+                    /* resolution */resolution[1]
+                  ]
+                ];
+        }
+      } else if (typeof resolution === "number" || resolution[0] !== -488794310) {
+        return undefined;
+      } else {
+        return /* `nonMarketPercentagePercentage */[
+                685928477,
+                /* record */[
+                  /* prediction */prediction$2,
+                  /* resolution */resolution[1]
+                ]
+              ];
+      }
+    }
+  }
+}
+
+var ScoringCombination = /* module */[/* toValidScoringCombination */toValidScoringCombination];
 
 exports.Cdf = Cdf;
 exports.Percentage = Percentage;
 exports.Measurement = Measurement;
+exports.ValidScoringCombination = ValidScoringCombination;
 exports.ScoringCombination = ScoringCombination;
 /* Result-Rationale Not a pure module */

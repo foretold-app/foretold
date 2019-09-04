@@ -3,7 +3,54 @@
 
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var Js_exn = require("bs-platform/lib/js/js_exn.js");
 var Result$Rationale = require("rationale/src/Result.js");
+
+function toString(e) {
+  if (e >= 606665514) {
+    if (e >= 879009456) {
+      return "OTHER";
+    } else {
+      return "FALSE_CONDITIONAL";
+    }
+  } else if (e >= -8423941) {
+    return "RESULT_NOT_AVAILABLE";
+  } else {
+    return "AMBIGUOUS";
+  }
+}
+
+var UnresolvableResolution = /* module */[/* toString */toString];
+
+function fromString(e) {
+  switch (e) {
+    case "GENERIC" : 
+        return /* GENERIC */909067767;
+    case "QUESTION_FEEDBACK" : 
+        return /* QUESTION_FEEDBACK */-527079426;
+    case "UPDATE" : 
+        return /* UPDATE */965227017;
+    default:
+      return Js_exn.raiseError("Invalid GraphQL Comment: " + e);
+  }
+}
+
+function toPublicString(e) {
+  if (e !== 909067767) {
+    if (e >= 965227017) {
+      return "Update";
+    } else {
+      return "Question Feedback";
+    }
+  } else {
+    return "Generic";
+  }
+}
+
+var $$Comment = /* module */[
+  /* fromString */fromString,
+  /* toPublicString */toPublicString
+];
 
 function verifyHasLength(param) {
   var ys = param[/* ys */1];
@@ -69,7 +116,11 @@ var Percentage = /* module */[
 
 var Measurement = /* module */[];
 
-var ValidScoringCombination = /* module */[];
+function make$2(t) {
+  return t;
+}
+
+var ValidScoringCombination = /* module */[/* make */make$2];
 
 function toValidScoringCombination(param) {
   var sampleCount = param[/* sampleCount */3];
@@ -127,8 +178,8 @@ function toValidScoringCombination(param) {
             if (variant$2 !== 365180284) {
               return undefined;
             } else {
-              return /* `nonMarketCdfFloat */[
-                      -829284224,
+              return /* `NonMarketCdfFloat */[
+                      -266870688,
                       /* record */[
                         /* prediction */prediction$1,
                         /* resolution */resolution[1]
@@ -136,8 +187,8 @@ function toValidScoringCombination(param) {
                     ];
             }
           } else if (sampleCount !== undefined) {
-            return /* `nonMarketCdfCdf */[
-                    -685666167,
+            return /* `NonMarketCdfCdf */[
+                    934123625,
                     /* record */[
                       /* prediction */prediction$1,
                       /* resolution */resolution[1],
@@ -168,8 +219,8 @@ function toValidScoringCombination(param) {
       } else if (typeof resolution === "number" || resolution[0] !== -488794310) {
         return undefined;
       } else {
-        return /* `nonMarketPercentagePercentage */[
-                685928477,
+        return /* `NonMarketPercentagePercentage */[
+                603488253,
                 /* record */[
                   /* prediction */prediction$2,
                   /* resolution */resolution[1]
@@ -182,6 +233,8 @@ function toValidScoringCombination(param) {
 
 var ScoringCombination = /* module */[/* toValidScoringCombination */toValidScoringCombination];
 
+exports.UnresolvableResolution = UnresolvableResolution;
+exports.$$Comment = $$Comment;
 exports.Cdf = Cdf;
 exports.Percentage = Percentage;
 exports.Measurement = Measurement;

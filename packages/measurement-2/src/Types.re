@@ -1,13 +1,40 @@
 open Belt.Result;
 
-type unresolvableTypes = [
-  | `AMBIGUOUS
-  | `FALSE_CONDITIONAL
-  | `OTHER
-  | `RESULT_NOT_AVAILABLE
-];
+module UnresolvableResolution = {
+  type t = [
+    | `AMBIGUOUS
+    | `FALSE_CONDITIONAL
+    | `OTHER
+    | `RESULT_NOT_AVAILABLE
+  ];
 
-type commentTypes = [ | `GENERIC | `QUESTION_FEEDBACK | `UPDATE];
+  let toString = (e: t): string =>
+    switch (e) {
+    | `AMBIGUOUS => "AMBIGUOUS"
+    | `FALSE_CONDITIONAL => "FALSE_CONDITIONAL"
+    | `OTHER => "OTHER"
+    | `RESULT_NOT_AVAILABLE => "RESULT_NOT_AVAILABLE"
+    };
+};
+
+module Comment = {
+  type t = [ | `GENERIC | `QUESTION_FEEDBACK | `UPDATE];
+
+  let fromString = e =>
+    switch (e) {
+    | "GENERIC" => `GENERIC
+    | "QUESTION_FEEDBACK" => `QUESTION_FEEDBACK
+    | "UPDATE" => `UPDATE
+    | _ => Js.Exn.raiseError("Invalid GraphQL Comment: " ++ e)
+    };
+
+  let toPublicString = (e: t): string =>
+    switch (e) {
+    | `GENERIC => "Generic"
+    | `QUESTION_FEEDBACK => "Question Feedback"
+    | `UPDATE => "Update"
+    };
+};
 
 module Cdf = {
   type t = {
@@ -47,9 +74,10 @@ module Measurement = {
   type t = [
     | `Cdf(Cdf.t)
     | `Float(float)
+    | `Binary(bool)
     | `Percentage(Percentage.t)
-    | `UnresolvableResolution(unresolvableTypes)
-    | `Comment(commentTypes)
+    | `UnresolvableResolution(UnresolvableResolution.t)
+    | `Comment(Comment.t)
   ];
 };
 
@@ -87,21 +115,15 @@ module ValidScoringCombination = {
     | `MarketCdfCdf(marketCdfCdf)
     | `MarketCdfFloat(marketCdfFloat)
     | `MarketPercentagePercentage(marketPercentagePercentage)
-    | `nonMarketCdfCdf(nonMarketCdfCdf)
-    | `nonMarketCdfFloat(nonMarketCdfFloat)
-    | `nonMarketPercentagePercentage(nonMarketPercentagePercentage)
+    | `NonMarketCdfCdf(nonMarketCdfCdf)
+    | `NonMarketCdfFloat(nonMarketCdfFloat)
+    | `NonMarketPercentagePercentage(nonMarketPercentagePercentage)
   ];
+
+  let make = (t: t) => t;
 };
 
 module ScoringCombination = {
-  // type combinationType =
-  //   | MarketCdfCdf
-  //   | MarketCdfFloat
-  //   | MarketPercentagePercentage
-  //   | NonMarketCdfCdf
-  //   | NonMarketCdfFloat
-  //   | NonMarketPercentagePercentage;
-
   type t = {
     prediction: Measurement.t,
     market: option(Measurement.t),
@@ -130,11 +152,11 @@ module ScoringCombination = {
       ) =>
       Some(`MarketPercentagePercentage({prediction, market, resolution}))
     | (`Cdf(prediction), None, `Cdf(resolution), Some(sampleCount)) =>
-      Some(`nonMarketCdfCdf({prediction, resolution, sampleCount}))
+      Some(`NonMarketCdfCdf({prediction, resolution, sampleCount}))
     | (`Cdf(prediction), None, `Float(resolution), _) =>
-      Some(`nonMarketCdfFloat({prediction, resolution}))
+      Some(`NonMarketCdfFloat({prediction, resolution}))
     | (`Percentage(prediction), None, `Percentage(resolution), _) =>
-      Some(`nonMarketPercentagePercentage({prediction, resolution}))
+      Some(`NonMarketPercentagePercentage({prediction, resolution}))
     | _ => None
     };
   };

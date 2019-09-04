@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const { MeasurementValue } = require('./measurement-value');
 
 class FloatCdf extends MeasurementValue {

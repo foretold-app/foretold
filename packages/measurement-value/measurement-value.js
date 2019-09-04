@@ -36,11 +36,11 @@ class MeasurementValue {
     }
 
     if (arr.length > 1) {
-      throw new Error('You can only submit one type of  value.');
+      throw new Error('You can only submit one type of value.');
     }
 
     if (arr.length === 0) {
-      throw new Error('Measurable should be in an Open state.');
+      throw new Error('You must submit one kind of value.');
     }
 
     return arr[0] !== undefined ? arr[0] : new Null(input);

@@ -352,13 +352,11 @@ function _nonMarketLogScore({ prediction, outcome }) {
 
   switch (combinationType) {
     case MEASUREMENT_VALUE.percentage:
-      console.log("VALUE WAS", !!_getDataValue(outcome));
       return scoringFunctions.percentageInputPercentageOutputMarketless({
         predictionPercentage: _getDataValue(prediction) / 100,
         resultPercentage: !!_getDataValue(outcome) ? 1 : 0
       });
     case MEASUREMENT_VALUE.floatCdf:
-      // console.log("VALUES...", _getDataValue(prediction).xs, _getDataValue(outcome).xs);
       return scoringFunctions.distributionInputDistributionOutputMarketless({
         predictionCdf: new Cdf(
           _getDataValue(prediction).xs,

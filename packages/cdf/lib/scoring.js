@@ -76,7 +76,6 @@ function percentageInputPercentageOutputMarketless({predictionPercentage, result
     let inverse = (e) => (1 - e);
     let isFalseFactor = resultPercentage * Math.log2(predictionPercentage);
     let isTrueFactor = inverse(resultPercentage) * Math.log2(inverse(predictionPercentage));
-    console.log("Results",predictionPercentage, resultPercentage, isFalseFactor, isTrueFactor, isFalseFactor + isTrueFactor)
     return isFalseFactor + isTrueFactor;
 }
 

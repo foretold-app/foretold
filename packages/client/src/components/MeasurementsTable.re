@@ -330,6 +330,21 @@ let measurableColumn: column =
     (),
   );
 
+let scoreColumn: column =
+  Table.Column.make(
+    ~name="Score" |> ste,
+    ~render=
+      (measurement: Types.measurement) =>
+        measurement.measurementScoreSet
+        |> E.O.ffmap((o: Types.measurementScoreSet) =>
+             o.primaryPointScore |> E.O.fmap(E.Float.toString)
+           )
+        |> E.O.default("0.0")
+        |> Utils.ste,
+    ~flex=1,
+    (),
+  );
+
 let getPredictionDistributionColumn = (bounds): column =>
   Table.Column.make(
     ~name="Prediction Distribution" |> ste,
@@ -361,6 +376,7 @@ let make = (measurementsList: list(measurement)): ReasonReact.reactElement => {
     getPredictionDistributionColumn(bounds),
     predictionValueColumn,
     agentColumn,
+    scoreColumn,
     timeColumn,
   |];
 

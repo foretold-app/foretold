@@ -78,9 +78,7 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
                   ) =>
                     switch (m) {
                     | Success(m) =>
-                      m.edges
-                      |> E.A.to_list
-                      |> Foretold__Components__Measurements__Table.make
+                      m.edges |> E.A.to_list |> MeasurementsTable.make
                     | _ => ReasonReact.null
                     },
                 (),

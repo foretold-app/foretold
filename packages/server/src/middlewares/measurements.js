@@ -1,7 +1,10 @@
 const _ = require('lodash');
+const { MeasurementValue } = require('@foretold/measurement-value');
 
 const { MEASURABLE_STATE } = require('../models/enums/measurable-state');
-const { MEASUREMENT_COMPETITOR_TYPE } = require('../models/enums/measurement-competitor-type');
+const {
+  MEASUREMENT_COMPETITOR_TYPE,
+} = require('../models/enums/measurement-competitor-type');
 
 // @todo: move to lang.js
 const ERR_5 = () => 'Measurable should be in an Open state.';
@@ -33,7 +36,8 @@ async function measurementValueValidation(root, args, context, info) {
  */
 async function measurableStateValidation(root, args, context, info) {
   const measurementType = _.get(args, 'input.competitorType');
-  const isCompetitive = MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE === measurementType;
+  const isCompetitive =
+    MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE === measurementType;
 
   const measurableState = _.get(context, 'measurable.state', '');
   const isMeasurableAvailable = [

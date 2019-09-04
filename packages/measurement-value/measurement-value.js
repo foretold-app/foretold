@@ -2,20 +2,20 @@ const _ = require('lodash');
 
 const { MEASUREMENT_VALUE } = require('./enums/measurement-value');
 
-const { Binary } = require('./binary');
-const { Comment } = require('./comment');
-const { FloatCdf } = require('./float-cdf');
-const { FloatPoint } = require('./float-point');
-const { Null } = require('./null');
-const { Percentage } = require('./percentage');
-const { UnresolvableResolution } = require('./unresolvable-resolution');
-
 class MeasurementValue {
   constructor(input) {
     this.input = input;
   }
 
   static factory(input) {
+    const { Binary } = require('./binary');
+    const { Comment } = require('./comment');
+    const { FloatCdf } = require('./float-cdf');
+    const { FloatPoint } = require('./float-point');
+    const { Null } = require('./null');
+    const { Percentage } = require('./percentage');
+    const { UnresolvableResolution } = require('./unresolvable-resolution');
+
     const map = {
       [MEASUREMENT_VALUE.floatCdf]: FloatCdf,
       [MEASUREMENT_VALUE.floatPoint]: FloatPoint,

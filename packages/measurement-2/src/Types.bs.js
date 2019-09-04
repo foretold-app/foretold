@@ -47,6 +47,10 @@ var Cdf = /* module */[
   /* make */make
 ];
 
+function inverse(t) {
+  return 1 - t;
+}
+
 function verifyInRange(f) {
   if (f < 0 || f > 1) {
     return /* Error */Block.__(1, ["Percentage must be between 0 and 1."]);
@@ -58,6 +62,7 @@ function verifyInRange(f) {
 var make$1 = verifyInRange;
 
 var Percentage = /* module */[
+  /* inverse */inverse,
   /* verifyInRange */verifyInRange,
   /* make */make$1
 ];

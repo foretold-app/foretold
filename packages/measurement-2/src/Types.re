@@ -31,6 +31,8 @@ module Cdf = {
 module Percentage = {
   type t = float;
 
+  let inverse = (t: t): t => 1. -. t;
+
   let verifyInRange = (f: float) =>
     if (f < 0. || f > 1.) {
       Error("Percentage must be between 0 and 1.");
@@ -46,7 +48,6 @@ module Measurement = {
     | `Cdf(Cdf.t)
     | `Float(float)
     | `Percentage(Percentage.t)
-    | `Binary(bool)
     | `UnresolvableResolution(unresolvableTypes)
     | `Comment(commentTypes)
   ];

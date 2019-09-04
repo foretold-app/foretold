@@ -79,11 +79,9 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
                 ~direction=None,
                 ~innerComponentFn=
                   measurement =>
-                    switch (
-                      measurement,
-                      Primary.Measurable.toStatus(measurable),
-                    ) {
-                    | (Success(measurement), `JUDGED | `CLOSED_AS_UNRESOLVED) =>
+                    switch (measurement, measurable.state) {
+                    | (Success(measurement), Some(`JUDGED))
+                    | (Success(measurement), Some(`CLOSED_AS_UNRESOLVED)) =>
                       measurement.edges
                       |> E.A.to_list
                       |> MeasurementsTable.makeExtended(loggedInUser)

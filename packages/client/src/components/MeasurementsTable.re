@@ -326,12 +326,28 @@ let measurableColumn =
 
 let scoreColumn = (loggedInUser: Types.user) =>
   Table.Column.make(
-    ~name="Score" |> ste,
+    ~name="Relative Score" |> ste,
     ~render=
       (measurement: Types.measurement) =>
         measurement.measurementScoreSet
         |> E.O.ffmap((o: Types.measurementScoreSet) =>
              o.primaryPointScore |> E.O.fmap(E.Float.toString)
+           )
+        |> E.O.default("0.0")
+        |> Utils.ste,
+    ~show=_ => Primary.User.showif(loggedInUser),
+    ~flex=1,
+    (),
+  );
+
+let logScoreColumn = (loggedInUser: Types.user) =>
+  Table.Column.make(
+    ~name="LogScore" |> ste,
+    ~render=
+      (measurement: Types.measurement) =>
+        measurement.measurementScoreSet
+        |> E.O.ffmap((o: Types.measurementScoreSet) =>
+             o.nonMarketLogScore |> E.O.fmap(E.Float.toString)
            )
         |> E.O.default("0.0")
         |> Utils.ste,
@@ -396,6 +412,7 @@ let makeExtended =
     getPredictionDistributionColumn(bounds),
     predictionValueColumn,
     agentColumn,
+    logScoreColumn(loggedInUser),
     scoreColumn(loggedInUser),
     timeColumn,
   |];

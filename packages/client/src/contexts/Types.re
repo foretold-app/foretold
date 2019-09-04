@@ -135,6 +135,7 @@ and measurable = {
 }
 and measurementScoreSet = {
   primaryPointScore: option(float),
+  nonMarketLogScore: option(float),
   prediction: measurement,
   outcome: option(measurement),
   previousAggregate: option(measurement),

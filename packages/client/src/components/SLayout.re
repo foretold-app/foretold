@@ -4,9 +4,7 @@ module Styles = {
   open Css;
 
   let width100 = style([width(`percent(100.))]);
-
   let headerText = style([color(`hex("486474"))]);
-
   let descriptionText = style([color(`hex("aaa"))]);
 
   let seriesText =
@@ -129,8 +127,6 @@ module FullPage = {
               marginTop(`em(2.0)),
               marginTop(`em(2.)),
               width(`percent(100.)),
-              paddingLeft(`em(2.)),
-              paddingRight(`em(2.)),
               boxSizing(`borderBox),
             ]
             @ FC.Base.BaseStyles.fullWidthFloatLeft,

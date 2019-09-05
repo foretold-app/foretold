@@ -15,7 +15,7 @@ let makeWithPage =
       <AgentMeasurables pageParams={id: agentId} loggedInUser layout />
     | AgentBots => <AgentBots pageParams={id: agentId} layout />
     | AgentCommunities => <AgentCommunities agentId layout />
-    | AgentUpdates => <FeedItems agentId={Some(agentId)} layout />
+    | AgentUpdates => <FeedItems agentId={Some(agentId)} />
     };
 
   | None => <Home />

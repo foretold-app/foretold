@@ -72,26 +72,6 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
                  )}
            </Div>
            form
-           {MeasurementsGet.component(
-              ~measurableId=Some(measurable.id),
-              ~pageLimit=20,
-              ~direction=None,
-              ~innerComponentFn=
-                measurement =>
-                  switch (measurement, measurable.state) {
-                  | (Success(measurement), Some(`JUDGED))
-                  | (Success(measurement), Some(`CLOSED_AS_UNRESOLVED)) =>
-                    measurement.edges
-                    |> E.A.to_list
-                    |> MeasurementsTable.makeExtended(loggedInUser)
-                  | (Success(measurement), _) =>
-                    measurement.edges
-                    |> E.A.to_list
-                    |> MeasurementsTable.make(loggedInUser)
-                  | _ => ReasonReact.null
-                  },
-              (),
-            )}
          </>;
        });
   },

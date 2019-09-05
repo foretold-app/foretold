@@ -1,12 +1,6 @@
 let component = ReasonReact.statelessComponent("ChannelMeasurable");
 
-let make =
-    (
-      ~measurableId: string,
-      ~loggedInUser: Types.user,
-      ~layout=SLayout.FullPage.makeWithEl,
-      _children,
-    ) => {
+let make = (~measurableId: string, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _ => {
     SLayout.LayoutConfig.make(
@@ -16,6 +10,6 @@ let make =
           <MeasurableFullPresentation id=measurableId loggedInUser />
         </FC.PageCard.Body>,
     )
-    |> layout;
+    |> SLayout.FullPage.makeWithEl;
   },
 };

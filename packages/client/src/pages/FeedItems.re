@@ -22,7 +22,6 @@ let make =
     (
       ~channelId: option(string)=None,
       ~agentId: option(string)=None,
-      ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {
   ...component,
@@ -74,7 +73,7 @@ let make =
         ~head=isFound ? pagination(reducerParams) : ReasonReact.null,
         ~body,
       )
-      |> layout;
+      |> SLayout.FullPage.makeWithEl;
     };
 
     <Reducer

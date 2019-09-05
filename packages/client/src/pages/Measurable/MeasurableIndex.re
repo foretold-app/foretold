@@ -20,7 +20,6 @@ let make =
       ~searchParams: MeasurableQueryIndex.query,
       ~loggedInUser: Types.user,
       ~itemsPerPage: int=20,
-      ~layout,
     ) => {
   let loadData = load3Queries(channelId, searchParams.state, itemsPerPage);
 
@@ -39,7 +38,6 @@ let make =
       searchParams,
       measurablesStateStatsQuery,
       state,
-    )
-    |> layout;
+    );
   });
 };

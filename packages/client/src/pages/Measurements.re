@@ -1,3 +1,5 @@
+open Style.Grid;
+
 module ReducerConfig = {
   type itemType = Types.measurement;
   type callFnParams = string;
@@ -14,63 +16,57 @@ module ReducerConfig = {
 module Reducer = PaginationReducerFunctor.Make(ReducerConfig);
 
 let component = ReasonReact.statelessComponent("Measurements");
-let make =
-    (
-      ~measurableId: string,
-      ~loggedInUser: Types.user,
-      ~layout=SLayout.FullPage.makeWithEl,
-      _children,
-    ) => {
+let make = (~measurableId: string, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _ => {
-    Reducer.make(
-      ~itemsPerPage=20,
-      ~callFnParams=measurableId,
-      ~subComponent=selectWithPaginationParams =>
-      SLayout.LayoutConfig.make(
-        ~head=
-          switch (selectWithPaginationParams.selection) {
-          | Some(_selection) =>
-            <>
-              {Reducer.Components.deselectButton(
-                 selectWithPaginationParams.send,
-               )}
-              {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
-            </>
-          | None => <div />
-          },
-        ~body=
-          switch (
-            selectWithPaginationParams.response,
-            selectWithPaginationParams.selection,
-          ) {
-          | (_, Some(measurement)) =>
-            switch (measurement.measurable) {
-            | Some(measurable) =>
-              <MeasurableFullPresentation id={measurable.id} loggedInUser />
-            | _ => <div />
-            }
+    let pagination = (reducerParams: Reducer.Types.reducerParams) =>
+      <Div>
+        <Div
+          float=`right
+          styles=[
+            Css.style([
+              FC.PageCard.HeaderRow.Styles.itemTopPadding,
+              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            ]),
+          ]>
+          {Reducer.Components.paginationPage(reducerParams)}
+        </Div>
+      </Div>;
 
-          | (Success(connection), None) =>
-            let onSelectClb = (e: Types.measurement) => {
-              Reducer.Components.sendSelectItem(
-                selectWithPaginationParams,
-                e.id,
-              );
-            };
+    MeasurableGet2.component(~id=measurableId)
+    |> E.F.apply((measurable: Types.measurable) =>
+         Reducer.make(
+           ~itemsPerPage=20,
+           ~callFnParams=measurable.id,
+           ~subComponent=selectWithPaginationParams =>
+           SLayout.LayoutConfig.make(
+             ~head=pagination(selectWithPaginationParams),
+             ~body=
+               switch (selectWithPaginationParams.response) {
+               | Success(connection) =>
+                 let measurementsList = connection.edges |> Array.to_list;
 
-            let measurementsList = connection.edges |> Array.to_list;
-
-            MeasurementsTable.makeAgentPredictionsTable(
-              ~measurementsList,
-              ~onSelect=onSelectClb,
-              (),
-            );
-          | _ => <SLayout.Spin />
-          },
-      )
-      |> layout
-    )
-    |> E.React.makeToEl;
+                 switch (measurable.state) {
+                 | Some(`JUDGED)
+                 | Some(`CLOSED_AS_UNRESOLVED) =>
+                   MeasurementsTable.makeExtended(
+                     ~measurementsList,
+                     ~loggedInUser,
+                     (),
+                   )
+                 | _ =>
+                   MeasurementsTable.make(
+                     ~loggedInUser,
+                     ~measurementsList,
+                     (),
+                   )
+                 };
+               | _ => <SLayout.Spin />
+               },
+           )
+           |> SLayout.FullPage.makeWithEl
+         )
+         |> E.React.makeToEl
+       );
   },
 };

@@ -1,4 +1,5 @@
 open MeasurementValue;
+
 module ValidScoringCombinationGroupOverTime = {
   type time = int;
 
@@ -26,16 +27,16 @@ module ValidScoringCombinationGroupOverTime = {
   };
   type nonMarketCdfCdf = {
     agentPredictions: measurementsWithTime(Cdf.t),
-    resolution: Cdf.t,
+    resolution: measurementWithTime(Cdf.t),
     sampleCount: int,
   };
   type nonMarketCdfFloat = {
     agentPredictions: measurementsWithTime(Cdf.t),
-    resolution: float,
+    resolution: measurementWithTime(float),
   };
   type nonMarketPercentagePercentage = {
     agentPredictions: measurementsWithTime(Percentage.t),
-    resolution: Percentage.t,
+    resolution: measurementWithTime(Percentage.t),
   };
   type measurementGroup = [
     | `MarketCdfCdf(marketCdfCdf)
@@ -52,4 +53,49 @@ module ValidScoringCombinationGroupOverTime = {
   };
 
   let make = (t: t) => t;
+};
+
+module ScoringCombinationGroupOverTimeInput = {
+  type marketScoreType =
+    | MarketScore
+    | NonMarketScore;
+
+  type t = {
+    agentPredictions: TypedMeasurementWithTime.MeasurementWithTime.ts,
+    marketPredictions:
+      option(TypedMeasurementWithTime.MeasurementWithTime.ts),
+    resolution: TypedMeasurementWithTime.MeasurementWithTime.t,
+    sampleCount: option(int),
+    marketScoreType,
+  };
+
+  let toValidScoringCombination =
+      (
+        {
+          marketScoreType,
+          agentPredictions,
+          marketPredictions,
+          resolution,
+          sampleCount,
+        }: t,
+      ) => {
+    open TypedMeasurementWithTime.MeasurementWithTime;
+    let typedAgentPredictions = agentPredictions |> toTypeOfFirstElement;
+    let typedMarketPredictions =
+      marketPredictions |> Rationale.Option.bind(_, toTypeOfFirstElement);
+    switch (
+      marketScoreType,
+      typedAgentPredictions,
+      typedMarketPredictions,
+      resolution,
+    ) {
+    | (
+        MarketScore,
+        Some(`Cdf(prediction)),
+        Some(`Cdf(market)),
+        {measurement: `Float(a)},
+      ) => 3.0
+    | _ => 3.0
+    };
+  };
 };

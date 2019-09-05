@@ -20,14 +20,15 @@ module TypedMeasurementWithTime = {
   };
   type tss('a) = array(t('a));
   let make = (time, measurement) => {measurement, time};
-  type ts = [
-    | `Cdf(tss(MeasurementValue.Cdf.t))
-    | `Float(tss(float))
-    | `Binary(tss(bool))
-    | `Percentage(tss(MeasurementValue.Percentage.t))
-    | `UnresolvableResolution(tss(MeasurementValue.UnresolvableResolution.t))
-    | `Comment(tss(MeasurementValue.Comment.t))
-  ];
+  type ts =
+    ValueType.T.t(
+      tss(MeasurementValue.Cdf.t),
+      tss(float),
+      tss(bool),
+      tss(MeasurementValue.Percentage.t),
+      tss(MeasurementValue.UnresolvableResolution.t),
+      tss(MeasurementValue.Comment.t),
+    );
 };
 
 module MeasurementWithTime = {
@@ -41,11 +42,11 @@ module MeasurementWithTime = {
     ts
     |> Belt.Array.get(_, 0)
     |> Rationale.Option.map((r: t) =>
-         r.measurement |> MeasurementValue.TypeName.fromMeasurementValue
+         r.measurement |> ValueType.TypeName.fromType
        );
 
-  let toTypedMeasurementWithTime =
-      (intendedType: MeasurementValue.TypeName.t, ts: ts)
+  let toTypedMeasurementsWithTime =
+      (intendedType: ValueType.TypeName.t, ts: ts)
       : TypedMeasurementWithTime.ts => {
     let transform = (t2, t3): TypedMeasurementWithTime.ts =>
       ts
@@ -58,16 +59,21 @@ module MeasurementWithTime = {
          )
       |> concatSome
       |> t3;
-    MeasurementValue.MeasurementValue.(
+    ValueType.T.(
       switch (intendedType) {
-      | Cdf => transform(toCdf, r => `Cdf(r))
-      | Float => transform(toFloat, r => `Float(r))
-      | Binary => transform(toBinary, r => `Binary(r))
-      | Percentage => transform(toPercentage, r => `Percentage(r))
-      | UnresolvableResolution =>
+      | `Cdf => transform(toCdf, r => `Cdf(r))
+      | `Float => transform(toFloat, r => `Float(r))
+      | `Binary => transform(toBinary, r => `Binary(r))
+      | `Percentage => transform(toPercentage, r => `Percentage(r))
+      | `UnresolvableResolution =>
         transform(toUnresolvableResolution, r => `UnresolvableResolution(r))
-      | Comment => transform(toComment, r => `Comment(r))
+      | `Comment => transform(toComment, r => `Comment(r))
       }
     );
+  };
+
+  let toTypeOfFirstElement = (ts: ts) => {
+    firstElementType(ts)
+    |> Rationale.Option.map(toTypedMeasurementsWithTime(_, ts));
   };
 };

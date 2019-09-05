@@ -42,7 +42,7 @@ module ValidScoringCombination = {
   let make = (t: t) => t;
 };
 
-module ScoringCombination = {
+module ScoringCombinationInput = {
   type marketScoreType =
     | MarketScore
     | NonMarketScore;

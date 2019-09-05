@@ -1,5 +1,7 @@
 open Belt.Result;
 
+type t = [ | `AMBIGUOUS | `FALSE_CONDITIONAL | `OTHER | `RESULT_NOT_AVAILABLE];
+
 module UnresolvableResolution = {
   type t = [
     | `AMBIGUOUS
@@ -71,86 +73,13 @@ module Percentage = {
 };
 
 module MeasurementValue = {
-  type t = [
-    | `Cdf(Cdf.t)
-    | `Float(float)
-    | `Binary(bool)
-    | `Percentage(Percentage.t)
-    | `UnresolvableResolution(UnresolvableResolution.t)
-    | `Comment(Comment.t)
-  ];
-
-  let isX = (toXFn, t: t) => t |> toXFn |> Rationale.Option.isSome;
-
-  let toCdf = (t: t) =>
-    switch (t) {
-    | `Cdf(a) => Some(a)
-    | _ => None
-    };
-
-  let toFloat = (t: t) =>
-    switch (t) {
-    | `Float(a) => Some(a)
-    | _ => None
-    };
-
-  let toBinary = (t: t) =>
-    switch (t) {
-    | `Binary(a) => Some(a)
-    | _ => None
-    };
-
-  let toPercentage = (t: t) =>
-    switch (t) {
-    | `Percentage(a) => Some(a)
-    | _ => None
-    };
-
-  let toUnresolvableResolution = (t: t) =>
-    switch (t) {
-    | `UnresolvableResolution(a) => Some(a)
-    | _ => None
-    };
-
-  let toComment = (t: t) =>
-    switch (t) {
-    | `Comment(a) => Some(a)
-    | _ => None
-    };
-
-  let isCdf = isX(toCdf);
-  let isFloat = isX(toFloat);
-  let isBinary = isX(toBinary);
-  let isPercentage = isX(toPercentage);
-  let isComment = isX(toComment);
-};
-
-module TypeName = {
   type t =
-    | Cdf
-    | Float
-    | Binary
-    | Percentage
-    | UnresolvableResolution
-    | Comment;
-
-  let toWrapperFn = (t: t) =>
-    switch (t) {
-    | Cdf => (r => `Cdf(r))
-    | Float => (r => `Float(r))
-    | Binary => (r => `Binary(r))
-    | Percentage => (r => `Percentage(r))
-    | UnresolvableResolution => (r => `UnresolvableResolution(r))
-    | Comment => (r => `Comment(r))
-    };
-
-  let fromMeasurementValue = (t: MeasurementValue.t): t =>
-    switch (t) {
-    | `Cdf(_) => Cdf
-    | `Float(_) => Float
-    | `Binary(_) => Binary
-    | `Percentage(_) => Percentage
-    | `UnresolvableResolution(_) => UnresolvableResolution
-    | `Comment(_) => Comment
-    };
+    ValueType.T.t(
+      Cdf.t,
+      float,
+      bool,
+      Percentage.t,
+      UnresolvableResolution.t,
+      Comment.t,
+    );
 };

@@ -47,18 +47,20 @@ let make =
            }}
         </ChannelContainer>;
 
-      let errorFn = _ => {
-        SLayout.LayoutConfig.make(
-          ~head=<div />,
-          ~body=<div> {"No channel." |> ReasonReact.string} </div>,
-        )
-        |> SLayout.FullPage.makeWithEl;
-      };
+      let errorFn = _ =>
+        <ChannelContainer channelPage loggedInUser channel=None>
+          {SLayout.LayoutConfig.make(
+             ~head=<div />,
+             ~body=<div> {"No channel." |> ReasonReact.string} </div>,
+           )
+           |> SLayout.FullPage.makeWithEl}
+        </ChannelContainer>;
 
-      let loadingFn = () => {
-        SLayout.LayoutConfig.make(~head=<div />, ~body=<SLayout.Spin />)
-        |> SLayout.FullPage.makeWithEl;
-      };
+      let loadingFn = () =>
+        <ChannelContainer channelPage loggedInUser channel=None>
+          {SLayout.LayoutConfig.make(~head=<div />, ~body=<SLayout.Spin />)
+           |> SLayout.FullPage.makeWithEl}
+        </ChannelContainer>;
 
       loadChannel(result =>
         result |> HttpResponse.flatten(successFn, errorFn, loadingFn)

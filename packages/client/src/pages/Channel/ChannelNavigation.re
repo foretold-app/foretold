@@ -4,7 +4,7 @@ let make =
     (
       ~channelPage: Routing.ChannelPage.t,
       ~loggedInUser: option(Types.user),
-      children,
+      _children,
     ) => {
   ...component,
   render: _ => {

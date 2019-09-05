@@ -2,7 +2,7 @@ module ReducerConfig = {
   type itemType = Types.measurable;
   type callFnParams = string;
 
-  let getId = (e: Types.measurable) => e.id;
+  let getId = (e: itemType) => e.id;
 
   let callFn = (creatorId: callFnParams) =>
     MeasurablesGet.component(

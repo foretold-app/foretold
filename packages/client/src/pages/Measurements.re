@@ -3,8 +3,8 @@ module ReducerConfig = {
   type callFnParams = string;
 
   let getId = (e: itemType) => e.id;
-  let callFn = (agentId: callFnParams) =>
-    MeasurementsGet.component(~agentId=Some(agentId), ());
+  let callFn = (measurableId: callFnParams) =>
+    MeasurementsGet.component(~measurableId=Some(measurableId), ());
 
   let isEqual = (a: itemType, b: itemType) => {
     a.id == b.id;
@@ -13,12 +13,10 @@ module ReducerConfig = {
 
 module Reducer = PaginationReducerFunctor.Make(ReducerConfig);
 
-let component = ReasonReact.statelessComponent("AgentMeasurements");
-type pageParams = {id: string};
-
+let component = ReasonReact.statelessComponent("Measurements");
 let make =
     (
-      ~pageParams: pageParams,
+      ~measurableId: string,
       ~loggedInUser: Types.user,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
@@ -27,7 +25,7 @@ let make =
   render: _ => {
     Reducer.make(
       ~itemsPerPage=20,
-      ~callFnParams=pageParams.id,
+      ~callFnParams=measurableId,
       ~subComponent=selectWithPaginationParams =>
       SLayout.LayoutConfig.make(
         ~head=

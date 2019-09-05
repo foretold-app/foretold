@@ -1,4 +1,3 @@
-/* TODO: Allow for cases where user is not logged in */
 let makeWithPage =
     (agentPage: Routing.AgentPage.t, loggedInUser: option(Types.user))
     : ReasonReact.reactElement => {

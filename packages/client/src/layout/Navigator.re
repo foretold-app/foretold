@@ -9,7 +9,7 @@ let make = (~route: Route.t, ~loggedInUser: option(Types.user), _children) => {
     switch (route, loggedInUser) {
     | (Home, Some(loggedInUser)) => Redirect.defaultPage(loggedInUser)
     | (Channel(channel), _) =>
-      Channel_Layout.makeWithPage(channel, loggedInUser)
+      <Channel_Layout channelPage=channel loggedInUser />
     | (Agent(agentPage), _) =>
       Agent_Layout.makeWithPage(agentPage, loggedInUser)
     | (AgentIndex, _) => AgentIndex'.toEl(loggedInUser)

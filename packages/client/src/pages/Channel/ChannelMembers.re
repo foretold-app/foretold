@@ -187,8 +187,7 @@ let inviteMemberButtonSection = (channelId: string) =>
         </FC.Base.Button>
       </FC.Base.Div>;
 
-let succesFn =
-    (~channelId: string, ~layout, ~channel: Types.channel, ~memberships) => {
+let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
   let head =
     switch (channel.myRole) {
     | Some(`ADMIN) =>
@@ -207,35 +206,29 @@ let succesFn =
     ~head,
     ~body=<FC.PageCard.Body> table </FC.PageCard.Body>,
   )
-  |> layout;
+  |> SLayout.FullPage.makeWithEl;
 };
 
-let errorFn = (layout, _) =>
+let errorFn = _ =>
   SLayout.LayoutConfig.make(
     ~head=<div />,
     ~body=<div> {"No channel." |> ReasonReact.string} </div>,
   )
-  |> layout;
+  |> SLayout.FullPage.makeWithEl;
 
-let loadingFn = (layout, _) =>
-  SLayout.LayoutConfig.make(~head=<div />, ~body=<SLayout.Spin />) |> layout;
+let loadingFn = _ =>
+  SLayout.LayoutConfig.make(~head=<div />, ~body=<SLayout.Spin />)
+  |> SLayout.FullPage.makeWithEl;
 
-let make =
-    (
-      ~channelId: string,
-      ~layout=SLayout.FullPage.makeWithEl,
-      ~channel: Types.channel,
-      _children,
-    ) => {
+let make = (~channelId: string, ~channel: Types.channel, _children) => {
   ...component,
   render: _ => {
     ChannelMembershipsGet.component(~id=channelId, result =>
       result
       |> HttpResponse.flatten(
-           memberships =>
-             succesFn(~channelId, ~layout, ~channel, ~memberships),
-           errorFn(layout),
-           loadingFn(layout),
+           memberships => succesFn(~channelId, ~channel, ~memberships),
+           errorFn,
+           loadingFn,
          )
     );
   },

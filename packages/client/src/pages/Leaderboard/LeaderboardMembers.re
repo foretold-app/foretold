@@ -17,7 +17,6 @@ let component = ReasonReact.statelessComponent("LeaderboardChannels");
 let make =
     (
       ~channelId: option(string)=None,
-      ~layout=SLayout.FullPage.makeWithEl,
       ~subTab: Routing.ChannelPage.leaderboard,
       _children,
     ) => {
@@ -55,7 +54,7 @@ let make =
           subTab,
         );
 
-      SLayout.LayoutConfig.make(~head, ~body) |> layout;
+      SLayout.LayoutConfig.make(~head, ~body) |> SLayout.FullPage.makeWithEl;
     };
 
     <Reducer callFnParams=channelId subComponent />;

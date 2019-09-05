@@ -2,13 +2,7 @@ let component = ReasonReact.statelessComponent("ChannelAddMember");
 
 type column = Table.column(Types.agent);
 
-let make =
-    (
-      ~channelId: string,
-      ~loggedInUser: Types.user,
-      ~layout=SLayout.FullPage.makeWithEl,
-      _children,
-    ) => {
+let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _ => {
     let addToChannelLink = (agentId: string, channelId: string) =>
@@ -86,6 +80,6 @@ let make =
       ~head=<div> title </div>,
       ~body=<FC.PageCard.Body> table </FC.PageCard.Body>,
     )
-    |> layout;
+    |> SLayout.FullPage.makeWithEl;
   },
 };

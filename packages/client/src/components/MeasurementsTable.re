@@ -380,7 +380,8 @@ let bottomSubRowFn =
       |> E.O.fmap((c: React.element) => [|FC.Table.Row.textSection(c)|]),
   );
 
-let make = (_loggedInUser: Types.user, measurementsList: list(measurement)) => {
+let make =
+    (~loggedInUser: Types.user, ~measurementsList: list(measurement), ()) => {
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
   let all = [|
@@ -405,7 +406,7 @@ let make = (_loggedInUser: Types.user, measurementsList: list(measurement)) => {
 };
 
 let makeExtended =
-    (loggedInUser: Types.user, measurementsList: list(measurement)) => {
+    (~loggedInUser: Types.user, ~measurementsList: list(measurement), ()) => {
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
   let all = [|

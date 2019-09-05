@@ -1,14 +1,13 @@
 open SLayout;
 open Style.Grid;
 
-let component = ReasonReact.statelessComponent("ChannelLayoutPage");
-
+let component = ReasonReact.statelessComponent("Channel");
 let make =
     (
-      channelPage: Routing.ChannelPage.t,
-      loggedInUser: Types.user,
-      channel: option(Types.channel),
-      {head, body}: LayoutConfig.t,
+      ~channelPage: Routing.ChannelPage.t,
+      ~loggedInUser: Types.user,
+      ~channel: option(Types.channel),
+      children,
     ) => {
   ...component,
   render: _ => {
@@ -71,35 +70,7 @@ let make =
 
     <FillWithSidebar channelId={Some(channelId)} loggedInUser>
       {headers()}
-      <div className=Styles.container>
-        <Div flexDirection=`row styles=[SLayout.Styles.width100]>
-          <Div
-            styles=[
-              Css.(
-                style([
-                  marginTop(`em(1.0)),
-                  paddingRight(`em(1.0)),
-                  paddingLeft(`em(1.0)),
-                ])
-              ),
-            ]
-            flex={`num(3.)}>
-            <FC.PageCard>
-              <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
-              body
-            </FC.PageCard>
-          </Div>
-        </Div>
-      </div>
+      <> {children[0]} </>
     </FillWithSidebar>;
   },
 };
-
-let makeWithEl =
-    (
-      channelPage: Routing.ChannelPage.t,
-      loggedInUser,
-      channel: option(Types.channel),
-      layout: LayoutConfig.t,
-    ) =>
-  make(channelPage, loggedInUser, channel, layout) |> ReasonReact.element;

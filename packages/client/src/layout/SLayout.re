@@ -4,9 +4,7 @@ module Styles = {
   open Css;
 
   let width100 = style([width(`percent(100.))]);
-
   let headerText = style([color(`hex("486474"))]);
-
   let descriptionText = style([color(`hex("aaa"))]);
 
   let seriesText =
@@ -129,8 +127,6 @@ module FullPage = {
               marginTop(`em(2.0)),
               marginTop(`em(2.)),
               width(`percent(100.)),
-              paddingLeft(`em(2.)),
-              paddingRight(`em(2.)),
               boxSizing(`borderBox),
             ]
             @ FC.Base.BaseStyles.fullWidthFloatLeft,
@@ -176,64 +172,3 @@ let seriesHead = (channel: Types.channel, seriesName) =>
       {seriesName |> ste}
     </div>
   </>;
-
-module SidebarSection = {
-  module Styles_ = {
-    open Css;
-    let containerOuter = style([paddingTop(`px(10))]);
-    let containerInner =
-      style([
-        background(`hex("fff")),
-        borderRadius(`px(5)),
-        width(`percent(100.)),
-        border(`px(1), `solid, `hex("e8eaef")),
-        float(`left),
-      ]);
-    let header =
-      style([
-        float(`left),
-        fontSize(`em(1.1)),
-        width(`percent(100.)),
-        color(`hex("242424")),
-        fontWeight(`num(600)),
-        padding(`em(1.)),
-        padding2(~v=`em(0.5), ~h=`em(0.7)),
-        borderBottom(`px(1), `solid, `hex("e6e9f0")),
-      ]);
-    let body =
-      style([
-        float(`left),
-        padding(`em(1.)),
-        fontSize(`em(1.1)),
-        padding2(~v=`em(0.5), ~h=`em(0.7)),
-        color(`hex("858585")),
-      ]);
-  };
-
-  module Container = {
-    let component = ReasonReact.statelessComponent("Container");
-    let make = children => {
-      ...component,
-      render: _ =>
-        <div className=Styles_.containerOuter>
-          <div className=Styles_.containerInner> ...children </div>
-        </div>,
-    };
-  };
-
-  module Header = {
-    let component = ReasonReact.statelessComponent("Container");
-    let make = children => {
-      ...component,
-      render: _ => <div className=Styles_.header> ...children </div>,
-    };
-  };
-
-  module Body = {
-    let component = ReasonReact.statelessComponent("Body");
-    let make = children => {
-      ...component,
-      render: _ => <div className=Styles_.body> ...children </div>,
-    };
-  };
-};

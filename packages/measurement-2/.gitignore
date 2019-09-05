@@ -2,6 +2,15 @@
 .merlin
 .bsb.lock
 npm-debug.log
-/lib/bs/
 /node_modules/
+.cache
+.cache/*
+dist
+lib/*
+.graphql_ppx_cache/
+*.graphql_ppx_cache
+*.cache
+build
+package-lock
 yarn-error.log
+*.bs.js

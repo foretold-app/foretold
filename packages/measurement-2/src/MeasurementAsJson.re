@@ -4,10 +4,11 @@ open Rationale.Result.Infix;
 
 module JsonToMeasurement = {
   module CustomDecoders = {
-    let floatToPercentage = Types.Percentage.make;
+    let floatToPercentage = MeasurementValue.Percentage.make;
 
     let stringToUnresolvableResolution =
-        (str: string): Belt.Result.t(Types.UnresolvableResolution.t, string) =>
+        (str: string)
+        : Belt.Result.t(MeasurementValue.UnresolvableResolution.t, string) =>
       switch (str) {
       | "AMBIGUOUS" => Ok(`AMBIGUOUS)
       | "FALSE_CONDITIONAL" => Ok(`FALSE_CONDITIONAL)
@@ -17,7 +18,7 @@ module JsonToMeasurement = {
       };
 
     let stringToComment =
-        (str: string): Belt.Result.t(Types.Comment.t, string) =>
+        (str: string): Belt.Result.t(MeasurementValue.Comment.t, string) =>
       switch (str) {
       | "GENERIC" => Ok(`GENERIC)
       | "QUESTION_FEEDBACK" => Ok(`QUESTION_FEEDBACK)
@@ -25,7 +26,7 @@ module JsonToMeasurement = {
       | _ => Error("Invalid GraphQL Comment: " ++ str)
       };
 
-    let jsonToCdfPair = (j: Js.Json.t): Types.Cdf.t => {
+    let jsonToCdfPair = (j: Js.Json.t): MeasurementValue.Cdf.t => {
       let xs =
         j |> Json.Decode.field("xs", Json.Decode.array(Json.Decode.float));
       let ys =
@@ -51,7 +52,8 @@ module JsonToMeasurement = {
     | _ => Error("Not found");
 
   let decodeData =
-      (a, json: Js.Json.t): Belt.Result.t(Types.Measurement.t, string) => {
+      (a, json: Js.Json.t)
+      : Belt.Result.t(MeasurementValue.MeasurementValue.t, string) => {
     let jsonToFinalValue = (toSimpleValueFn, toFinalValueFn) =>
       json
       |> jsonToSimpleValue(Json.Decode.field("data", toSimpleValueFn))
@@ -61,7 +63,7 @@ module JsonToMeasurement = {
     | `Float => jsonToFinalValue(Json.Decode.float, e => Ok(`Float(e)))
     | `Cdf =>
       jsonToFinalValue(CustomDecoders.jsonToCdfPair, e =>
-        e->Types.Cdf.make->Belt.Result.map(r => `Cdf(r))
+        e->MeasurementValue.Cdf.make->Belt.Result.map(r => `Cdf(r))
       )
     | `Percentage =>
       jsonToFinalValue(Json.Decode.float, e => Ok(`Percentage(e)))
@@ -79,7 +81,9 @@ module JsonToMeasurement = {
     };
   };
 
-  let run = (json: Js.Json.t): Belt.Result.t(Types.Measurement.t, string) => {
+  let run =
+      (json: Js.Json.t)
+      : Belt.Result.t(MeasurementValue.MeasurementValue.t, string) => {
     let t = json |> Json.Decode.field("dataType", Json.Decode.string);
     let decodingType = nameToType(t);
     switch (decodingType) {

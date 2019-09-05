@@ -15,7 +15,7 @@ let make =
       let loadChannel = ChannelGet.component2(~id=channelId);
 
       let successFn = (channel: Types.channel) =>
-        <ChannelContainer channelPage loggedInUser channel={Some(channel)}>
+        <Channel channelPage loggedInUser channel={Some(channel)}>
           {switch (channelPage.subPage) {
            | Measurables(searchParams) =>
              <MeasurableIndex channelId searchParams loggedInUser />
@@ -45,22 +45,22 @@ let make =
            | Settings => <ChannelEdit channelId loggedInUser />
            | NewSeries => <SeriesNew channelId loggedInUser />
            }}
-        </ChannelContainer>;
+        </Channel>;
 
       let errorFn = _ =>
-        <ChannelContainer channelPage loggedInUser channel=None>
+        <Channel channelPage loggedInUser channel=None>
           {SLayout.LayoutConfig.make(
              ~head=<div />,
              ~body=<div> {"No channel." |> ReasonReact.string} </div>,
            )
            |> SLayout.FullPage.makeWithEl}
-        </ChannelContainer>;
+        </Channel>;
 
       let loadingFn = () =>
-        <ChannelContainer channelPage loggedInUser channel=None>
+        <Channel channelPage loggedInUser channel=None>
           {SLayout.LayoutConfig.make(~head=<div />, ~body=<SLayout.Spin />)
            |> SLayout.FullPage.makeWithEl}
-        </ChannelContainer>;
+        </Channel>;
 
       loadChannel(result =>
         result |> HttpResponse.flatten(successFn, errorFn, loadingFn)

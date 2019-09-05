@@ -1,7 +1,7 @@
 open SLayout;
 open Style.Grid;
 
-let component = ReasonReact.statelessComponent("ChannelLayoutPage");
+let component = ReasonReact.statelessComponent("ChannelContainer");
 let make =
     (
       ~channelPage: Routing.ChannelPage.t,

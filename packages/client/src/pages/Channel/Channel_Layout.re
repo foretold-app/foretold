@@ -10,7 +10,7 @@ let makeWithPage =
     let loadChannel = ChannelGet.component2(~id=channelId);
 
     let successFn = (channel: Types.channel) =>
-      <Channel_Layout_C channelPage loggedInUser channel={Some(channel)}>
+      <ChannelContainer channelPage loggedInUser channel={Some(channel)}>
         {switch (channelPage.subPage) {
          | Measurables(searchParams) =>
            <MeasurableIndex channelId searchParams loggedInUser />
@@ -37,7 +37,7 @@ let makeWithPage =
          | Settings => <ChannelEdit channelId loggedInUser />
          | NewSeries => <SeriesNew channelId loggedInUser />
          }}
-      </Channel_Layout_C>;
+      </ChannelContainer>;
 
     let errorFn = _ => {
       SLayout.LayoutConfig.make(

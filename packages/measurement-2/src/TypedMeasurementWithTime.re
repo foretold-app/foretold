@@ -41,11 +41,11 @@ module MeasurementWithTime = {
     ts
     |> Belt.Array.get(_, 0)
     |> Rationale.Option.map((r: t) =>
-         r.measurement |> MeasurementValue.MeasurementValue.toTypeName
+         r.measurement |> MeasurementValue.TypeName.fromMeasurementValue
        );
 
   let toTypedMeasurementWithTime =
-      (intendedType: MeasurementValue.MeasurementValue.typeNames, ts: ts)
+      (intendedType: MeasurementValue.TypeName.t, ts: ts)
       : TypedMeasurementWithTime.ts => {
     let transform = (t2, t3): TypedMeasurementWithTime.ts =>
       ts

@@ -71,14 +71,6 @@ module Percentage = {
 };
 
 module MeasurementValue = {
-  type typeNames =
-    | Cdf
-    | Float
-    | Binary
-    | Percentage
-    | UnresolvableResolution
-    | Comment;
-
   type t = [
     | `Cdf(Cdf.t)
     | `Float(float)
@@ -131,8 +123,28 @@ module MeasurementValue = {
   let isBinary = isX(toBinary);
   let isPercentage = isX(toPercentage);
   let isComment = isX(toComment);
+};
 
-  let toTypeName = (t: t) =>
+module TypeName = {
+  type t =
+    | Cdf
+    | Float
+    | Binary
+    | Percentage
+    | UnresolvableResolution
+    | Comment;
+
+  let toWrapperFn = (t: t) =>
+    switch (t) {
+    | Cdf => (r => `Cdf(r))
+    | Float => (r => `Float(r))
+    | Binary => (r => `Binary(r))
+    | Percentage => (r => `Percentage(r))
+    | UnresolvableResolution => (r => `UnresolvableResolution(r))
+    | Comment => (r => `Comment(r))
+    };
+
+  let fromMeasurementValue = (t: MeasurementValue.t): t =>
     switch (t) {
     | `Cdf(_) => Cdf
     | `Float(_) => Float
@@ -140,15 +152,5 @@ module MeasurementValue = {
     | `Percentage(_) => Percentage
     | `UnresolvableResolution(_) => UnresolvableResolution
     | `Comment(_) => Comment
-    };
-
-  let typeToWrapperFn = (typeName: typeNames) =>
-    switch (typeName) {
-    | Cdf => (r => `Cdf(r))
-    | Float => (r => `Float(r))
-    | Binary => (r => `Binary(r))
-    | Percentage => (r => `Percentage(r))
-    | UnresolvableResolution => (r => `UnresolvableResolution(r))
-    | Comment => (r => `Comment(r))
     };
 };

@@ -4,6 +4,8 @@
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var Js_exn = require("bs-platform/lib/js/js_exn.js");
+var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
+var Option$Rationale = require("rationale/src/Option.js");
 var Result$Rationale = require("rationale/src/Result.js");
 
 function toString(e) {
@@ -114,13 +116,169 @@ var Percentage = /* module */[
   /* make */make$1
 ];
 
-var Measurement = /* module */[];
+function isX(toXFn, t) {
+  return Option$Rationale.isSome(Curry._1(toXFn, t));
+}
 
-function make$2(t) {
+function toCdf(t) {
+  if (typeof t === "number" || t[0] !== 3354245) {
+    return undefined;
+  } else {
+    return t[1];
+  }
+}
+
+function toFloat(t) {
+  if (typeof t === "number" || t[0] !== 365180284) {
+    return undefined;
+  } else {
+    return t[1];
+  }
+}
+
+function toBinary(t) {
+  if (typeof t === "number" || t[0] !== 564146209) {
+    return undefined;
+  } else {
+    return t[1];
+  }
+}
+
+function toPercentage(t) {
+  if (typeof t === "number" || t[0] !== -488794310) {
+    return undefined;
+  } else {
+    return t[1];
+  }
+}
+
+function toUnresolvableResolution(t) {
+  if (typeof t === "number" || t[0] !== -882782856) {
+    return undefined;
+  } else {
+    return t[1];
+  }
+}
+
+function toComment(t) {
+  if (typeof t === "number" || t[0] !== -826170817) {
+    return undefined;
+  } else {
+    return t[1];
+  }
+}
+
+function isCdf(param) {
+  return Option$Rationale.isSome(toCdf(param));
+}
+
+function isFloat(param) {
+  return Option$Rationale.isSome(toFloat(param));
+}
+
+function isBinary(param) {
+  return Option$Rationale.isSome(toBinary(param));
+}
+
+function isPercentage(param) {
+  return Option$Rationale.isSome(toPercentage(param));
+}
+
+function isComment(param) {
+  return Option$Rationale.isSome(toComment(param));
+}
+
+function toTypeName(t) {
+  var variant = t[0];
+  if (variant >= -488794310) {
+    if (variant >= 365180284) {
+      if (variant >= 564146209) {
+        return /* Binary */2;
+      } else {
+        return /* Float */1;
+      }
+    } else if (variant >= 3354245) {
+      return /* Cdf */0;
+    } else {
+      return /* Percentage */3;
+    }
+  } else if (variant >= -826170817) {
+    return /* Comment */5;
+  } else {
+    return /* UnresolvableResolution */4;
+  }
+}
+
+var Measurement = /* module */[
+  /* isX */isX,
+  /* toCdf */toCdf,
+  /* toFloat */toFloat,
+  /* toBinary */toBinary,
+  /* toPercentage */toPercentage,
+  /* toUnresolvableResolution */toUnresolvableResolution,
+  /* toComment */toComment,
+  /* isCdf */isCdf,
+  /* isFloat */isFloat,
+  /* isBinary */isBinary,
+  /* isPercentage */isPercentage,
+  /* isComment */isComment,
+  /* toTypeName */toTypeName
+];
+
+function make$2(time, measurement) {
+  return /* record */[
+          /* measurement */measurement,
+          /* time */time
+        ];
+}
+
+var TypedMeasurementWithTime = /* module */[/* make */make$2];
+
+var MeasurementWithTime = /* module */[];
+
+function concatSome(optionals) {
+  return optionals.filter(Option$Rationale.isSome).map((function (param) {
+                return Option$Rationale.toExn("Warning: This should not have happened", param);
+              }));
+}
+
+function defaultEmpty(o) {
+  if (o !== undefined) {
+    return o;
+  } else {
+    return /* array */[];
+  }
+}
+
+var foo = /* array */[/* `Float */[
+    365180284,
+    3.0
+  ]];
+
+var typee = Option$Rationale.map(toTypeName, Belt_Array.get(foo, 0));
+
+var mainType;
+
+if (typee !== undefined && typee === 0) {
+  var __x = concatSome(Belt_Array.map(foo, toCdf));
+  mainType = /* `Cdf */[
+    3354245,
+    Belt_Array.map(__x, (function (r) {
+            return /* record */[
+                    /* measurement */r,
+                    /* time */32
+                  ];
+          }))
+  ];
+} else {
+  mainType = undefined;
+}
+
+function make$3(t) {
   return t;
 }
 
-var ValidScoringCombination = /* module */[/* make */make$2];
+var ValidScoringCombination = /* module */[/* make */make$3];
 
 function toValidScoringCombination(param) {
   var sampleCount = param[/* sampleCount */3];
@@ -240,21 +398,25 @@ function toValidScoringCombination(param) {
 
 var ScoringCombination = /* module */[/* toValidScoringCombination */toValidScoringCombination];
 
-function make$3(t) {
+function make$4(t) {
   return t;
 }
 
-var ValidScoringCombinationGroupOverTime = /* module */[/* make */make$3];
-
-var ScoringCombinationGroupOverTime = /* module */[];
+var ValidScoringCombinationGroupOverTime = /* module */[/* make */make$4];
 
 exports.UnresolvableResolution = UnresolvableResolution;
 exports.$$Comment = $$Comment;
 exports.Cdf = Cdf;
 exports.Percentage = Percentage;
 exports.Measurement = Measurement;
+exports.TypedMeasurementWithTime = TypedMeasurementWithTime;
+exports.MeasurementWithTime = MeasurementWithTime;
+exports.concatSome = concatSome;
+exports.defaultEmpty = defaultEmpty;
+exports.foo = foo;
+exports.typee = typee;
+exports.mainType = mainType;
 exports.ValidScoringCombination = ValidScoringCombination;
 exports.ScoringCombination = ScoringCombination;
 exports.ValidScoringCombinationGroupOverTime = ValidScoringCombinationGroupOverTime;
-exports.ScoringCombinationGroupOverTime = ScoringCombinationGroupOverTime;
-/* Result-Rationale Not a pure module */
+/* typee Not a pure module */

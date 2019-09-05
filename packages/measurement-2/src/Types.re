@@ -88,26 +88,58 @@ module Measurement = {
     | `Comment(Comment.t)
   ];
 
-  let isCdf = (t: t) =>
-    switch (t) {
-    | `Cdf(_) => true
-    | _ => false
-    };
+  let isX = (toXFn, t: t) => t |> toXFn |> Rationale.Option.isSome;
 
   let toCdf = (t: t) =>
     switch (t) {
-    | `Cdf(cdf) => Some(cdf)
+    | `Cdf(a) => Some(a)
     | _ => None
     };
+
+  let toFloat = (t: t) =>
+    switch (t) {
+    | `Float(a) => Some(a)
+    | _ => None
+    };
+
+  let toBinary = (t: t) =>
+    switch (t) {
+    | `Binary(a) => Some(a)
+    | _ => None
+    };
+
+  let toPercentage = (t: t) =>
+    switch (t) {
+    | `Percentage(a) => Some(a)
+    | _ => None
+    };
+
+  let toUnresolvableResolution = (t: t) =>
+    switch (t) {
+    | `UnresolvableResolution(a) => Some(a)
+    | _ => None
+    };
+
+  let toComment = (t: t) =>
+    switch (t) {
+    | `Comment(a) => Some(a)
+    | _ => None
+    };
+
+  let isCdf = isX(toCdf);
+  let isFloat = isX(toFloat);
+  let isBinary = isX(toBinary);
+  let isPercentage = isX(toPercentage);
+  let isComment = isX(toComment);
 
   let toTypeName = (t: t) =>
     switch (t) {
     | `Cdf(_) => Cdf
-    | `Float(_) => Cdf
-    | `Binary(_) => Cdf
-    | `Percentage(_) => Cdf
-    | `UnresolvableResolution(_) => Cdf
-    | `Comment(_) => Cdf
+    | `Float(_) => Float
+    | `Binary(_) => Binary
+    | `Percentage(_) => Percentage
+    | `UnresolvableResolution(_) => UnresolvableResolution
+    | `Comment(_) => Comment
     };
 };
 
@@ -117,8 +149,16 @@ module TypedMeasurementWithTime = {
     measurement: 'a,
     time,
   };
-  type ts('a) = array(t('a));
+  type tss('a) = array(t('a));
   let make = (time, measurement) => {measurement, time};
+  type ts = [
+    | `Cdf(tss(Cdf.t))
+    | `Float(tss(float))
+    | `Binary(tss(bool))
+    | `Percentage(tss(Percentage.t))
+    | `UnresolvableResolution(tss(UnresolvableResolution.t))
+    | `Comment(tss(Comment.t))
+  ];
 };
 
 module MeasurementWithTime = {
@@ -133,9 +173,38 @@ module MeasurementWithTime = {
   //   };
 };
 
-let foo: MeasurementWithTime.ts = [|{measurement: `Float(3.0), time: 34}|];
+let concatSome = (optionals: array(option('a))): array('a) =>
+  optionals
+  |> Js.Array.filter(Rationale.Option.isSome)
+  |> Js.Array.map(
+       Rationale.Option.toExn("Warning: This should not have happened"),
+     );
+let defaultEmpty = (o: option(array('a))): array('a) =>
+  switch (o) {
+  | Some(o) => o
+  | None => [||]
+  };
 
->>>>>>> gentype-2
+// let foo: MeasurementWithTime.ts = [|{measurement: `Float(3.0), time: 34}|];
+let foo = [|`Float(3.0)|];
+let typee =
+  Belt.Array.get(foo, 0) |> Rationale.Option.map(Measurement.toTypeName);
+
+let mainType: option(TypedMeasurementWithTime.ts) =
+  switch (typee) {
+  | Some(Cdf) =>
+    Some(
+      foo
+      |> Belt.Array.map(_, Measurement.toCdf)
+      |> concatSome
+      |> Belt.Array.map(_, r =>
+           TypedMeasurementWithTime.{time: 32, measurement: r}
+         )
+      |> (r => `Cdf(r)),
+    )
+  | _ => None
+  };
+
 module ValidScoringCombination = {
   type marketCdfCdf = {
     agentPrediction: Cdf.t,
@@ -323,75 +392,57 @@ module ValidScoringCombinationGroupOverTime = {
   };
 
   let make = (t: t) => t;
-};
+} /* }*/ /*     }*/ /*     //     ({agentPredictions, marketPredictions, resolution, beginningTime}: t) => */ /*     //     }*/ /*   module NonMarketCombination = */ /*       agentPredictions: measurementsWithTime*/ /*       resolution: measurementWithTime*/ /*     }*/ /*         ({agentPredictions, marketPredictions, resolution, beginningTime}: t) => 3.*/ /*   }*/ /*     let score */ /*       beginningTime: time*/ /*       marketPredictions: measurementsWithTime*/ /*     type t = */ /*   }*/ /*     //       let agentPreds */ /*     // let toMain */;
 
-module ScoringCombinationGroupOverTime = {
-  type time = int;
+// module ScoringCombinationGroupOverTime = {
+//   type time = int;
 
-  type measurementWithTime('a) = {
-    measurement: 'a,
-    time,
-  };
+//   type measurementWithTime('a) = {
+//     measurement: 'a,
+//     time,
+//   };
 
-  type measurementsWithTime('a) = array(measurementWithTime('a));
+//   type measurementsWithTime('a) = array(measurementWithTime('a));
 
-  type genMarket('a, 'b) = {
-    agentPredictions: measurementsWithTime('a),
-    resolutions: measurementsWithTime('a),
-    resolution: measurementsWithTime('b),
-    beginningTime: time,
-  };
+//   type genMarket('a, 'b) = {
+//     agentPredictions: measurementsWithTime('a),
+//     resolutions: measurementsWithTime('a),
+//     resolution: measurementsWithTime('b),
+//     beginningTime: time,
+//   };
 
-  type genNonMarket('a, 'b) = {
-    agentPredictions: TypedMeasurementWithTime.ts('a),
-    resolution: TypedMeasurementWithTime.t('b),
-    beginningTime: time,
-  };
+//   type genNonMarket('a, 'b) = {
+//     agentPredictions: TypedMeasurementWithTime.ts('a),
+//     resolution: TypedMeasurementWithTime.t('b),
+//     beginningTime: time,
+//   };
 
-  type t = [
-    | `CdfCdf(genMarket(Cdf.t, Cdf.t))
-    | `CdfFloat(genMarket(Cdf.t, float))
-    | `MarketPercentagePercentage(genMarket(Percentage.t, Percentage.t))
-    | `NonMarketCdfCdf(genNonMarket(Cdf.t, Cdf.t))
-    | `NonMarketCdfFloat(genNonMarket(Cdf.t, float))
-    | `NonMarketPercentagePercentage(
-        genNonMarket(Percentage.t, Percentage.t),
-      )
-  ];
-};
+//   type t = [
+//     | `CdfCdf(genMarket(Cdf.t, Cdf.t))
+//     | `CdfFloat(genMarket(Cdf.t, float))
+//     | `MarketPercentagePercentage(genMarket(Percentage.t, Percentage.t))
+//     | `NonMarketCdfCdf(genNonMarket(Cdf.t, Cdf.t))
+//     | `NonMarketCdfFloat(genNonMarket(Cdf.t, float))
+//     | `NonMarketPercentagePercentage(
+//         genNonMarket(Percentage.t, Percentage.t),
+//       )
+//   ];
+// };
 
-module Interface = {
-  type time = int;
+// module Interface = {
+//   type time = int;
 
-  module MeasurementWithTime = {
-    type t = {
-      measurement: Measurement.t,
-      time,
-    };
-    type ts = array(t);
-  };
+//   module MeasurementWithTime = {
+//     type t = {
+//       measurement: Measurement.t,
+//       time,
+//     };
+//     type ts = array(t);
+//   };
 
-  module MarketCombination = {
-    type t = {
-      agentPredictions: MeasurementsWithTime.t,
-      marketPredictions: MeasurementsWithTime.t,
-      resolution: MeasurementWithTime.t,
-      beginningTime: time,
-    };
-    // let toMain =
-    //     ({agentPredictions, marketPredictions, resolution, beginningTime}: t) => {
-    //       let agentPreds =
-    //     };
-  };
-
-  module NonMarketCombination = {
-    type t = {
-      agentPredictions: measurementsWithTime,
-      marketPredictions: measurementsWithTime,
-      resolution: measurementWithTime,
-      beginningTime: time,
-    };
-    let score =
-        ({agentPredictions, marketPredictions, resolution, beginningTime}: t) => 3.;
-  };
-};
+//   module MarketCombination = {
+//     type t = {
+//       agentPredictions: MeasurementsWithTime.t,
+//       marketPredictions: MeasurementsWithTime.t,
+//       resolution: MeasurementWithTime.t,
+//       beginningTime: time,

@@ -83,32 +83,32 @@ module Measurement = {
 
 module ValidScoringCombination = {
   type marketCdfCdf = {
-    prediction: Cdf.t,
-    market: Cdf.t,
+    agentPrediction: Cdf.t,
+    marketPrediction: Cdf.t,
     resolution: Cdf.t,
     sampleCount: int,
   };
   type marketCdfFloat = {
-    prediction: Cdf.t,
-    market: Cdf.t,
+    agentPrediction: Cdf.t,
+    marketPrediction: Cdf.t,
     resolution: float,
   };
   type marketPercentagePercentage = {
-    prediction: Percentage.t,
-    market: Percentage.t,
+    agentPrediction: Percentage.t,
+    marketPrediction: Percentage.t,
     resolution: Percentage.t,
   };
   type nonMarketCdfCdf = {
-    prediction: Cdf.t,
+    agentPrediction: Cdf.t,
     resolution: Cdf.t,
     sampleCount: int,
   };
   type nonMarketCdfFloat = {
-    prediction: Cdf.t,
+    agentPrediction: Cdf.t,
     resolution: float,
   };
   type nonMarketPercentagePercentage = {
-    prediction: Percentage.t,
+    agentPrediction: Percentage.t,
     resolution: Percentage.t,
   };
   type t = [
@@ -124,40 +124,183 @@ module ValidScoringCombination = {
 };
 
 module ScoringCombination = {
+  type marketScoreType =
+    | MarketScore
+    | NonMarketScore;
+
   type t = {
-    prediction: Measurement.t,
-    market: option(Measurement.t),
+    agentPrediction: Measurement.t,
+    marketPrediction: option(Measurement.t),
     resolution: Measurement.t,
     sampleCount: option(int),
+    marketScoreType,
   };
 
   let toValidScoringCombination =
-      ({prediction, resolution, market, sampleCount}: t)
+      (
+        {
+          agentPrediction,
+          resolution,
+          marketPrediction,
+          sampleCount,
+          marketScoreType,
+        }: t,
+      )
       : option(ValidScoringCombination.t) => {
-    switch (prediction, market, resolution, sampleCount) {
+    switch (
+      marketScoreType,
+      agentPrediction,
+      marketPrediction,
+      resolution,
+      sampleCount,
+    ) {
     | (
-        `Cdf(prediction),
-        Some(`Cdf(market)),
+        MarketScore,
+        `Cdf(agentPrediction),
+        Some(`Cdf(marketPrediction)),
         `Cdf(resolution),
         Some(sampleCount),
       ) =>
-      Some(`MarketCdfCdf({prediction, market, resolution, sampleCount}))
-    | (`Cdf(prediction), Some(`Cdf(market)), `Float(resolution), _) =>
-      Some(`MarketCdfFloat({prediction, market, resolution}))
+      Some(
+        `MarketCdfCdf({
+          agentPrediction,
+          marketPrediction,
+          resolution,
+          sampleCount,
+        }),
+      )
     | (
-        `Percentage(prediction),
-        Some(`Percentage(market)),
+        MarketScore,
+        `Cdf(agentPrediction),
+        Some(`Cdf(marketPrediction)),
+        `Float(resolution),
+        _,
+      ) =>
+      Some(`MarketCdfFloat({agentPrediction, marketPrediction, resolution}))
+    | (
+        MarketScore,
+        `Percentage(agentPrediction),
+        Some(`Percentage(marketPrediction)),
         `Percentage(resolution),
         _,
       ) =>
-      Some(`MarketPercentagePercentage({prediction, market, resolution}))
-    | (`Cdf(prediction), None, `Cdf(resolution), Some(sampleCount)) =>
-      Some(`NonMarketCdfCdf({prediction, resolution, sampleCount}))
-    | (`Cdf(prediction), None, `Float(resolution), _) =>
-      Some(`NonMarketCdfFloat({prediction, resolution}))
-    | (`Percentage(prediction), None, `Percentage(resolution), _) =>
-      Some(`NonMarketPercentagePercentage({prediction, resolution}))
+      Some(
+        `MarketPercentagePercentage({
+          agentPrediction,
+          marketPrediction,
+          resolution,
+        }),
+      )
+    | (
+        NonMarketScore,
+        `Cdf(agentPrediction),
+        None,
+        `Cdf(resolution),
+        Some(sampleCount),
+      ) =>
+      Some(`NonMarketCdfCdf({agentPrediction, resolution, sampleCount}))
+    | (NonMarketScore, `Cdf(agentPrediction), None, `Float(resolution), _) =>
+      Some(`NonMarketCdfFloat({agentPrediction, resolution}))
+    | (
+        NonMarketScore,
+        `Percentage(agentPrediction),
+        None,
+        `Percentage(resolution),
+        _,
+      ) =>
+      Some(`NonMarketPercentagePercentage({agentPrediction, resolution}))
     | _ => None
     };
   };
+};
+
+module ValidScoringCombinationGroupOverTime = {
+  type time = int;
+
+  type measurementWithTime('a) = {
+    measurement: 'a,
+    time,
+  };
+
+  type measurementsWithTime('a) = array(measurementWithTime('a));
+
+  type marketCdfCdf = {
+    agentPredictions: measurementsWithTime(Cdf.t),
+    marketPredictions: measurementsWithTime(Cdf.t),
+    resolution: measurementWithTime(Cdf.t),
+    sampleCount: int,
+  };
+  type marketCdfFloat = {
+    agentPredictions: measurementsWithTime(Cdf.t),
+    marketPredictions: measurementsWithTime(Cdf.t),
+    resolutions: measurementWithTime(float),
+  };
+  type marketPercentagePercentage = {
+    agentPredictions: measurementsWithTime(Percentage.t),
+    marketPredictions: measurementsWithTime(Percentage.t),
+    resolution: measurementWithTime(Percentage.t),
+  };
+  type nonMarketCdfCdf = {
+    agentPredictions: measurementsWithTime(Cdf.t),
+    resolution: Cdf.t,
+    sampleCount: int,
+  };
+  type nonMarketCdfFloat = {
+    agentPredictions: measurementsWithTime(Cdf.t),
+    resolution: float,
+  };
+  type nonMarketPercentagePercentage = {
+    agentPredictions: measurementsWithTime(Percentage.t),
+    resolution: Percentage.t,
+  };
+  type measurementGroup = [
+    | `MarketCdfCdf(marketCdfCdf)
+    | `MarketCdfFloat(marketCdfFloat)
+    | `MarketPercentagePercentage(marketPercentagePercentage)
+    | `NonMarketCdfCdf(nonMarketCdfCdf)
+    | `NonMarketCdfFloat(nonMarketCdfFloat)
+    | `NonMarketPercentagePercentage(nonMarketPercentagePercentage)
+  ];
+
+  type t = {
+    measurementGroup,
+    beginningTime: time,
+  };
+
+  let make = (t: t) => t;
+};
+
+module ScoringCombinationGroupOverTime = {
+  type time = int;
+
+  type measurementWithTime('a) = {
+    measurement: 'a,
+    time,
+  };
+
+  type measurementsWithTime('a) = array(measurementWithTime('a));
+
+  type genMarket('a, 'b) = {
+    agentPredictions: measurementsWithTime('a),
+    resolutions: measurementsWithTime('a),
+    resolution: measurementsWithTime('b),
+    beginningTime: time,
+  };
+
+  type genNonMarket('a, 'b) = {
+    agentPredictions: measurementsWithTime('a),
+    resolution: measurementsWithTime('b),
+    beginningTime: time,
+  };
+
+  type t = [
+    | `CdfCdf(genMarket(Cdf.t, Cdf.t))
+    | `CdfFloat(genMarket(Cdf.t, float))
+    | `MarketPercentagePercentage(genMarket(Percentage.t, Percentage.t))
+    | `NonMarketCdfCdf(genNonMarket(Cdf.t, Cdf.t))
+    | `NonMarketCdfFloat(genNonMarket(Cdf.t, float))
+    | `NonMarketPercentagePercentage(
+        genNonMarket(Percentage.t, Percentage.t),
+      )
+  ];
 };

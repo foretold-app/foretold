@@ -125,63 +125,27 @@ var ValidScoringCombination = /* module */[/* make */make$2];
 function toValidScoringCombination(param) {
   var sampleCount = param[/* sampleCount */3];
   var resolution = param[/* resolution */2];
-  var market = param[/* market */1];
-  var prediction = param[/* prediction */0];
-  if (typeof prediction === "number") {
-    return undefined;
-  } else {
-    var variant = prediction[0];
-    if (variant !== -488794310) {
-      if (variant !== 3354245) {
-        return undefined;
-      } else {
-        var prediction$1 = prediction[1];
-        if (market !== undefined) {
-          var match = market;
-          if (typeof match === "number" || match[0] !== 3354245 || typeof resolution === "number") {
-            return undefined;
-          } else {
-            var variant$1 = resolution[0];
-            var market$1 = match[1];
-            if (variant$1 !== 3354245) {
-              if (variant$1 !== 365180284) {
-                return undefined;
-              } else {
-                return /* `MarketCdfFloat */[
-                        667773619,
-                        /* record */[
-                          /* prediction */prediction$1,
-                          /* market */market$1,
-                          /* resolution */resolution[1]
-                        ]
-                      ];
-              }
-            } else if (sampleCount !== undefined) {
-              return /* `MarketCdfCdf */[
-                      -249178116,
-                      /* record */[
-                        /* prediction */prediction$1,
-                        /* market */market$1,
-                        /* resolution */resolution[1],
-                        /* sampleCount */sampleCount
-                      ]
-                    ];
-            } else {
-              return undefined;
-            }
-          }
-        } else if (typeof resolution === "number") {
+  var marketPrediction = param[/* marketPrediction */1];
+  var agentPrediction = param[/* agentPrediction */0];
+  if (param[/* marketScoreType */4]) {
+    if (typeof agentPrediction === "number") {
+      return undefined;
+    } else {
+      var variant = agentPrediction[0];
+      if (variant !== -488794310) {
+        if (variant !== 3354245 || marketPrediction !== undefined || typeof resolution === "number") {
           return undefined;
         } else {
-          var variant$2 = resolution[0];
-          if (variant$2 !== 3354245) {
-            if (variant$2 !== 365180284) {
+          var variant$1 = resolution[0];
+          var agentPrediction$1 = agentPrediction[1];
+          if (variant$1 !== 3354245) {
+            if (variant$1 !== 365180284) {
               return undefined;
             } else {
               return /* `NonMarketCdfFloat */[
                       -266870688,
                       /* record */[
-                        /* prediction */prediction$1,
+                        /* agentPrediction */agentPrediction$1,
                         /* resolution */resolution[1]
                       ]
                     ];
@@ -190,7 +154,61 @@ function toValidScoringCombination(param) {
             return /* `NonMarketCdfCdf */[
                     934123625,
                     /* record */[
-                      /* prediction */prediction$1,
+                      /* agentPrediction */agentPrediction$1,
+                      /* resolution */resolution[1],
+                      /* sampleCount */sampleCount
+                    ]
+                  ];
+          } else {
+            return undefined;
+          }
+        }
+      } else if (marketPrediction !== undefined || typeof resolution === "number" || resolution[0] !== -488794310) {
+        return undefined;
+      } else {
+        return /* `NonMarketPercentagePercentage */[
+                603488253,
+                /* record */[
+                  /* agentPrediction */agentPrediction[1],
+                  /* resolution */resolution[1]
+                ]
+              ];
+      }
+    }
+  } else if (typeof agentPrediction === "number") {
+    return undefined;
+  } else {
+    var variant$2 = agentPrediction[0];
+    if (variant$2 !== -488794310) {
+      if (variant$2 !== 3354245 || marketPrediction === undefined) {
+        return undefined;
+      } else {
+        var match = marketPrediction;
+        if (typeof match === "number" || match[0] !== 3354245 || typeof resolution === "number") {
+          return undefined;
+        } else {
+          var variant$3 = resolution[0];
+          var marketPrediction$1 = match[1];
+          var agentPrediction$2 = agentPrediction[1];
+          if (variant$3 !== 3354245) {
+            if (variant$3 !== 365180284) {
+              return undefined;
+            } else {
+              return /* `MarketCdfFloat */[
+                      667773619,
+                      /* record */[
+                        /* agentPrediction */agentPrediction$2,
+                        /* marketPrediction */marketPrediction$1,
+                        /* resolution */resolution[1]
+                      ]
+                    ];
+            }
+          } else if (sampleCount !== undefined) {
+            return /* `MarketCdfCdf */[
+                    -249178116,
+                    /* record */[
+                      /* agentPrediction */agentPrediction$2,
+                      /* marketPrediction */marketPrediction$1,
                       /* resolution */resolution[1],
                       /* sampleCount */sampleCount
                     ]
@@ -200,38 +218,35 @@ function toValidScoringCombination(param) {
           }
         }
       }
-    } else {
-      var prediction$2 = prediction[1];
-      if (market !== undefined) {
-        var match$1 = market;
-        if (typeof match$1 === "number" || match$1[0] !== -488794310 || typeof resolution === "number" || resolution[0] !== -488794310) {
-          return undefined;
-        } else {
-          return /* `MarketPercentagePercentage */[
-                  -130172208,
-                  /* record */[
-                    /* prediction */prediction$2,
-                    /* market */match$1[1],
-                    /* resolution */resolution[1]
-                  ]
-                ];
-        }
-      } else if (typeof resolution === "number" || resolution[0] !== -488794310) {
+    } else if (marketPrediction !== undefined) {
+      var match$1 = marketPrediction;
+      if (typeof match$1 === "number" || match$1[0] !== -488794310 || typeof resolution === "number" || resolution[0] !== -488794310) {
         return undefined;
       } else {
-        return /* `NonMarketPercentagePercentage */[
-                603488253,
+        return /* `MarketPercentagePercentage */[
+                -130172208,
                 /* record */[
-                  /* prediction */prediction$2,
+                  /* agentPrediction */agentPrediction[1],
+                  /* marketPrediction */match$1[1],
                   /* resolution */resolution[1]
                 ]
               ];
       }
+    } else {
+      return undefined;
     }
   }
 }
 
 var ScoringCombination = /* module */[/* toValidScoringCombination */toValidScoringCombination];
+
+function make$3(t) {
+  return t;
+}
+
+var ValidScoringCombinationGroupOverTime = /* module */[/* make */make$3];
+
+var ScoringCombinationGroupOverTime = /* module */[];
 
 exports.UnresolvableResolution = UnresolvableResolution;
 exports.$$Comment = $$Comment;
@@ -240,4 +255,6 @@ exports.Percentage = Percentage;
 exports.Measurement = Measurement;
 exports.ValidScoringCombination = ValidScoringCombination;
 exports.ScoringCombination = ScoringCombination;
+exports.ValidScoringCombinationGroupOverTime = ValidScoringCombinationGroupOverTime;
+exports.ScoringCombinationGroupOverTime = ScoringCombinationGroupOverTime;
 /* Result-Rationale Not a pure module */

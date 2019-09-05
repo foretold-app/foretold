@@ -1,7 +1,6 @@
 open Belt.Result;
 type t = Js.Json.t;
 open Rationale.Result.Infix;
-open Rationale.Function.Infix;
 
 module JsonToMeasurement = {
   module CustomDecoders = {
@@ -25,7 +24,21 @@ module JsonToMeasurement = {
       | "UPDATE" => Ok(`UPDATE)
       | _ => Error("Invalid GraphQL Comment: " ++ str)
       };
+
+    let jsonToCdfPair = (j: Js.Json.t): Types.Cdf.t => {
+      let xs =
+        j |> Json.Decode.field("xs", Json.Decode.array(Json.Decode.float));
+      let ys =
+        j |> Json.Decode.field("ys", Json.Decode.array(Json.Decode.float));
+      {xs, ys};
+    };
   };
+
+  let jsonToSimpleValue = (fn, json: Js.Json.t) =>
+    try (Ok(json |> fn)) {
+    | Json_decode.DecodeError(e) => Error(e)
+    | _ => Error("Unknown Error.")
+    };
 
   let nameToType =
     fun
@@ -37,31 +50,31 @@ module JsonToMeasurement = {
     | "comment" => Ok(`Comment)
     | _ => Error("Not found");
 
-  let decodeResult = (fn, json) =>
-    try (Ok(json |> fn)) {
-    | Json_decode.DecodeError(e) => Error(e)
-    | _ => Error("Unknown Error.")
-    };
-
   let decodeData =
       (a, json: Js.Json.t): Belt.Result.t(Types.Measurement.t, string) => {
-    let convert = (decoderFn, toValue) =>
-      json |> decodeResult(Json.Decode.field("data", decoderFn)) >>= toValue;
+    let jsonToFinalValue = (toSimpleValueFn, toFinalValueFn) =>
+      json
+      |> jsonToSimpleValue(Json.Decode.field("data", toSimpleValueFn))
+      >>= toFinalValueFn;
 
     switch (a) {
-    | `Float => convert(Json.Decode.float, e => Ok(`Float(e)))
-    | `Cdf => convert(Json.Decode.float, e => Ok(`Float(e)))
-    | `Percentage => convert(Json.Decode.float, e => Ok(`Percentage(e)))
-    | `Binary => convert(Json.Decode.bool, e => Ok(`Binary(e)))
+    | `Float => jsonToFinalValue(Json.Decode.float, e => Ok(`Float(e)))
+    | `Cdf =>
+      jsonToFinalValue(CustomDecoders.jsonToCdfPair, e =>
+        e->Types.Cdf.make->Belt.Result.map(r => `Cdf(r))
+      )
+    | `Percentage =>
+      jsonToFinalValue(Json.Decode.float, e => Ok(`Percentage(e)))
+    | `Binary => jsonToFinalValue(Json.Decode.bool, e => Ok(`Binary(e)))
     | `UnresolvableResolution =>
-      convert(Json.Decode.string, e =>
-        CustomDecoders.stringToUnresolvableResolution(e)
-        |> Belt.Result.map(_, r => `UnresolvableResolution(r))
+      jsonToFinalValue(Json.Decode.string, e =>
+        e
+        ->CustomDecoders.stringToUnresolvableResolution
+        ->Belt.Result.map(r => `UnresolvableResolution(r))
       )
     | `Comment =>
-      convert(Json.Decode.string, e =>
-        CustomDecoders.stringToComment(e)
-        |> Belt.Result.map(_, r => `Comment(r))
+      jsonToFinalValue(Json.Decode.string, e =>
+        e->CustomDecoders.stringToComment->Belt.Result.map(r => `Comment(r))
       )
     };
   };

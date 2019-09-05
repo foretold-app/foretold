@@ -39,11 +39,39 @@ function stringToComment(str) {
   }
 }
 
+function jsonToCdfPair(j) {
+  var xs = Json_decode.field("xs", (function (param) {
+          return Json_decode.array(Json_decode.$$float, param);
+        }), j);
+  var ys = Json_decode.field("ys", (function (param) {
+          return Json_decode.array(Json_decode.$$float, param);
+        }), j);
+  return /* record */[
+          /* xs */xs,
+          /* ys */ys
+        ];
+}
+
 var CustomDecoders = /* module */[
   /* floatToPercentage */floatToPercentage,
   /* stringToUnresolvableResolution */stringToUnresolvableResolution,
-  /* stringToComment */stringToComment
+  /* stringToComment */stringToComment,
+  /* jsonToCdfPair */jsonToCdfPair
 ];
+
+function jsonToSimpleValue(fn, json) {
+  try {
+    return /* Ok */Block.__(0, [Curry._1(fn, json)]);
+  }
+  catch (raw_exn){
+    var exn = Caml_js_exceptions.internalToOCamlException(raw_exn);
+    if (exn[0] === Json_decode.DecodeError) {
+      return /* Error */Block.__(1, [exn[1]]);
+    } else {
+      return /* Error */Block.__(1, ["Unknown Error."]);
+    }
+  }
+}
 
 function nameToType(param) {
   switch (param) {
@@ -64,37 +92,23 @@ function nameToType(param) {
   }
 }
 
-function decodeResult(fn, json) {
-  try {
-    return /* Ok */Block.__(0, [Curry._1(fn, json)]);
-  }
-  catch (raw_exn){
-    var exn = Caml_js_exceptions.internalToOCamlException(raw_exn);
-    if (exn[0] === Json_decode.DecodeError) {
-      return /* Error */Block.__(1, [exn[1]]);
-    } else {
-      return /* Error */Block.__(1, ["Unknown Error."]);
-    }
-  }
-}
-
 function decodeData(a, json) {
-  var convert = function (decoderFn, toValue) {
-    return Curry._2(Result$Rationale.Infix[/* >>= */0], decodeResult((function (param) {
-                      return Json_decode.field("data", decoderFn, param);
-                    }), json), toValue);
+  var jsonToFinalValue = function (toSimpleValueFn, toFinalValueFn) {
+    return Curry._2(Result$Rationale.Infix[/* >>= */0], jsonToSimpleValue((function (param) {
+                      return Json_decode.field("data", toSimpleValueFn, param);
+                    }), json), toFinalValueFn);
   };
   if (a >= -488794310) {
     if (a >= 365180284) {
       if (a >= 564146209) {
-        return convert(Json_decode.bool, (function (e) {
+        return jsonToFinalValue(Json_decode.bool, (function (e) {
                       return /* Ok */Block.__(0, [/* `Binary */[
                                   564146209,
                                   e
                                 ]]);
                     }));
       } else {
-        return convert(Json_decode.$$float, (function (e) {
+        return jsonToFinalValue(Json_decode.$$float, (function (e) {
                       return /* Ok */Block.__(0, [/* `Float */[
                                   365180284,
                                   e
@@ -102,14 +116,16 @@ function decodeData(a, json) {
                     }));
       }
     } else if (a >= 3354245) {
-      return convert(Json_decode.$$float, (function (e) {
-                    return /* Ok */Block.__(0, [/* `Float */[
-                                365180284,
-                                e
-                              ]]);
+      return jsonToFinalValue(jsonToCdfPair, (function (e) {
+                    return Belt_Result.map(Types$Measurement.Cdf[/* make */2](e), (function (r) {
+                                  return /* `Cdf */[
+                                          3354245,
+                                          r
+                                        ];
+                                }));
                   }));
     } else {
-      return convert(Json_decode.$$float, (function (e) {
+      return jsonToFinalValue(Json_decode.$$float, (function (e) {
                     return /* Ok */Block.__(0, [/* `Percentage */[
                                 -488794310,
                                 e
@@ -117,9 +133,8 @@ function decodeData(a, json) {
                   }));
     }
   } else if (a >= -826170817) {
-    return convert(Json_decode.string, (function (e) {
-                  var __x = stringToComment(e);
-                  return Belt_Result.map(__x, (function (r) {
+    return jsonToFinalValue(Json_decode.string, (function (e) {
+                  return Belt_Result.map(stringToComment(e), (function (r) {
                                 return /* `Comment */[
                                         -826170817,
                                         r
@@ -127,9 +142,8 @@ function decodeData(a, json) {
                               }));
                 }));
   } else {
-    return convert(Json_decode.string, (function (e) {
-                  var __x = stringToUnresolvableResolution(e);
-                  return Belt_Result.map(__x, (function (r) {
+    return jsonToFinalValue(Json_decode.string, (function (e) {
+                  return Belt_Result.map(stringToUnresolvableResolution(e), (function (r) {
                                 return /* `UnresolvableResolution */[
                                         -882782856,
                                         r
@@ -151,8 +165,8 @@ function run(json) {
 
 var JsonToMeasurement = /* module */[
   /* CustomDecoders */CustomDecoders,
+  /* jsonToSimpleValue */jsonToSimpleValue,
   /* nameToType */nameToType,
-  /* decodeResult */decodeResult,
   /* decodeData */decodeData,
   /* run */run
 ];

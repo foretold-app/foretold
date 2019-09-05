@@ -297,9 +297,9 @@ function measurementScore({ prediction, aggregate, outcome }) {
   switch (combinationType) {
     case MEASUREMENT_VALUE.percentage:
       return scoringFunctions.percentageInputPercentageOutput({
-        predictionPercentage: _getDataValue(prediction),
-        aggregatePercentage: _getDataValue(aggregate),
-        resultPercentage: !!_getDataValue(outcome) ? 100.0 : 0.0
+        predictionPercentage: _getDataValue(prediction) / 100,
+        aggregatePercentage: _getDataValue(aggregate) / 100,
+        resultPercentage: !!_getDataValue(outcome) ? 1.0 : 0.0
       });
     case MEASUREMENT_VALUE.floatCdf:
       return scoringFunctions.distributionInputDistributionOutput({
@@ -335,6 +335,52 @@ function measurementScore({ prediction, aggregate, outcome }) {
 }
 
 /**
+ * @param prediction
+ * @param aggregate
+ * @param outcome
+ * @returns {number|*}
+ */
+function _nonMarketLogScore({ prediction, outcome }) {
+  // It should really return null or false if one of these doesn't exist.
+  if (!prediction || !outcome) return 0;
+
+  const combinationType = _matcher({
+    prediction: _getDataType(prediction),
+    aggregate: _getDataType(prediction),
+    outcome: _getDataType(outcome)
+  });
+
+  switch (combinationType) {
+    case MEASUREMENT_VALUE.percentage:
+      return scoringFunctions.percentageInputPercentageOutputMarketless({
+        predictionPercentage: _getDataValue(prediction) / 100,
+        resultPercentage: !!_getDataValue(outcome) ? 1 : 0
+      });
+    case MEASUREMENT_VALUE.floatCdf:
+      return scoringFunctions.distributionInputDistributionOutputMarketless({
+        predictionCdf: new Cdf(
+          _getDataValue(prediction).xs,
+          _getDataValue(prediction).ys,
+        ),
+        resultCdf: new Cdf(
+          _getDataValue(outcome).xs,
+          _getDataValue(outcome).ys,
+        ),
+      });
+    case MEASUREMENT_VALUE.floatPoint:
+      return scoringFunctions.distributionInputPointOutputMarketless({
+        predictionCdf: new Cdf(
+          _getDataValue(prediction).xs,
+          _getDataValue(prediction).ys,
+        ),
+        resultPoint: _getDataValue(outcome),
+      });
+    case null:
+      // It should really return null or false if invalid.
+      return 0;
+  }
+}
+/**
  * @param {*} root
  * @param {object} args
  * @param {Schema.Context} context
@@ -351,6 +397,23 @@ async function primaryPointScore(root, args, context, info) {
   return _.round(result, 2);
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function nonMarketLogScore(root, args, context, info) {
+  const result = _nonMarketLogScore({
+    prediction: await prediction(root, args, context, info),
+    outcome: await outcome(root, args, context, info),
+  });
+  console.log("GOT LOG SCORE", result);
+
+  return _.round(result, 2);
+}
+
 module.exports = {
   one,
   all,
@@ -360,6 +423,7 @@ module.exports = {
   prediction,
   outcome,
   outcomeByRootId,
+  nonMarketLogScore,
   previousAggregate,
   latestAggregateByRootId,
   primaryPointScore,

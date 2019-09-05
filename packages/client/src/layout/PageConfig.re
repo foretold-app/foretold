@@ -19,27 +19,6 @@ module Wrapper = {
         );
 };
 
-module Renderer = {
-  type channelId = string;
-  type channelPage = Routing.ChannelPage.t;
-  type loggedInUser = Types.user;
-
-  type t =
-    | Channel(channelPage, loggedInUser)
-    | NoChannel;
-
-  let normal = SLayout.FullPage.makeWithEl;
-  let channelLayout = (channelPage, loggedInUser) =>
-    Channel_Layout_C.makeWithEl(channelPage, loggedInUser);
-
-  let toComponent = t =>
-    switch (t) {
-    | Channel(channelPage, loggedInUser) =>
-      channelLayout(channelPage, loggedInUser, None)
-    | NoChannel => normal
-    };
-};
-
 module LayoutWrapper = {
   let standardLayoutAndWrapper =
       (
@@ -51,7 +30,7 @@ module LayoutWrapper = {
           ) =>
           'b,
       ) =>
-    make(~layout=Renderer.normal)
+    make(~layout=SLayout.FullPage.makeWithEl)
     |> Wrapper.noChannelSidebar(~key="", loggedInUser);
 };
 

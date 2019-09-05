@@ -326,12 +326,28 @@ let measurableColumn =
 
 let scoreColumn = (loggedInUser: Types.user) =>
   Table.Column.make(
-    ~name="Score" |> ste,
+    ~name="Relative Score" |> ste,
     ~render=
       (measurement: Types.measurement) =>
         measurement.measurementScoreSet
         |> E.O.ffmap((o: Types.measurementScoreSet) =>
              o.primaryPointScore |> E.O.fmap(E.Float.toString)
+           )
+        |> E.O.default("0.0")
+        |> Utils.ste,
+    ~show=_ => Primary.User.showif(loggedInUser),
+    ~flex=1,
+    (),
+  );
+
+let logScoreColumn = (loggedInUser: Types.user) =>
+  Table.Column.make(
+    ~name="LogScore" |> ste,
+    ~render=
+      (measurement: Types.measurement) =>
+        measurement.measurementScoreSet
+        |> E.O.ffmap((o: Types.measurementScoreSet) =>
+             o.nonMarketLogScore |> E.O.fmap(E.Float.toString)
            )
         |> E.O.default("0.0")
         |> Utils.ste,
@@ -364,7 +380,8 @@ let bottomSubRowFn =
       |> E.O.fmap((c: React.element) => [|FC.Table.Row.textSection(c)|]),
   );
 
-let make = (_loggedInUser: Types.user, measurementsList: list(measurement)) => {
+let make =
+    (~loggedInUser: Types.user, ~measurementsList: list(measurement), ()) => {
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
   let all = [|
@@ -389,13 +406,14 @@ let make = (_loggedInUser: Types.user, measurementsList: list(measurement)) => {
 };
 
 let makeExtended =
-    (loggedInUser: Types.user, measurementsList: list(measurement)) => {
+    (~loggedInUser: Types.user, ~measurementsList: list(measurement), ()) => {
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
   let all = [|
     getPredictionDistributionColumn(bounds),
     predictionValueColumn,
     agentColumn,
+    logScoreColumn(loggedInUser),
     scoreColumn(loggedInUser),
     timeColumn,
   |];

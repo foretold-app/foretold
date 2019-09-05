@@ -9,7 +9,7 @@ module CMutationForm =
 
 let component = ReasonReact.statelessComponent("ChannelEdit");
 
-let make = (~channelId: string, ~loggedInUser: Types.user, ~layout, _children) => {
+let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _ => {
     let loadChannel = ChannelGet.getChannelByIdAsComponent(~id=channelId);
@@ -90,6 +90,6 @@ let make = (~channelId: string, ~loggedInUser: Types.user, ~layout, _children) =
        )}
     </FC.PageCard.BodyPadding>
     |> SLayout.LayoutConfig.make(~head=header, ~body=_)
-    |> layout;
+    |> SLayout.FullPage.makeWithEl;
   },
 };

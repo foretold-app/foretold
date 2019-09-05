@@ -48,13 +48,7 @@ let load2Queries = (channelId, seriesId, itemsPerPage, fn) =>
 
 let component = ReasonReact.statelessComponent("SeriesShowPage");
 let make =
-    (
-      ~channelId: string,
-      ~id: string,
-      ~loggedInUser: Types.user,
-      ~layout=SLayout.FullPage.makeWithEl,
-      _children,
-    ) => {
+    (~channelId: string, ~id: string, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _ => {
     let loadData = load2Queries(channelId, id, 50);
@@ -103,7 +97,7 @@ let make =
           | _ => <div />
           },
       )
-      |> layout
+      |> SLayout.FullPage.makeWithEl
     )
     |> E.React.makeToEl;
   },

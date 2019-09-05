@@ -71,6 +71,14 @@ module Percentage = {
 };
 
 module Measurement = {
+  type typeNames =
+    | Cdf
+    | Float
+    | Binary
+    | Percentage
+    | UnresolvableResolution
+    | Comment;
+
   type t = [
     | `Cdf(Cdf.t)
     | `Float(float)
@@ -79,8 +87,55 @@ module Measurement = {
     | `UnresolvableResolution(UnresolvableResolution.t)
     | `Comment(Comment.t)
   ];
+
+  let isCdf = (t: t) =>
+    switch (t) {
+    | `Cdf(_) => true
+    | _ => false
+    };
+
+  let toCdf = (t: t) =>
+    switch (t) {
+    | `Cdf(cdf) => Some(cdf)
+    | _ => None
+    };
+
+  let toTypeName = (t: t) =>
+    switch (t) {
+    | `Cdf(_) => Cdf
+    | `Float(_) => Cdf
+    | `Binary(_) => Cdf
+    | `Percentage(_) => Cdf
+    | `UnresolvableResolution(_) => Cdf
+    | `Comment(_) => Cdf
+    };
 };
 
+type time = int;
+module TypedMeasurementWithTime = {
+  type t('a) = {
+    measurement: 'a,
+    time,
+  };
+  type ts('a) = array(t('a));
+  let make = (time, measurement) => {measurement, time};
+};
+
+module MeasurementWithTime = {
+  type t = {
+    measurement: Measurement.t,
+    time,
+  };
+  type ts = array(t);
+  // let tsToTypedTs = ({measurement, time}: t) =>
+  //   switch (measurement) {
+  //   | `Cdf(v) => `Cdf(TypedMeasurementWithTime.make(3.0, time))
+  //   };
+};
+
+let foo: MeasurementWithTime.ts = [|{measurement: `Float(3.0), time: 34}|];
+
+>>>>>>> gentype-2
 module ValidScoringCombination = {
   type marketCdfCdf = {
     agentPrediction: Cdf.t,
@@ -288,8 +343,8 @@ module ScoringCombinationGroupOverTime = {
   };
 
   type genNonMarket('a, 'b) = {
-    agentPredictions: measurementsWithTime('a),
-    resolution: measurementsWithTime('b),
+    agentPredictions: TypedMeasurementWithTime.ts('a),
+    resolution: TypedMeasurementWithTime.t('b),
     beginningTime: time,
   };
 
@@ -303,4 +358,40 @@ module ScoringCombinationGroupOverTime = {
         genNonMarket(Percentage.t, Percentage.t),
       )
   ];
+};
+
+module Interface = {
+  type time = int;
+
+  module MeasurementWithTime = {
+    type t = {
+      measurement: Measurement.t,
+      time,
+    };
+    type ts = array(t);
+  };
+
+  module MarketCombination = {
+    type t = {
+      agentPredictions: MeasurementsWithTime.t,
+      marketPredictions: MeasurementsWithTime.t,
+      resolution: MeasurementWithTime.t,
+      beginningTime: time,
+    };
+    // let toMain =
+    //     ({agentPredictions, marketPredictions, resolution, beginningTime}: t) => {
+    //       let agentPreds =
+    //     };
+  };
+
+  module NonMarketCombination = {
+    type t = {
+      agentPredictions: measurementsWithTime,
+      marketPredictions: measurementsWithTime,
+      resolution: measurementWithTime,
+      beginningTime: time,
+    };
+    let score =
+        ({agentPredictions, marketPredictions, resolution, beginningTime}: t) => 3.;
+  };
 };

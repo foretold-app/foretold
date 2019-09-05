@@ -5,13 +5,7 @@ module CMutationForm =
     type queryType = MeasurableCreate.GraphQL.t;
   });
 
-let make =
-    (
-      ~channelId,
-      ~layout=SLayout.FullPage.makeWithEl,
-      ~loggedInUser: Types.user,
-      _children,
-    ) => {
+let make = (~channelId, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _ => {
     let formCreator = mutation =>
@@ -70,6 +64,6 @@ let make =
            |> E.React.el}
         </FC.PageCard.BodyPadding>,
     )
-    |> layout;
+    |> SLayout.FullPage.makeWithEl;
   },
 };

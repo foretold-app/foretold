@@ -37,6 +37,13 @@ module LoadedAndSelected = {
       key={t.selectedMeasurable.id}
       loggedInUser={t.loggedInUser}
     />;
+
+  let body2 = (t: t) =>
+    <Measurements
+      measurableId={t.selectedMeasurable.id}
+      key={t.selectedMeasurable.id}
+      loggedInUser={t.loggedInUser}
+    />;
 };
 
 module LoadedAndUnselected = {
@@ -116,16 +123,12 @@ module LoadedAndUnselected = {
         }
       )
       |> E.O.toExn("");
-    <>
-      <MeasurableIndexTable
-        measurables
-        showExtraData=true
-        channelId={Some(t.channel.id)}
-        onSelect={e =>
-          Reducer.Components.sendSelectItem(t.reducerParams, e.id)
-        }
-      />
-    </>;
+    <MeasurableIndexTable
+      measurables
+      showExtraData=true
+      channelId={Some(t.channel.id)}
+      onSelect={e => Reducer.Components.sendSelectItem(t.reducerParams, e.id)}
+    />;
   };
 };
 
@@ -145,23 +148,32 @@ module MeasurableIndexDataState = {
         ~head=E.React.null,
         ~body="Item Not Valid" |> ste,
       )
+      |> SLayout.FullPage.makeWithEl
     | WithChannelButNotQuery(_c) =>
       SLayout.LayoutConfig.make(~head=E.React.null, ~body=<SLayout.Spin />)
+      |> SLayout.FullPage.makeWithEl
     | LoadedAndUnselected(l) =>
       SLayout.LayoutConfig.make(
         ~head=LoadedAndUnselected.header(l, stats, selectedState),
         ~body=LoadedAndUnselected.body(l, send),
       )
+      |> SLayout.FullPage.makeWithEl
     | LoadedAndSelected(l) =>
-      SLayout.LayoutConfig.make(
-        ~head=LoadedAndSelected.header(l, send),
-        ~body=LoadedAndSelected.body(l),
-      )
+      <>
+        {SLayout.LayoutConfig.make(
+           ~head=LoadedAndSelected.header(l, send),
+           ~body=LoadedAndSelected.body(l),
+         )
+         |> SLayout.FullPage.makeWithEl}
+        {LoadedAndSelected.body2(l)}
+      </>
+
     | WithoutChannel(_) =>
       SLayout.LayoutConfig.make(
         ~head=E.React.null,
         ~body="No channel." |> ste,
       )
+      |> SLayout.FullPage.makeWithEl
     };
   };
 };

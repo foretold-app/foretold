@@ -25,6 +25,11 @@ function distributionInputPointOutput({predictionCdf, aggregateCdf, resultPoint}
     return ensureScoreInBounds(scoreFunctionWithoutResult({prediction: _predictionPdfValue, aggregate: _aggregatePdfValue}));
 }
 
+function distributionInputPointOutputMarketless({predictionCdf, resultPoint}){
+    let _predictionPdfValue = (predictionCdf).toPdf().findY(resultPoint);
+    return Math.log2(_predictionPdfValue);
+}
+
 function distributionInputDistributionOutputDistribution({predictionCdf, aggregateCdf, resultCdf, sampleCount=10000}){
     let _predictionPdf = predictionCdf.toPdf();
     let _aggregatePdf = aggregateCdf.toPdf();
@@ -36,9 +41,20 @@ function distributionInputDistributionOutputDistribution({predictionCdf, aggrega
     return continuousResult;
 }
 
+
 function distributionInputDistributionOutput({predictionCdf, aggregateCdf, resultCdf, sampleCount=10000}){
     let pdfResult = distributionInputDistributionOutputDistribution({predictionCdf, aggregateCdf, resultCdf, sampleCount});
     return ensureScoreInBounds(pdfResult.integral());
+}
+
+function distributionInputDistributionOutputMarketless({predictionCdf, resultCdf, sampleCount=10000}){
+    let _predictionPdf = predictionCdf.toPdf();
+    let _resultPdf = resultCdf.toPdf();
+    let combination = new ContinuousDistributionCombination([_predictionPdf, _resultPdf]);
+    let continuousResult = combination.combineYsWithFn(sampleCount,
+        r => (r[1] * Math.log2(r[0] / r[1]))
+    );
+    return continuousResult.integral();
 }
 
 function percentageInputPercentageOutput({predictionPercentage, aggregatePercentage, resultPercentage}){
@@ -56,7 +72,17 @@ function percentageInputPercentageOutput({predictionPercentage, aggregatePercent
     return ensureScoreInBounds(isFalseFactor + isTrueFactor);
 }
 
+function percentageInputPercentageOutputMarketless({predictionPercentage, resultPercentage}){
+    let inverse = (e) => (1 - e);
+    let isFalseFactor = resultPercentage * Math.log2(predictionPercentage);
+    let isTrueFactor = inverse(resultPercentage) * Math.log2(inverse(predictionPercentage));
+    return isFalseFactor + isTrueFactor;
+}
+
 let scoringFunctions = {
+  distributionInputPointOutputMarketless,
+  distributionInputDistributionOutputMarketless,
+  percentageInputPercentageOutputMarketless,
   distributionInputPointOutput,
   distributionInputDistributionOutputDistribution,
   distributionInputDistributionOutput,

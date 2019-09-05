@@ -76,13 +76,7 @@ module CMutationForm =
   });
 
 let component = ReasonReact.statelessComponent("ChannelInviteMember");
-let make =
-    (
-      ~channelId: string,
-      ~loggedInUser: Types.user,
-      ~layout=SLayout.FullPage.makeWithEl,
-      _children,
-    ) => {
+let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _ =>
     SLayout.LayoutConfig.make(
@@ -120,5 +114,5 @@ let make =
            )}
         </FC.PageCard.BodyPadding>,
     )
-    |> layout,
+    |> SLayout.FullPage.makeWithEl,
 };

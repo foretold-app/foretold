@@ -113,12 +113,13 @@ module Scoring = {
          |> E.O.React.fmapOrNull(v =>
               <FC__CdfChart__Large minX maxX cdf=v width=None />
             )}
-        <h3> {"(A + B) * C" |> ReasonReact.string} </h3>
+        <h3> {"C * Log2(A / B)" |> ReasonReact.string} </h3>
         {switch (distributionScoreDistribution) {
          | None => ReasonReact.null
          | Some(divideBy) =>
            <FC__CdfChart__Large minX maxX cdf=divideBy width=None />
          }}
+        <h3> {"Final Score" |> ReasonReact.string} </h3>
         {switch (distributionScoreNumber) {
          | None => ReasonReact.null
          | Some(scoreNumber) =>

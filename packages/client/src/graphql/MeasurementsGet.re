@@ -47,6 +47,7 @@ let toMeasurement = (measurement): Types.measurement => {
 
          Primary.MeasurementScoreSet.make(
            ~primaryPointScore=measurementScoreSet##primaryPointScore,
+           ~nonMarketLogScore=measurementScoreSet##nonMarketLogScore,
            ~prediction,
            ~outcome,
            ~previousAggregate,
@@ -198,6 +199,7 @@ module Query = [%graphql
                         }
                     }
                     primaryPointScore
+                    nonMarketLogScore
                   }
               }
           }

@@ -8,6 +8,7 @@ const { setContextMeasurableByRoot } = require('./measurables');
 const { measurableNameValidation } = require('./measurables');
 const { measurementValueValidation } = require('./measurements');
 const { measurableStateValidation } = require('./measurements');
+const { measurementTypeValidation } = require('./measurements');
 const { setContextBot } = require('./bots');
 const { setContextPreference } = require('./preferences');
 const { setContextUser } = require('./users');
@@ -102,6 +103,7 @@ const middlewares = {
       await measurementValueValidation(root, args, context, info);
       await setContextMeasurable(root, args, context, info);
       await measurableStateValidation(root, args, context, info);
+      await measurementTypeValidation(root, args, context, info);
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
       return resolve(root, args, context, info);

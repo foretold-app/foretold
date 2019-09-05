@@ -186,24 +186,28 @@ let defaultEmpty = (o: option(array('a))): array('a) =>
   };
 
 // let foo: MeasurementWithTime.ts = [|{measurement: `Float(3.0), time: 34}|];
-let foo = [|`Float(3.0)|];
-let typee =
-  Belt.Array.get(foo, 0) |> Rationale.Option.map(Measurement.toTypeName);
+let foo: MeasurementWithTime.ts = [|{time: 34, measurement: `Float(3.0)}|];
 
-let mainType: option(TypedMeasurementWithTime.ts) =
-  switch (typee) {
-  | Some(Cdf) =>
-    Some(
-      foo
-      |> Belt.Array.map(_, Measurement.toCdf)
-      |> concatSome
-      |> Belt.Array.map(_, r =>
-           TypedMeasurementWithTime.{time: 32, measurement: r}
-         )
-      |> (r => `Cdf(r)),
-    )
-  | _ => None
+let firstElementType =
+  Belt.Array.get(foo, 0)
+  |> Rationale.Option.map((r: MeasurementWithTime.t) =>
+       r.measurement |> Measurement.toTypeName
+     );
+
+let mainType = (items, firstElementType: Measurement.typeNames) => {
+  switch (firstElementType) {
+  | Cdf =>
+    items
+    |> Belt.Array.map(_, ({time, measurement}: MeasurementWithTime.t) =>
+         switch (Measurement.toCdf(measurement)) {
+         | Some(c) => Some(TypedMeasurementWithTime.{time, measurement: c})
+         | None => None
+         }
+       )
+    |> concatSome
+    |> (r => `Cdf(r))
   };
+};
 
 module ValidScoringCombination = {
   type marketCdfCdf = {
@@ -392,7 +396,7 @@ module ValidScoringCombinationGroupOverTime = {
   };
 
   let make = (t: t) => t;
-} /* }*/ /*     }*/ /*     //     ({agentPredictions, marketPredictions, resolution, beginningTime}: t) => */ /*     //     }*/ /*   module NonMarketCombination = */ /*       agentPredictions: measurementsWithTime*/ /*       resolution: measurementWithTime*/ /*     }*/ /*         ({agentPredictions, marketPredictions, resolution, beginningTime}: t) => 3.*/ /*   }*/ /*     let score */ /*       beginningTime: time*/ /*       marketPredictions: measurementsWithTime*/ /*     type t = */ /*   }*/ /*     //       let agentPreds */ /*     // let toMain */;
+} /* }*/ /*         genNonMarket(Percentage.t, Percentage.t)*/ /*   ]*/ /* module Interface = */ /*   module MeasurementWithTime = */ /*       measurement: Measurement.t*/ /*     }*/ /*   }*/ /*     type t = */ /*       marketPredictions: MeasurementsWithTime.t*/ /*       beginningTime: time*/ /*     // let toMain */ /*     //       let agentPreds */ /*   }*/ /*     type t = */ /*       marketPredictions: measurementsWithTime*/ /*       beginningTime: time*/ /*     let score */ /*   }*/ /*         ({agentPredictions, marketPredictions, resolution, beginningTime}: t) => 3.*/ /*     }*/ /*       resolution: measurementWithTime*/ /*       agentPredictions: measurementsWithTime*/ /*   module NonMarketCombination = */ /*     //     }*/ /*     //     ({agentPredictions, agentPreds */ /*     // let toMain */ /*       beginningTime: time*/ /*       marketPredictions: MeasurementsWithTime.t*/ /*     type t = */ /*   }*/ /*     }*/ /*       measurement: Measurement.t*/ /*   module MeasurementWithTime = */ /* module Interface = */ /*   ]*/;
 
 // module ScoringCombinationGroupOverTime = {
 //   type time = int;
@@ -425,24 +429,3 @@ module ValidScoringCombinationGroupOverTime = {
 //     | `NonMarketCdfFloat(genNonMarket(Cdf.t, float))
 //     | `NonMarketPercentagePercentage(
 //         genNonMarket(Percentage.t, Percentage.t),
-//       )
-//   ];
-// };
-
-// module Interface = {
-//   type time = int;
-
-//   module MeasurementWithTime = {
-//     type t = {
-//       measurement: Measurement.t,
-//       time,
-//     };
-//     type ts = array(t);
-//   };
-
-//   module MarketCombination = {
-//     type t = {
-//       agentPredictions: MeasurementsWithTime.t,
-//       marketPredictions: MeasurementsWithTime.t,
-//       resolution: MeasurementWithTime.t,
-//       beginningTime: time,

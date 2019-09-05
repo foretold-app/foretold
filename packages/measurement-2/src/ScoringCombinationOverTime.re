@@ -1,12 +1,6 @@
-type fooType =
-  TypedMeasurementWithTime.TypedMeasurementWithTime.tss(
-    MeasurementValue.Cdf.t,
-  );
-
 module ValidScoringCombinationGroupOverTime = {
   type time = int;
 
-  // open TypedMeasurementWithTime;
   type measurementWithTime('a) =
     TypedMeasurementWithTime.TypedMeasurementWithTime.t('a);
 
@@ -15,11 +9,9 @@ module ValidScoringCombinationGroupOverTime = {
 
   open MeasurementValue;
   type marketCdfCdf = {
-    agentPredictions:
-      TypedMeasurementWithTime.TypedMeasurementWithTime.tss(Cdf.t),
-    marketPredictions:
-      TypedMeasurementWithTime.TypedMeasurementWithTime.tss(Cdf.t),
-    resolution: TypedMeasurementWithTime.TypedMeasurementWithTime.t(Cdf.t),
+    agentPredictions: measurementsWithTime(Cdf.t),
+    marketPredictions: measurementsWithTime(Cdf.t),
+    resolution: measurementWithTime(Cdf.t),
     sampleCount: int,
   };
 
@@ -77,6 +69,13 @@ module ScoringCombinationGroupOverTimeInput = {
     marketScoreType,
   };
 
+  let toResolution =
+      (time, measurementValue: 'a)
+      : TypedMeasurementWithTime.TypedMeasurementWithTime.t('a) => {
+    time,
+    measurementValue,
+  };
+
   let toValidScoringCombination =
       (
         {
@@ -91,6 +90,9 @@ module ScoringCombinationGroupOverTimeInput = {
     let typedAgentPredictions = agentPredictions |> toTypeOfFirstElement;
     let typedMarketPredictions =
       marketPredictions |> Rationale.Option.bind(_, toTypeOfFirstElement);
+
+    let resolutionTime = resolution.time;
+
     switch (
       marketScoreType,
       typedAgentPredictions,
@@ -102,7 +104,7 @@ module ScoringCombinationGroupOverTimeInput = {
         MarketScore,
         Some(`Cdf(agentPredictions)),
         Some(`Cdf(marketPredictions)),
-        {measurement: `Float(result), time},
+        {measurementValue: `Float(result)},
         _,
       ) =>
       Some(
@@ -110,10 +112,7 @@ module ScoringCombinationGroupOverTimeInput = {
           {
             agentPredictions,
             marketPredictions,
-            resolution: {
-              time,
-              measurement: result,
-            },
+            resolution: toResolution(resolutionTime, result),
           }: ValidScoringCombinationGroupOverTime.marketCdfFloat,
         ),
       )
@@ -121,7 +120,7 @@ module ScoringCombinationGroupOverTimeInput = {
         MarketScore,
         Some(`Cdf(agentPredictions)),
         Some(`Cdf(marketPredictions)),
-        {measurement: `Cdf(result), time},
+        {measurementValue: `Cdf(result)},
         Some(sampleCount),
       ) =>
       Some(
@@ -129,10 +128,7 @@ module ScoringCombinationGroupOverTimeInput = {
           {
             agentPredictions,
             marketPredictions,
-            resolution: {
-              time,
-              measurement: result,
-            },
+            resolution: toResolution(resolutionTime, result),
             sampleCount,
           }: ValidScoringCombinationGroupOverTime.marketCdfCdf,
         ),
@@ -141,7 +137,7 @@ module ScoringCombinationGroupOverTimeInput = {
         MarketScore,
         Some(`Percentage(agentPredictions)),
         Some(`Percentage(marketPredictions)),
-        {measurement: `Percentage(result), time},
+        {measurementValue: `Percentage(result)},
         _,
       ) =>
       Some(
@@ -149,10 +145,7 @@ module ScoringCombinationGroupOverTimeInput = {
           {
             agentPredictions,
             marketPredictions,
-            resolution: {
-              time,
-              measurement: result,
-            },
+            resolution: toResolution(resolutionTime, result),
           }: ValidScoringCombinationGroupOverTime.marketPercentagePercentage,
         ),
       )
@@ -160,17 +153,14 @@ module ScoringCombinationGroupOverTimeInput = {
         NonMarketScore,
         Some(`Cdf(agentPredictions)),
         _,
-        {measurement: `Cdf(result), time},
+        {measurementValue: `Cdf(result)},
         Some(sampleCount),
       ) =>
       Some(
         `NonMarketCdfCdf(
           {
             agentPredictions,
-            resolution: {
-              time,
-              measurement: result,
-            },
+            resolution: toResolution(resolutionTime, result),
             sampleCount,
           }: ValidScoringCombinationGroupOverTime.nonMarketCdfCdf,
         ),
@@ -179,17 +169,14 @@ module ScoringCombinationGroupOverTimeInput = {
         NonMarketScore,
         Some(`Cdf(agentPredictions)),
         _,
-        {measurement: `Float(result), time},
+        {measurementValue: `Float(result)},
         _,
       ) =>
       Some(
         `NonMarketCdfFloat(
           {
             agentPredictions,
-            resolution: {
-              time,
-              measurement: result,
-            },
+            resolution: toResolution(resolutionTime, result),
           }: ValidScoringCombinationGroupOverTime.nonMarketCdfFloat,
         ),
       )
@@ -197,17 +184,14 @@ module ScoringCombinationGroupOverTimeInput = {
         NonMarketScore,
         Some(`Percentage(agentPredictions)),
         _,
-        {measurement: `Percentage(result), time},
+        {measurementValue: `Percentage(result)},
         _,
       ) =>
       Some(
         `NonMarketPercentagePercentage(
           {
             agentPredictions,
-            resolution: {
-              time,
-              measurement: result,
-            },
+            resolution: toResolution(resolutionTime, result),
           }: ValidScoringCombinationGroupOverTime.nonMarketPercentagePercentage,
         ),
       )

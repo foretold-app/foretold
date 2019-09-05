@@ -15,11 +15,11 @@ let defaultEmpty = (o: option(array('a))): array('a) =>
 
 module TypedMeasurementWithTime = {
   type t('a) = {
-    measurement: 'a,
+    measurementValue: 'a,
     time,
   };
   type tss('a) = array(t('a));
-  let make = (time, measurement) => {measurement, time};
+  let make = (time, measurementValue) => {measurementValue, time};
   type ts =
     ValueType.T.t(
       tss(MeasurementValue.Cdf.t),
@@ -33,7 +33,7 @@ module TypedMeasurementWithTime = {
 
 module MeasurementWithTime = {
   type t = {
-    measurement: MeasurementValue.MeasurementValue.t,
+    measurementValue: MeasurementValue.MeasurementValue.t,
     time,
   };
   type ts = array(t);
@@ -42,7 +42,7 @@ module MeasurementWithTime = {
     ts
     |> Belt.Array.get(_, 0)
     |> Rationale.Option.map((r: t) =>
-         r.measurement |> ValueType.TypeName.fromType
+         r.measurementValue |> ValueType.TypeName.fromType
        );
 
   let toTypedMeasurementsWithTime =
@@ -51,10 +51,10 @@ module MeasurementWithTime = {
     let transform = (t2, t3): TypedMeasurementWithTime.ts =>
       ts
       |> Belt.Array.map(_, (t: t) =>
-           t.measurement
+           t.measurementValue
            |> t2
-           |> Rationale.Option.map(measurement =>
-                TypedMeasurementWithTime.{time: t.time, measurement}
+           |> Rationale.Option.map(measurementValue =>
+                TypedMeasurementWithTime.{time: t.time, measurementValue}
               )
          )
       |> concatSome

@@ -1,24 +1,32 @@
-open MeasurementValue;
+type fooType =
+  TypedMeasurementWithTime.TypedMeasurementWithTime.tss(
+    MeasurementValue.Cdf.t,
+  );
 
 module ValidScoringCombinationGroupOverTime = {
   type time = int;
 
+  // open TypedMeasurementWithTime;
   type measurementWithTime('a) =
     TypedMeasurementWithTime.TypedMeasurementWithTime.t('a);
 
   type measurementsWithTime('a) =
     TypedMeasurementWithTime.TypedMeasurementWithTime.tss('a);
 
+  open MeasurementValue;
   type marketCdfCdf = {
-    agentPredictions: measurementsWithTime(Cdf.t),
-    marketPredictions: measurementsWithTime(Cdf.t),
-    resolution: measurementWithTime(Cdf.t),
+    agentPredictions:
+      TypedMeasurementWithTime.TypedMeasurementWithTime.tss(Cdf.t),
+    marketPredictions:
+      TypedMeasurementWithTime.TypedMeasurementWithTime.tss(Cdf.t),
+    resolution: TypedMeasurementWithTime.TypedMeasurementWithTime.t(Cdf.t),
     sampleCount: int,
   };
+
   type marketCdfFloat = {
     agentPredictions: measurementsWithTime(Cdf.t),
     marketPredictions: measurementsWithTime(Cdf.t),
-    resolutions: measurementWithTime(float),
+    resolution: measurementWithTime(float),
   };
   type marketPercentagePercentage = {
     agentPredictions: measurementsWithTime(Percentage.t),
@@ -88,14 +96,122 @@ module ScoringCombinationGroupOverTimeInput = {
       typedAgentPredictions,
       typedMarketPredictions,
       resolution,
+      sampleCount,
     ) {
     | (
         MarketScore,
-        Some(`Cdf(prediction)),
-        Some(`Cdf(market)),
-        {measurement: `Float(a)},
-      ) => 3.0
-    | _ => 3.0
+        Some(`Cdf(agentPredictions)),
+        Some(`Cdf(marketPredictions)),
+        {measurement: `Float(result), time},
+        _,
+      ) =>
+      Some(
+        `MarketCdfFloat(
+          {
+            agentPredictions,
+            marketPredictions,
+            resolution: {
+              time,
+              measurement: result,
+            },
+          }: ValidScoringCombinationGroupOverTime.marketCdfFloat,
+        ),
+      )
+    | (
+        MarketScore,
+        Some(`Cdf(agentPredictions)),
+        Some(`Cdf(marketPredictions)),
+        {measurement: `Cdf(result), time},
+        Some(sampleCount),
+      ) =>
+      Some(
+        `MarketCdfCdf(
+          {
+            agentPredictions,
+            marketPredictions,
+            resolution: {
+              time,
+              measurement: result,
+            },
+            sampleCount,
+          }: ValidScoringCombinationGroupOverTime.marketCdfCdf,
+        ),
+      )
+    | (
+        MarketScore,
+        Some(`Percentage(agentPredictions)),
+        Some(`Percentage(marketPredictions)),
+        {measurement: `Percentage(result), time},
+        _,
+      ) =>
+      Some(
+        `MarketPercentagePercentage(
+          {
+            agentPredictions,
+            marketPredictions,
+            resolution: {
+              time,
+              measurement: result,
+            },
+          }: ValidScoringCombinationGroupOverTime.marketPercentagePercentage,
+        ),
+      )
+    | (
+        NonMarketScore,
+        Some(`Cdf(agentPredictions)),
+        _,
+        {measurement: `Cdf(result), time},
+        Some(sampleCount),
+      ) =>
+      Some(
+        `NonMarketCdfCdf(
+          {
+            agentPredictions,
+            resolution: {
+              time,
+              measurement: result,
+            },
+            sampleCount,
+          }: ValidScoringCombinationGroupOverTime.nonMarketCdfCdf,
+        ),
+      )
+    | (
+        NonMarketScore,
+        Some(`Cdf(agentPredictions)),
+        _,
+        {measurement: `Float(result), time},
+        _,
+      ) =>
+      Some(
+        `NonMarketCdfFloat(
+          {
+            agentPredictions,
+            resolution: {
+              time,
+              measurement: result,
+            },
+          }: ValidScoringCombinationGroupOverTime.nonMarketCdfFloat,
+        ),
+      )
+    | (
+        NonMarketScore,
+        Some(`Percentage(agentPredictions)),
+        _,
+        {measurement: `Percentage(result), time},
+        _,
+      ) =>
+      Some(
+        `NonMarketPercentagePercentage(
+          {
+            agentPredictions,
+            resolution: {
+              time,
+              measurement: result,
+            },
+          }: ValidScoringCombinationGroupOverTime.nonMarketPercentagePercentage,
+        ),
+      )
+    | _ => None
     };
   };
 };

@@ -52,7 +52,7 @@ app.use(cors());
 
 {
   // Supporting of GitHub integration
-  const { app: subApp } = require('./github/app');
+  const { app: subApp } = require('./lib/github/app');
   app.use('/hooks', subApp);
 }
 

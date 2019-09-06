@@ -5,7 +5,7 @@ const measurables = require('./measurables');
 const producers = require('./producers');
 const consumers = require('./consumers');
 const { Mailer } = require('./mailer');
-const { GitHubApi } = require('../github/git-hub-api');
+const { GitHubApi } = require('../lib/github/git-hub-api');
 
 async function toJudgementPendingTransition() {
   const name = 'Job::toJudgementPendingTransition';

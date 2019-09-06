@@ -3,7 +3,7 @@ const _ = require('lodash');
 const request = require('request');
 const crypto = require('crypto');
 
-const config = require('../config');
+const config = require('../../config');
 
 class GitHubApi {
   /**

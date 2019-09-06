@@ -2,7 +2,7 @@ const assert = require('assert');
 const _ = require('lodash');
 
 const { GitHubApi } = require('./git-hub-api');
-const { GlobalSettingsData } = require('../data/global-settings-data');
+const { GlobalSettingsData } = require('../../data/global-settings-data');
 
 class Trigger {
   /**

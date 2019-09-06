@@ -23,31 +23,27 @@ class ResponseAll {
 
     this._data.map((item, index) => {
       item.index = this._offset + index;
+      item.cursor = item.index;
       return item;
     });
   }
 
   get data() {
-    return this._total;
+    return this._data;
   }
 
   get total() {
     return this._total;
   }
 
-  get edges() {
-    return this._data.map(node => ({ node, cursor: node.index }));
-  }
-
   get pageInfo() {
-    const edges = this.edges;
-    const start = _.head(edges);
-    const end = _.last(edges);
+    const start = _.head(this._data);
+    const end = _.last(this._data);
 
     const startCursor = _.get(start, 'cursor');
     const endCursor = _.get(end, 'cursor');
 
-    const hasNextPage = _.toNumber(endCursor) < (this.total - 1);
+    const hasNextPage = _.toNumber(endCursor) < (this._total - 1);
     const hasPreviousPage = _.toNumber(startCursor) > 0;
 
     return {

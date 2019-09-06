@@ -9,7 +9,7 @@ const { runJobs } = require('./async');
 const { runListeners } = require('./async/listeners');
 const events = require('./async/events');
 const emitter = require('./async/emitter');
-const { apolloServer } = require('./apollo-server');
+const { apolloServer } = require('./graphql/apollo-server');
 
 {
   // Makes sync flows possible

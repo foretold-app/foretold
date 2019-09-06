@@ -1,6 +1,6 @@
 const {
   NOTIFICATION_ERROR_REASON,
-} = require('../../models/enums/notification-error-reason');
+} = require('../../enums/notification-error-reason');
 
 class CustomError extends Error {
   constructor(message) {

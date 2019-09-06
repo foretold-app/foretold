@@ -1,6 +1,6 @@
 const graphql = require('graphql');
 
-const { CHANNEL_MEMBERSHIP_ROLES } = require('../../../models/enums/channel-membership-roles');
+const { CHANNEL_MEMBERSHIP_ROLES } = require('../../../enums/channel-membership-roles');
 
 const channelMembershipRoles = new graphql.GraphQLEnumType({
   name: 'ChannelMembershipRoles',

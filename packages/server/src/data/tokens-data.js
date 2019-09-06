@@ -5,7 +5,7 @@ const { DataBase } = require('./data-base');
 
 const config = require('../config');
 const { TokenModel } = require('../models-abstract');
-const { TOKEN_TYPE } = require('../models/enums/token-type');
+const { TOKEN_TYPE } = require('../enums/token-type');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

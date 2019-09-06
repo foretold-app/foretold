@@ -4,7 +4,7 @@ const assert = require('assert');
 const models = require('../models');
 const {
   MEASUREMENT_COMPETITOR_TYPE,
-} = require('../models/enums/measurement-competitor-type');
+} = require('../enums/measurement-competitor-type');
 const { BrierScore } = require('../lib/brier-score');
 
 const { ModelPostgres } = require('./model-postgres');

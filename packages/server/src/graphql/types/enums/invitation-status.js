@@ -1,6 +1,6 @@
 const graphql = require('graphql');
 
-const { INVITATION_STATUS } = require('../../../models/enums/invitation-status');
+const { INVITATION_STATUS } = require('../../../enums/invitation-status');
 
 const invitationStatus = new graphql.GraphQLEnumType({
   name: 'invitationStatus',

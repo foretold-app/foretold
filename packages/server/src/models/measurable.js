@@ -8,11 +8,11 @@ const {
 
 const { clientUrl } = require('../lib/urls');
 
-const { MEASURABLE_STATE } = require('./enums/measurable-state');
-const { MEASURABLE_VALUE_TYPE } = require('./enums/measurable-value-type');
+const { MEASURABLE_STATE } = require('../enums/measurable-state');
+const { MEASURABLE_VALUE_TYPE } = require('../enums/measurable-value-type');
 const {
   MEASUREMENT_COMPETITOR_TYPE,
-} = require('./enums/measurement-competitor-type');
+} = require('../enums/measurement-competitor-type');
 
 module.exports = (sequelize, DataTypes) => {
   const Measurable = sequelize.define('Measurable', {

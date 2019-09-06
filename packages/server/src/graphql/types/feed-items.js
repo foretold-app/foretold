@@ -3,7 +3,7 @@ const { DateType, resolver } = require('graphql-sequelize');
 
 const models = require('../../models');
 
-const { FEED_ITEM_BODY } = require('../../models/enums/feed-item-body');
+const { FEED_ITEM_BODY } = require('../../enums/feed-item-body');
 
 const feedItemBodyGeneric = new graphql.GraphQLObjectType({
   name: 'FeedItemBodyGeneric',

@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const models = require('../models');
-const { MEASURABLE_STATE } = require('../models/enums/measurable-state');
+const { MEASURABLE_STATE } = require('../enums/measurable-state');
 
 const { ModelPostgres } = require('./model-postgres');
 

@@ -3,7 +3,7 @@ const _ = require('lodash');
 const { AgentMeasurableModel } = require('../models-abstract');
 const {
   MEASUREMENT_COMPETITOR_TYPE,
-} = require('../models/enums/measurement-competitor-type');
+} = require('../enums/measurement-competitor-type');
 
 const { DataBase } = require('./data-base');
 const { MeasurementsData } = require('./measurements-data');

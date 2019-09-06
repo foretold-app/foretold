@@ -5,13 +5,13 @@ const { Binary, Percentage } = require('@foretold/measurement-value');
 const { UnresolvableResolution } = require('@foretold/measurement-value');
 const { Comment } = require('@foretold/measurement-value');
 
-const { MEASURABLE_STATE } = require('../../models/enums/measurable-state');
+const { MEASURABLE_STATE } = require('../../enums/measurable-state');
 const {
   MEASUREMENT_COMPETITOR_TYPE,
-} = require('../../models/enums/measurement-competitor-type');
+} = require('../../enums/measurement-competitor-type');
 const {
   MEASURABLE_VALUE_TYPE,
-} = require('../../models/enums/measurable-value-type');
+} = require('../../enums/measurable-value-type');
 const lang = require('../../lang');
 
 /**

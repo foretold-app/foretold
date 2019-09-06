@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const models = require('../models');
-const { TOKEN_TYPE } = require('../models/enums/token-type');
+const { TOKEN_TYPE } = require('../enums/token-type');
 
 const { ModelPostgres } = require('./model-postgres');
 

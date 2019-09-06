@@ -23,9 +23,10 @@ class ResponseAll {
 
     this._data.map((item, index) => {
       item.index = this._offset + index;
-      item.cursor = item.index;
       return item;
     });
+
+    this._edges = this._data.map(node => ({ node, cursor: node.index }));
   }
 
   get data() {
@@ -36,9 +37,13 @@ class ResponseAll {
     return this._total;
   }
 
+  get edges() {
+    return this._edges;
+  }
+
   get pageInfo() {
-    const start = _.head(this._data);
-    const end = _.last(this._data);
+    const start = _.head(this._edges);
+    const end = _.last(this._edges);
 
     const startCursor = _.get(start, 'cursor');
     const endCursor = _.get(end, 'cursor');

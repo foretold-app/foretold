@@ -45,7 +45,7 @@ class MeasurementsData extends DataBase {
    * @todo: move it into Model Abstraction layer
    * @public
    * @param {Models.Measurable} measurable
-   * @param {Models.ObjectID} agentId
+   * @param {Models.ObjectID | null} agentId
    * @return {Promise<Models.Model>}
    */
   async getLatest({ measurable, agentId } = {}) {
@@ -69,7 +69,7 @@ class MeasurementsData extends DataBase {
 
   /**
    * @public
-   * @param {Models.ObjectID} agentId
+   * @param {Models.ObjectID | null} agentId
    * @return {Promise<number>}
    */
   async getBrierScore(agentId) {
@@ -91,7 +91,7 @@ class MeasurementsData extends DataBase {
 
   /**
    * @public
-   * @param {Models.ObjectID} measurableId
+   * @param {Models.ObjectID | null} measurableId
    * @returns {Promise<Model>}
    */
   async getOutcome(measurableId) {
@@ -100,21 +100,27 @@ class MeasurementsData extends DataBase {
 
   /**
    * @public
-   * @param {Models.ObjectID} measurableId
+   * @param {Models.ObjectID | null} measurableId
+   * @param {Models.ObjectID | null} agentId
    * @param {Date} relevantAt
    * @returns {Promise<Model>}
    */
-  async getPreviousRelevantAggregate(measurableId, relevantAt) {
-    return this.model.getPreviousRelevantAggregate(measurableId, relevantAt);
+  async getPreviousRelevantAggregate(measurableId, agentId, relevantAt) {
+    return this.model.getPreviousRelevantAggregate(
+      measurableId,
+      agentId,
+      relevantAt,
+    );
   }
 
   /**
    * @public
-   * @param {Models.ObjectID} measurableId
+   * @param {Models.ObjectID | null} measurableId
+   * @param {Models.ObjectID | null} agentId
    * @returns {Promise<Model>}
    */
-  async getLatestAggregate(measurableId) {
-    return this.model.getLatestAggregate(measurableId);
+  async getLatestAggregate(measurableId, agentId) {
+    return this.model.getLatestAggregate(measurableId, agentId);
   }
 }
 

@@ -144,6 +144,7 @@ export namespace Models {
 
   export interface GlobalSetting extends Model {
     entityGraph: null | object;
+    botAgentId: null | Models.ObjectID;
   }
 
   export interface AgentMeasurable extends Model {
@@ -167,15 +168,17 @@ export namespace Models {
 export namespace Schema {
   export interface Context {
     // Authentication/authorization section
-    // @todo: add prefix
     user?: Models.User;
     bot?: Models.Bot;
     agent: Models.Agent;
+    creator?: Models.User | Models.Bot;
+
+    // settings
+    botAgentId?: Models.ObjectID;
 
     // After Middleware Interceptions
     userAsObject?: Models.User;
     preference?: Models.Preference;
-    creator?: Models.User | Models.Bot;
     channel?: Models.Channel;
     channelMembership?: Models.ChannelMemberships;
     channelMembershipsAdmins?: Models.ChannelMemberships[];

@@ -386,6 +386,15 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.preferences.update,
       },
 
+      globalSettingUpdate: {
+        type: types.globalSettings.globalSetting,
+        args: {
+          name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          input: { type: graphql.GraphQLNonNull(types.globalSettings.globalSettingUpdateInput) },
+        },
+        resolve: resolvers.globalSettings.update,
+      },
+
     }
   })
 });

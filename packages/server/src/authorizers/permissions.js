@@ -189,6 +189,7 @@ const rules = {
         ),
       ),
     ),
+    globalSettingUpdate: currentAgentIsApplicationAdmin,
 
     ...rulesBots.Mutation,
     ...rulesMeasurables.Mutation,

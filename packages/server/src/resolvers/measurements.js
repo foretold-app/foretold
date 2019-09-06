@@ -211,8 +211,10 @@ async function outcomeByRootId(root, _args, _context, _info) {
 async function previousAggregate(root, args, context, info) {
   const measurableId = _.get(root, 'measurableId');
   const createdAt = _.get(root, 'createdAt');
+  const agentId = _.get(context, 'botAgentId');
   return data.measurements.getPreviousRelevantAggregate(
     measurableId,
+    agentId,
     createdAt,
   );
 }
@@ -221,13 +223,14 @@ async function previousAggregate(root, args, context, info) {
  * @param {object} root
  * @param {Models.ObjectID} root.id
  * @param {object} _args
- * @param {Schema.Context} _context
+ * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function latestAggregateByRootId(root, _args, _context, _info) {
+async function latestAggregateByRootId(root, _args, context, _info) {
   const measurableId = _.get(root, 'id');
-  return data.measurements.getLatestAggregate(measurableId);
+  const agentId = _.get(context, 'botAgentId');
+  return data.measurements.getLatestAggregate(measurableId, agentId);
 }
 
 /**

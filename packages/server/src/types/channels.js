@@ -32,9 +32,9 @@ const channel = new graphql.GraphQLObjectType({
 
     // @todo: security?
     agents: {
-      type: require('../connections').channelAgentsConnection.connectionType,
-      args: require('../connections').channelAgentsConnection.connectionArgs,
-      resolve: require('../connections').channelAgentsConnection.resolve,
+      type: require('./connections').channelAgentsConnection.connectionType,
+      args: require('./connections').channelAgentsConnection.connectionArgs,
+      resolve: require('./connections').channelAgentsConnection.resolve,
     },
 
     channelMemberships: {

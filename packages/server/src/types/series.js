@@ -39,9 +39,9 @@ const series = new graphql.GraphQLObjectType({
 
     // @todo: security?
     Measurables: {
-      type: require('../connections').seriesMeasurablesConnection.connectionType,
-      args: require('../connections').seriesMeasurablesConnection.connectionArgs,
-      resolve: require('../connections').seriesMeasurablesConnection.resolve
+      type: require('./connections').seriesMeasurablesConnection.connectionType,
+      args: require('./connections').seriesMeasurablesConnection.connectionArgs,
+      resolve: require('./connections').seriesMeasurablesConnection.resolve
     },
 
     // @todo: security?

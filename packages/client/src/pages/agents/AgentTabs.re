@@ -21,7 +21,7 @@ module Component = {
     </FC.Tab>;
   };
 
-  let tabs = (page: Routing.AgentPage.t, agent: AgenGet.agent) => {
+  let tabs = (page: Routing.AgentPage.t, agent: AgentGet.agent) => {
     let agentId = page.agentId;
     let subPage = page.subPage;
 

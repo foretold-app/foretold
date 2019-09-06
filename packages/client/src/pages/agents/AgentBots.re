@@ -13,7 +13,7 @@ let title =
     </FC.PageCard.HeaderRow.Title>
   </FC.Base.Div>;
 
-let agentSection = (agent: AgenGet.agent) =>
+let agentSection = (agent: AgentGet.agent) =>
   switch (agent) {
   | {user: Some(_user)} =>
     <>
@@ -100,7 +100,7 @@ module Columns = {
 
 type pageParams = {id: string};
 
-let getUserId = (agent: AgenGet.agent): string => {
+let getUserId = (agent: AgentGet.agent): string => {
   switch (agent.user) {
   | Some(user) => user.id
   | None => ""
@@ -110,7 +110,7 @@ let getUserId = (agent: AgenGet.agent): string => {
 let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>
-    AgenGet.component(
+    AgentGet.component(
       ~id=pageParams.id,
       ({agent}) => {
         let showBots = bots =>

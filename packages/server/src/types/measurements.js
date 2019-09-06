@@ -42,7 +42,14 @@ const measurementValueInput = new graphql.GraphQLInputObjectType({
 const measurementValue = new graphql.GraphQLObjectType({
   name: 'MeasurementValue',
   fields: () => ({
-    [MEASUREMENT_VALUE.floatCdf]: { type: measurementValueFloatCdf },
+    [MEASUREMENT_VALUE.floatCdf]: {
+      type: measurementValueFloatCdf,
+      args: {
+        truncate: { type: graphql.GraphQLFloat },
+        round: { type: graphql.GraphQLInt },
+      },
+      resolve: require('../resolvers').measurements.truncateCdf,
+    },
     [MEASUREMENT_VALUE.floatPoint]: { type: graphql.GraphQLFloat },
     [MEASUREMENT_VALUE.percentage]: { type: graphql.GraphQLFloat },
     [MEASUREMENT_VALUE.binary]: { type: graphql.GraphQLBoolean },

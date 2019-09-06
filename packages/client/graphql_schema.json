@@ -2717,7 +2717,28 @@
             {
               "name": "floatCdf",
               "description": null,
-              "args": [],
+              "args": [
+                {
+                  "name": "truncate",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Float",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "round",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
               "type": {
                 "kind": "OBJECT",
                 "name": "MeasurementValueFloatCdf",

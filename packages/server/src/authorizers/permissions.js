@@ -51,6 +51,7 @@ const rulesChannel = {
       currentAgentIsAuthenticated,
       currentAgentIsApplicationAdminOrChannelAdmin,
     ),
+    globalSettingUpdate: currentAgentIsApplicationAdmin,
   }
 };
 

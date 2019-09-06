@@ -665,11 +665,10 @@ class ModelPostgres extends Model {
       attributes: this._getAttributes(),
     };
 
-    /** @type {Models.Model[]} */
-    const data = await this.model.findAll(findCond);
+    const dataFn = () => this.model.findAll(findCond);
 
     return new ResponseAll(
-      data,
+      dataFn,
       totalFn,
       offset,
       filter.getSpacedLimit(),

@@ -1,37 +1,30 @@
 const _ = require('lodash');
 const utils = require('../../lib/utils');
 
-const { splitBy } = require('../../lib/functions');
-
 class ResponseAll {
   /**
    * @public
-   * @param {*[]} data
+   * @param {Function} dataFn
    * @param {Function} totalFn
    * @param {number} offset
-   * @param {number} spacedLimit
    */
-  constructor(data, totalFn, offset, spacedLimit) {
-    this._data = data;
-    this._totalResult = null;
+  constructor(dataFn, totalFn, offset) {
+    this._dataFn = dataFn;
     this._totalFn = totalFn;
     this._offset = offset;
-    this._spacedLimit = spacedLimit;
-
-    if (this._spacedLimit) {
-      this._data = splitBy(this._data, this._spacedLimit);
-    }
-
-    this._data.map((item, index) => {
-      item.index = this._offset + index;
-      return item;
-    });
-
-    this._edges = this._data.map(node => ({ node, cursor: node.index }));
+    this._dataResult = null;
+    this._totalResult = null;
   }
 
-  get data() {
-    return this._data;
+  getData() {
+    if (!this._dataResult) {
+      this._dataResult = this._dataFn()
+        .then(data => data.map((item, index) => {
+          item.index = this._offset + index;
+          return item;
+        }));
+    }
+    return this._dataResult;
   }
 
   getTotal() {
@@ -41,30 +34,43 @@ class ResponseAll {
     return this._totalResult;
   }
 
+  getEdges() {
+    return this.getData()
+      .then(data => data.map(node => ({ node, cursor: node.index })));
+  }
+
+  get data() {
+    return this.getData();
+  }
+
   get total() {
     return this.getTotal();
   }
 
   get edges() {
-    return this._edges;
+    return this.getEdges();
   }
 
   get pageInfo() {
     return async function () {
 
-      const start = _.head(this._edges);
-      const end = _.last(this._edges);
+      const startCursor = async () => {
+        const start = _.head(await this.getEdges());
+        return _.get(start, 'cursor');
+      };
 
-      const startCursor = async () => _.get(start, 'cursor');
-      const endCursor = async () => _.get(end, 'cursor');
+      const endCursor = async () => {
+        const end = _.last(await this.getEdges());
+        return _.get(end, 'cursor');
+      };
 
       const hasNextPage = async () => {
         const total = await this.getTotal();
-        return _.toNumber(endCursor) < (total - 1);
+        return _.toNumber(await endCursor()) < (total - 1);
       };
 
       const hasPreviousPage = async () => {
-        return _.toNumber(startCursor) > 0;
+        return _.toNumber(await startCursor()) > 0;
       };
 
       return {
@@ -80,8 +86,8 @@ class ResponseAll {
    * @public
    * @returns {* | null}
    */
-  getFirst() {
-    return _.head(this._data) || null;
+  async getFirst() {
+    return _.head(await this.getData()) || null;
   }
 
   inspect() {

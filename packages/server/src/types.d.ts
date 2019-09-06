@@ -144,6 +144,7 @@ export namespace Models {
 
   export interface GlobalSetting extends Model {
     entityGraph: null | object;
+    botAgentId: null | Models.ObjectID;
   }
 
   export interface AgentMeasurable extends Model {

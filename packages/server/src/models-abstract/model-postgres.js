@@ -654,9 +654,8 @@ class ModelPostgres extends Model {
     const cond = { where, include };
     this._extendConditions(cond, options);
 
-    /** @type {number} */
-    const total = await this.model.count(cond);
-    const { limit, offset } = pagination.getPagination(total);
+    const totalFn = () => this.model.count(cond);
+    const { limit, offset } = pagination.getPagination();
 
     const findCond = {
       ...cond,
@@ -671,7 +670,7 @@ class ModelPostgres extends Model {
 
     return new ResponseAll(
       data,
-      total,
+      totalFn,
       offset,
       filter.getSpacedLimit(),
     );

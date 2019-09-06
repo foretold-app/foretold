@@ -379,7 +379,7 @@ export namespace Layers {
       after?: string,
       before?: string,
 
-      getPagination(total: number): { limit: number, offset: number };
+      getPagination(): { limit: number | null, offset: number | null };
     };
     type query = {
       sort?: number,

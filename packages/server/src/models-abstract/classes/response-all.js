@@ -7,13 +7,14 @@ class ResponseAll {
   /**
    * @public
    * @param {*[]} data
-   * @param {number} total
+   * @param {Function} totalFn
    * @param {number} offset
    * @param {number} spacedLimit
    */
-  constructor(data, total, offset, spacedLimit) {
+  constructor(data, totalFn, offset, spacedLimit) {
     this._data = data;
-    this._total = total;
+    this._totalResult = null;
+    this._totalFn = totalFn;
     this._offset = offset;
     this._spacedLimit = spacedLimit;
 
@@ -33,8 +34,15 @@ class ResponseAll {
     return this._data;
   }
 
+  getTotal() {
+    if (!this._totalResult) {
+      this._totalResult = this._totalFn();
+    }
+    return this._totalResult;
+  }
+
   get total() {
-    return this._total;
+    return this.getTotal();
   }
 
   get edges() {
@@ -42,20 +50,29 @@ class ResponseAll {
   }
 
   get pageInfo() {
-    const start = _.head(this._edges);
-    const end = _.last(this._edges);
+    return async function () {
 
-    const startCursor = _.get(start, 'cursor');
-    const endCursor = _.get(end, 'cursor');
+      const start = _.head(this._edges);
+      const end = _.last(this._edges);
 
-    const hasNextPage = _.toNumber(endCursor) < (this._total - 1);
-    const hasPreviousPage = _.toNumber(startCursor) > 0;
+      const startCursor = async () => _.get(start, 'cursor');
+      const endCursor = async () => _.get(end, 'cursor');
 
-    return {
-      hasNextPage,
-      hasPreviousPage,
-      startCursor,
-      endCursor,
+      const hasNextPage = async () => {
+        const total = await this.getTotal();
+        return _.toNumber(endCursor) < (total - 1);
+      };
+
+      const hasPreviousPage = async () => {
+        return _.toNumber(startCursor) > 0;
+      };
+
+      return {
+        endCursor,
+        startCursor,
+        hasNextPage,
+        hasPreviousPage,
+      };
     };
   }
 

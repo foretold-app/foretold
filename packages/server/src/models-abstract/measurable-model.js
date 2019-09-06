@@ -104,7 +104,9 @@ class MeasurableModel extends ModelPostgres {
    */
   _getAttributes() {
     return {
-      include: [this._getStateOrderField()],
+      include: [
+        this._getStateOrderField(),
+      ],
     };
   }
 }

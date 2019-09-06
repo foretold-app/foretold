@@ -20,7 +20,7 @@ function getQueryToken(req) {
 
 /**
  * @param {Request} options
- * @return {Promise<*>}
+ * @return {Promise<* | null>}
  */
 async function authentication(options) {
   try {

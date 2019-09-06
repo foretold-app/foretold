@@ -144,11 +144,12 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @public
-   * @param {Models.ObjectID} measurableId
+   * @param {Models.ObjectID | null} measurableId
    * @returns {Promise<Model>}
    */
   async getOutcome(measurableId) {
     assert(!!measurableId, 'Measurable ID is required.');
+
     return this.model.findOne({
       where: {
         measurableId,
@@ -167,15 +168,18 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @public
-   * @param {Models.ObjectID} measurableId
+   * @param {Models.ObjectID | null} measurableId
+   * @param {Models.ObjectID | null} agentId
    * @param {Date} relevantAt
    * @returns {Promise<Model>}
    */
-  async getPreviousRelevantAggregate(measurableId, relevantAt) {
+  async getPreviousRelevantAggregate(measurableId, agentId, relevantAt) {
     assert(!!measurableId, 'Measurable ID is required.');
     assert(!!relevantAt, 'RelevantAt is required.');
+
     return this.model.findOne({
       where: {
+        agentId,
         measurableId,
         competitorType: MEASUREMENT_COMPETITOR_TYPE.AGGREGATION,
         relevantAt: { [this.lt]: relevantAt },
@@ -188,13 +192,16 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @public
-   * @param {Models.ObjectID} measurableId
+   * @param {Models.ObjectID | null} measurableId
+   * @param {Models.ObjectID | null} agentId
    * @returns {Promise<Model>}
    */
-  async getLatestAggregate(measurableId) {
+  async getLatestAggregate(measurableId, agentId) {
     assert(!!measurableId, 'Measurable ID is required.');
+
     return this.model.findOne({
       where: {
+        agentId,
         measurableId,
         competitorType: MEASUREMENT_COMPETITOR_TYPE.AGGREGATION,
       },

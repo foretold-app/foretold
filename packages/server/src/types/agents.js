@@ -5,20 +5,7 @@ const resolvers = require('../resolvers');
 const channelMemberships = require('./channel-memberhips');
 const models = require('../models');
 
-const { AGENT_TYPE } = require('../models/enums/agent-type');
-
-// @todo: move to enums
-const agentType = new graphql.GraphQLEnumType({
-  name: 'AgentType',
-  values: {
-    [AGENT_TYPE.USER]: {
-      value: AGENT_TYPE.USER,
-    },
-    [AGENT_TYPE.BOT]: {
-      value: AGENT_TYPE.BOT,
-    },
-  },
-});
+const { agentType } = require('./enums/agent-type');
 
 const agent = new graphql.GraphQLObjectType({
   name: 'Agent',

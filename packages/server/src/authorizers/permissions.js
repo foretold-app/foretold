@@ -51,7 +51,6 @@ const rulesChannel = {
       currentAgentIsAuthenticated,
       currentAgentIsApplicationAdminOrChannelAdmin,
     ),
-    globalSettingUpdate: currentAgentIsApplicationAdmin,
   }
 };
 
@@ -190,6 +189,7 @@ const rules = {
         ),
       ),
     ),
+    globalSettingUpdate: currentAgentIsApplicationAdmin,
 
     ...rulesBots.Mutation,
     ...rulesMeasurables.Mutation,

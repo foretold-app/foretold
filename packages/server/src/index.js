@@ -9,7 +9,7 @@ const { runJobs } = require('./async');
 const { runListeners } = require('./async/listeners');
 const events = require('./async/events');
 const emitter = require('./async/emitter');
-const { apolloServer } = require('./apollo-server');
+const { apolloServer } = require('./graphql/apollo-server');
 
 {
   // Makes sync flows possible
@@ -52,7 +52,7 @@ app.use(cors());
 
 {
   // Supporting of GitHub integration
-  const { app: subApp } = require('./github/app');
+  const { app: subApp } = require('./lib/github/app');
   app.use('/hooks', subApp);
 }
 

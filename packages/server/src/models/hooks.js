@@ -1,8 +1,8 @@
 const events = require('../async/events');
 const emitter = require('../async/emitter');
 
-const { AGENT_TYPE } = require('./enums/agent-type');
-const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-type');
+const { AGENT_TYPE } = require('../enums/agent-type');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums/measurement-competitor-type');
 
 /**
  * Try to keep all "async" hooks in one place.

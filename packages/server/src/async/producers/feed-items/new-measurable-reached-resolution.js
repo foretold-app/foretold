@@ -3,7 +3,7 @@ const _ = require('lodash');
 
 const { NewMeasurable } = require('./new-measurable');
 const { Producer } = require('../producer');
-const { MEASURABLE_STATE } = require('../../../models/enums/measurable-state');
+const { MEASURABLE_STATE } = require('../../../enums/measurable-state');
 
 class NewMeasurableReachedResolution extends NewMeasurable {
   /**

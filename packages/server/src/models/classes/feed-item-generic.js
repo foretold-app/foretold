@@ -3,7 +3,7 @@ const _ = require('lodash');
 const Mustache = require('mustache');
 
 const { FeedItem } = require('./feed-item');
-const { FEED_ITEM_BODY } = require('../enums/feed-item-body');
+const { FEED_ITEM_BODY } = require('../../enums/feed-item-body');
 
 class FeedItemGeneric extends FeedItem {
 

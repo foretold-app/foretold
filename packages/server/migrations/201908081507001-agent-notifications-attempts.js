@@ -1,6 +1,6 @@
 const {
     NOTIFICATION_ERROR_REASON,
-} = require('../src/models/enums/notification-error-reason');
+} = require('../src/enums/notification-error-reason');
 
 module.exports = {
   up: async function (queryInterface, Sequelize) {

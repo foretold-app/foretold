@@ -1,4 +1,4 @@
-const { NOTIFICATION_TYPE } = require('../src/models/enums/notification-type');
+const { NOTIFICATION_TYPE } = require('../src/enums/notification-type');
 
 module.exports = {
   up: async function (queryInterface, Sequelize) {

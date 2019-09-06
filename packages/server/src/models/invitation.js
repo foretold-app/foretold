@@ -1,4 +1,4 @@
-const { INVITATION_STATUS } = require('./enums/invitation-status');
+const { INVITATION_STATUS } = require('../enums/invitation-status');
 
 module.exports = (sequelize, DataTypes) => {
   const Invitation = sequelize.define('Invitation', {

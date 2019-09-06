@@ -1,4 +1,4 @@
-const { MEASUREMENT_COMPETITOR_TYPE } = require('./enums/measurement-competitor-type');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums/measurement-competitor-type');
 
 module.exports = (sequelize, DataTypes) => {
   const Bot = sequelize.define('Bot', {

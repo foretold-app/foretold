@@ -1,6 +1,6 @@
 const {
   MEASUREMENT_COMPETITOR_TYPE,
-} = require('../../../models/enums/measurement-competitor-type');
+} = require('../../../enums/measurement-competitor-type');
 const { Producer } = require('../producer');
 const { NewMeasurement } = require('./new-measurement');
 

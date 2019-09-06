@@ -383,6 +383,7 @@ function _nonMarketLogScore({ prediction, outcome }) {
       return 0;
   }
 }
+
 /**
  * @param {*} root
  * @param {object} args
@@ -417,6 +418,36 @@ async function nonMarketLogScore(root, args, context, info) {
   return _.round(result, 2);
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function truncateCdf(root, args, context, info) {
+  if (!_.get(root, 'floatCdf')) return null;
+
+  const truncate = _.get(args, 'truncate');
+  const round = _.get(args, 'round');
+
+  const xs = _.get(root, 'floatCdf.xs');
+  const ys = _.get(root, 'floatCdf.ys');
+  let result = { xs, ys };
+
+  if (truncate !== null && truncate !== undefined) {
+    const resized = new Cdf(xs, ys).convertToNewLength(truncate);
+    result = { xs: resized.xs, ys: resized.ys };
+  }
+
+  if (round !== null && round !== undefined) {
+    result.xs = result.xs.map(i => _.round(i, round));
+    result.ys = result.ys.map(i => _.round(i, round));
+  }
+
+  return result;
+}
+
 module.exports = {
   one,
   all,
@@ -431,4 +462,5 @@ module.exports = {
   latestAggregateByRootId,
   primaryPointScore,
   measurableMeasurement,
+  truncateCdf,
 };

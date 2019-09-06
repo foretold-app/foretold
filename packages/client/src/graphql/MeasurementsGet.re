@@ -166,7 +166,7 @@ module Query = [%graphql
                         id
                         valueText
                         value {
-                            floatCdf { xs ys }
+                            floatCdf(truncate: 50 round: 2) { xs ys }
                             floatPoint
                             percentage
                             binary
@@ -178,7 +178,7 @@ module Query = [%graphql
                         id
                         valueText
                         value {
-                            floatCdf { xs ys }
+                            floatCdf(truncate: 50 round: 2) { xs ys }
                             floatPoint
                             percentage
                             binary
@@ -190,7 +190,7 @@ module Query = [%graphql
                         id
                         valueText
                         value {
-                            floatCdf { xs ys }
+                            floatCdf(truncate: 50 round: 2) { xs ys }
                             floatPoint
                             percentage
                             binary

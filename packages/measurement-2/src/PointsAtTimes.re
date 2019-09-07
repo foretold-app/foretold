@@ -83,6 +83,16 @@ module StartAtDistribution = {
   //The Xs should be unique and should be sorted.
   let make = (~pointXY, ~finalX) => {finalX, pointXY};
 
+  let map = (fn, t: t('a, 'b)) => {
+    finalX: t.finalX,
+    pointXY: t.pointXY |> Array.map(((x, y)) => (x, fn(y))),
+  };
+
+  let xs = (t: t('a, 'b)) => t.pointXY |> Array.map(((x, _)) => x);
+  let ys = (t: t('a, 'b)) => t.pointXY |> Array.map((_, y) => y);
+  let minX = (t: t('a, 'b)) => SortedArray.min(t |> xs);
+
+  // Finds relevant (x,y) point at or before a specific x point.
   let xPointToPointXY = (xPoint, t: t('a, 'b)) =>
     xPoint > t.finalX
       ? None
@@ -93,9 +103,36 @@ module StartAtDistribution = {
   let xPointToPointX = (xPoint, t: t('a, 'b)) =>
     xPointToPointXY(xPoint, t) |> Belt.Option.map(_, ((x, _)) => x);
 
-  let xs = (t: t('a, 'b)) => t.pointXY |> Array.map(((x, _)) => x);
-  let ys = (t: t('a, 'b)) => t.pointXY |> Array.map((_, y) => y);
-  let minX = (t: t('a, 'b)) => SortedArray.min(t |> xs);
+  let xPointToPointY = (xPoint, t: t('a, 'b)) =>
+    xPointToPointXY(xPoint, t) |> Belt.Option.map(_, ((_, y)) => y);
+
+  let toSortedArray = (t: t('a, 'b)) => {
+    switch (xPointToPointXY(t.finalX, t)) {
+    | Some((x, y)) when x == t.finalX => Some(t.pointXY)
+    | Some((x, y)) => Some(SortedArray.concat(t.pointXY, [|(x, y)|]))
+    | _ => None
+    };
+  };
+
+  let integral = (t: t(float, float)) => {
+    switch (t |> toSortedArray |> Belt.Option.map(_, Belt.Array.length)) {
+    | Some(0) => 0.
+    | Some(1) => 0.
+    | None => 0.
+    | Some(n) =>
+      Belt.Array.makeBy(n - 1, r => r)
+      |> Belt.Array.map(
+           _,
+           r => {
+             let (lastX, lastY) = t.pointXY |> Belt.Array.getUnsafe(_, r);
+             let (nextX, _) = t.pointXY |> Belt.Array.getUnsafe(_, r + 1);
+             (nextX -. lastX) *. lastY;
+           },
+         )
+      |> Belt.Array.reduce(_, 0., (a, b) => a +. b)
+    };
+  };
+
   let compareXs = ((x1, _), (x2, _)) => compare(x1, x2);
   let sortXUniq = t =>
     t.pointXY |> Array.to_list |> List.sort_uniq(compareXs) |> Array.of_list;
@@ -109,17 +146,25 @@ module StartAtDistribution = {
       };
     switch (firstCommonMin) {
     | Some(firstCommonMin) =>
-      let overlapPoints =
-        SortedArray.concat(xs(a), xs(b))
-        |> SortedArray.filterOutLessThan(firstCommonMin);
-      let firstTwoPoints =
-        [|
-          xPointToPointX(firstCommonMin, a),
-          xPointToPointX(firstCommonMin, b),
-        |]
-        |> Utility.Array.concatSome;
-      SortedArray.concat(firstTwoPoints, overlapPoints);
+      SortedArray.concat(xs(a), xs(b))
+      |> SortedArray.filterOutLessThan(firstCommonMin)
     | None => [||]
+    };
+  };
+
+  let product = (t1: t('a, 'b), t2: t('a, 'c)): t('a, ('b, 'c)) => {
+    let xs = relevantXs(t1, t2);
+    {
+      finalX: min(t1.finalX, t2.finalX),
+      pointXY:
+        xs
+        |> Array.map(x =>
+             switch (xPointToPointY(x, t1), xPointToPointY(x, t2)) {
+             | (Some(y1), Some(y2)) => Some((x, (y1, y2)))
+             | _ => None
+             }
+           )
+        |> Utility.Array.concatSome,
     };
   };
 };

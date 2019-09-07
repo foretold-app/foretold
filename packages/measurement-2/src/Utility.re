@@ -13,4 +13,19 @@ module Array = {
     | Some(o) => o
     | None => [||]
     };
+
+  let toRanges = (a: array('a)) =>
+    switch (a |> Belt.Array.length) {
+    | 0 => None
+    | 1 => None
+    | n =>
+      Belt.Array.makeBy(n - 1, r => r)
+      |> Belt.Array.map(_, index =>
+           (
+             Belt.Array.getUnsafe(a, index),
+             Belt.Array.getUnsafe(a, index + 1),
+           )
+         )
+      |> Rationale.Option.some
+    };
 };

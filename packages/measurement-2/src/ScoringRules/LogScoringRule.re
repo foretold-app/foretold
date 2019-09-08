@@ -1,9 +1,9 @@
 open Belt.Result;
-let logError = Js.Math.log2;
-open ScoringCombination.ValidScoringCombination;
+let log2Error = Js.Math.log2;
 let marketCdfCdf =
     (
-      {agentPrediction, marketPrediction, resolution, sampleCount}: ScoringCombination.ValidScoringCombination.marketCdfCdf,
+      {agentPrediction, marketPrediction, resolution}: ScoringCombination.ValidScoringCombination.marketCdfCdf,
+      sampleCount: int,
     ) =>
   Ok(3.0);
 let marketCdfFloat =
@@ -20,17 +20,20 @@ let marketPercentagePercentage =
     MeasurementValue.Percentage.(
       {
         let positive =
-          resolution *. logError(agentPrediction /. marketPrediction);
+          resolution *. log2Error(agentPrediction /. marketPrediction);
         let negative =
           inverse(resolution)
-          *. logError(inverse(agentPrediction) /. inverse(marketPrediction));
+          *. log2Error(
+               inverse(agentPrediction) /. inverse(marketPrediction),
+             );
         positive +. negative;
       }
     ),
   );
 let nonMarketCdfCdf =
     (
-      {agentPrediction, resolution, sampleCount}: ScoringCombination.ValidScoringCombination.nonMarketCdfCdf,
+      {agentPrediction, resolution}: ScoringCombination.ValidScoringCombination.nonMarketCdfCdf,
+      sampleCount: int,
     ) =>
   Ok(3.0);
 let nonMarketCdfFloat =
@@ -45,10 +48,10 @@ let nonMarketPercentagePercentage =
   Ok(
     MeasurementValue.Percentage.(
       {
-        let positive = resolution *. logError(agentPrediction /. resolution);
+        let positive = resolution *. log2Error(agentPrediction /. resolution);
         let negative =
           inverse(resolution)
-          *. logError(inverse(agentPrediction) /. inverse(resolution));
+          *. log2Error(inverse(agentPrediction) /. inverse(resolution));
         positive +. negative;
       }
     ),

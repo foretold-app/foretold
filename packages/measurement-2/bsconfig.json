@@ -7,7 +7,8 @@
         },
         {
             "dir": "__tests__",
-            "type": "dev"
+            "type": "dev",
+            "subdirs": true
         }
     ],
     "package-specs": {

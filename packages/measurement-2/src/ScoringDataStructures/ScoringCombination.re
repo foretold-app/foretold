@@ -1,39 +1,36 @@
-module ValidScoringCombination = {
+module ScoringCombinationMeasurements = {
   open MeasurementValue;
 
-  type marketCombination('a, 'b) = {
+  type combination('a, 'b) = {
     agentPrediction: 'a,
-    marketPrediction: 'a,
+    marketPrediction: option('a),
     resolution: 'b,
   };
 
-  type nonMarketCombination('a, 'b) = {
-    agentPrediction: 'a,
-    resolution: 'b,
-  };
+  type cdfCdf = combination(Cdf.t, Cdf.t);
+  type cdfFloat = combination(Cdf.t, float);
+  type percentagePercentage = combination(Percentage.t, Percentage.t);
 
-  type marketCdfCdf = marketCombination(Cdf.t, Cdf.t);
-  type marketCdfFloat = marketCombination(Cdf.t, float);
-  type marketPercentagePercentage =
-    marketCombination(Percentage.t, Percentage.t);
-  type nonMarketCdfCdf = nonMarketCombination(Cdf.t, Cdf.t);
-  type nonMarketCdfFloat = nonMarketCombination(Cdf.t, float);
-  type nonMarketPercentagePercentage =
-    nonMarketCombination(Percentage.t, Percentage.t);
-
-  type measurements = [
-    | `MarketCdfCdf(marketCdfCdf)
-    | `MarketCdfFloat(marketCdfFloat)
-    | `MarketPercentagePercentage(marketPercentagePercentage)
-    | `NonMarketCdfCdf(nonMarketCdfCdf)
-    | `NonMarketCdfFloat(nonMarketCdfFloat)
-    | `NonMarketPercentagePercentage(nonMarketPercentagePercentage)
+  type t = [
+    | `CdfCdf(cdfCdf)
+    | `CdfFloat(cdfFloat)
+    | `PercentagePercentage(percentagePercentage)
   ];
 
+  let marketPredictionIsSome = (m: t) =>
+    switch (m) {
+    | `CdfCdf({marketPrediction: None}) => false
+    | `CdfFloat({marketPrediction: None}) => false
+    | `PercentagePercentage({marketPrediction: None}) => false
+    | _ => true
+    };
+};
+
+module ValidScoringCombination = {
   type config = {sampleCount: int};
 
   type t = {
-    measurements,
+    measurements: ScoringCombinationMeasurements.t,
     config,
   };
 
@@ -70,7 +67,7 @@ module ScoringCombinationInput = {
         }: t,
       )
       : option(ValidScoringCombination.t) => {
-    let measurements: option(ValidScoringCombination.measurements) =
+    let measurements: option(ScoringCombinationMeasurements.t) =
       switch (marketScoreType, agentPrediction, marketPrediction, resolution) {
       | (
           MarketScore,
@@ -78,7 +75,13 @@ module ScoringCombinationInput = {
           Some(`Cdf(marketPrediction)),
           `Cdf(resolution),
         ) =>
-        Some(`MarketCdfCdf({agentPrediction, marketPrediction, resolution}))
+        Some(
+          `CdfCdf({
+            agentPrediction,
+            marketPrediction: Some(marketPrediction),
+            resolution,
+          }),
+        )
       | (
           MarketScore,
           `Cdf(agentPrediction),
@@ -86,7 +89,11 @@ module ScoringCombinationInput = {
           `Float(resolution),
         ) =>
         Some(
-          `MarketCdfFloat({agentPrediction, marketPrediction, resolution}),
+          `CdfFloat({
+            agentPrediction,
+            marketPrediction: Some(marketPrediction),
+            resolution,
+          }),
         )
       | (
           MarketScore,
@@ -95,23 +102,31 @@ module ScoringCombinationInput = {
           `Percentage(resolution),
         ) =>
         Some(
-          `MarketPercentagePercentage({
+          `PercentagePercentage({
             agentPrediction,
-            marketPrediction,
+            marketPrediction: Some(marketPrediction),
             resolution,
           }),
         )
       | (NonMarketScore, `Cdf(agentPrediction), None, `Cdf(resolution)) =>
-        Some(`NonMarketCdfCdf({agentPrediction, resolution}))
+        Some(`CdfCdf({agentPrediction, marketPrediction: None, resolution}))
       | (NonMarketScore, `Cdf(agentPrediction), None, `Float(resolution)) =>
-        Some(`NonMarketCdfFloat({agentPrediction, resolution}))
+        Some(
+          `CdfFloat({agentPrediction, marketPrediction: None, resolution}),
+        )
       | (
           NonMarketScore,
           `Percentage(agentPrediction),
           None,
           `Percentage(resolution),
         ) =>
-        Some(`NonMarketPercentagePercentage({agentPrediction, resolution}))
+        Some(
+          `PercentagePercentage({
+            agentPrediction,
+            marketPrediction: None,
+            resolution,
+          }),
+        )
       | _ => None
       };
     measurements

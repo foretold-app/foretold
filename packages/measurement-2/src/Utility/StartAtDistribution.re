@@ -22,6 +22,14 @@ let xs = t => t.pointXY |> Array.map(((x, _)) => x);
 let ys = t => t.pointXY |> Array.map(((_, y)) => y);
 let minX = t => t |> xs |> SortedArray.min;
 
+let transposeResult =
+    (t: t('a, Belt.Result.t('b, 'c))): Belt.Result.t(t('a, 'b), 'c) => {
+  switch (Belt.Array.getBy(ys(t), Belt.Result.isError)) {
+  | Some(Error(r)) => Error(r)
+  | _ => Belt.Result.Ok(t |> map(Belt.Result.getExn))
+  };
+};
+
 // Finds relevant (x,y) point at or before a specific x point.
 let xPointToRelevantPointXY = (xPoint, t: t('a, 'b)) =>
   xPoint > t.finalX

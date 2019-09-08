@@ -1,4 +1,4 @@
-module ScoringCombinationMeasurements = {
+module ValidScoringCombination = {
   open MeasurementValue;
 
   type combination('a, 'b) = {
@@ -26,22 +26,6 @@ module ScoringCombinationMeasurements = {
     };
 };
 
-module ValidScoringCombination = {
-  type config = {sampleCount: int};
-
-  type t = {
-    measurements: ScoringCombinationMeasurements.t,
-    config,
-  };
-
-  let make = (~measurements, ~sampleCount=10000, ()) => {
-    measurements,
-    config: {
-      sampleCount: sampleCount,
-    },
-  };
-};
-
 module ScoringCombinationInput = {
   open MeasurementValue;
   type marketScoreType =
@@ -52,22 +36,27 @@ module ScoringCombinationInput = {
     agentPrediction: MeasurementValue.t,
     marketPrediction: option(MeasurementValue.t),
     resolution: MeasurementValue.t,
-    sampleCount: option(int),
+    marketScoreType,
+  };
+
+  let make =
+      (
+        ~agentPrediction,
+        ~marketPrediction=None,
+        ~resolution,
+        ~marketScoreType=NonMarketScore,
+        (),
+      ) => {
+    agentPrediction,
+    marketPrediction,
+    resolution,
     marketScoreType,
   };
 
   let toValidScoringCombination =
-      (
-        {
-          agentPrediction,
-          resolution,
-          marketPrediction,
-          sampleCount,
-          marketScoreType,
-        }: t,
-      )
-      : option(ValidScoringCombination.t) => {
-    let measurements: option(ScoringCombinationMeasurements.t) =
+      ({agentPrediction, resolution, marketPrediction, marketScoreType}: t)
+      : Belt.Result.t(ValidScoringCombination.t, string) => {
+    let measurements: Belt.Result.t(ValidScoringCombination.t, string) =
       switch (marketScoreType, agentPrediction, marketPrediction, resolution) {
       | (
           MarketScore,
@@ -75,7 +64,7 @@ module ScoringCombinationInput = {
           Some(`Cdf(marketPrediction)),
           `Cdf(resolution),
         ) =>
-        Some(
+        Ok(
           `CdfCdf({
             agentPrediction,
             marketPrediction: Some(marketPrediction),
@@ -88,7 +77,7 @@ module ScoringCombinationInput = {
           Some(`Cdf(marketPrediction)),
           `Float(resolution),
         ) =>
-        Some(
+        Ok(
           `CdfFloat({
             agentPrediction,
             marketPrediction: Some(marketPrediction),
@@ -101,7 +90,7 @@ module ScoringCombinationInput = {
           Some(`Percentage(marketPrediction)),
           `Percentage(resolution),
         ) =>
-        Some(
+        Ok(
           `PercentagePercentage({
             agentPrediction,
             marketPrediction: Some(marketPrediction),
@@ -109,29 +98,27 @@ module ScoringCombinationInput = {
           }),
         )
       | (NonMarketScore, `Cdf(agentPrediction), None, `Cdf(resolution)) =>
-        Some(`CdfCdf({agentPrediction, marketPrediction: None, resolution}))
+        Ok(`CdfCdf({agentPrediction, marketPrediction: None, resolution}))
       | (NonMarketScore, `Cdf(agentPrediction), None, `Float(resolution)) =>
-        Some(
-          `CdfFloat({agentPrediction, marketPrediction: None, resolution}),
-        )
+        Ok(`CdfFloat({agentPrediction, marketPrediction: None, resolution}))
       | (
           NonMarketScore,
           `Percentage(agentPrediction),
           None,
           `Percentage(resolution),
         ) =>
-        Some(
+        Ok(
           `PercentagePercentage({
             agentPrediction,
             marketPrediction: None,
             resolution,
           }),
         )
-      | _ => None
+      | _ =>
+        Error(
+          "#toValidScoringCombination error: Scoring Combination Not Valid.",
+        )
       };
-    measurements
-    |> Belt.Option.map(_, measurements =>
-         ValidScoringCombination.make(~measurements, ~sampleCount?, ())
-       );
+    measurements;
   };
 };

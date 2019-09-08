@@ -1,4 +1,4 @@
-type time = int;
+type time = float;
 
 let concatSome = (optionals: array(option('a))): array('a) =>
   optionals
@@ -65,6 +65,7 @@ module MeasurementWithTime = {
          )
       |> concatSome
       |> t3;
+
     MeasurementValueType.T.(
       switch (intendedType) {
       | `Cdf => transform(toCdf, r => `Cdf(r))

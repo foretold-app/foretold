@@ -3,20 +3,20 @@ let log2Error = Js.Math.log2;
 
 let marketCdfCdf =
     (
-      {agentPrediction, marketPrediction, resolution}: ScoringCombination.ScoringCombinationMeasurements.cdfCdf,
+      {agentPrediction, marketPrediction, resolution}: ScoringCombination.ValidScoringCombination.cdfCdf,
       sampleCount: int,
     ) =>
   Ok(3.0);
 
 let marketCdfFloat =
     (
-      {agentPrediction, marketPrediction, resolution}: ScoringCombination.ScoringCombinationMeasurements.cdfFloat,
+      {agentPrediction, marketPrediction, resolution}: ScoringCombination.ValidScoringCombination.cdfFloat,
     ) =>
   Ok(3.0);
 
 let marketPercentagePercentage =
     (
-      {agentPrediction, marketPrediction, resolution}: ScoringCombination.ScoringCombinationMeasurements.percentagePercentage,
+      {agentPrediction, marketPrediction, resolution}: ScoringCombination.ValidScoringCombination.percentagePercentage,
     ) =>
   switch (marketPrediction) {
   | None => Error("R")
@@ -40,20 +40,20 @@ let marketPercentagePercentage =
 
 let nonMarketCdfCdf =
     (
-      {agentPrediction, resolution}: ScoringCombination.ScoringCombinationMeasurements.cdfCdf,
+      {agentPrediction, resolution}: ScoringCombination.ValidScoringCombination.cdfCdf,
       sampleCount: int,
     ) =>
   Ok(3.0);
 
 let nonMarketCdfFloat =
     (
-      {agentPrediction, resolution}: ScoringCombination.ScoringCombinationMeasurements.cdfFloat,
+      {agentPrediction, resolution}: ScoringCombination.ValidScoringCombination.cdfFloat,
     ) =>
   Ok(3.0);
 
 let nonMarketPercentagePercentage =
     (
-      {agentPrediction, resolution}: ScoringCombination.ScoringCombinationMeasurements.percentagePercentage,
+      {agentPrediction, resolution}: ScoringCombination.ValidScoringCombination.percentagePercentage,
     ) =>
   Ok(
     MeasurementValue.Percentage.(
@@ -67,29 +67,33 @@ let nonMarketPercentagePercentage =
     ),
   );
 
-type marketType =
-  | Market
-  | Nonmarket;
-
-let score =
+let runMarketScore =
     (
-      ~marketType: marketType=Market,
       ~scoringCombination: ScoringCombination.ValidScoringCombination.t,
+      ~sampleCount=10000,
+      (),
     ) => {
   let marketPredictionExists =
-    ScoringCombination.ScoringCombinationMeasurements.marketPredictionIsSome(
-      scoringCombination.measurements,
+    ScoringCombination.ValidScoringCombination.marketPredictionIsSome(
+      scoringCombination,
     );
-  switch (marketType, marketPredictionExists, scoringCombination.measurements) {
-  | (Market, false, _) => Error("Market prediction needed")
-  | (Market, true, `CdfCdf(v)) =>
-    marketCdfCdf(v, scoringCombination.config.sampleCount)
-  | (Market, true, `CdfFloat(v)) => marketCdfFloat(v)
-  | (Market, true, `PercentagePercentage(v)) => marketPercentagePercentage(v)
-  | (Nonmarket, _, `CdfCdf(v)) =>
-    nonMarketCdfCdf(v, scoringCombination.config.sampleCount)
-  | (Nonmarket, _, `CdfFloat(v)) => nonMarketCdfFloat(v)
-  | (Nonmarket, _, `PercentagePercentage(v)) =>
-    nonMarketPercentagePercentage(v)
+  switch (marketPredictionExists, scoringCombination) {
+  | (false, _) => Error("Score error: market prediction needed")
+  | (true, `CdfCdf(v)) => marketCdfCdf(v, sampleCount)
+  | (true, `CdfFloat(v)) => marketCdfFloat(v)
+  | (true, `PercentagePercentage(v)) => marketPercentagePercentage(v)
+  };
+};
+
+let runNonmarketScore =
+    (
+      ~scoringCombination: ScoringCombination.ValidScoringCombination.t,
+      ~sampleCount=10000,
+      (),
+    ) => {
+  switch (scoringCombination) {
+  | `CdfCdf(v) => nonMarketCdfCdf(v, sampleCount)
+  | `CdfFloat(v) => nonMarketCdfFloat(v)
+  | `PercentagePercentage(v) => nonMarketPercentagePercentage(v)
   };
 };

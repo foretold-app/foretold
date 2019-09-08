@@ -74,7 +74,7 @@ module Percentage = {
 
 module MeasurementValue = {
   type t =
-    ValueType.T.t(
+    MeasurementValueType.T.t(
       Cdf.t,
       float,
       bool,

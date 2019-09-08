@@ -1,1 +1,1 @@
-{ "dirs" : [ "__tests__" , "src" , "src/Utility" ] , "generated" : [] }
+{ "dirs" : [ "__tests__" , "src" , "src/Utility" , "src/ScoringDataStructures" , "src/Measurement" , "src/ScoringRules" ] , "generated" : [] }

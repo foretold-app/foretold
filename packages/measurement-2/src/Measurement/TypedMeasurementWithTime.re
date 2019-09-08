@@ -21,13 +21,19 @@ module TypedMeasurementWithTime = {
   type tss('a) = array(t('a));
   let make = (time, measurementValue) => {measurementValue, time};
   type ts =
-    ValueType.T.t(
+    MeasurementValueType.T.t(
       tss(MeasurementValue.Cdf.t),
       tss(float),
       tss(bool),
       tss(MeasurementValue.Percentage.t),
       tss(MeasurementValue.UnresolvableResolution.t),
       tss(MeasurementValue.Comment.t),
+    );
+
+  let toStartAtDistribution = (finalTime, tss: tss('a)) =>
+    StartAtDistribution.make(
+      ~finalX=finalTime,
+      ~pointXY=tss |> Array.map(r => (r.time, r.measurementValue)),
     );
 };
 
@@ -42,11 +48,11 @@ module MeasurementWithTime = {
     ts
     |> Belt.Array.get(_, 0)
     |> Rationale.Option.map((r: t) =>
-         r.measurementValue |> ValueType.TypeName.fromType
+         r.measurementValue |> MeasurementValueType.TypeName.fromType
        );
 
   let toTypedMeasurementsWithTime =
-      (intendedType: ValueType.TypeName.t, ts: ts)
+      (intendedType: MeasurementValueType.TypeName.t, ts: ts)
       : TypedMeasurementWithTime.ts => {
     let transform = (t2, t3): TypedMeasurementWithTime.ts =>
       ts
@@ -59,7 +65,7 @@ module MeasurementWithTime = {
          )
       |> concatSome
       |> t3;
-    ValueType.T.(
+    MeasurementValueType.T.(
       switch (intendedType) {
       | `Cdf => transform(toCdf, r => `Cdf(r))
       | `Float => transform(toFloat, r => `Float(r))

@@ -50,7 +50,7 @@ let integral = (t: t(float, float)) => {
   |> Rationale.Option.bind(_, Utility.Array.toRanges)
   |> Rationale.Option.fmap(inRanges =>
        inRanges
-       |> Belt.Array.map(_, (((lastX, lastY), (nextX, nextY))) =>
+       |> Belt.Array.map(_, (((lastX, lastY), (nextX, _))) =>
             (nextX -. lastX) *. lastY
           )
        |> Belt.Array.reduce(_, 0., (a, b) => a +. b)

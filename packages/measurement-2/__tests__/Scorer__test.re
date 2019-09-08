@@ -1,17 +1,6 @@
 open Jest;
 open Expect;
 
-let maker = {
-  open TypedMeasurementWithTime.TypedMeasurementWithTime;
-  let combinationOverTime: ScoringCombinationOverTime.MeasurementCombinationOverTime.t =
-    `PercentagePercentage({
-      agentPredictions: [|make(0., 0.99), make(1., 0.11)|],
-      marketPredictions: Some([|make(0., 0.5), make(5., 0.7)|]),
-      resolution: make(10., 0.99),
-    });
-  combinationOverTime;
-};
-
 describe("Scorer", () => {
   describe("#scorePointCombination", () =>
     test("with PercentagePercentage score", () => {
@@ -33,16 +22,30 @@ describe("Scorer", () => {
     })
   );
   describe("#scorePointCombination", () =>
-    test("with PercentagePercentage score", () =>
+    test("with PercentagePercentage score", () => {
+      let makeCombination = {
+        open TypedMeasurementWithTime.TypedMeasurementWithTime;
+        let combinationOverTime: ScoringCombinationOverTime.MeasurementCombinationOverTime.t =
+          `PercentagePercentage({
+            agentPredictions: [|make(3., 0.70), make(8., 0.88)|],
+            marketPredictions: Some([|make(0., 0.5), make(5., 0.7)|]),
+            resolution: make(10., 0.95),
+          });
+        combinationOverTime;
+      };
+
       expect(
         Scorer.scoredIntegralOverTime(
           ~marketType=MarketScore,
-          ~scoringCombination={beginningTime: 0.0, measurementGroup: maker},
+          ~scoringCombination={
+            beginningTime: 0.0,
+            measurementGroup: makeCombination,
+          },
           (),
         )
         |> Belt.Result.getExn,
       )
-      |> toBeCloseTo(0.662)
-    )
+      |> toBeCloseTo(1.34);
+    })
   );
 });

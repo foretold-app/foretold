@@ -24,6 +24,7 @@ let formCreation = (id: string, m, loggedInUser: Types.user): React.element => {
             values.valueType,
             values.min,
             values.max,
+            values.channelId,
           ),
       ~initialState={
         name: measurable.name,
@@ -45,6 +46,7 @@ let formCreation = (id: string, m, loggedInUser: Types.user): React.element => {
         valueType: measurable.valueType |> Primary.Measurable.valueTypeToStr,
         min: measurable.min |> E.O.dimap(E.Float.toString, () => ""),
         max: measurable.max |> E.O.dimap(E.Float.toString, () => ""),
+        channelId: measurable.channelId,
       },
       ~schema=[(`name, Custom(_ => None))],
       ({handleSubmit, handleChange, form, _}) =>

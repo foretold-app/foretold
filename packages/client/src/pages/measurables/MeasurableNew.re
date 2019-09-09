@@ -27,6 +27,7 @@ let make = (~channelId, ~loggedInUser: Types.user, _children) => {
           valueType: "FLOAT",
           min: "",
           max: "",
+          channelId: "",
         },
         ~schema=[(`name, Custom(_ => None))],
       );

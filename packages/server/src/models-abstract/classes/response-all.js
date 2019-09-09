@@ -28,7 +28,7 @@ class ResponseAll {
   }
 
   get data() {
-    return this._total;
+    return this._data;
   }
 
   get total() {

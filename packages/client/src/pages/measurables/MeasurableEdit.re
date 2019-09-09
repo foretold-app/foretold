@@ -1,6 +1,6 @@
 module CMutationForm =
   MutationForm.Make({
-    type queryType = MeasurableUpdate.GraphQL.t;
+    type queryType = MeasurableUpdate.Query.t;
   });
 
 let formCreation =

@@ -2,7 +2,7 @@ let component = ReasonReact.statelessComponent("MeasurableNew");
 
 module CMutationForm =
   MutationForm.Make({
-    type queryType = MeasurableCreate.GraphQL.t;
+    type queryType = MeasurableCreate.Query.t;
   });
 
 let make = (~channelId, ~loggedInUser: Types.user, _children) => {
@@ -48,7 +48,7 @@ let make = (~channelId, ~loggedInUser: Types.user, _children) => {
                      (),
                    ),
                  ~onSuccess=
-                   (response: MeasurableCreate.GraphQL.t) => {
+                   (response: MeasurableCreate.Query.t) => {
                      switch (response##measurableCreate) {
                      | Some(m) =>
                        Routing.Url.push(MeasurableShow(channelId, m##id))

@@ -407,14 +407,14 @@ async function primaryPointScore(root, args, context, info) {
 
 /**
  * @param {*} root
- * @param {string} root.COMPETITOR_TYPE
+ * @param {string} root.competitorType
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<number>}
  */
 async function nonMarketLogScore(root, args, context, info) {
-  if (root.COMPETITOR_TYPE !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE) {
+  if (root.competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE) {
     return 0;
   }
 

@@ -23,29 +23,7 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-type innerType = {
-  .
-  "channelMemberships":
-    Js.Array.t(
-      option({
-        .
-        "agent":
-          option({
-            .
-            "id": string,
-            "name": option(string),
-          }),
-        "permissions": {
-          .
-          "mutations": {. "allow": Js.Array.t(option(Types.permission))},
-        },
-        "role": Types.channelMembershipRole,
-      }),
-    ),
-  "id": string,
-};
-
-let toChannelMemberships = (m: innerType): array(Types.channelMembership) => {
+let toChannelMemberships = (m): array(Types.channelMembership) => {
   let channelMemberships =
     m##channelMemberships
     |> E.A.O.concatSomes

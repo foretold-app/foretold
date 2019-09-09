@@ -1,4 +1,4 @@
-module GraphQL = [%graphql
+module Query = [%graphql
   {|
              mutation channelMembershipRoleUpdate($input:ChannelMembershipRoleInput!) {
                  channelMembershipRoleUpdate(input: $input) {
@@ -8,12 +8,12 @@ module GraphQL = [%graphql
      |}
 ];
 
-module Mutation = ReasonApollo.CreateMutation(GraphQL);
+module Mutation = ReasonApollo.CreateMutation(Query);
 
 let mutate =
     (mutation: Mutation.apolloMutation, ~agentId: string, ~channelId, ~role) => {
   let m =
-    GraphQL.make(
+    Query.make(
       ~input={
         "agentId": Some(agentId),
         "channelId": Some(channelId),

@@ -36,21 +36,7 @@ let unpackEdges = (a): array('a) => {
   response;
 };
 
-type bot = {
-  .
-  "competitorType": Types.competitorType,
-  "id": string,
-  "description": option(string),
-  "token": option(string),
-  "agent": option({. "id": string}),
-  "name": string,
-  "permissions": {
-    .
-    "mutations": {. "allow": Js.Array.t(option(Types.permission))},
-  },
-};
-
-let toBot = (botJson: bot) => {
+let toBot = botJson => {
   let allowMutations =
     botJson##permissions##mutations##allow |> E.A.O.concatSome |> E.A.to_list;
 

@@ -37,23 +37,38 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
       )
       ||> E.React.el;
 
-    <FC.PageCard.BodyPadding>
-      {mutationMake((mutation, data) =>
-         form(mutation, ({handleSubmit, handleChange, form, _}) =>
-           CMutationForm.showWithLoading(
-             ~result=data.result,
-             ~form=
-               ChannelForm.showForm(~form, ~handleSubmit, ~handleChange, ()),
-             ~successMessage="Community created successfully.",
-             (),
+    let body =
+      <FC.PageCard.BodyPadding>
+        {mutationMake((mutation, data) =>
+           form(mutation, ({handleSubmit, handleChange, form, _}) =>
+             CMutationForm.showWithLoading2(
+               ~result=data.result,
+               ~form=
+                 ChannelForm.showForm(
+                   ~form,
+                   ~handleSubmit,
+                   ~handleChange,
+                   (),
+                 ),
+               ~onSuccess=
+                 (response: ChannelCreate.Query.t) => {
+                   switch (response##channelCreate) {
+                   | Some(channel) =>
+                     Routing.Url.push(ChannelShow(channel##id))
+                   | _ => ()
+                   };
+                   ReasonReact.null;
+                 },
+               (),
+             )
            )
-         )
-       )}
-    </FC.PageCard.BodyPadding>
-    |> SLayout.LayoutConfig.make(
-         ~head=SLayout.Header.textDiv("Create a New Community"),
-         ~body=_,
-       )
+         )}
+      </FC.PageCard.BodyPadding>;
+
+    SLayout.LayoutConfig.make(
+      ~head=SLayout.Header.textDiv("Create a New Community"),
+      ~body,
+    )
     |> layout;
   },
 };

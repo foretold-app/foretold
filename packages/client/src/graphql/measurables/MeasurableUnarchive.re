@@ -1,4 +1,4 @@
-module GraphQL = [%graphql
+module Query = [%graphql
   {|
              mutation measurableUnarchive($id: String!) {
                  measurableUnarchive(id: $id) {
@@ -8,10 +8,10 @@ module GraphQL = [%graphql
      |}
 ];
 
-module Mutation = ReasonApollo.CreateMutation(GraphQL);
+module Mutation = ReasonApollo.CreateMutation(Query);
 
 let mutate = (mutation: Mutation.apolloMutation, id: string) => {
-  let m = GraphQL.make(~id, ());
+  let m = Query.make(~id, ());
   mutation(
     ~variables=m##variables,
     ~refetchQueries=[|

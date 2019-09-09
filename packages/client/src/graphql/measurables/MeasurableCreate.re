@@ -1,4 +1,4 @@
-module GraphQL = [%graphql
+module Query = [%graphql
   {|
              mutation measurableCreate($input: MeasurableCreateInput!) {
                  measurableCreate(input: $input) {
@@ -8,7 +8,7 @@ module GraphQL = [%graphql
      |}
 ];
 
-module Mutation = ReasonApollo.CreateMutation(GraphQL);
+module Mutation = ReasonApollo.CreateMutation(Query);
 
 let mutate =
     (
@@ -52,7 +52,7 @@ let mutate =
             values.max == "" ? None : Some(values.max |> float_of_string),
         };
 
-    GraphQL.make(~input, ());
+    Query.make(~input, ());
   };
 
   mutation(

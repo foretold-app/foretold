@@ -1,4 +1,4 @@
-module GraphQL = [%graphql
+module Query = [%graphql
   {|
              mutation measurableUpdate($id: String!, $input: MeasurableUpdateInput!) {
                  measurableUpdate(id: $id, input: $input) {
@@ -8,7 +8,7 @@ module GraphQL = [%graphql
      |}
 ];
 
-module Mutation = ReasonApollo.CreateMutation(GraphQL);
+module Mutation = ReasonApollo.CreateMutation(Query);
 
 let mutate =
     (
@@ -29,7 +29,7 @@ let mutate =
   let date = showDescriptionDate == "TRUE" ? labelOnDate : "";
 
   let m =
-    GraphQL.make(
+    Query.make(
       ~id,
       ~input={
         "name": name,

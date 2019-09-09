@@ -122,6 +122,31 @@ let showForm =
          </Antd.Radio.Group>
        </Form.Item>,
      )}
+    {loggedInUser.agent
+     |> E.O.fmap((agent: Types.agent) =>
+          ChannelsGet.component(
+            ~channelMemberId=?Some(agent.id),
+            ~sortFn=ChannelsGet.sortAsc,
+            channels =>
+            channels
+            |> Array.mapi((index, channel: Types.channel) =>
+                 <Antd.Select.Option
+                   value={channel.id} key={index |> string_of_int}>
+                   {channel.name |> Utils.ste}
+                 </Antd.Select.Option>
+               )
+            |> ReasonReact.array
+            |> (
+              c =>
+                <Antd.Select
+                  value={form.values.channelId}
+                  onChange={e => handleChange(`channelId, e)}>
+                  c
+                </Antd.Select>
+            )
+          )
+        )
+     |> E.O.React.defaultNull}
     {E.React.showIf(
        form.values.showDescriptionProperty == "FALSE",
        <>

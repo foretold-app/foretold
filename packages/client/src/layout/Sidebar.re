@@ -89,7 +89,6 @@ let make = (~channelId, ~loggedInUser: Types.user, _children) => {
          |> E.O.fmap((agent: Types.agent) =>
               ChannelsGet.component(
                 ~channelMemberId=?Some(agent.id),
-                ~isArchived=[|Some(`FALSE)|],
                 ~sortFn=ChannelsGet.sortAsc,
                 channels =>
                 channels

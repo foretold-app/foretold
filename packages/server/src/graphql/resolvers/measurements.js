@@ -4,6 +4,10 @@ const {
   MEASUREMENT_VALUE,
 } = require('@foretold/measurement-value/enums/measurement-value');
 
+const {
+  MEASUREMENT_COMPETITOR_TYPE,
+} = require('../../enums/measurement-competitor-type');
+
 const data = require('../../data');
 const { withinMeasurables } = require('../../structures');
 
@@ -403,16 +407,22 @@ async function primaryPointScore(root, args, context, info) {
 
 /**
  * @param {*} root
+ * @param {string} root.COMPETITOR_TYPE
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<*|Array<Model>>}
+ * @returns {Promise<number>}
  */
 async function nonMarketLogScore(root, args, context, info) {
+  if (root.COMPETITOR_TYPE !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE) {
+    return 0;
+  }
+
   const result = _nonMarketLogScore({
     prediction: await prediction(root, args, context, info),
     outcome: await outcome(root, args, context, info),
   });
+
   console.log("GOT LOG SCORE", result);
 
   return _.round(result, 2);
@@ -423,7 +433,7 @@ async function nonMarketLogScore(root, args, context, info) {
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} info
- * @returns {Promise<*|Array<Model>>}
+ * @returns {Promise<*>}
  */
 async function truncateCdf(root, args, context, info) {
   if (!_.get(root, 'floatCdf')) return null;

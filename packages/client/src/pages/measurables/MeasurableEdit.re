@@ -3,10 +3,8 @@ module CMutationForm =
     type queryType = MeasurableUpdate.Query.t;
   });
 
-let formCreation =
-    (id: string, m: MeasurableGet.measurable, loggedInUser: Types.user)
-    : React.element => {
-  let measurable: Types.measurable = MeasurableGet.toMeasurable(m);
+let formCreation = (id: string, m, loggedInUser: Types.user): React.element => {
+  let measurable = MeasurableGet.toMeasurable(m);
 
   MeasurableUpdate.Mutation.make((mutation, data) =>
     MeasurableForm.MeasurableReForm.make(
@@ -89,8 +87,7 @@ let make =
       ~head=SLayout.Header.textDiv("Edit Question"),
       ~body=
         <FC.PageCard.BodyPadding>
-          {MeasurableGet.component(
-             ~id=pageParams.id, (m: MeasurableGet.measurable) =>
+          {MeasurableGet.component(~id=pageParams.id, m =>
              formCreation(pageParams.id, m, loggedInUser)
            )}
         </FC.PageCard.BodyPadding>,

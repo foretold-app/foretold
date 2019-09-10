@@ -185,7 +185,7 @@ module Make = (Config: Config) => {
     };
 
     module ItemUnselected = {
-      let changePage = (state: state, pageDirection) =>
+      let changePage = (state, pageDirection) =>
         state.response
         |> HttpResponse.fmap((r: Primary.Connection.t('a)) =>
              pageDirection(r) |> E.O.fmap(d => {direction: d})
@@ -193,17 +193,17 @@ module Make = (Config: Config) => {
         |> HttpResponse.flattenDefault(None, a => a)
         |> E.O.default(state.pageConfig);
 
-      let nextPage = (state: state) =>
+      let nextPage = state =>
         changePage(state, Primary.Connection.nextPageDirection);
 
-      let lastPage = (state: state): pageConfig =>
+      let lastPage = (state): pageConfig =>
         changePage(state, Primary.Connection.lastPageDirection);
 
       let selectIndex = (i, itemsPerPage) =>
         E.BoundedInt.make(i, itemsPerPage)
         <$> (selectedIndex => ItemSelected({selectedIndex: selectedIndex}));
 
-      let newState = (itemsPerPage, state: state, action: action) =>
+      let newState = (itemsPerPage, state, action) =>
         switch (action) {
         | NextPage => Some((ItemUnselected, nextPage(state)))
         | LastPage => Some((ItemUnselected, lastPage(state)))
@@ -272,7 +272,7 @@ module Make = (Config: Config) => {
         <Icon.Icon icon={facesRight ? "CHEVRON_RIGHT" : "CHEVRON_LEFT"} />
       </div>;
 
-    let pageButton' = (buttonType: buttonType) =>
+    let pageButton' = buttonType =>
       switch (buttonType) {
       | PageLast => pageButton'(false, Types.LastPage, canDecrementPage)
       | PageNext => pageButton'(true, Types.NextPage, canIncrementPage)
@@ -282,7 +282,7 @@ module Make = (Config: Config) => {
         pageButton'(true, Types.NextSelection, canIncrementSelection)
       };
 
-    let buttonDuo = (buttonGroupType: buttonGroupType, params) =>
+    let buttonDuo = (buttonGroupType, params) =>
       switch (buttonGroupType) {
       | Page =>
         <>
@@ -302,7 +302,7 @@ module Make = (Config: Config) => {
       | None => buttonDuo(Page, params)
       };
 
-    let paginationItem = (reducerParams: Types.reducerParams) =>
+    let paginationItem = reducerParams =>
       switch (totalItems(reducerParams), selectionIndex(reducerParams)) {
       | (Some(count), Some(selection)) =>
         FC.PaginationButtons.make({
@@ -320,7 +320,7 @@ module Make = (Config: Config) => {
       | _ => "" |> ste
       };
 
-    let paginationPage = (reducerParams: Types.reducerParams) =>
+    let paginationPage = reducerParams =>
       switch (
         totalItems(reducerParams),
         upperBoundIndex(reducerParams),
@@ -349,9 +349,7 @@ module Make = (Config: Config) => {
       | _ => None
       };
 
-    let selectItemAction =
-        (reducerParams: Types.reducerParams, id: string)
-        : option(Types.action) => {
+    let selectItemAction = (reducerParams, id: string): option(Types.action) => {
       findIndexOfId(reducerParams, id) |> E.O.fmap(e => Types.SelectIndex(e));
     };
 
@@ -364,8 +362,6 @@ module Make = (Config: Config) => {
     };
   };
 
-  let component = ReasonReact.reducerComponent("Pagination");
-
   let compareItems =
       (
         connectionA: Primary.Connection.t('a),
@@ -373,6 +369,7 @@ module Make = (Config: Config) => {
       ) =>
     Belt.Array.eq(connectionA.edges, connectionB.edges, Config.isEqual);
 
+  let component = ReasonReact.reducerComponent("Pagination");
   let make =
       (
         ~itemsPerPage=20,

@@ -102,11 +102,11 @@ class MeasurementModel extends ModelPostgres {
         "AgentMeasurements".*, 
         "Measurements"."value" ->> 'data' as "questionResult"
       FROM "AgentMeasurements"
-               LEFT JOIN "Measurements"
-                         ON "Measurements"."measurableId" =
-                            "AgentMeasurements"."measurableId" AND
-                            "Measurements"."competitorType" = 'OBJECTIVE' AND
-                            "Measurements"."value" ->> 'dataType' = 'binary'
+        LEFT JOIN "Measurements"
+          ON "Measurements"."measurableId" =
+            "AgentMeasurements"."measurableId" AND
+            "Measurements"."competitorType" = 'OBJECTIVE' AND
+            "Measurements"."value" ->> 'dataType' = 'binary'
     )`;
   }
 
@@ -124,12 +124,13 @@ class MeasurementModel extends ModelPostgres {
              "Measurements"."agentId",
              array_agg("Measurements"."value" ->> 'data') as "probabilities"
       FROM "Measurements"
-               LEFT JOIN "Measurables"
-                         ON "Measurements"."measurableId" = "Measurables".id
+        LEFT JOIN "Measurables"
+          ON "Measurements"."measurableId" = "Measurables".id
       WHERE "Measurables"."state" = 'JUDGED'
         AND "Measurables"."valueType" = 'PERCENTAGE'
         AND "Measurements"."competitorType" = 'COMPETITIVE'
         AND "Measurements"."agentId" = '${ agentId }'
+        AND "Measurements"."value" ->> 'dataType' = 'percentage'
       GROUP BY "Measurements"."measurableId", "Measurements"."agentId"
     )`;
   }

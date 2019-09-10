@@ -63,6 +63,7 @@ export namespace Models {
     state: string;
     min: number;
     max: number;
+    resolutionEndpointResponse: Function;
 
     getCreationNotification(creator: Models.Creator): any;
 
@@ -71,6 +72,8 @@ export namespace Models {
     getCreator(): Models.Agent;
 
     getChannel(): Models.Channel;
+
+    judged(): void;
   }
 
   export interface Measurement extends Model {

@@ -22,6 +22,21 @@ async function toJudgementPendingTransition() {
   return true;
 }
 
+async function toResolving() {
+  const name = 'Job::toResolving';
+  console.log(name);
+
+  try {
+    const reducer = new measurables.Reducer();
+    const result = await reducer.toResolving();
+    console.log(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
 async function emailConsumer() {
   const name = '\x1b[35mJob::emailConsumer\x1b[0m';
   console.log(name);
@@ -91,6 +106,7 @@ function runListeners() {
     emitter.on(events.SERVER_IS_READY, addGitHubWebHook);
 
     emitter.on(events.EVERY_HOUR, toJudgementPendingTransition);
+    emitter.on(events.EVERY_HOUR, toResolving);
     emitter.on(events.EVERY_MINUTE, emailConsumer);
     emitter.on(events.MAIL, mailer);
 

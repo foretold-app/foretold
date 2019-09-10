@@ -18,7 +18,7 @@ module ReducerConfig = {
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
 };
 
-module Reducer = PaginationReducerFunctor.Make(ReducerConfig);
+module Reducer = PaginationFunctor.Make(ReducerConfig);
 
 type channel = Types.channel;
 type seriesCollection = array(SeriesCollectionGet.series);

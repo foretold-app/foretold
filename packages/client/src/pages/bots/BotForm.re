@@ -62,13 +62,13 @@ let onSuccess = (loggedInUser: Types.user, ()) => {
   ReasonReact.null;
 };
 
-let formFields = (form: Form.state, send, onSubmit) =>
+let formFields = (state: Form.state, send, onSubmit) =>
   <FC.PageCard.BodyPadding>
     <Antd.Form onSubmit={e => onSubmit()}>
       <Antd.Form.Item>
         {"Name" |> ReasonReact.string |> E.React.inH3}
         <Antd.Input
-          value={form.values.name}
+          value={state.values.name}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
             send(Form.FieldChangeValue(Name, e))
           )}
@@ -77,7 +77,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
       <Antd.Form.Item>
         {"Description" |> ReasonReact.string |> E.React.inH3}
         <Antd.Input
-          value={form.values.description}
+          value={state.values.description}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
             send(Form.FieldChangeValue(Description, e))
           )}

@@ -1,7 +1,5 @@
 open Rationale.Function.Infix;
 
-module ChannelFormShower = ReForm.Create(ChannelForm.Params);
-
 module CMutationForm =
   MutationForm.Make({
     type queryType = ChannelCreate.Query.t;
@@ -17,15 +15,15 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
       ||> E.React.el;
 
     let form = mutation =>
-      ChannelFormShower.make(
+      ChannelForm.Form.make(
         ~onSubmit=
-          ({values}) =>
+          values =>
             ChannelCreate.mutate(
               mutation,
-              values.name,
-              Some(values.description),
-              values.isPublic == "TRUE" ? true : false,
-              values.isArchived == "TRUE" ? true : false,
+              values.state.values.name,
+              Some(values.state.values.description),
+              values.state.values.isPublic == "TRUE" ? true : false,
+              values.state.values.isArchived == "TRUE" ? true : false,
             ),
         ~initialState={
           name: "",
@@ -33,21 +31,21 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
           isPublic: "TRUE",
           isArchived: "FALSE",
         },
-        ~schema=[(`name, Custom(_ => None))],
+        ~schema=ChannelForm.Form.Validation.Schema([||]),
       )
       ||> E.React.el;
 
     let body =
       <FC.PageCard.BodyPadding>
         {mutationMake((mutation, data) =>
-           form(mutation, ({handleSubmit, handleChange, form, _}) =>
+           form(mutation, ({send, state, _}) =>
              CMutationForm.showWithLoading2(
                ~result=data.result,
                ~form=
                  ChannelForm.showForm(
-                   ~form,
-                   ~handleSubmit,
-                   ~handleChange,
+                   ~state,
+                   ~send,
+                   ~onSubmit=() => send(ChannelForm.Form.Submit),
                    (),
                  ),
                ~onSuccess=

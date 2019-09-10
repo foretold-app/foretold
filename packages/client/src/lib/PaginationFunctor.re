@@ -364,7 +364,7 @@ module Make = (Config: Config) => {
     };
   };
 
-  let component = ReasonReact.reducerComponent("PaginationReducer");
+  let component = ReasonReact.reducerComponent("Pagination");
 
   let compareItems =
       (
@@ -401,15 +401,13 @@ module Make = (Config: Config) => {
 
       | _ =>
         let newState =
-          switch (state, action) {
-          | ({itemState: ItemUnselected}, _) =>
+          switch (state) {
+          | {itemState: ItemUnselected} =>
             Reducers.ItemUnselected.newState(itemsPerPage, state, action)
 
-          | ({itemState: ItemSelected(itemSelected)}, _) =>
+          | {itemState: ItemSelected(itemSelected)} =>
             Reducers.ItemSelected.newState(itemsPerPage, itemSelected, action)
-            |> E.O.fmap((itemState: Types.itemState) =>
-                 (itemState, state.pageConfig)
-               )
+            |> E.O.fmap(itemState => (itemState, state.pageConfig))
           };
 
         switch (newState) {

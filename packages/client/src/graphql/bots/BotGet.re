@@ -1,23 +1,16 @@
-type bot = {
-  id: string,
-  name: string,
-  competitorType: Types.competitorType,
-  description: option(string),
-};
-
-let toBot = (bot: bot): Types.bot =>
+let toBot = (bot): Types.bot =>
   Primary.Bot.make(
-    ~id=bot.id,
-    ~name=Some(bot.name),
-    ~competitorType=bot.competitorType,
-    ~description=bot.description,
+    ~id=bot##id,
+    ~name=Some(bot##name),
+    ~competitorType=bot##competitorType,
+    ~description=bot##description,
     (),
   );
 
 module Query = [%graphql
   {|
       query getBot ($id: String!) {
-          bot: bot(id: $id) @bsRecord {
+          bot: bot(id: $id) {
            id
            name
            description

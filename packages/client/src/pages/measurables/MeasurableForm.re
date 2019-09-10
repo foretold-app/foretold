@@ -122,6 +122,19 @@ let showForm =
          </Antd.Radio.Group>
        </Form.Item>,
      )}
+    {E.React.showIf(
+       form.values.showDescriptionProperty == "FALSE",
+       <>
+         <Form.Item label="Name" required=true>
+           <Input
+             value={form.values.name}
+             onChange={ReForm.Helpers.handleDomFormChange(
+               handleChange(`name),
+             )}
+           />
+         </Form.Item>
+       </>,
+     )}
     {loggedInUser.agent
      |> E.O.fmap((agent: Types.agent) =>
           ChannelsGet.component(
@@ -138,28 +151,17 @@ let showForm =
             |> ReasonReact.array
             |> (
               c =>
-                <Antd.Select
-                  value={form.values.channelId}
-                  onChange={e => handleChange(`channelId, e)}>
-                  c
-                </Antd.Select>
+                <Form.Item label="Channel">
+                  <Antd.Select
+                    value={form.values.channelId}
+                    onChange={e => handleChange(`channelId, e)}>
+                    c
+                  </Antd.Select>
+                </Form.Item>
             )
           )
         )
      |> E.O.React.defaultNull}
-    {E.React.showIf(
-       form.values.showDescriptionProperty == "FALSE",
-       <>
-         <Form.Item label="Name" required=true>
-           <Input
-             value={form.values.name}
-             onChange={ReForm.Helpers.handleDomFormChange(
-               handleChange(`name),
-             )}
-           />
-         </Form.Item>
-       </>,
-     )}
     {E.React.showIf(
        form.values.showDescriptionProperty == "TRUE",
        <>

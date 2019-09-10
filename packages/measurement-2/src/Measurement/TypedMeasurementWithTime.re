@@ -1,18 +1,4 @@
 type time = float;
-
-let concatSome = (optionals: array(option('a))): array('a) =>
-  optionals
-  |> Js.Array.filter(Rationale.Option.isSome)
-  |> Js.Array.map(
-       Rationale.Option.toExn("Warning: This should not have happened"),
-     );
-
-let defaultEmpty = (o: option(array('a))): array('a) =>
-  switch (o) {
-  | Some(o) => o
-  | None => [||]
-  };
-
 module TypedMeasurementWithTime = {
   type t('a) = {
     measurementValue: 'a,
@@ -21,7 +7,7 @@ module TypedMeasurementWithTime = {
   type tss('a) = array(t('a));
   let make = (time, measurementValue) => {measurementValue, time};
   type ts =
-    MeasurementValueType.T.t(
+    MeasurementValueWrapper.T.t(
       tss(MeasurementValue.Cdf.t),
       tss(float),
       tss(bool),
@@ -39,7 +25,7 @@ module TypedMeasurementWithTime = {
 
 module MeasurementWithTime = {
   type t = {
-    measurementValue: MeasurementValue.MeasurementValue.t,
+    measurementValue: MeasurementValue.t,
     time,
   };
   type ts = array(t);
@@ -48,11 +34,11 @@ module MeasurementWithTime = {
     ts
     |> Belt.Array.get(_, 0)
     |> Rationale.Option.map((r: t) =>
-         r.measurementValue |> MeasurementValueType.TypeName.fromType
+         r.measurementValue |> MeasurementValueWrapper.T.toTypeName
        );
 
   let toTypedMeasurementsWithTime =
-      (intendedType: MeasurementValueType.TypeName.t, ts: ts)
+      (intendedType: MeasurementValueWrapper.Name.t, ts: ts)
       : TypedMeasurementWithTime.ts => {
     let transform = (t2, t3): TypedMeasurementWithTime.ts =>
       ts
@@ -63,10 +49,10 @@ module MeasurementWithTime = {
                 TypedMeasurementWithTime.{time: t.time, measurementValue}
               )
          )
-      |> concatSome
+      |> Utility.Array.concatSome
       |> t3;
 
-    MeasurementValueType.T.(
+    MeasurementValueWrapper.T.(
       switch (intendedType) {
       | `Cdf => transform(toCdf, r => `Cdf(r))
       | `Float => transform(toFloat, r => `Float(r))

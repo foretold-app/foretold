@@ -4,8 +4,6 @@ open Rationale.Result.Infix;
 
 module JsonToMeasurement = {
   module CustomDecoders = {
-    let floatToPercentage = MeasurementValue.Percentage.make;
-
     let stringToUnresolvableResolution =
         (str: string)
         : Belt.Result.t(MeasurementValue.UnresolvableResolution.t, string) =>
@@ -42,8 +40,7 @@ module JsonToMeasurement = {
     };
 
   let decodeData =
-      (a, json: Js.Json.t)
-      : Belt.Result.t(MeasurementValue.MeasurementValue.t, string) => {
+      (a, json: Js.Json.t): Belt.Result.t(MeasurementValue.t, string) => {
     let jsonToFinalValue = (toSimpleValueFn, toFinalValueFn) =>
       json
       |> jsonToSimpleValue(Json.Decode.field("data", toSimpleValueFn))
@@ -77,14 +74,14 @@ module JsonToMeasurement = {
     };
   };
 
-  let run =
-      (json: Js.Json.t)
-      : Belt.Result.t(MeasurementValue.MeasurementValue.t, string) => {
+  let run = (json: Js.Json.t): Belt.Result.t(MeasurementValue.t, string) => {
     let t = json |> Json.Decode.field("dataType", Json.Decode.string);
-    let decodingType = MeasurementValueType.TypeName.fromString(t);
+    let decodingType = MeasurementValueWrapper.Name.fromString(t);
     switch (decodingType) {
     | Ok(e) => json |> decodeData(e)
     | Error(n) => Error(n)
     };
   };
 };
+
+let toMeasurement = JsonToMeasurement.run;

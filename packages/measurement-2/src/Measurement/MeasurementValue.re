@@ -32,6 +32,7 @@ module type Cdf = {
     (~xs: array(float), ~ys: array(float)) => Belt.Result.t(t, string);
   let toMeasurement: t => [> | `Cdf(t)];
 };
+
 module Cdf = {
   type t = {
     xs: array(float),
@@ -60,6 +61,7 @@ module type Percentage = {
   let toMeasurement: t => [> | `Percentage(t)];
   let toFloat: t => float;
   let inverse: t => t;
+  let fromBool: bool => t;
 };
 
 module Percentage: Percentage = {
@@ -77,16 +79,15 @@ module Percentage: Percentage = {
   let toMeasurement = t => `Percentage(t);
   let toFloat = t => t;
   let inverse = (t: t): t => 1. -. t;
+  let fromBool = (b: bool) => b ? 1.0 : 0.0;
 };
 
-module MeasurementValue = {
-  type t =
-    MeasurementValueType.T.t(
-      Cdf.t,
-      float,
-      bool,
-      Percentage.t,
-      UnresolvableResolution.t,
-      Comment.t,
-    );
-};
+type t =
+  MeasurementValueWrapper.T.t(
+    Cdf.t,
+    float,
+    bool,
+    Percentage.t,
+    UnresolvableResolution.t,
+    Comment.t,
+  );

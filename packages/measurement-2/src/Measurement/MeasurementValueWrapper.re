@@ -1,12 +1,32 @@
+type withInsides('a, 'b, 'c, 'd, 'e, 'f) = [
+  | `Cdf('a)
+  | `Float('b)
+  | `Binary('c)
+  | `Percentage('d)
+  | `UnresolvableResolution('e)
+  | `Comment('f)
+];
+
+type withoutInsides = [
+  | `Cdf
+  | `Float
+  | `Binary
+  | `Percentage
+  | `UnresolvableResolution
+  | `Comment
+];
+
 module T = {
-  type t('a, 'b, 'c, 'd, 'e, 'f) = [
-    | `Cdf('a)
-    | `Float('b)
-    | `Binary('c)
-    | `Percentage('d)
-    | `UnresolvableResolution('e)
-    | `Comment('f)
-  ];
+  type t('a, 'b, 'c, 'd, 'e, 'f) = withInsides('a, 'b, 'c, 'd, 'e, 'f);
+
+  let toTypeName =
+    fun
+    | `Cdf(_) => `Cdf
+    | `Float(_) => `Float
+    | `Binary(_) => `Binary
+    | `Percentage(_) => `Percentage
+    | `UnresolvableResolution(_) => `UnresolvableResolution
+    | `Comment(_) => `Comment;
 
   let toCdf = (t: t('a, 'b, 'c, 'd, 'e, 'f)) =>
     switch (t) {
@@ -40,31 +60,17 @@ module T = {
     | _ => None
     };
 
-  let isCdf = (t: t('a, 'b, 'c, 'd, 'e, 'f)): bool =>
-    t |> toCdf |> Rationale.Option.isSome;
-
-  let isFloat = (t: t('a, 'b, 'c, 'd, 'e, 'f)): bool =>
-    t |> toFloat |> Rationale.Option.isSome;
-
-  let isBinary = (t: t('a, 'b, 'c, 'd, 'e, 'f)): bool =>
-    t |> toBinary |> Rationale.Option.isSome;
-
-  let isPercentage = (t: t('a, 'b, 'c, 'd, 'e, 'f)): bool =>
-    t |> toPercentage |> Rationale.Option.isSome;
-
-  let isComment = (t: t('a, 'b, 'c, 'd, 'e, 'f)): bool =>
-    t |> toComment |> Rationale.Option.isSome;
+  let isX = (typeName, t: t('a, 'b, 'c, 'd, 'e, 'f)) =>
+    toTypeName(t) === typeName;
+  let isCdf = t => isX(`Cdf, t);
+  let isFloat = t => isX(`Float, t);
+  let isBinary = t => isX(`Binary, t);
+  let isPercentage = t => isX(`Percentage, t);
+  let isComment = t => isX(`Comment, t);
 };
 
-module TypeName = {
-  type t = [
-    | `Cdf
-    | `Float
-    | `Binary
-    | `Percentage
-    | `UnresolvableResolution
-    | `Comment
-  ];
+module Name = {
+  type t = withoutInsides;
 
   let toWrapperFn = (t: t) =>
     switch (t) {
@@ -74,16 +80,6 @@ module TypeName = {
     | `Percentage => (r => `Percentage(r))
     | `UnresolvableResolution => (r => `UnresolvableResolution(r))
     | `Comment => (r => `Comment(r))
-    };
-
-  let fromType = (t: T.t('a, 'b, 'c, 'd, 'e, 'f)): t =>
-    switch (t) {
-    | `Cdf(_) => `Cdf
-    | `Float(_) => `Float
-    | `Binary(_) => `Binary
-    | `Percentage(_) => `Percentage
-    | `UnresolvableResolution(_) => `UnresolvableResolution
-    | `Comment(_) => `Comment
     };
 
   let toString =

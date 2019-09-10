@@ -5,7 +5,7 @@ type marketScoreType =
 let scorePointCombination =
     (
       ~marketType: marketScoreType=MarketScore,
-      ~scoringCombination: ScoringCombination.ValidScoringCombination.t,
+      ~scoringCombination: PredictionResolutionGroup.t,
       ~sampleCount=10000,
       (),
     ) =>

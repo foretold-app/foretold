@@ -5,8 +5,6 @@ module MeasurementCombinationOverTime = {
   type measurementsWithTime('a) =
     TypedMeasurementWithTime.TypedMeasurementWithTime.tss('a);
 
-  open MeasurementValue;
-
   type combination('a, 'b) = {
     agentPredictions: measurementsWithTime('a),
     marketPredictions: option(measurementsWithTime('a)),
@@ -18,8 +16,8 @@ module MeasurementCombinationOverTime = {
   type percentagePercentage = combination(Percentage.t, Percentage.t);
 
   type combinationToMeasurement('a, 'b) =
-    ScoringCombination.ValidScoringCombination.combination('a, 'b) =>
-    ScoringCombination.ValidScoringCombination.t;
+    PredictionResolutionGroup.combination('a, 'b) =>
+    PredictionResolutionGroup.t;
 
   let _toStartAtDistribution =
       (

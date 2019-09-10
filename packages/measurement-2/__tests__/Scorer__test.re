@@ -5,7 +5,7 @@ describe("Scorer", () => {
   describe("#scorePointCombination", () =>
     test("with PercentagePercentage score", () => {
       open Percentage;
-      let scoringCombination: ScoringCombination.ValidScoringCombination.t =
+      let scoringCombination: PredictionResolutionGroup.t =
         `PercentagePercentage({
           agentPrediction: makeExt(0.01),
           marketPrediction: Some(makeExt(0.4)),

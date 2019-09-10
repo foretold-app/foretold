@@ -1,5 +1,3 @@
-open Belt.Result;
-
 module Comment = {
   type t = [ | `Generic | `QuestionFeedback | `Update];
 

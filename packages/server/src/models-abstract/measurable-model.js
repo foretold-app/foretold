@@ -1,9 +1,16 @@
 const _ = require('lodash');
+const {
+  MEASUREMENT_VALUE,
+} = require('@foretold/measurement-value/enums/measurement-value');
+
 
 const models = require('../models');
 const { MEASURABLE_STATE } = require('../enums/measurable-state');
 
 const { ModelPostgres } = require('./model-postgres');
+const {
+  MEASUREMENT_COMPETITOR_TYPE,
+} = require('../enums/measurement-competitor-type');
 
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
@@ -30,10 +37,10 @@ class MeasurableModel extends ModelPostgres {
     } = MeasurableModel.MEASURABLE_STATE;
 
     return this.sequelize.literal(
-      `(CASE WHEN "state"='${OPEN}' THEN 1 ` +
-      `WHEN "state"='${JUDGEMENT_PENDING}' THEN 2 ` +
-      `WHEN "state"='${JUDGED}' THEN 3 ` +
-      `WHEN "state"='${CLOSED_AS_UNRESOLVED}' THEN 3 ` +
+      `(CASE WHEN "state"='${ OPEN }' THEN 1 ` +
+      `WHEN "state"='${ JUDGEMENT_PENDING }' THEN 2 ` +
+      `WHEN "state"='${ JUDGED }' THEN 3 ` +
+      `WHEN "state"='${ CLOSED_AS_UNRESOLVED }' THEN 3 ` +
       `ELSE 5 END) AS "stateOrder"`,
     );
   }
@@ -85,6 +92,29 @@ class MeasurableModel extends ModelPostgres {
       },
     });
   }
+
+  /**
+   * @todo: implement client for this code
+   * @todo: do not remove
+   * @param {Models.Measurable} measurable
+   * @return {Promise<Models.Measurable>}
+   */
+  async processResolution(measurable) {
+    const asFloat = await measurable.resolutionEndpointResponse;
+    if (asFloat) {
+      await this.sequelize.models.Measurement.create({
+        agentId: measurable.creatorId,
+        competitorType: MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
+        measurableId: measurable.id,
+        value: {
+          [MEASUREMENT_VALUE.floatPoint]: asFloat,
+        },
+      });
+    }
+    // @todo: Do we really need it if we have hooks?
+    await measurable.judged();
+    return measurable;
+  };
 
   /**
    * @return {*[]}

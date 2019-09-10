@@ -88,6 +88,15 @@ class MeasurablesData extends DataBase {
   }
 
   /**
+   * @public
+   * @param {Models.Measurable} measurable
+   * @return {Promise<Models.Measurable>}
+   */
+  async processResolution(measurable) {
+    return this.model.processResolution(measurable);
+  }
+
+  /**
    * @param {Models.ObjectID} channelId
    * @return {Promise<*>}
    */

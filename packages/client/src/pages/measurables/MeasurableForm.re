@@ -137,7 +137,7 @@ let showForm =
             |> ReasonReact.array
             |> (
               c =>
-                <Antd.Form.Item label="Channel">
+                <Antd.Form.Item label="Community">
                   <Antd.Select
                     value={state.values.channelId}
                     onChange={e => send(Form.FieldChangeValue(ChannelId, e))}>

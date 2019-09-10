@@ -107,8 +107,7 @@ class MeasurableModel extends ModelPostgres {
         competitorType: MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
         measurableId: measurable.id,
         value: {
-          dataType: MEASUREMENT_VALUE.floatPoint,
-          data: asFloat,
+          [MEASUREMENT_VALUE.floatPoint]: asFloat,
         },
       });
     }

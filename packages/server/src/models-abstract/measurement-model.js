@@ -130,6 +130,7 @@ class MeasurementModel extends ModelPostgres {
         AND "Measurables"."valueType" = 'PERCENTAGE'
         AND "Measurements"."competitorType" = 'COMPETITIVE'
         AND "Measurements"."agentId" = '${ agentId }'
+        AND "Measurements"."value" ->> 'dataType' = 'percentage'
       GROUP BY "Measurements"."measurableId", "Measurements"."agentId"
     )`;
   }

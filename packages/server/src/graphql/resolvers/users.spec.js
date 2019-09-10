@@ -15,9 +15,8 @@ describe('Users Resolvers', () => {
     it('edits user', () => {
       return users.update(root, args, context).then((result) => {
         expect(data.users.updateOne).toHaveBeenCalledWith(
-          'id1',
+          { id: 'id1' },
           { name: 'name1' },
-          context.user,
         );
         expect(result).toBe(true);
       });

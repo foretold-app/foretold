@@ -2,19 +2,23 @@ const _ = require('lodash');
 
 const data = require('../../data');
 
+const { Params } = require('../../data/classes/params');
+const { Data } = require('../../data/classes/data');
+
 /**
  * @param {*} root
  * @param {object} args
  * @param {Models.ObjectID} args.id
  * @param {object} args.input
- * @param {Schema.Context} context
+ * @param {Schema.Context} _context
  * @returns {Promise<Models.User>}
  */
-async function update(root, args, context) {
-  const { id } = args;
-  const datas = args.input;
-  const user = context.user;
-  return data.users.updateOne(id, datas, user);
+async function update(root, args, _context) {
+  const id = _.get(args, 'id');
+  const input = _.get(args, 'input');
+  const params = new Params({ id });
+  const data$ = new Data(input);
+  return data.users.updateOne(params, data$);
 }
 
 /**

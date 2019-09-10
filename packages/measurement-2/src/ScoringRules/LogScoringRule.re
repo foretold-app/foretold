@@ -26,11 +26,15 @@ let marketPercentagePercentage =
       MeasurementValue.Percentage.(
         {
           let positive =
-            resolution *. log2Error(agentPrediction /. marketPrediction);
-          let negative =
-            inverse(resolution)
+            toFloat(resolution)
             *. log2Error(
-                 inverse(agentPrediction) /. inverse(marketPrediction),
+                 toFloat(agentPrediction) /. toFloat(marketPrediction),
+               );
+          let negative =
+            toFloat(inverse(resolution))
+            *. log2Error(
+                 toFloat(inverse(agentPrediction))
+                 /. toFloat(inverse(marketPrediction)),
                );
           positive +. negative;
         }
@@ -58,10 +62,15 @@ let nonMarketPercentagePercentage =
   Ok(
     MeasurementValue.Percentage.(
       {
-        let positive = resolution *. log2Error(agentPrediction /. resolution);
+        let positive =
+          toFloat(resolution)
+          *. log2Error(toFloat(agentPrediction) /. toFloat(resolution));
         let negative =
-          inverse(resolution)
-          *. log2Error(inverse(agentPrediction) /. inverse(resolution));
+          toFloat(inverse(resolution))
+          *. log2Error(
+               toFloat(inverse(agentPrediction))
+               /. toFloat(inverse(resolution)),
+             );
         positive +. negative;
       }
     ),

@@ -85,4 +85,23 @@ module TypeName = {
     | `UnresolvableResolution(_) => `UnresolvableResolution
     | `Comment(_) => `Comment
     };
+
+  let toString =
+    fun
+    | `Cdf => "floatCdf"
+    | `Float => "floatPoint"
+    | `Binary => "binary"
+    | `Percentage => "percentage"
+    | `UnresolvableResolution => "unresolvableResolution"
+    | `Comment => "comment";
+
+  let fromString =
+    fun
+    | "floatPoint" => Belt.Result.Ok(`Float)
+    | "floatCdf" => Ok(`Cdf)
+    | "percentage" => Ok(`Percentage)
+    | "binary" => Ok(`Binary)
+    | "unresolvableResolution" => Ok(`UnresolvableResolution)
+    | "comment" => Ok(`Comment)
+    | _ => Error("Not found");
 };

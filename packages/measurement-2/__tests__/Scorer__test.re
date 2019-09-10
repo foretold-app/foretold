@@ -4,11 +4,12 @@ open Expect;
 describe("Scorer", () => {
   describe("#scorePointCombination", () =>
     test("with PercentagePercentage score", () => {
+      open MeasurementValue.Percentage;
       let scoringCombination: ScoringCombination.ValidScoringCombination.t =
         `PercentagePercentage({
-          agentPrediction: 0.01,
-          marketPrediction: Some(0.4),
-          resolution: 0.01,
+          agentPrediction: makeExt(0.01),
+          marketPrediction: Some(makeExt(0.4)),
+          resolution: makeExt(0.01),
         });
       expect(
         Scorer.scorePointCombination(
@@ -25,11 +26,16 @@ describe("Scorer", () => {
     test("with PercentagePercentage score", () => {
       let makeCombination = {
         open TypedMeasurementWithTime.TypedMeasurementWithTime;
+        let makeExt = MeasurementValue.Percentage.makeExt;
         let combinationOverTime: ScoringCombinationOverTime.MeasurementCombinationOverTime.t =
           `PercentagePercentage({
-            agentPredictions: [|make(3., 0.70), make(8., 0.88)|],
-            marketPredictions: Some([|make(0., 0.5), make(5., 0.7)|]),
-            resolution: make(10., 0.95),
+            agentPredictions: [|
+              make(3., makeExt(0.70)),
+              make(8., makeExt(0.88)),
+            |],
+            marketPredictions:
+              Some([|make(0., makeExt(0.5)), make(5., makeExt(0.7))|]),
+            resolution: make(10., makeExt(0.95)),
           });
         combinationOverTime;
       };

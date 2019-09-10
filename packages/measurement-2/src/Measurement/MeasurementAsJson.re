@@ -10,19 +10,19 @@ module JsonToMeasurement = {
         (str: string)
         : Belt.Result.t(MeasurementValue.UnresolvableResolution.t, string) =>
       switch (str) {
-      | "AMBIGUOUS" => Ok(`AMBIGUOUS)
-      | "FALSE_CONDITIONAL" => Ok(`FALSE_CONDITIONAL)
-      | "OTHER" => Ok(`OTHER)
-      | "RESULT_NOT_AVAILABLE" => Ok(`RESULT_NOT_AVAILABLE)
+      | "AMBIGUOUS" => Ok(`Ambiguous)
+      | "FALSE_CONDITIONAL" => Ok(`FalseConditional)
+      | "RESULT_NOT_AVAILABLE" => Ok(`ResultNotAvailable)
+      | "OTHER" => Ok(`Other)
       | _ => Error("Invalid Unresolvable Resolution: " ++ str)
       };
 
     let stringToComment =
         (str: string): Belt.Result.t(MeasurementValue.Comment.t, string) =>
       switch (str) {
-      | "GENERIC" => Ok(`GENERIC)
-      | "QUESTION_FEEDBACK" => Ok(`QUESTION_FEEDBACK)
-      | "UPDATE" => Ok(`UPDATE)
+      | "GENERIC" => Ok(`Generic)
+      | "QUESTION_FEEDBACK" => Ok(`QuestionFeedback)
+      | "UPDATE" => Ok(`Update)
       | _ => Error("Invalid GraphQL Comment: " ++ str)
       };
 
@@ -41,16 +41,6 @@ module JsonToMeasurement = {
     | _ => Error("Unknown Error.")
     };
 
-  let nameToType =
-    fun
-    | "floatPoint" => Ok(`Float)
-    | "floatCdf" => Ok(`Cdf)
-    | "percentage" => Ok(`Percentage)
-    | "binary" => Ok(`Binary)
-    | "unresolvableResolution" => Ok(`UnresolvableResolution)
-    | "comment" => Ok(`Comment)
-    | _ => Error("Not found");
-
   let decodeData =
       (a, json: Js.Json.t)
       : Belt.Result.t(MeasurementValue.MeasurementValue.t, string) => {
@@ -62,11 +52,17 @@ module JsonToMeasurement = {
     switch (a) {
     | `Float => jsonToFinalValue(Json.Decode.float, e => Ok(`Float(e)))
     | `Cdf =>
-      jsonToFinalValue(CustomDecoders.jsonToCdfPair, e =>
-        e->MeasurementValue.Cdf.make->Belt.Result.map(r => `Cdf(r))
+      jsonToFinalValue(CustomDecoders.jsonToCdfPair, ({xs, ys}) =>
+        MeasurementValue.Cdf.(
+          make(~xs, ~ys, ())->Belt.Result.map(_, toMeasurement)
+        )
       )
     | `Percentage =>
-      jsonToFinalValue(Json.Decode.float, e => Ok(`Percentage(e)))
+      jsonToFinalValue(Json.Decode.float, e =>
+        MeasurementValue.Percentage.(
+          e |> make |> Belt.Result.map(_, toMeasurement)
+        )
+      )
     | `Binary => jsonToFinalValue(Json.Decode.bool, e => Ok(`Binary(e)))
     | `UnresolvableResolution =>
       jsonToFinalValue(Json.Decode.string, e =>
@@ -85,7 +81,7 @@ module JsonToMeasurement = {
       (json: Js.Json.t)
       : Belt.Result.t(MeasurementValue.MeasurementValue.t, string) => {
     let t = json |> Json.Decode.field("dataType", Json.Decode.string);
-    let decodingType = nameToType(t);
+    let decodingType = MeasurementValueType.TypeName.fromString(t);
     switch (decodingType) {
     | Ok(e) => json |> decodeData(e)
     | Error(n) => Error(n)

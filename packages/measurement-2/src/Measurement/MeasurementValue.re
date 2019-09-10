@@ -1,43 +1,37 @@
 open Belt.Result;
 
-type t = [ | `AMBIGUOUS | `FALSE_CONDITIONAL | `OTHER | `RESULT_NOT_AVAILABLE];
-
-module UnresolvableResolution = {
-  type t = [
-    | `AMBIGUOUS
-    | `FALSE_CONDITIONAL
-    | `OTHER
-    | `RESULT_NOT_AVAILABLE
-  ];
+module Comment = {
+  type t = [ | `Generic | `QuestionFeedback | `Update];
 
   let toString = (e: t): string =>
     switch (e) {
-    | `AMBIGUOUS => "AMBIGUOUS"
-    | `FALSE_CONDITIONAL => "FALSE_CONDITIONAL"
-    | `OTHER => "OTHER"
-    | `RESULT_NOT_AVAILABLE => "RESULT_NOT_AVAILABLE"
+    | `Generic => "Generic"
+    | `QuestionFeedback => "Question Feedback"
+    | `Update => "Update"
     };
+
+  let toMeasurement = (t: t) => `Comment(t);
 };
 
-module Comment = {
-  type t = [ | `GENERIC | `QUESTION_FEEDBACK | `UPDATE];
+module UnresolvableResolution = {
+  type t = [ | `Ambiguous | `FalseConditional | `ResultNotAvailable | `Other];
 
-  let fromString = e =>
+  let toString = (e: t): string =>
     switch (e) {
-    | "GENERIC" => `GENERIC
-    | "QUESTION_FEEDBACK" => `QUESTION_FEEDBACK
-    | "UPDATE" => `UPDATE
-    | _ => Js.Exn.raiseError("Invalid GraphQL Comment: " ++ e)
+    | `Ambiguous => "Ambiguous"
+    | `FalseConditional => "FalseConditional"
+    | `ResultNotAvailable => "ResultNotAvailable"
+    | `Other => "Other"
     };
-
-  let toPublicString = (e: t): string =>
-    switch (e) {
-    | `GENERIC => "Generic"
-    | `QUESTION_FEEDBACK => "Question Feedback"
-    | `UPDATE => "Update"
-    };
+  let toMeasurement = (t: t) => `UnresolvableResolution(t);
 };
 
+module type Cdf = {
+  type t;
+  let make:
+    (~xs: array(float), ~ys: array(float)) => Belt.Result.t(t, string);
+  let toMeasurement: t => [> | `Cdf(t)];
+};
 module Cdf = {
   type t = {
     xs: array(float),
@@ -53,23 +47,36 @@ module Cdf = {
       ? Error("Array length must be the same.") : Ok({xs, ys});
 
   // todo: verify is increasing
-  let make = ({xs, ys}) =>
+  let make = (~xs, ~ys, ()) =>
     {xs, ys} |> verifyHasLength |> Rationale.Result.bind(_, verifySameLength);
+
+  let toMeasurement = t => `Cdf(t);
 };
 
-module Percentage = {
+module type Percentage = {
+  type t;
+  let make: float => Belt.Result.t(t, string);
+  let makeExt: float => t;
+  let toMeasurement: t => [> | `Percentage(t)];
+  let toFloat: t => float;
+  let inverse: t => t;
+};
+
+module Percentage: Percentage = {
   type t = float;
 
-  let inverse = (t: t): t => 1. -. t;
-
-  let verifyInRange = (f: float) =>
+  let verifyInRange = (f: float): Belt.Result.t(t, string) =>
     if (f < 0. || f > 1.) {
       Error("Percentage must be between 0 and 1.");
     } else {
-      Ok(f);
+      Ok(f: t);
     };
 
-  let make = (t: t) => verifyInRange(t);
+  let make = verifyInRange;
+  let makeExt = t => t;
+  let toMeasurement = t => `Percentage(t);
+  let toFloat = t => t;
+  let inverse = (t: t): t => 1. -. t;
 };
 
 module MeasurementValue = {

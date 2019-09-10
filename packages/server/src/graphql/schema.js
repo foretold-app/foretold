@@ -42,7 +42,6 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.users.one,
       },
 
-      // @todo: security!
       users: {
         type: graphql.GraphQLNonNull(graphql.GraphQLList(types.users.user)),
         resolve: resolver(models.User),
@@ -154,7 +153,6 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.globalSettings.one,
       },
 
-      // @todo: security!
       agent: {
         type: types.agents.agent,
         args: {

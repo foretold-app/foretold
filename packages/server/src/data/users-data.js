@@ -35,26 +35,6 @@ class UsersData extends DataBase {
     return this.upsertOne(params, query, data);
   }
 
-
-  /**
-   * @todo: fix interface
-   * @todo: move to permissions
-   * @public
-   * @deprecated: use updateOne
-   * @param {Models.ObjectID} id
-   * @param {object} data
-   * @param {object} _user
-   * @return {Promise<Models.User>}
-   */
-  async updateOne(id, data, _user) {
-    const params = new Params({ id });
-    const user = await this.getOne(params);
-    if (user && user.auth0Id === _user.auth0Id) {
-      await user.update(data);
-    }
-    return user;
-  }
-
   /**
    * @public
    * @param {string} id

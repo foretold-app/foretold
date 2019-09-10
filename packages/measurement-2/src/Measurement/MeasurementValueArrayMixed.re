@@ -6,24 +6,19 @@ let first = Belt.Array.get(_, 0);
 let firstElementType = (t: t) =>
   t |> first |> Rationale.Option.map(MeasurementValueWrapper.T.toTypeName);
 
-let toMeasurementValueArrayWrapped =
-    (intendedType: MeasurementValueWrapper.Name.t, ts: t)
-    : MeasurementValueArrayWrapped.t => {
-  let transform = (t2, t3): MeasurementValueArrayWrapped.t =>
-    ts
-    |> Belt.Array.map(_, (t: single) => t |> t2)
-    |> Utility.Array.concatSome
-    |> t3;
+let filterOnIntendedType =
+    (intendedType: MeasurementValueWrapper.Name.t, ts: t): t => {
+  ts
+  |> Belt.Array.keep(_, (t: single) =>
+       t |> MeasurementValueWrapper.Name.toIsFn(intendedType)
+     );
+};
 
-  MeasurementValueWrapper.T.(
-    switch (intendedType) {
-    | `Cdf => transform(toCdf, r => `Cdf(r))
-    | `Float => transform(toFloat, r => `Float(r))
-    | `Binary => transform(toBinary, r => `Binary(r))
-    | `Percentage => transform(toPercentage, r => `Percentage(r))
-    | `UnresolvableResolution =>
-      transform(toUnresolvableResolution, r => `UnresolvableResolution(r))
-    | `Comment => transform(toComment, r => `Comment(r))
-    }
-  );
-} /* let allSameType = (t: t) => toMeasurementValueArrayWrapped |> Array.length*/;
+let filterOnFirstElementType = (ts: t) =>
+  switch (ts |> firstElementType) {
+  | Some(t) => filterOnIntendedType(t, ts)
+  | None => [||]
+  };
+
+let isAllSameType = (ts: t) =>
+  Belt.Array.length(ts) == Belt.Array.length(filterOnFirstElementType(ts));

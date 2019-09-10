@@ -28,20 +28,25 @@ module T = {
     | `UnresolvableResolution(_) => `UnresolvableResolution
     | `Comment(_) => `Comment;
 
-  // let map =
-  //     (
-  //       t: t('a, 'b, 'c, 'd, 'e, 'f),
-  //       fn: ('a => 'g, 'b => 'h, 'c => 'i, 'd => 'j, 'e => 'k, 'f => 'l),
-  //     ) => {
-  //   switch (t) {
-  //   | `Cdf(a) => `Cdf(fst(fn(a)))
-  //   | `Float(_) => `Float
-  //   | `Binary(_) => `Binary
-  //   | `Percentage(_) => `Percentage
-  //   | `UnresolvableResolution(_) => `UnresolvableResolution
-  //   | `Comment(_) => `Comment
-  //   };
-  // };
+  let mapSimilar = (fn, t: t('a, 'a, 'a, 'a, 'a, 'a)) =>
+    switch (t) {
+    | `Cdf(a) => `Cdf(fn(a))
+    | `Float(a) => `Float(fn(a))
+    | `Binary(a) => `Binary(fn(a))
+    | `Percentage(a) => `Percentage(fn(a))
+    | `UnresolvableResolution(a) => `UnresolvableResolution(fn(a))
+    | `Comment(a) => `Comment(fn(a))
+    };
+
+  let fnSimilar = (fn, t: t('a, 'a, 'a, 'a, 'a, 'a)) =>
+    switch (t) {
+    | `Cdf(a) => fn(a)
+    | `Float(a) => fn(a)
+    | `Binary(a) => fn(a)
+    | `Percentage(a) => fn(a)
+    | `UnresolvableResolution(a) => fn(a)
+    | `Comment(a) => fn(a)
+    };
 
   let toCdf = (t: t('a, 'b, 'c, 'd, 'e, 'f)) =>
     switch (t) {
@@ -81,6 +86,7 @@ module T = {
   let isFloat = t => isX(`Float, t);
   let isBinary = t => isX(`Binary, t);
   let isPercentage = t => isX(`Percentage, t);
+  let isUnresolvable = t => isX(`UnresolvableResolution, t);
   let isComment = t => isX(`Comment, t);
 };
 
@@ -96,6 +102,18 @@ module Name = {
     | `UnresolvableResolution => (r => `UnresolvableResolution(r))
     | `Comment => (r => `Comment(r))
     };
+
+  let toIsFn = (t: t) =>
+    T.(
+      switch (t) {
+      | `Cdf => isCdf
+      | `Float => isFloat
+      | `Binary => isBinary
+      | `Percentage => isPercentage
+      | `UnresolvableResolution => isUnresolvable
+      | `Comment => isComment
+      }
+    );
 
   let toString =
     fun

@@ -3,10 +3,8 @@ module CMutationForm =
     type queryType = MeasurableUpdate.Query.t;
   });
 
-let formCreation =
-    (id: string, m: MeasurableGet.measurable, loggedInUser: Types.user)
-    : React.element => {
-  let measurable: Types.measurable = MeasurableGet.toMeasurable(m);
+let formCreation = (id: string, m, loggedInUser: Types.user): React.element => {
+  let measurable = MeasurableGet.toMeasurable(m);
 
   MeasurableUpdate.Mutation.make((mutation, data) =>
     MeasurableForm.MeasurableReForm.make(
@@ -26,6 +24,7 @@ let formCreation =
             values.valueType,
             values.min,
             values.max,
+            values.channelId,
           ),
       ~initialState={
         name: measurable.name,
@@ -47,6 +46,7 @@ let formCreation =
         valueType: measurable.valueType |> Primary.Measurable.valueTypeToStr,
         min: measurable.min |> E.O.dimap(E.Float.toString, () => ""),
         max: measurable.max |> E.O.dimap(E.Float.toString, () => ""),
+        channelId: measurable.channelId,
       },
       ~schema=[(`name, Custom(_ => None))],
       ({handleSubmit, handleChange, form, _}) =>
@@ -62,8 +62,12 @@ let formCreation =
               (),
             ),
           ~onSuccess=
-            _ => {
-              Routing.Url.push(MeasurableShow(measurable.channelId, id));
+            (response: MeasurableUpdate.Query.t) => {
+              switch (response##measurableUpdate) {
+              | Some(measurable) =>
+                Routing.Url.push(MeasurableShow(measurable##channelId, id))
+              | _ => ()
+              };
               ReasonReact.null;
             },
           (),
@@ -89,8 +93,7 @@ let make =
       ~head=SLayout.Header.textDiv("Edit Question"),
       ~body=
         <FC.PageCard.BodyPadding>
-          {MeasurableGet.component(
-             ~id=pageParams.id, (m: MeasurableGet.measurable) =>
+          {MeasurableGet.component(~id=pageParams.id, m =>
              formCreation(pageParams.id, m, loggedInUser)
            )}
         </FC.PageCard.BodyPadding>,

@@ -104,6 +104,7 @@ const measurableUpdateInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     labelCustom: { type: graphql.GraphQLString },
+    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     valueType: { type: require('./enums/measurable-value-type').measurableValueType },
     expectedResolutionDate: { type: DateType.default },
     resolutionEndpoint: { type: graphql.GraphQLString },

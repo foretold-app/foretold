@@ -49,11 +49,11 @@ let sortAsc = (arr: array(Types.channel)) => {
 let component =
     (
       ~channelMemberId: option(string)=?,
-      ~isArchived=?,
+      ~isArchived=[|Some(`FALSE)|],
       ~sortFn=sortDefault,
       fn,
     ) => {
-  let query = Query.make(~channelMemberId?, ~isArchived?, ());
+  let query = Query.make(~channelMemberId?, ~isArchived, ());
 
   <QueryComponent variables=query##variables>
     ...{({result}) =>

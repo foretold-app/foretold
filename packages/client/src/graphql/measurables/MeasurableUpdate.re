@@ -3,6 +3,7 @@ module Query = [%graphql
              mutation measurableUpdate($id: String!, $input: MeasurableUpdateInput!) {
                  measurableUpdate(id: $id, input: $input) {
                    id
+                   channelId
                  }
              }
      |}
@@ -25,6 +26,7 @@ let mutate =
       valueType: string,
       min: string,
       max: string,
+      channelId: string,
     ) => {
   let date = showDescriptionDate == "TRUE" ? labelOnDate : "";
 
@@ -47,6 +49,7 @@ let mutate =
         "max":
           max != ""
             ? max |> Js.Float.fromString |> Rationale.Option.some : None,
+        "channelId": channelId,
       },
       (),
     );

@@ -24,6 +24,7 @@ module Params = {
     valueType: string,
     min: string,
     max: string,
+    channelId: string,
   };
 
   type fields = [
@@ -39,6 +40,7 @@ module Params = {
     | `valueType
     | `min
     | `max
+    | `channelId
   ];
 
   let lens = [
@@ -86,6 +88,7 @@ module Params = {
     (`valueType, s => s.valueType, (s, valueType) => {...s, valueType}),
     (`min, s => s.min, (s, min) => {...s, min}),
     (`max, s => s.max, (s, max) => {...s, max}),
+    (`channelId, s => s.channelId, (s, channelId) => {...s, channelId}),
   ];
 };
 
@@ -97,7 +100,7 @@ let showForm =
       ~form: MeasurableReForm.state,
       ~handleSubmit,
       ~handleChange,
-      ~creating: bool=true,
+      ~creating=true,
       (),
     ) =>
   <AntdForm onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
@@ -132,6 +135,33 @@ let showForm =
          </Form.Item>
        </>,
      )}
+    {loggedInUser.agent
+     |> E.O.fmap((agent: Types.agent) =>
+          ChannelsGet.component(
+            ~channelMemberId=?Some(agent.id),
+            ~sortFn=ChannelsGet.sortAsc,
+            channels =>
+            channels
+            |> Array.mapi((index, channel: Types.channel) =>
+                 <Antd.Select.Option
+                   value={channel.id} key={index |> string_of_int}>
+                   {channel.name |> Utils.ste}
+                 </Antd.Select.Option>
+               )
+            |> ReasonReact.array
+            |> (
+              c =>
+                <Form.Item label="Channel">
+                  <Antd.Select
+                    value={form.values.channelId}
+                    onChange={e => handleChange(`channelId, e)}>
+                    c
+                  </Antd.Select>
+                </Form.Item>
+            )
+          )
+        )
+     |> E.O.React.defaultNull}
     {E.React.showIf(
        form.values.showDescriptionProperty == "TRUE",
        <>

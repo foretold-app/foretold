@@ -23,7 +23,7 @@ let marketPercentagePercentage =
   | Some(marketPrediction) =>
     Ok(
       //   TODO: Handle cases where market is 0 or 1
-      MeasurementValue.Percentage.(
+      Percentage.(
         {
           let positive =
             toFloat(resolution)
@@ -60,7 +60,7 @@ let nonMarketPercentagePercentage =
       {agentPrediction, resolution}: ScoringCombination.ValidScoringCombination.percentagePercentage,
     ) =>
   Ok(
-    MeasurementValue.Percentage.(
+    Percentage.(
       {
         let positive =
           toFloat(resolution)

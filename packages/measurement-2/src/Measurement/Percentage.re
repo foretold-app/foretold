@@ -1,0 +1,15 @@
+type t = float;
+
+let verifyInRange = (f: float): Belt.Result.t(t, string) =>
+  if (f < 0. || f > 1.) {
+    Error("Percentage must be between 0 and 1.");
+  } else {
+    Ok(f: t);
+  };
+
+let make = verifyInRange;
+let makeExt = t => t;
+let toMeasurement = t => `Percentage(t);
+let toFloat = t => t;
+let inverse = (t: t): t => 1. -. t;
+let fromBool = (b: bool) => b ? 1.0 : 0.0;

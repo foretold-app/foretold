@@ -4,7 +4,7 @@ open Expect;
 describe("Scorer", () => {
   describe("#scorePointCombination", () =>
     test("with PercentagePercentage score", () => {
-      open MeasurementValue.Percentage;
+      open Percentage;
       let scoringCombination: ScoringCombination.ValidScoringCombination.t =
         `PercentagePercentage({
           agentPrediction: makeExt(0.01),
@@ -26,7 +26,7 @@ describe("Scorer", () => {
     test("with PercentagePercentage score", () => {
       let makeCombination = {
         open TypedMeasurementWithTime.TypedMeasurementWithTime;
-        let makeExt = MeasurementValue.Percentage.makeExt;
+        let makeExt = Percentage.makeExt;
         let combinationOverTime: ScoringCombinationOverTime.MeasurementCombinationOverTime.t =
           `PercentagePercentage({
             agentPredictions: [|

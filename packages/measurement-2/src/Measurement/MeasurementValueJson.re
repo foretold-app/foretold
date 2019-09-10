@@ -24,12 +24,12 @@ module JsonToMeasurement = {
       | _ => Error("Invalid GraphQL Comment: " ++ str)
       };
 
-    let jsonToCdfPair = (j: Js.Json.t): MeasurementValue.Cdf.t => {
+    let jsonToCdfPair = (j: Js.Json.t) => {
       let xs =
         j |> Json.Decode.field("xs", Json.Decode.array(Json.Decode.float));
       let ys =
         j |> Json.Decode.field("ys", Json.Decode.array(Json.Decode.float));
-      {xs, ys};
+      (xs, ys);
     };
   };
 
@@ -49,16 +49,12 @@ module JsonToMeasurement = {
     switch (a) {
     | `Float => jsonToFinalValue(Json.Decode.float, e => Ok(`Float(e)))
     | `Cdf =>
-      jsonToFinalValue(CustomDecoders.jsonToCdfPair, ({xs, ys}) =>
-        MeasurementValue.Cdf.(
-          make(~xs, ~ys, ())->Belt.Result.map(_, toMeasurement)
-        )
+      jsonToFinalValue(CustomDecoders.jsonToCdfPair, ((xs, ys)) =>
+        Cdf.(make(~xs, ~ys, ())->Belt.Result.map(_, toMeasurement))
       )
     | `Percentage =>
       jsonToFinalValue(Json.Decode.float, e =>
-        MeasurementValue.Percentage.(
-          e |> make |> Belt.Result.map(_, toMeasurement)
-        )
+        Percentage.(e |> make |> Belt.Result.map(_, toMeasurement))
       )
     | `Binary => jsonToFinalValue(Json.Decode.bool, e => Ok(`Binary(e)))
     | `UnresolvableResolution =>

@@ -8,10 +8,10 @@ module TypedMeasurementWithTime = {
   let make = (time, measurementValue) => {measurementValue, time};
   type ts =
     MeasurementValueWrapper.T.t(
-      tss(MeasurementValue.Cdf.t),
+      tss(Cdf.t),
       tss(float),
       tss(bool),
-      tss(MeasurementValue.Percentage.t),
+      tss(Percentage.t),
       tss(MeasurementValue.UnresolvableResolution.t),
       tss(MeasurementValue.Comment.t),
     );

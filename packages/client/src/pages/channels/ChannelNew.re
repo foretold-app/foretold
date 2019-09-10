@@ -38,7 +38,7 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
     let body =
       <FC.PageCard.BodyPadding>
         {mutationMake((mutation, data) =>
-           form(mutation, ({send, state, _}) =>
+           form(mutation, ({send, state}) =>
              CMutationForm.showWithLoading2(
                ~result=data.result,
                ~form=

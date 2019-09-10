@@ -15,7 +15,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
     let mutationMake =
       ChannelUpdate.Mutation.make(~onCompleted=_ => ()) ||> E.React.el;
 
-    let header =
+    let head =
       <>
         <FC.Base.Div float=`left>
           <FC.PageCard.HeaderRow.Title>
@@ -65,9 +65,9 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
 
     <FC.PageCard.BodyPadding>
       {loadChannel(
-         HttpResponse.fmap(result =>
+         HttpResponse.fmap(channel =>
            mutationMake((mutation, data) =>
-             form(mutation, result, ({send, state, _}) =>
+             form(mutation, channel, ({send, state}) =>
                CMutationForm.showWithLoading(
                  ~result=data.result,
                  ~form=
@@ -87,7 +87,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
          ||> HttpResponse.withReactDefaults,
        )}
     </FC.PageCard.BodyPadding>
-    |> SLayout.LayoutConfig.make(~head=header, ~body=_)
+    |> SLayout.LayoutConfig.make(~head, ~body=_)
     |> SLayout.FullPage.makeWithEl;
   },
 };

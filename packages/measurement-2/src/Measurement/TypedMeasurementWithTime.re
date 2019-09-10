@@ -1,26 +1,30 @@
 type time = float;
-module TypedMeasurementWithTime = {
+
+module T = {
   type t('a) = {
     measurementValue: 'a,
     time,
   };
-  type tss('a) = array(t('a));
-  let make = (time, measurementValue) => {measurementValue, time};
-  type ts =
+
+  type ts('a) = array(t('a));
+
+  type wrappedTs =
     MeasurementValueWrapper.T.t(
-      tss(Cdf.t),
-      tss(float),
-      tss(bool),
-      tss(Percentage.t),
-      tss(MeasurementValue.UnresolvableResolution.t),
-      tss(MeasurementValue.Comment.t),
+      ts(Cdf.t),
+      ts(float),
+      ts(bool),
+      ts(Percentage.t),
+      ts(MeasurementValue.UnresolvableResolution.t),
+      ts(MeasurementValue.Comment.t),
     );
 
-  let toStartAtDistribution = (finalTime, tss: tss('a)) =>
+  let toStartAtDistribution = (finalTime, ts: ts('a)) =>
     StartAtDistribution.make(
       ~finalX=finalTime,
-      ~pointXY=tss |> Array.map(r => (r.time, r.measurementValue)),
+      ~pointXY=ts |> Array.map(r => (r.time, r.measurementValue)),
     );
+
+  let make = (time, measurementValue) => {measurementValue, time};
 };
 
 module MeasurementWithTime = {
@@ -38,15 +42,14 @@ module MeasurementWithTime = {
        );
 
   let toTypedMeasurementsWithTime =
-      (intendedType: MeasurementValueWrapper.Name.t, ts: ts)
-      : TypedMeasurementWithTime.ts => {
-    let transform = (t2, t3): TypedMeasurementWithTime.ts =>
+      (intendedType: MeasurementValueWrapper.Name.t, ts: ts): T.wrappedTs => {
+    let transform = (t2, t3): T.wrappedTs =>
       ts
       |> Belt.Array.map(_, (t: t) =>
            t.measurementValue
            |> t2
            |> Rationale.Option.map(measurementValue =>
-                TypedMeasurementWithTime.{time: t.time, measurementValue}
+                T.{time: t.time, measurementValue}
               )
          )
       |> Utility.Array.concatSome

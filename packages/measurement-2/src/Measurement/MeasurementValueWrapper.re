@@ -28,6 +28,21 @@ module T = {
     | `UnresolvableResolution(_) => `UnresolvableResolution
     | `Comment(_) => `Comment;
 
+  // let map =
+  //     (
+  //       t: t('a, 'b, 'c, 'd, 'e, 'f),
+  //       fn: ('a => 'g, 'b => 'h, 'c => 'i, 'd => 'j, 'e => 'k, 'f => 'l),
+  //     ) => {
+  //   switch (t) {
+  //   | `Cdf(a) => `Cdf(fst(fn(a)))
+  //   | `Float(_) => `Float
+  //   | `Binary(_) => `Binary
+  //   | `Percentage(_) => `Percentage
+  //   | `UnresolvableResolution(_) => `UnresolvableResolution
+  //   | `Comment(_) => `Comment
+  //   };
+  // };
+
   let toCdf = (t: t('a, 'b, 'c, 'd, 'e, 'f)) =>
     switch (t) {
     | `Cdf(a) => Some(a)

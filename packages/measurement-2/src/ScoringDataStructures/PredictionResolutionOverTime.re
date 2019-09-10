@@ -1,9 +1,7 @@
 module MeasurementCombinationOverTime = {
-  type measurementWithTime('a) =
-    TypedMeasurementWithTime.TypedMeasurementWithTime.t('a);
+  type measurementWithTime('a) = TypedMeasurementWithTime.T.t('a);
 
-  type measurementsWithTime('a) =
-    TypedMeasurementWithTime.TypedMeasurementWithTime.tss('a);
+  type measurementsWithTime('a) = array(TypedMeasurementWithTime.T.t('a));
 
   type combination('a, 'b) = {
     agentPredictions: measurementsWithTime('a),
@@ -30,13 +28,9 @@ module MeasurementCombinationOverTime = {
       let product =
         StartAtDistribution.product(
           r.agentPredictions
-          |> TypedMeasurementWithTime.TypedMeasurementWithTime.toStartAtDistribution(
-               finalTime,
-             ),
+          |> TypedMeasurementWithTime.T.toStartAtDistribution(finalTime),
           marketPredictions
-          |> TypedMeasurementWithTime.TypedMeasurementWithTime.toStartAtDistribution(
-               finalTime,
-             ),
+          |> TypedMeasurementWithTime.T.toStartAtDistribution(finalTime),
         );
       let toScoringCombinations =
         StartAtDistribution.map(
@@ -51,9 +45,7 @@ module MeasurementCombinationOverTime = {
       toScoringCombinations;
     | None =>
       r.agentPredictions
-      |> TypedMeasurementWithTime.TypedMeasurementWithTime.toStartAtDistribution(
-           finalTime,
-         )
+      |> TypedMeasurementWithTime.T.toStartAtDistribution(finalTime)
       |> StartAtDistribution.map(agentPrediction =>
            toMeasurement({
              agentPrediction,
@@ -100,8 +92,7 @@ module ScoringCombinationGroupOverTimeInput = {
   };
 
   let _toResolution =
-      (time, measurementValue: 'a)
-      : TypedMeasurementWithTime.TypedMeasurementWithTime.t('a) => {
+      (time, measurementValue: 'a): TypedMeasurementWithTime.T.t('a) => {
     time,
     measurementValue,
   };

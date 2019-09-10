@@ -19,12 +19,12 @@ let scorePointCombination =
 let scoredIntegralOverTime =
     (
       ~marketType: marketScoreType=MarketScore,
-      ~scoringCombination: ScoringCombinationOverTime.ValidScoringCombinationGroupOverTime.t,
+      ~scoringCombination: PredictionResolutionOverTime.ValidScoringCombinationGroupOverTime.t,
       ~sampleCount=10000,
       (),
     ) => {
   scoringCombination.measurementGroup
-  |> ScoringCombinationOverTime.MeasurementCombinationOverTime.toStartAtDistribution
+  |> PredictionResolutionOverTime.MeasurementCombinationOverTime.toStartAtDistribution
   |> StartAtDistribution.map(scoringCombination =>
        scorePointCombination(
          ~marketType,

@@ -100,6 +100,7 @@ module MeasurableIndexDataState = {
         })
       | _ => InvalidIndexError(channel)
       }
+
     | (
         ItemUnselected(_),
         Success(channel),
@@ -112,6 +113,7 @@ module MeasurableIndexDataState = {
         loggedInUser: input.loggedInUser,
         seriesCollection,
       })
+
     | (_, Success(channel), _, _) =>
       WithChannelButNotQuery({
         channel,

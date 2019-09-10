@@ -149,15 +149,18 @@ module MeasurableIndexDataState = {
         ~body="Item Not Valid" |> ste,
       )
       |> SLayout.FullPage.makeWithEl
+
     | WithChannelButNotQuery(_c) =>
       SLayout.LayoutConfig.make(~head=E.React.null, ~body=<SLayout.Spin />)
       |> SLayout.FullPage.makeWithEl
+
     | LoadedAndUnselected(l) =>
       SLayout.LayoutConfig.make(
         ~head=LoadedAndUnselected.header(l, stats, selectedState),
         ~body=LoadedAndUnselected.body(l),
       )
       |> SLayout.FullPage.makeWithEl
+
     | LoadedAndSelected(l) =>
       <>
         {SLayout.LayoutConfig.make(

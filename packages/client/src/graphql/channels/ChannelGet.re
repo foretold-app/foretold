@@ -3,7 +3,6 @@ open Utils;
 module Query = [%graphql
   {|
     query getChannel($id: String!) {
-      channel:
       channel(id: $id){
         id
         name
@@ -24,7 +23,7 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let toChannel = (channel): Types.channel => {
+let toChannel = channel => {
   let allowMutations =
     channel##permissions##mutations##allow |> E.A.O.concatSome |> E.A.to_list;
 

@@ -62,8 +62,12 @@ let formCreation = (id: string, m, loggedInUser: Types.user): React.element => {
               (),
             ),
           ~onSuccess=
-            _ => {
-              Routing.Url.push(MeasurableShow(measurable.channelId, id));
+            (response: MeasurableUpdate.Query.t) => {
+              switch (response##measurableUpdate) {
+              | Some(measurable) =>
+                Routing.Url.push(MeasurableShow(measurable##channelId, id))
+              | _ => ()
+              };
               ReasonReact.null;
             },
           (),

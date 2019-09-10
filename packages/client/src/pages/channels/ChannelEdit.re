@@ -1,7 +1,5 @@
 open Rationale.Function.Infix;
 
-module ChannelFormShower = ReForm.Create(ChannelForm.Params);
-
 module CMutationForm =
   MutationForm.Make({
     type queryType = ChannelUpdate.Query.t;
@@ -17,7 +15,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
     let mutationMake =
       ChannelUpdate.Mutation.make(~onCompleted=_ => ()) ||> E.React.el;
 
-    let header =
+    let head =
       <>
         <FC.Base.Div float=`left>
           <FC.PageCard.HeaderRow.Title>
@@ -44,16 +42,16 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
       </>;
 
     let form = (mutation, channel: Types.channel) =>
-      ChannelFormShower.make(
+      ChannelForm.Form.make(
         ~onSubmit=
-          ({values}) =>
+          values =>
             ChannelUpdate.mutate(
               mutation,
               channelId,
-              values.name,
-              Some(values.description),
-              values.isPublic |> E.Bool.fromString,
-              values.isArchived |> E.Bool.fromString,
+              values.state.values.name,
+              Some(values.state.values.description),
+              values.state.values.isPublic |> E.Bool.fromString,
+              values.state.values.isArchived |> E.Bool.fromString,
             ),
         ~initialState={
           name: channel.name,
@@ -61,23 +59,23 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
           isPublic: channel.isPublic |> E.Bool.toString,
           isArchived: channel.isArchived |> E.Bool.toString,
         },
-        ~schema=[(`name, Custom(_ => None))],
+        ~schema=ChannelForm.Form.Validation.Schema([||]),
       )
       ||> E.React.el;
 
     <FC.PageCard.BodyPadding>
       {loadChannel(
-         HttpResponse.fmap(result =>
+         HttpResponse.fmap(channel =>
            mutationMake((mutation, data) =>
-             form(mutation, result, ({handleSubmit, handleChange, form, _}) =>
+             form(mutation, channel, ({send, state}) =>
                CMutationForm.showWithLoading(
                  ~result=data.result,
                  ~form=
                    ChannelForm.showForm(
-                     ~form,
-                     ~handleSubmit,
-                     ~handleChange,
+                     ~state,
+                     ~send,
                      ~creating=false,
+                     ~onSubmit=() => send(ChannelForm.Form.Submit),
                      (),
                    ),
                  ~successMessage="Community edited successfully.",
@@ -89,7 +87,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
          ||> HttpResponse.withReactDefaults,
        )}
     </FC.PageCard.BodyPadding>
-    |> SLayout.LayoutConfig.make(~head=header, ~body=_)
+    |> SLayout.LayoutConfig.make(~head, ~body=_)
     |> SLayout.FullPage.makeWithEl;
   },
 };

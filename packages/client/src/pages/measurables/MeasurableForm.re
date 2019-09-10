@@ -10,7 +10,22 @@ module Styles = {
   let shortInput = [width(`em(6.))] |> style;
 };
 
-module Params = {
+module FormConfig = {
+  type field(_) =
+    | Name: field(string)
+    | LabelCustom: field(string)
+    | LabelSubject: field(string)
+    | LabelOnDate: field(string)
+    | LabelProperty: field(string)
+    | ExpectedResolutionDate: field(string)
+    | ResolutionEndpoint: field(string)
+    | ShowDescriptionDate: field(string)
+    | ShowDescriptionProperty: field(string)
+    | ValueType: field(string)
+    | Min: field(string)
+    | Max: field(string)
+    | ChannelId: field(string);
+
   type state = {
     name: string,
     labelCustom: string,
@@ -27,112 +42,83 @@ module Params = {
     channelId: string,
   };
 
-  type fields = [
-    | `name
-    | `labelCustom
-    | `labelSubject
-    | `labelProperty
-    | `labelOnDate
-    | `expectedResolutionDate
-    | `resolutionEndpoint
-    | `showDescriptionDate
-    | `showDescriptionProperty
-    | `valueType
-    | `min
-    | `max
-    | `channelId
-  ];
+  let get: type value. (state, field(value)) => value =
+    (state, field) =>
+      switch (field) {
+      | Name => state.name
+      | LabelCustom => state.labelCustom
+      | LabelSubject => state.labelSubject
+      | LabelOnDate => state.labelOnDate
+      | LabelProperty => state.labelProperty
+      | ExpectedResolutionDate => state.expectedResolutionDate
+      | ResolutionEndpoint => state.resolutionEndpoint
+      | ShowDescriptionDate => state.showDescriptionDate
+      | ShowDescriptionProperty => state.showDescriptionProperty
+      | ValueType => state.valueType
+      | Min => state.min
+      | Max => state.max
+      };
 
-  let lens = [
-    (`name, s => s.name, (s, name) => {...s, name}),
-    (
-      `labelCustom,
-      s => s.labelCustom,
-      (s, labelCustom) => {...s, labelCustom},
-    ),
-    (
-      `labelSubject,
-      s => s.labelSubject,
-      (s, labelSubject) => {...s, labelSubject},
-    ),
-    (
-      `labelProperty,
-      s => s.labelProperty,
-      (s, labelProperty) => {...s, labelProperty},
-    ),
-    (
-      `showDescriptionDate,
-      s => s.showDescriptionDate,
-      (s, showDescriptionDate) => {...s, showDescriptionDate},
-    ),
-    (
-      `showDescriptionProperty,
-      s => s.showDescriptionProperty,
-      (s, showDescriptionProperty) => {...s, showDescriptionProperty},
-    ),
-    (
-      `labelOnDate,
-      s => s.labelOnDate,
-      (s, labelOnDate) => {...s, labelOnDate},
-    ),
-    (
-      `expectedResolutionDate,
-      s => s.expectedResolutionDate,
-      (s, expectedResolutionDate) => {...s, expectedResolutionDate},
-    ),
-    (
-      `resolutionEndpoint,
-      s => s.resolutionEndpoint,
-      (s, resolutionEndpoint) => {...s, resolutionEndpoint},
-    ),
-    (`valueType, s => s.valueType, (s, valueType) => {...s, valueType}),
-    (`min, s => s.min, (s, min) => {...s, min}),
-    (`max, s => s.max, (s, max) => {...s, max}),
-    (`channelId, s => s.channelId, (s, channelId) => {...s, channelId}),
-  ];
+  let set: type value. (state, field(value), value) => state =
+    (state, field, value) =>
+      switch (field) {
+      | Name => {...state, name: value}
+      | LabelCustom => {...state, labelCustom: value}
+      | LabelSubject => {...state, labelSubject: value}
+      | LabelOnDate => {...state, labelOnDate: value}
+      | LabelProperty => {...state, labelProperty: value}
+      | ExpectedResolutionDate => {...state, expectedResolutionDate: value}
+      | ResolutionEndpoint => {...state, resolutionEndpoint: value}
+      | ShowDescriptionDate => {...state, showDescriptionDate: value}
+      | ShowDescriptionProperty => {...state, showDescriptionProperty: value}
+      | ValueType => {...state, valueType: value}
+      | Min => {...state, min: value}
+      | Max => {...state, max: value}
+      | ChannelId => {...state, channelId: value}
+      };
 };
 
-module MeasurableReForm = ReForm.Create(Params);
+module Form = ReFormNext.Make(FormConfig);
 
 let showForm =
     (
       ~loggedInUser: Types.user,
-      ~form: MeasurableReForm.state,
-      ~handleSubmit,
-      ~handleChange,
+      ~state: Form.state,
+      ~send,
       ~creating=true,
+      ~onSubmit,
       (),
     ) =>
-  <AntdForm onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
+  <AntdForm onSubmit={e => onSubmit()}>
     {E.React.showIf(
        creating,
-       <Form.Item
+       <Antd.Form.Item
          label="Question Type"
          help="Number example: 'How many inches of rain will there be tomorrow?' Yes/No example: 'Will it rain tomorrow?'">
          <Antd.Radio.Group
-           value={form.values.valueType}
-           defaultValue={form.values.valueType}
-           onChange={ReForm.Helpers.handleDomFormChange(
-             handleChange(`valueType),
+           value={state.values.valueType}
+           defaultValue={state.values.valueType}
+           onChange={ReForm.Helpers.handleDomFormChange(e =>
+             send(Form.FieldChangeValue(ValueType, e))
            )}>
            <Antd.Radio value="FLOAT"> {"Number" |> ste} </Antd.Radio>
            <Antd.Radio value="PERCENTAGE">
              {"Yes/No Event" |> ste}
            </Antd.Radio>
          </Antd.Radio.Group>
-       </Form.Item>,
+       </Antd.Form.Item>,
      )}
     {E.React.showIf(
-       form.values.showDescriptionProperty == "FALSE",
+       state.values.showDescriptionProperty == "FALSE",
        <>
-         <Form.Item label="Name" required=true>
+         <Antd.Form.Item label="Name" required=true>
            <Input
-             value={form.values.name}
-             onChange={ReForm.Helpers.handleDomFormChange(
-               handleChange(`name),
+             value={state.values.name}
+             onChange={ReForm.Helpers.handleDomFormChange(e =>
+               send(Form.FieldChangeValue(Name, e))
              )}
            />
-         </Form.Item>
+         </Antd.Form.Item>
        </>,
      )}
     {loggedInUser.agent
@@ -151,19 +137,19 @@ let showForm =
             |> ReasonReact.array
             |> (
               c =>
-                <Form.Item label="Channel">
+                <Antd.Form.Item label="Community">
                   <Antd.Select
-                    value={form.values.channelId}
-                    onChange={e => handleChange(`channelId, e)}>
+                    value={state.values.channelId}
+                    onChange={e => send(Form.FieldChangeValue(ChannelId, e))}>
                     c
                   </Antd.Select>
-                </Form.Item>
+                </Antd.Form.Item>
             )
           )
         )
      |> E.O.React.defaultNull}
     {E.React.showIf(
-       form.values.showDescriptionProperty == "TRUE",
+       state.values.showDescriptionProperty == "TRUE",
        <>
          <p />
          <p>
@@ -176,47 +162,69 @@ let showForm =
             ++ "Contact Ozzie for information regarding these."
             |> ste}
          </p>
-         <Form.Item label="Subject" required=true>
+         <Antd.Form.Item label="Subject" required=true>
            <Antd.Input
-             value={form.values.labelSubject}
+             value={state.values.labelSubject}
              onChange={e =>
-               handleChange(`labelSubject, ReactEvent.Form.target(e)##value)
+               send(
+                 Form.FieldChangeValue(
+                   LabelSubject,
+                   ReactEvent.Form.target(e)##value,
+                 ),
+               )
              }
            />
-         </Form.Item>
-         <Form.Item label="Property" required=true>
+         </Antd.Form.Item>
+         <Antd.Form.Item label="Property" required=true>
            <Antd.Input
-             value={form.values.labelProperty}
+             value={state.values.labelProperty}
              onChange={e =>
-               handleChange(`labelProperty, ReactEvent.Form.target(e)##value)
+               send(
+                 Form.FieldChangeValue(
+                   LabelProperty,
+                   ReactEvent.Form.target(e)##value,
+                 ),
+               )
              }
            />
-         </Form.Item>
-         <Form.Item label="Include a Specific Date in Name">
+         </Antd.Form.Item>
+         <Antd.Form.Item label="Include a Specific Date in Name">
            <AntdSwitch
-             checked={form.values.showDescriptionDate == "TRUE"}
+             checked={state.values.showDescriptionDate == "TRUE"}
              onChange={e =>
-               handleChange(`showDescriptionDate, e ? "TRUE" : "FALSE")
+               send(
+                 Form.FieldChangeValue(
+                   ShowDescriptionDate,
+                   e ? "TRUE" : "FALSE",
+                 ),
+               )
              }
            />
-         </Form.Item>
-         {form.values.showDescriptionDate == "TRUE"
-            ? <Form.Item label="'On' Date">
+         </Antd.Form.Item>
+         {state.values.showDescriptionDate == "TRUE"
+            ? <Antd.Form.Item label="'On' Date">
                 <DatePicker
-                  value={form.values.labelOnDate |> MomentRe.moment}
+                  value={state.values.labelOnDate |> MomentRe.moment}
                   onChange={e => {
-                    handleChange(`labelOnDate, e |> formatDate);
-                    handleChange(`expectedResolutionDate, e |> formatDate);
+                    send(
+                      Form.FieldChangeValue(LabelOnDate, e |> formatDate),
+                    );
+                    send(
+                      Form.FieldChangeValue(
+                        ExpectedResolutionDate,
+                        e |> formatDate,
+                      ),
+                    );
                   }}
                 />
-              </Form.Item>
+              </Antd.Form.Item>
             : <div />}
        </>,
      )}
     {E.React.showIf(
-       form.values.valueType == "FLOAT",
+       state.values.valueType == "FLOAT",
        <>
-         <Form.Item
+         <Antd.Form.Item
            help="What are the most extreme values this could possibly take? For example, inches of rain tomorrow has a minimum of 0.">
            <Div flexDirection=`row>
              <Div flex={`num(1.)}>
@@ -230,9 +238,14 @@ let showForm =
                    <div className="ant-form-item-control">
                      <Antd.Input
                        className=Styles.shortInput
-                       value={form.values.min}
+                       value={state.values.min}
                        onChange={e =>
-                         handleChange(`min, ReactEvent.Form.target(e)##value)
+                         send(
+                           Form.FieldChangeValue(
+                             Min,
+                             ReactEvent.Form.target(e)##value,
+                           ),
+                         )
                        }
                      />
                    </div>
@@ -246,9 +259,14 @@ let showForm =
                    <div className="ant-form-item-control">
                      <Antd.Input
                        className=Styles.shortInput
-                       value={form.values.max}
+                       value={state.values.max}
                        onChange={e =>
-                         handleChange(`max, ReactEvent.Form.target(e)##value)
+                         send(
+                           Form.FieldChangeValue(
+                             Max,
+                             ReactEvent.Form.target(e)##value,
+                           ),
+                         )
                        }
                      />
                    </div>
@@ -257,61 +275,80 @@ let showForm =
              </Div>
              <Div flex={`num(3.)} />
            </Div>
-         </Form.Item>
+         </Antd.Form.Item>
        </>,
      )}
-    <Form.Item label="Description" help="Markdown supported.">
+    <Antd.Form.Item label="Description" help="Markdown supported.">
       <Input.TextArea
         style={ReactDOMRe.Style.make(~minHeight="16em", ())}
-        value={form.values.labelCustom}
-        onChange={ReForm.Helpers.handleDomFormChange(
-          handleChange(`labelCustom),
-        )}
+        value={state.values.labelCustom}
+        onChange={e =>
+          send(
+            Form.FieldChangeValue(
+              LabelCustom,
+              ReactEvent.Form.target(e)##value,
+            ),
+          )
+        }
       />
-    </Form.Item>
+    </Antd.Form.Item>
     {Primary.User.show(
        loggedInUser,
-       <Form.Item
+       <Antd.Form.Item
          label="Resolution Endpoint"
          help="If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value.">
          <Input
-           value={form.values.resolutionEndpoint}
-           onChange={ReForm.Helpers.handleDomFormChange(
-             handleChange(`resolutionEndpoint),
-           )}
+           value={state.values.resolutionEndpoint}
+           onChange={e =>
+             send(
+               Form.FieldChangeValue(
+                 ResolutionEndpoint,
+                 ReactEvent.Form.target(e)##value,
+               ),
+             )
+           }
          />
-       </Form.Item>,
+       </Antd.Form.Item>,
      )}
-    <Form.Item
+    <Antd.Form.Item
       label="Expected Resolution Date"
       help="When do you expect this will be resolvable by? You will get a notification when this date occurs.">
       <DatePicker
         value={
-          form.values.expectedResolutionDate |> MomentRe.momentDefaultFormat
+          state.values.expectedResolutionDate |> MomentRe.momentDefaultFormat
         }
-        onChange={e => handleChange(`expectedResolutionDate, e |> formatDate)}
-        disabled={form.values.showDescriptionDate == "TRUE"}
+        onChange={e =>
+          send(
+            Form.FieldChangeValue(ExpectedResolutionDate, e |> formatDate),
+          )
+        }
+        disabled={state.values.showDescriptionDate == "TRUE"}
       />
-    </Form.Item>
+    </Antd.Form.Item>
     {Primary.User.show(
        loggedInUser,
-       <Form.Item label="Use Entities in Title">
+       <Antd.Form.Item label="Use Entities in Title">
          <Antd.Radio.Group
-           value={form.values.showDescriptionProperty}
-           defaultValue={form.values.showDescriptionProperty}
-           onChange={ReForm.Helpers.handleDomFormChange(
-             handleChange(`showDescriptionProperty),
-           )}>
+           value={state.values.showDescriptionProperty}
+           defaultValue={state.values.showDescriptionProperty}
+           onChange={e =>
+             send(
+               Form.FieldChangeValue(
+                 ShowDescriptionProperty,
+                 ReactEvent.Form.target(e)##value,
+               ),
+             )
+           }>
            <Antd.Radio value="FALSE"> {"No" |> ste} </Antd.Radio>
            <Antd.Radio value="TRUE">
              {"Yes (Experimental)" |> ste}
            </Antd.Radio>
          </Antd.Radio.Group>
-       </Form.Item>,
+       </Antd.Form.Item>,
      )}
-    <Form.Item>
-      <Button _type=`primary onClick={_ => handleSubmit()}>
+    <Antd.Form.Item>
+      <Button _type=`primary onClick={_ => onSubmit()}>
         {"Submit" |> ste}
       </Button>
-    </Form.Item>
+    </Antd.Form.Item>
   </AntdForm>;

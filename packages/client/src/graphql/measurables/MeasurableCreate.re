@@ -13,43 +13,49 @@ module Mutation = ReasonApollo.CreateMutation(Query);
 let mutate =
     (
       mutation: Mutation.apolloMutation,
-      values: MeasurableForm.MeasurableReForm.values,
+      name: string,
+      labelCustom: string,
+      expectedResolutionDate: string,
+      resolutionEndpoint: string,
+      labelSubject: string,
+      labelOnDate: string,
+      showDescriptionDate: string,
+      labelProperty: string,
+      valueType: string,
+      min: string,
+      max: string,
       channelId: string,
     ) => {
   let mutate = {
     let input =
-      values.showDescriptionDate == "TRUE"
+      showDescriptionDate == "TRUE"
         ? {
-          "name": values.name,
-          "labelCustom": Some(values.labelCustom),
-          "labelProperty": Some(values.labelProperty),
+          "name": name,
+          "labelCustom": Some(labelCustom),
+          "labelProperty": Some(labelProperty),
           "expectedResolutionDate":
-            values.expectedResolutionDate |> Js.Json.string |> E.O.some,
-          "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
-          "labelSubject": values.labelSubject |> E.O.some,
-          "labelOnDate": values.labelOnDate |> Js.Json.string |> E.O.some,
+            expectedResolutionDate |> Js.Json.string |> E.O.some,
+          "resolutionEndpoint": resolutionEndpoint |> E.O.some,
+          "labelSubject": labelSubject |> E.O.some,
+          "labelOnDate": labelOnDate |> Js.Json.string |> E.O.some,
           "valueType": `FLOAT,
           "channelId": channelId,
-          "min":
-            values.min == "" ? None : Some(values.min |> float_of_string),
-          "max":
-            values.max == "" ? None : Some(values.max |> float_of_string),
+          "min": min == "" ? None : Some(min |> float_of_string),
+          "max": max == "" ? None : Some(max |> float_of_string),
         }
         : {
-          "name": values.name,
-          "labelCustom": Some(values.labelCustom),
-          "labelProperty": Some(values.labelProperty),
+          "name": name,
+          "labelCustom": Some(labelCustom),
+          "labelProperty": Some(labelProperty),
           "expectedResolutionDate":
-            values.expectedResolutionDate |> Js.Json.string |> E.O.some,
-          "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
-          "labelSubject": values.labelSubject |> E.O.some,
+            expectedResolutionDate |> Js.Json.string |> E.O.some,
+          "resolutionEndpoint": resolutionEndpoint |> E.O.some,
+          "labelSubject": labelSubject |> E.O.some,
           "labelOnDate": None,
-          "valueType": values.valueType |> Primary.Measurable.valueTypeToEnum,
+          "valueType": valueType |> Primary.Measurable.valueTypeToEnum,
           "channelId": channelId,
-          "min":
-            values.min == "" ? None : Some(values.min |> float_of_string),
-          "max":
-            values.max == "" ? None : Some(values.max |> float_of_string),
+          "min": min == "" ? None : Some(min |> float_of_string),
+          "max": max == "" ? None : Some(max |> float_of_string),
         };
 
     Query.make(~input, ());

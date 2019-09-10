@@ -1,68 +1,84 @@
-open Utils;
 open MomentRe;
-open Antd;
 
-module Params = {
+module FormConfig = {
+  type field(_) =
+    | Name: field(string)
+    | Description: field(string)
+    | IsPublic: field(string)
+    | IsArchived: field(string);
+
   type state = {
     name: string,
     description: string,
     isPublic: string,
     isArchived: string,
   };
-  type fields = [ | `name | `description | `isPublic | `isArchived];
-  let lens = [
-    (`name, s => s.name, (s, name) => {...s, name}),
-    (
-      `description,
-      s => s.description,
-      (s, description) => {...s, description},
-    ),
-    (`isPublic, s => s.isPublic, (s, isPublic) => {...s, isPublic}),
-    (`isArchived, s => s.isArchived, (s, isArchived) => {...s, isArchived}),
-  ];
+
+  let get: type value. (state, field(value)) => value =
+    (state, field) =>
+      switch (field) {
+      | Name => state.name
+      | Description => state.description
+      | IsPublic => state.isPublic
+      | IsArchived => state.isArchived
+      };
+
+  let set: type value. (state, field(value), value) => state =
+    (state, field, value) =>
+      switch (field) {
+      | Name => {...state, name: value}
+      | Description => {...state, description: value}
+      | IsPublic => {...state, isPublic: value}
+      | IsArchived => {...state, isArchived: value}
+      };
 };
 
-module FormUI = ReForm.Create(Params);
+module Form = ReFormNext.Make(FormConfig);
 
-let showForm =
-    (~form: FormUI.state, ~handleSubmit, ~handleChange, ~creating=true, ()) =>
-  <Form onSubmit={ReForm.Helpers.handleDomFormSubmit(handleSubmit)}>
-    <Form.Item>
-      {"Name" |> ste |> E.React.inH3}
-      <Input
-        value={form.values.name}
-        onChange={ReForm.Helpers.handleDomFormChange(handleChange(`name))}
-      />
-    </Form.Item>
-    <Form.Item>
-      {"Description" |> ste |> E.React.inH3}
-      <Input
-        value={form.values.description}
-        onChange={ReForm.Helpers.handleDomFormChange(
-          handleChange(`description),
+let showForm = (~state: Form.state, ~creating=true, ~onSubmit, ~send, ()) =>
+  <Antd.Form onSubmit={e => onSubmit()}>
+    <Antd.Form.Item>
+      {"Name" |> Utils.ste |> E.React.inH3}
+      <Antd.Input
+        value={state.values.name}
+        onChange={ReForm.Helpers.handleDomFormChange(e =>
+          send(Form.FieldChangeValue(Name, e))
         )}
       />
-    </Form.Item>
-    <Form.Item>
-      {"Make Community Public?" |> ste |> E.React.inH3}
-      <AntdSwitch
-        checked={form.values.isPublic == "TRUE"}
-        onChange={e => handleChange(`isPublic, e ? "TRUE" : "FALSE")}
+    </Antd.Form.Item>
+    <Antd.Form.Item>
+      {"Description" |> Utils.ste |> E.React.inH3}
+      <Antd.Input
+        value={state.values.description}
+        onChange={ReForm.Helpers.handleDomFormChange(e =>
+          send(Form.FieldChangeValue(Description, e))
+        )}
       />
-    </Form.Item>
+    </Antd.Form.Item>
+    <Antd.Form.Item>
+      {"Make Community Public?" |> Utils.ste |> E.React.inH3}
+      <AntdSwitch
+        checked={state.values.isPublic == "TRUE"}
+        onChange={e =>
+          send(Form.FieldChangeValue(IsPublic, e ? "TRUE" : "FALSE"))
+        }
+      />
+    </Antd.Form.Item>
     {E.React.showIf(
        !creating,
-       <Form.Item>
-         {"Archive Community?" |> ste |> E.React.inH3}
+       <Antd.Form.Item>
+         {"Archive Community?" |> Utils.ste |> E.React.inH3}
          <AntdSwitch
-           checked={form.values.isArchived == "TRUE"}
-           onChange={e => handleChange(`isArchived, e ? "TRUE" : "FALSE")}
+           checked={state.values.isArchived == "TRUE"}
+           onChange={e =>
+             send(Form.FieldChangeValue(IsArchived, e ? "TRUE" : "FALSE"))
+           }
          />
-       </Form.Item>,
+       </Antd.Form.Item>,
      )}
-    <Form.Item>
-      <Button _type=`primary onClick={_ => handleSubmit()}>
-        {"Submit" |> ste}
-      </Button>
-    </Form.Item>
-  </Form>;
+    <Antd.Form.Item>
+      <Antd.Button _type=`primary onClick={e => onSubmit()}>
+        {"Submit" |> Utils.ste}
+      </Antd.Button>
+    </Antd.Form.Item>
+  </Antd.Form>;

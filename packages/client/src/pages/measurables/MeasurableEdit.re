@@ -3,28 +3,29 @@ module CMutationForm =
     type queryType = MeasurableUpdate.Query.t;
   });
 
-let formCreation = (id: string, m, loggedInUser: Types.user): React.element => {
+let formCreation = (id: string, m, loggedInUser: Types.user) => {
   let measurable = MeasurableGet.toMeasurable(m);
 
   MeasurableUpdate.Mutation.make((mutation, data) =>
-    MeasurableForm.MeasurableReForm.make(
+    MeasurableForm.Form.make(
+      ~schema=MeasurableForm.Form.Validation.Schema([||]),
       ~onSubmit=
-        ({values}) =>
+        values =>
           MeasurableUpdate.mutate(
             mutation,
             id,
-            values.name,
-            values.labelCustom,
-            values.expectedResolutionDate,
-            values.resolutionEndpoint,
-            values.labelSubject,
-            values.labelOnDate,
-            values.showDescriptionDate,
-            values.labelProperty,
-            values.valueType,
-            values.min,
-            values.max,
-            values.channelId,
+            values.state.values.name,
+            values.state.values.labelCustom,
+            values.state.values.expectedResolutionDate,
+            values.state.values.resolutionEndpoint,
+            values.state.values.labelSubject,
+            values.state.values.labelOnDate,
+            values.state.values.showDescriptionDate,
+            values.state.values.labelProperty,
+            values.state.values.valueType,
+            values.state.values.min,
+            values.state.values.max,
+            values.state.values.channelId,
           ),
       ~initialState={
         name: measurable.name,
@@ -48,17 +49,16 @@ let formCreation = (id: string, m, loggedInUser: Types.user): React.element => {
         max: measurable.max |> E.O.dimap(E.Float.toString, () => ""),
         channelId: measurable.channelId,
       },
-      ~schema=[(`name, Custom(_ => None))],
-      ({handleSubmit, handleChange, form, _}) =>
+      ({state, send, _}) =>
         CMutationForm.showWithLoading2(
           ~result=data.result,
           ~form=
             MeasurableForm.showForm(
               ~loggedInUser,
-              ~form,
-              ~handleSubmit,
-              ~handleChange,
+              ~state,
+              ~send,
               ~creating=false,
+              ~onSubmit=_ => send(MeasurableForm.Form.Submit),
               (),
             ),
           ~onSuccess=

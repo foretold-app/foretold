@@ -1,18 +1,32 @@
-let component = ReasonReact.statelessComponent("MeasurableNew");
-
 module CMutationForm =
   MutationForm.Make({
     type queryType = MeasurableCreate.Query.t;
   });
 
+let component = ReasonReact.statelessComponent("MeasurableNew");
 let make = (~channelId, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _ => {
     let formCreator = mutation =>
-      MeasurableForm.MeasurableReForm.make(
+      MeasurableForm.Form.make(
+        ~schema=MeasurableForm.Form.Validation.Schema([||]),
         ~onSubmit=
-          ({values}) =>
-            MeasurableCreate.mutate(mutation, values, channelId),
+          values =>
+            MeasurableCreate.mutate(
+              mutation,
+              values.state.values.name,
+              values.state.values.labelCustom,
+              values.state.values.expectedResolutionDate,
+              values.state.values.resolutionEndpoint,
+              values.state.values.labelSubject,
+              values.state.values.labelOnDate,
+              values.state.values.showDescriptionDate,
+              values.state.values.labelProperty,
+              values.state.values.valueType,
+              values.state.values.min,
+              values.state.values.max,
+              values.state.values.channelId,
+            ),
         ~initialState={
           name: "",
           labelCustom: "",
@@ -27,9 +41,8 @@ let make = (~channelId, ~loggedInUser: Types.user, _children) => {
           valueType: "FLOAT",
           min: "",
           max: "",
-          channelId: "",
+          channelId,
         },
-        ~schema=[(`name, Custom(_ => None))],
       );
 
     SLayout.LayoutConfig.make(
@@ -37,15 +50,15 @@ let make = (~channelId, ~loggedInUser: Types.user, _children) => {
       ~body=
         <FC.PageCard.BodyPadding>
           {MeasurableCreate.Mutation.make((mutation, data) =>
-             formCreator(mutation, ({handleSubmit, handleChange, form, _}) =>
+             formCreator(mutation, ({state, send, _}) =>
                CMutationForm.showWithLoading2(
                  ~result=data.result,
                  ~form=
                    MeasurableForm.showForm(
                      ~loggedInUser,
-                     ~form,
-                     ~handleSubmit,
-                     ~handleChange,
+                     ~state,
+                     ~send,
+                     ~onSubmit=_ => send(MeasurableForm.Form.Submit),
                      (),
                    ),
                  ~onSuccess=

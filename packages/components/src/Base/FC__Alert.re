@@ -4,17 +4,17 @@ module Styles = {
   open Css;
   let alertBox =
     style([
-      borderRadius(FC__Colors.BorderRadius.tight),
+      borderRadius(FC__Settings.BorderRadius.tight),
       padding2(~v=`em(0.5), ~h=`em(0.8)),
       marginBottom(`em(0.75)),
     ]);
 
   // Colors from https://getbootstrap.com/docs/4.0/components/alerts/
   // They may look better on white background than grey/smokeWhite
-  let colors = (t: FC__Colors.Alert.t) =>
+  let colors = (t: FC__Settings.Alert.t) =>
     style([
-      color(FC__Colors.Alert.color(t)),
-      backgroundColor(FC__Colors.Alert.background(t)),
+      color(FC__Settings.Alert.color(t)),
+      backgroundColor(FC__Settings.Alert.background(t)),
     ]);
 };
 

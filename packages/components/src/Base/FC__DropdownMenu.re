@@ -2,7 +2,7 @@ let component = ReasonReact.statelessComponent(__MODULE__);
 
 module Styles = {
   open Css;
-  module Colors = FC__Colors;
+  module Colors = FC__Settings;
 
   // Reverting to "rc-dropdown" brings back some styles from the original css file
   let prefixCls = "ft-dropdown";
@@ -28,7 +28,7 @@ module Styles = {
 
   let dropdownTrigger =
     style([
-      border(`px(1), `solid, FC__Colors.border),
+      border(`px(1), `solid, FC__Settings.border),
       borderRadius(`px(3)),
       // Subtracting 2 from horizontal padding to account for border
       padding2(
@@ -38,7 +38,7 @@ module Styles = {
       backgroundColor(bgColor),
       fontSize(textSize),
       lineHeight(textLineHeight),
-      fontFamily(FC__Colors.Text.standardFont),
+      fontFamily(FC__Settings.Text.standardFont),
       color(textColor),
       // Selector for trigger element with overlay open
       selector(

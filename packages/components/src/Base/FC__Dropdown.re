@@ -53,15 +53,18 @@ module Styles = {
   // General
   // First overlay element, this doesn't apply to submenues, but
   // all kinds of direct overlays
-  global(".ft-overlay", [
-    fontFamily(FC__Colors.Text.standardFont),
-    fontSize(`rem(1.)),
-    lineHeight(`rem(1.0)),
-    zIndex(1070),
-    position(`absolute),
-    left(`px(-9999)),
-    top(`px(-9999)),
-  ]);
+  global(
+    ".ft-overlay",
+    [
+      fontFamily(FC__Settings.Text.standardFont),
+      fontSize(`rem(1.)),
+      lineHeight(`rem(1.0)),
+      zIndex(1070),
+      position(`absolute),
+      left(`px(-9999)),
+      top(`px(-9999)),
+    ],
+  );
 };
 
 /**

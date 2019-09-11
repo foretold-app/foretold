@@ -30,8 +30,8 @@ let link =
       Css.(
         style([
           marginRight(`em(2.)),
-          color(FC__Colors.Text.LightBackground.main),
-          hover([color(FC__Colors.Text.LightBackground.main)]),
+          color(FC__Settings.Text.LightBackground.main),
+          hover([color(FC__Settings.Text.LightBackground.main)]),
         ])
       ),
   );

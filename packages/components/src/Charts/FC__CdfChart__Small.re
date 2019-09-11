@@ -3,9 +3,9 @@ let component = ReasonReact.statelessComponent("SmallCdfChartSmall");
 module Styles = {
   open Css;
   let textOverlay = style([position(`absolute)]);
-  let mainText = style([fontSize(`em(1.1)), color(FC__Colors.darkLink)]);
+  let mainText = style([fontSize(`em(1.1)), color(FC__Settings.darkLink)]);
   let secondaryText =
-    style([fontSize(`em(0.9)), color(FC__Colors.accentBlue)]);
+    style([fontSize(`em(0.9)), color(FC__Settings.accentBlue)]);
 
   let graph = chartColor =>
     style([

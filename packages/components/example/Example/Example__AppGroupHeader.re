@@ -24,28 +24,18 @@ let make =
               marginBottom(`px(3)),
             ])
           )>
-          {
-            "Lots of description for the group would be here"
-            |> ReasonReact.string
-          }
+          {"Lots of description for the group would be here"
+           |> ReasonReact.string}
         </p>
       </Div>
       <Div float=`right>
-        {
-          GroupHeader.actionButton(
-            ~variant=Secondary,
-            ~href="#",
-            [|"Leave Channel" |> ReasonReact.string|],
-          )
-          |> ReasonReact.element
-        }
-        {
-          GroupHeader.actionButton(
-            ~href="#",
-            [|"Create Question" |> ReasonReact.string|],
-          )
-          |> ReasonReact.element
-        }
+        {GroupHeader.actionButton(
+           ~variant=Secondary,
+           [|"Leave Channel" |> ReasonReact.string|],
+         )
+         |> ReasonReact.element}
+        {GroupHeader.actionButton([|"Create Question" |> ReasonReact.string|])
+         |> ReasonReact.element}
       </Div>
     </GroupHeader>
     <GroupHeader.SubHeader>

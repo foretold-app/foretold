@@ -37,19 +37,15 @@ let varantColors = (variant: variant) =>
   );
 
 let styles =
-    (
-      ~isDisabled=false,
-      ~variant: variant,
-      ~verticalPadding=`px(4),
-      ~fullWidth=false,
-      (),
-    ) => {
+    (~isDisabled=false, ~variant, ~verticalPadding, ~fullWidth=false, ()) => {
   let colors = varantColors(variant);
 
   let main =
     Css.(
       style([
-        padding2(~v=verticalPadding, ~h=`px(14)),
+        cursor(`pointer),
+        fontSize(`px(16)),
+        padding2(~v=verticalPadding, ~h=`em(1.8)),
         FC__BaseStyles.floatLeft,
         borderRadius(FC__Colors.BorderRadius.medium),
         border(`px(1), `solid, `hex(colors.border)),
@@ -88,54 +84,27 @@ let styles =
   };
 };
 
+// Button must be button
 let component = ReasonReact.statelessComponent(__MODULE__);
 let make =
     (
-      ~href=?,
       ~onClick=?,
       ~variant=Secondary,
       ~isDisabled=false,
       ~fullWidth=false,
-      ~verticalPadding=`px(4),
+      ~verticalPadding=`em(0.6),
       ~className="",
       children,
     ) => {
   ...component,
   render: _self =>
-    <FC__Link
-      ?href
+    <button
       ?onClick
-      isDisabled
+      disabled=isDisabled
       className={Css.merge([
         styles(~isDisabled, ~fullWidth, ~variant, ~verticalPadding, ()),
         className,
       ])}>
       ...children
-    </FC__Link>,
-};
-
-module Classic = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Clasic");
-  let make =
-      (
-        ~onClick=?,
-        ~variant=Secondary,
-        ~isDisabled=false,
-        ~fullWidth=false,
-        ~verticalPadding=`px(4),
-        ~className="",
-        children,
-      ) => {
-    ...component,
-    render: _self =>
-      <button
-        ?onClick
-        disabled=isDisabled
-        className={Css.merge([
-          styles(~isDisabled, ~fullWidth, ~variant, ~verticalPadding, ()),
-          className,
-        ])}>
-        ...children
-      </button>,
-  };
+    </button>,
 };

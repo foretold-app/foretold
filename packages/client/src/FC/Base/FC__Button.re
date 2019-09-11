@@ -122,7 +122,7 @@ module Classic = {
         ~variant=Secondary,
         ~isDisabled=false,
         ~fullWidth=false,
-        ~verticalPadding=`px(6),
+        ~verticalPadding=`px(4),
         ~className="",
         children,
       ) => {

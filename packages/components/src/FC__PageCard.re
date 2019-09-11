@@ -216,7 +216,7 @@ module H1 = {
         className=Css.(
           style(
             [
-              fontSize(`em(1.4)),
+              fontSize(`em(1.15)),
               color(`hex("192D44")),
               FC__Colors.FontWeights.heavy,
               marginTop(`em(0.0)),

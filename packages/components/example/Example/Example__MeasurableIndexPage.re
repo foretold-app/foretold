@@ -42,7 +42,12 @@ let row =
        )}
     </Table.Cell>
     <Table.Cell flex={`num(2.)} className=standardCellPadding>
-      <FC__CdfChart__Small cdf minX=2.0 color={`hex("#d9dcdf")} maxX=12.0 />
+      <FC__CdfChart__Small
+        cdf
+        minX={Some(2.0)}
+        color={`hex("#d9dcdf")}
+        maxX={Some(12.0)}
+      />
     </Table.Cell>
     <Table.Cell
       flex={`num(1.)} className=Css.(style([paddingTop(`em(0.5))]))>

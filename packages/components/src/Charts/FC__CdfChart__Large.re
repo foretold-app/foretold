@@ -1,4 +1,4 @@
-let component = ReasonReact.statelessComponent("SmallCdfChart");
+let component = ReasonReact.statelessComponent("SmallCdfChartLarge");
 
 module Styles = {
   open Css;

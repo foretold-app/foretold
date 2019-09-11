@@ -45,6 +45,7 @@ let styles =
       (),
     ) => {
   let colors = varantColors(variant);
+
   let main =
     Css.(
       style([
@@ -64,8 +65,10 @@ let styles =
         ),
       ])
     );
+
   let disabledStyles =
     Css.(style([background(FC__Colors.greydisabled), opacity(0.5)]));
+
   let fullWidthStyle =
     Css.(
       style([
@@ -86,7 +89,6 @@ let styles =
 };
 
 let component = ReasonReact.statelessComponent(__MODULE__);
-
 let make =
     (
       ~href=?,
@@ -104,12 +106,36 @@ let make =
       ?href
       ?onClick
       isDisabled
-      className={
-        Css.merge([
-          styles(~isDisabled, ~fullWidth, ~variant, ~verticalPadding, ()),
-          className,
-        ])
-      }>
+      className={Css.merge([
+        styles(~isDisabled, ~fullWidth, ~variant, ~verticalPadding, ()),
+        className,
+      ])}>
       ...children
     </FC__Link>,
+};
+
+module Classic = {
+  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Clasic");
+  let make =
+      (
+        ~onClick=?,
+        ~variant=Secondary,
+        ~isDisabled=false,
+        ~fullWidth=false,
+        ~verticalPadding=`px(6),
+        ~className="",
+        children,
+      ) => {
+    ...component,
+    render: _self =>
+      <button
+        ?onClick
+        disabled=isDisabled
+        className={Css.merge([
+          styles(~isDisabled, ~fullWidth, ~variant, ~verticalPadding, ()),
+          className,
+        ])}>
+        ...children
+      </button>,
+  };
 };

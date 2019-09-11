@@ -10,15 +10,7 @@ let load = () => {
         fontSize(`px(16)),
         lineHeight(`em(1.5)),
       ],
-    ),
-    global(
-      "button",
-      [
-        fontFamily(FC__Settings.Text.standardFont),
-        fontSize(`px(16)),
-        lineHeight(`em(1.5)),
-      ],
-    ),
+    )
   );
 
   Css.(global("html", [height(`percent(100.0))]));

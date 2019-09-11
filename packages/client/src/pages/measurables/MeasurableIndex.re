@@ -8,8 +8,9 @@ let make =
     ) => {
   ...component,
   render: _ => {
-    Js.log("1");
-    <MeasurableIndex__Logic.Reducer
+    module Reducer =
+      PaginationFunctor.Make(MeasurableIndex__Logic.ReducerConfig);
+    <Reducer
       callFnParams={channelId, states: searchParams.state}
       subComponent={reducerParams =>
         ChannelGet.component2(~id=channelId, channelQuery =>

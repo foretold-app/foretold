@@ -1,11 +1,7 @@
 type t = float;
 
 let verifyInRange = (f: float): Belt.Result.t(t, string) =>
-  if (f < 0. || f > 1.) {
-    Error("Percentage must be between 0 and 1.");
-  } else {
-    Ok(f: t);
-  };
+  f >= 0. && f <= 1. ? Ok(f) : Error("Percentage must be between 0 and 1.");
 
 let make = verifyInRange;
 let makeExt = t => t;

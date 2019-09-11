@@ -39,7 +39,7 @@ describe("StartAtDistribution", () => {
   );
   test("#integral", () =>
     expect(distributuionA |> StartAtDistribution.integral)
-    |> toEqual(Some(325.))
+    |> toEqual(Belt.Result.Ok(325.))
   );
   test("#product", () =>
     expect(StartAtDistribution.product(distributuionA, distributuionB))

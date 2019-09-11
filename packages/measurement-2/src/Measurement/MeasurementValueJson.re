@@ -50,7 +50,11 @@ module JsonToMeasurement = {
     | `Float => jsonToFinalValue(Json.Decode.float, e => Ok(`Float(e)))
     | `Cdf =>
       jsonToFinalValue(CustomDecoders.jsonToCdfPair, ((xs, ys)) =>
-        Cdf.(make(~xs, ~ys, ())->Belt.Result.map(_, toMeasurement))
+        Cdf.(
+          make(~xs, ~ys, ~minLength=4, ~maxLength=100000, ())
+          ->Rationale.Result.bimap(r => r, err => Verifications.Err.toString)
+          ->Belt.Result.map(_, toMeasurement)
+        )
       )
     | `Percentage =>
       jsonToFinalValue(Json.Decode.float, e =>

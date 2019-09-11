@@ -55,8 +55,9 @@ let toSortedArrayTillFinalX = (t: t('a, 'b)) => {
 let integral = (t: t(float, float)) => {
   t
   |> toSortedArrayTillFinalX
-  |> Rationale.Option.bind(_, Utility.Array.toRanges)
-  |> Rationale.Option.fmap(inRanges =>
+  |> Rationale.Result.ofOption("Necessary values are missing.")
+  |> Rationale.Result.bind(_, Utility.Array.toRanges)
+  |> Rationale.Result.fmap(inRanges =>
        inRanges
        |> Belt.Array.map(_, (((lastX, lastY), (nextX, _))) =>
             (nextX -. lastX) *. lastY

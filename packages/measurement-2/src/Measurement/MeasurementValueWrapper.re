@@ -28,27 +28,6 @@ module T = {
     | `UnresolvableResolution(_) => `UnresolvableResolution
     | `Comment(_) => `Comment;
 
-  // TODO: Write map and 'open' for new type
-  let mapSimilar = (fn, t: t('a, 'a, 'a, 'a, 'a, 'a)) =>
-    switch (t) {
-    | `Cdf(a) => `Cdf(fn(a))
-    | `Float(a) => `Float(fn(a))
-    | `Binary(a) => `Binary(fn(a))
-    | `Percentage(a) => `Percentage(fn(a))
-    | `UnresolvableResolution(a) => `UnresolvableResolution(fn(a))
-    | `Comment(a) => `Comment(fn(a))
-    };
-
-  let fnSimilar = (fn, t: t('a, 'a, 'a, 'a, 'a, 'a)) =>
-    switch (t) {
-    | `Cdf(a) => fn(a)
-    | `Float(a) => fn(a)
-    | `Binary(a) => fn(a)
-    | `Percentage(a) => fn(a)
-    | `UnresolvableResolution(a) => fn(a)
-    | `Comment(a) => fn(a)
-    };
-
   let toCdf = (t: t('a, 'b, 'c, 'd, 'e, 'f)) =>
     switch (t) {
     | `Cdf(a) => Some(a)
@@ -89,6 +68,31 @@ module T = {
   let isPercentage = t => isX(`Percentage, t);
   let isUnresolvable = t => isX(`UnresolvableResolution, t);
   let isComment = t => isX(`Comment, t);
+};
+
+module Uniform = {
+  include T;
+  type u('a) = t('a, 'a, 'a, 'a, 'a, 'a);
+
+  let map = (fn, t: u('a)) =>
+    switch (t) {
+    | `Cdf(a) => `Cdf(fn(a))
+    | `Float(a) => `Float(fn(a))
+    | `Binary(a) => `Binary(fn(a))
+    | `Percentage(a) => `Percentage(fn(a))
+    | `UnresolvableResolution(a) => `UnresolvableResolution(fn(a))
+    | `Comment(a) => `Comment(fn(a))
+    };
+
+  let return = (fn, t: u('a)) =>
+    switch (t) {
+    | `Cdf(a) => fn(a)
+    | `Float(a) => fn(a)
+    | `Binary(a) => fn(a)
+    | `Percentage(a) => fn(a)
+    | `UnresolvableResolution(a) => fn(a)
+    | `Comment(a) => fn(a)
+    };
 };
 
 module Name = {

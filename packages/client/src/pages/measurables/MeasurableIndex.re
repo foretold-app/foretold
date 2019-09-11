@@ -15,12 +15,11 @@ let make =
       subComponent={reducerParams =>
         ChannelGet.component2(~id=channelId, channelQuery =>
           SeriesCollectionGet.component2(~channelId, seriesQuery =>
-            MeasurablesStateStatsGet.component2(
-              ~channelId, measurablesStateStatsQuery =>
+            MeasurablesStateStatsGet.component2(~channelId, statsQuery =>
               MeasurableIndex__Components.toLayoutInput(
                 reducerParams.send,
                 searchParams,
-                measurablesStateStatsQuery,
+                statsQuery,
                 MeasurableIndex__Logic.make({
                   reducerParams,
                   loggedInUser,

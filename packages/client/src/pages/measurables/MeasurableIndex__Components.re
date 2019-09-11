@@ -2,8 +2,6 @@ open Utils;
 open Style.Grid;
 open MeasurableIndex__Logic;
 
-module ReducerParams = Reducer.Reducers.ReducerParams;
-
 module LoadedAndSelected = {
   open MeasurableIndex__Logic.LoadedAndSelected;
 

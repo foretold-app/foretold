@@ -17,4 +17,6 @@ let verifySameLength = ({xs, ys}) =>
 let make = (~xs, ~ys, ()) =>
   {xs, ys} |> verifyHasLength |> Rationale.Result.bind(_, verifySameLength);
 
+// Verify length is limited to specific number of points.
+// TODO: Fn to shorten and to truncate.
 let toMeasurement = t => `Cdf(t);

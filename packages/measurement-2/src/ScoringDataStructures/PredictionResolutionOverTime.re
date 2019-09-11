@@ -83,6 +83,7 @@ module ValidScoringCombinationGroupOverTime = {
   let make = (t: t) => t;
 };
 
+// Check the resolution before checking other params.
 module ScoringCombinationGroupOverTimeInput = {
   type t = {
     agentPredictions: TypedMeasurementWithTime.MeasurementWithTime.ts,

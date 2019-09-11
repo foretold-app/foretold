@@ -43,6 +43,9 @@ module type ValueCollection = {
 
 module MakeValueCollection = (C: ValueCollection) => {
   type t = C.t;
+  //todo
+  let hasType = (intendedType, t) => true;
+
   type ts = array(t);
   let first = (ts: ts) => Belt.Array.get(ts, 0);
 
@@ -77,3 +80,5 @@ module TArrayInput = {
 };
 
 module TArray = MakeValueCollection(TArrayInput);
+
+type t = MeasurementValue.t;

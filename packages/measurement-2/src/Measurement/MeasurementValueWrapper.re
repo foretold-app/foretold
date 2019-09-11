@@ -28,6 +28,7 @@ module T = {
     | `UnresolvableResolution(_) => `UnresolvableResolution
     | `Comment(_) => `Comment;
 
+  // TODO: Write map and 'open' for new type
   let mapSimilar = (fn, t: t('a, 'a, 'a, 'a, 'a, 'a)) =>
     switch (t) {
     | `Cdf(a) => `Cdf(fn(a))

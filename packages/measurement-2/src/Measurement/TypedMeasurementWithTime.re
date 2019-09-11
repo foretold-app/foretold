@@ -28,48 +28,18 @@ module T = {
 };
 
 module MeasurementWithTime = {
-  type t = {
+  type p = {
     measurementValue: MeasurementValue.t,
     time,
   };
+  type t = p;
   type ts = array(t);
 
-  let firstElementType = (ts: ts) =>
-    ts
-    |> Belt.Array.get(_, 0)
-    |> Rationale.Option.map((r: t) =>
-         r.measurementValue |> MeasurementValueWrapper.T.toTypeName
-       );
-
-  let toTypedMeasurementsWithTime =
-      (intendedType: MeasurementValueWrapper.Name.t, ts: ts): T.wrappedTs => {
-    let transform = (t2, t3): T.wrappedTs =>
-      ts
-      |> Belt.Array.map(_, (t: t) =>
-           t.measurementValue
-           |> t2
-           |> Rationale.Option.map(measurementValue =>
-                T.{time: t.time, measurementValue}
-              )
-         )
-      |> Utility.Array.concatSome
-      |> t3;
-
-    MeasurementValueWrapper.T.(
-      switch (intendedType) {
-      | `Cdf => transform(toCdf, r => `Cdf(r))
-      | `Float => transform(toFloat, r => `Float(r))
-      | `Binary => transform(toBinary, r => `Binary(r))
-      | `Percentage => transform(toPercentage, r => `Percentage(r))
-      | `UnresolvableResolution =>
-        transform(toUnresolvableResolution, r => `UnresolvableResolution(r))
-      | `Comment => transform(toComment, r => `Comment(r))
-      }
-    );
+  module MeasurementWithTimeInput = {
+    type t = p;
+    let toMeasurement = t => t.measurementValue;
   };
 
-  let toTypeOfFirstElement = (ts: ts) => {
-    firstElementType(ts)
-    |> Rationale.Option.map(toTypedMeasurementsWithTime(_, ts));
-  };
+  module Collection =
+    MeasurementValue.MakeValueCollection(MeasurementWithTimeInput);
 };

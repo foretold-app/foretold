@@ -16,8 +16,8 @@ module Array = {
 
   let toRanges = (a: array('a)) =>
     switch (a |> Belt.Array.length) {
-    | 0 => None
-    | 1 => None
+    | 0
+    | 1 => Belt.Result.Error("Must be at least 2 elements")
     | n =>
       Belt.Array.makeBy(n - 1, r => r)
       |> Belt.Array.map(_, index =>
@@ -26,6 +26,6 @@ module Array = {
              Belt.Array.getUnsafe(a, index + 1),
            )
          )
-      |> Rationale.Option.some
+      |> Rationale.Result.return
     };
 };

@@ -414,10 +414,6 @@ async function primaryPointScore(root, args, context, info) {
  * @returns {Promise<number>}
  */
 async function nonMarketLogScore(root, args, context, info) {
-  if (root.competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE) {
-    return 0;
-  }
-
   const result = _nonMarketLogScore({
     prediction: await prediction(root, args, context, info),
     outcome: await outcome(root, args, context, info),

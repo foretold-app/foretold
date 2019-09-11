@@ -9,8 +9,10 @@ module Make = (C: T) => {
     t |> C.toMeasurement |> MeasurementValueWrapper.Name.toIsFn(intendedType);
 
   type ts = array(t);
+
   let first = (ts: ts) => Belt.Array.get(ts, 0);
 
+  let length = Belt.Array.length;
   let firstElementType = (t: ts) =>
     t
     |> first
@@ -30,15 +32,28 @@ module Make = (C: T) => {
   let isAllSameType = (ts: ts) =>
     Belt.Array.length(ts) == Belt.Array.length(filterOnFirstElementType(ts));
 
-  module CollectionWithSameMeasurementType = {
-    type t = MeasurementValueWrapper.Uniform.u(ts);
+  module Uniform = {
+    type us = ts;
+    type wrapped = MeasurementValueWrapper.Uniform.u(ts);
 
-    let wrapWithFirstType = (t: ts) =>
+    let wrapWithType = (t: us) =>
       t
       |> firstElementType
       |> Rationale.Option.map(MeasurementValueWrapper.Name.toWrapperFn)
       |> Rationale.Option.map(r => r(t));
 
-    let make = (t: ts) => t |> filterOnFirstElementType |> wrapWithFirstType;
+    let typeName = firstElementType;
+
+    // TODO: Make should only validate they are all the same, and perhaps there is at least one element.
+    let validateAllSame = (ts: ts) =>
+      isAllSameType(ts)
+        ? Belt.Result.Ok(ts) : Error("Must all be the same");
+
+    let validateHasLength = (ts: ts) =>
+      length(ts) > 0
+        ? Belt.Result.Ok(ts) : Error("Must have at least one element");
+
+    let make = (t: ts): Belt.Result.t(us, string) =>
+      t |> validateAllSame |> Belt.Result.flatMap(_, validateHasLength);
   };
 };

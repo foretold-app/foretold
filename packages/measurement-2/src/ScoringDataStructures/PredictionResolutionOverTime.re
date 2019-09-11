@@ -1,36 +1,34 @@
 module MeasurementCombinationOverTime = {
-  type measurementWithTime('a) = TypedMeasurementWithTime.T.t('a);
+  type measurementWithTime = MeasurementWithTime.t;
+  type measurementsWithTime = MeasurementWithTime.Ts.Uniform.us;
 
-  type measurementsWithTime('a) = array(TypedMeasurementWithTime.T.t('a));
-
-  type combination('a, 'b) = {
-    agentPredictions: measurementsWithTime('a),
-    marketPredictions: option(measurementsWithTime('a)),
-    resolution: measurementWithTime('b),
+  type combination = {
+    agentPredictions: measurementsWithTime,
+    marketPredictions: option(measurementsWithTime),
+    resolution: measurementWithTime,
   };
 
-  type cdfCdf = combination(Cdf.t, Cdf.t);
-  type cdfFloat = combination(Cdf.t, float);
-  type percentagePercentage = combination(Percentage.t, Percentage.t);
-
-  type combinationToMeasurement('a, 'b) =
-    PredictionResolutionGroup.combination('a, 'b) =>
-    PredictionResolutionGroup.t;
+  type t = [
+    | `CdfCdf(combination)
+    | `CdfFloat(combination)
+    | `PercentagePercentage(combination)
+  ];
 
   let _toStartAtDistribution =
       (
-        r: combination('a, 'b),
-        toMeasurement: combinationToMeasurement('a, 'b),
+        r: combination,
+        toMeasurement:
+          PredictionResolutionGroup.combination('a, 'b) =>
+          PredictionResolutionGroup.t,
       ) => {
-    let finalTime = r.resolution.time;
+    let toDistribution =
+      MeasurementWithTime.Ts.toStartAtDistribution(r.resolution.time);
     switch (r.marketPredictions) {
     | Some(marketPredictions) =>
       let product =
         StartAtDistribution.product(
-          r.agentPredictions
-          |> TypedMeasurementWithTime.T.toStartAtDistribution(finalTime),
-          marketPredictions
-          |> TypedMeasurementWithTime.T.toStartAtDistribution(finalTime),
+          toDistribution(marketPredictions),
+          toDistribution(r.agentPredictions),
         );
       let toScoringCombinations =
         StartAtDistribution.map(
@@ -45,7 +43,7 @@ module MeasurementCombinationOverTime = {
       toScoringCombinations;
     | None =>
       r.agentPredictions
-      |> TypedMeasurementWithTime.T.toStartAtDistribution(finalTime)
+      |> toDistribution
       |> StartAtDistribution.map(agentPrediction =>
            toMeasurement({
              agentPrediction,
@@ -55,12 +53,6 @@ module MeasurementCombinationOverTime = {
          )
     };
   };
-
-  type t = [
-    | `CdfCdf(cdfCdf)
-    | `CdfFloat(cdfFloat)
-    | `PercentagePercentage(percentagePercentage)
-  ];
 
   let toStartAtDistribution = (t: t) =>
     switch (t) {

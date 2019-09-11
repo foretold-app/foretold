@@ -10,6 +10,7 @@ module Verifications: {
       | LengthLessThan(int)
       | DifferentLength
       | YBetween0And1;
+    let toString: t => string;
   };
 };
 let make:

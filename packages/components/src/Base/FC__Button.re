@@ -58,6 +58,9 @@ let styles = (~isDisabled=false, ~variant, ~size, ~fullWidth=false, ()) => {
   let main =
     Css.(
       style([
+        fontFamily(FC__Settings.Text.standardFont),
+        fontSize(`px(16)),
+        lineHeight(`em(1.5)),
         cursor(`pointer),
         FC__BaseStyles.floatLeft,
         borderRadius(FC__Settings.BorderRadius.medium),

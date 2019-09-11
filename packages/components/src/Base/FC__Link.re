@@ -1,8 +1,8 @@
 let component = ReasonReact.statelessComponent(__MODULE__);
 
 let defaultColors = (
-  FC__Colors.Text.LightBackground.main,
-  FC__Colors.Text.LightBackground.light,
+  FC__Settings.Text.LightBackground.main,
+  FC__Settings.Text.LightBackground.light,
 );
 
 let headerLink = (~className, ~isDisabled=false, ()) => {
@@ -11,8 +11,8 @@ let headerLink = (~className, ~isDisabled=false, ()) => {
       style([
         textDecoration(`none),
         userSelect(`none),
-        color(FC__Colors.Text.LightBackground.main),
-        hover([color(FC__Colors.Text.LightBackground.light)]),
+        color(FC__Settings.Text.LightBackground.main),
+        hover([color(FC__Settings.Text.LightBackground.light)]),
         focus([textDecoration(`none)]),
       ])
     );

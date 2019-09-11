@@ -1,4 +1,4 @@
-open FC__Colors.Text;
+open FC__Settings.Text;
 
 let activeStyles =
   Css.[
@@ -8,7 +8,7 @@ let activeStyles =
   ];
 let inactiveStyles =
   Css.[
-    borderBottom(`px(2), `solid, FC__Colors.clear),
+    borderBottom(`px(2), `solid, FC__Settings.clear),
     color(LightBackground.main),
     hover([color(LightBackground.active)]),
   ];

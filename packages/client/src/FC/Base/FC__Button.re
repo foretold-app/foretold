@@ -16,8 +16,13 @@ type variant =
   | Primary
   | Secondary;
 
+type size =
+  | Small
+  | Median
+  | Large;
+
 let varantColors = (variant: variant) =>
-  FC__Colors.(
+  FC__Settings.(
     switch (variant) {
     | Primary => {
         text: white |> toS,
@@ -36,21 +41,29 @@ let varantColors = (variant: variant) =>
     }
   );
 
-let styles =
-    (
-      ~isDisabled=false,
-      ~variant: variant,
-      ~verticalPadding=`px(4),
-      ~fullWidth=false,
-      (),
-    ) => {
+let sizeStyles = size => {
+  switch (size) {
+  | Small =>
+    Css.(style([padding2(~v=`em(0.3), ~h=`em(1.2)), fontSize(`px(14))]))
+  | Median =>
+    Css.(style([padding2(~v=`em(0.4), ~h=`em(1.5)), fontSize(`px(16))]))
+  | Large =>
+    Css.(style([padding2(~v=`em(0.4), ~h=`em(1.8)), fontSize(`px(16))]))
+  };
+};
+
+let styles = (~isDisabled=false, ~variant, ~size, ~fullWidth=false, ()) => {
   let colors = varantColors(variant);
+
   let main =
     Css.(
       style([
-        padding2(~v=verticalPadding, ~h=`px(14)),
+        fontFamily(FC__Settings.Text.standardFont),
+        fontSize(`px(16)),
+        lineHeight(`em(1.5)),
+        cursor(`pointer),
         FC__BaseStyles.floatLeft,
-        borderRadius(FC__Colors.BorderRadius.medium),
+        borderRadius(FC__Settings.BorderRadius.medium),
         border(`px(1), `solid, `hex(colors.border)),
         color(`hex(colors.text)),
         background(`hex(colors.background)),
@@ -59,13 +72,15 @@ let styles =
           color(`hex(colors.textHover)),
         ]),
         transition(
-          ~duration=FC__Colors.Transitions.standardLength,
+          ~duration=FC__Settings.Transitions.standardLength,
           "background",
         ),
       ])
     );
+
   let disabledStyles =
-    Css.(style([background(FC__Colors.greydisabled), opacity(0.5)]));
+    Css.(style([background(FC__Settings.greydisabled), opacity(0.5)]));
+
   let fullWidthStyle =
     Css.(
       style([
@@ -77,39 +92,38 @@ let styles =
       ])
     );
 
-  switch (isDisabled, fullWidth) {
-  | (false, false) => main
-  | (true, false) => Css.merge([main, disabledStyles])
-  | (false, true) => Css.merge([main, fullWidthStyle])
-  | (true, true) => Css.merge([main, disabledStyles, fullWidthStyle])
-  };
+  let total =
+    switch (isDisabled, fullWidth) {
+    | (false, false) => main
+    | (true, false) => Css.merge([main, disabledStyles])
+    | (false, true) => Css.merge([main, fullWidthStyle])
+    | (true, true) => Css.merge([main, disabledStyles, fullWidthStyle])
+    };
+
+  Css.merge([sizeStyles(size), total]);
 };
 
+// Button must be button
 let component = ReasonReact.statelessComponent(__MODULE__);
-
 let make =
     (
-      ~href=?,
       ~onClick=?,
       ~variant=Secondary,
+      ~size=Large,
       ~isDisabled=false,
       ~fullWidth=false,
-      ~verticalPadding=`px(4),
       ~className="",
       children,
     ) => {
   ...component,
   render: _self =>
-    <FC__Link
-      ?href
+    <button
       ?onClick
-      isDisabled
-      className={
-        Css.merge([
-          styles(~isDisabled, ~fullWidth, ~variant, ~verticalPadding, ()),
-          className,
-        ])
-      }>
+      disabled=isDisabled
+      className={Css.merge([
+        styles(~isDisabled, ~fullWidth, ~variant, ~size, ()),
+        className,
+      ])}>
       ...children
-    </FC__Link>,
+    </button>,
 };

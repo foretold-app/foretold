@@ -1,5 +1,6 @@
 module Questionmark = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ " QuestionMark");
+  let component =
+    ReasonReact.statelessComponent(__MODULE__ ++ " QuestionMark");
   // Adapted to pagecard title
   let iconStyle =
     Css.(
@@ -18,9 +19,9 @@ module Questionmark = {
       style([
         selector(
           "text",
-          [fontSize(`em(0.7)), SVG.fill(FC__Colors.textMedium)],
+          [fontSize(`em(0.7)), SVG.fill(FC__Settings.textMedium)],
         ),
-        selector("circle", [SVG.stroke(FC__Colors.greyO4)]),
+        selector("circle", [SVG.stroke(FC__Settings.greyO4)]),
       ])
     );
   let make = _children => {
@@ -41,9 +42,7 @@ module Questionmark = {
 module DownArrow = {
   /* Down array from ant */
   let component = ReasonReact.statelessComponent(__MODULE__ ++ " DownArrow");
-  let buttonStyle = Css.(style([
-    marginLeft(`px(8)),
-  ]));
+  let buttonStyle = Css.(style([marginLeft(`px(8))]));
   let make = _children => {
     ...component,
     render: _self => {

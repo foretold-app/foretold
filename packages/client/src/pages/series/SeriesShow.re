@@ -14,7 +14,7 @@ module Config = {
   let isEqual = (a: itemType, b: itemType) => a.id == b.id;
 };
 
-module Reducer = PaginationReducerFunctor.Make(Config);
+module Reducer = PaginationFunctor.Make(Config);
 
 module Styles = {
   open Css;

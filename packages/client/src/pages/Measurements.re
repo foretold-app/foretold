@@ -13,7 +13,7 @@ module ReducerConfig = {
   };
 };
 
-module Reducer = PaginationReducerFunctor.Make(ReducerConfig);
+module Reducer = PaginationFunctor.Make(ReducerConfig);
 
 let component = ReasonReact.statelessComponent("Measurements");
 let make = (~measurableId: string, ~loggedInUser: Types.user, _children) => {

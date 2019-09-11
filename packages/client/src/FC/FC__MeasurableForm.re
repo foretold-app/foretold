@@ -55,11 +55,11 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
         {switch (self.state.selectedTab) {
          | SimpleTab =>
            <Div flexDirection=`row styles=[flexRowContainer]>
-             <Div flex={`num(1.)} styles=[flexRowItem]>
+             <Div flex={`num(1.0)} styles=[flexRowItem]>
                <InputLabel> "Min"->React.string </InputLabel>
                <TextInput fullWidth=true />
              </Div>
-             <Div flex={`num(1.)} styles=[flexRowItem]>
+             <Div flex={`num(1.0)} styles=[flexRowItem]>
                <InputLabel> "Max"->React.string </InputLabel>
                <TextInput fullWidth=true />
              </Div>
@@ -92,8 +92,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
         <InputLabel> "Comment"->React.string </InputLabel>
         <TextArea fullWidth=true />
         <PageCard.VerticalSpace />
-        <Button
-          variant=Button.Primary fullWidth=true verticalPadding={`px(10)}>
+        <Button variant=Button.Primary fullWidth=true size=Large>
           "Submit Prediction"->React.string
         </Button>
       </PageCard.Section>

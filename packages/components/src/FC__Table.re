@@ -133,28 +133,23 @@ module Row = {
 
   let textSection = text => <Div styles=[Styles.textArea]> text </Div>;
 
-  let make = (~className="", ~bottomSubRow=?, children) => {
+  let make = (~className="", ~bottomSubRow=?, ~onClick=?, children) => {
     ...component,
-    render: _self =>
+    render: _self => {
+      let commonClasses =
+        onClick |> E.O.isSome
+          ? [Styles.clickableRow, className] : [className];
       switch (bottomSubRow) {
       | Some(bottomSubRow) =>
-        <>
+        <Div styles=commonClasses ?onClick>
           <Div styles=[Styles.topRow]> ...children </Div>
           <Div styles=[Styles.bottomRow]> ...bottomSubRow </Div>
-        </>
-      | None => <Div styles=[Styles.row, className]> ...children </Div>
-      },
-  };
-};
-
-module RowLink = {
-  let component = ReasonReact.statelessComponent("TABLE ROW");
-
-  let make = (~onClick, children) => {
-    ...component,
-    render: _self =>
-      <Div styles=[Styles.row, Styles.clickableRow] onClick>
-        ...children
-      </Div>,
+        </Div>
+      | None =>
+        <Div styles=[Styles.row, ...commonClasses] ?onClick>
+          ...children
+        </Div>
+      };
+    },
   };
 };

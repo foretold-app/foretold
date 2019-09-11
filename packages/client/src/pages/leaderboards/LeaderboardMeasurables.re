@@ -16,7 +16,7 @@ module ReducerConfig = {
   };
 };
 
-module Reducer = PaginationReducerFunctor.Make(ReducerConfig);
+module Reducer = PaginationFunctor.Make(ReducerConfig);
 
 let component = ReasonReact.statelessComponent("LeaderboardMeasurables");
 let make =

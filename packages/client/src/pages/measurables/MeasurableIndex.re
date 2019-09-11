@@ -1,43 +1,36 @@
-let load3Queries = (channelId, states, itemsPerPage, fn) =>
-  (
-    (reducer, channel, series, stats) =>
-      (reducer, channel, series, stats) |> fn
-  )
-  |> E.F.flatten4Callbacks(
-       MeasurableIndex__Logic.Reducer.make(
-         ~itemsPerPage,
-         ~callFnParams={channelId, states},
-         ~subComponent=_,
-       ),
-       ChannelGet.component2(~id=channelId),
-       SeriesCollectionGet.component2(~channelId),
-       MeasurablesStateStatsGet.component2(~channelId),
-     );
-
+let component = ReasonReact.statelessComponent("MeasurableIndex");
 let make =
     (
       ~channelId: string,
       ~searchParams: MeasurableQueryIndex.query,
       ~loggedInUser: Types.user,
-      ~itemsPerPage: int=20,
+      _children,
     ) => {
-  let loadData = load3Queries(channelId, searchParams.state, itemsPerPage);
-
-  loadData(
-    ((reducerParams, channelQuery, seriesQuery, measurablesStateStatsQuery)) => {
-    let state =
-      MeasurableIndex__Logic.MeasurableIndexDataState.make({
-        reducerParams,
-        loggedInUser,
-        channelQuery,
-        seriesQuery,
-      });
-
-    MeasurableIndex__Components.MeasurableIndexDataState.toLayoutInput(
-      reducerParams.send,
-      searchParams,
-      measurablesStateStatsQuery,
-      state,
-    );
-  });
+  ...component,
+  render: _ => {
+    module Reducer =
+      PaginationFunctor.Make(MeasurableIndex__Logic.ReducerConfig);
+    <Reducer
+      callFnParams={channelId, states: searchParams.state}
+      subComponent={reducerParams =>
+        ChannelGet.component2(~id=channelId, channelQuery =>
+          SeriesCollectionGet.component2(~channelId, seriesQuery =>
+            MeasurablesStateStatsGet.component2(~channelId, statsQuery =>
+              MeasurableIndex__Components.toLayoutInput(
+                reducerParams.send,
+                searchParams,
+                statsQuery,
+                MeasurableIndex__Logic.make({
+                  reducerParams,
+                  loggedInUser,
+                  channelQuery,
+                  seriesQuery,
+                }),
+              )
+            )
+          )
+        )
+      }
+    />;
+  },
 };

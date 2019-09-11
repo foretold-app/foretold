@@ -12,7 +12,7 @@ module FloatPoint = {
       let mainText =
         Css.style([
           Css.fontSize(`em(1.1)),
-          Css.color(FC__Colors.darkLink),
+          Css.color(FC__Settings.darkLink),
         ]);
 
       <Div flexDirection=`column>
@@ -89,7 +89,7 @@ module UnresolvableResolution = {
       let secondaryText =
         Css.style([
           Css.fontSize(`em(0.9)),
-          Css.color(FC__Colors.accentBlue),
+          Css.color(FC__Settings.accentBlue),
         ]);
 
       <Div flexDirection=`column>
@@ -111,13 +111,13 @@ module Percentage = {
       let mainText =
         Css.style([
           Css.fontSize(`em(1.1)),
-          Css.color(FC__Colors.darkLink),
+          Css.color(FC__Settings.darkLink),
         ]);
 
       let secondaryText =
         Css.style([
           Css.fontSize(`em(0.9)),
-          Css.color(FC__Colors.accentBlue),
+          Css.color(FC__Settings.accentBlue),
         ]);
 
       <Div flexDirection=`column>

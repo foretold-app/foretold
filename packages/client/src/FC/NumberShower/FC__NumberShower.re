@@ -26,7 +26,7 @@ let make = (~number, ~precision, _children) => {
             <span>
               {{j|\u00b710|j} |> ReasonReact.string}
               <span className=sup>
-                {e |> Js.Float.toString |> ReasonReact.string}
+                {e |> FC__E.Float.toString |> ReasonReact.string}
               </span>
             </span>
           )}

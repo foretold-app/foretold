@@ -13,7 +13,7 @@ module Styles = {
 
   let inner =
     style(
-      [boxSizing(`borderBox), padding2(~v=`em(0.7), ~h=`em(2.0))]
+      [boxSizing(`borderBox), padding2(~v=`em(1.), ~h=`em(2.0))]
       @ BaseStyles.fullWidthFloatLeft,
     );
 
@@ -22,6 +22,7 @@ module Styles = {
       BaseStyles.floatRight,
       marginLeft(`em(2.)),
       marginTop(`em(0.2)),
+      padding2(~v=`em(0.4), ~h=`em(1.8)),
     ]);
 };
 

@@ -58,69 +58,67 @@ module WithChannelButNotQuery = {
   };
 };
 
-module MeasurableIndexDataState = {
-  type state =
-    | WithoutChannel(channelQuery)
-    | InvalidIndexError(channel)
-    | WithChannelButNotQuery(WithChannelButNotQuery.t)
-    | LoadedAndUnselected(LoadedAndUnselected.t)
-    | LoadedAndSelected(LoadedAndSelected.t);
+type state =
+  | WithoutChannel(channelQuery)
+  | InvalidIndexError(channel)
+  | WithChannelButNotQuery(WithChannelButNotQuery.t)
+  | LoadedAndUnselected(LoadedAndUnselected.t)
+  | LoadedAndSelected(LoadedAndSelected.t);
 
-  type input = {
-    reducerParams,
-    loggedInUser,
-    channelQuery,
-    seriesQuery,
-  };
+type input = {
+  reducerParams,
+  loggedInUser,
+  channelQuery,
+  seriesQuery,
+};
 
-  let make = (input: input) =>
-    switch (
-      input.reducerParams.itemState,
-      input.channelQuery,
-      input.seriesQuery,
-      input.reducerParams.response,
-    ) {
-    | (
-        ItemSelected({selectedIndex}),
-        Success(channel),
-        Success(seriesCollection),
-        Success(_),
-      ) =>
-      switch (input.reducerParams.selection) {
-      | Some(selectedMeasurable) =>
-        LoadedAndSelected({
-          channel,
-          reducerParams: input.reducerParams,
-          loggedInUser: input.loggedInUser,
-          itemState: {
-            selectedIndex: selectedIndex,
-          },
-          selectedMeasurable,
-          seriesCollection,
-        })
-      | _ => InvalidIndexError(channel)
-      }
-
-    | (
-        ItemUnselected(_),
-        Success(channel),
-        Success(seriesCollection),
-        Success(_),
-      ) =>
-      LoadedAndUnselected({
+let make = (input: input) =>
+  switch (
+    input.reducerParams.itemState,
+    input.channelQuery,
+    input.seriesQuery,
+    input.reducerParams.response,
+  ) {
+  | (
+      ItemSelected({selectedIndex}),
+      Success(channel),
+      Success(seriesCollection),
+      Success(_),
+    ) =>
+    switch (input.reducerParams.selection) {
+    | Some(selectedMeasurable) =>
+      LoadedAndSelected({
         channel,
         reducerParams: input.reducerParams,
         loggedInUser: input.loggedInUser,
+        itemState: {
+          selectedIndex: selectedIndex,
+        },
+        selectedMeasurable,
         seriesCollection,
       })
+    | _ => InvalidIndexError(channel)
+    }
 
-    | (_, Success(channel), _, _) =>
-      WithChannelButNotQuery({
-        channel,
-        reducerParams: input.reducerParams,
-        loggedInUser: input.loggedInUser,
-        seriesQuery: input.seriesQuery,
-      })
-    | _ => WithoutChannel(input.channelQuery)
-    };
-};
+  | (
+      ItemUnselected(_),
+      Success(channel),
+      Success(seriesCollection),
+      Success(_),
+    ) =>
+    LoadedAndUnselected({
+      channel,
+      reducerParams: input.reducerParams,
+      loggedInUser: input.loggedInUser,
+      seriesCollection,
+    })
+
+  | (_, Success(channel), _, _) =>
+    WithChannelButNotQuery({
+      channel,
+      reducerParams: input.reducerParams,
+      loggedInUser: input.loggedInUser,
+      seriesQuery: input.seriesQuery,
+    })
+  | _ => WithoutChannel(input.channelQuery)
+  };

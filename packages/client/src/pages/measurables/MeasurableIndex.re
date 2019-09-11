@@ -17,11 +17,11 @@ let make =
           SeriesCollectionGet.component2(~channelId, seriesQuery =>
             MeasurablesStateStatsGet.component2(
               ~channelId, measurablesStateStatsQuery =>
-              MeasurableIndex__Components.MeasurableIndexDataState.toLayoutInput(
+              MeasurableIndex__Components.toLayoutInput(
                 reducerParams.send,
                 searchParams,
                 measurablesStateStatsQuery,
-                MeasurableIndex__Logic.MeasurableIndexDataState.make({
+                MeasurableIndex__Logic.make({
                   reducerParams,
                   loggedInUser,
                   channelQuery,

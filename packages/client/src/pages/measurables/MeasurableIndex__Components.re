@@ -132,51 +132,44 @@ module LoadedAndUnselected = {
   };
 };
 
-module MeasurableIndexDataState = {
-  open MeasurableIndex__Logic.MeasurableIndexDataState;
+let toLayoutInput =
+    (
+      send: Reducer.Types.send,
+      selectedState: MeasurableQueryIndex.query,
+      stats: measurablesStateStatsQuery,
+      state: state,
+    ) => {
+  switch (state) {
+  | LoadedAndUnselected(l) =>
+    SLayout.LayoutConfig.make(
+      ~head=LoadedAndUnselected.header(l, stats, selectedState),
+      ~body=LoadedAndUnselected.body(l),
+    )
+    |> SLayout.FullPage.makeWithEl
 
-  let toLayoutInput =
-      (
-        send: Reducer.Types.send,
-        selectedState: MeasurableQueryIndex.query,
-        stats: measurablesStateStatsQuery,
-        state: state,
-      ) => {
-    switch (state) {
-    | LoadedAndUnselected(l) =>
-      SLayout.LayoutConfig.make(
-        ~head=LoadedAndUnselected.header(l, stats, selectedState),
-        ~body=LoadedAndUnselected.body(l),
-      )
-      |> SLayout.FullPage.makeWithEl
+  | LoadedAndSelected(l) =>
+    <>
+      {SLayout.LayoutConfig.make(
+         ~head=LoadedAndSelected.header(l, send),
+         ~body=LoadedAndSelected.body(l),
+       )
+       |> SLayout.FullPage.makeWithEl}
+      {LoadedAndSelected.body2(l)}
+    </>
 
-    | LoadedAndSelected(l) =>
-      <>
-        {SLayout.LayoutConfig.make(
-           ~head=LoadedAndSelected.header(l, send),
-           ~body=LoadedAndSelected.body(l),
-         )
-         |> SLayout.FullPage.makeWithEl}
-        {LoadedAndSelected.body2(l)}
-      </>
+  | WithoutChannel(_) =>
+    SLayout.LayoutConfig.make(~head=E.React.null, ~body="No channel." |> ste)
+    |> SLayout.FullPage.makeWithEl
 
-    | WithoutChannel(_) =>
-      SLayout.LayoutConfig.make(
-        ~head=E.React.null,
-        ~body="No channel." |> ste,
-      )
-      |> SLayout.FullPage.makeWithEl
+  | InvalidIndexError(_) =>
+    SLayout.LayoutConfig.make(
+      ~head=E.React.null,
+      ~body="Item Not Valid" |> ste,
+    )
+    |> SLayout.FullPage.makeWithEl
 
-    | InvalidIndexError(_) =>
-      SLayout.LayoutConfig.make(
-        ~head=E.React.null,
-        ~body="Item Not Valid" |> ste,
-      )
-      |> SLayout.FullPage.makeWithEl
-
-    | WithChannelButNotQuery(_c) =>
-      SLayout.LayoutConfig.make(~head=E.React.null, ~body=<SLayout.Spin />)
-      |> SLayout.FullPage.makeWithEl
-    };
+  | WithChannelButNotQuery(_c) =>
+    SLayout.LayoutConfig.make(~head=E.React.null, ~body=<SLayout.Spin />)
+    |> SLayout.FullPage.makeWithEl
   };
 };

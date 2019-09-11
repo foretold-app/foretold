@@ -22,7 +22,7 @@ type size =
   | Large;
 
 let varantColors = (variant: variant) =>
-  FC__Colors.(
+  FC__Settings.(
     switch (variant) {
     | Primary => {
         text: white |> toS,
@@ -60,7 +60,7 @@ let styles = (~isDisabled=false, ~variant, ~size, ~fullWidth=false, ()) => {
       style([
         cursor(`pointer),
         FC__BaseStyles.floatLeft,
-        borderRadius(FC__Colors.BorderRadius.medium),
+        borderRadius(FC__Settings.BorderRadius.medium),
         border(`px(1), `solid, `hex(colors.border)),
         color(`hex(colors.text)),
         background(`hex(colors.background)),
@@ -69,14 +69,14 @@ let styles = (~isDisabled=false, ~variant, ~size, ~fullWidth=false, ()) => {
           color(`hex(colors.textHover)),
         ]),
         transition(
-          ~duration=FC__Colors.Transitions.standardLength,
+          ~duration=FC__Settings.Transitions.standardLength,
           "background",
         ),
       ])
     );
 
   let disabledStyles =
-    Css.(style([background(FC__Colors.greydisabled), opacity(0.5)]));
+    Css.(style([background(FC__Settings.greydisabled), opacity(0.5)]));
 
   let fullWidthStyle =
     Css.(

@@ -32,7 +32,7 @@ module SeriesCards = {
               key={i |> string_of_int}
               className=Styles.itemPositioning
               onClick={_e => Routing.Url.push(SeriesShow(channelId, x.id))}>
-              <Foretold__Components__Series.Card series=x />
+              <SeriesCard series=x />
             </div>
           )
        |> ReasonReact.array}

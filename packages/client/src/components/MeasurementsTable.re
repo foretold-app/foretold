@@ -24,7 +24,7 @@ module Styles = {
     style([color(`rgb((102, 121, 134))), fontSize(`em(1.1))]);
 
   let secondaryText =
-    style([fontSize(`em(0.9)), color(FC__Colors.accentBlue)]);
+    style([fontSize(`em(0.9)), color(FC__Settings.accentBlue)]);
 
   let percentage = style([fontSize(`em(1.15))]);
 

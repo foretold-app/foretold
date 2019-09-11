@@ -63,7 +63,7 @@ module SubHeader = {
               style(
                 [
                   padding2(~v=`em(0.0), ~h=`em(2.0)),
-                  borderBottom(`px(1), `solid, FC__Colors.border),
+                  borderBottom(`px(1), `solid, FC__Settings.border),
                 ]
                 @ BaseStyles.fullWidthFloatLeft,
               )

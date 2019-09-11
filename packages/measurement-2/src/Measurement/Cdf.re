@@ -5,10 +5,6 @@ type t = {
   ys: array(float),
 };
 
-let verifyHasLength = ({xs, ys}) =>
-  Array.length(xs) != Array.length(ys)
-    ? Error("Arrays must have more than 0 elements.") : Ok({xs, ys});
-
 let _verifyNIncreasing = (fnN, errorMessageIfNotIncreasing, t: t) =>
   fnN(t)
   |> Utility.Array.toRanges
@@ -21,8 +17,13 @@ let _verifyNIncreasing = (fnN, errorMessageIfNotIncreasing, t: t) =>
 let verifyXsIncreasing = _verifyNIncreasing(t => t.xs, "Xs must increase");
 let verifyYsIncreasing = _verifyNIncreasing(t => t.ys, "Ys must increase");
 
+let verifyMinLength = (minLength, {xs, ys}) =>
+  Array.length(xs) < minLength || Array.length(ys) < minLength
+    ? Error("Length must be greater than:" ++ (minLength |> string_of_int))
+    : Ok({xs, ys});
+
 let verifySameLength = ({xs, ys}) =>
-  Array.length(xs) == 0 || Array.length(ys) == 0
+  Array.length(xs) != Array.length(ys)
     ? Error("Array length must be the same.") : Ok({xs, ys});
 
 let verifyMaxLength = (maxLength, {xs, ys}) =>
@@ -32,11 +33,11 @@ let verifyMaxLength = (maxLength, {xs, ys}) =>
 
 // TODO: Verify ys are between 0 and 1.
 
-let make = (~xs, ~ys, ~maxLength=10000, ()) =>
+let make = (~xs, ~ys, ~minLength=5, ~maxLength=10000, ()) =>
   {xs, ys}
-  |> verifyHasLength
-  |> Rationale.Result.bind(_, verifySameLength)
+  |> verifyMinLength(minLength)
   |> Rationale.Result.bind(_, verifyMaxLength(maxLength))
+  |> Rationale.Result.bind(_, verifySameLength)
   |> Rationale.Result.bind(_, verifyXsIncreasing)
   |> Rationale.Result.bind(_, verifyYsIncreasing);
 

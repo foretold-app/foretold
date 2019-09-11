@@ -17,13 +17,13 @@ let make =
       let joinButton = channelId =>
         E.React.showIf(
           Primary.Permissions.can(`JOIN_CHANNEL, channel.permissions),
-          C.Channel.SimpleHeader.joinChannel(channelId),
+          SimpleHeader.joinChannel(channelId),
         );
 
       let leaveButton = channelId =>
         E.React.showIf(
           Primary.Permissions.can(`LEAVE_CHANNEL, channel.permissions),
-          C.Channel.SimpleHeader.leaveChannel(channelId),
+          SimpleHeader.leaveChannel(channelId),
         );
 
       <>
@@ -32,9 +32,7 @@ let make =
           {channel.myRole === Some(`NONE)
              ? joinButton(channel.id)
              : <>
-                 {Foretold__Components__Channel.SimpleHeader.newMeasurable(
-                    channel.id,
-                  )}
+                 {SimpleHeader.newMeasurable(channel.id)}
                  {leaveButton(channel.id)}
                </>}
         </Div>

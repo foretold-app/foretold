@@ -4,7 +4,7 @@ open Css;
 
 type measurement = Types.measurement;
 type measurable = Types.measurable;
-module Items = Foretold__Components__Measurable__Items;
+module Items = MeasurableItems;
 
 module Styles = {
   open Css;

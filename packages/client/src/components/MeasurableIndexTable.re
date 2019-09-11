@@ -1,6 +1,3 @@
-module Items = Foretold__Components__Measurable__Items;
-module SeriesTable = Foretold__Components__Measurables__SeriesTable;
-
 module Styles = {
   open Css;
 
@@ -55,13 +52,11 @@ let make =
                     )>
                     <div className=Styles.mainColumn>
                       <div className=Styles.mainColumnTop>
-                        {Items.link(~m)}
+                        {MeasurableItems.link(~m)}
                       </div>
                     </div>
                     <div className=Styles.rightColumn>
-                      <Foretold__Components__Measurable.StatusDisplay
-                        measurable=m
-                      />
+                      <StatusDisplay measurable=m />
                     </div>
                   </FC.Table.Cell>
                   <FC.Table.Cell
@@ -74,20 +69,21 @@ let make =
                     className=Css.(style([paddingTop(`em(0.5))]))>
                     {E.React.showIf(
                        channelId == Some("home"),
-                       Items.channelLink(~m),
+                       MeasurableItems.channelLink(~m),
                      )}
                     {E.React.showIf(
                        showExtraData,
-                       Items.series(~m, ~channelId, ())
+                       MeasurableItems.series(~m, ~channelId, ())
                        |> E.O.React.defaultNull,
                      )}
                     {E.React.showIf(
                        showExtraData,
-                       Items.creatorLink(~m) |> E.O.React.defaultNull,
+                       MeasurableItems.creatorLink(~m)
+                       |> E.O.React.defaultNull,
                      )}
-                    {Items.measurements(~m) |> E.O.React.defaultNull}
-                    {Items.measurers(~m) |> E.O.React.defaultNull}
-                    {E.React.showIf(iAmOwner, Items.editLink(~m))}
+                    {MeasurableItems.measurements(~m) |> E.O.React.defaultNull}
+                    {MeasurableItems.measurers(~m) |> E.O.React.defaultNull}
+                    {E.React.showIf(iAmOwner, MeasurableItems.editLink(~m))}
                   </FC.Table.Cell>
                 </FC.Table.Row>;
               })

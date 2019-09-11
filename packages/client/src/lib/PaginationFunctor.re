@@ -1,5 +1,4 @@
 open Utils;
-open Rationale.Function.Infix;
 open Rationale.Option.Infix;
 
 type direction = Primary.Connection.direction;

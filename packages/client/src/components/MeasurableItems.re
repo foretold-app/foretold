@@ -1,7 +1,6 @@
 open Utils;
 open ReactMarkdown;
 open Style.Grid;
-module Shared = Foretold__Components__Shared;
 
 /**
  * Using <Components /> style in React.js is preferable then

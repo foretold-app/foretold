@@ -41,6 +41,7 @@ module HeaderRow = {
   module Styles = {
     let itemTopPadding = Css.paddingTop(`em(0.9));
     let itemBottomPadding = Css.paddingBottom(`em(0.9));
+    let itemRightPadding = Css.paddingRight(`em(0.9));
   };
 
   module Title = {

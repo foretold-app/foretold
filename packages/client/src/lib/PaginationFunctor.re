@@ -45,17 +45,6 @@ module Make = (Config: Config) => {
       | NextSelection
       | LastSelection;
 
-    let reducerName = action =>
-      switch (action) {
-      | NextPage => "NextPage"
-      | LastPage => "LastPage"
-      | Deselect => "Deselect"
-      | SelectIndex(int) => "SelectIndex"
-      | NextSelection => "NextSelection"
-      | LastSelection => "LastSelection"
-      | _ => "Other"
-      };
-
     type send = action => unit;
 
     type reducerParams = {

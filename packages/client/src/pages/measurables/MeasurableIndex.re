@@ -8,6 +8,7 @@ let make =
     ) => {
   ...component,
   render: _ => {
+    Js.log("1");
     <MeasurableIndex__Logic.Reducer
       callFnParams={channelId, states: searchParams.state}
       subComponent={reducerParams =>

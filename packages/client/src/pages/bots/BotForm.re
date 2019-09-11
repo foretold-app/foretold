@@ -63,7 +63,7 @@ let onSuccess = (loggedInUser: Types.user, ()) => {
 };
 
 let formFields = (state: Form.state, send, onSubmit) =>
-  <FC.PageCard.BodyPadding>
+  <Fc.FC__PageCard.BodyPadding>
     <Antd.Form onSubmit={e => onSubmit()}>
       <Antd.Form.Item>
         {"Name" |> ReasonReact.string |> E.React.inH3}
@@ -89,4 +89,4 @@ let formFields = (state: Form.state, send, onSubmit) =>
         </Antd.Button>
       </Antd.Form.Item>
     </Antd.Form>
-  </FC.PageCard.BodyPadding>;
+  </Fc.FC__PageCard.BodyPadding>;

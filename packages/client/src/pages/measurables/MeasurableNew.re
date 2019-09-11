@@ -48,7 +48,7 @@ let make = (~channelId, ~loggedInUser: Types.user, _children) => {
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv("New Question"),
       ~body=
-        <FC.PageCard.BodyPadding>
+        <Fc.FC.PageCard.BodyPadding>
           {MeasurableCreate.Mutation.make((mutation, data) =>
              formCreator(mutation, ({state, send, _}) =>
                CMutationForm.showWithLoading2(
@@ -76,7 +76,7 @@ let make = (~channelId, ~loggedInUser: Types.user, _children) => {
              |> E.React.el
            )
            |> E.React.el}
-        </FC.PageCard.BodyPadding>,
+        </Fc.FC.PageCard.BodyPadding>,
     )
     |> SLayout.FullPage.makeWithEl;
   },

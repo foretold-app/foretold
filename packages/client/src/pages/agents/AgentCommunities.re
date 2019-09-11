@@ -3,17 +3,17 @@ let make = (~agentId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
     let body =
-      <FC.PageCard.Body>
+      <Fc.FC.PageCard.Body>
         <ChannelTable.Jsx2 agentId={Some(agentId)} />
-      </FC.PageCard.Body>;
+      </Fc.FC.PageCard.Body>;
 
     let head =
       <div>
-        <FC.Base.Div float=`left>
-          <FC.PageCard.HeaderRow.Title>
+        <Fc.FC.Base.Div float=`left>
+          <Fc.FC.PageCard.HeaderRow.Title>
             {"Communities" |> ReasonReact.string}
-          </FC.PageCard.HeaderRow.Title>
-        </FC.Base.Div>
+          </Fc.FC.PageCard.HeaderRow.Title>
+        </Fc.FC.Base.Div>
       </div>;
 
     SLayout.LayoutConfig.make(~head, ~body) |> layout;

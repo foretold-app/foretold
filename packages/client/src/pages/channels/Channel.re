@@ -57,10 +57,10 @@ let make =
       switch (channel) {
       | Some(channel) =>
         <>
-          <FC.GroupHeader> {top(channel)} </FC.GroupHeader>
-          <FC.GroupHeader.SubHeader>
+          <Fc.FC.GroupHeader> {top(channel)} </Fc.FC.GroupHeader>
+          <Fc.FC.GroupHeader.SubHeader>
             {secondLevel(channel)}
-          </FC.GroupHeader.SubHeader>
+          </Fc.FC.GroupHeader.SubHeader>
         </>
       | _ => <div />
       };

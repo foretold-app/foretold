@@ -25,8 +25,8 @@ let make = (~measurableId: string, ~loggedInUser: Types.user, _children) => {
           float=`right
           styles=[
             Css.style([
-              FC.PageCard.HeaderRow.Styles.itemTopPadding,
-              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+              Fc.FC.PageCard.HeaderRow.Styles.itemTopPadding,
+              Fc.FC.PageCard.HeaderRow.Styles.itemBottomPadding,
             ]),
           ]>
           {Reducer.Components.paginationPage(reducerParams)}

@@ -42,9 +42,9 @@ let make =
         switch (reducerParams.response) {
         | Success(_) =>
           Array.length(items) > 0
-            ? <FC.PageCard.Body>
+            ? <Fc.FC.PageCard.Body>
                 <LeaderboardTable.Jsx2 items />
-              </FC.PageCard.Body>
+              </Fc.FC.PageCard.Body>
             : <SLayout.NothingToShow />
         | _ => <SLayout.Spin />
         };

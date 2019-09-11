@@ -146,46 +146,46 @@ module Columns = {
 };
 
 let title = () =>
-  <FC.Base.Div float=`left>
-    <FC.PageCard.HeaderRow.Title>
+  <Fc.FC.Base.Div float=`left>
+    <Fc.FC.PageCard.HeaderRow.Title>
       {"Community Members" |> ReasonReact.string}
-    </FC.PageCard.HeaderRow.Title>
-  </FC.Base.Div>;
+    </Fc.FC.PageCard.HeaderRow.Title>
+  </Fc.FC.Base.Div>;
 
 let addMembersButtonSection = (channelId: string) =>
-  <FC.Base.Div
+  <Fc.FC.Base.Div
     float=`right
     className={Css.style([
-      FC.PageCard.HeaderRow.Styles.itemTopPadding,
-      FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+      Fc.FC.PageCard.HeaderRow.Styles.itemTopPadding,
+      Fc.FC.PageCard.HeaderRow.Styles.itemBottomPadding,
     ])}>
-    <FC.Base.Button
+    <Fc.FC.Base.Button
       variant=Primary
       onClick={e =>
         LinkType.onClick(Internal(ChannelAddMember(channelId)), e)
       }>
       {"Add Members" |> ReasonReact.string}
-    </FC.Base.Button>
-  </FC.Base.Div>;
+    </Fc.FC.Base.Button>
+  </Fc.FC.Base.Div>;
 
 let inviteMemberButtonSection = (channelId: string) =>
   true
     ? ReasonReact.null
-    : <FC.Base.Div
+    : <Fc.FC.Base.Div
         float=`right
         className={Css.style([
-          FC.PageCard.HeaderRow.Styles.itemTopPadding,
-          FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-          FC.PageCard.HeaderRow.Styles.itemRightPadding,
+          Fc.FC.PageCard.HeaderRow.Styles.itemTopPadding,
+          Fc.FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+          Fc.FC.PageCard.HeaderRow.Styles.itemRightPadding,
         ])}>
-        <FC.Base.Button
+        <Fc.FC.Base.Button
           variant=Primary
           onClick={e =>
             LinkType.onClick(Internal(ChannelInviteMember(channelId)), e)
           }>
           {"Invite Member" |> ReasonReact.string}
-        </FC.Base.Button>
-      </FC.Base.Div>;
+        </Fc.FC.Base.Button>
+      </Fc.FC.Base.Div>;
 
 let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
   let head =
@@ -204,7 +204,7 @@ let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
 
   SLayout.LayoutConfig.make(
     ~head,
-    ~body=<FC.PageCard.Body> table </FC.PageCard.Body>,
+    ~body=<Fc.FC.PageCard.Body> table </Fc.FC.PageCard.Body>,
   )
   |> SLayout.FullPage.makeWithEl;
 };

@@ -71,34 +71,34 @@ let fromColumns =
   let columns' = filterColums(columns, rows);
 
   <Table>
-    <FC.Table.HeaderRow>
+    <Fc.FC__Table.HeaderRow>
       {columns'
        |> Array.mapi((columnIndex, column: column('a)) =>
-            <FC.Table.Cell
+            <Fc.FC.Table.Cell
               flex={`num(column.flex |> float_of_int)}
               key={columnIndex |> string_of_int}>
               {column.name}
-            </FC.Table.Cell>
+            </Fc.FC.Table.Cell>
           )
        |> ReasonReact.array}
-    </FC.Table.HeaderRow>
+    </Fc.FC__Table.HeaderRow>
     {rows
      |> Array.mapi((rowIndex, row: 'a) => {
           let columnsBody =
             columns'
             |> Array.mapi((columnIndex, column: column('a)) =>
-                 <FC.Table.Cell
+                 <Fc.FC.Table.Cell
                    flex={`num(column.flex |> float_of_int)}
                    key={columnIndex |> string_of_int}>
                    {column.render(row)}
-                 </FC.Table.Cell>
+                 </Fc.FC.Table.Cell>
                )
             |> ReasonReact.array;
 
           let key = rowIndex |> string_of_int;
           let bottomSubRow = bottomSubRowFn |> E.O.bind(_, r => r(row));
 
-          <FC.Table.Row
+          <Fc.FC.Table.Row
             onClick={_ => {
               onRowClb(row);
               ();
@@ -107,7 +107,7 @@ let fromColumns =
             ?bottomSubRow
             key>
             columnsBody
-          </FC.Table.Row>;
+          </Fc.FC.Table.Row>;
         })
      |> ReasonReact.array}
   </Table>;

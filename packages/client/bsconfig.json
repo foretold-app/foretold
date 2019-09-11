@@ -18,6 +18,7 @@
   "suffix": ".bs.js",
   "namespace": true,
   "bs-dependencies": [
+    "foretold-components",
     "@glennsl/bs-json",
     "@glennsl/bs-jest",
     "bs-reform",
@@ -30,7 +31,9 @@
     "reason-apollo",
     "rationale"
   ],
-  "dev-dependencies": [],
+  "dev-dependencies": [
+    "@foretold/components"
+  ],
   "refmt": 3,
   "warnings": {
     "error": "+5"

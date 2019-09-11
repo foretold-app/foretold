@@ -47,9 +47,9 @@ let make =
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv(pageParams.id),
       ~body=
-        <FC.PageCard.BodyPadding>
+        <Fc.FC.PageCard.BodyPadding>
           {display(pageParams.id)}
-        </FC.PageCard.BodyPadding>,
+        </Fc.FC.PageCard.BodyPadding>,
     )
     |> layout;
   },

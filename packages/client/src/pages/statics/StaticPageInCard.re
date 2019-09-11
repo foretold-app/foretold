@@ -12,13 +12,13 @@ let make = (~markdown, _children) => {
       <div className=SLayout.Styles.container>
         <div
           className=Css.(style([textAlign(`left), paddingTop(`em(3.))]))>
-          <FC.PageCard>
-            <FC.PageCard.Body>
-              <FC.PageCard.BodyPadding>
+          <Fc.FC.PageCard>
+            <Fc.FC.PageCard.Body>
+              <Fc.FC.PageCard.BodyPadding>
                 <Markdown source=markdown />
-              </FC.PageCard.BodyPadding>
-            </FC.PageCard.Body>
-          </FC.PageCard>
+              </Fc.FC.PageCard.BodyPadding>
+            </Fc.FC.PageCard.Body>
+          </Fc.FC.PageCard>
         </div>
       </div>
     </div>,

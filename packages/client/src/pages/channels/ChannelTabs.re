@@ -2,9 +2,9 @@ open Utils;
 open Routing;
 
 let tab = (isActive, interalUrl, str) =>
-  <FC.Tab isActive onClick={LinkType.onClick(Internal(interalUrl))}>
+  <Fc.FC.Tab isActive onClick={LinkType.onClick(Internal(interalUrl))}>
     {str |> ste}
-  </FC.Tab>;
+  </Fc.FC.Tab>;
 
 let tabToInternalUrl = (channelId, tabSelected: ChannelPage.tab): Url.t => {
   let channelPage: ChannelPage.t = {

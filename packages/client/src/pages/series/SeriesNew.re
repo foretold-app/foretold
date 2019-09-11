@@ -221,7 +221,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv("Make a New Series"),
       ~body=
-        <FC.PageCard.BodyPadding>
+        <Fc.FC.PageCard.BodyPadding>
           {SeriesCreate.withMutation((mutation, data) =>
              withForm(mutation, channelId, ({send, state}) =>
                CMutationForm.showWithLoading(
@@ -231,7 +231,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
                )
              )
            )}
-        </FC.PageCard.BodyPadding>,
+        </Fc.FC.PageCard.BodyPadding>,
     )
     |> SLayout.FullPage.makeWithEl,
 };

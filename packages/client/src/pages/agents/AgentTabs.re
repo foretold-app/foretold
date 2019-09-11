@@ -12,13 +12,13 @@ module Component = {
 
   let tab = (agentId, currentPage, selectedPage) => {
     let isActive = currentPage == selectedPage;
-    <FC.Tab
+    <Fc.FC.Tab
       isActive
       onClick={LinkType.onClick(
         Internal(Agent({agentId, subPage: selectedPage})),
       )}>
       {name(selectedPage) |> ste}
-    </FC.Tab>;
+    </Fc.FC.Tab>;
   };
 
   let tabs = (page: Routing.AgentPage.t, agent: AgentGet.agent) => {

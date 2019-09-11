@@ -92,11 +92,11 @@ let make =
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv("Edit Question"),
       ~body=
-        <FC.PageCard.BodyPadding>
+        <Fc.FC.PageCard.BodyPadding>
           {MeasurableGet.component(~id=pageParams.id, m =>
              formCreation(pageParams.id, m, loggedInUser)
            )}
-        </FC.PageCard.BodyPadding>,
+        </Fc.FC.PageCard.BodyPadding>,
     )
     |> layout,
 };

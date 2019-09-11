@@ -11,8 +11,8 @@ module LoadedAndSelected = {
         float=`left
         styles=[
           Css.style([
-            FC.PageCard.HeaderRow.Styles.itemTopPadding,
-            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            Fc.FC.PageCard.HeaderRow.Styles.itemTopPadding,
+            Fc.FC.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
         {Reducer.Components.deselectButton(send)}
@@ -21,8 +21,8 @@ module LoadedAndSelected = {
         float=`right
         styles=[
           Css.style([
-            FC.PageCard.HeaderRow.Styles.itemTopPadding,
-            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            Fc.FC.PageCard.HeaderRow.Styles.itemTopPadding,
+            Fc.FC.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
         {Reducer.Components.paginationItem(t.reducerParams)}
@@ -48,7 +48,7 @@ module LoadedAndUnselected = {
   open MeasurableIndex__Logic.LoadedAndUnselected;
 
   let stateLink = (state, text, num: int, isActive) =>
-    <FC.Tab2
+    <Fc.FC.Tab2
       isActive
       number=num
       onClick={LinkType.onClick(
@@ -58,7 +58,7 @@ module LoadedAndUnselected = {
         ),
       )}>
       {text |> ste}
-    </FC.Tab2>;
+    </Fc.FC.Tab2>;
 
   let header =
       (
@@ -74,8 +74,8 @@ module LoadedAndUnselected = {
              float=`left
              styles=[
                Css.style([
-                 FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                 FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+                 Fc.FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                 Fc.FC.PageCard.HeaderRow.Styles.itemBottomPadding,
                ]),
              ]>
              {stateLink(
@@ -104,8 +104,8 @@ module LoadedAndUnselected = {
         float=`right
         styles=[
           Css.style([
-            FC.PageCard.HeaderRow.Styles.itemTopPadding,
-            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            Fc.FC.PageCard.HeaderRow.Styles.itemTopPadding,
+            Fc.FC.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
         {Reducer.Components.paginationPage(t.reducerParams)}

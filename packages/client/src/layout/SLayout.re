@@ -42,11 +42,14 @@ module Styles = {
 module Header = {
   let component = ReasonReact.statelessComponent("Header");
   let textDiv = text =>
-    <FC.PageCard.HeaderRow.Title> {text |> ste} </FC.PageCard.HeaderRow.Title>;
+    <Fc.FC__PageCard.HeaderRow.Title>
+      {text |> ste}
+    </Fc.FC__PageCard.HeaderRow.Title>;
 
   let make = children => {
     ...component,
-    render: _ => <FC.PageCard.HeaderRow> ...children </FC.PageCard.HeaderRow>,
+    render: _ =>
+      <Fc.FC.PageCard.HeaderRow> ...children </Fc.FC.PageCard.HeaderRow>,
   };
 };
 
@@ -120,7 +123,7 @@ module FullPage = {
   let make = ({head, body}: LayoutConfig.t) => {
     ...component,
     render: _ =>
-      <FC.Base.Div
+      <Fc.FC.Base.Div
         className=Css.(
           style(
             [
@@ -129,24 +132,24 @@ module FullPage = {
               width(`percent(100.)),
               boxSizing(`borderBox),
             ]
-            @ FC.Base.BaseStyles.fullWidthFloatLeft,
+            @ Fc.FC.Base.BaseStyles.fullWidthFloatLeft,
           )
         )>
         <div className=Styles.container>
-          <FC.PageCard>
-            <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
-            <FC.PageCard.Body> body </FC.PageCard.Body>
-          </FC.PageCard>
+          <Fc.FC.PageCard>
+            <Fc.FC.PageCard.HeaderRow> head </Fc.FC.PageCard.HeaderRow>
+            <Fc.FC.PageCard.Body> body </Fc.FC.PageCard.Body>
+          </Fc.FC.PageCard>
         </div>
-      </FC.Base.Div>,
+      </Fc.FC.Base.Div>,
   };
   let makeWithEl = (t: LayoutConfig.t) => t |> make |> E.React.el;
 };
 
 let channelBack = (~onClick, ()) =>
-  <FC__Button onClick size=Median>
+  <Fc.FC__Button onClick size=Median>
     {"< Back" |> ReasonReact.string}
-  </FC__Button>;
+  </Fc.FC__Button>;
 
 let channelLink = (c: Types.channel) =>
   <Link.Jsx2

@@ -16,9 +16,9 @@ type t = [
 
 let fromArbitraryMeasurementValues:
   (
-    ~agentPrediction: Measurement.MeasurementValue.t,
-    ~marketPrediction: option(Measurement.MeasurementValue.t)=?,
-    ~resolution: Measurement.MeasurementValue.t,
+    ~agentPrediction: MeasurementValue.t,
+    ~marketPrediction: option(MeasurementValue.t)=?,
+    ~resolution: MeasurementValue.t,
     unit
   ) =>
   Belt.Result.t(t, string);

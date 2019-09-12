@@ -1,25 +1,34 @@
 type t;
 
-module Verifications: {
-  module Err: {
-    type t =
-      | XsIncrementing
-      | YsIncrementing
-      | RangeError
-      | LengthGreaterThan(int)
-      | LengthLessThan(int)
-      | DifferentLength
-      | YBetween0And1;
-    let toString: t => string;
+module Errors: {
+  type error =
+    | XsIncrementing
+    | YsIncrementing
+    | RangeError
+    | LengthGreaterThan(int)
+    | LengthLessThan(int)
+    | DifferentLength
+    | YBetween0And1;
+
+  type e = {
+    cdf: option(t),
+    error,
   };
+
+  let toString: e => string;
 };
+
 let make:
   (
     ~xs: array(float),
     ~ys: array(float),
-    ~minLength: int=?,
-    ~maxLength: int=?,
+    ~minLength: int,
+    ~maxLength: int,
     unit
   ) =>
-  Belt.Result.t(t, Verifications.Err.t);
+  Belt.Result.t(t, Errors.e);
+
+let makeWithoutValidations:
+  (~xs: array(float), ~ys: array(float), unit) => t;
+
 let toMeasurement: t => [> | `Cdf(t)];

@@ -25,17 +25,20 @@ describe("Scorer", () => {
   describe("#scorePointCombination", () =>
     test("with PercentagePercentage score", () => {
       let makeCombination = {
-        open TypedMeasurementWithTime.T;
+        open PredictionResolutionOverTime.MeasurementWithTime;
         let makeExt = Percentage.makeExt;
-        let combinationOverTime: PredictionResolutionOverTime.MeasurementCombinationOverTime.t =
+        let combinationOverTime: PredictionResolutionOverTime.T.t =
           `PercentagePercentage({
             agentPredictions: [|
-              make(3., makeExt(0.70)),
-              make(8., makeExt(0.88)),
+              make(~time=3., ~measurementValue=makeExt(0.70), ()),
+              make(~time=8., ~measurementValue=makeExt(0.88), ()),
             |],
             marketPredictions:
-              Some([|make(0., makeExt(0.5)), make(5., makeExt(0.7))|]),
-            resolution: make(10., makeExt(0.95)),
+              Some([|
+                make(~time=0., ~measurementValue=makeExt(0.5), ()),
+                make(~time=5., ~measurementValue=makeExt(0.7), ()),
+              |]),
+            resolution: make(~time=10., ~measurementValue=makeExt(0.95), ()),
           });
         combinationOverTime;
       };
@@ -43,10 +46,7 @@ describe("Scorer", () => {
       expect(
         Scorer.scoredIntegralOverTime(
           ~marketType=MarketScore,
-          ~scoringCombination={
-            beginningTime: 0.0,
-            measurementGroup: makeCombination,
-          },
+          ~scoringCombination=makeCombination,
           (),
         )
         |> Belt.Result.getExn,

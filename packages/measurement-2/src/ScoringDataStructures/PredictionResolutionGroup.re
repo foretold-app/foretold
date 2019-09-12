@@ -23,7 +23,7 @@ module T = {
     };
 };
 
-module ArbitraryMeasurementBuilder = {
+module TBuilder = {
   let make =
       (
         ~agentPrediction: MeasurementValue.t,
@@ -92,4 +92,4 @@ module ArbitraryMeasurementBuilder = {
 };
 
 include T;
-let fromArbitraryMeasurementValues = ArbitraryMeasurementBuilder.make;
+let fromArbitraryMeasurementValues = TBuilder.make;

@@ -1,4 +1,37 @@
-module MeasurementCombinationOverTime = {
+module MeasurementWithTime = {
+  type time = float;
+
+  type _t('a) = {
+    time,
+    measurementValue: 'a,
+  };
+
+  let make = (~time, ~measurementValue, ()) => {measurementValue, time};
+
+  module MeasurementWithTimeInput = {
+    type t('a) = _t('a);
+    let toMeasurement = (t: t('a)): 'a => t.measurementValue;
+    let map = (t: t('a), fn: 'a => 'b) =>
+      make(~time=t.time, ~measurementValue=fn(t.measurementValue), ());
+  };
+
+  module Ts = {
+    include MeasurementValueCollectionFunctor.Make(MeasurementWithTimeInput);
+    let toStartAtDistribution = (finalTime, ts: ls('a)) =>
+      StartAtDistribution.make(
+        ~finalX=finalTime,
+        ~pointXY=
+          ts
+          |> Array.map(({time, measurementValue}) =>
+               (time, measurementValue)
+             ),
+      );
+  };
+
+  include Ts;
+};
+
+module T = {
   type measurementWithTime('a) = MeasurementWithTime.l('a);
   type measurementsWithTime('a) = MeasurementWithTime.ls('a);
 
@@ -67,7 +100,7 @@ module MeasurementCombinationOverTime = {
     };
 };
 
-module MeasurementCombinationOverTimeBuilder = {
+module TBuilder = {
   type t = {
     agentPredictions: MeasurementWithTime.ts,
     marketPredictions: option(MeasurementWithTime.ts),
@@ -92,7 +125,7 @@ module MeasurementCombinationOverTimeBuilder = {
 
   let _run =
       ({agentPredictions, marketPredictions, resolution}: t)
-      : Belt.Result.t(MeasurementCombinationOverTime.t, string) => {
+      : Belt.Result.t(T.t, string) => {
     let res = resolution;
     open MeasurementWithTime;
     let convertAgent = typeName => {
@@ -117,7 +150,7 @@ module MeasurementCombinationOverTimeBuilder = {
                 time: res.time,
                 measurementValue: resolution,
               },
-            }: MeasurementCombinationOverTime.cdfFloat,
+            }: T.cdfFloat,
           ),
         )
       | (Ok(`Cdf(agentPredictions)), None) =>
@@ -130,7 +163,7 @@ module MeasurementCombinationOverTimeBuilder = {
                 time: res.time,
                 measurementValue: resolution,
               },
-            }: MeasurementCombinationOverTime.cdfFloat,
+            }: T.cdfFloat,
           ),
         )
       | (Error(e), _) => Error(e)
@@ -148,7 +181,7 @@ module MeasurementCombinationOverTimeBuilder = {
                 time: res.time,
                 measurementValue: resolution,
               },
-            }: MeasurementCombinationOverTime.cdfCdf,
+            }: T.cdfCdf,
           ),
         )
       | (Ok(`Cdf(agentPredictions)), None) =>
@@ -161,7 +194,7 @@ module MeasurementCombinationOverTimeBuilder = {
                 time: res.time,
                 measurementValue: resolution,
               },
-            }: MeasurementCombinationOverTime.cdfCdf,
+            }: T.cdfCdf,
           ),
         )
       | (Error(e), _) => Error(e)
@@ -182,7 +215,7 @@ module MeasurementCombinationOverTimeBuilder = {
                 time: res.time,
                 measurementValue: resolution,
               },
-            }: MeasurementCombinationOverTime.percentagePercentage,
+            }: T.percentagePercentage,
           ),
         )
       | (Ok(`Percentage(agentPredictions)), None) =>
@@ -195,7 +228,7 @@ module MeasurementCombinationOverTimeBuilder = {
                 time: res.time,
                 measurementValue: resolution,
               },
-            }: MeasurementCombinationOverTime.percentagePercentage,
+            }: T.percentagePercentage,
           ),
         )
       | (Error(e), _) => Error(e)
@@ -216,5 +249,5 @@ module MeasurementCombinationOverTimeBuilder = {
   };
 };
 
-include MeasurementCombinationOverTime;
-let fromMeasurementCombination = MeasurementCombinationOverTimeBuilder.run;
+include T;
+let fromMeasurementCombination = TBuilder.run;

@@ -75,7 +75,7 @@ let nonMarketPercentagePercentage =
   );
 
 let runMarketScore =
-    (~scoringCombination: PredictionResolutionGroup.t, ~sampleCount=10000, ()) => {
+    (~scoringCombination: PredictionResolutionGroup.t, ~sampleCount, ()) => {
   let marketPredictionExists =
     PredictionResolutionGroup.marketPredictionExists(scoringCombination);
   switch (marketPredictionExists, scoringCombination) {
@@ -87,7 +87,7 @@ let runMarketScore =
 };
 
 let runNonmarketScore =
-    (~scoringCombination: PredictionResolutionGroup.t, ~sampleCount=10000, ()) => {
+    (~scoringCombination: PredictionResolutionGroup.t, ~sampleCount, ()) => {
   switch (scoringCombination) {
   | `CdfCdf(v) => nonMarketCdfCdf(v, sampleCount)
   | `CdfFloat(v) => nonMarketCdfFloat(v)

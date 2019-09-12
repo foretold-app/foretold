@@ -1,1 +1,0 @@
-type errors = [ | `FooError | `BarError];

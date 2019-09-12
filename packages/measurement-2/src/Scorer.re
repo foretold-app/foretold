@@ -6,7 +6,7 @@ let scorePointCombination =
     (
       ~marketType: marketScoreType=MarketScore,
       ~scoringCombination: PredictionResolutionGroup.t,
-      ~sampleCount=10000,
+      ~sampleCount=DefaultParams.Cdf.maxCalculationLength,
       (),
     ) =>
   switch (marketType) {
@@ -19,12 +19,12 @@ let scorePointCombination =
 let scoredIntegralOverTime =
     (
       ~marketType: marketScoreType=MarketScore,
-      ~scoringCombination: PredictionResolutionOverTime.ValidScoringCombinationGroupOverTime.t,
-      ~sampleCount=10000,
+      ~scoringCombination: PredictionResolutionOverTime.t,
+      ~sampleCount=DefaultParams.Cdf.maxCalculationLength,
       (),
     ) => {
-  scoringCombination.measurementGroup
-  |> PredictionResolutionOverTime.MeasurementCombinationOverTime.toStartAtDistribution
+  scoringCombination
+  |> PredictionResolutionOverTime.toStartAtDistribution
   |> StartAtDistribution.map(scoringCombination =>
        scorePointCombination(
          ~marketType,
@@ -34,9 +34,5 @@ let scoredIntegralOverTime =
        )
      )
   |> StartAtDistribution.transposeResult
-  |> Belt.Result.flatMap(_, r =>
-       r
-       |> StartAtDistribution.integral
-       |> Rationale.Result.ofOption("Integral Failed")
-     );
+  |> Belt.Result.flatMap(_, StartAtDistribution.integral);
 };

@@ -50,8 +50,14 @@ module JsonToMeasurement = {
     | `Float => jsonToFinalValue(Json.Decode.float, e => Ok(`Float(e)))
     | `Cdf =>
       jsonToFinalValue(CustomDecoders.jsonToCdfPair, ((xs, ys)) =>
-        Cdf.make(~xs, ~ys, ~minLength=4, ~maxLength=100000, ())
-        |> Rationale.Result.bimap(r => r, Cdf.Verifications.Err.toString)
+        Cdf.make(
+          ~xs,
+          ~ys,
+          ~minLength=DefaultParams.Cdf.minSaveLength,
+          ~maxLength=DefaultParams.Cdf.maxSaveLength,
+          (),
+        )
+        |> Rationale.Result.bimap(r => r, Cdf.Errors.toString)
         |> Belt.Result.map(_, Cdf.toMeasurement)
       )
     | `Percentage =>

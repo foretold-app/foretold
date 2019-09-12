@@ -8,8 +8,7 @@
         "predev": "npm run build",
         "dev": "parcel example/index.html",
         "showcase": "parcel example/index.html showcase/index.html",
-        "start": "bsb -make-world -w",
-        "postinstall": "npm run build"
+        "start": "bsb -make-world -w"
     },
     "keywords": [
         "foretold",

@@ -14,29 +14,6 @@ module Table = {
   };
 };
 
-module Cell = {
-  let component = ReasonReact.statelessComponent("Cell");
-  let make = children => {
-    ...component,
-    render: _self => <div className=Styles.cell> ...children </div>,
-  };
-};
-
-module Row = {
-  let component = ReasonReact.statelessComponent("Row");
-  let make = (~cells: array(ReasonReact.reactElement), _) => {
-    ...component,
-    render: _self =>
-      <div className=Styles.row>
-        {cells
-         |> Array.mapi((index, cellBody: ReasonReact.reactElement) =>
-              <Cell key={index |> string_of_int}> cellBody </Cell>
-            )
-         |> ReasonReact.array}
-      </div>,
-  };
-};
-
 type column('a) = {
   name: ReasonReact.reactElement,
   render: 'a => ReasonReact.reactElement,

@@ -39,7 +39,7 @@
 		"@babel/preset-react": "7.0.0",
 		"@foretold/cdf": "1.0.9",
 		"@foretold/guesstimator": "1.0.0",
-		"@foretold/components": "0.0.1",
+		"fc": "0.0.1",
 		"@glennsl/bs-jest": "0.4.8",
 		"@glennsl/bs-json": "4.0.0",
 		"@ncthbrt/re-secure-random-string": "2.0.0",

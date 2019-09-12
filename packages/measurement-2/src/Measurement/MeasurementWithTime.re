@@ -19,8 +19,10 @@ module Ts = {
   let toStartAtDistribution = (finalTime, ts: ls('a)) =>
     StartAtDistribution.make(
       ~finalX=finalTime,
-      ~pointXY=ts |> Array.map(r => (r.time, r.measurementValue)),
+      ~pointXY=
+        ts
+        |> Array.map(({time, measurementValue}) => (time, measurementValue)),
     );
 };
 
-type t('a) = _t('a);
+include Ts;

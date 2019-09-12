@@ -77,7 +77,7 @@ let nonMarketPercentagePercentage =
 let runMarketScore =
     (~scoringCombination: PredictionResolutionGroup.t, ~sampleCount=10000, ()) => {
   let marketPredictionExists =
-    PredictionResolutionGroup.marketPredictionIsSome(scoringCombination);
+    PredictionResolutionGroup.marketPredictionExists(scoringCombination);
   switch (marketPredictionExists, scoringCombination) {
   | (false, _) => Error("Score error: market prediction needed")
   | (true, `CdfCdf(v)) => marketCdfCdf(v, sampleCount)

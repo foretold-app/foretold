@@ -23,4 +23,4 @@ let fromArbitraryMeasurementValues:
   ) =>
   Belt.Result.t(t, string);
 
-let marketPredictionIsSome: t => bool;
+let marketPredictionExists: t => bool;

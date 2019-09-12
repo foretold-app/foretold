@@ -1,35 +1,38 @@
-type combination('a, 'b) = {
-  agentPrediction: 'a,
-  marketPrediction: option('a),
-  resolution: 'b,
+module T = {
+  type combination('a, 'b) = {
+    agentPrediction: 'a,
+    marketPrediction: option('a),
+    resolution: 'b,
+  };
+  type cdfCdf = combination(Cdf.t, Cdf.t);
+  type cdfFloat = combination(Cdf.t, float);
+  type percentagePercentage = combination(Percentage.t, Percentage.t);
+  type t = [
+    | `CdfCdf(cdfCdf)
+    | `CdfFloat(cdfFloat)
+    | `PercentagePercentage(percentagePercentage)
+  ];
+  let marketPredictionExists = (m: t) =>
+    switch (m) {
+    | `CdfCdf({marketPrediction: Some(_)}) => true
+    | `CdfFloat({marketPrediction: Some(_)}) => true
+    | `PercentagePercentage({marketPrediction: Some(_)}) => true
+    | `CdfCdf({marketPrediction: None}) => false
+    | `CdfFloat({marketPrediction: None}) => false
+    | `PercentagePercentage({marketPrediction: None}) => false
+    };
 };
-type cdfCdf = combination(Cdf.t, Cdf.t);
-type cdfFloat = combination(Cdf.t, float);
-type percentagePercentage = combination(Percentage.t, Percentage.t);
-type sum = [
-  | `CdfCdf(cdfCdf)
-  | `CdfFloat(cdfFloat)
-  | `PercentagePercentage(percentagePercentage)
-];
-type t = sum;
 
-module ArbitraryMeasurementValueGroup = {
-  type t = {
-    agentPrediction: MeasurementValue.t,
-    marketPrediction: option(MeasurementValue.t),
-    resolution: MeasurementValue.t,
-  };
-
-  let make = (~agentPrediction, ~marketPrediction=None, ~resolution, ()) => {
-    agentPrediction,
-    marketPrediction,
-    resolution,
-  };
-
-  let toValidPredictionResolutionGroup =
-      ({agentPrediction, resolution, marketPrediction}: t)
-      : Belt.Result.t(sum, string) => {
-    let measurements: Belt.Result.t(sum, string) =
+module ArbitraryMeasurementBuilder = {
+  let make =
+      (
+        ~agentPrediction: MeasurementValue.t,
+        ~marketPrediction: option(MeasurementValue.t)=None,
+        ~resolution: MeasurementValue.t,
+        (),
+      )
+      : Belt.Result.t(T.t, string) => {
+    let measurements: Belt.Result.t(T.t, string) =
       switch (agentPrediction, marketPrediction, resolution) {
       | (
           `Cdf(agentPrediction),
@@ -88,26 +91,5 @@ module ArbitraryMeasurementValueGroup = {
   };
 };
 
-module T = {
-  let fromArbitraryMeasurementValues =
-      (~agentPrediction, ~marketPrediction=None, ~resolution, ()) =>
-    ArbitraryMeasurementValueGroup.make(
-      ~agentPrediction,
-      ~marketPrediction,
-      ~resolution,
-      (),
-    )
-    |> ArbitraryMeasurementValueGroup.toValidPredictionResolutionGroup;
-
-  let marketPredictionIsSome = (m: t) =>
-    switch (m) {
-    | `CdfCdf({marketPrediction: Some(_)}) => true
-    | `CdfFloat({marketPrediction: Some(_)}) => true
-    | `PercentagePercentage({marketPrediction: Some(_)}) => true
-    | `CdfCdf({marketPrediction: None}) => false
-    | `CdfFloat({marketPrediction: None}) => false
-    | `PercentagePercentage({marketPrediction: None}) => false
-    };
-};
-
 include T;
+let fromArbitraryMeasurementValues = ArbitraryMeasurementBuilder.make;

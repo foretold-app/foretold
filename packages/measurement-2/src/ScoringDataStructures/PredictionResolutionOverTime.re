@@ -1,6 +1,6 @@
 module MeasurementCombinationOverTime = {
-  type measurementWithTime('a) = MeasurementWithTime.Ts.l('a);
-  type measurementsWithTime('a) = MeasurementWithTime.Ts.ls('a);
+  type measurementWithTime('a) = MeasurementWithTime.l('a);
+  type measurementsWithTime('a) = MeasurementWithTime.ls('a);
 
   type combination('a, 'b) = {
     agentPredictions: measurementsWithTime('a),
@@ -26,7 +26,7 @@ module MeasurementCombinationOverTime = {
           PredictionResolutionGroup.t,
       ) => {
     let toDistribution = (m: measurementsWithTime('a)) =>
-      m |> MeasurementWithTime.Ts.toStartAtDistribution(r.resolution.time);
+      m |> MeasurementWithTime.toStartAtDistribution(r.resolution.time);
     switch (r.marketPredictions) {
     | Some(marketPredictions) =>
       let product =
@@ -67,29 +67,17 @@ module MeasurementCombinationOverTime = {
     };
 };
 
-// TODO: Delete this, the beginningTIme isn't important
-module ValidScoringCombinationGroupOverTime = {
-  type time = float;
-
+module MeasurementCombinationOverTimeBuilder = {
   type t = {
-    measurementGroup: MeasurementCombinationOverTime.t,
-    beginningTime: time,
+    agentPredictions: MeasurementWithTime.ts,
+    marketPredictions: option(MeasurementWithTime.ts),
+    resolution: MeasurementWithTime.t,
   };
 
-  let make = (t: t) => t;
-};
-
-module ScoringCombinationGroupOverTimeInput = {
-  type t = {
-    agentPredictions: MeasurementWithTime.Ts.ts,
-    marketPredictions: option(MeasurementWithTime.Ts.ts),
-    resolution: MeasurementWithTime.Ts.t,
-  };
-
-  let validateCorrectPredictionPair = (t: t) => {
+  let hasValidPredictionPair = (t: t): bool => {
     let {agentPredictions, resolution} = t;
     let hasMoreThanOne = typeName =>
-      MeasurementWithTime.Ts.hasMoreThanOneOfType(typeName, agentPredictions);
+      MeasurementWithTime.hasMoreThanOneOfType(typeName, agentPredictions);
     switch (resolution.measurementValue) {
     | `Float(_) when hasMoreThanOne(`Cdf) => true
     | `Cdf(_) when hasMoreThanOne(`Cdf) => true
@@ -99,9 +87,14 @@ module ScoringCombinationGroupOverTimeInput = {
     };
   };
 
-  let convert = ({agentPredictions, marketPredictions, resolution}) => {
+  let validateValidPredictionPair = (t: t): Belt.Result.t(t, string) =>
+    t |> hasValidPredictionPair ? Ok(t) : Error("Prediciton pair not valid");
+
+  let _run =
+      ({agentPredictions, marketPredictions, resolution}: t)
+      : Belt.Result.t(MeasurementCombinationOverTime.t, string) => {
     let res = resolution;
-    open MeasurementWithTime.Ts;
+    open MeasurementWithTime;
     let convertAgent = typeName => {
       Unwrapped.fromT(typeName, agentPredictions);
     };
@@ -211,4 +204,17 @@ module ScoringCombinationGroupOverTimeInput = {
     | _ => Error("Grouping not allowed")
     };
   };
+
+  let run =
+      (
+        ~agentPredictions: MeasurementWithTime.ts,
+        ~marketPredictions: option(MeasurementWithTime.ts)=None,
+        ~resolution: MeasurementWithTime.t,
+      ) => {
+    let input = {agentPredictions, marketPredictions, resolution};
+    input |> validateValidPredictionPair |> Belt.Result.flatMap(_, _run);
+  };
 };
+
+include MeasurementCombinationOverTime;
+let fromMeasurementCombination = MeasurementCombinationOverTimeBuilder.run;

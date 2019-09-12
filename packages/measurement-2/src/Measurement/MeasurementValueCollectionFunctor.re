@@ -42,7 +42,7 @@ module Make = (C: T) => {
     filterOnIntendedType(intededType, ts) |> Belt.Array.length > 1;
 
   module Uniform = {
-    // type wrapped = MeasurementValueWrapper.Uniform.u(ts);
+    type tu = ts;
     let wrapWithType = (t: ts) =>
       t
       |> firstElementType
@@ -64,7 +64,7 @@ module Make = (C: T) => {
       length(ts) > 0
         ? Belt.Result.Ok(ts) : Error("Must have at least one element");
 
-    let make = (t: ts): Belt.Result.t(ts, string) =>
+    let make = (t: ts): Belt.Result.t(tu, string) =>
       t |> validateAllSame |> Belt.Result.flatMap(_, validateHasLength);
 
     let fromT =
@@ -83,16 +83,6 @@ module Make = (C: T) => {
         array(C.t(MeasurementValue.UnresolvableResolution.t)),
         array(C.t(MeasurementValue.Comment.t)),
       );
-
-    type fn('b) = {fn: 'a. array('a) => 'b};
-
-    let map = (fn: fn('a), t: t) =>
-      MeasurementValueWrapper.T.fnn(
-        (fn.fn, fn.fn, fn.fn, fn.fn, fn.fn, fn.fn),
-        t,
-      );
-
-    let length = map({fn: Belt.Array.length});
 
     let fromUniform = (t: ts): t => {
       let fn = (fn1, fn2) =>
@@ -119,9 +109,6 @@ module Make = (C: T) => {
       );
     };
 
-    let fromT = (intendedType: MeasurementValueWrapper.Name.t, ts: ts) =>
-      Uniform.fromT(intendedType, ts) |> Belt.Result.map(_, fromUniform);
-
     let toUniform = (t: t): ts => {
       let fn = (items, wrapFn) =>
         items |> Array.map(C.map(_, e => wrapFn(e)));
@@ -134,5 +121,8 @@ module Make = (C: T) => {
       | `Comment(a) => fn(a, r => `Comment(r))
       };
     };
+
+    let fromT = (intendedType: MeasurementValueWrapper.Name.t, ts: ts) =>
+      Uniform.fromT(intendedType, ts) |> Belt.Result.map(_, fromUniform);
   };
 };

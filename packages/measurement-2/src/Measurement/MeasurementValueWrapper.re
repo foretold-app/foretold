@@ -19,7 +19,16 @@ type withoutInsides = [
 module T = {
   type t('a, 'b, 'c, 'd, 'e, 'f) = withInsides('a, 'b, 'c, 'd, 'e, 'f);
 
-  let fnn =
+  type fn('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm) = {
+    cdf: 'a => 'g,
+    float: 'b => 'h,
+    binary: 'c => 'j,
+    percentage: 'd => 'k,
+    unresolvableResolution: 'e => 'l,
+    comment: 'f => 'm,
+  };
+
+  let map =
       (
         fn: ('a => 'g, 'b => 'h, 'c => 'j, 'd => 'k, 'e => 'l, 'f => 'm),
         t: t('a, 'b, 'c, 'd, 'e, 'f),
@@ -84,31 +93,6 @@ module T = {
   let isPercentage = t => isX(`Percentage, t);
   let isUnresolvable = t => isX(`UnresolvableResolution, t);
   let isComment = t => isX(`Comment, t);
-};
-
-module Uniform = {
-  include T;
-  type u('a) = t('a, 'a, 'a, 'a, 'a, 'a);
-
-  let map = (fn, t: u('a)) =>
-    switch (t) {
-    | `Cdf(a) => `Cdf(fn(a))
-    | `Float(a) => `Float(fn(a))
-    | `Binary(a) => `Binary(fn(a))
-    | `Percentage(a) => `Percentage(fn(a))
-    | `UnresolvableResolution(a) => `UnresolvableResolution(fn(a))
-    | `Comment(a) => `Comment(fn(a))
-    };
-
-  let return = (fn, t: u('a)) =>
-    switch (t) {
-    | `Cdf(a) => fn(a)
-    | `Float(a) => fn(a)
-    | `Binary(a) => fn(a)
-    | `Percentage(a) => fn(a)
-    | `UnresolvableResolution(a) => fn(a)
-    | `Comment(a) => fn(a)
-    };
 };
 
 module Name = {

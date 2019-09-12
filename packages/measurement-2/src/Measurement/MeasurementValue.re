@@ -24,16 +24,12 @@ module UnresolvableResolution = {
   let toMeasurement = (t: t) => `UnresolvableResolution(t);
 };
 
-module MeasurementValue = {
-  type t =
-    MeasurementValueWrapper.T.t(
-      Cdf.t,
-      float,
-      bool,
-      Percentage.t,
-      UnresolvableResolution.t,
-      Comment.t,
-    );
-};
-
-type t = MeasurementValue.t;
+type t =
+  MeasurementValueWrapper.T.t(
+    Cdf.t,
+    float,
+    bool,
+    Percentage.t,
+    UnresolvableResolution.t,
+    Comment.t,
+  );

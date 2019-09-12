@@ -19,6 +19,22 @@ type withoutInsides = [
 module T = {
   type t('a, 'b, 'c, 'd, 'e, 'f) = withInsides('a, 'b, 'c, 'd, 'e, 'f);
 
+  let fnn =
+      (
+        fn: ('a => 'g, 'b => 'h, 'c => 'j, 'd => 'k, 'e => 'l, 'f => 'm),
+        t: t('a, 'b, 'c, 'd, 'e, 'f),
+      ) => {
+    let (f1, f2, f3, f4, f5, f6) = fn;
+    switch (t) {
+    | `Cdf(a) => `Cdf(f1(a))
+    | `Float(a) => `Float(f2(a))
+    | `Binary(a) => `Binary(f3(a))
+    | `Percentage(a) => `Percentage(f4(a))
+    | `UnresolvableResolution(a) => `UnresolvableResolution(f5(a))
+    | `Comment(a) => `Comment(f6(a))
+    };
+  };
+
   let toTypeName =
     fun
     | `Cdf(_) => `Cdf
@@ -49,7 +65,7 @@ module T = {
     | `Percentage(a) => Some(a)
     | _ => None
     };
-  let toUnresolvableResolution = (t: t('a, 'b, 'c, 'd, 'e, 'f)) =>
+  let toUnresolvable = (t: t('a, 'b, 'c, 'd, 'e, 'f)) =>
     switch (t) {
     | `UnresolvableResolution(a) => Some(a)
     | _ => None
@@ -119,6 +135,20 @@ module Name = {
       | `Comment => isComment
       }
     );
+
+  let toToFn = (fn, t: t) => {
+    T.(
+      switch (t) {
+      | `Cdf => fn(toCdf, r => `Cdf(r))
+      | `Float => fn(toFloat, r => `Float(r))
+      | `Binary => fn(toBinary, r => `Binary(r))
+      | `Percentage => fn(toPercentage, r => `Percentage(r))
+      | `UnresolvableResolution =>
+        fn(toUnresolvable, r => `UnresolvableResolution(r))
+      | `Comment => fn(toComment, r => `Comment(r))
+      }
+    );
+  };
 
   let toString =
     fun

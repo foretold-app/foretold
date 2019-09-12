@@ -1,28 +1,32 @@
 module MeasurementCombinationOverTime = {
-  type measurementWithTime = MeasurementWithTime.t;
-  type measurementsWithTime = MeasurementWithTime.Ts.Uniform.us;
+  type measurementWithTime('a) = MeasurementWithTime.Ts.l('a);
+  type measurementsWithTime('a) = MeasurementWithTime.Ts.ls('a);
 
-  type combination = {
-    agentPredictions: measurementsWithTime,
-    marketPredictions: option(measurementsWithTime),
-    resolution: measurementWithTime,
+  type combination('a, 'b) = {
+    agentPredictions: measurementsWithTime('a),
+    marketPredictions: option(measurementsWithTime('a)),
+    resolution: measurementWithTime('b),
   };
 
+  type cdfCdf = combination(Cdf.t, Cdf.t);
+  type cdfFloat = combination(Cdf.t, float);
+  type percentagePercentage = combination(Percentage.t, Percentage.t);
+
   type t = [
-    | `CdfCdf(combination)
-    | `CdfFloat(combination)
-    | `PercentagePercentage(combination)
+    | `CdfCdf(cdfCdf)
+    | `CdfFloat(cdfFloat)
+    | `PercentagePercentage(percentagePercentage)
   ];
 
   let _toStartAtDistribution =
       (
-        r: combination,
+        r: combination('a, 'b),
         toMeasurement:
           PredictionResolutionGroup.combination('a, 'b) =>
           PredictionResolutionGroup.t,
       ) => {
-    let toDistribution =
-      MeasurementWithTime.Ts.toStartAtDistribution(r.resolution.time);
+    let toDistribution = (m: measurementsWithTime('a)) =>
+      m |> MeasurementWithTime.Ts.toStartAtDistribution(r.resolution.time);
     switch (r.marketPredictions) {
     | Some(marketPredictions) =>
       let product =
@@ -75,112 +79,136 @@ module ValidScoringCombinationGroupOverTime = {
   let make = (t: t) => t;
 };
 
-// Check the resolution before checking other params.
 module ScoringCombinationGroupOverTimeInput = {
   type t = {
-    agentPredictions: TypedMeasurementWithTime.MeasurementWithTime.ts,
-    marketPredictions:
-      option(TypedMeasurementWithTime.MeasurementWithTime.ts),
-    resolution: TypedMeasurementWithTime.MeasurementWithTime.t,
+    agentPredictions: MeasurementWithTime.Ts.ts,
+    marketPredictions: option(MeasurementWithTime.Ts.ts),
+    resolution: MeasurementWithTime.Ts.t,
   };
 
-  let _toResolution =
-      (time, measurementValue: 'a): TypedMeasurementWithTime.T.t('a) => {
-    time,
-    measurementValue,
+  let validateCorrectPredictionPair = (t: t) => {
+    let {agentPredictions, resolution} = t;
+    let hasMoreThanOne = typeName =>
+      MeasurementWithTime.Ts.hasMoreThanOneOfType(typeName, agentPredictions);
+    switch (resolution.measurementValue) {
+    | `Float(_) when hasMoreThanOne(`Cdf) => true
+    | `Cdf(_) when hasMoreThanOne(`Cdf) => true
+    | `Percentage(_) when hasMoreThanOne(`Percentage) => true
+    | `Binary(_) when hasMoreThanOne(`Percentage) => true
+    | _ => false
+    };
   };
 
-  let toValidScoringCombination =
-      ({agentPredictions, marketPredictions, resolution}) => {
-    open TypedMeasurementWithTime.MeasurementWithTime;
-    let typedAgentPredictions = agentPredictions |> toTypeOfFirstElement;
-    let typedMarketPredictions =
-      marketPredictions |> Rationale.Option.bind(_, toTypeOfFirstElement);
-
-    let resolutionTime = resolution.time;
-
-    switch (typedAgentPredictions, typedMarketPredictions, resolution) {
-    | (
-        Some(`Cdf(agentPredictions)),
-        Some(`Cdf(marketPredictions)),
-        {measurementValue: `Float(result)},
-      ) =>
-      Some(
-        `CdfFloat(
-          {
-            agentPredictions,
-            marketPredictions: Some(marketPredictions),
-            resolution: _toResolution(resolutionTime, result),
-          }: MeasurementCombinationOverTime.cdfFloat,
-        ),
-      )
-    | (
-        Some(`Cdf(agentPredictions)),
-        Some(`Cdf(marketPredictions)),
-        {measurementValue: `Cdf(result)},
-      ) =>
-      Some(
-        `CdfCdf(
-          {
-            agentPredictions,
-            marketPredictions: Some(marketPredictions),
-            resolution: _toResolution(resolutionTime, result),
-          }: MeasurementCombinationOverTime.cdfCdf,
-        ),
-      )
-    | (
-        Some(`Percentage(agentPredictions)),
-        Some(`Percentage(marketPredictions)),
-        {measurementValue: `Percentage(result)},
-      ) =>
-      Some(
-        `PercentagePercentage(
-          {
-            agentPredictions,
-            marketPredictions: Some(marketPredictions),
-            resolution: _toResolution(resolutionTime, result),
-          }: MeasurementCombinationOverTime.percentagePercentage,
-        ),
-      )
-    | (Some(`Cdf(agentPredictions)), _, {measurementValue: `Cdf(result)}) =>
-      Some(
-        `CdfCdf(
-          {
-            agentPredictions,
-            marketPredictions: None,
-            resolution: _toResolution(resolutionTime, result),
-          }: MeasurementCombinationOverTime.cdfCdf,
-        ),
-      )
-    | (
-        Some(`Cdf(agentPredictions)),
-        _,
-        {measurementValue: `Float(result)},
-      ) =>
-      Some(
-        `CdfFloat(
-          {
-            agentPredictions,
-            marketPredictions: None,
-            resolution: _toResolution(resolutionTime, result),
-          }: MeasurementCombinationOverTime.cdfFloat,
-        ),
-      )
-    | (
-        Some(`Percentage(agentPredictions)),
-        _,
-        {measurementValue: `Percentage(result)},
-      ) =>
-      Some(
-        `PercentagePercentage(
-          {
-            agentPredictions,
-            marketPredictions: None,
-            resolution: _toResolution(resolutionTime, result),
-          }: MeasurementCombinationOverTime.percentagePercentage,
-        ),
-      )
-    | _ => None
+  let convert = ({agentPredictions, marketPredictions, resolution}) => {
+    let res = resolution;
+    open MeasurementWithTime.Ts;
+    let convertAgent = typeName => {
+      Unwrapped.fromT(typeName, agentPredictions);
+    };
+    let convertMarket = typeName => {
+      marketPredictions
+      |> Rationale.Option.bind(_, r =>
+           r |> Unwrapped.fromT(typeName) |> Rationale.Option.ofResult
+         );
+    };
+    switch (resolution.measurementValue) {
+    | `Float(resolution) =>
+      switch (convertAgent(`Cdf), convertMarket(`Cdf)) {
+      | (Ok(`Cdf(agentPredictions)), Some(`Cdf(marketPredictions))) =>
+        Belt.Result.Ok(
+          `CdfFloat(
+            {
+              agentPredictions,
+              marketPredictions: Some(marketPredictions),
+              resolution: {
+                time: res.time,
+                measurementValue: resolution,
+              },
+            }: MeasurementCombinationOverTime.cdfFloat,
+          ),
+        )
+      | (Ok(`Cdf(agentPredictions)), None) =>
+        Ok(
+          `CdfFloat(
+            {
+              agentPredictions,
+              marketPredictions: None,
+              resolution: {
+                time: res.time,
+                measurementValue: resolution,
+              },
+            }: MeasurementCombinationOverTime.cdfFloat,
+          ),
+        )
+      | (Error(e), _) => Error(e)
+      | (Ok(_), _) => Error("This should be an impossible error.")
+      }
+    | `Cdf(resolution) =>
+      switch (convertAgent(`Cdf), convertMarket(`Cdf)) {
+      | (Ok(`Cdf(agentPredictions)), Some(`Cdf(marketPredictions))) =>
+        Ok(
+          `CdfCdf(
+            {
+              agentPredictions,
+              marketPredictions: Some(marketPredictions),
+              resolution: {
+                time: res.time,
+                measurementValue: resolution,
+              },
+            }: MeasurementCombinationOverTime.cdfCdf,
+          ),
+        )
+      | (Ok(`Cdf(agentPredictions)), None) =>
+        Ok(
+          `CdfCdf(
+            {
+              agentPredictions,
+              marketPredictions: None,
+              resolution: {
+                time: res.time,
+                measurementValue: resolution,
+              },
+            }: MeasurementCombinationOverTime.cdfCdf,
+          ),
+        )
+      | (Error(e), _) => Error(e)
+      | (Ok(_), _) => Error("This should be an impossible error.")
+      }
+    | `Percentage(resolution) =>
+      switch (convertAgent(`Percentage), convertMarket(`Percentage)) {
+      | (
+          Ok(`Percentage(agentPredictions)),
+          Some(`Percentage(marketPredictions)),
+        ) =>
+        Ok(
+          `PercentagePercentage(
+            {
+              agentPredictions,
+              marketPredictions: Some(marketPredictions),
+              resolution: {
+                time: res.time,
+                measurementValue: resolution,
+              },
+            }: MeasurementCombinationOverTime.percentagePercentage,
+          ),
+        )
+      | (Ok(`Percentage(agentPredictions)), None) =>
+        Ok(
+          `PercentagePercentage(
+            {
+              agentPredictions,
+              marketPredictions: None,
+              resolution: {
+                time: res.time,
+                measurementValue: resolution,
+              },
+            }: MeasurementCombinationOverTime.percentagePercentage,
+          ),
+        )
+      | (Error(e), _) => Error(e)
+      | (Ok(_), _) => Error("This should be an impossible error.")
+      }
+    | _ => Error("Grouping not allowed")
     };
   };
 };

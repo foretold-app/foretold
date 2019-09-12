@@ -12,6 +12,7 @@ module Stats = FC__Stats;
 module StateStatus = FC__StateStatus;
 module MeasurableForm = FC__MeasurableForm;
 module NumberShower = FC__Numbershower;
+module Button = FC__Button;
 
 module Charts = {
   module Large = FC__CdfChart__Large;

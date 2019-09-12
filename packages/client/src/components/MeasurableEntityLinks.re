@@ -30,7 +30,7 @@ module Functor = (Ken: KenTools.KenModule) => {
     |> E.O.bind(_, r =>
          m
          |> attribute
-         |> E.O.fmap(d =>
+         |> E.O.fmap(_d =>
               <AntdPopover
                 content={kenDisplay(attribute(m) |> E.O.default(""))}
                 trigger=`hover

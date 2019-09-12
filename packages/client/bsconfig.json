@@ -1,7 +1,3 @@
-/* This is the BuckleScript configuration file. Note that this is a comment;
-  BuckleScript comes with a JSON parser that supports comments and trailing
-  comma. If this screws with your editor highlighting, please tell us by filing
-  an issue! */
 {
   "name": "client",
   "reason": {
@@ -18,6 +14,7 @@
   "suffix": ".bs.js",
   "namespace": true,
   "bs-dependencies": [
+    "@foretold/components",
     "@glennsl/bs-json",
     "@glennsl/bs-jest",
     "bs-reform",
@@ -30,7 +27,8 @@
     "reason-apollo",
     "rationale"
   ],
-  "dev-dependencies": [],
+  "dev-dependencies": [
+  ],
   "refmt": 3,
   "warnings": {
     "error": "+5"

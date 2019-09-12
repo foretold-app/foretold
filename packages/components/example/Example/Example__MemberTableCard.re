@@ -20,15 +20,17 @@ let make =
         </FC__Button>
       </Div>
     </PageCard.HeaderRow>
-    <Table.HeaderRow>
-      <Table.Cell flex={`num(4.)}>
-        {"Name & Status" |> ReasonReact.string}
-      </Table.Cell>
-      <Table.Cell flex={`num(2.)}>
-        {"Aggregate Prediction" |> ReasonReact.string}
-      </Table.Cell>
-      <Table.Cell flex={`num(1.)}>
-        {"Details" |> ReasonReact.string}
-      </Table.Cell>
-    </Table.HeaderRow>
+    <Table>
+      <Table.HeaderRow>
+        <Table.Cell flex={`num(4.)}>
+          {"Name & Status" |> ReasonReact.string}
+        </Table.Cell>
+        <Table.Cell flex={`num(2.)}>
+          {"Aggregate Prediction" |> ReasonReact.string}
+        </Table.Cell>
+        <Table.Cell flex={`num(1.)}>
+          {"Details" |> ReasonReact.string}
+        </Table.Cell>
+      </Table.HeaderRow>
+    </Table>
   </PageCard>;

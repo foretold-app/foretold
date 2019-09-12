@@ -381,8 +381,7 @@ let mainBlock =
       <Input.TextArea
         value={state.description}
         onChange={event => {
-          let value =
-            ReactDOMRe.domElementToObj(ReactEventRe.Form.target(event))##value;
+          let value = ReactEvent.Form.target(event)##value;
           send(UpdateDescription(value));
         }}
       />

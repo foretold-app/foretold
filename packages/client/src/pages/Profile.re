@@ -83,7 +83,7 @@ let formFields = (form: Form.state, send, onSubmit, getFieldState) => {
     | _ => false
     };
 
-  <Antd.Form onSubmit={e => onSubmit()}>
+  <Antd.Form onSubmit={_e => onSubmit()}>
     <Antd.Form.Item>
       {"Username" |> Utils.ste |> E.React.inH3}
       <Antd.Input

@@ -117,27 +117,29 @@ let make =
       </Div>
     </PageCard.HeaderRow>
     <Div styles=[Css.style(BaseStyles.fullWidthFloatLeft)]>
-      <Table.HeaderRow>
-        <Table.Cell flex={`num(2.0)}>
-          {"Prediction Distribution" |> ReasonReact.string}
-        </Table.Cell>
-        <Table.Cell flex={`num(1.0)}>
-          {"Prediction Value" |> ReasonReact.string}
-        </Table.Cell>
-        <Table.Cell flex={`num(1.0)}>
-          {"Agent" |> ReasonReact.string}
-        </Table.Cell>
-        <Table.Cell flex={`num(1.0)}>
-          {"Time" |> ReasonReact.string}
-        </Table.Cell>
-      </Table.HeaderRow>
-      row
-      row2
-      row2
-      row2
-      row
-      row
-      row2
-      row2
+      <Table>
+        <Table.HeaderRow>
+          <Table.Cell flex={`num(2.0)}>
+            {"Prediction Distribution" |> ReasonReact.string}
+          </Table.Cell>
+          <Table.Cell flex={`num(1.0)}>
+            {"Prediction Value" |> ReasonReact.string}
+          </Table.Cell>
+          <Table.Cell flex={`num(1.0)}>
+            {"Agent" |> ReasonReact.string}
+          </Table.Cell>
+          <Table.Cell flex={`num(1.0)}>
+            {"Time" |> ReasonReact.string}
+          </Table.Cell>
+        </Table.HeaderRow>
+        row
+        row2
+        row2
+        row2
+        row
+        row
+        row2
+        row2
+      </Table>
     </Div>
   </PageCard>;

@@ -11,7 +11,7 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
     let mutationMake =
-      ChannelCreate.Mutation.make(~onCompleted=e => Js.log("HI"))
+      ChannelCreate.Mutation.make(~onCompleted=_e => Js.log("HI"))
       ||> E.React.el;
 
     let form = mutation =>

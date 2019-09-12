@@ -31,7 +31,7 @@ let fromColumns =
     ) => {
   let columns' = filterColums(columns, rows);
 
-  <Table>
+  <FC__Table>
     <FC__Table.HeaderRow>
       {columns'
        |> Array.mapi((columnIndex, column: column('a)) =>
@@ -70,5 +70,5 @@ let fromColumns =
           </FC.Table.Row>;
         })
      |> ReasonReact.array}
-  </Table>;
+  </FC__Table>;
 };

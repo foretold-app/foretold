@@ -54,7 +54,7 @@ let withUserForm =
   |> E.React.el;
 
 let formFields = (form: Form.state, send, onSubmit) =>
-  <Antd.Form onSubmit={e => onSubmit()}>
+  <Antd.Form onSubmit={_e => onSubmit()}>
     <Antd.Form.Item>
       {"Do not send me emails" |> Utils.ste |> E.React.inH3}
       <AntdSwitch

@@ -7,11 +7,11 @@ module Styles = {
 };
 
 let title =
-  <Fc.FC.Base.Div float=`left>
-    <Fc.FC.PageCard.HeaderRow.Title>
+  <FC.Base.Div float=`left>
+    <FC.PageCard.HeaderRow.Title>
       {"Bots" |> ReasonReact.string}
-    </Fc.FC.PageCard.HeaderRow.Title>
-  </Fc.FC.Base.Div>;
+    </FC.PageCard.HeaderRow.Title>
+  </FC.Base.Div>;
 
 let agentSection = (agent: AgentGet.agent) =>
   switch (agent) {
@@ -115,9 +115,9 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
       ({agent}) => {
         let showBots = bots =>
           Array.length(bots) > 0
-            ? <Fc.FC.PageCard.Body>
+            ? <FC.PageCard.Body>
                 {Table.fromColumns(Columns.all, bots, ())}
-              </Fc.FC.PageCard.Body>
+              </FC.PageCard.Body>
             : <SLayout.NothingToShow />;
 
         let body =
@@ -128,14 +128,14 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
         let head =
           <div>
             title
-            <Fc.FC.Base.Div
+            <FC.Base.Div
               float=`right
               className={Css.style([
-                Fc.FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                Fc.FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+                FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
               ])}>
               {agentSection(agent)}
-            </Fc.FC.Base.Div>
+            </FC.Base.Div>
           </div>;
 
         SLayout.LayoutConfig.make(~head, ~body) |> layout;

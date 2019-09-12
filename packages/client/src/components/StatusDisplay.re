@@ -5,12 +5,12 @@ let statusShow = (~measurable: Types.measurable) =>
     measurable.stateUpdatedAt,
   ) {
   | (`OPEN, Some(resDate), _) =>
-    Fc.FC.StateStatus.make(~state=OPEN(resDate), ~fontSize=`em(0.85), ())
+    FC.StateStatus.make(~state=OPEN(resDate), ~fontSize=`em(0.85), ())
   | (`JUDGEMENT_PENDING, Some(resDate), _) =>
-    Fc.FC.StateStatus.make(~state=PENDING(resDate), ~fontSize=`em(0.85), ())
+    FC.StateStatus.make(~state=PENDING(resDate), ~fontSize=`em(0.85), ())
   | (`CLOSED_AS_UNRESOLVED, _, Some(resolvedAt))
   | (`JUDGED, _, Some(resolvedAt)) =>
-    Fc.FC.StateStatus.make(
+    FC.StateStatus.make(
       ~state=RESOLVED(resolvedAt),
       ~fontSize=`em(0.85),
       (),

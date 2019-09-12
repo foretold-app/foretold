@@ -48,11 +48,11 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
     let all: array(column) = [|agentColumn, inviteColumn|];
 
     let title =
-      <Fc.FC.Base.Div float=`left>
-        <Fc.FC.PageCard.HeaderRow.Title>
+      <FC.Base.Div float=`left>
+        <FC.PageCard.HeaderRow.Title>
           {"Add Agents" |> ReasonReact.string}
-        </Fc.FC.PageCard.HeaderRow.Title>
-      </Fc.FC.Base.Div>;
+        </FC.PageCard.HeaderRow.Title>
+      </FC.Base.Div>;
 
     let onSuccess = agents => {
       let dataSource =
@@ -78,7 +78,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
 
     SLayout.LayoutConfig.make(
       ~head=<div> title </div>,
-      ~body=<Fc.FC.PageCard.Body> table </Fc.FC.PageCard.Body>,
+      ~body=<FC.PageCard.Body> table </FC.PageCard.Body>,
     )
     |> SLayout.FullPage.makeWithEl;
   },

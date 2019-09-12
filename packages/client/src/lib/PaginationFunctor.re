@@ -298,7 +298,7 @@ module Make = (Config: Config) => {
     let paginationItem = reducerParams =>
       switch (totalItems(reducerParams), selectionIndex(reducerParams)) {
       | (Some(count), Some(selection)) =>
-        Fc.FC.PaginationButtons.make({
+        FC.PaginationButtons.make({
           currentValue: Item(selection + 1),
           max: count,
           pageLeft: {
@@ -320,7 +320,7 @@ module Make = (Config: Config) => {
         lowerBoundIndex(reducerParams),
       ) {
       | (Some(count), Some(upper), Some(lower)) =>
-        Fc.FC.PaginationButtons.make({
+        FC.PaginationButtons.make({
           currentValue: Range(lower + 1, upper + 1),
           max: count,
           pageLeft: {

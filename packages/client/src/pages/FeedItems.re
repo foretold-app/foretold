@@ -33,8 +33,8 @@ let make =
           float=`right
           styles=[
             Css.style([
-              Fc.FC.PageCard.HeaderRow.Styles.itemTopPadding,
-              Fc.FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+              FC.PageCard.HeaderRow.Styles.itemTopPadding,
+              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
             ]),
           ]>
           {Reducer.Components.paginationPage(reducerParams)}
@@ -65,7 +65,7 @@ let make =
         switch (reducerParams.response) {
         | Success(_) =>
           isFound
-            ? <Fc.FC.PageCard.Body> table </Fc.FC.PageCard.Body>
+            ? <FC.PageCard.Body> table </FC.PageCard.Body>
             : <SLayout.NothingToShow />
         | _ => <SLayout.Spin />
         };

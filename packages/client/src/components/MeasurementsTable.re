@@ -24,7 +24,7 @@ module Styles = {
     style([color(`rgb((102, 121, 134))), fontSize(`em(1.1))]);
 
   let secondaryText =
-    style([fontSize(`em(0.9)), color(Fc.FC__Settings.accentBlue)]);
+    style([fontSize(`em(0.9)), color(FC__Settings.accentBlue)]);
 
   let percentage = style([fontSize(`em(1.15))]);
 
@@ -82,14 +82,13 @@ module Helpers = {
     | Ok(`FloatCdf(r)) =>
       r
       |> MeasurementValue.FloatCdf.toJs
-      |> Fc.FC.Base.Types.Dist.fromJson
-      |> (cdf => Some(<Fc.FC__CdfChart__StatSummary cdf />))
-    | Ok(`FloatPoint(r)) =>
-      Some(<Fc.FC__NumberShower precision=8 number=r />)
+      |> FC.Base.Types.Dist.fromJson
+      |> (cdf => Some(<FC__CdfChart__StatSummary cdf />))
+    | Ok(`FloatPoint(r)) => Some(<FC__NumberShower precision=8 number=r />)
     | Ok(`Percentage(r)) =>
       Some(
         <span className=Styles.percentage>
-          <Fc.FC__PercentageShower precision=8 percentage=r />
+          <FC__PercentageShower precision=8 percentage=r />
         </span>,
       )
     | Ok(`Binary(r)) =>
@@ -254,11 +253,11 @@ let getItems = (measurementsList: list(measurement), ~makeItem) => {
 
        switch (Helpers.getDescription(~m)) {
        | Some(description) =>
-         <Fc.FC.Table.Row
-           bottomSubRow=[|Fc.FC.Table.Row.textSection(description)|]>
+         <FC.Table.Row
+           bottomSubRow=[|FC.Table.Row.textSection(description)|]>
            inside
-         </Fc.FC.Table.Row>
-       | None => <Fc.FC.Table.Row> inside </Fc.FC.Table.Row>
+         </FC.Table.Row>
+       | None => <FC.Table.Row> inside </FC.Table.Row>
        };
      })
   |> E.A.of_list
@@ -378,7 +377,7 @@ let bottomSubRowFn =
   Some(
     (measurement: Types.measurement) =>
       Helpers.getDescription(~m=measurement)
-      |> E.O.fmap((c: React.element) => [|Fc.FC.Table.Row.textSection(c)|]),
+      |> E.O.fmap((c: React.element) => [|FC.Table.Row.textSection(c)|]),
   );
 
 let make =
@@ -395,14 +394,14 @@ let make =
   let measurementsList' = measurementsList |> E.L.sort(sort);
 
   measurementsList' |> E.L.length > 0
-    ? <Fc.FC.PageCard.Body>
+    ? <FC.PageCard.Body>
         {Table.fromColumns(
            all,
            measurementsList' |> Array.of_list,
            ~bottomSubRowFn,
            (),
          )}
-      </Fc.FC.PageCard.Body>
+      </FC.PageCard.Body>
     : <SLayout.NothingToShow />;
 };
 
@@ -422,14 +421,14 @@ let makeExtended =
   let measurementsList' = measurementsList |> E.L.sort(sort);
 
   measurementsList' |> E.L.length > 0
-    ? <Fc.FC.PageCard.Body>
+    ? <FC.PageCard.Body>
         {Table.fromColumns(
            all,
            measurementsList' |> Array.of_list,
            ~bottomSubRowFn,
            (),
          )}
-      </Fc.FC.PageCard.Body>
+      </FC.PageCard.Body>
     : <SLayout.NothingToShow />;
 };
 
@@ -456,7 +455,7 @@ let makeAgentPredictionsTable =
   };
 
   measurementsList' |> E.L.length > 0
-    ? <Fc.FC.PageCard.Body>
+    ? <FC.PageCard.Body>
         {Table.fromColumns(
            all,
            measurementsList' |> Array.of_list,
@@ -464,6 +463,6 @@ let makeAgentPredictionsTable =
            ~onRowClb,
            (),
          )}
-      </Fc.FC.PageCard.Body>
+      </FC.PageCard.Body>
     : <SLayout.NothingToShow />;
 };

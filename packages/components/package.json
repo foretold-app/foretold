@@ -1,5 +1,5 @@
 {
-    "name": "fc",
+    "name": "@foretold/components",
     "version": "0.0.1",
     "description": "",
     "scripts": {
@@ -8,10 +8,7 @@
         "predev": "npm run build",
         "dev": "parcel example/index.html",
         "showcase": "parcel example/index.html showcase/index.html",
-        "start": "bsb -make-world -w",
-        "cp-from-client": "/bin/cp -rf ../client/src/FC/* src/",
-        "cp-to-client": "/bin/cp -rf src/* ../client/src/FC/",
-        "export": "cd ./src && cp -rf --parents `git ls-files -m` ../../client/src/FC/ && cd .."
+        "start": "bsb -make-world -w"
     },
     "keywords": [
         "foretold",

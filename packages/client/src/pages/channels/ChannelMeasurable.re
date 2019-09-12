@@ -7,9 +7,9 @@ let make = (~measurableId: string, ~loggedInUser: Types.user, _children) => {
       {SLayout.LayoutConfig.make(
          ~head=ReasonReact.null,
          ~body=
-           <Fc.FC.PageCard.Body>
+           <FC.PageCard.Body>
              <MeasurableFullPresentation id=measurableId loggedInUser />
-           </Fc.FC.PageCard.Body>,
+           </FC.PageCard.Body>,
        )
        |> SLayout.FullPage.makeWithEl}
       <Measurements measurableId loggedInUser />

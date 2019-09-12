@@ -95,7 +95,7 @@ let make =
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv("Preferences"),
       ~body=
-        <Fc.FC.PageCard.BodyPadding>
+        <FC.PageCard.BodyPadding>
           {PreferenceUpdate.withPreferenceMutation((mutation, data) => {
              let agent = loggedInUser.agent;
              let id =
@@ -129,7 +129,7 @@ let make =
                )
              );
            })}
-        </Fc.FC.PageCard.BodyPadding>,
+        </FC.PageCard.BodyPadding>,
     )
     |> layout,
 };

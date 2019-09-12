@@ -7,7 +7,7 @@ let feedbackUrl = "https://feedback.foretold.io/";
 let make = _children => {
   ...component,
   render: _self =>
-    <Fc.FC__Footer
+    <FC__Footer
       logo={React.string({js|Foretold|js})}
       links=[|
         <Link.Jsx2 linkType={External(documentationUrl)}>

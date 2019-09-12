@@ -46,7 +46,7 @@ let make =
           let secondLevel = AgentTabs.Component.tabs(agentPage, agent);
 
           <>
-            <Fc.FC.GroupHeader>
+            <FC.GroupHeader>
               <div> {name |> ste} </div>
               <Div styles=[SLayout.Styles.descriptionText]>
                 {"Percentage Question Brier Score: " |> ste}
@@ -55,10 +55,8 @@ let make =
               <Div styles=[SLayout.Styles.descriptionText]>
                 {description |> ste}
               </Div>
-            </Fc.FC.GroupHeader>
-            <Fc.FC.GroupHeader.SubHeader>
-              secondLevel
-            </Fc.FC.GroupHeader.SubHeader>
+            </FC.GroupHeader>
+            <FC.GroupHeader.SubHeader> secondLevel </FC.GroupHeader.SubHeader>
           </>;
         },
       );
@@ -78,10 +76,10 @@ let make =
               ),
             ]
             flex={`num(3.)}>
-            <Fc.FC.PageCard>
-              <Fc.FC.PageCard.HeaderRow> head </Fc.FC.PageCard.HeaderRow>
+            <FC.PageCard>
+              <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
               body
-            </Fc.FC.PageCard>
+            </FC.PageCard>
           </Div>
         </Div>
       </div>

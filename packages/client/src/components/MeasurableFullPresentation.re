@@ -6,7 +6,7 @@ module Styles = {
   let header =
     style(
       [padding2(~v=`em(1.5), ~h=`em(1.5))]
-      @ Fc.FC.Base.BaseStyles.fullWidthFloatLeft,
+      @ FC.Base.BaseStyles.fullWidthFloatLeft,
     );
 
   let link = style([marginTop(em(1.))]);
@@ -41,9 +41,9 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
            <Div styles=[Styles.header]>
              <Div flexDirection=`row>
                <Div flex={`num(3.)}>
-                 <Fc.FC.PageCard.H1>
+                 <FC.PageCard.H1>
                    {MeasurableItems.link(~m=measurable)}
-                 </Fc.FC.PageCard.H1>
+                 </FC.PageCard.H1>
                  <StatusDisplay measurable />
                </Div>
                <Div flex={`num(1.)}>

@@ -1,5 +1,5 @@
 let newMeasurable = channelId =>
-  Fc.FC.GroupHeader.actionButton(
+  FC.GroupHeader.actionButton(
     ~onClick=e => LinkType.onClick(Internal(MeasurableNew(channelId)), e),
     [|"New Question" |> ReasonReact.string|],
   )
@@ -7,7 +7,7 @@ let newMeasurable = channelId =>
 
 let leaveChannel = (channelId: string) =>
   ChannelLeave.Mutation.make((mutation, _) =>
-    Fc.FC.GroupHeader.actionButton(
+    FC.GroupHeader.actionButton(
       ~variant=Secondary,
       ~onClick=_ => ChannelLeave.mutate(mutation, channelId),
       [|"Leave Community" |> ReasonReact.string|],
@@ -18,7 +18,7 @@ let leaveChannel = (channelId: string) =>
 
 let joinChannel = channelId =>
   ChannelJoin.Mutation.make((mutation, _) =>
-    Fc.FC.GroupHeader.actionButton(
+    FC.GroupHeader.actionButton(
       ~onClick=_ => ChannelJoin.mutate(mutation, channelId),
       [|"Join Community" |> ReasonReact.string|],
     )

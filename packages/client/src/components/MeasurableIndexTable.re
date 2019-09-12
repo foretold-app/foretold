@@ -26,23 +26,23 @@ let make =
   render: _self =>
     measurables |> E.A.length > 0
       ? <>
-          <Fc.FC.Table.HeaderRow>
-            <Fc.FC.Table.Cell flex={`num(3.)}>
+          <FC.Table.HeaderRow>
+            <FC.Table.Cell flex={`num(3.)}>
               {"Name & Status" |> ReasonReact.string}
-            </Fc.FC.Table.Cell>
-            <Fc.FC.Table.Cell flex={`num(1.5)}>
+            </FC.Table.Cell>
+            <FC.Table.Cell flex={`num(1.5)}>
               {"Aggregate and resolution" |> ReasonReact.string}
-            </Fc.FC.Table.Cell>
-            <Fc.FC.Table.Cell flex={`num(1.)}>
+            </FC.Table.Cell>
+            <FC.Table.Cell flex={`num(1.)}>
               {"Details" |> ReasonReact.string}
-            </Fc.FC.Table.Cell>
-          </Fc.FC.Table.HeaderRow>
+            </FC.Table.Cell>
+          </FC.Table.HeaderRow>
           {measurables
            |> E.A.fmap((m: Types.measurable) => {
                 let iAmOwner = m.iAmOwner == Some(true);
 
-                <Fc.FC.Table.Row onClick={_e => onSelect(m)} key={m.id}>
-                  <Fc.FC.Table.Cell
+                <FC.Table.Row onClick={_e => onSelect(m)} key={m.id}>
+                  <FC.Table.Cell
                     flex={`num(3.)}
                     className=Css.(
                       style([
@@ -58,13 +58,13 @@ let make =
                     <div className=Styles.rightColumn>
                       <StatusDisplay measurable=m />
                     </div>
-                  </Fc.FC.Table.Cell>
-                  <Fc.FC.Table.Cell
+                  </FC.Table.Cell>
+                  <FC.Table.Cell
                     flex={`num(1.5)}
                     className=Css.(style([paddingTop(`em(0.5))]))>
                     <MeasurementItems.AggregationResolution measurable=m />
-                  </Fc.FC.Table.Cell>
-                  <Fc.FC.Table.Cell
+                  </FC.Table.Cell>
+                  <FC.Table.Cell
                     flex={`num(1.)}
                     className=Css.(style([paddingTop(`em(0.5))]))>
                     {E.React.showIf(
@@ -84,8 +84,8 @@ let make =
                     {MeasurableItems.measurements(~m) |> E.O.React.defaultNull}
                     {MeasurableItems.measurers(~m) |> E.O.React.defaultNull}
                     {E.React.showIf(iAmOwner, MeasurableItems.editLink(~m))}
-                  </Fc.FC.Table.Cell>
-                </Fc.FC.Table.Row>;
+                  </FC.Table.Cell>
+                </FC.Table.Row>;
               })
            |> ReasonReact.array}
         </>

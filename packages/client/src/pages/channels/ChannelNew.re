@@ -36,7 +36,7 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
       ||> E.React.el;
 
     let body =
-      <Fc.FC.PageCard.BodyPadding>
+      <FC.PageCard.BodyPadding>
         {mutationMake((mutation, data) =>
            form(mutation, ({send, state}) =>
              CMutationForm.showWithLoading2(
@@ -61,7 +61,7 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
              )
            )
          )}
-      </Fc.FC.PageCard.BodyPadding>;
+      </FC.PageCard.BodyPadding>;
 
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv("Create a New Community"),

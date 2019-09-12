@@ -17,28 +17,28 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
 
     let head =
       <>
-        <Fc.FC.Base.Div float=`left>
-          <Fc.FC.PageCard.HeaderRow.Title>
+        <FC.Base.Div float=`left>
+          <FC.PageCard.HeaderRow.Title>
             {"Edit Community" |> Utils.ste}
-          </Fc.FC.PageCard.HeaderRow.Title>
-        </Fc.FC.Base.Div>
-        <Fc.FC.Base.Div
+          </FC.PageCard.HeaderRow.Title>
+        </FC.Base.Div>
+        <FC.Base.Div
           float=`right
           className={Css.style([
-            Fc.FC.PageCard.HeaderRow.Styles.itemTopPadding,
-            Fc.FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            FC.PageCard.HeaderRow.Styles.itemTopPadding,
+            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
           ])}>
           {Primary.User.show(
              loggedInUser,
-             <Fc.FC.Base.Button
+             <FC.Base.Button
                variant=Primary
                onClick={e =>
                  LinkType.onClick(Internal(SeriesNew(channelId)), e)
                }>
                {"New Series" |> Utils.ste}
-             </Fc.FC.Base.Button>,
+             </FC.Base.Button>,
            )}
-        </Fc.FC.Base.Div>
+        </FC.Base.Div>
       </>;
 
     let form = (mutation, channel: Types.channel) =>
@@ -63,7 +63,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
       )
       ||> E.React.el;
 
-    <Fc.FC.PageCard.BodyPadding>
+    <FC.PageCard.BodyPadding>
       {loadChannel(
          HttpResponse.fmap(channel =>
            mutationMake((mutation, data) =>
@@ -86,7 +86,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
          )
          ||> HttpResponse.withReactDefaults,
        )}
-    </Fc.FC.PageCard.BodyPadding>
+    </FC.PageCard.BodyPadding>
     |> SLayout.LayoutConfig.make(~head, ~body=_)
     |> SLayout.FullPage.makeWithEl;
   },

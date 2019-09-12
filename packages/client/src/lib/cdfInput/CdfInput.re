@@ -298,10 +298,10 @@ let mainBlock =
         {Primary.Measurable.toMinMaxDescription(measurable)
          |> E.O.React.fmapOrNull(r => <p> {r |> ste} </p>)}
         {state.hasLimitError
-           ? <Fc.FC__Alert type_=`warning>
+           ? <FC__Alert type_=`warning>
                {"Warning: Foretold does not currently support ranges of this width, due to smoothing limitations."
                 |> ste}
-             </Fc.FC__Alert>
+             </FC__Alert>
            : ReasonReact.null}
         {ValueInput.floatPoint(measurable, send)}
         <div className=Styles.inputBox>

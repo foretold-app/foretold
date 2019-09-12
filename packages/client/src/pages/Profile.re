@@ -150,7 +150,7 @@ let make =
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv("Edit Profile Information"),
       ~body=
-        <Fc.FC.PageCard.BodyPadding>
+        <FC.PageCard.BodyPadding>
           {UserUpdate.withUserMutation((mutation, data) => {
              let agent = loggedInUser.agent;
              let id = loggedInUser.id;
@@ -183,7 +183,7 @@ let make =
                )
              );
            })}
-        </Fc.FC.PageCard.BodyPadding>,
+        </FC.PageCard.BodyPadding>,
     )
     |> layout,
 };

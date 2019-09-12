@@ -82,7 +82,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv("Invite Member"),
       ~body=
-        <Fc.FC.PageCard.BodyPadding>
+        <FC.PageCard.BodyPadding>
           {InvitationCreate.withMutation((mutation, data) =>
              withForm(
                channelId,
@@ -112,7 +112,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
                },
              )
            )}
-        </Fc.FC.PageCard.BodyPadding>,
+        </FC.PageCard.BodyPadding>,
     )
     |> SLayout.FullPage.makeWithEl,
 };

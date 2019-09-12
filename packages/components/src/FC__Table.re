@@ -90,6 +90,9 @@ module Styles = {
 };
 
 module Cell = {
+  let standardCellPadding =
+    Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))]));
+
   let style = flexAmount => Css.(style([flex(flexAmount)]));
 
   let component = ReasonReact.statelessComponent("TABLE CELL");
@@ -97,7 +100,8 @@ module Cell = {
   let make = (~flex, ~className="", children) => {
     ...component,
     render: _self =>
-      <Div className={Css.merge([style(flex), className])}>
+      <Div
+        className={Css.merge([style(flex), standardCellPadding, className])}>
         ...children
       </Div>,
   };
@@ -152,4 +156,10 @@ module Row = {
       };
     },
   };
+};
+
+let component = ReasonReact.statelessComponent("Table");
+let make = children => {
+  ...component,
+  render: _self => <div> ...children </div>,
 };

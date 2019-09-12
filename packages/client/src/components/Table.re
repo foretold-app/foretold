@@ -1,19 +1,3 @@
-module Styles = {
-  open Css;
-  let table = [display(`flex), flexDirection(`column)] |> style;
-  let row = [paddingTop(`em(0.5)), paddingBottom(`em(0.5))] |> style;
-  let cell =
-    [flex(`num(1.)), padding2(~v=`em(0.6), ~h=`em(0.5))] |> style;
-};
-
-module Table = {
-  let component = ReasonReact.statelessComponent("Table");
-  let make = children => {
-    ...component,
-    render: _self => <div className=Styles.table> ...children </div>,
-  };
-};
-
 type column('a) = {
   name: ReasonReact.reactElement,
   render: 'a => ReasonReact.reactElement,
@@ -80,7 +64,6 @@ let fromColumns =
               onRowClb(row);
               ();
             }}
-            className=Styles.row
             ?bottomSubRow
             key>
             columnsBody

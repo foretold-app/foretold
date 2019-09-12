@@ -18,12 +18,9 @@ let llink =
       ),
   );
 
-let standardCellPadding =
-  Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))]));
-
 let row =
   <Table.Row onClick={_ => Js.log("Row Clicked")}>
-    <Table.Cell flex={`num(4.)} className=standardCellPadding>
+    <Table.Cell flex={`num(4.)}>
       <span className=Table.Styles.Elements.primaryText>
         {"What will be the " |> ReasonReact.string}
         {llink(~href="d", [|"GDP" |> ReasonReact.string|])
@@ -41,7 +38,7 @@ let row =
          (),
        )}
     </Table.Cell>
-    <Table.Cell flex={`num(2.)} className=standardCellPadding>
+    <Table.Cell flex={`num(2.)}>
       <FC__CdfChart__Small
         cdf
         minX={Some(2.0)}
@@ -104,24 +101,26 @@ let make =
          })}
       </Div>
     </PageCard.HeaderRow>
-    <Table.HeaderRow>
-      <Table.Cell flex={`num(4.)}>
-        {"Name & Status" |> ReasonReact.string}
-      </Table.Cell>
-      <Table.Cell flex={`num(2.)}>
-        {"Aggregate Prediction" |> ReasonReact.string}
-      </Table.Cell>
-      <Table.Cell flex={`num(1.)}>
-        {"Details" |> ReasonReact.string}
-      </Table.Cell>
-    </Table.HeaderRow>
-    row
-    row
-    row
-    row
-    row
-    row
-    row
-    row
-    row
+    <Table>
+      <Table.HeaderRow>
+        <Table.Cell flex={`num(4.)}>
+          {"Name & Status" |> ReasonReact.string}
+        </Table.Cell>
+        <Table.Cell flex={`num(2.)}>
+          {"Aggregate Prediction" |> ReasonReact.string}
+        </Table.Cell>
+        <Table.Cell flex={`num(1.)}>
+          {"Details" |> ReasonReact.string}
+        </Table.Cell>
+      </Table.HeaderRow>
+      row
+      row
+      row
+      row
+      row
+      row
+      row
+      row
+      row
+    </Table>
   </PageCard>;

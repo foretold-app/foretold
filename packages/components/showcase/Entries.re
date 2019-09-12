@@ -2,6 +2,7 @@ open FC.Base;
 
 let entries =
   EntryTypes.[
+    Showcase_Buttons.entry,
     Showcase_PageCard.entry,
     Showcase_NumberShower.entry,
     Showcase_MeasurableForm.entry,

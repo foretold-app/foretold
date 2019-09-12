@@ -31,4 +31,4 @@ let make:
 let makeWithoutValidations:
   (~xs: array(float), ~ys: array(float), unit) => t;
 
-let toMeasurement: t => [> | `Cdf(t)];
+let toMeasurementValue: t => [> | `Cdf(t)];

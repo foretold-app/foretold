@@ -87,4 +87,4 @@ module Verifications = {
 
 let make = Verifications.runAll;
 let makeWithoutValidations = (~xs, ~ys, ()) => {xs, ys};
-let toMeasurement = (t: t) => `Cdf(t);
+let toMeasurementValue = (t: t) => `Cdf(t);

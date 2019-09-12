@@ -7,21 +7,23 @@ module Keys = {
   let data = "data";
 
   module Unresolvable = {
+    open MeasurementValue.UnresolvableResolution;
     let fromString =
       fun
-      | "AMBIGUOUS" => Some(`Ambiguous)
-      | "FALSE_CONDITIONAL" => Some(`FalseConditional)
-      | "RESULT_NOT_AVAILABLE" => Some(`ResultNotAvailable)
-      | "OTHER" => Some(`Other)
+      | "AMBIGUOUS" => Some(Ambiguous)
+      | "FALSE_CONDITIONAL" => Some(FalseConditional)
+      | "RESULT_NOT_AVAILABLE" => Some(ResultNotAvailable)
+      | "OTHER" => Some(Other)
       | _ => None;
   };
 
   module Comment = {
+    open MeasurementValue.Comment;
     let fromString =
       fun
-      | "GENERIC" => Some(`Generic)
-      | "QUESTION_FEEDBACK" => Some(`QuestionFeedback)
-      | "UPDATE" => Some(`Update)
+      | "GENERIC" => Some(Generic)
+      | "QUESTION_FEEDBACK" => Some(QuestionFeedback)
+      | "UPDATE" => Some(Update)
       | _ => None;
   };
 
@@ -88,11 +90,11 @@ module JsonToMeasurement = {
           (),
         )
         |> Rationale.Result.bimap(r => r, Cdf.Errors.toString)
-        |> Belt.Result.map(_, Cdf.toMeasurement)
+        |> Belt.Result.map(_, Cdf.toMeasurementValue)
       )
     | `Percentage =>
       jsonToFinalValue(Json.Decode.float, e =>
-        Percentage.(e |> make |> Belt.Result.map(_, toMeasurement))
+        Percentage.(e |> make |> Belt.Result.map(_, toMeasurementValue))
       )
     | `Binary => jsonToFinalValue(Json.Decode.bool, e => Ok(`Binary(e)))
     | `UnresolvableResolution =>
@@ -118,4 +120,4 @@ module JsonToMeasurement = {
   };
 };
 
-let toMeasurement = JsonToMeasurement.run;
+let toMeasurementValue = JsonToMeasurement.run;

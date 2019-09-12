@@ -1,26 +1,34 @@
 module Comment = {
-  type t = [ | `Generic | `QuestionFeedback | `Update];
+  type t =
+    | Generic
+    | QuestionFeedback
+    | Update;
 
   let toString = (e: t): string =>
     switch (e) {
-    | `Generic => "Generic"
-    | `QuestionFeedback => "Question Feedback"
-    | `Update => "Update"
+    | Generic => "Generic"
+    | QuestionFeedback => "Question Feedback"
+    | Update => "Update"
     };
 
   let toMeasurement = (t: t) => `Comment(t);
 };
 
 module UnresolvableResolution = {
-  type t = [ | `Ambiguous | `FalseConditional | `ResultNotAvailable | `Other];
+  type t =
+    | Ambiguous
+    | FalseConditional
+    | ResultNotAvailable
+    | Other;
 
   let toString = (e: t): string =>
     switch (e) {
-    | `Ambiguous => "Ambiguous"
-    | `FalseConditional => "FalseConditional"
-    | `ResultNotAvailable => "ResultNotAvailable"
-    | `Other => "Other"
+    | Ambiguous => "Ambiguous"
+    | FalseConditional => "False Conditional"
+    | ResultNotAvailable => "Result NotAvailable"
+    | Other => "Other"
     };
+
   let toMeasurement = (t: t) => `UnresolvableResolution(t);
 };
 

@@ -27,7 +27,7 @@ describe("Scorer", () => {
     test("with PercentagePercentage score", () => {
       let makeCombination = {
         open PredictionResolutionOverTime.MeasurementWithTime;
-        let combinationOverTime: PredictionResolutionOverTime.T.t =
+        let combinationOverTime: PredictionResolutionOverTime.t =
           `PercentagePercentage({
             agentPredictions: [|
               make(~time=3., ~measurementValue=mkPer(0.70), ()),

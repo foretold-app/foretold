@@ -1,5 +1,5 @@
 {
-    "name": "measurement",
+    "name": "prediction-analysis",
     "version": "0.0.1",
     "main": "index.js",
     "scripts": {

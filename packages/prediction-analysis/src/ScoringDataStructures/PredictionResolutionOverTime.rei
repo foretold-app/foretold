@@ -1,7 +1,17 @@
 module MeasurementWithTime: {
   type time = float;
+
+  type _t('a) = {
+    time,
+    measurementValue: 'a,
+  };
+
+  module MeasurementWithTimeInput: {type t('a) = _t('a);};
+  type t = MeasurementWithTimeInput.t(Measurement.MeasurementValue.t);
+  type ts = array(t);
   type ls('a) = array(MeasurementWithTimeInput.t('a));
   type l('a) = MeasurementWithTimeInput.t('a);
+  let make: (~time: time, ~measurementValue: 'a, unit) => _t('a);
 };
 
 type measurementWithTime('a) = MeasurementWithTime.l('a);
@@ -22,3 +32,15 @@ type t = [
   | `CdfFloat(cdfFloat)
   | `PercentagePercentage(percentagePercentage)
 ];
+
+let toStartAtDistribution:
+  t =>
+  StartAtDistribution.t(MeasurementWithTime.time, PredictionResolutionGroup.t);
+
+let fromMeasurementCombination:
+  (
+    ~agentPredictions: MeasurementWithTime.ts,
+    ~marketPredictions: option(MeasurementWithTime.ts)=?,
+    ~resolution: MeasurementWithTime.t
+  ) =>
+  Belt.Result.t(t, string);

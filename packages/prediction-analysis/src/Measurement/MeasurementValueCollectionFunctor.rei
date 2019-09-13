@@ -11,8 +11,7 @@ module Make:
     type ls('a) = array(C.t('a));
     type t = C.t(MeasurementValue.t);
     type ts = array(t);
-    let hasMoreThanOneOfType:
-      (Measurement.MeasurementValueWrapper.Name.t, ts) => bool;
+    let hasMoreThanOneOfType: (MeasurementValueWrapper.Name.t, ts) => bool;
 
     module Unwrapped: {
       type t =
@@ -25,7 +24,6 @@ module Make:
           array(C.t(MeasurementValue.Comment.t)),
         );
       let fromT:
-        (Measurement.MeasurementValueWrapper.Name.t, ts) =>
-        Belt.Result.t(t, string);
+        (MeasurementValueWrapper.Name.t, ts) => Belt.Result.t(t, string);
     };
   };

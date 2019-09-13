@@ -30,7 +30,6 @@ let transposeResult =
   };
 };
 
-// Finds relevant (x,y) point at or before a specific x point.
 let xPointToRelevantPointXY = (xPoint, t: t('a, 'b)) =>
   xPoint > t.finalX
     ? None
@@ -38,16 +37,13 @@ let xPointToRelevantPointXY = (xPoint, t: t('a, 'b)) =>
       |> Belt.Array.reverse
       |> Belt.Array.getBy(_, ((x, _)) => x <= xPoint);
 
-let xPointToRelevantPointX = (xPoint, t: t('a, 'b)) =>
-  xPointToRelevantPointXY(xPoint, t) |> Belt.Option.map(_, ((x, _)) => x);
-
 let xPointToRelevantPointY = (xPoint, t: t('a, 'b)) =>
   xPointToRelevantPointXY(xPoint, t) |> Belt.Option.map(_, ((_, y)) => y);
 
 let toSortedArrayTillFinalX = (t: t('a, 'b)) => {
   switch (xPointToRelevantPointXY(t.finalX, t)) {
   | Some((x, _)) when x == t.finalX => Some(t.pointXY)
-  | Some((x, y)) => Some(SortedArray.concat(t.pointXY, [|(t.finalX, y)|]))
+  | Some((_, y)) => Some(SortedArray.concat(t.pointXY, [|(t.finalX, y)|]))
   | _ => None
   };
 };

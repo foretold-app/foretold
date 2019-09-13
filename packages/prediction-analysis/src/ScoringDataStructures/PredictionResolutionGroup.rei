@@ -1,3 +1,21 @@
+// module WithMarket: {
+//   type combination('a, 'b) = {
+//     agentPrediction: 'a,
+//     marketPrediction: 'a,
+//     resolution: 'b,
+//   };
+
+//   type cdfCdf = combination(Cdf.t, Cdf.t);
+//   type cdfFloat = combination(Cdf.t, float);
+//   type percentagePercentage = combination(Percentage.t, Percentage.t);
+
+//   type t = [
+//     | `CdfCdf(combination(Cdf.t, Cdf.t))
+//     | `CdfFloat(cdfFloat)
+//     | `PercentagePercentage(percentagePercentage)
+//   ];
+// };
+
 type combination('a, 'b) = {
   agentPrediction: 'a,
   marketPrediction: option('a),
@@ -9,10 +27,12 @@ type cdfFloat = combination(Cdf.t, float);
 type percentagePercentage = combination(Percentage.t, Percentage.t);
 
 type t = [
-  | `CdfCdf(cdfCdf)
+  | `CdfCdf(combination(Cdf.t, Cdf.t))
   | `CdfFloat(cdfFloat)
   | `PercentagePercentage(percentagePercentage)
 ];
+
+// let toWithMarket: t => Belt.Result.t(WithMarket.t, string);
 
 let fromArbitraryMeasurementValues:
   (

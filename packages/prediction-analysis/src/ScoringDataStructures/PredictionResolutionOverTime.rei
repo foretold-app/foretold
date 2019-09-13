@@ -7,7 +7,7 @@ module MeasurementWithTime: {
   };
 
   module MeasurementWithTimeInput: {type t('a) = _t('a);};
-  type t = MeasurementWithTimeInput.t(Measurement.MeasurementValue.t);
+  type t = MeasurementWithTimeInput.t(MeasurementValue.t);
   type ts = array(t);
   type ls('a) = array(MeasurementWithTimeInput.t('a));
   type l('a) = MeasurementWithTimeInput.t('a);

@@ -1,3 +1,19 @@
+// module WithMarket = {
+//   type combination('a, 'b) = {
+//     agentPrediction: 'a,
+//     marketPrediction: 'a,
+//     resolution: 'b,
+//   };
+//   type cdfCdf = combination(Cdf.t, Cdf.t);
+//   type cdfFloat = combination(Cdf.t, float);
+//   type percentagePercentage = combination(Percentage.t, Percentage.t);
+//   type t = [
+//     | `CdfCdf(cdfCdf)
+//     | `CdfFloat(cdfFloat)
+//     | `PercentagePercentage(percentagePercentage)
+//   ];
+// };
+
 module T = {
   type combination('a, 'b) = {
     agentPrediction: 'a,
@@ -21,6 +37,39 @@ module T = {
     | `CdfFloat({marketPrediction: None}) => false
     | `PercentagePercentage({marketPrediction: None}) => false
     };
+  // There must be some more elegant way to do this, but I'm really not sure what it is.
+  // let toWithMarket = (t: t): Belt.Result.t(WithMarket.t, string) =>
+  //   switch (t) {
+  //   | `CdfCdf({
+  //       agentPrediction,
+  //       marketPrediction: Some(marketPrediction),
+  //       resolution,
+  //     }) =>
+  //     Belt.Result.Ok(
+  //       `CdfCdf({agentPrediction, marketPrediction, resolution}),
+  //     )
+  //   | `CdfFloat({
+  //       agentPrediction,
+  //       marketPrediction: Some(marketPrediction),
+  //       resolution,
+  //     }) =>
+  //     Belt.Result.Ok(
+  //       `CdfFloat({agentPrediction, marketPrediction, resolution}),
+  //     )
+  //   | `PercentagePercentage({
+  //       agentPrediction,
+  //       marketPrediction: Some(marketPrediction),
+  //       resolution,
+  //     }) =>
+  //     Belt.Result.Ok(
+  //       `PercentagePercentage({
+  //         agentPrediction,
+  //         marketPrediction,
+  //         resolution,
+  //       }),
+  //     )
+  //   | _ => Error("Market Prediction Needed")
+  //   };
 };
 
 module TBuilder = {

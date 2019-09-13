@@ -13,16 +13,23 @@ function mean(vars){
     return {xs: newCdf.xs, ys: newCdf.ys}
 }
 
-function distributionScoreDistribution(vars){
-    let cdfs = vars.map(r => (new Cdf(r.xs, r.ys)));
-    let newDist = scoringFunctions.distributionInputDistributionOutputDistribution({predictionCdf: cdfs[0], aggregateCdf: cdfs[1], resultCdf: cdfs[2], sampleCount: 10000})
-    let newCdf = (new Pdf(newDist.xs, newDist.ys)).toCdf();
-    return {xs: newCdf.xs, ys: newCdf.ys}
+function scoreMarketCdfCdf(predictionCdf, aggregateCdf, resolutionCdf){
+    let toCdf = (r) => (new Cdf(r.xs, r.ys));
+    return scoringFunctions.distributionInputDistributionOutput({
+        predictionCdf: toCdf(predictionCdf),
+        aggregateCdf: toCdf(aggregateCdf),
+        resultCdf: toCdf(resolutionCdf),
+        sampleCount: 10000
+    });
 }
 
-function distributionScoreNumber(vars){
-    let cdfs = vars.map(r => (new Cdf(r.xs, r.ys)));
-    return scoringFunctions.distributionInputDistributionOutput({predictionCdf: cdfs[0], aggregateCdf: cdfs[1], resultCdf: cdfs[2], sampleCount: 10000});
+function scoreNonMarketCdfCdf(predictionCdf, resolutionCdf){
+    let toCdf = (r) => (new Cdf(r.xs, r.ys));
+    return scoringFunctions.distributionInputDistributionOutputMarketless({
+        predictionCdf: toCdf(predictionCdf),
+        resultCdf: toCdf(resolutionCdf),
+        sampleCount: 10000
+    });
 }
 
 function findY(x, {xs, ys}){
@@ -42,4 +49,14 @@ function integral({xs, ys}){
     return distribution.integral();
 }
 
-module.exports = {cdfToPdf, findY, findX, mean, distributionScoreDistribution, distributionScoreNumber, integral};
+module.exports = {
+    cdfToPdf,
+    findY,
+    findX,
+    mean,
+    distributionScoreDistribution,
+    distributionScoreNumber,
+    scoreMarketCdfCdf,
+    scoreNonMarketCdfCdf,
+    integral
+};

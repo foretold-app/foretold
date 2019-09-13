@@ -7,7 +7,11 @@ let marketCdfCdf =
         PredictionResolutionGroup.WithMarket.combination(Cdf.t, Cdf.t),
       sampleCount: int,
     ) =>
-  Ok(3.0);
+  Distribution.Ts.scoreMarketCdfCdf(
+    agentPrediction |> Cdf.toDistribution,
+    marketPrediction |> Cdf.toDistribution,
+    resolution |> Cdf.toDistribution,
+  );
 
 let nonMarketCdfCdf =
     (
@@ -15,8 +19,12 @@ let nonMarketCdfCdf =
         PredictionResolutionGroup.combination(Cdf.t, Cdf.t),
       sampleCount: int,
     ) =>
-  Ok(3.0);
+  Distribution.Ts.scoreNonMarketCdfCdf(
+    agentPrediction |> Cdf.toDistribution,
+    resolution |> Cdf.toDistribution,
+  );
 
+class type rect = {};
 let marketCdfFloat =
     (
       {agentPrediction, marketPrediction, resolution}:
@@ -40,6 +48,7 @@ let nonMarketCdfFloat =
   |> Distribution.T.findY(resolution)
   |> log2Error;
 
+//   TODO: Handle cases where market is 0 or 1
 let marketPercentagePercentage =
     (
       {agentPrediction, marketPrediction, resolution}:
@@ -48,7 +57,6 @@ let marketPercentagePercentage =
           Percentage.t,
         ),
     ) =>
-  //   TODO: Handle cases where market is 0 or 1
   Percentage.(
     {
       let positiveFactor = {
@@ -70,6 +78,7 @@ let marketPercentagePercentage =
       positiveFactor +. negativeFactor;
     }
   );
+
 let nonMarketPercentagePercentage =
     (
       {agentPrediction, resolution}:
@@ -102,11 +111,11 @@ type group = [
 
 let run = (~scoringCombination: group, ~sampleCount, ()) => {
   switch (scoringCombination) {
-  | `MarketScore(`CdfCdf(v)) => marketCdfCdf(v, sampleCount)
+  | `MarketScore(`CdfCdf(v)) => Ok(marketCdfCdf(v, sampleCount))
   | `MarketScore(`CdfFloat(v)) => Ok(marketCdfFloat(v))
   | `MarketScore(`PercentagePercentage(v)) =>
     Ok(marketPercentagePercentage(v))
-  | `NonMarketScore(`CdfCdf(v)) => nonMarketCdfCdf(v, sampleCount)
+  | `NonMarketScore(`CdfCdf(v)) => Ok(nonMarketCdfCdf(v, sampleCount))
   | `NonMarketScore(`CdfFloat(v)) => Ok(nonMarketCdfFloat(v))
   | `NonMarketScore(`PercentagePercentage(v)) =>
     Ok(nonMarketPercentagePercentage(v))

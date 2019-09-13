@@ -17,6 +17,7 @@
     "license": "MIT",
     "devDependencies": {
         "@glennsl/bs-jest": "^0.4.2",
+        "@foretold/cdf": "1.0.9",
         "bs-platform": "5.0.6",
         "gentype": "2.34.0"
     },

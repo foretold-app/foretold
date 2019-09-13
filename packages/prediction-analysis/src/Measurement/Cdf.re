@@ -5,6 +5,8 @@ type t = {
   ys: array(float),
 };
 
+let toDistribution = ({xs, ys}: t) => Distribution.T.make(xs, ys);
+
 module Errors = {
   type error =
     | XsIncrementing

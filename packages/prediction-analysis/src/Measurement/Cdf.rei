@@ -32,3 +32,5 @@ let makeWithoutValidations:
   (~xs: array(float), ~ys: array(float), unit) => t;
 
 let toMeasurementValue: t => [> | `Cdf(t)];
+
+let toDistribution: t => PredictionAnalysis.Distribution.t;

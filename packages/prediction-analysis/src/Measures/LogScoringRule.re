@@ -57,7 +57,8 @@ let nonMarketCdfFloat =
       {agentPrediction, resolution}:
         PredictionResolutionGroup.combination(Cdf.t, float),
     ) =>
-  Ok(3.0);
+  agentPrediction |> CdfMeasures.toPdf;
+Ok(3.0);
 
 let nonMarketPercentagePercentage =
     (

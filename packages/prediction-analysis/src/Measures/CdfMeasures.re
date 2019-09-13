@@ -1,5 +1,8 @@
 type t = Cdf.t;
+open Rationale.Function;
 
+let findX = (x: float) => Cdf.toDistribution ||> Distribution.T.findX(x);
+let findY = (y: float) => Cdf.toDistribution ||> Distribution.T.findY(y);
+let integral = Cdf.toDistribution ||> Distribution.T.integral;
+let toPdf = Cdf.toDistribution ||> Distribution.T.toPdf;
 let differentialEntropy = (t: t) => 3.0;
-let mean = (t: t) => 1.0;
-let percentile = (t: t, percentile: float) => 2.0;

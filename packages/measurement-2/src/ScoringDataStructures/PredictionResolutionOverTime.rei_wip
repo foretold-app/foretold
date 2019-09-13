@@ -1,0 +1,24 @@
+module MeasurementWithTime: {
+  type time = float;
+  type ls('a) = array(MeasurementWithTimeInput.t('a));
+  type l('a) = MeasurementWithTimeInput.t('a);
+};
+
+type measurementWithTime('a) = MeasurementWithTime.l('a);
+type measurementsWithTime('a) = MeasurementWithTime.ls('a);
+
+type combination('a, 'b) = {
+  agentPredictions: measurementsWithTime('a),
+  marketPredictions: option(measurementsWithTime('a)),
+  resolution: measurementWithTime('b),
+};
+
+type cdfCdf = combination(Cdf.t, Cdf.t);
+type cdfFloat = combination(Cdf.t, float);
+type percentagePercentage = combination(Percentage.t, Percentage.t);
+
+type t = [
+  | `CdfCdf(cdfCdf)
+  | `CdfFloat(cdfFloat)
+  | `PercentagePercentage(percentagePercentage)
+];

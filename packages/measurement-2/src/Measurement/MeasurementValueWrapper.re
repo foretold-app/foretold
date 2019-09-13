@@ -119,21 +119,6 @@ module Name = {
       | `Comment => isComment
       }
     );
-
-  let toToFn = (fn, t: t) => {
-    T.(
-      switch (t) {
-      | `Cdf => fn(toCdf, r => `Cdf(r))
-      | `Float => fn(toFloat, r => `Float(r))
-      | `Binary => fn(toBinary, r => `Binary(r))
-      | `Percentage => fn(toPercentage, r => `Percentage(r))
-      | `UnresolvableResolution =>
-        fn(toUnresolvable, r => `UnresolvableResolution(r))
-      | `Comment => fn(toComment, r => `Comment(r))
-      }
-    );
-  };
-
   let toString =
     fun
     | `Cdf => "floatCdf"
@@ -142,7 +127,6 @@ module Name = {
     | `Percentage => "percentage"
     | `UnresolvableResolution => "unresolvableResolution"
     | `Comment => "comment";
-
   let fromString =
     fun
     | "floatPoint" => Belt.Result.Ok(`Float)

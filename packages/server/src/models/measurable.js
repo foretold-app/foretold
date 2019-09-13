@@ -2,17 +2,10 @@ const Sequelize = require('sequelize');
 const _ = require('lodash');
 const fetch = require('node-fetch');
 const moment = require('moment');
-const {
-  MEASUREMENT_VALUE,
-} = require('@foretold/measurement-value/enums/measurement-value');
-
 const { clientUrl } = require('../lib/urls');
 
-const { MEASURABLE_STATE } = require('./enums/measurable-state');
-const { MEASURABLE_VALUE_TYPE } = require('./enums/measurable-value-type');
-const {
-  MEASUREMENT_COMPETITOR_TYPE,
-} = require('./enums/measurement-competitor-type');
+const { MEASURABLE_STATE } = require('../enums/measurable-state');
+const { MEASURABLE_VALUE_TYPE } = require('../enums/measurable-value-type');
 
 module.exports = (sequelize, DataTypes) => {
   const Measurable = sequelize.define('Measurable', {
@@ -165,7 +158,7 @@ module.exports = (sequelize, DataTypes) => {
       const asFloat = parseFloat(match[0]);
 
       console.log(
-        `got response from endpoint. Url: ${endpoint}, ` +
+        `Got response from endpoint. Url: ${endpoint}, ` +
         `Response: ${JSON.stringify(json)}, Float: ${asFloat}`
       );
 
@@ -178,6 +171,7 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   /**
+   * @todo: move to "models-abstract" layer
    * @return {Promise<void>}
    */
   Measurable.prototype.watchExpectedResolutionDate =
@@ -243,30 +237,6 @@ module.exports = (sequelize, DataTypes) => {
   Measurable.prototype.updateState = async function updateState(state) {
     await this.update({ state, stateUpdatedAt: Sequelize.fn('now') });
   };
-
-  /**
-   * @todo: implement client for this code
-   * @todo: do not remove
-   * @param {Models.Agent.id} agentId
-   * @return {Promise<Models.Measurable>}
-   */
-  Measurable.prototype.processResolution =
-    async function processResolution(agentId) {
-      const asFloat = await this.resolutionEndpointResponse;
-      if (asFloat) {
-        await sequelize.models.Measurement.create({
-          agentId,
-          competitorType: MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
-          measurableId: this.dataValues.id,
-          value: {
-            dataType: MEASUREMENT_VALUE.floatPoint,
-            data: asFloat,
-          },
-        });
-      }
-      // @todo: Do we really need it if we have hooks?
-      await this.judged();
-    };
 
   /**
    * @todo: move me

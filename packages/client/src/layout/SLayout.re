@@ -144,7 +144,9 @@ module FullPage = {
 };
 
 let channelBack = (~onClick, ()) =>
-  <FC__Button onClick> {"< Back" |> ReasonReact.string} </FC__Button>;
+  <FC__Button onClick size=Median>
+    {"< Back" |> ReasonReact.string}
+  </FC__Button>;
 
 let channelLink = (c: Types.channel) =>
   <Link.Jsx2

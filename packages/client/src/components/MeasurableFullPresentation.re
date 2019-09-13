@@ -1,8 +1,5 @@
 open Style.Grid;
 
-module StatusDisplay = Foretold__Component__StatusDisplay;
-module Items = Foretold__Components__Measurable__Items;
-
 module Styles = {
   open Css;
 
@@ -32,7 +29,7 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
          let form =
            userAgentId == creatorId
            || Primary.Measurable.toStatus(measurable) !== `JUDGED
-             ? <Foretold__Components__Measurement__Form
+             ? <MeasurementForm
                  measurable
                  measurableId=id
                  isCreator={userAgentId == creatorId}
@@ -45,28 +42,30 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
              <Div flexDirection=`row>
                <Div flex={`num(3.)}>
                  <FC.PageCard.H1>
-                   {Items.link(~m=measurable)}
+                   {MeasurableItems.link(~m=measurable)}
                  </FC.PageCard.H1>
                  <StatusDisplay measurable />
                </Div>
                <Div flex={`num(1.)}>
-                 {Items.series(~m=measurable, ()) |> E.O.React.defaultNull}
-                 {Items.creatorLink(~m=measurable) |> E.O.React.defaultNull}
+                 {MeasurableItems.series(~m=measurable, ())
+                  |> E.O.React.defaultNull}
+                 {MeasurableItems.creatorLink(~m=measurable)
+                  |> E.O.React.defaultNull}
                  {E.React.showIf(
                     Primary.Permissions.can(
                       `MEASURABLE_UPDATE,
                       measurable.permissions,
                     ),
-                    Items.editLink(~m=measurable),
+                    MeasurableItems.editLink(~m=measurable),
                   )}
-                 {Items.resolutionEndpoint(~m=measurable)
+                 {MeasurableItems.resolutionEndpoint(~m=measurable)
                   |> E.O.React.defaultNull}
-                 {Items.endpointResponse(~m=measurable)
+                 {MeasurableItems.endpointResponse(~m=measurable)
                   |> E.O.React.defaultNull}
-                 {Items.questionLink(~m=measurable)}
+                 {MeasurableItems.questionLink(~m=measurable)}
                </Div>
              </Div>
-             {Items.description(~m=measurable)
+             {MeasurableItems.description(~m=measurable)
               |> E.O.React.fmapOrNull(d =>
                    <Div styles=[Styles.description]> d </Div>
                  )}

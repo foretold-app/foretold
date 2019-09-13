@@ -47,14 +47,25 @@ function distributionInputDistributionOutput({predictionCdf, aggregateCdf, resul
     return ensureScoreInBounds(pdfResult.integral());
 }
 
-function distributionInputDistributionOutputMarketless({predictionCdf, resultCdf, sampleCount=10000}){
-    let _predictionPdf = predictionCdf.toPdf();
-    let _resultPdf = resultCdf.toPdf();
-    let combination = new ContinuousDistributionCombination([_predictionPdf, _resultPdf]);
-    let continuousResult = combination.combineYsWithFn(sampleCount,
-        r => (r[1] * Math.log2(r[0] / r[1]))
-    );
-    return continuousResult.integral();
+function distributionInputDistributionOutputMarketless(
+  {
+    predictionCdf,
+    resultCdf,
+    sampleCount = 10000
+  }
+) {
+  let _predictionPdf = predictionCdf.toPdf();
+  let _resultPdf = resultCdf.toPdf();
+
+  let combination = new ContinuousDistributionCombination([_predictionPdf, _resultPdf]);
+
+  let continuousResult = combination.combineYsWithFn(sampleCount,
+    r => {
+      return (r[1] * Math.log2(Math.abs(r[0] / r[1]))); // @Ozzie, please,
+      // correct
+    }
+  );
+  return continuousResult.integral();
 }
 
 function percentageInputPercentageOutput({predictionPercentage, aggregatePercentage, resultPercentage}){

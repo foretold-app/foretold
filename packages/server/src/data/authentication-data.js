@@ -21,7 +21,7 @@ class AuthenticationData {
   /**
    * @public
    * @param {string} token
-   * @return {Promise<*>}
+   * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
    */
   async authenticate(token = '') {
     try {
@@ -44,7 +44,7 @@ class AuthenticationData {
   /**
    * @protected
    * @param {string} token
-   * @return {Promise<Schema.Context>}
+   * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
    */
   async _byJwt(token) {
     try {
@@ -59,7 +59,7 @@ class AuthenticationData {
   /**
    * @protected
    * @param {string} token
-   * @return {Promise<Schema.Context>}
+   * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
    */
   async _byToken(token) {
     try {
@@ -78,7 +78,7 @@ class AuthenticationData {
   async _getContext(agentId) {
     if (!agentId) throw new AuthenticationData.NoAgentIdError;
 
-    const agent = await this.agents.getOne({id: agentId});
+    const agent = await this.agents.getOne({ id: agentId });
     if (!agent) throw new AuthenticationData.NotAuthenticatedError;
 
     const bot = await agent.getBot();
@@ -107,7 +107,7 @@ class AuthenticationData {
       try {
         const userInfo = await this.auth0.getUserInfo(accessToken);
         await this.users.updateUserInfoFromAuth0(user.id, userInfo);
-      }catch (e) {
+      } catch (e) {
         console.log(`Saving user info is failed.`);
       }
 
@@ -138,29 +138,33 @@ class AuthenticationData {
 
 }
 
-AuthenticationData.NoUserIdError = class NoUserIdError extends AuthenticationError {
-  constructor() {
-    super('No User Id');
-  }
-};
+AuthenticationData.NoUserIdError =
+  class NoUserIdError extends AuthenticationError {
+    constructor() {
+      super('No User Id');
+    }
+  };
 
-AuthenticationData.NotAuthenticatedError = class NotAuthenticatedError extends AuthenticationError {
-  constructor() {
-    super('Not authenticated');
-  }
-};
+AuthenticationData.NotAuthenticatedError =
+  class NotAuthenticatedError extends AuthenticationError {
+    constructor() {
+      super('Not authenticated');
+    }
+  };
 
-AuthenticationData.TokenIsInvalidError = class TokenIsInvalidError extends AuthenticationError {
-  constructor() {
-    super('Token is invalid');
-  }
-};
+AuthenticationData.TokenIsInvalidError =
+  class TokenIsInvalidError extends AuthenticationError {
+    constructor() {
+      super('Token is invalid');
+    }
+  };
 
-AuthenticationData.NoAgentIdError = class NoAgentIdError extends AuthenticationError {
-  constructor() {
-    super('No Agent Id');
-  }
-};
+AuthenticationData.NoAgentIdError =
+  class NoAgentIdError extends AuthenticationError {
+    constructor() {
+      super('No Agent Id');
+    }
+  };
 
 module.exports = {
   AuthenticationData,

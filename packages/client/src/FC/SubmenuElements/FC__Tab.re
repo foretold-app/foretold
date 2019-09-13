@@ -1,4 +1,4 @@
-open FC__Colors.Text;
+open FC__Settings.Text;
 
 let activeStyles =
   Css.[
@@ -8,14 +8,14 @@ let activeStyles =
   ];
 let inactiveStyles =
   Css.[
-    borderBottom(`px(2), `solid, FC__Colors.clear),
+    borderBottom(`px(2), `solid, FC__Settings.clear),
     color(LightBackground.main),
     hover([color(LightBackground.active)]),
   ];
 let allStyles =
   Css.[
-    paddingBottom(`em(0.6)),
-    paddingTop(`em(0.6)),
+    paddingBottom(`em(0.8)),
+    paddingTop(`em(0.8)),
     paddingLeft(`em(0.4)),
     paddingRight(`em(0.4)),
     marginRight(`em(1.8)),

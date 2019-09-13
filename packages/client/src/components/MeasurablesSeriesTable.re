@@ -1,8 +1,5 @@
 open Primary;
 
-module MeasurableItems = Foretold__Components__Measurable__Items;
-module Shared = Foretold__Components__Shared;
-
 module Styles = {
   open Css;
 
@@ -77,9 +74,7 @@ let make =
                     {MeasurableItems.measurers(~m) |> E.O.React.defaultNull}
                   </div>
                   <div className=Styles.column>
-                    <Foretold__Components__Measurable.StatusDisplay
-                      measurable=m
-                    />
+                    <StatusDisplay measurable=m />
                   </div>
                 </div>
               )

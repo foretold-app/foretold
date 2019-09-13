@@ -9,9 +9,9 @@ module State = {
 
   let toColor = (t: t) =>
     switch (t) {
-    | OPEN(_) => FC__Colors.Statuses.green
-    | PENDING(_) => FC__Colors.Statuses.yellow
-    | RESOLVED(_) => FC__Colors.Statuses.resolved
+    | OPEN(_) => FC__Settings.Statuses.green
+    | PENDING(_) => FC__Settings.Statuses.yellow
+    | RESOLVED(_) => FC__Settings.Statuses.resolved
     };
 
   let toText = (t: t) =>
@@ -36,7 +36,7 @@ module Style = {
   let token = (state, fontSize') =>
     Css.(
       style([
-        FC__Colors.FontWeights.heavy,
+        FC__Settings.FontWeights.heavy,
         color(State.toColor(state)),
         marginRight(`em(1.0)),
         fontSize(fontSize'),
@@ -44,7 +44,7 @@ module Style = {
     );
 
   let text = fontSize' =>
-    Css.(style([color(FC__Colors.accentBlue), fontSize(fontSize')]));
+    Css.(style([color(FC__Settings.accentBlue), fontSize(fontSize')]));
 };
 
 let make = (~state: State.t, ~fontSize=`em(0.9), ()) =>

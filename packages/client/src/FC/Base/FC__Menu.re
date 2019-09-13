@@ -21,7 +21,7 @@ module Styles = {
   global(
     ".ft-menu-general, .ft-submenu-general>ul",
     [
-      fontFamily(FC__Colors.Text.standardFont),
+      fontFamily(FC__Settings.Text.standardFont),
       listStyleType(`none),
       position(`relative),
       outlineStyle(`none),
@@ -193,7 +193,7 @@ module Styles = {
         selector(
           "::before",
           [
-            color(FC__Colors.textMedium),
+            color(FC__Settings.textMedium),
             fontStyle(`normal),
             fontSize(`em(0.9)),
             // One option here is to use font-awesome,

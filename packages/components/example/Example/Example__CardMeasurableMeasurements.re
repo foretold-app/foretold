@@ -41,7 +41,7 @@ let row =
       className=Css.(
         style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])
       )>
-      <span className=Css.(style([color(FC__Colors.textMedium)]))>
+      <span className=Css.(style([color(FC__Settings.textMedium)]))>
         {MomentRe.momentWithUnix(pastTime)
          |> MomentRe.Moment.format(format_standard)
          |> ReasonReact.string}
@@ -77,7 +77,7 @@ let row2 =
       className=Css.(
         style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])
       )>
-      <span className=Css.(style([color(FC__Colors.textMedium)]))>
+      <span className=Css.(style([color(FC__Settings.textMedium)]))>
         {MomentRe.momentWithUnix(pastTime)
          |> MomentRe.Moment.format(format_standard)
          |> ReasonReact.string}

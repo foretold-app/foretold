@@ -12,7 +12,7 @@ module.exports.diff = function diff(className, options, list) {
   list = _.isArray(list) ? list : _.keys(list);
   const difference = _.difference(_.keys(options), list);
   if (difference.length > 0) {
-    console.warn(`${className} doesn't expect "${difference.join(', ')}".`);
+    console.warn(`${className} doesn't expect "${difference.join('", "')}".`);
   }
   return difference;
 };

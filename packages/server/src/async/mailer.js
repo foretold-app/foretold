@@ -1,7 +1,7 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const { MailHelper } = require('../mails/mail-helper');
+const { MailHelper } = require('../lib/mails/mail-helper');
 
 class Mailer {
   constructor(envelope = {}) {

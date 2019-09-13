@@ -22,7 +22,6 @@ module Styles = {
       BaseStyles.floatRight,
       marginLeft(`em(2.)),
       marginTop(`em(0.2)),
-      padding2(~v=`em(0.4), ~h=`em(1.8)),
     ]);
 };
 
@@ -64,7 +63,7 @@ module SubHeader = {
               style(
                 [
                   padding2(~v=`em(0.0), ~h=`em(2.0)),
-                  borderBottom(`px(1), `solid, FC__Colors.border),
+                  borderBottom(`px(1), `solid, FC__Settings.border),
                 ]
                 @ BaseStyles.fullWidthFloatLeft,
               )

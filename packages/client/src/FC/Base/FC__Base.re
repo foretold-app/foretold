@@ -1,6 +1,6 @@
 module Types = FC__Types;
 module Link = FC__Link;
-module Colors = FC__Colors;
+module Colors = FC__Settings;
 module Div = FC__Div;
 module E = FC__E;
 module Globals = FC__Globals;

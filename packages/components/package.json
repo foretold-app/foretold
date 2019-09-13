@@ -10,7 +10,8 @@
         "showcase": "parcel example/index.html showcase/index.html",
         "start": "bsb -make-world -w",
         "cp-from-client": "/bin/cp -rf ../client/src/FC/* src/",
-        "cp-to-client": "/bin/cp -rf src/* ../client/src/FC/"
+        "cp-to-client": "/bin/cp -rf src/* ../client/src/FC/",
+        "export": "cd ./src && cp -rf --parents `git ls-files -m` ../../client/src/FC/ && cd .."
     },
     "keywords": [
         "foretold",

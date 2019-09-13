@@ -92,8 +92,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
         <InputLabel> "Comment"->React.string </InputLabel>
         <TextArea fullWidth=true />
         <PageCard.VerticalSpace />
-        <Button
-          variant=Button.Primary fullWidth=true verticalPadding={`px(10)}>
+        <Button variant=Button.Primary fullWidth=true size=Large>
           "Submit Prediction"->React.string
         </Button>
       </PageCard.Section>

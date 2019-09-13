@@ -22,7 +22,7 @@ let standardCellPadding =
   Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))]));
 
 let row =
-  <Table.RowLink onClick={_ => Js.log("Row Clicked")}>
+  <Table.Row onClick={_ => Js.log("Row Clicked")}>
     <Table.Cell flex={`num(4.)} className=standardCellPadding>
       <span className=Table.Styles.Elements.primaryText>
         {"What will be the " |> ReasonReact.string}
@@ -42,7 +42,12 @@ let row =
        )}
     </Table.Cell>
     <Table.Cell flex={`num(2.)} className=standardCellPadding>
-      <FC__CdfChart__Small cdf minX=2.0 color={`hex("#d9dcdf")} maxX=12.0 />
+      <FC__CdfChart__Small
+        cdf
+        minX={Some(2.0)}
+        color={`hex("#d9dcdf")}
+        maxX={Some(12.0)}
+      />
     </Table.Cell>
     <Table.Cell
       flex={`num(1.)} className=Css.(style([paddingTop(`em(0.5))]))>
@@ -63,7 +68,7 @@ let row =
         </Link>
       </Div>
     </Table.Cell>
-  </Table.RowLink>;
+  </Table.Row>;
 
 let make =
   <PageCard>

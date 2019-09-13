@@ -3,8 +3,8 @@ const _ = require('lodash');
 const { DataBase } = require('./data-base');
 
 const { ChannelMembershipModel } = require('../models-abstract');
-const { CHANNEL_MEMBERSHIP_ROLES } = require('../models/enums/channel-membership-roles');
-const { CHANNEL_MEMBERSHIP_TYPE } = require('../models/enums/channel-membership-type');
+const { CHANNEL_MEMBERSHIP_ROLES } = require('../enums/channel-membership-roles');
+const { CHANNEL_MEMBERSHIP_TYPE } = require('../enums/channel-membership-type');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

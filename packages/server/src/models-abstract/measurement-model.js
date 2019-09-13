@@ -4,7 +4,7 @@ const assert = require('assert');
 const models = require('../models');
 const {
   MEASUREMENT_COMPETITOR_TYPE,
-} = require('../models/enums/measurement-competitor-type');
+} = require('../enums/measurement-competitor-type');
 const { BrierScore } = require('../lib/brier-score');
 
 const { ModelPostgres } = require('./model-postgres');
@@ -102,11 +102,11 @@ class MeasurementModel extends ModelPostgres {
         "AgentMeasurements".*, 
         "Measurements"."value" ->> 'data' as "questionResult"
       FROM "AgentMeasurements"
-               LEFT JOIN "Measurements"
-                         ON "Measurements"."measurableId" =
-                            "AgentMeasurements"."measurableId" AND
-                            "Measurements"."competitorType" = 'OBJECTIVE' AND
-                            "Measurements"."value" ->> 'dataType' = 'binary'
+        LEFT JOIN "Measurements"
+          ON "Measurements"."measurableId" =
+            "AgentMeasurements"."measurableId" AND
+            "Measurements"."competitorType" = 'OBJECTIVE' AND
+            "Measurements"."value" ->> 'dataType' = 'binary'
     )`;
   }
 
@@ -124,12 +124,13 @@ class MeasurementModel extends ModelPostgres {
              "Measurements"."agentId",
              array_agg("Measurements"."value" ->> 'data') as "probabilities"
       FROM "Measurements"
-               LEFT JOIN "Measurables"
-                         ON "Measurements"."measurableId" = "Measurables".id
+        LEFT JOIN "Measurables"
+          ON "Measurements"."measurableId" = "Measurables".id
       WHERE "Measurables"."state" = 'JUDGED'
         AND "Measurables"."valueType" = 'PERCENTAGE'
         AND "Measurements"."competitorType" = 'COMPETITIVE'
         AND "Measurements"."agentId" = '${ agentId }'
+        AND "Measurements"."value" ->> 'dataType' = 'percentage'
       GROUP BY "Measurements"."measurableId", "Measurements"."agentId"
     )`;
   }
@@ -144,11 +145,12 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @public
-   * @param {Models.ObjectID} measurableId
+   * @param {Models.ObjectID | null} measurableId
    * @returns {Promise<Model>}
    */
   async getOutcome(measurableId) {
     assert(!!measurableId, 'Measurable ID is required.');
+
     return this.model.findOne({
       where: {
         measurableId,
@@ -167,15 +169,18 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @public
-   * @param {Models.ObjectID} measurableId
+   * @param {Models.ObjectID | null} measurableId
+   * @param {Models.ObjectID | null} agentId
    * @param {Date} relevantAt
    * @returns {Promise<Model>}
    */
-  async getPreviousRelevantAggregate(measurableId, relevantAt) {
+  async getPreviousRelevantAggregate(measurableId, agentId, relevantAt) {
     assert(!!measurableId, 'Measurable ID is required.');
     assert(!!relevantAt, 'RelevantAt is required.');
+
     return this.model.findOne({
       where: {
+        agentId,
         measurableId,
         competitorType: MEASUREMENT_COMPETITOR_TYPE.AGGREGATION,
         relevantAt: { [this.lt]: relevantAt },
@@ -188,13 +193,16 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @public
-   * @param {Models.ObjectID} measurableId
+   * @param {Models.ObjectID | null} measurableId
+   * @param {Models.ObjectID | null} agentId
    * @returns {Promise<Model>}
    */
-  async getLatestAggregate(measurableId) {
+  async getLatestAggregate(measurableId, agentId) {
     assert(!!measurableId, 'Measurable ID is required.');
+
     return this.model.findOne({
       where: {
+        agentId,
         measurableId,
         competitorType: MEASUREMENT_COMPETITOR_TYPE.AGGREGATION,
       },

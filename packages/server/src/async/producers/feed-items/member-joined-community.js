@@ -2,7 +2,7 @@ const assert = require('assert');
 const _ = require('lodash');
 
 const { ProducerFeedItems } = require('./producer-feed-items');
-const { CHANNEL_MEMBERSHIP_TYPE } = require('../../../models/enums/channel-membership-type');
+const { CHANNEL_MEMBERSHIP_TYPE } = require('../../../enums/channel-membership-type');
 const { Producer } = require('../producer');
 
 class MemberJoinedCommunity extends ProducerFeedItems {

@@ -1,8 +1,5 @@
 ReactDOMRe.renderToElementWithId(
-  <div
-    className=Css.(
-      style([fontFamily(FC__Colors.Text.standardFont)])
-    )>
+  <div className=Css.(style([fontFamily(FC__Settings.Text.standardFont)]))>
     <Lib.Index />
   </div>,
   "main",

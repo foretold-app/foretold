@@ -41,6 +41,7 @@ module HeaderRow = {
   module Styles = {
     let itemTopPadding = Css.paddingTop(`em(0.9));
     let itemBottomPadding = Css.paddingBottom(`em(0.9));
+    let itemRightPadding = Css.paddingRight(`em(0.9));
   };
 
   module Title = {
@@ -57,7 +58,7 @@ module HeaderRow = {
                 color(Colors.textDark),
                 paddingTop(`em(1.2)),
                 paddingBottom(`em(1.2)),
-                FC__Colors.FontWeights.heavy,
+                FC__Settings.FontWeights.heavy,
               ])
             ),
           ]>
@@ -122,7 +123,7 @@ module Section = {
     type border = [ | `none | `top | `bottom | `topBottom];
 
     let baseClass = style([clear(`both)]);
-    let bgGrey = style([backgroundColor(FC__Colors.smokeWhite)]);
+    let bgGrey = style([backgroundColor(FC__Settings.smokeWhite)]);
     let paddingAll = style([padding(`em(1.5))]);
     let paddingTop =
       style([
@@ -133,9 +134,9 @@ module Section = {
         padding4(~top=`zero, ~right=`zero, ~bottom=`em(1.5), ~left=`zero),
       ]);
     let borderTop =
-      style([borderTop(`px(1), `solid, FC__Colors.accentBlue1a)]);
+      style([borderTop(`px(1), `solid, FC__Settings.accentBlue1a)]);
     let borderBottom =
-      style([borderBottom(`px(1), `solid, FC__Colors.accentBlue1a)]);
+      style([borderBottom(`px(1), `solid, FC__Settings.accentBlue1a)]);
     let flexCls = style([display(`flex)]);
 
     [@bs.send] external push: (Js.Array.t('a), 'a) => unit = "";
@@ -216,9 +217,9 @@ module H1 = {
         className=Css.(
           style(
             [
-              fontSize(`em(1.4)),
+              fontSize(`em(1.15)),
               color(`hex("192D44")),
-              FC__Colors.FontWeights.heavy,
+              FC__Settings.FontWeights.heavy,
               marginTop(`em(0.0)),
               marginBottom(`em(0.4)),
             ]

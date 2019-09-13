@@ -1,4 +1,4 @@
-const { TOKEN_TYPE } = require('./enums/token-type');
+const { TOKEN_TYPE } = require('../enums/token-type');
 
 module.exports = (sequelize, DataTypes) => {
   const Token = sequelize.define('Token', {

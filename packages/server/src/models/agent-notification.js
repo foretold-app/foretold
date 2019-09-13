@@ -1,6 +1,6 @@
 const {
   NOTIFICATION_ERROR_REASON,
-} = require('./enums/notification-error-reason');
+} = require('../enums/notification-error-reason');
 
 module.exports = (sequelize, DataTypes) => {
 

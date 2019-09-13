@@ -105,13 +105,13 @@ module Connection = {
 
   let nextPageDirection = (t: t('a)) =>
     switch (hasNextPage(t), t.pageInfo.endCursor) {
-    | (true, Some(b)) => Some(After(b))
+    | (true, Some(endCursor)) => Some(After(endCursor))
     | _ => None
     };
 
   let lastPageDirection = (t: t('a)) =>
     switch (hasPreviousPage(t), t.pageInfo.startCursor) {
-    | (true, Some(b)) => Some(Before(b))
+    | (true, Some(startCursor)) => Some(Before(startCursor))
     | _ => None
     };
 };

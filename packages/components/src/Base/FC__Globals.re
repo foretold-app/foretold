@@ -3,11 +3,12 @@ let load = () => {
     global(
       "body",
       [
-        fontFamily(FC__Colors.Text.standardFont),
+        fontFamily(FC__Settings.Text.standardFont),
         margin(`zero),
         height(`percent(100.0)),
         background(`hex("F0F1F3")),
         fontSize(`px(16)),
+        lineHeight(`em(1.5)),
       ],
     )
   );

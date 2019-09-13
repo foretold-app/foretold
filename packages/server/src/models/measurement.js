@@ -8,7 +8,7 @@ const { clientUrl } = require('../lib/urls');
 
 const {
   MEASUREMENT_COMPETITOR_TYPE,
-} = require('./enums/measurement-competitor-type');
+} = require('../enums/measurement-competitor-type');
 
 module.exports = (sequelize, DataTypes) => {
   const Measurement = sequelize.define('Measurement', {

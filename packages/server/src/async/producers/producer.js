@@ -3,8 +3,8 @@ const _ = require('lodash');
 
 const data = require('../../data');
 
-const { TEMPLATE_NAME } = require('../../models/enums/template-name');
-const { NOTIFICATION_TYPE } = require('../../models/enums/notification-type');
+const { TEMPLATE_NAME } = require('../../enums/template-name');
+const { NOTIFICATION_TYPE } = require('../../enums/notification-type');
 const { EmailEnvelope } = require('../../models/classes/notifications');
 
 const { FeedItem } = require('../../models/classes');

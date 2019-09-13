@@ -5,7 +5,7 @@ const measurables = require('./measurables');
 const producers = require('./producers');
 const consumers = require('./consumers');
 const { Mailer } = require('./mailer');
-const { GitHubApi } = require('../github/git-hub-api');
+const { GitHubApi } = require('../lib/github/git-hub-api');
 
 async function toJudgementPendingTransition() {
   const name = 'Job::toJudgementPendingTransition';
@@ -14,6 +14,21 @@ async function toJudgementPendingTransition() {
   try {
     const reducer = new measurables.Reducer();
     const result = await reducer.toJudgementPending();
+    console.log(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
+async function toResolving() {
+  const name = 'Job::toResolving';
+  console.log(name);
+
+  try {
+    const reducer = new measurables.Reducer();
+    const result = await reducer.toResolving();
     console.log(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -91,6 +106,7 @@ function runListeners() {
     emitter.on(events.SERVER_IS_READY, addGitHubWebHook);
 
     emitter.on(events.EVERY_HOUR, toJudgementPendingTransition);
+    emitter.on(events.EVERY_HOUR, toResolving);
     emitter.on(events.EVERY_MINUTE, emailConsumer);
     emitter.on(events.MAIL, mailer);
 

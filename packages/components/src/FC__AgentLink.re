@@ -5,8 +5,8 @@ let make =
     ~className=
       Css.(
         style([
-          color(FC__Colors.accentBlue),
-          hover([color(FC__Colors.darkLink)]),
+          color(FC__Settings.accentBlue),
+          hover([color(FC__Settings.darkLink)]),
         ])
       ),
     ~isDisabled=false,

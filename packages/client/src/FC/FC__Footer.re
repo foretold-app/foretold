@@ -14,7 +14,7 @@ module Styles = {
   /* Layout box for spacing in the page */
   let layoutBox =
     style(
-      [margin2(~v=`em(1.), ~h=`zero), padding2(~v=`zero, ~h=`em(2.))]
+      [margin2(~v=`em(2.), ~h=`zero), padding2(~v=`zero, ~h=`em(2.))]
       @ BaseStyles.fullWidthFloatLeft,
     );
 
@@ -103,9 +103,7 @@ let make =
         <div className=Styles.sections>
           <div className=Styles.element> logo </div>
           <ul className=Styles.items>
-            {links->Belt.Array.mapWithIndex((index, item) =>
-               <li key={index |> string_of_int}> item </li>
-             )
+            {links->Belt.Array.map(item => <li> item </li>)
              |> ReasonReact.array}
           </ul>
         </div>

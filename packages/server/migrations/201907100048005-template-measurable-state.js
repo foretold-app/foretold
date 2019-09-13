@@ -1,4 +1,4 @@
-const { TEMPLATE_NAME } = require('../src/models/enums/template-name');
+const { TEMPLATE_NAME } = require('../src/enums/template-name');
 const { EmailEnvelopeTemplate } = require('../src/models/classes/templates');
 
 module.exports = {

@@ -40,6 +40,7 @@ type permission = [
   | `MEASUREMENT_CREATE
   | `SERIES_CREATE
   | `USER_UPDATE
+  | `GLOBAL_SETTING_UPDATE
 ];
 
 type permissions = {allow: list(permission)};

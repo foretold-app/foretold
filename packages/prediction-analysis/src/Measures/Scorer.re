@@ -5,13 +5,23 @@ type marketScoreType =
 let scorePointCombination =
     (
       ~marketType: marketScoreType=MarketScore,
-      ~scoringCombination: PredictionResolutionGroup.t,
       ~sampleCount=DefaultParams.Cdf.maxCalculationLength,
+      ~scoringCombination: PredictionResolutionGroup.t,
       (),
     ) =>
   switch (marketType) {
   | MarketScore =>
-    LogScoringRule.runMarketScore(~scoringCombination, ~sampleCount, ())
+    scoringCombination
+    |> PredictionResolutionGroup.toWithMarket
+    |> Rationale.Result.ofOption("Needs market score")
+    |> Rationale.Result.bind(
+         _,
+         LogScoringRule.runMarketScore(
+           ~scoringCombination=_,
+           ~sampleCount,
+           (),
+         ),
+       )
   | NonMarketScore =>
     LogScoringRule.runNonmarketScore(~scoringCombination, ~sampleCount, ())
   };
@@ -19,8 +29,8 @@ let scorePointCombination =
 let scoredIntegralOverTime =
     (
       ~marketType: marketScoreType=MarketScore,
-      ~scoringCombination: PredictionResolutionOverTime.t,
       ~sampleCount=DefaultParams.Cdf.maxCalculationLength,
+      ~scoringCombination: PredictionResolutionOverTime.t,
       (),
     ) => {
   scoringCombination

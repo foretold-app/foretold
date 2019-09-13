@@ -1,18 +1,15 @@
-// module WithMarket = {
-//   type combination('a, 'b) = {
-//     agentPrediction: 'a,
-//     marketPrediction: 'a,
-//     resolution: 'b,
-//   };
-//   type cdfCdf = combination(Cdf.t, Cdf.t);
-//   type cdfFloat = combination(Cdf.t, float);
-//   type percentagePercentage = combination(Percentage.t, Percentage.t);
-//   type t = [
-//     | `CdfCdf(cdfCdf)
-//     | `CdfFloat(cdfFloat)
-//     | `PercentagePercentage(percentagePercentage)
-//   ];
-// };
+module WithMarket = {
+  type combination('a, 'b) = {
+    agentPrediction: 'a,
+    marketPrediction: 'a,
+    resolution: 'b,
+  };
+  type t = [
+    | `CdfCdf(combination(Cdf.t, Cdf.t))
+    | `CdfFloat(combination(Cdf.t, float))
+    | `PercentagePercentage(combination(Percentage.t, Percentage.t))
+  ];
+};
 
 module T = {
   type combination('a, 'b) = {
@@ -20,56 +17,41 @@ module T = {
     marketPrediction: option('a),
     resolution: 'b,
   };
-  type cdfCdf = combination(Cdf.t, Cdf.t);
-  type cdfFloat = combination(Cdf.t, float);
-  type percentagePercentage = combination(Percentage.t, Percentage.t);
+
   type t = [
-    | `CdfCdf(cdfCdf)
-    | `CdfFloat(cdfFloat)
-    | `PercentagePercentage(percentagePercentage)
+    | `CdfCdf(combination(Cdf.t, Cdf.t))
+    | `CdfFloat(combination(Cdf.t, float))
+    | `PercentagePercentage(combination(Percentage.t, Percentage.t))
   ];
-  let marketPredictionExists = (m: t) =>
-    switch (m) {
-    | `CdfCdf({marketPrediction: Some(_)}) => true
-    | `CdfFloat({marketPrediction: Some(_)}) => true
-    | `PercentagePercentage({marketPrediction: Some(_)}) => true
-    | `CdfCdf({marketPrediction: None}) => false
-    | `CdfFloat({marketPrediction: None}) => false
-    | `PercentagePercentage({marketPrediction: None}) => false
+
+  let map = ((f1, f2, f3), t) =>
+    switch (t) {
+    | `CdfCdf(e) => `CdfCdf(f1(e))
+    | `CdfFloat(e) => `CdfFloat(f2(e))
+    | `PercentagePercentage(e) => `PercentagePercentage(f3(e))
     };
-  // There must be some more elegant way to do this, but I'm really not sure what it is.
-  // let toWithMarket = (t: t): Belt.Result.t(WithMarket.t, string) =>
-  //   switch (t) {
-  //   | `CdfCdf({
-  //       agentPrediction,
-  //       marketPrediction: Some(marketPrediction),
-  //       resolution,
-  //     }) =>
-  //     Belt.Result.Ok(
-  //       `CdfCdf({agentPrediction, marketPrediction, resolution}),
-  //     )
-  //   | `CdfFloat({
-  //       agentPrediction,
-  //       marketPrediction: Some(marketPrediction),
-  //       resolution,
-  //     }) =>
-  //     Belt.Result.Ok(
-  //       `CdfFloat({agentPrediction, marketPrediction, resolution}),
-  //     )
-  //   | `PercentagePercentage({
-  //       agentPrediction,
-  //       marketPrediction: Some(marketPrediction),
-  //       resolution,
-  //     }) =>
-  //     Belt.Result.Ok(
-  //       `PercentagePercentage({
-  //         agentPrediction,
-  //         marketPrediction,
-  //         resolution,
-  //       }),
-  //     )
-  //   | _ => Error("Market Prediction Needed")
-  //   };
+
+  let transposeOption = t =>
+    switch (t) {
+    | `CdfCdf(Some(e)) => Some(`CdfCdf(e))
+    | `CdfFloat(Some(e)) => Some(`CdfFloat(e))
+    | `PercentagePercentage(Some(e)) => Some(`PercentagePercentage(e))
+    | _ => None
+    };
+
+  let combinationToMarket =
+      ({agentPrediction, marketPrediction, resolution}: combination('a, 'b))
+      : option(WithMarket.combination('a, 'b)) =>
+    switch (marketPrediction) {
+    | Some(marketPrediction) =>
+      Some({agentPrediction, marketPrediction, resolution})
+    | None => None
+    };
+
+  let toWithMarket = (t: t) =>
+    t
+    |> map((combinationToMarket, combinationToMarket, combinationToMarket))
+    |> transposeOption;
 };
 
 module TBuilder = {

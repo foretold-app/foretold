@@ -1,20 +1,16 @@
-// module WithMarket: {
-//   type combination('a, 'b) = {
-//     agentPrediction: 'a,
-//     marketPrediction: 'a,
-//     resolution: 'b,
-//   };
+module WithMarket: {
+  type combination('a, 'b) = {
+    agentPrediction: 'a,
+    marketPrediction: 'a,
+    resolution: 'b,
+  };
 
-//   type cdfCdf = combination(Cdf.t, Cdf.t);
-//   type cdfFloat = combination(Cdf.t, float);
-//   type percentagePercentage = combination(Percentage.t, Percentage.t);
-
-//   type t = [
-//     | `CdfCdf(combination(Cdf.t, Cdf.t))
-//     | `CdfFloat(cdfFloat)
-//     | `PercentagePercentage(percentagePercentage)
-//   ];
-// };
+  type t = [
+    | `CdfCdf(combination(Cdf.t, Cdf.t))
+    | `CdfFloat(combination(Cdf.t, float))
+    | `PercentagePercentage(combination(Percentage.t, Percentage.t))
+  ];
+};
 
 type combination('a, 'b) = {
   agentPrediction: 'a,
@@ -22,14 +18,10 @@ type combination('a, 'b) = {
   resolution: 'b,
 };
 
-type cdfCdf = combination(Cdf.t, Cdf.t);
-type cdfFloat = combination(Cdf.t, float);
-type percentagePercentage = combination(Percentage.t, Percentage.t);
-
 type t = [
   | `CdfCdf(combination(Cdf.t, Cdf.t))
-  | `CdfFloat(cdfFloat)
-  | `PercentagePercentage(percentagePercentage)
+  | `CdfFloat(combination(Cdf.t, float))
+  | `PercentagePercentage(combination(Percentage.t, Percentage.t))
 ];
 
 // let toWithMarket: t => Belt.Result.t(WithMarket.t, string);
@@ -43,4 +35,4 @@ let fromArbitraryMeasurementValues:
   ) =>
   Belt.Result.t(t, string);
 
-let marketPredictionExists: t => bool;
+let toWithMarket: t => option(WithMarket.t);

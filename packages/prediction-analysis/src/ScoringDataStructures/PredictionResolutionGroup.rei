@@ -24,8 +24,6 @@ type t = [
   | `PercentagePercentage(combination(Percentage.t, Percentage.t))
 ];
 
-// let toWithMarket: t => Belt.Result.t(WithMarket.t, string);
-
 let fromArbitraryMeasurementValues:
   (
     ~agentPrediction: MeasurementValue.t,

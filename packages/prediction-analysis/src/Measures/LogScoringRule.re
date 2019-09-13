@@ -81,25 +81,19 @@ let nonMarketPercentagePercentage =
     ),
   );
 
-//TODO Fix me!
-let runMarketScore =
-    (
-      ~scoringCombination: PredictionResolutionGroup.WithMarket.t,
-      ~sampleCount,
-      (),
-    ) => {
-  switch (scoringCombination) {
-  | `CdfCdf(v) => marketCdfCdf(v, sampleCount)
-  | `CdfFloat(v) => marketCdfFloat(v)
-  | `PercentagePercentage(v) => marketPercentagePercentage(v)
-  };
-};
+type group = [
+  | `MarketScore(PredictionResolutionGroup.WithMarket.t)
+  | `NonMarketScore(PredictionResolutionGroup.t)
+];
 
-let runNonmarketScore =
-    (~scoringCombination: PredictionResolutionGroup.t, ~sampleCount, ()) => {
+let run = (~scoringCombination: group, ~sampleCount, ()) => {
   switch (scoringCombination) {
-  | `CdfCdf(v) => nonMarketCdfCdf(v, sampleCount)
-  | `CdfFloat(v) => nonMarketCdfFloat(v)
-  | `PercentagePercentage(v) => nonMarketPercentagePercentage(v)
+  | `MarketScore(`CdfCdf(v)) => marketCdfCdf(v, sampleCount)
+  | `MarketScore(`CdfFloat(v)) => marketCdfFloat(v)
+  | `MarketScore(`PercentagePercentage(v)) => marketPercentagePercentage(v)
+  | `NonMarketScore(`CdfCdf(v)) => nonMarketCdfCdf(v, sampleCount)
+  | `NonMarketScore(`CdfFloat(v)) => nonMarketCdfFloat(v)
+  | `NonMarketScore(`PercentagePercentage(v)) =>
+    nonMarketPercentagePercentage(v)
   };
 };

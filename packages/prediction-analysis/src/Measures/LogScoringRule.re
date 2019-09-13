@@ -9,12 +9,36 @@ let marketCdfCdf =
     ) =>
   Ok(3.0);
 
+let nonMarketCdfCdf =
+    (
+      {agentPrediction, resolution}:
+        PredictionResolutionGroup.combination(Cdf.t, Cdf.t),
+      sampleCount: int,
+    ) =>
+  Ok(3.0);
+
 let marketCdfFloat =
     (
       {agentPrediction, marketPrediction, resolution}:
         PredictionResolutionGroup.WithMarket.combination(Cdf.t, float),
+    ) => {
+  let pdfY = e => e |> CdfMeasures.toPdf |> Distribution.T.findY(resolution);
+  let (agentPrediction, marketPrediction) = (
+    pdfY(agentPrediction),
+    pdfY(marketPrediction),
+  );
+  agentPrediction /. marketPrediction |> log2Error;
+};
+
+let nonMarketCdfFloat =
+    (
+      {agentPrediction, resolution}:
+        PredictionResolutionGroup.combination(Cdf.t, float),
     ) =>
-  Ok(3.0);
+  agentPrediction
+  |> CdfMeasures.toPdf
+  |> Distribution.T.findY(resolution)
+  |> log2Error;
 
 let marketPercentagePercentage =
     (
@@ -24,62 +48,51 @@ let marketPercentagePercentage =
           Percentage.t,
         ),
     ) =>
-  Ok(
-    //   TODO: Handle cases where market is 0 or 1
-    Percentage.(
-      {
-        let positive =
-          toFloat(resolution)
-          *. log2Error(
-               toFloat(agentPrediction) /. toFloat(marketPrediction),
-             );
-        let negative =
-          toFloat(inverse(resolution))
-          *. log2Error(
-               toFloat(inverse(agentPrediction))
-               /. toFloat(inverse(marketPrediction)),
-             );
-        positive +. negative;
-      }
-    ),
+  //   TODO: Handle cases where market is 0 or 1
+  Percentage.(
+    {
+      let positiveFactor = {
+        let (marketPrediction, agentPrediction, resolution) = (
+          toFloat(marketPrediction),
+          toFloat(agentPrediction),
+          toFloat(resolution),
+        );
+        resolution *. log2Error(agentPrediction /. marketPrediction);
+      };
+      let negativeFactor = {
+        let (marketPrediction, agentPrediction, resolution) = (
+          toFloat(inverse(marketPrediction)),
+          toFloat(inverse(agentPrediction)),
+          toFloat(inverse(resolution)),
+        );
+        resolution *. log2Error(agentPrediction /. marketPrediction);
+      };
+      positiveFactor +. negativeFactor;
+    }
   );
-
-let nonMarketCdfCdf =
-    (
-      {agentPrediction, resolution}:
-        PredictionResolutionGroup.combination(Cdf.t, Cdf.t),
-      sampleCount: int,
-    ) =>
-  Ok(3.0);
-
-let nonMarketCdfFloat =
-    (
-      {agentPrediction, resolution}:
-        PredictionResolutionGroup.combination(Cdf.t, float),
-    ) =>
-  agentPrediction |> CdfMeasures.toPdf;
-Ok(3.0);
-
 let nonMarketPercentagePercentage =
     (
       {agentPrediction, resolution}:
         PredictionResolutionGroup.combination(Percentage.t, Percentage.t),
     ) =>
-  Ok(
-    Percentage.(
-      {
-        let positive =
-          toFloat(resolution)
-          *. log2Error(toFloat(agentPrediction) /. toFloat(resolution));
-        let negative =
-          toFloat(inverse(resolution))
-          *. log2Error(
-               toFloat(inverse(agentPrediction))
-               /. toFloat(inverse(resolution)),
-             );
-        positive +. negative;
-      }
-    ),
+  Percentage.(
+    {
+      let positiveFactor = {
+        let (agentPrediction, resolution) = (
+          toFloat(agentPrediction),
+          toFloat(resolution),
+        );
+        resolution *. log2Error(agentPrediction /. resolution);
+      };
+      let negativeFactor = {
+        let (agentPrediction, resolution) = (
+          toFloat(inverse(agentPrediction)),
+          toFloat(inverse(resolution)),
+        );
+        resolution *. log2Error(agentPrediction /. resolution);
+      };
+      positiveFactor +. negativeFactor;
+    }
   );
 
 type group = [
@@ -90,11 +103,12 @@ type group = [
 let run = (~scoringCombination: group, ~sampleCount, ()) => {
   switch (scoringCombination) {
   | `MarketScore(`CdfCdf(v)) => marketCdfCdf(v, sampleCount)
-  | `MarketScore(`CdfFloat(v)) => marketCdfFloat(v)
-  | `MarketScore(`PercentagePercentage(v)) => marketPercentagePercentage(v)
+  | `MarketScore(`CdfFloat(v)) => Ok(marketCdfFloat(v))
+  | `MarketScore(`PercentagePercentage(v)) =>
+    Ok(marketPercentagePercentage(v))
   | `NonMarketScore(`CdfCdf(v)) => nonMarketCdfCdf(v, sampleCount)
-  | `NonMarketScore(`CdfFloat(v)) => nonMarketCdfFloat(v)
+  | `NonMarketScore(`CdfFloat(v)) => Ok(nonMarketCdfFloat(v))
   | `NonMarketScore(`PercentagePercentage(v)) =>
-    nonMarketPercentagePercentage(v)
+    Ok(nonMarketPercentagePercentage(v))
   };
 };

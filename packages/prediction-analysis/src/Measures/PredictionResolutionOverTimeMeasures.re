@@ -1,6 +1,6 @@
 type marketScoreType = [ | `MarketScore | `NonMarketScore];
 
-let scoredIntegralOverTime =
+let pointScoreIntegral =
     (
       ~marketType: marketScoreType=`MarketScore,
       ~sampleCount=DefaultParams.Cdf.maxCalculationLength,
@@ -10,7 +10,7 @@ let scoredIntegralOverTime =
   scoringCombination
   |> PredictionResolutionOverTime.toStartAtDistribution
   |> StartAtDistribution.map(scoringCombination =>
-       PredictionResolutionGroupMeasures.scorePointCombination(
+       PredictionResolutionGroupMeasures.pointScore(
          ~marketType,
          ~sampleCount,
          ~scoringCombination,

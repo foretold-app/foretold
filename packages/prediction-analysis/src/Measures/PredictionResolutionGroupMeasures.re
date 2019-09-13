@@ -1,6 +1,6 @@
 type marketScoreType = [ | `MarketScore | `NonMarketScore];
 
-let scorePointCombination =
+let pointScore =
     (
       ~marketType: marketScoreType=`MarketScore,
       ~sampleCount=DefaultParams.Cdf.maxCalculationLength,

@@ -31,6 +31,7 @@ module T = {
     | `PercentagePercentage(e) => `PercentagePercentage(f3(e))
     };
 
+  // I think that "sequence" could be a better name, but am not sure.
   let transposeOption = t =>
     switch (t) {
     | `CdfCdf(Some(e)) => Some(`CdfCdf(e))

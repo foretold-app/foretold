@@ -89,4 +89,5 @@ module Verifications = {
 
 let make = Verifications.runAll;
 let makeWithoutValidations = (~xs, ~ys, ()) => {xs, ys};
+let toPdf = (t: t) => t |> toDistribution |> Distribution.T.toPdf;
 let toMeasurementValue = (t: t) => `Cdf(t);

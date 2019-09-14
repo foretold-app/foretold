@@ -1,10 +1,10 @@
 type t('a) = array('a);
 
-let fromArray = (a: array('a)) =>
-  a |> Belt.SortArray.stableSortBy(_, compare);
-
 let uniq = (a: array('a)) =>
   a |> Array.to_list |> List.sort_uniq(compare) |> Array.of_list;
+
+let fromArray = (a: array('a)) =>
+  a |> Belt.SortArray.stableSortBy(_, compare) |> uniq;
 
 let make = (t: array('a)) =>
   Belt.SortArray.isSorted(t, compare) ? Some(t) : None;

@@ -13,20 +13,17 @@ module FloatArray = {
 
 module T = {
   module Lib = CdfLibraryImporter.Distribution;
-  let hasLength = (t: t): bool => t.xs |> Belt.Array.length > 0;
+  let hasLength = (t: t) => t.xs |> Belt.Array.length > 0;
   let empty: t = {xs: [||], ys: [||]};
   let findX = Lib.findX;
   let findY = Lib.findY;
   let make = (xs, ys): t => {xs, ys};
   let toPdf = Lib.toPdf;
   let integral = Lib.integral;
-  let differentialEntropy = Lib.differentialEntropy;
 };
 
 module Ts = {
-  let minX = (x: float, dists: ts) =>
-    dists |> Array.map(T.findX(x)) |> FloatArray.min;
+  let minX = (x, dists) => dists |> Array.map(T.findX(x)) |> FloatArray.min;
 
-  let maxX = (x: float, dists: ts) =>
-    dists |> Array.map(T.findX(x)) |> FloatArray.max;
+  let maxX = (x, dists) => dists |> Array.map(T.findX(x)) |> FloatArray.max;
 };

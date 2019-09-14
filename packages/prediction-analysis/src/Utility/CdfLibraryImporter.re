@@ -1,6 +1,3 @@
-// type t = Types.distribution;
-type ts = Types.distributions;
-
 module JS = {
   [@bs.deriving abstract]
   type distJs = {
@@ -9,39 +6,45 @@ module JS = {
   };
 
   let distToJs = (d: Types.distribution) => distJs(~xs=d.xs, ~ys=d.ys);
+
   let jsToDist = (d: distJs): Types.distribution => {
     xs: xsGet(d),
     ys: ysGet(d),
   };
 
   let doAsDist = (f, d: Types.distribution) => d |> distToJs |> f |> jsToDist;
-  [@bs.module "./stats.js"] external cdfToPdf: distJs => distJs = "cdfToPdf";
-  [@bs.module "./stats.js"] external findY: (float, distJs) => float = "findY";
-  [@bs.module "./stats.js"] external findX: (float, distJs) => float = "findX";
-  [@bs.module "./stats.js"] external integral: distJs => float = "integral";
 
-  [@bs.module "./stats.js"]
+  [@bs.module "./CdfLibraryImporter.js"]
+  external cdfToPdf: distJs => distJs = "cdfToPdf";
+
+  [@bs.module "./CdfLibraryImporter.js"]
+  external findY: (float, distJs) => float = "findY";
+
+  [@bs.module "./CdfLibraryImporter.js"]
+  external findX: (float, distJs) => float = "findX";
+
+  [@bs.module "./CdfLibraryImporter.js"]
+  external integral: distJs => float = "integral";
+
+  [@bs.module "./CdfLibraryImporter.js"]
   external differentialEntropy: (int, distJs) => distJs =
     "differentialEntropy";
 
-  [@bs.module "./stats.js"]
+  [@bs.module "./CdfLibraryImporter.js"]
   external scoreMarketCdfCdf: (int, distJs, distJs, distJs) => distJs =
     "scoreMarketCdfCdf";
 
-  [@bs.module "./stats.js"]
+  [@bs.module "./CdfLibraryImporter.js"]
   external scoreNonMarketCdfCdf: (int, distJs, distJs) => distJs =
     "scoreNonMarketCdfCdf";
 };
 
 module Distribution = {
-  let toPdf = (dist: Types.distribution) => dist |> JS.doAsDist(JS.cdfToPdf);
-  let findX = (y: float, dist: Types.distribution) =>
-    dist |> JS.distToJs |> JS.findX(y);
-  let findY = (x: float, dist: Types.distribution) =>
-    dist |> JS.distToJs |> JS.findY(x);
-  let integral = (dist: Types.distribution) =>
-    dist |> JS.distToJs |> JS.integral;
-  let differentialEntropy = (maxCalculationLength, dist: Types.distribution) =>
+  let toPdf = dist => dist |> JS.doAsDist(JS.cdfToPdf);
+  let findX = (y, dist) => dist |> JS.distToJs |> JS.findX(y);
+  let findY = (x, dist) => dist |> JS.distToJs |> JS.findY(x);
+  let integral = dist => dist |> JS.distToJs |> JS.integral;
+  let differentialEntropy = (maxCalculationLength, dist) =>
     dist
     |> JS.doAsDist(JS.differentialEntropy(maxCalculationLength))
     |> integral;
@@ -49,12 +52,7 @@ module Distribution = {
 
 module PredictionResolutionGroup = {
   let logScoreMarketCdfCdf =
-      (
-        ~sampleCount,
-        ~agentPrediction: Types.distribution,
-        ~marketPrediction: Types.distribution,
-        ~resolution: Types.distribution,
-      ) => {
+      (~sampleCount, ~agentPrediction, ~marketPrediction, ~resolution) => {
     JS.scoreMarketCdfCdf(
       sampleCount,
       JS.distToJs(agentPrediction),
@@ -65,12 +63,7 @@ module PredictionResolutionGroup = {
     |> Distribution.integral;
   };
 
-  let logScoreNonMarketCdfCdf =
-      (
-        ~sampleCount,
-        ~agentPrediction: Types.distribution,
-        ~resolution: Types.distribution,
-      ) => {
+  let logScoreNonMarketCdfCdf = (~sampleCount, ~agentPrediction, ~resolution) => {
     JS.scoreNonMarketCdfCdf(
       sampleCount,
       JS.distToJs(agentPrediction),

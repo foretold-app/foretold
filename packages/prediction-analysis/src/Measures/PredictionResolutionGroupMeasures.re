@@ -5,7 +5,7 @@ let pointScore =
       ~marketType: marketScoreType=`MarketScore,
       ~sampleCount=DefaultParams.Cdf.maxCalculationLength,
       ~scoringCombination: PredictionResolutionGroup.t,
-      ~scoreFn=LogError.PredictionGroupError.run,
+      ~scoreFn=LogError.predictionGroupError,
       (),
     ) =>
   switch (marketType) {

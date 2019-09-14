@@ -1,6 +1,11 @@
 open Belt.Result;
 let log2Error = Js.Math.log2;
 
+type predictionGroupErrorType = [
+  | `MarketScore(PredictionResolutionGroup.WithMarket.t)
+  | `NonMarketScore(PredictionResolutionGroup.t)
+];
+
 module PredictionGroupError = {
   let marketCdfCdf =
       (
@@ -106,12 +111,7 @@ module PredictionGroupError = {
       }
     );
 
-  type group = [
-    | `MarketScore(PredictionResolutionGroup.WithMarket.t)
-    | `NonMarketScore(PredictionResolutionGroup.t)
-  ];
-
-  let run = (~scoringCombination: group, ~sampleCount, ()) => {
+  let run = (~scoringCombination: predictionGroupErrorType, ~sampleCount, ()) => {
     switch (scoringCombination) {
     | `MarketScore(`CdfCdf(v)) => Ok(marketCdfCdf(sampleCount, v))
     | `MarketScore(`CdfFloat(v)) => Ok(marketCdfFloat(v))
@@ -153,3 +153,6 @@ module DifferentialEntropy = {
     | _ => None
     };
 };
+
+let predictionGroupError = PredictionGroupError.run;
+let differentialEntropy = DifferentialEntropy.run;

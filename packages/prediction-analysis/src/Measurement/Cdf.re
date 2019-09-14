@@ -41,7 +41,7 @@ module Verifications = {
 
   let _verifyNIncreasing = (fnN, errorMessageIfNotIncreasing, t: t) =>
     fnN(t)
-    |> Utility.Array.toRanges
+    |> E.Array.toRanges
     |> Rationale.Result.bimap(
          r => r,
          _ => Errors.make(Errors.RangeError, Some(t)),

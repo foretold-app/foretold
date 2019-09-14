@@ -18,6 +18,10 @@ let filterOutLessThan = (lowestAllowedValue: 'a, t: t('a)): t('a) =>
 let filterOutGreaterThan = (highestAllowedValue: 'a, t: t('a)): t('a) =>
   Belt.Array.keep(t, x => x >= highestAllowedValue);
 
+let min = Belt.Array.get(_, 0);
+let max = t => Belt.Array.get(t, Belt.Array.length(t));
+
+// Currenty not used
 let firstBeforeValue = (v: 'a, t: t('a)) => {
   let firstIndex = Belt.Array.getIndexBy(t, r => r >= v);
   let previousIndex =
@@ -31,6 +35,7 @@ let firstBeforeValue = (v: 'a, t: t('a)) => {
   previousValue;
 };
 
+// Currenty not used
 let firstAtOrBeforeValue = (v: 'a, t: t('a)) => {
   let firstIndex = Belt.Array.getIndexBy(t, r => r >= v);
   let previousIndex =
@@ -44,6 +49,7 @@ let firstAtOrBeforeValue = (v: 'a, t: t('a)) => {
   previousValue;
 };
 
+// Currenty not used
 let filterOutLessThanButKeepFirstBefore =
     (lowestAllowedValue: 'a, t: t('a)): t('a) => {
   let atAndAfter = filterOutLessThan(lowestAllowedValue, t);
@@ -53,6 +59,3 @@ let filterOutLessThanButKeepFirstBefore =
   | Some(e) => concat([|e|], atAndAfter) |> fromArray
   };
 };
-
-let min = Belt.Array.get(_, 0);
-let max = t => Belt.Array.get(t, Belt.Array.length(t));

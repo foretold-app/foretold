@@ -87,7 +87,7 @@ module Make = (C: T) => {
              |> fn1
              |> Rationale.Option.fmap(result => C.map(r, _ => result))
            )
-        |> Utility.Array.concatSome
+        |> E.Array.concatSome
         |> fn2;
 
       MeasurementValueWrapper.T.(

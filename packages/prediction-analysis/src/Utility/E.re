@@ -28,4 +28,11 @@ module Array = {
          )
       |> Rationale.Result.return
     };
+  let fold_left = Array.fold_left;
+  let fold_right = Array.fold_right;
+};
+
+module FloatArray = {
+  let min = r => r |> Array.fold_left((a, b) => a < b ? a : b, max_float);
+  let max = r => r |> Array.fold_left((a, b) => a > b ? a : b, min_float);
 };

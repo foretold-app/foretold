@@ -30,6 +30,7 @@ let transposeResult =
   };
 };
 
+// TODO: Move to SortedArray
 let xPointToRelevantPointXY = (xPoint, t: t('a, 'b)) =>
   xPoint > t.finalX
     ? None
@@ -52,7 +53,7 @@ let integral = (t: t(float, float)) => {
   t
   |> toSortedArrayTillFinalX
   |> Rationale.Result.ofOption("Necessary values are missing.")
-  |> Rationale.Result.bind(_, Utility.Array.toRanges)
+  |> Rationale.Result.bind(_, E.Array.toRanges)
   |> Rationale.Result.fmap(inRanges =>
        inRanges
        |> Belt.Array.map(_, (((lastX, lastY), (nextX, _))) =>
@@ -92,6 +93,6 @@ let product = (t1: t('a, 'b), t2: t('a, 'c)): t('a, ('b, 'c)) => {
            | _ => None
            }
          )
-      |> Utility.Array.concatSome,
+      |> E.Array.concatSome,
   };
 };

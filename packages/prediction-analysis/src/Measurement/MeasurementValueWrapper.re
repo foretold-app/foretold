@@ -19,31 +19,6 @@ type withoutInsides = [
 module T = {
   type t('a, 'b, 'c, 'd, 'e, 'f) = withInsides('a, 'b, 'c, 'd, 'e, 'f);
 
-  type fn('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'i, 'j, 'k, 'l, 'm) = {
-    cdf: 'a => 'g,
-    float: 'b => 'h,
-    binary: 'c => 'j,
-    percentage: 'd => 'k,
-    unresolvableResolution: 'e => 'l,
-    comment: 'f => 'm,
-  };
-
-  let map =
-      (
-        fn: ('a => 'g, 'b => 'h, 'c => 'j, 'd => 'k, 'e => 'l, 'f => 'm),
-        t: t('a, 'b, 'c, 'd, 'e, 'f),
-      ) => {
-    let (f1, f2, f3, f4, f5, f6) = fn;
-    switch (t) {
-    | `Cdf(a) => `Cdf(f1(a))
-    | `Float(a) => `Float(f2(a))
-    | `Binary(a) => `Binary(f3(a))
-    | `Percentage(a) => `Percentage(f4(a))
-    | `UnresolvableResolution(a) => `UnresolvableResolution(f5(a))
-    | `Comment(a) => `Comment(f6(a))
-    };
-  };
-
   let toTypeName =
     fun
     | `Cdf(_) => `Cdf

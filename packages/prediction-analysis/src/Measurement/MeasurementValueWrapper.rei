@@ -30,6 +30,7 @@ module T: {
 module Name: {
   type t = withoutInsides;
   let fromString: string => Belt.Result.t(t, string);
+  let toString: t => string;
   let toIsFn: (t, T.t('a, 'b, 'c, 'd, 'e, 'f)) => bool;
   let toWrapperFn: (t, 'a) => T.t('a, 'a, 'a, 'a, 'a, 'a);
 };

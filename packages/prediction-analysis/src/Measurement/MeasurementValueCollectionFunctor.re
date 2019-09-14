@@ -43,12 +43,6 @@ module Make = (C: T) => {
 
   module Uniform = {
     type tu = ts;
-    let wrapWithType = (t: ts) =>
-      t
-      |> firstElementType
-      |> Rationale.Option.map(MeasurementValueWrapper.Name.toWrapperFn)
-      |> Rationale.Option.map(r => r(t))
-      |> Rationale.Option.toExn("This should be impossible.");
 
     let typeName = (t: ts) =>
       t
@@ -107,19 +101,6 @@ module Make = (C: T) => {
         | `Comment => fn(toComment, r => `Comment(r))
         }
       );
-    };
-
-    let toUniform = (t: t): ts => {
-      let fn = (items, wrapFn) =>
-        items |> Array.map(C.map(_, e => wrapFn(e)));
-      switch (t) {
-      | `Cdf(a) => fn(a, r => `Cdf(r))
-      | `Float(a) => fn(a, r => `Float(r))
-      | `Binary(a) => fn(a, r => `Binary(r))
-      | `Percentage(a) => fn(a, r => `Percentage(r))
-      | `UnresolvableResolution(a) => fn(a, r => `UnresolvableResolution(r))
-      | `Comment(a) => fn(a, r => `Comment(r))
-      };
     };
 
     let fromT = (intendedType: MeasurementValueWrapper.Name.t, ts: ts) =>

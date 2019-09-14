@@ -9,8 +9,8 @@ module MeasurementWithTime: {
   module MeasurementWithTimeInput: {type t('a) = _t('a);};
   type t = MeasurementWithTimeInput.t(MeasurementValue.t);
   type ts = array(t);
-  type ls('a) = array(MeasurementWithTimeInput.t('a));
   type l('a) = MeasurementWithTimeInput.t('a);
+  type ls('a) = array(MeasurementWithTimeInput.t('a));
   let make: (~time: time, ~measurementValue: 'a, unit) => _t('a);
 };
 

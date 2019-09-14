@@ -28,8 +28,7 @@ let make:
   ) =>
   Belt.Result.t(t, Errors.e);
 
-let makeWithoutValidations:
-  (~xs: array(float), ~ys: array(float), unit) => t;
+let makeWithoutValidations: (~xs: array(float), ~ys: array(float)) => t;
 
 let toMeasurementValue: t => [> | `Cdf(t)];
 

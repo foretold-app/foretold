@@ -64,8 +64,8 @@ module T = {
     | Some(marketPredictions) =>
       let product: StartAtDistribution.t(MeasurementWithTime.time, ('a, 'a)) =
         StartAtDistribution.product(
-          toDistribution(marketPredictions),
           toDistribution(r.agentPredictions),
+          toDistribution(marketPredictions),
         );
       let toScoringCombinations =
         StartAtDistribution.map(

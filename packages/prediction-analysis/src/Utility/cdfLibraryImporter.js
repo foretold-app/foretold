@@ -1,4 +1,4 @@
-import {Pdf, Cdf, ContinuousDistribution, ContinuousDistributionCombination, scoringFunctions} from "@foretold/cdf";
+var {Pdf, Cdf, ContinuousDistribution, ContinuousDistributionCombination, scoringFunctions} = require("@foretold/cdf");
 
 function cdfToPdf({xs, ys}){
     let cdf = new Cdf(xs, ys);
@@ -62,8 +62,6 @@ module.exports = {
     findY,
     findX,
     mean,
-    distributionScoreDistribution,
-    distributionScoreNumber,
     scoreMarketCdfCdf,
     scoreNonMarketCdfCdf,
     differentialEntropy,

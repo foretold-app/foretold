@@ -33,4 +33,4 @@ let makeWithoutValidations:
 
 let toMeasurementValue: t => [> | `Cdf(t)];
 
-let toDistribution: t => PredictionAnalysis.Distribution.t;
+let toDistribution: t => Distribution.t;

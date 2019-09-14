@@ -43,8 +43,7 @@ function distributionInputDistributionOutputDistribution({predictionCdf, aggrega
 
 
 function distributionInputDistributionOutput({predictionCdf, aggregateCdf, resultCdf, sampleCount=10000}){
-    let pdfResult = distributionInputDistributionOutputDistribution({predictionCdf, aggregateCdf, resultCdf, sampleCount});
-    return ensureScoreInBounds(pdfResult.integral());
+    return distributionInputDistributionOutputDistribution({predictionCdf, aggregateCdf, resultCdf, sampleCount});
 }
 
 function distributionInputDistributionOutputMarketless(
@@ -65,7 +64,7 @@ function distributionInputDistributionOutputMarketless(
       // correct
     }
   );
-  return continuousResult.integral();
+  return continuousResult;
 }
 
 function percentageInputPercentageOutput({predictionPercentage, aggregatePercentage, resultPercentage}){
@@ -90,6 +89,15 @@ function percentageInputPercentageOutputMarketless({predictionPercentage, result
     return isFalseFactor + isTrueFactor;
 }
 
+function differentialEntropy({cdf, sampleCount=10000}){
+    let _cdf = (cdf).toPdf();
+    let combination = new ContinuousDistributionCombination([_cdf]);
+    let continuousResult = combination.combineYsWithFn(sampleCount,
+        r => r[0] * Math.log2(r[0])
+    );
+    return continuousResult;
+}
+
 let scoringFunctions = {
   distributionInputPointOutputMarketless,
   distributionInputDistributionOutputMarketless,
@@ -99,7 +107,8 @@ let scoringFunctions = {
   distributionInputDistributionOutput,
   percentageInputPercentageOutput,
   scoreFunctionWithoutResult,
-  scoreFunctionWithResult
+  scoreFunctionWithResult,
+  differentialEntropy
 };
 
 module.exports = {

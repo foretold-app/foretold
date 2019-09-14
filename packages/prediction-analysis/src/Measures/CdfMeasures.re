@@ -5,4 +5,5 @@ let findX = (x: float) => Cdf.toDistribution ||> Distribution.T.findX(x);
 let findY = (y: float) => Cdf.toDistribution ||> Distribution.T.findY(y);
 let integral = Cdf.toDistribution ||> Distribution.T.integral;
 let toPdf = Cdf.toDistribution ||> Distribution.T.toPdf;
-let differentialEntropy = (t: t) => 3.0;
+let differentialEntropy =
+  Cdf.toDistribution ||> Distribution.T.differentialEntropy;

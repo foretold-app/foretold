@@ -7,7 +7,7 @@ let marketCdfCdf =
         PredictionResolutionGroup.WithMarket.combination(Cdf.t, Cdf.t),
       sampleCount: int,
     ) =>
-  Distribution.Ts.scoreMarketCdfCdf(
+  Distribution.Ts.logScoreMarketCdfCdf(
     agentPrediction |> Cdf.toDistribution,
     marketPrediction |> Cdf.toDistribution,
     resolution |> Cdf.toDistribution,
@@ -19,7 +19,7 @@ let nonMarketCdfCdf =
         PredictionResolutionGroup.combination(Cdf.t, Cdf.t),
       sampleCount: int,
     ) =>
-  Distribution.Ts.scoreNonMarketCdfCdf(
+  Distribution.Ts.logScoreNonMarketCdfCdf(
     agentPrediction |> Cdf.toDistribution,
     resolution |> Cdf.toDistribution,
   );

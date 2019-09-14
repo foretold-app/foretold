@@ -32,6 +32,14 @@ function scoreNonMarketCdfCdf(predictionCdf, resolutionCdf){
     });
 }
 
+function differentialEntropy(cdf){
+    let toCdf = (r) => (new Cdf(r.xs, r.ys));
+    return scoringFunctions.differentialEntropy({
+        cdf: toCdf(cdf),
+        sampleCount: 10000
+    });
+}
+
 function findY(x, {xs, ys}){
     let cdf = new Cdf(xs, ys);
     let result = cdf.findY(x);
@@ -58,5 +66,6 @@ module.exports = {
     distributionScoreNumber,
     scoreMarketCdfCdf,
     scoreNonMarketCdfCdf,
+    differentialEntropy,
     integral
 };

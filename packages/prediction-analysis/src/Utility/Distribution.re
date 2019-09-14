@@ -31,16 +31,19 @@ module JS = {
   [@bs.module "./stats.js"] external integral: distJs => float = "integral";
 
   [@bs.module "./stats.js"]
-  external differentialEntropy: distJs => distJs = "differentialEntropy";
+  external differentialEntropy: (int, distJs) => distJs =
+    "differentialEntropy";
 
   [@bs.module "./stats.js"]
-  external scoreMarketCdfCdf: (distJs, distJs, distJs) => distJs =
+  external scoreMarketCdfCdf: (int, distJs, distJs, distJs) => distJs =
     "scoreMarketCdfCdf";
 
   [@bs.module "./stats.js"]
-  external scoreNonMarketCdfCdf: (distJs, distJs) => distJs =
+  external scoreNonMarketCdfCdf: (int, distJs, distJs) => distJs =
     "scoreNonMarketCdfCdf";
 };
+
+let maxCalculationLength = DefaultParams.Cdf.maxCalculationLength;
 
 module T = {
   let hasLength = (t: t): bool => t.xs |> Belt.Array.length > 0;
@@ -53,7 +56,9 @@ module T = {
 
   let integral = (dist: t) => dist |> JS.distToJs |> JS.integral;
   let differentialEntropy = (dist: t) =>
-    dist |> JS.doAsDist(JS.differentialEntropy) |> integral;
+    dist
+    |> JS.doAsDist(JS.differentialEntropy(maxCalculationLength))
+    |> integral;
 };
 
 module Ts = {
@@ -65,6 +70,7 @@ module Ts = {
 
   let logScoreMarketCdfCdf = (prediction: t, aggregate: t, resolution: t) => {
     JS.scoreMarketCdfCdf(
+      maxCalculationLength,
       JS.distToJs(prediction),
       JS.distToJs(aggregate),
       JS.distToJs(resolution),
@@ -75,6 +81,7 @@ module Ts = {
 
   let logScoreNonMarketCdfCdf = (prediction: t, resolution: t) => {
     JS.scoreNonMarketCdfCdf(
+      maxCalculationLength,
       JS.distToJs(prediction),
       JS.distToJs(resolution),
     )

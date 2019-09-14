@@ -121,3 +121,10 @@ let run = (~scoringCombination: group, ~sampleCount, ()) => {
     Ok(nonMarketPercentagePercentage(v))
   };
 };
+
+let differentialEntropy = (m: MeasurementValue.t) =>
+  switch (m) {
+  | `Cdf(m) => Some(3.0)
+  | `Percentage(m) => Some(3.0)
+  | _ => None
+  };

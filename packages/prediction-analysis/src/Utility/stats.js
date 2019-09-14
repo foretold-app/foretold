@@ -6,37 +6,37 @@ function cdfToPdf({xs, ys}){
     return {xs: pdf.xs, ys: pdf.ys}
 }
 
-function mean(vars){
+function mean(sampleCount, vars){
     let cdfs = vars.map(r => new Cdf(r.xs, r.ys));
     let comb = new ContinuousDistributionCombination(cdfs);
-    let newCdf = comb.combineYsWithMean(10000);
+    let newCdf = comb.combineYsWithMean(sampleCount);
     return {xs: newCdf.xs, ys: newCdf.ys}
 }
 
-function scoreMarketCdfCdf(predictionCdf, aggregateCdf, resolutionCdf){
+function scoreMarketCdfCdf(sampleCount, predictionCdf, aggregateCdf, resolutionCdf){
     let toCdf = (r) => (new Cdf(r.xs, r.ys));
     return scoringFunctions.distributionInputDistributionOutput({
         predictionCdf: toCdf(predictionCdf),
         aggregateCdf: toCdf(aggregateCdf),
         resultCdf: toCdf(resolutionCdf),
-        sampleCount: 10000
+        sampleCount
     });
 }
 
-function scoreNonMarketCdfCdf(predictionCdf, resolutionCdf){
+function scoreNonMarketCdfCdf(sampleCount, predictionCdf, resolutionCdf){
     let toCdf = (r) => (new Cdf(r.xs, r.ys));
     return scoringFunctions.distributionInputDistributionOutputMarketless({
         predictionCdf: toCdf(predictionCdf),
         resultCdf: toCdf(resolutionCdf),
-        sampleCount: 10000
+        sampleCount
     });
 }
 
-function differentialEntropy(cdf){
+function differentialEntropy(sampleCount, cdf){
     let toCdf = (r) => (new Cdf(r.xs, r.ys));
     return scoringFunctions.differentialEntropy({
         cdf: toCdf(cdf),
-        sampleCount: 10000
+        sampleCount: sampleCount
     });
 }
 

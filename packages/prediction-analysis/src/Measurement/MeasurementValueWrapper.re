@@ -102,13 +102,14 @@ module Name = {
     | `Percentage => "percentage"
     | `UnresolvableResolution => "unresolvableResolution"
     | `Comment => "comment";
-  let fromString =
-    fun
+  let fromString = str =>
+    switch (str) {
     | "floatPoint" => Belt.Result.Ok(`Float)
     | "floatCdf" => Ok(`Cdf)
     | "percentage" => Ok(`Percentage)
     | "binary" => Ok(`Binary)
     | "unresolvableResolution" => Ok(`UnresolvableResolution)
     | "comment" => Ok(`Comment)
-    | _ => Error("Not found");
+    | _ => Error("Measurement datatype value not valid: " ++ str)
+    };
 };

@@ -36,3 +36,15 @@ module FloatArray = {
   let min = r => r |> Array.fold_left((a, b) => a < b ? a : b, max_float);
   let max = r => r |> Array.fold_left((a, b) => a > b ? a : b, min_float);
 };
+
+module Result = {
+  let flatten = (results: list(Belt.Result.t('a, 'b))) =>
+    List.for_all(Belt.Result.isOk, results)
+      ? Belt.Result.Ok(List.map(Belt.Result.getExn, results))
+      : Error(
+          results
+          |> List.map(Rationale.Result.getError)
+          |> List.filter(Rationale.Option.isSome)
+          |> List.map(Belt.Option.getExn),
+        );
+};

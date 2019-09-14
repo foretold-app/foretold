@@ -1,5 +1,7 @@
+[@genType]
 type marketScoreType = [ | `MarketScore | `NonMarketScore];
 
+[@genType]
 let pointScore =
     (
       ~marketType: marketScoreType=`MarketScore,

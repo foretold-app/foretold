@@ -146,12 +146,13 @@ module DifferentialEntropy = {
       }
     );
 
-  let run = (sampleCount, m: MeasurementValue.t) =>
+  let run = (sampleCount, m: MeasurementValue.t) => {
     switch (m) {
     | `Cdf(m) => Some(ofCdf(sampleCount, m))
     | `Percentage(p) => Some(ofPercentage(p))
     | _ => None
     };
+  };
 };
 
 let predictionGroupError = PredictionGroupError.run;

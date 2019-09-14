@@ -1,9 +1,11 @@
 module Comment = {
+  [@genType]
   type t =
     | Generic
     | QuestionFeedback
     | Update;
 
+  [@genType]
   let toString = (e: t): string =>
     switch (e) {
     | Generic => "Generic"
@@ -11,16 +13,19 @@ module Comment = {
     | Update => "Update"
     };
 
+  [@genType]
   let toMeasurement = (t: t) => `Comment(t);
 };
 
 module UnresolvableResolution = {
+  [@genType]
   type t =
     | Ambiguous
     | FalseConditional
     | ResultNotAvailable
     | Other;
 
+  [@genType]
   let toString = (e: t): string =>
     switch (e) {
     | Ambiguous => "Ambiguous"
@@ -29,9 +34,11 @@ module UnresolvableResolution = {
     | Other => "Other"
     };
 
+  [@genType]
   let toMeasurement = (t: t) => `UnresolvableResolution(t);
 };
 
+[@genType]
 type t =
   MeasurementValueWrapper.T.t(
     Cdf.t,

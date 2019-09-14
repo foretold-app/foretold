@@ -16,10 +16,13 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
     "@glennsl/bs-jest": "^0.4.2",
-    "jest": "24.9.0",
+    "babel-jest": "^24.9.0",
     "bs-platform": "5.0.6",
-    "gentype": "2.34.0"
+    "gentype": "2.34.0",
+    "jest": "24.9.0"
   },
   "dependencies": {
     "@foretold/cdf": "1.0.9",

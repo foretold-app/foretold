@@ -28,6 +28,7 @@
     "refmt": 3,
     "gentypeconfig": {
         "language": "untyped",
+        "module": "commonjs",
         "shims": {},
         "debug": {
             "all": true,

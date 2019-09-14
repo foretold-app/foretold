@@ -46,16 +46,16 @@ module Verifications = {
          r => r,
          _ => Errors.make(Errors.RangeError, Some(t)),
        )
-    <$> (
+    >>= (
       r =>
         Belt.Array.every(r, ((first, second)) => second >= first)
-          ? Ok(r)
+          ? Ok(t)
           : Error(Errors.make(errorMessageIfNotIncreasing, Some(t)))
-    )
-    <$> (_ => t);
+    );
 
   let verifyXsIncreasing =
     _verifyNIncreasing(t => t.xs, Errors.XsIncrementing);
+
   let verifyYsIncreasing =
     _verifyNIncreasing(t => t.ys, Errors.YsIncrementing);
 
@@ -69,7 +69,7 @@ module Verifications = {
       ? Error(Errors.make(DifferentLength, Some({xs, ys}))) : Ok({xs, ys});
 
   let verifyMaxLength = (maxLength, {xs, ys}) =>
-    Array.length(xs) <= maxLength
+    Array.length(xs) > maxLength
       ? Error(Errors.make(LengthGreaterThan(maxLength), Some({xs, ys})))
       : Ok({xs, ys});
 

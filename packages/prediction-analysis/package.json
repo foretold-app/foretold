@@ -1,32 +1,30 @@
 {
-    "name": "prediction-analysis",
-    "version": "0.0.1",
-    "main": "index.js",
-    "scripts": {
-        "build": "bsb -make-world",
-        "start": "bsb -make-world -w",
-        "clean": "bsb -clean-world",
-        "test": "jest",
-        "watch:test": "jest --watchAll",
-        "watch:s": "yarn run jest -- Converter_test --watch"
-    },
-    "keywords": [
-        "BuckleScript"
-    ],
-    "author": "",
-    "license": "MIT",
-    "devDependencies": {
-        "@glennsl/bs-jest": "^0.4.2",
-        "bs-platform": "5.0.6",
-        "gentype": "2.34.0"
-    },
-    "dependencies": {
-        "@foretold/cdf": "1.0.9",
-        "@glennsl/bs-json": "4.0.0",
-        "lodash": "^4.17.11",
-        "rationale": "^0.1.10"
-    },
-    "jest": {
-        "testEnvironment": "node"
-    }
+  "name": "prediction-analysis",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "test": "jest",
+    "watch:test": "jest --watchAll",
+    "watch:s": "yarn run jest -- Converter_test --watch"
+  },
+  "keywords": [
+    "BuckleScript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@glennsl/bs-jest": "^0.4.2",
+    "jest": "24.9.0",
+    "bs-platform": "5.0.6",
+    "gentype": "2.34.0"
+  },
+  "dependencies": {
+    "@foretold/cdf": "1.0.9",
+    "@glennsl/bs-json": "4.0.0",
+    "lodash": "^4.17.11",
+    "rationale": "^0.1.10"
+  }
 }

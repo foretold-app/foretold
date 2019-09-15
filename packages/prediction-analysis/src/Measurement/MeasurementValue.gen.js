@@ -8,24 +8,28 @@ const $$toJS951164472 = {"0": "Ambiguous", "1": "FalseConditional", "2": "Result
 
 const $$toRE951164472 = {"Ambiguous": 0, "FalseConditional": 1, "ResultNotAvailable": 2, "Other": 3};
 
-import * as MeasurementValueBS from './MeasurementValue.bs';
+const MeasurementValueBS = require('./MeasurementValue.bs');
 
-export const Comment_toString = function (Arg1) {
+const Comment_toString = function (Arg1) {
   const result = MeasurementValueBS.Comment[0]($$toRE266309803[Arg1]);
   return result
-};
+};;
+exports.Comment_toString = Comment_toString
 
-export const Comment_toMeasurement = function (Arg1) {
+const Comment_toMeasurement = function (Arg1) {
   const result = MeasurementValueBS.Comment[1]($$toRE266309803[Arg1]);
   return $$toJS266309803[result]
-};
+};;
+exports.Comment_toMeasurement = Comment_toMeasurement
 
-export const UnresolvableResolution_toString = function (Arg1) {
+const UnresolvableResolution_toString = function (Arg1) {
   const result = MeasurementValueBS.UnresolvableResolution[0]($$toRE951164472[Arg1]);
   return result
-};
+};;
+exports.UnresolvableResolution_toString = UnresolvableResolution_toString
 
-export const UnresolvableResolution_toMeasurement = function (Arg1) {
+const UnresolvableResolution_toMeasurement = function (Arg1) {
   const result = MeasurementValueBS.UnresolvableResolution[1]($$toRE951164472[Arg1]);
   return $$toJS951164472[result]
-};
+};;
+exports.UnresolvableResolution_toMeasurement = UnresolvableResolution_toMeasurement

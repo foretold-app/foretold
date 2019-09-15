@@ -29,10 +29,6 @@ module Array = {
     |> Js.Array.map(
          Rationale.Option.toExn("Warning: This should not have happened"),
        );
-  // let concatResult =
-  //     (results: array(Belt.Result.t('a, 'b)))
-  //     : Belt.Result.t(array('a), array('b)) =>
-  //   results -> Belt.Array.some(Belt.Result.isError) ? (results |> Array.map(Rationale.Result.getError))
 
   let defaultEmpty = (o: option(array('a))): array('a) =>
     switch (o) {

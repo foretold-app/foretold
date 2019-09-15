@@ -1,4 +1,4 @@
-var {toMeasurementValue, score, fromOption, getScoreOverTime, itemArray} = require('../../src/Utility/JsExport.gen');
+var {toMeasurementValue, score, fromOption, getScoreOverTime, itemArray} = require('./src/Utility/JsExport.gen');
 
 test('adds 1 + 2 to equal 3', () => {
     expect((toMeasurementValue({data: 0.2, dataType: "percentage"}))).toBe(3);

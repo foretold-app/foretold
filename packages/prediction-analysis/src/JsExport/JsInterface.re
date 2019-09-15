@@ -19,10 +19,22 @@ module JsResult = {
     };
 };
 
+module MarketType = {
+  [@genType]
+  type marketScoreType = [ | `MarketScore | `NonMarketScore];
+  [@genType]
+  let marketScore = `MarketScore;
+  [@genType]
+  let nonMarketScore = `NonMarketScore;
+};
+
 module MeasurementValueI = {
   [@genType]
-  let make = (e: Js.Json.t) =>
-    e |> MeasurementValueJson.toMeasurementValue |> JsResult.fromResult;
+  let make = (e: Js.Json.t) => e |> MeasurementValueJson.toMeasurementValue;
+
+  [@genType]
+  let differentialEntropy = (e: MeasurementValue.t) =>
+    e |> MeasurementValueMeasures.differentialEntropy;
 };
 
 module PredictionResolutionGroupI = {
@@ -65,9 +77,12 @@ module PredictionResolutionGroupI = {
 
   [@genType]
   let pointScore =
-      (scoringCombination: PredictionAnalysis.PredictionResolutionGroup.t) => {
+      (
+        marketType: MarketType.marketScoreType,
+        scoringCombination: PredictionAnalysis.PredictionResolutionGroup.t,
+      ) => {
     PredictionResolutionGroupMeasures.pointScore(
-      ~marketType=`MarketScore,
+      ~marketType,
       ~scoringCombination,
       (),
     );
@@ -101,29 +116,27 @@ module PredictionResolutionOverTimeI = {
         marketPredictions: array(item),
         resolution: item,
       ) => {
-    (
-      switch (
-        itemArray(agentPredictions),
-        itemArray(marketPredictions),
-        toMeasurementValue(resolution),
-      ) {
-      | (Ok(agentPredictions), Ok(marketPredictions), Ok(resolution)) =>
-        PredictionResolutionOverTime.fromMeasurementCombination(
-          ~agentPredictions,
-          ~marketPredictions=Some(marketPredictions),
-          ~resolution,
-        )
-      | (Error(a), _, _) => Error(a |> Js.Array.joinWith(", "))
-      | (_, Error(a), _) => Error(a |> Js.Array.joinWith(", "))
-      | (_, _, Error(a)) => Error(a)
-      }
-    )
-    |> JsResult.fromResult;
+    switch (
+      itemArray(agentPredictions),
+      itemArray(marketPredictions),
+      toMeasurementValue(resolution),
+    ) {
+    | (Ok(agentPredictions), Ok(marketPredictions), Ok(resolution)) =>
+      PredictionResolutionOverTime.fromMeasurementCombination(
+        ~agentPredictions,
+        ~marketPredictions=Some(marketPredictions),
+        ~resolution,
+      )
+    | (Error(a), _, _) => Error(a |> Js.Array.joinWith(", "))
+    | (_, Error(a), _) => Error(a |> Js.Array.joinWith(", "))
+    | (_, _, Error(a)) => Error(a)
+    };
   };
 
   [@genType]
-  let pointScoreIntegral = e =>
+  let pointScoreIntegral = (marketType: MarketType.marketScoreType, e) =>
     PredictionResolutionOverTimeMeasures.pointScoreIntegral(
+      ~marketType,
       ~scoringCombination=e,
       (),
     );

@@ -9,7 +9,7 @@ let pointScore =
       ~scoringCombination: PredictionResolutionGroup.t,
       ~scoreFn=LogError.predictionGroupError,
       (),
-    ) =>
+    ) => {
   switch (marketType) {
   | `MarketScore =>
     scoringCombination
@@ -25,3 +25,4 @@ let pointScore =
       (),
     )
   };
+};

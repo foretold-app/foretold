@@ -16,3 +16,7 @@ let transposeResult:
   t('a, Belt.Result.t('b, 'c)) => Belt.Result.t(t('a, 'b), 'c);
 
 let integral: t(float, float) => Belt.Result.t(float, string);
+
+let average:
+  (~t: t(float, float), ~lowestTime: float=?, ~highestTime: float=?, unit) =>
+  Belt.Result.t(float, string);

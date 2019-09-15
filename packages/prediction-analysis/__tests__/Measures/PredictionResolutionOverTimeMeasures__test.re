@@ -24,13 +24,13 @@ describe("#scorePointCombination", () =>
     };
 
     expect(
-      PredictionResolutionOverTimeMeasures.pointScoreIntegral(
+      PredictionResolutionOverTimeMeasures.averagePointScore(
         ~marketType=`MarketScore,
         ~scoringCombination=makeCombination,
         (),
       )
       |> Belt.Result.getExn,
     )
-    |> toBeCloseTo(1.34);
+    |> toBeCloseTo(0.268);
   })
 );

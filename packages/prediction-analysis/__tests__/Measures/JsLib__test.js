@@ -55,19 +55,31 @@ describe("#PredictionResolutionOverTime", () => {
       })).error).toBe(undefined);
     });
 
-  test('#pointScoreIntegral', () => {
+  test('#averagePointScore', () => {
       expect((new PredictionResolutionOverTime({
         agentPredictions: [
-          {time: 10., measurement: {data: 0.4, dataType: "percentage"}},
-          {time: 20., measurement: {data: 0.3, dataType: "percentage"}},
-          {time: 30., measurement: {data: 0.2, dataType: "percentage"}}
+          {time: 3., measurement: {data: 0.7, dataType: "percentage"}},
+          {time: 8., measurement: {data: 0.88, dataType: "percentage"}},
         ],
         marketPredictions: [
-          {time: 5., measurement: {data: 0.8, dataType: "percentage"}},
-          {time: 15., measurement: {data: 0.7, dataType: "percentage"}},
-          {time: 25., measurement: {data: 0.6, dataType: "percentage"}}
+          {time: 0., measurement: {data: 0.5, dataType: "percentage"}},
+          {time: 5., measurement: {data: 0.7, dataType: "percentage"}},
         ],
-        resolution: {time: 40, measurement: {data: 0.2, dataType: "percentage"}}
-      })).pointScoreIntegral(marketScore).data).toBeCloseTo(19.259);
+        resolution: {time: 10, measurement: {data: 0.95, dataType: "percentage"}}
+      })).averagePointScore(marketScore, undefined).data).toBeCloseTo(0.268);
+    });
+
+  test('#averagePointScore with low point', () => {
+      expect((new PredictionResolutionOverTime({
+        agentPredictions: [
+          {time: 3., measurement: {data: 0.7, dataType: "percentage"}},
+          {time: 8., measurement: {data: 0.88, dataType: "percentage"}},
+        ],
+        marketPredictions: [
+          {time: 0., measurement: {data: 0.5, dataType: "percentage"}},
+          {time: 5., measurement: {data: 0.7, dataType: "percentage"}},
+        ],
+        resolution: {time: 10, measurement: {data: 0.95, dataType: "percentage"}}
+      })).averagePointScore(marketScore, 1.0).data).toBeCloseTo(0.192);
     });
 });

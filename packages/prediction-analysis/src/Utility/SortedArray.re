@@ -19,7 +19,7 @@ let filterOutGreaterThan = (highestAllowedValue: 'a, t: t('a)): t('a) =>
   Belt.Array.keep(t, x => x >= highestAllowedValue);
 
 let min = Belt.Array.get(_, 0);
-let max = t => Belt.Array.get(t, Belt.Array.length(t));
+let max = t => Belt.Array.get(t, Belt.Array.length(t) - 1);
 
 // Currenty not used
 let firstBeforeValue = (v: 'a, t: t('a)) => {

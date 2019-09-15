@@ -134,9 +134,17 @@ module PredictionResolutionOverTimeI = {
   };
 
   [@genType]
-  let pointScoreIntegral = (marketType: MarketType.marketScoreType, e) =>
-    PredictionResolutionOverTimeMeasures.pointScoreIntegral(
+  let averagePointScore =
+      (
+        marketType: MarketType.marketScoreType,
+        lowestTimeForAverage,
+        highestTimeForAverage,
+        e,
+      ) =>
+    PredictionResolutionOverTimeMeasures.averagePointScore(
       ~marketType,
+      ~lowestTimeForAverage,
+      ~highestTimeForAverage,
       ~scoringCombination=e,
       (),
     );

@@ -21,6 +21,7 @@ let map = (fn, t: t('a, 'b)) => {
 let xs = t => t.pointXY |> Array.map(((x, _)) => x);
 let ys = t => t.pointXY |> Array.map(((_, y)) => y);
 let minX = t => t |> xs |> SortedArray.min;
+let maxX = t => t |> xs |> SortedArray.max;
 
 let transposeResult =
     (t: t('a, Belt.Result.t('b, 'c))): Belt.Result.t(t('a, 'b), 'c) => {
@@ -61,6 +62,18 @@ let integral = (t: t(float, float)) => {
           )
        |> Belt.Array.reduce(_, 0., (a, b) => a +. b)
      );
+};
+
+let average = (~t, ~lowestTime=?, ~highestTime=?, ()) => {
+  let lowestTime = Rationale.Option.firstSome(lowestTime, minX(t));
+  let highestTime = Rationale.Option.firstSome(highestTime, maxX(t));
+  switch (integral(t), lowestTime, highestTime) {
+  | (Error(e), _, _) => Belt.Result.Error(e)
+  | (_, None, _) => Belt.Result.Error("Min must exist")
+  | (_, _, None) => Belt.Result.Error("Max must exist")
+  | (Ok(integral), Some(min), Some(max)) =>
+    Belt.Result.Ok(integral /. (max -. min))
+  };
 };
 
 // If ether is empty, should return empty list.

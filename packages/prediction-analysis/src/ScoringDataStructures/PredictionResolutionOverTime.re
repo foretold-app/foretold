@@ -6,13 +6,13 @@ module MeasurementWithTime = {
     measurementValue: 'a,
   };
 
-  let make = (~time, ~measurementValue, ()) => {measurementValue, time};
+  let make = (~time, ~measurementValue) => {measurementValue, time};
 
   module MeasurementWithTimeInput = {
     type t('a) = _t('a);
     let toMeasurement = (t: t('a)): 'a => t.measurementValue;
     let map = (t: t('a), fn: 'a => 'b) =>
-      make(~time=t.time, ~measurementValue=fn(t.measurementValue), ());
+      make(~time=t.time, ~measurementValue=fn(t.measurementValue));
   };
 
   module Ts = {
@@ -121,7 +121,7 @@ module TBuilder = {
   };
 
   let validateValidPredictionPair = (t: t): Belt.Result.t(t, string) =>
-    t |> hasValidPredictionPair ? Ok(t) : Error("Prediciton pair not valid");
+    t |> hasValidPredictionPair ? Ok(t) : Error("Prediction pair not valid");
 
   let _run =
       ({agentPredictions, marketPredictions, resolution}: t)

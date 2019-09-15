@@ -11,7 +11,7 @@ module MeasurementWithTime: {
   type ts = array(t);
   type l('a) = MeasurementWithTimeInput.t('a);
   type ls('a) = array(MeasurementWithTimeInput.t('a));
-  let make: (~time: time, ~measurementValue: 'a, unit) => _t('a);
+  let make: (~time: time, ~measurementValue: 'a) => _t('a);
 };
 
 type measurementWithTime('a) = MeasurementWithTime.l('a);

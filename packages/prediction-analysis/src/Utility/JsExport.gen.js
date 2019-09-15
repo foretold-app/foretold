@@ -4,9 +4,6 @@ const Curry = require('bs-platform/lib/js/curry.js');
 
 const JsExportBS = require('./JsExport.bs');
 
-const foo = JsExportBS.foo;;
-exports.foo = foo
-
 const JsResult_fromResult = function (Arg1) {
   const result = JsExportBS.JsResult[0](Arg1);
   return {data:result[0], error:result[1]}
@@ -27,12 +24,24 @@ exports.toPredictionResolutionGroup = toPredictionResolutionGroup
 
 const score = function (Arg1, Arg2, Arg3) {
   const result = Curry._3(JsExportBS.score, Arg1, (Arg2 == null ? undefined : Arg2), Arg3);
-  return {data:result[0], error:result[1]}
+  return result
 };;
 exports.score = score
 
-const fromOption = function (Arg1) {
-  const result = JsExportBS.fromOption((Arg1 == null ? undefined : Arg1));
+const toM = function (Arg1) {
+  const result = JsExportBS.toM([Arg1.measurement, Arg1.time]);
   return result
 };;
-exports.fromOption = fromOption
+exports.toM = toM
+
+const itemArray = function (Arg1) {
+  const result = JsExportBS.itemArray(Arg1.map(function _element(ArrayItem) { return [ArrayItem.measurement, ArrayItem.time]}));
+  return result
+};;
+exports.itemArray = itemArray
+
+const getScoreOverTime = function (Arg1, Arg2, Arg3) {
+  const result = Curry._3(JsExportBS.getScoreOverTime, Arg1.map(function _element(ArrayItem) { return [ArrayItem.measurement, ArrayItem.time]}), Arg2.map(function _element(ArrayItem1) { return [ArrayItem1.measurement, ArrayItem1.time]}), [Arg3.measurement, Arg3.time]);
+  return {data:result[0], error:result[1]}
+};;
+exports.getScoreOverTime = getScoreOverTime

@@ -1,18 +1,7 @@
 [@genType]
-let foo = 3;
-
-[@genType]
 type resultToJs('a) = {
   value: 'a,
   error: string,
-};
-
-type name = string;
-type surname = string;
-[@genType]
-type person = {
-  name,
-  surname,
 };
 
 module JsResult = {
@@ -74,18 +63,65 @@ let toPredictionResolutionGroup =
 [@genType]
 let score = (a: Js.Json.t, m: option(Js.Json.t), r: Js.Json.t) => {
   toPredictionResolutionGroup(a, m, r)
-  |> Belt.Result.map(
-       _,
-       e => {
-         Js.log2("YO", e);
-         PredictionResolutionGroupMeasures.pointScore(
-           ~scoringCombination=e,
-           (),
-         );
-       },
-     )
-  |> JsResult.fromResult;
+  |> Belt.Result.map(_, e =>
+       PredictionResolutionGroupMeasures.pointScore(
+         ~marketType=`MarketScore,
+         ~scoringCombination=e,
+         (),
+       )
+     );
 };
 
 [@genType]
-let fromOption = (a): option(int) => a |> Rationale.Option.map(r => r + 3);
+type item = {
+  measurement: Js.Json.t,
+  time: float,
+};
+
+[@genType]
+let toM = (item: item) =>
+  MeasurementValueJson.toMeasurementValue(item.measurement)
+  ->Belt.Result.map(e =>
+      PredictionResolutionOverTime.MeasurementWithTime.make(
+        ~measurementValue=e,
+        ~time=item.time,
+      )
+    );
+
+[@genType]
+let itemArray = (items: array(item)) => {
+  items |> Array.map(toM) |> E.Result.arrayFlatten;
+};
+
+[@genType]
+let getScoreOverTime =
+    (
+      agentPredictions: array(item),
+      marketPredictions: array(item),
+      resolution: item,
+    ) => {
+  (
+    switch (
+      itemArray(agentPredictions),
+      itemArray(marketPredictions),
+      toM(resolution),
+    ) {
+    | (Ok(agentPredictions), Ok(marketPredictions), Ok(resolution)) =>
+      PredictionResolutionOverTime.fromMeasurementCombination(
+        ~agentPredictions,
+        ~marketPredictions=Some(marketPredictions),
+        ~resolution,
+      )
+      |> Rationale.Result.bind(_, e =>
+           PredictionResolutionOverTimeMeasures.pointScoreIntegral(
+             ~scoringCombination=e,
+             (),
+           )
+         )
+    | (Error(a), _, _) => Error(a |> Js.Array.joinWith(", "))
+    | (_, Error(a), _) => Error(a |> Js.Array.joinWith(", "))
+    | (_, _, Error(a)) => Error(a)
+    }
+  )
+  |> JsResult.fromResult;
+};

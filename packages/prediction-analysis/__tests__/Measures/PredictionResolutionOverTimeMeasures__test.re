@@ -10,15 +10,15 @@ describe("#scorePointCombination", () =>
       let combinationOverTime: PredictionResolutionOverTime.t =
         `PercentagePercentage({
           agentPredictions: [|
-            make(~time=3., ~measurementValue=mkPer(0.70), ()),
-            make(~time=8., ~measurementValue=mkPer(0.88), ()),
+            make(~time=3., ~measurementValue=mkPer(0.70)),
+            make(~time=8., ~measurementValue=mkPer(0.88)),
           |],
           marketPredictions:
             Some([|
-              make(~time=0., ~measurementValue=mkPer(0.5), ()),
-              make(~time=5., ~measurementValue=mkPer(0.7), ()),
+              make(~time=0., ~measurementValue=mkPer(0.5)),
+              make(~time=5., ~measurementValue=mkPer(0.7)),
             |]),
-          resolution: make(~time=10., ~measurementValue=mkPer(0.95), ()),
+          resolution: make(~time=10., ~measurementValue=mkPer(0.95)),
         });
       combinationOverTime;
     };

@@ -1,5 +1,27 @@
 type time = int;
 
+module Result = {
+  let listFlatten = (results: list(Belt.Result.t('a, 'b))) =>
+    List.for_all(Belt.Result.isOk, results)
+      ? Belt.Result.Ok(List.map(Belt.Result.getExn, results))
+      : Error(
+          results
+          |> List.map(Rationale.Result.getError)
+          |> List.filter(Rationale.Option.isSome)
+          |> List.map(Belt.Option.getExn),
+        );
+
+  let arrayFlatten = (results: array(Belt.Result.t('a, 'b))) =>
+    Belt.Array.some(results, Belt.Result.isError)
+      ? Belt.Result.Error(
+          results
+          |> Array.map(Rationale.Result.getError)
+          |> Belt.Array.keep(_, Rationale.Option.isSome)
+          |> Array.map(Belt.Option.getExn),
+        )
+      : Ok(Array.map(Belt.Result.getExn, results));
+};
+
 module Array = {
   let concatSome = (optionals: array(option('a))): array('a) =>
     optionals
@@ -7,6 +29,10 @@ module Array = {
     |> Js.Array.map(
          Rationale.Option.toExn("Warning: This should not have happened"),
        );
+  // let concatResult =
+  //     (results: array(Belt.Result.t('a, 'b)))
+  //     : Belt.Result.t(array('a), array('b)) =>
+  //   results -> Belt.Array.some(Belt.Result.isError) ? (results |> Array.map(Rationale.Result.getError))
 
   let defaultEmpty = (o: option(array('a))): array('a) =>
     switch (o) {
@@ -35,16 +61,4 @@ module Array = {
 module FloatArray = {
   let min = r => r |> Array.fold_left((a, b) => a < b ? a : b, max_float);
   let max = r => r |> Array.fold_left((a, b) => a > b ? a : b, min_float);
-};
-
-module Result = {
-  let flatten = (results: list(Belt.Result.t('a, 'b))) =>
-    List.for_all(Belt.Result.isOk, results)
-      ? Belt.Result.Ok(List.map(Belt.Result.getExn, results))
-      : Error(
-          results
-          |> List.map(Rationale.Result.getError)
-          |> List.filter(Rationale.Option.isSome)
-          |> List.map(Belt.Option.getExn),
-        );
 };

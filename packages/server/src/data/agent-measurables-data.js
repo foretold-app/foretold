@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const moment = require('moment');
 
 const { AgentMeasurableModel } = require('../models-abstract');
 const {
@@ -9,6 +10,7 @@ const { DataBase } = require('./data-base');
 const { MeasurementsData } = require('./measurements-data');
 const { MeasurablesData } = require('./measurables-data');
 const { Filter } = require('./classes/filter');
+const {PredictionResolutionOverTime, marketScore, nonMarketScore} = require('@foretold/prediction-analysis');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -45,21 +47,32 @@ class AgentMeasurablesData extends DataBase {
   async primaryPointScore(agentId, measurableId) {
     const {
       predictions,
+      recentResult,
+      allAggregations,
+      measurableCreatedAt
     } = await this._getMeasurementsToScoring(agentId, measurableId);
 
-    const numCompetitiveMeasurements = _.size(predictions);
-
-    const numAggregatesAfter = predictions
-      .map(v => _.size(v.aggregatesAfter))
-      .reduce((a, c) => a + c, 0);
-
-    const numAggregatesBefore = predictions
-      .map(v => !!v.aggregateBefore ? 1 : 0)
-      .reduce((a, c) => a + c, 0);
-
-    return numCompetitiveMeasurements * 10 +
-      numAggregatesAfter +
-      numAggregatesBefore;
+    let toUnix = r => moment(r).unix()
+    let toOverTime = (p) => {
+      return ({time: toUnix(p.dataValues.createdAt), measurement: p.dataValues.value})
+    };
+    if ((predictions.length > 0) && !!recentResult && (allAggregations.length > 0) && measurableCreatedAt){
+      let agentPredictions = predictions.map(r => r.measurement).map(toOverTime);
+      let marketPredictions = allAggregations.map(toOverTime);
+      let resolution = toOverTime(recentResult);
+      let overTime = new PredictionResolutionOverTime({
+        agentPredictions,
+        marketPredictions,
+        resolution,
+      }).averagePointScore(marketScore, toUnix(measurableCreatedAt));
+      if (!!overTime.error){
+        console.error("PrimaryPointScore Error: ",  overTime.error)
+        return 0.;
+      }
+      return _.round(overTime.data, 2);
+    } else {
+      return 0.0
+    }
   }
 
   /**

@@ -1,4 +1,4 @@
-var {MeasurementValue, PredictionResolutionGroup, marketScore, nonMarketScore, PredictionResolutionOverTime} = require("../../src/JsExport/JsLib");
+var {MeasurementValue, PredictionResolutionGroup, marketScore, nonMarketScore, PredictionResolutionOverTime} = require("../../src/index");
 
 describe("#MeasurementValue", () => {
   test('Constructor', () => {

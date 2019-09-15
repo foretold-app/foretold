@@ -419,7 +419,8 @@ async function nonMarketLogScore(root, args, context, info) {
     outcome: await outcome(root, args, context, info),
   });
 
-  console.log("GOT LOG SCORE", result);
+  // TODO OZZIE: THIS MARKET SCORE IS A DISTRIBUTION! WRONG SHAPE!
+  // console.log("GOT LOG SCORE", result);
 
   return _.round(result, 2);
 }

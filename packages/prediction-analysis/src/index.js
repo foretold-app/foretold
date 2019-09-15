@@ -1,5 +1,15 @@
-function sum(a, b) {
-    return a + b;
-  }
+var {
+  MeasurementValue,
+  PredictionResolutionGroup,
+  PredictionResolutionOverTime,
+  marketScore,
+  nonMarketScore
+} = require("./JsExport/JsLib");
 
-module.exports = {sum};
+module.exports = {
+  MeasurementValue,
+  PredictionResolutionGroup,
+  PredictionResolutionOverTime,
+  marketScore,
+  nonMarketScore
+};

@@ -77,14 +77,15 @@ module Verifications = {
     Belt.Array.every(ys, e => e >= 0. && e <= 1.)
       ? Ok({xs, ys}) : Error(Errors.make(YBetween0And1, Some({xs, ys})));
 
+  // These commented out for now, because many cdfs in prod were not valid.
   let runAll = (~xs, ~ys, ~minLength, ~maxLength, ()) =>
     {xs, ys}
     |> verifyMinLength(minLength)
     >>= verifyMaxLength(maxLength)
-    >>= verifySameLength
-    >>= verifyXsIncreasing
-    >>= verifyYsIncreasing
-    >>= verifyYsBetween0And1;
+    >>= verifySameLength;
+  // >>= verifyXsIncreasing
+  // >>= verifyYsIncreasing
+  // >>= verifyYsBetween0And1;
 };
 
 let make = Verifications.runAll;

@@ -110,7 +110,7 @@ module TBuilder = {
   let hasValidPredictionPair = (t: t): bool => {
     let {agentPredictions, resolution} = t;
     let hasMoreThanOne = typeName =>
-      MeasurementWithTime.hasMoreThanOneOfType(typeName, agentPredictions);
+      MeasurementWithTime.lengthOfIntendedType(typeName, agentPredictions) > 0;
     switch (resolution.measurementValue) {
     | `Float(_) when hasMoreThanOne(`Cdf) => true
     | `Cdf(_) when hasMoreThanOne(`Cdf) => true

@@ -11,7 +11,7 @@ module Make:
     type ls('a) = array(C.t('a));
     type t = C.t(MeasurementValue.t);
     type ts = array(t);
-    let hasMoreThanOneOfType: (MeasurementValueWrapper.Name.t, ts) => bool;
+    let lengthOfIntendedType: (MeasurementValueWrapper.Name.t, ts) => int;
 
     module Unwrapped: {
       type t =

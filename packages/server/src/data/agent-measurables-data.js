@@ -86,10 +86,10 @@ class AgentMeasurablesData extends DataBase {
 
       if (!!overTime.error) {
         console.error("PrimaryPointScore Error: ", overTime.error);
-        return 0.;
+        return 0.0;
+      } else {
+        return _.round(overTime.data, 2);
       }
-
-      return _.round(overTime.data, 2);
     } else {
       return 0.0
     }

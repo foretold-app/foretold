@@ -37,9 +37,9 @@ module Make = (C: T) => {
   let isAllSameType = (ts: ts) =>
     Belt.Array.length(ts) == Belt.Array.length(filterOnFirstElementType(ts));
 
-  let hasMoreThanOneOfType =
+  let lengthOfIntendedType =
       (intededType: MeasurementValueWrapper.Name.t, ts: ts) =>
-    filterOnIntendedType(intededType, ts) |> Belt.Array.length > 1;
+    filterOnIntendedType(intededType, ts) |> Belt.Array.length;
 
   module Uniform = {
     type tu = ts;

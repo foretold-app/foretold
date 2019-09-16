@@ -57,11 +57,18 @@ class AgentMeasurablesData extends DataBase {
     } = await this._getMeasurementsToScoring(agentId, measurableId);
 
     let toUnix = r => moment(r).unix();
+    function translateValue(v) {
+      let {data, dataType} = v;
+      if (dataType === "percentage"){
+        data = data / 100
+      }
+      return {data, dataType}
+    }
 
     let toOverTime = (p) => {
       return {
-        time: toUnix(p.dataValues.createdAt),
-        measurement: p.dataValues.value
+        time: toUnix(p.dataValues.relevantAt),
+        measurement: translateValue(p.dataValues.value)
       };
     };
 

@@ -92,6 +92,15 @@ class AgentMeasurablesData extends DataBase {
       }).averagePointScore(marketScore, toUnix(measurableCreatedAt));
 
       console.log("VALUE OF POINT SCORE---------------------------", overTime);
+      if (overTime === NaN){
+        console.log("ERROR------------------------------")
+        console.log({
+          agentPredictions,
+          marketPredictions,
+          resolution,
+          createdAt: toUnix(measurableCreatedAt)
+        });
+      }
       if (!!overTime.error) {
         console.error("PrimaryPointScore Error: ", overTime.error);
         return 0.0;

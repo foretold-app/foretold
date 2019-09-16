@@ -13,17 +13,21 @@ function runJobs() {
 
   const jobs = [];
 
-  jobs.push(cron.scheduleJob(EVERY_HOUR, () => {
+  const a = cron.scheduleJob(EVERY_HOUR, () => {
     emitter.emit(events.EVERY_HOUR);
-  }));
+  });
 
-  jobs.push(cron.scheduleJob(EVERY_TEN_MINUTES, () => {
+  const b = cron.scheduleJob(EVERY_TEN_MINUTES, () => {
     emitter.emit(events.EVERY_TEN_MINUTES);
-  }));
+  });
 
-  jobs.push(cron.scheduleJob(EVERY_MINUTE, () => {
+  const c = cron.scheduleJob(EVERY_MINUTE, () => {
     emitter.emit(events.EVERY_MINUTE);
-  }));
+  });
+
+  jobs.push(a);
+  jobs.push(b);
+  jobs.push(c);
 
   return jobs;
 }

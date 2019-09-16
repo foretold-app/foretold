@@ -1,0 +1,38 @@
+{
+    "name": "predictionAnalysis",
+    "version": "0.0.1",
+    "sources": [{
+            "dir": "src",
+            "subdirs": true
+        },
+        {
+            "dir": "__tests__",
+            "type": "dev",
+            "subdirs": true
+        }
+    ],
+    "package-specs": {
+        "module": "commonjs",
+        "in-source": true
+    },
+    "suffix": ".bs.js",
+    "bs-dependencies": [
+        "@glennsl/bs-json",
+        "@glennsl/bs-jest",
+        "rationale"
+    ],
+    "warnings": {
+        "error": "+101"
+    },
+    "namespace": true,
+    "refmt": 3,
+    "gentypeconfig": {
+        "language": "untyped",
+        "module": "commonjs",
+        "shims": {},
+        "debug": {
+            "all": true,
+            "basic": true
+        }
+    }
+}

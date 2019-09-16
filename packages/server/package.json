@@ -37,6 +37,7 @@
     "@slack/client": "^5.0.2",
     "@foretold/cdf": "^1.0.9",
     "@foretold/measurement-value": "^1.0.0",
+    "@foretold/prediction-analysis": "^0.0.1",
     "apollo-server": "^2.7.2",
     "apollo-server-express": "^2.7.2",
     "auth0": "^2.18.0",

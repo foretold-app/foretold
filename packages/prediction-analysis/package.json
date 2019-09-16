@@ -1,0 +1,33 @@
+{
+  "name": "@foretold/prediction-analysis",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "test": "jest",
+    "watch:test": "jest --watchAll",
+    "watch:s": "yarn run jest -- Converter_test --watch"
+  },
+  "keywords": [
+    "BuckleScript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "24.9.0"
+  },
+  "dependencies": {
+    "babel-jest": "^24.9.0",
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "@glennsl/bs-jest": "^0.4.2",
+    "gentype": "2.34.0",
+    "bs-platform": "5.0.6",
+    "@foretold/cdf": "1.0.9",
+    "@glennsl/bs-json": "4.0.0",
+    "lodash": "^4.17.11",
+    "rationale": "^0.1.10"
+  }
+}

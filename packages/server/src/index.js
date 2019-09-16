@@ -1,12 +1,10 @@
-const _ = require('lodash');
 const path = require('path');
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser-graphql');
 
 const config = require('./config');
-const { runJobs } = require('./async');
-const { runListeners } = require('./async/listeners');
+const { runJobs, runListeners } = require('./async');
 const events = require('./async/events');
 const emitter = require('./async/emitter');
 const { apolloServer } = require('./graphql/apollo-server');
@@ -43,9 +41,9 @@ app.use(cors());
   // Do not set API_URL in "Heroku.com" for Production.
   app.get(/^\/env\.([0-9a-z]+)\.js$/, (_req, res) => res.send(
     `window.ENV = { ` +
-    `API_URL: "${config.API_URL}", ` +
-    `AUTH0_DOMAIN: "${config.AUTH0_DOMAIN}", ` +
-    `AUTH0_CLIENT_ID: "${config.AUTH0_CLIENT_ID}", ` +
+    `API_URL: "${ config.API_URL }", ` +
+    `AUTH0_DOMAIN: "${ config.AUTH0_DOMAIN }", ` +
+    `AUTH0_CLIENT_ID: "${ config.AUTH0_CLIENT_ID }", ` +
     `}`
   ));
 }
@@ -63,6 +61,6 @@ app.use(cors());
 }
 
 app.listen({ port: config.PORT }, () => {
-  console.log(`Server ready at http://localhost:${config.PORT}`);
+  console.log(`Server ready at http://localhost:${ config.PORT }`);
   emitter.emit(events.SERVER_IS_READY, app);
 });

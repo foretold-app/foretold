@@ -1,12 +1,11 @@
 const _ = require('lodash');
-const { Cdf, scoringFunctions } = require('@foretold/cdf');
-const {
-  MEASUREMENT_VALUE,
-} = require('@foretold/measurement-value/enums/measurement-value');
+const { Cdf } = require('@foretold/cdf');
 
 const {
-  MEASUREMENT_COMPETITOR_TYPE,
-} = require('../../enums/measurement-competitor-type');
+  PredictionResolutionGroup,
+  marketScore,
+  nonMarketScore,
+} = require('@foretold/prediction-analysis');
 
 const data = require('../../data');
 const { withinMeasurables } = require('../../structures');
@@ -237,54 +236,14 @@ async function latestAggregateByRootId(root, _args, context, _info) {
   return data.measurements.getLatestAggregate(measurableId, agentId);
 }
 
-/**
- * @todo: remove later
- * @param measurement
- * @returns {*}
- */
-function _getDataType(measurement) {
-  return measurement.dataValues.value.dataType;
-}
 
-/**
- * @todo: remove later
- * @param measurement
- * @returns {*}
- */
-function _getDataValue(measurement) {
-  return measurement.dataValues.value.data;
-}
-
-/**
- * @param {string} prediction
- * @param {string} aggregate
- * @param {string} outcome
- * @returns {string | null}
- */
-function _matcher({ prediction, aggregate, outcome }) {
-  if (
-    prediction === MEASUREMENT_VALUE.percentage &&
-    aggregate === MEASUREMENT_VALUE.percentage &&
-    outcome === MEASUREMENT_VALUE.binary
-  ) {
-    return MEASUREMENT_VALUE.percentage;
-  } else if (
-    prediction === MEASUREMENT_VALUE.floatCdf &&
-    aggregate === MEASUREMENT_VALUE.floatCdf &&
-    outcome === MEASUREMENT_VALUE.floatCdf
-  ) {
-    return MEASUREMENT_VALUE.floatCdf;
-  } else if (
-    prediction === MEASUREMENT_VALUE.floatCdf &&
-    aggregate === MEASUREMENT_VALUE.floatCdf &&
-    outcome === MEASUREMENT_VALUE.floatPoint
-  ) {
-    return MEASUREMENT_VALUE.floatPoint;
-  } else {
-    return null;
+function translateValue(r) {
+  let {data, dataType} = r.dataValues.value;
+  if (dataType === "percentage"){
+    data = data / 100
   }
+  return {data, dataType}
 }
-
 /**
  * @param prediction
  * @param aggregate
@@ -292,53 +251,17 @@ function _matcher({ prediction, aggregate, outcome }) {
  * @returns {number|*}
  */
 function measurementScore({ prediction, aggregate, outcome }) {
-  // It should really return null or false if one of these doesn't exist.
+  let getValue = translateValue;
+
   if (!prediction || !aggregate || !outcome) return 0;
 
-  const combinationType = _matcher({
-    prediction: _getDataType(prediction),
-    aggregate: _getDataType(aggregate),
-    outcome: _getDataType(outcome)
-  });
+  const score = new PredictionResolutionGroup({
+    agentPrediction: getValue(prediction),
+    marketPrediction: getValue(aggregate),
+    resolution: getValue(outcome),
+  }).pointScore(marketScore);
 
-  switch (combinationType) {
-    case MEASUREMENT_VALUE.percentage:
-      return scoringFunctions.percentageInputPercentageOutput({
-        predictionPercentage: _getDataValue(prediction) / 100,
-        aggregatePercentage: _getDataValue(aggregate) / 100,
-        resultPercentage: !!_getDataValue(outcome) ? 1.0 : 0.0
-      });
-    case MEASUREMENT_VALUE.floatCdf:
-      return scoringFunctions.distributionInputDistributionOutput({
-        predictionCdf: new Cdf(
-          _getDataValue(prediction).xs,
-          _getDataValue(prediction).ys,
-        ),
-        aggregateCdf: new Cdf(
-          _getDataValue(aggregate).xs,
-          _getDataValue(aggregate).ys,
-        ),
-        resultCdf: new Cdf(
-          _getDataValue(outcome).xs,
-          _getDataValue(outcome).ys,
-        ),
-      });
-    case MEASUREMENT_VALUE.floatPoint:
-      return scoringFunctions.distributionInputPointOutput({
-        predictionCdf: new Cdf(
-          _getDataValue(prediction).xs,
-          _getDataValue(prediction).ys,
-        ),
-        aggregateCdf: new Cdf(
-          _getDataValue(aggregate).xs,
-          _getDataValue(aggregate).ys,
-        ),
-        resultPoint: _getDataValue(outcome),
-      });
-    case null:
-      // It should really return null or false if invalid.
-      return 0;
-  }
+  return score.data || 0.0
 }
 
 /**
@@ -348,44 +271,17 @@ function measurementScore({ prediction, aggregate, outcome }) {
  * @returns {number|*}
  */
 function _nonMarketLogScore({ prediction, outcome }) {
-  // It should really return null or false if one of these doesn't exist.
+  let getValue = translateValue;
+
   if (!prediction || !outcome) return 0;
 
-  const combinationType = _matcher({
-    prediction: _getDataType(prediction),
-    aggregate: _getDataType(prediction),
-    outcome: _getDataType(outcome)
-  });
+  const score = new PredictionResolutionGroup({
+    agentPrediction: getValue(prediction),
+    marketPrediction: undefined,
+    resolution: getValue(outcome),
+  }).pointScore(nonMarketScore);
 
-  switch (combinationType) {
-    case MEASUREMENT_VALUE.percentage:
-      return scoringFunctions.percentageInputPercentageOutputMarketless({
-        predictionPercentage: _getDataValue(prediction) / 100,
-        resultPercentage: !!_getDataValue(outcome) ? 1 : 0
-      });
-    case MEASUREMENT_VALUE.floatCdf:
-      return scoringFunctions.distributionInputDistributionOutputMarketless({
-        predictionCdf: new Cdf(
-          _getDataValue(prediction).xs,
-          _getDataValue(prediction).ys,
-        ),
-        resultCdf: new Cdf(
-          _getDataValue(outcome).xs,
-          _getDataValue(outcome).ys,
-        ),
-      });
-    case MEASUREMENT_VALUE.floatPoint:
-      return scoringFunctions.distributionInputPointOutputMarketless({
-        predictionCdf: new Cdf(
-          _getDataValue(prediction).xs,
-          _getDataValue(prediction).ys,
-        ),
-        resultPoint: _getDataValue(outcome),
-      });
-    case null:
-      // It should really return null or false if invalid.
-      return 0;
-  }
+  return score.data || 0.0
 }
 
 /**
@@ -418,8 +314,6 @@ async function nonMarketLogScore(root, args, context, info) {
     prediction: await prediction(root, args, context, info),
     outcome: await outcome(root, args, context, info),
   });
-
-  console.log("GOT LOG SCORE", result);
 
   return _.round(result, 2);
 }

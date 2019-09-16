@@ -4,17 +4,17 @@ const { ContinuousDistributionCombination } = require('./continuousDistributionC
 // Returns the cutoff value of the specified percentile,
 // considering the samples array to be 'length' long.
 // samples must be sorted.
+
 /**
- *
  * @param cdfs
  * @param fn
- * @return {cdf}
+ * @param sampleCount
+ * @returns {Cdf}
  */
 function fnToCdf(cdfs, fn, sampleCount) {
-    let pdfs = cdfs.map(c => c.toPdf());
-    let combination = new ContinuousDistributionCombination(pdfs);
-    let pdf = combination.combineYsWithFn(sampleCount, fn);
-    return pdf;
+  let pdfs = cdfs.map(c => c.toPdf());
+  let combination = new ContinuousDistributionCombination(pdfs);
+  return combination.combineYsWithFn(sampleCount, fn);
 }
 
 module.exports = {

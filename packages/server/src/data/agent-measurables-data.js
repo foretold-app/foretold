@@ -1,4 +1,10 @@
 const _ = require('lodash');
+const moment = require('moment');
+
+const {
+  PredictionResolutionOverTime,
+  marketScore,
+} = require('@foretold/prediction-analysis');
 
 const { AgentMeasurableModel } = require('../models-abstract');
 const {
@@ -45,21 +51,48 @@ class AgentMeasurablesData extends DataBase {
   async primaryPointScore(agentId, measurableId) {
     const {
       predictions,
+      recentResult,
+      allAggregations,
+      measurableCreatedAt
     } = await this._getMeasurementsToScoring(agentId, measurableId);
 
-    const numCompetitiveMeasurements = _.size(predictions);
+    let toUnix = r => moment(r).unix();
 
-    const numAggregatesAfter = predictions
-      .map(v => _.size(v.aggregatesAfter))
-      .reduce((a, c) => a + c, 0);
+    let toOverTime = (p) => {
+      return {
+        time: toUnix(p.dataValues.createdAt),
+        measurement: p.dataValues.value
+      };
+    };
 
-    const numAggregatesBefore = predictions
-      .map(v => !!v.aggregateBefore ? 1 : 0)
-      .reduce((a, c) => a + c, 0);
+    if (
+      !!recentResult &&
+      predictions.length > 0 &&
+      allAggregations.length > 0 &&
+      measurableCreatedAt
+    ) {
 
-    return numCompetitiveMeasurements * 10 +
-      numAggregatesAfter +
-      numAggregatesBefore;
+      let agentPredictions = predictions
+        .map(r => r.measurement)
+        .map(toOverTime);
+      let marketPredictions = allAggregations.map(toOverTime);
+      let resolution = toOverTime(recentResult);
+
+      let overTime = new PredictionResolutionOverTime({
+        agentPredictions,
+        marketPredictions,
+        resolution,
+      }).averagePointScore(marketScore, toUnix(measurableCreatedAt));
+
+      if (!!overTime.error) {
+        console.error("PrimaryPointScore Error: ", overTime.error);
+        return 0.;
+      }
+
+      return _.round(overTime.data, 2);
+    } else {
+      return 0.0
+    }
   }
 
   /**

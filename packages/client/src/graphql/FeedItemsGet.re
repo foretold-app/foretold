@@ -1,5 +1,3 @@
-open Rationale.Function.Infix;
-
 type generic = {
   item: string,
   description: string,

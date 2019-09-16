@@ -42,7 +42,9 @@ module Styles = {
 module Header = {
   let component = ReasonReact.statelessComponent("Header");
   let textDiv = text =>
-    <FC.PageCard.HeaderRow.Title> {text |> ste} </FC.PageCard.HeaderRow.Title>;
+    <FC__PageCard.HeaderRow.Title>
+      {text |> ste}
+    </FC__PageCard.HeaderRow.Title>;
 
   let make = children => {
     ...component,

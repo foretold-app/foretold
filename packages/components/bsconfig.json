@@ -1,5 +1,5 @@
 {
-  "name": "@foretold/theme",
+  "name": "@foretold/components",
   "reason": {
     "react-jsx": 2
   },
@@ -18,7 +18,7 @@
     "module": "commonjs",
     "in-source": true
   }],
-  "namespace": true,
+  "namespace": false,
   "sources": [{
       "dir": "src",
       "subdirs": true

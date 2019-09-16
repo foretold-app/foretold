@@ -17,3 +17,4 @@ A "Prediction Resolution Group" is a group of measurements needed to score a par
 ## PredictionResolutionOverTime
 
 A "Prediction Resolution Over Time" is a group of measurements needed to score a user's predictions over a period of time. This is done by making a bunch of Prediction Resolution Groups, scoring those, and taking the average user score over a specific period.
+

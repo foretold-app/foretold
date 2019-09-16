@@ -724,14 +724,6 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@foretold/cdf@1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@foretold/cdf/-/cdf-1.0.9.tgz#3af95dd7b563e550f53d03e46cd60139f9b12390"
-  integrity sha512-mMZ17N3wXxnh7rmp567jYSirinfNfP5W96vBEuTahh+cGbFxYtc0yWO7tZosoI6R6YxybQ1lorlHB38rv2WMqw==
-  dependencies:
-    lodash "4.17.15"
-    pdfast "^0.2.0"
-
 "@glennsl/bs-jest@^0.4.2":
   version "0.4.9"
   resolved "https://registry.yarnpkg.com/@glennsl/bs-jest/-/bs-jest-0.4.9.tgz#a23af2668dda05947ce9c043fd5a7b295e91cef7"
@@ -2791,7 +2783,7 @@ lodash.sortby@^4.7.0:
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
   integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
 
-lodash@4.17.15, lodash@^4.17.11, lodash@^4.17.13:
+lodash@^4.17.11, lodash@^4.17.13:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -3269,11 +3261,6 @@ path-type@^3.0.0:
   integrity sha512-T2ZUsdZFHgA3u4e5PfPbjd7HDDpxPnQb5jN0SrDsjNSuVXHJqtwTnWqG0B1jZrgmJ/7lj1EmVIByWt1gxGkWvg==
   dependencies:
     pify "^3.0.0"
-
-pdfast@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/pdfast/-/pdfast-0.2.0.tgz#8cbc556e1bf2522177787c0de2e0d4373ba885c9"
-  integrity sha1-jLxVbhvyUiF3eHwN4uDUNzuohck=
 
 performance-now@^2.1.0:
   version "2.1.0"

@@ -102,6 +102,18 @@ module TBuilder = {
             resolution,
           }),
         )
+      | (
+          `Percentage(agentPrediction),
+          Some(`Percentage(marketPrediction)),
+          `Binary(resolution),
+        ) =>
+        Ok(
+          `PercentagePercentage({
+            agentPrediction,
+            marketPrediction: Some(marketPrediction),
+            resolution: Percentage.fromBool(resolution),
+          }),
+        )
       | (`Cdf(agentPrediction), None, `Cdf(resolution)) =>
         Ok(`CdfCdf({agentPrediction, marketPrediction: None, resolution}))
       | (`Cdf(agentPrediction), None, `Float(resolution)) =>
@@ -112,6 +124,14 @@ module TBuilder = {
             agentPrediction,
             marketPrediction: None,
             resolution,
+          }),
+        )
+      | (`Percentage(agentPrediction), None, `Binary(resolution)) =>
+        Ok(
+          `PercentagePercentage({
+            agentPrediction,
+            marketPrediction: None,
+            resolution: Percentage.fromBool(resolution),
           }),
         )
       | _ =>

@@ -234,6 +234,40 @@ module TBuilder = {
       | (Error(e), _) => Error(e)
       | (Ok(_), _) => Error("This should be an impossible error.")
       }
+    | `Binary(resolution) =>
+      switch (convertAgent(`Percentage), convertMarket(`Percentage)) {
+      | (
+          Ok(`Percentage(agentPredictions)),
+          Some(`Percentage(marketPredictions)),
+        ) =>
+        Ok(
+          `PercentagePercentage(
+            {
+              agentPredictions,
+              marketPredictions: Some(marketPredictions),
+              resolution: {
+                time: res.time,
+                measurementValue: Percentage.fromBool(resolution),
+              },
+            }: T.percentagePercentage,
+          ),
+        )
+      | (Ok(`Percentage(agentPredictions)), None) =>
+        Ok(
+          `PercentagePercentage(
+            {
+              agentPredictions,
+              marketPredictions: None,
+              resolution: {
+                time: res.time,
+                measurementValue: Percentage.fromBool(resolution),
+              },
+            }: T.percentagePercentage,
+          ),
+        )
+      | (Error(e), _) => Error(e)
+      | (Ok(_), _) => Error("This should be an impossible error.")
+      }
     | _ => Error("Grouping not allowed")
     };
   };

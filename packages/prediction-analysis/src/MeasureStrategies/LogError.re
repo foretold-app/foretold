@@ -82,7 +82,11 @@ module PredictionGroupError = {
           );
           resolution *. log2Error(agentPrediction /. marketPrediction);
         };
-        positiveFactor +. negativeFactor;
+        switch (Percentage.toFloat(resolution)) {
+        | 0.0 => negativeFactor
+        | 1.0 => positiveFactor
+        | _ => positiveFactor +. negativeFactor
+        };
       }
     );
 
@@ -107,7 +111,11 @@ module PredictionGroupError = {
           );
           resolution *. log2Error(agentPrediction /. resolution);
         };
-        positiveFactor +. negativeFactor;
+        switch (Percentage.toFloat(resolution)) {
+        | 0.0 => negativeFactor
+        | 1.0 => positiveFactor
+        | _ => positiveFactor +. negativeFactor
+        };
       }
     );
 

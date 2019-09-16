@@ -11,7 +11,7 @@ module Footer = FC__Footer;
 module Stats = FC__Stats;
 module StateStatus = FC__StateStatus;
 module MeasurableForm = FC__MeasurableForm;
-module NumberShower = FC__Numbershower;
+module NumberShower = FC__NumberShower;
 module Button = FC__Button;
 
 module Charts = {

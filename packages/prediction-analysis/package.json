@@ -20,11 +20,11 @@
     "@babel/preset-env": "^7.6.0",
     "@glennsl/bs-jest": "^0.4.2",
     "babel-jest": "^24.9.0",
-    "bs-platform": "5.0.6",
-    "gentype": "2.34.0",
     "jest": "24.9.0"
   },
   "dependencies": {
+    "gentype": "2.34.0",
+    "bs-platform": "5.0.6",
     "@foretold/cdf": "1.0.9",
     "@glennsl/bs-json": "4.0.0",
     "lodash": "^4.17.11",

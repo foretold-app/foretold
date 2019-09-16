@@ -1,10 +1,10 @@
-var {
+const {
   MeasurementValue,
   PredictionResolutionGroup,
   PredictionResolutionOverTime,
   marketScore,
   nonMarketScore
-} = require("./JsExport/JsLib");
+} = require('./JsExport/JsLib');
 
 module.exports = {
   MeasurementValue,

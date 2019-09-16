@@ -57,7 +57,7 @@ module Columns = {
         (r: record) =>
           r.pointScore
           |> E.O.fmap(E.Float.toString)
-          |> E.O.default("0.0")
+          |> E.O.default("")
           |> Utils.ste,
       ~flex=1,
       (),
@@ -70,7 +70,7 @@ module Columns = {
         (r: record) =>
           r.pointScore
           |> E.O.fmap(E.Float.toString)
-          |> E.O.default("0.0")
+          |> E.O.default("")
           |> Utils.ste,
       ~flex=1,
       (),
@@ -96,7 +96,7 @@ module Columns = {
         (r: record) =>
           r.numberOfQuestionsScored
           |> E.O.fmap(E.I.toString)
-          |> E.O.default("0")
+          |> E.O.default("")
           |> Utils.ste,
       ~flex=1,
       (),
@@ -124,7 +124,7 @@ module Columns = {
       ~height=30,
       (),
     )
-    |> E.O.default("-" |> Utils.ste);
+    |> E.O.default("" |> Utils.ste);
   };
 
   let competitiveMeasurement =
@@ -134,7 +134,7 @@ module Columns = {
         (r: record) =>
           r.competitiveMeasurement
           |> E.O.fmap(getMeasurement)
-          |> E.O.default("-" |> Utils.ste),
+          |> E.O.default("" |> Utils.ste),
       ~flex=1,
       (),
     );
@@ -146,7 +146,7 @@ module Columns = {
         (r: record) =>
           r.aggregationMeasurement
           |> E.O.fmap(getMeasurement)
-          |> E.O.default("-" |> Utils.ste),
+          |> E.O.default("" |> Utils.ste),
       ~flex=1,
       (),
     );
@@ -158,7 +158,7 @@ module Columns = {
         (r: record) =>
           r.objectiveMeasurement
           |> E.O.fmap(getMeasurement)
-          |> E.O.default("-" |> Utils.ste),
+          |> E.O.default("" |> Utils.ste),
       ~flex=1,
       (),
     );

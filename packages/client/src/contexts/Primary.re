@@ -419,8 +419,8 @@ module MeasurementScoreSet = {
 
   let make =
       (
-        ~primaryPointScore,
-        ~nonMarketLogScore,
+        ~primaryPointScore=None,
+        ~nonMarketLogScore=None,
         ~prediction,
         ~outcome=None,
         ~previousAggregate=None,

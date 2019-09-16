@@ -8,7 +8,7 @@ const agentMeasurable = new graphql.GraphQLObjectType({
     agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     primaryPointScore: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLFloat),
+      type: graphql.GraphQLFloat,
       resolve: require('../resolvers').agentMeasurables.primaryPointScore,
     },
     predictionCountTotal: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },

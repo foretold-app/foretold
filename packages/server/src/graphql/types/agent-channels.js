@@ -8,8 +8,8 @@ const agentChannel = new graphql.GraphQLObjectType({
     agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     primaryPointScore: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLFloat),
-      resolve: () => 0
+      type: graphql.GraphQLFloat,
+      resolve: () => 28
     },
     numberOfPredictions: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
     numberOfQuestionsScored: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },

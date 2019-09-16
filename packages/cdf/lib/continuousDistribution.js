@@ -1,5 +1,5 @@
-const { interpolate, range, min, max } = require('./functions');
 const _ = require('lodash');
+const { interpolate, range, min, max } = require('./functions');
 
 class ContinuousDistribution {
   /**
@@ -58,11 +58,11 @@ class ContinuousDistribution {
     return xs.length > 0;
   }
 
-  minX(){
+  minX() {
     return this.xs[0]
   }
 
-  maxX(){
+  maxX() {
     return this.xs[this.xs.length - 1]
   }
 
@@ -155,22 +155,28 @@ class ContinuousDistribution {
   }
 
   /**
-   * Finds the integral. Takes the average Y value between points, treating them like a triangle.
+   * Finds the integral. Takes the average Y value between points,
+   * treating them like a triangle.
    * @return {number[]}
    */
-  integral(){
-    let integral = 0
+  integral() {
+    let integral = 0;
     for (let i = 1; i < this.ys.length; i++) {
       let thisY = this.ys[i];
-      let lastY = this.ys[i-1];
+      let lastY = this.ys[i - 1];
       let thisX = this.xs[i];
-      let lastX = this.xs[i-1];
-      if (_.isFinite(thisY) && _.isFinite(lastY) && _.isFinite(thisX) && _.isFinite(lastX)){
-        let sectionInterval = ((thisY+lastY)/2)*(thisX-lastX);
-        integral = integral + sectionInterval
+      let lastX = this.xs[i - 1];
+
+      if (
+        _.isFinite(thisY) && _.isFinite(lastY) &&
+        _.isFinite(thisX) && _.isFinite(lastX)
+      ) {
+        let sectionInterval = ((thisY + lastY) / 2) * (thisX - lastX);
+        integral = integral + sectionInterval;
       }
+
     }
-    return integral
+    return integral;
   }
 }
 

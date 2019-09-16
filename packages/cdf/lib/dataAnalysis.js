@@ -1,5 +1,4 @@
 /**
- *
  * @param sortedValues
  * @param start
  * @param end
@@ -90,7 +89,6 @@ function sampleMeanAndStdev(samples) {
 // considering the samples array to be 'length' long.
 // samples must be sorted.
 /**
- *
  * @param samples
  * @param length
  * @param percentage
@@ -103,7 +101,6 @@ function percentile(samples, length, percentage) {
 // Returns the first index before length whose value is
 // greater than the supplied cutoff. Else returns -1.
 /**
- *
  * @param sortedValues
  * @param value
  * @param start
@@ -131,5 +128,5 @@ module.exports = {
   sortDescending,
   sampleMeanAndStdev,
   percentile,
-  cutoff
+  cutoff,
 };

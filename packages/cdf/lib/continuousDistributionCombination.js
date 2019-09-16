@@ -1,6 +1,7 @@
+const _ = require('lodash');
+
 const { range, min, max, mean } = require('./functions');
 const { ContinuousDistribution } = require('./continuousDistribution');
-const _ = require('lodash');
 
 class ContinuousDistributionCombination {
   /**
@@ -41,8 +42,9 @@ class ContinuousDistributionCombination {
   }
 
   /**
-   * @param {number} sampleCount
-   * @return {Cdf}
+   * @param sampleCount
+   * @param fn
+   * @returns {ContinuousDistribution|*}
    */
   combineYsWithFn(sampleCount, fn) {
     const xs = this.equallyDividedXs(sampleCount);

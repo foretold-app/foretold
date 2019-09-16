@@ -73,6 +73,9 @@ class MeasurableModel extends ModelPostgres {
     return this.model.findAll({
       where: {
         state: MEASURABLE_STATE.JUDGEMENT_PENDING,
+        resolutionEndpoint: {
+          [this.not]: null,
+        },
         expectedResolutionDate: {
           [this.lt]: this.fn('now'),
         },
@@ -96,6 +99,7 @@ class MeasurableModel extends ModelPostgres {
   /**
    * @todo: implement client for this code
    * @todo: do not remove
+   * @todo: Do we really need it if we have hooks?
    * @param {Models.Measurable} measurable
    * @return {Promise<Models.Measurable>}
    */
@@ -110,9 +114,8 @@ class MeasurableModel extends ModelPostgres {
           [MEASUREMENT_VALUE.floatPoint]: asFloat,
         },
       });
+      await measurable.judged();
     }
-    // @todo: Do we really need it if we have hooks?
-    await measurable.judged();
     return measurable;
   };
 

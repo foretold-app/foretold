@@ -1,5 +1,4 @@
 export namespace Models {
-
   export type ObjectID = string;
   export type ChannelMembershipRole = "ADMIN" | "VIEWER";
   export type float = number;
@@ -93,7 +92,7 @@ export namespace Models {
 
   export interface Agent extends Model {
     isAdmin: boolean;
-    type: 'BOT' | 'USER';
+    type: "BOT" | "USER";
     name: string;
     measurementCount: number;
 
@@ -102,17 +101,16 @@ export namespace Models {
     getUser(): Models.User;
   }
 
-  export interface Series extends Model {
-  }
+  export interface Series extends Model {}
 
   export interface ChannelMemberships {
     agentId: ObjectID;
     channelId: ObjectID;
     role: ChannelMembershipRole;
     methodCreatedBy:
-      'ADDED_IN_APP_BY_ADMIN' |
-      'AGENT_JOINED_DIRECTLY' |
-      'ADDED_BY_EMAIL_BY_ADMIN';
+      | "ADDED_IN_APP_BY_ADMIN"
+      | "AGENT_JOINED_DIRECTLY"
+      | "ADDED_BY_EMAIL_BY_ADMIN";
   }
 
   export interface Token extends Model {
@@ -120,28 +118,25 @@ export namespace Models {
     isActive: boolean;
   }
 
-  export interface AgentNotification extends Model {
-  }
+  export interface AgentNotification extends Model {}
 
-  export interface Template extends Model {
-  }
+  export interface Template extends Model {}
 
-  export interface Notification extends Model {
-  }
+  export interface Notification extends Model {}
 
   export interface Invitation extends Model {
     agentId: ObjectID;
     channelId: ObjectID;
     inviterAgentId: ObjectID;
-    status: 'AWAITING' | 'ACCEPTED';
+    status: "AWAITING" | "ACCEPTED";
   }
 
   export interface FeedItem extends Model {
     channelId: ObjectID;
     agentId: ObjectID;
     body: {
-      generic?: { item: string, description: string },
-      measurable?: { item: string, description: string, measurableId: string },
+      generic?: { item: string; description: string };
+      measurable?: { item: string; description: string; measurableId: string };
     };
   }
 
@@ -153,7 +148,7 @@ export namespace Models {
   export interface AgentMeasurable extends Model {
     agentId: ObjectID;
     measurableId: ObjectID;
-    primaryPointScore: float;
+    primaryPointScore?: float;
     predictionCountTotal: number;
   }
 
@@ -199,124 +194,110 @@ export namespace Schema {
 
 export namespace Layers {
   export type withinMeasurables = {
-    as: string,
-    states?: string[],
-    channelId?: Models.ObjectID,
-  }
+    as: string;
+    states?: string[];
+    channelId?: Models.ObjectID;
+  };
 
   export type withinPublicChannels = {
-    as: string,
-  }
+    as: string;
+  };
 
   export type withinJoinedChannels = {
-    as: string,
-    agentId: Models.ObjectID,
-  }
+    as: string;
+    agentId: Models.ObjectID;
+  };
 
   export type withinPublicAndJoinedChannels = {
-    as: string,
-    agentId: Models.ObjectID,
-  }
+    as: string;
+    agentId: Models.ObjectID;
+  };
 
   namespace DataSourceLayer {
     type compoundId = object;
     type id = string | compoundId;
     type data = object;
     type options = {
-      isAdmin?: boolean,
-      agentId?: Models.ObjectID,
-      measuredByAgentId?: Models.ObjectID,
-      transaction?: object,
-      lock?: boolean,
-      skipLocked?: boolean,
-      currentAgentId?: Models.ObjectID,
+      isAdmin?: boolean;
+      agentId?: Models.ObjectID;
+      measuredByAgentId?: Models.ObjectID;
+      transaction?: object;
+      lock?: boolean;
+      skipLocked?: boolean;
+      currentAgentId?: Models.ObjectID;
     };
     type filter = {
-      id?: Models.ObjectID,
-      creatorId?: Models.ObjectID,
-      seriesId?: Models.ObjectID,
-      channelId?: Models.ObjectID,
-      measurableId?: Models.ObjectID,
-      userId?: Models.ObjectID,
-      agentId?: Models.ObjectID,
-      excludeChannelId?: Models.ObjectID,
-      notTaggedByAgent?: Models.ObjectID,
-      notificationId?: Models.ObjectID,
+      id?: Models.ObjectID;
+      creatorId?: Models.ObjectID;
+      seriesId?: Models.ObjectID;
+      channelId?: Models.ObjectID;
+      measurableId?: Models.ObjectID;
+      userId?: Models.ObjectID;
+      agentId?: Models.ObjectID;
+      excludeChannelId?: Models.ObjectID;
+      notTaggedByAgent?: Models.ObjectID;
+      notificationId?: Models.ObjectID;
 
-      competitorType?: string,
-      type?: string,
-      attemptCounterMax?: number,
-      sentAt?: string | null,
-      minPredictionCountTotal?: number | null,
-      minNumberOfPredictions?: number | null,
-      minNumberOfQuestionsScored?: number | null,
+      competitorType?: string;
+      type?: string;
+      attemptCounterMax?: number;
+      sentAt?: string | null;
+      minPredictionCountTotal?: number | null;
+      minNumberOfPredictions?: number | null;
+      minNumberOfQuestionsScored?: number | null;
 
-      findInDateRange?: object, // @todo: Object? Give definition!
-      withinMeasurables?: withinMeasurables | null,
-      withinPublicChannels?: withinPublicChannels | null,
-      withinJoinedChannels?: withinJoinedChannels | null,
-      withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
+      findInDateRange?: object; // @todo: Object? Give definition!
+      withinMeasurables?: withinMeasurables | null;
+      withinPublicChannels?: withinPublicChannels | null;
+      withinJoinedChannels?: withinJoinedChannels | null;
+      withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null;
 
-      states?: string[],
-      isArchived?: string[],
-      types?: string[],
+      states?: string[];
+      isArchived?: string[];
+      types?: string[];
     };
     type pagination = {
-      limit?: number,
-      offset?: number,
-      last?: number,
-      first?: number,
-      after?: string,
-      before?: string,
+      limit?: number;
+      offset?: number;
+      last?: number;
+      first?: number;
+      after?: string;
+      before?: string;
     };
     type query = {
-      sort?: number,
+      sort?: number;
     };
     type params = {
-      id?: Models.ObjectID,
-      agentId?: Models.ObjectID,
+      id?: Models.ObjectID;
+      agentId?: Models.ObjectID;
       auth0Id?: string;
       name?: string;
-      measurableId?: Models.ObjectID,
-      competitorType?: string,
+      measurableId?: Models.ObjectID;
+      competitorType?: string;
     };
     type response = { data: any };
-    type responseList = { data: any[], total: number };
+    type responseList = { data: any[]; total: number };
 
     interface DataSource {
-      createOne(
-        data: data,
-        options: options,
-      ): response;
+      createOne(data: data, options: options): response;
 
-      getOne(
-        params: params,
-        query: query,
-        options: options,
-      ): response;
+      getOne(params: params, query: query, options: options): response;
 
-      updateOne(
-        params: params,
-        data: data,
-        options: options,
-      ): response;
+      updateOne(params: params, data: data, options: options): response;
 
-      deleteOne(
-        params: params,
-        options: options,
-      ): response;
+      deleteOne(params: params, options: options): response;
 
       getAll(
         filter: filter,
         pagination: pagination,
-        options: options,
+        options: options
       ): responseList;
 
       upsertOne(
         params: params,
         query: query,
         data: data,
-        options: options,
+        options: options
       ): response;
     }
   }
@@ -327,56 +308,56 @@ export namespace Layers {
 
     type data = object;
     type restrictions = {
-      agentId?: Models.ObjectID,
-      userId?: Models.ObjectID,
-      channelId?: Models.ObjectID,
-      measuredByAgentId?: Models.ObjectID,
+      agentId?: Models.ObjectID;
+      userId?: Models.ObjectID;
+      channelId?: Models.ObjectID;
+      measuredByAgentId?: Models.ObjectID;
 
-      isAdmin?: boolean,
-      channelIdAsId?: boolean,
-      measurableId?: boolean,
+      isAdmin?: boolean;
+      channelIdAsId?: boolean;
+      measurableId?: boolean;
 
-      withinMeasurables?: withinMeasurables | null,
-      withinPublicChannels?: withinPublicChannels | null,
-      withinJoinedChannels?: withinJoinedChannels | null,
-      withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
+      withinMeasurables?: withinMeasurables | null;
+      withinPublicChannels?: withinPublicChannels | null;
+      withinJoinedChannels?: withinJoinedChannels | null;
+      withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null;
     };
     type options = {
-      transaction?: object,
-      lock?: boolean,
-      skipLocked?: boolean,
+      transaction?: object;
+      lock?: boolean;
+      skipLocked?: boolean;
     };
     type filter = {
-      agentId?: Models.ObjectID,
-      excludeChannelId?: Models.ObjectID,
-      userId?: Models.ObjectID,
-      channelId?: Models.ObjectID,
-      measurableId?: Models.ObjectID,
-      notTaggedByAgent?: Models.ObjectID,
-      seriesId?: Models.ObjectID,
-      creatorId?: Models.ObjectID,
+      agentId?: Models.ObjectID;
+      excludeChannelId?: Models.ObjectID;
+      userId?: Models.ObjectID;
+      channelId?: Models.ObjectID;
+      measurableId?: Models.ObjectID;
+      notTaggedByAgent?: Models.ObjectID;
+      seriesId?: Models.ObjectID;
+      creatorId?: Models.ObjectID;
 
-      isArchived?: string[],
-      types?: string[],
-      sentAt?: string[],
-      notificationId?: string[],
-      competitorType?: string[],
-      states?: string[],
-      attemptCounterMax?: number,
-      minPredictionCountTotal?: number | null,
-      minNumberOfPredictions?: number | null,
-      minNumberOfQuestionsScored?: number | null,
+      isArchived?: string[];
+      types?: string[];
+      sentAt?: string[];
+      notificationId?: string[];
+      competitorType?: string[];
+      states?: string[];
+      attemptCounterMax?: number;
+      minPredictionCountTotal?: number | null;
+      minNumberOfPredictions?: number | null;
+      minNumberOfQuestionsScored?: number | null;
 
-      withinMeasurables?: withinMeasurables | null,
-      withinPublicChannels?: withinPublicChannels | null,
-      withinJoinedChannels?: withinJoinedChannels | null,
-      withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null,
+      withinMeasurables?: withinMeasurables | null;
+      withinPublicChannels?: withinPublicChannels | null;
+      withinJoinedChannels?: withinJoinedChannels | null;
+      withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null;
 
       getSpacedLimit?(): number | undefined;
     };
     type pagination = {
-      limit?: number,
-      offset?: number,
+      limit?: number;
+      offset?: number;
       last?: number,
       first?: number,
       after?: string,

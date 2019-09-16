@@ -100,15 +100,15 @@ class AgentMeasurablesData extends DataBase {
       });
       if (!!overTime.error) {
         console.error("PrimaryPointScore Error: ", overTime.error);
-        return false;
+        return undefined;
       } else if (!_.isFinite(overTime.data)){
         console.error("Error: PrimaryPointScore score, ${overTime.data} is not finite");
-        return false;
+        return undefined;
       } else {
         return _.round(overTime.data, 6);
       }
     } else {
-      return false;
+      return undefined;
     }
   }
 

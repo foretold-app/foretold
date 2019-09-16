@@ -8,7 +8,6 @@ module Keys = {
 
   module Unresolvable = {
     open MeasurementValue.UnresolvableResolution;
-    [@genType]
     let fromString =
       fun
       | "AMBIGUOUS" => Some(Ambiguous)
@@ -20,7 +19,6 @@ module Keys = {
 
   module Comment = {
     open MeasurementValue.Comment;
-    [@genType]
     let fromString =
       fun
       | "GENERIC" => Some(Generic)

@@ -1,8 +1,4 @@
-const emitter = require('./emitter');
-const events = require('./events');
-
 const measurables = require('./measurables');
-const producers = require('./producers');
 const consumers = require('./consumers');
 const { Mailer } = require('./mailer');
 const { GitHubApi } = require('../lib/github/git-hub-api');
@@ -100,37 +96,11 @@ async function addGitHubWebHook() {
   return true;
 }
 
-function runListeners() {
-  console.log('Listeners are in a queue.');
-  try {
-    emitter.on(events.SERVER_IS_READY, addGitHubWebHook);
-
-    emitter.on(events.EVERY_HOUR, toJudgementPendingTransition);
-    emitter.on(events.EVERY_HOUR, toResolving);
-    emitter.on(events.EVERY_MINUTE, emailConsumer);
-    emitter.on(events.MAIL, mailer);
-
-    emitter.on(events.MEASURABLE_CHANGED, listenFor(producers.notifications.MeasurableStateChanged));
-    emitter.on(events.MEASURABLE_CHANGED, listenFor(producers.notifications.MeasurableStateResolved));
-    emitter.on(events.MEASURABLE_CHANGED, listenFor(producers.feedItems.NewMeasurableReachedResolution));
-
-    emitter.on(events.NEW_MEMBERSHIP, listenFor(producers.notifications.MemberAddedToCommunity));
-    emitter.on(events.NEW_MEMBERSHIP, listenFor(producers.notifications.MemberInvitedToCommunity));
-    emitter.on(events.NEW_MEMBERSHIP, listenFor(producers.feedItems.MemberJoinedCommunity));
-
-    emitter.on(events.NEW_MEASUREMENT, listenFor(producers.feedItems.NewMeasurementPrediction));
-    emitter.on(events.NEW_MEASUREMENT, listenFor(producers.feedItems.NewMeasurementComment));
-    emitter.on(events.NEW_MEASUREMENT, listenFor(producers.feedItems.NewMeasurementResolution));
-    emitter.on(events.NEW_MEASUREMENT, listenFor(producers.feedItems.NewMeasurementNotAvailable));
-
-    emitter.on(events.NEW_MEASURABLE, listenFor(producers.feedItems.NewMeasurable));
-    emitter.on(events.NEW_CHANNEL, listenFor(producers.feedItems.NewChannel));
-
-  } catch (e) {
-    console.error('Listener error', e);
-  }
-}
-
 module.exports = {
-  runListeners,
+  toJudgementPendingTransition,
+  toResolving,
+  emailConsumer,
+  mailer,
+  listenFor,
+  addGitHubWebHook,
 };

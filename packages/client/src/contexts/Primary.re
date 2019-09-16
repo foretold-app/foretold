@@ -419,8 +419,8 @@ module MeasurementScoreSet = {
 
   let make =
       (
-        ~primaryPointScore,
-        ~nonMarketLogScore,
+        ~primaryPointScore=None,
+        ~nonMarketLogScore=None,
         ~prediction,
         ~outcome=None,
         ~previousAggregate=None,
@@ -640,7 +640,7 @@ module AgentMeasurable = {
         ~id: string,
         ~measurable,
         ~agent,
-        ~primaryPointScore,
+        ~primaryPointScore=None,
         ~predictionCountTotal,
         ~createdAt,
         ~competitiveMeasurement=None,
@@ -744,7 +744,7 @@ module LeaderboardItem = {
       ~id=agentMeasurable.id,
       ~agent=Some(agentMeasurable.agent),
       ~measurable=Some(agentMeasurable.measurable),
-      ~pointScore=Some(agentMeasurable.primaryPointScore),
+      ~pointScore=agentMeasurable.primaryPointScore,
       ~predictionCountTotal=Some(agentMeasurable.predictionCountTotal),
       ~createdAt=Some(agentMeasurable.createdAt),
       ~objectiveMeasurement=agentMeasurable.objectiveMeasurement,
@@ -755,7 +755,7 @@ module LeaderboardItem = {
     make(
       ~id=agentChannel.id,
       ~agent=Some(agentChannel.agent),
-      ~pointScore=Some(agentChannel.primaryPointScore),
+      ~pointScore=agentChannel.primaryPointScore,
       ~predictionCountTotal=Some(agentChannel.numberOfPredictions),
       ~numberOfQuestionsScored=Some(agentChannel.numberOfQuestionsScored),
       (),

@@ -15,6 +15,7 @@ const { Filter } = require('../../data/classes/filter');
 const { Options } = require('../../data/classes/options');
 const { Params } = require('../../data/classes/params');
 const { Query } = require('../../data/classes/query');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums/measurement-competitor-type');
 
 /**
  * @param {*} root
@@ -250,18 +251,18 @@ function translateValue(r) {
  * @param outcome
  * @returns {number|*}
  */
-function measurementScore({ prediction, aggregate, outcome }) {
-  let getValue = translateValue;
-
-  if (!prediction || !aggregate || !outcome) return 0;
-
-  const score = new PredictionResolutionGroup({
-    agentPrediction: getValue(prediction),
-    marketPrediction: getValue(aggregate),
-    resolution: getValue(outcome),
+function _marketLogScore({ prediction, aggregate, outcome }) {
+  if (!prediction || !aggregate || !outcome){
+    return ({error: "MeasurementScore Error: Missing needed data"});
+  }
+  if (prediction.dataValues.competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE){
+    return ({error: "False"});
+  }
+  return new PredictionResolutionGroup({
+    agentPrediction: translateValue(prediction),
+    marketPrediction: translateValue(aggregate),
+    resolution: translateValue(outcome),
   }).pointScore(marketScore);
-
-  return score.data || 0.0
 }
 
 /**
@@ -271,17 +272,20 @@ function measurementScore({ prediction, aggregate, outcome }) {
  * @returns {number|*}
  */
 function _nonMarketLogScore({ prediction, outcome }) {
-  let getValue = translateValue;
-
-  if (!prediction || !outcome) return 0;
-
-  const score = new PredictionResolutionGroup({
-    agentPrediction: getValue(prediction),
+  if (!prediction || !outcome){
+    return ({error: "_nonMarketLogScore Error: Missing needed data"});
+  }
+  if (
+    prediction.dataValues.competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE &&
+    prediction.dataValues.competitorType !== MEASUREMENT_COMPETITOR_TYPE.AGGREGATION
+    ){
+    return ({error: "False"});
+  }
+  return new PredictionResolutionGroup({
+    agentPrediction: translateValue(prediction),
     marketPrediction: undefined,
-    resolution: getValue(outcome),
+    resolution: translateValue(outcome),
   }).pointScore(nonMarketScore);
-
-  return score.data || 0.0
 }
 
 /**
@@ -292,13 +296,16 @@ function _nonMarketLogScore({ prediction, outcome }) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function primaryPointScore(root, args, context, info) {
-  const result = measurementScore({
+  const result = _marketLogScore({
     prediction: await prediction(root, args, context, info),
     aggregate: await previousAggregate(root, args, context, info),
     outcome: await outcome(root, args, context, info),
   });
-
-  return _.round(result, 2);
+  if (result.error){
+    console.log("ERROR: ", result.error)
+    return undefined;
+  };
+  return _.isFinite(result.data) ? _.round(result.data, 6) : undefined;
 }
 
 /**
@@ -315,7 +322,11 @@ async function nonMarketLogScore(root, args, context, info) {
     outcome: await outcome(root, args, context, info),
   });
 
-  return _.round(result, 2);
+  if (result.error){
+    console.log("ERROR: ", result.error)
+    return undefined;
+  };
+  return _.isFinite(result.data) ? _.round(result.data, 6) : undefined;
 }
 
 /**

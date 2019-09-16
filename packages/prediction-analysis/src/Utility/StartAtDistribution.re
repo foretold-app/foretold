@@ -57,8 +57,29 @@ let integral = (t: t(float, float)) => {
   |> Rationale.Result.bind(_, E.Array.toRanges)
   |> Rationale.Result.fmap(inRanges =>
        inRanges
-       |> Belt.Array.map(_, (((lastX, lastY), (nextX, _))) =>
-            (nextX -. lastX) *. lastY
+       |> Belt.Array.map(
+            _,
+            (((lastX, lastY), (nextX, _))) => {
+              Js.log(
+                "Integral section nextX:"
+                ++ (nextX |> Js.Float.toFixed)
+                ++ "|| lastX: "
+                ++ (lastX |> Js.Float.toFixedWithPrecision(~digits=4))
+                ++ "|| diff: "
+                ++ (
+                  nextX -. lastX |> Js.Float.toFixedWithPrecision(~digits=4)
+                )
+                ++ "|| lastY: "
+                ++ (lastY |> Js.Float.toFixedWithPrecision(~digits=4))
+                ++ "|| area:"
+                ++ (
+                  (nextX -. lastX)
+                  *. lastY
+                  |> Js.Float.toFixedWithPrecision(~digits=4)
+                ),
+              );
+              (nextX -. lastX) *. lastY;
+            },
           )
        |> Belt.Array.reduce(_, 0., (a, b) => a +. b)
      );
@@ -72,7 +93,22 @@ let average = (~t, ~lowestTime=?, ~highestTime=?, ()) => {
   | (_, None, _) => Belt.Result.Error("Min must exist")
   | (_, _, None) => Belt.Result.Error("Max must exist")
   | (Ok(integral), Some(min), Some(max)) =>
-    Belt.Result.Ok(integral /. (max -. min))
+    Js.log4("The integral is:", integral, max, min);
+    Js.log(
+      "Integral Calculation: integral:"
+      ++ (integral |> Js.Float.toFixedWithPrecision(~digits=4))
+      ++ "|| maxX: "
+      ++ (max |> Js.Float.toFixedWithPrecision(~digits=4))
+      ++ "|| minX: "
+      ++ (min |> Js.Float.toFixedWithPrecision(~digits=4))
+      ++ "|| diff: "
+      ++ (max -. min |> Js.Float.toFixedWithPrecision(~digits=4)),
+    );
+    Js.log2(
+      "The integral is |||||",
+      integral /. (max -. min) |> Js.Float.toFixedWithPrecision(~digits=4),
+    );
+    Belt.Result.Ok(integral /. (max -. min));
   };
 };
 

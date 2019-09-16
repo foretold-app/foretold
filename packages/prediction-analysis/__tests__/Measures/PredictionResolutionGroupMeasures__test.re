@@ -39,6 +39,6 @@ describe("#scorePointCombination", () => {
       )
       |> Belt.Result.getExn,
     )
-    |> toBeCloseTo(1.75);
+    |> toBeCloseTo(1.762);
   });
 });

@@ -29,13 +29,31 @@ describe("#PredictionResolutionGroup", () => {
       })).error).toBe(undefined);
     });
 
-  test('#PointScore', () => {
-      expect((new PredictionResolutionGroup({
-        agentPrediction: {data: 0.1, dataType: "percentage"},
-        marketPrediction: {data: 0.6, dataType: "percentage"},
-        resolution:{data: 0.05, dataType: "percentage"}
-      })).pointScore(marketScore).data).toBeCloseTo(0.982);
-    });
+  describe("#PointScore", () => {
+    test('With a percentage resolution', () => {
+        expect((new PredictionResolutionGroup({
+          agentPrediction: {data: 0.1, dataType: "percentage"},
+          marketPrediction: {data: 0.6, dataType: "percentage"},
+          resolution:{data: 0.05, dataType: "percentage"}
+        })).pointScore(marketScore).data).toBeCloseTo(0.982);
+      });
+
+    test('With a binary resolution', () => {
+        expect((new PredictionResolutionGroup({
+          agentPrediction: {data: 0.1, dataType: "percentage"},
+          marketPrediction: {data: 0.6, dataType: "percentage"},
+          resolution:{data: false, dataType: "binary"}
+        })).pointScore(marketScore).data).toBeCloseTo(1.169);
+      });
+
+    test('Nonmarket, with a binary resolution', () => {
+        expect((new PredictionResolutionGroup({
+          agentPrediction: {data: 0.875, dataType: "percentage"},
+          marketPrediction: undefined,
+          resolution:{data: false, dataType: "binary"}
+        })).pointScore(nonMarketScore).data).toBeCloseTo(-3);
+      });
+    })
 })
 
 describe("#PredictionResolutionOverTime", () => {

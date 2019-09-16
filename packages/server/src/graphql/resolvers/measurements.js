@@ -236,6 +236,14 @@ async function latestAggregateByRootId(root, _args, context, _info) {
   return data.measurements.getLatestAggregate(measurableId, agentId);
 }
 
+
+function translateValue(r) {
+  let {data, dataType} = r.dataValues.value;
+  if (dataType === "percentage"){
+    data = data / 100
+  }
+  return {data, dataType}
+}
 /**
  * @param prediction
  * @param aggregate
@@ -243,7 +251,7 @@ async function latestAggregateByRootId(root, _args, context, _info) {
  * @returns {number|*}
  */
 function measurementScore({ prediction, aggregate, outcome }) {
-  let getValue = r => r.dataValues.value;
+  let getValue = translateValue;
 
   if (!prediction || !aggregate || !outcome) return 0;
 
@@ -263,7 +271,7 @@ function measurementScore({ prediction, aggregate, outcome }) {
  * @returns {number|*}
  */
 function _nonMarketLogScore({ prediction, outcome }) {
-  let getValue = r => r.dataValues.value;
+  let getValue = translateValue;
 
   if (!prediction || !outcome) return 0;
 

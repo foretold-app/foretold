@@ -104,6 +104,8 @@ class AgentMeasurablesData extends DataBase {
       if (!!overTime.error) {
         console.error("PrimaryPointScore Error: ", overTime.error);
         return 0.0;
+      } else if (!_.isFinite(overTime.data)){
+        console.error("Error: PrimaryPointScore score, ${overTime.data} is not finite");
       } else {
         return _.round(overTime.data, 2);
       }

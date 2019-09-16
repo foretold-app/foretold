@@ -1,6 +1,12 @@
 const _ = require('lodash');
 const { Cdf } = require('@foretold/cdf');
 
+const {
+  PredictionResolutionGroup,
+  marketScore,
+  nonMarketScore,
+} = require('@foretold/prediction-analysis');
+
 const data = require('../../data');
 const { withinMeasurables } = require('../../structures');
 
@@ -9,8 +15,6 @@ const { Filter } = require('../../data/classes/filter');
 const { Options } = require('../../data/classes/options');
 const { Params } = require('../../data/classes/params');
 const { Query } = require('../../data/classes/query');
-
-const {PredictionResolutionGroup, marketScore, nonMarketScore} = require('@foretold/prediction-analysis');
 
 /**
  * @param {*} root
@@ -240,12 +244,15 @@ async function latestAggregateByRootId(root, _args, context, _info) {
  */
 function measurementScore({ prediction, aggregate, outcome }) {
   let getValue = r => r.dataValues.value;
+
   if (!prediction || !aggregate || !outcome) return 0;
-  let score = new PredictionResolutionGroup({
+
+  const score = new PredictionResolutionGroup({
     agentPrediction: getValue(prediction),
     marketPrediction: getValue(aggregate),
-    resolution:getValue(outcome)
+    resolution: getValue(outcome),
   }).pointScore(marketScore);
+
   return score.data || 0.0
 }
 
@@ -257,12 +264,15 @@ function measurementScore({ prediction, aggregate, outcome }) {
  */
 function _nonMarketLogScore({ prediction, outcome }) {
   let getValue = r => r.dataValues.value;
+
   if (!prediction || !outcome) return 0;
-  let score = new PredictionResolutionGroup({
+
+  const score = new PredictionResolutionGroup({
     agentPrediction: getValue(prediction),
     marketPrediction: undefined,
-    resolution:getValue(outcome)
+    resolution: getValue(outcome),
   }).pointScore(nonMarketScore);
+
   return score.data || 0.0
 }
 

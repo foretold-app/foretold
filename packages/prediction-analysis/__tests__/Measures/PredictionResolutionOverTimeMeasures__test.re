@@ -63,4 +63,33 @@ describe("#scorePointCombination", () => {
     )
     |> toBeCloseTo(0.269);
   });
+
+  test("with PercentagePercentage score2", () => {
+    let makeCombination = {
+      open PredictionResolutionOverTime.MeasurementWithTime;
+      let combinationOverTime: PredictionResolutionOverTime.t =
+        `PercentagePercentage({
+          agentPredictions: [|
+            make(~time=3000., ~measurementValue=mkPer(0.70)),
+          |],
+          marketPredictions:
+            Some([|
+              make(~time=0., ~measurementValue=mkPer(0.5)),
+              make(~time=5000., ~measurementValue=mkPer(0.7)),
+            |]),
+          resolution: make(~time=10000., ~measurementValue=mkPer(0.95)),
+        });
+      combinationOverTime;
+    };
+
+    expect(
+      PredictionResolutionOverTimeMeasures.averagePointScore(
+        ~marketType=`MarketScore,
+        ~scoringCombination=makeCombination,
+        (),
+      )
+      |> Belt.Result.getExn,
+    )
+    |> toBeCloseTo(0.423);
+  });
 });

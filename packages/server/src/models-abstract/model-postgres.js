@@ -61,12 +61,12 @@ class ModelPostgres extends Model {
   _publicAndJoinedChannels(agentId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     return `(
-      /* P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      /* P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${ name }) */
       SELECT "Channels"."id" FROM "Channels"
       LEFT OUTER JOIN 
         "ChannelMemberships" 
         ON "Channels".id = "ChannelMemberships"."channelId"
-        AND "ChannelMemberships"."agentId" = '${agentId}'
+        AND "ChannelMemberships"."agentId" = '${ agentId }'
       WHERE 
         "ChannelMemberships"."agentId" IS NOT NULL
         OR "Channels"."isPublic" = TRUE 
@@ -89,7 +89,7 @@ class ModelPostgres extends Model {
    */
   _publicChannels(name = '') {
     return `(
-      /* P͟u͟b͟l͟i͟c͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      /* P͟u͟b͟l͟i͟c͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${ name }) */
       SELECT "Channels"."id" FROM "Channels"
       WHERE "Channels"."isPublic" = TRUE
     )`;
@@ -116,12 +116,12 @@ class ModelPostgres extends Model {
   _joinedChannels(agentId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     return `(
-      /* J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      /* J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${ name }) */
       SELECT "Channels"."id" FROM "Channels"
       LEFT OUTER JOIN 
         "ChannelMemberships" 
         ON "Channels".id = "ChannelMemberships"."channelId"
-        AND "ChannelMemberships"."agentId" = '${agentId}'
+        AND "ChannelMemberships"."agentId" = '${ agentId }'
       WHERE 
         "ChannelMemberships"."agentId" IS NOT NULL
     )`;
@@ -148,8 +148,8 @@ class ModelPostgres extends Model {
   _measurablesInPublicAndJoinedChannels(agentId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     return `(
-      /* Measurables in Public and Joined Channels (${name}) */
-      WITH channelIds AS (${this._publicAndJoinedChannels(agentId, name)})
+      /* Measurables in Public and Joined Channels (${ name }) */
+      WITH channelIds AS (${ this._publicAndJoinedChannels(agentId, name) })
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
     )`;
@@ -173,8 +173,8 @@ class ModelPostgres extends Model {
    */
   _measurablesInPublicChannels(name = '') {
     return `(
-      /* Measurables in Public Channels (${name}) */
-      WITH channelIds AS (${this._publicChannels(name)})
+      /* Measurables in Public Channels (${ name }) */
+      WITH channelIds AS (${ this._publicChannels(name) })
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
     )`;
@@ -203,17 +203,17 @@ class ModelPostgres extends Model {
   _withinMeasurables(statesIn, channelIdIn, name = '') {
     const cond = [];
     const states = _.isArray(statesIn)
-      ? statesIn.map(state => `'${state}'`).join(', ') : [];
+      ? statesIn.map(state => `'${ state }'`).join(', ') : [];
 
-    if (states.length > 0) cond.push(`("state" IN (${states}))`);
-    if (!!channelIdIn) cond.push(`("channelId" = '${channelIdIn}')`);
+    if (states.length > 0) cond.push(`("state" IN (${ states }))`);
+    if (!!channelIdIn) cond.push(`("channelId" = '${ channelIdIn }')`);
 
-    const where = cond.length > 0 ? `WHERE (${cond.join(' AND ')})` : '';
+    const where = cond.length > 0 ? `WHERE (${ cond.join(' AND ') })` : '';
 
     return `(
-      /* Within Measurables (${name}) */
+      /* Within Measurables (${ name }) */
       SELECT "id" FROM "Measurables"
-      ${where}
+      ${ where }
     )`;
   }
 
@@ -345,7 +345,6 @@ class ModelPostgres extends Model {
 
     this.applyAbstracts(where, filter);
 
-    // OK
     if (filter.isArchived) {
       where[this.and].push({
         isArchived: {
@@ -354,64 +353,64 @@ class ModelPostgres extends Model {
       });
     }
 
-    // OK
     if (filter.userId) {
       where[this.and].push({
         userId: filter.userId,
       });
     }
 
-    // OK
     if (filter.agentId) {
       where[this.and].push({
         agentId: filter.agentId,
       });
     }
 
-    // OK
     if (filter.channelId) {
       where[this.and].push({
         channelId: filter.channelId,
       });
     }
 
-    // OK?
     if (filter.measurableId) {
       where.measurableId = filter.measurableId;
     }
+
     if (filter.competitorType) {
       where.competitorType = {
         [this.in]: filter.competitorType,
       };
     }
+
     if (filter.notTaggedByAgent) {
       where.id = {
         [this.notIn]: this._taggedMeasurementsLiteral(filter.notTaggedByAgent),
       };
     }
+
     const startDate = _.get(filter, 'findInDateRange.startDate');
     if (startDate) {
       where[this.and].push({
         createdAt: { [this.gte]: startDate },
       });
     }
+
     const endDate = _.get(filter, 'findInDateRange.endDate');
     if (endDate) {
       where[this.and].push({ createdAt: { [this.lte]: endDate } });
     }
 
-    // OK?
     if (_.isArray(filter.states)) {
       where.state = { [this.in]: filter.states };
     }
+
     if (filter.seriesId) {
       where.seriesId = filter.seriesId;
     }
+
     if (filter.creatorId) {
       where.creatorId = filter.creatorId;
     }
 
-    // OK?
     if (_.has(filter, 'excludeChannelId')) {
       where[this.and].push({
         id: {
@@ -428,7 +427,6 @@ class ModelPostgres extends Model {
       });
     }
 
-    // OK?
     if (_.has(filter, 'sentAt')) {
       where[this.and].push({
         sentAt: filter.sentAt,

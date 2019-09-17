@@ -37,6 +37,22 @@ async function all(root, args, context, info) {
   return data.agentChannels.getConnection(filter, pagination, options);
 }
 
+/**
+ * @param {*} root
+ * @param {Models.Agent.id} root.agentId
+ * @param {Models.Channel.id} root.channelId
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+async function primaryPointScore(root, args, context, info) {
+  const agentId = _.get(root, 'agentId');
+  const channelId = _.get(root, 'channelId');
+  return data.agentChannels.primaryPointScore(agentId, channelId);
+}
+
 module.exports = {
   all,
+  primaryPointScore,
 };

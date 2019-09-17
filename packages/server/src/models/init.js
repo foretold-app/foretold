@@ -1,9 +1,8 @@
+/**
+ * Nobody loves magic when debugs.
+ * Keep it readable.
+ */
 function init(db) {
-  /**
-   * Nobody loves magic when debugs.
-   * Keep it readable.
-   */
-
   const agent = db.sequelize.import('./agent');
   const bot = db.sequelize.import('./bot');
   const channelMembership = db.sequelize.import('./channel-membership');

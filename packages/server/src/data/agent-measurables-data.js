@@ -56,59 +56,66 @@ class AgentMeasurablesData extends DataBase {
       measurableCreatedAt
     } = await this._getMeasurementsToScoring(agentId, measurableId);
 
-    let toUnix = r => moment(r).unix();
-    function translateValue(v) {
-      let {data, dataType} = v;
-      if (dataType === "percentage"){
-        data = data / 100
-      }
-      return {data, dataType}
+    function toUnix(r) {
+      return moment(r).unix();
     }
 
-    let toOverTime = (p) => {
+    function translateValue(v) {
+      let { data, dataType } = v;
+      if (dataType === "percentage") {
+        data = data / 100
+      }
+      return { data, dataType };
+    }
+
+    function toOverTime(p) {
       return {
         time: toUnix(p.dataValues.relevantAt),
         measurement: translateValue(p.dataValues.value)
       };
-    };
+    }
 
-    if (
-      !!recentResult &&
-      predictions.length > 0 &&
-      allAggregations.length > 0 &&
-      measurableCreatedAt
-    ) {
+    if (!recentResult) return undefined;
+    if (!measurableCreatedAt) return undefined;
+    if (predictions.length === 0) return undefined;
+    if (allAggregations.length === 0) return undefined;
 
-      let agentPredictions = predictions
-        .map(r => r.measurement)
-        .map(toOverTime);
-      let marketPredictions = allAggregations.map(toOverTime);
-      let resolution = toOverTime(recentResult);
+    let agentPredictions = predictions.map(r => r.measurement).map(toOverTime);
+    let marketPredictions = allAggregations.map(toOverTime);
+    let resolution = toOverTime(recentResult);
 
-      let overTime = new PredictionResolutionOverTime({
+    let overTime;
+
+    try {
+      overTime = new PredictionResolutionOverTime({
         agentPredictions,
         marketPredictions,
         resolution,
       }).averagePointScore(marketScore, toUnix(measurableCreatedAt));
-
-      console.log("VALUE OF POINT SCORE---------------------------", overTime);
-      console.log({
-        agentPredictions,
-        marketPredictions,
-        resolution,
-        createdAt: toUnix(measurableCreatedAt)
-      });
-      if (!!overTime.error) {
-        console.error("PrimaryPointScore Error: ", overTime.error);
-        return undefined;
-      } else if (!_.isFinite(overTime.data)){
-        console.error("Error: PrimaryPointScore score, ${overTime.data} is not finite");
-        return undefined;
-      } else {
-        return _.round(overTime.data, 6);
-      }
-    } else {
+    } catch (e) {
+      console.log(e.message);
       return undefined;
+    }
+
+    console.log("VALUE OF POINT SCORE---------------------------", overTime);
+    console.log({
+      agentPredictions,
+      marketPredictions,
+      resolution,
+      createdAt: toUnix(measurableCreatedAt)
+    });
+
+    if (!!overTime.error) {
+      console.error("PrimaryPointScore Error: ", overTime.error);
+      return undefined;
+    } else if (!_.isFinite(overTime.data)) {
+      console.error(
+        "Error: PrimaryPointScore score, " +
+        "${overTime.data} is not finite"
+      );
+      return undefined;
+    } else {
+      return _.round(overTime.data, 6);
     }
   }
 
@@ -160,9 +167,11 @@ class AgentMeasurablesData extends DataBase {
       const aggregatesAfter = _.filter(allAggregations, (aggregate) => {
         return aggregate.createdAt > measurement.createdAt;
       });
+
       const aggregateBefore = _.find(allAggregations, (aggregate) => {
         return measurement.createdAt > aggregate.createdAt;
       });
+
       return {
         measurement,
         aggregatesAfter,
@@ -171,7 +180,6 @@ class AgentMeasurablesData extends DataBase {
     });
 
     return {
-      predictions,
       recentResult,
       allAggregations,
       proceededPredictions,

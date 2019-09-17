@@ -57,7 +57,7 @@ module.exports.withinPublicChannelsById = () => {
 
 /**
  * @param {string[] | null} states
- * @param {Models.ObjectID | null} channelId
+ * @param {Models.Channel.id | null} channelId
  * @return {Layers.withinMeasurables | null}
  */
 module.exports.withinMeasurables = (states, channelId) => {

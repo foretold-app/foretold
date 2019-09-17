@@ -9,7 +9,7 @@ const agentChannel = new graphql.GraphQLObjectType({
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     primaryPointScore: {
       type: graphql.GraphQLFloat,
-      resolve: () => 28
+      resolve: require('../resolvers').agentChannels.primaryPointScore
     },
     numberOfPredictions: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
     numberOfQuestionsScored: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },

@@ -42,6 +42,8 @@ async function all(root, args, context, info) {
 
 /**
  * @param {*} root
+ * @param {Models.ObjectID} root.agentId
+ * @param {Models.ObjectID} root.measurableId
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} info

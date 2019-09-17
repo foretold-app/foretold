@@ -56,21 +56,24 @@ class AgentMeasurablesData extends DataBase {
       measurableCreatedAt
     } = await this._getMeasurementsToScoring(agentId, measurableId);
 
-    let toUnix = r => moment(r).unix();
-    function translateValue(v) {
-      let {data, dataType} = v;
-      if (dataType === "percentage"){
-        data = data / 100
-      }
-      return {data, dataType}
+    function toUnix(r) {
+      return moment(r).unix();
     }
 
-    let toOverTime = (p) => {
+    function translateValue(v) {
+      let { data, dataType } = v;
+      if (dataType === "percentage") {
+        data = data / 100
+      }
+      return { data, dataType };
+    }
+
+    function toOverTime(p) {
       return {
         time: toUnix(p.dataValues.relevantAt),
         measurement: translateValue(p.dataValues.value)
       };
-    };
+    }
 
     if (
       !!recentResult &&
@@ -98,10 +101,11 @@ class AgentMeasurablesData extends DataBase {
         resolution,
         createdAt: toUnix(measurableCreatedAt)
       });
+
       if (!!overTime.error) {
         console.error("PrimaryPointScore Error: ", overTime.error);
         return undefined;
-      } else if (!_.isFinite(overTime.data)){
+      } else if (!_.isFinite(overTime.data)) {
         console.error("Error: PrimaryPointScore score, ${overTime.data} is not finite");
         return undefined;
       } else {
@@ -160,9 +164,11 @@ class AgentMeasurablesData extends DataBase {
       const aggregatesAfter = _.filter(allAggregations, (aggregate) => {
         return aggregate.createdAt > measurement.createdAt;
       });
+
       const aggregateBefore = _.find(allAggregations, (aggregate) => {
         return measurement.createdAt > aggregate.createdAt;
       });
+
       return {
         measurement,
         aggregatesAfter,

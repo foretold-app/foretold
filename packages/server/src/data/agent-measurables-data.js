@@ -75,44 +75,46 @@ class AgentMeasurablesData extends DataBase {
       };
     }
 
-    if (
-      !!recentResult &&
-      predictions.length > 0 &&
-      allAggregations.length > 0 &&
-      measurableCreatedAt
-    ) {
+    if (!!recentResult) return undefined;
+    if (!!measurableCreatedAt) return undefined;
+    if (predictions.length === 0) return undefined;
+    if (allAggregations.length === 0) return undefined;
 
-      let agentPredictions = predictions
-        .map(r => r.measurement)
-        .map(toOverTime);
-      let marketPredictions = allAggregations.map(toOverTime);
-      let resolution = toOverTime(recentResult);
+    let agentPredictions = predictions.map(r => r.measurement).map(toOverTime);
+    let marketPredictions = allAggregations.map(toOverTime);
+    let resolution = toOverTime(recentResult);
 
-      let overTime = new PredictionResolutionOverTime({
+    let overTime;
+
+    try {
+      overTime = new PredictionResolutionOverTime({
         agentPredictions,
         marketPredictions,
         resolution,
       }).averagePointScore(marketScore, toUnix(measurableCreatedAt));
-
-      console.log("VALUE OF POINT SCORE---------------------------", overTime);
-      console.log({
-        agentPredictions,
-        marketPredictions,
-        resolution,
-        createdAt: toUnix(measurableCreatedAt)
-      });
-
-      if (!!overTime.error) {
-        console.error("PrimaryPointScore Error: ", overTime.error);
-        return undefined;
-      } else if (!_.isFinite(overTime.data)) {
-        console.error("Error: PrimaryPointScore score, ${overTime.data} is not finite");
-        return undefined;
-      } else {
-        return _.round(overTime.data, 6);
-      }
-    } else {
+    } catch (e) {
       return undefined;
+    }
+
+    console.log("VALUE OF POINT SCORE---------------------------", overTime);
+    console.log({
+      agentPredictions,
+      marketPredictions,
+      resolution,
+      createdAt: toUnix(measurableCreatedAt)
+    });
+
+    if (!!overTime.error) {
+      console.error("PrimaryPointScore Error: ", overTime.error);
+      return undefined;
+    } else if (!_.isFinite(overTime.data)) {
+      console.error(
+        "Error: PrimaryPointScore score, " +
+        "${overTime.data} is not finite"
+      );
+      return undefined;
+    } else {
+      return _.round(overTime.data, 6);
     }
   }
 
@@ -177,7 +179,6 @@ class AgentMeasurablesData extends DataBase {
     });
 
     return {
-      predictions,
       recentResult,
       allAggregations,
       proceededPredictions,

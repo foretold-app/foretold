@@ -39,8 +39,8 @@ async function all(root, args, context, info) {
 
 /**
  * @param {*} root
- * @param {Models.ObjectID} root.agentId
- * @param {Models.ObjectID} root.channelId
+ * @param {Models.Agent.id} root.agentId
+ * @param {Models.Channel.id} root.channelId
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} info

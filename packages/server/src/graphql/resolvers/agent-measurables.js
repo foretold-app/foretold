@@ -11,7 +11,7 @@ const structures = require('../../structures');
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.ObjectID} args.channelId
+ * @param {Models.Channel.id} args.channelId
  * @param {string[]} args.measurableState
  * @param {string[]} args.minPredictionCountTotal
  * @param {string} args.after
@@ -42,8 +42,8 @@ async function all(root, args, context, info) {
 
 /**
  * @param {*} root
- * @param {Models.ObjectID} root.agentId
- * @param {Models.ObjectID} root.measurableId
+ * @param {Models.Agent.id} root.agentId
+ * @param {Models.Measurable.id} root.measurableId
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} info

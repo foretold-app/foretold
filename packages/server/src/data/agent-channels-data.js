@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const { DataBase } = require('./data-base');
 const { AgentMeasurablesData } = require('./agent-measurables-data');
 const { MeasurablesData } = require('./measurables-data');

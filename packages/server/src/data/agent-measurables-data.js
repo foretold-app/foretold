@@ -75,8 +75,8 @@ class AgentMeasurablesData extends DataBase {
       };
     }
 
-    if (!!recentResult) return undefined;
-    if (!!measurableCreatedAt) return undefined;
+    if (!recentResult) return undefined;
+    if (!measurableCreatedAt) return undefined;
     if (predictions.length === 0) return undefined;
     if (allAggregations.length === 0) return undefined;
 
@@ -93,6 +93,7 @@ class AgentMeasurablesData extends DataBase {
         resolution,
       }).averagePointScore(marketScore, toUnix(measurableCreatedAt));
     } catch (e) {
+      console.log(e.message);
       return undefined;
     }
 

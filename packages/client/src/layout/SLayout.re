@@ -118,7 +118,7 @@ module LayoutConfig = {
 };
 
 module FullPage = {
-  let component = ReasonReact.statelessComponent("Page");
+  let component = ReasonReact.statelessComponent("FullPage");
   let make = ({head, body}: LayoutConfig.t) => {
     ...component,
     render: _ =>
@@ -176,3 +176,30 @@ let seriesHead = (channel: Types.channel, seriesName) =>
       {seriesName |> ste}
     </div>
   </>;
+
+let component = ReasonReact.statelessComponent("SLayout");
+let make = (~head=ReasonReact.null, ~children) => {
+  ...component,
+  render: _ =>
+    <FC.Base.Div
+      className=Css.(
+        style(
+          [
+            marginTop(`em(2.0)),
+            marginTop(`em(2.)),
+            width(`percent(100.)),
+            boxSizing(`borderBox),
+          ]
+          @ FC.Base.BaseStyles.fullWidthFloatLeft,
+        )
+      )>
+      <div className=Styles.container>
+        <FC.PageCard>
+          <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
+          <FC.PageCard.Body>
+            {children |> ReasonReact.array}
+          </FC.PageCard.Body>
+        </FC.PageCard>
+      </div>
+    </FC.Base.Div>,
+};

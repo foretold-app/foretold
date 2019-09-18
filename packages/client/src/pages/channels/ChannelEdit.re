@@ -24,10 +24,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
         </FC.Base.Div>
         <FC.Base.Div
           float=`right
-          className={Css.style([
-            FC.PageCard.HeaderRow.Styles.itemTopPadding,
-            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-          ])}>
+          className={Css.style([FC.PageCard.HeaderRow.Styles.itemTopPadding])}>
           {Primary.User.show(
              loggedInUser,
              <FC.Base.Button

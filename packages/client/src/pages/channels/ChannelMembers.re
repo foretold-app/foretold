@@ -155,10 +155,7 @@ let title = () =>
 let addMembersButtonSection = (channelId: string) =>
   <FC.Base.Div
     float=`right
-    className={Css.style([
-      FC.PageCard.HeaderRow.Styles.itemTopPadding,
-      FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-    ])}>
+    className={Css.style([FC.PageCard.HeaderRow.Styles.itemTopPadding])}>
     <FC.Base.Button
       variant=Primary
       onClick={e =>

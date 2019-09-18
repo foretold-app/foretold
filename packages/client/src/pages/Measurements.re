@@ -15,58 +15,85 @@ module ReducerConfig = {
 
 module Reducer = PaginationFunctor.Make(ReducerConfig);
 
+module Pagination = {
+  let component = ReasonReact.statelessComponent("Pagination");
+  let make = (~reducerParams: Reducer.Types.reducerParams, _children) => {
+    ...component,
+    render: _ =>
+      <>
+        <Div>
+          <Div
+            styles=[
+              Css.style([
+                FC.Base.BaseStyles.floatLeft,
+                Css.paddingTop(`em(0.2)),
+              ]),
+            ]>
+            <FC.Tab isActive=true>
+              {"Predictions" |> ReasonReact.string}
+            </FC.Tab>
+            <FC.Tab isActive=false> {"Scores" |> ReasonReact.string} </FC.Tab>
+          </Div>
+        </Div>
+        <Div>
+          <Div
+            float=`right
+            styles=[Css.style([FC.PageCard.HeaderRow.Styles.itemTopPadding])]>
+            {Reducer.Components.paginationPage(reducerParams)}
+          </Div>
+        </Div>
+      </>,
+  };
+};
+
+module Body = {
+  let component = ReasonReact.statelessComponent("Body");
+  let make =
+      (
+        ~selectWithPaginationParams,
+        ~loggedInUser,
+        ~measurable: Types.measurable,
+        _children,
+      ) => {
+    ...component,
+    render: _ =>
+      SLayout.LayoutConfig.make(
+        ~head=<Pagination reducerParams=selectWithPaginationParams />,
+        ~body=
+          switch (selectWithPaginationParams.response) {
+          | Success(connection) =>
+            let measurementsList = connection.edges |> Array.to_list;
+
+            switch (measurable.state) {
+            | Some(`JUDGED)
+            | Some(`CLOSED_AS_UNRESOLVED) =>
+              MeasurementsTable.makeExtended(
+                ~measurementsList,
+                ~loggedInUser,
+                (),
+              )
+            | _ =>
+              MeasurementsTable.make(~loggedInUser, ~measurementsList, ())
+            };
+          | _ => <SLayout.Spin />
+          },
+      )
+      |> SLayout.FullPage.makeWithEl,
+  };
+};
+
 let component = ReasonReact.statelessComponent("Measurements");
 let make = (~measurableId: string, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _ => {
-    let pagination = (reducerParams: Reducer.Types.reducerParams) =>
-      <Div>
-        <Div
-          float=`right
-          styles=[
-            Css.style([
-              FC.PageCard.HeaderRow.Styles.itemTopPadding,
-              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-            ]),
-          ]>
-          {Reducer.Components.paginationPage(reducerParams)}
-        </Div>
-      </Div>;
-
     MeasurableGet2.component(~id=measurableId)
     |> E.F.apply((measurable: Types.measurable) =>
-         Reducer.make(
-           ~itemsPerPage=20,
-           ~callFnParams=measurable.id,
-           ~subComponent=selectWithPaginationParams =>
-           SLayout.LayoutConfig.make(
-             ~head=pagination(selectWithPaginationParams),
-             ~body=
-               switch (selectWithPaginationParams.response) {
-               | Success(connection) =>
-                 let measurementsList = connection.edges |> Array.to_list;
-
-                 switch (measurable.state) {
-                 | Some(`JUDGED)
-                 | Some(`CLOSED_AS_UNRESOLVED) =>
-                   MeasurementsTable.makeExtended(
-                     ~measurementsList,
-                     ~loggedInUser,
-                     (),
-                   )
-                 | _ =>
-                   MeasurementsTable.make(
-                     ~loggedInUser,
-                     ~measurementsList,
-                     (),
-                   )
-                 };
-               | _ => <SLayout.Spin />
-               },
-           )
-           |> SLayout.FullPage.makeWithEl
-         )
-         |> E.React.makeToEl
+         <Reducer
+           callFnParams={measurable.id}
+           subComponent={selectWithPaginationParams =>
+             <Body selectWithPaginationParams measurable loggedInUser />
+           }
+         />
        );
   },
 };

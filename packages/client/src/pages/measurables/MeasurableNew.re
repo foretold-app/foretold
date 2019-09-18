@@ -65,7 +65,9 @@ let make = (~channelId, ~loggedInUser: Types.user, _children) => {
                    (response: MeasurableCreate.Query.t) => {
                      switch (response##measurableCreate) {
                      | Some(m) =>
-                       Routing.Url.push(MeasurableShow(channelId, m##id))
+                       Routing.Url.push(
+                         MeasurableShow(channelId, m##id, ByMeasurements),
+                       )
                      | _ => ()
                      };
                      ReasonReact.null;

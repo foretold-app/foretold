@@ -1,5 +1,3 @@
-open Style.Grid;
-
 module ReducerConfig = {
   type itemType = Types.measurement;
   type callFnParams = string;

@@ -19,8 +19,8 @@ let make =
           {switch (channelPage.subPage) {
            | Measurables(searchParams) =>
              <MeasurableIndex channelId searchParams loggedInUser />
-           | Measurable(measurableId) =>
-             <ChannelMeasurable measurableId loggedInUser />
+           | Measurable(measurableId, subTab) =>
+             <ChannelMeasurable measurableId loggedInUser subTab />
            | Series(id) => <SeriesShow id channelId loggedInUser />
            | NewMeasurable => <MeasurableNew channelId loggedInUser />
            | Members => <ChannelMembers channelId channel />

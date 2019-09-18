@@ -9,7 +9,13 @@ module Columns = {
     | Some(measurable) =>
       <Link
         linkType={
-          Internal(MeasurableShow(measurable.channelId, measurable.id))
+          Internal(
+            MeasurableShow(
+              measurable.channelId,
+              measurable.id,
+              ByMeasurements,
+            ),
+          )
         }>
         [|measurable.name |> E.S.default("Question") |> Utils.ste|]
       </Link>

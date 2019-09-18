@@ -18,6 +18,7 @@ let make =
     (
       ~channelId=None,
       ~head=Leaderboard.head(~subTab=ByMeasurable),
+      ~columns=LeaderboardTable.Columns.measurables,
       _children,
     ) => {
   ...component,
@@ -37,10 +38,7 @@ let make =
         | Success(_) =>
           Array.length(items) > 0
             ? <FC.PageCard.Body>
-                <LeaderboardTable.Jsx2
-                  items
-                  columns=LeaderboardTable.Columns.measurables
-                />
+                <LeaderboardTable.Jsx2 items columns />
               </FC.PageCard.Body>
             : <NothingToShow />
         | _ => <Spin />

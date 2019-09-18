@@ -15,7 +15,12 @@ module Reducer = PaginationFunctor.Make(ReducerConfig);
 
 let component = ReasonReact.statelessComponent("LeaderboardChannels");
 let make =
-    (~channelId=None, ~head=Leaderboard.head(~subTab=ByMember), _children) => {
+    (
+      ~channelId=None,
+      ~head=Leaderboard.head(~subTab=ByMember),
+      ~columns=LeaderboardTable.Columns.members,
+      _children,
+    ) => {
   ...component,
   render: _ => {
     let subComponent = (reducerParams: Reducer.Types.reducerParams) => {
@@ -32,10 +37,7 @@ let make =
         | Success(_) =>
           Array.length(items) > 0
             ? <FC.PageCard.Body>
-                <LeaderboardTable.Jsx2
-                  items
-                  columns=LeaderboardTable.Columns.members
-                />
+                <LeaderboardTable.Jsx2 items columns />
               </FC.PageCard.Body>
             : <NothingToShow />
         | _ => <Spin />

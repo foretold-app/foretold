@@ -1,7 +1,7 @@
 open Style.Grid;
 
 let component = ReasonReact.statelessComponent("PaginationX");
-let make = _children => {
+let make = (~paginationPage, _children) => {
   ...component,
   render: _ =>
     <>
@@ -17,6 +17,13 @@ let make = _children => {
             {"Predictions" |> ReasonReact.string}
           </FC.Tab>
           <FC.Tab isActive=false> {"Scores" |> ReasonReact.string} </FC.Tab>
+        </Div>
+        <Div>
+          <Div
+            float=`right
+            styles=[Css.style([FC.PageCard.HeaderRow.Styles.itemTopPadding])]>
+            paginationPage
+          </Div>
         </Div>
       </Div>
     </>,

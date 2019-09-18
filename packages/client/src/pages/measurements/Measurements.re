@@ -15,24 +15,6 @@ module ReducerConfig = {
 
 module Reducer = PaginationFunctor.Make(ReducerConfig);
 
-module Pagination = {
-  let component = ReasonReact.statelessComponent("Pagination");
-  let make = (~reducerParams: Reducer.Types.reducerParams, _children) => {
-    ...component,
-    render: _ =>
-      <>
-        <PaginationX />
-        <Div>
-          <Div
-            float=`right
-            styles=[Css.style([FC.PageCard.HeaderRow.Styles.itemTopPadding])]>
-            {Reducer.Components.paginationPage(reducerParams)}
-          </Div>
-        </Div>
-      </>,
-  };
-};
-
 module Body = {
   let component = ReasonReact.statelessComponent("Body");
   let make =
@@ -44,7 +26,12 @@ module Body = {
       ) => {
     ...component,
     render: _ =>
-      <SLayout head={<Pagination reducerParams />}>
+      <SLayout
+        head={
+          <PaginationX
+            paginationPage={Reducer.Components.paginationPage(reducerParams)}
+          />
+        }>
         {switch (reducerParams.response) {
          | Success(connection) =>
            let measurementsList = connection.edges |> Array.to_list;

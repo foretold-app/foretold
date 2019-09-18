@@ -26,20 +26,11 @@ let make =
            | Members => <ChannelMembers channelId channel />
            | FeedItems => <FeedItems channelId={Some(channelId)} />
            | Leaderboard(ByMeasurement) =>
-             <LeaderboardMeasurements
-               channelId={Some(channelId)}
-               subTab=ByMeasurement
-             />
+             <LeaderboardMeasurements channelId={Some(channelId)} />
            | Leaderboard(ByMeasurable) =>
-             <LeaderboardMeasurables
-               channelId={Some(channelId)}
-               subTab=ByMeasurable
-             />
+             <LeaderboardMeasurables channelId={Some(channelId)} />
            | Leaderboard(ByMember) =>
-             <LeaderboardMembers
-               channelId={Some(channelId)}
-               subTab=ByMember
-             />
+             <LeaderboardMembers channelId={Some(channelId)} />
            | AddMember => <ChannelAddMember channelId loggedInUser />
            | InviteMember => <ChannelInviteMember channelId loggedInUser />
            | Settings => <ChannelEdit channelId loggedInUser />

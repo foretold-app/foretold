@@ -14,12 +14,7 @@ module ReducerConfig = {
 module Reducer = PaginationFunctor.Make(ReducerConfig);
 
 let component = ReasonReact.statelessComponent("LeaderboardChannels");
-let make =
-    (
-      ~channelId: option(string)=None,
-      ~subTab: Routing.ChannelPage.leaderboard,
-      _children,
-    ) => {
+let make = (~channelId=None, _children) => {
   ...component,
   render: _ => {
     let subComponent = (reducerParams: Reducer.Types.reducerParams) => {
@@ -49,7 +44,7 @@ let make =
         <Leaderboard.Pagination
           channelId
           paginationPage={Reducer.Components.paginationPage(reducerParams)}
-          subTab
+          subTab=ByMember
         />;
 
       <SLayout head> body </SLayout>;

@@ -66,3 +66,12 @@ module Pagination = {
       </Div>,
   };
 };
+
+let head =
+    (
+      ~channelId,
+      ~subTab: Routing.ChannelPage.leaderboard=ByMeasurable,
+      ~paginationPage,
+      (),
+    ) =>
+  <Pagination channelId paginationPage subTab />;

@@ -14,7 +14,12 @@ module ReducerConfig = {
 module Reducer = PaginationFunctor.Make(ReducerConfig);
 
 let component = ReasonReact.statelessComponent("LeaderboardMeasurables");
-let make = (~channelId=None, _children) => {
+let make =
+    (
+      ~channelId=None,
+      ~head=Leaderboard.head(~subTab=ByMeasurable),
+      _children,
+    ) => {
   ...component,
   render: _ => {
     let subComponent = (reducerParams: Reducer.Types.reducerParams) => {
@@ -42,11 +47,11 @@ let make = (~channelId=None, _children) => {
         };
 
       let head =
-        <Leaderboard.Pagination
-          channelId
-          paginationPage={Reducer.Components.paginationPage(reducerParams)}
-          subTab=ByMeasurable
-        />;
+        head(
+          ~channelId,
+          ~paginationPage=Reducer.Components.paginationPage(reducerParams),
+          (),
+        );
 
       <SLayout head> body </SLayout>;
     };

@@ -31,7 +31,7 @@ describe("#scorePointCombination", () => {
       )
       |> Belt.Result.getExn,
     )
-    |> toBeCloseTo(0.269);
+    |> toBeCloseTo(0.192);
   });
 
   test("with PercentagePercentage score2", () => {
@@ -61,7 +61,7 @@ describe("#scorePointCombination", () => {
       )
       |> Belt.Result.getExn,
     )
-    |> toBeCloseTo(0.269);
+    |> toBeCloseTo(0.192);
   });
 
   test("with PercentagePercentage over a long time", () => {
@@ -90,7 +90,7 @@ describe("#scorePointCombination", () => {
       )
       |> Belt.Result.getExn,
     )
-    |> toBeCloseTo(0.423);
+    |> toBeCloseTo(0.121);
   });
 
   test("with PercentagePercentage with testing", () => {
@@ -103,7 +103,7 @@ describe("#scorePointCombination", () => {
           |],
           marketPredictions:
             Some([|
-              make(~time=0., ~measurementValue=mkPer(0.5)),
+              make(~time=3000., ~measurementValue=mkPer(0.5)),
               make(~time=5000., ~measurementValue=mkPer(0.7)),
             |]),
           resolution: make(~time=10000., ~measurementValue=mkPer(0.95)),
@@ -115,10 +115,11 @@ describe("#scorePointCombination", () => {
       PredictionResolutionOverTimeMeasures.averagePointScore(
         ~marketType=`MarketScore,
         ~scoringCombination=makeCombination,
+        ~lowestTimeForAverage=0.0,
         (),
       )
       |> Belt.Result.getExn,
     )
-    |> toBeCloseTo(0.423);
+    |> toBeCloseTo(0.085);
   });
 });

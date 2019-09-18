@@ -42,8 +42,8 @@ const PredictionResolutionOverTimeI_make = function (Arg1, Arg2, Arg3) {
 };;
 exports.PredictionResolutionOverTimeI_make = PredictionResolutionOverTimeI_make
 
-const PredictionResolutionOverTimeI_averagePointScore = function (Arg1, Arg2, Arg3, Arg4) {
-  const result = Curry._4(JsInterfaceBS.PredictionResolutionOverTimeI[3], $$toRE824073253[Arg1], Arg2, Arg3, Arg4);
+const PredictionResolutionOverTimeI_averagePointScore = function (Arg1, Arg2, Arg3) {
+  const result = Curry._3(JsInterfaceBS.PredictionResolutionOverTimeI[3], $$toRE824073253[Arg1], Arg2, Arg3);
   return result
 };;
 exports.PredictionResolutionOverTimeI_averagePointScore = PredictionResolutionOverTimeI_averagePointScore

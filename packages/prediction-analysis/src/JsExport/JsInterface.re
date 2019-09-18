@@ -135,16 +135,10 @@ module PredictionResolutionOverTimeI = {
 
   [@genType]
   let averagePointScore =
-      (
-        marketType: MarketType.marketScoreType,
-        lowestTimeForAverage,
-        highestTimeForAverage,
-        e,
-      ) =>
+      (marketType: MarketType.marketScoreType, lowestTimeForAverage, e) =>
     PredictionResolutionOverTimeMeasures.averagePointScore(
       ~marketType,
       ~lowestTimeForAverage,
-      ~highestTimeForAverage,
       ~scoringCombination=e,
       (),
     );

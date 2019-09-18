@@ -1,5 +1,3 @@
-open Primary;
-
 module Styles = {
   open Css;
 
@@ -30,7 +28,7 @@ module Styles = {
 let component = ReasonReact.statelessComponent("MeasurablesSeriesTable");
 let make =
     (
-      ~measurables: array(Measurable.t),
+      ~measurables: array(Types.measurable),
       ~selected: option(string),
       ~onClick,
       _children,
@@ -47,7 +45,7 @@ let make =
 
         <div className=Styles.group>
           {measurables
-           |> Array.map((m: Measurable.t) =>
+           |> Array.map((m: Types.measurable) =>
                 <div
                   className={Styles.row(Some(m.id) == selected)}
                   onClick={_e => onClick(m.id)}>

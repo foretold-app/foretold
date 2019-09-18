@@ -85,30 +85,31 @@ let integral = (t: t(float, float)) => {
      );
 };
 
-let average = (~t, ~lowestTime=?, ~highestTime=?, ()) => {
+let average = (~t: t(float, float), ~lowestTime=?, ()) => {
   let lowestTime = Rationale.Option.firstSome(lowestTime, minX(t));
-  let highestTime = Rationale.Option.firstSome(highestTime, maxX(t));
-  switch (integral(t), lowestTime, highestTime) {
-  | (Error(e), _, _) => Belt.Result.Error(e)
-  | (_, None, _) => Belt.Result.Error("Min must exist")
-  | (_, _, None) => Belt.Result.Error("Max must exist")
-  | (Ok(integral), Some(min), Some(max)) =>
+  let highestTime = t.finalX;
+  switch (integral(t), lowestTime) {
+  | (Error(e), _) => Belt.Result.Error(e)
+  | (_, None) => Belt.Result.Error("Min must exist")
+  | (Ok(integral), Some(min)) =>
     Js.log4("The integral is:", integral, max, min);
     Js.log(
       "Integral Calculation: integral:"
       ++ (integral |> Js.Float.toFixedWithPrecision(~digits=4))
       ++ "|| maxX: "
-      ++ (max |> Js.Float.toFixedWithPrecision(~digits=4))
+      ++ (highestTime |> Js.Float.toFixedWithPrecision(~digits=4))
       ++ "|| minX: "
       ++ (min |> Js.Float.toFixedWithPrecision(~digits=4))
       ++ "|| diff: "
-      ++ (max -. min |> Js.Float.toFixedWithPrecision(~digits=4)),
+      ++ (highestTime -. min |> Js.Float.toFixedWithPrecision(~digits=4)),
     );
     Js.log2(
       "The integral is |||||",
-      integral /. (max -. min) |> Js.Float.toFixedWithPrecision(~digits=4),
+      integral
+      /. (highestTime -. min)
+      |> Js.Float.toFixedWithPrecision(~digits=4),
     );
-    Belt.Result.Ok(integral /. (max -. min));
+    Belt.Result.Ok(integral /. (highestTime -. min));
   };
 };
 

@@ -84,7 +84,7 @@ describe("#PredictionResolutionOverTime", () => {
           {time: 5., measurement: {data: 0.7, dataType: "percentage"}},
         ],
         resolution: {time: 10, measurement: {data: 0.95, dataType: "percentage"}}
-      })).averagePointScore(marketScore, undefined).data).toBeCloseTo(0.268);
+      })).averagePointScore(marketScore, undefined).data).toBeCloseTo(0.192);
     });
 
   test('#averagePointScore with low point', () => {
@@ -98,6 +98,6 @@ describe("#PredictionResolutionOverTime", () => {
           {time: 5., measurement: {data: 0.7, dataType: "percentage"}},
         ],
         resolution: {time: 10, measurement: {data: 0.95, dataType: "percentage"}}
-      })).averagePointScore(marketScore, 1.0).data).toBeCloseTo(0.192);
+      })).averagePointScore(marketScore, 1.0).data).toBeCloseTo(0.149);
     });
 });

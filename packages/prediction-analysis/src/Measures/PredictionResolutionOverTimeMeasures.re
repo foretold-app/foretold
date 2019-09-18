@@ -6,7 +6,6 @@ let averagePointScore =
       ~sampleCount=DefaultParams.Cdf.maxCalculationLength,
       ~scoringCombination: PredictionResolutionOverTime.t,
       ~lowestTimeForAverage=?,
-      ~highestTimeForAverage=?,
       (),
     ) => {
   scoringCombination
@@ -21,11 +20,6 @@ let averagePointScore =
      )
   |> StartAtDistribution.transposeResult
   |> Belt.Result.flatMap(_, t =>
-       StartAtDistribution.average(
-         ~t,
-         ~lowestTime=?lowestTimeForAverage,
-         ~highestTime=?highestTimeForAverage,
-         (),
-       )
+       StartAtDistribution.average(~t, ~lowestTime=?lowestTimeForAverage, ())
      );
 };

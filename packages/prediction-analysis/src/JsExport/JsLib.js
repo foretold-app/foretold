@@ -115,7 +115,6 @@ PredictionResolutionOverTime.prototype.averagePointScore = function (
     PredictionResolutionOverTimeI_averagePointScore(
       marketScoreType,
       beginningTime,
-      undefined,
       this.data,
     ),
   );

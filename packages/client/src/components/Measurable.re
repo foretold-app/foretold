@@ -14,7 +14,7 @@ module Styles = {
   let description = style([paddingTop(`em(1.5))]);
 };
 
-let component = ReasonReact.statelessComponent("MeasurableFullPresentation");
+let component = ReasonReact.statelessComponent("Measurable");
 let make = (~id: string, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _self => {

@@ -30,7 +30,7 @@ module LoadedAndSelected = {
     </>;
 
   let body = (t: t) =>
-    <MeasurableFullPresentation
+    <Measurable
       id={t.selectedMeasurable.id}
       key={t.selectedMeasurable.id}
       loggedInUser={t.loggedInUser}

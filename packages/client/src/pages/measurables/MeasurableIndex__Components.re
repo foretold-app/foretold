@@ -166,7 +166,7 @@ let toLayoutInput =
     |> SLayout.FullPage.makeWithEl
 
   | WithChannelButNotQuery(_c) =>
-    SLayout.LayoutConfig.make(~head=E.React.null, ~body=<SLayout.Spin />)
+    SLayout.LayoutConfig.make(~head=E.React.null, ~body=<Spin />)
     |> SLayout.FullPage.makeWithEl
   };
 };

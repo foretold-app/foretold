@@ -59,7 +59,7 @@ module Body = {
              )
            | _ => MeasurementsTable.make(~loggedInUser, ~measurementsList, ())
            };
-         | _ => <SLayout.Spin />
+         | _ => <Spin />
          }}
       </SLayout>,
   };

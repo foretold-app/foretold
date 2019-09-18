@@ -45,8 +45,8 @@ let make =
             ? <FC.PageCard.Body>
                 <LeaderboardTable.Jsx2 items />
               </FC.PageCard.Body>
-            : <SLayout.NothingToShow />
-        | _ => <SLayout.Spin />
+            : <NothingToShow />
+        | _ => <Spin />
         };
 
       let head =

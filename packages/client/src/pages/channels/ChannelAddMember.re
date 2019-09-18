@@ -67,9 +67,9 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
       Table.fromColumns(all, dataSource, ());
     };
 
-    let onError = e => <SLayout.Error e />;
+    let onError = e => <Error e />;
 
-    let loadingFn = () => <SLayout.Spin />;
+    let loadingFn = () => <Spin />;
 
     let table =
       AgentsGet.componentUsers(~excludeChannelId=channelId, agents =>

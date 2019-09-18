@@ -65,9 +65,8 @@ let make =
         switch (reducerParams.response) {
         | Success(_) =>
           isFound
-            ? <FC.PageCard.Body> table </FC.PageCard.Body>
-            : <SLayout.NothingToShow />
-        | _ => <SLayout.Spin />
+            ? <FC.PageCard.Body> table </FC.PageCard.Body> : <NothingToShow />
+        | _ => <Spin />
         };
 
       SLayout.LayoutConfig.make(

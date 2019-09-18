@@ -214,7 +214,7 @@ let errorFn = _ =>
   |> SLayout.FullPage.makeWithEl;
 
 let loadingFn = _ =>
-  SLayout.LayoutConfig.make(~head=<div />, ~body=<SLayout.Spin />)
+  SLayout.LayoutConfig.make(~head=<div />, ~body=<Spin />)
   |> SLayout.FullPage.makeWithEl;
 
 let make = (~channelId: string, ~channel: Types.channel, _children) => {

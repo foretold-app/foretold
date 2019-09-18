@@ -406,7 +406,7 @@ let make =
            (),
          )}
       </FC.PageCard.Body>
-    : <SLayout.NothingToShow />;
+    : <NothingToShow />;
 };
 
 let makeExtended =
@@ -433,7 +433,7 @@ let makeExtended =
            (),
          )}
       </FC.PageCard.Body>
-    : <SLayout.NothingToShow />;
+    : <NothingToShow />;
 };
 
 let makeAgentPredictionsTable =
@@ -468,5 +468,5 @@ let makeAgentPredictionsTable =
            (),
          )}
       </FC.PageCard.Body>
-    : <SLayout.NothingToShow />;
+    : <NothingToShow />;
 };

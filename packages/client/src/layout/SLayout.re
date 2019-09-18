@@ -52,63 +52,6 @@ module Header = {
   };
 };
 
-module Spin = {
-  module Styles = {
-    open Css;
-    let centerBlock = style([textAlign(`center), padding(`em(2.))]);
-    let clear = style([clear(`both)]);
-  };
-
-  let component = ReasonReact.statelessComponent("Spin");
-
-  let make = _children => {
-    ...component,
-    render: _ =>
-      <>
-        <div className=Styles.clear />
-        <div className=Styles.centerBlock>
-          <Antd.Spin tip="Loading..." />
-        </div>
-      </>,
-  };
-};
-
-module Error = {
-  module Styles = {
-    open Css;
-    let centerBlock = style([textAlign(`center), padding(`em(2.))]);
-    let clear = style([clear(`both)]);
-  };
-
-  let component = ReasonReact.statelessComponent("Error");
-
-  let make = (~e, _children) => {
-    ...component,
-    render: _ => <> <div> {"Error: " ++ e |> Utils.ste} </div> </>,
-  };
-};
-
-module NothingToShow = {
-  module Styles = {
-    open Css;
-    let centerBlock = style([textAlign(`center), margin(`em(2.))]);
-    let clear = style([clear(`both)]);
-  };
-
-  let component = ReasonReact.statelessComponent("NothingToShow");
-
-  let make = _children => {
-    ...component,
-    render: _ =>
-      <>
-        <div className=Styles.clear />
-        <div className=Styles.centerBlock>
-          {"Nothing to show" |> Utils.ste}
-        </div>
-      </>,
-  };
-};
-
 module LayoutConfig = {
   type t = {
     head: ReasonReact.reactElement,

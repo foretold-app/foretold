@@ -58,7 +58,7 @@ let make =
 
       let loadingFn = () =>
         <Channel channelPage loggedInUser channel=None>
-          {SLayout.LayoutConfig.make(~head=<div />, ~body=<SLayout.Spin />)
+          {SLayout.LayoutConfig.make(~head=<div />, ~body=<Spin />)
            |> SLayout.FullPage.makeWithEl}
         </Channel>;
 

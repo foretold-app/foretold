@@ -43,8 +43,8 @@ let make =
                   columns=LeaderboardTable.Columns.measurables
                 />
               </FC.PageCard.Body>
-            : <SLayout.NothingToShow />
-        | _ => <SLayout.Spin />
+            : <NothingToShow />
+        | _ => <Spin />
         };
 
       let head =

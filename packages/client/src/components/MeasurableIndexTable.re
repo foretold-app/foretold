@@ -89,5 +89,5 @@ let make =
               })
            |> ReasonReact.array}
         </>
-      : <SLayout.NothingToShow />,
+      : <NothingToShow />,
 };

@@ -39,6 +39,7 @@ module LoadedAndSelected = {
   let body2 = (t: t) =>
     <Switcher
       measurableId={t.selectedMeasurable.id}
+      channelId={Some(t.selectedMeasurable.channelId)}
       loggedInUser={t.loggedInUser}
     />;
 };

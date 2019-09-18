@@ -3,6 +3,7 @@ let component = ReasonReact.statelessComponent("ChannelMeasurable");
 let make =
     (
       ~measurableId: string,
+      ~channelId: option(string),
       ~loggedInUser: Types.user,
       ~subTab: Routing.ChannelPage.measurementsTab,
       _children,
@@ -11,7 +12,7 @@ let make =
   render: _ => {
     <>
       <SLayout> <Measurable id=measurableId loggedInUser /> </SLayout>
-      <Switcher measurableId loggedInUser subTab />
+      <Switcher measurableId channelId loggedInUser subTab />
     </>;
   },
 };

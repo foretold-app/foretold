@@ -20,7 +20,12 @@ let make =
            | Measurables(searchParams) =>
              <MeasurableIndex channelId searchParams loggedInUser />
            | Measurable(measurableId, subTab) =>
-             <ChannelMeasurable measurableId loggedInUser subTab />
+             <ChannelMeasurable
+               channelId={Some(channelId)}
+               measurableId
+               loggedInUser
+               subTab
+             />
            | Series(id) => <SeriesShow id channelId loggedInUser />
            | NewMeasurable => <MeasurableNew channelId loggedInUser />
            | Members => <ChannelMembers channelId channel />

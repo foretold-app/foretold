@@ -5,6 +5,7 @@ let component = ReasonReact.statelessComponent("Switcher");
 let make =
     (
       ~measurableId: string,
+      ~channelId: option(string),
       ~loggedInUser: Types.user,
       ~subTab: Routing.ChannelPage.measurementsTab=ByMeasurements,
       _children,
@@ -15,7 +16,11 @@ let make =
     switch (subTab) {
     | ByMeasurements => <Measurements measurableId loggedInUser />
     | ByScores =>
-      <LeaderboardMeasurables measurableId={Some(measurableId)} head />
+      <LeaderboardMeasurables
+        channelId
+        measurableId={Some(measurableId)}
+        head
+      />
     };
   },
 };

@@ -76,10 +76,8 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
         agents |> HttpResponse.flatten(onSuccess, onError, loadingFn)
       );
 
-    SLayout.LayoutConfig.make(
-      ~head=<div> title </div>,
-      ~body=<FC.PageCard.Body> table </FC.PageCard.Body>,
-    )
-    |> SLayout.FullPage.makeWithEl;
+    <SLayout head={<div> title </div>}>
+      <FC.PageCard.Body> table </FC.PageCard.Body>
+    </SLayout>;
   },
 };

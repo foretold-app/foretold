@@ -45,17 +45,14 @@ let make =
 
       let errorFn = _ =>
         <Channel channelPage loggedInUser channel=None>
-          {SLayout.LayoutConfig.make(
-             ~head=<div />,
-             ~body=<div> {"No channel." |> ReasonReact.string} </div>,
-           )
-           |> SLayout.FullPage.makeWithEl}
+          <SLayout>
+            <div> {"No channel." |> ReasonReact.string} </div>
+          </SLayout>
         </Channel>;
 
       let loadingFn = () =>
         <Channel channelPage loggedInUser channel=None>
-          {SLayout.LayoutConfig.make(~head=<div />, ~body=<Spin />)
-           |> SLayout.FullPage.makeWithEl}
+          <SLayout> <Spin /> </SLayout>
         </Channel>;
 
       loadChannel(result =>

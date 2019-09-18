@@ -1,5 +1,5 @@
-let head = (~channelId, ~paginationPage, ~subTab, ()) =>
-  <PaginationX paginationPage subTab />;
+let head = (~channelId, ~measurableId, ~paginationPage, ~subTab, ()) =>
+  <PaginationX paginationPage subTab measurableId channelId />;
 
 let component = ReasonReact.statelessComponent("Switcher");
 let make =
@@ -11,7 +11,7 @@ let make =
     ) => {
   ...component,
   render: _ => {
-    let head = head(~subTab);
+    let head = head(~subTab, ~measurableId);
     switch (subTab) {
     | ByMeasurements => <Measurements measurableId loggedInUser />
     | ByScores =>

@@ -27,6 +27,8 @@ module Body = {
       <SLayout
         head={
           <PaginationX
+            measurableId={measurable.id}
+            channelId={Some(measurable.channelId)}
             paginationPage={Reducer.Components.paginationPage(reducerParams)}
           />
         }>

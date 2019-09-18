@@ -4,6 +4,8 @@ let component = ReasonReact.statelessComponent("PaginationX");
 let make =
     (
       ~paginationPage,
+      ~channelId: option(string),
+      ~measurableId,
       ~subTab: Routing.ChannelPage.measurementsTab=ByMeasurements,
       _children,
     ) => {
@@ -18,10 +20,30 @@ let make =
               Css.paddingTop(`em(0.2)),
             ]),
           ]>
-          <FC.Tab isActive={subTab == ByMeasurements}>
+          <FC.Tab
+            isActive={subTab == ByMeasurements}
+            onClick={LinkType.onClick(
+              Internal(
+                MeasurableShow(
+                  channelId |> E.O.toString,
+                  measurableId,
+                  ByMeasurements,
+                ),
+              ),
+            )}>
             {"Predictions" |> ReasonReact.string}
           </FC.Tab>
-          <FC.Tab isActive={subTab == ByScores}>
+          <FC.Tab
+            isActive={subTab == ByScores}
+            onClick={LinkType.onClick(
+              Internal(
+                MeasurableShow(
+                  channelId |> E.O.toString,
+                  measurableId,
+                  ByScores,
+                ),
+              ),
+            )}>
             {"Scores" |> ReasonReact.string}
           </FC.Tab>
         </Div>

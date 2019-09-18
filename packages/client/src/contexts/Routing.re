@@ -265,9 +265,9 @@ module Url = {
     | SeriesNew(channelId) => "/c/" ++ channelId ++ "/s/new"
     | SeriesShow(channelId, id) => "/c/" ++ channelId ++ "/s/" ++ id
     | MeasurableShow(channelId, measurableId, ByMeasurements) =>
-      "/c/" ++ channelId ++ "/m/" ++ measurableId ++ "questions"
+      "/c/" ++ channelId ++ "/m/" ++ measurableId ++ "/questions"
     | MeasurableShow(channelId, measurableId, ByScores) =>
-      "/c/" ++ channelId ++ "/m/" ++ measurableId ++ "scores"
+      "/c/" ++ channelId ++ "/m/" ++ measurableId ++ "/scores"
     | Subscribe => "/subscribe"
     | Unsubscribe => "/unsubscribe"
     | Login => "/login"

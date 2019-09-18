@@ -4,12 +4,7 @@ module ReducerConfig = {
 
   let getId = (e: itemType) => e.id;
   let callFn = (channelId: callFnParams) =>
-    AgentMeasurablesGet.component(
-      ~channelId,
-      ~minPredictionCountTotal=Some(1),
-      ~measurableState=Some([|Some(`JUDGED)|]),
-      (),
-    );
+    AgentMeasurablesGet.component(~channelId, ());
 
   let isEqual = (a: itemType, b: itemType) => {
     a.id == b.id;
@@ -59,7 +54,7 @@ let make =
           subTab,
         );
 
-      SLayout.LayoutConfig.make(~head, ~body) |> SLayout.FullPage.makeWithEl;
+      <SLayout head> body </SLayout>;
     };
 
     <Reducer callFnParams=channelId subComponent />;

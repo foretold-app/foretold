@@ -140,8 +140,8 @@ let componentMaker = (query, innerComponentFn) =>
 let component =
     (
       ~channelId=None,
-      ~measurableState=None,
-      ~minPredictionCountTotal=None,
+      ~measurableState=Some([|Some(`JUDGED)|]),
+      ~minPredictionCountTotal=Some(1),
       ~pageLimit,
       ~direction: direction,
       ~innerComponentFn,

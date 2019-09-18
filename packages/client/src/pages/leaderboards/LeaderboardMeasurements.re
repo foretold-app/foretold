@@ -56,7 +56,7 @@ let make =
           subTab,
         );
 
-      SLayout.LayoutConfig.make(~head, ~body) |> SLayout.FullPage.makeWithEl;
+      <SLayout head> body </SLayout>;
     };
 
     <Reducer callFnParams=channelId subComponent />;

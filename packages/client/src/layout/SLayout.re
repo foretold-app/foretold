@@ -178,7 +178,7 @@ let seriesHead = (channel: Types.channel, seriesName) =>
   </>;
 
 let component = ReasonReact.statelessComponent("SLayout");
-let make = (~head=ReasonReact.null, ~children) => {
+let make = (~head=ReasonReact.null, children) => {
   ...component,
   render: _ =>
     <FC.Base.Div

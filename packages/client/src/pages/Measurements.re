@@ -50,35 +50,31 @@ module Body = {
   let component = ReasonReact.statelessComponent("Body");
   let make =
       (
-        ~selectWithPaginationParams,
+        ~reducerParams: Reducer.Types.reducerParams,
         ~loggedInUser,
         ~measurable: Types.measurable,
         _children,
       ) => {
     ...component,
     render: _ =>
-      SLayout.LayoutConfig.make(
-        ~head=<Pagination reducerParams=selectWithPaginationParams />,
-        ~body=
-          switch (selectWithPaginationParams.response) {
-          | Success(connection) =>
-            let measurementsList = connection.edges |> Array.to_list;
+      <SLayout head={<Pagination reducerParams />}>
+        {switch (reducerParams.response) {
+         | Success(connection) =>
+           let measurementsList = connection.edges |> Array.to_list;
 
-            switch (measurable.state) {
-            | Some(`JUDGED)
-            | Some(`CLOSED_AS_UNRESOLVED) =>
-              MeasurementsTable.makeExtended(
-                ~measurementsList,
-                ~loggedInUser,
-                (),
-              )
-            | _ =>
-              MeasurementsTable.make(~loggedInUser, ~measurementsList, ())
-            };
-          | _ => <SLayout.Spin />
-          },
-      )
-      |> SLayout.FullPage.makeWithEl,
+           switch (measurable.state) {
+           | Some(`JUDGED)
+           | Some(`CLOSED_AS_UNRESOLVED) =>
+             MeasurementsTable.makeExtended(
+               ~measurementsList,
+               ~loggedInUser,
+               (),
+             )
+           | _ => MeasurementsTable.make(~loggedInUser, ~measurementsList, ())
+           };
+         | _ => <SLayout.Spin />
+         }}
+      </SLayout>,
   };
 };
 
@@ -90,8 +86,8 @@ let make = (~measurableId: string, ~loggedInUser: Types.user, _children) => {
     |> E.F.apply((measurable: Types.measurable) =>
          <Reducer
            callFnParams={measurable.id}
-           subComponent={selectWithPaginationParams =>
-             <Body selectWithPaginationParams measurable loggedInUser />
+           subComponent={reducerParams =>
+             <Body reducerParams measurable loggedInUser />
            }
          />
        );

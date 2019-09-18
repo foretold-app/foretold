@@ -1,10 +1,10 @@
 module ReducerConfig = {
   type itemType = Types.agentMeasurable;
-  type callFnParams = option(string);
+  type callFnParams = (option(string), option(string));
 
   let getId = (e: itemType) => e.id;
-  let callFn = (channelId: callFnParams) =>
-    AgentMeasurablesGet.component(~channelId, ());
+  let callFn = ((channelId, measurableId): callFnParams) =>
+    AgentMeasurablesGet.component(~channelId, ~measurableId, ());
 
   let isEqual = (a: itemType, b: itemType) => {
     a.id == b.id;
@@ -17,6 +17,7 @@ let component = ReasonReact.statelessComponent("LeaderboardMeasurables");
 let make =
     (
       ~channelId=None,
+      ~measurableId=None,
       ~head=Leaderboard.head(~subTab=ByMeasurable),
       ~columns=LeaderboardTable.Columns.measurables,
       _children,
@@ -54,6 +55,6 @@ let make =
       <SLayout head> body </SLayout>;
     };
 
-    <Reducer callFnParams=channelId subComponent />;
+    <Reducer callFnParams=(channelId, measurableId) subComponent />;
   },
 };

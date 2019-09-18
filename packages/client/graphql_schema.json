@@ -475,6 +475,16 @@
                   "defaultValue": null
                 },
                 {
+                  "name": "measurableId",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
                   "name": "measurableState",
                   "description": null,
                   "type": {

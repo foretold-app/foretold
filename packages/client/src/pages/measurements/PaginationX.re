@@ -1,7 +1,12 @@
 open Style.Grid;
 
 let component = ReasonReact.statelessComponent("PaginationX");
-let make = (~paginationPage, _children) => {
+let make =
+    (
+      ~paginationPage,
+      ~subTab: Routing.ChannelPage.measurementsTab=ByMeasurements,
+      _children,
+    ) => {
   ...component,
   render: _ =>
     <>
@@ -13,10 +18,12 @@ let make = (~paginationPage, _children) => {
               Css.paddingTop(`em(0.2)),
             ]),
           ]>
-          <FC.Tab isActive=true>
+          <FC.Tab isActive={subTab == ByMeasurements}>
             {"Predictions" |> ReasonReact.string}
           </FC.Tab>
-          <FC.Tab isActive=false> {"Scores" |> ReasonReact.string} </FC.Tab>
+          <FC.Tab isActive={subTab == ByScores}>
+            {"Scores" |> ReasonReact.string}
+          </FC.Tab>
         </Div>
         <Div>
           <Div

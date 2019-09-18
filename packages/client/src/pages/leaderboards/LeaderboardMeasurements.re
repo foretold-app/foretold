@@ -34,9 +34,7 @@ let make =
         | _ => [||]
         };
 
-      let items =
-        items
-        |> E.A.fmap(node => Primary.LeaderboardItem.fromMeasurement(node));
+      let items = items |> E.A.fmap(Primary.LeaderboardItem.fromMeasurement);
 
       let body =
         switch (reducerParams.response) {

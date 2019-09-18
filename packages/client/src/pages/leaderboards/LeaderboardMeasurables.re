@@ -30,8 +30,7 @@ let make =
         };
 
       let items =
-        items
-        |> E.A.fmap(node => Primary.LeaderboardItem.fromAgentMeasurable(node));
+        items |> E.A.fmap(Primary.LeaderboardItem.fromAgentMeasurable);
 
       let body =
         switch (reducerParams.response) {

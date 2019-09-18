@@ -69,14 +69,6 @@ let component = ReasonReact.statelessComponent("Scores");
 let make = (~measurableId: string, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _ => {
-    MeasurableGet2.component(~id=measurableId)
-    |> E.F.apply((measurable: Types.measurable) =>
-         <Reducer
-           callFnParams={measurable.id}
-           subComponent={reducerParams =>
-             <Body reducerParams measurable loggedInUser />
-           }
-         />
-       );
+    <LeaderboardMeasurables channelId=None subTab=ByMeasurable />;
   },
 };

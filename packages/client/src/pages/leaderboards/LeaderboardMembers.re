@@ -29,9 +29,7 @@ let make =
         | _ => [||]
         };
 
-      let items =
-        items
-        |> E.A.fmap(node => Primary.LeaderboardItem.fromAgentChannel(node));
+      let items = items |> E.A.fmap(Primary.LeaderboardItem.fromAgentChannel);
 
       let body =
         switch (reducerParams.response) {

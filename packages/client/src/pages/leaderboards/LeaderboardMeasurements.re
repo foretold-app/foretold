@@ -50,11 +50,11 @@ let make =
         };
 
       let head =
-        Leaderboard.pagination(
-          channelId,
-          Reducer.Components.paginationPage(reducerParams),
-          subTab,
-        );
+        <Leaderboard.Pagination
+          channelId
+          paginationPage={Reducer.Components.paginationPage(reducerParams)}
+          subTab
+        />;
 
       <SLayout head> body </SLayout>;
     };

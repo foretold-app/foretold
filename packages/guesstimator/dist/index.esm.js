@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import math from 'mathjs';
-import { jStat } from 'jstat';
+import jstat from 'jstat';
 import Sampling, { Discrete } from 'discrete-sampling';
 
 //FIXME
@@ -207,25 +207,25 @@ function PERT(min, max, mode = (min + max)/2, lambda = 4) {
   const width = max - min;
   const a = 1 + lambda * ((mode - min)/width);
   const b = 1 + lambda * ((max - mode)/width);
-  const p = jStat.beta.sample(a, b);
+  const p = jstat.beta.sample(a, b);
   return min + p*width
 }
 
 const Distributions = {
-  beta: jStat.beta.sample,
-  centralF: jStat.centralF.sample,
-  cauchy: jStat.cauchy.sample,
-  chisquare: jStat.chisquare.sample,
-  exponential: jStat.exponential.sample,
-  invgamma: jStat.invgamma.sample,
-  lognormal: jStat.lognormal.sample,
-  logn: jStat.lognormal.sample,
-  normal: jStat.normal.sample,
-  n: jStat.normal.sample,
-  studentt: jStat.studentt.sample,
-  weibull: jStat.weibull.sample,
-  uniform: jStat.uniform.sample,
-  gamma: jStat.gamma.sample,
+  beta: jstat.beta.sample,
+  centralF: jstat.centralF.sample,
+  cauchy: jstat.cauchy.sample,
+  chisquare: jstat.chisquare.sample,
+  exponential: jstat.exponential.sample,
+  invgamma: jstat.invgamma.sample,
+  lognormal: jstat.lognormal.sample,
+  logn: jstat.lognormal.sample,
+  normal: jstat.normal.sample,
+  n: jstat.normal.sample,
+  studentt: jstat.studentt.sample,
+  weibull: jstat.weibull.sample,
+  uniform: jstat.uniform.sample,
+  gamma: jstat.gamma.sample,
   triangular,
   doubleTriangular,
   PERT,

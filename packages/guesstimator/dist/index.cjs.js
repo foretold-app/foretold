@@ -6,7 +6,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var _ = _interopDefault(require('lodash'));
 var math = _interopDefault(require('mathjs'));
-var jstat = require('jstat');
+var jstat = _interopDefault(require('jstat'));
 var Sampling = require('discrete-sampling');
 var Sampling__default = _interopDefault(Sampling);
 
@@ -214,25 +214,25 @@ function PERT(min, max, mode = (min + max)/2, lambda = 4) {
   const width = max - min;
   const a = 1 + lambda * ((mode - min)/width);
   const b = 1 + lambda * ((max - mode)/width);
-  const p = jstat.jStat.beta.sample(a, b);
+  const p = jstat.beta.sample(a, b);
   return min + p*width
 }
 
 const Distributions = {
-  beta: jstat.jStat.beta.sample,
-  centralF: jstat.jStat.centralF.sample,
-  cauchy: jstat.jStat.cauchy.sample,
-  chisquare: jstat.jStat.chisquare.sample,
-  exponential: jstat.jStat.exponential.sample,
-  invgamma: jstat.jStat.invgamma.sample,
-  lognormal: jstat.jStat.lognormal.sample,
-  logn: jstat.jStat.lognormal.sample,
-  normal: jstat.jStat.normal.sample,
-  n: jstat.jStat.normal.sample,
-  studentt: jstat.jStat.studentt.sample,
-  weibull: jstat.jStat.weibull.sample,
-  uniform: jstat.jStat.uniform.sample,
-  gamma: jstat.jStat.gamma.sample,
+  beta: jstat.beta.sample,
+  centralF: jstat.centralF.sample,
+  cauchy: jstat.cauchy.sample,
+  chisquare: jstat.chisquare.sample,
+  exponential: jstat.exponential.sample,
+  invgamma: jstat.invgamma.sample,
+  lognormal: jstat.lognormal.sample,
+  logn: jstat.lognormal.sample,
+  normal: jstat.normal.sample,
+  n: jstat.normal.sample,
+  studentt: jstat.studentt.sample,
+  weibull: jstat.weibull.sample,
+  uniform: jstat.uniform.sample,
+  gamma: jstat.gamma.sample,
   triangular,
   doubleTriangular,
   PERT,

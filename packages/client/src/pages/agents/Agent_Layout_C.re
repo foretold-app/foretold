@@ -1,10 +1,5 @@
 let component = ReasonReact.statelessComponent("AgentLayoutPage");
-let make =
-    (
-      agentPage: Routing.AgentPage.t,
-      loggedInUser: Types.user,
-      {head, body}: SLayout.LayoutConfig.t,
-    ) => {
+let make = ({head, body}: SLayout.LayoutConfig.t) => {
   ...component,
   render: _ => {
     <FC.PageCard>
@@ -14,6 +9,4 @@ let make =
   },
 };
 
-let makeWithEl =
-    (agentPage: Routing.AgentPage.t, loggedInUser, t: SLayout.LayoutConfig.t) =>
-  make(agentPage, loggedInUser, t) |> E.React.el;
+let makeWithEl = (t: SLayout.LayoutConfig.t) => make(t) |> E.React.el;

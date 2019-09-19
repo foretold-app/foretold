@@ -72,7 +72,7 @@ let make =
 
     switch (loggedInUser) {
     | Some(loggedInUser) =>
-      let layout = Agent_Layout_C.makeWithEl(agentPage, loggedInUser);
+      let layout = Agent_Layout_C.makeWithEl;
 
       <FillWithSidebar loggedInUser>
         <Top agentPage loggedInUser />
@@ -105,7 +105,7 @@ let make =
                | AgentBots => <AgentBots pageParams={id: agentId} layout />
                | AgentCommunities => <AgentCommunities agentId layout />
                | AgentUpdates => <FeedItems agentId={Some(agentId)} layout />
-               | AgentScores => <AgentScores agentId={Some(agentId)} layout />
+               | AgentScores => <AgentScores agentId={Some(agentId)} />
                }}
             </Div>
           </Div>

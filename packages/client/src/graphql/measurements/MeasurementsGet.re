@@ -230,7 +230,7 @@ let unpackResults = result =>
   |> Rationale.Option.fmap(Primary.Connection.fromJson(toMeasurement));
 
 let componentMaker = (query, innerComponentFn) =>
-  <QueryComponent variables=query##variables fetchPolicy="no-cache">
+  <QueryComponent variables=query##variables>
     ...{o =>
       o.result
       |> HttpResponse.fromApollo

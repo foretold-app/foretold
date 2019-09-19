@@ -4,7 +4,7 @@ module Columns = {
   type record = Types.channel;
   type column = Table.column(Types.channel);
 
-  let nameColumn: column =
+  let nameColumn =
     Table.Column.make(
       ~name="Name" |> Utils.ste,
       ~render=
@@ -16,7 +16,7 @@ module Columns = {
       (),
     );
 
-  let descriptionColumn: column =
+  let descriptionColumn =
     Table.Column.make(
       ~name="Description" |> Utils.ste,
       ~render=(r: record) => r.description |> E.O.default("") |> Utils.ste,
@@ -24,7 +24,7 @@ module Columns = {
       (),
     );
 
-  let memberCountColumn: column =
+  let memberCountColumn =
     Table.Column.make(
       ~name="Members" |> Utils.ste,
       ~render=
@@ -37,7 +37,7 @@ module Columns = {
       (),
     );
 
-  let openedCountColumn: column =
+  let openedCountColumn =
     Table.Column.make(
       ~name="Open Questions" |> Utils.ste,
       ~render=
@@ -50,7 +50,7 @@ module Columns = {
       (),
     );
 
-  let labelsColumn: column =
+  let labelsColumn =
     Table.Column.make(
       ~name="Labels" |> Utils.ste,
       ~render=

@@ -6,7 +6,7 @@ module ColumnsFunctor = (Ken: KenTools.KenModule) => {
   type record = Graph_T.T.thing;
   type column = Table.column(Graph_T.T.thing);
 
-  let nameColumn: column =
+  let nameColumn =
     Table.Column.make(
       ~name="Name" |> ste,
       ~render=
@@ -18,14 +18,14 @@ module ColumnsFunctor = (Ken: KenTools.KenModule) => {
       (),
     );
 
-  let instanceOf: column =
+  let instanceOf =
     Table.Column.make(
       ~name="Instance Of" |> ste,
       ~render=(r: record) => r |> Ken.getInstanceOfName |> ste,
       (),
     );
 
-  let idColumn: column =
+  let idColumn =
     Table.Column.make(
       ~name="Name" |> ste,
       ~render=(r: record) => r |> Graph_T.Thing.id |> ste,

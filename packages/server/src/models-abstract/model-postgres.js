@@ -625,6 +625,8 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @todo: This is an anisotropy when pagination is defined {}
+   * @todo: instead of pagination = new Pagination().
    * @public
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]

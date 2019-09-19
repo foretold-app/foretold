@@ -38,5 +38,6 @@ class Guesstimator {
   }
 }
 
-export {Guesstimator};
-// console.log(new Guesstimator({ parsedInput: Guesstimator.parse({ text: '3 to 40' })[1].parsedInput }).sample(5));
+const testVar = 30;
+
+export {Guesstimator, testVar};

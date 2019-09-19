@@ -35,7 +35,7 @@ let component = ReasonReact.statelessComponent("AgentBots");
 module Columns = {
   type column = Table.column(Types.bot);
 
-  let nameColumn: column =
+  let nameColumn =
     Table.Column.make(
       ~name="Name" |> ste,
       ~render=
@@ -55,7 +55,7 @@ module Columns = {
       (),
     );
 
-  let descriptionColumn: column =
+  let descriptionColumn =
     Table.Column.make(
       ~name="Description" |> ste,
       ~render=
@@ -64,7 +64,7 @@ module Columns = {
       (),
     );
 
-  let tokenColumn: column =
+  let tokenColumn =
     Table.Column.make(
       ~name="Token" |> ste,
       ~render=
@@ -76,7 +76,7 @@ module Columns = {
       (),
     );
 
-  let editColumn: column =
+  let editColumn =
     Table.Column.make(
       ~name="Edit" |> ste,
       ~render=

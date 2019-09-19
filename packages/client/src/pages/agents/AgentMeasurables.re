@@ -16,9 +16,9 @@ module ReducerConfig = {
 
 module Reducer = PaginationFunctor.Make(ReducerConfig);
 
-let component = ReasonReact.statelessComponent("AgentMeasurables");
 type pageParams = {id: string};
 
+let component = ReasonReact.statelessComponent("AgentMeasurables");
 let make =
     (
       ~pageParams: pageParams,

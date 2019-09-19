@@ -19,7 +19,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
       )
       |> ReasonReact.element;
 
-    let agentColumn: column =
+    let agentColumn =
       Table.Column.make(
         ~name="Member" |> ReasonReact.string,
         ~render=
@@ -37,7 +37,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
         (),
       );
 
-    let inviteColumn: column =
+    let inviteColumn =
       Table.Column.make(
         ~name="Invite" |> ReasonReact.string,
         ~render=

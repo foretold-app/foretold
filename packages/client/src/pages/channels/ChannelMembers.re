@@ -35,7 +35,7 @@ let removeFromChannel = (agentId, channelId) =>
 module Columns = {
   type column = Table.column(Types.channelMembership);
 
-  let agentColumn: column =
+  let agentColumn =
     Table.Column.make(
       ~name="Member" |> ReasonReact.string,
       ~render=
@@ -55,7 +55,7 @@ module Columns = {
       (),
     );
 
-  let roleColumn: column =
+  let roleColumn =
     Table.Column.make(
       ~name="Role" |> ReasonReact.string,
       ~render=

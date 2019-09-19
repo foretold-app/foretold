@@ -186,6 +186,7 @@ and leaderboardItem = {
   id: string,
   measurable: option(measurable),
   agent: option(agent),
+  channel: option(channel),
   pointScore: option(float),
   createdAt: option(MomentRe.Moment.t),
   predictionCountTotal: option(int),

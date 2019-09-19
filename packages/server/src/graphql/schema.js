@@ -116,6 +116,7 @@ const schema = new graphql.GraphQLSchema({
           minNumberOfPredictions: { type: graphql.GraphQLInt },
           minNumberOfQuestionsScored: { type: graphql.GraphQLInt },
           channelId: { type: graphql.GraphQLString },
+          agentId: { type: graphql.GraphQLString },
         },
         resolve: resolvers.agentChannels.all,
       },

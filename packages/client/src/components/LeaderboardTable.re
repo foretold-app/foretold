@@ -50,6 +50,22 @@ module Columns = {
       (),
     );
 
+  let channel =
+    Table.Column.make(
+      ~name="Community" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          r.channel
+          |> E.O.fmap((channel: Types.channel) =>
+               <Link linkType={Internal(ChannelShow(channel.id))}>
+                 [|channel.name |> Utils.ste|]
+               </Link>
+             )
+          |> E.O.default("Community" |> Utils.ste),
+      ~flex=1,
+      (),
+    );
+
   let score =
     Table.Column.make(
       ~name="Score" |> Utils.ste,
@@ -192,6 +208,13 @@ module Columns = {
 
   let members = [|
     agent,
+    totalScore,
+    predictedMeasurablesCount,
+    predictionCount,
+  |];
+
+  let members' = [|
+    channel,
     totalScore,
     predictedMeasurablesCount,
     predictionCount,

@@ -1,10 +1,10 @@
 module ReducerConfig = {
   type itemType = Types.agentChannel;
-  type callFnParams = option(string);
+  type callFnParams = (option(string), option(string));
 
   let getId = (e: itemType) => e.id;
-  let callFn = (channelId: callFnParams) =>
-    AgentChannelsGet.component(~channelId, ());
+  let callFn = ((channelId, agentId): callFnParams) =>
+    AgentChannelsGet.component(~channelId, ~agentId, ());
 
   let isEqual = (a: itemType, b: itemType) => {
     a.id == b.id;
@@ -17,6 +17,7 @@ let component = ReasonReact.statelessComponent("LeaderboardChannels");
 let make =
     (
       ~channelId=None,
+      ~agentId=None,
       ~head=Leaderboard.head(~subTab=ByMember),
       ~columns=LeaderboardTable.Columns.members,
       _children,
@@ -53,6 +54,6 @@ let make =
       <SLayout head> body </SLayout>;
     };
 
-    <Reducer callFnParams=channelId subComponent />;
+    <Reducer callFnParams=(channelId, agentId) subComponent />;
   },
 };

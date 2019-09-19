@@ -38,6 +38,7 @@ module Query = [%graphql
         $after: String
         $before: String
         $channelId: String
+        $agentId: String
         $minNumberOfPredictions: Int
         $minNumberOfQuestionsScored: Int
      ) {
@@ -47,6 +48,7 @@ module Query = [%graphql
             after: $after
             before: $before
             channelId: $channelId
+            agentId: $agentId
             minNumberOfPredictions: $minNumberOfPredictions
             minNumberOfQuestionsScored: $minNumberOfQuestionsScored
         ) {
@@ -126,6 +128,7 @@ let componentMaker = (query, innerComponentFn) =>
 let component =
     (
       ~channelId=None,
+      ~agentId=None,
       ~minNumberOfPredictions=None,
       ~minNumberOfQuestionsScored=None,
       ~pageLimit,
@@ -140,6 +143,7 @@ let component =
       ~fn=
         Query.make(
           ~channelId?,
+          ~agentId?,
           ~minNumberOfPredictions?,
           ~minNumberOfQuestionsScored?,
         ),

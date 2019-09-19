@@ -88,7 +88,7 @@ let endpointResponse = (~m: Types.measurable) =>
 let questionLink = (~m: Types.measurable) =>
   <Link.Jsx2
     className=Shared.Item.item
-    linkType={Internal(MeasurableShow(m.channelId, m.id, ByMeasurements))}>
+    linkType={Internal(MeasurableShow(m.channelId, m.id))}>
     {"Link to This Question" |> Utils.ste}
   </Link.Jsx2>;
 

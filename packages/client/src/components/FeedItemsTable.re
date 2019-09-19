@@ -9,11 +9,7 @@ module Columns = {
     | (Some(row), _) => row.item |> Utils.ste
     | (_, Some(row)) =>
       <Link
-        linkType={
-          Internal(
-            MeasurableShow(r.channelId, row.measurableId, ByMeasurements),
-          )
-        }>
+        linkType={Internal(MeasurableShow(r.channelId, row.measurableId))}>
         [|row.item |> Utils.ste|]
       </Link>
     | _ => "" |> Utils.ste

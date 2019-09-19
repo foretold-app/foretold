@@ -32,14 +32,10 @@ module ChannelPage = {
     | ByMeasurable
     | ByMember;
 
-  type measurementsTab =
-    | ByMeasurements
-    | ByScores;
-
   module SubPage = {
     type t =
       | Measurables(MeasurableQueryIndex.query)
-      | Measurable(string, measurementsTab)
+      | Measurable(string)
       | NewMeasurable
       | Members
       | AddMember
@@ -139,16 +135,10 @@ module Route = {
             url.search |> MeasurableQueryIndex.fromStringWithDefaults,
           ),
       })
-    | ["c", channelId, "m", measurableId]
-    | ["c", channelId, "m", measurableId, "questions"] =>
+    | ["c", channelId, "m", measurableId] =>
       Channel({
         channelId: getChannelId(channelId),
-        subPage: Measurable(measurableId, ByMeasurements),
-      })
-    | ["c", channelId, "m", measurableId, "scores"] =>
-      Channel({
-        channelId: getChannelId(channelId),
-        subPage: Measurable(measurableId, ByScores),
+        subPage: Measurable(measurableId),
       })
     | ["c", channelId, "new"] => Channel({channelId, subPage: NewMeasurable})
     | ["c", channelId, "edit"] => Channel({channelId, subPage: Settings})
@@ -211,7 +201,7 @@ module Url = {
     | ChannelNew
     | ChannelIndex
     | SeriesShow(string, string)
-    | MeasurableShow(string, string, ChannelPage.measurementsTab)
+    | MeasurableShow(string, string)
     | SeriesNew(string)
     | MeasurableEdit(string)
     | ChannelEdit(string)
@@ -264,10 +254,8 @@ module Url = {
     | MeasurableNew(channelId) => "/c/" ++ channelId ++ "/new"
     | SeriesNew(channelId) => "/c/" ++ channelId ++ "/s/new"
     | SeriesShow(channelId, id) => "/c/" ++ channelId ++ "/s/" ++ id
-    | MeasurableShow(channelId, measurableId, ByMeasurements) =>
-      "/c/" ++ channelId ++ "/m/" ++ measurableId ++ "/questions"
-    | MeasurableShow(channelId, measurableId, ByScores) =>
-      "/c/" ++ channelId ++ "/m/" ++ measurableId ++ "/scores"
+    | MeasurableShow(channelId, measurableId) =>
+      "/c/" ++ channelId ++ "/m/" ++ measurableId
     | Subscribe => "/subscribe"
     | Unsubscribe => "/unsubscribe"
     | Login => "/login"
@@ -288,7 +276,7 @@ module Url = {
     | Settings => ChannelEdit(channelPage.channelId)
     | NewSeries => SeriesNew(channelPage.channelId)
     | Series(id) => SeriesShow(channelPage.channelId, id)
-    | Measurable(measurableId, measurementsTab) =>
-      MeasurableShow(channelPage.channelId, measurableId, measurementsTab)
+    | Measurable(measurableId) =>
+      MeasurableShow(channelPage.channelId, measurableId)
     };
 };

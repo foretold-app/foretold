@@ -1,14 +1,11 @@
 open Style.Grid;
 
+type tab =
+  | Measurements
+  | Scores;
+
 let component = ReasonReact.statelessComponent("PaginationX");
-let make =
-    (
-      ~paginationPage,
-      ~channelId: option(string),
-      ~measurableId,
-      ~subTab: Routing.ChannelPage.measurementsTab=ByMeasurements,
-      _children,
-    ) => {
+let make = (~paginationPage, ~switchTab, ~tab, _children) => {
   ...component,
   render: _ =>
     <>
@@ -21,29 +18,11 @@ let make =
             ]),
           ]>
           <FC.Tab
-            isActive={subTab == ByMeasurements}
-            onClick={LinkType.onClick(
-              Internal(
-                MeasurableShow(
-                  channelId |> E.O.toString,
-                  measurableId,
-                  ByMeasurements,
-                ),
-              ),
-            )}>
+            isActive={tab == Measurements}
+            onClick={_ => switchTab(Measurements)}>
             {"Predictions" |> ReasonReact.string}
           </FC.Tab>
-          <FC.Tab
-            isActive={subTab == ByScores}
-            onClick={LinkType.onClick(
-              Internal(
-                MeasurableShow(
-                  channelId |> E.O.toString,
-                  measurableId,
-                  ByScores,
-                ),
-              ),
-            )}>
+          <FC.Tab isActive={tab == Scores} onClick={_ => switchTab(Scores)}>
             {"Scores" |> ReasonReact.string}
           </FC.Tab>
         </Div>

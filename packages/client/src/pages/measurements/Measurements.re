@@ -20,18 +20,17 @@ module Body = {
         ~reducerParams: Reducer.Types.reducerParams,
         ~loggedInUser,
         ~measurable: Types.measurable,
+        ~head,
         _children,
       ) => {
     ...component,
     render: _ =>
       <SLayout
-        head={
-          <PaginationX
-            measurableId={measurable.id}
-            channelId={Some(measurable.channelId)}
-            paginationPage={Reducer.Components.paginationPage(reducerParams)}
-          />
-        }>
+        head={head(
+          ~channelId=Some(""),
+          ~paginationPage=Reducer.Components.paginationPage(reducerParams),
+          (),
+        )}>
         {switch (reducerParams.response) {
          | Success(connection) =>
            let measurementsList = connection.edges |> Array.to_list;
@@ -53,7 +52,8 @@ module Body = {
 };
 
 let component = ReasonReact.statelessComponent("Measurements");
-let make = (~measurableId: string, ~loggedInUser: Types.user, _children) => {
+let make =
+    (~measurableId: string, ~loggedInUser: Types.user, ~head, _children) => {
   ...component,
   render: _ => {
     MeasurableGet2.component(~id=measurableId)
@@ -61,7 +61,7 @@ let make = (~measurableId: string, ~loggedInUser: Types.user, _children) => {
          <Reducer
            callFnParams={measurable.id}
            subComponent={reducerParams =>
-             <Body reducerParams measurable loggedInUser />
+             <Body reducerParams measurable loggedInUser head />
            }
          />
        );

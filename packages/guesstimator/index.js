@@ -4,7 +4,7 @@ import _ from "lodash";
 
 //TODO(fix this class)
 
-export class Guesstimator {
+class Guesstimator {
   static parse(unparsedInput) {
     const [parsedError, parsedInput] = parse(unparsedInput)
     const newItem = new this({ parsedError, parsedInput })
@@ -38,4 +38,5 @@ export class Guesstimator {
   }
 }
 
+export {Guesstimator};
 // console.log(new Guesstimator({ parsedInput: Guesstimator.parse({ text: '3 to 40' })[1].parsedInput }).sample(5));

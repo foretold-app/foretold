@@ -113,7 +113,7 @@ let unpackResults = result =>
   result##edges |> Rationale.Option.fmap(Primary.Connection.fromJson(toNode));
 
 let componentMaker = (query, innerComponentFn) =>
-  <QueryComponent variables=query##variables fetchPolicy="no-cache">
+  <QueryComponent variables=query##variables>
     ...{o =>
       o.result
       |> HttpResponse.fromApollo

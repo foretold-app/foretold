@@ -6,6 +6,7 @@ const utils = require('../../lib/utils');
  */
 class Query {
   /**
+   * @todo: sort or Pagination.order?
    * @param {Layers.DataSourceLayer.query} [query]
    */
   constructor(query = {}) {

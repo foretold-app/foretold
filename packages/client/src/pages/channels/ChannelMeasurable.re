@@ -1,18 +1,17 @@
 let component = ReasonReact.statelessComponent("ChannelMeasurable");
 
-let make = (~measurableId: string, ~loggedInUser: Types.user, _children) => {
+let make =
+    (
+      ~measurableId: string,
+      ~channelId: option(string),
+      ~loggedInUser: Types.user,
+      _children,
+    ) => {
   ...component,
   render: _ => {
     <>
-      {SLayout.LayoutConfig.make(
-         ~head=ReasonReact.null,
-         ~body=
-           <FC.PageCard.Body>
-             <MeasurableFullPresentation id=measurableId loggedInUser />
-           </FC.PageCard.Body>,
-       )
-       |> SLayout.FullPage.makeWithEl}
-      <Measurements measurableId loggedInUser />
+      <SLayout> <Measurable id=measurableId loggedInUser /> </SLayout>
+      <MeasurableButtom measurableId channelId loggedInUser />
     </>;
   },
 };

@@ -15,6 +15,7 @@ class Pagination {
    * @param {string} [options.before]
    * @param {number} [options.limit]
    * @param {number} [options.offset]
+   * @param {Layers.orderList} [options.order]
    */
   constructor(options = {}) {
     if (_.has(options, 'last')) {
@@ -37,6 +38,44 @@ class Pagination {
     if (_.has(options, 'offset')) {
       this.offset = _.get(options, 'offset');
     }
+
+    if (_.has(options, 'order')) {
+      this.order = this._getOrder(options);
+    }
+  }
+
+  /**
+   * @param {object} options
+   * @param {Layers.orderList} options.order
+   * @returns {Layers.orderList}
+   * @private
+   */
+  _getOrder(options) {
+    const orderInput = _.get(options, 'order');
+    const orderArray = _.isArray(orderInput) ? orderInput : [];
+    return orderArray
+      .filter(item => _.has(item, 'field'))
+      .filter(item => _.has(item, 'direction'))
+      .map((item) => {
+        return {
+          field: _.get(item, 'field'),
+          direction: _.get(item, 'direction'),
+        };
+      });
+  }
+
+  /**
+    * @returns {boolean}
+   */
+  isOrderSet() {
+    return !!this.order && this.order.length > 0;
+  }
+
+  /**
+   * @returns {{field: any, direction: any}[]}
+   */
+  getOrder() {
+    return this.order;
   }
 
   /**

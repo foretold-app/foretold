@@ -276,6 +276,7 @@ module Url = {
     | Settings => ChannelEdit(channelPage.channelId)
     | NewSeries => SeriesNew(channelPage.channelId)
     | Series(id) => SeriesShow(channelPage.channelId, id)
-    | Measurable(id) => MeasurableShow(channelPage.channelId, id)
+    | Measurable(measurableId) =>
+      MeasurableShow(channelPage.channelId, measurableId)
     };
 };

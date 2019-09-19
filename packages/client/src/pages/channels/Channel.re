@@ -68,7 +68,7 @@ let make =
 
     <FillWithSidebar channelId={Some(channelId)} loggedInUser>
       {headers()}
-      <> {children[0]} </>
+      {children |> ReasonReact.array}
     </FillWithSidebar>;
   },
 };

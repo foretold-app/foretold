@@ -10,7 +10,7 @@ module Make = (Config: Config) => {
         (),
       ) =>
     switch (result) {
-    | Loading => <SLayout.Spin />
+    | Loading => <Spin />
     | Error(e) => <> {"Error: " ++ e##message |> ste} form </>
     | Data(_) => successMessage |> ste |> E.React.inH2
     | NotCalled => form
@@ -24,7 +24,7 @@ module Make = (Config: Config) => {
         (),
       ) =>
     switch (result) {
-    | Loading => <SLayout.Spin />
+    | Loading => <Spin />
     | Error(e) => <> <AntdAlert message=e##message type_="warning" /> form </>
     | Data(r) => onSuccess(r)
     | NotCalled => form

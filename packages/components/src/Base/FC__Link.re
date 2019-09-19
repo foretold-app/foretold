@@ -1,10 +1,5 @@
 let component = ReasonReact.statelessComponent(__MODULE__);
 
-let defaultColors = (
-  FC__Settings.Text.LightBackground.main,
-  FC__Settings.Text.LightBackground.light,
-);
-
 let headerLink = (~className, ~isDisabled=false, ()) => {
   let primaryStyles =
     Css.(

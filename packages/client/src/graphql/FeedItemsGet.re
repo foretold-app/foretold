@@ -160,7 +160,7 @@ let queryDirection = (~channelId=?, ~agentId=?, ~pageLimit, ~direction, ()) => {
 };
 
 let componentMaker = (query, innerComponentFn) =>
-  <QueryComponent variables=query##variables fetchPolicy="no-cache">
+  <QueryComponent variables=query##variables>
     ...{o =>
       o.result
       |> HttpResponse.fromApollo

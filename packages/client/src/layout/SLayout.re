@@ -52,63 +52,6 @@ module Header = {
   };
 };
 
-module Spin = {
-  module Styles = {
-    open Css;
-    let centerBlock = style([textAlign(`center), padding(`em(2.))]);
-    let clear = style([clear(`both)]);
-  };
-
-  let component = ReasonReact.statelessComponent("Spin");
-
-  let make = _children => {
-    ...component,
-    render: _ =>
-      <>
-        <div className=Styles.clear />
-        <div className=Styles.centerBlock>
-          <Antd.Spin tip="Loading..." />
-        </div>
-      </>,
-  };
-};
-
-module Error = {
-  module Styles = {
-    open Css;
-    let centerBlock = style([textAlign(`center), padding(`em(2.))]);
-    let clear = style([clear(`both)]);
-  };
-
-  let component = ReasonReact.statelessComponent("Error");
-
-  let make = (~e, _children) => {
-    ...component,
-    render: _ => <> <div> {"Error: " ++ e |> Utils.ste} </div> </>,
-  };
-};
-
-module NothingToShow = {
-  module Styles = {
-    open Css;
-    let centerBlock = style([textAlign(`center), margin(`em(2.))]);
-    let clear = style([clear(`both)]);
-  };
-
-  let component = ReasonReact.statelessComponent("NothingToShow");
-
-  let make = _children => {
-    ...component,
-    render: _ =>
-      <>
-        <div className=Styles.clear />
-        <div className=Styles.centerBlock>
-          {"Nothing to show" |> Utils.ste}
-        </div>
-      </>,
-  };
-};
-
 module LayoutConfig = {
   type t = {
     head: ReasonReact.reactElement,
@@ -118,7 +61,7 @@ module LayoutConfig = {
 };
 
 module FullPage = {
-  let component = ReasonReact.statelessComponent("Page");
+  let component = ReasonReact.statelessComponent("FullPage");
   let make = ({head, body}: LayoutConfig.t) => {
     ...component,
     render: _ =>
@@ -176,3 +119,30 @@ let seriesHead = (channel: Types.channel, seriesName) =>
       {seriesName |> ste}
     </div>
   </>;
+
+let component = ReasonReact.statelessComponent("SLayout");
+let make = (~head=ReasonReact.null, children) => {
+  ...component,
+  render: _ =>
+    <FC.Base.Div
+      className=Css.(
+        style(
+          [
+            marginTop(`em(2.0)),
+            marginTop(`em(2.)),
+            width(`percent(100.)),
+            boxSizing(`borderBox),
+          ]
+          @ FC.Base.BaseStyles.fullWidthFloatLeft,
+        )
+      )>
+      <div className=Styles.container>
+        <FC.PageCard>
+          <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
+          <FC.PageCard.Body>
+            {children |> ReasonReact.array}
+          </FC.PageCard.Body>
+        </FC.PageCard>
+      </div>
+    </FC.Base.Div>,
+};

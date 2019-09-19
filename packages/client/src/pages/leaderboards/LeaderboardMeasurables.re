@@ -1,15 +1,10 @@
 module ReducerConfig = {
   type itemType = Types.agentMeasurable;
-  type callFnParams = option(string);
+  type callFnParams = (option(string), option(string));
 
   let getId = (e: itemType) => e.id;
-  let callFn = (channelId: callFnParams) =>
-    AgentMeasurablesGet.component(
-      ~channelId,
-      ~minPredictionCountTotal=Some(1),
-      ~measurableState=Some([|Some(`JUDGED)|]),
-      (),
-    );
+  let callFn = ((channelId, measurableId): callFnParams) =>
+    AgentMeasurablesGet.component(~channelId, ~measurableId, ());
 
   let isEqual = (a: itemType, b: itemType) => {
     a.id == b.id;
@@ -21,8 +16,10 @@ module Reducer = PaginationFunctor.Make(ReducerConfig);
 let component = ReasonReact.statelessComponent("LeaderboardMeasurables");
 let make =
     (
-      ~channelId: option(string)=None,
-      ~subTab: Routing.ChannelPage.leaderboard,
+      ~channelId=None,
+      ~measurableId=None,
+      ~head=Leaderboard.head(~subTab=ByMeasurable),
+      ~columns=LeaderboardTable.Columns.measurables,
       _children,
     ) => {
   ...component,
@@ -35,33 +32,29 @@ let make =
         };
 
       let items =
-        items
-        |> E.A.fmap(node => Primary.LeaderboardItem.fromAgentMeasurable(node));
+        items |> E.A.fmap(Primary.LeaderboardItem.fromAgentMeasurable);
 
       let body =
         switch (reducerParams.response) {
         | Success(_) =>
           Array.length(items) > 0
             ? <FC.PageCard.Body>
-                <LeaderboardTable.Jsx2
-                  items
-                  columns=LeaderboardTable.Columns.measurables
-                />
+                <LeaderboardTable.Jsx2 items columns />
               </FC.PageCard.Body>
-            : <SLayout.NothingToShow />
-        | _ => <SLayout.Spin />
+            : <NothingToShow />
+        | _ => <Spin />
         };
 
       let head =
-        Leaderboard.pagination(
-          channelId,
-          Reducer.Components.paginationPage(reducerParams),
-          subTab,
+        head(
+          ~channelId,
+          ~paginationPage=Reducer.Components.paginationPage(reducerParams),
+          (),
         );
 
-      SLayout.LayoutConfig.make(~head, ~body) |> SLayout.FullPage.makeWithEl;
+      <SLayout head> body </SLayout>;
     };
 
-    <Reducer callFnParams=channelId subComponent />;
+    <Reducer callFnParams=(channelId, measurableId) subComponent />;
   },
 };

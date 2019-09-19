@@ -16,8 +16,9 @@ module Reducer = PaginationFunctor.Make(ReducerConfig);
 let component = ReasonReact.statelessComponent("LeaderboardChannels");
 let make =
     (
-      ~channelId: option(string)=None,
-      ~subTab: Routing.ChannelPage.leaderboard,
+      ~channelId=None,
+      ~head=Leaderboard.head(~subTab=ByMember),
+      ~columns=LeaderboardTable.Columns.members,
       _children,
     ) => {
   ...component,
@@ -29,32 +30,27 @@ let make =
         | _ => [||]
         };
 
-      let items =
-        items
-        |> E.A.fmap(node => Primary.LeaderboardItem.fromAgentChannel(node));
+      let items = items |> E.A.fmap(Primary.LeaderboardItem.fromAgentChannel);
 
       let body =
         switch (reducerParams.response) {
         | Success(_) =>
           Array.length(items) > 0
             ? <FC.PageCard.Body>
-                <LeaderboardTable.Jsx2
-                  items
-                  columns=LeaderboardTable.Columns.members
-                />
+                <LeaderboardTable.Jsx2 items columns />
               </FC.PageCard.Body>
-            : <SLayout.NothingToShow />
-        | _ => <SLayout.Spin />
+            : <NothingToShow />
+        | _ => <Spin />
         };
 
       let head =
-        Leaderboard.pagination(
-          channelId,
-          Reducer.Components.paginationPage(reducerParams),
-          subTab,
+        head(
+          ~channelId,
+          ~paginationPage=Reducer.Components.paginationPage(reducerParams),
+          (),
         );
 
-      SLayout.LayoutConfig.make(~head, ~body) |> SLayout.FullPage.makeWithEl;
+      <SLayout head> body </SLayout>;
     };
 
     <Reducer callFnParams=channelId subComponent />;

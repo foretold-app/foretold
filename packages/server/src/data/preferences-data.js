@@ -19,7 +19,7 @@ class PreferencesData extends DataBase {
 
   /**
    * @public
-   * @param {string} agentId
+   * @param {Models.ObjectID} agentId
    * @return {Promise<*>}
    */
   async getOneByAgentId(agentId) {

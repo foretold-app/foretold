@@ -24,10 +24,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
         </FC.Base.Div>
         <FC.Base.Div
           float=`right
-          className={Css.style([
-            FC.PageCard.HeaderRow.Styles.itemTopPadding,
-            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-          ])}>
+          className={Css.style([FC.PageCard.HeaderRow.Styles.itemTopPadding])}>
           {Primary.User.show(
              loggedInUser,
              <FC.Base.Button
@@ -63,31 +60,31 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
       )
       ||> E.React.el;
 
-    <FC.PageCard.BodyPadding>
-      {loadChannel(
-         HttpResponse.fmap(channel =>
-           mutationMake((mutation, data) =>
-             form(mutation, channel, ({send, state}) =>
-               CMutationForm.showWithLoading(
-                 ~result=data.result,
-                 ~form=
-                   ChannelForm.showForm(
-                     ~state,
-                     ~send,
-                     ~creating=false,
-                     ~onSubmit=() => send(ChannelForm.Form.Submit),
-                     (),
-                   ),
-                 ~successMessage="Community edited successfully.",
-                 (),
+    <SLayout head>
+      <FC.PageCard.BodyPadding>
+        {loadChannel(
+           HttpResponse.fmap(channel =>
+             mutationMake((mutation, data) =>
+               form(mutation, channel, ({send, state}) =>
+                 CMutationForm.showWithLoading(
+                   ~result=data.result,
+                   ~form=
+                     ChannelForm.showForm(
+                       ~state,
+                       ~send,
+                       ~creating=false,
+                       ~onSubmit=() => send(ChannelForm.Form.Submit),
+                       (),
+                     ),
+                   ~successMessage="Community edited successfully.",
+                   (),
+                 )
                )
              )
            )
-         )
-         ||> HttpResponse.withReactDefaults,
-       )}
-    </FC.PageCard.BodyPadding>
-    |> SLayout.LayoutConfig.make(~head, ~body=_)
-    |> SLayout.FullPage.makeWithEl;
+           ||> HttpResponse.withReactDefaults,
+         )}
+      </FC.PageCard.BodyPadding>
+    </SLayout>;
   },
 };

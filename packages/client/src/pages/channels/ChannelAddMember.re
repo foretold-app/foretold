@@ -67,19 +67,17 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
       Table.fromColumns(all, dataSource, ());
     };
 
-    let onError = e => <SLayout.Error e />;
+    let onError = e => <Error e />;
 
-    let loadingFn = () => <SLayout.Spin />;
+    let loadingFn = () => <Spin />;
 
     let table =
       AgentsGet.componentUsers(~excludeChannelId=channelId, agents =>
         agents |> HttpResponse.flatten(onSuccess, onError, loadingFn)
       );
 
-    SLayout.LayoutConfig.make(
-      ~head=<div> title </div>,
-      ~body=<FC.PageCard.Body> table </FC.PageCard.Body>,
-    )
-    |> SLayout.FullPage.makeWithEl;
+    <SLayout head={<div> title </div>}>
+      <FC.PageCard.Body> table </FC.PageCard.Body>
+    </SLayout>;
   },
 };

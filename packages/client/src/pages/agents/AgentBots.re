@@ -118,12 +118,12 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
             ? <FC.PageCard.Body>
                 {Table.fromColumns(Columns.all, bots, ())}
               </FC.PageCard.Body>
-            : <SLayout.NothingToShow />;
+            : <NothingToShow />;
 
         let body =
           getUserId(agent) !== ""
             ? BotsGet.component(~ownerId=getUserId(agent), showBots)
-            : <SLayout.NothingToShow />;
+            : <NothingToShow />;
 
         let head =
           <div>

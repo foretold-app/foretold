@@ -625,6 +625,8 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @todo: This is an anisotropy when pagination is defined {}
+   * @todo: instead of pagination = new Pagination().
    * @public
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
@@ -656,11 +658,15 @@ class ModelPostgres extends Model {
     const total = await this.model.count(cond);
     const { limit, offset } = pagination.getPagination(total);
 
+    const order = pagination.isOrderSet()
+      ? this._getDefaultOrder(pagination)
+      : this._getOrder();
+
     const findCond = {
       ...cond,
       limit,
       offset,
-      order: this._getOrder(),
+      order,
       attributes: this._getAttributes(),
     };
 
@@ -673,6 +679,16 @@ class ModelPostgres extends Model {
       offset,
       filter.getSpacedLimit(),
     );
+  }
+
+  /**
+   * @param pagination
+   * @returns {[any, any][]}
+   * @private
+   */
+  _getDefaultOrder(pagination) {
+    return pagination.getOrder()
+      .map(item => ([item.field, item.direction]));
   }
 
   /**

@@ -20,26 +20,21 @@ let make =
            | Measurables(searchParams) =>
              <MeasurableIndex channelId searchParams loggedInUser />
            | Measurable(measurableId) =>
-             <ChannelMeasurable measurableId loggedInUser />
+             <ChannelMeasurable
+               channelId={Some(channelId)}
+               measurableId
+               loggedInUser
+             />
            | Series(id) => <SeriesShow id channelId loggedInUser />
            | NewMeasurable => <MeasurableNew channelId loggedInUser />
            | Members => <ChannelMembers channelId channel />
            | FeedItems => <FeedItems channelId={Some(channelId)} />
            | Leaderboard(ByMeasurement) =>
-             <LeaderboardMeasurements
-               channelId={Some(channelId)}
-               subTab=ByMeasurement
-             />
+             <LeaderboardMeasurements channelId={Some(channelId)} />
            | Leaderboard(ByMeasurable) =>
-             <LeaderboardMeasurables
-               channelId={Some(channelId)}
-               subTab=ByMeasurable
-             />
+             <LeaderboardMeasurables channelId={Some(channelId)} />
            | Leaderboard(ByMember) =>
-             <LeaderboardMembers
-               channelId={Some(channelId)}
-               subTab=ByMember
-             />
+             <LeaderboardMembers channelId={Some(channelId)} />
            | AddMember => <ChannelAddMember channelId loggedInUser />
            | InviteMember => <ChannelInviteMember channelId loggedInUser />
            | Settings => <ChannelEdit channelId loggedInUser />
@@ -49,17 +44,14 @@ let make =
 
       let errorFn = _ =>
         <Channel channelPage loggedInUser channel=None>
-          {SLayout.LayoutConfig.make(
-             ~head=<div />,
-             ~body=<div> {"No channel." |> ReasonReact.string} </div>,
-           )
-           |> SLayout.FullPage.makeWithEl}
+          <SLayout>
+            <div> {"No channel." |> ReasonReact.string} </div>
+          </SLayout>
         </Channel>;
 
       let loadingFn = () =>
         <Channel channelPage loggedInUser channel=None>
-          {SLayout.LayoutConfig.make(~head=<div />, ~body=<SLayout.Spin />)
-           |> SLayout.FullPage.makeWithEl}
+          <SLayout> <Spin /> </SLayout>
         </Channel>;
 
       loadChannel(result =>

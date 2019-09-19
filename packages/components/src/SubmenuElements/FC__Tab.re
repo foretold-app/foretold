@@ -6,12 +6,14 @@ let activeStyles =
     color(LightBackground.active),
     hover([color(LightBackground.active)]),
   ];
+
 let inactiveStyles =
   Css.[
     borderBottom(`px(2), `solid, FC__Settings.clear),
     color(LightBackground.main),
     hover([color(LightBackground.active)]),
   ];
+
 let allStyles =
   Css.[
     paddingBottom(`em(0.8)),
@@ -24,6 +26,32 @@ let allStyles =
 
 let flexStyles =
   Css.[textAlign(`center), flexGrow(1.), padding2(~v=`em(0.8), ~h=`zero)];
+
+module Button = {
+  open Css;
+  let noStyles = [
+    borderWidth(`px(0)),
+    backgroundColor(`transparent),
+    userSelect(`none),
+    cursor(`pointer),
+  ];
+
+  let component = ReasonReact.statelessComponent("TabButton");
+  let make = (~isActive=false, ~onClick=?, ~flex=false, children) => {
+    ...component,
+    render: _self =>
+      <button
+        disabled=isActive
+        ?onClick
+        className={Css.style(
+          noStyles
+          @ (isActive ? activeStyles : inactiveStyles)
+          @ (flex ? flexStyles : allStyles),
+        )}>
+        ...children
+      </button>,
+  };
+};
 
 let component = ReasonReact.statelessComponent("Tab");
 let make = (~isActive=false, ~onClick=?, ~flex=false, children) => {

@@ -45,8 +45,10 @@ module Query = [%graphql
         $after: String
         $before: String
         $channelId: String
+        $measurableId: String
         $minPredictionCountTotal: Int
         $measurableState: [measurableState]
+        $order: [Order]
      ) {
         edges: agentMeasurables (
             first: $first
@@ -54,8 +56,10 @@ module Query = [%graphql
             after: $after
             before: $before
             channelId: $channelId
+            measurableId: $measurableId
             minPredictionCountTotal: $minPredictionCountTotal
             measurableState: $measurableState
+            order: $order
         ) {
           total
           pageInfo{
@@ -127,7 +131,7 @@ let unpackResults = result =>
   result##edges |> Rationale.Option.fmap(Primary.Connection.fromJson(toNode));
 
 let componentMaker = (query, innerComponentFn) =>
-  <QueryComponent variables=query##variables fetchPolicy="no-cache">
+  <QueryComponent variables=query##variables>
     ...{o =>
       o.result
       |> HttpResponse.fromApollo
@@ -140,8 +144,12 @@ let componentMaker = (query, innerComponentFn) =>
 let component =
     (
       ~channelId=None,
-      ~measurableState=None,
-      ~minPredictionCountTotal=None,
+      ~measurableId=None,
+      ~measurableState=Some([|Some(`JUDGED)|]),
+      ~minPredictionCountTotal=Some(1),
+      ~order=Some([|
+               Some({"field": `primaryPointScore, "direction": `DESC}),
+             |]),
       ~pageLimit,
       ~direction: direction,
       ~innerComponentFn,
@@ -152,7 +160,13 @@ let component =
       ~pageLimit,
       ~direction,
       ~fn=
-        Query.make(~channelId?, ~measurableState?, ~minPredictionCountTotal?),
+        Query.make(
+          ~channelId?,
+          ~measurableId?,
+          ~measurableState?,
+          ~minPredictionCountTotal?,
+          ~order?,
+        ),
       (),
     );
   componentMaker(query, innerComponentFn);

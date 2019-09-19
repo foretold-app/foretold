@@ -30,16 +30,16 @@ module LoadedAndSelected = {
     </>;
 
   let body = (t: t) =>
-    <MeasurableFullPresentation
+    <Measurable
       id={t.selectedMeasurable.id}
       key={t.selectedMeasurable.id}
       loggedInUser={t.loggedInUser}
     />;
 
   let body2 = (t: t) =>
-    <Measurements
+    <MeasurableButtom
       measurableId={t.selectedMeasurable.id}
-      key={t.selectedMeasurable.id}
+      channelId={Some(t.selectedMeasurable.channelId)}
       loggedInUser={t.loggedInUser}
     />;
 };
@@ -167,7 +167,7 @@ let toLayoutInput =
     |> SLayout.FullPage.makeWithEl
 
   | WithChannelButNotQuery(_c) =>
-    SLayout.LayoutConfig.make(~head=E.React.null, ~body=<SLayout.Spin />)
+    SLayout.LayoutConfig.make(~head=E.React.null, ~body=<Spin />)
     |> SLayout.FullPage.makeWithEl
   };
 };

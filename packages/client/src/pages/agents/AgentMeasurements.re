@@ -49,7 +49,7 @@ let make =
           | (_, Some(measurement)) =>
             switch (measurement.measurable) {
             | Some(measurable) =>
-              <MeasurableFullPresentation id={measurable.id} loggedInUser />
+              <Measurable id={measurable.id} loggedInUser />
             | _ => <div />
             }
 
@@ -68,7 +68,7 @@ let make =
               ~onSelect=onSelectClb,
               (),
             );
-          | _ => <SLayout.Spin />
+          | _ => <Spin />
           },
       )
       |> layout

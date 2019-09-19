@@ -17,6 +17,7 @@ let component = ReasonReact.statelessComponent("LeaderboardChannels");
 let make =
     (
       ~channelId=None,
+      ~agentId=None,
       ~head=Leaderboard.head(~subTab=ByMember),
       ~columns=LeaderboardTable.Columns.members,
       _children,

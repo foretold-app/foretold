@@ -15,6 +15,7 @@ let makeWithPage =
     | AgentBots => <AgentBots pageParams={id: agentId} layout />
     | AgentCommunities => <AgentCommunities agentId layout />
     | AgentUpdates => <FeedItems agentId={Some(agentId)} layout />
+    | AgentScores => <AgentScores agentId={Some(agentId)} layout />
     };
 
   | None => <Home />

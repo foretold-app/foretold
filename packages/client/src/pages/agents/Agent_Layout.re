@@ -1,5 +1,3 @@
-open SLayout;
-open Utils;
 open Style.Grid;
 
 module Top = {
@@ -42,13 +40,13 @@ module Top = {
 
           <>
             <FC.GroupHeader>
-              <div> {name |> ste} </div>
+              <div> {name |> Utils.ste} </div>
               <Div styles=[SLayout.Styles.descriptionText]>
-                {"Percentage Question Brier Score: " |> ste}
-                {score |> ste}
+                {"Percentage Question Brier Score: " |> Utils.ste}
+                {score |> Utils.ste}
               </Div>
               <Div styles=[SLayout.Styles.descriptionText]>
-                {description |> ste}
+                {description |> Utils.ste}
               </Div>
             </FC.GroupHeader>
             <FC.GroupHeader.SubHeader> secondLevel </FC.GroupHeader.SubHeader>
@@ -57,6 +55,18 @@ module Top = {
       );
     },
   };
+};
+
+module Agent_Layout_C = {
+  let component = ReasonReact.statelessComponent("AgentLayoutPage");
+  let make = ({head, body}: SLayout.LayoutConfig.t) => {
+    ...component,
+    render: _ => {
+      <SLayout head> body </SLayout>;
+    },
+  };
+
+  let makeWithEl = (t: SLayout.LayoutConfig.t) => make(t) |> E.React.el;
 };
 
 let component = ReasonReact.statelessComponent("AgentLayout");

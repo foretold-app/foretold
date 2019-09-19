@@ -1,4 +1,5 @@
 open Style.Grid;
+open FC;
 
 type tab =
   | Measurements
@@ -17,14 +18,15 @@ let make = (~paginationPage, ~switchTab, ~tab, _children) => {
               Css.paddingTop(`em(0.2)),
             ]),
           ]>
-          <FC.Tab
+          <TabButton
             isActive={tab == Measurements}
             onClick={_ => switchTab(Measurements)}>
             {"Predictions" |> ReasonReact.string}
-          </FC.Tab>
-          <FC.Tab isActive={tab == Scores} onClick={_ => switchTab(Scores)}>
+          </TabButton>
+          <TabButton
+            isActive={tab == Scores} onClick={_ => switchTab(Scores)}>
             {"Scores" |> ReasonReact.string}
-          </FC.Tab>
+          </TabButton>
         </Div>
         <Div>
           <Div

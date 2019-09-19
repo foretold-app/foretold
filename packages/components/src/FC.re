@@ -6,6 +6,7 @@ module PageCard = FC__PageCard;
 module PaginationButtons = FC__PaginationButtons;
 module Tab = FC__Tab;
 module Tab2 = FC__Tab2;
+module TabButton = FC__Tab.Button;
 module Table = FC__Table;
 module Footer = FC__Footer;
 module Stats = FC__Stats;

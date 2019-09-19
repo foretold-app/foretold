@@ -699,6 +699,7 @@ module LeaderboardItem = {
         ~id: string,
         ~measurable=None,
         ~agent=None,
+        ~channel=None,
         ~pointScore=None,
         ~createdAt=None,
         ~predictionCountTotal=None,
@@ -712,6 +713,7 @@ module LeaderboardItem = {
     id,
     measurable,
     agent,
+    channel,
     pointScore,
     createdAt,
     predictionCountTotal,
@@ -755,6 +757,7 @@ module LeaderboardItem = {
     make(
       ~id=agentChannel.id,
       ~agent=Some(agentChannel.agent),
+      ~channel=Some(agentChannel.channel),
       ~pointScore=agentChannel.primaryPointScore,
       ~predictionCountTotal=Some(agentChannel.numberOfPredictions),
       ~numberOfQuestionsScored=Some(agentChannel.numberOfQuestionsScored),

@@ -20,6 +20,10 @@ let make = (~agentId, _children) => {
         </Div>
       </div>;
 
-    <LeaderboardMembers agentId={Some(agentId)} head />;
+    <LeaderboardMembers
+      agentId
+      head
+      columns=LeaderboardTable.Columns.members'
+    />;
   },
 };

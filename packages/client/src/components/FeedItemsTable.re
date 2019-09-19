@@ -2,7 +2,7 @@
 
 module Columns = {
   type record = Types.feedItem;
-  type column = Table.column(Types.feedItem);
+  type column = Table.column(record);
 
   let getName = (r: record): ReasonReact.reactElement =>
     switch (r.body.generic, r.body.measurable) {
@@ -22,7 +22,7 @@ module Columns = {
     | _ => ""
     };
 
-  let channel: column =
+  let channel =
     Table.Column.make(
       ~name="Community" |> Utils.ste,
       ~render=
@@ -34,7 +34,7 @@ module Columns = {
       (),
     );
 
-  let item: column =
+  let item =
     Table.Column.make(
       ~name="Question" |> Utils.ste,
       ~render=(r: record) => r |> getName,
@@ -42,7 +42,7 @@ module Columns = {
       (),
     );
 
-  let description: column =
+  let description =
     Table.Column.make(
       ~name="Description" |> Utils.ste,
       ~render=(r: record) => r |> getDescription |> Utils.ste,
@@ -50,7 +50,7 @@ module Columns = {
       (),
     );
 
-  let time: column =
+  let time =
     Table.Column.make(
       ~name="Time" |> Utils.ste,
       ~render=

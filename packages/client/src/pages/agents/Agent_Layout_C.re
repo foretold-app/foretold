@@ -43,7 +43,7 @@ let make =
             | _ => "(none)"
             };
 
-          let secondLevel = AgentTabs.Component.tabs(agentPage, agent);
+          let secondLevel = AgentTabs.tabs(agentPage, agent);
 
           <>
             <FC.GroupHeader>

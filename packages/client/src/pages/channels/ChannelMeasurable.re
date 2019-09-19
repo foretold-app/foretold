@@ -11,7 +11,7 @@ let make =
   render: _ => {
     <>
       <SLayout> <Measurable id=measurableId loggedInUser /> </SLayout>
-      <Switcher measurableId channelId loggedInUser />
+      <MeasurableButtom measurableId channelId loggedInUser />
     </>;
   },
 };

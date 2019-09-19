@@ -1,10 +1,11 @@
 {
   "name": "@foretold/guesstimator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Guesstimator",
   "author": "Ozzie Gooen",
   "license": "MIT",
   "private": false,
+  "main": "index.js",
   "keywords": [
     "foretold",
     "cdf",

@@ -1,7 +1,7 @@
 import React from "react";
 import _ from "lodash";
 
-import { Guesstimator } from '@foretold/guesstimator/index';
+import { Guesstimator } from '@foretold/guesstimator';
 import { Samples } from "@foretold/cdf";
 
 /**

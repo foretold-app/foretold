@@ -2,7 +2,7 @@ import React from "react";
 import _ from "lodash";
 import { Input } from "antd";
 
-import { Guesstimator } from '@foretold/guesstimator/index';
+import { Guesstimator } from '@foretold/guesstimator';
 import { Samples } from "../../../../cdf";
 
 /**

@@ -40,4 +40,5 @@ class Guesstimator {
 
 const testVar = 30;
 
-export {Guesstimator, testVar};
+// export {Guesstimator, testVar};
+export default testVar;

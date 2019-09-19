@@ -1,8 +1,8 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(global = global || self, factory(global.guesstimator = {}));
-}(this, function (exports) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global = global || self, global.guesstimator = factory());
+}(this, function () { 'use strict';
 
 	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -17111,14 +17111,6 @@
 	}.call(commonjsGlobal));
 	});
 
-	//FIXME
-	const item = {
-	  formatterName: 'FUNCTION',
-	  matches({text}) { return !!text && text.startsWith('=') },
-	  error({text}) { return !lodash.isEmpty(text.slice(1)) ? {} : {type: 1, subType: 2}},
-	  format({text}) { return {guesstimateType: 'FUNCTION', text: text.slice(1)} },
-	};
-
 	const SUFFIXES = {
 	  '%': -2,
 	  'K': 3,
@@ -17178,76 +17170,20 @@
 	  }
 	}
 
-	const item$1 = {
+	const item = {
 	  formatterName: 'DISTRIBUTION_NORMAL_TEXT_UPTO',
 	  ...regexBasedFormatter(rangeRegex(/to|\.\.|->|:/)),
 	};
 
-	const item$2 = {
+	const item$1 = {
 	  formatterName: 'DISTRIBUTION_NORMAL_TEXT_UPTO',
 	  ...regexBasedFormatter(rangeRegex(/,\s?/, /\[/, /\]/)),
 	};
 
-	const item$3 = {
+	const item$2 = {
 	  formatterName: 'DISTRIBUTION_PROPORTIONALITY',
 	  ...regexBasedFormatter(rangeRegex(/of|in/), () => 'BETA'),
 	};
-
-	const item$4 = {
-	  formatterName: 'DISTRIBUTION_POINT_TEXT',
-	  ...regexBasedFormatter(POINT_REGEX, () => 'POINT', () => {}),
-	};
-
-	const item$5 = {
-	  formatterName: 'DATA',
-	  error(g) { return {} },
-	  matches(g) { return !lodash.isEmpty(g.data) },
-	  format(g) { return { guesstimateType: 'DATA', data: g.data } },
-	};
-
-	//TODOFIX ERRORS
-	const item$6 = {
-	  guesstimateType: 'NONE',
-	  inputType: 'NONE',
-	  formatterName: 'NULL',
-	  matches(g) { return true },
-	  format(g) { return {guesstimateType: 'NONE'} },
-	  error({text}) { return lodash.isEmpty(text) ? {} : {type: 1, subType: 2} },
-	};
-
-	const formatters = [
-	  item,
-	  item$1,
-	  item$3,
-	  item$2,
-	  item$4,
-	  item$5
-	];
-
-	function _matchingFormatter(g) {
-	  for (let formatter of formatters) {
-	    if (formatter.matches(g)) {
-	      return formatter
-	    }
-	  }
-	  return item$6
-	}
-
-	// General formatting that applies to everything.  After it goes through
-	// this stage, a specific formatter gets applied.
-	function prepare(guesstimate) {
-	  return {
-	    text: (guesstimate.input || guesstimate.text),
-	    guesstimateType: guesstimate.guesstimateType,
-	    data: (guesstimate.data || guesstimate.value)
-	  }
-	}
-
-	function parse(g) {
-	  const i = prepare(g);
-	  const formatter = _matchingFormatter(i);
-	  return [formatter.error(i), formatter.format(i)]
-	}
 
 	// TODO: remove these polyfills as soon as we have a build process that transpiles the code to ES5
 	// Polyfill for IE 11 (Number.isFinite is used in `complex.js`)
@@ -50821,7 +50757,7 @@
 	var path$u = 'expression';
 	var factory_1$1j = factory$1j;
 
-	var parse$1 = {
+	var parse = {
 		name: name$1a,
 		path: path$u,
 		factory: factory_1$1j
@@ -51004,17 +50940,17 @@
 	var factory_1$1k = factory$1k;
 	var math$a = true;
 
-	var util$1 = {
+	var util = {
 		factory: factory_1$1k,
 		math: math$a
 	};
 
 	function factory$1l(type, config, load, typed, math) {
-	  var util = load(util$1);
-	  var isCommutative = util.isCommutative;
-	  var isAssociative = util.isAssociative;
-	  var allChildren = util.allChildren;
-	  var createMakeNodeFunction = util.createMakeNodeFunction;
+	  var util$1 = load(util);
+	  var isCommutative = util$1.isCommutative;
+	  var isAssociative = util$1.isAssociative;
+	  var allChildren = util$1.allChildren;
+	  var createMakeNodeFunction = util$1.createMakeNodeFunction;
 	  var ConstantNode = math.expression.node.ConstantNode;
 	  var OperatorNode = math.expression.node.OperatorNode;
 	  var FunctionNode = math.expression.node.FunctionNode;
@@ -52501,7 +52437,7 @@
 	function _typeof$c(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof$c = function _typeof(obj) { return typeof obj; }; } else { _typeof$c = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof$c(obj); }
 
 	function factory$1t(type, config, load, typed, math) {
-	  var parse = load(parse$1);
+	  var parse$1 = load(parse);
 	  var equal$1 = load(equal);
 	  var ConstantNode$1 = load(ConstantNode);
 	  var FunctionNode$1 = load(FunctionNode);
@@ -52511,13 +52447,13 @@
 	  var simplifyConstant$1 = load(simplifyConstant);
 	  var simplifyCore$1 = load(simplifyCore);
 	  var resolve$1 = load(resolve);
-	  var util = load(util$1);
-	  var isCommutative = util.isCommutative;
-	  var isAssociative = util.isAssociative;
-	  var flatten = util.flatten;
-	  var unflattenr = util.unflattenr;
-	  var unflattenl = util.unflattenl;
-	  var createMakeNodeFunction = util.createMakeNodeFunction;
+	  var util$1 = load(util);
+	  var isCommutative = util$1.isCommutative;
+	  var isAssociative = util$1.isAssociative;
+	  var flatten = util$1.flatten;
+	  var unflattenr = util$1.unflattenr;
+	  var unflattenl = util$1.unflattenl;
+	  var createMakeNodeFunction = util$1.createMakeNodeFunction;
 	  /**
 	   * Simplify an expression tree.
 	   *
@@ -52589,22 +52525,22 @@
 
 	  var simplify = typed('simplify', {
 	    'string': function string(expr) {
-	      return simplify(parse(expr), simplify.rules, {}, {});
+	      return simplify(parse$1(expr), simplify.rules, {}, {});
 	    },
 	    'string, Object': function stringObject(expr, scope) {
-	      return simplify(parse(expr), simplify.rules, scope, {});
+	      return simplify(parse$1(expr), simplify.rules, scope, {});
 	    },
 	    'string, Object, Object': function stringObjectObject(expr, scope, options) {
-	      return simplify(parse(expr), simplify.rules, scope, options);
+	      return simplify(parse$1(expr), simplify.rules, scope, options);
 	    },
 	    'string, Array': function stringArray(expr, rules) {
-	      return simplify(parse(expr), rules, {}, {});
+	      return simplify(parse$1(expr), rules, {}, {});
 	    },
 	    'string, Array, Object': function stringArrayObject(expr, rules, scope) {
-	      return simplify(parse(expr), rules, scope, {});
+	      return simplify(parse$1(expr), rules, scope, {});
 	    },
 	    'string, Array, Object, Object': function stringArrayObjectObject(expr, rules, scope, options) {
-	      return simplify(parse(expr), rules, scope, options);
+	      return simplify(parse$1(expr), rules, scope, options);
 	    },
 	    'Node, Object': function NodeObject(expr, scope) {
 	      return simplify(expr, simplify.rules, scope, {});
@@ -52848,8 +52784,8 @@
 
 	        case 'object':
 	          newRule = {
-	            l: removeParens(parse(rule.l)),
-	            r: removeParens(parse(rule.r))
+	            l: removeParens(parse$1(rule.l)),
+	            r: removeParens(parse$1(rule.r))
 	          };
 
 	          if (rule.context) {
@@ -52857,7 +52793,7 @@
 	          }
 
 	          if (rule.evaluate) {
-	            newRule.evaluate = parse(rule.evaluate);
+	            newRule.evaluate = parse$1(rule.evaluate);
 	          }
 
 	          if (isAssociative(newRule.l)) {
@@ -53267,7 +53203,7 @@
 	};
 
 	function factory$1u(type, config, load, typed) {
-	  var parse = load(parse$1);
+	  var parse$1 = load(parse);
 	  var simplify$1 = load(simplify);
 	  var equal$1 = load(equal);
 	  var isZero$1 = load(isZero);
@@ -53332,22 +53268,22 @@
 	      });
 	    },
 	    'string, SymbolNode': function stringSymbolNode(expr, variable) {
-	      return derivative(parse(expr), variable);
+	      return derivative(parse$1(expr), variable);
 	    },
 	    'string, SymbolNode, Object': function stringSymbolNodeObject(expr, variable, options) {
-	      return derivative(parse(expr), variable, options);
+	      return derivative(parse$1(expr), variable, options);
 	    },
 	    'string, string': function stringString(expr, variable) {
-	      return derivative(parse(expr), parse(variable));
+	      return derivative(parse$1(expr), parse$1(variable));
 	    },
 	    'string, string, Object': function stringStringObject(expr, variable, options) {
-	      return derivative(parse(expr), parse(variable), options);
+	      return derivative(parse$1(expr), parse$1(variable), options);
 	    },
 	    'Node, string': function NodeString(expr, variable) {
-	      return derivative(expr, parse(variable));
+	      return derivative(expr, parse$1(variable));
 	    },
 	    'Node, string, Object': function NodeStringObject(expr, variable, options) {
-	      return derivative(expr, parse(variable), options);
+	      return derivative(expr, parse$1(variable), options);
 	    } // TODO: replace the 8 signatures above with 4 as soon as typed-function supports optional arguments
 
 	    /* TODO: implement and test syntax with order of derivatives -> implement as an option {order: number}
@@ -53373,14 +53309,14 @@
 	  var _derivTex = typed('_derivTex', {
 	    'Node, SymbolNode': function NodeSymbolNode(expr, x) {
 	      if (type.isConstantNode(expr) && getType(expr.value) === 'string') {
-	        return _derivTex(parse(expr.value).toString(), x.toString(), 1);
+	        return _derivTex(parse$1(expr.value).toString(), x.toString(), 1);
 	      } else {
 	        return _derivTex(expr.toString(), x.toString(), 1);
 	      }
 	    },
 	    'Node, ConstantNode': function NodeConstantNode(expr, x) {
 	      if (getType(x.value) === 'string') {
-	        return _derivTex(expr, parse(x.value));
+	        return _derivTex(expr, parse$1(x.value));
 	      } else {
 	        throw new Error("The second parameter to 'derivative' is a non-string constant");
 	      }
@@ -53888,7 +53824,7 @@
 	};
 
 	function factory$1v(type, config, load, typed) {
-	  var parse = load(parse$1);
+	  var parse$1 = load(parse);
 	  /**
 	   * Parse an expression. Returns a node tree, which can be evaluated by
 	   * invoking node.eval().
@@ -53930,15 +53866,15 @@
 	   */
 
 	  return typed('parse', {
-	    'string | Array | Matrix': parse,
-	    'string | Array | Matrix, Object': parse
+	    'string | Array | Matrix': parse$1,
+	    'string | Array | Matrix, Object': parse$1
 	  });
 	}
 
 	var name$1l = 'parse';
 	var factory_1$1v = factory$1v;
 
-	var parse$2 = {
+	var parse$1 = {
 		name: name$1l,
 		factory: factory_1$1v
 	};
@@ -53947,7 +53883,7 @@
 	  var simplify$1 = load(simplify);
 	  var simplifyCore$1 = load(simplifyCore);
 	  var simplifyConstant$1 = load(simplifyConstant);
-	  var parse = load(parse$2);
+	  var parse = load(parse$1);
 
 	  var number$1 = number;
 
@@ -75830,7 +75766,7 @@
 	};
 
 	function factory$4h(type, config, load, typed) {
-	  var parse = load(parse$1);
+	  var parse$1 = load(parse);
 	  /**
 	   * Parse and compile an expression.
 	   * Returns a an object with a function `eval([scope])` to evaluate the
@@ -75868,11 +75804,11 @@
 
 	  return typed('compile', {
 	    'string': function string(expr) {
-	      return parse(expr).compile();
+	      return parse$1(expr).compile();
 	    },
 	    'Array | Matrix': function ArrayMatrix(expr) {
 	      return deepMap(expr, function (entry) {
-	        return parse(entry).compile();
+	        return parse$1(entry).compile();
 	      });
 	    }
 	  });
@@ -75887,7 +75823,7 @@
 	};
 
 	function factory$4i(type, config, load, typed) {
-	  var parse = load(parse$1);
+	  var parse$1 = load(parse);
 	  /**
 	   * Evaluate an expression.
 	   *
@@ -75924,20 +75860,20 @@
 	  return typed('compile', {
 	    'string': function string(expr) {
 	      var scope = {};
-	      return parse(expr).compile().eval(scope);
+	      return parse$1(expr).compile().eval(scope);
 	    },
 	    'string, Object': function stringObject(expr, scope) {
-	      return parse(expr).compile().eval(scope);
+	      return parse$1(expr).compile().eval(scope);
 	    },
 	    'Array | Matrix': function ArrayMatrix(expr) {
 	      var scope = {};
 	      return deepMap(expr, function (entry) {
-	        return parse(entry).compile().eval(scope);
+	        return parse$1(entry).compile().eval(scope);
 	      });
 	    },
 	    'Array | Matrix, Object': function ArrayMatrixObject(expr, scope) {
 	      return deepMap(expr, function (entry) {
-	        return parse(entry).compile().eval(scope);
+	        return parse$1(entry).compile().eval(scope);
 	      });
 	    }
 	  });
@@ -76030,7 +75966,7 @@
 
 
 	function factory$4k(type, config, load, typed, math) {
-	  var _parse = load(parse$1);
+	  var _parse = load(parse);
 	  /**
 	   * @constructor Parser
 	   * Parser contains methods to evaluate or parse expressions, and has a number
@@ -76264,7 +76200,7 @@
 		math: math$i
 	};
 
-	var _function$3 = [compile, _eval$1, help$1, parse$2, parser];
+	var _function$3 = [compile, _eval$1, help$1, parse$1, parser];
 
 	function factory$4m(type, config, load, typed) {
 	  /**
@@ -77292,7 +77228,7 @@
 
 	var expression = [// Note that the docs folder is called "embeddedDocs" and not "docs" to prevent issues
 	// with yarn autoclean. See https://github.com/josdejong/mathjs/issues/969
-	embeddedDocs, _function$3, node, transform$1, Help, parse$1, Parser];
+	embeddedDocs, _function$3, node, transform$1, Help, parse, Parser];
 
 	function factory$4F(type, config, load, typed, math) {
 	  /**
@@ -82701,13 +82637,6 @@
 
 	const finance = new Finance();
 
-	const SAMPLING_ERROR = 1;
-	const PARSER_ERROR = 1;
-	const FUNCTIONS_CONTAIN_UNITS_ERROR = 1;
-	const UNEXPECTED_END_OF_EXPRESSION_ERROR = 1;
-	const DIVIDE_BY_ZERO_ERROR = 1;
-	const ALL_SAMPLES_FILTERED_ERROR = 1;
-
 	const financeFunctions = {
 	  PV: finance.PV,
 	  FV: finance.FV,
@@ -82736,266 +82665,8 @@
 	// Multimodals
 	mathjs.import(Multimodals, {override: true});
 
-	function Evaluate(text, sampleCount, inputs) {
-	  try {
-	    const compiled = mathjs.compile(text);
-
-	    return evaluate(compiled, inputs, sampleCount, text)
-	  } catch ({message}) {
-	    if (message.startsWith('Unexpected end of expression')) {
-	      return {errors: [{type: SAMPLING_ERROR, subType: UNEXPECTED_END_OF_EXPRESSION_ERROR, rawMessage: message}]}
-	    } else {
-	      return {errors: [{type: SAMPLING_ERROR, rawMessage: message}]}
-	    }
-	  }
-	}
-
-	function sampleInputs(inputs, i) {
-	  const sample = {};
-	  for (let key of Object.keys(inputs)){
-	    sample[key] = inputs[key][i % inputs[key].length];
-	    util.inspect(inputs);
-	  }
-	  return sample
-	}
-
-	function evaluate(compiled, inputs, n, text){
-	  let values = [];
-	  let errors = [];
-	  let anyNotFiltered = false;
-
-	  for (var i = 0; i < n; i++) {
-	    const sampledInputs = sampleInputs(inputs, i);
-	    const someInputFiltered = lodash.some(sampledInputs, val => lodash.isEqual(val, SAMPLE_FILTERED));
-	    let newSample = NaN;
-	    try {
-	      newSample = someInputFiltered ? SAMPLE_FILTERED : compiled.eval(sampledInputs);
-
-	    } catch (rawError) {
-	      const isUnexpectedTypeError = rawError.message.includes('Unexpected type of argument in function');
-	      const containsFilterFn = lodash.some(Object.keys(Filters), f => text.includes(f));
-	      if (isUnexpectedTypeError && containsFilterFn) {
-	        newSample = SAMPLE_FILTERED;
-	      } else {
-	        return {values: [], errors: [{type: SAMPLING_ERROR, rawError}]}
-	      }
-	    }
-
-	    if (lodash.isFinite(newSample)) {
-	      anyNotFiltered = true;
-	      values.push(newSample);
-	    } else if (newSample === SAMPLE_FILTERED) {
-	      values.push(newSample);
-	    } else if ([Infinity, -Infinity].includes(newSample)) {
-	      errors.push({type: SAMPLING_ERROR, subType: DIVIDE_BY_ZERO_ERROR});
-	      values.push(newSample);
-	    } else if (newSample.constructor.name === 'Unit') {
-	      return {values: [], errors: [{type: PARSER_ERROR, subType: FUNCTIONS_CONTAIN_UNITS_ERROR}]}
-	    } else if (typeof newSample === 'function') {
-	      return {values: [], errors: [{type: PARSER_ERROR, subType: INCOMPLETE_FUNCTION_ERROR}]}
-	    } else {
-	      if (__DEV__) { console.warn('Unidentified sample detected: ', newSample); }
-	      return {values: [], errors: [{type: SAMPLING_ERROR}]}
-	    }
-	  }
-
-	  errors = lodash.uniq(errors);
-
-	  return anyNotFiltered ? {values, errors} : {values: [], errors: [...errors, {type: SAMPLING_ERROR, subType: ALL_SAMPLES_FILTERED_ERROR}]}
-	}
-
-	function simulate(expr, inputs, maxSamples) {
-	  const s = Evaluate(expr, maxSamples, []);
-	  return s
-	}
-
-	var Sampler = {
-	  sample({params: [low, high]}, n, _1) {
-	    // This assumes a centered 90% confidence interval, e.g. the left endpoint
-	    // marks 0.05% on the CDF, the right 0.95%.
-	    const mean = mathjs.mean(high, low);
-	    const stdev = (high - mean) / 1.645;
-	    return simulate(`normal(${mean},${stdev})`, [], n)
-	  }
-	};
-
-	var Sampler$1 = {
-	  sample({params: [low, high]}, n, _1) {
-	    // This assumes a centered 90% confidence interval, e.g. the left endpoint
-	    // marks 0.05% on the CDF, the right 0.95%.
-	    const logHigh = mathjs.log(high);
-	    const logLow = mathjs.log(low);
-
-	    const mean = mathjs.mean(logHigh, logLow);
-	    const stdev = (logHigh-logLow) / (2*1.645);
-
-	    return simulate(`lognormal(${mean},${stdev})`, [], n)
-	  }
-	};
-
-	var Sampler$2 = {
-	  sample({params: [hits, total]}, n, _1) {
-	    // This treats your entry as a prior, and assumes you are 2 times more confident than
-	    // a raw beta would be. This gives your distribution more of a peak for small numbers.
-	    return simulate(`beta(${2*hits},${2*(total-hits)})`, [], n)
-	  }
-	};
-
-	var Sampler$3 = {
-	  sample({params: [value]}) {
-	    return ({values: [value]})
-	  }
-	};
-
-	var Sampler$4 = {
-	  sample({params: [low, high]}, n, _1) {
-	    return simulate(`uniform(${low},${high})`, [], n)
-	  }
-	};
-
-	var Sampler$5 = {
-	  sample({text}, n, inputs) {
-	    return simulate(text, inputs, n)
-	  }
-	};
-
-	var Sampler$6 = {
-	  sample(formatted, n) {
-	    return Promise.resolve({values: formatted.data})
-	  }
-	};
-
-	var Sampler$7 = {
-	  sample(formatted) {
-	    return Promise.resolve({values: [], errors: []})
-	  }
-	};
-
-	const Funct = {
-	  referenceName: 'FUNCTION',
-	  types: ['FUNCTION'],
-	  displayName: 'Function',
-	  sampler: Sampler$5,
-	};
-
-	const DistributionNormal = {
-	  referenceName: 'NORMAL',
-	  types: ['DISTRIBUTION', 'NORMAL'],
-	  displayName: 'Normal',
-	  sampler: Sampler,
-	  isRangeDistribution: true,
-	};
-
-	const DistributionPoint = {
-	  referenceName: 'POINT',
-	  types: ['DISTRIBUTION', 'POINT'],
-	  displayName: 'Point',
-	  sampler: Sampler$3,
-	};
-
-	const DistributionLognormal = {
-	  referenceName: 'LOGNORMAL',
-	  types: ['DISTRIBUTION', 'LOGNORMAL'],
-	  displayName: 'LogNormal',
-	  isRangeDistribution: true,
-	  sampler: Sampler$1,
-	};
-
-	const DistributionBeta = {
-	  referenceName: 'BETA',
-	  types: ['DISTRIBUTION', 'BETA'],
-	  displayName: 'Beta',
-	  isRangeDistribution: false,
-	  sampler: Sampler$2,
-	};
-
-
-	const DistributionUniform = {
-	  referenceName: 'UNIFORM',
-	  types: ['DISTRIBUTION', 'UNIFORM'],
-	  displayName: 'Uniform',
-	  isRangeDistribution: true,
-	  sampler: Sampler$4,
-	};
-
-	const Data = {
-	  referenceName: 'DATA',
-	  types: ['DATA'],
-	  displayName: 'Data',
-	  isRangeDistribution: false,
-	  sampler: Sampler$6,
-	};
-
-	// Change to null Guesstimate for sampler
-	const None = {
-	  referenceName: 'NONE',
-	  types: [],
-	  displayName: 'NONE',
-	  sampler: Sampler$7
-	};
-
-	const all = [
-	  Funct,
-	  DistributionNormal,
-	  DistributionBeta,
-	  DistributionPoint,
-	  DistributionLognormal,
-	  DistributionUniform,
-	  Data,
-	  None
-	];
-
-	function find(referenceName) {
-	  const found = all.find(e => e.referenceName === referenceName);
-	  return found || None
-	}
-
-	const samplerTypes = {
-	  find: referenceName => find(referenceName),
-	  all
-	};
-
-	//TODO(fix this class)
-
-	class Guesstimator {
-	  static parse(unparsedInput) {
-	    const [parsedError, parsedInput] = parse(unparsedInput);
-	    const newItem = new this({ parsedError, parsedInput });
-	    return [parsedError, newItem]
-	  }
-
-	  constructor({ parsedError, parsedInput }) {
-	    this.parsedError = parsedError || {};
-	    this.parsedInput = parsedInput;
-	  }
-
-	  hasParsingErrors() {
-	    return !lodash.isEmpty(this.parsedError)
-	  }
-
-	  samplerType() {
-	    return samplerTypes.find(this.parsedInput.guesstimateType)
-	  }
-
-	  needsExternalInputs() {
-	    return (this.parsedInput.guesstimateType === 'FUNCTION')
-	  }
-
-	  sample(n, externalInputs = []) {
-	    if (!lodash.isEmpty(this.parsedError)) {
-	      return Promise.resolve({ errors: [this.parsedError], values: [] })
-	    }
-
-	    const samplerType = this.samplerType();
-	    return samplerType.sampler.sample(this.parsedInput, n, externalInputs)
-	  }
-	}
-
 	const testVar = 30;
 
-	exports.Guesstimator = Guesstimator;
-	exports.testVar = testVar;
-
-	Object.defineProperty(exports, '__esModule', { value: true });
+	return testVar;
 
 }));

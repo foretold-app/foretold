@@ -3,14 +3,6 @@ import math from 'mathjs';
 import jstat from 'jstat';
 import Sampling, { Discrete } from 'discrete-sampling';
 
-//FIXME
-const item = {
-  formatterName: 'FUNCTION',
-  matches({text}) { return !!text && text.startsWith('=') },
-  error({text}) { return !_.isEmpty(text.slice(1)) ? {} : {type: 1, subType: 2}},
-  format({text}) { return {guesstimateType: 'FUNCTION', text: text.slice(1)} },
-};
-
 const SUFFIXES = {
   '%': -2,
   'K': 3,
@@ -70,76 +62,20 @@ function regexBasedFormatter(re, guesstimateTypeFn = getGuesstimateType, errorFn
   }
 }
 
-const item$1 = {
+const item = {
   formatterName: 'DISTRIBUTION_NORMAL_TEXT_UPTO',
   ...regexBasedFormatter(rangeRegex(/to|\.\.|->|:/)),
 };
 
-const item$2 = {
+const item$1 = {
   formatterName: 'DISTRIBUTION_NORMAL_TEXT_UPTO',
   ...regexBasedFormatter(rangeRegex(/,\s?/, /\[/, /\]/)),
 };
 
-const item$3 = {
+const item$2 = {
   formatterName: 'DISTRIBUTION_PROPORTIONALITY',
   ...regexBasedFormatter(rangeRegex(/of|in/), () => 'BETA'),
 };
-
-const item$4 = {
-  formatterName: 'DISTRIBUTION_POINT_TEXT',
-  ...regexBasedFormatter(POINT_REGEX, () => 'POINT', () => {}),
-};
-
-const item$5 = {
-  formatterName: 'DATA',
-  error(g) { return {} },
-  matches(g) { return !_.isEmpty(g.data) },
-  format(g) { return { guesstimateType: 'DATA', data: g.data } },
-};
-
-//TODOFIX ERRORS
-const item$6 = {
-  guesstimateType: 'NONE',
-  inputType: 'NONE',
-  formatterName: 'NULL',
-  matches(g) { return true },
-  format(g) { return {guesstimateType: 'NONE'} },
-  error({text}) { return _.isEmpty(text) ? {} : {type: 1, subType: 2} },
-};
-
-const formatters = [
-  item,
-  item$1,
-  item$3,
-  item$2,
-  item$4,
-  item$5
-];
-
-function _matchingFormatter(g) {
-  for (let formatter of formatters) {
-    if (formatter.matches(g)) {
-      return formatter
-    }
-  }
-  return item$6
-}
-
-// General formatting that applies to everything.  After it goes through
-// this stage, a specific formatter gets applied.
-function prepare(guesstimate) {
-  return {
-    text: (guesstimate.input || guesstimate.text),
-    guesstimateType: guesstimate.guesstimateType,
-    data: (guesstimate.data || guesstimate.value)
-  }
-}
-
-function parse(g) {
-  const i = prepare(g);
-  const formatter = _matchingFormatter(i);
-  return [formatter.error(i), formatter.format(i)]
-}
 
 // We use an empty object here instead of a more meaningful object to play well with mathjs under the hood.
 const SAMPLE_FILTERED = {filtered: true};
@@ -299,13 +235,6 @@ var Finance = require('financejs');
 
 const finance = new Finance();
 
-const SAMPLING_ERROR = 1;
-const PARSER_ERROR = 1;
-const FUNCTIONS_CONTAIN_UNITS_ERROR = 1;
-const UNEXPECTED_END_OF_EXPRESSION_ERROR = 1;
-const DIVIDE_BY_ZERO_ERROR = 1;
-const ALL_SAMPLES_FILTERED_ERROR = 1;
-
 const financeFunctions = {
   PV: finance.PV,
   FV: finance.FV,
@@ -334,261 +263,6 @@ math.import(Filters, {override: true});
 // Multimodals
 math.import(Multimodals, {override: true});
 
-function Evaluate(text, sampleCount, inputs) {
-  try {
-    const compiled = math.compile(text);
-
-    return evaluate(compiled, inputs, sampleCount, text)
-  } catch ({message}) {
-    if (message.startsWith('Unexpected end of expression')) {
-      return {errors: [{type: SAMPLING_ERROR, subType: UNEXPECTED_END_OF_EXPRESSION_ERROR, rawMessage: message}]}
-    } else {
-      return {errors: [{type: SAMPLING_ERROR, rawMessage: message}]}
-    }
-  }
-}
-
-function sampleInputs(inputs, i) {
-  const sample = {};
-  for (let key of Object.keys(inputs)){
-    sample[key] = inputs[key][i % inputs[key].length];
-    util.inspect(inputs);
-  }
-  return sample
-}
-
-function evaluate(compiled, inputs, n, text){
-  let values = [];
-  let errors = [];
-  let anyNotFiltered = false;
-
-  for (var i = 0; i < n; i++) {
-    const sampledInputs = sampleInputs(inputs, i);
-    const someInputFiltered = _.some(sampledInputs, val => _.isEqual(val, SAMPLE_FILTERED));
-    let newSample = NaN;
-    try {
-      newSample = someInputFiltered ? SAMPLE_FILTERED : compiled.eval(sampledInputs);
-
-    } catch (rawError) {
-      const isUnexpectedTypeError = rawError.message.includes('Unexpected type of argument in function');
-      const containsFilterFn = _.some(Object.keys(Filters), f => text.includes(f));
-      if (isUnexpectedTypeError && containsFilterFn) {
-        newSample = SAMPLE_FILTERED;
-      } else {
-        return {values: [], errors: [{type: SAMPLING_ERROR, rawError}]}
-      }
-    }
-
-    if (_.isFinite(newSample)) {
-      anyNotFiltered = true;
-      values.push(newSample);
-    } else if (newSample === SAMPLE_FILTERED) {
-      values.push(newSample);
-    } else if ([Infinity, -Infinity].includes(newSample)) {
-      errors.push({type: SAMPLING_ERROR, subType: DIVIDE_BY_ZERO_ERROR});
-      values.push(newSample);
-    } else if (newSample.constructor.name === 'Unit') {
-      return {values: [], errors: [{type: PARSER_ERROR, subType: FUNCTIONS_CONTAIN_UNITS_ERROR}]}
-    } else if (typeof newSample === 'function') {
-      return {values: [], errors: [{type: PARSER_ERROR, subType: INCOMPLETE_FUNCTION_ERROR}]}
-    } else {
-      if (__DEV__) { console.warn('Unidentified sample detected: ', newSample); }
-      return {values: [], errors: [{type: SAMPLING_ERROR}]}
-    }
-  }
-
-  errors = _.uniq(errors);
-
-  return anyNotFiltered ? {values, errors} : {values: [], errors: [...errors, {type: SAMPLING_ERROR, subType: ALL_SAMPLES_FILTERED_ERROR}]}
-}
-
-function simulate(expr, inputs, maxSamples) {
-  const s = Evaluate(expr, maxSamples, []);
-  return s
-}
-
-var Sampler = {
-  sample({params: [low, high]}, n, _1) {
-    // This assumes a centered 90% confidence interval, e.g. the left endpoint
-    // marks 0.05% on the CDF, the right 0.95%.
-    const mean = math.mean(high, low);
-    const stdev = (high - mean) / 1.645;
-    return simulate(`normal(${mean},${stdev})`, [], n)
-  }
-};
-
-var Sampler$1 = {
-  sample({params: [low, high]}, n, _1) {
-    // This assumes a centered 90% confidence interval, e.g. the left endpoint
-    // marks 0.05% on the CDF, the right 0.95%.
-    const logHigh = math.log(high);
-    const logLow = math.log(low);
-
-    const mean = math.mean(logHigh, logLow);
-    const stdev = (logHigh-logLow) / (2*1.645);
-
-    return simulate(`lognormal(${mean},${stdev})`, [], n)
-  }
-};
-
-var Sampler$2 = {
-  sample({params: [hits, total]}, n, _1) {
-    // This treats your entry as a prior, and assumes you are 2 times more confident than
-    // a raw beta would be. This gives your distribution more of a peak for small numbers.
-    return simulate(`beta(${2*hits},${2*(total-hits)})`, [], n)
-  }
-};
-
-var Sampler$3 = {
-  sample({params: [value]}) {
-    return ({values: [value]})
-  }
-};
-
-var Sampler$4 = {
-  sample({params: [low, high]}, n, _1) {
-    return simulate(`uniform(${low},${high})`, [], n)
-  }
-};
-
-var Sampler$5 = {
-  sample({text}, n, inputs) {
-    return simulate(text, inputs, n)
-  }
-};
-
-var Sampler$6 = {
-  sample(formatted, n) {
-    return Promise.resolve({values: formatted.data})
-  }
-};
-
-var Sampler$7 = {
-  sample(formatted) {
-    return Promise.resolve({values: [], errors: []})
-  }
-};
-
-const Funct = {
-  referenceName: 'FUNCTION',
-  types: ['FUNCTION'],
-  displayName: 'Function',
-  sampler: Sampler$5,
-};
-
-const DistributionNormal = {
-  referenceName: 'NORMAL',
-  types: ['DISTRIBUTION', 'NORMAL'],
-  displayName: 'Normal',
-  sampler: Sampler,
-  isRangeDistribution: true,
-};
-
-const DistributionPoint = {
-  referenceName: 'POINT',
-  types: ['DISTRIBUTION', 'POINT'],
-  displayName: 'Point',
-  sampler: Sampler$3,
-};
-
-const DistributionLognormal = {
-  referenceName: 'LOGNORMAL',
-  types: ['DISTRIBUTION', 'LOGNORMAL'],
-  displayName: 'LogNormal',
-  isRangeDistribution: true,
-  sampler: Sampler$1,
-};
-
-const DistributionBeta = {
-  referenceName: 'BETA',
-  types: ['DISTRIBUTION', 'BETA'],
-  displayName: 'Beta',
-  isRangeDistribution: false,
-  sampler: Sampler$2,
-};
-
-
-const DistributionUniform = {
-  referenceName: 'UNIFORM',
-  types: ['DISTRIBUTION', 'UNIFORM'],
-  displayName: 'Uniform',
-  isRangeDistribution: true,
-  sampler: Sampler$4,
-};
-
-const Data = {
-  referenceName: 'DATA',
-  types: ['DATA'],
-  displayName: 'Data',
-  isRangeDistribution: false,
-  sampler: Sampler$6,
-};
-
-// Change to null Guesstimate for sampler
-const None = {
-  referenceName: 'NONE',
-  types: [],
-  displayName: 'NONE',
-  sampler: Sampler$7
-};
-
-const all = [
-  Funct,
-  DistributionNormal,
-  DistributionBeta,
-  DistributionPoint,
-  DistributionLognormal,
-  DistributionUniform,
-  Data,
-  None
-];
-
-function find(referenceName) {
-  const found = all.find(e => e.referenceName === referenceName);
-  return found || None
-}
-
-const samplerTypes = {
-  find: referenceName => find(referenceName),
-  all
-};
-
-//TODO(fix this class)
-
-class Guesstimator {
-  static parse(unparsedInput) {
-    const [parsedError, parsedInput] = parse(unparsedInput);
-    const newItem = new this({ parsedError, parsedInput });
-    return [parsedError, newItem]
-  }
-
-  constructor({ parsedError, parsedInput }) {
-    this.parsedError = parsedError || {};
-    this.parsedInput = parsedInput;
-  }
-
-  hasParsingErrors() {
-    return !_.isEmpty(this.parsedError)
-  }
-
-  samplerType() {
-    return samplerTypes.find(this.parsedInput.guesstimateType)
-  }
-
-  needsExternalInputs() {
-    return (this.parsedInput.guesstimateType === 'FUNCTION')
-  }
-
-  sample(n, externalInputs = []) {
-    if (!_.isEmpty(this.parsedError)) {
-      return Promise.resolve({ errors: [this.parsedError], values: [] })
-    }
-
-    const samplerType = this.samplerType();
-    return samplerType.sampler.sample(this.parsedInput, n, externalInputs)
-  }
-}
-
 const testVar = 30;
 
-export { Guesstimator, testVar };
+export default testVar;

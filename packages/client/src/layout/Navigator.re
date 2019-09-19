@@ -10,8 +10,7 @@ let make = (~route: Route.t, ~loggedInUser: option(Types.user), _children) => {
     | (Home, Some(loggedInUser)) => Redirect.defaultPage(loggedInUser)
     | (Channel(channel), _) =>
       <ChannelNavigation channelPage=channel loggedInUser />
-    | (Agent(agentPage), _) =>
-      Agent_Layout.makeWithPage(agentPage, loggedInUser)
+    | (Agent(agentPage), _) => <Agent_Layout agentPage loggedInUser />
     | (AgentIndex, _) => AgentIndex'.toEl(loggedInUser)
     | (EntityShow(id), _) => EntityShow'.toEl({id: id}, loggedInUser)
     | (EntityIndex, _) => EntityIndex'.toEl(loggedInUser)

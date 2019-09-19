@@ -23,6 +23,10 @@ type measurableState = [
 
 type isArchived = [ | `TRUE | `FALSE];
 
+type field = [ | `primaryPointScore];
+
+type direction = [ | `ASC | `DESC];
+
 type permission = [
   | `BOT_CREATE
   | `BOT_UPDATE

@@ -48,6 +48,7 @@ module Query = [%graphql
         $measurableId: String
         $minPredictionCountTotal: Int
         $measurableState: [measurableState]
+        $order: [Order]
      ) {
         edges: agentMeasurables (
             first: $first
@@ -58,6 +59,7 @@ module Query = [%graphql
             measurableId: $measurableId
             minPredictionCountTotal: $minPredictionCountTotal
             measurableState: $measurableState
+            order: $order
         ) {
           total
           pageInfo{
@@ -145,6 +147,9 @@ let component =
       ~measurableId=None,
       ~measurableState=Some([|Some(`JUDGED)|]),
       ~minPredictionCountTotal=Some(1),
+      ~order=Some([|
+               Some({"field": `primaryPointScore, "direction": `DESC}),
+             |]),
       ~pageLimit,
       ~direction: direction,
       ~innerComponentFn,
@@ -160,6 +165,7 @@ let component =
           ~measurableId?,
           ~measurableState?,
           ~minPredictionCountTotal?,
+          ~order?,
         ),
       (),
     );

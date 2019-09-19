@@ -213,6 +213,9 @@ export namespace Layers {
     agentId: Models.ObjectID;
   };
 
+  export type order = {field: string, direction: string};
+  export type orderList = order[];
+
   namespace DataSourceLayer {
     type compoundId = object;
     type id = string | compoundId;
@@ -362,8 +365,10 @@ export namespace Layers {
       first?: number,
       after?: string,
       before?: string,
+      order?: orderList;
 
       getPagination(total: number): { limit: number, offset: number };
+      isOrderSet(): boolean;
     };
     type query = {
       sort?: number,

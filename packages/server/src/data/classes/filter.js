@@ -20,6 +20,7 @@ const utils = require('../../lib/utils');
 
 class Filter {
   /**
+   * @todo: turn on type assertion
    * @param {Layers.DataSourceLayer.filter} [filter]
    */
   constructor(filter = {}) {

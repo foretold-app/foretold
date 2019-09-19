@@ -19,6 +19,7 @@ const structures = require('../../structures');
  * @param {string} args.before
  * @param {number} args.last
  * @param {number} args.first
+ * @param {Layers.orderList} args.order
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<*>}

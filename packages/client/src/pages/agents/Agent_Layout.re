@@ -76,40 +76,16 @@ let make =
 
       <FillWithSidebar loggedInUser>
         <Top agentPage loggedInUser />
-        <div className=Styles.container>
-          <Div flexDirection=`row styles=[SLayout.Styles.width100]>
-            <Div
-              styles=[
-                Css.(
-                  style([
-                    marginTop(`em(1.0)),
-                    paddingRight(`em(1.0)),
-                    paddingLeft(`em(1.0)),
-                  ])
-                ),
-              ]
-              flex={`num(3.)}>
-              {switch (agentPage.subPage) {
-               | AgentMeasurements =>
-                 <AgentMeasurements
-                   pageParams={id: agentId}
-                   loggedInUser
-                   layout
-                 />
-               | AgentMeasurables =>
-                 <AgentMeasurables
-                   pageParams={id: agentId}
-                   loggedInUser
-                   layout
-                 />
-               | AgentBots => <AgentBots pageParams={id: agentId} layout />
-               | AgentCommunities => <AgentCommunities agentId layout />
-               | AgentUpdates => <FeedItems agentId={Some(agentId)} layout />
-               | AgentScores => <AgentScores agentId={Some(agentId)} />
-               }}
-            </Div>
-          </Div>
-        </div>
+        {switch (agentPage.subPage) {
+         | AgentMeasurements =>
+           <AgentMeasurements pageParams={id: agentId} loggedInUser layout />
+         | AgentMeasurables =>
+           <AgentMeasurables pageParams={id: agentId} loggedInUser layout />
+         | AgentBots => <AgentBots pageParams={id: agentId} layout />
+         | AgentCommunities => <AgentCommunities agentId layout />
+         | AgentUpdates => <FeedItems agentId={Some(agentId)} layout />
+         | AgentScores => <AgentScores agentId={Some(agentId)} />
+         }}
       </FillWithSidebar>;
 
     | None => <Home />

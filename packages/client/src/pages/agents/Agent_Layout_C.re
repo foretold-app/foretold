@@ -2,19 +2,14 @@ open SLayout;
 open Utils;
 open Style.Grid;
 
-let component = ReasonReact.statelessComponent("AgentLayoutPage");
+module Top = {
+  let component = ReasonReact.statelessComponent("Top");
+  let make =
+      (~agentPage: Routing.AgentPage.t, ~loggedInUser: Types.user, _children) => {
+    ...component,
+    render: _ => {
+      let agentId = agentPage.agentId;
 
-let make =
-    (
-      agentPage: Routing.AgentPage.t,
-      loggedInUser: Types.user,
-      {head, body}: LayoutConfig.t,
-    ) => {
-  ...component,
-  render: _ => {
-    let agentId = agentPage.agentId;
-
-    let top =
       AgentGet.component(
         ~id=agentId,
         ({agent}) => {
@@ -60,9 +55,21 @@ let make =
           </>;
         },
       );
+    },
+  };
+};
 
+let component = ReasonReact.statelessComponent("AgentLayoutPage");
+let make =
+    (
+      agentPage: Routing.AgentPage.t,
+      loggedInUser: Types.user,
+      {head, body}: LayoutConfig.t,
+    ) => {
+  ...component,
+  render: _ => {
     <FillWithSidebar loggedInUser>
-      top
+      <Top agentPage loggedInUser />
       <div className=Styles.container>
         <Div flexDirection=`row styles=[SLayout.Styles.width100]>
           <Div

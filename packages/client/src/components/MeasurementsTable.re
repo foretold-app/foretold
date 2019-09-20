@@ -346,12 +346,8 @@ let logScoreColumn = (loggedInUser: Types.user) =>
     ~render=
       (measurement: Types.measurement) =>
         measurement.measurementScoreSet
-        |> E.O.bind(
-             _,
-             (o: Types.measurementScoreSet) => {
-               Js.log(o.nonMarketLogScore);
-               o.nonMarketLogScore |> E.O.fmap(E.Float.toString);
-             },
+        |> E.O.bind(_, (o: Types.measurementScoreSet) =>
+             o.nonMarketLogScore |> E.O.fmap(E.Float.toString)
            )
         |> E.O.default("")
         |> Utils.ste,

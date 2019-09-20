@@ -167,44 +167,11 @@ module Columns = {
       (),
     );
 
-  let objectiveMeasurement =
-    Table.Column.make(
-      ~name="Final Answer" |> Utils.ste,
-      ~render=
-        (r: record) =>
-          r.objectiveMeasurement
-          |> E.O.fmap(getMeasurement)
-          |> E.O.default("" |> Utils.ste),
-      ~flex=1,
-      (),
-    );
+  let default = [|agent, measurable, totalScore, predictionCount, time|];
 
-  let default = [|
-    agent,
-    measurable,
-    competitiveMeasurement,
-    aggregationMeasurement,
-    objectiveMeasurement,
-    score,
-    time,
-  |];
+  let measurables = [|agent, measurable, totalScore, predictionCount, time|];
 
-  let measurables = [|
-    agent,
-    measurable,
-    objectiveMeasurement,
-    totalScore,
-    predictionCount,
-    time,
-  |];
-
-  let measurables' = [|
-    agent,
-    objectiveMeasurement,
-    totalScore,
-    predictionCount,
-    time,
-  |];
+  let measurables' = [|agent, totalScore, predictionCount, time|];
 
   let members = [|
     agent,

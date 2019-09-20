@@ -422,7 +422,6 @@ module MeasurementScoreSet = {
         ~primaryPointScore=None,
         ~nonMarketLogScore=None,
         ~prediction,
-        ~outcome=None,
         ~previousAggregate=None,
         (),
       )
@@ -430,7 +429,6 @@ module MeasurementScoreSet = {
     primaryPointScore,
     nonMarketLogScore,
     prediction,
-    outcome,
     previousAggregate,
   };
 };
@@ -645,7 +643,6 @@ module AgentMeasurable = {
         ~createdAt,
         ~competitiveMeasurement=None,
         ~aggregationMeasurement=None,
-        ~objectiveMeasurement=None,
         (),
       )
       : t => {
@@ -657,7 +654,6 @@ module AgentMeasurable = {
     createdAt,
     competitiveMeasurement,
     aggregationMeasurement,
-    objectiveMeasurement,
   };
 };
 
@@ -706,7 +702,6 @@ module LeaderboardItem = {
         ~numberOfQuestionsScored=None,
         ~competitiveMeasurement=None,
         ~aggregationMeasurement=None,
-        ~objectiveMeasurement=None,
         (),
       )
       : t => {
@@ -720,7 +715,6 @@ module LeaderboardItem = {
     numberOfQuestionsScored,
     competitiveMeasurement,
     aggregationMeasurement,
-    objectiveMeasurement,
   };
 
   let fromMeasurement = (measurement: Types.measurement) =>
@@ -735,8 +729,6 @@ module LeaderboardItem = {
         measurement.measurementScoreSet |> E.O.fmap(a => a.prediction),
       ~aggregationMeasurement=
         measurement.measurementScoreSet |> E.O.ffmap(a => a.previousAggregate),
-      ~objectiveMeasurement=
-        measurement.measurementScoreSet |> E.O.ffmap(a => a.outcome),
       ~createdAt=measurement.createdAt,
       (),
     );
@@ -749,7 +741,6 @@ module LeaderboardItem = {
       ~pointScore=agentMeasurable.primaryPointScore,
       ~predictionCountTotal=Some(agentMeasurable.predictionCountTotal),
       ~createdAt=Some(agentMeasurable.createdAt),
-      ~objectiveMeasurement=agentMeasurable.objectiveMeasurement,
       (),
     );
 

@@ -8,53 +8,6 @@ let toMeasurement = (measurement): Types.measurement => {
          Primary.Agent.make(~id=k##id, ~agentType, ~name=k##name, ())
        );
 
-  let measurementScoreSet =
-    measurement##measurementScoreSet
-    |> E.O.fmap(measurementScoreSet => {
-         let prediction =
-           measurementScoreSet##prediction
-           |> (
-             measurement =>
-               Primary.Measurement.make(
-                 ~id=measurement##id,
-                 ~valueText=measurement##valueText,
-                 ~value=measurement##value |> MeasurementValue.decodeGraphql,
-                 (),
-               )
-           );
-
-         let outcome =
-           measurementScoreSet##outcome
-           |> E.O.fmap(measurement =>
-                Primary.Measurement.make(
-                  ~id=measurement##id,
-                  ~valueText=measurement##valueText,
-                  ~value=measurement##value |> MeasurementValue.decodeGraphql,
-                  (),
-                )
-              );
-
-         let previousAggregate =
-           measurementScoreSet##previousAggregate
-           |> E.O.fmap(measurement =>
-                Primary.Measurement.make(
-                  ~id=measurement##id,
-                  ~valueText=measurement##valueText,
-                  ~value=measurement##value |> MeasurementValue.decodeGraphql,
-                  (),
-                )
-              );
-
-         Primary.MeasurementScoreSet.make(
-           ~primaryPointScore=measurementScoreSet##primaryPointScore,
-           ~nonMarketLogScore=measurementScoreSet##nonMarketLogScore,
-           ~prediction,
-           ~outcome,
-           ~previousAggregate,
-           (),
-         );
-       });
-
   Primary.Measurement.make(
     ~id=measurement##id,
     ~description=measurement##description,
@@ -65,7 +18,6 @@ let toMeasurement = (measurement): Types.measurement => {
     ~createdAt=Some(measurement##createdAt),
     ~relevantAt=measurement##relevantAt,
     ~agent,
-    ~measurementScoreSet,
     ~measurable=
       switch (measurement##measurable) {
       | Some(measurable) =>
@@ -161,46 +113,6 @@ module Query = [%graphql
                     stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
                   }
 
-                  measurementScoreSet {
-                    prediction {
-                        id
-                        valueText
-                        value {
-                            floatCdf(truncate: 50 round: 2) { xs ys }
-                            floatPoint
-                            percentage
-                            binary
-                            unresolvableResolution
-                            comment
-                        }
-                    }
-                    outcome {
-                        id
-                        valueText
-                        value {
-                            floatCdf(truncate: 50 round: 2) { xs ys }
-                            floatPoint
-                            percentage
-                            binary
-                            unresolvableResolution
-                            comment
-                        }
-                    }
-                    previousAggregate {
-                        id
-                        valueText
-                        value {
-                            floatCdf(truncate: 50 round: 2) { xs ys }
-                            floatPoint
-                            percentage
-                            binary
-                            unresolvableResolution
-                            comment
-                        }
-                    }
-                    primaryPointScore
-                    nonMarketLogScore
-                  }
               }
           }
         }

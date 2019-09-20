@@ -39,18 +39,6 @@ module Pagination = {
               )}>
               {"Question Scores" |> Utils.ste}
             </FC.Tab2>
-            <FC.Tab2
-              isActive={subTab === ByMeasurement}
-              onClick={LinkType.onClick(
-                Internal(
-                  ChannelLeaderboard(
-                    channelId |> E.O.toString,
-                    ByMeasurement,
-                  ),
-                ),
-              )}>
-              {"Prediction Scores" |> Utils.ste}
-            </FC.Tab2>
           </Div>
         </Div>
         <Div

@@ -1,14 +1,15 @@
 {
   "name": "@foretold/prediction-analysis",
   "version": "0.0.1",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "bsb -make-world",
     "start": "bsb -make-world -w",
     "clean": "bsb -clean-world",
     "test": "jest",
     "watch:test": "jest --watchAll",
-    "watch:s": "yarn run jest -- Converter_test --watch"
+    "watch:s": "yarn run jest -- Converter_test --watch",
+    "parcel": "parcel build ./src/index.js --no-source-maps --no-autoinstall"
   },
   "keywords": [
     "BuckleScript"
@@ -16,6 +17,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "parcel-bundler": "1.12.3",
     "jest": "24.9.0"
   },
   "dependencies": {

@@ -331,7 +331,7 @@ let scoreColumn = (loggedInUser: Types.user) =>
       (measurement: Types.measurement) =>
         measurement.measurementScoreSet
         |> E.O.ffmap((o: Types.measurementScoreSet) =>
-             o.primaryPointScore |> E.O.fmap(E.Float.toString)
+             o.primaryPointScore |> E.O.fmap(E.Float.with3DigitsPrecision)
            )
         |> E.O.default("")
         |> Utils.ste,
@@ -346,12 +346,8 @@ let logScoreColumn = (loggedInUser: Types.user) =>
     ~render=
       (measurement: Types.measurement) =>
         measurement.measurementScoreSet
-        |> E.O.bind(
-             _,
-             (o: Types.measurementScoreSet) => {
-               Js.log(o.nonMarketLogScore);
-               o.nonMarketLogScore |> E.O.fmap(E.Float.toString);
-             },
+        |> E.O.bind(_, (o: Types.measurementScoreSet) =>
+             o.nonMarketLogScore |> E.O.fmap(E.Float.with3DigitsPrecision)
            )
         |> E.O.default("")
         |> Utils.ste,

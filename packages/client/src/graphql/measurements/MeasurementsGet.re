@@ -8,6 +8,16 @@ let toMeasurement = (measurement): Types.measurement => {
          Primary.Agent.make(~id=k##id, ~agentType, ~name=k##name, ())
        );
 
+  let measurementScoreSet =
+    measurement##measurementScoreSet
+    |> E.O.fmap(measurementScoreSet =>
+         Primary.MeasurementScoreSet.make(
+           ~primaryPointScore=measurementScoreSet##primaryPointScore,
+           ~nonMarketLogScore=measurementScoreSet##nonMarketLogScore,
+           (),
+         )
+       );
+
   Primary.Measurement.make(
     ~id=measurement##id,
     ~description=measurement##description,
@@ -18,6 +28,7 @@ let toMeasurement = (measurement): Types.measurement => {
     ~createdAt=Some(measurement##createdAt),
     ~relevantAt=measurement##relevantAt,
     ~agent,
+    ~measurementScoreSet,
     ~measurable=
       switch (measurement##measurable) {
       | Some(measurable) =>
@@ -113,6 +124,10 @@ module Query = [%graphql
                     stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
                   }
 
+                  measurementScoreSet {
+                    primaryPointScore
+                    nonMarketLogScore
+                  }
               }
           }
         }

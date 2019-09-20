@@ -72,7 +72,7 @@ module Columns = {
       ~render=
         (r: record) =>
           r.pointScore
-          |> E.O.fmap(E.Float.toString)
+          |> E.O.fmap(E.Float.with3DigitsPrecision)
           |> E.O.default("")
           |> Utils.ste,
       ~flex=1,
@@ -85,7 +85,7 @@ module Columns = {
       ~render=
         (r: record) =>
           r.pointScore
-          |> E.O.fmap(E.Float.toString)
+          |> E.O.fmap(E.Float.with3DigitsPrecision)
           |> E.O.default("")
           |> Utils.ste,
       ~flex=1,
@@ -167,8 +167,6 @@ module Columns = {
       (),
     );
 
-  let default = [|agent, measurable, totalScore, predictionCount, time|];
-
   let measurables = [|agent, measurable, totalScore, predictionCount, time|];
 
   let measurables' = [|agent, totalScore, predictionCount, time|];
@@ -189,12 +187,12 @@ module Columns = {
 };
 
 [@react.component]
-let make = (~items, ~columns=Columns.default) =>
+let make = (~items, ~columns=Columns.measurables) =>
   Table.fromColumns(columns, items, ());
 
 module Jsx2 = {
   let component = ReasonReact.statelessComponent("LeaderboardTable");
-  let make = (~items, ~columns=Columns.default, children) =>
+  let make = (~items, ~columns=Columns.measurables, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
       makeProps(~items, ~columns, ()),

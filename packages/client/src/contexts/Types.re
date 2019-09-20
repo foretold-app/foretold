@@ -142,7 +142,6 @@ and measurementScoreSet = {
   primaryPointScore: option(float),
   nonMarketLogScore: option(float),
   prediction: measurement,
-  outcome: option(measurement),
   previousAggregate: option(measurement),
 }
 and measurement = {
@@ -168,7 +167,6 @@ and agentMeasurable = {
   createdAt: MomentRe.Moment.t,
   competitiveMeasurement: option(measurement),
   aggregationMeasurement: option(measurement),
-  objectiveMeasurement: option(measurement),
 }
 and agentChannel = {
   id: string,
@@ -193,7 +191,6 @@ and leaderboardItem = {
   numberOfQuestionsScored: option(int),
   competitiveMeasurement: option(measurement),
   aggregationMeasurement: option(measurement),
-  objectiveMeasurement: option(measurement),
 }
 and series = {
   id: string,

@@ -29,8 +29,6 @@ let make =
            | NewMeasurable => <MeasurableNew channelId loggedInUser />
            | Members => <ChannelMembers channelId channel />
            | FeedItems => <FeedItems channelId={Some(channelId)} />
-           | Leaderboard(ByMeasurement) =>
-             <LeaderboardMeasurements channelId={Some(channelId)} />
            | Leaderboard(ByMeasurable) =>
              <LeaderboardMeasurables channelId={Some(channelId)} />
            | Leaderboard(ByMember) =>
@@ -39,6 +37,7 @@ let make =
            | InviteMember => <ChannelInviteMember channelId loggedInUser />
            | Settings => <ChannelEdit channelId loggedInUser />
            | NewSeries => <SeriesNew channelId loggedInUser />
+           | _ => ReasonReact.null
            }}
         </Channel>;
 

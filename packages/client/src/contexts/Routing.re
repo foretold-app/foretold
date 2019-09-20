@@ -29,7 +29,6 @@ module ChannelPage = {
     | Leaderboard;
 
   type leaderboard =
-    | ByMeasurement
     | ByMeasurable
     | ByMember;
 
@@ -146,11 +145,6 @@ module Route = {
     | ["c", channelId, "members"] => Channel({channelId, subPage: Members})
     | ["c", channelId, "activity"] =>
       Channel({channelId: getChannelId(channelId), subPage: FeedItems})
-    | ["c", channelId, "scoring", "predictions"] =>
-      Channel({
-        channelId: getChannelId(channelId),
-        subPage: Leaderboard(ByMeasurement),
-      })
     | ["c", channelId, "scoring", "questions"] =>
       Channel({
         channelId: getChannelId(channelId),
@@ -245,8 +239,6 @@ module Url = {
     | ChannelEdit(channelId) => "/c/" ++ channelId ++ "/edit"
     | ChannelMembers(channelId) => "/c/" ++ channelId ++ "/members"
     | ChannelFeedItems(channelId) => "/c/" ++ channelId ++ "/activity"
-    | ChannelLeaderboard(channelId, ByMeasurement) =>
-      "/c/" ++ channelId ++ "/scoring/predictions"
     | ChannelLeaderboard(channelId, ByMeasurable) =>
       "/c/" ++ channelId ++ "/scoring/questions"
     | ChannelLeaderboard(channelId, ByMember) =>

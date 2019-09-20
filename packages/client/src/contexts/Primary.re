@@ -417,19 +417,9 @@ module Measurement = {
 module MeasurementScoreSet = {
   type t = Types.measurementScoreSet;
 
-  let make =
-      (
-        ~primaryPointScore=None,
-        ~nonMarketLogScore=None,
-        ~prediction,
-        ~previousAggregate=None,
-        (),
-      )
-      : t => {
+  let make = (~primaryPointScore=None, ~nonMarketLogScore=None, ()): t => {
     primaryPointScore,
     nonMarketLogScore,
-    prediction,
-    previousAggregate,
   };
 };
 
@@ -643,6 +633,7 @@ module AgentMeasurable = {
         ~createdAt,
         ~competitiveMeasurement=None,
         ~aggregationMeasurement=None,
+        ~objectiveMeasurement=None,
         (),
       )
       : t => {
@@ -654,6 +645,7 @@ module AgentMeasurable = {
     createdAt,
     competitiveMeasurement,
     aggregationMeasurement,
+    objectiveMeasurement,
   };
 };
 
@@ -702,6 +694,7 @@ module LeaderboardItem = {
         ~numberOfQuestionsScored=None,
         ~competitiveMeasurement=None,
         ~aggregationMeasurement=None,
+        ~objectiveMeasurement=None,
         (),
       )
       : t => {
@@ -715,23 +708,8 @@ module LeaderboardItem = {
     numberOfQuestionsScored,
     competitiveMeasurement,
     aggregationMeasurement,
+    objectiveMeasurement,
   };
-
-  let fromMeasurement = (measurement: Types.measurement) =>
-    make(
-      ~id=measurement.id,
-      ~agent=measurement.agent,
-      ~measurable=measurement.measurable,
-      ~pointScore=
-        measurement.measurementScoreSet
-        |> E.O.ffmap((a: Types.measurementScoreSet) => a.primaryPointScore),
-      ~competitiveMeasurement=
-        measurement.measurementScoreSet |> E.O.fmap(a => a.prediction),
-      ~aggregationMeasurement=
-        measurement.measurementScoreSet |> E.O.ffmap(a => a.previousAggregate),
-      ~createdAt=measurement.createdAt,
-      (),
-    );
 
   let fromAgentMeasurable = (agentMeasurable: Types.agentMeasurable) =>
     make(
@@ -741,6 +719,7 @@ module LeaderboardItem = {
       ~pointScore=agentMeasurable.primaryPointScore,
       ~predictionCountTotal=Some(agentMeasurable.predictionCountTotal),
       ~createdAt=Some(agentMeasurable.createdAt),
+      ~objectiveMeasurement=agentMeasurable.objectiveMeasurement,
       (),
     );
 

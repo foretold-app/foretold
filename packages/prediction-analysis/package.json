@@ -1,6 +1,6 @@
 {
   "name": "@foretold/prediction-analysis",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "dist/index.js",
   "scripts": {
     "build": "bsb -make-world",

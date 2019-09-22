@@ -142,4 +142,13 @@ module PredictionResolutionOverTimeI = {
       ~scoringCombination=e,
       (),
     );
+
+  [@genType]
+  let pointScoreDistribution = (marketType: MarketType.marketScoreType, e) =>
+    PredictionResolutionOverTimeMeasures.pointScoreDistribution(
+      ~marketType,
+      ~scoringCombination=e,
+      (),
+    )
+    |> Belt.Result.map(_, StartAtDistribution.toJs);
 };

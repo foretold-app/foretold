@@ -121,33 +121,38 @@ let showForm =
          </Antd.Form.Item>
        </>,
      )}
-    {loggedInUser.agent
-     |> E.O.fmap((agent: Types.agent) =>
-          ChannelsGet.component(
-            ~channelMemberId=?Some(agent.id),
-            ~sortFn=ChannelsGet.sortAsc,
-            channels =>
-            channels
-            |> Array.mapi((index, channel: Types.channel) =>
-                 <Antd.Select.Option
-                   value={channel.id} key={index |> string_of_int}>
-                   {channel.name |> Utils.ste}
-                 </Antd.Select.Option>
-               )
-            |> ReasonReact.array
-            |> (
-              c =>
-                <Antd.Form.Item label="Community">
-                  <Antd.Select
-                    value={state.values.channelId}
-                    onChange={e => send(Form.FieldChangeValue(ChannelId, e))}>
-                    c
-                  </Antd.Select>
-                </Antd.Form.Item>
+    {E.React.showIf(
+       !creating,
+       loggedInUser.agent
+       |> E.O.fmap((agent: Types.agent) =>
+            ChannelsGet.component(
+              ~channelMemberId=?Some(agent.id),
+              ~sortFn=ChannelsGet.sortAsc,
+              channels =>
+              channels
+              |> Array.mapi((index, channel: Types.channel) =>
+                   <Antd.Select.Option
+                     value={channel.id} key={index |> string_of_int}>
+                     {channel.name |> Utils.ste}
+                   </Antd.Select.Option>
+                 )
+              |> ReasonReact.array
+              |> (
+                c =>
+                  <Antd.Form.Item label="Community">
+                    <Antd.Select
+                      value={state.values.channelId}
+                      onChange={e =>
+                        send(Form.FieldChangeValue(ChannelId, e))
+                      }>
+                      c
+                    </Antd.Select>
+                  </Antd.Form.Item>
+              )
             )
           )
-        )
-     |> E.O.React.defaultNull}
+       |> E.O.React.defaultNull,
+     )}
     {E.React.showIf(
        state.values.showDescriptionProperty == "TRUE",
        <>

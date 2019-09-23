@@ -9,12 +9,18 @@ const data = require('./data');
 function getQueryToken(req) {
   const authorization = _.get(req, 'headers.authorization');
   const token = _.get(req, 'query.token');
+  const authorization$ = _.split(authorization, ' ');
+  const authorizationName = _.get(authorization$, 0);
+  const authorizationBody = _.get(authorization$, 1);
 
-  if (authorization && authorization.split(' ')[0] === 'Bearer') {
-    return authorization.split(' ')[1];
-  } else if (!!token) {
+  if (authorizationName === 'Bearer') {
+    return authorizationBody;
+  }
+
+  if (!!token) {
     return token;
   }
+
   return null;
 }
 

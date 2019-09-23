@@ -34,12 +34,19 @@ let isUnauthenticated = error =>
      )
   |> E.O.default(false);
 
+let isCode400 = error =>
+  error##networkError
+  |> Js.Nullable.toOption
+  |> E.O.fmap(networkError => networkError##statusCode == 400)
+  |> E.O.default(false);
+
 let errorLink =
   ApolloLinks.apolloLinkOnError(error => {
     Js.log2("GraphQL Error!", Js.Json.stringifyAny(error));
 
-    switch (error |> isUnauthenticated) {
-    | true => Auth.Actions.logout()
+    switch (error |> isUnauthenticated, error |> isCode400) {
+    | (true, _)
+    | (_, true) => Auth.Actions.logout()
     | _ => ()
     };
   });

@@ -17,19 +17,19 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "parcel-bundler": "1.12.3",
     "jest": "24.9.0"
   },
   "dependencies": {
-    "babel-jest": "^24.9.0",
-    "@babel/core": "^7.6.0",
-    "@babel/preset-env": "^7.6.0",
-    "@glennsl/bs-jest": "^0.4.2",
+    "parcel-bundler": "1.12.3",
+    "babel-jest": "24.9.0",
+    "@babel/core": "7.6.0",
+    "@babel/preset-env": "7.6.0",
+    "@glennsl/bs-jest": "0.4.9",
     "gentype": "2.34.0",
     "bs-platform": "5.0.6",
-    "@foretold/cdf": "^1.0.10",
+    "@foretold/cdf": "1.0.10",
     "@glennsl/bs-json": "4.0.0",
-    "lodash": "^4.17.11",
-    "rationale": "^0.1.10"
+    "lodash": "4.17.15",
+    "rationale": "0.1.10"
   }
 }

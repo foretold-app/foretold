@@ -3,7 +3,6 @@ FROM node:12.6.0-alpine
 RUN env
 
 COPY package.json /opt/app/
-COPY package-lock.json /opt/app/
 WORKDIR /opt/app
 
 RUN apk add --no-cache build-base python && \

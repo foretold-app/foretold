@@ -28,6 +28,8 @@
     "test": "karma start",
     "test-once": "karma start --single-run",
     "parcel": "parcel build ./index.js --no-source-maps --no-autoinstall",
+    "build": "npm run parcel",
+    "clean": "echo CLENED",
     "start:b": "babel-node ./index.js"
   },
   "devDependencies": {

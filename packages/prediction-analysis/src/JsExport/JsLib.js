@@ -6,6 +6,7 @@ const {
   PredictionResolutionGroupI_pointScore,
   PredictionResolutionOverTimeI_make,
   PredictionResolutionOverTimeI_averagePointScore,
+  PredictionResolutionOverTimeI_pointScoreDistribution,
   MarketType_marketScore,
   MarketType_nonMarketScore,
 } = require('./JsInterface.gen');
@@ -115,6 +116,25 @@ PredictionResolutionOverTime.prototype.averagePointScore = function (
     PredictionResolutionOverTimeI_averagePointScore(
       marketScoreType,
       beginningTime,
+      this.data,
+    ),
+  );
+};
+
+PredictionResolutionOverTime.prototype.pointScoreDistribution = function (
+  marketScoreType,
+) {
+  if (marketScoreType !== marketScore && marketScoreType !== nonMarketScore) {
+    return { error: 'Market score type invalid' };
+  }
+
+  if (!!this.error) {
+    return { error: this.error };
+  }
+
+  return JsResult_fromResult(
+    PredictionResolutionOverTimeI_pointScoreDistribution(
+      marketScoreType,
       this.data,
     ),
   );

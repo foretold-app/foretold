@@ -1,11 +1,10 @@
 type marketScoreType = [ | `MarketScore | `NonMarketScore];
 
-let averagePointScore =
+let pointScoreDistribution =
     (
       ~marketType: marketScoreType=`MarketScore,
       ~sampleCount=DefaultParams.Cdf.maxCalculationLength,
       ~scoringCombination: PredictionResolutionOverTime.t,
-      ~lowestTimeForAverage=?,
       (),
     ) => {
   scoringCombination
@@ -18,7 +17,18 @@ let averagePointScore =
          (),
        )
      )
-  |> StartAtDistribution.transposeResult
+  |> StartAtDistribution.transposeResult;
+};
+
+let averagePointScore =
+    (
+      ~marketType: marketScoreType=`MarketScore,
+      ~sampleCount=DefaultParams.Cdf.maxCalculationLength,
+      ~scoringCombination: PredictionResolutionOverTime.t,
+      ~lowestTimeForAverage=?,
+      (),
+    ) => {
+  pointScoreDistribution(~marketType, ~sampleCount, ~scoringCombination, ())
   |> Belt.Result.flatMap(_, t =>
        StartAtDistribution.average(~t, ~lowestTime=?lowestTimeForAverage, ())
      );

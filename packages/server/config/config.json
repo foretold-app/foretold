@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "ozziegooen",
-    "password": null,
-    "database": "predictions",
-    "host": "127.0.0.1",
+    "username": "postgres",
+    "password": "password",
+    "database": "test2",
+    "host": "database",
     "dialect": "postgres"
   },
   "production": {

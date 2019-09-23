@@ -20,3 +20,18 @@ let integral: t(float, float) => Belt.Result.t(float, string);
 let average:
   (~t: t(float, float), ~lowestTime: float=?, unit) =>
   Belt.Result.t(float, string);
+
+module JS: {
+  [@bs.deriving abstract]
+  type point('a, 'b) = {
+    x: 'a,
+    y: 'b,
+  };
+  [@bs.deriving abstract]
+  type r('a, 'b) = {
+    finalX: 'a,
+    points: array(point('a, 'b)),
+  };
+};
+
+let toJs: t('a, 'b) => JS.r('a, 'b);

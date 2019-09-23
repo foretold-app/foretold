@@ -27,7 +27,7 @@
     "start": "NODE_ENV=development API_ENV=development webpack-dev-server",
     "test": "karma start",
     "test-once": "karma start --single-run",
-    "parcel": "parcel build ./index.js --no-source-maps",
+    "parcel": "parcel build ./index.js --no-source-maps --no-autoinstall",
     "start:b": "babel-node ./index.js"
   },
   "devDependencies": {

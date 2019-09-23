@@ -100,4 +100,27 @@ describe("#PredictionResolutionOverTime", () => {
         resolution: {time: 10, measurement: {data: 0.95, dataType: "percentage"}}
       })).averagePointScore(marketScore, 1.0).data).toBeCloseTo(0.149);
     });
+
+  test('#pointScoreDistribution', () => {
+      expect((new PredictionResolutionOverTime({
+        agentPredictions: [
+          {time: 3., measurement: {data: 0.7, dataType: "percentage"}},
+          {time: 8., measurement: {data: 0.88, dataType: "percentage"}},
+        ],
+        marketPredictions: [
+          {time: 0., measurement: {data: 0.5, dataType: "percentage"}},
+          {time: 5., measurement: {data: 0.7, dataType: "percentage"}},
+        ],
+        resolution: {time: 10, measurement: {data: 0.95, dataType: "percentage"}}
+      })).pointScoreDistribution(marketScore).data).toStrictEqual(
+        {
+          finalX: 10,
+          points: [
+            {x: 3, y: 0.4243072061034192},
+            {x: 5, y: 0.0},
+            {x: 8, y: 0.24754476686334626}
+          ]
+        }
+      );
+    });
 });

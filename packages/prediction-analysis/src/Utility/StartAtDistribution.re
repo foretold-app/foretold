@@ -108,3 +108,21 @@ let product = (t1: t('a, 'b), t2: t('a, 'c)): t('a, ('b, 'c)) => {
       |> E.Array.concatSome,
   };
 };
+
+module JS = {
+  [@bs.deriving abstract]
+  type point('a, 'b) = {
+    x: 'a,
+    y: 'b,
+  };
+  [@bs.deriving abstract]
+  type r('a, 'b) = {
+    finalX: 'a,
+    points: array(point('a, 'b)),
+  };
+  let fromT = ({finalX, pointXY}: t('a, 'b)) => {
+    r(~finalX, ~points=pointXY |> Array.map(((x, y)) => point(~x, ~y)));
+  };
+};
+
+let toJs = JS.fromT;

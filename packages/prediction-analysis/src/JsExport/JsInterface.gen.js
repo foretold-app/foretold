@@ -47,3 +47,9 @@ const PredictionResolutionOverTimeI_averagePointScore = function (Arg1, Arg2, Ar
   return result
 };;
 exports.PredictionResolutionOverTimeI_averagePointScore = PredictionResolutionOverTimeI_averagePointScore
+
+const PredictionResolutionOverTimeI_pointScoreDistribution = function (Arg1, Arg2) {
+  const result = Curry._2(JsInterfaceBS.PredictionResolutionOverTimeI[4], $$toRE824073253[Arg1], Arg2);
+  return result
+};;
+exports.PredictionResolutionOverTimeI_pointScoreDistribution = PredictionResolutionOverTimeI_pointScoreDistribution

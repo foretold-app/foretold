@@ -5,12 +5,10 @@ npm-debug.log
 /node_modules/
 .cache
 .cache/*
-dist
 lib/*
 .graphql_ppx_cache/
 *.graphql_ppx_cache
 *.cache
 build
-package-lock
 yarn-error.log
 *.bs.js

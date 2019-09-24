@@ -11,10 +11,10 @@
   "author": "Ozzie Gooen",
   "license": "MIT",
   "devDependencies": {
-    "jest": "^24.7.1"
+    "jest": "24.9.0"
   },
   "dependencies": {
-    "pdfast": "^0.2.0",
+    "pdfast": "0.2.0",
     "lodash": "4.17.15"
   },
   "private": false,

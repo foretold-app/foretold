@@ -12,10 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@foretold/cdf": "^1.0.9",
-    "graphql-client": "^2.0.1",
-    "node-schedule": "^1.3.2",
-    "lodash": "^4.17.11",
-    "nodemon": "^1.18.11"
+    "@foretold/cdf": "1.0.10",
+    "graphql-client": "2.0.1",
+    "node-schedule": "1.3.2",
+    "lodash": "4.17.11",
+    "nodemon": "1.18.11"
   }
 }

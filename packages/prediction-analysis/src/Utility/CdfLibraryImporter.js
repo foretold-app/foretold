@@ -50,7 +50,7 @@ function scoreMarketCdfCdf(
     predictionCdf: toCdf(predictionCdf),
     aggregateCdf: toCdf(aggregateCdf),
     resultCdf: toCdf(resolutionCdf),
-    sampleCount
+    sampleCount,
   });
 }
 
@@ -66,7 +66,7 @@ function scoreNonMarketCdfCdf(sampleCount, predictionCdf, resolutionCdf) {
   return scoringFunctions.distributionInputDistributionOutputMarketless({
     predictionCdf: toCdf(predictionCdf),
     resultCdf: toCdf(resolutionCdf),
-    sampleCount
+    sampleCount,
   });
 }
 

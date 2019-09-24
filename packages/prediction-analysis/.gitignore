@@ -11,4 +11,3 @@ lib/*
 *.cache
 build
 yarn-error.log
-*.bs.js

@@ -12,3 +12,4 @@ lib/*
 build
 yarn-error.log
 *.bs.js
+dist

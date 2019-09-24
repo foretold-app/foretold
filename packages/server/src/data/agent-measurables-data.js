@@ -4,7 +4,7 @@ const moment = require('moment');
 const {
   PredictionResolutionOverTime,
   marketScore,
-} = require('@foretold/prediction-analysis/dist');
+} = require('@foretold/prediction-analysis');
 
 const { AgentMeasurableModel } = require('../models-abstract');
 const {

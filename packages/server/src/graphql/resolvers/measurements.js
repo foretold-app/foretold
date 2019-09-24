@@ -5,7 +5,7 @@ const {
   PredictionResolutionGroup,
   marketScore,
   nonMarketScore,
-} = require('@foretold/prediction-analysis/src/index');
+} = require('@foretold/prediction-analysis');
 
 const data = require('../../data');
 const { withinMeasurables } = require('../../structures');

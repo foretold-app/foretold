@@ -26,4 +26,4 @@ install:
 
 script:
   - printenv
-  - docker run main npm run server/test:ci
+  - docker run main yarn server/test:ci

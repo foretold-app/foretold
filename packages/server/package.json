@@ -13,7 +13,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js --exec \"node -r dotenv/config\"",
-    "dev:production": "DATABASE_URL=postgres://ozziegooen@127.0.0.1:5432/predictions NODE_ENV=production yarn run dev",
+    "dev:production": "DATABASE_URL=postgres://ozziegooen@127.0.0.1:5432/predictions NODE_ENV=production yarn dev",
     "thing": "nodemon src/bots/primary.js --exec \"node -r dotenv/config\"",
     "resolutions": "nodemon src/bots/resolution.js --exec \"node -r dotenv/config\"",
     "inspect": "nodemon --inspect src/index.js",
@@ -27,7 +27,7 @@
     "db:migrate": "sequelize db:migrate",
     "db:migrate:undo": "sequelize db:migrate:undo",
     "db:seed": "sequelize db:seed:all",
-    "db:reset": "yarn run db:drop; yarn run db:create; yarn run db:migrate"
+    "db:reset": "yarn db:drop; yarn db:create; yarn db:migrate"
   },
   "keywords": [
     "foretold",

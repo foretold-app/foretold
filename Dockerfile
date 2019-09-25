@@ -9,7 +9,7 @@ COPY packages /opt/app/packages/
 WORKDIR /opt/app
 
 RUN yarn install --loglevel=warn --unsafe-perm --ignore-scripts
-RUN yarn run bootstrap
+RUN yarn bootstrap
 
 EXPOSE ${PORT:-80}
 

@@ -9,6 +9,6 @@ services:
       - NODE_PATH=/opt/app
       - NODE_ENV=development
     command: >
-      yarn run serve
+      yarn serve
     ports:
       - 1234:80

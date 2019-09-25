@@ -90,7 +90,7 @@ As an extra step, add the following script to your `package.json` `scripts`:
 Then deploy with:
 
 ```sh
-yarn run deploy (or npm run deploy)
+yarn deploy
 ```
 
 The above script will provide more reasonable versioning naming containing the date (`Y-m-d-H-M-S`) and the hash of your most current commit.

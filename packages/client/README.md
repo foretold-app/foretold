@@ -7,12 +7,12 @@ Go [here](https://reasonml.github.io) for instructions about ReasonML, and [here
 
 ```sh
 yarn install
-yarn run bsb-watch
+yarn bsb-watch
 # in another tab
-npm run parcel
+yarn parcel
 ```
 
 Optionally, you can run parcel on the staging server, if you don't want to run the server locally.
 ```
-yarn run parcel-staging
+yarn parcel-staging
 ```

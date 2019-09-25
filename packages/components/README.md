@@ -6,8 +6,8 @@ There's an example page in the `example/App.re` file. To run this, do:
 
 ```
 yarn
-yarn run start
-yarn run dev (in a separate terminal)
+yarn start
+yarn dev (in a separate terminal)
 ```
 
 ### Showcase component viewer
@@ -15,7 +15,7 @@ yarn run dev (in a separate terminal)
 To open the component viewer, run:
 
 ```
-yarn run showcase
+yarn showcase
 ```
 
 Showcase should then be available on `http://localhost:1234/showcase/index.html`, while the

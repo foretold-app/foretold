@@ -22,13 +22,13 @@
     "parcel": "1.12.3"
   },
   "scripts": {
-    "ci:test": "npm run test-once -- --browsers ChromeHeadless",
+    "ci:test": "yarn test-once -- --browsers ChromeHeadless",
     "lint": "eslint . --quiet",
     "start": "NODE_ENV=development API_ENV=development webpack-dev-server",
     "test": "karma start",
     "test-once": "karma start --single-run",
     "parcel": "parcel build ./index.js --no-source-maps --no-autoinstall",
-    "build": "npm run parcel",
+    "build": "yarn parcel",
     "clean": "echo CLENED",
     "start:b": "babel-node ./index.js"
   },

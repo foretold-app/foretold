@@ -2,6 +2,7 @@
   "name": "@foretold/prediction-analysis",
   "version": "0.0.4",
   "main": "dist/index.js",
+  "private": false,
   "scripts": {
     "build": "bsb -make-world && npm run parcel",
     "start": "bsb -make-world -w",

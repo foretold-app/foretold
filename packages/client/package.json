@@ -9,6 +9,7 @@
 		"node": ">=12.6.0",
 		"yarn": ">=1.16.0"
 	},
+	"private": false,
 	"license": "MIT",
 	"scripts": {
 		"build-bsb": "bsb -make-world",
@@ -40,7 +41,7 @@
 		"@glennsl/bs-jest": "0.4.8",
 		"@glennsl/bs-json": "4.0.0",
 		"@ncthbrt/re-secure-random-string": "2.0.0",
-		"antd": "3.17.0",
+		"antd": "3.15.0",
 		"apollo-cache-inmemory": "1.6.2",
 		"apollo-client": "2.6.3",
 		"apollo-link": "1.2.12",
@@ -86,7 +87,8 @@
 		"parcel-plugin-less-js-enabled": "1.0.2"
 	},
 	"devDependencies": {
-		"parcel-plugin-html-externals": "^0.1.2"
+		"parcel-plugin-bundle-visualiser": "1.2.0",
+		"parcel-plugin-html-externals": "0.1.2"
 	},
 	"externals": {
 		"/env.js": false

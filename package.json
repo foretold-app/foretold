@@ -10,7 +10,7 @@
     "private": true,
     "scripts": {
         "lerna": "lerna",
-        "bootstrap": "lerna bootstrap",
+        "bootstrap": "lerna bootstrap --hoist",
         "start": "node packages",
         "dev": "nodemon packages",
         "client/build": "cd packages/guesstimator && npm run build && cd ../.. && cd packages/components && npm run build && cd ../.. && cd packages/prediction-analysis &&  npm run build && cd ../.. && cd packages/client && npm run build-t && cd ../..",

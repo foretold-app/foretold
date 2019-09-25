@@ -5,6 +5,7 @@
   "author": "Ozzie Gooen <ozzieagooen@gmail.com>",
   "license": "MIT",
   "main": "src/index.js",
+  "private": false,
   "engines": {
     "node": ">=12.6.0",
     "yarn": ">=1.16.0"

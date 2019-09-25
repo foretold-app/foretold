@@ -36,7 +36,7 @@ module.exports = {
        * much work.
        */
       await queryInterface.sequelize.query(`
-        CREATE VIEW "AgentMeasurables" AS
+        CREATE OR REPLACE VIEW "AgentMeasurables" AS
           SELECT
             DISTINCT ON ("Measurables"."id", "ChannelMemberships"."agentId")
             uuid_generate_v4() AS "id",

@@ -3,7 +3,7 @@
   "version": "0.0.4",
   "main": "dist/index.js",
   "scripts": {
-    "build": "bsb -make-world",
+    "build": "bsb -make-world && npm run parcel",
     "start": "bsb -make-world -w",
     "clean": "bsb -clean-world",
     "test": "jest",

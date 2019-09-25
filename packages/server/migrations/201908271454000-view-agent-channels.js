@@ -4,7 +4,7 @@ module.exports = {
       await queryInterface.sequelize.query(`BEGIN`);
 
       await queryInterface.sequelize.query(`
-      CREATE VIEW "AgentChannels" AS
+      CREATE OR REPLACE VIEW "AgentChannels" AS
         SELECT uuid_generate_v4() AS "id",
           "ChannelMemberships"."agentId",
           "ChannelMemberships"."channelId",

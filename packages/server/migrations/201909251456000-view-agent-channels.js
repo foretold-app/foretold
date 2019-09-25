@@ -15,7 +15,7 @@ module.exports = {
           "ChannelAgents"."createdAt",
           "ChannelAgents"."updatedAt",
           (
-             SELECT count(*)
+             SELECT count(DISTINCT "Measurements"."id")
              FROM "Measurements"
                LEFT JOIN "Measurables" ON
                "Measurables"."id" = "Measurements"."measurableId"
@@ -24,11 +24,10 @@ module.exports = {
                AND "Measurements"."competitorType" IN ('OBJECTIVE', 'COMPETITIVE')
           ) AS "numberOfPredictions",
           (
-             SELECT count(*)
-             FROM "Measurements"
-               LEFT JOIN "Measurables" ON
-               "Measurables"."id" = "Measurements"."measurableId"
-             WHERE "Measurables"."channelId" = "ChannelAgents"."channelId"
+             SELECT count(DISTINCT "Measurables"."id")
+             FROM "Measurables", "Measurements"
+             WHERE "Measurables"."id" = "Measurements"."measurableId"
+               AND "Measurables"."channelId" = "ChannelAgents"."channelId"
                AND "Measurements"."agentId" = "ChannelAgents"."agentId"
                AND "Measurements"."competitorType" IN ('OBJECTIVE', 'COMPETITIVE')
                AND "Measurables"."state" = 'JUDGED'

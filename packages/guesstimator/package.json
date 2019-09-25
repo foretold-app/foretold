@@ -67,7 +67,7 @@
     "transform-loader": "0.2.4",
     "url-loader": "0.5.9",
     "webpack-cli": "3.3.6",
-    "webpack-dev-server": "1.16.5",
+    "webpack-dev-server": "3.1.11",
     "worker-loader": "0.7.1",
     "yaml-loader": "0.1.0"
   }

@@ -8,16 +8,21 @@ module.exports = {
           WITH
            "MembersFromMeasurements" AS (
               SELECT DISTINCT "Measurables"."channelId", "Measurements"."agentId",
-                "Measurements"."updatedAt", "Measurements"."createdAt"
+               "Measurements"."createdAt", "Measurements"."updatedAt"
               FROM "Measurables", "Measurements"
               WHERE "Measurements"."measurableId" = "Measurables"."id"
                 AND "Measurements"."competitorType" IN ('COMPETITIVE', 'OBJECTIVE')),
            "MembersAsMembers" AS (
-               SELECT "agentId", "channelId", "updatedAt", "createdAt"
+               SELECT "agentId", "channelId", "createdAt", "updatedAt"
                FROM "ChannelMemberships"
            )
-          SELECT * FROM "MembersFromMeasurements"
-          UNION SELECT * FROM "MembersAsMembers"
+          SELECT
+            DISTINCT ON ("channelId", "agentId")
+            "channelId", "agentId", "createdAt", "updatedAt"
+          FROM (
+              SELECT * FROM "MembersFromMeasurements"
+              UNION SELECT * FROM "MembersAsMembers"
+          ) AS "ChannelAgents2"
       `);
 
       await queryInterface.sequelize.query(`COMMIT`);

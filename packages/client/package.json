@@ -34,7 +34,6 @@
 		"analyze": "source-map-explorer dist/Index.adc0ecca.js"
 	},
 	"dependencies": {
-		"@babel/preset-react": "7.0.0",
 		"@foretold/cdf": "1.0.10",
 		"@foretold/guesstimator": "1.0.1",
 		"@foretold/components": "0.0.1",
@@ -84,15 +83,9 @@
 		"static-server": "2.2.1",
 		"subscriptions-transport-ws": "0.9.16",
 		"warning": "4.0.3",
-		"babel-core": "6.26.3",
-		"babel-plugin-import": "1.12.0",
-		"babel-preset-es2015": "6.24.1",
-		"babel-preset-stage-0": "6.24.1",
-		"babel-runtime": "6.26.0",
 		"parcel-plugin-less-js-enabled": "1.0.2"
 	},
 	"devDependencies": {
-		"babel-preset-react": "^6.24.1",
 		"parcel-plugin-html-externals": "^0.1.2"
 	},
 	"externals": {

@@ -2,13 +2,14 @@
   "name": "@foretold/prediction-analysis",
   "version": "0.0.4",
   "main": "dist/index.js",
+  "private": false,
   "scripts": {
-    "build": "bsb -make-world && npm run parcel",
+    "build": "bsb -make-world && yarn parcel",
     "start": "bsb -make-world -w",
     "clean": "bsb -clean-world",
     "test": "jest",
     "watch:test": "jest --watchAll",
-    "watch:s": "yarn run jest -- Converter_test --watch",
+    "watch:s": "yarn jest -- Converter_test --watch",
     "parcel": "parcel build ./src/index.js --no-source-maps --no-autoinstall"
   },
   "keywords": [

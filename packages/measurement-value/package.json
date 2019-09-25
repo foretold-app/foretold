@@ -2,6 +2,7 @@
     "name": "@foretold/measurement-value",
     "version": "1.0.0",
     "description": "",
+    "private": false,
     "keywords": [
         "foretold"
     ],

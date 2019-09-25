@@ -24,6 +24,6 @@ COPY bsconfig.json /opt/app/
 COPY graphql_schema.json /opt/app/
 COPY webpack.config.js /opt/app/
 
-RUN yarn run build-for-server
+RUN yarn build-for-server
 
 EXPOSE ${PORT:-80}

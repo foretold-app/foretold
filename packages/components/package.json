@@ -2,10 +2,11 @@
     "name": "@foretold/components",
     "version": "0.0.1",
     "description": "",
+    "private": false,
     "scripts": {
         "build": "bsb -make-world",
         "clean": "bsb -clean-world",
-        "predev": "npm run build",
+        "predev": "yarn build",
         "dev": "parcel example/index.html",
         "showcase": "parcel example/index.html showcase/index.html",
         "start": "bsb -make-world -w"

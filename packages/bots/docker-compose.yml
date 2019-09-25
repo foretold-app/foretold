@@ -12,5 +12,5 @@ services:
       - ./bots:/opt/app/bots
       - ./config:/opt/app/config
     command: >
-      npm run serve
+      yarn serve
 

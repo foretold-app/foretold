@@ -19,6 +19,7 @@ module.exports = {
             (SELECT count(*) FROM "Measurements"
                 WHERE "Measurements"."measurableId"  = "Measurables" ."id"
                 AND "Measurements"."agentId" = "ChannelAgents"."agentId"
+                AND "Measurements"."competitorType" IN ('OBJECTIVE', 'COMPETITIVE')
             ) AS "predictionCountTotal"
           FROM "ChannelAgents", "Measurables"
           WHERE "ChannelAgents"."channelId" = "Measurables"."channelId";
@@ -50,8 +51,8 @@ module.exports = {
             "ChannelMemberships"."createdAt",
             "ChannelMemberships"."updatedAt",
             (SELECT count(*) FROM "Measurements"
-                WHERE "Measurements"."measurableId"  = "Measurables" ."id"
-                AND "Measurements"."agentId" = "ChannelMemberships"."agentId"
+              WHERE "Measurements"."measurableId"  = "Measurables" ."id"
+              AND "Measurements"."agentId" = "ChannelMemberships"."agentId"
             ) AS "predictionCountTotal"
           FROM "ChannelMemberships", "Measurables"
           WHERE "ChannelMemberships"."channelId" = "Measurables"."channelId";

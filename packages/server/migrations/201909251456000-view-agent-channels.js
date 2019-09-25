@@ -21,8 +21,7 @@ module.exports = {
                "Measurables"."id" = "Measurements"."measurableId"
              WHERE "Measurables"."channelId" = "ChannelAgents"."channelId"
                AND "Measurements"."agentId" = "ChannelAgents"."agentId"
-               AND "Measurements"."competitorType" IN 
-                 ('OBJECTIVE', 'COMPETITIVE')
+               AND "Measurements"."competitorType" IN ('OBJECTIVE', 'COMPETITIVE')
           ) AS "numberOfPredictions",
           (
              SELECT count(*)
@@ -31,8 +30,7 @@ module.exports = {
                "Measurables"."id" = "Measurements"."measurableId"
              WHERE "Measurables"."channelId" = "ChannelAgents"."channelId"
                AND "Measurements"."agentId" = "ChannelAgents"."agentId"
-               AND "Measurements"."competitorType" IN 
-                 ('OBJECTIVE', 'COMPETITIVE')
+               AND "Measurements"."competitorType" IN ('OBJECTIVE', 'COMPETITIVE')
                AND "Measurables"."state" = 'JUDGED'
           ) AS "numberOfQuestionsScored"
           FROM "ChannelAgents"
@@ -68,8 +66,7 @@ module.exports = {
                "Measurables"."id" = "Measurements"."measurableId"
              WHERE "Measurables"."channelId" = "ChannelMemberships"."channelId"
                AND "Measurements"."agentId" = "ChannelMemberships"."agentId"
-               AND "Measurements"."competitorType" IN 
-                 ('OBJECTIVE', 'COMPETITIVE')
+               AND "Measurements"."competitorType" IN ('OBJECTIVE', 'COMPETITIVE')
           ) AS "numberOfPredictions",
           (
              SELECT count(*)
@@ -78,8 +75,7 @@ module.exports = {
                "Measurables"."id" = "Measurements"."measurableId"
              WHERE "Measurables"."channelId" = "ChannelMemberships"."channelId"
                AND "Measurements"."agentId" = "ChannelMemberships"."agentId"
-               AND "Measurements"."competitorType" IN 
-                 ('OBJECTIVE', 'COMPETITIVE')
+               AND "Measurements"."competitorType" IN ('OBJECTIVE', 'COMPETITIVE')
                AND "Measurables"."state" = 'JUDGED'
           ) AS "numberOfQuestionsScored"
           FROM "ChannelMemberships"

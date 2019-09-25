@@ -37,7 +37,7 @@ module.exports = {
       await queryInterface.sequelize.query(`BEGIN`);
 
       /**
-       * Here we replaced "ChannelMemberships" on "ChannelAgents".
+       * Here we replaced "ChannelAgents" on "ChannelMemberships".
        */
       await queryInterface.sequelize.query(`
         CREATE OR REPLACE VIEW "AgentMeasurables" AS

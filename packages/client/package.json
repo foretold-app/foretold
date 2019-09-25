@@ -30,8 +30,6 @@
 		"build-t": "npm run build-bsb && npm run build",
 		"test": "jest --ci --bail --no-cache",
 		"update-gql": "API_URL=${API_URL:-http://localhost:4000/graphql} yarn send-introspection-query ${API_URL}",
-		"webpack": "webpack -w",
-		"webpack:production": "NODE_ENV=production webpack",
 		"find-interface-for-file": "bsc -bs-re-out",
 		"analyze": "source-map-explorer dist/Index.adc0ecca.js"
 	},
@@ -95,10 +93,7 @@
 		"babel-preset-es2015": "6.24.1",
 		"babel-preset-stage-0": "6.24.1",
 		"babel-runtime": "6.26.0",
-		"parcel-plugin-less-js-enabled": "1.0.2",
-		"webpack": "4.36.1",
-		"webpack-cli": "3.3.6",
-		"webpack-dev-server": "3.7.2"
+		"parcel-plugin-less-js-enabled": "1.0.2"
 	},
 	"devDependencies": {
 		"babel-preset-react": "^6.24.1",

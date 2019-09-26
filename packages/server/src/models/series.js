@@ -38,11 +38,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID(),
       allowNull: false,
     },
-    measurableCount: {
-      allowNull: true,
-      type: Sequelize.VIRTUAL(DataTypes.INTEGER),
-      get: getMeasurableCount,
-    },
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
@@ -52,13 +47,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW,
     },
   });
-
-  // TODO: These queries are likely very slow,
-  //  my guess is that this could be sped up a location.
-  async function getMeasurableCount() {
-    const items = await this.getMeasurables();
-    return items.length;
-  }
 
   Series.prototype.createMeasurables = async function createMeasurables() {
     for (const subject of this.subjects) {

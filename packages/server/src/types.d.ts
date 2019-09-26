@@ -279,6 +279,7 @@ export namespace Layers {
       name?: string;
       measurableId?: Models.ObjectID;
       competitorType?: string;
+      seriesId?: Models.ObjectID;
     };
     type response = { data: any };
     type responseList = { data: any[]; total: number };
@@ -382,6 +383,7 @@ export namespace Layers {
       agentId?: Models.ObjectID
       name?: string,
       auth0Id?: string,
+      seriesId?: Models.ObjectID,
     };
     type response = { data: any };
     type responseList = { data: any[], total: number };

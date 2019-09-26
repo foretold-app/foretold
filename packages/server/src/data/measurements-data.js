@@ -30,10 +30,10 @@ class MeasurementsData extends DataBase {
   async createOne(data = {}, creator) {
     const measurement = await super.createOne(data);
 
-    const notification = await measurement.getCreationNotification(creator);
     const measurable = await measurement.getMeasurable();
     const channel = await measurable.getChannel();
     if (channel.isPublic) {
+      const notification = await measurement.getCreationNotification(creator);
       await notify(notification);
     }
 
@@ -41,29 +41,12 @@ class MeasurementsData extends DataBase {
   }
 
   /**
-   * @todo: move it into Model Abstraction layer
    * @public
-   * @param {Models.Measurable} measurable
-   * @param {Models.ObjectID | null} agentId
+   * @param {*} options
    * @return {Promise<Models.Model>}
    */
-  async getLatest({ measurable, agentId } = {}) {
-    const measurableId = measurable.id;
-    const competitorType = MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE;
-
-    if (measurable.state === MEASURABLE_STATE.JUDGED) {
-      const measurement = await this.model.getOne({
-        measurableId,
-        agentId,
-        competitorType,
-      });
-      if (!measurement) {
-        throw new Error('Measurement as Objective is not found');
-      }
-      return measurement;
-    }
-
-    return this.model.getOne({ measurableId, agentId });
+  async getLatest(options) {
+    return this.model.getLatest(options);
   }
 
   /**

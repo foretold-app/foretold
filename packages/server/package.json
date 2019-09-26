@@ -109,6 +109,7 @@
     ],
     "rules": {
       "no-extra-boolean-cast": 0,
+      "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
       "max-len": ["error", { "code": 80 }],
       "jest/no-focused-tests": 2,
       "jest/no-identical-title": 2

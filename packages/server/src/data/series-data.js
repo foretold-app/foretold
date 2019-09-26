@@ -14,16 +14,6 @@ class SeriesData extends DataBase {
   }
 
   /**
-   * @public
-   * @deprecated: use createdOne
-   * @param {object} data
-   * @return {Promise<*>}
-   */
-  async createOne(data) {
-    return super.createOne(data);
-  }
-
-  /**
    * @protected
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Layers.AbstractModelsLayer.restrictions}

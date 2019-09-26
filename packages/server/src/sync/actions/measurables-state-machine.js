@@ -2,7 +2,7 @@ const _ = require('lodash');
 
 const data = require('../../data');
 
-class Reducer {
+class MeasurablesStateMachine {
   constructor() {
     this.data = data;
   }
@@ -37,5 +37,5 @@ class Reducer {
 }
 
 module.exports = {
-  Reducer,
+  MeasurablesStateMachine,
 };

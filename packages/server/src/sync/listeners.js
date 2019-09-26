@@ -1,4 +1,4 @@
-const measurables = require('./measurables');
+const actions = require('./actions');
 const consumers = require('./consumers');
 const { Mailer } = require('./mailer');
 const { GitHubApi } = require('../lib/github/git-hub-api');
@@ -8,7 +8,7 @@ async function toJudgementPendingTransition() {
   console.log(name);
 
   try {
-    const reducer = new measurables.Reducer();
+    const reducer = new actions.MeasurablesStateMachine();
     const result = await reducer.toJudgementPending();
     console.log(name, 'all done', result);
   } catch (e) {
@@ -23,7 +23,7 @@ async function toResolving() {
   console.log(name);
 
   try {
-    const reducer = new measurables.Reducer();
+    const reducer = new actions.MeasurablesStateMachine();
     const result = await reducer.toResolving();
     console.log(name, 'all done', result);
   } catch (e) {

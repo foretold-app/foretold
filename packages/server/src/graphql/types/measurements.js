@@ -121,7 +121,7 @@ const measurement = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(graphql.GraphQLList(measurement)),
       resolve: resolver(models.Measurement.TaggedBy),
     },
-  })
+  }),
 });
 
 const measurementsEdge = new graphql.GraphQLObjectType({

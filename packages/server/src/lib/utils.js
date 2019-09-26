@@ -27,8 +27,9 @@ module.exports.test = function test(className, list, context) {
     if (_.has(context, name)) {
       assert(
         test(context[name]),
-        `${className}."${name}" assert failed, ` +
-        `type is "${typeof _.get(context, name)}".`);
+        `${className}."${name}" assert failed, `
+        + `type is "${typeof _.get(context, name)}".`,
+      );
     }
   });
 };
@@ -75,4 +76,3 @@ module.exports.inspect = function inspect(context) {
     util.inspect(context, { showHidden: false, depth: null, colors: true }),
   );
 };
-

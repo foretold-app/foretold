@@ -53,7 +53,7 @@ const agent = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(graphql.GraphQLList(channelMemberships.channelsMembership)),
       resolve: resolvers.channelMemberships.allByAgentId,
     },
-  })
+  }),
 });
 
 module.exports = {

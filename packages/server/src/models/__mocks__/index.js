@@ -6,7 +6,7 @@ const ChannelMemberships = {
   ROLE: {
     ADMIN: 'ADMIN',
     VIEWER: 'VIEWER',
-  }
+  },
 };
 
 const Channel = {

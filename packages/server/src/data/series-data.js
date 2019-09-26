@@ -7,7 +7,6 @@ const { SeriesModel } = require('../models-abstract');
  * @property {SeriesModel} SeriesModel
  */
 class SeriesData extends DataBase {
-
   constructor() {
     super();
     this.SeriesModel = new SeriesModel();

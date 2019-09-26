@@ -1,25 +1,27 @@
 const PORT = process.env.PORT || 4000;
-const NODE_ENV = process.env.NODE_ENV;
-const SERVER_URL = process.env.SERVER_URL;
-const API_URL = process.env.API_URL ||
-  `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/graphql`;
+const { NODE_ENV } = process.env;
+const { SERVER_URL } = process.env;
+const API_URL = process.env.API_URL
+  || `https://${process.env.HEROKU_APP_NAME}.herokuapp.com/graphql`;
 
-const AUTH0_SECRET = process.env.AUTH0_SECRET;
-const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN;
-const AUTH0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
+const { AUTH0_SECRET } = process.env;
+const { AUTH0_DOMAIN } = process.env;
+const { AUTH0_CLIENT_ID } = process.env;
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const { JWT_SECRET } = process.env;
 const JWT_ISSUER = process.env.JWT_ISSUER || 'Foretold';
 const JWT_EXPIN = process.env.JWT_EXPIN || '31 days';
 
 const MAX_BOT_TOKEN_SIZE = process.env.MAX_BOT_TOKEN_SIZE * 1 || 32;
 
-const GITHUB_PERSONAL_ACCESS_TOKEN = process.env.GITHUB_PERSONAL_ACCESS_TOKEN;
-const GITHUB_REPO_OWNER = process.env.GITHUB_REPO_OWNER;
-const GITHUB_REPO_NAME = process.env.GITHUB_REPO_NAME;
-const GITHUB_WEBHOOK_SECRET = process.env.GITHUB_WEBHOOK_SECRET;
-const GITHUB_API_URL = process.env.GITHUB_API_URL || 'https://api.github.com';
-const GITHUB_QUERY_USER_AGENT = process.env.GITHUB_QUERY_USER_AGENT || 'Foretold App';
+const { GITHUB_PERSONAL_ACCESS_TOKEN } = process.env;
+const { GITHUB_REPO_OWNER } = process.env;
+const { GITHUB_REPO_NAME } = process.env;
+const { GITHUB_WEBHOOK_SECRET } = process.env;
+const GITHUB_API_URL = process.env.GITHUB_API_URL
+  || 'https://api.github.com';
+const GITHUB_QUERY_USER_AGENT = process.env.GITHUB_QUERY_USER_AGENT
+  || 'Foretold App';
 
 if (!SERVER_URL) throw new ReferenceError('SERVER_URL is not defined');
 

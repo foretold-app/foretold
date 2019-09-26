@@ -16,39 +16,39 @@ describe('Structure Factories', () => {
     const channelId = 'channelId1';
     expect(withinMeasurables(states, channelId)).toEqual(
       {
-        "as": "measurableId",
-        "channelId": "channelId1",
-        "states": [
-          "a",
-          "b",
-          "c",
+        as: 'measurableId',
+        channelId: 'channelId1',
+        states: [
+          'a',
+          'b',
+          'c',
         ],
-      }
+      },
     );
     expect(withinMeasurables(states)).toEqual(
       {
-        "as": "measurableId",
-        "states": [
-          "a",
-          "b",
-          "c",
+        as: 'measurableId',
+        states: [
+          'a',
+          'b',
+          'c',
         ],
-      }
+      },
     );
     expect(withinMeasurables(null, channelId)).toEqual(
       {
-        "as": "measurableId",
-        "channelId": "channelId1",
-      }
+        as: 'measurableId',
+        channelId: 'channelId1',
+      },
     );
     expect(withinMeasurables()).toEqual(null);
     expect(() => withinMeasurables('a')).toThrow();
   });
   it('withinPublicChannelsById()', () => {
-    expect(withinPublicChannelsById()).toEqual({as: 'id'});
+    expect(withinPublicChannelsById()).toEqual({ as: 'id' });
   });
   it('withinPublicChannelsByChannelId()', () => {
-    expect(withinPublicChannelsByChannelId()).toEqual({as: 'channelId'});
+    expect(withinPublicChannelsByChannelId()).toEqual({ as: 'channelId' });
   });
   it('withinPublicAndJoinedChannelsById()', () => {
     expect(() => withinPublicAndJoinedChannelsById()).toThrow();

@@ -7,13 +7,11 @@ const { AgentNotificationModel } = require('../models-abstract');
  * @property {AgentNotificationModel} AgentNotificationsModel
  */
 class AgentNotificationsData extends DataBase {
-
   constructor() {
     super();
     this.AgentNotificationModel = new AgentNotificationModel();
     this.model = this.AgentNotificationModel;
   }
-
 }
 
 module.exports = {

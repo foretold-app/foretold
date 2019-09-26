@@ -6,7 +6,6 @@ const { FeedItem } = require('./feed-item');
 const { FEED_ITEM_BODY } = require('../../enums/feed-item-body');
 
 class FeedItemGeneric extends FeedItem {
-
   /**
    * @param {object} options
    * @param {string} options.item

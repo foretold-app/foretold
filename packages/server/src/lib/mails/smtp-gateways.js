@@ -12,7 +12,6 @@ class SmtpGateways {
   getDefault() {
     return _.find(this.gateways, 'default');
   }
-
 }
 
 module.exports = {

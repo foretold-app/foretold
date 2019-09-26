@@ -11,7 +11,6 @@ const { ProducerNotifications } = require('./producer-notifications');
  * @abstract
  */
 class MeasurableState extends ProducerNotifications {
-
   /**
    * @param {Models.Measurable} measurable
    */
@@ -36,7 +35,7 @@ class MeasurableState extends ProducerNotifications {
         name: _.get(measurable, 'name'),
         link: getMeasurableLinkWithToken(channel, measurable),
       },
-    }
+    };
   }
 
   /**

@@ -2,7 +2,6 @@ const agents = require('./agents');
 const data = require('../../data');
 
 describe('Agents Resolvers', () => {
-
   beforeEach(() => {
     jest.spyOn(data.agents, 'getOne').mockReturnValue(
       Promise.resolve(true),
@@ -30,5 +29,4 @@ describe('Agents Resolvers', () => {
       });
     });
   });
-
 });

@@ -9,7 +9,7 @@ const apolloServer = new ApolloServer({
   playground: true,
   schema: schemaWithMiddlewares,
   formatError: (error) => {
-    console.error("Error!", error);
+    console.error('Error!', error);
     console.error(error.extensions.exception.stacktrace);
     return error;
   },

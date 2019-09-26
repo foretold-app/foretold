@@ -14,7 +14,6 @@ const { Data } = require('./classes/data');
  * @property {UserModel} UserModel
  */
 class UsersData extends DataBase {
-
   constructor() {
     super();
     this.UserModel = new UserModel();

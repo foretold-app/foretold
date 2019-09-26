@@ -47,7 +47,7 @@ function splitBy(arr, n) {
   const min = 0;
   const max = arr.length - 1;
   const indexes = range(min, max, n);
-  const rounded = indexes.map(ind => Math.round(ind));
+  const rounded = indexes.map((ind) => Math.round(ind));
   const result = [];
   for (const index of rounded) {
     if (arr[index]) {

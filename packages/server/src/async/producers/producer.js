@@ -15,7 +15,6 @@ const { FeedItemMeasurable } = require('../../models/classes');
  * @abstract
  */
 class Producer {
-
   constructor(options = {}) {
     assert(_.isObject(options), 'Options is not an object');
 

@@ -20,7 +20,11 @@
     "test": "jest --watch",
     "test:cv": "jest --coverage --forceExit",
     "test:ci": "jest --forceExit",
-    "lint": "esw -w src test",
+    "lint": "eslint src --max-warnings 552",
+    "lint:ci": "eslint src --max-warnings 552 --quiet",
+    "lint-table": "eslint src --format table",
+    "lint-codeframe": "eslint src --format codeframe",
+    "lint-fix": "eslint src --fix",
     "serve": "node ./src/index.js",
     "db:create": "sequelize db:create",
     "db:drop": "sequelize db:drop",
@@ -35,6 +39,7 @@
     "cdf"
   ],
   "dependencies": {
+    "lodash": "4.17.15",
     "@slack/client": "5.0.2",
     "@foretold/cdf": "1.0.10",
     "@foretold/measurement-value": "1.0.0",
@@ -68,29 +73,36 @@
     "sequelize-cli": "5.5.0"
   },
   "devDependencies": {
-    "@types/node": "12.6.8",
-    "@types/lodash": "4.14.136",
-    "@types/express": "4.17.0",
+    "@types/node": "12.7.8",
+    "@types/lodash": "4.14.139",
+    "@types/express": "4.17.1",
     "@types/nodemailer": "6.2.1",
     "@types/moment": "2.13.0",
     "@types/sequelize": "4.28.4",
     "dotenv": "8.0.0",
-    "eslint": "6.1.0",
+    "eslint": "6.4.0",
+    "eslint-plugin-filenames": "1.3.2",
+    "eslint-plugin-only-warn": "1.0.1",
+    "eslint-config-airbnb": "18.0.1",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-react": "7.14.3",
     "eslint-plugin-import": "2.18.2",
-    "eslint-plugin-jest": "22.14.0",
-    "eslint-watch": "6.0.0",
+    "eslint-plugin-jest": "22.17.0",
+    "eslint-watch": "6.0.1",
     "graphql_ppx": "0.2.8",
-    "jest": "24.8.0",
-    "nodemon": "1.19.1",
+    "jest": "24.9.0",
+    "nodemon": "1.19.2",
     "supertest": "4.0.2"
   },
   "eslintConfig": {
     "plugins": [
       "import",
-      "jest"
+      "jest",
+      "only-warn",
+      "filenames"
     ],
     "parserOptions": {
-      "ecmaVersion": 2017,
+      "ecmaVersion": 2019,
       "sourceType": "module"
     },
     "env": {
@@ -98,9 +110,17 @@
       "jest": true
     },
     "extends": [
-      "eslint:recommended"
+      "airbnb"
     ],
     "rules": {
+      "class-methods-use-this": 0,
+      "no-extra-boolean-cast": 0,
+      "no-console": 0,
+      "arrow-body-style": 0,
+      "filenames/match-exported": [ 2, "kebab" ],
+      "no-underscore-dangle": ["error", { "allowAfterThis": true }],
+      "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+      "max-len": ["error", { "code": 80 }],
       "jest/no-focused-tests": 2,
       "jest/no-identical-title": 2
     }

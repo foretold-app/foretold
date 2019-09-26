@@ -9,7 +9,7 @@ const { Options } = require('../../data/classes/options');
 const structures = require('../../structures');
 
 /**
- * @param {*} root
+ * @param {*} _root
  * @param {object} args
  * @param {Models.Channel.id} args.channelId
  * @param {Models.Measurable.id} args.measurableId
@@ -21,10 +21,10 @@ const structures = require('../../structures');
  * @param {number} args.first
  * @param {Layers.orderList} args.order
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*>}
  */
-async function all(root, args, context, info) {
+async function all(_root, args, context, _info) {
   const channelId = _.get(args, 'channelId');
   const measurableId = _.get(args, 'measurableId');
   const measurableState = _.get(args, 'measurableState');
@@ -51,12 +51,12 @@ async function all(root, args, context, info) {
  * @param {*} root
  * @param {Models.Agent.id} root.agentId
  * @param {Models.Measurable.id} root.measurableId
- * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*>}
  */
-async function primaryPointScore(root, args, context, info) {
+async function primaryPointScore(root, _args, _context, _info) {
   const agentId = _.get(root, 'agentId');
   const measurableId = _.get(root, 'measurableId');
   return data.agentMeasurables.primaryPointScore(agentId, measurableId);

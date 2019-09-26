@@ -2,7 +2,6 @@ const { setContextChannel } = require('./channels');
 const data = require('../../data');
 
 describe('Channels Middleware', () => {
-
   describe('setContextChannel() sets channel model into context', () => {
     const channelObj = {};
     beforeEach(() => {
@@ -46,8 +45,5 @@ describe('Channels Middleware', () => {
         expect(context.channel).toBe(channelObj);
       });
     });
-
   });
-
 });
-

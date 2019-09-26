@@ -21,6 +21,7 @@
         "server/db:reset": "cd packages/server && yarn db:reset && cd ../..",
         "server/db:seed": "cd packages/server && yarn db:seed && cd ../..",
         "server/test:ci": "cd packages/server && yarn test:ci && cd ../..",
+        "server/lint:ci": "cd packages/server && yarn lint:ci && cd ../..",
         "migrate": "yarn server/db:migrate",
         "_build": "yarn client/build",
         "preinstall": "printenv",

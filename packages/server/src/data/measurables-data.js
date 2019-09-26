@@ -10,7 +10,6 @@ const { DataBase } = require('./data-base');
  * @implements {Layers.DataSourceLayer.DataSource}
  */
 class MeasurablesData extends DataBase {
-
   constructor() {
     super();
     this.MeasurableModel = new MeasurableModel();

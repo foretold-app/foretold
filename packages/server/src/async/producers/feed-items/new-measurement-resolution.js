@@ -5,7 +5,6 @@ const { Producer } = require('../producer');
 const { NewMeasurement } = require('./new-measurement');
 
 class NewMeasurementResolution extends NewMeasurement {
-
   /**
    * @param {Models.Measurement} measurement
    */
@@ -19,10 +18,9 @@ class NewMeasurementResolution extends NewMeasurement {
    * @return {Promise<boolean>}
    */
   async _isActual() {
-    const competitorType = this.input.competitorType;
+    const { competitorType } = this.input;
     return competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE;
   }
-
 }
 
 module.exports = {

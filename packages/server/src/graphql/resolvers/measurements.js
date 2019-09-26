@@ -120,10 +120,9 @@ async function one(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
-  const creator = context.creator;
-  const agentId =
-    _.get(args, 'input.agentId') ||
-    _.get(context, 'agent.id');
+  const { creator } = context;
+  const agentId = _.get(args, 'input.agentId')
+    || _.get(context, 'agent.id');
   const datas = { ...args.input, agentId };
   return data.measurements.createOne(datas, creator);
 }
@@ -243,10 +242,10 @@ async function latestAggregateByRootId(root, _args, context, _info) {
  */
 function translateValue(r) {
   let { data, dataType } = r.dataValues.value;
-  if (dataType === "percentage") {
-    data = data / 100
+  if (dataType === 'percentage') {
+    data /= 100;
   }
-  return { data, dataType }
+  return { data, dataType };
 }
 
 /**
@@ -257,15 +256,15 @@ function translateValue(r) {
  */
 function _marketLogScore({ prediction, aggregate, outcome }) {
   if (!prediction || !aggregate || !outcome) {
-    return ({ error: "MeasurementScore Error: Missing needed data" });
+    return ({ error: 'MeasurementScore Error: Missing needed data' });
   }
 
-  const competitorType = prediction.dataValues.competitorType;
+  const { competitorType } = prediction.dataValues;
 
   if (
     competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
   ) {
-    return ({ error: "False" });
+    return ({ error: 'False' });
   }
 
   return new PredictionResolutionGroup({
@@ -283,16 +282,16 @@ function _marketLogScore({ prediction, aggregate, outcome }) {
  */
 function _nonMarketLogScore({ prediction, outcome }) {
   if (!prediction || !outcome) {
-    return ({ error: "_nonMarketLogScore Error: Missing needed data" });
+    return ({ error: '_nonMarketLogScore Error: Missing needed data' });
   }
 
-  const competitorType = prediction.dataValues.competitorType;
+  const { competitorType } = prediction.dataValues;
 
   if (
-    competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE &&
-    competitorType !== MEASUREMENT_COMPETITOR_TYPE.AGGREGATION
+    competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
+    && competitorType !== MEASUREMENT_COMPETITOR_TYPE.AGGREGATION
   ) {
-    return ({ error: "False" });
+    return ({ error: 'False' });
   }
 
   return new PredictionResolutionGroup({
@@ -316,7 +315,7 @@ async function primaryPointScore(root, args, context, info) {
     outcome: await outcome(root, args, context, info),
   });
   if (result.error) {
-    console.log("ERROR: ", result.error);
+    console.log('ERROR: ', result.error);
     return undefined;
   }
   return _.isFinite(result.data) ? _.round(result.data, 6) : undefined;
@@ -337,7 +336,7 @@ async function nonMarketLogScore(root, args, context, info) {
   });
 
   if (result.error) {
-    console.log("ERROR: ", result.error);
+    console.log('ERROR: ', result.error);
     return undefined;
   }
 
@@ -367,8 +366,8 @@ async function truncateCdf(root, args, context, info) {
   }
 
   if (round !== null && round !== undefined) {
-    result.xs = result.xs.map(i => _.round(i, round));
-    result.ys = result.ys.map(i => _.round(i, round));
+    result.xs = result.xs.map((i) => _.round(i, round));
+    result.ys = result.ys.map((i) => _.round(i, round));
   }
 
   return result;

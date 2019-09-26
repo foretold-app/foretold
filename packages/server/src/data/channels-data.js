@@ -9,7 +9,6 @@ const { ChannelModel } = require('../models-abstract');
  * @implements {Layers.DataSourceLayer.DataSource}
  */
 class ChannelsData extends DataBase {
-
   constructor() {
     super();
     this.channelMembershipsData = new ChannelMembershipsData();

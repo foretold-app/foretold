@@ -23,14 +23,14 @@ app.post('/', (req, res) => {
 
   const webhook = req.body;
   new Trigger(webhook, xHubSignature).main().then((result) => {
-    console.log(`GitHub trigger result`, result);
+    console.log('GitHub trigger result', result);
   }, (err) => {
-    console.warn(`GitHut trigger error`, err.message);
+    console.warn('GitHut trigger error', err.message);
   });
 
   res.send('OK');
 });
 
 module.exports = {
-  app
+  app,
 };

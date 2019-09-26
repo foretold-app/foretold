@@ -29,7 +29,6 @@ function runListeners() {
 
     emitter.on(events.NEW_MEASURABLE, listenFor(producers.feedItems.NewMeasurable));
     emitter.on(events.NEW_CHANNEL, listenFor(producers.feedItems.NewChannel));
-
   } catch (e) {
     console.error('Listener error', e);
   }

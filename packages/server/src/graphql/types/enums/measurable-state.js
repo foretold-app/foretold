@@ -9,7 +9,7 @@ const measurableState = new graphql.GraphQLEnumType({
     [MEASURABLE_STATE.JUDGED]: { value: MEASURABLE_STATE.JUDGED },
     [MEASURABLE_STATE.JUDGEMENT_PENDING]: { value: MEASURABLE_STATE.JUDGEMENT_PENDING },
     [MEASURABLE_STATE.CLOSED_AS_UNRESOLVED]: { value: MEASURABLE_STATE.CLOSED_AS_UNRESOLVED },
-  }
+  },
 });
 
 module.exports = {

@@ -10,14 +10,14 @@ const emailConfig = {
 
   gateways: [
     {
-      name: "Default",
-      host: process.env.SMTP_HOST || "smtp.host.com",
-      port: process.env.SMTP_PORT || "465",
-      user: process.env.SMTP_USER || "user@host.com",
-      pass: process.env.SMTP_PASS || "<none>",
-      from: process.env.SMTP_FROM || "User <user@host.com>",
-      default: true
-    }
+      name: 'Default',
+      host: process.env.SMTP_HOST || 'smtp.host.com',
+      port: process.env.SMTP_PORT || '465',
+      user: process.env.SMTP_USER || 'user@host.com',
+      pass: process.env.SMTP_PASS || '<none>',
+      from: process.env.SMTP_FROM || 'User <user@host.com>',
+      default: true,
+    },
   ],
 };
 

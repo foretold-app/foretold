@@ -11,7 +11,6 @@ const { CHANNEL_MEMBERSHIP_TYPE } = require('../enums/channel-membership-type');
  * @property {ChannelMembershipModel} ChannelMembershipModel
  */
 class ChannelMembershipsData extends DataBase {
-
   constructor() {
     super();
     this.ChannelMembershipModel = new ChannelMembershipModel();
@@ -38,13 +37,13 @@ class ChannelMembershipsData extends DataBase {
     return await this.models.ChannelMemberships.findOne({
       where: {
         channelId,
-        agentId
-      }
+        agentId,
+      },
     }) || await this.models.ChannelMemberships.create({
       channelId,
       agentId,
       inviterAgentId,
-      role
+      role,
     });
   }
 
@@ -90,10 +89,10 @@ class ChannelMembershipsData extends DataBase {
    */
   async _validate({ channelId, agentId }) {
     if (!await this.models.Channel.findByPk(channelId)) {
-      return Promise.reject(new Error(`Channel "${ channelId }" is not found.`));
+      return Promise.reject(new Error(`Channel "${channelId}" is not found.`));
     }
     if (!await this.models.Agent.findByPk(agentId)) {
-      return Promise.reject(new Error(`Agent "${ agentId }" is not found.`));
+      return Promise.reject(new Error(`Agent "${agentId}" is not found.`));
     }
     return true;
   }
@@ -133,7 +132,7 @@ class ChannelMembershipsData extends DataBase {
    * @returns {Promise<string[]>}
    */
   async getAllChannelIds(options) {
-    return (await this.getAll2(options)).map(o => o.channelId);
+    return (await this.getAll2(options)).map((o) => o.channelId);
   }
 
   /**

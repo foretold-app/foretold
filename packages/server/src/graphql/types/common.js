@@ -37,24 +37,24 @@ const pageInfoConnection = new graphql.GraphQLObjectType({
 const isArchived = new graphql.GraphQLEnumType({
   name: 'isArchived',
   values: {
-    TRUE: { value: "TRUE" },
-    FALSE: { value: "FALSE" },
+    TRUE: { value: 'TRUE' },
+    FALSE: { value: 'FALSE' },
   },
 });
 
 const orderField = new graphql.GraphQLEnumType({
   name: 'OrderField',
   values: {
-    primaryPointScore: { value: "primaryPointScore" },
-  }
+    primaryPointScore: { value: 'primaryPointScore' },
+  },
 });
 
 const orderDirection = new graphql.GraphQLEnumType({
   name: 'OrderDirection',
   values: {
-    ASC: { value: "ASC" },
-    DESC: { value: "DESC" },
-  }
+    ASC: { value: 'ASC' },
+    DESC: { value: 'DESC' },
+  },
 });
 
 const order = new graphql.GraphQLInputObjectType({
@@ -62,7 +62,7 @@ const order = new graphql.GraphQLInputObjectType({
   fields: () => ({
     field: { type: graphql.GraphQLNonNull(orderField) },
     direction: { type: graphql.GraphQLNonNull(orderDirection) },
-  })
+  }),
 });
 
 const orderList = new graphql.GraphQLList(order);

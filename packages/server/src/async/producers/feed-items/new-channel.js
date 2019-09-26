@@ -9,8 +9,7 @@ class NewChannel extends ProducerFeedItems {
    */
   constructor(channel) {
     super(channel);
-    this.templateName =
-      Producer.TEMPLATE_NAME.NEW_CHANNEL_FEED_ITEM;
+    this.templateName = Producer.TEMPLATE_NAME.NEW_CHANNEL_FEED_ITEM;
 
     this.FeedItem = Producer.FeedItemGeneric;
   }

@@ -4,7 +4,6 @@ const utils = require('../../lib/utils');
  * See "filter.js" comments.
  */
 class Options {
-
   /**
    * @todo: add type tests (assertion)
    * @param {Layers.DataSourceLayer.options} [options]
@@ -15,8 +14,8 @@ class Options {
       'lock', // bool
       'skipLocked', // bool
 
-      'isAdmin',  // bool
-      'agentId',  // string
+      'isAdmin', // bool
+      'agentId', // string
       'measuredByAgentId', // string
       'currentAgentId', // string
     ];

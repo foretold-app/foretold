@@ -2,7 +2,6 @@ const measurements = require('./measurements');
 const data = require('../../data');
 
 describe('Measurements Resolver', () => {
-
   describe('all()', () => {
     const root = {};
     const args = {
@@ -24,20 +23,20 @@ describe('Measurements Resolver', () => {
       return measurements.all(root, args, context, info).then((result) => {
         expect(data.measurements.getConnection).toHaveBeenCalledWith(
           {
-            "agentId": "agentId2",
-            "competitorType": undefined,
-            "findInDateRange": undefined,
-            "measurableId": "measurableId1",
-            "notTaggedByAgent": undefined,
-            "withinMeasurables": null
+            agentId: 'agentId2',
+            competitorType: undefined,
+            findInDateRange: undefined,
+            measurableId: 'measurableId1',
+            notTaggedByAgent: undefined,
+            withinMeasurables: null,
           },
           {
-            "after": 3,
-            "before": 4,
-            "first": "first5",
-            "last": "last5"
+            after: 3,
+            before: 4,
+            first: 'first5',
+            last: 'last5',
           },
-          { "agentId": "agentId1" },
+          { agentId: 'agentId1' },
         );
         expect(result).toEqual(true);
       });
@@ -79,12 +78,11 @@ describe('Measurements Resolver', () => {
     it('creates a measurement', () => {
       return measurements.create(root, args, context, info).then((result) => {
         expect(data.measurements.createOne).toHaveBeenCalledWith(
-          { "a": "a1", "agentId": "agentId3" },
+          { a: 'a1', agentId: 'agentId3' },
           context.user,
         );
         expect(result).toBe(true);
       });
     });
   });
-
 });

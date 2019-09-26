@@ -86,7 +86,7 @@ module.exports = (sequelize, DataTypes) => {
       through: models.ChannelMemberships,
       foreignKey: 'channelId',
       otherKey: 'agentId',
-      as: 'agents'
+      as: 'agents',
     });
   };
 

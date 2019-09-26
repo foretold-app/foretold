@@ -8,7 +8,6 @@ const { AgentsData } = require('./agents-data');
 const { TokensData } = require('./tokens-data');
 
 class AuthenticationData {
-
   constructor() {
     this.Jwt = new Jwt();
     this.auth0 = new Auth0();
@@ -25,7 +24,6 @@ class AuthenticationData {
    */
   async authenticate(token = '') {
     try {
-
       if (this.tokens.validate(token)) {
         return await this._byToken(token);
       }
@@ -34,8 +32,7 @@ class AuthenticationData {
         return await this._byJwt(token);
       }
 
-      throw new AuthenticationData.TokenIsInvalidError;
-
+      throw new AuthenticationData.TokenIsInvalidError();
     } catch (err) {
       throw err;
     }
@@ -76,16 +73,18 @@ class AuthenticationData {
    * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
    */
   async _getContext(agentId) {
-    if (!agentId) throw new AuthenticationData.NoAgentIdError;
+    if (!agentId) throw new AuthenticationData.NoAgentIdError();
 
     const agent = await this.agents.getOne({ id: agentId });
-    if (!agent) throw new AuthenticationData.NotAuthenticatedError;
+    if (!agent) throw new AuthenticationData.NotAuthenticatedError();
 
     const bot = await agent.getBot();
     const user = await agent.getUser();
     const creator = bot || user;
 
-    return { agent, bot, user, creator };
+    return {
+      agent, bot, user, creator,
+    };
   }
 
   /**
@@ -98,17 +97,17 @@ class AuthenticationData {
   async exchangeAuthComToken(jwt, accessToken) {
     try {
       const decoded = this.Jwt.decodeAuth0Jwt(jwt);
-      if (!decoded.sub) throw new AuthenticationData.NoUserIdError;
+      if (!decoded.sub) throw new AuthenticationData.NoUserIdError();
 
       const auth0Id = decoded.sub;
       const user = await this.users.getUserByAuth0Id(auth0Id);
-      const agentId = user.agentId;
+      const { agentId } = user;
 
       try {
         const userInfo = await this.auth0.getUserInfo(accessToken);
         await this.users.updateUserInfoFromAuth0(user.id, userInfo);
       } catch (e) {
-        console.log(`Saving user info is failed.`);
+        console.log('Saving user info is failed.');
       }
 
       return this.Jwt.encodeJWT({}, agentId);
@@ -127,15 +126,14 @@ class AuthenticationData {
   async exchangeAuthToken(authToken) {
     try {
       const token = await this.tokens.getAuthToken(authToken);
-      if (!token) throw new AuthenticationData.NotAuthenticatedError;
+      if (!token) throw new AuthenticationData.NotAuthenticatedError();
       await this.tokens.increaseUsageCount(authToken);
-      const agentId = token.agentId;
+      const { agentId } = token;
       return this.Jwt.encodeJWT({}, agentId);
     } catch (err) {
       throw err;
     }
   }
-
 }
 
 AuthenticationData.NoUserIdError =

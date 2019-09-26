@@ -13,7 +13,6 @@ const { ModelPostgres } = require('./model-postgres');
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
  */
 class MeasurementModel extends ModelPostgres {
-
   constructor() {
     super({
       model: models.Measurement,
@@ -39,10 +38,10 @@ class MeasurementModel extends ModelPostgres {
   _taggedMeasurements(agentId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     return `(
-      /* T͟a͟g͟g͟e͟d͟ ͟M͟e͟a͟s͟u͟r͟e͟m͟e͟n͟t͟s͟ (${ name }) */
+      /* T͟a͟g͟g͟e͟d͟ ͟M͟e͟a͟s͟u͟r͟e͟m͟e͟n͟t͟s͟ (${name}) */
       SELECT "taggedMeasurementId"
       FROM "Measurements"
-      WHERE "agentId" = '${ agentId }'
+      WHERE "agentId" = '${agentId}'
       AND "taggedMeasurementId" IS NOT NULL
     )`;
   }
@@ -54,7 +53,7 @@ class MeasurementModel extends ModelPostgres {
   async getBrierScore(agentId) {
     const raw = await this.getBinaryPercentages(agentId);
 
-    const brierScores = raw.map(item => {
+    const brierScores = raw.map((item) => {
       return new BrierScore(item.probabilities, item.questionResult).mean();
     });
 
@@ -97,7 +96,7 @@ class MeasurementModel extends ModelPostgres {
 
     return `(
       /* B͟i͟n͟a͟r͟y͟ ͟P͟e͟r͟c͟e͟n͟t͟a͟g͟e͟s͟ */
-      WITH "AgentMeasurements" AS ${ agentMeasurements }
+      WITH "AgentMeasurements" AS ${agentMeasurements}
       SELECT 
         "AgentMeasurements".*, 
         "Measurements"."value" ->> 'data' as "questionResult"
@@ -129,7 +128,7 @@ class MeasurementModel extends ModelPostgres {
       WHERE "Measurables"."state" = 'JUDGED'
         AND "Measurables"."valueType" = 'PERCENTAGE'
         AND "Measurements"."competitorType" = 'COMPETITIVE'
-        AND "Measurements"."agentId" = '${ agentId }'
+        AND "Measurements"."agentId" = '${agentId}'
         AND "Measurements"."value" ->> 'dataType' = 'percentage'
       GROUP BY "Measurements"."measurableId", "Measurements"."agentId"
     )`;

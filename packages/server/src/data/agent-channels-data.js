@@ -12,7 +12,6 @@ const { AgentChannelModel } = require('../models-abstract');
  * @property {AgentChannelModel} AgentChannelsModel
  */
 class AgentChannelsData extends DataBase {
-
   constructor() {
     super();
     this.AgentChannelModel = new AgentChannelModel();

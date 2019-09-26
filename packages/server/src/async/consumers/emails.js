@@ -29,7 +29,7 @@ class Emails extends Consumer {
     try {
       transaction = await this.notifications.getTransaction();
     } catch (e) {
-      console.log(`Emails Consumer Transaction Error`, e.message, e);
+      console.log('Emails Consumer Transaction Error', e.message, e);
       throw e;
     }
 
@@ -54,21 +54,21 @@ class Emails extends Consumer {
           }
 
           console.log(
-            `\x1b[35mNotification ID = "${notification.id}", ` +
-            `Transaction ID = "${transaction.id}", ` +
-            `Agent Preferences ID = "${agentPreferences.id}", ` +
-            `Agent ID = "${agent.id}", ` +
-            `Result = "${result}".\x1b[0m`
+            `\x1b[35mNotification ID = "${notification.id}", `
+            + `Transaction ID = "${transaction.id}", `
+            + `Agent Preferences ID = "${agentPreferences.id}", `
+            + `Agent ID = "${agent.id}", `
+            + `Result = "${result}".\x1b[0m`,
           );
         } catch (err) {
-          console.log(`Emails Consumer, pass sending due to`, err.message);
+          console.log('Emails Consumer, pass sending due to', err.message);
           await this._notificationError(agentNotification, err, transaction);
         }
       }
 
       await this.notifications.commit(transaction);
     } catch (e) {
-      console.log(`Emails Consumer`, e.message, e);
+      console.log('Emails Consumer', e.message, e);
       await this.notifications.rollback(transaction);
     }
 
@@ -151,7 +151,7 @@ class Emails extends Consumer {
    * @protected
    */
   async _getPreferences(agentNotification) {
-    const agentId = agentNotification.agentId;
+    const { agentId } = agentNotification;
     const preferences = await this.preferences.getOneByAgentId(agentId);
     assert(!!preferences, 'Preferences is required');
     return preferences;
@@ -206,7 +206,7 @@ class Emails extends Consumer {
     try {
       emitter.emit(events.MAIL, envelope);
     } catch (e) {
-      console.log(`Emails Consumer Emit Email`, e.message, e);
+      console.log('Emails Consumer Emit Email', e.message, e);
       return false;
     }
 

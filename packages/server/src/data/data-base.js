@@ -11,7 +11,6 @@ const structures = require('../structures');
  * @abstract
  */
 class DataBase {
-
   /**
    * @todo: remove this property then
    */
@@ -219,5 +218,3 @@ class DataBase {
 module.exports = {
   DataBase,
 };
-
-

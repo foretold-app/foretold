@@ -11,15 +11,12 @@ describe('Users Resolvers', () => {
         Promise.resolve(true),
       );
     });
-    it('edits user', () => {
-      return users.update(root, args, context).then((result) => {
-        expect(data.users.updateOne).toHaveBeenCalledWith(
-          { id: 'id1' },
-          { name: 'name1' },
-        );
-        expect(result).toBe(true);
-      });
-    });
+    it('edits user', () => users.update(root, args, context).then((result) => {
+      expect(data.users.updateOne).toHaveBeenCalledWith(
+        { id: 'id1' },
+        { name: 'name1' },
+      );
+      expect(result).toBe(true);
+    }));
   });
-
 });

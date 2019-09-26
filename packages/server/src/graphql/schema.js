@@ -225,7 +225,7 @@ const schema = new graphql.GraphQLSchema({
         type: graphql.GraphQLNonNull(types.authentications.authenticated),
         resolve: resolvers.authentications.authenticated,
       },
-    }
+    },
   }),
 
   mutation: new graphql.GraphQLObjectType({
@@ -398,8 +398,8 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.globalSettings.update,
       },
 
-    }
-  })
+    },
+  }),
 });
 
 const schemaWithMiddlewares = applyMiddleware(

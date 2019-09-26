@@ -52,19 +52,16 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   AgentNotification.associate = function associate(models) {
+    AgentNotification.Agent = AgentNotification.belongsTo(models.Agent, {
+      foreignKey: 'agentId',
+      as: 'agent',
+    });
 
-    AgentNotification.Agent =
-      AgentNotification.belongsTo(models.Agent, {
-        foreignKey: 'agentId',
-        as: 'agent',
-      });
-
-    AgentNotification.Notification =
-      AgentNotification.belongsTo(models.Notification, {
+    AgentNotification.Notification = AgentNotification.belongsTo(
+      models.Notification, {
         foreignKey: 'notificationId',
         as: 'notification',
       });
-
   };
 
   return AgentNotification;

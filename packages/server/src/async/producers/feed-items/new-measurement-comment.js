@@ -12,8 +12,7 @@ class NewMeasurementComment extends NewMeasurement {
    */
   constructor(measurement) {
     super(measurement);
-    this.templateName =
-      Producer.TEMPLATE_NAME.NEW_MEASUREMENT_COMMENT_FEED_ITEM;
+    this.templateName = Producer.TEMPLATE_NAME.NEW_MEASUREMENT_COMMENT_FEED_ITEM;
   }
 
   /**

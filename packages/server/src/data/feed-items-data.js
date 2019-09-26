@@ -10,7 +10,6 @@ const structures = require('../structures');
  * @property {FeedItemModel} FeedItemModel
  */
 class FeedItemsData extends DataBase {
-
   constructor() {
     super();
     this.FeedItemModel = new FeedItemModel();
@@ -27,7 +26,6 @@ class FeedItemsData extends DataBase {
       ...super._getDefaultRestrictionsForIncludedIntoChannel(options),
     };
   }
-
 }
 
 module.exports = {

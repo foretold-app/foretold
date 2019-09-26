@@ -26,6 +26,7 @@ function runListeners() {
     emitter.on(events.NEW_MEASUREMENT, listenFor(producers.feedItems.NewMeasurementComment));
     emitter.on(events.NEW_MEASUREMENT, listenFor(producers.feedItems.NewMeasurementResolution));
     emitter.on(events.NEW_MEASUREMENT, listenFor(producers.feedItems.NewMeasurementNotAvailable));
+    emitter.on(events.NEW_MEASUREMENT, listeners.newMeasurement);
 
     emitter.on(events.NEW_MEASURABLE, listenFor(producers.feedItems.NewMeasurable));
     emitter.on(events.NEW_CHANNEL, listenFor(producers.feedItems.NewChannel));

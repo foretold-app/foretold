@@ -67,7 +67,7 @@ function addHooks(db) {
       const agent = await db.sequelize.models.Agent.create({
         type: AGENT_TYPE.BOT,
       });
-      event.agentId = agent.dataValues.id;
+      event.agentId = agent.id;
     } catch (e) {
       console.log('Hook', e);
     }
@@ -78,7 +78,7 @@ function addHooks(db) {
       const agent = await db.sequelize.models.Agent.create({
         type: AGENT_TYPE.USER,
       });
-      event.agentId = agent.dataValues.id;
+      event.agentId = agent.id;
     } catch (e) {
       console.log('Hook', e);
     }
@@ -116,7 +116,7 @@ function addHooks(db) {
 
   db.Measurement.addHook('afterCreate', async (instance) => {
     try {
-      const { competitorType } = instance.dataValues;
+      const { competitorType } = instance;
 
       if (competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE) {
         const measurable = await instance.getMeasurable();

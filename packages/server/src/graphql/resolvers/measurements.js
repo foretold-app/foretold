@@ -120,11 +120,10 @@ async function one(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
-  const { creator } = context;
   const agentId = _.get(args, 'input.agentId')
     || _.get(context, 'agent.id');
   const datas = { ...args.input, agentId };
-  return data.measurements.createOne(datas, creator);
+  return data.measurements.createOne(datas);
 }
 
 /**

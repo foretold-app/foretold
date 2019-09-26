@@ -88,6 +88,8 @@ export namespace Models {
     getCreationNotification(creator: Models.Creator): any;
 
     getMeasurable(): Measurable;
+
+    getAgent(): Agent;
   }
 
   export interface Agent extends Model {

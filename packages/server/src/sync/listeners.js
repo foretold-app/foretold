@@ -3,6 +3,21 @@ const consumers = require('./consumers');
 const { Mailer } = require('./mailer');
 const { GitHubApi } = require('../lib/github/git-hub-api');
 
+async function newMeasurement(measurement) {
+  const name = 'Job::newMeasurement';
+  console.log(name);
+
+  try {
+    const notifications = new actions.Notifications();
+    const result = await notifications.newMeasurement(measurement);
+    console.log(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
 async function toJudgementPendingTransition() {
   const name = 'Job::toJudgementPendingTransition';
   console.log(name);
@@ -103,4 +118,5 @@ module.exports = {
   mailer,
   listenFor,
   addGitHubWebHook,
+  newMeasurement,
 };

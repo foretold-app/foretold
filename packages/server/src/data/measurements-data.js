@@ -1,5 +1,3 @@
-const { notify } = require('../lib/notifications');
-
 const { DataBase } = require('./data-base');
 
 const { MeasurementModel } = require('../models-abstract');
@@ -13,29 +11,6 @@ class MeasurementsData extends DataBase {
     super();
     this.MeasurementModel = new MeasurementModel();
     this.model = this.MeasurementModel;
-  }
-
-  /**
-   * @todo: move logic
-   * @todo: fix interface
-   * @todo: rename, move down
-   * @public
-   * @deprecated: use createOne
-   * @param {object} [data]
-   * @param {Models.Creator} creator
-   * @return {Promise<Models.Measurement>}
-   */
-  async createOne(data = {}, creator) {
-    const measurement = await super.createOne(data);
-
-    const measurable = await measurement.getMeasurable();
-    const channel = await measurable.getChannel();
-    if (channel.isPublic) {
-      const notification = await measurement.getCreationNotification(creator);
-      await notify(notification);
-    }
-
-    return measurement;
   }
 
   /**

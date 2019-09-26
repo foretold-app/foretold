@@ -1,5 +1,3 @@
-const _ = require('lodash');
-
 const models = require('../models');
 const { TOKEN_TYPE } = require('../enums/token-type');
 

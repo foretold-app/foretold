@@ -84,5 +84,4 @@ describe('Common Resolvers', () => {
       });
     });
   });
-
 });

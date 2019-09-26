@@ -92,7 +92,7 @@ module.exports = (sequelize, DataTypes) => {
     if (data !== undefined && dataType !== undefined) {
       this.dataValues.value = {
         data,
-        dataType
+        dataType,
       };
     }
   }

@@ -29,5 +29,4 @@ describe('Agents Resolvers', () => {
       });
     });
   });
-
 });

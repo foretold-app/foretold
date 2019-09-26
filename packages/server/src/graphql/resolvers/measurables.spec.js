@@ -26,20 +26,20 @@ describe('Measurables Resolvers', () => {
       return measurables.all(root, args, context, info).then((result) => {
         expect(data.measurables.getConnection).toHaveBeenCalledWith(
           {
-            "channelId": "channelId2",
-            "creatorId": "creatorId1",
-            "isArchived": "isArchived1",
-            "seriesId": "seriesId2",
-            "states": "states1",
-            "withinJoinedChannels": null
+            channelId: 'channelId2',
+            creatorId: 'creatorId1',
+            isArchived: 'isArchived1',
+            seriesId: 'seriesId2',
+            states: 'states1',
+            withinJoinedChannels: null,
           },
           {
-            "after": 2,
-            "before": 2,
-            "first": "first1",
-            "last": "last1"
+            after: 2,
+            before: 2,
+            first: 'first1',
+            last: 'last1',
           },
-          { "agentId": "agentId2" },
+          { agentId: 'agentId2' },
         );
         expect(result).toEqual(true);
       });
@@ -61,7 +61,7 @@ describe('Measurables Resolvers', () => {
         expect(data.measurables.getOne).toHaveBeenCalledWith(
           { id: 'id1' },
           {},
-          { "agentId": "agentId2", "isAdmin": undefined }
+          { agentId: 'agentId2', isAdmin: undefined },
         );
         expect(result).toBe(true);
       });
@@ -81,7 +81,7 @@ describe('Measurables Resolvers', () => {
     it('creates a measurable', () => {
       return measurables.create(root, args, context, info).then((result) => {
         expect(data.measurables.createOne).toHaveBeenCalledWith(
-          { "creatorId": "agentId1" },
+          { creatorId: 'agentId1' },
           context.user,
         );
         expect(result).toBe(true);
@@ -150,5 +150,4 @@ describe('Measurables Resolvers', () => {
       });
     });
   });
-
 });

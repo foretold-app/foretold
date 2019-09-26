@@ -11,8 +11,7 @@ class NewMeasurableReachedResolution extends NewMeasurable {
    */
   constructor(measurable) {
     super(measurable);
-    this.templateName =
-      Producer.TEMPLATE_NAME.MEASURABLE_REACHED_RESOLUTION_DATE_FEED_ITEM;
+    this.templateName = Producer.TEMPLATE_NAME.MEASURABLE_REACHED_RESOLUTION_DATE_FEED_ITEM;
   }
 
   /**

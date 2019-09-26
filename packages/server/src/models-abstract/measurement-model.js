@@ -53,7 +53,7 @@ class MeasurementModel extends ModelPostgres {
   async getBrierScore(agentId) {
     const raw = await this.getBinaryPercentages(agentId);
 
-    const brierScores = raw.map(item => {
+    const brierScores = raw.map((item) => {
       return new BrierScore(item.probabilities, item.questionResult).mean();
     });
 

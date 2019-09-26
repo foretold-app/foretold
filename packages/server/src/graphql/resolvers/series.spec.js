@@ -17,7 +17,7 @@ describe('Series Resolvers', () => {
         expect(data.series.getOne).toHaveBeenCalledWith(
           { id: 'id1' },
           {},
-          { "agentId": "agentId1" },
+          { agentId: 'agentId1' },
         );
         expect(result).toEqual(true);
       });
@@ -39,7 +39,7 @@ describe('Series Resolvers', () => {
         expect(data.series.getAll).toHaveBeenCalledWith(
           {},
           {},
-          { "agentId": "agentId2", "isAdmin": undefined },
+          { agentId: 'agentId2', isAdmin: undefined },
         );
         expect(result).toEqual(true);
       });
@@ -59,11 +59,10 @@ describe('Series Resolvers', () => {
     it('creates series', () => {
       return series.create(root, args, context, info).then((result) => {
         expect(data.series.createOne).toHaveBeenCalledWith(
-          { "a": "a1", "creatorId": "agentId3" },
+          { a: 'a1', creatorId: 'agentId3' },
         );
         expect(result).toBe(true);
       });
     });
   });
-
 });

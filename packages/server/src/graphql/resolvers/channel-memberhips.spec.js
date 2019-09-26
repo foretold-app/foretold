@@ -92,8 +92,8 @@ describe('Channel Memberships Resolvers', () => {
       return channelMemberships.myRole(root, args, context, info)
         .then((result) => {
           expect(data.channelMemberships.getOneOnlyRole).toHaveBeenCalledWith({
-            "agentId": "agentId10",
-            "channelId": "id1"
+            agentId: 'agentId10',
+            channelId: 'id1',
           });
           expect(result).toBe(true);
         });
@@ -113,8 +113,8 @@ describe('Channel Memberships Resolvers', () => {
       return channelMemberships.leave(root, args, context, info)
         .then((result) => {
           expect(data.channelMemberships.leave).toHaveBeenCalledWith({
-            "agentId": "agentId11",
-            "channelId": "channelId1"
+            agentId: 'agentId11',
+            channelId: 'channelId1',
           });
           expect(result).toBe(true);
         });
@@ -134,12 +134,11 @@ describe('Channel Memberships Resolvers', () => {
       return channelMemberships.join(root, args, context, info)
         .then((result) => {
           expect(data.channelMemberships.join).toHaveBeenCalledWith({
-            "agentId": "agentId12",
-            "channelId": "channelId2"
+            agentId: 'agentId12',
+            channelId: 'channelId2',
           });
           expect(result).toBe(true);
         });
     });
   });
-
 });

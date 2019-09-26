@@ -50,10 +50,10 @@ describe('Channels Data Layer', () => {
         });
         expect(models.Channel.create).toHaveBeenCalledTimes(1);
         expect(ChannelMembershipsData.prototype.createOne2).toHaveBeenCalledWith(
-          "id1",
-          "agentId1",
+          'id1',
+          'agentId1',
           null,
-          "ADMIN"
+          'ADMIN',
         );
         expect(result).toEqual({ id: 'id1' });
       });
@@ -89,5 +89,4 @@ describe('Channels Data Layer', () => {
       });
     });
   });
-
 });

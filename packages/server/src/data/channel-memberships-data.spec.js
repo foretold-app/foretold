@@ -2,7 +2,6 @@ const models = require('../models');
 const { ChannelMembershipsData } = require('./channel-memberships-data');
 
 describe('Data Layer - Channel Memberships Data', () => {
-
   it('class should be a constructor', () => {
     expect(ChannelMembershipsData).toBeInstanceOf(Function);
   });
@@ -43,7 +42,7 @@ describe('Data Layer - Channel Memberships Data', () => {
           where: input,
         });
         expect(models.ChannelMemberships.create).toHaveBeenCalledWith({
-          ...input, inviterAgentId, role
+          ...input, inviterAgentId, role,
         });
         expect(result).toBe(true);
       });
@@ -85,7 +84,7 @@ describe('Data Layer - Channel Memberships Data', () => {
     });
     it('throws an error ', () => {
       return instance._validate(input).catch((err) => {
-        expect(err).toBeInstanceOf(Error)
+        expect(err).toBeInstanceOf(Error);
       });
     });
   });
@@ -103,7 +102,7 @@ describe('Data Layer - Channel Memberships Data', () => {
       return instance._validate({ agentId }).catch((err) => {
         expect(models.Channel.findByPk).toHaveBeenCalledTimes(1);
         expect(models.Agent.findByPk).toHaveBeenCalledTimes(0);
-        expect(err).toBeInstanceOf(Error)
+        expect(err).toBeInstanceOf(Error);
       });
     });
   });
@@ -146,7 +145,7 @@ describe('Data Layer - Channel Memberships Data', () => {
     const options = {};
     beforeEach(() => {
       jest.spyOn(instance, 'getAll2').mockReturnValue(Promise.resolve([
-        { channelId: 'channelId1' }
+        { channelId: 'channelId1' },
       ]));
     });
     it('calls getAll()', () => {
@@ -177,6 +176,4 @@ describe('Data Layer - Channel Memberships Data', () => {
       });
     });
   });
-
 });
-

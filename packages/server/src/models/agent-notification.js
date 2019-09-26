@@ -61,7 +61,8 @@ module.exports = (sequelize, DataTypes) => {
       models.Notification, {
         foreignKey: 'notificationId',
         as: 'notification',
-      });
+      },
+    );
   };
 
   return AgentNotification;

@@ -792,6 +792,23 @@ class ModelPostgres extends Model {
     }
     return cond;
   }
+
+  /**
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} restrictions
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @return {Promise<Models.Model>}
+   */
+  async deleteOne(params, query, restrictions, options) {
+    const where = {...params};
+    const entity = await this.getOne(params, query, restrictions, options);
+    if (entity) {
+      await this.model.destroy({ where });
+    }
+    return entity;
+  }
 }
 
 module.exports = {

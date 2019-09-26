@@ -19,7 +19,9 @@ class Model {
   }
 
   getAllWithConnections(_filter, _pagination, _restrictions, _options) {
-    return Promise.reject(new Error('getAllWithConnections is not implemented.'));
+    return Promise.reject(
+      new Error('getAllWithConnections is not implemented.'),
+    );
   }
 
   getOne(_params, _query, _restrictions, _options) {

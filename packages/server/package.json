@@ -108,7 +108,9 @@
       "airbnb"
     ],
     "rules": {
+      "class-methods-use-this": 0,
       "no-extra-boolean-cast": 0,
+      "no-underscore-dangle": ["error", { "allowAfterThis": true }],
       "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
       "max-len": ["error", { "code": 80 }],
       "jest/no-focused-tests": 2,

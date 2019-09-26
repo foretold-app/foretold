@@ -28,6 +28,10 @@ class Model {
     return Promise.reject(new Error('getOne is not implemented.'));
   }
 
+  getCount(_params, _query, _restrictions, _options) {
+    return Promise.reject(new Error('getCount is not implemented.'));
+  }
+
   createOne(_data, _restrictions, _options) {
     return Promise.reject(new Error('createOne is not implemented.'));
   }

@@ -738,6 +738,20 @@ class ModelPostgres extends Model {
   /**
    * @public
    * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [_query]
+   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [_options]
+   * @return {Promise<Models.Model>}
+   */
+  async getCount(params = {}, _query = {}, _restrictions = {}, _options = {}) {
+    const where = { ...params };
+    const cond = { where };
+    return this.model.count(cond);
+  }
+
+  /**
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
    * @param {Layers.AbstractModelsLayer.query} [query]
    * @param {Layers.AbstractModelsLayer.data} data
    * @param {Layers.AbstractModelsLayer.restrictions} restrictions

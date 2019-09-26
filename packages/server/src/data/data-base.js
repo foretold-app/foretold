@@ -73,6 +73,19 @@ class DataBase {
   /**
    * @public
    * @param {Layers.DataSourceLayer.params} [params]
+   * @param {Layers.DataSourceLayer.query} [query]
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Promise<*>}
+   */
+  async getCount(params = {}, query = {}, options = {}) {
+    const option$ = this._getModelOptions(options);
+    const restrictions = this._getModelRestrictions(options);
+    return this.model.getCount(params, query, restrictions, option$);
+  }
+
+  /**
+   * @public
+   * @param {Layers.DataSourceLayer.params} [params]
    * @param {Layers.DataSourceLayer.data} [data]
    * @param {Layers.DataSourceLayer.options} options
    * @return {Promise<*>}

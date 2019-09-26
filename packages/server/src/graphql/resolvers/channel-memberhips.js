@@ -153,6 +153,20 @@ async function myRole(root, _args, context, _info) {
   });
 }
 
+/**
+ * @param {object | null} root
+ * @param {{ input: Schema.ChannelsInput }} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<string>}
+ */
+async function membershipCount(root, _args, _context, _info) {
+  const channelId = _.get(root, 'id');
+  return data.channelMemberships.getCount({
+    channelId,
+  });
+}
+
 module.exports = {
   allByAgentId,
   allByChannelId,
@@ -162,4 +176,5 @@ module.exports = {
   join,
   leave,
   myRole,
+  membershipCount,
 };

@@ -13,7 +13,11 @@ const channel = new graphql.GraphQLObjectType({
     isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     isPublic: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     isCurated: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
-    membershipCount: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
+
+    membershipCount: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLInt),
+      resolve: resolvers.channelMemberships.membershipCount,
+    },
 
     myRole: {
       type: graphql.GraphQLNonNull(require('./channel-memberhips').roleOutput),

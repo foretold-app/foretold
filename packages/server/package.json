@@ -20,8 +20,10 @@
     "test": "jest --watch",
     "test:cv": "jest --coverage --forceExit",
     "test:ci": "jest --forceExit",
-    "lint": "eslint src --cache --ext .js",
-    "lint-fix": "eslint src --fix --ext .js",
+    "lint": "eslint src",
+    "lint-table": "eslint src --format table",
+    "lint-codeframe": "eslint src --format codeframe",
+    "lint-fix": "eslint src --fix",
     "serve": "node ./src/index.js",
     "db:create": "sequelize db:create",
     "db:drop": "sequelize db:drop",
@@ -36,6 +38,7 @@
     "cdf"
   ],
   "dependencies": {
+    "lodash": "4.17.15",
     "@slack/client": "5.0.2",
     "@foretold/cdf": "1.0.10",
     "@foretold/measurement-value": "1.0.0",
@@ -105,6 +108,7 @@
       "airbnb"
     ],
     "rules": {
+      "no-extra-boolean-cast": 0,
       "max-len": ["error", { "code": 80 }],
       "jest/no-focused-tests": 2,
       "jest/no-identical-title": 2

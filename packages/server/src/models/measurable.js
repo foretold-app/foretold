@@ -107,23 +107,6 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   /**
-   * @todo: move to "models-abstract" layer
-   * @return {Promise<void>}
-   */
-  Measurable.prototype.watchExpectedResolutionDate = async function watchExpectedResolutionDate() {
-    const isChanged = this.changed('expectedResolutionDate');
-    if (!isChanged) return;
-    const current = this.getDataValue('expectedResolutionDate');
-    if (!current) return;
-    const now = new Date();
-    const isResolutionDateInFuture = current >= now;
-    if (isResolutionDateInFuture) {
-      // @todo: this.open()?
-      this.set('state', MEASURABLE_STATE.OPEN);
-    }
-  };
-
-  /**
    * @return {Promise<Models.Measurable>}
    */
   Measurable.prototype.archive = async function archive() {

@@ -3,6 +3,7 @@ const emitter = require('../sync/emitter');
 
 const { AGENT_TYPE } = require('../enums/agent-type');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums/measurement-competitor-type');
+const { MEASURABLE_STATE } = require('../enums/measurable-state');
 
 /**
  * Try to keep all "sync" hooks in one place.
@@ -93,7 +94,11 @@ function addHooks(db) {
 
   db.Measurable.addHook('beforeUpdate', async (instance) => {
     try {
-      await instance.watchExpectedResolutionDate();
+      if (instance.changed('expectedResolutionDate')) {
+        if (instance.expectedResolutionDate >= new Date()) {
+          await instance.set('state', MEASURABLE_STATE.OPEN);
+        }
+      }
     } catch (e) {
       console.log('Hook', e);
     }
@@ -101,7 +106,7 @@ function addHooks(db) {
 
   db.Measurement.addHook('beforeValidate', async (instance) => {
     try {
-      if (instance.dataValues.relevantAt == null) {
+      if (instance.relevantAt == null) {
         instance.relevantAt = Date.now();
       }
     } catch (e) {

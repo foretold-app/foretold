@@ -61,10 +61,10 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   Series.prototype.createMeasurables = async function createMeasurables() {
-    for (let subject of this.subjects) {
-      for (let property of this.properties) {
-        for (let date of this.dates) {
-          console.log("Making Measurable for Series:", subject, property, date);
+    for (const subject of this.subjects) {
+      for (const property of this.properties) {
+        for (const date of this.dates) {
+          console.log('Making Measurable for Series:', subject, property, date);
           await sequelize.models.Measurable.create({
             name: '',
             labelSubject: subject,

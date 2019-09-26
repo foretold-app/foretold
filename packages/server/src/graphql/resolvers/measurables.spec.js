@@ -2,7 +2,6 @@ const measurables = require('./measurables');
 const data = require('../../data');
 
 describe('Measurables Resolvers', () => {
-
   describe('all()', () => {
     const root = {};
     const args = {

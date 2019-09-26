@@ -20,7 +20,7 @@ const measurementCompetitorType = graphql.GraphQLNonNull(new graphql.GraphQLEnum
     [MEASUREMENT_COMPETITOR_TYPE.COMMENT]: {
       value: MEASUREMENT_COMPETITOR_TYPE.COMMENT,
     },
-  }
+  },
 }));
 
 module.exports = {

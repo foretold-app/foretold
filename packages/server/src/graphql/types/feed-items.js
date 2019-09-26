@@ -43,7 +43,7 @@ const feedItem = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(require('./channels').channel),
       resolve: resolver(models.FeedItem.Channel),
     },
-  })
+  }),
 });
 
 const feedItemEdge = new graphql.GraphQLObjectType({

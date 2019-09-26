@@ -1,5 +1,4 @@
 module.exports = (sequelize, DataTypes) => {
-
   const GlobalSetting = sequelize.define('GlobalSetting', {
     id: {
       type: DataTypes.UUID(),

@@ -18,20 +18,21 @@ class GitHubApi {
     this.apiURL = config.GITHUB_API_URL;
     this.userAgent = config.GITHUB_QUERY_USER_AGENT;
 
-    this.isReady =
-      !!this.repoOwner && !!this.repoName &&
-      !!this.token && !!this.webhookSecret;
+    this.isReady = !!this.repoOwner && !!this.repoName
+      && !!this.token && !!this.webhookSecret;
 
     this.hookUrl = `${this.serverURL}/hooks`;
     this.gitHubRepoUrl =
       `${this.apiURL}/repos/${this.repoOwner}/${this.repoName}`;
     this.gitHubHooksUrl = `${this.gitHubRepoUrl}/hooks`;
 
-    if (!this.repoOwner) console.warn(`GitHub repo owner is not set.`);
-    if (!this.repoName) console.warn(`GitHub repo name is not set.`);
-    if (!this.token) console.warn(`GitHub personal access token is not set, ` +
-      `see https://github.com/settings/tokens.`);
-    if (!this.webhookSecret) console.warn(`GitHub webhook secret is not set.`);
+    if (!this.repoOwner) console.warn('GitHub repo owner is not set.');
+    if (!this.repoName) console.warn('GitHub repo name is not set.');
+    if (!this.token) {
+      console.warn('GitHub personal access token is not set, '
+      + 'see https://github.com/settings/tokens.');
+    }
+    if (!this.webhookSecret) console.warn('GitHub webhook secret is not set.');
   }
 
   /**
@@ -41,8 +42,8 @@ class GitHubApi {
   async addHook() {
     await this._checkIfAllIsReady();
 
-    if (!!(await this._checkUrl())) {
-      console.warn(`GitHub web hook is already added.`);
+    if (await this._checkUrl()) {
+      console.warn('GitHub web hook is already added.');
       return false;
     }
 
@@ -129,12 +130,12 @@ class GitHubApi {
       body,
       headers: this._getHeaders(),
       json: true,
-      followAllRedirects: true
+      followAllRedirects: true,
     };
     return new Promise((resolve, reject) => {
       request(options, (error, response, body) => {
         if (error) return reject(error);
-        resolve(body)
+        resolve(body);
       });
     });
   }
@@ -147,9 +148,9 @@ class GitHubApi {
     assert(_.isString(this.token),
       'GitHub "personal access token" should be a string.');
     return {
-      'Authorization': `bearer ${this.token}`,
+      Authorization: `bearer ${this.token}`,
       'User-Agent': this.userAgent,
-      'Accept': 'application/vnd.github.v3+json',
+      Accept: 'application/vnd.github.v3+json',
     };
   }
 
@@ -159,7 +160,7 @@ class GitHubApi {
    * @return {string}
    */
   _getPullFilesUrl(pullRequestNumber) {
-    return `${this.gitHubRepoUrl}/pulls/${pullRequestNumber}/files`
+    return `${this.gitHubRepoUrl}/pulls/${pullRequestNumber}/files`;
   }
 
   /**
@@ -196,12 +197,11 @@ class GitHubApi {
    */
   async _checkIfAllIsReady() {
     if (this.isReady === false) {
-      throw new Error(`GitHub integration is turned off. ` +
-        `Since env is not ready.`);
+      throw new Error('GitHub integration is turned off. '
+        + 'Since env is not ready.');
     }
     return true;
   }
-
 }
 
 module.exports = {

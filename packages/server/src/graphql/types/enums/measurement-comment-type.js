@@ -14,7 +14,7 @@ const measurementCommentType = new graphql.GraphQLEnumType({
     [MEASUREMENT_COMMENT_TYPE.UPDATE]: {
       value: MEASUREMENT_COMMENT_TYPE.UPDATE,
     },
-  }
+  },
 });
 
 module.exports = {

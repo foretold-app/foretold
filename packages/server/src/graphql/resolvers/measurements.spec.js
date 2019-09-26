@@ -2,7 +2,6 @@ const measurements = require('./measurements');
 const data = require('../../data');
 
 describe('Measurements Resolver', () => {
-
   describe('all()', () => {
     const root = {};
     const args = {

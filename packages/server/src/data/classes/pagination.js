@@ -54,14 +54,12 @@ class Pagination {
     const orderInput = _.get(options, 'order');
     const orderArray = _.isArray(orderInput) ? orderInput : [];
     return orderArray
-      .filter(item => _.has(item, 'field'))
-      .filter(item => _.has(item, 'direction'))
-      .map((item) => {
-        return {
-          field: _.get(item, 'field'),
-          direction: _.get(item, 'direction'),
-        };
-      });
+      .filter((item) => _.has(item, 'field'))
+      .filter((item) => _.has(item, 'direction'))
+      .map((item) => ({
+        field: _.get(item, 'field'),
+        direction: _.get(item, 'direction'),
+      }));
   }
 
   /**
@@ -90,7 +88,8 @@ class Pagination {
     this.last = Math.abs(this.last) || 0;
     this.first = Math.abs(this.first) || 0;
 
-    let offset, limit;
+    let offset;
+    let limit;
     if (this.first) limit = this.first;
     if (this.after) offset = this.after + 1;
 

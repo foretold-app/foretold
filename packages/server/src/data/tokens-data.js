@@ -12,7 +12,6 @@ const { TOKEN_TYPE } = require('../enums/token-type');
  * @property {TokenModel} model
  */
 class TokensData extends DataBase {
-
   constructor() {
     super();
     this.model = new TokenModel();
@@ -110,8 +109,12 @@ class TokensData extends DataBase {
    * @param {number} [usageCount]
    * @return {Promise<Models.Token>}
    */
-  async _getToken({ agentId, token, type, usageCount }) {
-    return this.model.getToken({ agentId, token, type, usageCount });
+  async _getToken({
+    agentId, token, type, usageCount,
+  }) {
+    return this.model.getToken({
+      agentId, token, type, usageCount,
+    });
   }
 
   /**

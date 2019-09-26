@@ -11,7 +11,7 @@ const invitation = new graphql.GraphQLObjectType({
     inviterAgentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-  })
+  }),
 });
 
 const invitationCreateInput = new graphql.GraphQLInputObjectType({
@@ -19,7 +19,7 @@ const invitationCreateInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     email: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-  })
+  }),
 });
 
 module.exports = {

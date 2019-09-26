@@ -2,7 +2,6 @@ const series = require('./series');
 const data = require('../../data');
 
 describe('Series Resolvers', () => {
-
   describe('one()', () => {
     const root = {};
     const args = { id: 'id1' };

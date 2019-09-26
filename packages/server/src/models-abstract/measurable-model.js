@@ -16,7 +16,6 @@ const {
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
  */
 class MeasurableModel extends ModelPostgres {
-
   constructor() {
     super({
       model: models.Measurable,
@@ -37,11 +36,11 @@ class MeasurableModel extends ModelPostgres {
     } = MeasurableModel.MEASURABLE_STATE;
 
     return this.sequelize.literal(
-      `(CASE WHEN "state"='${ OPEN }' THEN 1 ` +
-      `WHEN "state"='${ JUDGEMENT_PENDING }' THEN 2 ` +
-      `WHEN "state"='${ JUDGED }' THEN 3 ` +
-      `WHEN "state"='${ CLOSED_AS_UNRESOLVED }' THEN 3 ` +
-      `ELSE 5 END) AS "stateOrder"`,
+      `(CASE WHEN "state"='${OPEN}' THEN 1 `
+      + `WHEN "state"='${JUDGEMENT_PENDING}' THEN 2 `
+      + `WHEN "state"='${JUDGED}' THEN 3 `
+      + `WHEN "state"='${CLOSED_AS_UNRESOLVED}' THEN 3 `
+      + 'ELSE 5 END) AS "stateOrder"',
     );
   }
 
@@ -117,7 +116,7 @@ class MeasurableModel extends ModelPostgres {
       await measurable.judged();
     }
     return measurable;
-  };
+  }
 
   /**
    * @return {*[]}

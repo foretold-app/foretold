@@ -13,7 +13,6 @@ const { InvitationModel } = require('../models-abstract');
  * @property {InvitationModel} InvitationModel
  */
 class InvitationsData extends DataBase {
-
   constructor() {
     super();
     this.InvitationModel = new InvitationModel();

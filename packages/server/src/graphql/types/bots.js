@@ -40,7 +40,7 @@ const bot = new graphql.GraphQLObjectType({
       type: require('./users').user,
       resolve: resolver(models.Bot.User),
     },
-  })
+  }),
 });
 
 const botInput = new graphql.GraphQLInputObjectType({

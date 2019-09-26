@@ -11,7 +11,6 @@ const { ProducerNotifications } = require('./producer-notifications');
  * @abstract
  */
 class MemberToCommunity extends ProducerNotifications {
-
   /**
    * @param {Models.ChannelMembership} channelMembership
    */
@@ -88,7 +87,7 @@ class MemberToCommunity extends ProducerNotifications {
         name: _.get(channel, 'name') || 'Channel',
         link: getChannelLinkWithToken(channel),
       },
-    }
+    };
   }
 }
 

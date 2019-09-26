@@ -3,7 +3,6 @@ const {
 } = require('../enums/notification-error-reason');
 
 module.exports = (sequelize, DataTypes) => {
-
   const AgentNotification = sequelize.define('AgentNotification', {
     id: {
       type: DataTypes.UUID(),

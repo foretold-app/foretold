@@ -7,7 +7,6 @@ const { Producer } = require('../producer');
 const { NewMeasurement } = require('./new-measurement');
 
 class NewMeasurementComment extends NewMeasurement {
-
   /**
    * @param {Models.Measurement} measurement
    */
@@ -23,7 +22,6 @@ class NewMeasurementComment extends NewMeasurement {
   async _isActual() {
     return !!_.get(this.input, ['value', MEASUREMENT_VALUE.comment]);
   }
-
 }
 
 module.exports = {

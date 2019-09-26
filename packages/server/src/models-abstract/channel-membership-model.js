@@ -49,7 +49,6 @@ class ChannelMembershipModel extends ModelPostgres {
     }
     return channelMembership;
   }
-
 }
 
 ChannelMembershipModel.ROLES = CHANNEL_MEMBERSHIP_ROLES;

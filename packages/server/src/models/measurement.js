@@ -74,7 +74,8 @@ module.exports = (sequelize, DataTypes) => {
    * @param {object} value
    */
   function setMeasurementValue(value) {
-    let data, dataType;
+    let data;
+    let dataType;
 
     const types = Object.values(MEASUREMENT_VALUE);
 

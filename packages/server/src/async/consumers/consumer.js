@@ -1,5 +1,5 @@
 const assert = require('assert');
-const _ = require('lodash')
+const _ = require('lodash');
 
 const data = require('../../data');
 

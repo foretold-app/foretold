@@ -6,7 +6,6 @@ const { transporter } = require('./transporter');
 const { SmtpGateways } = require('./smtp-gateways');
 
 class MailHelper {
-
   /**
    * @param {string} [authToken]
    * @param {object} [replacements]
@@ -21,7 +20,7 @@ class MailHelper {
       template = '',
       to = '',
       subject = '',
-    } = {}
+    } = {},
   ) {
     this.authToken = authToken;
     this.replacements = replacements;
@@ -60,7 +59,7 @@ class MailHelper {
       list: this._ListHeaders(),
     };
 
-    console.log(`mailOptions.body`, JSON.stringify(mailOptions));
+    console.log('mailOptions.body', JSON.stringify(mailOptions));
 
     return new Promise((resolve, reject) => {
       this.transporter.sendMail(mailOptions, (error, response) => {
@@ -97,10 +96,10 @@ class MailHelper {
         // this._compileStr(this.config.subscribeEmail),
         {
           url: this._compileStr(this.config.subscribeLink),
-          comment: this._compileStr(this.config.subscribeComment)
-        }
+          comment: this._compileStr(this.config.subscribeComment),
+        },
       ],
-    }
+    };
   }
 
   /**

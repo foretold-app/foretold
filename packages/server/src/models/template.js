@@ -1,5 +1,4 @@
 module.exports = (sequelize, DataTypes) => {
-
   const Template = sequelize.define('Template', {
     id: {
       type: DataTypes.UUID(),

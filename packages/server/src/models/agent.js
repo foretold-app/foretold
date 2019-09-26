@@ -47,10 +47,9 @@ module.exports = (sequelize, DataTypes) => {
     if (this.type === AGENT_TYPE.USER) {
       const user = await this.getUser();
       return _.get(user, 'name');
-    } else {
-      const bot = await this.getBot();
-      return _.get(bot, 'name');
     }
+    const bot = await this.getBot();
+    return _.get(bot, 'name');
   }
 
   async function getMeasurementCount() {

@@ -8,14 +8,13 @@ const { Producer } = require('../producer');
  * @abstract
  */
 class NewMeasurement extends ProducerFeedItems {
-
   /**
    * @param {Models.Measurement} measurement
    */
   constructor(measurement) {
     super(measurement);
     assert(
-      typeof _.get(measurement, 'getMeasurable') === "function",
+      typeof _.get(measurement, 'getMeasurable') === 'function',
       'getMeasurable is required.',
     );
     /** @type {Models.Measurable} */
@@ -59,7 +58,7 @@ class NewMeasurement extends ProducerFeedItems {
         name: _.get(this.measurable, 'name', 'Question'),
         id: _.get(this.measurable, 'id'),
       },
-    }
+    };
   }
 }
 

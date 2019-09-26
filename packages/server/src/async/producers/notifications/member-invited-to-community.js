@@ -2,7 +2,6 @@ const { Producer } = require('../producer');
 const { ProducerNotifications } = require('./producer-notifications');
 
 class MemberInvitedToCommunity extends ProducerNotifications {
-
   /**
    * @param {Models.ChannelMembership} input
    */
@@ -25,7 +24,6 @@ class MemberInvitedToCommunity extends ProducerNotifications {
       return false;
     }
   }
-
 }
 
 module.exports = {

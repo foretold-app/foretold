@@ -14,7 +14,7 @@ const measurableValueType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
     [MEASURABLE_VALUE_TYPE.PERCENTAGE]: {
       value: MEASURABLE_VALUE_TYPE.PERCENTAGE,
     },
-  }
+  },
 }));
 
 module.exports = {

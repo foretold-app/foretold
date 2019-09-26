@@ -11,7 +11,7 @@ const globalSetting = new graphql.GraphQLObjectType({
     botAgentId: { type: graphql.GraphQLString },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-  })
+  }),
 });
 
 const globalSettingUpdateInput = new graphql.GraphQLInputObjectType({

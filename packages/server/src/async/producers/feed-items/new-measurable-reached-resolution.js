@@ -23,10 +23,8 @@ class NewMeasurableReachedResolution extends NewMeasurable {
     return this.input.changed('state')
       && this.input.changed('stateUpdatedAt')
       && this.input.previous('state') === MEASURABLE_STATE.OPEN
-      && this.input.get('state') === MEASURABLE_STATE.JUDGEMENT_PENDING
-      ;
+      && this.input.get('state') === MEASURABLE_STATE.JUDGEMENT_PENDING;
   }
-
 }
 
 module.exports = {

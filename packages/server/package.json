@@ -20,7 +20,8 @@
     "test": "jest --watch",
     "test:cv": "jest --coverage --forceExit",
     "test:ci": "jest --forceExit",
-    "lint": "esw -w src",
+    "lint": "eslint src --cache --ext .js",
+    "lint-fix": "eslint src --fix --ext .js",
     "serve": "node ./src/index.js",
     "db:create": "sequelize db:create",
     "db:drop": "sequelize db:drop",
@@ -104,6 +105,7 @@
       "airbnb"
     ],
     "rules": {
+      "max-len": ["error", { "code": 80 }],
       "jest/no-focused-tests": 2,
       "jest/no-identical-title": 2
     }

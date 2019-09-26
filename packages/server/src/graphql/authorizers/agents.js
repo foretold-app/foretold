@@ -13,8 +13,8 @@ function currentAgentIsAuthenticatedRule(root, args, context, info) {
   const result = !!agentId;
 
   console.log(
-    `\x1b[33m Rule Agents (currentAgentIsAuthenticatedRule) ` +
-    `agentId "${agentId}", result = "${result}".\x1b[0m`
+    '\x1b[33m Rule Agents (currentAgentIsAuthenticatedRule) '
+    + `agentId "${agentId}", result = "${result}".\x1b[0m`,
   );
 
   return result;
@@ -32,8 +32,8 @@ function currentAgentIsApplicationAdminRule(root, args, context, info) {
   const result = !!isAdmin;
 
   console.log(
-    `\x1b[33m Rule Agents (currentAgentIsAdminRule) ` +
-    `result = "${result}".\x1b[0m`,
+    '\x1b[33m Rule Agents (currentAgentIsAdminRule) '
+    + `result = "${result}".\x1b[0m`,
   );
 
   return result;

@@ -2,7 +2,6 @@
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
  */
 class Model {
-
   getTransaction() {
     return Promise.reject(new Error('getTransaction is not implemented.'));
   }

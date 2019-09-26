@@ -2,7 +2,6 @@ const users = require('./users');
 const data = require('../../data');
 
 describe('Users Resolvers', () => {
-
   describe('users()', () => {
     const root = {};
     const args = { id: 'id1', input: { name: 'name1' } };

@@ -9,7 +9,6 @@ const { Producer } = require('../producer');
  * @abstract
  */
 class ProducerNotifications extends Producer {
-
   constructor(options = {}) {
     super(options);
   }
@@ -47,9 +46,9 @@ class ProducerNotifications extends Producer {
   ) {
     assert(
       envelope instanceof Producer.EmailEnvelope,
-      'Envelope is not EmailEnvelope'
+      'Envelope is not EmailEnvelope',
     );
-    const data = { type, envelope: envelope };
+    const data = { type, envelope };
     const options = await this._getOptions();
     return Producer.data.notifications.createOne(data, options);
   }

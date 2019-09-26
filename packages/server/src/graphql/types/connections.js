@@ -1,7 +1,8 @@
 const graphql = require('graphql');
+const { createConnection } = require('graphql-sequelize');
+
 const models = require('../../models');
 
-const { createConnection } = require('graphql-sequelize');
 
 const measurableMeasurementsConnection = createConnection({
   name: 'MeasurableMeasurements',

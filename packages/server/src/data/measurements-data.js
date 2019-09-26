@@ -11,7 +11,6 @@ const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums/measurement-competitor
  * @property {MeasurementModel} MeasurementModel
  */
 class MeasurementsData extends DataBase {
-
   constructor() {
     super();
     this.MeasurementModel = new MeasurementModel();

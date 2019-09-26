@@ -7,7 +7,6 @@ const { Producer } = require('../producer');
  * @abstract
  */
 class ProducerFeedItems extends Producer {
-
   constructor(input) {
     super({});
 
@@ -93,7 +92,7 @@ class ProducerFeedItems extends Producer {
       agent: {
         name: (await _.get(agent, 'name')) || 'Somebody',
       },
-    }
+    };
   }
 
   /**
@@ -120,7 +119,7 @@ class ProducerFeedItems extends Producer {
   async _createFeedItem(feedItem, channelId, agentId) {
     assert(
       feedItem instanceof Producer.FeedItem,
-      'feedItem is not FeedItem'
+      'feedItem is not FeedItem',
     );
     const feedItemBodyName = feedItem.getName();
     const body = { [feedItemBodyName]: feedItem };
@@ -128,7 +127,6 @@ class ProducerFeedItems extends Producer {
     const options = await this._getOptions();
     return Producer.data.feedItems.createOne(data, options);
   }
-
 }
 
 module.exports = {

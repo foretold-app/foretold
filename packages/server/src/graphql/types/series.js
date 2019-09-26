@@ -12,7 +12,7 @@ const seriesCreateInput = new graphql.GraphQLInputObjectType({
     subjects: { type: graphql.GraphQLList(graphql.GraphQLString) },
     properties: { type: graphql.GraphQLList(graphql.GraphQLString) },
     dates: { type: graphql.GraphQLList(DateType.default) },
-  })
+  }),
 });
 
 const series = new graphql.GraphQLObjectType({
@@ -41,7 +41,7 @@ const series = new graphql.GraphQLObjectType({
     Measurables: {
       type: require('./connections').seriesMeasurablesConnection.connectionType,
       args: require('./connections').seriesMeasurablesConnection.connectionArgs,
-      resolve: require('./connections').seriesMeasurablesConnection.resolve
+      resolve: require('./connections').seriesMeasurablesConnection.resolve,
     },
 
     // @todo: security?
@@ -49,7 +49,7 @@ const series = new graphql.GraphQLObjectType({
       type: require('./channels').channel,
       resolve: resolver(models.Series.Channel),
     },
-  })
+  }),
 });
 
 module.exports = {

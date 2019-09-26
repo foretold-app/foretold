@@ -11,7 +11,7 @@ const userUpdateInput = new graphql.GraphQLInputObjectType({
     email: { type: graphql.GraphQLString },
     picture: { type: graphql.GraphQLString },
     description: { type: graphql.GraphQLString },
-  })
+  }),
 });
 
 const user = new graphql.GraphQLObjectType({
@@ -45,7 +45,7 @@ const user = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./bots').bot)),
       resolve: resolver(models.User.Bots),
     },
-  })
+  }),
 });
 
 module.exports = {

@@ -6,7 +6,6 @@ const { CHANNEL_MEMBERSHIP_TYPE } = require('../../../enums/channel-membership-t
 const { Producer } = require('../producer');
 
 class MemberJoinedCommunity extends ProducerFeedItems {
-
   /**
    * @param {Models.ChannelMembership} input
    */
@@ -26,10 +25,9 @@ class MemberJoinedCommunity extends ProducerFeedItems {
    * @return {Promise<boolean>}
    */
   async _isActual() {
-    const methodCreatedBy = this.input.methodCreatedBy;
+    const { methodCreatedBy } = this.input;
     return methodCreatedBy === CHANNEL_MEMBERSHIP_TYPE.AGENT_JOINED_DIRECTLY;
   }
-
 }
 
 module.exports = {

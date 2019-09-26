@@ -8,7 +8,6 @@ const { TokensData } = require('./tokens-data');
  * @property {BotModel} BotModel
  */
 class BotsData extends DataBase {
-
   constructor() {
     super();
     this.BotModel = new BotModel();

@@ -9,8 +9,7 @@ class NewMeasurable extends ProducerFeedItems {
    */
   constructor(measurable) {
     super(measurable);
-    this.templateName =
-      Producer.TEMPLATE_NAME.NEW_MEASURABLE_FEED_ITEM;
+    this.templateName = Producer.TEMPLATE_NAME.NEW_MEASURABLE_FEED_ITEM;
 
     this.FeedItem = Producer.FeedItemMeasurable;
   }
@@ -29,7 +28,7 @@ class NewMeasurable extends ProducerFeedItems {
         name: this.input.name || 'Question',
         id: this.input.id,
       },
-    }
+    };
   }
 }
 

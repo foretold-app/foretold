@@ -42,7 +42,7 @@ const measurable = new graphql.GraphQLObjectType({
     Measurements: {
       type: require('./connections').measurableMeasurementsConnection.connectionType,
       args: require('./connections').measurableMeasurementsConnection.connectionArgs,
-      resolve: require('./connections').measurableMeasurementsConnection.resolve
+      resolve: require('./connections').measurableMeasurementsConnection.resolve,
     },
 
     series: {
@@ -61,8 +61,8 @@ const measurable = new graphql.GraphQLObjectType({
     },
 
     recentMeasurement: {
-      description: 'Returns either objective measurement for a judged' +
-        ' measurable or latest measurement of an agent.',
+      description: 'Returns either objective measurement for a judged'
+        + ' measurable or latest measurement of an agent.',
       type: require('./measurements').measurement,
       resolve: resolvers.measurements.latest,
     },
@@ -79,7 +79,7 @@ const measurable = new graphql.GraphQLObjectType({
       type: require('./measurements').measurement,
       resolve: require('../resolvers/measurements').latestAggregateByRootId,
     },
-  })
+  }),
 });
 
 const measurableCreateInput = new graphql.GraphQLInputObjectType({
@@ -96,7 +96,7 @@ const measurableCreateInput = new graphql.GraphQLInputObjectType({
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     min: { type: graphql.GraphQLFloat },
     max: { type: graphql.GraphQLFloat },
-  })
+  }),
 });
 
 const measurableUpdateInput = new graphql.GraphQLInputObjectType({
@@ -113,7 +113,7 @@ const measurableUpdateInput = new graphql.GraphQLInputObjectType({
     labelProperty: { type: graphql.GraphQLString },
     min: { type: graphql.GraphQLFloat },
     max: { type: graphql.GraphQLFloat },
-  })
+  }),
 });
 
 const measurablesEdge = new graphql.GraphQLObjectType({

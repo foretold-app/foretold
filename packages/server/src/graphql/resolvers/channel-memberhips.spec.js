@@ -2,14 +2,13 @@ const channelMemberships = require('./channel-memberhips');
 const data = require('../../data');
 
 describe('Channel Memberships Resolvers', () => {
-
   describe('create()', () => {
     const root = {};
     const args = {
       input: {
         channelId: 'channelId1',
         agentId: 'agentId2',
-        role: 'ADMIN'
+        role: 'ADMIN',
       },
     };
     const context = { agent: { id: 'agentId' } };
@@ -37,8 +36,8 @@ describe('Channel Memberships Resolvers', () => {
       input: {
         channelId: 'channelId1',
         agentId: 'agentId2',
-        role: 'ADMIN'
-      }
+        role: 'ADMIN',
+      },
     };
     beforeEach(() => {
       jest.spyOn(data.channelMemberships, 'updateOne2').mockReturnValue(
@@ -63,7 +62,7 @@ describe('Channel Memberships Resolvers', () => {
       input: {
         channelId: 'channelId1',
         agentId: 'agentId2',
-      }
+      },
     };
     beforeEach(() => {
       jest.spyOn(data.channelMemberships, 'deleteOne2')

@@ -1,7 +1,6 @@
 const common = require('./common');
 
 describe('Common Resolvers', () => {
-
   describe('iAmOwner() when creatorId passed through root', () => {
     const root = { creatorId: 'creatorId1' };
     const args = {};

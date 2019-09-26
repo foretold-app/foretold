@@ -12,7 +12,6 @@ const { Data } = require('./classes/data');
  * @property {FeedItemModel} FeedItemModel
  */
 class GlobalSettingsData extends DataBase {
-
   constructor() {
     super();
     this.GlobalSettingModel = new GlobalSettingModel();
@@ -45,7 +44,6 @@ class GlobalSettingsData extends DataBase {
     const params = new Params({ name: GlobalSettingsData.MAIN });
     return this.getOne(params);
   }
-
 }
 
 GlobalSettingsData.MAIN = 'main';

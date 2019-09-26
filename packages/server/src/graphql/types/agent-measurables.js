@@ -40,7 +40,7 @@ const agentMeasurable = new graphql.GraphQLObjectType({
       },
       resolve: require('../resolvers').measurements.measurableMeasurement,
     },
-  })
+  }),
 });
 
 const agentMeasurablesEdge = new graphql.GraphQLObjectType({

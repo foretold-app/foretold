@@ -9,7 +9,6 @@ const { ModelPostgres } = require('./model-postgres');
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
  */
 class TokenModel extends ModelPostgres {
-
   constructor() {
     super({
       model: models.Token,
@@ -24,7 +23,9 @@ class TokenModel extends ModelPostgres {
    * @param {number} [usageCount]
    * @return {Promise<Models.Token>}
    */
-  async getToken({ agentId, token, type, usageCount }) {
+  async getToken({
+    agentId, token, type, usageCount,
+  }) {
     type = type || TOKEN_TYPE.ACCESS_TOKEN;
     usageCount = usageCount || TokenModel.MAX_USAGE_COUNT;
 

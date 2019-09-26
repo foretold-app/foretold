@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: '',
       validate: {
         is: ['^[a-z0-9._]{0,30}$', 'i'],
-      }
+      },
     },
     description: {
       type: DataTypes.STRING(255),
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       validate: {
         isEmail: true,
-      }
+      },
     },
     picture: {
       type: DataTypes.STRING(255),

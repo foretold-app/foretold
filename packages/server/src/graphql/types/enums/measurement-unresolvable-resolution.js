@@ -17,7 +17,7 @@ const measurementUnresolvableResolution = new graphql.GraphQLEnumType({
     [UNRESOLVABLE_RESOLUTIONS.OTHER]: {
       value: UNRESOLVABLE_RESOLUTIONS.OTHER,
     },
-  }
+  },
 });
 
 module.exports = {

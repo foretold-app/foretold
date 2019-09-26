@@ -6,7 +6,6 @@ const { MeasurableState } = require('./measurable-state');
 const { MEASURABLE_STATE } = require('../../../enums/measurable-state');
 
 class MeasurableStateChanged extends MeasurableState {
-
   /**
    * @param {Models.Measurable} measurable
    */

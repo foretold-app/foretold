@@ -6,7 +6,6 @@ const { MeasurableState } = require('./measurable-state');
 const { MEASURABLE_STATE } = require('../../../enums/measurable-state');
 
 class MeasurableStateResolved extends MeasurableState {
-
   /**
    * @param {Models.Measurable} measurable
    */
@@ -48,7 +47,7 @@ class MeasurableStateResolved extends MeasurableState {
       const agents = await channel.getAgents();
       assert(_.isArray(agents), 'Channel Members are required.');
       assert(agents.length !== 0, 'Channel Members list is empty.');
-      assert(_.every(agents, agent => _.get(agent, 'id')), 'Agent ID is required');
+      assert(_.every(agents, (agent) => _.get(agent, 'id')), 'Agent ID is required');
 
       /** @type {Models.Measurement} */
       const lastMeasurement = await this._getLastResolvedMeasurement();

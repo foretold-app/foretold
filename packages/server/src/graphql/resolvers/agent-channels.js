@@ -32,7 +32,7 @@ async function all(root, args, context, info) {
     channelId,
     agentId,
     minNumberOfPredictions,
-    minNumberOfQuestionsScored
+    minNumberOfQuestionsScored,
   });
   const pagination = new Pagination(args);
   const options = new Options({ currentAgentId });

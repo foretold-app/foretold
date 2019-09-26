@@ -63,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     stateUpdatedAt: {
       allowNull: true,
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
     },
 
     // Status
@@ -80,7 +80,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     expectedResolutionDate: {
       allowNull: true,
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
     },
 
     // Links
@@ -142,7 +142,7 @@ module.exports = (sequelize, DataTypes) => {
    */
   async function getMeasurerCount() {
     const items = await this.getMeasurements();
-    return _.uniq(items.map(i => i.agentId)).length;
+    return _.uniq(items.map((i) => i.agentId)).length;
   }
 
   /**
@@ -158,14 +158,14 @@ module.exports = (sequelize, DataTypes) => {
       const asFloat = parseFloat(match[0]);
 
       console.log(
-        `Got response from endpoint. Url: ${endpoint}, ` +
-        `Response: ${JSON.stringify(json)}, Float: ${asFloat}`
+        `Got response from endpoint. Url: ${endpoint}, `
+        + `Response: ${JSON.stringify(json)}, Float: ${asFloat}`,
       );
 
       return asFloat;
     } catch (e) {
-      console.error(`Error getting response from endpoint. ` +
-        `Url: ${endpoint}, error: ${e}`);
+      console.error('Error getting response from endpoint. '
+        + `Url: ${endpoint}, error: ${e}`);
       return null;
     }
   }
@@ -273,8 +273,8 @@ module.exports = (sequelize, DataTypes) => {
    */
   Measurable.prototype.changedFields = function changedFields(ops) {
     return Object.keys(ops)
-      .filter(r => r !== "expectedResolutionDate")
-      .filter(r => this[r] !== ops[r]);
+      .filter((r) => r !== 'expectedResolutionDate')
+      .filter((r) => this[r] !== ops[r]);
   };
 
   /**

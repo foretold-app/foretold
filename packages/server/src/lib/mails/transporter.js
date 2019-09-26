@@ -36,10 +36,10 @@ function transportFakeFactory(confIn) {
 
     close() {
     }
-  };
+  }();
 }
 
-const transporter = process.env.NODE_ENV === "development"
+const transporter = process.env.NODE_ENV === 'development'
   ? transportFakeFactory
   : transportFactory;
 

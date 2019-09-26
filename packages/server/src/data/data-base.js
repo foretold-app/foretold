@@ -71,6 +71,7 @@ class DataBase {
   }
 
   /**
+   * @todo: later fix "col" argument
    * @public
    * @param {Layers.DataSourceLayer.params} [params]
    * @param {Layers.DataSourceLayer.query} [query]

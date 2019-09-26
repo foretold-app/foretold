@@ -97,13 +97,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
 
-    // Counts
-    measurerCount: {
-      allowNull: true,
-      type: Sequelize.VIRTUAL(DataTypes.INTEGER),
-      get: getMeasurerCount,
-    },
-
     // Satellite
     resolutionEndpointResponse: {
       allowNull: true,
@@ -121,15 +114,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW,
     },
   });
-
-  /**
-   * @todo: optimize it
-   * @return {Promise<*>}
-   */
-  async function getMeasurerCount() {
-    const items = await this.getMeasurements();
-    return _.uniq(items.map((i) => i.agentId)).length;
-  }
 
   /**
    * @return {Promise<null|boolean|number>}

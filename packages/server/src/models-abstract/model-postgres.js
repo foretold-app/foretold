@@ -716,9 +716,37 @@ class ModelPostgres extends Model {
    * @return {Promise<Models.Model>}
    */
   async getOne(params = {}, query = {}, restrictions = {}, options = {}) {
+    const cond = await this.getPredicated(params, query, restrictions, options);
+    return this.model.findOne(cond);
+  }
+
+  /**
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
+   * @return {Promise<Models.Model>}
+   */
+  async getCount(params = {}, query = {}, restrictions = {}, options = {}) {
+    const cond = await this.getPredicated(params, query, restrictions, options);
+    return this.model.count(cond);
+  }
+
+  /**
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
+   * @return {Promise<*>}
+   */
+  async getPredicated(params = {}, query = {}, restrictions = {}, options = {}) {
     const where = { ...params };
     const sort = query.sort === 1 ? 'ASC' : 'DESC';
     const order = [['createdAt', sort]];
+    const distinct = !!query.distinct ? true : null;
+    const col = !!query.col ? query.col : null;
 
     if ('inspect' in params) params.inspect();
     if ('inspect' in restrictions) restrictions.inspect();
@@ -728,25 +756,13 @@ class ModelPostgres extends Model {
     const cond = {
       where,
       order,
+      distinct,
+      col,
     };
 
     this._extendConditions(cond, options);
 
-    return this.model.findOne(cond);
-  }
-
-  /**
-   * @public
-   * @param {Layers.AbstractModelsLayer.params} [params]
-   * @param {Layers.AbstractModelsLayer.query} [_query]
-   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [_options]
-   * @return {Promise<Models.Model>}
-   */
-  async getCount(params = {}, _query = {}, _restrictions = {}, _options = {}) {
-    const where = { ...params };
-    const cond = { where };
-    return this.model.count(cond);
+    return cond;
   }
 
   /**

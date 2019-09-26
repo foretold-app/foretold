@@ -269,6 +269,8 @@ export namespace Layers {
     };
     type query = {
       sort?: number;
+      distinct?: boolean;
+      col?: string;
     };
     type params = {
       id?: Models.ObjectID;
@@ -372,6 +374,8 @@ export namespace Layers {
     };
     type query = {
       sort?: number,
+      distinct?: boolean,
+      col?: string,
     };
     type params = {
       id?: Models.ObjectID

@@ -29,7 +29,11 @@ const measurable = new graphql.GraphQLObjectType({
       resolve: resolvers.measurements.measurementCountByMeasurableId,
     },
 
-    measurerCount: { type: graphql.GraphQLInt },
+    measurerCount: {
+      type: graphql.GraphQLInt,
+      resolve: resolvers.measurements.measurerCount,
+    },
+
     resolutionEndpointResponse: { type: graphql.GraphQLFloat },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },

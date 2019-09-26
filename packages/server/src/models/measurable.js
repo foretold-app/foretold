@@ -1,6 +1,4 @@
 const Sequelize = require('sequelize');
-const _ = require('lodash');
-const fetch = require('node-fetch');
 const moment = require('moment');
 const { clientUrl } = require('../lib/urls');
 
@@ -97,13 +95,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
 
-    // Satellite
-    resolutionEndpointResponse: {
-      allowNull: true,
-      type: Sequelize.VIRTUAL(DataTypes.FLOAT),
-      get: resolutionEndpointResponseGetter,
-    },
-
     // Object Dates
     createdAt: {
       type: DataTypes.DATE,
@@ -114,31 +105,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW,
     },
   });
-
-  /**
-   * @return {Promise<null|boolean|number>}
-   */
-  async function resolutionEndpointResponseGetter() {
-    const endpoint = await this.dataValues.resolutionEndpoint;
-    if (!endpoint) return false;
-    try {
-      const response = await fetch(endpoint);
-      const json = await response.json();
-      const match = JSON.stringify(json).match(/[-+]?[0-9]*\.?[0-9]+/);
-      const asFloat = parseFloat(match[0]);
-
-      console.log(
-        `Got response from endpoint. Url: ${endpoint}, `
-        + `Response: ${JSON.stringify(json)}, Float: ${asFloat}`,
-      );
-
-      return asFloat;
-    } catch (e) {
-      console.error('Error getting response from endpoint. '
-        + `Url: ${endpoint}, error: ${e}`);
-      return null;
-    }
-  }
 
   /**
    * @todo: move to "models-abstract" layer

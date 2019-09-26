@@ -169,6 +169,29 @@ async function count(_root, _args, _context, _info) {
   return data.measurables.getCount();
 }
 
+/**
+ * @param {*} root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function measurableCount(root, _args, _context, _info) {
+  const seriesId = _.get(root, 'id');
+  return data.measurables.getCount({ seriesId });
+}
+
+/**
+ * @param {*} root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function resolutionEndpointResponse(root, _args, _context, _info) {
+  return data.measurables.resolutionEndpointResponse(root);
+}
+
 module.exports = {
   one,
   all,
@@ -178,4 +201,6 @@ module.exports = {
   create,
   openedCount,
   count,
+  measurableCount,
+  resolutionEndpointResponse,
 };

@@ -18,10 +18,10 @@ const { Options } = require('../../data/classes/options');
  * @param {number} args.last
  * @param {number} args.first
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*>}
  */
-async function all(root, args, context, info) {
+async function all(root, args, context, _info) {
   const channelId = _.get(args, 'channelId');
   const agentId = _.get(args, 'agentId');
   const currentAgentId = _.get(context, 'agent.id');
@@ -44,12 +44,12 @@ async function all(root, args, context, info) {
  * @param {*} root
  * @param {Models.Agent.id} root.agentId
  * @param {Models.Channel.id} root.channelId
- * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*>}
  */
-async function primaryPointScore(root, args, context, info) {
+async function primaryPointScore(root, _args, _context, _info) {
   const agentId = _.get(root, 'agentId');
   const channelId = _.get(root, 'channelId');
   return data.agentChannels.primaryPointScore(agentId, channelId);

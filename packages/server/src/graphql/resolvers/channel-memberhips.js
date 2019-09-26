@@ -6,12 +6,16 @@ const { Options } = require('../../data/classes/options');
 const { Filter } = require('../../data/classes/filter');
 
 /**
- * @param {*} root
- * @param {{input: {channelId: Models.ObjectID, agentId: Models.ObjectID, role: string}}} args
+ * @param {*} _root
+ * @param {{input: {
+ * channelId: Models.ObjectID,
+ * agentId: Models.ObjectID,
+ * role: string,
+ * }}} args
  * @param {*} context
  * @returns {Promise<Models.ChannelMemberships>}
  */
-async function create(root, args, context) {
+async function create(_root, args, context) {
   const input = _.get(args, 'input');
   const inviterAgentId = _.get(context, 'agent.id');
   return data.channelMemberships.createOne2(
@@ -23,11 +27,15 @@ async function create(root, args, context) {
 }
 
 /**
- * @param {*} root
- * @param {{input: {channelId: Models.ObjectID, agentId: Models.ObjectID, role: string}}} args
+ * @param {*} _root
+ * @param {{input: {
+ * channelId: Models.ObjectID,
+ * agentId: Models.ObjectID,
+ * role: string,
+ * }}} args
  * @returns {Promise<Models.ChannelMemberships>}
  */
-async function update(root, args) {
+async function update(_root, args) {
   const input = _.get(args, 'input');
   return data.channelMemberships.updateOne2(
     input.channelId,
@@ -37,11 +45,14 @@ async function update(root, args) {
 }
 
 /**
- * @param root
- * @param {{input: {channelId: Models.ObjectID, agentId: Models.ObjectID}}} args
+ * @param _root
+ * @param {{input: {
+ * channelId: Models.ObjectID,
+ * agentId: Models.ObjectID,
+ * }}} args
  * @returns {Promise<Models.ChannelMemberships | null>}
  */
-async function remove(root, args) {
+async function remove(_root, args) {
   const input = _.get(args, 'input');
   return data.channelMemberships.deleteOne2(
     input.channelId,
@@ -52,13 +63,12 @@ async function remove(root, args) {
 /**
  * @param {object | null} root
  * @param {string} root.id
- * @param {object} args
- * @param {Models.ObjectID} args.id
+ * @param {object} _args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<Models.ChannelMemberships[]>}
  */
-async function allByAgentId(root, args, context, info) {
+async function allByAgentId(root, _args, context, _info) {
   const agentId = _.get(root, 'id');
   const currentAgentId = _.get(context, 'agent.id');
 
@@ -71,13 +81,12 @@ async function allByAgentId(root, args, context, info) {
 
 /**
  * @param {object | null} root
- * @param {object} args
- * @param {Models.ObjectID} args.id
+ * @param {object} _args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<Models.ChannelMemberships[]>}
  */
-async function allByChannelId(root, args, context, info) {
+async function allByChannelId(root, _args, context, _info) {
   const channelId = _.get(root, 'id');
   const currentAgentId = _.get(context, 'agent.id');
 
@@ -89,14 +98,14 @@ async function allByChannelId(root, args, context, info) {
 }
 
 /**
- * @param {object | null} root
+ * @param {object | null} _root
  * @param {object} args
  * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<Models.ChannelMemberships>}
  */
-async function join(root, args, context, info) {
+async function join(_root, args, context, _info) {
   const channelId = _.get(args, 'input.channelId');
   const agentId = _.get(context, 'agent.id');
   return data.channelMemberships.join({
@@ -106,14 +115,14 @@ async function join(root, args, context, info) {
 }
 
 /**
- * @param {object | null} root
+ * @param {object | null} _root
  * @param {object} args
  * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<Models.ChannelMemberships>}
  */
-async function leave(root, args, context, info) {
+async function leave(_root, args, context, _info) {
   const channelId = _.get(args, 'input.channelId');
   const agentId = _.get(context, 'agent.id');
   return data.channelMemberships.leave({
@@ -124,12 +133,12 @@ async function leave(root, args, context, info) {
 
 /**
  * @param {object | null} root
- * @param {{ input: Schema.ChannelsInput }} args
+ * @param {{ input: Schema.ChannelsInput }} _args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<string>}
  */
-async function myRole(root, args, context, info) {
+async function myRole(root, _args, context, _info) {
   const channelId = _.get(root, 'id');
   const agentId = _.get(context, 'agent.id');
   return data.channelMemberships.getOneOnlyRole({

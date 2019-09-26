@@ -16,7 +16,7 @@ const agent = new graphql.GraphQLObjectType({
 
     measurementCount: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),
-      resolve: require('../resolvers').measurements.measurementCount,
+      resolve: require('../resolvers').measurements.measurementCountByAgentId,
     },
 
     isMe: require('./common').isMe,

@@ -98,11 +98,6 @@ module.exports = (sequelize, DataTypes) => {
     },
 
     // Counts
-    measurementCount: {
-      allowNull: true,
-      type: Sequelize.VIRTUAL(DataTypes.INTEGER),
-      get: getMeasurementCount,
-    },
     measurerCount: {
       allowNull: true,
       type: Sequelize.VIRTUAL(DataTypes.INTEGER),
@@ -126,15 +121,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW,
     },
   });
-
-  /**
-   * @todo: optimize it
-   * @return {Promise<*>}
-   */
-  async function getMeasurementCount() {
-    const items = await this.getMeasurements();
-    return items.length;
-  }
 
   /**
    * @todo: optimize it

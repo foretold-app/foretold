@@ -381,14 +381,39 @@ async function truncateCdf(root, args, context, info) {
  * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function measurementCount(root, _args, _context, _info) {
+async function measurementCountByAgentId(root, _args, _context, _info) {
   const agentId = _.get(root, 'id');
   return data.measurements.getCount({ agentId });
+}
+
+/**
+ * @param {object} root
+ * @param {Models.ObjectID} root.id
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function measurementCountByMeasurableId(root, _args, _context, _info) {
+  const measurableId = _.get(root, 'id');
+  return data.measurements.getCount({ measurableId });
+}
+
+/**
+ * @param {object} _root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function count(_root, _args, _context, _info) {
+  return data.measurements.getCount();
 }
 
 module.exports = {
   one,
   all,
+  count,
   create,
   latest,
   scoreSet,
@@ -401,5 +426,6 @@ module.exports = {
   primaryPointScore,
   measurableMeasurement,
   truncateCdf,
-  measurementCount,
+  measurementCountByAgentId,
+  measurementCountByMeasurableId,
 };

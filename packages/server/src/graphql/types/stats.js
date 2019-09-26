@@ -1,6 +1,7 @@
 const graphql = require('graphql');
 
 const models = require('../../models');
+const resolvers = require('../resolvers');
 
 /**
  * @todo: use resolvers! never use models this way.
@@ -22,11 +23,11 @@ const stats = new graphql.GraphQLObjectType({
     },
     measurementCount: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),
-      resolve: async () => models.Measurement.count(),
+      resolve: resolvers.measurements.count,
     },
     measurableCount: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),
-      resolve: async () => models.Measurable.count(),
+      resolve: resolvers.measurables.count,
     },
   },
 });

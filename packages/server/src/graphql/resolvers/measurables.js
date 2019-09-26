@@ -38,7 +38,7 @@ async function all(root, args, context, info) {
   const channelId = _.get(args, 'channelId');
   const currentAgentId = _.get(context, 'agent.id');
 
-  const withinJoinedChannels = _.isEmpty(channelId)
+  const withinJoinedChannels = _.isEmpty(channelId) && !_.isEmpty(currentAgentId)
     ? structures.withinJoinedChannelsByChannelId(currentAgentId) : null;
 
   const filter = new Filter({
@@ -148,14 +148,25 @@ async function update(root, args, context, info) {
 /**
  * @param {*} root
  * @param {Models.ObjectID} root.id
- * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function openedCount(root, args, context, info) {
+async function openedCount(root, _args, _context, _info) {
   const channelId = root.id;
   return data.measurables.getOpenedCount(channelId);
+}
+
+/**
+ * @param {*} _root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function count(_root, _args, _context, _info) {
+  return data.measurables.getCount();
 }
 
 module.exports = {
@@ -166,4 +177,5 @@ module.exports = {
   archive,
   create,
   openedCount,
+  count,
 };

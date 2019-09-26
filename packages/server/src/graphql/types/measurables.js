@@ -23,7 +23,12 @@ const measurable = new graphql.GraphQLObjectType({
     resolutionEndpoint: { type: graphql.GraphQLString },
     expectedResolutionDate: { type: DateType.default },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    measurementCount: { type: graphql.GraphQLInt },
+
+    measurementCount: {
+      type: graphql.GraphQLInt,
+      resolve: resolvers.measurements.measurementCountByMeasurableId,
+    },
+
     measurerCount: { type: graphql.GraphQLInt },
     resolutionEndpointResponse: { type: graphql.GraphQLFloat },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },

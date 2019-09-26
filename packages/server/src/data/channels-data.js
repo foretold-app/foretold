@@ -4,6 +4,7 @@ const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { DataBase } = require('./data-base');
 
 const { ChannelModel } = require('../models-abstract');
+const { CHANNEL_MEMBERSHIP_ROLES } = require('../enums/channel-membership-roles');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -44,12 +45,14 @@ class ChannelsData extends DataBase {
       ...input,
       creatorId: agent.id,
     });
-    await this.channelMembershipsData.createOne2(
-      channel.id,
-      agent.id,
-      null,
-      this.models.ChannelMemberships.ROLE.ADMIN,
-    );
+    await this.channelMembershipsData.upsertOne({
+      channelId: channel.id,
+      agentId: agent.id,
+    }, {}, {
+      role: CHANNEL_MEMBERSHIP_ROLES.ADMIN,
+      channelId: channel.id,
+      agentId: agent.id,
+    });
     return channel;
   }
 

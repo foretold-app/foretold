@@ -223,7 +223,7 @@ class MeasurementModel extends ModelPostgres {
     const competitorType = MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE;
 
     if (measurable.state === MEASURABLE_STATE.JUDGED) {
-      const measurement = await this.model.getOne({
+      const measurement = await this.getOne({
         measurableId,
         agentId,
         competitorType,
@@ -234,7 +234,7 @@ class MeasurementModel extends ModelPostgres {
       return measurement;
     }
 
-    return this.model.getOne({ measurableId, agentId });
+    return this.getOne({ measurableId, agentId });
   }
 }
 

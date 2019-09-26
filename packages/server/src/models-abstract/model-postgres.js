@@ -410,7 +410,7 @@ class ModelPostgres extends Model {
       where.creatorId = filter.creatorId;
     }
 
-    if (_.has(filter, 'excludeChannelId')) {
+    if (filter.excludeChannelId) {
       where[this.and].push({
         id: {
           [this.notIn]: this._agentsIdsLiteral(filter.excludeChannelId),
@@ -418,7 +418,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (_.has(filter, 'types')) {
+    if (filter.types) {
       where[this.and].push({
         type: {
           [this.in]: filter.types,
@@ -426,19 +426,19 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (_.has(filter, 'sentAt')) {
+    if (filter.entAt) {
       where[this.and].push({
         sentAt: filter.sentAt,
       });
     }
 
-    if (_.has(filter, 'notificationId')) {
+    if (filter.notificationId) {
       where[this.and].push({
         sentAt: filter.notificationId,
       });
     }
 
-    if (_.has(filter, 'attemptCounterMax')) {
+    if (filter.attemptCounterMax) {
       where[this.and].push({
         attemptCounter: {
           [this.lt]: filter.attemptCounterMax,

@@ -13,7 +13,12 @@ const agent = new graphql.GraphQLObjectType({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     type: { type: graphql.GraphQLNonNull(agentType) },
     name: { type: graphql.GraphQLString },
-    measurementCount: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
+
+    measurementCount: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLInt),
+      resolve: require('../resolvers').measurements.measurementCount,
+    },
+
     isMe: require('./common').isMe,
     isAdmin: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
 

@@ -8,7 +8,7 @@ services:
       - ./package.json:/opt/app/package.json
       - ./node_modules:/opt/app/node_modules
       - ./api:/opt/app/api
-      - ./async:/opt/app/async
+      - ./sync:/opt/app/sync
       - ./bots:/opt/app/bots
       - ./config:/opt/app/config
     command: >

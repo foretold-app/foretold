@@ -4,9 +4,9 @@ const express = require('express');
 const bodyParser = require('body-parser-graphql');
 
 const config = require('./config');
-const { runJobs, runListeners } = require('./async');
-const events = require('./async/events');
-const emitter = require('./async/emitter');
+const { runJobs, runListeners } = require('./sync');
+const events = require('./sync/events');
+const emitter = require('./sync/emitter');
 const { apolloServer } = require('./graphql/apollo-server');
 
 {

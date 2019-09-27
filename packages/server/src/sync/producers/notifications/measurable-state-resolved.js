@@ -45,15 +45,19 @@ class MeasurableStateResolved extends MeasurableState {
 
       /** @type {Models.Agent[]} */
       const agents = await channel.getAgents();
-      assert(_.isArray(agents), 'Channel Members are required.');
-      assert(agents.length !== 0, 'Channel Members list is empty.');
-      assert(_.every(agents, (agent) => _.get(agent, 'id')), 'Agent ID is required');
+      assert(_.isArray(agents),
+        'Channel Members are required.');
+      assert(agents.length !== 0,
+        'Channel Members list is empty.');
+      assert(_.every(agents, (agent) => _.get(agent, 'id')),
+        'Agent ID is required');
 
       /** @type {Models.Measurement} */
       const lastMeasurement = await this._getLastResolvedMeasurement();
       assert(!!_.get(lastMeasurement, 'agentId'), 'Agent ID is required');
 
-      const replacements = MeasurableState._getReplacements(channel, this.measurable);
+      const replacements
+        = MeasurableState._getReplacements(channel, this.measurable);
       const notification = await this._queueEmail(replacements);
 
       const agentsWithoutAuthor = agents.filter((agent) => {

@@ -1,6 +1,10 @@
 const data = require('../../data');
-const { MEASURABLE_VALUE_TYPE } = require('../../enums/measurable-value-type');
-const { CHANNEL_MEMBERSHIP_ROLES } = require('../../enums/channel-membership-roles');
+const {
+  MEASURABLE_VALUE_TYPE,
+} = require('../../enums/measurable-value-type');
+const {
+  CHANNEL_MEMBERSHIP_ROLES,
+} = require('../../enums/channel-membership-roles');
 
 class Creators {
   constructor() {

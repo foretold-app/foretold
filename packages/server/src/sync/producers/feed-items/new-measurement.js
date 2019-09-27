@@ -46,7 +46,10 @@ class NewMeasurement extends ProducerFeedItems {
 
   /**
    * @param {Models.Agent} agent
-   * @return {Promise.<{agent: {name: string}, measurable: {id: string, name: string}}>}
+   * @return {Promise.<{agent: {
+   * name: string},
+   * measurable: {id: string, name: string}
+   * }>}
    * @protected
    */
   async _getReplacements(agent) {

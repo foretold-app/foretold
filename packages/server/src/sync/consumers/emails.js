@@ -34,7 +34,8 @@ class Emails extends Consumer {
     }
 
     try {
-      const agentNotifications = await this._getAgentsNotifications(transaction);
+      const agentNotifications
+        = await this._getAgentsNotifications(transaction);
 
       for (let i = 0; i < agentNotifications.length; i++) {
         const agentNotification = agentNotifications[i];
@@ -42,7 +43,8 @@ class Emails extends Consumer {
         try {
           const notification = await this._getNotification(agentNotification);
           const agent = await this._getAgent(agentNotification);
-          const agentPreferences = await this._getPreferences(agentNotification);
+          const agentPreferences
+            = await this._getPreferences(agentNotification);
           const user = await this._getUser(agent);
           const _test = await this._test(agentPreferences, user);
           const result = await this._emitEmail(notification, user, agent);
@@ -176,9 +178,12 @@ class Emails extends Consumer {
    * @protected
    */
   async _test(agentPreferences, user) {
-    assert(!!user, 'User is not found.');
-    assert(!!_.get(user, 'email'), 'Email is required.', errs.EmailAddressError);
-    assert(!agentPreferences.stopAllEmails, 'Emails are turned off.', errs.PreferencesError);
+    assert(!!user,
+      'User is not found.');
+    assert(!!_.get(user, 'email'),
+      'Email is required.', errs.EmailAddressError);
+    assert(!agentPreferences.stopAllEmails,
+      'Emails are turned off.', errs.PreferencesError);
     return true;
   }
 

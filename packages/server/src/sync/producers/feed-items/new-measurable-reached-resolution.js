@@ -1,6 +1,3 @@
-const moment = require('moment');
-const _ = require('lodash');
-
 const { NewMeasurable } = require('./new-measurable');
 const { Producer } = require('../producer');
 const { MEASURABLE_STATE } = require('../../../enums/measurable-state');
@@ -11,7 +8,8 @@ class NewMeasurableReachedResolution extends NewMeasurable {
    */
   constructor(measurable) {
     super(measurable);
-    this.templateName = Producer.TEMPLATE_NAME.MEASURABLE_REACHED_RESOLUTION_DATE_FEED_ITEM;
+    this.templateName
+      = Producer.TEMPLATE_NAME.MEASURABLE_REACHED_RESOLUTION_DATE_FEED_ITEM;
   }
 
   /**

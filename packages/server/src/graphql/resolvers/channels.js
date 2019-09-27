@@ -34,10 +34,10 @@ async function channelCreator(channel) {
  * @param {Models.ObjectID} args.channelMemberId
  * @param {string[]} args.isArchived
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<Models.Channel[]>}
  */
-async function all(root, args, context, info) {
+async function all(root, args, context, _info) {
   const agentId = _.get(context, 'agent.id');
   const channelMemberId = _.get(args, 'channelMemberId') || _.get(root, 'id');
   const isArchived = _.get(args, 'isArchived');

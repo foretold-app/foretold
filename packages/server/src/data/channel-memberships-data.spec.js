@@ -10,13 +10,13 @@ describe('Data Layer - Channel Memberships Data', () => {
   describe('getAllChannelIds()', () => {
     const options = {};
     beforeEach(() => {
-      jest.spyOn(instance, 'getAll2').mockReturnValue(Promise.resolve([
+      jest.spyOn(instance, 'getAll').mockReturnValue(Promise.resolve([
         { channelId: 'channelId1' },
       ]));
     });
     it('calls getAll()', () => {
       return instance.getAllChannelIds(options).then((result) => {
-        expect(instance.getAll2).toHaveBeenCalledWith(options);
+        expect(instance.getAll).toHaveBeenCalledWith(options);
         expect(result).toEqual(['channelId1']);
       });
     });

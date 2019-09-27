@@ -35,7 +35,7 @@ function getList(rules) {
 
     return {
       allow,
-      deny
+      deny,
     };
   };
 }
@@ -60,7 +60,7 @@ function getAll(rulesPart) {
     );
     return {
       mutations,
-      queries
+      queries,
     };
   };
 }

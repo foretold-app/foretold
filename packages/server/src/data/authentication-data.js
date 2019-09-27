@@ -83,7 +83,10 @@ class AuthenticationData {
     const creator = bot || user;
 
     return {
-      agent, bot, user, creator,
+      agent,
+      bot,
+      user,
+      creator,
     };
   }
 
@@ -136,33 +139,33 @@ class AuthenticationData {
   }
 }
 
-AuthenticationData.NoUserIdError =
-  class NoUserIdError extends AuthenticationError {
-    constructor() {
-      super('No User Id');
-    }
-  };
+AuthenticationData.NoUserIdError
+  = class NoUserIdError extends AuthenticationError {
+  constructor() {
+    super('No User Id');
+  }
+};
 
-AuthenticationData.NotAuthenticatedError =
-  class NotAuthenticatedError extends AuthenticationError {
-    constructor() {
-      super('Not authenticated');
-    }
-  };
+AuthenticationData.NotAuthenticatedError
+  = class NotAuthenticatedError extends AuthenticationError {
+  constructor() {
+    super('Not authenticated');
+  }
+};
 
-AuthenticationData.TokenIsInvalidError =
-  class TokenIsInvalidError extends AuthenticationError {
-    constructor() {
-      super('Token is invalid');
-    }
-  };
+AuthenticationData.TokenIsInvalidError
+  = class TokenIsInvalidError extends AuthenticationError {
+  constructor() {
+    super('Token is invalid');
+  }
+};
 
-AuthenticationData.NoAgentIdError =
-  class NoAgentIdError extends AuthenticationError {
-    constructor() {
-      super('No Agent Id');
-    }
-  };
+AuthenticationData.NoAgentIdError
+  = class NoAgentIdError extends AuthenticationError {
+  constructor() {
+    super('No Agent Id');
+  }
+};
 
 module.exports = {
   AuthenticationData,

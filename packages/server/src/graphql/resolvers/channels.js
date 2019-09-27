@@ -47,7 +47,7 @@ async function all(root, args, context, info) {
 
   const filter = new Filter({
     withinJoinedChannels,
-    isArchived
+    isArchived,
   });
   const pagination = new Pagination(args);
   const options = new Options({ agentId });
@@ -100,7 +100,7 @@ async function create(root, args, context, info) {
   const creatorId = _.get(context, 'agent.id');
   const input = {
     ...args.input,
-    creatorId
+    creatorId,
   };
   return data.channels.createOne(input);
 }

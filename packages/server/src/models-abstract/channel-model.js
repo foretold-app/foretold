@@ -24,7 +24,7 @@ class ChannelModel extends ModelPostgres {
       where: { id },
       include: [{
         model: this.models.Agent,
-        as: 'agents'
+        as: 'agents',
       }],
     });
     return _.get(channel, 'agents', []);

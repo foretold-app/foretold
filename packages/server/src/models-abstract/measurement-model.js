@@ -92,8 +92,8 @@ class MeasurementModel extends ModelPostgres {
   _binaryPercentages(agentId) {
     assert(!!agentId, 'Agent ID is required.');
 
-    const agentMeasurements =
-      this._agentMeasurementsJudgedPercentageCompetitive(agentId);
+    const agentMeasurements
+      = this._agentMeasurementsJudgedPercentageCompetitive(agentId);
 
     return `(
       /* B͟i͟n͟a͟r͟y͟ ͟P͟e͟r͟c͟e͟n͟t͟a͟g͟e͟s͟ */

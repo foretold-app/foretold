@@ -13,7 +13,7 @@ async function initContext({ req }) {
 
   const initContext = {
     ...identity,
-    botAgentId
+    botAgentId,
   };
 
   console.log(' --- ');

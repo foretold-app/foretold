@@ -18,7 +18,10 @@ async function setContextChannelMemberships(root, args, context, info) {
     || _.get(context, 'channel.id');
   const agentId = _.get(context, 'agent.id');
 
-  const compoundId = { agentId, channelId };
+  const compoundId = {
+    agentId,
+    channelId
+  };
   console.log('\x1b[36m ---> \x1b[0m Middleware '
     + '(setContextChannelMemberships)', compoundId);
 
@@ -51,10 +54,10 @@ async function setContextChannelMembershipsAdmins(root, args, context, info) {
     + '(channelMembershipsAdmins)', channelId);
 
   if (channelId) {
-    context.channelMembershipsAdmins =
-      await data.channelMemberships.getAllOnlyAdmins({
-        channelId,
-      });
+    context.channelMembershipsAdmins
+      = await data.channelMemberships.getAllOnlyAdmins({
+      channelId,
+    });
   } else {
     context.channelMembershipsAdmins = null;
   }

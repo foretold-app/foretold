@@ -423,7 +423,7 @@ async function measurerCount(root, _args, _context, _info) {
   const measurableId = _.get(root, 'id');
   return data.measurements.getCount({ measurableId }, {
     distinct: true,
-    col: 'agentId'
+    col: 'agentId',
   });
 }
 

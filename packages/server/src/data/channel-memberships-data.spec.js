@@ -21,5 +21,4 @@ describe('Data Layer - Channel Memberships Data', () => {
       });
     });
   });
-
 });

@@ -124,7 +124,7 @@ class Notifications {
         color: '#4a8ed8',
       }],
     };
-  };
+  }
 
   /**
    * @protected
@@ -145,7 +145,7 @@ class Notifications {
         color: '#ffe75e',
       }],
     };
-  };
+  }
 
   /**
    * @todo: temporary turned off
@@ -181,7 +181,7 @@ class Notifications {
         short: false,
         value: `*From*: ${measurable.previous(r)} \n*To*:  ${measurable.get(r)}`,
       }));
-  };
+  }
 }
 
 module.exports = {

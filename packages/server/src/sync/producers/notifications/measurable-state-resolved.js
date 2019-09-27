@@ -56,8 +56,9 @@ class MeasurableStateResolved extends MeasurableState {
       const lastMeasurement = await this._getLastResolvedMeasurement();
       assert(!!_.get(lastMeasurement, 'agentId'), 'Agent ID is required');
 
-      const replacements
-        = MeasurableState._getReplacements(channel, this.measurable);
+      const replacements = MeasurableState._getReplacements(
+        channel, this.measurable,
+      );
       const notification = await this._queueEmail(replacements);
 
       const agentsWithoutAuthor = agents.filter((agent) => {

@@ -15,7 +15,7 @@ function sendNotificationToSlack(message) {
     util.inspect(message, {
       showHidden: false,
       depth: null,
-      colors: true
+      colors: true,
     }),
   );
 

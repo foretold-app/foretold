@@ -53,7 +53,7 @@ const botInput = new graphql.GraphQLInputObjectType({
     description: { type: graphql.GraphQLString },
     competitorType: {
       type:
-      require('./enums/measurement-competitor-type').measurementCompetitorType
+      require('./enums/measurement-competitor-type').measurementCompetitorType,
     },
   }),
 });

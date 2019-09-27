@@ -39,7 +39,7 @@ class Creators {
         }
       }
     }
-  };
+  }
 
   /**
    * @param {Models.Channel} channel

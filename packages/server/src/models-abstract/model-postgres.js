@@ -832,7 +832,7 @@ class ModelPostgres extends Model {
    * @return {Promise<Models.Model>}
    */
   async deleteOne(params, query, restrictions, options) {
-    const where = {...params};
+    const where = { ...params };
     const entity = await this.getOne(params, query, restrictions, options);
     if (entity) {
       await this.model.destroy({ where });

@@ -24,14 +24,14 @@ describe('Channel Memberships Resolvers', () => {
           expect(data.channelMemberships.upsertOne)
             .toHaveBeenCalledWith(
               {
-                'agentId': 'agentId2',
-                'channelId': 'channelId1'
+                agentId: 'agentId2',
+                channelId: 'channelId1',
               }, {}, {
-                'agentId': 'agentId2',
-                'channelId': 'channelId1',
-                'inviterAgentId': 'agentId',
-                'role': 'ADMIN'
-              }
+                agentId: 'agentId2',
+                channelId: 'channelId1',
+                inviterAgentId: 'agentId',
+                role: 'ADMIN',
+              },
             );
           expect(result)
             .toBe(true);
@@ -60,13 +60,13 @@ describe('Channel Memberships Resolvers', () => {
           expect(data.channelMemberships.updateOne)
             .toHaveBeenCalledWith(
               {
-                'agentId': 'agentId2',
-                'channelId': 'channelId1'
+                agentId: 'agentId2',
+                channelId: 'channelId1',
               }, {
-                'agentId': 'agentId2',
-                'channelId': 'channelId1',
-                'role': 'ADMIN'
-              }
+                agentId: 'agentId2',
+                channelId: 'channelId1',
+                role: 'ADMIN',
+              },
             );
           expect(result)
             .toBe(true);
@@ -92,9 +92,9 @@ describe('Channel Memberships Resolvers', () => {
           expect(data.channelMemberships.deleteOne)
             .toHaveBeenCalledWith(
               {
-                'agentId': 'agentId2',
-                'channelId': 'channelId1'
-              }
+                agentId: 'agentId2',
+                channelId: 'channelId1',
+              },
             );
           expect(result)
             .toBe(true);

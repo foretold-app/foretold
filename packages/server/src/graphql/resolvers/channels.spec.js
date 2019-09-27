@@ -107,7 +107,7 @@ describe('Channels Resolvers', () => {
 
   describe('create()', () => {
     const root = {};
-    const context = { agent: { b: '2' , id: 'id2'} };
+    const context = { agent: { b: '2', id: 'id2' } };
     const args = { input: { a: '1' } };
     const info = {};
     beforeEach(() => {

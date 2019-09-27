@@ -94,13 +94,12 @@ async function one(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
-  const { creator } = context;
   const agentId = _.get(context, 'agent.id');
   const datas = {
     ...args.input,
     creatorId: agentId,
   };
-  return data.measurables.createOne(datas, creator);
+  return data.measurables.createOne(datas);
 }
 
 /**
@@ -141,8 +140,7 @@ async function unarchive(root, args, context, info) {
 async function update(root, args, context, info) {
   const { id } = args;
   const datas = args.input;
-  const { creator } = context;
-  return data.measurables.updateOne(id, datas, creator);
+  return data.measurables.updateOne({ id }, datas);
 }
 
 /**

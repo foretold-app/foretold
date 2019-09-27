@@ -18,20 +18,6 @@ class MeasurablesData extends DataBase {
   }
 
   /**
-   * @todo: fix interface (data, options)
-   * @public
-   * @deprecated: use createOne
-   * @param {object} [data]
-   * @param {Models.Creator} [creator]
-   * @return {Promise<Models.Measurable>}
-   */
-  async createOne(data = {}, creator = {}) {
-    const measurable = await super.createOne(data);
-    measurable && notifications.creationNotification(measurable, creator);
-    return measurable;
-  }
-
-  /**
    * @todo: rework
    * @public
    * @param {string} id
@@ -53,22 +39,6 @@ class MeasurablesData extends DataBase {
     const params = new Params({ id });
     const measurable = await this.getOne(params);
     return measurable && measurable.unarchive();
-  }
-
-  /**
-   * @todo: fix interface (params, data, options)
-   * @public
-   * @deprecated: use updateOne
-   * @param {Models.ObjectID} id
-   * @param {object} data
-   * @param {Models.Creator} creator
-   * @return {Promise<Models.Measurable>}
-   */
-  async updateOne(id, data, creator) {
-    const params = new Params({ id });
-    const measurable = await this.getOne(params);
-    measurable && notifications.updateNotification(measurable, creator, data);
-    return measurable && measurable.update(data);
   }
 
   /**

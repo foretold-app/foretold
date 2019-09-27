@@ -32,6 +32,35 @@ class Notifications {
   }
 
   /**
+   * @param entity
+   * @param entity.getCreationNotification
+   * @param entity.getChannel
+   * @param creator
+   * @return {Promise<boolean>}
+   */
+  async creationNotification(entity, creator) {
+    const notification = await entity.getCreationNotification(creator);
+    const channel = await entity.getChannel();
+    if (channel.isPublic) await notify(notification);
+    return true;
+  }
+
+  /**
+   * @param entity
+   * @param entity.getUpdateNotifications
+   * @param entity.getChannel
+   * @param creator
+   * @param data
+   * @return {Promise<boolean>}
+   */
+  async updateNotification(entity, creator, data) {
+    const notification = await entity.getUpdateNotifications(creator, data);
+    const channel = await entity.getChannel();
+    if (channel.isPublic) await notify(notification);
+    return true;
+  }
+
+  /**
    * @protected
    * @param {Models.Measurement} measurement
    * @param {Models.Measurable} measurable

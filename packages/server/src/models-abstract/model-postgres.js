@@ -426,7 +426,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.entAt) {
+    if (filter.sentAt || filter.sentAt === null) {
       where[this.and].push({
         sentAt: filter.sentAt,
       });

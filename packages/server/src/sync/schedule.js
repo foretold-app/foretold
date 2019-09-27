@@ -34,6 +34,7 @@ function runListeners() {
     emitter.on(events.NEW_MEASURABLE, listeners.newMeasurable);
 
     emitter.on(events.NEW_CHANNEL, listenFor(producers.feedItems.NewChannel));
+    emitter.on(events.NEW_CHANNEL, listeners.createChannelMembership);
     emitter.on(events.NEW_SERIES, listeners.createNewMeasurables);
   } catch (e) {
     console.error('Listener error', e);

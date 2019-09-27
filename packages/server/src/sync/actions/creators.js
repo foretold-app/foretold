@@ -1,5 +1,6 @@
 const data = require('../../data');
 const { MEASURABLE_VALUE_TYPE } = require('../../enums/measurable-value-type');
+const { CHANNEL_MEMBERSHIP_ROLES } = require('../../enums/channel-membership-roles');
 
 class Creators {
   constructor() {
@@ -35,6 +36,22 @@ class Creators {
       }
     }
   };
+
+  /**
+   * @param {Models.Channel} channel
+   * @returns {Promise<boolean>}
+   */
+  async createChannelMembership(channel) {
+    await this.data.channelMembershipsData.upsertOne({
+      channelId: channel.id,
+      agentId: channel.creatorId,
+    }, {}, {
+      role: CHANNEL_MEMBERSHIP_ROLES.ADMIN,
+      channelId: channel.id,
+      agentId: channel.creatorId,
+    });
+    return true;
+  }
 }
 
 module.exports = {

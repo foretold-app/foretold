@@ -5,7 +5,6 @@ const { DataBase } = require('./data-base');
 const { AgentsData } = require('./agents-data');
 
 const { ChannelModel } = require('../models-abstract');
-const { CHANNEL_MEMBERSHIP_ROLES } = require('../enums/channel-membership-roles');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -29,33 +28,17 @@ class ChannelsData extends DataBase {
   }
 
   /**
-   * @todo: fix interface (data, options)
    * @public
-   * @deprecated: use createOne
-   * @param {Models.Agent} agent
-   * @param {Schema.ChannelsInput} input
+   * @param {Layers.DataSourceLayer.data} data
+   * @param {string} data.name
    * @return {Promise<Models.Channel>}
    */
-  async createOne(agent, input) {
-    let channel = await this.models.Channel.findOne({
-      where: { name: input.name },
-    });
+  async createOne(data) {
+    const channel = await this.getOne({ name: data.name });
     if (channel) {
       return Promise.reject(new Error('Channel exists.'));
     }
-    channel = await this.models.Channel.create({
-      ...input,
-      creatorId: agent.id,
-    });
-    await this.channelMembershipsData.upsertOne({
-      channelId: channel.id,
-      agentId: agent.id,
-    }, {}, {
-      role: CHANNEL_MEMBERSHIP_ROLES.ADMIN,
-      channelId: channel.id,
-      agentId: agent.id,
-    });
-    return channel;
+    return await this.createOne(data);
   }
 
   /**

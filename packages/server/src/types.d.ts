@@ -17,6 +17,7 @@ export namespace Models {
 
   export interface Channel extends Model {
     isPublic: boolean;
+    creatorId: ObjectID;
 
     getAgents(): Models.Agent[];
   }

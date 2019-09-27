@@ -3,6 +3,21 @@ const consumers = require('./consumers');
 const { Mailer } = require('./mailer');
 const { GitHubApi } = require('../lib/github/git-hub-api');
 
+async function createChannelMembership(channel) {
+  const name = 'Job::createChannelMembership';
+  console.log(name);
+
+  try {
+    const creators = new actions.Creators();
+    const result = await creators.createChannelMembership(channel);
+    console.log(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
 async function measurableStateTransition(measurement) {
   const name = 'Job::measurableStateTransition';
   console.log(name);
@@ -183,4 +198,5 @@ module.exports = {
   updateMeasurable,
   createNewMeasurables,
   measurableStateTransition,
+  createChannelMembership,
 };

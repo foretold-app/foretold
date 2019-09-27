@@ -13,20 +13,29 @@ describe('Channel Memberships Resolvers', () => {
     };
     const context = { agent: { id: 'agentId' } };
     beforeEach(() => {
-      jest.spyOn(data.channelMemberships, 'createOne2').mockReturnValue(
-        Promise.resolve(true),
-      );
+      jest.spyOn(data.channelMemberships, 'upsertOne')
+        .mockReturnValue(
+          Promise.resolve(true),
+        );
     });
     it('creates agent-channel row', () => {
-      return channelMemberships.create(root, args, context).then((result) => {
-        expect(data.channelMemberships.createOne2).toHaveBeenCalledWith(
-          'channelId1',
-          'agentId2',
-          'agentId',
-          args.input.role,
-        );
-        expect(result).toBe(true);
-      });
+      return channelMemberships.create(root, args, context)
+        .then((result) => {
+          expect(data.channelMemberships.upsertOne)
+            .toHaveBeenCalledWith(
+              {
+                'agentId': 'agentId2',
+                'channelId': 'channelId1'
+              }, {}, {
+                'agentId': 'agentId2',
+                'channelId': 'channelId1',
+                'inviterAgentId': 'agentId',
+                'role': 'ADMIN'
+              }
+            );
+          expect(result)
+            .toBe(true);
+        });
     });
   });
 
@@ -40,19 +49,28 @@ describe('Channel Memberships Resolvers', () => {
       },
     };
     beforeEach(() => {
-      jest.spyOn(data.channelMemberships, 'updateOne2').mockReturnValue(
-        Promise.resolve(true),
-      );
+      jest.spyOn(data.channelMemberships, 'updateOne')
+        .mockReturnValue(
+          Promise.resolve(true),
+        );
     });
     it('updates agent-channel row', () => {
-      return channelMemberships.update(root, args).then((result) => {
-        expect(data.channelMemberships.updateOne2).toHaveBeenCalledWith(
-          'channelId1',
-          'agentId2',
-          'ADMIN',
-        );
-        expect(result).toBe(true);
-      });
+      return channelMemberships.update(root, args)
+        .then((result) => {
+          expect(data.channelMemberships.updateOne)
+            .toHaveBeenCalledWith(
+              {
+                'agentId': 'agentId2',
+                'channelId': 'channelId1'
+              }, {
+                'agentId': 'agentId2',
+                'channelId': 'channelId1',
+                'role': 'ADMIN'
+              }
+            );
+          expect(result)
+            .toBe(true);
+        });
     });
   });
 
@@ -65,17 +83,22 @@ describe('Channel Memberships Resolvers', () => {
       },
     };
     beforeEach(() => {
-      jest.spyOn(data.channelMemberships, 'deleteOne2')
+      jest.spyOn(data.channelMemberships, 'deleteOne')
         .mockReturnValue(Promise.resolve(true));
     });
     it('removes agent-channel row', () => {
-      return channelMemberships.remove(root, args).then((result) => {
-        expect(data.channelMemberships.deleteOne2).toHaveBeenCalledWith(
-          'channelId1',
-          'agentId2',
-        );
-        expect(result).toBe(true);
-      });
+      return channelMemberships.remove(root, args)
+        .then((result) => {
+          expect(data.channelMemberships.deleteOne)
+            .toHaveBeenCalledWith(
+              {
+                'agentId': 'agentId2',
+                'channelId': 'channelId1'
+              }
+            );
+          expect(result)
+            .toBe(true);
+        });
     });
   });
 
@@ -91,11 +114,13 @@ describe('Channel Memberships Resolvers', () => {
     it('returns only role string', () => {
       return channelMemberships.myRole(root, args, context, info)
         .then((result) => {
-          expect(data.channelMemberships.getOneOnlyRole).toHaveBeenCalledWith({
-            agentId: 'agentId10',
-            channelId: 'id1',
-          });
-          expect(result).toBe(true);
+          expect(data.channelMemberships.getOneOnlyRole)
+            .toHaveBeenCalledWith({
+              agentId: 'agentId10',
+              channelId: 'id1',
+            });
+          expect(result)
+            .toBe(true);
         });
     });
   });
@@ -112,11 +137,13 @@ describe('Channel Memberships Resolvers', () => {
     it('leaves channel', () => {
       return channelMemberships.leave(root, args, context, info)
         .then((result) => {
-          expect(data.channelMemberships.leave).toHaveBeenCalledWith({
-            agentId: 'agentId11',
-            channelId: 'channelId1',
-          });
-          expect(result).toBe(true);
+          expect(data.channelMemberships.leave)
+            .toHaveBeenCalledWith({
+              agentId: 'agentId11',
+              channelId: 'channelId1',
+            });
+          expect(result)
+            .toBe(true);
         });
     });
   });
@@ -133,11 +160,13 @@ describe('Channel Memberships Resolvers', () => {
     it('joins channel', () => {
       return channelMemberships.join(root, args, context, info)
         .then((result) => {
-          expect(data.channelMemberships.join).toHaveBeenCalledWith({
-            agentId: 'agentId12',
-            channelId: 'channelId2',
-          });
-          expect(result).toBe(true);
+          expect(data.channelMemberships.join)
+            .toHaveBeenCalledWith({
+              agentId: 'agentId12',
+              channelId: 'channelId2',
+            });
+          expect(result)
+            .toBe(true);
         });
     });
   });

@@ -2,6 +2,7 @@ const _ = require('lodash');
 
 const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { DataBase } = require('./data-base');
+const { AgentsData } = require('./agents-data');
 
 const { ChannelModel } = require('../models-abstract');
 const { CHANNEL_MEMBERSHIP_ROLES } = require('../enums/channel-membership-roles');
@@ -15,6 +16,7 @@ class ChannelsData extends DataBase {
     this.channelMembershipsData = new ChannelMembershipsData();
     this.ChannelModel = new ChannelModel();
     this.model = this.ChannelModel;
+    this.agents = new AgentsData();
   }
 
   /**
@@ -57,31 +59,24 @@ class ChannelsData extends DataBase {
   }
 
   /**
-   * @todo: rework
    * @public
    * @param {Models.ObjectID} id
    * @return {Promise<Model[]>}
    */
   async getAgentsByChannelId(id) {
-    const channel = await this.models.Channel.findOne({
-      where: { id },
-      include: [{ model: this.models.Agent, as: 'agents' }],
-    });
-    return _.get(channel, 'agents', []);
+    return this.model.getAgentsByChannelId(id);
   }
 
   /**
-   * @todo: rework
    * @public
    * @param {Models.ObjectID} id
    * @return {Promise<Model>}
    */
   async getCreatorByChannelId(id) {
-    const channel = await this.models.Channel.findOne({
-      where: { id },
-      include: [{ model: this.models.Agent, as: 'creator' }],
-    });
-    return _.get(channel, 'creator');
+    const channel = await this.getOne({ id });
+    const creatorId = _.get(channel, 'creatorId');
+    if (!creatorId) return null;
+    return this.agents.getOne({ id: creatorId });
   }
 }
 

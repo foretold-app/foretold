@@ -15,7 +15,9 @@ const { Filter } = require('../../data/classes/filter');
 const { Options } = require('../../data/classes/options');
 const { Params } = require('../../data/classes/params');
 const { Query } = require('../../data/classes/query');
-const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums/measurement-competitor-type');
+const {
+  MEASUREMENT_COMPETITOR_TYPE,
+} = require('../../enums/measurement-competitor-type');
 
 /**
  * @param {*} root
@@ -120,11 +122,10 @@ async function one(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
-  const { creator } = context;
   const agentId = _.get(args, 'input.agentId')
     || _.get(context, 'agent.id');
   const datas = { ...args.input, agentId };
-  return data.measurements.createOne(datas, creator);
+  return data.measurements.createOne(datas);
 }
 
 /**
@@ -373,9 +374,63 @@ async function truncateCdf(root, args, context, info) {
   return result;
 }
 
+/**
+ * @param {object} root
+ * @param {Models.ObjectID} root.id
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function measurementCountByAgentId(root, _args, _context, _info) {
+  const agentId = _.get(root, 'id');
+  return data.measurements.getCount({ agentId });
+}
+
+/**
+ * @param {object} root
+ * @param {Models.ObjectID} root.id
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function measurementCountByMeasurableId(root, _args, _context, _info) {
+  const measurableId = _.get(root, 'id');
+  return data.measurements.getCount({ measurableId });
+}
+
+/**
+ * @param {object} _root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function count(_root, _args, _context, _info) {
+  return data.measurements.getCount();
+}
+
+/**
+ * @param {object} root
+ * @param {Models.ObjectID} root.id
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function measurerCount(root, _args, _context, _info) {
+  const measurableId = _.get(root, 'id');
+  return data.measurements.getCount({ measurableId }, {
+    distinct: true,
+    col: 'agentId',
+  });
+}
+
 module.exports = {
   one,
   all,
+  count,
   create,
   latest,
   scoreSet,
@@ -388,4 +443,7 @@ module.exports = {
   primaryPointScore,
   measurableMeasurement,
   truncateCdf,
+  measurementCountByAgentId,
+  measurementCountByMeasurableId,
+  measurerCount,
 };

@@ -1,6 +1,6 @@
-const index = require('./reducer');
+const index = require('./notifications');
 
-describe('Measurable Reducer Async', () => {
+describe('Notifications Class', () => {
   it('returns an object', () => {
     expect(index).toBeInstanceOf(Object);
   });

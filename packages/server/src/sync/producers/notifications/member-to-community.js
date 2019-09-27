@@ -17,9 +17,12 @@ class MemberToCommunity extends ProducerNotifications {
   constructor(channelMembership) {
     super({});
 
-    assert(_.isObject(channelMembership), 'Channel Membership is not an object');
-    assert(!!_.get(channelMembership, 'channelId'), 'Channel ID is required.');
-    assert(!!_.get(channelMembership, 'agentId'), 'Agent ID is required.');
+    assert(_.isObject(channelMembership),
+      'Channel Membership is not an object');
+    assert(!!_.get(channelMembership,
+      'channelId'), 'Channel ID is required.');
+    assert(!!_.get(channelMembership,
+      'agentId'), 'Agent ID is required.');
 
     this.channelMembership = channelMembership;
     this.templateName = Producer.TEMPLATE_NAME.MEMBER_ADDED_TO_COMMUNITY;

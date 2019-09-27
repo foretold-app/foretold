@@ -55,8 +55,14 @@ const agentMeasurablesConnection = new graphql.GraphQLObjectType({
   name: 'AgentMeasurablesConnection',
   fields: () => ({
     total: { type: graphql.GraphQLInt },
-    pageInfo: { type: graphql.GraphQLNonNull(require('./common').pageInfoConnection) },
-    edges: { type: graphql.GraphQLList(require('./agent-measurables').agentMeasurablesEdge) },
+    pageInfo: {
+      type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
+    },
+    edges: {
+      type: graphql.GraphQLList(
+        require('./agent-measurables').agentMeasurablesEdge,
+      ),
+    },
   }),
 });
 

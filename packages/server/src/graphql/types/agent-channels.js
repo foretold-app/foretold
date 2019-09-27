@@ -12,7 +12,9 @@ const agentChannel = new graphql.GraphQLObjectType({
       resolve: require('../resolvers').agentChannels.primaryPointScore,
     },
     numberOfPredictions: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
-    numberOfQuestionsScored: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
+    numberOfQuestionsScored: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLInt),
+    },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
 
@@ -42,8 +44,12 @@ const agentChannelsConnection = new graphql.GraphQLObjectType({
   name: 'AgentChannelsConnection',
   fields: () => ({
     total: { type: graphql.GraphQLInt },
-    pageInfo: { type: graphql.GraphQLNonNull(require('./common').pageInfoConnection) },
-    edges: { type: graphql.GraphQLList(require('./agent-channels').agentChannelsEdge) },
+    pageInfo: {
+      type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
+    },
+    edges: {
+      type: graphql.GraphQLList(require('./agent-channels').agentChannelsEdge),
+    },
   }),
 });
 

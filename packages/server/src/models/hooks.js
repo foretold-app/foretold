@@ -1,11 +1,11 @@
-const events = require('../async/events');
-const emitter = require('../async/emitter');
+const events = require('../sync/events');
+const emitter = require('../sync/emitter');
 
 const { AGENT_TYPE } = require('../enums/agent-type');
-const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums/measurement-competitor-type');
+const { MEASURABLE_STATE } = require('../enums/measurable-state');
 
 /**
- * Try to keep all "async" hooks in one place.
+ * Try to keep all "sync" hooks in one place.
  * For what do you want to ask?
  *
  * Server side application architecture is being building with separated,
@@ -16,7 +16,7 @@ const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums/measurement-competitor
  * Models are just "data type definitions" which are similar with "grapqhl
  * types". "Sequelize" is a just lib which plays role of "DB Driver".
  *
- * So this is why we keep "async" part of the application here, and
+ * So this is why we keep "sync" part of the application here, and
  * "associations" definitions too. It does not matter where the "associations"
  * are defined and placed (either DB or JS files). The main purpose
  * is to give to developers to read this base definitions without
@@ -60,32 +60,31 @@ function addHooks(db) {
       console.log('Hook', e);
     }
   });
+  db.Series.addHook('afterCreate', (instance) => {
+    try {
+      emitter.emit(events.NEW_SERIES, instance);
+    } catch (e) {
+      console.log('Hook', e);
+    }
+  });
 
-  db.Bot.addHook('beforeCreate', async (event) => {
+  db.Bot.addHook('beforeCreate', async (instance) => {
     try {
       const agent = await db.sequelize.models.Agent.create({
         type: AGENT_TYPE.BOT,
       });
-      event.agentId = agent.dataValues.id;
+      instance.agentId = agent.id;
     } catch (e) {
       console.log('Hook', e);
     }
   });
 
-  db.User.addHook('beforeCreate', async (event) => {
+  db.User.addHook('beforeCreate', async (instance) => {
     try {
       const agent = await db.sequelize.models.Agent.create({
         type: AGENT_TYPE.USER,
       });
-      event.agentId = agent.dataValues.id;
-    } catch (e) {
-      console.log('Hook', e);
-    }
-  });
-
-  db.Series.addHook('afterCreate', async (series) => {
-    try {
-      await series.createMeasurables();
+      instance.agentId = agent.id;
     } catch (e) {
       console.log('Hook', e);
     }
@@ -93,7 +92,11 @@ function addHooks(db) {
 
   db.Measurable.addHook('beforeUpdate', async (instance) => {
     try {
-      await instance.watchExpectedResolutionDate();
+      if (instance.changed('expectedResolutionDate')) {
+        if (instance.expectedResolutionDate >= new Date()) {
+          await instance.set('state', MEASURABLE_STATE.OPEN);
+        }
+      }
     } catch (e) {
       console.log('Hook', e);
     }
@@ -101,24 +104,8 @@ function addHooks(db) {
 
   db.Measurement.addHook('beforeValidate', async (instance) => {
     try {
-      if (instance.dataValues.relevantAt == null) {
+      if (instance.relevantAt == null) {
         instance.relevantAt = Date.now();
-      }
-    } catch (e) {
-      console.log('Hook', e);
-    }
-  });
-
-  db.Measurement.addHook('afterCreate', async (instance) => {
-    try {
-      const { competitorType } = instance.dataValues;
-
-      if (competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE) {
-        const measurable = await instance.getMeasurable();
-        await measurable.judged();
-      } else if (competitorType === MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED) {
-        const measurable = await instance.getMeasurable();
-        await measurable.closedAsUnresolved();
       }
     } catch (e) {
       console.log('Hook', e);

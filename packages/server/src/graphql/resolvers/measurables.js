@@ -38,7 +38,8 @@ async function all(root, args, context, info) {
   const channelId = _.get(args, 'channelId');
   const currentAgentId = _.get(context, 'agent.id');
 
-  const withinJoinedChannels = _.isEmpty(channelId)
+  const withinJoinedChannels
+    = _.isEmpty(channelId) && !_.isEmpty(currentAgentId)
     ? structures.withinJoinedChannelsByChannelId(currentAgentId) : null;
 
   const filter = new Filter({
@@ -58,7 +59,8 @@ async function all(root, args, context, info) {
   });
 
   // @todo: tricky, rework it.
-  context.resultOrLatestMeasurementForAgentId = args.resultOrLatestMeasurementForAgentId;
+  context.resultOrLatestMeasurementForAgentId
+    = args.resultOrLatestMeasurementForAgentId;
   return data.measurables.getConnection(filter, pagination, options);
 }
 
@@ -94,13 +96,12 @@ async function one(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
-  const { creator } = context;
   const agentId = _.get(context, 'agent.id');
   const datas = {
     ...args.input,
     creatorId: agentId,
   };
-  return data.measurables.createOne(datas, creator);
+  return data.measurables.createOne(datas);
 }
 
 /**
@@ -141,21 +142,54 @@ async function unarchive(root, args, context, info) {
 async function update(root, args, context, info) {
   const { id } = args;
   const datas = args.input;
-  const { creator } = context;
-  return data.measurables.updateOne(id, datas, creator);
+  return data.measurables.updateOne({ id }, datas);
 }
 
 /**
  * @param {*} root
  * @param {Models.ObjectID} root.id
- * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function openedCount(root, args, context, info) {
+async function openedCount(root, _args, _context, _info) {
   const channelId = root.id;
   return data.measurables.getOpenedCount(channelId);
+}
+
+/**
+ * @param {*} _root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function count(_root, _args, _context, _info) {
+  return data.measurables.getCount();
+}
+
+/**
+ * @param {*} root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function measurableCount(root, _args, _context, _info) {
+  const seriesId = _.get(root, 'id');
+  return data.measurables.getCount({ seriesId });
+}
+
+/**
+ * @param {*} root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function resolutionEndpointResponse(root, _args, _context, _info) {
+  return data.measurables.resolutionEndpointResponse(root);
 }
 
 module.exports = {
@@ -166,4 +200,7 @@ module.exports = {
   archive,
   create,
   openedCount,
+  count,
+  measurableCount,
+  resolutionEndpointResponse,
 };

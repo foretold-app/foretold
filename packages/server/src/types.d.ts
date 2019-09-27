@@ -17,6 +17,7 @@ export namespace Models {
 
   export interface Channel extends Model {
     isPublic: boolean;
+    creatorId: ObjectID;
 
     getAgents(): Models.Agent[];
   }
@@ -88,6 +89,8 @@ export namespace Models {
     getCreationNotification(creator: Models.Creator): any;
 
     getMeasurable(): Measurable;
+
+    getAgent(): Agent;
   }
 
   export interface Agent extends Model {
@@ -101,7 +104,13 @@ export namespace Models {
     getUser(): Models.User;
   }
 
-  export interface Series extends Model {}
+  export interface Series extends Model {
+    subjects: string[];
+    properties: string[];
+    dates: string[];
+    creatorId: ObjectID;
+    channelId: ObjectID;
+  }
 
   export interface ChannelMemberships {
     agentId: ObjectID;
@@ -269,6 +278,8 @@ export namespace Layers {
     };
     type query = {
       sort?: number;
+      distinct?: boolean;
+      col?: string;
     };
     type params = {
       id?: Models.ObjectID;
@@ -277,6 +288,7 @@ export namespace Layers {
       name?: string;
       measurableId?: Models.ObjectID;
       competitorType?: string;
+      seriesId?: Models.ObjectID;
     };
     type response = { data: any };
     type responseList = { data: any[]; total: number };
@@ -368,16 +380,20 @@ export namespace Layers {
       order?: orderList;
 
       getPagination(total: number): { limit: number, offset: number };
+      getPagination2(): { limit: number, offset: number };
       isOrderSet(): boolean;
     };
     type query = {
       sort?: number,
+      distinct?: boolean,
+      col?: string,
     };
     type params = {
       id?: Models.ObjectID
       agentId?: Models.ObjectID
       name?: string,
       auth0Id?: string,
+      seriesId?: Models.ObjectID,
     };
     type response = { data: any };
     type responseList = { data: any[], total: number };

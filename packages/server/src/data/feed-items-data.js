@@ -3,8 +3,6 @@ const _ = require('lodash');
 const { DataBase } = require('./data-base');
 const { FeedItemModel } = require('../models-abstract');
 
-const structures = require('../structures');
-
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
  * @property {FeedItemModel} FeedItemModel

@@ -5,7 +5,7 @@ describe('Channel Memberships Middlewares', () => {
   describe('setContextChannelMemberships() sets agent-channel model into context', () => {
     const channelMembership = {};
     beforeEach(() => {
-      jest.spyOn(data.channelMemberships, 'getOne2').mockReturnValue(
+      jest.spyOn(data.channelMemberships, 'getOne').mockReturnValue(
         Promise.resolve(channelMembership),
       );
     });
@@ -16,7 +16,7 @@ describe('Channel Memberships Middlewares', () => {
       const context = { agent: { id: 'agentId1' } };
       const info = {};
       return setContextChannelMemberships(root, args, context, info).then((result) => {
-        expect(data.channelMemberships.getOne2).toHaveBeenCalledWith({
+        expect(data.channelMemberships.getOne).toHaveBeenCalledWith({
           agentId: 'agentId1',
           channelId: 'channelId1',
         });
@@ -31,7 +31,7 @@ describe('Channel Memberships Middlewares', () => {
       const context = { agent: { id: 'agentId2' } };
       const info = {};
       return setContextChannelMemberships(root, args, context, info).then((result) => {
-        expect(data.channelMemberships.getOne2).toHaveBeenCalledWith({
+        expect(data.channelMemberships.getOne).toHaveBeenCalledWith({
           agentId: 'agentId2',
           channelId: 'channelId1',
         });
@@ -49,7 +49,7 @@ describe('Channel Memberships Middlewares', () => {
       };
       const info = {};
       return setContextChannelMemberships(root, args, context, info).then((result) => {
-        expect(data.channelMemberships.getOne2).toHaveBeenCalledWith({
+        expect(data.channelMemberships.getOne).toHaveBeenCalledWith({
           agentId: 'agentId3',
           channelId: 'channelId1',
         });

@@ -1,5 +1,3 @@
-const _ = require('lodash');
-
 const models = require('../models');
 const { ModelPostgres } = require('./model-postgres');
 
@@ -13,41 +11,6 @@ class ChannelMembershipModel extends ModelPostgres {
       model: models.ChannelMemberships,
       sequelize: models.sequelize,
     });
-  }
-
-  /**
-   * @todo: fix interface
-   * @param {Models.ObjectID} channelId
-   * @param {Models.ObjectID} agentId
-   * @param {string} role
-   * @returns {Promise<Models.ChannelMemberships>}
-   */
-  async updateOne(channelId, agentId, role) {
-    const channelMembership = await this.model.findOne({
-      where: { channelId, agentId },
-    });
-    if (channelMembership) {
-      await channelMembership.update({ role });
-    }
-    return channelMembership;
-  }
-
-  /**
-   * @todo: fix interface
-   * @param {Models.ObjectID} channelId
-   * @param {Models.ObjectID} agentId
-   * @returns {Promise<Models.ChannelMemberships | null>}
-   */
-  async deleteOne(channelId, agentId) {
-    const channelMembership = await this.model.findOne({
-      where: { channelId, agentId },
-    });
-    if (channelMembership) {
-      await this.model.destroy({
-        where: { channelId, agentId },
-      });
-    }
-    return channelMembership;
   }
 }
 

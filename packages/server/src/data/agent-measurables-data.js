@@ -79,7 +79,9 @@ class AgentMeasurablesData extends DataBase {
     if (predictions.length === 0) return undefined;
     if (allAggregations.length === 0) return undefined;
 
-    const agentPredictions = predictions.map((r) => r.measurement).map(toOverTime);
+    const agentPredictions = predictions
+      .map((r) => r.measurement)
+      .map(toOverTime);
     const marketPredictions = allAggregations.map(toOverTime);
     const resolution = toOverTime(recentResult);
 

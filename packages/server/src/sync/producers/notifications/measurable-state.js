@@ -2,7 +2,9 @@ const assert = require('assert');
 const _ = require('lodash');
 
 const { getMeasurableLinkWithToken } = require('../../../lib/urls');
-const { MEASUREMENT_COMPETITOR_TYPE } = require('../../../enums/measurement-competitor-type');
+const {
+  MEASUREMENT_COMPETITOR_TYPE,
+} = require('../../../enums/measurement-competitor-type');
 
 const { Producer } = require('../producer');
 const { ProducerNotifications } = require('./producer-notifications');
@@ -16,10 +18,14 @@ class MeasurableState extends ProducerNotifications {
    */
   constructor(measurable) {
     super({});
-    assert(!!_.get(measurable, 'id'), 'Measurable ID is required');
-    assert(!!_.get(measurable, 'changed'), 'Measurable "changed" is required');
-    assert(!!_.get(measurable, 'get'), 'Measurable "get" is required');
-    assert(!!_.get(measurable, 'previous'), 'Measurable "previous" is required');
+    assert(!!_.get(measurable, 'id'),
+      'Measurable ID is required');
+    assert(!!_.get(measurable, 'changed'),
+      'Measurable "changed" is required');
+    assert(!!_.get(measurable, 'get'),
+      'Measurable "get" is required');
+    assert(!!_.get(measurable, 'previous'),
+      'Measurable "previous" is required');
     this.measurable = measurable;
   }
 

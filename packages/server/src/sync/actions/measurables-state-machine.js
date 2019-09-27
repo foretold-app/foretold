@@ -1,8 +1,11 @@
 const _ = require('lodash');
 
 const data = require('../../data');
+const {
+  MEASUREMENT_COMPETITOR_TYPE,
+} = require('../../enums/measurement-competitor-type');
 
-class Reducer {
+class MeasurablesStateMachine {
   constructor() {
     this.data = data;
   }
@@ -34,8 +37,29 @@ class Reducer {
 
     return true;
   }
+
+  /**
+   * @param {Models.Measurement} measurement
+   * @returns {Promise<boolean>}
+   */
+  async measurableStateTransition(measurement) {
+    const { competitorType } = measurement;
+    const measurable = await measurement.getMeasurable();
+
+    if (competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE) {
+      await measurable.judged();
+      return true;
+    }
+
+    if (competitorType === MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED) {
+      await measurable.closedAsUnresolved();
+      return true;
+    }
+
+    return false;
+  }
 }
 
 module.exports = {
-  Reducer,
+  MeasurablesStateMachine,
 };

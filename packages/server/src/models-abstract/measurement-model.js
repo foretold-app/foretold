@@ -5,6 +5,7 @@ const models = require('../models');
 const {
   MEASUREMENT_COMPETITOR_TYPE,
 } = require('../enums/measurement-competitor-type');
+const { MEASURABLE_STATE } = require('../enums/measurable-state');
 const { BrierScore } = require('../lib/brier-score');
 
 const { ModelPostgres } = require('./model-postgres');
@@ -91,8 +92,8 @@ class MeasurementModel extends ModelPostgres {
   _binaryPercentages(agentId) {
     assert(!!agentId, 'Agent ID is required.');
 
-    const agentMeasurements =
-      this._agentMeasurementsJudgedPercentageCompetitive(agentId);
+    const agentMeasurements
+      = this._agentMeasurementsJudgedPercentageCompetitive(agentId);
 
     return `(
       /* B͟i͟n͟a͟r͟y͟ ͟P͟e͟r͟c͟e͟n͟t͟a͟g͟e͟s͟ */
@@ -209,6 +210,31 @@ class MeasurementModel extends ModelPostgres {
         ['relevantAt', 'DESC'],
       ],
     });
+  }
+
+  /**
+   * @public
+   * @param {Models.Measurable} measurable
+   * @param {Models.ObjectID | null} agentId
+   * @return {Promise<Models.Model>}
+   */
+  async getLatest({ measurable, agentId } = {}) {
+    const measurableId = measurable.id;
+    const competitorType = MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE;
+
+    if (measurable.state === MEASURABLE_STATE.JUDGED) {
+      const measurement = await this.getOne({
+        measurableId,
+        agentId,
+        competitorType,
+      });
+      if (!measurement) {
+        throw new Error('Measurement as Objective is not found');
+      }
+      return measurement;
+    }
+
+    return this.getOne({ measurableId, agentId });
   }
 }
 

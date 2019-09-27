@@ -1,6 +1,6 @@
 const _ = require('lodash');
+const fetch = require('node-fetch');
 
-const notifications = require('../lib/notifications');
 const { MeasurableModel } = require('../models-abstract');
 const { Params } = require('./classes/params');
 
@@ -14,20 +14,6 @@ class MeasurablesData extends DataBase {
     super();
     this.MeasurableModel = new MeasurableModel();
     this.model = this.MeasurableModel;
-  }
-
-  /**
-   * @todo: fix interface (data, options)
-   * @public
-   * @deprecated: use createOne
-   * @param {object} [data]
-   * @param {Models.Creator} [creator]
-   * @return {Promise<Models.Measurable>}
-   */
-  async createOne(data = {}, creator = {}) {
-    const measurable = await super.createOne(data);
-    measurable && notifications.creationNotification(measurable, creator);
-    return measurable;
   }
 
   /**
@@ -52,22 +38,6 @@ class MeasurablesData extends DataBase {
     const params = new Params({ id });
     const measurable = await this.getOne(params);
     return measurable && measurable.unarchive();
-  }
-
-  /**
-   * @todo: fix interface (params, data, options)
-   * @public
-   * @deprecated: use updateOne
-   * @param {Models.ObjectID} id
-   * @param {object} data
-   * @param {Models.Creator} creator
-   * @return {Promise<Models.Measurable>}
-   */
-  async updateOne(id, data, creator) {
-    const params = new Params({ id });
-    const measurable = await this.getOne(params);
-    measurable && notifications.updateNotification(measurable, creator, data);
-    return measurable && measurable.update(data);
   }
 
   /**
@@ -116,6 +86,32 @@ class MeasurablesData extends DataBase {
       // @todo: move to filter
       measuredByAgentId: options.measuredByAgentId,
     };
+  }
+
+  /**
+   * @return {Promise<null|boolean|number>}
+   */
+  async resolutionEndpointResponse(measurable) {
+    const endpoint = measurable.resolutionEndpoint;
+    if (!endpoint) return false;
+
+    try {
+      const response = await fetch(endpoint);
+      const json = await response.json();
+      const match = JSON.stringify(json).match(/[-+]?[0-9]*\.?[0-9]+/);
+      const asFloat = !!match ? parseFloat(match[0]) : null;
+
+      console.log(
+        `Got response from endpoint. Url: ${endpoint}, `
+        + `Response: ${JSON.stringify(json)}, Float: ${asFloat}`,
+      );
+
+      return asFloat;
+    } catch (e) {
+      console.error('Error getting response from endpoint. '
+        + `Url: ${endpoint}, error: ${e}`);
+    }
+    return null;
   }
 }
 

@@ -410,7 +410,7 @@ class ModelPostgres extends Model {
       where.creatorId = filter.creatorId;
     }
 
-    if (_.has(filter, 'excludeChannelId')) {
+    if (filter.excludeChannelId) {
       where[this.and].push({
         id: {
           [this.notIn]: this._agentsIdsLiteral(filter.excludeChannelId),
@@ -418,7 +418,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (_.has(filter, 'types')) {
+    if (filter.types) {
       where[this.and].push({
         type: {
           [this.in]: filter.types,
@@ -426,19 +426,19 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (_.has(filter, 'sentAt')) {
+    if (filter.sentAt || filter.sentAt === null) {
       where[this.and].push({
         sentAt: filter.sentAt,
       });
     }
 
-    if (_.has(filter, 'notificationId')) {
+    if (filter.notificationId) {
       where[this.and].push({
         sentAt: filter.notificationId,
       });
     }
 
-    if (_.has(filter, 'attemptCounterMax')) {
+    if (filter.attemptCounterMax) {
       where[this.and].push({
         attemptCounter: {
           [this.lt]: filter.attemptCounterMax,
@@ -655,7 +655,7 @@ class ModelPostgres extends Model {
 
     /** @type {number} */
     const total = await this.model.count(cond);
-    const { limit, offset } = pagination.getPagination(total);
+    const { limit, offset } = pagination.getPagination2();
 
     const order = pagination.isOrderSet()
       ? this._getDefaultOrder(pagination)
@@ -716,9 +716,37 @@ class ModelPostgres extends Model {
    * @return {Promise<Models.Model>}
    */
   async getOne(params = {}, query = {}, restrictions = {}, options = {}) {
+    const cond = await this.getPredicated(params, query, restrictions, options);
+    return this.model.findOne(cond);
+  }
+
+  /**
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
+   * @return {Promise<Models.Model>}
+   */
+  async getCount(params = {}, query = {}, restrictions = {}, options = {}) {
+    const cond = await this.getPredicated(params, query, restrictions, options);
+    return this.model.count(cond);
+  }
+
+  /**
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
+   * @return {Promise<*>}
+   */
+  async getPredicated(params = {}, query = {}, restrictions = {}, options = {}) {
     const where = { ...params };
     const sort = query.sort === 1 ? 'ASC' : 'DESC';
     const order = [['createdAt', sort]];
+    const distinct = !!query.distinct ? true : null;
+    const col = !!query.col ? query.col : null;
 
     if ('inspect' in params) params.inspect();
     if ('inspect' in restrictions) restrictions.inspect();
@@ -728,11 +756,13 @@ class ModelPostgres extends Model {
     const cond = {
       where,
       order,
+      distinct,
+      col,
     };
 
     this._extendConditions(cond, options);
 
-    return this.model.findOne(cond);
+    return cond;
   }
 
   /**
@@ -791,6 +821,23 @@ class ModelPostgres extends Model {
       cond.skipLocked = options.skipLocked;
     }
     return cond;
+  }
+
+  /**
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} restrictions
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @return {Promise<Models.Model>}
+   */
+  async deleteOne(params, query, restrictions, options) {
+    const where = { ...params };
+    const entity = await this.getOne(params, query, restrictions, options);
+    if (entity) {
+      await this.model.destroy({ where });
+    }
+    return entity;
   }
 }
 

@@ -1,7 +1,4 @@
 const assert = require('assert');
-const _ = require('lodash');
-
-const { EmailEnvelope } = require('../../../models/classes/notifications');
 
 const { Producer } = require('../producer');
 
@@ -22,7 +19,7 @@ class ProducerNotifications extends Producer {
     const template = await this._getTemplate();
     const emailEnvelope = new Producer.EmailEnvelope(template.envelopeTemplate);
     const emailEnvelope$ = emailEnvelope.instanceFactory(replacements);
-    return await this._createEmailNotification(emailEnvelope$);
+    return this._createEmailNotification(emailEnvelope$);
   }
 
   /**
@@ -65,7 +62,7 @@ class ProducerNotifications extends Producer {
 
     const data = { agentId: agent.id, notificationId: notification.id };
     const options = await this._getOptions();
-    return await Producer.data.agentNotifications.createOne(
+    return Producer.data.agentNotifications.createOne(
       data,
       options,
     );

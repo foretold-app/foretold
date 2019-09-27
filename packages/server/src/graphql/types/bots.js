@@ -33,13 +33,13 @@ const bot = new graphql.GraphQLObjectType({
     },
 
     // @todo: security?
-    Agent: {
+    agent: {
       type: require('./agents').agent,
       resolve: resolver(models.Bot.Agent),
     },
 
     // @todo: security?
-    User: {
+    user: {
       type: require('./users').user,
       resolve: resolver(models.Bot.User),
     },

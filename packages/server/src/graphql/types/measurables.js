@@ -52,7 +52,7 @@ const measurable = new graphql.GraphQLObjectType({
       resolve: resolvers.permissions.measurablesPermissions,
     },
 
-    Measurements: {
+    measurements: {
       type: require('./connections').measurableMeasurementsConnection.connectionType,
       args: require('./connections').measurableMeasurementsConnection.connectionArgs,
       resolve: require('./connections').measurableMeasurementsConnection.resolve,
@@ -68,7 +68,7 @@ const measurable = new graphql.GraphQLObjectType({
       resolve: resolver(models.Measurable.Creator),
     },
 
-    Channel: {
+    channel: {
       type: require('./channels').channel,
       resolve: resolver(models.Measurable.Channel),
     },

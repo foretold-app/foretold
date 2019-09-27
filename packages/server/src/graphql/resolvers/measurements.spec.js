@@ -64,25 +64,4 @@ describe('Measurements Resolver', () => {
       });
     });
   });
-
-  describe('create()', () => {
-    const root = {};
-    const args = { input: { a: 'a1' } };
-    const context = { agent: { id: 'agentId3' } };
-    const info = {};
-    beforeEach(() => {
-      jest.spyOn(data.measurements, 'createOne').mockReturnValue(
-        Promise.resolve(true),
-      );
-    });
-    it('creates a measurement', () => {
-      return measurements.create(root, args, context, info).then((result) => {
-        expect(data.measurements.createOne).toHaveBeenCalledWith(
-          { a: 'a1', agentId: 'agentId3' },
-          context.user,
-        );
-        expect(result).toBe(true);
-      });
-    });
-  });
 });

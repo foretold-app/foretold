@@ -82,7 +82,6 @@ describe('Measurables Resolvers', () => {
       return measurables.create(root, args, context, info).then((result) => {
         expect(data.measurables.createOne).toHaveBeenCalledWith(
           { creatorId: 'agentId1' },
-          context.user,
         );
         expect(result).toBe(true);
       });
@@ -142,9 +141,8 @@ describe('Measurables Resolvers', () => {
     it('updates a measurable', () => {
       return measurables.update(root, args, context, info).then((result) => {
         expect(data.measurables.updateOne).toHaveBeenCalledWith(
-          'id1',
+          { id : 'id1' },
           { b: 'b1' },
-          context.user,
         );
         expect(result).toBe(true);
       });

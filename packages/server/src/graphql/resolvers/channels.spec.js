@@ -107,7 +107,7 @@ describe('Channels Resolvers', () => {
 
   describe('create()', () => {
     const root = {};
-    const context = { agent: { b: '2' } };
+    const context = { agent: { b: '2' , id: 'id2'} };
     const args = { input: { a: '1' } };
     const info = {};
     beforeEach(() => {
@@ -118,8 +118,7 @@ describe('Channels Resolvers', () => {
     it('creates channel', () => {
       return channels.create(root, args, context, info).then((result) => {
         expect(data.channels.createOne).toHaveBeenCalledWith(
-          context.agent,
-          args.input,
+          { a: '1', creatorId: 'id2' },
         );
         expect(result).toBe(true);
       });

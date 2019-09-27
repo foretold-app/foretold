@@ -3,6 +3,21 @@ const consumers = require('./consumers');
 const { Mailer } = require('./mailer');
 const { GitHubApi } = require('../lib/github/git-hub-api');
 
+async function measurableStateTransition(measurement) {
+  const name = 'Job::measurableStateTransition';
+  console.log(name);
+
+  try {
+    const action = new actions.MeasurablesStateMachine();
+    const result = await action.measurableStateTransition(measurement);
+    console.log(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
 async function createNewMeasurables(series) {
   const name = 'Job::createNewMeasurables';
   console.log(name);
@@ -167,4 +182,5 @@ module.exports = {
   newMeasurable,
   updateMeasurable,
   createNewMeasurables,
+  measurableStateTransition,
 };

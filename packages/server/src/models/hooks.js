@@ -2,7 +2,6 @@ const events = require('../sync/events');
 const emitter = require('../sync/emitter');
 
 const { AGENT_TYPE } = require('../enums/agent-type');
-const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums/measurement-competitor-type');
 const { MEASURABLE_STATE } = require('../enums/measurable-state');
 
 /**
@@ -69,23 +68,23 @@ function addHooks(db) {
     }
   });
 
-  db.Bot.addHook('beforeCreate', async (event) => {
+  db.Bot.addHook('beforeCreate', async (instance) => {
     try {
       const agent = await db.sequelize.models.Agent.create({
         type: AGENT_TYPE.BOT,
       });
-      event.agentId = agent.id;
+      instance.agentId = agent.id;
     } catch (e) {
       console.log('Hook', e);
     }
   });
 
-  db.User.addHook('beforeCreate', async (event) => {
+  db.User.addHook('beforeCreate', async (instance) => {
     try {
       const agent = await db.sequelize.models.Agent.create({
         type: AGENT_TYPE.USER,
       });
-      event.agentId = agent.id;
+      instance.agentId = agent.id;
     } catch (e) {
       console.log('Hook', e);
     }
@@ -107,22 +106,6 @@ function addHooks(db) {
     try {
       if (instance.relevantAt == null) {
         instance.relevantAt = Date.now();
-      }
-    } catch (e) {
-      console.log('Hook', e);
-    }
-  });
-
-  db.Measurement.addHook('afterCreate', async (instance) => {
-    try {
-      const { competitorType } = instance;
-
-      if (competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE) {
-        const measurable = await instance.getMeasurable();
-        await measurable.judged();
-      } else if (competitorType === MEASUREMENT_COMPETITOR_TYPE.UNRESOLVED) {
-        const measurable = await instance.getMeasurable();
-        await measurable.closedAsUnresolved();
       }
     } catch (e) {
       console.log('Hook', e);

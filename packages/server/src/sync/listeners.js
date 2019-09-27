@@ -3,6 +3,21 @@ const consumers = require('./consumers');
 const { Mailer } = require('./mailer');
 const { GitHubApi } = require('../lib/github/git-hub-api');
 
+async function createNewMeasurables(series) {
+  const name = 'Job::createNewMeasurables';
+  console.log(name);
+
+  try {
+    const creators = new actions.Creators();
+    const result = await creators.createMeasurables(series);
+    console.log(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
 async function newMeasurement(measurement) {
   const name = 'Job::newMeasurement';
   console.log(name);
@@ -151,4 +166,5 @@ module.exports = {
   newMeasurement,
   newMeasurable,
   updateMeasurable,
+  createNewMeasurables,
 };

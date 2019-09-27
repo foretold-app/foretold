@@ -1,7 +1,3 @@
-const Sequelize = require('sequelize');
-
-const { MEASURABLE_VALUE_TYPE } = require('../enums/measurable-value-type');
-
 module.exports = (sequelize, DataTypes) => {
   const Series = sequelize.define('Series', {
     id: {
@@ -47,27 +43,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW,
     },
   });
-
-  Series.prototype.createMeasurables = async function createMeasurables() {
-    for (const subject of this.subjects) {
-      for (const property of this.properties) {
-        for (const date of this.dates) {
-          console.log('Making Measurable for Series:', subject, property, date);
-          await sequelize.models.Measurable.create({
-            name: '',
-            labelSubject: subject,
-            labelProperty: property,
-            labelOnDate: date,
-            expectedResolutionDate: date,
-            seriesId: this.id,
-            creatorId: this.creatorId,
-            channelId: this.channelId,
-            valueType: MEASURABLE_VALUE_TYPE.FLOAT,
-          });
-        }
-      }
-    }
-  };
 
   Series.associate = function associate(models) {
     Series.Creator = Series.belongsTo(models.Agent, {

@@ -61,6 +61,13 @@ function addHooks(db) {
       console.log('Hook', e);
     }
   });
+  db.Series.addHook('afterCreate', (instance) => {
+    try {
+      emitter.emit(events.NEW_SERIES, instance);
+    } catch (e) {
+      console.log('Hook', e);
+    }
+  });
 
   db.Bot.addHook('beforeCreate', async (event) => {
     try {
@@ -79,14 +86,6 @@ function addHooks(db) {
         type: AGENT_TYPE.USER,
       });
       event.agentId = agent.id;
-    } catch (e) {
-      console.log('Hook', e);
-    }
-  });
-
-  db.Series.addHook('afterCreate', async (series) => {
-    try {
-      await series.createMeasurables();
     } catch (e) {
       console.log('Hook', e);
     }

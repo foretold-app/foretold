@@ -103,7 +103,13 @@ export namespace Models {
     getUser(): Models.User;
   }
 
-  export interface Series extends Model {}
+  export interface Series extends Model {
+    subjects: string[];
+    properties: string[];
+    dates: string[];
+    creatorId: ObjectID;
+    channelId: ObjectID;
+  }
 
   export interface ChannelMemberships {
     agentId: ObjectID;

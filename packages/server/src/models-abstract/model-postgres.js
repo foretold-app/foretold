@@ -655,7 +655,7 @@ class ModelPostgres extends Model {
 
     /** @type {number} */
     const total = await this.model.count(cond);
-    const { limit, offset } = pagination.getPagination(total);
+    const { limit, offset } = pagination.getPagination2();
 
     const order = pagination.isOrderSet()
       ? this._getDefaultOrder(pagination)

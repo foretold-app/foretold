@@ -38,7 +38,7 @@ class ChannelsData extends DataBase {
     if (channel) {
       return Promise.reject(new Error('Channel exists.'));
     }
-    return await this.createOne(data);
+    return super.createOne(data);
   }
 
   /**

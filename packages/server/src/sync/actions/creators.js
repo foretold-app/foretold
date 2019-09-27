@@ -42,7 +42,7 @@ class Creators {
    * @returns {Promise<boolean>}
    */
   async createChannelMembership(channel) {
-    await this.data.channelMembershipsData.upsertOne({
+    await this.data.channelMemberships.upsertOne({
       channelId: channel.id,
       agentId: channel.creatorId,
     }, {}, {

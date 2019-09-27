@@ -1,6 +1,6 @@
-const index = require('./notifications');
+const index = require('./slack');
 
-describe('Notifications Lib', () => {
+describe('Slack Lib', () => {
   it('returns an object', () => {
     expect(index).toBeInstanceOf(Object);
   });

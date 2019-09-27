@@ -2,7 +2,7 @@ const _ = require('lodash');
 const moment = require('moment');
 
 const data = require('../../data');
-const { notify } = require('../../lib/notifications');
+const { sendNotificationToSlack } = require('../../lib/slack');
 const { clientUrl } = require('../../lib/urls');
 
 class Notifications {
@@ -28,7 +28,7 @@ class Notifications {
       agent,
     );
 
-    await notify(notification);
+    await sendNotificationToSlack(notification);
     return true;
   }
 
@@ -39,7 +39,7 @@ class Notifications {
    */
   async newMeasurable(measurable) {
     const channel = await measurable.getChannel();
-    if (channel.isPublic) return false;
+    if (!channel.isPublic) return false;
 
     const agent = await measurable.getCreator();
     const notification = await this.getNotificationNewMeasurable(
@@ -47,7 +47,7 @@ class Notifications {
       agent,
     );
 
-    await notify(notification);
+    await sendNotificationToSlack(notification);
     return true;
   }
 
@@ -58,16 +58,15 @@ class Notifications {
    */
   async updateMeasurable(measurable) {
     const channel = await measurable.getChannel();
-    if (channel.isPublic) return false;
+    if (!channel.isPublic) return false;
 
     const agent = await measurable.getCreator();
     const notification = await this.getNotificationUpdateMeasurable(
       measurable,
       agent,
-      measurable,
     );
 
-    await notify(notification);
+    await sendNotificationToSlack(notification);
     return true;
   }
 
@@ -84,7 +83,7 @@ class Notifications {
         pretext: 'New Measurement Created',
         title: measurable.name,
         title_link: `${clientUrl}/c/${measurable.channelId}`,
-        author_name: agent.name,
+        author_name: await agent.name,
         author_link: `${clientUrl}/agents/${agent.id}`,
         text: measurement.description,
         fields: [
@@ -111,7 +110,7 @@ class Notifications {
         pretext: 'New Measurable Created',
         title: measurable.name,
         title_link: `${clientUrl}/c/${measurable.channelId}`,
-        author_name: agent.name,
+        author_name: await agent.name,
         author_link: `${clientUrl}/agents/${agent.id}`,
         text: measurable.labelCustom,
         fields: [
@@ -131,38 +130,57 @@ class Notifications {
    * @protected
    * @param {Models.Measurable} measurable
    * @param {Models.Creator} agent
-   * @param {object} newData
    * @return {Promise<*>}
    */
-  async getNotificationUpdateMeasurable(measurable, agent, newData) {
-    const changed = this.changedFields(measurable, newData);
+  async getNotificationUpdateMeasurable(measurable, agent) {
+    const changed = this.changedFields(measurable);
     return {
       attachments: [{
         pretext: 'Measurable Updated',
         title: measurable.name,
         title_link: `${clientUrl}/c/${measurable.channelId}`,
-        author_name: agent.name,
+        author_name: await agent.name,
         author_link: `${clientUrl}/agents/${agent.id}`,
-        fields: changed.map((c) => ({
-          title: c,
-          short: false,
-          value: `*From*: ${measurable[c]} \n*To*:  ${newData[c]}`,
-        })),
+        fields: changed,
         color: '#ffe75e',
       }],
     };
   };
 
   /**
+   * @todo: temporary turned off
    * @protected
    * @param {Models.Measurable} measurable
-   * @param {object} ops
    * @return {string[]}
    */
-  changedFields(measurable, ops) {
-    return Object.keys(ops)
-      .filter((r) => r !== 'expectedResolutionDate')
-      .filter((r) => measurable[r] !== ops[r]);
+  changedFields(measurable) {
+    return [];
+    const fields = [
+      'name',
+      'labelCustom',
+      'valueType',
+      'createdAt',
+      'updatedAt',
+      'creatorId',
+      'resolutionEndpoint',
+      'state',
+      'stateUpdatedAt',
+      'labelSubject',
+      'labelOnDate',
+      'labelProperty',
+      'seriesId',
+      'channelId',
+      'isArchived',
+      'min',
+      'max',
+    ];
+    return fields
+      .filter((r) => measurable.get(r) !== measurable.previous(r))
+      .map((r) => ({
+        title: r,
+        short: false,
+        value: `*From*: ${measurable.previous(r)} \n*To*:  ${measurable.get(r)}`,
+      }));
   };
 }
 

@@ -1,7 +1,6 @@
 const _ = require('lodash');
 const fetch = require('node-fetch');
 
-const notifications = require('../lib/notifications');
 const { MeasurableModel } = require('../models-abstract');
 const { Params } = require('./classes/params');
 

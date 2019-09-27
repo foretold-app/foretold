@@ -1,5 +1,3 @@
-const Sequelize = require('sequelize');
-
 /**
  * @param sequelize
  * @param DataTypes

@@ -9,7 +9,8 @@ const bots = require('./bots');
 const permissions = require('./permissions');
 const authentications = require('./authentications');
 const common = require('./common');
-const measurementCompetitorType = require('./enums/measurement-competitor-type');
+const measurementCompetitorType
+  = require('./enums/measurement-competitor-type');
 const invitationStatus = require('./enums/invitation-status');
 const preferences = require('./preferences');
 const invitations = require('./invitations');

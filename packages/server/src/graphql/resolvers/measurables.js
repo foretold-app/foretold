@@ -38,7 +38,8 @@ async function all(root, args, context, info) {
   const channelId = _.get(args, 'channelId');
   const currentAgentId = _.get(context, 'agent.id');
 
-  const withinJoinedChannels = _.isEmpty(channelId) && !_.isEmpty(currentAgentId)
+  const withinJoinedChannels
+    = _.isEmpty(channelId) && !_.isEmpty(currentAgentId)
     ? structures.withinJoinedChannelsByChannelId(currentAgentId) : null;
 
   const filter = new Filter({
@@ -58,7 +59,8 @@ async function all(root, args, context, info) {
   });
 
   // @todo: tricky, rework it.
-  context.resultOrLatestMeasurementForAgentId = args.resultOrLatestMeasurementForAgentId;
+  context.resultOrLatestMeasurementForAgentId
+    = args.resultOrLatestMeasurementForAgentId;
   return data.measurables.getConnection(filter, pagination, options);
 }
 

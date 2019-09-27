@@ -1,6 +1,8 @@
 const graphql = require('graphql');
 
-const { MEASUREMENT_COMMENT_TYPE } = require('../../../enums/measurement-comment-type');
+const {
+  MEASUREMENT_COMMENT_TYPE,
+} = require('../../../enums/measurement-comment-type');
 
 const measurementCommentType = new graphql.GraphQLEnumType({
   name: 'commentType',

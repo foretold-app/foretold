@@ -42,7 +42,9 @@ const channel = new graphql.GraphQLObjectType({
     },
 
     channelMemberships: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(channelMemberships.channelsMembership)),
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(
+        channelMemberships.channelsMembership,
+      )),
       resolve: resolvers.channelMemberships.allByChannelId,
     },
 

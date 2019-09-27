@@ -8,7 +8,9 @@ const { currentAgentIsApplicationAdmin } = require('./agents');
 const { channelIsPublic } = require('./channels');
 const { currentAgentIsChannelAdmin } = require('./channel-memberships');
 const { currentAgentIsChannelViewer } = require('./channel-memberships');
-const { channelHasMembershipWithCurrentAgent } = require('./channel-memberships');
+const {
+  channelHasMembershipWithCurrentAgent,
+} = require('./channel-memberships');
 const { channelHasMultipleAdmins } = require('./channel-memberships');
 const { membershipBelongsToCurrentAgent } = require('./channel-memberships');
 const { membershipHasAdminRole } = require('./channel-memberships');

@@ -58,7 +58,9 @@ const feedItemsConnection = new graphql.GraphQLObjectType({
   name: 'FeedItemsConnection',
   fields: () => ({
     total: { type: graphql.GraphQLInt },
-    pageInfo: { type: graphql.GraphQLNonNull(require('./common').pageInfoConnection) },
+    pageInfo: {
+      type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
+    },
     edges: { type: graphql.GraphQLList(require('./feed-items').feedItemEdge) },
   }),
 });

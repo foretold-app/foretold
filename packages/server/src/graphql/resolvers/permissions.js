@@ -30,7 +30,9 @@ async function channelPermissions(root, args, context, info) {
  * @returns {Promise<*>}
  */
 async function channelMembershipsPermissions(root, args, context, info) {
-  return authorizers.availableChannelMembershipsPermissions(root, args, context, info);
+  return authorizers.availableChannelMembershipsPermissions(
+    root, args, context, info,
+  );
 }
 
 /**

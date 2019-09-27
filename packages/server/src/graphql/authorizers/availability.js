@@ -33,7 +33,10 @@ function getList(rules) {
     _.pull(allow, '');
     _.pull(deny, '');
 
-    return { allow, deny };
+    return {
+      allow,
+      deny
+    };
   };
 }
 
@@ -49,9 +52,16 @@ function getAll(rulesPart) {
    * @returns {Promise<*>}
    */
   return async (root, args, context, info) => {
-    const mutations = await (getList(rulesPart.Mutation))(root, args, context, info);
-    const queries = await (getList(rulesPart.Query))(root, args, context, info);
-    return { mutations, queries };
+    const mutations = await (getList(rulesPart.Mutation))(
+      root, args, context, info,
+    );
+    const queries = await (getList(rulesPart.Query))(
+      root, args, context, info,
+    );
+    return {
+      mutations,
+      queries
+    };
   };
 }
 
@@ -85,7 +95,9 @@ async function availableChannelPermissions(root, args, context, info) {
  * @param {object} info
  * @returns {Promise<*>}
  */
-async function availableChannelMembershipsPermissions(root, args, context, info) {
+async function availableChannelMembershipsPermissions(
+  root, args, context, info,
+) {
   return getAll(rulesChannelMemberships)(root, args, context, info);
 }
 

@@ -49,13 +49,17 @@ const agent = new graphql.GraphQLObjectType({
 
     // OK
     Channels: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./channels').channel)),
+      type: graphql.GraphQLNonNull(
+        graphql.GraphQLList(require('./channels').channel),
+      ),
       resolve: require('../resolvers/channels').all,
     },
 
     // OK
     channelMemberships: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(channelMemberships.channelsMembership)),
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(
+        channelMemberships.channelsMembership,
+      )),
       resolve: resolvers.channelMemberships.allByAgentId,
     },
   }),

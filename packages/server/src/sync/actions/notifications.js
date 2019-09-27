@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const moment = require('moment');
 
 const data = require('../../data');
 const { notify } = require('../../lib/notifications');
@@ -31,6 +32,7 @@ class Notifications {
   }
 
   /**
+   * @protected
    * @param {Models.Measurement} measurement
    * @param {Models.Measurable} measurable
    * @param {Models.Agent} agent
@@ -56,6 +58,71 @@ class Notifications {
       }],
     };
   }
+
+  /**
+   * @protected
+   * @param {Models.Measurable} measurable
+   * @param {Models.Creator} agent
+   * @return {Promise<*>}
+   */
+  async getNotificationNewMeasurable(measurable, agent) {
+    return {
+      attachments: [{
+        pretext: 'New Measurable Created',
+        title: measurable.name,
+        title_link: `${clientUrl}/c/${measurable.channelId}`,
+        author_name: agent.name,
+        author_link: `${clientUrl}/agents/${agent.id}`,
+        text: measurable.labelCustom,
+        fields: [
+          {
+            title: 'Resolution Date',
+            value: moment(measurable.expectedResolutionDate).format('MMM DD, YYYY'),
+            short: true,
+          },
+        ],
+        color: '#4a8ed8',
+      }],
+    };
+  };
+
+  /**
+   * @protected
+   * @param {Models.Measurable} measurable
+   * @param {Models.Creator} agent
+   * @param {object} newData
+   * @return {Promise<*>}
+   */
+  async getNotificationUpdateMeasurable(measurable, agent, newData) {
+    const changed = this.changedFields(measurable, newData);
+    return {
+      attachments: [{
+        pretext: 'Measurable Updated',
+        title: measurable.name,
+        title_link: `${clientUrl}/c/${measurable.channelId}`,
+        author_name: agent.name,
+        author_link: `${clientUrl}/agents/${agent.id}`,
+        fields: changed.map((c) => ({
+          title: c,
+          short: false,
+          value: `*From*: ${measurable[c]} \n*To*:  ${newData[c]}`,
+        })),
+        color: '#ffe75e',
+      }],
+    };
+  };
+
+  /**
+   * @protected
+   * @param {Models.Measurable} measurable
+   * @param {object} ops
+   * @return {string[]}
+   */
+  changedFields(measurable, ops) {
+    return Object.keys(ops)
+      .filter((r) => r !== 'expectedResolutionDate')
+      .filter((r) => measurable[r] !== ops[r]);
+  };
 }
 
 module.exports = {

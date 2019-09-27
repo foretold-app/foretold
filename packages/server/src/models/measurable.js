@@ -1,6 +1,4 @@
 const Sequelize = require('sequelize');
-const moment = require('moment');
-const { clientUrl } = require('../lib/urls');
 
 const { MEASURABLE_STATE } = require('../enums/measurable-state');
 const { MEASURABLE_VALUE_TYPE } = require('../enums/measurable-value-type');
@@ -154,71 +152,6 @@ module.exports = (sequelize, DataTypes) => {
    */
   Measurable.prototype.updateState = async function updateState(state) {
     await this.update({ state, stateUpdatedAt: Sequelize.fn('now') });
-  };
-
-  /**
-   * @todo: move me
-   * @public
-   * @param {Models.Creator} creator
-   * @return {Promise<*>}
-   */
-  Measurable.prototype.getCreationNotification = async function getCreationNotification(creator) {
-    const agent = await creator.getAgent();
-    return {
-      attachments: [{
-        pretext: 'New Measurable Created',
-        title: this.name,
-        title_link: `${clientUrl}/c/${this.channelId}`,
-        author_name: creator.name,
-        author_link: `${clientUrl}/agents/${agent.id}`,
-        text: this.labelCustom,
-        fields: [
-          {
-            title: 'Resolution Date',
-            value: moment(this.expectedResolutionDate).format('MMM DD, YYYY'),
-            short: true,
-          },
-        ],
-        color: '#4a8ed8',
-      }],
-    };
-  };
-
-  /**
-   * @param {object} ops
-   * @return {string[]}
-   */
-  Measurable.prototype.changedFields = function changedFields(ops) {
-    return Object.keys(ops)
-      .filter((r) => r !== 'expectedResolutionDate')
-      .filter((r) => this[r] !== ops[r]);
-  };
-
-  /**
-   * @todo: move me
-   * @public
-   * @param {Models.Creator} creator
-   * @param {object} newData
-   * @return {Promise<*>}
-   */
-  Measurable.prototype.getUpdateNotifications = async function getUpdateNotifications(creator, newData) {
-    const changed = this.changedFields(newData);
-    const agent = await creator.getAgent();
-    return {
-      attachments: [{
-        pretext: 'Measurable Updated',
-        title: this.name,
-        title_link: `${clientUrl}/c/${this.channelId}`,
-        author_name: creator.name,
-        author_link: `${clientUrl}/agents/${agent.id}`,
-        fields: changed.map((c) => ({
-          title: c,
-          short: false,
-          value: `*From*: ${this[c]} \n*To*:  ${newData[c]}`,
-        })),
-        color: '#ffe75e',
-      }],
-    };
   };
 
   Measurable.associate = function associate(models) {

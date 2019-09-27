@@ -64,12 +64,12 @@ module Query = [%graphql
         id
         name
         measurementCount
-        user: User @bsRecord{
+        user @bsRecord{
           id
           name
           agentId
         }
-        bot: Bot @bsRecord{
+        bot @bsRecord{
           id
           name
           description

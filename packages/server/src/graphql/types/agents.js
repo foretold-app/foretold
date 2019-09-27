@@ -23,32 +23,32 @@ const agent = new graphql.GraphQLObjectType({
     isAdmin: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
 
     // @todo: security
-    User: {
+    user: {
       type: require('./users').user,
       resolve: resolver(models.Agent.User),
     },
 
     // @todo: security
-    Bot: {
+    bot: {
       type: require('./bots').bot,
       resolve: resolver(models.Agent.Bot),
     },
 
     // @todo: security
-    Preference: {
+    preference: {
       type: require('./preferences').preference,
       resolve: require('../resolvers').preferences.getOne,
     },
 
     // OK
-    Measurements: {
+    measurements: {
       type: require('./measurements').agentMeasurementsConnection,
       args: require('./common').connectionArguments,
       resolve: require('../resolvers/measurements').all,
     },
 
     // OK
-    Channels: {
+    channels: {
       type: graphql.GraphQLNonNull(
         graphql.GraphQLList(require('./channels').channel),
       ),

@@ -1,7 +1,6 @@
 module Query = [%graphql
   {|
     query getChannelMemberships($id: String!) {
-      channelWithMemberships:
       channel(id: $id){
         id
         channelMemberships{
@@ -64,9 +63,7 @@ let component = (~id, innerFn) => {
     ...{({result}) =>
       result
       |> HttpResponse.fromApollo
-      |> HttpResponse.fmap(e =>
-           e##channelWithMemberships |> E.O.fmap(toChannelMemberships)
-         )
+      |> HttpResponse.fmap(e => e##channel |> E.O.fmap(toChannelMemberships))
       |> HttpResponse.optionalToMissing
       |> innerFn
     }

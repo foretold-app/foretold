@@ -35,13 +35,13 @@ const user = new graphql.GraphQLObjectType({
     },
 
     // security?
-    Agent: {
+    agent: {
       type: require('./agents').agent,
       resolve: resolver(models.User.Agent),
     },
 
     // security?
-    Bots: {
+    bots: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./bots').bot)),
       resolve: resolver(models.User.Bots),
     },

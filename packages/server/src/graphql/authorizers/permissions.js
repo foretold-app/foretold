@@ -141,7 +141,7 @@ const rules = {
     isEmailVerified: userIsOwnedByCurrentAgent(agentIdFromRootAgentId),
   },
   Agent: {
-    Preference: userIsOwnedByCurrentAgent(agentIdFromRootId),
+    preference: userIsOwnedByCurrentAgent(agentIdFromRootId),
   },
   Query: {
     '*': allow,

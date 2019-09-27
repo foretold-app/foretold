@@ -9,7 +9,7 @@ module Query = [%graphql
                   description
                   competitorType
                   token
-                  agent: Agent{
+                  agent {
                     id
                   }
                   permissions {

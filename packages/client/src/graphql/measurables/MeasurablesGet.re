@@ -85,7 +85,7 @@ module Query = [%graphql
         $after: String
         $before: String
     ) {
-        measurables: measurables(
+        measurables (
             states: $states
             channelId: $channelId
             seriesId: $seriesId
@@ -108,7 +108,7 @@ module Query = [%graphql
               name
               channelId
               isArchived
-              channel: Channel {
+              channel {
                 id
                 name
                 description

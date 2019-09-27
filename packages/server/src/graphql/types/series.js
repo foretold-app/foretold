@@ -44,14 +44,14 @@ const series = new graphql.GraphQLObjectType({
     },
 
     // @todo: security?
-    Measurables: {
+    measurables: {
       type: require('./connections').seriesMeasurablesConnection.connectionType,
       args: require('./connections').seriesMeasurablesConnection.connectionArgs,
       resolve: require('./connections').seriesMeasurablesConnection.resolve,
     },
 
     // @todo: security?
-    Channel: {
+    channel: {
       type: require('./channels').channel,
       resolve: resolver(models.Series.Channel),
     },

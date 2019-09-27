@@ -11,15 +11,16 @@ class Notifications {
   }
 
   /**
+   * @public
    * @param {Models.Measurement} measurement
    * @returns {Promise<boolean>}
    */
   async newMeasurement(measurement) {
-    const agent = await measurement.getAgent();
     const measurable = await measurement.getMeasurable();
     const channel = await measurable.getChannel();
-
     if (!channel.isPublic) return false;
+
+    const agent = await measurement.getAgent();
 
     const notification = await this.getNotificationNewMeasurement(
       measurement,
@@ -32,31 +33,41 @@ class Notifications {
   }
 
   /**
-   * @param entity
-   * @param entity.getCreationNotification
-   * @param entity.getChannel
-   * @param creator
+   * @public
+   * @param {Models.Measurable} measurable
    * @return {Promise<boolean>}
    */
-  async creationNotification(entity, creator) {
-    const notification = await entity.getCreationNotification(creator);
-    const channel = await entity.getChannel();
-    if (channel.isPublic) await notify(notification);
+  async newMeasurable(measurable) {
+    const channel = await measurable.getChannel();
+    if (channel.isPublic) return false;
+
+    const agent = await measurable.getCreator();
+    const notification = await this.getNotificationNewMeasurable(
+      measurable,
+      agent,
+    );
+
+    await notify(notification);
     return true;
   }
 
   /**
-   * @param entity
-   * @param entity.getUpdateNotifications
-   * @param entity.getChannel
-   * @param creator
-   * @param data
+   * @public
+   * @param {Models.Measurable} measurable
    * @return {Promise<boolean>}
    */
-  async updateNotification(entity, creator, data) {
-    const notification = await entity.getUpdateNotifications(creator, data);
-    const channel = await entity.getChannel();
-    if (channel.isPublic) await notify(notification);
+  async updateMeasurable(measurable) {
+    const channel = await measurable.getChannel();
+    if (channel.isPublic) return false;
+
+    const agent = await measurable.getCreator();
+    const notification = await this.getNotificationUpdateMeasurable(
+      measurable,
+      agent,
+      measurable,
+    );
+
+    await notify(notification);
     return true;
   }
 
@@ -106,7 +117,8 @@ class Notifications {
         fields: [
           {
             title: 'Resolution Date',
-            value: moment(measurable.expectedResolutionDate).format('MMM DD, YYYY'),
+            value: moment(measurable.expectedResolutionDate)
+              .format('MMM DD, YYYY'),
             short: true,
           },
         ],

@@ -1,6 +1,6 @@
 const index = require('./measurables-state-machine');
 
-describe('Measurable MeasurablesStateMachine Sync', () => {
+describe('MeasurablesStateMachine Class', () => {
   it('returns an object', () => {
     expect(index).toBeInstanceOf(Object);
   });

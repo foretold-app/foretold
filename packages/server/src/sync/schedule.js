@@ -17,6 +17,7 @@ function runListeners() {
     emitter.on(events.MEASURABLE_CHANGED, listenFor(producers.notifications.MeasurableStateChanged));
     emitter.on(events.MEASURABLE_CHANGED, listenFor(producers.notifications.MeasurableStateResolved));
     emitter.on(events.MEASURABLE_CHANGED, listenFor(producers.feedItems.NewMeasurableReachedResolution));
+    emitter.on(events.MEASURABLE_CHANGED, listeners.updateMeasurable);
 
     emitter.on(events.NEW_MEMBERSHIP, listenFor(producers.notifications.MemberAddedToCommunity));
     emitter.on(events.NEW_MEMBERSHIP, listenFor(producers.notifications.MemberInvitedToCommunity));
@@ -29,6 +30,8 @@ function runListeners() {
     emitter.on(events.NEW_MEASUREMENT, listeners.newMeasurement);
 
     emitter.on(events.NEW_MEASURABLE, listenFor(producers.feedItems.NewMeasurable));
+    emitter.on(events.NEW_MEASURABLE, listeners.newMeasurable);
+
     emitter.on(events.NEW_CHANNEL, listenFor(producers.feedItems.NewChannel));
   } catch (e) {
     console.error('Listener error', e);

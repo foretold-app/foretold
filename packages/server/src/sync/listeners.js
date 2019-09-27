@@ -18,6 +18,36 @@ async function newMeasurement(measurement) {
   return true;
 }
 
+async function newMeasurable(measurable) {
+  const name = 'Job::newMeasurable';
+  console.log(name);
+
+  try {
+    const notifications = new actions.Notifications();
+    const result = await notifications.newMeasurable(measurable);
+    console.log(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
+async function updateMeasurable(measurable) {
+  const name = 'Job::updateMeasurable';
+  console.log(name);
+
+  try {
+    const notifications = new actions.Notifications();
+    const result = await notifications.updateMeasurable(measurable);
+    console.log(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
 async function toJudgementPendingTransition() {
   const name = 'Job::toJudgementPendingTransition';
   console.log(name);
@@ -119,4 +149,6 @@ module.exports = {
   listenFor,
   addGitHubWebHook,
   newMeasurement,
+  newMeasurable,
+  updateMeasurable,
 };

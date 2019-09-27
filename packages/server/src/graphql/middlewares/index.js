@@ -42,7 +42,7 @@ const middlewares = {
   },
 
   Agent: {
-    Preference: async (resolve, root, args, context, info) => {
+    preference: async (resolve, root, args, context, info) => {
       const result = await resolve(root, args, context, info);
       return (result instanceof Error) ? null : result;
     },

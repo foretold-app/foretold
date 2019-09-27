@@ -10,7 +10,7 @@ let toBot = (bot): Types.bot =>
 module Query = [%graphql
   {|
       query getBot ($id: String!) {
-          bot: bot(id: $id) {
+          bot(id: $id) {
            id
            name
            description

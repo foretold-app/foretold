@@ -98,7 +98,7 @@ module Query = [%graphql
         $after: String
         $before: String
     ) {
-        feedItems: feedItems (
+        feedItems (
             channelId: $channelId
             agentId: $agentId
             first: $first
@@ -128,7 +128,7 @@ module Query = [%graphql
                   measurableId
                  }
               }
-              channel: Channel @bsRecord {
+              channel @bsRecord {
                 id
                 name
                 isArchived

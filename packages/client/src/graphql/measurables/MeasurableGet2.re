@@ -3,39 +3,38 @@ open Utils;
 module Query = [%graphql
   {|
       query getMeasurable ($id: String!) {
-          measurable:
-            measurable(id: $id){
-              id
-              name
-              valueType
-              channelId
-              labelCustom
-              resolutionEndpoint
-              resolutionEndpointResponse
-              labelSubject
-              labelProperty
-              state
-              labelOnDate @bsDecoder(fn: "E.J.O.toMoment")
-              stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
-              expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
-              createdAt @bsDecoder(fn: "E.J.toMoment")
-              updatedAt @bsDecoder(fn: "E.J.toMoment")
-              creator {
-                id
-                name
-              }
-              series {
-                id
-                name
-              }
-              min
-              max
-              permissions {
-                mutations {
-                  allow
-                }
-              }
+        measurable(id: $id){
+          id
+          name
+          valueType
+          channelId
+          labelCustom
+          resolutionEndpoint
+          resolutionEndpointResponse
+          labelSubject
+          labelProperty
+          state
+          labelOnDate @bsDecoder(fn: "E.J.O.toMoment")
+          stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
+          expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")
+          createdAt @bsDecoder(fn: "E.J.toMoment")
+          updatedAt @bsDecoder(fn: "E.J.toMoment")
+          creator {
+            id
+            name
           }
+          series {
+            id
+            name
+          }
+          min
+          max
+          permissions {
+            mutations {
+              allow
+            }
+          }
+        }
       }
     |}
 ];

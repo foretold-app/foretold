@@ -72,12 +72,12 @@ module Query = [%graphql
                 agent {
                     id
                     name
-                    user: User {
+                    user {
                         id
                         name
                         agentId
                     }
-                    bot: Bot {
+                    bot {
                         id
                         name
                         competitorType

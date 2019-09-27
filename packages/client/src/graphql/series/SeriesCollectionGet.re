@@ -23,12 +23,11 @@ type seriesCollection = array(series);
 module Query = [%graphql
   {|
       query getSeriesCollection($channelId: String) {
-          seriesCollection:
           seriesCollection(channelId: $channelId) @bsRecord{
            id
            name
            description
-           channel:Channel @bsRecord {
+           channel @bsRecord {
              id
              name
              description

@@ -24,7 +24,7 @@ let toSeries = (m: series): Types.series =>
 module Query = [%graphql
   {|
       query getSeries ($id: String!) {
-          series: series(id: $id) @bsRecord{
+          series (id: $id) @bsRecord{
            id
            name
            description

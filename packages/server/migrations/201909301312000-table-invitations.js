@@ -53,7 +53,7 @@ module.exports = {
       await queryInterface.sequelize.query(`BEGIN`);
 
       await queryInterface.dropTable('Invitations');
-      await queryInterface.sequelize.query(`DROP TYPE "enum_Invitations_type"`);
+      await queryInterface.sequelize.query(`DROP TYPE "enum_Invitations_status"`);
 
       await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {

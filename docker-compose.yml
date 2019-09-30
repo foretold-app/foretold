@@ -33,7 +33,7 @@ services:
       - GITHUB_REPO_OWNER=foretold-app # 5.2
       - GITHUB_REPO_NAME=ken-data # 5.3
       - GITHUB_WEBHOOK_SECRET=<change-me> # 5.4
-    command: npm start
+    command: yarn start
     links:
       - database
 

@@ -1,2 +1,3 @@
 require('./bots');
-require('./server/src');
+require('./server');
+

@@ -4,15 +4,15 @@ const { ModelPostgres } = require('./model-postgres');
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
  */
-class AgentNotificationModel extends ModelPostgres {
+class NotificationStatusModel extends ModelPostgres {
   constructor() {
     super({
-      model: models.AgentNotification,
+      model: models.NotificationStatus,
       sequelize: models.sequelize,
     });
   }
 }
 
 module.exports = {
-  AgentNotificationModel,
+  NotificationStatusModel,
 };

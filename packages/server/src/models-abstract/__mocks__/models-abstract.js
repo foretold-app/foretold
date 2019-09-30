@@ -69,7 +69,7 @@ const NotificationModel = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
 
-const AgentNotificationModel = jest.fn().mockImplementation(() => ({
+const NotificationStatusModel = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
 
@@ -110,7 +110,7 @@ module.exports = {
   PreferenceModel,
   TemplateModel,
   NotificationModel,
-  AgentNotificationModel,
+  NotificationStatusModel,
   InvitationModel,
   FeedItemModel,
   GlobalSettingModel,

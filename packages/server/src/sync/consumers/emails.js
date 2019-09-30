@@ -88,72 +88,72 @@ class Emails extends Consumer {
     const filter = new Filter({ sentAt: null, attemptCounterMax: 3 });
     const pagination = new Pagination({ limit: 10 });
     const options = new Options({ transaction, lock: true, skipLocked: true });
-    return this.agentNotifications.getAll(filter, pagination, options);
+    return this.notificationStatuses.getAll(filter, pagination, options);
   }
 
   /**
-   * @param {object} agentNotification
+   * @param {object} notificationStatus
    * @return {Promise<void>}
    * @protected
    */
-  async _getNotification(agentNotification) {
-    const params = new Params({ id: agentNotification.notificationId });
+  async _getNotification(notificationStatus) {
+    const params = new Params({ id: notificationStatus.notificationId });
     const notification = await this.notifications.getOne(params);
     assert(!!notification, 'Notification is required');
     return notification;
   }
 
   /**
-   * @param {object} agentNotification
+   * @param {object} notificationStatus
    * @return {Promise<void>}
    * @protected
    */
-  async _getAgent(agentNotification) {
-    const params = new Params({ id: agentNotification.agentId });
+  async _getAgent(notificationStatus) {
+    const params = new Params({ id: notificationStatus.agentId });
     return await this.agents.getOne(params);
   }
 
   /**
-   * @param {object} agentNotification
+   * @param {object} notificationStatus
    * @param {object} transaction
    * @return {Promise<*>}
    * @protected
    */
-  async _markNotificationAsSent(agentNotification, transaction) {
-    const params = new Params({ id: agentNotification.id });
+  async _markNotificationAsSent(notificationStatus, transaction) {
+    const params = new Params({ id: notificationStatus.id });
     const data = { sentAt: moment.utc().toDate() };
     const options = new Options({ transaction });
-    return this.agentNotifications.updateOne(params, data, options);
+    return this.notificationStatuses.updateOne(params, data, options);
   }
 
   /**
-   * @param {object} agentNotification
+   * @param {object} notificationStatus
    * @param {CustomError} err
    * @param {object} transaction
    * @return {Promise<*>}
    * @protected
    */
-  async _notificationError(agentNotification, err, transaction) {
+  async _notificationError(notificationStatus, err, transaction) {
     const weightError = err.weight || 1;
-    const attemptCounterPrev = _.get(agentNotification, 'attemptCounter') || 0;
+    const attemptCounterPrev = _.get(notificationStatus, 'attemptCounter') || 0;
     const attemptCounter = attemptCounterPrev + weightError;
     const errorAt = moment.utc().toDate();
     const errorReason = err.type;
 
-    const params = new Params({ id: agentNotification.id });
+    const params = new Params({ id: notificationStatus.id });
     const data = { errorAt, attemptCounter, errorReason };
     const options = new Options({ transaction });
 
-    return this.agentNotifications.updateOne(params, data, options);
+    return this.notificationStatuses.updateOne(params, data, options);
   }
 
   /**
-   * @param {object} agentNotification
+   * @param {object} notificationStatus
    * @return {Promise<*>}
    * @protected
    */
-  async _getPreferences(agentNotification) {
-    const { agentId } = agentNotification;
+  async _getPreferences(notificationStatus) {
+    const { agentId } = notificationStatus;
     return await this.preferences.getOneByAgentId(agentId);
   }
 

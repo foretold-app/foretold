@@ -13,11 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     inviterAgentId: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID(),
       allowNull: false,
     },
     channelId: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID(),
       allowNull: false,
     },
     status: {

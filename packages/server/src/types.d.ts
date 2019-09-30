@@ -127,7 +127,7 @@ export namespace Models {
     isActive: boolean;
   }
 
-  export interface AgentNotification extends Model {}
+  export interface NotificationStatus extends Model {}
 
   export interface Template extends Model {}
 

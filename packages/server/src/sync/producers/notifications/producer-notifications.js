@@ -56,7 +56,7 @@ class ProducerNotifications extends Producer {
   /**
    * @param {Models.Agent} agent
    * @param {Models.Notification} notification
-   * @return {Promise<Models.AgentNotification>}
+   * @return {Promise<Models.NotificationStatus>}
    * @protected
    */
   async _assignAgentToNotification(agent, notification) {
@@ -65,7 +65,7 @@ class ProducerNotifications extends Producer {
 
     const data = { agentId: agent.id, notificationId: notification.id };
     const options = await this._getOptions();
-    return Producer.data.agentNotifications.createOne(
+    return Producer.data.notificationStatuses.createOne(
       data,
       options,
     );
@@ -73,7 +73,7 @@ class ProducerNotifications extends Producer {
 
   /**
    * @param {Models.Notification} notification
-   * @return {Promise<Models.AgentNotification>}
+   * @return {Promise<Models.NotificationStatus>}
    * @protected
    */
   async _assignGuestToNotification(notification) {
@@ -81,7 +81,7 @@ class ProducerNotifications extends Producer {
 
     const data = { notificationId: notification.id };
     const options = await this._getOptions();
-    return Producer.data.agentNotifications.createOne(
+    return Producer.data.notificationStatuses.createOne(
       data,
       options,
     );

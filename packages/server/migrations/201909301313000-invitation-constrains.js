@@ -1,20 +1,14 @@
 module.exports = {
-  up: async function (queryInterface, Sequelize) {
+  up: async function (queryInterface) {
     try {
       await queryInterface.sequelize.query(`BEGIN`);
-
-      await queryInterface.addColumn('ChannelMemberships', 'inviterAgentId', {
-        type: Sequelize.UUID,
-        references: {
-          model: 'Agents',
-          key: 'id',
-        },
-        allowNull: true,
+      await queryInterface.addIndex('Invitations', ['email', 'channelId'], {
+        name: 'Invitations_email_channelId_unique',
+        unique: true,
       });
-
       await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {
-      console.error('Migration Up Error', e);
+      console.error(e);
       await queryInterface.sequelize.query(`ROLLBACK`);
       throw e;
     }
@@ -23,10 +17,13 @@ module.exports = {
   down: async function (queryInterface) {
     try {
       await queryInterface.sequelize.query(`BEGIN`);
-      await queryInterface.removeColumn('ChannelMemberships', 'inviterAgentId');
+      await queryInterface.removeIndex(
+        'Invitations',
+        'Invitations_email_channelId_unique',
+      );
       await queryInterface.sequelize.query(`COMMIT`);
     } catch (e) {
-      console.error('Migration Down Error', e);
+      console.error(e);
       await queryInterface.sequelize.query(`ROLLBACK`);
       throw e;
     }

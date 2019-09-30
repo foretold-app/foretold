@@ -16,6 +16,8 @@ class Params {
       'measurableId',
       'competitorType',
       'seriesId',
+      'email',
+      'channelId',
     ];
     utils.extend(this.constructor.name, params, list, this);
     utils.diff(this.constructor.name, params, list);

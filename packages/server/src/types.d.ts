@@ -257,6 +257,8 @@ export namespace Layers {
       minPredictionCountTotal?: number | null;
       minNumberOfPredictions?: number | null;
       minNumberOfQuestionsScored?: number | null;
+      email?: string;
+      status?: string;
 
       findInDateRange?: object; // @todo: Object? Give definition!
       withinMeasurables?: withinMeasurables | null;
@@ -289,6 +291,8 @@ export namespace Layers {
       measurableId?: Models.ObjectID;
       competitorType?: string;
       seriesId?: Models.ObjectID;
+      email?: string;
+      channelId?: Models.ObjectID;
     };
     type response = { data: any };
     type responseList = { data: any[]; total: number };

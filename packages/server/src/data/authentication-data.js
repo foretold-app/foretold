@@ -6,6 +6,7 @@ const { Auth0 } = require('../lib/auth0');
 const { UsersData } = require('./users-data');
 const { AgentsData } = require('./agents-data');
 const { TokensData } = require('./tokens-data');
+const { InvitationsData } = require('./invitations-data');
 
 class AuthenticationData {
   constructor() {
@@ -15,6 +16,7 @@ class AuthenticationData {
     this.users = new UsersData();
     this.agents = new AgentsData();
     this.tokens = new TokensData();
+    this.invitation = new InvitationsData();
   }
 
   /**
@@ -106,11 +108,19 @@ class AuthenticationData {
       const user = await this.users.getUserByAuth0Id(auth0Id);
       const { agentId } = user;
 
+      // @todo: To move upper?
       try {
         const userInfo = await this.auth0.getUserInfo(accessToken);
         await this.users.updateUserInfoFromAuth0(user.id, userInfo);
       } catch (e) {
         console.log('Saving user info is failed.');
+      }
+
+      // @todo: To move upper?
+      try {
+        await this.invitation.transition(user);
+      } catch (e) {
+        console.log('Invitation transition is failed.');
       }
 
       return this.Jwt.encodeJWT({}, agentId);

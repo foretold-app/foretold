@@ -303,7 +303,7 @@ const schema = new graphql.GraphQLSchema({
       },
 
       invitationCreate: {
-        type: graphql.GraphQLNonNull(graphql.GraphQLBoolean),
+        type: types.invitations.invitation,
         args: {
           input: {
             type: graphql.GraphQLNonNull(

@@ -2,9 +2,6 @@ const _ = require('lodash');
 const assert = require('assert');
 
 const { DataBase } = require('./data-base');
-const { UsersData } = require('./users-data');
-const { AgentsData } = require('./agents-data');
-const { ChannelMembershipsData } = require('./channel-memberships-data');
 
 const { InvitationModel } = require('../models-abstract');
 
@@ -17,9 +14,6 @@ class InvitationsData extends DataBase {
     super();
     this.InvitationModel = new InvitationModel();
     this.model = this.InvitationModel;
-    this.users = new UsersData();
-    this.agents = new AgentsData();
-    this.memberships = new ChannelMembershipsData();
   }
 
   /**
@@ -40,12 +34,21 @@ class InvitationsData extends DataBase {
       assert(_.isString(email), 'Email should be a string');
       assert(_.isString(channelId), 'Channel Id should be a string');
       assert(_.isString(inviterAgentId), 'Inviter Agent Id should be a string');
+console.log({
+  email,
+  inviterAgentId,
+  channelId,
+})
+      return await this.createOne({
+        email,
+        inviterAgentId,
+        channelId,
+      });
 
-      return true;
     } catch (e) {
-      console.error('Invitation Err', e.message);
-      return false;
+      console.error('Invitation Err', e);
     }
+    return null;
   }
 }
 

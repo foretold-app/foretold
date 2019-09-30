@@ -15,6 +15,14 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: false,
         },
+        inviterAgentId: {
+          type: Sequelize.UUID,
+          references: {
+            model: 'Agents',
+            key: 'id',
+          },
+          allowNull: false,
+        },
         channelId: {
           type: Sequelize.UUID,
           references: {

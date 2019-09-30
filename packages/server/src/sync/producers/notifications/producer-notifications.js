@@ -1,4 +1,5 @@
 const assert = require('assert');
+const _ = require('lodash');
 
 const { Producer } = require('../producer');
 

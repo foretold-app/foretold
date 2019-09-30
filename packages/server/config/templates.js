@@ -99,6 +99,7 @@ module.exports = [
       description: "{{{ agent.name }}} has created a community",
     }
   },
+  // @todo: Copy to DB (later).
   {
     name: TEMPLATE_NAME.NEW_INVITATION,
     envelopeTemplate: {

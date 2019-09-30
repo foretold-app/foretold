@@ -64,6 +64,7 @@ class Emails extends Consumer {
             + `Agent ID = "${_.get(agent, 'id')}", `
             + `Result = "${result}".\x1b[0m`,
           );
+
         } catch (err) {
           console.log('Emails Consumer, pass sending due to', err.message);
           await this._notificationError(status, err, transaction);
@@ -109,6 +110,7 @@ class Emails extends Consumer {
    * @protected
    */
   async _getAgent(notificationStatus) {
+    if (!notificationStatus.agentId) return null;
     const params = new Params({ id: notificationStatus.agentId });
     return await this.agents.getOne(params);
   }
@@ -138,7 +140,7 @@ class Emails extends Consumer {
     const attemptCounterPrev = _.get(notificationStatus, 'attemptCounter') || 0;
     const attemptCounter = attemptCounterPrev + weightError;
     const errorAt = moment.utc().toDate();
-    const errorReason = err.type;
+    const errorReason = err.type || (new errs.InternalError()).type;
 
     const params = new Params({ id: notificationStatus.id });
     const data = { errorAt, attemptCounter, errorReason };
@@ -154,6 +156,7 @@ class Emails extends Consumer {
    */
   async _getPreferences(notificationStatus) {
     const { agentId } = notificationStatus;
+    if (!agentId) return null;
     return await this.preferences.getOneByAgentId(agentId);
   }
 
@@ -163,6 +166,7 @@ class Emails extends Consumer {
    * @protected
    */
   async _getUser(agent) {
+    if (!agent) return null;
     const params = new Params({ agentId: agent.id });
     return await this.users.getOne(params);
   }

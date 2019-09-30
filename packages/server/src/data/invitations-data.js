@@ -34,11 +34,10 @@ class InvitationsData extends DataBase {
       assert(_.isString(channelId), 'Channel Id should be a string');
       assert(_.isString(inviterAgentId), 'Inviter Agent Id should be a string');
 
-      return await this.createOne({
-        email,
-        inviterAgentId,
-        channelId,
-      });
+      const params = { email, channelId };
+      const query = {};
+      const data = { email, inviterAgentId, channelId };
+      return await this.upsertOne(params, query, data);
 
     } catch (e) {
       console.error('Invitation Err', e);

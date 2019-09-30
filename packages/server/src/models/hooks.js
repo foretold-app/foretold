@@ -67,6 +67,13 @@ function addHooks(db) {
       console.log('Hook', e);
     }
   });
+  db.Invitation.addHook('afterCreate', (instance) => {
+    try {
+      emitter.emit(events.NEW_INVITATION, instance);
+    } catch (e) {
+      console.log('Hook', e);
+    }
+  });
 
   db.Bot.addHook('beforeCreate', async (instance) => {
     try {

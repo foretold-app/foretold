@@ -73,8 +73,13 @@ function runListeners() {
     emitter.on(events.NEW_CHANNEL,
       listeners.createChannelMembership);
 
+    /**
+     * Common.
+     */
     emitter.on(events.NEW_SERIES,
       listeners.createNewMeasurables);
+    emitter.on(events.NEW_INVITATION,
+      listenFor(producers.notifications.Invitation));
   } catch (e) {
     console.error('Listener error', e);
   }

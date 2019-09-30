@@ -134,7 +134,7 @@ export namespace Models {
   export interface Notification extends Model {}
 
   export interface Invitation extends Model {
-    agentId: ObjectID;
+    email: string;
     channelId: ObjectID;
     inviterAgentId: ObjectID;
     status: "AWAITING" | "ACCEPTED";

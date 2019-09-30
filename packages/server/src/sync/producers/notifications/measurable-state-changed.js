@@ -53,7 +53,7 @@ class MeasurableStateChanged extends MeasurableState {
         this.measurable,
       );
       const notification = await this._queueEmail(replacements);
-      await this._assignAgentToNotification(creator, notification);
+      await this._assignNotification(creator, notification);
 
       await this._commit();
       return true;

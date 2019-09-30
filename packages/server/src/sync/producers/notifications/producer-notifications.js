@@ -48,7 +48,10 @@ class ProducerNotifications extends Producer {
       envelope instanceof Producer.EmailEnvelope,
       'Envelope is not EmailEnvelope',
     );
-    const data = { type, envelope };
+    const data = {
+      type,
+      envelope
+    };
     const options = await this._getOptions();
     return Producer.data.notifications.createOne(data, options);
   }
@@ -59,27 +62,14 @@ class ProducerNotifications extends Producer {
    * @return {Promise<Models.NotificationStatus>}
    * @protected
    */
-  async _assignAgentToNotification(agent, notification) {
-    assert(!!agent.id, 'Agent ID is required');
+  async _assignNotification(agent, notification) {
     assert(!!notification.id, 'Notification ID is required');
 
-    const data = { agentId: agent.id, notificationId: notification.id };
-    const options = await this._getOptions();
-    return Producer.data.notificationStatuses.createOne(
-      data,
-      options,
-    );
-  }
+    const data = {
+      agentId: _.get(agent, 'id', null),
+      notificationId: notification.id,
+    };
 
-  /**
-   * @param {Models.Notification} notification
-   * @return {Promise<Models.NotificationStatus>}
-   * @protected
-   */
-  async _assignGuestToNotification(notification) {
-    assert(!!notification.id, 'Notification ID is required');
-
-    const data = { notificationId: notification.id };
     const options = await this._getOptions();
     return Producer.data.notificationStatuses.createOne(
       data,

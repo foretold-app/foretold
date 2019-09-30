@@ -54,7 +54,7 @@ class Invitation extends ProducerNotifications {
 
       /** @type {Models.Notification} */
       const notification = await this._queueEmail(replacements, email);
-      await this._assignGuestToNotification(notification);
+      await this._assignNotification(null, notification);
 
       await this._commit();
       return true;

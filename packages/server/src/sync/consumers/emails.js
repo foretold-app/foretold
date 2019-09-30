@@ -22,6 +22,7 @@ class Emails extends Consumer {
   }
 
   /**
+   * @public
    * @return {Promise<boolean>}
    */
   async main() {
@@ -42,11 +43,13 @@ class Emails extends Consumer {
 
         try {
           const notification = await this._getNotification(agentNotification);
+
           const agent = await this._getAgent(agentNotification);
           const agentPreferences
             = await this._getPreferences(agentNotification);
           const user = await this._getUser(agent);
           const _test = await this._test(agentPreferences, user);
+
           const result = await this._emitEmail(notification, user, agent);
 
           if (result === true) {

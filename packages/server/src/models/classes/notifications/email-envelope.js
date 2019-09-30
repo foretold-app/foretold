@@ -21,6 +21,11 @@ class EmailEnvelope {
     this.to = options.to;
   }
 
+  setTo(to) {
+    this.to = to;
+    return this;
+  }
+
   /**
    * @param {object} replacements
    * @return {EmailEnvelope}

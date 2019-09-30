@@ -50,9 +50,11 @@ class Invitation extends ProducerNotifications {
         channel,
       );
 
+      const email = this.invitation.email;
+
       /** @type {Models.Notification} */
-      const notification = await this._queueEmail(replacements);
-      await this._assignAgentToNotification(agent, notification);
+      const notification = await this._queueEmail(replacements, email);
+      await this._assignGuestToNotification(notification);
 
       await this._commit();
       return true;

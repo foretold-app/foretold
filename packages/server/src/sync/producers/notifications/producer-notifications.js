@@ -12,13 +12,16 @@ class ProducerNotifications extends Producer {
 
   /**
    * @param {object} replacements
+   * @param {object} to
    * @return {Promise<Models.Notification>}
    * @protected
    */
-  async _queueEmail(replacements) {
+  async _queueEmail(replacements = {}, to = null) {
     const template = await this._getTemplate();
     const emailEnvelope = new Producer.EmailEnvelope(template.envelopeTemplate);
-    const emailEnvelope$ = emailEnvelope.instanceFactory(replacements);
+    const emailEnvelope$ = emailEnvelope
+      .instanceFactory(replacements)
+      .setTo(to);
     return this._createEmailNotification(emailEnvelope$);
   }
 
@@ -61,6 +64,22 @@ class ProducerNotifications extends Producer {
     assert(!!notification.id, 'Notification ID is required');
 
     const data = { agentId: agent.id, notificationId: notification.id };
+    const options = await this._getOptions();
+    return Producer.data.agentNotifications.createOne(
+      data,
+      options,
+    );
+  }
+
+  /**
+   * @param {Models.Notification} notification
+   * @return {Promise<Models.AgentNotification>}
+   * @protected
+   */
+  async _assignGuestToNotification(notification) {
+    assert(!!notification.id, 'Notification ID is required');
+
+    const data = { notificationId: notification.id };
     const options = await this._getOptions();
     return Producer.data.agentNotifications.createOne(
       data,

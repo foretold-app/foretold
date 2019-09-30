@@ -35,39 +35,38 @@ class Emails extends Consumer {
     }
 
     try {
-      const agentNotifications
-        = await this._getAgentsNotifications(transaction);
+      const statuses = await this._getNotificationsStatusesToSend(transaction);
 
-      for (let i = 0; i < agentNotifications.length; i++) {
-        const agentNotification = agentNotifications[i];
+      for (let i = 0; i < statuses.length; i++) {
+        const status = statuses[i];
 
         try {
-          const notification = await this._getNotification(agentNotification);
+          const notification = await this._getNotification(status);
 
-          const agent = await this._getAgent(agentNotification);
-          const agentPreferences
-            = await this._getPreferences(agentNotification);
+          const agent = await this._getAgent(status);
+          const preferences = await this._getPreferences(status);
           const user = await this._getUser(agent);
-          const _test = await this._test(agentPreferences, user);
+
+          await this._test(preferences, user);
 
           const result = await this._emitEmail(notification, user, agent);
 
           if (result === true) {
-            await this._markNotificationAsSent(agentNotification, transaction);
+            await this._markNotificationAsSent(status, transaction);
           } else {
             throw new errs.ExternalError('Email is not sent');
           }
 
           console.log(
-            `\x1b[35mNotification ID = "${notification.id}", `
-            + `Transaction ID = "${transaction.id}", `
-            + `Agent Preferences ID = "${agentPreferences.id}", `
-            + `Agent ID = "${agent.id}", `
+            `\x1b[35mNotification ID = "${_.get(notification, 'id')}", `
+            + `Transaction ID = "${_.get(transaction, 'id')}", `
+            + `Agent Preferences ID = "${_.get(preferences, 'id')}", `
+            + `Agent ID = "${_.get(agent, 'id')}", `
             + `Result = "${result}".\x1b[0m`,
           );
         } catch (err) {
           console.log('Emails Consumer, pass sending due to', err.message);
-          await this._notificationError(agentNotification, err, transaction);
+          await this._notificationError(status, err, transaction);
         }
       }
 
@@ -85,7 +84,7 @@ class Emails extends Consumer {
    * @return {Promise<*>}
    * @protected
    */
-  async _getAgentsNotifications(transaction) {
+  async _getNotificationsStatusesToSend(transaction) {
     const filter = new Filter({ sentAt: null, attemptCounterMax: 3 });
     const pagination = new Pagination({ limit: 10 });
     const options = new Options({ transaction, lock: true, skipLocked: true });
@@ -111,9 +110,7 @@ class Emails extends Consumer {
    */
   async _getAgent(agentNotification) {
     const params = new Params({ id: agentNotification.agentId });
-    const agent = await this.agents.getOne(params);
-    assert(!!agent, 'Agent is required');
-    return agent;
+    return await this.agents.getOne(params);
   }
 
   /**
@@ -157,9 +154,7 @@ class Emails extends Consumer {
    */
   async _getPreferences(agentNotification) {
     const { agentId } = agentNotification;
-    const preferences = await this.preferences.getOneByAgentId(agentId);
-    assert(!!preferences, 'Preferences is required');
-    return preferences;
+    return await this.preferences.getOneByAgentId(agentId);
   }
 
   /**
@@ -169,9 +164,7 @@ class Emails extends Consumer {
    */
   async _getUser(agent) {
     const params = new Params({ agentId: agent.id });
-    const user = await this.users.getOne(params);
-    assert(!!user, `User is required for an agent "${agent.id}".`);
-    return user;
+    return await this.users.getOne(params);
   }
 
   /**
@@ -181,11 +174,9 @@ class Emails extends Consumer {
    * @protected
    */
   async _test(agentPreferences, user) {
-    assert(!!user,
-      'User is not found.');
-    assert(!!_.get(user, 'email'),
+    assert(user && !!_.get(user, 'email'),
       'Email is required.', errs.EmailAddressError);
-    assert(!agentPreferences.stopAllEmails,
+    assert(agentPreferences && !agentPreferences.stopAllEmails,
       'Emails are turned off.', errs.PreferencesError);
     return true;
   }
@@ -223,10 +214,11 @@ class Emails extends Consumer {
 
   /**
    * @param {object} agent
-   * @return {Promise<string>}
+   * @return {Promise<string | null>}
    * @protected
    */
   async _getAuthToken(agent) {
+    if (!agent) return null;
     const agentId = agent.id;
     const token = await this.tokens.createAuthToken(agentId);
     assert(!!token, 'Token is required');

@@ -11,8 +11,7 @@ const { ChannelModel } = require('../models-abstract');
 class ChannelsData extends DataBase {
   constructor() {
     super();
-    this.ChannelModel = new ChannelModel();
-    this.model = this.ChannelModel;
+    this.model = new ChannelModel();
     this.agents = new AgentsData();
   }
 

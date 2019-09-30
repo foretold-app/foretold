@@ -9,8 +9,7 @@ const { TemplateModel } = require('../models-abstract');
 class TemplatesData extends DataBase {
   constructor() {
     super();
-    this.TemplateModel = new TemplateModel();
-    this.model = this.TemplateModel;
+    this.model = new TemplateModel();
   }
 }
 

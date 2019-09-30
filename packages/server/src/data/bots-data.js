@@ -10,8 +10,7 @@ const { TokensData } = require('./tokens-data');
 class BotsData extends DataBase {
   constructor() {
     super();
-    this.BotModel = new BotModel();
-    this.model = this.BotModel;
+    this.model = new BotModel();
     this.tokens = new TokensData();
   }
 
@@ -21,7 +20,7 @@ class BotsData extends DataBase {
    * @return {Promise<string>}
    */
   async tokenRefresh(params = {}) {
-    const bot = await this.BotModel.getOne(params);
+    const bot = await this.getOne(params);
     if (!bot) throw new Error('Bot is not found');
     return this.tokens.revokeGet(bot.agentId);
   }

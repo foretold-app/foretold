@@ -16,9 +16,7 @@ const { Data } = require('./classes/data');
 class UsersData extends DataBase {
   constructor() {
     super();
-    this.UserModel = new UserModel();
-    this.model = this.UserModel;
-
+    this.model = new UserModel();
     this.measurements = new MeasurementsData();
   }
 

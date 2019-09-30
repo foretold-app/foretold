@@ -66,9 +66,17 @@ const schema = new graphql.GraphQLSchema({
           channelId: { type: graphql.GraphQLString },
           notTaggedByAgent: { type: graphql.GraphQLString },
 
-          competitorType: { type: graphql.GraphQLList(types.measurementCompetitorType.measurementCompetitorType) },
-          findInDateRange: { type: types.measurements.measurementsInDateRangeInput },
-          measurableState: { type: graphql.GraphQLList(types.measurables.measurableState) },
+          competitorType: {
+            type: graphql.GraphQLList(
+              types.measurementCompetitorType.measurementCompetitorType,
+            ),
+          },
+          findInDateRange: {
+            type: types.measurements.measurementsInDateRangeInput,
+          },
+          measurableState: {
+            type: graphql.GraphQLList(types.measurables.measurableState),
+          },
         },
         resolve: resolvers.measurements.all,
       },
@@ -89,7 +97,11 @@ const schema = new graphql.GraphQLSchema({
           seriesId: { type: graphql.GraphQLString },
           channelId: { type: graphql.GraphQLString },
           measuredByAgentId: { type: graphql.GraphQLString },
-          states: { type: graphql.GraphQLList(types.measurables.measurableState) },
+          states: {
+            type: graphql.GraphQLList(
+              types.measurables.measurableState,
+            ),
+          },
           isArchived: { type: graphql.GraphQLList(types.common.isArchived) },
           resultOrLatestMeasurementForAgentId: { type: graphql.GraphQLString },
         },
@@ -102,7 +114,11 @@ const schema = new graphql.GraphQLSchema({
           ...types.common.connectionArguments,
           channelId: { type: graphql.GraphQLString },
           measurableId: { type: graphql.GraphQLString },
-          measurableState: { type: graphql.GraphQLList(types.measurables.measurableState) },
+          measurableState: {
+            type: graphql.GraphQLList(
+              types.measurables.measurableState,
+            ),
+          },
           minPredictionCountTotal: { type: graphql.GraphQLInt },
           order: { type: types.common.orderList },
         },
@@ -196,7 +212,9 @@ const schema = new graphql.GraphQLSchema({
       },
 
       channels: {
-        type: graphql.GraphQLNonNull(graphql.GraphQLList(types.channels.channel)),
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(
+          types.channels.channel,
+        )),
         args: {
           offset: { type: graphql.GraphQLInt },
           limit: { type: graphql.GraphQLInt },
@@ -235,7 +253,11 @@ const schema = new graphql.GraphQLSchema({
       measurementCreate: {
         type: types.measurements.measurement,
         args: {
-          input: { type: graphql.GraphQLNonNull(types.measurements.measurementCreateInput) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.measurements.measurementCreateInput,
+            ),
+          },
         },
         resolve: resolvers.measurements.create,
       },
@@ -243,7 +265,11 @@ const schema = new graphql.GraphQLSchema({
       measurableCreate: {
         type: types.measurables.measurable,
         args: {
-          input: { type: graphql.GraphQLNonNull(types.measurables.measurableCreateInput) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.measurables.measurableCreateInput,
+            )
+          },
         },
         resolve: resolvers.measurables.create,
       },
@@ -251,7 +277,11 @@ const schema = new graphql.GraphQLSchema({
       seriesCreate: {
         type: types.series.series,
         args: {
-          input: { type: graphql.GraphQLNonNull(types.series.seriesCreateInput) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.series.seriesCreateInput,
+            )
+          },
         },
         resolve: resolvers.series.create,
       },
@@ -275,7 +305,11 @@ const schema = new graphql.GraphQLSchema({
       invitationCreate: {
         type: graphql.GraphQLNonNull(graphql.GraphQLBoolean),
         args: {
-          input: { type: graphql.GraphQLNonNull(types.invitations.invitationCreateInput) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.invitations.invitationCreateInput,
+            ),
+          },
         },
         resolve: resolvers.invitations.create,
       },
@@ -284,7 +318,11 @@ const schema = new graphql.GraphQLSchema({
         type: types.measurables.measurable,
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-          input: { type: graphql.GraphQLNonNull(types.measurables.measurableUpdateInput) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.measurables.measurableUpdateInput,
+            ),
+          },
         },
         resolve: resolvers.measurables.update,
       },
@@ -318,7 +356,11 @@ const schema = new graphql.GraphQLSchema({
       channelMembershipCreate: {
         type: types.channelMemberships.channelsMembership,
         args: {
-          input: { type: graphql.GraphQLNonNull(types.channelMemberships.channelMembershipRoleInput) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.channelMemberships.channelMembershipRoleInput,
+            ),
+          },
         },
         resolve: resolvers.channelMemberships.create,
       },
@@ -326,7 +368,11 @@ const schema = new graphql.GraphQLSchema({
       channelMembershipRoleUpdate: {
         type: types.channelMemberships.channelsMembership,
         args: {
-          input: { type: graphql.GraphQLNonNull(types.channelMemberships.channelMembershipRoleInput) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.channelMemberships.channelMembershipRoleInput,
+            ),
+          },
         },
         resolve: resolvers.channelMemberships.update,
       },
@@ -334,7 +380,10 @@ const schema = new graphql.GraphQLSchema({
       channelMembershipDelete: {
         type: types.channelMemberships.channelsMembership,
         args: {
-          input: { type: graphql.GraphQLNonNull(types.channelMemberships.channelMembershipDeleteInput) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.channelMemberships.channelMembershipDeleteInput,),
+          },
         },
         resolve: resolvers.channelMemberships.remove,
       },
@@ -342,7 +391,11 @@ const schema = new graphql.GraphQLSchema({
       leaveChannel: {
         type: types.channelMemberships.channelsMembership,
         args: {
-          input: { type: graphql.GraphQLNonNull(types.channelMemberships.joiningChannelInput) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.channelMemberships.joiningChannelInput,
+            ),
+          },
         },
         resolve: resolvers.channelMemberships.leave,
       },
@@ -350,7 +403,11 @@ const schema = new graphql.GraphQLSchema({
       joinChannel: {
         type: types.channelMemberships.channelsMembership,
         args: {
-          input: { type: graphql.GraphQLNonNull(types.channelMemberships.joiningChannelInput) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.channelMemberships.joiningChannelInput,
+            ),
+          },
         },
         resolve: resolvers.channelMemberships.join,
       },
@@ -358,7 +415,11 @@ const schema = new graphql.GraphQLSchema({
       botCreate: {
         type: types.bots.bot,
         args: {
-          input: { type: graphql.GraphQLNonNull(types.bots.botInput) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.bots.botInput,
+            ),
+          },
         },
         resolve: resolvers.bots.create,
       },
@@ -384,7 +445,11 @@ const schema = new graphql.GraphQLSchema({
         type: types.preferences.preference,
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-          input: { type: graphql.GraphQLNonNull(types.preferences.preferenceUpdateInput) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.preferences.preferenceUpdateInput,
+            ),
+          },
         },
         resolve: resolvers.preferences.update,
       },
@@ -393,7 +458,11 @@ const schema = new graphql.GraphQLSchema({
         type: types.globalSettings.globalSetting,
         args: {
           name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-          input: { type: graphql.GraphQLNonNull(types.globalSettings.globalSettingUpdateInput) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.globalSettings.globalSettingUpdateInput,
+            ),
+          },
         },
         resolve: resolvers.globalSettings.update,
       },

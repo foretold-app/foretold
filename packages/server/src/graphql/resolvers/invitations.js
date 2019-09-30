@@ -14,12 +14,12 @@ const { Data } = require('../../data/classes/data');
  * @returns {Promise<boolean>}
  */
 async function create(root, args, context, info) {
-  const datas = new Data({
+  const input = new Data({
     inviterAgentId: _.get(context, 'agent.id'),
     email: _.get(args, 'input.email'),
     channelId: _.get(args, 'input.channelId'),
   });
-  return data.invitations.invite(datas);
+  return data.invitations.invite(input);
 }
 
 module.exports = {

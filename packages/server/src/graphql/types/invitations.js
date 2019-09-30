@@ -5,9 +5,7 @@ const invitation = new graphql.GraphQLObjectType({
   name: 'Invitation',
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    email: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     inviterAgentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },

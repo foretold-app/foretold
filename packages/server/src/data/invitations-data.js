@@ -18,6 +18,7 @@ class InvitationsData extends DataBase {
   /**
    * @public
    * @todo: Use transactions here.
+   * @todo: Do not send an invitation to existed users.
    * @param {object} input
    * @param {string} input.email
    * @param {string} input.channelId

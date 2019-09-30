@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('./data');
+const data = require('../data');
 
 /**
  * @param {Request} req

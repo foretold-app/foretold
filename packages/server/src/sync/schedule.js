@@ -80,6 +80,10 @@ function runListeners() {
       listeners.createNewMeasurables);
     emitter.on(events.NEW_INVITATION,
       listenFor(producers.notifications.Invitation));
+    emitter.on(events.NEW_USER,
+      listeners.invitations);
+    emitter.on(events.USER_CHANGED,
+      listeners.invitations);
   } catch (e) {
     console.error('Listener error', e);
   }

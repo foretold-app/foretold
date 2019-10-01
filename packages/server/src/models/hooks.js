@@ -25,6 +25,9 @@ const { MEASURABLE_STATE } = require('../enums/measurable-state');
  */
 
 function addHooks(db) {
+  /**
+   * afterUpdate
+   */
   db.Measurable.addHook('afterUpdate', (instance) => {
     try {
       emitter.emit(events.MEASURABLE_CHANGED, instance);
@@ -32,6 +35,17 @@ function addHooks(db) {
       console.log('Hook MEASURABLE_CHANGED', e);
     }
   });
+  db.User.addHook('afterUpdate', (instance) => {
+    try {
+      emitter.emit(events.USER_CHANGED, instance);
+    } catch (e) {
+      console.log('Hook USER_CHANGED', e);
+    }
+  });
+
+  /**
+   * afterCreate
+   */
   db.Measurement.addHook('afterCreate', (instance) => {
     try {
       emitter.emit(events.NEW_MEASUREMENT, instance);
@@ -50,31 +64,41 @@ function addHooks(db) {
     try {
       emitter.emit(events.NEW_MEMBERSHIP, instance);
     } catch (e) {
-      console.log('Hook', e);
+      console.log('Hook NEW_MEMBERSHIP', e);
     }
   });
   db.Channel.addHook('afterCreate', (instance) => {
     try {
       emitter.emit(events.NEW_CHANNEL, instance);
     } catch (e) {
-      console.log('Hook', e);
+      console.log('Hook NEW_CHANNEL', e);
     }
   });
   db.Series.addHook('afterCreate', (instance) => {
     try {
       emitter.emit(events.NEW_SERIES, instance);
     } catch (e) {
-      console.log('Hook', e);
+      console.log('Hook NEW_SERIES', e);
     }
   });
   db.Invitation.addHook('afterCreate', (instance) => {
     try {
       emitter.emit(events.NEW_INVITATION, instance);
     } catch (e) {
-      console.log('Hook', e);
+      console.log('Hook NEW_INVITATION', e);
+    }
+  });
+  db.User.addHook('afterCreate', (instance) => {
+    try {
+      emitter.emit(events.NEW_USER, instance);
+    } catch (e) {
+      console.log('Hook NEW_USER', e);
     }
   });
 
+  /**
+   * beforeCreate
+   */
   db.Bot.addHook('beforeCreate', async (instance) => {
     try {
       const agent = await db.sequelize.models.Agent.create({
@@ -85,7 +109,6 @@ function addHooks(db) {
       console.log('Hook', e);
     }
   });
-
   db.User.addHook('beforeCreate', async (instance) => {
     try {
       const agent = await db.sequelize.models.Agent.create({
@@ -97,6 +120,9 @@ function addHooks(db) {
     }
   });
 
+  /**
+   * beforeUpdate
+   */
   db.Measurable.addHook('beforeUpdate', async (instance) => {
     try {
       if (instance.changed('expectedResolutionDate')) {
@@ -109,6 +135,9 @@ function addHooks(db) {
     }
   });
 
+  /**
+   * beforeValidate
+   */
   db.Measurement.addHook('beforeValidate', async (instance) => {
     try {
       if (instance.relevantAt == null) {

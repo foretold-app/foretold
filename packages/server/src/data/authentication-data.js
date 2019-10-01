@@ -100,13 +100,6 @@ class AuthenticationData {
       console.log('Saving user info is failed.');
     }
 
-    // @todo: To move upper?
-    try {
-      await this.invitation.transition(user);
-    } catch (e) {
-      console.log('Invitation transition is failed.');
-    }
-
     return this.Jwt.encodeJWT({}, agentId);
   }
 

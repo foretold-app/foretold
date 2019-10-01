@@ -94,10 +94,11 @@ class InvitationsData extends DataBase {
         });
       }
 
+      return true;
     } catch (e) {
       console.error('Transition Err', e);
     }
-    return true;
+    return false;
   }
 }
 

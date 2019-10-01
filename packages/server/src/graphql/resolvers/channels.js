@@ -60,10 +60,10 @@ async function all(root, args, context, _info) {
  * @param {object} args
  * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<Models.Channel>}
  */
-async function one(root, args, context, info) {
+async function one(root, args, context, _info) {
   const id = _.get(args, 'id') || _.get(root, 'channelId');
   const agentId = _.get(context, 'agent.id');
 
@@ -80,10 +80,10 @@ async function one(root, args, context, info) {
  * @param {Models.ObjectID} args.id
  * @param {object} args.input
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<Models.Channel>}
  */
-async function update(root, args, context, info) {
+async function update(root, args, context, _info) {
   const params = new Params({ id: args.id });
   const data$ = new Data(args.input);
   return data.channels.updateOne(params, data$);
@@ -93,10 +93,10 @@ async function update(root, args, context, info) {
  * @param {object | null} root
  * @param {{ input: Schema.ChannelsInput }} args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<Models.Channel>}
  */
-async function create(root, args, context, info) {
+async function create(root, args, context, _info) {
   const creatorId = _.get(context, 'agent.id');
   const input = {
     ...args.input,

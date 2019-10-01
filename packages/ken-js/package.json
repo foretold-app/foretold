@@ -1,0 +1,27 @@
+{
+  "name": "@foretold/ken-js",
+  "version": "1.0.0",
+  "description": "Foretold Ken JS",
+  "author": "Ozzie Gooen <ozzieagooen@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=12.6.0",
+    "yarn": ">=1.16.0"
+  },
+  "scripts": {
+    "do": "cd ./node_modules/bs-ken && yarn build && cd ../..",
+    "clean": "cd ./node_modules/bs-ken && yarn clean && cd ../..",
+    "build": "parcel build ./index.js --no-source-maps --no-autoinstall"
+  },
+  "dependencies": {
+    "browserify": "16.5.0",
+    "gentype": "1.6.1",
+    "@glennsl/bs-jest": "0.4.2",
+    "bs-platform": "4.0.9",
+    "bs-ken": "0.0.5",
+    "parcel": "1.12.3",
+    "rationale": "0.1.10"
+  }
+}

@@ -11,6 +11,8 @@ const { stats } = require('./types/stats');
 const { permissions } = require('./authorizers');
 const { middlewares } = require('./middlewares');
 
+const { GraphQLJSON } = require('graphql-type-json');
+
 const schema = new graphql.GraphQLSchema({
   types: [
     types.channels.channel,
@@ -23,6 +25,21 @@ const schema = new graphql.GraphQLSchema({
   query: new graphql.GraphQLObjectType({
     name: 'Query',
     fields: {
+
+      ken: {
+        type: GraphQLJSON,
+        resolve: async () => {
+          const data = require('../data');
+          const json = await data.globalSettings.getMain();
+          const { entityGraph } = json;
+
+          const ken = require('@foretold/ken-js/lib');
+
+          return ken.main(entityGraph)
+            .findThing('@lesswrong/posts/rain')
+            .connectedPropertyThings();
+        },
+      },
 
       permissions: {
         type: types.permissions.permissions,

@@ -166,23 +166,21 @@ let addMembersButtonSection = (channelId: string) =>
   </FC.Base.Div>;
 
 let inviteMemberButtonSection = (channelId: string) =>
-  true
-    ? ReasonReact.null
-    : <FC.Base.Div
-        float=`right
-        className={Css.style([
-          FC.PageCard.HeaderRow.Styles.itemTopPadding,
-          FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-          FC.PageCard.HeaderRow.Styles.itemRightPadding,
-        ])}>
-        <FC.Base.Button
-          variant=Primary
-          onClick={e =>
-            LinkType.onClick(Internal(ChannelInviteMember(channelId)), e)
-          }>
-          {"Invite Member" |> ReasonReact.string}
-        </FC.Base.Button>
-      </FC.Base.Div>;
+  <FC.Base.Div
+    float=`right
+    className={Css.style([
+      FC.PageCard.HeaderRow.Styles.itemTopPadding,
+      FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+      FC.PageCard.HeaderRow.Styles.itemRightPadding,
+    ])}>
+    <FC.Base.Button
+      variant=Secondary
+      onClick={e =>
+        LinkType.onClick(Internal(ChannelInviteMember(channelId)), e)
+      }>
+      {"Invite Member" |> ReasonReact.string}
+    </FC.Base.Button>
+  </FC.Base.Div>;
 
 let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
   let head =

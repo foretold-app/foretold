@@ -5,7 +5,9 @@ module Query = [%graphql
     ) {
         invitationCreate(
             input: $input
-        )
+        ) {
+            id
+        }
     }
  |}
 ];

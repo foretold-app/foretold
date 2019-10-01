@@ -37,7 +37,6 @@ let make =
            | InviteMember => <ChannelInviteMember channelId loggedInUser />
            | Settings => <ChannelEdit channelId loggedInUser />
            | NewSeries => <SeriesNew channelId loggedInUser />
-           | _ => ReasonReact.null
            }}
         </Channel>;
 

@@ -127,11 +127,21 @@ export namespace Models {
     isActive: boolean;
   }
 
-  export interface NotificationStatus extends Model {}
+  export interface NotificationStatus extends Model {
+    agentId: ObjectID;
+    notificationId: ObjectID;
+  }
 
   export interface Template extends Model {}
 
-  export interface Notification extends Model {}
+  export interface Notification extends Model {
+    envelope: {
+      replacements: Object;
+      to: string;
+      body: string;
+      subject: string;
+    }
+  }
 
   export interface Invitation extends Model {
     email: string;
@@ -167,6 +177,10 @@ export namespace Models {
     primaryPointScore: float;
     numberOfPredictions: number;
     numberOfQuestionsScored: number;
+  }
+
+  export interface AgentPreference extends Model {
+    stopAllEmails: boolean;
   }
 
   export type Creator = Models.User | Models.Bot;

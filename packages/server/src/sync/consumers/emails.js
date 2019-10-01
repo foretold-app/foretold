@@ -41,14 +41,12 @@ class Emails extends Consumer {
         const status = statuses[i];
 
         try {
-          const notification = await this._getNotification(status);
-
           const agent = await this._getAgent(status);
-          const preferences = await this._getPreferences(status);
           const user = await this._getUser(agent);
-
+          const preferences = await this._getPreferences(status);
           await this._test(preferences, user);
 
+          const notification = await this._getNotification(status);
           const result = await this._emitEmail(notification, user, agent);
 
           if (result === true) {

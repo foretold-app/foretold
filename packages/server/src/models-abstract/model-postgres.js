@@ -374,6 +374,14 @@ class ModelPostgres extends Model {
       where.measurableId = filter.measurableId;
     }
 
+    if (filter.email) {
+      where.email = filter.email;
+    }
+
+    if (filter.status) {
+      where.status = filter.status;
+    }
+
     if (filter.competitorType) {
       where.competitorType = {
         [this.in]: filter.competitorType,

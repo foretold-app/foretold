@@ -366,6 +366,8 @@ export namespace Layers {
       minPredictionCountTotal?: number | null;
       minNumberOfPredictions?: number | null;
       minNumberOfQuestionsScored?: number | null;
+      email?: string;
+      status?: string;
 
       withinMeasurables?: withinMeasurables | null;
       withinPublicChannels?: withinPublicChannels | null;

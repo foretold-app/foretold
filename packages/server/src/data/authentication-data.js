@@ -121,6 +121,7 @@ class AuthenticationData {
         await this.invitation.transition(user);
       } catch (e) {
         console.log('Invitation transition is failed.');
+        throw e;
       }
 
       return this.Jwt.encodeJWT({}, agentId);

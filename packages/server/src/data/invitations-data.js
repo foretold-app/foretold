@@ -67,19 +67,21 @@ class InvitationsData extends DataBase {
       assert(_.isString(email), 'Email should be a string.');
       assert(_.isString(agentId), 'Agent ID is required.');
 
-      const invitations = this.getAll({
+      const invitations = await this.getAll({
         email,
         status: INVITATION_STATUS.AWAITING,
       });
 
       const methodCreatedBy = CHANNEL_MEMBERSHIP_TYPE.ADDED_BY_EMAIL_BY_ADMIN;
 
-      for(let i = 0, max = invitations.length; i < max; i ++) {
+      for (let i = 0, max = invitations.length; i < max; i++) {
         const invitation = invitations[i];
         const channelId = _.get(invitation, 'channelId');
         const inviterAgentId = _.get(invitation, 'inviterAgentId');
 
-        await this.updateOne({ email, channelId }, {
+        await this.updateOne({
+          id: invitation.id,
+        }, {
           status: INVITATION_STATUS.ACCEPTED,
         });
 

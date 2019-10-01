@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const { authentication } = require('../../authentication');
+const { authentication } = require('../authentication');
 const { globalSettings } = require('../../data');
 
 /**

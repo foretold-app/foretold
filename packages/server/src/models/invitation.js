@@ -8,16 +8,16 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: sequelize.fn('uuid_generate_v4'),
       allowNull: false,
     },
-    agentId: {
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     inviterAgentId: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID(),
       allowNull: false,
     },
     channelId: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID(),
       allowNull: false,
     },
     status: {
@@ -38,9 +38,6 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Invitation.associate = function associate(models) {
-    Invitation.Agent = Invitation.belongsTo(models.Agent, {
-      foreignKey: 'agentId',
-    });
     Invitation.Inviter = Invitation.belongsTo(models.Agent, {
       foreignKey: 'inviterAgentId',
     });

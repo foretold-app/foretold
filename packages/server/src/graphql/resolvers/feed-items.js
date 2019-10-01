@@ -10,7 +10,7 @@ const { HOME_CHANNEL_ID } = require('../../well-known');
 const structures = require('../../structures');
 
 /**
- * @param {*} root
+ * @param {*} _root
  * @param {object} args
  * @param {Models.ObjectID} args.channelId
  * @param {Models.ObjectID} args.agentId
@@ -19,10 +19,10 @@ const structures = require('../../structures');
  * @param {number} args.last
  * @param {number} args.first
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*>}
  */
-async function all(root, args, context, info) {
+async function all(_root, args, context, _info) {
   const channelId = _.get(args, 'channelId');
   const agentId = _.get(args, 'agentId');
   const currentAgentId = _.get(context, 'agent.id');

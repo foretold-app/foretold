@@ -15,7 +15,7 @@ class Consumer {
     this.options = options;
     this.data = data;
     this.notifications = data.notifications;
-    this.agentNotifications = data.agentNotifications;
+    this.notificationStatuses = data.notificationStatuses;
     this.agents = data.agents;
     this.preferences = data.preferences;
     this.users = data.users;

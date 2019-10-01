@@ -12,8 +12,7 @@ const { DataBase } = require('./data-base');
 class MeasurablesData extends DataBase {
   constructor() {
     super();
-    this.MeasurableModel = new MeasurableModel();
-    this.model = this.MeasurableModel;
+    this.model =  new MeasurableModel();
   }
 
   /**

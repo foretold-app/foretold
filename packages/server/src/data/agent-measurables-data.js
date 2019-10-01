@@ -23,8 +23,7 @@ const { Filter } = require('./classes/filter');
 class AgentMeasurablesData extends DataBase {
   constructor() {
     super();
-    this.AgentMeasurableModel = new AgentMeasurableModel();
-    this.model = this.AgentMeasurableModel;
+    this.model = new AgentMeasurableModel();
     this.measurements = new MeasurementsData();
     this.measurables = new MeasurablesData();
   }

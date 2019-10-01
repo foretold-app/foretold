@@ -3,7 +3,7 @@ const {
 } = require('../enums/notification-error-reason');
 
 module.exports = (sequelize, DataTypes) => {
-  const AgentNotification = sequelize.define('AgentNotification', {
+  const NotificationStatus = sequelize.define('NotificationStatus', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     agentId: {
       type: DataTypes.UUID(),
-      allowNull: false,
+      allowNull: true,
     },
     notificationId: {
       type: DataTypes.UUID(),
@@ -51,13 +51,13 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  AgentNotification.associate = function associate(models) {
-    AgentNotification.Agent = AgentNotification.belongsTo(models.Agent, {
+  NotificationStatus.associate = function associate(models) {
+    NotificationStatus.Agent = NotificationStatus.belongsTo(models.Agent, {
       foreignKey: 'agentId',
       as: 'agent',
     });
 
-    AgentNotification.Notification = AgentNotification.belongsTo(
+    NotificationStatus.Notification = NotificationStatus.belongsTo(
       models.Notification, {
         foreignKey: 'notificationId',
         as: 'notification',
@@ -65,5 +65,5 @@ module.exports = (sequelize, DataTypes) => {
     );
   };
 
-  return AgentNotification;
+  return NotificationStatus;
 };

@@ -48,6 +48,8 @@ class Filter {
       'minPredictionCountTotal', // number | null
       'minNumberOfPredictions', // number | null
       'minNumberOfQuestionsScored', // number | null
+      'email', // string
+      'status', // string
     ];
     utils.extend(this.constructor.name, filter, list, this);
     utils.diff(this.constructor.name, filter, list);

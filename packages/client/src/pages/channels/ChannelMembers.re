@@ -166,23 +166,21 @@ let addMembersButtonSection = (channelId: string) =>
   </FC.Base.Div>;
 
 let inviteMemberButtonSection = (channelId: string) =>
-  true
-    ? ReasonReact.null
-    : <FC.Base.Div
-        float=`right
-        className={Css.style([
-          FC.PageCard.HeaderRow.Styles.itemTopPadding,
-          FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-          FC.PageCard.HeaderRow.Styles.itemRightPadding,
-        ])}>
-        <FC.Base.Button
-          variant=Primary
-          onClick={e =>
-            LinkType.onClick(Internal(ChannelInviteMember(channelId)), e)
-          }>
-          {"Invite Member" |> ReasonReact.string}
-        </FC.Base.Button>
-      </FC.Base.Div>;
+  <FC.Base.Div
+    float=`right
+    className={Css.style([
+      FC.PageCard.HeaderRow.Styles.itemTopPadding,
+      FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+      FC.PageCard.HeaderRow.Styles.itemRightPadding,
+    ])}>
+    <FC.Base.Button
+      variant=Secondary
+      onClick={e =>
+        LinkType.onClick(Internal(ChannelInviteMember(channelId)), e)
+      }>
+      {"Invite Member" |> ReasonReact.string}
+    </FC.Base.Button>
+  </FC.Base.Div>;
 
 let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
   let head =
@@ -199,23 +197,13 @@ let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
   let table =
     Table.fromColumns(Columns.all(channelId, channel), memberships, ());
 
-  SLayout.LayoutConfig.make(
-    ~head,
-    ~body=<FC.PageCard.Body> table </FC.PageCard.Body>,
-  )
-  |> SLayout.FullPage.makeWithEl;
+  <SLayout head> <FC.PageCard.Body> table </FC.PageCard.Body> </SLayout>;
 };
 
 let errorFn = _ =>
-  SLayout.LayoutConfig.make(
-    ~head=<div />,
-    ~body=<div> {"No channel." |> ReasonReact.string} </div>,
-  )
-  |> SLayout.FullPage.makeWithEl;
+  <SLayout> <div> {"No channel." |> ReasonReact.string} </div> </SLayout>;
 
-let loadingFn = _ =>
-  SLayout.LayoutConfig.make(~head=<div />, ~body=<Spin />)
-  |> SLayout.FullPage.makeWithEl;
+let loadingFn = _ => <SLayout> <Spin /> </SLayout>;
 
 let make = (~channelId: string, ~channel: Types.channel, _children) => {
   ...component,

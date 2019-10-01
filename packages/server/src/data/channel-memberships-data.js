@@ -12,8 +12,7 @@ const { CHANNEL_MEMBERSHIP_TYPE } = require('../enums/channel-membership-type');
 class ChannelMembershipsData extends DataBase {
   constructor() {
     super();
-    this.ChannelMembershipModel = new ChannelMembershipModel();
-    this.model = this.ChannelMembershipModel;
+    this.model = new ChannelMembershipModel();
   }
 
   /**

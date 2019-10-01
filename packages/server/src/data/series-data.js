@@ -9,8 +9,7 @@ const { SeriesModel } = require('../models-abstract');
 class SeriesData extends DataBase {
   constructor() {
     super();
-    this.SeriesModel = new SeriesModel();
-    this.model = this.SeriesModel;
+    this.model = new SeriesModel();
   }
 
   /**

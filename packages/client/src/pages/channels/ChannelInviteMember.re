@@ -79,40 +79,32 @@ let component = ReasonReact.statelessComponent("ChannelInviteMember");
 let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
   ...component,
   render: _ =>
-    SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("Invite Member"),
-      ~body=
-        <FC.PageCard.BodyPadding>
-          {InvitationCreate.withMutation((mutation, data) =>
-             withForm(
-               channelId,
-               "",
-               mutation,
-               ({send, state, getFieldState}) => {
-                 let form =
-                   fields(
-                     state,
-                     send,
-                     () => send(Form.Submit),
-                     getFieldState,
-                   );
+    <SLayout head={SLayout.Header.textDiv("Invite Member")}>
+      <FC.PageCard.BodyPadding>
+        {InvitationCreate.withMutation((mutation, data) =>
+           withForm(
+             channelId,
+             "",
+             mutation,
+             ({send, state, getFieldState}) => {
+               let form =
+                 fields(state, send, () => send(Form.Submit), getFieldState);
 
-                 let onSuccess = _ =>
-                   <>
-                     <AntdAlert message=Lang.memberInvited type_="success" />
-                     form
-                   </>;
+               let onSuccess = _ =>
+                 <>
+                   <AntdAlert message=Lang.memberInvited type_="success" />
+                   form
+                 </>;
 
-                 CMutationForm.showWithLoading2(
-                   ~result=data.result,
-                   ~form,
-                   ~onSuccess,
-                   (),
-                 );
-               },
-             )
-           )}
-        </FC.PageCard.BodyPadding>,
-    )
-    |> SLayout.FullPage.makeWithEl,
+               CMutationForm.showWithLoading2(
+                 ~result=data.result,
+                 ~form,
+                 ~onSuccess,
+                 (),
+               );
+             },
+           )
+         )}
+      </FC.PageCard.BodyPadding>
+    </SLayout>,
 };

@@ -22,6 +22,7 @@ class Emails extends Consumer {
   }
 
   /**
+   * @public
    * @return {Promise<boolean>}
    */
   async main() {
@@ -34,37 +35,37 @@ class Emails extends Consumer {
     }
 
     try {
-      const agentNotifications
-        = await this._getAgentsNotifications(transaction);
+      const statuses = await this._getNotificationsStatusesToSend(transaction);
 
-      for (let i = 0; i < agentNotifications.length; i++) {
-        const agentNotification = agentNotifications[i];
+      for (let i = 0; i < statuses.length; i++) {
+        const status = statuses[i];
 
         try {
-          const notification = await this._getNotification(agentNotification);
-          const agent = await this._getAgent(agentNotification);
-          const agentPreferences
-            = await this._getPreferences(agentNotification);
+          const agent = await this._getAgent(status);
           const user = await this._getUser(agent);
-          const _test = await this._test(agentPreferences, user);
+          const preferences = await this._getPreferences(status);
+          await this._test(preferences, user);
+
+          const notification = await this._getNotification(status);
           const result = await this._emitEmail(notification, user, agent);
 
           if (result === true) {
-            await this._markNotificationAsSent(agentNotification, transaction);
+            await this._markNotificationAsSent(status, transaction);
           } else {
             throw new errs.ExternalError('Email is not sent');
           }
 
           console.log(
-            `\x1b[35mNotification ID = "${notification.id}", `
-            + `Transaction ID = "${transaction.id}", `
-            + `Agent Preferences ID = "${agentPreferences.id}", `
-            + `Agent ID = "${agent.id}", `
+            `\x1b[35mNotification ID = "${_.get(notification, 'id')}", `
+            + `Transaction ID = "${_.get(transaction, 'id')}", `
+            + `Agent Preferences ID = "${_.get(preferences, 'id')}", `
+            + `Agent ID = "${_.get(agent, 'id')}", `
             + `Result = "${result}".\x1b[0m`,
           );
+
         } catch (err) {
           console.log('Emails Consumer, pass sending due to', err.message);
-          await this._notificationError(agentNotification, err, transaction);
+          await this._notificationError(status, err, transaction);
         }
       }
 
@@ -79,92 +80,98 @@ class Emails extends Consumer {
 
   /**
    * @param {object} transaction
-   * @return {Promise<*>}
+   * @return {Promise<Models.NotificationStatus[]>}
    * @protected
    */
-  async _getAgentsNotifications(transaction) {
+  async _getNotificationsStatusesToSend(transaction) {
     const filter = new Filter({ sentAt: null, attemptCounterMax: 3 });
     const pagination = new Pagination({ limit: 10 });
     const options = new Options({ transaction, lock: true, skipLocked: true });
-    return this.agentNotifications.getAll(filter, pagination, options);
+    return this.notificationStatuses.getAll(filter, pagination, options);
   }
 
   /**
-   * @param {object} agentNotification
-   * @return {Promise<void>}
+   * @param {Models.NotificationStatus} notificationStatus
+   * @return {Promise<Models.Notification>}
    * @protected
    */
-  async _getNotification(agentNotification) {
-    const params = new Params({ id: agentNotification.notificationId });
+  async _getNotification(notificationStatus) {
+    const params = new Params({ id: notificationStatus.notificationId });
     const notification = await this.notifications.getOne(params);
     assert(!!notification, 'Notification is required');
     return notification;
   }
 
   /**
-   * @param {object} agentNotification
-   * @return {Promise<void>}
+   * @param {Models.NotificationStatus} notificationStatus
+   * @return {Promise<Models.Agent>}
    * @protected
    */
-  async _getAgent(agentNotification) {
-    const params = new Params({ id: agentNotification.agentId });
+  async _getAgent(notificationStatus) {
+    if (!notificationStatus.agentId) return null;
+
+    const params = new Params({ id: notificationStatus.agentId });
     const agent = await this.agents.getOne(params);
     assert(!!agent, 'Agent is required');
     return agent;
   }
 
   /**
-   * @param {object} agentNotification
+   * @param {Models.NotificationStatus} notificationStatus
    * @param {object} transaction
-   * @return {Promise<*>}
+   * @return {Promise<Models.NotificationStatus>}
    * @protected
    */
-  async _markNotificationAsSent(agentNotification, transaction) {
-    const params = new Params({ id: agentNotification.id });
+  async _markNotificationAsSent(notificationStatus, transaction) {
+    const params = new Params({ id: notificationStatus.id });
     const data = { sentAt: moment.utc().toDate() };
     const options = new Options({ transaction });
-    return this.agentNotifications.updateOne(params, data, options);
+    return this.notificationStatuses.updateOne(params, data, options);
   }
 
   /**
-   * @param {object} agentNotification
+   * @param {Models.NotificationStatus} notificationStatus
    * @param {CustomError} err
    * @param {object} transaction
-   * @return {Promise<*>}
+   * @return {Promise<Models.NotificationStatus>}
    * @protected
    */
-  async _notificationError(agentNotification, err, transaction) {
+  async _notificationError(notificationStatus, err, transaction) {
     const weightError = err.weight || 1;
-    const attemptCounterPrev = _.get(agentNotification, 'attemptCounter') || 0;
+    const attemptCounterPrev = _.get(notificationStatus, 'attemptCounter') || 0;
     const attemptCounter = attemptCounterPrev + weightError;
     const errorAt = moment.utc().toDate();
-    const errorReason = err.type;
+    const errorReason = err.type || (new errs.InternalError()).type;
 
-    const params = new Params({ id: agentNotification.id });
+    const params = new Params({ id: notificationStatus.id });
     const data = { errorAt, attemptCounter, errorReason };
     const options = new Options({ transaction });
 
-    return this.agentNotifications.updateOne(params, data, options);
+    return this.notificationStatuses.updateOne(params, data, options);
   }
 
   /**
-   * @param {object} agentNotification
-   * @return {Promise<*>}
+   * @param {Models.NotificationStatus} notificationStatus
+   * @return {Promise<Models.AgentPreference | null>}
    * @protected
    */
-  async _getPreferences(agentNotification) {
-    const { agentId } = agentNotification;
+  async _getPreferences(notificationStatus) {
+    if (!notificationStatus.agentId) return null;
+
+    const { agentId } = notificationStatus;
     const preferences = await this.preferences.getOneByAgentId(agentId);
     assert(!!preferences, 'Preferences is required');
     return preferences;
   }
 
   /**
-   * @param {object} agent
-   * @return {Promise<void>}
+   * @param {Models.Agent} agent
+   * @return {Promise<Models.User | null>}
    * @protected
    */
   async _getUser(agent) {
+    if (!agent) return null;
+
     const params = new Params({ agentId: agent.id });
     const user = await this.users.getOne(params);
     assert(!!user, `User is required for an agent "${agent.id}".`);
@@ -172,25 +179,27 @@ class Emails extends Consumer {
   }
 
   /**
-   * @param {object} agentPreferences
-   * @param {object} user
+   * @param {Models.AgentPreference} agentPreferences
+   * @param {Models.User} user
    * @return {Promise<boolean>}
    * @protected
    */
   async _test(agentPreferences, user) {
-    assert(!!user,
-      'User is not found.');
-    assert(!!_.get(user, 'email'),
-      'Email is required.', errs.EmailAddressError);
-    assert(!agentPreferences.stopAllEmails,
-      'Emails are turned off.', errs.PreferencesError);
+    if (user) {
+      assert(!!_.get(user, 'email'),
+        'Email is required.', errs.EmailAddressError);
+    }
+    if (agentPreferences) {
+      assert(!agentPreferences.stopAllEmails,
+        'Emails are turned off.', errs.PreferencesError);
+    }
     return true;
   }
 
   /**
-   * @param {object} notification
-   * @param {object} user
-   * @param {object} agent
+   * @param {Models.Notification} notification
+   * @param {Models.User} user
+   * @param {Models.Agent} agent
    * @return {Promise<boolean>}
    * @protected
    */
@@ -219,13 +228,14 @@ class Emails extends Consumer {
   }
 
   /**
-   * @param {object} agent
-   * @return {Promise<string>}
+   * @param {Models.Agent} agent
+   * @return {Promise<string | null>}
    * @protected
    */
   async _getAuthToken(agent) {
-    const agentId = agent.id;
-    const token = await this.tokens.createAuthToken(agentId);
+    if (!agent) return null;
+
+    const token = await this.tokens.createAuthToken(agent.id);
     assert(!!token, 'Token is required');
     assert(!!token.token, 'Token is required #2');
     return token.token;

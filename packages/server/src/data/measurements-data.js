@@ -9,8 +9,7 @@ const { MeasurementModel } = require('../models-abstract');
 class MeasurementsData extends DataBase {
   constructor() {
     super();
-    this.MeasurementModel = new MeasurementModel();
-    this.model = this.MeasurementModel;
+    this.model = new MeasurementModel();
   }
 
   /**

@@ -14,8 +14,7 @@ const { Data } = require('./classes/data');
 class GlobalSettingsData extends DataBase {
   constructor() {
     super();
-    this.GlobalSettingModel = new GlobalSettingModel();
-    this.model = this.GlobalSettingModel;
+    this.model = new GlobalSettingModel();
   }
 
   /**

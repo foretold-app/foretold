@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const { AuthenticationError } = require('apollo-server');
 
 const { Jwt } = require('../lib/jwt');
@@ -6,6 +7,7 @@ const { Auth0 } = require('../lib/auth0');
 const { UsersData } = require('./users-data');
 const { AgentsData } = require('./agents-data');
 const { TokensData } = require('./tokens-data');
+const { InvitationsData } = require('./invitations-data');
 
 class AuthenticationData {
   constructor() {
@@ -15,6 +17,7 @@ class AuthenticationData {
     this.users = new UsersData();
     this.agents = new AgentsData();
     this.tokens = new TokensData();
+    this.invitation = new InvitationsData();
   }
 
   /**
@@ -23,19 +26,15 @@ class AuthenticationData {
    * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
    */
   async authenticate(token = '') {
-    try {
-      if (this.tokens.validate(token)) {
-        return await this._byToken(token);
-      }
-
-      if (this.Jwt.validate(token)) {
-        return await this._byJwt(token);
-      }
-
-      throw new AuthenticationData.TokenIsInvalidError();
-    } catch (err) {
-      throw err;
+    if (this.tokens.validate(token)) {
+      return await this._byToken(token);
     }
+
+    if (this.Jwt.validate(token)) {
+      return await this._byJwt(token);
+    }
+
+    throw new AuthenticationData.TokenIsInvalidError();
   }
 
   /**
@@ -44,13 +43,9 @@ class AuthenticationData {
    * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
    */
   async _byJwt(token) {
-    try {
-      const decoded = this.Jwt.decodeJwtToken(token);
-      const agentId = decoded.sub;
-      return await this._getContext(agentId);
-    } catch (err) {
-      throw err;
-    }
+    const decoded = this.Jwt.decodeJwtToken(token);
+    const agentId = decoded.sub;
+    return await this._getContext(agentId);
   }
 
   /**
@@ -59,12 +54,8 @@ class AuthenticationData {
    * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
    */
   async _byToken(token) {
-    try {
-      const agentId = await this.tokens.getAgentId(token);
-      return await this._getContext(agentId);
-    } catch (err) {
-      throw err;
-    }
+    const agentId = await this.tokens.getAgentId(token);
+    return await this._getContext(agentId);
   }
 
   /**
@@ -82,41 +73,34 @@ class AuthenticationData {
     const user = await agent.getUser();
     const creator = bot || user;
 
-    return {
-      agent,
-      bot,
-      user,
-      creator,
-    };
+    return { agent, bot, user, creator };
   }
 
   /**
-   * @todo: To adds "Late User Binding" (with an email).
    * @public
    * @param {string} jwt
    * @param {string} accessToken
    * @return {Promise<string>}
    */
   async exchangeAuthComToken(jwt, accessToken) {
-    try {
-      const decoded = this.Jwt.decodeAuth0Jwt(jwt);
-      if (!decoded.sub) throw new AuthenticationData.NoUserIdError();
-
-      const auth0Id = decoded.sub;
-      const user = await this.users.getUserByAuth0Id(auth0Id);
-      const { agentId } = user;
-
-      try {
-        const userInfo = await this.auth0.getUserInfo(accessToken);
-        await this.users.updateUserInfoFromAuth0(user.id, userInfo);
-      } catch (e) {
-        console.log('Saving user info is failed.');
-      }
-
-      return this.Jwt.encodeJWT({}, agentId);
-    } catch (err) {
-      throw err;
+    const decoded = this.Jwt.decodeAuth0Jwt(jwt);
+    const auth0Id = _.get(decoded, 'sub');
+    if (!auth0Id) {
+      throw new AuthenticationData.NoUserIdError();
     }
+
+    const user = await this.users.getUserByAuth0Id(auth0Id);
+    const { agentId } = user;
+
+    // @todo: To move upper?
+    try {
+      const userInfo = await this.auth0.getUserInfo(accessToken);
+      await this.users.updateUserInfoFromAuth0(user.id, userInfo);
+    } catch (e) {
+      console.log('Saving user info is failed.');
+    }
+
+    return this.Jwt.encodeJWT({}, agentId);
   }
 
   /**
@@ -127,15 +111,14 @@ class AuthenticationData {
    * @return {Promise<string>}
    */
   async exchangeAuthToken(authToken) {
-    try {
-      const token = await this.tokens.getAuthToken(authToken);
-      if (!token) throw new AuthenticationData.NotAuthenticatedError();
-      await this.tokens.increaseUsageCount(authToken);
-      const { agentId } = token;
-      return this.Jwt.encodeJWT({}, agentId);
-    } catch (err) {
-      throw err;
+    const token = await this.tokens.getAuthToken(authToken);
+    if (!token) {
+      throw new AuthenticationData.NotAuthenticatedError();
     }
+
+    await this.tokens.increaseUsageCount(authToken);
+    const { agentId } = token;
+    return this.Jwt.encodeJWT({}, agentId);
   }
 }
 

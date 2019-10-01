@@ -8,14 +8,14 @@ const { Query } = require('../../data/classes/query');
 const { Data } = require('../../data/classes/data');
 
 /**
- * @param {*} root
+ * @param {*} _root
  * @param {object} args
  * @param {string} args.name
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<Models.Model>}
  */
-async function one(root, args, context, info) {
+async function one(_root, args, context, _info) {
   const name = _.get(args, 'name');
 
   const params = new Params({ name });
@@ -30,16 +30,16 @@ async function one(root, args, context, info) {
 }
 
 /**
- * @param {*} root
+ * @param {*} _root
  * @param {object} args
  * @param {Models.ObjectID} args.name
  * @param {Models.ObjectID} args.input
  * @param {object} args.input
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*>}
  */
-async function update(root, args, context, info) {
+async function update(_root, args, _context, _info) {
   const name = _.get(args, 'name');
   const input = _.get(args, 'input');
 

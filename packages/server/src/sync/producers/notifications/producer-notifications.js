@@ -1,4 +1,5 @@
 const assert = require('assert');
+const _ = require('lodash');
 
 const { Producer } = require('../producer');
 
@@ -12,13 +13,16 @@ class ProducerNotifications extends Producer {
 
   /**
    * @param {object} replacements
+   * @param {object} to
    * @return {Promise<Models.Notification>}
    * @protected
    */
-  async _queueEmail(replacements) {
+  async _queueEmail(replacements = {}, to = null) {
     const template = await this._getTemplate();
     const emailEnvelope = new Producer.EmailEnvelope(template.envelopeTemplate);
-    const emailEnvelope$ = emailEnvelope.instanceFactory(replacements);
+    const emailEnvelope$ = emailEnvelope
+      .instanceFactory(replacements)
+      .setTo(to);
     return this._createEmailNotification(emailEnvelope$);
   }
 
@@ -45,7 +49,10 @@ class ProducerNotifications extends Producer {
       envelope instanceof Producer.EmailEnvelope,
       'Envelope is not EmailEnvelope',
     );
-    const data = { type, envelope };
+    const data = {
+      type,
+      envelope
+    };
     const options = await this._getOptions();
     return Producer.data.notifications.createOne(data, options);
   }
@@ -53,16 +60,19 @@ class ProducerNotifications extends Producer {
   /**
    * @param {Models.Agent} agent
    * @param {Models.Notification} notification
-   * @return {Promise<Models.AgentNotification>}
+   * @return {Promise<Models.NotificationStatus>}
    * @protected
    */
-  async _assignAgentToNotification(agent, notification) {
-    assert(!!agent.id, 'Agent ID is required');
+  async _assignNotification(agent, notification) {
     assert(!!notification.id, 'Notification ID is required');
 
-    const data = { agentId: agent.id, notificationId: notification.id };
+    const data = {
+      agentId: _.get(agent, 'id', null),
+      notificationId: notification.id,
+    };
+
     const options = await this._getOptions();
-    return Producer.data.agentNotifications.createOne(
+    return Producer.data.notificationStatuses.createOne(
       data,
       options,
     );

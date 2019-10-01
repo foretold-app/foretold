@@ -2,8 +2,7 @@ const _ = require('lodash');
 const assert = require('assert');
 
 const { DataBase } = require('./data-base');
-const { UsersData } = require('./users-data');
-const { AgentsData } = require('./agents-data');
+
 const { ChannelMembershipsData } = require('./channel-memberships-data');
 
 const { InvitationModel } = require('../models-abstract');
@@ -15,16 +14,15 @@ const { InvitationModel } = require('../models-abstract');
 class InvitationsData extends DataBase {
   constructor() {
     super();
-    this.InvitationModel = new InvitationModel();
-    this.model = this.InvitationModel;
-    this.users = new UsersData();
-    this.agents = new AgentsData();
-    this.memberships = new ChannelMembershipsData();
+    this.model = new InvitationModel();
+    this.channelMemberships = new ChannelMembershipsData();
   }
 
   /**
    * @public
    * @todo: Use transactions here.
+   * @todo: Always send invitations! Never mess the invitations flow
+   * @todo: with direct member adding into channel.
    * @param {object} input
    * @param {string} input.email
    * @param {string} input.channelId
@@ -41,11 +39,15 @@ class InvitationsData extends DataBase {
       assert(_.isString(channelId), 'Channel Id should be a string');
       assert(_.isString(inviterAgentId), 'Inviter Agent Id should be a string');
 
-      return true;
+      const params = { email, channelId };
+      const query = {};
+      const data = { email, inviterAgentId, channelId };
+      return await this.upsertOne(params, query, data);
+
     } catch (e) {
-      console.error('Invitation Err', e.message);
-      return false;
+      console.error('Invitation Err', e);
     }
+    return null;
   }
 }
 

@@ -40,7 +40,7 @@ let make =
     };
 
     let topGlobalChannel = channel => {
-      <> <Div float=`left> {channelLink(channel)} </Div> </>;
+      <Div float=`left> {channelLink(channel)} </Div>;
     };
 
     let top = channel =>

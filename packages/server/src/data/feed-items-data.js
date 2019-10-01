@@ -10,8 +10,7 @@ const { FeedItemModel } = require('../models-abstract');
 class FeedItemsData extends DataBase {
   constructor() {
     super();
-    this.FeedItemModel = new FeedItemModel();
-    this.model = this.FeedItemModel;
+    this.model = new FeedItemModel();
   }
 
   /**

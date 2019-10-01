@@ -15,12 +15,12 @@ function init(db) {
   const preference = db.sequelize.import('./preference');
   const template = db.sequelize.import('./template');
   const notification = db.sequelize.import('./notification');
-  const agentNotification = db.sequelize.import('./agent-notification');
+  const notificationStatus = db.sequelize.import('./notification-status');
   const feedItem = db.sequelize.import('./feed-item');
   const globalSetting = db.sequelize.import('./global-setting');
   const agentMeasurable = db.sequelize.import('./agent-measurable');
   const agentChannel = db.sequelize.import('./agent-channel');
-  // const invitation = db.sequelize.import('./invitation');
+  const invitation = db.sequelize.import('./invitation');
 
   db.Agent = agent;
   db.Bot = bot;
@@ -34,18 +34,18 @@ function init(db) {
   db.Preference = preference;
   db.Template = template;
   db.Notification = notification;
-  db.AgentNotification = agentNotification;
+  db.NotificationStatus = notificationStatus;
   db.FeedItem = feedItem;
   db.GlobalSetting = globalSetting;
   db.AgentMeasurable = agentMeasurable;
   db.AgentChannel = agentChannel;
-  // db.Invitation = invitation;
+  db.Invitation = invitation;
 
   const initList = [
     'Agent', 'Bot', 'ChannelMemberships', 'Channel', 'Measurable',
     'Series', 'User', 'Token', 'Preference', 'Template', 'Notification',
-    'AgentNotification', 'FeedItem', 'GlobalSetting', 'Measurement',
-    'AgentMeasurable', 'AgentChannel',
+    'NotificationStatus', 'FeedItem', 'GlobalSetting', 'Measurement',
+    'AgentMeasurable', 'AgentChannel', 'Invitation',
   ];
 
   // Associate All Models

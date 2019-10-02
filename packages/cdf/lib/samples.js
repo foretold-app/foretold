@@ -2,6 +2,7 @@ const pdfast = require('pdfast');
 
 const { percentile, sortDescending } = require('./dataAnalysis');
 const { Pdf } = require('./pdf');
+const _ = require("lodash");
 
 class Samples {
   /**
@@ -41,8 +42,8 @@ class Samples {
   toPdf({ min, max, size, width }) {
     const args = { size, width };
 
-    if (!!min) args.min = min;
-    if (!!max) args.max = max;
+    if (_.isFinite(min)) args.min = min;
+    if (_.isFinite(max)) args.max = max;
 
     const kde = this._kde(args);
     return new Pdf(kde.map(r => r.x), kde.map(r => r.y));

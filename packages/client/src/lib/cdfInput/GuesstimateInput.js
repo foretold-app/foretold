@@ -44,7 +44,12 @@ const toCdf = (values, min, max) => {
   const samples = new Samples(_values);
   const ratioSize$ = ratioSize(samples);
   const width = ratioSize$ === "SMALL" ? 20 : 1;
-  const cdf = samples.toCdf({ size: 1000, width, min, max });
+  /* We don't pass the min/max to the samples.toCdf method, because it is buggy.
+     Mainly: when the max is very large (>100000), then almost nothing seems to render like expected. 
+     Second, if the inputed range starts lower than the min, problems happen, though this isn't shown
+     as these values are filtered out 5 lines above.
+  */ 
+  const cdf = samples.toCdf({ size: 1000, width });
   return [cdf.ys, cdf.xs, ratioSize$ === "LARGE"];
 };
 

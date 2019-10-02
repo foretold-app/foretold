@@ -28,8 +28,6 @@
     "rationale",
     "bs-ken"
   ],
-  "dev-dependencies": [
-  ],
   "refmt": 3,
   "warnings": {
     "error": "+5"

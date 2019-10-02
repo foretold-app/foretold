@@ -39,7 +39,7 @@
 		"@foretold/guesstimator": "1.0.1",
 		"@foretold/components": "0.0.1",
 		"@glennsl/bs-jest": "0.4.8",
-		"@glennsl/bs-json": "4.0.0",
+		"@glennsl/bs-json": "3.0.0",
 		"@ncthbrt/re-secure-random-string": "2.0.0",
 		"antd": "3.17.0",
 		"apollo-cache-inmemory": "1.6.2",

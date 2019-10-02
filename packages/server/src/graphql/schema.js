@@ -33,9 +33,11 @@ const schema = new graphql.GraphQLSchema({
           const { KenFacade } = require('../lib/ken-facade');
           const { entityGraph } = await data.globalSettings.getMain();
 
+          const subjectId = '@foretold/main/n-foretold';
+          const propertyId = '@foretold/main/measurables';
           return new KenFacade(entityGraph).names(
-            '@foretold/main/n-foretold',
-            '@foretold/main/measurables',
+            subjectId,
+            propertyId,
           );
         },
       },

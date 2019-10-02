@@ -37,8 +37,6 @@ function runListeners() {
     emitter.on(events.NEW_MEMBERSHIP,
       listenFor(producers.notifications.MemberAddedToCommunity));
     emitter.on(events.NEW_MEMBERSHIP,
-      listenFor(producers.notifications.MemberInvitedToCommunity));
-    emitter.on(events.NEW_MEMBERSHIP,
       listenFor(producers.feedItems.MemberJoinedCommunity));
 
     /**

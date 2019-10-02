@@ -11,6 +11,8 @@ const { stats } = require('./types/stats');
 const { permissions } = require('./authorizers');
 const { middlewares } = require('./middlewares');
 
+const { GraphQLJSON } = require('graphql-type-json');
+
 const schema = new graphql.GraphQLSchema({
   types: [
     types.channels.channel,

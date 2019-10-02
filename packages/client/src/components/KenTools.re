@@ -1,3 +1,5 @@
+open BsKen;
+
 module type KenModule = {
   type t = Graph_T.T.thing;
   let graph: Graph_Dirs.t;
@@ -23,7 +25,7 @@ module Functor =
          globalSetting.entityGraph |> E.O.default(Js.Json.null)
        )
     |> E.O.default(Js.Json.array([||]))
-    |> (e => Ken_Interface.Graph.fromJson(e));
+    |> (e => Interface.Graph.fromJson(e));
 
   let itemUrl = id => Routing.Url.toString(EntityShow(id));
 

@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      get: getName,
     },
     labelSubject: {
       type: DataTypes.STRING,
@@ -103,6 +104,28 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW,
     },
   });
+
+  /**
+   * @todo: To fix, remove this code from this layer.
+   * @returns {string}
+   */
+  function getName() {
+    if (this.labelSubject && this.labelProperty) {
+      const { globalSettings } = require('../data');
+      const kenFacade = globalSettings.getKenFacadeCached();
+      const names = kenFacade.names(
+        this.labelSubject,
+        this.labelProperty,
+      );
+      return `${names.subject} ${names.property}`;
+    }
+
+    if (this.dataValues.name) {
+      return this.dataValues.name;
+    }
+
+    return '';
+  }
 
   /**
    * @return {Promise<Models.Measurable>}

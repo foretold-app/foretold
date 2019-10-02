@@ -2,6 +2,7 @@ const _ = require('lodash');
 
 const kenFacade = require('bs-ken/dist');
 
+
 /**
  * Subject
  * @foretold/main/n-foretold
@@ -14,6 +15,7 @@ const kenFacade = require('bs-ken/dist');
 class KenFacade {
   constructor(entityGraph) {
     this.db = kenFacade.main(entityGraph);
+    console.log(this.db);
     this.NAME = '@base/properties/p-name';
   }
 
@@ -28,16 +30,18 @@ class KenFacade {
    */
   names(subjectId, propertyId) {
 
-    const subjects = this.db
-      .findThing(subjectId)
-      .propertyIdFacts(this.NAME);
+    const subjects = this.db.findThing(subjectId);
+    const subjectsFacts = subjects
+      ? subjects.propertyIdFacts(this.NAME)
+      : [];
 
-    const properties = this.db
-      .findThing(propertyId)
-      .propertyIdFacts(this.NAME);
+    const properties = this.db.findThing(propertyId);
+    const propertiesFacts = properties
+      ? properties.propertyIdFacts(this.NAME)
+      : [];
 
-    const subject = _.head(subjects);
-    const property = _.head(properties);
+    const subject = _.head(subjectsFacts);
+    const property = _.head(propertiesFacts);
 
     return {
       subject: this.value(subject),
@@ -45,6 +49,10 @@ class KenFacade {
     };
   }
 
+  /**
+   * @param thing
+   * @returns {string|*}
+   */
   thingProperty(thing) {
     if (!thing) return '';
     const facts = thing.propertyIdFacts(this.NAME);
@@ -53,6 +61,10 @@ class KenFacade {
     return thing.id() + data;
   }
 
+  /**
+   * @param fact
+   * @returns {string|string|*}
+   */
   value(fact) {
     if (!fact) return '';
 

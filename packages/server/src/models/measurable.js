@@ -110,7 +110,6 @@ module.exports = (sequelize, DataTypes) => {
    * @returns {string}
    */
   function getName() {
-
     if (this.labelSubject && this.labelProperty) {
       const { globalSettings } = require('../data');
       const kenFacade = globalSettings.getKenFacadeCached();

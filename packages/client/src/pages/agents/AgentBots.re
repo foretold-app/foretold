@@ -44,9 +44,7 @@ module Columns = {
           | (Some(name), Some(agent)) =>
             <Link.Jsx2
               linkType={
-                Internal(
-                  Agent({agentId: agent.id, subPage: AgentMeasurements}),
-                )
+                Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
               }>
               {name |> ste}
             </Link.Jsx2>

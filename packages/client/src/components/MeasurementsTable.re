@@ -189,9 +189,7 @@ module Helpers = {
         Some(
           <Link.Jsx2
             linkType={
-              Internal(
-                Agent({agentId: agent.id, subPage: AgentMeasurements}),
-              )
+              Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
             }
             className=Styles.agentStyle>
             {name |> ste}

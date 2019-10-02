@@ -2,7 +2,6 @@ open Utils;
 
 let name = (page: Routing.AgentPage.SubPage.t) =>
   switch (page) {
-  | AgentMeasurements => "Predictions"
   | AgentMeasurables => "Created Questions"
   | AgentBots => "Bots"
   | AgentCommunities => "Communities"

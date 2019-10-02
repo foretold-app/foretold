@@ -96,9 +96,7 @@ let creatorLink = (~m: Types.measurable) =>
   m.creator
   |> E.O.fmap((c: Types.agent) =>
        <Link.Jsx2
-         linkType={
-           Internal(Agent({agentId: c.id, subPage: AgentMeasurements}))
-         }
+         linkType={Internal(Agent({agentId: c.id, subPage: AgentUpdates}))}
          className=Shared.Item.item>
          {c.name |> E.O.default("") |> ste}
        </Link.Jsx2>

@@ -45,7 +45,7 @@ module Columns = {
                <Link.Jsx2
                  linkType={
                    Internal(
-                     Agent({agentId: r.id, subPage: AgentMeasurements}),
+                     Agent({agentId: r.id, subPage: AgentUpdates}),
                    )
                  }>
                  {r.name |> E.O.default("Anonymous") |> ReasonReact.string}

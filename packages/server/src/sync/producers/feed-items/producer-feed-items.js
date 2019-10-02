@@ -106,7 +106,7 @@ class ProducerFeedItems extends Producer {
     const template = await this._getTemplate();
     const feedItem = new this.FeedItem(template.envelopeTemplate);
     const feedItem$ = feedItem.instanceFactory(replacements);
-    return await this._createFeedItem(feedItem$, channelId, agentId);
+    return this._createFeedItem(feedItem$, channelId, agentId);
   }
 
   /**

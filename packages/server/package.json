@@ -119,9 +119,11 @@
       "no-console": 0,
       "arrow-body-style": 0,
       "no-await-in-loop": 0,
+      "no-underscore-dangle": 0,
+      "prefer-destructuring": 0,
       "filenames/match-exported": [ 2, "kebab" ],
-      "no-underscore-dangle": ["error", { "allowAfterThis": true }],
       "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+      "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
       "max-len": ["error", { "code": 80 }],
       "jest/no-focused-tests": 2,
       "jest/no-identical-title": 2

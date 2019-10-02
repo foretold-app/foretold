@@ -18,6 +18,9 @@ class GlobalSettingsData extends DataBase {
     this.model = new GlobalSettingModel();
     this.kenFacade = null;
 
+    /**
+     * @todo: Please, fix later.
+     */
     this.initKen()
       .then((kenFacade) => {
         this.kenFacade = kenFacade;
@@ -56,6 +59,9 @@ class GlobalSettingsData extends DataBase {
     return this.getOne(params);
   }
 
+  /**
+   * @returns {Promise<KenFacade>}
+   */
   async initKen() {
     const { entityGraph } = await this.getMain();
     return new KenFacade(entityGraph);

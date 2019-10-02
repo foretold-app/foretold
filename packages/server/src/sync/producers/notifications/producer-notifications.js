@@ -49,10 +49,7 @@ class ProducerNotifications extends Producer {
       envelope instanceof Producer.EmailEnvelope,
       'Envelope is not EmailEnvelope',
     );
-    const data = {
-      type,
-      envelope
-    };
+    const data = { type, envelope };
     const options = await this._getOptions();
     return Producer.data.notifications.createOne(data, options);
   }

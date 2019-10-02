@@ -49,6 +49,8 @@ const toCdf = (values, min, max) => {
      Second, if the inputed range starts lower than the min, problems happen, though this isn't shown
      as these values are filtered out 5 lines above.
   */ 
+
+  //  TODO: have min/max work in the cdf lib, but have them work by filtering as done above.
   const cdf = samples.toCdf({ size: 1000, width });
   return [cdf.ys, cdf.xs, ratioSize$ === "LARGE"];
 };
@@ -75,9 +77,8 @@ export class GuesstimateInput extends React.Component {
 
     let [_error, item] = Guesstimator.parse({ text });
     let parsedInput = item.parsedInput;
-    let what = new Guesstimator({ parsedInput: parsedInput });
-    let foo = what.sample(this.props.sampleCount);
-    let values = _.filter(foo.values, _.isFinite);
+    let value = (new Guesstimator({ parsedInput: parsedInput })).sample(this.props.sampleCount);
+    let values = _.filter(value.values, _.isFinite);
 
     if (!!values) {
       this.setState({ value: event.target.value, items: values });

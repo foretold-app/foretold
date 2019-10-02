@@ -25,7 +25,8 @@
     "reason-react",
     "@ncthbrt/re-secure-random-string",
     "reason-apollo",
-    "rationale"
+    "rationale",
+    "bs-ken"
   ],
   "dev-dependencies": [
   ],

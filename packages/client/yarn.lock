@@ -846,6 +846,11 @@
   resolved "https://registry.yarnpkg.com/@glennsl/bs-json/-/bs-json-4.0.0.tgz#f057d0d1d84d614e27d8bbb67b64e6b6727f24b2"
   integrity sha512-nunb6+cZcx7pyooh8i4froogXumOOiFb7rF3bz6E9X7b3Dc+3/HGwpnUjxciFN8eQL4QC+MskzG1tG+Ci1aJxA==
 
+"@glennsl/bs-json@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@glennsl/bs-json/-/bs-json-3.0.0.tgz#b4e1cf6612270a8dd7287a8a71ebe17e8f0fb683"
+  integrity sha512-slqtGLd/c3yQK9Qfd1gfMB9JCzNU4wzCpVPfO9pXlG64M+te5r30FK++tb3uQEVlVLYtpgZ4wCHtkI8xoshgxQ==
+
 "@iarna/toml@^2.2.0":
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/@iarna/toml/-/toml-2.2.3.tgz#f060bf6eaafae4d56a7dac618980838b0696e2ab"
@@ -1005,7 +1010,7 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@ncthbrt/re-secure-random-string@2.0.0":
+"@ncthbrt/re-secure-random-string@2.0.0", "@ncthbrt/re-secure-random-string@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@ncthbrt/re-secure-random-string/-/re-secure-random-string-2.0.0.tgz#ff2b5a875dfe672d39039e6df703527af7e02551"
   integrity sha512-6vZoC161ByWX4q0vYiaC/QZa4F3a8DGPhwoNss9/+C7xgLyKvI0ojEBvP8PN8c+8V2VOieVPAvChE2WS7TvRwQ==
@@ -2087,6 +2092,17 @@ bs-css@9.0.1:
   integrity sha512-EnEWGMearvX1SpnM0s6rRvKGeiNM5SyvU1BzoYJvtaTR3WE3RUqUc5cCVWDInT1SNUwi4uBo4BfBakzWt9MZww==
   dependencies:
     emotion "^10.0.7"
+
+bs-ken@0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/bs-ken/-/bs-ken-0.0.5.tgz#e1c2345917ff0001f182dfa636d2ff0082e19020"
+  integrity sha512-VaqeoDkfesxk6FqRUYpz2mh3mOJixCXbBUMXUTOPtrxassJU+gYbqhcifZI8o2jRp1kP9wMttQqYDzoYWwKIUQ==
+  dependencies:
+    "@glennsl/bs-json" "^3.0.0"
+    "@ncthbrt/re-secure-random-string" "^2.0.0"
+    lodash "^4.17.11"
+    ramda "^0.26.1"
+    rationale "^0.1.10"
 
 bs-moment@0.4.4:
   version "0.4.4"
@@ -3953,6 +3969,11 @@ gauge@~2.7.3:
     string-width "^1.0.1"
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
+
+gentype@1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/gentype/-/gentype-1.6.1.tgz#e3481b5e630342d591131443e8b1061d9d5edcfa"
+  integrity sha512-bEe8ozaJRvkFGWBrBKeny+5hi8w4unM+/vK1Dv9FNwPK1jLIMZrqM8jatigWR+gO5abxfQM+9XiLo3ORulw8wg==
 
 get-caller-file@^1.0.1:
   version "1.0.3"
@@ -7094,7 +7115,7 @@ raf@^3.4.0, raf@^3.4.1:
   dependencies:
     performance-now "^2.1.0"
 
-ramda@^0.26:
+ramda@^0.26, ramda@^0.26.1:
   version "0.26.1"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.26.1.tgz#8d41351eb8111c55353617fc3bbffad8e4d35d06"
   integrity sha512-hLWjpy7EnsDBb0p+Z3B7rPi3GDeRG5ZtiI33kJhTt+ORCd38AbAIjB/9zRIUoeTbE/AVX5ZkU7m6bznsvrf8eQ==
@@ -7119,7 +7140,7 @@ range-parser@~1.2.0:
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.0.tgz#f49be6b487894ddc40dcc94a322f611092e00d5e"
   integrity sha1-9JvmtIeJTdxA3MlKMi9hEJLgDV4=
 
-rationale@0.1.10:
+rationale@0.1.10, rationale@^0.1.10:
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/rationale/-/rationale-0.1.10.tgz#a14567d3eea7facaba0ed35d68ef2127fdd861d7"
   integrity sha512-WMBpRHHjhY4AA8BtboQsA5voL2dQXhbtX0C/F4HYOGFZDZz5gbUfZVs22Sc4FqyvpJoT/1A+PhcpOvefnKKxJQ==

@@ -164,9 +164,7 @@ let showForm =
             |> ste}
          </p>
          <p>
-           {"It is currently not possible to add or modify entities. "
-            ++ "Contact Ozzie for information regarding these."
-            |> ste}
+           {"Adding and modifying entities is currently not supported." |> ste}
          </p>
          <Antd.Form.Item label="Subject" required=true>
            <Antd.Input

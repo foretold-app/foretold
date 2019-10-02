@@ -107,13 +107,13 @@ module.exports = (sequelize, DataTypes) => {
 
   /**
    * @todo: To fix, remove this code from this layer.
-   * @returns {Promise<string|*>}
+   * @returns {string}
    */
-  async function getName() {
+  function getName() {
 
     if (this.labelSubject && this.labelProperty) {
       const { globalSettings } = require('../data');
-      const kenFacade = await globalSettings.getKenFacadeCached();
+      const kenFacade = globalSettings.getKenFacadeCached();
       const names = kenFacade.names(
         this.labelSubject,
         this.labelProperty,

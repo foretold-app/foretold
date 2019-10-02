@@ -30,14 +30,13 @@ const schema = new graphql.GraphQLSchema({
         type: GraphQLJSON,
         resolve: async () => {
           const data = require('../data');
-          const json = await data.globalSettings.getMain();
-          const { entityGraph } = json;
+          const { KenFacade } = require('../lib/ken-facade');
+          const { entityGraph } = await data.globalSettings.getMain();
 
-          const ken = require('@foretold/ken-js/lib');
-
-          return ken.main(entityGraph)
-            .findThing('@lesswrong/posts/rain')
-            .connectedPropertyThings();
+          return new KenFacade(entityGraph).names(
+            '@foretold/main/n-foretold',
+            '@foretold/main/measurables',
+          );
         },
       },
 

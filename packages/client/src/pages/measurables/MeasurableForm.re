@@ -94,6 +94,7 @@ let showForm =
        creating,
        <Antd.Form.Item
          label="Question Type"
+         required=true
          help="Number example: 'How many inches of rain will there be tomorrow?' Yes/No example: 'Will it rain tomorrow?'">
          <Antd.Radio.Group
            value={state.values.valueType}
@@ -111,7 +112,7 @@ let showForm =
     {E.React.showIf(
        state.values.showDescriptionProperty == "FALSE",
        <>
-         <Antd.Form.Item label="Name" required=true>
+         <Antd.Form.Item label="Question Title" required=true>
            <Input
              value={state.values.name}
              onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -226,6 +227,20 @@ let showForm =
             : <div />}
        </>,
      )}
+    <Antd.Form.Item label="Description" help="Markdown supported.">
+      <Input.TextArea
+        style={ReactDOMRe.Style.make(~minHeight="16em", ())}
+        value={state.values.labelCustom}
+        onChange={e =>
+          send(
+            Form.FieldChangeValue(
+              LabelCustom,
+              ReactEvent.Form.target(e)##value,
+            ),
+          )
+        }
+      />
+    </Antd.Form.Item>
     {E.React.showIf(
        state.values.valueType == "FLOAT",
        <>
@@ -283,20 +298,6 @@ let showForm =
          </Antd.Form.Item>
        </>,
      )}
-    <Antd.Form.Item label="Description" help="Markdown supported.">
-      <Input.TextArea
-        style={ReactDOMRe.Style.make(~minHeight="16em", ())}
-        value={state.values.labelCustom}
-        onChange={e =>
-          send(
-            Form.FieldChangeValue(
-              LabelCustom,
-              ReactEvent.Form.target(e)##value,
-            ),
-          )
-        }
-      />
-    </Antd.Form.Item>
     {Primary.User.show(
        loggedInUser,
        <Antd.Form.Item

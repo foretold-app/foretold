@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const kenFacade = require('@foretold/ken-js/dist');
+const kenFacade = require('bs-ken/dist');
 
 /**
  * Subject

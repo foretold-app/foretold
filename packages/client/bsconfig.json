@@ -23,7 +23,6 @@
     "bs-moment",
     "bs-react-markdown",
     "reason-react",
-    "@ncthbrt/re-secure-random-string",
     "reason-apollo",
     "rationale",
     "bs-ken"

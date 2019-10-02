@@ -1005,7 +1005,7 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@ncthbrt/re-secure-random-string@2.0.0", "@ncthbrt/re-secure-random-string@^2.0.0":
+"@ncthbrt/re-secure-random-string@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@ncthbrt/re-secure-random-string/-/re-secure-random-string-2.0.0.tgz#ff2b5a875dfe672d39039e6df703527af7e02551"
   integrity sha512-6vZoC161ByWX4q0vYiaC/QZa4F3a8DGPhwoNss9/+C7xgLyKvI0ojEBvP8PN8c+8V2VOieVPAvChE2WS7TvRwQ==

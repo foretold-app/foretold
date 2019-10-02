@@ -23,11 +23,9 @@
     "bs-moment",
     "bs-react-markdown",
     "reason-react",
-    "@ncthbrt/re-secure-random-string",
     "reason-apollo",
-    "rationale"
-  ],
-  "dev-dependencies": [
+    "rationale",
+    "bs-ken"
   ],
   "refmt": 3,
   "warnings": {

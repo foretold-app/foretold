@@ -4,9 +4,9 @@ const express = require('express');
 const bodyParser = require('body-parser-graphql');
 
 const config = require('./config');
-const { runJobs, runListeners } = require('./async');
-const events = require('./async/events');
-const emitter = require('./async/emitter');
+const { runJobs, runListeners } = require('./sync');
+const events = require('./sync/events');
+const emitter = require('./sync/emitter');
 const { apolloServer } = require('./graphql/apollo-server');
 
 {
@@ -30,8 +30,7 @@ app.use(cors());
   // or returns fallback page.
   app.get(/^((?!(graphql|hooks|env)).)*$/,
     express.static(distDir),
-    (req, res) => res.sendFile(fallbackFile),
-  );
+    (req, res) => res.sendFile(fallbackFile));
 }
 
 {
@@ -40,11 +39,11 @@ app.use(cors());
   // (this env is used for PR building too).
   // Do not set API_URL in "Heroku.com" for Production.
   app.get(/^\/env\.([0-9a-z]+)\.js$/, (_req, res) => res.send(
-    `window.ENV = { ` +
-    `API_URL: "${ config.API_URL }", ` +
-    `AUTH0_DOMAIN: "${ config.AUTH0_DOMAIN }", ` +
-    `AUTH0_CLIENT_ID: "${ config.AUTH0_CLIENT_ID }", ` +
-    `}`
+    'window.ENV = { '
+    + `API_URL: "${config.API_URL}", `
+    + `AUTH0_DOMAIN: "${config.AUTH0_DOMAIN}", `
+    + `AUTH0_CLIENT_ID: "${config.AUTH0_CLIENT_ID}", `
+    + '}',
   ));
 }
 
@@ -61,6 +60,6 @@ app.use(cors());
 }
 
 app.listen({ port: config.PORT }, () => {
-  console.log(`Server ready at http://localhost:${ config.PORT }`);
+  console.log(`Server ready at http://localhost:${config.PORT}`);
   emitter.emit(events.SERVER_IS_READY, app);
 });

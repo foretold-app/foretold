@@ -37,8 +37,8 @@ async function measurementValueValidation(root, args, context, info) {
  */
 async function measurableStateValidation(root, args, context, info) {
   const measurementType = _.get(args, 'input.competitorType');
-  const isCompetitive =
-    MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE === measurementType;
+  const isCompetitive
+    = MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE === measurementType;
 
   const measurableState = _.get(context, 'measurable.state', '');
   const isMeasurableAvailable = [

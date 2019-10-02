@@ -9,14 +9,14 @@ const { Options } = require('../../data/classes/options');
 const { Filter } = require('../../data/classes/filter');
 
 /**
- * @param {*} root
+ * @param {*} _root
  * @param {object} args
  * @param {object} args.input
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<Models.User>}
  */
-async function create(root, args, context, info) {
+async function create(_root, args, context, _info) {
   const datas = new Data({
     ...args.input,
     userId: _.get(context, 'user.id'),
@@ -25,33 +25,33 @@ async function create(root, args, context, info) {
 }
 
 /**
- * @param {*} root
+ * @param {*} _root
  * @param {object} args
  * @param {Models.ObjectID} args.id
  * @param {object} args.input
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<Models.User>}
  */
-async function update(root, args, context, info) {
+async function update(_root, args, _context, _info) {
   const params = new Params({ id: args.id });
   const data$ = new Data(args.input);
   return data.bots.updateOne(params, data$);
 }
 
 /**
- * @param {*} root
+ * @param {*} _root
  * @param {object} args
  * @param {Models.ObjectID} args.ownerId
  * @param {string} args.after
  * @param {string} args.before
  * @param {number} args.last
  * @param {number} args.first
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*>}
  */
-async function all(root, args, context, info) {
+async function all(_root, args, _context, _info) {
   const filter = new Filter({ userId: _.get(args, 'ownerId') });
   const pagination = new Pagination(args);
   const options = new Options();
@@ -60,26 +60,26 @@ async function all(root, args, context, info) {
 }
 
 /**
- * @param {*} root
+ * @param {*} _root
  * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function one(root, args, context, info) {
+async function one(_root, args, _context, _info) {
   const id = _.get(args, 'id');
   const params = new Params({ id });
   return data.bots.getOne(params);
 }
 
 /**
- * @param {*} root
+ * @param {*} _root
  * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<{token: string}>}
  */
-async function tokenRefresh(root, args, context, info) {
+async function tokenRefresh(_root, args, _context, _info) {
   const id = _.get(args, 'id');
   const token = await data.bots.tokenRefresh({ id });
   return { token };

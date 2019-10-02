@@ -99,22 +99,22 @@ module Query = [%graphql
                   valueText
                   taggedMeasurementId
 
-                  agent: Agent {
+                  agent {
                       id
                       name
-                      user: User {
+                      user {
                           id
                           name
                           agentId
                       }
-                      bot: Bot {
+                      bot {
                           id
                           name
                           competitorType
                       }
                   }
 
-                  measurable: Measurable {
+                  measurable {
                     id
                     name
                     channelId

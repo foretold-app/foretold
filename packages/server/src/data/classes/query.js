@@ -11,7 +11,7 @@ class Query {
    */
   constructor(query = {}) {
     const list = {
-      sort: v => _.isNumber(v) || utils.none(v),
+      sort: (v) => _.isNumber(v) || utils.none(v),
     };
     utils.copy(this.constructor.name, query, this);
     utils.test(this.constructor.name, list, this);

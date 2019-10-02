@@ -2,6 +2,7 @@ const graphql = require('graphql');
 const { resolver, DateType } = require('graphql-sequelize');
 
 const models = require('../../models');
+const resolvers = require('../resolvers');
 
 const seriesCreateInput = new graphql.GraphQLInputObjectType({
   name: 'SeriesCreateInput',
@@ -12,7 +13,7 @@ const seriesCreateInput = new graphql.GraphQLInputObjectType({
     subjects: { type: graphql.GraphQLList(graphql.GraphQLString) },
     properties: { type: graphql.GraphQLList(graphql.GraphQLString) },
     dates: { type: graphql.GraphQLList(DateType.default) },
-  })
+  }),
 });
 
 const series = new graphql.GraphQLObjectType({
@@ -25,7 +26,12 @@ const series = new graphql.GraphQLObjectType({
     properties: { type: graphql.GraphQLList(graphql.GraphQLString) },
     dates: { type: graphql.GraphQLList(DateType.default) },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    measurableCount: { type: graphql.GraphQLInt },
+
+    measurableCount: {
+      type: graphql.GraphQLInt,
+      resolve: resolvers.measurables.measurableCount,
+    },
+
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     creatorId: { type: graphql.GraphQLString },
@@ -38,18 +44,18 @@ const series = new graphql.GraphQLObjectType({
     },
 
     // @todo: security?
-    Measurables: {
+    measurables: {
       type: require('./connections').seriesMeasurablesConnection.connectionType,
       args: require('./connections').seriesMeasurablesConnection.connectionArgs,
-      resolve: require('./connections').seriesMeasurablesConnection.resolve
+      resolve: require('./connections').seriesMeasurablesConnection.resolve,
     },
 
     // @todo: security?
-    Channel: {
+    channel: {
       type: require('./channels').channel,
       resolve: resolver(models.Series.Channel),
     },
-  })
+  }),
 });
 
 module.exports = {

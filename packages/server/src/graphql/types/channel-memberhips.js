@@ -1,8 +1,12 @@
 const graphql = require('graphql');
 
 const resolvers = require('../resolvers');
-const { channelMembershipRoles } = require('./enums/channel-membership-roles');
-const { channelMembershipRolesOutput } = require('./enums/channel-membership-roles-output');
+const {
+  channelMembershipRoles,
+} = require('./enums/channel-membership-roles');
+const {
+  channelMembershipRolesOutput,
+} = require('./enums/channel-membership-roles-output');
 
 const channelsMembership = new graphql.GraphQLObjectType({
   name: 'ChannelsMembership',
@@ -34,7 +38,9 @@ const channelMembershipRoleInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     agentId: { type: graphql.GraphQLString },
     channelId: { type: graphql.GraphQLString },
-    role: { type: graphql.GraphQLNonNull(require('./channel-memberhips').role) },
+    role: {
+      type: graphql.GraphQLNonNull(require('./channel-memberhips').role),
+    },
   }),
 });
 

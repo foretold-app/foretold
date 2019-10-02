@@ -12,10 +12,10 @@ function channelIsPublicRule(root, args, context, info) {
   const result = !!_.get(context, 'channel.isPublic');
 
   console.log(
-    `\x1b[33m Rule Channels (channelIsPublic) ` +
-    `channelId "${_.get(context, 'channel.id')}", ` +
-    `channelIsPublic "${JSON.stringify(result)}".` +
-    `\x1b[0m`
+    '\x1b[33m Rule Channels (channelIsPublic) '
+    + `channelId "${_.get(context, 'channel.id')}", `
+    + `channelIsPublic "${JSON.stringify(result)}".`
+    + '\x1b[0m',
   );
 
   return result;

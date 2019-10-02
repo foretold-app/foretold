@@ -102,26 +102,26 @@ const measurement = new graphql.GraphQLObjectType({
       resolve: require('../resolvers/measurements').scoreSet,
     },
 
-    Measurable: {
+    measurable: {
       type: require('./measurables').measurable,
       resolve: resolver(models.Measurement.Measurable),
     },
 
-    Agent: {
+    agent: {
       type: require('./agents').agent,
       resolve: resolver(models.Measurement.Agent),
     },
 
-    TaggedMeasurement: {
+    taggedMeasurement: {
       type: measurement,
       resolve: resolver(models.Measurement.TaggedMeasurement),
     },
 
-    TaggedBy: {
+    taggedBy: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(measurement)),
       resolve: resolver(models.Measurement.TaggedBy),
     },
-  })
+  }),
 });
 
 const measurementsEdge = new graphql.GraphQLObjectType({

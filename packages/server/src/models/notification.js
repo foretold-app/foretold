@@ -1,7 +1,6 @@
 const { NOTIFICATION_TYPE } = require('../enums/notification-type');
 
 module.exports = (sequelize, DataTypes) => {
-
   const Notification = sequelize.define('Notification', {
     id: {
       type: DataTypes.UUID(),

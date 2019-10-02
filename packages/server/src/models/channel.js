@@ -1,7 +1,4 @@
-const Sequelize = require('sequelize');
-
 /**
- * @todo: Rename table to "channels".
  * @param sequelize
  * @param DataTypes
  * @return {*}
@@ -42,11 +39,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID(),
       allowNull: false,
     },
-    membershipCount: {
-      allowNull: true,
-      type: Sequelize.VIRTUAL(DataTypes.INTEGER),
-      get: getMembershipCount,
-    },
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
@@ -56,11 +48,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW,
     },
   });
-
-  async function getMembershipCount() {
-    const items = await this.getAgents();
-    return items.length;
-  }
 
   Channel.associate = function associate(models) {
     // Usage:
@@ -86,7 +73,7 @@ module.exports = (sequelize, DataTypes) => {
       through: models.ChannelMemberships,
       foreignKey: 'channelId',
       otherKey: 'agentId',
-      as: 'agents'
+      as: 'agents',
     });
   };
 

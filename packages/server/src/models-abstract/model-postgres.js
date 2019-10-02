@@ -12,12 +12,11 @@ const { ResponseAll } = require('./classes/response-all');
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
  */
 class ModelPostgres extends Model {
-
   constructor(
     {
       model,
       sequelize,
-    }
+    },
   ) {
     super();
 
@@ -61,12 +60,12 @@ class ModelPostgres extends Model {
   _publicAndJoinedChannels(agentId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     return `(
-      /* P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${ name }) */
+      /* P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
       LEFT OUTER JOIN 
         "ChannelMemberships" 
         ON "Channels".id = "ChannelMemberships"."channelId"
-        AND "ChannelMemberships"."agentId" = '${ agentId }'
+        AND "ChannelMemberships"."agentId" = '${agentId}'
       WHERE 
         "ChannelMemberships"."agentId" IS NOT NULL
         OR "Channels"."isPublic" = TRUE 
@@ -89,7 +88,7 @@ class ModelPostgres extends Model {
    */
   _publicChannels(name = '') {
     return `(
-      /* P͟u͟b͟l͟i͟c͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${ name }) */
+      /* P͟u͟b͟l͟i͟c͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
       WHERE "Channels"."isPublic" = TRUE
     )`;
@@ -116,12 +115,12 @@ class ModelPostgres extends Model {
   _joinedChannels(agentId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     return `(
-      /* J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${ name }) */
+      /* J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
       LEFT OUTER JOIN 
         "ChannelMemberships" 
         ON "Channels".id = "ChannelMemberships"."channelId"
-        AND "ChannelMemberships"."agentId" = '${ agentId }'
+        AND "ChannelMemberships"."agentId" = '${agentId}'
       WHERE 
         "ChannelMemberships"."agentId" IS NOT NULL
     )`;
@@ -148,8 +147,8 @@ class ModelPostgres extends Model {
   _measurablesInPublicAndJoinedChannels(agentId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     return `(
-      /* Measurables in Public and Joined Channels (${ name }) */
-      WITH channelIds AS (${ this._publicAndJoinedChannels(agentId, name) })
+      /* Measurables in Public and Joined Channels (${name}) */
+      WITH channelIds AS (${this._publicAndJoinedChannels(agentId, name)})
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
     )`;
@@ -173,8 +172,8 @@ class ModelPostgres extends Model {
    */
   _measurablesInPublicChannels(name = '') {
     return `(
-      /* Measurables in Public Channels (${ name }) */
-      WITH channelIds AS (${ this._publicChannels(name) })
+      /* Measurables in Public Channels (${name}) */
+      WITH channelIds AS (${this._publicChannels(name)})
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
     )`;
@@ -203,17 +202,17 @@ class ModelPostgres extends Model {
   _withinMeasurables(statesIn, channelIdIn, name = '') {
     const cond = [];
     const states = _.isArray(statesIn)
-      ? statesIn.map(state => `'${ state }'`).join(', ') : [];
+      ? statesIn.map((state) => `'${state}'`).join(', ') : [];
 
-    if (states.length > 0) cond.push(`("state" IN (${ states }))`);
-    if (!!channelIdIn) cond.push(`("channelId" = '${ channelIdIn }')`);
+    if (states.length > 0) cond.push(`("state" IN (${states}))`);
+    if (!!channelIdIn) cond.push(`("channelId" = '${channelIdIn}')`);
 
-    const where = cond.length > 0 ? `WHERE (${ cond.join(' AND ') })` : '';
+    const where = cond.length > 0 ? `WHERE (${cond.join(' AND ')})` : '';
 
     return `(
-      /* Within Measurables (${ name }) */
+      /* Within Measurables (${name}) */
       SELECT "id" FROM "Measurables"
-      ${ where }
+      ${where}
     )`;
   }
 
@@ -349,7 +348,7 @@ class ModelPostgres extends Model {
       where[this.and].push({
         isArchived: {
           [this.in]: this._getBooleansOfList(filter.isArchived),
-        }
+        },
       });
     }
 
@@ -373,6 +372,14 @@ class ModelPostgres extends Model {
 
     if (filter.measurableId) {
       where.measurableId = filter.measurableId;
+    }
+
+    if (filter.email) {
+      where.email = filter.email;
+    }
+
+    if (filter.status) {
+      where.status = filter.status;
     }
 
     if (filter.competitorType) {
@@ -411,7 +418,7 @@ class ModelPostgres extends Model {
       where.creatorId = filter.creatorId;
     }
 
-    if (_.has(filter, 'excludeChannelId')) {
+    if (filter.excludeChannelId) {
       where[this.and].push({
         id: {
           [this.notIn]: this._agentsIdsLiteral(filter.excludeChannelId),
@@ -419,7 +426,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (_.has(filter, 'types')) {
+    if (filter.types) {
       where[this.and].push({
         type: {
           [this.in]: filter.types,
@@ -427,19 +434,19 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (_.has(filter, 'sentAt')) {
+    if (filter.sentAt || filter.sentAt === null) {
       where[this.and].push({
         sentAt: filter.sentAt,
       });
     }
 
-    if (_.has(filter, 'notificationId')) {
+    if (filter.notificationId) {
       where[this.and].push({
         sentAt: filter.notificationId,
       });
     }
 
-    if (_.has(filter, 'attemptCounterMax')) {
+    if (filter.attemptCounterMax) {
       where[this.and].push({
         attemptCounter: {
           [this.lt]: filter.attemptCounterMax,
@@ -536,10 +543,10 @@ class ModelPostgres extends Model {
    * @return {*[]}
    */
   _getBooleansOfList(list = []) {
-    return list.map(item => {
+    return list.map((item) => {
       if (item === 'TRUE') {
         return true;
-      } else if (item === 'FALSE') {
+      } if (item === 'FALSE') {
         return false;
       }
       return item;
@@ -656,7 +663,7 @@ class ModelPostgres extends Model {
 
     /** @type {number} */
     const total = await this.model.count(cond);
-    const { limit, offset } = pagination.getPagination(total);
+    const { limit, offset } = pagination.getPagination2();
 
     const order = pagination.isOrderSet()
       ? this._getDefaultOrder(pagination)
@@ -688,7 +695,7 @@ class ModelPostgres extends Model {
    */
   _getDefaultOrder(pagination) {
     return pagination.getOrder()
-      .map(item => ([item.field, item.direction]));
+      .map((item) => ([item.field, item.direction]));
   }
 
   /**
@@ -717,9 +724,37 @@ class ModelPostgres extends Model {
    * @return {Promise<Models.Model>}
    */
   async getOne(params = {}, query = {}, restrictions = {}, options = {}) {
+    const cond = await this.getPredicated(params, query, restrictions, options);
+    return this.model.findOne(cond);
+  }
+
+  /**
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
+   * @return {Promise<Models.Model>}
+   */
+  async getCount(params = {}, query = {}, restrictions = {}, options = {}) {
+    const cond = await this.getPredicated(params, query, restrictions, options);
+    return this.model.count(cond);
+  }
+
+  /**
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
+   * @return {Promise<*>}
+   */
+  async getPredicated(params = {}, query = {}, restrictions = {}, options = {}) {
     const where = { ...params };
     const sort = query.sort === 1 ? 'ASC' : 'DESC';
     const order = [['createdAt', sort]];
+    const distinct = !!query.distinct ? true : null;
+    const col = !!query.col ? query.col : null;
 
     if ('inspect' in params) params.inspect();
     if ('inspect' in restrictions) restrictions.inspect();
@@ -729,11 +764,13 @@ class ModelPostgres extends Model {
     const cond = {
       where,
       order,
+      distinct,
+      col,
     };
 
     this._extendConditions(cond, options);
 
-    return this.model.findOne(cond);
+    return cond;
   }
 
   /**
@@ -792,6 +829,23 @@ class ModelPostgres extends Model {
       cond.skipLocked = options.skipLocked;
     }
     return cond;
+  }
+
+  /**
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} restrictions
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @return {Promise<Models.Model>}
+   */
+  async deleteOne(params, query, restrictions, options) {
+    const where = { ...params };
+    const entity = await this.getOne(params, query, restrictions, options);
+    if (entity) {
+      await this.model.destroy({ where });
+    }
+    return entity;
   }
 }
 

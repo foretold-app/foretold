@@ -10,7 +10,7 @@ const preference = new graphql.GraphQLObjectType({
     enableExperimentalFeatures: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-  })
+  }),
 });
 
 const preferenceUpdateInput = new graphql.GraphQLInputObjectType({

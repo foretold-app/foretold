@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
-const ERR_1 = () => 'Either Auth0 JWT and Auth0 Access Token should be not ' +
-  'empty or Auth Token.';
+const ERR_1 = () => 'Either Auth0 JWT and Auth0 Access Token should be not '
+  + 'empty or Auth Token.';
 
 /**
  * @param {*} root

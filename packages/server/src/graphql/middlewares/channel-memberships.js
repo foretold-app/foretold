@@ -18,12 +18,15 @@ async function setContextChannelMemberships(root, args, context, info) {
     || _.get(context, 'channel.id');
   const agentId = _.get(context, 'agent.id');
 
-  const compoundId = { agentId, channelId };
-  console.log('\x1b[36m ---> \x1b[0m Middleware ' +
-    '(setContextChannelMemberships)', compoundId);
+  const compoundId = {
+    agentId,
+    channelId
+  };
+  console.log('\x1b[36m ---> \x1b[0m Middleware '
+    + '(setContextChannelMemberships)', compoundId);
 
   if (channelId && agentId) {
-    const channelMembership = await data.channelMemberships.getOne2(compoundId);
+    const channelMembership = await data.channelMemberships.getOne(compoundId);
     context.channelMembership = channelMembership;
     context.channelMembershipsRole = _.get(channelMembership, 'role');
   } else {
@@ -47,14 +50,14 @@ async function setContextChannelMembershipsAdmins(root, args, context, info) {
     || _.get(context, 'measurable.channelId')
     || _.get(context, 'channel.id');
 
-  console.log('\x1b[36m ---> \x1b[0m Middleware ' +
-    '(channelMembershipsAdmins)', channelId);
+  console.log('\x1b[36m ---> \x1b[0m Middleware '
+    + '(channelMembershipsAdmins)', channelId);
 
   if (channelId) {
-    context.channelMembershipsAdmins =
-      await data.channelMemberships.getAllOnlyAdmins({
-        channelId,
-      });
+    context.channelMembershipsAdmins
+      = await data.channelMemberships.getAllOnlyAdmins({
+      channelId,
+    });
   } else {
     context.channelMembershipsAdmins = null;
   }

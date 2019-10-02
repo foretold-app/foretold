@@ -17,6 +17,7 @@ export namespace Models {
 
   export interface Channel extends Model {
     isPublic: boolean;
+    creatorId: ObjectID;
 
     getAgents(): Models.Agent[];
   }
@@ -88,6 +89,8 @@ export namespace Models {
     getCreationNotification(creator: Models.Creator): any;
 
     getMeasurable(): Measurable;
+
+    getAgent(): Agent;
   }
 
   export interface Agent extends Model {
@@ -101,7 +104,13 @@ export namespace Models {
     getUser(): Models.User;
   }
 
-  export interface Series extends Model {}
+  export interface Series extends Model {
+    subjects: string[];
+    properties: string[];
+    dates: string[];
+    creatorId: ObjectID;
+    channelId: ObjectID;
+  }
 
   export interface ChannelMemberships {
     agentId: ObjectID;
@@ -118,14 +127,24 @@ export namespace Models {
     isActive: boolean;
   }
 
-  export interface AgentNotification extends Model {}
+  export interface NotificationStatus extends Model {
+    agentId: ObjectID;
+    notificationId: ObjectID;
+  }
 
   export interface Template extends Model {}
 
-  export interface Notification extends Model {}
+  export interface Notification extends Model {
+    envelope: {
+      replacements: Object;
+      to: string;
+      body: string;
+      subject: string;
+    }
+  }
 
   export interface Invitation extends Model {
-    agentId: ObjectID;
+    email: string;
     channelId: ObjectID;
     inviterAgentId: ObjectID;
     status: "AWAITING" | "ACCEPTED";
@@ -158,6 +177,10 @@ export namespace Models {
     primaryPointScore: float;
     numberOfPredictions: number;
     numberOfQuestionsScored: number;
+  }
+
+  export interface AgentPreference extends Model {
+    stopAllEmails: boolean;
   }
 
   export type Creator = Models.User | Models.Bot;
@@ -248,6 +271,8 @@ export namespace Layers {
       minPredictionCountTotal?: number | null;
       minNumberOfPredictions?: number | null;
       minNumberOfQuestionsScored?: number | null;
+      email?: string;
+      status?: string;
 
       findInDateRange?: object; // @todo: Object? Give definition!
       withinMeasurables?: withinMeasurables | null;
@@ -269,6 +294,8 @@ export namespace Layers {
     };
     type query = {
       sort?: number;
+      distinct?: boolean;
+      col?: string;
     };
     type params = {
       id?: Models.ObjectID;
@@ -277,6 +304,9 @@ export namespace Layers {
       name?: string;
       measurableId?: Models.ObjectID;
       competitorType?: string;
+      seriesId?: Models.ObjectID;
+      email?: string;
+      channelId?: Models.ObjectID;
     };
     type response = { data: any };
     type responseList = { data: any[]; total: number };
@@ -350,6 +380,8 @@ export namespace Layers {
       minPredictionCountTotal?: number | null;
       minNumberOfPredictions?: number | null;
       minNumberOfQuestionsScored?: number | null;
+      email?: string;
+      status?: string;
 
       withinMeasurables?: withinMeasurables | null;
       withinPublicChannels?: withinPublicChannels | null;
@@ -368,16 +400,20 @@ export namespace Layers {
       order?: orderList;
 
       getPagination(total: number): { limit: number, offset: number };
+      getPagination2(): { limit: number, offset: number };
       isOrderSet(): boolean;
     };
     type query = {
       sort?: number,
+      distinct?: boolean,
+      col?: string,
     };
     type params = {
       id?: Models.ObjectID
       agentId?: Models.ObjectID
       name?: string,
       auth0Id?: string,
+      seriesId?: Models.ObjectID,
     };
     type response = { data: any };
     type responseList = { data: any[], total: number };

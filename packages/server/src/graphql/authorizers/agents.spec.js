@@ -1,7 +1,6 @@
 const { currentAgentIsAuthenticatedRule } = require('./agents');
 
 describe('Agents Authorizers', () => {
-
   describe('currentAgentIsAuthenticatedRule()', () => {
     it('returns true when user model exists within context', () => {
       const root = {};
@@ -20,5 +19,4 @@ describe('Agents Authorizers', () => {
       expect(result).toBe(false);
     });
   });
-
 });

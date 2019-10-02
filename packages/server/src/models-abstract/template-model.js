@@ -8,7 +8,6 @@ const templates = require('../../config/templates');
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
  */
 class TemplateModel extends ModelPostgres {
-
   constructor() {
     super({
       model: models.Template,
@@ -32,7 +31,6 @@ class TemplateModel extends ModelPostgres {
     const template = _.find(templates, ['name', params.name]);
     return new this.model(template);
   }
-
 }
 
 module.exports = {

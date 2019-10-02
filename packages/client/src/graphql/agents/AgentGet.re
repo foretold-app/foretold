@@ -21,16 +21,15 @@ type agent = {
 module Query = [%graphql
   {|
     query getAgent ($id: String!) {
-        agent:
         agent(id: $id) @bsRecord{
             isMe
-            user: User @bsRecord{
+            user @bsRecord{
               id
               name
               description
               score
             }
-            bot: Bot @bsRecord{
+            bot @bsRecord{
               id
               name
               description

@@ -31,9 +31,9 @@ async function one(root, args, context) {
   const { id, auth0Id } = args;
   if (context.user) {
     return context.user;
-  } else if (id) {
+  } if (id) {
     return data.users.getOne({ id });
-  } else if (auth0Id) {
+  } if (auth0Id) {
     return data.users.getUserByAuth0Id(auth0Id);
   }
 }

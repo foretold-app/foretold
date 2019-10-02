@@ -34,10 +34,10 @@ async function channelCreator(channel) {
  * @param {Models.ObjectID} args.channelMemberId
  * @param {string[]} args.isArchived
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<Models.Channel[]>}
  */
-async function all(root, args, context, info) {
+async function all(root, args, context, _info) {
   const agentId = _.get(context, 'agent.id');
   const channelMemberId = _.get(args, 'channelMemberId') || _.get(root, 'id');
   const isArchived = _.get(args, 'isArchived');
@@ -45,7 +45,10 @@ async function all(root, args, context, info) {
   const withinJoinedChannels = _.isEmpty(channelMemberId)
     ? null : structures.withinJoinedChannelsById(channelMemberId);
 
-  const filter = new Filter({ withinJoinedChannels, isArchived });
+  const filter = new Filter({
+    withinJoinedChannels,
+    isArchived,
+  });
   const pagination = new Pagination(args);
   const options = new Options({ agentId });
 
@@ -57,10 +60,10 @@ async function all(root, args, context, info) {
  * @param {object} args
  * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<Models.Channel>}
  */
-async function one(root, args, context, info) {
+async function one(root, args, context, _info) {
   const id = _.get(args, 'id') || _.get(root, 'channelId');
   const agentId = _.get(context, 'agent.id');
 
@@ -77,10 +80,10 @@ async function one(root, args, context, info) {
  * @param {Models.ObjectID} args.id
  * @param {object} args.input
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<Models.Channel>}
  */
-async function update(root, args, context, info) {
+async function update(root, args, context, _info) {
   const params = new Params({ id: args.id });
   const data$ = new Data(args.input);
   return data.channels.updateOne(params, data$);
@@ -90,11 +93,16 @@ async function update(root, args, context, info) {
  * @param {object | null} root
  * @param {{ input: Schema.ChannelsInput }} args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<Models.Channel>}
  */
-async function create(root, args, context, info) {
-  return data.channels.createOne(context.agent, args.input);
+async function create(root, args, context, _info) {
+  const creatorId = _.get(context, 'agent.id');
+  const input = {
+    ...args.input,
+    creatorId,
+  };
+  return data.channels.createOne(input);
 }
 
 module.exports = {

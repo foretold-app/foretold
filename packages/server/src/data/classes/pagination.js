@@ -54,14 +54,12 @@ class Pagination {
     const orderInput = _.get(options, 'order');
     const orderArray = _.isArray(orderInput) ? orderInput : [];
     return orderArray
-      .filter(item => _.has(item, 'field'))
-      .filter(item => _.has(item, 'direction'))
-      .map((item) => {
-        return {
-          field: _.get(item, 'field'),
-          direction: _.get(item, 'direction'),
-        };
-      });
+      .filter((item) => _.has(item, 'field'))
+      .filter((item) => _.has(item, 'direction'))
+      .map((item) => ({
+        field: _.get(item, 'field'),
+        direction: _.get(item, 'direction'),
+      }));
   }
 
   /**
@@ -80,6 +78,7 @@ class Pagination {
 
   /**
    * @public
+   * @deprecated
    * @param {number} total
    * @return {{offset: number, limit: number }}
    */
@@ -90,7 +89,8 @@ class Pagination {
     this.last = Math.abs(this.last) || 0;
     this.first = Math.abs(this.first) || 0;
 
-    let offset, limit;
+    let offset;
+    let limit;
     if (this.first) limit = this.first;
     if (this.after) offset = this.after + 1;
 
@@ -112,6 +112,23 @@ class Pagination {
     if (limit < 0) limit = 0;
 
     return { limit, offset };
+  }
+
+  /**
+   * @public
+   * @return {{offset: number | null, limit: number | null}}
+   */
+  getPagination2() {
+    if (this.first) {
+      const limit = this.first;
+      const offset = this.after ? this.after * 1 + 1 : null;
+      return { limit, offset };
+    } else if (this.last) {
+      const limit = this.last;
+      const offset = this.before ? this.before * 1 - this.last : null;
+      return { limit, offset };
+    }
+    return { limit: 10, offset: null };
   }
 
   inspect() {

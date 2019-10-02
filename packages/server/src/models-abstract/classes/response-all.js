@@ -36,11 +36,11 @@ class ResponseAll {
   }
 
   get edges() {
-    return this._data.map(node => ({ node, cursor: node.index }));
+    return this._data.map((node) => ({ node, cursor: node.index }));
   }
 
   get pageInfo() {
-    const edges = this.edges;
+    const { edges } = this;
     const start = _.head(edges);
     const end = _.last(edges);
 

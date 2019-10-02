@@ -1,3 +1,5 @@
+const { TEMPLATE_NAME } = require('../src/enums/template-name');
+
 /**
  * Do not forget that this file is used as a stub of DB table "Templates".
  * This is why if you had decided to return to DB you would have needed
@@ -5,7 +7,7 @@
  */
 module.exports = [
   {
-    name: "MEASURABLE_STATE_IS_CHANGED",
+    name: TEMPLATE_NAME.MEASURABLE_STATE_IS_CHANGED,
     envelopeTemplate: {
       subject: "Question \"{{{ measurable.name }}}\" has reached its "
         + "expected resolution date.",
@@ -18,7 +20,7 @@ module.exports = [
     }
   },
   {
-    name: "MEASURABLE_STATE_IS_RESOLVED",
+    name: TEMPLATE_NAME.MEASURABLE_STATE_IS_RESOLVED,
     envelopeTemplate: {
       subject: "Question \"{{{ measurable.name }}}\" was resolved",
       body: "The question [{{{ measurable.name }}}] was resolved. Click <a" +
@@ -26,7 +28,7 @@ module.exports = [
     }
   },
   {
-    name: "MEMBER_ADDED_TO_COMMUNITY",
+    name: TEMPLATE_NAME.MEMBER_ADDED_TO_COMMUNITY,
     envelopeTemplate: {
       subject: "You have been added to a community on Foretold",
       body: "<a href=\"{{{ inviterAgent.link }}}\">{{{ inviterAgent.name" +
@@ -35,14 +37,14 @@ module.exports = [
     }
   },
   {
-    name: "MEMBER_JOINED_COMMUNITY_FEED_ITEM",
+    name: TEMPLATE_NAME.MEMBER_JOINED_COMMUNITY_FEED_ITEM,
     envelopeTemplate: {
       item: "",
       description: "{{{ agent.name }}} joined the community"
     }
   },
   {
-    name: "NEW_MEASUREMENT_PREDICTION_FEED_ITEM",
+    name: TEMPLATE_NAME.NEW_MEASUREMENT_PREDICTION_FEED_ITEM,
     envelopeTemplate: {
       item: "{{{ measurable.name }}}",
       description: "{{{ agent.name }}} made a prediction",
@@ -50,7 +52,7 @@ module.exports = [
     }
   },
   {
-    name: "NEW_MEASUREMENT_COMMENT_FEED_ITEM",
+    name: TEMPLATE_NAME.NEW_MEASUREMENT_COMMENT_FEED_ITEM,
     envelopeTemplate: {
       item: "{{{ measurable.name }}}",
       description: "{{{ agent.name }}} made a comment",
@@ -58,7 +60,7 @@ module.exports = [
     }
   },
   {
-    name: "NEW_MEASUREMENT_RESOLUTION_FEED_ITEM",
+    name: TEMPLATE_NAME.NEW_MEASUREMENT_RESOLUTION_FEED_ITEM,
     envelopeTemplate: {
       item: "{{{ measurable.name }}}",
       description: "{{{ agent.name }}} resolved the question with an answer",
@@ -66,7 +68,7 @@ module.exports = [
     }
   },
   {
-    name: "NEW_MEASUREMENT_RESOLUTION_NOT_AVAILABLE_FEED_ITEM",
+    name: TEMPLATE_NAME.NEW_MEASUREMENT_RESOLUTION_NOT_AVAILABLE_FEED_ITEM,
     envelopeTemplate: {
       item: "{{{ measurable.name }}}",
       description: "{{{ agent.name }}} has marked this question as unresolved",
@@ -74,7 +76,7 @@ module.exports = [
     }
   },
   {
-    name: "MEASURABLE_REACHED_RESOLUTION_DATE_FEED_ITEM",
+    name: TEMPLATE_NAME.MEASURABLE_REACHED_RESOLUTION_DATE_FEED_ITEM,
     envelopeTemplate: {
       item: "{{{ measurable.name }}}",
       description: "{{{ measurable.name }}} has reached it's expected" +
@@ -83,7 +85,7 @@ module.exports = [
     }
   },
   {
-    name: "NEW_MEASURABLE_FEED_ITEM",
+    name: TEMPLATE_NAME.NEW_MEASURABLE_FEED_ITEM,
     envelopeTemplate: {
       item: "{{{ measurable.name }}}",
       description: "{{{ agent.name }}} made a question",
@@ -91,10 +93,21 @@ module.exports = [
     }
   },
   {
-    name: "NEW_CHANNEL_FEED_ITEM",
+    name: TEMPLATE_NAME.NEW_CHANNEL_FEED_ITEM,
     envelopeTemplate: {
       item: "",
       description: "{{{ agent.name }}} has created a community",
     }
-  }
+  },
+  // @todo: Copy to DB (later).
+  {
+    name: TEMPLATE_NAME.NEW_INVITATION,
+    envelopeTemplate: {
+      subject: "You are invited to Foretold in \"{{{ channel.name }}}\"",
+      body: "You are invited to Foretold into "
+        + "<a href=\"{{{ channel.link }}}\">{{{ channel.name }}}</a> channel. "
+        + "Please, log in "
+        + "<a href=\"{{{ loginLink }}}\">here</a> to accept the invitation."
+    }
+  },
 ];

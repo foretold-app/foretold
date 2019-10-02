@@ -1670,7 +1670,7 @@
               "deprecationReason": null
             },
             {
-              "name": "Agent",
+              "name": "agent",
               "description": null,
               "args": [],
               "type": {
@@ -1682,7 +1682,7 @@
               "deprecationReason": null
             },
             {
-              "name": "Bots",
+              "name": "bots",
               "description": null,
               "args": [],
               "type": {
@@ -1835,7 +1835,7 @@
               "deprecationReason": null
             },
             {
-              "name": "User",
+              "name": "user",
               "description": null,
               "args": [],
               "type": {
@@ -1847,7 +1847,7 @@
               "deprecationReason": null
             },
             {
-              "name": "Bot",
+              "name": "bot",
               "description": null,
               "args": [],
               "type": {
@@ -1859,7 +1859,7 @@
               "deprecationReason": null
             },
             {
-              "name": "Preference",
+              "name": "preference",
               "description": null,
               "args": [],
               "type": {
@@ -1871,7 +1871,7 @@
               "deprecationReason": null
             },
             {
-              "name": "Measurements",
+              "name": "measurements",
               "description": null,
               "args": [
                 {
@@ -1924,7 +1924,7 @@
               "deprecationReason": null
             },
             {
-              "name": "Channels",
+              "name": "channels",
               "description": null,
               "args": [],
               "type": {
@@ -2168,7 +2168,7 @@
               "deprecationReason": null
             },
             {
-              "name": "Agent",
+              "name": "agent",
               "description": null,
               "args": [],
               "type": {
@@ -2180,7 +2180,7 @@
               "deprecationReason": null
             },
             {
-              "name": "User",
+              "name": "user",
               "description": null,
               "args": [],
               "type": {
@@ -2688,7 +2688,7 @@
               "deprecationReason": null
             },
             {
-              "name": "Measurable",
+              "name": "measurable",
               "description": null,
               "args": [],
               "type": {
@@ -2700,7 +2700,7 @@
               "deprecationReason": null
             },
             {
-              "name": "Agent",
+              "name": "agent",
               "description": null,
               "args": [],
               "type": {
@@ -2712,7 +2712,7 @@
               "deprecationReason": null
             },
             {
-              "name": "TaggedMeasurement",
+              "name": "taggedMeasurement",
               "description": null,
               "args": [],
               "type": {
@@ -2724,7 +2724,7 @@
               "deprecationReason": null
             },
             {
-              "name": "TaggedBy",
+              "name": "taggedBy",
               "description": null,
               "args": [],
               "type": {
@@ -3385,7 +3385,7 @@
               "deprecationReason": null
             },
             {
-              "name": "Measurements",
+              "name": "measurements",
               "description": null,
               "args": [
                 {
@@ -3462,7 +3462,7 @@
               "deprecationReason": null
             },
             {
-              "name": "Channel",
+              "name": "channel",
               "description": null,
               "args": [],
               "type": {
@@ -3934,7 +3934,7 @@
               "deprecationReason": null
             },
             {
-              "name": "Measurables",
+              "name": "measurables",
               "description": null,
               "args": [
                 {
@@ -3987,7 +3987,7 @@
               "deprecationReason": null
             },
             {
-              "name": "Channel",
+              "name": "channel",
               "description": null,
               "args": [],
               "type": {
@@ -5741,7 +5741,7 @@
               "deprecationReason": null
             },
             {
-              "name": "Channel",
+              "name": "channel",
               "description": null,
               "args": [],
               "type": {
@@ -6339,13 +6339,9 @@
                 }
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Invitation",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -7287,6 +7283,97 @@
             }
           ],
           "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "Invitation",
+          "description": null,
+          "fields": [
+            {
+              "name": "id",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "channelId",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "inviterAgentId",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "createdAt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Date",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updatedAt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Date",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },

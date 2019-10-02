@@ -1,12 +1,16 @@
 const _ = require('lodash');
-const { shield, allow, and, or, not } = require('graphql-shield');
+const {
+  shield, allow, and, or, not,
+} = require('graphql-shield');
 
 const { currentAgentIsAuthenticated } = require('./agents');
 const { currentAgentIsApplicationAdmin } = require('./agents');
 const { channelIsPublic } = require('./channels');
 const { currentAgentIsChannelAdmin } = require('./channel-memberships');
 const { currentAgentIsChannelViewer } = require('./channel-memberships');
-const { channelHasMembershipWithCurrentAgent } = require('./channel-memberships');
+const {
+  channelHasMembershipWithCurrentAgent,
+} = require('./channel-memberships');
 const { channelHasMultipleAdmins } = require('./channel-memberships');
 const { membershipBelongsToCurrentAgent } = require('./channel-memberships');
 const { membershipHasAdminRole } = require('./channel-memberships');
@@ -15,9 +19,9 @@ const { measurableIsArchived } = require('./measurables');
 const { botBelongsToCurrentUser } = require('./bots');
 const { userIsOwnedByCurrentAgent } = require('./users');
 const { preferenceIsOwnedByCurrentAgent } = require('./preferences');
-const { agentIdFromRootId} = require('./predicates');
-const { agentIdFromContext} = require('./predicates');
-const { agentIdFromRootAgentId} = require('./predicates');
+const { agentIdFromRootId } = require('./predicates');
+const { agentIdFromContext } = require('./predicates');
+const { agentIdFromRootAgentId } = require('./predicates');
 
 const currentAgentIsApplicationAdminOrChannelAdmin = or(
   currentAgentIsApplicationAdmin,
@@ -51,7 +55,7 @@ const rulesChannel = {
       currentAgentIsAuthenticated,
       currentAgentIsApplicationAdminOrChannelAdmin,
     ),
-  }
+  },
 };
 
 const rulesChannelMemberships = {
@@ -74,7 +78,7 @@ const rulesChannelMemberships = {
         not(membershipBelongsToCurrentAgent),
       ),
     ),
-  }
+  },
 };
 
 const rulesMeasurables = {
@@ -104,7 +108,7 @@ const rulesMeasurables = {
       currentAgentIsAuthenticated,
       measurableIsOwnedByCurrentAgent,
     ),
-  }
+  },
 };
 
 const rulesBots = {
@@ -114,7 +118,7 @@ const rulesBots = {
       currentAgentIsAuthenticated,
       botBelongsToCurrentUser,
     ),
-  }
+  },
 };
 
 const rulesInvitations = {
@@ -124,7 +128,7 @@ const rulesInvitations = {
       currentAgentIsAuthenticated,
       currentAgentIsApplicationAdminOrChannelAdmin,
     ),
-  }
+  },
 };
 
 const rules = {
@@ -137,7 +141,7 @@ const rules = {
     isEmailVerified: userIsOwnedByCurrentAgent(agentIdFromRootAgentId),
   },
   Agent: {
-    Preference: userIsOwnedByCurrentAgent(agentIdFromRootId),
+    preference: userIsOwnedByCurrentAgent(agentIdFromRootId),
   },
   Query: {
     '*': allow,
@@ -196,13 +200,13 @@ const rules = {
     ...rulesChannel.Mutation,
     ...rulesChannelMemberships.Mutation,
     ...rulesInvitations.Mutation,
-  }
+  },
 };
 
 function getPermissions() {
   return shield(
     _.cloneDeep(rules),
-    { debug: false }
+    { debug: false },
   );
 }
 

@@ -11,7 +11,7 @@ const { TokensData } = require('./tokens-data');
 const { PreferencesData } = require('./preferences-data');
 const { NotificationsData } = require('./notifications-data');
 const { TemplatesData } = require('./templates-data');
-const { AgentNotificationsData } = require('./agent-notifications-data');
+const { NotificationStatusesData } = require('./notification-statuses-data');
 const { InvitationsData } = require('./invitations-data');
 const { FeedItemsData } = require('./feed-items-data');
 const { GlobalSettingsData } = require('./global-settings-data');
@@ -32,7 +32,7 @@ module.exports = {
   preferences: new PreferencesData(),
   notifications: new NotificationsData(),
   templates: new TemplatesData(),
-  agentNotifications: new AgentNotificationsData(),
+  notificationStatuses: new NotificationStatusesData(),
   invitations: new InvitationsData(),
   feedItems: new FeedItemsData(),
   globalSettings: new GlobalSettingsData(),

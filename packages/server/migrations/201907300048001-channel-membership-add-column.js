@@ -1,5 +1,3 @@
-const { TOKEN_TYPE } = require('../src/enums/token-type');
-
 module.exports = {
   up: async function (queryInterface, Sequelize) {
     try {

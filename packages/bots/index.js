@@ -1,5 +1,5 @@
-const { runListeners } = require('./async/listeners');
-const { runJobs } = require('./async');
+const { runListeners } = require('./sync/listeners');
+const { runJobs } = require('./sync');
 
 runListeners();
 runJobs();

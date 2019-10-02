@@ -11,7 +11,7 @@ const invitationStatus = new graphql.GraphQLEnumType({
     [INVITATION_STATUS.ACCEPTED]: {
       value: INVITATION_STATUS.ACCEPTED,
     },
-  }
+  },
 });
 
 module.exports = {

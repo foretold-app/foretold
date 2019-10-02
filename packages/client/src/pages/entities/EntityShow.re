@@ -13,13 +13,13 @@ let display = id => {
 
       Ken.names(id)
       |> E.A.of_list
-      |> E.A.fmapi((i, r: Graph_T.T.fact) =>
+      |> E.A.fmapi((i, r: BsKen.Graph_T.T.fact) =>
            <div key={i |> string_of_int}>
              {Ken.findName(r.propertyId)
               |> E.O.default("no-name")
               |> ste
               |> E.React.inH3}
-             Graph_T.T.(
+             BsKen.Graph_T.T.(
                switch (r.value.valueType) {
                | String(s) => s |> ste
                | ThingId(s) =>

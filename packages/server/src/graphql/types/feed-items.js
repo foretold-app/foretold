@@ -39,11 +39,11 @@ const feedItem = new graphql.GraphQLObjectType({
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
 
-    Channel: {
+    channel: {
       type: graphql.GraphQLNonNull(require('./channels').channel),
       resolve: resolver(models.FeedItem.Channel),
     },
-  })
+  }),
 });
 
 const feedItemEdge = new graphql.GraphQLObjectType({
@@ -58,7 +58,9 @@ const feedItemsConnection = new graphql.GraphQLObjectType({
   name: 'FeedItemsConnection',
   fields: () => ({
     total: { type: graphql.GraphQLInt },
-    pageInfo: { type: graphql.GraphQLNonNull(require('./common').pageInfoConnection) },
+    pageInfo: {
+      type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
+    },
     edges: { type: graphql.GraphQLList(require('./feed-items').feedItemEdge) },
   }),
 });

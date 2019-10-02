@@ -28,11 +28,6 @@ module.exports = (sequelize, DataTypes) => {
       type: Sequelize.VIRTUAL(DataTypes.STRING),
       get: getName,
     },
-    measurementCount: {
-      allowNull: true,
-      type: Sequelize.VIRTUAL(DataTypes.INTEGER),
-      get: getMeasurementCount,
-    },
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
@@ -47,15 +42,9 @@ module.exports = (sequelize, DataTypes) => {
     if (this.type === AGENT_TYPE.USER) {
       const user = await this.getUser();
       return _.get(user, 'name');
-    } else {
-      const bot = await this.getBot();
-      return _.get(bot, 'name');
     }
-  }
-
-  async function getMeasurementCount() {
-    const items = await this.getMeasurements();
-    return items.length;
+    const bot = await this.getBot();
+    return _.get(bot, 'name');
   }
 
   Agent.associate = function associate(models) {

@@ -1,5 +1,4 @@
 module.exports = (sequelize, DataTypes) => {
-
   const FeedItem = sequelize.define('FeedItem', {
     id: {
       type: DataTypes.UUID(),

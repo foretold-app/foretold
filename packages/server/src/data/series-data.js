@@ -7,21 +7,9 @@ const { SeriesModel } = require('../models-abstract');
  * @property {SeriesModel} SeriesModel
  */
 class SeriesData extends DataBase {
-
   constructor() {
     super();
-    this.SeriesModel = new SeriesModel();
-    this.model = this.SeriesModel;
-  }
-
-  /**
-   * @public
-   * @deprecated: use createdOne
-   * @param {object} data
-   * @return {Promise<*>}
-   */
-  async createOne(data) {
-    return super.createOne(data);
+    this.model = new SeriesModel();
   }
 
   /**

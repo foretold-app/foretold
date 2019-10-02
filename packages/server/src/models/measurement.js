@@ -4,8 +4,6 @@ const {
   MEASUREMENT_VALUE,
 } = require('@foretold/measurement-value/enums/measurement-value');
 
-const { clientUrl } = require('../lib/urls');
-
 const {
   MEASUREMENT_COMPETITOR_TYPE,
 } = require('../enums/measurement-competitor-type');
@@ -74,7 +72,8 @@ module.exports = (sequelize, DataTypes) => {
    * @param {object} value
    */
   function setMeasurementValue(value) {
-    let data, dataType;
+    let data;
+    let dataType;
 
     const types = Object.values(MEASUREMENT_VALUE);
 
@@ -89,7 +88,10 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     if (data !== undefined && dataType !== undefined) {
-      this.dataValues.value = { data, dataType };
+      this.dataValues.value = {
+        data,
+        dataType,
+      };
     }
   }
 
@@ -105,36 +107,6 @@ module.exports = (sequelize, DataTypes) => {
     }
     return value;
   }
-
-  /**
-   * @todo: move me
-   * @public
-   * @param {Models.Creator} creator
-   * @return {Promise<*>}
-   */
-  Measurement.prototype.getCreationNotification =
-    async function getCreationNotification(creator) {
-      const agent = await creator.getAgent();
-      const measurable = await this.getMeasurable();
-      return {
-        attachments: [{
-          pretext: 'New Measurement Created',
-          title: measurable.name,
-          title_link: `${ clientUrl }/c/${ measurable.channelId }`,
-          author_name: creator.name,
-          author_link: `${ clientUrl }/agents/${ agent.id }`,
-          text: this.description,
-          fields: [
-            {
-              title: 'Type',
-              value: this.competitorType,
-              short: true,
-            },
-          ],
-          color: '#d2ebff',
-        }],
-      };
-    };
 
   Measurement.associate = function associate(models) {
     Measurement.Measurable = Measurement.belongsTo(models.Measurable, {

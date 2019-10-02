@@ -7,13 +7,10 @@ const { TemplateModel } = require('../models-abstract');
  * @property {TemplateModel} TemplatesModel
  */
 class TemplatesData extends DataBase {
-
   constructor() {
     super();
-    this.TemplateModel = new TemplateModel();
-    this.model = this.TemplateModel;
+    this.model = new TemplateModel();
   }
-
 }
 
 module.exports = {

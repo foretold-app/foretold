@@ -3,6 +3,7 @@ const _ = require('lodash');
 
 const { DataBase } = require('./data-base');
 const { GlobalSettingModel } = require('../models-abstract');
+const { KenFacade } = require('../lib/ken-facade');
 
 const { Params } = require('./classes/params');
 const { Data } = require('./classes/data');
@@ -12,14 +13,24 @@ const { Data } = require('./classes/data');
  * @property {FeedItemModel} FeedItemModel
  */
 class GlobalSettingsData extends DataBase {
-
   constructor() {
     super();
-    this.GlobalSettingModel = new GlobalSettingModel();
-    this.model = this.GlobalSettingModel;
+    this.model = new GlobalSettingModel();
+    this.kenFacade = null;
+
+    /**
+     * @todo: Please, fix later.
+     */
+    this.initKen()
+      .then((kenFacade) => {
+        this.kenFacade = kenFacade;
+      }, (err) => {
+        console.log('GlobalSettingsData Ken Init Err', err);
+      });
   }
 
   /**
+   * @public
    * @param {object} incomingData
    * @return {Promise<Models.Model>}
    */
@@ -31,6 +42,7 @@ class GlobalSettingsData extends DataBase {
   }
 
   /**
+   * @public
    * @return {Promise<string | null>}
    */
   async getBotAgentId() {
@@ -39,13 +51,30 @@ class GlobalSettingsData extends DataBase {
   }
 
   /**
-   * @return {Promise<string>}
+   * @public
+   * @return {Promise<object>}
    */
   async getMain() {
     const params = new Params({ name: GlobalSettingsData.MAIN });
     return this.getOne(params);
   }
 
+  /**
+   * @returns {Promise<KenFacade>}
+   */
+  async initKen() {
+    const { entityGraph } = await this.getMain();
+    return new KenFacade(entityGraph);
+  }
+
+  /**
+   * @todo: Never do like this.
+   * @todo: These are shadowed promises.
+   * @returns {Promise<KenFacade>}
+   */
+  getKenFacadeCached() {
+    return this.kenFacade;
+  }
 }
 
 GlobalSettingsData.MAIN = 'main';

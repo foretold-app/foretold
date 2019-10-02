@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "nodemon ./",
-    "emit:aggb": "node ./async/emit/aggregation-bot",
-    "debug": "node-inspect ./async/emit/aggregation-bot"
+    "emit:aggb": "node ./sync/emit/aggregation-bot",
+    "debug": "node-inspect ./sync/emit/aggregation-bot"
   },
   "author": "",
   "license": "ISC",

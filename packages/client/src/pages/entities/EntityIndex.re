@@ -3,15 +3,16 @@ open Utils;
 let component = ReasonReact.statelessComponent("EntityShow");
 
 module ColumnsFunctor = (Ken: KenTools.KenModule) => {
-  type record = Graph_T.T.thing;
-  type column = Table.column(Graph_T.T.thing);
+  type record = BsKen.Graph_T.T.thing;
+  type column = Table.column(BsKen.Graph_T.T.thing);
 
   let nameColumn =
     Table.Column.make(
       ~name="Name" |> ste,
       ~render=
         (r: record) =>
-          <Link.Jsx2 linkType={Internal(EntityShow(r |> Graph_T.Thing.id))}>
+          <Link.Jsx2
+            linkType={Internal(EntityShow(r |> BsKen.Graph_T.Thing.id))}>
             {r |> Ken.getName |> ste}
           </Link.Jsx2>,
       ~flex=2,
@@ -28,7 +29,7 @@ module ColumnsFunctor = (Ken: KenTools.KenModule) => {
   let idColumn =
     Table.Column.make(
       ~name="Name" |> ste,
-      ~render=(r: record) => r |> Graph_T.Thing.id |> ste,
+      ~render=(r: record) => r |> BsKen.Graph_T.Thing.id |> ste,
       (),
     );
 

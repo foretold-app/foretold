@@ -10,11 +10,9 @@ const { Data } = require('./classes/data');
  * @property {PreferenceModel} PreferencesModel
  */
 class PreferencesData extends DataBase {
-
   constructor() {
     super();
-    this.PreferenceModel = new PreferenceModel();
-    this.model = this.PreferenceModel;
+    this.model = new PreferenceModel();
   }
 
   /**

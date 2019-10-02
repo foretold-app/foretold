@@ -9,7 +9,7 @@ RUN apk add --no-cache build-base python mc nano && \
   npm install --loglevel=warn
 
 COPY api/ /opt/app/api
-COPY async/ /opt/app/async
+COPY sync /opt/app/async
 COPY bots/ /opt/app/bots
 COPY config/ /opt/app/config
 COPY index.js /opt/app

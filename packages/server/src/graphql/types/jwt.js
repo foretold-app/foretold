@@ -15,7 +15,7 @@ module.exports = new graphql.GraphQLScalarType({
   },
 
   parseLiteral: function parseLiteral(ast) {
-    if (typeof ast.value !== "string") {
+    if (typeof ast.value !== 'string') {
       throw new Error('JWT should be a string.');
     }
 
@@ -24,5 +24,5 @@ module.exports = new graphql.GraphQLScalarType({
     }
 
     return ast.value;
-  }
+  },
 });

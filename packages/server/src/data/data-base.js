@@ -1,6 +1,5 @@
 const _ = require('lodash');
 
-const models = require('../models');
 const { Model } = require('../models-abstract');
 const { Options } = require('../models-abstract/classes/options');
 const { Restrictions } = require('../models-abstract/classes/restrictions');
@@ -11,12 +10,10 @@ const structures = require('../structures');
  * @abstract
  */
 class DataBase {
-
   /**
    * @todo: remove this property then
    */
   constructor() {
-    this.models = models;
     this.model = new Model();
   }
 
@@ -69,6 +66,20 @@ class DataBase {
     const option$ = this._getModelOptions(options);
     const restrictions = this._getModelRestrictions(options);
     return this.model.getOne(params, query, restrictions, option$);
+  }
+
+  /**
+   * @todo: later fix "col" argument
+   * @public
+   * @param {Layers.DataSourceLayer.params} [params]
+   * @param {Layers.DataSourceLayer.query} [query]
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Promise<*>}
+   */
+  async getCount(params = {}, query = {}, options = {}) {
+    const option$ = this._getModelOptions(options);
+    const restrictions = this._getModelRestrictions(options);
+    return this.model.getCount(params, query, restrictions, option$);
   }
 
   /**
@@ -219,5 +230,3 @@ class DataBase {
 module.exports = {
   DataBase,
 };
-
-

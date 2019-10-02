@@ -7,13 +7,10 @@ const { NotificationModel } = require('../models-abstract');
  * @property {NotificationModel} NotificationsModel
  */
 class NotificationsData extends DataBase {
-
   constructor() {
     super();
-    this.NotificationModel = new NotificationModel();
-    this.model = this.NotificationModel;
+    this.model = new NotificationModel();
   }
-
 }
 
 module.exports = {

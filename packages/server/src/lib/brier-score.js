@@ -2,7 +2,6 @@ const _ = require('lodash');
 const assert = require('assert');
 
 class BrierScore {
-
   constructor(probabilities, result) {
     assert(_.isBoolean(result), 'Result should be a boolean.');
     assert(_.isArray(probabilities), 'Probabilities should be an array.');

@@ -23,9 +23,22 @@ const measurable = new graphql.GraphQLObjectType({
     resolutionEndpoint: { type: graphql.GraphQLString },
     expectedResolutionDate: { type: DateType.default },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    measurementCount: { type: graphql.GraphQLInt },
-    measurerCount: { type: graphql.GraphQLInt },
-    resolutionEndpointResponse: { type: graphql.GraphQLFloat },
+
+    measurementCount: {
+      type: graphql.GraphQLInt,
+      resolve: resolvers.measurements.measurementCountByMeasurableId,
+    },
+
+    measurerCount: {
+      type: graphql.GraphQLInt,
+      resolve: resolvers.measurements.measurerCount,
+    },
+
+    resolutionEndpointResponse: {
+      type: graphql.GraphQLFloat,
+      resolve: resolvers.measurables.resolutionEndpointResponse,
+    },
+
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     creatorId: { type: graphql.GraphQLString },
@@ -39,10 +52,10 @@ const measurable = new graphql.GraphQLObjectType({
       resolve: resolvers.permissions.measurablesPermissions,
     },
 
-    Measurements: {
+    measurements: {
       type: require('./connections').measurableMeasurementsConnection.connectionType,
       args: require('./connections').measurableMeasurementsConnection.connectionArgs,
-      resolve: require('./connections').measurableMeasurementsConnection.resolve
+      resolve: require('./connections').measurableMeasurementsConnection.resolve,
     },
 
     series: {
@@ -55,14 +68,14 @@ const measurable = new graphql.GraphQLObjectType({
       resolve: resolver(models.Measurable.Creator),
     },
 
-    Channel: {
+    channel: {
       type: require('./channels').channel,
       resolve: resolver(models.Measurable.Channel),
     },
 
     recentMeasurement: {
-      description: 'Returns either objective measurement for a judged' +
-        ' measurable or latest measurement of an agent.',
+      description: 'Returns either objective measurement for a judged'
+        + ' measurable or latest measurement of an agent.',
       type: require('./measurements').measurement,
       resolve: resolvers.measurements.latest,
     },
@@ -79,7 +92,7 @@ const measurable = new graphql.GraphQLObjectType({
       type: require('./measurements').measurement,
       resolve: require('../resolvers/measurements').latestAggregateByRootId,
     },
-  })
+  }),
 });
 
 const measurableCreateInput = new graphql.GraphQLInputObjectType({
@@ -96,7 +109,7 @@ const measurableCreateInput = new graphql.GraphQLInputObjectType({
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     min: { type: graphql.GraphQLFloat },
     max: { type: graphql.GraphQLFloat },
-  })
+  }),
 });
 
 const measurableUpdateInput = new graphql.GraphQLInputObjectType({
@@ -113,7 +126,7 @@ const measurableUpdateInput = new graphql.GraphQLInputObjectType({
     labelProperty: { type: graphql.GraphQLString },
     min: { type: graphql.GraphQLFloat },
     max: { type: graphql.GraphQLFloat },
-  })
+  }),
 });
 
 const measurablesEdge = new graphql.GraphQLObjectType({

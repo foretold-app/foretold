@@ -20,13 +20,12 @@ function userIsOwnedByCurrentAgentRule$(predicateAgentId) {
     const agentId = _.toString(agentIdIn);
     const contextAgentId = _.toString(contextAgentIdIn);
 
-    const result =
-      (!!agentId && !!contextAgentId)
+    const result = (!!agentId && !!contextAgentId)
       && (agentId === contextAgentId);
 
-    console.log(`\x1b[33m Rule Users (userIsOwnedByCurrentAgentRule) ` +
-      `agentId "${agentId}", contextAgentId "${contextAgentId}", ` +
-      `result = "${result}".\x1b[0m`);
+    console.log('\x1b[33m Rule Users (userIsOwnedByCurrentAgentRule) '
+      + `agentId "${agentId}", contextAgentId "${contextAgentId}", `
+      + `result = "${result}".\x1b[0m`);
 
     return result;
   };
@@ -36,12 +35,11 @@ function userIsOwnedByCurrentAgentRule$(predicateAgentId) {
  * @param {function} predicateAgentId
  * @return {Rule}
  */
-const userIsOwnedByCurrentAgent = (predicateAgentId) => {
+const userIsOwnedByCurrentAgent = (predicateAgentId) =>
   /** @type {Rule} */
-  return rule({
+  rule({
     cache: 'no_cache',
   })(userIsOwnedByCurrentAgentRule$(predicateAgentId));
-};
 
 module.exports = {
   userIsOwnedByCurrentAgent,

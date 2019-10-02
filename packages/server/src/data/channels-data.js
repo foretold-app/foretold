@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
-const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { DataBase } = require('./data-base');
+const { AgentsData } = require('./agents-data');
 
 const { ChannelModel } = require('../models-abstract');
 
@@ -9,12 +9,10 @@ const { ChannelModel } = require('../models-abstract');
  * @implements {Layers.DataSourceLayer.DataSource}
  */
 class ChannelsData extends DataBase {
-
   constructor() {
     super();
-    this.channelMembershipsData = new ChannelMembershipsData();
-    this.ChannelModel = new ChannelModel();
-    this.model = this.ChannelModel;
+    this.model = new ChannelModel();
+    this.agents = new AgentsData();
   }
 
   /**
@@ -27,59 +25,38 @@ class ChannelsData extends DataBase {
   }
 
   /**
-   * @todo: fix interface (data, options)
    * @public
-   * @deprecated: use createOne
-   * @param {Models.Agent} agent
-   * @param {Schema.ChannelsInput} input
+   * @param {Layers.DataSourceLayer.data} data
+   * @param {string} data.name
    * @return {Promise<Models.Channel>}
    */
-  async createOne(agent, input) {
-    let channel = await this.models.Channel.findOne({
-      where: { name: input.name },
-    });
+  async createOne(data) {
+    const channel = await this.getOne({ name: data.name });
     if (channel) {
       return Promise.reject(new Error('Channel exists.'));
     }
-    channel = await this.models.Channel.create({
-      ...input,
-      creatorId: agent.id,
-    });
-    await this.channelMembershipsData.createOne2(
-      channel.id,
-      agent.id,
-      null,
-      this.models.ChannelMemberships.ROLE.ADMIN,
-    );
-    return channel;
+    return super.createOne(data);
   }
 
   /**
-   * @todo: rework
    * @public
    * @param {Models.ObjectID} id
    * @return {Promise<Model[]>}
    */
   async getAgentsByChannelId(id) {
-    const channel = await this.models.Channel.findOne({
-      where: { id },
-      include: [{ model: this.models.Agent, as: 'agents' }],
-    });
-    return _.get(channel, 'agents', []);
+    return this.model.getAgentsByChannelId(id);
   }
 
   /**
-   * @todo: rework
    * @public
    * @param {Models.ObjectID} id
    * @return {Promise<Model>}
    */
   async getCreatorByChannelId(id) {
-    const channel = await this.models.Channel.findOne({
-      where: { id },
-      include: [{ model: this.models.Agent, as: 'creator' }],
-    });
-    return _.get(channel, 'creator');
+    const channel = await this.getOne({ id });
+    const creatorId = _.get(channel, 'creatorId');
+    if (!creatorId) return null;
+    return this.agents.getOne({ id: creatorId });
   }
 }
 

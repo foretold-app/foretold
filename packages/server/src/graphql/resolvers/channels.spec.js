@@ -2,7 +2,6 @@ const channels = require('./channels');
 const data = require('../../data');
 
 describe('Channels Resolvers', () => {
-
   it('class should be constructor', () => {
     expect(channels.channelAgents).toBeInstanceOf(Function);
     expect(channels.channelCreator).toBeInstanceOf(Function);
@@ -53,13 +52,13 @@ describe('Channels Resolvers', () => {
     it('returns channels with restrictions', () => {
       return channels.all(root, args, context, info).then((result) => {
         expect(data.channels.getAll).toHaveBeenCalledWith({
-          "isArchived": undefined,
-          "withinJoinedChannels": { "agentId": "channelMemberId1", "as": "id" }
+          isArchived: undefined,
+          withinJoinedChannels: { agentId: 'channelMemberId1', as: 'id' },
         }, {
-          "limit": 2,
-          "offset": 1,
+          limit: 2,
+          offset: 1,
         }, {
-          "agentId": "1"
+          agentId: '1',
         });
         expect(result).toBe(true);
       });
@@ -78,8 +77,8 @@ describe('Channels Resolvers', () => {
     });
     it('returns channel using restrictions', () => {
       return channels.one(root, args, context, info).then((result) => {
-        expect(data.channels.getOne).toHaveBeenCalledWith({ id: "id1" }, {}, {
-          "agentId": "agentId1"
+        expect(data.channels.getOne).toHaveBeenCalledWith({ id: 'id1' }, {}, {
+          agentId: 'agentId1',
         });
         expect(result).toBe(true);
       });
@@ -98,8 +97,8 @@ describe('Channels Resolvers', () => {
     });
     it('updates channel', () => {
       return channels.update(root, args, context, info).then((result) => {
-        expect(data.channels.updateOne).toHaveBeenCalledWith({ id: "id2" }, {
-          "a": "1",
+        expect(data.channels.updateOne).toHaveBeenCalledWith({ id: 'id2' }, {
+          a: '1',
         });
         expect(result).toBe(true);
       });
@@ -108,7 +107,7 @@ describe('Channels Resolvers', () => {
 
   describe('create()', () => {
     const root = {};
-    const context = { agent: { b: '2' } };
+    const context = { agent: { b: '2', id: 'id2' } };
     const args = { input: { a: '1' } };
     const info = {};
     beforeEach(() => {
@@ -119,12 +118,10 @@ describe('Channels Resolvers', () => {
     it('creates channel', () => {
       return channels.create(root, args, context, info).then((result) => {
         expect(data.channels.createOne).toHaveBeenCalledWith(
-          context.agent,
-          args.input,
+          { a: '1', creatorId: 'id2' },
         );
         expect(result).toBe(true);
       });
     });
   });
-
 });

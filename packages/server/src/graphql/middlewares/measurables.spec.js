@@ -2,7 +2,6 @@ const { setContextMeasurable } = require('./measurables');
 const data = require('../../data');
 
 describe('Measurables Middleware', () => {
-
   describe('setContextMeasurable() sets measurable and channelId into context ', () => {
     const measurableObj = { channelId: 'channelId1' };
     beforeEach(() => {
@@ -72,8 +71,5 @@ describe('Measurables Middleware', () => {
         expect(result).toBe(undefined);
       });
     });
-
   });
-
 });
-

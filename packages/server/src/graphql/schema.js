@@ -26,22 +26,6 @@ const schema = new graphql.GraphQLSchema({
     name: 'Query',
     fields: {
 
-      ken: {
-        type: GraphQLJSON,
-        resolve: async () => {
-          const data = require('../data');
-          const { KenFacade } = require('../lib/ken-facade');
-          const { entityGraph } = await data.globalSettings.getMain();
-
-          const subjectId = '@foretold/main/n-foretold';
-          const propertyId = '@foretold/main/measurables';
-          return new KenFacade(entityGraph).names(
-            subjectId,
-            propertyId,
-          );
-        },
-      },
-
       permissions: {
         type: types.permissions.permissions,
         args: {

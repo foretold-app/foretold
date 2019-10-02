@@ -24,7 +24,7 @@ class KenFacade {
    *
    * @param {string} subjectId
    * @param {string} propertyId
-   * @returns {{subject: *, property: *}}
+   * @returns {{subject: string, property: string}}
    */
   names(subjectId, propertyId) {
 

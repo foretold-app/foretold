@@ -1,6 +1,5 @@
 const _ = require('lodash');
 
-const models = require('../models');
 const { Model } = require('../models-abstract');
 const { Options } = require('../models-abstract/classes/options');
 const { Restrictions } = require('../models-abstract/classes/restrictions');
@@ -15,7 +14,6 @@ class DataBase {
    * @todo: remove this property then
    */
   constructor() {
-    this.models = models;
     this.model = new Model();
   }
 

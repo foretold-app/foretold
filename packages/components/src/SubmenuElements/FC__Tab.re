@@ -57,7 +57,7 @@ let component = ReasonReact.statelessComponent("Tab");
 let make = (~isActive=false, ~onClick=?, ~flex=false, children) => {
   ...component,
   render: _self =>
-    <FC__Link
+    <FC__Link.Jsx2
       isDisabled=false
       ?onClick
       className={Css.style(
@@ -65,5 +65,5 @@ let make = (~isActive=false, ~onClick=?, ~flex=false, children) => {
         @ (flex ? flexStyles : allStyles),
       )}>
       ...children
-    </FC__Link>,
+    </FC__Link.Jsx2>,
 };

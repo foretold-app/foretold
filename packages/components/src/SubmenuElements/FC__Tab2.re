@@ -29,32 +29,30 @@ let make = (~isActive, ~onClick=?, ~number: option(int)=?, children) => {
 
     let colors =
       Colors.Text.(
-        isActive ?
-          Css.[
-            color(LightBackground.active),
-            hover([color(LightBackground.active)]),
-          ] :
-          Css.[
-            color(LightBackground.main),
-            hover([color(LightBackground.active)]),
-          ]
+        isActive
+          ? Css.[
+              color(LightBackground.active),
+              hover([color(LightBackground.active)]),
+            ]
+          : Css.[
+              color(LightBackground.main),
+              hover([color(LightBackground.active)]),
+            ]
       );
 
-    <Link
+    <Link.Jsx2
       ?onClick
       className=Css.(
         style([BaseStyles.floatLeft, marginRight(`em(1.8))] @ colors)
       )
       isDisabled=false>
       <span className=textStyle> ...children </span>
-      {
-        number
-        |> FC__E.O.React.fmapOrNull(number =>
-             <span className={styles()}>
-               {number |> string_of_int |> ReasonReact.string}
-             </span>
-           )
-      }
-    </Link>;
+      {number
+       |> FC__E.O.React.fmapOrNull(number =>
+            <span className={styles()}>
+              {number |> string_of_int |> ReasonReact.string}
+            </span>
+          )}
+    </Link.Jsx2>;
   },
 };

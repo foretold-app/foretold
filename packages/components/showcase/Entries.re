@@ -14,13 +14,13 @@ let entries =
       ~title="Link",
       ~children=[
         entry(~title="Link1b", ~render=() =>
-          <Link> "Test link"->React.string </Link>
+          <FC__Link.Jsx2> "Test link"->React.string </FC__Link.Jsx2>
         ),
         entry(~title="Link2", ~render=() =>
-          <Link> "Test link2"->React.string </Link>
+          <FC__Link.Jsx2> "Test link2"->React.string </FC__Link.Jsx2>
         ),
         entry(~title="Link3", ~render=() =>
-          <Link> "Test link3"->React.string </Link>
+          <FC__Link.Jsx2> "Test link3"->React.string </FC__Link.Jsx2>
         ),
       ],
     ),

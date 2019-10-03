@@ -4,12 +4,12 @@ open Base;
 let make =
   <PageCard>
     <PageCard.HeaderRow>
-      <Div float=`left>
+      <Div.Jsx2 float=`left>
         <PageCard.HeaderRow.Title>
           {"Pending Resolution" |> ReasonReact.string}
         </PageCard.HeaderRow.Title>
-      </Div>
-      <Div
+      </Div.Jsx2>
+      <Div.Jsx2
         float=`right
         className={Css.style([
           PageCard.HeaderRow.Styles.itemTopPadding,
@@ -18,7 +18,7 @@ let make =
         <FC__Button variant=Primary>
           {"< Back" |> ReasonReact.string}
         </FC__Button>
-      </Div>
+      </Div.Jsx2>
     </PageCard.HeaderRow>
     <Table>
       <Table.HeaderRow>

@@ -2,7 +2,7 @@ open FC__Base;
 let component = ReasonReact.statelessComponent(__MODULE__);
 
 let link =
-  Link.make(
+  Link.Jsx2.make(
     ~className=
       Css.(
         style([
@@ -16,7 +16,7 @@ let link =
 let make = children => {
   ...component,
   render: _self =>
-    <Div
+    <Div.Jsx2
       styles=[
         Css.(
           style(
@@ -30,7 +30,7 @@ let make = children => {
         ),
       ]>
       ...children
-    </Div>,
+    </Div.Jsx2>,
 };
 
 let defaultPadding = Css.padding2(~v=`em(0.0), ~h=`em(1.5));
@@ -51,7 +51,7 @@ module HeaderRow = {
     let make = children => {
       ...component,
       render: _self =>
-        <Div
+        <Div.Jsx2
           styles=[
             Css.(
               style([
@@ -63,14 +63,14 @@ module HeaderRow = {
             ),
           ]>
           ...children
-        </Div>,
+        </Div.Jsx2>,
     };
   };
 
   let make = children => {
     ...component,
     render: _self =>
-      <Div
+      <Div.Jsx2
         styles=[
           Css.(
             style(
@@ -83,7 +83,7 @@ module HeaderRow = {
           ),
         ]>
         ...children
-      </Div>,
+      </Div.Jsx2>,
   };
 };
 
@@ -92,9 +92,9 @@ module Body = {
   let make = children => {
     ...component,
     render: _self =>
-      <Div styles=[Css.style(BaseStyles.fullWidthFloatLeft)]>
+      <Div.Jsx2 styles=[Css.style(BaseStyles.fullWidthFloatLeft)]>
         ...children
-      </Div>,
+      </Div.Jsx2>,
   };
 };
 
@@ -103,7 +103,7 @@ module BodyPadding = {
   let make = children => {
     ...component,
     render: _self =>
-      <Div
+      <Div.Jsx2
         styles=[
           Css.style(
             [Css.padding2(~v=`em(1.5), ~h=`em(1.5))]
@@ -111,7 +111,7 @@ module BodyPadding = {
           ),
         ]>
         ...children
-      </Div>,
+      </Div.Jsx2>,
   };
 };
 

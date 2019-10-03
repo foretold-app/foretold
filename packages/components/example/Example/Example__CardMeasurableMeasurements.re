@@ -34,7 +34,7 @@ let row =
       className=Css.(
         style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])
       )>
-      <FC__AgentLink
+      <FC__AgentLink.Jsx2
         agent={FC__AgentLink.Agent.makeUser(
           ~name="Roger Adams",
           ~image=
@@ -77,7 +77,7 @@ let row2 =
       className=Css.(
         style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])
       )>
-      <FC__AgentLink
+      <FC__AgentLink.Jsx2
         agent={FC__AgentLink.Agent.makeUser(
           ~name="Samantha Hope",
           ~image=
@@ -102,17 +102,17 @@ let row2 =
 let make =
   <PageCard>
     <PageCard.HeaderRow>
-      <Div>
-        <Div
+      <Div.Jsx2>
+        <Div.Jsx2
           styles=[
             Css.style([BaseStyles.floatLeft, Css.paddingTop(`em(0.2))]),
           ]>
           <Tab isActive=true> {"Predictions" |> ReasonReact.string} </Tab>
           <Tab isActive=false> {"Settings" |> ReasonReact.string} </Tab>
-        </Div>
-      </Div>
-      <Div>
-        <Div
+        </Div.Jsx2>
+      </Div.Jsx2>
+      <Div.Jsx2>
+        <Div.Jsx2
           float=`right
           styles=[Css.style([PageCard.HeaderRow.Styles.itemTopPadding])]>
           {PaginationButtons.make({
@@ -127,10 +127,10 @@ let make =
                onClick: _ => (),
              },
            })}
-        </Div>
-      </Div>
+        </Div.Jsx2>
+      </Div.Jsx2>
     </PageCard.HeaderRow>
-    <Div styles=[Css.style(BaseStyles.fullWidthFloatLeft)]>
+    <Div.Jsx2 styles=[Css.style(BaseStyles.fullWidthFloatLeft)]>
       <Table>
         <Table.HeaderRow>
           <Table.Cell flex={`num(2.0)}>
@@ -155,5 +155,5 @@ let make =
         row2
         row2
       </Table>
-    </Div>
+    </Div.Jsx2>
   </PageCard>;

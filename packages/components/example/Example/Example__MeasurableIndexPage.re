@@ -6,7 +6,7 @@ let cdf = ExampleCdfs.Example1.cdf;
 let futureTime = 1559005200;
 
 let llink =
-  FC__Link.make(
+  Link.Jsx2.make(
     ~isDisabled=false,
     ~className=
       Css.(
@@ -48,29 +48,33 @@ let row =
     </Table.Cell>
     <Table.Cell
       flex={`num(1.)} className=Css.(style([paddingTop(`em(0.5))]))>
-      <Div>
-        <Link className={Table.Styles.Elements.link(~isUnderlined=false, ())}>
+      <Div.Jsx2>
+        <Link.Jsx2
+          className={Table.Styles.Elements.link(~isUnderlined=false, ())}>
           {"Series A" |> ReasonReact.string}
-        </Link>
-        <Link className={Table.Styles.Elements.link(~isUnderlined=false, ())}>
+        </Link.Jsx2>
+        <Link.Jsx2
+          className={Table.Styles.Elements.link(~isUnderlined=false, ())}>
           {"19" |> ReasonReact.string}
-        </Link>
-      </Div>
-      <Div>
-        <Link className={Table.Styles.Elements.link(~isUnderlined=true, ())}>
+        </Link.Jsx2>
+      </Div.Jsx2>
+      <Div.Jsx2>
+        <Link.Jsx2
+          className={Table.Styles.Elements.link(~isUnderlined=true, ())}>
           {"Edit" |> ReasonReact.string}
-        </Link>
-        <Link className={Table.Styles.Elements.link(~isUnderlined=true, ())}>
+        </Link.Jsx2>
+        <Link.Jsx2
+          className={Table.Styles.Elements.link(~isUnderlined=true, ())}>
           {"Archive" |> ReasonReact.string}
-        </Link>
-      </Div>
+        </Link.Jsx2>
+      </Div.Jsx2>
     </Table.Cell>
   </Table.Row>;
 
 let make =
   <PageCard>
     <PageCard.HeaderRow>
-      <Div
+      <Div.Jsx2
         float=`left
         className={Css.style([
           PageCard.HeaderRow.Styles.itemTopPadding,
@@ -83,8 +87,8 @@ let make =
         <Tab2 isActive=false number=831>
           {"Closed" |> ReasonReact.string}
         </Tab2>
-      </Div>
-      <Div
+      </Div.Jsx2>
+      <Div.Jsx2
         float=`right
         styles=[Css.style([PageCard.HeaderRow.Styles.itemTopPadding])]>
         {PaginationButtons.make({
@@ -99,7 +103,7 @@ let make =
              onClick: _ => (),
            },
          })}
-      </Div>
+      </Div.Jsx2>
     </PageCard.HeaderRow>
     <Table>
       <Table.HeaderRow>

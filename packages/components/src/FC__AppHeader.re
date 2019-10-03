@@ -24,7 +24,7 @@ module Styles = {
 let component = ReasonReact.statelessComponent(__MODULE__);
 
 let link =
-  FC__Link.make(
+  Link.Jsx2.make(
     ~isDisabled=false,
     ~className=
       Css.(
@@ -39,5 +39,7 @@ let link =
 let make = (~links: ReasonReact.reactElement, _children) => {
   ...component,
   render: _self =>
-    <Div styles=[Styles.outer]> <Div float=`left> links </Div> </Div>,
+    <Div.Jsx2 styles=[Styles.outer]>
+      <Div.Jsx2 float=`left> links </Div.Jsx2>
+    </Div.Jsx2>,
 };

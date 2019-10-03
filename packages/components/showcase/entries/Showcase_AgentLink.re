@@ -6,7 +6,7 @@ let bot1image = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxIT
 let links = () =>
   <div>
     <h3> {"Bot" |> ReasonReact.string} </h3>
-    <FC__AgentLink
+    <FC__AgentLink.Jsx2
       agent={FC__AgentLink.Agent.makeBot(
         ~name="Stan Bot",
         ~owner=
@@ -19,7 +19,7 @@ let links = () =>
       )}
     />
     <h3> {"User Simple" |> ReasonReact.string} </h3>
-    <FC__AgentLink
+    <FC__AgentLink.Jsx2
       agent={FC__AgentLink.Agent.makeUser(
         ~name="Stan Lee",
         ~image=image1,
@@ -27,7 +27,7 @@ let links = () =>
       )}
     />
     <h3> {"User with long name" |> ReasonReact.string} </h3>
-    <FC__AgentLink
+    <FC__AgentLink.Jsx2
       agent={FC__AgentLink.Agent.makeUser(
         ~name="Stan Ben Goldmemberfeinsteinwatkins",
         ~image=image2,

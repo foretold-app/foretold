@@ -2,9 +2,9 @@ open FC;
 open Base;
 
 let make =
-  <Div>
+  <Div.Jsx2>
     <GroupHeader>
-      <Div float=`left>
+      <Div.Jsx2 float=`left>
         <div
           className=Css.(
             style([
@@ -27,8 +27,8 @@ let make =
           {"Lots of description for the group would be here"
            |> ReasonReact.string}
         </p>
-      </Div>
-      <Div float=`right>
+      </Div.Jsx2>
+      <Div.Jsx2 float=`right>
         {GroupHeader.actionButton(
            ~variant=Secondary,
            [|"Leave Channel" |> ReasonReact.string|],
@@ -36,7 +36,7 @@ let make =
          |> ReasonReact.element}
         {GroupHeader.actionButton([|"Create Question" |> ReasonReact.string|])
          |> ReasonReact.element}
-      </Div>
+      </Div.Jsx2>
     </GroupHeader>
     <GroupHeader.SubHeader>
       <Tab isActive=true> {"Questions" |> ReasonReact.string} </Tab>
@@ -44,4 +44,4 @@ let make =
       <Tab isActive=false> {"Leaderboard" |> ReasonReact.string} </Tab>
       <Tab isActive=false> {"Settings" |> ReasonReact.string} </Tab>
     </GroupHeader.SubHeader>
-  </Div>;
+  </Div.Jsx2>;

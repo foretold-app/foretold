@@ -192,7 +192,7 @@ module Helpers = {
               Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
             }
             className=Styles.agentStyle>
-            {name |> ste}
+            <FC__AgentLink agent={FC__AgentLink.Agent.makeUser(~name, ())} />
           </Link.Jsx2>,
         )
       | _ => None

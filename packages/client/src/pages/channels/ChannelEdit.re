@@ -17,12 +17,12 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
 
     let head =
       <>
-        <FC.Base.Div float=`left>
+        <FC.Base.Div.Jsx2 float=`left>
           <FC.PageCard.HeaderRow.Title>
             {"Edit Community" |> Utils.ste}
           </FC.PageCard.HeaderRow.Title>
-        </FC.Base.Div>
-        <FC.Base.Div
+        </FC.Base.Div.Jsx2>
+        <FC.Base.Div.Jsx2
           float=`right
           className={Css.style([FC.PageCard.HeaderRow.Styles.itemTopPadding])}>
           {Primary.User.show(
@@ -35,7 +35,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
                {"New Series" |> Utils.ste}
              </FC.Base.Button>,
            )}
-        </FC.Base.Div>
+        </FC.Base.Div.Jsx2>
       </>;
 
     let form = (mutation, channel: Types.channel) =>

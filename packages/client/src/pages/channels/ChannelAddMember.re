@@ -46,11 +46,11 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
     let all: array(column) = [|agentColumn, inviteColumn|];
 
     let title =
-      <FC.Base.Div float=`left>
+      <FC.Base.Div.Jsx2 float=`left>
         <FC.PageCard.HeaderRow.Title>
           {"Add Agents" |> ReasonReact.string}
         </FC.PageCard.HeaderRow.Title>
-      </FC.Base.Div>;
+      </FC.Base.Div.Jsx2>;
 
     let onSuccess = agents => {
       let dataSource =

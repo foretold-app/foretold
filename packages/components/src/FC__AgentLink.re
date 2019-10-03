@@ -105,7 +105,7 @@ module SubItem = {
           className=Styles.image
         />
       </div>
-        {Agent.name(agent) |> ReasonReact.string}
+      {Agent.name(agent) |> ReasonReact.string}
     </FC__Link>;
 };
 

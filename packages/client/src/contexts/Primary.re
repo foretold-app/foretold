@@ -755,6 +755,7 @@ module AgentType = {
           User.make(
             ~id=user##id,
             ~name=user##name,
+            ~picture=user##picture,
             ~agentId=user##agentId,
             (),
           ),

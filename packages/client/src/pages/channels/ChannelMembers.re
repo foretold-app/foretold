@@ -44,9 +44,7 @@ module Columns = {
           |> Rationale.Option.fmap((r: Types.agent) =>
                <Link.Jsx2
                  linkType={
-                   Internal(
-                     Agent({agentId: r.id, subPage: AgentUpdates}),
-                   )
+                   Internal(Agent({agentId: r.id, subPage: AgentUpdates}))
                  }>
                  {r.name |> E.O.default("Anonymous") |> ReasonReact.string}
                </Link.Jsx2>
@@ -146,14 +144,14 @@ module Columns = {
 };
 
 let title = () =>
-  <FC.Base.Div float=`left>
+  <FC.Base.Div.Jsx2 float=`left>
     <FC.PageCard.HeaderRow.Title>
       {"Community Members" |> ReasonReact.string}
     </FC.PageCard.HeaderRow.Title>
-  </FC.Base.Div>;
+  </FC.Base.Div.Jsx2>;
 
 let addMembersButtonSection = (channelId: string) =>
-  <FC.Base.Div
+  <FC.Base.Div.Jsx2
     float=`right
     className={Css.style([FC.PageCard.HeaderRow.Styles.itemTopPadding])}>
     <FC.Base.Button
@@ -163,10 +161,10 @@ let addMembersButtonSection = (channelId: string) =>
       }>
       {"Add Members" |> ReasonReact.string}
     </FC.Base.Button>
-  </FC.Base.Div>;
+  </FC.Base.Div.Jsx2>;
 
 let inviteMemberButtonSection = (channelId: string) =>
-  <FC.Base.Div
+  <FC.Base.Div.Jsx2
     float=`right
     className={Css.style([
       FC.PageCard.HeaderRow.Styles.itemTopPadding,
@@ -180,7 +178,7 @@ let inviteMemberButtonSection = (channelId: string) =>
       }>
       {"Invite Member" |> ReasonReact.string}
     </FC.Base.Button>
-  </FC.Base.Div>;
+  </FC.Base.Div.Jsx2>;
 
 let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
   let head =

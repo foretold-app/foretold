@@ -105,6 +105,7 @@ module Query = [%graphql
                       user {
                           id
                           name
+                          picture
                           agentId
                       }
                       bot {

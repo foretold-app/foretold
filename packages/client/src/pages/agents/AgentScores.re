@@ -6,11 +6,11 @@ let make = (~agentId, _children) => {
   render: _ => {
     let head = (~channelId, ~paginationPage, ()) =>
       <div>
-        <FC.Base.Div float=`left>
+        <FC.Base.Div.Jsx2 float=`left>
           <FC.PageCard.HeaderRow.Title>
             {"Scores" |> ReasonReact.string}
           </FC.PageCard.HeaderRow.Title>
-        </FC.Base.Div>
+        </FC.Base.Div.Jsx2>
         <Div>
           <Div
             float=`right

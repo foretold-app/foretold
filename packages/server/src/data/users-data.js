@@ -69,15 +69,6 @@ class UsersData extends DataBase {
     await user.save();
     return user;
   }
-
-  /**
-   * @public
-   * @param {Models.ObjectID} agentId
-   * @return {Promise<number>}
-   */
-  async getScore(agentId) {
-    return this.measurements.getBrierScore(agentId);
-  }
 }
 
 module.exports = {

@@ -167,7 +167,6 @@ module User = {
         ~picture=None,
         ~description=None,
         ~auth0Id=None,
-        ~score=None,
         ~agent=None,
         ~bots=None,
         (),
@@ -180,7 +179,6 @@ module User = {
     picture,
     description,
     auth0Id,
-    score,
     agent,
     bots,
   };

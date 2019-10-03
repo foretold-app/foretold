@@ -28,23 +28,11 @@ module Top = {
             )
             |> E.O.default("");
 
-          let score =
-            switch (agent) {
-            | {user: Some(r)} =>
-              r.score == None
-                ? "(none)" : r.score |> E.O.default(0.) |> string_of_float
-            | _ => "(none)"
-            };
-
           let secondLevel = AgentTabs.tabs(agentPage, agent);
 
           <>
             <FC.GroupHeader>
               <div> {name |> Utils.ste} </div>
-              <Div styles=[SLayout.Styles.descriptionText]>
-                {"Percentage Question Brier Score: " |> Utils.ste}
-                {score |> Utils.ste}
-              </Div>
               <Div styles=[SLayout.Styles.descriptionText]>
                 {description |> Utils.ste}
               </Div>

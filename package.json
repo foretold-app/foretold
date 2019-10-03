@@ -24,8 +24,9 @@
         "server/lint:ci": "cd packages/server && yarn lint:ci && cd ../..",
         "migrate": "yarn server/db:migrate",
         "_build": "yarn client/build",
+        "_clean": "yarn client/clean && rm -rf ./packages/client/node_modules && rm -rf ./packages/components/node_module && rm -rf ./packages/prediction-analysis/node_module",
         "preinstall": "printenv",
-        "postinstall": "yarn bootstrap && yarn migrate && yarn _build"
+        "postinstall": "yarn bootstrap && yarn migrate && yarn _build && yarn _clean"
     },
     "author": "Foretold",
     "license": "MIT",

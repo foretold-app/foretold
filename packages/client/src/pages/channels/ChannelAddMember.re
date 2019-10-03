@@ -22,16 +22,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
     let agentColumn =
       Table.Column.make(
         ~name="Member" |> ReasonReact.string,
-        ~render=
-          (agent: Types.agent) =>
-            <Link.Jsx2
-              linkType={
-                Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
-              }>
-              {agent.name
-               |> Rationale.Option.default("")
-               |> ReasonReact.string}
-            </Link.Jsx2>,
+        ~render=(agent: Types.agent) => <AgentLink.Jsx2 agent />,
         (),
       );
 

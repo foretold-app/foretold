@@ -1,21 +1,5 @@
 [@bs.config {jsx: 3}];
 
-module Link = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ " link");
-  let make =
-    FC__Link.Jsx2.make(
-      ~className=
-        Css.(
-          style([
-            display(`inlineBlock),
-            color(FC__Settings.textDark),
-            hover([color(FC__Settings.darkLink)]),
-          ])
-        ),
-      ~isDisabled=false,
-    );
-};
-
 module Styles = {
   open Css;
   let small = style([fontSize(`em(0.8)), marginTop(`em(0.1))]);
@@ -28,17 +12,18 @@ module Styles = {
   let imageCropper =
     style([
       width(`em(1.)),
+      float(`left),
       height(`em(1.)),
       marginRight(`em(0.4)),
       marginTop(`em(0.1)),
       overflow(`hidden),
       position(`relative),
+      marginTop(`em(0.3)),
       borderRadius(`percent(20.)),
-      display(`inlineBlock),
     ]);
   let image =
     style([
-      display(`inline),
+      float(`left),
       margin2(~v=`zero, ~h=`auto),
       height(`auto),
       width(`percent(100.)),
@@ -94,8 +79,8 @@ module Agent = {
 
 module SubItem = {
   [@react.component]
-  let make = (~agent: Agent.t) =>
-    <FC__Link onClick={Agent.onClick(agent)}>
+  let make = (~agent: Agent.t, ~className) =>
+    <FC__Link onClick={Agent.onClick(agent)} className>
       <div className=Styles.imageCropper>
         <img
           src={
@@ -112,18 +97,18 @@ module SubItem = {
 let component = ReasonReact.statelessComponent(__MODULE__);
 
 [@react.component]
-let make = (~agent: Agent.t) => {
+let make = (~agent: Agent.t, ~className="") => {
   FC__Base.(
     switch (Agent.owner(agent)) {
     | Some(owner) =>
       <Div flexDirection=`column>
-        <Div flex={`num(1.0)}> <SubItem agent /> </Div>
+        <Div flex={`num(1.0)}> <SubItem agent className /> </Div>
         <Div flex={`num(1.0)} className=Styles.small>
           <span className=Styles.by> {"by " |> ReasonReact.string} </span>
-          <SubItem agent=owner />
+          <SubItem agent=owner className />
         </Div>
       </Div>
-    | None => <SubItem agent />
+    | None => <SubItem agent className />
     }
   );
 };
@@ -131,10 +116,10 @@ let make = (~agent: Agent.t) => {
 module Jsx2 = {
   let component = ReasonReact.statelessComponent("Link");
 
-  let make = (~agent: Agent.t, children) =>
+  let make = (~agent: Agent.t, ~className="", children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
-      makeProps(~agent, ()),
+      makeProps(~agent, ~className, ()),
       children,
     );
 };

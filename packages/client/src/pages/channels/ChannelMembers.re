@@ -41,13 +41,8 @@ module Columns = {
       ~render=
         (membership: Types.channelMembership) =>
           membership.agent
-          |> Rationale.Option.fmap((r: Types.agent) =>
-               <Link.Jsx2
-                 linkType={
-                   Internal(Agent({agentId: r.id, subPage: AgentUpdates}))
-                 }>
-                 {r.name |> E.O.default("Anonymous") |> ReasonReact.string}
-               </Link.Jsx2>
+          |> Rationale.Option.fmap((agent: Types.agent) =>
+               <AgentLink.Jsx2 agent />
              )
           |> E.O.React.defaultNull,
       (),

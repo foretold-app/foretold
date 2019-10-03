@@ -24,9 +24,8 @@
         "server/lint:ci": "cd packages/server && yarn lint:ci && cd ../..",
         "migrate": "yarn server/db:migrate",
         "_build": "yarn client/build",
-        "_clean": "yarn client/clean",
         "preinstall": "printenv",
-        "postinstall": "yarn bootstrap && yarn migrate && yarn _build && yarn _clean"
+        "postinstall": "yarn bootstrap && yarn migrate && yarn _build"
     },
     "author": "Foretold",
     "license": "MIT",

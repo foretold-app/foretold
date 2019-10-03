@@ -30,6 +30,13 @@ let mutate =
     ) => {
   let date = showDescriptionDate == "TRUE" ? labelOnDate : "";
 
+  let expectedResolutionDate =
+    expectedResolutionDate
+    |> E.M.toUtc
+    |> E.M.toJSON
+    |> Js.Json.string
+    |> Rationale.Option.some;
+
   let m =
     Query.make(
       ~id,
@@ -38,8 +45,7 @@ let mutate =
         "labelCustom": labelCustom |> Rationale.Option.some,
         "labelProperty": labelProperty |> Rationale.Option.some,
         "labelOnDate": date |> Js.Json.string |> Rationale.Option.some,
-        "expectedResolutionDate":
-          expectedResolutionDate |> Js.Json.string |> Rationale.Option.some,
+        "expectedResolutionDate": expectedResolutionDate,
         "resolutionEndpoint": resolutionEndpoint |> Rationale.Option.some,
         "labelSubject": labelSubject |> Rationale.Option.some,
         "valueType": valueType |> Primary.Measurable.valueTypeToEnum,

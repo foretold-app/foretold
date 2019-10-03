@@ -114,29 +114,26 @@ module S = {
   let toReact = ReasonReact.string;
   let safe_float = float_of_string->safe_fn_of_string;
   let safe_int = int_of_string->safe_fn_of_string;
-  let toMoment = e => MomentRe.moment(e);
   let default = (defaultStr, str) => str == "" ? defaultStr : str;
-  module O = {
-    let toMoment = O.fmap(toMoment);
-  };
 };
 
 module J = {
   let toString = Js.Json.decodeString ||> O.default("");
-  let toMoment = toString ||> MomentRe.moment;
+  let toMoment = toString ||> MomentRe.momentUtc;
   module O = {
     let toMoment = O.fmap(toMoment);
   };
 };
 
 module M = {
-  open MomentRe;
-  let format = Moment.format;
+  let format = MomentRe.Moment.format;
   let format_standard = "MMM DD, YYYY HH:mm";
   let format_simple = "L";
   /* TODO: Figure out better name */
-  let goFormat_simple = format(format_simple);
-  let goFormat_standard = format(format_standard);
+  let goFormat_simple = MomentRe.Moment.format(format_simple);
+  let goFormat_standard = MomentRe.Moment.format(format_standard);
+  let toUtc = MomentRe.momentUtc;
+  let toJSON = MomentRe.Moment.toJSON;
 };
 
 module JsDate = {

@@ -33,8 +33,5 @@
     "devDependencies": {
         "lerna": "^3.13.4",
         "nodemon": "^1.12.1"
-    },
-    "dependencies": {
-        "react-markdown": "^4.0.8"
     }
 }

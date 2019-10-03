@@ -119,7 +119,7 @@ module S = {
 
 module J = {
   let toString = Js.Json.decodeString ||> O.default("");
-  let toMoment = toString ||> MomentRe.momentUtc;
+  let toMoment = toString ||> MomentRe.moment;
   module O = {
     let toMoment = O.fmap(toMoment);
   };
@@ -134,6 +134,7 @@ module M = {
   let goFormat_standard = MomentRe.Moment.format(format_standard);
   let toUtc = MomentRe.momentUtc;
   let toJSON = MomentRe.Moment.toJSON;
+  let momentDefaultFormat = MomentRe.momentDefaultFormat;
 };
 
 module JsDate = {

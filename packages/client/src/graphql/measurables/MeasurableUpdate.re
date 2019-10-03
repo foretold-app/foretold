@@ -32,7 +32,7 @@ let mutate =
 
   let expectedResolutionDate =
     expectedResolutionDate
-    |> E.M.toUtc
+    |> E.M.momentDefaultFormat
     |> E.M.toJSON
     |> Js.Json.string
     |> Rationale.Option.some;

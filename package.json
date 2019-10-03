@@ -1,39 +1,39 @@
 {
-    "name": "@foretold/foretold",
-    "version": "1.0.2",
-    "description": "Simple prediction service",
-    "main": "index.js",
-    "engines": {
-        "node": ">=12.6.0",
-        "yarn": ">=1.16.0"
-    },
-    "private": true,
-    "scripts": {
-        "lerna": "lerna",
-        "bootstrap": "lerna bootstrap",
-        "start": "node packages",
-        "dev": "nodemon packages",
-        "client/build": "cd packages/guesstimator && yarn build && cd ../.. && cd packages/components && yarn build && cd ../.. && cd packages/prediction-analysis && yarn build && cd ../.. && cd ./packages/client && yarn build-t && cd ../..",
-        "client/clean": "cd packages/guesstimator && yarn clean && cd ../.. && cd packages/components && yarn clean && cd ../.. && cd packages/prediction-analysis && yarn clean && cd ../.. && cd packages/client && yarn clean && cd ../..",
-        "server/db:create": "cd packages/server && yarn db:create && cd ../..",
-        "server/db:migrate": "cd packages/server && yarn db:migrate cd ../..",
-        "server/db:migrate:undo": "cd packages/server && yarn db:migrate:undo cd ../..",
-        "server/db:reset": "cd packages/server && yarn db:reset && cd ../..",
-        "server/db:seed": "cd packages/server && yarn db:seed && cd ../..",
-        "server/test:ci": "cd packages/server && yarn test:ci && cd ../..",
-        "server/lint:ci": "cd packages/server && yarn lint:ci && cd ../..",
-        "migrate": "yarn server/db:migrate",
-        "_build": "yarn client/build",
-        "preinstall": "printenv",
-        "postinstall": "yarn bootstrap && yarn migrate && yarn _build"
-    },
-    "author": "Foretold",
-    "license": "MIT",
-    "devDependencies": {
-        "lerna": "^3.13.4",
-        "nodemon": "^1.12.1"
-    },
-    "dependencies": {
-        "react-markdown": "^4.0.8"
-    }
+  "name": "@foretold/foretold",
+  "version": "1.0.2",
+  "description": "Simple prediction service",
+  "main": "index.js",
+  "engines": {
+    "node": ">=12.6.0",
+    "yarn": ">=1.16.0"
+  },
+  "private": true,
+  "scripts": {
+    "lerna": "lerna",
+    "bootstrap": "lerna bootstrap",
+    "start": "node packages",
+    "dev": "nodemon packages",
+    "migrate": "yarn server/db:migrate",
+
+    "packages/build": "cd packages/guesstimator && yarn build && cd ../.. && cd packages/components && yarn build && cd ../.. && cd packages/prediction-analysis && yarn build && cd ../.. && cd packages/client && yarn build-t && cd ../..",
+    "packages/clean": "cd packages/guesstimator && yarn clean && cd ../.. && cd packages/components && yarn clean && cd ../.. && cd packages/prediction-analysis && yarn clean && cd ../.. && cd packages/client && yarn clean && cd ../..",
+    "packages/remove": "rm -rf ./packages/client/node_modules && rm -rf ./packages/components/node_modules && rm -rf ./packages/prediction-analysis/node_modules && rm -rf ./packages/guesstimator/node_modules",
+
+    "server/db:create": "cd packages/server && yarn db:create && cd ../..",
+    "server/db:migrate": "cd packages/server && yarn db:migrate cd ../..",
+    "server/db:migrate:undo": "cd packages/server && yarn db:migrate:undo cd ../..",
+    "server/db:reset": "cd packages/server && yarn db:reset && cd ../..",
+    "server/db:seed": "cd packages/server && yarn db:seed && cd ../..",
+    "server/test:ci": "cd packages/server && yarn test:ci && cd ../..",
+    "server/lint:ci": "cd packages/server && yarn lint:ci && cd ../..",
+
+    "preinstall": "printenv",
+    "postinstall": "yarn bootstrap && yarn migrate && yarn packages/build && yarn packages/clean && yarn packages/remove"
+  },
+  "author": "Foretold",
+  "license": "MIT",
+  "dependencies": {
+    "lerna": "3.13.4",
+    "nodemon": "1.12.1"
+  }
 }

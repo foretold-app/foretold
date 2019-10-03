@@ -49,7 +49,6 @@ let toUser = a =>
     ~email=a##email,
     ~picture=a##picture,
     ~description=a##description,
-    ~score=a##score,
     ~agent=a##agent |> E.O.fmap(toAgent),
     ~bots=a##bots |> toBots,
     (),
@@ -66,7 +65,6 @@ module Query = [%graphql
         description
         auth0Id
         agentId
-        score
         agent {
           id
           name

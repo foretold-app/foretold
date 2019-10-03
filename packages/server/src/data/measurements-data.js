@@ -22,15 +22,6 @@ class MeasurementsData extends DataBase {
   }
 
   /**
-   * @public
-   * @param {Models.ObjectID | null} agentId
-   * @return {Promise<number>}
-   */
-  async getBrierScore(agentId) {
-    return this.model.getBrierScore(agentId);
-  }
-
-  /**
    * @protected
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Layers.AbstractModelsLayer.restrictions}

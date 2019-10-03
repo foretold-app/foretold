@@ -29,11 +29,6 @@ const user = new graphql.GraphQLObjectType({
     agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     isMe: require('./common').isMe,
 
-    score: {
-      type: graphql.GraphQLFloat,
-      resolve: resolvers.users.score,
-    },
-
     // security?
     agent: {
       type: require('./agents').agent,

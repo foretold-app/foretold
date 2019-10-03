@@ -13,14 +13,6 @@
     "prediction",
     "trends"
   ],
-  "dependencies": {
-    "discrete-sampling": "1.0.3",
-    "financejs": "4.1.0",
-    "jstat": "1.9.0",
-    "lodash": "4.17.15",
-    "mathjs": "5.10.3",
-    "parcel": "1.12.3"
-  },
   "scripts": {
     "ci:test": "yarn test-once -- --browsers ChromeHeadless",
     "lint": "eslint . --quiet",
@@ -33,6 +25,12 @@
     "start:b": "babel-node ./index.js"
   },
   "devDependencies": {
+    "discrete-sampling": "1.0.3",
+    "financejs": "4.1.0",
+    "jstat": "1.9.0",
+    "lodash": "4.17.15",
+    "mathjs": "5.10.3",
+    "parcel": "1.12.3",
     "@babel/cli": "7.5.5",
     "@babel/core": "7.5.5",
     "@babel/node": "7.5.5",

@@ -19,7 +19,7 @@
     ],
     "author": "Ozzie Gooen <ozzieagooen@gmail.com>",
     "license": "MIT",
-    "dependencies": {
+    "devDependencies": {
         "@foretold/cdf": "1.0.10",
         "bs-css": "9.0.1",
         "bs-moment": "0.4.4",
@@ -32,9 +32,7 @@
         "rc-menu": "7.4.20",
         "rc-dropdown": "2.4.1",
         "bs-platform": "5.0.6",
-        "reason-react": "0.7.0"
-    },
-    "devDependencies": {
+        "reason-react": "0.7.0",
         "parcel-bundler": "^1.12.3"
     }
 }

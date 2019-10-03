@@ -74,6 +74,7 @@ and bot = {
   token: option(string),
   agent: option(agent),
   permissions: option(permissions),
+  user: option(user),
 }
 and agentType =
   | Bot(bot)

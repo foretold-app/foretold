@@ -205,6 +205,7 @@ module Bot = {
         ~token=None,
         ~agent=None,
         ~permissions=None,
+        ~user=None,
         (),
       )
       : t => {
@@ -215,6 +216,7 @@ module Bot = {
     token,
     agent,
     permissions,
+    user,
   };
 };
 

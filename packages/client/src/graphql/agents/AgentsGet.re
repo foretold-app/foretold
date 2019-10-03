@@ -1,38 +1,22 @@
-type user = {
-  id: string,
-  name: string,
-  agentId: string,
-};
+let toUser = (user): Types.user =>
+  Primary.User.make(
+    ~id=user##id,
+    ~name=user##name,
+    ~agentId=user##agentId,
+    (),
+  );
 
-type bot = {
-  competitorType: Types.competitorType,
-  description: option(string),
-  id: string,
-  name: string,
-};
+let toBot = (bot: bot): Types.bot =>
+  Primary.Bot.make(
+    ~id=bot##id,
+    ~name=bot##name,
+    ~agentId=bot##agentId,
+    ~competitorType=bot##competitorType,
+    ~description=bot##description,
+    (),
+  );
 
-type agent = {
-  id: string,
-  name: option(string),
-  measurementCount: int,
-  bot: option(bot),
-  user: option(user),
-};
-
-let toUser = (user: user): Types.user =>
-  Primary.User.make(~id=user.id, ~name=user.name, ~agentId=user.agentId, ());
-
-let toBot = (bot: bot): Types.bot => {
-  competitorType: bot.competitorType,
-  description: bot.description,
-  id: bot.id,
-  name: Some(bot.name),
-  token: None,
-  agent: None,
-  permissions: None,
-};
-
-let toAgent = (agent: agent): Types.agent => {
+let toAgent = (agent): Types.agent => {
   let agentType: option(Primary.AgentType.t) =
     switch (agent.bot, agent.user) {
     | (Some(bot), None) => Some(Bot(toBot(bot)))
@@ -60,16 +44,16 @@ module Query = [%graphql
       agents (
         excludeChannelId: $excludeChannelId
         types: $types
-      ) @bsRecord {
+      ) {
         id
         name
         measurementCount
-        user @bsRecord{
+        user {
           id
           name
           agentId
         }
-        bot @bsRecord{
+        bot {
           id
           name
           description

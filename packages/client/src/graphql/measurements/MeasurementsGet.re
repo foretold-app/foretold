@@ -111,6 +111,11 @@ module Query = [%graphql
                           id
                           name
                           competitorType
+                          user {
+                            id
+                            name
+                            agentId
+                          }
                       }
                   }
 

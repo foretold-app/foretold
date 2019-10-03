@@ -59,11 +59,14 @@ let make =
              (),
            )}
         </Div>
-        <Div flex={`num(1.)}>
-          <FC__AgentLink>
-            {"Roger Adams" |> ReasonReact.string}
-          </FC__AgentLink>
-        </Div>
+        <FC__AgentLink
+          agent={FC__AgentLink.Agent.makeUser(
+            ~name="Roger Adams",
+            ~image=
+              "https://lh3.googleusercontent.com/-1sj3EqkojJ4/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfWCVqnuJxxM41Zird4HZx0BbRpbQ/photo.jpg",
+            (),
+          )}
+        />
       </Div>
       <Div styles=[Css.style([Css.marginTop(`em(2.0))])]>
         <PageCard.P>

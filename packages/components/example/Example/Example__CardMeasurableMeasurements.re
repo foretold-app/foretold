@@ -34,7 +34,14 @@ let row =
       className=Css.(
         style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])
       )>
-      <FC__AgentLink> {"Roger Adams" |> ReasonReact.string} </FC__AgentLink>
+      <FC__AgentLink
+        agent={FC__AgentLink.Agent.makeUser(
+          ~name="Roger Adams",
+          ~image=
+            "https://lh3.googleusercontent.com/-1sj3EqkojJ4/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfWCVqnuJxxM41Zird4HZx0BbRpbQ/photo.jpg",
+          (),
+        )}
+      />
     </Table.Cell>
     <Table.Cell
       flex={`num(1.0)}
@@ -70,7 +77,14 @@ let row2 =
       className=Css.(
         style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])
       )>
-      <FC__AgentLink> {"Samantha Hope" |> ReasonReact.string} </FC__AgentLink>
+      <FC__AgentLink
+        agent={FC__AgentLink.Agent.makeUser(
+          ~name="Samantha Hope",
+          ~image=
+            "https://lh3.googleusercontent.com/-1sj3EqkojJ4/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfWCVqnuJxxM41Zird4HZx0BbRpbQ/photo.jpg",
+          (),
+        )}
+      />
     </Table.Cell>
     <Table.Cell
       flex={`num(1.0)}

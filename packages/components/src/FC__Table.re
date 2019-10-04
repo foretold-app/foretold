@@ -100,10 +100,10 @@ module Cell = {
   let make = (~flex, ~className="", children) => {
     ...component,
     render: _self =>
-      <Div
+      <Div.Jsx2
         className={Css.merge([style(flex), standardCellPadding, className])}>
         ...children
-      </Div>,
+      </Div.Jsx2>,
   };
 };
 
@@ -128,14 +128,16 @@ module HeaderRow = {
 
   let make = children => {
     ...component,
-    render: _self => <Div styles=[Styles.headerRow]> ...children </Div>,
+    render: _self =>
+      <Div.Jsx2 styles=[Styles.headerRow]> ...children </Div.Jsx2>,
   };
 };
 
 module Row = {
   let component = ReasonReact.statelessComponent("TABLE ROW");
 
-  let textSection = text => <Div styles=[Styles.textArea]> text </Div>;
+  let textSection = text =>
+    <Div.Jsx2 styles=[Styles.textArea]> text </Div.Jsx2>;
 
   let make = (~className="", ~bottomSubRow=?, ~onClick=?, children) => {
     ...component,
@@ -145,14 +147,14 @@ module Row = {
           ? [Styles.clickableRow, className] : [className];
       switch (bottomSubRow) {
       | Some(bottomSubRow) =>
-        <Div styles=commonClasses ?onClick>
-          <Div styles=[Styles.topRow]> ...children </Div>
-          <Div styles=[Styles.bottomRow]> ...bottomSubRow </Div>
-        </Div>
+        <Div.Jsx2 styles=commonClasses ?onClick>
+          <Div.Jsx2 styles=[Styles.topRow]> ...children </Div.Jsx2>
+          <Div.Jsx2 styles=[Styles.bottomRow]> ...bottomSubRow </Div.Jsx2>
+        </Div.Jsx2>
       | None =>
-        <Div styles=[Styles.row, ...commonClasses] ?onClick>
+        <Div.Jsx2 styles=[Styles.row, ...commonClasses] ?onClick>
           ...children
-        </Div>
+        </Div.Jsx2>
       };
     },
   };

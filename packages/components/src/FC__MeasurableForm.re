@@ -4,7 +4,7 @@ module PageCard = FC__PageCard;
 module Tab = FC__Tab;
 module TabList = FC__TabList;
 
-// Could this be in some flexrow or part of Div component?
+// Could this be in some flexrow or part of Div.Jsx2 component?
 let flexRowContainer =
   Css.(style([margin2(~v=`zero, ~h=`px(-6)), alignItems(`flexEnd)]));
 let flexRowItem = Css.(style([margin2(~v=`zero, ~h=`px(6))]));
@@ -54,21 +54,21 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
       <PageCard.Section background=`grey>
         {switch (self.state.selectedTab) {
          | SimpleTab =>
-           <Div flexDirection=`row styles=[flexRowContainer]>
-             <Div flex={`num(1.0)} styles=[flexRowItem]>
+           <Div.Jsx2 flexDirection=`row styles=[flexRowContainer]>
+             <Div.Jsx2 flex={`num(1.0)} styles=[flexRowItem]>
                <InputLabel> "Min"->React.string </InputLabel>
                <TextInput fullWidth=true />
-             </Div>
-             <Div flex={`num(1.0)} styles=[flexRowItem]>
+             </Div.Jsx2>
+             <Div.Jsx2 flex={`num(1.0)} styles=[flexRowItem]>
                <InputLabel> "Max"->React.string </InputLabel>
                <TextInput fullWidth=true />
-             </Div>
-             <Div styles=[flexRowItem]>
+             </Div.Jsx2>
+             <Div.Jsx2 styles=[flexRowItem]>
                <Button variant=Button.Secondary>
                  "Clear"->React.string
                </Button>
-             </Div>
-           </Div>
+             </Div.Jsx2>
+           </Div.Jsx2>
          | FreeformTab => <TextInput fullWidth=true placeholder="5 to 50" />
          | CustomTab =>
            <div>

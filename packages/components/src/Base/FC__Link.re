@@ -1,4 +1,4 @@
-let component = ReasonReact.statelessComponent(__MODULE__);
+[@bs.config {jsx: 3}];
 
 let headerLink = (~className, ~isDisabled=false, ()) => {
   let primaryStyles =
@@ -18,14 +18,32 @@ let headerLink = (~className, ~isDisabled=false, ()) => {
   Css.(merge([primaryStyles, className, disabledStyles]));
 };
 
-let make = (~href="#", ~onClick=?, ~isDisabled=false, ~className="", children) => {
-  ...component,
-  render: _self =>
-    <a
-      disabled=isDisabled
-      href
-      className={headerLink(~className, ~isDisabled, ())}
-      ?onClick>
-      ...children
-    </a>,
+[@react.component]
+let make =
+    (~href="#", ~onClick=?, ~isDisabled=false, ~className="", ~children) => {
+  <a
+    disabled=isDisabled
+    href
+    className={headerLink(~className, ~isDisabled, ())}
+    ?onClick>
+    children
+  </a>;
+};
+
+module Jsx2 = {
+  let component = ReasonReact.statelessComponent("Link");
+
+  let make = (~href=?, ~onClick=?, ~isDisabled=?, ~className=?, children) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(
+        ~href?,
+        ~onClick?,
+        ~isDisabled?,
+        ~className?,
+        ~children=children |> ReasonReact.array,
+        (),
+      ),
+      children,
+    );
 };

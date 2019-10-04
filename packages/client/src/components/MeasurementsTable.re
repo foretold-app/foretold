@@ -181,22 +181,7 @@ module Helpers = {
 
   let measurerLink = (~measurement: measurement): ReasonReact.reactElement => {
     let aLink =
-      switch (
-        measurement.agent,
-        measurement.agent |> E.O.bind(_, Primary.Agent.name),
-      ) {
-      | (Some(agent), Some(name)) =>
-        Some(
-          <Link.Jsx2
-            linkType={
-              Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
-            }
-            className=Styles.agentStyle>
-            {name |> ste}
-          </Link.Jsx2>,
-        )
-      | _ => None
-      };
+      measurement.agent |> E.O.fmap(agent => <AgentLink.Jsx2 agent />);
 
     let judgementStyle =
       style([

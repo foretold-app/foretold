@@ -37,9 +37,9 @@ let component = ReasonReact.statelessComponent(__MODULE__);
 let make = children => {
   ...component,
   render: _self =>
-    <Div styles=[Styles.outer]>
-      <Div styles=[Styles.inner]> ...children </Div>
-    </Div>,
+    <Div.Jsx2 styles=[Styles.outer]>
+      <Div.Jsx2 styles=[Styles.inner]> ...children </Div.Jsx2>
+    </Div.Jsx2>,
 };
 
 module SubHeader = {
@@ -48,7 +48,7 @@ module SubHeader = {
   let make = children => {
     ...component,
     render: _self =>
-      <Div
+      <Div.Jsx2
         styles=[
           Css.(
             style(
@@ -57,7 +57,7 @@ module SubHeader = {
             )
           ),
         ]>
-        <Div
+        <Div.Jsx2
           styles=[
             Css.(
               style(
@@ -70,7 +70,7 @@ module SubHeader = {
             ),
           ]>
           ...children
-        </Div>
-      </Div>,
+        </Div.Jsx2>
+      </Div.Jsx2>,
   };
 };

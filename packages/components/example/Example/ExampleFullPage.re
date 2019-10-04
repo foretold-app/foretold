@@ -1,7 +1,7 @@
 open FC__Base;
 open FC;
 let make =
-  <Div>
+  <Div.Jsx2>
     <AppHeader
       links={
         [|
@@ -20,7 +20,7 @@ let make =
       }
     />
     Example__AppGroupHeader.make
-    <Div
+    <Div.Jsx2
       styles=[
         Css.(
           style(
@@ -35,8 +35,8 @@ let make =
         ),
       ]>
       Example__MeasurableIndexPage.make
-    </Div>
-    <Div
+    </Div.Jsx2>
+    <Div.Jsx2
       styles=[
         Css.(
           style(
@@ -51,11 +51,11 @@ let make =
           )
         ),
       ]>
-      <Div flexDirection=`row>
-        <Div
+      <Div.Jsx2 flexDirection=`row>
+        <Div.Jsx2
           flex={`num(5.0)} styles=[Css.(style([paddingRight(`em(2.0))]))]>
-          <Div> Example__MeasurableTopCard.make </Div>
-          <Div
+          <Div.Jsx2> Example__MeasurableTopCard.make </Div.Jsx2>
+          <Div.Jsx2
             styles=[
               Css.(
                 style(
@@ -64,17 +64,18 @@ let make =
               ),
             ]>
             Example__CardMeasurableMeasurements.make
-          </Div>
-        </Div>
-        <Div flex={`num(2.0)}>
+          </Div.Jsx2>
+        </Div.Jsx2>
+        <Div.Jsx2 flex={`num(2.0)}>
           Example__MeasurableTopCard.make
-          <Div styles=[Css.(style([clear(`both), paddingTop(`em(2.0))]))]>
+          <Div.Jsx2
+            styles=[Css.(style([clear(`both), paddingTop(`em(2.0))]))]>
             <MeasurableForm cdf=ExampleCdfs.Example1.cdf />
-          </Div>
-        </Div>
-      </Div>
-    </Div>
-    <Div
+          </Div.Jsx2>
+        </Div.Jsx2>
+      </Div.Jsx2>
+    </Div.Jsx2>
+    <Div.Jsx2
       styles=[
         Css.(
           style(
@@ -89,14 +90,14 @@ let make =
           )
         ),
       ]>
-      <Div flexDirection=`row>
-        <Div
+      <Div.Jsx2 flexDirection=`row>
+        <Div.Jsx2
           flex={`num(5.0)} styles=[Css.(style([paddingRight(`em(2.0))]))]>
-          <Div> Example__MemberTableCard.make </Div>
-        </Div>
-        <Div flex={`num(2.0)} />
-      </Div>
-    </Div>
+          <Div.Jsx2> Example__MemberTableCard.make </Div.Jsx2>
+        </Div.Jsx2>
+        <Div.Jsx2 flex={`num(2.0)} />
+      </Div.Jsx2>
+    </Div.Jsx2>
     <Footer
       logo={React.string({js|2019 \u00a9 Foretold|js})}
       links=[|
@@ -107,4 +108,4 @@ let make =
         <a href="#"> {React.string("Terms of Service")} </a>,
       |]
     />
-  </Div>;
+  </Div.Jsx2>;

@@ -30,21 +30,7 @@ module Columns = {
       ~render=
         (r: record) =>
           r.agent
-          |> E.O.fmap((agent: Types.agent) =>
-               <Link
-                 linkType={
-                   Internal(
-                     Agent({agentId: agent.id, subPage: AgentUpdates}),
-                   )
-                 }>
-                 [|
-                   agent.name
-                   |> E.O.fmap(E.S.default("Member"))
-                   |> E.O.default("Member")
-                   |> Utils.ste,
-                 |]
-               </Link>
-             )
+          |> E.O.fmap((agent: Types.agent) => <AgentLink agent />)
           |> E.O.default("Member" |> Utils.ste),
       ~flex=1,
       (),

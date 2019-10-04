@@ -9,11 +9,11 @@ let make = (~agentId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
 
     let head =
       <div>
-        <FC.Base.Div float=`left>
+        <FC.Base.Div.Jsx2 float=`left>
           <FC.PageCard.HeaderRow.Title>
             {"Communities" |> ReasonReact.string}
           </FC.PageCard.HeaderRow.Title>
-        </FC.Base.Div>
+        </FC.Base.Div.Jsx2>
       </div>;
 
     SLayout.LayoutConfig.make(~head, ~body) |> layout;

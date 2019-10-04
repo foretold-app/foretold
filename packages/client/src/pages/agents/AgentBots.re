@@ -7,11 +7,11 @@ module Styles = {
 };
 
 let title =
-  <FC.Base.Div float=`left>
+  <FC.Base.Div.Jsx2 float=`left>
     <FC.PageCard.HeaderRow.Title>
       {"Bots" |> ReasonReact.string}
     </FC.PageCard.HeaderRow.Title>
-  </FC.Base.Div>;
+  </FC.Base.Div.Jsx2>;
 
 let agentSection = (agent: AgentGet.agent) =>
   switch (agent) {
@@ -126,14 +126,14 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
         let head =
           <div>
             title
-            <FC.Base.Div
+            <FC.Base.Div.Jsx2
               float=`right
               className={Css.style([
                 FC.PageCard.HeaderRow.Styles.itemTopPadding,
                 FC.PageCard.HeaderRow.Styles.itemBottomPadding,
               ])}>
               {agentSection(agent)}
-            </FC.Base.Div>
+            </FC.Base.Div.Jsx2>
           </div>;
 
         SLayout.LayoutConfig.make(~head, ~body) |> layout;

@@ -65,7 +65,7 @@ module FullPage = {
   let make = ({head, body}: LayoutConfig.t) => {
     ...component,
     render: _ =>
-      <FC.Base.Div
+      <FC.Base.Div.Jsx2
         className=Css.(
           style(
             [
@@ -83,7 +83,7 @@ module FullPage = {
             <FC.PageCard.Body> body </FC.PageCard.Body>
           </FC.PageCard>
         </div>
-      </FC.Base.Div>,
+      </FC.Base.Div.Jsx2>,
   };
   let makeWithEl = (t: LayoutConfig.t) => t |> make |> E.React.el;
 };
@@ -124,7 +124,7 @@ let component = ReasonReact.statelessComponent("SLayout");
 let make = (~head=ReasonReact.null, children) => {
   ...component,
   render: _ =>
-    <FC.Base.Div
+    <FC.Base.Div.Jsx2
       className=Css.(
         style(
           [
@@ -144,5 +144,5 @@ let make = (~head=ReasonReact.null, children) => {
           </FC.PageCard.Body>
         </FC.PageCard>
       </div>
-    </FC.Base.Div>,
+    </FC.Base.Div.Jsx2>,
 };

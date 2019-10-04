@@ -97,6 +97,7 @@ function addHooks(db) {
   });
 
   /**
+   * @todo: move this logic into "sync"
    * beforeCreate
    */
   db.Bot.addHook('beforeCreate', async (instance) => {
@@ -121,6 +122,7 @@ function addHooks(db) {
   });
 
   /**
+   * @todo: move this logic into "sync"
    * beforeUpdate
    */
   db.Measurable.addHook('beforeUpdate', async (instance) => {
@@ -136,6 +138,7 @@ function addHooks(db) {
   });
 
   /**
+   * @todo: move this logic into "sync"
    * beforeValidate
    */
   db.Measurement.addHook('beforeValidate', async (instance) => {

@@ -1,9 +1,11 @@
 let toAgent = agent => {
+  let agentType = agent |> Primary.AgentType.getAgentType;
+
   Primary.Agent.make(
     ~id=agent##id,
     ~name=agent##name,
     ~measurementCount=Some(agent##measurementCount),
-    ~agentType=agent |> Primary.AgentType.getAgentType,
+    ~agentType,
     (),
   );
 };

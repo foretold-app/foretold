@@ -1,5 +1,14 @@
 [@bs.config {jsx: 3}];
 
+let agentLinkStyle = {
+  Css.(
+    style([
+      color(FC__Settings.Text.LightBackground.light),
+      hover([color(FC__Settings.Text.LightBackground.light)]),
+    ])
+  );
+};
+
 let toOnClick = (agent: Types.agent) =>
   LinkType.onClick(
     Internal(Agent({agentId: agent.id, subPage: AgentUpdates})),
@@ -36,7 +45,10 @@ let rec toAgent = (~agent: Types.agent) => {
 
 [@react.component]
 let make = (~agent: Types.agent) =>
-  toAgent(~agent) |> E.O.React.fmapOrNull(agent => <FC__AgentLink agent />);
+  toAgent(~agent)
+  |> E.O.React.fmapOrNull(agent =>
+       <FC__AgentLink agent className=agentLinkStyle />
+     );
 
 module Jsx2 = {
   let component = ReasonReact.statelessComponent("AgentLInk");

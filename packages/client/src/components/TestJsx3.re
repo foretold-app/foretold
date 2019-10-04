@@ -9,7 +9,7 @@ let make = (~text, ~children) =>
 // Usages: <TestJsx3.Jsx2 text="Text from props"> {"Children Text" |> Utils.ste} </TestJsx3.Jsx2>
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("TestJsx3");
+  let component = ReasonReact.statelessComponent("TestJsx2");
   /* `children` is not labelled, as it is a regular parameter in version 2 of JSX */
   let make = (~text, children) =>
     ReasonReactCompat.wrapReactForReasonReact(

@@ -117,6 +117,7 @@ let make = (~loggedInUser: Types.user, _children) => {
            </Link.Jsx2>,
          )}
       </Div>
+      <Div float=`left> <Banner /> </Div>
       <Div float=`right> {header(loggedInUser)} </Div>
     </Div>,
 };

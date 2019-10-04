@@ -65,6 +65,7 @@ type user = {
   picture: option(string),
   description: option(string),
   bots: option(array(bot)),
+  isEmailVerified: option(bool),
 }
 
 and bot = {

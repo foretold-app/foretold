@@ -36,7 +36,7 @@ async function _exchangeAuthComToken(_root, args, _context, _info) {
   const auth0jwt = _.get(args, 'auth0jwt');
   const auth0accessToken = _.get(args, 'auth0accessToken');
 
-  const jwt = await data.authentication.exchangeAuthComToken(
+  const jwt = await data.authentication2.exchangeAuthComToken(
     auth0jwt,
     auth0accessToken,
   );
@@ -54,7 +54,7 @@ async function _exchangeAuthComToken(_root, args, _context, _info) {
  */
 async function _exchangeAuthToken(_root, args, _context, _info) {
   const authToken = _.get(args, 'authToken');
-  const jwt = await data.authentication.exchangeAuthToken(authToken);
+  const jwt = await data.authentication2.exchangeAuthToken(authToken);
   return { jwt };
 }
 

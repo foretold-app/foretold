@@ -6,7 +6,7 @@ const data = require('../data');
  * @param {Request} req
  * @return {string | null}
  */
-function getQueryToken(req) {
+function _getQueryToken(req) {
   const authorization = _.get(req, 'headers.authorization');
   const token = _.get(req, 'query.token');
   const authorization$ = _.split(authorization, ' ');
@@ -30,10 +30,12 @@ function getQueryToken(req) {
  */
 async function authentication(options) {
   try {
-    const token = getQueryToken(options);
+    const token = _getQueryToken(options);
+
     if (token) {
       return await data.authentication.authenticate(token);
     }
+
     return null;
   } catch (err) {
     console.error('Authentication', err);
@@ -42,6 +44,5 @@ async function authentication(options) {
 }
 
 module.exports = {
-  getQueryToken,
   authentication,
 };

@@ -51,6 +51,7 @@ let toUser = a =>
     ~description=a##description,
     ~agent=a##agent |> E.O.fmap(toAgent),
     ~bots=a##bots |> toBots,
+    ~isEmailVerified=a##isEmailVerified,
     (),
   );
 
@@ -65,6 +66,7 @@ module Query = [%graphql
         description
         auth0Id
         agentId
+        isEmailVerified
         agent {
           id
           name

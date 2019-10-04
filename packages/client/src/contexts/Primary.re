@@ -169,6 +169,7 @@ module User = {
         ~auth0Id=None,
         ~agent=None,
         ~bots=None,
+        ~isEmailVerified=None,
         (),
       )
       : t => {
@@ -181,6 +182,7 @@ module User = {
     auth0Id,
     agent,
     bots,
+    isEmailVerified,
   };
 };
 

@@ -1,5 +1,4 @@
 const _ = require('lodash');
-const { AuthenticationError } = require('apollo-server');
 
 const { Jwt } = require('../lib/jwt');
 const { Auth0 } = require('../lib/auth0');
@@ -7,7 +6,12 @@ const { Auth0 } = require('../lib/auth0');
 const { UsersData } = require('./users-data');
 const { AgentsData } = require('./agents-data');
 const { TokensData } = require('./tokens-data');
-const { InvitationsData } = require('./invitations-data');
+
+const {
+  NotAuthenticatedError,
+  TokenIsInvalidError,
+  NoAgentIdError,
+} = require('./classes/authentication-errors');
 
 class AuthenticationData {
   constructor() {
@@ -17,13 +21,17 @@ class AuthenticationData {
     this.users = new UsersData();
     this.agents = new AgentsData();
     this.tokens = new TokensData();
-    this.invitation = new InvitationsData();
   }
 
   /**
    * @public
    * @param {string} token
-   * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
+   * @return {Promise<{
+   *  agent: Models.Agent,
+   *  creator: Models.Creator,
+   *  bot: Models.Bot,
+   *  user: Models.Bot,
+   * }>}
    */
   async authenticate(token = '') {
     if (this.tokens.validate(token)) {
@@ -34,13 +42,18 @@ class AuthenticationData {
       return await this._byJwt(token);
     }
 
-    throw new AuthenticationData.TokenIsInvalidError();
+    throw new TokenIsInvalidError();
   }
 
   /**
    * @protected
    * @param {string} token
-   * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
+   * @return {Promise<{
+   *  agent: Models.Agent,
+   *  creator: Models.Creator,
+   *  bot: Models.Bot,
+   *  user: Models.Bot,
+   * }>}
    */
   async _byJwt(token) {
     const decoded = this.Jwt.decodeJwtToken(token);
@@ -51,7 +64,12 @@ class AuthenticationData {
   /**
    * @protected
    * @param {string} token
-   * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
+   * @return {Promise<{
+   *  agent: Models.Agent,
+   *  creator: Models.Creator,
+   *  bot: Models.Bot,
+   *  user: Models.Bot,
+   * }>}
    */
   async _byToken(token) {
     const agentId = await this.tokens.getAgentId(token);
@@ -61,13 +79,22 @@ class AuthenticationData {
   /**
    * @protected
    * @param {Models.ObjectID} agentId
-   * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
+   * @return {Promise<{
+   *  agent: Models.Agent,
+   *  creator: Models.Creator,
+   *  bot: Models.Bot,
+   *  user: Models.Bot,
+   * }>}
    */
   async _getContext(agentId) {
-    if (!agentId) throw new AuthenticationData.NoAgentIdError();
+    if (!agentId) {
+      throw new NoAgentIdError();
+    }
 
     const agent = await this.agents.getOne({ id: agentId });
-    if (!agent) throw new AuthenticationData.NotAuthenticatedError();
+    if (!agent) {
+      throw new NotAuthenticatedError();
+    }
 
     const bot = await agent.getBot();
     const user = await agent.getUser();
@@ -76,79 +103,7 @@ class AuthenticationData {
     return { agent, bot, user, creator };
   }
 
-  /**
-   * @public
-   * @param {string} jwt
-   * @param {string} accessToken
-   * @return {Promise<string>}
-   */
-  async exchangeAuthComToken(jwt, accessToken) {
-    const decoded = this.Jwt.decodeAuth0Jwt(jwt);
-    const auth0Id = _.get(decoded, 'sub');
-    if (!auth0Id) {
-      throw new AuthenticationData.NoUserIdError();
-    }
-
-    const user = await this.users.getUserByAuth0Id(auth0Id);
-    const { agentId } = user;
-
-    // @todo: To move upper?
-    try {
-      const userInfo = await this.auth0.getUserInfo(accessToken);
-      await this.users.updateUserInfoFromAuth0(user.id, userInfo);
-    } catch (e) {
-      console.log('Saving user info is failed.');
-    }
-
-    return this.Jwt.encodeJWT({}, agentId);
-  }
-
-  /**
-   * @public
-   * @todo: To figure out why "NotAuthenticatedError" is not being passed
-   * @todo: and is showed as internal error.
-   * @param {string} authToken
-   * @return {Promise<string>}
-   */
-  async exchangeAuthToken(authToken) {
-    const token = await this.tokens.getAuthToken(authToken);
-    if (!token) {
-      throw new AuthenticationData.NotAuthenticatedError();
-    }
-
-    await this.tokens.increaseUsageCount(authToken);
-    const { agentId } = token;
-    return this.Jwt.encodeJWT({}, agentId);
-  }
 }
-
-AuthenticationData.NoUserIdError
-  = class NoUserIdError extends AuthenticationError {
-  constructor() {
-    super('No User Id');
-  }
-};
-
-AuthenticationData.NotAuthenticatedError
-  = class NotAuthenticatedError extends AuthenticationError {
-  constructor() {
-    super('Not authenticated');
-  }
-};
-
-AuthenticationData.TokenIsInvalidError
-  = class TokenIsInvalidError extends AuthenticationError {
-  constructor() {
-    super('Token is invalid');
-  }
-};
-
-AuthenticationData.NoAgentIdError
-  = class NoAgentIdError extends AuthenticationError {
-  constructor() {
-    super('No Agent Id');
-  }
-};
 
 module.exports = {
   AuthenticationData,

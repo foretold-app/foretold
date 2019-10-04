@@ -82,6 +82,12 @@ module Query = [%graphql
                         id
                         name
                         competitorType
+                        user {
+                            id
+                            name
+                            picture
+                            agentId
+                        }
                     }
                 }
                 channel {

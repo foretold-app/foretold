@@ -18,6 +18,21 @@ let toMeasurement = (measurement): Types.measurement => {
          )
        );
 
+  let measurable =
+    switch (measurement##measurable) {
+    | Some(measurable) =>
+      Some(
+        Primary.Measurable.make(
+          ~id=measurable##id,
+          ~name=measurable##name,
+          ~channelId=measurable##channelId,
+          ~valueType=measurable##valueType,
+          (),
+        ),
+      )
+    | None => None
+    };
+
   Primary.Measurement.make(
     ~id=measurement##id,
     ~description=measurement##description,
@@ -29,20 +44,7 @@ let toMeasurement = (measurement): Types.measurement => {
     ~relevantAt=measurement##relevantAt,
     ~agent,
     ~measurementScoreSet,
-    ~measurable=
-      switch (measurement##measurable) {
-      | Some(measurable) =>
-        Some(
-          Primary.Measurable.make(
-            ~id=measurable##id,
-            ~name=measurable##name,
-            ~channelId=measurable##channelId,
-            ~valueType=measurable##valueType,
-            (),
-          ),
-        )
-      | None => None
-      },
+    ~measurable,
     (),
   );
 };
@@ -112,6 +114,12 @@ module Query = [%graphql
                           id
                           name
                           competitorType
+                          user {
+                              id
+                              name
+                              picture
+                              agentId
+                          }
                       }
                   }
 

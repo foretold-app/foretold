@@ -1,55 +1,12 @@
-type user = {
-  id: string,
-  name: string,
-  agentId: string,
-};
-
-type bot = {
-  competitorType: Types.competitorType,
-  description: option(string),
-  id: string,
-  name: string,
-};
-
-type agent = {
-  id: string,
-  name: option(string),
-  measurementCount: int,
-  bot: option(bot),
-  user: option(user),
-};
-
-let toUser = (user: user): Types.user =>
-  Primary.User.make(~id=user.id, ~name=user.name, ~agentId=user.agentId, ());
-
-let toBot = (bot: bot): Types.bot => {
-  competitorType: bot.competitorType,
-  description: bot.description,
-  id: bot.id,
-  name: Some(bot.name),
-  token: None,
-  agent: None,
-  permissions: None,
-};
-
-let toAgent = (agent: agent): Types.agent => {
-  let agentType: option(Primary.AgentType.t) =
-    switch (agent.bot, agent.user) {
-    | (Some(bot), None) => Some(Bot(toBot(bot)))
-    | (None, Some(user)) => Some(User(toUser(user)))
-    | _ => None
-    };
-
+let toAgent = agent => {
   Primary.Agent.make(
-    ~id=agent.id,
-    ~name=agent.name,
-    ~measurementCount=Some(agent.measurementCount),
-    ~agentType,
+    ~id=agent##id,
+    ~name=agent##name,
+    ~measurementCount=Some(agent##measurementCount),
+    ~agentType=agent |> Primary.AgentType.getAgentType,
     (),
   );
 };
-
-type agents = array(agent);
 
 module Query = [%graphql
   {|
@@ -60,20 +17,27 @@ module Query = [%graphql
       agents (
         excludeChannelId: $excludeChannelId
         types: $types
-      ) @bsRecord {
+      ) {
         id
         name
         measurementCount
-        user @bsRecord{
+        user {
           id
           name
           agentId
+          picture
         }
-        bot @bsRecord{
+        bot {
           id
           name
           description
           competitorType
+          user {
+              id
+              name
+              picture
+              agentId
+          }
         }
       }
     }
@@ -85,14 +49,12 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 let component = (~excludeChannelId: string, ~types=?, innerFn) => {
   let query = Query.make(~excludeChannelId, ~types?, ());
   <QueryComponent variables=query##variables>
-    ...{response =>
-      response.result
+    ...{({result}) =>
+      result
       |> HttpResponse.fromApollo
-      |> HttpResponse.fmap((e: Query.t) => {
-           let agents = e##agents;
-           let foo = agents |> E.A.O.concatSomes |> E.A.fmap(toAgent);
-           foo;
-         })
+      |> HttpResponse.fmap(e =>
+           e##agents |> E.A.O.concatSome |> E.A.fmap(toAgent)
+         )
       |> innerFn
     }
   </QueryComponent>;

@@ -16,11 +16,14 @@ let toOnClick = (agent: Types.agent) =>
 
 let rec toAgent = (~agent: Types.agent) => {
   let onClick = toOnClick(agent);
+
   switch (agent.name, agent.agentType) {
   | (_, Some(User({name, picture}))) =>
     Some(FC__AgentLink.Agent.makeUser(~name, ~onClick, ~image=?picture, ()))
-  | (_, Some(Bot({name, agent: Some(owner)}))) =>
-    let owner = toAgent(~agent=owner);
+
+  | (_, Some(Bot({name, owner: Some(agent)}))) =>
+    let owner = toAgent(~agent);
+
     Some(
       FC__AgentLink.Agent.makeBot(
         ~name=name |> E.O.default("bot"),
@@ -29,6 +32,7 @@ let rec toAgent = (~agent: Types.agent) => {
         (),
       ),
     );
+
   | (_, Some(Bot({name}))) =>
     Some(
       FC__AgentLink.Agent.makeBot(
@@ -37,8 +41,10 @@ let rec toAgent = (~agent: Types.agent) => {
         (),
       ),
     )
+
   | (Some(name), _) =>
     Some(FC__AgentLink.Agent.makeUser(~name, ~onClick, ()))
+
   | (_, _) => None
   };
 };

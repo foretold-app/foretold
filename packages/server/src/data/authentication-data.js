@@ -46,7 +46,12 @@ class AuthenticationData {
   /**
    * @protected
    * @param {string} token
-   * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
+   * @return {Promise<{
+   *  agent: Models.Agent,
+   *  creator: Models.Creator,
+   *  bot: Models.Bot,
+   *  user: Models.Bot,
+   * }>}
    */
   async _byJwt(token) {
     const decoded = this.Jwt.decodeJwtToken(token);
@@ -57,7 +62,12 @@ class AuthenticationData {
   /**
    * @protected
    * @param {string} token
-   * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
+   * @return {Promise<{
+   *  agent: Models.Agent,
+   *  creator: Models.Creator,
+   *  bot: Models.Bot,
+   *  user: Models.Bot,
+   * }>}
    */
   async _byToken(token) {
     const agentId = await this.tokens.getAgentId(token);
@@ -67,13 +77,22 @@ class AuthenticationData {
   /**
    * @protected
    * @param {Models.ObjectID} agentId
-   * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
+   * @return {Promise<{
+   *  agent: Models.Agent,
+   *  creator: Models.Creator,
+   *  bot: Models.Bot,
+   *  user: Models.Bot,
+   * }>}
    */
   async _getContext(agentId) {
-    if (!agentId) throw new NoAgentIdError();
+    if (!agentId) {
+      throw new NoAgentIdError();
+    }
 
     const agent = await this.agents.getOne({ id: agentId });
-    if (!agent) throw new NotAuthenticatedError();
+    if (!agent) {
+      throw new NotAuthenticatedError();
+    }
 
     const bot = await agent.getBot();
     const user = await agent.getUser();
@@ -124,6 +143,7 @@ class AuthenticationData {
 
     await this.tokens.increaseUsageCount(authToken);
     const { agentId } = token;
+
     return this.Jwt.encodeJWT({}, agentId);
   }
 }

@@ -205,6 +205,7 @@ module Bot = {
         ~token=None,
         ~agent=None,
         ~permissions=None,
+        ~owner=None,
         (),
       )
       : t => {
@@ -215,6 +216,7 @@ module Bot = {
     token,
     agent,
     permissions,
+    owner,
   };
 };
 
@@ -739,19 +741,48 @@ module AgentType = {
   let getAgentType = agent =>
     switch (agent##bot, agent##user) {
     | (Some(bot), None) =>
+      let owner =
+        switch (bot##user) {
+        | Some(user) =>
+          let agentType =
+            Some(
+              User(
+                User.make(
+                  ~id=user##id,
+                  ~name=user##name,
+                  ~picture=user##picture,
+                  ~agentId=user##agentId,
+                  (),
+                ),
+              ),
+            );
+
+          let agent =
+            Agent.make(
+              ~id=user##agentId,
+              ~agentType,
+              ~name=Some(user##name),
+              (),
+            );
+
+          Some(agent);
+        | _ => None
+        };
+
       Some(
-        Types.Bot(
+        Bot(
           Bot.make(
             ~id=bot##id,
             ~name=Some(bot##name),
             ~competitorType=bot##competitorType,
+            ~owner,
             (),
           ),
         ),
-      )
+      );
     | (None, Some(user)) =>
       Some(
-        Types.User(
+        User(
           User.make(
             ~id=user##id,
             ~name=user##name,

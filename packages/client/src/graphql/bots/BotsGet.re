@@ -27,13 +27,11 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let unpackEdges = (a): array('a) => {
-  let response =
-    a
-    |> E.O.fmap(b => b##edges |> E.A.O.defaultEmpty |> E.A.O.concatSome)
-    |> E.A.O.defaultEmpty
-    |> E.A.fmap(e => e##node)
-    |> E.A.O.concatSome;
-  response;
+  a
+  |> E.O.fmap(b => b##edges |> E.A.O.defaultEmpty |> E.A.O.concatSome)
+  |> E.A.O.defaultEmpty
+  |> E.A.fmap(e => e##node)
+  |> E.A.O.concatSome;
 };
 
 let toBot = botJson => {

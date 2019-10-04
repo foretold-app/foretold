@@ -66,6 +66,7 @@ type user = {
   description: option(string),
   bots: option(array(bot)),
 }
+
 and bot = {
   competitorType,
   description: option(string),
@@ -74,10 +75,13 @@ and bot = {
   token: option(string),
   agent: option(agent),
   permissions: option(permissions),
+  owner: option(agent),
 }
+
 and agentType =
   | Bot(bot)
   | User(user)
+
 and agent = {
   id: string,
   name: option(string),
@@ -87,6 +91,7 @@ and agent = {
   channelMemberships: option(Js.Array.t(channelMembership)),
   preference: option(preference),
 }
+
 and channel = {
   id: string,
   name: string,
@@ -101,12 +106,14 @@ and channel = {
   openedMeasurablesCount: option(int),
   permissions: option(permissions),
 }
+
 and channelMembership = {
   channel: option(channel),
   role: channelMembershipRole,
   agent: option(agent),
   permissions: option(permissions),
 }
+
 and measurable = {
   id: string,
   name: string,
@@ -137,10 +144,12 @@ and measurable = {
   outcome: option(measurement),
   previousAggregate: option(measurement),
 }
+
 and measurementScoreSet = {
   primaryPointScore: option(float),
   nonMarketLogScore: option(float),
 }
+
 and measurement = {
   id: string,
   description: option(string),
@@ -155,6 +164,7 @@ and measurement = {
   agent: option(agent),
   measurementScoreSet: option(measurementScoreSet),
 }
+
 and agentMeasurable = {
   id: string,
   measurable,
@@ -166,6 +176,7 @@ and agentMeasurable = {
   aggregationMeasurement: option(measurement),
   objectiveMeasurement: option(measurement),
 }
+
 and agentChannel = {
   id: string,
   agentId: string,
@@ -178,6 +189,7 @@ and agentChannel = {
   agent,
   channel,
 }
+
 and leaderboardItem = {
   id: string,
   measurable: option(measurable),
@@ -191,6 +203,7 @@ and leaderboardItem = {
   aggregationMeasurement: option(measurement),
   objectiveMeasurement: option(measurement),
 }
+
 and series = {
   id: string,
   description: option(string),
@@ -199,6 +212,7 @@ and series = {
   channel: option(channel),
   measurableCount: option(int),
 }
+
 and feedItem = {
   id: string,
   channelId: string,
@@ -207,17 +221,20 @@ and feedItem = {
   createdAt: option(MomentRe.Moment.t),
   updatedAt: option(MomentRe.Moment.t),
 }
+
 and pageInfo = {
   hasNextPage: bool,
   hasPreviousPage: bool,
   endCursor: option(string),
   startCursor: option(string),
 }
+
 and connection('a) = {
   pageInfo,
   total: option(int),
   edges: array('a),
 }
+
 and globalSetting = {
   id: string,
   entityGraph: option(Js.Json.t),

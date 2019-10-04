@@ -203,7 +203,7 @@ module Helpers = {
       <div className=judgementStyle>
         {"Resolution" |> ste |> E.React.inH3}
         {switch (aLink) {
-         | Some(name) => <> {"by " |> ste} name </>
+         | Some(name) => <> name </>
          | None => E.React.null
          }}
       </div>;

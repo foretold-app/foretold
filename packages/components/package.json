@@ -1,7 +1,7 @@
 {
     "name": "@foretold/components",
     "version": "0.0.1",
-    "description": "",
+    "description": "Kit-demo of UX components",
     "private": false,
     "scripts": {
         "build": "bsb -make-world",
@@ -9,6 +9,7 @@
         "predev": "yarn build",
         "dev": "parcel example/index.html",
         "showcase": "parcel example/index.html showcase/index.html",
+        "showcase2": "PORT=12345 parcel example/index.html showcase/index.html",
         "start": "bsb -make-world -w"
     },
     "keywords": [

@@ -26,9 +26,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
           (agent: Types.agent) =>
             <Link.Jsx2
               linkType={
-                Internal(
-                  Agent({agentId: agent.id, subPage: AgentMeasurements}),
-                )
+                Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
               }>
               {agent.name
                |> Rationale.Option.default("")

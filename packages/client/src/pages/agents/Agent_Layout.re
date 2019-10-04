@@ -75,8 +75,6 @@ let make =
       <FillWithSidebar loggedInUser>
         <Top agentPage loggedInUser />
         {switch (agentPage.subPage) {
-         | AgentMeasurements =>
-           <AgentMeasurements pageParams={id: agentId} loggedInUser layout />
          | AgentMeasurables =>
            <AgentMeasurables pageParams={id: agentId} loggedInUser layout />
          | AgentBots => <AgentBots pageParams={id: agentId} layout />

@@ -6,10 +6,8 @@ const { Auth0 } = require('../lib/auth0');
 const { UsersData } = require('./users-data');
 const { AgentsData } = require('./agents-data');
 const { TokensData } = require('./tokens-data');
-const { InvitationsData } = require('./invitations-data');
 
 const {
-  NoUserIdError,
   NotAuthenticatedError,
   TokenIsInvalidError,
   NoAgentIdError,
@@ -23,13 +21,17 @@ class AuthenticationData {
     this.users = new UsersData();
     this.agents = new AgentsData();
     this.tokens = new TokensData();
-    this.invitation = new InvitationsData();
   }
 
   /**
    * @public
    * @param {string} token
-   * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
+   * @return {Promise<{
+   *  agent: Models.Agent,
+   *  creator: Models.Creator,
+   *  bot: Models.Bot,
+   *  user: Models.Bot,
+   * }>}
    */
   async authenticate(token = '') {
     if (this.tokens.validate(token)) {
@@ -101,51 +103,6 @@ class AuthenticationData {
     return { agent, bot, user, creator };
   }
 
-  /**
-   * @public
-   * @param {string} jwt
-   * @param {string} accessToken
-   * @return {Promise<string>}
-   */
-  async exchangeAuthComToken(jwt, accessToken) {
-    const decoded = this.Jwt.decodeAuth0Jwt(jwt);
-    const auth0Id = _.get(decoded, 'sub');
-    if (!auth0Id) {
-      throw new NoUserIdError();
-    }
-
-    const user = await this.users.getUserByAuth0Id(auth0Id);
-    const { agentId } = user;
-
-    // @todo: To move upper?
-    try {
-      const userInfo = await this.auth0.getUserInfo(accessToken);
-      await this.users.updateUserInfoFromAuth0(user.id, userInfo);
-    } catch (e) {
-      console.log('Saving user info is failed.');
-    }
-
-    return this.Jwt.encodeJWT({}, agentId);
-  }
-
-  /**
-   * @public
-   * @todo: To figure out why "NotAuthenticatedError" is not being passed
-   * @todo: and is showed as internal error.
-   * @param {string} authToken
-   * @return {Promise<string>}
-   */
-  async exchangeAuthToken(authToken) {
-    const token = await this.tokens.getAuthToken(authToken);
-    if (!token) {
-      throw new NotAuthenticatedError();
-    }
-
-    await this.tokens.increaseUsageCount(authToken);
-    const { agentId } = token;
-
-    return this.Jwt.encodeJWT({}, agentId);
-  }
 }
 
 module.exports = {

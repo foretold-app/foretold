@@ -49,7 +49,7 @@ let fields = (form: Form.state, send, onSubmit, getFieldState) => {
 
   <Antd.Form onSubmit={e => onSubmit()}>
     <Antd.Form.Item>
-      {"E-mail*:" |> Utils.ste |> E.React.inH3}
+      {"Email*:" |> Utils.ste |> E.React.inH3}
       <AntdInput
         value={form.values.email}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -64,7 +64,7 @@ let fields = (form: Form.state, send, onSubmit, getFieldState) => {
         onClick={_ => onSubmit()}
         icon=Antd.IconName.usergroupAdd
         disabled={!isFormValid}>
-        {"Submit" |> Utils.ste}
+        {"Email an Invitation" |> Utils.ste}
       </Button>
     </Antd.Form.Item>
   </Antd.Form>;

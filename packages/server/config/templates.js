@@ -103,11 +103,10 @@ module.exports = [
   {
     name: TEMPLATE_NAME.NEW_INVITATION,
     envelopeTemplate: {
-      subject: "You are invited to Foretold in \"{{{ channel.name }}}\"",
-      body: "You are invited to Foretold into "
-        + "<a href=\"{{{ channel.link }}}\">{{{ channel.name }}}</a> channel. "
-        + "Please, log in "
-        + "<a href=\"{{{ loginLink }}}\">here</a> to accept the invitation."
+      subject: "You have been invited to the Foretold community, \"{{{ channel.name }}}\"",
+      body: "You have been invited to the Foretold community "
+        + "<a href=\"{{{ channel.link }}}\">{{{ channel.name }}}</a>."
+        + "Sign up to <a href=\"https://foretold.io/login\">Foretold</a> and verify your email address to accept the invitation. "
     }
   },
 ];

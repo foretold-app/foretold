@@ -106,7 +106,7 @@ let formFields = (form: Form.state, send, onSubmit, getFieldState) => {
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"E-mail" |> Utils.ste |> E.React.inH3}
+      {"Email" |> Utils.ste |> E.React.inH3}
       <AntdInput
         value={form.values.email}
         disabled=true

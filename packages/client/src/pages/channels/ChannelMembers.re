@@ -148,7 +148,10 @@ let title = () =>
 let addMembersButtonSection = (channelId: string) =>
   <FC.Base.Div.Jsx2
     float=`right
-    className={Css.style([FC.PageCard.HeaderRow.Styles.itemTopPadding])}>
+    className={Css.style([
+      FC.PageCard.HeaderRow.Styles.itemTopPadding,
+      FC.PageCard.HeaderRow.Styles.itemRightPadding,
+    ])}>
     <FC.Base.Button
       variant=Primary
       onClick={e =>
@@ -164,14 +167,13 @@ let inviteMemberButtonSection = (channelId: string) =>
     className={Css.style([
       FC.PageCard.HeaderRow.Styles.itemTopPadding,
       FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-      FC.PageCard.HeaderRow.Styles.itemRightPadding,
     ])}>
     <FC.Base.Button
       variant=Secondary
       onClick={e =>
         LinkType.onClick(Internal(ChannelInviteMember(channelId)), e)
       }>
-      {"Invite Member" |> ReasonReact.string}
+      {"Invite Member With Email" |> ReasonReact.string}
     </FC.Base.Button>
   </FC.Base.Div.Jsx2>;
 
@@ -181,8 +183,8 @@ let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
     | Some(`ADMIN) =>
       <div>
         {title()}
-        {addMembersButtonSection(channelId)}
         {inviteMemberButtonSection(channelId)}
+        {addMembersButtonSection(channelId)}
       </div>
     | _ => <div> {title()} </div>
     };

@@ -1,5 +1,4 @@
 const _ = require('lodash');
-const { AuthenticationError } = require('apollo-server');
 
 const { Jwt } = require('../lib/jwt');
 const { Auth0 } = require('../lib/auth0');
@@ -8,6 +7,13 @@ const { UsersData } = require('./users-data');
 const { AgentsData } = require('./agents-data');
 const { TokensData } = require('./tokens-data');
 const { InvitationsData } = require('./invitations-data');
+
+const {
+  NoUserIdError,
+  NotAuthenticatedError,
+  TokenIsInvalidError,
+  NoAgentIdError,
+} = require('./classes/authentication-errors');
 
 class AuthenticationData {
   constructor() {
@@ -34,7 +40,7 @@ class AuthenticationData {
       return await this._byJwt(token);
     }
 
-    throw new AuthenticationData.TokenIsInvalidError();
+    throw new TokenIsInvalidError();
   }
 
   /**
@@ -64,10 +70,10 @@ class AuthenticationData {
    * @return {Promise<{agent: *, creator: *, bot: *, user: *}>}
    */
   async _getContext(agentId) {
-    if (!agentId) throw new AuthenticationData.NoAgentIdError();
+    if (!agentId) throw new NoAgentIdError();
 
     const agent = await this.agents.getOne({ id: agentId });
-    if (!agent) throw new AuthenticationData.NotAuthenticatedError();
+    if (!agent) throw new NotAuthenticatedError();
 
     const bot = await agent.getBot();
     const user = await agent.getUser();
@@ -86,7 +92,7 @@ class AuthenticationData {
     const decoded = this.Jwt.decodeAuth0Jwt(jwt);
     const auth0Id = _.get(decoded, 'sub');
     if (!auth0Id) {
-      throw new AuthenticationData.NoUserIdError();
+      throw new NoUserIdError();
     }
 
     const user = await this.users.getUserByAuth0Id(auth0Id);
@@ -113,7 +119,7 @@ class AuthenticationData {
   async exchangeAuthToken(authToken) {
     const token = await this.tokens.getAuthToken(authToken);
     if (!token) {
-      throw new AuthenticationData.NotAuthenticatedError();
+      throw new NotAuthenticatedError();
     }
 
     await this.tokens.increaseUsageCount(authToken);
@@ -121,34 +127,6 @@ class AuthenticationData {
     return this.Jwt.encodeJWT({}, agentId);
   }
 }
-
-AuthenticationData.NoUserIdError
-  = class NoUserIdError extends AuthenticationError {
-  constructor() {
-    super('No User Id');
-  }
-};
-
-AuthenticationData.NotAuthenticatedError
-  = class NotAuthenticatedError extends AuthenticationError {
-  constructor() {
-    super('Not authenticated');
-  }
-};
-
-AuthenticationData.TokenIsInvalidError
-  = class TokenIsInvalidError extends AuthenticationError {
-  constructor() {
-    super('Token is invalid');
-  }
-};
-
-AuthenticationData.NoAgentIdError
-  = class NoAgentIdError extends AuthenticationError {
-  constructor() {
-    super('No Agent Id');
-  }
-};
 
 module.exports = {
   AuthenticationData,

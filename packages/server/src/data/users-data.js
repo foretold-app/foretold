@@ -53,9 +53,7 @@ class UsersData extends DataBase {
     const nickname = _.toString(nicknameIn).substr(0, 30);
     const picture = _.toString(pictureIn).substr(0, 255);
 
-    const emailValid = email !== '' && isEmailVerifiedIn === true;
-
-    if (user.email === null && emailValid) {
+    if (email !== '' && isEmailVerifiedIn === true) {
       user.set('email', email);
       user.set('isEmailVerified', isEmailVerifiedIn);
     }

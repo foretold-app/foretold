@@ -12,32 +12,25 @@ let make = _ => {
       <Providers.AppContext.Consumer>
         ...{({loggedInUser}) => {
           let warning = email =>
-            <>
+            <FC__Alert type_=`warning>
               <span className=Styles.icon>
                 <Icon.Icon icon="EMAIL_UNREAD" />
               </span>
-              {"Please verify your email \""
+              {"Please verify your email address, \""
                ++ email
-               ++ "\" address in Auth0.com and "
+               ++ ", then log out and log back in."
                |> Utils.ste}
-              <Link.Jsx2 linkType={Action(_ => Auth.Actions.logout())}>
-                {"relogin after" |> Utils.ste}
-              </Link.Jsx2>
               {"." |> Utils.ste}
-            </>;
+            </FC__Alert>;
 
           let warningNoEmail =
-            <>
+            <FC__Alert type_=`warning>
               <span className=Styles.icon>
                 <Icon.Icon icon="EMAIL_UNREAD" />
               </span>
-              {"Please specify and vefiry your email address in Auth0.com and "
+              {"Please verify your email address, log out, and then log back in. "
                |> Utils.ste}
-              <Link.Jsx2 linkType={Action(_ => Auth.Actions.logout())}>
-                {"relogin after" |> Utils.ste}
-              </Link.Jsx2>
-              {"." |> Utils.ste}
-            </>;
+            </FC__Alert>;
 
           switch (loggedInUser) {
           | Some({

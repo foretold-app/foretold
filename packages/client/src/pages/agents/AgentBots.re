@@ -46,7 +46,7 @@ module Columns = {
               linkType={
                 Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
               }>
-              {name |> ste}
+              <AgentLink.Jsx2 agent />
             </Link.Jsx2>
           | _ => ReasonReact.null
           },

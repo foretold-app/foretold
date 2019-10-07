@@ -11,6 +11,7 @@ module Query = [%graphql
                   token
                   agent {
                     id
+                    name
                   }
                   permissions {
                     mutations {
@@ -40,15 +41,19 @@ let toBot = botJson => {
 
   let permissions = Primary.Permissions.make(allowMutations);
 
+  let agent =
+    botJson##agent
+    |> E.O.fmap(agentJson =>
+         Primary.Agent.make(~id=agentJson##id, ~name=Some(botJson##name), ())
+       );
+
   Primary.Bot.make(
     ~id=botJson##id,
     ~name=Some(botJson##name),
     ~description=botJson##description,
     ~competitorType=botJson##competitorType,
     ~token=botJson##token,
-    ~agent=
-      botJson##agent
-      |> E.O.fmap(agentJson => Primary.Agent.make(~id=agentJson##id, ())),
+    ~agent,
     ~permissions=Some(permissions),
     (),
   );

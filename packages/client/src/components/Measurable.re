@@ -21,7 +21,7 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
     let userAgentId =
       loggedInUser.agent |> E.O.fmap((r: Types.agent) => r.id);
 
-    MeasurableGet2.component(~id)
+    MeasurableGet.component(~id)
     |> E.F.apply((measurable: Types.measurable) => {
          let creatorId =
            measurable.creator |> E.O.fmap((r: Types.agent) => r.id);

@@ -3,9 +3,8 @@ module CMutationForm =
     type queryType = MeasurableUpdate.Query.t;
   });
 
-let formCreation = (id: string, m, loggedInUser: Types.user) => {
-  let measurable = MeasurableGet.toMeasurable(m);
-
+let formCreation =
+    (id: string, measurable: Types.measurable, loggedInUser: Types.user) => {
   MeasurableUpdate.Mutation.make((mutation, data) =>
     MeasurableForm.Form.make(
       ~schema=MeasurableForm.Form.Validation.Schema([||]),

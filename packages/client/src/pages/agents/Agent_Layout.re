@@ -24,7 +24,7 @@ module Top = {
 
           <>
             <FC.GroupHeader>
-              <div> {agent.name |> E.O.default("") |> Utils.ste} </div>
+              <AgentLink.Jsx2 agent />
               <Div styles=[SLayout.Styles.descriptionText]>
                 {description |> Utils.ste}
               </Div>

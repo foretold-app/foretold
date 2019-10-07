@@ -113,8 +113,8 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
 
         let body =
           switch (agent.agentType) {
-          | Some(Bot({owner: Some(owner)})) =>
-            BotsGet.component(~ownerId=owner.id, showBots)
+          | Some(User(user)) =>
+            BotsGet.component(~ownerId=user.id, showBots)
           | _ => <NothingToShow />
           };
 

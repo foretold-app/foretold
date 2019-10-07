@@ -131,7 +131,7 @@ const measurement = new graphql.GraphQLObjectType({
       require('./enums/measurement-competitor-type').measurementCompetitorType,
     },
     description: { type: string8K },
-    measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    measurableId: { type: graphql.GraphQLNonNull(objectId) },
     agentId: { type: objectId },
     relevantAt: { type: DateType.default },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },

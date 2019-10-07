@@ -18,8 +18,10 @@ const feedItems = require('./feed-items');
 const globalSettings = require('./global-settings');
 const agentMeasurables = require('./agent-measurables');
 const agentChannels = require('./agent-channels');
-const jwt = require('./scalars/jwt');
 const connections = require('./connections');
+
+const scalars = require('./scalars');
+const stats = require('./stats');
 
 module.exports = {
   bots,
@@ -41,6 +43,7 @@ module.exports = {
   globalSettings,
   agentMeasurables,
   agentChannels,
-  jwt,
   connections,
+  stats,
+  ...scalars,
 };

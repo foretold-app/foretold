@@ -5,22 +5,22 @@ const models = require('../../models');
 
 const { FEED_ITEM_BODY } = require('../../enums/feed-item-body');
 
-const { objectId } = require('./scalars');
+const { objectId, string512 } = require('./scalars');
 
 const feedItemBodyGeneric = new graphql.GraphQLObjectType({
   name: 'FeedItemBodyGeneric',
   fields: () => ({
-    item: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    description: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    item: { type: graphql.GraphQLNonNull(string512) },
+    description: { type: graphql.GraphQLNonNull(string512) },
   }),
 });
 
 const feedItemBodyMeasurable = new graphql.GraphQLObjectType({
   name: 'FeedItemBodyMeasurable',
   fields: () => ({
-    item: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    description: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    item: { type: graphql.GraphQLNonNull(string512) },
+    description: { type: graphql.GraphQLNonNull(string512) },
+    measurableId: { type: graphql.GraphQLNonNull(objectId) },
   }),
 });
 

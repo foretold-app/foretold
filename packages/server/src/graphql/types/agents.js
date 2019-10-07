@@ -7,13 +7,14 @@ const models = require('../../models');
 
 const { agentType } = require('./enums/agent-type');
 const { objectId } = require('./scalars');
+const { string256 } = require('./scalars');
 
 const agent = new graphql.GraphQLObjectType({
   name: 'Agent',
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(objectId) },
     type: { type: graphql.GraphQLNonNull(agentType) },
-    name: { type: graphql.GraphQLString },
+    name: { type: string256 },
 
     measurementCount: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),

@@ -9,7 +9,9 @@ const preference = new graphql.GraphQLObjectType({
     id: { type: graphql.GraphQLNonNull(objectId) },
     agentId: { type: objectId },
     stopAllEmails: { type: graphql.GraphQLBoolean },
-    enableExperimentalFeatures: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
+    enableExperimentalFeatures: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLBoolean),
+    },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
   }),

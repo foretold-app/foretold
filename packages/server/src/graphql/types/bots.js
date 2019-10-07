@@ -5,13 +5,14 @@ const models = require('../../models');
 const resolvers = require('../resolvers');
 
 const { objectId } = require('./scalars');
+const { string256 } = require('./scalars');
 
 const bot = new graphql.GraphQLObjectType({
   name: 'Bot',
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(objectId) },
-    name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    description: { type: graphql.GraphQLString },
+    name: { type: graphql.GraphQLNonNull(string256) },
+    description: { type: string256 },
     competitorType: {
       type:
       require('./enums/measurement-competitor-type').measurementCompetitorType,
@@ -51,8 +52,8 @@ const bot = new graphql.GraphQLObjectType({
 const botInput = new graphql.GraphQLInputObjectType({
   name: 'BotInput',
   fields: () => ({
-    name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    description: { type: graphql.GraphQLString },
+    name: { type: graphql.GraphQLNonNull(string256) },
+    description: { type: string256 },
     competitorType: {
       type:
       require('./enums/measurement-competitor-type').measurementCompetitorType,

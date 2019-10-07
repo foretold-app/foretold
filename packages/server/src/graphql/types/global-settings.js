@@ -2,13 +2,13 @@ const graphql = require('graphql');
 const { DateType } = require('graphql-sequelize');
 const { GraphQLJSON } = require('graphql-type-json');
 
-const { objectId } = require('./scalars');
+const { objectId, string256 } = require('./scalars');
 
 const globalSetting = new graphql.GraphQLObjectType({
   name: 'GlobalSetting',
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(objectId) },
-    name: { type: graphql.GraphQLString },
+    name: { type: string256 },
     entityGraph: { type: GraphQLJSON },
     botAgentId: { type: objectId },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },

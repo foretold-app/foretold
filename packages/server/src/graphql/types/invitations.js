@@ -1,7 +1,7 @@
 const graphql = require('graphql');
 const { DateType } = require('graphql-sequelize');
 
-const { objectId } = require('./scalars');
+const { objectId, string256 } = require('./scalars');
 
 const invitation = new graphql.GraphQLObjectType({
   name: 'Invitation',
@@ -17,7 +17,7 @@ const invitation = new graphql.GraphQLObjectType({
 const invitationCreateInput = new graphql.GraphQLInputObjectType({
   name: 'InvitationCreateInput',
   fields: () => ({
-    email: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    email: { type: graphql.GraphQLNonNull(string256) },
     channelId: { type: graphql.GraphQLNonNull(objectId) },
   }),
 });

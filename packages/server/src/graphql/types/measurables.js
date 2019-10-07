@@ -12,7 +12,7 @@ const { objectId } = require('./scalars');
 const measurable = new graphql.GraphQLObjectType({
   name: 'Measurable',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(objectId) },
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     labelSubject: { type: graphql.GraphQLString },
     labelOnDate: { type: DateType.default },

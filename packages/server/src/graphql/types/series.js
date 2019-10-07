@@ -4,12 +4,14 @@ const { resolver, DateType } = require('graphql-sequelize');
 const models = require('../../models');
 const resolvers = require('../resolvers');
 
+const { objectId } = require('./scalars');
+
 const seriesCreateInput = new graphql.GraphQLInputObjectType({
   name: 'SeriesCreateInput',
   fields: () => ({
     name: { type: graphql.GraphQLString },
     description: { type: graphql.GraphQLString },
-    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    channelId: { type: graphql.GraphQLNonNull(objectId) },
     subjects: { type: graphql.GraphQLList(graphql.GraphQLString) },
     properties: { type: graphql.GraphQLList(graphql.GraphQLString) },
     dates: { type: graphql.GraphQLList(DateType.default) },
@@ -19,13 +21,13 @@ const seriesCreateInput = new graphql.GraphQLInputObjectType({
 const series = new graphql.GraphQLObjectType({
   name: 'Series',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(objectId) },
     name: { type: graphql.GraphQLString },
     description: { type: graphql.GraphQLString },
     subjects: { type: graphql.GraphQLList(graphql.GraphQLString) },
     properties: { type: graphql.GraphQLList(graphql.GraphQLString) },
     dates: { type: graphql.GraphQLList(DateType.default) },
-    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    channelId: { type: graphql.GraphQLNonNull(objectId) },
 
     measurableCount: {
       type: graphql.GraphQLInt,
@@ -34,7 +36,7 @@ const series = new graphql.GraphQLObjectType({
 
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    creatorId: { type: graphql.GraphQLString },
+    creatorId: { type: objectId },
     iAmOwner: require('./common').iAmOwner,
 
     // @todo: security?

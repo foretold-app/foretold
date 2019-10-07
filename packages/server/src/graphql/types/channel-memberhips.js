@@ -8,11 +8,13 @@ const {
   channelMembershipRolesOutput,
 } = require('./enums/channel-membership-roles-output');
 
+const { objectId } = require('./scalars');
+
 const channelsMembership = new graphql.GraphQLObjectType({
   name: 'ChannelsMembership',
   fields: () => ({
-    agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    agentId: { type: graphql.GraphQLNonNull(objectId) },
+    channelId: { type: graphql.GraphQLNonNull(objectId) },
     role: { type: graphql.GraphQLNonNull(channelMembershipRoles) },
 
     permissions: {
@@ -36,8 +38,8 @@ const channelsMembership = new graphql.GraphQLObjectType({
 const channelMembershipRoleInput = new graphql.GraphQLInputObjectType({
   name: 'ChannelMembershipRoleInput',
   fields: () => ({
-    agentId: { type: graphql.GraphQLString },
-    channelId: { type: graphql.GraphQLString },
+    agentId: { type: objectId },
+    channelId: { type: objectId },
     role: {
       type: graphql.GraphQLNonNull(require('./channel-memberhips').role),
     },
@@ -47,15 +49,15 @@ const channelMembershipRoleInput = new graphql.GraphQLInputObjectType({
 const channelMembershipDeleteInput = new graphql.GraphQLInputObjectType({
   name: 'ChannelMembershipDeleteInput',
   fields: () => ({
-    agentId: { type: graphql.GraphQLString },
-    channelId: { type: graphql.GraphQLString },
+    agentId: { type: objectId },
+    channelId: { type: objectId },
   }),
 });
 
 const joiningChannelInput = new graphql.GraphQLInputObjectType({
   name: 'JoiningChannelInput',
   fields: () => ({
-    channelId: { type: graphql.GraphQLString },
+    channelId: { type: objectId },
   }),
 });
 

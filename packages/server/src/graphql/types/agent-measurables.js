@@ -1,12 +1,14 @@
 const graphql = require('graphql');
 const { DateType } = require('graphql-sequelize');
 
+const { objectId } = require('./scalars');
+
 const agentMeasurable = new graphql.GraphQLObjectType({
   name: 'AgentMeasurable',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(objectId) },
+    agentId: { type: graphql.GraphQLNonNull(objectId) },
+    measurableId: { type: graphql.GraphQLNonNull(objectId) },
     primaryPointScore: {
       type: graphql.GraphQLFloat,
       resolve: require('../resolvers').agentMeasurables.primaryPointScore,

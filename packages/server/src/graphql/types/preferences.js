@@ -1,11 +1,13 @@
 const graphql = require('graphql');
 const { DateType } = require('graphql-sequelize');
 
+const { objectId } = require('./scalars');
+
 const preference = new graphql.GraphQLObjectType({
   name: 'Preference',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    agentId: { type: graphql.GraphQLString },
+    id: { type: graphql.GraphQLNonNull(objectId) },
+    agentId: { type: objectId },
     stopAllEmails: { type: graphql.GraphQLBoolean },
     enableExperimentalFeatures: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },

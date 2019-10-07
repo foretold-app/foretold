@@ -4,10 +4,12 @@ const resolvers = require('../resolvers');
 const agents = require('./agents');
 const channelMemberships = require('./channel-memberhips');
 
+const { objectId } = require('./scalars');
+
 const channel = new graphql.GraphQLObjectType({
   name: 'Channel',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(objectId) },
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     description: { type: graphql.GraphQLString },
     isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },

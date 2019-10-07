@@ -4,10 +4,12 @@ const { resolver, DateType } = require('graphql-sequelize');
 const models = require('../../models');
 const resolvers = require('../resolvers');
 
+const { objectId } = require('./scalars');
+
 const bot = new graphql.GraphQLObjectType({
   name: 'Bot',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(objectId) },
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     description: { type: graphql.GraphQLString },
     competitorType: {
@@ -16,8 +18,8 @@ const bot = new graphql.GraphQLObjectType({
     },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    agentId: { type: graphql.GraphQLString },
-    userId: { type: graphql.GraphQLString },
+    agentId: { type: objectId },
+    userId: { type: objectId },
     iAmOwner: require('./common').iAmOwnerByUserId,
 
     // @todo: security?

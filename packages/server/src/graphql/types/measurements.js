@@ -6,6 +6,8 @@ const {
 
 const models = require('../../models');
 
+const { objectId } = require('./scalars');
+
 const {
   measurementUnresolvableResolution,
 } = require('./enums/measurement-unresolvable-resolution');
@@ -64,10 +66,10 @@ const measurementCreateInput = new graphql.GraphQLInputObjectType({
     value: { type: measurementValueInput },
     valueText: { type: graphql.GraphQLString },
     competitorType: { type: require('./enums/measurement-competitor-type').measurementCompetitorType },
-    measurableId: { type: graphql.GraphQLString },
-    agentId: { type: graphql.GraphQLString },
+    measurableId: { type: objectId },
+    agentId: { type: objectId },
     description: { type: graphql.GraphQLString },
-    taggedMeasurementId: { type: graphql.GraphQLString },
+    taggedMeasurementId: { type: objectId },
     relevantAt: { type: DateType.default },
   }),
 });
@@ -84,12 +86,12 @@ const measurementsInDateRangeInput = new graphql.GraphQLInputObjectType({
 const measurement = new graphql.GraphQLObjectType({
   name: 'Measurement',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(objectId) },
     value: { type: graphql.GraphQLNonNull(measurementValue) },
     competitorType: { type: require('./enums/measurement-competitor-type').measurementCompetitorType },
     description: { type: graphql.GraphQLString },
     measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    agentId: { type: graphql.GraphQLString },
+    agentId: { type: objectId },
     relevantAt: { type: DateType.default },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },

@@ -5,6 +5,8 @@ const models = require('../../models');
 
 const { FEED_ITEM_BODY } = require('../../enums/feed-item-body');
 
+const { objectId } = require('./scalars');
+
 const feedItemBodyGeneric = new graphql.GraphQLObjectType({
   name: 'FeedItemBodyGeneric',
   fields: () => ({
@@ -33,8 +35,8 @@ const feedItemBody = new graphql.GraphQLObjectType({
 const feedItem = new graphql.GraphQLObjectType({
   name: 'FeedItem',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(objectId) },
+    channelId: { type: graphql.GraphQLNonNull(objectId) },
     body: { type: graphql.GraphQLNonNull(feedItemBody) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },

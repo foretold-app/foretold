@@ -3,6 +3,7 @@ const { resolver, DateType } = require('graphql-sequelize');
 
 const models = require('../../models');
 const { string30, string64, string512 } = require('./scalars');
+const { objectId } = require('./scalars');
 
 const userUpdateInput = new graphql.GraphQLInputObjectType({
   name: 'UserUpdateInput',
@@ -17,16 +18,16 @@ const userUpdateInput = new graphql.GraphQLInputObjectType({
 const user = new graphql.GraphQLObjectType({
   name: 'User',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    description: { type: graphql.GraphQLString },
-    email: { type: graphql.GraphQLString },
-    picture: { type: graphql.GraphQLString },
+    id: { type: graphql.GraphQLNonNull(objectId) },
+    name: { type: graphql.GraphQLNonNull(string30) },
+    description: { type: string512 },
+    email: { type: string64 },
+    picture: { type: string512 },
     isEmailVerified: { type: graphql.GraphQLBoolean },
     auth0Id: { type: graphql.GraphQLString },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    agentId: { type: graphql.GraphQLNonNull(objectId) },
     isMe: require('./common').isMe,
 
     // security?

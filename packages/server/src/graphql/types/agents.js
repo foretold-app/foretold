@@ -6,11 +6,12 @@ const channelMemberships = require('./channel-memberhips');
 const models = require('../../models');
 
 const { agentType } = require('./enums/agent-type');
+const { objectId } = require('./scalars');
 
 const agent = new graphql.GraphQLObjectType({
   name: 'Agent',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(objectId) },
     type: { type: graphql.GraphQLNonNull(agentType) },
     name: { type: graphql.GraphQLString },
 

@@ -2,14 +2,15 @@ const graphql = require('graphql');
 const { resolver, DateType } = require('graphql-sequelize');
 
 const models = require('../../models');
+const { string64, string512 } = require('./scalars');
 
 const userUpdateInput = new graphql.GraphQLInputObjectType({
   name: 'UserUpdateInput',
   fields: () => ({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    email: { type: graphql.GraphQLString },
-    picture: { type: graphql.GraphQLString },
-    description: { type: graphql.GraphQLString },
+    email: { type: string64 },
+    picture: { type: string512 },
+    description: { type: string512 },
   }),
 });
 

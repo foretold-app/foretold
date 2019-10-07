@@ -44,9 +44,9 @@ let errorLink =
   ApolloLinks.apolloLinkOnError(error => {
     Js.log2("GraphQL Error!", Js.Json.stringifyAny(error));
 
-    switch (error |> isUnauthenticated, error |> isCode400) {
-    | (true, _)
-    | (_, true) => Auth.Actions.logout()
+    switch (Env.dev, error |> isUnauthenticated, error |> isCode400) {
+    | (false, true, _)
+    | (false, _, true) => Auth.Actions.logout()
     | _ => ()
     };
   });

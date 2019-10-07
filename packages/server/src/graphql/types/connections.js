@@ -3,6 +3,7 @@ const { createConnection } = require('graphql-sequelize');
 
 const models = require('../../models');
 
+// @todo: replace with generic connections
 const measurableMeasurementsConnection = createConnection({
   name: 'MeasurableMeasurements',
   nodeType: require('./measurements').measurement,
@@ -15,6 +16,7 @@ const measurableMeasurementsConnection = createConnection({
   },
 });
 
+// @todo: replace with generic connections
 const channelAgentsConnection = createConnection({
   name: 'ChannelAgents',
   nodeType: require('./agents').agent,
@@ -27,6 +29,7 @@ const channelAgentsConnection = createConnection({
   },
 });
 
+// @todo: replace with generic connections
 const seriesMeasurablesConnection = createConnection({
   name: 'SeriesMeasurables',
   nodeType: require('./measurables').measurable,

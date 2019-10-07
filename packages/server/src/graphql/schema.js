@@ -11,6 +11,13 @@ const { stats } = require('./types/stats');
 const { permissions } = require('./authorizers');
 const { middlewares } = require('./middlewares');
 
+/**
+ * If once you will want to use "directives"
+ * remember that they are used only with Graphql DDL.
+ * So using GraphqlObject definitions
+ * directives do not have a sense.
+ */
+
 const schema = new graphql.GraphQLSchema({
   types: [
     types.channels.channel,

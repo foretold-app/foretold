@@ -1,4 +1,5 @@
 const graphql = require('graphql');
+const { UserInputError } = require('apollo-server');
 
 const JWT_PATTERN = '^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$';
 
@@ -16,11 +17,11 @@ module.exports = new graphql.GraphQLScalarType({
 
   parseLiteral: function parseLiteral(ast) {
     if (typeof ast.value !== 'string') {
-      throw new Error('JWT should be a string.');
+      throw new UserInputError('JWT should be a string.');
     }
 
     if (!(new RegExp(JWT_PATTERN).test(ast.value))) {
-      throw new Error('JWT is invalid.');
+      throw new UserInputError('JWT is invalid.');
     }
 
     return ast.value;

@@ -22,6 +22,26 @@ module Query = [%graphql
           creator {
             id
             name
+            user {
+              id
+              name
+              description
+              agentId
+              picture
+            }
+            bot {
+              id
+              name
+              description
+              competitorType
+              user {
+                  id
+                  name
+                  description
+                  picture
+                  agentId
+              }
+            }
           }
           series {
             id
@@ -42,9 +62,7 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let toMeasurable = (m): Types.measurable => {
-  let agent =
-    m##creator
-    |> E.O.fmap(r => Primary.Agent.make(~id=r##id, ~name=r##name, ()));
+  let agent = m##creator |> MeasurablesGet.toAgent;
 
   let series =
     m##series

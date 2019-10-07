@@ -13,9 +13,9 @@ let title =
     </FC.PageCard.HeaderRow.Title>
   </FC.Base.Div.Jsx2>;
 
-let agentSection = (agent: AgentGet.agent) =>
-  switch (agent) {
-  | {user: Some(_user)} =>
+let agentSection = (agent: Types.agent) =>
+  switch (agent.agentType) {
+  | Some(User(_)) =>
     <>
       {E.React.showIf(
          agent.isMe,
@@ -98,19 +98,12 @@ module Columns = {
 
 type pageParams = {id: string};
 
-let getUserId = (agent: AgentGet.agent): string => {
-  switch (agent.user) {
-  | Some(user) => user.id
-  | None => ""
-  };
-};
-
 let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>
-    AgentGet.component(
-      ~id=pageParams.id,
-      ({agent}) => {
+    AgentGet.component(~id=pageParams.id, agent =>
+      switch (agent) {
+      | Success(Some(agent)) =>
         let showBots = bots =>
           Array.length(bots) > 0
             ? <FC.PageCard.Body>
@@ -119,9 +112,11 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
             : <NothingToShow />;
 
         let body =
-          getUserId(agent) !== ""
-            ? BotsGet.component(~ownerId=getUserId(agent), showBots)
-            : <NothingToShow />;
+          switch (agent.agentType) {
+          | Some(Bot({owner: Some(owner)})) =>
+            BotsGet.component(~ownerId=owner.id, showBots)
+          | _ => <NothingToShow />
+          };
 
         let head =
           <div>
@@ -137,6 +132,7 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
           </div>;
 
         SLayout.LayoutConfig.make(~head, ~body) |> layout;
-      },
+      | _ => <SLayout> <NothingToShow /> </SLayout>
+      }
     ),
 };

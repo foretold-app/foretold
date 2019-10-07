@@ -20,22 +20,18 @@ let tab = (agentId, currentPage, selectedPage) => {
   </FC.Tab>;
 };
 
-let tabs = (page: Routing.AgentPage.t, agent: AgentGet.agent) => {
+let tabs = (page: Routing.AgentPage.t, agent: Types.agent) => {
   let agentId = page.agentId;
   let subPage = page.subPage;
 
-  let agentType =
-    switch (agent) {
-    | {bot: Some(_)} => `BOT
-    | _ => `USER
-    };
-
-  agentType == `USER
-    ? <>
-        {tab(agentId, subPage, AgentUpdates)}
-        {tab(agentId, subPage, AgentCommunities)}
-        {tab(agentId, subPage, AgentBots)}
-        {tab(agentId, subPage, AgentScores)}
-      </>
-    : <> {tab(agentId, subPage, AgentUpdates)} </>;
+  switch (agent.agentType) {
+  | Some(User(_)) =>
+    <>
+      {tab(agentId, subPage, AgentUpdates)}
+      {tab(agentId, subPage, AgentCommunities)}
+      {tab(agentId, subPage, AgentBots)}
+      {tab(agentId, subPage, AgentScores)}
+    </>
+  | _ => <> {tab(agentId, subPage, AgentUpdates)} </>
+  };
 };

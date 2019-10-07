@@ -2,28 +2,20 @@ open Style.Grid;
 
 module Top = {
   let component = ReasonReact.statelessComponent("Top");
-  let make =
-      (~agentPage: Routing.AgentPage.t, ~loggedInUser: Types.user, _children) => {
+  let make = (~agentPage: Routing.AgentPage.t, _children) => {
     ...component,
     render: _ => {
       let agentId = agentPage.agentId;
 
-      AgentGet.component(
-        ~id=agentId,
-        ({agent}) => {
-          let name =
-            switch (agent) {
-            | {bot: Some(r)} => r.name
-            | {user: Some(r)} => r.name
-            | _ => ""
-            };
-
+      AgentGet.component(~id=agentId, agent =>
+        switch (agent) {
+        | Success(Some(agent)) =>
           let description =
             (
-              switch (agent) {
-              | {bot: Some(r)} => r.description
-              | {user: Some(r)} => r.description
-              | _ => Some("")
+              switch (agent.agentType) {
+              | Some(Bot({description})) => description
+              | Some(User({description})) => description
+              | _ => None
               }
             )
             |> E.O.default("");
@@ -32,14 +24,15 @@ module Top = {
 
           <>
             <FC.GroupHeader>
-              <div> {name |> Utils.ste} </div>
+              <div> {agent.name |> E.O.default("") |> Utils.ste} </div>
               <Div styles=[SLayout.Styles.descriptionText]>
                 {description |> Utils.ste}
               </Div>
             </FC.GroupHeader>
             <FC.GroupHeader.SubHeader> secondLevel </FC.GroupHeader.SubHeader>
           </>;
-        },
+        | _ => ReasonReact.null
+        }
       );
     },
   };
@@ -73,7 +66,7 @@ let make =
       let layout = Agent_Layout_C.makeWithEl;
 
       <FillWithSidebar loggedInUser>
-        <Top agentPage loggedInUser />
+        <Top agentPage />
         {switch (agentPage.subPage) {
          | AgentMeasurables =>
            <AgentMeasurables pageParams={id: agentId} loggedInUser layout />

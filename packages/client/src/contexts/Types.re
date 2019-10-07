@@ -91,6 +91,7 @@ and agent = {
   channels: Js.Array.t(channel),
   channelMemberships: option(Js.Array.t(channelMembership)),
   preference: option(preference),
+  isMe: bool,
 }
 
 and channel = {

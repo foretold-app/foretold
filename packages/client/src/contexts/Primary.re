@@ -247,6 +247,7 @@ module Agent = {
         ~channels=[||],
         ~channelMemberships=None,
         ~preference=None,
+        ~isMe=false,
         (),
       )
       : t => {
@@ -257,6 +258,7 @@ module Agent = {
     channels,
     channelMemberships,
     preference,
+    isMe,
   };
 };
 
@@ -776,6 +778,7 @@ module AgentType = {
           Bot.make(
             ~id=bot##id,
             ~name=Some(bot##name),
+            ~description=bot##description,
             ~competitorType=bot##competitorType,
             ~owner,
             (),
@@ -788,6 +791,7 @@ module AgentType = {
           User.make(
             ~id=user##id,
             ~name=user##name,
+            ~description=user##description,
             ~picture=user##picture,
             ~agentId=user##agentId,
             (),

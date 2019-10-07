@@ -107,16 +107,19 @@ module Query = [%graphql
                       user {
                           id
                           name
+                          description
                           picture
                           agentId
                       }
                       bot {
                           id
                           name
+                          description
                           competitorType
                           user {
                               id
                               name
+                              description
                               picture
                               agentId
                           }

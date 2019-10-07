@@ -8,21 +8,22 @@ const { measurableValueType } = require('./enums/measurable-value-type');
 const { measurableState } = require('./enums/measurable-state');
 
 const { objectId } = require('./scalars');
+const { string512, string256, string8K } = require('./scalars');
 
 const measurable = new graphql.GraphQLObjectType({
   name: 'Measurable',
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(objectId) },
-    name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    labelSubject: { type: graphql.GraphQLString },
+    name: { type: graphql.GraphQLNonNull(string512) },
+    labelSubject: { type: string256 },
     labelOnDate: { type: DateType.default },
-    labelProperty: { type: graphql.GraphQLString },
-    labelCustom: { type: graphql.GraphQLString },
+    labelProperty: { type: string256 },
+    labelCustom: { type: string8K },
     valueType: { type: measurableValueType },
     state: { type: graphql.GraphQLNonNull(measurableState) },
     stateUpdatedAt: { type: DateType.default },
     isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
-    resolutionEndpoint: { type: graphql.GraphQLString },
+    resolutionEndpoint: { type: string512 },
     expectedResolutionDate: { type: DateType.default },
     channelId: { type: graphql.GraphQLNonNull(objectId) },
 
@@ -43,8 +44,8 @@ const measurable = new graphql.GraphQLObjectType({
 
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    creatorId: { type: graphql.GraphQLString },
-    seriesId: { type: graphql.GraphQLString },
+    creatorId: { type: objectId },
+    seriesId: { type: objectId },
     iAmOwner: require('./common').iAmOwner,
     min: { type: graphql.GraphQLFloat },
     max: { type: graphql.GraphQLFloat },
@@ -100,14 +101,14 @@ const measurable = new graphql.GraphQLObjectType({
 const measurableCreateInput = new graphql.GraphQLInputObjectType({
   name: 'MeasurableCreateInput',
   fields: () => ({
-    name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    labelCustom: { type: graphql.GraphQLString },
+    name: { type: graphql.GraphQLNonNull(string512) },
+    labelCustom: { type: string8K },
     valueType: { type: require('./enums/measurable-value-type').measurableValueType },
     expectedResolutionDate: { type: DateType.default },
-    resolutionEndpoint: { type: graphql.GraphQLString },
-    labelSubject: { type: graphql.GraphQLString },
+    resolutionEndpoint: { type: string512 },
+    labelSubject: { type: string256 },
     labelOnDate: { type: DateType.default },
-    labelProperty: { type: graphql.GraphQLString },
+    labelProperty: { type: string256 },
     channelId: { type: graphql.GraphQLNonNull(objectId) },
     min: { type: graphql.GraphQLFloat },
     max: { type: graphql.GraphQLFloat },
@@ -117,15 +118,15 @@ const measurableCreateInput = new graphql.GraphQLInputObjectType({
 const measurableUpdateInput = new graphql.GraphQLInputObjectType({
   name: 'MeasurableUpdateInput',
   fields: () => ({
-    name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    labelCustom: { type: graphql.GraphQLString },
+    name: { type: graphql.GraphQLNonNull(string512) },
+    labelCustom: { type: string8K },
     channelId: { type: graphql.GraphQLNonNull(objectId) },
     valueType: { type: require('./enums/measurable-value-type').measurableValueType },
     expectedResolutionDate: { type: DateType.default },
-    resolutionEndpoint: { type: graphql.GraphQLString },
-    labelSubject: { type: graphql.GraphQLString },
+    resolutionEndpoint: { type: string512 },
+    labelSubject: { type: string256 },
     labelOnDate: { type: DateType.default },
-    labelProperty: { type: graphql.GraphQLString },
+    labelProperty: { type: string256 },
     min: { type: graphql.GraphQLFloat },
     max: { type: graphql.GraphQLFloat },
   }),

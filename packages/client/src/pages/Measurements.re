@@ -56,7 +56,7 @@ let make =
     (~measurableId: string, ~loggedInUser: Types.user, ~head, _children) => {
   ...component,
   render: _ => {
-    MeasurableGet2.component(~id=measurableId)
+    MeasurableGet.component(~id=measurableId)
     |> E.F.apply((measurable: Types.measurable) =>
          <Reducer
            callFnParams={measurable.id}

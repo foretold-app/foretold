@@ -1,4 +1,11 @@
-let toAgent = c => Primary.Agent.make(~id=c##id, ~name=c##name, ());
+let toAgent = agent => {
+  let agentType = agent |> E.O.bind(_, Primary.AgentType.getAgentType);
+
+  agent
+  |> E.O.fmap(k =>
+       Primary.Agent.make(~id=k##id, ~agentType, ~name=k##name, ())
+     );
+};
 
 let toSeries = c =>
   Primary.Series.make(
@@ -62,7 +69,7 @@ let toMeasurable = m => {
     ~expectedResolutionDate=m##expectedResolutionDate,
     ~state=Some(m##state),
     ~stateUpdatedAt=m##stateUpdatedAt,
-    ~creator=E.O.fmap(toAgent, m##creator),
+    ~creator=m##creator |> toAgent,
     ~series=E.O.fmap(toSeries, m##series),
     ~iAmOwner=Some(m##iAmOwner),
     ~min=m##min,
@@ -134,6 +141,26 @@ module Query = [%graphql
               creator {
                 id
                 name
+                user {
+                  id
+                  name
+                  description
+                  agentId
+                  picture
+                }
+                bot {
+                  id
+                  name
+                  description
+                  competitorType
+                  user {
+                      id
+                      name
+                      description
+                      picture
+                      agentId
+                  }
+                }
               }
               series {
                 id

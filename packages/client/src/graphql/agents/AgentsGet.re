@@ -26,6 +26,7 @@ module Query = [%graphql
         user {
           id
           name
+          description
           agentId
           picture
         }
@@ -37,6 +38,7 @@ module Query = [%graphql
           user {
               id
               name
+              description
               picture
               agentId
           }

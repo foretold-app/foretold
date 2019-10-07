@@ -11,8 +11,28 @@ module Query = [%graphql
               }
             }
             agent {
-                id
-                name
+              id
+              name
+              user {
+                  id
+                  name
+                  description
+                  picture
+                  agentId
+              }
+              bot {
+                  id
+                  name
+                  description
+                  competitorType
+                  user {
+                      id
+                      name
+                      description
+                      picture
+                      agentId
+                  }
+              }
             }
         }
       }
@@ -23,38 +43,36 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let toChannelMemberships = (m): array(Types.channelMembership) => {
-  let channelMemberships =
-    m##channelMemberships
-    |> E.A.O.concatSomes
-    |> (
-      e =>
-        e
-        |> E.A.fmap(r => {
-             open Types;
+  m##channelMemberships
+  |> E.A.O.concatSomes
+  |> (
+    e =>
+      e
+      |> E.A.fmap(r => {
+           let agentType =
+             r##agent |> E.O.bind(_, Primary.AgentType.getAgentType);
 
-             let agent =
-               Primary.Agent.make(
-                 ~id=r##agent |> E.O.fmap(r => r##id) |> E.O.default(""),
-                 ~name=r##agent |> E.O.bind(_, r => r##name),
-                 (),
-               );
+           let agent =
+             r##agent
+             |> E.O.fmap(k =>
+                  Primary.Agent.make(~id=k##id, ~agentType, ~name=k##name, ())
+                );
 
-             let allowMutations =
-               r##permissions##mutations##allow
-               |> E.A.O.concatSome
-               |> E.A.to_list;
+           let allowMutations =
+             r##permissions##mutations##allow
+             |> E.A.O.concatSome
+             |> E.A.to_list;
 
-             let permissions = Primary.Permissions.make(allowMutations);
+           let permissions = Primary.Permissions.make(allowMutations);
 
-             Primary.ChannelMembership.make(
-               ~role=r##role,
-               ~agent=Some(agent),
-               ~permissions=Some(permissions),
-               (),
-             );
-           })
-    );
-  channelMemberships;
+           Primary.ChannelMembership.make(
+             ~role=r##role,
+             ~agent,
+             ~permissions=Some(permissions),
+             (),
+           );
+         })
+  );
 };
 
 let component = (~id, innerFn) => {

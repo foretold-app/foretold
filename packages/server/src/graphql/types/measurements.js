@@ -7,6 +7,7 @@ const {
 const models = require('../../models');
 
 const { objectId } = require('./scalars');
+const { string256, string8K } = require('./scalars');
 
 const {
   measurementUnresolvableResolution,
@@ -64,11 +65,11 @@ const measurementCreateInput = new graphql.GraphQLInputObjectType({
   name: 'MeasurementCreateInput',
   fields: () => ({
     value: { type: measurementValueInput },
-    valueText: { type: graphql.GraphQLString },
+    valueText: { type: string256 },
     competitorType: { type: require('./enums/measurement-competitor-type').measurementCompetitorType },
     measurableId: { type: objectId },
     agentId: { type: objectId },
-    description: { type: graphql.GraphQLString },
+    description: { type: string8K },
     taggedMeasurementId: { type: objectId },
     relevantAt: { type: DateType.default },
   }),
@@ -89,15 +90,15 @@ const measurement = new graphql.GraphQLObjectType({
     id: { type: graphql.GraphQLNonNull(objectId) },
     value: { type: graphql.GraphQLNonNull(measurementValue) },
     competitorType: { type: require('./enums/measurement-competitor-type').measurementCompetitorType },
-    description: { type: graphql.GraphQLString },
+    description: { type: string8K },
     measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     agentId: { type: objectId },
     relevantAt: { type: DateType.default },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    taggedMeasurementId: { type: graphql.GraphQLString },
+    taggedMeasurementId: { type: objectId },
     iAmOwner: require('./common').iAmOwner,
-    valueText: { type: graphql.GraphQLString },
+    valueText: { type: string256 },
 
     measurementScoreSet: {
       type: require('./measurements').measurementScoreSet,

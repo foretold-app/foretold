@@ -5,15 +5,16 @@ const models = require('../../models');
 const resolvers = require('../resolvers');
 
 const { objectId } = require('./scalars');
+const { string512, string256 } = require('./scalars');
 
 const seriesCreateInput = new graphql.GraphQLInputObjectType({
   name: 'SeriesCreateInput',
   fields: () => ({
-    name: { type: graphql.GraphQLString },
-    description: { type: graphql.GraphQLString },
+    name: { type: string256 },
+    description: { type: string512 },
     channelId: { type: graphql.GraphQLNonNull(objectId) },
-    subjects: { type: graphql.GraphQLList(graphql.GraphQLString) },
-    properties: { type: graphql.GraphQLList(graphql.GraphQLString) },
+    subjects: { type: graphql.GraphQLList(string512) },
+    properties: { type: graphql.GraphQLList(string512) },
     dates: { type: graphql.GraphQLList(DateType.default) },
   }),
 });
@@ -22,10 +23,10 @@ const series = new graphql.GraphQLObjectType({
   name: 'Series',
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(objectId) },
-    name: { type: graphql.GraphQLString },
-    description: { type: graphql.GraphQLString },
-    subjects: { type: graphql.GraphQLList(graphql.GraphQLString) },
-    properties: { type: graphql.GraphQLList(graphql.GraphQLString) },
+    name: { type: string256 },
+    description: { type: string512 },
+    subjects: { type: graphql.GraphQLList(string512) },
+    properties: { type: graphql.GraphQLList(string512) },
     dates: { type: graphql.GraphQLList(DateType.default) },
     channelId: { type: graphql.GraphQLNonNull(objectId) },
 

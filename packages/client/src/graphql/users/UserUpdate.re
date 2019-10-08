@@ -58,7 +58,7 @@ let withUserQuery =
   </UserGet.QueryComponent>;
 };
 
-let withUserMutation = innerComponentFn =>
+let component = innerComponentFn =>
   EditUserMutation.make(
     ~onError=e => Js.log2("Graphql Error:", e),
     innerComponentFn,

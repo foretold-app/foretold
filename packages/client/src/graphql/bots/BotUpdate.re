@@ -26,7 +26,7 @@ let mutate =
   |> ignore;
 };
 
-let withMutation = innerComponentFn =>
+let component = innerComponentFn =>
   <Mutation onError={e => Js.log2("Graphql Error:", e)}>
     ...innerComponentFn
   </Mutation>;

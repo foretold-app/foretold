@@ -81,7 +81,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
   render: _ =>
     <SLayout head={SLayout.Header.textDiv("Invite Member")}>
       <FC.PageCard.BodyPadding>
-        {InvitationCreate.withMutation((mutation, data) =>
+        {InvitationCreate.component((mutation, data) =>
            withForm(
              channelId,
              "",

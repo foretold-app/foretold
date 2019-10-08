@@ -54,20 +54,21 @@ let make = _children => {
       | _ => None
       };
 
-    let getUser = innerComponentFn => {
+    let getUser = fn => {
       let serverJwt = ServerJwt.make_from_storage();
       let auth0tokens = Auth0Tokens.make_from_storage();
       let authToken = state.authToken;
 
       switch (serverJwt, authToken, auth0tokens) {
-      | (Some(_), _, _) => UserGet.inner(innerComponentFn)
-      | (_, None, None) => innerComponentFn(Me.WithoutTokens)
+      | (Some(_), _, _) => UserGet.component(fn)
+      | (_, None, None) => fn(Me.WithoutTokens)
       | (_, _, _) => Authentication.component(auth0tokens, authToken)
       };
     };
 
     <ReasonApollo.Provider client=appApolloClient>
-      {GlobalSettingGet.inner((globalSetting: option(Types.globalSetting)) =>
+      {GlobalSettingGet.component(
+         (globalSetting: option(Types.globalSetting)) =>
          getUser((me: Me.t) => {
            let loggedInUser = meToUser(Some(me));
 

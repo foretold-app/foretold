@@ -151,7 +151,7 @@ let make =
       ~head=SLayout.Header.textDiv("Edit Profile Information"),
       ~body=
         <FC.PageCard.BodyPadding>
-          {UserUpdate.withUserMutation((mutation, data) => {
+          {UserUpdate.component((mutation, data) => {
              let agent = loggedInUser.agent;
              let id = loggedInUser.id;
              let email = loggedInUser.email |> E.O.default("");

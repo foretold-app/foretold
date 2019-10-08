@@ -14,7 +14,7 @@ let make =
   ...component,
   render: _ => {
     let body =
-      BotCreateMutation.withMutation((mutation, data) => {
+      BotCreateMutation.component((mutation, data) => {
         let onSubmit = (values: BotForm.Form.onSubmitAPI): unit => {
           BotCreateMutation.mutate(
             mutation,

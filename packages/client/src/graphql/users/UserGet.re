@@ -91,8 +91,8 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let inner = innerComponentFn => {
-  <QueryComponent>
+let component = innerComponentFn => {
+  <QueryComponent pollInterval=3000>
     ...{({result}) =>
       result
       |> HttpResponse.fromApollo

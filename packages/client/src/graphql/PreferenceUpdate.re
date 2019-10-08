@@ -35,8 +35,7 @@ let mutate =
   mutation(~variables=mutate##variables, ~refetchQueries=[||], ()) |> ignore;
 };
 
-let withUserQuery =
-    (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
+let component = (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
   let query = UserGet.Query.make(~auth0Id, ());
   <UserGet.QueryComponent variables=query##variables>
     ...{({result}) =>

@@ -222,7 +222,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
       ~head=SLayout.Header.textDiv("Make a New Series"),
       ~body=
         <FC.PageCard.BodyPadding>
-          {SeriesCreate.withMutation((mutation, data) =>
+          {SeriesCreate.component((mutation, data) =>
              withForm(mutation, channelId, ({send, state}) =>
                CMutationForm.showWithLoading(
                  ~result=data.result,

@@ -48,8 +48,6 @@ let component = (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
 };
 
 let withPreferenceMutation = innerComponentFn =>
-  EditPreferenceMutation.make(
-    ~onError=e => Js.log2("Graphql Error:", e),
-    innerComponentFn,
-  )
-  |> E.React.el;
+  <EditPreferenceMutation onError={e => Js.log2("Graphql Error:", e)}>
+    ...innerComponentFn
+  </EditPreferenceMutation>;

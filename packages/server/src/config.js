@@ -23,21 +23,38 @@ const GITHUB_API_URL = process.env.GITHUB_API_URL
 const GITHUB_QUERY_USER_AGENT = process.env.GITHUB_QUERY_USER_AGENT
   || 'Foretold App';
 
-if (!SERVER_URL) throw new ReferenceError('SERVER_URL is not defined');
+const DEV = NODE_ENV === 'development';
+const PROD = NODE_ENV === 'production';
 
-if (!AUTH0_SECRET) throw new ReferenceError('AUTH0_SECRET is not defined');
-if (!JWT_SECRET) throw new ReferenceError('JWT_SECRET is not defined');
-if (!JWT_ISSUER) throw new ReferenceError('JWT_ISSUER is not defined');
-
-if (!JWT_EXPIN) throw new ReferenceError('JWT_EXPIN is not defined');
-if (!AUTH0_DOMAIN) throw new ReferenceError('AUTH0_DOMAIN is not defined');
-if (!AUTH0_CLIENT_ID) throw new ReferenceError('AUTH0_CLIENT_ID is not defined');
+if (!SERVER_URL) {
+  throw new ReferenceError('SERVER_URL is not defined');
+}
+if (!AUTH0_SECRET) {
+  throw new ReferenceError('AUTH0_SECRET is not defined');
+}
+if (!JWT_SECRET) {
+  throw new ReferenceError('JWT_SECRET is not defined');
+}
+if (!JWT_ISSUER) {
+  throw new ReferenceError('JWT_ISSUER is not defined');
+}
+if (!JWT_EXPIN) {
+  throw new ReferenceError('JWT_EXPIN is not defined');
+}
+if (!AUTH0_DOMAIN) {
+  throw new ReferenceError('AUTH0_DOMAIN is not defined');
+}
+if (!AUTH0_CLIENT_ID) {
+  throw new ReferenceError('AUTH0_CLIENT_ID is not defined');
+}
 
 const conf = {
   PORT,
   NODE_ENV,
   SERVER_URL,
   API_URL,
+  PROD,
+  DEV,
 
   AUTH0_SECRET,
   AUTH0_DOMAIN,

@@ -5,8 +5,7 @@ const bodyParser = require('body-parser-graphql');
 
 const config = require('./config');
 const { runJobs, runListeners } = require('./sync');
-const events = require('./sync/events');
-const emitter = require('./sync/emitter');
+const { events, emitter } = require('./sync');
 const { apolloServer } = require('./graphql/apollo-server');
 
 {
@@ -17,6 +16,20 @@ const { apolloServer } = require('./graphql/apollo-server');
 
 const app = express();
 app.use(cors());
+
+{
+  const redirectRequestToHttps = (req, res, next) => {
+    if (req.secure) {
+      next();
+    } else {
+      res.redirect('https://' + req.headers.host + req.url);
+    }
+  };
+
+  if (config.PROD) {
+    app.use(redirectRequestToHttps);
+  }
+}
 
 {
   // Returns the client's files

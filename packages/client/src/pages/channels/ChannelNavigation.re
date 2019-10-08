@@ -12,8 +12,6 @@ let make =
 
     switch (loggedInUser) {
     | Some(loggedInUser) =>
-      let loadChannel = ChannelGet.component2(~id=channelId);
-
       let successFn = (channel: Types.channel) =>
         <Channel channelPage loggedInUser channel={Some(channel)}>
           {switch (channelPage.subPage) {
@@ -52,7 +50,7 @@ let make =
           <SLayout> <Spin /> </SLayout>
         </Channel>;
 
-      loadChannel(result =>
+      ChannelGet.component2(~id=channelId, result =>
         result |> HttpResponse.flatten(successFn, errorFn, loadingFn)
       );
     | None => <Home />

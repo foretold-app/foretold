@@ -1,5 +1,4 @@
 open Utils;
-open E;
 
 let component = ReasonReact.statelessComponent("Home");
 

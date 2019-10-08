@@ -1,6 +1,7 @@
 // This var need to prevent when "a user cannot go from profile page".
 let redirectionCount = ref(0);
 
+//@todo: remove somehow
 let defaultPage = (loggedInUser: Types.user) =>
   loggedInUser.agent
   |> E.O.bind(_, Primary.Agent.firstChannel)
@@ -12,16 +13,19 @@ let defaultPage = (loggedInUser: Types.user) =>
     Primary.Channel.globalLink()
     |> Routing.Url.toString
     |> ReasonReact.Router.push;
+
     E.O.default(<Home />);
   };
 
 let component = ReasonReact.statelessComponent("Redirect");
-let make = (~appContext: Providers.appContext, _children) => {
+let make =
+    (~loggedInUser: option(Types.user), ~route: Routing.Route.t, _children) => {
   ...component,
   didUpdate: _self => {
     redirectionCount := redirectionCount^ + 1;
 
-    switch (appContext.loggedInUser, appContext.route, redirectionCount^) {
+    // @todo: remove
+    switch (loggedInUser, route, redirectionCount^) {
     | (_, Profile, _) => ()
     | (Some(loggedInUser), _, 2) =>
       loggedInUser.agent

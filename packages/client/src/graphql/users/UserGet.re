@@ -92,7 +92,7 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let component = innerComponentFn => {
-  <QueryComponent fetchPolicy="no-cache">
+  <QueryComponent fetchPolicy="network-only">
     ...{({result}) =>
       result
       |> ApolloUtils.apolloResponseToResult

@@ -32,7 +32,8 @@ let mutate =
       },
       (),
     );
-  mutation(~variables=mutate##variables, ~refetchQueries=[||], ()) |> ignore;
+  mutation(~variables=mutate##variables, ~refetchQueries=[|"user"|], ())
+  |> ignore;
 };
 
 let withUserQuery =

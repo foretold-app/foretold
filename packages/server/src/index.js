@@ -18,7 +18,7 @@ const app = express();
 app.use(cors());
 
 {
-  const redirectRequestToHttps = (res, req, next) => {
+  const redirectRequestToHttps = (req, res, next) => {
     if (req.secure) {
       next();
     } else {

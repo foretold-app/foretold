@@ -1,8 +1,3 @@
-let inMemoryCache = ApolloInMemoryCache.createInMemoryCache();
-
-[@bs.deriving abstract]
-type data = {name: string};
-
 let storageToHeaders = (jwt: ServerJwt.t) =>
   Json.Encode.(
     object_([("authorization", Json.Encode.string("Bearer " ++ jwt))])
@@ -57,11 +52,9 @@ let link = () =>
   | None => ApolloLinks.from([|errorLink, httpLink|])
   };
 
-/* TODO: Don't always load devtools. */
 let instance = () =>
   ReasonApollo.createApolloClient(
     ~link=link(),
-    ~cache=inMemoryCache,
-    ~connectToDevTools=true,
+    ~cache=ApolloInMemoryCache.createInMemoryCache(),
     (),
   );

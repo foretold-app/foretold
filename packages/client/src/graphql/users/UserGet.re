@@ -57,8 +57,8 @@ let toUser = a =>
 
 module Query = [%graphql
   {|
-    query user ($auth0Id: String) {
-      user(auth0Id: $auth0Id) {
+    query user {
+      user {
         id
         name
         email

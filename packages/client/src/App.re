@@ -66,25 +66,23 @@ let make = _children => {
       };
     };
 
-    <ReasonApollo.Provider client=appApolloClient>
-      {GlobalSettingGet.inner((globalSetting: option(Types.globalSetting)) =>
-         getUser((me: Me.t) => {
-           let loggedInUser = meToUser(Some(me));
+    GlobalSettingGet.inner((globalSetting: option(Types.globalSetting)) =>
+      getUser((me: Me.t) => {
+        let loggedInUser = meToUser(Some(me));
 
-           let appContext: Providers.appContext = {
-             route: state.route,
-             authToken: state.authToken,
-             me: Some(me),
-             loggedInUser,
-             globalSetting,
-           };
+        let appContext: Providers.appContext = {
+          route: state.route,
+          authToken: state.authToken,
+          me: Some(me),
+          loggedInUser,
+          globalSetting,
+        };
 
-           <Providers.AppContext.Provider value=appContext>
-             <Navigator route={self.state.route} loggedInUser />
-             <Redirect appContext />
-           </Providers.AppContext.Provider>;
-         })
-       )}
-    </ReasonApollo.Provider>;
+        <Providers.AppContext.Provider value=appContext>
+          <Navigator route={self.state.route} loggedInUser />
+          <Redirect appContext />
+        </Providers.AppContext.Provider>;
+      })
+    );
   },
 };

@@ -1,4 +1,4 @@
-module EditPreference = [%graphql
+module Query = [%graphql
   {|
     mutation preferenceUpdate(
         $id: String!
@@ -14,7 +14,7 @@ module EditPreference = [%graphql
  |}
 ];
 
-module EditPreferenceMutation = ReasonApollo.CreateMutation(EditPreference);
+module EditPreferenceMutation = ReasonApollo.CreateMutation(Query);
 
 let mutate =
     (
@@ -24,7 +24,7 @@ let mutate =
       id: string,
     ) => {
   let mutate =
-    EditPreference.make(
+    Query.make(
       ~id,
       ~input={
         "stopAllEmails": Some(stopAllEmails),

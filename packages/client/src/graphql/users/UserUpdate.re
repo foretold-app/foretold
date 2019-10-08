@@ -1,4 +1,4 @@
-module EditUser = [%graphql
+module Query = [%graphql
   {|
     mutation userUpdate(
         $id: String!
@@ -14,7 +14,7 @@ module EditUser = [%graphql
  |}
 ];
 
-module EditUserMutation = ReasonApollo.CreateMutation(EditUser);
+module EditUserMutation = ReasonApollo.CreateMutation(Query);
 
 let mutate =
     (
@@ -30,7 +30,7 @@ let mutate =
   let description' = picture === "" ? None : Some(description);
 
   let mutate =
-    EditUser.make(
+    Query.make(
       ~id,
       ~input={
         "name": name,

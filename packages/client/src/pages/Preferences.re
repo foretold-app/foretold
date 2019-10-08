@@ -80,7 +80,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
 
 module CMutationForm =
   MutationForm.Make({
-    type queryType = PreferenceUpdate.EditPreference.t;
+    type queryType = PreferenceUpdate.Query.t;
   });
 
 let component = ReasonReact.statelessComponent("Preference");

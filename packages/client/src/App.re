@@ -14,8 +14,6 @@ let mapUrlToAction = (state, url: ReasonReact.Router.url) => {
 let firstStateUpdate = (_state, url: ReasonReact.Router.url) => {
   let route = url |> Routing.Route.fromUrl;
   let authToken = url |> Auth.UrlToTokens.make;
-  // @todo: remove side effect
-  //  KeyValuePairs.clearHash(url, "token") |> ReasonReact.Router.replace;
   ChangeState({authToken, route});
 };
 
@@ -46,13 +44,7 @@ let make = _children => {
   },
 
   render: self => {
-    let state: state = self.state;
-
-    let meToUser = (me: option(Me.t)) =>
-      switch (me) {
-      | Some(WithTokensAndUserData({userData})) => Some(userData)
-      | _ => None
-      };
+    let state = self.state;
 
     let getUser = fn => {
       let serverJwt = ServerJwt.make_from_storage();
@@ -61,27 +53,24 @@ let make = _children => {
 
       switch (serverJwt, authToken, auth0tokens) {
       | (Some(_), _, _) => UserGet.component(fn)
-      | (_, None, None) => fn(Me.WithoutTokens)
       | (_, _, _) => Authentication.component(auth0tokens, authToken)
       };
     };
 
     <ReasonApollo.Provider client=appApolloClient>
-      {GlobalSettingGet.component(
-         (globalSetting: option(Types.globalSetting)) =>
-         getUser((me: Me.t) => {
-           let loggedInUser = meToUser(Some(me));
+      {GlobalSettingGet.component(globalSetting =>
+         getUser(loggedInUser => {
+           Js.log2("loggedInUser", loggedInUser);
 
            let appContext: Providers.appContext = {
              route: state.route,
              authToken: state.authToken,
-             me: Some(me),
              loggedInUser,
              globalSetting,
            };
 
            <Providers.AppContext.Provider value=appContext>
-             <Navigator route={self.state.route} loggedInUser />
+             <Navigator route={state.route} loggedInUser />
              <Redirect appContext />
            </Providers.AppContext.Provider>;
          })

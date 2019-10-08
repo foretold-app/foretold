@@ -39,19 +39,7 @@ module FormConfig = {
 
 module Form = ReFormNext.Make(FormConfig);
 
-let component = ReasonReact.statelessComponent("Measurables");
-
-let withUserQuery =
-    (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = UserGet.Query.make(~auth0Id, ());
-  UserGet.QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(innerComponentFn)
-    |> E.R.id
-  )
-  |> E.React.el;
-};
+let component = ReasonReact.statelessComponent("SeriesNew");
 
 module CMutationForm =
   MutationForm.Make({

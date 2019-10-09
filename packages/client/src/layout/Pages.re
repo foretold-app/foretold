@@ -1,3 +1,5 @@
+// @todo: remove this
+
 open PageConfig;
 
 module EntityShow' = {
@@ -14,10 +16,6 @@ module BotEdit' = {
 
 module AgentIndex' = {
   let toEl = AgentIndex.make |> LoggedInPage.noParams;
-};
-
-module Profile' = {
-  let toEl = Profile.make |> LoggedInPage.justLoggedInUser;
 };
 
 module Preferences' = {

@@ -273,6 +273,7 @@ export namespace Layers {
       minNumberOfQuestionsScored?: number | null;
       email?: string;
       status?: string;
+      isEmailVerified?: boolean;
 
       findInDateRange?: object; // @todo: Object? Give definition!
       withinMeasurables?: withinMeasurables | null;
@@ -307,6 +308,7 @@ export namespace Layers {
       seriesId?: Models.ObjectID;
       email?: string;
       channelId?: Models.ObjectID;
+      isEmailVerified?: boolean;
     };
     type response = { data: any };
     type responseList = { data: any[]; total: number };
@@ -382,6 +384,7 @@ export namespace Layers {
       minNumberOfQuestionsScored?: number | null;
       email?: string;
       status?: string;
+      isEmailVerified?: boolean;
 
       withinMeasurables?: withinMeasurables | null;
       withinPublicChannels?: withinPublicChannels | null;
@@ -414,6 +417,7 @@ export namespace Layers {
       name?: string,
       auth0Id?: string,
       seriesId?: Models.ObjectID,
+      isEmailVerified?: boolean,
     };
     type response = { data: any };
     type responseList = { data: any[], total: number };

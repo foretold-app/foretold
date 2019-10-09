@@ -62,13 +62,13 @@ class ModelPostgres extends Model {
     return `(
       /* P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
-      LEFT OUTER JOIN 
-        "ChannelMemberships" 
+      LEFT OUTER JOIN
+        "ChannelMemberships"
         ON "Channels".id = "ChannelMemberships"."channelId"
         AND "ChannelMemberships"."agentId" = '${agentId}'
-      WHERE 
+      WHERE
         "ChannelMemberships"."agentId" IS NOT NULL
-        OR "Channels"."isPublic" = TRUE 
+        OR "Channels"."isPublic" = TRUE
     )`;
   }
 
@@ -117,11 +117,11 @@ class ModelPostgres extends Model {
     return `(
       /* J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       SELECT "Channels"."id" FROM "Channels"
-      LEFT OUTER JOIN 
-        "ChannelMemberships" 
+      LEFT OUTER JOIN
+        "ChannelMemberships"
         ON "Channels".id = "ChannelMemberships"."channelId"
         AND "ChannelMemberships"."agentId" = '${agentId}'
-      WHERE 
+      WHERE
         "ChannelMemberships"."agentId" IS NOT NULL
     )`;
   }
@@ -416,6 +416,10 @@ class ModelPostgres extends Model {
 
     if (filter.creatorId) {
       where.creatorId = filter.creatorId;
+    }
+
+    if (filter.isEmailVerified) {
+      where.creatorId = filter.isEmailVerified;
     }
 
     if (filter.excludeChannelId) {

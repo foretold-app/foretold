@@ -4,8 +4,11 @@ const assert = require('assert');
 const { DataBase } = require('./data-base');
 
 const { ChannelMembershipsData } = require('./channel-memberships-data');
+const { UsersData } = require('./users-data');
 
 const { InvitationModel } = require('../models-abstract');
+
+const { Data, Params, Filter, Query } = require('./classes');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -16,6 +19,7 @@ class InvitationsData extends DataBase {
     super();
     this.model = new InvitationModel();
     this.channelMemberships = new ChannelMembershipsData();
+    this.users = new UsersData();
   }
 
   /**
@@ -39,15 +43,54 @@ class InvitationsData extends DataBase {
       assert(_.isString(channelId), 'Channel Id should be a string');
       assert(_.isString(inviterAgentId), 'Inviter Agent Id should be a string');
 
-      const params = { email, channelId };
-      const query = {};
-      const data = { email, inviterAgentId, channelId };
-      return await this.upsertOne(params, query, data);
+      const added = await this.addMemberships(
+        email,
+        channelId,
+        inviterAgentId,
+      );
 
+      if (added) {
+        return null;
+      }
+
+      return this.upsert(email, channelId, inviterAgentId);
     } catch (e) {
       console.error('Invitation Err', e);
     }
     return null;
+  }
+
+  /**
+   * @param {string} email
+   * @param {Models.ObjectID} channelId
+   * @param {Models.ObjectID} inviterAgentId
+   * @returns {Promise<*>}
+   */
+  async upsert(email, channelId, inviterAgentId) {
+    const params = new Params({ email, channelId });
+    const query = new Query();
+    const data = new Data({ email, inviterAgentId, channelId });
+    return await this.upsertOne(params, query, data);
+  }
+
+  /**
+   * @param {string} email
+   * @param {Models.ObjectID} channelId
+   * @param {Models.ObjectID} inviterAgentId
+   * @returns {Promise<boolean>}
+   */
+  async addMemberships(email, channelId, inviterAgentId) {
+    const user = await this.getVerified(email);
+
+    if (!!user) {
+      const agentId = _.get(user, 'agentId', null);
+      const data = new Data({ channelId, agentId });
+      const memberships = await this.channelMemberships.createOne(data);
+
+      return !!memberships;
+    }
+
+    return false;
   }
 }
 

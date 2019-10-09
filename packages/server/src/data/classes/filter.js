@@ -50,6 +50,7 @@ class Filter {
       'minNumberOfQuestionsScored', // number | null
       'email', // string
       'status', // string
+      'isEmailVerified', // boolean
     ];
     utils.extend(this.constructor.name, filter, list, this);
     utils.diff(this.constructor.name, filter, list);

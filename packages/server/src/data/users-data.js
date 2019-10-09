@@ -67,6 +67,16 @@ class UsersData extends DataBase {
     await user.save();
     return user;
   }
+
+  /**
+   * @public
+   * @param {string} email
+   * @return {Promise<Models.User>}
+   */
+  async getVerified(email) {
+    const params = new Params({ email, isEmailVerified: true });
+    return this.getOne(params);
+  }
 }
 
 module.exports = {

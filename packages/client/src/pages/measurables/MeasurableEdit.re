@@ -96,6 +96,7 @@ let make =
              formCreation(pageParams.id, m, loggedInUser)
            )}
         </FC.PageCard.BodyPadding>,
+      (),
     )
     |> layout,
 };

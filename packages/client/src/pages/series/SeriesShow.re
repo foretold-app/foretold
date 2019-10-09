@@ -96,6 +96,7 @@ let make =
             />
           | _ => <div />
           },
+        (),
       )
       |> SLayout.FullPage.makeWithEl
     )

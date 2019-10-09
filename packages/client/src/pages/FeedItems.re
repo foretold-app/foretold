@@ -72,6 +72,8 @@ let make =
       SLayout.LayoutConfig.make(
         ~head=isFound ? pagination(reducerParams) : ReasonReact.null,
         ~body,
+        ~isFluid=true,
+        (),
       )
       |> layout;
     };

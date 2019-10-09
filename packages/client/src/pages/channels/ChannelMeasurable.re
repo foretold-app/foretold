@@ -11,7 +11,7 @@ let make =
   render: _ => {
     <>
       <SLayout> <Measurable id=measurableId loggedInUser /> </SLayout>
-      <MeasurableButtom measurableId channelId loggedInUser />
+      <MeasurableBottomSection measurableId channelId loggedInUser />
     </>;
   },
 };

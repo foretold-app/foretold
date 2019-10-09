@@ -49,6 +49,7 @@ let make =
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv("Make a New Bot"),
       ~body,
+      (),
     )
     |> layout;
   },

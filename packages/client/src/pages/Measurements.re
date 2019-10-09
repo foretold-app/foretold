@@ -30,7 +30,8 @@ module Body = {
           ~channelId=Some(""),
           ~paginationPage=Reducer.Components.paginationPage(reducerParams),
           (),
-        )}>
+        )}
+        isFluid=true>
         {switch (reducerParams.response) {
          | Success(connection) =>
            let measurementsList = connection.edges |> Array.to_list;

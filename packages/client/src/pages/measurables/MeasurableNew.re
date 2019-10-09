@@ -77,6 +77,7 @@ let make = (~channelId, ~loggedInUser: Types.user, _children) => {
            )
            |> E.React.el}
         </FC.PageCard.BodyPadding>,
+      (),
     )
     |> SLayout.FullPage.makeWithEl;
   },

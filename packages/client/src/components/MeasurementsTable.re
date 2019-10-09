@@ -368,9 +368,9 @@ let make =
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
   let all = [|
+    agentColumn,
     getPredictionDistributionColumn(bounds),
     predictionValueColumn,
-    agentColumn,
     timeColumn,
   |];
 

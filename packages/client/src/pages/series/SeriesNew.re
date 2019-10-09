@@ -232,6 +232,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
              )
            )}
         </FC.PageCard.BodyPadding>,
+      (),
     )
     |> SLayout.FullPage.makeWithEl,
 };

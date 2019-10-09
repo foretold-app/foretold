@@ -47,7 +47,7 @@ module Tabs = {
   };
 };
 
-let component = ReasonReact.reducerComponent("MeasurableButtom");
+let component = ReasonReact.reducerComponent("MeasurableBottomSection");
 let make =
     (
       ~measurableId: string,

@@ -24,7 +24,10 @@ module Styles = {
       float(`left),
     ]);
 
-  let container = style([maxWidth(`px(1170)), margin(`auto)]);
+  let container = isFluid =>
+    isFluid
+      ? style([paddingLeft(`em(2.0)), paddingRight(`em(2.0))])
+      : style([maxWidth(`px(1170)), margin(`auto)]);
 
   let backHover = style([fontSize(`em(1.3))]);
 
@@ -56,13 +59,14 @@ module LayoutConfig = {
   type t = {
     head: ReasonReact.reactElement,
     body: ReasonReact.reactElement,
+    isFluid: bool,
   };
-  let make = (~head, ~body) => {head, body};
+  let make = (~head, ~body, ~isFluid=false, ()) => {head, body, isFluid};
 };
 
 module FullPage = {
   let component = ReasonReact.statelessComponent("FullPage");
-  let make = ({head, body}: LayoutConfig.t) => {
+  let make = ({head, body, isFluid}: LayoutConfig.t) => {
     ...component,
     render: _ =>
       <FC.Base.Div.Jsx2
@@ -77,7 +81,7 @@ module FullPage = {
             @ FC.Base.BaseStyles.fullWidthFloatLeft,
           )
         )>
-        <div className=Styles.container>
+        <div className={Styles.container(isFluid)}>
           <FC.PageCard>
             <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
             <FC.PageCard.Body> body </FC.PageCard.Body>
@@ -121,7 +125,7 @@ let seriesHead = (channel: Types.channel, seriesName) =>
   </>;
 
 let component = ReasonReact.statelessComponent("SLayout");
-let make = (~head=ReasonReact.null, children) => {
+let make = (~head=ReasonReact.null, ~isFluid=false, children) => {
   ...component,
   render: _ =>
     <FC.Base.Div.Jsx2
@@ -136,7 +140,7 @@ let make = (~head=ReasonReact.null, children) => {
           @ FC.Base.BaseStyles.fullWidthFloatLeft,
         )
       )>
-      <div className=Styles.container>
+      <div className={Styles.container(isFluid)}>
         <FC.PageCard>
           <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
           <FC.PageCard.Body>

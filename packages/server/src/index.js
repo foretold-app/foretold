@@ -18,26 +18,6 @@ const app = express();
 app.use(cors());
 
 {
-  const redirectRequestToHttps = (req, res, next) => {
-    console.log("req.protocol", req.protocol);
-    console.log("req.secure", req.secure);
-    console.log("redirect to", 'https://' + req.headers.host + req.url);
-    console.log("header", req.headers['x-forwarded-proto']);
-    console.log("req.connection.encrypted", req.connection && req.connection.encrypted);
-    if (req.secure) {
-      next();
-    } else {
-      next();
-      // res.redirect('https://' + req.headers.host + req.url);
-    }
-  };
-
-  if (config.PROD) {
-    app.use(redirectRequestToHttps);
-  }
-}
-
-{
   // Returns the client's files
   const fallbackFile = path.resolve(__dirname, '../../client/dist/index.html');
   const distDir = path.resolve(__dirname, '../../client/dist');

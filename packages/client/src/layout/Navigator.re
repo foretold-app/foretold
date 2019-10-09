@@ -14,7 +14,10 @@ let make = (~route: Route.t, ~loggedInUser: option(Types.user), _children) => {
     | (AgentIndex, _) => AgentIndex'.toEl(loggedInUser)
     | (EntityShow(id), _) => EntityShow'.toEl({id: id}, loggedInUser)
     | (EntityIndex, _) => EntityIndex'.toEl(loggedInUser)
-    | (Profile, _) => Profile'.toEl(loggedInUser)
+    | (Profile, Some(loggedInUser)) =>
+      <FillWithSidebar loggedInUser>
+        <Profile loggedInUser />
+      </FillWithSidebar>
     | (Preferences, _) => Preferences'.toEl(loggedInUser)
     | (Subscribe, _) => Preferences'.toEl(loggedInUser)
     | (Unsubscribe, _) => Preferences'.toEl(loggedInUser)

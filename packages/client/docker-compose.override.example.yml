@@ -1,9 +1,0 @@
-version: "2"
-
-services:
-
-  app:
-    environment:
-      - AUTH0_DOMAIN=<change-me>
-      - API_URL=<change-me>
-      - AUTH0_CLIENT_ID=<change-me>

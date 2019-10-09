@@ -18,8 +18,22 @@ const app = express();
 app.use(cors());
 
 {
+  /**
+   * Always remember, that services like "Heroku.com"
+   * use proxies.
+   */
   const redirectRequestToHttps = (req, res, next) => {
-    if (req.secure) {
+    const isProtocolHttps = req.protocol === 'https';
+    const isSecure = req.secure === true;
+    const isHeaderHttps = req.headers['x-forwarded-proto'] === 'https';
+    const isConnectionEnc = !!(req.connection && req.connection.encrypted);
+
+    const secure = isProtocolHttps
+      || isSecure
+      || isHeaderHttps
+      || isConnectionEnc;
+
+    if (secure) {
       next();
     } else {
       res.redirect('https://' + req.headers.host + req.url);
@@ -47,7 +61,6 @@ app.use(cors());
 }
 
 {
-  // Set API_URL only in "Netlify.com" to Backend.
   // Do not set API_URL in "Heroku.com" for Staging
   // (this env is used for PR building too).
   // Do not set API_URL in "Heroku.com" for Production.

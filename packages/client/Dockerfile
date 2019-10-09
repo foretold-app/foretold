@@ -17,12 +17,9 @@ COPY src/ /opt/app/src
 COPY stories/ /opt/app/stories
 COPY .babelrc /opt/app/
 COPY .merlin /opt/app/
-COPY .netlifyk /opt/app/
 COPY .uglifyrc /opt/app/
-COPY _redirects /opt/app/
 COPY bsconfig.json /opt/app/
 COPY graphql_schema.json /opt/app/
-COPY webpack.config.js /opt/app/
 
 RUN yarn build-for-server
 

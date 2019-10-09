@@ -19,10 +19,16 @@ app.use(cors());
 
 {
   const redirectRequestToHttps = (req, res, next) => {
+    console.log("req.protocol", req.protocol);
+    console.log("req.secure", req.secure);
+    console.log("redirect to", 'https://' + req.headers.host + req.url);
+    console.log("header", req.headers['x-forwarded-proto']);
+    console.log("req.connection.encrypted", req.connection && req.connection.encrypted);
     if (req.secure) {
       next();
     } else {
-      res.redirect('https://' + req.headers.host + req.url);
+      next();
+      // res.redirect('https://' + req.headers.host + req.url);
     }
   };
 

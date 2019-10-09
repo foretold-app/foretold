@@ -1,0 +1,11 @@
+[[redirects]]
+  from = "http://www.foretold.io/*"
+  to = "https://www.foretold.io/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+

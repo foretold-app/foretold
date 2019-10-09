@@ -73,8 +73,7 @@ module FullPage = {
         className=Css.(
           style(
             [
-              marginTop(`em(2.0)),
-              marginTop(`em(2.)),
+              marginTop(`em(1.)),
               width(`percent(100.)),
               boxSizing(`borderBox),
             ]
@@ -132,8 +131,7 @@ let make = (~head=ReasonReact.null, ~isFluid=false, children) => {
       className=Css.(
         style(
           [
-            marginTop(`em(2.0)),
-            marginTop(`em(2.)),
+            marginTop(`em(1.)),
             width(`percent(100.)),
             boxSizing(`borderBox),
           ]

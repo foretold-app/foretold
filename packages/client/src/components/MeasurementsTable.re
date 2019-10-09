@@ -41,8 +41,8 @@ module Helpers = {
       (
         ~measurement: measurement,
         ~bounds: (float, float),
-        ~width=300,
-        ~height=50,
+        ~width=150,
+        ~height=30,
         (),
       )
       : option(React.element) =>
@@ -83,7 +83,7 @@ module Helpers = {
       r
       |> MeasurementValue.FloatCdf.toJs
       |> FC.Base.Types.Dist.fromJson
-      |> (cdf => Some(<FC__CdfChart__StatSummary cdf />))
+      |> (cdf => Some(<FC__CdfChart__StatSummary cdf showMean=false />))
     | Ok(`FloatPoint(r)) => Some(<FC__NumberShower precision=8 number=r />)
     | Ok(`Percentage(r)) =>
       Some(
@@ -269,20 +269,29 @@ type column = Table.column(Types.measurement);
 let predictionValueColumn =
   Table.Column.make(
     ~name="Prediction" |> ste,
-    ~flex=1,
+    ~flex=5,
     ~render=
       (measurement: Types.measurement) =>
         <div>
           {Helpers.statSummary(measurement) |> E.O.React.defaultNull}
-          {Helpers.getValueText(measurement)}
         </div>,
+    (),
+  );
+
+let predictionTextColumn =
+  Table.Column.make(
+    ~name="Input Text" |> ste,
+    ~flex=5,
+    ~render=
+      (measurement: Types.measurement) =>
+        <div> {Helpers.getValueText(measurement)} </div>,
     (),
   );
 
 let agentColumn =
   Table.Column.make(
     ~name="Member" |> ste,
-    ~flex=1,
+    ~flex=7,
     ~render=
       (measurement: Types.measurement) => Helpers.measurerLink(~measurement),
     (),
@@ -291,7 +300,7 @@ let agentColumn =
 let timeColumn =
   Table.Column.make(
     ~name="Time" |> ste,
-    ~flex=1,
+    ~flex=5,
     ~render=
       (measurement: Types.measurement) =>
         Helpers.relevantAt(~m=measurement) |> E.O.React.defaultNull,
@@ -303,7 +312,7 @@ let measurableColumn =
     ~name="Measurable" |> ste,
     ~render=
       (measurement: Types.measurement) => getMeasurableLink(measurement),
-    ~flex=2,
+    ~flex=5,
     (),
   );
 
@@ -319,13 +328,13 @@ let scoreColumn = (loggedInUser: Types.user) =>
         |> E.O.default("")
         |> Utils.ste,
     ~show=_ => Primary.User.showif(loggedInUser),
-    ~flex=1,
+    ~flex=5,
     (),
   );
 
 let logScoreColumn = (loggedInUser: Types.user) =>
   Table.Column.make(
-    ~name="LogScore" |> ste,
+    ~name="Log Score" |> ste,
     ~render=
       (measurement: Types.measurement) =>
         measurement.measurementScoreSet
@@ -335,14 +344,14 @@ let logScoreColumn = (loggedInUser: Types.user) =>
         |> E.O.default("")
         |> Utils.ste,
     ~show=_ => Primary.User.showif(loggedInUser),
-    ~flex=1,
+    ~flex=5,
     (),
   );
 
 let getPredictionDistributionColumn = bounds =>
   Table.Column.make(
-    ~name="Prediction Distribution" |> ste,
-    ~flex=2,
+    ~name="Distribution" |> ste,
+    ~flex=7,
     ~render=
       (measurement: Types.measurement) =>
         Helpers.smallDistribution(~measurement, ~bounds, ())
@@ -364,15 +373,31 @@ let bottomSubRowFn =
   );
 
 let make =
-    (~loggedInUser: Types.user, ~measurementsList: list(measurement), ()) => {
+    (
+      ~loggedInUser: Types.user,
+      ~measurementsList: list(measurement),
+      ~measurableValueType: Types.valueType,
+      (),
+    ) => {
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
-  let all = [|
-    agentColumn,
-    getPredictionDistributionColumn(bounds),
-    predictionValueColumn,
-    timeColumn,
-  |];
+  let all =
+    switch (measurableValueType) {
+    | `FLOAT => [|
+        agentColumn,
+        getPredictionDistributionColumn(bounds),
+        predictionValueColumn,
+        predictionTextColumn,
+        timeColumn,
+      |]
+    | `PERCENTAGE => [|
+        agentColumn,
+        getPredictionDistributionColumn(bounds),
+        predictionTextColumn,
+        timeColumn,
+      |]
+    | `DATE => Js.Exn.raiseError("Date not supported ")
+    };
 
   let measurementsList' = measurementsList |> E.L.sort(sort);
 
@@ -389,53 +414,37 @@ let make =
 };
 
 let makeExtended =
-    (~loggedInUser: Types.user, ~measurementsList: list(measurement), ()) => {
-  let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
-
-  let all = [|
-    getPredictionDistributionColumn(bounds),
-    predictionValueColumn,
-    agentColumn,
-    logScoreColumn(loggedInUser),
-    scoreColumn(loggedInUser),
-    timeColumn,
-  |];
-
-  let measurementsList' = measurementsList |> E.L.sort(sort);
-
-  measurementsList' |> E.L.length > 0
-    ? <FC.PageCard.Body>
-        {Table.fromColumns(
-           all,
-           measurementsList' |> Array.of_list,
-           ~bottomSubRowFn,
-           (),
-         )}
-      </FC.PageCard.Body>
-    : <NothingToShow />;
-};
-
-let makeAgentPredictionsTable =
     (
+      ~loggedInUser: Types.user,
       ~measurementsList: list(measurement),
-      ~onSelect=(_measurement: Types.measurement) => (),
+      ~measurableValueType: Types.valueType,
       (),
     ) => {
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
-  let all = [|
-    measurableColumn,
-    getPredictionDistributionColumn(bounds),
-    predictionValueColumn,
-    timeColumn,
-  |];
+  let all =
+    switch (measurableValueType) {
+    | `FLOAT => [|
+        agentColumn,
+        getPredictionDistributionColumn(bounds),
+        predictionValueColumn,
+        predictionTextColumn,
+        logScoreColumn(loggedInUser),
+        scoreColumn(loggedInUser),
+        timeColumn,
+      |]
+    | `PERCENTAGE => [|
+        agentColumn,
+        getPredictionDistributionColumn(bounds),
+        predictionValueColumn,
+        logScoreColumn(loggedInUser),
+        scoreColumn(loggedInUser),
+        timeColumn,
+      |]
+    | `DATE => Js.Exn.raiseError("Date not supported ")
+    };
 
   let measurementsList' = measurementsList |> E.L.sort(sort);
-
-  let onRowClb = (measurement: Types.measurement) => {
-    onSelect(measurement);
-    ();
-  };
 
   measurementsList' |> E.L.length > 0
     ? <FC.PageCard.Body>
@@ -443,7 +452,6 @@ let makeAgentPredictionsTable =
            all,
            measurementsList' |> Array.of_list,
            ~bottomSubRowFn,
-           ~onRowClb,
            (),
          )}
       </FC.PageCard.Body>

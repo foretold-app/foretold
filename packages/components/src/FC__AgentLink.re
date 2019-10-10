@@ -9,25 +9,8 @@ module Styles = {
       color(FC__Settings.accentBlue),
       fontSize(`em(0.8)),
     ]);
-  let imageCropper =
-    style([
-      width(`em(1.)),
-      float(`left),
-      height(`em(1.)),
-      marginRight(`em(0.4)),
-      marginTop(`em(0.1)),
-      overflow(`hidden),
-      position(`relative),
-      marginTop(`em(0.3)),
-      borderRadius(`percent(20.)),
-    ]);
-  let image =
-    style([
-      float(`left),
-      margin2(~v=`zero, ~h=`auto),
-      height(`auto),
-      width(`percent(100.)),
-    ]);
+  let avatar =
+    style([marginTop(`em(0.3)), float(`left), marginRight(`em(0.4))]);
 };
 
 module Agent = {
@@ -81,13 +64,12 @@ module SubItem = {
   [@react.component]
   let make = (~agent: Agent.t, ~className) =>
     <FC__Link onClick={Agent.onClick(agent)} className>
-      <div className=Styles.imageCropper>
-        <img
+      <div className=Styles.avatar>
+        <FC__Avatar
           src={
             Agent.image(agent)
             |> Rationale.Option.default(BotDefaultImage.botDefault)
           }
-          className=Styles.image
         />
       </div>
       {Agent.name(agent) |> ReasonReact.string}

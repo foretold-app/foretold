@@ -94,10 +94,11 @@ let header = (loggedInUser: Types.user) =>
     <AntdDropdown
       overlay={userDropdown(agent.id)}
       overlayClassName=StylesDropdown.dropdown>
-      {agent.name
-       |> (e => e == Some("") ? None : e)
-       |> E.O.default("Settings (Please add a Username on the Profile page)")
-       |> ste}
+      {switch (agent.name, loggedInUser.picture) {
+       | (Some(""), _) => "Please add a Username on the Profile page" |> ste
+       | (Some(name), Some(picture)) => name ++ picture |> ste
+       | _ => "Please add a Username on the Profile page" |> ste
+       }}
       <Icon.Icon icon="CHEVRON_DOWN" />
     </AntdDropdown>
   | None => ReasonReact.null

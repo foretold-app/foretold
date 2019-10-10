@@ -16,3 +16,4 @@ module Menu = FC__Menu;
 module DropdownMenu = FC__DropdownMenu;
 module TabList = FC__TabList;
 module Alert = FC__Alert;
+module Avatar = FC__Avatar;

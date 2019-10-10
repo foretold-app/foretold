@@ -62,8 +62,8 @@ class InvitationsData extends DataBase {
 
   /**
    * @param {string} email
-   * @param {Models.ObjectID} channelId
-   * @param {Models.ObjectID} inviterAgentId
+   * @param {Models.ChannelID} channelId
+   * @param {Models.AgentID} inviterAgentId
    * @returns {Promise<*>}
    */
   async upsert(email, channelId, inviterAgentId) {
@@ -75,8 +75,8 @@ class InvitationsData extends DataBase {
 
   /**
    * @param {string} email
-   * @param {Models.ObjectID} channelId
-   * @param {Models.ObjectID} inviterAgentId
+   * @param {Models.ChannelID} channelId
+   * @param {Models.AgentID} inviterAgentId
    * @returns {Promise<boolean>}
    */
   async addMemberships(email, channelId, inviterAgentId) {
@@ -84,7 +84,7 @@ class InvitationsData extends DataBase {
 
     if (!!user) {
       const agentId = _.get(user, 'agentId', null);
-      const data = new Data({ channelId, agentId });
+      const data = new Data({ channelId, agentId, inviterAgentId });
       const memberships = await this.channelMemberships.createOne(data);
 
       return !!memberships;

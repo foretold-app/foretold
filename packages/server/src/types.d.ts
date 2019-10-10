@@ -3,6 +3,23 @@ export namespace Models {
   export type ChannelMembershipRole = "ADMIN" | "VIEWER";
   export type float = number;
 
+  export type AgentID = ObjectID;
+  export type ChannelID = ObjectID;
+  export type UserID = ObjectID;
+  export type BotID = ObjectID;
+  export type MeasurableID = ObjectID;
+  export type MeasurementID = ObjectID;
+  export type NotificationID = ObjectID;
+  export type TemplateID = ObjectID;
+  export type GlobalSettingsID = ObjectID;
+  export type FeedItemID = ObjectID;
+  export type InvitationID = ObjectID;
+  export type NotificationStatusID = ObjectID;
+  export type SeriesID = ObjectID;
+  export type PreferenceID = ObjectID;
+  export type TokenID = ObjectID;
+  export type ChannelMembershipID = ObjectID;
+
   export interface Model {
     id: ObjectID;
     createdAt: string;
@@ -16,28 +33,32 @@ export namespace Models {
   }
 
   export interface Channel extends Model {
+    id: ChannelID;
     isPublic: boolean;
-    creatorId: ObjectID;
+    creatorId: AgentID;
 
     getAgents(): Models.Agent[];
   }
 
   export interface Bot extends Model {
+    id: BotID;
     name: string;
 
     getAgent(): Models.Agent;
   }
 
   export interface Preference extends Model {
-    agentId: ObjectID;
+    id: PreferenceID;
+    agentId: AgentID;
     stopAllEmails: boolean;
     enableExperimentalFeatures: boolean;
   }
 
   export interface User extends Model {
+    id: UserID;
     name: string;
     auth0Id: string;
-    agentId: ObjectID;
+    agentId: AgentID;
     email?: string;
     picture?: string;
     isEmailVerified: boolean;
@@ -47,27 +68,24 @@ export namespace Models {
   }
 
   export interface Measurable extends Model {
+    id: MeasurableID;
     name: string;
     labelCustom: string;
     valueType: string;
     expectedResolutionDate: string;
-    creatorId: ObjectID;
+    creatorId: AgentID;
     resolutionEndpoint: string;
     stateUpdatedAt: string;
     labelSubject: string;
     labelOnDate: string;
     labelProperty: string;
-    seriesId: string;
-    channelId: string;
+    seriesId: SeriesID;
+    channelId: ChannelID;
     isArchived: boolean;
     state: string;
     min: number;
     max: number;
     resolutionEndpointResponse: Function;
-
-    getCreationNotification(creator: Models.Creator): any;
-
-    getUpdateNotifications(creator: Models.Creator): any;
 
     getCreator(): Models.Agent;
 
@@ -77,16 +95,15 @@ export namespace Models {
   }
 
   export interface Measurement extends Model {
+    id: MeasurementID;
     value: any;
     competitorType: string;
-    measurableId: ObjectID;
-    agentId: ObjectID;
+    measurableId: MeasurableID;
+    agentId: AgentID;
     relevantAt: string;
-    taggedMeasurementId: ObjectID;
+    taggedMeasurementId: MeasurementID;
     description: string;
     valueText: string;
-
-    getCreationNotification(creator: Models.Creator): any;
 
     getMeasurable(): Measurable;
 
@@ -94,6 +111,7 @@ export namespace Models {
   }
 
   export interface Agent extends Model {
+    id: AgentID;
     isAdmin: boolean;
     type: "BOT" | "USER";
     name: string;
@@ -105,6 +123,7 @@ export namespace Models {
   }
 
   export interface Series extends Model {
+    id: SeriesID;
     subjects: string[];
     properties: string[];
     dates: string[];
@@ -113,8 +132,9 @@ export namespace Models {
   }
 
   export interface ChannelMemberships {
-    agentId: ObjectID;
-    channelId: ObjectID;
+    id: ChannelMembershipID;
+    agentId: AgentID;
+    channelId: ChannelID;
     role: ChannelMembershipRole;
     methodCreatedBy:
       | "ADDED_IN_APP_BY_ADMIN"
@@ -123,18 +143,23 @@ export namespace Models {
   }
 
   export interface Token extends Model {
+    id: TokenID;
     token: string;
     isActive: boolean;
   }
 
   export interface NotificationStatus extends Model {
-    agentId: ObjectID;
-    notificationId: ObjectID;
+    id: NotificationStatusID;
+    agentId: AgentID;
+    notificationId: NotificationID;
   }
 
-  export interface Template extends Model {}
+  export interface Template extends Model {
+    id: TemplateID;
+  }
 
   export interface Notification extends Model {
+    id: NotificationID;
     envelope: {
       replacements: Object;
       to: string;
@@ -144,15 +169,17 @@ export namespace Models {
   }
 
   export interface Invitation extends Model {
+    id: InvitationID;
     email: string;
-    channelId: ObjectID;
-    inviterAgentId: ObjectID;
+    channelId: ChannelID;
+    inviterAgentId: AgentID;
     status: "AWAITING" | "ACCEPTED";
   }
 
   export interface FeedItem extends Model {
-    channelId: ObjectID;
-    agentId: ObjectID;
+    id: FeedItemID;
+    channelId: ChannelID;
+    agentId: AgentID;
     body: {
       generic?: { item: string; description: string };
       measurable?: { item: string; description: string; measurableId: string };
@@ -160,27 +187,26 @@ export namespace Models {
   }
 
   export interface GlobalSetting extends Model {
+    id: GlobalSettingsID;
     entityGraph: null | object;
-    botAgentId: null | Models.ObjectID;
+    botAgentId: null | Models.AgentID;
   }
 
   export interface AgentMeasurable extends Model {
-    agentId: ObjectID;
-    measurableId: ObjectID;
+    id: MeasurableID;
+    agentId: AgentID;
+    measurableId: MeasurableID;
     primaryPointScore?: float;
     predictionCountTotal: number;
   }
 
   export interface AgentChannel extends Model {
-    agentId: ObjectID;
-    channelId: ObjectID;
+    id: AgentID;
+    agentId: AgentID;
+    channelId: ChannelID;
     primaryPointScore: float;
     numberOfPredictions: number;
     numberOfQuestionsScored: number;
-  }
-
-  export interface AgentPreference extends Model {
-    stopAllEmails: boolean;
   }
 
   export type Creator = Models.User | Models.Bot;
@@ -195,7 +221,7 @@ export namespace Schema {
     creator?: Models.User | Models.Bot;
 
     // settings
-    botAgentId?: Models.ObjectID;
+    botAgentId?: Models.AgentID;
 
     // After Middleware Interceptions
     userAsObject?: Models.User;
@@ -219,7 +245,7 @@ export namespace Layers {
   export type withinMeasurables = {
     as: string;
     states?: string[];
-    channelId?: Models.ObjectID;
+    channelId?: Models.ChannelID;
   };
 
   export type withinPublicChannels = {
@@ -228,12 +254,12 @@ export namespace Layers {
 
   export type withinJoinedChannels = {
     as: string;
-    agentId: Models.ObjectID;
+    agentId: Models.AgentID;
   };
 
   export type withinPublicAndJoinedChannels = {
     as: string;
-    agentId: Models.ObjectID;
+    agentId: Models.AgentID;
   };
 
   export type order = {field: string, direction: string};
@@ -245,24 +271,24 @@ export namespace Layers {
     type data = object;
     type options = {
       isAdmin?: boolean;
-      agentId?: Models.ObjectID;
-      measuredByAgentId?: Models.ObjectID;
+      agentId?: Models.AgentID;
+      measuredByAgentId?: Models.AgentID;
       transaction?: object;
       lock?: boolean;
       skipLocked?: boolean;
-      currentAgentId?: Models.ObjectID;
+      currentAgentId?: Models.AgentID;
     };
     type filter = {
       id?: Models.ObjectID;
-      creatorId?: Models.ObjectID;
-      seriesId?: Models.ObjectID;
-      channelId?: Models.ObjectID;
-      measurableId?: Models.ObjectID;
-      userId?: Models.ObjectID;
-      agentId?: Models.ObjectID;
-      excludeChannelId?: Models.ObjectID;
-      notTaggedByAgent?: Models.ObjectID;
-      notificationId?: Models.ObjectID;
+      creatorId?: Models.AgentID;
+      seriesId?: Models.SeriesID;
+      channelId?: Models.ChannelID;
+      measurableId?: Models.MeasurableID;
+      userId?: Models.UserID;
+      agentId?: Models.AgentID;
+      excludeChannelId?: Models.ChannelID;
+      notTaggedByAgent?: Models.AgentID;
+      notificationId?: Models.NotificationID;
 
       competitorType?: string;
       type?: string;
@@ -300,14 +326,16 @@ export namespace Layers {
     };
     type params = {
       id?: Models.ObjectID;
-      agentId?: Models.ObjectID;
+
+      agentId?: Models.AgentID;
+      measurableId?: Models.MeasurableID;
+      seriesId?: Models.SeriesID;
+      channelId?: Models.ChannelID;
+
       auth0Id?: string;
       name?: string;
-      measurableId?: Models.ObjectID;
       competitorType?: string;
-      seriesId?: Models.ObjectID;
       email?: string;
-      channelId?: Models.ObjectID;
       isEmailVerified?: boolean;
     };
     type response = { data: any };
@@ -343,10 +371,10 @@ export namespace Layers {
 
     type data = object;
     type restrictions = {
-      agentId?: Models.ObjectID;
-      userId?: Models.ObjectID;
-      channelId?: Models.ObjectID;
-      measuredByAgentId?: Models.ObjectID;
+      agentId?: Models.AgentID;
+      userId?: Models.UserID;
+      channelId?: Models.ChannelID;
+      measuredByAgentId?: Models.AgentID;
 
       isAdmin?: boolean;
       channelIdAsId?: boolean;
@@ -363,14 +391,14 @@ export namespace Layers {
       skipLocked?: boolean;
     };
     type filter = {
-      agentId?: Models.ObjectID;
-      excludeChannelId?: Models.ObjectID;
-      userId?: Models.ObjectID;
-      channelId?: Models.ObjectID;
-      measurableId?: Models.ObjectID;
-      notTaggedByAgent?: Models.ObjectID;
-      seriesId?: Models.ObjectID;
-      creatorId?: Models.ObjectID;
+      agentId?: Models.AgentID;
+      excludeChannelId?: Models.ChannelID;
+      userId?: Models.UserID;
+      channelId?: Models.ChannelID;
+      measurableId?: Models.MeasurableID;
+      notTaggedByAgent?: Models.AgentID;
+      seriesId?: Models.SeriesID;
+      creatorId?: Models.AgentID;
 
       isArchived?: string[];
       types?: string[];
@@ -413,10 +441,10 @@ export namespace Layers {
     };
     type params = {
       id?: Models.ObjectID
-      agentId?: Models.ObjectID
+      agentId?: Models.AgentID
       name?: string,
       auth0Id?: string,
-      seriesId?: Models.ObjectID,
+      seriesId?: Models.SeriesID,
       isEmailVerified?: boolean,
     };
     type response = { data: any };

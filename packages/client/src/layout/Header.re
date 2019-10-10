@@ -97,9 +97,9 @@ let header = (loggedInUser: Types.user) =>
       <Div styles=[Css.style([Css.color(`hex("61738d"))])]>
         <Div float=`left styles=[Css.style([Css.marginLeft(`em(0.2))])]>
           {switch (agent.name) {
-           | Some("") => "Please add a Username on the Profile page" |> ste
+           | Some("")
+           | None => "Please add a Username on the Profile page" |> ste
            | Some(name) => name |> ste
-           | _ => "Please add a Username on the Profile page" |> ste
            }}
         </Div>
         <Div

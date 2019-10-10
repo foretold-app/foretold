@@ -51,10 +51,10 @@ module Top = {
 
 module Agent_Layout_C = {
   let component = ReasonReact.statelessComponent("AgentLayoutPage");
-  let make = ({head, body}: SLayout.LayoutConfig.t) => {
+  let make = ({head, body, isFluid}: SLayout.LayoutConfig.t) => {
     ...component,
     render: _ => {
-      <SLayout head> body </SLayout>;
+      <SLayout head isFluid> body </SLayout>;
     },
   };
 

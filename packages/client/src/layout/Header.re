@@ -94,11 +94,34 @@ let header = (loggedInUser: Types.user) =>
     <AntdDropdown
       overlay={userDropdown(agent.id)}
       overlayClassName=StylesDropdown.dropdown>
-      {agent.name
-       |> (e => e == Some("") ? None : e)
-       |> E.O.default("Settings (Please add a Username on the Profile page)")
-       |> ste}
-      <Icon.Icon icon="CHEVRON_DOWN" />
+      <Div styles=[Css.style([Css.color(`hex("61738d"))])]>
+        <Div float=`left styles=[Css.style([Css.marginLeft(`em(0.2))])]>
+          {switch (agent.name) {
+           | Some("")
+           | None => "Please add a Username on the Profile page" |> ste
+           | Some(name) => name |> ste
+           }}
+        </Div>
+        <Div
+          float=`left
+          styles=[
+            Css.style([
+              Css.marginLeft(`em(0.3)),
+              Css.fontSize(`em(0.7)),
+              Css.opacity(0.4),
+            ]),
+          ]>
+          <Icon.Icon icon="CHEVRON_DOWN" />
+        </Div>
+        {loggedInUser.picture
+         |> E.O.React.fmapOrNull((picture: string) =>
+              <Div
+                float=`left
+                styles=[Css.style([Css.marginLeft(`em(0.45))])]>
+                <FC.Base.Avatar.Jsx2 src=picture width=1.5 />
+              </Div>
+            )}
+      </Div>
     </AntdDropdown>
   | None => ReasonReact.null
   };

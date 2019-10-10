@@ -195,7 +195,7 @@ module Styles = {
           [
             color(FC__Settings.textMedium),
             fontStyle(`normal),
-            fontSize(`em(0.9)),
+            fontSize(`em(0.7)),
             // One option here is to use font-awesome,
             // don't know how much use it would be elsewhere or how to do this,
             // rc-menu does this by default

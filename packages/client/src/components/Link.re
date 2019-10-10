@@ -1,5 +1,14 @@
 [@bs.config {jsx: 3}];
 
+module Styles = {
+  open Css;
+  let link =
+    style([
+      color(`hex("324ea2")),
+      selector(":hover", [color(`hex("000"))]),
+    ]);
+};
+
 [@react.component]
 let make =
     (
@@ -9,7 +18,7 @@ let make =
     ) =>
   <a
     href={LinkType.toString(linkType)}
-    ?className
+    className={Css.merge([Styles.link, className |> E.O.default("")])}
     onClick={LinkType.onClick(linkType)}>
     {children |> ReasonReact.array}
   </a>;

@@ -293,7 +293,12 @@ module Channel = {
     let globe =
       style([marginRight(`px(4)), float(`left), marginTop(`px(-2))]);
     let lock =
-      style([fontSize(`em(0.8)), float(`left), marginRight(`px(0))]);
+      style([
+        fontSize(`em(0.8)),
+        float(`left),
+        marginRight(`px(0)),
+        marginTop(`em(-0.1)),
+      ]);
   };
 
   let present = (~className="", channel: t) =>

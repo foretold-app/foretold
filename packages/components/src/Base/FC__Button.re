@@ -17,8 +17,8 @@ type variant =
   | Secondary;
 
 type size =
-  | Small
-  | Median
+  | MediumShort
+  | Medium
   | Large;
 
 let varantColors = (variant: variant) =>
@@ -43,10 +43,10 @@ let varantColors = (variant: variant) =>
 
 let sizeStyles = size => {
   switch (size) {
-  | Small =>
-    Css.(style([padding2(~v=`em(0.3), ~h=`em(1.2)), fontSize(`px(14))]))
-  | Median =>
-    Css.(style([padding2(~v=`em(0.4), ~h=`em(1.8)), fontSize(`px(16))]))
+  | MediumShort =>
+    Css.(style([padding2(~v=`em(0.3), ~h=`em(1.1)), fontSize(`px(14))]))
+  | Medium =>
+    Css.(style([padding2(~v=`em(0.3), ~h=`em(1.6)), fontSize(`px(16))]))
   | Large =>
     Css.(style([padding2(~v=`em(0.5), ~h=`em(2.4)), fontSize(`px(16))]))
   };
@@ -109,7 +109,7 @@ let make =
     (
       ~onClick=?,
       ~variant=Secondary,
-      ~size=Median,
+      ~size=Medium,
       ~isDisabled=false,
       ~fullWidth=false,
       ~className="",

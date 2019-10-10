@@ -46,8 +46,7 @@ let row =
         maxX={Some(12.0)}
       />
     </Table.Cell>
-    <Table.Cell
-      flex={`num(1.)} className=Css.(style([paddingTop(`em(0.5))]))>
+    <Table.Cell flex={`num(1.)} properties=Css.[paddingTop(`em(0.3))]>
       <Div.Jsx2>
         <Link.Jsx2
           className={Table.Styles.Elements.link(~isUnderlined=false, ())}>

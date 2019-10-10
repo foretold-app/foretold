@@ -50,6 +50,7 @@ let make =
         <FC.PageCard.BodyPadding>
           {display(pageParams.id)}
         </FC.PageCard.BodyPadding>,
+      (),
     )
     |> layout;
   },

@@ -9,7 +9,7 @@ let make = (~markdown, _children) => {
   ...component,
   render: _ =>
     <div className=StaticStyles.body>
-      <div className=SLayout.Styles.container>
+      <div className={SLayout.Styles.container(false)}>
         <div
           className=Css.(style([textAlign(`left), paddingTop(`em(3.))]))>
           <FC.PageCard>

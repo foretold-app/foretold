@@ -2,32 +2,17 @@
 
 module Styles = {
   open Css;
-  let small = style([fontSize(`em(0.8)), marginTop(`em(0.1))]);
-  let by =
+  let avatarOuter =
+    style([float(`left), position(`relative), marginRight(`em(0.4))]);
+  let avatar = style([marginTop(`em(0.1)), float(`left)]);
+  let ownerAvatarOuter =
     style([
-      marginRight(`em(0.4)),
-      color(FC__Settings.accentBlue),
-      fontSize(`em(0.8)),
-    ]);
-  let imageCropper =
-    style([
+      float(`left),
       width(`em(1.)),
-      float(`left),
-      height(`em(1.)),
-      marginRight(`em(0.4)),
-      marginTop(`em(0.1)),
-      overflow(`hidden),
-      position(`relative),
-      marginTop(`em(0.3)),
-      borderRadius(`percent(20.)),
+      height(`percent(100.)),
+      marginLeft(`em(0.1)),
     ]);
-  let image =
-    style([
-      float(`left),
-      margin2(~v=`zero, ~h=`auto),
-      height(`auto),
-      width(`percent(100.)),
-    ]);
+  let ownerAvatar = style([position(`absolute), bottom(`zero)]);
 };
 
 module Agent = {
@@ -79,16 +64,33 @@ module Agent = {
 
 module SubItem = {
   [@react.component]
-  let make = (~agent: Agent.t, ~className) =>
+  let make = (~agent: Agent.t, ~owner: option(Agent.t), ~className) =>
     <FC__Link onClick={Agent.onClick(agent)} className>
-      <div className=Styles.imageCropper>
-        <img
-          src={
-            Agent.image(agent)
-            |> Rationale.Option.default(BotDefaultImage.botDefault)
-          }
-          className=Styles.image
-        />
+      <div className=Styles.avatarOuter>
+        <div className=Styles.avatar>
+          <FC__Avatar
+            width=1.2
+            src={
+              Agent.image(agent)
+              |> Rationale.Option.default(BotDefaultImage.botDefault)
+            }
+          />
+        </div>
+        {owner
+         |> FC__E.O.React.fmapOrNull(owner =>
+              <div className=Styles.ownerAvatarOuter>
+                <FC__Link
+                  onClick={Agent.onClick(agent)} className=Styles.ownerAvatar>
+                  <FC__Avatar
+                    width=0.8
+                    src={
+                      Agent.image(owner)
+                      |> Rationale.Option.default(BotDefaultImage.botDefault)
+                    }
+                  />
+                </FC__Link>
+              </div>
+            )}
       </div>
       {Agent.name(agent) |> ReasonReact.string}
     </FC__Link>;
@@ -97,21 +99,8 @@ module SubItem = {
 let component = ReasonReact.statelessComponent(__MODULE__);
 
 [@react.component]
-let make = (~agent: Agent.t, ~className="") => {
-  FC__Base.(
-    switch (Agent.owner(agent)) {
-    | Some(owner) =>
-      <Div flexDirection=`column>
-        <Div flex={`num(1.0)}> <SubItem agent className /> </Div>
-        <Div flex={`num(1.0)} className=Styles.small>
-          <span className=Styles.by> {"by " |> ReasonReact.string} </span>
-          <SubItem agent=owner className />
-        </Div>
-      </Div>
-    | None => <SubItem agent className />
-    }
-  );
-};
+let make = (~agent: Agent.t, ~className="") =>
+  <SubItem agent className owner={Agent.owner(agent)} />;
 
 module Jsx2 = {
   let component = ReasonReact.statelessComponent("Link");

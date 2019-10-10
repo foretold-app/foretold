@@ -25,7 +25,7 @@ let make =
         Css.(
           style(
             [
-              marginTop(`em(2.)),
+              marginTop(`em(1.)),
               width(`percent(100.)),
               paddingLeft(`em(2.)),
               paddingRight(`em(2.)),
@@ -41,7 +41,7 @@ let make =
         Css.(
           style(
             [
-              marginTop(`em(2.)),
+              marginTop(`em(1.)),
               width(`percent(100.)),
               paddingLeft(`em(2.)),
               paddingRight(`em(2.)),
@@ -59,7 +59,7 @@ let make =
             styles=[
               Css.(
                 style(
-                  [marginTop(`em(2.0))] @ BaseStyles.fullWidthFloatLeft,
+                  [marginTop(`em(1.0))] @ BaseStyles.fullWidthFloatLeft,
                 )
               ),
             ]>
@@ -69,7 +69,7 @@ let make =
         <Div.Jsx2 flex={`num(2.0)}>
           Example__MeasurableTopCard.make
           <Div.Jsx2
-            styles=[Css.(style([clear(`both), paddingTop(`em(2.0))]))]>
+            styles=[Css.(style([clear(`both), paddingTop(`em(1.0))]))]>
             <MeasurableForm cdf=ExampleCdfs.Example1.cdf />
           </Div.Jsx2>
         </Div.Jsx2>

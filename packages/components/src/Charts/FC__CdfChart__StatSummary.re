@@ -8,16 +8,18 @@ module Styles = {
     style([fontSize(`em(0.9)), color(FC__Settings.accentBlue)]);
 };
 
-let make = (~cdf: FC__Types.Dist.t, _children) => {
+let make = (~cdf: FC__Types.Dist.t, ~showMean=true, _children) => {
   ...component,
   render: _ =>
     <>
-      <div className=Styles.mainText>
-        <FC__NumberShower
-          precision=3
-          number={cdf |> FC__Types.Dist.findX(0.5)}
-        />
-      </div>
+      {showMean
+         ? <div className=Styles.mainText>
+             <FC__NumberShower
+               precision=3
+               number={cdf |> FC__Types.Dist.findX(0.5)}
+             />
+           </div>
+         : ReasonReact.null}
       <div className=Styles.secondaryText>
         <FC__NumberShower
           precision=3

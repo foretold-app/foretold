@@ -39,8 +39,8 @@ module HeaderRow = {
   let component = ReasonReact.statelessComponent("PageCard HeaderRow");
 
   module Styles = {
-    let itemTopPadding = Css.paddingTop(`em(0.9));
-    let itemBottomPadding = Css.paddingBottom(`em(0.9));
+    let itemTopPadding = Css.paddingTop(`em(0.6));
+    let itemBottomPadding = Css.paddingBottom(`em(0.6));
     let itemRightPadding = Css.paddingRight(`em(0.9));
   };
 

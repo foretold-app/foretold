@@ -37,7 +37,7 @@ module LoadedAndSelected = {
     />;
 
   let body2 = (t: t) =>
-    <MeasurableButtom
+    <MeasurableBottomSection
       measurableId={t.selectedMeasurable.id}
       channelId={Some(t.selectedMeasurable.channelId)}
       loggedInUser={t.loggedInUser}
@@ -142,6 +142,8 @@ let toLayoutInput =
     SLayout.LayoutConfig.make(
       ~head=LoadedAndUnselected.header(l, stats, selectedState),
       ~body=LoadedAndUnselected.body(l),
+      ~isFluid=true,
+      (),
     )
     |> SLayout.FullPage.makeWithEl
 
@@ -150,24 +152,38 @@ let toLayoutInput =
       {SLayout.LayoutConfig.make(
          ~head=LoadedAndSelected.header(l, send),
          ~body=LoadedAndSelected.body(l),
+         ~isFluid=true,
+         (),
        )
        |> SLayout.FullPage.makeWithEl}
       {LoadedAndSelected.body2(l)}
     </>
 
   | WithoutChannel(_) =>
-    SLayout.LayoutConfig.make(~head=E.React.null, ~body="No channel." |> ste)
+    SLayout.LayoutConfig.make(
+      ~head=E.React.null,
+      ~body="No channel." |> ste,
+      ~isFluid=true,
+      (),
+    )
     |> SLayout.FullPage.makeWithEl
 
   | InvalidIndexError(_) =>
     SLayout.LayoutConfig.make(
       ~head=E.React.null,
       ~body="Item Not Valid" |> ste,
+      ~isFluid=true,
+      (),
     )
     |> SLayout.FullPage.makeWithEl
 
   | WithChannelButNotQuery(_c) =>
-    SLayout.LayoutConfig.make(~head=E.React.null, ~body=<Spin />)
+    SLayout.LayoutConfig.make(
+      ~head=E.React.null,
+      ~body=<Spin />,
+      ~isFluid=true,
+      (),
+    )
     |> SLayout.FullPage.makeWithEl
   };
 };

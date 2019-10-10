@@ -97,11 +97,16 @@ module Cell = {
 
   let component = ReasonReact.statelessComponent("TABLE CELL");
 
-  let make = (~flex, ~className="", children) => {
+  let make = (~flex, ~className="", ~properties=[], children) => {
     ...component,
     render: _self =>
       <Div.Jsx2
-        className={Css.merge([style(flex), standardCellPadding, className])}>
+        className={Css.merge([
+          style(flex),
+          standardCellPadding,
+          className,
+          Css.style(properties),
+        ])}>
         ...children
       </Div.Jsx2>,
   };
@@ -119,7 +124,7 @@ module HeaderRow = {
             borderBottom(`px(1), `solid, Colors.accentBlueO8),
             display(`flex),
             flexDirection(`row),
-            padding2(~v=`em(0.7), ~h=defaultRowHorizontalPadding),
+            padding2(~v=`em(0.1), ~h=defaultRowHorizontalPadding),
           ]
           @ BaseStyles.fullWidthFloatLeft,
         )

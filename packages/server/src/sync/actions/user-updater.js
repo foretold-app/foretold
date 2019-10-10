@@ -50,8 +50,8 @@ class UserUpdater {
    */
   async getNotVerifiedUsers() {
     const filter = new Filter({
-      isEmailVerified: [false, null],
-      notAuth0AccessToken: [null],
+      isNotEmailVerified: true,
+      notAuth0AccessToken: true,
     });
     return this.users.getAll(filter);
   }

@@ -404,7 +404,9 @@ class ModelPostgres extends Model {
 
     const endDate = _.get(filter, 'findInDateRange.endDate');
     if (endDate) {
-      where[this.and].push({ createdAt: { [this.lte]: endDate } });
+      where[this.and].push({
+        createdAt: { [this.lte]: endDate },
+      });
     }
 
     if (_.isArray(filter.states)) {
@@ -427,10 +429,19 @@ class ModelPostgres extends Model {
       });
     }
 
+    if (filter.isNotEmailVerified) {
+      where[this.and].push({
+        [this.or]: [
+          { isEmailVerified: false },
+          { isEmailVerified: null },
+        ],
+      });
+    }
+
     if (filter.notAuth0AccessToken) {
       where[this.and].push({
         auth0AccessToken: {
-          [this.notIn]: filter.notAuth0AccessToken,
+          [this.not]: null,
         },
       });
     }

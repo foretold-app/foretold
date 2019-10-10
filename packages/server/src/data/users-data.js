@@ -43,6 +43,7 @@ class UsersData extends DataBase {
     const user = await this.getOne(params);
 
     assert(!!user, 'User is required.');
+    assert(_.isObject(userInfo), 'User Info is required.');
 
     const emailIn = _.get(userInfo, 'email');
     const isEmailVerifiedIn = !!_.get(userInfo, 'email_verified');

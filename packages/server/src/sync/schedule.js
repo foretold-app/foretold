@@ -82,6 +82,8 @@ function runListeners() {
       listeners.invitations);
     emitter.on(events.USER_CHANGED,
       listeners.invitations);
+    emitter.on(events.USER_CHANGED,
+      listeners.updateUser);
   } catch (e) {
     console.error('Listener error', e);
   }

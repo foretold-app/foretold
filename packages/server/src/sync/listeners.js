@@ -3,6 +3,29 @@ const consumers = require('./consumers');
 const { Mailer } = require('./mailer');
 const { GitHubApi } = require('../lib/github/git-hub-api');
 
+/**
+ * @param {Models.User} user
+ * @returns {Promise<boolean>}
+ */
+async function updateUser(user) {
+  const name = 'Job::updateUser';
+  console.log(name);
+
+  try {
+    const userUpdater = new actions.UserUpdater();
+    const result = await userUpdater.updateUser(user);
+    console.log(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
+/**
+ * @param {Models.User} user
+ * @returns {Promise<boolean>}
+ */
 async function invitations(user) {
   const name = 'Job::invitations';
   console.log(name);
@@ -18,6 +41,10 @@ async function invitations(user) {
   return true;
 }
 
+/**
+ * @param {Models.Channel} channel
+ * @returns {Promise<boolean>}
+ */
 async function createChannelMembership(channel) {
   const name = 'Job::createChannelMembership';
   console.log(name);
@@ -33,6 +60,10 @@ async function createChannelMembership(channel) {
   return true;
 }
 
+/**
+ * @param {Models.Measurement} measurement
+ * @returns {Promise<boolean>}
+ */
 async function measurableStateTransition(measurement) {
   const name = 'Job::measurableStateTransition';
   console.log(name);
@@ -48,6 +79,10 @@ async function measurableStateTransition(measurement) {
   return true;
 }
 
+/**
+ * @param {Models.Series} series
+ * @returns {Promise<boolean>}
+ */
 async function createNewMeasurables(series) {
   const name = 'Job::createNewMeasurables';
   console.log(name);
@@ -63,6 +98,10 @@ async function createNewMeasurables(series) {
   return true;
 }
 
+/**
+ * @param {Models.Measurement} measurement
+ * @returns {Promise<boolean>}
+ */
 async function newMeasurement(measurement) {
   const name = 'Job::newMeasurement';
   console.log(name);
@@ -78,6 +117,10 @@ async function newMeasurement(measurement) {
   return true;
 }
 
+/**
+ * @param {Models.Measurable} measurable
+ * @returns {Promise<boolean>}
+ */
 async function newMeasurable(measurable) {
   const name = 'Job::newMeasurable';
   console.log(name);
@@ -93,6 +136,10 @@ async function newMeasurable(measurable) {
   return true;
 }
 
+/**
+ * @param {Models.Measurable} measurable
+ * @returns {Promise<boolean>}
+ */
 async function updateMeasurable(measurable) {
   const name = 'Job::updateMeasurable';
   console.log(name);
@@ -108,6 +155,9 @@ async function updateMeasurable(measurable) {
   return true;
 }
 
+/**
+ * @returns {Promise<boolean>}
+ */
 async function toJudgementPendingTransition() {
   const name = 'Job::toJudgementPendingTransition';
   console.log(name);
@@ -123,6 +173,9 @@ async function toJudgementPendingTransition() {
   return true;
 }
 
+/**
+ * @returns {Promise<boolean>}
+ */
 async function toResolving() {
   const name = 'Job::toResolving';
   console.log(name);
@@ -138,6 +191,9 @@ async function toResolving() {
   return true;
 }
 
+/**
+ * @returns {Promise<boolean>}
+ */
 async function emailConsumer() {
   const name = '\x1b[35mJob::emailConsumer\x1b[0m';
   console.log(name);
@@ -153,6 +209,10 @@ async function emailConsumer() {
   return true;
 }
 
+/**
+ * @param {Object} envelop
+ * @returns {Promise<boolean>}
+ */
 async function mailer(envelop = {}) {
   const name = '\x1b[35mJob::mailer\x1b[0m';
   console.log(name);
@@ -167,6 +227,10 @@ async function mailer(envelop = {}) {
   return true;
 }
 
+/**
+ * @param {function} Producer
+ * @returns {function(*=): boolean}
+ */
 function listenFor(Producer) {
   const name = `${Producer.name}`;
   console.log(`Listen for: ${name}`);
@@ -186,6 +250,9 @@ function listenFor(Producer) {
   };
 }
 
+/**
+ * @returns {Promise<boolean>}
+ */
 async function addGitHubWebHook() {
   const name = 'Job::addGitHubWebHook';
   console.log(name);
@@ -215,4 +282,5 @@ module.exports = {
   measurableStateTransition,
   createChannelMembership,
   invitations,
+  updateUser,
 };

@@ -35,14 +35,6 @@ class AuthenticationPrimary {
     const user = await this.users.getUserByAuth0Id(auth0Id);
     await this.users.saveAccessToken(user.id, auth0AccessToken);
 
-    // @todo: To move upper?
-    try {
-      const userInfo = await this.auth0.getUserInfo(auth0AccessToken);
-      await this.users.updateUserInfoFromAuth0(user.id, userInfo);
-    } catch (e) {
-      console.log('Saving user info is failed.');
-    }
-
     return this.Jwt.encodeJWT({}, user.agentId);
   }
 

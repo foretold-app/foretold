@@ -8,7 +8,7 @@ const { UsersData } = require('./users-data');
 
 const { InvitationModel } = require('../models-abstract');
 
-const { Data, Params, Filter, Query } = require('./classes');
+const { Data, Params, Query } = require('./classes');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -70,7 +70,7 @@ class InvitationsData extends DataBase {
     const params = new Params({ email, channelId });
     const query = new Query();
     const data = new Data({ email, inviterAgentId, channelId });
-    return await this.upsertOne(params, query, data);
+    return this.upsertOne(params, query, data);
   }
 
   /**

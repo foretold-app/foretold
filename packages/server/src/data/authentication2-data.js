@@ -52,8 +52,8 @@ class Authentication2Data {
 
   /**
    * @public
-   * @todo: To figure out why "NotAuthenticatedError" is not being passed
-   * @todo: and is showed as internal error.
+   * @todo: Remember that all errors in production mode are masked as Internal
+   * @todo: errors.
    * @param {string} authToken
    * @return {Promise<string>}
    */

@@ -7,7 +7,7 @@ const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { AgentsData } = require('./agents-data');
 const { BotsData } = require('./bots-data');
 const { AuthenticationData } = require('./authentication-data');
-const { Authentication2Data } = require('./authentication2-data');
+const { AuthenticationPrimaryData } = require('./authentication-primary-data');
 const { TokensData } = require('./tokens-data');
 const { PreferencesData } = require('./preferences-data');
 const { NotificationsData } = require('./notifications-data');
@@ -29,7 +29,7 @@ module.exports = {
   agents: new AgentsData(),
   bots: new BotsData(),
   authentication: new AuthenticationData(),
-  authentication2: new Authentication2Data(),
+  authenticationPrimary: new AuthenticationPrimaryData(),
   tokens: new TokensData(),
   preferences: new PreferencesData(),
   notifications: new NotificationsData(),

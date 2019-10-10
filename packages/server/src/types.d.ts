@@ -63,6 +63,7 @@ export namespace Models {
     picture?: string;
     isEmailVerified: boolean;
     descriptions?: string;
+    auth0AccessToken?: string;
 
     getAgent(): Models.Agent;
   }

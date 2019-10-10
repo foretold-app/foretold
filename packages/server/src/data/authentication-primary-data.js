@@ -14,7 +14,7 @@ const {
 /**
  * @todo: Rename it later. Give more meaningfully name.
  */
-class Authentication2Data {
+class AuthenticationPrimaryData {
   constructor() {
     this.Jwt = new Jwt();
     this.auth0 = new Auth0();
@@ -71,5 +71,5 @@ class Authentication2Data {
 }
 
 module.exports = {
-  Authentication2Data,
+  AuthenticationPrimaryData,
 };

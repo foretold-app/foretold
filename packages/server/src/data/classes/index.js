@@ -5,6 +5,7 @@ const { Options } = require('./options');
 const { Pagination } = require('./pagination');
 const { Params } = require('./params');
 const { Query } = require('./query');
+const structures = require('./structures');
 
 module.exports = {
   Data,
@@ -14,4 +15,5 @@ module.exports = {
   Params,
   Query,
   authenticationErrors,
+  structures,
 };

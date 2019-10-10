@@ -29,6 +29,7 @@ let actionButton = (~variant: FC__Button.variant=Primary) =>
   FC__Button.make(
     ~variant,
     ~isDisabled=false,
+    ~size=Medium,
     ~className=Css.(merge([Styles.actionButtonPosition])),
   );
 

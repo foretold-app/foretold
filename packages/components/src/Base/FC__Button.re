@@ -17,6 +17,7 @@ type variant =
   | Secondary;
 
 type size =
+  | Small
   | MediumShort
   | Medium
   | Large;
@@ -43,10 +44,12 @@ let varantColors = (variant: variant) =>
 
 let sizeStyles = size => {
   switch (size) {
+  | Small =>
+    Css.(style([padding2(~v=`em(0.15), ~h=`em(1.0)), fontSize(`px(14))]))
   | MediumShort =>
-    Css.(style([padding2(~v=`em(0.3), ~h=`em(1.1)), fontSize(`px(14))]))
+    Css.(style([padding2(~v=`em(0.2), ~h=`em(1.1)), fontSize(`px(14))]))
   | Medium =>
-    Css.(style([padding2(~v=`em(0.3), ~h=`em(1.6)), fontSize(`px(16))]))
+    Css.(style([padding2(~v=`em(0.25), ~h=`em(1.4)), fontSize(`px(16))]))
   | Large =>
     Css.(style([padding2(~v=`em(0.5), ~h=`em(2.4)), fontSize(`px(16))]))
   };
@@ -59,7 +62,6 @@ let styles = (~isDisabled=false, ~variant, ~size, ~fullWidth=false, ()) => {
     Css.(
       style([
         fontFamily(FC__Settings.Text.standardFont),
-        fontSize(`px(16)),
         lineHeight(`em(1.5)),
         cursor(`pointer),
         FC__BaseStyles.floatLeft,

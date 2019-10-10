@@ -8,7 +8,7 @@ const {
 } = require('@foretold/prediction-analysis');
 
 const data = require('../../data');
-const { withinMeasurables } = require('../../structures');
+const { withinMeasurables } = require('../../data/classes/structures');
 
 const { Pagination } = require('../../data/classes/pagination');
 const { Filter } = require('../../data/classes/filter');

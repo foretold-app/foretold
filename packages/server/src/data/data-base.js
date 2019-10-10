@@ -4,7 +4,7 @@ const { Model } = require('../models-abstract');
 const { Options } = require('../models-abstract/classes/options');
 const { Restrictions } = require('../models-abstract/classes/restrictions');
 
-const structures = require('../structures');
+const structures = require('./classes/structures');
 
 /**
  * @abstract

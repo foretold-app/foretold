@@ -18,6 +18,7 @@ class Params {
       'seriesId',
       'email',
       'channelId',
+      'isEmailVerified',
     ];
     utils.extend(this.constructor.name, params, list, this);
     utils.diff(this.constructor.name, params, list);

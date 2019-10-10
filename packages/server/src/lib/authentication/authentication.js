@@ -1,19 +1,19 @@
 const _ = require('lodash');
 
-const { Jwt } = require('../lib/jwt');
-const { Auth0 } = require('../lib/auth0');
+const { Jwt } = require('../jwt');
+const { Auth0 } = require('../auth0');
 
-const { UsersData } = require('./users-data');
-const { AgentsData } = require('./agents-data');
-const { TokensData } = require('./tokens-data');
+const { UsersData } = require('../../data/users-data');
+const { AgentsData } = require('../../data/agents-data');
+const { TokensData } = require('../../data/tokens-data');
 
 const {
   NotAuthenticatedError,
   TokenIsInvalidError,
   NoAgentIdError,
-} = require('./classes/authentication-errors');
+} = require('./authentication-errors');
 
-class AuthenticationData {
+class Authentication {
   constructor() {
     this.Jwt = new Jwt();
     this.auth0 = new Auth0();
@@ -106,5 +106,5 @@ class AuthenticationData {
 }
 
 module.exports = {
-  AuthenticationData,
+  Authentication,
 };

@@ -6,8 +6,6 @@ const { ChannelsData } = require('./channels-data');
 const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { AgentsData } = require('./agents-data');
 const { BotsData } = require('./bots-data');
-const { AuthenticationData } = require('./authentication-data');
-const { AuthenticationPrimaryData } = require('./authentication-primary-data');
 const { TokensData } = require('./tokens-data');
 const { PreferencesData } = require('./preferences-data');
 const { NotificationsData } = require('./notifications-data');
@@ -28,8 +26,6 @@ module.exports = {
   channelMemberships: new ChannelMembershipsData(),
   agents: new AgentsData(),
   bots: new BotsData(),
-  authentication: new AuthenticationData(),
-  authenticationPrimary: new AuthenticationPrimaryData(),
   tokens: new TokensData(),
   preferences: new PreferencesData(),
   notifications: new NotificationsData(),

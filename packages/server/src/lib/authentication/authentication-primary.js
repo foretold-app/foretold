@@ -1,20 +1,17 @@
 const _ = require('lodash');
 
-const { Jwt } = require('../lib/jwt');
-const { Auth0 } = require('../lib/auth0');
+const { Jwt } = require('../jwt');
+const { Auth0 } = require('../auth0');
 
-const { UsersData } = require('./users-data');
-const { TokensData } = require('./tokens-data');
+const { UsersData } = require('../../data/users-data');
+const { TokensData } = require('../../data/tokens-data');
 
 const {
   NoUserIdError,
   NotAuthenticatedError,
-} = require('./classes/authentication-errors');
+} = require('./authentication-errors');
 
-/**
- * @todo: Rename it later. Give more meaningfully name.
- */
-class AuthenticationPrimaryData {
+class AuthenticationPrimary {
   constructor() {
     this.Jwt = new Jwt();
     this.auth0 = new Auth0();
@@ -71,5 +68,5 @@ class AuthenticationPrimaryData {
 }
 
 module.exports = {
-  AuthenticationPrimaryData,
+  AuthenticationPrimary,
 };

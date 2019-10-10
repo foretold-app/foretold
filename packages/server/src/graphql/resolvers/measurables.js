@@ -8,7 +8,7 @@ const { Filter } = require('../../data/classes/filter');
 const { Options } = require('../../data/classes/options');
 const { Query } = require('../../data/classes/query');
 
-const structures = require('../../structures');
+const structures = require('../../data/classes/structures');
 
 /**
  *
@@ -61,6 +61,7 @@ async function all(root, args, context, info) {
   // @todo: tricky, rework it.
   context.resultOrLatestMeasurementForAgentId
     = args.resultOrLatestMeasurementForAgentId;
+
   return data.measurables.getConnection(filter, pagination, options);
 }
 

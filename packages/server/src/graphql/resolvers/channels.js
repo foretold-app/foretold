@@ -8,7 +8,7 @@ const { Params } = require('../../data/classes/params');
 const { Query } = require('../../data/classes/query');
 const { Data } = require('../../data/classes/data');
 
-const structures = require('../../structures');
+const structures = require('../../data/classes/structures');
 
 /**
  * @param {Models.Channel} channel

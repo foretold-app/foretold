@@ -4,6 +4,23 @@ const { Mailer } = require('./mailer');
 const { GitHubApi } = require('../lib/github/git-hub-api');
 
 /**
+ * @returns {Promise<boolean>}
+ */
+async function updateUsers() {
+  const name = 'Job::updateUsers';
+  console.log(name);
+
+  try {
+    const userUpdater = new actions.UserUpdater();
+    const result = await userUpdater.main();
+    console.log(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+/**
  * @param {Models.User} user
  * @returns {Promise<boolean>}
  */
@@ -283,4 +300,5 @@ module.exports = {
   createChannelMembership,
   invitations,
   updateUser,
+  updateUsers,
 };

@@ -27,6 +27,27 @@ class UserUpdater {
 
     return true;
   }
+
+  /**
+   * @returns {Promise<boolean>}
+   */
+  async main() {
+    const users = await this.getNotVerifiedUsers();
+
+    for(let i = 0, max = users.length; i < max; i++) {
+      const user = users[i];
+      await this.updateUser(user);
+    }
+
+    return true;
+  }
+
+  /**
+   * @returns {Promise<Models.User[]>}
+   */
+  async getNotVerifiedUsers() {
+    return [];
+  }
 }
 
 module.exports = {

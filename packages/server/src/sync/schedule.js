@@ -16,6 +16,8 @@ function runListeners() {
       listeners.toResolving);
     emitter.on(events.EVERY_MINUTE,
       listeners.emailConsumer);
+    emitter.on(events.EVERY_THREE_MINUTES,
+      listeners.updateUsers);
     emitter.on(events.MAIL,
       listeners.mailer);
 

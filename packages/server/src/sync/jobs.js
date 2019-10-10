@@ -6,6 +6,7 @@ const events = require('./events');
 // m h d month weekDay
 const EVERY_HOUR = '0 * * * *';
 const EVERY_TEN_MINUTES = '*/10 * * * *';
+const EVERY_THREE_MINUTES = '*/3 * * * *';
 const EVERY_MINUTE = '* * * * *';
 
 function runJobs() {
@@ -25,9 +26,14 @@ function runJobs() {
     emitter.emit(events.EVERY_MINUTE);
   });
 
+  const d = cron.scheduleJob(EVERY_THREE_MINUTES, () => {
+    emitter.emit(events.EVERY_THREE_MINUTES);
+  });
+
   jobs.push(a);
   jobs.push(b);
   jobs.push(c);
+  jobs.push(d);
 
   return jobs;
 }

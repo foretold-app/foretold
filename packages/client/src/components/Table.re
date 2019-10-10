@@ -21,6 +21,15 @@ module Column = {
   };
 };
 
+let headerCellPadding =
+  Css.(
+    style([
+      paddingTop(`em(0.3)),
+      paddingBottom(`em(0.4)),
+      background(`hex("000000")),
+    ])
+  );
+
 let fromColumns =
     (
       columns: array(column('a)),
@@ -37,6 +46,13 @@ let fromColumns =
        |> Array.mapi((columnIndex, column: column('a)) =>
             <FC.Table.Cell
               flex={`num(column.flex |> float_of_int)}
+              className=Css.(
+                style([paddingTop(`em(0.3)), paddingBottom(`em(0.2))])
+              )
+              properties=[
+                Css.paddingTop(`em(0.4)),
+                Css.paddingBottom(`em(0.3)),
+              ]
               key={columnIndex |> string_of_int}>
               {column.name}
             </FC.Table.Cell>

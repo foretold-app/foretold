@@ -61,7 +61,7 @@ module Columns = {
              )
           |> E.O.default("")
           |> Utils.ste,
-      ~flex=1,
+      ~flex=2,
       (),
     );
 

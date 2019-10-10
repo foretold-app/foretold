@@ -44,7 +44,7 @@ let _directionLink = (t: directionButton, icon: string, positionStyles) =>
     isDisabled={t.isDisabled}
     onClick={t.onClick}
     className=positionStyles
-    size=Small>
+    size=MediumShort>
     {icon |> ReasonReact.string}
   </FC__Button>;
 

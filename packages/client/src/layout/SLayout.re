@@ -92,7 +92,7 @@ module FullPage = {
 };
 
 let channelBack = (~onClick, ()) =>
-  <FC__Button onClick size=Median>
+  <FC__Button onClick size=Medium>
     {"< Back" |> ReasonReact.string}
   </FC__Button>;
 

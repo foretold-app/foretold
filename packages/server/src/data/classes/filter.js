@@ -20,40 +20,40 @@ const utils = require('../../lib/utils');
 
 class Filter {
   /**
-   * @todo: turn on type assertion
    * @param {Layers.DataSourceLayer.filter} [filter]
    */
   constructor(filter = {}) {
-    const list = [
-      'id',
-      'isArchived', // string[] | null
-      'withinJoinedChannels', // Layers.withinJoinedChannels | null
-      'excludeChannelId',
-      'notificationId', // string
-      'sentAt', // Date | null
-      'attemptCounterMax', // number
-      'types', // string[] | null
-      'type',
-      'creatorId',
-      'userId',
-      'seriesId', // string
-      'channelId', // string
-      'measurableId', // string
-      'agentId',
-      'competitorType', // string[]
-      'findInDateRange', // object
-      'notTaggedByAgent', // string | null
-      'states', // string[] | null
-      'withinMeasurables', // Layers.withinMeasurables | null
-      'minPredictionCountTotal', // number | null
-      'minNumberOfPredictions', // number | null
-      'minNumberOfQuestionsScored', // number | null
-      'email', // string
-      'status', // string
-      'isEmailVerified', // array of null or boolean
-      'notAuth0AccessToken', // array of null or string
-    ];
+    const list = {
+      id: (v) => _.isString(v) || utils.none(v),
+      isArchived: (v) => _.isArray(v) || utils.none(v),
+      withinJoinedChannels: (v) => _.isObject(v) || utils.none(v),
+      excludeChannelId: (v) => _.isString(v) || utils.none(v),
+      notificationId: (v) => _.isString(v) || utils.none(v),
+      sentAt: (v) => _.isString(v) || _.isObject(v) || utils.none(v),
+      attemptCounterMax: (v) => _.isNumber(v) || utils.none(v),
+      types: (v) => _.isArray(v) || utils.none(v),
+      type: (v) => _.isString(v) || utils.none(v),
+      creatorId: (v) => _.isString(v) || utils.none(v),
+      userId: (v) => _.isString(v) || utils.none(v),
+      seriesId: (v) => _.isString(v) || utils.none(v),
+      channelId: (v) => _.isString(v) || utils.none(v),
+      measurableId: (v) => _.isString(v) || utils.none(v),
+      agentId: (v) => _.isString(v) || utils.none(v),
+      competitorType: (v) => _.isArray(v) || utils.none(v),
+      findInDateRange: (v) => _.isObject(v) || utils.none(v),
+      notTaggedByAgent: (v) => _.isString(v) || utils.none(v),
+      states: (v) => _.isArray(v) || utils.none(v),
+      withinMeasurables: (v) => _.isObject(v) || utils.none(v),
+      minPredictionCountTotal: (v) => _.isNumber(v) || utils.none(v),
+      minNumberOfPredictions: (v) => _.isNumber(v) || utils.none(v),
+      minNumberOfQuestionsScored: (v) => _.isNumber(v) || utils.none(v),
+      email: (v) => _.isString(v) || utils.none(v),
+      status: (v) => _.isString(v) || utils.none(v),
+      isEmailVerified: (v) => _.isArray(v) || utils.none(v),
+      notAuth0AccessToken: (v) => _.isArray(v) || utils.none(v),
+    };
     utils.extend(this.constructor.name, filter, list, this);
+    utils.test(this.constructor.name, list, this);
     utils.diff(this.constructor.name, filter, list);
   }
 

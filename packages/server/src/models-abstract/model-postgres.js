@@ -372,27 +372,37 @@ class ModelPostgres extends Model {
     }
 
     if (filter.measurableId) {
-      where.measurableId = filter.measurableId;
+      where[this.and].push({
+        measurableId: filter.measurableId,
+      });
     }
 
     if (filter.email) {
-      where.email = filter.email;
+      where[this.and].push({
+        email: filter.email,
+      });
     }
 
     if (filter.status) {
-      where.status = filter.status;
+      where[this.and].push({
+        status: filter.status,
+      });
     }
 
     if (filter.competitorType) {
-      where.competitorType = {
-        [this.in]: filter.competitorType,
-      };
+      where[this.and].push({
+        competitorType: {
+          [this.in]: filter.competitorType,
+        },
+      });
     }
 
     if (filter.notTaggedByAgent) {
-      where.id = {
-        [this.notIn]: this._taggedMeasurementsLiteral(filter.notTaggedByAgent),
-      };
+      where[this.and].push({
+        id: {
+          [this.notIn]: this._taggedMeasurementsLiteral(filter.notTaggedByAgent),
+        },
+      });
     }
 
     const startDate = _.get(filter, 'findInDateRange.startDate');
@@ -410,15 +420,21 @@ class ModelPostgres extends Model {
     }
 
     if (_.isArray(filter.states)) {
-      where.state = { [this.in]: filter.states };
+      where[this.and].push({
+        state: { [this.in]: filter.states },
+      });
     }
 
     if (filter.seriesId) {
-      where.seriesId = filter.seriesId;
+      where[this.and].push({
+        seriesId: filter.seriesId,
+      });
     }
 
     if (filter.creatorId) {
-      where.creatorId = filter.creatorId;
+      where[this.and].push({
+        creatorId: filter.creatorId,
+      });
     }
 
     if (filter.isEmailVerified) {

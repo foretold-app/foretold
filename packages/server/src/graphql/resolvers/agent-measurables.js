@@ -6,7 +6,7 @@ const { Pagination } = require('../../data/classes/pagination');
 const { Filter } = require('../../data/classes/filter');
 const { Options } = require('../../data/classes/options');
 
-const structures = require('../../structures');
+const structures = require('../../data/classes/structures');
 
 /**
  * @param {*} _root

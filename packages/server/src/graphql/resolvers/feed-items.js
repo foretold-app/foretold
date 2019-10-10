@@ -7,7 +7,7 @@ const { Options } = require('../../data/classes/options');
 const { Filter } = require('../../data/classes/filter');
 
 const { HOME_CHANNEL_ID } = require('../../well-known');
-const structures = require('../../structures');
+const structures = require('../../data/classes/structures');
 
 /**
  * @param {*} _root

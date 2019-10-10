@@ -24,9 +24,20 @@ module Top = {
 
           <>
             <FC.GroupHeader>
-              <AgentLink.Jsx2 agent />
-              <Div styles=[SLayout.Styles.descriptionText]>
-                {description |> Utils.ste}
+              <Div flexDirection=`column>
+                <Div
+                  flex={`num(1.)}
+                  styles=[
+                    Css.style([
+                      Css.fontSize(`em(1.2)),
+                      Css.marginBottom(`em(0.1)),
+                    ]),
+                  ]>
+                  <AgentLink.Jsx2 agent />
+                </Div>
+                <Div flex={`num(1.)} styles=[SLayout.Styles.descriptionText]>
+                  {description |> Utils.ste}
+                </Div>
               </Div>
             </FC.GroupHeader>
             <FC.GroupHeader.SubHeader> secondLevel </FC.GroupHeader.SubHeader>

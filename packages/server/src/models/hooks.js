@@ -107,7 +107,7 @@ function addHooks(db) {
       });
       instance.agentId = agent.id;
     } catch (e) {
-      console.log('Hook', e);
+      console.log('Hook Bot beforeCreate', e);
     }
   });
   db.User.addHook('beforeCreate', async (instance) => {
@@ -117,7 +117,7 @@ function addHooks(db) {
       });
       instance.agentId = agent.id;
     } catch (e) {
-      console.log('Hook', e);
+      console.log('Hook User beforeCreate', e);
     }
   });
 
@@ -133,7 +133,7 @@ function addHooks(db) {
         }
       }
     } catch (e) {
-      console.log('Hook', e);
+      console.log('Hook Measurable beforeUpdate', e);
     }
   });
 
@@ -147,7 +147,7 @@ function addHooks(db) {
         instance.relevantAt = Date.now();
       }
     } catch (e) {
-      console.log('Hook', e);
+      console.log('Hook Measurement beforeValidate', e);
     }
   });
 }

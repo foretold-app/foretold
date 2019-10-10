@@ -13,7 +13,7 @@ class UserUpdater {
    * @returns {Promise<boolean>}
    */
   async updateUser(user) {
-    if (!user.changed('auth0AccessToken')) {
+    if (!user.auth0AccessToken) {
       return false;
     }
 

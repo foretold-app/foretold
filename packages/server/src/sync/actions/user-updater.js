@@ -38,6 +38,7 @@ class UserUpdater {
 
     for (let i = 0, max = users.length; i < max; i++) {
       const user = users[i];
+      console.log(`Update user ID: ${user.id}`);
       await this.updateUser(user);
     }
 

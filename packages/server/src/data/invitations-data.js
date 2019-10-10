@@ -80,7 +80,7 @@ class InvitationsData extends DataBase {
    * @returns {Promise<boolean>}
    */
   async addMemberships(email, channelId, inviterAgentId) {
-    const user = await this.getVerified(email);
+    const user = await this.users.getVerified(email);
 
     if (!!user) {
       const agentId = _.get(user, 'agentId', null);

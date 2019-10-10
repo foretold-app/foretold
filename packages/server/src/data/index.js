@@ -18,6 +18,25 @@ const { AgentMeasurablesData } = require('./agent-measurables-data');
 const { AgentChannelsData } = require('./agent-channels-data');
 
 module.exports = {
+  MeasurablesData,
+  MeasurementsData,
+  UsersData,
+  SeriesData,
+  ChannelsData,
+  ChannelMembershipsData,
+  AgentsData,
+  BotsData,
+  TokensData,
+  PreferencesData,
+  NotificationsData,
+  TemplatesData,
+  NotificationStatusesData,
+  InvitationsData,
+  FeedItemsData,
+  GlobalSettingsData,
+  AgentMeasurablesData,
+  AgentChannelsData,
+
   measurables: new MeasurablesData(),
   measurements: new MeasurementsData(),
   users: new UsersData(),

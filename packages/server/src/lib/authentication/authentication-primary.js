@@ -3,8 +3,7 @@ const _ = require('lodash');
 const { Jwt } = require('../jwt');
 const { Auth0 } = require('../auth0');
 
-const { UsersData } = require('../../data/users-data');
-const { TokensData } = require('../../data/tokens-data');
+const { UsersData, TokensData } = require('../../data');
 
 const {
   NoUserIdError,
@@ -23,10 +22,10 @@ class AuthenticationPrimary {
   /**
    * @public
    * @param {string} jwt
-   * @param {string} accessToken
+   * @param {string} auth0AccessToken
    * @return {Promise<string>}
    */
-  async exchangeAuthComToken(jwt, accessToken) {
+  async exchangeAuthComToken(jwt, auth0AccessToken) {
     const decoded = this.Jwt.decodeAuth0Jwt(jwt);
     const auth0Id = _.get(decoded, 'sub');
     if (!auth0Id) {
@@ -34,17 +33,17 @@ class AuthenticationPrimary {
     }
 
     const user = await this.users.getUserByAuth0Id(auth0Id);
-    const { agentId } = user;
+    await this.users.saveAccessToken(user.id, auth0AccessToken);
 
     // @todo: To move upper?
     try {
-      const userInfo = await this.auth0.getUserInfo(accessToken);
+      const userInfo = await this.auth0.getUserInfo(auth0AccessToken);
       await this.users.updateUserInfoFromAuth0(user.id, userInfo);
     } catch (e) {
       console.log('Saving user info is failed.');
     }
 
-    return this.Jwt.encodeJWT({}, agentId);
+    return this.Jwt.encodeJWT({}, user.agentId);
   }
 
   /**
@@ -61,9 +60,8 @@ class AuthenticationPrimary {
     }
 
     await this.tokens.increaseUsageCount(authToken);
-    const { agentId } = token;
 
-    return this.Jwt.encodeJWT({}, agentId);
+    return this.Jwt.encodeJWT({}, token.agentId);
   }
 }
 

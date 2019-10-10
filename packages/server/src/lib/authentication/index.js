@@ -1,7 +1,7 @@
-const { Authentication } = require('./authentication');
+const { AuthenticationSecondary } = require('./authentication-secondary');
 const { AuthenticationPrimary } = require('./authentication-primary');
 
 module.exports = {
-  Authentication,
+  AuthenticationSecondary,
   AuthenticationPrimary,
 };

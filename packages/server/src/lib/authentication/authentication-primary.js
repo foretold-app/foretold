@@ -9,7 +9,7 @@ const { TokensData } = require('../../data/tokens-data');
 const {
   NoUserIdError,
   NotAuthenticatedError,
-} = require('./authentication-errors');
+} = require('./errors');
 
 class AuthenticationPrimary {
   constructor() {

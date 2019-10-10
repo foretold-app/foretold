@@ -11,9 +11,9 @@ const {
   NotAuthenticatedError,
   TokenIsInvalidError,
   NoAgentIdError,
-} = require('./authentication-errors');
+} = require('./errors');
 
-class Authentication {
+class AuthenticationSecondary {
   constructor() {
     this.Jwt = new Jwt();
     this.auth0 = new Auth0();
@@ -106,5 +106,5 @@ class Authentication {
 }
 
 module.exports = {
-  Authentication,
+  AuthenticationSecondary,
 };

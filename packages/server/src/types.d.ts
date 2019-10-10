@@ -300,7 +300,8 @@ export namespace Layers {
       minNumberOfQuestionsScored?: number | null;
       email?: string;
       status?: string;
-      isEmailVerified?: boolean;
+      isEmailVerified?: (null | boolean)[];
+      notAuth0AccessToken?: (null | string)[];
 
       findInDateRange?: object; // @todo: Object? Give definition!
       withinMeasurables?: withinMeasurables | null;
@@ -413,7 +414,8 @@ export namespace Layers {
       minNumberOfQuestionsScored?: number | null;
       email?: string;
       status?: string;
-      isEmailVerified?: boolean;
+      isEmailVerified?: (null | boolean)[];
+      notAuth0AccessToken?: (null | string)[];
 
       withinMeasurables?: withinMeasurables | null;
       withinPublicChannels?: withinPublicChannels | null;

@@ -77,7 +77,7 @@ class UsersData extends DataBase {
    * @return {Promise<Models.User>}
    */
   async getVerified(email) {
-    const params = new Params({ email, isEmailVerified: true });
+    const params = new Params({ email, isEmailVerified: [true] });
     return this.getOne(params);
   }
 

@@ -1,6 +1,8 @@
 const { UsersData } = require('../../data');
 const { Auth0 } = require('../../lib/auth0');
 
+const { Filter } = require('../../data/classes');
+
 class UserUpdater {
   constructor() {
     this.users = new UsersData();
@@ -34,7 +36,7 @@ class UserUpdater {
   async main() {
     const users = await this.getNotVerifiedUsers();
 
-    for(let i = 0, max = users.length; i < max; i++) {
+    for (let i = 0, max = users.length; i < max; i++) {
       const user = users[i];
       await this.updateUser(user);
     }
@@ -46,7 +48,11 @@ class UserUpdater {
    * @returns {Promise<Models.User[]>}
    */
   async getNotVerifiedUsers() {
-    return [];
+    const filter = new Filter({
+      isEmailVerified: [false, null],
+      notAuth0AccessToken: [null],
+    });
+    return this.users.getAll(filter);
   }
 }
 

@@ -202,7 +202,8 @@ class ModelPostgres extends Model {
   _withinMeasurables(statesIn, channelIdIn, name = '') {
     const cond = [];
     const states = _.isArray(statesIn)
-      ? statesIn.map((state) => `'${state}'`).join(', ') : [];
+      ? statesIn.map((state) => `'${state}'`)
+        .join(', ') : [];
 
     if (states.length > 0) cond.push(`("state" IN (${states}))`);
     if (!!channelIdIn) cond.push(`("channelId" = '${channelIdIn}')`);
@@ -419,7 +420,19 @@ class ModelPostgres extends Model {
     }
 
     if (filter.isEmailVerified) {
-      where.creatorId = filter.isEmailVerified;
+      where[this.and].push({
+        isEmailVerified: {
+          [this.in]: filter.isEmailVerified,
+        },
+      });
+    }
+
+    if (filter.notAuth0AccessToken) {
+      where[this.and].push({
+        auth0AccessToken: {
+          [this.notIn]: filter.notAuth0AccessToken,
+        },
+      });
     }
 
     if (filter.excludeChannelId) {
@@ -446,7 +459,7 @@ class ModelPostgres extends Model {
 
     if (filter.notificationId) {
       where[this.and].push({
-        sentAt: filter.notificationId,
+        notificationId: filter.notificationId,
       });
     }
 
@@ -550,7 +563,8 @@ class ModelPostgres extends Model {
     return list.map((item) => {
       if (item === 'TRUE') {
         return true;
-      } if (item === 'FALSE') {
+      }
+      if (item === 'FALSE') {
         return false;
       }
       return item;

@@ -69,7 +69,8 @@ app.use(cors());
     + `API_URL: "${config.API_URL}", `
     + `AUTH0_DOMAIN: "${config.AUTH0_DOMAIN}", `
     + `AUTH0_CLIENT_ID: "${config.AUTH0_CLIENT_ID}", `
-    + '}',
+    + `MODE: "${process.env.NODE_ENV}", `
+    + '};',
   ));
 }
 

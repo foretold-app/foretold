@@ -91,6 +91,7 @@
 		"parcel-plugin-html-externals": "0.1.2"
 	},
 	"externals": {
-		"/env.js": false
+		"/env.js": false,
+		"/intercom.js": false
 	}
 }

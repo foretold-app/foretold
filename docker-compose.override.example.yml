@@ -21,6 +21,7 @@ services:
       - BOT_TOKEN=someTokenStringWithALengthUpToSixtyFourCharsGetItFromApplication # 3.5  (change)
       # - JWT_ISSUER=Foretold # 3.6
       - JWT_SECRET=anotherRandomSecretString # 3.7  (change)
+      - INTERCOM_APP_ID=changeString # 3.8 (change)
       # 4. SMTP
       - SMTP_HOST=some-smtp-gateway.domain.com # 4.1 (change)
       # - SMTP_PORT=465 # 4.2

@@ -69,7 +69,9 @@ app.use(cors());
     + `API_URL: "${config.API_URL}", `
     + `AUTH0_DOMAIN: "${config.AUTH0_DOMAIN}", `
     + `AUTH0_CLIENT_ID: "${config.AUTH0_CLIENT_ID}", `
-    + '}',
+    + `CLIENT_ENV: "${process.env.NODE_ENV}", `
+    + `INTERCOM_APP_ID: "${config.INTERCOM_APP_ID}", `
+    + '};',
   ));
 }
 

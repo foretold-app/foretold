@@ -1,14 +1,11 @@
-let inMemoryCache = ApolloInMemoryCache.createInMemoryCache();
-
-[@bs.deriving abstract]
-type data = {name: string};
+let inMemoryCache = () => ApolloInMemoryCache.createInMemoryCache();
 
 let storageToHeaders = (jwt: ServerJwt.t) =>
   Json.Encode.(
     object_([("authorization", Json.Encode.string("Bearer " ++ jwt))])
   );
 
-let httpLink = ApolloLinks.createHttpLink(~uri=Env.serverUrl, ());
+let httpLink = _ => ApolloLinks.createHttpLink(~uri=Env.serverUrl, ());
 
 let contextLink = (tokens: ServerJwt.t) =>
   ApolloLinks.createContextLink(() => {"headers": storageToHeaders(tokens)});
@@ -40,7 +37,7 @@ let isCode400 = error =>
   |> E.O.fmap(networkError => networkError##statusCode == 400)
   |> E.O.default(false);
 
-let errorLink =
+let errorLink = _ =>
   ApolloLinks.apolloLinkOnError(error => {
     Js.log2("GraphQL Error!", Js.Json.stringifyAny(error));
 
@@ -53,15 +50,21 @@ let errorLink =
 
 let link = () =>
   switch (ServerJwt.make_from_storage()) {
-  | Some(s) => ApolloLinks.from([|contextLink(s), errorLink, httpLink|])
-  | None => ApolloLinks.from([|errorLink, httpLink|])
+  | Some(s) => ApolloLinks.from([|contextLink(s), errorLink(), httpLink()|])
+  | None => ApolloLinks.from([|errorLink(), httpLink()|])
   };
 
-/* TODO: Don't always load devtools. */
+let connectToDevTools = _ => {
+  switch (Env.clientEnv) {
+  | Development => true
+  | _ => false
+  };
+};
+
 let instance = () =>
   ReasonApollo.createApolloClient(
     ~link=link(),
-    ~cache=inMemoryCache,
-    ~connectToDevTools=true,
+    ~cache=inMemoryCache(),
+    ~connectToDevTools=connectToDevTools(),
     (),
   );

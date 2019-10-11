@@ -1,8 +1,4 @@
-var intecomLoaded = false;
 function intercom(name, email) {
-  if (intecomLoaded) return;
-  intecomLoaded = true;
-
   (function () {
     var w = window;
     var ic = w.Intercom;
@@ -27,11 +23,7 @@ function intercom(name, email) {
         var x = d.getElementsByTagName('script')[0];
         x.parentNode.insertBefore(s, x);
       };
-      if (w.attachEvent) {
-        w.attachEvent('onload', l);
-      } else {
-        w.addEventListener('load', l, false);
-      }
+      l();
     }
   })();
 
@@ -44,8 +36,6 @@ function intercom(name, email) {
 
   window.Intercom('boot', options);
   window.Intercom('update');
-
-  console.log('Intercom was loaded.', { options });
 }
 
 module.exports = { intercom };

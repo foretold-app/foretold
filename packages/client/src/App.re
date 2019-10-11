@@ -73,6 +73,7 @@ let make = _children => {
            <Providers.AppContext.Provider value=appContext>
              <Navigator route={state.route} loggedInUser />
              <Redirect appContext />
+             <Intercom />
            </Providers.AppContext.Provider>;
          })
        )}

@@ -1,4 +1,8 @@
+var intecomLoaded = false;
 function intercom(name, email) {
+  if (intecomLoaded) return;
+  intecomLoaded = true;
+
   (function () {
     var w = window;
     var ic = w.Intercom;
@@ -16,8 +20,8 @@ function intercom(name, email) {
       };
       w.Intercom = i;
       var l = function () {
-        var s = d.createElement('script');s
-          .type = 'text/javascript';
+        var s = d.createElement('script');
+        s.type = 'text/javascript';
         s.async = true;
         s.src = 'https://widget.intercom.io/widget/gx67sx4f';
         var x = d.getElementsByTagName('script')[0];
@@ -31,16 +35,17 @@ function intercom(name, email) {
     }
   })();
 
-  window.Intercom('boot', {
+  var options = {
     app_id: 'gx67sx4f',
-    name: 'Foretold', // Full name
-    email: 'internal-tech@foretold.io', // Email address
+    name: name,
+    email: email,
     created_at: Math.floor(Date.now() / 1000),
-  });
+  };
 
+  window.Intercom('boot', options);
   window.Intercom('update');
 
-  console.log('Intercom was loaded.');
+  console.log('Intercom was loaded.', { options });
 }
 
 module.exports = { intercom };

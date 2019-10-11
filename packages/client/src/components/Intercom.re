@@ -10,8 +10,8 @@ let make = _children => {
       ...{(context: Providers.appContext) => {
         let loggedInUser = context.loggedInUser;
 
-        switch (Env.prod, loggedInUser) {
-        | (true, Some(loggedInUser)) =>
+        switch (Env.clientEnv, loggedInUser) {
+        | (Production, Some(loggedInUser)) =>
           let name = loggedInUser.name == "" ? "User" : loggedInUser.name;
           let email =
             loggedInUser.email |> E.O.default("no-reply@foretold.io");

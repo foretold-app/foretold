@@ -54,10 +54,17 @@ let link = () =>
   | None => ApolloLinks.from([|errorLink(), httpLink()|])
   };
 
+let connectToDevTools = _ => {
+  switch (Env.clientEnv) {
+  | Development => true
+  | _ => false
+  };
+};
+
 let instance = () =>
   ReasonApollo.createApolloClient(
     ~link=link(),
     ~cache=inMemoryCache(),
-    ~connectToDevTools=Env.dev,
+    ~connectToDevTools=connectToDevTools(),
     (),
   );

@@ -1,4 +1,10 @@
-function intercom(name, email) {
+/**
+ * @param {string} intercomAppId
+ * @param {string} name
+ * @param {string} email
+ * @param {Moment} createdAt
+ */
+function intercom(intercomAppId, name, email, createdAt) {
   (function () {
     var w = window;
     var ic = w.Intercom;
@@ -27,15 +33,22 @@ function intercom(name, email) {
     }
   })();
 
+  var now = Math.floor(Date.now() / 1000);
+  var signupAt = !!createdAt && 'unix' in createdAt
+    ? createdAt.unix()
+    : now;
+
   var options = {
-    app_id: 'gx67sx4f',
+    app_id: intercomAppId,
     name: name,
     email: email,
-    created_at: Math.floor(Date.now() / 1000),
+    created_at: signupAt,
   };
 
   window.Intercom('boot', options);
   window.Intercom('update');
+
+  console.debug("Intercom init", options);
 }
 
 module.exports = { intercom };

@@ -52,6 +52,7 @@ let toUser = a =>
     ~agent=a##agent |> E.O.fmap(toAgent),
     ~bots=a##bots |> toBots,
     ~isEmailVerified=a##isEmailVerified,
+    ~createdAt=Some(a##createdAt),
     (),
   );
 
@@ -68,6 +69,7 @@ module Query = [%graphql
             auth0Id
             agentId
             isEmailVerified
+            createdAt @bsDecoder(fn: "E.J.toMoment")
             agent {
               id
               name

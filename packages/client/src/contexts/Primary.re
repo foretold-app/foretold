@@ -170,6 +170,7 @@ module User = {
         ~agent=None,
         ~bots=None,
         ~isEmailVerified=None,
+        ~createdAt=None,
         (),
       )
       : t => {
@@ -183,6 +184,7 @@ module User = {
     agent,
     bots,
     isEmailVerified,
+    createdAt,
   };
 };
 

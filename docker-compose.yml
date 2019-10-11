@@ -22,6 +22,7 @@ services:
       - BOT_TOKEN=<change-me> # 3.5
       - JWT_ISSUER=Foretold # 3.6
       - JWT_SECRET=<change-me> # 3.7
+      - INTERCOM_APP_ID=<change-me> # 3.8
       # 4. SMTP
       - SMTP_HOST=<change-me> # 4.1
       - SMTP_PORT=465 # 4.2

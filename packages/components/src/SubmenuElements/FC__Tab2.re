@@ -4,11 +4,12 @@ let styles = (~isDisabled=false, ~heightPadding=0, ()) => {
   let main =
     Css.(
       style([
-        fontSize(`em(0.95)),
-        padding2(~v=`px(heightPadding), ~h=`px(5)),
+        padding2(~v=`px(heightPadding), ~h=`px(6)),
         BaseStyles.floatLeft,
         borderRadius(Colors.BorderRadius.medium),
         border(`px(1), `solid, Colors.accentBlueO8),
+        marginTop(`em(0.05)),
+        lineHeight(`em(1.35)),
       ])
     );
   let disabledStyles = Css.(style([background(Colors.greydisabled)]));
@@ -20,13 +21,7 @@ let make = (~isActive, ~onClick=?, ~number: option(int)=?, children) => {
   ...component,
   render: _self => {
     let textStyle =
-      Css.(
-        style([
-          BaseStyles.floatLeft,
-          marginRight(`em(0.3)),
-          fontSize(`em(0.95)),
-        ])
-      );
+      Css.(style([BaseStyles.floatLeft, marginRight(`em(0.4))]));
 
     let colors =
       Colors.Text.(

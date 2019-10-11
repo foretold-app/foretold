@@ -12,7 +12,6 @@ module Styles = {
     ]);
   let rightColumn = style([flex(`num(1.))]);
 };
-
 let component = ReasonReact.statelessComponent("MeasurableIndexTable");
 let make =
     (
@@ -27,13 +26,13 @@ let make =
     measurables |> E.A.length > 0
       ? <>
           <FC.Table.HeaderRow>
-            <FC.Table.Cell flex={`num(3.)}>
+            <FC.Table.Cell flex={`num(3.)} properties=Table.headerCellStyles>
               {"Name & Status" |> ReasonReact.string}
             </FC.Table.Cell>
-            <FC.Table.Cell flex={`num(1.5)}>
+            <FC.Table.Cell flex={`num(1.5)} properties=Table.headerCellStyles>
               {"Aggregate and resolution" |> ReasonReact.string}
             </FC.Table.Cell>
-            <FC.Table.Cell flex={`num(1.)}>
+            <FC.Table.Cell flex={`num(1.)} properties=Table.headerCellStyles>
               {"Details" |> ReasonReact.string}
             </FC.Table.Cell>
           </FC.Table.HeaderRow>

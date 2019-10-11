@@ -21,6 +21,13 @@ module Column = {
   };
 };
 
+let headerCellStyles =
+  Css.[
+    paddingTop(`em(0.2)),
+    paddingBottom(`em(0.2)),
+    fontSize(`em(0.9)),
+  ];
+
 let headerCellPadding =
   Css.(
     style([
@@ -46,13 +53,7 @@ let fromColumns =
        |> Array.mapi((columnIndex, column: column('a)) =>
             <FC.Table.Cell
               flex={`num(column.flex |> float_of_int)}
-              className=Css.(
-                style([paddingTop(`em(0.3)), paddingBottom(`em(0.2))])
-              )
-              properties=[
-                Css.paddingTop(`em(0.4)),
-                Css.paddingBottom(`em(0.3)),
-              ]
+              properties=headerCellStyles
               key={columnIndex |> string_of_int}>
               {column.name}
             </FC.Table.Cell>

@@ -13,15 +13,7 @@ type authResult = {
 
 type authErr = {. "message": string};
 
-type checkSessionOptions = {
-  .
-  "nonce": string,
-  "domain": string,
-  "audience": string,
-  "clientID": string,
-  "responseType": string,
-  "scope": string,
-};
+type checkSessionOptions = {.};
 
 type t = {
   .
@@ -33,7 +25,6 @@ type t = {
 
 type clientOptions = {
   .
-  "nonce": string,
   "domain": string,
   "clientID": string,
   "redirectUri": string,
@@ -45,7 +36,6 @@ type clientOptions = {
 external createClient: clientOptions => t = "WebAuth";
 
 let authOptions = {
-  "nonce": "1",
   "domain": Env.auth0Domain,
   "clientID": Env.auth0ClientId,
   "redirectUri": Env.redirectUrl,
@@ -53,13 +43,7 @@ let authOptions = {
   "scope": "openid email profile",
 };
 
-let checkSessionOptions = {
-  "nonce": "1",
-  "audience": "http://localhost:1234",
-  "clientID": Env.auth0ClientId,
-  "responseType": "token id_token",
-  "scope": "openid email profile",
-};
+let checkSessionOptions = {};
 
 let client = authOptions |> createClient;
 

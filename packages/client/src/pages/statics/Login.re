@@ -12,6 +12,9 @@ let make = _children => {
           _type=`primary onClick={_e => Auth0Client.triggerLoginScreen()}>
           {"Login" |> ste}
         </Antd.Button>
+        <Antd.Button _type=`primary onClick={_e => Auth0Client.checkSession()}>
+          {"Check Session" |> ste}
+        </Antd.Button>
       </div>
     </div>,
 };

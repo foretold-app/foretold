@@ -50,8 +50,8 @@ module Transitions = {
 };
 
 module BorderRadius = {
-  let medium = `px(5);
-  let tight = `px(3);
+  let medium = `px(4);
+  let tight = `px(2);
 };
 
 module Statuses = {

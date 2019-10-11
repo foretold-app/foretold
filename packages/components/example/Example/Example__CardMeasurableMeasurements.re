@@ -6,6 +6,9 @@ let format_standard = "LLL";
 
 let cdf = ExampleCdfs.Example1.cdf;
 
+let cellStyle =
+  Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.4))]));
+
 let row =
   <Table.Row
     bottomSubRow=[|
@@ -29,11 +32,7 @@ let row =
       )>
       <FC__CdfChart__StatSummary cdf />
     </Table.Cell>
-    <Table.Cell
-      flex={`num(1.0)}
-      className=Css.(
-        style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])
-      )>
+    <Table.Cell flex={`num(1.0)} className=cellStyle>
       <FC__AgentLink.Jsx2
         agent={FC__AgentLink.Agent.makeUser(
           ~name="Roger Adams",
@@ -43,11 +42,7 @@ let row =
         )}
       />
     </Table.Cell>
-    <Table.Cell
-      flex={`num(1.0)}
-      className=Css.(
-        style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])
-      )>
+    <Table.Cell flex={`num(1.0)} className=cellStyle>
       <span className=Css.(style([color(FC__Settings.textMedium)]))>
         {MomentRe.momentWithUnix(pastTime)
          |> MomentRe.Moment.format(format_standard)
@@ -72,11 +67,7 @@ let row2 =
       )>
       <FC__CdfChart__StatSummary cdf />
     </Table.Cell>
-    <Table.Cell
-      flex={`num(1.0)}
-      className=Css.(
-        style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])
-      )>
+    <Table.Cell flex={`num(1.0)} className=cellStyle>
       <FC__AgentLink.Jsx2
         agent={FC__AgentLink.Agent.makeUser(
           ~name="Samantha Hope",
@@ -86,11 +77,7 @@ let row2 =
         )}
       />
     </Table.Cell>
-    <Table.Cell
-      flex={`num(1.0)}
-      className=Css.(
-        style([paddingTop(`em(0.7)), paddingBottom(`em(0.5))])
-      )>
+    <Table.Cell flex={`num(1.0)} className=cellStyle>
       <span className=Css.(style([color(FC__Settings.textMedium)]))>
         {MomentRe.momentWithUnix(pastTime)
          |> MomentRe.Moment.format(format_standard)

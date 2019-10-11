@@ -16,7 +16,7 @@ let inactiveStyles =
 
 let allStyles =
   Css.[
-    paddingBottom(`em(0.5)),
+    paddingBottom(`em(0.2)),
     paddingTop(`em(0.5)),
     paddingLeft(`em(0.4)),
     paddingRight(`em(0.4)),

@@ -13,13 +13,11 @@ type authResult = {
 
 type authErr = {. "message": string};
 
-type checkSessionOptions = {.};
-
 type t = {
   .
   "authorize": [@bs.meth] (unit => unit),
   "checkSession":
-    [@bs.meth] ((checkSessionOptions, (authErr, authResult) => unit) => unit),
+    [@bs.meth] ((Js.Dict.t(string), (authErr, authResult) => unit) => unit),
   "logout": [@bs.meth] (logoutType => unit),
 };
 
@@ -43,15 +41,13 @@ let authOptions = {
   "scope": "openid email profile",
 };
 
-let checkSessionOptions = {};
-
 let client = authOptions |> createClient;
 
 let triggerLoginScreen = () => client##authorize();
 
 let checkSession = () => {
   client##checkSession(
-    checkSessionOptions,
+    Js.Dict.empty(),
     (authErr, authResult) => {
       Js.log2("authErr", authErr);
       Js.log2("authResult", authResult);

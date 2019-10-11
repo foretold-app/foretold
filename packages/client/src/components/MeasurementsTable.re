@@ -41,8 +41,8 @@ module Helpers = {
       (
         ~measurement: measurement,
         ~bounds: (float, float),
-        ~width=150,
-        ~height=30,
+        ~width=230,
+        ~height=38,
         (),
       )
       : option(React.element) =>
@@ -148,8 +148,8 @@ module Helpers = {
       |> E.A.keepMap(_, r => getFloatCdf(r.value))
       |> E.A.fmap(r =>
            (
-             E.FloatCdf.firstAboveValue(0.05, r),
-             E.FloatCdf.firstAboveValue(0.95, r),
+             E.FloatCdf.firstAboveValue(0.02, r),
+             E.FloatCdf.firstAboveValue(0.98, r),
            )
          );
 
@@ -170,8 +170,8 @@ module Helpers = {
     switch (measurement.value) {
     | Ok(`FloatCdf(r)) =>
       switch (
-        E.FloatCdf.firstAboveValue(0.05, r),
-        E.FloatCdf.firstAboveValue(0.95, r),
+        E.FloatCdf.firstAboveValue(0.02, r),
+        E.FloatCdf.firstAboveValue(0.98, r),
       ) {
       | (Some(low), Some(high)) => Some((low, high))
       | _ => None
@@ -281,7 +281,7 @@ let predictionValueColumn =
 let predictionTextColumn =
   Table.Column.make(
     ~name="Input Text" |> ste,
-    ~flex=5,
+    ~flex=3,
     ~render=
       (measurement: Types.measurement) =>
         <div> {Helpers.getValueText(measurement)} </div>,
@@ -291,7 +291,7 @@ let predictionTextColumn =
 let agentColumn =
   Table.Column.make(
     ~name="Member" |> ste,
-    ~flex=7,
+    ~flex=5,
     ~render=
       (measurement: Types.measurement) => Helpers.measurerLink(~measurement),
     (),

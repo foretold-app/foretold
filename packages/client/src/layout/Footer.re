@@ -8,7 +8,7 @@ let make = _children => {
   ...component,
   render: _self =>
     <FC__Footer
-      logo={React.string({js|Foretold|js})}
+      logo={React.string({js|Foretold.io|js})}
       links=[|
         <Link.Jsx2 linkType={External(documentationUrl)}>
           {"Documentation" |> ste}

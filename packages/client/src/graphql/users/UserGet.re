@@ -58,32 +58,34 @@ let toUser = a =>
 module Query = [%graphql
   {|
     query user {
-      user {
-        id
-        name
-        email
-        picture
-        description
-        auth0Id
-        agentId
-        isEmailVerified
-        agent {
-          id
-          name
-          preference {
-            id
-            stopAllEmails
-            enableExperimentalFeatures
-          }
-        }
-        bots {
-          id
-          name
-          agent {
+      authenticated {
+          user {
             id
             name
+            email
+            picture
+            description
+            auth0Id
+            agentId
+            isEmailVerified
+            agent {
+              id
+              name
+              preference {
+                id
+                stopAllEmails
+                enableExperimentalFeatures
+              }
+            }
+            bots {
+              id
+              name
+              agent {
+                id
+                name
+              }
+            }
           }
-        }
       }
     }
   |}
@@ -96,7 +98,7 @@ let inner = innerComponentFn => {
     ...{({result}) =>
       result
       |> HttpResponse.fromApollo
-      |> HttpResponse.fmap(e => e##user |> E.O.fmap(toUser))
+      |> HttpResponse.fmap(e => e##authenticated##user |> E.O.fmap(toUser))
       |> HttpResponse.optionalToMissing
       |> (
         e =>

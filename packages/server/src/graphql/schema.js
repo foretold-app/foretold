@@ -37,7 +37,6 @@ const schema = new graphql.GraphQLSchema({
         type: types.users.user,
         args: {
           id: { type: graphql.GraphQLString },
-          auth0Id: { type: graphql.GraphQLString },
         },
         resolve: resolvers.users.one,
       },

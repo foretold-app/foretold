@@ -8,7 +8,7 @@ const { Data } = require('../../data/classes/data');
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.ObjectID} args.id
+ * @param {Models.UserID} args.id
  * @param {object} args.input
  * @param {Schema.Context} _context
  * @returns {Promise<Models.User>}
@@ -24,18 +24,13 @@ async function update(root, args, _context) {
 /**
  * @param {*} root
  * @param {object} args
+ * @param {Models.UserID} args.id
  * @param {Schema.Context} context
  * @returns {Promise<Models.User>}
  */
 async function one(root, args, context) {
-  const { id, auth0Id } = args;
-  if (context.user) {
-    return context.user;
-  } if (id) {
-    return data.users.getOne({ id });
-  } if (auth0Id) {
-    return data.users.getUserByAuth0Id(auth0Id);
-  }
+  const { id } = args;
+  return data.users.getOne({ id });
 }
 
 module.exports = {

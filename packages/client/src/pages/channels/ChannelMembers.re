@@ -154,6 +154,7 @@ let addMembersButtonSection = (channelId: string) =>
     ])}>
     <FC.Base.Button
       variant=Primary
+      size=MediumShort
       onClick={e =>
         LinkType.onClick(Internal(ChannelAddMember(channelId)), e)
       }>
@@ -170,6 +171,7 @@ let inviteMemberButtonSection = (channelId: string) =>
     ])}>
     <FC.Base.Button
       variant=Secondary
+      size=MediumShort
       onClick={e =>
         LinkType.onClick(Internal(ChannelInviteMember(channelId)), e)
       }>

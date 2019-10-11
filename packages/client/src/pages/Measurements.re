@@ -30,20 +30,29 @@ module Body = {
           ~channelId=Some(""),
           ~paginationPage=Reducer.Components.paginationPage(reducerParams),
           (),
-        )}>
+        )}
+        isFluid=true>
         {switch (reducerParams.response) {
          | Success(connection) =>
            let measurementsList = connection.edges |> Array.to_list;
+           let measurableValueType = measurable.valueType;
 
            switch (measurable.state) {
            | Some(`JUDGED)
            | Some(`CLOSED_AS_UNRESOLVED) =>
              MeasurementsTable.makeExtended(
+               ~measurableValueType,
                ~measurementsList,
                ~loggedInUser,
                (),
              )
-           | _ => MeasurementsTable.make(~loggedInUser, ~measurementsList, ())
+           | _ =>
+             MeasurementsTable.make(
+               ~loggedInUser,
+               ~measurementsList,
+               ~measurableValueType,
+               (),
+             )
            };
          | _ => <Spin />
          }}

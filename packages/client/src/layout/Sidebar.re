@@ -13,7 +13,7 @@ module Styles = {
   let minorHeader =
     style([
       color(`rgba((255, 255, 255, 0.6))),
-      fontSize(`em(1.4)),
+      fontSize(`em(1.15)),
       width(`percent(100.)),
       padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
     ]);
@@ -38,7 +38,6 @@ module Styles = {
     style([
       flex(`num(1.)),
       color(`rgba((255, 255, 255, 0.6))),
-      fontSize(`em(1.1)),
       padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
       cursor(`pointer),
       textDecoration(`none),
@@ -54,7 +53,6 @@ module Styles = {
       flex(`num(1.)),
       color(`rgba((255, 255, 255, 0.8))),
       background(`hex("3192ff")),
-      fontSize(`em(1.1)),
       cursor(`pointer),
       padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
       focus([textDecoration(`none)]),
@@ -69,7 +67,6 @@ let make = (~channelId, ~loggedInUser: Types.user, _children) => {
   render: _self =>
     <div className=Styles.sidebar>
       <div className=Styles.over />
-      <div className=Styles.sectionPadding />
       <div className=Styles.minorHeader>
         <Link.Jsx2
           linkType={Internal(ChannelIndex)} className=Styles.minorHeaderLink>

@@ -52,7 +52,7 @@ let make =
           (),
         );
 
-      <SLayout head> body </SLayout>;
+      <SLayout head isFluid=true> body </SLayout>;
     };
 
     <Reducer callFnParams=(channelId, measurableId) subComponent />;

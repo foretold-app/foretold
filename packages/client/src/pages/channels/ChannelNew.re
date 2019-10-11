@@ -66,6 +66,7 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
     SLayout.LayoutConfig.make(
       ~head=SLayout.Header.textDiv("Create a New Community"),
       ~body,
+      (),
     )
     |> layout;
   },

@@ -50,8 +50,8 @@ module Transitions = {
 };
 
 module BorderRadius = {
-  let medium = `px(5);
-  let tight = `px(3);
+  let medium = `px(4);
+  let tight = `px(2);
 };
 
 module Statuses = {
@@ -87,7 +87,7 @@ module Text = {
     let main = textDark;
     let p = "#777c88"->r;
     let light = accentBlue;
-    let active = "#3562AE"->r;
+    let active = "#0C5CD9"->r;
   };
   let standardFont = "Lato";
 };

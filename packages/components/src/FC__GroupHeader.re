@@ -13,7 +13,7 @@ module Styles = {
 
   let inner =
     style(
-      [boxSizing(`borderBox), padding2(~v=`em(1.), ~h=`em(2.0))]
+      [boxSizing(`borderBox), padding2(~v=`em(0.5), ~h=`em(2.0))]
       @ BaseStyles.fullWidthFloatLeft,
     );
 
@@ -29,6 +29,7 @@ let actionButton = (~variant: FC__Button.variant=Primary) =>
   FC__Button.make(
     ~variant,
     ~isDisabled=false,
+    ~size=Medium,
     ~className=Css.(merge([Styles.actionButtonPosition])),
   );
 

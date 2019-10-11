@@ -50,6 +50,7 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
         SLayout.LayoutConfig.make(
           ~head=SLayout.Header.textDiv("All Entities"),
           ~body=Table.fromColumns(Columns.all, Ken.dataSource, ()),
+          (),
         )
         |> layout;
       }}

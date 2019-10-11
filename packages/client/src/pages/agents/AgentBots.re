@@ -131,7 +131,7 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
             </FC.Base.Div.Jsx2>
           </div>;
 
-        SLayout.LayoutConfig.make(~head, ~body) |> layout;
+        SLayout.LayoutConfig.make(~head, ~body, ()) |> layout;
       | _ => <SLayout> <NothingToShow /> </SLayout>
       }
     ),

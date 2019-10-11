@@ -153,7 +153,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
 
 module CMutationForm =
   MutationForm.Make({
-    type queryType = UserUpdate.EditUser.t;
+    type queryType = UserUpdate.Query.t;
   });
 
 let component = ReasonReact.statelessComponent("Profile");

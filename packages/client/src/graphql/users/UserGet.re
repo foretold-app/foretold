@@ -57,8 +57,8 @@ let toUser = a =>
 
 module Query = [%graphql
   {|
-    query user () {
-      user() {
+    query user {
+      user {
         id
         name
         email

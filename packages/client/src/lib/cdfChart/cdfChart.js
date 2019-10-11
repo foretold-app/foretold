@@ -29,6 +29,7 @@ class CdfChart extends React.Component {
     var _chart = chart()
           .svgHeight(this.props.height)
           .maxX(this.props.maxX)
+          .minX(this.props.minX)
           .marginBottom(this.props.marginBottom || 15)
           .marginLeft(5)
           .marginRight(5)

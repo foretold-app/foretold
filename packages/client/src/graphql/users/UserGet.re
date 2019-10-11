@@ -101,12 +101,8 @@ let inner = innerComponentFn => {
       |> (
         e =>
           switch (e) {
-          | Success(c) =>
-            innerComponentFn(Me.WithTokensAndUserData({userData: c}))
-          | _ =>
-            innerComponentFn(
-              Me.WithTokensAndUserLoading({loadingUserData: e}),
-            )
+          | Success(user) => innerComponentFn(Some(user))
+          | _ => innerComponentFn(None)
           }
       )
     }

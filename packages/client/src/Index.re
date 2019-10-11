@@ -1,9 +1,6 @@
-[@bs.module "./intercom.js"] external intercom: unit => unit = "intercom";
+[@bs.module "./intercom.js"]
+external intercom: (string, string) => unit = "intercom";
 
 FC.Base.Globals.load();
 
 ReactDOMRe.renderToElementWithId(<App />, "app");
-
-if (Env.prod) {
-  intercom();
-};

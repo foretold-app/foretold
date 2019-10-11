@@ -1,4 +1,4 @@
-function intercom() {
+function intercom(name, email) {
   (function () {
     var w = window;
     var ic = w.Intercom;

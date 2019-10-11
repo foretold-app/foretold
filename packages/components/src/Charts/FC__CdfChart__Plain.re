@@ -36,7 +36,7 @@ let make =
         height=30
         minX
         maxX
-        marginBottom=0
+        marginBottom=15
         marginTop=0
         showVerticalLine=false
         showDistributionLines=false

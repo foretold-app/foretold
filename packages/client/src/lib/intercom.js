@@ -47,6 +47,8 @@ function intercom(intercomAppId, name, email, createdAt) {
 
   window.Intercom('boot', options);
   window.Intercom('update');
+
+  console.debug("Intercom init", options);
 }
 
 module.exports = { intercom };

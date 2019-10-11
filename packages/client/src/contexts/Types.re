@@ -66,6 +66,7 @@ type user = {
   description: option(string),
   bots: option(array(bot)),
   isEmailVerified: option(bool),
+  createdAt: option(MomentRe.Moment.t),
 }
 
 and bot = {

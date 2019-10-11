@@ -52,38 +52,42 @@ let toUser = a =>
     ~agent=a##agent |> E.O.fmap(toAgent),
     ~bots=a##bots |> toBots,
     ~isEmailVerified=a##isEmailVerified,
+    ~createdAt=Some(a##createdAt),
     (),
   );
 
 module Query = [%graphql
   {|
-    query user ($auth0Id: String) {
-      user(auth0Id: $auth0Id) {
-        id
-        name
-        email
-        picture
-        description
-        auth0Id
-        agentId
-        isEmailVerified
-        agent {
-          id
-          name
-          preference {
-            id
-            stopAllEmails
-            enableExperimentalFeatures
-          }
-        }
-        bots {
-          id
-          name
-          agent {
+    query user {
+      authenticated {
+          user {
             id
             name
+            email
+            picture
+            description
+            auth0Id
+            agentId
+            isEmailVerified
+            createdAt @bsDecoder(fn: "E.J.toMoment")
+            agent {
+              id
+              name
+              preference {
+                id
+                stopAllEmails
+                enableExperimentalFeatures
+              }
+            }
+            bots {
+              id
+              name
+              agent {
+                id
+                name
+              }
+            }
           }
-        }
       }
     }
   |}
@@ -96,7 +100,7 @@ let inner = innerComponentFn => {
     ...{({result}) =>
       result
       |> HttpResponse.fromApollo
-      |> HttpResponse.fmap(e => e##user |> E.O.fmap(toUser))
+      |> HttpResponse.fmap(e => e##authenticated##user |> E.O.fmap(toUser))
       |> HttpResponse.optionalToMissing
       |> (
         e =>

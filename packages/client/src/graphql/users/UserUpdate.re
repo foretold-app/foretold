@@ -45,19 +45,6 @@ let mutate =
   |> ignore;
 };
 
-let withUserQuery =
-    (auth0Id, innerComponentFn: 'a => ReasonReact.reactElement) => {
-  let query = UserGet.Query.make(~auth0Id, ());
-  <UserGet.QueryComponent variables=query##variables>
-    ...{({result}) =>
-      result
-      |> ApolloUtils.apolloResponseToResult
-      |> E.R.fmap(innerComponentFn)
-      |> E.R.id
-    }
-  </UserGet.QueryComponent>;
-};
-
 let withUserMutation = innerComponentFn =>
   EditUserMutation.make(
     ~onError=e => Js.log2("Graphql Error:", e),

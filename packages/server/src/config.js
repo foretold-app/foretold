@@ -14,6 +14,8 @@ const JWT_EXPIN = process.env.JWT_EXPIN || '31 days';
 
 const MAX_BOT_TOKEN_SIZE = process.env.MAX_BOT_TOKEN_SIZE * 1 || 32;
 
+const { INTERCOM_APP_ID } = process.env;
+
 const { GITHUB_PERSONAL_ACCESS_TOKEN } = process.env;
 const { GITHUB_REPO_OWNER } = process.env;
 const { GITHUB_REPO_NAME } = process.env;
@@ -63,8 +65,8 @@ const conf = {
   JWT_SECRET,
   JWT_ISSUER,
   JWT_EXPIN,
-
   MAX_BOT_TOKEN_SIZE,
+  INTERCOM_APP_ID,
 
   GITHUB_PERSONAL_ACCESS_TOKEN,
   GITHUB_REPO_OWNER,

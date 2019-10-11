@@ -1,5 +1,6 @@
 [@bs.module "../lib/intercom.js"]
-external intercom: (string, string) => unit = "intercom";
+external intercom: (string, string, string, option(MomentRe.Moment.t)) => unit =
+  "intercom";
 
 let component = ReasonReact.statelessComponent("Intercom");
 let make = _children => {
@@ -14,8 +15,9 @@ let make = _children => {
           let name = loggedInUser.name == "" ? "User" : loggedInUser.name;
           let email =
             loggedInUser.email |> E.O.default("no-reply@foretold.io");
+          let createdAt = loggedInUser.createdAt;
 
-          intercom(name, email);
+          intercom(Env.intercomAppId, name, email, createdAt);
         | _ => ()
         };
 

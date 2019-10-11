@@ -38,7 +38,7 @@ module Columns = {
     Table.Column.make(
       ~name="Question" |> Utils.ste,
       ~render=(r: record) => r |> getName,
-      ~flex=2,
+      ~flex=3,
       (),
     );
 
@@ -61,7 +61,7 @@ module Columns = {
              )
           |> E.O.default("")
           |> Utils.ste,
-      ~flex=2,
+      ~flex=1,
       (),
     );
 

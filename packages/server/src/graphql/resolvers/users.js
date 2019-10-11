@@ -10,6 +10,7 @@ const { Data } = require('../../data/classes/data');
  * @param {object} args
  * @param {Models.UserID} args.id
  * @param {object} args.input
+ * @param {String} args.input.auth0AccessToken
  * @param {Schema.Context} _context
  * @returns {Promise<Models.User>}
  */

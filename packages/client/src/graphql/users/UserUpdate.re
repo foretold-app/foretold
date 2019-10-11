@@ -33,16 +33,38 @@ let mutate =
     Query.make(
       ~id,
       ~input={
-        "name": name,
+        "name": Some(name),
         "email": email',
         "picture": picture',
         "description": description',
+        "auth0AccessToken": None,
       },
       (),
     );
 
   mutation(~variables=mutate##variables, ~refetchQueries=[|"user"|], ())
   |> ignore;
+};
+
+let mutateAccessToken =
+    (
+      mutation: EditUserMutation.apolloMutation,
+      id: string,
+      auth0AccessToken: string,
+    ) => {
+  let mutate =
+    Query.make(
+      ~id,
+      ~input={
+        "name": None,
+        "email": None,
+        "picture": None,
+        "description": None,
+        "auth0AccessToken": Some(auth0AccessToken),
+      },
+      (),
+    );
+  mutation(~variables=mutate##variables, ~refetchQueries=[||], ()) |> ignore;
 };
 
 let withUserMutation = innerComponentFn =>

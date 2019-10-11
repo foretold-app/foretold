@@ -45,16 +45,14 @@ let client = authOptions |> createClient;
 
 let triggerLoginScreen = () => client##authorize();
 
-let checkSession = () => {
+let checkSession = fn => {
   client##checkSession(
     Js.Dict.empty(),
-    (authErr, authResult) => {
-      Js.log2("authErr", authErr);
-      Js.log2("authResult", authResult);
+    (_authErr, authResult) => {
+      authResult |> fn;
       ();
     },
   );
-
   ();
 };
 

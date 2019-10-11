@@ -55,7 +55,7 @@ app.use(cors());
 
   // Returns all routes excluding "/graphql", "/hooks", "/env" as static files
   // or returns fallback page.
-  app.get(/^((?!(graphql|hooks|env)).)*$/,
+  app.get(/^((?!(graphql|hooks|env|intercom)).)*$/,
     express.static(distDir),
     (req, res) => res.sendFile(fallbackFile));
 }

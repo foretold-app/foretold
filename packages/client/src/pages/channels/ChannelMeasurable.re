@@ -10,7 +10,9 @@ let make =
   ...component,
   render: _ => {
     <>
-      <SLayout> <Measurable id=measurableId loggedInUser /> </SLayout>
+      <SLayout isFluid=true>
+        <Measurable id=measurableId loggedInUser />
+      </SLayout>
       <MeasurableBottomSection measurableId channelId loggedInUser />
     </>;
   },

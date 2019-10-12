@@ -33,7 +33,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
       <PageCard.HeaderRow>
         <PageCard.HeaderRow.Title>
           "New Prediction"->React.string
-          <Icon.Questionmark />
+          <FC__HelpDropdown />
         </PageCard.HeaderRow.Title>
       </PageCard.HeaderRow>
       <PageCard.Section flex=true padding=`none>
@@ -77,7 +77,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
                  initialValue={Some("CDF")}
                  values=[("CDF", "CDF"), ("PDF", "PDF")]
                />
-               <Icon.Questionmark />
+               <FC__HelpDropdown />
              </div>
              <PageCard.VerticalSpace />
              <Alert type_=`error>

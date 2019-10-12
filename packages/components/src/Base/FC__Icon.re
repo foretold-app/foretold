@@ -7,9 +7,8 @@ module Questionmark = {
       style([
         height(`px(21)),
         width(`px(21)),
-        paddingLeft(`em(0.6)),
         verticalAlign(`bottom),
-        margin2(~v=`px(-2), ~h=`zero),
+        margin2(~v=`px(1), ~h=`zero),
         cursor(`default),
       ])
     );
@@ -19,21 +18,33 @@ module Questionmark = {
       style([
         selector(
           "text",
-          [fontSize(`em(0.7)), SVG.fill(FC__Settings.textMedium)],
+          [
+            fontSize(`em(0.8)),
+            SVG.fill(FC__Settings.white),
+            fontStyle(`italic),
+          ],
         ),
-        selector("circle", [SVG.stroke(FC__Settings.greyO4)]),
+        selector("circle", [SVG.fill(Css.hex("bdbcbc"))]),
+        selector(
+          ":hover",
+          [
+            cursor(`pointer),
+            selector("circle", [SVG.fill(Css.hex("777"))]),
+          ],
+        ),
       ])
     );
+
   let make = _children => {
     ...component,
     render: _self => {
       <svg
         className={Css.merge([iconStyle, questionMarkstyle])}
         viewBox="0 0 20 20">
-        <text x="10" y="13" fontWeight="bold" textAnchor="middle">
-          {React.string("?")}
+        <circle cx="10" cy="10" r="8.5" />
+        <text x="9" y="15" fontWeight="bold" textAnchor="middle">
+          {React.string("i")}
         </text>
-        <circle cx="10" cy="10" r="8.5" strokeWidth="1" fill="none" />
       </svg>;
     },
   };

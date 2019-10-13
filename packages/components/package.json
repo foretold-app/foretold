@@ -25,6 +25,7 @@
         "bs-css": "9.0.1",
         "bs-moment": "0.4.4",
         "bs-platform": "5.0.6",
+        "bs-react-markdown": "0.0.9",
         "d3": "5.9.2",
         "emotion": "10.0.9",
         "lodash": "4.17.11",
@@ -34,7 +35,7 @@
         "rc-menu": "7.4.20",
         "react": "^16.3.0",
         "react-dom": ">=16.6.0",
-        "react-markdown": "4.2.2",
+        "react-markdown": "4.1.0",
         "reason-react": "0.7.0"
     },
     "devDependencies": {

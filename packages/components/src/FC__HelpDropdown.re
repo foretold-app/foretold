@@ -37,7 +37,7 @@ module Overlay = {
                     lineHeight(`em(1.5)),
                   ])
                 )>
-                <FC__Markdown.Jsx2 content={content.bodyContent} />
+                <ReactMarkdown.Markdown source={content.bodyContent} />
               </span>
             </FC__PageCard.BodyPadding>
           </FC__PageCard.Body>

@@ -72,8 +72,8 @@ let make =
       </Div.Jsx2>
       <Div.Jsx2 styles=[Css.style([Css.marginTop(`em(2.0))])]>
         <PageCard.P>
-          <FC__Markdown.Jsx2
-            content="LLorem ipsum dolor sit amet, consectetur adipiscing elit. $$ e^3$$"
+          <ReactMarkdown.Markdown
+            source="LLorem ipsum dolor sit amet, consectetur adipiscing elit. $$ e^3$$"
           />
         </PageCard.P>
       </Div.Jsx2>

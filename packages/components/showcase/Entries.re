@@ -9,6 +9,7 @@ let entries =
     Showcase_Colors.entry,
     Scoring.entry,
     Showcase_AgentLink.entry,
+    Showcase_HelpDropdown.entry,
     Showcase_Alerts.entry,
     folder(
       ~title="Link",

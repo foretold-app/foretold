@@ -100,14 +100,13 @@ module Body = {
 
 module BodyPadding = {
   let component = ReasonReact.statelessComponent("Card BodyPadding");
-  let make = children => {
+  let make = (~v=`em(1.5), children) => {
     ...component,
     render: _self =>
       <Div.Jsx2
         styles=[
           Css.style(
-            [Css.padding2(~v=`em(1.5), ~h=`em(1.5))]
-            @ BaseStyles.fullWidthFloatLeft,
+            [Css.padding2(~v, ~h=`em(1.5))] @ BaseStyles.fullWidthFloatLeft,
           ),
         ]>
         ...children

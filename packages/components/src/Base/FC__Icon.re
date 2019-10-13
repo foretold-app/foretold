@@ -41,7 +41,7 @@ module Questionmark = {
       <svg
         className={Css.merge([iconStyle, questionMarkstyle])}
         viewBox="0 0 20 20">
-        <circle cx="10" cy="10" r="8.5" />
+        <circle cx="10" cy="10" r="8.2" />
         <text x="9" y="15" fontWeight="bold" textAnchor="middle">
           {React.string("i")}
         </text>

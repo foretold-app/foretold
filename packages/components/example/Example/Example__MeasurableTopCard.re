@@ -72,10 +72,10 @@ let make =
       </Div.Jsx2>
       <Div.Jsx2 styles=[Css.style([Css.marginTop(`em(2.0))])]>
         <PageCard.P>
-          {"LLorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vulputate tortor a sapien aliquet ullamcorper. Nunc non varius sapien, quis elementum sapien. Morbi ac tristique quam. Cras hendrerit accumsan pretium. Praesent id nisl sit amet eros imperdiet placerat. Vestibulum sodales posuere diam vel laoreet."
-           |> ReasonReact.string}
+          <FC__Markdown.Jsx2
+            content="LLorem ipsum dolor sit amet, consectetur adipiscing elit. $$ e^3$$"
+          />
         </PageCard.P>
-        <FC__Markdown source="foobar inc" />
       </Div.Jsx2>
     </Div.Jsx2>
   </PageCard>;

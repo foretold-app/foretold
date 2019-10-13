@@ -324,7 +324,16 @@ let measurableColumn =
 
 let scoreColumn = (loggedInUser: Types.user) =>
   Table.Column.make(
-    ~name="Relative Score" |> ste,
+    ~name={
+      "Relative Score" |> ste;
+    },
+    ~help=
+      Some({
+        headerContent: "Relative Score" |> ste,
+        bodyContent:
+          "The difference between the log error for this predictions vs. the log score for the most recent aggregate prediction."
+          |> ste,
+      }),
     ~render=
       (measurement: Types.measurement) =>
         measurement.measurementScoreSet
@@ -340,7 +349,14 @@ let scoreColumn = (loggedInUser: Types.user) =>
 
 let logScoreColumn = (loggedInUser: Types.user) =>
   Table.Column.make(
-    ~name=<span> {"Log Score" |> ste} </span>,
+    ~name="Log Score" |> ste,
+    ~help=
+      Some({
+        headerContent: "Log Score" |> ste,
+        bodyContent:
+          "The absolute log error of the forecast vs. the most recent resolution."
+          |> ste,
+      }),
     ~render=
       (measurement: Types.measurement) =>
         measurement.measurementScoreSet

@@ -6,7 +6,7 @@ type content = {
 module Overlay = {
   module Styles = {
     open Css;
-    let className = style([maxWidth(`em(20.))]);
+    let className = style([maxWidth(`em(30.))]);
   };
 
   let component = ReasonReact.statelessComponent("HelpDropdown Inside");
@@ -22,14 +22,14 @@ module Overlay = {
                   className=Css.(
                     style([marginRight(`em(0.4)), opacity(0.5)])
                   )>
-                  <FC__Icon.Questionmark />
+                  <FC__Icon.Questionmark isInteractive=false />
                 </span>
                 {content.headerContent}
               </FC__PageCard.HeaderRow.Title>
             </FC__Div.Jsx2>
           </FC__PageCard.HeaderRow>
           <FC__PageCard.Body>
-            <FC__PageCard.BodyPadding v={`em(0.0)}>
+            <FC__PageCard.BodyPadding v={`em(0.5)}>
               <span
                 className=Css.(
                   style([
@@ -55,7 +55,7 @@ let make = (~content, _children) => {
   ...component,
   render: _self => {
     <FC__Dropdown overlay={staticOverlay(content)} trigger=FC__Dropdown.Hover>
-      <span> <FC__Icon.Questionmark /> </span>
+      <span> <FC__Icon.Questionmark isInteractive=true /> </span>
     </FC__Dropdown>;
   },
 };

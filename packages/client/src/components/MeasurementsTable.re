@@ -280,7 +280,13 @@ let predictionValueColumn =
 
 let predictionTextColumn =
   Table.Column.make(
-    ~name="Input Text" |> ste,
+    ~name=
+      <span>
+        {"Input Text" |> ste}
+        <FC.HelpDropdown
+          content={headerContent: "sdf" |> ste, bodyContent: "sdfsdf" |> ste}
+        />
+      </span>,
     ~flex=3,
     ~render=
       (measurement: Types.measurement) =>
@@ -334,7 +340,7 @@ let scoreColumn = (loggedInUser: Types.user) =>
 
 let logScoreColumn = (loggedInUser: Types.user) =>
   Table.Column.make(
-    ~name="Log Score" |> ste,
+    ~name=<span> {"Log Score" |> ste} </span>,
     ~render=
       (measurement: Types.measurement) =>
         measurement.measurementScoreSet

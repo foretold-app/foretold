@@ -334,7 +334,13 @@ let scoreColumn = (loggedInUser: Types.user) =>
 
 let logScoreColumn = (loggedInUser: Types.user) =>
   Table.Column.make(
-    ~name="Log Score" |> ste,
+    ~name=
+      <span>
+        {"Log Score" |> ste}
+        <FC.HelpDropdown
+          content={headerContent: "Log Score", bodyContent: "testing 123"}
+        />
+      </span>,
     ~render=
       (measurement: Types.measurement) =>
         measurement.measurementScoreSet

@@ -3,7 +3,7 @@ type content = {
   bodyContent: string,
 };
 
-module Inside = {
+module Overlay = {
   module Styles = {
     open Css;
     let className = style([maxWidth(`em(20.))]);
@@ -30,9 +30,15 @@ module Inside = {
           </FC__PageCard.HeaderRow>
           <FC__PageCard.Body>
             <FC__PageCard.BodyPadding v={`em(0.0)}>
-              <FC__PageCard.P>
+              <span
+                className=Css.(
+                  style([
+                    color(FC__Settings.Text.LightBackground.p),
+                    lineHeight(`em(1.5)),
+                  ])
+                )>
                 <FC__Markdown.Jsx2 content={content.bodyContent} />
-              </FC__PageCard.P>
+              </span>
             </FC__PageCard.BodyPadding>
           </FC__PageCard.Body>
         </FC__PageCard>
@@ -43,7 +49,7 @@ module Inside = {
 
 let component = ReasonReact.statelessComponent("HelpDropdown");
 
-let staticOverlay = content => <Inside content />;
+let staticOverlay = content => <Overlay content />;
 
 let make = (~content, _children) => {
   ...component,

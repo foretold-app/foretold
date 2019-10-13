@@ -739,14 +739,6 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.4.tgz#622a72bebd1e3f48d921563b4b60a762295a81fc"
   integrity sha512-6PYY5DVdAY1ifaQW6XYTnOMihmBVT27elqSjEoodchsGjzYlEsTQMcEhSud99kVawatyTZRTiVkJ/c6lwbQ7nA==
 
-"@foretold/cdf@1.0.10":
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/@foretold/cdf/-/cdf-1.0.10.tgz#e068062be6983e220439f887b66da2f6147eff53"
-  integrity sha512-a8cUCdWjZViimKTROJIwA1j0//AWeYg2wP79ZARtpwdMq1oMEyHCA4N9iYmkkz/R/kUkBjO5p1NQ+/+O1W1Y9g==
-  dependencies:
-    lodash "4.17.15"
-    pdfast "0.2.0"
-
 "@foretold/guesstimator@1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@foretold/guesstimator/-/guesstimator-1.0.1.tgz#6c061474a0b453eb5e8caa17912689262175185e"
@@ -4348,11 +4340,6 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-pdfast@0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/pdfast/-/pdfast-0.2.0.tgz#8cbc556e1bf2522177787c0de2e0d4373ba885c9"
-  integrity sha1-jLxVbhvyUiF3eHwN4uDUNzuohck=
-
 performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
@@ -4943,7 +4930,7 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@>=16.6.0, react-dom@>=16.8.1:
+react-dom@>=16.8.1:
   version "16.10.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.10.2.tgz#4840bce5409176bc3a1f2bd8cb10b92db452fda6"
   integrity sha512-kWGDcH3ItJK4+6Pl9DZB16BXYAZyrYQItU4OMy0jAkv5aNqc+mAKb4TpFtAteI6TJZu+9ZlNhaeNQSVQDHJzkw==
@@ -4976,7 +4963,7 @@ react-markdown@4.1.0:
     unist-util-visit "^1.3.0"
     xtend "^4.0.1"
 
-react@>=16.8.1, react@^16.3.0:
+react@>=16.8.1:
   version "16.10.2"
   resolved "https://registry.yarnpkg.com/react/-/react-16.10.2.tgz#a5ede5cdd5c536f745173c8da47bda64797a4cf0"
   integrity sha512-MFVIq0DpIhrHFyqLU0S3+4dIcBhhOvBE8bJ/5kHPVOVaGdo0KuiQzpcjCPsf585WvhypqtrMILyoE2th6dT+Lw==

@@ -280,13 +280,9 @@ let predictionValueColumn =
 
 let predictionTextColumn =
   Table.Column.make(
-    ~name=
-      <span>
-        {"Input Text" |> ste}
-        <FC.HelpDropdown
-          content={headerContent: "sdf" |> ste, bodyContent: "sdfsdf" |> ste}
-        />
-      </span>,
+    ~name={
+      "Input Text" |> ste;
+    },
     ~flex=3,
     ~render=
       (measurement: Types.measurement) =>

@@ -46,27 +46,6 @@ let mutate =
   |> ignore;
 };
 
-let mutateAccessToken =
-    (
-      mutation: EditUserMutation.apolloMutation,
-      id: string,
-      auth0AccessToken: string,
-    ) => {
-  let mutate =
-    Query.make(
-      ~id,
-      ~input={
-        "name": None,
-        "email": None,
-        "picture": None,
-        "description": None,
-        "auth0AccessToken": Some(auth0AccessToken),
-      },
-      (),
-    );
-  mutation(~variables=mutate##variables, ~refetchQueries=[||], ()) |> ignore;
-};
-
 let withUserMutation = innerComponentFn =>
   <EditUserMutation onError={e => Js.log2("Graphql Error:", e)}>
     ...innerComponentFn

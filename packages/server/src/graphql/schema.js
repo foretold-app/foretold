@@ -335,6 +335,19 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.users.update,
       },
 
+      userAccessTokenUpdate: {
+        type: types.users.user,
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.users.userAccessTokenUpdateInput,
+            ),
+          },
+        },
+        resolve: resolvers.users.accessTokenUpdate,
+      },
+
       channelUpdate: {
         type: types.channels.channel,
         args: {

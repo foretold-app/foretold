@@ -7,7 +7,7 @@ let make = _children => {
       ...{({loggedInUser}) =>
         switch (loggedInUser) {
         | Some(loggedInUser) =>
-          <UserUpdate.EditUserMutation>
+          <UserAccessTokenUpdate.Mutation>
             ...{(mutation, data) =>
               switch (data.result) {
               | NotCalled =>
@@ -19,7 +19,7 @@ let make = _children => {
                 Js.log2("idToken", idToken);
                 Js.log2("authResult", authResult);
 
-                UserUpdate.mutateAccessToken(
+                UserAccessTokenUpdate.mutate(
                   mutation,
                   loggedInUser.id,
                   accessToken,
@@ -29,7 +29,7 @@ let make = _children => {
               | _ => ReasonReact.null
               }
             }
-          </UserUpdate.EditUserMutation>
+          </UserAccessTokenUpdate.Mutation>
         | _ => ReasonReact.null
         }
       }

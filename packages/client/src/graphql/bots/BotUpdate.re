@@ -25,8 +25,3 @@ let mutate =
   mutation(~variables=m##variables, ~refetchQueries=[|"user", "bots"|], ())
   |> ignore;
 };
-
-let withMutation = innerComponentFn =>
-  <Mutation onError={e => Js.log2("Graphql Error:", e)}>
-    ...innerComponentFn
-  </Mutation>;

@@ -11,19 +11,29 @@ let make = _children => {
             ...{(mutation, data) =>
               switch (data.result) {
               | NotCalled =>
-                let accessToken = "accessToken1";
-                let idToken = "idToken1";
-                let authResult = "authResult1";
+                Auth0Client.checkSession((authResult: Auth0Client.authResult) => {
+                  let accessToken = authResult##accessToken;
+                  let idToken = authResult##idToken;
+                  let expiresInSec = authResult##expiresIn;
 
-                Js.log2("accessToken", accessToken);
-                Js.log2("idToken", idToken);
-                Js.log2("authResult", authResult);
+                  UserAccessTokenUpdate.mutate(
+                    mutation,
+                    loggedInUser.id,
+                    accessToken,
+                  );
 
-                UserAccessTokenUpdate.mutate(
-                  mutation,
-                  loggedInUser.id,
-                  accessToken,
-                );
+                  let nowInSec =
+                    MomentRe.momentNow() |> MomentRe.Moment.toUnix;
+                  let expiresAt = nowInSec + expiresInSec;
+                  let expiresAtStr = string_of_int(expiresAt);
+
+                  let tokens =
+                    Auth0Tokens.make(accessToken, idToken, expiresAtStr);
+
+                  Auth0Tokens.set(tokens);
+
+                  ();
+                });
 
                 ReasonReact.null;
               | _ => ReasonReact.null

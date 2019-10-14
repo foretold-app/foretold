@@ -7,7 +7,7 @@ type logoutType = {
 type authResult = {
   .
   "accessToken": string,
-  "expiresIn": string,
+  "expiresIn": int,
   "idToken": string,
 };
 

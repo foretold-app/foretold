@@ -1,6 +1,7 @@
 type column('a) = {
   name: ReasonReact.reactElement,
   render: 'a => ReasonReact.reactElement,
+  help: option(FC.HelpDropdown.content),
   flex: int,
   show: 'a => bool,
 };
@@ -13,8 +14,10 @@ let filterColums = (columns, rows) => {
 };
 
 module Column = {
-  let make = (~name, ~render, ~flex=1, ~show=_ => true, ()): column('b) => {
+  let make =
+      (~name, ~render, ~flex=1, ~show=_ => true, ~help=None, ()): column('b) => {
     name,
+    help,
     render,
     flex,
     show,
@@ -55,7 +58,19 @@ let fromColumns =
               flex={`num(column.flex |> float_of_int)}
               properties=headerCellStyles
               key={columnIndex |> string_of_int}>
-              {column.name}
+              {switch (column.help) {
+               | None => column.name
+               | Some(content) =>
+                 <span>
+                   {column.name}
+                   <span
+                     className=Css.(
+                       style([fontSize(`em(1.2)), marginLeft(`em(0.4))])
+                     )>
+                     <FC.HelpDropdown content />
+                   </span>
+                 </span>
+               }}
             </FC.Table.Cell>
           )
        |> ReasonReact.array}

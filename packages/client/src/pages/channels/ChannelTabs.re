@@ -47,13 +47,10 @@ let make =
      )}
     {E.React.showIf(
        channel.id != "home",
-       Primary.User.show(
-         loggedInUser,
-         tab(
-           tabSelected == Leaderboard,
-           tabToInternalUrl(channel.id, Leaderboard),
-           "Scoring",
-         ),
+       tab(
+         tabSelected == Leaderboard,
+         tabToInternalUrl(channel.id, Leaderboard),
+         "Scoring",
        ),
      )}
     {E.React.showIf(

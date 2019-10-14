@@ -338,7 +338,6 @@ let scoreColumn = (loggedInUser: Types.user) =>
            )
         |> E.O.default("")
         |> Utils.ste,
-    ~show=_ => Primary.User.showif(loggedInUser),
     ~flex=5,
     (),
   );
@@ -361,7 +360,6 @@ let logScoreColumn = (loggedInUser: Types.user) =>
            )
         |> E.O.default("")
         |> Utils.ste,
-    ~show=_ => Primary.User.showif(loggedInUser),
     ~flex=5,
     (),
   );

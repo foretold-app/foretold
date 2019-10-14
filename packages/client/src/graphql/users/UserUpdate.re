@@ -64,6 +64,7 @@ let mutateAccessToken =
       },
       (),
     );
+  Js.log("mutateAccessToken");
   mutation(~variables=mutate##variables, ~refetchQueries=[||], ()) |> ignore;
 };
 

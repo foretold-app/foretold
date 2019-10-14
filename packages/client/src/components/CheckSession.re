@@ -1,7 +1,3 @@
-[@bs.module "../lib/intercom.js"]
-external intercom: (string, string, string, option(MomentRe.Moment.t)) => unit =
-  "intercom";
-
 let component = ReasonReact.statelessComponent("CheckSession");
 let make = _children => {
   ...component,
@@ -10,25 +6,47 @@ let make = _children => {
       ...{({loggedInUser}) =>
         switch (loggedInUser) {
         | Some(loggedInUser) =>
-          Auth0Client.checkSession(authResult => {
-            let accessToken = authResult##accessToken;
-            let idToken = authResult##idToken;
+          Js.log("Rest 1");
+          UserUpdate.withUserMutation(mutation => {
+            Js.log("withUserMutation 2");
 
-            Js.log(accessToken);
-            Js.log(idToken);
-            Js.log(authResult);
+            let accessToken = "accessToken1";
+            let idToken = "idToken1";
+            let authResult = "authResult1";
 
-            <UserUpdate.EditUserMutation>
-              ...{mutation => {
-                UserUpdate.mutateAccessToken(
-                  mutation,
-                  loggedInUser.id,
-                  accessToken,
-                );
+            //            Auth0Client.checkSession(authResult => {
+            //              let accessToken = authResult##accessToken;
+            //              let idToken = authResult##idToken;
+
+            Js.log2("accessToken", accessToken);
+            Js.log2("idToken", idToken);
+            Js.log2("authResult", authResult);
+
+            let mutate =
+              UserUpdate.Query.make(
+                ~id=loggedInUser.id,
+                ~input={
+                  "name": None,
+                  "email": None,
+                  "picture": None,
+                  "description": None,
+                  "auth0AccessToken": Some(accessToken),
+                },
+                (),
+              );
+
+            mutation(~variables=mutate##variables, ~refetchQueries=[||], ())
+            |> ignore;
+
+            //            });
+
+            (
+              rest => {
+                Js.log2("Rest", rest);
                 ReasonReact.null;
-              }}
-            </UserUpdate.EditUserMutation>;
-          })
+              }
+            );
+          });
         | _ => ReasonReact.null
         }
       }

@@ -5,7 +5,7 @@ let storageToHeaders = (jwt: ServerJwt.t) =>
     object_([("authorization", Json.Encode.string("Bearer " ++ jwt))])
   );
 
-let httpLink = _ => ApolloLinks.createHttpLink(~uri=Env.serverUrl, ());
+let httpLink = ApolloLinks.createHttpLink(~uri=Env.serverUrl, ());
 
 let contextLink = (tokens: ServerJwt.t) =>
   ApolloLinks.createContextLink(() => {"headers": storageToHeaders(tokens)});
@@ -37,7 +37,7 @@ let isCode400 = error =>
   |> E.O.fmap(networkError => networkError##statusCode == 400)
   |> E.O.default(false);
 
-let errorLink = _ =>
+let errorLink =
   ApolloLinks.apolloLinkOnError(error => {
     Js.log2("GraphQL Error!", Js.Json.stringifyAny(error));
 
@@ -50,8 +50,8 @@ let errorLink = _ =>
 
 let link = () =>
   switch (ServerJwt.make_from_storage()) {
-  | Some(s) => ApolloLinks.from([|contextLink(s), errorLink(), httpLink()|])
-  | None => ApolloLinks.from([|errorLink(), httpLink()|])
+  | Some(s) => ApolloLinks.from([|contextLink(s), errorLink, httpLink|])
+  | None => ApolloLinks.from([|errorLink, httpLink|])
   };
 
 let connectToDevTools = _ => {

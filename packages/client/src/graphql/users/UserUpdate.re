@@ -64,13 +64,10 @@ let mutateAccessToken =
       },
       (),
     );
-  Js.log("mutateAccessToken");
   mutation(~variables=mutate##variables, ~refetchQueries=[||], ()) |> ignore;
 };
 
 let withUserMutation = innerComponentFn =>
-  EditUserMutation.make(
-    ~onError=e => Js.log2("Graphql Error:", e),
-    innerComponentFn,
-  )
-  |> E.React.el;
+  <EditUserMutation onError={e => Js.log2("Graphql Error:", e)}>
+    ...innerComponentFn
+  </EditUserMutation>;

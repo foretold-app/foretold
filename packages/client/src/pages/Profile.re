@@ -162,32 +162,34 @@ let make = (~loggedInUser: Types.user, _children) => {
   render: _ =>
     <SLayout head={SLayout.Header.textDiv("Edit Profile Information")}>
       <FC.PageCard.BodyPadding>
-        {UserUpdate.withUserMutation((mutation, data) => {
-           let agent = loggedInUser.agent;
-           let id = loggedInUser.id;
-           let email = loggedInUser.email |> E.O.default("");
-           let picture = loggedInUser.picture |> E.O.default("");
-           let description = loggedInUser.description |> E.O.default("");
-           let name =
-             agent
-             |> E.O.bind(_, (r: Types.agent) => r.name)
-             |> E.O.default("");
+        <UserUpdate.Mutation>
+          ...{(mutation, data) => {
+            let agent = loggedInUser.agent;
+            let id = loggedInUser.id;
+            let email = loggedInUser.email |> E.O.default("");
+            let picture = loggedInUser.picture |> E.O.default("");
+            let description = loggedInUser.description |> E.O.default("");
+            let name =
+              agent
+              |> E.O.bind(_, (r: Types.agent) => r.name)
+              |> E.O.default("");
 
-           withUserForm(
-             id,
-             name,
-             email,
-             picture,
-             description,
-             mutation,
-             ({send, state, getFieldState}) =>
-             CMutationForm.showWithLoading(
-               ~result=data.result,
-               ~form=formFields(state, send, getFieldState),
-               (),
-             )
-           );
-         })}
+            withUserForm(
+              id,
+              name,
+              email,
+              picture,
+              description,
+              mutation,
+              ({send, state, getFieldState}) =>
+              CMutationForm.showWithLoading(
+                ~result=data.result,
+                ~form=formFields(state, send, getFieldState),
+                (),
+              )
+            );
+          }}
+        </UserUpdate.Mutation>
       </FC.PageCard.BodyPadding>
     </SLayout>,
 };

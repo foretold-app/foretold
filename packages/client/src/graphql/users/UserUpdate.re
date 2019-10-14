@@ -14,11 +14,11 @@ module Query = [%graphql
  |}
 ];
 
-module EditUserMutation = ReasonApollo.CreateMutation(Query);
+module Mutation = ReasonApollo.CreateMutation(Query);
 
 let mutate =
     (
-      mutation: EditUserMutation.apolloMutation,
+      mutation: Mutation.apolloMutation,
       name: string,
       email: string,
       picture: string,
@@ -45,8 +45,3 @@ let mutate =
   mutation(~variables=mutate##variables, ~refetchQueries=[|"user"|], ())
   |> ignore;
 };
-
-let withUserMutation = innerComponentFn =>
-  <EditUserMutation onError={e => Js.log2("Graphql Error:", e)}>
-    ...innerComponentFn
-  </EditUserMutation>;

@@ -33,7 +33,12 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
       <PageCard.HeaderRow>
         <PageCard.HeaderRow.Title>
           "New Prediction"->React.string
-          <Icon.Questionmark />
+          <FC__HelpDropdown
+            content={
+              headerContent: "sdf" |> ReasonReact.string,
+              bodyContent: "sdfsdfsd" |> ReasonReact.string,
+            }
+          />
         </PageCard.HeaderRow.Title>
       </PageCard.HeaderRow>
       <PageCard.Section flex=true padding=`none>

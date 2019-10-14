@@ -36,11 +36,7 @@ let dateItem = (~m: Types.measurable, ~showOn=true, ~onStyle=dateOnStyle, ()) =>
     Some(<span className=Shared.TagLink.dateItem> {e |> ste} </span>)
   };
 
-let link = (~m: Types.measurable) => {
-  open Css;
-  let name = style([fontSize(`em(1.)), color(`hex("333"))]);
-  let nameComonent = <span className=name> {m.name |> ste} </span>;
-
+let linkName = (~m: Types.measurable) =>
   <Providers.AppContext.Consumer>
     ...{context => {
       module Config = {
@@ -49,27 +45,30 @@ let link = (~m: Types.measurable) => {
       module Ken = KenTools.Functor(Config);
       module MeasurableEntityLinks = MeasurableEntityLinks.Functor(Ken);
       <>
-        {switch (m.labelSubject, m.labelProperty) {
-         | (Some(""), Some("")) => nameComonent
-         | (Some(_), Some(_)) =>
-           <>
-             {MeasurableEntityLinks.nameEntityLink(
-                ~m,
-                ~className=Shared.TagLink.item,
-              )
-              |> E.O.React.defaultNull}
-             {MeasurableEntityLinks.propertyEntityLink(
-                ~m,
-                ~className=Shared.TagLink.property,
-              )
-              |> E.O.React.defaultNull}
-           </>
-         | _ => nameComonent
-         }}
+        {MeasurableEntityLinks.nameEntityLink(
+           ~m,
+           ~className=Shared.TagLink.item,
+         )
+         |> E.O.React.defaultNull}
+        {MeasurableEntityLinks.propertyEntityLink(
+           ~m,
+           ~className=Shared.TagLink.property,
+         )
+         |> E.O.React.defaultNull}
         {dateItem(~m, ()) |> E.O.React.defaultNull}
       </>;
     }}
   </Providers.AppContext.Consumer>;
+
+let link = (~m: Types.measurable) => {
+  open Css;
+  let name = style([fontSize(`em(1.)), color(`hex("333"))]);
+  switch (m.labelSubject, m.labelProperty) {
+  | (Some(""), Some(""))
+  | (None, _)
+  | (_, None) => <span className=name> {m.name |> ste} </span>
+  | (Some(_), Some(_)) => linkName(~m)
+  };
 };
 
 let description = (~m: Types.measurable) =>

@@ -38,11 +38,20 @@ let toChannel = m =>
 
 let sortDefault = arr => arr;
 
+let isCuratedCompare = (a: Types.channel, b: Types.channel) =>
+  a.isCurated > b.isCurated ? (-1) : 1;
+
+let nameCompare = (a: Types.channel, b: Types.channel) =>
+  String.compare(a.name, b.name);
+
 let sortAsc = (arr: array(Types.channel)) => {
-  Array.sort(
-    (a: Types.channel, b: Types.channel) => String.compare(a.name, b.name),
-    arr,
-  );
+  Array.sort(nameCompare, arr);
+  arr;
+};
+
+let sortCurated = (arr: array(Types.channel)) => {
+  Array.sort(nameCompare, arr);
+  Array.sort(isCuratedCompare, arr);
   arr;
 };
 

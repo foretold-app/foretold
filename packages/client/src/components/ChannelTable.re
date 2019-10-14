@@ -50,7 +50,7 @@ module Columns = {
 
   let labelsColumn =
     Table.Column.make(
-      ~name="Curated" |> Utils.ste,
+      ~name="Curation" |> Utils.ste,
       ~render=
         (r: record) =>
           <>

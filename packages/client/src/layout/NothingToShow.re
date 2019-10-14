@@ -13,8 +13,6 @@ let make = _children => {
   render: _ =>
     <>
       <div className=Styles.clear />
-      <div className=Styles.centerBlock>
-        {"Nothing to show" |> Utils.ste}
-      </div>
+      <div className=Styles.centerBlock> {"No Results" |> Utils.ste} </div>
     </>,
 };

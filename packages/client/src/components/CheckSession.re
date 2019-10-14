@@ -27,10 +27,8 @@ let make = _children => {
                   let expiresAt = nowInSec + expiresInSec;
                   let expiresAtStr = string_of_int(expiresAt);
 
-                  let tokens =
-                    Auth0Tokens.make(accessToken, idToken, expiresAtStr);
-
-                  Auth0Tokens.set(tokens);
+                  Auth0Tokens.make(accessToken, idToken, expiresAtStr)
+                  |> Auth0Tokens.set;
 
                   ();
                 });

@@ -4,9 +4,20 @@ type logoutType = {
   "returnTo": string,
 };
 
+type authResult = {
+  .
+  "accessToken": string,
+  "expiresIn": int,
+  "idToken": string,
+};
+
+type authErr = {. "message": string};
+
 type t = {
   .
   "authorize": [@bs.meth] (unit => unit),
+  "checkSession":
+    [@bs.meth] ((Js.Dict.t(string), (authErr, authResult) => unit) => unit),
   "logout": [@bs.meth] (logoutType => unit),
 };
 
@@ -30,13 +41,24 @@ let authOptions = {
   "scope": "openid email profile",
 };
 
-let triggerLoginScreen = () =>
-  authOptions |> createClient |> (c => c##authorize());
+let client = authOptions |> createClient;
+
+let triggerLoginScreen = () => client##authorize();
+
+let checkSession = fn => {
+  client##checkSession(
+    Js.Dict.empty(),
+    (_authErr, authResult) => {
+      authResult |> fn;
+      ();
+    },
+  );
+  ();
+};
 
 let logoutOptions: logoutType = {
   "clientId": Env.auth0ClientId,
   "returnTo": Env.logoutUrl,
 };
 
-let logout = () =>
-  authOptions |> createClient |> (c => c##logout(logoutOptions));
+let logout = () => client##logout(logoutOptions);

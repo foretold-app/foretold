@@ -39,7 +39,7 @@ module FormConfig = {
 
 module Form = ReFormNext.Make(FormConfig);
 
-let component = ReasonReact.statelessComponent("Measurables");
+let component = ReasonReact.statelessComponent("SeriesNew");
 
 module CMutationForm =
   MutationForm.Make({

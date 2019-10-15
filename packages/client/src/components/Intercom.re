@@ -8,9 +8,7 @@ let make = _children => {
   ...component,
   render: _self => {
     <Providers.AppContext.Consumer>
-      ...{(context: Providers.appContext) => {
-        let loggedInUser = context.loggedInUser;
-
+      ...{({loggedInUser}) => {
         switch (Env.clientEnv, loggedInUser) {
         | (Production, Some(loggedInUser)) =>
           let name = loggedInUser |> Primary.User.getName;

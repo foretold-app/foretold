@@ -1,4 +1,3 @@
-const authenticationErrors = require('./authentication-errors');
 const { Data } = require('./data');
 const { Filter } = require('./filter');
 const { Options } = require('./options');
@@ -14,6 +13,5 @@ module.exports = {
   Pagination,
   Params,
   Query,
-  authenticationErrors,
   structures,
 };

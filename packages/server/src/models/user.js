@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    auth0AccessToken: {
+      type: DataTypes.STRING(64),
+      allowNull: true,
+    },
     email: {
       type: DataTypes.STRING(64),
       allowNull: true,

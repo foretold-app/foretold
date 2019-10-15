@@ -37,7 +37,6 @@ const schema = new graphql.GraphQLSchema({
         type: types.users.user,
         args: {
           id: { type: graphql.GraphQLString },
-          auth0Id: { type: graphql.GraphQLString },
         },
         resolve: resolvers.users.one,
       },
@@ -334,6 +333,19 @@ const schema = new graphql.GraphQLSchema({
           input: { type: graphql.GraphQLNonNull(types.users.userUpdateInput) },
         },
         resolve: resolvers.users.update,
+      },
+
+      userAccessTokenUpdate: {
+        type: types.users.user,
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.users.userAccessTokenUpdateInput,
+            ),
+          },
+        },
+        resolve: resolvers.users.accessTokenUpdate,
       },
 
       channelUpdate: {

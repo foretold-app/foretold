@@ -8,12 +8,12 @@ describe('Measurables Resolvers', () => {
       creatorId: 'creatorId1',
       seriesId: 'seriesId2',
       channelId: 'channelId2',
-      states: 'states1',
+      states: ['states1'],
       after: 2,
       before: 2,
       last: 'last1',
       first: 'first1',
-      isArchived: 'isArchived1',
+      isArchived: [false],
     };
     const context = { agent: { id: 'agentId2' } };
     const info = {};
@@ -28,9 +28,9 @@ describe('Measurables Resolvers', () => {
           {
             channelId: 'channelId2',
             creatorId: 'creatorId1',
-            isArchived: 'isArchived1',
+            isArchived: [false],
             seriesId: 'seriesId2',
-            states: 'states1',
+            states: ['states1'],
             withinJoinedChannels: null,
           },
           {

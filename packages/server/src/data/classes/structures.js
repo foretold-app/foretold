@@ -44,12 +44,16 @@ module.exports.withinPublicAndJoinedChannelsById = (agentId) => {
 /**
  * @return {Layers.withinPublicChannels}
  */
-module.exports.withinPublicChannelsByChannelId = () => ({ as: 'channelId' });
+module.exports.withinPublicChannelsByChannelId = () => {
+  return { as: 'channelId' };
+};
 
 /**
  * @return {Layers.withinPublicChannels}
  */
-module.exports.withinPublicChannelsById = () => ({ as: 'id' });
+module.exports.withinPublicChannelsById = () => {
+  return { as: 'id' };
+};
 
 /**
  * @param {string[] | null} states

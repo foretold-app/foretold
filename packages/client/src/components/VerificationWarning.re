@@ -18,9 +18,8 @@ let make = _ => {
               </span>
               {"Please verify your email address, \""
                ++ email
-               ++ ", then log out and log back in."
+               ++ "\"."
                |> Utils.ste}
-              {"." |> Utils.ste}
             </FC__Alert>;
 
           let warningNoEmail =
@@ -28,8 +27,7 @@ let make = _ => {
               <span className=Styles.icon>
                 <Icon.Icon icon="EMAIL_UNREAD" />
               </span>
-              {"Please verify your email address, log out, and then log back in. "
-               |> Utils.ste}
+              {"Please verify your email address. " |> Utils.ste}
             </FC__Alert>;
 
           switch (loggedInUser) {

@@ -12,7 +12,7 @@ let make = _children => {
 
         switch (Env.clientEnv, loggedInUser) {
         | (Production, Some(loggedInUser)) =>
-          let name = loggedInUser.name == "" ? "User" : loggedInUser.name;
+          let name = loggedInUser |> Primary.User.getName;
           let email =
             loggedInUser.email |> E.O.default("no-reply@foretold.io");
           let createdAt = loggedInUser.createdAt;

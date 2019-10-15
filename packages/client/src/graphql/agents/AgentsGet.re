@@ -1,5 +1,5 @@
 let toAgent = agent => {
-  let agentType = agent |> Primary.AgentType.getAgentType;
+  let agentType = Primary.AgentType.getAgentType(~agent, ());
 
   Primary.Agent.make(
     ~id=agent##id,
@@ -34,6 +34,7 @@ module Query = [%graphql
           id
           name
           description
+          picture
           competitorType
           user {
               id

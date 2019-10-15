@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     picture: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.STRING(512),
       allowNull: true,
     },
     isEmailVerified: {

@@ -11,7 +11,14 @@ module Query = [%graphql
 module Mutation = ReasonApollo.CreateMutation(Query);
 
 let mutate =
-    (mutation: Mutation.apolloMutation, id, name, description, competitorType) => {
+    (
+      mutation: Mutation.apolloMutation,
+      id,
+      name,
+      description,
+      competitorType,
+      picture: string,
+    ) => {
   let m =
     Query.make(
       ~id,
@@ -19,9 +26,15 @@ let mutate =
         "name": name,
         "description": Some(description),
         "competitorType": competitorType,
+        "picture": Some(picture),
       },
       (),
     );
   mutation(~variables=m##variables, ~refetchQueries=[|"user", "bots"|], ())
   |> ignore;
 };
+
+let withMutation = innerComponentFn =>
+  <Mutation onError={e => Js.log2("Graphql Error:", e)}>
+    ...innerComponentFn
+  </Mutation>;

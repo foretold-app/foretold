@@ -19,6 +19,16 @@ type state = {
   asAgent: string,
 };
 
+let tutorialSource = "
+Use this to quickly enter probability distributions. You can experiment with interactive and more complex examples [here](https://observablehq.com/@oagr/guesstimator-library).\n
+### Simple Examples \n
+`10 to 100`\n
+A lognormal distribution with a 90% confidence interval between 10 and 100.\n
+`10M to 100M`\n
+The same as above, but between 10 Million and 100 Million. \n
+`=normal(5,2)`\n
+A normal distribution with a mean of 5 and a standard deviation of 2.";
+
 type action =
   // -> Measurement.value
   | UpdateFloatPdf(FloatCdf.t)
@@ -282,7 +292,7 @@ let mainBlock =
     | None => ReasonReact.null
     | Some(bots) => botsSelect(~state, ~send, ~bots, ~loggedInUser)
     };
-
+  open Style.Grid;
   let valueInput: ReasonReact.reactElement =
     switch (state.dataType) {
     | "FLOAT_CDF"
@@ -303,7 +313,26 @@ let mainBlock =
                 |> ste}
              </FC__Alert>
            : ReasonReact.null}
-        {ValueInput.floatPoint(measurable, send)}
+        <Div>
+          <Div
+            float=`left
+            styles=[
+              Css.(style([width(Css.Calc.(`percent(100.0) - `em(2.2)))])),
+            ]>
+            {ValueInput.floatPoint(measurable, send)}
+          </Div>
+          <Div float=`left styles=[Css.(style([width(`em(2.2))]))]>
+            <span
+              className=Css.(style([float(`right), fontSize(`em(1.6))]))>
+              <FC.HelpDropdown
+                content={
+                  headerContent: "Distribution Editor" |> ste,
+                  bodyContent: <Markdown source=tutorialSource />,
+                }
+              />
+            </span>
+          </Div>
+        </Div>
         <div className=Styles.inputBox>
           <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
         </div>

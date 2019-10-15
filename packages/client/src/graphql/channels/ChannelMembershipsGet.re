@@ -24,6 +24,7 @@ module Query = [%graphql
                   id
                   name
                   description
+                  picture
                   competitorType
                   user {
                       id
@@ -50,7 +51,10 @@ let toChannelMemberships = (m): array(Types.channelMembership) => {
       e
       |> E.A.fmap(r => {
            let agentType =
-             r##agent |> E.O.bind(_, Primary.AgentType.getAgentType);
+             E.O.bind(
+               r##agent,
+               Primary.AgentType.getAgentType(~agent=_, ()),
+             );
 
            let agent =
              r##agent

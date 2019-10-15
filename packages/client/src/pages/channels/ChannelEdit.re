@@ -29,6 +29,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
              loggedInUser,
              <FC.Base.Button
                variant=Primary
+               size=Small
                onClick={e =>
                  LinkType.onClick(Internal(SeriesNew(channelId)), e)
                }>

@@ -27,7 +27,17 @@ let make =
         );
 
       <>
-        <Div float=`left> {channelLink(channel)} </Div>
+        <Div float=`left flexDirection=`column>
+          <Div flex={`num(1.0)}> {channelLink(channel)} </Div>
+          {channel.description
+           |> E.O.React.fmapOrNull(source =>
+                <Div
+                  flex={`num(1.0)}
+                  styles=[Css.(style([marginTop(`em(0.5))]))]>
+                  <ReactMarkdown.Markdown source />
+                </Div>
+              )}
+        </Div>
         <Div float=`right>
           {channel.myRole === Some(`NONE)
              ? joinButton(channel.id)

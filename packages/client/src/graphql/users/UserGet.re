@@ -53,6 +53,7 @@ let toUser = a =>
     ~bots=a##bots |> toBots,
     ~isEmailVerified=a##isEmailVerified,
     ~createdAt=Some(a##createdAt),
+    ~name=a##name,
     (),
   );
 

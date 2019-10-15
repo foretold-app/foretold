@@ -33,6 +33,7 @@ module Query = [%graphql
               id
               name
               description
+              picture
               competitorType
               user {
                   id

@@ -4,23 +4,21 @@ module Columns = {
   type record = Types.channel;
   type column = Table.column(Types.channel);
 
-  let nameColumn =
+  let nameDescriptionColumn =
     Table.Column.make(
-      ~name="Name" |> Utils.ste,
+      ~name="Name & Description" |> Utils.ste,
       ~render=
         (r: record) =>
-          <Link linkType={Internal(ChannelShow(r.id))}>
-            [|r.name |> Utils.ste|]
-          </Link>,
-      ~flex=2,
-      (),
-    );
-
-  let descriptionColumn =
-    Table.Column.make(
-      ~name="Description" |> Utils.ste,
-      ~render=(r: record) => r.description |> E.O.default("") |> Utils.ste,
-      ~flex=3,
+          <div>
+            <Link linkType={Internal(ChannelShow(r.id))}>
+              [|r.name |> Utils.ste|]
+            </Link>
+            {r.description
+             |> E.O.React.fmapOrNull(description =>
+                  <Markdown.Jsx3 source=description />
+                )}
+          </div>,
+      ~flex=4,
       (),
     );
 
@@ -52,7 +50,7 @@ module Columns = {
 
   let labelsColumn =
     Table.Column.make(
-      ~name="Labels" |> Utils.ste,
+      ~name="Curation" |> Utils.ste,
       ~render=
         (r: record) =>
           <>
@@ -73,8 +71,7 @@ module Columns = {
     );
 
   let all = [|
-    nameColumn,
-    descriptionColumn,
+    nameDescriptionColumn,
     memberCountColumn,
     openedCountColumn,
     labelsColumn,
@@ -83,7 +80,11 @@ module Columns = {
 
 [@react.component]
 let make = (~agentId=None, ~isArchived=?) =>
-  ChannelsGet.component(~channelMemberId=?agentId, ~isArchived?, channels =>
+  ChannelsGet.component(
+    ~channelMemberId=?agentId,
+    ~isArchived?,
+    ~sortFn=ChannelsGet.sortCurated,
+    channels =>
     Table.fromColumns(Columns.all, channels, ())
   );
 

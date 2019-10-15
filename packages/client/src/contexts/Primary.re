@@ -205,6 +205,7 @@ module Bot = {
         ~id,
         ~name=None,
         ~description=None,
+        ~picture=None,
         ~competitorType=`AGGREGATION,
         ~token=None,
         ~agent=None,
@@ -214,9 +215,10 @@ module Bot = {
       )
       : t => {
     id,
-    competitorType,
-    description,
     name,
+    description,
+    picture,
+    competitorType,
     token,
     agent,
     permissions,

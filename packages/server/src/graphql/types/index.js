@@ -19,7 +19,6 @@ const globalSettings = require('./global-settings');
 const agentMeasurables = require('./agent-measurables');
 const agentChannels = require('./agent-channels');
 const jwt = require('./jwt');
-const connections = require('./connections');
 
 module.exports = {
   bots,
@@ -42,5 +41,4 @@ module.exports = {
   agentMeasurables,
   agentChannels,
   jwt,
-  connections,
 };

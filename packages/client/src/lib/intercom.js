@@ -2,9 +2,10 @@
  * @param {string} intercomAppId
  * @param {string} name
  * @param {string} email
+ * @param {string} user_id
  * @param {Moment} createdAt
  */
-function intercom(intercomAppId, name, email, createdAt) {
+function intercom(intercomAppId, name, email, user_id, createdAt) {
   (function () {
     var w = window;
     var ic = w.Intercom;
@@ -42,6 +43,7 @@ function intercom(intercomAppId, name, email, createdAt) {
     app_id: intercomAppId,
     name: name,
     email: email,
+    user_id: user_id,
     created_at: signupAt,
   };
 

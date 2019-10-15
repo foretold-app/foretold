@@ -144,7 +144,10 @@ module User = {
 
   let getAgent = (user: t, clbFn) =>
     switch (user.agent) {
-    | Some(agent) => clbFn(agent)
+    | Some(agent) =>
+      clbFn(agent);
+      ();
+    | _ => ()
     };
 
   let showif = (user: t): bool => {
@@ -157,6 +160,11 @@ module User = {
   let show = (user: t, component: ReasonReact.reactElement) => {
     showif(user) ? component : ReasonReact.null;
   };
+
+  let getName = (user: t) =>
+    user.agent
+    |> E.O.fmap((agent: Types.agent) => agent.name |> E.O.default("User"))
+    |> E.O.default("User");
 
   let make =
       (

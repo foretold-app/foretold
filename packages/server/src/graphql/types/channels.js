@@ -34,13 +34,6 @@ const channel = new graphql.GraphQLObjectType({
       resolve: resolvers.channels.channelCreator,
     },
 
-    // @todo: security?
-    agents: {
-      type: require('./connections').channelAgentsConnection.connectionType,
-      args: require('./connections').channelAgentsConnection.connectionArgs,
-      resolve: require('./connections').channelAgentsConnection.resolve,
-    },
-
     channelMemberships: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(
         channelMemberships.channelsMembership,

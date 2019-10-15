@@ -4547,6 +4547,11 @@ graphql-extensions@^0.10.3:
     apollo-server-env "^2.4.3"
     apollo-server-types "^0.2.4"
 
+graphql-input-number@0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/graphql-input-number/-/graphql-input-number-0.0.10.tgz#509b1c1fb5baeef8ab516a7c82c40dcebb8f8358"
+  integrity sha1-UJscH7W67virUWp8gsQNzruPg1g=
+
 graphql-middleware@3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/graphql-middleware/-/graphql-middleware-3.0.3.tgz#58cbce80892fb933d72794447f33f978fc743aa5"

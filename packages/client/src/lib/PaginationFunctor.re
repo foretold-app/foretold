@@ -13,7 +13,7 @@ module type Config = {
   let callFn:
     (
       callFnParams,
-      ~pageLimit: int,
+      ~pageLimit: Js.Json.t,
       ~direction: direction,
       ~innerComponentFn: HttpResponse.t(Primary.Connection.t(itemType)) =>
                          ReasonReact.reactElement
@@ -158,13 +158,14 @@ module Make = (Config: Config) => {
 
       let lowerBoundIndex = (reducerParams: t) =>
         switch (reducerParams.response) {
-        | Success(m) => m.pageInfo.startCursor |> E.O.fmap(int_of_string)
+        | Success(m) =>
+          m.pageInfo.startCursor |> E.O.fmap(Primary.Cursor.toInt)
         | _ => None
         };
 
       let upperBoundIndex = (reducerParams: t) =>
         switch (reducerParams.response) {
-        | Success(m) => m.pageInfo.endCursor |> E.O.fmap(int_of_string)
+        | Success(m) => m.pageInfo.endCursor |> E.O.fmap(Primary.Cursor.toInt)
         | _ => None
         };
 
@@ -431,7 +432,7 @@ module Make = (Config: Config) => {
       Config.callFn(
         callFnParams,
         ~direction=state.pageConfig.direction,
-        ~pageLimit=itemsPerPage,
+        ~pageLimit=Js.Json.number(itemsPerPage |> float_of_int),
         ~innerComponentFn,
       );
     },

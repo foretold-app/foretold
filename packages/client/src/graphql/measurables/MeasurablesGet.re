@@ -88,10 +88,10 @@ module Query = [%graphql
         $channelId: String
         $seriesId: String
         $creatorId: String
-        $first: Int
-        $last: Int
-        $after: String
-        $before: String
+        $first: Int500
+        $last: Int500
+        $after: Cursor
+        $before: Cursor
     ) {
         measurables (
             states: $states
@@ -205,13 +205,9 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 let unpackEdges = a =>
   a##measurables |> E.O.fmap(Primary.Connection.fromJson(toMeasurable));
 
-type measurableStates = Types.measurableState;
-
-type direction = Primary.Connection.direction;
-
 let queryDirection =
     (
-      ~states: Js.Array.t(option(measurableStates)),
+      ~states,
       ~seriesId=?,
       ~channelId=?,
       ~creatorId=?,
@@ -220,7 +216,7 @@ let queryDirection =
       (),
     ) => {
   let fn = Query.make(~seriesId?, ~channelId?, ~creatorId?, ~states);
-  switch ((direction: direction)) {
+  switch ((direction: Primary.Connection.direction)) {
   | None => fn(~first=pageLimit, ())
   | After(after) => fn(~first=pageLimit, ~after, ())
   | Before(before) => fn(~last=pageLimit, ~before, ())
@@ -245,7 +241,7 @@ let component =
       ~channelId=None,
       ~pageLimit,
       ~states,
-      ~direction: direction,
+      ~direction,
       ~innerComponentFn,
       (),
     ) => {

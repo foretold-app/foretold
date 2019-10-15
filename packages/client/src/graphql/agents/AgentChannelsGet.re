@@ -33,10 +33,10 @@ let toNode = node => {
 module Query = [%graphql
   {|
     query getAgentChannels(
-        $first: Int
-        $last: Int
-        $after: String
-        $before: String
+        $first: Int500
+        $last: Int500
+        $after: Cursor
+        $before: Cursor
         $channelId: String
         $agentId: String
         $minNumberOfPredictions: Int
@@ -109,14 +109,9 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-type inputType('a) =
-  (~first: int=?, ~last: int=?, ~after: string=?, ~before: string=?, unit) =>
-  'a;
-
-type direction = Primary.Connection.direction;
-
-let queryDirection = (~pageLimit, ~direction, ~fn: inputType('a), ()) =>
-  switch ((direction: direction)) {
+let queryDirection =
+    (~pageLimit, ~direction, ~fn: Types.connectionInputType('a), ()) =>
+  switch ((direction: Primary.Connection.direction)) {
   | None => fn(~first=pageLimit, ())
   | After(after) => fn(~first=pageLimit, ~after, ())
   | Before(before) => fn(~last=pageLimit, ~before, ())
@@ -143,7 +138,7 @@ let component =
       ~minNumberOfPredictions=None,
       ~minNumberOfQuestionsScored=None,
       ~pageLimit,
-      ~direction: direction,
+      ~direction,
       ~innerComponentFn,
       (),
     ) => {

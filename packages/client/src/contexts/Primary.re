@@ -50,9 +50,10 @@ module ChannelMembershipRole = {
     };
 };
 
-module CursorId = {
-  type t = Types.cursorId;
+module Cursor = {
+  type t = Types.cursor;
   let make = (cursor): t => Js.Json.string(cursor);
+  let toInt = (cursor): int => cursor |> E.J.toString |> int_of_string;
 };
 
 module PageInfo = {
@@ -68,8 +69,8 @@ module PageInfo = {
         },
       )
       : t => {
-    endCursor: pageInfo##endCursor |> E.O.fmap(CursorId.make),
-    startCursor: pageInfo##startCursor |> E.O.fmap(CursorId.make),
+    endCursor: pageInfo##endCursor |> E.O.fmap(Cursor.make),
+    startCursor: pageInfo##startCursor |> E.O.fmap(Cursor.make),
     hasPreviousPage: pageInfo##hasPreviousPage,
     hasNextPage: pageInfo##hasNextPage,
   };
@@ -103,8 +104,8 @@ module Connection = {
 
   type direction =
     | None
-    | Before(Types.cursorId)
-    | After(Types.cursorId);
+    | Before(Types.cursor)
+    | After(Types.cursor);
 
   let hasNextPage = (t: t('a)) => t.pageInfo.hasNextPage;
   let hasPreviousPage = (t: t('a)) => t.pageInfo.hasPreviousPage;

@@ -6,6 +6,7 @@ module Query = [%graphql
               node{
                   id
                   name
+                  picture
                   description
                   competitorType
                   token
@@ -55,6 +56,7 @@ let toBot = botJson => {
     ~token=botJson##token,
     ~agent,
     ~permissions=Some(permissions),
+    ~picture=botJson##picture,
     (),
   );
 };

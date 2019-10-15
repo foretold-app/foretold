@@ -96,7 +96,7 @@ let formFields = (state: Form.state, send, onSubmit) =>
       <Antd.Form.Item>
         {"Picture" |> ReasonReact.string |> E.React.inH3}
         <Antd.Input
-          value={state.values.description}
+          value={state.values.picture}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
             send(Form.FieldChangeValue(Picture, e))
           )}

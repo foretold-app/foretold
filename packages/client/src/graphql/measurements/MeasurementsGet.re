@@ -55,8 +55,8 @@ module Query = [%graphql
         $measurableId: String
         $agentId: String
         $channelId: String
-        $first: Int
-        $last: Int
+        $first: Int500
+        $last: Int500
         $after: String
         $before: String
         $measurableState: [measurableState]
@@ -149,16 +149,9 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-type measurableStates = Types.measurableState;
-
-type inputType('a) =
-  (~first: int=?, ~last: int=?, ~after: string=?, ~before: string=?, unit) =>
-  'a;
-
-type direction = Primary.Connection.direction;
-
-let queryDirection = (~pageLimit, ~direction, ~fn: inputType('a), ()) =>
-  switch ((direction: direction)) {
+let queryDirection =
+    (~pageLimit, ~direction, ~fn: Types.connectionInputType('a), ()) =>
+  switch ((direction: Primary.Connection.direction)) {
   | None => fn(~first=pageLimit, ())
   | After(after) => fn(~first=pageLimit, ~after, ())
   | Before(before) => fn(~last=pageLimit, ~before, ())
@@ -187,7 +180,7 @@ let component =
       ~measurableState=None,
       ~competitorType=None,
       ~pageLimit,
-      ~direction: direction,
+      ~direction,
       ~innerComponentFn,
       (),
     ) => {

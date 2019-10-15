@@ -1,6 +1,13 @@
 const graphql = require('graphql');
+const { GraphQLInputInt } = require('graphql-input-number');
 
 const resolvers = require('../resolvers');
+
+const int500 = GraphQLInputInt({
+  name: 'Int500',
+  min: 1,
+  max: 500,
+});
 
 const iAmOwner = {
   type: graphql.GraphQLNonNull(graphql.GraphQLBoolean),
@@ -20,8 +27,8 @@ const isMe = {
 const connectionArguments = {
   after: { type: graphql.GraphQLString },
   before: { type: graphql.GraphQLString },
-  first: { type: graphql.GraphQLInt },
-  last: { type: graphql.GraphQLInt },
+  first: { type: int500 },
+  last: { type: int500 },
 };
 
 const pageInfoConnection = new graphql.GraphQLObjectType({
@@ -75,4 +82,6 @@ module.exports = {
   iAmOwnerByUserId,
   connectionArguments,
   pageInfoConnection,
+
+  int500,
 };

@@ -87,8 +87,8 @@ module Query = [%graphql
         $channelId: String
         $seriesId: String
         $creatorId: String
-        $first: Int
-        $last: Int
+        $first: Int500
+        $last: Int500
         $after: String
         $before: String
     ) {

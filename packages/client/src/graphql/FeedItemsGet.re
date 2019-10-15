@@ -93,8 +93,8 @@ module Query = [%graphql
     query getFeedItems (
         $channelId: String
         $agentId: String
-        $first: Int
-        $last: Int
+        $first: Int500
+        $last: Int500
         $after: String
         $before: String
     ) {
@@ -148,11 +148,9 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 let unpackEdges = a =>
   a##feedItems |> E.O.fmap(Primary.Connection.fromJson(toFeedItem));
 
-type direction = Primary.Connection.direction;
-
 let queryDirection = (~channelId=?, ~agentId=?, ~pageLimit, ~direction, ()) => {
   let fn = Query.make(~channelId?, ~agentId?);
-  switch ((direction: direction)) {
+  switch ((direction: Primary.Connection.direction)) {
   | None => fn(~first=pageLimit, ())
   | After(after) => fn(~first=pageLimit, ~after, ())
   | Before(before) => fn(~last=pageLimit, ~before, ())
@@ -171,13 +169,7 @@ let componentMaker = (query, innerComponentFn) =>
   </QueryComponent>;
 
 let component2 =
-    (
-      ~channelId,
-      ~agentId,
-      ~pageLimit,
-      ~direction: direction,
-      ~innerComponentFn,
-    ) => {
+    (~channelId, ~agentId, ~pageLimit, ~direction, ~innerComponentFn) => {
   let query =
     queryDirection(~channelId?, ~agentId?, ~pageLimit, ~direction, ());
   componentMaker(query, innerComponentFn);

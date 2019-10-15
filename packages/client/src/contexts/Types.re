@@ -238,6 +238,16 @@ and connection('a) = {
   edges: array('a),
 }
 
+and connectionInputType('a) =
+  (
+    ~first: Js.Json.t=?,
+    ~last: Js.Json.t=?,
+    ~after: string=?,
+    ~before: string=?,
+    unit
+  ) =>
+  'a
+
 and globalSetting = {
   id: string,
   entityGraph: option(Js.Json.t),

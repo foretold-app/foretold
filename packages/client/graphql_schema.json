@@ -156,7 +156,7 @@
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "Int500",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -166,7 +166,7 @@
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "Int500",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -318,7 +318,7 @@
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "Int500",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -328,7 +328,7 @@
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "Int500",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -449,7 +449,7 @@
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "Int500",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -459,7 +459,7 @@
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "Int500",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -560,7 +560,7 @@
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "Int500",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -570,7 +570,7 @@
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "Int500",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -680,7 +680,7 @@
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "Int500",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -690,7 +690,7 @@
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "Int500",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -743,7 +743,7 @@
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "Int500",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -753,7 +753,7 @@
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "Int500",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -1877,7 +1877,7 @@
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "Int500",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -1887,7 +1887,7 @@
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "Int500",
                     "ofType": null
                   },
                   "defaultValue": null
@@ -2312,6 +2312,16 @@
           ],
           "inputFields": null,
           "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "Int500",
+          "description": null,
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },

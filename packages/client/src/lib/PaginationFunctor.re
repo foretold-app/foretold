@@ -13,7 +13,7 @@ module type Config = {
   let callFn:
     (
       callFnParams,
-      ~pageLimit: int,
+      ~pageLimit: Js.Json.t,
       ~direction: direction,
       ~innerComponentFn: HttpResponse.t(Primary.Connection.t(itemType)) =>
                          ReasonReact.reactElement
@@ -431,7 +431,7 @@ module Make = (Config: Config) => {
       Config.callFn(
         callFnParams,
         ~direction=state.pageConfig.direction,
-        ~pageLimit=itemsPerPage,
+        ~pageLimit=Js.Json.number(itemsPerPage |> float_of_int),
         ~innerComponentFn,
       );
     },

@@ -2,6 +2,7 @@ const graphql = require('graphql');
 const { GraphQLInputInt } = require('graphql-input-number');
 
 const resolvers = require('../resolvers');
+const { cursor } = require('./scalars');
 
 const int500 = GraphQLInputInt({
   name: 'Int500',

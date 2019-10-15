@@ -1,10 +1,9 @@
-let component = ReasonReact.statelessComponent("BotCreate");
-
 module CMutationForm =
   MutationForm.Make({
     type queryType = BotCreateMutation.Query.t;
   });
 
+let component = ReasonReact.statelessComponent("BotCreate");
 let make =
     (
       ~loggedInUser: Types.user,
@@ -21,6 +20,7 @@ let make =
             values.state.values.name,
             values.state.values.description,
             values.state.values.competitorType,
+            values.state.values.picture,
           );
           ();
         };

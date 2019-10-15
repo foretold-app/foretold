@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    picture: {
+      type: DataTypes.STRING(512),
+      allowNull: true,
+    },
     competitorType: {
       type: DataTypes.ENUM([
         MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,

@@ -30,8 +30,6 @@ let agentSection = (agent: Types.agent) =>
   | _ => E.React.null
   };
 
-let component = ReasonReact.statelessComponent("AgentBots");
-
 module Columns = {
   type column = Table.column(Types.bot);
 
@@ -98,6 +96,7 @@ module Columns = {
 
 type pageParams = {id: string};
 
+let component = ReasonReact.statelessComponent("AgentBots");
 let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ =>

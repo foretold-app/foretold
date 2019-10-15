@@ -1,10 +1,9 @@
-let component = ReasonReact.statelessComponent("BotEdit");
-
 module CMutationForm =
   MutationForm.Make({
     type queryType = BotUpdate.Query.t;
   });
 
+let component = ReasonReact.statelessComponent("BotEdit");
 let make =
     (
       ~pageParams: PageConfig.LoggedInPage.pageParams,
@@ -23,6 +22,7 @@ let make =
             values.state.values.name,
             values.state.values.description,
             values.state.values.competitorType,
+            values.state.values.picture,
           );
           ();
         };

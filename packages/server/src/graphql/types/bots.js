@@ -10,6 +10,7 @@ const bot = new graphql.GraphQLObjectType({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     description: { type: graphql.GraphQLString },
+    picture: { type: graphql.GraphQLString },
     competitorType: {
       type:
       require('./enums/measurement-competitor-type').measurementCompetitorType,
@@ -51,6 +52,7 @@ const botInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     description: { type: graphql.GraphQLString },
+    picture: { type: graphql.GraphQLString },
     competitorType: {
       type:
       require('./enums/measurement-competitor-type').measurementCompetitorType,

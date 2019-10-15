@@ -95,8 +95,8 @@ module Query = [%graphql
         $agentId: String
         $first: Int500
         $last: Int500
-        $after: String
-        $before: String
+        $after: Cursor
+        $before: Cursor
     ) {
         feedItems (
             channelId: $channelId

@@ -26,8 +26,8 @@ const isMe = {
 };
 
 const connectionArguments = {
-  after: { type: graphql.GraphQLString },
-  before: { type: graphql.GraphQLString },
+  after: { type: cursor },
+  before: { type: cursor },
   first: { type: int500 },
   last: { type: int500 },
 };

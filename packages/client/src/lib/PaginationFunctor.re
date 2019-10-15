@@ -158,13 +158,19 @@ module Make = (Config: Config) => {
 
       let lowerBoundIndex = (reducerParams: t) =>
         switch (reducerParams.response) {
-        | Success(m) => m.pageInfo.startCursor |> E.O.fmap(int_of_string)
+        | Success(m) =>
+          m.pageInfo.startCursor
+          |> E.O.fmap(startCursor =>
+               startCursor |> E.J.toString |> int_of_string
+             )
         | _ => None
         };
 
       let upperBoundIndex = (reducerParams: t) =>
         switch (reducerParams.response) {
-        | Success(m) => m.pageInfo.endCursor |> E.O.fmap(int_of_string)
+        | Success(m) =>
+          m.pageInfo.endCursor
+          |> E.O.fmap(endCursor => endCursor |> E.J.toString |> int_of_string)
         | _ => None
         };
 

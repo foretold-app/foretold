@@ -30,8 +30,8 @@ module Query = [%graphql
     query getAgentMeasurables(
         $first: Int500
         $last: Int500
-        $after: String
-        $before: String
+        $after: Cursor
+        $before: Cursor
         $channelId: String
         $measurableId: String
         $minPredictionCountTotal: Int

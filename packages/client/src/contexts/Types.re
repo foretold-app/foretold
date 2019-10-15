@@ -226,11 +226,13 @@ and feedItem = {
   updatedAt: option(MomentRe.Moment.t),
 }
 
+and cursorId = Js.Json.t
+
 and pageInfo = {
   hasNextPage: bool,
   hasPreviousPage: bool,
-  endCursor: option(string),
-  startCursor: option(string),
+  endCursor: option(cursorId),
+  startCursor: option(cursorId),
 }
 
 and connection('a) = {
@@ -243,8 +245,8 @@ and connectionInputType('a) =
   (
     ~first: Js.Json.t=?,
     ~last: Js.Json.t=?,
-    ~after: string=?,
-    ~before: string=?,
+    ~after: cursorId=?,
+    ~before: cursorId=?,
     unit
   ) =>
   'a

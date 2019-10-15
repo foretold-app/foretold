@@ -58,8 +58,8 @@ module Query = [%graphql
         $channelId: String
         $first: Int500
         $last: Int500
-        $after: String
-        $before: String
+        $after: Cursor
+        $before: Cursor
         $measurableState: [measurableState]
         $competitorType: [competitorType!]
      ) {

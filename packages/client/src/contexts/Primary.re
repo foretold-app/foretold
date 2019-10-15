@@ -790,6 +790,7 @@ module AgentType = {
             ~description=bot##description,
             ~competitorType=bot##competitorType,
             ~owner,
+            ~picture=bot##picture,
             (),
           ),
         ),

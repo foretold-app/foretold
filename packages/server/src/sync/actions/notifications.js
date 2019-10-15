@@ -1,14 +1,10 @@
 const _ = require('lodash');
 const moment = require('moment');
 
-const data = require('../../data');
 const { sendNotificationToSlack } = require('../../lib/slack');
 const { clientUrl } = require('../../lib/urls');
 
 class Notifications {
-  constructor() {
-    this.data = data;
-  }
 
   /**
    * @public
@@ -18,7 +14,10 @@ class Notifications {
   async newMeasurement(measurement) {
     const measurable = await measurement.getMeasurable();
     const channel = await measurable.getChannel();
-    if (!channel.isPublic) return false;
+
+    if (!channel.isPublic) {
+      return false;
+    }
 
     const agent = await measurement.getAgent();
 
@@ -39,7 +38,10 @@ class Notifications {
    */
   async newMeasurable(measurable) {
     const channel = await measurable.getChannel();
-    if (!channel.isPublic) return false;
+
+    if (!channel.isPublic) {
+      return false;
+    }
 
     const agent = await measurable.getCreator();
     const notification = await this.getNotificationNewMeasurable(
@@ -58,7 +60,10 @@ class Notifications {
    */
   async updateMeasurable(measurable) {
     const channel = await measurable.getChannel();
-    if (!channel.isPublic) return false;
+
+    if (!channel.isPublic) {
+      return false;
+    }
 
     const agent = await measurable.getCreator();
     const notification = await this.getNotificationUpdateMeasurable(

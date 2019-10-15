@@ -4,6 +4,7 @@ let toBot = (bot): Types.bot =>
     ~name=Some(bot##name),
     ~competitorType=bot##competitorType,
     ~description=bot##description,
+    ~picture=bot##picture,
     (),
   );
 
@@ -15,6 +16,7 @@ module Query = [%graphql
            name
            description
            competitorType
+           picture
           }
       }
     |}

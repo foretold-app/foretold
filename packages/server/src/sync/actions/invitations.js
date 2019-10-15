@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const assert = require('assert');
 
-const data = require('../../data');
+const { InvitationsData, ChannelMembershipsData } = require('../../data');
 
 const { INVITATION_STATUS } = require('../../enums/invitation-status');
 const {
@@ -10,9 +10,8 @@ const {
 
 class Invitations {
   constructor() {
-    this.data = data;
-    this.invitations = this.data.invitations;
-    this.channelMemberships = this.data.channelMemberships;
+    this.invitations = new InvitationsData();
+    this.channelMemberships = new ChannelMembershipsData();
   }
 
   /**

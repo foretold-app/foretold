@@ -71,9 +71,10 @@ type user = {
 
 and bot = {
   competitorType,
-  description: option(string),
   id: string,
   name: option(string),
+  description: option(string),
+  picture: option(string),
   token: option(string),
   agent: option(agent),
   permissions: option(permissions),

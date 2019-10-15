@@ -202,7 +202,8 @@ class ModelPostgres extends Model {
   _withinMeasurables(statesIn, channelIdIn, name = '') {
     const cond = [];
     const states = _.isArray(statesIn)
-      ? statesIn.map((state) => `'${state}'`).join(', ') : [];
+      ? statesIn.map((state) => `'${state}'`)
+        .join(', ') : [];
 
     if (states.length > 0) cond.push(`("state" IN (${states}))`);
     if (!!channelIdIn) cond.push(`("channelId" = '${channelIdIn}')`);
@@ -371,27 +372,37 @@ class ModelPostgres extends Model {
     }
 
     if (filter.measurableId) {
-      where.measurableId = filter.measurableId;
+      where[this.and].push({
+        measurableId: filter.measurableId,
+      });
     }
 
     if (filter.email) {
-      where.email = filter.email;
+      where[this.and].push({
+        email: filter.email,
+      });
     }
 
     if (filter.status) {
-      where.status = filter.status;
+      where[this.and].push({
+        status: filter.status,
+      });
     }
 
     if (filter.competitorType) {
-      where.competitorType = {
-        [this.in]: filter.competitorType,
-      };
+      where[this.and].push({
+        competitorType: {
+          [this.in]: filter.competitorType,
+        },
+      });
     }
 
     if (filter.notTaggedByAgent) {
-      where.id = {
-        [this.notIn]: this._taggedMeasurementsLiteral(filter.notTaggedByAgent),
-      };
+      where[this.and].push({
+        id: {
+          [this.notIn]: this._taggedMeasurementsLiteral(filter.notTaggedByAgent),
+        },
+      });
     }
 
     const startDate = _.get(filter, 'findInDateRange.startDate');
@@ -403,23 +414,52 @@ class ModelPostgres extends Model {
 
     const endDate = _.get(filter, 'findInDateRange.endDate');
     if (endDate) {
-      where[this.and].push({ createdAt: { [this.lte]: endDate } });
+      where[this.and].push({
+        createdAt: { [this.lte]: endDate },
+      });
     }
 
     if (_.isArray(filter.states)) {
-      where.state = { [this.in]: filter.states };
+      where[this.and].push({
+        state: { [this.in]: filter.states },
+      });
     }
 
     if (filter.seriesId) {
-      where.seriesId = filter.seriesId;
+      where[this.and].push({
+        seriesId: filter.seriesId,
+      });
     }
 
     if (filter.creatorId) {
-      where.creatorId = filter.creatorId;
+      where[this.and].push({
+        creatorId: filter.creatorId,
+      });
     }
 
     if (filter.isEmailVerified) {
-      where.creatorId = filter.isEmailVerified;
+      where[this.and].push({
+        isEmailVerified: {
+          [this.in]: filter.isEmailVerified,
+        },
+      });
+    }
+
+    if (filter.isNotEmailVerified) {
+      where[this.and].push({
+        [this.or]: [
+          { isEmailVerified: false },
+          { isEmailVerified: null },
+        ],
+      });
+    }
+
+    if (filter.notAuth0AccessToken) {
+      where[this.and].push({
+        auth0AccessToken: {
+          [this.not]: null,
+        },
+      });
     }
 
     if (filter.excludeChannelId) {
@@ -446,7 +486,7 @@ class ModelPostgres extends Model {
 
     if (filter.notificationId) {
       where[this.and].push({
-        sentAt: filter.notificationId,
+        notificationId: filter.notificationId,
       });
     }
 
@@ -550,7 +590,8 @@ class ModelPostgres extends Model {
     return list.map((item) => {
       if (item === 'TRUE') {
         return true;
-      } if (item === 'FALSE') {
+      }
+      if (item === 'FALSE') {
         return false;
       }
       return item;

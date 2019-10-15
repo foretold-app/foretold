@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const utils = require('../../lib/utils');
 
 /**
@@ -5,21 +6,22 @@ const utils = require('../../lib/utils');
  */
 class Options {
   /**
-   * @todo: add type tests (assertion)
    * @param {Layers.DataSourceLayer.options} [options]
    */
   constructor(options = {}) {
-    const list = [
-      'transaction', // object
-      'lock', // bool
-      'skipLocked', // bool
+    const list = {
+      transaction: (v) => _.isObject(v) || utils.none(v),
+      lock: (v) => _.isBoolean(v) || utils.none(v),
+      skipLocked: (v) => _.isBoolean(v) || utils.none(v),
 
-      'isAdmin', // bool
-      'agentId', // string
-      'measuredByAgentId', // string
-      'currentAgentId', // string
-    ];
+      isAdmin: (v) => _.isBoolean(v) || utils.none(v),
+      agentId: (v) => _.isString(v) || utils.none(v),
+      measuredByAgentId: (v) => _.isString(v) || utils.none(v),
+      currentAgentId: (v) => _.isString(v) || utils.none(v),
+    };
+
     utils.extend(this.constructor.name, options, list, this);
+    utils.test(this.constructor.name, list, this);
     utils.diff(this.constructor.name, options, list);
   }
 

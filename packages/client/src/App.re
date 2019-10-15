@@ -48,14 +48,14 @@ let make = _children => {
   render: self => {
     let state = self.state;
 
-    let getUser = innerComponentFn => {
+    let getUser = fn => {
       let serverJwt = ServerJwt.make_from_storage();
       let auth0tokens = Auth0Tokens.make_from_storage();
       let authToken = state.authToken;
 
       switch (serverJwt, authToken, auth0tokens) {
-      | (Some(_), _, _) => UserGet.inner(innerComponentFn)
-      | (_, None, None) => innerComponentFn(None)
+      | (Some(_), _, _) => UserGet.inner(fn)
+      | (_, None, None) => fn(None)
       | (_, _, _) => Authentication.component(auth0tokens, authToken)
       };
     };
@@ -74,6 +74,7 @@ let make = _children => {
              <Navigator route={state.route} loggedInUser />
              <Redirect appContext />
              <Intercom />
+             <CheckSession />
            </Providers.AppContext.Provider>;
          })
        )}

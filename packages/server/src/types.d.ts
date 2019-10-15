@@ -63,6 +63,7 @@ export namespace Models {
     picture?: string;
     isEmailVerified: boolean;
     descriptions?: string;
+    auth0AccessToken?: string;
 
     getAgent(): Models.Agent;
   }
@@ -299,7 +300,9 @@ export namespace Layers {
       minNumberOfQuestionsScored?: number | null;
       email?: string;
       status?: string;
-      isEmailVerified?: boolean;
+      isEmailVerified?: boolean[];
+      notAuth0AccessToken?: boolean;
+      isNotEmailVerified?: boolean;
 
       findInDateRange?: object; // @todo: Object? Give definition!
       withinMeasurables?: withinMeasurables | null;
@@ -412,7 +415,9 @@ export namespace Layers {
       minNumberOfQuestionsScored?: number | null;
       email?: string;
       status?: string;
-      isEmailVerified?: boolean;
+      isEmailVerified?: boolean[];
+      notAuth0AccessToken?: boolean;
+      isNotEmailVerified?: boolean;
 
       withinMeasurables?: withinMeasurables | null;
       withinPublicChannels?: withinPublicChannels | null;

@@ -1,8 +1,8 @@
 let toNode = node => {
   let channel = node##channel;
   let agent = node##agent;
-  let agentType = Primary.AgentType.getAgentType(agent);
 
+  let agentType = Primary.AgentType.getAgentType(~agent, ());
   let agent =
     Primary.Agent.make(~id=agent##id, ~agentType, ~name=agent##name, ());
 
@@ -83,6 +83,7 @@ module Query = [%graphql
                         id
                         name
                         description
+                        picture
                         competitorType
                         user {
                             id

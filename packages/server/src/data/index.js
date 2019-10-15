@@ -6,8 +6,6 @@ const { ChannelsData } = require('./channels-data');
 const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { AgentsData } = require('./agents-data');
 const { BotsData } = require('./bots-data');
-const { AuthenticationData } = require('./authentication-data');
-const { Authentication2Data } = require('./authentication2-data');
 const { TokensData } = require('./tokens-data');
 const { PreferencesData } = require('./preferences-data');
 const { NotificationsData } = require('./notifications-data');
@@ -20,6 +18,25 @@ const { AgentMeasurablesData } = require('./agent-measurables-data');
 const { AgentChannelsData } = require('./agent-channels-data');
 
 module.exports = {
+  MeasurablesData,
+  MeasurementsData,
+  UsersData,
+  SeriesData,
+  ChannelsData,
+  ChannelMembershipsData,
+  AgentsData,
+  BotsData,
+  TokensData,
+  PreferencesData,
+  NotificationsData,
+  TemplatesData,
+  NotificationStatusesData,
+  InvitationsData,
+  FeedItemsData,
+  GlobalSettingsData,
+  AgentMeasurablesData,
+  AgentChannelsData,
+
   measurables: new MeasurablesData(),
   measurements: new MeasurementsData(),
   users: new UsersData(),
@@ -28,8 +45,6 @@ module.exports = {
   channelMemberships: new ChannelMembershipsData(),
   agents: new AgentsData(),
   bots: new BotsData(),
-  authentication: new AuthenticationData(),
-  authentication2: new Authentication2Data(),
   tokens: new TokensData(),
   preferences: new PreferencesData(),
   notifications: new NotificationsData(),

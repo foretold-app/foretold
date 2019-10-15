@@ -34,24 +34,28 @@ class UsersData extends DataBase {
 
   /**
    * @public
-   * @param {string} id
+   * @param {Models.UserID} userId
    * @param {Auth0UserInfoResponse} userInfo
    * @return {Promise<Models.User>}
    */
-  async updateUserInfoFromAuth0(id, userInfo) {
-    const params = new Params({ id });
+  async updateUserInfoFromAuth0(userId, userInfo) {
+    const params = new Params({ id: userId });
     const user = await this.getOne(params);
 
     assert(!!user, 'User is required.');
+    assert(_.isObject(userInfo), 'User Info is required.');
 
     const emailIn = _.get(userInfo, 'email');
     const isEmailVerifiedIn = !!_.get(userInfo, 'email_verified');
     const nicknameIn = _.get(userInfo, 'nickname');
     const pictureIn = _.get(userInfo, 'picture');
 
-    const email = _.toString(emailIn).substr(0, 64);
-    const nickname = _.toString(nicknameIn).substr(0, 30);
-    const picture = _.toString(pictureIn).substr(0, 255);
+    const email = _.toString(emailIn)
+      .substr(0, 64);
+    const nickname = _.toString(nicknameIn)
+      .substr(0, 30);
+    const picture = _.toString(pictureIn)
+      .substr(0, 255);
 
     if (email !== '' && isEmailVerifiedIn === true) {
       user.set('email', email);
@@ -74,8 +78,20 @@ class UsersData extends DataBase {
    * @return {Promise<Models.User>}
    */
   async getVerified(email) {
-    const params = new Params({ email, isEmailVerified: true });
+    const params = new Params({ email, isEmailVerified: [true] });
     return this.getOne(params);
+  }
+
+  /**
+   * @public
+   * @param {Models.UserID} userId
+   * @param {string} auth0AccessToken
+   * @returns {Promise<*>}
+   */
+  async saveAccessToken(userId, auth0AccessToken) {
+    const params = new Params({ id: userId });
+    const data = new Data({ auth0AccessToken });
+    return this.updateOne(params, data);
   }
 }
 

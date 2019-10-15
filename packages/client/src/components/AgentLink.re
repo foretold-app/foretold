@@ -21,7 +21,7 @@ let rec toAgent = (~agent: Types.agent) => {
   | (_, Some(User({name, picture}))) =>
     Some(FC__AgentLink.Agent.makeUser(~name, ~onClick, ~image=?picture, ()))
 
-  | (_, Some(Bot({name, owner: Some(agent)}))) =>
+  | (_, Some(Bot({name, owner: Some(agent), picture}))) =>
     let owner = toAgent(~agent);
 
     Some(
@@ -29,15 +29,17 @@ let rec toAgent = (~agent: Types.agent) => {
         ~name=name |> E.O.default("bot"),
         ~owner?,
         ~onClick,
+        ~image=?picture,
         (),
       ),
     );
 
-  | (_, Some(Bot({name}))) =>
+  | (_, Some(Bot({name, picture}))) =>
     Some(
       FC__AgentLink.Agent.makeBot(
         ~name=name |> E.O.default("bot"),
         ~onClick,
+        ~image=?picture,
         (),
       ),
     )

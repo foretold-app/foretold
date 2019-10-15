@@ -6,7 +6,6 @@ const {
   MEASUREMENT_COMPETITOR_TYPE,
 } = require('../enums/measurement-competitor-type');
 const { MEASURABLE_STATE } = require('../enums/measurable-state');
-const { BrierScore } = require('../lib/brier-score');
 
 const { ModelPostgres } = require('./model-postgres');
 

@@ -2,12 +2,14 @@ module FormConfig = {
   type field(_) =
     | Name: field(string)
     | Description: field(string)
-    | CompetitorType: field(Types.competitorType);
+    | CompetitorType: field(Types.competitorType)
+    | Picture: field(string);
 
   type state = {
     name: string,
     description: string,
     competitorType: Types.competitorType,
+    picture: string,
   };
 
   let get: type value. (state, field(value)) => value =
@@ -16,6 +18,7 @@ module FormConfig = {
       | Name => state.name
       | Description => state.description
       | CompetitorType => state.competitorType
+      | Picture => state.picture
       };
 
   let set: type value. (state, field(value), value) => state =
@@ -24,6 +27,7 @@ module FormConfig = {
       | Name => {...state, name: value}
       | Description => {...state, description: value}
       | CompetitorType => {...state, competitorType: value}
+      | Picture => {...state, picture: value}
       };
 };
 
@@ -36,8 +40,14 @@ let withForm = (onSubmit, bot: option(Types.bot), innerComponentFn) => {
         name: bot.name |> Rationale.Option.default(""),
         description: bot.description |> Rationale.Option.default(""),
         competitorType: `COMPETITIVE,
+        picture: bot.picture |> Rationale.Option.default(""),
       }
-    | None => {name: "", description: "", competitorType: `COMPETITIVE}
+    | None => {
+        name: "",
+        description: "",
+        competitorType: `COMPETITIVE,
+        picture: "",
+      }
     };
 
   Form.make(
@@ -80,6 +90,15 @@ let formFields = (state: Form.state, send, onSubmit) =>
           value={state.values.description}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
             send(Form.FieldChangeValue(Description, e))
+          )}
+        />
+      </Antd.Form.Item>
+      <Antd.Form.Item>
+        {"Picture" |> ReasonReact.string |> E.React.inH3}
+        <Antd.Input
+          value={state.values.picture}
+          onChange={ReForm.Helpers.handleDomFormChange(e =>
+            send(Form.FieldChangeValue(Picture, e))
           )}
         />
       </Antd.Form.Item>

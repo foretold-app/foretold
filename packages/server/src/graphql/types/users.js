@@ -6,10 +6,17 @@ const models = require('../../models');
 const userUpdateInput = new graphql.GraphQLInputObjectType({
   name: 'UserUpdateInput',
   fields: () => ({
-    name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    name: { type: graphql.GraphQLString },
     email: { type: graphql.GraphQLString },
     picture: { type: graphql.GraphQLString },
     description: { type: graphql.GraphQLString },
+  }),
+});
+
+const userAccessTokenUpdateInput = new graphql.GraphQLInputObjectType({
+  name: 'UserAccessTokenUpdateInput',
+  fields: () => ({
+    auth0AccessToken: { type: graphql.GraphQLString },
   }),
 });
 
@@ -45,4 +52,5 @@ const user = new graphql.GraphQLObjectType({
 module.exports = {
   user,
   userUpdateInput,
+  userAccessTokenUpdateInput,
 };

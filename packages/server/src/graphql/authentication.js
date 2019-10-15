@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../data');
+const { AuthenticationSecondary } = require('../lib/authentication');
 
 /**
  * @param {Request} req
@@ -33,7 +33,7 @@ async function authentication(options) {
     const token = _getQueryToken(options);
 
     if (token) {
-      return await data.authentication.authenticate(token);
+      return await new AuthenticationSecondary().authenticate(token);
     }
 
     return null;

@@ -53,6 +53,7 @@ let toUser = a =>
     ~bots=a##bots |> toBots,
     ~isEmailVerified=a##isEmailVerified,
     ~createdAt=Some(a##createdAt),
+    ~name=a##name,
     (),
   );
 
@@ -96,7 +97,7 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let inner = innerComponentFn => {
-  <QueryComponent>
+  <QueryComponent pollInterval={60 * 1000}>
     ...{({result}) =>
       result
       |> HttpResponse.fromApollo

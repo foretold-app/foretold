@@ -16,6 +16,8 @@ function runListeners() {
       listeners.toResolving);
     emitter.on(events.EVERY_MINUTE,
       listeners.emailConsumer);
+    emitter.on(events.EVERY_MINUTE,
+      listeners.updateUsers);
     emitter.on(events.MAIL,
       listeners.mailer);
 
@@ -82,6 +84,8 @@ function runListeners() {
       listeners.invitations);
     emitter.on(events.USER_CHANGED,
       listeners.invitations);
+    emitter.on(events.USER_CHANGED,
+      listeners.updateUser);
   } catch (e) {
     console.error('Listener error', e);
   }

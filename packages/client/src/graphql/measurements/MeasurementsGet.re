@@ -1,6 +1,7 @@
 let toMeasurement = (measurement): Types.measurement => {
   let agentType =
-    measurement##agent |> E.O.bind(_, Primary.AgentType.getAgentType);
+    measurement##agent
+    |> E.O.bind(_, Primary.AgentType.getAgentType(~agent=_, ()));
 
   let agent =
     measurement##agent

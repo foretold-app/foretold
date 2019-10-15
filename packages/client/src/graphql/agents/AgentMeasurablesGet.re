@@ -1,8 +1,8 @@
 let toNode = node => {
   let measurable = node##measurable;
   let agent = node##agent;
-  let agentType = Primary.AgentType.getAgentType(agent);
 
+  let agentType = Primary.AgentType.getAgentType(~agent, ());
   let agent =
     Primary.Agent.make(~id=agent##id, ~agentType, ~name=agent##name, ());
 

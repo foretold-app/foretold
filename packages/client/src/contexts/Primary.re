@@ -751,37 +751,39 @@ module LeaderboardItem = {
 module AgentType = {
   type t = Types.agentType;
 
-  let getAgentType = agent =>
+  let getOwner = bot =>
+    switch (bot##user) {
+    | Some(user) =>
+      let agentType =
+        Some(
+          User(
+            User.make(
+              ~id=user##id,
+              ~name=user##name,
+              ~picture=user##picture,
+              ~agentId=user##agentId,
+              (),
+            ),
+          ),
+        );
+
+      let agent =
+        Agent.make(
+          ~id=user##agentId,
+          ~agentType,
+          ~name=Some(user##name),
+          (),
+        );
+
+      Some(agent);
+    | _ => None
+    };
+
+  let getEmptyOwner = _ => None;
+
+  let getAgentType = (~agent, ~getOwner=getOwner, ()) =>
     switch (agent##bot, agent##user) {
     | (Some(bot), None) =>
-      let owner =
-        switch (bot##user) {
-        | Some(user) =>
-          let agentType =
-            Some(
-              User(
-                User.make(
-                  ~id=user##id,
-                  ~name=user##name,
-                  ~picture=user##picture,
-                  ~agentId=user##agentId,
-                  (),
-                ),
-              ),
-            );
-
-          let agent =
-            Agent.make(
-              ~id=user##agentId,
-              ~agentType,
-              ~name=Some(user##name),
-              (),
-            );
-
-          Some(agent);
-        | _ => None
-        };
-
       Some(
         Bot(
           Bot.make(
@@ -789,12 +791,12 @@ module AgentType = {
             ~name=Some(bot##name),
             ~description=bot##description,
             ~competitorType=bot##competitorType,
-            ~owner,
+            ~owner=getOwner(bot),
             ~picture=bot##picture,
             (),
           ),
         ),
-      );
+      )
     | (None, Some(user)) =>
       Some(
         User(

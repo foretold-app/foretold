@@ -1,5 +1,6 @@
 let toAgent = agent => {
-  let agentType = agent |> E.O.bind(_, Primary.AgentType.getAgentType);
+  let agentType =
+    agent |> E.O.bind(_, Primary.AgentType.getAgentType(~agent=_, ()));
 
   agent
   |> E.O.fmap(k =>

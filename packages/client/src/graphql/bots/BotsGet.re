@@ -11,8 +11,29 @@ module Query = [%graphql
                   competitorType
                   token
                   agent {
-                    id
-                    name
+                      id
+                      name
+                      user {
+                          id
+                          name
+                          description
+                          picture
+                          agentId
+                      }
+                      bot {
+                          id
+                          name
+                          description
+                          picture
+                          competitorType
+                          user {
+                              id
+                              name
+                              description
+                              picture
+                              agentId
+                          }
+                      }
                   }
                   permissions {
                     mutations {
@@ -36,27 +57,42 @@ let unpackEdges = (a): array('a) => {
   |> E.A.O.concatSome;
 };
 
-let toBot = botJson => {
+let toBot = bot => {
   let allowMutations =
-    botJson##permissions##mutations##allow |> E.A.O.concatSome |> E.A.to_list;
+    bot##permissions##mutations##allow |> E.A.O.concatSome |> E.A.to_list;
 
   let permissions = Primary.Permissions.make(allowMutations);
 
+  let agentType =
+    E.O.bind(
+      bot##agent,
+      Primary.AgentType.getAgentType(
+        ~agent=_,
+        ~getOwner=Primary.AgentType.getEmptyOwner,
+        (),
+      ),
+    );
+
   let agent =
-    botJson##agent
-    |> E.O.fmap(agentJson =>
-         Primary.Agent.make(~id=agentJson##id, ~name=Some(botJson##name), ())
+    bot##agent
+    |> E.O.fmap(agent =>
+         Primary.Agent.make(
+           ~id=agent##id,
+           ~agentType,
+           ~name=Some(bot##name),
+           (),
+         )
        );
 
   Primary.Bot.make(
-    ~id=botJson##id,
-    ~name=Some(botJson##name),
-    ~description=botJson##description,
-    ~competitorType=botJson##competitorType,
-    ~token=botJson##token,
+    ~id=bot##id,
+    ~name=Some(bot##name),
+    ~description=bot##description,
+    ~competitorType=bot##competitorType,
+    ~token=bot##token,
     ~agent,
     ~permissions=Some(permissions),
-    ~picture=botJson##picture,
+    ~picture=bot##picture,
     (),
   );
 };

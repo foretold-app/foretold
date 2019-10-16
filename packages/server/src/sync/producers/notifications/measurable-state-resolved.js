@@ -4,6 +4,10 @@ const _ = require('lodash');
 const { Producer } = require('./../producer');
 const { MeasurableState } = require('./measurable-state');
 const { MEASURABLE_STATE } = require('../../../enums/measurable-state');
+const logger = require('../../../lib/log');
+
+const log
+  = logger.module('sync/producers/notifications/measurable-state-resolved');
 
 class MeasurableStateResolved extends MeasurableState {
   /**
@@ -30,7 +34,7 @@ class MeasurableStateResolved extends MeasurableState {
   async main() {
     try {
       if (await this._isActual() === false) {
-        console.log(this.constructor.name, 'Hook is not actual');
+        log.trace(this.constructor.name, 'Hook is not actual');
         return true;
       }
     } catch (e) {
@@ -74,7 +78,7 @@ class MeasurableStateResolved extends MeasurableState {
       return true;
     } catch (e) {
       await this._rollback();
-      console.log(this.constructor.name, e.message, e);
+      log.trace(this.constructor.name, e.message, e);
       return false;
     }
   }

@@ -1,6 +1,9 @@
 const _ = require('lodash');
 
 const data = require('../../data');
+const logger = require('../../lib/log');
+
+const log = logger.module('middlewares/preferences');
 
 /**
  * @param {object | null} root
@@ -13,7 +16,7 @@ const data = require('../../data');
 async function setContextPreference(root, args, context, info) {
   const id = _.get(args, 'id');
 
-  console.log(
+  log.trace(
     '\x1b[36m ---> \x1b[0m Middleware (setContextPreference)',
     { id },
   );

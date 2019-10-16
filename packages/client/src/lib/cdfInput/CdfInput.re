@@ -20,7 +20,7 @@ type state = {
 };
 
 let tutorialSource = "
-Use this to quickly enter probability distributions. You can experiment with interactive and more complex examples [here](https://observablehq.com/@oagr/guesstimator-library).\n
+Use this to quickly enter probability distributions. You can experiment with interactive and more complex examples [here](https://observablehq.com/@oagr/foretold-inputs).\n
 ### Simple Examples \n
 `10 to 100`\n
 A lognormal distribution with a 90% confidence interval between 10 and 100.\n

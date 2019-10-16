@@ -20,11 +20,11 @@ if (process.env.NODE_ENV === 'development') {
 
   const level = map[config.local_level] || map.debug;
 
-  logger.streams.unshift({
+  logger.streams = [{
     level,
     raw: true,
     stream: prettyStdOut,
-  });
+  }];
   logger._level = level;
 
   logger.module = (moduleName) => {
@@ -35,5 +35,6 @@ if (process.env.NODE_ENV === 'development') {
     });
   };
 }
+
 
 module.exports = logger;

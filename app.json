@@ -62,6 +62,15 @@
     },
     "HEROKU_PARENT_APP_NAME": {
       "required": true
+    },
+    "GOOGLE_AUTH": {
+      "required": true
+    },
+    "LOG_LEVEL_LOCAL": {
+      "required": true
+    },
+    "LOG_LEVEL_REMOTE": {
+      "required": true
     }
   },
   "formation": {

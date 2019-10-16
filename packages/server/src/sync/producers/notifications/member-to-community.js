@@ -3,9 +3,13 @@ const _ = require('lodash');
 
 const { getChannelLinkWithToken } = require('../../../lib/urls');
 const { getAgentLinkWithToken } = require('../../../lib/urls');
+const logger = require('../../../lib/log');
 
 const { Producer } = require('../producer');
 const { ProducerNotifications } = require('./producer-notifications');
+
+const log
+  = logger.module('sync/producers/notifications/member-to-community');
 
 /**
  * @abstract
@@ -34,7 +38,7 @@ class MemberToCommunity extends ProducerNotifications {
    */
   async main() {
     if (!this.channelMembership.inviterAgentId) {
-      console.log(this.constructor.name, 'There is no "inviterAgentId"');
+      log.trace(this.constructor.name, 'There is no "inviterAgentId"');
       return true;
     }
 
@@ -69,7 +73,7 @@ class MemberToCommunity extends ProducerNotifications {
       return true;
     } catch (e) {
       await this._rollback();
-      console.log(this.constructor.name, e.message, e);
+      log.trace(this.constructor.name, e.message, e);
       return false;
     }
   }

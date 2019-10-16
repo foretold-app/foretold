@@ -4,6 +4,9 @@ const Mustache = require('mustache');
 const { emailConfig } = require('./email-config');
 const { transporter } = require('./transporter');
 const { SmtpGateways } = require('./smtp-gateways');
+const logger = require('../../lib/log');
+
+const log = logger.module('lib/mails/mail-helper');
 
 class MailHelper {
   /**
@@ -48,7 +51,7 @@ class MailHelper {
     subject = this.subject,
     contentHtml = this.html,
   ) {
-    console.log('______sendMail____');
+    log.trace('______sendMail____');
 
     const mailOptions = {
       subject,
@@ -59,7 +62,7 @@ class MailHelper {
       list: this._ListHeaders(),
     };
 
-    console.log('mailOptions.body', JSON.stringify(mailOptions));
+    log.trace('mailOptions.body', JSON.stringify(mailOptions));
 
     return new Promise((resolve, reject) => {
       this.transporter.sendMail(mailOptions, (error, response) => {
@@ -68,7 +71,7 @@ class MailHelper {
           console.error(`send email error: ${JSON.stringify(error)}`);
           return reject(error);
         }
-        console.log(`send email result: ${JSON.stringify(response)}`);
+        log.trace(`send email result: ${JSON.stringify(response)}`);
         resolve(response);
       });
     });

@@ -1,6 +1,9 @@
 const _ = require('lodash');
 
 const data = require('../../data');
+const logger = require('../../lib/log');
+
+const log = logger.module('middlewares/channel-memberships');
 
 /**
  * @param {object | null} root
@@ -22,7 +25,7 @@ async function setContextChannelMemberships(root, args, context, info) {
     agentId,
     channelId
   };
-  console.log('\x1b[36m ---> \x1b[0m Middleware '
+  log.trace('\x1b[36m ---> \x1b[0m Middleware '
     + '(setContextChannelMemberships)', compoundId);
 
   if (channelId && agentId) {
@@ -50,7 +53,7 @@ async function setContextChannelMembershipsAdmins(root, args, context, info) {
     || _.get(context, 'measurable.channelId')
     || _.get(context, 'channel.id');
 
-  console.log('\x1b[36m ---> \x1b[0m Middleware '
+  log.trace('\x1b[36m ---> \x1b[0m Middleware '
     + '(channelMembershipsAdmins)', channelId);
 
   if (channelId) {

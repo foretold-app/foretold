@@ -3,6 +3,9 @@ const _ = require('lodash');
 
 const { GitHubApi } = require('./git-hub-api');
 const { GlobalSettingsData } = require('../../data/global-settings-data');
+const logger = require('../../lib/log');
+
+const log = logger.module('lib/trigger');
 
 class Trigger {
   /**
@@ -34,7 +37,7 @@ class Trigger {
   async main() {
     const isTested = this.api.verifySignature(this.webhook, this.xHubSignature);
     if (isTested !== true) {
-      console.log('GitHub signature is not valid.');
+      log.trace('GitHub signature is not valid.');
       return false;
     }
 
@@ -43,7 +46,7 @@ class Trigger {
       console.warn('PullRequest is not merged yet.');
       return false;
     }
-    console.log('PullRequest is merged.');
+    log.trace('PullRequest is merged.');
 
 
     const pullRequestNumber = _.get(this.webhook, 'number');
@@ -54,7 +57,7 @@ class Trigger {
 
     const dataJson = await this.api.getDataJson(pullRequestNumber);
     if (dataJson) {
-      console.log('Data.json content', dataJson);
+      log.trace('Data.json content', dataJson);
       await this.globalSetting.updateEntityGraph(dataJson);
     } else {
       console.warn('Data.json file is not found '

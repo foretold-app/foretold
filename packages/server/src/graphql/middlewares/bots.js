@@ -1,6 +1,9 @@
 const _ = require('lodash');
 
 const data = require('../../data');
+const logger = require('../../lib/log');
+
+const log = logger.module('middlewares/bots');
 
 /**
  * @param {object | null} root
@@ -12,7 +15,7 @@ const data = require('../../data');
  */
 async function setContextBot(root, args, context, info) {
   const id = _.get(args, 'id');
-  console.log('\x1b[36m ---> \x1b[0m Middleware (setContextBot)', { id });
+  log.trace('\x1b[36m ---> \x1b[0m Middleware (setContextBot)', { id });
   context.bot = id ? await data.bots.getOne({ id }) : null;
 }
 

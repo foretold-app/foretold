@@ -1,5 +1,8 @@
 const _ = require('lodash');
 const { rule } = require('graphql-shield');
+const logger = require('../../lib/log');
+
+const log = logger.module('authorizers/preferences');
 
 /**
  * @param {*} root
@@ -18,7 +21,7 @@ function preferenceIsOwnedByCurrentAgentRule(root, args, context, info) {
   const result = (!!agentId && !!contextAgentId)
     && (agentId === contextAgentId);
 
-  console.log(
+  log.trace(
     '\x1b[33m Rule Preferences (preferenceIsOwnedByCurrentAgentRule) '
     + `agentId "${agentId}", contextAgentId "${contextAgentId}", `
     + `result = "${result}".\x1b[0m`,

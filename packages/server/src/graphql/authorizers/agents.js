@@ -1,5 +1,8 @@
 const _ = require('lodash');
 const { rule } = require('graphql-shield');
+const logger = require('../../lib/log');
+
+const log = logger.module('authorizers/agents');
 
 /**
  * @param {*} root
@@ -12,7 +15,7 @@ function currentAgentIsAuthenticatedRule(root, args, context, info) {
   const agentId = _.get(context, 'agent.id');
   const result = !!agentId;
 
-  console.log(
+  log.trace(
     '\x1b[33m Rule Agents (currentAgentIsAuthenticatedRule) '
     + `agentId "${agentId}", result = "${result}".\x1b[0m`,
   );
@@ -31,7 +34,7 @@ function currentAgentIsApplicationAdminRule(root, args, context, info) {
   const isAdmin = _.get(context, 'agent.isAdmin', false);
   const result = !!isAdmin;
 
-  console.log(
+  log.trace(
     '\x1b[33m Rule Agents (currentAgentIsAdminRule) '
     + `result = "${result}".\x1b[0m`,
   );

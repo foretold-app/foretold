@@ -1,6 +1,9 @@
 const _ = require('lodash');
 
 const data = require('../../data');
+const logger = require('../../lib/log');
+
+const log = logger.module('middlewares/channels');
 
 /**
  * @param {object | null} root
@@ -17,7 +20,7 @@ async function setContextChannel(root, args, context, info) {
     || _.get(context, 'measurable.channelId')
     || _.get(args, 'id');
 
-  console.log(
+  log.trace(
     '\x1b[36m ---> \x1b[0m Middleware (setContextChannel)',
     { channelId },
   );
@@ -37,7 +40,7 @@ async function setContextChannel(root, args, context, info) {
  * @return {Promise<void>}
  */
 async function setContextChannelByRoot(root, args, context, info) {
-  console.log('\x1b[36m ---> \x1b[0m Middleware (setContextChannelByRoot)');
+  log.trace('\x1b[36m ---> \x1b[0m Middleware (setContextChannelByRoot)');
   context.channel = !!root ? root : null;
 }
 

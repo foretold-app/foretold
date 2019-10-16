@@ -2,6 +2,9 @@ const { UsersData } = require('../../data');
 const { Auth0 } = require('../../lib/auth0');
 
 const { Filter } = require('../../data/classes');
+const logger = require('../../lib/log');
+
+const log = logger.module('sync/actions/user-updater');
 
 class UserUpdater {
   constructor() {
@@ -23,7 +26,7 @@ class UserUpdater {
       const userInfo = await this.auth0.getUserInfo(user.auth0AccessToken);
       await this.users.updateUserInfoFromAuth0(user.id, userInfo);
     } catch (e) {
-      console.log('Saving user info is failed.', e);
+      log.trace('Saving user info is failed.', e);
       return false;
     }
 
@@ -38,7 +41,7 @@ class UserUpdater {
 
     for (let i = 0, max = users.length; i < max; i++) {
       const user = users[i];
-      console.log(`Update user ID: ${user.id}`);
+      log.trace(`Update user ID: ${user.id}`);
       await this.updateUser(user);
     }
 

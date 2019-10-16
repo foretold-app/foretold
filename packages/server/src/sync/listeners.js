@@ -2,18 +2,21 @@ const actions = require('./actions');
 const consumers = require('./consumers');
 const { Mailer } = require('./mailer');
 const { GitHubApi } = require('../lib/github/git-hub-api');
+const logger = require('../lib/log');
+
+const log = logger.module('sync/listeners');
 
 /**
  * @returns {Promise<boolean>}
  */
 async function updateUsers() {
   const name = 'Job::updateUsers';
-  console.log(name);
+  log.trace(name);
 
   try {
     const userUpdater = new actions.UserUpdater();
     const result = await userUpdater.main();
-    console.log(name, 'all done', result);
+    log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
   }
@@ -26,12 +29,12 @@ async function updateUsers() {
  */
 async function updateUser(user) {
   const name = 'Job::updateUser';
-  console.log(name);
+  log.trace(name);
 
   try {
     const userUpdater = new actions.UserUpdater();
     const result = await userUpdater.updateUser(user);
-    console.log(name, 'all done', result);
+    log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
   }
@@ -45,12 +48,12 @@ async function updateUser(user) {
  */
 async function invitations(user) {
   const name = 'Job::invitations';
-  console.log(name);
+  log.trace(name);
 
   try {
     const invitations = new actions.Invitations();
     const result = await invitations.transition(user);
-    console.log(name, 'all done', result);
+    log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
   }
@@ -64,12 +67,12 @@ async function invitations(user) {
  */
 async function createChannelMembership(channel) {
   const name = 'Job::createChannelMembership';
-  console.log(name);
+  log.trace(name);
 
   try {
     const creators = new actions.Creators();
     const result = await creators.createChannelMembership(channel);
-    console.log(name, 'all done', result);
+    log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
   }
@@ -83,12 +86,12 @@ async function createChannelMembership(channel) {
  */
 async function measurableStateTransition(measurement) {
   const name = 'Job::measurableStateTransition';
-  console.log(name);
+  log.trace(name);
 
   try {
     const action = new actions.MeasurablesStateMachine();
     const result = await action.measurableStateTransition(measurement);
-    console.log(name, 'all done', result);
+    log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
   }
@@ -102,12 +105,12 @@ async function measurableStateTransition(measurement) {
  */
 async function createNewMeasurables(series) {
   const name = 'Job::createNewMeasurables';
-  console.log(name);
+  log.trace(name);
 
   try {
     const creators = new actions.Creators();
     const result = await creators.createMeasurables(series);
-    console.log(name, 'all done', result);
+    log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
   }
@@ -121,12 +124,12 @@ async function createNewMeasurables(series) {
  */
 async function newMeasurement(measurement) {
   const name = 'Job::newMeasurement';
-  console.log(name);
+  log.trace(name);
 
   try {
     const notifications = new actions.Notifications();
     const result = await notifications.newMeasurement(measurement);
-    console.log(name, 'all done', result);
+    log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
   }
@@ -140,12 +143,12 @@ async function newMeasurement(measurement) {
  */
 async function newMeasurable(measurable) {
   const name = 'Job::newMeasurable';
-  console.log(name);
+  log.trace(name);
 
   try {
     const notifications = new actions.Notifications();
     const result = await notifications.newMeasurable(measurable);
-    console.log(name, 'all done', result);
+    log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
   }
@@ -159,12 +162,12 @@ async function newMeasurable(measurable) {
  */
 async function updateMeasurable(measurable) {
   const name = 'Job::updateMeasurable';
-  console.log(name);
+  log.trace(name);
 
   try {
     const notifications = new actions.Notifications();
     const result = await notifications.updateMeasurable(measurable);
-    console.log(name, 'all done', result);
+    log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
   }
@@ -177,12 +180,12 @@ async function updateMeasurable(measurable) {
  */
 async function toJudgementPendingTransition() {
   const name = 'Job::toJudgementPendingTransition';
-  console.log(name);
+  log.trace(name);
 
   try {
     const reducer = new actions.MeasurablesStateMachine();
     const result = await reducer.toJudgementPending();
-    console.log(name, 'all done', result);
+    log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
   }
@@ -195,12 +198,12 @@ async function toJudgementPendingTransition() {
  */
 async function toResolving() {
   const name = 'Job::toResolving';
-  console.log(name);
+  log.trace(name);
 
   try {
     const reducer = new actions.MeasurablesStateMachine();
     const result = await reducer.toResolving();
-    console.log(name, 'all done', result);
+    log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
   }
@@ -213,12 +216,12 @@ async function toResolving() {
  */
 async function emailConsumer() {
   const name = '\x1b[35mJob::emailConsumer\x1b[0m';
-  console.log(name);
+  log.trace(name);
 
   try {
     const consumer = new consumers.Emails();
     const result = await consumer.main();
-    console.log(name, 'all done', result);
+    log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
   }
@@ -232,11 +235,11 @@ async function emailConsumer() {
  */
 async function mailer(envelop = {}) {
   const name = '\x1b[35mJob::mailer\x1b[0m';
-  console.log(name);
+  log.trace(name);
 
   try {
     const result = await new Mailer(envelop).main();
-    console.log(name, 'all done', result);
+    log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
   }
@@ -250,15 +253,15 @@ async function mailer(envelop = {}) {
  */
 function listenFor(Producer) {
   const name = `${Producer.name}`;
-  console.log(`Listen for: ${name}`);
+  log.trace(`Listen for: ${name}`);
 
   return async function (input) {
-    console.log(`Run listener: ${name}`);
+    log.trace(`Run listener: ${name}`);
 
     try {
       const producer = new Producer(input);
       const result = await producer.main();
-      console.log(name, 'all done', result);
+      log.trace(name, 'all done', result);
     } catch (e) {
       console.error(name, e.message, e);
     }
@@ -272,12 +275,12 @@ function listenFor(Producer) {
  */
 async function addGitHubWebHook() {
   const name = 'Job::addGitHubWebHook';
-  console.log(name);
+  log.trace(name);
 
   try {
     const gitHubApi = new GitHubApi();
     const result = await gitHubApi.addHook();
-    console.log(name, 'all done', result);
+    log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
   }

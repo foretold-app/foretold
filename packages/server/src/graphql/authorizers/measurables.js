@@ -1,5 +1,8 @@
 const _ = require('lodash');
 const { rule } = require('graphql-shield');
+const logger = require('../../lib/log');
+
+const log = logger.module('authorizers/measurables');
 
 /**
  * @param {object} root
@@ -15,13 +18,13 @@ function measurableIsOwnedByCurrentAgentRule(root, args, context, info) {
   const result = (!!creatorId && !!agentId)
     && (creatorId === agentId);
 
-  console.log(
+  log.trace(
     '\x1b[33m Rule Measurables (measurableIsOwnedByCurrentAgent) '
     + `"${result}".\x1b[0m`,
   );
 
   const compoundId = { creatorId, agentId };
-  console.log('\x1b[36m ---> \x1b[0m Rule Measurable '
+  log.trace('\x1b[36m ---> \x1b[0m Rule Measurable '
     + '(measurableIsOwnedByCurrentAgent parameters)', compoundId);
 
   return result;
@@ -37,7 +40,7 @@ function measurableIsOwnedByCurrentAgentRule(root, args, context, info) {
 function measurableIsArchivedRule(root, args, context, info) {
   const result = !!_.get(context, 'measurable.isArchived');
 
-  console.log(
+  log.trace(
     '\x1b[33m Rule Measurables '
     + `(measurableIsArchivedRule) "${result}".\x1b[0m`,
   );

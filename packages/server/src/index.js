@@ -7,6 +7,9 @@ const config = require('./config');
 const { runJobs, runListeners } = require('./sync');
 const { events, emitter } = require('./sync');
 const { apolloServer } = require('./graphql/apollo-server');
+const logger = require('./lib/log');
+
+const log = logger.module('src/index.js');
 
 {
   // Makes sync flows possible
@@ -50,8 +53,8 @@ app.use(cors());
   const fallbackFile = path.resolve(__dirname, '../../client/dist/index.html');
   const distDir = path.resolve(__dirname, '../../client/dist');
 
-  console.log('Fallback file', fallbackFile);
-  console.log('Dist dir', distDir);
+  log.info('Fallback file', fallbackFile);
+  log.info('Dist dir', distDir);
 
   // Returns all routes excluding "/graphql", "/hooks", "/env" as static files
   // or returns fallback page.
@@ -88,6 +91,6 @@ app.use(cors());
 }
 
 app.listen({ port: config.PORT }, () => {
-  console.log(`Server ready at http://localhost:${config.PORT}`);
+  log.info(`Server ready at http://localhost:${config.PORT}`);
   emitter.emit(events.SERVER_IS_READY, app);
 });

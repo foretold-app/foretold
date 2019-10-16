@@ -27,7 +27,9 @@
     "server/test:ci": "cd packages/server && yarn test:ci && cd ../..",
     "server/lint:ci": "cd packages/server && yarn lint:ci && cd ../..",
 
-    "preinstall": "printenv",
+    "google": "echo ${GOOGLE_AUTH} > ./packages/server/config/google.json",
+
+    "preinstall": "printenv && yarn google",
     "postinstall": "yarn bootstrap && yarn migrate && yarn packages/build && yarn packages/clean && yarn packages/remove"
   },
   "author": "Foretold",

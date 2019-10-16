@@ -1,7 +1,15 @@
 const Sequelize = require('sequelize');
 
+const logger = require('../lib/log');
+
 const env = process.env.NODE_ENV || 'development';
-const config = require(`${__dirname}/../../config/config.json`)[env];
+const configSrc = require(`${__dirname}/../../config/config.json`)[env];
+
+const log = logger.module('models/db');
+
+const config = { ...configSrc };
+
+config.logging = (...rest) => log.trace(rest[0]);
 
 function getDB() {
   const db = {};

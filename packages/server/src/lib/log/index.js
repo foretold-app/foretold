@@ -1,31 +1,34 @@
-const bunyan = require('bunyan');
-const PrettyStream = require('bunyan-prettystream');
-const bunyanBuddy = require('bunyan-buddy');
-
 const config = require('../../../config/log');
 
-const map = {
-  trace: 10,
-  debug: 20,
-  info: 30,
-  warn: 40,
-  error: 50,
-};
-
-const logger = bunyanBuddy(config);
+const logger = process.env.NODE_ENV === 'development'
+  ? require('bunyan-buddy')({
+    ...config,
+    local_level: 0,
+    remote_level: null,
+  })
+  : require('bunyan-buddy')(config);
 
 if (process.env.NODE_ENV === 'development') {
+  const bunyan = require('bunyan');
+  const PrettyStream = require('bunyan-prettystream');
+
   const prettyStdOut = new PrettyStream();
   prettyStdOut.pipe(process.stdout);
 
-  const level = map[config.local_level] || map.debug;
+  const map = {
+    trace: 10,
+    debug: 20,
+    info: 30,
+    warn: 40,
+    error: 50,
+  };
 
-  logger.streams = [{
-    level,
+  logger.streams.unshift({
+    level: map[config.local_level] || 20,
     raw: true,
     stream: prettyStdOut,
-  }];
-  logger._level = level;
+  });
+  logger._level = map[config.local_level] || 20;
 
   logger.module = (moduleName) => {
     return bunyan.createLogger({
@@ -36,5 +39,5 @@ if (process.env.NODE_ENV === 'development') {
   };
 }
 
-
 module.exports = logger;
+

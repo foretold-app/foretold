@@ -127,7 +127,7 @@ module Percentage = {
           </div>
         </Div>
         <Div flex={`num(1.)}>
-          <div className=secondaryText> {"Median" |> Utils.ste} </div>
+          <div className=secondaryText> {"Mean" |> Utils.ste} </div>
         </Div>
       </Div>;
     },

@@ -5,6 +5,9 @@ const { MeasurableModel } = require('../models-abstract');
 const { Params } = require('./classes/params');
 
 const { DataBase } = require('./data-base');
+const logger = require('../lib/log');
+
+const log = logger.module('data/measurables-data');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -100,7 +103,7 @@ class MeasurablesData extends DataBase {
       const match = JSON.stringify(json).match(/[-+]?[0-9]*\.?[0-9]+/);
       const asFloat = !!match ? parseFloat(match[0]) : null;
 
-      console.log(
+      log.trace(
         `Got response from endpoint. Url: ${endpoint}, `
         + `Response: ${JSON.stringify(json)}, Float: ${asFloat}`,
       );

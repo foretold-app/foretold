@@ -1,3 +1,7 @@
+const logger = require('../lib/log');
+
+const log = logger.module('models/init');
+
 /**
  * Nobody loves magic when debugs.
  * Keep it readable.
@@ -49,16 +53,16 @@ function init(db) {
   ];
 
   // Associate All Models
-  console.log(' --- ');
+  log.trace(' --- ');
   initList.forEach((modelName) => {
     if (db[modelName].associate) {
-      console.log(' > Build association for model:', modelName);
+      log.trace(' > Build association for model:', modelName);
       db[modelName].associate(db);
     } else {
-      console.log(' > Pass association for model:', modelName);
+      log.trace(' > Pass association for model:', modelName);
     }
   });
-  console.log(' --- ');
+  log.trace(' --- ');
 }
 
 module.exports = {

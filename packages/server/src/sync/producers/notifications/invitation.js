@@ -6,6 +6,9 @@ const { getAgentLink } = require('../../../lib/urls');
 
 const { Producer } = require('../producer');
 const { ProducerNotifications } = require('./producer-notifications');
+const logger = require('../../../lib/log');
+
+const log = logger.module('sync/producers/notifications/invitation');
 
 class Invitation extends ProducerNotifications {
   /**
@@ -60,7 +63,7 @@ class Invitation extends ProducerNotifications {
       return true;
     } catch (e) {
       await this._rollback();
-      console.log(this.constructor.name, e.message, e);
+      log.trace(this.constructor.name, e.message, e);
       return false;
     }
   }

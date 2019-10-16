@@ -18,6 +18,9 @@ const { Query } = require('../../data/classes/query');
 const {
   MEASUREMENT_COMPETITOR_TYPE,
 } = require('../../enums/measurement-competitor-type');
+const logger = require('../../lib/log');
+
+const log = logger.module('resolvers/measurements');
 
 /**
  * @param {*} root
@@ -316,7 +319,7 @@ async function primaryPointScore(root, args, context, info) {
     outcome: await outcome(root, args, context, info),
   });
   if (result.error) {
-    console.log('ERROR: ', result.error);
+    log.trace('ERROR: ', result.error);
     return undefined;
   }
   return _.isFinite(result.data) ? _.round(result.data, 6) : undefined;
@@ -337,7 +340,7 @@ async function nonMarketLogScore(root, args, context, info) {
   });
 
   if (result.error) {
-    console.log('ERROR: ', result.error);
+    log.trace('ERROR: ', result.error);
     return undefined;
   }
 

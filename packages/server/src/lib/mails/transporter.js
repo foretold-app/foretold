@@ -1,4 +1,7 @@
 const nodemailer = require('nodemailer');
+const logger = require('../../lib/log');
+
+const log = logger.module('lib/github');
 
 /**
  * @tested
@@ -6,7 +9,7 @@ const nodemailer = require('nodemailer');
  * @return {object}
  */
 function transportFactory(confIn) {
-  console.log('Transporter is ready for production version');
+  log.trace('Transporter is ready for production version');
 
   return nodemailer.createTransport({
     host: confIn.host,
@@ -28,7 +31,7 @@ function transportFactory(confIn) {
  * @return {{close(), sendMail(*, *): void}}
  */
 function transportFakeFactory(confIn) {
-  console.log('Transporter is ready for development version');
+  log.trace('Transporter is ready for development version');
 
   return new class {
     sendMail(options) {

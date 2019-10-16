@@ -2,6 +2,9 @@ const assert = require('assert');
 const _ = require('lodash');
 
 const { Producer } = require('../producer');
+const logger = require('../../../lib/log');
+
+const log = logger.module('sync/producers/feed-items');
 
 /**
  * @abstract
@@ -26,7 +29,7 @@ class ProducerFeedItems extends Producer {
   async main() {
     try {
       if (await this._isActual() === false) {
-        console.log(this.constructor.name, 'Hook is not actual');
+        log.trace(this.constructor.name, 'Hook is not actual');
         return true;
       }
       await this._preload();

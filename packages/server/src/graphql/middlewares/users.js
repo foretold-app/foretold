@@ -1,6 +1,9 @@
 const _ = require('lodash');
 
 const data = require('../../data');
+const logger = require('../../lib/log');
+
+const log = logger.module('middlewares/users');
 
 /**
  * @todo: Do not use "context.user" to compare objects.
@@ -14,7 +17,7 @@ const data = require('../../data');
 async function setContextUser(root, args, context, info) {
   const id = _.get(args, 'id');
 
-  console.log(
+  log.trace(
     '\x1b[36m ---> \x1b[0m Middleware (setContextUser)',
     { id },
   );

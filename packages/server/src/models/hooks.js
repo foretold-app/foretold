@@ -3,6 +3,9 @@ const emitter = require('../sync/emitter');
 
 const { AGENT_TYPE } = require('../enums/agent-type');
 const { MEASURABLE_STATE } = require('../enums/measurable-state');
+const logger = require('../lib/log');
+
+const log = logger.module('data/agent-measurables-data');
 
 /**
  * Try to keep all "sync" hooks in one place.
@@ -32,14 +35,14 @@ function addHooks(db) {
     try {
       emitter.emit(events.MEASURABLE_CHANGED, instance);
     } catch (e) {
-      console.log('Hook MEASURABLE_CHANGED', e);
+      log.trace('Hook MEASURABLE_CHANGED', e);
     }
   });
   db.User.addHook('afterUpdate', (instance) => {
     try {
       emitter.emit(events.USER_CHANGED, instance);
     } catch (e) {
-      console.log('Hook USER_CHANGED', e);
+      log.trace('Hook USER_CHANGED', e);
     }
   });
 
@@ -50,49 +53,49 @@ function addHooks(db) {
     try {
       emitter.emit(events.NEW_MEASUREMENT, instance);
     } catch (e) {
-      console.log('Hook NEW_MEASUREMENT', e);
+      log.trace('Hook NEW_MEASUREMENT', e);
     }
   });
   db.Measurable.addHook('afterCreate', (instance) => {
     try {
       emitter.emit(events.NEW_MEASURABLE, instance);
     } catch (e) {
-      console.log('Hook NEW_MEASURABLE', e);
+      log.trace('Hook NEW_MEASURABLE', e);
     }
   });
   db.ChannelMemberships.addHook('afterCreate', (instance) => {
     try {
       emitter.emit(events.NEW_MEMBERSHIP, instance);
     } catch (e) {
-      console.log('Hook NEW_MEMBERSHIP', e);
+      log.trace('Hook NEW_MEMBERSHIP', e);
     }
   });
   db.Channel.addHook('afterCreate', (instance) => {
     try {
       emitter.emit(events.NEW_CHANNEL, instance);
     } catch (e) {
-      console.log('Hook NEW_CHANNEL', e);
+      log.trace('Hook NEW_CHANNEL', e);
     }
   });
   db.Series.addHook('afterCreate', (instance) => {
     try {
       emitter.emit(events.NEW_SERIES, instance);
     } catch (e) {
-      console.log('Hook NEW_SERIES', e);
+      log.trace('Hook NEW_SERIES', e);
     }
   });
   db.Invitation.addHook('afterCreate', (instance) => {
     try {
       emitter.emit(events.NEW_INVITATION, instance);
     } catch (e) {
-      console.log('Hook NEW_INVITATION', e);
+      log.trace('Hook NEW_INVITATION', e);
     }
   });
   db.User.addHook('afterCreate', (instance) => {
     try {
       emitter.emit(events.NEW_USER, instance);
     } catch (e) {
-      console.log('Hook NEW_USER', e);
+      log.trace('Hook NEW_USER', e);
     }
   });
 
@@ -107,7 +110,7 @@ function addHooks(db) {
       });
       instance.agentId = agent.id;
     } catch (e) {
-      console.log('Hook Bot beforeCreate', e);
+      log.trace('Hook Bot beforeCreate', e);
     }
   });
   db.User.addHook('beforeCreate', async (instance) => {
@@ -117,7 +120,7 @@ function addHooks(db) {
       });
       instance.agentId = agent.id;
     } catch (e) {
-      console.log('Hook User beforeCreate', e);
+      log.trace('Hook User beforeCreate', e);
     }
   });
 
@@ -133,7 +136,7 @@ function addHooks(db) {
         }
       }
     } catch (e) {
-      console.log('Hook Measurable beforeUpdate', e);
+      log.trace('Hook Measurable beforeUpdate', e);
     }
   });
 
@@ -147,7 +150,7 @@ function addHooks(db) {
         instance.relevantAt = Date.now();
       }
     } catch (e) {
-      console.log('Hook Measurement beforeValidate', e);
+      log.trace('Hook Measurement beforeValidate', e);
     }
   });
 }

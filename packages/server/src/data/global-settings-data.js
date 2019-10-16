@@ -7,6 +7,9 @@ const { KenFacade } = require('../lib/ken-facade');
 
 const { Params } = require('./classes/params');
 const { Data } = require('./classes/data');
+const logger = require('../lib/log');
+
+const log = logger.module('data/global-settings-data');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -25,7 +28,7 @@ class GlobalSettingsData extends DataBase {
       .then((kenFacade) => {
         this.kenFacade = kenFacade;
       }, (err) => {
-        console.log('GlobalSettingsData Ken Init Err', err);
+        log.trace('GlobalSettingsData Ken Init Err', err);
       });
   }
 

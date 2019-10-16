@@ -2,6 +2,9 @@ const _ = require('lodash');
 
 const { authentication } = require('../authentication');
 const { globalSettings } = require('../../data');
+const logger = require('../../lib/log');
+
+const log = logger.module('middlewares/init-context');
 
 /**
  *
@@ -16,20 +19,20 @@ async function initContext({ req }) {
     botAgentId,
   };
 
-  console.log(' --- ');
-  console.log(' ✓ Context Identity User Id',
+  log.trace(' --- ');
+  log.trace(' ✓ Context Identity User Id',
     _.get(initContext, 'user.id'));
-  console.log(' ✓ Context Identity Agent Id',
+  log.trace(' ✓ Context Identity Agent Id',
     _.get(initContext, 'agent.id'));
-  console.log(' ✓ Context Identity Bot Id',
+  log.trace(' ✓ Context Identity Bot Id',
     _.get(initContext, 'bot.id'));
-  console.log(' ✓ Context Identity Creator Id',
+  log.trace(' ✓ Context Identity Creator Id',
     _.get(initContext, 'creator.id'));
-  console.log(' ✓ Context Identity Creator Name',
+  log.trace(' ✓ Context Identity Creator Name',
     _.get(initContext, 'creator.constructor.name'));
-  console.log(' ✓ Context Settings Bot Agent Id',
+  log.trace(' ✓ Context Settings Bot Agent Id',
     _.get(initContext, 'botAgentId'));
-  console.log(' --- ');
+  log.trace(' --- ');
 
   return initContext;
 }

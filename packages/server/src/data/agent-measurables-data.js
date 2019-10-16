@@ -15,6 +15,9 @@ const { DataBase } = require('./data-base');
 const { MeasurementsData } = require('./measurements-data');
 const { MeasurablesData } = require('./measurables-data');
 const { Filter } = require('./classes/filter');
+const logger = require('../lib/log');
+
+const log = logger.module('data/agent-measurables-data');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -93,12 +96,12 @@ class AgentMeasurablesData extends DataBase {
         resolution,
       }).averagePointScore(marketScore, toUnix(measurableCreatedAt));
     } catch (e) {
-      console.log(e.message);
+      log.trace(e.message);
       return undefined;
     }
 
-    console.log('VALUE OF POINT SCORE---------------------------', overTime);
-    console.log({
+    log.trace('VALUE OF POINT SCORE---------------------------', overTime);
+    log.trace({
       agentPredictions,
       marketPredictions,
       resolution,
@@ -106,10 +109,10 @@ class AgentMeasurablesData extends DataBase {
     });
 
     if (!!overTime.error) {
-      console.error('PrimaryPointScore Error: ', overTime.error);
+      log.error('PrimaryPointScore Error: ', overTime.error);
       return undefined;
     } if (!_.isFinite(overTime.data)) {
-      console.error(
+      log.error(
         'Error: PrimaryPointScore score, '
         + '${overTime.data} is not finite',
       );

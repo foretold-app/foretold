@@ -1,5 +1,8 @@
 const _ = require('lodash');
 const { rule } = require('graphql-shield');
+const logger = require('../../lib/log');
+
+const log = logger.module('authorizers/bots');
 
 /**
  * @param {object} root
@@ -15,7 +18,7 @@ function botBelongsToCurrentUserRule(root, args, context, info) {
   const userId = _.get(context, 'user.id');
   const result = !!botUserId && botUserId === userId;
 
-  console.log(
+  log.trace(
     '\x1b[33m Rule Bots (botBelongsToCurrentUser), '
     + `result = "${result}".\x1b[0m`,
   );

@@ -1,5 +1,8 @@
 const _ = require('lodash');
 const { rule } = require('graphql-shield');
+const logger = require('../../lib/log');
+
+const log = logger.module('authorizers/users');
 
 /**
  * @param {function} predicateAgentId
@@ -23,7 +26,7 @@ function userIsOwnedByCurrentAgentRule$(predicateAgentId) {
     const result = (!!agentId && !!contextAgentId)
       && (agentId === contextAgentId);
 
-    console.log('\x1b[33m Rule Users (userIsOwnedByCurrentAgentRule) '
+    log.trace('\x1b[33m Rule Users (userIsOwnedByCurrentAgentRule) '
       + `agentId "${agentId}", contextAgentId "${contextAgentId}", `
       + `result = "${result}".\x1b[0m`);
 

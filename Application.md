@@ -13,6 +13,17 @@ and so on).
 - We always remember about timezones. We store all time formats as UTC.
 - We hate code duplication.
 
+> **Mark Watney**: The problem is water. I have created 126 square meters of soil. 
+But every cubic meter of soil requires 40 liters of water to be farmable. 
+So I got to make a lot more water. Good thing is, I know the recipe. 
+You take hydrogen, you add oxygen, you burn. Now, I have hundreds of liters 
+of unused hydrazine at the MDV. If I run the hydrazine over an iridium 
+catalyst, it’ll separate into N2 and H2. And then if I just direct the 
+hydrogen into a small area and burn it. Luckily, in the history of humanity
+nothing bad has ever happened from lighting hydrogen on fire. 
+**NASA hates fire**. Because of the whole “fire makes everybody die in space” 
+thing.
+
 # Introduction
 To understand better how the application works, which data flows are existed in
 it, pay attention on this text. Please, start from **Terms**, 

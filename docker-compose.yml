@@ -36,8 +36,9 @@ services:
       - GITHUB_WEBHOOK_SECRET=<change-me> # 5.4
       # 6. Logging.
       - GOOGLE_AUTH={"jsonObjectsAsString":true} # 6.1 (change)
-      - LOG_LEVEL_LOCAL=trace # 6.2 (changeable)
-      - LOG_LEVEL_REMOTE=trace # 6.3 (changeable)
+      - LOG_LEVEL_LOCAL=trace # 6.2
+      - LOG_LEVEL_REMOTE=trace # 6.3
+      - LOG_APP_NAME=foretold # 6.4
     command: yarn start
     links:
       - database

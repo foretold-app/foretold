@@ -39,7 +39,8 @@ app.use(cors());
     if (secure) {
       next();
     } else {
-      res.redirect('https://' + req.headers.host + req.url);
+      // @todo: fix it later
+      res.redirect('https://' + 'www.foretold.io' + req.url);
     }
   };
 

@@ -409,7 +409,7 @@ let make =
     | `PERCENTAGE => [|
         agentColumn,
         getPredictionDistributionColumn(bounds),
-        predictionTextColumn,
+        predictionValueColumn,
         timeColumn,
       |]
     | `DATE => Js.Exn.raiseError("Date not supported ")

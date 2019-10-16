@@ -95,7 +95,7 @@ let showForm =
        <Antd.Form.Item
          label="Question Type"
          required=true
-         help="Number example: 'How many inches of rain will there be tomorrow?' Yes/No example: 'Will it rain tomorrow?'">
+         help="Number example: 'How many inches of rain will there be tomorrow?' Binary example: 'Will it rain tomorrow?'">
          <Antd.Radio.Group
            value={state.values.valueType}
            defaultValue={state.values.valueType}
@@ -103,9 +103,7 @@ let showForm =
              send(Form.FieldChangeValue(ValueType, e))
            )}>
            <Antd.Radio value="FLOAT"> {"Number" |> ste} </Antd.Radio>
-           <Antd.Radio value="PERCENTAGE">
-             {"Yes/No Event" |> ste}
-           </Antd.Radio>
+           <Antd.Radio value="PERCENTAGE"> {"Binary" |> ste} </Antd.Radio>
          </Antd.Radio.Group>
        </Antd.Form.Item>,
      )}
@@ -227,7 +225,7 @@ let showForm =
      )}
     <Antd.Form.Item label="Description" help="Markdown supported.">
       <Input.TextArea
-        style={ReactDOMRe.Style.make(~minHeight="16em", ())}
+        style={ReactDOMRe.Style.make(~minHeight="12em", ())}
         value={state.values.labelCustom}
         onChange={e =>
           send(
@@ -243,7 +241,7 @@ let showForm =
        state.values.valueType == "FLOAT",
        <>
          <Antd.Form.Item
-           help="What are the most extreme values this could possibly take? For example, inches of rain tomorrow has a minimum of 0.">
+           help="What are the most extreme values this could possibly take? For example, inches of rain tomorrow has a minimum of 0. These are optional, and in many cases not relevant.">
            <Div flexDirection=`row>
              <Div flex={`num(1.)}>
                <Div flexDirection=`row>

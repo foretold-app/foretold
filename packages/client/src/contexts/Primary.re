@@ -50,6 +50,12 @@ module ChannelMembershipRole = {
     };
 };
 
+module Cursor = {
+  type t = Types.cursor;
+  let make = (cursor): t => Js.Json.string(cursor);
+  let toInt = (cursor): int => cursor |> E.J.toString |> int_of_string;
+};
+
 module PageInfo = {
   type t = Types.pageInfo;
   let fromJson =
@@ -63,8 +69,8 @@ module PageInfo = {
         },
       )
       : t => {
-    endCursor: pageInfo##endCursor,
-    startCursor: pageInfo##startCursor,
+    endCursor: pageInfo##endCursor |> E.O.fmap(Cursor.make),
+    startCursor: pageInfo##startCursor |> E.O.fmap(Cursor.make),
     hasPreviousPage: pageInfo##hasPreviousPage,
     hasNextPage: pageInfo##hasNextPage,
   };
@@ -72,12 +78,14 @@ module PageInfo = {
 
 module Connection = {
   type t('a) = Types.connection('a);
+
   let make =
       (~pageInfo: Types.pageInfo, ~total=None, ~edges: array('a)): t('a) => {
     pageInfo,
     total,
     edges,
   };
+
   type edges('a) = option(Js.Array.t(option({. "node": option('a)})));
 
   let flattenEdges = (edges: edges('a)) =>
@@ -94,11 +102,10 @@ module Connection = {
     make(~pageInfo, ~total, ~edges);
   };
 
-  type cursorId = string;
   type direction =
     | None
-    | Before(cursorId)
-    | After(cursorId);
+    | Before(Types.cursor)
+    | After(Types.cursor);
 
   let hasNextPage = (t: t('a)) => t.pageInfo.hasNextPage;
   let hasPreviousPage = (t: t('a)) => t.pageInfo.hasPreviousPage;

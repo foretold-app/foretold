@@ -52,12 +52,6 @@ const measurable = new graphql.GraphQLObjectType({
       resolve: resolvers.permissions.measurablesPermissions,
     },
 
-    measurements: {
-      type: require('./connections').measurableMeasurementsConnection.connectionType,
-      args: require('./connections').measurableMeasurementsConnection.connectionArgs,
-      resolve: require('./connections').measurableMeasurementsConnection.resolve,
-    },
-
     series: {
       type: require('./series').series,
       resolve: resolver(models.Measurable.Series),

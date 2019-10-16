@@ -10,8 +10,11 @@ const { Pagination } = require('../../data/classes/pagination');
 const { Filter } = require('../../data/classes/filter');
 const { Options } = require('../../data/classes/options');
 const { Params } = require('../../data/classes/params');
+const logger = require('../../lib/log');
 
 const { assert, errs } = require('./errors');
+
+const log = logger.module('sync/consumers/emails');
 
 /**
  * @todo: Rename into "EmailsConsumer".
@@ -30,7 +33,7 @@ class Emails extends Consumer {
     try {
       transaction = await this.notifications.getTransaction();
     } catch (e) {
-      console.log('Emails Consumer Transaction Error', e.message, e);
+      log.trace('Emails Consumer Transaction Error', e.message, e);
       throw e;
     }
 
@@ -55,7 +58,7 @@ class Emails extends Consumer {
             throw new errs.ExternalError('Email is not sent');
           }
 
-          console.log(
+          log.trace(
             `\x1b[35mNotification ID = "${_.get(notification, 'id')}", `
             + `Transaction ID = "${_.get(transaction, 'id')}", `
             + `Agent Preferences ID = "${_.get(preferences, 'id')}", `
@@ -64,14 +67,14 @@ class Emails extends Consumer {
           );
 
         } catch (err) {
-          console.log('Emails Consumer, pass sending due to', err.message);
+          log.trace('Emails Consumer, pass sending due to', err.message);
           await this._notificationError(status, err, transaction);
         }
       }
 
       await this.notifications.commit(transaction);
     } catch (e) {
-      console.log('Emails Consumer', e.message, e);
+      log.trace('Emails Consumer', e.message, e);
       await this.notifications.rollback(transaction);
     }
 
@@ -220,7 +223,7 @@ class Emails extends Consumer {
     try {
       emitter.emit(events.MAIL, envelope);
     } catch (e) {
-      console.log('Emails Consumer Emit Email', e.message, e);
+      log.trace('Emails Consumer Emit Email', e.message, e);
       return false;
     }
 

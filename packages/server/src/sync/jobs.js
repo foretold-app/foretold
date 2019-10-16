@@ -2,6 +2,9 @@ const cron = require('node-schedule');
 
 const emitter = require('./emitter');
 const events = require('./events');
+const logger = require('../lib/log');
+
+const log = logger.module('sync/jobs');
 
 // m h d month weekDay
 const EVERY_HOUR = '0 * * * *';
@@ -10,7 +13,7 @@ const EVERY_THREE_MINUTES = '*/3 * * * *';
 const EVERY_MINUTE = '* * * * *';
 
 function runJobs() {
-  console.log('Jobs are in a queue.');
+  log.trace('Jobs are in a queue.');
 
   const jobs = [];
 

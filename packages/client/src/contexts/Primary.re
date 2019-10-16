@@ -373,7 +373,10 @@ module Channel = {
     make(
       ~id="home",
       ~name="Home",
-      ~description=Some("Global Community"),
+      ~description=
+        Some(
+          "Home lists questions and activity from communities you have joined. To see the list of all public communities, click [here](/communities).",
+        ),
       ~isArchived=false,
       ~isPublic=true,
       ~myRole=Some(`VIEWER),

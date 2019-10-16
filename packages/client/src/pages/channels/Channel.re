@@ -50,7 +50,30 @@ let make =
     };
 
     let topGlobalChannel = channel => {
-      <Div float=`left> {channelLink(channel)} </Div>;
+      <Div float=`left flexDirection=`column>
+        <Div flex={`num(1.0)}> {channelLink(channel)} </Div>
+        {channel.description
+         |> E.O.React.fmapOrNull(source =>
+              <Div
+                flex={`num(1.0)}
+                styles=[
+                  Css.(
+                    style([
+                      marginTop(`em(0.5)),
+                      selector(
+                        "p",
+                        [
+                          marginBottom(`zero),
+                          color(FC.Base.Colors.textDark),
+                        ],
+                      ),
+                    ])
+                  ),
+                ]>
+                <ReactMarkdown.Markdown source />
+              </Div>
+            )}
+      </Div>;
     };
 
     let top = channel =>

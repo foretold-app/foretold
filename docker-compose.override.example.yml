@@ -33,6 +33,10 @@ services:
       - GITHUB_REPO_OWNER=repo-owner # 5.2 (change)
       - GITHUB_REPO_NAME=repo-name # 5.3 (change)
       - GITHUB_WEBHOOK_SECRET=someRandomSecretString # 5.4 (change)
+      # 6. Logging.
+      - GOOGLE_AUTH={"jsonObjectsAsString":true} # 6.1 (change)
+      - LOG_LEVEL_LOCAL=trace # 6.2 (changeable)
+      - LOG_LEVEL_REMOTE=trace # 6.3 (changeable)
 
   database:
     environment:

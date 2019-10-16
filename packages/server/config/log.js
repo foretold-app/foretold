@@ -11,14 +11,12 @@ const package$ = require('../package');
 
 module.exports = {
   app: {
-    name: package$.name || 'app',
+    name: process.env.LOG_APP_NAME || 'foretold',
     version: package$.version || '1.0.0',
   },
   remote_auth: {
-    // projectId: 'my-google-cloud-project',
-    keyFilename: process.env.LOG_STACKDRIVER_AUTH
-      || '/secrets/stackdriver/gcloud-auth.json',
+    keyFilename: `${__dirname}/google.json`,
   },
-  local_level: process.env.LOG_LEVEL_LOCAL,
-  remote_level: process.env.LOG_LEVEL_REMOTE,
+  local_level: process.env.LOG_LEVEL_LOCAL || 'trace',
+  remote_level: process.env.LOG_LEVEL_REMOTE || 'trace',
 };

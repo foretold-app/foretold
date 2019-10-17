@@ -29,22 +29,36 @@ class MutexesData extends DataBase {
     const options = new Options({ transaction });
 
     const found = await this.getOne(params, query, options);
-    let created = found ? null : await this.createOne(data, options);
+    let created = null;
 
-    if (found && this.minutes(found) > MutexesData.MUTEX_TTL_MIN) {
-      const deleted = await this.deleteOne(params, options);
-      created = deleted ? await this.createOne(data, options) : null;
+    if (found && this.expired(found)) {
+      await this.deleteOne(params, options);
+      created = await this.createOne(data, options);
+    }
+
+    if (!found) {
+      created = await this.createOne(data, options);
     }
 
     await this.commit(transaction);
-
     return created;
   }
 
-  minutes(mutex) {
+  /**
+   * @param mutex
+   * @returns {boolean}
+   */
+  expired(mutex) {
+    return this.age(mutex) > MutexesData.MUTEX_TTL_MIN;
+  }
+
+  /**
+   * @param mutex
+   * @returns {number}
+   */
+  age(mutex) {
     const updatedAt = moment(mutex.get('updatedAt'));
-    const diff = moment()
-      .diff(updatedAt);
+    const diff = moment().diff(updatedAt);
     const duration = moment.duration(diff);
     return duration.minutes();
   }

@@ -16,6 +16,7 @@ const { FeedItemModel } = require('./feed-item-model');
 const { GlobalSettingModel } = require('./global-setting-model');
 const { AgentMeasurableModel } = require('./agent-measurable-model');
 const { AgentChannelModel } = require('./agent-channel-model');
+const { MutexModel } = require('./mutex-model');
 const { Model } = require('./model');
 
 module.exports = {
@@ -37,5 +38,6 @@ module.exports = {
   GlobalSettingModel,
   AgentMeasurableModel,
   AgentChannelModel,
+  MutexModel,
   Model,
 };

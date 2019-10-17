@@ -63,21 +63,32 @@ class Bot {
       });
 
       const measurementsInOrder = _.orderBy(measurements, ['createdAt'], ['desc']);
-      const lastMeasurementOfEachAgent = _.uniqBy(measurementsInOrder, r => r.agentId);
+      const lastMeasurementsOfEachAgent = _.uniqBy(measurementsInOrder, r => r.agentId);
 
-      console.log(`\x1b[43mGot "${measurementsInOrder.length}" after sorting.\x1b[0m`);
-      console.log(`\x1b[43mGot "${lastMeasurementOfEachAgent.length}" for aggregation.\x1b[0m`);
-      if (lastMeasurementOfEachAgent.length === 0) continue;
+      console.log(
+        `\x1b[43mGot "${measurementsInOrder.length}" after sorting.\x1b[0m`,
+      );
+      console.log(
+        `\x1b[43mGot "${lastMeasurementsOfEachAgent.length}"`
+        + ` for aggregation.\x1b[0m`
+      );
 
-      const aggregation = new Aggregation(lastMeasurementOfEachAgent);
+      if (lastMeasurementsOfEachAgent.length === 0) {
+        continue;
+      }
+
+      const aggregation = new Aggregation(lastMeasurementsOfEachAgent);
       const aggregated = await aggregation.main();
       if (!aggregated) {
         console.log(`\x1b[43mNothing to aggregate.\x1b[0m`);
         continue;
       }
 
-      const measurementIds = lastMeasurementOfEachAgent.map(item => item.id);
-      console.log(`\x1b[43mMeasurement IDs "${measurementIds.join(', ')}".\x1b[0m`);
+      const measurementIds = lastMeasurementsOfEachAgent.map(item => item.id);
+
+      console.log(
+        `\x1b[43mMeasurement IDs "${measurementIds.join(', ')}".\x1b[0m`,
+      );
 
       await this.api.measurementCreateAggregation({
         measurableId,

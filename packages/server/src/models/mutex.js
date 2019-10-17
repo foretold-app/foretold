@@ -7,9 +7,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     name: {
-      type: DataTypes.STRING(512),
+      type: DataTypes.STRING(128),
       allowNull: false,
-      unique: true,
     },
     agentId: {
       type: DataTypes.UUID(),

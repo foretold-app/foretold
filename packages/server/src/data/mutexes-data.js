@@ -57,7 +57,7 @@ class MutexesData extends DataBase {
    * @returns {number}
    */
   age(mutex) {
-    const updatedAt = moment(mutex.get('updatedAt'));
+    const updatedAt = moment(mutex.get('createdAt'));
     const diff = moment().diff(updatedAt);
     const duration = moment.duration(diff);
     return duration.minutes();

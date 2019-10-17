@@ -62,6 +62,23 @@ class MutexesData extends DataBase {
     const duration = moment.duration(diff);
     return duration.minutes();
   }
+
+  /**
+   * @param {Models.AgentID} agentId
+   * @param {string} mutexId
+   * @returns {Promise<*>}
+   */
+  async free(agentId, mutexId) {
+    const transaction = await this.getTransaction();
+
+    const params = new Params({ agentId, id: mutexId });
+    const options = new Options({ transaction });
+
+    await this.deleteOne(params, options);
+
+    await this.commit(transaction);
+    return true;
+  }
 }
 
 MutexesData.MUTEX_TTL_MIN = 5;

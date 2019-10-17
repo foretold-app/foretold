@@ -1,5 +1,3 @@
-const { MUTEX_STATUS } = require('../enums/mutex-status');
-
 module.exports = (sequelize, DataTypes) => {
   const Mutex = sequelize.define('Mutex', {
     id: {
@@ -12,13 +10,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(512),
       allowNull: false,
       unique: true,
-    },
-    status: {
-      type: DataTypes.ENUM([
-        MUTEX_STATUS.FREE,
-        MUTEX_STATUS.CAPTURED,
-      ]),
-      allowNull: false,
     },
     agentId: {
       type: DataTypes.UUID(),

@@ -2,7 +2,6 @@ const moment = require('moment');
 const { DataBase } = require('./data-base');
 
 const { MutexModel } = require('../models-abstract');
-const { MUTEX_STATUS } = require('../enums/mutex-status');
 
 const { Params, Query, Data, Options } = require('./classes');
 
@@ -17,7 +16,6 @@ class MutexesData extends DataBase {
   }
 
   /**
-   * Do not use small decomposed methods here.
    * @param {Models.AgentID} agentId
    * @param {string} name
    * @returns {Promise<*>}
@@ -29,32 +27,27 @@ class MutexesData extends DataBase {
     const query = new Query();
     const data = new Data({ agentId, name });
     const options = new Options({ transaction });
-    let mutex = await this.upsertOne(params, query, data, options);
 
-    const updatedAt = moment(mutex.get('updatedAt'));
-    const diff = moment().diff(updatedAt);
-    const duration = moment.duration(diff);
-    const minutes = duration.minutes();
+    const found = await this.getOne(params, query, options);
+    let created = found ? null : await this.createOne(data, options);
 
-    if (minutes > MutexesData.MUTEX_TTL_MIN) {
-      const params = new Params({ id: mutex.get('id') });
-      const data = new Data({ status: MUTEX_STATUS.FREE });
-      const options = new Options({ transaction });
-      mutex = await this.updateOne(params, data, options);
-    }
-
-    if (mutex.get('status') === MUTEX_STATUS.FREE) {
-      const params = new Params({ id: mutex.get('id') });
-      const data = new Data({ status: MUTEX_STATUS.CAPTURED });
-      const options = new Options({ transaction });
-      await this.updateOne(params, data, options);
+    if (found && this.minutes(found) > MutexesData.MUTEX_TTL_MIN) {
+      const deleted = await this.deleteOne(params, options);
+      created = deleted ? await this.createOne(data, options) : null;
     }
 
     await this.commit(transaction);
 
-    return mutex;
+    return created;
   }
 
+  minutes(mutex) {
+    const updatedAt = moment(mutex.get('updatedAt'));
+    const diff = moment()
+      .diff(updatedAt);
+    const duration = moment.duration(diff);
+    return duration.minutes();
+  }
 }
 
 MutexesData.MUTEX_TTL_MIN = 5;

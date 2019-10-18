@@ -62,8 +62,15 @@ class Bot {
         findInDateRange: { endDate: createdAt },
       });
 
-      const measurementsInOrder = _.orderBy(measurements, ['createdAt'], ['desc']);
-      const lastMeasurementsOfEachAgent = _.uniqBy(measurementsInOrder, r => r.agentId);
+      const measurementsInOrder = _.orderBy(
+        measurements,
+        ['createdAt'],
+        ['desc'],
+      );
+      const lastMeasurementsOfEachAgent = _.uniqBy(
+        measurementsInOrder,
+        r => r.agentId,
+      );
 
       console.log(
         `\x1b[43mGot "${measurementsInOrder.length}" after sorting.\x1b[0m`,

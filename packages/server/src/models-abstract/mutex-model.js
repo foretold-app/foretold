@@ -11,6 +11,14 @@ class MutexModel extends ModelPostgres {
       sequelize: models.sequelize,
     });
   }
+
+  /**
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @returns {Promise<*>}
+   */
+  async lock(options) {
+    return this._lockTable('Mutexes', options);
+  }
 }
 
 module.exports = {

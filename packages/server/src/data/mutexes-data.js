@@ -29,7 +29,9 @@ class MutexesData extends DataBase {
       const params = new Params({ agentId, name });
       const query = new Query();
       const data = new Data({ agentId, name });
-      const options = new Options({ transaction, lock: true });
+      const options = new Options({ transaction });
+
+      await this.lock(options);
 
       const found = await this.getOne(params, query, options);
 
@@ -80,8 +82,9 @@ class MutexesData extends DataBase {
 
     try {
       const params = new Params({ agentId, id: mutexId });
-      const options = new Options({ transaction, lock: true });
+      const options = new Options({ transaction });
 
+      await this.lock(options);
       await this.deleteOne(params, options);
 
       await this.commit(transaction);

@@ -148,6 +148,16 @@ class DataBase {
   }
 
   /**
+   * @public
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Promise<*>}
+   */
+  async lock(options = {}) {
+    const option$ = this._getModelOptions(options);
+    return this.model.lock(option$);
+  }
+
+  /**
    * @protected
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Layers.AbstractModelsLayer.options}

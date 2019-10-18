@@ -400,7 +400,9 @@ class ModelPostgres extends Model {
     if (filter.notTaggedByAgent) {
       where[this.and].push({
         id: {
-          [this.notIn]: this._taggedMeasurementsLiteral(filter.notTaggedByAgent),
+          [this.notIn]: this._taggedMeasurementsLiteral(
+            filter.notTaggedByAgent,
+          ),
         },
       });
     }
@@ -794,7 +796,12 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise<*>}
    */
-  async getPredicated(params = {}, query = {}, restrictions = {}, options = {}) {
+  async getPredicated(
+    params = {},
+    query = {},
+    restrictions = {},
+    options = {},
+  ) {
     const where = { ...params };
     const sort = query.sort === 1 ? 'ASC' : 'DESC';
     const order = [['createdAt', sort]];
@@ -834,6 +841,23 @@ class ModelPostgres extends Model {
 
   /**
    * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} restrictions
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @return {Promise<Models.Model>}
+   */
+  async deleteOne(params, query, restrictions, options) {
+    const where = { ...params };
+    const entity = await this.getOne(params, query, restrictions, options);
+    if (entity) {
+      await this.model.destroy({ where });
+    }
+    return entity;
+  }
+
+  /**
+   * @public
    * @return {Promise<*>}
    */
   async getTransaction() {
@@ -859,6 +883,17 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @param {string} name
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @returns {Promise<*>}
+   */
+  async _lockTable(name, options = {}) {
+    const cond = {};
+    this._extendConditions(cond, options);
+    return this.sequelize.query(`LOCK TABLE "${name}"`, cond);
+  }
+
+  /**
    * @protected
    * @param {object} cond
    * @param {Layers.AbstractModelsLayer.options} options
@@ -874,23 +909,6 @@ class ModelPostgres extends Model {
       cond.skipLocked = options.skipLocked;
     }
     return cond;
-  }
-
-  /**
-   * @public
-   * @param {Layers.AbstractModelsLayer.params} [params]
-   * @param {Layers.AbstractModelsLayer.query} [query]
-   * @param {Layers.AbstractModelsLayer.restrictions} restrictions
-   * @param {Layers.AbstractModelsLayer.options} options
-   * @return {Promise<Models.Model>}
-   */
-  async deleteOne(params, query, restrictions, options) {
-    const where = { ...params };
-    const entity = await this.getOne(params, query, restrictions, options);
-    if (entity) {
-      await this.model.destroy({ where });
-    }
-    return entity;
   }
 }
 

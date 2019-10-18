@@ -10,12 +10,12 @@ const logger = require('../../lib/log');
 const log = logger.module('authorizers/channel-memberships');
 
 /**
- * @param {*} root
+ * @param {*} _root
  * @param {object} args
  * @param {Schema.Context} context
  * @return {boolean}
  */
-function currentAgentIsChannelAdminRule(root, args, context) {
+function currentAgentIsChannelAdminRule(_root, args, context) {
   const roleName = models.ChannelMemberships.ROLE.ADMIN;
   const role = _.get(context, 'channelMembershipsRole');
 
@@ -31,12 +31,12 @@ function currentAgentIsChannelAdminRule(root, args, context) {
 }
 
 /**
- * @param {*} root
+ * @param {*} _root
  * @param {object} args
  * @param {Schema.Context} context
  * @return {boolean}
  */
-function currentAgentIsChannelViewerRule(root, args, context) {
+function currentAgentIsChannelViewerRule(_root, args, context) {
   const roleName = models.ChannelMemberships.ROLE.VIEWER;
   const role = _.get(context, 'channelMembershipsRole');
 
@@ -52,13 +52,18 @@ function currentAgentIsChannelViewerRule(root, args, context) {
 }
 
 /**
- * @param {*} root
- * @param {object} args
+ * @param {*} _root
+ * @param {object} _args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {boolean}
  */
-function channelHasMembershipWithCurrentAgentRule(root, args, context, info) {
+function channelHasMembershipWithCurrentAgentRule(
+  _root,
+  _args,
+  context,
+  _info,
+) {
   const channelMembership = _.get(context, 'channelMembership');
   const agentId = _.get(context, 'agent.id');
 
@@ -74,13 +79,13 @@ function channelHasMembershipWithCurrentAgentRule(root, args, context, info) {
 }
 
 /**
- * @param {*} root
- * @param {object} args
+ * @param {*} _root
+ * @param {object} _args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {boolean}
  */
-function channelHasMultipleAdminsRule(root, args, context, info) {
+function channelHasMultipleAdminsRule(_root, _args, context, _info) {
   const channelMembershipsAdmins = _.get(context, 'channelMembershipsAdmins');
 
   const result = _.isArray(channelMembershipsAdmins)
@@ -98,10 +103,10 @@ function channelHasMultipleAdminsRule(root, args, context, info) {
  * @param {*} root
  * @param {object} args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {boolean}
  */
-function membershipBelongsToCurrentAgentRule(root, args, context, info) {
+function membershipBelongsToCurrentAgentRule(root, args, context, _info) {
   const objectAgentId = _.get(args, 'input.agentId')
     || _.get(root, 'agentId');
   const subjectAgentId = _.get(context, 'agent.id');

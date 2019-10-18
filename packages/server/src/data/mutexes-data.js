@@ -45,9 +45,9 @@ class MutexesData extends DataBase {
       }
 
       await this.commit(transaction);
-    } catch (e) {
+    } catch (err) {
       await this.rollback(transaction);
-      throw e;
+      throw err;
     }
 
     return created;

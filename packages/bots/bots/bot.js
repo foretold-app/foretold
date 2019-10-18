@@ -70,8 +70,10 @@ class Bot {
   async mutexFree() {
     const mutexId = _.get(this.mutex, 'id');
     if (mutexId) {
-      this.log.trace("mutexId", mutexId);
       await this.api.mutexFree(mutexId);
+      this.log.trace('Mutex is freed.');
+    } else {
+      this.log.trace('Mutex is not freed since it is not captured.');
     }
   }
 

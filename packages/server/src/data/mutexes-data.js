@@ -23,24 +23,31 @@ class MutexesData extends DataBase {
   async take(agentId, name) {
     const transaction = await this.getTransaction();
 
-    const params = new Params({ agentId, name });
-    const query = new Query();
-    const data = new Data({ agentId, name });
-    const options = new Options({ transaction, lock: true });
-
-    const found = await this.getOne(params, query, options);
     let created = null;
 
-    if (found && this.expired(found)) {
-      await this.deleteOne(params, options);
-      created = await this.createOne(data, options);
+    try {
+      const params = new Params({ agentId, name });
+      const query = new Query();
+      const data = new Data({ agentId, name });
+      const options = new Options({ transaction, lock: true });
+
+      const found = await this.getOne(params, query, options);
+
+      if (found && this.expired(found)) {
+        await this.deleteOne(params, options);
+        created = await this.createOne(data, options);
+      }
+
+      if (!found) {
+        created = await this.createOne(data, options);
+      }
+
+      await this.commit(transaction);
+    } catch (e) {
+      await this.rollback(transaction);
+      throw e;
     }
 
-    if (!found) {
-      created = await this.createOne(data, options);
-    }
-
-    await this.commit(transaction);
     return created;
   }
 
@@ -71,12 +78,18 @@ class MutexesData extends DataBase {
   async free(agentId, mutexId) {
     const transaction = await this.getTransaction();
 
-    const params = new Params({ agentId, id: mutexId });
-    const options = new Options({ transaction, lock: true });
+    try {
+      const params = new Params({ agentId, id: mutexId });
+      const options = new Options({ transaction, lock: true });
 
-    await this.deleteOne(params, options);
+      await this.deleteOne(params, options);
 
-    await this.commit(transaction);
+      await this.commit(transaction);
+    } catch (e) {
+      await this.rollback(transaction);
+      throw e;
+    }
+
     return true;
   }
 }

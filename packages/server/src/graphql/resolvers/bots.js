@@ -2,11 +2,11 @@ const _ = require('lodash');
 
 const data = require('../../data');
 
-const { Pagination } = require('../../data/classes/pagination');
-const { Params } = require('../../data/classes/params');
-const { Data } = require('../../data/classes/data');
-const { Options } = require('../../data/classes/options');
-const { Filter } = require('../../data/classes/filter');
+const { Pagination } = require('../../data/classes');
+const { Params } = require('../../data/classes');
+const { Data } = require('../../data/classes');
+const { Options } = require('../../data/classes');
+const { Filter } = require('../../data/classes');
 
 /**
  * @param {*} _root

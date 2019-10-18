@@ -3,7 +3,7 @@ const _ = require('lodash');
 const { DataBase } = require('./data-base');
 const { AgentMeasurablesData } = require('./agent-measurables-data');
 const { MeasurablesData } = require('./measurables-data');
-const { Filter } = require('./classes/filter');
+const { Filter } = require('./classes');
 
 const { AgentChannelModel } = require('../models-abstract');
 

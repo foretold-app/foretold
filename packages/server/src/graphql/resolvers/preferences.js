@@ -2,10 +2,10 @@ const _ = require('lodash');
 
 const datas = require('../../data');
 
-const { Options } = require('../../data/classes/options');
-const { Params } = require('../../data/classes/params');
-const { Query } = require('../../data/classes/query');
-const { Data } = require('../../data/classes/data');
+const { Options } = require('../../data/classes');
+const { Params } = require('../../data/classes');
+const { Query } = require('../../data/classes');
+const { Data } = require('../../data/classes');
 
 /**
  * @param {object | null} root

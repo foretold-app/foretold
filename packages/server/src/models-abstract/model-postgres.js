@@ -3,9 +3,11 @@ const assert = require('assert');
 const { Op } = require('sequelize');
 
 const models = require('../models');
+const logger = require('../lib/log');
 
 const { Model } = require('./model');
-const { ResponseAll } = require('./classes/response-all');
+const { ResponseAll } = require('./classes');
+
 
 /**
  * @abstract
@@ -38,6 +40,8 @@ class ModelPostgres extends Model {
     this.fn = this.sequelize.fn;
     this.col = this.sequelize.col;
     this.literal = this.sequelize.literal;
+
+    this.log = logger.module('models-abstract/model-postgres');
   }
 
   /**
@@ -848,10 +852,12 @@ class ModelPostgres extends Model {
    * @return {Promise<Models.Model>}
    */
   async deleteOne(params, query, restrictions, options) {
-    const where = { ...params };
     const entity = await this.getOne(params, query, restrictions, options);
     if (entity) {
-      await this.model.destroy({ where });
+      const where = { ...params };
+      const cond = { where };
+      this._extendConditions(cond, options);
+      await this.model.destroy(cond);
     }
     return entity;
   }
@@ -890,6 +896,7 @@ class ModelPostgres extends Model {
   async _lockTable(name, options = {}) {
     const cond = {};
     this._extendConditions(cond, options);
+    await this.sequelize.query(`SET LOCAL lock_timeout = '3s'`, cond);
     return this.sequelize.query(`LOCK TABLE "${name}"`, cond);
   }
 

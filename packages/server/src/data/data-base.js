@@ -1,10 +1,11 @@
 const _ = require('lodash');
 
 const { Model } = require('../models-abstract');
-const { Options } = require('../models-abstract/classes/options');
-const { Restrictions } = require('../models-abstract/classes/restrictions');
+const { Options } = require('../models-abstract/classes');
+const { Restrictions } = require('../models-abstract/classes');
+const logger = require('../lib/log');
 
-const structures = require('./classes/structures');
+const { structures } = require('./classes');
 
 /**
  * @abstract
@@ -15,6 +16,7 @@ class DataBase {
    */
   constructor() {
     this.model = new Model();
+    this.log = logger.module('data/data-base');
   }
 
   /**
@@ -98,13 +100,14 @@ class DataBase {
   /**
    * @public
    * @param {Layers.DataSourceLayer.params} [params]
+   * @param {Layers.DataSourceLayer.query} [query]
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Promise<*>}
    */
-  async deleteOne(params = {}, options = {}) {
+  async deleteOne(params = {}, query = {}, options = {}) {
     const option$ = this._getModelOptions(options);
     const restrictions = this._getModelRestrictions(options);
-    return this.model.deleteOne(params, restrictions, option$);
+    return this.model.deleteOne(params, query, restrictions, option$);
   }
 
   /**

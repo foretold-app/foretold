@@ -36,7 +36,7 @@ class MutexesData extends DataBase {
       const found = await this.getOne(params, query, options);
 
       if (found && this.expired(found)) {
-        await this.deleteOne(params, options);
+        await this.deleteOne(params, query, options);
         created = await this.createOne(data, options);
       }
 
@@ -82,10 +82,11 @@ class MutexesData extends DataBase {
 
     try {
       const params = new Params({ agentId, id: mutexId });
+      const query = new Query();
       const options = new Options({ transaction });
 
       await this.lock(options);
-      await this.deleteOne(params, options);
+      await this.deleteOne(params, query, options);
 
       await this.commit(transaction);
     } catch (e) {

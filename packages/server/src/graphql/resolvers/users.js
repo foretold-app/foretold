@@ -2,8 +2,8 @@ const _ = require('lodash');
 
 const data = require('../../data');
 
-const { Params } = require('../../data/classes/params');
-const { Data } = require('../../data/classes/data');
+const { Params } = require('../../data/classes');
+const { Data } = require('../../data/classes');
 
 /**
  * @param {*} root

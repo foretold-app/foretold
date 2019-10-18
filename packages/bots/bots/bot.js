@@ -3,6 +3,7 @@ const _ = require('lodash');
 
 const { API } = require('../api');
 const config = require('../config');
+const logger = require('../log');
 
 const { Aggregation } = require('./aggregation');
 
@@ -10,6 +11,7 @@ class Bot {
   constructor() {
     this.api = new API(config.BOT_TOKEN);
     this.mutex = null;
+    this.log = logger.module('bots/bot');
   }
 
   /**
@@ -17,32 +19,35 @@ class Bot {
    * @return {Promise<boolean>}
    */
   async main() {
-    const agentId = await this._getAgentId();
-    assert(!_.isEmpty(agentId), 'Agent ID is required.');
+    try {
+      const agentId = await this._getAgentId();
+      assert(!_.isEmpty(agentId), 'Agent ID is required.');
 
-    await this.mutexTake();
-    assert(this.mutex !== null, 'Mutex is not free.');
+      await this.mutexTake();
+      assert(this.mutex !== null, 'Mutex is not free.');
 
-    const measurementsNotTagged = await this.api.measurementsCompetitive({
-      notTaggedByAgent: agentId,
-    });
+      const measurementsNotTagged = await this.api.measurementsCompetitive({
+        notTaggedByAgent: agentId,
+      });
 
-    if (measurementsNotTagged.length === 0) {
-      console.log(`\x1b[43mMeasurements (not tagged) are empty.\x1b[0m`);
-      return true;
+      if (measurementsNotTagged.length === 0) {
+        throw new Error('Measurements (not tagged) are empty.');
+      }
+
+      this.log.trace(`\x1b[43m --------------------------------- \x1b[0m`);
+      this.log.trace(
+        `\x1b[43mGot "${measurementsNotTagged.length}" not tagged measurements ` +
+        `for an aggregation.\x1b[0m`
+      );
+
+      for (const measurement of measurementsNotTagged) {
+        await this.aggregate(measurement);
+      }
+    } catch (e) {
+      this.log.trace(e);
+    } finally {
+      await this.mutexFree();
     }
-
-    console.log(`\x1b[43m --------------------------------- \x1b[0m`);
-    console.log(
-      `\x1b[43mGot "${measurementsNotTagged.length}" not tagged measurements ` +
-      `for an aggregation.\x1b[0m`
-    );
-
-    for (const measurement of measurementsNotTagged) {
-      await this.aggregate(measurement);
-    }
-
-    await this.mutexFree();
     return true;
   }
 
@@ -63,7 +68,11 @@ class Bot {
    * @returns {Promise<void>}
    */
   async mutexFree() {
-    await this.api.mutexFree(this.mutex.id);
+    const mutexId = _.get(this.mutex, 'id');
+    if (mutexId) {
+      this.log.trace("mutexId", mutexId);
+      await this.api.mutexFree(mutexId);
+    }
   }
 
   /**
@@ -71,14 +80,14 @@ class Bot {
    * @returns {Promise<void>}
    */
   async aggregate(measurement) {
-    console.log(`\x1b[43m --- \x1b[0m`);
+    this.log.trace(`\x1b[43m --- \x1b[0m`);
 
     const measurableId = measurement.measurableId;
     const createdAt = measurement.createdAt;
     const relevantAt = measurement.createdAt;
     const taggedMeasurementId = measurement.id;
 
-    console.log(
+    this.log.trace(
       `\x1b[43mMeasurable id = "${measurableId}", ` +
       `created at = "${createdAt}".\x1b[0m`
     );
@@ -92,13 +101,13 @@ class Bot {
 
     const aggregated = await new Aggregation(lastMeasurementsByAgent).main();
     if (!aggregated) {
-      console.log(`\x1b[43mNothing to aggregate.\x1b[0m`);
+      this.log.trace(`\x1b[43mNothing to aggregate.\x1b[0m`);
       return;
     }
 
     const measurementIds = lastMeasurementsByAgent.map(item => item.id);
 
-    console.log(
+    this.log.trace(
       `\x1b[43mMeasurement IDs "${measurementIds.join(', ')}".\x1b[0m`,
     );
 
@@ -131,10 +140,10 @@ class Bot {
       r => r.agentId,
     );
 
-    console.log(
+    this.log.trace(
       `\x1b[43mGot "${measurementsInOrder.length}" after sorting.\x1b[0m`,
     );
-    console.log(
+    this.log.trace(
       `\x1b[43mGot "${lastMeasurementsByAgent.length}"`
       + ` for aggregation.\x1b[0m`
     );

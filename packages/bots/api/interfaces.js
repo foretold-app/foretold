@@ -82,7 +82,7 @@ mutation mutexTake (
 
 const mutexFree = `
 mutation mutexFree (
-  $id: String
+  $id: String!
 ) {
   mutexFree(id: $id)
 }

@@ -73,6 +73,6 @@ module.exports.none = function none(v) {
  */
 module.exports.inspect = function inspect(context) {
   console.log(
-    util.inspect(context, { showHidden: false, depth: null, colors: true }),
+    util.inspect(context, { showHidden: false, depth: 1, colors: true }),
   );
 };

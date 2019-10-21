@@ -7,7 +7,7 @@ module CMutationForm =
 
 let component = ReasonReact.statelessComponent("ChannelEdit");
 
-let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
+let make = (~channelId: string, ~loggedUser: Types.user, _children) => {
   ...component,
   render: _ => {
     let loadChannel = ChannelGet.getChannelByIdAsComponent(~id=channelId);
@@ -26,7 +26,7 @@ let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
           float=`right
           className={Css.style([FC.PageCard.HeaderRow.Styles.itemTopPadding])}>
           {Primary.User.show(
-             loggedInUser,
+             loggedUser,
              <FC.Base.Button
                variant=Primary
                size=Small

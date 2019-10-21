@@ -4,7 +4,7 @@ module CMutationForm =
   });
 
 let formCreation =
-    (id: string, measurable: Types.measurable, loggedInUser: Types.user) => {
+    (id: string, measurable: Types.measurable, loggedUser: Types.user) => {
   MeasurableUpdate.Mutation.make((mutation, data) =>
     MeasurableForm.Form.make(
       ~schema=MeasurableForm.Form.Validation.Schema([||]),
@@ -53,7 +53,7 @@ let formCreation =
           ~result=data.result,
           ~form=
             MeasurableForm.showForm(
-              ~loggedInUser,
+              ~loggedUser,
               ~state,
               ~send,
               ~creating=false,
@@ -79,14 +79,13 @@ let formCreation =
 
 let component = ReasonReact.statelessComponent("MeasurableEdit");
 
-let make =
-    (~pageParams: Types.pageParams, ~loggedInUser: Types.user, _children) => {
+let make = (~pageParams: Types.pageParams, ~loggedUser: Types.user, _children) => {
   ...component,
   render: _self =>
     <SLayout head={SLayout.Header.textDiv("Edit Question")}>
       <FC.PageCard.BodyPadding>
         {MeasurableGet.component(~id=pageParams.id, m =>
-           formCreation(pageParams.id, m, loggedInUser)
+           formCreation(pageParams.id, m, loggedUser)
          )}
       </FC.PageCard.BodyPadding>
     </SLayout>,

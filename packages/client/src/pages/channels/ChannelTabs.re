@@ -16,7 +16,7 @@ let tabToInternalUrl = (channelId, tabSelected: ChannelPage.tab): Url.t => {
 
 let make =
     (
-      loggedInUser: Types.user,
+      loggedUser: Types.user,
       tabSelected: Routing.ChannelPage.tab,
       channel: Types.channel,
     ) =>

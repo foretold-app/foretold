@@ -48,7 +48,7 @@ let load2Queries = (channelId, seriesId, itemsPerPage, fn) =>
 
 let component = ReasonReact.statelessComponent("SeriesShowPage");
 let make =
-    (~channelId: string, ~id: string, ~loggedInUser: Types.user, _children) => {
+    (~channelId: string, ~id: string, ~loggedUser: Types.user, _children) => {
   ...component,
   render: _ => {
     let loadData = load2Queries(channelId, id, 50);
@@ -82,7 +82,7 @@ let make =
             selectWithPaginationParams.selection,
           ) {
           | (_, Some(measurable)) =>
-            <Measurable id={measurable.id} loggedInUser />
+            <Measurable id={measurable.id} loggedUser />
           | (Success(connection), None) =>
             <MeasurablesSeriesTable
               measurables={connection.edges}

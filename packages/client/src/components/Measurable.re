@@ -15,11 +15,10 @@ module Styles = {
 };
 
 let component = ReasonReact.statelessComponent("Measurable");
-let make = (~id: string, ~loggedInUser: Types.user, _children) => {
+let make = (~id: string, ~loggedUser: Types.user, _children) => {
   ...component,
   render: _self => {
-    let userAgentId =
-      loggedInUser.agent |> E.O.fmap((r: Types.agent) => r.id);
+    let userAgentId = loggedUser.agent |> E.O.fmap((r: Types.agent) => r.id);
 
     MeasurableGet.component(~id)
     |> E.F.apply((measurable: Types.measurable) => {
@@ -33,7 +32,7 @@ let make = (~id: string, ~loggedInUser: Types.user, _children) => {
                  measurable
                  measurableId=id
                  isCreator={userAgentId == creatorId}
-                 loggedInUser
+                 loggedUser
                />
              : E.React.null;
 

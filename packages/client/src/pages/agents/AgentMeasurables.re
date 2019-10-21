@@ -22,7 +22,7 @@ let component = ReasonReact.statelessComponent("AgentMeasurables");
 let make =
     (
       ~pageParams: pageParams,
-      ~loggedInUser: Types.user,
+      ~loggedUser: Types.user,
       ~layout=SLayout.FullPage.makeWithEl,
       _children,
     ) => {
@@ -54,7 +54,7 @@ let make =
             selectWithPaginationParams.selection,
           ) {
           | (_, Some(measurable)) =>
-            <Measurable id={measurable.id} loggedInUser />
+            <Measurable id={measurable.id} loggedUser />
           | (Success(connection), None) =>
             <MeasurableIndexTable
               measurables={connection.edges}

@@ -2,7 +2,7 @@ let component = ReasonReact.statelessComponent("MeasurementForm");
 
 let make =
     (
-      ~loggedInUser: Types.user,
+      ~loggedUser: Types.user,
       ~measurable: Types.measurable,
       ~measurableId: string,
       ~isCreator: bool,
@@ -27,10 +27,10 @@ let make =
               asAgent,
             )
           }
-          bots={loggedInUser.bots}
+          bots={loggedUser.bots}
           data
           isCreator
-          loggedInUser
+          loggedUser
         />
       }
     </MeasurementCreate.Mutation>,

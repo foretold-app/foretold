@@ -3,7 +3,7 @@ let make =
     (
       ~channelId: string,
       ~searchParams: MeasurableQueryIndex.query,
-      ~loggedInUser: Types.user,
+      ~loggedUser: Types.user,
       _children,
     ) => {
   ...component,
@@ -22,7 +22,7 @@ let make =
                 statsQuery,
                 MeasurableIndex__Logic.make({
                   reducerParams,
-                  loggedInUser,
+                  loggedUser,
                   channelQuery,
                   seriesQuery,
                 }),

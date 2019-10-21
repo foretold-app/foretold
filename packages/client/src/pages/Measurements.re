@@ -18,7 +18,7 @@ module Body = {
   let make =
       (
         ~reducerParams: Reducer.Types.reducerParams,
-        ~loggedInUser,
+        ~loggedUser,
         ~measurable: Types.measurable,
         ~head,
         _children,
@@ -43,12 +43,12 @@ module Body = {
              MeasurementsTable.makeExtended(
                ~measurableValueType,
                ~measurementsList,
-               ~loggedInUser,
+               ~loggedUser,
                (),
              )
            | _ =>
              MeasurementsTable.make(
-               ~loggedInUser,
+               ~loggedUser,
                ~measurementsList,
                ~measurableValueType,
                (),
@@ -61,8 +61,7 @@ module Body = {
 };
 
 let component = ReasonReact.statelessComponent("Measurements");
-let make =
-    (~measurableId: string, ~loggedInUser: Types.user, ~head, _children) => {
+let make = (~measurableId: string, ~loggedUser: Types.user, ~head, _children) => {
   ...component,
   render: _ => {
     MeasurableGet.component(~id=measurableId)
@@ -70,7 +69,7 @@ let make =
          <Reducer
            callFnParams={measurable.id}
            subComponent={reducerParams =>
-             <Body reducerParams measurable loggedInUser head />
+             <Body reducerParams measurable loggedUser head />
            }
          />
        );

@@ -4,7 +4,7 @@ module CMutationForm =
   });
 
 let component = ReasonReact.statelessComponent("MeasurableNew");
-let make = (~channelId, ~loggedInUser: Types.user, _children) => {
+let make = (~channelId, ~loggedUser: Types.user, _children) => {
   ...component,
   render: _ => {
     let formCreator = mutation =>
@@ -55,7 +55,7 @@ let make = (~channelId, ~loggedInUser: Types.user, _children) => {
                  ~result=data.result,
                  ~form=
                    MeasurableForm.showForm(
-                     ~loggedInUser,
+                     ~loggedUser,
                      ~state,
                      ~send,
                      ~onSubmit=_ => send(MeasurableForm.Form.Submit),

@@ -82,7 +82,7 @@ module Form = ReFormNext.Make(FormConfig);
 
 let showForm =
     (
-      ~loggedInUser: Types.user,
+      ~loggedUser: Types.user,
       ~state: Form.state,
       ~send,
       ~creating=true,
@@ -122,7 +122,7 @@ let showForm =
      )}
     {E.React.showIf(
        !creating,
-       loggedInUser.agent
+       loggedUser.agent
        |> E.O.fmap((agent: Types.agent) =>
             ChannelsGet.component(
               ~channelMemberId=?Some(agent.id),
@@ -295,7 +295,7 @@ let showForm =
        </>,
      )}
     {Primary.User.show(
-       loggedInUser,
+       loggedUser,
        <Antd.Form.Item
          label="Resolution Endpoint"
          help="If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value.">
@@ -328,7 +328,7 @@ let showForm =
       />
     </Antd.Form.Item>
     {Primary.User.show(
-       loggedInUser,
+       loggedUser,
        <Antd.Form.Item label="Use Entities in Title">
          <Antd.Radio.Group
            value={state.values.showDescriptionProperty}

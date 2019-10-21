@@ -4,16 +4,16 @@ let make =
     (
       ~measurableId: string,
       ~channelId: option(string),
-      ~loggedInUser: Types.user,
+      ~loggedUser: Types.user,
       _children,
     ) => {
   ...component,
   render: _ => {
     <>
       <SLayout isFluid=true>
-        <Measurable id=measurableId loggedInUser />
+        <Measurable id=measurableId loggedUser />
       </SLayout>
-      <MeasurableBottomSection measurableId channelId loggedInUser />
+      <MeasurableBottomSection measurableId channelId loggedUser />
     </>;
   },
 };

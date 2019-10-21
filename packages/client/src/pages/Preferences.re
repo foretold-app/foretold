@@ -84,13 +84,13 @@ module CMutationForm =
   });
 
 let component = ReasonReact.statelessComponent("Preference");
-let make = (~loggedInUser: Types.user, _children) => {
+let make = (~loggedUser: Types.user, _children) => {
   ...component,
   render: _ =>
     <SLayout head={SLayout.Header.textDiv("Preferences")}>
       <FC.PageCard.BodyPadding>
         {PreferenceUpdate.withPreferenceMutation((mutation, data) => {
-           let agent = loggedInUser.agent;
+           let agent = loggedUser.agent;
            let id =
              agent
              |> E.O.bind(_, (r: Types.agent) => r.preference)

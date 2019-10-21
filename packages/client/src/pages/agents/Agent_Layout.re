@@ -65,22 +65,22 @@ let component = ReasonReact.statelessComponent("AgentLayout");
 let make =
     (
       ~agentPage: Routing.AgentPage.t,
-      ~loggedInUser: option(Types.user),
+      ~loggedUser: option(Types.user),
       _children,
     ) => {
   ...component,
   render: _ => {
     let agentId = agentPage.agentId;
 
-    switch (loggedInUser) {
-    | Some(loggedInUser) =>
+    switch (loggedUser) {
+    | Some(loggedUser) =>
       let layout = Agent_Layout_C.makeWithEl;
 
-      <FillWithSidebar loggedInUser>
+      <FillWithSidebar loggedUser={Some(loggedUser)}>
         <Top agentPage />
         {switch (agentPage.subPage) {
          | AgentMeasurables =>
-           <AgentMeasurables pageParams={id: agentId} loggedInUser layout />
+           <AgentMeasurables pageParams={id: agentId} loggedUser layout />
          | AgentBots => <AgentBots pageParams={id: agentId} layout />
          | AgentCommunities => <AgentCommunities agentId layout />
          | AgentUpdates => <FeedItems agentId={Some(agentId)} layout />

@@ -52,7 +52,7 @@ let make =
     (
       ~measurableId: string,
       ~channelId: option(string),
-      ~loggedInUser: Types.user,
+      ~loggedUser: Types.user,
       _children,
     ) => {
   ...component,
@@ -69,7 +69,7 @@ let make =
       <Tabs switchTab paginationPage tab />;
 
     switch (tab) {
-    | Measurements => <Measurements measurableId loggedInUser head />
+    | Measurements => <Measurements measurableId loggedUser head />
     | Scores =>
       <LeaderboardMeasurables
         channelId

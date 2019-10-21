@@ -203,7 +203,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
     </Antd.Form.Item>
   </Antd.Form>;
 
-let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
+let make = (~channelId: string, ~loggedUser: Types.user, _children) => {
   ...component,
   render: _ =>
     SLayout.LayoutConfig.make(

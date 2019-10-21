@@ -22,6 +22,7 @@ const { preferenceIsOwnedByCurrentAgent } = require('./preferences');
 const { agentIdFromRootId } = require('./predicates');
 const { agentIdFromContext } = require('./predicates');
 const { agentIdFromRootAgentId } = require('./predicates');
+const { rateLimit } = require('./rate-limit');
 
 const currentAgentIsApplicationAdminOrChannelAdmin = or(
   currentAgentIsApplicationAdmin,
@@ -144,28 +145,13 @@ const rules = {
     preference: userIsOwnedByCurrentAgent(agentIdFromRootId),
   },
   Query: {
-    '*': allow,
-    permissions: allow,
-    user: allow,
-    users: allow,
-    measurement: allow,
-    measurements: allow,
-    measurable: allow,
-    measurables: allow,
-    bot: allow,
-    bots: allow,
-    agent: allow,
-    agents: allow,
-    series: allow,
-    seriesCollection: allow,
-    channel: allow,
-    channels: allow,
-    stats: allow,
+    '*': and(allow, rateLimit),
 
     ...rulesInvitations.Query,
   },
   Mutation: {
-    '*': currentAgentIsAuthenticated,
+    '*': and(currentAgentIsAuthenticated, rateLimit),
+
     channelCreate: currentAgentIsAuthenticated,
     botCreate: currentAgentIsAuthenticated,
     userUpdate: and(

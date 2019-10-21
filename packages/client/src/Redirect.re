@@ -12,7 +12,7 @@ let defaultPage = (loggedUser: Types.user) =>
     Primary.Channel.globalLink()
     |> Routing.Url.toString
     |> ReasonReact.Router.push;
-    E.O.default(<Home />);
+    E.O.default("<Home /> Redirect" |> Utils.ste);
   };
 
 let component = ReasonReact.statelessComponent("Redirect");

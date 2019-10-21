@@ -88,7 +88,7 @@ let make =
          }}
       </FillWithSidebar>;
 
-    | None => <Home />
+    | None => "<Home /> Agent_Layout" |> Utils.ste
     };
   },
 };

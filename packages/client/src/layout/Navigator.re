@@ -62,7 +62,7 @@ let make = (~route: Route.t, ~loggedUser: option(Types.user), _children) => {
         <EntityIndex />
       </FillWithSidebar>
 
-    | (_, _) => <Home />
+    | (_, _) => "<Home /> Natigator" |> Utils.ste
     };
   },
 };

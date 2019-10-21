@@ -55,7 +55,7 @@ let make =
       loadChannel(result =>
         result |> HttpResponse.flatten(successFn, errorFn, loadingFn)
       );
-    | None => <Home />
+    | None => "<Home /> ChannelNagivation" |> Utils.ste
     };
   },
 };

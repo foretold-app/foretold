@@ -13,7 +13,7 @@ let make = (~route: Route.t, ~loggedUser: option(Types.user), _children) => {
     | (Login, _) => <Login />
     | (Channel(channel), _) =>
       <ChannelNavigation channelPage=channel loggedUser />
-    | (Agent(agentPage), _) => <Agent_Layout agentPage loggedUser />
+    | (Agent(agentPage), _) => <AgentNavigation agentPage loggedUser />
     | (AgentIndex, _) => <AgentIndex />
 
     | (Home, Some(loggedUser)) => Redirect.defaultPage(loggedUser)

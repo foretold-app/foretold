@@ -84,53 +84,44 @@ module CMutationForm =
   });
 
 let component = ReasonReact.statelessComponent("Preference");
-let make =
-    (
-      ~loggedInUser: Types.user,
-      ~layout=SLayout.FullPage.makeWithEl,
-      _children,
-    ) => {
+let make = (~loggedInUser: Types.user, _children) => {
   ...component,
   render: _ =>
-    SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("Preferences"),
-      ~body=
-        <FC.PageCard.BodyPadding>
-          {PreferenceUpdate.withPreferenceMutation((mutation, data) => {
-             let agent = loggedInUser.agent;
-             let id =
-               agent
-               |> E.O.bind(_, (r: Types.agent) => r.preference)
-               |> E.O.fmap((r: Types.preference) => r.id)
-               |> E.O.toExn("The preference needs an ID!");
-             let stopAllEmails =
-               agent
-               |> E.O.bind(_, (r: Types.agent) => r.preference)
-               |> E.O.bind(_, (r: Types.preference) => r.stopAllEmails)
-               |> E.O.default(true);
-             let enableExperimentalFeatures =
-               agent
-               |> E.O.bind(_, (r: Types.agent) => r.preference)
-               |> E.O.fmap((r: Types.preference) =>
-                    r.enableExperimentalFeatures
-                  )
-               |> E.O.default(true);
+    <SLayout head={SLayout.Header.textDiv("Preferences")}>
+      <FC.PageCard.BodyPadding>
+        {PreferenceUpdate.withPreferenceMutation((mutation, data) => {
+           let agent = loggedInUser.agent;
+           let id =
+             agent
+             |> E.O.bind(_, (r: Types.agent) => r.preference)
+             |> E.O.fmap((r: Types.preference) => r.id)
+             |> E.O.toExn("The preference needs an ID!");
+           let stopAllEmails =
+             agent
+             |> E.O.bind(_, (r: Types.agent) => r.preference)
+             |> E.O.bind(_, (r: Types.preference) => r.stopAllEmails)
+             |> E.O.default(true);
+           let enableExperimentalFeatures =
+             agent
+             |> E.O.bind(_, (r: Types.agent) => r.preference)
+             |> E.O.fmap((r: Types.preference) =>
+                  r.enableExperimentalFeatures
+                )
+             |> E.O.default(true);
 
-             withUserForm(
-               id,
-               stopAllEmails,
-               enableExperimentalFeatures,
-               mutation,
-               ({send, state}) =>
-               CMutationForm.showWithLoading(
-                 ~result=data.result,
-                 ~form=formFields(state, send, () => send(Form.Submit)),
-                 (),
-               )
-             );
-           })}
-        </FC.PageCard.BodyPadding>,
-      (),
-    )
-    |> layout,
+           withUserForm(
+             id,
+             stopAllEmails,
+             enableExperimentalFeatures,
+             mutation,
+             ({send, state}) =>
+             CMutationForm.showWithLoading(
+               ~result=data.result,
+               ~form=formFields(state, send, () => send(Form.Submit)),
+               (),
+             )
+           );
+         })}
+      </FC.PageCard.BodyPadding>
+    </SLayout>,
 };

@@ -1,5 +1,5 @@
 let component = ReasonReact.statelessComponent("AgentIndex");
-let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
+let make = _children => {
   ...component,
   render: _ =>
     AgentsGet.QueryComponent.make(({result}) =>

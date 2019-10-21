@@ -51,8 +51,8 @@ async function invitations(user) {
   log.trace(name);
 
   try {
-    const invitations = new actions.Invitations();
-    const result = await invitations.transition(user);
+    const invitation$ = new actions.Invitations();
+    const result = await invitation$.transition(user);
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);

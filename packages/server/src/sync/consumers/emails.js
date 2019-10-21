@@ -20,10 +20,6 @@ const log = logger.module('sync/consumers/emails');
  * @todo: Rename into "EmailsConsumer".
  */
 class Emails extends Consumer {
-  constructor() {
-    super();
-  }
-
   /**
    * @public
    * @return {Promise<boolean>}

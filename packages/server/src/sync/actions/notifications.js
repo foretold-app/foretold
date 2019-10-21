@@ -184,7 +184,9 @@ class Notifications {
       .map((r) => ({
         title: r,
         short: false,
-        value: `*From*: ${measurable.previous(r)} \n*To*:  ${measurable.get(r)}`,
+        value:
+          `*From*: ${measurable.previous(r)} \n` +
+          `*To*:  ${measurable.get(r)}`,
       }));
   }
 }

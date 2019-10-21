@@ -8,28 +8,49 @@ let make = (~route: Route.t, ~loggedInUser: option(Types.user), _children) => {
     switch (route, loggedInUser) {
     | (Home, Some(loggedInUser)) => Redirect.defaultPage(loggedInUser)
 
-    | (Preferences, Some(loggedInUser)) => <Preferences loggedInUser />
-    | (ChannelNew, Some(_)) => <ChannelNew />
+    | (Preferences, Some(loggedInUser)) =>
+      <FillWithSidebar loggedInUser>
+        <Preferences loggedInUser />
+      </FillWithSidebar>
+    | (ChannelNew, Some(loggedInUser)) =>
+      <FillWithSidebar loggedInUser> <ChannelNew /> </FillWithSidebar>
     | (MeasurableEdit(id), Some(loggedInUser)) =>
-      <MeasurableEdit loggedInUser pageParams={id: id} />
-    | (BotCreate, Some(loggedInUser)) => <BotCreate loggedInUser />
+      <FillWithSidebar loggedInUser>
+        <MeasurableEdit loggedInUser pageParams={id: id} />
+      </FillWithSidebar>
+    | (BotCreate, Some(loggedInUser)) =>
+      <FillWithSidebar loggedInUser>
+        <BotCreate loggedInUser />
+      </FillWithSidebar>
     | (BotEdit(botId), Some(loggedInUser)) =>
-      <BotEdit pageParams={id: botId} loggedInUser />
+      <FillWithSidebar loggedInUser>
+        <BotEdit pageParams={id: botId} loggedInUser />
+      </FillWithSidebar>
     | (ChannelIndex, Some(loggedInUser)) =>
       <FillWithSidebar loggedInUser> <ChannelIndex.Jsx2 /> </FillWithSidebar>
     | (Profile, Some(loggedInUser)) =>
       <FillWithSidebar loggedInUser>
         <Profile loggedInUser />
       </FillWithSidebar>
-    | (Subscribe, Some(loggedInUser)) => <Preferences loggedInUser />
-    | (Unsubscribe, Some(loggedInUser)) => <Preferences loggedInUser />
+    | (Subscribe, Some(loggedInUser)) =>
+      <FillWithSidebar loggedInUser>
+        <Preferences loggedInUser />
+      </FillWithSidebar>
+    | (Unsubscribe, Some(loggedInUser)) =>
+      <FillWithSidebar loggedInUser>
+        <Preferences loggedInUser />
+      </FillWithSidebar>
 
     | (Channel(channel), _) =>
       <ChannelNavigation channelPage=channel loggedInUser />
     | (Agent(agentPage), _) => <Agent_Layout agentPage loggedInUser />
     | (AgentIndex, _) => <AgentIndex />
-    | (EntityShow(id), _) => <EntityShow pageParams={id: id} />
-    | (EntityIndex, _) => <EntityIndex />
+    | (EntityShow(id), Some(loggedInUser)) =>
+      <FillWithSidebar loggedInUser>
+        <EntityShow pageParams={id: id} />
+      </FillWithSidebar>
+    | (EntityIndex, Some(loggedInUser)) =>
+      <FillWithSidebar loggedInUser> <EntityIndex /> </FillWithSidebar>
     | (Privacy, _) =>
       <StaticPageInCard markdown=StaticMarkdown.privacyPolicy />
     | (Terms, _) =>

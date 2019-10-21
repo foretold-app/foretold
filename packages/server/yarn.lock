@@ -1493,6 +1493,20 @@
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"
   integrity sha512-ewFXqrQHlFsgc09MK5jP5iR7vumV/BYayNC6PgJO2LPe8vrnNFyjQjSppfEngITi0qvfKtzFvgKymGheFM9UOA==
 
+"@types/redis-mock@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@types/redis-mock/-/redis-mock-0.17.0.tgz#13c56c8cf3f748ae1656efc2da9bd6a97cc38e4d"
+  integrity sha512-UDKHu9otOSE1fPjgn0H7UoggqVyuRYfo3WJpdXdVmzgGmr1XIM/dTk/gRYf/bLjIK5mxpV8inA5uNBS2sVOilA==
+  dependencies:
+    "@types/redis" "*"
+
+"@types/redis@*":
+  version "2.8.14"
+  resolved "https://registry.yarnpkg.com/@types/redis/-/redis-2.8.14.tgz#2ed46d0f923f7ccd63fbe73a46a1241e606cf716"
+  integrity sha512-255dzsOLJdXFHBio9/aMHGozNkoiBUgc+g2nlNjbTSp5qcAlmpm4Z6Xs3pKOBLNIKdZbA2BkUxWvYSIwKra0Yw==
+  dependencies:
+    "@types/node" "*"
+
 "@types/request@^2.47.0":
   version "2.48.3"
   resolved "https://registry.yarnpkg.com/@types/request/-/request-2.48.3.tgz#970b8ed2317568c390361d29c555a95e74bd6135"
@@ -1572,6 +1586,11 @@
   version "0.26.22"
   resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.26.22.tgz#66da181bfddaf797192f5fc2795583e033568407"
   integrity sha512-AhUPifCc7j2BEfp+wye3Mj7v3mMhbtu5BbO7n0zpwC/NVSETc8+MHENRmoxjE8wLC8AmFr5+uEhg5cvqusaRFQ==
+
+"@types/yup@0.26.23":
+  version "0.26.23"
+  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.26.23.tgz#00721a3b675e7609e5bcccb94234e86b754bcd04"
+  integrity sha512-+tipAL6prdInS/avA6QityIFBDvHnqk1Tv9L5JMEws5IZC6agymBGAoDsrPyYp42wGcktyQtYKv9kvGPEKd4Qg==
 
 "@typescript-eslint/experimental-utils@^1.13.0":
   version "1.13.0"
@@ -4959,6 +4978,25 @@ graphql-middleware@3.0.3:
   dependencies:
     graphql-tools "^4.0.5"
 
+graphql-middleware@^3.0.2:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/graphql-middleware/-/graphql-middleware-3.0.5.tgz#8cbce45ce4be95bd4600ffe5332e1936ec721e10"
+  integrity sha512-84HBmvJlMKxgavbygbRgn2i1fOSrZ7KhxWToWDpe4xOgnWxGb5WY1rwRIkyK25ajh4qRwLtGPbBxtClzwGngCQ==
+  dependencies:
+    graphql-tools "^4.0.5"
+
+graphql-rate-limit@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/graphql-rate-limit/-/graphql-rate-limit-2.0.1.tgz#216d1d56efdca4e00d6cd980f55e4177803b649b"
+  integrity sha512-wiyeigjTZd1BGa9NHOWIqPr+PjatVxoXCcq6PpWeqBMEo3UhcdwuUD3JxNq4DFUJ4WzDVt9P8kh3XR/G7lNGRA==
+  dependencies:
+    "@types/redis-mock" "^0.17.0"
+    graphql-middleware "^3.0.2"
+    graphql-shield "^6.0.2"
+    graphql-tools "^4.0.3"
+    lodash.get "^4.4.2"
+    ms "^2.1.1"
+
 graphql-relay@0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/graphql-relay/-/graphql-relay-0.6.0.tgz#18ec36b772cfcb3dbb9bd369c3f8004cf42c7b93"
@@ -4985,6 +5023,16 @@ graphql-shield@6.0.4:
     object-hash "^1.3.1"
     yup "^0.27.0"
 
+graphql-shield@^6.0.2:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/graphql-shield/-/graphql-shield-6.1.0.tgz#7298af72167e7c9fd19a36fac9b425b94025a393"
+  integrity sha512-dIZ6ABnUn3XQtIzw9/9f8wFmZoY5XZlsHgkxSKF+N/oXmKvQoi11J5/y/jxJTBmKYi/2JZ12C1JjDn5TOopn+w==
+  dependencies:
+    "@types/yup" "0.26.23"
+    lightercollective "^0.3.0"
+    object-hash "^1.3.1"
+    yup "^0.27.0"
+
 graphql-subscriptions@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/graphql-subscriptions/-/graphql-subscriptions-1.1.0.tgz#5f2fa4233eda44cf7570526adfcf3c16937aef11"
@@ -4997,7 +5045,7 @@ graphql-tag@^2.9.2:
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.10.1.tgz#10aa41f1cd8fae5373eaf11f1f67260a3cad5e02"
   integrity sha512-jApXqWBzNXQ8jYa/HLkZJaVw9jgwNqZkywa2zfFn16Iv1Zb7ELNHkJaXHR7Quvd5SIGsy6Ny7SUKATgnu05uEg==
 
-graphql-tools@^4.0.0, graphql-tools@^4.0.5:
+graphql-tools@^4.0.0, graphql-tools@^4.0.3, graphql-tools@^4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-4.0.5.tgz#d2b41ee0a330bfef833e5cdae7e1f0b0d86b1754"
   integrity sha512-kQCh3IZsMqquDx7zfIGWBau42xe46gmqabwYkpPlCLIjcEY1XK+auP7iGRD9/205BPyoQdY8hT96MPpgERdC9Q==

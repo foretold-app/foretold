@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const assert = require('assert');
 
 const { DataBase } = require('./data-base');
 
@@ -60,6 +61,13 @@ class ChannelMembershipsData extends DataBase {
    * @return {Promise<string>}
    */
   async getOneOnlyRole(options) {
+    assert(!!_.get(options, 'channelId'),
+      'getOneOnlyRole::channelId is required.');
+
+    if (!_.get(options, 'agentId')) {
+      return ChannelMembershipModel.ROLES.NONE;
+    }
+
     const channelMembership = await this.getOne(options);
     return _.get(
       channelMembership,

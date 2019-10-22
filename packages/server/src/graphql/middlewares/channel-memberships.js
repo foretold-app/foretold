@@ -21,14 +21,11 @@ async function setContextChannelMemberships(root, args, context, info) {
     || _.get(context, 'channel.id');
   const agentId = _.get(context, 'agent.id');
 
-  const compoundId = {
-    agentId,
-    channelId
-  };
+  const compoundId = { agentId, channelId };
   log.trace('\x1b[36m ---> \x1b[0m Middleware '
     + '(setContextChannelMemberships)', compoundId);
 
-  if (channelId && agentId) {
+  if (!!channelId && !!agentId) {
     const channelMembership = await data.channelMemberships.getOne(compoundId);
     context.channelMembership = channelMembership;
     context.channelMembershipsRole = _.get(channelMembership, 'role');
@@ -56,11 +53,9 @@ async function setContextChannelMembershipsAdmins(root, args, context, info) {
   log.trace('\x1b[36m ---> \x1b[0m Middleware '
     + '(channelMembershipsAdmins)', channelId);
 
-  if (channelId) {
+  if (!!channelId) {
     context.channelMembershipsAdmins
-      = await data.channelMemberships.getAllOnlyAdmins({
-      channelId,
-    });
+      = await data.channelMemberships.getAllOnlyAdmins({ channelId });
   } else {
     context.channelMembershipsAdmins = null;
   }

@@ -5,7 +5,6 @@ let component = ReasonReact.statelessComponent("Channel");
 let make =
     (
       ~channelPage: Routing.ChannelPage.t,
-      ~loggedUser: option(Types.user),
       ~channel: option(Types.channel),
       children,
     ) => {
@@ -98,7 +97,7 @@ let make =
       };
     };
 
-    <FillWithSidebar channelId={Some(channelId)} loggedUser>
+    <FillWithSidebar channelId={Some(channelId)}>
       {headers()}
       {children |> ReasonReact.array}
     </FillWithSidebar>;

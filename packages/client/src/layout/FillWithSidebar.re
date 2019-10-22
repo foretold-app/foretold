@@ -25,17 +25,21 @@ module Styles = {
 };
 
 let component = ReasonReact.statelessComponent("FillWithSidebar");
-let make = (~channelId=None, ~loggedUser: option(Types.user), _children) => {
+let make = (~channelId=None, _children) => {
   ...component,
   render: _self =>
-    <div className=Styles.outer>
-      <div className=Styles.left> <Sidebar channelId loggedUser /> </div>
-      <div className=Styles.right>
-        <div className=Styles.rightInner>
-          <Header loggedUser />
-          <div> ..._children </div>
+    <Providers.AppContext.Consumer>
+      ...{({loggedUser}) =>
+        <div className=Styles.outer>
+          <div className=Styles.left> <Sidebar channelId loggedUser /> </div>
+          <div className=Styles.right>
+            <div className=Styles.rightInner>
+              <Header loggedUser />
+              <div> ..._children </div>
+            </div>
+            <Footer />
+          </div>
         </div>
-        <Footer />
-      </div>
-    </div>,
+      }
+    </Providers.AppContext.Consumer>,
 };

@@ -13,7 +13,7 @@ let make =
     let loadChannel = ChannelGet.component2(~id=channelId);
 
     let successFn = (channel: Types.channel) =>
-      <Channel channelPage loggedUser channel={Some(channel)}>
+      <Channel channelPage channel={Some(channel)}>
         {switch (channelPage.subPage) {
          | Measurables(searchParams) =>
            <MeasurableIndex channelId searchParams />
@@ -35,12 +35,12 @@ let make =
       </Channel>;
 
     let errorFn = _ =>
-      <Channel channelPage loggedUser channel=None>
+      <Channel channelPage channel=None>
         <SLayout> <div> {"No channel." |> ReasonReact.string} </div> </SLayout>
       </Channel>;
 
     let loadingFn = () =>
-      <Channel channelPage loggedUser channel=None>
+      <Channel channelPage channel=None>
         <SLayout> <Spin /> </SLayout>
       </Channel>;
 

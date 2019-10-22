@@ -6,7 +6,7 @@ const models = require('../models');
 const logger = require('../lib/log');
 
 const { Model } = require('./model');
-const { ResponseAll } = require('./classes');
+const { ResponseAll } = require('./classes/response-all');
 
 /**
  * @abstract

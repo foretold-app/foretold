@@ -31,13 +31,12 @@ let make = (~channelId=None, _children) => {
     <Providers.AppContext.Consumer>
       ...{({loggedUser}) =>
         <div className=Styles.outer>
-          {switch (loggedUser) {
-           | Some(_) =>
-             <div className=Styles.left>
-               <Sidebar channelId loggedUser />
-             </div>
-           | None => ReasonReact.null
-           }}
+          {loggedUser
+           |> E.O.React.fmapOrNull(_ =>
+                <div className=Styles.left>
+                  <Sidebar channelId loggedUser />
+                </div>
+              )}
           <div className=Styles.right>
             <div className=Styles.rightInner>
               <Header loggedUser />

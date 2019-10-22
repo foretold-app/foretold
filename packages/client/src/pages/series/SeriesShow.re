@@ -46,15 +46,15 @@ let load2Queries = (channelId, seriesId, itemsPerPage, fn) =>
        SeriesGet.component(~id=seriesId),
      );
 
-let component = ReasonReact.statelessComponent("SeriesShowPage");
+let component = ReasonReact.statelessComponent("SeriesShow");
 let make = (~channelId: string, ~id: string, _children) => {
   ...component,
   render: _ => {
     let loadData = load2Queries(channelId, id, 50);
 
     loadData(((selectWithPaginationParams, channel, series)) =>
-      SLayout.LayoutConfig.make(
-        ~head=
+      <SLayout
+        head={
           switch (channel, series, selectWithPaginationParams.selection) {
           | (
               Success(channel),
@@ -74,29 +74,27 @@ let make = (~channelId: string, ~id: string, _children) => {
               {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
             </>
           | _ => <div />
-          },
-        ~body=
-          switch (
-            selectWithPaginationParams.response,
-            selectWithPaginationParams.selection,
-          ) {
-          | (_, Some(measurable)) => <Measurable id={measurable.id} />
-          | (Success(connection), None) =>
-            <MeasurablesSeriesTable
-              measurables={connection.edges}
-              selected=None
-              onClick={id =>
-                Reducer.Components.sendSelectItem(
-                  selectWithPaginationParams,
-                  id,
-                )
-              }
-            />
-          | _ => <div />
-          },
-        (),
-      )
-      |> SLayout.FullPage.makeWithEl
+          }
+        }>
+        {switch (
+           selectWithPaginationParams.response,
+           selectWithPaginationParams.selection,
+         ) {
+         | (_, Some(measurable)) => <Measurable id={measurable.id} />
+         | (Success(connection), None) =>
+           <MeasurablesSeriesTable
+             measurables={connection.edges}
+             selected=None
+             onClick={id =>
+               Reducer.Components.sendSelectItem(
+                 selectWithPaginationParams,
+                 id,
+               )
+             }
+           />
+         | _ => <div />
+         }}
+      </SLayout>
     )
     |> E.React.makeToEl;
   },

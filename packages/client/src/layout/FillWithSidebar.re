@@ -31,7 +31,13 @@ let make = (~channelId=None, _children) => {
     <Providers.AppContext.Consumer>
       ...{({loggedUser}) =>
         <div className=Styles.outer>
-          <div className=Styles.left> <Sidebar channelId loggedUser /> </div>
+          {switch (loggedUser) {
+           | Some(_) =>
+             <div className=Styles.left>
+               <Sidebar channelId loggedUser />
+             </div>
+           | None => ReasonReact.null
+           }}
           <div className=Styles.right>
             <div className=Styles.rightInner>
               <Header loggedUser />

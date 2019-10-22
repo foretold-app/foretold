@@ -36,7 +36,8 @@ let make = _ => {
               email: Some(email),
             }) =>
             isEmailVerified ? ReasonReact.null : warning(email)
-          | _ => warningNoEmail
+          | Some({isEmailVerified: _, email: None}) => warningNoEmail
+          | _ => ReasonReact.null
           };
         }}
       </Providers.AppContext.Consumer>

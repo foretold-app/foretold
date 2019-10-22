@@ -53,8 +53,7 @@ let make =
             selectWithPaginationParams.response,
             selectWithPaginationParams.selection,
           ) {
-          | (_, Some(measurable)) =>
-            <Measurable id={measurable.id} loggedUser />
+          | (_, Some(measurable)) => <Measurable id={measurable.id} />
           | (Success(connection), None) =>
             <MeasurableIndexTable
               measurables={connection.edges}

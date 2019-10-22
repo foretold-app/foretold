@@ -48,13 +48,7 @@ module Tabs = {
 };
 
 let component = ReasonReact.reducerComponent("MeasurableBottomSection");
-let make =
-    (
-      ~measurableId: string,
-      ~channelId: option(string),
-      ~loggedUser: Types.user,
-      _children,
-    ) => {
+let make = (~measurableId: string, ~channelId: option(string), _children) => {
   ...component,
   reducer: (action, _state) =>
     switch (action) {
@@ -69,7 +63,7 @@ let make =
       <Tabs switchTab paginationPage tab />;
 
     switch (tab) {
-    | Measurements => <Measurements measurableId loggedUser head />
+    | Measurements => <Measurements measurableId head />
     | Scores =>
       <LeaderboardMeasurables
         channelId

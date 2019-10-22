@@ -1,11 +1,6 @@
 let component = ReasonReact.statelessComponent("MeasurableIndex");
 let make =
-    (
-      ~channelId: string,
-      ~searchParams: MeasurableQueryIndex.query,
-      ~loggedUser: Types.user,
-      _children,
-    ) => {
+    (~channelId: string, ~searchParams: MeasurableQueryIndex.query, _children) => {
   ...component,
   render: _ => {
     module Reducer =
@@ -22,7 +17,6 @@ let make =
                 statsQuery,
                 MeasurableIndex__Logic.make({
                   reducerParams,
-                  loggedUser,
                   channelQuery,
                   seriesQuery,
                 }),

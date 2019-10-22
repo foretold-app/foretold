@@ -14,12 +14,7 @@ let tabToInternalUrl = (channelId, tabSelected: ChannelPage.tab): Url.t => {
   channelPage |> Url.fromChannelPage;
 };
 
-let make =
-    (
-      loggedUser: Types.user,
-      tabSelected: Routing.ChannelPage.tab,
-      channel: Types.channel,
-    ) =>
+let make = (tabSelected: Routing.ChannelPage.tab, channel: Types.channel) =>
   <>
     {tab(
        tabSelected == Measurables,

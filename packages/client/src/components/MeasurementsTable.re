@@ -318,7 +318,7 @@ let measurableColumn =
     (),
   );
 
-let scoreColumn = (loggedUser: Types.user) =>
+let scoreColumn = _ =>
   Table.Column.make(
     ~name={
       "Relative Score" |> ste;
@@ -342,7 +342,7 @@ let scoreColumn = (loggedUser: Types.user) =>
     (),
   );
 
-let logScoreColumn = (loggedUser: Types.user) =>
+let logScoreColumn = _ =>
   Table.Column.make(
     ~name="Log Score" |> ste,
     ~help=
@@ -390,7 +390,6 @@ let bottomSubRowFn =
 
 let make =
     (
-      ~loggedUser: Types.user,
       ~measurementsList: list(measurement),
       ~measurableValueType: Types.valueType,
       (),
@@ -431,7 +430,6 @@ let make =
 
 let makeExtended =
     (
-      ~loggedUser: Types.user,
       ~measurementsList: list(measurement),
       ~measurableValueType: Types.valueType,
       (),
@@ -445,16 +443,16 @@ let makeExtended =
         getPredictionDistributionColumn(bounds),
         predictionValueColumn,
         predictionTextColumn,
-        logScoreColumn(loggedUser),
-        scoreColumn(loggedUser),
+        logScoreColumn(),
+        scoreColumn(),
         timeColumn,
       |]
     | `PERCENTAGE => [|
         agentColumn,
         getPredictionDistributionColumn(bounds),
         predictionValueColumn,
-        logScoreColumn(loggedUser),
-        scoreColumn(loggedUser),
+        logScoreColumn(),
+        scoreColumn(),
         timeColumn,
       |]
     | `DATE => Js.Exn.raiseError("Date not supported ")

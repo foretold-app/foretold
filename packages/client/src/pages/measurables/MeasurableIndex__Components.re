@@ -30,17 +30,12 @@ module LoadedAndSelected = {
     </>;
 
   let body = (t: t) =>
-    <Measurable
-      id={t.selectedMeasurable.id}
-      key={t.selectedMeasurable.id}
-      loggedUser={t.loggedUser}
-    />;
+    <Measurable id={t.selectedMeasurable.id} key={t.selectedMeasurable.id} />;
 
   let body2 = (t: t) =>
     <MeasurableBottomSection
       measurableId={t.selectedMeasurable.id}
       channelId={Some(t.selectedMeasurable.channelId)}
-      loggedUser={t.loggedUser}
     />;
 };
 

@@ -11,6 +11,7 @@ let make = (~route: Route.t, ~loggedUser: option(Types.user), _children) => {
     | (Terms, _) =>
       <StaticPageInCard markdown=StaticMarkdown.termsAndConditions />
     | (Login, _) => <Login />
+
     | (Channel(channel), _) =>
       <ChannelNavigation channelPage=channel loggedUser />
     | (Agent(agentPage), _) => <AgentNavigation agentPage loggedUser />

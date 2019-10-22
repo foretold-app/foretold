@@ -2,7 +2,6 @@ let component = ReasonReact.statelessComponent("MeasurementForm");
 
 let make =
     (
-      ~loggedUser: Types.user,
       ~measurable: Types.measurable,
       ~measurableId: string,
       ~isCreator: bool,
@@ -10,28 +9,36 @@ let make =
     ) => {
   ...component,
   render: _ =>
-    <MeasurementCreate.Mutation>
-      ...{(mutation, data) =>
-        <CdfInput
-          measurable
-          onSubmit={(
-            (value, competitorType, description, valueText, asAgent),
-          ) =>
-            MeasurementCreate.mutate(
-              mutation,
-              measurableId,
-              value,
-              competitorType,
-              description,
-              valueText,
-              asAgent,
-            )
-          }
-          bots={loggedUser.bots}
-          data
-          isCreator
-          loggedUser
-        />
+    <Providers.AppContext.Consumer>
+      ...{({loggedUser}) =>
+        switch (loggedUser) {
+        | Some(loggedUser) =>
+          <MeasurementCreate.Mutation>
+            ...{(mutation, data) =>
+              <CdfInput
+                measurable
+                onSubmit={(
+                  (value, competitorType, description, valueText, asAgent),
+                ) =>
+                  MeasurementCreate.mutate(
+                    mutation,
+                    measurableId,
+                    value,
+                    competitorType,
+                    description,
+                    valueText,
+                    asAgent,
+                  )
+                }
+                bots={loggedUser.bots}
+                data
+                isCreator
+                loggedUser
+              />
+            }
+          </MeasurementCreate.Mutation>
+        | _ => ReasonReact.null
+        }
       }
-    </MeasurementCreate.Mutation>,
+    </Providers.AppContext.Consumer>,
 };

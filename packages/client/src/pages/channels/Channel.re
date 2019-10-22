@@ -5,7 +5,7 @@ let component = ReasonReact.statelessComponent("Channel");
 let make =
     (
       ~channelPage: Routing.ChannelPage.t,
-      ~loggedUser: Types.user,
+      ~loggedUser: option(Types.user),
       ~channel: option(Types.channel),
       children,
     ) => {
@@ -84,8 +84,7 @@ let make =
 
     let headers = () => {
       let topOption = Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
-      let secondLevel = channel =>
-        ChannelTabs.make(loggedUser, topOption, channel);
+      let secondLevel = channel => ChannelTabs.make(topOption, channel);
 
       switch (channel) {
       | Some(channel) =>
@@ -99,8 +98,7 @@ let make =
       };
     };
 
-    <FillWithSidebar
-      channelId={Some(channelId)} loggedUser={Some(loggedUser)}>
+    <FillWithSidebar channelId={Some(channelId)} loggedUser>
       {headers()}
       {children |> ReasonReact.array}
     </FillWithSidebar>;

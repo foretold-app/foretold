@@ -10,10 +10,8 @@ let make =
   ...component,
   render: _ => {
     <>
-      <SLayout isFluid=true>
-        <Measurable id=measurableId loggedUser />
-      </SLayout>
-      <MeasurableBottomSection measurableId channelId loggedUser />
+      <SLayout isFluid=true> <Measurable id=measurableId /> </SLayout>
+      <MeasurableBottomSection measurableId channelId />
     </>;
   },
 };

@@ -22,7 +22,6 @@ module Reducer = PaginationFunctor.Make(ReducerConfig);
 
 type channel = Types.channel;
 type seriesCollection = array(SeriesCollectionGet.series);
-type loggedUser = Types.user;
 type reducerParams = Reducer.Types.reducerParams;
 type seriesQuery = HttpResponse.t(seriesCollection);
 type channelQuery = HttpResponse.t(channel);
@@ -32,7 +31,6 @@ type measurablesStateStatsQuery =
 module LoadedAndSelected = {
   type t = {
     reducerParams,
-    loggedUser,
     channel,
     seriesCollection,
     itemState: Reducer.Types.itemSelected,
@@ -43,7 +41,6 @@ module LoadedAndSelected = {
 module LoadedAndUnselected = {
   type t = {
     reducerParams,
-    loggedUser,
     channel,
     seriesCollection,
   };
@@ -52,7 +49,6 @@ module LoadedAndUnselected = {
 module WithChannelButNotQuery = {
   type t = {
     reducerParams,
-    loggedUser,
     channel,
     seriesQuery,
   };
@@ -67,7 +63,6 @@ type state =
 
 type input = {
   reducerParams,
-  loggedUser,
   channelQuery,
   seriesQuery,
 };
@@ -90,7 +85,6 @@ let make = (input: input) =>
       LoadedAndSelected({
         channel,
         reducerParams: input.reducerParams,
-        loggedUser: input.loggedUser,
         itemState: {
           selectedIndex: selectedIndex,
         },
@@ -109,7 +103,6 @@ let make = (input: input) =>
     LoadedAndUnselected({
       channel,
       reducerParams: input.reducerParams,
-      loggedUser: input.loggedUser,
       seriesCollection,
     })
 
@@ -117,7 +110,6 @@ let make = (input: input) =>
     WithChannelButNotQuery({
       channel,
       reducerParams: input.reducerParams,
-      loggedUser: input.loggedUser,
       seriesQuery: input.seriesQuery,
     })
   | _ => WithoutChannel(input.channelQuery)

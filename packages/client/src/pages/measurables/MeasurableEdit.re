@@ -53,7 +53,6 @@ let formCreation =
           ~result=data.result,
           ~form=
             MeasurableForm.showForm(
-              ~loggedUser,
               ~state,
               ~send,
               ~creating=false,

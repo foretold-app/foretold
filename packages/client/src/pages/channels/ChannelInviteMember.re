@@ -76,7 +76,7 @@ module CMutationForm =
   });
 
 let component = ReasonReact.statelessComponent("ChannelInviteMember");
-let make = (~channelId: string, ~loggedUser: Types.user, _children) => {
+let make = (~channelId: string, _children) => {
   ...component,
   render: _ =>
     <SLayout head={SLayout.Header.textDiv("Invite Member")}>

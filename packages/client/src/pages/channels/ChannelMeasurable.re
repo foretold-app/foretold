@@ -1,12 +1,6 @@
 let component = ReasonReact.statelessComponent("ChannelMeasurable");
 
-let make =
-    (
-      ~measurableId: string,
-      ~channelId: option(string),
-      ~loggedUser: Types.user,
-      _children,
-    ) => {
+let make = (~measurableId: string, ~channelId: option(string), _children) => {
   ...component,
   render: _ => {
     <>

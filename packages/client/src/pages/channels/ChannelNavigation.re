@@ -18,23 +18,19 @@ let make =
          | Measurables(searchParams) =>
            <MeasurableIndex channelId searchParams />
          | Measurable(measurableId) =>
-           <ChannelMeasurable
-             channelId={Some(channelId)}
-             measurableId
-             loggedUser
-           />
-         | Series(id) => <SeriesShow id channelId loggedUser />
-         | NewMeasurable => <MeasurableNew channelId loggedUser />
+           <ChannelMeasurable channelId={Some(channelId)} measurableId />
+         | Series(id) => <SeriesShow id channelId />
+         | NewMeasurable => <MeasurableNew channelId />
          | Members => <ChannelMembers channelId channel />
          | FeedItems => <FeedItems channelId={Some(channelId)} />
          | Leaderboard(ByMeasurable) =>
            <LeaderboardMeasurables channelId={Some(channelId)} />
          | Leaderboard(ByMember) =>
            <LeaderboardMembers channelId={Some(channelId)} />
-         | AddMember => <ChannelAddMember channelId loggedUser />
-         | InviteMember => <ChannelInviteMember channelId loggedUser />
-         | Settings => <ChannelEdit channelId loggedUser />
-         | NewSeries => <SeriesNew channelId loggedUser />
+         | AddMember => <ChannelAddMember channelId />
+         | InviteMember => <ChannelInviteMember channelId />
+         | Settings => <ChannelEdit channelId />
+         | NewSeries => <SeriesNew channelId />
          }}
       </Channel>;
 

@@ -2,7 +2,7 @@ let component = ReasonReact.statelessComponent("ChannelAddMember");
 
 type column = Table.column(Types.agent);
 
-let make = (~channelId: string, ~loggedUser: Types.user, _children) => {
+let make = (~channelId: string, _children) => {
   ...component,
   render: _ => {
     let addToChannelLink = (agentId: string, channelId: string) =>

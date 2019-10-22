@@ -24,7 +24,7 @@ let make = (~route: Route.t, ~loggedUser: option(Types.user), _children) => {
       <FillWithSidebar> <ChannelNew /> </FillWithSidebar>
     | (MeasurableEdit(id), Some(loggedUser)) =>
       <FillWithSidebar>
-        <MeasurableEdit loggedUser pageParams={id: id} />
+        <MeasurableEdit pageParams={id: id} />
       </FillWithSidebar>
     | (BotCreate, Some(loggedUser)) =>
       <FillWithSidebar> <BotCreate loggedUser /> </FillWithSidebar>

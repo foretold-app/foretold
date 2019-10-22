@@ -20,12 +20,7 @@ type pageParams = {id: string};
 
 let component = ReasonReact.statelessComponent("AgentMeasurables");
 let make =
-    (
-      ~pageParams: pageParams,
-      ~loggedUser: Types.user,
-      ~layout=SLayout.FullPage.makeWithEl,
-      _children,
-    ) => {
+    (~pageParams: pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
     let lmake = SLayout.LayoutConfig.make;

@@ -76,7 +76,7 @@ let make = (~agentPage: Routing.AgentPage.t, _children) => {
             <Top agentPage />
             {switch (agentPage.subPage) {
              | AgentMeasurables =>
-               <AgentMeasurables pageParams={id: agentId} loggedUser layout />
+               <AgentMeasurables pageParams={id: agentId} layout />
              | AgentBots => <AgentBots pageParams={id: agentId} layout />
              | AgentCommunities => <AgentCommunities agentId layout />
              | AgentUpdates => <FeedItems agentId={Some(agentId)} layout />

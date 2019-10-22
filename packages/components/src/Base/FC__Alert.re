@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 /* For the icons, font-awesome (or similar?) is a possibility */
 
 module Styles = {
@@ -30,10 +32,19 @@ type type_ = [ | `primary | `info | `success | `warning | `error];
 
 let component = ReasonReact.statelessComponent(__MODULE__);
 
-let make = (~type_: type_=`info, children) => {
-  ...component,
-  render: _self => {
-    let classes = Styles.alertBox ++ " " ++ Styles.colors(type_);
-    <div className=classes> ...children </div>;
-  },
+[@react.component]
+let make = (~type_: type_=`info, ~children) => {
+  let classes = Styles.alertBox ++ " " ++ Styles.colors(type_);
+  <div className=classes> {children |> ReasonReact.array} </div>;
+};
+
+module Jsx2 = {
+  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+  let make = (~type_: type_=`info, children) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~type_, ~children, ()),
+      children,
+    );
 };

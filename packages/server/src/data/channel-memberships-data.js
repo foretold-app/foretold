@@ -19,8 +19,8 @@ class ChannelMembershipsData extends DataBase {
   /**
    * @public
    * @param {object} options
-   * @param {Models.ObjectID} [options.agentId]
-   * @param {Models.ObjectID} [options.channelId]
+   * @param {Models.AgentID} [options.agentId]
+   * @param {Models.ChannelID} [options.channelId]
    * @returns {Promise<string[]>}
    */
   async getAllChannelIds(options) {
@@ -29,11 +29,16 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @param {object} options
-   * @param {Models.ObjectID} options.channelId
-   * @param {object} options.agentId
+   * @param {Models.ChannelID} options.channelId
+   * @param {Models.AgentID} options.agentId
    * @return {Promise<Models.ChannelMemberships>}
    */
   async join(options) {
+    assert(!!_.get(options, 'agentId'),
+      'join::agentId is required.');
+    assert(!!_.get(options, 'channelId'),
+      'join::channelId is required.');
+
     const data = {
       channelId: options.channelId,
       agentId: options.agentId,
@@ -45,9 +50,16 @@ class ChannelMembershipsData extends DataBase {
   /**
    * @public
    * @param {object} options
+   * @param {Models.AgentID} options.agentId
+   * @param {Models.ChannelID} options.channelId
    * @return {Promise<Models.ChannelMemberships|null>}
    */
   async leave(options) {
+    assert(!!_.get(options, 'agentId'),
+      'leave::agentId is required.');
+    assert(!!_.get(options, 'channelId'),
+      'leave::channelId is required.');
+
     return this.deleteOne({
       channelId: options.channelId,
       agentId: options.agentId,
@@ -56,8 +68,9 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @public
-   * @param {object} options.agentId
-   * @param {object} options.channelId
+   * @param {object} options
+   * @param {Models.AgentID} options.agentId
+   * @param {Models.ChannelID} options.channelId
    * @return {Promise<string>}
    */
   async getOneOnlyRole(options) {

@@ -1,11 +1,6 @@
 let component = ReasonReact.statelessComponent("Channel");
 
-let make =
-    (
-      ~channelPage: Routing.ChannelPage.t,
-      ~loggedUser: option(Types.user),
-      _children,
-    ) => {
+let make = (~channelPage: Routing.ChannelPage.t, _children) => {
   ...component,
   render: _ => {
     let channelId = channelPage.channelId;

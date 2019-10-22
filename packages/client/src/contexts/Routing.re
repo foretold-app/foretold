@@ -106,7 +106,14 @@ module Route = {
 
   let fromUrl = (url: ReasonReact.Router.url) =>
     switch (url.path) {
-    | [] => Home
+    | [] =>
+      Channel({
+        channelId: getChannelId(""),
+        subPage:
+          Measurables(
+            url.search |> MeasurableQueryIndex.fromStringWithDefaults,
+          ),
+      })
     | ["privacy_policy"] => Privacy
     | ["terms_and_conditions"] => Terms
     | ["login"] => Login

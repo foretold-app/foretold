@@ -12,12 +12,12 @@ let make = (~route: Route.t, ~loggedUser: option(Types.user), _children) => {
       <StaticPageInCard markdown=StaticMarkdown.termsAndConditions />
     | (Login, _) => <Login />
 
-    | (Channel(channel), _) =>
-      <ChannelNavigation channelPage=channel loggedUser />
+    | (Channel(channel), _) => <ChannelNavigation channelPage=channel />
     | (Agent(agentPage), _) => <AgentNavigation agentPage />
     | (AgentIndex, _) => <AgentIndex />
+    | (ChannelIndex, _) =>
+      <FillWithSidebar> <ChannelIndex.Jsx2 /> </FillWithSidebar>
 
-    | (Home, Some(loggedUser)) => Redirect.defaultPage(loggedUser)
     | (Preferences, Some(loggedUser)) =>
       <FillWithSidebar> <Preferences loggedUser /> </FillWithSidebar>
     | (ChannelNew, Some(_)) =>
@@ -32,8 +32,6 @@ let make = (~route: Route.t, ~loggedUser: option(Types.user), _children) => {
       <FillWithSidebar>
         <BotEdit pageParams={id: botId} loggedUser />
       </FillWithSidebar>
-    | (ChannelIndex, Some(_)) =>
-      <FillWithSidebar> <ChannelIndex.Jsx2 /> </FillWithSidebar>
     | (Profile, Some(loggedUser)) =>
       <FillWithSidebar> <Profile loggedUser /> </FillWithSidebar>
     | (Subscribe, Some(loggedUser)) =>
@@ -45,7 +43,7 @@ let make = (~route: Route.t, ~loggedUser: option(Types.user), _children) => {
     | (EntityIndex, Some(_)) =>
       <FillWithSidebar> <EntityIndex /> </FillWithSidebar>
 
-    | (_, _) => "<Home /> Natigator" |> Utils.ste
+    | (_, _) => <Home />
     };
   },
 };

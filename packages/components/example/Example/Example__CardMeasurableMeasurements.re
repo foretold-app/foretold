@@ -104,8 +104,12 @@ let make =
           styles=[
             Css.style([BaseStyles.floatLeft, Css.paddingTop(`em(0.2))]),
           ]>
-          <Tab isActive=true> {"Predictions" |> ReasonReact.string} </Tab>
-          <Tab isActive=false> {"Settings" |> ReasonReact.string} </Tab>
+          <Tab.Jsx2 isActive=true>
+            {"Predictions" |> ReasonReact.string}
+          </Tab.Jsx2>
+          <Tab.Jsx2 isActive=false>
+            {"Settings" |> ReasonReact.string}
+          </Tab.Jsx2>
         </Div.Jsx2>
       </Div.Jsx2>
       <Div.Jsx2>

@@ -39,9 +39,13 @@ let make =
       </Div.Jsx2>
     </GroupHeader>
     <GroupHeader.SubHeader>
-      <Tab isActive=true> {"Questions" |> ReasonReact.string} </Tab>
-      <Tab isActive=false> {"Knowledge Graph" |> ReasonReact.string} </Tab>
-      <Tab isActive=false> {"Leaderboard" |> ReasonReact.string} </Tab>
-      <Tab isActive=false> {"Settings" |> ReasonReact.string} </Tab>
+      <Tab.Jsx2 isActive=true> {"Questions" |> ReasonReact.string} </Tab.Jsx2>
+      <Tab.Jsx2 isActive=false>
+        {"Knowledge Graph" |> ReasonReact.string}
+      </Tab.Jsx2>
+      <Tab.Jsx2 isActive=false>
+        {"Leaderboard" |> ReasonReact.string}
+      </Tab.Jsx2>
+      <Tab.Jsx2 isActive=false> {"Settings" |> ReasonReact.string} </Tab.Jsx2>
     </GroupHeader.SubHeader>
   </Div.Jsx2>;

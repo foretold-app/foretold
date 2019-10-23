@@ -61,17 +61,25 @@ module Button = {
   };
 };
 
-let component = ReasonReact.statelessComponent("Tab");
-let make = (~isActive=false, ~onClick=?, ~flex=false, children) => {
-  ...component,
-  render: _self =>
-    <FC__Link.Jsx2
-      isDisabled=false
-      ?onClick
-      className={Css.style(
-        (isActive ? activeStyles : inactiveStyles)
-        @ (flex ? flexStyles : allStyles),
-      )}>
-      ...children
-    </FC__Link.Jsx2>,
+[@react.component]
+let make = (~isActive=false, ~onClick=?, ~flex=false, ~children) =>
+  <FC__Link.Jsx2
+    isDisabled=false
+    ?onClick
+    className={Css.style(
+      (isActive ? activeStyles : inactiveStyles)
+      @ (flex ? flexStyles : allStyles),
+    )}>
+    ...children
+  </FC__Link.Jsx2>;
+
+module Jsx2 = {
+  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+  let make = (~isActive=false, ~onClick=?, ~flex=false, children) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~isActive, ~onClick?, ~flex, ~children, ()),
+      children,
+    );
 };

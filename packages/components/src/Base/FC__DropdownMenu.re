@@ -56,7 +56,7 @@ let make = (~title, ~trigger=FC__Dropdown.Hover, ~children) => {
   <FC__Dropdown trigger overlay prefixCls=Styles.prefixCls>
     <button className=Styles.dropdownTrigger>
       <span> {title |> React.string} </span>
-      <FC__Icon.DownArrow />
+      <FC__Icon.DownArrow.Jsx2 />
     </button>
   </FC__Dropdown>;
 };

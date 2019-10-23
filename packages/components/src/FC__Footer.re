@@ -1,3 +1,4 @@
+[@bs.config {jsx: 3}];
 open FC__Base;
 
 let str = ReasonReact.string;

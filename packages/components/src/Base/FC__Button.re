@@ -118,7 +118,7 @@ let make =
       ~isDisabled=false,
       ~fullWidth=false,
       ~className="",
-      ~children,
+      ~children=ReasonReact.null,
     ) =>
   <button
     ?onClick
@@ -127,7 +127,7 @@ let make =
       styles(~isDisabled, ~fullWidth, ~variant, ~size, ()),
       className,
     ])}>
-    {children |> ReasonReact.array}
+    children
   </button>;
 
 module Jsx2 = {

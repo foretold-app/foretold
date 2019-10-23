@@ -33,7 +33,7 @@ type type_ = [ | `primary | `info | `success | `warning | `error];
 [@react.component]
 let make = (~type_: type_=`info, ~children) => {
   let classes = Styles.alertBox ++ " " ++ Styles.colors(type_);
-  <div className=classes> {children |> ReasonReact.array} </div>;
+  <div className=classes> children </div>;
 };
 
 module Jsx2 = {

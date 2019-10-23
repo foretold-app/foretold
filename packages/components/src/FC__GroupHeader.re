@@ -1,3 +1,4 @@
+[@bs.config {jsx: 3}];
 open FC__Base;
 
 module Styles = {
@@ -26,18 +27,18 @@ module Styles = {
 };
 
 let actionButton = (~variant: FC__Button.variant=Primary) =>
-  FC__Button.Jsx2.make(
-    ~variant,
-    ~isDisabled=false,
-    ~size=Medium,
-    ~className=Css.(merge([Styles.actionButtonPosition])),
-  );
+  <FC__Button
+    variant
+    isDisabled=false
+    size=FC__Button.(Medium)
+    className=Css.(merge([Styles.actionButtonPosition]))
+  />;
 
 [@react.component]
 let make = (~children) =>
-  <Div.Jsx2 styles=[Styles.outer]>
-    <Div.Jsx2 styles=[Styles.inner]> ...children </Div.Jsx2>
-  </Div.Jsx2>;
+  <Div styles=[Styles.outer]>
+    <Div styles=[Styles.inner]> ...children </Div>
+  </Div>;
 
 module Jsx2 = {
   let make = children =>
@@ -51,7 +52,7 @@ module Jsx2 = {
 module SubHeader = {
   [@react.component]
   let make = (~children) =>
-    <Div.Jsx2
+    <Div
       styles=[
         Css.(
           style(
@@ -60,7 +61,7 @@ module SubHeader = {
           )
         ),
       ]>
-      <Div.Jsx2
+      <Div
         styles=[
           Css.(
             style(
@@ -72,9 +73,9 @@ module SubHeader = {
             )
           ),
         ]>
-        ...children
-      </Div.Jsx2>
-    </Div.Jsx2>;
+        children
+      </Div>
+    </Div>;
 
   module Jsx2 = {
     let make = children =>

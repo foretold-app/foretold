@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 /**
  * Dropdown component provides a way to show an overlay element
  * at a position relative to it's trigger element (the children given
@@ -82,7 +84,14 @@ module Styles = {
  * </Dropdown>
  * ```
  */
-let make = (~overlay, ~trigger=Hover, ~prefixCls="rc-dropdown", children) =>
+[@react.component]
+let make =
+    (
+      ~overlay,
+      ~trigger=Hover,
+      ~prefixCls="rc-dropdown",
+      ~children=ReasonReact.null,
+    ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=rcDropDownClass,
     ~props=
@@ -93,4 +102,14 @@ let make = (~overlay, ~trigger=Hover, ~prefixCls="rc-dropdown", children) =>
         ~prefixCls,
       ),
     children,
-  );
+  )
+  |> ReasonReact.element;
+
+module Jsx2 = {
+  let make = (~overlay, ~trigger=Hover, ~prefixCls="rc-dropdown", children) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~overlay, ~trigger, ~prefixCls, ~children, ()),
+      children,
+    );
+};

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open FC__Base;
 
 type directionButton = {
@@ -40,13 +42,13 @@ module Styles = {
 };
 
 let _directionLink = (t: directionButton, icon: string, positionStyles) =>
-  <FC__Button.Jsx2
+  <FC__Button
     isDisabled={t.isDisabled}
     onClick={t.onClick}
     className=positionStyles
-    size=Small>
+    size=FC__Button.(Small)>
     {icon |> ReasonReact.string}
-  </FC__Button.Jsx2>;
+  </FC__Button>;
 
 let make = (t: t) =>
   <>

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module Styles = {
   open Css;
   let graph =
@@ -11,11 +13,10 @@ module Styles = {
 };
 
 [@react.component]
-let make =
-    (~cdf: FC__Types.Dist.t, ~minX=?, ~maxX=?, ~width=Some(400), ~children) => {
+let make = (~cdf: FC__Types.Dist.t, ~minX=?, ~maxX=?, ~width=Some(400)) => {
   let pdf = cdf |> FC__Types.Dist.toPdf;
   <div className=Styles.graph>
-    <FC__CdfChart__Base.Jsx2
+    <FC__CdfChart__Base
       marginBottom=25
       ?width
       height=200
@@ -34,7 +35,7 @@ module Jsx2 = {
       (~cdf: FC__Types.Dist.t, ~minX=?, ~maxX=?, ~width=Some(400), children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
-      makeProps(~cdf, ~minX?, ~maxX?, ~width, ~children, ()),
+      makeProps(~cdf, ~minX?, ~maxX?, ~width, ()),
       children,
     );
 };

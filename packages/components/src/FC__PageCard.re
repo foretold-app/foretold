@@ -1,20 +1,10 @@
-open FC__Base;
+[@bs.config {jsx: 3}];
 
-let link =
-  Link.Jsx2.make(
-    ~className=
-      Css.(
-        style([
-          marginRight(`em(2.)),
-          color(Colors.accentBlue),
-          hover([color(Colors.darkAccentBlue)]),
-        ])
-      ),
-  );
+open FC__Base;
 
 [@react.component]
 let make = (~children) =>
-  <Div.Jsx2
+  <Div
     styles=[
       Css.(
         style(
@@ -27,8 +17,8 @@ let make = (~children) =>
         )
       ),
     ]>
-    ...children
-  </Div.Jsx2>;
+    children
+  </Div>;
 
 module Jsx2 = {
   let make = children =>
@@ -51,7 +41,7 @@ module HeaderRow = {
   module Title = {
     [@react.component]
     let make = (~children) =>
-      <Div.Jsx2
+      <Div
         styles=[
           Css.(
             style([
@@ -62,8 +52,8 @@ module HeaderRow = {
             ])
           ),
         ]>
-        ...children
-      </Div.Jsx2>;
+        children
+      </Div>;
 
     module Jsx2 = {
       let make = children =>
@@ -77,7 +67,7 @@ module HeaderRow = {
 
   [@react.component]
   let make = (~children) =>
-    <Div.Jsx2
+    <Div
       styles=[
         Css.(
           style(
@@ -89,8 +79,8 @@ module HeaderRow = {
           )
         ),
       ]>
-      ...children
-    </Div.Jsx2>;
+      children
+    </Div>;
 
   module Jsx2 = {
     let make = children =>
@@ -105,9 +95,7 @@ module HeaderRow = {
 module Body = {
   [@react.component]
   let make = (~children) =>
-    <Div.Jsx2 styles=[Css.style(BaseStyles.fullWidthFloatLeft)]>
-      ...children
-    </Div.Jsx2>;
+    <Div styles=[Css.style(BaseStyles.fullWidthFloatLeft)]> children </Div>;
 
   module Jsx2 = {
     let make = children =>
@@ -122,14 +110,14 @@ module Body = {
 module BodyPadding = {
   [@react.component]
   let make = (~v=`em(1.5), ~children) =>
-    <Div.Jsx2
+    <Div
       styles=[
         Css.style(
           [Css.padding2(~v, ~h=`em(1.5))] @ BaseStyles.fullWidthFloatLeft,
         ),
       ]>
-      ...children
-    </Div.Jsx2>;
+      children
+    </Div>;
 
   module Jsx2 = {
     let make = (~v=`em(1.5), children) =>
@@ -216,7 +204,7 @@ module Section = {
         ~children,
       ) =>
     <div className={StyleProps.toClasses(background, border, padding, flex)}>
-      ...children
+      children
     </div>;
 
   module Jsx2 = {
@@ -264,7 +252,7 @@ module H1 = {
           @ BaseStyles.fullWidthFloatLeft,
         )
       )>
-      ...children
+      children
     </h1>;
 
   module Jsx2 = {
@@ -284,7 +272,7 @@ module P = {
       className=Css.(
         style([color(Colors.Text.LightBackground.p), lineHeight(`em(1.5))])
       )>
-      ...children
+      {children |> ReasonReact.array}
     </p>;
 
   module Jsx2 = {

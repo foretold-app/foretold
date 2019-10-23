@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Css;
 
 let fnWithDefault = (fn, r) =>
@@ -36,7 +38,7 @@ module Jsx2 = {
         ~flexDirection=?,
         ~float=?,
         ~onClick=?,
-        children: array(ReasonReact.reactElement),
+        children,
       ) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
@@ -47,7 +49,7 @@ module Jsx2 = {
         ~flexDirection?,
         ~float?,
         ~onClick?,
-        ~children=children |> ReasonReact.array,
+        ~children,
         (),
       ),
       children,

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module Styles = {
   open Css;
   let textOverlay = style([position(`absolute)]);
@@ -22,10 +24,8 @@ let make =
   let pdf = cdf |> FC__Types.Dist.toPdf;
 
   <div className={Styles.graph(color)}>
-    <div className=Styles.textOverlay>
-      <FC__CdfChart__StatSummary.Jsx2 cdf />
-    </div>
-    <FC__CdfChart__Base.Jsx2
+    <div className=Styles.textOverlay> <FC__CdfChart__StatSummary cdf /> </div>
+    <FC__CdfChart__Base
       width=200
       height=40
       ?minX

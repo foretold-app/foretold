@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 [@react.component]
 let make = (~fullWidth=false, ~rows=5, ~value=?) =>
   <textarea className={FC__FormStyles.widthStyle(~fullWidth, ())} rows>

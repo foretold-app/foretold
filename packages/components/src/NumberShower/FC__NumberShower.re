@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module JS = {
   [@bs.deriving abstract]
   type numberPresentation = {

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module Base = FC__Base;
 
 module AppHeader = FC__AppHeader;

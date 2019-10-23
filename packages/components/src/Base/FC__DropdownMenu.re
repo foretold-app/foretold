@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module Styles = {
   open Css;
   module Colors = FC__Settings;
@@ -48,15 +50,11 @@ module Styles = {
 
 [@react.component]
 let make = (~title, ~trigger=FC__Dropdown.Hover, ~children) => {
-  let overlay =
-    switch (Array.length(children)) {
-    | 1 => children[0]
-    | _ => <div> ...children </div>
-    };
+  let overlay = <div> children </div>;
   <FC__Dropdown trigger overlay prefixCls=Styles.prefixCls>
     <button className=Styles.dropdownTrigger>
       <span> {title |> React.string} </span>
-      <FC__Icon.DownArrow.Jsx2 />
+      <FC__Icon.DownArrow />
     </button>
   </FC__Dropdown>;
 };

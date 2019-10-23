@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open FC__Settings.Text;
 
 let activeStyles =
@@ -46,7 +48,7 @@ module Button = {
         @ (isActive ? activeStyles : inactiveStyles)
         @ (flex ? flexStyles : allStyles),
       )}>
-      ...children
+      children
     </button>;
 
   module Jsx2 = {
@@ -61,15 +63,15 @@ module Button = {
 
 [@react.component]
 let make = (~isActive=false, ~onClick=?, ~flex=false, ~children) =>
-  <FC__Link.Jsx2
+  <FC__Link
     isDisabled=false
     ?onClick
     className={Css.style(
       (isActive ? activeStyles : inactiveStyles)
       @ (flex ? flexStyles : allStyles),
     )}>
-    ...children
-  </FC__Link.Jsx2>;
+    children
+  </FC__Link>;
 
 module Jsx2 = {
   let make = (~isActive=false, ~onClick=?, ~flex=false, children) =>

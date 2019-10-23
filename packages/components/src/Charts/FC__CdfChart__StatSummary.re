@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module Styles = {
   open Css;
   let textOverlay = style([position(`absolute)]);
@@ -11,19 +13,19 @@ let make = (~cdf: FC__Types.Dist.t, ~showMean=true) =>
   <>
     {showMean
        ? <div className=Styles.mainText>
-           <FC__NumberShower.Jsx2
+           <FC__NumberShower
              precision=3
              number={cdf |> FC__Types.Dist.findX(0.5)}
            />
          </div>
        : ReasonReact.null}
     <div className=Styles.secondaryText>
-      <FC__NumberShower.Jsx2
+      <FC__NumberShower
         precision=3
         number={cdf |> FC__Types.Dist.findX(0.05)}
       />
       {" to " |> ReasonReact.string}
-      <FC__NumberShower.Jsx2
+      <FC__NumberShower
         precision=3
         number={cdf |> FC__Types.Dist.findX(0.95)}
       />

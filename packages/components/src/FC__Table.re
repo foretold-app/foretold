@@ -1,3 +1,4 @@
+[@bs.config {jsx: 3}];
 open FC__Base;
 
 let defaultRowHorizontalPadding = `em(1.5);
@@ -97,15 +98,15 @@ module Cell = {
 
   [@react.component]
   let make = (~flex, ~className="", ~properties=[], ~children) =>
-    <Div.Jsx2
+    <Div
       className={Css.merge([
         style(flex),
         standardCellPadding,
         className,
         Css.style(properties),
       ])}>
-      ...children
-    </Div.Jsx2>;
+      children
+    </Div>;
 
   module Jsx2 = {
     let make = (~flex, ~className="", ~properties=[], children) =>
@@ -136,8 +137,7 @@ module HeaderRow = {
   };
 
   [@react.component]
-  let make = (~children) =>
-    <Div.Jsx2 styles=[Styles.headerRow]> ...children </Div.Jsx2>;
+  let make = (~children) => <Div styles=[Styles.headerRow]> children </Div>;
 
   module Jsx2 = {
     let make = children =>
@@ -150,23 +150,25 @@ module HeaderRow = {
 };
 
 module Row = {
-  let textSection = text =>
-    <Div.Jsx2 styles=[Styles.textArea]> text </Div.Jsx2>;
+  let textSection = text => <Div styles=[Styles.textArea]> text </Div>;
 
   [@react.component]
   let make = (~className="", ~bottomSubRow=?, ~onClick=?, ~children) => {
-    let commonClasses =
-      onClick |> E.O.isSome ? [Styles.clickableRow, className] : [className];
     switch (bottomSubRow) {
     | Some(bottomSubRow) =>
-      <Div.Jsx2 styles=commonClasses ?onClick>
-        <Div.Jsx2 styles=[Styles.topRow]> ...children </Div.Jsx2>
-        <Div.Jsx2 styles=[Styles.bottomRow]> ...bottomSubRow </Div.Jsx2>
-      </Div.Jsx2>
+      let commonClasses =
+        onClick |> E.O.isSome
+          ? [Styles.clickableRow, className] : [className];
+      <Div styles=commonClasses ?onClick>
+        <Div styles=[Styles.topRow]> children </Div>
+        <Div styles=[Styles.bottomRow]> bottomSubRow </Div>
+      </Div>;
     | None =>
-      <Div.Jsx2 styles=[Styles.row, ...commonClasses] ?onClick>
-        ...children
-      </Div.Jsx2>
+      let commonClasses =
+        onClick |> E.O.isSome
+          ? [Styles.row, Styles.clickableRow, className]
+          : [Styles.row, className];
+      <Div styles=commonClasses ?onClick> ...children </Div>;
     };
   };
 
@@ -181,7 +183,7 @@ module Row = {
 };
 
 [@react.component]
-let make = (~children) => <div> ...children </div>;
+let make = (~children) => <div> children </div>;
 
 module Jsx2 = {
   let make = children =>

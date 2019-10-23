@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module Questionmark = {
   // Adapted to pagecard title
   let circle =
@@ -40,19 +42,16 @@ module Questionmark = {
     );
 
   [@react.component]
-  let make = (~isInteractive=true, ~children) =>
+  let make = (~isInteractive=true) =>
     <div className={questionMarkstyle(isInteractive)}>
       <span className=insideStyle> {React.string("i")} </span>
     </div>;
 
   module Jsx2 = {
-    let component =
-      ReasonReact.statelessComponent(__MODULE__ ++ "QuestionmarkJsx2");
-
     let make = (~isInteractive=true, children) =>
       ReasonReactCompat.wrapReactForReasonReact(
         make,
-        makeProps(~isInteractive, ~children, ()),
+        makeProps(~isInteractive, ()),
         children,
       );
   };
@@ -63,7 +62,7 @@ module DownArrow = {
   let buttonStyle = Css.(style([marginLeft(`px(8))]));
 
   [@react.component]
-  let make = (~children) =>
+  let make = () =>
     <svg
       className=buttonStyle
       viewBox="64 64 896 896"
@@ -78,14 +77,7 @@ module DownArrow = {
     </svg>;
 
   module Jsx2 = {
-    let component =
-      ReasonReact.statelessComponent(__MODULE__ ++ "DownArrowJsx2");
-
     let make = children =>
-      ReasonReactCompat.wrapReactForReasonReact(
-        make,
-        makeProps(~children, ()),
-        children,
-      );
+      ReasonReactCompat.wrapReactForReasonReact(make, makeProps(), children);
   };
 };

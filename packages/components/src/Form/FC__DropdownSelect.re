@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module E = FC__E;
 
 type state = {label: string};
@@ -49,10 +51,10 @@ let make =
     };
   },
   render: self => {
-    <FC__DropdownMenu.Jsx2 title={self.state.label} trigger>
-      <FC__Menu.Jsx2
+    <FC__DropdownMenu title={self.state.label} trigger>
+      <FC__Menu
         selectable=true
-        onSelect={info =>
+        onSelect={(info: FC__Menu.clickInfo) =>
           switch (
             (values |> E.L.withIdx)
             ->(E.L.getBy(((i, _)) => info.key == "key" ++ string_of_int(i)))
@@ -72,11 +74,11 @@ let make =
 
           {values
            |> E.L.React.fmapi((i, (_key, label)) =>
-                <FC__Menu.Item.Jsx2 key={"key" ++ string_of_int(i)}>
+                <FC__Menu.Item key={"key" ++ string_of_int(i)}>
                   label->React.string
-                </FC__Menu.Item.Jsx2>
+                </FC__Menu.Item>
               )}
-        </FC__Menu.Jsx2>
-    </FC__DropdownMenu.Jsx2>;
+        </FC__Menu>
+    </FC__DropdownMenu>;
   },
 };

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open FC__Base;
 
 let styles = (~isDisabled=false, ~heightPadding=0, ()) => {
@@ -34,20 +36,20 @@ let make = (~isActive, ~onClick=?, ~number: option(int)=?, ~children) => {
           ]
     );
 
-  <Link.Jsx2
+  <Link
     ?onClick
     className=Css.(
       style([BaseStyles.floatLeft, marginRight(`em(1.8))] @ colors)
     )
     isDisabled=false>
-    <span className=textStyle> ...children </span>
+    <span className=textStyle> children </span>
     {number
      |> FC__E.O.React.fmapOrNull(number =>
           <span className={styles()}>
             {number |> string_of_int |> ReasonReact.string}
           </span>
         )}
-  </Link.Jsx2>;
+  </Link>;
 };
 
 module Jsx2 = {

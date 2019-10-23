@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 type content = {
   headerContent: ReasonReact.reactElement,
   bodyContent: ReasonReact.reactElement,
@@ -12,22 +14,22 @@ module Overlay = {
   [@react.component]
   let make = (~content) =>
     <div className=Styles.className>
-      <FC__PageCard.Jsx2>
-        <FC__PageCard.HeaderRow.Jsx2>
-          <FC__Div.Jsx2 float=`left>
-            <FC__PageCard.HeaderRow.Title.Jsx2>
+      <FC__PageCard>
+        <FC__PageCard.HeaderRow>
+          <FC__Div float=`left>
+            <FC__PageCard.HeaderRow.Title>
               <span
                 className=Css.(
                   style([marginRight(`em(0.4)), opacity(0.5)])
                 )>
-                <FC__Icon.Questionmark.Jsx2 isInteractive=false />
+                <FC__Icon.Questionmark isInteractive=false />
               </span>
               {content.headerContent}
-            </FC__PageCard.HeaderRow.Title.Jsx2>
-          </FC__Div.Jsx2>
-        </FC__PageCard.HeaderRow.Jsx2>
-        <FC__PageCard.Body.Jsx2>
-          <FC__PageCard.BodyPadding.Jsx2 v={`em(0.5)}>
+            </FC__PageCard.HeaderRow.Title>
+          </FC__Div>
+        </FC__PageCard.HeaderRow>
+        <FC__PageCard.Body>
+          <FC__PageCard.BodyPadding v={`em(0.5)}>
             <span
               className=Css.(
                 style([
@@ -37,9 +39,9 @@ module Overlay = {
               )>
               {content.bodyContent}
             </span>
-          </FC__PageCard.BodyPadding.Jsx2>
-        </FC__PageCard.Body.Jsx2>
-      </FC__PageCard.Jsx2>
+          </FC__PageCard.BodyPadding>
+        </FC__PageCard.Body>
+      </FC__PageCard>
     </div>;
 
   module Jsx2 = {
@@ -52,13 +54,10 @@ module Overlay = {
   };
 };
 
-let staticOverlay = content => <Overlay.Jsx2 content />;
+let staticOverlay = content => <Overlay content />;
 
 [@react.component]
-let make = (~content) =>
-  <FC__Dropdown overlay={staticOverlay(content)} trigger=FC__Dropdown.Hover>
-    <span> <FC__Icon.Questionmark.Jsx2 isInteractive=true /> </span>
-  </FC__Dropdown>;
+let make = (~content) => <FC__Dropdown overlay={staticOverlay(content)} />;
 
 module Jsx2 = {
   let make = (~content, children) =>

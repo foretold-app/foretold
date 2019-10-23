@@ -1,8 +1,10 @@
+[@bs.config {jsx: 3}];
+
 [@react.component]
-let make = (~selected, ~flex=false, ~onClick=?, ~list, ~children) =>
+let make = (~selected, ~flex=false, ~onClick=?, ~list) =>
   list
   |> FC__E.L.React.fmapi((i, (key, label)) =>
-       <FC__Tab.Jsx2
+       <FC__Tab
          key={string_of_int(i)}
          onClick={e =>
            switch (onClick) {
@@ -15,14 +17,14 @@ let make = (~selected, ~flex=false, ~onClick=?, ~list, ~children) =>
          isActive={selected == key}
          flex>
          label->React.string
-       </FC__Tab.Jsx2>
+       </FC__Tab>
      );
 
 module Jsx2 = {
   let make = (~selected, ~flex=false, ~onClick=?, ~list, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
-      makeProps(~selected, ~flex=false, ~onClick?, ~list, ~children, ()),
+      makeProps(~selected, ~flex=false, ~onClick?, ~list, ()),
       children,
     );
 };

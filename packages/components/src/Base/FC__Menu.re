@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 /**
  * Menu component and sibling components provides define menu items,
  * submenues and dividers. See make for usage.
@@ -6,9 +8,12 @@
  */
 [@bs.module "rc-menu"]
 external rcMenuClass: ReasonReact.reactClass = "default";
+
 [@bs.module "rc-menu"]
 external rcSubMenuClass: ReasonReact.reactClass = "SubMenu";
+
 [@bs.module "rc-menu"] external rcItemClass: ReasonReact.reactClass = "Item";
+
 [@bs.module "rc-menu"]
 external rcDividerClass: ReasonReact.reactClass = "Divider";
 
@@ -230,7 +235,9 @@ module Item = {
     itemIcon: Js.Undefined.t(React.element),
     className: string,
   };
-  let make = (~disabled=false, ~itemIcon=None, children) =>
+
+  [@react.component]
+  let make = (~disabled=false, ~itemIcon=None, ~children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=rcItemClass,
       ~props=
@@ -240,12 +247,26 @@ module Item = {
           ~className="ft-menu-item-general",
         ),
       children,
-    );
+    )
+    |> ReasonReact.element;
+
+  module Jsx2 = {
+    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+    let make = (~disabled=false, ~itemIcon=None, children) =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~disabled, ~itemIcon, ~children, ()),
+        children,
+      );
+  };
 };
 
 module Divider = {
   // https://github.com/react-component/menu#menuitem-props
-  let make = children =>
+
+  [@react.component]
+  let make = (~children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=rcDividerClass,
       ~props=Js.Obj.empty(),

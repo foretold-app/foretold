@@ -9,47 +9,52 @@ module Overlay = {
     let className = style([maxWidth(`em(30.))]);
   };
 
-  let component = ReasonReact.statelessComponent("HelpDropdown Inside");
-  let make = (~content, _children) => {
-    ...component,
-    render: _self => {
-      <div className=Styles.className>
-        <FC__PageCard>
-          <FC__PageCard.HeaderRow>
-            <FC__Div.Jsx2 float=`left>
-              <FC__PageCard.HeaderRow.Title>
-                <span
-                  className=Css.(
-                    style([marginRight(`em(0.4)), opacity(0.5)])
-                  )>
-                  <FC__Icon.Questionmark.Jsx2 isInteractive=false />
-                </span>
-                {content.headerContent}
-              </FC__PageCard.HeaderRow.Title>
-            </FC__Div.Jsx2>
-          </FC__PageCard.HeaderRow>
-          <FC__PageCard.Body>
-            <FC__PageCard.BodyPadding v={`em(0.5)}>
+  [@react.component]
+  let make = (~content) =>
+    <div className=Styles.className>
+      <FC__PageCard>
+        <FC__PageCard.HeaderRow>
+          <FC__Div.Jsx2 float=`left>
+            <FC__PageCard.HeaderRow.Title>
               <span
                 className=Css.(
-                  style([
-                    color(FC__Settings.Text.LightBackground.p),
-                    lineHeight(`em(1.5)),
-                  ])
+                  style([marginRight(`em(0.4)), opacity(0.5)])
                 )>
-                {content.bodyContent}
+                <FC__Icon.Questionmark.Jsx2 isInteractive=false />
               </span>
-            </FC__PageCard.BodyPadding>
-          </FC__PageCard.Body>
-        </FC__PageCard>
-      </div>;
-    },
+              {content.headerContent}
+            </FC__PageCard.HeaderRow.Title>
+          </FC__Div.Jsx2>
+        </FC__PageCard.HeaderRow>
+        <FC__PageCard.Body>
+          <FC__PageCard.BodyPadding v={`em(0.5)}>
+            <span
+              className=Css.(
+                style([
+                  color(FC__Settings.Text.LightBackground.p),
+                  lineHeight(`em(1.5)),
+                ])
+              )>
+              {content.bodyContent}
+            </span>
+          </FC__PageCard.BodyPadding>
+        </FC__PageCard.Body>
+      </FC__PageCard>
+    </div>;
+
+  module Jsx2 = {
+    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+    let make = (~content, children) =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~content, ()),
+        children,
+      );
   };
 };
 
-let component = ReasonReact.statelessComponent("HelpDropdown");
-
-let staticOverlay = content => <Overlay content />;
+let staticOverlay = content => <Overlay.Jsx2 content />;
 
 [@react.component]
 let make = (~content) =>

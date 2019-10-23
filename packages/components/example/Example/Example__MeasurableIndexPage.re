@@ -39,7 +39,7 @@ let row =
        )}
     </Table.Cell>
     <Table.Cell flex={`num(2.)}>
-      <FC__CdfChart__Small
+      <FC__CdfChart__Small.Jsx2
         cdf
         minX={Some(2.0)}
         color={`hex("#d9dcdf")}

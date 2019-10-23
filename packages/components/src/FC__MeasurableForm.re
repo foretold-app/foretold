@@ -42,7 +42,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
         </PageCard.HeaderRow.Title>
       </PageCard.HeaderRow>
       <PageCard.Section flex=true padding=`none>
-        <TabList
+        <TabList.Jsx2
           selected={self.state.selectedTab}
           onClick={key => self.send(ChangeTab(key))}
           list=[

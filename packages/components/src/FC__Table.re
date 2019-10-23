@@ -153,29 +153,45 @@ module Row = {
   let textSection = text =>
     <Div.Jsx2 styles=[Styles.textArea]> text </Div.Jsx2>;
 
-  let make = (~className="", ~bottomSubRow=?, ~onClick=?, children) => {
-    ...component,
-    render: _self => {
-      let commonClasses =
-        onClick |> E.O.isSome
-          ? [Styles.clickableRow, className] : [className];
-      switch (bottomSubRow) {
-      | Some(bottomSubRow) =>
-        <Div.Jsx2 styles=commonClasses ?onClick>
-          <Div.Jsx2 styles=[Styles.topRow]> ...children </Div.Jsx2>
-          <Div.Jsx2 styles=[Styles.bottomRow]> ...bottomSubRow </Div.Jsx2>
-        </Div.Jsx2>
-      | None =>
-        <Div.Jsx2 styles=[Styles.row, ...commonClasses] ?onClick>
-          ...children
-        </Div.Jsx2>
-      };
-    },
+  [@react.component]
+  let make = (~className="", ~bottomSubRow=?, ~onClick=?, ~children) => {
+    let commonClasses =
+      onClick |> E.O.isSome ? [Styles.clickableRow, className] : [className];
+    switch (bottomSubRow) {
+    | Some(bottomSubRow) =>
+      <Div.Jsx2 styles=commonClasses ?onClick>
+        <Div.Jsx2 styles=[Styles.topRow]> ...children </Div.Jsx2>
+        <Div.Jsx2 styles=[Styles.bottomRow]> ...bottomSubRow </Div.Jsx2>
+      </Div.Jsx2>
+    | None =>
+      <Div.Jsx2 styles=[Styles.row, ...commonClasses] ?onClick>
+        ...children
+      </Div.Jsx2>
+    };
+  };
+
+  module Jsx2 = {
+    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+    let make = (~className="", ~bottomSubRow=?, ~onClick=?, children) =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~className, ~bottomSubRow?, ~onClick?, ~children, ()),
+        children,
+      );
   };
 };
 
-let component = ReasonReact.statelessComponent("Table");
-let make = children => {
-  ...component,
-  render: _self => <div> ...children </div>,
+[@react.component]
+let make = (~children) => <div> ...children </div>;
+
+module Jsx2 = {
+  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+  let make = children =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~children, ()),
+      children,
+    );
 };

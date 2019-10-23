@@ -49,7 +49,7 @@ let make =
     };
   },
   render: self => {
-    <FC__DropdownMenu title={self.state.label} trigger>
+    <FC__DropdownMenu.Jsx2 title={self.state.label} trigger>
       <FC__Menu
         selectable=true
         onSelect={info =>
@@ -77,6 +77,6 @@ let make =
                 </FC__Menu.Item>
               )}
         </FC__Menu>
-    </FC__DropdownMenu>;
+    </FC__DropdownMenu.Jsx2>;
   },
 };

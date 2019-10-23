@@ -28,7 +28,9 @@ let make =
   let pdf = cdf |> FC__Types.Dist.toPdf;
 
   <div className={Styles.graph(color)}>
-    <div className=Styles.textOverlay> <FC__CdfChart__StatSummary cdf /> </div>
+    <div className=Styles.textOverlay>
+      <FC__CdfChart__StatSummary.Jsx2 cdf />
+    </div>
     <FC__CdfChart__Base
       width=200
       height=40

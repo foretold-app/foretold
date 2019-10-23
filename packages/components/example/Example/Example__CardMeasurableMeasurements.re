@@ -35,7 +35,7 @@ let row =
       className=Css.(
         style([paddingTop(`em(0.2)), paddingBottom(`em(0.3))])
       )>
-      <FC__CdfChart__StatSummary cdf />
+      <FC__CdfChart__StatSummary.Jsx2 cdf />
     </Table.Cell>
     <Table.Cell flex={`num(1.0)} className=cellStyle>
       <FC__AgentLink.Jsx2
@@ -75,7 +75,7 @@ let row2 =
       className=Css.(
         style([paddingTop(`em(0.2)), paddingBottom(`em(0.3))])
       )>
-      <FC__CdfChart__StatSummary cdf />
+      <FC__CdfChart__StatSummary.Jsx2 cdf />
     </Table.Cell>
     <Table.Cell flex={`num(1.0)} className=cellStyle>
       <FC__AgentLink.Jsx2

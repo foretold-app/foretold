@@ -1,31 +1,31 @@
 open FC.Base;
 
 let simpleMenu = () =>
-  <DropdownMenu title="Simple menu">
+  <DropdownMenu.Jsx2 title="Simple menu">
     Menu.(
-      <Menu onClick={e => Js.log(e.key)}>
-        <Item key="item1"> "1st menu item"->React.string </Item>
-        <Item key="item2"> "2nd menu item"->React.string </Item>
-        <Divider />
-        <Item key="item3"> "3nd menu item"->React.string </Item>
-      </Menu>
+      <Menu.Jsx2 onClick={e => Js.log(e.key)}>
+        <Item.Jsx2 key="item1"> "1st menu item"->React.string </Item.Jsx2>
+        <Item.Jsx2 key="item2"> "2nd menu item"->React.string </Item.Jsx2>
+        <Divider.Jsx2 />
+        <Item.Jsx2 key="item3"> "3nd menu item"->React.string </Item.Jsx2>
+      </Menu.Jsx2>
     )
-  </DropdownMenu>;
+  </DropdownMenu.Jsx2>;
 
 let subMenu = () =>
-  <DropdownMenu title="Submenu" trigger=Dropdown.Hover>
+  <DropdownMenu.Jsx2 title="Submenu" trigger=Dropdown.Hover>
     Menu.(
-      <Menu onClick={e => Js.log(e.key)}>
-        <Item key="item1"> "Item1"->React.string </Item>
-        <Divider />
-        <Item key="item2"> "Item2"->React.string </Item>
-        <SubMenu title="Submenu1">
-          <Item key="item3"> "Item3"->React.string </Item>
-          <Item key="item4"> "Item4"->React.string </Item>
-        </SubMenu>
-      </Menu>
+      <Menu.Jsx2 onClick={e => Js.log(e.key)}>
+        <Item.Jsx2 key="item1"> "Item1"->React.string </Item.Jsx2>
+        <Divider.Jsx2 />
+        <Item.Jsx2 key="item2"> "Item2"->React.string </Item.Jsx2>
+        <SubMenu.Jsx2 title="Submenu1">
+          <Item.Jsx2 key="item3"> "Item3"->React.string </Item.Jsx2>
+          <Item.Jsx2 key="item4"> "Item4"->React.string </Item.Jsx2>
+        </SubMenu.Jsx2>
+      </Menu.Jsx2>
     )
-  </DropdownMenu>;
+  </DropdownMenu.Jsx2>;
 
 let entries =
   EntryTypes.[

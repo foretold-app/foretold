@@ -64,7 +64,7 @@ let make = (~title, ~trigger=FC__Dropdown.Hover, ~children) => {
 module Jsx2 = {
   let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
 
-  let make = (~title, ~trigger, children) =>
+  let make = (~title, ~trigger=FC__Dropdown.Hover, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
       makeProps(~title, ~trigger, ~children, ()),

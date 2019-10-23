@@ -81,7 +81,7 @@ module Scoring = {
         />
         {self.state.varA
          |> E.O.React.fmapOrNull(v =>
-              <FC__CdfChart__Large cdf=v minX maxX width=None />
+              <FC__CdfChart__Large.Jsx2 cdf=v minX maxX width=None />
             )}
         <h3> {"Variable B" |> ReasonReact.string} </h3>
         <FC_GuesstimateInput
@@ -96,7 +96,7 @@ module Scoring = {
         />
         {self.state.varB
          |> E.O.React.fmapOrNull(v =>
-              <FC__CdfChart__Large minX maxX cdf=v width=None />
+              <FC__CdfChart__Large.Jsx2 minX maxX cdf=v width=None />
             )}
         <h3> {"Variable C" |> ReasonReact.string} </h3>
         <FC_GuesstimateInput
@@ -111,13 +111,13 @@ module Scoring = {
         />
         {self.state.varC
          |> E.O.React.fmapOrNull(v =>
-              <FC__CdfChart__Large minX maxX cdf=v width=None />
+              <FC__CdfChart__Large.Jsx2 minX maxX cdf=v width=None />
             )}
         <h3> {"C * Log2(A / B)" |> ReasonReact.string} </h3>
         {switch (distributionScoreDistribution) {
          | None => ReasonReact.null
          | Some(divideBy) =>
-           <FC__CdfChart__Large minX maxX cdf=divideBy width=None />
+           <FC__CdfChart__Large.Jsx2 minX maxX cdf=divideBy width=None />
          }}
         <h3> {"Final Score" |> ReasonReact.string} </h3>
         {switch (distributionScoreNumber) {

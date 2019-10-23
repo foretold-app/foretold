@@ -54,7 +54,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
         />
       </PageCard.Section>
       <PageCard.Section background=`grey border=`bottom padding=`top>
-        <FC__CdfChart__Large cdf width=None />
+        <FC__CdfChart__Large.Jsx2 cdf width=None />
       </PageCard.Section>
       <PageCard.Section background=`grey>
         {switch (self.state.selectedTab) {

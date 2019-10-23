@@ -219,12 +219,26 @@ module SubMenu = {
     title: string,
     popupClassName: string,
   };
-  let make = (~title, children) =>
+
+  [@react.component]
+  let make = (~title, ~children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=rcSubMenuClass,
       ~props=jsProps(~title, ~popupClassName="ft-submenu-general"),
       children,
-    );
+    )
+    |> ReasonReact.element;
+
+  module Jsx2 = {
+    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+    let make = (~title, children) =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~title, ~children, ()),
+        children,
+      );
+  };
 };
 
 module Item = {

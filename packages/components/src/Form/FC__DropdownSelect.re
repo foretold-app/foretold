@@ -5,7 +5,6 @@ type state = {label: string};
 type action =
   | ChangeLabel(string);
 
-let component = ReasonReact.reducerComponent(__MODULE__);
 /**
    * Dropdown select
    * Usage
@@ -21,6 +20,7 @@ let component = ReasonReact.reducerComponent(__MODULE__);
    * />
    *
    */
+let component = ReasonReact.reducerComponent(__MODULE__);
 let make =
     (
       ~initialValue: option('a)=None,

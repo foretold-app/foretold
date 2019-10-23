@@ -249,41 +249,50 @@ module VerticalSpace = {
 };
 
 module H1 = {
-  let component = ReasonReact.statelessComponent("H1");
-  let make = children => {
-    ...component,
-    render: _self =>
-      <h1
-        className=Css.(
-          style(
-            [
-              fontSize(`em(1.15)),
-              color(`hex("192D44")),
-              FC__Settings.FontWeights.heavy,
-              marginTop(`em(0.0)),
-              marginBottom(`em(0.4)),
-            ]
-            @ BaseStyles.fullWidthFloatLeft,
-          )
-        )>
-        ...children
-      </h1>,
+  [@react.component]
+  let make = (~children) =>
+    <h1
+      className=Css.(
+        style(
+          [
+            fontSize(`em(1.15)),
+            color(`hex("192D44")),
+            FC__Settings.FontWeights.heavy,
+            marginTop(`em(0.0)),
+            marginBottom(`em(0.4)),
+          ]
+          @ BaseStyles.fullWidthFloatLeft,
+        )
+      )>
+      ...children
+    </h1>;
+
+  module Jsx2 = {
+    let make = children =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~children, ()),
+        children,
+      );
   };
 };
 
 module P = {
-  let component = ReasonReact.statelessComponent("P");
-  let make = children => {
-    ...component,
-    render: _self =>
-      <p
-        className=Css.(
-          style([
-            color(Colors.Text.LightBackground.p),
-            lineHeight(`em(1.5)),
-          ])
-        )>
-        ...children
-      </p>,
+  [@react.component]
+  let make = (~children) =>
+    <p
+      className=Css.(
+        style([color(Colors.Text.LightBackground.p), lineHeight(`em(1.5))])
+      )>
+      ...children
+    </p>;
+
+  module Jsx2 = {
+    let make = children =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~children, ()),
+        children,
+      );
   };
 };

@@ -31,7 +31,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
   render: self =>
     <PageCard.Jsx2>
       <PageCard.HeaderRow.Jsx2>
-        <PageCard.HeaderRow.Title>
+        <PageCard.HeaderRow.Title.Jsx2>
           "New Prediction"->React.string
           <FC__HelpDropdown.Jsx2
             content={
@@ -39,7 +39,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
               bodyContent: "sdfsdfsd" |> ReasonReact.string,
             }
           />
-        </PageCard.HeaderRow.Title>
+        </PageCard.HeaderRow.Title.Jsx2>
       </PageCard.HeaderRow.Jsx2>
       <PageCard.Section flex=true padding=`none>
         <TabList.Jsx2

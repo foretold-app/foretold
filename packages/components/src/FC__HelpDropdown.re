@@ -15,7 +15,7 @@ module Overlay = {
       <FC__PageCard.Jsx2>
         <FC__PageCard.HeaderRow.Jsx2>
           <FC__Div.Jsx2 float=`left>
-            <FC__PageCard.HeaderRow.Title>
+            <FC__PageCard.HeaderRow.Title.Jsx2>
               <span
                 className=Css.(
                   style([marginRight(`em(0.4)), opacity(0.5)])
@@ -23,7 +23,7 @@ module Overlay = {
                 <FC__Icon.Questionmark.Jsx2 isInteractive=false />
               </span>
               {content.headerContent}
-            </FC__PageCard.HeaderRow.Title>
+            </FC__PageCard.HeaderRow.Title.Jsx2>
           </FC__Div.Jsx2>
         </FC__PageCard.HeaderRow.Jsx2>
         <FC__PageCard.Body>

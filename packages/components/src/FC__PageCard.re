@@ -52,25 +52,31 @@ module HeaderRow = {
   };
 
   module Title = {
-    let component =
-      ReasonReact.statelessComponent("PageCard HeaderRow Title");
+    [@react.component]
+    let make = (~children) =>
+      <Div.Jsx2
+        styles=[
+          Css.(
+            style([
+              color(Colors.textDark),
+              paddingTop(`em(0.6)),
+              paddingBottom(`em(0.6)),
+              FC__Settings.FontWeights.heavy,
+            ])
+          ),
+        ]>
+        ...children
+      </Div.Jsx2>;
 
-    let make = children => {
-      ...component,
-      render: _self =>
-        <Div.Jsx2
-          styles=[
-            Css.(
-              style([
-                color(Colors.textDark),
-                paddingTop(`em(0.6)),
-                paddingBottom(`em(0.6)),
-                FC__Settings.FontWeights.heavy,
-              ])
-            ),
-          ]>
-          ...children
-        </Div.Jsx2>,
+    module Jsx2 = {
+      let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+      let make = children =>
+        ReasonReactCompat.wrapReactForReasonReact(
+          make,
+          makeProps(~children, ()),
+          children,
+        );
     };
   };
 

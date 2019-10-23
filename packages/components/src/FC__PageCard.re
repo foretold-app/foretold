@@ -31,8 +31,6 @@ let make = (~children) =>
   </Div.Jsx2>;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
   let make = children =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
@@ -68,8 +66,6 @@ module HeaderRow = {
       </Div.Jsx2>;
 
     module Jsx2 = {
-      let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
       let make = children =>
         ReasonReactCompat.wrapReactForReasonReact(
           make,
@@ -97,8 +93,6 @@ module HeaderRow = {
     </Div.Jsx2>;
 
   module Jsx2 = {
-    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
     let make = children =>
       ReasonReactCompat.wrapReactForReasonReact(
         make,
@@ -116,8 +110,6 @@ module Body = {
     </Div.Jsx2>;
 
   module Jsx2 = {
-    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
     let make = children =>
       ReasonReactCompat.wrapReactForReasonReact(
         make,
@@ -140,8 +132,6 @@ module BodyPadding = {
     </Div.Jsx2>;
 
   module Jsx2 = {
-    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
     let make = (~v=`em(1.5), children) =>
       ReasonReactCompat.wrapReactForReasonReact(
         make,
@@ -209,7 +199,6 @@ module Section = {
     };
   };
 
-  let component = ReasonReact.statelessComponent("Card Section");
   /**
    * Section of a PageCard
    * background: `white (default) | `grey
@@ -217,20 +206,33 @@ module Section = {
    * padding: `none | `top | `bottom | `all (default)
    * flex: true | false
    */
+  [@react.component]
   let make =
       (
         ~background: StyleProps.background=`white,
         ~border: StyleProps.border=`none,
         ~padding: StyleProps.padding=`all,
         ~flex=false,
+        ~children,
+      ) =>
+    <div className={StyleProps.toClasses(background, border, padding, flex)}>
+      ...children
+    </div>;
+
+  module Jsx2 = {
+    let make =
+        (
+          ~background: StyleProps.background=`white,
+          ~border: StyleProps.border=`none,
+          ~padding: StyleProps.padding=`all,
+          ~flex=false,
+          children,
+        ) =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~background, ~border, ~padding, ~flex, ~children, ()),
         children,
-      ) => {
-    ...component,
-    render: _self =>
-      <div
-        className={StyleProps.toClasses(background, border, padding, flex)}>
-        ...children
-      </div>,
+      );
   };
 };
 

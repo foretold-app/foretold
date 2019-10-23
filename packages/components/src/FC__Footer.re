@@ -106,8 +106,6 @@ let make =
   </div>;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
   let make =
       (
         ~logo: ReasonReact.reactElement,

@@ -40,8 +40,6 @@ let make = (~children) =>
   </Div.Jsx2>;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
   let make = children =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
@@ -79,8 +77,6 @@ module SubHeader = {
     </Div.Jsx2>;
 
   module Jsx2 = {
-    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
     let make = children =>
       ReasonReactCompat.wrapReactForReasonReact(
         make,

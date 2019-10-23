@@ -19,8 +19,6 @@ let make = (~selected, ~flex=false, ~onClick=?, ~list, ~children) =>
      );
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
   let make = (~selected, ~flex=false, ~onClick=?, ~list, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

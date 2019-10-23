@@ -32,8 +32,6 @@ let make =
   |> ReasonReact.element;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
   let make =
       (
         ~sampleCount=10000,

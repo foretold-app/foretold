@@ -50,8 +50,6 @@ module Button = {
     </button>;
 
   module Jsx2 = {
-    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
     let make = (~isActive=false, ~onClick=?, ~flex=false, children) =>
       ReasonReactCompat.wrapReactForReasonReact(
         make,
@@ -74,8 +72,6 @@ let make = (~isActive=false, ~onClick=?, ~flex=false, ~children) =>
   </FC__Link.Jsx2>;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
   let make = (~isActive=false, ~onClick=?, ~flex=false, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

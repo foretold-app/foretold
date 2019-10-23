@@ -41,8 +41,6 @@ let make =
 };
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
   let make =
       (
         ~cdf: FC__Types.Dist.t,

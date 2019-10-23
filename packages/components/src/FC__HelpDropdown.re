@@ -43,8 +43,6 @@ module Overlay = {
     </div>;
 
   module Jsx2 = {
-    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
     let make = (~content, children) =>
       ReasonReactCompat.wrapReactForReasonReact(
         make,
@@ -63,8 +61,6 @@ let make = (~content) =>
   </FC__Dropdown>;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
   let make = (~content, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

@@ -5,8 +5,6 @@ let make = (~fullWidth=false, ~rows=5, ~value=?) =>
   </textarea>;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
   let make = (~fullWidth=false, ~rows=5, ~value=?, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

@@ -7,8 +7,6 @@ let make = (~fullWidth=false, ~placeholder=?) =>
   />;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
   let make = (~fullWidth=false, ~placeholder=?, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

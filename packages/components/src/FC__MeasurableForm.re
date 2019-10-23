@@ -41,7 +41,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
           />
         </PageCard.HeaderRow.Title.Jsx2>
       </PageCard.HeaderRow.Jsx2>
-      <PageCard.Section flex=true padding=`none>
+      <PageCard.Section.Jsx2 flex=true padding=`none>
         <TabList.Jsx2
           selected={self.state.selectedTab}
           onClick={key => self.send(ChangeTab(key))}
@@ -52,11 +52,11 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
           ]
           flex=true
         />
-      </PageCard.Section>
-      <PageCard.Section background=`grey border=`bottom padding=`top>
+      </PageCard.Section.Jsx2>
+      <PageCard.Section.Jsx2 background=`grey border=`bottom padding=`top>
         <FC__CdfChart__Large.Jsx2 cdf width=None />
-      </PageCard.Section>
-      <PageCard.Section background=`grey>
+      </PageCard.Section.Jsx2>
+      <PageCard.Section.Jsx2 background=`grey>
         {switch (self.state.selectedTab) {
          | SimpleTab =>
            <Div.Jsx2 flexDirection=`row styles=[flexRowContainer]>
@@ -93,14 +93,14 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
              <TextArea.Jsx2 rows=4 fullWidth=true />
            </div>
          }}
-      </PageCard.Section>
-      <PageCard.Section>
+      </PageCard.Section.Jsx2>
+      <PageCard.Section.Jsx2>
         <InputLabel.Jsx2> "Comment"->React.string </InputLabel.Jsx2>
         <TextArea.Jsx2 fullWidth=true />
         <PageCard.VerticalSpace />
         <Button.Jsx2 variant=Button.Primary fullWidth=true size=Large>
           "Submit Prediction"->React.string
         </Button.Jsx2>
-      </PageCard.Section>
+      </PageCard.Section.Jsx2>
     </PageCard.Jsx2>,
 };

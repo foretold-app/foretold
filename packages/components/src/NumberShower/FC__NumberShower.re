@@ -32,8 +32,6 @@ let make = (~number, ~precision) => {
 };
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
   let make = (~number, ~precision, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

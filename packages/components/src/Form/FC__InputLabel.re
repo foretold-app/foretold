@@ -5,8 +5,6 @@ let inputHeader =
 let make = (~children) => <div className=inputHeader> ...children </div>;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
   let make = children =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

@@ -41,8 +41,6 @@ let make = (~links: ReasonReact.reactElement) =>
   </Div.Jsx2>;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
   let make = (~links: ReasonReact.reactElement, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

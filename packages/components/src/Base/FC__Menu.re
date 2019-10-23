@@ -230,8 +230,6 @@ module SubMenu = {
     |> ReasonReact.element;
 
   module Jsx2 = {
-    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
     let make = (~title, children) =>
       ReasonReactCompat.wrapReactForReasonReact(
         make,
@@ -265,8 +263,6 @@ module Item = {
     |> ReasonReact.element;
 
   module Jsx2 = {
-    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
     let make = (~disabled=false, ~itemIcon=None, children) =>
       ReasonReactCompat.wrapReactForReasonReact(
         make,
@@ -289,8 +285,6 @@ module Divider = {
     |> ReasonReact.element;
 
   module Jsx2 = {
-    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
     let make = children =>
       ReasonReactCompat.wrapReactForReasonReact(
         make,
@@ -408,8 +402,6 @@ let make =
   |> ReasonReact.element;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
   let make =
       (~onClick=?, ~selectable=false, ~onSelect=?, ~selectedKey=?, children) =>
     ReasonReactCompat.wrapReactForReasonReact(

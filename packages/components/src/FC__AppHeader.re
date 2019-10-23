@@ -21,8 +21,6 @@ module Styles = {
     );
 };
 
-let component = ReasonReact.statelessComponent(__MODULE__);
-
 let link =
   Link.Jsx2.make(
     ~isDisabled=false,
@@ -36,10 +34,19 @@ let link =
       ),
   );
 
-let make = (~links: ReasonReact.reactElement, _children) => {
-  ...component,
-  render: _self =>
-    <Div.Jsx2 styles=[Styles.outer]>
-      <Div.Jsx2 float=`left> links </Div.Jsx2>
-    </Div.Jsx2>,
+[@react.component]
+let make = (~links: ReasonReact.reactElement) =>
+  <Div.Jsx2 styles=[Styles.outer]>
+    <Div.Jsx2 float=`left> links </Div.Jsx2>
+  </Div.Jsx2>;
+
+module Jsx2 = {
+  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+  let make = (~links: ReasonReact.reactElement, children) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~links, ()),
+      children,
+    );
 };

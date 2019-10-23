@@ -33,45 +33,59 @@ let actionButton = (~variant: FC__Button.variant=Primary) =>
     ~className=Css.(merge([Styles.actionButtonPosition])),
   );
 
-let component = ReasonReact.statelessComponent(__MODULE__);
+[@react.component]
+let make = (~children) =>
+  <Div.Jsx2 styles=[Styles.outer]>
+    <Div.Jsx2 styles=[Styles.inner]> ...children </Div.Jsx2>
+  </Div.Jsx2>;
 
-let make = children => {
-  ...component,
-  render: _self =>
-    <Div.Jsx2 styles=[Styles.outer]>
-      <Div.Jsx2 styles=[Styles.inner]> ...children </Div.Jsx2>
-    </Div.Jsx2>,
+module Jsx2 = {
+  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+  let make = children =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~children, ()),
+      children,
+    );
 };
 
 module SubHeader = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ " Subheader");
-
-  let make = children => {
-    ...component,
-    render: _self =>
+  [@react.component]
+  let make = (~children) =>
+    <Div.Jsx2
+      styles=[
+        Css.(
+          style(
+            [backgroundColor(Colors.lighterGrayBackground)]
+            @ BaseStyles.fullWidthFloatLeft,
+          )
+        ),
+      ]>
       <Div.Jsx2
         styles=[
           Css.(
             style(
-              [backgroundColor(Colors.lighterGrayBackground)]
+              [
+                padding2(~v=`em(0.0), ~h=`em(2.0)),
+                borderBottom(`px(1), `solid, FC__Settings.border),
+              ]
               @ BaseStyles.fullWidthFloatLeft,
             )
           ),
         ]>
-        <Div.Jsx2
-          styles=[
-            Css.(
-              style(
-                [
-                  padding2(~v=`em(0.0), ~h=`em(2.0)),
-                  borderBottom(`px(1), `solid, FC__Settings.border),
-                ]
-                @ BaseStyles.fullWidthFloatLeft,
-              )
-            ),
-          ]>
-          ...children
-        </Div.Jsx2>
-      </Div.Jsx2>,
+        ...children
+      </Div.Jsx2>
+    </Div.Jsx2>;
+
+  module Jsx2 = {
+    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+    let make = children =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~children, ()),
+        children,
+      );
   };
 };

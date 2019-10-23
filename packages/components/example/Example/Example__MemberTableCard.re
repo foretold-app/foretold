@@ -20,17 +20,17 @@ let make =
         </FC__Button.Jsx2>
       </Div.Jsx2>
     </PageCard.HeaderRow.Jsx2>
-    <Table>
+    <Table.Jsx2>
       <Table.HeaderRow.Jsx2>
-        <Table.Cell flex={`num(4.)}>
+        <Table.Cell.Jsx2 flex={`num(4.)}>
           {"Name & Status" |> ReasonReact.string}
-        </Table.Cell>
-        <Table.Cell flex={`num(2.)}>
+        </Table.Cell.Jsx2>
+        <Table.Cell.Jsx2 flex={`num(2.)}>
           {"Aggregate Prediction" |> ReasonReact.string}
-        </Table.Cell>
-        <Table.Cell flex={`num(1.)}>
+        </Table.Cell.Jsx2>
+        <Table.Cell.Jsx2 flex={`num(1.)}>
           {"Details" |> ReasonReact.string}
-        </Table.Cell>
+        </Table.Cell.Jsx2>
       </Table.HeaderRow.Jsx2>
-    </Table>
+    </Table.Jsx2>
   </PageCard.Jsx2>;

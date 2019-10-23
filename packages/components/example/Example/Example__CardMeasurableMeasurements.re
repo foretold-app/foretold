@@ -10,7 +10,7 @@ let cellStyle =
   Css.(style([paddingTop(`em(0.7)), paddingBottom(`em(0.4))]));
 
 let row =
-  <Table.Row
+  <Table.Row.Jsx2
     bottomSubRow=[|
       Table.Row.textSection(
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vulputate tortor a sapien aliquet ullamcorper. Nunc non varius sapien, quis elementum sapien. Morbi ac tristique quam. Cras hendrerit accumsan pretium. Praesent id nisl sit amet eros imperdiet placerat. Vestibulum sodales posuere diam vel laoreet.
@@ -18,7 +18,7 @@ let row =
         |> ReasonReact.string,
       ),
     |]>
-    <Table.Cell
+    <Table.Cell.Jsx2
       flex={`num(2.0)}
       className=Css.(
         style([paddingTop(`em(0.6)), paddingBottom(`em(0.0))])
@@ -29,15 +29,15 @@ let row =
         color={`hex("#d9dcdf")}
         maxX=12.0
       />
-    </Table.Cell>
-    <Table.Cell
+    </Table.Cell.Jsx2>
+    <Table.Cell.Jsx2
       flex={`num(1.0)}
       className=Css.(
         style([paddingTop(`em(0.2)), paddingBottom(`em(0.3))])
       )>
       <FC__CdfChart__StatSummary.Jsx2 cdf />
-    </Table.Cell>
-    <Table.Cell flex={`num(1.0)} className=cellStyle>
+    </Table.Cell.Jsx2>
+    <Table.Cell.Jsx2 flex={`num(1.0)} className=cellStyle>
       <FC__AgentLink.Jsx2
         agent={FC__AgentLink.Agent.makeUser(
           ~name="Roger Adams",
@@ -46,19 +46,19 @@ let row =
           (),
         )}
       />
-    </Table.Cell>
-    <Table.Cell flex={`num(1.0)} className=cellStyle>
+    </Table.Cell.Jsx2>
+    <Table.Cell.Jsx2 flex={`num(1.0)} className=cellStyle>
       <span className=Css.(style([color(FC__Settings.textMedium)]))>
         {MomentRe.momentWithUnix(pastTime)
          |> MomentRe.Moment.format(format_standard)
          |> ReasonReact.string}
       </span>
-    </Table.Cell>
-  </Table.Row>;
+    </Table.Cell.Jsx2>
+  </Table.Row.Jsx2>;
 
 let row2 =
-  <Table.Row>
-    <Table.Cell
+  <Table.Row.Jsx2>
+    <Table.Cell.Jsx2
       flex={`num(2.0)}
       className=Css.(
         style([paddingTop(`em(0.6)), paddingBottom(`em(0.0))])
@@ -69,15 +69,15 @@ let row2 =
         color={`hex("#d9dcdf")}
         maxX=12.0
       />
-    </Table.Cell>
-    <Table.Cell
+    </Table.Cell.Jsx2>
+    <Table.Cell.Jsx2
       flex={`num(1.0)}
       className=Css.(
         style([paddingTop(`em(0.2)), paddingBottom(`em(0.3))])
       )>
       <FC__CdfChart__StatSummary.Jsx2 cdf />
-    </Table.Cell>
-    <Table.Cell flex={`num(1.0)} className=cellStyle>
+    </Table.Cell.Jsx2>
+    <Table.Cell.Jsx2 flex={`num(1.0)} className=cellStyle>
       <FC__AgentLink.Jsx2
         agent={FC__AgentLink.Agent.makeUser(
           ~name="Samantha Hope",
@@ -86,15 +86,15 @@ let row2 =
           (),
         )}
       />
-    </Table.Cell>
-    <Table.Cell flex={`num(1.0)} className=cellStyle>
+    </Table.Cell.Jsx2>
+    <Table.Cell.Jsx2 flex={`num(1.0)} className=cellStyle>
       <span className=Css.(style([color(FC__Settings.textMedium)]))>
         {MomentRe.momentWithUnix(pastTime)
          |> MomentRe.Moment.format(format_standard)
          |> ReasonReact.string}
       </span>
-    </Table.Cell>
-  </Table.Row>;
+    </Table.Cell.Jsx2>
+  </Table.Row.Jsx2>;
 
 let make =
   <PageCard.Jsx2>
@@ -132,20 +132,20 @@ let make =
       </Div.Jsx2>
     </PageCard.HeaderRow.Jsx2>
     <Div.Jsx2 styles=[Css.style(BaseStyles.fullWidthFloatLeft)]>
-      <Table>
+      <Table.Jsx2>
         <Table.HeaderRow.Jsx2>
-          <Table.Cell flex={`num(2.0)}>
+          <Table.Cell.Jsx2 flex={`num(2.0)}>
             {"Prediction Distribution" |> ReasonReact.string}
-          </Table.Cell>
-          <Table.Cell flex={`num(1.0)}>
+          </Table.Cell.Jsx2>
+          <Table.Cell.Jsx2 flex={`num(1.0)}>
             {"Prediction Value" |> ReasonReact.string}
-          </Table.Cell>
-          <Table.Cell flex={`num(1.0)}>
+          </Table.Cell.Jsx2>
+          <Table.Cell.Jsx2 flex={`num(1.0)}>
             {"Agent" |> ReasonReact.string}
-          </Table.Cell>
-          <Table.Cell flex={`num(1.0)}>
+          </Table.Cell.Jsx2>
+          <Table.Cell.Jsx2 flex={`num(1.0)}>
             {"Time" |> ReasonReact.string}
-          </Table.Cell>
+          </Table.Cell.Jsx2>
         </Table.HeaderRow.Jsx2>
         row
         row2
@@ -155,6 +155,6 @@ let make =
         row
         row2
         row2
-      </Table>
+      </Table.Jsx2>
     </Div.Jsx2>
   </PageCard.Jsx2>;

@@ -30,8 +30,6 @@ module Styles = {
 
 type type_ = [ | `primary | `info | `success | `warning | `error];
 
-let component = ReasonReact.statelessComponent(__MODULE__);
-
 [@react.component]
 let make = (~type_: type_=`info, ~children) => {
   let classes = Styles.alertBox ++ " " ++ Styles.colors(type_);
@@ -39,8 +37,6 @@ let make = (~type_: type_=`info, ~children) => {
 };
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
   let make = (~type_: type_=`info, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

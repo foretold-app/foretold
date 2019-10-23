@@ -95,25 +95,29 @@ module Cell = {
 
   let style = flexAmount => Css.(style([flex(flexAmount)]));
 
-  let component = ReasonReact.statelessComponent("TABLE CELL");
+  [@react.component]
+  let make = (~flex, ~className="", ~properties=[], ~children) =>
+    <Div.Jsx2
+      className={Css.merge([
+        style(flex),
+        standardCellPadding,
+        className,
+        Css.style(properties),
+      ])}>
+      ...children
+    </Div.Jsx2>;
 
-  let make = (~flex, ~className="", ~properties=[], children) => {
-    ...component,
-    render: _self =>
-      <Div.Jsx2
-        className={Css.merge([
-          style(flex),
-          standardCellPadding,
-          className,
-          Css.style(properties),
-        ])}>
-        ...children
-      </Div.Jsx2>,
+  module Jsx2 = {
+    let make = (~flex, ~className="", ~properties=[], children) =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~flex, ~className, ~properties, ~children, ()),
+        children,
+      );
   };
 };
 
 module HeaderRow = {
-  let component = ReasonReact.statelessComponent("TABLE HEADER ROW");
   module Styles = {
     let headerRow =
       Css.(
@@ -136,8 +140,6 @@ module HeaderRow = {
     <Div.Jsx2 styles=[Styles.headerRow]> ...children </Div.Jsx2>;
 
   module Jsx2 = {
-    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
     let make = children =>
       ReasonReactCompat.wrapReactForReasonReact(
         make,
@@ -148,8 +150,6 @@ module HeaderRow = {
 };
 
 module Row = {
-  let component = ReasonReact.statelessComponent("TABLE ROW");
-
   let textSection = text =>
     <Div.Jsx2 styles=[Styles.textArea]> text </Div.Jsx2>;
 
@@ -171,8 +171,6 @@ module Row = {
   };
 
   module Jsx2 = {
-    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
     let make = (~className="", ~bottomSubRow=?, ~onClick=?, children) =>
       ReasonReactCompat.wrapReactForReasonReact(
         make,
@@ -186,8 +184,6 @@ module Row = {
 let make = (~children) => <div> ...children </div>;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
-
   let make = children =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

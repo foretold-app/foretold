@@ -19,8 +19,8 @@ let llink =
   );
 
 let row =
-  <Table.Row onClick={_ => Js.log("Row Clicked")}>
-    <Table.Cell flex={`num(4.)}>
+  <Table.Row.Jsx2 onClick={_ => Js.log("Row Clicked")}>
+    <Table.Cell.Jsx2 flex={`num(4.)}>
       <span className=Table.Styles.Elements.primaryText>
         {"What will be the " |> ReasonReact.string}
         {llink(~href="d", [|"GDP" |> ReasonReact.string|])
@@ -37,16 +37,16 @@ let row =
          ~fontSize=`em(0.85),
          (),
        )}
-    </Table.Cell>
-    <Table.Cell flex={`num(2.)}>
+    </Table.Cell.Jsx2>
+    <Table.Cell.Jsx2 flex={`num(2.)}>
       <FC__CdfChart__Small.Jsx2
         cdf
         minX={Some(2.0)}
         color={`hex("#d9dcdf")}
         maxX={Some(12.0)}
       />
-    </Table.Cell>
-    <Table.Cell flex={`num(1.)} properties=Css.[paddingTop(`em(0.3))]>
+    </Table.Cell.Jsx2>
+    <Table.Cell.Jsx2 flex={`num(1.)} properties=Css.[paddingTop(`em(0.3))]>
       <Div.Jsx2>
         <Link.Jsx2
           className={Table.Styles.Elements.link(~isUnderlined=false, ())}>
@@ -67,8 +67,8 @@ let row =
           {"Archive" |> ReasonReact.string}
         </Link.Jsx2>
       </Div.Jsx2>
-    </Table.Cell>
-  </Table.Row>;
+    </Table.Cell.Jsx2>
+  </Table.Row.Jsx2>;
 
 let make =
   <PageCard.Jsx2>
@@ -106,17 +106,17 @@ let make =
          })}
       </Div.Jsx2>
     </PageCard.HeaderRow.Jsx2>
-    <Table>
+    <Table.Jsx2>
       <Table.HeaderRow.Jsx2>
-        <Table.Cell flex={`num(4.)}>
+        <Table.Cell.Jsx2 flex={`num(4.)}>
           {"Name & Status" |> ReasonReact.string}
-        </Table.Cell>
-        <Table.Cell flex={`num(2.)}>
+        </Table.Cell.Jsx2>
+        <Table.Cell.Jsx2 flex={`num(2.)}>
           {"Aggregate Prediction" |> ReasonReact.string}
-        </Table.Cell>
-        <Table.Cell flex={`num(1.)}>
+        </Table.Cell.Jsx2>
+        <Table.Cell.Jsx2 flex={`num(1.)}>
           {"Details" |> ReasonReact.string}
-        </Table.Cell>
+        </Table.Cell.Jsx2>
       </Table.HeaderRow.Jsx2>
       row
       row
@@ -127,5 +127,5 @@ let make =
       row
       row
       row
-    </Table>
+    </Table.Jsx2>
   </PageCard.Jsx2>;

@@ -272,7 +272,7 @@ module P = {
       className=Css.(
         style([color(Colors.Text.LightBackground.p), lineHeight(`em(1.5))])
       )>
-      {children |> ReasonReact.array}
+      children
     </p>;
 
   module Jsx2 = {

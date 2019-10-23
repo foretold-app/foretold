@@ -1,12 +1,14 @@
+[@bs.config {jsx: 3}];
+
 open FC.Base;
 
 let alerts = () =>
   <div>
-    <Alert.Jsx2 type_=`primary> "Primary alert"->React.string </Alert.Jsx2>
-    <Alert.Jsx2 type_=`info> "Info alert"->React.string </Alert.Jsx2>
-    <Alert.Jsx2 type_=`success> "Success alert"->React.string </Alert.Jsx2>
-    <Alert.Jsx2 type_=`warning> "Warning alert"->React.string </Alert.Jsx2>
-    <Alert.Jsx2 type_=`error> "Error alert"->React.string </Alert.Jsx2>
+    <Alert type_=`primary> "Primary alert"->React.string </Alert>
+    <Alert type_=`info> "Info alert"->React.string </Alert>
+    <Alert type_=`success> "Success alert"->React.string </Alert>
+    <Alert type_=`warning> "Warning alert"->React.string </Alert>
+    <Alert type_=`error> "Error alert"->React.string </Alert>
   </div>;
 
 let entry = EntryTypes.(entry(~title="Alerts", ~render=alerts));

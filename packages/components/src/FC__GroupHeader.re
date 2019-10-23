@@ -26,12 +26,13 @@ module Styles = {
     ]);
 };
 
-let actionButton = (~variant: FC__Button.variant=Primary) =>
+let actionButton = (~variant: FC__Button.variant=Primary, ~children) =>
   <FC__Button
     variant
     isDisabled=false
     size=FC__Button.(Medium)
     className=Css.(merge([Styles.actionButtonPosition]))
+    ?children
   />;
 
 [@react.component]

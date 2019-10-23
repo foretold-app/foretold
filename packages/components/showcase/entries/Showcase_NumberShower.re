@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open FC;
 open FC.Base;
 
@@ -33,29 +35,32 @@ let numbers = [
 ];
 
 module NumbersDisplay = {
-  let component = ReasonReact.statelessComponent(__MODULE__);
-  let make = _children => {
-    ...component,
-    render: self =>
-      <PageCard.Jsx2>
-        <PageCard.HeaderRow.Jsx2>
-          <PageCard.HeaderRow.Title.Jsx2>
-            "NumberShower"->React.string
-          </PageCard.HeaderRow.Title.Jsx2>
-        </PageCard.HeaderRow.Jsx2>
-        <div>
-          {(
-             numbers
-             |> E.L.fmap(n =>
-                  <div key={n |> Js.Float.toString}>
-                    <FC__NumberShower.Jsx2 number=n precision=3 />
-                  </div>
-                )
-             |> E.L.toArray
-           )
-           ->React.array}
-        </div>
-      </PageCard.Jsx2>,
+  [@react.component]
+  let make = () => {
+    <PageCard>
+      <PageCard.HeaderRow>
+        <PageCard.HeaderRow.Title>
+          "NumberShower"->React.string
+        </PageCard.HeaderRow.Title>
+      </PageCard.HeaderRow>
+      <div>
+        {(
+           numbers
+           |> E.L.fmap(n =>
+                <div key={n |> Js.Float.toString}>
+                  <FC__NumberShower number=n precision=3 />
+                </div>
+              )
+           |> E.L.toArray
+         )
+         ->React.array}
+      </div>
+    </PageCard>;
+  };
+
+  module Jsx2 = {
+    let make = children =>
+      ReasonReactCompat.wrapReactForReasonReact(make, makeProps(), children);
   };
 };
 

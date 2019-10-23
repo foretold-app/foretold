@@ -16,7 +16,7 @@ let make =
       ~flexDirection=?,
       ~float=?,
       ~onClick=_ => (),
-      ~children,
+      ~children=ReasonReact.null,
     ) => {
   let flexStyle = flex |> fnWithDefault(e => [Css.flex(e)]);
   let floatStyle = float |> fnWithDefault(e => [Css.float(e)]);

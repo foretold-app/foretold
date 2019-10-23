@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open FC;
 open FC.Base;
 
@@ -55,61 +57,53 @@ let colorContainer = bgColor =>
   );
 
 module ColorDisplay = {
-  type state = {
-    bgColor: Css.color,
-    bgName: string,
-  };
-  type action =
-    | ChangeBg(string);
-  let reducer = (action: action, _state: state) => {
-    switch (action) {
-    | ChangeBg(bgName) =>
-      let (_, bgColor) = colors |> E.L.find(((n, _)) => n == bgName);
-      ReasonReact.Update({bgColor, bgName});
-    };
-  };
-  let component = ReasonReact.reducerComponent(__MODULE__);
-  let make = _children => {
-    ...component,
-    initialState: () => {bgColor: Colors.white, bgName: "white"},
-    reducer,
-    render: self =>
-      <PageCard.Jsx2>
-        <PageCard.HeaderRow.Jsx2>
-          <PageCard.HeaderRow.Title.Jsx2>
-            "Colors"->React.string
-          </PageCard.HeaderRow.Title.Jsx2>
-        </PageCard.HeaderRow.Jsx2>
-        <PageCard.Section.Jsx2 border=`bottom>
-          "Background: "->React.string
-          <select
-            value={self.state.bgName}
-            onChange={e =>
-              self.send(ChangeBg(ReactEvent.Form.target(e)##value))
-            }>
-            {{colors
-              |> E.L.fmap(((name, _c)) =>
-                   <option key=name value=name> name->React.string </option>
-                 )
-              |> E.L.toArray}
-             ->React.array}
-          </select>
-        </PageCard.Section.Jsx2>
-        <div className={colorContainer(self.state.bgColor)}>
+  [@react.component]
+  let make = () => {
+    let (bgColor, setBgColor) = React.useState(() => Colors.white);
+    let (bgName, setBgName) = React.useState(() => "white");
+
+    <PageCard>
+      <PageCard.HeaderRow>
+        <PageCard.HeaderRow.Title>
+          "Colors"->React.string
+        </PageCard.HeaderRow.Title>
+      </PageCard.HeaderRow>
+      <PageCard.Section border=`bottom>
+        "Background: "->React.string
+        <select
+          value=bgName
+          onChange={e => {
+            let bgName = ReactEvent.Form.target(e)##value;
+            setBgName(_ => bgName);
+            setBgColor(_ => {
+              let (_, bgColor) =
+                colors |> E.L.find(((n, _)) => n == bgName);
+              bgColor;
+            });
+          }}>
           {{colors
-            |> E.L.fmap(((name, c)) =>
-                 <div
-                   key=name
-                   className=Css.(
-                     merge([colorBoxStyle, style([backgroundColor(c)])])
-                   )>
-                   name->React.string
-                 </div>
+            |> E.L.fmap(((name, _c)) =>
+                 <option key=name value=name> name->React.string </option>
                )
             |> E.L.toArray}
            ->React.array}
-        </div>
-      </PageCard.Jsx2>,
+        </select>
+      </PageCard.Section>
+      <div className={colorContainer(bgColor)}>
+        {{colors
+          |> E.L.fmap(((name, c)) =>
+               <div
+                 key=name
+                 className=Css.(
+                   merge([colorBoxStyle, style([backgroundColor(c)])])
+                 )>
+                 name->React.string
+               </div>
+             )
+          |> E.L.toArray}
+         ->React.array}
+      </div>
+    </PageCard>;
   };
 };
 

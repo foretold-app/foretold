@@ -1,10 +1,12 @@
+[@bs.config {jsx: 3}];
+
 open FC;
 open Base;
 
 let make =
-  <Div.Jsx2>
-    <GroupHeader.Jsx2>
-      <Div.Jsx2 float=`left>
+  <Div>
+    <GroupHeader>
+      <Div float=`left>
         <div
           className=Css.(
             style([
@@ -27,25 +29,33 @@ let make =
           {"Lots of description for the group would be here"
            |> ReasonReact.string}
         </p>
-      </Div.Jsx2>
-      <Div.Jsx2 float=`right>
-        {GroupHeader.actionButton(
-           ~variant=Secondary,
-           [|"Leave Channel" |> ReasonReact.string|],
-         )
-         |> ReasonReact.element}
-        {GroupHeader.actionButton([|"Create Question" |> ReasonReact.string|])
-         |> ReasonReact.element}
-      </Div.Jsx2>
-    </GroupHeader.Jsx2>
-    <GroupHeader.SubHeader.Jsx2>
-      <Tab.Jsx2 isActive=true> {"Questions" |> ReasonReact.string} </Tab.Jsx2>
-      <Tab.Jsx2 isActive=false>
-        {"Knowledge Graph" |> ReasonReact.string}
-      </Tab.Jsx2>
-      <Tab.Jsx2 isActive=false>
-        {"Leaderboard" |> ReasonReact.string}
-      </Tab.Jsx2>
-      <Tab.Jsx2 isActive=false> {"Settings" |> ReasonReact.string} </Tab.Jsx2>
-    </GroupHeader.SubHeader.Jsx2>
-  </Div.Jsx2>;
+      </Div>
+      <Div float=`right>
+        <FC__Button
+          variant=FC__Button.Secondary
+          isDisabled=false
+          size=FC__Button.(Medium)
+          className=GroupHeader.Styles.actionButtonPosition>
+          {"Leave Channel" |> ReasonReact.string}
+        </FC__Button>
+        <FC__Button
+          isDisabled=false
+          size=FC__Button.(Medium)
+          className=GroupHeader.Styles.actionButtonPosition>
+          {"Create Question" |> ReasonReact.string}
+        </FC__Button>
+        <FC__Button
+          isDisabled=false
+          size=FC__Button.(Medium)
+          className=GroupHeader.Styles.actionButtonPosition>
+          {"Create Question" |> ReasonReact.string}
+        </FC__Button>
+      </Div>
+    </GroupHeader>
+    <GroupHeader.SubHeader>
+      <Tab isActive=true> {"Questions" |> ReasonReact.string} </Tab>
+      <Tab isActive=false> {"Knowledge Graph" |> ReasonReact.string} </Tab>
+      <Tab isActive=false> {"Leaderboard" |> ReasonReact.string} </Tab>
+      <Tab isActive=false> {"Settings" |> ReasonReact.string} </Tab>
+    </GroupHeader.SubHeader>
+  </Div>;

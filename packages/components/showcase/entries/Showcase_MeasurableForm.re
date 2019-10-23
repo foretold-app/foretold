@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open FC;
 
 let cdf: FC__Types.Dist.t = {

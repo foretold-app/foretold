@@ -1,8 +1,10 @@
+[@bs.config {jsx: 3}];
+
 type compEntry = {
   mutable id: string,
   title: string,
   render: unit => React.element,
-  container: containerType
+  container: containerType,
 }
 and folderEntry = {
   mutable id: string,

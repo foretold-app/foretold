@@ -168,7 +168,7 @@ module Row = {
         onClick |> E.O.isSome
           ? [Styles.row, Styles.clickableRow, className]
           : [Styles.row, className];
-      <Div styles=commonClasses ?onClick> ...children </Div>;
+      <Div styles=commonClasses ?onClick> children </Div>;
     };
   };
 

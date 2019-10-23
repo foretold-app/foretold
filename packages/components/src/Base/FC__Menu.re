@@ -276,7 +276,7 @@ module Divider = {
   // https://github.com/react-component/menu#menuitem-props
 
   [@react.component]
-  let make = (~children) =>
+  let make = (~children=ReasonReact.null) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=rcDividerClass,
       ~props=Js.Obj.empty(),

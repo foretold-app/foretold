@@ -68,7 +68,7 @@ module Scoring = {
       Js.log2("MIN", min);
       <div>
         <h3> {"Variable A" |> ReasonReact.string} </h3>
-        <FC_GuesstimateInput
+        <FC_GuesstimateInput.Jsx2
           focusOnRender=true
           initialValue={Some(mm1)}
           sampleCount=50000
@@ -84,7 +84,7 @@ module Scoring = {
               <FC__CdfChart__Large.Jsx2 cdf=v minX maxX width=None />
             )}
         <h3> {"Variable B" |> ReasonReact.string} </h3>
-        <FC_GuesstimateInput
+        <FC_GuesstimateInput.Jsx2
           focusOnRender=true
           sampleCount=50000
           initialValue={Some(mm2)}
@@ -99,7 +99,7 @@ module Scoring = {
               <FC__CdfChart__Large.Jsx2 minX maxX cdf=v width=None />
             )}
         <h3> {"Variable C" |> ReasonReact.string} </h3>
-        <FC_GuesstimateInput
+        <FC_GuesstimateInput.Jsx2
           focusOnRender=true
           sampleCount=50000
           initialValue={Some("20 to 60")}

@@ -28,8 +28,6 @@ let make =
 };
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("Link");
-
   let make =
       (
         ~styles=?,

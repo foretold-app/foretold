@@ -80,7 +80,7 @@ module ColorDisplay = {
             "Colors"->React.string
           </PageCard.HeaderRow.Title.Jsx2>
         </PageCard.HeaderRow.Jsx2>
-        <PageCard.Section border=`bottom>
+        <PageCard.Section.Jsx2 border=`bottom>
           "Background: "->React.string
           <select
             value={self.state.bgName}
@@ -94,7 +94,7 @@ module ColorDisplay = {
               |> E.L.toArray}
              ->React.array}
           </select>
-        </PageCard.Section>
+        </PageCard.Section.Jsx2>
         <div className={colorContainer(self.state.bgColor)}>
           {{colors
             |> E.L.fmap(((name, c)) =>

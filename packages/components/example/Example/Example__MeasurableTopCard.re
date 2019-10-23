@@ -52,9 +52,9 @@ let make =
       ]>
       <Div.Jsx2 flexDirection=`row>
         <Div.Jsx2 flex={`num(5.)}>
-          <PageCard.H1>
+          <PageCard.H1.Jsx2>
             {"What would the US GDP Be in 2020?" |> ReasonReact.string}
-          </PageCard.H1>
+          </PageCard.H1.Jsx2>
           {FC__StateStatus.make(
              ~state=RESOLVED(MomentRe.momentWithUnix(pastTime)),
              ~fontSize=`em(1.0),
@@ -71,10 +71,10 @@ let make =
         />
       </Div.Jsx2>
       <Div.Jsx2 styles=[Css.style([Css.marginTop(`em(2.0))])]>
-        <PageCard.P>
+        <PageCard.P.Jsx2>
           {"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vulputate tortor a sapien aliquet ullamcorper. Nunc non varius sapien, quis elementum sapien. Morbi ac tristique quam. Cras hendrerit accumsan pretium. Praesent id nisl sit amet eros imperdiet placerat. Vestibulum sodales posuere diam vel laoreet."
            |> ReasonReact.string}
-        </PageCard.P>
+        </PageCard.P.Jsx2>
       </Div.Jsx2>
     </Div.Jsx2>
   </PageCard.Jsx2>;

@@ -8,12 +8,12 @@ let render = () =>
       </PageCard.HeaderRow.Title.Jsx2>
     </PageCard.HeaderRow.Jsx2>
     <PageCard.BodyPadding.Jsx2>
-      <PageCard.H1> "PageCard.H1"->React.string </PageCard.H1>
-      <PageCard.P> "PageCard.P"->React.string </PageCard.P>
+      <PageCard.H1.Jsx2> "PageCard.H1"->React.string </PageCard.H1.Jsx2>
+      <PageCard.P.Jsx2> "PageCard.P"->React.string </PageCard.P.Jsx2>
     </PageCard.BodyPadding.Jsx2>
-    <PageCard.Section border=`top background=`grey>
+    <PageCard.Section.Jsx2 border=`top background=`grey>
       "Section, grey + borderTop"->React.string
-    </PageCard.Section>
+    </PageCard.Section.Jsx2>
   </PageCard.Jsx2>;
 
 let entry = EntryTypes.(entry(~title="PageCard", ~render));

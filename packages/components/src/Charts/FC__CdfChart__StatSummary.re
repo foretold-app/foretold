@@ -11,19 +11,19 @@ let make = (~cdf: FC__Types.Dist.t, ~showMean=true) =>
   <>
     {showMean
        ? <div className=Styles.mainText>
-           <FC__NumberShower
+           <FC__NumberShower.Jsx2
              precision=3
              number={cdf |> FC__Types.Dist.findX(0.5)}
            />
          </div>
        : ReasonReact.null}
     <div className=Styles.secondaryText>
-      <FC__NumberShower
+      <FC__NumberShower.Jsx2
         precision=3
         number={cdf |> FC__Types.Dist.findX(0.05)}
       />
       {" to " |> ReasonReact.string}
-      <FC__NumberShower
+      <FC__NumberShower.Jsx2
         precision=3
         number={cdf |> FC__Types.Dist.findX(0.95)}
       />

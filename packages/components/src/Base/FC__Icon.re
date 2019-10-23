@@ -1,6 +1,4 @@
 module Questionmark = {
-  let component =
-    ReasonReact.statelessComponent(__MODULE__ ++ " QuestionMark");
   // Adapted to pagecard title
   let circle =
     Css.(
@@ -40,20 +38,31 @@ module Questionmark = {
         hover(isInteractive ? [opacity(1.0)] : []),
       ])
     );
-  let make = (~isInteractive=true, _children) => {
-    ...component,
-    render: _self => {
-      <div className={questionMarkstyle(isInteractive)}>
-        <span className=insideStyle> {React.string("i")} </span>
-      </div>;
-    },
+
+  [@react.component]
+  let make = (~isInteractive=true, ~children) =>
+    <div className={questionMarkstyle(isInteractive)}>
+      <span className=insideStyle> {React.string("i")} </span>
+    </div>;
+
+  module Jsx2 = {
+    let component =
+      ReasonReact.statelessComponent(__MODULE__ ++ "QuestionmarkJsx2");
+
+    let make = (~isInteractive=true, children) =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~isInteractive, ~children, ()),
+        children,
+      );
   };
 };
 
 module DownArrow = {
   /* Down array from ant */
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ " DownArrow");
   let buttonStyle = Css.(style([marginLeft(`px(8))]));
+
+  let component = ReasonReact.statelessComponent(__MODULE__ ++ " DownArrow");
   let make = _children => {
     ...component,
     render: _self => {

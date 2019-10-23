@@ -22,7 +22,7 @@ module Overlay = {
                   className=Css.(
                     style([marginRight(`em(0.4)), opacity(0.5)])
                   )>
-                  <FC__Icon.Questionmark isInteractive=false />
+                  <FC__Icon.Questionmark.Jsx2 isInteractive=false />
                 </span>
                 {content.headerContent}
               </FC__PageCard.HeaderRow.Title>
@@ -55,7 +55,7 @@ let make = (~content, _children) => {
   ...component,
   render: _self => {
     <FC__Dropdown overlay={staticOverlay(content)} trigger=FC__Dropdown.Hover>
-      <span> <FC__Icon.Questionmark isInteractive=true /> </span>
+      <span> <FC__Icon.Questionmark.Jsx2 isInteractive=true /> </span>
     </FC__Dropdown>;
   },
 };

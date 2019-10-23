@@ -82,7 +82,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
                  initialValue={Some("CDF")}
                  values=[("CDF", "CDF"), ("PDF", "PDF")]
                />
-               <Icon.Questionmark />
+               <Icon.Questionmark.Jsx2 />
              </div>
              <PageCard.VerticalSpace />
              <Alert.Jsx2 type_=`error>

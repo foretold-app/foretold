@@ -69,9 +69,9 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
                <TextInput fullWidth=true />
              </Div.Jsx2>
              <Div.Jsx2 styles=[flexRowItem]>
-               <Button variant=Button.Secondary>
+               <Button.Jsx2 variant=Button.Secondary>
                  "Clear"->React.string
-               </Button>
+               </Button.Jsx2>
              </Div.Jsx2>
            </Div.Jsx2>
          | FreeformTab => <TextInput fullWidth=true placeholder="5 to 50" />
@@ -85,9 +85,9 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
                <Icon.Questionmark />
              </div>
              <PageCard.VerticalSpace />
-             <Alert type_=`error>
+             <Alert.Jsx2 type_=`error>
                "Input is not a valid PDF"->React.string
-             </Alert>
+             </Alert.Jsx2>
              <PageCard.VerticalSpace />
              <TextArea rows=4 fullWidth=true />
            </div>
@@ -97,9 +97,9 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
         <InputLabel> "Comment"->React.string </InputLabel>
         <TextArea fullWidth=true />
         <PageCard.VerticalSpace />
-        <Button variant=Button.Primary fullWidth=true size=Large>
+        <Button.Jsx2 variant=Button.Primary fullWidth=true size=Large>
           "Submit Prediction"->React.string
-        </Button>
+        </Button.Jsx2>
       </PageCard.Section>
     </PageCard>,
 };

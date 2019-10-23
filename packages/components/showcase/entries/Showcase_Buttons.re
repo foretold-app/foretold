@@ -4,21 +4,23 @@ let render = () =>
   <>
     <div> "Secondary"->React.string </div>
     <div>
-      <Button size=MediumShort> "Small Button"->React.string </Button>
-      <Button size=Medium> "Medium Button"->React.string </Button>
-      <Button size=Large> "Large Button"->React.string </Button>
+      <Button.Jsx2 size=MediumShort>
+        "Small Button"->React.string
+      </Button.Jsx2>
+      <Button.Jsx2 size=Medium> "Medium Button"->React.string </Button.Jsx2>
+      <Button.Jsx2 size=Large> "Large Button"->React.string </Button.Jsx2>
     </div>
     <div> "Primary"->React.string </div>
     <div>
-      <Button size=MediumShort variant=Primary>
+      <Button.Jsx2 size=MediumShort variant=Primary>
         "Small Button"->React.string
-      </Button>
-      <Button size=Medium variant=Primary>
+      </Button.Jsx2>
+      <Button.Jsx2 size=Medium variant=Primary>
         "Medium Button"->React.string
-      </Button>
-      <Button size=Large variant=Primary>
+      </Button.Jsx2>
+      <Button.Jsx2 size=Large variant=Primary>
         "Large Button"->React.string
-      </Button>
+      </Button.Jsx2>
     </div>
   </>;
 

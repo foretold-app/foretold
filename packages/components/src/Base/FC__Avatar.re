@@ -25,7 +25,7 @@ let make = (~src: string, ~width=1., ()) =>
   </span>;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("Avatar");
+  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
 
   let make = (~src: string, ~width=1., children) =>
     ReasonReactCompat.wrapReactForReasonReact(

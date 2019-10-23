@@ -40,13 +40,13 @@ module Styles = {
 };
 
 let _directionLink = (t: directionButton, icon: string, positionStyles) =>
-  <FC__Button
+  <FC__Button.Jsx2
     isDisabled={t.isDisabled}
     onClick={t.onClick}
     className=positionStyles
     size=Small>
     {icon |> ReasonReact.string}
-  </FC__Button>;
+  </FC__Button.Jsx2>;
 
 let make = (t: t) =>
   <>

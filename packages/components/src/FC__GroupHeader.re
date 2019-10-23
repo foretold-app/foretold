@@ -26,7 +26,7 @@ module Styles = {
 };
 
 let actionButton = (~variant: FC__Button.variant=Primary) =>
-  FC__Button.make(
+  FC__Button.Jsx2.make(
     ~variant,
     ~isDisabled=false,
     ~size=Medium,

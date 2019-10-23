@@ -3,6 +3,7 @@ const assert = require('assert');
 const { Op } = require('sequelize');
 
 const models = require('../models');
+const logger = require('../lib/log');
 
 const { Model } = require('./model');
 const { ResponseAll } = require('./classes/response-all');
@@ -38,6 +39,8 @@ class ModelPostgres extends Model {
     this.fn = this.sequelize.fn;
     this.col = this.sequelize.col;
     this.literal = this.sequelize.literal;
+
+    this.log = logger.module('models-abstract/model-postgres');
   }
 
   /**
@@ -231,7 +234,7 @@ class ModelPostgres extends Model {
     this.applyAbstracts(where, restrictions);
 
     // @todo: Use "withinPublicChannels" as "channelId"
-    if (restrictions.channelId && !restrictions.agentId) {
+    if (!!restrictions.channelId && !restrictions.agentId) {
       where[this.and].push({
         channelId: {
           [this.in]: this._publicChannelsLiteral('Restrictions'),
@@ -240,7 +243,7 @@ class ModelPostgres extends Model {
     }
 
     // @todo: Use "withinPublicAndJoinedChannels" as "channelId"
-    if (restrictions.channelId && restrictions.agentId) {
+    if (!!restrictions.channelId && restrictions.agentId) {
       where[this.and].push({
         channelId: {
           [this.in]: this._publicAndJoinedChannelsLiteral(
@@ -272,7 +275,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (restrictions.userId) {
+    if (!!restrictions.userId) {
       where[this.and].push({
         userId: restrictions.userId,
       });
@@ -315,7 +318,7 @@ class ModelPostgres extends Model {
 
     // @todo: It is a filter, b͟u͟t͟ ͟n͟o͟t͟ ͟r͟e͟s͟t͟r͟i͟c͟t͟i͟o͟n͟
     // @todo: Use object structures.
-    if (restrictions.measuredByAgentId) {
+    if (!!restrictions.measuredByAgentId) {
       include.push({
         model: this.models.Measurement,
         as: 'Measurements',
@@ -353,43 +356,43 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.userId) {
+    if (!!filter.userId) {
       where[this.and].push({
         userId: filter.userId,
       });
     }
 
-    if (filter.agentId) {
+    if (!!filter.agentId) {
       where[this.and].push({
         agentId: filter.agentId,
       });
     }
 
-    if (filter.channelId) {
+    if (!!filter.channelId) {
       where[this.and].push({
         channelId: filter.channelId,
       });
     }
 
-    if (filter.measurableId) {
+    if (!!filter.measurableId) {
       where[this.and].push({
         measurableId: filter.measurableId,
       });
     }
 
-    if (filter.email) {
+    if (!!filter.email) {
       where[this.and].push({
         email: filter.email,
       });
     }
 
-    if (filter.status) {
+    if (!!filter.status) {
       where[this.and].push({
         status: filter.status,
       });
     }
 
-    if (filter.competitorType) {
+    if (!!filter.competitorType) {
       where[this.and].push({
         competitorType: {
           [this.in]: filter.competitorType,
@@ -397,23 +400,25 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.notTaggedByAgent) {
+    if (!!filter.notTaggedByAgent) {
       where[this.and].push({
         id: {
-          [this.notIn]: this._taggedMeasurementsLiteral(filter.notTaggedByAgent),
+          [this.notIn]: this._taggedMeasurementsLiteral(
+            filter.notTaggedByAgent,
+          ),
         },
       });
     }
 
     const startDate = _.get(filter, 'findInDateRange.startDate');
-    if (startDate) {
+    if (!!startDate) {
       where[this.and].push({
         createdAt: { [this.gte]: startDate },
       });
     }
 
     const endDate = _.get(filter, 'findInDateRange.endDate');
-    if (endDate) {
+    if (!!endDate) {
       where[this.and].push({
         createdAt: { [this.lte]: endDate },
       });
@@ -425,13 +430,13 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.seriesId) {
+    if (!!filter.seriesId) {
       where[this.and].push({
         seriesId: filter.seriesId,
       });
     }
 
-    if (filter.creatorId) {
+    if (!!filter.creatorId) {
       where[this.and].push({
         creatorId: filter.creatorId,
       });
@@ -462,7 +467,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.excludeChannelId) {
+    if (!!filter.excludeChannelId) {
       where[this.and].push({
         id: {
           [this.notIn]: this._agentsIdsLiteral(filter.excludeChannelId),
@@ -470,7 +475,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.types) {
+    if (!!filter.types) {
       where[this.and].push({
         type: {
           [this.in]: filter.types,
@@ -484,7 +489,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.notificationId) {
+    if (!!filter.notificationId) {
       where[this.and].push({
         notificationId: filter.notificationId,
       });
@@ -539,7 +544,7 @@ class ModelPostgres extends Model {
     const name = _.get(abstractions, 'constructor.name', 'Abstraction');
 
     // OK
-    if (abstractions.withinPublicChannels) {
+    if (!!abstractions.withinPublicChannels) {
       const { as } = abstractions.withinPublicChannels;
       where[this.and].push({
         [as]: {
@@ -549,7 +554,7 @@ class ModelPostgres extends Model {
     }
 
     // OK
-    if (abstractions.withinJoinedChannels) {
+    if (!!abstractions.withinJoinedChannels) {
       const { as, agentId } = abstractions.withinJoinedChannels;
       where[this.and].push({
         [as]: {
@@ -559,7 +564,7 @@ class ModelPostgres extends Model {
     }
 
     // OK
-    if (abstractions.withinPublicAndJoinedChannels) {
+    if (!!abstractions.withinPublicAndJoinedChannels) {
       const { as, agentId } = abstractions.withinPublicAndJoinedChannels;
       where[this.and].push({
         [as]: {
@@ -569,7 +574,7 @@ class ModelPostgres extends Model {
     }
 
     // OK
-    if (abstractions.withinMeasurables) {
+    if (!!abstractions.withinMeasurables) {
       const { as, states, channelId } = abstractions.withinMeasurables;
       where[this.and].push({
         [as]: {
@@ -624,7 +629,7 @@ class ModelPostgres extends Model {
     this._extendConditions(updateCond, options);
 
     const entity = await this.model.findOne(findCond);
-    if (entity) await entity.update(data, updateCond);
+    if (!!entity) await entity.update(data, updateCond);
     return entity;
   }
 
@@ -794,7 +799,12 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise<*>}
    */
-  async getPredicated(params = {}, query = {}, restrictions = {}, options = {}) {
+  async getPredicated(
+    params = {},
+    query = {},
+    restrictions = {},
+    options = {},
+  ) {
     const where = { ...params };
     const sort = query.sort === 1 ? 'ASC' : 'DESC';
     const order = [['createdAt', sort]];
@@ -834,6 +844,25 @@ class ModelPostgres extends Model {
 
   /**
    * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} restrictions
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @return {Promise<Models.Model>}
+   */
+  async deleteOne(params, query, restrictions, options) {
+    const entity = await this.getOne(params, query, restrictions, options);
+    if (entity) {
+      const where = { ...params };
+      const cond = { where };
+      this._extendConditions(cond, options);
+      await this.model.destroy(cond);
+    }
+    return entity;
+  }
+
+  /**
+   * @public
    * @return {Promise<*>}
    */
   async getTransaction() {
@@ -859,6 +888,18 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @param {string} name
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @returns {Promise<*>}
+   */
+  async _lockTable(name, options = {}) {
+    const cond = {};
+    this._extendConditions(cond, options);
+    await this.sequelize.query(`SET LOCAL lock_timeout = '3s'`, cond);
+    return this.sequelize.query(`LOCK TABLE "${name}"`, cond);
+  }
+
+  /**
    * @protected
    * @param {object} cond
    * @param {Layers.AbstractModelsLayer.options} options
@@ -874,23 +915,6 @@ class ModelPostgres extends Model {
       cond.skipLocked = options.skipLocked;
     }
     return cond;
-  }
-
-  /**
-   * @public
-   * @param {Layers.AbstractModelsLayer.params} [params]
-   * @param {Layers.AbstractModelsLayer.query} [query]
-   * @param {Layers.AbstractModelsLayer.restrictions} restrictions
-   * @param {Layers.AbstractModelsLayer.options} options
-   * @return {Promise<Models.Model>}
-   */
-  async deleteOne(params, query, restrictions, options) {
-    const where = { ...params };
-    const entity = await this.getOne(params, query, restrictions, options);
-    if (entity) {
-      await this.model.destroy({ where });
-    }
-    return entity;
   }
 }
 

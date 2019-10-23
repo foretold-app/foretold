@@ -3,8 +3,7 @@ module CMutationForm =
     type queryType = MeasurableUpdate.Query.t;
   });
 
-let formCreation =
-    (id: string, measurable: Types.measurable, loggedInUser: Types.user) => {
+let formCreation = (id: string, measurable: Types.measurable) => {
   MeasurableUpdate.Mutation.make((mutation, data) =>
     MeasurableForm.Form.make(
       ~schema=MeasurableForm.Form.Validation.Schema([||]),
@@ -53,7 +52,6 @@ let formCreation =
           ~result=data.result,
           ~form=
             MeasurableForm.showForm(
-              ~loggedInUser,
               ~state,
               ~send,
               ~creating=false,
@@ -79,24 +77,14 @@ let formCreation =
 
 let component = ReasonReact.statelessComponent("MeasurableEdit");
 
-let make =
-    (
-      ~pageParams: PageConfig.LoggedInPage.pageParams,
-      ~loggedInUser: Types.user,
-      ~layout=SLayout.FullPage.makeWithEl,
-      _children,
-    ) => {
+let make = (~pageParams: Types.pageParams, _children) => {
   ...component,
   render: _self =>
-    SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("Edit Question"),
-      ~body=
-        <FC.PageCard.BodyPadding>
-          {MeasurableGet.component(~id=pageParams.id, m =>
-             formCreation(pageParams.id, m, loggedInUser)
-           )}
-        </FC.PageCard.BodyPadding>,
-      (),
-    )
-    |> layout,
+    <SLayout head={SLayout.Header.textDiv("Edit Question")}>
+      <FC.PageCard.BodyPadding>
+        {MeasurableGet.component(~id=pageParams.id, m =>
+           formCreation(pageParams.id, m)
+         )}
+      </FC.PageCard.BodyPadding>
+    </SLayout>,
 };

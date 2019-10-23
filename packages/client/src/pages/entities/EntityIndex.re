@@ -36,7 +36,7 @@ module ColumnsFunctor = (Ken: KenTools.KenModule) => {
   let all = [|nameColumn, instanceOf, idColumn|];
 };
 
-let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
+let make = _children => {
   ...component,
   render: _ =>
     <Providers.AppContext.Consumer>
@@ -47,12 +47,9 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
         module Ken = KenTools.Functor(Config);
         module Columns = ColumnsFunctor(Ken);
 
-        SLayout.LayoutConfig.make(
-          ~head=SLayout.Header.textDiv("All Entities"),
-          ~body=Table.fromColumns(Columns.all, Ken.dataSource, ()),
-          (),
-        )
-        |> layout;
+        <SLayout head={SLayout.Header.textDiv("All Entities")}>
+          {Table.fromColumns(Columns.all, Ken.dataSource, ())}
+        </SLayout>;
       }}
     </Providers.AppContext.Consumer>,
 };

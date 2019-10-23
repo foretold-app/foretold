@@ -62,7 +62,7 @@ module Styles = {
 };
 
 let component = ReasonReact.statelessComponent("Sidebar");
-let make = (~channelId, ~loggedInUser: Types.user, _children) => {
+let make = (~channelId, ~loggedUser: option(Types.user), _children) => {
   ...component,
   render: _self =>
     <div className=Styles.sidebar>
@@ -82,31 +82,37 @@ let make = (~channelId, ~loggedInUser: Types.user, _children) => {
           }>
           {Primary.Channel.presentGlobal(~className=Styles.hash, ())}
         </Link.Jsx2>
-        {loggedInUser.agent
-         |> E.O.fmap((agent: Types.agent) =>
-              ChannelsGet.component(
-                ~channelMemberId=?Some(agent.id),
-                ~sortFn=ChannelsGet.sortAsc,
-                channels =>
-                channels
-                |> Array.mapi((index, channel: Types.channel) =>
-                     <Link.Jsx2
-                       key={index |> string_of_int}
-                       linkType={Internal(Primary.Channel.showLink(channel))}
-                       className={
-                         Some(channel.id) == channelId
-                           ? Styles.selectedItem : Styles.item
-                       }>
-                       {Primary.Channel.present(
-                          ~className=Styles.hash,
-                          channel,
-                        )}
-                     </Link.Jsx2>
-                   )
-                |> ReasonReact.array
+        {switch (loggedUser) {
+         | Some(loggedUser) =>
+           loggedUser.agent
+           |> E.O.fmap((agent: Types.agent) =>
+                ChannelsGet.component(
+                  ~channelMemberId=?Some(agent.id),
+                  ~sortFn=ChannelsGet.sortAsc,
+                  channels =>
+                  channels
+                  |> Array.mapi((index, channel: Types.channel) =>
+                       <Link.Jsx2
+                         key={index |> string_of_int}
+                         linkType={
+                           Internal(Primary.Channel.showLink(channel))
+                         }
+                         className={
+                           Some(channel.id) == channelId
+                             ? Styles.selectedItem : Styles.item
+                         }>
+                         {Primary.Channel.present(
+                            ~className=Styles.hash,
+                            channel,
+                          )}
+                       </Link.Jsx2>
+                     )
+                  |> ReasonReact.array
+                )
               )
-            )
-         |> E.O.React.defaultNull}
+           |> E.O.React.defaultNull
+         | _ => ReasonReact.null
+         }}
       </div>
     </div>,
 };

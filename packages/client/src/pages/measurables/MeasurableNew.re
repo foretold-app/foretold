@@ -4,7 +4,7 @@ module CMutationForm =
   });
 
 let component = ReasonReact.statelessComponent("MeasurableNew");
-let make = (~channelId, ~loggedInUser: Types.user, _children) => {
+let make = (~channelId, _children) => {
   ...component,
   render: _ => {
     let formCreator = mutation =>
@@ -45,40 +45,35 @@ let make = (~channelId, ~loggedInUser: Types.user, _children) => {
         },
       );
 
-    SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("New Question"),
-      ~body=
-        <FC.PageCard.BodyPadding>
-          {MeasurableCreate.Mutation.make((mutation, data) =>
-             formCreator(mutation, ({state, send, _}) =>
-               CMutationForm.showWithLoading2(
-                 ~result=data.result,
-                 ~form=
-                   MeasurableForm.showForm(
-                     ~loggedInUser,
-                     ~state,
-                     ~send,
-                     ~onSubmit=_ => send(MeasurableForm.Form.Submit),
-                     (),
-                   ),
-                 ~onSuccess=
-                   (response: MeasurableCreate.Query.t) => {
-                     switch (response##measurableCreate) {
-                     | Some(m) =>
-                       Routing.Url.push(MeasurableShow(channelId, m##id))
-                     | _ => ()
-                     };
-                     ReasonReact.null;
-                   },
-                 (),
-               )
+    <SLayout head={SLayout.Header.textDiv("New Question")}>
+      <FC.PageCard.BodyPadding>
+        {MeasurableCreate.Mutation.make((mutation, data) =>
+           formCreator(mutation, ({state, send, _}) =>
+             CMutationForm.showWithLoading2(
+               ~result=data.result,
+               ~form=
+                 MeasurableForm.showForm(
+                   ~state,
+                   ~send,
+                   ~onSubmit=_ => send(MeasurableForm.Form.Submit),
+                   (),
+                 ),
+               ~onSuccess=
+                 (response: MeasurableCreate.Query.t) => {
+                   switch (response##measurableCreate) {
+                   | Some(m) =>
+                     Routing.Url.push(MeasurableShow(channelId, m##id))
+                   | _ => ()
+                   };
+                   ReasonReact.null;
+                 },
+               (),
              )
-             |> E.React.el
            )
-           |> E.React.el}
-        </FC.PageCard.BodyPadding>,
-      (),
-    )
-    |> SLayout.FullPage.makeWithEl;
+           |> E.React.el
+         )
+         |> E.React.el}
+      </FC.PageCard.BodyPadding>
+    </SLayout>;
   },
 };

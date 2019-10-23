@@ -40,20 +40,20 @@ class ChannelsData extends DataBase {
 
   /**
    * @public
-   * @param {Models.ObjectID} id
+   * @param {Models.ChannelID} channelId
    * @return {Promise<Model[]>}
    */
-  async getAgentsByChannelId(id) {
-    return this.model.getAgentsByChannelId(id);
+  async getAgentsByChannelId(channelId) {
+    return this.model.getAgentsByChannelId(channelId);
   }
 
   /**
    * @public
-   * @param {Models.ObjectID} id
+   * @param {Models.ChannelID} channelId
    * @return {Promise<Model>}
    */
-  async getCreatorByChannelId(id) {
-    const channel = await this.getOne({ id });
+  async getCreatorByChannelId(channelId) {
+    const channel = await this.getOne({ id: channelId });
     const creatorId = _.get(channel, 'creatorId');
     if (!creatorId) return null;
     return this.agents.getOne({ id: creatorId });

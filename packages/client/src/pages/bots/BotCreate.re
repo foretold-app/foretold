@@ -4,12 +4,7 @@ module CMutationForm =
   });
 
 let component = ReasonReact.statelessComponent("BotCreate");
-let make =
-    (
-      ~loggedInUser: Types.user,
-      ~layout=SLayout.FullPage.makeWithEl,
-      _children,
-    ) => {
+let make = (~loggedUser: Types.user, _children) => {
   ...component,
   render: _ => {
     let body =
@@ -39,18 +34,13 @@ let make =
             CMutationForm.showWithLoading2(
               ~result=data.result,
               ~form,
-              ~onSuccess=_ => BotForm.onSuccess(loggedInUser, ()),
+              ~onSuccess=_ => BotForm.onSuccess(loggedUser, ()),
               (),
             );
           },
         );
       });
 
-    SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("Make a New Bot"),
-      ~body,
-      (),
-    )
-    |> layout;
+    <SLayout head={SLayout.Header.textDiv("Make a New Bot")}> body </SLayout>;
   },
 };

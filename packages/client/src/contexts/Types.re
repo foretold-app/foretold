@@ -254,4 +254,6 @@ and connectionInputType('a) =
 and globalSetting = {
   id: string,
   entityGraph: option(Js.Json.t),
-};
+}
+
+and pageParams = {id: string};

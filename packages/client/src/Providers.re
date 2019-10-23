@@ -1,7 +1,7 @@
 type appContext = {
   route: Routing.Route.t,
   authToken: option(string),
-  loggedInUser: option(Types.user),
+  loggedUser: option(Types.user),
   globalSetting: option(Types.globalSetting),
 };
 
@@ -11,7 +11,7 @@ module AppContext =
     let defaultValue = {
       route: Home,
       authToken: None,
-      loggedInUser: None,
+      loggedUser: None,
       globalSetting: None,
     };
   });

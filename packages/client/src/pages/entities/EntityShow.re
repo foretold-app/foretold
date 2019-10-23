@@ -36,22 +36,13 @@ let display = id => {
   </Providers.AppContext.Consumer>;
 };
 
-let make =
-    (
-      ~pageParams: PageConfig.LoggedInPage.pageParams,
-      ~layout=SLayout.FullPage.makeWithEl,
-      _children,
-    ) => {
+let make = (~pageParams: Types.pageParams, _children) => {
   ...component,
   render: _ => {
-    SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv(pageParams.id),
-      ~body=
-        <FC.PageCard.BodyPadding>
-          {display(pageParams.id)}
-        </FC.PageCard.BodyPadding>,
-      (),
-    )
-    |> layout;
+    <SLayout head={SLayout.Header.textDiv(pageParams.id)}>
+      <FC.PageCard.BodyPadding>
+        {display(pageParams.id)}
+      </FC.PageCard.BodyPadding>
+    </SLayout>;
   },
 };

@@ -16,12 +16,12 @@ class ChannelModel extends ModelPostgres {
 
   /**
    * @public
-   * @param {Models.ObjectID} id
+   * @param {Models.ChannelID} channelId
    * @return {Promise<Model[]>}
    */
-  async getAgentsByChannelId(id) {
+  async getAgentsByChannelId(channelId) {
     const channel = await this.model.findOne({
-      where: { id },
+      where: { id: channelId },
       include: [{
         model: this.models.Agent,
         as: 'agents',

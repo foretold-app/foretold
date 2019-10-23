@@ -20,12 +20,7 @@ type pageParams = {id: string};
 
 let component = ReasonReact.statelessComponent("AgentMeasurables");
 let make =
-    (
-      ~pageParams: pageParams,
-      ~loggedInUser: Types.user,
-      ~layout=SLayout.FullPage.makeWithEl,
-      _children,
-    ) => {
+    (~pageParams: pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,
   render: _ => {
     let lmake = SLayout.LayoutConfig.make;
@@ -53,8 +48,7 @@ let make =
             selectWithPaginationParams.response,
             selectWithPaginationParams.selection,
           ) {
-          | (_, Some(measurable)) =>
-            <Measurable id={measurable.id} loggedInUser />
+          | (_, Some(measurable)) => <Measurable id={measurable.id} />
           | (Success(connection), None) =>
             <MeasurableIndexTable
               measurables={connection.edges}

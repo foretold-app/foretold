@@ -50,7 +50,7 @@ let make =
   },
   render: self => {
     <FC__DropdownMenu.Jsx2 title={self.state.label} trigger>
-      <FC__Menu
+      <FC__Menu.Jsx2
         selectable=true
         onSelect={info =>
           switch (
@@ -76,7 +76,7 @@ let make =
                   label->React.string
                 </FC__Menu.Item.Jsx2>
               )}
-        </FC__Menu>
+        </FC__Menu.Jsx2>
     </FC__DropdownMenu.Jsx2>;
   },
 };

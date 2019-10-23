@@ -336,8 +336,9 @@ type clickInfo = {
  * )
  * ```
  */
+[@react.component]
 let make =
-    (~onClick=?, ~selectable=false, ~onSelect=?, ~selectedKey=?, children) =>
+    (~onClick=?, ~selectable=false, ~onSelect=?, ~selectedKey=?, ~children) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=rcMenuClass,
     ~props=
@@ -377,4 +378,24 @@ let make =
         ~className="ft-menu-general",
       ),
     children,
-  ) /* Menu item group is not implemented (https://react-component.github.io/menu/examples/menuItemGroup.html*/;
+  )  /* Menu item group is not implemented (https://react-component.github.io/menu/examples/menuItemGroup.html*/
+  |> ReasonReact.element;
+
+module Jsx2 = {
+  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+  let make =
+      (~onClick=?, ~selectable=false, ~onSelect=?, ~selectedKey=?, children) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(
+        ~onClick?,
+        ~selectable,
+        ~onSelect?,
+        ~selectedKey?,
+        ~children,
+        (),
+      ),
+      children,
+    );
+};

@@ -13,24 +13,33 @@ let link =
       ),
   );
 
-let make = children => {
-  ...component,
-  render: _self =>
-    <Div.Jsx2
-      styles=[
-        Css.(
-          style(
-            [
-              background(Colors.white),
-              border(`px(1), `solid, Colors.border),
-              borderRadius(`px(5)),
-            ]
-            @ BaseStyles.fullWidthFloatLeft,
-          )
-        ),
-      ]>
-      ...children
-    </Div.Jsx2>,
+[@react.component]
+let make = (~children) =>
+  <Div.Jsx2
+    styles=[
+      Css.(
+        style(
+          [
+            background(Colors.white),
+            border(`px(1), `solid, Colors.border),
+            borderRadius(`px(5)),
+          ]
+          @ BaseStyles.fullWidthFloatLeft,
+        )
+      ),
+    ]>
+    ...children
+  </Div.Jsx2>;
+
+module Jsx2 = {
+  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+  let make = children =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~children, ()),
+      children,
+    );
 };
 
 let defaultPadding = Css.padding2(~v=`em(0.0), ~h=`em(1.5));

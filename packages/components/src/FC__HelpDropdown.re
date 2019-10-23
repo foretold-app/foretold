@@ -12,7 +12,7 @@ module Overlay = {
   [@react.component]
   let make = (~content) =>
     <div className=Styles.className>
-      <FC__PageCard>
+      <FC__PageCard.Jsx2>
         <FC__PageCard.HeaderRow>
           <FC__Div.Jsx2 float=`left>
             <FC__PageCard.HeaderRow.Title>
@@ -39,7 +39,7 @@ module Overlay = {
             </span>
           </FC__PageCard.BodyPadding>
         </FC__PageCard.Body>
-      </FC__PageCard>
+      </FC__PageCard.Jsx2>
     </div>;
 
   module Jsx2 = {

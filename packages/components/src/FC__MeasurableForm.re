@@ -29,7 +29,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
     };
   },
   render: self =>
-    <PageCard>
+    <PageCard.Jsx2>
       <PageCard.HeaderRow>
         <PageCard.HeaderRow.Title>
           "New Prediction"->React.string
@@ -102,5 +102,5 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
           "Submit Prediction"->React.string
         </Button.Jsx2>
       </PageCard.Section>
-    </PageCard>,
+    </PageCard.Jsx2>,
 };

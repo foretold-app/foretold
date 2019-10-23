@@ -23,7 +23,12 @@ let row =
       className=Css.(
         style([paddingTop(`em(0.6)), paddingBottom(`em(0.0))])
       )>
-      <FC__CdfChart__Plain cdf minX=2.0 color={`hex("#d9dcdf")} maxX=12.0 />
+      <FC__CdfChart__Plain.Jsx2
+        cdf
+        minX=2.0
+        color={`hex("#d9dcdf")}
+        maxX=12.0
+      />
     </Table.Cell>
     <Table.Cell
       flex={`num(1.0)}
@@ -58,7 +63,12 @@ let row2 =
       className=Css.(
         style([paddingTop(`em(0.6)), paddingBottom(`em(0.0))])
       )>
-      <FC__CdfChart__Plain cdf minX=2.0 color={`hex("#d9dcdf")} maxX=12.0 />
+      <FC__CdfChart__Plain.Jsx2
+        cdf
+        minX=2.0
+        color={`hex("#d9dcdf")}
+        maxX=12.0
+      />
     </Table.Cell>
     <Table.Cell
       flex={`num(1.0)}

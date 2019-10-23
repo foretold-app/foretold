@@ -13,7 +13,7 @@ module Overlay = {
   let make = (~content) =>
     <div className=Styles.className>
       <FC__PageCard.Jsx2>
-        <FC__PageCard.HeaderRow>
+        <FC__PageCard.HeaderRow.Jsx2>
           <FC__Div.Jsx2 float=`left>
             <FC__PageCard.HeaderRow.Title>
               <span
@@ -25,7 +25,7 @@ module Overlay = {
               {content.headerContent}
             </FC__PageCard.HeaderRow.Title>
           </FC__Div.Jsx2>
-        </FC__PageCard.HeaderRow>
+        </FC__PageCard.HeaderRow.Jsx2>
         <FC__PageCard.Body>
           <FC__PageCard.BodyPadding v={`em(0.5)}>
             <span

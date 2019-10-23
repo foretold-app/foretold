@@ -45,8 +45,6 @@ module Jsx2 = {
 let defaultPadding = Css.padding2(~v=`em(0.0), ~h=`em(1.5));
 
 module HeaderRow = {
-  let component = ReasonReact.statelessComponent("PageCard HeaderRow");
-
   module Styles = {
     let itemTopPadding = Css.paddingTop(`em(0.5));
     let itemBottomPadding = Css.paddingBottom(`em(0.35));
@@ -76,23 +74,32 @@ module HeaderRow = {
     };
   };
 
-  let make = children => {
-    ...component,
-    render: _self =>
-      <Div.Jsx2
-        styles=[
-          Css.(
-            style(
-              [
-                borderBottom(`px(1), `solid, Colors.accentBlueO8),
-                defaultPadding,
-              ]
-              @ BaseStyles.fullWidthFloatLeft,
-            )
-          ),
-        ]>
-        ...children
-      </Div.Jsx2>,
+  [@react.component]
+  let make = (~children) =>
+    <Div.Jsx2
+      styles=[
+        Css.(
+          style(
+            [
+              borderBottom(`px(1), `solid, Colors.accentBlueO8),
+              defaultPadding,
+            ]
+            @ BaseStyles.fullWidthFloatLeft,
+          )
+        ),
+      ]>
+      ...children
+    </Div.Jsx2>;
+
+  module Jsx2 = {
+    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+    let make = children =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~children, ()),
+        children,
+      );
   };
 };
 

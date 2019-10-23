@@ -30,7 +30,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
   },
   render: self =>
     <PageCard.Jsx2>
-      <PageCard.HeaderRow>
+      <PageCard.HeaderRow.Jsx2>
         <PageCard.HeaderRow.Title>
           "New Prediction"->React.string
           <FC__HelpDropdown.Jsx2
@@ -40,7 +40,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
             }
           />
         </PageCard.HeaderRow.Title>
-      </PageCard.HeaderRow>
+      </PageCard.HeaderRow.Jsx2>
       <PageCard.Section flex=true padding=`none>
         <TabList.Jsx2
           selected={self.state.selectedTab}

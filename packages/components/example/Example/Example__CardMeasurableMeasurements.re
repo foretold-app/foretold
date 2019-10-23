@@ -97,8 +97,8 @@ let row2 =
   </Table.Row>;
 
 let make =
-  <PageCard>
-    <PageCard.HeaderRow>
+  <PageCard.Jsx2>
+    <PageCard.HeaderRow.Jsx2>
       <Div.Jsx2>
         <Div.Jsx2
           styles=[
@@ -130,10 +130,10 @@ let make =
            })}
         </Div.Jsx2>
       </Div.Jsx2>
-    </PageCard.HeaderRow>
+    </PageCard.HeaderRow.Jsx2>
     <Div.Jsx2 styles=[Css.style(BaseStyles.fullWidthFloatLeft)]>
       <Table>
-        <Table.HeaderRow>
+        <Table.HeaderRow.Jsx2>
           <Table.Cell flex={`num(2.0)}>
             {"Prediction Distribution" |> ReasonReact.string}
           </Table.Cell>
@@ -146,7 +146,7 @@ let make =
           <Table.Cell flex={`num(1.0)}>
             {"Time" |> ReasonReact.string}
           </Table.Cell>
-        </Table.HeaderRow>
+        </Table.HeaderRow.Jsx2>
         row
         row2
         row2
@@ -157,4 +157,4 @@ let make =
         row2
       </Table>
     </Div.Jsx2>
-  </PageCard>;
+  </PageCard.Jsx2>;

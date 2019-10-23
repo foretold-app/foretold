@@ -71,21 +71,23 @@ let row =
   </Table.Row>;
 
 let make =
-  <PageCard>
-    <PageCard.HeaderRow>
+  <PageCard.Jsx2>
+    <PageCard.HeaderRow.Jsx2>
       <Div.Jsx2
         float=`left
         className={Css.style([
           PageCard.HeaderRow.Styles.itemTopPadding,
           PageCard.HeaderRow.Styles.itemBottomPadding,
         ])}>
-        <Tab2 isActive=true number=12> {"Open" |> ReasonReact.string} </Tab2>
-        <Tab2 isActive=false number=18>
+        <Tab2.Jsx2 isActive=true number=12>
+          {"Open" |> ReasonReact.string}
+        </Tab2.Jsx2>
+        <Tab2.Jsx2 isActive=false number=18>
           {"Pending Resolution" |> ReasonReact.string}
-        </Tab2>
-        <Tab2 isActive=false number=831>
+        </Tab2.Jsx2>
+        <Tab2.Jsx2 isActive=false number=831>
           {"Closed" |> ReasonReact.string}
-        </Tab2>
+        </Tab2.Jsx2>
       </Div.Jsx2>
       <Div.Jsx2
         float=`right
@@ -103,9 +105,9 @@ let make =
            },
          })}
       </Div.Jsx2>
-    </PageCard.HeaderRow>
+    </PageCard.HeaderRow.Jsx2>
     <Table>
-      <Table.HeaderRow>
+      <Table.HeaderRow.Jsx2>
         <Table.Cell flex={`num(4.)}>
           {"Name & Status" |> ReasonReact.string}
         </Table.Cell>
@@ -115,7 +117,7 @@ let make =
         <Table.Cell flex={`num(1.)}>
           {"Details" |> ReasonReact.string}
         </Table.Cell>
-      </Table.HeaderRow>
+      </Table.HeaderRow.Jsx2>
       row
       row
       row
@@ -126,4 +128,4 @@ let make =
       row
       row
     </Table>
-  </PageCard>;
+  </PageCard.Jsx2>;

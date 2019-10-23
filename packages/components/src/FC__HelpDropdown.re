@@ -26,8 +26,8 @@ module Overlay = {
             </FC__PageCard.HeaderRow.Title.Jsx2>
           </FC__Div.Jsx2>
         </FC__PageCard.HeaderRow.Jsx2>
-        <FC__PageCard.Body>
-          <FC__PageCard.BodyPadding v={`em(0.5)}>
+        <FC__PageCard.Body.Jsx2>
+          <FC__PageCard.BodyPadding.Jsx2 v={`em(0.5)}>
             <span
               className=Css.(
                 style([
@@ -37,8 +37,8 @@ module Overlay = {
               )>
               {content.bodyContent}
             </span>
-          </FC__PageCard.BodyPadding>
-        </FC__PageCard.Body>
+          </FC__PageCard.BodyPadding.Jsx2>
+        </FC__PageCard.Body.Jsx2>
       </FC__PageCard.Jsx2>
     </div>;
 

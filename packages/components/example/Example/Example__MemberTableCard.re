@@ -2,12 +2,12 @@ open FC;
 open Base;
 
 let make =
-  <PageCard>
-    <PageCard.HeaderRow>
+  <PageCard.Jsx2>
+    <PageCard.HeaderRow.Jsx2>
       <Div.Jsx2 float=`left>
-        <PageCard.HeaderRow.Title>
+        <PageCard.HeaderRow.Title.Jsx2>
           {"Pending Resolution" |> ReasonReact.string}
-        </PageCard.HeaderRow.Title>
+        </PageCard.HeaderRow.Title.Jsx2>
       </Div.Jsx2>
       <Div.Jsx2
         float=`right
@@ -19,9 +19,9 @@ let make =
           {"< Back" |> ReasonReact.string}
         </FC__Button.Jsx2>
       </Div.Jsx2>
-    </PageCard.HeaderRow>
+    </PageCard.HeaderRow.Jsx2>
     <Table>
-      <Table.HeaderRow>
+      <Table.HeaderRow.Jsx2>
         <Table.Cell flex={`num(4.)}>
           {"Name & Status" |> ReasonReact.string}
         </Table.Cell>
@@ -31,6 +31,6 @@ let make =
         <Table.Cell flex={`num(1.)}>
           {"Details" |> ReasonReact.string}
         </Table.Cell>
-      </Table.HeaderRow>
+      </Table.HeaderRow.Jsx2>
     </Table>
-  </PageCard>;
+  </PageCard.Jsx2>;

@@ -74,12 +74,12 @@ module ColorDisplay = {
     initialState: () => {bgColor: Colors.white, bgName: "white"},
     reducer,
     render: self =>
-      <PageCard>
-        <PageCard.HeaderRow>
-          <PageCard.HeaderRow.Title>
+      <PageCard.Jsx2>
+        <PageCard.HeaderRow.Jsx2>
+          <PageCard.HeaderRow.Title.Jsx2>
             "Colors"->React.string
-          </PageCard.HeaderRow.Title>
-        </PageCard.HeaderRow>
+          </PageCard.HeaderRow.Title.Jsx2>
+        </PageCard.HeaderRow.Jsx2>
         <PageCard.Section border=`bottom>
           "Background: "->React.string
           <select
@@ -109,7 +109,7 @@ module ColorDisplay = {
             |> E.L.toArray}
            ->React.array}
         </div>
-      </PageCard>,
+      </PageCard.Jsx2>,
   };
 };
 

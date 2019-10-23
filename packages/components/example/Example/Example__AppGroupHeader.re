@@ -3,7 +3,7 @@ open Base;
 
 let make =
   <Div.Jsx2>
-    <GroupHeader>
+    <GroupHeader.Jsx2>
       <Div.Jsx2 float=`left>
         <div
           className=Css.(
@@ -37,8 +37,8 @@ let make =
         {GroupHeader.actionButton([|"Create Question" |> ReasonReact.string|])
          |> ReasonReact.element}
       </Div.Jsx2>
-    </GroupHeader>
-    <GroupHeader.SubHeader>
+    </GroupHeader.Jsx2>
+    <GroupHeader.SubHeader.Jsx2>
       <Tab.Jsx2 isActive=true> {"Questions" |> ReasonReact.string} </Tab.Jsx2>
       <Tab.Jsx2 isActive=false>
         {"Knowledge Graph" |> ReasonReact.string}
@@ -47,5 +47,5 @@ let make =
         {"Leaderboard" |> ReasonReact.string}
       </Tab.Jsx2>
       <Tab.Jsx2 isActive=false> {"Settings" |> ReasonReact.string} </Tab.Jsx2>
-    </GroupHeader.SubHeader>
+    </GroupHeader.SubHeader.Jsx2>
   </Div.Jsx2>;

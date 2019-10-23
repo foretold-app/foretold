@@ -131,10 +131,19 @@ module HeaderRow = {
       );
   };
 
-  let make = children => {
-    ...component,
-    render: _self =>
-      <Div.Jsx2 styles=[Styles.headerRow]> ...children </Div.Jsx2>,
+  [@react.component]
+  let make = (~children) =>
+    <Div.Jsx2 styles=[Styles.headerRow]> ...children </Div.Jsx2>;
+
+  module Jsx2 = {
+    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+    let make = children =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~children, ()),
+        children,
+      );
   };
 };
 

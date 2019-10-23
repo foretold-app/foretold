@@ -1,5 +1,4 @@
 open FC__Base;
-let component = ReasonReact.statelessComponent(__MODULE__);
 
 let link =
   Link.Jsx2.make(
@@ -110,29 +109,45 @@ module HeaderRow = {
 };
 
 module Body = {
-  let component = ReasonReact.statelessComponent("Card Body");
-  let make = children => {
-    ...component,
-    render: _self =>
-      <Div.Jsx2 styles=[Css.style(BaseStyles.fullWidthFloatLeft)]>
-        ...children
-      </Div.Jsx2>,
+  [@react.component]
+  let make = (~children) =>
+    <Div.Jsx2 styles=[Css.style(BaseStyles.fullWidthFloatLeft)]>
+      ...children
+    </Div.Jsx2>;
+
+  module Jsx2 = {
+    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+    let make = children =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~children, ()),
+        children,
+      );
   };
 };
 
 module BodyPadding = {
-  let component = ReasonReact.statelessComponent("Card BodyPadding");
-  let make = (~v=`em(1.5), children) => {
-    ...component,
-    render: _self =>
-      <Div.Jsx2
-        styles=[
-          Css.style(
-            [Css.padding2(~v, ~h=`em(1.5))] @ BaseStyles.fullWidthFloatLeft,
-          ),
-        ]>
-        ...children
-      </Div.Jsx2>,
+  [@react.component]
+  let make = (~v=`em(1.5), ~children) =>
+    <Div.Jsx2
+      styles=[
+        Css.style(
+          [Css.padding2(~v, ~h=`em(1.5))] @ BaseStyles.fullWidthFloatLeft,
+        ),
+      ]>
+      ...children
+    </Div.Jsx2>;
+
+  module Jsx2 = {
+    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+    let make = (~v=`em(1.5), children) =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~v, ~children, ()),
+        children,
+      );
   };
 };
 

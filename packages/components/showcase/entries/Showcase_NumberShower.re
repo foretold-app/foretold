@@ -37,12 +37,12 @@ module NumbersDisplay = {
   let make = _children => {
     ...component,
     render: self =>
-      <PageCard>
-        <PageCard.HeaderRow>
-          <PageCard.HeaderRow.Title>
+      <PageCard.Jsx2>
+        <PageCard.HeaderRow.Jsx2>
+          <PageCard.HeaderRow.Title.Jsx2>
             "NumberShower"->React.string
-          </PageCard.HeaderRow.Title>
-        </PageCard.HeaderRow>
+          </PageCard.HeaderRow.Title.Jsx2>
+        </PageCard.HeaderRow.Jsx2>
         <div>
           {(
              numbers
@@ -55,7 +55,7 @@ module NumbersDisplay = {
            )
            ->React.array}
         </div>
-      </PageCard>,
+      </PageCard.Jsx2>,
   };
 };
 

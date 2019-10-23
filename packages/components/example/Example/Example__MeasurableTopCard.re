@@ -5,8 +5,8 @@ let pastTime = 1483232400;
 let futureTime = 1559005200;
 
 let make =
-  <PageCard>
-    <PageCard.HeaderRow>
+  <PageCard.Jsx2>
+    <PageCard.HeaderRow.Jsx2>
       <Div.Jsx2>
         <Div.Jsx2
           styles=[
@@ -42,7 +42,7 @@ let make =
            })}
         </Div.Jsx2>
       </Div.Jsx2>
-    </PageCard.HeaderRow>
+    </PageCard.HeaderRow.Jsx2>
     <Div.Jsx2
       styles=[
         Css.style(
@@ -77,4 +77,4 @@ let make =
         </PageCard.P>
       </Div.Jsx2>
     </Div.Jsx2>
-  </PageCard>;
+  </PageCard.Jsx2>;

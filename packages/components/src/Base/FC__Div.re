@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 open Css;
 
 let fnWithDefault = (fn, r) =>
@@ -24,6 +23,7 @@ let make =
     |> fnWithDefault(e => [display(`flex), Css.flexDirection(e)]);
   let allStyles =
     Css.merge([flexStyle, directionStyle, floatStyle, className, ...styles]);
+
   <div className=allStyles onClick> children </div>;
 };
 

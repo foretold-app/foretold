@@ -2,7 +2,7 @@ open FC__Base;
 open FC;
 let make =
   <Div.Jsx2>
-    <AppHeader
+    <AppHeader.Jsx2
       links={
         [|
           AppHeader.link(
@@ -98,7 +98,7 @@ let make =
         <Div.Jsx2 flex={`num(2.0)} />
       </Div.Jsx2>
     </Div.Jsx2>
-    <Footer
+    <Footer.Jsx2
       logo={React.string({js|2019 \u00a9 Foretold|js})}
       links=[|
         <a href="#"> {React.string("About")} </a>,

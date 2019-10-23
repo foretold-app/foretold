@@ -21,7 +21,7 @@ let make = (~cdf: FC__Types.Dist.t, ~minX, ~maxX, ~color=`hex("3562AE66")) => {
   let pdf = cdf |> FC__Types.Dist.toPdf;
 
   <div className={Styles.graph(color)}>
-    <FC__CdfChart__Base
+    <FC__CdfChart__Base.Jsx2
       width=200
       height=30
       minX

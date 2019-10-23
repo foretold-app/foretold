@@ -15,7 +15,7 @@ let make =
     (~cdf: FC__Types.Dist.t, ~minX=?, ~maxX=?, ~width=Some(400), ~children) => {
   let pdf = cdf |> FC__Types.Dist.toPdf;
   <div className=Styles.graph>
-    <FC__CdfChart__Base
+    <FC__CdfChart__Base.Jsx2
       marginBottom=25
       ?width
       height=200

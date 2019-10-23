@@ -25,6 +25,8 @@ external makeProps:
   ) =>
   _ =
   "";
+
+[@react.component]
 let make =
     (
       ~width=?,
@@ -38,7 +40,7 @@ let make =
       ~minX=?,
       ~onHover=?,
       ~primaryDistribution=?,
-      children,
+      ~children,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=cdfChart,
@@ -58,4 +60,44 @@ let make =
         (),
       ),
     children,
-  );
+  )
+  |> ReasonReact.element;
+
+module Jsx2 = {
+  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+  let make =
+      (
+        ~width=?,
+        ~height=?,
+        ~verticalLine=?,
+        ~showVerticalLine=?,
+        ~marginBottom=?,
+        ~marginTop=?,
+        ~showDistributionLines=?,
+        ~maxX=?,
+        ~minX=?,
+        ~onHover=?,
+        ~primaryDistribution=?,
+        children,
+      ) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(
+        ~width,
+        ~height,
+        ~verticalLine,
+        ~showVerticalLine,
+        ~marginBottom,
+        ~marginTop,
+        ~showDistributionLines,
+        ~maxX,
+        ~minX,
+        ~onHover,
+        ~primaryDistribution,
+        ~children,
+        (),
+      ),
+      children,
+    );
+};

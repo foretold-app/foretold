@@ -18,20 +18,14 @@ module Styles = {
 
 [@react.component]
 let make =
-    (
-      ~cdf: FC__Types.Dist.t,
-      ~minX=None,
-      ~maxX=None,
-      ~color=`hex("7e9db7"),
-      ~children,
-    ) => {
+    (~cdf: FC__Types.Dist.t, ~minX=None, ~maxX=None, ~color=`hex("7e9db7")) => {
   let pdf = cdf |> FC__Types.Dist.toPdf;
 
   <div className={Styles.graph(color)}>
     <div className=Styles.textOverlay>
       <FC__CdfChart__StatSummary.Jsx2 cdf />
     </div>
-    <FC__CdfChart__Base
+    <FC__CdfChart__Base.Jsx2
       width=200
       height=40
       ?minX
@@ -59,7 +53,7 @@ module Jsx2 = {
       ) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
-      makeProps(~cdf, ~minX, ~maxX, ~color, ~children, ()),
+      makeProps(~cdf, ~minX, ~maxX, ~color, ()),
       children,
     );
 };

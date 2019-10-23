@@ -36,20 +36,28 @@ module Button = {
     cursor(`pointer),
   ];
 
-  let component = ReasonReact.statelessComponent("TabButton");
-  let make = (~isActive=false, ~onClick=?, ~flex=false, children) => {
-    ...component,
-    render: _self =>
-      <button
-        disabled=isActive
-        ?onClick
-        className={Css.style(
-          noStyles
-          @ (isActive ? activeStyles : inactiveStyles)
-          @ (flex ? flexStyles : allStyles),
-        )}>
-        ...children
-      </button>,
+  [@react.component]
+  let make = (~isActive=false, ~onClick=?, ~flex=false, ~children) =>
+    <button
+      disabled=isActive
+      ?onClick
+      className={Css.style(
+        noStyles
+        @ (isActive ? activeStyles : inactiveStyles)
+        @ (flex ? flexStyles : allStyles),
+      )}>
+      ...children
+    </button>;
+
+  module Jsx2 = {
+    let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+    let make = (~isActive=false, ~onClick=?, ~flex=false, children) =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~isActive, ~onClick?, ~flex, ~children, ()),
+        children,
+      );
   };
 };
 

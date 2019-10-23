@@ -61,12 +61,12 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
          | SimpleTab =>
            <Div.Jsx2 flexDirection=`row styles=[flexRowContainer]>
              <Div.Jsx2 flex={`num(1.0)} styles=[flexRowItem]>
-               <InputLabel> "Min"->React.string </InputLabel>
-               <TextInput fullWidth=true />
+               <InputLabel.Jsx2> "Min"->React.string </InputLabel.Jsx2>
+               <TextInput.Jsx2 fullWidth=true />
              </Div.Jsx2>
              <Div.Jsx2 flex={`num(1.0)} styles=[flexRowItem]>
-               <InputLabel> "Max"->React.string </InputLabel>
-               <TextInput fullWidth=true />
+               <InputLabel.Jsx2> "Max"->React.string </InputLabel.Jsx2>
+               <TextInput.Jsx2 fullWidth=true />
              </Div.Jsx2>
              <Div.Jsx2 styles=[flexRowItem]>
                <Button.Jsx2 variant=Button.Secondary>
@@ -74,7 +74,8 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
                </Button.Jsx2>
              </Div.Jsx2>
            </Div.Jsx2>
-         | FreeformTab => <TextInput fullWidth=true placeholder="5 to 50" />
+         | FreeformTab =>
+           <TextInput.Jsx2 fullWidth=true placeholder="5 to 50" />
          | CustomTab =>
            <div>
              <div>
@@ -89,13 +90,13 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
                "Input is not a valid PDF"->React.string
              </Alert.Jsx2>
              <PageCard.VerticalSpace />
-             <TextArea rows=4 fullWidth=true />
+             <TextArea.Jsx2 rows=4 fullWidth=true />
            </div>
          }}
       </PageCard.Section>
       <PageCard.Section>
-        <InputLabel> "Comment"->React.string </InputLabel>
-        <TextArea fullWidth=true />
+        <InputLabel.Jsx2> "Comment"->React.string </InputLabel.Jsx2>
+        <TextArea.Jsx2 fullWidth=true />
         <PageCard.VerticalSpace />
         <Button.Jsx2 variant=Button.Primary fullWidth=true size=Large>
           "Submit Prediction"->React.string

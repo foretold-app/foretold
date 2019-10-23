@@ -237,12 +237,14 @@ module Section = {
 };
 
 module VerticalSpace = {
-  let component =
-    ReasonReact.statelessComponent("Card Vertical Padding Area");
   let spaceStyle = Css.(style([marginTop(`em(1.5))]));
-  let make = _children => {
-    ...component,
-    render: _self => <div className=spaceStyle />,
+
+  [@react.component]
+  let make = _ => <div className=spaceStyle />;
+
+  module Jsx2 = {
+    let make = children =>
+      ReasonReactCompat.wrapReactForReasonReact(make, makeProps(), children);
   };
 };
 

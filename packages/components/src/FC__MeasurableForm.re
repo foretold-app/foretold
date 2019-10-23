@@ -85,11 +85,11 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
                />
                <Icon.Questionmark.Jsx2 />
              </div>
-             <PageCard.VerticalSpace />
+             <PageCard.VerticalSpace.Jsx2 />
              <Alert.Jsx2 type_=`error>
                "Input is not a valid PDF"->React.string
              </Alert.Jsx2>
-             <PageCard.VerticalSpace />
+             <PageCard.VerticalSpace.Jsx2 />
              <TextArea.Jsx2 rows=4 fullWidth=true />
            </div>
          }}
@@ -97,7 +97,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
       <PageCard.Section.Jsx2>
         <InputLabel.Jsx2> "Comment"->React.string </InputLabel.Jsx2>
         <TextArea.Jsx2 fullWidth=true />
-        <PageCard.VerticalSpace />
+        <PageCard.VerticalSpace.Jsx2 />
         <Button.Jsx2 variant=Button.Primary fullWidth=true size=Large>
           "Submit Prediction"->React.string
         </Button.Jsx2>

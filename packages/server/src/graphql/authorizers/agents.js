@@ -5,13 +5,13 @@ const logger = require('../../lib/log');
 const log = logger.module('authorizers/agents');
 
 /**
- * @param {*} root
+ * @param {*} _root
  * @param {object} args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {boolean}
  */
-function currentAgentIsAuthenticatedRule(root, args, context, info) {
+function currentAgentIsAuthenticatedRule(_root, args, context, _info) {
   const agentId = _.get(context, 'agent.id');
   const result = !!agentId;
 
@@ -24,13 +24,13 @@ function currentAgentIsAuthenticatedRule(root, args, context, info) {
 }
 
 /**
- * @param {*} root
+ * @param {*} _root
  * @param {object} args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {boolean}
  */
-function currentAgentIsApplicationAdminRule(root, args, context, info) {
+function currentAgentIsApplicationAdminRule(_root, args, context, _info) {
   const isAdmin = _.get(context, 'agent.isAdmin', false);
   const result = !!isAdmin;
 

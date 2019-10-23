@@ -9,10 +9,10 @@ const log = logger.module('authorizers/bots');
  * @param {string} root.userId
  * @param {object} args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {boolean}
  */
-function botBelongsToCurrentUserRule(root, args, context, info) {
+function botBelongsToCurrentUserRule(root, args, context, _info) {
   const botUserId = _.get(root, 'userId')
     || _.get(context, 'bot.userId');
   const userId = _.get(context, 'user.id');

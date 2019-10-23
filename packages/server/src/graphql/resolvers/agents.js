@@ -2,8 +2,8 @@ const _ = require('lodash');
 
 const data = require('../../data');
 
-const { Params } = require('../../data/classes/params');
-const { Filter } = require('../../data/classes/filter');
+const { Params } = require('../../data/classes');
+const { Filter } = require('../../data/classes');
 
 /**
  * @param {object | null} root

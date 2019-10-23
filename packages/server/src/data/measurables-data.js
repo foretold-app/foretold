@@ -2,7 +2,7 @@ const _ = require('lodash');
 const fetch = require('node-fetch');
 
 const { MeasurableModel } = require('../models-abstract');
-const { Params } = require('./classes/params');
+const { Params } = require('./classes');
 
 const { DataBase } = require('./data-base');
 const logger = require('../lib/log');

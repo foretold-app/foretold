@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const data = require('../../data');
-const { Params } = require('../../data/classes/params');
+const { Params } = require('../../data/classes');
 const { measurableEmptyName } = require('../../lang');
 const logger = require('../../lib/log');
 

@@ -6,10 +6,10 @@ const { Consumer } = require('./consumer');
 const events = require('../events');
 const emitter = require('../emitter');
 
-const { Pagination } = require('../../data/classes/pagination');
-const { Filter } = require('../../data/classes/filter');
-const { Options } = require('../../data/classes/options');
-const { Params } = require('../../data/classes/params');
+const { Pagination } = require('../../data/classes');
+const { Filter } = require('../../data/classes');
+const { Options } = require('../../data/classes');
+const { Params } = require('../../data/classes');
 const logger = require('../../lib/log');
 
 const { assert, errs } = require('./errors');

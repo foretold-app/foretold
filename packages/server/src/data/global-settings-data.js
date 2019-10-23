@@ -5,8 +5,8 @@ const { DataBase } = require('./data-base');
 const { GlobalSettingModel } = require('../models-abstract');
 const { KenFacade } = require('../lib/ken-facade');
 
-const { Params } = require('./classes/params');
-const { Data } = require('./classes/data');
+const { Params } = require('./classes');
+const { Data } = require('./classes');
 const logger = require('../lib/log');
 
 const log = logger.module('data/global-settings-data');

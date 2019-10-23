@@ -33,7 +33,7 @@ let make = (~cdf: FC__Types.Dist.t, _children) => {
       <PageCard.HeaderRow>
         <PageCard.HeaderRow.Title>
           "New Prediction"->React.string
-          <FC__HelpDropdown
+          <FC__HelpDropdown.Jsx2
             content={
               headerContent: "sdf" |> ReasonReact.string,
               bodyContent: "sdfsdfsd" |> ReasonReact.string,

@@ -51,11 +51,19 @@ let component = ReasonReact.statelessComponent("HelpDropdown");
 
 let staticOverlay = content => <Overlay content />;
 
-let make = (~content, _children) => {
-  ...component,
-  render: _self => {
-    <FC__Dropdown overlay={staticOverlay(content)} trigger=FC__Dropdown.Hover>
-      <span> <FC__Icon.Questionmark.Jsx2 isInteractive=true /> </span>
-    </FC__Dropdown>;
-  },
+[@react.component]
+let make = (~content) =>
+  <FC__Dropdown overlay={staticOverlay(content)} trigger=FC__Dropdown.Hover>
+    <span> <FC__Icon.Questionmark.Jsx2 isInteractive=true /> </span>
+  </FC__Dropdown>;
+
+module Jsx2 = {
+  let component = ReasonReact.statelessComponent(__MODULE__ ++ "Jsx2");
+
+  let make = (~content, children) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~content, ()),
+      children,
+    );
 };

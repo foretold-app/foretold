@@ -101,8 +101,6 @@ let make = (~agent: Agent.t, ~className="") =>
   <SubItem agent className owner={Agent.owner(agent)} />;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent(__MODULE__);
-
   let make = (~agent: Agent.t, ~className="", children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

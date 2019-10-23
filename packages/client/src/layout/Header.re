@@ -141,14 +141,23 @@ let make = (~loggedUser: option(Types.user), _children) => {
                {"Entity Explorer" |> ste}
              </Link.Jsx2>,
            )
-         | _ => ReasonReact.null
+         | None =>
+           <Link.Jsx2
+             linkType={Internal(ChannelIndex)} className=Styles.headerLink>
+             {"Communities" |> ste}
+           </Link.Jsx2>
          }}
       </Div>
       <Div float=`left> <VerificationWarning /> </Div>
       <Div float=`right>
         {switch (loggedUser) {
          | Some(loggedUser) => header(loggedUser)
-         | _ => ReasonReact.null
+         | None =>
+           <Link.Jsx2
+             linkType={Action(_e => Auth0Client.triggerLoginScreen())}
+             className=Styles.headerLink>
+             {"Log In" |> ste}
+           </Link.Jsx2>
          }}
       </Div>
     </Div>,

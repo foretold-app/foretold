@@ -31,7 +31,12 @@ let make = (~channelId=None, _children) => {
     <Providers.AppContext.Consumer>
       ...{({loggedUser}) =>
         <div className=Styles.outer>
-          <div className=Styles.left> <Sidebar channelId loggedUser /> </div>
+          {loggedUser
+           |> E.O.React.fmapOrNull(_ =>
+                <div className=Styles.left>
+                  <Sidebar channelId loggedUser />
+                </div>
+              )}
           <div className=Styles.right>
             <div className=Styles.rightInner>
               <Header loggedUser />

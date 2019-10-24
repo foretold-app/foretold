@@ -18,6 +18,7 @@ let make =
       ~id=?,
       ~className=?,
       ~style=?,
+      ~children=ReasonReact.null,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=form,
@@ -30,16 +31,19 @@ let make =
         "className": fromOption(className),
         "style": fromOption(style),
       },
-  );
+    children,
+  )
+  |> ReasonReact.element;
 
 type wrapper = (. ReasonReact.reactClass) => ReasonReact.reactClass;
 
 [@bs.module "antd/lib/form"] external create: unit => wrapper = "create";
-let wrapper = (~component, ~make', ~props, ~children) => {
+let wrapper = (~component, ~make', ~props, ~children=ReasonReact.null) => {
   let wrapper = create();
   let reactClass' = ReasonReact.wrapReasonForJs(~component, _ => make'([||]));
   let reactClass = wrapper(. reactClass');
-  ReasonReact.wrapJsForReason(~reactClass, ~props, children);
+  ReasonReact.wrapJsForReason(~reactClass, ~props, children)
+  |> ReasonReact.element;
 };
 
 module Item = {
@@ -78,5 +82,6 @@ module Item = {
           "hasFeedback": unwrapBool(hasFeedback),
           "labelCol": fromOption(labelCol),
         },
-    );
+    )
+    |> ReasonReact.element;
 };

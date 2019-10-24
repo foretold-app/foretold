@@ -12,9 +12,10 @@ external makeProps:
   "";
 
 [@react.component]
-let make = (~overlay=?, ~overlayClassName=?, ~children) =>
+let make = (~overlay=?, ~overlayClassName=?, ~children=ReasonReact.null) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=dropdown,
     ~props=makeProps(~overlay?, ~overlayClassName?, ()),
     children,
-  );
+  )
+  |> ReasonReact.element;

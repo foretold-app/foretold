@@ -73,11 +73,12 @@ let link = (~m: Types.measurable) => {
   };
 };
 
+// @todo: 1
 let description = (~m: Types.measurable) =>
   switch (m.labelCustom) {
   | Some("")
   | None => None
-  | Some(text) => Some(<Markdown source=text />)
+  | Some(text) => Some(ReasonReact.null)
   };
 
 let endpointResponse = (~m: Types.measurable) =>

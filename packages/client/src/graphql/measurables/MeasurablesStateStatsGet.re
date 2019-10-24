@@ -38,13 +38,14 @@ let toStats = (r: Query.t) =>
   };
 
 let componentMaker = (query, innerComponentFn) =>
-  QueryComponent.make(~variables=query##variables, o =>
-    o.result
-    |> HttpResponse.fromApollo
-    |> HttpResponse.fmap(toStats)
-    |> innerComponentFn
-  )
-  |> E.React.el;
+  <QueryComponent variables=query##variables>
+    ...{o =>
+      o.result
+      |> HttpResponse.fromApollo
+      |> HttpResponse.fmap(toStats)
+      |> innerComponentFn
+    }
+  </QueryComponent>;
 
 let component2 = (~channelId, innerComponentFn) => {
   let query = Query.make(~channelId, ());

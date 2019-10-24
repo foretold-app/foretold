@@ -29,7 +29,7 @@ module FloatCdf = {
       (
         ~value: MeasurementValue.FloatCdf.t,
         ~competitorType: Types.competitorType,
-        ~valueText: option(string)=None,
+        ~valueText=None,
         ~width=150,
         ~height=30,
       ) => {

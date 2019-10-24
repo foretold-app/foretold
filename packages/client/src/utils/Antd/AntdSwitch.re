@@ -42,7 +42,7 @@ let make =
       ~loading=?,
       ~autoFocus=?,
       ~style=?,
-      ~children,
+      ~children=ReasonReact.null,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=switcher,
@@ -63,4 +63,5 @@ let make =
         (),
       ),
     children,
-  );
+  )
+  |> ReasonReact.element;

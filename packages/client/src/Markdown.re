@@ -1,4 +1,6 @@
 [@bs.config {jsx: 3}];
 
+// @todo: 1
+
 [@react.component]
-let make = (~source) => <ReactMarkdown.Markdown source />;
+let make = (~source) => ReasonReact.null;

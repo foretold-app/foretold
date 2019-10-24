@@ -19,6 +19,7 @@ module Styles = {
     ]);
 };
 
+// @todo: 1
 [@react.component]
 let make =
     (

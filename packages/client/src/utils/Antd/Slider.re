@@ -35,7 +35,7 @@ let make =
       ~max=?,
       ~step=?,
       ~disabled=false,
-      ~children,
+      ~children=ReasonReact.null,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,
@@ -54,4 +54,5 @@ let make =
         (),
       ),
     children,
-  );
+  )
+  |> ReasonReact.element;

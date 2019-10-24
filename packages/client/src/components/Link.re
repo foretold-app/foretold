@@ -14,25 +14,11 @@ let make =
     (
       ~linkType: LinkType.t,
       ~className: option(string)=?,
-      ~children: array(ReasonReact.reactElement),
+      ~children=ReasonReact.null,
     ) =>
   <a
     href={LinkType.toString(linkType)}
     className={Css.merge([Styles.link, className |> E.O.default("")])}
     onClick={LinkType.onClick(linkType)}>
-    {children |> ReasonReact.array}
+    children
   </a>;
-
-module Jsx2 = {
-  let make =
-      (
-        ~linkType: LinkType.t,
-        ~className: option(string)=?,
-        children: array(ReasonReact.reactElement),
-      ) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~linkType, ~className?, ~children, ()),
-      children,
-    );
-};

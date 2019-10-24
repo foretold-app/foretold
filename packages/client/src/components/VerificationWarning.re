@@ -7,35 +7,33 @@ module Styles = {
 
 [@react.component]
 let make = _ => {
-  <>
-    <Providers.AppContext.Consumer>
-      ...{({loggedUser}) => {
-        let warning = email =>
-          <FC__Alert type_=`warning>
-            <span className=Styles.icon>
-              <Icon.Icon icon="EMAIL_UNREAD" />
-            </span>
-            {"Please verify your email address, \""
-             ++ email
-             ++ "\"."
-             |> Utils.ste}
-          </FC__Alert>;
+  <Providers.AppContext.Consumer>
+    ...{({loggedUser}) => {
+      let warning = email =>
+        <FC__Alert type_=`warning>
+          <span className=Styles.icon>
+            <Icon.Icon icon="EMAIL_UNREAD" />
+          </span>
+          {"Please verify your email address, \""
+           ++ email
+           ++ "\"."
+           |> Utils.ste}
+        </FC__Alert>;
 
-        let warningNoEmail =
-          <FC__Alert type_=`warning>
-            <span className=Styles.icon>
-              <Icon.Icon icon="EMAIL_UNREAD" />
-            </span>
-            {"Please verify your email address. " |> Utils.ste}
-          </FC__Alert>;
+      let warningNoEmail =
+        <FC__Alert type_=`warning>
+          <span className=Styles.icon>
+            <Icon.Icon icon="EMAIL_UNREAD" />
+          </span>
+          {"Please verify your email address. " |> Utils.ste}
+        </FC__Alert>;
 
-        switch (loggedUser) {
-        | Some({isEmailVerified: Some(isEmailVerified), email: Some(email)}) =>
-          isEmailVerified ? ReasonReact.null : warning(email)
-        | Some({isEmailVerified: _, email: None}) => warningNoEmail
-        | _ => ReasonReact.null
-        };
-      }}
-    </Providers.AppContext.Consumer>
-  </>;
+      switch (loggedUser) {
+      | Some({isEmailVerified: Some(isEmailVerified), email: Some(email)}) =>
+        isEmailVerified ? ReasonReact.null : warning(email)
+      | Some({isEmailVerified: _, email: None}) => warningNoEmail
+      | _ => ReasonReact.null
+      };
+    }}
+  </Providers.AppContext.Consumer>;
 };

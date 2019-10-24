@@ -18,21 +18,23 @@ external makeProps:
   _ =
   "";
 
+// @todo: 1
+
 [@react.component]
-let make = (~value=?, ~defaultValue=?, ~onChange=?, ~className=?, ~children) =>
+let make =
+    (
+      ~value=?,
+      ~defaultValue=?,
+      ~onChange=?,
+      ~className=?,
+      ~children=ReasonReact.null,
+    ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=select,
-    ~props=
-      makeProps(
-        ~value?,
-        ~defaultValue?,
-        ~onChange?,
-        ~className?,
-        ~showSearch=true,
-        (),
-      ),
+    ~props=makeProps(~value?, ~defaultValue?, ~onChange?, ~className?, ()),
     children,
-  );
+  )
+  |> ReasonReact.element;
 
 module Option = {
   [@bs.scope "default"] [@bs.module "antd/lib/select"]
@@ -41,9 +43,11 @@ module Option = {
   [@bs.obj] external makeProps: (~value: string, ~title: string=?) => _ = "";
 
   [@react.component]
-  let make = (~value, ~title=?) =>
+  let make = (~value, ~title=?, ~children=ReasonReact.null) =>
     ReasonReact.wrapJsForReason(
       ~reactClass,
       ~props=makeProps(~value, ~title?),
-    );
+      children,
+    )
+    |> ReasonReact.element;
 };

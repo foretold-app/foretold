@@ -28,11 +28,12 @@ let make =
       ~onChange=?,
       ~value=?,
       ~disabled=false,
-      ~children,
+      ~children=ReasonReact.null,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,
     ~props=
       makeProps(~className?, ~style?, ~onChange?, ~value?, ~disabled, ()),
     children,
-  );
+  )
+  |> ReasonReact.element;

@@ -91,7 +91,7 @@ let make =
       ~id=?,
       ~className=?,
       ~style=?,
-      ~children,
+      ~children=ReasonReact.null,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,
@@ -117,4 +117,5 @@ let make =
         (),
       ),
     children,
-  );
+  )
+  |> ReasonReact.element;

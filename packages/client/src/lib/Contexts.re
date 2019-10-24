@@ -15,12 +15,13 @@ module MakePair = (Config: {
 
   module Provider = {
     [@react.component]
-    let make = (~value: Config.t, ~children) =>
+    let make = (~value: Config.t, ~children=ReasonReact.null) =>
       ReasonReact.wrapJsForReason(
         ~reactClass=provider(_pair),
         ~props={"value": value},
         children,
-      );
+      )
+      |> ReasonReact.element;
   };
 
   module Consumer = {
@@ -30,6 +31,7 @@ module MakePair = (Config: {
         ~reactClass=consumer(_pair),
         ~props=Js.Obj.empty(),
         children,
-      );
+      )
+      |> ReasonReact.element;
   };
 };

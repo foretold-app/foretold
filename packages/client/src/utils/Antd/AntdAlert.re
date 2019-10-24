@@ -8,9 +8,10 @@
 external makeProps: (~message: string=?, ~_type: string=?, unit) => _ = "";
 
 [@react.component]
-let make = (~message=?, ~type_=?, ~children) =>
+let make = (~message=?, ~type_=?, ~children=ReasonReact.null) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,
     ~props=makeProps(~message?, ~_type=?type_, ()),
     children,
-  );
+  )
+  |> ReasonReact.element;

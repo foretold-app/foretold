@@ -37,7 +37,7 @@ module FormConfig = {
 
 module Form = ReFormNext.Make(FormConfig);
 
-let showForm = (~state: Form.state, ~creating=true, ~onSubmit, ~send, ()) =>
+let showForm = (~state: Form.state, ~creating=true, ~onSubmit, ~send, ()) => {
   <Antd.Form onSubmit={e => onSubmit()}>
     <Antd.Form.Item label="Name">
       <Antd.Input
@@ -81,3 +81,4 @@ let showForm = (~state: Form.state, ~creating=true, ~onSubmit, ~send, ()) =>
       </Antd.Button>
     </Antd.Form.Item>
   </Antd.Form>;
+};

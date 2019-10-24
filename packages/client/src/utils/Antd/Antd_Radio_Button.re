@@ -9,9 +9,10 @@ external makeProps:
   "";
 
 [@react.component]
-let make = (~value, ~onClick, ~children) =>
+let make = (~value, ~onClick, ~children=ReasonReact.null) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,
     ~props=makeProps(~value, ~onClick, ()),
     children,
-  );
+  )
+  |> ReasonReact.element;

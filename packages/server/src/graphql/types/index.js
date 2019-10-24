@@ -18,6 +18,7 @@ const feedItems = require('./feed-items');
 const globalSettings = require('./global-settings');
 const agentMeasurables = require('./agent-measurables');
 const agentChannels = require('./agent-channels');
+const mutexes = require('./mutexes');
 const jwt = require('./scalars/jwt');
 
 module.exports = {
@@ -40,5 +41,6 @@ module.exports = {
   globalSettings,
   agentMeasurables,
   agentChannels,
+  mutexes,
   jwt,
 };

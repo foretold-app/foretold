@@ -16,6 +16,7 @@ const { FeedItemsData } = require('./feed-items-data');
 const { GlobalSettingsData } = require('./global-settings-data');
 const { AgentMeasurablesData } = require('./agent-measurables-data');
 const { AgentChannelsData } = require('./agent-channels-data');
+const { MutexesData } = require('./mutexes-data');
 
 module.exports = {
   MeasurablesData,
@@ -36,6 +37,7 @@ module.exports = {
   GlobalSettingsData,
   AgentMeasurablesData,
   AgentChannelsData,
+  MutexesData,
 
   measurables: new MeasurablesData(),
   measurements: new MeasurementsData(),

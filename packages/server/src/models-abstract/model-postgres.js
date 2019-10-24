@@ -3,9 +3,11 @@ const assert = require('assert');
 const { Op } = require('sequelize');
 
 const models = require('../models');
+const logger = require('../lib/log');
 
 const { Model } = require('./model');
-const { ResponseAll } = require('./classes/response-all');
+const { ResponseAll } = require('./classes');
+
 
 /**
  * @abstract
@@ -38,6 +40,8 @@ class ModelPostgres extends Model {
     this.fn = this.sequelize.fn;
     this.col = this.sequelize.col;
     this.literal = this.sequelize.literal;
+
+    this.log = logger.module('models-abstract/model-postgres');
   }
 
   /**
@@ -400,7 +404,9 @@ class ModelPostgres extends Model {
     if (filter.notTaggedByAgent) {
       where[this.and].push({
         id: {
-          [this.notIn]: this._taggedMeasurementsLiteral(filter.notTaggedByAgent),
+          [this.notIn]: this._taggedMeasurementsLiteral(
+            filter.notTaggedByAgent,
+          ),
         },
       });
     }
@@ -794,7 +800,12 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise<*>}
    */
-  async getPredicated(params = {}, query = {}, restrictions = {}, options = {}) {
+  async getPredicated(
+    params = {},
+    query = {},
+    restrictions = {},
+    options = {},
+  ) {
     const where = { ...params };
     const sort = query.sort === 1 ? 'ASC' : 'DESC';
     const order = [['createdAt', sort]];
@@ -834,6 +845,25 @@ class ModelPostgres extends Model {
 
   /**
    * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} restrictions
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @return {Promise<Models.Model>}
+   */
+  async deleteOne(params, query, restrictions, options) {
+    const entity = await this.getOne(params, query, restrictions, options);
+    if (entity) {
+      const where = { ...params };
+      const cond = { where };
+      this._extendConditions(cond, options);
+      await this.model.destroy(cond);
+    }
+    return entity;
+  }
+
+  /**
+   * @public
    * @return {Promise<*>}
    */
   async getTransaction() {
@@ -859,6 +889,18 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @param {string} name
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @returns {Promise<*>}
+   */
+  async _lockTable(name, options = {}) {
+    const cond = {};
+    this._extendConditions(cond, options);
+    await this.sequelize.query(`SET LOCAL lock_timeout = '3s'`, cond);
+    return this.sequelize.query(`LOCK TABLE "${name}"`, cond);
+  }
+
+  /**
    * @protected
    * @param {object} cond
    * @param {Layers.AbstractModelsLayer.options} options
@@ -874,23 +916,6 @@ class ModelPostgres extends Model {
       cond.skipLocked = options.skipLocked;
     }
     return cond;
-  }
-
-  /**
-   * @public
-   * @param {Layers.AbstractModelsLayer.params} [params]
-   * @param {Layers.AbstractModelsLayer.query} [query]
-   * @param {Layers.AbstractModelsLayer.restrictions} restrictions
-   * @param {Layers.AbstractModelsLayer.options} options
-   * @return {Promise<Models.Model>}
-   */
-  async deleteOne(params, query, restrictions, options) {
-    const where = { ...params };
-    const entity = await this.getOne(params, query, restrictions, options);
-    if (entity) {
-      await this.model.destroy({ where });
-    }
-    return entity;
   }
 }
 

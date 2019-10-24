@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const data = require('../../data');
-const { Data } = require('../../data/classes/data');
+const { Data } = require('../../data/classes');
 
 /**
  * @param {*} _root

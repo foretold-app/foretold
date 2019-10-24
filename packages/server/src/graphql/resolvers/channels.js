@@ -1,14 +1,13 @@
 const _ = require('lodash');
 const data = require('../../data');
 
-const { Pagination } = require('../../data/classes/pagination');
-const { Filter } = require('../../data/classes/filter');
-const { Options } = require('../../data/classes/options');
-const { Params } = require('../../data/classes/params');
-const { Query } = require('../../data/classes/query');
-const { Data } = require('../../data/classes/data');
-
-const structures = require('../../data/classes/structures');
+const { Pagination } = require('../../data/classes');
+const { Filter } = require('../../data/classes');
+const { Options } = require('../../data/classes');
+const { Params } = require('../../data/classes');
+const { Query } = require('../../data/classes');
+const { Data } = require('../../data/classes');
+const { structures } = require('../../data/classes');
 
 /**
  * @param {Models.Channel} channel

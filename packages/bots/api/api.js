@@ -1,7 +1,8 @@
 const _ = require('lodash');
+const assert = require('assert');
 const graphqlClient = require('graphql-client');
 
-const queries = require('./queries');
+const queries = require('./interfaces');
 const config = require('../config');
 
 class API {
@@ -41,13 +42,15 @@ class API {
       if (res.status === 401) {
         throw new Error('Not authorized');
       }
-    }).then((body) => {
-      // console.log(query, variables, body);
-      return body;
-    }).catch((err) => {
-      console.log('Query Error', err.message);
-      return Promise.reject(err);
-    });
+    })
+      .then((body) => {
+        // console.log(query, variables, body);
+        return body;
+      })
+      .catch((err) => {
+        console.log('Query Error', err.message);
+        return Promise.reject(err);
+      });
   }
 
   /**
@@ -63,7 +66,22 @@ class API {
    * @public
    * @return {*}
    */
-  async measurementCreate({ floatCdf, percentage, ...rest}) {
+  measurementCreateAggregation(params) {
+    assert(
+      _.isObject(params),
+      'Params for "measurementCreateAggregation" should be an object.'
+    );
+    return this.measurementCreate({
+      competitorType: 'AGGREGATION',
+      ...params,
+    });
+  }
+
+  /**
+   * @public
+   * @return {*}
+   */
+  async measurementCreate({ floatCdf, percentage, ...rest }) {
     const result = await this.query(this.queries.measurementCreate, {
       input: {
         value: { floatCdf, percentage },
@@ -77,11 +95,20 @@ class API {
    * @public
    * @return {*}
    */
-  measurementCreateAggregation(params) {
-    return this.measurementCreate({
-      competitorType: 'AGGREGATION',
-      ...params,
-    });
+  async mutexTake(name = 'aggregation') {
+    assert(_.isString(name), 'Name for "mutexTake" is required.');
+    const result = await this.query(this.queries.mutexTake, { name });
+    return this.getEntity('mutexTake')(result);
+  }
+
+  /**
+   * @public
+   * @return {*}
+   */
+  async mutexFree(id) {
+    assert(_.isString(id), 'ID for "mutexFree" is required.');
+    const result = await this.query(this.queries.mutexFree, { id });
+    return this.getEntity('mutexFree')(result);
   }
 
   /**
@@ -90,6 +117,10 @@ class API {
    * @return {*}
    */
   async measurements(params) {
+    assert(
+      _.isObject(params),
+      'Params for "measurementCreate" should be an object.'
+    );
     const result = await this.query(this.queries.measurements, params);
     return this.getList('measurements')(result);
   }
@@ -99,6 +130,10 @@ class API {
    * @return {*}
    */
   async measurementsCompetitive(params) {
+    assert(
+      _.isObject(params),
+      'Params for "measurementsCompetitive" should be an object.'
+    );
     return this.measurements({
       competitorType: ['COMPETITIVE'],
       ...params,
@@ -124,7 +159,7 @@ class API {
       this.proceedErrors(result);
       const edges = _.get(result, ['data', alias, 'edges'], []);
       return edges.map(edge => edge.node);
-    }
+    };
   }
 
   /**
@@ -136,7 +171,7 @@ class API {
     return (result) => {
       this.proceedErrors(result);
       return _.get(result, ['data', alias]);
-    }
+    };
   }
 
   /**

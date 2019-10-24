@@ -479,6 +479,27 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.globalSettings.update,
       },
 
+      mutexTake: {
+        type: types.mutexes.mutex,
+        args: {
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.mutexes.mutexCreateInput,
+            ),
+          },
+        },
+        resolve: resolvers.mutexes.take,
+      },
+
+      mutexFree: {
+        type: graphql.GraphQLBoolean,
+        args: {
+          id: {
+            type: graphql.GraphQLNonNull(graphql.GraphQLString),
+          },
+        },
+        resolve: resolvers.mutexes.free,
+      },
     },
   }),
 });

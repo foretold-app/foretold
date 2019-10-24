@@ -14,7 +14,7 @@ const {
 const { DataBase } = require('./data-base');
 const { MeasurementsData } = require('./measurements-data');
 const { MeasurablesData } = require('./measurables-data');
-const { Filter } = require('./classes/filter');
+const { Filter } = require('./classes');
 const logger = require('../lib/log');
 
 const log = logger.module('data/agent-measurables-data');

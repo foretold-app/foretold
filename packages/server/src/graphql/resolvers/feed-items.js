@@ -2,12 +2,12 @@ const _ = require('lodash');
 
 const data = require('../../data');
 
-const { Pagination } = require('../../data/classes/pagination');
-const { Options } = require('../../data/classes/options');
-const { Filter } = require('../../data/classes/filter');
+const { Pagination } = require('../../data/classes');
+const { Options } = require('../../data/classes');
+const { Filter } = require('../../data/classes');
+const { structures } = require('../../data/classes');
 
 const { HOME_CHANNEL_ID } = require('../../well-known');
-const structures = require('../../data/classes/structures');
 
 /**
  * @param {*} _root

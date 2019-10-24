@@ -68,9 +68,31 @@ mutation measurementCreate(
 }
 `;
 
+const mutexTake = `
+mutation mutexTake (
+  $name: String
+) {
+  mutexTake(input:{
+    name: $name
+  }){
+    id
+  }
+}
+`;
+
+const mutexFree = `
+mutation mutexFree (
+  $id: String!
+) {
+  mutexFree(id: $id)
+}
+`;
+
 module.exports = {
   authenticated,
   measurables,
   measurements,
   measurementCreate,
+  mutexTake,
+  mutexFree,
 };

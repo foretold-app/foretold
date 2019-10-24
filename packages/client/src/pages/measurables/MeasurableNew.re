@@ -47,32 +47,33 @@ let make = (~channelId) => {
 
   <SLayout head={SLayout.Header.textDiv("New Question")}>
     <FC.PageCard.BodyPadding>
-      {MeasurableCreate.Mutation.make((mutation, data) =>
-         formCreator(mutation, ({state, send, _}) =>
-           CMutationForm.showWithLoading2(
-             ~result=data.result,
-             ~form=
-               MeasurableForm.showForm(
-                 ~state,
-                 ~send,
-                 ~onSubmit=_ => send(MeasurableForm.Form.Submit),
-                 (),
-               ),
-             ~onSuccess=
-               (response: MeasurableCreate.Query.t) => {
-                 switch (response##measurableCreate) {
-                 | Some(m) =>
-                   Routing.Url.push(MeasurableShow(channelId, m##id))
-                 | _ => ()
-                 };
-                 ReasonReact.null;
-               },
-             (),
+      {<MeasurableCreate.Mutation>
+         ...{(mutation, data) =>
+           formCreator(mutation, ({state, send, _}) =>
+             CMutationForm.showWithLoading2(
+               ~result=data.result,
+               ~form=
+                 MeasurableForm.showForm(
+                   ~state,
+                   ~send,
+                   ~onSubmit=_ => send(MeasurableForm.Form.Submit),
+                   (),
+                 ),
+               ~onSuccess=
+                 (response: MeasurableCreate.Query.t) => {
+                   switch (response##measurableCreate) {
+                   | Some(m) =>
+                     Routing.Url.push(MeasurableShow(channelId, m##id))
+                   | _ => ()
+                   };
+                   ReasonReact.null;
+                 },
+               (),
+             )
            )
-         )
-         |> E.React.el
-       )
-       |> E.React.el}
+           |> E.React.el
+         }
+       </MeasurableCreate.Mutation>}
     </FC.PageCard.BodyPadding>
   </SLayout>;
 };

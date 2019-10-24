@@ -11,9 +11,6 @@ module CMutationForm =
 let make = (~channelId: string) => {
   let loadChannel = ChannelGet.getChannelByIdAsComponent(~id=channelId);
 
-  let mutationMake =
-    ChannelUpdate.Mutation.make(~onCompleted=_ => ()) ||> E.React.el;
-
   let head =
     <>
       <FC.Base.Div float=`left>
@@ -74,22 +71,22 @@ let make = (~channelId: string) => {
     <FC.PageCard.BodyPadding>
       {loadChannel(
          HttpResponse.fmap(channel =>
-           mutationMake((mutation, data) =>
-             form(mutation, channel, ({send, state}) =>
-               CMutationForm.showWithLoading(
-                 ~result=data.result,
-                 ~form=
-                   ChannelForm.showForm(
-                     ~state,
-                     ~send,
-                     ~creating=false,
-                     ~onSubmit=() => send(ChannelForm.Form.Submit),
-                     (),
-                   ),
-                 ~successMessage="Community edited successfully.",
-                 (),
-               )
-             )
+           <ChannelUpdate.Mutation>...{(mutation, data) =>
+                                                    form(mutation, channel, ({send, state}) =>
+                                                      CMutationForm.showWithLoading(
+                                                        ~result=data.result,
+                                                        ~form=
+                                                          ChannelForm.showForm(
+                                                            ~state,
+                                                            ~send,
+                                                            ~creating=false,
+                                                            ~onSubmit=() => send(ChannelForm.Form.Submit),
+                                                            (),
+                                                          ),
+                                                        ~successMessage="Community edited successfully.",
+                                                        (),
+                                                      )
+                                                    )}</ChannelUpdate.Mutation>
            )
          )
          ||> HttpResponse.withReactDefaults,

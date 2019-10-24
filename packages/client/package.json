@@ -49,7 +49,7 @@
 		"apollo-link-ws": "1.0.19",
 		"apollo-utilities": "1.3.2",
 		"auth0-js": "9.11.2",
-		"bs-ant-design": "git+https://git@github.com/Thinkei/bs-ant-design.git",
+		"bs-ant-design-alt": "git+https://github.com/Enalmada/bs-ant-design.git",
 		"bs-css": "9.0.1",
 		"bs-react-markdown": "0.0.9",
 		"bs-moment": "0.4.4",

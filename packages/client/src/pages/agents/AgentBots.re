@@ -99,7 +99,7 @@ module Columns = {
 type pageParams = {id: string};
 
 [@react.component]
-let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl) => {
+let make = (~pageParams, ~layout) => {
   AgentGet.component(~id=pageParams.id, agent =>
     switch (agent) {
     | Success(Some(agent)) =>

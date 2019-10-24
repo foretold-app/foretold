@@ -64,6 +64,7 @@ module Item = {
         ~help=?,
         ~hasFeedback=?,
         ~labelCol=?,
+        ~children=ReasonReact.null,
       ) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=item,
@@ -82,6 +83,7 @@ module Item = {
           "hasFeedback": unwrapBool(hasFeedback),
           "labelCol": fromOption(labelCol),
         },
+      children,
     )
     |> ReasonReact.element;
 };

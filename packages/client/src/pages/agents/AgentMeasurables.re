@@ -21,7 +21,7 @@ module Reducer = PaginationFunctor.Make(ReducerConfig);
 type pageParams = {id: string};
 
 [@react.component]
-let make = (~pageParams: pageParams, ~layout=SLayout.FullPage.makeWithEl) => {
+let make = (~pageParams: pageParams, ~layout) => {
   let lmake = SLayout.LayoutConfig.make;
   Reducer.make(
     ~itemsPerPage=20,

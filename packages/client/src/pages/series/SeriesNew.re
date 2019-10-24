@@ -171,14 +171,16 @@ let formFields = (form: Form.state, send, onSubmit) =>
        |> E.L.fmapi((i, r) =>
             <DatePicker
               value=r
-              onChange={e =>
+              onChange={e => {
                 send(
                   Form.FieldChangeValue(
                     Dates,
                     form.values.dates |> E.L.update(e, i),
                   ),
-                )
-              }
+                );
+
+                _ => ();
+              }}
             />
           )
        |> E.L.toArray

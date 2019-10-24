@@ -1,7 +1,7 @@
 [@bs.config {jsx: 3}];
 
 [@react.component]
-let make = (~agentId, ~layout=SLayout.FullPage.makeWithEl) => {
+let make = (~agentId, ~layout) => {
   let body =
     <FC.PageCard.Body>
       <ChannelTable agentId={Some(agentId)} />

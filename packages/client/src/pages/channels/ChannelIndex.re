@@ -8,13 +8,3 @@ let make = (~layout, ~title) =>
     (),
   )
   |> layout;
-
-module Jsx2 = {
-  let make =
-      (~layout=SLayout.FullPage.makeWithEl, ~title="Communities", children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~layout, ~title, ()),
-      children,
-    );
-};

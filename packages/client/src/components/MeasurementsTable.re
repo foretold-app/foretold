@@ -119,6 +119,7 @@ module Helpers = {
        |> Utils.ste}
     </div>;
 
+  //@todo: 1
   let getDescription = (~m: measurement): option(React.element) => {
     switch (m.description) {
     | None
@@ -126,7 +127,7 @@ module Helpers = {
     | Some(description) =>
       Some(
         <div className=Styles.descriptionStyle>
-          <ReactMarkdown.Markdown source=description />
+          {"<ReactMarkdown.Markdown source=description />" |> Utils.ste}
         </div>,
       )
     };
@@ -238,7 +239,9 @@ let getItems = (measurementsList: list(measurement), ~makeItem) => {
        switch (Helpers.getDescription(~m)) {
        | Some(description) =>
          <FC.Table.Row
-           bottomSubRow=[|FC.Table.Row.textSection(description)|]>
+           bottomSubRow={
+             [|FC.Table.Row.textSection(description)|] |> ReasonReact.array
+           }>
            inside
          </FC.Table.Row>
        | None => <FC.Table.Row> inside </FC.Table.Row>

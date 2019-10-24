@@ -86,12 +86,10 @@ module FullPage = {
       </div>
     </FC.Base.Div>;
   };
-
-  let makeWithEl = (t: LayoutConfig.t) => t |> make |> E.React.el;
 };
 
 let channelBack = (~onClick, ()) =>
-  <FC__Button onClick size=Small>
+  <FC__Button onClick size=FC__Button.Small>
     {"< Back" |> ReasonReact.string}
   </FC__Button>;
 
@@ -137,7 +135,7 @@ let make =
     <div className={Styles.container(isFluid)}>
       <FC.PageCard>
         <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
-        <FC.PageCard.Body> {children |> ReasonReact.array} </FC.PageCard.Body>
+        <FC.PageCard.Body> children </FC.PageCard.Body>
       </FC.PageCard>
     </div>
   </FC.Base.Div>;

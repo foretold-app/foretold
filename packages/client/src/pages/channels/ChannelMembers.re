@@ -1,23 +1,24 @@
 [@bs.config {jsx: 3}];
 
 let changeRoleAction = (agentId, channelId, role, text) =>
-  ChannelMembershipRoleUpdate.Mutation.make((mutation, _) =>
-    <Link
-      linkType={
-        Action(
-          _ =>
-            ChannelMembershipRoleUpdate.mutate(
-              mutation,
-              ~agentId,
-              ~channelId,
-              ~role,
-            ),
-        )
-      }>
-      {text |> ReasonReact.string}
-    </Link>
-  )
-  |> ReasonReact.element;
+  <ChannelMembershipRoleUpdate.Mutation>
+    ...{(mutation, _) =>
+      <Link
+        linkType={
+          Action(
+            _ =>
+              ChannelMembershipRoleUpdate.mutate(
+                mutation,
+                ~agentId,
+                ~channelId,
+                ~role,
+              ),
+          )
+        }>
+        {text |> ReasonReact.string}
+      </Link>
+    }
+  </ChannelMembershipRoleUpdate.Mutation>;
 
 let removeFromChannel = (agentId, channelId) =>
   ChannelMembershipDelete.Mutation.make((mutation, _) =>

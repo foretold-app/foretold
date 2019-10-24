@@ -4,14 +4,13 @@
 
 [%bs.raw {|require("antd/lib/alert/style")|}];
 
-[@bs.obj]
-external makeProps: (~message: string=?, ~_type: string=?, unit) => _ = "";
+// @todo: 1
 
 [@react.component]
 let make = (~message=?, ~type_=?, ~children=ReasonReact.null) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,
-    ~props=makeProps(~message?, ~_type=?type_, ()),
+    ~props=makeProps(~message?, ~type_?, ()),
     children,
   )
   |> ReasonReact.element;

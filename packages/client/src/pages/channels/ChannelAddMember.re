@@ -5,17 +5,19 @@ type column = Table.column(Types.agent);
 [@react.component]
 let make = (~channelId: string) => {
   let addToChannelLink = (agentId: string, channelId: string) =>
-    ChannelMembershipCreate.Mutation.make((mutation, _) =>
-      <Link
-        linkType={
-          Action(
-            _ => ChannelMembershipCreate.mutate(mutation, agentId, channelId),
-          )
-        }>
-        {"Add to Community" |> ReasonReact.string}
-      </Link>
-    )
-    |> ReasonReact.element;
+    <ChannelMembershipCreate.Mutation>
+      ...{(mutation, _) =>
+        <Link
+          linkType={
+            Action(
+              _ =>
+                ChannelMembershipCreate.mutate(mutation, agentId, channelId),
+            )
+          }>
+          {"Add to Community" |> ReasonReact.string}
+        </Link>
+      }
+    </ChannelMembershipCreate.Mutation>;
 
   let agentColumn =
     Table.Column.make(

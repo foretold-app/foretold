@@ -202,34 +202,36 @@ let resolutionEndpoint = (~m: Types.measurable) =>
   };
 
 let archiveButton = (~m: Types.measurable) =>
-  MeasurableArchive.Mutation.make((mutation, _) =>
-    <div className=Shared.Item.item>
-      <div
-        className={Shared.Item.itemButton(DANGER)}
-        onClick={e => {
-          MeasurableArchive.mutate(mutation, m.id);
-          ReactEvent.Synthetic.stopPropagation(e);
-        }}>
-        {"Archive" |> ste}
+  <MeasurableArchive.Mutation>
+    ...{(mutation, _) =>
+      <div className=Shared.Item.item>
+        <div
+          className={Shared.Item.itemButton(DANGER)}
+          onClick={e => {
+            MeasurableArchive.mutate(mutation, m.id);
+            ReactEvent.Synthetic.stopPropagation(e);
+          }}>
+          {"Archive" |> ste}
+        </div>
       </div>
-    </div>
-  )
-  |> E.React.el;
+    }
+  </MeasurableArchive.Mutation>;
 
 let unArchiveButton = (~m: Types.measurable) =>
-  MeasurableUnarchive.Mutation.make((mutation, _) =>
-    <div className=Shared.Item.item>
-      <div
-        className={Shared.Item.itemButton(DANGER)}
-        onClick={e => {
-          MeasurableUnarchive.mutate(mutation, m.id);
-          ReactEvent.Synthetic.stopPropagation(e);
-        }}>
-        {"Unarchive" |> ste}
+  <MeasurableUnarchive.Mutation>
+    ...{(mutation, _) =>
+      <div className=Shared.Item.item>
+        <div
+          className={Shared.Item.itemButton(DANGER)}
+          onClick={e => {
+            MeasurableUnarchive.mutate(mutation, m.id);
+            ReactEvent.Synthetic.stopPropagation(e);
+          }}>
+          {"Unarchive" |> ste}
+        </div>
       </div>
-    </div>
-  )
-  |> E.React.el;
+    }
+  </MeasurableUnarchive.Mutation>;
 
 let archiveOption = (~m: Types.measurable) =>
   m.isArchived == Some(true) ? unArchiveButton(~m) : archiveButton(~m);

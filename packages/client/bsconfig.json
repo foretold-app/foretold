@@ -19,7 +19,7 @@
     "@glennsl/bs-jest",
     "bs-reform",
     "bs-css",
-    "bs-ant-design",
+    "bs-ant-design-alt",
     "bs-moment",
     "bs-react-markdown",
     "reason-react",

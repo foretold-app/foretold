@@ -69,12 +69,12 @@ let competitorTypeSelect =
       ~state=measurable.state,
     );
 
-  <Select
+  <Antd.Select
     value={state.competitorType}
     className=Styles.fullWidth
     onChange={e => send(UpdateCompetitorType(e))}>
     {options |> ReasonReact.array}
-  </Select>;
+  </Antd.Select>;
 };
 
 let dataTypeSelect = (~state, ~send): ReasonReact.reactElement =>

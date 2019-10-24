@@ -24,7 +24,7 @@ let make =
     (
       ~channelId: option(string)=None,
       ~agentId: option(string)=None,
-      ~layout=SLayout.FullPage.makeWithEl,
+      ~layout,
     ) => {
   let pagination = (reducerParams: Reducer.Types.reducerParams) =>
     <Div>

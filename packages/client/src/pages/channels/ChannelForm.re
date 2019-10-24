@@ -39,7 +39,7 @@ module Form = ReFormNext.Make(FormConfig);
 
 let showForm = (~state: Form.state, ~creating=true, ~onSubmit, ~send, ()) => {
   <Antd.Form onSubmit={e => onSubmit()}>
-    <Antd.Form.Item label="Name">
+    <Antd.Form.Item label={"Name" |> Utils.ste}>
       <Antd.Input
         value={state.values.name}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -47,7 +47,9 @@ let showForm = (~state: Form.state, ~creating=true, ~onSubmit, ~send, ()) => {
         )}
       />
     </Antd.Form.Item>
-    <Antd.Form.Item label="Description" help="Markdown supported">
+    <Antd.Form.Item
+      label={"Description" |> Utils.ste}
+      help={"Markdown supported" |> Utils.ste}>
       <Antd.Input.TextArea
         style={ReactDOMRe.Style.make(~minHeight="6em", ())}
         value={state.values.description}
@@ -56,7 +58,7 @@ let showForm = (~state: Form.state, ~creating=true, ~onSubmit, ~send, ()) => {
         )}
       />
     </Antd.Form.Item>
-    <Antd.Form.Item label="Community is public">
+    <Antd.Form.Item label={"Community is public" |> Utils.ste}>
       <AntdSwitch
         checked={state.values.isPublic == "TRUE"}
         onChange={e =>
@@ -66,7 +68,7 @@ let showForm = (~state: Form.state, ~creating=true, ~onSubmit, ~send, ()) => {
     </Antd.Form.Item>
     {E.React.showIf(
        !creating,
-       <Antd.Form.Item label="Archive community">
+       <Antd.Form.Item label={"Archive community" |> Utils.ste}>
          <AntdSwitch
            checked={state.values.isArchived == "TRUE"}
            onChange={e =>

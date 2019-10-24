@@ -27,7 +27,7 @@ module Styles = {
 };
 
 [@react.component]
-let make = (~channelId=None) => {
+let make = (~channelId=None, ~children) => {
   <Providers.AppContext.Consumer>
     ...{({loggedUser}) =>
       <div className=Styles.outer>
@@ -40,7 +40,7 @@ let make = (~channelId=None) => {
         <div className=Styles.right>
           <div className=Styles.rightInner>
             <Header loggedUser />
-            <div> ..._children </div>
+            <div> children </div>
           </div>
           <Footer />
         </div>

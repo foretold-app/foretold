@@ -45,16 +45,14 @@ module Styles = {
 };
 
 module Header = {
-  let component = ReasonReact.statelessComponent("Header");
   let textDiv = text =>
     <FC__PageCard.HeaderRow.Title>
       {text |> ste}
     </FC__PageCard.HeaderRow.Title>;
 
-  let make = children => {
-    ...component,
-    render: _ => <FC.PageCard.HeaderRow> ...children </FC.PageCard.HeaderRow>,
-  };
+  [@react.component]
+  let make = (~children) =>
+    <FC.PageCard.HeaderRow> ...children </FC.PageCard.HeaderRow>;
 };
 
 module LayoutConfig = {
@@ -67,29 +65,28 @@ module LayoutConfig = {
 };
 
 module FullPage = {
-  let component = ReasonReact.statelessComponent("FullPage");
+  [@react.component]
   let make = ({head, body, isFluid}: LayoutConfig.t) => {
-    ...component,
-    render: _ =>
-      <FC.Base.Div.Jsx2
-        className=Css.(
-          style(
-            [
-              marginTop(`em(1.)),
-              width(`percent(100.)),
-              boxSizing(`borderBox),
-            ]
-            @ FC.Base.BaseStyles.fullWidthFloatLeft,
-          )
-        )>
-        <div className={Styles.container(isFluid)}>
-          <FC.PageCard>
-            <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
-            <FC.PageCard.Body> body </FC.PageCard.Body>
-          </FC.PageCard>
-        </div>
-      </FC.Base.Div.Jsx2>,
+    <FC.Base.Div.Jsx2
+      className=Css.(
+        style(
+          [
+            marginTop(`em(1.)),
+            width(`percent(100.)),
+            boxSizing(`borderBox),
+          ]
+          @ FC.Base.BaseStyles.fullWidthFloatLeft,
+        )
+      )>
+      <div className={Styles.container(isFluid)}>
+        <FC.PageCard>
+          <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
+          <FC.PageCard.Body> body </FC.PageCard.Body>
+        </FC.PageCard>
+      </div>
+    </FC.Base.Div.Jsx2>;
   };
+
   let makeWithEl = (t: LayoutConfig.t) => t |> make |> E.React.el;
 };
 
@@ -125,28 +122,24 @@ let seriesHead = (channel: Types.channel, seriesName) =>
     </div>
   </>;
 
-let component = ReasonReact.statelessComponent("SLayout");
-let make = (~head=ReasonReact.null, ~isFluid=false, children) => {
-  ...component,
-  render: _ =>
-    <FC.Base.Div.Jsx2
-      className=Css.(
-        style(
-          [
-            marginTop(`em(1.)),
-            width(`percent(100.)),
-            boxSizing(`borderBox),
-          ]
-          @ FC.Base.BaseStyles.fullWidthFloatLeft,
-        )
-      )>
-      <div className={Styles.container(isFluid)}>
-        <FC.PageCard>
-          <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
-          <FC.PageCard.Body>
-            {children |> ReasonReact.array}
-          </FC.PageCard.Body>
-        </FC.PageCard>
-      </div>
-    </FC.Base.Div.Jsx2>,
+[@react.component]
+let make = (~head=ReasonReact.null, ~isFluid=false, ~children) => {
+  <FC.Base.Div.Jsx2
+    className=Css.(
+      style(
+        [
+          marginTop(`em(1.)),
+          width(`percent(100.)),
+          boxSizing(`borderBox),
+        ]
+        @ FC.Base.BaseStyles.fullWidthFloatLeft,
+      )
+    )>
+    <div className={Styles.container(isFluid)}>
+      <FC.PageCard>
+        <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
+        <FC.PageCard.Body> {children |> ReasonReact.array} </FC.PageCard.Body>
+      </FC.PageCard>
+    </div>
+  </FC.Base.Div.Jsx2>;
 };

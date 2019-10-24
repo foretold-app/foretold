@@ -12,40 +12,37 @@ type action =
 module Tabs = {
   open Style.Grid;
   open FC;
-  let component = ReasonReact.statelessComponent("Tabs");
-  let make = (~paginationPage, ~switchTab, ~tab, _children) => {
-    ...component,
-    render: _ =>
-      <>
+
+  [@react.component]
+  let make = (~paginationPage, ~switchTab, ~tab) => {
+    <>
+      <Div>
+        <Div
+          styles=[
+            Css.style([
+              FC.Base.BaseStyles.floatLeft,
+              Css.paddingTop(`em(0.2)),
+            ]),
+          ]>
+          <TabButton
+            isActive={tab == Measurements}
+            onClick={_ => switchTab(Measurements)}>
+            {"Predictions" |> ReasonReact.string}
+          </TabButton>
+          <TabButton
+            isActive={tab == Scores} onClick={_ => switchTab(Scores)}>
+            {"Scores" |> ReasonReact.string}
+          </TabButton>
+        </Div>
         <Div>
           <Div
-            styles=[
-              Css.style([
-                FC.Base.BaseStyles.floatLeft,
-                Css.paddingTop(`em(0.2)),
-              ]),
-            ]>
-            <TabButton
-              isActive={tab == Measurements}
-              onClick={_ => switchTab(Measurements)}>
-              {"Predictions" |> ReasonReact.string}
-            </TabButton>
-            <TabButton
-              isActive={tab == Scores} onClick={_ => switchTab(Scores)}>
-              {"Scores" |> ReasonReact.string}
-            </TabButton>
-          </Div>
-          <Div>
-            <Div
-              float=`right
-              styles=[
-                Css.style([FC.PageCard.HeaderRow.Styles.itemTopPadding]),
-              ]>
-              paginationPage
-            </Div>
+            float=`right
+            styles=[Css.style([FC.PageCard.HeaderRow.Styles.itemTopPadding])]>
+            paginationPage
           </Div>
         </Div>
-      </>,
+      </Div>
+    </>;
   };
 };
 

@@ -20,54 +20,50 @@ module Reducer = PaginationFunctor.Make(ReducerConfig);
 
 type pageParams = {id: string};
 
-let component = ReasonReact.statelessComponent("AgentMeasurables");
-let make =
-    (~pageParams: pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
-  ...component,
-  render: _ => {
-    let lmake = SLayout.LayoutConfig.make;
-    Reducer.make(
-      ~itemsPerPage=20,
-      ~callFnParams=pageParams.id,
-      ~subComponent=selectWithPaginationParams =>
-      lmake(
-        ~head=
-          switch (selectWithPaginationParams.selection) {
-          | Some(_selection) =>
-            <>
-              {Reducer.Components.deselectButton(
-                 selectWithPaginationParams.send,
-               )}
-              {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
-            </>
-          | None =>
-            <>
-              {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
-            </>
-          },
-        ~body=
-          switch (
-            selectWithPaginationParams.response,
-            selectWithPaginationParams.selection,
-          ) {
-          | (_, Some(measurable)) => <Measurable id={measurable.id} />
-          | (Success(connection), None) =>
-            <MeasurableIndexTable
-              measurables={connection.edges}
-              showExtraData=true
-              onSelect={e =>
-                Reducer.Components.sendSelectItem(
-                  selectWithPaginationParams,
-                  e.id,
-                )
-              }
-            />
-          | _ => <div />
-          },
-        (),
-      )
-      |> layout
+[@react.component]
+let make = (~pageParams: pageParams, ~layout=SLayout.FullPage.makeWithEl) => {
+  let lmake = SLayout.LayoutConfig.make;
+  Reducer.make(
+    ~itemsPerPage=20,
+    ~callFnParams=pageParams.id,
+    ~subComponent=selectWithPaginationParams =>
+    lmake(
+      ~head=
+        switch (selectWithPaginationParams.selection) {
+        | Some(_selection) =>
+          <>
+            {Reducer.Components.deselectButton(
+               selectWithPaginationParams.send,
+             )}
+            {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
+          </>
+        | None =>
+          <>
+            {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
+          </>
+        },
+      ~body=
+        switch (
+          selectWithPaginationParams.response,
+          selectWithPaginationParams.selection,
+        ) {
+        | (_, Some(measurable)) => <Measurable id={measurable.id} />
+        | (Success(connection), None) =>
+          <MeasurableIndexTable
+            measurables={connection.edges}
+            showExtraData=true
+            onSelect={e =>
+              Reducer.Components.sendSelectItem(
+                selectWithPaginationParams,
+                e.id,
+              )
+            }
+          />
+        | _ => <div />
+        },
+      (),
     )
-    |> E.React.makeToEl;
-  },
+    |> layout
+  )
+  |> E.React.makeToEl;
 };

@@ -6,6 +6,7 @@ let fn2 = (a: string) => ();
 [@bs.module "./GuesstimateInput.js"]
 external guesstimateInput: ReasonReact.reactClass = "GuesstimateInput";
 
+[@react.component]
 let make =
     (
       ~sampleCount=10000,
@@ -14,7 +15,7 @@ let make =
       ~onUpdate=fn,
       ~onChange=fn2,
       ~focusOnRender=true,
-      children,
+      ~children,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=guesstimateInput,

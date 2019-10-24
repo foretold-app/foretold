@@ -98,42 +98,39 @@ module Columns = {
 
 type pageParams = {id: string};
 
-let component = ReasonReact.statelessComponent("AgentBots");
-let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
-  ...component,
-  render: _ =>
-    AgentGet.component(~id=pageParams.id, agent =>
-      switch (agent) {
-      | Success(Some(agent)) =>
-        let showBots = bots =>
-          Array.length(bots) > 0
-            ? <FC.PageCard.Body>
-                {Table.fromColumns(Columns.all, bots, ())}
-              </FC.PageCard.Body>
-            : <NothingToShow />;
+[@react.component]
+let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl) => {
+  AgentGet.component(~id=pageParams.id, agent =>
+    switch (agent) {
+    | Success(Some(agent)) =>
+      let showBots = bots =>
+        Array.length(bots) > 0
+          ? <FC.PageCard.Body>
+              {Table.fromColumns(Columns.all, bots, ())}
+            </FC.PageCard.Body>
+          : <NothingToShow />;
 
-        let body =
-          switch (agent.agentType) {
-          | Some(User(user)) =>
-            BotsGet.component(~ownerId=user.id, showBots)
-          | _ => <NothingToShow />
-          };
+      let body =
+        switch (agent.agentType) {
+        | Some(User(user)) => BotsGet.component(~ownerId=user.id, showBots)
+        | _ => <NothingToShow />
+        };
 
-        let head =
-          <div>
-            title
-            <FC.Base.Div.Jsx2
-              float=`right
-              className={Css.style([
-                FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-              ])}>
-              {agentSection(agent)}
-            </FC.Base.Div.Jsx2>
-          </div>;
+      let head =
+        <div>
+          title
+          <FC.Base.Div.Jsx2
+            float=`right
+            className={Css.style([
+              FC.PageCard.HeaderRow.Styles.itemTopPadding,
+              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            ])}>
+            {agentSection(agent)}
+          </FC.Base.Div.Jsx2>
+        </div>;
 
-        SLayout.LayoutConfig.make(~head, ~body, ()) |> layout;
-      | _ => <SLayout> <NothingToShow /> </SLayout>
-      }
-    ),
+      SLayout.LayoutConfig.make(~head, ~body, ()) |> layout;
+    | _ => <SLayout> <NothingToShow /> </SLayout>
+    }
+  );
 };

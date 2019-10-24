@@ -64,60 +64,56 @@ module Styles = {
 };
 
 module ChannelsList = {
-  let component = ReasonReact.statelessComponent("ChannelsList");
-  let make = (~channelId, ~loggedUser: Types.user, _children) => {
-    ...component,
-    render: _self =>
-      loggedUser.agent
-      |> E.O.fmap((agent: Types.agent) =>
-           ChannelsGet.component(
-             ~channelMemberId=?Some(agent.id),
-             ~sortFn=ChannelsGet.sortAsc,
-             channels =>
-             channels
-             |> Array.mapi((index, channel: Types.channel) =>
-                  <Link.Jsx2
-                    key={index |> string_of_int}
-                    linkType={Internal(Primary.Channel.showLink(channel))}
-                    className={
-                      Some(channel.id) == channelId
-                        ? Styles.selectedItem : Styles.item
-                    }>
-                    {Primary.Channel.present(~className=Styles.hash, channel)}
-                  </Link.Jsx2>
-                )
-             |> ReasonReact.array
-           )
+  [@react.component]
+  let make = (~channelId, ~loggedUser: Types.user) => {
+    loggedUser.agent
+    |> E.O.fmap((agent: Types.agent) =>
+         ChannelsGet.component(
+           ~channelMemberId=?Some(agent.id),
+           ~sortFn=ChannelsGet.sortAsc,
+           channels =>
+           channels
+           |> Array.mapi((index, channel: Types.channel) =>
+                <Link.Jsx2
+                  key={index |> string_of_int}
+                  linkType={Internal(Primary.Channel.showLink(channel))}
+                  className={
+                    Some(channel.id) == channelId
+                      ? Styles.selectedItem : Styles.item
+                  }>
+                  {Primary.Channel.present(~className=Styles.hash, channel)}
+                </Link.Jsx2>
+              )
+           |> ReasonReact.array
          )
-      |> E.O.React.defaultNull,
+       )
+    |> E.O.React.defaultNull;
   };
 };
 
-let component = ReasonReact.statelessComponent("Sidebar");
-let make = (~channelId, ~loggedUser: option(Types.user), _children) => {
-  ...component,
-  render: _self =>
-    <div className=Styles.sidebar>
-      <div className=Styles.over />
-      <div className=Styles.minorHeader>
-        <Link.Jsx2
-          linkType={Internal(ChannelIndex)} className=Styles.minorHeaderLink>
-          {"Communities" |> ste}
-        </Link.Jsx2>
-      </div>
-      <div className=Styles.over>
-        <Link.Jsx2
-          key="channel-global-item"
-          linkType={Internal(Primary.Channel.globalLink())}
-          className={
-            Some("home") == channelId ? Styles.selectedItem : Styles.item
-          }>
-          {Primary.Channel.presentGlobal(~className=Styles.hash, ())}
-        </Link.Jsx2>
-        {loggedUser
-         |> E.O.React.fmapOrNull(loggedUser =>
-              <ChannelsList loggedUser channelId />
-            )}
-      </div>
-    </div>,
+[@react.component]
+let make = (~channelId, ~loggedUser: option(Types.user)) => {
+  <div className=Styles.sidebar>
+    <div className=Styles.over />
+    <div className=Styles.minorHeader>
+      <Link.Jsx2
+        linkType={Internal(ChannelIndex)} className=Styles.minorHeaderLink>
+        {"Communities" |> ste}
+      </Link.Jsx2>
+    </div>
+    <div className=Styles.over>
+      <Link.Jsx2
+        key="channel-global-item"
+        linkType={Internal(Primary.Channel.globalLink())}
+        className={
+          Some("home") == channelId ? Styles.selectedItem : Styles.item
+        }>
+        {Primary.Channel.presentGlobal(~className=Styles.hash, ())}
+      </Link.Jsx2>
+      {loggedUser
+       |> E.O.React.fmapOrNull(loggedUser =>
+            <ChannelsList loggedUser channelId />
+          )}
+    </div>
+  </div>;
 };

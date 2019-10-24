@@ -1,7 +1,5 @@
 [@bs.config {jsx: 3}];
 
-let component = ReasonReact.statelessComponent("ChannelMembers");
-
 let changeRoleAction = (agentId, channelId, role, text) =>
   ChannelMembershipRoleUpdate.Mutation.make((mutation, _) =>
     <Link.Jsx2
@@ -204,16 +202,14 @@ let errorFn = _ =>
 
 let loadingFn = _ => <SLayout> <Spin /> </SLayout>;
 
-let make = (~channelId: string, ~channel: Types.channel, _children) => {
-  ...component,
-  render: _ => {
-    ChannelMembershipsGet.component(~id=channelId, result =>
-      result
-      |> HttpResponse.flatten(
-           memberships => succesFn(~channelId, ~channel, ~memberships),
-           errorFn,
-           loadingFn,
-         )
-    );
-  },
+[@react.component]
+let make = (~channelId: string, ~channel: Types.channel) => {
+  ChannelMembershipsGet.component(~id=channelId, result =>
+    result
+    |> HttpResponse.flatten(
+         memberships => succesFn(~channelId, ~channel, ~memberships),
+         errorFn,
+         loadingFn,
+       )
+  );
 };

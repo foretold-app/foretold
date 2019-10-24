@@ -24,8 +24,6 @@ let make =
   </a>;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("Link");
-
   let make =
       (
         ~linkType: LinkType.t,

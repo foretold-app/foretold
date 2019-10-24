@@ -2,8 +2,6 @@
 
 open Utils;
 
-let component = ReasonReact.statelessComponent("EntityShow");
-
 let display = id => {
   <Providers.AppContext.Consumer>
     ...{context => {
@@ -38,13 +36,11 @@ let display = id => {
   </Providers.AppContext.Consumer>;
 };
 
-let make = (~pageParams: Types.pageParams, _children) => {
-  ...component,
-  render: _ => {
-    <SLayout head={SLayout.Header.textDiv(pageParams.id)}>
-      <FC.PageCard.BodyPadding>
-        {display(pageParams.id)}
-      </FC.PageCard.BodyPadding>
-    </SLayout>;
-  },
+[@react.component]
+let make = (~pageParams: Types.pageParams) => {
+  <SLayout head={SLayout.Header.textDiv(pageParams.id)}>
+    <FC.PageCard.BodyPadding>
+      {display(pageParams.id)}
+    </FC.PageCard.BodyPadding>
+  </SLayout>;
 };

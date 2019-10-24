@@ -8,9 +8,5 @@ module Styles = {
   let clear = style([clear(`both)]);
 };
 
-let component = ReasonReact.statelessComponent("Error");
-
-let make = (~e, _children) => {
-  ...component,
-  render: _ => <> <div> {"Error: " ++ e |> Utils.ste} </div> </>,
-};
+[@react.component]
+let make = (~e) => <> <div> {"Error: " ++ e |> Utils.ste} </div> </>;

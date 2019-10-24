@@ -77,36 +77,34 @@ module CMutationForm =
     type queryType = InvitationCreate.Query.t;
   });
 
-let component = ReasonReact.statelessComponent("ChannelInviteMember");
-let make = (~channelId: string, _children) => {
-  ...component,
-  render: _ =>
-    <SLayout head={SLayout.Header.textDiv("Invite Member")}>
-      <FC.PageCard.BodyPadding>
-        {InvitationCreate.withMutation((mutation, data) =>
-           withForm(
-             channelId,
-             "",
-             mutation,
-             ({send, state, getFieldState}) => {
-               let form =
-                 fields(state, send, () => send(Form.Submit), getFieldState);
+[@react.component]
+let make = (~channelId: string) => {
+  <SLayout head={SLayout.Header.textDiv("Invite Member")}>
+    <FC.PageCard.BodyPadding>
+      {InvitationCreate.withMutation((mutation, data) =>
+         withForm(
+           channelId,
+           "",
+           mutation,
+           ({send, state, getFieldState}) => {
+             let form =
+               fields(state, send, () => send(Form.Submit), getFieldState);
 
-               let onSuccess = _ =>
-                 <>
-                   <AntdAlert message=Lang.memberInvited type_="success" />
-                   form
-                 </>;
+             let onSuccess = _ =>
+               <>
+                 <AntdAlert message=Lang.memberInvited type_="success" />
+                 form
+               </>;
 
-               CMutationForm.showWithLoading2(
-                 ~result=data.result,
-                 ~form,
-                 ~onSuccess,
-                 (),
-               );
-             },
-           )
-         )}
-      </FC.PageCard.BodyPadding>
-    </SLayout>,
+             CMutationForm.showWithLoading2(
+               ~result=data.result,
+               ~form,
+               ~onSuccess,
+               (),
+             );
+           },
+         )
+       )}
+    </FC.PageCard.BodyPadding>
+  </SLayout>;
 };

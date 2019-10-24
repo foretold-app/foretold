@@ -2,8 +2,6 @@
 
 open Utils;
 
-let component = ReasonReact.statelessComponent("SmallCdfChart");
-
 let foo = {
   "xs": [|50., 100., 300., 400., 500., 600.|],
   "ys": [|0.1, 0.4, 0.6, 0.7, 0.8, 0.9|],
@@ -21,6 +19,7 @@ module Styles = {
     ]);
 };
 
+[@react.component]
 let make =
     (
       ~data,
@@ -29,20 +28,16 @@ let make =
       ~width=300,
       ~height=50,
       ~color=`hex("7e9db7"),
-      _children,
-    ) => {
-  ...component,
-  render: _ =>
-    <div className={Styles.graph(color)}>
-      <CdfChart
-        width
-        height
-        ?minX
-        ?maxX
-        marginBottom=15
-        showVerticalLine=false
-        showDistributionLines=false
-        primaryDistribution=data
-      />
-    </div>,
-};
+    ) =>
+  <div className={Styles.graph(color)}>
+    <CdfChart
+      width
+      height
+      ?minX
+      ?maxX
+      marginBottom=15
+      showVerticalLine=false
+      showDistributionLines=false
+      primaryDistribution=data
+    />
+  </div>;

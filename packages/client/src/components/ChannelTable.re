@@ -89,7 +89,6 @@ let make = (~agentId=None, ~isArchived=?) =>
   );
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("ChannelTable");
   let make = (~agentId=None, ~isArchived=?, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

@@ -2,8 +2,6 @@
 
 open Utils;
 
-let component = ReasonReact.statelessComponent("SeriesCard");
-
 module Styles = {
   open Css;
   let card =
@@ -28,23 +26,22 @@ module Styles = {
     ]);
 };
 
-let make = (~series: SeriesCollectionGet.series, _children) => {
-  ...component,
-  render: _self =>
-    <div
-      className=Styles.card
-      onClick={_e => Routing.Url.push(SeriesShow("general", series.id))}>
-      <span className=Styles.heading>
-        <Icon.Icon icon="LAYERS" />
-        {series.name |> E.O.default("") |> ste}
-      </span>
-      {series.description
-       |> E.O.fmap(d => d |> ste |> E.React.inP)
-       |> E.O.React.defaultNull}
-      {series.measurableCount
-       |> E.O.fmap(d =>
-            d |> string_of_int |> (e => e ++ " items") |> ste |> E.React.inP
-          )
-       |> E.O.React.defaultNull}
-    </div>,
+[@react.component]
+let make = (~series: SeriesCollectionGet.series) => {
+  <div
+    className=Styles.card
+    onClick={_e => Routing.Url.push(SeriesShow("general", series.id))}>
+    <span className=Styles.heading>
+      <Icon.Icon icon="LAYERS" />
+      {series.name |> E.O.default("") |> ste}
+    </span>
+    {series.description
+     |> E.O.fmap(d => d |> ste |> E.React.inP)
+     |> E.O.React.defaultNull}
+    {series.measurableCount
+     |> E.O.fmap(d =>
+          d |> string_of_int |> (e => e ++ " items") |> ste |> E.React.inP
+        )
+     |> E.O.React.defaultNull}
+  </div>;
 };

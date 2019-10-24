@@ -2,8 +2,6 @@
 
 open Utils;
 
-let component = ReasonReact.statelessComponent("EntityShow");
-
 module ColumnsFunctor = (Ken: KenTools.KenModule) => {
   type record = BsKen.Graph_T.T.thing;
   type column = Table.column(BsKen.Graph_T.T.thing);
@@ -38,20 +36,19 @@ module ColumnsFunctor = (Ken: KenTools.KenModule) => {
   let all = [|nameColumn, instanceOf, idColumn|];
 };
 
-let make = _children => {
-  ...component,
-  render: _ =>
-    <Providers.AppContext.Consumer>
-      ...{context => {
-        module Config = {
-          let globalSetting = context.globalSetting;
-        };
-        module Ken = KenTools.Functor(Config);
-        module Columns = ColumnsFunctor(Ken);
+[@react.component]
+let make = () => {
+  <Providers.AppContext.Consumer>
+    ...{context => {
+      module Config = {
+        let globalSetting = context.globalSetting;
+      };
+      module Ken = KenTools.Functor(Config);
+      module Columns = ColumnsFunctor(Ken);
 
-        <SLayout head={SLayout.Header.textDiv("All Entities")}>
-          {Table.fromColumns(Columns.all, Ken.dataSource, ())}
-        </SLayout>;
-      }}
-    </Providers.AppContext.Consumer>,
+      <SLayout head={SLayout.Header.textDiv("All Entities")}>
+        {Table.fromColumns(Columns.all, Ken.dataSource, ())}
+      </SLayout>;
+    }}
+  </Providers.AppContext.Consumer>;
 };

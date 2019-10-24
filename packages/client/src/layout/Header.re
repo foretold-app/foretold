@@ -128,39 +128,37 @@ let header = (loggedUser: Types.user) =>
   | None => ReasonReact.null
   };
 
-let component = ReasonReact.statelessComponent("Header");
-let make = (~loggedUser: option(Types.user), _children) => {
-  ...component,
-  render: _self =>
-    <Div styles=[Styles.outer]>
-      <Div float=`left>
-        {switch (loggedUser) {
-         | Some(loggedUser) =>
-           Primary.User.show(
-             loggedUser,
-             <Link.Jsx2
-               linkType={Internal(EntityIndex)} className=Styles.headerLink>
-               {"Entity Explorer" |> ste}
-             </Link.Jsx2>,
-           )
-         | None =>
+[@react.component]
+let make = (~loggedUser: option(Types.user)) => {
+  <Div styles=[Styles.outer]>
+    <Div float=`left>
+      {switch (loggedUser) {
+       | Some(loggedUser) =>
+         Primary.User.show(
+           loggedUser,
            <Link.Jsx2
-             linkType={Internal(ChannelIndex)} className=Styles.headerLink>
-             {"Communities" |> ste}
-           </Link.Jsx2>
-         }}
-      </Div>
-      <Div float=`left> <VerificationWarning /> </Div>
-      <Div float=`right>
-        {switch (loggedUser) {
-         | Some(loggedUser) => header(loggedUser)
-         | None =>
-           <Link.Jsx2
-             linkType={Action(_e => Auth0Client.triggerLoginScreen())}
-             className=Styles.headerLink>
-             {"Log In" |> ste}
-           </Link.Jsx2>
-         }}
-      </Div>
-    </Div>,
+             linkType={Internal(EntityIndex)} className=Styles.headerLink>
+             {"Entity Explorer" |> ste}
+           </Link.Jsx2>,
+         )
+       | None =>
+         <Link.Jsx2
+           linkType={Internal(ChannelIndex)} className=Styles.headerLink>
+           {"Communities" |> ste}
+         </Link.Jsx2>
+       }}
+    </Div>
+    <Div float=`left> <VerificationWarning /> </Div>
+    <Div float=`right>
+      {switch (loggedUser) {
+       | Some(loggedUser) => header(loggedUser)
+       | None =>
+         <Link.Jsx2
+           linkType={Action(_e => Auth0Client.triggerLoginScreen())}
+           className=Styles.headerLink>
+           {"Log In" |> ste}
+         </Link.Jsx2>
+       }}
+    </Div>
+  </Div>;
 };

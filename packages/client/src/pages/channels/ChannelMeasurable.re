@@ -1,13 +1,9 @@
 [@bs.config {jsx: 3}];
 
-let component = ReasonReact.statelessComponent("ChannelMeasurable");
-
-let make = (~measurableId: string, ~channelId: option(string), _children) => {
-  ...component,
-  render: _ => {
-    <>
-      <SLayout isFluid=true> <Measurable id=measurableId /> </SLayout>
-      <MeasurableBottomSection measurableId channelId />
-    </>;
-  },
+[@react.component]
+let make = (~measurableId: string, ~channelId: option(string)) => {
+  <>
+    <SLayout isFluid=true> <Measurable id=measurableId /> </SLayout>
+    <MeasurableBottomSection measurableId channelId />
+  </>;
 };

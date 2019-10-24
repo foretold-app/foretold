@@ -27,59 +27,56 @@ module Styles = {
     ]);
 };
 
-let component = ReasonReact.statelessComponent("MeasurablesSeriesTable");
+[@react.component]
 let make =
     (
       ~measurables: array(Types.measurable),
       ~selected: option(string),
       ~onClick,
-      _children,
     ) => {
-  ...component,
-  render: _self =>
-    <Providers.AppContext.Consumer>
-      ...{context => {
-        module Config = {
-          let globalSetting = context.globalSetting;
-        };
-        module Ken = KenTools.Functor(Config);
-        module MeasurableEntityLinks = MeasurableEntityLinks.Functor(Ken);
+  <Providers.AppContext.Consumer>
+    ...{context => {
+      module Config = {
+        let globalSetting = context.globalSetting;
+      };
+      module Ken = KenTools.Functor(Config);
+      module MeasurableEntityLinks = MeasurableEntityLinks.Functor(Ken);
 
-        <div className=Styles.group>
-          {measurables
-           |> Array.map((m: Types.measurable) =>
-                <div
-                  className={Styles.row(Some(m.id) == selected)}
-                  onClick={_e => onClick(m.id)}>
-                  <div className=Styles.column>
-                    {MeasurableEntityLinks.nameEntityLink(
-                       ~m,
-                       ~className=Shared.TagLink.item,
-                     )
-                     |> E.O.React.defaultNull}
-                  </div>
-                  <div className=Styles.column>
-                    {MeasurableEntityLinks.propertyEntityLink(
-                       ~m,
-                       ~className=Shared.TagLink.property,
-                     )
-                     |> E.O.React.defaultNull}
-                  </div>
-                  <div className=Styles.column>
-                    {MeasurableItems.dateItem(~m, ~showOn=false, ())
-                     |> E.O.React.defaultNull}
-                  </div>
-                  <div className=Styles.column>
-                    {MeasurableItems.measurements(~m) |> E.O.React.defaultNull}
-                    {MeasurableItems.measurers(~m) |> E.O.React.defaultNull}
-                  </div>
-                  <div className=Styles.column>
-                    <StatusDisplay measurable=m />
-                  </div>
+      <div className=Styles.group>
+        {measurables
+         |> Array.map((m: Types.measurable) =>
+              <div
+                className={Styles.row(Some(m.id) == selected)}
+                onClick={_e => onClick(m.id)}>
+                <div className=Styles.column>
+                  {MeasurableEntityLinks.nameEntityLink(
+                     ~m,
+                     ~className=Shared.TagLink.item,
+                   )
+                   |> E.O.React.defaultNull}
                 </div>
-              )
-           |> ReasonReact.array}
-        </div>;
-      }}
-    </Providers.AppContext.Consumer>,
+                <div className=Styles.column>
+                  {MeasurableEntityLinks.propertyEntityLink(
+                     ~m,
+                     ~className=Shared.TagLink.property,
+                   )
+                   |> E.O.React.defaultNull}
+                </div>
+                <div className=Styles.column>
+                  {MeasurableItems.dateItem(~m, ~showOn=false, ())
+                   |> E.O.React.defaultNull}
+                </div>
+                <div className=Styles.column>
+                  {MeasurableItems.measurements(~m) |> E.O.React.defaultNull}
+                  {MeasurableItems.measurers(~m) |> E.O.React.defaultNull}
+                </div>
+                <div className=Styles.column>
+                  <StatusDisplay measurable=m />
+                </div>
+              </div>
+            )
+         |> ReasonReact.array}
+      </div>;
+    }}
+  </Providers.AppContext.Consumer>;
 };

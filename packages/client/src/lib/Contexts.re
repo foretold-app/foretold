@@ -14,7 +14,8 @@ module MakePair = (Config: {
   let _pair = createContext(Config.defaultValue);
 
   module Provider = {
-    let make = (~value: Config.t, children) =>
+    [@react.component]
+    let make = (~value: Config.t, ~children) =>
       ReasonReact.wrapJsForReason(
         ~reactClass=provider(_pair),
         ~props={"value": value},
@@ -23,7 +24,8 @@ module MakePair = (Config: {
   };
 
   module Consumer = {
-    let make = (children: Config.t => ReasonReact.reactElement) =>
+    [@react.component]
+    let make = (~children: Config.t => ReasonReact.reactElement) =>
       ReasonReact.wrapJsForReason(
         ~reactClass=consumer(_pair),
         ~props=Js.Obj.empty(),

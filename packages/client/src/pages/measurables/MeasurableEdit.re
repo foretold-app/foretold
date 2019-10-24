@@ -77,16 +77,13 @@ let formCreation = (id: string, measurable: Types.measurable) => {
   |> E.React.el;
 };
 
-let component = ReasonReact.statelessComponent("MeasurableEdit");
-
+[@react.component]
 let make = (~pageParams: Types.pageParams, _children) => {
-  ...component,
-  render: _self =>
-    <SLayout head={SLayout.Header.textDiv("Edit Question")}>
-      <FC.PageCard.BodyPadding>
-        {MeasurableGet.component(~id=pageParams.id, m =>
-           formCreation(pageParams.id, m)
-         )}
-      </FC.PageCard.BodyPadding>
-    </SLayout>,
+  <SLayout head={SLayout.Header.textDiv("Edit Question")}>
+    <FC.PageCard.BodyPadding>
+      {MeasurableGet.component(~id=pageParams.id, m =>
+         formCreation(pageParams.id, m)
+       )}
+    </FC.PageCard.BodyPadding>
+  </SLayout>;
 };

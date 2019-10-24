@@ -209,7 +209,6 @@ let make = (~items, ~columns=Columns.measurables) =>
   Table.fromColumns(columns, items, ());
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("LeaderboardTable");
   let make = (~items, ~columns=Columns.measurables, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

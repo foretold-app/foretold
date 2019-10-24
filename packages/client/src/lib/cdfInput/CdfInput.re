@@ -2,7 +2,6 @@
 
 open E;
 open Utils;
-open Antd;
 
 type state = {
   // -> Measurement.value
@@ -69,22 +68,27 @@ let competitorTypeSelect =
       ~state=measurable.state,
     );
 
-  <AntdSelect
-    value={state.competitorType}
-    className=Styles.fullWidth
-    onChange={e => send(UpdateCompetitorType(e))}>
-    {options |> ReasonReact.array}
-  </AntdSelect>;
-};
+  // @todo: 1
+  //  <Antd.Select
+  //    value={state.competitorType}
+  //    className=Styles.fullWidth
+  //    onChange={e => send(UpdateCompetitorType(e))}>
+  //    {options |> ReasonReact.array}
+  //  </Antd.Select>;
 
-let dataTypeSelect = (~state, ~send): ReasonReact.reactElement =>
-  <Select
-    value={state.dataType}
-    onChange={e => send(UpdateDataType(e))}
-    className=Styles.fullWidth>
-    <Select.Option value="FLOAT_CDF"> {"Distribution" |> ste} </Select.Option>
-    <Select.Option value="FLOAT_POINT"> {"Exact Value" |> ste} </Select.Option>
-  </Select>;
+  ReasonReact.null;
+};
+// @todo: 1
+//let dataTypeSelect = (~state, ~send): ReasonReact.reactElement =>
+//  <Select
+//    value={state.dataType}
+//    onChange={e => send(UpdateDataType(e))}
+//    className=Styles.fullWidth>
+//    <Select.Option value="FLOAT_CDF"> {"Distribution" |> ste} </Select.Option>
+//    <Select.Option value="FLOAT_POINT"> {"Exact Value" |> ste} </Select.Option>
+//  </Select>;
+
+let dataTypeSelect = (~state, ~send): ReasonReact.reactElement => ReasonReact.null;
 
 let getIsValid = (state: state): bool => {
   switch (state.dataType) {
@@ -145,6 +149,7 @@ let getCompetitorTypeFromString = (str: string): Types.competitorType =>
   | _ => `OBJECTIVE
   };
 
+// @todo: 1
 let botsSelect =
     (~state, ~send, ~bots: array(Types.bot), ~loggedUser: Types.user)
     : ReasonReact.reactElement => {
@@ -156,24 +161,7 @@ let botsSelect =
     <div className=Styles.inputBox>
       <h4 className=Styles.label> {"Do this as:" |> ste} </h4>
     </div>
-    <Select
-      value={state.asAgent}
-      onChange={e => send(UpdateAsAgent(e))}
-      className=Styles.fullWidth>
-      <Select.Option value=""> {name |> ste} </Select.Option>
-      {bots
-       |> Array.map((bot: Types.bot) =>
-            <Select.Option
-              value={
-                bot.agent
-                |> E.O.fmap((agent: Types.agent) => agent.id)
-                |> E.O.default("")
-              }>
-              {bot.name |> E.O.default(bot.id) |> ste}
-            </Select.Option>
-          )
-       |> ReasonReact.array}
-    </Select>
+    ReasonReact.null
   </>;
 };
 

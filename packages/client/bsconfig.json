@@ -17,7 +17,6 @@
     "@foretold/components",
     "@glennsl/bs-json",
     "@glennsl/bs-jest",
-    "bs-reform",
     "bs-css",
     "bs-ant-design-alt",
     "bs-moment",

@@ -24,14 +24,15 @@ module Config = {
 module Form = ReFormNext.Make(Config);
 
 let withForm = (channelId, email, mutation, innerComponentFn) =>
-  <Form
+  <Form.Jsx3
     initialState={email: email}
+    onSubmitFail=ignore
     onSubmit={values =>
       InvitationCreate.mutate(mutation, values.state.values.email, channelId)
     }
     schema={Form.Validation.Schema([|Email(Email)|])}>
     ...innerComponentFn
-  </Form>;
+  </Form.Jsx3>;
 
 let fields = (form: Form.state, send, onSubmit, getFieldState) => {
   let stateEmail: Form.fieldState = getFieldState(Form.Field(Email));

@@ -11,10 +11,9 @@ module ColumnsFunctor = (Ken: KenTools.KenModule) => {
       ~name="Name" |> ste,
       ~render=
         (r: record) =>
-          <Link.Jsx2
-            linkType={Internal(EntityShow(r |> BsKen.Graph_T.Thing.id))}>
+          <Link linkType={Internal(EntityShow(r |> BsKen.Graph_T.Thing.id))}>
             {r |> Ken.getName |> ste}
-          </Link.Jsx2>,
+          </Link>,
       ~flex=2,
       (),
     );

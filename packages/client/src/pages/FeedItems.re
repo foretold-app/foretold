@@ -50,9 +50,8 @@ let make =
     let table =
       switch (channelId) {
       | Some("")
-      | None => <FeedItemsTable.Jsx2 feedItems />
-      | _ =>
-        <FeedItemsTable.Jsx2 feedItems columns=FeedItemsTable.Columns.short />
+      | None => <FeedItemsTable feedItems />
+      | _ => <FeedItemsTable feedItems columns=FeedItemsTable.Columns.short />
       };
 
     let isFound = Array.length(feedItems) > 0;

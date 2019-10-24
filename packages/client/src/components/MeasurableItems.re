@@ -94,43 +94,43 @@ let endpointResponse = (~m: Types.measurable) =>
   };
 
 let questionLink = (~m: Types.measurable) =>
-  <Link.Jsx2
+  <Link
     className=Shared.Item.item
     linkType={Internal(MeasurableShow(m.channelId, m.id))}>
     {"Link to This Question" |> Utils.ste}
-  </Link.Jsx2>;
+  </Link>;
 
 let creatorLink = (~m: Types.measurable) =>
   m.creator
   |> E.O.fmap((agent: Types.agent) =>
-       <Link.Jsx2
+       <Link
          linkType={
            Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
          }
          className=Shared.Item.item>
-         <AgentLink.Jsx2 agent />
-       </Link.Jsx2>
+         <AgentLink agent />
+       </Link>
      );
 
 let editLink = (~m: Types.measurable) =>
   <div className=Shared.Item.item>
-    <Link.Jsx2
+    <Link
       linkType={Internal(MeasurableEdit(m.id))}
       className={Shared.Item.itemButton(NORMAL)}>
       {"Edit" |> ste}
-    </Link.Jsx2>
+    </Link>
   </div>;
 
 let channelLink = (~m: Types.measurable) =>
   <div className=Shared.Item.item>
-    <Link.Jsx2
+    <Link
       linkType={Internal(ChannelShow(m.channelId))}
       className=Shared.Item.item>
       {switch (m.channel) {
        | Some(channel) => "#" ++ channel.name |> ste
        | _ => "#channel" |> ste
        }}
-    </Link.Jsx2>
+    </Link>
   </div>;
 
 let measurements = (~m: Types.measurable) =>
@@ -175,10 +175,10 @@ let series = (~m: Types.measurable, ~channelId=None, ()) => {
        | Some(name) =>
          Some(
            <div className=Shared.Item.item>
-             <Link.Jsx2 linkType={Internal(SeriesShow(m.channelId, r.id))}>
+             <Link linkType={Internal(SeriesShow(m.channelId, r.id))}>
                <Icon.Icon icon="LAYERS" />
                {name |> ste}
-             </Link.Jsx2>
+             </Link>
            </div>,
          )
        | None => None

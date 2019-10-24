@@ -2,7 +2,7 @@
 
 let changeRoleAction = (agentId, channelId, role, text) =>
   ChannelMembershipRoleUpdate.Mutation.make((mutation, _) =>
-    <Link.Jsx2
+    <Link
       linkType={
         Action(
           _ =>
@@ -15,20 +15,20 @@ let changeRoleAction = (agentId, channelId, role, text) =>
         )
       }>
       {text |> ReasonReact.string}
-    </Link.Jsx2>
+    </Link>
   )
   |> ReasonReact.element;
 
 let removeFromChannel = (agentId, channelId) =>
   ChannelMembershipDelete.Mutation.make((mutation, _) =>
-    <Link.Jsx2
+    <Link
       linkType={
         Action(
           _ => ChannelMembershipDelete.mutate(mutation, agentId, channelId),
         )
       }>
       {"Remove" |> ReasonReact.string}
-    </Link.Jsx2>
+    </Link>
   )
   |> ReasonReact.element;
 
@@ -42,7 +42,7 @@ module Columns = {
         (membership: Types.channelMembership) =>
           membership.agent
           |> Rationale.Option.fmap((agent: Types.agent) =>
-               <AgentLink.Jsx2 agent />
+               <AgentLink agent />
              )
           |> E.O.React.defaultNull,
       (),
@@ -139,14 +139,14 @@ module Columns = {
 };
 
 let title = () =>
-  <FC.Base.Div.Jsx2 float=`left>
+  <FC.Base.Div float=`left>
     <FC.PageCard.HeaderRow.Title>
       {"Community Members" |> ReasonReact.string}
     </FC.PageCard.HeaderRow.Title>
-  </FC.Base.Div.Jsx2>;
+  </FC.Base.Div>;
 
 let addMembersButtonSection = (channelId: string) =>
-  <FC.Base.Div.Jsx2
+  <FC.Base.Div
     float=`right
     className={Css.style([
       FC.PageCard.HeaderRow.Styles.itemTopPadding,
@@ -160,10 +160,10 @@ let addMembersButtonSection = (channelId: string) =>
       }>
       {"Add Members" |> ReasonReact.string}
     </FC.Base.Button>
-  </FC.Base.Div.Jsx2>;
+  </FC.Base.Div>;
 
 let inviteMemberButtonSection = (channelId: string) =>
-  <FC.Base.Div.Jsx2
+  <FC.Base.Div
     float=`right
     className={Css.style([
       FC.PageCard.HeaderRow.Styles.itemTopPadding,
@@ -177,7 +177,7 @@ let inviteMemberButtonSection = (channelId: string) =>
       }>
       {"Invite Member With Email" |> ReasonReact.string}
     </FC.Base.Button>
-  </FC.Base.Div.Jsx2>;
+  </FC.Base.Div>;
 
 let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
   let head =

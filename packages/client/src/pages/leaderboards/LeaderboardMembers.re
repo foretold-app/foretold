@@ -38,7 +38,7 @@ let make =
       | Success(_) =>
         Array.length(items) > 0
           ? <FC.PageCard.Body>
-              <LeaderboardTable.Jsx2 items columns />
+              <LeaderboardTable items columns />
             </FC.PageCard.Body>
           : <NothingToShow />
       | _ => <Spin />

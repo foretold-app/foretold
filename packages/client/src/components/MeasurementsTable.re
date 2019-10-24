@@ -182,8 +182,7 @@ module Helpers = {
     };
 
   let measurerLink = (~measurement: measurement): ReasonReact.reactElement => {
-    let aLink =
-      measurement.agent |> E.O.fmap(agent => <AgentLink.Jsx2 agent />);
+    let aLink = measurement.agent |> E.O.fmap(agent => <AgentLink agent />);
 
     let judgementStyle =
       style([

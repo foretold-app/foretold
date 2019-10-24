@@ -23,9 +23,7 @@ let display = id => {
                switch (r.value.valueType) {
                | String(s) => s |> ste
                | ThingId(s) =>
-                 <Link.Jsx2 linkType={Internal(EntityShow(s))}>
-                   {s |> ste}
-                 </Link.Jsx2>
+                 <Link linkType={Internal(EntityShow(s))}> {s |> ste} </Link>
                | _ => "no-name" |> ste
                }
              )

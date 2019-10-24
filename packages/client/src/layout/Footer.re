@@ -10,18 +10,14 @@ let make = () => {
   <FC__Footer
     logo={React.string({js|Foretold.io|js})}
     links=[|
-      <Link.Jsx2 linkType={External(documentationUrl)}>
+      <Link linkType={External(documentationUrl)}>
         {"Documentation" |> ste}
-      </Link.Jsx2>,
-      <Link.Jsx2 linkType={External(feedbackUrl)}>
-        {"Feedback" |> ste}
-      </Link.Jsx2>,
-      <Link.Jsx2 linkType={Internal(Terms)}>
+      </Link>,
+      <Link linkType={External(feedbackUrl)}> {"Feedback" |> ste} </Link>,
+      <Link linkType={Internal(Terms)}>
         {"Terms and Conditions" |> ste}
-      </Link.Jsx2>,
-      <Link.Jsx2 linkType={Internal(Privacy)}>
-        {"Privacy Policy" |> ste}
-      </Link.Jsx2>,
+      </Link>,
+      <Link linkType={Internal(Privacy)}> {"Privacy Policy" |> ste} </Link>,
     |]
   />;
 };

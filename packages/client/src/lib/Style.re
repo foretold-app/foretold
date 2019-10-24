@@ -37,7 +37,7 @@ module Grid = {
 
       let allStyles = [flexStyle, directionStyle, floatStyle, ...styles];
 
-      <div className={E.L.join(" ", allStyles)}> ...children </div>;
+      <div className={E.L.join(" ", allStyles)}> children </div>;
     };
   };
 };

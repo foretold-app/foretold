@@ -74,7 +74,7 @@ module ChannelsList = {
            channels =>
            channels
            |> Array.mapi((index, channel: Types.channel) =>
-                <Link.Jsx2
+                <Link
                   key={index |> string_of_int}
                   linkType={Internal(Primary.Channel.showLink(channel))}
                   className={
@@ -82,7 +82,7 @@ module ChannelsList = {
                       ? Styles.selectedItem : Styles.item
                   }>
                   {Primary.Channel.present(~className=Styles.hash, channel)}
-                </Link.Jsx2>
+                </Link>
               )
            |> ReasonReact.array
          )
@@ -96,20 +96,20 @@ let make = (~channelId, ~loggedUser: option(Types.user)) => {
   <div className=Styles.sidebar>
     <div className=Styles.over />
     <div className=Styles.minorHeader>
-      <Link.Jsx2
+      <Link
         linkType={Internal(ChannelIndex)} className=Styles.minorHeaderLink>
         {"Communities" |> ste}
-      </Link.Jsx2>
+      </Link>
     </div>
     <div className=Styles.over>
-      <Link.Jsx2
+      <Link
         key="channel-global-item"
         linkType={Internal(Primary.Channel.globalLink())}
         className={
           Some("home") == channelId ? Styles.selectedItem : Styles.item
         }>
         {Primary.Channel.presentGlobal(~className=Styles.hash, ())}
-      </Link.Jsx2>
+      </Link>
       {loggedUser
        |> E.O.React.fmapOrNull(loggedUser =>
             <ChannelsList loggedUser channelId />

@@ -14,9 +14,9 @@ module Functor = (Ken: KenTools.KenModule) => {
              switch (r.value.valueType) {
              | String(s) => s |> Utils.ste
              | ThingId(s) =>
-               <Link.Jsx2 linkType={Internal(EntityShow(s))}>
+               <Link linkType={Internal(EntityShow(s))}>
                  {s |> Utils.ste}
-               </Link.Jsx2>
+               </Link>
              | _ => "no-name" |> Utils.ste
              }
            )

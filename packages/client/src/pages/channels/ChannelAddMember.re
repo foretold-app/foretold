@@ -6,21 +6,21 @@ type column = Table.column(Types.agent);
 let make = (~channelId: string) => {
   let addToChannelLink = (agentId: string, channelId: string) =>
     ChannelMembershipCreate.Mutation.make((mutation, _) =>
-      <Link.Jsx2
+      <Link
         linkType={
           Action(
             _ => ChannelMembershipCreate.mutate(mutation, agentId, channelId),
           )
         }>
         {"Add to Community" |> ReasonReact.string}
-      </Link.Jsx2>
+      </Link>
     )
     |> ReasonReact.element;
 
   let agentColumn =
     Table.Column.make(
       ~name="Member" |> ReasonReact.string,
-      ~render=(agent: Types.agent) => <AgentLink.Jsx2 agent />,
+      ~render=(agent: Types.agent) => <AgentLink agent />,
       (),
     );
 
@@ -34,11 +34,11 @@ let make = (~channelId: string) => {
   let all: array(column) = [|agentColumn, inviteColumn|];
 
   let title =
-    <FC.Base.Div.Jsx2 float=`left>
+    <FC.Base.Div float=`left>
       <FC.PageCard.HeaderRow.Title>
         {"Add Agents" |> ReasonReact.string}
       </FC.PageCard.HeaderRow.Title>
-    </FC.Base.Div.Jsx2>;
+    </FC.Base.Div>;
 
   let onSuccess = agents => {
     let dataSource =

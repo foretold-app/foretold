@@ -76,7 +76,7 @@ module StylesDropdown = {
 let action = StylesDropdown.action;
 
 let link = (linkType: LinkType.linkType, str) =>
-  <Link.Jsx2 linkType className=action> {str |> ste} </Link.Jsx2>;
+  <Link linkType className=action> {str |> ste} </Link>;
 
 let userDropdown = agentId =>
   <div className=StylesDropdown.actions>
@@ -120,7 +120,7 @@ let header = (loggedUser: Types.user) =>
               <Div
                 float=`left
                 styles=[Css.style([Css.marginLeft(`em(0.45))])]>
-                <FC.Base.Avatar.Jsx2 src=picture width=1.5 />
+                <FC.Base.Avatar src=picture width=1.5 />
               </Div>
             )}
       </Div>
@@ -136,16 +136,14 @@ let make = (~loggedUser: option(Types.user)) => {
        | Some(loggedUser) =>
          Primary.User.show(
            loggedUser,
-           <Link.Jsx2
-             linkType={Internal(EntityIndex)} className=Styles.headerLink>
+           <Link linkType={Internal(EntityIndex)} className=Styles.headerLink>
              {"Entity Explorer" |> ste}
-           </Link.Jsx2>,
+           </Link>,
          )
        | None =>
-         <Link.Jsx2
-           linkType={Internal(ChannelIndex)} className=Styles.headerLink>
+         <Link linkType={Internal(ChannelIndex)} className=Styles.headerLink>
            {"Communities" |> ste}
-         </Link.Jsx2>
+         </Link>
        }}
     </Div>
     <Div float=`left> <VerificationWarning /> </Div>
@@ -153,11 +151,11 @@ let make = (~loggedUser: option(Types.user)) => {
       {switch (loggedUser) {
        | Some(loggedUser) => header(loggedUser)
        | None =>
-         <Link.Jsx2
+         <Link
            linkType={Action(_e => Auth0Client.triggerLoginScreen())}
            className=Styles.headerLink>
            {"Log In" |> ste}
-         </Link.Jsx2>
+         </Link>
        }}
     </Div>
   </Div>;

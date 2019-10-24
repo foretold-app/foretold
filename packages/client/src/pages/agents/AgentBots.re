@@ -9,11 +9,11 @@ module Styles = {
 };
 
 let title =
-  <FC.Base.Div.Jsx2 float=`left>
+  <FC.Base.Div float=`left>
     <FC.PageCard.HeaderRow.Title>
       {"Bots" |> ReasonReact.string}
     </FC.PageCard.HeaderRow.Title>
-  </FC.Base.Div.Jsx2>;
+  </FC.Base.Div>;
 
 let agentSection = (agent: Types.agent) =>
   switch (agent.agentType) {
@@ -42,12 +42,12 @@ module Columns = {
         (bot: Types.bot) =>
           switch (bot.name, bot.agent) {
           | (Some(name), Some(agent)) =>
-            <Link.Jsx2
+            <Link
               linkType={
                 Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
               }>
-              <AgentLink.Jsx2 agent />
-            </Link.Jsx2>
+              <AgentLink agent />
+            </Link>
           | _ => ReasonReact.null
           },
       (),
@@ -79,9 +79,9 @@ module Columns = {
       ~name="Edit" |> ste,
       ~render=
         (bot: Types.bot) =>
-          <Link.Jsx2 linkType={Internal(BotEdit(bot.id))}>
+          <Link linkType={Internal(BotEdit(bot.id))}>
             {"Edit Bot" |> ste}
-          </Link.Jsx2>,
+          </Link>,
       ~show=
         (bot: Types.bot) =>
           Primary.Permissions.can(`BOT_UPDATE, bot.permissions),
@@ -119,14 +119,14 @@ let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl) => {
       let head =
         <div>
           title
-          <FC.Base.Div.Jsx2
+          <FC.Base.Div
             float=`right
             className={Css.style([
               FC.PageCard.HeaderRow.Styles.itemTopPadding,
               FC.PageCard.HeaderRow.Styles.itemBottomPadding,
             ])}>
             {agentSection(agent)}
-          </FC.Base.Div.Jsx2>
+          </FC.Base.Div>
         </div>;
 
       SLayout.LayoutConfig.make(~head, ~body, ()) |> layout;

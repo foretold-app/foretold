@@ -13,8 +13,7 @@ let make = (~route: Route.t, ~loggedUser: option(Types.user)) => {
   | (Channel(channel), _) => <ChannelNavigation channelPage=channel />
   | (Agent(agentPage), _) => <AgentNavigation agentPage />
   | (AgentIndex, _) => <AgentIndex />
-  | (ChannelIndex, _) =>
-    <FillWithSidebar> <ChannelIndex.Jsx2 /> </FillWithSidebar>
+  | (ChannelIndex, _) => <FillWithSidebar> <ChannelIndex /> </FillWithSidebar>
 
   | (Preferences, Some(loggedUser)) =>
     <FillWithSidebar> <Preferences loggedUser /> </FillWithSidebar>

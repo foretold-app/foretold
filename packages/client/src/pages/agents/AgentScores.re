@@ -6,11 +6,11 @@ open Style.Grid;
 let make = (~agentId, _children) => {
   let head = (~channelId, ~paginationPage, ()) =>
     <div>
-      <FC.Base.Div.Jsx2 float=`left>
+      <FC.Base.Div float=`left>
         <FC.PageCard.HeaderRow.Title>
           {"Scores" |> ReasonReact.string}
         </FC.PageCard.HeaderRow.Title>
-      </FC.Base.Div.Jsx2>
+      </FC.Base.Div>
       <Div>
         <Div
           float=`right

@@ -52,7 +52,7 @@ module Header = {
 
   [@react.component]
   let make = (~children) =>
-    <FC.PageCard.HeaderRow> ...children </FC.PageCard.HeaderRow>;
+    <FC.PageCard.HeaderRow> children </FC.PageCard.HeaderRow>;
 };
 
 module LayoutConfig = {
@@ -67,7 +67,7 @@ module LayoutConfig = {
 module FullPage = {
   [@react.component]
   let make = ({head, body, isFluid}: LayoutConfig.t) => {
-    <FC.Base.Div.Jsx2
+    <FC.Base.Div
       className=Css.(
         style(
           [
@@ -84,7 +84,7 @@ module FullPage = {
           <FC.PageCard.Body> body </FC.PageCard.Body>
         </FC.PageCard>
       </div>
-    </FC.Base.Div.Jsx2>;
+    </FC.Base.Div>;
   };
 
   let makeWithEl = (t: LayoutConfig.t) => t |> make |> E.React.el;
@@ -96,8 +96,7 @@ let channelBack = (~onClick, ()) =>
   </FC__Button>;
 
 let channelLink = (c: Types.channel) =>
-  <Link.Jsx2
-    linkType={Internal(ChannelShow(c.id))} className=Styles.channelText>
+  <Link linkType={Internal(ChannelShow(c.id))} className=Styles.channelText>
     {switch (c.id) {
      | "home" =>
        Primary.Channel.presentGlobal(
@@ -106,13 +105,12 @@ let channelLink = (c: Types.channel) =>
        )
      | _ => c |> Primary.Channel.present
      }}
-  </Link.Jsx2>;
+  </Link>;
 
 let channelEditLink = (c: Types.channel) =>
-  <Link.Jsx2
-    linkType={Internal(ChannelEdit(c.id))} className=Styles.headerText>
+  <Link linkType={Internal(ChannelEdit(c.id))} className=Styles.headerText>
     {"edit" |> ste}
-  </Link.Jsx2>;
+  </Link>;
 
 let seriesHead = (channel: Types.channel, seriesName) =>
   <>
@@ -124,7 +122,7 @@ let seriesHead = (channel: Types.channel, seriesName) =>
 
 [@react.component]
 let make = (~head=ReasonReact.null, ~isFluid=false, ~children) => {
-  <FC.Base.Div.Jsx2
+  <FC.Base.Div
     className=Css.(
       style(
         [
@@ -141,5 +139,5 @@ let make = (~head=ReasonReact.null, ~isFluid=false, ~children) => {
         <FC.PageCard.Body> {children |> ReasonReact.array} </FC.PageCard.Body>
       </FC.PageCard>
     </div>
-  </FC.Base.Div.Jsx2>;
+  </FC.Base.Div>;
 };

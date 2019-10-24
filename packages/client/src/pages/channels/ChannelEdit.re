@@ -16,16 +16,16 @@ let make = (~channelId: string) => {
 
   let head =
     <>
-      <FC.Base.Div.Jsx2 float=`left>
+      <FC.Base.Div float=`left>
         <FC.PageCard.HeaderRow.Title>
           {"Edit Community" |> Utils.ste}
         </FC.PageCard.HeaderRow.Title>
-      </FC.Base.Div.Jsx2>
+      </FC.Base.Div>
       <Providers.AppContext.Consumer>
         ...{({loggedUser}) =>
           switch (loggedUser) {
           | Some(loggedUser) =>
-            <FC.Base.Div.Jsx2
+            <FC.Base.Div
               float=`right
               className={Css.style([
                 FC.PageCard.HeaderRow.Styles.itemTopPadding,
@@ -41,7 +41,7 @@ let make = (~channelId: string) => {
                    {"New Series" |> Utils.ste}
                  </FC.Base.Button>,
                )}
-            </FC.Base.Div.Jsx2>
+            </FC.Base.Div>
           | _ => ReasonReact.null
           }
         }

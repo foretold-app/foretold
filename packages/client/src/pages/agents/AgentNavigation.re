@@ -33,7 +33,7 @@ module Top = {
                     Css.marginBottom(`em(0.1)),
                   ]),
                 ]>
-                <AgentLink.Jsx2 agent />
+                <AgentLink agent />
               </Div>
               <Div flex={`num(1.)} styles=[SLayout.Styles.descriptionText]>
                 {description |> Utils.ste}

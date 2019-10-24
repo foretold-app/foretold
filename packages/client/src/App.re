@@ -62,16 +62,16 @@ let make = _children => {
 
     <ReasonApollo.Provider client=appApolloClient>
       {GlobalSettingGet.inner((globalSetting: option(Types.globalSetting)) =>
-         getUser((loggedInUser: option(Types.user)) => {
+         getUser((loggedUser: option(Types.user)) => {
            let appContext: Providers.appContext = {
              route: state.route,
              authToken: state.authToken,
-             loggedInUser,
+             loggedUser,
              globalSetting,
            };
 
            <Providers.AppContext.Provider value=appContext>
-             <Navigator route={state.route} loggedInUser />
+             <Navigator route={state.route} loggedUser />
              <Redirect appContext />
              <Intercom />
              <CheckSession />

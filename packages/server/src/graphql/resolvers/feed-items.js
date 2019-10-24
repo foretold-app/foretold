@@ -23,11 +23,14 @@ const { HOME_CHANNEL_ID } = require('../../well-known');
  * @returns {Promise<*>}
  */
 async function all(_root, args, context, _info) {
+  /** @type {string} */
   const channelId = _.get(args, 'channelId');
+  /** @type {string} */
   const agentId = _.get(args, 'agentId');
+  /** @type {string} */
   const currentAgentId = _.get(context, 'agent.id');
 
-  const withinJoinedChannels = channelId === HOME_CHANNEL_ID
+  const withinJoinedChannels = channelId === HOME_CHANNEL_ID && !!currentAgentId
     ? structures.withinJoinedChannelsByChannelId(currentAgentId) : null;
 
   const filter = new Filter({ agentId, channelId, withinJoinedChannels });

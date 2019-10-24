@@ -104,9 +104,18 @@ module Route = {
     | Unsubscribe
     | NotFound;
 
-  let fromUrl = (url: ReasonReact.Router.url) =>
+  let fromUrl = (url: ReasonReact.Router.url) => {
+    let showChannel = channelId =>
+      Channel({
+        channelId: getChannelId(channelId),
+        subPage:
+          Measurables(
+            url.search |> MeasurableQueryIndex.fromStringWithDefaults,
+          ),
+      });
+
     switch (url.path) {
-    | [] => Home
+    | [] => showChannel("")
     | ["privacy_policy"] => Privacy
     | ["terms_and_conditions"] => Terms
     | ["login"] => Login
@@ -114,7 +123,7 @@ module Route = {
       Auth.UrlToAuth0Tokens.make(url)
       |> E.O.fmap(Auth0Tokens.set)
       |> E.O.default();
-      Home;
+      showChannel("");
     | ["agents"] => AgentIndex
     | ["profile"] => Profile
     | ["preferences"] => Preferences
@@ -126,14 +135,7 @@ module Route = {
     | ["bots", id, "edit"] => BotEdit(id)
     | ["measurables", id, "edit"] => MeasurableEdit(id)
     | ["c"] => ChannelIndex
-    | ["c", channelId] =>
-      Channel({
-        channelId: getChannelId(channelId),
-        subPage:
-          Measurables(
-            url.search |> MeasurableQueryIndex.fromStringWithDefaults,
-          ),
-      })
+    | ["c", channelId] => showChannel(channelId)
     | ["c", channelId, "m", measurableId] =>
       Channel({
         channelId: getChannelId(channelId),
@@ -176,6 +178,7 @@ module Route = {
     | ["unsubscribe"] => Unsubscribe
     | _ => NotFound
     };
+  };
 };
 
 module Url = {

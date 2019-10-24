@@ -134,7 +134,7 @@ class GitHubApi {
     };
     return new Promise((resolve, reject) => {
       request(options, (error, response, body) => {
-        if (error) return reject(error);
+        if (!!error) return reject(error);
         resolve(body);
       });
     });

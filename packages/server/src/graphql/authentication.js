@@ -32,7 +32,7 @@ async function authentication(options) {
   try {
     const token = _getQueryToken(options);
 
-    if (token) {
+    if (!!token) {
       return await new AuthenticationSecondary().authenticate(token);
     }
 

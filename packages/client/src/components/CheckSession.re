@@ -4,9 +4,9 @@ let make = _children => {
   ...component,
   render: _self => {
     <Providers.AppContext.Consumer>
-      ...{({loggedInUser}) =>
-        switch (loggedInUser) {
-        | Some(loggedInUser) =>
+      ...{({loggedUser}) =>
+        switch (loggedUser) {
+        | Some(loggedUser) =>
           <UserAccessTokenUpdate.Mutation>
             ...{(mutation, data) =>
               switch (data.result) {
@@ -18,7 +18,7 @@ let make = _children => {
 
                   UserAccessTokenUpdate.mutate(
                     mutation,
-                    loggedInUser.id,
+                    loggedUser.id,
                     accessToken,
                   );
 

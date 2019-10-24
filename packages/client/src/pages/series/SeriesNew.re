@@ -203,24 +203,20 @@ let formFields = (form: Form.state, send, onSubmit) =>
     </Antd.Form.Item>
   </Antd.Form>;
 
-let make = (~channelId: string, ~loggedInUser: Types.user, _children) => {
+let make = (~channelId: string, _children) => {
   ...component,
   render: _ =>
-    SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("Make a New Series"),
-      ~body=
-        <FC.PageCard.BodyPadding>
-          {SeriesCreate.withMutation((mutation, data) =>
-             withForm(mutation, channelId, ({send, state}) =>
-               CMutationForm.showWithLoading(
-                 ~result=data.result,
-                 ~form=formFields(state, send, () => send(Form.Submit)),
-                 (),
-               )
+    <SLayout head={SLayout.Header.textDiv("Make a New Series")}>
+      <FC.PageCard.BodyPadding>
+        {SeriesCreate.withMutation((mutation, data) =>
+           withForm(mutation, channelId, ({send, state}) =>
+             CMutationForm.showWithLoading(
+               ~result=data.result,
+               ~form=formFields(state, send, () => send(Form.Submit)),
+               (),
              )
-           )}
-        </FC.PageCard.BodyPadding>,
-      (),
-    )
-    |> SLayout.FullPage.makeWithEl,
+           )
+         )}
+      </FC.PageCard.BodyPadding>
+    </SLayout>,
 };

@@ -88,8 +88,8 @@ let userDropdown = agentId =>
     <div className=StylesDropdown.clear />
   </div>;
 
-let header = (loggedInUser: Types.user) =>
-  switch (loggedInUser.agent) {
+let header = (loggedUser: Types.user) =>
+  switch (loggedUser.agent) {
   | Some((agent: Types.agent)) =>
     <AntdDropdown
       overlay={userDropdown(agent.id)}
@@ -113,7 +113,7 @@ let header = (loggedInUser: Types.user) =>
           ]>
           <Icon.Icon icon="CHEVRON_DOWN" />
         </Div>
-        {loggedInUser.picture
+        {loggedUser.picture
          |> E.O.React.fmapOrNull((picture: string) =>
               <Div
                 float=`left
@@ -127,20 +127,38 @@ let header = (loggedInUser: Types.user) =>
   };
 
 let component = ReasonReact.statelessComponent("Header");
-let make = (~loggedInUser: Types.user, _children) => {
+let make = (~loggedUser: option(Types.user), _children) => {
   ...component,
   render: _self =>
     <Div styles=[Styles.outer]>
       <Div float=`left>
-        {Primary.User.show(
-           loggedInUser,
+        {switch (loggedUser) {
+         | Some(loggedUser) =>
+           Primary.User.show(
+             loggedUser,
+             <Link.Jsx2
+               linkType={Internal(EntityIndex)} className=Styles.headerLink>
+               {"Entity Explorer" |> ste}
+             </Link.Jsx2>,
+           )
+         | None =>
            <Link.Jsx2
-             linkType={Internal(EntityIndex)} className=Styles.headerLink>
-             {"Entity Explorer" |> ste}
-           </Link.Jsx2>,
-         )}
+             linkType={Internal(ChannelIndex)} className=Styles.headerLink>
+             {"Communities" |> ste}
+           </Link.Jsx2>
+         }}
       </Div>
       <Div float=`left> <VerificationWarning /> </Div>
-      <Div float=`right> {header(loggedInUser)} </Div>
+      <Div float=`right>
+        {switch (loggedUser) {
+         | Some(loggedUser) => header(loggedUser)
+         | None =>
+           <Link.Jsx2
+             linkType={Action(_e => Auth0Client.triggerLoginScreen())}
+             className=Styles.headerLink>
+             {"Log In" |> ste}
+           </Link.Jsx2>
+         }}
+      </Div>
     </Div>,
 };

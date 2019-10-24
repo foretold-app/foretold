@@ -157,18 +157,18 @@ module CMutationForm =
   });
 
 let component = ReasonReact.statelessComponent("Profile");
-let make = (~loggedInUser: Types.user, _children) => {
+let make = (~loggedUser: Types.user, _children) => {
   ...component,
   render: _ =>
     <SLayout head={SLayout.Header.textDiv("Edit Profile Information")}>
       <FC.PageCard.BodyPadding>
         <UserUpdate.Mutation>
           ...{(mutation, data) => {
-            let agent = loggedInUser.agent;
-            let id = loggedInUser.id;
-            let email = loggedInUser.email |> E.O.default("");
-            let picture = loggedInUser.picture |> E.O.default("");
-            let description = loggedInUser.description |> E.O.default("");
+            let agent = loggedUser.agent;
+            let id = loggedUser.id;
+            let email = loggedUser.email |> E.O.default("");
+            let picture = loggedUser.picture |> E.O.default("");
+            let description = loggedUser.description |> E.O.default("");
             let name =
               agent
               |> E.O.bind(_, (r: Types.agent) => r.name)

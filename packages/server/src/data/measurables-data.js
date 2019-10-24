@@ -33,11 +33,11 @@ class MeasurablesData extends DataBase {
   /**
    * @todo: rework
    * @public
-   * @param {Models.ObjectID} id
+   * @param {Models.MeasurableID} measurableId
    * @return {Promise<Models.Measurable>}
    */
-  async unArchive(id) {
-    const params = new Params({ id });
+  async unArchive(measurableId) {
+    const params = new Params({ id: measurableId });
     const measurable = await this.getOne(params);
     return measurable && measurable.unarchive();
   }

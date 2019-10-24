@@ -144,10 +144,10 @@ let getCompetitorTypeFromString = (str: string): Types.competitorType =>
   };
 
 let botsSelect =
-    (~state, ~send, ~bots: array(Types.bot), ~loggedInUser: Types.user)
+    (~state, ~send, ~bots: array(Types.bot), ~loggedUser: Types.user)
     : ReasonReact.reactElement => {
   let name =
-    loggedInUser.agent
+    loggedUser.agent
     |> E.O.fmap((agent: Types.agent) => agent.name |> E.O.default("Me"))
     |> E.O.default("Me");
   <>
@@ -274,7 +274,7 @@ let mainBlock =
       ~onSubmit,
       ~measurable: Types.measurable,
       ~bots: option(array(Types.bot)),
-      ~loggedInUser: Types.user,
+      ~loggedUser: Types.user,
     )
     : ReasonReact.reactElement => {
   let isValid = getIsValid(state);
@@ -290,7 +290,7 @@ let mainBlock =
     switch (bots) {
     | Some([||])
     | None => ReasonReact.null
-    | Some(bots) => botsSelect(~state, ~send, ~bots, ~loggedInUser)
+    | Some(bots) => botsSelect(~state, ~send, ~bots, ~loggedUser)
     };
   open Style.Grid;
   let valueInput: ReasonReact.reactElement =
@@ -371,7 +371,7 @@ let mainBlock =
     | "COMMENT" =>
       <>
         {Primary.User.show(
-           loggedInUser,
+           loggedUser,
            <>
              <div className=Styles.inputBox>
                <h4 className=Styles.label> {"Comment Type" |> ste} </h4>
@@ -414,7 +414,7 @@ let mainBlock =
           send(UpdateDescription(value));
         }}
       />
-      {Primary.User.show(loggedInUser, getBotSelect)}
+      {Primary.User.show(loggedUser, getBotSelect)}
       <div className=Styles.submitButton>
         <Antd.Button
           _type=`primary onClick={_ => onSubmit()} disabled={!isValid}>
@@ -435,7 +435,7 @@ let make =
       ~onSubmit=_ => (),
       ~measurable: Types.measurable,
       ~bots: option(array(Types.bot)),
-      ~loggedInUser: Types.user,
+      ~loggedUser: Types.user,
       _children,
     ) => {
   ...component,
@@ -536,7 +536,7 @@ let make =
         ~onSubmit,
         ~measurable,
         ~bots,
-        ~loggedInUser,
+        ~loggedUser,
       );
 
     <Style.BorderedBox>

@@ -62,33 +62,31 @@ module Agent_Layout_C = {
 };
 
 let component = ReasonReact.statelessComponent("AgentLayout");
-let make =
-    (
-      ~agentPage: Routing.AgentPage.t,
-      ~loggedInUser: option(Types.user),
-      _children,
-    ) => {
+let make = (~agentPage: Routing.AgentPage.t, _children) => {
   ...component,
   render: _ => {
     let agentId = agentPage.agentId;
+    <Providers.AppContext.Consumer>
+      ...{({loggedUser}) =>
+        switch (loggedUser) {
+        | Some(loggedUser) =>
+          let layout = Agent_Layout_C.makeWithEl;
 
-    switch (loggedInUser) {
-    | Some(loggedInUser) =>
-      let layout = Agent_Layout_C.makeWithEl;
+          <FillWithSidebar>
+            <Top agentPage />
+            {switch (agentPage.subPage) {
+             | AgentMeasurables =>
+               <AgentMeasurables pageParams={id: agentId} layout />
+             | AgentBots => <AgentBots pageParams={id: agentId} layout />
+             | AgentCommunities => <AgentCommunities agentId layout />
+             | AgentUpdates => <FeedItems agentId={Some(agentId)} layout />
+             | AgentScores => <AgentScores agentId={Some(agentId)} />
+             }}
+          </FillWithSidebar>;
 
-      <FillWithSidebar loggedInUser>
-        <Top agentPage />
-        {switch (agentPage.subPage) {
-         | AgentMeasurables =>
-           <AgentMeasurables pageParams={id: agentId} loggedInUser layout />
-         | AgentBots => <AgentBots pageParams={id: agentId} layout />
-         | AgentCommunities => <AgentCommunities agentId layout />
-         | AgentUpdates => <FeedItems agentId={Some(agentId)} layout />
-         | AgentScores => <AgentScores agentId={Some(agentId)} />
-         }}
-      </FillWithSidebar>;
-
-    | None => <Home />
-    };
+        | None => "<Home /> Agent_Layout" |> Utils.ste
+        }
+      }
+    </Providers.AppContext.Consumer>;
   },
 };

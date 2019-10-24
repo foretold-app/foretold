@@ -7,7 +7,7 @@ module CMutationForm =
 
 let component = ReasonReact.statelessComponent("ChannelNew");
 
-let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
+let make = _children => {
   ...component,
   render: _ => {
     let mutationMake =
@@ -63,11 +63,8 @@ let make = (~layout=SLayout.FullPage.makeWithEl, _children) => {
          )}
       </FC.PageCard.BodyPadding>;
 
-    SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("Create a New Community"),
-      ~body,
-      (),
-    )
-    |> layout;
+    <SLayout head={SLayout.Header.textDiv("Create a New Community")}>
+      body
+    </SLayout>;
   },
 };

@@ -10,7 +10,7 @@ let make = _ => {
   render: _ => {
     <>
       <Providers.AppContext.Consumer>
-        ...{({loggedInUser}) => {
+        ...{({loggedUser}) => {
           let warning = email =>
             <FC__Alert type_=`warning>
               <span className=Styles.icon>
@@ -30,13 +30,14 @@ let make = _ => {
               {"Please verify your email address. " |> Utils.ste}
             </FC__Alert>;
 
-          switch (loggedInUser) {
+          switch (loggedUser) {
           | Some({
               isEmailVerified: Some(isEmailVerified),
               email: Some(email),
             }) =>
             isEmailVerified ? ReasonReact.null : warning(email)
-          | _ => warningNoEmail
+          | Some({isEmailVerified: _, email: None}) => warningNoEmail
+          | _ => ReasonReact.null
           };
         }}
       </Providers.AppContext.Consumer>

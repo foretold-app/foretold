@@ -235,7 +235,7 @@ class ModelPostgres extends Model {
     this.applyAbstracts(where, restrictions);
 
     // @todo: Use "withinPublicChannels" as "channelId"
-    if (restrictions.channelId && !restrictions.agentId) {
+    if (!!restrictions.channelId && !restrictions.agentId) {
       where[this.and].push({
         channelId: {
           [this.in]: this._publicChannelsLiteral('Restrictions'),
@@ -244,7 +244,7 @@ class ModelPostgres extends Model {
     }
 
     // @todo: Use "withinPublicAndJoinedChannels" as "channelId"
-    if (restrictions.channelId && restrictions.agentId) {
+    if (!!restrictions.channelId && restrictions.agentId) {
       where[this.and].push({
         channelId: {
           [this.in]: this._publicAndJoinedChannelsLiteral(
@@ -276,7 +276,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (restrictions.userId) {
+    if (!!restrictions.userId) {
       where[this.and].push({
         userId: restrictions.userId,
       });
@@ -319,7 +319,7 @@ class ModelPostgres extends Model {
 
     // @todo: It is a filter, b͟u͟t͟ ͟n͟o͟t͟ ͟r͟e͟s͟t͟r͟i͟c͟t͟i͟o͟n͟
     // @todo: Use object structures.
-    if (restrictions.measuredByAgentId) {
+    if (!!restrictions.measuredByAgentId) {
       include.push({
         model: this.models.Measurement,
         as: 'Measurements',
@@ -357,43 +357,43 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.userId) {
+    if (!!filter.userId) {
       where[this.and].push({
         userId: filter.userId,
       });
     }
 
-    if (filter.agentId) {
+    if (!!filter.agentId) {
       where[this.and].push({
         agentId: filter.agentId,
       });
     }
 
-    if (filter.channelId) {
+    if (!!filter.channelId) {
       where[this.and].push({
         channelId: filter.channelId,
       });
     }
 
-    if (filter.measurableId) {
+    if (!!filter.measurableId) {
       where[this.and].push({
         measurableId: filter.measurableId,
       });
     }
 
-    if (filter.email) {
+    if (!!filter.email) {
       where[this.and].push({
         email: filter.email,
       });
     }
 
-    if (filter.status) {
+    if (!!filter.status) {
       where[this.and].push({
         status: filter.status,
       });
     }
 
-    if (filter.competitorType) {
+    if (!!filter.competitorType) {
       where[this.and].push({
         competitorType: {
           [this.in]: filter.competitorType,
@@ -401,7 +401,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.notTaggedByAgent) {
+    if (!!filter.notTaggedByAgent) {
       where[this.and].push({
         id: {
           [this.notIn]: this._taggedMeasurementsLiteral(
@@ -412,14 +412,14 @@ class ModelPostgres extends Model {
     }
 
     const startDate = _.get(filter, 'findInDateRange.startDate');
-    if (startDate) {
+    if (!!startDate) {
       where[this.and].push({
         createdAt: { [this.gte]: startDate },
       });
     }
 
     const endDate = _.get(filter, 'findInDateRange.endDate');
-    if (endDate) {
+    if (!!endDate) {
       where[this.and].push({
         createdAt: { [this.lte]: endDate },
       });
@@ -431,13 +431,13 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.seriesId) {
+    if (!!filter.seriesId) {
       where[this.and].push({
         seriesId: filter.seriesId,
       });
     }
 
-    if (filter.creatorId) {
+    if (!!filter.creatorId) {
       where[this.and].push({
         creatorId: filter.creatorId,
       });
@@ -468,7 +468,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.excludeChannelId) {
+    if (!!filter.excludeChannelId) {
       where[this.and].push({
         id: {
           [this.notIn]: this._agentsIdsLiteral(filter.excludeChannelId),
@@ -476,7 +476,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.types) {
+    if (!!filter.types) {
       where[this.and].push({
         type: {
           [this.in]: filter.types,
@@ -490,7 +490,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.notificationId) {
+    if (!!filter.notificationId) {
       where[this.and].push({
         notificationId: filter.notificationId,
       });
@@ -545,7 +545,7 @@ class ModelPostgres extends Model {
     const name = _.get(abstractions, 'constructor.name', 'Abstraction');
 
     // OK
-    if (abstractions.withinPublicChannels) {
+    if (!!abstractions.withinPublicChannels) {
       const { as } = abstractions.withinPublicChannels;
       where[this.and].push({
         [as]: {
@@ -555,7 +555,7 @@ class ModelPostgres extends Model {
     }
 
     // OK
-    if (abstractions.withinJoinedChannels) {
+    if (!!abstractions.withinJoinedChannels) {
       const { as, agentId } = abstractions.withinJoinedChannels;
       where[this.and].push({
         [as]: {
@@ -565,7 +565,7 @@ class ModelPostgres extends Model {
     }
 
     // OK
-    if (abstractions.withinPublicAndJoinedChannels) {
+    if (!!abstractions.withinPublicAndJoinedChannels) {
       const { as, agentId } = abstractions.withinPublicAndJoinedChannels;
       where[this.and].push({
         [as]: {
@@ -575,7 +575,7 @@ class ModelPostgres extends Model {
     }
 
     // OK
-    if (abstractions.withinMeasurables) {
+    if (!!abstractions.withinMeasurables) {
       const { as, states, channelId } = abstractions.withinMeasurables;
       where[this.and].push({
         [as]: {
@@ -630,7 +630,7 @@ class ModelPostgres extends Model {
     this._extendConditions(updateCond, options);
 
     const entity = await this.model.findOne(findCond);
-    if (entity) await entity.update(data, updateCond);
+    if (!!entity) await entity.update(data, updateCond);
     return entity;
   }
 

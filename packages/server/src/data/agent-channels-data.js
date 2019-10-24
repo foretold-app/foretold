@@ -33,8 +33,8 @@ class AgentChannelsData extends DataBase {
   /**
    * Do not make any optimization here, it is early for this.
    * For each optimization we need to do a researching of the performance.
-   * @param {Models.ObjectID} agentId
-   * @param {Models.ObjectID} channelId
+   * @param {Models.AgentID} agentId
+   * @param {Models.ChannelID} channelId
    * @returns {Promise<number>}
    */
   async primaryPointScore(agentId, channelId) {
@@ -50,7 +50,7 @@ class AgentChannelsData extends DataBase {
   }
 
   /**
-   * @param {Models.ObjectID} channelId
+   * @param {Models.ChannelID} channelId
    * @returns {Promise<*>}
    */
   async _getMeasurables(channelId) {

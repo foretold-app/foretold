@@ -4,13 +4,7 @@ module CMutationForm =
   });
 
 let component = ReasonReact.statelessComponent("BotEdit");
-let make =
-    (
-      ~pageParams: PageConfig.LoggedInPage.pageParams,
-      ~loggedInUser: Types.user,
-      ~layout=SLayout.FullPage.makeWithEl,
-      _children,
-    ) => {
+let make = (~pageParams: Types.pageParams, ~loggedUser: Types.user, _children) => {
   ...component,
   render: _ => {
     let getForm = (bot: option(Types.bot)) =>
@@ -40,7 +34,7 @@ let make =
               CMutationForm.showWithLoading2(
                 ~result=data.result,
                 ~form,
-                ~onSuccess=_ => BotForm.onSuccess(loggedInUser, ()),
+                ~onSuccess=_ => BotForm.onSuccess(loggedUser, ()),
                 (),
               );
             },
@@ -51,11 +45,6 @@ let make =
     let botId = pageParams.id;
     let body = BotGet.component(~id=botId, getForm);
 
-    SLayout.LayoutConfig.make(
-      ~head=SLayout.Header.textDiv("Edit a Bot"),
-      ~body,
-      (),
-    )
-    |> layout;
+    <SLayout head={SLayout.Header.textDiv("Edit a Bot")}> body </SLayout>;
   },
 };

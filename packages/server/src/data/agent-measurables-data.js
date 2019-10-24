@@ -45,8 +45,8 @@ class AgentMeasurablesData extends DataBase {
   /**
    * Do not make any optimization here, it is early for this.
    * For each optimization we need to do a researching of the performance.
-   * @param {Models.ObjectID} agentId
-   * @param {Models.ObjectID} measurableId
+   * @param {Models.AgentID} agentId
+   * @param {Models.MeasurableID} measurableId
    * @returns {Promise<*>}
    */
   async primaryPointScore(agentId, measurableId) {
@@ -122,8 +122,8 @@ class AgentMeasurablesData extends DataBase {
   }
 
   /**
-   * @param {Models.ObjectID} agentId
-   * @param {Models.ObjectID} measurableId
+   * @param {Models.AgentID} agentId
+   * @param {Models.MeasurableID} measurableId
    * @returns {Promise<*>}
    */
   async _getMeasurementsToScoring(agentId, measurableId) {
@@ -149,7 +149,7 @@ class AgentMeasurablesData extends DataBase {
   }
 
   /**
-   * @param {Models.ObjectID} measurableId
+   * @param {Models.MeasurableID} measurableId
    * @returns {Promise<*>}
    */
   async _getProceededMeasurements(measurableId) {

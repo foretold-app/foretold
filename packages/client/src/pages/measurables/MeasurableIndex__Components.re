@@ -30,17 +30,12 @@ module LoadedAndSelected = {
     </>;
 
   let body = (t: t) =>
-    <Measurable
-      id={t.selectedMeasurable.id}
-      key={t.selectedMeasurable.id}
-      loggedInUser={t.loggedInUser}
-    />;
+    <Measurable id={t.selectedMeasurable.id} key={t.selectedMeasurable.id} />;
 
   let body2 = (t: t) =>
     <MeasurableBottomSection
       measurableId={t.selectedMeasurable.id}
       channelId={Some(t.selectedMeasurable.channelId)}
-      loggedInUser={t.loggedInUser}
     />;
 };
 
@@ -139,51 +134,28 @@ let toLayoutInput =
     ) => {
   switch (state) {
   | LoadedAndUnselected(l) =>
-    SLayout.LayoutConfig.make(
-      ~head=LoadedAndUnselected.header(l, stats, selectedState),
-      ~body=LoadedAndUnselected.body(l),
-      ~isFluid=true,
-      (),
-    )
-    |> SLayout.FullPage.makeWithEl
+    <SLayout
+      head={LoadedAndUnselected.header(l, stats, selectedState)} isFluid=true>
+      {LoadedAndUnselected.body(l)}
+    </SLayout>
 
   | LoadedAndSelected(l) =>
     <>
-      {SLayout.LayoutConfig.make(
-         ~head=LoadedAndSelected.header(l, send),
-         ~body=LoadedAndSelected.body(l),
-         ~isFluid=true,
-         (),
-       )
-       |> SLayout.FullPage.makeWithEl}
+      {<SLayout head={LoadedAndSelected.header(l, send)} isFluid=true>
+         {LoadedAndSelected.body(l)}
+       </SLayout>}
       {LoadedAndSelected.body2(l)}
     </>
 
   | WithoutChannel(_) =>
-    SLayout.LayoutConfig.make(
-      ~head=E.React.null,
-      ~body="No channel." |> ste,
-      ~isFluid=true,
-      (),
-    )
-    |> SLayout.FullPage.makeWithEl
+    <SLayout head=E.React.null isFluid=true> {"No channel." |> ste} </SLayout>
 
   | InvalidIndexError(_) =>
-    SLayout.LayoutConfig.make(
-      ~head=E.React.null,
-      ~body="Item Not Valid" |> ste,
-      ~isFluid=true,
-      (),
-    )
-    |> SLayout.FullPage.makeWithEl
+    <SLayout head=E.React.null isFluid=true>
+      {"Item Not Valid" |> ste}
+    </SLayout>
 
   | WithChannelButNotQuery(_c) =>
-    SLayout.LayoutConfig.make(
-      ~head=E.React.null,
-      ~body=<Spin />,
-      ~isFluid=true,
-      (),
-    )
-    |> SLayout.FullPage.makeWithEl
+    <SLayout head=E.React.null isFluid=true> <Spin /> </SLayout>
   };
 };

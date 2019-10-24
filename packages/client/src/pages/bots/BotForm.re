@@ -65,8 +65,8 @@ let withForm = (onSubmit, bot: option(Types.bot), innerComponentFn) => {
   |> E.React.el;
 };
 
-let onSuccess = (loggedInUser: Types.user, ()) => {
-  Primary.User.getAgent(loggedInUser, agent =>
+let onSuccess = (loggedUser: Types.user, ()) => {
+  Primary.User.getAgent(loggedUser, agent =>
     Routing.Url.push(Agent({agentId: agent.id, subPage: AgentBots}))
   );
   ReasonReact.null;

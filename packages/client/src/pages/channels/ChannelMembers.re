@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let component = ReasonReact.statelessComponent("ChannelMembers");
 
 let changeRoleAction = (agentId, channelId, role, text) =>

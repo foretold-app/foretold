@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 [@bs.val] [@bs.scope ("window", "location")]
 external reload: unit => unit = "reload";
 

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let component = ReasonReact.statelessComponent("MeasurementForm");
 
 let make =

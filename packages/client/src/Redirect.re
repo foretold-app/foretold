@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 // This var need to prevent when "a user cannot go from profile page".
 let redirectionCount = ref(0);
 

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 [@bs.module] external switcher: ReasonReact.reactClass = "antd/lib/switch";
 
 [%bs.raw {|require("antd/lib/switch/style")|}];

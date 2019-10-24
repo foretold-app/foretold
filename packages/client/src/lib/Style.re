@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module BorderedBox = {
   let component = ReasonReact.statelessComponent("BorderedBox");
   module Styles = {

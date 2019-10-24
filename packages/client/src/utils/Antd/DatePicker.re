@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 // from https://github.com/JakubMarkiewicz/bs-ant-design/blob/master/src/Antd_DatePicker.re
 
 [@bs.module]

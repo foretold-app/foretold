@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 type creator = {
   id: string,
   name: option(string),

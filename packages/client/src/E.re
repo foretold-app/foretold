@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 /* O for option */
 open Rationale.Function.Infix;
 

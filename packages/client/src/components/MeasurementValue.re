@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Rationale.Function.Infix;
 open Rationale.Result.Infix;
 open Belt.Result;

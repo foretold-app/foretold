@@ -1,9 +1,15 @@
-let newMeasurable = channelId =>
-  FC.GroupHeader.actionButton(
-    ~onClick=e => LinkType.onClick(Internal(MeasurableNew(channelId)), e),
-    [|"New Question" |> ReasonReact.string|],
-  )
-  |> ReasonReact.element;
+[@bs.config {jsx: 3}];
+
+let newMeasurable = channelId => {
+  <FC__Button
+    variant
+    isDisabled=false
+    size=FC__Button.(Medium)
+    className=Css.(merge([FC__Button.Styles.actionButtonPosition]))
+    onClick={e => LinkType.onClick(Internal(MeasurableNew(channelId)), e)}>
+    {"New Question" |> ReasonReact.string}
+  </FC__Button>;
+};
 
 let leaveChannel = (channelId: string) =>
   ChannelLeave.Mutation.make((mutation, _) =>

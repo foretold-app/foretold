@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open E;
 open Utils;
 open Antd;

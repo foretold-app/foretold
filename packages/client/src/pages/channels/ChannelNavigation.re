@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let component = ReasonReact.statelessComponent("Channel");
 
 let make = (~channelPage: Routing.ChannelPage.t, _children) => {

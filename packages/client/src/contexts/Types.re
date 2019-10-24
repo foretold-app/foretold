@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 type valueType = [ | `DATE | `FLOAT | `PERCENTAGE];
 
 type agentTypeEntity = [ | `USER | `BOT];

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 [@bs.module "antd/lib/select"]
 external select: ReasonReact.reactClass = "default";
 

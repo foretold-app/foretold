@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module FormConfig = {
   type field(_) =
     | Name: field(string)

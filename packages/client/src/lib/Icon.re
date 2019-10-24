@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module Icon = {
   [@bs.module "./Icon.js"]
   external reactClass: ReasonReact.reactClass = "Icon";

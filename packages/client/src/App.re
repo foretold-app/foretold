@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 type state = {
   route: Routing.Route.t,
   authToken: option(string),

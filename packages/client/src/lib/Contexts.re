@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 type pair;
 
 [@bs.get] external provider: pair => ReasonReact.reactClass = "Provider";

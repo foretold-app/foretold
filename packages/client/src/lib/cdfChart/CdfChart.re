@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 [@bs.module "./cdfChart.js"]
 external cdfChart: ReasonReact.reactClass = "default";
 

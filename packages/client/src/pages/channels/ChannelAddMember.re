@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let component = ReasonReact.statelessComponent("ChannelAddMember");
 
 type column = Table.column(Types.agent);

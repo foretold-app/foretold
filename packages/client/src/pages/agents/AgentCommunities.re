@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let component = ReasonReact.statelessComponent("AgentCommunities");
 let make = (~agentId, ~layout=SLayout.FullPage.makeWithEl, _children) => {
   ...component,

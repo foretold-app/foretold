@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Utils;
 open Style.Grid;
 open MeasurableIndex__Logic;

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let fn = (a: (array(float), array(float), bool)) => ();
 let fn2 = (a: string) => ();
 

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Routing;
 
 let component = ReasonReact.statelessComponent("Navigator");

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module EditPreference = [%graphql
   {|
     mutation preferenceUpdate(

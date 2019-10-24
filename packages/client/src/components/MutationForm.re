@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module type Config = {type queryType;};
 open Utils;
 

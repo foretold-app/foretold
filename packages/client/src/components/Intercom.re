@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 [@bs.module "../lib/intercom.js"]
 external intercom:
   (string, string, string, string, option(MomentRe.Moment.t)) => unit =

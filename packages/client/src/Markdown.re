@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let component = ReasonReact.statelessComponent("Text");
 let make = (~source, _children) => {
   ...component,

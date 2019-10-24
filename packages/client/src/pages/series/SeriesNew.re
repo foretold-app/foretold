@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Antd;
 open Rationale.Function.Infix;
 

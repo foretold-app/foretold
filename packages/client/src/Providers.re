@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 type appContext = {
   route: Routing.Route.t,
   authToken: option(string),

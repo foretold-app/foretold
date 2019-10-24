@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module ReducerConfig = {
   type itemType = Types.measurement;
   type callFnParams = string;

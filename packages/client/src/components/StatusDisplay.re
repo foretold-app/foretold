@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let statusShow = (~measurable: Types.measurable) =>
   switch (
     Primary.Measurable.toStatus(measurable),

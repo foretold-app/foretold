@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module ReducerConfig = {
   type itemType = Types.agentChannel;
   type callFnParams = (option(string), option(string));

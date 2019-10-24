@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 [@bs.module "antd/lib/radio/radioButton"]
 external reactClass: ReasonReact.reactClass = "default";
 

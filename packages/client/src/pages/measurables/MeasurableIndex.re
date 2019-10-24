@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let component = ReasonReact.statelessComponent("MeasurableIndex");
 let make =
     (~channelId: string, ~searchParams: MeasurableQueryIndex.query, _children) => {

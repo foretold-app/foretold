@@ -46,30 +46,31 @@ module Tabs = {
   };
 };
 
-let component = ReasonReact.reducerComponent("MeasurableBottomSection");
-let make = (~measurableId: string, ~channelId: option(string), _children) => {
-  ...component,
-  reducer: (action, _state) =>
-    switch (action) {
-    | SwitchTab(tab) => ReasonReact.Update({tab: tab})
-    },
-
-  initialState: () => {tab: Measurements},
-  render: self => {
-    let tab = self.state.tab;
-    let switchTab = tabToSwitch => self.send(SwitchTab(tabToSwitch));
-    let head = (~channelId: option(string), ~paginationPage, ()) =>
-      <Tabs switchTab paginationPage tab />;
-
-    switch (tab) {
-    | Measurements => <Measurements measurableId head />
-    | Scores =>
-      <LeaderboardMeasurables
-        channelId
-        measurableId={Some(measurableId)}
-        columns=LeaderboardTable.Columns.measurables'
-        head
-      />
-    };
-  },
+[@react.component]
+let make = (~measurableId: string, ~channelId: option(string)) => {
+  //  reducer: (action, _state) =>
+  //    switch (action) {
+  //    | SwitchTab(tab) => ReasonReact.Update({tab: tab})
+  //    },
+  //
+  //  initialState: () => {tab: Measurements},
+  //  render: self => {
+  //    let tab = self.state.tab;
+  //    let switchTab = tabToSwitch => self.send(SwitchTab(tabToSwitch));
+  //    let head = (~channelId: option(string), ~paginationPage, ()) =>
+  //      <Tabs switchTab paginationPage tab />;
+  //
+  //    switch (tab) {
+  //    | Measurements => <Measurements measurableId head />
+  //    | Scores =>
+  //      <LeaderboardMeasurables
+  //        channelId
+  //        measurableId={Some(measurableId)}
+  //        columns=LeaderboardTable.Columns.measurables'
+  //        head
+  //      />
+  //    };
+  //  },
+  // @todo: 1
+  ReasonReact.null;
 };

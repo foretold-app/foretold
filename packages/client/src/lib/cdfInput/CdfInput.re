@@ -427,8 +427,7 @@ let mainBlock =
   </div>;
 };
 
-let component = ReasonReact.reducerComponent("CdfInput");
-
+[@react.component]
 let make =
     (
       ~data: MeasurementCreate.Mutation.renderPropObj,
@@ -438,116 +437,115 @@ let make =
       ~measurable: Types.measurable,
       ~bots: option(array(Types.bot)),
       ~loggedUser: Types.user,
-      _children,
     ) => {
-  ...component,
-
-  initialState: () => {
-    let competitorTypeInitValue =
-      switch (measurable.state) {
-      | Some(`JUDGED) => "OBJECTIVE"
-      | _ => "COMPETITIVE"
-      };
-
-    {
-      // Values
-      floatCdf: FloatCdf.empty,
-      percentage: 0.,
-      binary: true,
-      unresolvableResolution: "AMBIGUOUS",
-      comment: "GENERIC",
-
-      // OBJECTIVE, COMPETITIVE, AGGREGATION (not used here), UNRESOLVED
-      competitorType: competitorTypeInitValue,
-      // Used to transform Form Data Type to Measurement Type
-      dataType:
-        getDataTypeAsString(competitorTypeInitValue, measurable, None),
-
-      // Strings
-      description: "",
-      valueText: "",
-
-      // Form State Only
-      hasLimitError: false,
-      asAgent: "",
-    };
-  },
-
-  reducer: (action, state) =>
-    switch (action) {
-    | UpdateFloatPdf((floatCdf: FloatCdf.t)) =>
-      onUpdate(floatCdf);
-      ReasonReact.Update({...state, floatCdf});
-
-    | UpdateHasLimitError((hasLimitError: bool)) =>
-      ReasonReact.Update({...state, hasLimitError})
-
-    | UpdateCompetitorType(competitorType) =>
-      let dataType =
-        getDataTypeAsString(
-          competitorType,
-          measurable,
-          Some(state.dataType),
-        );
-      ReasonReact.Update({...state, competitorType, dataType});
-
-    | UpdateDataType((dataType: string)) =>
-      ReasonReact.Update({...state, dataType})
-
-    | UpdateUnresolvableResolution((unresolvableResolution: string)) =>
-      ReasonReact.Update({...state, unresolvableResolution})
-
-    | UpdateComment((comment: string)) =>
-      ReasonReact.Update({...state, comment})
-
-    | UpdateBinary((binary: bool)) => ReasonReact.Update({...state, binary})
-
-    | UpdatePercentage((percentage: float)) =>
-      ReasonReact.Update({...state, percentage})
-
-    | UpdateDescription((description: string)) =>
-      ReasonReact.Update({...state, description})
-
-    | UpdateValueText((valueText: string)) =>
-      ReasonReact.Update({...state, valueText})
-
-    | UpdateAsAgent((asAgent: string)) =>
-      ReasonReact.Update({...state, asAgent})
-    },
-
-  render: ({state, send}) => {
-    let onSubmit = () => {
-      let value = getValueFromState(state);
-
-      onSubmit((
-        value,
-        getCompetitorTypeFromString(state.competitorType),
-        state.description,
-        state.valueText,
-        state.asAgent,
-      ));
-
-      ();
-    };
-
-    let block =
-      mainBlock(
-        ~state,
-        ~isCreator,
-        ~send,
-        ~onSubmit,
-        ~measurable,
-        ~bots,
-        ~loggedUser,
-      );
-
-    <Style.BorderedBox>
-      {switch (data.result) {
-       | Loading => "Loading" |> ste
-       | Error(e) => <> {"Error: " ++ e##message |> ste} block </>
-       | Data(_) => "Form submitted successfully." |> ste |> E.React.inH2
-       | NotCalled => block
-       }}
-    </Style.BorderedBox>;
-  },
+  //  initialState: () => {
+  //    let competitorTypeInitValue =
+  //      switch (measurable.state) {
+  //      | Some(`JUDGED) => "OBJECTIVE"
+  //      | _ => "COMPETITIVE"
+  //      };
+  //
+  //    {
+  //      // Values
+  //      floatCdf: FloatCdf.empty,
+  //      percentage: 0.,
+  //      binary: true,
+  //      unresolvableResolution: "AMBIGUOUS",
+  //      comment: "GENERIC",
+  //
+  //      // OBJECTIVE, COMPETITIVE, AGGREGATION (not used here), UNRESOLVED
+  //      competitorType: competitorTypeInitValue,
+  //      // Used to transform Form Data Type to Measurement Type
+  //      dataType:
+  //        getDataTypeAsString(competitorTypeInitValue, measurable, None),
+  //
+  //      // Strings
+  //      description: "",
+  //      valueText: "",
+  //
+  //      // Form State Only
+  //      hasLimitError: false,
+  //      asAgent: "",
+  //    };
+  //  },
+  //
+  //  reducer: (action, state) =>
+  //    switch (action) {
+  //    | UpdateFloatPdf((floatCdf: FloatCdf.t)) =>
+  //      onUpdate(floatCdf);
+  //      ReasonReact.Update({...state, floatCdf});
+  //
+  //    | UpdateHasLimitError((hasLimitError: bool)) =>
+  //      ReasonReact.Update({...state, hasLimitError})
+  //
+  //    | UpdateCompetitorType(competitorType) =>
+  //      let dataType =
+  //        getDataTypeAsString(
+  //          competitorType,
+  //          measurable,
+  //          Some(state.dataType),
+  //        );
+  //      ReasonReact.Update({...state, competitorType, dataType});
+  //
+  //    | UpdateDataType((dataType: string)) =>
+  //      ReasonReact.Update({...state, dataType})
+  //
+  //    | UpdateUnresolvableResolution((unresolvableResolution: string)) =>
+  //      ReasonReact.Update({...state, unresolvableResolution})
+  //
+  //    | UpdateComment((comment: string)) =>
+  //      ReasonReact.Update({...state, comment})
+  //
+  //    | UpdateBinary((binary: bool)) => ReasonReact.Update({...state, binary})
+  //
+  //    | UpdatePercentage((percentage: float)) =>
+  //      ReasonReact.Update({...state, percentage})
+  //
+  //    | UpdateDescription((description: string)) =>
+  //      ReasonReact.Update({...state, description})
+  //
+  //    | UpdateValueText((valueText: string)) =>
+  //      ReasonReact.Update({...state, valueText})
+  //
+  //    | UpdateAsAgent((asAgent: string)) =>
+  //      ReasonReact.Update({...state, asAgent})
+  //    },
+  //
+  //  render: ({state, send}) => {
+  //    let onSubmit = () => {
+  //      let value = getValueFromState(state);
+  //
+  //      onSubmit((
+  //        value,
+  //        getCompetitorTypeFromString(state.competitorType),
+  //        state.description,
+  //        state.valueText,
+  //        state.asAgent,
+  //      ));
+  //
+  //      ();
+  //    };
+  //
+  //    let block =
+  //      mainBlock(
+  //        ~state,
+  //        ~isCreator,
+  //        ~send,
+  //        ~onSubmit,
+  //        ~measurable,
+  //        ~bots,
+  //        ~loggedUser,
+  //      );
+  //
+  //    <Style.BorderedBox>
+  //      {switch (data.result) {
+  //       | Loading => "Loading" |> ste
+  //       | Error(e) => <> {"Error: " ++ e##message |> ste} block </>
+  //       | Data(_) => "Form submitted successfully." |> ste |> E.React.inH2
+  //       | NotCalled => block
+  //       }}
+  //    </Style.BorderedBox>;
+  //  },
+  // @todo: 1
+  ReasonReact.null;
 };

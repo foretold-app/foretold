@@ -366,7 +366,8 @@ module Make = (Config: Config) => {
     Belt.Array.eq(connectionA.edges, connectionB.edges, Config.isEqual);
 
   open Types;
-  let component = ReasonReact.reducerComponent("Pagination");
+
+  [@react.component]
   let make =
       (
         ~itemsPerPage=20,
@@ -374,69 +375,70 @@ module Make = (Config: Config) => {
         ~subComponent,
         _children,
       ) => {
-    ...component,
-
-    initialState: () => {
-      itemState: ItemUnselected,
-      response: Loading,
-      pageConfig: {
-        direction: None,
-      },
-    },
-
-    reducer: (action, state: state) =>
-      switch (action) {
-      | UpdateResponse(response) =>
-        ReasonReact.Update({
-          response,
-          itemState: state.itemState,
-          pageConfig: state.pageConfig,
-        })
-
-      | _ =>
-        let newState =
-          switch (state) {
-          | {itemState: ItemUnselected} =>
-            Reducers.ItemUnselected.newState(itemsPerPage, state, action)
-
-          | {itemState: ItemSelected(itemSelected)} =>
-            Reducers.ItemSelected.newState(itemsPerPage, itemSelected, action)
-            |> E.O.fmap(itemState => (itemState, state.pageConfig))
-          };
-
-        switch (newState) {
-        | Some((itemState, pageConfig)) =>
-          ReasonReact.Update({
-            response: state.response,
-            itemState,
-            pageConfig,
-          })
-
-        | None => ReasonReact.NoUpdate
-        };
-      },
-
-    render: ({state, send}) => {
-      let innerComponentFn = response => {
-        if (!HttpResponse.isEq(state.response, response, compareItems)) {
-          send(UpdateResponse(response));
-        };
-
-        subComponent({
-          itemsPerPage,
-          itemState: state.itemState,
-          response: state.response,
-          selection: Reducers.State.selection(state),
-          send,
-        });
-      };
-
-      Config.callFn(
-        callFnParams,
-        ~direction=state.pageConfig.direction,
-        ~pageLimit=Js.Json.number(itemsPerPage |> float_of_int),
-        ~innerComponentFn,
-      );
-    },
+    //
+    //    initialState: () => {
+    //      itemState: ItemUnselected,
+    //      response: Loading,
+    //      pageConfig: {
+    //        direction: None,
+    //      },
+    //    },
+    //
+    //    reducer: (action, state: state) =>
+    //      switch (action) {
+    //      | UpdateResponse(response) =>
+    //        ReasonReact.Update({
+    //          response,
+    //          itemState: state.itemState,
+    //          pageConfig: state.pageConfig,
+    //        })
+    //
+    //      | _ =>
+    //        let newState =
+    //          switch (state) {
+    //          | {itemState: ItemUnselected} =>
+    //            Reducers.ItemUnselected.newState(itemsPerPage, state, action)
+    //
+    //          | {itemState: ItemSelected(itemSelected)} =>
+    //            Reducers.ItemSelected.newState(itemsPerPage, itemSelected, action)
+    //            |> E.O.fmap(itemState => (itemState, state.pageConfig))
+    //          };
+    //
+    //        switch (newState) {
+    //        | Some((itemState, pageConfig)) =>
+    //          ReasonReact.Update({
+    //            response: state.response,
+    //            itemState,
+    //            pageConfig,
+    //          })
+    //
+    //        | None => ReasonReact.NoUpdate
+    //        };
+    //      },
+    //
+    //    render: ({state, send}) => {
+    //      let innerComponentFn = response => {
+    //        if (!HttpResponse.isEq(state.response, response, compareItems)) {
+    //          send(UpdateResponse(response));
+    //        };
+    //
+    //        subComponent({
+    //          itemsPerPage,
+    //          itemState: state.itemState,
+    //          response: state.response,
+    //          selection: Reducers.State.selection(state),
+    //          send,
+    //        });
+    //      };
+    //
+    //      Config.callFn(
+    //        callFnParams,
+    //        ~direction=state.pageConfig.direction,
+    //        ~pageLimit=Js.Json.number(itemsPerPage |> float_of_int),
+    //        ~innerComponentFn,
+    //      );
+    //    },
+    // @todo: 1
+    ReasonReact.null;
   };
 };

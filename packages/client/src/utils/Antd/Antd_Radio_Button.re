@@ -8,7 +8,8 @@ external makeProps:
   (~value: string, ~onClick: ReactEvent.Form.t => unit=?, unit) => _ =
   "";
 
-let make = (~value, ~onClick, children) =>
+[@react.component]
+let make = (~value, ~onClick, ~children) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,
     ~props=makeProps(~value, ~onClick, ()),

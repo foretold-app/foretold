@@ -71,6 +71,7 @@ external makeProps:
   _ =
   "";
 
+[@react.component]
 let make =
     (
       ~arrowPointAtCenter=?,
@@ -90,7 +91,7 @@ let make =
       ~id=?,
       ~className=?,
       ~style=?,
-      children,
+      ~children,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,

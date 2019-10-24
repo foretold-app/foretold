@@ -27,6 +27,7 @@ external makeProps:
   _ =
   "";
 
+[@react.component]
 let make =
     (
       ~prefixCls=?,
@@ -41,7 +42,7 @@ let make =
       ~loading=?,
       ~autoFocus=?,
       ~style=?,
-      children,
+      ~children,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=switcher,

@@ -48,56 +48,50 @@ let load2Queries = (channelId, seriesId, itemsPerPage, fn) =>
        SeriesGet.component(~id=seriesId),
      );
 
-let component = ReasonReact.statelessComponent("SeriesShow");
+[@react.component]
 let make = (~channelId: string, ~id: string, _children) => {
-  ...component,
-  render: _ => {
-    let loadData = load2Queries(channelId, id, 50);
+  let loadData = load2Queries(channelId, id, 50);
 
-    loadData(((selectWithPaginationParams, channel, series)) =>
-      <SLayout
-        head={
-          switch (channel, series, selectWithPaginationParams.selection) {
-          | (
-              Success(channel),
-              Some((series: Types.series)),
-              Some(_selection),
-            ) =>
-            <>
-              {SLayout.seriesHead(channel, series.name |> E.O.default(""))}
-              {Reducer.Components.deselectButton(
-                 selectWithPaginationParams.send,
-               )}
-              {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
-            </>
-          | (Success(channel), Some((series: Types.series)), None) =>
-            <>
-              {SLayout.seriesHead(channel, series.name |> E.O.default(""))}
-              {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
-            </>
-          | _ => <div />
-          }
-        }>
-        {switch (
-           selectWithPaginationParams.response,
-           selectWithPaginationParams.selection,
-         ) {
-         | (_, Some(measurable)) => <Measurable id={measurable.id} />
-         | (Success(connection), None) =>
-           <MeasurablesSeriesTable
-             measurables={connection.edges}
-             selected=None
-             onClick={id =>
-               Reducer.Components.sendSelectItem(
-                 selectWithPaginationParams,
-                 id,
-               )
-             }
-           />
-         | _ => <div />
-         }}
-      </SLayout>
-    )
-    |> E.React.makeToEl;
-  },
+  loadData(((selectWithPaginationParams, channel, series)) =>
+    <SLayout
+      head={
+        switch (channel, series, selectWithPaginationParams.selection) {
+        | (
+            Success(channel),
+            Some((series: Types.series)),
+            Some(_selection),
+          ) =>
+          <>
+            {SLayout.seriesHead(channel, series.name |> E.O.default(""))}
+            {Reducer.Components.deselectButton(
+               selectWithPaginationParams.send,
+             )}
+            {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
+          </>
+        | (Success(channel), Some((series: Types.series)), None) =>
+          <>
+            {SLayout.seriesHead(channel, series.name |> E.O.default(""))}
+            {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
+          </>
+        | _ => <div />
+        }
+      }>
+      {switch (
+         selectWithPaginationParams.response,
+         selectWithPaginationParams.selection,
+       ) {
+       | (_, Some(measurable)) => <Measurable id={measurable.id} />
+       | (Success(connection), None) =>
+         <MeasurablesSeriesTable
+           measurables={connection.edges}
+           selected=None
+           onClick={id =>
+             Reducer.Components.sendSelectItem(selectWithPaginationParams, id)
+           }
+         />
+       | _ => <div />
+       }}
+    </SLayout>
+  )
+  |> E.React.makeToEl;
 };

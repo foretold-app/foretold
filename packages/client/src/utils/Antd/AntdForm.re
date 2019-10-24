@@ -37,6 +37,7 @@ module Item = {
     _ =
     "";
 
+  [@react.component]
   let make =
       (
         ~prefixCls=?,
@@ -50,7 +51,7 @@ module Item = {
         ~required=?,
         ~style=?,
         ~colon=?,
-        children,
+        ~children,
       ) =>
     ReasonReact.wrapJsForReason(
       ~reactClass,
@@ -88,6 +89,7 @@ external makeProps:
   _ =
   "";
 
+[@react.component]
 let make =
     (
       ~layout=?,
@@ -96,7 +98,7 @@ let make =
       ~className=?,
       ~prefixCls=?,
       ~hideRequiredMark=?,
-      children,
+      ~children,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,

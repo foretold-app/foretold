@@ -7,7 +7,8 @@
 [@bs.obj]
 external makeProps: (~message: string=?, ~_type: string=?, unit) => _ = "";
 
-let make = (~message=?, ~type_=?, children) =>
+[@react.component]
+let make = (~message=?, ~type_=?, ~children) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,
     ~props=makeProps(~message?, ~_type=?type_, ()),

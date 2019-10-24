@@ -1,6 +1,6 @@
 [@bs.config {jsx: 3}];
 
-let component = ReasonReact.statelessComponent("AgentIndex");
+[@react.component]
 let make = () =>
   AgentsGet.QueryComponent.make(({result}) =>
     result

@@ -26,6 +26,7 @@ external makeProps:
 /**
  * Antd.Input does not support some fields (disabled etc).
  */
+[@react.component]
 let make =
     (
       ~htmlType=?,
@@ -39,7 +40,7 @@ let make =
       ~className=?,
       ~style=?,
       ~placeholder=?,
-      children,
+      ~children,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,

@@ -7,24 +7,19 @@ open Style.Grid;
  * functions. Try first of all to create new component.
  **/
 module FloatPoint = {
-  let component = ReasonReact.statelessComponent("FloatPoint");
-  let make = (~value: float, _children) => {
-    ...component,
-    render: _self => {
-      let mainText =
-        Css.style([
-          Css.fontSize(`em(1.1)),
-          Css.color(FC__Settings.darkLink),
-        ]);
+  [@react.component]
+  let make = (~value: float) => {
+    let mainText =
+      Css.style([
+        Css.fontSize(`em(1.1)),
+        Css.color(FC__Settings.darkLink),
+      ]);
 
-      <Div flexDirection=`column>
-        <Div flex={`num(1.)}>
-          <div className=mainText>
-            {value |> E.Float.toFixed |> Utils.ste}
-          </div>
-        </Div>
-      </Div>;
-    },
+    <Div flexDirection=`column>
+      <Div flex={`num(1.)}>
+        <div className=mainText> {value |> E.Float.toFixed |> Utils.ste} </div>
+      </Div>
+    </Div>;
   };
 };
 

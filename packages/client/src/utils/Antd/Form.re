@@ -8,6 +8,8 @@ let optBoolToOptJsBoolean =
 let unwrapBool = v => Js.Undefined.fromOption @@ optBoolToOptJsBoolean(v);
 
 [@bs.module] external form: ReasonReact.reactClass = "antd/lib/form";
+
+[@react.component]
 let make =
     (
       ~layout=?,
@@ -42,6 +44,8 @@ let wrapper = (~component, ~make', ~props, ~children) => {
 
 module Item = {
   [@bs.module "antd/lib/form"] external item: ReasonReact.reactClass = "Item";
+
+  [@react.component]
   let make =
       (
         ~colon=?,

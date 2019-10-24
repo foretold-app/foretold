@@ -22,6 +22,7 @@ external makeProps:
   _ =
   "";
 
+[@react.component]
 let make =
     (
       ~className=?,
@@ -34,7 +35,7 @@ let make =
       ~max=?,
       ~step=?,
       ~disabled=false,
-      children,
+      ~children,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,

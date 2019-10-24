@@ -17,7 +17,9 @@ external makeProps:
   ) =>
   _ =
   "";
-let make = (~value=?, ~defaultValue=?, ~onChange=?, ~className=?, children) =>
+
+[@react.component]
+let make = (~value=?, ~defaultValue=?, ~onChange=?, ~className=?, ~children) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=select,
     ~props=
@@ -38,6 +40,7 @@ module Option = {
 
   [@bs.obj] external makeProps: (~value: string, ~title: string=?) => _ = "";
 
+  [@react.component]
   let make = (~value, ~title=?) =>
     ReasonReact.wrapJsForReason(
       ~reactClass,

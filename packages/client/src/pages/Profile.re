@@ -158,40 +158,38 @@ module CMutationForm =
     type queryType = UserUpdate.Query.t;
   });
 
-let component = ReasonReact.statelessComponent("Profile");
-let make = (~loggedUser: Types.user, _children) => {
-  ...component,
-  render: _ =>
-    <SLayout head={SLayout.Header.textDiv("Edit Profile Information")}>
-      <FC.PageCard.BodyPadding>
-        <UserUpdate.Mutation>
-          ...{(mutation, data) => {
-            let agent = loggedUser.agent;
-            let id = loggedUser.id;
-            let email = loggedUser.email |> E.O.default("");
-            let picture = loggedUser.picture |> E.O.default("");
-            let description = loggedUser.description |> E.O.default("");
-            let name =
-              agent
-              |> E.O.bind(_, (r: Types.agent) => r.name)
-              |> E.O.default("");
+[@react.component]
+let make = (~loggedUser: Types.user) => {
+  <SLayout head={SLayout.Header.textDiv("Edit Profile Information")}>
+    <FC.PageCard.BodyPadding>
+      <UserUpdate.Mutation>
+        ...{(mutation, data) => {
+          let agent = loggedUser.agent;
+          let id = loggedUser.id;
+          let email = loggedUser.email |> E.O.default("");
+          let picture = loggedUser.picture |> E.O.default("");
+          let description = loggedUser.description |> E.O.default("");
+          let name =
+            agent
+            |> E.O.bind(_, (r: Types.agent) => r.name)
+            |> E.O.default("");
 
-            withUserForm(
-              id,
-              name,
-              email,
-              picture,
-              description,
-              mutation,
-              ({send, state, getFieldState}) =>
-              CMutationForm.showWithLoading(
-                ~result=data.result,
-                ~form=formFields(state, send, getFieldState),
-                (),
-              )
-            );
-          }}
-        </UserUpdate.Mutation>
-      </FC.PageCard.BodyPadding>
-    </SLayout>,
+          withUserForm(
+            id,
+            name,
+            email,
+            picture,
+            description,
+            mutation,
+            ({send, state, getFieldState}) =>
+            CMutationForm.showWithLoading(
+              ~result=data.result,
+              ~form=formFields(state, send, getFieldState),
+              (),
+            )
+          );
+        }}
+      </UserUpdate.Mutation>
+    </FC.PageCard.BodyPadding>
+  </SLayout>;
 };

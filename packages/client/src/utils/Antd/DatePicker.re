@@ -20,8 +20,16 @@ external makeProps:
   _ =
   "";
 
+[@react.component]
 let make =
-    (~className=?, ~style=?, ~onChange=?, ~value=?, ~disabled=false, children) =>
+    (
+      ~className=?,
+      ~style=?,
+      ~onChange=?,
+      ~value=?,
+      ~disabled=false,
+      ~children,
+    ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,
     ~props=

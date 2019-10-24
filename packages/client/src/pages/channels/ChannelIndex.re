@@ -10,7 +10,6 @@ let make = (~layout, ~title) =>
   |> layout;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("ChannelIndex");
   let make =
       (~layout=SLayout.FullPage.makeWithEl, ~title="Communities", children) =>
     ReasonReactCompat.wrapReactForReasonReact(

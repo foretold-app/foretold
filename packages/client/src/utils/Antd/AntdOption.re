@@ -9,8 +9,8 @@ external reactClass: ReasonReact.reactClass = "default";
 
 [@bs.obj] external makeProps: (~value: string, ~title: string=?) => _ = "";
 
+[@react.component]
 let make = (~value, ~title=?) => {
-  Js.log(reactClass);
   ReasonReact.wrapJsForReason(
     ~reactClass,
     ~props=makeProps(~value, ~title?),

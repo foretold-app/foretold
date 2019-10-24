@@ -21,7 +21,7 @@ let make =
       ~measurables: array(Types.measurable),
       ~showExtraData: bool,
       ~onSelect=(_m: Types.measurable) => (),
-      ~channelId: option(string)=None,
+      ~channelId=None,
     ) => {
   measurables |> E.A.length > 0
     ? <>

@@ -21,17 +21,18 @@ let changeRoleAction = (agentId, channelId, role, text) =>
   </ChannelMembershipRoleUpdate.Mutation>;
 
 let removeFromChannel = (agentId, channelId) =>
-  ChannelMembershipDelete.Mutation.make((mutation, _) =>
-    <Link
-      linkType={
-        Action(
-          _ => ChannelMembershipDelete.mutate(mutation, agentId, channelId),
-        )
-      }>
-      {"Remove" |> ReasonReact.string}
-    </Link>
-  )
-  |> ReasonReact.element;
+  <ChannelMembershipDelete.Mutation>
+    ...{(mutation, _) =>
+      <Link
+        linkType={
+          Action(
+            _ => ChannelMembershipDelete.mutate(mutation, agentId, channelId),
+          )
+        }>
+        {"Remove" |> ReasonReact.string}
+      </Link>
+    }
+  </ChannelMembershipDelete.Mutation>;
 
 module Columns = {
   type column = Table.column(Types.channelMembership);
@@ -154,8 +155,8 @@ let addMembersButtonSection = (channelId: string) =>
       FC.PageCard.HeaderRow.Styles.itemRightPadding,
     ])}>
     <FC.Base.Button
-      variant=Primary
-      size=MediumShort
+      variant=FC.Base.Button.Primary
+      size=FC.Base.Button.MediumShort
       onClick={e =>
         LinkType.onClick(Internal(ChannelAddMember(channelId)), e)
       }>
@@ -171,8 +172,8 @@ let inviteMemberButtonSection = (channelId: string) =>
       FC.PageCard.HeaderRow.Styles.itemBottomPadding,
     ])}>
     <FC.Base.Button
-      variant=Secondary
-      size=MediumShort
+      variant=FC.Base.Button.Secondary
+      size=FC.Base.Button.MediumShort
       onClick={e =>
         LinkType.onClick(Internal(ChannelInviteMember(channelId)), e)
       }>

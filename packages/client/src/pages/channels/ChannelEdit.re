@@ -30,8 +30,8 @@ let make = (~channelId: string) => {
               {Primary.User.show(
                  loggedUser,
                  <FC.Base.Button
-                   variant=Primary
-                   size=Small
+                   variant=FC.Base.Button.Primary
+                   size=FC.Base.Button.Small
                    onClick={e =>
                      LinkType.onClick(Internal(SeriesNew(channelId)), e)
                    }>
@@ -71,23 +71,25 @@ let make = (~channelId: string) => {
     <FC.PageCard.BodyPadding>
       {loadChannel(
          HttpResponse.fmap(channel =>
-           <ChannelUpdate.Mutation>...{(mutation, data) =>
-                                                    form(mutation, channel, ({send, state}) =>
-                                                      CMutationForm.showWithLoading(
-                                                        ~result=data.result,
-                                                        ~form=
-                                                          ChannelForm.showForm(
-                                                            ~state,
-                                                            ~send,
-                                                            ~creating=false,
-                                                            ~onSubmit=() => send(ChannelForm.Form.Submit),
-                                                            (),
-                                                          ),
-                                                        ~successMessage="Community edited successfully.",
-                                                        (),
-                                                      )
-                                                    )}</ChannelUpdate.Mutation>
-           )
+           <ChannelUpdate.Mutation>
+             ...{(mutation, data) =>
+               form(mutation, channel, ({send, state}) =>
+                 CMutationForm.showWithLoading(
+                   ~result=data.result,
+                   ~form=
+                     ChannelForm.showForm(
+                       ~state,
+                       ~send,
+                       ~creating=false,
+                       ~onSubmit=() => send(ChannelForm.Form.Submit),
+                       (),
+                     ),
+                   ~successMessage="Community edited successfully.",
+                   (),
+                 )
+               )
+             }
+           </ChannelUpdate.Mutation>
          )
          ||> HttpResponse.withReactDefaults,
        )}

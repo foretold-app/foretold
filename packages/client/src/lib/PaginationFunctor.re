@@ -373,7 +373,7 @@ module Make = (Config: Config) => {
         ~itemsPerPage=20,
         ~callFnParams: Config.callFnParams,
         ~subComponent,
-        _children,
+        ~children=ReasonReact.null,
       ) => {
     //
     //    initialState: () => {

@@ -20,12 +20,7 @@ module Reducer = PaginationFunctor.Make(ReducerConfig);
 type pageParams = {id: string};
 
 [@react.component]
-let make =
-    (
-      ~channelId: option(string)=None,
-      ~agentId: option(string)=None,
-      ~layout,
-    ) => {
+let make = (~channelId=None, ~agentId: option(string)=None, ~layout) => {
   let pagination = (reducerParams: Reducer.Types.reducerParams) =>
     <Div>
       <Div

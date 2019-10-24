@@ -9,10 +9,6 @@ module CMutationForm =
 
 [@react.component]
 let make = _children => {
-  let mutationMake =
-    ChannelCreate.Mutation.make(~onCompleted=_e => Js.log("HI"))
-    ||> E.React.el;
-
   let form = mutation =>
     ChannelForm.Form.make(
       ~onSubmit=
@@ -36,30 +32,32 @@ let make = _children => {
 
   let body =
     <FC.PageCard.BodyPadding>
-      {mutationMake((mutation, data) =>
-         form(mutation, ({send, state}) =>
-           CMutationForm.showWithLoading2(
-             ~result=data.result,
-             ~form=
-               ChannelForm.showForm(
-                 ~state,
-                 ~send,
-                 ~onSubmit=() => send(ChannelForm.Form.Submit),
-                 (),
-               ),
-             ~onSuccess=
-               (response: ChannelCreate.Query.t) => {
-                 switch (response##channelCreate) {
-                 | Some(channel) =>
-                   Routing.Url.push(ChannelShow(channel##id))
-                 | _ => ()
-                 };
-                 ReasonReact.null;
-               },
-             (),
-           )
-         )
-       )}
+      <ChannelCreate.Mutation>
+        ...{(mutation, data) =>
+          form(mutation, ({send, state}) =>
+            CMutationForm.showWithLoading2(
+              ~result=data.result,
+              ~form=
+                ChannelForm.showForm(
+                  ~state,
+                  ~send,
+                  ~onSubmit=() => send(ChannelForm.Form.Submit),
+                  (),
+                ),
+              ~onSuccess=
+                (response: ChannelCreate.Query.t) => {
+                  switch (response##channelCreate) {
+                  | Some(channel) =>
+                    Routing.Url.push(ChannelShow(channel##id))
+                  | _ => ()
+                  };
+                  ReasonReact.null;
+                },
+              (),
+            )
+          )
+        }
+      </ChannelCreate.Mutation>
     </FC.PageCard.BodyPadding>;
 
   <SLayout head={SLayout.Header.textDiv("Create a New Community")}>

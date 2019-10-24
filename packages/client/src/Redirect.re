@@ -16,7 +16,7 @@ let make = (~appContext: Providers.appContext) => {
          switch (agent.name) {
          | Some("") =>
            Routing.Url.push(Profile);
-           Antd.Message.info(Lang.nameIsEmpty |> Utils.ste, 30.) |> ignore;
+           Antd.Message.info(Lang.nameIsEmpty |> Utils.ste, 30) |> ignore;
            ();
          | _ => ()
          }

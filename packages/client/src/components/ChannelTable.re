@@ -15,7 +15,7 @@ module Columns = {
             </Link>
             {r.description
              |> E.O.React.fmapOrNull(description =>
-                  <Markdown source=description />
+                  <ReactMarkdown source=description />
                 )}
           </div>,
       ~flex=4,

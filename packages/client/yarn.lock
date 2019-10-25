@@ -2034,11 +2034,6 @@ bs-platform@^4.0.8:
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-4.0.18.tgz#d17b8693ba1f714d9b27e0ddb365f2069ba4b8a0"
   integrity sha512-BwzW0iYHvREqUZIgQxJmdJrxexppLvJxYQ4LLexbhCp7uZU5DIZ5ub4ZHpkCkc8fn8bsXWc+Rrejb3csi+BoAQ==
 
-bs-react-markdown@0.0.9:
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/bs-react-markdown/-/bs-react-markdown-0.0.9.tgz#22712dd19d66368544f276198fe53c7b13003ef0"
-  integrity sha512-shTQe94BSEecbFBu1F+TNhKbazmBtpkGP87CS0Rm5A23A8kfY/2n0XdMiapVjolylnqZFZM11KgVjpX0ZU6dVQ==
-
 bsb-js@1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/bsb-js/-/bsb-js-1.1.7.tgz#12cc91e974f5896b3a2aa8358419d24e56f552c3"

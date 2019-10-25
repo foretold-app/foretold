@@ -119,7 +119,6 @@ module Helpers = {
        |> Utils.ste}
     </div>;
 
-  //@todo: 1
   let getDescription = (~m: measurement): option(React.element) => {
     switch (m.description) {
     | None
@@ -127,7 +126,7 @@ module Helpers = {
     | Some(description) =>
       Some(
         <div className=Styles.descriptionStyle>
-          {"<ReactMarkdown.Markdown source=description />" |> Utils.ste}
+          <ReactMarkdown source=description />
         </div>,
       )
     };

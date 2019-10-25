@@ -2,7 +2,6 @@
 
 open E;
 open Utils;
-open Antd;
 
 type state = {
   // -> Measurement.value
@@ -78,13 +77,17 @@ let competitorTypeSelect =
 };
 
 let dataTypeSelect = (~state, ~send): ReasonReact.reactElement =>
-  <Select
+  <Antd.Select
     value={state.dataType}
     onChange={e => send(UpdateDataType(e))}
     className=Styles.fullWidth>
-    <Select.Option value="FLOAT_CDF"> {"Distribution" |> ste} </Select.Option>
-    <Select.Option value="FLOAT_POINT"> {"Exact Value" |> ste} </Select.Option>
-  </Select>;
+    <Antd.Select.Option value="FLOAT_CDF">
+      {"Distribution" |> ste}
+    </Antd.Select.Option>
+    <Antd.Select.Option value="FLOAT_POINT">
+      {"Exact Value" |> ste}
+    </Antd.Select.Option>
+  </Antd.Select>;
 
 let getIsValid = (state: state): bool => {
   switch (state.dataType) {
@@ -156,24 +159,24 @@ let botsSelect =
     <div className=Styles.inputBox>
       <h4 className=Styles.label> {"Do this as:" |> ste} </h4>
     </div>
-    <Select
+    <Antd.Select
       value={state.asAgent}
       onChange={e => send(UpdateAsAgent(e))}
       className=Styles.fullWidth>
-      <Select.Option value=""> {name |> ste} </Select.Option>
+      <Antd.Select.Option value=""> {name |> ste} </Antd.Select.Option>
       {bots
        |> Array.map((bot: Types.bot) =>
-            <Select.Option
+            <Antd.Select.Option
               value={
                 bot.agent
                 |> E.O.fmap((agent: Types.agent) => agent.id)
                 |> E.O.default("")
               }>
               {bot.name |> E.O.default(bot.id) |> ste}
-            </Select.Option>
+            </Antd.Select.Option>
           )
        |> ReasonReact.array}
-    </Select>
+    </Antd.Select>
   </>;
 };
 
@@ -197,13 +200,13 @@ module ValueInput = {
     />;
 
   let boolean = (binaryValue, send) =>
-    <Select
+    <Antd.Select
       value={binaryValue |> E.Bool.toString}
       className=Styles.fullWidth
       onChange={e => send(UpdateBinary(e |> E.Bool.fromString))}>
-      <Select.Option value="TRUE"> {"True" |> ste} </Select.Option>
-      <Select.Option value="FALSE"> {"False" |> ste} </Select.Option>
-    </Select>;
+      <Antd.Select.Option value="TRUE"> {"True" |> ste} </Antd.Select.Option>
+      <Antd.Select.Option value="FALSE"> {"False" |> ste} </Antd.Select.Option>
+    </Antd.Select>;
 
   let percentage = (percentageValue, send) =>
     <>
@@ -236,37 +239,37 @@ module ValueInput = {
     </>;
 
   let unresolvable = (unresolvableResolution, send) =>
-    <Select
+    <Antd.Select
       value=unresolvableResolution
       className=Styles.fullWidth
       onChange={e => send(UpdateUnresolvableResolution(e))}>
-      <Select.Option value="AMBIGUOUS">
+      <Antd.Select.Option value="AMBIGUOUS">
         {"Result Ambiguous" |> ste}
-      </Select.Option>
-      <Select.Option value="RESULT_NOT_AVAILABLE">
+      </Antd.Select.Option>
+      <Antd.Select.Option value="RESULT_NOT_AVAILABLE">
         {"Result Not Available" |> ste}
-      </Select.Option>
-      <Select.Option value="FALSE_CONDITIONAL">
+      </Antd.Select.Option>
+      <Antd.Select.Option value="FALSE_CONDITIONAL">
         {"Necessary Conditional was False" |> ste}
-      </Select.Option>
-      <Select.Option value="OTHER"> {"Other" |> ste} </Select.Option>
-    </Select>;
+      </Antd.Select.Option>
+      <Antd.Select.Option value="OTHER"> {"Other" |> ste} </Antd.Select.Option>
+    </Antd.Select>;
 
   let comment = (comment, send) =>
-    <Select
+    <Antd.Select
       value=comment
       onChange={e => send(UpdateComment(e))}
       className=Styles.fullWidth>
-      <Select.Option value="GENERIC">
+      <Antd.Select.Option value="GENERIC">
         {"Generic Comment" |> ste}
-      </Select.Option>
-      <Select.Option value="QUESTION_FEEDBACK">
+      </Antd.Select.Option>
+      <Antd.Select.Option value="QUESTION_FEEDBACK">
         {"Question Feedback" |> ste}
-      </Select.Option>
-      <Select.Option value="UPDATE">
+      </Antd.Select.Option>
+      <Antd.Select.Option value="UPDATE">
         {"Relevant Information Update" |> ste}
-      </Select.Option>
-    </Select>;
+      </Antd.Select.Option>
+    </Antd.Select>;
 };
 
 let mainBlock =
@@ -330,7 +333,7 @@ let mainBlock =
               <FC.HelpDropdown
                 content=FC.HelpDropdown.{
                   headerContent: "Distribution Editor" |> ste,
-                  bodyContent: <Markdown source=tutorialSource />,
+                  bodyContent: <ReactMarkdown source=tutorialSource />,
                 }
               />
             </span>
@@ -410,7 +413,7 @@ let mainBlock =
       </div>
       getDataTypeSelect
       valueInput
-      <Input.TextArea
+      <Antd.Input.TextArea
         value={state.description}
         onChange={event => {
           let value = ReactEvent.Form.target(event)##value;

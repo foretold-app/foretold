@@ -16,8 +16,6 @@ let mapUrlToAction = (state, url: ReasonReact.Router.url) => {
 let firstStateUpdate = (_state, url: ReasonReact.Router.url) => {
   let route = url |> Routing.Route.fromUrl;
   let authToken = url |> Auth.UrlToTokens.make;
-  // @todo: remove side effect
-  //  KeyValuePairs.clearHash(url, "token") |> ReasonReact.Router.replace;
   ChangeState({authToken, route});
 };
 

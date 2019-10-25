@@ -24,7 +24,6 @@ let make =
         Primary.Permissions.can(`LEAVE_CHANNEL, channel.permissions),
         SimpleHeader.leaveChannel(channelId),
       );
-    // @todo: 1
     <>
       <Div float=`left flexDirection=`column>
         <Div flex={`num(1.0)}> {channelLink(channel)} </Div>
@@ -33,7 +32,7 @@ let make =
               <Div
                 flex={`num(1.0)}
                 styles=[Css.(style([marginTop(`em(0.5))]))]>
-                {"<ReactMarkdown.Markdown source />" |> Utils.ste}
+                <ReactMarkdown source />
               </Div>
             )}
       </Div>

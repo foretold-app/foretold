@@ -1,7 +1,5 @@
 [@bs.config {jsx: 3}];
 
-open Utils;
-
 module Styles = {
   open Css;
   let centerBlock = style([textAlign(`center), padding(`em(2.))]);

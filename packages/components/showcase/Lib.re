@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open FC.Base;
 open EntryTypes;
 
@@ -162,7 +160,7 @@ module Index = {
     };
   };
 
-  let make = () => {
+  let make = _children => {
     ...component,
     initialState: () => {
       /* Not the correct url at this point */

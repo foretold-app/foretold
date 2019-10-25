@@ -43,13 +43,14 @@ module Styles = {
 let load2Queries = (channelId, seriesId, itemsPerPage, fn) =>
   ((a, b, c) => (a, b, c) |> fn)
   |> E.F.flatten3Callbacks(
-       Reducer.make(~itemsPerPage, ~callFnParams=seriesId, ~subComponent=_),
+       subComponent =>
+         <Reducer itemsPerPage callFnParams=seriesId subComponent />,
        ChannelGet.component2(~id=channelId),
        SeriesGet.component(~id=seriesId),
      );
 
 [@react.component]
-let make = (~channelId: string, ~id: string, _children) => {
+let make = (~channelId: string, ~id: string) => {
   let loadData = load2Queries(channelId, id, 50);
 
   loadData(((selectWithPaginationParams, channel, series)) =>
@@ -92,6 +93,5 @@ let make = (~channelId: string, ~id: string, _children) => {
        | _ => <div />
        }}
     </SLayout>
-  )
-  |> E.React.makeToEl;
+  );
 };

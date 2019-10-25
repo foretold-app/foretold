@@ -1,6 +1,5 @@
 [@bs.config {jsx: 3}];
 
-open Utils;
 open Rationale.Option.Infix;
 
 type direction = Primary.Connection.direction;
@@ -313,7 +312,7 @@ module Make = (Config: Config) => {
             onClick: _ => reducerParams.send(Types.NextSelection),
           },
         })
-      | _ => "" |> ste
+      | _ => "" |> ReasonReact.string
       };
 
     let paginationPage = reducerParams =>
@@ -335,7 +334,7 @@ module Make = (Config: Config) => {
             onClick: _ => reducerParams.send(Types.NextPage),
           },
         })
-      | _ => "" |> ste
+      | _ => "" |> ReasonReact.string
       };
 
     let findIndexOfId =
@@ -369,21 +368,7 @@ module Make = (Config: Config) => {
 
   [@react.component]
   let make =
-      (
-        ~itemsPerPage=20,
-        ~callFnParams: Config.callFnParams,
-        ~subComponent,
-        ~children=ReasonReact.null,
-      ) => {
-    //
-    //    initialState: () => {
-    //      itemState: ItemUnselected,
-    //      response: Loading,
-    //      pageConfig: {
-    //        direction: None,
-    //      },
-    //    },
-    //
+      (~itemsPerPage=20, ~callFnParams: Config.callFnParams, ~subComponent) => {
     //    reducer: (action, state: state) =>
     //      switch (action) {
     //      | UpdateResponse(response) =>
@@ -415,30 +400,38 @@ module Make = (Config: Config) => {
     //        | None => ReasonReact.NoUpdate
     //        };
     //      },
-    //
-    //    render: ({state, send}) => {
-    //      let innerComponentFn = response => {
-    //        if (!HttpResponse.isEq(state.response, response, compareItems)) {
-    //          send(UpdateResponse(response));
-    //        };
-    //
-    //        subComponent({
-    //          itemsPerPage,
-    //          itemState: state.itemState,
-    //          response: state.response,
-    //          selection: Reducers.State.selection(state),
-    //          send,
-    //        });
-    //      };
-    //
-    //      Config.callFn(
-    //        callFnParams,
-    //        ~direction=state.pageConfig.direction,
-    //        ~pageLimit=Js.Json.number(itemsPerPage |> float_of_int),
-    //        ~innerComponentFn,
-    //      );
-    //    },
-    // @todo: 1
-    ReasonReact.null;
+
+    let send = (action: action) => {
+      ();
+    };
+
+    let state = {
+      itemState: ItemUnselected,
+      response: Loading,
+      pageConfig: {
+        direction: None,
+      },
+    };
+
+    let innerComponentFn = response => {
+      if (!HttpResponse.isEq(state.response, response, compareItems)) {
+        send(UpdateResponse(response));
+      };
+
+      subComponent({
+        itemsPerPage,
+        itemState: state.itemState,
+        response: state.response,
+        selection: Reducers.State.selection(state),
+        send,
+      });
+    };
+
+    Config.callFn(
+      callFnParams,
+      ~direction=state.pageConfig.direction,
+      ~pageLimit=Js.Json.number(itemsPerPage |> float_of_int),
+      ~innerComponentFn,
+    );
   };
 };

@@ -369,48 +369,43 @@ module Make = (Config: Config) => {
   [@react.component]
   let make =
       (~itemsPerPage=20, ~callFnParams: Config.callFnParams, ~subComponent) => {
-    //    reducer: (action, state: state) =>
-    //      switch (action) {
-    //      | UpdateResponse(response) =>
-    //        ReasonReact.Update({
-    //          response,
-    //          itemState: state.itemState,
-    //          pageConfig: state.pageConfig,
-    //        })
-    //
-    //      | _ =>
-    //        let newState =
-    //          switch (state) {
-    //          | {itemState: ItemUnselected} =>
-    //            Reducers.ItemUnselected.newState(itemsPerPage, state, action)
-    //
-    //          | {itemState: ItemSelected(itemSelected)} =>
-    //            Reducers.ItemSelected.newState(itemsPerPage, itemSelected, action)
-    //            |> E.O.fmap(itemState => (itemState, state.pageConfig))
-    //          };
-    //
-    //        switch (newState) {
-    //        | Some((itemState, pageConfig)) =>
-    //          ReasonReact.Update({
-    //            response: state.response,
-    //            itemState,
-    //            pageConfig,
-    //          })
-    //
-    //        | None => ReasonReact.NoUpdate
-    //        };
-    //      },
+    let (state, setState) =
+      React.useState(() =>
+        {
+          itemState: ItemUnselected,
+          response: Loading,
+          pageConfig: {
+            direction: None,
+          },
+        }
+      );
 
     let send = (action: action) => {
-      ();
-    };
+      switch (action) {
+      | UpdateResponse(response) =>
+        setState(_ =>
+          {response, itemState: state.itemState, pageConfig: state.pageConfig}
+        )
 
-    let state = {
-      itemState: ItemUnselected,
-      response: Loading,
-      pageConfig: {
-        direction: None,
-      },
+      | _ =>
+        let newState =
+          switch (state) {
+          | {itemState: ItemUnselected} =>
+            Reducers.ItemUnselected.newState(itemsPerPage, state, action)
+
+          | {itemState: ItemSelected(itemSelected)} =>
+            Reducers.ItemSelected.newState(itemsPerPage, itemSelected, action)
+            |> E.O.fmap(itemState => (itemState, state.pageConfig))
+          };
+
+        switch (newState) {
+        | Some((itemState, pageConfig)) =>
+          setState(_ => {response: state.response, itemState, pageConfig})
+
+        | None => ()
+        };
+      };
+      ();
     };
 
     let innerComponentFn = response => {

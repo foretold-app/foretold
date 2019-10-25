@@ -88,7 +88,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
       switch (loggedUser) {
       | Some(loggedUser) =>
         <AntdForm onSubmit={_e => onSubmit()}>
-          {E.React.showIf(
+          {E.React2.showIf(
              creating,
              <Antd.Form.Item
                label={"Question Type" |> Utils.ste}
@@ -110,7 +110,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                </Antd.Radio.Group>
              </Antd.Form.Item>,
            )}
-          {E.React.showIf(
+          {E.React2.showIf(
              state.values.showDescriptionProperty == "FALSE",
              <>
                <Antd.Form.Item
@@ -124,7 +124,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                </Antd.Form.Item>
              </>,
            )}
-          {E.React.showIf(
+          {E.React2.showIf(
              !creating,
              loggedUser.agent
              |> E.O.fmap((agent: Types.agent) =>
@@ -156,7 +156,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                 )
              |> E.O.React.defaultNull,
            )}
-          {E.React.showIf(
+          {E.React2.showIf(
              state.values.showDescriptionProperty == "TRUE",
              <>
                <p />
@@ -249,7 +249,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
               }
             />
           </Antd.Form.Item>
-          {E.React.showIf(
+          {E.React2.showIf(
              state.values.valueType == "FLOAT",
              <>
                <Antd.Form.Item

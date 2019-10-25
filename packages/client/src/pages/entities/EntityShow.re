@@ -18,7 +18,7 @@ let display = id => {
              {Ken.findName(r.propertyId)
               |> E.O.default("no-name")
               |> ste
-              |> E.React.inH3}
+              |> E.React2.inH3}
              BsKen.Graph_T.T.(
                switch (r.value.valueType) {
                | String(s) => s |> ste

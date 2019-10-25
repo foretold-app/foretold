@@ -39,7 +39,7 @@ let make = (~id: string) => {
                    measurableId=id
                    isCreator={userAgentId == Some(creatorId)}
                  />
-               : E.React.null;
+               : E.React2.null;
 
            <>
              <Div styles=[Styles.header]>
@@ -55,7 +55,7 @@ let make = (~id: string) => {
                     |> E.O.React.defaultNull}
                    {MeasurableItems.creatorLink(~m=measurable)
                     |> E.O.React.defaultNull}
-                   {E.React.showIf(
+                   {E.React2.showIf(
                       Primary.Permissions.can(
                         `MEASURABLE_UPDATE,
                         measurable.permissions,

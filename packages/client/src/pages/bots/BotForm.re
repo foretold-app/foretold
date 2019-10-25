@@ -64,7 +64,7 @@ let withForm = (onSubmit, bot: option(Types.bot), innerComponentFn) => {
       |]),
     innerComponentFn,
   )
-  |> E.React.el;
+  |> E.React2.el;
 };
 
 let onSuccess = (loggedUser: Types.user, ()) => {
@@ -78,7 +78,7 @@ let formFields = (state: Form.state, send, onSubmit) =>
   <FC__PageCard.BodyPadding>
     <Antd.Form onSubmit={e => onSubmit()}>
       <Antd.Form.Item>
-        {"Name" |> ReasonReact.string |> E.React.inH3}
+        {"Name" |> ReasonReact.string |> E.React2.inH3}
         <Antd.Input
           value={state.values.name}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -87,7 +87,7 @@ let formFields = (state: Form.state, send, onSubmit) =>
         />
       </Antd.Form.Item>
       <Antd.Form.Item>
-        {"Description" |> ReasonReact.string |> E.React.inH3}
+        {"Description" |> ReasonReact.string |> E.React2.inH3}
         <Antd.Input
           value={state.values.description}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -96,7 +96,7 @@ let formFields = (state: Form.state, send, onSubmit) =>
         />
       </Antd.Form.Item>
       <Antd.Form.Item>
-        {"Picture" |> ReasonReact.string |> E.React.inH3}
+        {"Picture" |> ReasonReact.string |> E.React2.inH3}
         <Antd.Input
           value={state.values.picture}
           onChange={ReForm.Helpers.handleDomFormChange(e =>

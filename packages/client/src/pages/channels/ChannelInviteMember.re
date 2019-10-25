@@ -52,7 +52,7 @@ let fields = (form: Form.state, send, onSubmit, getFieldState) => {
 
   <Antd.Form onSubmit={e => onSubmit()}>
     <Antd.Form.Item>
-      {"Email*:" |> Utils.ste |> E.React.inH3}
+      {"Email*:" |> Utils.ste |> E.React2.inH3}
       <AntdInput
         value={form.values.email}
         onChange={ReForm.Helpers.handleDomFormChange(e =>

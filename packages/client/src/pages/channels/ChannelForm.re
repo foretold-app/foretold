@@ -66,7 +66,7 @@ let showForm = (~state: Form.state, ~creating=true, ~onSubmit, ~send, ()) => {
         }
       />
     </Antd.Form.Item>
-    {E.React.showIf(
+    {E.React2.showIf(
        !creating,
        <Antd.Form.Item label={"Archive community" |> Utils.ste}>
          <AntdSwitch

@@ -69,7 +69,7 @@ let withUserForm =
       |]),
     innerComponentFn,
   )
-  |> E.React.el;
+  |> E.React2.el;
 
 let formFields = (state: Form.state, send, getFieldState) => {
   let onSubmit = () => send(Form.Submit);
@@ -103,7 +103,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
 
   <Antd.Form onSubmit={_e => onSubmit()}>
     <Antd.Form.Item>
-      {"Username" |> Utils.ste |> E.React.inH3}
+      {"Username" |> Utils.ste |> E.React2.inH3}
       <Antd.Input
         value={state.values.name}
         onChange={ReForm.Helpers.handleDomFormChange(e => {
@@ -114,7 +114,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
       {error(stateName)}
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"Description" |> Utils.ste |> E.React.inH3}
+      {"Description" |> Utils.ste |> E.React2.inH3}
       <Antd.Input
         value={state.values.description}
         onChange={ReForm.Helpers.handleDomFormChange(e => {
@@ -124,7 +124,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"Email" |> Utils.ste |> E.React.inH3}
+      {"Email" |> Utils.ste |> E.React2.inH3}
       <AntdInput
         value={state.values.email}
         disabled=true
@@ -135,7 +135,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"Picture URL" |> Utils.ste |> E.React.inH3}
+      {"Picture URL" |> Utils.ste |> E.React2.inH3}
       <Antd.Input
         value={state.values.picture}
         onChange={ReForm.Helpers.handleDomFormChange(e => {

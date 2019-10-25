@@ -79,7 +79,7 @@ let withForm = (mutation, channelId, innerComponentFn) =>
     ~schema=Form.Validation.Schema([||]),
     innerComponentFn,
   )
-  |> E.React.el;
+  |> E.React2.el;
 
 let formFields = (form: Form.state, send, onSubmit) =>
   <Antd.Form onSubmit={e => onSubmit()}>
@@ -88,7 +88,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
        |> Utils.ste}
     </h3>
     <Antd.Form.Item>
-      {"Name" |> Utils.ste |> E.React.inH3}
+      {"Name" |> Utils.ste |> E.React2.inH3}
       <Input
         value={form.values.name}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -97,7 +97,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"Description" |> Utils.ste |> E.React.inH3}
+      {"Description" |> Utils.ste |> E.React2.inH3}
       <Input
         value={form.values.description}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -106,7 +106,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"Subjects" |> Utils.ste |> E.React.inH3}
+      {"Subjects" |> Utils.ste |> E.React2.inH3}
       {form.values.subjects
        |> E.L.fmapi((i, r) =>
             <Input
@@ -136,7 +136,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
       </Button>
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"Properties" |> Utils.ste |> E.React.inH3}
+      {"Properties" |> Utils.ste |> E.React2.inH3}
       {form.values.properties
        |> E.L.fmapi((i, r) =>
             <Input
@@ -166,7 +166,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
       </Button>
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"Dates" |> Utils.ste |> E.React.inH3}
+      {"Dates" |> Utils.ste |> E.React2.inH3}
       {form.values.dates
        |> E.L.fmapi((i, r) =>
             <DatePicker

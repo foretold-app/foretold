@@ -77,7 +77,7 @@ module Columns = {
             <div>
               {switch (membership.role, membership.agent) {
                | (`VIEWER, Some(agent)) =>
-                 E.React.showIf(
+                 E.React2.showIf(
                    Primary.Permissions.can(
                      `CHANNEL_MEMBERSHIP_ROLE_UPDATE,
                      membership.permissions,
@@ -90,7 +90,7 @@ module Columns = {
                    ),
                  )
                | (`ADMIN, Some(agent)) =>
-                 E.React.showIf(
+                 E.React2.showIf(
                    Primary.Permissions.can(
                      `CHANNEL_MEMBERSHIP_ROLE_UPDATE,
                      membership.permissions,

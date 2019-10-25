@@ -14,7 +14,7 @@ module Make = (Config: Config) => {
     switch (result) {
     | Loading => <Spin />
     | Error(e) => <> {"Error: " ++ e##message |> ste} form </>
-    | Data(_) => successMessage |> ste |> E.React.inH2
+    | Data(_) => successMessage |> ste |> E.React2.inH2
     | NotCalled => form
     };
 

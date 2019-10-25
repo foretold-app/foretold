@@ -14,13 +14,13 @@ let make =
 
   let topOrdinaryChannel = (channel: Types.channel) => {
     let joinButton = channelId =>
-      E.React.showIf(
+      E.React2.showIf(
         Primary.Permissions.can(`JOIN_CHANNEL, channel.permissions),
         SimpleHeader.joinChannel(channelId),
       );
 
     let leaveButton = channelId =>
-      E.React.showIf(
+      E.React2.showIf(
         Primary.Permissions.can(`LEAVE_CHANNEL, channel.permissions),
         SimpleHeader.leaveChannel(channelId),
       );

@@ -203,10 +203,10 @@ module Helpers = {
 
     if (isJudge) {
       <div className=judgementStyle>
-        {"Resolution" |> ste |> E.React.inH3}
+        {"Resolution" |> ste |> E.React2.inH3}
         {switch (aLink) {
          | Some(name) => <> name </>
-         | None => E.React.null
+         | None => E.React2.null
          }}
       </div>;
     } else {

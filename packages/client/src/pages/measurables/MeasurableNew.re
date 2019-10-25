@@ -71,7 +71,7 @@ let make = (~channelId) => {
                (),
              )
            )
-           |> E.React.el
+           |> E.React2.el
          }
        </MeasurableCreate.Mutation>}
     </FC.PageCard.BodyPadding>

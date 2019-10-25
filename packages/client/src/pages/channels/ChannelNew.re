@@ -28,7 +28,7 @@ let make = () => {
       },
       ~schema=ChannelForm.Form.Validation.Schema([||]),
     )
-    ||> E.React.el;
+    ||> E.React2.el;
 
   let body =
     <FC.PageCard.BodyPadding>

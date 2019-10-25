@@ -63,22 +63,22 @@ let make =
                 <FC.Table.Cell
                   flex={`num(1.)}
                   className=Css.(style([paddingTop(`em(0.5))]))>
-                  {E.React.showIf(
+                  {E.React2.showIf(
                      channelId == Some("home"),
                      MeasurableItems.channelLink(~m),
                    )}
-                  {E.React.showIf(
+                  {E.React2.showIf(
                      showExtraData,
                      MeasurableItems.series(~m, ~channelId, ())
                      |> E.O.React.defaultNull,
                    )}
-                  {E.React.showIf(
+                  {E.React2.showIf(
                      showExtraData,
                      MeasurableItems.creatorLink(~m) |> E.O.React.defaultNull,
                    )}
                   {MeasurableItems.measurements(~m) |> E.O.React.defaultNull}
                   {MeasurableItems.measurers(~m) |> E.O.React.defaultNull}
-                  {E.React.showIf(iAmOwner, MeasurableItems.editLink(~m))}
+                  {E.React2.showIf(iAmOwner, MeasurableItems.editLink(~m))}
                 </FC.Table.Cell>
               </FC.Table.Row>;
             })

@@ -643,7 +643,7 @@ module CompetitorType = {
         {\"Close without Answer\" |> ste}
       </Antd.Select.Option>"
       |> Utils.ste
-    | `AGGREGATION => E.React.null
+    | `AGGREGATION => E.React2.null
     };
 
   let availableSelections =

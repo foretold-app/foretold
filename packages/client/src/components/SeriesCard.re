@@ -36,11 +36,11 @@ let make = (~series: SeriesCollectionGet.series) => {
       {series.name |> E.O.default("") |> ste}
     </span>
     {series.description
-     |> E.O.fmap(d => d |> ste |> E.React.inP)
+     |> E.O.fmap(d => d |> ste |> E.React2.inP)
      |> E.O.React.defaultNull}
     {series.measurableCount
      |> E.O.fmap(d =>
-          d |> string_of_int |> (e => e ++ " items") |> ste |> E.React.inP
+          d |> string_of_int |> (e => e ++ " items") |> ste |> E.React2.inP
         )
      |> E.O.React.defaultNull}
   </div>;

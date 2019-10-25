@@ -7,7 +7,7 @@ let make = () =>
       result
       |> ApolloUtils.apolloResponseToResult
       |> E.R.fmap(d => d##agents)
-      |> E.R.fmap(_ => E.React.null)
+      |> E.R.fmap(_ => E.React2.null)
       |> E.R.id
     }
   </AgentsGet.QueryComponent>;

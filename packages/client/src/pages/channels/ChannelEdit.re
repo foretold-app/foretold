@@ -65,7 +65,7 @@ let make = (~channelId: string) => {
       },
       ~schema=ChannelForm.Form.Validation.Schema([||]),
     )
-    ||> E.React.el;
+    ||> E.React2.el;
 
   <SLayout head>
     <FC.PageCard.BodyPadding>

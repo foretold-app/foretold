@@ -30,7 +30,6 @@ let make = () => {
   //    | ChangeState(state) => ReasonReact.Update(state)
   //    },
   //
-  //  initialState: () => {route: Home, authToken: None},
   //
   //  didMount: self => {
   //    let initUrl = ReasonReact.Router.dangerouslyGetInitialUrl();
@@ -45,42 +44,39 @@ let make = () => {
   //
   //    self.onUnmount(() => ReasonReact.Router.unwatchUrl(watcherID));
   //  },
-  //
-  //  render: self => {
-  //    let state = self.state;
-  //
-  //    let getUser = fn => {
-  //      let serverJwt = ServerJwt.make_from_storage();
-  //      let auth0tokens = Auth0Tokens.make_from_storage();
-  //      let authToken = state.authToken;
-  //
-  //      switch (serverJwt, authToken, auth0tokens) {
-  //      | (Some(_), _, _) => UserGet.inner(fn)
-  //      | (_, None, None) => fn(None)
-  //      | (_, _, _) => Authentication.component(auth0tokens, authToken)
-  //      };
-  //    };
-  //
-  //    <ReasonApollo.Provider client=appApolloClient>
-  //      {GlobalSettingGet.inner((globalSetting: option(Types.globalSetting)) =>
-  //         getUser((loggedUser: option(Types.user)) => {
-  //           let appContext: Providers.appContext = {
-  //             route: state.route,
-  //             authToken: state.authToken,
-  //             loggedUser,
-  //             globalSetting,
-  //           };
-  //
-  //           <Providers.AppContext.Provider value=appContext>
-  //             <Navigator route={state.route} loggedUser />
-  //             <Redirect appContext />
-  //             <Intercom />
-  //             <CheckSession />
-  //           </Providers.AppContext.Provider>;
-  //         })
-  //       )}
-  //    </ReasonApollo.Provider>;
-  //  },
+
   // @todo: 1
-  ReasonReact.null;
+  let state = {route: Home, authToken: None};
+
+  let getUser = fn => {
+    let serverJwt = ServerJwt.make_from_storage();
+    let auth0tokens = Auth0Tokens.make_from_storage();
+    let authToken = state.authToken;
+
+    switch (serverJwt, authToken, auth0tokens) {
+    | (Some(_), _, _) => UserGet.inner(fn)
+    | (_, None, None) => fn(None)
+    | (_, _, _) => Authentication.component(auth0tokens, authToken)
+    };
+  };
+
+  <ReasonApollo.Provider client=appApolloClient>
+    {GlobalSettingGet.inner((globalSetting: option(Types.globalSetting)) =>
+       getUser((loggedUser: option(Types.user)) => {
+         let appContext: Providers.appContext = {
+           route: state.route,
+           authToken: state.authToken,
+           loggedUser,
+           globalSetting,
+         };
+
+         <Providers.AppContext.Provider value=appContext>
+           <Navigator route={state.route} loggedUser />
+           <Redirect appContext />
+           <Intercom />
+           <CheckSession />
+         </Providers.AppContext.Provider>;
+       })
+     )}
+  </ReasonApollo.Provider>;
 };

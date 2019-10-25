@@ -252,7 +252,7 @@ module FloatCdf = {
     Rationale.Option.fmap(((_, x)) => x, firstAbove(min, t));
 };
 
-module React = {
+module React2 = {
   let el = ReasonReact.element;
   let null = ReasonReact.null;
   let str = ReasonReact.string;

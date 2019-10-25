@@ -9,7 +9,7 @@ module Functor = (Ken: KenTools.KenModule) => {
            {Ken.findName(r.propertyId)
             |> E.O.default("no-name")
             |> Utils.ste
-            |> E.React.inH3}
+            |> E.React2.inH3}
            BsKen.Graph_T.T.(
              switch (r.value.valueType) {
              | String(s) => s |> Utils.ste

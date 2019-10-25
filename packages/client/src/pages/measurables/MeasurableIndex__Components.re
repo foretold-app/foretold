@@ -152,14 +152,14 @@ let toLayoutInput =
     </>
 
   | WithoutChannel(_) =>
-    <SLayout head=E.React.null isFluid=true> {"No channel." |> ste} </SLayout>
+    <SLayout head=E.React2.null isFluid=true> {"No channel." |> ste} </SLayout>
 
   | InvalidIndexError(_) =>
-    <SLayout head=E.React.null isFluid=true>
+    <SLayout head=E.React2.null isFluid=true>
       {"Item Not Valid" |> ste}
     </SLayout>
 
   | WithChannelButNotQuery(_c) =>
-    <SLayout head=E.React.null isFluid=true> <Spin /> </SLayout>
+    <SLayout head=E.React2.null isFluid=true> <Spin /> </SLayout>
   };
 };

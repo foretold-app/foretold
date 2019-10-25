@@ -19,7 +19,7 @@ let agentSection = (agent: Types.agent) =>
   switch (agent.agentType) {
   | Some(User(_)) =>
     <>
-      {E.React.showIf(
+      {E.React2.showIf(
          agent.isMe,
          <Div float=`right>
            <Antd.Button
@@ -29,7 +29,7 @@ let agentSection = (agent: Types.agent) =>
          </Div>,
        )}
     </>
-  | _ => E.React.null
+  | _ => E.React2.null
   };
 
 module Columns = {

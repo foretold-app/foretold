@@ -74,7 +74,7 @@ let formCreation = (id: string, measurable: Types.measurable) => {
             (),
           ),
       )
-      |> E.React.el
+      |> E.React2.el
     }
   </MeasurableUpdate.Mutation>;
 };

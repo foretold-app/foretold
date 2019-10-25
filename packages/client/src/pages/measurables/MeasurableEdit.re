@@ -80,7 +80,7 @@ let formCreation = (id: string, measurable: Types.measurable) => {
 };
 
 [@react.component]
-let make = (~pageParams: Types.pageParams, _children) => {
+let make = (~pageParams: Types.pageParams) => {
   <SLayout head={SLayout.Header.textDiv("Edit Question")}>
     <FC.PageCard.BodyPadding>
       {MeasurableGet.component(~id=pageParams.id, m =>

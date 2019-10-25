@@ -20,7 +20,7 @@ module Reducer = PaginationFunctor.Make(ReducerConfig);
 type pageParams = {id: string};
 
 [@react.component]
-let make = (~channelId=None, ~agentId=None, ~layout) => {
+let make = (~channelId=None, ~agentId=None) => {
   let pagination = (reducerParams: Reducer.Types.reducerParams) =>
     <Div>
       <Div
@@ -59,13 +59,9 @@ let make = (~channelId=None, ~agentId=None, ~layout) => {
       | _ => <Spin />
       };
 
-    SLayout.LayoutConfig.make(
-      ~head=isFound ? pagination(reducerParams) : ReasonReact.null,
-      ~body,
-      ~isFluid=true,
-      (),
-    )
-    |> layout;
+    let head = isFound ? pagination(reducerParams) : ReasonReact.null;
+
+    <SLayout head isFluid=true> body </SLayout>;
   };
 
   <Reducer itemsPerPage=20 callFnParams=(channelId, agentId) subComponent />;

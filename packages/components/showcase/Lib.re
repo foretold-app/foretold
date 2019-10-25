@@ -162,7 +162,7 @@ module Index = {
     };
   };
 
-  let make = _children => {
+  let make = () => {
     ...component,
     initialState: () => {
       /* Not the correct url at this point */

@@ -99,7 +99,7 @@ module Columns = {
 type pageParams = {id: string};
 
 [@react.component]
-let make = (~pageParams, ~layout) => {
+let make = (~pageParams: Types.pageParams) => {
   AgentGet.component(~id=pageParams.id, agent =>
     switch (agent) {
     | Success(Some(agent)) =>
@@ -129,7 +129,7 @@ let make = (~pageParams, ~layout) => {
           </FC.Base.Div>
         </div>;
 
-      SLayout.LayoutConfig.make(~head, ~body, ()) |> layout;
+      <SLayout head isFluid=false> body </SLayout>;
     | _ => <SLayout> <NothingToShow /> </SLayout>
     }
   );

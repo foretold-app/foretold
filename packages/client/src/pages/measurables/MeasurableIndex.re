@@ -6,7 +6,7 @@ let make = (~channelId: string, ~searchParams: MeasurableQueryIndex.query) => {
     PaginationFunctor.Make(MeasurableIndex__Logic.ReducerConfig);
   <Reducer
     callFnParams={channelId, states: searchParams.state}
-    subComponent={reducerParams =>
+    subComponent={(reducerParams: Reducer.Types.reducerParams) =>
       ChannelGet.component2(~id=channelId, channelQuery =>
         SeriesCollectionGet.component2(~channelId, seriesQuery =>
           MeasurablesStateStatsGet.component2(~channelId, statsQuery =>

@@ -8,7 +8,7 @@ module CMutationForm =
   });
 
 [@react.component]
-let make = _children => {
+let make = () => {
   let form = mutation =>
     ChannelForm.Form.make(
       ~onSubmit=

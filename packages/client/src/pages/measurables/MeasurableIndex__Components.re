@@ -122,7 +122,9 @@ module LoadedAndUnselected = {
       measurables
       showExtraData=true
       channelId={Some(t.channel.id)}
-      onSelect={e => Reducer.Components.sendSelectItem(t.reducerParams, e.id)}
+      onSelect={(e: Types.measurable) =>
+        Reducer.Components.sendSelectItem(t.reducerParams, e.id)
+      }
     />;
   };
 };

@@ -1,7 +1,7 @@
 [@bs.config {jsx: 3}];
 
 [@react.component]
-let make = (~agentId, ~layout) => {
+let make = (~agentId: string) => {
   let body =
     <FC.PageCard.Body>
       <ChannelTable agentId={Some(agentId)} />
@@ -16,5 +16,5 @@ let make = (~agentId, ~layout) => {
       </FC.Base.Div>
     </div>;
 
-  SLayout.LayoutConfig.make(~head, ~body, ()) |> layout;
+  <SLayout head isFluid=false> body </SLayout>;
 };

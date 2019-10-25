@@ -3,7 +3,7 @@
 open Style.Grid;
 
 [@react.component]
-let make = (~agentId, _children) => {
+let make = (~agentId) => {
   let head = (~channelId, ~paginationPage, ()) =>
     <div>
       <FC.Base.Div float=`left>

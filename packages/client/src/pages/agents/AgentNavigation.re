@@ -48,14 +48,6 @@ module Top = {
   };
 };
 
-module Agent_Layout_C = {
-  [@react.component]
-  let make = ({head, body, isFluid}: SLayout.LayoutConfig.t) =>
-    <SLayout head isFluid> body </SLayout>;
-
-  let makeWithEl = (t: SLayout.LayoutConfig.t) => make(t) |> E.React.el;
-};
-
 [@react.component]
 let make = (~agentPage: Routing.AgentPage.t) => {
   let agentId = agentPage.agentId;
@@ -63,21 +55,18 @@ let make = (~agentPage: Routing.AgentPage.t) => {
     ...{({loggedUser}) =>
       switch (loggedUser) {
       | Some(loggedUser) =>
-        let layout = Agent_Layout_C.makeWithEl;
-
         <FillWithSidebar>
           <Top agentPage />
           {switch (agentPage.subPage) {
-           | AgentMeasurables =>
-             <AgentMeasurables pageParams={id: agentId} layout />
-           | AgentBots => <AgentBots pageParams={id: agentId} layout />
-           | AgentCommunities => <AgentCommunities agentId layout />
-           | AgentUpdates => <FeedItems agentId={Some(agentId)} layout />
+           | AgentMeasurables => <AgentMeasurables pageParams={id: agentId} />
+           | AgentBots => <AgentBots pageParams={id: agentId} />
+           | AgentCommunities => <AgentCommunities agentId />
+           | AgentUpdates => <FeedItems agentId={Some(agentId)} />
            | AgentScores => <AgentScores agentId={Some(agentId)} />
            }}
-        </FillWithSidebar>;
+        </FillWithSidebar>
 
-      | None => "<Home /> Agent_Layout" |> Utils.ste
+      | None => <Home />
       }
     }
   </Providers.AppContext.Consumer>;

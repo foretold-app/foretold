@@ -620,29 +620,24 @@ module CompetitorType = {
     };
   };
 
-  // @todo: 1
   let toSelection = (t: t) =>
     switch (t) {
     | `COMPETITIVE =>
-      "<Antd.Select.Option value=\"COMPETITIVE\">
-        {\"Predict\" |> ste}
-      </Antd.Select.Option>"
-      |> Utils.ste
+      <Antd.Select.Option value="COMPETITIVE">
+        {"Predict" |> ste}
+      </Antd.Select.Option>
     | `OBJECTIVE =>
-      "<Antd.Select.Option value=\"OBJECTIVE\">
-        {\"Resolve\" |> ste}
-      </Antd.Select.Option>"
-      |> Utils.ste
+      <Antd.Select.Option value="OBJECTIVE">
+        {"Resolve" |> ste}
+      </Antd.Select.Option>
     | `COMMENT =>
-      "<Antd.Select.Option value=\"COMMENT\">
-        {\"Comment\" |> ste}
-      </Antd.Select.Option>"
-      |> Utils.ste
+      <Antd.Select.Option value="COMMENT">
+        {"Comment" |> ste}
+      </Antd.Select.Option>
     | `UNRESOLVED =>
-      "<Antd.Select.Option value=\"UNRESOLVED\">
-        {\"Close without Answer\" |> ste}
-      </Antd.Select.Option>"
-      |> Utils.ste
+      <Antd.Select.Option value="UNRESOLVED">
+        {"Close without Answer" |> ste}
+      </Antd.Select.Option>
     | `AGGREGATION => E.React2.null
     };
 

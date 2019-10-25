@@ -4,8 +4,6 @@
 
 [%bs.raw {|require("antd/lib/alert/style")|}];
 
-// @todo: 1
-
 [@react.component]
 let make = (~message=?, ~type_=?, ~children=ReasonReact.null) =>
   ReasonReact.wrapJsForReason(

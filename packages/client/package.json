@@ -6,8 +6,8 @@
 		"BuckleScript"
 	],
 	"engines": {
-		"node": ">=12.6.0",
-		"yarn": ">=1.16.0"
+		"node": "12.6.0",
+		"yarn": "1.16.0"
 	},
 	"private": false,
 	"license": "MIT",

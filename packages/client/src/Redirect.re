@@ -3,7 +3,6 @@
 // This var need to prevent when "a user cannot go from profile page".
 let redirectionCount = ref(0);
 
-//@todo: 1
 [@react.component]
 let make = (~appContext: Providers.appContext) => {
   redirectionCount := redirectionCount^ + 1;

@@ -8,12 +8,9 @@ module Styles = {
   let clear = style([clear(`both)]);
 };
 
-// @todo: 1
 [@react.component]
 let make = () =>
   <>
     <div className=Styles.clear />
-    <div className=Styles.centerBlock>
-      {"<Antd.Spin tip=\"Loading...\" />" |> Utils.ste}
-    </div>
+    <div className=Styles.centerBlock> <Antd.Spin tip="Loading..." /> </div>
   </>;

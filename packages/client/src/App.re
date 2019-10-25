@@ -1,55 +1,30 @@
 [@bs.config {jsx: 3}];
 
-type state = {
-  route: Routing.Route.t,
-  authToken: option(string),
-};
-
-type action =
-  | ChangeState(state);
-
-let mapUrlToAction = (state, url: ReasonReact.Router.url) => {
-  let route = url |> Routing.Route.fromUrl;
-  ChangeState({...state, route});
-};
-
-let firstStateUpdate = (_state, url: ReasonReact.Router.url) => {
-  let route = url |> Routing.Route.fromUrl;
-  let authToken = url |> Auth.UrlToTokens.make;
-  ChangeState({authToken, route});
-};
-
 let appApolloClient = AppApolloClient.instance();
 
 [@react.component]
 let make = () => {
-  //  reducer: (action, _state) =>
-  //    switch (action) {
-  //    | ChangeState(state) => ReasonReact.Update(state)
-  //    },
-  //
-  //
-  //  didMount: self => {
-  //    let initUrl = ReasonReact.Router.dangerouslyGetInitialUrl();
-  //
-  //    firstStateUpdate(self.state, initUrl) |> self.send;
-  //
-  //    let watcherID =
-  //      ReasonReact.Router.watchUrl(url => {
-  //        mapUrlToAction(self.state, url) |> self.send;
-  //        ();
-  //      });
-  //
-  //    self.onUnmount(() => ReasonReact.Router.unwatchUrl(watcherID));
-  //  },
+  let (route, setRoute) =
+    React.useState(() => {
+      let url = ReasonReact.Router.dangerouslyGetInitialUrl();
+      url |> Routing.Route.fromUrl;
+    });
 
-  // @todo: 1
-  let state = {route: Home, authToken: None};
+  let (authToken, setAuthToken) =
+    React.useState(() => {
+      let url = ReasonReact.Router.dangerouslyGetInitialUrl();
+      url |> Auth.UrlToTokens.make;
+    });
+
+  ReasonReact.Router.watchUrl(url => {
+    setRoute(_ => url |> Routing.Route.fromUrl);
+    ();
+  })
+  |> ignore;
 
   let getUser = fn => {
     let serverJwt = ServerJwt.make_from_storage();
     let auth0tokens = Auth0Tokens.make_from_storage();
-    let authToken = state.authToken;
 
     switch (serverJwt, authToken, auth0tokens) {
     | (Some(_), _, _) => UserGet.inner(fn)
@@ -62,14 +37,14 @@ let make = () => {
     {GlobalSettingGet.inner((globalSetting: option(Types.globalSetting)) =>
        getUser((loggedUser: option(Types.user)) => {
          let appContext: Providers.appContext = {
-           route: state.route,
-           authToken: state.authToken,
+           route,
+           authToken,
            loggedUser,
            globalSetting,
          };
 
          <Providers.AppContext.Provider value=appContext>
-           <Navigator route={state.route} loggedUser />
+           <Navigator route loggedUser />
            <Redirect appContext />
            <Intercom />
            <CheckSession />

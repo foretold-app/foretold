@@ -10,12 +10,6 @@ let make = () => {
       url |> Routing.Route.fromUrl;
     });
 
-  let (authToken, setAuthToken) =
-    React.useState(() => {
-      let url = ReasonReact.Router.dangerouslyGetInitialUrl();
-      url |> Auth.UrlToTokens.make;
-    });
-
   ReasonReact.Router.watchUrl(url => {
     setRoute(_ => url |> Routing.Route.fromUrl);
     ();
@@ -25,6 +19,9 @@ let make = () => {
   let getUser = fn => {
     let serverJwt = ServerJwt.make_from_storage();
     let auth0tokens = Auth0Tokens.make_from_storage();
+
+    let authToken =
+      ReasonReact.Router.dangerouslyGetInitialUrl() |> Auth.UrlToTokens.make;
 
     switch (serverJwt, authToken, auth0tokens) {
     | (Some(_), _, _) => UserGet.inner(fn)
@@ -38,7 +35,6 @@ let make = () => {
        getUser((loggedUser: option(Types.user)) => {
          let appContext: Providers.appContext = {
            route,
-           authToken,
            loggedUser,
            globalSetting,
          };

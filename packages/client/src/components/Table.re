@@ -91,8 +91,7 @@ let fromColumns =
             |> ReasonReact.array;
 
           let key = rowIndex |> string_of_int;
-          // @todo: 1
-          //          let bottomSubRow = bottomSubRowFn |> E.O.bind(_, r => r(row));
+          let bottomSubRow = bottomSubRowFn |> E.O.bind(_, r => r(row));
 
           <FC.Table.Row
             onClick={_ => {

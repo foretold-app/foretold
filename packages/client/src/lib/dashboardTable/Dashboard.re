@@ -23,8 +23,7 @@ let default = {|
 
 [@react.component]
 let make = (~channelId: string) => {
-  let (text, setText) =
-    React.useReducer((oldText, newText) => newText, default);
+  let (text, setText) = React.useReducer((oldText, newText) => newText, "");
   <div>
     <textarea
       value=text

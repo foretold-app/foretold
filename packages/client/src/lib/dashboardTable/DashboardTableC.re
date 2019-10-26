@@ -1,20 +1,5 @@
 let component = ReasonReact.statelessComponent("DashboardTable");
 
-let template =
-  DashboardTable.Table.make(
-    [|
-      {id: "1", name: "Name", columnType: String},
-      {id: "2", name: "Description", columnType: String},
-    |],
-    [|
-      [|String("Canada"), String("Country 1")|],
-      [|String("US"), String("Country 2")|],
-    |],
-  );
-
-let foo = [3, 4, 5];
-let foobar = [|3, 4, 5|];
-
 module DashboardTableToTable = {
   let toColumn =
       (
@@ -35,8 +20,9 @@ module DashboardTableToTable = {
             |> (
               r =>
                 switch (r) {
-                | Some(measurable) => "GOT IT" |> Utils.ste
-                | None => "Nothing :(" |> Utils.ste
+                | Some(measurable) =>
+                  <MeasurementItems.AggregationResolution measurable />
+                | None => "Not loaded :(" |> Utils.ste
                 }
             )
           | Some(Empty)
@@ -56,22 +42,27 @@ module DashboardTableToTable = {
   };
 };
 
-let make = (~table: DashboardTable.Table.t=template, _) => {
-  ...component,
-  render: _ =>
-    MeasurablesGet.component(
-      ~channelId=Some("sdf"),
-      ~states=[|Some(`OPEN)|],
-      ~pageLimit=Js.Json.number(50 |> float_of_int),
-      ~direction=None,
-      ~innerComponentFn=
-        e =>
-          e
-          |> HttpResponse.fmap(
-               (r: Client.Primary.Connection.t(Client.Primary.Measurable.t)) =>
-               DashboardTableToTable.run(table, r.edges)
-             )
-          |> HttpResponse.withReactDefaults,
-      (),
-    ),
+let tableJsonString = {| { "columns": [{"id":"1", "name": "Name", "columnType": "String"},{"id":"2", "name": "Description", "columnType": "String"}], "data": [{"1": "Thing1", "2":"This is a long description"},{"1":"Thing2"}] } |};
+let tableJson: Js.Json.t = Json.parseOrRaise(tableJsonString);
+
+[@react.component]
+let make = (~channelId, ~tableJson=tableJson, _) => {
+  MeasurablesGet.component(
+    ~channelId=Some(channelId),
+    ~states=[|Some(`OPEN)|],
+    ~pageLimit=Js.Json.number(50 |> float_of_int),
+    ~direction=None,
+    ~innerComponentFn=
+      e =>
+        e
+        |> HttpResponse.fmap(
+             (r: Client.Primary.Connection.t(Client.Primary.Measurable.t)) =>
+             switch (DashboardTable.Json.decode(tableJson)) {
+             | Ok(table) => DashboardTableToTable.run(table, r.edges)
+             | Error(e) => e |> Utils.ste
+             }
+           )
+        |> HttpResponse.withReactDefaults,
+    (),
+  );
 };

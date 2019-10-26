@@ -47,22 +47,41 @@ let rows: Row.ts = [|[|String("sdf")|]|];
 
 module Json = {
   let decode = (j: Js.Json.t): Belt.Result.t(Table.t, string) => {
-    let columnDecode = (json): Column.t =>
-      Json.Decode.{
-        id: json |> field("id", string),
-        name: json |> field("name", string),
-        columnType:
-          switch (json |> field("columnType", string)) {
-          | "MeasurableId" => MeasurableId
-          | _ => String
-          },
+    let decodeField = (fieldName, json) =>
+      Json.Decode.(json |> optional(field(fieldName, string)));
+
+    let columnDecode = (json): Belt.Result.t(Column.t, string) =>
+      switch (
+        decodeField("id", json),
+        decodeField("name", json),
+        decodeField("columnType", json),
+      ) {
+      | (Some(id), Some(name), Some(columnType)) =>
+        Belt.Result.Ok({
+          id,
+          name,
+          columnType:
+            switch (columnType) {
+            | "MeasurableId" => MeasurableId
+            | _ => String
+            },
+        })
+      | _ => Belt.Result.Error("All columns need id, name, and columnType")
       };
 
-    let columns = Json.Decode.(field("columns", array(columnDecode)));
-    let cs = columns(j);
+    let columns = json =>
+      json
+      |> Json.Decode.(optional(field("columns", array(columnDecode))))
+      |> E.O.fmap(E.A.R.firstErrorOrOpen)
+      |> {
+        e =>
+          switch (e) {
+          | Some(result) => result
+          | None => Belt.Result.Error("Need at least one row.")
+          };
+      };
 
-    // I don't think this will handle null values now :(
-    let rowDecode = (columns: array(Column.t), json: Js.Json.t): Row.t =>
+    let rowDecode = (columns: Column.ts, json: Js.Json.t): Row.t =>
       columns
       |> E.A.fmap((column: Column.t) =>
            switch (column.columnType) {
@@ -79,8 +98,20 @@ module Json = {
            }
          );
 
-    let rowsDecode = Json.Decode.(field("data", array(rowDecode(cs))));
+    let rowsDecode = columns =>
+      Json.Decode.(optional(field("data", array(rowDecode(columns)))));
 
-    Belt.Result.Ok(Table.make(cs, rowsDecode(j)));
+    let columns = columns(j);
+    switch (columns) {
+    | Belt.Result.Ok(columns) =>
+      switch (rowsDecode(columns, j)) {
+      | Some(rows) => Belt.Result.Ok(Table.make(columns, rows))
+      | None =>
+        Belt.Result.Error(
+          "There needs to be a data field with at least 1 valid row.",
+        )
+      }
+    | Belt.Result.Error(error) => Belt.Result.Error(error)
+    };
   };
 };

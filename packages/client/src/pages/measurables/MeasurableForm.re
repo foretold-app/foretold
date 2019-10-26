@@ -57,6 +57,7 @@ module FormConfig = {
       | ValueType => state.valueType
       | Min => state.min
       | Max => state.max
+      | ChannelId => state.channelId
       };
 
   let set: type value. (state, field(value), value) => state =

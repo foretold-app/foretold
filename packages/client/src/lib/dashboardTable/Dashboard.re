@@ -30,10 +30,6 @@ let make = (~channelId: string) => {
       className=Styles.input
       onChange={event => setText(valueFromEvent(event))}
     />
-    {switch (Json.parse(text)) {
-     | Some(json) => <DashboardTableC channelId tableJson=json />
-     | None => "sdf" |> Utils.ste
-     }}
   </div>;
 };
 

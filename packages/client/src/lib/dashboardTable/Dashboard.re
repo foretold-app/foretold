@@ -21,24 +21,33 @@ let default = {|
 }
 |};
 
-[@react.component]
-let make = (~channelId: string) => {
-  let (text, setText) = React.useReducer((oldText, newText) => newText, "");
-  <div>
-    <textarea
-      value=text
-      className=Styles.input
-      onChange={event => setText(valueFromEvent(event))}
-    />
-  </div>;
-};
+type state = {text: string};
 
-module Jsx2 = {
-  let component = ReasonReact.statelessComponent("ChannelTable");
-  let make = (~channelId, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~channelId, ()),
-      children,
-    );
+type action =
+  | Update(string);
+
+let component = ReasonReact.reducerComponent("MeasurableBottomSection");
+
+let make = (~channelId: string, _children) => {
+  ...component,
+  reducer: (action, _state) =>
+    switch (action) {
+    | Update(text) => ReasonReact.Update({text: text})
+    },
+
+  initialState: () => {text: ""},
+
+  render: self => {
+    <div>
+      <textarea
+        value={self.state.text}
+        className=Styles.input
+        onChange={event => self.send(Update(valueFromEvent(event)))}
+      />
+      {switch (Json.parse(self.state.text)) {
+       | Some(json) => <DashboardTableC channelId tableJson=json />
+       | None => "sdf" |> Utils.ste
+       }}
+    </div>;
+  },
 };

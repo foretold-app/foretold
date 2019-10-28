@@ -442,108 +442,90 @@ let make =
       ~bots: option(array(Types.bot)),
       ~loggedUser: Types.user,
     ) => {
-  //  ...component,
-  //
-  //  initialState: () => {
-  //    let competitorTypeInitValue =
-  //      switch (measurable.state) {
-  //      | Some(`JUDGED) => "OBJECTIVE"
-  //      | _ => "COMPETITIVE"
-  //      };
-  //
-  //    {
-  //      // Values
-  //      floatCdf: FloatCdf.empty,
-  //      percentage: 0.,
-  //      binary: true,
-  //      unresolvableResolution: "AMBIGUOUS",
-  //      comment: "GENERIC",
-  //
-  //      // OBJECTIVE, COMPETITIVE, AGGREGATION (not used here), UNRESOLVED
-  //      competitorType: competitorTypeInitValue,
-  //      // Used to transform Form Data Type to Measurement Type
-  //      dataType:
-  //        getDataTypeAsString(competitorTypeInitValue, measurable, None),
-  //
-  //      // Strings
-  //      description: "",
-  //      valueText: "",
-  //
-  //      // Form State Only
-  //      hasLimitError: false,
-  //      asAgent: "",
-  //    };
-  //  },
-  //
-  //  reducer: (action, state) =>
-  //    switch (action) {
-  //    | UpdateFloatPdf((floatCdf: FloatCdf.t)) =>
-  //      onUpdate(floatCdf);
-  //      ReasonReact.Update({...state, floatCdf});
-  //
-  //    | UpdateHasLimitError((hasLimitError: bool)) =>
-  //      ReasonReact.Update({...state, hasLimitError})
-  //
-  //    | UpdateCompetitorType(competitorType) =>
-  //      let dataType =
-  //        getDataTypeAsString(
-  //          competitorType,
-  //          measurable,
-  //          Some(state.dataType),
-  //        );
-  //      ReasonReact.Update({...state, competitorType, dataType});
-  //
-  //    | UpdateDataType((dataType: string)) =>
-  //      ReasonReact.Update({...state, dataType})
-  //
-  //    | UpdateUnresolvableResolution((unresolvableResolution: string)) =>
-  //      ReasonReact.Update({...state, unresolvableResolution})
-  //
-  //    | UpdateComment((comment: string)) =>
-  //      ReasonReact.Update({...state, comment})
-  //
-  //    | UpdateBinary((binary: bool)) => ReasonReact.Update({...state, binary})
-  //
-  //    | UpdatePercentage((percentage: float)) =>
-  //      ReasonReact.Update({...state, percentage})
-  //
-  //    | UpdateDescription((description: string)) =>
-  //      ReasonReact.Update({...state, description})
-  //
-  //    | UpdateValueText((valueText: string)) =>
-  //      ReasonReact.Update({...state, valueText})
-  //
-  //    | UpdateAsAgent((asAgent: string)) =>
-  //      ReasonReact.Update({...state, asAgent})
-  //    },
-  //
-  //  render: ({state, send}) => {
   let competitorTypeInitValue =
     switch (measurable.state) {
     | Some(`JUDGED) => "OBJECTIVE"
     | _ => "COMPETITIVE"
     };
-  let send = action => ();
+
+  let (floatCdf, setFloatPdf) = React.useState(() => FloatCdf.empty);
+  let (percentage, setPercentage) = React.useState(() => 0.);
+  let (binary, setBinary) = React.useState(() => true);
+  let (unresolvableResolution, setUnresolvableResolution) =
+    React.useState(() => "AMBIGUOUS");
+  let (comment, setComment) = React.useState(() => "GENERIC");
+  let (competitorType, setCompetitorType) =
+    React.useState(() => competitorTypeInitValue);
+  let (dataType, setDataType) =
+    React.useState(() =>
+      getDataTypeAsString(competitorTypeInitValue, measurable, None)
+    );
+  let (description, setDescription) = React.useState(() => "");
+  let (valueText, setValueText) = React.useState(() => "");
+  let (hasLimitError, setHasLimitError) = React.useState(() => false);
+  let (asAgent, setAsAgent) = React.useState(() => "");
+
   let state = {
     // Values
-    floatCdf: FloatCdf.empty,
-    percentage: 0.,
-    binary: true,
-    unresolvableResolution: "AMBIGUOUS",
-    comment: "GENERIC",
+    floatCdf,
+    percentage,
+    binary,
+    unresolvableResolution,
+    comment,
 
     // OBJECTIVE, COMPETITIVE, AGGREGATION (not used here), UNRESOLVED
-    competitorType: competitorTypeInitValue,
+    competitorType,
     // Used to transform Form Data Type to Measurement Type
-    dataType: getDataTypeAsString(competitorTypeInitValue, measurable, None),
+    dataType,
 
     // Strings
-    description: "",
-    valueText: "",
+    description,
+    valueText,
 
     // Form State Only
-    hasLimitError: false,
-    asAgent: "",
+    hasLimitError,
+    asAgent,
+  };
+
+  let send = action => {
+    switch (action) {
+    | UpdateFloatPdf((floatCdf: FloatCdf.t)) =>
+      onUpdate(floatCdf);
+      setFloatPdf(_ => floatCdf);
+
+    | UpdateHasLimitError((hasLimitError: bool)) =>
+      setHasLimitError(_ => hasLimitError)
+
+    | UpdateCompetitorType(competitorType) =>
+      let dataType =
+        getDataTypeAsString(
+          competitorType,
+          measurable,
+          Some(state.dataType),
+        );
+      setCompetitorType(_ => competitorType);
+      setDataType(_ => dataType);
+
+    | UpdateDataType((dataType: string)) => setDataType(_ => dataType)
+
+    | UpdateUnresolvableResolution((unresolvableResolution: string)) =>
+      setUnresolvableResolution(_ => unresolvableResolution)
+
+    | UpdateComment((comment: string)) => setComment(_ => comment)
+
+    | UpdateBinary((binary: bool)) => setBinary(_ => binary)
+
+    | UpdatePercentage((percentage: float)) => setPercentage(_ => percentage)
+
+    | UpdateDescription((description: string)) =>
+      setDescription(_ => description)
+
+    | UpdateValueText((valueText: string)) => setValueText(_ => valueText)
+
+    | UpdateAsAgent((asAgent: string)) => setAsAgent(_ => asAgent)
+    };
+
+    ();
   };
 
   let onSubmit = () => {
@@ -579,5 +561,4 @@ let make =
      | NotCalled => block
      }}
   </Style.BorderedBox>;
-  //  },
 };

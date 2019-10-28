@@ -7894,7 +7894,7 @@ realpath-native@^1.1.0:
   dependencies:
     util.promisify "^1.0.0"
 
-reason-apollo@^0.16.1:
+reason-apollo@0.16.4:
   version "0.16.4"
   resolved "https://registry.yarnpkg.com/reason-apollo/-/reason-apollo-0.16.4.tgz#c34a136e039ebeb346f41152c931147bf3ba83f9"
   integrity sha512-kSAHaWFsrsx6P/1I2EippubV1vtmmUGmks/Hi2sQq082EdewILxI1whXPBDwwCRElb/wruJg7vMcHbOTaFzF/g==
@@ -7913,7 +7913,7 @@ reason-apollo@^0.16.1:
     react-apollo "2.3.2"
     subscriptions-transport-ws "^0.9.16"
 
-reason-react@>=0.7.0:
+reason-react@0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.7.0.tgz#46a975c321e81cd51310d7b1a02418ca7667b0d6"
   integrity sha512-czR/f0lY5iyLCki9gwftOFF5Zs40l7ZSFmpGK/Z6hx2jBVeFDmIiXB8bAQW/cO6IvtuEt97OmsYueiuOYG9XjQ==

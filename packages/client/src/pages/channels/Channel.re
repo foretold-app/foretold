@@ -65,7 +65,7 @@ let make =
                   ])
                 ),
               ]>
-              {"<ReactMarkdown.Markdown source />" |> Utils.ste}
+              <ReactMarkdown source />
             </Div>
           )}
     </Div>;

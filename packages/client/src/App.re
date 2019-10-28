@@ -10,11 +10,11 @@ let make = () => {
       url |> Routing.Route.fromUrl;
     });
 
-  //  ReasonReact.Router.watchUrl(url => {
-  //    setRoute(_ => url |> Routing.Route.fromUrl);
-  //    ();
-  //  })
-  //  |> ignore;
+  ReasonReact.Router.watchUrl(url => {
+    setRoute(_ => url |> Routing.Route.fromUrl);
+    ();
+  })
+  |> ignore;
 
   let getUser = fn => {
     let serverJwt = ServerJwt.make_from_storage();

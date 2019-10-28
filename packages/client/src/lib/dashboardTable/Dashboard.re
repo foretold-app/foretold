@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let valueFromEvent = (evt): string => evt->ReactEvent.Form.target##value;
 
 module Styles = {
@@ -25,32 +27,31 @@ type state = {text: string};
 type action =
   | Update(string);
 
-let component = ReasonReact.reducerComponent("MeasurableBottomSection");
-
-let make = (~channelId: string, _children) => {
-  ...component,
-  reducer: (action, _state) =>
-    switch (action) {
-    | Update(text) => ReasonReact.Update({text: text})
-    },
-
-  initialState: () => {text: ""},
-
-  render: self => {
-    <SLayout isFluid=true head=ReasonReact.null>
-      <FC.PageCard.Body>
-        <div className=Styles.padding>
-          <Antd.Input.TextArea
-            style={ReactDOMRe.Style.make(~minHeight="6em", ())}
-            onChange={event => self.send(Update(valueFromEvent(event)))}
-            value={self.state.text}
-          />
-        </div>
-        {switch (Json.parse(self.state.text)) {
-         | Some(json) => <DashboardTableC channelId tableJson=json />
-         | None => "Invalid Json. Check a formatting tool." |> Utils.ste
-         }}
-      </FC.PageCard.Body>
-    </SLayout>;
-  },
+[@react.component]
+let make = (~channelId: string) => {
+  //  ...component,
+  //  reducer: (action, _state) =>
+  //    switch (action) {
+  //    | Update(text) => ReasonReact.Update({text: text})
+  //    },
+  //
+  //  initialState: () => {text: ""},
+  //  render: self => {
+  let text = "";
+  let send = action => ();
+  <SLayout isFluid=true head=ReasonReact.null>
+    <FC.PageCard.Body>
+      <div className=Styles.padding>
+        <Antd.Input.TextArea
+          style={ReactDOMRe.Style.make(~minHeight="6em", ())}
+          onChange={event => send(Update(valueFromEvent(event)))}
+          value=text
+        />
+      </div>
+      {switch (Json.parse(text)) {
+       | Some(json) => <DashboardTableC channelId tableJson=json />
+       | None => "Invalid Json. Check a formatting tool." |> Utils.ste
+       }}
+    </FC.PageCard.Body>
+  </SLayout>;
 };

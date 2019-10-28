@@ -11,7 +11,6 @@ module Tab2 = FC__Tab2;
 module TabButton = FC__Tab.Button;
 module Table = FC__Table;
 module Footer = FC__Footer;
-module Stats = FC__Stats;
 module StateStatus = FC__StateStatus;
 module MeasurableForm = FC__MeasurableForm;
 module NumberShower = FC__NumberShower;

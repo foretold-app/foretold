@@ -187,6 +187,7 @@ module A = {
   let empty = [||];
   let unsafe_get = Array.unsafe_get;
   let get = Belt.Array.get;
+  let getBy = Belt.Array.getBy;
   let fold_left = Array.fold_left;
   let fold_right = Array.fold_right;
   let concatMany = Belt.Array.concatMany;
@@ -224,6 +225,22 @@ module A = {
       | Some(o) => o
       | None => [||]
       };
+  };
+
+  module R = {
+    let firstErrorOrOpen =
+        (results: array(Belt.Result.t('a, 'b)))
+        : Belt.Result.t(array('a), 'b) => {
+      let bringErrorUp =
+        switch (results |> Belt.Array.getBy(_, Belt.Result.isError)) {
+        | Some(Belt.Result.Error(err)) => Belt.Result.Error(err)
+        | Some(Belt.Result.Ok(_)) => Belt.Result.Ok(results)
+        | None => Belt.Result.Ok(results)
+        };
+      let forceOpen = (r: array(Belt.Result.t('a, 'b))): array('a) =>
+        r |> Belt.Array.map(_, r => Belt.Result.getExn(r));
+      bringErrorUp |> Belt.Result.map(_, forceOpen);
+    };
   };
 };
 

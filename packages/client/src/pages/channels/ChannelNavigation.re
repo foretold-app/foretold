@@ -25,6 +25,7 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
        | InviteMember => <ChannelInviteMember channelId />
        | Settings => <ChannelEdit channelId />
        | NewSeries => <SeriesNew channelId />
+       | Dashboard => <Dashboard channelId />
        }}
     </Channel>;
 

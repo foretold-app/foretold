@@ -100,14 +100,6 @@ class AgentMeasurablesData extends DataBase {
       return undefined;
     }
 
-    log.trace('VALUE OF POINT SCORE---------------------------', overTime);
-    log.trace({
-      agentPredictions,
-      marketPredictions,
-      resolution,
-      createdAt: toUnix(measurableCreatedAt),
-    });
-
     if (!!overTime.error) {
       log.error('PrimaryPointScore Error: ', overTime.error);
       return undefined;

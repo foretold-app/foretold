@@ -56,8 +56,11 @@ module Overlay = {
 
 let staticOverlay = content => <Overlay content />;
 
+//[@react.component]
+//let make = (~content) => <FC__Dropdown overlay={staticOverlay(content)} />;
+
 [@react.component]
-let make = (~content) => <FC__Dropdown overlay={staticOverlay(content)} />;
+let make = (~content) => ReasonReact.null;
 
 module Jsx2 = {
   let make = (~content, children) =>

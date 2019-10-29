@@ -33,21 +33,6 @@ let make = () => {
   };
 
   <ReasonApollo.Provider client=appApolloClient>
-    {GlobalSettingGet.inner((globalSetting: option(Types.globalSetting)) =>
-       getUser((loggedUser: option(Types.user)) => {
-         let appContext: Providers.appContext = {
-           route,
-           loggedUser,
-           globalSetting,
-         };
-
-         <Providers.AppContext.Provider value=appContext>
-           <Navigator route loggedUser />
-           <Redirect appContext />
-           <Intercom />
-           <CheckSession />
-         </Providers.AppContext.Provider>;
-       })
-     )}
+    {"0" |> ReasonReact.string}
   </ReasonApollo.Provider>;
 };

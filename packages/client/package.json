@@ -15,9 +15,9 @@
 		"build-bsb": "bsb -make-world",
 		"clean": "bsb -clean-world",
 		"bsb-watch": "bsb -make-world -w",
-		"parcel": "API_URL=${API_URL:-http://localhost:4000/graphql} AUTH0_DOMAIN=${AUTH0_DOMAIN:-guesstimate.auth0.com} AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID:-gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT} INTERCOM_APP_ID=${INTERCOM_APP_ID:-gx67sx4f} parcel ./src/index.html --public-url / --no-autoinstall --no-minify -- watch",
-		"parcel-staging": "API_URL=${API_URL:-http://localhost:4000/graphql} AUTH0_DOMAIN=${AUTH0_DOMAIN:-guesstimate.auth0.com} AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID:-gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT} INTERCOM_APP_ID=${INTERCOM_APP_ID:-gx67sx4f} parcel build ./src/index.html --no-source-maps --no-autoinstall --no-minify",
-		"parcel-production": "API_URL=${API_URL:-http://localhost:4000/graphql} AUTH0_DOMAIN=${AUTH0_DOMAIN:-guesstimate.auth0.com} AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID:-gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT} INTERCOM_APP_ID=${INTERCOM_APP_ID:-gx67sx4f} parcel build ./src/index.html --no-source-maps --no-autoinstall --no-minify",
+		"parcel": "API_URL=${API_URL:-http://localhost:4000/graphql} AUTH0_DOMAIN=${AUTH0_DOMAIN:-guesstimate.auth0.com} AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID:-gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT} INTERCOM_APP_ID=${INTERCOM_APP_ID:-gx67sx4f} parcel ./src/index.html --public-url / --no-autoinstall -- watch",
+		"parcel-staging": "API_URL=${API_URL:-http://localhost:4000/graphql} AUTH0_DOMAIN=${AUTH0_DOMAIN:-guesstimate.auth0.com} AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID:-gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT} INTERCOM_APP_ID=${INTERCOM_APP_ID:-gx67sx4f} parcel build ./src/index.html --no-source-maps --no-autoinstall",
+		"parcel-production": "API_URL=${API_URL:-http://localhost:4000/graphql} AUTH0_DOMAIN=${AUTH0_DOMAIN:-guesstimate.auth0.com} AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID:-gn1bwgJfK5Y6jfL6x7t6fB43ZAN3eSnT} INTERCOM_APP_ID=${INTERCOM_APP_ID:-gx67sx4f} parcel build ./src/index.html --no-source-maps --no-autoinstall",
 		"prepare-dist": "mkdir -p dist && cp _redirects dist/_redirects",
 		"replace-dist": "rm -rf .cache && rm -rf dist && yarn prepare-dist",
 		"build": "yarn parcel-production",
@@ -31,7 +31,10 @@
 		"test": "jest --ci --bail --no-cache",
 		"update-gql": "API_URL=${API_URL:-http://localhost:4000/graphql} yarn send-introspection-query ${API_URL}",
 		"find-interface-for-file": "bsc -bs-re-out",
-		"analyze": "source-map-explorer dist/Index.adc0ecca.js"
+		"analyze": "source-map-explorer dist/Index.adc0ecca.js",
+		"webpack": "webpack -w",
+		"webpack:production": "NODE_ENV=production webpack",
+		"server": "webpack-dev-server"
 	},
 	"dependencies": {
 		"@foretold/cdf": "1.0.10",
@@ -75,7 +78,11 @@
 		"react": "16.8.6",
 		"react-dom": "16.8.6",
 		"reason-apollo": "0.16.4",
-		"reason-react": "0.7.0"
+		"reason-react": "0.7.0",
+		"html-webpack-plugin": "^3.2.0",
+		"webpack": "^4.0.1",
+		"webpack-cli": "^3.1.1",
+		"webpack-dev-server": "^3.1.8"
 	},
 	"devDependencies": {
 		"parcel-plugin-bundle-visualiser": "1.2.0",

@@ -6,18 +6,14 @@ let multimodal = "=mm(uniform(0,100), uniform(10,20), [.33,0.9])";
 let mm1 = "=mm(uniform(1,100), normal(50, 5), [.01, .99])";
 let mm2 = "=mm(uniform(1,100), normal(50, 8), [.01, .99])";
 
-let a4 = React.useState(() => None);
-let a5 = React.useState(() => None);
-let a6 = React.useState(() => None);
-
 module Scoring = {
   type dist = FC__Types.Dist.t;
 
   [@react.component]
   let make = () => {
-    let (varA, setVarA) = a4;
-    let (varB, setVarB) = a5;
-    let (varC, setVarC) = a6;
+    let (varA, setVarA) = React.useState(() => None);
+    let (varB, setVarB) = React.useState(() => None);
+    let (varC, setVarC) = React.useState(() => None);
 
     let distributionScoreDistribution =
       switch (varA, varB, varC) {

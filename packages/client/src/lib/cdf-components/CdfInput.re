@@ -431,23 +431,6 @@ let mainBlock =
   </div>;
 };
 
-let a9 = React.useState(() => FloatCdf.empty);
-let a10 = React.useState(() => 0.);
-let a11 = React.useState(() => true);
-let a12 = React.useState(() => "AMBIGUOUS");
-let a13 = React.useState(() => "GENERIC");
-//let competitorTypeInitValue =
-//  switch (measurable.state) {
-//  | Some(`JUDGED) => "OBJECTIVE"
-//  | _ => "COMPETITIVE"
-//  };
-let a14 = React.useState(() => "COMPETITIVE"); // @todo 1
-let a15 = React.useState(() => "FLOAT_CDF"); // @todo 2
-let a16 = React.useState(() => "");
-let a17 = React.useState(() => "");
-let a18 = React.useState(() => false);
-let a19 = React.useState(() => "");
-
 [@react.component]
 let make =
     (
@@ -459,17 +442,28 @@ let make =
       ~bots: option(array(Types.bot)),
       ~loggedUser: Types.user,
     ) => {
-  let (floatCdf, setFloatPdf) = a9;
-  let (percentage, setPercentage) = a10;
-  let (binary, setBinary) = a11;
-  let (unresolvableResolution, setUnresolvableResolution) = a12;
-  let (comment, setComment) = a13;
-  let (competitorType, setCompetitorType) = a14;
-  let (dataType, setDataType) = a15;
-  let (description, setDescription) = a16;
-  let (valueText, setValueText) = a17;
-  let (hasLimitError, setHasLimitError) = a18;
-  let (asAgent, setAsAgent) = a19;
+  let competitorTypeInitValue =
+    switch (measurable.state) {
+    | Some(`JUDGED) => "OBJECTIVE"
+    | _ => "COMPETITIVE"
+    };
+
+  let (floatCdf, setFloatPdf) = React.useState(() => FloatCdf.empty);
+  let (percentage, setPercentage) = React.useState(() => 0.);
+  let (binary, setBinary) = React.useState(() => true);
+  let (unresolvableResolution, setUnresolvableResolution) =
+    React.useState(() => "AMBIGUOUS");
+  let (comment, setComment) = React.useState(() => "GENERIC");
+  let (competitorType, setCompetitorType) =
+    React.useState(() => competitorTypeInitValue);
+  let (dataType, setDataType) =
+    React.useState(() =>
+      getDataTypeAsString(competitorTypeInitValue, measurable, None)
+    );
+  let (description, setDescription) = React.useState(() => "");
+  let (valueText, setValueText) = React.useState(() => "");
+  let (hasLimitError, setHasLimitError) = React.useState(() => false);
+  let (asAgent, setAsAgent) = React.useState(() => "");
 
   let state = {
     // Values

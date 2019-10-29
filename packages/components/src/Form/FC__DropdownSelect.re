@@ -18,8 +18,6 @@ module E = FC__E;
    *
    */
 
-let a3 = React.useState(() => "");
-
 [@react.component]
 let make =
     (
@@ -30,7 +28,7 @@ let make =
     ) => {
   let initLabel = "";
 
-  let (label, setLabel) = a3;
+  let (label, setLabel) = React.useState(() => initLabel);
 
   <FC__DropdownMenu title=label trigger>
     <FC__Menu

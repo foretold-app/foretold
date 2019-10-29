@@ -45,10 +45,10 @@ module Tabs = {
     </>;
   };
 };
-
+let a22 = React.useState(() => Measurements);
 [@react.component]
 let make = (~measurableId: string, ~channelId: option(string)) => {
-  let (tab, setTab) = React.useState(() => Measurements);
+  let (tab, setTab) = a22;
 
   let switchTab = tabToSwitch => setTab(_ => tabToSwitch);
   let head = (~channelId: option(string), ~paginationPage, ()) =>

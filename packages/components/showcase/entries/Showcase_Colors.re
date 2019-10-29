@@ -56,11 +56,14 @@ let colorContainer = bgColor =>
     ])
   );
 
+let a7 = React.useState(() => Colors.white);
+let a8 = React.useState(() => "white");
+
 module ColorDisplay = {
   [@react.component]
   let make = () => {
-    let (bgColor, setBgColor) = React.useState(() => Colors.white);
-    let (bgName, setBgName) = React.useState(() => "white");
+    let (bgColor, setBgColor) = a7;
+    let (bgName, setBgName) = a8;
 
     <PageCard>
       <PageCard.HeaderRow>

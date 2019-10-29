@@ -366,19 +366,21 @@ module Make = (Config: Config) => {
 
   open Types;
 
+  let a20 =
+    React.useState(() =>
+      {
+        itemState: ItemUnselected,
+        response: Loading,
+        pageConfig: {
+          direction: None,
+        },
+      }
+    );
+
   [@react.component]
   let make =
       (~itemsPerPage=20, ~callFnParams: Config.callFnParams, ~subComponent) => {
-    let (state, setState) =
-      React.useState(() =>
-        {
-          itemState: ItemUnselected,
-          response: Loading,
-          pageConfig: {
-            direction: None,
-          },
-        }
-      );
+    let (state, setState) = a20;
 
     let send = (action: action) => {
       switch (action) {

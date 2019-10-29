@@ -20,9 +20,11 @@ type state = {selectedTab: tabs};
 type action =
   | ChangeTab(tabs);
 
+let a2 = React.useState(() => SimpleTab);
+
 [@react.component]
 let make = (~cdf: FC__Types.Dist.t) => {
-  let (selectedTab, setSelectedTab) = React.useState(() => SimpleTab);
+  let (selectedTab, setSelectedTab) = a2;
 
   <PageCard>
     <PageCard.HeaderRow>

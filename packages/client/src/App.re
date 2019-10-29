@@ -2,13 +2,15 @@
 
 let appApolloClient = AppApolloClient.instance();
 
+let a1 =
+  React.useState(() => {
+    let url = ReasonReact.Router.dangerouslyGetInitialUrl();
+    url |> Routing.Route.fromUrl;
+  });
+
 [@react.component]
 let make = () => {
-  let (route, setRoute) =
-    React.useState(() => {
-      let url = ReasonReact.Router.dangerouslyGetInitialUrl();
-      url |> Routing.Route.fromUrl;
-    });
+  let (route, setRoute) = a1;
 
   ReasonReact.Router.watchUrl(url => {
     setRoute(_ => url |> Routing.Route.fromUrl);

@@ -31,10 +31,7 @@
 		"test": "jest --ci --bail --no-cache",
 		"update-gql": "API_URL=${API_URL:-http://localhost:4000/graphql} yarn send-introspection-query ${API_URL}",
 		"find-interface-for-file": "bsc -bs-re-out",
-		"analyze": "source-map-explorer dist/Index.adc0ecca.js",
-		"webpack": "webpack -w",
-		"webpack:production": "NODE_ENV=production webpack",
-		"server": "webpack-dev-server"
+		"analyze": "source-map-explorer dist/Index.adc0ecca.js"
 	},
 	"dependencies": {
 		"@foretold/cdf": "1.0.10",
@@ -78,11 +75,7 @@
 		"react": "16.8.6",
 		"react-dom": "16.8.6",
 		"reason-apollo": "0.16.4",
-		"reason-react": "0.7.0",
-		"html-webpack-plugin": "^3.2.0",
-		"webpack": "^4.0.1",
-		"webpack-cli": "^3.1.1",
-		"webpack-dev-server": "^3.1.8"
+		"reason-react": "0.7.0"
 	},
 	"devDependencies": {
 		"parcel-plugin-bundle-visualiser": "1.2.0",

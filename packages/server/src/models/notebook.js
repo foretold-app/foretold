@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     body: {
-      type: DataTypes.JSON,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     createdAt: {

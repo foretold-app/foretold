@@ -30,7 +30,7 @@ module.exports = {
           allowNull: false,
         },
         body: {
-          type: Sequelize.JSON,
+          type: Sequelize.TEXT,
           allowNull: true,
         },
         createdAt: {

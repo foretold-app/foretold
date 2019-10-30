@@ -5,13 +5,12 @@ const { DataBase } = require('./data-base');
 const { MeasurementsData } = require('./measurements-data');
 
 const { UserModel } = require('../models-abstract');
-const { Params } = require('./classes');
-const { Query } = require('./classes');
-const { Data } = require('./classes');
+
+const { Params, Query, Data } = require('./classes');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {UserModel} UserModel
+ * @property {UserModel} model
  */
 class UsersData extends DataBase {
   constructor() {

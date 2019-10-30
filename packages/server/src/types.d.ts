@@ -2,6 +2,7 @@ export namespace Models {
   export type ObjectID = string;
   export type ChannelMembershipRole = "ADMIN" | "VIEWER";
   export type float = number;
+  export type Json = string;
 
   export type AgentID = ObjectID;
   export type ChannelID = ObjectID;
@@ -19,6 +20,7 @@ export namespace Models {
   export type PreferenceID = ObjectID;
   export type TokenID = ObjectID;
   export type ChannelMembershipID = ObjectID;
+  export type NotebookID = ObjectID;
 
   export interface Model {
     id: ObjectID;
@@ -208,6 +210,14 @@ export namespace Models {
     primaryPointScore: float;
     numberOfPredictions: number;
     numberOfQuestionsScored: number;
+  }
+
+  export interface Notebook extends Model {
+    id: NotebookID;
+    ownerId: AgentID;
+    channelId: ChannelID;
+    body: Json;
+    name: string;
   }
 
   export type Creator = Models.User | Models.Bot;

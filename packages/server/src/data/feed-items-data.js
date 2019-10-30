@@ -5,7 +5,7 @@ const { FeedItemModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {FeedItemModel} FeedItemModel
+ * @property {FeedItemModel} model
  */
 class FeedItemsData extends DataBase {
   constructor() {

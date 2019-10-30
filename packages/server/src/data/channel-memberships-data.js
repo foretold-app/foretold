@@ -8,7 +8,7 @@ const { CHANNEL_MEMBERSHIP_TYPE } = require('../enums/channel-membership-type');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {ChannelMembershipModel} ChannelMembershipModel
+ * @property {ChannelMembershipModel} model
  */
 class ChannelMembershipsData extends DataBase {
   constructor() {

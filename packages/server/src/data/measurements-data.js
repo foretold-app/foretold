@@ -4,7 +4,7 @@ const { MeasurementModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {MeasurementModel} MeasurementModel
+ * @property {MeasurementModel} model
  */
 class MeasurementsData extends DataBase {
   constructor() {

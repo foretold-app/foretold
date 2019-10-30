@@ -4,7 +4,7 @@ const { NotificationModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {NotificationModel} NotificationsModel
+ * @property {NotificationModel} model
  */
 class NotificationsData extends DataBase {
   constructor() {

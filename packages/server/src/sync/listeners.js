@@ -128,7 +128,9 @@ async function newMeasurementSlackNotification(measurement) {
 
   try {
     const notifications = new actions.Notifications();
-    const result = await notifications.newMeasurementSlackNotification(measurement);
+    const result = await notifications.newMeasurementSlackNotification(
+      measurement,
+    );
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -147,7 +149,9 @@ async function newMeasurableSlackNotification(measurable) {
 
   try {
     const notifications = new actions.Notifications();
-    const result = await notifications.newMeasurableSlackNotification(measurable);
+    const result = await notifications.newMeasurableSlackNotification(
+      measurable,
+    );
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -166,7 +170,9 @@ async function updateMeasurableSlackNotification(measurable) {
 
   try {
     const notifications = new actions.Notifications();
-    const result = await notifications.updateMeasurableSlackNotification(measurable);
+    const result = await notifications.updateMeasurableSlackNotification(
+      measurable,
+    );
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -255,7 +261,7 @@ function listenFor(Producer) {
   const name = `${Producer.name}`;
   log.trace(`Listen for: ${name}`);
 
-  return async function (input) {
+  return async function listenForProducer(input) {
     log.trace(`Run listener: ${name}`);
 
     try {

@@ -46,10 +46,7 @@ let make = (~channelId: string, _children) => {
             value={self.state.text}
           />
         </div>
-        <Markdown
-          source={self.state.text}
-          renderers={Markdown.foretoldJsRenderers(channelId)}
-        />
+        <Markdown source={self.state.text} channelId supportForetoldJs=true />
       </FC.PageCard.Body>
     </SLayout>;
   },

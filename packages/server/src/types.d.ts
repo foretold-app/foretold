@@ -300,6 +300,7 @@ export namespace Layers {
       excludeChannelId?: Models.ChannelID;
       notTaggedByAgent?: Models.AgentID;
       notificationId?: Models.NotificationID;
+      ownerId?: Models.AgentID;
 
       competitorType?: string;
       type?: string;
@@ -412,6 +413,7 @@ export namespace Layers {
       notTaggedByAgent?: Models.AgentID;
       seriesId?: Models.SeriesID;
       creatorId?: Models.AgentID;
+      ownerId?: Models.AgentID;
 
       isArchived?: string[];
       types?: string[];

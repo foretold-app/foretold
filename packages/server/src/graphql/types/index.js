@@ -19,6 +19,7 @@ const globalSettings = require('./global-settings');
 const agentMeasurables = require('./agent-measurables');
 const agentChannels = require('./agent-channels');
 const mutexes = require('./mutexes');
+const notebooks = require('./notebooks');
 const jwt = require('./scalars/jwt');
 
 module.exports = {
@@ -42,5 +43,6 @@ module.exports = {
   agentMeasurables,
   agentChannels,
   mutexes,
+  notebooks,
   jwt,
 };

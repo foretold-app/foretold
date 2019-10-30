@@ -13,7 +13,7 @@ const log = logger.module('data/global-settings-data');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {FeedItemModel} FeedItemModel
+ * @property {FeedItemModel} model
  */
 class GlobalSettingsData extends DataBase {
   constructor() {

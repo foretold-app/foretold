@@ -7,7 +7,7 @@ const { Params, Query, Data, Options } = require('./classes');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {MutexesModel} MutexesModel
+ * @property {MutexesModel} model
  */
 class MutexesData extends DataBase {
   constructor() {

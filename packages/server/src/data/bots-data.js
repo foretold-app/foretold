@@ -5,7 +5,7 @@ const { TokensData } = require('./tokens-data');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {BotModel} BotModel
+ * @property {BotModel} model
  */
 class BotsData extends DataBase {
   constructor() {

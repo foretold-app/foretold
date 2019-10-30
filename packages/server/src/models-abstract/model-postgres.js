@@ -310,6 +310,7 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
+   * @todo: Try to fix it and do not use "this.models.Measurement".
    * @param {object} [include]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {*}

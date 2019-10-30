@@ -4,7 +4,7 @@ const { TemplateModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {TemplateModel} TemplatesModel
+ * @property {TemplateModel} model
  */
 class TemplatesData extends DataBase {
   constructor() {

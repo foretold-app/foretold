@@ -9,7 +9,7 @@ const { AgentChannelModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {AgentChannelModel} AgentChannelsModel
+ * @property {AgentChannelModel} model
  */
 class AgentChannelsData extends DataBase {
   constructor() {

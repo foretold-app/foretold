@@ -7,6 +7,7 @@ const { ChannelModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
+ * @property {ChannelModel} model
  */
 class ChannelsData extends DataBase {
   constructor() {

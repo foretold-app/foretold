@@ -438,6 +438,12 @@ class ModelPostgres extends Model {
       });
     }
 
+    if (!!filter.ownerId) {
+      where[this.and].push({
+        ownerId: filter.ownerId,
+      });
+    }
+
     if (!!filter.creatorId) {
       where[this.and].push({
         creatorId: filter.creatorId,

@@ -52,6 +52,7 @@ class Filter {
       isEmailVerified: (v) => _.isArray(v) || utils.none(v),
       notAuth0AccessToken: (v) => _.isBoolean(v) || utils.none(v),
       isNotEmailVerified: (v) => _.isBoolean(v) || utils.none(v),
+      ownerId: (v) => _.isString(v) || utils.none(v),
     };
     utils.extend(this.constructor.name, filter, list, this);
     utils.test(this.constructor.name, list, this);

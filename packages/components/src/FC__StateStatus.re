@@ -1,3 +1,4 @@
+[@bs.config {jsx: 3}];
 type expectedResolutionDate = MomentRe.Moment.t;
 type resolutionDate = MomentRe.Moment.t;
 

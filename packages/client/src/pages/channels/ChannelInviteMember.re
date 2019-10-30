@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Antd;
 
 module Config = {
@@ -22,14 +24,15 @@ module Config = {
 module Form = ReFormNext.Make(Config);
 
 let withForm = (channelId, email, mutation, innerComponentFn) =>
-  <Form
+  <Form.Jsx3
     initialState={email: email}
+    onSubmitFail=ignore
     onSubmit={values =>
       InvitationCreate.mutate(mutation, values.state.values.email, channelId)
     }
     schema={Form.Validation.Schema([|Email(Email)|])}>
     ...innerComponentFn
-  </Form>;
+  </Form.Jsx3>;
 
 let fields = (form: Form.state, send, onSubmit, getFieldState) => {
   let stateEmail: Form.fieldState = getFieldState(Form.Field(Email));
@@ -49,7 +52,7 @@ let fields = (form: Form.state, send, onSubmit, getFieldState) => {
 
   <Antd.Form onSubmit={e => onSubmit()}>
     <Antd.Form.Item>
-      {"Email*:" |> Utils.ste |> E.React.inH3}
+      {"Email*:" |> Utils.ste |> E.React2.inH3}
       <AntdInput
         value={form.values.email}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -75,36 +78,34 @@ module CMutationForm =
     type queryType = InvitationCreate.Query.t;
   });
 
-let component = ReasonReact.statelessComponent("ChannelInviteMember");
-let make = (~channelId: string, _children) => {
-  ...component,
-  render: _ =>
-    <SLayout head={SLayout.Header.textDiv("Invite Member")}>
-      <FC.PageCard.BodyPadding>
-        {InvitationCreate.withMutation((mutation, data) =>
-           withForm(
-             channelId,
-             "",
-             mutation,
-             ({send, state, getFieldState}) => {
-               let form =
-                 fields(state, send, () => send(Form.Submit), getFieldState);
+[@react.component]
+let make = (~channelId: string) => {
+  <SLayout head={SLayout.Header.textDiv("Invite Member")}>
+    <FC.PageCard.BodyPadding>
+      {InvitationCreate.withMutation((mutation, data) =>
+         withForm(
+           channelId,
+           "",
+           mutation,
+           ({send, state, getFieldState}) => {
+             let form =
+               fields(state, send, () => send(Form.Submit), getFieldState);
 
-               let onSuccess = _ =>
-                 <>
-                   <AntdAlert message=Lang.memberInvited type_="success" />
-                   form
-                 </>;
+             let onSuccess = _ =>
+               <>
+                 <AntdAlert message=Lang.memberInvited type_="success" />
+                 form
+               </>;
 
-               CMutationForm.showWithLoading2(
-                 ~result=data.result,
-                 ~form,
-                 ~onSuccess,
-                 (),
-               );
-             },
-           )
-         )}
-      </FC.PageCard.BodyPadding>
-    </SLayout>,
+             CMutationForm.showWithLoading2(
+               ~result=data.result,
+               ~form,
+               ~onSuccess,
+               (),
+             );
+           },
+         )
+       )}
+    </FC.PageCard.BodyPadding>
+  </SLayout>;
 };

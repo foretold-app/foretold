@@ -1,7 +1,11 @@
+[@bs.config {jsx: 3}];
+
 module Icon = {
   [@bs.module "./Icon.js"]
   external reactClass: ReasonReact.reactClass = "Icon";
-  let make = (~icon=?, ~size=?, children) =>
+
+  [@react.component]
+  let make = (~icon=?, ~size=?, ~children=ReasonReact.null) =>
     ReasonReact.wrapJsForReason(
       ~reactClass,
       ~props={
@@ -9,5 +13,6 @@ module Icon = {
         "size": size |> E.O.default("1em"),
       },
       children,
-    );
+    )
+    |> ReasonReact.element;
 };

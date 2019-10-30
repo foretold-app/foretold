@@ -31,8 +31,6 @@ let make =
 };
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("Link");
-
   let make = (~href=?, ~onClick=?, ~isDisabled=?, ~className=?, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

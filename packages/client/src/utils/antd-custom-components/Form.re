@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let optBoolToOptJsBoolean =
   fun
   | None => None
@@ -6,6 +8,8 @@ let optBoolToOptJsBoolean =
 let unwrapBool = v => Js.Undefined.fromOption @@ optBoolToOptJsBoolean(v);
 
 [@bs.module] external form: ReasonReact.reactClass = "antd/lib/form";
+
+[@react.component]
 let make =
     (
       ~layout=?,
@@ -14,6 +18,7 @@ let make =
       ~id=?,
       ~className=?,
       ~style=?,
+      ~children=ReasonReact.null,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=form,
@@ -26,20 +31,25 @@ let make =
         "className": fromOption(className),
         "style": fromOption(style),
       },
-  );
+    children,
+  )
+  |> ReasonReact.element;
 
 type wrapper = (. ReasonReact.reactClass) => ReasonReact.reactClass;
 
 [@bs.module "antd/lib/form"] external create: unit => wrapper = "create";
-let wrapper = (~component, ~make', ~props, ~children) => {
+let wrapper = (~component, ~make', ~props, ~children=ReasonReact.null) => {
   let wrapper = create();
   let reactClass' = ReasonReact.wrapReasonForJs(~component, _ => make'([||]));
   let reactClass = wrapper(. reactClass');
-  ReasonReact.wrapJsForReason(~reactClass, ~props, children);
+  ReasonReact.wrapJsForReason(~reactClass, ~props, children)
+  |> ReasonReact.element;
 };
 
 module Item = {
   [@bs.module "antd/lib/form"] external item: ReasonReact.reactClass = "Item";
+
+  [@react.component]
   let make =
       (
         ~colon=?,
@@ -54,6 +64,7 @@ module Item = {
         ~help=?,
         ~hasFeedback=?,
         ~labelCol=?,
+        ~children=ReasonReact.null,
       ) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=item,
@@ -72,5 +83,7 @@ module Item = {
           "hasFeedback": unwrapBool(hasFeedback),
           "labelCol": fromOption(labelCol),
         },
-    );
+      children,
+    )
+    |> ReasonReact.element;
 };

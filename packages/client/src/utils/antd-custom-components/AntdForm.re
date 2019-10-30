@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 [@bs.module] external reactClass: ReasonReact.reactClass = "antd/lib/form";
 
 [%bs.raw {|require("antd/lib/form/style")|}];
@@ -35,6 +37,7 @@ module Item = {
     _ =
     "";
 
+  [@react.component]
   let make =
       (
         ~prefixCls=?,
@@ -48,7 +51,7 @@ module Item = {
         ~required=?,
         ~style=?,
         ~colon=?,
-        children,
+        ~children=ReasonReact.null,
       ) =>
     ReasonReact.wrapJsForReason(
       ~reactClass,
@@ -69,7 +72,8 @@ module Item = {
           (),
         ),
       children,
-    );
+    )
+    |> ReasonReact.element;
 };
 
 [@bs.obj]
@@ -86,6 +90,7 @@ external makeProps:
   _ =
   "";
 
+[@react.component]
 let make =
     (
       ~layout=?,
@@ -94,7 +99,7 @@ let make =
       ~className=?,
       ~prefixCls=?,
       ~hideRequiredMark=?,
-      children,
+      ~children=ReasonReact.null,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,
@@ -109,4 +114,5 @@ let make =
         (),
       ),
     children,
-  );
+  )
+  |> ReasonReact.element;

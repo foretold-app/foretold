@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module Styles = {
   open Css;
   let outer =
@@ -24,27 +26,25 @@ module Styles = {
   let rightInner = style([flex(`num(1.))]);
 };
 
-let component = ReasonReact.statelessComponent("FillWithSidebar");
-let make = (~channelId=None, _children) => {
-  ...component,
-  render: _self =>
-    <Providers.AppContext.Consumer>
-      ...{({loggedUser}) =>
-        <div className=Styles.outer>
-          {loggedUser
-           |> E.O.React.fmapOrNull(_ =>
-                <div className=Styles.left>
-                  <Sidebar channelId loggedUser />
-                </div>
-              )}
-          <div className=Styles.right>
-            <div className=Styles.rightInner>
-              <Header loggedUser />
-              <div> ..._children </div>
-            </div>
-            <Footer />
+[@react.component]
+let make = (~channelId=None, ~children=ReasonReact.null) => {
+  <Providers.AppContext.Consumer>
+    ...{({loggedUser}) =>
+      <div className=Styles.outer>
+        {loggedUser
+         |> E.O.React.fmapOrNull(_ =>
+              <div className=Styles.left>
+                <Sidebar channelId loggedUser />
+              </div>
+            )}
+        <div className=Styles.right>
+          <div className=Styles.rightInner>
+            <Header loggedUser />
+            <div> children </div>
           </div>
+          <Footer />
         </div>
-      }
-    </Providers.AppContext.Consumer>,
+      </div>
+    }
+  </Providers.AppContext.Consumer>;
 };

@@ -11,11 +11,11 @@ module Columns = {
         (r: record) =>
           <div>
             <Link linkType={Internal(ChannelShow(r.id))}>
-              [|r.name |> Utils.ste|]
+              {r.name |> Utils.ste}
             </Link>
             {r.description
              |> E.O.React.fmapOrNull(description =>
-                  <Markdown.Jsx3 source=description />
+                  <ReactMarkdown source=description />
                 )}
           </div>,
       ~flex=4,
@@ -89,7 +89,6 @@ let make = (~agentId=None, ~isArchived=?) =>
   );
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("ChannelTable");
   let make = (~agentId=None, ~isArchived=?, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

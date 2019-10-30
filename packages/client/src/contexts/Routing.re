@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 type channelId = string;
 type seriesId = string;
 type measurablesSearchString = string;

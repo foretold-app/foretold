@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Utils;
 open ReactMarkdown;
 open Style.Grid;
@@ -75,7 +77,7 @@ let description = (~m: Types.measurable) =>
   switch (m.labelCustom) {
   | Some("")
   | None => None
-  | Some(text) => Some(<Markdown source=text />)
+  | Some(text) => Some(<ReactMarkdown source=text />)
   };
 
 let endpointResponse = (~m: Types.measurable) =>
@@ -92,43 +94,43 @@ let endpointResponse = (~m: Types.measurable) =>
   };
 
 let questionLink = (~m: Types.measurable) =>
-  <Link.Jsx2
+  <Link
     className=Shared.Item.item
     linkType={Internal(MeasurableShow(m.channelId, m.id))}>
     {"Link to This Question" |> Utils.ste}
-  </Link.Jsx2>;
+  </Link>;
 
 let creatorLink = (~m: Types.measurable) =>
   m.creator
   |> E.O.fmap((agent: Types.agent) =>
-       <Link.Jsx2
+       <Link
          linkType={
            Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
          }
          className=Shared.Item.item>
-         <AgentLink.Jsx2 agent />
-       </Link.Jsx2>
+         <AgentLink agent />
+       </Link>
      );
 
 let editLink = (~m: Types.measurable) =>
   <div className=Shared.Item.item>
-    <Link.Jsx2
+    <Link
       linkType={Internal(MeasurableEdit(m.id))}
       className={Shared.Item.itemButton(NORMAL)}>
       {"Edit" |> ste}
-    </Link.Jsx2>
+    </Link>
   </div>;
 
 let channelLink = (~m: Types.measurable) =>
   <div className=Shared.Item.item>
-    <Link.Jsx2
+    <Link
       linkType={Internal(ChannelShow(m.channelId))}
       className=Shared.Item.item>
       {switch (m.channel) {
        | Some(channel) => "#" ++ channel.name |> ste
        | _ => "#channel" |> ste
        }}
-    </Link.Jsx2>
+    </Link>
   </div>;
 
 let measurements = (~m: Types.measurable) =>
@@ -173,10 +175,10 @@ let series = (~m: Types.measurable, ~channelId=None, ()) => {
        | Some(name) =>
          Some(
            <div className=Shared.Item.item>
-             <Link.Jsx2 linkType={Internal(SeriesShow(m.channelId, r.id))}>
+             <Link linkType={Internal(SeriesShow(m.channelId, r.id))}>
                <Icon.Icon icon="LAYERS" />
                {name |> ste}
-             </Link.Jsx2>
+             </Link>
            </div>,
          )
        | None => None
@@ -199,34 +201,36 @@ let resolutionEndpoint = (~m: Types.measurable) =>
   };
 
 let archiveButton = (~m: Types.measurable) =>
-  MeasurableArchive.Mutation.make((mutation, _) =>
-    <div className=Shared.Item.item>
-      <div
-        className={Shared.Item.itemButton(DANGER)}
-        onClick={e => {
-          MeasurableArchive.mutate(mutation, m.id);
-          ReactEvent.Synthetic.stopPropagation(e);
-        }}>
-        {"Archive" |> ste}
+  <MeasurableArchive.Mutation>
+    ...{(mutation, _) =>
+      <div className=Shared.Item.item>
+        <div
+          className={Shared.Item.itemButton(DANGER)}
+          onClick={e => {
+            MeasurableArchive.mutate(mutation, m.id);
+            ReactEvent.Synthetic.stopPropagation(e);
+          }}>
+          {"Archive" |> ste}
+        </div>
       </div>
-    </div>
-  )
-  |> E.React.el;
+    }
+  </MeasurableArchive.Mutation>;
 
 let unArchiveButton = (~m: Types.measurable) =>
-  MeasurableUnarchive.Mutation.make((mutation, _) =>
-    <div className=Shared.Item.item>
-      <div
-        className={Shared.Item.itemButton(DANGER)}
-        onClick={e => {
-          MeasurableUnarchive.mutate(mutation, m.id);
-          ReactEvent.Synthetic.stopPropagation(e);
-        }}>
-        {"Unarchive" |> ste}
+  <MeasurableUnarchive.Mutation>
+    ...{(mutation, _) =>
+      <div className=Shared.Item.item>
+        <div
+          className={Shared.Item.itemButton(DANGER)}
+          onClick={e => {
+            MeasurableUnarchive.mutate(mutation, m.id);
+            ReactEvent.Synthetic.stopPropagation(e);
+          }}>
+          {"Unarchive" |> ste}
+        </div>
       </div>
-    </div>
-  )
-  |> E.React.el;
+    }
+  </MeasurableUnarchive.Mutation>;
 
 let archiveOption = (~m: Types.measurable) =>
   m.isArchived == Some(true) ? unArchiveButton(~m) : archiveButton(~m);

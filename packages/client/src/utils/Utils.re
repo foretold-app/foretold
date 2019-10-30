@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Belt.Result;
 
 let resolveRegex = (exp, str) => {

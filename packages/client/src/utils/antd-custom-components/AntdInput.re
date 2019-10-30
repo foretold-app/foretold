@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 [@bs.module] external reactClass: ReasonReact.reactClass = "antd/lib/input";
 
 [%bs.raw {|require("antd/lib/input/style")|}];
@@ -24,6 +26,7 @@ external makeProps:
 /**
  * Antd.Input does not support some fields (disabled etc).
  */
+[@react.component]
 let make =
     (
       ~htmlType=?,
@@ -37,7 +40,7 @@ let make =
       ~className=?,
       ~style=?,
       ~placeholder=?,
-      children,
+      ~children=ReasonReact.null,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,
@@ -57,4 +60,5 @@ let make =
         (),
       ),
     children,
-  );
+  )
+  |> ReasonReact.element;

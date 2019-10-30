@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 type t('a) =
   | Loading
   | Error(string)

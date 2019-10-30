@@ -1,4 +1,4 @@
-let component = ReasonReact.statelessComponent("SmallCdfChartLarge");
+[@bs.config {jsx: 3}];
 
 module Styles = {
   open Css;
@@ -11,23 +11,31 @@ module Styles = {
       selector(".chart .area-path", [SVG.fill(`hex("7e9db7"))]),
     ]);
 };
-let make =
-    (~cdf: FC__Types.Dist.t, ~minX=?, ~maxX=?, ~width=Some(400), _children) => {
-  ...component,
-  render: _ => {
-    let pdf = cdf |> FC__Types.Dist.toPdf;
-    <div className=Styles.graph>
-      <FC__CdfChart__Base
-        marginBottom=25
-        ?width
-        height=200
-        ?maxX
-        ?minX
-        showVerticalLine=false
-        showDistributionLines=false
-        primaryDistribution={"xs": pdf.xs, "ys": pdf.ys}
-        onHover={_r => ()}
-      />
-    </div>;
-  },
+
+[@react.component]
+let make = (~cdf: FC__Types.Dist.t, ~minX=?, ~maxX=?, ~width=Some(400)) => {
+  let pdf = cdf |> FC__Types.Dist.toPdf;
+  <div className=Styles.graph>
+    <FC__CdfChart__Base
+      marginBottom=25
+      ?width
+      height=200
+      ?maxX
+      ?minX
+      showVerticalLine=false
+      showDistributionLines=false
+      primaryDistribution={"xs": pdf.xs, "ys": pdf.ys}
+      onHover={_r => ()}
+    />
+  </div>;
+};
+
+module Jsx2 = {
+  let make =
+      (~cdf: FC__Types.Dist.t, ~minX=?, ~maxX=?, ~width=Some(400), children) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~cdf, ~minX?, ~maxX?, ~width, ()),
+      children,
+    );
 };

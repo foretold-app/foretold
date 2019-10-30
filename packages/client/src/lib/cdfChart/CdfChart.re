@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 [@bs.module "./cdfChart.js"]
 external cdfChart: ReasonReact.reactClass = "default";
 
@@ -7,22 +9,7 @@ type data = {
   "ys": array(float),
 };
 
-[@bs.obj]
-external makeProps:
-  (
-    ~width: int=?,
-    ~height: int=?,
-    ~verticalLine: float=?,
-    ~showVerticalLine: bool=?,
-    ~showDistributionLines: bool=?,
-    ~marginBottom: int=?,
-    ~maxX: float=?,
-    ~minX: float=?,
-    ~primaryDistribution: data=?,
-    unit
-  ) =>
-  _ =
-  "";
+[@react.component]
 let make =
     (
       ~width=?,
@@ -34,7 +21,7 @@ let make =
       ~maxX=?,
       ~minX=?,
       ~primaryDistribution=?,
-      children,
+      ~children=ReasonReact.null,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=cdfChart,
@@ -52,4 +39,5 @@ let make =
         (),
       ),
     children,
-  );
+  )
+  |> ReasonReact.element;

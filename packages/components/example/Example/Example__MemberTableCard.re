@@ -1,24 +1,26 @@
+[@bs.config {jsx: 3}];
+
 open FC;
 open Base;
 
 let make =
   <PageCard>
     <PageCard.HeaderRow>
-      <Div.Jsx2 float=`left>
+      <Div float=`left>
         <PageCard.HeaderRow.Title>
           {"Pending Resolution" |> ReasonReact.string}
         </PageCard.HeaderRow.Title>
-      </Div.Jsx2>
-      <Div.Jsx2
+      </Div>
+      <Div
         float=`right
         className={Css.style([
           PageCard.HeaderRow.Styles.itemTopPadding,
           PageCard.HeaderRow.Styles.itemBottomPadding,
         ])}>
-        <FC__Button variant=Primary size=Small>
+        <FC__Button variant=FC__Button.Primary size=FC__Button.Small>
           {"< Back" |> ReasonReact.string}
         </FC__Button>
-      </Div.Jsx2>
+      </Div>
     </PageCard.HeaderRow>
     <Table>
       <Table.HeaderRow>

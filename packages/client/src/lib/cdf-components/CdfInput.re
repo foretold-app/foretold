@@ -1,6 +1,7 @@
+[@bs.config {jsx: 3}];
+
 open E;
 open Utils;
-open Antd;
 
 type state = {
   // -> Measurement.value
@@ -67,22 +68,26 @@ let competitorTypeSelect =
       ~state=measurable.state,
     );
 
-  <Select
+  <Antd.Select
     value={state.competitorType}
     className=Styles.fullWidth
     onChange={e => send(UpdateCompetitorType(e))}>
     {options |> ReasonReact.array}
-  </Select>;
+  </Antd.Select>;
 };
 
 let dataTypeSelect = (~state, ~send): ReasonReact.reactElement =>
-  <Select
+  <Antd.Select
     value={state.dataType}
     onChange={e => send(UpdateDataType(e))}
     className=Styles.fullWidth>
-    <Select.Option value="FLOAT_CDF"> {"Distribution" |> ste} </Select.Option>
-    <Select.Option value="FLOAT_POINT"> {"Exact Value" |> ste} </Select.Option>
-  </Select>;
+    <Antd.Select.Option value="FLOAT_CDF">
+      {"Distribution" |> ste}
+    </Antd.Select.Option>
+    <Antd.Select.Option value="FLOAT_POINT">
+      {"Exact Value" |> ste}
+    </Antd.Select.Option>
+  </Antd.Select>;
 
 let getIsValid = (state: state): bool => {
   switch (state.dataType) {
@@ -154,24 +159,24 @@ let botsSelect =
     <div className=Styles.inputBox>
       <h4 className=Styles.label> {"Do this as:" |> ste} </h4>
     </div>
-    <Select
+    <Antd.Select
       value={state.asAgent}
       onChange={e => send(UpdateAsAgent(e))}
       className=Styles.fullWidth>
-      <Select.Option value=""> {name |> ste} </Select.Option>
+      <Antd.Select.Option value=""> {name |> ste} </Antd.Select.Option>
       {bots
        |> Array.map((bot: Types.bot) =>
-            <Select.Option
+            <Antd.Select.Option
               value={
                 bot.agent
                 |> E.O.fmap((agent: Types.agent) => agent.id)
                 |> E.O.default("")
               }>
               {bot.name |> E.O.default(bot.id) |> ste}
-            </Select.Option>
+            </Antd.Select.Option>
           )
        |> ReasonReact.array}
-    </Select>
+    </Antd.Select>
   </>;
 };
 
@@ -195,75 +200,76 @@ module ValueInput = {
     />;
 
   let boolean = (binaryValue, send) =>
-    <Select
+    <Antd.Select
       value={binaryValue |> E.Bool.toString}
       className=Styles.fullWidth
       onChange={e => send(UpdateBinary(e |> E.Bool.fromString))}>
-      <Select.Option value="TRUE"> {"True" |> ste} </Select.Option>
-      <Select.Option value="FALSE"> {"False" |> ste} </Select.Option>
-    </Select>;
+      <Antd.Select.Option value="TRUE"> {"True" |> ste} </Antd.Select.Option>
+      <Antd.Select.Option value="FALSE"> {"False" |> ste} </Antd.Select.Option>
+    </Antd.Select>;
 
   let percentage = (percentageValue, send) =>
     <>
       <Slider
         min=0.
         max=100.
-        value=percentageValue
+        value={percentageValue |> int_of_float}
         tipFormatter={(v: string) => v ++ "%"}
         step=1.
         onChange={(value: float) => send(UpdatePercentage(value))}
       />
       <InputNumber
-        formatter={v => v ++ "%"}
-        parser={v => Js.String.replace("%", "", v)}
-        min=0.
-        max=100.
-        value=percentageValue
-        step=1.
-        onChange={(value: float) =>
+        formatter={v => string_of_int(v) ++ "%"}
+        parser={v => Js.String.replace("%", "", v) |> int_of_string}
+        min=0
+        max=100
+        value={percentageValue |> int_of_float}
+        step=1
+        onChange={(value: int) => {
+          let value = float_of_int(value);
           if (value > (-0.001)) {
             // This is to fix a bug. The value could actually be undefined,
             // but the antd lib can't handle this.
             send(
               UpdatePercentage(value),
             );
-          }
-        }
+          };
+        }}
       />
     </>;
 
   let unresolvable = (unresolvableResolution, send) =>
-    <Select
+    <Antd.Select
       value=unresolvableResolution
       className=Styles.fullWidth
       onChange={e => send(UpdateUnresolvableResolution(e))}>
-      <Select.Option value="AMBIGUOUS">
+      <Antd.Select.Option value="AMBIGUOUS">
         {"Result Ambiguous" |> ste}
-      </Select.Option>
-      <Select.Option value="RESULT_NOT_AVAILABLE">
+      </Antd.Select.Option>
+      <Antd.Select.Option value="RESULT_NOT_AVAILABLE">
         {"Result Not Available" |> ste}
-      </Select.Option>
-      <Select.Option value="FALSE_CONDITIONAL">
+      </Antd.Select.Option>
+      <Antd.Select.Option value="FALSE_CONDITIONAL">
         {"Necessary Conditional was False" |> ste}
-      </Select.Option>
-      <Select.Option value="OTHER"> {"Other" |> ste} </Select.Option>
-    </Select>;
+      </Antd.Select.Option>
+      <Antd.Select.Option value="OTHER"> {"Other" |> ste} </Antd.Select.Option>
+    </Antd.Select>;
 
   let comment = (comment, send) =>
-    <Select
+    <Antd.Select
       value=comment
       onChange={e => send(UpdateComment(e))}
       className=Styles.fullWidth>
-      <Select.Option value="GENERIC">
+      <Antd.Select.Option value="GENERIC">
         {"Generic Comment" |> ste}
-      </Select.Option>
-      <Select.Option value="QUESTION_FEEDBACK">
+      </Antd.Select.Option>
+      <Antd.Select.Option value="QUESTION_FEEDBACK">
         {"Question Feedback" |> ste}
-      </Select.Option>
-      <Select.Option value="UPDATE">
+      </Antd.Select.Option>
+      <Antd.Select.Option value="UPDATE">
         {"Relevant Information Update" |> ste}
-      </Select.Option>
-    </Select>;
+      </Antd.Select.Option>
+    </Antd.Select>;
 };
 
 let mainBlock =
@@ -325,9 +331,9 @@ let mainBlock =
             <span
               className=Css.(style([float(`right), fontSize(`em(1.6))]))>
               <FC.HelpDropdown
-                content={
+                content=FC.HelpDropdown.{
                   headerContent: "Distribution Editor" |> ste,
-                  bodyContent: <Markdown source=tutorialSource />,
+                  bodyContent: <ReactMarkdown source=tutorialSource />,
                 }
               />
             </span>
@@ -407,7 +413,7 @@ let mainBlock =
       </div>
       getDataTypeSelect
       valueInput
-      <Input.TextArea
+      <Antd.Input.TextArea
         value={state.description}
         onChange={event => {
           let value = ReactEvent.Form.target(event)##value;
@@ -425,8 +431,7 @@ let mainBlock =
   </div>;
 };
 
-let component = ReasonReact.reducerComponent("CdfInput");
-
+[@react.component]
 let make =
     (
       ~data: MeasurementCreate.Mutation.renderPropObj,
@@ -436,49 +441,60 @@ let make =
       ~measurable: Types.measurable,
       ~bots: option(array(Types.bot)),
       ~loggedUser: Types.user,
-      _children,
     ) => {
-  ...component,
-
-  initialState: () => {
-    let competitorTypeInitValue =
-      switch (measurable.state) {
-      | Some(`JUDGED) => "OBJECTIVE"
-      | _ => "COMPETITIVE"
-      };
-
-    {
-      // Values
-      floatCdf: FloatCdf.empty,
-      percentage: 0.,
-      binary: true,
-      unresolvableResolution: "AMBIGUOUS",
-      comment: "GENERIC",
-
-      // OBJECTIVE, COMPETITIVE, AGGREGATION (not used here), UNRESOLVED
-      competitorType: competitorTypeInitValue,
-      // Used to transform Form Data Type to Measurement Type
-      dataType:
-        getDataTypeAsString(competitorTypeInitValue, measurable, None),
-
-      // Strings
-      description: "",
-      valueText: "",
-
-      // Form State Only
-      hasLimitError: false,
-      asAgent: "",
+  let competitorTypeInitValue =
+    switch (measurable.state) {
+    | Some(`JUDGED) => "OBJECTIVE"
+    | _ => "COMPETITIVE"
     };
-  },
 
-  reducer: (action, state) =>
+  let (floatCdf, setFloatPdf) = React.useState(() => FloatCdf.empty);
+  let (percentage, setPercentage) = React.useState(() => 0.);
+  let (binary, setBinary) = React.useState(() => true);
+  let (unresolvableResolution, setUnresolvableResolution) =
+    React.useState(() => "AMBIGUOUS");
+  let (comment, setComment) = React.useState(() => "GENERIC");
+  let (competitorType, setCompetitorType) =
+    React.useState(() => competitorTypeInitValue);
+  let (dataType, setDataType) =
+    React.useState(() =>
+      getDataTypeAsString(competitorTypeInitValue, measurable, None)
+    );
+  let (description, setDescription) = React.useState(() => "");
+  let (valueText, setValueText) = React.useState(() => "");
+  let (hasLimitError, setHasLimitError) = React.useState(() => false);
+  let (asAgent, setAsAgent) = React.useState(() => "");
+
+  let state = {
+    // Values
+    floatCdf,
+    percentage,
+    binary,
+    unresolvableResolution,
+    comment,
+
+    // OBJECTIVE, COMPETITIVE, AGGREGATION (not used here), UNRESOLVED
+    competitorType,
+    // Used to transform Form Data Type to Measurement Type
+    dataType,
+
+    // Strings
+    description,
+    valueText,
+
+    // Form State Only
+    hasLimitError,
+    asAgent,
+  };
+
+  let send = action => {
     switch (action) {
     | UpdateFloatPdf((floatCdf: FloatCdf.t)) =>
       onUpdate(floatCdf);
-      ReasonReact.Update({...state, floatCdf});
+      setFloatPdf(_ => floatCdf);
 
     | UpdateHasLimitError((hasLimitError: bool)) =>
-      ReasonReact.Update({...state, hasLimitError})
+      setHasLimitError(_ => hasLimitError)
 
     | UpdateCompetitorType(competitorType) =>
       let dataType =
@@ -487,65 +503,62 @@ let make =
           measurable,
           Some(state.dataType),
         );
-      ReasonReact.Update({...state, competitorType, dataType});
+      setCompetitorType(_ => competitorType);
+      setDataType(_ => dataType);
 
-    | UpdateDataType((dataType: string)) =>
-      ReasonReact.Update({...state, dataType})
+    | UpdateDataType((dataType: string)) => setDataType(_ => dataType)
 
     | UpdateUnresolvableResolution((unresolvableResolution: string)) =>
-      ReasonReact.Update({...state, unresolvableResolution})
+      setUnresolvableResolution(_ => unresolvableResolution)
 
-    | UpdateComment((comment: string)) =>
-      ReasonReact.Update({...state, comment})
+    | UpdateComment((comment: string)) => setComment(_ => comment)
 
-    | UpdateBinary((binary: bool)) => ReasonReact.Update({...state, binary})
+    | UpdateBinary((binary: bool)) => setBinary(_ => binary)
 
-    | UpdatePercentage((percentage: float)) =>
-      ReasonReact.Update({...state, percentage})
+    | UpdatePercentage((percentage: float)) => setPercentage(_ => percentage)
 
     | UpdateDescription((description: string)) =>
-      ReasonReact.Update({...state, description})
+      setDescription(_ => description)
 
-    | UpdateValueText((valueText: string)) =>
-      ReasonReact.Update({...state, valueText})
+    | UpdateValueText((valueText: string)) => setValueText(_ => valueText)
 
-    | UpdateAsAgent((asAgent: string)) =>
-      ReasonReact.Update({...state, asAgent})
-    },
-
-  render: ({state, send}) => {
-    let onSubmit = () => {
-      let value = getValueFromState(state);
-
-      onSubmit((
-        value,
-        getCompetitorTypeFromString(state.competitorType),
-        state.description,
-        state.valueText,
-        state.asAgent,
-      ));
-
-      ();
+    | UpdateAsAgent((asAgent: string)) => setAsAgent(_ => asAgent)
     };
 
-    let block =
-      mainBlock(
-        ~state,
-        ~isCreator,
-        ~send,
-        ~onSubmit,
-        ~measurable,
-        ~bots,
-        ~loggedUser,
-      );
+    ();
+  };
 
-    <Style.BorderedBox>
-      {switch (data.result) {
-       | Loading => "Loading" |> ste
-       | Error(e) => <> {"Error: " ++ e##message |> ste} block </>
-       | Data(_) => "Form submitted successfully." |> ste |> E.React.inH2
-       | NotCalled => block
-       }}
-    </Style.BorderedBox>;
-  },
+  let onSubmit = () => {
+    let value = getValueFromState(state);
+
+    onSubmit((
+      value,
+      getCompetitorTypeFromString(state.competitorType),
+      state.description,
+      state.valueText,
+      state.asAgent,
+    ));
+
+    ();
+  };
+
+  let block =
+    mainBlock(
+      ~state,
+      ~isCreator,
+      ~send,
+      ~onSubmit,
+      ~measurable,
+      ~bots,
+      ~loggedUser,
+    );
+
+  <Style.BorderedBox>
+    {switch (data.result) {
+     | Loading => "Loading" |> ste
+     | Error(e) => <> {"Error: " ++ e##message |> ste} block </>
+     | Data(_) => "Form submitted successfully." |> ste |> E.React2.inH2
+     | NotCalled => block
+     }}
+  </Style.BorderedBox>;
 };

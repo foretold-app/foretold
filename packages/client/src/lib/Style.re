@@ -1,5 +1,6 @@
+[@bs.config {jsx: 3}];
+
 module BorderedBox = {
-  let component = ReasonReact.statelessComponent("BorderedBox");
   module Styles = {
     open Css;
     let item =
@@ -13,39 +14,38 @@ module BorderedBox = {
       ]);
   };
 
-  let make = children => {
-    ...component,
-    render: _ => <div className=Styles.item> ...children </div>,
-  };
+  [@react.component]
+  let make = (~children=ReasonReact.null) =>
+    <div className=Styles.item> children </div>;
 };
 
 module Grid = {
   open Css;
 
   module Div = {
-    let component = ReasonReact.statelessComponent("DivWithStyles");
-    let make = (~styles=[], ~flex=?, ~flexDirection=?, ~float=?, children) => {
-      ...component,
-      render: _ => {
-        let flexStyle =
-          flex |> E.O.fmap(e => Css.style([Css.flex(e)])) |> E.O.default("");
+    [@react.component]
+    let make =
+        (
+          ~styles=[],
+          ~flex=?,
+          ~flexDirection=?,
+          ~float=?,
+          ~children=ReasonReact.null,
+        ) => {
+      let flexStyle =
+        flex |> E.O.fmap(e => Css.style([Css.flex(e)])) |> E.O.default("");
 
-        let floatStyle =
-          float
-          |> E.O.fmap(e => Css.style([Css.float(e)]))
-          |> E.O.default("");
+      let floatStyle =
+        float |> E.O.fmap(e => Css.style([Css.float(e)])) |> E.O.default("");
 
-        let directionStyle =
-          flexDirection
-          |> E.O.fmap(e =>
-               Css.style([display(`flex), Css.flexDirection(e)])
-             )
-          |> E.O.default("");
+      let directionStyle =
+        flexDirection
+        |> E.O.fmap(e => Css.style([display(`flex), Css.flexDirection(e)]))
+        |> E.O.default("");
 
-        let allStyles = [flexStyle, directionStyle, floatStyle, ...styles];
+      let allStyles = [flexStyle, directionStyle, floatStyle, ...styles];
 
-        <div className={E.L.join(" ", allStyles)}> ...children </div>;
-      },
+      <div className={E.L.join(" ", allStyles)}> children </div>;
     };
   };
 };

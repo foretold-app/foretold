@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Utils;
 
 module Query = [%graphql
@@ -102,15 +104,17 @@ let toMeasurable = (m): Types.measurable => {
 
 let component = (~id, fn) => {
   let query = Query.make(~id, ());
-  QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> ApolloUtils.apolloResponseToResult
-    |> E.R.bind(_, e =>
-         e##measurable |> filterOptionalResult("Measurable not found" |> ste)
-       )
-    |> E.R.fmap(toMeasurable)
-    |> E.R.fmap(fn)
-    |> E.R.id
-  )
-  |> E.React.el;
+  <QueryComponent variables=query##variables>
+    ...{({result}) =>
+      result
+      |> ApolloUtils.apolloResponseToResult
+      |> E.R.bind(_, e =>
+           e##measurable
+           |> filterOptionalResult("Measurable not found" |> ste)
+         )
+      |> E.R.fmap(toMeasurable)
+      |> E.R.fmap(fn)
+      |> E.R.id
+    }
+  </QueryComponent>;
 };

@@ -1,4 +1,7 @@
+[@bs.config {jsx: 3}];
+
 open FC;
+open Button;
 
 let render = () =>
   <>

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 type column('a) = {
   name: ReasonReact.reactElement,
   render: 'a => ReasonReact.reactElement,
@@ -96,7 +98,6 @@ let fromColumns =
               onRowClb(row);
               ();
             }}
-            ?bottomSubRow
             key>
             columnsBody
           </FC.Table.Row>;

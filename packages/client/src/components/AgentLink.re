@@ -59,8 +59,6 @@ let make = (~agent: Types.agent) =>
      );
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("AgentLInk");
-
   let make = (~agent, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

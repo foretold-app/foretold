@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let toBot = (bot): Types.bot =>
   Primary.Bot.make(
     ~id=bot##id,

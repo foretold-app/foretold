@@ -1,4 +1,4 @@
-let component = ReasonReact.statelessComponent("SmallCdfChartPlain");
+[@bs.config {jsx: 3}];
 
 module Styles = {
   open Css;
@@ -18,31 +18,38 @@ module Styles = {
     ]);
 };
 
-let make =
-    (
-      ~cdf: FC__Types.Dist.t,
-      ~minX,
-      ~maxX,
-      ~color=`hex("3562AE66"),
-      _children,
-    ) => {
-  ...component,
-  render: _ => {
-    let pdf = cdf |> FC__Types.Dist.toPdf;
+[@react.component]
+let make = (~cdf: FC__Types.Dist.t, ~minX, ~maxX, ~color=`hex("3562AE66")) => {
+  let pdf = cdf |> FC__Types.Dist.toPdf;
 
-    <div className={Styles.graph(color)}>
-      <FC__CdfChart__Base
-        width=200
-        height=30
-        minX
-        maxX
-        marginBottom=15
-        marginTop=0
-        showVerticalLine=false
-        showDistributionLines=false
-        primaryDistribution={"xs": pdf.xs, "ys": pdf.ys}
-        onHover={_r => ()}
-      />
-    </div>;
-  },
+  <div className={Styles.graph(color)}>
+    <FC__CdfChart__Base
+      width=200
+      height=30
+      minX
+      maxX
+      marginBottom=15
+      marginTop=0
+      showVerticalLine=false
+      showDistributionLines=false
+      primaryDistribution={"xs": pdf.xs, "ys": pdf.ys}
+      onHover={_r => ()}
+    />
+  </div>;
+};
+
+module Jsx2 = {
+  let make =
+      (
+        ~cdf: FC__Types.Dist.t,
+        ~minX,
+        ~maxX,
+        ~color=`hex("3562AE66"),
+        children,
+      ) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~cdf, ~minX, ~maxX, ~color, ()),
+      children,
+    );
 };

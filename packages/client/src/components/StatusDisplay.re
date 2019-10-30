@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let statusShow = (~measurable: Types.measurable) =>
   switch (
     Primary.Measurable.toStatus(measurable),
@@ -20,9 +22,5 @@ let statusShow = (~measurable: Types.measurable) =>
     ReasonReact.null;
   };
 
-let component = ReasonReact.statelessComponent("StatusDisplay");
-
-let make = (~measurable: Types.measurable, _children) => {
-  ...component,
-  render: _self => statusShow(~measurable),
-};
+[@react.component]
+let make = (~measurable: Types.measurable) => statusShow(~measurable);

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module Functor = (Ken: KenTools.KenModule) => {
   let kenDisplay = id => {
     Ken.names(id)
@@ -7,14 +9,14 @@ module Functor = (Ken: KenTools.KenModule) => {
            {Ken.findName(r.propertyId)
             |> E.O.default("no-name")
             |> Utils.ste
-            |> E.React.inH3}
+            |> E.React2.inH3}
            BsKen.Graph_T.T.(
              switch (r.value.valueType) {
              | String(s) => s |> Utils.ste
              | ThingId(s) =>
-               <Link.Jsx2 linkType={Internal(EntityShow(s))}>
+               <Link linkType={Internal(EntityShow(s))}>
                  {s |> Utils.ste}
-               </Link.Jsx2>
+               </Link>
              | _ => "no-name" |> Utils.ste
              }
            )

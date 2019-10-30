@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 [@bs.module "./cdfChart.js"]
 external cdfChart: ReasonReact.reactClass = "default";
 
@@ -7,24 +9,7 @@ type data = {
   "ys": array(float),
 };
 
-[@bs.obj]
-external makeProps:
-  (
-    ~width: int=?,
-    ~height: int=?,
-    ~verticalLine: float=?,
-    ~showVerticalLine: bool=?,
-    ~showDistributionLines: bool=?,
-    ~marginBottom: int=?,
-    ~marginTop: int=?,
-    ~maxX: float=?,
-    ~minX: float=?,
-    ~primaryDistribution: data=?,
-    ~onHover: float => unit=?,
-    unit
-  ) =>
-  _ =
-  "";
+[@react.component]
 let make =
     (
       ~width=?,
@@ -38,7 +23,7 @@ let make =
       ~minX=?,
       ~onHover=?,
       ~primaryDistribution=?,
-      children,
+      ~children=[||],
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=cdfChart,
@@ -58,4 +43,42 @@ let make =
         (),
       ),
     children,
-  );
+  )
+  |> ReasonReact.element;
+
+module Jsx2 = {
+  let make =
+      (
+        ~width=?,
+        ~height=?,
+        ~verticalLine=?,
+        ~showVerticalLine=?,
+        ~marginBottom=?,
+        ~marginTop=?,
+        ~showDistributionLines=?,
+        ~maxX=?,
+        ~minX=?,
+        ~onHover=?,
+        ~primaryDistribution=?,
+        children,
+      ) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(
+        ~width,
+        ~height,
+        ~verticalLine,
+        ~showVerticalLine,
+        ~marginBottom,
+        ~marginTop,
+        ~showDistributionLines,
+        ~maxX,
+        ~minX,
+        ~onHover,
+        ~primaryDistribution,
+        ~children,
+        (),
+      ),
+      children,
+    );
+};

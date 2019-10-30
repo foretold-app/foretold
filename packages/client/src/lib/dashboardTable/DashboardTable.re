@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 type columnType =
   | String
   | MeasurableId;

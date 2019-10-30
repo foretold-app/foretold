@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Utils;
 open MomentRe;
 open Css;
@@ -124,7 +126,7 @@ module Helpers = {
     | Some(description) =>
       Some(
         <div className=Styles.descriptionStyle>
-          <ReactMarkdown.Markdown source=description />
+          <ReactMarkdown source=description />
         </div>,
       )
     };
@@ -180,8 +182,7 @@ module Helpers = {
     };
 
   let measurerLink = (~measurement: measurement): ReasonReact.reactElement => {
-    let aLink =
-      measurement.agent |> E.O.fmap(agent => <AgentLink.Jsx2 agent />);
+    let aLink = measurement.agent |> E.O.fmap(agent => <AgentLink agent />);
 
     let judgementStyle =
       style([
@@ -201,10 +202,10 @@ module Helpers = {
 
     if (isJudge) {
       <div className=judgementStyle>
-        {"Resolution" |> ste |> E.React.inH3}
+        {"Resolution" |> ste |> E.React2.inH3}
         {switch (aLink) {
          | Some(name) => <> name </>
-         | None => E.React.null
+         | None => E.React2.null
          }}
       </div>;
     } else {
@@ -237,7 +238,9 @@ let getItems = (measurementsList: list(measurement), ~makeItem) => {
        switch (Helpers.getDescription(~m)) {
        | Some(description) =>
          <FC.Table.Row
-           bottomSubRow=[|FC.Table.Row.textSection(description)|]>
+           bottomSubRow={
+             [|FC.Table.Row.textSection(description)|] |> ReasonReact.array
+           }>
            inside
          </FC.Table.Row>
        | None => <FC.Table.Row> inside </FC.Table.Row>

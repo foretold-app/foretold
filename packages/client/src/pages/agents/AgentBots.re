@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Utils;
 open Style.Grid;
 
@@ -7,17 +9,17 @@ module Styles = {
 };
 
 let title =
-  <FC.Base.Div.Jsx2 float=`left>
+  <FC.Base.Div float=`left>
     <FC.PageCard.HeaderRow.Title>
       {"Bots" |> ReasonReact.string}
     </FC.PageCard.HeaderRow.Title>
-  </FC.Base.Div.Jsx2>;
+  </FC.Base.Div>;
 
 let agentSection = (agent: Types.agent) =>
   switch (agent.agentType) {
   | Some(User(_)) =>
     <>
-      {E.React.showIf(
+      {E.React2.showIf(
          agent.isMe,
          <Div float=`right>
            <Antd.Button
@@ -27,7 +29,7 @@ let agentSection = (agent: Types.agent) =>
          </Div>,
        )}
     </>
-  | _ => E.React.null
+  | _ => E.React2.null
   };
 
 module Columns = {
@@ -40,12 +42,12 @@ module Columns = {
         (bot: Types.bot) =>
           switch (bot.name, bot.agent) {
           | (Some(name), Some(agent)) =>
-            <Link.Jsx2
+            <Link
               linkType={
                 Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
               }>
-              <AgentLink.Jsx2 agent />
-            </Link.Jsx2>
+              <AgentLink agent />
+            </Link>
           | _ => ReasonReact.null
           },
       (),
@@ -77,9 +79,9 @@ module Columns = {
       ~name="Edit" |> ste,
       ~render=
         (bot: Types.bot) =>
-          <Link.Jsx2 linkType={Internal(BotEdit(bot.id))}>
+          <Link linkType={Internal(BotEdit(bot.id))}>
             {"Edit Bot" |> ste}
-          </Link.Jsx2>,
+          </Link>,
       ~show=
         (bot: Types.bot) =>
           Primary.Permissions.can(`BOT_UPDATE, bot.permissions),
@@ -96,42 +98,39 @@ module Columns = {
 
 type pageParams = {id: string};
 
-let component = ReasonReact.statelessComponent("AgentBots");
-let make = (~pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
-  ...component,
-  render: _ =>
-    AgentGet.component(~id=pageParams.id, agent =>
-      switch (agent) {
-      | Success(Some(agent)) =>
-        let showBots = bots =>
-          Array.length(bots) > 0
-            ? <FC.PageCard.Body>
-                {Table.fromColumns(Columns.all, bots, ())}
-              </FC.PageCard.Body>
-            : <NothingToShow />;
+[@react.component]
+let make = (~pageParams: Types.pageParams) => {
+  AgentGet.component(~id=pageParams.id, agent =>
+    switch (agent) {
+    | Success(Some(agent)) =>
+      let showBots = bots =>
+        Array.length(bots) > 0
+          ? <FC.PageCard.Body>
+              {Table.fromColumns(Columns.all, bots, ())}
+            </FC.PageCard.Body>
+          : <NothingToShow />;
 
-        let body =
-          switch (agent.agentType) {
-          | Some(User(user)) =>
-            BotsGet.component(~ownerId=user.id, showBots)
-          | _ => <NothingToShow />
-          };
+      let body =
+        switch (agent.agentType) {
+        | Some(User(user)) => BotsGet.component(~ownerId=user.id, showBots)
+        | _ => <NothingToShow />
+        };
 
-        let head =
-          <div>
-            title
-            <FC.Base.Div.Jsx2
-              float=`right
-              className={Css.style([
-                FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-              ])}>
-              {agentSection(agent)}
-            </FC.Base.Div.Jsx2>
-          </div>;
+      let head =
+        <div>
+          title
+          <FC.Base.Div
+            float=`right
+            className={Css.style([
+              FC.PageCard.HeaderRow.Styles.itemTopPadding,
+              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            ])}>
+            {agentSection(agent)}
+          </FC.Base.Div>
+        </div>;
 
-        SLayout.LayoutConfig.make(~head, ~body, ()) |> layout;
-      | _ => <SLayout> <NothingToShow /> </SLayout>
-      }
-    ),
+      <SLayout head isFluid=false> body </SLayout>;
+    | _ => <SLayout> <NothingToShow /> </SLayout>
+    }
+  );
 };

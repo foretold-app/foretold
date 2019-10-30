@@ -1,9 +1,11 @@
+[@bs.config {jsx: 3}];
 let fn = (a: (array(float), array(float), bool)) => ();
 let fn2 = (a: string) => ();
 
 [@bs.module "./GuesstimateInput.js"]
 external guesstimateInput: ReasonReact.reactClass = "GuesstimateInput";
 
+[@react.component]
 let make =
     (
       ~sampleCount=10000,
@@ -13,7 +15,7 @@ let make =
       ~onUpdate=fn,
       ~onChange=fn2,
       ~focusOnRender=true,
-      children,
+      ~children=ReasonReact.null,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=guesstimateInput,
@@ -27,4 +29,34 @@ let make =
       "focusOnRender": focusOnRender,
     },
     children,
-  );
+  )
+  |> ReasonReact.element;
+
+module Jsx2 = {
+  let make =
+      (
+        ~sampleCount=10000,
+        ~min=None,
+        ~max=None,
+        ~initialValue=None,
+        ~onUpdate=fn,
+        ~onChange=fn2,
+        ~focusOnRender=true,
+        children,
+      ) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(
+        ~sampleCount,
+        ~min,
+        ~max,
+        ~initialValue,
+        ~onUpdate,
+        ~onChange,
+        ~focusOnRender,
+        ~children,
+        (),
+      ),
+      children,
+    );
+};

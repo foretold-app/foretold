@@ -1,4 +1,5 @@
-open Utils;
+[@bs.config {jsx: 3}];
+
 open Rationale.Option.Infix;
 
 type direction = Primary.Connection.direction;
@@ -311,7 +312,7 @@ module Make = (Config: Config) => {
             onClick: _ => reducerParams.send(Types.NextSelection),
           },
         })
-      | _ => "" |> ste
+      | _ => "" |> ReasonReact.string
       };
 
     let paginationPage = reducerParams =>
@@ -333,7 +334,7 @@ module Make = (Config: Config) => {
             onClick: _ => reducerParams.send(Types.NextPage),
           },
         })
-      | _ => "" |> ste
+      | _ => "" |> ReasonReact.string
       };
 
     let findIndexOfId =
@@ -364,32 +365,27 @@ module Make = (Config: Config) => {
     Belt.Array.eq(connectionA.edges, connectionB.edges, Config.isEqual);
 
   open Types;
-  let component = ReasonReact.reducerComponent("Pagination");
+
+  [@react.component]
   let make =
-      (
-        ~itemsPerPage=20,
-        ~callFnParams: Config.callFnParams,
-        ~subComponent,
-        _children,
-      ) => {
-    ...component,
+      (~itemsPerPage=20, ~callFnParams: Config.callFnParams, ~subComponent) => {
+    let (state, setState) =
+      React.useState(() =>
+        {
+          itemState: ItemUnselected,
+          response: Loading,
+          pageConfig: {
+            direction: None,
+          },
+        }
+      );
 
-    initialState: () => {
-      itemState: ItemUnselected,
-      response: Loading,
-      pageConfig: {
-        direction: None,
-      },
-    },
-
-    reducer: (action, state: state) =>
+    let send = (action: action) => {
       switch (action) {
       | UpdateResponse(response) =>
-        ReasonReact.Update({
-          response,
-          itemState: state.itemState,
-          pageConfig: state.pageConfig,
-        })
+        setState(_ =>
+          {response, itemState: state.itemState, pageConfig: state.pageConfig}
+        )
 
       | _ =>
         let newState =
@@ -404,37 +400,33 @@ module Make = (Config: Config) => {
 
         switch (newState) {
         | Some((itemState, pageConfig)) =>
-          ReasonReact.Update({
-            response: state.response,
-            itemState,
-            pageConfig,
-          })
+          setState(_ => {response: state.response, itemState, pageConfig})
 
-        | None => ReasonReact.NoUpdate
+        | None => ()
         };
-      },
+      };
+      ();
+    };
 
-    render: ({state, send}) => {
-      let innerComponentFn = response => {
-        if (!HttpResponse.isEq(state.response, response, compareItems)) {
-          send(UpdateResponse(response));
-        };
-
-        subComponent({
-          itemsPerPage,
-          itemState: state.itemState,
-          response: state.response,
-          selection: Reducers.State.selection(state),
-          send,
-        });
+    let innerComponentFn = response => {
+      if (!HttpResponse.isEq(state.response, response, compareItems)) {
+        send(UpdateResponse(response));
       };
 
-      Config.callFn(
-        callFnParams,
-        ~direction=state.pageConfig.direction,
-        ~pageLimit=Js.Json.number(itemsPerPage |> float_of_int),
-        ~innerComponentFn,
-      );
-    },
+      subComponent({
+        itemsPerPage,
+        itemState: state.itemState,
+        response: state.response,
+        selection: Reducers.State.selection(state),
+        send,
+      });
+    };
+
+    Config.callFn(
+      callFnParams,
+      ~direction=state.pageConfig.direction,
+      ~pageLimit=Js.Json.number(itemsPerPage |> float_of_int),
+      ~innerComponentFn,
+    );
   };
 };

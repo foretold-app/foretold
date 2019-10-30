@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module ReducerConfig = {
   type itemType = Types.measurable;
   type callFnParams = string;
@@ -16,20 +18,13 @@ module ReducerConfig = {
 
 module Reducer = PaginationFunctor.Make(ReducerConfig);
 
-type pageParams = {id: string};
-
-let component = ReasonReact.statelessComponent("AgentMeasurables");
-let make =
-    (~pageParams: pageParams, ~layout=SLayout.FullPage.makeWithEl, _children) => {
-  ...component,
-  render: _ => {
-    let lmake = SLayout.LayoutConfig.make;
-    Reducer.make(
-      ~itemsPerPage=20,
-      ~callFnParams=pageParams.id,
-      ~subComponent=selectWithPaginationParams =>
-      lmake(
-        ~head=
+[@react.component]
+let make = (~pageParams: Types.pageParams) => {
+  <Reducer
+    callFnParams={pageParams.id}
+    subComponent={(selectWithPaginationParams: Reducer.Types.reducerParams) =>
+      <SLayout
+        head={
           switch (selectWithPaginationParams.selection) {
           | Some(_selection) =>
             <>
@@ -42,30 +37,28 @@ let make =
             <>
               {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
             </>
-          },
-        ~body=
-          switch (
-            selectWithPaginationParams.response,
-            selectWithPaginationParams.selection,
-          ) {
-          | (_, Some(measurable)) => <Measurable id={measurable.id} />
-          | (Success(connection), None) =>
-            <MeasurableIndexTable
-              measurables={connection.edges}
-              showExtraData=true
-              onSelect={e =>
-                Reducer.Components.sendSelectItem(
-                  selectWithPaginationParams,
-                  e.id,
-                )
-              }
-            />
-          | _ => <div />
-          },
-        (),
-      )
-      |> layout
-    )
-    |> E.React.makeToEl;
-  },
+          }
+        }
+        isFluid=false>
+        {switch (
+           selectWithPaginationParams.response,
+           selectWithPaginationParams.selection,
+         ) {
+         | (_, Some(measurable)) => <Measurable id={measurable.id} />
+         | (Success(connection), None) =>
+           <MeasurableIndexTable
+             measurables={connection.edges}
+             showExtraData=true
+             onSelect={(e: Types.measurable) =>
+               Reducer.Components.sendSelectItem(
+                 selectWithPaginationParams,
+                 e.id,
+               )
+             }
+           />
+         | _ => <div />
+         }}
+      </SLayout>
+    }
+  />;
 };

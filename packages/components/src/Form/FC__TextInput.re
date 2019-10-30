@@ -1,11 +1,18 @@
-let component = ReasonReact.statelessComponent(__MODULE__);
+[@bs.config {jsx: 3}];
 
-let make = (~fullWidth=false, ~placeholder=?, _children) => {
-  ...component,
-  render: _self =>
-    <input
-      type_="text"
-      className={FC__FormStyles.widthStyle(~fullWidth, ())}
-      ?placeholder
-    />,
+[@react.component]
+let make = (~fullWidth=false, ~placeholder=?) =>
+  <input
+    type_="text"
+    className={FC__FormStyles.widthStyle(~fullWidth, ())}
+    ?placeholder
+  />;
+
+module Jsx2 = {
+  let make = (~fullWidth=false, ~placeholder=?, children) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~fullWidth, ~placeholder?, ()),
+      children,
+    );
 };

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 // from https://github.com/JakubMarkiewicz/bs-ant-design/blob/master/src/Antd_DatePicker.re
 
 [@bs.module]
@@ -18,11 +20,20 @@ external makeProps:
   _ =
   "";
 
+[@react.component]
 let make =
-    (~className=?, ~style=?, ~onChange=?, ~value=?, ~disabled=false, children) =>
+    (
+      ~className=?,
+      ~style=?,
+      ~onChange=?,
+      ~value=?,
+      ~disabled=false,
+      ~children=ReasonReact.null,
+    ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,
     ~props=
       makeProps(~className?, ~style?, ~onChange?, ~value?, ~disabled, ()),
     children,
-  );
+  )
+  |> ReasonReact.element;

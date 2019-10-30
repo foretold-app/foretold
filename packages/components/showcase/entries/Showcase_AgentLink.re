@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let image1 = "https://media1.popsugar-assets.com/files/thumbor/PqBqxo_cWMRP99nvp73HN0lSqr0/fit-in/1024x1024/filters:format_auto-!!-:strip_icc-!!-/2016/01/11/797/n/1922153/940d7f6ffea5ccb7_grid-cell-30798-1452255774-1/i/Photos-People-Freckles.jpg";
 let image2 = "https://www.w3schools.com/howto/img_avatar.png";
 let image3 = "https://secure.gravatar.com/avatar/d9032fc9ac4a2f815ae8f88a0bdd97f2?s=96&d=mm&r=g";
@@ -7,7 +9,7 @@ let bot1image = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxIT
 let links = () =>
   <div>
     <h3> {"Bot" |> ReasonReact.string} </h3>
-    <FC__AgentLink.Jsx2
+    <FC__AgentLink
       agent={FC__AgentLink.Agent.makeBot(
         ~name="Stan Bot",
         ~owner=
@@ -20,7 +22,7 @@ let links = () =>
       )}
     />
     <h3> {"User Simple" |> ReasonReact.string} </h3>
-    <FC__AgentLink.Jsx2
+    <FC__AgentLink
       agent={FC__AgentLink.Agent.makeUser(
         ~name="Stan Lee",
         ~image=image1,
@@ -28,7 +30,7 @@ let links = () =>
       )}
     />
     <h3> {"User Ozzie" |> ReasonReact.string} </h3>
-    <FC__AgentLink.Jsx2
+    <FC__AgentLink
       agent={FC__AgentLink.Agent.makeUser(
         ~name="Ozzie Gooen",
         ~image=image4,
@@ -36,7 +38,7 @@ let links = () =>
       )}
     />
     <h3> {"User with long name" |> ReasonReact.string} </h3>
-    <FC__AgentLink.Jsx2
+    <FC__AgentLink
       agent={FC__AgentLink.Agent.makeUser(
         ~name="Stan Ben Goldmemberfeinsteinwatkins",
         ~image=image2,

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Utils;
 
 let name = (page: Routing.AgentPage.SubPage.t) =>

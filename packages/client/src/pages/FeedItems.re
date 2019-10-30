@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Style.Grid;
 
 module ReducerConfig = {
@@ -15,73 +17,52 @@ module ReducerConfig = {
 
 module Reducer = PaginationFunctor.Make(ReducerConfig);
 
-let component = ReasonReact.statelessComponent("FeedItems");
 type pageParams = {id: string};
 
-let make =
-    (
-      ~channelId: option(string)=None,
-      ~agentId: option(string)=None,
-      ~layout=SLayout.FullPage.makeWithEl,
-      _children,
-    ) => {
-  ...component,
-  render: _ => {
-    let pagination = (reducerParams: Reducer.Types.reducerParams) =>
-      <Div>
-        <Div
-          float=`right
-          styles=[
-            Css.style([
-              FC.PageCard.HeaderRow.Styles.itemTopPadding,
-              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-            ]),
-          ]>
-          {Reducer.Components.paginationPage(reducerParams)}
-        </Div>
-      </Div>;
+[@react.component]
+let make = (~channelId=None, ~agentId=None) => {
+  let pagination = (reducerParams: Reducer.Types.reducerParams) =>
+    <Div>
+      <Div
+        float=`right
+        styles=[
+          Css.style([
+            FC.PageCard.HeaderRow.Styles.itemTopPadding,
+            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+          ]),
+        ]>
+        {Reducer.Components.paginationPage(reducerParams)}
+      </Div>
+    </Div>;
 
-    let subComponent = (reducerParams: Reducer.Types.reducerParams) => {
-      let feedItems =
-        switch (reducerParams.response) {
-        | Success(connection) => connection.edges
-        | _ => [||]
-        };
+  let subComponent = (reducerParams: Reducer.Types.reducerParams) => {
+    let feedItems =
+      switch (reducerParams.response) {
+      | Success(connection) => connection.edges
+      | _ => [||]
+      };
 
-      let table =
-        switch (channelId) {
-        | Some("")
-        | None => <FeedItemsTable.Jsx2 feedItems />
-        | _ =>
-          <FeedItemsTable.Jsx2
-            feedItems
-            columns=FeedItemsTable.Columns.short
-          />
-        };
+    let table =
+      switch (channelId) {
+      | Some("")
+      | None => <FeedItemsTable feedItems />
+      | _ => <FeedItemsTable feedItems columns=FeedItemsTable.Columns.short />
+      };
 
-      let isFound = Array.length(feedItems) > 0;
+    let isFound = Array.length(feedItems) > 0;
 
-      let body =
-        switch (reducerParams.response) {
-        | Success(_) =>
-          isFound
-            ? <FC.PageCard.Body> table </FC.PageCard.Body> : <NothingToShow />
-        | _ => <Spin />
-        };
+    let body =
+      switch (reducerParams.response) {
+      | Success(_) =>
+        isFound
+          ? <FC.PageCard.Body> table </FC.PageCard.Body> : <NothingToShow />
+      | _ => <Spin />
+      };
 
-      SLayout.LayoutConfig.make(
-        ~head=isFound ? pagination(reducerParams) : ReasonReact.null,
-        ~body,
-        ~isFluid=true,
-        (),
-      )
-      |> layout;
-    };
+    let head = isFound ? pagination(reducerParams) : ReasonReact.null;
 
-    <Reducer
-      itemsPerPage=20
-      callFnParams=(channelId, agentId)
-      subComponent
-    />;
-  },
+    <SLayout head isFluid=true> body </SLayout>;
+  };
+
+  <Reducer itemsPerPage=20 callFnParams=(channelId, agentId) subComponent />;
 };

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 type generic = {
   item: string,
   description: string,

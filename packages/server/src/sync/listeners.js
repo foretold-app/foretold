@@ -122,13 +122,13 @@ async function createNewMeasurables(series) {
  * @param {Models.Measurement} measurement
  * @returns {Promise<boolean>}
  */
-async function newMeasurement(measurement) {
-  const name = 'Job::newMeasurement';
+async function newMeasurementSlackNotification(measurement) {
+  const name = 'Job::newMeasurementSlackNotification';
   log.trace(name);
 
   try {
     const notifications = new actions.Notifications();
-    const result = await notifications.newMeasurement(measurement);
+    const result = await notifications.newMeasurementSlackNotification(measurement);
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -141,13 +141,13 @@ async function newMeasurement(measurement) {
  * @param {Models.Measurable} measurable
  * @returns {Promise<boolean>}
  */
-async function newMeasurable(measurable) {
-  const name = 'Job::newMeasurable';
+async function newMeasurableSlackNotification(measurable) {
+  const name = 'Job::newMeasurableSlackNotification';
   log.trace(name);
 
   try {
     const notifications = new actions.Notifications();
-    const result = await notifications.newMeasurable(measurable);
+    const result = await notifications.newMeasurableSlackNotification(measurable);
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -160,13 +160,13 @@ async function newMeasurable(measurable) {
  * @param {Models.Measurable} measurable
  * @returns {Promise<boolean>}
  */
-async function updateMeasurable(measurable) {
-  const name = 'Job::updateMeasurable';
+async function updateMeasurableSlackNotification(measurable) {
+  const name = 'Job::updateMeasurableSlackNotification';
   log.trace(name);
 
   try {
     const notifications = new actions.Notifications();
-    const result = await notifications.updateMeasurable(measurable);
+    const result = await notifications.updateMeasurableSlackNotification(measurable);
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -295,9 +295,9 @@ module.exports = {
   mailer,
   listenFor,
   addGitHubWebHook,
-  newMeasurement,
-  newMeasurable,
-  updateMeasurable,
+  newMeasurementSlackNotification,
+  newMeasurableSlackNotification,
+  updateMeasurableSlackNotification,
   createNewMeasurables,
   measurableStateTransition,
   createChannelMembership,

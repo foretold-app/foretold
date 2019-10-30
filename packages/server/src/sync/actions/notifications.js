@@ -11,7 +11,7 @@ class Notifications {
    * @param {Models.Measurement} measurement
    * @returns {Promise<boolean>}
    */
-  async newMeasurement(measurement) {
+  async newMeasurementSlackNotification(measurement) {
     const measurable = await measurement.getMeasurable();
     const channel = await measurable.getChannel();
 
@@ -36,7 +36,7 @@ class Notifications {
    * @param {Models.Measurable} measurable
    * @return {Promise<boolean>}
    */
-  async newMeasurable(measurable) {
+  async newMeasurableSlackNotification(measurable) {
     const channel = await measurable.getChannel();
 
     if (!channel.isPublic) {
@@ -58,7 +58,7 @@ class Notifications {
    * @param {Models.Measurable} measurable
    * @return {Promise<boolean>}
    */
-  async updateMeasurable(measurable) {
+  async updateMeasurableSlackNotification(measurable) {
     const channel = await measurable.getChannel();
 
     if (!channel.isPublic) {

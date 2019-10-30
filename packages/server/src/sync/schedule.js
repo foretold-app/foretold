@@ -30,8 +30,8 @@ function runListeners() {
       listenFor(producers.notifications.MeasurableStateResolved));
     emitter.on(events.MEASURABLE_CHANGED,
       listenFor(producers.feedItems.NewMeasurableReachedResolution));
-    emitter.on(events.MEASURABLE_CHANGED,
-      listeners.updateMeasurable);
+    // emitter.on(events.MEASURABLE_CHANGED,
+    //   listeners.updateMeasurableSlackNotification);
 
     /**
      * NEW_MEMBERSHIP
@@ -52,8 +52,8 @@ function runListeners() {
       listenFor(producers.feedItems.NewMeasurementResolution));
     emitter.on(events.NEW_MEASUREMENT,
       listenFor(producers.feedItems.NewMeasurementNotAvailable));
-    emitter.on(events.NEW_MEASUREMENT,
-      listeners.newMeasurement);
+    // emitter.on(events.NEW_MEASUREMENT,
+    //   listeners.newMeasurementSlackNotification);
     emitter.on(events.NEW_MEASUREMENT,
       listeners.measurableStateTransition);
 
@@ -62,8 +62,8 @@ function runListeners() {
      */
     emitter.on(events.NEW_MEASURABLE,
       listenFor(producers.feedItems.NewMeasurable));
-    emitter.on(events.NEW_MEASURABLE,
-      listeners.newMeasurable);
+    // emitter.on(events.NEW_MEASURABLE,
+    //   listeners.newMeasurableSlackNotification);
 
     /**
      * NEW_CHANNEL

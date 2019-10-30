@@ -31,8 +31,7 @@ module.exports = {
         },
         body: {
           type: Sequelize.JSON,
-          defaultValue: {},
-          allowNull: false,
+          allowNull: true,
         },
         createdAt: {
           type: Sequelize.DATE,

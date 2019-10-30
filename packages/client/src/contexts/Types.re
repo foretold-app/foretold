@@ -227,6 +227,11 @@ and feedItem = {
 }
 
 and cursor = Js.Json.t
+and agentId = string
+and channelId = string
+and notebookId = string
+and string0to255 = string
+and string0to16K = string
 
 and pageInfo = {
   hasNextPage: bool,
@@ -254,6 +259,14 @@ and connectionInputType('a) =
 and globalSetting = {
   id: string,
   entityGraph: option(Js.Json.t),
+}
+
+and notebook = {
+  id: notebookId,
+  ownerId: agentId,
+  channelId,
+  createdAt: option(MomentRe.Moment.t),
+  updatedAt: option(MomentRe.Moment.t),
 }
 
 and pageParams = {id: string};

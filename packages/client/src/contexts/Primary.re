@@ -766,6 +766,23 @@ module LeaderboardItem = {
     );
 };
 
+module Notebook = {
+  type t = Types.notebook;
+
+  let make =
+      (
+        ~id: Js.Json.t,
+        ~ownerId: Js.Json.t,
+        ~channelId: Js.Json.t,
+        ~createdAt: Js.Json.t,
+        ~updatedAt: Js.Json.t,
+        (),
+      )
+      : t => {
+    id,
+  };
+};
+
 module AgentType = {
   type t = Types.agentType;
 

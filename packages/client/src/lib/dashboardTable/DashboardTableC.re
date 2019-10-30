@@ -19,8 +19,22 @@ module DashboardTableToTable = {
               r =>
                 switch (r) {
                 | Some(measurable) =>
-                  <MeasurementItems.AggregationResolution measurable />
-                | None => "Not loaded :(" |> Utils.ste
+                  <div>
+                    <MeasurementItems.AggregationResolution measurable />
+                    <Link.Jsx2
+                      className=Shared.Item.item
+                      linkType={
+                        Internal(
+                          MeasurableShow(measurable.channelId, measurable.id),
+                        )
+                      }>
+                      {"Link" |> Utils.ste}
+                    </Link.Jsx2>
+                  </div>
+                | None =>
+                  <FC__Alert type_=`warning>
+                    {"Not loaded :(" |> Utils.ste}
+                  </FC__Alert>
                 }
             )
           | Some(Empty)
@@ -51,8 +65,9 @@ let make = (~channelId, ~tableJson=tableJson, _) => {
     MeasurablesGet.component(
       ~channelId=Some(channelId),
       ~states=[|Some(`OPEN)|],
-      ~pageLimit=Js.Json.number(50 |> float_of_int),
+      ~pageLimit=Js.Json.number(100 |> float_of_int),
       ~direction=None,
+      ~pollInterval=20 * 1000,
       ~innerComponentFn=
         e =>
           e

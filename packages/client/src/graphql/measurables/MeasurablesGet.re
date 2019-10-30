@@ -223,8 +223,8 @@ let queryDirection =
   };
 };
 
-let componentMaker = (query, innerComponentFn) =>
-  <QueryComponent variables=query##variables>
+let componentMaker = (~pollInterval=?, query, innerComponentFn) =>
+  <QueryComponent variables=query##variables ?pollInterval>
     ...{o =>
       o.result
       |> HttpResponse.fromApollo
@@ -239,6 +239,7 @@ let component =
       ~creatorId=None,
       ~seriesId=None,
       ~channelId=None,
+      ~pollInterval=?,
       ~pageLimit,
       ~states,
       ~direction,
@@ -255,5 +256,5 @@ let component =
       ~states,
       (),
     );
-  componentMaker(query, innerComponentFn);
+  componentMaker(~pollInterval=?pollInterval, query, innerComponentFn);
 };

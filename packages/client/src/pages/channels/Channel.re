@@ -33,7 +33,7 @@ let make =
                 <Div
                   flex={`num(1.0)}
                   styles=[Css.(style([marginTop(`em(0.5))]))]>
-                  <ReactMarkdown.Markdown source />
+                  <Markdown source />
                 </Div>
               )}
         </Div>
@@ -69,7 +69,7 @@ let make =
                     ])
                   ),
                 ]>
-                <ReactMarkdown.Markdown source />
+                <Markdown source />
               </Div>
             )}
       </Div>;

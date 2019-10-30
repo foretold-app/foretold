@@ -7,19 +7,6 @@ module Styles = {
   let padding = style([padding(`em(1.0))]);
 };
 
-let default = {|
-{
-    "columns": [
-        {"id":"name", "name": "Name", "columnType": "String"},
-        {"id":"metric1", "name": "Metric 1", "columnType": "MeasurableId"}
-    ],
-    "data": [
-        {"name": "Thing1", "metric1": "sdf98sdjf8sjdf8j"},
-        {"name": "Thing2", "metric1": "sdf98sdjf8sjdf8j"}
-    ]
-}
-|};
-
 type state = {text: string};
 
 type action =
@@ -46,10 +33,7 @@ let make = (~channelId: string, _children) => {
             value={self.state.text}
           />
         </div>
-        {switch (Json.parse(self.state.text)) {
-         | Some(json) => <DashboardTableC channelId tableJson=json />
-         | None => "Invalid Json. Check a formatting tool." |> Utils.ste
-         }}
+        <Markdown source={self.state.text} channelId supportForetoldJs=true />
       </FC.PageCard.Body>
     </SLayout>;
   },

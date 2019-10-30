@@ -6,8 +6,7 @@ const { MeasurableState } = require('./measurable-state');
 const { MEASURABLE_STATE } = require('../../../enums/measurable-state');
 const logger = require('../../../lib/log');
 
-const log
-  = logger.module('sync/producers/notifications/measurable-state-resolved');
+const log = logger.module('notifications/measurable-state-resolved');
 
 class MeasurableStateResolved extends MeasurableState {
   /**

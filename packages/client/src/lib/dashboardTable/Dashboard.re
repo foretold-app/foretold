@@ -46,10 +46,10 @@ let make = (~channelId: string, _children) => {
             value={self.state.text}
           />
         </div>
-        {switch (Json.parse(self.state.text)) {
-         | Some(json) => <DashboardTableC channelId tableJson=json />
-         | None => "Invalid Json. Check a formatting tool." |> Utils.ste
-         }}
+        <Markdown
+          source={self.state.text}
+          renderers={Markdown.foretoldJsRenderers(channelId)}
+        />
       </FC.PageCard.Body>
     </SLayout>;
   },

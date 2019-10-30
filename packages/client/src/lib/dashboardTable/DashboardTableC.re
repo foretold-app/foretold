@@ -20,7 +20,10 @@ module DashboardTableToTable = {
                 switch (r) {
                 | Some(measurable) =>
                   <MeasurementItems.AggregationResolution measurable />
-                | None => "Not loaded :(" |> Utils.ste
+                | None =>
+                  <FC__Alert type_=`warning>
+                    {"Not loaded :(" |> Utils.ste}
+                  </FC__Alert>
                 }
             )
           | Some(Empty)

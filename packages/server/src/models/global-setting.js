@@ -9,9 +9,12 @@ module.exports = (sequelize, DataTypes) => {
     // Always use this field
     // since UUID4 is not ordered.
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: false,
       unique: true,
+      validate: {
+        len: [3, 255],
+      },
     },
     entityGraph: {
       type: DataTypes.JSON,

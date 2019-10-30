@@ -14,12 +14,15 @@ module.exports = (sequelize, DataTypes) => {
 
     // Meta
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: false,
       get: getName,
+      validate: {
+        len: [3, 255],
+      },
     },
     labelSubject: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: true,
     },
     labelOnDate: {
@@ -27,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     labelProperty: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: true,
     },
     labelCustom: {
@@ -54,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
 
     // State
     state: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       defaultValue: MEASURABLE_STATE.OPEN,
       allowNull: false,
     },

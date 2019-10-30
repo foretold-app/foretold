@@ -19,8 +19,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     auth0Id: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: false,
+      validate: {
+        len: [3, 255],
+      },
     },
     auth0AccessToken: {
       type: DataTypes.STRING(64),

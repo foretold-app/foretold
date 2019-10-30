@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: true,
     },
     description: {
@@ -15,11 +15,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     subjects: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+      type: DataTypes.ARRAY(DataTypes.STRING(255)),
       allowNull: true,
     },
     properties: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+      type: DataTypes.ARRAY(DataTypes.STRING(255)),
       allowNull: true,
     },
     dates: {

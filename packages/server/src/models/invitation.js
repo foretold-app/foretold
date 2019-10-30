@@ -9,8 +9,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     email: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: false,
+      validate: {
+        isEmail: true,
+        len: [3, 255],
+      },
     },
     inviterAgentId: {
       type: DataTypes.UUID(),

@@ -255,7 +255,8 @@ module Url = {
     | MeasurableNew(string)
     | Subscribe
     | Login
-    | Unsubscribe;
+    | Unsubscribe
+    | Unknown;
 
   let toString = (r: t) =>
     switch ((r: t)) {
@@ -334,5 +335,6 @@ module Url = {
     | Series(seriesId) => SeriesShow(channelPage.channelId, seriesId)
     | Measurable(measurableId) =>
       MeasurableShow(channelPage.channelId, measurableId)
+    | _ => Unknown
     };
 };

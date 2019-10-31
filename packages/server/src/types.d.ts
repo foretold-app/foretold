@@ -200,7 +200,7 @@ export namespace Models {
     agentId: AgentID;
     measurableId: MeasurableID;
     primaryPointScore?: float;
-    primaryPointScoreConstant?: float;
+    timeAverageScore?: float;
     predictionCountTotal: number;
   }
 

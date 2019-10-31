@@ -11,9 +11,9 @@ const agentMeasurable = new graphql.GraphQLObjectType({
       type: graphql.GraphQLFloat,
       resolve: require('../resolvers').agentMeasurables.primaryPointScore,
     },
-    primaryPointScoreConstant: {
+    timeAverageScore: {
       type: graphql.GraphQLFloat,
-      resolve: require('../resolvers').agentMeasurables.primaryPointScoreConstant,
+      resolve: require('../resolvers').agentMeasurables.timeAverageScore,
       args: {
         marketType: {
           type: require('./enums/agent-measurable-score-params').marketScoreType

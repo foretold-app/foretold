@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
-    primaryPointScoreConstant: {
+    timeAverageScore: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },

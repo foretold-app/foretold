@@ -21,7 +21,7 @@ module.exports = {
                 AND "Measurements"."agentId" = "ChannelAgents"."agentId"
                 AND "Measurements"."competitorType" IN ('OBJECTIVE', 'COMPETITIVE')
             ) AS "predictionCountTotal",
-            0.0 AS "primaryPointScoreConstant"
+            0.0 AS "timeAverageScore"
           FROM "ChannelAgents", "Measurables"
           WHERE "ChannelAgents"."channelId" = "Measurables"."channelId";
       `);

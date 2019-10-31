@@ -72,7 +72,7 @@ async function primaryPointScore(root, _args, _context, _info) {
  * @param {object} _info
  * @returns {Promise<*>}
  */
-async function primaryPointScoreConstant(root, args, _context, _info) {
+async function timeAverageScore(root, args, _context, _info) {
   const agentId = _.get(root, 'agentId');
   const measurableId = _.get(root, 'measurableId');
   const marketType = _.get(args, 'marketType');
@@ -85,5 +85,5 @@ async function primaryPointScoreConstant(root, args, _context, _info) {
 module.exports = {
   all,
   primaryPointScore,
-  primaryPointScoreConstant,
+  timeAverageScore,
 };

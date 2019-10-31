@@ -21,6 +21,19 @@ module AgentPage = {
   };
 };
 
+module NotebookPage = {
+  module SubPage = {
+    type t =
+      | Dashboards
+      | Details;
+  };
+
+  type t = {
+    notebookId: Types.notebookId,
+    subPage: SubPage.t,
+  };
+};
+
 module ChannelPage = {
   type tab =
     | Measurables
@@ -29,7 +42,8 @@ module ChannelPage = {
     | Updates
     | Leaderboard
     | Dashboard
-    | Notebooks;
+    | Notebooks
+    | Unknown;
 
   type leaderboard =
     | ByMeasurable
@@ -49,7 +63,8 @@ module ChannelPage = {
       | Notebooks
       | Series(seriesId)
       | FeedItems
-      | Leaderboard(leaderboard);
+      | Leaderboard(leaderboard)
+      | Unknown;
 
     let toTab = (subPage: t): tab =>
       switch (subPage) {
@@ -66,6 +81,7 @@ module ChannelPage = {
       | Dashboard => Dashboard
       | Notebooks => Notebooks
       | Leaderboard(_) => Leaderboard
+      | _ => Unknown
       };
 
     let fromTab = (tab: tab): t =>
@@ -76,6 +92,7 @@ module ChannelPage = {
       | Updates => FeedItems
       | Notebooks => Notebooks
       | Leaderboard => Leaderboard(ByMember)
+      | _ => Unknown
       };
   };
 
@@ -106,6 +123,7 @@ module Route = {
     | EntityIndex
     | Channel(ChannelPage.t)
     | Agent(AgentPage.t)
+    | Notebook(NotebookPage.t)
     | ChannelIndex
     | ChannelNew
     | MeasurableEdit(string)
@@ -143,6 +161,8 @@ module Route = {
     | ["bots", "new"] => BotCreate
     | ["bots", id, "edit"] => BotEdit(id)
     | ["measurables", id, "edit"] => MeasurableEdit(id)
+
+    // Channels
     | ["c"] => ChannelIndex
     | ["c", channelId] => showChannel(channelId)
     | ["c", channelId, "m", measurableId] =>
@@ -179,6 +199,8 @@ module Route = {
         channelId: getChannelId(channelId),
         subPage: Series(seriesId),
       })
+
+    // Agents
     | ["agents", agentId, "bots"] => Agent({agentId, subPage: AgentBots})
     | ["agents", agentId, "measurables"] =>
       Agent({agentId, subPage: AgentMeasurables})
@@ -187,6 +209,13 @@ module Route = {
     | ["agents", agentId, "activity"] =>
       Agent({agentId, subPage: AgentUpdates})
     | ["agents", agentId, "scores"] => Agent({agentId, subPage: AgentScores})
+
+    // Notebooks
+    | ["n", notebookId, "dashboards"] =>
+      Notebook({notebookId, subPage: Dashboards})
+    | ["n", notebookId, "details"] =>
+      Notebook({notebookId, subPage: Details})
+
     | ["subscribe"] => Subscribe
     | ["unsubscribe"] => Unsubscribe
     | _ => NotFound
@@ -207,9 +236,7 @@ module Url = {
     | BotEdit(string)
     | EntityShow(string)
     | Agent(AgentPage.t)
-    | ChannelShow(string)
-    | ChannelNew
-    | ChannelIndex
+    | Notebook(NotebookPage.t)
     | SeriesShow(string, string)
     | MeasurableShow(string, string)
     | SeriesNew(string)
@@ -221,6 +248,9 @@ module Url = {
     | ChannelAddMember(string)
     | ChannelInviteMember(string)
     | ChannelDashboard(string)
+    | ChannelShow(string)
+    | ChannelNew
+    | ChannelIndex
     | ChannelNotebooks(string)
     | MeasurableNew(string)
     | Subscribe
@@ -232,13 +262,15 @@ module Url = {
     | Home => "/"
     | Privacy => "/privacy_policy"
     | Terms => "/terms_and_conditions"
-    | AgentIndex => "/agents"
     | Profile => "/profile/"
     | Preferences => "/preferences/"
     | BotCreate => "/bots/new"
     | BotEdit(id) => "/bots/" ++ id ++ "/edit"
     | EntityIndex => "/entities"
     | EntityShow(id) => "/entities/" ++ id
+
+    // Agents
+    | AgentIndex => "/agents"
     | Agent({agentId, subPage: AgentBots}) => "/agents/" ++ agentId ++ "/bots"
     | Agent({agentId, subPage: AgentMeasurables}) =>
       "/agents/" ++ agentId ++ "/measurables"
@@ -248,6 +280,14 @@ module Url = {
       "/agents/" ++ agentId ++ "/activity"
     | Agent({agentId, subPage: AgentScores}) =>
       "/agents/" ++ agentId ++ "/scores"
+
+    // Notebooks
+    | Notebook({notebookId, subPage: Dashboards}) =>
+      "/n/" ++ notebookId ++ "/dashboards"
+    | Notebook({notebookId, subPage: Details}) =>
+      "/n/" ++ notebookId ++ "/details"
+
+    // Channels
     | ChannelNew => "/communities/" ++ "new"
     | ChannelIndex => "/communities"
     | ChannelShow(channelId) => "/c/" ++ channelId
@@ -262,6 +302,7 @@ module Url = {
       "/c/" ++ channelId ++ "/scoring/members"
     | ChannelAddMember(channelId) => "/c/" ++ channelId ++ "/add"
     | ChannelInviteMember(channelId) => "/c/" ++ channelId ++ "/invite"
+
     | MeasurableEdit(measurableId) =>
       "/measurables/" ++ measurableId ++ "/edit"
     | MeasurableNew(channelId) => "/c/" ++ channelId ++ "/new"
@@ -290,7 +331,7 @@ module Url = {
     | InviteMember => ChannelInviteMember(channelPage.channelId)
     | Settings => ChannelEdit(channelPage.channelId)
     | NewSeries => SeriesNew(channelPage.channelId)
-    | Series(id) => SeriesShow(channelPage.channelId, id)
+    | Series(seriesId) => SeriesShow(channelPage.channelId, seriesId)
     | Measurable(measurableId) =>
       MeasurableShow(channelPage.channelId, measurableId)
     };

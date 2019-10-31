@@ -57,12 +57,56 @@ class AgentMeasurablesData extends DataBase {
     finalComparisonMeasurement: FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT,
   }) {
     const {
-      predictions,
+      agentPredictions,
       recentResult,
       allAggregations,
-      measurableCreatedAt,
-    } = await this._getMeasurementsToScoring(agentId, measurableId);
+      measurable,
+    } = await this._getTimeScoringData(agentId, measurableId);
+    // Checks ----------------------------------------------------------------------
+    if (agentPredictions.length === 0) return undefined;
+    if (allAggregations.length === 0) return undefined;
+    if (!!recentResult) return undefined;
+    if (!!measurable) return undefined;
 
+    // Use of Parameters ----------------------------------------------------------------------
+    const resolutionMeasurement = (params.finalComparisonMeasurement === FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT)
+      ? recentResult
+      : _.last(allAggregations);
+
+    if (!resolutionMeasurement) return undefined;
+
+    const startTime = (params.startAt === START_AT.QUESTION_CREATION_TIME)
+      ? (measurable.createdAt)
+      : (!!agentPredictions[0] && agentPredictions[0].dataValues.relevantAt);
+
+    const marketScoreType = params.marketType === MARKET_TYPE.MARKET ? marketScore : nonMarketScore;
+
+    const timeScore = this._scoreCalculator({
+      agentPredictions,
+      allAggregations,
+      resolutionMeasurement,
+      marketScoreType,
+      startTime,
+    });
+
+    return {
+      score: _.round(timeScore.data, 6),
+      agentPredictions,
+      aggregations: allAggregations,
+      recentResult,
+      startAt: startTime,
+      endAt: resolutionMeasurement.dataValues.relevantAt,
+    };
+  }
+
+  async _scoreCalculator({
+    agentPredictions,
+    allAggregations,
+    resolutionMeasurement,
+    marketScoreType,
+    startTime,
+  }) {
+    // Private Functions -----------------------------------------------------
     function toUnix(r) {
       return moment(r).unix();
     }
@@ -82,58 +126,31 @@ class AgentMeasurablesData extends DataBase {
       };
     }
 
-    if (predictions.length === 0) return undefined;
-    if (allAggregations.length === 0) return undefined;
-
-    const agentPredictions = predictions
-      .map((r) => r.measurement)
-      .map(toOverTime);
-
-    const resolutionMeasurement = (params.finalComparisonMeasurement === FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT)
-      ? recentResult
-      : _.last(allAggregations);
-
-    if (!resolutionMeasurement) return undefined;
-
-    const resolution = toOverTime(resolutionMeasurement);
-
-    const marketPredictions = allAggregations.map(toOverTime);
-
-    let overTime;
-
-    const startTime = (params.startAt === START_AT.QUESTION_CREATION_TIME)
-      ? (measurableCreatedAt)
-      : (!!predictions[0] &&  predictions[0].measurement.dataValues.relevantAt);
-
-    const marketScoreType = params.marketType === MARKET_TYPE.MARKET ? marketScore : nonMarketScore;
-
+    // Main Function -------------------------------------------------------
+    let timeScore;
     if (!startTime) return undefined;
     try {
-      overTime = new PredictionResolutionOverTime({
-        agentPredictions,
-        marketPredictions,
-        resolution,
+      timeScore = new PredictionResolutionOverTime({
+        agentPredictions: agentPredictions.map(toOverTime),
+        marketPredictions: allAggregations.map(toOverTime),
+        resolution: toOverTime(resolutionMeasurement),
       }).averagePointScore(marketScoreType, toUnix(startTime));
     } catch (e) {
       log.trace(e.message);
       return undefined;
     }
 
-    if (!!overTime.error) {
-      log.error('PrimaryPointScore Error: ', overTime.error);
+    if (!!timeScore.error) {
+      log.error('PrimaryPointScore Error: ', timeScore.error);
       return undefined;
-    } if (!_.isFinite(overTime.data)) {
+    } if (!_.isFinite(timeScore.data)) {
       log.error(
         'Error: PrimaryPointScore score, '
-        + '${overTime.data} is not finite',
+        + '${timeScore.data} is not finite',
       );
       return undefined;
     }
-    return {
-      score: _.round(overTime.data, 6),
-      startAt: startTime,
-      endAt: resolutionMeasurement.dataValues.relevantAt,
-    };
+    return timeScore.data;
   }
 
   /**
@@ -141,65 +158,29 @@ class AgentMeasurablesData extends DataBase {
    * @param {Models.MeasurableID} measurableId
    * @returns {Promise<*>}
    */
-  async _getMeasurementsToScoring(agentId, measurableId) {
+  async _getTimeScoringData(agentId, measurableId) {
     const measurable = await this._getMeasurable(measurableId);
 
-    const {
-      recentResult,
-      allAggregations,
-      proceededPredictions,
-    } = await this._getProceededMeasurements(measurableId);
-
-    const predictions = _.filter(
-      proceededPredictions,
-      ['measurement.agentId', agentId],
-    );
-
-    return {
-      predictions,
-      recentResult,
-      allAggregations,
-      measurableCreatedAt: measurable.createdAt,
-    };
-  }
-
-  /**
-   * @param {Models.MeasurableID} measurableId
-   * @returns {Promise<*>}
-   */
-  async _getProceededMeasurements(measurableId) {
     const measurements = await this._getMeasurements(measurableId);
 
     const allAggregations = _.filter(measurements, [
       'competitorType', MEASUREMENT_COMPETITOR_TYPE.AGGREGATION,
     ]);
+
     const recentResult = _.find(measurements, [
       'competitorType', MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
     ]);
-    const predictions = _.filter(measurements, [
-      'competitorType', MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE,
-    ]);
 
-    const proceededPredictions = predictions.map((measurement) => {
-      const aggregatesAfter = _.filter(allAggregations, (aggregate) => {
-        return aggregate.createdAt > measurement.createdAt;
-      });
-
-      const aggregateBefore = _.find(allAggregations, (aggregate) => {
-        return measurement.createdAt > aggregate.createdAt;
-      });
-
-      return {
-        measurement,
-        aggregatesAfter,
-        aggregateBefore,
-      };
+    const agentPredictions = _.filter(measurements, {
+      competitorType: MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE,
+      agentId,
     });
 
     return {
+      agentPredictions,
       recentResult,
       allAggregations,
-      proceededPredictions,
+      measurableCreatedAt: measurable.createdAt,
     };
   }
 

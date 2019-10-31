@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     ownerId: {
       type: DataTypes.UUID(),
-      allowNull: true,
+      allowNull: false,
     },
     body: {
       type: DataTypes.TEXT,

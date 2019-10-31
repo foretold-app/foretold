@@ -11,7 +11,7 @@ module Columns = {
         linkType={
           Internal(MeasurableShow(measurable.channelId, measurable.id))
         }>
-        [|measurable.name |> E.S.default("Question") |> Utils.ste|]
+        {measurable.name |> E.S.default("Question") |> Utils.ste}
       </Link>
     | _ => "Question" |> Utils.ste
     };
@@ -44,7 +44,7 @@ module Columns = {
           r.channel
           |> E.O.fmap((channel: Types.channel) =>
                <Link linkType={Internal(ChannelShow(channel.id))}>
-                 [|channel.name |> Utils.ste|]
+                 {channel.name |> Utils.ste}
                </Link>
              )
           |> E.O.default("Community" |> Utils.ste),
@@ -209,7 +209,6 @@ let make = (~items, ~columns=Columns.measurables) =>
   Table.fromColumns(columns, items, ());
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("LeaderboardTable");
   let make = (~items, ~columns=Columns.measurables, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

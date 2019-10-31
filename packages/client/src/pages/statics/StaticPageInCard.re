@@ -1,25 +1,18 @@
-open ReactMarkdown;
+[@bs.config {jsx: 3}];
 
-open Utils;
-open E;
-
-let component = ReasonReact.statelessComponent("StaticPageInCard");
-
-let make = (~markdown, _children) => {
-  ...component,
-  render: _ =>
-    <div className=StaticStyles.body>
-      <div className={SLayout.Styles.container(false)}>
-        <div
-          className=Css.(style([textAlign(`left), paddingTop(`em(3.))]))>
-          <FC.PageCard>
-            <FC.PageCard.Body>
-              <FC.PageCard.BodyPadding>
-                <Markdown source=markdown />
-              </FC.PageCard.BodyPadding>
-            </FC.PageCard.Body>
-          </FC.PageCard>
-        </div>
+[@react.component]
+let make = (~markdown) => {
+  <div className=StaticStyles.body>
+    <div className={SLayout.Styles.container(false)}>
+      <div className=Css.(style([textAlign(`left), paddingTop(`em(3.))]))>
+        <FC.PageCard>
+          <FC.PageCard.Body>
+            <FC.PageCard.BodyPadding>
+              <ReactMarkdown source=markdown />
+            </FC.PageCard.BodyPadding>
+          </FC.PageCard.Body>
+        </FC.PageCard>
       </div>
-    </div>,
+    </div>
+  </div>;
 };

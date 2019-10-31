@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module type Config = {type queryType;};
 open Utils;
 
@@ -12,7 +14,7 @@ module Make = (Config: Config) => {
     switch (result) {
     | Loading => <Spin />
     | Error(e) => <> {"Error: " ++ e##message |> ste} form </>
-    | Data(_) => successMessage |> ste |> E.React.inH2
+    | Data(_) => successMessage |> ste |> E.React2.inH2
     | NotCalled => form
     };
 

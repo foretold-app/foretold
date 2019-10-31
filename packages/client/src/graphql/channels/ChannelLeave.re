@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module Query = [%graphql
   {|
             mutation leaveChannel($input: JoiningChannelInput!) {

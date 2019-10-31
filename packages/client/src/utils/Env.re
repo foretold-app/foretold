@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 [@bs.val] external serverUrl: string = "window.ENV.API_URL";
 [@bs.val] external auth0Domain: string = "window.ENV.AUTH0_DOMAIN";
 [@bs.val] external auth0ClientId: string = "window.ENV.AUTH0_CLIENT_ID";

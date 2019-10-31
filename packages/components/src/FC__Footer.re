@@ -1,3 +1,4 @@
+[@bs.config {jsx: 3}];
 open FC__Base;
 
 let str = ReasonReact.string;
@@ -85,28 +86,36 @@ module Styles = {
     ]);
 };
 
-let component = ReasonReact.statelessComponent(__MODULE__);
-
 /**
  * Shows a footer with an element (ie. name and copyright), and a list of items
  */
+[@react.component]
 let make =
     (
       ~logo: ReasonReact.reactElement,
       ~links: array(ReasonReact.reactElement),
-      _children,
-    ) => {
-  ...component,
-  render: _self =>
-    <div className=Styles.layoutBox>
-      <div className=Styles.footerBox>
-        <div className=Styles.sections>
-          <div className=Styles.element> logo </div>
-          <ul className=Styles.items>
-            {links->Belt.Array.map(item => <li> item </li>)
-             |> ReasonReact.array}
-          </ul>
-        </div>
+    ) =>
+  <div className=Styles.layoutBox>
+    <div className=Styles.footerBox>
+      <div className=Styles.sections>
+        <div className=Styles.element> logo </div>
+        <ul className=Styles.items>
+          {links->Belt.Array.map(item => <li> item </li>) |> ReasonReact.array}
+        </ul>
       </div>
-    </div>,
+    </div>
+  </div>;
+
+module Jsx2 = {
+  let make =
+      (
+        ~logo: ReasonReact.reactElement,
+        ~links: array(ReasonReact.reactElement),
+        children,
+      ) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~logo, ~links, ()),
+      children,
+    );
 };

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open FC;
 
 let render = () =>
@@ -12,7 +14,7 @@ let render = () =>
       <PageCard.P> "PageCard.P"->React.string </PageCard.P>
     </PageCard.BodyPadding>
     <PageCard.Section border=`top background=`grey>
-        "Section, grey + borderTop"->React.string
+      "Section, grey + borderTop"->React.string
     </PageCard.Section>
   </PageCard>;
 

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 /* O for option */
 open Rationale.Function.Infix;
 
@@ -267,7 +269,7 @@ module FloatCdf = {
     Rationale.Option.fmap(((_, x)) => x, firstAbove(min, t));
 };
 
-module React = {
+module React2 = {
   let el = ReasonReact.element;
   let null = ReasonReact.null;
   let str = ReasonReact.string;

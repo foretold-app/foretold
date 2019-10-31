@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Antd;
 
 module FormConfig = {
@@ -51,19 +53,19 @@ let withUserForm =
     ~schema=Form.Validation.Schema([||]),
     innerComponentFn,
   )
-  |> E.React.el;
+  |> E.React2.el;
 
 let formFields = (form: Form.state, send, onSubmit) =>
   <Antd.Form onSubmit={_e => onSubmit()}>
     <Antd.Form.Item>
-      {"Do not send me emails" |> Utils.ste |> E.React.inH3}
+      {"Do not send me emails" |> Utils.ste |> E.React2.inH3}
       <AntdSwitch
         checked={form.values.stopAllEmails}
         onChange={e => send(Form.FieldChangeValue(StopAllEmails, e))}
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"Enable experimental features" |> Utils.ste |> E.React.inH3}
+      {"Enable experimental features" |> Utils.ste |> E.React2.inH3}
       <AntdSwitch
         checked={form.values.enableExperimentalFeatures}
         onChange={e =>
@@ -83,45 +85,41 @@ module CMutationForm =
     type queryType = PreferenceUpdate.EditPreference.t;
   });
 
-let component = ReasonReact.statelessComponent("Preference");
-let make = (~loggedUser: Types.user, _children) => {
-  ...component,
-  render: _ =>
-    <SLayout head={SLayout.Header.textDiv("Preferences")}>
-      <FC.PageCard.BodyPadding>
-        {PreferenceUpdate.withPreferenceMutation((mutation, data) => {
-           let agent = loggedUser.agent;
-           let id =
-             agent
-             |> E.O.bind(_, (r: Types.agent) => r.preference)
-             |> E.O.fmap((r: Types.preference) => r.id)
-             |> E.O.toExn("The preference needs an ID!");
-           let stopAllEmails =
-             agent
-             |> E.O.bind(_, (r: Types.agent) => r.preference)
-             |> E.O.bind(_, (r: Types.preference) => r.stopAllEmails)
-             |> E.O.default(true);
-           let enableExperimentalFeatures =
-             agent
-             |> E.O.bind(_, (r: Types.agent) => r.preference)
-             |> E.O.fmap((r: Types.preference) =>
-                  r.enableExperimentalFeatures
-                )
-             |> E.O.default(true);
+[@react.component]
+let make = (~loggedUser: Types.user) => {
+  <SLayout head={SLayout.Header.textDiv("Preferences")}>
+    <FC.PageCard.BodyPadding>
+      {PreferenceUpdate.withPreferenceMutation((mutation, data) => {
+         let agent = loggedUser.agent;
+         let id =
+           agent
+           |> E.O.bind(_, (r: Types.agent) => r.preference)
+           |> E.O.fmap((r: Types.preference) => r.id)
+           |> E.O.toExn("The preference needs an ID!");
+         let stopAllEmails =
+           agent
+           |> E.O.bind(_, (r: Types.agent) => r.preference)
+           |> E.O.bind(_, (r: Types.preference) => r.stopAllEmails)
+           |> E.O.default(true);
+         let enableExperimentalFeatures =
+           agent
+           |> E.O.bind(_, (r: Types.agent) => r.preference)
+           |> E.O.fmap((r: Types.preference) => r.enableExperimentalFeatures)
+           |> E.O.default(true);
 
-           withUserForm(
-             id,
-             stopAllEmails,
-             enableExperimentalFeatures,
-             mutation,
-             ({send, state}) =>
-             CMutationForm.showWithLoading(
-               ~result=data.result,
-               ~form=formFields(state, send, () => send(Form.Submit)),
-               (),
-             )
-           );
-         })}
-      </FC.PageCard.BodyPadding>
-    </SLayout>,
+         withUserForm(
+           id,
+           stopAllEmails,
+           enableExperimentalFeatures,
+           mutation,
+           ({send, state}) =>
+           CMutationForm.showWithLoading(
+             ~result=data.result,
+             ~form=formFields(state, send, () => send(Form.Submit)),
+             (),
+           )
+         );
+       })}
+    </FC.PageCard.BodyPadding>
+  </SLayout>;
 };

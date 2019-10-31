@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open FC__Base;
 
 module Styles = {
@@ -21,25 +23,15 @@ module Styles = {
     );
 };
 
-let component = ReasonReact.statelessComponent(__MODULE__);
+[@react.component]
+let make = (~links: ReasonReact.reactElement) =>
+  <Div styles=[Styles.outer]> <Div float=`left> links </Div> </Div>;
 
-let link =
-  Link.Jsx2.make(
-    ~isDisabled=false,
-    ~className=
-      Css.(
-        style([
-          marginRight(`em(2.)),
-          color(FC__Settings.Text.LightBackground.main),
-          hover([color(FC__Settings.Text.LightBackground.main)]),
-        ])
-      ),
-  );
-
-let make = (~links: ReasonReact.reactElement, _children) => {
-  ...component,
-  render: _self =>
-    <Div.Jsx2 styles=[Styles.outer]>
-      <Div.Jsx2 float=`left> links </Div.Jsx2>
-    </Div.Jsx2>,
+module Jsx2 = {
+  let make = (~links: ReasonReact.reactElement, children) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~links, ()),
+      children,
+    );
 };

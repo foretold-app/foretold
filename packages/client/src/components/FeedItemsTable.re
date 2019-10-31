@@ -10,7 +10,7 @@ module Columns = {
     | (_, Some(row)) =>
       <Link
         linkType={Internal(MeasurableShow(r.channelId, row.measurableId))}>
-        [|row.item |> Utils.ste|]
+        {row.item |> Utils.ste}
       </Link>
     | _ => "" |> Utils.ste
     };
@@ -28,7 +28,7 @@ module Columns = {
       ~render=
         (r: record) =>
           <Link linkType={Internal(ChannelShow(r.channelId))}>
-            [|r.channel.name |> Utils.ste|]
+            {r.channel.name |> Utils.ste}
           </Link>,
       ~flex=2,
       (),
@@ -74,7 +74,6 @@ let make = (~feedItems, ~columns=Columns.all) =>
   Table.fromColumns(columns, feedItems, ());
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("FeedItemsTable");
   let make = (~feedItems, ~columns=Columns.all, children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

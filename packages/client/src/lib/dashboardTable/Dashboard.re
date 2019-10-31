@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let valueFromEvent = (evt): string => evt->ReactEvent.Form.target##value;
 
 module Styles = {

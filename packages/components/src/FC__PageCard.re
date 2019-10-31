@@ -1,43 +1,37 @@
+[@bs.config {jsx: 3}];
+
 open FC__Base;
-let component = ReasonReact.statelessComponent(__MODULE__);
 
-let link =
-  Link.Jsx2.make(
-    ~className=
+[@react.component]
+let make = (~children) =>
+  <Div
+    styles=[
       Css.(
-        style([
-          marginRight(`em(2.)),
-          color(Colors.accentBlue),
-          hover([color(Colors.darkAccentBlue)]),
-        ])
+        style(
+          [
+            background(Colors.white),
+            border(`px(1), `solid, Colors.border),
+            borderRadius(`px(5)),
+          ]
+          @ BaseStyles.fullWidthFloatLeft,
+        )
       ),
-  );
+    ]>
+    children
+  </Div>;
 
-let make = children => {
-  ...component,
-  render: _self =>
-    <Div.Jsx2
-      styles=[
-        Css.(
-          style(
-            [
-              background(Colors.white),
-              border(`px(1), `solid, Colors.border),
-              borderRadius(`px(5)),
-            ]
-            @ BaseStyles.fullWidthFloatLeft,
-          )
-        ),
-      ]>
-      ...children
-    </Div.Jsx2>,
+module Jsx2 = {
+  let make = children =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~children, ()),
+      children,
+    );
 };
 
 let defaultPadding = Css.padding2(~v=`em(0.0), ~h=`em(1.5));
 
 module HeaderRow = {
-  let component = ReasonReact.statelessComponent("PageCard HeaderRow");
-
   module Styles = {
     let itemTopPadding = Css.paddingTop(`em(0.5));
     let itemBottomPadding = Css.paddingBottom(`em(0.35));
@@ -45,72 +39,93 @@ module HeaderRow = {
   };
 
   module Title = {
-    let component =
-      ReasonReact.statelessComponent("PageCard HeaderRow Title");
+    [@react.component]
+    let make = (~children) =>
+      <Div
+        styles=[
+          Css.(
+            style([
+              color(Colors.textDark),
+              paddingTop(`em(0.6)),
+              paddingBottom(`em(0.6)),
+              FC__Settings.FontWeights.heavy,
+            ])
+          ),
+        ]>
+        children
+      </Div>;
 
-    let make = children => {
-      ...component,
-      render: _self =>
-        <Div.Jsx2
-          styles=[
-            Css.(
-              style([
-                color(Colors.textDark),
-                paddingTop(`em(0.6)),
-                paddingBottom(`em(0.6)),
-                FC__Settings.FontWeights.heavy,
-              ])
-            ),
-          ]>
-          ...children
-        </Div.Jsx2>,
+    module Jsx2 = {
+      let make = children =>
+        ReasonReactCompat.wrapReactForReasonReact(
+          make,
+          makeProps(~children, ()),
+          children,
+        );
     };
   };
 
-  let make = children => {
-    ...component,
-    render: _self =>
-      <Div.Jsx2
-        styles=[
-          Css.(
-            style(
-              [
-                borderBottom(`px(1), `solid, Colors.accentBlueO8),
-                defaultPadding,
-              ]
-              @ BaseStyles.fullWidthFloatLeft,
-            )
-          ),
-        ]>
-        ...children
-      </Div.Jsx2>,
+  [@react.component]
+  let make = (~children) =>
+    <Div
+      styles=[
+        Css.(
+          style(
+            [
+              borderBottom(`px(1), `solid, Colors.accentBlueO8),
+              defaultPadding,
+            ]
+            @ BaseStyles.fullWidthFloatLeft,
+          )
+        ),
+      ]>
+      children
+    </Div>;
+
+  module Jsx2 = {
+    let make = children =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~children, ()),
+        children,
+      );
   };
 };
 
 module Body = {
-  let component = ReasonReact.statelessComponent("Card Body");
-  let make = children => {
-    ...component,
-    render: _self =>
-      <Div.Jsx2 styles=[Css.style(BaseStyles.fullWidthFloatLeft)]>
-        ...children
-      </Div.Jsx2>,
+  [@react.component]
+  let make = (~children) =>
+    <Div styles=[Css.style(BaseStyles.fullWidthFloatLeft)]> children </Div>;
+
+  module Jsx2 = {
+    let make = children =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~children, ()),
+        children,
+      );
   };
 };
 
 module BodyPadding = {
-  let component = ReasonReact.statelessComponent("Card BodyPadding");
-  let make = (~v=`em(1.5), children) => {
-    ...component,
-    render: _self =>
-      <Div.Jsx2
-        styles=[
-          Css.style(
-            [Css.padding2(~v, ~h=`em(1.5))] @ BaseStyles.fullWidthFloatLeft,
-          ),
-        ]>
-        ...children
-      </Div.Jsx2>,
+  [@react.component]
+  let make = (~v=`em(1.5), ~children) =>
+    <Div
+      styles=[
+        Css.style(
+          [Css.padding2(~v, ~h=`em(1.5))] @ BaseStyles.fullWidthFloatLeft,
+        ),
+      ]>
+      children
+    </Div>;
+
+  module Jsx2 = {
+    let make = (~v=`em(1.5), children) =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~v, ~children, ()),
+        children,
+      );
   };
 };
 
@@ -172,7 +187,6 @@ module Section = {
     };
   };
 
-  let component = ReasonReact.statelessComponent("Card Section");
   /**
    * Section of a PageCard
    * background: `white (default) | `grey
@@ -180,69 +194,93 @@ module Section = {
    * padding: `none | `top | `bottom | `all (default)
    * flex: true | false
    */
+  [@react.component]
   let make =
       (
         ~background: StyleProps.background=`white,
         ~border: StyleProps.border=`none,
         ~padding: StyleProps.padding=`all,
         ~flex=false,
+        ~children,
+      ) =>
+    <div className={StyleProps.toClasses(background, border, padding, flex)}>
+      children
+    </div>;
+
+  module Jsx2 = {
+    let make =
+        (
+          ~background: StyleProps.background=`white,
+          ~border: StyleProps.border=`none,
+          ~padding: StyleProps.padding=`all,
+          ~flex=false,
+          children,
+        ) =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~background, ~border, ~padding, ~flex, ~children, ()),
         children,
-      ) => {
-    ...component,
-    render: _self =>
-      <div
-        className={StyleProps.toClasses(background, border, padding, flex)}>
-        ...children
-      </div>,
+      );
   };
 };
 
 module VerticalSpace = {
-  let component =
-    ReasonReact.statelessComponent("Card Vertical Padding Area");
   let spaceStyle = Css.(style([marginTop(`em(1.5))]));
-  let make = _children => {
-    ...component,
-    render: _self => <div className=spaceStyle />,
+
+  [@react.component]
+  let make = _ => <div className=spaceStyle />;
+
+  module Jsx2 = {
+    let make = children =>
+      ReasonReactCompat.wrapReactForReasonReact(make, makeProps(), children);
   };
 };
 
 module H1 = {
-  let component = ReasonReact.statelessComponent("H1");
-  let make = children => {
-    ...component,
-    render: _self =>
-      <h1
-        className=Css.(
-          style(
-            [
-              fontSize(`em(1.15)),
-              color(`hex("192D44")),
-              FC__Settings.FontWeights.heavy,
-              marginTop(`em(0.0)),
-              marginBottom(`em(0.4)),
-            ]
-            @ BaseStyles.fullWidthFloatLeft,
-          )
-        )>
-        ...children
-      </h1>,
+  [@react.component]
+  let make = (~children) =>
+    <h1
+      className=Css.(
+        style(
+          [
+            fontSize(`em(1.15)),
+            color(`hex("192D44")),
+            FC__Settings.FontWeights.heavy,
+            marginTop(`em(0.0)),
+            marginBottom(`em(0.4)),
+          ]
+          @ BaseStyles.fullWidthFloatLeft,
+        )
+      )>
+      children
+    </h1>;
+
+  module Jsx2 = {
+    let make = children =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~children, ()),
+        children,
+      );
   };
 };
 
 module P = {
-  let component = ReasonReact.statelessComponent("P");
-  let make = children => {
-    ...component,
-    render: _self =>
-      <p
-        className=Css.(
-          style([
-            color(Colors.Text.LightBackground.p),
-            lineHeight(`em(1.5)),
-          ])
-        )>
-        ...children
-      </p>,
+  [@react.component]
+  let make = (~children) =>
+    <p
+      className=Css.(
+        style([color(Colors.Text.LightBackground.p), lineHeight(`em(1.5))])
+      )>
+      children
+    </p>;
+
+  module Jsx2 = {
+    let make = children =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~children, ()),
+        children,
+      );
   };
 };

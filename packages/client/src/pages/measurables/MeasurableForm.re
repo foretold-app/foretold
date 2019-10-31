@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Utils;
 open Antd;
 
@@ -87,12 +89,15 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
       switch (loggedUser) {
       | Some(loggedUser) =>
         <AntdForm onSubmit={_e => onSubmit()}>
-          {E.React.showIf(
+          {E.React2.showIf(
              creating,
              <Antd.Form.Item
-               label="Question Type"
+               label={"Question Type" |> Utils.ste}
                required=true
-               help="Number example: 'How many inches of rain will there be tomorrow?' Binary example: 'Will it rain tomorrow?'">
+               help={
+                 "Number example: 'How many inches of rain will there be tomorrow?' Binary example: 'Will it rain tomorrow?'"
+                 |> Utils.ste
+               }>
                <Antd.Radio.Group
                  value={state.values.valueType}
                  defaultValue={state.values.valueType}
@@ -106,10 +111,11 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                </Antd.Radio.Group>
              </Antd.Form.Item>,
            )}
-          {E.React.showIf(
+          {E.React2.showIf(
              state.values.showDescriptionProperty == "FALSE",
              <>
-               <Antd.Form.Item label="Question Title" required=true>
+               <Antd.Form.Item
+                 label={"Question Title" |> Utils.ste} required=true>
                  <Input
                    value={state.values.name}
                    onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -119,7 +125,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                </Antd.Form.Item>
              </>,
            )}
-          {E.React.showIf(
+          {E.React2.showIf(
              !creating,
              loggedUser.agent
              |> E.O.fmap((agent: Types.agent) =>
@@ -137,7 +143,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                     |> ReasonReact.array
                     |> (
                       c =>
-                        <Antd.Form.Item label="Community">
+                        <Antd.Form.Item label={"Community" |> Utils.ste}>
                           <Antd.Select
                             value={state.values.channelId}
                             onChange={e =>
@@ -151,7 +157,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                 )
              |> E.O.React.defaultNull,
            )}
-          {E.React.showIf(
+          {E.React2.showIf(
              state.values.showDescriptionProperty == "TRUE",
              <>
                <p />
@@ -164,7 +170,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                  {"Adding and modifying entities is currently not supported."
                   |> ste}
                </p>
-               <Antd.Form.Item label="Subject" required=true>
+               <Antd.Form.Item label={"Subject" |> Utils.ste} required=true>
                  <Antd.Input
                    value={state.values.labelSubject}
                    onChange={e =>
@@ -177,7 +183,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                    }
                  />
                </Antd.Form.Item>
-               <Antd.Form.Item label="Property" required=true>
+               <Antd.Form.Item label={"Property" |> Utils.ste} required=true>
                  <Antd.Input
                    value={state.values.labelProperty}
                    onChange={e =>
@@ -190,7 +196,8 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                    }
                  />
                </Antd.Form.Item>
-               <Antd.Form.Item label="Include a Specific Date in Name">
+               <Antd.Form.Item
+                 label={"Include a Specific Date in Name" |> Utils.ste}>
                  <AntdSwitch
                    checked={state.values.showDescriptionDate == "TRUE"}
                    onChange={e =>
@@ -204,7 +211,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                  />
                </Antd.Form.Item>
                {state.values.showDescriptionDate == "TRUE"
-                  ? <Antd.Form.Item label="'On' Date">
+                  ? <Antd.Form.Item label={"'On' Date" |> Utils.ste}>
                       <DatePicker
                         value={state.values.labelOnDate |> MomentRe.moment}
                         onChange={e => {
@@ -220,13 +227,16 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                               e |> formatDate,
                             ),
                           );
+                          _ => ();
                         }}
                       />
                     </Antd.Form.Item>
                   : <div />}
              </>,
            )}
-          <Antd.Form.Item label="Description" help="Markdown supported.">
+          <Antd.Form.Item
+            label={"Description" |> Utils.ste}
+            help={"Markdown supported." |> Utils.ste}>
             <Input.TextArea
               style={ReactDOMRe.Style.make(~minHeight="12em", ())}
               value={state.values.labelCustom}
@@ -240,11 +250,14 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
               }
             />
           </Antd.Form.Item>
-          {E.React.showIf(
+          {E.React2.showIf(
              state.values.valueType == "FLOAT",
              <>
                <Antd.Form.Item
-                 help="What are the most extreme values this could possibly take? For example, inches of rain tomorrow has a minimum of 0. These are optional, and in many cases not relevant.">
+                 help={
+                   "What are the most extreme values this could possibly take? For example, inches of rain tomorrow has a minimum of 0. These are optional, and in many cases not relevant."
+                   |> Utils.ste
+                 }>
                  <Div flexDirection=`row>
                    <Div flex={`num(1.)}>
                      <Div flexDirection=`row>
@@ -300,8 +313,11 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
           {Primary.User.show(
              loggedUser,
              <Antd.Form.Item
-               label="Resolution Endpoint"
-               help="If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value.">
+               label={"Resolution Endpoint" |> Utils.ste}
+               help={
+                 "If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value."
+                 |> Utils.ste
+               }>
                <Input
                  value={state.values.resolutionEndpoint}
                  onChange={e =>
@@ -316,27 +332,32 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
              </Antd.Form.Item>,
            )}
           <Antd.Form.Item
-            label="Expected Resolution Date"
-            help="When do you expect this will be resolvable by? You will get a notification when this date occurs.">
+            label={"Expected Resolution Date" |> Utils.ste}
+            help={
+              "When do you expect this will be resolvable by? You will get a notification when this date occurs."
+              |> Utils.ste
+            }>
             <DatePicker
               value={
                 state.values.expectedResolutionDate
                 |> MomentRe.momentDefaultFormat
               }
-              onChange={e =>
+              onChange={e => {
                 send(
                   Form.FieldChangeValue(
                     ExpectedResolutionDate,
                     e |> formatDate,
                   ),
-                )
-              }
+                );
+
+                (_ => ());
+              }}
               disabled={state.values.showDescriptionDate == "TRUE"}
             />
           </Antd.Form.Item>
           {Primary.User.show(
              loggedUser,
-             <Antd.Form.Item label="Use Entities in Title">
+             <Antd.Form.Item label={"Use Entities in Title" |> Utils.ste}>
                <Antd.Radio.Group
                  value={state.values.showDescriptionProperty}
                  defaultValue={state.values.showDescriptionProperty}

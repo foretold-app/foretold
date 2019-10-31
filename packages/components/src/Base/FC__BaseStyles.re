@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let floatLeft = Css.float(`left);
 let floatRight = Css.float(`right);
 let fullWidthFloatLeft =

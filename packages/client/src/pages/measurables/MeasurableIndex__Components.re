@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Utils;
 open Style.Grid;
 open MeasurableIndex__Logic;
@@ -120,7 +122,9 @@ module LoadedAndUnselected = {
       measurables
       showExtraData=true
       channelId={Some(t.channel.id)}
-      onSelect={e => Reducer.Components.sendSelectItem(t.reducerParams, e.id)}
+      onSelect={(e: Types.measurable) =>
+        Reducer.Components.sendSelectItem(t.reducerParams, e.id)
+      }
     />;
   };
 };
@@ -148,14 +152,14 @@ let toLayoutInput =
     </>
 
   | WithoutChannel(_) =>
-    <SLayout head=E.React.null isFluid=true> {"No channel." |> ste} </SLayout>
+    <SLayout head=E.React2.null isFluid=true> {"No channel." |> ste} </SLayout>
 
   | InvalidIndexError(_) =>
-    <SLayout head=E.React.null isFluid=true>
+    <SLayout head=E.React2.null isFluid=true>
       {"Item Not Valid" |> ste}
     </SLayout>
 
   | WithChannelButNotQuery(_c) =>
-    <SLayout head=E.React.null isFluid=true> <Spin /> </SLayout>
+    <SLayout head=E.React2.null isFluid=true> <Spin /> </SLayout>
   };
 };

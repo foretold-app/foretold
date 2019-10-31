@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module FormConfig = {
   type field(_) =
     | Name: field(string)
@@ -67,7 +69,7 @@ let withUserForm =
       |]),
     innerComponentFn,
   )
-  |> E.React.el;
+  |> E.React2.el;
 
 let formFields = (state: Form.state, send, getFieldState) => {
   let onSubmit = () => send(Form.Submit);
@@ -101,7 +103,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
 
   <Antd.Form onSubmit={_e => onSubmit()}>
     <Antd.Form.Item>
-      {"Username" |> Utils.ste |> E.React.inH3}
+      {"Username" |> Utils.ste |> E.React2.inH3}
       <Antd.Input
         value={state.values.name}
         onChange={ReForm.Helpers.handleDomFormChange(e => {
@@ -112,7 +114,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
       {error(stateName)}
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"Description" |> Utils.ste |> E.React.inH3}
+      {"Description" |> Utils.ste |> E.React2.inH3}
       <Antd.Input
         value={state.values.description}
         onChange={ReForm.Helpers.handleDomFormChange(e => {
@@ -122,7 +124,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"Email" |> Utils.ste |> E.React.inH3}
+      {"Email" |> Utils.ste |> E.React2.inH3}
       <AntdInput
         value={state.values.email}
         disabled=true
@@ -133,7 +135,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
-      {"Picture URL" |> Utils.ste |> E.React.inH3}
+      {"Picture URL" |> Utils.ste |> E.React2.inH3}
       <Antd.Input
         value={state.values.picture}
         onChange={ReForm.Helpers.handleDomFormChange(e => {
@@ -156,40 +158,38 @@ module CMutationForm =
     type queryType = UserUpdate.Query.t;
   });
 
-let component = ReasonReact.statelessComponent("Profile");
-let make = (~loggedUser: Types.user, _children) => {
-  ...component,
-  render: _ =>
-    <SLayout head={SLayout.Header.textDiv("Edit Profile Information")}>
-      <FC.PageCard.BodyPadding>
-        <UserUpdate.Mutation>
-          ...{(mutation, data) => {
-            let agent = loggedUser.agent;
-            let id = loggedUser.id;
-            let email = loggedUser.email |> E.O.default("");
-            let picture = loggedUser.picture |> E.O.default("");
-            let description = loggedUser.description |> E.O.default("");
-            let name =
-              agent
-              |> E.O.bind(_, (r: Types.agent) => r.name)
-              |> E.O.default("");
+[@react.component]
+let make = (~loggedUser: Types.user) => {
+  <SLayout head={SLayout.Header.textDiv("Edit Profile Information")}>
+    <FC.PageCard.BodyPadding>
+      <UserUpdate.Mutation>
+        ...{(mutation, data) => {
+          let agent = loggedUser.agent;
+          let id = loggedUser.id;
+          let email = loggedUser.email |> E.O.default("");
+          let picture = loggedUser.picture |> E.O.default("");
+          let description = loggedUser.description |> E.O.default("");
+          let name =
+            agent
+            |> E.O.bind(_, (r: Types.agent) => r.name)
+            |> E.O.default("");
 
-            withUserForm(
-              id,
-              name,
-              email,
-              picture,
-              description,
-              mutation,
-              ({send, state, getFieldState}) =>
-              CMutationForm.showWithLoading(
-                ~result=data.result,
-                ~form=formFields(state, send, getFieldState),
-                (),
-              )
-            );
-          }}
-        </UserUpdate.Mutation>
-      </FC.PageCard.BodyPadding>
-    </SLayout>,
+          withUserForm(
+            id,
+            name,
+            email,
+            picture,
+            description,
+            mutation,
+            ({send, state, getFieldState}) =>
+            CMutationForm.showWithLoading(
+              ~result=data.result,
+              ~form=formFields(state, send, getFieldState),
+              (),
+            )
+          );
+        }}
+      </UserUpdate.Mutation>
+    </FC.PageCard.BodyPadding>
+  </SLayout>;
 };

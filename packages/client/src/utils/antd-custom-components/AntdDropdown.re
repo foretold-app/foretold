@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 [@bs.module "./AntdDropdown.js"]
 external dropdown: ReasonReact.reactClass = "Dropdown";
 
@@ -9,9 +11,11 @@ external makeProps:
   _ =
   "";
 
-let make = (~overlay=?, ~overlayClassName=?, children) =>
+[@react.component]
+let make = (~overlay=?, ~overlayClassName=?, ~children=ReasonReact.null) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=dropdown,
     ~props=makeProps(~overlay?, ~overlayClassName?, ()),
     children,
-  );
+  )
+  |> ReasonReact.element;

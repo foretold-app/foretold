@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Rationale.Function.Infix;
 open Utils;
 open Types;
@@ -646,7 +648,7 @@ module CompetitorType = {
       <Antd.Select.Option value="UNRESOLVED">
         {"Close without Answer" |> ste}
       </Antd.Select.Option>
-    | `AGGREGATION => E.React.null
+    | `AGGREGATION => E.React2.null
     };
 
   let availableSelections =

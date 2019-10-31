@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let toNotebook = m => {
   Primary.Notebook.convertJs(
     ~id=m##id,

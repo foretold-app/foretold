@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open FC__Settings.Text;
 
 let activeStyles =
@@ -36,34 +38,46 @@ module Button = {
     cursor(`pointer),
   ];
 
-  let component = ReasonReact.statelessComponent("TabButton");
-  let make = (~isActive=false, ~onClick=?, ~flex=false, children) => {
-    ...component,
-    render: _self =>
-      <button
-        disabled=isActive
-        ?onClick
-        className={Css.style(
-          noStyles
-          @ (isActive ? activeStyles : inactiveStyles)
-          @ (flex ? flexStyles : allStyles),
-        )}>
-        ...children
-      </button>,
+  [@react.component]
+  let make = (~isActive=false, ~onClick=?, ~flex=false, ~children) =>
+    <button
+      disabled=isActive
+      ?onClick
+      className={Css.style(
+        noStyles
+        @ (isActive ? activeStyles : inactiveStyles)
+        @ (flex ? flexStyles : allStyles),
+      )}>
+      children
+    </button>;
+
+  module Jsx2 = {
+    let make = (~isActive=false, ~onClick=?, ~flex=false, children) =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~isActive, ~onClick?, ~flex, ~children, ()),
+        children,
+      );
   };
 };
 
-let component = ReasonReact.statelessComponent("Tab");
-let make = (~isActive=false, ~onClick=?, ~flex=false, children) => {
-  ...component,
-  render: _self =>
-    <FC__Link.Jsx2
-      isDisabled=false
-      ?onClick
-      className={Css.style(
-        (isActive ? activeStyles : inactiveStyles)
-        @ (flex ? flexStyles : allStyles),
-      )}>
-      ...children
-    </FC__Link.Jsx2>,
+[@react.component]
+let make = (~isActive=false, ~onClick=?, ~flex=false, ~children) =>
+  <FC__Link
+    isDisabled=false
+    ?onClick
+    className={Css.style(
+      (isActive ? activeStyles : inactiveStyles)
+      @ (flex ? flexStyles : allStyles),
+    )}>
+    children
+  </FC__Link>;
+
+module Jsx2 = {
+  let make = (~isActive=false, ~onClick=?, ~flex=false, children) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~isActive, ~onClick?, ~flex, ~children, ()),
+      children,
+    );
 };

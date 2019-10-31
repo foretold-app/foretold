@@ -1,3 +1,4 @@
+[@bs.config {jsx: 3}];
 open FC__Base;
 
 module Styles = {
@@ -25,53 +26,64 @@ module Styles = {
     ]);
 };
 
-let actionButton = (~variant: FC__Button.variant=Primary) =>
-  FC__Button.make(
-    ~variant,
-    ~isDisabled=false,
-    ~size=Medium,
-    ~className=Css.(merge([Styles.actionButtonPosition])),
-  );
+let actionButton = (~variant: FC__Button.variant=Primary, ~children) =>
+  <FC__Button
+    variant
+    isDisabled=false
+    size=FC__Button.(Medium)
+    className=Css.(merge([Styles.actionButtonPosition]))
+    ?children
+  />;
 
-let component = ReasonReact.statelessComponent(__MODULE__);
+[@react.component]
+let make = (~children) =>
+  <Div styles=[Styles.outer]>
+    <Div styles=[Styles.inner]> ...children </Div>
+  </Div>;
 
-let make = children => {
-  ...component,
-  render: _self =>
-    <Div.Jsx2 styles=[Styles.outer]>
-      <Div.Jsx2 styles=[Styles.inner]> ...children </Div.Jsx2>
-    </Div.Jsx2>,
+module Jsx2 = {
+  let make = children =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~children, ()),
+      children,
+    );
 };
 
 module SubHeader = {
-  let component = ReasonReact.statelessComponent(__MODULE__ ++ " Subheader");
-
-  let make = children => {
-    ...component,
-    render: _self =>
-      <Div.Jsx2
+  [@react.component]
+  let make = (~children) =>
+    <Div
+      styles=[
+        Css.(
+          style(
+            [backgroundColor(Colors.lighterGrayBackground)]
+            @ BaseStyles.fullWidthFloatLeft,
+          )
+        ),
+      ]>
+      <Div
         styles=[
           Css.(
             style(
-              [backgroundColor(Colors.lighterGrayBackground)]
+              [
+                padding2(~v=`em(0.0), ~h=`em(2.0)),
+                borderBottom(`px(1), `solid, FC__Settings.border),
+              ]
               @ BaseStyles.fullWidthFloatLeft,
             )
           ),
         ]>
-        <Div.Jsx2
-          styles=[
-            Css.(
-              style(
-                [
-                  padding2(~v=`em(0.0), ~h=`em(2.0)),
-                  borderBottom(`px(1), `solid, FC__Settings.border),
-                ]
-                @ BaseStyles.fullWidthFloatLeft,
-              )
-            ),
-          ]>
-          ...children
-        </Div.Jsx2>
-      </Div.Jsx2>,
+        children
+      </Div>
+    </Div>;
+
+  module Jsx2 = {
+    let make = children =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~children, ()),
+        children,
+      );
   };
 };

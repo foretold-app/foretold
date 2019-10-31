@@ -1,36 +1,38 @@
-let component = ReasonReact.statelessComponent("ChannelMembers");
+[@bs.config {jsx: 3}];
 
 let changeRoleAction = (agentId, channelId, role, text) =>
-  ChannelMembershipRoleUpdate.Mutation.make((mutation, _) =>
-    <Link.Jsx2
-      linkType={
-        Action(
-          _ =>
-            ChannelMembershipRoleUpdate.mutate(
-              mutation,
-              ~agentId,
-              ~channelId,
-              ~role,
-            ),
-        )
-      }>
-      {text |> ReasonReact.string}
-    </Link.Jsx2>
-  )
-  |> ReasonReact.element;
+  <ChannelMembershipRoleUpdate.Mutation>
+    ...{(mutation, _) =>
+      <Link
+        linkType={
+          Action(
+            _ =>
+              ChannelMembershipRoleUpdate.mutate(
+                mutation,
+                ~agentId,
+                ~channelId,
+                ~role,
+              ),
+          )
+        }>
+        {text |> ReasonReact.string}
+      </Link>
+    }
+  </ChannelMembershipRoleUpdate.Mutation>;
 
 let removeFromChannel = (agentId, channelId) =>
-  ChannelMembershipDelete.Mutation.make((mutation, _) =>
-    <Link.Jsx2
-      linkType={
-        Action(
-          _ => ChannelMembershipDelete.mutate(mutation, agentId, channelId),
-        )
-      }>
-      {"Remove" |> ReasonReact.string}
-    </Link.Jsx2>
-  )
-  |> ReasonReact.element;
+  <ChannelMembershipDelete.Mutation>
+    ...{(mutation, _) =>
+      <Link
+        linkType={
+          Action(
+            _ => ChannelMembershipDelete.mutate(mutation, agentId, channelId),
+          )
+        }>
+        {"Remove" |> ReasonReact.string}
+      </Link>
+    }
+  </ChannelMembershipDelete.Mutation>;
 
 module Columns = {
   type column = Table.column(Types.channelMembership);
@@ -42,7 +44,7 @@ module Columns = {
         (membership: Types.channelMembership) =>
           membership.agent
           |> Rationale.Option.fmap((agent: Types.agent) =>
-               <AgentLink.Jsx2 agent />
+               <AgentLink agent />
              )
           |> E.O.React.defaultNull,
       (),
@@ -75,7 +77,7 @@ module Columns = {
             <div>
               {switch (membership.role, membership.agent) {
                | (`VIEWER, Some(agent)) =>
-                 E.React.showIf(
+                 E.React2.showIf(
                    Primary.Permissions.can(
                      `CHANNEL_MEMBERSHIP_ROLE_UPDATE,
                      membership.permissions,
@@ -88,7 +90,7 @@ module Columns = {
                    ),
                  )
                | (`ADMIN, Some(agent)) =>
-                 E.React.showIf(
+                 E.React2.showIf(
                    Primary.Permissions.can(
                      `CHANNEL_MEMBERSHIP_ROLE_UPDATE,
                      membership.permissions,
@@ -139,45 +141,45 @@ module Columns = {
 };
 
 let title = () =>
-  <FC.Base.Div.Jsx2 float=`left>
+  <FC.Base.Div float=`left>
     <FC.PageCard.HeaderRow.Title>
       {"Community Members" |> ReasonReact.string}
     </FC.PageCard.HeaderRow.Title>
-  </FC.Base.Div.Jsx2>;
+  </FC.Base.Div>;
 
 let addMembersButtonSection = (channelId: string) =>
-  <FC.Base.Div.Jsx2
+  <FC.Base.Div
     float=`right
     className={Css.style([
       FC.PageCard.HeaderRow.Styles.itemTopPadding,
       FC.PageCard.HeaderRow.Styles.itemRightPadding,
     ])}>
     <FC.Base.Button
-      variant=Primary
-      size=MediumShort
+      variant=FC.Base.Button.Primary
+      size=FC.Base.Button.MediumShort
       onClick={e =>
         LinkType.onClick(Internal(ChannelAddMember(channelId)), e)
       }>
       {"Add Members" |> ReasonReact.string}
     </FC.Base.Button>
-  </FC.Base.Div.Jsx2>;
+  </FC.Base.Div>;
 
 let inviteMemberButtonSection = (channelId: string) =>
-  <FC.Base.Div.Jsx2
+  <FC.Base.Div
     float=`right
     className={Css.style([
       FC.PageCard.HeaderRow.Styles.itemTopPadding,
       FC.PageCard.HeaderRow.Styles.itemBottomPadding,
     ])}>
     <FC.Base.Button
-      variant=Secondary
-      size=MediumShort
+      variant=FC.Base.Button.Secondary
+      size=FC.Base.Button.MediumShort
       onClick={e =>
         LinkType.onClick(Internal(ChannelInviteMember(channelId)), e)
       }>
       {"Invite Member With Email" |> ReasonReact.string}
     </FC.Base.Button>
-  </FC.Base.Div.Jsx2>;
+  </FC.Base.Div>;
 
 let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
   let head =
@@ -202,16 +204,14 @@ let errorFn = _ =>
 
 let loadingFn = _ => <SLayout> <Spin /> </SLayout>;
 
-let make = (~channelId: string, ~channel: Types.channel, _children) => {
-  ...component,
-  render: _ => {
-    ChannelMembershipsGet.component(~id=channelId, result =>
-      result
-      |> HttpResponse.flatten(
-           memberships => succesFn(~channelId, ~channel, ~memberships),
-           errorFn,
-           loadingFn,
-         )
-    );
-  },
+[@react.component]
+let make = (~channelId: string, ~channel: Types.channel) => {
+  ChannelMembershipsGet.component(~id=channelId, result =>
+    result
+    |> HttpResponse.flatten(
+         memberships => succesFn(~channelId, ~channel, ~memberships),
+         errorFn,
+         loadingFn,
+       )
+  );
 };

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open FC.Base;
 
 let staticOverlay =
@@ -18,7 +20,7 @@ let divAreaStyle =
       backgroundColor(Colors.smokeWhite),
       width(`px(300)),
       textAlign(`center),
-      padding2(~v=`em(1.), ~h=`em(1.))
+      padding2(~v=`em(1.), ~h=`em(1.)),
     ])
   );
 

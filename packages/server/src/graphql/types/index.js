@@ -21,6 +21,7 @@ const agentChannels = require('./agent-channels');
 const mutexes = require('./mutexes');
 const jwt = require('./scalars/jwt');
 const scalars = require('./scalars');
+const notebooks = require('./notebooks');
 
 module.exports = {
   bots,
@@ -45,4 +46,5 @@ module.exports = {
   mutexes,
   jwt,
   scalars,
+  notebooks,
 };

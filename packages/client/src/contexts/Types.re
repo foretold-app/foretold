@@ -203,6 +203,7 @@ and leaderboardItem = {
   agent: option(agent),
   channel: option(channel),
   pointScore: option(float),
+  pointScore2: option(float),
   createdAt: option(MomentRe.Moment.t),
   predictionCountTotal: option(int),
   numberOfQuestionsScored: option(int),

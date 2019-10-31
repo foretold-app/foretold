@@ -75,10 +75,11 @@ async function primaryPointScore(root, _args, _context, _info) {
 async function primaryPointScoreConstant(root, _args, _context, _info) {
   const agentId = _.get(root, 'agentId');
   const measurableId = _.get(root, 'measurableId');
-  return data.agentMeasurables.primaryPointScore(agentId, measurableId, false);
+  return data.agentMeasurables.primaryPointScore(agentId, measurableId, true);
 }
 
 module.exports = {
   all,
   primaryPointScore,
+  primaryPointScoreConstant,
 };

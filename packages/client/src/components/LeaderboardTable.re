@@ -85,6 +85,26 @@ module Columns = {
       (),
     );
 
+  let timeAveragedScore2 =
+    Table.Column.make(
+      ~name="Time-Average Score" |> Utils.ste,
+      ~help=
+        Some({
+          headerContent: "Time-Average Score" |> Utils.ste,
+          bodyContent:
+            "The average difference in log error between this member's predictions and the aggregate prediction, over the course of the life of the question."
+            |> Utils.ste,
+        }),
+      ~render=
+        (r: record) =>
+          r.pointScore2
+          |> E.O.fmap(E.Float.with3DigitsPrecision)
+          |> E.O.default("")
+          |> Utils.ste,
+      ~flex=1,
+      (),
+    );
+
   let totalScore =
     Table.Column.make(
       ~name="Total Net Log Score" |> Utils.ste,
@@ -183,11 +203,18 @@ module Columns = {
     agent,
     measurable,
     timeAveragedScore,
+    timeAveragedScore2,
     predictionCount,
     time,
   |];
 
-  let measurables' = [|agent, timeAveragedScore, predictionCount, time|];
+  let measurables' = [|
+    agent,
+    timeAveragedScore,
+    timeAveragedScore2,
+    predictionCount,
+    time,
+  |];
 
   let members = [|
     agent,

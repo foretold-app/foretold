@@ -860,6 +860,7 @@ module Notebook = {
   let convertJs =
       (
         ~id: Js.Json.t,
+        ~name: Js.Json.t,
         ~ownerId: Js.Json.t,
         ~channelId: Js.Json.t,
         ~createdAt: Js.Json.t,
@@ -869,6 +870,7 @@ module Notebook = {
       )
       : t => {
     id: toNotebookId(id),
+    name: name |> E.J.toString,
     ownerId: Agent.toAgentId(ownerId),
     channelId: Channel.toChannelId(channelId),
     createdAt: toCreatedAt(createdAt),

@@ -3,6 +3,7 @@
 let toNotebook = m => {
   Primary.Notebook.convertJs(
     ~id=m##id,
+    ~name=m##name,
     ~ownerId=m##ownerId,
     ~channelId=m##channelId,
     ~createdAt=m##createdAt,
@@ -15,8 +16,8 @@ let toNotebook = m => {
 module Query = [%graphql
   {|
     query getNotebooks (
-        $channelId: String
-        $ownerId: String
+        $channelId: ChannelId
+        $ownerId: AgentId
         $first: Int500
         $last: Int500
         $after: Cursor
@@ -40,6 +41,7 @@ module Query = [%graphql
           edges{
             node {
               id
+              name
               ownerId
               channelId
               createdAt
@@ -100,3 +102,9 @@ let componentMaker = (query, innerComponentFn) =>
       |> innerComponentFn
     }
   </QueryComponent>;
+
+let component = (~channelId, ~pageLimit, ~direction, ~innerComponentFn) => {
+  let channelId = channelId |> E.J.O.fromString;
+  let query = queryDirection(~channelId?, ~pageLimit, ~direction, ());
+  componentMaker(query, innerComponentFn);
+};

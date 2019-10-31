@@ -51,6 +51,14 @@ let make = (tabSelected: Routing.ChannelPage.tab, channel: Types.channel) =>
        ),
      )}
     {E.React2.showIf(
+       channel.id != "home",
+       tab(
+         tabSelected == Notebooks,
+         tabToInternalUrl(channel.id, Notebooks),
+         "Notebooks",
+       ),
+     )}
+    {E.React2.showIf(
        channel.myRole === Some(`ADMIN),
        tab(
          tabSelected == Options,

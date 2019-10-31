@@ -11,6 +11,10 @@ const agentMeasurable = new graphql.GraphQLObjectType({
       type: graphql.GraphQLFloat,
       resolve: require('../resolvers').agentMeasurables.primaryPointScore,
     },
+    primaryPointScoreConstant: {
+      type: graphql.GraphQLFloat,
+      resolve: require('../resolvers').agentMeasurables.primaryPointScoreConstant,
+    },
     predictionCountTotal: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },

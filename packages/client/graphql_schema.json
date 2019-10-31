@@ -4665,6 +4665,18 @@
               "deprecationReason": null
             },
             {
+              "name": "primaryPointScoreConstant",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "predictionCountTotal",
               "description": null,
               "args": [],

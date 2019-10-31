@@ -176,6 +176,7 @@ and agentMeasurable = {
   measurable,
   agent,
   primaryPointScore: option(float),
+  primaryPointScoreConstant: option(float),
   predictionCountTotal: int,
   createdAt: MomentRe.Moment.t,
   competitiveMeasurement: option(measurement),

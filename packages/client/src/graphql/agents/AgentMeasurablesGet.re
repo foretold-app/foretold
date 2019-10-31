@@ -19,6 +19,7 @@ let toNode = node => {
   Primary.AgentMeasurable.make(
     ~id=node##id,
     ~primaryPointScore=node##primaryPointScore,
+    ~primaryPointScoreConstant=node##primaryPointScoreConstant,
     ~createdAt=node##createdAt,
     ~predictionCountTotal=node##predictionCountTotal,
     ~agent,
@@ -63,6 +64,7 @@ module Query = [%graphql
                   id
                   createdAt @bsDecoder(fn: "E.J.toMoment")
                   primaryPointScore
+                  primaryPointScoreConstant
                   predictionCountTotal
                   agent {
                       id

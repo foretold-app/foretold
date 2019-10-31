@@ -49,7 +49,7 @@ class AgentMeasurablesData extends DataBase {
    * @param {Models.MeasurableID} measurableId
    * @returns {Promise<*>}
    */
-  async primaryPointScore(agentId, measurableId) {
+  async primaryPointScore(agentId, measurableId, startAtFirstPrediction=false) {
     const {
       predictions,
       recentResult,
@@ -89,12 +89,14 @@ class AgentMeasurablesData extends DataBase {
 
     let overTime;
 
+    const startTime = startAtFirstPrediction ? (agentPredictions[0] && agentPredictions[0].createdAt) : measurableCreatedAt;
+    if (!startTime) return undefined;
     try {
       overTime = new PredictionResolutionOverTime({
         agentPredictions,
         marketPredictions,
         resolution,
-      }).averagePointScore(marketScore, toUnix(measurableCreatedAt));
+      }).averagePointScore(marketScore, toUnix(startTime));
     } catch (e) {
       log.trace(e.message);
       return undefined;

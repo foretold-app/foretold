@@ -168,7 +168,7 @@ export namespace Models {
       to: string;
       body: string;
       subject: string;
-    }
+    };
   }
 
   export interface Invitation extends Model {
@@ -200,6 +200,7 @@ export namespace Models {
     agentId: AgentID;
     measurableId: MeasurableID;
     primaryPointScore?: float;
+    primaryPointScoreConstant?: float;
     predictionCountTotal: number;
   }
 
@@ -273,7 +274,7 @@ export namespace Layers {
     agentId: Models.AgentID;
   };
 
-  export type order = {field: string, direction: string};
+  export type order = { field: string; direction: string };
   export type orderList = order[];
 
   namespace DataSourceLayer {
@@ -441,112 +442,105 @@ export namespace Layers {
     type pagination = {
       limit?: number;
       offset?: number;
-      last?: number,
-      first?: number,
-      after?: string,
-      before?: string,
+      last?: number;
+      first?: number;
+      after?: string;
+      before?: string;
       order?: orderList;
 
-      getPagination(total: number): { limit: number, offset: number };
-      getPagination2(): { limit: number, offset: number };
+      getPagination(total: number): { limit: number; offset: number };
+      getPagination2(): { limit: number; offset: number };
       isOrderSet(): boolean;
     };
     type query = {
-      sort?: number,
-      distinct?: boolean,
-      col?: string,
+      sort?: number;
+      distinct?: boolean;
+      col?: string;
     };
     type params = {
-      id?: Models.ObjectID
-      agentId?: Models.AgentID
-      name?: string,
-      auth0Id?: string,
-      seriesId?: Models.SeriesID,
-      isEmailVerified?: boolean,
+      id?: Models.ObjectID;
+      agentId?: Models.AgentID;
+      name?: string;
+      auth0Id?: string;
+      seriesId?: Models.SeriesID;
+      isEmailVerified?: boolean;
     };
     type response = { data: any };
-    type responseList = { data: any[], total: number };
+    type responseList = { data: any[]; total: number };
 
     interface AbstractModel {
       deleteOne(
         params: params,
         restrictions: restrictions,
-        options: options,
+        options: options
       ): response;
 
       updateOne(
         params: params,
         data: data,
         restrictions: restrictions,
-        options: options,
+        options: options
       ): response;
 
-      createOne(
-        data: data,
-        restrictions: restrictions,
-      ): response;
+      createOne(data: data, restrictions: restrictions): response;
 
       getOne(
         params: params,
         query: query,
         restrictions: restrictions,
-        options: options,
+        options: options
       ): response;
 
       getAll(
         filter: filter,
         pagination: pagination,
         restrictions: restrictions,
-        options: options,
+        options: options
       ): responseList;
 
-      updateAll(
-        params: params,
-        data: data,
-        options: options,
-      ): boolean;
+      updateAll(params: params, data: data, options: options): boolean;
 
       upsertOne(
         params: params,
         query: query,
         data: data,
         restrictions: restrictions,
-        options: options,
+        options: options
       ): response;
     }
   }
 }
 
 export type Auth0UserInfoResponse = {
-  sub: string,
-  email?: string,
-  email_verified?: boolean,
-  nickname?: string,
-  picture?: string,
-  given_name?: string,
-  family_name?: string,
-  name?: string,
-  gender?: string,
-  locale?: string,
-  updated_at?: string,
-}
+  sub: string;
+  email?: string;
+  email_verified?: boolean;
+  nickname?: string;
+  picture?: string;
+  given_name?: string;
+  family_name?: string;
+  name?: string;
+  gender?: string;
+  locale?: string;
+  updated_at?: string;
+};
 
 export type EmailConfig = {
-  emailHostGenerator: string,
-  emailHelp: string,
-  unsubscribeLink: string,
-  unsubscribeComment: string,
-  subscribeEmail: string,
-  subscribeLink: string,
-  subscribeComment: string,
+  emailHostGenerator: string;
+  emailHelp: string;
+  unsubscribeLink: string;
+  unsubscribeComment: string;
+  subscribeEmail: string;
+  subscribeLink: string;
+  subscribeComment: string;
 
-  gateways: SmtpGateway[],
-}
+  gateways: SmtpGateway[];
+};
 
 export type SmtpGateway = {
-  host: string,
-  port: string,
-  user: string,
-  pass: string,
-  from: string,
-}
+  host: string;
+  port: string;
+  user: string;
+  pass: string;
+  from: string;
+};

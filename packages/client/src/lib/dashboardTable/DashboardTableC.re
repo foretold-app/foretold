@@ -23,7 +23,7 @@ module DashboardTableToTable = {
                 | Some(measurable) =>
                   <div>
                     <MeasurementItems.AggregationResolution measurable />
-                    <Link.Jsx2
+                    <Link
                       className=Shared.Item.item
                       linkType={
                         Internal(
@@ -31,7 +31,7 @@ module DashboardTableToTable = {
                         )
                       }>
                       {"Link" |> Utils.ste}
-                    </Link.Jsx2>
+                    </Link>
                   </div>
                 | None =>
                   <FC__Alert type_=`warning>
@@ -60,7 +60,7 @@ let tableJsonString = {| { "columns": [{"id":"1", "name": "Name", "columnType": 
 let tableJson: Js.Json.t = Json.parseOrRaise(tableJsonString);
 
 [@react.component]
-let make = (~channelId, ~tableJson=tableJson, _) => {
+let make = (~channelId, ~tableJson=tableJson) => {
   MeasurablesGet.component(
     ~channelId=Some(channelId),
     ~states=[|Some(`OPEN)|],

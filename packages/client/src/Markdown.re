@@ -1,4 +1,4 @@
-let component = ReasonReact.statelessComponent("Text");
+[@bs.config {jsx: 3}];
 
 type code = {
   .
@@ -46,34 +46,19 @@ let foretoldJsRenderers = (channelId): renderers => {
     | (Some(language), Some(value)) =>
       <code className=language> {value |> Utils.ste} </code>
     | (None, Some(value)) => value |> Utils.ste
-    | (_, None) => E.React.null
+    | (_, None) => E.React2.null
     };
   },
 };
 
-let make = (~source, ~supportForetoldJs=false, ~channelId=?, _children) => {
-  ...component,
-  render: _self =>
-    switch (supportForetoldJs, channelId) {
-    | (true, Some(channelId)) =>
-      <div className=Styles.all>
-        <ReactMarkdown.Markdown
-          source
-          renderers={foretoldJsRenderers(channelId)}
-        />
-      </div>
-    | (true, None) => <ReactMarkdown.Markdown source />
-    | (false, _) => <ReactMarkdown.Markdown source />
-    },
-};
-
-module Jsx3 = {
-  [@bs.obj] external makeProps: (~source: string, unit) => _ = "";
-
-  let make =
-    ReasonReactCompat.wrapReasonReactForReact(
-      ~component=ReasonReact.statelessComponent("Markdown"),
-      (reactProps: {. "source": string}) =>
-      make(~source=reactProps##source, [||])
-    );
+[@react.component]
+let make = (~source, ~supportForetoldJs=false, ~channelId=?) => {
+  switch (supportForetoldJs, channelId) {
+  | (true, Some(channelId)) =>
+    <div className=Styles.all>
+      <ReactMarkdown source renderers={foretoldJsRenderers(channelId)} />
+    </div>
+  | (true, None) => <ReactMarkdown source />
+  | (false, _) => <ReactMarkdown source />
+  };
 };

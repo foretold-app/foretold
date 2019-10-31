@@ -17,6 +17,7 @@ const { GlobalSettingsData } = require('./global-settings-data');
 const { AgentMeasurablesData } = require('./agent-measurables-data');
 const { AgentChannelsData } = require('./agent-channels-data');
 const { MutexesData } = require('./mutexes-data');
+const { NotebooksData } = require('./notebooks-data');
 
 module.exports = {
   MeasurablesData,
@@ -38,7 +39,9 @@ module.exports = {
   AgentMeasurablesData,
   AgentChannelsData,
   MutexesData,
+  NotebooksData,
 
+  // @todo: Repair it, do not provide instances.
   measurables: new MeasurablesData(),
   measurements: new MeasurementsData(),
   users: new UsersData(),

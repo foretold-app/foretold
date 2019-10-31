@@ -28,7 +28,8 @@ module ChannelPage = {
     | Options
     | Updates
     | Leaderboard
-    | Dashboard;
+    | Dashboard
+    | Notebooks;
 
   type leaderboard =
     | ByMeasurable
@@ -45,6 +46,7 @@ module ChannelPage = {
       | Settings
       | NewSeries
       | Dashboard
+      | Notebooks
       | Series(seriesId)
       | FeedItems
       | Leaderboard(leaderboard);
@@ -62,6 +64,7 @@ module ChannelPage = {
       | Settings => Options
       | FeedItems => Updates
       | Dashboard => Dashboard
+      | Notebooks => Notebooks
       | Leaderboard(_) => Leaderboard
       };
 
@@ -71,7 +74,7 @@ module ChannelPage = {
       | Members => Members
       | Options => Settings
       | Updates => FeedItems
-      | Dashboard => Dashboard
+      | Notebooks => Notebooks
       | Leaderboard => Leaderboard(ByMember)
       };
   };
@@ -151,7 +154,9 @@ module Route = {
     | ["c", channelId, "edit"] => Channel({channelId, subPage: Settings})
     | ["c", channelId, "members"] => Channel({channelId, subPage: Members})
     | ["c", channelId, "dashboard"] =>
-      Channel({channelId, subPage: Dashboard})
+      Channel({channelId: getChannelId(channelId), subPage: Dashboard})
+    | ["c", channelId, "notebooks"] =>
+      Channel({channelId: getChannelId(channelId), subPage: Notebooks})
     | ["c", channelId, "activity"] =>
       Channel({channelId: getChannelId(channelId), subPage: FeedItems})
     | ["c", channelId, "scoring", "questions"] =>
@@ -216,6 +221,7 @@ module Url = {
     | ChannelAddMember(string)
     | ChannelInviteMember(string)
     | ChannelDashboard(string)
+    | ChannelNotebooks(string)
     | MeasurableNew(string)
     | Subscribe
     | Login
@@ -247,6 +253,7 @@ module Url = {
     | ChannelShow(channelId) => "/c/" ++ channelId
     | ChannelEdit(channelId) => "/c/" ++ channelId ++ "/edit"
     | ChannelDashboard(channelId) => "/c/" ++ channelId ++ "/dashboard"
+    | ChannelNotebooks(channelId) => "/c/" ++ channelId ++ "/notebooks"
     | ChannelMembers(channelId) => "/c/" ++ channelId ++ "/members"
     | ChannelFeedItems(channelId) => "/c/" ++ channelId ++ "/activity"
     | ChannelLeaderboard(channelId, ByMeasurable) =>
@@ -275,6 +282,7 @@ module Url = {
     | NewMeasurable => MeasurableNew(channelPage.channelId)
     | Members => ChannelMembers(channelPage.channelId)
     | Dashboard => ChannelDashboard(channelPage.channelId)
+    | Notebooks => ChannelNotebooks(channelPage.channelId)
     | FeedItems => ChannelFeedItems(channelPage.channelId)
     | Leaderboard(subTab) =>
       ChannelLeaderboard(channelPage.channelId, subTab)

@@ -7,11 +7,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     channelId: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID(),
       allowNull: false,
     },
     agentId: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID(),
       allowNull: true,
     },
     body: {

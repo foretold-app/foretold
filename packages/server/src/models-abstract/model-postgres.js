@@ -310,6 +310,7 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
+   * @todo: Try to fix it and do not use "this.models.Measurement".
    * @param {object} [include]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {*}
@@ -434,6 +435,12 @@ class ModelPostgres extends Model {
     if (!!filter.seriesId) {
       where[this.and].push({
         seriesId: filter.seriesId,
+      });
+    }
+
+    if (!!filter.ownerId) {
+      where[this.and].push({
+        ownerId: filter.ownerId,
       });
     }
 

@@ -1,5 +1,7 @@
 const { AuthenticationError } = require('apollo-server');
 
+/* eslint-disable max-classes-per-file */
+
 class NoUserIdError extends AuthenticationError {
   constructor() {
     super('No User Id');
@@ -23,6 +25,8 @@ class NoAgentIdError extends AuthenticationError {
     super('No Agent Id');
   }
 }
+
+/* eslint-enable max-classes-per-file */
 
 module.exports = {
   NoUserIdError,

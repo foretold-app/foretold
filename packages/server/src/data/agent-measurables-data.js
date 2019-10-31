@@ -21,7 +21,7 @@ const log = logger.module('data/agent-measurables-data');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {AgentMeasurableModel} AgentMeasurablesModel
+ * @property {AgentMeasurableModel} model
  */
 class AgentMeasurablesData extends DataBase {
   constructor() {

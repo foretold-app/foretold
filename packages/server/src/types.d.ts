@@ -2,6 +2,7 @@ export namespace Models {
   export type ObjectID = string;
   export type ChannelMembershipRole = "ADMIN" | "VIEWER";
   export type float = number;
+  export type Json = string;
 
   export type AgentID = ObjectID;
   export type ChannelID = ObjectID;
@@ -19,6 +20,7 @@ export namespace Models {
   export type PreferenceID = ObjectID;
   export type TokenID = ObjectID;
   export type ChannelMembershipID = ObjectID;
+  export type NotebookID = ObjectID;
 
   export interface Model {
     id: ObjectID;
@@ -210,6 +212,14 @@ export namespace Models {
     numberOfQuestionsScored: number;
   }
 
+  export interface Notebook extends Model {
+    id: NotebookID;
+    ownerId: AgentID;
+    channelId: ChannelID;
+    body: string;
+    name: string;
+  }
+
   export type Creator = Models.User | Models.Bot;
 }
 
@@ -290,6 +300,7 @@ export namespace Layers {
       excludeChannelId?: Models.ChannelID;
       notTaggedByAgent?: Models.AgentID;
       notificationId?: Models.NotificationID;
+      ownerId?: Models.AgentID;
 
       competitorType?: string;
       type?: string;
@@ -402,6 +413,7 @@ export namespace Layers {
       notTaggedByAgent?: Models.AgentID;
       seriesId?: Models.SeriesID;
       creatorId?: Models.AgentID;
+      ownerId?: Models.AgentID;
 
       isArchived?: string[];
       types?: string[];

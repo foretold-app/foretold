@@ -5,7 +5,7 @@ const { Params, Query, Data } = require('./classes');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {PreferenceModel} PreferencesModel
+ * @property {PreferenceModel} model
  */
 class PreferencesData extends DataBase {
   constructor() {

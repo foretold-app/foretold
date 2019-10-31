@@ -4,6 +4,11 @@ open Rationale.Function.Infix;
 open Utils;
 open Types;
 
+let toTimestamp = (json: Js.Json.t): option(MomentRe.Moment.t) =>
+  json |> E.J.toMoment |> E.O.some;
+let toCreatedAt = toTimestamp;
+let toUpdatedAt = toTimestamp;
+
 module MeasurableState = {
   type t = measurableState;
 
@@ -246,6 +251,8 @@ module Bot = {
 module Agent = {
   type t = Types.agent;
 
+  let toAgentId = (json: Js.Json.t): Types.agentId => json |> E.J.toString;
+
   let name = (a: t): option(string) =>
     switch (a.agentType) {
     | Some(Bot(b)) => b.name
@@ -300,6 +307,9 @@ module Channel = {
   let globalLink = () => Routing.Url.ChannelShow("home");
   let showUrl = showLink ||> Routing.Url.toString;
   let showPush = showLink ||> Routing.Url.push;
+
+  let toChannelId = (json: Js.Json.t): Types.channelId =>
+    json |> E.J.toString;
 
   module Styles = {
     open Css;
@@ -832,4 +842,39 @@ module AgentType = {
       )
     | (_, _) => None
     };
+
+  let toAgent = (agent: option(Js.t('a))) => {
+    let agentType = agent |> E.O.bind(_, getAgentType(~agent=_, ()));
+
+    agent
+    |> E.O.fmap(k => Agent.make(~id=k##id, ~agentType, ~name=k##name, ()));
+  };
+};
+
+module Notebook = {
+  type t = Types.notebook;
+
+  let toNotebookId = (json: Js.Json.t): Types.notebookId =>
+    json |> E.J.toString;
+
+  let convertJs =
+      (
+        ~id: Js.Json.t,
+        ~name: Js.Json.t,
+        ~ownerId: Js.Json.t,
+        ~channelId: Js.Json.t,
+        ~createdAt: Js.Json.t,
+        ~updatedAt: Js.Json.t,
+        ~owner: option(Js.t('a)),
+        (),
+      )
+      : t => {
+    id: toNotebookId(id),
+    name: name |> E.J.toString,
+    ownerId: Agent.toAgentId(ownerId),
+    channelId: Channel.toChannelId(channelId),
+    createdAt: toCreatedAt(createdAt),
+    updatedAt: toUpdatedAt(updatedAt),
+    owner: AgentType.toAgent(owner),
+  };
 };

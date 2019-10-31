@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const {
   MEASUREMENT_VALUE,
 } = require('@foretold/measurement-value/enums/measurement-value');

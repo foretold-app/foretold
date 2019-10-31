@@ -39,6 +39,13 @@ services:
       - LOG_LEVEL_LOCAL=trace # 6.2
       - LOG_LEVEL_REMOTE=trace # 6.3
       - LOG_APP_NAME=foretold # 6.4
+      # 7. DB
+      - DB_USERNAME=<change-me> # 6.1
+      - DB_PASSWORD=<change-me> # 6.2
+      - DB_DATABASE=<change-me> # 6.3
+      - DB_HOST=127.0.0.1 # 6.4
+      # - DB_USE_ENV_VARIABLE=DATABASE_URL # 6.5
+
     command: yarn start
     links:
       - database

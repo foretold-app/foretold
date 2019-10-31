@@ -12,7 +12,7 @@ const { Data, Params, Query } = require('./classes');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {InvitationModel} InvitationModel
+ * @property {InvitationModel} model
  */
 class InvitationsData extends DataBase {
   constructor() {

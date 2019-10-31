@@ -4,7 +4,7 @@ const { SeriesModel } = require('../models-abstract');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {SeriesModel} SeriesModel
+ * @property {SeriesModel} model
  */
 class SeriesData extends DataBase {
   constructor() {

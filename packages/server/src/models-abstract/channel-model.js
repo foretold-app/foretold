@@ -16,6 +16,7 @@ class ChannelModel extends ModelPostgres {
 
   /**
    * @public
+   * @todo: To decline in use of "this.models".
    * @param {Models.ChannelID} channelId
    * @return {Promise<Model[]>}
    */

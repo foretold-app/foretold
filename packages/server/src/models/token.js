@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     agentId: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID(),
       allowNull: false,
     },
     token: {

@@ -8,15 +8,14 @@ const logger = require('../../../lib/log');
 const { Producer } = require('../producer');
 const { ProducerNotifications } = require('./producer-notifications');
 
-const log
-  = logger.module('sync/producers/notifications/member-to-community');
+const log = logger.module('notifications/member-to-community');
 
 /**
  * @abstract
  */
 class MemberToCommunity extends ProducerNotifications {
   /**
-   * @param {Models.ChannelMembership} channelMembership
+   * @param {Models.ChannelMemberships} channelMembership
    */
   constructor(channelMembership) {
     super({});

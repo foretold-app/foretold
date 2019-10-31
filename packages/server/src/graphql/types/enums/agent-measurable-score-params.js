@@ -3,7 +3,7 @@ const graphql = require('graphql');
 const {
   MARKET_TYPE,
   START_AT,
-  FINAL_SCORE_TYPE,
+  FINAL_COMPARISON_MEASUREMENT,
 } = require('../../../enums/agent-measurable-score-type');
 
 const marketScoreType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
@@ -21,23 +21,23 @@ const marketScoreType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
 const startAt = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
   name: 'startAt',
   values: {
-    [START_AT.QUESTION_START]: {
-      value: START_AT.QUESTION_START,
+    [START_AT.QUESTION_CREATION_TIME]: {
+      value: START_AT.QUESTION_CREATION_TIME,
     },
-    [START_AT.AGENT_MEASUREMENT_START]: {
-      value: START_AT.AGENT_MEASUREMENT_START,
+    [START_AT.AGENT_MEASUREMENT_CREATION_TIME]: {
+      value: START_AT.AGENT_MEASUREMENT_CREATION_TIME,
     },
   },
 }));
 
-const finalScoreType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
-  name: 'finalScoreType',
+const finalComparisonMeasurement = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
+  name: 'finalComparisonMeasurement',
   values: {
-    [FINAL_SCORE_TYPE.LAST_OBJECTIVE_MEASUREMENT]: {
-      value: FINAL_SCORE_TYPE.LAST_OBJECTIVE_MEASUREMENT,
+    [FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT]: {
+      value: FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT,
     },
-    [FINAL_SCORE_TYPE.LAST_AGGREGATE_MEASUREMENT]: {
-      value: FINAL_SCORE_TYPE.LAST_AGGREGATE_MEASUREMENT,
+    [FINAL_COMPARISON_MEASUREMENT.LAST_AGGREGATE_MEASUREMENT]: {
+      value: FINAL_COMPARISON_MEASUREMENT.LAST_AGGREGATE_MEASUREMENT,
     },
   },
 }));
@@ -45,5 +45,5 @@ const finalScoreType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
 module.exports = {
   marketScoreType,
   startAt,
-  finalScoreType,
+  finalComparisonMeasurement,
 };

@@ -21,8 +21,8 @@ const agentMeasurable = new graphql.GraphQLObjectType({
         startAt: {
           type: require('./enums/agent-measurable-score-params').startAt
         },
-        finalScoreType: {
-          type: require('./enums/agent-measurable-score-params').finalScoreType
+        finalComparisonMeasurement: {
+          type: require('./enums/agent-measurable-score-params').finalComparisonMeasurement
         },
       },
     },

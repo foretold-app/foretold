@@ -77,8 +77,8 @@ async function timeAverageScore(root, args, _context, _info) {
   const measurableId = _.get(root, 'measurableId');
   const marketType = _.get(args, 'marketType');
   const startAt = _.get(args, 'startAt');
-  const finalScoreType = _.get(args, 'finalScoreType');
-  const params = { startAt, marketType, finalScoreType };
+  const finalComparisonMeasurement = _.get(args, 'finalComparisonMeasurement');
+  const params = { startAt, marketType, finalComparisonMeasurement };
   return data.agentMeasurables.primaryPointScore(agentId, measurableId, params);
 }
 

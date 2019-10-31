@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const moment = require('moment');
-const { MARKET_TYPE, START_AT, FINAL_SCORE_TYPE } = require('../enums/agent-measurable-score-type');
+const { MARKET_TYPE, START_AT, FINAL_COMPARISON_MEASUREMENT } = require('../enums/agent-measurable-score-type');
 
 const {
   PredictionResolutionOverTime,
@@ -53,8 +53,8 @@ class AgentMeasurablesData extends DataBase {
    */
   async primaryPointScore(agentId, measurableId, params = {
     marketType: MARKET_TYPE.MARKET,
-    startAt: START_AT.QUESTION_START,
-    finalScoreType: FINAL_SCORE_TYPE.LAST_OBJECTIVE_MEASUREMENT,
+    startAt: START_AT.QUESTION_CREATION_TIME,
+    finalComparisonMeasurement: FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT,
   }) {
     const {
       predictions,
@@ -89,7 +89,7 @@ class AgentMeasurablesData extends DataBase {
       .map((r) => r.measurement)
       .map(toOverTime);
 
-    const resolutionMeasurement = (params.finalScoreType === FINAL_SCORE_TYPE.LAST_OBJECTIVE_MEASUREMENT)
+    const resolutionMeasurement = (params.finalComparisonMeasurement === FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT)
       ? recentResult
       : _.last(allAggregations);
 
@@ -101,7 +101,7 @@ class AgentMeasurablesData extends DataBase {
 
     let overTime;
 
-    const startTime = (params.startAt === START_AT.QUESTION_START)
+    const startTime = (params.startAt === START_AT.QUESTION_CREATION_TIME)
       ? toUnix(measurableCreatedAt)
       : (!!agentPredictions[0] && agentPredictions[0].time);
 

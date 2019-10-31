@@ -12,7 +12,14 @@ const agentMeasurable = new graphql.GraphQLObjectType({
       resolve: require('../resolvers').agentMeasurables.primaryPointScore,
     },
     timeAverageScore: {
-      type: graphql.GraphQLFloat,
+      type: new graphql.GraphQLObjectType({
+        name: 'timeAverageScore',
+        fields: () => ({
+          score: { type: graphql.GraphQLFloat },
+          startAt: { type: DateType.default },
+          endAt: { type: DateType.default },
+        }),
+      }),
       resolve: require('../resolvers').agentMeasurables.timeAverageScore,
       args: {
         marketType: {

@@ -102,8 +102,8 @@ class AgentMeasurablesData extends DataBase {
     let overTime;
 
     const startTime = (params.startAt === START_AT.QUESTION_CREATION_TIME)
-      ? toUnix(measurableCreatedAt)
-      : (!!agentPredictions[0] && agentPredictions[0].time);
+      ? (measurableCreatedAt)
+      : (!!predictions[0] &&  predictions[0].measurement.dataValues.relevantAt);
 
     const marketScoreType = params.marketType === MARKET_TYPE.MARKET ? marketScore : nonMarketScore;
 
@@ -113,7 +113,7 @@ class AgentMeasurablesData extends DataBase {
         agentPredictions,
         marketPredictions,
         resolution,
-      }).averagePointScore(marketScoreType, startTime);
+      }).averagePointScore(marketScoreType, toUnix(startTime));
     } catch (e) {
       log.trace(e.message);
       return undefined;
@@ -129,7 +129,11 @@ class AgentMeasurablesData extends DataBase {
       );
       return undefined;
     }
-    return _.round(overTime.data, 6);
+    return {
+      score: _.round(overTime.data, 6),
+      startAt: startTime,
+      endAt: resolutionMeasurement.dataValues.relevantAt,
+    };
   }
 
   /**

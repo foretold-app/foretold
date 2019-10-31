@@ -3,6 +3,12 @@ const _ = require('lodash');
 const data = require('../../data');
 
 const {
+  MARKET_TYPE,
+  START_AT,
+  FINAL_COMPARISON_MEASUREMENT,
+} = require('../../enums/agent-measurable-score-type');
+
+const {
   Pagination,
   structures,
   Filter,
@@ -60,7 +66,16 @@ async function all(_root, args, context, _info) {
 async function primaryPointScore(root, _args, _context, _info) {
   const agentId = _.get(root, 'agentId');
   const measurableId = _.get(root, 'measurableId');
-  return data.agentMeasurables.primaryPointScore(agentId, measurableId);
+  let response = await data.agentMeasurables.primaryPointScore(agentId, measurableId, {
+    marketType: MARKET_TYPE.MARKET,
+    startAt: START_AT.QUESTION_CREATION_TIME,
+    finalComparisonMeasurement: FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT,
+  })
+  if (response){
+    return response.score;
+  } else {
+    return response;
+  }
 }
 
 /**

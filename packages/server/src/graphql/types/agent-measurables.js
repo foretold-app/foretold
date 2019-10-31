@@ -14,6 +14,17 @@ const agentMeasurable = new graphql.GraphQLObjectType({
     primaryPointScoreConstant: {
       type: graphql.GraphQLFloat,
       resolve: require('../resolvers').agentMeasurables.primaryPointScoreConstant,
+      args: {
+        marketType: {
+          type: require('./enums/agent-measurable-score-params').marketScoreType
+        },
+        startAt: {
+          type: require('./enums/agent-measurable-score-params').startAt
+        },
+        finalScoreType: {
+          type: require('./enums/agent-measurable-score-params').finalScoreType
+        },
+      },
     },
     predictionCountTotal: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },

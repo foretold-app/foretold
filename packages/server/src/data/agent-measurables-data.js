@@ -1,9 +1,11 @@
 const _ = require('lodash');
 const moment = require('moment');
+const { MARKET_TYPE, START_AT, FINAL_SCORE_TYPE } = require('../enums/agent-measurable-score-type');
 
 const {
   PredictionResolutionOverTime,
   marketScore,
+  nonMarketScore
 } = require('@foretold/prediction-analysis');
 
 const { AgentMeasurableModel } = require('../models-abstract');
@@ -49,7 +51,11 @@ class AgentMeasurablesData extends DataBase {
    * @param {Models.MeasurableID} measurableId
    * @returns {Promise<*>}
    */
-  async primaryPointScore(agentId, measurableId, startAtFirstPrediction = false) {
+  async primaryPointScore(agentId, measurableId, params = {
+    marketType: MARKET_TYPE.MARKET,
+    startAt: START_AT.QUESTION_START,
+    finalScoreType: FINAL_SCORE_TYPE.LAST_OBJECTIVE_MEASUREMENT,
+  }) {
     const {
       predictions,
       recentResult,
@@ -76,27 +82,38 @@ class AgentMeasurablesData extends DataBase {
       };
     }
 
-    if (!recentResult) return undefined;
-    if (!measurableCreatedAt) return undefined;
     if (predictions.length === 0) return undefined;
     if (allAggregations.length === 0) return undefined;
 
     const agentPredictions = predictions
       .map((r) => r.measurement)
       .map(toOverTime);
+
+    const resolutionMeasurement = (params.finalScoreType === FINAL_SCORE_TYPE.LAST_OBJECTIVE_MEASUREMENT)
+      ? recentResult
+      : _.last(allAggregations);
+
+    if (!resolutionMeasurement) return undefined;
+
+    const resolution = toOverTime(resolutionMeasurement);
+
     const marketPredictions = allAggregations.map(toOverTime);
-    const resolution = toOverTime(recentResult);
 
     let overTime;
 
-    const startTime = startAtFirstPrediction ? (!!agentPredictions[0] && agentPredictions[0].time) : toUnix(measurableCreatedAt);
+    const startTime = (params.startAt === START_AT.QUESTION_START)
+      ? toUnix(measurableCreatedAt)
+      : (!!agentPredictions[0] && agentPredictions[0].time);
+
+    const marketScoreType = params.marketType === MARKET_TYPE.MARKET ? marketScore : nonMarketScore;
+
     if (!startTime) return undefined;
     try {
       overTime = new PredictionResolutionOverTime({
         agentPredictions,
         marketPredictions,
         resolution,
-      }).averagePointScore(marketScore, startTime);
+      }).averagePointScore(marketScoreType, startTime);
     } catch (e) {
       log.trace(e.message);
       return undefined;

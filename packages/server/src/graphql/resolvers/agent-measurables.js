@@ -60,7 +60,7 @@ async function all(_root, args, context, _info) {
 async function primaryPointScore(root, _args, _context, _info) {
   const agentId = _.get(root, 'agentId');
   const measurableId = _.get(root, 'measurableId');
-  return data.agentMeasurables.primaryPointScore(agentId, measurableId, false);
+  return data.agentMeasurables.primaryPointScore(agentId, measurableId);
 }
 
 /**
@@ -72,10 +72,14 @@ async function primaryPointScore(root, _args, _context, _info) {
  * @param {object} _info
  * @returns {Promise<*>}
  */
-async function primaryPointScoreConstant(root, _args, _context, _info) {
+async function primaryPointScoreConstant(root, args, _context, _info) {
   const agentId = _.get(root, 'agentId');
   const measurableId = _.get(root, 'measurableId');
-  return data.agentMeasurables.primaryPointScore(agentId, measurableId, true);
+  const marketType = _.get(args, 'marketType');
+  const startAt = _.get(args, 'startAt');
+  const finalScoreType = _.get(args, 'finalScoreType');
+  const params = { startAt, marketType, finalScoreType };
+  return data.agentMeasurables.primaryPointScore(agentId, measurableId, params);
 }
 
 module.exports = {

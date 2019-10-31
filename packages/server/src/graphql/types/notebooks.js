@@ -14,7 +14,7 @@ const notebook = new graphql.GraphQLObjectType({
     ownerId: { type: graphql.GraphQLNonNull(scalars.agentId) },
     channelId: { type: graphql.GraphQLNonNull(scalars.channelId) },
     body: { type: graphql.GraphQLNonNull(scalars.string3to16K) },
-    agent: {
+    owner: {
       type: require('./agents').agent,
       resolve: resolver(models.Notebook.Agent),
     },

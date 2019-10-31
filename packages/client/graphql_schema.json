@@ -5368,7 +5368,7 @@
               "deprecationReason": null
             },
             {
-              "name": "agent",
+              "name": "owner",
               "description": null,
               "args": [],
               "type": {

@@ -776,30 +776,6 @@ module LeaderboardItem = {
     );
 };
 
-module Notebook = {
-  type t = Types.notebook;
-
-  let toNotebookId = (json: Js.Json.t): Types.notebookId =>
-    json |> E.J.toString;
-
-  let make =
-      (
-        ~id: Js.Json.t,
-        ~ownerId: Js.Json.t,
-        ~channelId: Js.Json.t,
-        ~createdAt: Js.Json.t,
-        ~updatedAt: Js.Json.t,
-        (),
-      )
-      : t => {
-    id: toNotebookId(id),
-    ownerId: Agent.toAgentId(ownerId),
-    channelId: Channel.toChannelId(channelId),
-    createdAt: toCreatedAt(createdAt),
-    updatedAt: toUpdatedAt(updatedAt),
-  };
-};
-
 module AgentType = {
   type t = Types.agentType;
 
@@ -864,4 +840,37 @@ module AgentType = {
       )
     | (_, _) => None
     };
+
+  let toAgent = (agent: option(Js.t('a))) => {
+    let agentType = agent |> E.O.bind(_, getAgentType(~agent=_, ()));
+
+    agent
+    |> E.O.fmap(k => Agent.make(~id=k##id, ~agentType, ~name=k##name, ()));
+  };
+};
+
+module Notebook = {
+  type t = Types.notebook;
+
+  let toNotebookId = (json: Js.Json.t): Types.notebookId =>
+    json |> E.J.toString;
+
+  let convertJs =
+      (
+        ~id: Js.Json.t,
+        ~ownerId: Js.Json.t,
+        ~channelId: Js.Json.t,
+        ~createdAt: Js.Json.t,
+        ~updatedAt: Js.Json.t,
+        ~owner: option(Js.t('a)),
+        (),
+      )
+      : t => {
+    id: toNotebookId(id),
+    ownerId: Agent.toAgentId(ownerId),
+    channelId: Channel.toChannelId(channelId),
+    createdAt: toCreatedAt(createdAt),
+    updatedAt: toUpdatedAt(updatedAt),
+    owner: AgentType.toAgent(owner),
+  };
 };

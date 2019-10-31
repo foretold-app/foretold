@@ -1,10 +1,11 @@
 let toNotebook = m => {
-  Primary.Notebook.make(
+  Primary.Notebook.convertJs(
     ~id=m##id,
     ~ownerId=m##ownerId,
     ~channelId=m##channelId,
     ~createdAt=m##createdAt,
     ~updatedAt=m##updatedAt,
+    ~owner=m##owner,
     (),
   );
 };
@@ -41,6 +42,31 @@ module Query = [%graphql
               channelId
               createdAt
               updatedAt
+              owner {
+                id
+                name
+                user {
+                  id
+                  name
+                  description
+                  agentId
+                  picture
+                }
+                bot {
+                  id
+                  name
+                  description
+                  picture
+                  competitorType
+                  user {
+                      id
+                      name
+                      description
+                      picture
+                      agentId
+                  }
+                }
+              }
             }
           }
         }

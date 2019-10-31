@@ -11,7 +11,7 @@ const notebook = new graphql.GraphQLObjectType({
     name: { type: graphql.GraphQLNonNull(scalars.string3to255) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    agentId: { type: graphql.GraphQLNonNull(scalars.agentId) },
+    ownerId: { type: graphql.GraphQLNonNull(scalars.agentId) },
     channelId: { type: graphql.GraphQLNonNull(scalars.channelId) },
     body: { type: graphql.GraphQLNonNull(scalars.string3to16K) },
     agent: {

@@ -5320,7 +5320,7 @@
               "deprecationReason": null
             },
             {
-              "name": "agentId",
+              "name": "ownerId",
               "description": null,
               "args": [],
               "type": {

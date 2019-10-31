@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let toNotebook = m => {
   Primary.Notebook.make(
     ~id=m##id,

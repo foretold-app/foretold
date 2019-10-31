@@ -216,7 +216,7 @@ export namespace Models {
     id: NotebookID;
     ownerId: AgentID;
     channelId: ChannelID;
-    body: Json;
+    body: string;
     name: string;
   }
 

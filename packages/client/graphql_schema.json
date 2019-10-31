@@ -4697,14 +4697,14 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "finalScoreType",
+                  "name": "finalComparisonMeasurement",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
                       "kind": "ENUM",
-                      "name": "finalScoreType",
+                      "name": "finalComparisonMeasurement",
                       "ofType": null
                     }
                   },
@@ -4712,8 +4712,8 @@
                 }
               ],
               "type": {
-                "kind": "SCALAR",
-                "name": "Float",
+                "kind": "OBJECT",
+                "name": "timeAverageScore",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -4868,13 +4868,13 @@
           "interfaces": null,
           "enumValues": [
             {
-              "name": "QUESTION_START",
+              "name": "QUESTION_CREATION_TIME",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "AGENT_MEASUREMENT_START",
+              "name": "AGENT_MEASUREMENT_CREATION_TIME",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -4884,7 +4884,7 @@
         },
         {
           "kind": "ENUM",
-          "name": "finalScoreType",
+          "name": "finalComparisonMeasurement",
           "description": null,
           "fields": null,
           "inputFields": null,
@@ -4903,6 +4903,53 @@
               "deprecationReason": null
             }
           ],
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "timeAverageScore",
+          "description": null,
+          "fields": [
+            {
+              "name": "score",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "startAt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "endAt",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
           "possibleTypes": null
         },
         {

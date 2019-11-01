@@ -16,7 +16,7 @@ const { Data } = require('../../data/classes');
  * @returns {Promise<Models.Model>}
  */
 async function one(_root, args, context, _info) {
-  const name = _.get(args, 'name');
+  const name = _.get(args, 'name', null);
 
   const params = new Params({ name });
   const query = new Query();
@@ -40,8 +40,8 @@ async function one(_root, args, context, _info) {
  * @returns {Promise<*>}
  */
 async function update(_root, args, _context, _info) {
-  const name = _.get(args, 'name');
-  const input = _.get(args, 'input');
+  const name = _.get(args, 'name', null);
+  const input = _.get(args, 'input') || {};
 
   const params = new Params({ name });
   const datas = new Data(input);

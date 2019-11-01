@@ -51,23 +51,15 @@ module Top = {
 [@react.component]
 let make = (~agentPage: Routing.AgentPage.t) => {
   let agentId = agentPage.agentId;
-  <Providers.AppContext.Consumer>
-    ...{({loggedUser}) =>
-      switch (loggedUser) {
-      | Some(loggedUser) =>
-        <FillWithSidebar>
-          <Top agentPage />
-          {switch (agentPage.subPage) {
-           | AgentMeasurables => <AgentMeasurables pageParams={id: agentId} />
-           | AgentBots => <AgentBots pageParams={id: agentId} />
-           | AgentCommunities => <AgentCommunities agentId />
-           | AgentUpdates => <FeedItems agentId={Some(agentId)} />
-           | AgentScores => <AgentScores agentId={Some(agentId)} />
-           }}
-        </FillWithSidebar>
 
-      | None => <Home />
-      }
-    }
-  </Providers.AppContext.Consumer>;
+  <FillWithSidebar>
+    <Top agentPage />
+    {switch (agentPage.subPage) {
+     | AgentMeasurables => <AgentMeasurables pageParams={id: agentId} />
+     | AgentBots => <AgentBots pageParams={id: agentId} />
+     | AgentCommunities => <AgentCommunities agentId />
+     | AgentUpdates => <FeedItems agentId={Some(agentId)} />
+     | AgentScores => <AgentScores agentId={Some(agentId)} />
+     }}
+  </FillWithSidebar>;
 };

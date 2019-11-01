@@ -111,12 +111,10 @@ let channelEditLink = (c: Types.channel) =>
   </Link>;
 
 let seriesHead = (channel: Types.channel, seriesName) =>
-  <>
-    <div className=Styles.seriesText>
-      <Icon.Icon icon="LAYERS" />
-      {seriesName |> ste}
-    </div>
-  </>;
+  <div className=Styles.seriesText>
+    <Icon.Icon icon="LAYERS" />
+    {seriesName |> ste}
+  </div>;
 
 [@react.component]
 let make =
@@ -134,7 +132,8 @@ let make =
     )>
     <div className={Styles.container(isFluid)}>
       <FC.PageCard>
-        <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
+        {head != ReasonReact.null
+           ? <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow> : head}
         <FC.PageCard.Body> children </FC.PageCard.Body>
       </FC.PageCard>
     </div>

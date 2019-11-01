@@ -14,8 +14,8 @@ const { AuthenticationPrimary } = require('../../lib/authentication');
  * @returns {Promise<{jwt: string}>}
  */
 async function exchangeToken(root, args, context, info) {
-  const auth0jwt = _.get(args, 'auth0jwt');
-  const auth0accessToken = _.get(args, 'auth0accessToken');
+  const auth0jwt = _.get(args, 'auth0jwt', null);
+  const auth0accessToken = _.get(args, 'auth0accessToken', null);
 
   if (!!auth0jwt && !!auth0accessToken) {
     return _exchangeAuthComToken(root, args, context, info);
@@ -34,8 +34,8 @@ async function exchangeToken(root, args, context, info) {
  * @returns {Promise<{jwt: string}>}
  */
 async function _exchangeAuthComToken(_root, args, _context, _info) {
-  const auth0jwt = _.get(args, 'auth0jwt');
-  const auth0accessToken = _.get(args, 'auth0accessToken');
+  const auth0jwt = _.get(args, 'auth0jwt', null);
+  const auth0accessToken = _.get(args, 'auth0accessToken', null);
 
   const jwt = await new AuthenticationPrimary().exchangeAuthComToken(
     auth0jwt,
@@ -54,7 +54,7 @@ async function _exchangeAuthComToken(_root, args, _context, _info) {
  * @returns {Promise<{jwt: string}>}
  */
 async function _exchangeAuthToken(_root, args, _context, _info) {
-  const authToken = _.get(args, 'authToken');
+  const authToken = _.get(args, 'authToken', null);
   const jwt = await new AuthenticationPrimary().exchangeAuthToken(authToken);
   return { jwt };
 }
@@ -68,7 +68,7 @@ async function _exchangeAuthToken(_root, args, _context, _info) {
  * @returns {Promise<*>}
  */
 async function getTokenByAgentId(root, _args, _context, _info) {
-  const agentId = _.get(root, 'agentId');
+  const agentId = _.get(root, 'agentId', null);
   return data.tokens.getCreate(agentId);
 }
 

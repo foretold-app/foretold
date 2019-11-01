@@ -24,10 +24,10 @@ describe('Measurements Resolver', () => {
         expect(data.measurements.getConnection).toHaveBeenCalledWith(
           {
             agentId: 'agentId2',
-            competitorType: undefined,
-            findInDateRange: undefined,
+            competitorType: null,
+            findInDateRange: null,
             measurableId: 'measurableId1',
-            notTaggedByAgent: undefined,
+            notTaggedByAgent: null,
             withinMeasurables: null,
           },
           {
@@ -36,7 +36,7 @@ describe('Measurements Resolver', () => {
             first: 'first5',
             last: 'last5',
           },
-          { agentId: 'agentId1' },
+          { agentId: 'agentId1', isAdmin: null },
         );
         expect(result).toEqual(true);
       });
@@ -58,7 +58,7 @@ describe('Measurements Resolver', () => {
         expect(data.measurements.getOne).toHaveBeenCalledWith(
           { id: 'id1' },
           {},
-          { agentId: 'agentId2' },
+          { agentId: 'agentId2', isAdmin: null },
         );
         expect(result).toEqual(true);
       });

@@ -52,7 +52,7 @@ describe('Channels Resolvers', () => {
     it('returns channels with restrictions', () => {
       return channels.all(root, args, context, info).then((result) => {
         expect(data.channels.getAll).toHaveBeenCalledWith({
-          isArchived: undefined,
+          isArchived: null,
           withinJoinedChannels: { agentId: 'channelMemberId1', as: 'id' },
         }, {
           limit: 2,

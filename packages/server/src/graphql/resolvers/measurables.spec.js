@@ -39,7 +39,11 @@ describe('Measurables Resolvers', () => {
             first: 'first1',
             last: 'last1',
           },
-          { agentId: 'agentId2' },
+          {
+            agentId: 'agentId2',
+            isAdmin: undefined,
+            measuredByAgentId: undefined,
+          },
         );
         expect(result).toEqual(true);
       });
@@ -61,7 +65,7 @@ describe('Measurables Resolvers', () => {
         expect(data.measurables.getOne).toHaveBeenCalledWith(
           { id: 'id1' },
           {},
-          { agentId: 'agentId2', isAdmin: undefined },
+          { agentId: 'agentId2', isAdmin: null },
         );
         expect(result).toBe(true);
       });

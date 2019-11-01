@@ -5,6 +5,7 @@ const { NotebooksData } = require('../../data');
 const { Pagination } = require('../../data/classes');
 const { Options } = require('../../data/classes');
 const { Filter } = require('../../data/classes');
+const { Params } = require('../../data/classes');
 
 /**
  * @param {*} _root
@@ -33,6 +34,21 @@ async function all(_root, args, _context, _info) {
 }
 
 
+/**
+ * @param {*} _root
+ * @param {object} args
+ * @param {Models.NotebookID} args.id
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<Model>}
+ */
+async function one(_root, args, _context, _info) {
+  const id = _.get(args, 'id', null);
+  const params = new Params({ id });
+  return new NotebooksData().getOne(params);
+}
+
 module.exports = {
   all,
+  one,
 };

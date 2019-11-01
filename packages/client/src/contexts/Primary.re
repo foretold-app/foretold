@@ -845,11 +845,10 @@ module AgentType = {
     | (_, _) => None
     };
 
-  let toAgent = (agent: option(Js.t('a))) => {
-    let agentType = agent |> E.O.bind(_, getAgentType(~agent=_, ()));
+  let toAgent = (agent: Js.t('a)) => {
+    let agentType = getAgentType(~agent, ());
 
-    agent
-    |> E.O.fmap(k => Agent.make(~id=k##id, ~agentType, ~name=k##name, ()));
+    Agent.make(~id=agent##id, ~agentType, ~name=agent##name, ());
   };
 };
 
@@ -867,7 +866,7 @@ module Notebook = {
         ~channelId: Js.Json.t,
         ~createdAt: Js.Json.t,
         ~updatedAt: Js.Json.t,
-        ~owner: option(Js.t('a)),
+        ~owner: Js.t('a),
         (),
       )
       : t => {
@@ -878,5 +877,18 @@ module Notebook = {
     createdAt: toCreatedAt(createdAt),
     updatedAt: toUpdatedAt(updatedAt),
     owner: AgentType.toAgent(owner),
+  };
+
+  let convertJsObject = m => {
+    convertJs(
+      ~id=m##id,
+      ~name=m##name,
+      ~ownerId=m##ownerId,
+      ~channelId=m##channelId,
+      ~createdAt=m##createdAt,
+      ~updatedAt=m##updatedAt,
+      ~owner=m##owner,
+      (),
+    );
   };
 };

@@ -13,11 +13,11 @@ const { Data } = require('../../data/classes');
  * @param {object} _info
  * @returns {Promise<boolean>}
  */
-async function create(root, args, context, _info) {
+async function create(_root, args, context, _info) {
   const input = new Data({
-    inviterAgentId: _.get(context, 'agent.id'),
-    email: _.get(args, 'input.email'),
-    channelId: _.get(args, 'input.channelId'),
+    inviterAgentId: _.get(context, 'agent.id', null),
+    email: _.get(args, 'input.email', null),
+    channelId: _.get(args, 'input.channelId', null),
   });
   return data.invitations.invite(input);
 }

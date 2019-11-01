@@ -122,6 +122,7 @@ module S = {
 module J = {
   let toString = Js.Json.decodeString ||> O.default("");
   let toMoment = toString ||> MomentRe.moment;
+  let fromString = (str: string) => Js.Json.string(str);
 
   module O = {
     let toMoment = O.fmap(toMoment);

@@ -15,7 +15,7 @@ const { Data } = require('../../data/classes');
  * @returns {Promise<*>}
  */
 async function getOne(root, args, context, info) {
-  const agentId = _.get(root, 'id');
+  const agentId = _.get(root, 'id', null);
   const params = new Params({ agentId });
   const query = new Query();
   const data = new Data({ agentId });
@@ -32,9 +32,12 @@ async function getOne(root, args, context, info) {
  * @returns {Promise<Models.User>}
  */
 async function update(root, args, context, info) {
-  const params = new Params({ id: args.id });
+  const id = _.get(args, 'id', null);
+
+  const params = new Params({ id });
   const data = new Data(args.input);
   const options = new Options();
+
   return datas.preferences.updateOne(params, data, options);
 }
 

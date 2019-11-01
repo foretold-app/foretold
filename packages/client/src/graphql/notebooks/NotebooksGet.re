@@ -1,18 +1,5 @@
 [@bs.config {jsx: 3}];
 
-let toNotebook = m => {
-  Primary.Notebook.convertJs(
-    ~id=m##id,
-    ~name=m##name,
-    ~ownerId=m##ownerId,
-    ~channelId=m##channelId,
-    ~createdAt=m##createdAt,
-    ~updatedAt=m##updatedAt,
-    ~owner=m##owner,
-    (),
-  );
-};
-
 module Query = [%graphql
   {|
     query getNotebooks (
@@ -81,7 +68,8 @@ module Query = [%graphql
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let unpackEdges = a =>
-  a##notebooks |> E.O.fmap(Primary.Connection.fromJson(toNotebook));
+  a##notebooks
+  |> E.O.fmap(Primary.Connection.fromJson(Primary.Notebook.convertJsObject));
 
 let queryDirection = (~channelId=?, ~ownerId=?, ~pageLimit, ~direction, ()) => {
   let fn = Query.make(~channelId?, ~ownerId?);

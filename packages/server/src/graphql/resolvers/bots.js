@@ -17,9 +17,12 @@ const { Filter } = require('../../data/classes');
  * @returns {Promise<Models.User>}
  */
 async function create(_root, args, context, _info) {
+  const input = _.get(args, 'input') || {};
+  const userId = _.get(context, 'user.id', null);
+
   const datas = new Data({
-    ...args.input,
-    userId: _.get(context, 'user.id'),
+    ...input,
+    userId,
   });
   return data.bots.createOne(datas);
 }
@@ -27,22 +30,25 @@ async function create(_root, args, context, _info) {
 /**
  * @param {*} _root
  * @param {object} args
- * @param {Models.ObjectID} args.id
+ * @param {Models.BotID} args.id
  * @param {object} args.input
  * @param {Schema.Context} _context
  * @param {object} _info
  * @returns {Promise<Models.User>}
  */
 async function update(_root, args, _context, _info) {
-  const params = new Params({ id: args.id });
-  const data$ = new Data(args.input);
+  const id = _.get(args, 'id', null);
+  const input = _.get(args, 'input') || {};
+
+  const params = new Params({ id });
+  const data$ = new Data(input);
   return data.bots.updateOne(params, data$);
 }
 
 /**
  * @param {*} _root
  * @param {object} args
- * @param {Models.ObjectID} args.ownerId
+ * @param {Models.AgentID} args.ownerId
  * @param {string} args.after
  * @param {string} args.before
  * @param {number} args.last
@@ -52,7 +58,9 @@ async function update(_root, args, _context, _info) {
  * @returns {Promise<*>}
  */
 async function all(_root, args, _context, _info) {
-  const filter = new Filter({ userId: _.get(args, 'ownerId') });
+  const ownerId = _.get(args, 'ownerId', null);
+
+  const filter = new Filter({ userId: ownerId });
   const pagination = new Pagination(args);
   const options = new Options();
 
@@ -64,10 +72,10 @@ async function all(_root, args, _context, _info) {
  * @param {object} args
  * @param {Schema.Context} _context
  * @param {object} _info
- * @returns {Promise<*|Array<Model>>}
+ * @returns {Promise<Model>}
  */
 async function one(_root, args, _context, _info) {
-  const id = _.get(args, 'id');
+  const id = _.get(args, 'id', null);
   const params = new Params({ id });
   return data.bots.getOne(params);
 }
@@ -80,7 +88,7 @@ async function one(_root, args, _context, _info) {
  * @returns {Promise<{token: string}>}
  */
 async function tokenRefresh(_root, args, _context, _info) {
-  const id = _.get(args, 'id');
+  const id = _.get(args, 'id', null);
   const token = await data.bots.tokenRefresh({ id });
   return { token };
 }

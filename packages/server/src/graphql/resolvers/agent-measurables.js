@@ -32,11 +32,11 @@ const {
  * @returns {Promise<*>}
  */
 async function all(_root, args, context, _info) {
-  const channelId = _.get(args, 'channelId');
-  const measurableId = _.get(args, 'measurableId');
-  const measurableState = _.get(args, 'measurableState');
-  const currentAgentId = _.get(context, 'agent.id');
-  const minPredictionCountTotal = _.get(args, 'minPredictionCountTotal');
+  const channelId = _.get(args, 'channelId', null);
+  const measurableId = _.get(args, 'measurableId', null);
+  const measurableState = _.get(args, 'measurableState', null);
+  const currentAgentId = _.get(context, 'agent.id', null);
+  const minPredictionCountTotal = _.get(args, 'minPredictionCountTotal', null);
 
   const withinMeasurables = structures.withinMeasurables(
     measurableState,

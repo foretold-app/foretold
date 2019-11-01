@@ -1,31 +1,46 @@
+// Third-part dependencies
 const _ = require('lodash');
 const moment = require('moment');
-const { MARKET_TYPE, START_AT, FINAL_COMPARISON_MEASUREMENT } = require('../enums/agent-measurable-score-type');
-
 const {
   PredictionResolutionOverTime,
   marketScore,
   nonMarketScore
 } = require('@foretold/prediction-analysis');
 
+// The first level of dependencies (..)
+const logger = require('../lib/log');
 const { AgentMeasurableModel } = require('../models-abstract');
 const {
   MEASUREMENT_COMPETITOR_TYPE,
 } = require('../enums/measurement-competitor-type');
+const {
+  MARKET_TYPE,
+  START_AT,
+  FINAL_COMPARISON_MEASUREMENT,
+} = require('../enums/agent-measurable-score-type');
 
+// The second level (.)
 const { DataBase } = require('./data-base');
 const { MeasurementsData } = require('./measurements-data');
 const { MeasurablesData } = require('./measurables-data');
 const { Filter } = require('./classes');
-const logger = require('../lib/log');
 
 const log = logger.module('data/agent-measurables-data');
 
+/**
+ * @param r
+ * @returns {number}
+ */
 function toUnix(r) {
   return moment(r).unix();
 }
 
-
+/**
+ * @param initialTime
+ * @param firstPredictionTime
+ * @param endingTime
+ * @returns {number|undefined}
+ */
 function timeActivityRatio({ initialTime, firstPredictionTime, endingTime }) {
   if (!initialTime || !firstPredictionTime || !endingTime) {
     return undefined;
@@ -62,14 +77,28 @@ class AgentMeasurablesData extends DataBase {
   /**
    * Do not make any optimization here, it is early for this.
    * For each optimization we need to do a researching of the performance.
-   * @param {Models.AgentID} agentId
-   * @param {Models.MeasurableID} measurableId
-   * @returns {Promise<*>}
+   * @param agentId
+   * @param measurableId
+   * @param params
+   * @returns {Promise<undefined|
+   * {
+   * score: *,
+   * agentPredictions: *,
+   * finalResolutionTime: *,
+   * scoringStartTime: *,
+   * timeActivityRatio: *,
+   * recentResult: *,
+   * activeTimeDistribution: {finalX: *, points: *},
+   * measurableCreationTime: *,
+   * aggregations: *,
+   * scoringEndTime: *
+   * }>}
    */
   async primaryPointScore(agentId, measurableId, params = {
     marketType: MARKET_TYPE.MARKET,
     startAt: START_AT.QUESTION_CREATION_TIME,
-    finalComparisonMeasurement: FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT,
+    finalComparisonMeasurement:
+      FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT,
   }) {
     const {
       agentPredictions,
@@ -78,24 +107,28 @@ class AgentMeasurablesData extends DataBase {
       measurable,
     } = await this._getTimeScoringData(agentId, measurableId);
 
-    // Checks ----------------------------------------------------------------------
+    // Checks
     if (agentPredictions.length === 0) return undefined;
     if (allAggregations.length === 0) return undefined;
     if (!recentResult) return undefined;
     if (!measurable) return undefined;
 
-    // Use of Parameters ----------------------------------------------------------------------
-    const resolutionMeasurement = (params.finalComparisonMeasurement === FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT)
-      ? recentResult
-      : _.last(allAggregations);
+    // Use of Parameters
+    const resolutionMeasurement =
+      (params.finalComparisonMeasurement ===
+        FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT)
+        ? recentResult
+        : _.last(allAggregations);
 
     if (!resolutionMeasurement) return undefined;
 
     const startTime = (params.startAt === START_AT.QUESTION_CREATION_TIME)
-      ? (measurable.createdAt)
-      : (!!agentPredictions[0] && agentPredictions[0].dataValues.relevantAt);
+      ? measurable.createdAt
+      : _.get(agentPredictions, '0.dataValues.relevantAt');
 
-    const marketScoreType = params.marketType === MARKET_TYPE.MARKET ? marketScore : nonMarketScore;
+    const marketScoreType = params.marketType === MARKET_TYPE.MARKET
+      ? marketScore
+      : nonMarketScore;
 
     const scoreCalculator = this._scoreCalculator({
       agentPredictions,
@@ -109,7 +142,7 @@ class AgentMeasurablesData extends DataBase {
 
     const _timeActivityRatio = timeActivityRatio({
       initialTime: measurable.createdAt,
-      firstPredictionTime: agentPredictions[0] && agentPredictions[0].dataValues.relevantAt,
+      firstPredictionTime: _.get(agentPredictions, '0.dataValues.relevantAt'),
       endingTime: resolutionMeasurement.dataValues.relevantAt,
     });
 
@@ -130,15 +163,28 @@ class AgentMeasurablesData extends DataBase {
     };
   }
 
-  _scoreCalculator({
-    agentPredictions,
-    allAggregations,
-    resolutionMeasurement,
-    marketScoreType,
-    startTime,
-  }) {
-    // Private Functions -----------------------------------------------------
-
+  /**
+   * @param agentPredictions
+   * @param allAggregations
+   * @param resolutionMeasurement
+   * @param marketScoreType
+   * @param startTime
+   * @returns {undefined|{score: *, distribution: *}}
+   * @private
+   */
+  _scoreCalculator(
+    {
+      agentPredictions,
+      allAggregations,
+      resolutionMeasurement,
+      marketScoreType,
+      startTime,
+    }
+  ) {
+    /**
+     * @param v
+     * @returns {{data: *, dataType: *}}
+     */
     function translateValue(v) {
       let { data, dataType } = v;
       if (dataType === 'percentage') {
@@ -147,6 +193,10 @@ class AgentMeasurablesData extends DataBase {
       return { data, dataType };
     }
 
+    /**
+     * @param p
+     * @returns {{time: *, measurement: *}}
+     */
     function toOverTime(p) {
       return {
         time: toUnix(p.dataValues.relevantAt),
@@ -154,16 +204,19 @@ class AgentMeasurablesData extends DataBase {
       };
     }
 
-    // Main Function -------------------------------------------------------
+    // Main Function
+    if (!startTime) return undefined;
+
     let timeScore;
     let timeDistribution;
-    if (!startTime) return undefined;
+
     try {
       timeScore = new PredictionResolutionOverTime({
         agentPredictions: agentPredictions.map(toOverTime),
         marketPredictions: allAggregations.map(toOverTime),
         resolution: toOverTime(resolutionMeasurement),
       }).averagePointScore(marketScoreType, toUnix(startTime));
+
       timeDistribution = new PredictionResolutionOverTime({
         agentPredictions: agentPredictions.map(toOverTime),
         marketPredictions: allAggregations.map(toOverTime),
@@ -177,13 +230,16 @@ class AgentMeasurablesData extends DataBase {
     if (!!timeScore.error) {
       log.error('PrimaryPointScore Error: ', timeScore.error);
       return undefined;
-    } if (!_.isFinite(timeScore.data)) {
+    }
+
+    if (!_.isFinite(timeScore.data)) {
       log.error(
         'Error: PrimaryPointScore score, '
         + '${timeScore.data} is not finite',
       );
       return undefined;
     }
+
     return {
       score: timeScore.data,
       distribution: timeDistribution.data,

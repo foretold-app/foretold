@@ -38,7 +38,6 @@ module Columns = {
   let all = [|name, owner, time|];
 };
 
-// TODO: Fix Channel ID
 [@react.component]
 let make = (~items, ~columns=Columns.all, ~channelId: string) => {
   let onRowClb = (notebook: Types.notebook) => {

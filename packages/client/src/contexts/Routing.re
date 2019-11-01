@@ -22,20 +22,6 @@ module AgentPage = {
   };
 };
 
-// module NotebookPage = {
-//   module SubPage = {
-//     type t =
-//       | Show
-//       | Details
-//       | Unknown;
-//   };
-
-//   type t = {
-//     notebookId: Types.notebookId,
-//     subPage: SubPage.t,
-//   };
-// };
-
 module ChannelPage = {
   type tab =
     | Measurables
@@ -285,6 +271,8 @@ module Url = {
       "/agents/" ++ agentId ++ "/activity"
     | Agent({agentId, subPage: AgentScores}) =>
       "/agents/" ++ agentId ++ "/scores"
+    | Agent({agentId, subPage: Unknown}) =>
+      "/agents/" ++ agentId ++ "/measurables"
 
     // Channels
     | ChannelNew => "/communities/" ++ "new"

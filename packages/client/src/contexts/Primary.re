@@ -865,6 +865,7 @@ module Notebook = {
         ~ownerId: Js.Json.t,
         ~channelId: Js.Json.t,
         ~createdAt: Js.Json.t,
+        ~body: Js.Json.t,
         ~updatedAt: Js.Json.t,
         ~owner: Js.t('a),
         (),
@@ -876,6 +877,7 @@ module Notebook = {
     channelId: Channel.toChannelId(channelId),
     createdAt: toCreatedAt(createdAt),
     updatedAt: toUpdatedAt(updatedAt),
+    body: Some(body |> E.J.toString),
     owner: AgentType.toAgent(owner),
   };
 
@@ -888,6 +890,7 @@ module Notebook = {
       ~createdAt=m##createdAt,
       ~updatedAt=m##updatedAt,
       ~owner=m##owner,
+      ~body=m##body,
       (),
     );
   };

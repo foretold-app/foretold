@@ -3,7 +3,7 @@
 open Style.Grid;
 
 type tab =
-  | Dashboard
+  | Show
   | Details;
 
 module Tabs = {
@@ -19,9 +19,8 @@ module Tabs = {
             Css.paddingTop(`em(0.2)),
           ]),
         ]>
-        <TabButton
-          isActive={tab == Dashboard} onClick={_ => switchTab(Dashboard)}>
-          {"Dashboard" |> ReasonReact.string}
+        <TabButton isActive={tab == Show} onClick={_ => switchTab(Show)}>
+          {"Notebook" |> ReasonReact.string}
         </TabButton>
         <TabButton
           isActive={tab == Details} onClick={_ => switchTab(Details)}>
@@ -33,20 +32,29 @@ module Tabs = {
 };
 
 [@react.component]
-let make = (~notebookPage: Routing.NotebookPage.t) => {
-  let (tab, setTab) = React.useState(() => Dashboard);
+let make = (~channelId: string, ~notebookId: string) => {
+  let (tab, setTab) = React.useState(() => Show);
   let switchTab = tabToSwitch => setTab(_ => tabToSwitch);
 
   let head = <Tabs switchTab tab />;
-  NotebookGet.component(~id=notebookPage.notebookId, notebook =>
+  NotebookGet.component(~id=notebookId, notebook =>
     switch (notebook) {
     | Some(notebook) =>
       <>
         <NotebookHeader notebook />
         <SLayout head isFluid=true>
           {switch (tab) {
-           | Dashboard =>
-             <Center> {"This is the notebook view" |> Utils.ste} </Center>
+           | Show =>
+             <div
+               className=Css.(
+                 style([marginTop(`em(2.0)), marginBottom(`em(2.0))])
+               )>
+               <Markdown
+                 source={notebook.body |> E.O.default("")}
+                 supportForetoldJs=true
+                 channelId
+               />
+             </div>
            | Details =>
              <Center> {"This is the details view" |> Utils.ste} </Center>
            }}

@@ -187,7 +187,12 @@ module Columns = {
     time,
   |];
 
-  let measurables' = [|agent, timeAveragedScore, predictionCount, time|];
+  let measurables' = [|
+    agent,
+    timeAveragedScore,
+    predictionCount,
+    time,
+  |];
 
   let members = [|
     agent,

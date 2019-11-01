@@ -39,5 +39,11 @@ module Columns = {
 };
 
 [@react.component]
-let make = (~items, ~columns=Columns.all) =>
-  Table.fromColumns(columns, items, ());
+let make = (~items, ~columns=Columns.all) => {
+  let onRowClb = (notebook: Types.notebook) => {
+    Routing.Url.push(
+      Notebook({notebookId: notebook.id, subPage: Dashboard}),
+    );
+  };
+  Table.fromColumns(columns, items, ~onRowClb, ());
+};

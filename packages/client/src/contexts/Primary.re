@@ -877,4 +877,17 @@ module Notebook = {
     updatedAt: toUpdatedAt(updatedAt),
     owner: AgentType.toAgent(owner),
   };
+
+  let convertJsObject = m => {
+    convertJs(
+      ~id=m##id,
+      ~name=m##name,
+      ~ownerId=m##ownerId,
+      ~channelId=m##channelId,
+      ~createdAt=m##createdAt,
+      ~updatedAt=m##updatedAt,
+      ~owner=m##owner,
+      (),
+    );
+  };
 };

@@ -9,6 +9,7 @@ const notebook = new graphql.GraphQLObjectType({
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(scalars.notebookId) },
     name: { type: graphql.GraphQLNonNull(scalars.string3to255) },
+    description: { type: scalars.string3to512 },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     ownerId: { type: graphql.GraphQLNonNull(scalars.agentId) },

@@ -6,16 +6,15 @@ module CMutationForm =
   });
 
 [@react.component]
-let make = (~loggedUser: Types.user) => {
+let make = () => {
   let body =
     NotebookCreateMutation.withMutation((mutation, data) => {
       let onSubmit = (values: NotebookForm.Form.onSubmitAPI): unit => {
-        BotCreateMutation.mutate(
+        NotebookCreateMutation.mutate(
           mutation,
           values.state.values.name,
           values.state.values.description,
-          values.state.values.competitorType,
-          values.state.values.picture,
+          values.state.values.body,
         );
         ();
       };
@@ -31,12 +30,7 @@ let make = (~loggedUser: Types.user) => {
               send(NotebookForm.Form.Submit)
             );
 
-          CMutationForm.showWithLoading2(
-            ~result=data.result,
-            ~form,
-            ~onSuccess=_ => NotebookForm.onSuccess(loggedUser, ()),
-            (),
-          );
+          CMutationForm.showWithLoading(~result=data.result, ~form, ());
         },
       );
     });

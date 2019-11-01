@@ -4,14 +4,12 @@ module FormConfig = {
   type field(_) =
     | Name: field(string)
     | Description: field(string)
-    | CompetitorType: field(Types.competitorType)
-    | Picture: field(string);
+    | Body: field(string);
 
   type state = {
     name: string,
     description: string,
-    competitorType: Types.competitorType,
-    picture: string,
+    body: string,
   };
 
   let get: type value. (state, field(value)) => value =
@@ -19,8 +17,7 @@ module FormConfig = {
       switch (field) {
       | Name => state.name
       | Description => state.description
-      | CompetitorType => state.competitorType
-      | Picture => state.picture
+      | Body => state.body
       };
 
   let set: type value. (state, field(value), value) => state =
@@ -28,28 +25,21 @@ module FormConfig = {
       switch (field) {
       | Name => {...state, name: value}
       | Description => {...state, description: value}
-      | CompetitorType => {...state, competitorType: value}
-      | Picture => {...state, picture: value}
+      | Body => {...state, body: value}
       };
 };
 
 module Form = ReFormNext.Make(FormConfig);
 
-let withForm = (onSubmit, bot: option(Types.bot), innerComponentFn) => {
+let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) => {
   let initialState: FormConfig.state =
-    switch (bot) {
-    | Some(bot) => {
-        name: bot.name |> Rationale.Option.default(""),
-        description: bot.description |> Rationale.Option.default(""),
-        competitorType: `COMPETITIVE,
-        picture: bot.picture |> Rationale.Option.default(""),
+    switch (notebook) {
+    | Some(notebook) => {
+        name: notebook.name,
+        description: notebook.description |> Rationale.Option.default(""),
+        body: notebook.body,
       }
-    | None => {
-        name: "",
-        description: "",
-        competitorType: `COMPETITIVE,
-        picture: "",
-      }
+    | None => {name: "", description: "", body: ""}
     };
 
   Form.make(
@@ -65,13 +55,6 @@ let withForm = (onSubmit, bot: option(Types.bot), innerComponentFn) => {
     innerComponentFn,
   )
   |> E.React2.el;
-};
-
-let onSuccess = (loggedUser: Types.user, ()) => {
-  Primary.User.getAgent(loggedUser, agent =>
-    Routing.Url.push(Agent({agentId: agent.id, subPage: AgentBots}))
-  );
-  ReasonReact.null;
 };
 
 let formFields = (state: Form.state, send, onSubmit) =>
@@ -96,11 +79,11 @@ let formFields = (state: Form.state, send, onSubmit) =>
         />
       </Antd.Form.Item>
       <Antd.Form.Item>
-        {"Picture" |> ReasonReact.string |> E.React2.inH3}
+        {"Body" |> ReasonReact.string |> E.React2.inH3}
         <Antd.Input
-          value={state.values.picture}
+          value={state.values.body}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
-            send(Form.FieldChangeValue(Picture, e))
+            send(Form.FieldChangeValue(Body, e))
           )}
         />
       </Antd.Form.Item>

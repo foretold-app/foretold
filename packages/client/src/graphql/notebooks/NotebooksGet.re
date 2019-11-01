@@ -29,6 +29,8 @@ module Query = [%graphql
             node {
               id
               name
+              description
+              body
               ownerId
               channelId
               createdAt

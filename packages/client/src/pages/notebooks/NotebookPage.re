@@ -3,7 +3,7 @@
 open Style.Grid;
 
 [@react.component]
-let make = (~notebookId: Types.notebookId) => {
+let make = (~notebookPage: Routing.NotebookPage.t) => {
   <SLayout head={"head" |> Utils.ste} isFluid=true>
     {"body" |> Utils.ste}
   </SLayout>;

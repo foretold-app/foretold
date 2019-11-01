@@ -11,14 +11,15 @@ let make = (~route: Route.t, ~loggedUser: option(Types.user)) => {
   | (Login, _) => <Login />
 
   | (Channel(channel), _) => <ChannelNavigation channelPage=channel />
+  | (ChannelIndex, _) => <FillWithSidebar> <ChannelIndex /> </FillWithSidebar>
+  | (ChannelNew, Some(_)) =>
+    <FillWithSidebar> <ChannelNew /> </FillWithSidebar>
+
   | (Agent(agentPage), _) => <AgentNavigation agentPage />
   | (AgentIndex, _) => <AgentIndex />
-  | (ChannelIndex, _) => <FillWithSidebar> <ChannelIndex /> </FillWithSidebar>
 
   | (Preferences, Some(loggedUser)) =>
     <FillWithSidebar> <Preferences loggedUser /> </FillWithSidebar>
-  | (ChannelNew, Some(_)) =>
-    <FillWithSidebar> <ChannelNew /> </FillWithSidebar>
   | (MeasurableEdit(id), Some(loggedUser)) =>
     <FillWithSidebar>
       <MeasurableEdit pageParams={id: id} />

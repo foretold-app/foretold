@@ -29,6 +29,7 @@ const notebookCreateInput = new graphql.GraphQLInputObjectType({
   name: 'NotebookCreateInput',
   fields: () => ({
     name: { type: graphql.GraphQLNonNull(scalars.string3to255) },
+    description: { type: scalars.string3to512 },
     body: { type: graphql.GraphQLNonNull(scalars.string3to16K) },
   }),
 });

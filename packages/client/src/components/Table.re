@@ -91,13 +91,17 @@ let fromColumns =
             |> ReasonReact.array;
 
           let key = rowIndex |> string_of_int;
-          let bottomSubRow = bottomSubRowFn |> E.O.bind(_, r => r(row));
+          let bottomSubRow =
+            bottomSubRowFn
+            |> E.O.bind(_, r => r(row))
+            |> E.O.fmap(ReasonReact.array);
 
           <FC.Table.Row
             onClick={_ => {
               onRowClb(row);
               ();
             }}
+            ?bottomSubRow
             key>
             columnsBody
           </FC.Table.Row>;

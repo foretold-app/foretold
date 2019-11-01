@@ -5,6 +5,7 @@ const { NotebooksData } = require('../../data');
 const { Pagination } = require('../../data/classes');
 const { Options } = require('../../data/classes');
 const { Filter } = require('../../data/classes');
+const { Params } = require('../../data/classes');
 
 /**
  * @param {*} _root

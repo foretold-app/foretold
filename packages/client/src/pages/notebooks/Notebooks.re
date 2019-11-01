@@ -55,7 +55,7 @@ let make = (~channelId: string) => {
 
     let head = isFound ? pagination(reducerParams) : ReasonReact.null;
 
-    <SLayout head isFluid=true> body </SLayout>;
+    <SLayout head> body </SLayout>;
   };
 
   <Reducer itemsPerPage=20 callFnParams=channelId subComponent />;

@@ -45,11 +45,16 @@ let make = (~channelId: string, ~notebookId: string) => {
         <SLayout head isFluid=true>
           {switch (tab) {
            | Show =>
-             <Markdown
-               source={notebook.body |> E.O.default("")}
-               supportForetoldJs=true
-               channelId="9800714a-e875-43dd-91cd-729cb699105a"
-             />
+             <div
+               className=Css.(
+                 style([marginTop(`em(2.0)), marginBottom(`em(2.0))])
+               )>
+               <Markdown
+                 source={notebook.body |> E.O.default("")}
+                 supportForetoldJs=true
+                 channelId
+               />
+             </div>
            | Details =>
              <Center> {"This is the details view" |> Utils.ste} </Center>
            }}

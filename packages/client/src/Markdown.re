@@ -17,6 +17,8 @@ module Styles = {
           marginLeft(`auto),
           marginRight(`auto),
           display(`block),
+          paddingLeft(`rem(1.)),
+          paddingRight(`rem(1.)),
         ],
       ),
       selector(
@@ -40,7 +42,18 @@ let foretoldJsRenderers = (channelId): renderers => {
     ) {
     | (Some("foretoldJs"), Some(json)) =>
       switch (Json.parse(json)) {
-      | Some(json) => <DashboardTableC channelId tableJson=json />
+      | Some(json) =>
+        <div
+          className=Css.(
+            style([
+              marginTop(`em(1.0)),
+              marginBottom(`em(1.5)),
+              Css.float(`left),
+              width(`percent(100.)),
+            ])
+          )>
+          <DashboardTableC channelId tableJson=json />
+        </div>
       | None => "Invalid Json. Check a formatting tool." |> Utils.ste
       }
     | (Some(language), Some(value)) =>

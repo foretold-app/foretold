@@ -6,7 +6,7 @@ module Columns = {
 
   let name =
     Table.Column.make(
-      ~name="name" |> Utils.ste,
+      ~name="Name" |> Utils.ste,
       ~render=(r: record) => r.name |> Utils.ste,
       ~flex=3,
       (),

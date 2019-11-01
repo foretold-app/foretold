@@ -6,6 +6,26 @@ const { Pagination } = require('../../data/classes');
 const { Options } = require('../../data/classes');
 const { Filter } = require('../../data/classes');
 const { Params } = require('../../data/classes');
+const { Data } = require('../../data/classes');
+
+/**
+ * @param {*} _root
+ * @param {object} args
+ * @param {object} args.input
+ * @param {Schema.Context} context
+ * @param {object} _info
+ * @returns {Promise<Models.User>}
+ */
+async function create(_root, args, context, _info) {
+  const input = _.get(args, 'input') || {};
+  const ownerId = _.get(context, 'agent.id', null);
+
+  const datas = new Data({
+    ...input,
+    ownerId,
+  });
+  return new NotebooksData().createOne(datas);
+}
 
 /**
  * @param {*} _root
@@ -51,4 +71,5 @@ async function one(_root, args, _context, _info) {
 module.exports = {
   all,
   one,
+  create,
 };

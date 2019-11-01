@@ -66,12 +66,17 @@ async function all(_root, args, context, _info) {
 async function primaryPointScore(root, _args, _context, _info) {
   const agentId = _.get(root, 'agentId');
   const measurableId = _.get(root, 'measurableId');
-  let response = await data.agentMeasurables.primaryPointScore(agentId, measurableId, {
-    marketType: MARKET_TYPE.MARKET,
-    startAt: START_AT.QUESTION_CREATION_TIME,
-    finalComparisonMeasurement: FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT,
-  })
-  if (response){
+
+  const response = await data.agentMeasurables.primaryPointScore(
+    agentId,
+    measurableId, {
+      marketType: MARKET_TYPE.MARKET,
+      startAt: START_AT.QUESTION_CREATION_TIME,
+      finalComparisonMeasurement:
+      FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT,
+    });
+
+  if (response) {
     return response.score;
   } else {
     return response;
@@ -82,7 +87,7 @@ async function primaryPointScore(root, _args, _context, _info) {
  * @param {*} root
  * @param {Models.Agent.id} root.agentId
  * @param {Models.Measurable.id} root.measurableId
- * @param {object} _args
+ * @param {object} args
  * @param {Schema.Context} _context
  * @param {object} _info
  * @returns {Promise<*>}
@@ -93,6 +98,7 @@ async function timeAverageScore(root, args, _context, _info) {
   const marketType = _.get(args, 'marketType');
   const startAt = _.get(args, 'startAt');
   const finalComparisonMeasurement = _.get(args, 'finalComparisonMeasurement');
+
   const params = { startAt, marketType, finalComparisonMeasurement };
   return data.agentMeasurables.primaryPointScore(agentId, measurableId, params);
 }

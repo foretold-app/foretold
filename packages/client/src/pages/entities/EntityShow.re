@@ -1,6 +1,6 @@
-open Utils;
+[@bs.config {jsx: 3}];
 
-let component = ReasonReact.statelessComponent("EntityShow");
+open Utils;
 
 let display = id => {
   <Providers.AppContext.Consumer>
@@ -18,14 +18,12 @@ let display = id => {
              {Ken.findName(r.propertyId)
               |> E.O.default("no-name")
               |> ste
-              |> E.React.inH3}
+              |> E.React2.inH3}
              BsKen.Graph_T.T.(
                switch (r.value.valueType) {
                | String(s) => s |> ste
                | ThingId(s) =>
-                 <Link.Jsx2 linkType={Internal(EntityShow(s))}>
-                   {s |> ste}
-                 </Link.Jsx2>
+                 <Link linkType={Internal(EntityShow(s))}> {s |> ste} </Link>
                | _ => "no-name" |> ste
                }
              )
@@ -36,13 +34,11 @@ let display = id => {
   </Providers.AppContext.Consumer>;
 };
 
-let make = (~pageParams: Types.pageParams, _children) => {
-  ...component,
-  render: _ => {
-    <SLayout head={SLayout.Header.textDiv(pageParams.id)}>
-      <FC.PageCard.BodyPadding>
-        {display(pageParams.id)}
-      </FC.PageCard.BodyPadding>
-    </SLayout>;
-  },
+[@react.component]
+let make = (~pageParams: Types.pageParams) => {
+  <SLayout head={SLayout.Header.textDiv(pageParams.id)}>
+    <FC.PageCard.BodyPadding>
+      {display(pageParams.id)}
+    </FC.PageCard.BodyPadding>
+  </SLayout>;
 };

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Utils;
 open Style.Grid;
 
@@ -74,7 +76,7 @@ module StylesDropdown = {
 let action = StylesDropdown.action;
 
 let link = (linkType: LinkType.linkType, str) =>
-  <Link.Jsx2 linkType className=action> {str |> ste} </Link.Jsx2>;
+  <Link linkType className=action> {str |> ste} </Link>;
 
 let userDropdown = agentId =>
   <div className=StylesDropdown.actions>
@@ -118,7 +120,7 @@ let header = (loggedUser: Types.user) =>
               <Div
                 float=`left
                 styles=[Css.style([Css.marginLeft(`em(0.45))])]>
-                <FC.Base.Avatar.Jsx2 src=picture width=1.5 />
+                <FC.Base.Avatar src=picture width=1.5 />
               </Div>
             )}
       </Div>
@@ -126,39 +128,35 @@ let header = (loggedUser: Types.user) =>
   | None => ReasonReact.null
   };
 
-let component = ReasonReact.statelessComponent("Header");
-let make = (~loggedUser: option(Types.user), _children) => {
-  ...component,
-  render: _self =>
-    <Div styles=[Styles.outer]>
-      <Div float=`left>
-        {switch (loggedUser) {
-         | Some(loggedUser) =>
-           Primary.User.show(
-             loggedUser,
-             <Link.Jsx2
-               linkType={Internal(EntityIndex)} className=Styles.headerLink>
-               {"Entity Explorer" |> ste}
-             </Link.Jsx2>,
-           )
-         | None =>
-           <Link.Jsx2
-             linkType={Internal(ChannelIndex)} className=Styles.headerLink>
-             {"Communities" |> ste}
-           </Link.Jsx2>
-         }}
-      </Div>
-      <Div float=`left> <VerificationWarning /> </Div>
-      <Div float=`right>
-        {switch (loggedUser) {
-         | Some(loggedUser) => header(loggedUser)
-         | None =>
-           <Link.Jsx2
-             linkType={Action(_e => Auth0Client.triggerLoginScreen())}
-             className=Styles.headerLink>
-             {"Log In" |> ste}
-           </Link.Jsx2>
-         }}
-      </Div>
-    </Div>,
+[@react.component]
+let make = (~loggedUser: option(Types.user)) => {
+  <Div styles=[Styles.outer]>
+    <Div float=`left>
+      {switch (loggedUser) {
+       | Some(loggedUser) =>
+         Primary.User.show(
+           loggedUser,
+           <Link linkType={Internal(EntityIndex)} className=Styles.headerLink>
+             {"Entity Explorer" |> ste}
+           </Link>,
+         )
+       | None =>
+         <Link linkType={Internal(ChannelIndex)} className=Styles.headerLink>
+           {"Communities" |> ste}
+         </Link>
+       }}
+    </Div>
+    <Div float=`left> <VerificationWarning /> </Div>
+    <Div float=`right>
+      {switch (loggedUser) {
+       | Some(loggedUser) => header(loggedUser)
+       | None =>
+         <Link
+           linkType={Action(_e => Auth0Client.triggerLoginScreen())}
+           className=Styles.headerLink>
+           {"Log In" |> ste}
+         </Link>
+       }}
+    </Div>
+  </Div>;
 };

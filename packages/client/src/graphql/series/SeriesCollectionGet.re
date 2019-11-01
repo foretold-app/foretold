@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 type creator = {
   id: string,
   name: option(string),
@@ -45,24 +47,27 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let component = (channelId, innerFn) => {
   let query = Query.make(~channelId, ());
-  QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> ApolloUtils.apolloResponseToResult
-    |> E.R.fmap(e => e##seriesCollection)
-    |> E.R.fmap(E.JsArray.concatSomes)
-    |> E.R.fmap(innerFn)
-    |> E.R.id
-  )
-  |> E.React.el;
+
+  <QueryComponent variables=query##variables>
+    ...{({result}) =>
+      result
+      |> ApolloUtils.apolloResponseToResult
+      |> E.R.fmap(e => e##seriesCollection)
+      |> E.R.fmap(E.JsArray.concatSomes)
+      |> E.R.fmap(innerFn)
+      |> E.R.id
+    }
+  </QueryComponent>;
 };
 
 let component2 = (~channelId, innerFn) => {
   let query = Query.make(~channelId, ());
-  QueryComponent.make(~variables=query##variables, ({result}) =>
-    result
-    |> HttpResponse.fromApollo
-    |> HttpResponse.fmap(e => e##seriesCollection |> E.JsArray.concatSomes)
-    |> innerFn
-  )
-  |> E.React.el;
+  <QueryComponent variables=query##variables>
+    ...{({result}) =>
+      result
+      |> HttpResponse.fromApollo
+      |> HttpResponse.fmap(e => e##seriesCollection |> E.JsArray.concatSomes)
+      |> innerFn
+    }
+  </QueryComponent>;
 };

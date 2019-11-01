@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 type channelId = string;
 type seriesId = string;
 type measurablesSearchString = string;
@@ -10,7 +12,8 @@ module AgentPage = {
       | AgentBots
       | AgentCommunities
       | AgentUpdates
-      | AgentScores;
+      | AgentScores
+      | Unknown;
   };
 
   type t = {
@@ -26,7 +29,9 @@ module ChannelPage = {
     | Options
     | Updates
     | Leaderboard
-    | Dashboard;
+    | Notebook
+    | Notebooks
+    | Unknown;
 
   type leaderboard =
     | ByMeasurable
@@ -42,10 +47,13 @@ module ChannelPage = {
       | InviteMember
       | Settings
       | NewSeries
-      | Dashboard
       | Series(seriesId)
+      | Notebooks
+      | Notebook(string)
+      | NotebookDetails(string)
       | FeedItems
-      | Leaderboard(leaderboard);
+      | Leaderboard(leaderboard)
+      | Unknown;
 
     let toTab = (subPage: t): tab =>
       switch (subPage) {
@@ -59,8 +67,9 @@ module ChannelPage = {
       | InviteMember => Members
       | Settings => Options
       | FeedItems => Updates
-      | Dashboard => Dashboard
+      | Notebooks => Notebooks
       | Leaderboard(_) => Leaderboard
+      | _ => Unknown
       };
 
     let fromTab = (tab: tab): t =>
@@ -69,8 +78,9 @@ module ChannelPage = {
       | Members => Members
       | Options => Settings
       | Updates => FeedItems
-      | Dashboard => Dashboard
+      | Notebooks => Notebooks
       | Leaderboard => Leaderboard(ByMember)
+      | _ => Unknown
       };
   };
 
@@ -138,6 +148,8 @@ module Route = {
     | ["bots", "new"] => BotCreate
     | ["bots", id, "edit"] => BotEdit(id)
     | ["measurables", id, "edit"] => MeasurableEdit(id)
+
+    // Channels
     | ["c"] => ChannelIndex
     | ["c", channelId] => showChannel(channelId)
     | ["c", channelId, "m", measurableId] =>
@@ -148,8 +160,8 @@ module Route = {
     | ["c", channelId, "new"] => Channel({channelId, subPage: NewMeasurable})
     | ["c", channelId, "edit"] => Channel({channelId, subPage: Settings})
     | ["c", channelId, "members"] => Channel({channelId, subPage: Members})
-    | ["c", channelId, "dashboard"] =>
-      Channel({channelId, subPage: Dashboard})
+    | ["c", channelId, "notebooks"] =>
+      Channel({channelId: getChannelId(channelId), subPage: Notebooks})
     | ["c", channelId, "activity"] =>
       Channel({channelId: getChannelId(channelId), subPage: FeedItems})
     | ["c", channelId, "scoring", "questions"] =>
@@ -172,6 +184,19 @@ module Route = {
         channelId: getChannelId(channelId),
         subPage: Series(seriesId),
       })
+    // Notebooks
+    | ["c", channelId, "n", notebookId, "details"] =>
+      Channel({
+        channelId: getChannelId(channelId),
+        subPage: NotebookDetails(notebookId),
+      })
+    | ["c", channelId, "n", notebookId] =>
+      Channel({
+        channelId: getChannelId(channelId),
+        subPage: Notebook(notebookId),
+      })
+
+    // Agents
     | ["agents", agentId, "bots"] => Agent({agentId, subPage: AgentBots})
     | ["agents", agentId, "measurables"] =>
       Agent({agentId, subPage: AgentMeasurables})
@@ -180,6 +205,7 @@ module Route = {
     | ["agents", agentId, "activity"] =>
       Agent({agentId, subPage: AgentUpdates})
     | ["agents", agentId, "scores"] => Agent({agentId, subPage: AgentScores})
+
     | ["subscribe"] => Subscribe
     | ["unsubscribe"] => Unsubscribe
     | _ => NotFound
@@ -200,9 +226,6 @@ module Url = {
     | BotEdit(string)
     | EntityShow(string)
     | Agent(AgentPage.t)
-    | ChannelShow(string)
-    | ChannelNew
-    | ChannelIndex
     | SeriesShow(string, string)
     | MeasurableShow(string, string)
     | SeriesNew(string)
@@ -213,24 +236,32 @@ module Url = {
     | ChannelLeaderboard(string, ChannelPage.leaderboard)
     | ChannelAddMember(string)
     | ChannelInviteMember(string)
-    | ChannelDashboard(string)
+    | ChannelShow(string)
+    | ChannelNew
+    | ChannelIndex
+    | ChannelNotebooks(string)
+    | ChannelNotebook(string, string)
+    | ChannelNotebookDetails(string, string)
     | MeasurableNew(string)
     | Subscribe
     | Login
-    | Unsubscribe;
+    | Unsubscribe
+    | Unknown;
 
   let toString = (r: t) =>
     switch ((r: t)) {
     | Home => "/"
     | Privacy => "/privacy_policy"
     | Terms => "/terms_and_conditions"
-    | AgentIndex => "/agents"
     | Profile => "/profile/"
     | Preferences => "/preferences/"
     | BotCreate => "/bots/new"
     | BotEdit(id) => "/bots/" ++ id ++ "/edit"
     | EntityIndex => "/entities"
     | EntityShow(id) => "/entities/" ++ id
+
+    // Agents
+    | AgentIndex => "/agents"
     | Agent({agentId, subPage: AgentBots}) => "/agents/" ++ agentId ++ "/bots"
     | Agent({agentId, subPage: AgentMeasurables}) =>
       "/agents/" ++ agentId ++ "/measurables"
@@ -240,11 +271,15 @@ module Url = {
       "/agents/" ++ agentId ++ "/activity"
     | Agent({agentId, subPage: AgentScores}) =>
       "/agents/" ++ agentId ++ "/scores"
+    | Agent({agentId, subPage: Unknown}) =>
+      "/agents/" ++ agentId ++ "/measurables"
+
+    // Channels
     | ChannelNew => "/communities/" ++ "new"
     | ChannelIndex => "/communities"
     | ChannelShow(channelId) => "/c/" ++ channelId
     | ChannelEdit(channelId) => "/c/" ++ channelId ++ "/edit"
-    | ChannelDashboard(channelId) => "/c/" ++ channelId ++ "/dashboard"
+    | ChannelNotebooks(channelId) => "/c/" ++ channelId ++ "/notebooks"
     | ChannelMembers(channelId) => "/c/" ++ channelId ++ "/members"
     | ChannelFeedItems(channelId) => "/c/" ++ channelId ++ "/activity"
     | ChannelLeaderboard(channelId, ByMeasurable) =>
@@ -253,16 +288,22 @@ module Url = {
       "/c/" ++ channelId ++ "/scoring/members"
     | ChannelAddMember(channelId) => "/c/" ++ channelId ++ "/add"
     | ChannelInviteMember(channelId) => "/c/" ++ channelId ++ "/invite"
+    // Notebooks
     | MeasurableEdit(measurableId) =>
       "/measurables/" ++ measurableId ++ "/edit"
     | MeasurableNew(channelId) => "/c/" ++ channelId ++ "/new"
     | SeriesNew(channelId) => "/c/" ++ channelId ++ "/s/new"
     | SeriesShow(channelId, id) => "/c/" ++ channelId ++ "/s/" ++ id
+    | ChannelNotebook(channelId, notebookId) =>
+      "/c/" ++ channelId ++ "/n/" ++ notebookId
+    | ChannelNotebookDetails(channelId, notebookId) =>
+      "/c/" ++ channelId ++ "/n/" ++ notebookId ++ "/details"
     | MeasurableShow(channelId, measurableId) =>
       "/c/" ++ channelId ++ "/m/" ++ measurableId
     | Subscribe => "/subscribe"
     | Unsubscribe => "/unsubscribe"
     | Login => "/login"
+    | Unknown => "/"
     };
 
   let push = (r: t) => r |> toString |> ReasonReact.Router.push;
@@ -272,7 +313,7 @@ module Url = {
     | Measurables(_) => ChannelShow(channelPage.channelId)
     | NewMeasurable => MeasurableNew(channelPage.channelId)
     | Members => ChannelMembers(channelPage.channelId)
-    | Dashboard => ChannelDashboard(channelPage.channelId)
+    | Notebooks => ChannelNotebooks(channelPage.channelId)
     | FeedItems => ChannelFeedItems(channelPage.channelId)
     | Leaderboard(subTab) =>
       ChannelLeaderboard(channelPage.channelId, subTab)
@@ -280,8 +321,9 @@ module Url = {
     | InviteMember => ChannelInviteMember(channelPage.channelId)
     | Settings => ChannelEdit(channelPage.channelId)
     | NewSeries => SeriesNew(channelPage.channelId)
-    | Series(id) => SeriesShow(channelPage.channelId, id)
+    | Series(seriesId) => SeriesShow(channelPage.channelId, seriesId)
     | Measurable(measurableId) =>
       MeasurableShow(channelPage.channelId, measurableId)
+    | _ => Unknown
     };
 };

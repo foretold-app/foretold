@@ -18,6 +18,7 @@ const schema = new graphql.GraphQLSchema({
     types.bots.bot,
     types.users.user,
     types.agents.agent,
+    types.notebooks.notebook,
   ],
 
   query: new graphql.GraphQLObjectType({
@@ -151,6 +152,24 @@ const schema = new graphql.GraphQLSchema({
           ownerId: { type: graphql.GraphQLString },
         },
         resolve: resolvers.bots.all,
+      },
+
+      notebook: {
+        type: types.notebooks.notebook,
+        args: {
+          id: { type: graphql.GraphQLNonNull(types.scalars.notebookId) },
+        },
+        resolve: resolvers.notebooks.one,
+      },
+
+      notebooks: {
+        type: types.notebooks.notebooksConnection,
+        args: {
+          ...types.common.connectionArguments,
+          ownerId: { type: types.scalars.agentId },
+          channelId: { type: types.scalars.channelId },
+        },
+        resolve: resolvers.notebooks.all,
       },
 
       feedItems: {

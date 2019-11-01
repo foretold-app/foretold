@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let toNode = node => {
   let measurable = node##measurable;
   let agent = node##agent;

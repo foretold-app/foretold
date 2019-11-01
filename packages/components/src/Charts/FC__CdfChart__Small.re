@@ -1,4 +1,4 @@
-let component = ReasonReact.statelessComponent("SmallCdfChartSmall");
+[@bs.config {jsx: 3}];
 
 module Styles = {
   open Css;
@@ -18,34 +18,40 @@ module Styles = {
     ]);
 };
 
+[@react.component]
 let make =
-    (
-      ~cdf: FC__Types.Dist.t,
-      ~minX=None,
-      ~maxX=None,
-      ~color=`hex("7e9db7"),
-      _children,
-    ) => {
-  ...component,
-  render: _ => {
-    let pdf = cdf |> FC__Types.Dist.toPdf;
+    (~cdf: FC__Types.Dist.t, ~minX=None, ~maxX=None, ~color=`hex("7e9db7")) => {
+  let pdf = cdf |> FC__Types.Dist.toPdf;
 
-    <div className={Styles.graph(color)}>
-      <div className=Styles.textOverlay>
-        <FC__CdfChart__StatSummary cdf />
-      </div>
-      <FC__CdfChart__Base
-        width=200
-        height=40
-        ?minX
-        ?maxX
-        marginBottom=0
-        marginTop=0
-        showVerticalLine=false
-        showDistributionLines=false
-        primaryDistribution={"xs": pdf.xs, "ys": pdf.ys}
-        onHover={_r => ()}
-      />
-    </div>;
-  },
+  <div className={Styles.graph(color)}>
+    <div className=Styles.textOverlay> <FC__CdfChart__StatSummary cdf /> </div>
+    <FC__CdfChart__Base
+      width=200
+      height=40
+      ?minX
+      ?maxX
+      marginBottom=0
+      marginTop=0
+      showVerticalLine=false
+      showDistributionLines=false
+      primaryDistribution={"xs": pdf.xs, "ys": pdf.ys}
+      onHover={_r => ()}
+    />
+  </div>;
+};
+
+module Jsx2 = {
+  let make =
+      (
+        ~cdf: FC__Types.Dist.t,
+        ~minX=None,
+        ~maxX=None,
+        ~color=`hex("7e9db7"),
+        children,
+      ) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~cdf, ~minX, ~maxX, ~color, ()),
+      children,
+    );
 };

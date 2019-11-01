@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open FC.Base;
 
 let entries =
@@ -14,13 +16,13 @@ let entries =
       ~title="Link",
       ~children=[
         entry(~title="Link1b", ~render=() =>
-          <FC__Link.Jsx2> "Test link"->React.string </FC__Link.Jsx2>
+          <FC__Link> "Test link"->React.string </FC__Link>
         ),
         entry(~title="Link2", ~render=() =>
-          <FC__Link.Jsx2> "Test link2"->React.string </FC__Link.Jsx2>
+          <FC__Link> "Test link2"->React.string </FC__Link>
         ),
         entry(~title="Link3", ~render=() =>
-          <FC__Link.Jsx2> "Test link3"->React.string </FC__Link.Jsx2>
+          <FC__Link> "Test link3"->React.string </FC__Link>
         ),
       ],
     ),

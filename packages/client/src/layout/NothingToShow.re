@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Utils;
 
 module Styles = {
@@ -6,13 +8,10 @@ module Styles = {
   let clear = style([clear(`both)]);
 };
 
-let component = ReasonReact.statelessComponent("NothingToShow");
-
-let make = _children => {
-  ...component,
-  render: _ =>
-    <>
-      <div className=Styles.clear />
-      <div className=Styles.centerBlock> {"No Results" |> Utils.ste} </div>
-    </>,
+[@react.component]
+let make = () => {
+  <>
+    <div className=Styles.clear />
+    <div className=Styles.centerBlock> {"No Results" |> Utils.ste} </div>
+  </>;
 };

@@ -133,9 +133,9 @@ class GitHubApi {
       followAllRedirects: true,
     };
     return new Promise((resolve, reject) => {
-      request(options, (error, response, body) => {
+      request(options, (error, response, responseBody) => {
         if (!!error) return reject(error);
-        resolve(body);
+        resolve(responseBody);
       });
     });
   }

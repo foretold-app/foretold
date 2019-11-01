@@ -1,13 +1,13 @@
-let component = ReasonReact.statelessComponent("ChannelAddMember");
+[@bs.config {jsx: 3}];
 
 type column = Table.column(Types.agent);
 
-let make = (~channelId: string, _children) => {
-  ...component,
-  render: _ => {
-    let addToChannelLink = (agentId: string, channelId: string) =>
-      ChannelMembershipCreate.Mutation.make((mutation, _) =>
-        <Link.Jsx2
+[@react.component]
+let make = (~channelId: string) => {
+  let addToChannelLink = (agentId: string, channelId: string) =>
+    <ChannelMembershipCreate.Mutation>
+      ...{(mutation, _) =>
+        <Link
           linkType={
             Action(
               _ =>
@@ -15,58 +15,56 @@ let make = (~channelId: string, _children) => {
             )
           }>
           {"Add to Community" |> ReasonReact.string}
-        </Link.Jsx2>
-      )
-      |> ReasonReact.element;
+        </Link>
+      }
+    </ChannelMembershipCreate.Mutation>;
 
-    let agentColumn =
-      Table.Column.make(
-        ~name="Member" |> ReasonReact.string,
-        ~render=(agent: Types.agent) => <AgentLink.Jsx2 agent />,
-        (),
-      );
+  let agentColumn =
+    Table.Column.make(
+      ~name="Member" |> ReasonReact.string,
+      ~render=(agent: Types.agent) => <AgentLink agent />,
+      (),
+    );
 
-    let inviteColumn =
-      Table.Column.make(
-        ~name="Invite" |> ReasonReact.string,
-        ~render=
-          (agent: Types.agent) => addToChannelLink(agent.id, channelId),
-        (),
-      );
+  let inviteColumn =
+    Table.Column.make(
+      ~name="Invite" |> ReasonReact.string,
+      ~render=(agent: Types.agent) => addToChannelLink(agent.id, channelId),
+      (),
+    );
 
-    let all: array(column) = [|agentColumn, inviteColumn|];
+  let all: array(column) = [|agentColumn, inviteColumn|];
 
-    let title =
-      <FC.Base.Div.Jsx2 float=`left>
-        <FC.PageCard.HeaderRow.Title>
-          {"Add Agents" |> ReasonReact.string}
-        </FC.PageCard.HeaderRow.Title>
-      </FC.Base.Div.Jsx2>;
+  let title =
+    <FC.Base.Div float=`left>
+      <FC.PageCard.HeaderRow.Title>
+        {"Add Agents" |> ReasonReact.string}
+      </FC.PageCard.HeaderRow.Title>
+    </FC.Base.Div>;
 
-    let onSuccess = agents => {
-      let dataSource =
-        agents
-        |> Js.Array.filter((agent: Types.agent) =>
-             switch (agent.name) {
-             | Some(name) when name != "" => true
-             | _ => false
-             }
-           );
+  let onSuccess = agents => {
+    let dataSource =
+      agents
+      |> Js.Array.filter((agent: Types.agent) =>
+           switch (agent.name) {
+           | Some(name) when name != "" => true
+           | _ => false
+           }
+         );
 
-      Table.fromColumns(all, dataSource, ());
-    };
+    Table.fromColumns(all, dataSource, ());
+  };
 
-    let onError = e => <Error e />;
+  let onError = e => <Error e />;
 
-    let loadingFn = () => <Spin />;
+  let loadingFn = () => <Spin />;
 
-    let table =
-      AgentsGet.componentUsers(~excludeChannelId=channelId, agents =>
-        agents |> HttpResponse.flatten(onSuccess, onError, loadingFn)
-      );
+  let table =
+    AgentsGet.componentUsers(~excludeChannelId=channelId, agents =>
+      agents |> HttpResponse.flatten(onSuccess, onError, loadingFn)
+    );
 
-    <SLayout head={<div> title </div>}>
-      <FC.PageCard.Body> table </FC.PageCard.Body>
-    </SLayout>;
-  },
+  <SLayout head={<div> title </div>}>
+    <FC.PageCard.Body> table </FC.PageCard.Body>
+  </SLayout>;
 };

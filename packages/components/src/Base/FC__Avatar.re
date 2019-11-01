@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module Styles = {
   open Css;
   let imageCropper = width =>
@@ -25,8 +27,6 @@ let make = (~src: string, ~width=1., ()) =>
   </span>;
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("Avatar");
-
   let make = (~src: string, ~width=1., children) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,

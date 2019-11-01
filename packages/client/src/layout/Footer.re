@@ -1,27 +1,23 @@
+[@bs.config {jsx: 3}];
+
 open Utils;
-let component = ReasonReact.statelessComponent("Footer");
 
 let documentationUrl = "https://docs.foretold.io/";
 let feedbackUrl = "https://feedback.foretold.io/";
 
-let make = _children => {
-  ...component,
-  render: _self =>
-    <FC__Footer
-      logo={React.string({js|Foretold.io|js})}
-      links=[|
-        <Link.Jsx2 linkType={External(documentationUrl)}>
-          {"Documentation" |> ste}
-        </Link.Jsx2>,
-        <Link.Jsx2 linkType={External(feedbackUrl)}>
-          {"Feedback" |> ste}
-        </Link.Jsx2>,
-        <Link.Jsx2 linkType={Internal(Terms)}>
-          {"Terms and Conditions" |> ste}
-        </Link.Jsx2>,
-        <Link.Jsx2 linkType={Internal(Privacy)}>
-          {"Privacy Policy" |> ste}
-        </Link.Jsx2>,
-      |]
-    />,
+[@react.component]
+let make = () => {
+  <FC__Footer
+    logo={React.string({js|Foretold.io|js})}
+    links=[|
+      <Link linkType={External(documentationUrl)}>
+        {"Documentation" |> ste}
+      </Link>,
+      <Link linkType={External(feedbackUrl)}> {"Feedback" |> ste} </Link>,
+      <Link linkType={Internal(Terms)}>
+        {"Terms and Conditions" |> ste}
+      </Link>,
+      <Link linkType={Internal(Privacy)}> {"Privacy Policy" |> ste} </Link>,
+    |]
+  />;
 };

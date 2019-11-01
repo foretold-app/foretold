@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 module Types = FC__Types;
 module Link = FC__Link;
 module Colors = FC__Settings;

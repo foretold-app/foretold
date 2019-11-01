@@ -24,11 +24,11 @@ const { HOME_CHANNEL_ID } = require('../../well-known');
  */
 async function all(_root, args, context, _info) {
   /** @type {string} */
-  const channelId = _.get(args, 'channelId');
+  const channelId = _.get(args, 'channelId', null);
   /** @type {string} */
-  const agentId = _.get(args, 'agentId');
+  const agentId = _.get(args, 'agentId', null);
   /** @type {string} */
-  const currentAgentId = _.get(context, 'agent.id');
+  const currentAgentId = _.get(context, 'agent.id', null);
 
   const withinJoinedChannels = channelId === HOME_CHANNEL_ID && !!currentAgentId
     ? structures.withinJoinedChannelsByChannelId(currentAgentId) : null;

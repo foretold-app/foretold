@@ -1,13 +1,13 @@
-let component = ReasonReact.statelessComponent("AgentIndex");
-let make = _children => {
-  ...component,
-  render: _ =>
-    AgentsGet.QueryComponent.make(({result}) =>
+[@bs.config {jsx: 3}];
+
+[@react.component]
+let make = () =>
+  <AgentsGet.QueryComponent>
+    ...{({result}) =>
       result
       |> ApolloUtils.apolloResponseToResult
       |> E.R.fmap(d => d##agents)
-      |> E.R.fmap(_ => E.React.null)
+      |> E.R.fmap(_ => E.React2.null)
       |> E.R.id
-    )
-    |> E.React.el,
-};
+    }
+  </AgentsGet.QueryComponent>;

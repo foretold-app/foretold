@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open FC;
 open Base;
 
@@ -5,32 +7,60 @@ let cdf = ExampleCdfs.Example1.cdf;
 
 let futureTime = 1559005200;
 
-let llink =
-  Link.Jsx2.make(
-    ~isDisabled=false,
-    ~className=
-      Css.(
-        style([
-          textDecoration(`underline),
-          color(`hex("384e67")),
-          hover([color(Colors.link)]),
-        ])
-      ),
-  );
-
 let row =
   <Table.Row onClick={_ => Js.log("Row Clicked")}>
     <Table.Cell flex={`num(4.)}>
       <span className=Table.Styles.Elements.primaryText>
         {"What will be the " |> ReasonReact.string}
-        {llink(~href="d", [|"GDP" |> ReasonReact.string|])
-         |> ReasonReact.element}
+        <Link
+          isDisabled=false
+          className=Css.(
+            style([
+              textDecoration(`underline),
+              color(`hex("384e67")),
+              hover([color(Colors.link)]),
+            ])
+          )>
+          {"GDP" |> ReasonReact.string}
+        </Link>
+        <Link
+          href="d"
+          isDisabled=false
+          className=Css.(
+            style([
+              textDecoration(`underline),
+              color(`hex("384e67")),
+              hover([color(Colors.link)]),
+            ])
+          )>
+          {"GDP" |> ReasonReact.string}
+        </Link>
         {" of " |> ReasonReact.string}
-        {llink(~href="China", [|"China" |> ReasonReact.string|])
-         |> ReasonReact.element}
+        <Link
+          href="China"
+          isDisabled=false
+          className=Css.(
+            style([
+              textDecoration(`underline),
+              color(`hex("384e67")),
+              hover([color(Colors.link)]),
+            ])
+          )>
+          {"China" |> ReasonReact.string}
+        </Link>
         {" in " |> ReasonReact.string}
-        {llink(~href="2018", [|"2018" |> ReasonReact.string|])
-         |> ReasonReact.element}
+        <Link
+          href="2018"
+          isDisabled=false
+          className=Css.(
+            style([
+              textDecoration(`underline),
+              color(`hex("384e67")),
+              hover([color(Colors.link)]),
+            ])
+          )>
+          {"2018" |> ReasonReact.string}
+        </Link>
       </span>
       {FC__StateStatus.make(
          ~state=OPEN(MomentRe.momentWithUnix(futureTime)),
@@ -47,33 +77,29 @@ let row =
       />
     </Table.Cell>
     <Table.Cell flex={`num(1.)} properties=Css.[paddingTop(`em(0.3))]>
-      <Div.Jsx2>
-        <Link.Jsx2
-          className={Table.Styles.Elements.link(~isUnderlined=false, ())}>
+      <Div>
+        <Link className={Table.Styles.Elements.link(~isUnderlined=false, ())}>
           {"Series A" |> ReasonReact.string}
-        </Link.Jsx2>
-        <Link.Jsx2
-          className={Table.Styles.Elements.link(~isUnderlined=false, ())}>
+        </Link>
+        <Link className={Table.Styles.Elements.link(~isUnderlined=false, ())}>
           {"19" |> ReasonReact.string}
-        </Link.Jsx2>
-      </Div.Jsx2>
-      <Div.Jsx2>
-        <Link.Jsx2
-          className={Table.Styles.Elements.link(~isUnderlined=true, ())}>
+        </Link>
+      </Div>
+      <Div>
+        <Link className={Table.Styles.Elements.link(~isUnderlined=true, ())}>
           {"Edit" |> ReasonReact.string}
-        </Link.Jsx2>
-        <Link.Jsx2
-          className={Table.Styles.Elements.link(~isUnderlined=true, ())}>
+        </Link>
+        <Link className={Table.Styles.Elements.link(~isUnderlined=true, ())}>
           {"Archive" |> ReasonReact.string}
-        </Link.Jsx2>
-      </Div.Jsx2>
+        </Link>
+      </Div>
     </Table.Cell>
   </Table.Row>;
 
 let make =
   <PageCard>
     <PageCard.HeaderRow>
-      <Div.Jsx2
+      <Div
         float=`left
         className={Css.style([
           PageCard.HeaderRow.Styles.itemTopPadding,
@@ -86,8 +112,8 @@ let make =
         <Tab2 isActive=false number=831>
           {"Closed" |> ReasonReact.string}
         </Tab2>
-      </Div.Jsx2>
-      <Div.Jsx2
+      </Div>
+      <Div
         float=`right
         styles=[Css.style([PageCard.HeaderRow.Styles.itemTopPadding])]>
         {PaginationButtons.make({
@@ -102,7 +128,7 @@ let make =
              onClick: _ => (),
            },
          })}
-      </Div.Jsx2>
+      </Div>
     </PageCard.HeaderRow>
     <Table>
       <Table.HeaderRow>

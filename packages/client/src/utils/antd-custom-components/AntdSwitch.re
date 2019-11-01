@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 [@bs.module] external switcher: ReasonReact.reactClass = "antd/lib/switch";
 
 [%bs.raw {|require("antd/lib/switch/style")|}];
@@ -25,6 +27,7 @@ external makeProps:
   _ =
   "";
 
+[@react.component]
 let make =
     (
       ~prefixCls=?,
@@ -39,7 +42,7 @@ let make =
       ~loading=?,
       ~autoFocus=?,
       ~style=?,
-      children,
+      ~children=ReasonReact.null,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=switcher,
@@ -60,4 +63,5 @@ let make =
         (),
       ),
     children,
-  );
+  )
+  |> ReasonReact.element;

@@ -1,3 +1,4 @@
+[@bs.config {jsx: 3}];
 open FC__Base;
 
 let defaultRowHorizontalPadding = `em(1.5);
@@ -95,25 +96,29 @@ module Cell = {
 
   let style = flexAmount => Css.(style([flex(flexAmount)]));
 
-  let component = ReasonReact.statelessComponent("TABLE CELL");
+  [@react.component]
+  let make = (~flex, ~className="", ~properties=[], ~children) =>
+    <Div
+      className={Css.merge([
+        style(flex),
+        standardCellPadding,
+        className,
+        Css.style(properties),
+      ])}>
+      children
+    </Div>;
 
-  let make = (~flex, ~className="", ~properties=[], children) => {
-    ...component,
-    render: _self =>
-      <Div.Jsx2
-        className={Css.merge([
-          style(flex),
-          standardCellPadding,
-          className,
-          Css.style(properties),
-        ])}>
-        ...children
-      </Div.Jsx2>,
+  module Jsx2 = {
+    let make = (~flex, ~className="", ~properties=[], children) =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~flex, ~className, ~properties, ~children, ()),
+        children,
+      );
   };
 };
 
 module HeaderRow = {
-  let component = ReasonReact.statelessComponent("TABLE HEADER ROW");
   module Styles = {
     let headerRow =
       Css.(
@@ -131,42 +136,60 @@ module HeaderRow = {
       );
   };
 
-  let make = children => {
-    ...component,
-    render: _self =>
-      <Div.Jsx2 styles=[Styles.headerRow]> ...children </Div.Jsx2>,
+  [@react.component]
+  let make = (~children) => <Div styles=[Styles.headerRow]> children </Div>;
+
+  module Jsx2 = {
+    let make = children =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~children, ()),
+        children,
+      );
   };
 };
 
 module Row = {
-  let component = ReasonReact.statelessComponent("TABLE ROW");
+  let textSection = text => <Div styles=[Styles.textArea]> text </Div>;
 
-  let textSection = text =>
-    <Div.Jsx2 styles=[Styles.textArea]> text </Div.Jsx2>;
-
-  let make = (~className="", ~bottomSubRow=?, ~onClick=?, children) => {
-    ...component,
-    render: _self => {
+  [@react.component]
+  let make = (~className="", ~bottomSubRow=?, ~onClick=?, ~children) => {
+    switch (bottomSubRow) {
+    | Some(bottomSubRow) =>
       let commonClasses =
         onClick |> E.O.isSome
           ? [Styles.clickableRow, className] : [className];
-      switch (bottomSubRow) {
-      | Some(bottomSubRow) =>
-        <Div.Jsx2 styles=commonClasses ?onClick>
-          <Div.Jsx2 styles=[Styles.topRow]> ...children </Div.Jsx2>
-          <Div.Jsx2 styles=[Styles.bottomRow]> ...bottomSubRow </Div.Jsx2>
-        </Div.Jsx2>
-      | None =>
-        <Div.Jsx2 styles=[Styles.row, ...commonClasses] ?onClick>
-          ...children
-        </Div.Jsx2>
-      };
-    },
+      <Div styles=commonClasses ?onClick>
+        <Div styles=[Styles.topRow]> children </Div>
+        <Div styles=[Styles.bottomRow]> bottomSubRow </Div>
+      </Div>;
+    | None =>
+      let commonClasses =
+        onClick |> E.O.isSome
+          ? [Styles.row, Styles.clickableRow, className]
+          : [Styles.row, className];
+      <Div styles=commonClasses ?onClick> children </Div>;
+    };
+  };
+
+  module Jsx2 = {
+    let make = (~className="", ~bottomSubRow=?, ~onClick=?, children) =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~className, ~bottomSubRow?, ~onClick?, ~children, ()),
+        children,
+      );
   };
 };
 
-let component = ReasonReact.statelessComponent("Table");
-let make = children => {
-  ...component,
-  render: _self => <div> ...children </div>,
+[@react.component]
+let make = (~children) => <div> children </div>;
+
+module Jsx2 = {
+  let make = children =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~children, ()),
+      children,
+    );
 };

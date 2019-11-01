@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 type color = [ | `hex(Js.String.t)];
 
 /* I made this contain strings instead of colors,
@@ -106,7 +108,8 @@ let styles = (~isDisabled=false, ~variant, ~size, ~fullWidth=false, ()) => {
 };
 
 // Button must be button
-let component = ReasonReact.statelessComponent(__MODULE__);
+
+[@react.component]
 let make =
     (
       ~onClick=?,
@@ -115,17 +118,41 @@ let make =
       ~isDisabled=false,
       ~fullWidth=false,
       ~className="",
+      ~children=ReasonReact.null,
+    ) =>
+  <button
+    ?onClick
+    disabled=isDisabled
+    className={Css.merge([
+      styles(~isDisabled, ~fullWidth, ~variant, ~size, ()),
+      className,
+    ])}>
+    children
+  </button>;
+
+module Jsx2 = {
+  let make =
+      (
+        ~onClick=?,
+        ~variant=Secondary,
+        ~size=Medium,
+        ~isDisabled=false,
+        ~fullWidth=false,
+        ~className="",
+        children,
+      ) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(
+        ~onClick?,
+        ~variant,
+        ~size,
+        ~isDisabled,
+        ~fullWidth,
+        ~className="",
+        ~children,
+        (),
+      ),
       children,
-    ) => {
-  ...component,
-  render: _self =>
-    <button
-      ?onClick
-      disabled=isDisabled
-      className={Css.merge([
-        styles(~isDisabled, ~fullWidth, ~variant, ~size, ()),
-        className,
-      ])}>
-      ...children
-    </button>,
+    );
 };

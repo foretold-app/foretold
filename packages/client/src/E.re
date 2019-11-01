@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 /* O for option */
 open Rationale.Function.Infix;
 
@@ -120,8 +122,16 @@ module S = {
 module J = {
   let toString = Js.Json.decodeString ||> O.default("");
   let toMoment = toString ||> MomentRe.moment;
+  let fromString = (str: string) => Js.Json.string(str);
+
   module O = {
     let toMoment = O.fmap(toMoment);
+
+    let fromString = (str: option(string)) =>
+      switch (str) {
+      | Some(str) => Some(Js.Json.string(str))
+      | _ => Some(Js.Json.string(""))
+      };
   };
 };
 
@@ -267,7 +277,7 @@ module FloatCdf = {
     Rationale.Option.fmap(((_, x)) => x, firstAbove(min, t));
 };
 
-module React = {
+module React2 = {
   let el = ReasonReact.element;
   let null = ReasonReact.null;
   let str = ReasonReact.string;

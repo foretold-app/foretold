@@ -1,4 +1,4 @@
-let component = ReasonReact.statelessComponent("Text");
+[@bs.config {jsx: 3}];
 
 type code = {
   .
@@ -17,6 +17,8 @@ module Styles = {
           marginLeft(`auto),
           marginRight(`auto),
           display(`block),
+          paddingLeft(`rem(1.)),
+          paddingRight(`rem(1.)),
         ],
       ),
       selector(
@@ -40,40 +42,36 @@ let foretoldJsRenderers = (channelId): renderers => {
     ) {
     | (Some("foretoldJs"), Some(json)) =>
       switch (Json.parse(json)) {
-      | Some(json) => <DashboardTableC channelId tableJson=json />
+      | Some(json) =>
+        <div
+          className=Css.(
+            style([
+              marginTop(`em(1.0)),
+              marginBottom(`em(1.5)),
+              Css.float(`left),
+              width(`percent(100.)),
+            ])
+          )>
+          <DashboardTableC channelId tableJson=json />
+        </div>
       | None => "Invalid Json. Check a formatting tool." |> Utils.ste
       }
     | (Some(language), Some(value)) =>
       <code className=language> {value |> Utils.ste} </code>
     | (None, Some(value)) => value |> Utils.ste
-    | (_, None) => E.React.null
+    | (_, None) => E.React2.null
     };
   },
 };
 
-let make = (~source, ~supportForetoldJs=false, ~channelId=?, _children) => {
-  ...component,
-  render: _self =>
-    switch (supportForetoldJs, channelId) {
-    | (true, Some(channelId)) =>
-      <div className=Styles.all>
-        <ReactMarkdown.Markdown
-          source
-          renderers={foretoldJsRenderers(channelId)}
-        />
-      </div>
-    | (true, None) => <ReactMarkdown.Markdown source />
-    | (false, _) => <ReactMarkdown.Markdown source />
-    },
-};
-
-module Jsx3 = {
-  [@bs.obj] external makeProps: (~source: string, unit) => _ = "";
-
-  let make =
-    ReasonReactCompat.wrapReasonReactForReact(
-      ~component=ReasonReact.statelessComponent("Markdown"),
-      (reactProps: {. "source": string}) =>
-      make(~source=reactProps##source, [||])
-    );
+[@react.component]
+let make = (~source, ~supportForetoldJs=false, ~channelId=?) => {
+  switch (supportForetoldJs, channelId) {
+  | (true, Some(channelId)) =>
+    <div className=Styles.all>
+      <ReactMarkdown source renderers={foretoldJsRenderers(channelId)} />
+    </div>
+  | (true, None) => <ReactMarkdown source />
+  | (false, _) => <ReactMarkdown source />
+  };
 };

@@ -1,4 +1,4 @@
-let component = ReasonReact.statelessComponent(__MODULE__);
+[@bs.config {jsx: 3}];
 
 module Styles = {
   open Css;
@@ -48,19 +48,22 @@ module Styles = {
     ]);
 };
 
-let make = (~title, ~trigger=FC__Dropdown.Hover, children) => {
-  ...component,
-  render: _self => {
-    let overlay =
-      switch (Array.length(children)) {
-      | 1 => children[0]
-      | _ => <div> ...children </div>
-      };
-    <FC__Dropdown trigger overlay prefixCls=Styles.prefixCls>
-      <button className=Styles.dropdownTrigger>
-        <span> {title |> React.string} </span>
-        <FC__Icon.DownArrow />
-      </button>
-    </FC__Dropdown>;
-  },
+[@react.component]
+let make = (~title, ~trigger=FC__Dropdown.Hover, ~children) => {
+  let overlay = <div> children </div>;
+  <FC__Dropdown trigger overlay prefixCls=Styles.prefixCls>
+    <button className=Styles.dropdownTrigger>
+      <span> {title |> React.string} </span>
+      <FC__Icon.DownArrow />
+    </button>
+  </FC__Dropdown>;
+};
+
+module Jsx2 = {
+  let make = (~title, ~trigger=FC__Dropdown.Hover, children) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(~title, ~trigger, ~children, ()),
+      children,
+    );
 };

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 /**
  * Menu component and sibling components provides define menu items,
  * submenues and dividers. See make for usage.
@@ -6,9 +8,12 @@
  */
 [@bs.module "rc-menu"]
 external rcMenuClass: ReasonReact.reactClass = "default";
+
 [@bs.module "rc-menu"]
 external rcSubMenuClass: ReasonReact.reactClass = "SubMenu";
+
 [@bs.module "rc-menu"] external rcItemClass: ReasonReact.reactClass = "Item";
+
 [@bs.module "rc-menu"]
 external rcDividerClass: ReasonReact.reactClass = "Divider";
 
@@ -214,12 +219,24 @@ module SubMenu = {
     title: string,
     popupClassName: string,
   };
-  let make = (~title, children) =>
+
+  [@react.component]
+  let make = (~title, ~children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=rcSubMenuClass,
       ~props=jsProps(~title, ~popupClassName="ft-submenu-general"),
       children,
-    );
+    )
+    |> ReasonReact.element;
+
+  module Jsx2 = {
+    let make = (~title, children) =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~title, ~children, ()),
+        children,
+      );
+  };
 };
 
 module Item = {
@@ -230,7 +247,9 @@ module Item = {
     itemIcon: Js.Undefined.t(React.element),
     className: string,
   };
-  let make = (~disabled=false, ~itemIcon=None, children) =>
+
+  [@react.component]
+  let make = (~disabled=false, ~itemIcon=None, ~children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=rcItemClass,
       ~props=
@@ -240,17 +259,39 @@ module Item = {
           ~className="ft-menu-item-general",
         ),
       children,
-    );
+    )
+    |> ReasonReact.element;
+
+  module Jsx2 = {
+    let make = (~disabled=false, ~itemIcon=None, children) =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~disabled, ~itemIcon, ~children, ()),
+        children,
+      );
+  };
 };
 
 module Divider = {
   // https://github.com/react-component/menu#menuitem-props
-  let make = children =>
+
+  [@react.component]
+  let make = (~children=ReasonReact.null) =>
     ReasonReact.wrapJsForReason(
       ~reactClass=rcDividerClass,
       ~props=Js.Obj.empty(),
       children,
-    );
+    )
+    |> ReasonReact.element;
+
+  module Jsx2 = {
+    let make = children =>
+      ReasonReactCompat.wrapReactForReasonReact(
+        make,
+        makeProps(~children, ()),
+        children,
+      );
+  };
 };
 
 type callbackType =
@@ -315,8 +356,9 @@ type clickInfo = {
  * )
  * ```
  */
+[@react.component]
 let make =
-    (~onClick=?, ~selectable=false, ~onSelect=?, ~selectedKey=?, children) =>
+    (~onClick=?, ~selectable=false, ~onSelect=?, ~selectedKey=?, ~children) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=rcMenuClass,
     ~props=
@@ -356,4 +398,22 @@ let make =
         ~className="ft-menu-general",
       ),
     children,
-  ) /* Menu item group is not implemented (https://react-component.github.io/menu/examples/menuItemGroup.html*/;
+  )  /* Menu item group is not implemented (https://react-component.github.io/menu/examples/menuItemGroup.html*/
+  |> ReasonReact.element;
+
+module Jsx2 = {
+  let make =
+      (~onClick=?, ~selectable=false, ~onSelect=?, ~selectedKey=?, children) =>
+    ReasonReactCompat.wrapReactForReasonReact(
+      make,
+      makeProps(
+        ~onClick?,
+        ~selectable,
+        ~onSelect?,
+        ~selectedKey?,
+        ~children,
+        (),
+      ),
+      children,
+    );
+};

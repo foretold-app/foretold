@@ -14,8 +14,8 @@ const { Filter } = require('../../data/classes');
  * @returns {Promise<Models.Agent>}
  */
 async function one(root, args, _context, _info) {
-  const id = _.get(args, 'id')
-    || _.get(root, 'agentId');
+  const id = _.get(args, 'id', null)
+    || _.get(root, 'agentId', null);
   const params = new Params({ id });
   return data.agents.getOne(params);
 }
@@ -23,16 +23,19 @@ async function one(root, args, _context, _info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.ObjectID} args.excludeChannelId
+ * @param {Models.ChannelID} args.excludeChannelId
  * @param {string[]} args.types
  * @param {Schema.Context} _context
  * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
 async function all(root, args, _context, _info) {
+  const excludeChannelId = _.get(args, 'excludeChannelId', null);
+  const types = _.get(args, 'types', null);
+
   const filter = new Filter({
-    excludeChannelId: _.get(args, 'excludeChannelId'),
-    types: _.get(args, 'types'),
+    excludeChannelId,
+    types,
   });
   return data.agents.getAll(filter);
 }

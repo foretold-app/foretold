@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let valueFromEvent = (evt): string => evt->ReactEvent.Form.target##value;
 
 module Styles = {
@@ -12,29 +14,20 @@ type state = {text: string};
 type action =
   | Update(string);
 
-let component = ReasonReact.reducerComponent("MeasurableBottomSection");
+[@react.component]
+let make = (~channelId: string) => {
+  let (text, setText) = React.useState(() => "");
 
-let make = (~channelId: string, _children) => {
-  ...component,
-  reducer: (action, _state) =>
-    switch (action) {
-    | Update(text) => ReasonReact.Update({text: text})
-    },
-
-  initialState: () => {text: ""},
-
-  render: self => {
-    <SLayout isFluid=true head=ReasonReact.null>
-      <FC.PageCard.Body>
-        <div className=Styles.padding>
-          <Antd.Input.TextArea
-            style={ReactDOMRe.Style.make(~minHeight="6em", ())}
-            onChange={event => self.send(Update(valueFromEvent(event)))}
-            value={self.state.text}
-          />
-        </div>
-        <Markdown source={self.state.text} channelId supportForetoldJs=true />
-      </FC.PageCard.Body>
-    </SLayout>;
-  },
+  <SLayout isFluid=true head=ReasonReact.null>
+    <FC.PageCard.Body>
+      <div className=Styles.padding>
+        <Antd.Input.TextArea
+          style={ReactDOMRe.Style.make(~minHeight="6em", ())}
+          onChange={event => setText(_ => valueFromEvent(event))}
+          value=text
+        />
+      </div>
+      <Markdown source=text channelId supportForetoldJs=true />
+    </FC.PageCard.Body>
+  </SLayout>;
 };

@@ -1,6 +1,6 @@
-open Utils;
+[@bs.config {jsx: 3}];
 
-let component = ReasonReact.statelessComponent("SmallCdfChart");
+open Utils;
 
 module Styles = {
   open Css;
@@ -13,17 +13,16 @@ module Styles = {
       selector(".chart .area-path", [SVG.fill(`hex("7e9db7"))]),
     ]);
 };
-let make = (~data, _children) => {
-  ...component,
-  render: _ =>
-    <div className=Styles.graph>
-      <CdfChart
-        marginBottom=25
-        width=400
-        height=200
-        showVerticalLine=false
-        showDistributionLines=false
-        primaryDistribution=data
-      />
-    </div>,
-};
+
+[@react.component]
+let make = (~data) =>
+  <div className=Styles.graph>
+    <CdfChart
+      marginBottom=25
+      width=400
+      height=200
+      showVerticalLine=false
+      showDistributionLines=false
+      primaryDistribution=data
+    />
+  </div>;

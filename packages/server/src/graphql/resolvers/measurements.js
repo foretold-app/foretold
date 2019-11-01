@@ -45,21 +45,21 @@ const log = logger.module('resolvers/measurements');
  * @returns {Promise<*>}
  */
 async function all(root, args, context, info) {
-  const measurableState = _.get(args, 'measurableState');
-  const channelId = _.get(args, 'channelId');
+  const measurableState = _.get(args, 'measurableState', null);
+  const channelId = _.get(args, 'channelId', null);
 
   const filter = new Filter({
     withinMeasurables: withinMeasurables(measurableState, channelId),
-    measurableId: _.get(args, 'measurableId'),
-    agentId: _.get(args, 'agentId') || _.get(root, 'id'),
-    competitorType: _.get(args, 'competitorType'),
-    findInDateRange: _.get(args, 'findInDateRange'),
-    notTaggedByAgent: _.get(args, 'notTaggedByAgent'),
+    measurableId: _.get(args, 'measurableId', null),
+    agentId: _.get(args, 'agentId', null) || _.get(root, 'id', null),
+    competitorType: _.get(args, 'competitorType', null),
+    findInDateRange: _.get(args, 'findInDateRange', null),
+    notTaggedByAgent: _.get(args, 'notTaggedByAgent', null),
   });
   const pagination = new Pagination(args);
   const options = new Options({
-    isAdmin: _.get(context, 'agent.isAdmin'),
-    agentId: _.get(context, 'agent.id'),
+    isAdmin: _.get(context, 'agent.isAdmin', null),
+    agentId: _.get(context, 'agent.id', null),
   });
 
   return data.measurements.getConnection(filter, pagination, options);
@@ -76,14 +76,14 @@ async function all(root, args, context, info) {
  * @returns {Promise<*>}
  */
 async function measurableMeasurement(root, args, context, info) {
-  const measurableId = _.get(root, 'measurableId');
-  const competitorType = _.get(args, 'competitorType');
+  const measurableId = _.get(root, 'measurableId', null);
+  const competitorType = _.get(args, 'competitorType', null);
 
   const filter = new Filter({ measurableId, competitorType });
   const pagination = new Pagination({ first: 1 });
   const options = new Options({
-    isAdmin: _.get(context, 'agent.isAdmin'),
-    agentId: _.get(context, 'agent.id'),
+    isAdmin: _.get(context, 'agent.isAdmin', null),
+    agentId: _.get(context, 'agent.id', null),
   });
 
   const result = await data.measurements.getConnection(
@@ -104,13 +104,13 @@ async function measurableMeasurement(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function one(root, args, context, info) {
-  const id = _.get(args, 'id');
-  const currentAgentId = _.get(context, 'agent.id');
+  const id = _.get(args, 'id', null);
+  const currentAgentId = _.get(context, 'agent.id', null);
 
   const params = new Params({ id });
   const query = new Query();
   const options = new Options({
-    isAdmin: _.get(context, 'agent.isAdmin'),
+    isAdmin: _.get(context, 'agent.isAdmin', null),
     agentId: currentAgentId,
   });
 
@@ -126,8 +126,8 @@ async function one(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
-  const agentId = _.get(args, 'input.agentId')
-    || _.get(context, 'agent.id');
+  const agentId = _.get(args, 'input.agentId', null)
+    || _.get(context, 'agent.id', null);
   const datas = { ...args.input, agentId };
   return data.measurements.createOne(datas);
 }
@@ -175,7 +175,7 @@ async function scoreSet(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function prediction(root, args, context, info) {
-  const id = _.get(root, 'id');
+  const id = _.get(root, 'id', null);
   const params = new Params({ id });
   return data.measurements.getOne(params);
 }
@@ -190,7 +190,7 @@ async function prediction(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function outcome(root, args, context, info) {
-  const measurableId = _.get(root, 'measurableId');
+  const measurableId = _.get(root, 'measurableId', null);
   return data.measurements.getOutcome(measurableId);
 }
 
@@ -203,7 +203,7 @@ async function outcome(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function outcomeByRootId(root, _args, _context, _info) {
-  const measurableId = _.get(root, 'id');
+  const measurableId = _.get(root, 'id', null);
   return data.measurements.getOutcome(measurableId);
 }
 
@@ -217,9 +217,9 @@ async function outcomeByRootId(root, _args, _context, _info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function previousAggregate(root, args, context, info) {
-  const measurableId = _.get(root, 'measurableId');
-  const createdAt = _.get(root, 'createdAt');
-  const agentId = _.get(context, 'botAgentId');
+  const measurableId = _.get(root, 'measurableId', null);
+  const createdAt = _.get(root, 'createdAt', null);
+  const agentId = _.get(context, 'botAgentId', null);
   return data.measurements.getPreviousRelevantAggregate(
     measurableId,
     agentId,
@@ -236,12 +236,13 @@ async function previousAggregate(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function latestAggregateByRootId(root, _args, context, _info) {
-  const measurableId = _.get(root, 'id');
-  const agentId = _.get(context, 'botAgentId');
+  const measurableId = _.get(root, 'id', null);
+  const agentId = _.get(context, 'botAgentId', null);
   return data.measurements.getLatestAggregate(measurableId, agentId);
 }
 
 /**
+ * @todo: duplicated?
  * @param r
  * @returns {{data: *, dataType: *}}
  */
@@ -387,7 +388,7 @@ async function truncateCdf(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function measurementCountByAgentId(root, _args, _context, _info) {
-  const agentId = _.get(root, 'id');
+  const agentId = _.get(root, 'id', null);
   return data.measurements.getCount({ agentId });
 }
 
@@ -400,7 +401,7 @@ async function measurementCountByAgentId(root, _args, _context, _info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function measurementCountByMeasurableId(root, _args, _context, _info) {
-  const measurableId = _.get(root, 'id');
+  const measurableId = _.get(root, 'id', null);
   return data.measurements.getCount({ measurableId });
 }
 
@@ -424,7 +425,7 @@ async function count(_root, _args, _context, _info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function measurerCount(root, _args, _context, _info) {
-  const measurableId = _.get(root, 'id');
+  const measurableId = _.get(root, 'id', null);
   return data.measurements.getCount({ measurableId }, {
     distinct: true,
     col: 'agentId',

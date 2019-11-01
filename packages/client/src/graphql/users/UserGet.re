@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 let toChannel = ch =>
   Primary.Channel.make(
     ~id=ch##id,

@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 [@bs.module] external reactClass: ReasonReact.reactClass = "antd/lib/slider";
 
 [%bs.raw {|require("antd/lib/slider/style")|}];
@@ -20,6 +22,7 @@ external makeProps:
   _ =
   "";
 
+[@react.component]
 let make =
     (
       ~className=?,
@@ -32,7 +35,7 @@ let make =
       ~max=?,
       ~step=?,
       ~disabled=false,
-      children,
+      ~children=ReasonReact.null,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,
@@ -51,4 +54,5 @@ let make =
         (),
       ),
     children,
-  );
+  )
+  |> ReasonReact.element;

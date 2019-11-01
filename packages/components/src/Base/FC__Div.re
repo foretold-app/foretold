@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+
 open Css;
 
 let fnWithDefault = (fn, r) =>
@@ -15,7 +16,7 @@ let make =
       ~flexDirection=?,
       ~float=?,
       ~onClick=_ => (),
-      ~children,
+      ~children=ReasonReact.null,
     ) => {
   let flexStyle = flex |> fnWithDefault(e => [Css.flex(e)]);
   let floatStyle = float |> fnWithDefault(e => [Css.float(e)]);
@@ -24,12 +25,11 @@ let make =
     |> fnWithDefault(e => [display(`flex), Css.flexDirection(e)]);
   let allStyles =
     Css.merge([flexStyle, directionStyle, floatStyle, className, ...styles]);
+
   <div className=allStyles onClick> children </div>;
 };
 
 module Jsx2 = {
-  let component = ReasonReact.statelessComponent("Link");
-
   let make =
       (
         ~styles=?,
@@ -38,7 +38,7 @@ module Jsx2 = {
         ~flexDirection=?,
         ~float=?,
         ~onClick=?,
-        children: array(ReasonReact.reactElement),
+        children,
       ) =>
     ReasonReactCompat.wrapReactForReasonReact(
       make,
@@ -49,7 +49,7 @@ module Jsx2 = {
         ~flexDirection?,
         ~float?,
         ~onClick?,
-        ~children=children |> ReasonReact.array,
+        ~children,
         (),
       ),
       children,

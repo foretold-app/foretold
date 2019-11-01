@@ -1,6 +1,13 @@
+[@bs.config {jsx: 3}];
+
 open Rationale.Function.Infix;
 open Utils;
 open Types;
+
+let toTimestamp = (json: Js.Json.t): option(MomentRe.Moment.t) =>
+  json |> E.J.toMoment |> E.O.some;
+let toCreatedAt = toTimestamp;
+let toUpdatedAt = toTimestamp;
 
 module MeasurableState = {
   type t = measurableState;
@@ -244,6 +251,8 @@ module Bot = {
 module Agent = {
   type t = Types.agent;
 
+  let toAgentId = (json: Js.Json.t): Types.agentId => json |> E.J.toString;
+
   let name = (a: t): option(string) =>
     switch (a.agentType) {
     | Some(Bot(b)) => b.name
@@ -298,6 +307,9 @@ module Channel = {
   let globalLink = () => Routing.Url.ChannelShow("home");
   let showUrl = showLink ||> Routing.Url.toString;
   let showPush = showLink ||> Routing.Url.push;
+
+  let toChannelId = (json: Js.Json.t): Types.channelId =>
+    json |> E.J.toString;
 
   module Styles = {
     open Css;
@@ -636,7 +648,7 @@ module CompetitorType = {
       <Antd.Select.Option value="UNRESOLVED">
         {"Close without Answer" |> ste}
       </Antd.Select.Option>
-    | `AGGREGATION => E.React.null
+    | `AGGREGATION => E.React2.null
     };
 
   let availableSelections =
@@ -660,6 +672,7 @@ module AgentMeasurable = {
         ~measurable,
         ~agent,
         ~primaryPointScore=None,
+        ~timeAverageScore=None,
         ~predictionCountTotal,
         ~createdAt,
         ~competitiveMeasurement=None,
@@ -672,6 +685,7 @@ module AgentMeasurable = {
     measurable,
     agent,
     primaryPointScore,
+    timeAverageScore,
     predictionCountTotal,
     createdAt,
     competitiveMeasurement,
@@ -830,4 +844,54 @@ module AgentType = {
       )
     | (_, _) => None
     };
+
+  let toAgent = (agent: Js.t('a)) => {
+    let agentType = getAgentType(~agent, ());
+
+    Agent.make(~id=agent##id, ~agentType, ~name=agent##name, ());
+  };
+};
+
+module Notebook = {
+  type t = Types.notebook;
+
+  let toNotebookId = (json: Js.Json.t): Types.notebookId =>
+    json |> E.J.toString;
+
+  let convertJs =
+      (
+        ~id: Js.Json.t,
+        ~name: Js.Json.t,
+        ~ownerId: Js.Json.t,
+        ~channelId: Js.Json.t,
+        ~createdAt: Js.Json.t,
+        ~body: Js.Json.t,
+        ~updatedAt: Js.Json.t,
+        ~owner: Js.t('a),
+        (),
+      )
+      : t => {
+    id: toNotebookId(id),
+    name: name |> E.J.toString,
+    ownerId: Agent.toAgentId(ownerId),
+    channelId: Channel.toChannelId(channelId),
+    createdAt: toCreatedAt(createdAt),
+    updatedAt: toUpdatedAt(updatedAt),
+    body: Some(body |> E.J.toString),
+    owner: AgentType.toAgent(owner),
+  };
+
+  let convertJsObject = m => {
+    convertJs(
+      ~id=m##id,
+      ~name=m##name,
+      ~ownerId=m##ownerId,
+      ~channelId=m##channelId,
+      ~createdAt=m##createdAt,
+      ~updatedAt=m##updatedAt,
+      ~owner=m##owner,
+      ~body=m##body,
+      (),
+    );
+  };
 };

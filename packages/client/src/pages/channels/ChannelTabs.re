@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 open Utils;
 open Routing;
 
@@ -26,7 +28,7 @@ let make = (tabSelected: Routing.ChannelPage.tab, channel: Types.channel) =>
        tabToInternalUrl(channel.id, Updates),
        "Activity",
      )}
-    {E.React.showIf(
+    {E.React2.showIf(
        channel.id != "home",
        tab(
          tabSelected == Members,
@@ -40,7 +42,7 @@ let make = (tabSelected: Routing.ChannelPage.tab, channel: Types.channel) =>
          ++ "Members",
        ),
      )}
-    {E.React.showIf(
+    {E.React2.showIf(
        channel.id != "home",
        tab(
          tabSelected == Leaderboard,
@@ -48,7 +50,15 @@ let make = (tabSelected: Routing.ChannelPage.tab, channel: Types.channel) =>
          "Scoring",
        ),
      )}
-    {E.React.showIf(
+    {E.React2.showIf(
+       channel.id != "home",
+       tab(
+         tabSelected == Notebooks,
+         tabToInternalUrl(channel.id, Notebooks),
+         "Notebooks",
+       ),
+     )}
+    {E.React2.showIf(
        channel.myRole === Some(`ADMIN),
        tab(
          tabSelected == Options,

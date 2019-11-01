@@ -1,3 +1,5 @@
+[@bs.config {jsx: 3}];
+
 type state = [ | `OPEN | `JUDGEMENT_PENDING | `JUDGED | `CLOSED_AS_UNRESOLVED];
 
 type query = {state: option(array(state))};

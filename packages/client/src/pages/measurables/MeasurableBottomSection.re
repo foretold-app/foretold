@@ -4,11 +4,6 @@ type tab =
   | Measurements
   | Scores;
 
-type state = {tab};
-
-type action =
-  | SwitchTab(tab);
-
 module Tabs = {
   open Style.Grid;
   open FC;

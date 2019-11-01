@@ -12,7 +12,8 @@ module AgentPage = {
       | AgentBots
       | AgentCommunities
       | AgentUpdates
-      | AgentScores;
+      | AgentScores
+      | Unknown;
   };
 
   type t = {
@@ -24,8 +25,9 @@ module AgentPage = {
 module NotebookPage = {
   module SubPage = {
     type t =
-      | Dashboards
-      | Details;
+      | Dashboard
+      | Details
+      | Unknown;
   };
 
   type t = {
@@ -212,7 +214,7 @@ module Route = {
 
     // Notebooks
     | ["n", notebookId, "dashboards"] =>
-      Notebook({notebookId, subPage: Dashboards})
+      Notebook({notebookId, subPage: Dashboard})
     | ["n", notebookId, "details"] =>
       Notebook({notebookId, subPage: Details})
 
@@ -283,7 +285,7 @@ module Url = {
       "/agents/" ++ agentId ++ "/scores"
 
     // Notebooks
-    | Notebook({notebookId, subPage: Dashboards}) =>
+    | Notebook({notebookId, subPage: Dashboard}) =>
       "/n/" ++ notebookId ++ "/dashboards"
     | Notebook({notebookId, subPage: Details}) =>
       "/n/" ++ notebookId ++ "/details"

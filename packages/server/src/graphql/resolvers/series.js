@@ -16,13 +16,13 @@ const { Query } = require('../../data/classes');
  * @returns {Promise<*|Array<Model>>}
  */
 async function one(root, args, context, info) {
-  const id = _.get(args, 'id');
-  const currentAgentId = _.get(context, 'agent.id');
+  const id = _.get(args, 'id', null);
+  const currentAgentId = _.get(context, 'agent.id', null);
 
   const params = new Params({ id });
   const query = new Query();
   const options = new Options({
-    isAdmin: _.get(context, 'agent.isAdmin'),
+    isAdmin: _.get(context, 'agent.isAdmin', null),
     agentId: currentAgentId,
   });
 
@@ -38,13 +38,13 @@ async function one(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function all(root, args, context, info) {
-  const channelId = _.get(args, 'channelId');
-  const currentAgentId = _.get(context, 'agent.id');
+  const channelId = _.get(args, 'channelId', null);
+  const currentAgentId = _.get(context, 'agent.id', null);
 
   const filter = new Filter({ channelId });
   const pagination = new Pagination();
   const options = new Options({
-    isAdmin: _.get(context, 'agent.isAdmin'),
+    isAdmin: _.get(context, 'agent.isAdmin', null),
     agentId: currentAgentId,
   });
 
@@ -61,7 +61,7 @@ async function all(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function create(root, args, context, info) {
-  const agentId = _.get(context, 'agent.id');
+  const agentId = _.get(context, 'agent.id', null);
   const datas = {
     ...args.input,
     creatorId: agentId,

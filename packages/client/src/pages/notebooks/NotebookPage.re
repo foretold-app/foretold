@@ -7,7 +7,6 @@ type tab =
   | Details;
 
 module Tabs = {
-  open Style.Grid;
   open FC;
 
   [@react.component]

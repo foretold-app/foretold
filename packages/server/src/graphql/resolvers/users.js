@@ -14,10 +14,12 @@ const { Data } = require('../../data/classes');
  * @returns {Promise<Models.User>}
  */
 async function update(root, args, _context) {
-  const id = _.get(args, 'id');
-  const input = _.get(args, 'input');
+  const id = _.get(args, 'id', null);
+  const input = _.get(args, 'input') || {};
+
   const params = new Params({ id });
   const data$ = new Data(input);
+
   return data.users.updateOne(params, data$);
 }
 
@@ -31,10 +33,12 @@ async function update(root, args, _context) {
  * @returns {Promise<Models.User>}
  */
 async function accessTokenUpdate(root, args, _context) {
-  const id = _.get(args, 'id');
-  const input = _.get(args, 'input');
+  const id = _.get(args, 'id', null);
+  const input = _.get(args, 'input', null);
+
   const params = new Params({ id });
   const data$ = new Data(input);
+
   return data.users.updateOne(params, data$);
 }
 

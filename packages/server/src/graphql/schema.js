@@ -154,6 +154,14 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.bots.all,
       },
 
+      notebook: {
+        type: types.notebooks.notebook,
+        args: {
+          id: { type: graphql.GraphQLNonNull(types.scalars.notebookId) },
+        },
+        resolve: resolvers.notebooks.one,
+      },
+
       notebooks: {
         type: types.notebooks.notebooksConnection,
         args: {

@@ -37,9 +37,10 @@ async function channelCreator(channel) {
  * @returns {Promise<Models.Channel[]>}
  */
 async function all(root, args, context, _info) {
-  const agentId = _.get(context, 'agent.id');
-  const channelMemberId = _.get(args, 'channelMemberId') || _.get(root, 'id');
-  const isArchived = _.get(args, 'isArchived');
+  const agentId = _.get(context, 'agent.id', null);
+  const channelMemberId =
+    _.get(args, 'channelMemberId', null) || _.get(root, 'id', null);
+  const isArchived = _.get(args, 'isArchived', null);
 
   const withinJoinedChannels = _.isEmpty(channelMemberId)
     ? null : structures.withinJoinedChannelsById(channelMemberId);
@@ -63,8 +64,8 @@ async function all(root, args, context, _info) {
  * @returns {Promise<Models.Channel>}
  */
 async function one(root, args, context, _info) {
-  const id = _.get(args, 'id') || _.get(root, 'channelId');
-  const agentId = _.get(context, 'agent.id');
+  const id = _.get(args, 'id', null) || _.get(root, 'channelId', null);
+  const agentId = _.get(context, 'agent.id', null);
 
   const params = new Params({ id });
   const query = new Query();
@@ -83,7 +84,8 @@ async function one(root, args, context, _info) {
  * @returns {Promise<Models.Channel>}
  */
 async function update(root, args, context, _info) {
-  const params = new Params({ id: args.id });
+  const id = _.get(args, 'id', null);
+  const params = new Params({ id });
   const data$ = new Data(args.input);
   return data.channels.updateOne(params, data$);
 }
@@ -96,12 +98,13 @@ async function update(root, args, context, _info) {
  * @returns {Promise<Models.Channel>}
  */
 async function create(root, args, context, _info) {
-  const creatorId = _.get(context, 'agent.id');
-  const input = {
-    ...args.input,
+  const creatorId = _.get(context, 'agent.id', null);
+  const input = _.get(args, 'input') || {};
+
+  return data.channels.createOne({
+    ...input,
     creatorId,
-  };
-  return data.channels.createOne(input);
+  });
 }
 
 module.exports = {

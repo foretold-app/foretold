@@ -22,11 +22,12 @@ const { Options } = require('../../data/classes');
  * @returns {Promise<*>}
  */
 async function all(root, args, context, _info) {
-  const channelId = _.get(args, 'channelId');
-  const agentId = _.get(args, 'agentId');
-  const currentAgentId = _.get(context, 'agent.id');
-  const minNumberOfPredictions = _.get(args, 'minNumberOfPredictions');
-  const minNumberOfQuestionsScored = _.get(args, 'minNumberOfQuestionsScored');
+  const channelId = _.get(args, 'channelId', null);
+  const agentId = _.get(args, 'agentId', null);
+  const currentAgentId = _.get(context, 'agent.id', null);
+  const minNumberOfPredictions = _.get(args, 'minNumberOfPredictions', null);
+  const minNumberOfQuestionsScored =
+    _.get(args, 'minNumberOfQuestionsScored', null);
 
   const filter = new Filter({
     channelId,

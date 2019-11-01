@@ -8,8 +8,9 @@ const _ = require('lodash');
  * @returns {Promise<boolean>}
  */
 async function iAmOwner(root, _args, context, _info) {
-  const creatorId = _.get(root, 'creatorId') || _.get(root, 'agentId');
-  const currentAgentId = _.get(context, 'agent.id');
+  const creatorId =
+    _.get(root, 'creatorId', null) || _.get(root, 'agentId', null);
+  const currentAgentId = _.get(context, 'agent.id', null);
   return !!creatorId && creatorId === currentAgentId;
 }
 
@@ -22,8 +23,8 @@ async function iAmOwner(root, _args, context, _info) {
  * @returns {Promise<boolean>}
  */
 async function iAmOwnerByUserId(root, _args, context, _info) {
-  const creatorId = _.get(root, 'userId');
-  const currentCreatorId = _.get(context, 'user.id');
+  const creatorId = _.get(root, 'userId', null);
+  const currentCreatorId = _.get(context, 'user.id', null);
   return !!creatorId && creatorId === currentCreatorId;
 }
 
@@ -35,8 +36,8 @@ async function iAmOwnerByUserId(root, _args, context, _info) {
  * @returns {Promise<boolean>}
  */
 async function isMe(root, _args, context, _info) {
-  const agentId = _.get(root, 'agentId') || _.get(root, 'id');
-  const currentAgentId = _.get(context, 'agent.id');
+  const agentId = _.get(root, 'agentId', null) || _.get(root, 'id', null);
+  const currentAgentId = _.get(context, 'agent.id', null);
   return !!agentId && agentId === currentAgentId;
 }
 

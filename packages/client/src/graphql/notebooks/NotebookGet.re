@@ -42,7 +42,8 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let component = (~id, innerFn) => {
+let component = (~id: string, innerFn) => {
+  let id = id |> E.J.fromString;
   let query = Query.make(~id, ());
   <QueryComponent variables=query##variables>
     ...{({result}) =>

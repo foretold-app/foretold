@@ -7,8 +7,19 @@ module Styles = {
 };
 
 [@react.component]
-let make = (~children) =>
-  <>
-    <div className=Styles.clear />
-    <div className=Styles.centerBlock> children </div>
-  </>;
+let make = (~notebook: Types.notebook) => {
+  <SLayout isFluid=true>
+    <Padding>
+      <FC__Div flexDirection=`row>
+        <FC__Div flex={`num(5.)}>
+          <FC__PageCard.H1> {notebook.name |> Utils.ste} </FC__PageCard.H1>
+        </FC__Div>
+        <FC__Div flex={`num(2.)}> <Null /> </FC__Div>
+        <FC__Div flex={`num(1.)}>
+          <AgentLink agent={notebook.owner} />
+        </FC__Div>
+        <FC__Div flex={`num(2.)}> <Null /> </FC__Div>
+      </FC__Div>
+    </Padding>
+  </SLayout>;
+};

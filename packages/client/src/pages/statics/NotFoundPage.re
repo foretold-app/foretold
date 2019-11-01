@@ -2,7 +2,7 @@
 
 [@react.component]
 let make = () => {
-  <SLayout head=ReasonReact.null isFluid=true>
-    {"Sorry, but the page is not found :(" |> Utils.ste}
+  <SLayout isFluid=true>
+    <Center> {"Sorry, but the page is not found :(" |> Utils.ste} </Center>
   </SLayout>;
 };

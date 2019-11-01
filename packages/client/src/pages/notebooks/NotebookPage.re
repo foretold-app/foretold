@@ -35,15 +35,24 @@ module Tabs = {
 [@react.component]
 let make = (~notebookPage: Routing.NotebookPage.t) => {
   let (tab, setTab) = React.useState(() => Dashboard);
-
   let switchTab = tabToSwitch => setTab(_ => tabToSwitch);
-  let head = <Tabs switchTab tab />;
 
-  <SLayout head isFluid=true>
-    {switch (tab) {
-     | Dashboard =>
-       <Center> {"This is the notebook view" |> Utils.ste} </Center>
-     | Details => <Center> {"This is the details view" |> Utils.ste} </Center>
-     }}
-  </SLayout>;
+  let head = <Tabs switchTab tab />;
+  NotebookGet.component(~id=notebookPage.notebookId, notebook =>
+    switch (notebook) {
+    | Some(notebook) =>
+      <>
+        <NotebookHeader notebook />
+        <SLayout head isFluid=true>
+          {switch (tab) {
+           | Dashboard =>
+             <Center> {"This is the notebook view" |> Utils.ste} </Center>
+           | Details =>
+             <Center> {"This is the details view" |> Utils.ste} </Center>
+           }}
+        </SLayout>
+      </>
+    | _ => <NotFoundPage />
+    }
+  );
 };

@@ -15,11 +15,7 @@ module Columns = {
   let owner =
     Table.Column.make(
       ~name="Owner" |> Utils.ste,
-      ~render=
-        (r: record) =>
-          r.owner
-          |> E.O.fmap((agent: Types.agent) => <AgentLink agent />)
-          |> E.O.default("Member" |> Utils.ste),
+      ~render=(r: record) => <AgentLink agent={r.owner} />,
       ~flex=2,
       (),
     );

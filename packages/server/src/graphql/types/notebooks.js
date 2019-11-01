@@ -15,11 +15,11 @@ const notebook = new graphql.GraphQLObjectType({
     channelId: { type: graphql.GraphQLNonNull(scalars.channelId) },
     body: { type: graphql.GraphQLNonNull(scalars.string3to16K) },
     owner: {
-      type: require('./agents').agent,
+      type: graphql.GraphQLNonNull(require('./agents').agent),
       resolve: resolver(models.Notebook.Agent),
     },
     channel: {
-      type: require('./channels').channel,
+      type: graphql.GraphQLNonNull(require('./channels').channel),
       resolve: resolver(models.Notebook.Channel),
     },
   }),

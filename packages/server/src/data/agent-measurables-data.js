@@ -78,7 +78,6 @@ class AgentMeasurablesData extends DataBase {
       measurable,
     } = await this._getTimeScoringData(agentId, measurableId);
 
-    console.log("11111111111111111", agentPredictions.length, allAggregations.length, !!recentResult, !!measurable)
     // Checks ----------------------------------------------------------------------
     if (agentPredictions.length === 0) return undefined;
     if (allAggregations.length === 0) return undefined;
@@ -98,13 +97,15 @@ class AgentMeasurablesData extends DataBase {
 
     const marketScoreType = params.marketType === MARKET_TYPE.MARKET ? marketScore : nonMarketScore;
 
-    const timeScore = this._scoreCalculator({
+    const scoreCalculator = this._scoreCalculator({
       agentPredictions,
       allAggregations,
       resolutionMeasurement,
       marketScoreType,
       startTime,
     });
+
+    const { score, distribution } = scoreCalculator;
 
     const _timeActivityRatio = timeActivityRatio({
       initialTime: measurable.createdAt,
@@ -113,7 +114,7 @@ class AgentMeasurablesData extends DataBase {
     });
 
     return {
-      score: _.round(timeScore, 6),
+      score: _.round(score, 6),
       agentPredictions,
       aggregations: allAggregations,
       recentResult,
@@ -122,6 +123,10 @@ class AgentMeasurablesData extends DataBase {
       measurableCreationTime: measurable.createdAt,
       finalResolutionTime: resolutionMeasurement.dataValues.relevantAt,
       timeActivityRatio: _.round(_timeActivityRatio, 6),
+      activeTimeDistribution: {
+        finalX: distribution.finalX,
+        points: distribution.points,
+      },
     };
   }
 
@@ -151,6 +156,7 @@ class AgentMeasurablesData extends DataBase {
 
     // Main Function -------------------------------------------------------
     let timeScore;
+    let timeDistribution;
     if (!startTime) return undefined;
     try {
       timeScore = new PredictionResolutionOverTime({
@@ -158,6 +164,11 @@ class AgentMeasurablesData extends DataBase {
         marketPredictions: allAggregations.map(toOverTime),
         resolution: toOverTime(resolutionMeasurement),
       }).averagePointScore(marketScoreType, toUnix(startTime));
+      timeDistribution = new PredictionResolutionOverTime({
+        agentPredictions: agentPredictions.map(toOverTime),
+        marketPredictions: allAggregations.map(toOverTime),
+        resolution: toOverTime(resolutionMeasurement),
+      }).pointScoreDistribution(marketScoreType, toUnix(startTime));
     } catch (e) {
       log.trace(e.message);
       return undefined;
@@ -173,7 +184,10 @@ class AgentMeasurablesData extends DataBase {
       );
       return undefined;
     }
-    return timeScore.data;
+    return {
+      score: timeScore.data,
+      distribution: timeDistribution.data,
+    };
   }
 
   /**

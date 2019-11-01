@@ -30,6 +30,23 @@ const agentMeasurable = new graphql.GraphQLObjectType({
           measurableCreationTime: { type: DateType.default },
           finalResolutionTime: { type: DateType.default },
           timeActivityRatio: { type: graphql.GraphQLFloat },
+          activeTimeDistribution: {
+            type: new graphql.GraphQLObjectType({
+              name: 'timeDistribution',
+              fields: () => ({
+                finalX: { type: graphql.GraphQLInt },
+                points: {
+                  type: graphql.GraphQLList(new graphql.GraphQLObjectType({
+                    name: 'point',
+                    fields: () => ({
+                      x: { type: graphql.GraphQLInt },
+                      y: { type: graphql.GraphQLFloat },
+                    }),
+                  })),
+                },
+              }),
+            }),
+          },
         }),
       }),
       resolve: require('../resolvers').agentMeasurables.timeAverageScore,

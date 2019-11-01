@@ -4,7 +4,7 @@ module.exports = {
       await queryInterface.sequelize.query(`BEGIN`);
 
       /**
-       * Here we replaced "ChannelMemberships" on "ChannelAgents".
+       * This part adds "timeAverageScore" column into the view.
        */
       await queryInterface.sequelize.query(`
         CREATE OR REPLACE VIEW "AgentMeasurables" AS
@@ -40,24 +40,25 @@ module.exports = {
       await queryInterface.sequelize.query(`DROP VIEW "AgentMeasurables"`);
 
       /**
-       * Here we replaced "ChannelAgents" on "ChannelMemberships".
+       * However this part removes "timeAverageScore" column from the view.
        */
       await queryInterface.sequelize.query(`
         CREATE OR REPLACE VIEW "AgentMeasurables" AS
           SELECT
-            DISTINCT ON ("Measurables"."id", "ChannelMemberships"."agentId")
+            DISTINCT ON ("Measurables"."id", "ChannelAgents"."agentId")
             uuid_generate_v4() AS "id",
             0.0 AS "primaryPointScore",
             "Measurables"."id" AS "measurableId",
-            "ChannelMemberships"."agentId",
-            "ChannelMemberships"."createdAt",
-            "ChannelMemberships"."updatedAt",
+            "ChannelAgents"."agentId",
+            "ChannelAgents"."createdAt",
+            "ChannelAgents"."updatedAt",
             (SELECT count(*) FROM "Measurements"
-              WHERE "Measurements"."measurableId"  = "Measurables" ."id"
-              AND "Measurements"."agentId" = "ChannelMemberships"."agentId"
+                WHERE "Measurements"."measurableId"  = "Measurables" ."id"
+                AND "Measurements"."agentId" = "ChannelAgents"."agentId"
+                AND "Measurements"."competitorType" IN ('OBJECTIVE', 'COMPETITIVE')
             ) AS "predictionCountTotal"
-          FROM "ChannelMemberships", "Measurables"
-          WHERE "ChannelMemberships"."channelId" = "Measurables"."channelId";
+          FROM "ChannelAgents", "Measurables"
+          WHERE "ChannelAgents"."channelId" = "Measurables"."channelId";
       `);
 
       await queryInterface.sequelize.query(`COMMIT`);

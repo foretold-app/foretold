@@ -21,6 +21,21 @@ const logger = require('../lib/log');
 
 const log = logger.module('data/agent-measurables-data');
 
+function toUnix(r) {
+  return moment(r).unix();
+}
+
+
+function timeActivityRatio({ initialTime, firstPredictionTime, endingTime }) {
+  if (!initialTime || !firstPredictionTime || !endingTime) {
+    return undefined;
+  }
+  const _initialTime = toUnix(initialTime);
+  const _firstPredictionTime = toUnix(firstPredictionTime);
+  const _endingTime = toUnix(endingTime);
+  return (_endingTime - _firstPredictionTime) / (_endingTime - _initialTime);
+}
+
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
  * @property {AgentMeasurableModel} model
@@ -62,11 +77,13 @@ class AgentMeasurablesData extends DataBase {
       allAggregations,
       measurable,
     } = await this._getTimeScoringData(agentId, measurableId);
+
+    console.log("11111111111111111", agentPredictions.length, allAggregations.length, !!recentResult, !!measurable)
     // Checks ----------------------------------------------------------------------
     if (agentPredictions.length === 0) return undefined;
     if (allAggregations.length === 0) return undefined;
-    if (!!recentResult) return undefined;
-    if (!!measurable) return undefined;
+    if (!recentResult) return undefined;
+    if (!measurable) return undefined;
 
     // Use of Parameters ----------------------------------------------------------------------
     const resolutionMeasurement = (params.finalComparisonMeasurement === FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT)
@@ -89,17 +106,26 @@ class AgentMeasurablesData extends DataBase {
       startTime,
     });
 
+    const _timeActivityRatio = timeActivityRatio({
+      initialTime: measurable.createdAt,
+      firstPredictionTime: agentPredictions[0] && agentPredictions[0].dataValues.relevantAt,
+      endingTime: resolutionMeasurement.dataValues.relevantAt,
+    });
+
     return {
-      score: _.round(timeScore.data, 6),
+      score: _.round(timeScore, 6),
       agentPredictions,
       aggregations: allAggregations,
       recentResult,
-      startAt: startTime,
-      endAt: resolutionMeasurement.dataValues.relevantAt,
+      scoringStartTime: startTime,
+      scoringEndTime: resolutionMeasurement.dataValues.relevantAt,
+      measurableCreationTime: measurable.createdAt,
+      finalResolutionTime: resolutionMeasurement.dataValues.relevantAt,
+      timeActivityRatio: _.round(_timeActivityRatio, 6),
     };
   }
 
-  async _scoreCalculator({
+  _scoreCalculator({
     agentPredictions,
     allAggregations,
     resolutionMeasurement,
@@ -107,9 +133,6 @@ class AgentMeasurablesData extends DataBase {
     startTime,
   }) {
     // Private Functions -----------------------------------------------------
-    function toUnix(r) {
-      return moment(r).unix();
-    }
 
     function translateValue(v) {
       let { data, dataType } = v;
@@ -180,7 +203,7 @@ class AgentMeasurablesData extends DataBase {
       agentPredictions,
       recentResult,
       allAggregations,
-      measurableCreatedAt: measurable.createdAt,
+      measurable,
     };
   }
 

@@ -16,8 +16,6 @@ const agentMeasurable = new graphql.GraphQLObjectType({
         name: 'timeAverageScore',
         fields: () => ({
           score: { type: graphql.GraphQLFloat },
-          startAt: { type: DateType.default },
-          endAt: { type: DateType.default },
           agentPredictions: {
             type: graphql.GraphQLList(require('./measurements').measurement),
           },
@@ -27,6 +25,11 @@ const agentMeasurable = new graphql.GraphQLObjectType({
           recentResult: {
             type: require('./measurements').measurement,
           },
+          scoringStartTime: { type: DateType.default },
+          scoringEndTime: { type: DateType.default },
+          measurableCreationTime: { type: DateType.default },
+          finalResolutionTime: { type: DateType.default },
+          timeActivityRatio: { type: graphql.GraphQLFloat },
         }),
       }),
       resolve: require('../resolvers').agentMeasurables.timeAverageScore,

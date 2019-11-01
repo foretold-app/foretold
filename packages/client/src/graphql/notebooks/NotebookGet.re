@@ -6,6 +6,7 @@ module Query = [%graphql
           notebook(id: $id) {
              id
              name
+             body
              ownerId
              channelId
              createdAt

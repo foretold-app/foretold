@@ -38,12 +38,11 @@ module Columns = {
   let all = [|name, owner, time|];
 };
 
+// TODO: Fix Channel ID
 [@react.component]
-let make = (~items, ~columns=Columns.all) => {
+let make = (~items, ~columns=Columns.all, ~channelId: string) => {
   let onRowClb = (notebook: Types.notebook) => {
-    Routing.Url.push(
-      Notebook({notebookId: notebook.id, subPage: Dashboard}),
-    );
+    Routing.Url.push(ChannelNotebook(channelId, notebook.id));
   };
   Table.fromColumns(columns, items, ~onRowClb, ());
 };

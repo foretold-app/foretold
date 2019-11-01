@@ -18,8 +18,6 @@ let make = (~route: Route.t, ~loggedUser: option(Types.user)) => {
   | (Agent(agentPage), Some(_)) => <AgentNavigation agentPage />
   | (AgentIndex, _) => <AgentIndex />
 
-  | (Notebook(notebookPage), _) => <NotebookNavigation notebookPage />
-
   | (Preferences, Some(loggedUser)) =>
     <FillWithSidebar> <Preferences loggedUser /> </FillWithSidebar>
   | (MeasurableEdit(id), Some(loggedUser)) =>

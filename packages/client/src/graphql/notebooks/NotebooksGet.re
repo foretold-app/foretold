@@ -29,6 +29,7 @@ module Query = [%graphql
             node {
               id
               name
+              body
               ownerId
               channelId
               createdAt
@@ -91,8 +92,9 @@ let componentMaker = (query, innerComponentFn) =>
     }
   </QueryComponent>;
 
-let component = (~channelId, ~pageLimit, ~direction, ~innerComponentFn) => {
-  let channelId = channelId |> E.J.O.fromString;
-  let query = queryDirection(~channelId?, ~pageLimit, ~direction, ());
+let component =
+    (~channelId: string, ~pageLimit, ~direction, ~innerComponentFn) => {
+  let channelId = channelId |> E.J.fromString;
+  let query = queryDirection(~channelId, ~pageLimit, ~direction, ());
   componentMaker(query, innerComponentFn);
 };

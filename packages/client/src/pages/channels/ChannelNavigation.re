@@ -25,8 +25,8 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
        | InviteMember => <ChannelInviteMember channelId />
        | Settings => <ChannelEdit channelId />
        | NewSeries => <SeriesNew channelId />
-       | Dashboard => <Dashboard channelId />
-       | Notebooks => <Notebooks channelId={Some(channelId)} />
+       | Notebook(id) => <NotebookPage channelId notebookId=id />
+       | Notebooks => <Notebooks channelId />
        | _ => "Tab is not found" |> Utils.ste
        }}
     </Channel>;

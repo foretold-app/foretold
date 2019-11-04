@@ -89,7 +89,7 @@ export function shorthandIntoLognormalFormattingStep(text){
 
     let regNumberToNumber= new RegExp("([0-9]+) to ([0-9]+)", "g");
     
-    return text.replace(regNumberToNumber, shorthandIntoLognormalReplacerStep);
+    return text.replace(regNumberToNumber, shorthandIntoLognormalReplacer);
 
 }
 

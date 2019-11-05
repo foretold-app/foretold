@@ -8195,6 +8195,20 @@
           "fields": null,
           "inputFields": [
             {
+              "name": "channelId",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ChannelId",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "name",
               "description": null,
               "type": {

@@ -12,11 +12,16 @@ module Query = [%graphql
 
 module Mutation = ReasonApollo.CreateMutation(Query);
 
-let mutate = (mutation: Mutation.apolloMutation, name, body) => {
+let mutate = (mutation: Mutation.apolloMutation, channelId, name, body) => {
+  let channelId = channelId |> E.J.fromString;
   let name = name |> E.J.fromString;
   let body = body |> E.J.fromString;
 
-  let m = Query.make(~input={"name": name, "body": body}, ());
+  let m =
+    Query.make(
+      ~input={"channelId": channelId, "name": name, "body": body},
+      (),
+    );
 
   mutation(~variables=m##variables, ~refetchQueries=[|"notebooks"|], ())
   |> ignore;

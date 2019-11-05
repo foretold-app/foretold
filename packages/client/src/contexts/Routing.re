@@ -44,6 +44,7 @@ module ChannelPage = {
       | NewMeasurable
       | Members
       | AddMember
+      | AddNotebook
       | InviteMember
       | Settings
       | NewSeries
@@ -67,6 +68,7 @@ module ChannelPage = {
       | InviteMember => Members
       | Settings => Options
       | FeedItems => Updates
+      | AddNotebook => Notebooks
       | Notebooks => Notebooks
       | Leaderboard(_) => Leaderboard
       | _ => Unknown
@@ -195,6 +197,8 @@ module Route = {
         channelId: getChannelId(channelId),
         subPage: Notebook(notebookId),
       })
+    | ["c", channelId, "notebooks", "add"] =>
+      Channel({channelId, subPage: AddNotebook})
 
     // Agents
     | ["agents", agentId, "bots"] => Agent({agentId, subPage: AgentBots})
@@ -235,6 +239,7 @@ module Url = {
     | ChannelFeedItems(string)
     | ChannelLeaderboard(string, ChannelPage.leaderboard)
     | ChannelAddMember(string)
+    | ChannelAddNotebook(string)
     | ChannelInviteMember(string)
     | ChannelShow(string)
     | ChannelNew
@@ -280,6 +285,7 @@ module Url = {
     | ChannelShow(channelId) => "/c/" ++ channelId
     | ChannelEdit(channelId) => "/c/" ++ channelId ++ "/edit"
     | ChannelNotebooks(channelId) => "/c/" ++ channelId ++ "/notebooks"
+    | ChannelAddNotebook(channelId) => "/c/" ++ channelId ++ "/notebooks/add"
     | ChannelMembers(channelId) => "/c/" ++ channelId ++ "/members"
     | ChannelFeedItems(channelId) => "/c/" ++ channelId ++ "/activity"
     | ChannelLeaderboard(channelId, ByMeasurable) =>
@@ -288,7 +294,7 @@ module Url = {
       "/c/" ++ channelId ++ "/scoring/members"
     | ChannelAddMember(channelId) => "/c/" ++ channelId ++ "/add"
     | ChannelInviteMember(channelId) => "/c/" ++ channelId ++ "/invite"
-    // Notebooks
+
     | MeasurableEdit(measurableId) =>
       "/measurables/" ++ measurableId ++ "/edit"
     | MeasurableNew(channelId) => "/c/" ++ channelId ++ "/new"
@@ -318,6 +324,7 @@ module Url = {
     | Leaderboard(subTab) =>
       ChannelLeaderboard(channelPage.channelId, subTab)
     | AddMember => ChannelAddMember(channelPage.channelId)
+    | AddNotebook => ChannelAddNotebook(channelPage.channelId)
     | InviteMember => ChannelInviteMember(channelPage.channelId)
     | Settings => ChannelEdit(channelPage.channelId)
     | NewSeries => SeriesNew(channelPage.channelId)

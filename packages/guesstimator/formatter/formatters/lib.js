@@ -1,4 +1,6 @@
 import _ from "lodash";
+import math from 'mathjs';  
+
 const SUFFIXES = {
   '%': -2,
   'K': 3,

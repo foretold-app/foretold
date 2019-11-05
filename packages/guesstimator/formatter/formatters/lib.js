@@ -31,8 +31,7 @@ const NUMBER_REGEX = new RegExp(`(-?${or([INTEGER_REGEX, DECIMAL_REGEX]).source}
 export const POINT_REGEX = padded([NUMBER_REGEX])
 export const rangeRegex = (sep, left, right) => padded([left, NUMBER_REGEX, sep, NUMBER_REGEX, right])
 
-rangeRegexIndividualDistributionTextUpTo = rangeRegex(/to|\.\.|->|:/)
-export rangeRegexIndividualDistributionTextUpTo
+export const SeparatorsDistributionUpTo = /to|\.\.|->|:/
 
 const getMult = suffix => Math.pow(10,SUFFIXES[suffix])
 const parseNumber = (num, suffix) => parseFloat(num.replace(',', '')) * (!!suffix ? getMult(suffix) : 1)
@@ -73,10 +72,11 @@ export function regexBasedFormatter(re, guesstimateTypeFn = getGuesstimateType, 
 // into strings like "=mm(normal(10,5), lognormal(50.1, 1.4))
 
 export function shorthandIntoLognormalFormattingStep(text){
-        
+  
     function shorthandIntoLognormalReplacer(string){
-    
-        let arrayLowHigh = getNumbers(string, rangeRegexIndividualDistributionTextUpTo)
+        
+        let rangeRegexIndividual = rangeRegex(SeparatorsDistributionUpTo)
+        let arrayLowHigh = getNumbers(string, rangeRegexIndividual)
       
         let low = arrayLowHigh[0]
         let high= arrayLowHigh[1]
@@ -92,7 +92,7 @@ export function shorthandIntoLognormalFormattingStep(text){
     } 
     
     let rangeRegexMultiple = (sep, left, right) => spaceSep([left, NUMBER_REGEX, sep, NUMBER_REGEX, right])
-    shorthandIntoLognormalRegex= new RegExp(rangeRegexMultiple(/to|\.\.|->|:/), "g")
+    let shorthandIntoLognormalRegex= new RegExp(rangeRegexMultiple(SeparatorsDistributionUpTo), "g")
   
     return text.replace(shorthandIntoLognormalRegex, shorthandIntoLognormalReplacer)
 

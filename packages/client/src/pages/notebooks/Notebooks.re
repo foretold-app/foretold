@@ -71,8 +71,7 @@ let make = (~channelId: string) => {
       | _ => <Spin />
       };
 
-    let head =
-      isFound ? pagination(reducerParams, channelId) : ReasonReact.null;
+    let head = pagination(reducerParams, channelId);
 
     <SLayout head> body </SLayout>;
   };

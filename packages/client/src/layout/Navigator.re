@@ -15,7 +15,7 @@ let make = (~route: Route.t, ~loggedUser: option(Types.user)) => {
   | (ChannelNew, Some(_)) =>
     <FillWithSidebar> <ChannelNew /> </FillWithSidebar>
 
-  | (Agent(agentPage), Some(_)) => <AgentNavigation agentPage />
+  | (Agent(agentPage), _) => <AgentNavigation agentPage />
   | (AgentIndex, _) => <AgentIndex />
 
   | (Preferences, Some(loggedUser)) =>

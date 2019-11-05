@@ -61,13 +61,15 @@ let formFields = (state: Form.state, send, onSubmit) =>
           )}
         />
       </Antd.Form.Item>
-      <Antd.Form.Item>
-        {"Body" |> ReasonReact.string |> E.React2.inH3}
-        <Antd.Input
+      <Antd.Form.Item label={"Body" |> Utils.ste} help={"" |> Utils.ste}>
+        <Antd.Input.TextArea
+          style={ReactDOMRe.Style.make(~minHeight="12em", ())}
           value={state.values.body}
-          onChange={ReForm.Helpers.handleDomFormChange(e =>
-            send(Form.FieldChangeValue(Body, e))
-          )}
+          onChange={e =>
+            send(
+              Form.FieldChangeValue(Body, ReactEvent.Form.target(e)##value),
+            )
+          }
         />
       </Antd.Form.Item>
       <Antd.Form.Item>

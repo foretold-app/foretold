@@ -23,7 +23,7 @@ let mutate = (mutation: Mutation.apolloMutation, channelId, name, body) => {
       (),
     );
 
-  mutation(~variables=m##variables, ~refetchQueries=[|"notebooks"|], ())
+  mutation(~variables=m##variables, ~refetchQueries=[|"getNotebooks"|], ())
   |> ignore;
 };
 

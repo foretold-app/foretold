@@ -6,10 +6,11 @@ let limitScore = (~max, ~min, ~score) => {
   | score when score == infinity => max
   | score when score > max => max
   | score when score == neg_infinity => min
-  | score when score < (-20.) => min
+  | score when score < min => min
   | score => score
   };
 };
+let scoreLimiter = limitScore(~max=20.0, ~min=-20.0, ~score=_);
 
 let pointScore =
     (
@@ -25,15 +26,19 @@ let pointScore =
     |> PredictionResolutionGroup.toWithMarket
     |> Rationale.Result.ofOption("Needs market score")
     |> Rationale.Result.bind(_, e =>
-         scoreFn(~scoringCombination=`MarketScore(e), ~sampleCount, ())
+         scoreFn(
+           ~scoringCombination=`MarketScore(e),
+           ~sampleCount,
+           ~scoreLimiter,
+           (),
+         )
        )
-    |> Rationale.Result.fmap(limitScore(~max=20., ~min=-20., ~score=_))
   | `NonMarketScore =>
     scoreFn(
       ~scoringCombination=`NonMarketScore(scoringCombination),
       ~sampleCount,
+      ~scoreLimiter,
       (),
     )
-    |> Rationale.Result.fmap(limitScore(~max=20., ~min=-20., ~score=_))
   };
 };

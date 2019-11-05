@@ -50,7 +50,7 @@ let make = (~channelId: string, ~notebookId: string) => {
                  style([marginTop(`em(2.0)), marginBottom(`em(2.0))])
                )>
                <Markdown
-                 source={notebook.body |> E.O.default("")}
+                 source={notebook.body}
                  supportForetoldJs=true
                  channelId
                />

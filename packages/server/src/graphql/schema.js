@@ -472,6 +472,18 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.bots.tokenRefresh,
       },
 
+      notebookCreate: {
+        type: types.notebooks.notebook,
+        args: {
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.notebooks.notebookCreateInput,
+            ),
+          },
+        },
+        resolve: resolvers.notebooks.create,
+      },
+
       preferenceUpdate: {
         type: types.preferences.preference,
         args: {

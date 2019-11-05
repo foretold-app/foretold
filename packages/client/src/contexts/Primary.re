@@ -862,10 +862,10 @@ module Notebook = {
       (
         ~id: Js.Json.t,
         ~name: Js.Json.t,
+        ~body: Js.Json.t,
         ~ownerId: Js.Json.t,
         ~channelId: Js.Json.t,
         ~createdAt: Js.Json.t,
-        ~body: Js.Json.t,
         ~updatedAt: Js.Json.t,
         ~owner: Js.t('a),
         (),
@@ -873,11 +873,11 @@ module Notebook = {
       : t => {
     id: toNotebookId(id),
     name: name |> E.J.toString,
+    body: body |> E.J.toString,
     ownerId: Agent.toAgentId(ownerId),
     channelId: Channel.toChannelId(channelId),
     createdAt: toCreatedAt(createdAt),
     updatedAt: toUpdatedAt(updatedAt),
-    body: Some(body |> E.J.toString),
     owner: AgentType.toAgent(owner),
   };
 
@@ -885,12 +885,12 @@ module Notebook = {
     convertJs(
       ~id=m##id,
       ~name=m##name,
+      ~body=m##body,
       ~ownerId=m##ownerId,
       ~channelId=m##channelId,
       ~createdAt=m##createdAt,
       ~updatedAt=m##updatedAt,
       ~owner=m##owner,
-      ~body=m##body,
       (),
     );
   };

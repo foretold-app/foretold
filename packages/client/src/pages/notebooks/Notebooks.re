@@ -17,8 +17,26 @@ module ReducerConfig = {
 
 module Reducer = PaginationFunctor.Make(ReducerConfig);
 
-let pagination = (reducerParams: Reducer.Types.reducerParams) =>
+let pagination =
+    (reducerParams: Reducer.Types.reducerParams, channelId: string) =>
   <Div>
+    <Div
+      float=`left
+      styles=[
+        Css.style([
+          FC.PageCard.HeaderRow.Styles.itemTopPadding,
+          FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+        ]),
+      ]>
+      <FC.Base.Button
+        variant=FC.Base.Button.Primary
+        size=FC.Base.Button.Small
+        onClick={e =>
+          LinkType.onClick(Internal(ChannelAddNotebook(channelId)), e)
+        }>
+        {"New Notebooks" |> Utils.ste}
+      </FC.Base.Button>
+    </Div>
     <Div
       float=`right
       styles=[
@@ -53,7 +71,7 @@ let make = (~channelId: string) => {
       | _ => <Spin />
       };
 
-    let head = isFound ? pagination(reducerParams) : ReasonReact.null;
+    let head = pagination(reducerParams, channelId);
 
     <SLayout head> body </SLayout>;
   };

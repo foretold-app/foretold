@@ -116,16 +116,16 @@ function findX(y, { xs, ys }) {
  * @returns {number[]}
  */
 function integral({ xs, ys }) {
-  if (_.includes(this.ys, NaN)){
+  if (_.includes(ys, NaN)){
     return NaN;
   }
-  else if (_.includes(this.ys, Infinity) && _.includes(this.ys, -Infinity)){
+  else if (_.includes(ys, Infinity) && _.includes(ys, -Infinity)){
     return NaN;
   }
-  else if (_.includes(this.ys, Infinity)){
+  else if (_.includes(ys, Infinity)){
     return Infinity;
   }
-  else if (_.includes(this.ys, -Infinity)){
+  else if (_.includes(ys, -Infinity)){
     return -Infinity;
   }
 

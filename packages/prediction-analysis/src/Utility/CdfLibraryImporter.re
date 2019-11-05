@@ -58,6 +58,13 @@ module PredictionResolutionGroup = {
       JS.distToJs(resolution),
     )
     |> JS.jsToDist
+    |> (
+      e => {
+        Js.log(e);
+        Js.log(Distribution.integral(e));
+        e;
+      }
+    )
     |> Distribution.integral;
   };
 };

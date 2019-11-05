@@ -41,9 +41,9 @@
   "dependencies": {
     "lodash": "4.17.15",
     "@slack/client": "5.0.2",
-    "@foretold/cdf": "1.0.10",
+    "@foretold/cdf": "1.0.11",
     "@foretold/measurement-value": "1.0.0",
-    "@foretold/prediction-analysis": "0.0.4",
+    "@foretold/prediction-analysis": "0.0.5",
     "bs-ken": "0.0.6",
     "apollo-server": "2.9.3",
     "apollo-server-express": "2.9.3",
@@ -127,10 +127,16 @@
       "no-await-in-loop": 0,
       "no-underscore-dangle": 0,
       "prefer-destructuring": 0,
-      "filenames/match-exported": [ 2, "kebab" ],
-      "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-      "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
-      "max-len": ["error", { "code": 80 }],
+      "filenames/match-exported": [2, "kebab"],
+      "no-unused-vars": ["error", {
+        "argsIgnorePattern": "^_"
+      }],
+      "no-plusplus": ["error", {
+        "allowForLoopAfterthoughts": true
+      }],
+      "max-len": ["error", {
+        "code": 80
+      }],
       "jest/no-focused-tests": 2,
       "jest/no-identical-title": 2
     }

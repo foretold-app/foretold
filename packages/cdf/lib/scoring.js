@@ -60,7 +60,11 @@ function distributionInputDistributionOutputMarketless(
 
   return combination.combineYsWithFn(sampleCount,
     r => {
-      return (r[1] * Math.log2(Math.abs(r[0] / r[1])));
+      if (r[1] === 0){
+        return 0;
+      } else {
+        return (r[1] * Math.log2(Math.abs(r[0] / r[1])));
+      }
     }
   );
 }

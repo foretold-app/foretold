@@ -43,13 +43,45 @@ let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) =>
           Name,
           values => values.name == "" ? Error("Can't be empty") : Valid,
         ),
+        Custom(
+          Body,
+          values => values.body == "" ? Error("Can't be empty") : Valid,
+        ),
       |]),
     innerComponentFn,
   )
   |> E.React2.el;
 };
 
-let formFields = (state: Form.state, send, onSubmit) =>
+let formFields = (state: Form.state, send, getFieldState, onSubmit) => {
+  let onSubmit = () => send(Form.Submit);
+
+  let stateName = getFieldState(Form.Field(Name));
+  let stateBody = getFieldState(Form.Field(Body));
+
+  let stateForm = state.formState;
+
+  let error = state =>
+    switch (state) {
+    | Form.Error(s) => <AntdAlert message=s type_="warning" />
+    | _ => ReasonReact.null
+    };
+
+  let isFormValid =
+    switch (stateName, stateBody) {
+    | (Form.Error(_), _) => false
+    | (_, Form.Error(_)) => false
+    | _ => true
+    };
+
+  let isFormDirty =
+    switch (stateForm) {
+    | Form.Dirty => true
+    | _ => false
+    };
+
+  let isEnabled = isFormValid && isFormDirty;
+
   <FC__PageCard.BodyPadding>
     <Antd.Form onSubmit={e => onSubmit()}>
       <Antd.Form.Item>
@@ -60,6 +92,7 @@ let formFields = (state: Form.state, send, onSubmit) =>
             send(Form.FieldChangeValue(Name, e))
           )}
         />
+        {error(stateName)}
       </Antd.Form.Item>
       <Antd.Form.Item label={"Body" |> Utils.ste} help={"" |> Utils.ste}>
         <Antd.Input.TextArea
@@ -71,11 +104,14 @@ let formFields = (state: Form.state, send, onSubmit) =>
             )
           }
         />
+        {error(stateBody)}
       </Antd.Form.Item>
       <Antd.Form.Item>
-        <Antd.Button _type=`primary onClick={_ => onSubmit()}>
+        <Antd.Button
+          _type=`primary onClick={_ => onSubmit()} disabled={!isEnabled}>
           {"Submit" |> ReasonReact.string}
         </Antd.Button>
       </Antd.Form.Item>
     </Antd.Form>
   </FC__PageCard.BodyPadding>;
+};

@@ -22,8 +22,9 @@ let make = (~channelId: string) => {
        NotebookForm.withForm(
          onSubmit,
          notebook,
-         ({send, state}) => {
-           let form = NotebookForm.formFields(state, send, () =>
+         ({send, state, getFieldState}) => {
+           let form =
+             NotebookForm.formFields(state, send, getFieldState, () =>
                send(NotebookForm.Form.Submit)
              );
 

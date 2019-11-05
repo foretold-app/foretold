@@ -6,6 +6,41 @@ type predictionGroupErrorType = [
   | `NonMarketScore(PredictionResolutionGroup.t)
 ];
 
+let limitScore = (~max, ~min, ~score) => {
+  switch (score) {
+  | score when score == nan => nan
+  | score when score == infinity => max
+  | score when score > max => max
+  | score when score == neg_infinity => min
+  | score when score < (-20.) => min
+  | score => score
+  };
+};
+
+let logScoreMarketCdfCdfCalculation =
+    (~sampleCount, ~agentPrediction, ~marketPrediction, ~resolution) => {
+  let agent =
+    CdfLibraryImporter.PredictionResolutionGroup.logScoreNonMarketCdfCdf(
+      ~sampleCount,
+      ~agentPrediction,
+      ~resolution,
+    );
+  let market =
+    CdfLibraryImporter.PredictionResolutionGroup.logScoreNonMarketCdfCdf(
+      ~sampleCount,
+      ~agentPrediction=marketPrediction,
+      ~resolution,
+    );
+  switch (agent, market) {
+  | (agent, market) when agent == infinity && market == infinity => nan
+  | (agent, market) when agent == neg_infinity && market == neg_infinity => nan
+  | (agent, market) when agent == infinity && market == neg_infinity => infinity
+  | (agent, market) when agent == neg_infinity && market == infinity => neg_infinity
+  | (agent, market) when agent == nan || market == nan => nan
+  | (agent, market) => agent -. market
+  };
+};
+
 module PredictionGroupError = {
   let marketCdfCdf =
       (
@@ -13,7 +48,7 @@ module PredictionGroupError = {
         {agentPrediction, marketPrediction, resolution}:
           PredictionResolutionGroup.WithMarket.combination(Cdf.t, Cdf.t),
       ) =>
-    CdfLibraryImporter.PredictionResolutionGroup.logScoreMarketCdfCdf(
+    logScoreMarketCdfCdfCalculation(
       ~sampleCount,
       ~agentPrediction=agentPrediction |> Cdf.toDistribution,
       ~marketPrediction=marketPrediction |> Cdf.toDistribution,
@@ -55,7 +90,6 @@ module PredictionGroupError = {
     |> Distribution.T.findY(resolution)
     |> log2Error;
 
-  //   TODO: Handle cases where market is 0 or 1
   let marketPercentagePercentage =
       (
         {agentPrediction, marketPrediction, resolution}:

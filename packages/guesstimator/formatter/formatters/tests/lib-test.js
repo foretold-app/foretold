@@ -7,7 +7,7 @@ describe('shorthandIntoLognormalFormattingStep', () => {
       ['1 to 10', 'lognormal(5.500, 0.700)'],
       ['1K to 10K', 'lognormal(5500.000, 0.700)' ],
       ['-1 to 10', "[unknown]"],
-      ['1-10', 'lognormal(5.500, 0.700)'],
+      ['1->10', 'lognormal(5.500, 0.700)'],
       ['1:10', 'lognormal(5.500, 0.700)'],
     ]
 

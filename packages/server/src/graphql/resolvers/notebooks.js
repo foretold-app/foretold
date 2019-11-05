@@ -20,11 +20,12 @@ async function create(_root, args, context, _info) {
   const input = _.get(args, 'input') || {};
   const ownerId = _.get(context, 'agent.id', null);
 
-  const datas = new Data({
+  const data = new Data({
     ...input,
     ownerId,
   });
-  return new NotebooksData().createOne(datas);
+
+  return new NotebooksData().createOne(data);
 }
 
 /**

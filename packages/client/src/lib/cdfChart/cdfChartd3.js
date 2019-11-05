@@ -80,8 +80,6 @@ function chart() {
             .x(function (d, i) { return xScale(d.x); })
             .y(function (d, i) { return yScale(d.y); });
 
-            console.log("LINE", line)
-
         var area = d3.area()
             .x(function (d, i) { return xScale(d.x); })
             .y1(function (d, i) { return yScale(d.y); })

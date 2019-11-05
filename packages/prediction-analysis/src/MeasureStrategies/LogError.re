@@ -15,29 +15,6 @@ let floatSubtractionWithLimitation = (a, b, limiter) => {
   };
 };
 
-let logScoreMarketCdfCdfCalculation =
-    (
-      ~sampleCount,
-      ~agentPrediction,
-      ~marketPrediction,
-      ~resolution,
-      ~scoreLimiter,
-    ) => {
-  let agent =
-    CdfLibraryImporter.PredictionResolutionGroup.logScoreNonMarketCdfCdf(
-      ~sampleCount,
-      ~agentPrediction,
-      ~resolution,
-    );
-  let market =
-    CdfLibraryImporter.PredictionResolutionGroup.logScoreNonMarketCdfCdf(
-      ~sampleCount,
-      ~agentPrediction=marketPrediction,
-      ~resolution,
-    );
-  floatSubtractionWithLimitation(agent, market, scoreLimiter);
-};
-
 module PredictionGroupError = {
   let marketCdfCdf =
       (
@@ -46,13 +23,22 @@ module PredictionGroupError = {
           PredictionResolutionGroup.WithMarket.combination(Cdf.t, Cdf.t),
         scoreLimiter: float => float,
       ) => {
-    logScoreMarketCdfCdfCalculation(
-      ~sampleCount,
-      ~agentPrediction=agentPrediction |> Cdf.toDistribution,
-      ~marketPrediction=marketPrediction |> Cdf.toDistribution,
-      ~resolution=resolution |> Cdf.toDistribution,
-      ~scoreLimiter,
-    );
+    let agentPrediction = agentPrediction |> Cdf.toDistribution;
+    let marketPrediction = marketPrediction |> Cdf.toDistribution;
+    let resolution = resolution |> Cdf.toDistribution;
+    let agent =
+      CdfLibraryImporter.PredictionResolutionGroup.logScoreNonMarketCdfCdf(
+        ~sampleCount,
+        ~agentPrediction,
+        ~resolution,
+      );
+    let market =
+      CdfLibraryImporter.PredictionResolutionGroup.logScoreNonMarketCdfCdf(
+        ~sampleCount,
+        ~agentPrediction=marketPrediction,
+        ~resolution,
+      );
+    floatSubtractionWithLimitation(agent, market, scoreLimiter);
   };
 
   let nonMarketCdfCdf =

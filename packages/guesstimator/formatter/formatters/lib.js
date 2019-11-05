@@ -75,8 +75,8 @@ export function shorthandIntoLognormalFormattingStep(text){
         let logLow = math.log(p1)
         let logHigh = math.log(p2)
 
-        let mean = math.mean(p1,p2)
-        let stdev = (logHigh-logLow) / (2*1.645)
+        let mean = (math.mean(p1,p2)).toFixed(3)
+        let stdev = ((logHigh-logLow) / (2*1.645)).toFixed(3)
         
         return `lognormal(${mean}, ${stdev})`
 

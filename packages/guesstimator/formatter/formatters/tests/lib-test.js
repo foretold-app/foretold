@@ -31,7 +31,5 @@ describe('shorthandIntoLognormalFormattingStep', () => {
       })
     }).map(e => e())
 
-    examplesWhichBreakTheCurrentSystem
-
   });
 })

@@ -58,18 +58,9 @@ export function regexBasedFormatter(re, guesstimateTypeFn = getGuesstimateType, 
   }
 }
 
-
-
-
-
 // The function: shorthandIntoLognormalFormattingStep 
-// is used in foretold/packages/guesstimator/formatter/formatters/Function.js
-// In order to be able to format inputs like "1 to 100" when inside a multimodal, like "=mm(normal(10,5), 1 to 100))".
-
-// The function: shorthandIntoLognormalReplacer
-// is inside shorthandIntoLognormalFormatting. This might be marginally slower, but it makes clear that it is not used by any other function.
-// Note: "a string".replace can take a function, rather than a string, as its second argument.
-// See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_function_as_a_parameter
+// transforms strings like "=mm(normal(10,5), 1 to 100))
+// into strings like "=mm(normal(10,5), lognormal(50.1, 1.4))
 
 export function shorthandIntoLognormalFormattingStep(text){
         

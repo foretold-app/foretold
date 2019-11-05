@@ -1,5 +1,6 @@
 import _ from "lodash";
 import math from 'mathjs';  
+import {distributionUpToIntoLognormal} from "../../lib/distributionMath.js";
 
 const SUFFIXES = {
   '%': -2,
@@ -81,13 +82,7 @@ export function shorthandIntoLognormalFormattingStep(text){
         let low = arrayLowHigh[0]
         let high= arrayLowHigh[1]
 
-        let logLow = math.log(low)
-        let logHigh = math.log(high)
-
-        let mean = (math.mean(low,high)).toFixed(3)
-        let stdev = ((logHigh-logLow) / (2*1.645)).toFixed(3)
-
-        return `lognormal(${mean}, ${stdev})`
+        return distributionUpToIntoLognormal(low, high)
 
     } 
     

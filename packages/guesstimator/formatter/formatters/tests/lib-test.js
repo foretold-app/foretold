@@ -4,11 +4,11 @@ describe('shorthandIntoLognormalFormattingStep', () => {
 
   describe('Behavior:', () => {
     const examplesShort = [
-      ['1 to 10', 'lognormal(5.500, 0.700)'],
-      ['1K to 10K', 'lognormal(5500.000, 0.700)' ],
+      ['1 to 10', 'lognormal(1.151, 0.700)'],
+      ['1K to 10K', 'lognormal(9.210, 0.700)' ],
       ['-1 to 10', "[unknown]"],
-      ['1->10', 'lognormal(5.500, 0.700)'],
-      ['1:10', 'lognormal(5.500, 0.700)'],
+      ['1->10', 'lognormal(1.151, 0.700)'],
+      ['1:10', 'lognormal(1.151, 0.700)'],
     ]
 
     examplesShort.map(e => () => {
@@ -18,11 +18,11 @@ describe('shorthandIntoLognormalFormattingStep', () => {
     }).map(e => e())
 
     const examplesInContext = [
-      ['=mm(1 to 10, normal(1,1),[.1,.3])', '=mm(lognormal(5.500, 0.700), normal(1,1),[.1,.3])'],
-      ['=mm(1K to 10K, normal(1,1),[.1,.3])', '=mm(lognormal(5500.000, 0.700), normal(1,1),[.1,.3])' ],
+      ['=mm(1 to 10, normal(1,1),[.1,.3])', '=mm(lognormal(1.151, 0.700), normal(1,1),[.1,.3])'],
+      ['=mm(1K to 10K, normal(1,1),[.1,.3])', '=mm(lognormal9.210.000, 0.700), normal(1,1),[.1,.3])' ],
       ['=mm(-1 to 10, normal(1,1),[.1,.3])', "[unknown]"],
-      ['=mm(1->10, normal(1,1),[.1,.3])', '=mm(lognormal(5.500, 0.700), normal(1,1),[.1,.3])'],
-      ['=mm(1:10, normal(1,1),[.1,.3])', '=mm(lognormal(5.500, 0.700), normal(1,1),[.1,.3])'],
+      ['=mm(1->10, normal(1,1),[.1,.3])', '=mm(lognormal(1.151, 0.700), normal(1,1),[.1,.3])'],
+      ['=mm(1:10, normal(1,1),[.1,.3])', '=mm(lognormal(1.151, 0.700), normal(1,1),[.1,.3])'],
     ]
 
     examplesInContext.map(e => () => {

@@ -59,7 +59,8 @@ export function regexBasedFormatter(re, guesstimateTypeFn = getGuesstimateType, 
 }
 
 // The function: shorthandIntoLognormalFormattingStep 
-// transforms strings like "=mm(normal(10,5), 1 to 100))
+// is used to format inputs like "1 to 100" when inside a multimodal.
+// It transforms strings like "=mm(normal(10,5), 1 to 100))
 // into strings like "=mm(normal(10,5), lognormal(50.1, 1.4))
 
 export function shorthandIntoLognormalFormattingStep(text){

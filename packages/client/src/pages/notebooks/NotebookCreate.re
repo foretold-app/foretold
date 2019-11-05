@@ -13,7 +13,6 @@ let make = () => {
         NotebookCreateMutation.mutate(
           mutation,
           values.state.values.name,
-          values.state.values.description,
           values.state.values.body,
         );
         ();

@@ -10,10 +10,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(255),
       allowNull: false,
     },
-    description: {
-      type: DataTypes.STRING(512),
-      allowNull: true,
-    },
     channelId: {
       type: DataTypes.UUID(),
       allowNull: false,

@@ -267,13 +267,11 @@ and globalSetting = {
 and notebook = {
   id: notebookId,
   name: string,
-  description: option(string),
   body: string,
   ownerId: agentId,
   channelId,
   createdAt: option(MomentRe.Moment.t),
   updatedAt: option(MomentRe.Moment.t),
-  body: option(string),
   owner: agent,
 }
 

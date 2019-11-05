@@ -51,18 +51,6 @@ module Distribution = {
 };
 
 module PredictionResolutionGroup = {
-  let logScoreMarketCdfCdf =
-      (~sampleCount, ~agentPrediction, ~marketPrediction, ~resolution) => {
-    JS.scoreMarketCdfCdf(
-      sampleCount,
-      JS.distToJs(agentPrediction),
-      JS.distToJs(marketPrediction),
-      JS.distToJs(resolution),
-    )
-    |> JS.jsToDist
-    |> Distribution.integral;
-  };
-
   let logScoreNonMarketCdfCdf = (~sampleCount, ~agentPrediction, ~resolution) => {
     JS.scoreNonMarketCdfCdf(
       sampleCount,

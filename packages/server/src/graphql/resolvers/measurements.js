@@ -270,7 +270,7 @@ function _marketLogScore({ prediction, aggregate, outcome }) {
   if (
     competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
   ) {
-    return ({ error: 'False' });
+    return ({ error: 'MeasurementScore Exception: Measurement not competitive' });
   }
 
   return new PredictionResolutionGroup({

@@ -4,6 +4,7 @@ const {
   ContinuousDistributionCombination,
   scoringFunctions,
 } = require("@foretold/cdf");
+const _ = require("lodash");
 
 /**
  *
@@ -115,8 +116,36 @@ function findX(y, { xs, ys }) {
  * @returns {number[]}
  */
 function integral({ xs, ys }) {
-  let distribution = new ContinuousDistribution(xs, ys);
-  return distribution.integral();
+  if (_.includes(ys, NaN)){
+    return NaN;
+  }
+  else if (_.includes(ys, Infinity) && _.includes(ys, -Infinity)){
+    return NaN;
+  }
+  else if (_.includes(ys, Infinity)){
+    return Infinity;
+  }
+  else if (_.includes(ys, -Infinity)){
+    return -Infinity;
+  }
+
+  let integral = 0;
+  for (let i = 1; i < ys.length; i++) {
+    let thisY = ys[i];
+    let lastY = ys[i - 1];
+    let thisX = xs[i];
+    let lastX = xs[i - 1];
+
+    if (
+      _.isFinite(thisY) && _.isFinite(lastY) &&
+      _.isFinite(thisX) && _.isFinite(lastX)
+    ) {
+      let sectionInterval = ((thisY + lastY) / 2) * (thisX - lastX);
+      integral = integral + sectionInterval;
+    }
+
+  }
+  return integral;
 }
 
 module.exports = {

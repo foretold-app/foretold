@@ -31,6 +31,9 @@ const NUMBER_REGEX = new RegExp(`(-?${or([INTEGER_REGEX, DECIMAL_REGEX]).source}
 export const POINT_REGEX = padded([NUMBER_REGEX])
 export const rangeRegex = (sep, left, right) => padded([left, NUMBER_REGEX, sep, NUMBER_REGEX, right])
 
+rangeRegexIndividualDistributionTextUpTo = rangeRegex(/to|\.\.|->|:/)
+export rangeRegexIndividualDistributionTextUpTo
+
 const getMult = suffix => Math.pow(10,SUFFIXES[suffix])
 const parseNumber = (num, suffix) => parseFloat(num.replace(',', '')) * (!!suffix ? getMult(suffix) : 1)
 
@@ -46,6 +49,10 @@ function getGuesstimateType(guesstimateType, [low]) {
   }
 }
 
+function getNumbers(text, regEx){
+  return _.chunk(text.match(regEx).slice(1), 2).map(([num, suffix]) => parseNumber(num, suffix))
+}
+
 export function regexBasedFormatter(re, guesstimateTypeFn = getGuesstimateType, errorFn = rangeErrorFn) {
   return {
     matches({text}) { return re.test(text) },
@@ -56,7 +63,7 @@ export function regexBasedFormatter(re, guesstimateTypeFn = getGuesstimateType, 
       return {guesstimateType: guesstimateTypeFn(guesstimateType, params), params}
     },
 
-    _numbers(text) { return _.chunk(text.match(re).slice(1), 2).map(([num, suffix]) => parseNumber(num, suffix)) },
+    _numbers(text) { getNumbers(text, re) },
   }
 }
 
@@ -67,24 +74,26 @@ export function regexBasedFormatter(re, guesstimateTypeFn = getGuesstimateType, 
 
 export function shorthandIntoLognormalFormattingStep(text){
         
-    function shorthandIntoLognormalReplacer(match, p1, p2){
+    function shorthandIntoLognormalReplacer(string){
     
-        p1 = Number(p1)
-        p2 = Number(p2)
-        
-        let logLow = math.log(p1)
-        let logHigh = math.log(p2)
+        let arrayLowHigh = getNumbers(string, rangeRegexIndividualDistributionTextUpTo)
+      
+        let low = arrayLowHigh[0]
+        let high= arrayLowHigh[1]
 
-        let mean = (math.mean(p1,p2)).toFixed(3)
+        let logLow = math.log(low)
+        let logHigh = math.log(high)
+
+        let mean = (math.mean(low,high)).toFixed(3)
         let stdev = ((logHigh-logLow) / (2*1.645)).toFixed(3)
-        
+
         return `lognormal(${mean}, ${stdev})`
 
     } 
-
-    let regNumberToNumber= new RegExp("([0-9]+) to ([0-9]+)", "g");
     
-    return text.replace(regNumberToNumber, shorthandIntoLognormalReplacer);
+    let rangeRegexMultiple = (sep, left, right) => spaceSep([left, NUMBER_REGEX, sep, NUMBER_REGEX, right])
+    shorthandIntoLognormalRegex= new RegExp(rangeRegexMultiple(/to|\.\.|->|:/), "g")
+  
+    return text.replace(shorthandIntoLognormalRegex, shorthandIntoLognormalReplacer)
 
 }
-

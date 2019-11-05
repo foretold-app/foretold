@@ -23,12 +23,21 @@ let make = (~channelId: string) => {
          onSubmit,
          notebook,
          ({send, state}) => {
-           let form =
-             NotebookForm.formFields(state, send, () =>
+           let form = NotebookForm.formFields(state, send, () =>
                send(NotebookForm.Form.Submit)
              );
 
-           CMutationForm.showWithLoading(~result=data.result, ~form, ());
+           let onSuccess = _ => {
+             Routing.Url.push(ChannelNotebooks(channelId));
+             <Null />;
+           };
+
+           CMutationForm.showWithLoading2(
+             ~result=data.result,
+             ~form,
+             ~onSuccess,
+             (),
+           );
          },
        );
      })}

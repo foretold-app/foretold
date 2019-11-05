@@ -27,6 +27,24 @@ module FormConfig = {
 
 module Form = ReFormNext.Make(FormConfig);
 
+let testName = (str) => {
+  let exp = () => [%re "/^[a-z0-9._]{3,255}$/i"];
+  let res = exp() |> Js.Re.exec(str);
+  switch (res) {
+  | Some(_) => true
+  | _ => false
+  };
+};
+
+let testBody = (str) => {
+  let exp = () => [%re "/^[a-z0-9._]{3,16384}$/i"];
+  let res = exp() |> Js.Re.exec(str);
+  switch (res) {
+  | Some(_) => true
+  | _ => false
+  };
+};
+
 let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) => {
   let initialState: FormConfig.state =
     switch (notebook) {
@@ -41,11 +59,11 @@ let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) =>
       Form.Validation.Schema([|
         Custom(
           Name,
-          values => values.name == "" ? Error("Can't be empty") : Valid,
+          values => testName(values.name) ? Valid : Error("At least 3 charachters are needed."),
         ),
         Custom(
           Body,
-          values => values.body == "" ? Error("Can't be empty") : Valid,
+          values => testBody(values.body) ? Valid : Error("At least 3 charachters are needed."),
         ),
       |]),
     innerComponentFn,
@@ -53,7 +71,7 @@ let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) =>
   |> E.React2.el;
 };
 
-let formFields = (state: Form.state, send, getFieldState, onSubmit) => {
+let formFields = (state: Form.state, send, getFieldState) => {
   let onSubmit = () => send(Form.Submit);
 
   let stateName = getFieldState(Form.Field(Name));

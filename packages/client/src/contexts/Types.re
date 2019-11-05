@@ -273,6 +273,7 @@ and notebook = {
   channelId,
   createdAt: option(MomentRe.Moment.t),
   updatedAt: option(MomentRe.Moment.t),
+  body: option(string),
   owner: agent,
 }
 

@@ -4,7 +4,7 @@ open Style.Grid;
 
 module ReducerConfig = {
   type itemType = Types.notebook;
-  type callFnParams = option(string);
+  type callFnParams = string;
 
   let getId = (e: itemType) => e.id;
   let callFn = (channelId: callFnParams) =>
@@ -32,7 +32,7 @@ let pagination = (reducerParams: Reducer.Types.reducerParams) =>
   </Div>;
 
 [@react.component]
-let make = (~channelId=None) => {
+let make = (~channelId: string) => {
   let subComponent = (reducerParams: Reducer.Types.reducerParams) => {
     let items =
       switch (reducerParams.response) {
@@ -46,14 +46,16 @@ let make = (~channelId=None) => {
       switch (reducerParams.response) {
       | Success(_) =>
         isFound
-          ? <FC.PageCard.Body> <NotebooksTable items /> </FC.PageCard.Body>
+          ? <FC.PageCard.Body>
+              <NotebooksTable items channelId />
+            </FC.PageCard.Body>
           : <NothingToShow />
       | _ => <Spin />
       };
 
     let head = isFound ? pagination(reducerParams) : ReasonReact.null;
 
-    <SLayout head isFluid=true> body </SLayout>;
+    <SLayout head> body </SLayout>;
   };
 
   <Reducer itemsPerPage=20 callFnParams=channelId subComponent />;

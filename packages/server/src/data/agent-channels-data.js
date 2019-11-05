@@ -45,8 +45,9 @@ class AgentChannelsData extends DataBase {
     });
 
     const primaryPointScores = await Promise.all(primaryPointScore$);
-    const cleaned = _.remove(primaryPointScores, _.isNumber);
-    return _.sum(cleaned);
+    const sum = _.chain(primaryPointScores).remove(_.isObject).map((r) => r.score).sum()
+      .value();
+    return sum;
   }
 
   /**

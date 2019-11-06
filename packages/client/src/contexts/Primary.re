@@ -175,6 +175,13 @@ module User = {
     showif(user) ? component : <Null />;
   };
 
+  let authorized = (user: option(t), component: ReasonReact.reactElement) => {
+    switch (user) {
+    | Some(_) => component
+    | _ => ReasonReact.null
+    };
+  };
+
   let getName = (user: t) =>
     user.agent
     |> E.O.fmap((agent: Types.agent) => agent.name |> E.O.default("User"))

@@ -57,15 +57,13 @@ let withUserForm =
 
 let formFields = (form: Form.state, send, onSubmit) =>
   <Antd.Form onSubmit={_e => onSubmit()}>
-    <Antd.Form.Item>
-      {"Do not send me emails" |> Utils.ste |> E.React2.inH3}
+    <Antd.Form.Item label={"Do not send me emails" |> Utils.ste}>
       <AntdSwitch
         checked={form.values.stopAllEmails}
         onChange={e => send(Form.FieldChangeValue(StopAllEmails, e))}
       />
     </Antd.Form.Item>
-    <Antd.Form.Item>
-      {"Enable experimental features" |> Utils.ste |> E.React2.inH3}
+    <Antd.Form.Item label={"Enable experimental features" |> Utils.ste}>
       <AntdSwitch
         checked={form.values.enableExperimentalFeatures}
         onChange={e =>

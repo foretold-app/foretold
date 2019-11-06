@@ -20,23 +20,30 @@ module Reducer = PaginationFunctor.Make(ReducerConfig);
 let pagination =
     (reducerParams: Reducer.Types.reducerParams, channelId: string) =>
   <Div>
-    <Div
-      float=`left
-      styles=[
-        Css.style([
-          FC.PageCard.HeaderRow.Styles.itemTopPadding,
-          FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-        ]),
-      ]>
-      <FC.Base.Button
-        variant=FC.Base.Button.Primary
-        size=FC.Base.Button.Small
-        onClick={e =>
-          LinkType.onClick(Internal(ChannelAddNotebook(channelId)), e)
-        }>
-        {"New Notebooks" |> Utils.ste}
-      </FC.Base.Button>
-    </Div>
+    <Providers.AppContext.Consumer>
+      ...{({loggedUser}) =>
+        Primary.User.authorized(
+          loggedUser,
+          <Div
+            float=`left
+            styles=[
+              Css.style([
+                FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+              ]),
+            ]>
+            <FC.Base.Button
+              variant=FC.Base.Button.Primary
+              size=FC.Base.Button.Small
+              onClick={e =>
+                LinkType.onClick(Internal(ChannelAddNotebook(channelId)), e)
+              }>
+              {"New Notebooks" |> Utils.ste}
+            </FC.Base.Button>
+          </Div>,
+        )
+      }
+    </Providers.AppContext.Consumer>
     <Div
       float=`right
       styles=[

@@ -20,11 +20,11 @@ module Tabs = {
           ]),
         ]>
         <TabButton isActive={tab == Show} onClick={_ => switchTab(Show)}>
-          {"Notebook" |> ReasonReact.string}
+          {"Notebook" |> Utils.ste}
         </TabButton>
         <TabButton
           isActive={tab == Details} onClick={_ => switchTab(Details)}>
-          {"Details" |> ReasonReact.string}
+          {"Details" |> Utils.ste}
         </TabButton>
       </Div>
     </Div>;

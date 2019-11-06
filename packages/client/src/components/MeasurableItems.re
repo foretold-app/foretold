@@ -164,9 +164,7 @@ let measurers = (~m: Types.measurable) =>
   };
 
 let id = (~m: Types.measurable, ()) =>
-  <div className=Shared.Item.id>
-    {"ID:  " ++ m.id |> ReasonReact.string}
-  </div>;
+  <div className=Shared.Item.id> {"ID:  " ++ m.id |> Utils.ste} </div>;
 
 let series = (~m: Types.measurable, ~channelId=None, ()) => {
   m.series

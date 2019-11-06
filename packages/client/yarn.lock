@@ -917,14 +917,6 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.4.tgz#622a72bebd1e3f48d921563b4b60a762295a81fc"
   integrity sha512-6PYY5DVdAY1ifaQW6XYTnOMihmBVT27elqSjEoodchsGjzYlEsTQMcEhSud99kVawatyTZRTiVkJ/c6lwbQ7nA==
 
-"@foretold/cdf@1.0.10":
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/@foretold/cdf/-/cdf-1.0.10.tgz#e068062be6983e220439f887b66da2f6147eff53"
-  integrity sha512-a8cUCdWjZViimKTROJIwA1j0//AWeYg2wP79ZARtpwdMq1oMEyHCA4N9iYmkkz/R/kUkBjO5p1NQ+/+O1W1Y9g==
-  dependencies:
-    lodash "4.17.15"
-    pdfast "0.2.0"
-
 "@foretold/guesstimator@1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@foretold/guesstimator/-/guesstimator-1.0.1.tgz#6c061474a0b453eb5e8caa17912689262175185e"
@@ -2091,6 +2083,11 @@ bs-platform@^4.0.8:
   version "4.0.18"
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-4.0.18.tgz#d17b8693ba1f714d9b27e0ddb365f2069ba4b8a0"
   integrity sha512-BwzW0iYHvREqUZIgQxJmdJrxexppLvJxYQ4LLexbhCp7uZU5DIZ5ub4ZHpkCkc8fn8bsXWc+Rrejb3csi+BoAQ==
+
+bs-reform@6.0.0-gadt.5:
+  version "6.0.0-gadt.5"
+  resolved "https://registry.yarnpkg.com/bs-reform/-/bs-reform-6.0.0-gadt.5.tgz#76c8f26ac6709fcc07b5d75f4e94257582c86bbd"
+  integrity sha512-KdBgBHTf0KCpOMfWvMfTfz9bW8vU73NSKV8MunygDrUozNMmwkHD6gmuUmtrjshSYq00DQz5X/qK8A4y0luODg==
 
 bsb-js@1.1.7:
   version "1.1.7"
@@ -6682,11 +6679,6 @@ pbkdf2@^3.0.3:
     ripemd160 "^2.0.1"
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
-
-pdfast@0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/pdfast/-/pdfast-0.2.0.tgz#8cbc556e1bf2522177787c0de2e0d4373ba885c9"
-  integrity sha1-jLxVbhvyUiF3eHwN4uDUNzuohck=
 
 performance-now@^2.1.0:
   version "2.1.0"

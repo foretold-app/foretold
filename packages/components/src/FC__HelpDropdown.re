@@ -54,13 +54,11 @@ module Overlay = {
   };
 };
 
-let staticOverlay = content => <Overlay content />;
-
-//[@react.component]
-//let make = (~content) => <FC__Dropdown overlay={staticOverlay(content)} />;
-
 [@react.component]
-let make = (~content) => ReasonReact.null;
+let make = (~content) =>
+  <FC__Dropdown overlay={<Overlay content />} trigger=FC__Dropdown.Hover>
+    <span> <FC__Icon.Questionmark isInteractive=true /> </span>
+  </FC__Dropdown>;
 
 module Jsx2 = {
   let make = (~content, children) =>

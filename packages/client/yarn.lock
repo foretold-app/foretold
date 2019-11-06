@@ -917,17 +917,6 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.4.tgz#622a72bebd1e3f48d921563b4b60a762295a81fc"
   integrity sha512-6PYY5DVdAY1ifaQW6XYTnOMihmBVT27elqSjEoodchsGjzYlEsTQMcEhSud99kVawatyTZRTiVkJ/c6lwbQ7nA==
 
-"@foretold/guesstimator@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@foretold/guesstimator/-/guesstimator-1.0.1.tgz#6c061474a0b453eb5e8caa17912689262175185e"
-  integrity sha512-jrwOthO9YhC3rb4l4OPJl3kOB4192fW4sPqHJz9pqzoBlRWKZVeSg91fFQMSsSr/MEvAtycYLU/WRqWkmZsCoQ==
-  dependencies:
-    discrete-sampling "1.0.3"
-    financejs "4.1.0"
-    jstat "1.9.0"
-    lodash "4.17.15"
-    mathjs "5.10.3"
-
 "@glennsl/bs-jest@0.4.8":
   version "0.4.8"
   resolved "https://registry.yarnpkg.com/@glennsl/bs-jest/-/bs-jest-0.4.8.tgz#e756ae5b43edc1cdcb4b5592021e50984566dafb"

@@ -59,15 +59,11 @@ let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) =>
       Form.Validation.Schema([|
         Custom(
           Name,
-          values =>
-            testName(values.name)
-              ? Valid : Error("At least 3 charachters are needed."),
+          values => testName(values.name) ? Valid : Error(Lang.atLeast3),
         ),
         Custom(
           Body,
-          values =>
-            testBody(values.body)
-              ? Valid : Error("At least 3 charachters are needed."),
+          values => testBody(values.body) ? Valid : Error(Lang.atLeast3),
         ),
       |]),
     innerComponentFn,

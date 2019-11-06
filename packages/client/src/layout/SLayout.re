@@ -90,7 +90,7 @@ module FullPage = {
 
 let channelBack = (~onClick, ()) =>
   <FC__Button onClick size=FC__Button.Small>
-    {"< Back" |> ReasonReact.string}
+    {"< Back" |> Utils.ste}
   </FC__Button>;
 
 let channelLink = (c: Types.channel) =>

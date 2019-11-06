@@ -78,7 +78,7 @@ let formFields = (state: Form.state, send, onSubmit) =>
   <FC__PageCard.BodyPadding>
     <Antd.Form onSubmit={e => onSubmit()}>
       <Antd.Form.Item>
-        {"Name" |> ReasonReact.string |> E.React2.inH3}
+        {"Name" |> Utils.ste |> E.React2.inH3}
         <Antd.Input
           value={state.values.name}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -87,7 +87,7 @@ let formFields = (state: Form.state, send, onSubmit) =>
         />
       </Antd.Form.Item>
       <Antd.Form.Item>
-        {"Description" |> ReasonReact.string |> E.React2.inH3}
+        {"Description" |> Utils.ste |> E.React2.inH3}
         <Antd.Input
           value={state.values.description}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -96,7 +96,7 @@ let formFields = (state: Form.state, send, onSubmit) =>
         />
       </Antd.Form.Item>
       <Antd.Form.Item>
-        {"Picture" |> ReasonReact.string |> E.React2.inH3}
+        {"Picture" |> Utils.ste |> E.React2.inH3}
         <Antd.Input
           value={state.values.picture}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -106,7 +106,7 @@ let formFields = (state: Form.state, send, onSubmit) =>
       </Antd.Form.Item>
       <Antd.Form.Item>
         <Antd.Button _type=`primary onClick={_ => onSubmit()}>
-          {"Submit" |> ReasonReact.string}
+          {"Submit" |> Utils.ste}
         </Antd.Button>
       </Antd.Form.Item>
     </Antd.Form>

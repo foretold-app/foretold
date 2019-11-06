@@ -7,7 +7,7 @@ let newMeasurable = channelId => {
     size=FC__Button.(Medium)
     className=FC.GroupHeader.Styles.actionButtonPosition
     onClick={e => LinkType.onClick(Internal(MeasurableNew(channelId)), e)}>
-    {"New Question" |> ReasonReact.string}
+    {"New Question" |> Utils.ste}
   </FC__Button>;
 };
 
@@ -20,7 +20,7 @@ let leaveChannel = (channelId: string) =>
         size=FC__Button.(Medium)
         className=FC.GroupHeader.Styles.actionButtonPosition
         onClick={_ => ChannelLeave.mutate(mutation, channelId)}>
-        {"Leave Community" |> ReasonReact.string}
+        {"Leave Community" |> Utils.ste}
       </FC__Button>
     }
   </ChannelLeave.Mutation>;
@@ -34,7 +34,7 @@ let joinChannel = channelId =>
         size=FC__Button.(Medium)
         className=FC.GroupHeader.Styles.actionButtonPosition
         onClick={_ => ChannelJoin.mutate(mutation, channelId)}>
-        {"Join Community" |> ReasonReact.string}
+        {"Join Community" |> Utils.ste}
       </FC__Button>
     }
   </ChannelJoin.Mutation>;

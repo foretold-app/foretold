@@ -11,7 +11,7 @@ let make = (~agentId: string) => {
     <div>
       <FC.Base.Div float=`left>
         <FC.PageCard.HeaderRow.Title>
-          {"Communities" |> ReasonReact.string}
+          {"Communities" |> Utils.ste}
         </FC.PageCard.HeaderRow.Title>
       </FC.Base.Div>
     </div>;

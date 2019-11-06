@@ -19,5 +19,3 @@ export function distributionUpToIntoNormal(low, high){
     return `normal(${mean},${stdev})`
 
 }
-
-

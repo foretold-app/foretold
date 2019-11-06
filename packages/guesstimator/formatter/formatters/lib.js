@@ -77,8 +77,11 @@ export function shorthandIntoLognormalFormattingStep(text){
         let low = arrayLowHigh[0]
         let high= arrayLowHigh[1]
         
-        result = (getGuesstimateType("unknown yet", [low])=='LOGNORMAL') ? distributionUpToIntoLognormal(low, high) : distributionUpToIntoNormal(low, high)
-        return result
+        if(low>0){
+          return distributionUpToIntoLognormal(low, high)
+        }else{
+          return distributionUpToIntoNormal(low, high)
+        }
     } 
     
     let rangeRegexMultiple = (sep, left, right) => spaceSep([left, NUMBER_REGEX, sep, NUMBER_REGEX, right])

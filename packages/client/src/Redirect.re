@@ -4,10 +4,10 @@
 let redirectionCount = ref(0);
 
 [@react.component]
-let make = (~appContext: Providers.appContext) => {
+let make = (~route: Routing.Route.t, ~loggedUser: option(Types.user)) => {
   redirectionCount := redirectionCount^ + 1;
 
-  switch (appContext.loggedUser, appContext.route, redirectionCount^) {
+  switch (loggedUser, route, redirectionCount^) {
   | (_, Profile, _) => ()
   | (Some(loggedUser), _, 2) =>
     loggedUser.agent

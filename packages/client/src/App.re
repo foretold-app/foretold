@@ -4,18 +4,6 @@ let appApolloClient = AppApolloClient.instance();
 
 [@react.component]
 let make = () => {
-  let (route, setRoute) =
-    React.useState(() => {
-      let url = ReasonReact.Router.dangerouslyGetInitialUrl();
-      url |> Routing.Route.fromUrl;
-    });
-
-  ReasonReact.Router.watchUrl(url => {
-    setRoute(_ => url |> Routing.Route.fromUrl);
-    ();
-  })
-  |> ignore;
-
   let getUser = fn => {
     let serverJwt = ServerJwt.make_from_storage();
     let auth0tokens = Auth0Tokens.make_from_storage();
@@ -33,15 +21,10 @@ let make = () => {
   <ReasonApollo.Provider client=appApolloClient>
     {GlobalSettingGet.inner((globalSetting: option(Types.globalSetting)) =>
        getUser((loggedUser: option(Types.user)) => {
-         let appContext: Providers.appContext = {
-           route,
-           loggedUser,
-           globalSetting,
-         };
+         let value: Providers.appContext = {loggedUser, globalSetting};
 
-         <Providers.AppContext.Provider value=appContext>
-           <Navigator route loggedUser />
-           <Redirect appContext />
+         <Providers.AppContext.Provider value>
+           <Navigator />
            <Intercom />
            <CheckSession />
          </Providers.AppContext.Provider>;

@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../../data');
+const { ChannelsData } = require('../../data');
 const logger = require('../../lib/log');
 
 const log = logger.module('middlewares/channels');
@@ -26,7 +26,7 @@ async function setContextChannel(root, args, context, info) {
   );
 
   if (channelId) {
-    context.channel = await data.channels.getOne({ id: channelId });
+    context.channel = await new ChannelsData().getOne({ id: channelId });
   } else {
     context.channel = null;
   }

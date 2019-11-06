@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../../data');
+const { ChannelMembershipsData } = require('../../data');
 const logger = require('../../lib/log');
 
 const log = logger.module('middlewares/channel-memberships');
@@ -26,7 +26,8 @@ async function setContextChannelMemberships(root, args, context, info) {
     + '(setContextChannelMemberships)', compoundId);
 
   if (!!channelId && !!agentId) {
-    const channelMembership = await data.channelMemberships.getOne(compoundId);
+    const channelMembership = await new ChannelMembershipsData()
+      .getOne(compoundId);
     context.channelMembership = channelMembership;
     context.channelMembershipsRole = _.get(channelMembership, 'role');
   } else {
@@ -55,7 +56,7 @@ async function setContextChannelMembershipsAdmins(root, args, context, info) {
 
   if (!!channelId) {
     context.channelMembershipsAdmins
-      = await data.channelMemberships.getAllOnlyAdmins({ channelId });
+      = await new ChannelMembershipsData().getAllOnlyAdmins({ channelId });
   } else {
     context.channelMembershipsAdmins = null;
   }

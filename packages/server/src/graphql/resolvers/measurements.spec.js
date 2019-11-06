@@ -1,5 +1,5 @@
 const measurements = require('./measurements');
-const data = require('../../data');
+const { MeasurementsData } = require('../../data');
 
 describe('Measurements Resolver', () => {
   describe('all()', () => {
@@ -14,14 +14,10 @@ describe('Measurements Resolver', () => {
     };
     const context = { agent: { id: 'agentId1' } };
     const info = {};
-    beforeEach(() => {
-      jest.spyOn(data.measurements, 'getConnection').mockReturnValue(
-        Promise.resolve(true),
-      );
-    });
+
     it('returns measurements', () => {
       return measurements.all(root, args, context, info).then((result) => {
-        expect(data.measurements.getConnection).toHaveBeenCalledWith(
+        expect(new MeasurementsData().getConnection).toHaveBeenCalledWith(
           {
             agentId: 'agentId2',
             competitorType: null,
@@ -48,14 +44,10 @@ describe('Measurements Resolver', () => {
     const args = { id: 'id1' };
     const context = { agent: { id: 'agentId2' } };
     const info = {};
-    beforeEach(() => {
-      jest.spyOn(data.measurements, 'getOne').mockReturnValue(
-        Promise.resolve(true),
-      );
-    });
+
     it('return a measurement', () => {
       return measurements.one(root, args, context, info).then((result) => {
-        expect(data.measurements.getOne).toHaveBeenCalledWith(
+        expect(new MeasurementsData().getOne).toHaveBeenCalledWith(
           { id: 'id1' },
           {},
           { agentId: 'agentId2', isAdmin: null },

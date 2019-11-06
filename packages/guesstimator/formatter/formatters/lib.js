@@ -1,6 +1,8 @@
 import _ from "lodash";
 import math from 'mathjs';  
 import {distributionUpToIntoLognormal} from "../../lib/distributionMath.js";
+import {distributionUpToIntoNormal} from "../../lib/distributionMath.js";
+
 
 const SUFFIXES = {
   '%': -2,
@@ -74,8 +76,12 @@ export function shorthandIntoLognormalFormattingStep(text){
       
         let low = arrayLowHigh[0]
         let high= arrayLowHigh[1]
-
-        return distributionUpToIntoLognormal(low, high)
+        
+        if(low>0){
+          return distributionUpToIntoLognormal(low, high)
+        }else{
+          return distributionUpToIntoNormal(low, high)
+        }
     } 
     
     let rangeRegexMultiple = (sep, left, right) => spaceSep([left, NUMBER_REGEX, sep, NUMBER_REGEX, right])

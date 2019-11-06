@@ -37,19 +37,22 @@ async function create(_root, args, context, _info) {
  * @param {string} args.before
  * @param {number} args.last
  * @param {number} args.first
- * @param {Schema.Context} _context
+ * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<*>}
  */
-async function all(_root, args, _context, _info) {
+async function all(_root, args, context, _info) {
   /** @type {Models.AgentID} */
   const ownerId = _.get(args, 'ownerId', null);
   /** @type {Models.ChannelID} */
   const channelId = _.get(args, 'channelId', null);
 
+  const isAdmin = _.get(context, 'agent.isAdmin', null);
+  const currentAgentId = _.get(context, 'agent.id', null);
+
   const filter = new Filter({ ownerId, channelId });
   const pagination = new Pagination(args);
-  const options = new Options();
+  const options = new Options({ isAdmin, currentAgentId });
 
   return new NotebooksData().getConnection(filter, pagination, options);
 }

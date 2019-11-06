@@ -45,8 +45,12 @@ class AgentChannelsData extends DataBase {
     });
 
     const primaryPointScores = await Promise.all(primaryPointScore$);
-    const sum = _.chain(primaryPointScores).remove(_.isObject).map((r) => r.score).sum()
+
+    const sum = _.chain(primaryPointScores)
+      .remove(_.isObject)
+      .map((r) => r.score).sum()
       .value();
+
     return sum;
   }
 
@@ -55,9 +59,8 @@ class AgentChannelsData extends DataBase {
    * @returns {Promise<*>}
    */
   async _getMeasurables(channelId) {
-    return this.measurables.getAll(new Filter({
-      channelId,
-    }));
+    const filter = new Filter({ channelId });
+    return this.measurables.getAll(filter);
   }
 }
 

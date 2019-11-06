@@ -15,7 +15,7 @@ let changeRoleAction = (agentId, channelId, role, text) =>
               ),
           )
         }>
-        {text |> ReasonReact.string}
+        {text |> Utils.ste}
       </Link>
     }
   </ChannelMembershipRoleUpdate.Mutation>;
@@ -29,7 +29,7 @@ let removeFromChannel = (agentId, channelId) =>
             _ => ChannelMembershipDelete.mutate(mutation, agentId, channelId),
           )
         }>
-        {"Remove" |> ReasonReact.string}
+        {"Remove" |> Utils.ste}
       </Link>
     }
   </ChannelMembershipDelete.Mutation>;
@@ -39,7 +39,7 @@ module Columns = {
 
   let agentColumn =
     Table.Column.make(
-      ~name="Member" |> ReasonReact.string,
+      ~name="Member" |> Utils.ste,
       ~render=
         (membership: Types.channelMembership) =>
           membership.agent
@@ -52,17 +52,17 @@ module Columns = {
 
   let roleColumn =
     Table.Column.make(
-      ~name="Role" |> ReasonReact.string,
+      ~name="Role" |> Utils.ste,
       ~render=
         (membership: Types.channelMembership) =>
           switch (membership.role) {
           | `ADMIN =>
             <div className="ant-tag ant-tag-blue">
-              {"Admin" |> ReasonReact.string}
+              {"Admin" |> Utils.ste}
             </div>
           | `VIEWER =>
             <div className="ant-tag ant-tag-green">
-              {"Member" |> ReasonReact.string}
+              {"Member" |> Utils.ste}
             </div>
           },
       (),
@@ -71,7 +71,7 @@ module Columns = {
   let roleChangeColumn: string => column =
     channelId =>
       Table.Column.make(
-        ~name="Change Role" |> ReasonReact.string,
+        ~name="Change Role" |> Utils.ste,
         ~render=
           (membership: Types.channelMembership) =>
             <div>
@@ -111,7 +111,7 @@ module Columns = {
   let removeFromChannelColumn: string => column =
     channelId =>
       Table.Column.make(
-        ~name="Remove" |> ReasonReact.string,
+        ~name="Remove" |> Utils.ste,
         ~render=
           (membership: Types.channelMembership) =>
             switch (
@@ -122,7 +122,7 @@ module Columns = {
               ),
             ) {
             | (Some(agent), true) => removeFromChannel(agent.id, channelId)
-            | _ => ReasonReact.null
+            | _ => <Null />
             },
         (),
       );
@@ -143,7 +143,7 @@ module Columns = {
 let title = () =>
   <FC.Base.Div float=`left>
     <FC.PageCard.HeaderRow.Title>
-      {"Community Members" |> ReasonReact.string}
+      {"Community Members" |> Utils.ste}
     </FC.PageCard.HeaderRow.Title>
   </FC.Base.Div>;
 
@@ -160,7 +160,7 @@ let addMembersButtonSection = (channelId: string) =>
       onClick={e =>
         LinkType.onClick(Internal(ChannelAddMember(channelId)), e)
       }>
-      {"Add Members" |> ReasonReact.string}
+      {"Add Members" |> Utils.ste}
     </FC.Base.Button>
   </FC.Base.Div>;
 
@@ -177,7 +177,7 @@ let inviteMemberButtonSection = (channelId: string) =>
       onClick={e =>
         LinkType.onClick(Internal(ChannelInviteMember(channelId)), e)
       }>
-      {"Invite Member With Email" |> ReasonReact.string}
+      {"Invite Member With Email" |> Utils.ste}
     </FC.Base.Button>
   </FC.Base.Div>;
 
@@ -200,7 +200,7 @@ let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
 };
 
 let errorFn = _ =>
-  <SLayout> <div> {"No channel." |> ReasonReact.string} </div> </SLayout>;
+  <SLayout> <div> {"No channel." |> Utils.ste} </div> </SLayout>;
 
 let loadingFn = _ => <SLayout> <Spin /> </SLayout>;
 

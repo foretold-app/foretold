@@ -167,6 +167,7 @@ class DataBase {
    */
   _getModelOptions(options = {}) {
     if (_.isEmpty(options)) return new Options({});
+
     return new Options({
       ...options,
       ...this._getDefaultOptions(options),
@@ -189,6 +190,7 @@ class DataBase {
    */
   _getModelRestrictions(options = {}) {
     if (_.isEmpty(options)) return new Restrictions({});
+
     return new Restrictions({
       ...options,
       ...this._getDefaultRestrictions(options),
@@ -210,13 +212,13 @@ class DataBase {
    * @return {Layers.AbstractModelsLayer.restrictions}
    */
   _getDefaultRestrictionsForIncludedIntoChannel(options = {}) {
-    const currentAgentId = _.get(options, 'currentAgentId');
+    const currentAgentId = _.get(options, 'currentAgentId', null);
 
-    const withinPublicChannels = currentAgentId
+    const withinPublicChannels = !!currentAgentId
       ? null
       : structures.withinPublicChannelsByChannelId();
 
-    const withinPublicAndJoinedChannels = currentAgentId
+    const withinPublicAndJoinedChannels = !!currentAgentId
       ? structures.withinPublicAndJoinedChannelsByChannelId(currentAgentId)
       : null;
 
@@ -232,7 +234,8 @@ class DataBase {
    * @return {Layers.AbstractModelsLayer.restrictions}
    */
   _getDefaultRestrictionsForIncludedIntoMeasurables(options = {}) {
-    const currentAgentId = _.get(options, 'currentAgentId');
+    const currentAgentId = _.get(options, 'currentAgentId', null);
+
     return {
       measurableId: true,
       agentId: currentAgentId,

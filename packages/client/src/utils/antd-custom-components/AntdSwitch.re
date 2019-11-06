@@ -42,7 +42,7 @@ let make =
       ~loading=?,
       ~autoFocus=?,
       ~style=?,
-      ~children=ReasonReact.null,
+      ~children=<Null />,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=switcher,

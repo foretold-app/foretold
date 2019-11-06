@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING(255),
       allowNull: false,
+      validate: {
+        len: [3, 255],
+      },
     },
     channelId: {
       type: DataTypes.UUID(),
@@ -21,6 +24,9 @@ module.exports = (sequelize, DataTypes) => {
     body: {
       type: DataTypes.TEXT,
       allowNull: false,
+      validate: {
+        len: [3, 16*1024],
+      },
     },
     createdAt: {
       type: DataTypes.DATE,

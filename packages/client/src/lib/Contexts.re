@@ -15,7 +15,7 @@ module MakePair = (Config: {
 
   module Provider = {
     [@react.component]
-    let make = (~value: Config.t, ~children=ReasonReact.null) =>
+    let make = (~value: Config.t, ~children=<Null />) =>
       ReasonReact.wrapJsForReason(
         ~reactClass=provider(_pair),
         ~props={"value": value},

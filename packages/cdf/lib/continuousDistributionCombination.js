@@ -49,7 +49,7 @@ class ContinuousDistributionCombination {
   combineYsWithFn(sampleCount, fn) {
     const xs = this.equallyDividedXs(sampleCount);
     const result = xs.map(xPoint => fn(this.allYsAtXPoint(xPoint)));
-    let filtered = _.filter(_.zip(xs, result), z => _.isFinite(z[1]));
+    let filtered = _.filter(_.zip(xs, result), z => _.isNumber(z[1]));
     let [xss,ys] = _.unzip(filtered);
     return new ContinuousDistribution(xss, ys);
   }

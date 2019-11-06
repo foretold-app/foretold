@@ -2,6 +2,8 @@ const logger = require('../lib/log');
 
 const log = logger.module('models/init');
 
+/* eslint-disable no-param-reassign */
+
 /**
  * Nobody loves magic when debugs.
  * Keep it readable.
@@ -69,6 +71,8 @@ function init(db) {
   });
   log.trace(' --- ');
 }
+
+/* eslint-enable no-param-reassign */
 
 module.exports = {
   init,

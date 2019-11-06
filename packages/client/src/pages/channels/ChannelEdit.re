@@ -39,7 +39,7 @@ let make = (~channelId: string) => {
                  </FC.Base.Button>,
                )}
             </FC.Base.Div>
-          | _ => ReasonReact.null
+          | _ => <Null />
           }
         }
       </Providers.AppContext.Consumer>

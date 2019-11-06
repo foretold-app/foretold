@@ -8,15 +8,6 @@ module Distribution: {
 };
 
 module PredictionResolutionGroup: {
-  let logScoreMarketCdfCdf:
-    (
-      ~sampleCount: int,
-      ~agentPrediction: PredictionAnalysis.Types.distribution,
-      ~marketPrediction: PredictionAnalysis.Types.distribution,
-      ~resolution: PredictionAnalysis.Types.distribution
-    ) =>
-    float;
-
   let logScoreNonMarketCdfCdf:
     (
       ~sampleCount: int,

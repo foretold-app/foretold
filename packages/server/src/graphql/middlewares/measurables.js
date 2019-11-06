@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../../data');
+const { MeasurablesData } = require('../../data');
 const { Params } = require('../../data/classes');
 const { measurableEmptyName } = require('../../lang');
 const logger = require('../../lib/log');
@@ -28,7 +28,7 @@ async function setContextMeasurable(root, args, context, info) {
 
   if (measurableId) {
     const params = new Params({ id: measurableId });
-    context.measurable = await data.measurables.getOne(params);
+    context.measurable = await new MeasurablesData().getOne(params);
   } else {
     context.measurable = null;
   }

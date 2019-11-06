@@ -28,6 +28,7 @@ const notebook = new graphql.GraphQLObjectType({
 const notebookCreateInput = new graphql.GraphQLInputObjectType({
   name: 'NotebookCreateInput',
   fields: () => ({
+    channelId: { type: graphql.GraphQLNonNull(scalars.channelId) },
     name: { type: graphql.GraphQLNonNull(scalars.string3to255) },
     body: { type: graphql.GraphQLNonNull(scalars.string3to16K) },
   }),

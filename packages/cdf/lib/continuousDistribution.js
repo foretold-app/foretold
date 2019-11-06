@@ -159,8 +159,20 @@ class ContinuousDistribution {
    * treating them like a triangle.
    * @return {number[]}
    */
-  integral() {
+  integral(params={filterOutNaNs:false}) {
     let integral = 0;
+    if (!params.filterOutNaNs && _.includes(this.ys, NaN)){
+      return NaN;
+    }
+    else if (_.includes(this.ys, Infinity) && _.includes(this.ys, -Infinity)){
+      return NaN;
+    }
+    else if (_.includes(this.ys, Infinity)){
+      return Infinity;
+    }
+    else if (_.includes(this.ys, -Infinity)){
+      return -Infinity;
+    }
     for (let i = 1; i < this.ys.length; i++) {
       let thisY = this.ys[i];
       let lastY = this.ys[i - 1];

@@ -66,7 +66,7 @@ let make = (~channelId) => {
                      Routing.Url.push(MeasurableShow(channelId, m##id))
                    | _ => ()
                    };
-                   ReasonReact.null;
+                   <Null />;
                  },
                (),
              )

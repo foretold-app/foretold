@@ -1,4 +1,4 @@
-/* eslint-disable max-classes-per-file */
+/* eslint-disable */
 
 const Op = {
   or: 'orop',
@@ -99,7 +99,7 @@ const Model = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
 
-/* eslint-enable max-classes-per-file */
+/* eslint-enable */
 
 module.exports = {
   AgentModel,

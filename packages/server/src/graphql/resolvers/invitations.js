@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../../data');
+const { InvitationsData } = require('../../data');
 const { Data } = require('../../data/classes');
 
 /**
@@ -19,7 +19,7 @@ async function create(_root, args, context, _info) {
     email: _.get(args, 'input.email', null),
     channelId: _.get(args, 'input.channelId', null),
   });
-  return data.invitations.invite(input);
+  return new InvitationsData().invite(input);
 }
 
 module.exports = {

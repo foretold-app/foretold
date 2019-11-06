@@ -289,13 +289,13 @@ let mainBlock =
     switch (state.competitorType, measurable.valueType) {
     | ("OBJECTIVE", `FLOAT | `DATE) =>
       <div className=Styles.select> {dataTypeSelect(~state, ~send)} </div>
-    | _ => ReasonReact.null
+    | _ => <Null />
     };
 
   let getBotSelect: ReasonReact.reactElement =
     switch (bots) {
     | Some([||])
-    | None => ReasonReact.null
+    | None => <Null />
     | Some(bots) => botsSelect(~state, ~send, ~bots, ~loggedUser)
     };
   open Style.Grid;
@@ -318,7 +318,7 @@ let mainBlock =
                {"Warning: Foretold does not currently support ranges of this width, due to smoothing limitations."
                 |> ste}
              </FC__Alert>
-           : ReasonReact.null}
+           : <Null />}
         <Div>
           <Div
             float=`left
@@ -390,7 +390,7 @@ let mainBlock =
         </div>
       </>
 
-    | _ => ReasonReact.null
+    | _ => <Null />
     };
 
   <div className=Styles.form>

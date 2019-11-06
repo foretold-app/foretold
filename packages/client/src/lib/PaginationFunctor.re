@@ -312,7 +312,7 @@ module Make = (Config: Config) => {
             onClick: _ => reducerParams.send(Types.NextSelection),
           },
         })
-      | _ => "" |> ReasonReact.string
+      | _ => "" |> Utils.ste
       };
 
     let paginationPage = reducerParams =>
@@ -334,7 +334,7 @@ module Make = (Config: Config) => {
             onClick: _ => reducerParams.send(Types.NextPage),
           },
         })
-      | _ => "" |> ReasonReact.string
+      | _ => "" |> Utils.ste
       };
 
     let findIndexOfId =

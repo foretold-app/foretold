@@ -21,7 +21,7 @@ let make =
       ~maxX=?,
       ~minX=?,
       ~primaryDistribution=?,
-      ~children=ReasonReact.null,
+      ~children=<Null />,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=cdfChart,

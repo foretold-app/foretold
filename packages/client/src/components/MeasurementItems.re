@@ -131,7 +131,7 @@ module AggregationResolution = {
         />
       | Ok(`Binary(r)) => <Binary value=r />
       | Ok(`UnresolvableResolution(r)) => <UnresolvableResolution />
-      | _ => ReasonReact.null
+      | _ => <Null />
       }
 
     | (Some(measurement), None) =>
@@ -143,10 +143,10 @@ module AggregationResolution = {
           competitorType={measurement.competitorType}
         />
       | Ok(`Percentage(r)) => <Percentage value=r />
-      | _ => ReasonReact.null
+      | _ => <Null />
       }
 
-    | _ => ReasonReact.null
+    | _ => <Null />
     };
   };
 };

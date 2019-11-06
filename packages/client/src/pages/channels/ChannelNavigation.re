@@ -28,13 +28,14 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
        | Notebook(id) => <NotebookPage channelId notebookId=id />
        | NotebookDetails(id) => <NotebookPage channelId notebookId=id />
        | Notebooks => <Notebooks channelId />
+       | AddNotebook => <NotebookCreate channelId />
        | Unknown => "Tab is not found" |> Utils.ste
        }}
     </Channel>;
 
   let errorFn = _ =>
     <Channel channelPage channel=None>
-      <SLayout> <div> {"No channel." |> ReasonReact.string} </div> </SLayout>
+      <SLayout> <div> {"No channel." |> Utils.ste} </div> </SLayout>
     </Channel>;
 
   let loadingFn = () =>

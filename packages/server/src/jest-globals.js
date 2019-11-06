@@ -1,6 +1,7 @@
 jest.mock('./models/index');
+jest.mock('./data/index', () => require('./data/__mocks__/data'));
 jest.mock('./lib/slack');
-jest.mock('./lib/log');
+jest.mock('./lib/log', () => require('./lib/log/__mocks__/log'));
 jest.mock('./models-abstract/index', () => require('./models-abstract/__mocks__/models-abstract'));
 jest.mock('@foretold/prediction-analysis', () => require('./__mocks__/prediction-analysis'));
 

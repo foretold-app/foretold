@@ -6,6 +6,28 @@ const { Pagination } = require('../../data/classes');
 const { Options } = require('../../data/classes');
 const { Filter } = require('../../data/classes');
 const { Params } = require('../../data/classes');
+const { Data } = require('../../data/classes');
+const { Query } = require('../../data/classes');
+
+/**
+ * @param {*} _root
+ * @param {object} args
+ * @param {object} args.input
+ * @param {Schema.Context} context
+ * @param {object} _info
+ * @returns {Promise<Models.User>}
+ */
+async function create(_root, args, context, _info) {
+  const input = _.get(args, 'input') || {};
+  const ownerId = _.get(context, 'agent.id', null);
+
+  const data = new Data({
+    ...input,
+    ownerId,
+  });
+
+  return new NotebooksData().createOne(data);
+}
 
 /**
  * @param {*} _root
@@ -16,19 +38,22 @@ const { Params } = require('../../data/classes');
  * @param {string} args.before
  * @param {number} args.last
  * @param {number} args.first
- * @param {Schema.Context} _context
+ * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<*>}
  */
-async function all(_root, args, _context, _info) {
+async function all(_root, args, context, _info) {
   /** @type {Models.AgentID} */
   const ownerId = _.get(args, 'ownerId', null);
   /** @type {Models.ChannelID} */
   const channelId = _.get(args, 'channelId', null);
 
+  const isAdmin = _.get(context, 'agent.isAdmin', null);
+  const currentAgentId = _.get(context, 'agent.id', null);
+
   const filter = new Filter({ ownerId, channelId });
   const pagination = new Pagination(args);
-  const options = new Options();
+  const options = new Options({ isAdmin, currentAgentId });
 
   return new NotebooksData().getConnection(filter, pagination, options);
 }
@@ -38,17 +63,25 @@ async function all(_root, args, _context, _info) {
  * @param {*} _root
  * @param {object} args
  * @param {Models.NotebookID} args.id
- * @param {Schema.Context} _context
+ * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<Model>}
  */
-async function one(_root, args, _context, _info) {
+async function one(_root, args, context, _info) {
   const id = _.get(args, 'id', null);
+
+  const isAdmin = _.get(context, 'agent.isAdmin', null);
+  const currentAgentId = _.get(context, 'agent.id', null);
+
   const params = new Params({ id });
-  return new NotebooksData().getOne(params);
+  const query = new Query();
+  const options = new Options({ isAdmin, currentAgentId });
+
+  return new NotebooksData().getOne(params, query, options);
 }
 
 module.exports = {
   all,
   one,
+  create,
 };

@@ -11,11 +11,7 @@ module Styles = {
 
 [@react.component]
 let make =
-    (
-      ~linkType: LinkType.t,
-      ~className: option(string)=?,
-      ~children=ReasonReact.null,
-    ) =>
+    (~linkType: LinkType.t, ~className: option(string)=?, ~children=<Null />) =>
   <a
     href={LinkType.toString(linkType)}
     className={Css.merge([Styles.link, className |> E.O.default("")])}

@@ -51,7 +51,7 @@ module Header = {
     </FC__PageCard.HeaderRow.Title>;
 
   [@react.component]
-  let make = (~children=ReasonReact.null) =>
+  let make = (~children=<Null />) =>
     <FC.PageCard.HeaderRow> children </FC.PageCard.HeaderRow>;
 };
 
@@ -90,7 +90,7 @@ module FullPage = {
 
 let channelBack = (~onClick, ()) =>
   <FC__Button onClick size=FC__Button.Small>
-    {"< Back" |> ReasonReact.string}
+    {"< Back" |> Utils.ste}
   </FC__Button>;
 
 let channelLink = (c: Types.channel) =>
@@ -117,8 +117,7 @@ let seriesHead = (channel: Types.channel, seriesName) =>
   </div>;
 
 [@react.component]
-let make =
-    (~head=ReasonReact.null, ~isFluid=false, ~children=ReasonReact.null) => {
+let make = (~head=ReasonReact.null, ~isFluid=false, ~children=<Null />) => {
   <FC.Base.Div
     className=Css.(
       style(

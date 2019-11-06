@@ -28,11 +28,10 @@ const SUFFIX_REGEX = new RegExp(Object.keys(SUFFIXES).join('|'))
 const INTEGER_REGEX = /(?:(?:\d+)|(?:\d{1,3}(?:,\d{3})*))(?!\.[^\.])/
 const DECIMAL_REGEX = /\d*\.\d+/
 const NUMBER_REGEX = new RegExp(`(-?${or([INTEGER_REGEX, DECIMAL_REGEX]).source})\\s?(${SUFFIX_REGEX.source})?`)
+export const DISTRIBUTION_RANGE_REGEX = /to|\.\.|->|:/
 
 export const POINT_REGEX = padded([NUMBER_REGEX])
 export const rangeRegex = (sep, left, right) => padded([left, NUMBER_REGEX, sep, NUMBER_REGEX, right])
-
-export const SeparatorsDistributionUpTo = /to|\.\.|->|:/
 
 const getMult = suffix => Math.pow(10,SUFFIXES[suffix])
 const parseNumber = (num, suffix) => parseFloat(num.replace(',', '')) * (!!suffix ? getMult(suffix) : 1)
@@ -67,28 +66,20 @@ export function regexBasedFormatter(re, guesstimateTypeFn = getGuesstimateType, 
   }
 }
 
-// The function: shorthandIntoLognormalFormattingStep 
-// is used to format inputs like "1 to 100" when inside a multimodal.
-// It transforms strings like "=mm(normal(10,5), 1 to 100))
-// into strings like "=mm(normal(10,5), lognormal(50.1, 1.4))
-
+// Transforms "=mm(normal(10,5), 1 to 100)) -> "=mm(normal(10,5), lognormal(50.1, 1.4))
 export function shorthandIntoLognormalFormattingStep(text){
-  
     function shorthandIntoLognormalReplacer(string){
-        
-        let rangeRegexIndividual = rangeRegex(SeparatorsDistributionUpTo)
+        let rangeRegexIndividual = rangeRegex(DISTRIBUTION_RANGE_REGEX)
         let arrayLowHigh = getNumbers(string, rangeRegexIndividual)
       
         let low = arrayLowHigh[0]
         let high= arrayLowHigh[1]
 
         return distributionUpToIntoLognormal(low, high)
-
     } 
     
     let rangeRegexMultiple = (sep, left, right) => spaceSep([left, NUMBER_REGEX, sep, NUMBER_REGEX, right])
-    let shorthandIntoLognormalRegex= new RegExp(rangeRegexMultiple(SeparatorsDistributionUpTo), "g")
+    let shorthandIntoLognormalRegex= new RegExp(rangeRegexMultiple(DISTRIBUTION_RANGE_REGEX), "g")
   
     return text.replace(shorthandIntoLognormalRegex, shorthandIntoLognormalReplacer)
-
 }

@@ -11,7 +11,7 @@ module Styles = {
 let title =
   <FC.Base.Div float=`left>
     <FC.PageCard.HeaderRow.Title>
-      {"Bots" |> ReasonReact.string}
+      {"Bots" |> Utils.ste}
     </FC.PageCard.HeaderRow.Title>
   </FC.Base.Div>;
 
@@ -48,7 +48,7 @@ module Columns = {
               }>
               <AgentLink agent />
             </Link>
-          | _ => ReasonReact.null
+          | _ => <Null />
           },
       (),
     );

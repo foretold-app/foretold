@@ -11,6 +11,8 @@ const measurableId = createObjectId('MeasurableId');
 
 const string0to255 = createLimitedString(0, 255);
 const string3to255 = createLimitedString(3, 255);
+const string0to512 = createLimitedString(0, 512);
+const string3to512 = createLimitedString(3, 512);
 const string0to16K = createLimitedString(0, 16*1024);
 const string3to16K = createLimitedString(3, 16*1024);
 
@@ -26,6 +28,9 @@ module.exports = {
 
   string0to255,
   string3to255,
+
+  string0to512,
+  string3to512,
 
   string0to16K,
   string3to16K,

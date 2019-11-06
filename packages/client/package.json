@@ -34,7 +34,7 @@
     "analyze": "source-map-explorer dist/Index.adc0ecca.js"
   },
   "dependencies": {
-    "@foretold/cdf": "1.0.10",
+    "@foretold/cdf": "1.0.11",
     "@foretold/guesstimator": "1.0.1",
     "@foretold/components": "0.0.2",
     "@glennsl/bs-jest": "0.4.8",
@@ -72,6 +72,7 @@
     "parcel-plugin-less-js-enabled": "1.0.2",
     "apollo-client": "2.4.7",
     "react-apollo": "2.5.8",
+    "bs-reform": "6.0.0-gadt.5",
     "reason-apollo": "0.16.4",
     "react": "16.11.0",
     "react-dom": "16.11.0",

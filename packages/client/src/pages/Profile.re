@@ -82,7 +82,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
   let error = state =>
     switch (state) {
     | Form.Error(s) => <AntdAlert message=s type_="warning" />
-    | _ => ReasonReact.null
+    | _ => <Null />
     };
 
   let isFormValid =
@@ -102,8 +102,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
   let isEnabled = isFormValid && isFormDirty;
 
   <Antd.Form onSubmit={_e => onSubmit()}>
-    <Antd.Form.Item>
-      {"Username" |> Utils.ste |> E.React2.inH3}
+    <Antd.Form.Item label={"Username" |> Utils.ste}>
       <Antd.Input
         value={state.values.name}
         onChange={ReForm.Helpers.handleDomFormChange(e => {
@@ -113,8 +112,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
       />
       {error(stateName)}
     </Antd.Form.Item>
-    <Antd.Form.Item>
-      {"Description" |> Utils.ste |> E.React2.inH3}
+    <Antd.Form.Item label={"Description" |> Utils.ste}>
       <Antd.Input
         value={state.values.description}
         onChange={ReForm.Helpers.handleDomFormChange(e => {
@@ -123,8 +121,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
         })}
       />
     </Antd.Form.Item>
-    <Antd.Form.Item>
-      {"Email" |> Utils.ste |> E.React2.inH3}
+    <Antd.Form.Item label={"Email" |> Utils.ste}>
       <AntdInput
         value={state.values.email}
         disabled=true
@@ -134,8 +131,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
         })}
       />
     </Antd.Form.Item>
-    <Antd.Form.Item>
-      {"Picture URL" |> Utils.ste |> E.React2.inH3}
+    <Antd.Form.Item label={"Picture URL" |> Utils.ste}>
       <Antd.Input
         value={state.values.picture}
         onChange={ReForm.Helpers.handleDomFormChange(e => {

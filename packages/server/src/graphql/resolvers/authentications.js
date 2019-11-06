@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../../data');
+const { TokensData } = require('../../data');
 const { AuthenticationPrimary } = require('../../lib/authentication');
 
 /**
@@ -69,7 +69,7 @@ async function _exchangeAuthToken(_root, args, _context, _info) {
  */
 async function getTokenByAgentId(root, _args, _context, _info) {
   const agentId = _.get(root, 'agentId', null);
-  return data.tokens.getCreate(agentId);
+  return new TokensData().getCreate(agentId);
 }
 
 /**

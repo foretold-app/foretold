@@ -20,11 +20,11 @@ module Tabs = {
           ]),
         ]>
         <TabButton isActive={tab == Show} onClick={_ => switchTab(Show)}>
-          {"Notebook" |> ReasonReact.string}
+          {"Notebook" |> Utils.ste}
         </TabButton>
         <TabButton
           isActive={tab == Details} onClick={_ => switchTab(Details)}>
-          {"Details" |> ReasonReact.string}
+          {"Details" |> Utils.ste}
         </TabButton>
       </Div>
     </Div>;
@@ -50,7 +50,7 @@ let make = (~channelId: string, ~notebookId: string) => {
                  style([marginTop(`em(2.0)), marginBottom(`em(2.0))])
                )>
                <Markdown
-                 source={notebook.body |> E.O.default("")}
+                 source={notebook.body}
                  supportForetoldJs=true
                  channelId
                />

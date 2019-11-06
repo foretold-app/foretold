@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../../data');
+const { MeasurablesData } = require('../../data');
 
 const { Pagination } = require('../../data/classes');
 const { Params } = require('../../data/classes');
@@ -44,24 +44,24 @@ async function all(root, args, context, info) {
   const filter = new Filter({
     channelId,
     withinJoinedChannels,
-    creatorId: _.get(args, 'creatorId'),
-    seriesId: _.get(args, 'seriesId'),
-    states: _.get(args, 'states'),
-    isArchived: _.get(args, 'isArchived'),
+    creatorId: _.get(args, 'creatorId', null),
+    seriesId: _.get(args, 'seriesId', null),
+    states: _.get(args, 'states', null),
+    isArchived: _.get(args, 'isArchived', null),
   });
   const pagination = new Pagination(args);
   const options = new Options({
-    isAdmin: _.get(context, 'agent.isAdmin'),
+    isAdmin: _.get(context, 'agent.isAdmin', null),
     agentId: currentAgentId,
     // @todo: move to filter
-    measuredByAgentId: _.get(args, 'measuredByAgentId'),
+    measuredByAgentId: _.get(args, 'measuredByAgentId', null),
   });
 
   // @todo: tricky, rework it.
   context.resultOrLatestMeasurementForAgentId
     = args.resultOrLatestMeasurementForAgentId;
 
-  return data.measurables.getConnection(filter, pagination, options);
+  return new MeasurablesData().getConnection(filter, pagination, options);
 }
 
 /**
@@ -84,7 +84,7 @@ async function one(root, args, context, info) {
     agentId: currentAgentId,
   });
 
-  return data.measurables.getOne(params, query, options);
+  return new MeasurablesData().getOne(params, query, options);
 }
 
 /**
@@ -97,11 +97,12 @@ async function one(root, args, context, info) {
  */
 async function create(root, args, context, info) {
   const agentId = _.get(context, 'agent.id', null);
-  const datas = {
-    ...args.input,
+  const input = _.get(args, 'input', null);
+  const data = {
+    ...input,
     creatorId: agentId,
   };
-  return data.measurables.createOne(datas);
+  return new MeasurablesData().createOne(data);
 }
 
 /**
@@ -113,8 +114,8 @@ async function create(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function archive(root, args, context, info) {
-  const { id } = args;
-  return data.measurables.archive(id);
+  const id = _.get(args, 'id', null);
+  return new MeasurablesData().archive(id);
 }
 
 /**
@@ -126,8 +127,8 @@ async function archive(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function unarchive(root, args, context, info) {
-  const { id } = args;
-  return data.measurables.unArchive(id);
+  const id = _.get(args, 'id', null);
+  return new MeasurablesData().unArchive(id);
 }
 
 /**
@@ -140,9 +141,9 @@ async function unarchive(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function update(root, args, context, info) {
-  const { id } = args;
-  const datas = args.input;
-  return data.measurables.updateOne({ id }, datas);
+  const id = _.get(args, 'id', null);
+  const input = _.get(args, 'input') || {};
+  return new MeasurablesData().updateOne({ id }, input);
 }
 
 /**
@@ -154,8 +155,8 @@ async function update(root, args, context, info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function openedCount(root, _args, _context, _info) {
-  const channelId = root.id;
-  return data.measurables.getOpenedCount(channelId);
+  const channelId = _.get(root, 'id', null);
+  return new MeasurablesData().getOpenedCount(channelId);
 }
 
 /**
@@ -166,7 +167,7 @@ async function openedCount(root, _args, _context, _info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function count(_root, _args, _context, _info) {
-  return data.measurables.getCount();
+  return new MeasurablesData().getCount();
 }
 
 /**
@@ -178,7 +179,7 @@ async function count(_root, _args, _context, _info) {
  */
 async function measurableCount(root, _args, _context, _info) {
   const seriesId = _.get(root, 'id', null);
-  return data.measurables.getCount({ seriesId });
+  return new MeasurablesData().getCount({ seriesId });
 }
 
 /**
@@ -189,7 +190,7 @@ async function measurableCount(root, _args, _context, _info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function resolutionEndpointResponse(root, _args, _context, _info) {
-  return data.measurables.resolutionEndpointResponse(root);
+  return new MeasurablesData().resolutionEndpointResponse(root);
 }
 
 module.exports = {

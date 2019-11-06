@@ -13,7 +13,7 @@ describe('shorthandIntoLognormalFormattingStep', () => {
     ['=mm(1->10, normal(1,1),[.1,.3])', '=mm(lognormal(1.151,0.700), normal(1,1),[.1,.3])'],
     ['=mm(1:10, normal(1,1),[.1,.3])', '=mm(lognormal(1.151,0.700), normal(1,1),[.1,.3])'],
   ]
-  
+    
   examples.map(e => () => {
     it(`it converts ${e[0]} to ${e[1]}`, () => {
       expect(shorthandIntoLognormalFormattingStep(e[0])).to.equal(e[1])

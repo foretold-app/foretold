@@ -1,5 +1,6 @@
 const _ = require('lodash');
-const data = require('../../data');
+
+const { ChannelMembershipsData } = require('../../data');
 
 const { Pagination } = require('../../data/classes');
 const { Options } = require('../../data/classes');
@@ -19,7 +20,7 @@ async function create(_root, args, context) {
   const input = _.get(args, 'input') || {};
   const inviterAgentId = _.get(context, 'agent.id', null);
 
-  return data.channelMemberships.upsertOne({
+  return new ChannelMembershipsData().upsertOne({
     channelId: input.channelId,
     agentId: input.agentId,
   }, {}, {
@@ -42,7 +43,7 @@ async function create(_root, args, context) {
 async function update(_root, args) {
   const input = _.get(args, 'input') || {};
 
-  return data.channelMemberships.updateOne({
+  return new ChannelMembershipsData().updateOne({
     channelId: input.channelId,
     agentId: input.agentId,
   }, {
@@ -62,7 +63,7 @@ async function update(_root, args) {
  */
 async function remove(_root, args) {
   const input = _.get(args, 'input') || {};
-  return data.channelMemberships.deleteOne({
+  return new ChannelMembershipsData().deleteOne({
     channelId: input.channelId,
     agentId: input.agentId,
   });
@@ -84,7 +85,7 @@ async function allByAgentId(root, _args, context, _info) {
   const pagination = new Pagination();
   const options = new Options({ currentAgentId });
 
-  return data.channelMemberships.getAll(filter, pagination, options);
+  return new ChannelMembershipsData().getAll(filter, pagination, options);
 }
 
 /**
@@ -102,7 +103,7 @@ async function allByChannelId(root, _args, context, _info) {
   const pagination = new Pagination();
   const options = new Options({ currentAgentId });
 
-  return data.channelMemberships.getAll(filter, pagination, options);
+  return new ChannelMembershipsData().getAll(filter, pagination, options);
 }
 
 /**
@@ -117,7 +118,7 @@ async function join(_root, args, context, _info) {
   const channelId = _.get(args, 'input.channelId', null);
   const agentId = _.get(context, 'agent.id', null);
 
-  return data.channelMemberships.join({
+  return new ChannelMembershipsData().join({
     channelId,
     agentId,
   });
@@ -135,7 +136,7 @@ async function leave(_root, args, context, _info) {
   const channelId = _.get(args, 'input.channelId', null);
   const agentId = _.get(context, 'agent.id', null);
 
-  return data.channelMemberships.leave({
+  return new ChannelMembershipsData().leave({
     channelId,
     agentId,
   });
@@ -152,7 +153,7 @@ async function myRole(root, _args, context, _info) {
   const channelId = _.get(root, 'id', null);
   const agentId = _.get(context, 'agent.id', null);
 
-  return data.channelMemberships.getOneOnlyRole({
+  return new ChannelMembershipsData().getOneOnlyRole({
     channelId,
     agentId,
   });
@@ -168,7 +169,7 @@ async function myRole(root, _args, context, _info) {
 async function membershipCount(root, _args, _context, _info) {
   const channelId = _.get(root, 'id', null);
 
-  return data.channelMemberships.getCount({
+  return new ChannelMembershipsData().getCount({
     channelId,
   });
 }

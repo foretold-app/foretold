@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../../data');
+const { AgentChannelsData } = require('../../data');
 
 const { Pagination } = require('../../data/classes');
 const { Filter } = require('../../data/classes');
@@ -38,7 +38,7 @@ async function all(root, args, context, _info) {
   const pagination = new Pagination(args);
   const options = new Options({ currentAgentId });
 
-  return data.agentChannels.getConnection(filter, pagination, options);
+  return new AgentChannelsData().getConnection(filter, pagination, options);
 }
 
 /**
@@ -51,9 +51,9 @@ async function all(root, args, context, _info) {
  * @returns {Promise<*>}
  */
 async function primaryPointScore(root, _args, _context, _info) {
-  const agentId = _.get(root, 'agentId');
-  const channelId = _.get(root, 'channelId');
-  return data.agentChannels.primaryPointScore(agentId, channelId);
+  const agentId = _.get(root, 'agentId', null);
+  const channelId = _.get(root, 'channelId', null);
+  return new AgentChannelsData().primaryPointScore(agentId, channelId);
 }
 
 module.exports = {

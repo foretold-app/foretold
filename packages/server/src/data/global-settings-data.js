@@ -22,7 +22,7 @@ class GlobalSettingsData extends DataBase {
     this.kenFacade = null;
 
     /**
-     * @todo: Please, fix later.
+     * @todo: Please, fix later!
      */
     this.initKen()
       .then((kenFacade) => {

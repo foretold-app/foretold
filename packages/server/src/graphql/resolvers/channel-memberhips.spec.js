@@ -1,5 +1,5 @@
 const channelMemberships = require('./channel-memberhips');
-const data = require('../../data');
+const { ChannelMembershipsData } = require('../../data');
 
 describe('Channel Memberships Resolvers', () => {
   describe('create()', () => {
@@ -12,16 +12,11 @@ describe('Channel Memberships Resolvers', () => {
       },
     };
     const context = { agent: { id: 'agentId' } };
-    beforeEach(() => {
-      jest.spyOn(data.channelMemberships, 'upsertOne')
-        .mockReturnValue(
-          Promise.resolve(true),
-        );
-    });
+
     it('creates agent-channel row', () => {
       return channelMemberships.create(root, args, context)
         .then((result) => {
-          expect(data.channelMemberships.upsertOne)
+          expect(new ChannelMembershipsData().upsertOne)
             .toHaveBeenCalledWith(
               {
                 agentId: 'agentId2',
@@ -48,16 +43,11 @@ describe('Channel Memberships Resolvers', () => {
         role: 'ADMIN',
       },
     };
-    beforeEach(() => {
-      jest.spyOn(data.channelMemberships, 'updateOne')
-        .mockReturnValue(
-          Promise.resolve(true),
-        );
-    });
+
     it('updates agent-channel row', () => {
       return channelMemberships.update(root, args)
         .then((result) => {
-          expect(data.channelMemberships.updateOne)
+          expect(new ChannelMembershipsData().updateOne)
             .toHaveBeenCalledWith(
               {
                 agentId: 'agentId2',
@@ -82,14 +72,11 @@ describe('Channel Memberships Resolvers', () => {
         agentId: 'agentId2',
       },
     };
-    beforeEach(() => {
-      jest.spyOn(data.channelMemberships, 'deleteOne')
-        .mockReturnValue(Promise.resolve(true));
-    });
+
     it('removes agent-channel row', () => {
       return channelMemberships.remove(root, args)
         .then((result) => {
-          expect(data.channelMemberships.deleteOne)
+          expect(new ChannelMembershipsData().deleteOne)
             .toHaveBeenCalledWith(
               {
                 agentId: 'agentId2',
@@ -107,14 +94,11 @@ describe('Channel Memberships Resolvers', () => {
     const args = {};
     const context = { agent: { id: 'agentId10' } };
     const info = {};
-    beforeEach(() => {
-      jest.spyOn(data.channelMemberships, 'getOneOnlyRole')
-        .mockReturnValue(Promise.resolve(true));
-    });
+
     it('returns only role string', () => {
       return channelMemberships.myRole(root, args, context, info)
         .then((result) => {
-          expect(data.channelMemberships.getOneOnlyRole)
+          expect(new ChannelMembershipsData().getOneOnlyRole)
             .toHaveBeenCalledWith({
               agentId: 'agentId10',
               channelId: 'id1',
@@ -130,14 +114,11 @@ describe('Channel Memberships Resolvers', () => {
     const args = { input: { channelId: 'channelId1' } };
     const context = { agent: { id: 'agentId11' } };
     const info = {};
-    beforeEach(() => {
-      jest.spyOn(data.channelMemberships, 'leave')
-        .mockReturnValue(Promise.resolve(true));
-    });
+
     it('leaves channel', () => {
       return channelMemberships.leave(root, args, context, info)
         .then((result) => {
-          expect(data.channelMemberships.leave)
+          expect(new ChannelMembershipsData().leave)
             .toHaveBeenCalledWith({
               agentId: 'agentId11',
               channelId: 'channelId1',
@@ -153,14 +134,11 @@ describe('Channel Memberships Resolvers', () => {
     const args = { input: { channelId: 'channelId2' } };
     const context = { agent: { id: 'agentId12' } };
     const info = {};
-    beforeEach(() => {
-      jest.spyOn(data.channelMemberships, 'join')
-        .mockReturnValue(Promise.resolve(true));
-    });
+
     it('joins channel', () => {
       return channelMemberships.join(root, args, context, info)
         .then((result) => {
-          expect(data.channelMemberships.join)
+          expect(new ChannelMembershipsData().join)
             .toHaveBeenCalledWith({
               agentId: 'agentId12',
               channelId: 'channelId2',

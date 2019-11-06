@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../../data');
+const { FeedItemsData } = require('../../data');
 
 const { Pagination } = require('../../data/classes');
 const { Options } = require('../../data/classes');
@@ -10,6 +10,12 @@ const { structures } = require('../../data/classes');
 const { HOME_CHANNEL_ID } = require('../../well-known');
 
 /**
+ *
+ * Do not make wrong conclusions about "Filters"
+ * and "Restrictions". "Filters" are used to filter
+ * objects. However, "Restrictions" are used to
+ * restrict an access to objects.
+ *
  * @param {*} _root
  * @param {object} args
  * @param {Models.ObjectID} args.channelId
@@ -37,7 +43,7 @@ async function all(_root, args, context, _info) {
   const pagination = new Pagination(args);
   const options = new Options({ currentAgentId });
 
-  return data.feedItems.getConnection(
+  return new FeedItemsData().getConnection(
     filter,
     pagination,
     options,

@@ -1,5 +1,6 @@
 const _ = require('lodash');
-const data = require('../../data');
+
+const { SeriesData } = require('../../data');
 
 const { Pagination } = require('../../data/classes');
 const { Params } = require('../../data/classes');
@@ -26,7 +27,7 @@ async function one(root, args, context, info) {
     agentId: currentAgentId,
   });
 
-  return data.series.getOne(params, query, options);
+  return new SeriesData().getOne(params, query, options);
 }
 
 /**
@@ -48,7 +49,7 @@ async function all(root, args, context, info) {
     agentId: currentAgentId,
   });
 
-  return data.series.getAll(filter, pagination, options);
+  return new SeriesData().getAll(filter, pagination, options);
 }
 
 /**
@@ -66,7 +67,7 @@ async function create(root, args, context, info) {
     ...args.input,
     creatorId: agentId,
   };
-  return data.series.createOne(datas);
+  return new SeriesData().createOne(datas);
 }
 
 module.exports = {

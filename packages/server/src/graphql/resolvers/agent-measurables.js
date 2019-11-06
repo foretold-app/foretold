@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../../data');
+const { AgentMeasurablesData } = require('../../data');
 
 const {
   MARKET_TYPE,
@@ -51,7 +51,7 @@ async function all(_root, args, context, _info) {
   const pagination = new Pagination(args);
   const options = new Options({ currentAgentId });
 
-  return data.agentMeasurables.getConnection(filter, pagination, options);
+  return new AgentMeasurablesData().getConnection(filter, pagination, options);
 }
 
 /**
@@ -64,10 +64,10 @@ async function all(_root, args, context, _info) {
  * @returns {Promise<*>}
  */
 async function primaryPointScore(root, _args, _context, _info) {
-  const agentId = _.get(root, 'agentId');
-  const measurableId = _.get(root, 'measurableId');
+  const agentId = _.get(root, 'agentId', null);
+  const measurableId = _.get(root, 'measurableId', null);
 
-  const response = await data.agentMeasurables.primaryPointScore(
+  const response = await new AgentMeasurablesData().primaryPointScore(
     agentId,
     measurableId, {
       marketType: MARKET_TYPE.MARKET,
@@ -93,14 +93,20 @@ async function primaryPointScore(root, _args, _context, _info) {
  * @returns {Promise<*>}
  */
 async function timeAverageScore(root, args, _context, _info) {
-  const agentId = _.get(root, 'agentId');
-  const measurableId = _.get(root, 'measurableId');
-  const marketType = _.get(args, 'marketType');
-  const startAt = _.get(args, 'startAt');
-  const finalComparisonMeasurement = _.get(args, 'finalComparisonMeasurement');
+  const agentId = _.get(root, 'agentId', null);
+  const measurableId = _.get(root, 'measurableId', null);
+  const marketType = _.get(args, 'marketType', null);
+  const startAt = _.get(args, 'startAt', null);
+  const finalComparisonMeasurement
+    = _.get(args, 'finalComparisonMeasurement', null);
 
   const params = { startAt, marketType, finalComparisonMeasurement };
-  return data.agentMeasurables.primaryPointScore(agentId, measurableId, params);
+
+  return new AgentMeasurablesData().primaryPointScore(
+    agentId,
+    measurableId,
+    params,
+  );
 }
 
 module.exports = {

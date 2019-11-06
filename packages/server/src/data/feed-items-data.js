@@ -1,5 +1,3 @@
-const _ = require('lodash');
-
 const { DataBase } = require('./data-base');
 const { FeedItemModel } = require('../models-abstract');
 

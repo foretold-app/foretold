@@ -244,7 +244,7 @@ class ModelPostgres extends Model {
     }
 
     // @todo: Use "withinPublicAndJoinedChannels" as "channelId"
-    if (!!restrictions.channelId && restrictions.agentId) {
+    if (!!restrictions.channelId && !!restrictions.agentId) {
       where[this.and].push({
         channelId: {
           [this.in]: this._publicAndJoinedChannelsLiteral(
@@ -256,7 +256,7 @@ class ModelPostgres extends Model {
     }
 
     // @todo: Use "withinPublicAndJoinedChannels" as "id"
-    if (restrictions.channelIdAsId && restrictions.agentId) {
+    if (!!restrictions.channelIdAsId && !!restrictions.agentId) {
       where[this.and].push({
         id: {
           [this.in]: this._publicAndJoinedChannelsLiteral(
@@ -268,7 +268,7 @@ class ModelPostgres extends Model {
     }
 
     // @todo: Use "withinPublicAndJoinedChannels" as "id"
-    if (restrictions.channelIdAsId && !restrictions.agentId) {
+    if (!!restrictions.channelIdAsId && !restrictions.agentId) {
       where[this.and].push({
         id: {
           [this.in]: this._publicChannelsLiteral('Restrictions'),
@@ -283,7 +283,7 @@ class ModelPostgres extends Model {
     }
 
     // @todo: Use structures.
-    if (restrictions.measurableId && restrictions.agentId) {
+    if (!!restrictions.measurableId && !!restrictions.agentId) {
       where[this.and].push({
         measurableId: {
           [this.in]: this._measurablesInPublicAndJoinedChannelsLiteral(
@@ -295,7 +295,7 @@ class ModelPostgres extends Model {
     }
 
     // @todo: Use structures.
-    if (restrictions.measurableId && !restrictions.agentId) {
+    if (!!restrictions.measurableId && !restrictions.agentId) {
       where[this.and].push({
         measurableId: {
           [this.in]: this._measurablesInPublicChannelsLiteral(
@@ -551,7 +551,6 @@ class ModelPostgres extends Model {
 
     const name = _.get(abstractions, 'constructor.name', 'Abstraction');
 
-    // OK
     if (!!abstractions.withinPublicChannels) {
       const { as } = abstractions.withinPublicChannels;
       where[this.and].push({
@@ -561,7 +560,6 @@ class ModelPostgres extends Model {
       });
     }
 
-    // OK
     if (!!abstractions.withinJoinedChannels) {
       const { as, agentId } = abstractions.withinJoinedChannels;
       where[this.and].push({
@@ -571,7 +569,6 @@ class ModelPostgres extends Model {
       });
     }
 
-    // OK
     if (!!abstractions.withinPublicAndJoinedChannels) {
       const { as, agentId } = abstractions.withinPublicAndJoinedChannels;
       where[this.and].push({
@@ -581,7 +578,6 @@ class ModelPostgres extends Model {
       });
     }
 
-    // OK
     if (!!abstractions.withinMeasurables) {
       const { as, states, channelId } = abstractions.withinMeasurables;
       where[this.and].push({

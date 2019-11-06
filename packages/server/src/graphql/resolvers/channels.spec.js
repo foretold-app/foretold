@@ -1,5 +1,5 @@
+const { ChannelsData } = require('../../data');
 const channels = require('./channels');
-const data = require('../../data');
 
 describe('Channels Resolvers', () => {
   it('class should be constructor', () => {
@@ -9,14 +9,10 @@ describe('Channels Resolvers', () => {
 
   describe('channelAgents()', () => {
     const channel = { id: '1' };
-    beforeEach(() => {
-      jest.spyOn(data.channels, 'getAgentsByChannelId').mockReturnValue(
-        Promise.resolve(true),
-      );
-    });
+
     it('returns agent-channel model', () => {
       return channels.channelAgents(channel).then((result) => {
-        expect(data.channels.getAgentsByChannelId)
+        expect(new ChannelsData().getAgentsByChannelId)
           .toHaveBeenCalledWith(channel.id);
         expect(result).toBe(true);
       });
@@ -25,14 +21,10 @@ describe('Channels Resolvers', () => {
 
   describe('channelCreator()', () => {
     const channel = { id: '1' };
-    beforeEach(() => {
-      jest.spyOn(data.channels, 'getCreatorByChannelId').mockReturnValue(
-        Promise.resolve(true),
-      );
-    });
+
     it('returns creator of channel', () => {
       return channels.channelCreator(channel).then((result) => {
-        expect(data.channels.getCreatorByChannelId)
+        expect(new ChannelsData().getCreatorByChannelId)
           .toHaveBeenCalledWith(channel.id);
         expect(result).toBe(true);
       });
@@ -44,14 +36,10 @@ describe('Channels Resolvers', () => {
     const context = { agent: { id: '1' } };
     const args = { offset: 1, limit: 2, channelMemberId: 'channelMemberId1' };
     const info = {};
-    beforeEach(() => {
-      jest.spyOn(data.channels, 'getAll').mockReturnValue(
-        Promise.resolve(true),
-      );
-    });
+
     it('returns channels with restrictions', () => {
       return channels.all(root, args, context, info).then((result) => {
-        expect(data.channels.getAll).toHaveBeenCalledWith({
+        expect(new ChannelsData().getAll).toHaveBeenCalledWith({
           isArchived: null,
           withinJoinedChannels: { agentId: 'channelMemberId1', as: 'id' },
         }, {
@@ -70,14 +58,10 @@ describe('Channels Resolvers', () => {
     const context = { agent: { id: 'agentId1' } };
     const args = { id: 'id1' };
     const info = {};
-    beforeEach(() => {
-      jest.spyOn(data.channels, 'getOne').mockReturnValue(
-        Promise.resolve(true),
-      );
-    });
+
     it('returns channel using restrictions', () => {
       return channels.one(root, args, context, info).then((result) => {
-        expect(data.channels.getOne).toHaveBeenCalledWith({ id: 'id1' }, {}, {
+        expect(new ChannelsData().getOne).toHaveBeenCalledWith({ id: 'id1' }, {}, {
           agentId: 'agentId1',
         });
         expect(result).toBe(true);
@@ -90,14 +74,10 @@ describe('Channels Resolvers', () => {
     const context = {};
     const args = { id: 'id2', input: { a: '1' } };
     const info = {};
-    beforeEach(() => {
-      jest.spyOn(data.channels, 'updateOne').mockReturnValue(
-        Promise.resolve(true),
-      );
-    });
+
     it('updates channel', () => {
       return channels.update(root, args, context, info).then((result) => {
-        expect(data.channels.updateOne).toHaveBeenCalledWith({ id: 'id2' }, {
+        expect(new ChannelsData().updateOne).toHaveBeenCalledWith({ id: 'id2' }, {
           a: '1',
         });
         expect(result).toBe(true);
@@ -110,14 +90,10 @@ describe('Channels Resolvers', () => {
     const context = { agent: { b: '2', id: 'id2' } };
     const args = { input: { a: '1' } };
     const info = {};
-    beforeEach(() => {
-      jest.spyOn(data.channels, 'createOne').mockReturnValue(
-        Promise.resolve(true),
-      );
-    });
+
     it('creates channel', () => {
       return channels.create(root, args, context, info).then((result) => {
-        expect(data.channels.createOne).toHaveBeenCalledWith(
+        expect(new ChannelsData().createOne).toHaveBeenCalledWith(
           { a: '1', creatorId: 'id2' },
         );
         expect(result).toBe(true);

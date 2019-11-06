@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../../data');
+const { BotsData } = require('../../data');
 
 const { Pagination } = require('../../data/classes');
 const { Params } = require('../../data/classes');
@@ -20,11 +20,12 @@ async function create(_root, args, context, _info) {
   const input = _.get(args, 'input') || {};
   const userId = _.get(context, 'user.id', null);
 
-  const datas = new Data({
+  const data = new Data({
     ...input,
     userId,
   });
-  return data.bots.createOne(datas);
+
+  return new BotsData().createOne(data);
 }
 
 /**
@@ -41,8 +42,9 @@ async function update(_root, args, _context, _info) {
   const input = _.get(args, 'input') || {};
 
   const params = new Params({ id });
-  const data$ = new Data(input);
-  return data.bots.updateOne(params, data$);
+  const data = new Data(input);
+
+  return new BotsData().updateOne(params, data);
 }
 
 /**
@@ -64,7 +66,7 @@ async function all(_root, args, _context, _info) {
   const pagination = new Pagination(args);
   const options = new Options();
 
-  return data.bots.getConnection(filter, pagination, options);
+  return new BotsData().getConnection(filter, pagination, options);
 }
 
 /**
@@ -77,7 +79,7 @@ async function all(_root, args, _context, _info) {
 async function one(_root, args, _context, _info) {
   const id = _.get(args, 'id', null);
   const params = new Params({ id });
-  return data.bots.getOne(params);
+  return new BotsData().getOne(params);
 }
 
 /**
@@ -89,7 +91,7 @@ async function one(_root, args, _context, _info) {
  */
 async function tokenRefresh(_root, args, _context, _info) {
   const id = _.get(args, 'id', null);
-  const token = await data.bots.tokenRefresh({ id });
+  const token = await new BotsData().tokenRefresh({ id });
   return { token };
 }
 

@@ -51,7 +51,7 @@ module Header = {
     </FC__PageCard.HeaderRow.Title>;
 
   [@react.component]
-  let make = (~children=ReasonReact.null) =>
+  let make = (~children=<Null />) =>
     <FC.PageCard.HeaderRow> children </FC.PageCard.HeaderRow>;
 };
 
@@ -117,8 +117,7 @@ let seriesHead = (channel: Types.channel, seriesName) =>
   </div>;
 
 [@react.component]
-let make =
-    (~head=ReasonReact.null, ~isFluid=false, ~children=ReasonReact.null) => {
+let make = (~head=<Null />, ~isFluid=false, ~children=<Null />) => {
   <FC.Base.Div
     className=Css.(
       style(
@@ -132,7 +131,7 @@ let make =
     )>
     <div className={Styles.container(isFluid)}>
       <FC.PageCard>
-        {head != ReasonReact.null
+        {head != <Null />
            ? <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow> : head}
         <FC.PageCard.Body> children </FC.PageCard.Body>
       </FC.PageCard>

@@ -5,7 +5,7 @@
 [%bs.raw {|require("antd/lib/alert/style")|}];
 
 [@react.component]
-let make = (~message=?, ~type_=?, ~children=ReasonReact.null) =>
+let make = (~message=?, ~type_=?, ~children=<Null />) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,
     ~props=makeProps(~message?, ~type_?, ()),

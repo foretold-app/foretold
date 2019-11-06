@@ -69,7 +69,7 @@ let formCreation = (id: string, measurable: Types.measurable) => {
                   Routing.Url.push(MeasurableShow(measurable##channelId, id))
                 | _ => ()
                 };
-                ReasonReact.null;
+                <Null />;
               },
             (),
           ),

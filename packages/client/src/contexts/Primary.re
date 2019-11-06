@@ -172,7 +172,7 @@ module User = {
   };
 
   let show = (user: t, component: ReasonReact.reactElement) => {
-    showif(user) ? component : ReasonReact.null;
+    showif(user) ? component : <Null />;
   };
 
   let getName = (user: t) =>

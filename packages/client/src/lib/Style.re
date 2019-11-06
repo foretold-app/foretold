@@ -15,7 +15,7 @@ module BorderedBox = {
   };
 
   [@react.component]
-  let make = (~children=ReasonReact.null) =>
+  let make = (~children=<Null />) =>
     <div className=Styles.item> children </div>;
 };
 
@@ -25,13 +25,7 @@ module Grid = {
   module Div = {
     [@react.component]
     let make =
-        (
-          ~styles=[],
-          ~flex=?,
-          ~flexDirection=?,
-          ~float=?,
-          ~children=ReasonReact.null,
-        ) => {
+        (~styles=[], ~flex=?, ~flexDirection=?, ~float=?, ~children=<Null />) => {
       let flexStyle =
         flex |> E.O.fmap(e => Css.style([Css.flex(e)])) |> E.O.default("");
 

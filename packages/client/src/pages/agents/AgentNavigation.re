@@ -42,7 +42,7 @@ module Top = {
           </FC.GroupHeader>
           <FC.GroupHeader.SubHeader> secondLevel </FC.GroupHeader.SubHeader>
         </>;
-      | _ => ReasonReact.null
+      | _ => <Null />
       }
     );
   };

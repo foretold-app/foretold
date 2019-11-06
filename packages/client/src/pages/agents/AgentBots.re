@@ -48,7 +48,7 @@ module Columns = {
               }>
               <AgentLink agent />
             </Link>
-          | _ => ReasonReact.null
+          | _ => <Null />
           },
       (),
     );

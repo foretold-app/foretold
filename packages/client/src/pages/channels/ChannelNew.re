@@ -51,7 +51,7 @@ let make = () => {
                     Routing.Url.push(ChannelShow(channel##id))
                   | _ => ()
                   };
-                  ReasonReact.null;
+                  <Null />;
                 },
               (),
             )

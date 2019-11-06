@@ -31,7 +31,7 @@ let make =
             />
           }
         </MeasurementCreate.Mutation>
-      | _ => ReasonReact.null
+      | _ => <Null />
       }
     }
   </Providers.AppContext.Consumer>;

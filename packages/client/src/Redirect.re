@@ -24,5 +24,5 @@ let make = (~route: Routing.Route.t, ~loggedUser: option(Types.user)) => {
   | _ => ()
   };
 
-  ReasonReact.null;
+  <Null />;
 };

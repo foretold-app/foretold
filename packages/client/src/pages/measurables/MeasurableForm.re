@@ -382,7 +382,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
             </Button>
           </Antd.Form.Item>
         </AntdForm>
-      | _ => ReasonReact.null
+      | _ => <Null />
       }
     }
   </Providers.AppContext.Consumer>;

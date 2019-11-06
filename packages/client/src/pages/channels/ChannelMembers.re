@@ -122,7 +122,7 @@ module Columns = {
               ),
             ) {
             | (Some(agent), true) => removeFromChannel(agent.id, channelId)
-            | _ => ReasonReact.null
+            | _ => <Null />
             },
         (),
       );

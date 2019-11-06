@@ -19,7 +19,7 @@ let statusShow = (~measurable: Types.measurable) =>
     )
   | (_, _, _) =>
     Js.log("Missing data in statusShow");
-    ReasonReact.null;
+    <Null />;
   };
 
 [@react.component]

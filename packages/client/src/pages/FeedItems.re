@@ -59,7 +59,7 @@ let make = (~channelId=None, ~agentId=None) => {
       | _ => <Spin />
       };
 
-    let head = isFound ? pagination(reducerParams) : ReasonReact.null;
+    let head = isFound ? pagination(reducerParams) : <Null />;
 
     <SLayout head isFluid=true> body </SLayout>;
   };

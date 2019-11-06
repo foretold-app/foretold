@@ -27,7 +27,7 @@ module Styles = {
 };
 
 [@react.component]
-let make = (~channelId=None, ~children=ReasonReact.null) => {
+let make = (~channelId=None, ~children=<Null />) => {
   <Providers.AppContext.Consumer>
     ...{({loggedUser}) =>
       <div className=Styles.outer>

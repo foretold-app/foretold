@@ -15,7 +15,7 @@ let make =
       ~onUpdate=fn,
       ~onChange=fn2,
       ~focusOnRender=true,
-      ~children=ReasonReact.null,
+      ~children=<Null />,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=guesstimateInput,

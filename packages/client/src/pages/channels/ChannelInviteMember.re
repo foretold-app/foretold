@@ -40,7 +40,7 @@ let fields = (form: Form.state, send, onSubmit, getFieldState) => {
   let error = state =>
     switch (state) {
     | Form.Error(s) => <AntdAlert message=s type_="warning" />
-    | _ => ReasonReact.null
+    | _ => <Null />
     };
 
   let isFormValid =

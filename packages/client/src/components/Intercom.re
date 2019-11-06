@@ -20,7 +20,7 @@ let make = () => {
       | _ => ()
       };
 
-      ReasonReact.null;
+      <Null />;
     }}
   </Providers.AppContext.Consumer>;
 };

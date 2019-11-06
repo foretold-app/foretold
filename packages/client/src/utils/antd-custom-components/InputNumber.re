@@ -19,7 +19,7 @@ let make =
       ~max=?,
       ~step=?,
       ~disabled=false,
-      ~children=ReasonReact.null,
+      ~children=<Null />,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,

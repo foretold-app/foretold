@@ -125,7 +125,7 @@ let header = (loggedUser: Types.user) =>
             )}
       </Div>
     </AntdDropdown>
-  | None => ReasonReact.null
+  | None => <Null />
   };
 
 [@react.component]

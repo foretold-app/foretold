@@ -244,7 +244,7 @@ class ModelPostgres extends Model {
     }
 
     // @todo: Use "withinPublicAndJoinedChannels" as "channelId"
-    if (!!restrictions.channelId && restrictions.agentId) {
+    if (!!restrictions.channelId && !!restrictions.agentId) {
       where[this.and].push({
         channelId: {
           [this.in]: this._publicAndJoinedChannelsLiteral(
@@ -256,7 +256,7 @@ class ModelPostgres extends Model {
     }
 
     // @todo: Use "withinPublicAndJoinedChannels" as "id"
-    if (restrictions.channelIdAsId && restrictions.agentId) {
+    if (!!restrictions.channelIdAsId && !!restrictions.agentId) {
       where[this.and].push({
         id: {
           [this.in]: this._publicAndJoinedChannelsLiteral(
@@ -268,7 +268,7 @@ class ModelPostgres extends Model {
     }
 
     // @todo: Use "withinPublicAndJoinedChannels" as "id"
-    if (restrictions.channelIdAsId && !restrictions.agentId) {
+    if (!!restrictions.channelIdAsId && !restrictions.agentId) {
       where[this.and].push({
         id: {
           [this.in]: this._publicChannelsLiteral('Restrictions'),
@@ -283,7 +283,7 @@ class ModelPostgres extends Model {
     }
 
     // @todo: Use structures.
-    if (restrictions.measurableId && restrictions.agentId) {
+    if (!!restrictions.measurableId && !!restrictions.agentId) {
       where[this.and].push({
         measurableId: {
           [this.in]: this._measurablesInPublicAndJoinedChannelsLiteral(
@@ -295,7 +295,7 @@ class ModelPostgres extends Model {
     }
 
     // @todo: Use structures.
-    if (restrictions.measurableId && !restrictions.agentId) {
+    if (!!restrictions.measurableId && !restrictions.agentId) {
       where[this.and].push({
         measurableId: {
           [this.in]: this._measurablesInPublicChannelsLiteral(

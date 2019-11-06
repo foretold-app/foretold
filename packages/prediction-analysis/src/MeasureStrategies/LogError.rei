@@ -4,7 +4,12 @@ type predictionGroupErrorType = [
 ];
 
 let predictionGroupError:
-  (~scoringCombination: predictionGroupErrorType, ~sampleCount: int, unit) =>
+  (
+    ~scoringCombination: predictionGroupErrorType,
+    ~sampleCount: int,
+    ~scoreLimiter: float => float,
+    unit
+  ) =>
   Belt.Result.t(float, 'a);
 
 let differentialEntropy:

@@ -1,6 +1,6 @@
 {
   "name": "@foretold/prediction-analysis",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "dist/index.js",
   "private": false,
   "scripts": {
@@ -28,7 +28,7 @@
     "@glennsl/bs-jest": "0.4.9",
     "gentype": "2.34.0",
     "bs-platform": "5.0.6",
-    "@foretold/cdf": "1.0.10",
+    "@foretold/cdf": "1.0.11",
     "@glennsl/bs-json": "4.0.0",
     "lodash": "4.17.15",
     "rationale": "0.1.10"

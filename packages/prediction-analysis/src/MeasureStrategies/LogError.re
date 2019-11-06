@@ -6,19 +6,40 @@ type predictionGroupErrorType = [
   | `NonMarketScore(PredictionResolutionGroup.t)
 ];
 
+let floatSubtractionWithLimitation = (a, b, limiter) => {
+  switch (a, b) {
+  | (a, b) when a == infinity && b == infinity => nan
+  | (a, b) when a == neg_infinity && b == neg_infinity => nan
+  | (a, b) when a == nan || b == nan => nan
+  | (a, b) => limiter(a) -. limiter(b)
+  };
+};
+
 module PredictionGroupError = {
   let marketCdfCdf =
       (
         sampleCount: int,
         {agentPrediction, marketPrediction, resolution}:
           PredictionResolutionGroup.WithMarket.combination(Cdf.t, Cdf.t),
-      ) =>
-    CdfLibraryImporter.PredictionResolutionGroup.logScoreMarketCdfCdf(
-      ~sampleCount,
-      ~agentPrediction=agentPrediction |> Cdf.toDistribution,
-      ~marketPrediction=marketPrediction |> Cdf.toDistribution,
-      ~resolution=resolution |> Cdf.toDistribution,
-    );
+        scoreLimiter: float => float,
+      ) => {
+    let agentPrediction = agentPrediction |> Cdf.toDistribution;
+    let marketPrediction = marketPrediction |> Cdf.toDistribution;
+    let resolution = resolution |> Cdf.toDistribution;
+    let agent =
+      CdfLibraryImporter.PredictionResolutionGroup.logScoreNonMarketCdfCdf(
+        ~sampleCount,
+        ~agentPrediction,
+        ~resolution,
+      );
+    let market =
+      CdfLibraryImporter.PredictionResolutionGroup.logScoreNonMarketCdfCdf(
+        ~sampleCount,
+        ~agentPrediction=marketPrediction,
+        ~resolution,
+      );
+    floatSubtractionWithLimitation(agent, market, scoreLimiter);
+  };
 
   let nonMarketCdfCdf =
       (
@@ -36,13 +57,18 @@ module PredictionGroupError = {
       (
         {agentPrediction, marketPrediction, resolution}:
           PredictionResolutionGroup.WithMarket.combination(Cdf.t, float),
+        scoreLimiter: float => float,
       ) => {
     let pdfY = e => e |> Cdf.toPdf |> Distribution.T.findY(resolution);
     let (agentPrediction, marketPrediction) = (
       pdfY(agentPrediction),
       pdfY(marketPrediction),
     );
-    agentPrediction /. marketPrediction |> log2Error;
+    floatSubtractionWithLimitation(
+      log2Error(agentPrediction),
+      log2Error(marketPrediction),
+      scoreLimiter,
+    );
   };
 
   let nonMarketCdfFloat =
@@ -55,7 +81,6 @@ module PredictionGroupError = {
     |> Distribution.T.findY(resolution)
     |> log2Error;
 
-  //   TODO: Handle cases where market is 0 or 1
   let marketPercentagePercentage =
       (
         {agentPrediction, marketPrediction, resolution}:
@@ -119,16 +144,25 @@ module PredictionGroupError = {
       }
     );
 
-  let run = (~scoringCombination: predictionGroupErrorType, ~sampleCount, ()) => {
+  let run =
+      (
+        ~scoringCombination: predictionGroupErrorType,
+        ~sampleCount,
+        ~scoreLimiter,
+        (),
+      ) => {
     switch (scoringCombination) {
-    | `MarketScore(`CdfCdf(v)) => Ok(marketCdfCdf(sampleCount, v))
-    | `MarketScore(`CdfFloat(v)) => Ok(marketCdfFloat(v))
+    | `MarketScore(`CdfCdf(v)) =>
+      Ok(marketCdfCdf(sampleCount, v, scoreLimiter))
+    | `MarketScore(`CdfFloat(v)) => Ok(marketCdfFloat(v, scoreLimiter))
     | `MarketScore(`PercentagePercentage(v)) =>
-      Ok(marketPercentagePercentage(v))
-    | `NonMarketScore(`CdfCdf(v)) => Ok(nonMarketCdfCdf(sampleCount, v))
-    | `NonMarketScore(`CdfFloat(v)) => Ok(nonMarketCdfFloat(v))
+      Ok(marketPercentagePercentage(v) |> scoreLimiter)
+    | `NonMarketScore(`CdfCdf(v)) =>
+      Ok(nonMarketCdfCdf(sampleCount, v) |> scoreLimiter)
+    | `NonMarketScore(`CdfFloat(v)) =>
+      Ok(nonMarketCdfFloat(v) |> scoreLimiter)
     | `NonMarketScore(`PercentagePercentage(v)) =>
-      Ok(nonMarketPercentagePercentage(v))
+      Ok(nonMarketPercentagePercentage(v) |> scoreLimiter)
     };
   };
 };

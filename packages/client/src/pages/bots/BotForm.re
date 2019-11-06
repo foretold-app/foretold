@@ -77,8 +77,7 @@ let onSuccess = (loggedUser: Types.user, ()) => {
 let formFields = (state: Form.state, send, onSubmit) =>
   <FC__PageCard.BodyPadding>
     <Antd.Form onSubmit={e => onSubmit()}>
-      <Antd.Form.Item>
-        {"Name" |> Utils.ste |> E.React2.inH3}
+      <Antd.Form.Item label={"Name" |> Utils.ste}>
         <Antd.Input
           value={state.values.name}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -86,8 +85,7 @@ let formFields = (state: Form.state, send, onSubmit) =>
           )}
         />
       </Antd.Form.Item>
-      <Antd.Form.Item>
-        {"Description" |> Utils.ste |> E.React2.inH3}
+      <Antd.Form.Item label={"Description" |> Utils.ste}>
         <Antd.Input
           value={state.values.description}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -95,8 +93,7 @@ let formFields = (state: Form.state, send, onSubmit) =>
           )}
         />
       </Antd.Form.Item>
-      <Antd.Form.Item>
-        {"Picture" |> Utils.ste |> E.React2.inH3}
+      <Antd.Form.Item label={"Picture" |> Utils.ste}>
         <Antd.Input
           value={state.values.picture}
           onChange={ReForm.Helpers.handleDomFormChange(e =>

@@ -107,7 +107,6 @@ let formFields = (state: Form.state, send, getFieldState) => {
   <FC__PageCard.BodyPadding>
     <Antd.Form onSubmit={e => onSubmit()}>
       <Antd.Form.Item label={"Name" |> Utils.ste}>
-        {"Name" |> Utils.ste |> E.React2.inH3}
         <Antd.Input
           value={state.values.name}
           onChange={ReForm.Helpers.handleDomFormChange(e =>

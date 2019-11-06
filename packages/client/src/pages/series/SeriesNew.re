@@ -87,8 +87,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
       {"Warning: You can not edit a Series after created it at this time."
        |> Utils.ste}
     </h3>
-    <Antd.Form.Item>
-      {"Name" |> Utils.ste |> E.React2.inH3}
+    <Antd.Form.Item label={"Name" |> Utils.ste}>
       <Input
         value={form.values.name}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -96,8 +95,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
         )}
       />
     </Antd.Form.Item>
-    <Antd.Form.Item>
-      {"Description" |> Utils.ste |> E.React2.inH3}
+    <Antd.Form.Item label={"Description" |> Utils.ste}>
       <Input
         value={form.values.description}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -105,8 +103,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
         )}
       />
     </Antd.Form.Item>
-    <Antd.Form.Item>
-      {"Subjects" |> Utils.ste |> E.React2.inH3}
+    <Antd.Form.Item label={"Subjects" |> Utils.ste}>
       {form.values.subjects
        |> E.L.fmapi((i, r) =>
             <Input
@@ -135,8 +132,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
         {"Add Subject" |> Utils.ste}
       </Button>
     </Antd.Form.Item>
-    <Antd.Form.Item>
-      {"Properties" |> Utils.ste |> E.React2.inH3}
+    <Antd.Form.Item label={"Properties" |> Utils.ste}>
       {form.values.properties
        |> E.L.fmapi((i, r) =>
             <Input
@@ -165,8 +161,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
         {"Add Property" |> Utils.ste}
       </Button>
     </Antd.Form.Item>
-    <Antd.Form.Item>
-      {"Dates" |> Utils.ste |> E.React2.inH3}
+    <Antd.Form.Item label={"Dates" |> Utils.ste}>
       {form.values.dates
        |> E.L.fmapi((i, r) =>
             <DatePicker

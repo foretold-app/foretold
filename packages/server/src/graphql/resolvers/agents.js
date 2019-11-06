@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../../data');
+const { AgentsData } = require('../../data');
 
 const { Params } = require('../../data/classes');
 const { Filter } = require('../../data/classes');
@@ -17,7 +17,7 @@ async function one(root, args, _context, _info) {
   const id = _.get(args, 'id', null)
     || _.get(root, 'agentId', null);
   const params = new Params({ id });
-  return data.agents.getOne(params);
+  return new AgentsData().getOne(params);
 }
 
 /**
@@ -37,7 +37,8 @@ async function all(root, args, _context, _info) {
     excludeChannelId,
     types,
   });
-  return data.agents.getAll(filter);
+
+  return new AgentsData().getAll(filter);
 }
 
 module.exports = {

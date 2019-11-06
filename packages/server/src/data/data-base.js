@@ -214,11 +214,11 @@ class DataBase {
   _getDefaultRestrictionsForIncludedIntoChannel(options = {}) {
     const currentAgentId = _.get(options, 'currentAgentId', null);
 
-    const withinPublicChannels = currentAgentId
+    const withinPublicChannels = !!currentAgentId
       ? null
       : structures.withinPublicChannelsByChannelId();
 
-    const withinPublicAndJoinedChannels = currentAgentId
+    const withinPublicAndJoinedChannels = !!currentAgentId
       ? structures.withinPublicAndJoinedChannelsByChannelId(currentAgentId)
       : null;
 

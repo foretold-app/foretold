@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../../data');
+const { UsersData } = require('../../data');
 
 const { Params } = require('../../data/classes');
 const { Data } = require('../../data/classes');
@@ -20,7 +20,7 @@ async function update(root, args, _context) {
   const params = new Params({ id });
   const data$ = new Data(input);
 
-  return data.users.updateOne(params, data$);
+  return new UsersData().updateOne(params, data$);
 }
 
 /**
@@ -39,7 +39,7 @@ async function accessTokenUpdate(root, args, _context) {
   const params = new Params({ id });
   const data$ = new Data(input);
 
-  return data.users.updateOne(params, data$);
+  return new UsersData().updateOne(params, data$);
 }
 
 /**
@@ -50,8 +50,9 @@ async function accessTokenUpdate(root, args, _context) {
  * @returns {Promise<Models.User>}
  */
 async function one(root, args, context) {
-  const { id } = args;
-  return data.users.getOne({ id });
+  const id = _.get(args, 'id', null);
+
+  return new UsersData().getOne({ id });
 }
 
 module.exports = {

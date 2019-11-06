@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const datas = require('../../data');
+const { PreferencesData } = require('../../data');
 
 const { Options } = require('../../data/classes');
 const { Params } = require('../../data/classes');
@@ -16,10 +16,12 @@ const { Data } = require('../../data/classes');
  */
 async function getOne(root, args, context, info) {
   const agentId = _.get(root, 'id', null);
+
   const params = new Params({ agentId });
   const query = new Query();
   const data = new Data({ agentId });
-  return datas.preferences.upsertOne(params, query, data);
+
+  return new PreferencesData().upsertOne(params, query, data);
 }
 
 /**
@@ -38,7 +40,7 @@ async function update(root, args, context, info) {
   const data = new Data(args.input);
   const options = new Options();
 
-  return datas.preferences.updateOne(params, data, options);
+  return new PreferencesData().updateOne(params, data, options);
 }
 
 module.exports = {

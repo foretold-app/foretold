@@ -7,7 +7,7 @@ const {
   nonMarketScore,
 } = require('@foretold/prediction-analysis');
 
-const data = require('../../data');
+const { MeasurementsData } = require('../../data');
 const { withinMeasurables } = require('../../data/classes/structures');
 
 const { Pagination } = require('../../data/classes');
@@ -62,7 +62,7 @@ async function all(root, args, context, info) {
     agentId: _.get(context, 'agent.id', null),
   });
 
-  return data.measurements.getConnection(filter, pagination, options);
+  return new MeasurementsData().getConnection(filter, pagination, options);
 }
 
 /**
@@ -86,11 +86,12 @@ async function measurableMeasurement(root, args, context, info) {
     agentId: _.get(context, 'agent.id', null),
   });
 
-  const result = await data.measurements.getConnection(
+  const result = await new MeasurementsData().getConnection(
     filter,
     pagination,
     options,
   );
+
   return result.getFirst();
 }
 
@@ -114,7 +115,7 @@ async function one(root, args, context, info) {
     agentId: currentAgentId,
   });
 
-  return data.measurements.getOne(params, query, options);
+  return new MeasurementsData().getOne(params, query, options);
 }
 
 /**
@@ -128,8 +129,10 @@ async function one(root, args, context, info) {
 async function create(root, args, context, info) {
   const agentId = _.get(args, 'input.agentId', null)
     || _.get(context, 'agent.id', null);
-  const datas = { ...args.input, agentId };
-  return data.measurements.createOne(datas);
+
+  const data = { ...args.input, agentId };
+
+  return new MeasurementsData().createOne(data);
 }
 
 /**
@@ -142,9 +145,11 @@ async function create(root, args, context, info) {
 async function latest(root, args, context, info) {
   const measurable = root;
   const agentId = context.resultOrLatestMeasurementForAgentId;
+
   if (!measurable) return null;
   if (!agentId) return null;
-  return data.measurements.getLatest({
+
+  return new MeasurementsData().getLatest({
     measurable,
     agentId,
   });
@@ -177,7 +182,7 @@ async function scoreSet(root, args, context, info) {
 async function prediction(root, args, context, info) {
   const id = _.get(root, 'id', null);
   const params = new Params({ id });
-  return data.measurements.getOne(params);
+  return new MeasurementsData().getOne(params);
 }
 
 /**
@@ -191,7 +196,7 @@ async function prediction(root, args, context, info) {
  */
 async function outcome(root, args, context, info) {
   const measurableId = _.get(root, 'measurableId', null);
-  return data.measurements.getOutcome(measurableId);
+  return new MeasurementsData().getOutcome(measurableId);
 }
 
 /**
@@ -204,7 +209,7 @@ async function outcome(root, args, context, info) {
  */
 async function outcomeByRootId(root, _args, _context, _info) {
   const measurableId = _.get(root, 'id', null);
-  return data.measurements.getOutcome(measurableId);
+  return new MeasurementsData().getOutcome(measurableId);
 }
 
 /**
@@ -220,7 +225,8 @@ async function previousAggregate(root, args, context, info) {
   const measurableId = _.get(root, 'measurableId', null);
   const createdAt = _.get(root, 'createdAt', null);
   const agentId = _.get(context, 'botAgentId', null);
-  return data.measurements.getPreviousRelevantAggregate(
+
+  return new MeasurementsData().getPreviousRelevantAggregate(
     measurableId,
     agentId,
     createdAt,
@@ -238,7 +244,8 @@ async function previousAggregate(root, args, context, info) {
 async function latestAggregateByRootId(root, _args, context, _info) {
   const measurableId = _.get(root, 'id', null);
   const agentId = _.get(context, 'botAgentId', null);
-  return data.measurements.getLatestAggregate(measurableId, agentId);
+
+  return new MeasurementsData().getLatestAggregate(measurableId, agentId);
 }
 
 /**
@@ -389,7 +396,7 @@ async function truncateCdf(root, args, context, info) {
  */
 async function measurementCountByAgentId(root, _args, _context, _info) {
   const agentId = _.get(root, 'id', null);
-  return data.measurements.getCount({ agentId });
+  return new MeasurementsData().getCount({ agentId });
 }
 
 /**
@@ -402,7 +409,7 @@ async function measurementCountByAgentId(root, _args, _context, _info) {
  */
 async function measurementCountByMeasurableId(root, _args, _context, _info) {
   const measurableId = _.get(root, 'id', null);
-  return data.measurements.getCount({ measurableId });
+  return new MeasurementsData().getCount({ measurableId });
 }
 
 /**
@@ -413,7 +420,7 @@ async function measurementCountByMeasurableId(root, _args, _context, _info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function count(_root, _args, _context, _info) {
-  return data.measurements.getCount();
+  return new MeasurementsData().getCount();
 }
 
 /**
@@ -426,7 +433,7 @@ async function count(_root, _args, _context, _info) {
  */
 async function measurerCount(root, _args, _context, _info) {
   const measurableId = _.get(root, 'id', null);
-  return data.measurements.getCount({ measurableId }, {
+  return new MeasurementsData().getCount({ measurableId }, {
     distinct: true,
     col: 'agentId',
   });

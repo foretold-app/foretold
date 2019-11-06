@@ -1,5 +1,6 @@
 const _ = require('lodash');
-const data = require('../../data');
+
+const { ChannelsData } = require('../../data');
 
 const { Pagination } = require('../../data/classes');
 const { Filter } = require('../../data/classes');
@@ -14,7 +15,7 @@ const { structures } = require('../../data/classes');
  * @returns {Promise<Model[]>}
  */
 async function channelAgents(channel) {
-  return data.channels.getAgentsByChannelId(channel.id);
+  return new ChannelsData().getAgentsByChannelId(channel.id);
 }
 
 /**
@@ -22,7 +23,7 @@ async function channelAgents(channel) {
  * @returns {Promise<Model>}
  */
 async function channelCreator(channel) {
-  return data.channels.getCreatorByChannelId(channel.id);
+  return new ChannelsData().getCreatorByChannelId(channel.id);
 }
 
 /**
@@ -52,7 +53,7 @@ async function all(root, args, context, _info) {
   const pagination = new Pagination(args);
   const options = new Options({ agentId });
 
-  return data.channels.getAll(filter, pagination, options);
+  return new ChannelsData().getAll(filter, pagination, options);
 }
 
 /**
@@ -71,7 +72,7 @@ async function one(root, args, context, _info) {
   const query = new Query();
   const options = new Options({ agentId });
 
-  return data.channels.getOne(params, query, options);
+  return new ChannelsData().getOne(params, query, options);
 }
 
 /**
@@ -85,9 +86,11 @@ async function one(root, args, context, _info) {
  */
 async function update(root, args, context, _info) {
   const id = _.get(args, 'id', null);
+
   const params = new Params({ id });
   const data$ = new Data(args.input);
-  return data.channels.updateOne(params, data$);
+
+  return new ChannelsData().updateOne(params, data$);
 }
 
 /**
@@ -101,7 +104,7 @@ async function create(root, args, context, _info) {
   const creatorId = _.get(context, 'agent.id', null);
   const input = _.get(args, 'input') || {};
 
-  return data.channels.createOne({
+  return new ChannelsData().createOne({
     ...input,
     creatorId,
   });

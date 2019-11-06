@@ -5,7 +5,7 @@ module Icon = {
   external reactClass: ReasonReact.reactClass = "Icon";
 
   [@react.component]
-  let make = (~icon=?, ~size=?, ~children=ReasonReact.null) =>
+  let make = (~icon=?, ~size=?, ~children=<Null />) =>
     ReasonReact.wrapJsForReason(
       ~reactClass,
       ~props={

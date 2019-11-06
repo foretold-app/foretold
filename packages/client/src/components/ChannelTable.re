@@ -58,12 +58,12 @@ module Columns = {
                ? <div className="ant-tag ant-tag-blue">
                    {"Curated" |> Utils.ste}
                  </div>
-               : ReasonReact.null}
+               : <Null />}
             {r.isArchived
                ? <div className="ant-tag ant-tag-gold">
                    {"Archived" |> Utils.ste}
                  </div>
-               : ReasonReact.null}
+               : <Null />}
           </>,
       ~show=(r: record) => r.isCurated || r.isArchived,
       ~flex=1,

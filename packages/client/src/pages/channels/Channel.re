@@ -8,7 +8,7 @@ let make =
     (
       ~channelPage: Routing.ChannelPage.t,
       ~channel: option(Types.channel),
-      ~children=ReasonReact.null,
+      ~children=<Null />,
     ) => {
   let channelId = channelPage.channelId;
 

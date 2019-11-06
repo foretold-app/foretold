@@ -52,10 +52,10 @@ let component =
             // @todo: rapir this hard logic
             ServerJwt.set(c);
             reload();
-            ReasonReact.null;
+            <Null />;
           | Error(_) =>
             Routing.Url.push(Login);
-            ReasonReact.null;
+            <Null />;
           | _ => redirectingMessage
           }
       )

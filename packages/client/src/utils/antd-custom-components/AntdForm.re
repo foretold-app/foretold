@@ -51,7 +51,7 @@ module Item = {
         ~required=?,
         ~style=?,
         ~colon=?,
-        ~children=ReasonReact.null,
+        ~children=<Null />,
       ) =>
     ReasonReact.wrapJsForReason(
       ~reactClass,
@@ -99,7 +99,7 @@ let make =
       ~className=?,
       ~prefixCls=?,
       ~hideRequiredMark=?,
-      ~children=ReasonReact.null,
+      ~children=<Null />,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,

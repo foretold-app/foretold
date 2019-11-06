@@ -22,7 +22,7 @@ let make =
       ~agentId=None,
       ~head=Leaderboard.head(~subTab=ByMember),
       ~columns=LeaderboardTable.Columns.members,
-      ~children=ReasonReact.null,
+      ~children=<Null />,
     ) => {
   let subComponent = (reducerParams: Reducer.Types.reducerParams) => {
     let items =

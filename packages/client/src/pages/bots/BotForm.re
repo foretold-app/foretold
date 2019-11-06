@@ -71,7 +71,7 @@ let onSuccess = (loggedUser: Types.user, ()) => {
   Primary.User.getAgent(loggedUser, agent =>
     Routing.Url.push(Agent({agentId: agent.id, subPage: AgentBots}))
   );
-  ReasonReact.null;
+  <Null />;
 };
 
 let formFields = (state: Form.state, send, onSubmit) =>

@@ -30,9 +30,9 @@ let make = _ => {
 
       switch (loggedUser) {
       | Some({isEmailVerified: Some(isEmailVerified), email: Some(email)}) =>
-        isEmailVerified ? ReasonReact.null : warning(email)
+        isEmailVerified ? <Null /> : warning(email)
       | Some({isEmailVerified: _, email: None}) => warningNoEmail
-      | _ => ReasonReact.null
+      | _ => <Null />
       };
     }}
   </Providers.AppContext.Consumer>;

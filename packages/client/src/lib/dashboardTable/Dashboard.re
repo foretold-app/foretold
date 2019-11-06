@@ -9,16 +9,11 @@ module Styles = {
   let padding = style([padding(`em(1.0))]);
 };
 
-type state = {text: string};
-
-type action =
-  | Update(string);
-
 [@react.component]
 let make = (~channelId: string) => {
   let (text, setText) = React.useState(() => "");
 
-  <SLayout isFluid=true head=ReasonReact.null>
+  <SLayout isFluid=true>
     <FC.PageCard.Body>
       <div className=Styles.padding>
         <Antd.Input.TextArea

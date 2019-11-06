@@ -28,7 +28,7 @@ let make =
       ~onChange=?,
       ~value=?,
       ~disabled=false,
-      ~children=ReasonReact.null,
+      ~children=<Null />,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass,

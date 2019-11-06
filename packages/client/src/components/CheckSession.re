@@ -31,12 +31,12 @@ let make = () => {
                 ();
               });
 
-              ReasonReact.null;
-            | _ => ReasonReact.null
+              <Null />;
+            | _ => <Null />
             }
           }
         </UserAccessTokenUpdate.Mutation>
-      | _ => ReasonReact.null
+      | _ => <Null />
       }
     }
   </Providers.AppContext.Consumer>;

@@ -27,7 +27,7 @@ module FormConfig = {
 
 module Form = ReFormNext.Make(FormConfig);
 
-let testName = (str) => {
+let testName = str => {
   let exp = () => [%re "/^[a-z0-9._]{3,255}$/i"];
   let res = exp() |> Js.Re.exec(str);
   switch (res) {
@@ -36,7 +36,7 @@ let testName = (str) => {
   };
 };
 
-let testBody = (str) => {
+let testBody = str => {
   let exp = () => [%re "/^[a-z0-9._]{3,16384}$/i"];
   let res = exp() |> Js.Re.exec(str);
   switch (res) {
@@ -59,11 +59,15 @@ let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) =>
       Form.Validation.Schema([|
         Custom(
           Name,
-          values => testName(values.name) ? Valid : Error("At least 3 charachters are needed."),
+          values =>
+            testName(values.name)
+              ? Valid : Error("At least 3 charachters are needed."),
         ),
         Custom(
           Body,
-          values => testBody(values.body) ? Valid : Error("At least 3 charachters are needed."),
+          values =>
+            testBody(values.body)
+              ? Valid : Error("At least 3 charachters are needed."),
         ),
       |]),
     innerComponentFn,

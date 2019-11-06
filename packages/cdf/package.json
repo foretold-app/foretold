@@ -1,9 +1,10 @@
 {
   "name": "@foretold/cdf",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Cumulative distribution functions",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "parcel": "parcel build ./index.js --no-source-maps --no-autoinstall",
     "test": "jest --watch",
     "test:cv": "jest --coverage --forceExit",
     "test:ci": "jest --forceExit"
@@ -14,6 +15,7 @@
     "jest": "24.9.0"
   },
   "dependencies": {
+    "parcel": "1.12.3",
     "pdfast": "0.2.0",
     "lodash": "4.17.15"
   },

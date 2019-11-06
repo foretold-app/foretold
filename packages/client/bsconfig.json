@@ -23,7 +23,8 @@
     "reason-react",
     "reason-apollo",
     "rationale",
-    "bs-ken"
+    "bs-ken",
+    "bs-reform"
   ],
   "refmt": 3,
   "warnings": {

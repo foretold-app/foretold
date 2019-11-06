@@ -22,11 +22,11 @@ module Tabs = {
           <TabButton
             isActive={tab == Measurements}
             onClick={_ => switchTab(Measurements)}>
-            {"Predictions" |> ReasonReact.string}
+            {"Predictions" |> Utils.ste}
           </TabButton>
           <TabButton
             isActive={tab == Scores} onClick={_ => switchTab(Scores)}>
-            {"Scores" |> ReasonReact.string}
+            {"Scores" |> Utils.ste}
           </TabButton>
         </Div>
         <Div>

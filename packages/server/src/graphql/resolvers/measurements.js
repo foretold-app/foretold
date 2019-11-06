@@ -242,7 +242,7 @@ async function latestAggregateByRootId(root, _args, context, _info) {
 }
 
 /**
- * @todo: duplicated?
+ * @todo: duplicated.
  * @param r
  * @returns {{data: *, dataType: *}}
  */
@@ -262,7 +262,7 @@ function translateValue(r) {
  */
 function _marketLogScore({ prediction, aggregate, outcome }) {
   if (!prediction || !aggregate || !outcome) {
-    return ({ error: 'MeasurementScore Error: Missing needed data' });
+    return { error: 'MeasurementScore Error: Missing needed data' };
   }
 
   const { competitorType } = prediction.dataValues;
@@ -270,7 +270,7 @@ function _marketLogScore({ prediction, aggregate, outcome }) {
   if (
     competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
   ) {
-    return ({ error: 'MeasurementScore Exception: Measurement not competitive' });
+    return { error: 'MeasurementScore Exception: Measurement not competitive' };
   }
 
   return new PredictionResolutionGroup({
@@ -288,7 +288,7 @@ function _marketLogScore({ prediction, aggregate, outcome }) {
  */
 function _nonMarketLogScore({ prediction, outcome }) {
   if (!prediction || !outcome) {
-    return ({ error: '_nonMarketLogScore Error: Missing needed data' });
+    return { error: '_nonMarketLogScore Error: Missing needed data' };
   }
 
   const { competitorType } = prediction.dataValues;
@@ -297,7 +297,7 @@ function _nonMarketLogScore({ prediction, outcome }) {
     competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
     && competitorType !== MEASUREMENT_COMPETITOR_TYPE.AGGREGATION
   ) {
-    return ({ error: 'False' });
+    return { error: 'False' };
   }
 
   return new PredictionResolutionGroup({
@@ -320,10 +320,12 @@ async function primaryPointScore(root, args, context, info) {
     aggregate: await previousAggregate(root, args, context, info),
     outcome: await outcome(root, args, context, info),
   });
+
   if (result.error) {
     log.trace('ERROR: ', result.error);
     return undefined;
   }
+
   return _.isFinite(result.data) ? _.round(result.data, 6) : undefined;
 }
 

@@ -14,21 +14,21 @@ let make = (~channelId: string) => {
                 ChannelMembershipCreate.mutate(mutation, agentId, channelId),
             )
           }>
-          {"Add to Community" |> ReasonReact.string}
+          {"Add to Community" |> Utils.ste}
         </Link>
       }
     </ChannelMembershipCreate.Mutation>;
 
   let agentColumn =
     Table.Column.make(
-      ~name="Member" |> ReasonReact.string,
+      ~name="Member" |> Utils.ste,
       ~render=(agent: Types.agent) => <AgentLink agent />,
       (),
     );
 
   let inviteColumn =
     Table.Column.make(
-      ~name="Invite" |> ReasonReact.string,
+      ~name="Invite" |> Utils.ste,
       ~render=(agent: Types.agent) => addToChannelLink(agent.id, channelId),
       (),
     );
@@ -38,7 +38,7 @@ let make = (~channelId: string) => {
   let title =
     <FC.Base.Div float=`left>
       <FC.PageCard.HeaderRow.Title>
-        {"Add Agents" |> ReasonReact.string}
+        {"Add Agents" |> Utils.ste}
       </FC.PageCard.HeaderRow.Title>
     </FC.Base.Div>;
 

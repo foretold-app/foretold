@@ -27,8 +27,8 @@ module FormConfig = {
 
 module Form = ReFormNext.Make(FormConfig);
 
-let testName = (str) => {
-  let exp = () => [%re "/^[a-z0-9._]{3,255}$/i"];
+let testName = str => {
+  let exp = () => [%re "/^.{3,255}$/i"];
   let res = exp() |> Js.Re.exec(str);
   switch (res) {
   | Some(_) => true
@@ -36,8 +36,8 @@ let testName = (str) => {
   };
 };
 
-let testBody = (str) => {
-  let exp = () => [%re "/^[a-z0-9._]{3,16384}$/i"];
+let testBody = str => {
+  let exp = () => [%re "/^.{3,16384}$/i"];
   let res = exp() |> Js.Re.exec(str);
   switch (res) {
   | Some(_) => true
@@ -59,11 +59,11 @@ let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) =>
       Form.Validation.Schema([|
         Custom(
           Name,
-          values => testName(values.name) ? Valid : Error("At least 3 charachters are needed."),
+          values => testName(values.name) ? Valid : Error(Lang.atLeast3),
         ),
         Custom(
           Body,
-          values => testBody(values.body) ? Valid : Error("At least 3 charachters are needed."),
+          values => testBody(values.body) ? Valid : Error(Lang.atLeast3),
         ),
       |]),
     innerComponentFn,
@@ -102,8 +102,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
 
   <FC__PageCard.BodyPadding>
     <Antd.Form onSubmit={e => onSubmit()}>
-      <Antd.Form.Item>
-        {"Name" |> ReasonReact.string |> E.React2.inH3}
+      <Antd.Form.Item label={"Name" |> Utils.ste}>
         <Antd.Input
           value={state.values.name}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
@@ -112,7 +111,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
         />
         {error(stateName)}
       </Antd.Form.Item>
-      <Antd.Form.Item label={"Body" |> Utils.ste} help={"" |> Utils.ste}>
+      <Antd.Form.Item label={"Body" |> Utils.ste}>
         <Antd.Input.TextArea
           style={ReactDOMRe.Style.make(~minHeight="12em", ())}
           value={state.values.body}
@@ -127,7 +126,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
       <Antd.Form.Item>
         <Antd.Button
           _type=`primary onClick={_ => onSubmit()} disabled={!isEnabled}>
-          {"Submit" |> ReasonReact.string}
+          {"Submit" |> Utils.ste}
         </Antd.Button>
       </Antd.Form.Item>
     </Antd.Form>

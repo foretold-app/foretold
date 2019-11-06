@@ -35,7 +35,7 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
 
   let errorFn = _ =>
     <Channel channelPage channel=None>
-      <SLayout> <div> {"No channel." |> ReasonReact.string} </div> </SLayout>
+      <SLayout> <div> {"No channel." |> Utils.ste} </div> </SLayout>
     </Channel>;
 
   let loadingFn = () =>

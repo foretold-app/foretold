@@ -27,13 +27,13 @@ let make =
     ? <>
         <FC.Table.HeaderRow>
           <FC.Table.Cell flex={`num(3.)} properties=Table.headerCellStyles>
-            {"Name & Status" |> ReasonReact.string}
+            {"Name & Status" |> Utils.ste}
           </FC.Table.Cell>
           <FC.Table.Cell flex={`num(1.5)} properties=Table.headerCellStyles>
-            {"Aggregate and resolution" |> ReasonReact.string}
+            {"Aggregate and resolution" |> Utils.ste}
           </FC.Table.Cell>
           <FC.Table.Cell flex={`num(1.)} properties=Table.headerCellStyles>
-            {"Details" |> ReasonReact.string}
+            {"Details" |> Utils.ste}
           </FC.Table.Cell>
         </FC.Table.HeaderRow>
         {measurables

@@ -1,4 +1,7 @@
 import _ from "lodash";
+import math from 'mathjs';  
+import {distributionUpToIntoLognormal} from "../../lib/distributionMath.js";
+
 const SUFFIXES = {
   '%': -2,
   'K': 3,
@@ -29,6 +32,8 @@ const NUMBER_REGEX = new RegExp(`(-?${or([INTEGER_REGEX, DECIMAL_REGEX]).source}
 export const POINT_REGEX = padded([NUMBER_REGEX])
 export const rangeRegex = (sep, left, right) => padded([left, NUMBER_REGEX, sep, NUMBER_REGEX, right])
 
+export const SeparatorsDistributionUpTo = /to|\.\.|->|:/
+
 const getMult = suffix => Math.pow(10,SUFFIXES[suffix])
 const parseNumber = (num, suffix) => parseFloat(num.replace(',', '')) * (!!suffix ? getMult(suffix) : 1)
 
@@ -44,6 +49,10 @@ function getGuesstimateType(guesstimateType, [low]) {
   }
 }
 
+function getNumbers(text, regEx){
+  return _.chunk(text.match(regEx).slice(1), 2).map(([num, suffix]) => parseNumber(num, suffix))
+}
+
 export function regexBasedFormatter(re, guesstimateTypeFn = getGuesstimateType, errorFn = rangeErrorFn) {
   return {
     matches({text}) { return re.test(text) },
@@ -54,6 +63,32 @@ export function regexBasedFormatter(re, guesstimateTypeFn = getGuesstimateType, 
       return {guesstimateType: guesstimateTypeFn(guesstimateType, params), params}
     },
 
-    _numbers(text) { return _.chunk(text.match(re).slice(1), 2).map(([num, suffix]) => parseNumber(num, suffix)) },
+    _numbers(text) { getNumbers(text, re) },
   }
+}
+
+// The function: shorthandIntoLognormalFormattingStep 
+// is used to format inputs like "1 to 100" when inside a multimodal.
+// It transforms strings like "=mm(normal(10,5), 1 to 100))
+// into strings like "=mm(normal(10,5), lognormal(50.1, 1.4))
+
+export function shorthandIntoLognormalFormattingStep(text){
+  
+    function shorthandIntoLognormalReplacer(string){
+        
+        let rangeRegexIndividual = rangeRegex(SeparatorsDistributionUpTo)
+        let arrayLowHigh = getNumbers(string, rangeRegexIndividual)
+      
+        let low = arrayLowHigh[0]
+        let high= arrayLowHigh[1]
+
+        return distributionUpToIntoLognormal(low, high)
+
+    } 
+    
+    let rangeRegexMultiple = (sep, left, right) => spaceSep([left, NUMBER_REGEX, sep, NUMBER_REGEX, right])
+    let shorthandIntoLognormalRegex= new RegExp(rangeRegexMultiple(SeparatorsDistributionUpTo), "g")
+  
+    return text.replace(shorthandIntoLognormalRegex, shorthandIntoLognormalReplacer)
+
 }

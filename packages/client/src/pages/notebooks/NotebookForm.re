@@ -28,7 +28,7 @@ module FormConfig = {
 module Form = ReFormNext.Make(FormConfig);
 
 let testName = str => {
-  let exp = () => [%re "/^[a-z0-9._]{3,255}$/i"];
+  let exp = () => [%re "/^.{3,255}$/i"];
   let res = exp() |> Js.Re.exec(str);
   switch (res) {
   | Some(_) => true
@@ -37,7 +37,7 @@ let testName = str => {
 };
 
 let testBody = str => {
-  let exp = () => [%re "/^[a-z0-9._]{3,16384}$/i"];
+  let exp = () => [%re "/^.{3,16384}$/i"];
   let res = exp() |> Js.Re.exec(str);
   switch (res) {
   | Some(_) => true

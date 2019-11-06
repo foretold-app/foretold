@@ -7,6 +7,7 @@ const { Options } = require('../../data/classes');
 const { Filter } = require('../../data/classes');
 const { Params } = require('../../data/classes');
 const { Data } = require('../../data/classes');
+const { Query } = require('../../data/classes');
 
 /**
  * @param {*} _root
@@ -62,14 +63,21 @@ async function all(_root, args, context, _info) {
  * @param {*} _root
  * @param {object} args
  * @param {Models.NotebookID} args.id
- * @param {Schema.Context} _context
+ * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<Model>}
  */
-async function one(_root, args, _context, _info) {
+async function one(_root, args, context, _info) {
   const id = _.get(args, 'id', null);
+
+  const isAdmin = _.get(context, 'agent.isAdmin', null);
+  const currentAgentId = _.get(context, 'agent.id', null);
+
   const params = new Params({ id });
-  return new NotebooksData().getOne(params);
+  const query = new Query();
+  const options = new Options({ isAdmin, currentAgentId });
+
+  return new NotebooksData().getOne(params, query, options);
 }
 
 module.exports = {

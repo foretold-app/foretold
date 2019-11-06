@@ -1,5 +1,5 @@
-type t = Types.distribution;
-type ts = Types.distributions;
+type t = Types.Distribution.t;
+type ts = Types.Distribution.ts;
 
 module T: {
   let hasLength: t => bool;
@@ -9,6 +9,7 @@ module T: {
   let make: (array(float), array(float)) => t;
   let toPdf: t => t;
   let integral: t => float;
+  let fmap: (float => float, t) => t;
 };
 
 module Ts: {

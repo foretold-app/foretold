@@ -1,18 +1,17 @@
 module Distribution: {
-  let toPdf: Types.distribution => Types.distribution;
-  let findX: (float, PredictionAnalysis.Types.distribution) => float;
-  let findY: (float, PredictionAnalysis.Types.distribution) => float;
-  let integral: Types.distribution => float;
-  let differentialEntropy:
-    (int, PredictionAnalysis.Types.distribution) => float;
+  let toPdf: Types.Distribution.t => Types.Distribution.t;
+  let findX: (float, Types.Distribution.t) => float;
+  let findY: (float, Types.Distribution.t) => float;
+  let integral: Types.Distribution.t => float;
+  let differentialEntropy: (int, Types.Distribution.t) => float;
 };
 
 module PredictionResolutionGroup: {
   let logScoreNonMarketCdfCdf:
     (
       ~sampleCount: int,
-      ~agentPrediction: PredictionAnalysis.Types.distribution,
-      ~resolution: PredictionAnalysis.Types.distribution
+      ~agentPrediction: Types.Distribution.t,
+      ~resolution: Types.Distribution.t
     ) =>
-    float;
+    Types.Distribution.t;
 };

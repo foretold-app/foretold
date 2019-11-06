@@ -28,7 +28,7 @@ let pointScore =
     |> Rationale.Result.bind(_, e =>
          scoreFn(
            ~scoringCombination=`MarketScore(e),
-           ~sampleCount,
+           ~sampleCount=20,
            ~scoreLimiter,
            (),
          )
@@ -36,7 +36,7 @@ let pointScore =
   | `NonMarketScore =>
     scoreFn(
       ~scoringCombination=`NonMarketScore(scoringCombination),
-      ~sampleCount,
+      ~sampleCount=20,
       ~scoreLimiter,
       (),
     )

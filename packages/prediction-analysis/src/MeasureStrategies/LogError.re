@@ -31,13 +31,18 @@ module PredictionGroupError = {
         ~sampleCount,
         ~agentPrediction,
         ~resolution,
-      );
+      )
+      |> Distribution.T.fmap(scoreLimiter)
+      |> CdfLibraryImporter.Distribution.integral;
+
     let market =
       CdfLibraryImporter.PredictionResolutionGroup.logScoreNonMarketCdfCdf(
         ~sampleCount,
         ~agentPrediction=marketPrediction,
         ~resolution,
-      );
+      )
+      |> Distribution.T.fmap(scoreLimiter)
+      |> CdfLibraryImporter.Distribution.integral;
     floatSubtractionWithLimitation(agent, market, scoreLimiter);
   };
 
@@ -46,12 +51,27 @@ module PredictionGroupError = {
         sampleCount: int,
         {agentPrediction, resolution}:
           PredictionResolutionGroup.combination(Cdf.t, Cdf.t),
+        scoreLimiter,
       ) =>
     CdfLibraryImporter.PredictionResolutionGroup.logScoreNonMarketCdfCdf(
       ~sampleCount,
       ~agentPrediction=agentPrediction |> Cdf.toDistribution,
       ~resolution=resolution |> Cdf.toDistribution,
-    );
+    )
+    |> (
+      e => {
+        Js.log2("HIHIHIHIHI", e);
+        e;
+      }
+    )
+    |> Distribution.T.fmap(scoreLimiter)
+    |> (
+      e => {
+        Js.log(e);
+        e;
+      }
+    )
+    |> CdfLibraryImporter.Distribution.integral;
 
   let marketCdfFloat =
       (
@@ -158,7 +178,7 @@ module PredictionGroupError = {
     | `MarketScore(`PercentagePercentage(v)) =>
       Ok(marketPercentagePercentage(v) |> scoreLimiter)
     | `NonMarketScore(`CdfCdf(v)) =>
-      Ok(nonMarketCdfCdf(sampleCount, v) |> scoreLimiter)
+      Ok(nonMarketCdfCdf(sampleCount, v, scoreLimiter) |> scoreLimiter)
     | `NonMarketScore(`CdfFloat(v)) =>
       Ok(nonMarketCdfFloat(v) |> scoreLimiter)
     | `NonMarketScore(`PercentagePercentage(v)) =>

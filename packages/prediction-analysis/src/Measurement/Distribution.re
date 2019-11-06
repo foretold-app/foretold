@@ -1,5 +1,5 @@
-type t = Types.distribution;
-type ts = Types.distributions;
+type t = Types.Distribution.t;
+type ts = Types.Distribution.ts;
 
 module T = {
   module Lib = CdfLibraryImporter.Distribution;
@@ -10,6 +10,13 @@ module T = {
   let make = (xs, ys): t => {xs, ys};
   let toPdf = Lib.toPdf;
   let integral = Lib.integral;
+  let fmap = (fn, {xs, ys}: t): t => {
+    let (xs, ys) =
+      Belt.Array.zip(xs, ys)
+      |> Belt.Array.map(_, ((x, y)) => (x, fn(y)))
+      |> Belt.Array.unzip;
+    {xs, ys};
+  };
 };
 
 module Ts = {

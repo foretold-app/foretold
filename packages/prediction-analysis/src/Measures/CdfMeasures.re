@@ -5,4 +5,4 @@ let findY = (y: float) => Cdf.toDistribution ||> Distribution.T.findY(y);
 let integral = Cdf.toDistribution ||> Distribution.T.integral;
 
 let differentialEntropy = (t: Cdf.t) =>
-  LogError.differentialEntropy(10000, `Cdf(t));
+  LogError.differentialEntropy(1000, `Cdf(t));

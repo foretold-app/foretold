@@ -5,14 +5,15 @@ module JS = {
     ys: array(float),
   };
 
-  let distToJs = (d: Types.distribution) => distJs(~xs=d.xs, ~ys=d.ys);
+  let distToJs = (d: Types.Distribution.t) => distJs(~xs=d.xs, ~ys=d.ys);
 
-  let jsToDist = (d: distJs): Types.distribution => {
+  let jsToDist = (d: distJs): Types.Distribution.t => {
     xs: xsGet(d),
     ys: ysGet(d),
   };
 
-  let doAsDist = (f, d: Types.distribution) => d |> distToJs |> f |> jsToDist;
+  let doAsDist = (f, d: Types.Distribution.t) =>
+    d |> distToJs |> f |> jsToDist;
 
   [@bs.module "./CdfLibraryImporter.js"]
   external cdfToPdf: distJs => distJs = "cdfToPdf";
@@ -57,7 +58,6 @@ module PredictionResolutionGroup = {
       JS.distToJs(agentPrediction),
       JS.distToJs(resolution),
     )
-    |> JS.jsToDist
-    |> Distribution.integral;
+    |> JS.jsToDist;
   };
 };

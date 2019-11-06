@@ -3,9 +3,10 @@
  elsewhere in this codebase. It my be reasonable to refactor later.
  */
 
-type distribution = {
-  xs: array(float),
-  ys: array(float),
+module Distribution = {
+  type t = {
+    xs: array(float),
+    ys: array(float),
+  };
+  type ts = array(t);
 };
-
-type distributions = array(distribution);

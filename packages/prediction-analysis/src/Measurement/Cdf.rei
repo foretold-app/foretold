@@ -33,4 +33,4 @@ let makeWithoutValidations: (~xs: array(float), ~ys: array(float)) => t;
 let toMeasurementValue: t => [> | `Cdf(t)];
 
 let toDistribution: t => Distribution.t;
-let toPdf: t => PredictionAnalysis.Types.distribution;
+let toPdf: t => Distribution.t;

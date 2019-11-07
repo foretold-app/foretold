@@ -24,6 +24,7 @@
   "scripts": {
     "lint": "eslint . --quiet",
     "test": "jest",
+    "test:ci": "yarn test",
     "parcel": "parcel build ./src/index.js --no-source-maps --no-autoinstall",
     "build": "yarn parcel",
     "clean": "echo CLENED"

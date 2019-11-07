@@ -41,7 +41,7 @@
   "dependencies": {
     "lodash": "4.17.15",
     "@slack/client": "5.0.2",
-    "@foretold/cdf": "1.0.11",
+    "@foretold/cdf": "1.0.13",
     "@foretold/measurement-value": "1.0.0",
     "@foretold/prediction-analysis": "0.0.6",
     "bs-ken": "0.0.6",

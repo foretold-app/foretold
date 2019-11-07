@@ -43,8 +43,9 @@ class Bot {
       for (const measurement of measurementsNotTagged) {
         await this.aggregate(measurement);
       }
+
     } catch (e) {
-      this.log.trace(e);
+      this.log.trace(e.message);
     } finally {
       await this.mutexFree();
     }

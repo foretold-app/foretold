@@ -4,9 +4,7 @@ describe('formatter', () => {
   describe('#formatters', () => {
     it('holds all formatters', () => {
       expect(formatters.length)
-        .to
-        .be
-        .above(3);
+        .toBeGreaterThan(3);
     });
   });
 
@@ -17,11 +15,10 @@ describe('formatter', () => {
       [{ text: '34 -> 88' }, 'DISTRIBUTION_NORMAL_TEXT_UPTO']
     ];
 
-    const itExamples = examples.map(e => () => {
+    examples.map(e => () => {
       it(`finds correct formatter for input ${JSON.stringify(e[0])}`, () => {
         expect(_matchingFormatter(e[0]).formatterName)
-          .to
-          .equal(e[1]);
+          .toBe(e[1]);
       });
     })
       .map(e => e());

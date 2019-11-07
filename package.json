@@ -16,7 +16,7 @@
     "migrate": "yarn server/db:migrate",
 
     "packages/build": "cd packages/guesstimator && yarn build && cd ../.. && cd packages/components && yarn build && cd ../.. && cd packages/prediction-analysis && yarn build && cd ../.. && cd packages/client && yarn build-t && cd ../..",
-    "packages/clean": "cd packages/guesstimator && yarn clean && cd ../.. && cd packages/components && yarn clean && cd ../.. && cd packages/client && yarn clean && cd ../..",
+    "packages/clean": "cd packages/guesstimator && yarn clean && cd ../.. && cd packages/components && yarn clean && cd ../.. && cd packages/prediction-analysis && yarn clean && cd ../.. && cd packages/client && yarn clean && cd ../..",
     "packages/remove": "rm -rf ./packages/client/node_modules && rm -rf ./packages/components/node_modules && rm -rf ./packages/prediction-analysis/node_modules && rm -rf ./packages/guesstimator/node_modules",
 
     "server/db:create": "cd packages/server && yarn db:create && cd ../..",
@@ -30,7 +30,7 @@
     "guesstimator/test:ci": "cd packages/guesstimator && yarn test:ci && cd ../..",
     "cdf/test:ci": "cd packages/cdf && yarn test:ci && cd ../..",
     "bots/test:ci": "cd packages/bots && yarn test:ci && cd ../..",
-    "prediction-analysis/test:ci": "cd packages/prediction-analysis && yarn test:ci && cd ../..",
+    "prediction-analysis/test:ci": "cd packages/prediction-analysis && yarn build && yarn test:ci && cd ../..",
 
     "google": "echo ${GOOGLE_AUTH} > ./packages/server/config/google.json",
 

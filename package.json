@@ -30,6 +30,7 @@
     "guesstimator/test:ci": "cd packages/guesstimator && yarn test:ci && cd ../..",
     "cdf/test:ci": "cd packages/cdf && yarn test:ci && cd ../..",
     "bots/test:ci": "cd packages/bots && yarn test:ci && cd ../..",
+    "prediction-analysis/test:ci": "cd packages/prediction-analysis && yarn test:ci && cd ../..",
 
     "google": "echo ${GOOGLE_AUTH} > ./packages/server/config/google.json",
 

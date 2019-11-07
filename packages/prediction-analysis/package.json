@@ -8,6 +8,7 @@
     "start": "bsb -make-world -w",
     "clean": "bsb -clean-world",
     "test": "jest",
+    "test:ci": "yarn jest",
     "watch:test": "jest --watchAll",
     "watch:s": "yarn jest -- Converter_test --watch",
     "parcel": "parcel build ./src/index.js --no-source-maps --no-autoinstall"

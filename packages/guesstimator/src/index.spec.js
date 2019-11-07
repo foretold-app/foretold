@@ -1,4 +1,5 @@
-import { Guesstimator } from './index.js';
+const _ = require('lodash');
+const { Guesstimator } = require('./index.js');
 
 describe('Guesstimator', () => {
   describe('.parse', () => {
@@ -6,25 +7,13 @@ describe('Guesstimator', () => {
       const input = { text: '=34' };
       const [error, item] = Guesstimator.parse(input);
       expect(_.isEmpty(error))
-        .to
-        .eq(true);
+        .toBe(true);
 
       const parsedInput = item.parsedInput;
       expect(parsedInput.guesstimateType)
-        .to
-        .eq('FUNCTION');
+        .toBe('FUNCTION');
       expect(parsedInput.text)
-        .to
-        .eq('34');
-    });
-  });
-
-  describe('.samplerTypes', () => {
-    it('has many samplerTypes', () => {
-      expect(Guesstimator.samplerTypes.all.length)
-        .to
-        .be
-        .above(4);
+        .toBe('34');
     });
   });
 
@@ -33,8 +22,7 @@ describe('Guesstimator', () => {
       const input = { text: '=34' };
       const [error, item] = Guesstimator.parse(input);
       expect(item.samplerType().referenceName)
-        .to
-        .eq('FUNCTION');
+        .toBe('FUNCTION');
     });
   });
 });

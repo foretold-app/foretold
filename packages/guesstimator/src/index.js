@@ -1,6 +1,7 @@
+import _ from 'lodash';
+
 import { parse } from './formatter/index';
 import { samplerTypes } from './types';
-import _ from 'lodash';
 
 //TODO(fix this class)
 
@@ -39,4 +40,3 @@ class Guesstimator {
 }
 
 export { Guesstimator };
-// console.log(new Guesstimator({ parsedInput: Guesstimator.parse({ text: '3 to 40' })[1].parsedInput }).sample(5));

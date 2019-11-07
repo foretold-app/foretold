@@ -1,5 +1,4 @@
-import { neededSamples } from '../Simulator';
-import { expect } from 'chai';
+import { neededSamples } from './Simulator';
 
 const n = 5000;
 
@@ -7,7 +6,7 @@ describe('Simulator', () => {
   describe('#neededSamples', () => {
     const examples = [
       [{ text: '3', inputs: {} }, 1],
-      [{ text: 'foofunction([4,5,3])', inputs: { AK: [3], BA: [5] } }, 1],
+      [{ text: 'foofunction([4,5,3])', inputs: { AK: [3], BA: [5] } }, 5000],
 
       [{ text: '3*AK*BA', inputs: { AK: [3, 4], BA: [5] } }, 2],
       [{ text: '3*AK*BA', inputs: { AK: [3, 3, 3, 3, 3, 4], BA: [5] } }, 6],
@@ -25,8 +24,7 @@ describe('Simulator', () => {
       it(`with inputs ${JSON.stringify(e[0])}, is ${e[1]} `, () => {
         const inputs = e[0];
         expect(neededSamples(inputs.text, inputs.inputs, n))
-          .to
-          .equal(e[1]);
+          .toBe(e[1]);
       });
     })
       .map(e => e());

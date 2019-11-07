@@ -13,9 +13,7 @@ export function distributionUpToIntoLognormal(low, high){
 
 // The left endpoint marks 0.05% on the CDF, the right 0.95%.
 export function distributionUpToIntoNormal(low, high){
-    
     let mean = math.mean(high, low)
     let stdev = (high - mean) / 1.645
     return `normal(${mean},${stdev})`
-
 }

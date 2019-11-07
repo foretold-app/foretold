@@ -28,4 +28,13 @@ describe('CDF Class', () => {
     expect(pdf.ys[1]).toBeCloseTo(0.4);
     expect(pdf.ys[2]).toBeCloseTo(0.13);
   });
+  it.only('combineWithUniformOfCdf()', () => {
+    const xs = [1,2,5,8];
+    const ys = [0.0, 0.4, 0.8, 1.0];
+    const cdf1 = new Cdf([1,2,3,4,5], [0.0, .25, .5, .75, 1.0]);
+    const cdf2 = new Cdf([2, 2.1, 2.2, 2.3, 2.4], [0.0, .25, .5, .75, 1.0]);
+    const pdf = cdf2.combineWithUniformOfCdf({cdf: cdf1, uniformWeight: .1, sampleCount: 10})
+    expect(pdf.ys.length).toBe(10)
+    expect(pdf.xs.length).toBe(10)
+  });
 });

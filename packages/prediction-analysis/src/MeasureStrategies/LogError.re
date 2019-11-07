@@ -14,6 +14,8 @@ let floatSubtractionWithLimitation = (a, b, limiter) => {
   | (a, b) => limiter(a) -. limiter(b)
   };
 };
+let resolutionUniformAdditionWeight =
+  Js.Math.pow_float(~base=10.0, ~exp=-11.);
 
 module PredictionGroupError = {
   let marketCdfCdf =
@@ -31,12 +33,14 @@ module PredictionGroupError = {
         ~sampleCount,
         ~agentPrediction,
         ~resolution,
+        ~resolutionUniformAdditionWeight,
       );
     let market =
       CdfLibraryImporter.PredictionResolutionGroup.logScoreNonMarketCdfCdf(
         ~sampleCount,
         ~agentPrediction=marketPrediction,
         ~resolution,
+        ~resolutionUniformAdditionWeight,
       );
     floatSubtractionWithLimitation(agent, market, scoreLimiter);
   };
@@ -51,6 +55,7 @@ module PredictionGroupError = {
       ~sampleCount,
       ~agentPrediction=agentPrediction |> Cdf.toDistribution,
       ~resolution=resolution |> Cdf.toDistribution,
+      ~resolutionUniformAdditionWeight,
     );
 
   let marketCdfFloat =

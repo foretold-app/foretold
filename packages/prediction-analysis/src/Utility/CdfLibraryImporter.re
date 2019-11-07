@@ -35,7 +35,7 @@ module JS = {
     "scoreMarketCdfCdf";
 
   [@bs.module "./CdfLibraryImporter.js"]
-  external scoreNonMarketCdfCdf: (int, distJs, distJs) => distJs =
+  external scoreNonMarketCdfCdf: (int, distJs, distJs, float) => distJs =
     "scoreNonMarketCdfCdf";
 };
 
@@ -51,11 +51,18 @@ module Distribution = {
 };
 
 module PredictionResolutionGroup = {
-  let logScoreNonMarketCdfCdf = (~sampleCount, ~agentPrediction, ~resolution) => {
+  let logScoreNonMarketCdfCdf =
+      (
+        ~sampleCount,
+        ~resolutionUniformAdditionWeight,
+        ~agentPrediction,
+        ~resolution,
+      ) => {
     JS.scoreNonMarketCdfCdf(
       sampleCount,
       JS.distToJs(agentPrediction),
       JS.distToJs(resolution),
+      resolutionUniformAdditionWeight,
     )
     |> JS.jsToDist
     |> Distribution.integral;

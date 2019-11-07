@@ -14,7 +14,8 @@ let floatSubtractionWithLimitation = (a, b, limiter) => {
   | (a, b) => limiter(a) -. limiter(b)
   };
 };
-let resolutionUniformAdditionWeight = Js.Math.pow_float(~base=10.0, ~exp=-2.);
+let resolutionUniformAdditionWeight =
+  Js.Math.pow_float(~base=10.0, ~exp=-11.);
 
 module PredictionGroupError = {
   let marketCdfCdf =

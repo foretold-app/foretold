@@ -72,7 +72,7 @@ function sampleInputs(inputs, i) {
   const sample = {};
   for (let key of Object.keys(inputs)) {
     sample[key] = inputs[key][i % inputs[key].length];
-    util.inspect(inputs);
+    console.log(inputs);
   }
   return sample;
 }

@@ -1,14 +1,10 @@
-import { Evaluate } from '../simulator/evaluator.js';
-import { expect } from 'chai';
+import { Evaluate } from './evaluator.js';
 
 describe('Simulator', () => {
   describe('#evaluate', () => {
     it('a function with no inputs', () => {
       const samples = Evaluate('34', 1, []);
-      expect(samples.values)
-        .to
-        .deep
-        .eq([34]);
+      expect(samples.values).toEqual([34]);
     });
 
     describe('function guesstimateType', () => {
@@ -20,16 +16,13 @@ describe('Simulator', () => {
 
       examples.map(e => () => {
         const _sample = Evaluate(e[0], e[2], e[1]);
-        it(`guesstimate ${e[0]} with value count ${e[1]} has correct number of values`, () => {
-          expect(_sample.values.length)
-            .to
-            .equal(e[2]);
+
+        it(`guesstimate ${e[0]} with value count ${JSON.stringify(e[1])} has correct number of values`, () => {
+          expect(_sample.values.length).toBe(e[2]);
         });
 
-        it(`guesstimate ${e[0]} with value count ${e[1]} has correct first value`, () => {
-          expect(_sample.values[0])
-            .to
-            .equal(e[3]);
+        it(`guesstimate ${e[0]} with value count ${JSON.stringify(e[1])} has correct first value`, () => {
+          expect(_sample.values[0]).toBe(e[3]);
         });
       })
         .map(e => e());

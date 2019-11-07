@@ -11,6 +11,7 @@ module PredictionResolutionGroup: {
   let logScoreNonMarketCdfCdf:
     (
       ~sampleCount: int,
+      ~resolutionUniformAdditionWeight: float,
       ~agentPrediction: PredictionAnalysis.Types.distribution,
       ~resolution: PredictionAnalysis.Types.distribution
     ) =>

@@ -61,11 +61,21 @@ function scoreMarketCdfCdf(
  * @param predictionCdf
  * @param resolutionCdf
  */
-function scoreNonMarketCdfCdf(sampleCount, predictionCdf, resolutionCdf) {
+function scoreNonMarketCdfCdf(sampleCount, predictionCdf, resolutionCdf, resolutionUniformAdditionWeight=0) {
   let toCdf = (r) => (new Cdf(r.xs, r.ys));
+  let prediction = toCdf(predictionCdf);
+  if (_.isFinite(resolutionUniformAdditionWeight)){
+    prediction = prediction.combineWithUniformOfCdf(
+      {
+        cdf: toCdf(resolutionCdf),
+        uniformWeight: resolutionUniformAdditionWeight,
+        sampleCount
+      }
+    );
+  }
 
   return scoringFunctions.distributionInputDistributionOutputMarketless({
-    predictionCdf: toCdf(predictionCdf),
+    predictionCdf: prediction,
     resultCdf: toCdf(resolutionCdf),
     sampleCount,
   });

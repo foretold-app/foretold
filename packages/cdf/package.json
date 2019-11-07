@@ -1,6 +1,6 @@
 {
   "name": "@foretold/cdf",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Cumulative distribution functions",
   "main": "dist/index.js",
   "scripts": {

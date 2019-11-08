@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { shorthandIntoLognormalFormattingStep } from '../lib'
 
 //FIXME
 export const item = {
@@ -10,6 +11,6 @@ export const item = {
     return !_.isEmpty(text.slice(1)) ? {} : { type: 1, subType: 2 };
   },
   format({ text }) {
-    return { guesstimateType: 'FUNCTION', text: text.slice(1) };
+    return {guesstimateType: 'FUNCTION', text: (shorthandIntoLognormalFormattingStep(text)).slice(1)};
   },
 };

@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import { distributionUpToIntoLognormal } from "../lib/distributionMath.js";
+import { distributionUpToIntoNormal } from "../lib/distributionMath.js";
 
 const SUFFIXES = {
   '%': -2,
@@ -32,6 +34,7 @@ const SUFFIX_REGEX = new RegExp(Object.keys(SUFFIXES)
 const INTEGER_REGEX = /(?:(?:\d+)|(?:\d{1,3}(?:,\d{3})*))(?!\.[^\.])/;
 const DECIMAL_REGEX = /\d*\.\d+/;
 const NUMBER_REGEX = new RegExp(`(-?${or([INTEGER_REGEX, DECIMAL_REGEX]).source})\\s?(${SUFFIX_REGEX.source})?`);
+export const DISTRIBUTION_RANGE_REGEX = /to|\.\.|->|:/
 
 export const POINT_REGEX = padded([NUMBER_REGEX]);
 export const rangeRegex = (sep, left, right) => padded([left, NUMBER_REGEX, sep, NUMBER_REGEX, right]);
@@ -54,6 +57,10 @@ function getGuesstimateType(guesstimateType, [low]) {
   }
 }
 
+function getNumbers(text, regEx){
+  return _.chunk(text.match(regEx).slice(1), 2).map(([num, suffix]) => parseNumber(num, suffix))
+}
+
 export function regexBasedFormatter(re, guesstimateTypeFn = getGuesstimateType, errorFn = rangeErrorFn) {
   return {
     matches({ text }) {
@@ -71,9 +78,29 @@ export function regexBasedFormatter(re, guesstimateTypeFn = getGuesstimateType, 
     },
 
     _numbers(text) {
-      return _.chunk(text.match(re)
-        .slice(1), 2)
-        .map(([num, suffix]) => parseNumber(num, suffix));
+      return getNumbers(text, re);
     },
   };
+}
+
+// Transforms "=mm(normal(10,5), 1 to 100)) -> "=mm(normal(10,5), lognormal(50.1, 1.4))
+export function shorthandIntoLognormalFormattingStep(text){
+  function shorthandIntoLognormalReplacer(string){
+      let rangeRegexIndividual = rangeRegex(DISTRIBUTION_RANGE_REGEX)
+      let arrayLowHigh = getNumbers(string, rangeRegexIndividual)
+
+      let low = arrayLowHigh[0]
+      let high= arrayLowHigh[1]
+
+      if (low>0) {
+        return distributionUpToIntoLognormal(low, high)
+      } else {
+        return distributionUpToIntoNormal(low, high)
+      }
+  } 
+
+  let rangeRegexMultiple = (sep, left, right) => spaceSep([left, NUMBER_REGEX, sep, NUMBER_REGEX, right]);
+  let shorthandIntoLognormalRegex = new RegExp(rangeRegexMultiple(DISTRIBUTION_RANGE_REGEX), "g");
+
+  return text.replace(shorthandIntoLognormalRegex, shorthandIntoLognormalReplacer)
 }

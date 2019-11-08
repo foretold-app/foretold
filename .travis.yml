@@ -32,3 +32,4 @@ script:
   - docker run main yarn guesstimator/test:ci
   - docker run main yarn cdf/test:ci
   - docker run main yarn bots/test:ci
+  - docker run main yarn prediction-analysis/test:ci

@@ -3,7 +3,7 @@ const {
   ContinuousDistribution,
   ContinuousDistributionCombination,
   scoringFunctions,
-} = require("@foretold/cdf");
+} = require("@foretold/cdf/lib");
 const _ = require("lodash");
 
 /**

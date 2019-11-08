@@ -1,6 +1,11 @@
 const graphql = require('graphql');
 const { DateType } = require('graphql-sequelize');
 
+/**
+ * @todo: To move "timeAverageScore", "activeTimeDistribution"
+ * @todo: types into separated files.
+ * @type {GraphQLObjectType}
+ */
 const agentMeasurable = new graphql.GraphQLObjectType({
   name: 'AgentMeasurable',
   fields: () => ({

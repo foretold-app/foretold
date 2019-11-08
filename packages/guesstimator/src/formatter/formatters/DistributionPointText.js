@@ -1,4 +1,4 @@
-import { POINT_REGEX, regexBasedFormatter } from './lib';
+import { POINT_REGEX, regexBasedFormatter } from '../lib';
 
 export const item = {
   formatterName: 'DISTRIBUTION_POINT_TEXT',

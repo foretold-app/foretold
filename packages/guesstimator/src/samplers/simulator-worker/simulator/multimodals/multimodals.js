@@ -4,7 +4,7 @@ import { Discrete } from 'discrete-sampling';
 function bimodal(d1, d2, w = math.matrix([0.5])) {
   // A handy shorthand without the need to add square brackets
   if (!isNaN(w)) { //Check if weights specified as numbers, and if so, turn them into a matrix
-    var array_ws = Array.prototype.slice.call(arguments, 2);
+    const array_ws = Array.prototype.slice.call(arguments, 2);
     w = math.matrix(array_ws);
   }
   return multimodal(d1, d2, w);
@@ -20,13 +20,14 @@ function multimodal() {
   // However, if only some weights are specified, it will be assumed notation of kind 1) is used, and otherwise
   // an error is thrown.
   // (The math.matrix is there instead of an array as mathjs compiles the expression "[]" that way. Might fix later.)
-  var args = Array.from(arguments);
+  const args = Array.from(arguments);
   let l = args.length;
+  let weights;
 
   // check whether user submited an array of weights
   if (math.typeof(args[l - 1]) == 'Matrix') {
     // separate distributions and weights into separate arrays (and extract array from mathjs matrix)
-    var weights = args.pop()._data;
+    weights = args.pop()._data;
 
     // Check that all arguments are numbers
     if (args.some(isNaN)) throw new TypeError('Input must be coercible to numbers (except weight array)');
@@ -46,7 +47,7 @@ function multimodal() {
     }
   } else {
     //FIX there should be some kind of TypeError check her as well, but want it DRY
-    var weights = Array(l)
+    weights = Array(l)
       .fill(1 / l);
   }
 

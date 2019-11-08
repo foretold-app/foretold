@@ -22,11 +22,12 @@ function multimodal() {
   // (The math.matrix is there instead of an array as mathjs compiles the expression "[]" that way. Might fix later.)
   const args = Array.from(arguments);
   let l = args.length;
+  let weights;
 
   // check whether user submited an array of weights
   if (math.typeof(args[l - 1]) == 'Matrix') {
     // separate distributions and weights into separate arrays (and extract array from mathjs matrix)
-    let weights = args.pop()._data;
+    weights = args.pop()._data;
 
     // Check that all arguments are numbers
     if (args.some(isNaN)) throw new TypeError('Input must be coercible to numbers (except weight array)');

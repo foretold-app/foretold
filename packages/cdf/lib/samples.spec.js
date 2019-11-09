@@ -7,19 +7,19 @@ describe('Samples Class', () => {
     expect(kde.ys).toStrictEqual([0.25, 0.75, 1.0, 1.0]);
   });
   it('toCdf()', () => {
-    const samples = new Samples([1,2,3,5,6,7,8,9,10]);
+    const samples = new Samples([1,2,3,5,6,7,8,9,10,12,15,20]);
     const kde = samples.toCdf({size: 4, min: 3, max:8});
     expect(kde.ys).toStrictEqual([
-      0.16666666666666666,
-      0.5833333333333334,
-      0.9166666666666667,
+      .25,
+      .75,
+      1,
       1
     ]);
     expect(kde.xs).toStrictEqual([
-      3,
-      4.666666666666667,
-      6.333333333333334,
-      8,
+      2.3333333333333335,
+      4.777777777777778,
+      7.222222222222221,
+      9.666666666666666,
     ]);
   });
   it('_kde()', () => {

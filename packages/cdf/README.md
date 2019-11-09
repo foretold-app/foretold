@@ -8,7 +8,7 @@ Manipulate sets of samples representing a stochastic variable.
 
 Options:
 
-- min: min value. This does not use pdfast's min, but rather removes all of the samples below it. - max: max value. This does not use pdfast's max, but rather removes all of the samples above it.
+- min: min value. This does not use pdfast's min, but rather removes all of the samples below it. - max: max value. This does not use pdfast's max, but rather removes all of the samples above it. This means that the resulting PDF or CDF may have some mass outside this range, due to KDE.
 - size: number of points to represent the pdf or cdf. Defaults to 50.
 - width: determine how many points to the left and right does an element affect, similar to bandwidth in kernel density estimation. Defaults to 2.
 

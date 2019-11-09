@@ -68,6 +68,11 @@ class Samples {
     return pdf.toCdf();
   }
 
+  /* We don't pass the min/max to the pdfast method, because it is buggy.
+     Mainly: when the max is very large (>100000), then almost nothing seems to render like expected. 
+     Second, if the inputed range starts lower than the min, problems happen, though this isn't shown
+     as these values are filtered out 5 lines above.
+  */ 
   /**
    * @param min
    * @param max
@@ -77,7 +82,7 @@ class Samples {
    */
   _kde({ min, max, size, width }) {
     let samples = this.filter({min, max}).samples;
-    return pdfast.create(samples, { min, max, size, width });
+    return pdfast.create(samples, { size, width });
   }
 
 }

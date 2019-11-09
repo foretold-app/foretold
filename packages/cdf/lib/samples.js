@@ -32,6 +32,13 @@ class Samples {
     return percentile(this.sorted, length, perc);
   }
 
+  filter({max, min}) {
+    let samples = this.samples
+    if (_.isFinite(min)) samples = _.filter(samples, r => r > min);
+    if (_.isFinite(max)) samples = _.filter(samples, r => r < max);
+    return new Samples(samples);
+  }
+
   /**
    * @param {number} min
    * @param {number} max
@@ -61,6 +68,11 @@ class Samples {
     return pdf.toCdf();
   }
 
+  /* We don't pass the min/max to the pdfast method, because it is buggy.
+     Mainly: when the max is very large (>100000), then almost nothing seems to render like expected. 
+     Second, if the inputed range starts lower than the min, problems happen, though this isn't shown
+     as these values are filtered out 5 lines above.
+  */ 
   /**
    * @param min
    * @param max
@@ -69,7 +81,8 @@ class Samples {
    * @private
    */
   _kde({ min, max, size, width }) {
-    return pdfast.create(this.samples, { min, max, size, width });
+    let samples = this.filter({min, max}).samples;
+    return pdfast.create(samples, { size, width });
   }
 
 }

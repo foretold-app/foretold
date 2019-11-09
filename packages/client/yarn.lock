@@ -917,14 +917,6 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.4.tgz#622a72bebd1e3f48d921563b4b60a762295a81fc"
   integrity sha512-6PYY5DVdAY1ifaQW6XYTnOMihmBVT27elqSjEoodchsGjzYlEsTQMcEhSud99kVawatyTZRTiVkJ/c6lwbQ7nA==
 
-"@foretold/cdf@1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@foretold/cdf/-/cdf-1.0.11.tgz#7aab15c239a3b6050a48fcc62304b82ad5245fdc"
-  integrity sha512-Hv/AtzbZgwIRif8zajZ9+bK9a7b8iHl4QqrRm2S2s3s+bsbs/b7rzixtb7OClSzUSvvpqUymwVuve19MqVGQJQ==
-  dependencies:
-    lodash "4.17.15"
-    pdfast "0.2.0"
-
 "@glennsl/bs-jest@0.4.8":
   version "0.4.8"
   resolved "https://registry.yarnpkg.com/@glennsl/bs-jest/-/bs-jest-0.4.8.tgz#e756ae5b43edc1cdcb4b5592021e50984566dafb"
@@ -6676,11 +6668,6 @@ pbkdf2@^3.0.3:
     ripemd160 "^2.0.1"
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
-
-pdfast@0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/pdfast/-/pdfast-0.2.0.tgz#8cbc556e1bf2522177787c0de2e0d4373ba885c9"
-  integrity sha1-jLxVbhvyUiF3eHwN4uDUNzuohck=
 
 performance-now@^2.1.0:
   version "2.1.0"

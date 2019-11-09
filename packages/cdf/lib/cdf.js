@@ -3,7 +3,7 @@ const { ContinuousDistributionCombination } = require('./continuousDistributionC
 
 class Cdf extends ContinuousDistribution{
   // TODO: This convertToNewLength function is obviously messy, could likely be refactored. I wanted to make a uniform distribution.
-  createUniform2({min, max, sampleCount}) {
+  static createUniform({min, max, sampleCount}) {
     let importantPoints = p => p.splice(0, 2).concat(p[p.length - 1]); 
     const dist = new Cdf([min, max], [0,1]).convertToNewLength(sampleCount);
     return new Cdf(importantPoints(dist.xs), importantPoints(dist.ys));
@@ -22,7 +22,7 @@ class Cdf extends ContinuousDistribution{
   }
 
   toUniform(sampleCount) {
-    return this.createUniform2({min: this.xs[0], max: this.xs[this.xs.length - 1], sampleCount})
+    return Cdf.createUniform({min: this.xs[0], max: this.xs[this.xs.length - 1], sampleCount})
   }
 
   combineWithUniformOfCdf({cdf, uniformWeight, sampleCount}) {

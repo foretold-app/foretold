@@ -37,11 +37,7 @@ const ratioSize = samples => {
  * @return {[number[], number[], boolean]}
  */
 const toCdf = (values, min, max) => {
-  let _values = values;
-  if (_.isFinite(min)) _values = _.filter(_values, r => r > min);
-  if (_.isFinite(max)) _values = _.filter(_values, r => r < max);
-
-  const samples = new Samples(_values);
+  const samples = new Samples(values);
   const ratioSize$ = ratioSize(samples);
   const width = ratioSize$ === "SMALL" ? 20 : 1;
   /* We don't pass the min/max to the samples.toCdf method, because it is buggy.

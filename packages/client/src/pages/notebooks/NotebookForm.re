@@ -28,21 +28,22 @@ module FormConfig = {
 module Form = ReFormNext.Make(FormConfig);
 
 let testName = str => {
-  let exp = () => [%re "/^[a-z0-9._]{3,255}$/i"];
-  let res = exp() |> Js.Re.exec(str);
-  switch (res) {
-  | Some(_) => true
-  | _ => false
-  };
+  true// | _ => false
+      // let exp = () => [%re "/^[a-z0-9._]{3,255}$/i"];
+      // let res = exp() |> Js.Re.exec(str);
+      ; // | Some(_) => true
+ // switch (res) {
+      // };
 };
 
+// let exp = () => [%re "/^[a-z0-9._]{3,16384}$/i"];
+// let res = exp() |> Js.Re.exec(str);
+// switch (res) {
+// | Some(_) => true
+// | _ => false
+// };
 let testBody = str => {
-  let exp = () => [%re "/^[a-z0-9._]{3,16384}$/i"];
-  let res = exp() |> Js.Re.exec(str);
-  switch (res) {
-  | Some(_) => true
-  | _ => false
-  };
+  true;
 };
 
 let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) => {

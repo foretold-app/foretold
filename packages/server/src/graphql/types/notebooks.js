@@ -34,6 +34,15 @@ const notebookCreateInput = new graphql.GraphQLInputObjectType({
   }),
 });
 
+const notebookUpdateInput = new graphql.GraphQLInputObjectType({
+  name: 'NotebookUpdateInput',
+  fields: () => ({
+    name: { type: graphql.GraphQLNonNull(scalars.string3to255) },
+    body: { type: graphql.GraphQLNonNull(scalars.string3to16K) },
+  }),
+});
+
+
 const notebookEdge = new graphql.GraphQLObjectType({
   name: 'NotebookEdge',
   fields: () => ({
@@ -60,6 +69,7 @@ const notebooksConnection = new graphql.GraphQLObjectType({
 module.exports = {
   notebook,
   notebookCreateInput,
+  notebookUpdateInput,
   notebookEdge,
   notebooksConnection,
 };

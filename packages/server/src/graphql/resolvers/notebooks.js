@@ -30,6 +30,21 @@ async function create(_root, args, context, _info) {
 }
 
 /**
+ * @param {*} root
+ * @param {object} args
+ * @param {Models.ObjectID} args.id
+ * @param {object} args.input
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function update(root, args, _context, _info) {
+  const id = _.get(args, 'id', null);
+  const input = _.get(args, 'input') || {};
+  return new NotebooksData().updateOne({ id }, input);
+}
+
+/**
  * @param {*} _root
  * @param {object} args
  * @param {Models.AgentID} args.ownerId
@@ -84,4 +99,5 @@ module.exports = {
   all,
   one,
   create,
+  update,
 };

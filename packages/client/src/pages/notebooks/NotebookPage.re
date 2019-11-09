@@ -4,6 +4,7 @@ open Style.Grid;
 
 type tab =
   | Show
+  | Edit
   | Details;
 
 module Tabs = {
@@ -25,6 +26,9 @@ module Tabs = {
         <TabButton
           isActive={tab == Details} onClick={_ => switchTab(Details)}>
           {"Details" |> Utils.ste}
+        </TabButton>
+        <TabButton isActive={tab == Details} onClick={_ => switchTab(Edit)}>
+          {"Edit" |> Utils.ste}
         </TabButton>
       </Div>
     </Div>;
@@ -57,6 +61,7 @@ let make = (~channelId: string, ~notebookId: string) => {
              </div>
            | Details =>
              <Center> {"This is the details view" |> Utils.ste} </Center>
+           | Edit => <div> <NotebookUpdate notebook /> </div>
            }}
         </SLayout>
       </>

@@ -484,6 +484,19 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.notebooks.create,
       },
 
+      notebookUpdate: {
+        type: types.notebooks.notebook,
+        args: {
+          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.notebooks.notebookUpdateInput,
+            ),
+          },
+        },
+        resolve: resolvers.notebooks.update,
+      },
+
       preferenceUpdate: {
         type: types.preferences.preference,
         args: {

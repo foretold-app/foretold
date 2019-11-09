@@ -52,6 +52,18 @@ module Query = [%graphql
           }
           min
           max
+          previousAggregate {
+              id
+              valueText
+              value {
+                  floatCdf { xs ys }
+                  floatPoint
+                  percentage
+                  binary
+                  unresolvableResolution
+                  comment
+              }
+          }
           permissions {
             mutations {
               allow
@@ -66,6 +78,17 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 
 let toMeasurable = (m): Types.measurable => {
   let agent = m##creator |> MeasurablesGet.toAgent;
+
+  let previousAggregate =
+    m##previousAggregate
+    |> E.O.fmap(measurement =>
+         Primary.Measurement.make(
+           ~id=measurement##id,
+           ~valueText=measurement##valueText,
+           ~value=measurement##value |> MeasurementValue.decodeGraphql,
+           (),
+         )
+       );
 
   let series =
     m##series
@@ -97,6 +120,7 @@ let toMeasurable = (m): Types.measurable => {
     ~min=m##min,
     ~max=m##max,
     ~series,
+    ~previousAggregate,
     ~permissions=Some(permissions),
     (),
   );

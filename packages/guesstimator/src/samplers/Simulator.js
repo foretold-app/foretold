@@ -15,7 +15,7 @@ function LCM(a, b) {
 }
 
 export function simulate(expr, inputs, maxSamples) {
-  const s = Evaluate(expr, maxSamples, []);
+  const s = Evaluate(expr, maxSamples, inputs);
   return s;
 }
 

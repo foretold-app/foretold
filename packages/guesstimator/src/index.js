@@ -29,7 +29,7 @@ class Guesstimator {
     return (this.parsedInput.guesstimateType === 'FUNCTION');
   }
 
-  sample(n, externalInputs = []) {
+  sample(n, externalInputs = {}) {
     if (!_.isEmpty(this.parsedError)) {
       return Promise.resolve({ errors: [this.parsedError], values: [] });
     }

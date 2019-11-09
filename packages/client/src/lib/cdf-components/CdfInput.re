@@ -181,12 +181,33 @@ let botsSelect =
 };
 
 module ValueInput = {
-  let floatPoint = (measurable: Types.measurable, send) =>
+  let floatPoint = (measurable: Types.measurable, send) => {
+    let toGuesstimateInputs = ((ys, xs)): GuesstimateInput.input => {
+      "name": "AG",
+      "xs": xs,
+      "ys": ys,
+    };
+
+    let input: option(GuesstimateInput.input) =
+      measurable.previousAggregate
+      |> E.O.bind(_, agg =>
+           switch (agg.value) {
+           | Ok(`FloatCdf(e)) =>
+             Some(
+               e |> MeasurementValue.FloatCdf.toArrays |> toGuesstimateInputs,
+             )
+           | _ => None
+           }
+         );
+
+    let inputs = input |> E.O.fmap(r => [|r|]) |> E.O.default([||]);
+
     <GuesstimateInput
       focusOnRender=true
       sampleCount=30000
       min={measurable.min}
       max={measurable.max}
+      inputs
       onUpdate={event =>
         {
           let (ys, xs, hasLimitError) = event;
@@ -198,6 +219,7 @@ module ValueInput = {
       }
       onChange={text => send(UpdateValueText(text))}
     />;
+  };
 
   let boolean = (binaryValue, send) =>
     <Antd.Select

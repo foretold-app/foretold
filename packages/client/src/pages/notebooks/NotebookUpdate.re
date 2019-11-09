@@ -20,7 +20,13 @@ let make = (~notebook: Types.notebook) => {
       onSubmit,
       Some(notebook),
       ({send, state, getFieldState}) => {
-        let form = NotebookForm.formFields(state, send, getFieldState);
+        let form =
+          NotebookForm.formFields(
+            state,
+            send,
+            getFieldState,
+            notebook.channelId,
+          );
 
         let onSuccess = _ => {
           <Null />;

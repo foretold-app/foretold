@@ -24,12 +24,9 @@ let make = (~channelId: string) => {
          notebook,
          ({send, state, getFieldState}) => {
            let form =
-             NotebookForm.formFields(state, send, getFieldState);
+             NotebookForm.formFields(state, send, getFieldState, channelId);
 
-           let onSuccess = _ => {
-             Routing.Url.push(ChannelNotebooks(channelId));
-             <Null />;
-           };
+           let onSuccess = _ => {<Null />};
 
            CMutationForm.showWithLoading2(
              ~result=data.result,

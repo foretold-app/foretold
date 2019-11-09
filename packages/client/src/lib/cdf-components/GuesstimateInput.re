@@ -1,5 +1,12 @@
 [@bs.config {jsx: 3}];
 
+type input = {
+  .
+  "name": string,
+  "xs": array(float),
+  "ys": array(float),
+};
+
 let fn = (a: (array(float), array(float), bool)) => ();
 let fn2 = (a: string) => ();
 
@@ -12,6 +19,7 @@ let make =
       ~sampleCount=10000,
       ~min=None,
       ~max=None,
+      ~inputs: array(input)=[||],
       ~onUpdate=fn,
       ~onChange=fn2,
       ~focusOnRender=true,
@@ -25,6 +33,7 @@ let make =
       "onChange": onChange,
       "min": min,
       "max": max,
+      "inputs": inputs,
       "focusOnRender": focusOnRender,
     },
     children,

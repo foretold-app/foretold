@@ -3,7 +3,7 @@ import _ from "lodash";
 import { Input } from "antd";
 
 import { Guesstimator } from '@foretold/guesstimator';
-import { Samples } from "../../../../cdf";
+import { Samples, Cdf } from "../../../../cdf";
 
 /**
  * @param {number} ratio
@@ -61,12 +61,18 @@ export class GuesstimateInput extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = { value: '', items: [] };
+    this.state = { value: '', items: [], inputs: {}};
     this.handleChange = this.handleChange.bind(this);
     this.textInput = React.createRef();
   }
 
   componentDidMount() {
+    let dict = {}
+    this.props.inputs.forEach(element => {
+      let cdf = (new Cdf(element.xs, element.ys)).sample(10000);
+      dict[element.name] = cdf;
+    })
+    this.setState({inputs:dict});
     if (this.props.focusOnRender) {
       this.textInput.focus();
     }
@@ -77,7 +83,7 @@ export class GuesstimateInput extends React.Component {
 
     let [_error, item] = Guesstimator.parse({ text });
     let parsedInput = item.parsedInput;
-    let value = (new Guesstimator({ parsedInput: parsedInput })).sample(this.props.sampleCount);
+    let value = (new Guesstimator({ parsedInput: parsedInput })).sample(this.props.sampleCount, this.state.inputs);
     let values = _.filter(value.values, _.isFinite);
 
     if (!!values) {

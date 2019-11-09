@@ -2,24 +2,43 @@
 
 module Styles = {
   open Css;
-  let centerBlock = style([textAlign(`center), padding(`em(2.))]);
-  let clear = style([clear(`both)]);
+  let main =
+    style([
+      maxWidth(`px(1170)),
+      marginLeft(`auto),
+      marginRight(`auto),
+      display(`block),
+      paddingLeft(`rem(1.)),
+      paddingRight(`rem(1.)),
+      marginTop(`em(1.0)),
+      marginBottom(`em(2.0)),
+    ]);
+  let h1 =
+    style([
+      fontSize(`em(1.5)),
+      color(`hex("192D44")),
+      marginBottom(`em(1.0)),
+      FC__Settings.FontWeights.heavy,
+    ]);
+  let hr =
+    style([
+      borderTop(`px(0), `solid, `hex("fff")),
+      borderBottom(`px(1), `solid, `hex("8C9EB540")),
+    ]);
 };
 
 [@react.component]
 let make = (~notebook: Types.notebook) => {
-  <SLayout isFluid=true>
-    <Padding>
-      <FC__Div flexDirection=`row>
-        <FC__Div flex={`num(5.)}>
-          <FC__PageCard.H1> {notebook.name |> Utils.ste} </FC__PageCard.H1>
-        </FC__Div>
-        <FC__Div flex={`num(2.)}> <Null /> </FC__Div>
-        <FC__Div flex={`num(1.)}>
-          <AgentLink agent={notebook.owner} />
-        </FC__Div>
-        <FC__Div flex={`num(2.)}> <Null /> </FC__Div>
+  <div className=Styles.main>
+    <FC__Div flexDirection=`row>
+      <FC__Div flex={`num(5.)}>
+        <h1 className=Styles.h1> {notebook.name |> Utils.ste} </h1>
       </FC__Div>
-    </Padding>
-  </SLayout>;
+      <FC__Div flex={`num(3.)} />
+      <FC__Div flex={`num(1.)}>
+        <AgentLink agent={notebook.owner} />
+      </FC__Div>
+    </FC__Div>
+    <hr className=Styles.hr />
+  </div>;
 };

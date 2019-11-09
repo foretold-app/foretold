@@ -11,7 +11,7 @@ module Styles = {
   let all =
     style([
       selector(
-        "h1, h2, h3, h4, h5, p, hr, blockquote, code",
+        "h1, h2, h3, h4, h5, p, hr, blockquote, code, li, ul",
         [
           maxWidth(`px(1170)),
           marginLeft(`auto),

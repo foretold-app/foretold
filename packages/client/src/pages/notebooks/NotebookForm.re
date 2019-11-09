@@ -1,4 +1,5 @@
 [@bs.config {jsx: 3}];
+open Style.Grid;
 
 module FormConfig = {
   type field(_) =
@@ -28,21 +29,11 @@ module FormConfig = {
 module Form = ReFormNext.Make(FormConfig);
 
 let testName = str => {
-  let exp = () => [%re "/^[a-z0-9._]{3,255}$/i"];
-  let res = exp() |> Js.Re.exec(str);
-  switch (res) {
-  | Some(_) => true
-  | _ => false
-  };
+  Js.String.length(str) > 3;
 };
 
 let testBody = str => {
-  let exp = () => [%re "/^[a-z0-9._]{3,16384}$/i"];
-  let res = exp() |> Js.Re.exec(str);
-  switch (res) {
-  | Some(_) => true
-  | _ => false
-  };
+  Js.String.length(str) > 3;
 };
 
 let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) => {
@@ -71,7 +62,7 @@ let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) =>
   |> E.React2.el;
 };
 
-let formFields = (state: Form.state, send, getFieldState) => {
+let formFields = (state: Form.state, send, getFieldState, channelId) => {
   let onSubmit = () => send(Form.Submit);
 
   let stateName = getFieldState(Form.Field(Name));
@@ -112,16 +103,30 @@ let formFields = (state: Form.state, send, getFieldState) => {
         {error(stateName)}
       </Antd.Form.Item>
       <Antd.Form.Item label={"Body" |> Utils.ste}>
-        <Antd.Input.TextArea
-          style={ReactDOMRe.Style.make(~minHeight="12em", ())}
-          value={state.values.body}
-          onChange={e =>
-            send(
-              Form.FieldChangeValue(Body, ReactEvent.Form.target(e)##value),
-            )
-          }
-        />
-        {error(stateBody)}
+        <Div flexDirection=`row>
+          <Div flex={`num(1.)}>
+            <Antd.Input.TextArea
+              style={ReactDOMRe.Style.make(~minHeight="80em", ())}
+              value={state.values.body}
+              onChange={e =>
+                send(
+                  Form.FieldChangeValue(
+                    Body,
+                    ReactEvent.Form.target(e)##value,
+                  ),
+                )
+              }
+            />
+            {error(stateBody)}
+          </Div>
+          <Div flex={`num(1.)}>
+            <Markdown
+              source={state.values.body}
+              channelId
+              supportForetoldJs=true
+            />
+          </Div>
+        </Div>
       </Antd.Form.Item>
       <Antd.Form.Item>
         <Antd.Button

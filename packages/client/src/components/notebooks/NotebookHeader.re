@@ -10,14 +10,14 @@ module Styles = {
       display(`block),
       paddingLeft(`rem(1.)),
       paddingRight(`rem(1.)),
-      marginTop(`em(1.0)),
-      marginBottom(`em(2.0)),
+      marginTop(`em(1.5)),
+      marginBottom(`em(2.5)),
     ]);
   let h1 =
     style([
-      fontSize(`em(1.5)),
+      fontSize(`em(1.9)),
       color(`hex("192D44")),
-      marginBottom(`em(1.0)),
+      marginBottom(`em(0.3)),
       FC__Settings.FontWeights.heavy,
     ]);
   let hr =
@@ -39,6 +39,5 @@ let make = (~notebook: Types.notebook) => {
         <AgentLink agent={notebook.owner} />
       </FC__Div>
     </FC__Div>
-    <hr className=Styles.hr />
   </div>;
 };

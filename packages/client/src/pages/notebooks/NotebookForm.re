@@ -92,48 +92,41 @@ let formFields = (state: Form.state, send, getFieldState, channelId) => {
   let isEnabled = isFormValid && isFormDirty;
 
   <FC__PageCard.BodyPadding>
-    <Antd.Form onSubmit={e => onSubmit()}>
-      <Antd.Form.Item label={"Name" |> Utils.ste}>
-        <Antd.Input
-          value={state.values.name}
-          onChange={ReForm.Helpers.handleDomFormChange(e =>
-            send(Form.FieldChangeValue(Name, e))
-          )}
+    <Antd.Form.Item label={"Name" |> Utils.ste}>
+      <Antd.Input
+        value={state.values.name}
+        onChange={ReForm.Helpers.handleDomFormChange(e =>
+          send(Form.FieldChangeValue(Name, e))
+        )}
+      />
+      {error(stateName)}
+    </Antd.Form.Item>
+    <Div flexDirection=`row>
+      <Div flex={`num(1.)}>
+        <Antd.Input.TextArea
+          style={ReactDOMRe.Style.make(~minHeight="80em", ())}
+          value={state.values.body}
+          onChange={e =>
+            send(
+              Form.FieldChangeValue(Body, ReactEvent.Form.target(e)##value),
+            )
+          }
         />
-        {error(stateName)}
-      </Antd.Form.Item>
-      <Antd.Form.Item label={"Body" |> Utils.ste}>
-        <Div flexDirection=`row>
-          <Div flex={`num(1.)}>
-            <Antd.Input.TextArea
-              style={ReactDOMRe.Style.make(~minHeight="80em", ())}
-              value={state.values.body}
-              onChange={e =>
-                send(
-                  Form.FieldChangeValue(
-                    Body,
-                    ReactEvent.Form.target(e)##value,
-                  ),
-                )
-              }
-            />
-            {error(stateBody)}
-          </Div>
-          <Div flex={`num(1.)}>
-            <Markdown
-              source={state.values.body}
-              channelId
-              supportForetoldJs=true
-            />
-          </Div>
-        </Div>
-      </Antd.Form.Item>
-      <Antd.Form.Item>
-        <Antd.Button
-          _type=`primary onClick={_ => onSubmit()} disabled={!isEnabled}>
-          {"Submit" |> Utils.ste}
-        </Antd.Button>
-      </Antd.Form.Item>
-    </Antd.Form>
+        {error(stateBody)}
+        <Antd.Form.Item>
+          <Antd.Button
+            _type=`primary onClick={_ => onSubmit()} disabled={!isEnabled}>
+            {"Submit" |> Utils.ste}
+          </Antd.Button>
+        </Antd.Form.Item>
+      </Div>
+      <Div flex={`num(1.)}>
+        <Markdown
+          source={state.values.body}
+          channelId
+          supportForetoldJs=true
+        />
+      </Div>
+    </Div>
   </FC__PageCard.BodyPadding>;
 };

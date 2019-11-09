@@ -6,7 +6,7 @@ module CMutationForm =
   });
 
 [@react.component]
-let make = (~notebook: Types.notebook) => {
+let make = (~notebook: Types.notebook, ~onSuccess) => {
   NotebookUpdateMutation.withMutation((mutation, data) => {
     let onSubmit = (values: NotebookForm.Form.onSubmitAPI): unit =>
       NotebookUpdateMutation.mutate(
@@ -28,7 +28,8 @@ let make = (~notebook: Types.notebook) => {
             notebook.channelId,
           );
 
-        let onSuccess = _ => {
+        let onSuccess = e => {
+          onSuccess(e);
           <Null />;
         };
 

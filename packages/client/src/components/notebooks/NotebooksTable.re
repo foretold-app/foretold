@@ -22,12 +22,12 @@ module Columns = {
 
   let time =
     Table.Column.make(
-      ~name="Time" |> Utils.ste,
+      ~name="Last Updated At" |> Utils.ste,
       ~render=
         (r: record) =>
-          r.createdAt
-          |> E.O.fmap((createdAt: MomentRe.Moment.t) =>
-               createdAt |> MomentRe.Moment.format("LLL")
+          r.updatedAt
+          |> E.O.fmap((updatedAt: MomentRe.Moment.t) =>
+               updatedAt |> MomentRe.Moment.format("LLL")
              )
           |> E.O.default("")
           |> Utils.ste,

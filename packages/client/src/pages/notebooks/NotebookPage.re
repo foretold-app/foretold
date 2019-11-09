@@ -29,11 +29,18 @@ module Tabs = {
   let make = (~switchTab, ~tab, ~notebook: Types.notebook) => {
     <Providers.AppContext.Consumer>
       ...{({loggedUser}) =>
-        <Div>
+        <Div
+          styles=[
+            Css.style([
+              Css.maxWidth(`px(1170)),
+              Css.marginLeft(`auto),
+              Css.marginRight(`auto),
+            ]),
+          ]>
           <Div
             styles=[
               Css.style([
-                FC.Base.BaseStyles.floatLeft,
+                FC.Base.BaseStyles.floatRight,
                 Css.paddingTop(`em(0.2)),
               ]),
             ]>
@@ -66,29 +73,40 @@ let make = (~channelId: string, ~notebookId: string) => {
     switch (notebook) {
     | Some(notebook) =>
       <>
-        <SLayout head={<Tabs switchTab tab notebook />} isFluid=true>
-          {switch (tab) {
-           | Show =>
-             <div
-               className=Css.(
-                 style([marginTop(`em(2.0)), marginBottom(`em(2.0))])
-               )>
-               <NotebookHeader notebook />
-               <Markdown
-                 source={notebook.body}
-                 supportForetoldJs=true
-                 channelId
-               />
-             </div>
-           | Details =>
-             <FC__PageCard.BodyPadding>
-               <Antd.Input.TextArea
-                 style={ReactDOMRe.Style.make(~minHeight="30em", ())}
-                 value={notebook.body}
-               />
-             </FC__PageCard.BodyPadding>
-           | Edit => <div> <NotebookUpdate notebook /> </div>
-           }}
+        <SLayout isFluid=true>
+          <Div flexDirection=`column>
+            <Div flex={`num(1.)}> <Tabs switchTab tab notebook /> </Div>
+            <Div flex={`num(1.)}>
+              {switch (tab) {
+               | Show =>
+                 <div
+                   className=Css.(
+                     style([marginTop(`em(2.0)), marginBottom(`em(2.0))])
+                   )>
+                   <NotebookHeader notebook />
+                   <Markdown
+                     source={notebook.body}
+                     supportForetoldJs=true
+                     channelId
+                   />
+                 </div>
+               | Details =>
+                 <FC__PageCard.BodyPadding>
+                   <Antd.Input.TextArea
+                     style={ReactDOMRe.Style.make(~minHeight="30em", ())}
+                     value={notebook.body}
+                   />
+                 </FC__PageCard.BodyPadding>
+               | Edit =>
+                 <div>
+                   <NotebookUpdate
+                     notebook
+                     onSuccess={_ => switchTab(Show)}
+                   />
+                 </div>
+               }}
+            </Div>
+          </Div>
         </SLayout>
       </>
     | _ => <NotFoundPage />

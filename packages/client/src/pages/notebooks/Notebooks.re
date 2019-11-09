@@ -38,7 +38,7 @@ let pagination =
               onClick={e =>
                 LinkType.onClick(Internal(ChannelAddNotebook(channelId)), e)
               }>
-              {"New Notebooks" |> Utils.ste}
+              {"New Notebook" |> Utils.ste}
             </FC.Base.Button>
           </Div>,
         )

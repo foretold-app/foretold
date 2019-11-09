@@ -7,7 +7,7 @@ module CMutationForm =
 
 [@react.component]
 let make = (~channelId: string) => {
-  <SLayout head={SLayout.Header.textDiv("Make a New Notebook")}>
+  <SLayout head={SLayout.Header.textDiv("Make a New Notebook")} isFluid=true>
     {NotebookCreateMutation.withMutation((mutation, data) => {
        let onSubmit = (values: NotebookForm.Form.onSubmitAPI): unit =>
          NotebookCreateMutation.mutate(
@@ -26,7 +26,9 @@ let make = (~channelId: string) => {
            let form =
              NotebookForm.formFields(state, send, getFieldState, channelId);
 
-           let onSuccess = _ => {<Null />};
+           let onSuccess = _ =>
+             {Routing.Url.push(ChannelNotebooks(channelId))
+              ReasonReact.null};
 
            CMutationForm.showWithLoading2(
              ~result=data.result,

@@ -1,6 +1,6 @@
 [@bs.config {jsx: 3}];
 
-let toNode = node => {
+let toNode = (marketType, finalComparisonMeasurement, node) => {
   let measurable = node##measurable;
   let agent = node##agent;
 
@@ -16,11 +16,27 @@ let toNode = node => {
       (),
     );
 
+  let timeAverageScore =
+    E.O.bind(node##timeAverageScore, timeAverageScore =>
+      switch (timeAverageScore##score, timeAverageScore##timeActivityRatio) {
+      | (Some(score), Some(timeActivityRatio)) =>
+        Some(
+          Primary.TimeAverageScore.make(
+            ~score,
+            ~timeActivityRatio,
+            ~marketType,
+            ~finalComparisonMeasurement,
+          ),
+        )
+      | _ => None
+      }
+    );
+
   Primary.AgentMeasurable.make(
     ~id=node##id,
-    ~primaryPointScore=node##primaryPointScore,
     ~createdAt=node##createdAt,
     ~predictionCountTotal=node##predictionCountTotal,
+    ~timeAverageScore,
     ~agent,
     ~measurable,
     (),
@@ -39,6 +55,8 @@ module Query = [%graphql
         $minPredictionCountTotal: Int
         $measurableState: [measurableState]
         $order: [Order]
+        $marketType: marketScoreType!
+        $finalComparisonMeasurement: finalComparisonMeasurement!
      ) {
         edges: agentMeasurables (
             first: $first
@@ -62,7 +80,10 @@ module Query = [%graphql
               node{
                   id
                   createdAt @bsDecoder(fn: "E.J.toMoment")
-                  primaryPointScore
+                  timeAverageScore (marketType: $marketType, startAt: AGENT_MEASUREMENT_CREATION_TIME, finalComparisonMeasurement: $finalComparisonMeasurement) {
+                    score
+                    timeActivityRatio
+                  }
                   predictionCountTotal
                   agent {
                       id
@@ -111,15 +132,23 @@ let queryDirection =
   | Before(before) => fn(~last=pageLimit, ~before, ())
   };
 
-let unpackResults = result =>
-  result##edges |> Rationale.Option.fmap(Primary.Connection.fromJson(toNode));
+let unpackResults = (marketType, finalComparisonMeasurement, result) =>
+  result##edges
+  |> Rationale.Option.fmap(
+       Primary.Connection.fromJson(
+         toNode(marketType, finalComparisonMeasurement),
+       ),
+     );
 
-let componentMaker = (query, innerComponentFn) =>
+let componentMaker =
+    (query, marketType, finalComparisonMeasurement, innerComponentFn) =>
   <QueryComponent variables=query##variables>
     ...{o =>
       o.result
       |> HttpResponse.fromApollo
-      |> HttpResponse.fmap(unpackResults)
+      |> HttpResponse.fmap(
+           unpackResults(marketType, finalComparisonMeasurement),
+         )
       |> HttpResponse.optionalToMissing
       |> innerComponentFn
     }
@@ -131,14 +160,19 @@ let component =
       ~measurableId=None,
       ~measurableState=Some([|Some(`JUDGED)|]),
       ~minPredictionCountTotal=Some(1),
-      ~order=Some([|
-               Some({"field": `primaryPointScore, "direction": `DESC}),
-             |]),
       ~pageLimit,
       ~direction,
       ~innerComponentFn,
+      ~order=Some([|
+               Some({"field": `primaryPointScore, "direction": `DESC}),
+             |]),
+      ~marketType=None,
+      ~finalComparisonMeasurement=None,
       (),
     ) => {
+  let marketType = marketType |> E.O.default(`MARKET);
+  let finalComparisonMeasurement =
+    finalComparisonMeasurement |> E.O.default(`LAST_OBJECTIVE_MEASUREMENT);
   let query =
     queryDirection(
       ~pageLimit,
@@ -150,8 +184,15 @@ let component =
           ~measurableState?,
           ~minPredictionCountTotal?,
           ~order?,
+          ~marketType,
+          ~finalComparisonMeasurement,
         ),
       (),
     );
-  componentMaker(query, innerComponentFn);
+  componentMaker(
+    query,
+    marketType,
+    finalComparisonMeasurement,
+    innerComponentFn,
+  );
 };

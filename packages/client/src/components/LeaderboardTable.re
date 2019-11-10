@@ -85,6 +85,48 @@ module Columns = {
       (),
     );
 
+  let timeAveragedScore2 =
+    Table.Column.make(
+      ~name="Time-Average Score" |> Utils.ste,
+      ~help=
+        Some({
+          headerContent: "Participant Time Average Score" |> Utils.ste,
+          bodyContent:
+            "The average difference in log error between this member's predictions and the aggregate prediction, over the course of the life of user's participation."
+            |> Utils.ste,
+        }),
+      ~render=
+        (r: record) =>
+          r.timeAverageScore
+          |> E.O.fmap((r: Types.timeAverageScore) => r.score)
+          |> E.O.fmap(E.Float.with2DigitsPrecision)
+          |> E.O.default("")
+          |> Utils.ste,
+      ~flex=1,
+      (),
+    );
+
+  let timeActivityRatio =
+    Table.Column.make(
+      ~name="Fraction of Time Active" |> Utils.ste,
+      ~help=
+        Some({
+          headerContent: "Fraction of Time Active" |> Utils.ste,
+          bodyContent:
+            "The fraction of the question's open time when the agent was forecasting."
+            |> Utils.ste,
+        }),
+      ~render=
+        (r: record) =>
+          r.timeAverageScore
+          |> E.O.fmap((r: Types.timeAverageScore) => r.timeActivityRatio)
+          |> E.O.fmap(E.Float.with3DigitsPrecision)
+          |> E.O.default("")
+          |> Utils.ste,
+      ~flex=1,
+      (),
+    );
+
   let totalScore =
     Table.Column.make(
       ~name="Total Net Log Score" |> Utils.ste,
@@ -182,14 +224,16 @@ module Columns = {
   let measurables = [|
     agent,
     measurable,
-    timeAveragedScore,
+    timeAveragedScore2,
+    timeActivityRatio,
     predictionCount,
     time,
   |];
 
   let measurables' = [|
     agent,
-    timeAveragedScore,
+    timeAveragedScore2,
+    timeActivityRatio,
     predictionCount,
     time,
   |];

@@ -25,7 +25,7 @@ module Body = {
       ) => {
     <SLayout
       head={head(
-        ~channelId=Some(""),
+        ~channelId=None,
         ~paginationPage=Reducer.Components.paginationPage(reducerParams),
         (),
       )}

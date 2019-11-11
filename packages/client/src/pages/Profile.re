@@ -122,7 +122,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
       />
     </Antd.Form.Item>
     <Antd.Form.Item label={"Email" |> Utils.ste}>
-      <AntdInput
+      <Antd.Input
         value={state.values.email}
         disabled=true
         onChange={ReForm.Helpers.handleDomFormChange(e => {

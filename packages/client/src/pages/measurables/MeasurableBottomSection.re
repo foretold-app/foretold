@@ -51,32 +51,41 @@ let make = (~measurableId: string, ~channelId: option(string)) => {
   let head = (~channelId: option(string), ~paginationPage, ()) =>
     <Tabs switchTab paginationPage tab />;
 
-  switch (tab) {
-  | Measurements => <Measurements measurableId head />
-  | Scores =>
-    <LeaderboardMeasurables
-      channelId
-      measurableId={Some(measurableId)}
-      columns=LeaderboardTable.Columns.measurables'
-      head
-    />
-  | Details =>
-    <SLayout
-      head={head(~channelId, ~paginationPage=E.React2.null, ())} isFluid=true>
-      <FC.PageCard.Body>
-        <Style.Grid.Div
-          float=`left
-          styles=[
-            Css.style([
-              FC.PageCard.HeaderRow.Styles.itemTopPadding,
-              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-              Css.marginLeft(`em(1.0)),
-            ]),
-          ]>
-          <h4> {"Question Id:" |> Utils.ste} </h4>
-          {measurableId |> Utils.ste}
-        </Style.Grid.Div>
-      </FC.PageCard.Body>
-    </SLayout>
-  };
+  MeasurableGet.component(~id=measurableId)
+  |> E.F.apply((measurable: Types.measurable) =>
+       switch (tab) {
+       | Measurements => <Measurements measurableId head />
+       | Scores =>
+         <LeaderboardMeasurables
+           channelId
+           measurableId={Some(measurableId)}
+           columns=LeaderboardTable.Columns.measurables'
+           finalComparisonMeasurement={
+             measurable.state == Some(`JUDGED)
+               ? Some(`LAST_OBJECTIVE_MEASUREMENT)
+               : Some(`LAST_AGGREGATE_MEASUREMENT)
+           }
+           head
+         />
+       | Details =>
+         <SLayout
+           head={head(~channelId, ~paginationPage=E.React2.null, ())}
+           isFluid=true>
+           <FC.PageCard.Body>
+             <Style.Grid.Div
+               float=`left
+               styles=[
+                 Css.style([
+                   FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                   FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+                   Css.marginLeft(`em(1.0)),
+                 ]),
+               ]>
+               <h4> {"Question Id:" |> Utils.ste} </h4>
+               {measurableId |> Utils.ste}
+             </Style.Grid.Div>
+           </FC.PageCard.Body>
+         </SLayout>
+       }
+     );
 };

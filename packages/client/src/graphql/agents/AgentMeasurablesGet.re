@@ -158,7 +158,7 @@ let component =
     (
       ~channelId=None,
       ~measurableId=None,
-      ~measurableState=Some([|Some(`JUDGED)|]),
+      ~measurableState=None,
       ~minPredictionCountTotal=Some(1),
       ~pageLimit,
       ~direction,

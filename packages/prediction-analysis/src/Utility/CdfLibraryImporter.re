@@ -31,10 +31,6 @@ module JS = {
     "differentialEntropy";
 
   [@bs.module "./CdfLibraryImporter.js"]
-  external scoreMarketCdfCdf: (int, distJs, distJs, distJs) => distJs =
-    "scoreMarketCdfCdf";
-
-  [@bs.module "./CdfLibraryImporter.js"]
   external scoreNonMarketCdfCdf: (int, distJs, distJs, float) => distJs =
     "scoreNonMarketCdfCdf";
 };

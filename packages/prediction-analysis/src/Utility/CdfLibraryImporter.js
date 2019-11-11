@@ -36,29 +36,6 @@ function mean(sampleCount, vars) {
  *
  * @param sampleCount
  * @param predictionCdf
- * @param aggregateCdf
- * @param resolutionCdf
- */
-function scoreMarketCdfCdf(
-  sampleCount,
-  predictionCdf,
-  aggregateCdf,
-  resolutionCdf,
-) {
-  let toCdf = (r) => (new Cdf(r.xs, r.ys));
-
-  return scoringFunctions.distributionInputDistributionOutput({
-    predictionCdf: toCdf(predictionCdf),
-    aggregateCdf: toCdf(aggregateCdf),
-    resultCdf: toCdf(resolutionCdf),
-    sampleCount,
-  });
-}
-
-/**
- *
- * @param sampleCount
- * @param predictionCdf
  * @param resolutionCdf
  */
 function scoreNonMarketCdfCdf(sampleCount, predictionCdf, resolutionCdf, resolutionUniformAdditionWeight=0) {
@@ -163,7 +140,6 @@ module.exports = {
   findY,
   findX,
   mean,
-  scoreMarketCdfCdf,
   scoreNonMarketCdfCdf,
   differentialEntropy,
   integral,

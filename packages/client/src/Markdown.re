@@ -13,7 +13,7 @@ module Styles = {
       selector(
         "h1, h2, h3, h4, h5, p, blockquote, code",
         [
-          maxWidth(`px(1170)),
+          maxWidth(`px(682)),
           marginLeft(`auto),
           marginRight(`auto),
           display(`block),
@@ -24,7 +24,7 @@ module Styles = {
       selector(
         "ul, ol",
         [
-          maxWidth(`px(1170)),
+          maxWidth(`px(682)),
           marginLeft(`auto),
           marginRight(`auto),
           paddingLeft(`rem(2.)),
@@ -42,7 +42,7 @@ module Styles = {
       selector(
         "hr",
         [
-          maxWidth(`px(1170)),
+          maxWidth(`px(682)),
           marginLeft(`auto),
           marginRight(`auto),
           display(`block),

@@ -4,7 +4,7 @@ module Styles = {
   open Css;
   let main =
     style([
-      maxWidth(`px(1170)),
+      maxWidth(`px(682)),
       marginLeft(`auto),
       marginRight(`auto),
       display(`block),

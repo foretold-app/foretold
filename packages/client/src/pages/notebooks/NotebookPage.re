@@ -32,7 +32,7 @@ module Tabs = {
         <Div
           styles=[
             Css.style([
-              Css.maxWidth(`px(1170)),
+              Css.maxWidth(`px(682)),
               Css.marginLeft(`auto),
               Css.marginRight(`auto),
             ]),

@@ -47,7 +47,7 @@ let make = (tabSelected: Routing.ChannelPage.tab, channel: Types.channel) =>
        tab(
          tabSelected == Leaderboard,
          tabToInternalUrl(channel.id, Leaderboard),
-         "Scoring",
+         "Scores",
        ),
      )}
     {E.React2.showIf(

@@ -49,6 +49,13 @@ type permission = [
   | `GLOBAL_SETTING_UPDATE
 ];
 
+type marketType = [ | `MARKET | `NON_MARKET];
+
+type finalComparisonMeasurement = [
+  | `LAST_AGGREGATE_MEASUREMENT
+  | `LAST_OBJECTIVE_MEASUREMENT
+];
+
 type permissions = {allow: list(permission)};
 
 type preference = {
@@ -171,12 +178,19 @@ and measurement = {
   measurementScoreSet: option(measurementScoreSet),
 }
 
+and timeAverageScore = {
+  score: float,
+  timeActivityRatio: float,
+  marketType,
+  finalComparisonMeasurement,
+}
+
 and agentMeasurable = {
   id: string,
   measurable,
   agent,
   primaryPointScore: option(float),
-  timeAverageScore: option(float),
+  timeAverageScore: option(timeAverageScore),
   predictionCountTotal: int,
   createdAt: MomentRe.Moment.t,
   competitiveMeasurement: option(measurement),
@@ -203,6 +217,7 @@ and leaderboardItem = {
   agent: option(agent),
   channel: option(channel),
   pointScore: option(float),
+  timeAverageScore: option(timeAverageScore),
   createdAt: option(MomentRe.Moment.t),
   predictionCountTotal: option(int),
   numberOfQuestionsScored: option(int),

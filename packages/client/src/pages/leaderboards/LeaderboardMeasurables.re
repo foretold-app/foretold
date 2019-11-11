@@ -2,11 +2,21 @@
 
 module ReducerConfig = {
   type itemType = Types.agentMeasurable;
-  type callFnParams = (option(string), option(string));
+  type callFnParams = (
+    option(string),
+    option(string),
+    option(Types.finalComparisonMeasurement),
+  );
 
   let getId = (e: itemType) => e.id;
-  let callFn = ((channelId, measurableId): callFnParams) =>
-    AgentMeasurablesGet.component(~channelId, ~measurableId, ());
+  let callFn =
+      ((channelId, measurableId, finalComparisonMeasurement): callFnParams) =>
+    AgentMeasurablesGet.component(
+      ~channelId,
+      ~measurableId,
+      ~finalComparisonMeasurement,
+      (),
+    );
 
   let isEqual = (a: itemType, b: itemType) => {
     a.id == b.id;
@@ -22,6 +32,7 @@ let make =
       ~measurableId=None,
       ~head=Leaderboard.head(~subTab=ByMeasurable),
       ~columns=LeaderboardTable.Columns.measurables,
+      ~finalComparisonMeasurement=None,
     ) => {
   let subComponent = (reducerParams: Reducer.Types.reducerParams) => {
     let items =
@@ -54,5 +65,8 @@ let make =
     <SLayout head isFluid=true> body </SLayout>;
   };
 
-  <Reducer callFnParams=(channelId, measurableId) subComponent />;
+  <Reducer
+    callFnParams=(channelId, measurableId, finalComparisonMeasurement)
+    subComponent
+  />;
 };

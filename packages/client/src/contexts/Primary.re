@@ -671,6 +671,23 @@ module GlobalSetting = {
   };
 };
 
+module TimeAverageScore = {
+  type t = Types.timeAverageScore;
+  let make =
+      (
+        ~score: float,
+        ~timeActivityRatio: float,
+        ~marketType: marketType,
+        ~finalComparisonMeasurement: finalComparisonMeasurement,
+      )
+      : t => {
+    score,
+    timeActivityRatio,
+    marketType,
+    finalComparisonMeasurement,
+  };
+};
+
 module AgentMeasurable = {
   type t = Types.agentMeasurable;
   let make =
@@ -679,12 +696,12 @@ module AgentMeasurable = {
         ~measurable,
         ~agent,
         ~primaryPointScore=None,
-        ~timeAverageScore=None,
         ~predictionCountTotal,
         ~createdAt,
         ~competitiveMeasurement=None,
         ~aggregationMeasurement=None,
         ~objectiveMeasurement=None,
+        ~timeAverageScore=None,
         (),
       )
       : t => {
@@ -744,6 +761,7 @@ module LeaderboardItem = {
         ~createdAt=None,
         ~predictionCountTotal=None,
         ~numberOfQuestionsScored=None,
+        ~timeAverageScore=None,
         ~competitiveMeasurement=None,
         ~aggregationMeasurement=None,
         ~objectiveMeasurement=None,
@@ -757,6 +775,7 @@ module LeaderboardItem = {
     pointScore,
     createdAt,
     predictionCountTotal,
+    timeAverageScore,
     numberOfQuestionsScored,
     competitiveMeasurement,
     aggregationMeasurement,
@@ -768,6 +787,7 @@ module LeaderboardItem = {
       ~id=agentMeasurable.id,
       ~agent=Some(agentMeasurable.agent),
       ~measurable=Some(agentMeasurable.measurable),
+      ~timeAverageScore=agentMeasurable.timeAverageScore,
       ~pointScore=agentMeasurable.primaryPointScore,
       ~predictionCountTotal=Some(agentMeasurable.predictionCountTotal),
       ~createdAt=Some(agentMeasurable.createdAt),

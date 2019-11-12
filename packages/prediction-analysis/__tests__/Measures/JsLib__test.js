@@ -63,6 +63,24 @@ describe('#PredictionResolutionGroup', () => {
         .toBeCloseTo(1.169);
     });
 
+    test('Market, with cdf inputs and cdf resolution', () => {
+      expect((new PredictionResolutionGroup({
+        agentPrediction: {data: {xs: [1., 2.,3.,4.,5.], ys: [.0, .0, .0, .99, .99]}, dataType: "floatCdf"},
+        marketPrediction: {data: {xs: [1., 2.,3.,4.,5.], ys: [.0, .1, .2, .99, .99]}, dataType: "floatCdf"},
+        resolution: {data: {xs: [1., 2.,3.,4.,5.], ys: [.0, .0, .0, .99, .99]}, dataType: "floatCdf"}
+      })).pointScore(marketScore).data)
+        .toBeCloseTo(0.16);
+    });
+
+    test('Market, with cdf inputs and point resolution', () => {
+      let group = (new PredictionResolutionGroup({
+        agentPrediction: {data: {xs: [1., 2.,3.,4.,5.], ys: [.0, .0, .0, .99, .99]}, dataType: "floatCdf"},
+        marketPrediction: {data: {xs: [1., 2.,3.,4.,5.], ys: [.0, .1, .2, .99, .99]}, dataType: "floatCdf"},
+        resolution: {data: 4, dataType: "floatPoint"}
+      }));
+      expect(group.pointScore(marketScore).data).toBeCloseTo(.326);
+    });
+
     test('Nonmarket, with a binary resolution', () => {
       expect((new PredictionResolutionGroup({
         agentPrediction: { data: 0.875, dataType: 'percentage' },

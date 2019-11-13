@@ -9,7 +9,7 @@ module Config = {
   let callFn = (seriesId: callFnParams) =>
     MeasurablesGet.component(
       ~seriesId=Some(seriesId),
-      ~states=[|Some(`OPEN)|],
+      ~states=Some([|`OPEN|]),
       (),
     );
 

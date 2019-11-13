@@ -9,7 +9,7 @@ module ReducerConfig = {
   let callFn = (creatorId: callFnParams) =>
     MeasurablesGet.component(
       ~creatorId=Some(creatorId),
-      ~states=[|Some(`OPEN)|],
+      ~states=Some([|`OPEN|]),
       (),
     );
 

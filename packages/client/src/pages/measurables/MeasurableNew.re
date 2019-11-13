@@ -33,7 +33,9 @@ let make = (~channelId) => {
         labelProperty: "",
         labelSubject: "",
         expectedResolutionDate:
-          MomentRe.momentNow() |> MeasurableForm.formatDate,
+          MomentRe.momentNow()
+          |> MomentRe.Moment.add(~duration=MomentRe.duration(1.0, `months))
+          |> MeasurableForm.formatDate,
         labelOnDate: MomentRe.momentNow() |> MeasurableForm.formatDate,
         resolutionEndpoint: "",
         showDescriptionDate: "FALSE",

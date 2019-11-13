@@ -51,7 +51,7 @@ let showForm = (~state: Form.state, ~creating=true, ~onSubmit, ~send, ()) => {
       label={"Description" |> Utils.ste}
       help={"Markdown supported" |> Utils.ste}>
       <Antd.Input.TextArea
-        style={ReactDOMRe.Style.make(~minHeight="6em", ())}
+        style={ReactDOMRe.Style.make(~minHeight="30em", ())}
         value={state.values.description}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
           send(Form.FieldChangeValue(Description, e))

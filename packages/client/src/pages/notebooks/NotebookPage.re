@@ -93,7 +93,7 @@ let make = (~channelId: string, ~notebookId: string) => {
                | Details =>
                  <FC__PageCard.BodyPadding>
                    <Antd.Input.TextArea
-                     style={ReactDOMRe.Style.make(~minHeight="30em", ())}
+                     style={ReactDOMRe.Style.make(~minHeight="80em", ())}
                      value={notebook.body}
                    />
                  </FC__PageCard.BodyPadding>

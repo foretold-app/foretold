@@ -358,6 +358,14 @@ class ModelPostgres extends Model {
       });
     }
 
+    if (!!filter.measurableIds) {
+      where[this.and].push({
+        id: {
+          [this.in]: filter.measurableIds,
+        }
+      });
+    }
+
     if (!!filter.userId) {
       where[this.and].push({
         userId: filter.userId,

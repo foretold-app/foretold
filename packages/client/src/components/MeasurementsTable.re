@@ -404,6 +404,8 @@ let make =
     | `FLOAT => [|
         agentColumn,
         getPredictionDistributionColumn(bounds),
+        predictionValueColumn,
+        predictionTextColumn,
         timeColumn,
       |]
     | `PERCENTAGE => [|

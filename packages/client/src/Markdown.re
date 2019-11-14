@@ -57,7 +57,7 @@ module Styles = {
 type renderers = {. "code": code => ReasonReact.reactElement};
 
 // switch (code##language, , code##value) {
-let foretoldJsRenderers = (channelId): renderers => {
+let foretoldJsRenderers = {
   "code": (code: code) => {
     switch (
       Js.Nullable.toOption(code##language),
@@ -75,7 +75,7 @@ let foretoldJsRenderers = (channelId): renderers => {
               width(`percent(100.)),
             ])
           )>
-          <DashboardTableC channelId tableJson=json />
+          <DashboardTableC tableJson=json />
         </div>
       | None => "Invalid Json. Check a formatting tool." |> Utils.ste
       }
@@ -88,13 +88,10 @@ let foretoldJsRenderers = (channelId): renderers => {
 };
 
 [@react.component]
-let make = (~source, ~supportForetoldJs=false, ~channelId=?) => {
-  switch (supportForetoldJs, channelId) {
-  | (true, Some(channelId)) =>
-    <div className=Styles.all>
-      <ReactMarkdown source renderers={foretoldJsRenderers(channelId)} />
-    </div>
-  | (true, None) => <ReactMarkdown source />
-  | (false, _) => <ReactMarkdown source />
-  };
+let make = (~source, ~supportForetoldJs=false) => {
+  supportForetoldJs
+    ? <div className=Styles.all>
+        <ReactMarkdown source renderers=foretoldJsRenderers />
+      </div>
+    : <ReactMarkdown source />;
 };

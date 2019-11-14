@@ -84,11 +84,7 @@ let make = (~channelId: string, ~notebookId: string) => {
                      style([marginTop(`em(2.0)), marginBottom(`em(2.0))])
                    )>
                    <NotebookHeader notebook />
-                   <Markdown
-                     source={notebook.body}
-                     supportForetoldJs=true
-                     channelId
-                   />
+                   <Markdown source={notebook.body} supportForetoldJs=true />
                  </div>
                | Details =>
                  <FC__PageCard.BodyPadding>

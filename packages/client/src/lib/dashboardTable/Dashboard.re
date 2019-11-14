@@ -10,7 +10,7 @@ module Styles = {
 };
 
 [@react.component]
-let make = (~channelId: string) => {
+let make = () => {
   let (text, setText) = React.useState(() => "");
 
   <SLayout isFluid=true>
@@ -22,7 +22,7 @@ let make = (~channelId: string) => {
           value=text
         />
       </div>
-      <Markdown source=text channelId supportForetoldJs=true />
+      <Markdown source=text supportForetoldJs=true />
     </FC.PageCard.Body>
   </SLayout>;
 };

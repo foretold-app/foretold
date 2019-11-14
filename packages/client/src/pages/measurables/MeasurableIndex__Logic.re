@@ -13,7 +13,7 @@ module ReducerConfig = {
   let callFn = (params: callFnParams) =>
     MeasurablesGet.component(
       ~channelId=Some(params.channelId),
-      ~states=params.states |> E.O.default([||]) |> Array.map(r => Some(r)),
+      ~states=Some(params.states |> E.O.default([||])),
       (),
     );
 

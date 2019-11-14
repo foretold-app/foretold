@@ -14,6 +14,7 @@ module DashboardTableToTable = {
         (c: DashboardTable.Row.t) =>
           switch (Belt.Array.get(c, index)) {
           | Some(String(str)) => str |> Utils.ste
+          | Some(MeasurementValue(_)) => "MeasurementValue" |> Utils.ste
           | Some(MeasurableId(str)) =>
             measurables
             |> E.A.getBy(_, r => r.id == str)
@@ -35,7 +36,7 @@ module DashboardTableToTable = {
                   </div>
                 | None =>
                   <FC__Alert type_=`warning>
-                    {"Not loaded :(" |> Utils.ste}
+                    {"Not loaded" |> Utils.ste}
                   </FC__Alert>
                 }
             )
@@ -60,24 +61,24 @@ let tableJsonString = {| { "columns": [{"id":"1", "name": "Name", "columnType": 
 let tableJson: Js.Json.t = Json.parseOrRaise(tableJsonString);
 
 [@react.component]
-let make = (~channelId, ~tableJson=tableJson) => {
-  MeasurablesGet.component(
-    ~channelId=Some(channelId),
-    ~states=[|Some(`OPEN)|],
-    ~pageLimit=Js.Json.number(100 |> float_of_int),
-    ~direction=None,
-    ~pollInterval=20 * 1000,
-    ~innerComponentFn=
-      e =>
-        e
-        |> HttpResponse.fmap(
-             (r: Client.Primary.Connection.t(Client.Primary.Measurable.t)) =>
-             switch (DashboardTable.Json.decode(tableJson)) {
-             | Ok(table) => DashboardTableToTable.run(table, r.edges)
-             | Error(e) => e |> Utils.ste
-             }
-           )
-        |> HttpResponse.withReactDefaults,
-    (),
-  );
+let make = (~tableJson=tableJson) => {
+  switch (DashboardTable.Json.decode(tableJson)) {
+  | Ok(table) =>
+    MeasurablesGet.component(
+      ~measurableIds=Some(DashboardTable.Table.allMeasurableIds(table)),
+      ~pageLimit=Js.Json.number(500 |> float_of_int),
+      ~direction=None,
+      ~pollInterval=20 * 1000,
+      ~innerComponentFn=
+        e =>
+          e
+          |> HttpResponse.fmap(
+               (r: Client.Primary.Connection.t(Client.Primary.Measurable.t)) =>
+               DashboardTableToTable.run(table, r.edges)
+             )
+          |> HttpResponse.withReactDefaults,
+      (),
+    )
+  | Error(e) => e |> Utils.ste
+  };
 };

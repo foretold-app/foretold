@@ -62,7 +62,7 @@ let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) =>
   |> E.React2.el;
 };
 
-let formFields = (state: Form.state, send, getFieldState, channelId) => {
+let formFields = (state: Form.state, send, getFieldState) => {
   let onSubmit = () => send(Form.Submit);
 
   let stateName = getFieldState(Form.Field(Name));
@@ -121,11 +121,7 @@ let formFields = (state: Form.state, send, getFieldState, channelId) => {
         </Antd.Form.Item>
       </Div>
       <Div flex={`num(1.)}>
-        <Markdown
-          source={state.values.body}
-          channelId
-          supportForetoldJs=true
-        />
+        <Markdown source={state.values.body} supportForetoldJs=true />
       </Div>
     </Div>
   </FC__PageCard.BodyPadding>;

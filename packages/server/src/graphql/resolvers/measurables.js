@@ -44,6 +44,7 @@ async function all(root, args, context, info) {
   const filter = new Filter({
     channelId,
     withinJoinedChannels,
+    measurableIds: _.get(args, 'measurableIds', null),
     creatorId: _.get(args, 'creatorId', null),
     seriesId: _.get(args, 'seriesId', null),
     states: _.get(args, 'states', null),

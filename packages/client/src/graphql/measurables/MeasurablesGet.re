@@ -86,7 +86,8 @@ let toMeasurable = m => {
 module Query = [%graphql
   {|
     query getMeasurables (
-        $states: [measurableState]!
+        $measurableIds: [String!]
+        $states: [measurableState!]
         $channelId: String
         $seriesId: String
         $creatorId: String
@@ -96,6 +97,7 @@ module Query = [%graphql
         $before: Cursor
     ) {
         measurables (
+            measurableIds: $measurableIds
             states: $states
             channelId: $channelId
             seriesId: $seriesId
@@ -209,15 +211,23 @@ let unpackEdges = a =>
 
 let queryDirection =
     (
-      ~states,
+      ~states=?,
       ~seriesId=?,
       ~channelId=?,
       ~creatorId=?,
+      ~measurableIds,
       ~pageLimit,
       ~direction,
       (),
     ) => {
-  let fn = Query.make(~seriesId?, ~channelId?, ~creatorId?, ~states);
+  let fn =
+    Query.make(
+      ~seriesId?,
+      ~channelId?,
+      ~creatorId?,
+      ~measurableIds?,
+      ~states?,
+    );
   switch ((direction: Primary.Connection.direction)) {
   | None => fn(~first=pageLimit, ())
   | After(after) => fn(~first=pageLimit, ~after, ())
@@ -241,9 +251,10 @@ let component =
       ~creatorId=None,
       ~seriesId=None,
       ~channelId=None,
+      ~measurableIds=None,
+      ~states=None,
       ~pollInterval=?,
       ~pageLimit,
-      ~states,
       ~direction,
       ~innerComponentFn,
       (),
@@ -253,10 +264,11 @@ let component =
       ~channelId?,
       ~seriesId?,
       ~creatorId?,
+      ~states?,
+      ~measurableIds,
       ~pageLimit,
       ~direction,
-      ~states,
       (),
     );
-  componentMaker(~pollInterval=?pollInterval, query, innerComponentFn);
+  componentMaker(~pollInterval?, query, innerComponentFn);
 };

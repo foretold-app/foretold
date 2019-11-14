@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 
 const { MEASURABLE_STATE } = require('../enums/measurable-state');
 const { MEASURABLE_VALUE_TYPE } = require('../enums/measurable-value-type');
+const moment = require('moment');
 
 module.exports = (sequelize, DataTypes) => {
   const Measurable = sequelize.define('Measurable', {
@@ -75,9 +76,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
+
+    // We default to having questions resolve 1 month after they are created.
     expectedResolutionDate: {
       allowNull: true,
       type: DataTypes.DATE,
+      defaultValue: moment().add(1, 'months').format('MMM DD, YYYY HH:mm'),
     },
 
     // Links

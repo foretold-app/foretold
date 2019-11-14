@@ -9,7 +9,11 @@ import { Samples, Cdf } from "../../../../cdf";
  * @param {number} ratio
  * @return {string}
  */
-const minMaxRatio = (ratio) => {
+const minMaxRatio = (minValue, maxValue) => {
+  if (minValue === 0 || maxValue === 0){
+    return "SMALL"
+  }
+  const ratio = maxValue / minValue;
   if (ratio < 100000) {
     return "SMALL"
   } else if (ratio < 10000000) {
@@ -27,7 +31,7 @@ const ratioSize = samples => {
   samples.sort();
   const minValue = samples.getPercentile(2);
   const maxValue = samples.getPercentile(98);
-  return minMaxRatio(maxValue / minValue);
+  return minMaxRatio(minValue, maxValue);
 };
 
 /**

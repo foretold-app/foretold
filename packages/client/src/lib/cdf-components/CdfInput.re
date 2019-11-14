@@ -6,6 +6,7 @@ open Utils;
 type state = {
   // -> Measurement.value
   floatCdf: FloatCdf.t,
+  kdeWidth: int,
   percentage: float,
   binary: bool,
   dataType: string,
@@ -33,6 +34,7 @@ A normal distribution with a mean of 5 and a standard deviation of 2.";
 type action =
   // -> Measurement.value
   | UpdateFloatPdf(FloatCdf.t)
+  | UpdateKdeWidth(int)
   | UpdateHasLimitError(bool)
   | UpdatePercentage(float)
   | UpdateBinary(bool)
@@ -181,7 +183,7 @@ let botsSelect =
 };
 
 module ValueInput = {
-  let floatPoint = (measurable: Types.measurable, send) => {
+  let floatPoint = (kdeWidth, measurable: Types.measurable, send) => {
     let toGuesstimateInputs = ((ys, xs)): GuesstimateInput.input => {
       "name": "AG",
       "xs": xs,
@@ -202,11 +204,25 @@ module ValueInput = {
 
     let inputs = input |> E.O.fmap(r => [|r|]) |> E.O.default([||]);
 
+    let foo = (r: FloatCdf.t) => {
+      let min =
+        r |> FloatCdf.fromMeasurementValue |> FloatCdf.firstAboveValue(0.02);
+      let max =
+        r |> FloatCdf.fromMeasurementValue |> FloatCdf.firstAboveValue(0.98);
+
+      switch (min, max) {
+      | (Some(x1), Some(_)) when x1 == 0. => 20
+      | (Some(min), Some(max)) when max /. min > 100000. => 1
+      | _ => 20
+      };
+    };
+
     <GuesstimateInput
       focusOnRender=true
       sampleCount=30000
       min={measurable.min}
       max={measurable.max}
+      kdeWidth
       inputs
       onUpdate={event =>
         {
@@ -214,6 +230,7 @@ module ValueInput = {
           let asGroup: FloatCdf.t = {xs, ys};
           send(UpdateHasLimitError(hasLimitError));
           send(UpdateFloatPdf(asGroup));
+          send(UpdateKdeWidth(foo(asGroup)));
         }
         |> ignore
       }
@@ -347,7 +364,7 @@ let mainBlock =
             styles=[
               Css.(style([width(Css.Calc.(`percent(100.0) - `em(2.2)))])),
             ]>
-            {ValueInput.floatPoint(measurable, send)}
+            {ValueInput.floatPoint(state.kdeWidth, measurable, send)}
           </Div>
           <Div float=`left styles=[Css.(style([width(`em(2.2))]))]>
             <span
@@ -442,6 +459,13 @@ let mainBlock =
           send(UpdateDescription(value));
         }}
       />
+      <InputNumber
+        min=0
+        max=100
+        value={state.kdeWidth}
+        step=1
+        onChange={(value: int) => send(UpdateKdeWidth(value))}
+      />
       {Primary.User.show(loggedUser, getBotSelect)}
       <div className=Styles.submitButton>
         <Antd.Button
@@ -486,6 +510,7 @@ let make =
   let (valueText, setValueText) = React.useState(() => "");
   let (hasLimitError, setHasLimitError) = React.useState(() => false);
   let (asAgent, setAsAgent) = React.useState(() => "");
+  let (kdeWidth, setKdeWidth) = React.useState(() => 20);
 
   let state = {
     // Values
@@ -507,6 +532,7 @@ let make =
     // Form State Only
     hasLimitError,
     asAgent,
+    kdeWidth,
   };
 
   let send = action => {
@@ -517,7 +543,7 @@ let make =
 
     | UpdateHasLimitError((hasLimitError: bool)) =>
       setHasLimitError(_ => hasLimitError)
-
+    | UpdateKdeWidth((kdeWidth: int)) => setKdeWidth(_ => kdeWidth)
     | UpdateCompetitorType(competitorType) =>
       let dataType =
         getDataTypeAsString(

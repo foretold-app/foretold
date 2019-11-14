@@ -40,10 +40,10 @@ const ratioSize = samples => {
  * @param {number} max
  * @return {[number[], number[], boolean]}
  */
-const toCdf = (values, min, max) => {
+const toCdf = (width, values, min, max) => {
   const samples = new Samples(values);
   const ratioSize$ = ratioSize(samples);
-  const width = ratioSize$ === "SMALL" ? 20 : 1;
+  // const width = ratioSize$ === "SMALL" ? 20 : 1;
 
   const cdf = samples.toCdf({ size: 1000, width, min, max});
   return [cdf.ys, cdf.xs, ratioSize$ === "LARGE"];
@@ -71,7 +71,6 @@ export class GuesstimateInput extends React.Component {
       this.textInput.focus();
     }
   }
-
   handleChange(event) {
     const text = event.target.value;
 
@@ -93,10 +92,18 @@ export class GuesstimateInput extends React.Component {
     } else {
       const min = this.props.min;
       const max = this.props.max;
-      this.props.onUpdate(toCdf(values, min, max));
+      this.props.onUpdate(toCdf(this.props.kdeWidth, values, min, max));
     }
 
     this.props.onChange(text);
+  }
+
+  componentDidUpdate(prevProps){
+    if (this.props.kdeWidth !== prevProps.kdeWidth && this.state.items.length !== 0){
+      const min = this.props.min;
+      const max = this.props.max;
+      this.props.onUpdate(toCdf(this.props.kdeWidth, this.state.items, min, max));
+    }
   }
 
   render() {

@@ -269,6 +269,8 @@ module FloatCdf = {
   };
   let empty: t = {xs: [||], ys: [||]};
 
+  let fromMeasurementValue = (r: t): MeasurementValue.FloatCdf.t =>
+    MeasurementValue.FloatCdf.fromArrays((r.ys, r.xs));
   // TODO: This isn't actually a floatCDF< but instead a MeasurementValue.FloatCDF which is confusingly different.
   let firstAbove = (min: float, t: MeasurementValue.FloatCdf.t) =>
     Belt.Map.findFirstBy(t, (k, _v) => k > min);

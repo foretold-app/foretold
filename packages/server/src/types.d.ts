@@ -285,6 +285,7 @@ export namespace Layers {
       isAdmin?: boolean;
       agentId?: Models.AgentID;
       measuredByAgentId?: Models.AgentID;
+      measurableIds?: Models.MeasurementId[];
       transaction?: object;
       lock?: boolean;
       skipLocked?: boolean;

@@ -2,7 +2,8 @@
 
 type columnType =
   | String
-  | MeasurableId;
+  | MeasurableId
+  | MeasurementValue;
 
 module Column = {
   type t = {
@@ -18,6 +19,7 @@ module Column = {
 type cell =
   | String(string)
   | MeasurableId(string)
+  | MeasurementValue(MeasurementValue.t)
   | Empty;
 
 module Row = {
@@ -65,6 +67,7 @@ module Json = {
           columnType:
             switch (columnType) {
             | "MeasurableId" => MeasurableId
+            | "MeasurementValue" => MeasurementValue
             | _ => String
             },
         })
@@ -92,6 +95,17 @@ module Json = {
              |> Json.Decode.(optional(field(column.id, string)))
              |> E.O.fmap(r => String(r))
              |> E.O.default(Empty)
+           | MeasurementValue =>
+             switch (
+               json
+               |> Json.Decode.(
+                    optional(field(column.id, MeasurementValue.decode))
+                  )
+             ) {
+             | Some(Ok(r)) => MeasurementValue(r)
+             | Some(Error(_)) => Empty
+             | _ => Empty
+             }
            | MeasurableId =>
              json
              |> Json.Decode.(optional(field(column.id, string)))

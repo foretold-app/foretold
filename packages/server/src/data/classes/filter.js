@@ -26,6 +26,7 @@ class Filter {
     const list = {
       id: (v) => _.isString(v) || utils.none(v),
       isArchived: (v) => _.isArray(v) || utils.none(v),
+      measurableIds: (v) => _.isArray(v) || utils.none(v),
       withinJoinedChannels: (v) => _.isObject(v) || utils.none(v),
       excludeChannelId: (v) => _.isString(v) || utils.none(v),
       notificationId: (v) => _.isString(v) || utils.none(v),

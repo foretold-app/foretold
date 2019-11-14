@@ -12,6 +12,7 @@ module Query = [%graphql
         isArchived
         isPublic
         membershipCount
+        notebooksCount
         myRole
         permissions {
           mutations {
@@ -37,6 +38,7 @@ let toChannel = channel => {
     ~description=channel##description,
     ~isArchived=channel##isArchived,
     ~isPublic=channel##isPublic,
+    ~notebooksCount=Some(channel##notebooksCount),
     ~myRole=Some(channel##myRole),
     ~membershipCount=Some(channel##membershipCount),
     ~permissions=Some(permissions),

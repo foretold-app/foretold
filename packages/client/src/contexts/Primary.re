@@ -369,6 +369,7 @@ module Channel = {
         ~myRole=None,
         ~channelMemberships=None,
         ~openedMeasurablesCount=None,
+        ~notebooksCount=None,
         ~isCurated=false,
         ~permissions=None,
         (),
@@ -384,6 +385,7 @@ module Channel = {
     myRole,
     channelMemberships,
     openedMeasurablesCount,
+    notebooksCount,
     isCurated,
     permissions,
   };

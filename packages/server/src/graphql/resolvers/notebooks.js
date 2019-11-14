@@ -95,9 +95,22 @@ async function one(_root, args, context, _info) {
   return new NotebooksData().getOne(params, query, options);
 }
 
+/**
+ * @param {*} root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function count(root, _args, _context, _info) {
+  const channelId = _.get(root, 'id', null);
+  return new NotebooksData().getCount({ channelId });
+}
+
 module.exports = {
   all,
   one,
   create,
   update,
+  count,
 };

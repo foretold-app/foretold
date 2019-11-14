@@ -45,6 +45,11 @@ const channel = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),
       resolve: resolvers.measurables.openedCount,
     },
+
+    notebooksCount: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLInt),
+      resolve: resolvers.notebooks.count,
+    },
   }),
 });
 

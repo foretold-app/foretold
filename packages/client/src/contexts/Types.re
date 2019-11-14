@@ -115,6 +115,7 @@ and channel = {
   membershipCount: option(int),
   creator: option(agent),
   myRole: option(myMembershipRole),
+  notebooksCount: option(int),
   channelMemberships: option(Js.Array.t(channelMembership)),
   openedMeasurablesCount: option(int),
   permissions: option(permissions),

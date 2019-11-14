@@ -14,6 +14,7 @@ module DashboardTableToTable = {
         (c: DashboardTable.Row.t) =>
           switch (Belt.Array.get(c, index)) {
           | Some(String(str)) => str |> Utils.ste
+          | Some(MeasurementValue(_)) => "MeasurementValue" |> Utils.ste
           | Some(MeasurableId(str)) =>
             measurables
             |> E.A.getBy(_, r => r.id == str)
@@ -35,7 +36,7 @@ module DashboardTableToTable = {
                   </div>
                 | None =>
                   <FC__Alert type_=`warning>
-                    {"Not loaded :(" |> Utils.ste}
+                    {"Not loaded" |> Utils.ste}
                   </FC__Alert>
                 }
             )

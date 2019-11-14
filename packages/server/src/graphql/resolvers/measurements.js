@@ -144,7 +144,9 @@ async function create(root, args, context, info) {
  */
 async function latest(root, args, context, info) {
   const measurable = root;
-  const agentId = context.resultOrLatestMeasurementForAgentId;
+  // const agentId = context.resultOrLatestMeasurementForAgentId;
+  const agentId = _.get(args, 'input.agentId', null)
+    || _.get(context, 'agent.id', null);
 
   if (!measurable) return null;
   if (!agentId) return null;

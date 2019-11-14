@@ -559,6 +559,7 @@ module Measurable = {
         ~permissions=None,
         ~outcome=None,
         ~previousAggregate=None,
+        ~recentMeasurement=None,
         (),
       )
       : t => {
@@ -590,6 +591,7 @@ module Measurable = {
     permissions,
     outcome,
     previousAggregate,
+    recentMeasurement,
   };
 };
 

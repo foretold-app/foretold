@@ -4,6 +4,7 @@ module DashboardTableToTable = {
   let toColumn =
       (
         measurables: array(Primary.Measurable.t),
+        editor: DashboardTableEditor.editor,
         index: int,
         column: DashboardTable.Column.t,
       )
@@ -22,17 +23,25 @@ module DashboardTableToTable = {
               r =>
                 switch (r) {
                 | Some(measurable) =>
-                  <div>
+                  <div
+                    onClick={_ => editor.onSelect(measurable.id)}
+                    className=Css.(
+                      style([
+                        borderRadius(`px(4)),
+                        marginLeft(`px(3)),
+                        padding(`px(5)),
+                        backgroundColor(
+                          Some(measurable.id) == editor.selectedId
+                            ? `hex("eff3f5") : `hex("fff"),
+                        ),
+                        hover([
+                          backgroundColor(`hex("eee")),
+                          cursor(`pointer),
+                        ]),
+                      ])
+                    )>
                     <MeasurementItems.AggregationResolution measurable />
-                    <Link
-                      className=Shared.Item.item
-                      linkType={
-                        Internal(
-                          MeasurableShow(measurable.channelId, measurable.id),
-                        )
-                      }>
-                      {"Link" |> Utils.ste}
-                    </Link>
+                    <MeasurementItems.AgentMeasurement measurable />
                   </div>
                 | None =>
                   <FC__Alert type_=`warning>
@@ -50,9 +59,11 @@ module DashboardTableToTable = {
       (
         table: DashboardTable.Table.t,
         measurables: array(Primary.Measurable.t),
+        editor: DashboardTableEditor.editor,
       ) => {
     let columns =
-      table.columns |> Belt.Array.mapWithIndex(_, toColumn(measurables));
+      table.columns
+      |> Belt.Array.mapWithIndex(_, toColumn(measurables, editor));
     Table.fromColumns(columns, table.rows, ());
   };
 };
@@ -61,7 +72,7 @@ let tableJsonString = {| { "columns": [{"id":"1", "name": "Name", "columnType": 
 let tableJson: Js.Json.t = Json.parseOrRaise(tableJsonString);
 
 [@react.component]
-let make = (~tableJson=tableJson) => {
+let make = (~tableJson=tableJson, ~editor: DashboardTableEditor.editor) => {
   switch (DashboardTable.Json.decode(tableJson)) {
   | Ok(table) =>
     MeasurablesGet.component(
@@ -74,7 +85,7 @@ let make = (~tableJson=tableJson) => {
           e
           |> HttpResponse.fmap(
                (r: Client.Primary.Connection.t(Client.Primary.Measurable.t)) =>
-               DashboardTableToTable.run(table, r.edges)
+               DashboardTableToTable.run(table, r.edges, editor)
              )
           |> HttpResponse.withReactDefaults,
       (),

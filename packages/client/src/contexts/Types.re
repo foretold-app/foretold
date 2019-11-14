@@ -157,6 +157,7 @@ and measurable = {
   permissions: option(permissions),
   outcome: option(measurement),
   previousAggregate: option(measurement),
+  recentMeasurement: option(measurement),
 }
 
 and measurementScoreSet = {

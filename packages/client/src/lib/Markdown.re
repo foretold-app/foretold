@@ -54,44 +54,7 @@ module Styles = {
     ]);
 };
 
-type renderers = {. "code": code => ReasonReact.reactElement};
-
-// switch (code##language, , code##value) {
-let foretoldJsRenderers = {
-  "code": (code: code) => {
-    switch (
-      Js.Nullable.toOption(code##language),
-      Js.Nullable.toOption(code##value),
-    ) {
-    | (Some("foretoldJs"), Some(json)) =>
-      switch (Json.parse(json)) {
-      | Some(json) =>
-        <div
-          className=Css.(
-            style([
-              marginTop(`em(1.0)),
-              marginBottom(`em(1.5)),
-              Css.float(`left),
-              width(`percent(100.)),
-            ])
-          )>
-          <DashboardTableC tableJson=json />
-        </div>
-      | None => "Invalid Json. Check a formatting tool." |> Utils.ste
-      }
-    | (Some(language), Some(value)) =>
-      <code className=language> {value |> Utils.ste} </code>
-    | (None, Some(value)) => value |> Utils.ste
-    | (_, None) => E.React2.null
-    };
-  },
-};
-
 [@react.component]
 let make = (~source, ~supportForetoldJs=false) => {
-  supportForetoldJs
-    ? <div className=Styles.all>
-        <ReactMarkdown source renderers=foretoldJsRenderers />
-      </div>
-    : <ReactMarkdown source />;
+  <ReactMarkdown source />;
 };

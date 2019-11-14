@@ -47,7 +47,7 @@ let fromColumns =
       columns: array(column('a)),
       rows: array('a),
       ~bottomSubRowFn: option('a => option(array(ReasonReact.reactElement)))=None,
-      ~onRowClb: 'a => unit=_ => (),
+      ~onRowClb: option('a => unit)=None,
       (),
     ) => {
   let columns' = filterColums(columns, rows);
@@ -95,14 +95,14 @@ let fromColumns =
             bottomSubRowFn
             |> E.O.bind(_, r => r(row))
             |> E.O.fmap(ReasonReact.array);
+          let onClick =
+            onRowClb
+            |> E.O.fmap((r, _) => {
+                 r(row);
+                 ();
+               });
 
-          <FC.Table.Row
-            onClick={_ => {
-              onRowClb(row);
-              ();
-            }}
-            ?bottomSubRow
-            key>
+          <FC.Table.Row ?onClick ?bottomSubRow key>
             columnsBody
           </FC.Table.Row>;
         })

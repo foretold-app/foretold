@@ -39,7 +39,7 @@ let mutate =
 
   mutation(
     ~variables=m##variables,
-    ~refetchQueries=[|"getMeasurements"|],
+    ~refetchQueries=[|"getMeasurements", "getMeasurables", "getMeasurable"|],
     (),
   )
   |> ignore;

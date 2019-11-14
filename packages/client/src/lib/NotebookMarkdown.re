@@ -74,13 +74,24 @@ let make = (~source) => {
      |> E.O.React.fmapOrNull(id =>
           <Div flex={`num(3.)}>
             {MeasurableGet.component(~id)
-             |> E.F.apply((measurable: Types.measurable) =>
-                  <MeasurementForm
-                    measurable
-                    measurableId={measurable.id}
-                    isCreator=false
-                  />
-                )}
+             |> E.F.apply((measurable: Types.measurable) => {
+                  let defaultValueText =
+                    measurable.recentMeasurement
+                    |> E.O.bind(_, (r: Types.measurement) => r.valueText)
+                    |> E.O.default("");
+                  <div>
+                    <MeasurementForm
+                      measurable
+                      measurableId={measurable.id}
+                      isCreator=false
+                      defaultValueText
+                    />
+                    <MeasurableBottomSection
+                      measurableId={measurable.id}
+                      channelId=None
+                    />
+                  </div>;
+                })}
           </Div>
         )}
   </Div>;

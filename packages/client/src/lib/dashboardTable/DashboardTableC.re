@@ -32,9 +32,12 @@ module DashboardTableToTable = {
                         padding(`px(5)),
                         backgroundColor(
                           Some(measurable.id) == editor.selectedId
-                            ? `hex("d5e5ed") : `hex("fff"),
+                            ? `hex("eff3f5") : `hex("fff"),
                         ),
-                        hover([backgroundColor(`hex("eee"))]),
+                        hover([
+                          backgroundColor(`hex("eee")),
+                          cursor(`pointer),
+                        ]),
                       ])
                     )>
                     <MeasurementItems.AggregationResolution measurable />

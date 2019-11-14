@@ -2,7 +2,12 @@
 
 [@react.component]
 let make =
-    (~measurable: Types.measurable, ~measurableId: string, ~isCreator: bool) => {
+    (
+      ~measurable: Types.measurable,
+      ~measurableId: string,
+      ~isCreator: bool,
+      ~defaultValueText="",
+    ) => {
   <Providers.AppContext.Consumer>
     ...{({loggedUser}) =>
       switch (loggedUser) {
@@ -11,6 +16,7 @@ let make =
           ...{(mutation, data) =>
             <CdfInput
               measurable
+              defaultValueText
               onSubmit={(
                 (value, competitorType, description, valueText, asAgent),
               ) =>

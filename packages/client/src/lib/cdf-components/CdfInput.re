@@ -463,6 +463,7 @@ let make =
       ~measurable: Types.measurable,
       ~bots: option(array(Types.bot)),
       ~loggedUser: Types.user,
+      ~defaultValueText="sdfsdf",
     ) => {
   let competitorTypeInitValue =
     switch (measurable.state) {
@@ -483,7 +484,7 @@ let make =
       getDataTypeAsString(competitorTypeInitValue, measurable, None)
     );
   let (description, setDescription) = React.useState(() => "");
-  let (valueText, setValueText) = React.useState(() => "");
+  let (valueText, setValueText) = React.useState(() => defaultValueText);
   let (hasLimitError, setHasLimitError) = React.useState(() => false);
   let (asAgent, setAsAgent) = React.useState(() => "");
 

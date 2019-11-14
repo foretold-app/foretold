@@ -116,10 +116,14 @@ module Percentage = {
   };
 };
 
-module AggregationResolution = {
+module MeasurementShow = {
   [@react.component]
-  let make = (~measurable: Types.measurable) => {
-    switch (measurable.previousAggregate, measurable.outcome) {
+  let make =
+      (
+        ~measurable: Types.measurable,
+        ~measurement: option(Types.measurement),
+      ) => {
+    switch (measurement, measurable.outcome) {
     | (_, Some(measurement)) =>
       switch (measurement.value) {
       | Ok(`FloatPoint(r)) => <FloatPoint value=r />
@@ -148,5 +152,19 @@ module AggregationResolution = {
 
     | _ => <Null />
     };
+  };
+};
+
+module AggregationResolution = {
+  [@react.component]
+  let make = (~measurable: Types.measurable) => {
+    <MeasurementShow measurable measurement={measurable.previousAggregate} />;
+  };
+};
+
+module AgentMeasurement = {
+  [@react.component]
+  let make = (~measurable: Types.measurable) => {
+    <MeasurementShow measurable measurement={measurable.recentMeasurement} />;
   };
 };

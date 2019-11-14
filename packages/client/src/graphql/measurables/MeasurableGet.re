@@ -64,6 +64,18 @@ module Query = [%graphql
                   comment
               }
           }
+          recentMeasurement {
+            id
+            valueText
+            value {
+              floatCdf { xs ys }
+              floatPoint
+              percentage
+              binary
+              unresolvableResolution
+              comment
+            }
+          }
           permissions {
             mutations {
               allow
@@ -81,6 +93,17 @@ let toMeasurable = (m): Types.measurable => {
 
   let previousAggregate =
     m##previousAggregate
+    |> E.O.fmap(measurement =>
+         Primary.Measurement.make(
+           ~id=measurement##id,
+           ~valueText=measurement##valueText,
+           ~value=measurement##value |> MeasurementValue.decodeGraphql,
+           (),
+         )
+       );
+
+  let recentMeasurement =
+    m##recentMeasurement
     |> E.O.fmap(measurement =>
          Primary.Measurement.make(
            ~id=measurement##id,
@@ -122,6 +145,7 @@ let toMeasurable = (m): Types.measurable => {
     ~series,
     ~previousAggregate,
     ~permissions=Some(permissions),
+    ~recentMeasurement,
     (),
   );
 };

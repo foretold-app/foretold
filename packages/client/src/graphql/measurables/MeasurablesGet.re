@@ -53,6 +53,17 @@ let toMeasurable = m => {
          )
        );
 
+  let recentMeasurement =
+    m##recentMeasurement
+    |> E.O.fmap(measurement =>
+         Primary.Measurement.make(
+           ~id=measurement##id,
+           ~valueText=measurement##valueText,
+           ~value=measurement##value |> MeasurementValue.decodeGraphql,
+           (),
+         )
+       );
+
   Primary.Measurable.make(
     ~id=m##id,
     ~name=m##name,
@@ -79,6 +90,7 @@ let toMeasurable = m => {
     ~max=m##max,
     ~outcome,
     ~previousAggregate,
+    ~recentMeasurement,
     (),
   );
 };
@@ -196,6 +208,18 @@ module Query = [%graphql
                       unresolvableResolution
                       comment
                   }
+              }
+              recentMeasurement {
+                id
+                valueText
+                value {
+                  floatCdf { xs ys }
+                  floatPoint
+                  percentage
+                  binary
+                  unresolvableResolution
+                  comment
+                }
               }
             }
           }

@@ -130,20 +130,6 @@ class MeasurementModel extends ModelPostgres {
    */
   async getLatest({ measurable, agentId } = {}) {
     const measurableId = measurable.id;
-    const competitorType = MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE;
-
-    if (measurable.state === MEASURABLE_STATE.JUDGED) {
-      const measurement = await this.getOne({
-        measurableId,
-        agentId,
-        competitorType,
-      });
-      if (!measurement) {
-        throw new Error('Measurement as Objective is not found');
-      }
-      return measurement;
-    }
-
     return this.getOne({ measurableId, agentId });
   }
 }

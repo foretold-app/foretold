@@ -22,7 +22,6 @@ const { structures } = require('../../data/classes');
  * @param {Models.ObjectID} args.seriesId
  * @param {Models.ObjectID} args.channelId
  * @param {Models.ObjectID} args.measuredByAgentId
- * @param {string} args.resultOrLatestMeasurementForAgentId
  * @param {string[]} args.states
  * @param {string[]} args.isArchived
  * @param {string} args.after
@@ -57,10 +56,6 @@ async function all(root, args, context, info) {
     // @todo: move to filter
     measuredByAgentId: _.get(args, 'measuredByAgentId', null),
   });
-
-  // @todo: tricky, rework it.
-  context.resultOrLatestMeasurementForAgentId
-    = args.resultOrLatestMeasurementForAgentId;
 
   return new MeasurablesData().getConnection(filter, pagination, options);
 }

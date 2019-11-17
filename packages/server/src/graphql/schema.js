@@ -104,7 +104,6 @@ const schema = new graphql.GraphQLSchema({
             ),
           },
           isArchived: { type: graphql.GraphQLList(types.common.isArchived) },
-          resultOrLatestMeasurementForAgentId: { type: graphql.GraphQLString },
         },
         resolve: resolvers.measurables.all,
       },

@@ -242,7 +242,6 @@ export namespace Schema {
     channelMembership?: Models.ChannelMemberships;
     channelMembershipsAdmins?: Models.ChannelMemberships[];
     channelMembershipsRole?: Models.ChannelMembershipRole;
-    resultOrLatestMeasurementForAgentId?: string;
   }
 
   export interface ChannelsInput {

@@ -84,7 +84,9 @@ let make = (~channelId: string, ~notebookId: string) => {
                      style([marginTop(`em(2.0)), marginBottom(`em(2.0))])
                    )>
                    <NotebookHeader notebook />
-                   <NotebookMarkdown source={notebook.body} />
+                   <NotebookMarkdown
+                     blocks={NotebookMarkdown.markdownToBlocks(notebook.body)}
+                   />
                  </div>
                | Details =>
                  <FC__PageCard.BodyPadding>
@@ -94,12 +96,7 @@ let make = (~channelId: string, ~notebookId: string) => {
                    />
                  </FC__PageCard.BodyPadding>
                | Edit =>
-                 <div>
-                   <NotebookUpdate
-                     notebook
-                     onSuccess={_ => switchTab(Show)}
-                   />
-                 </div>
+                 <NotebookUpdate notebook onSuccess={_ => switchTab(Show)} />
                }}
             </Div>
           </Div>

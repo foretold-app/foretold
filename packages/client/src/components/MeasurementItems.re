@@ -53,6 +53,11 @@ module FloatCdf = {
       <Div flex={`num(1.)}> dist </Div>
     </Div>;
   };
+  // We basically never change these, so they should generally stay constant.
+  let make =
+    React.memoCustomCompareProps(make, (next, current) =>
+      next##value == current##value
+    );
 };
 
 module Binary = {

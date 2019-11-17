@@ -16,41 +16,35 @@ let reducerToEditor =
   selectedId: notebookReducer.state.selectedMeasurableId,
 };
 
-let foretoldJsRenderers = (~notebookReducer: notebookReducer) => {
-  "code": (code: code) => {
-    switch (
-      Js.Nullable.toOption(code##language),
-      Js.Nullable.toOption(code##value),
-    ) {
-    | (Some("foretoldJs"), Some(json)) =>
-      switch (Json.parse(json)) {
-      | Some(json) =>
-        <div
-          className=Css.(
-            style([
-              marginTop(`em(1.0)),
-              marginBottom(`em(1.5)),
-              Css.float(`left),
-              width(`percent(100.)),
-            ])
-          )>
-          <DashboardTableC
-            tableJson=json
-            editor={reducerToEditor(notebookReducer)}
-          />
-        </div>
-      | None => "Invalid Json. Check a formatting tool." |> Utils.ste
-      }
-    | (Some(language), Some(value)) =>
-      <code className=language> {value |> Utils.ste} </code>
-    | (None, Some(value)) => value |> Utils.ste
-    | (_, None) => E.React2.null
-    };
-  },
+type block =
+  | Markdown(string)
+  | Json(Js.Json.t);
+type blocks = array(block);
+
+let markdownToBlocks = (str: string): blocks => {
+  let splitUp = Js.String.splitByRe([%re "/```foretoldJs|```/"], str);
+  splitUp
+  |> E.A.fmap(e =>
+       switch (e) {
+       | Some(str) =>
+         switch (Json.parse(str)) {
+         | Some(json) => Some(Json(json))
+         | None => Some(Markdown(str))
+         }
+       | _ => None
+       }
+     )
+  |> E.A.O.concatSome;
 };
 
+module Styles = {
+  open Css;
+  let sidebarOutside =
+    style([background(`hex("f0f2f5")), paddingLeft(`em(1.0))]);
+  let sidebar = style([position(`sticky), top(`em(2.0))]);
+};
 [@react.component]
-let make = (~source) => {
+let make = (~blocks: blocks) => {
   let (state, dispatch) =
     React.useReducer(
       (state, action) =>
@@ -61,34 +55,66 @@ let make = (~source) => {
       {selectedMeasurableId: None},
     );
 
+  let head = (~channelId: option(string), ~paginationPage, ()) => ReasonReact.null;
+
   <Div flexDirection=`row>
     <Div flex={`num(5.)}>
       <div className=Markdown.Styles.all>
-        <ReactMarkdown
-          source
-          renderers={foretoldJsRenderers(~notebookReducer={state, dispatch})}
-        />
+        {blocks
+         |> E.A.fmap(e =>
+              switch (e) {
+              | Markdown(str) => <ReactMarkdown source=str />
+              | Json(json) =>
+                <div
+                  className=Css.(
+                    style([
+                      marginTop(`em(1.0)),
+                      marginBottom(`em(1.5)),
+                      Css.float(`left),
+                      width(`percent(100.)),
+                    ])
+                  )>
+                  <DashboardTableC
+                    tableJson=json
+                    editor={reducerToEditor({state, dispatch})}
+                  />
+                </div>
+              }
+            )
+         |> ReasonReact.array}
       </div>
     </Div>
     {state.selectedMeasurableId
      |> E.O.React.fmapOrNull(id =>
-          <Div flex={`num(3.)}>
+          <Div flex={`num(3.)} styles=[Styles.sidebarOutside]>
             {MeasurableGet.component(~id)
              |> E.F.apply((measurable: Types.measurable) => {
                   let defaultValueText =
                     measurable.recentMeasurement
                     |> E.O.bind(_, (r: Types.measurement) => r.valueText)
                     |> E.O.default("");
-                  <div>
-                    <MeasurementForm
-                      measurable
-                      measurableId={measurable.id}
-                      isCreator=false
-                      defaultValueText
-                    />
+                  <div className=Styles.sidebar>
+                    <SLayout
+                      head={head(
+                        ~channelId=None,
+                        ~paginationPage=E.React2.null,
+                        (),
+                      )}
+                      isFluid=true>
+                      <FC.PageCard.Body>
+                        <MeasurementForm
+                          measurable
+                          measurableId={measurable.id}
+                          isCreator=false
+                          defaultValueText
+                          key={measurable.id}
+                        />
+                      </FC.PageCard.Body>
+                    </SLayout>
                     <MeasurableBottomSection
                       measurableId={measurable.id}
                       channelId=None
+                      key={measurable.id}
                     />
                   </div>;
                 })}

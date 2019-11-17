@@ -121,7 +121,9 @@ let formFields = (state: Form.state, send, getFieldState) => {
         </Antd.Form.Item>
       </Div>
       <Div flex={`num(1.)}>
-        <Markdown source={state.values.body} supportForetoldJs=true />
+        <NotebookMarkdown
+          blocks={NotebookMarkdown.markdownToBlocks(state.values.body)}
+        />
       </Div>
     </Div>
   </FC__PageCard.BodyPadding>;

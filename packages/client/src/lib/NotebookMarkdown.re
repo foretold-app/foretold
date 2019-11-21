@@ -41,7 +41,7 @@ module Styles = {
   open Css;
   let sidebarOutside =
     style([background(`hex("f0f2f5")), paddingLeft(`em(1.0))]);
-  let sidebar = style([position(`sticky), top(`em(2.0))]);
+  let sidebar = style([position(`sticky), top(`em(2.0)), float(`left)]);
 };
 [@react.component]
 let make = (~blocks: blocks) => {

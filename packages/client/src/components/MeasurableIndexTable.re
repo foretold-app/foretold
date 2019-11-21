@@ -58,7 +58,9 @@ let make =
                 <FC.Table.Cell
                   flex={`num(1.5)}
                   className=Css.(style([paddingTop(`em(0.5))]))>
-                  <MeasurementItems.AggregationResolution measurable=m />
+                  <MeasurementItems.ResolutionOrRecentAggregation
+                    measurable=m
+                  />
                 </FC.Table.Cell>
                 <FC.Table.Cell
                   flex={`num(1.)}

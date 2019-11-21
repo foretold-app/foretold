@@ -40,8 +40,10 @@ module DashboardTableToTable = {
                         ]),
                       ])
                     )>
-                    <MeasurementItems.AggregationResolution measurable />
-                    <MeasurementItems.AgentMeasurement measurable />
+                    <MeasurementItems.ResolutionOrRecentAggregation
+                      measurable
+                    />
+                    <MeasurementItems.AgentPrediction measurable />
                   </div>
                 | None =>
                   <FC__Alert type_=`warning>

@@ -437,6 +437,7 @@ let mainBlock =
       valueInput
       <Antd.Input.TextArea
         value={state.description}
+        style={ReactDOMRe.Style.make(~minHeight="9em", ())}
         onChange={event => {
           let value = ReactEvent.Form.target(event)##value;
           send(UpdateDescription(value));

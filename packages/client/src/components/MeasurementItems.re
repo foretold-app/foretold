@@ -123,13 +123,9 @@ module Percentage = {
 
 module MeasurementShow = {
   [@react.component]
-  let make =
-      (
-        ~measurable: Types.measurable,
-        ~measurement: option(Types.measurement),
-      ) => {
-    switch (measurement, measurable.outcome) {
-    | (_, Some(measurement)) =>
+  let make = (~measurement: option(Types.measurement)) => {
+    switch (measurement) {
+    | Some(measurement) =>
       switch (measurement.value) {
       | Ok(`FloatPoint(r)) => <FloatPoint value=r />
       | Ok(`FloatCdf(r)) =>
@@ -138,38 +134,41 @@ module MeasurementShow = {
           valueText={measurement.valueText}
           competitorType={measurement.competitorType}
         />
+      | Ok(`UnresolvableResolution(_)) => <UnresolvableResolution />
       | Ok(`Binary(r)) => <Binary value=r />
-      | Ok(`UnresolvableResolution(r)) => <UnresolvableResolution />
       | _ => <Null />
       }
-
-    | (Some(measurement), None) =>
-      switch (measurement.value) {
-      | Ok(`FloatCdf(r)) =>
-        <FloatCdf
-          value=r
-          valueText={measurement.valueText}
-          competitorType={measurement.competitorType}
-        />
-      | Ok(`Percentage(r)) => <Percentage value=r />
-      | _ => <Null />
-      }
-
     | _ => <Null />
     };
   };
 };
 
-module AggregationResolution = {
+module ResolutionOrRecentAggregation = {
   [@react.component]
   let make = (~measurable: Types.measurable) => {
-    <MeasurementShow measurable measurement={measurable.previousAggregate} />;
+    <MeasurementShow
+      measurement={E.O.firstSome(
+        measurable.outcome,
+        measurable.previousAggregate,
+      )}
+    />;
   };
 };
 
-module AgentMeasurement = {
+module AgentPrediction = {
   [@react.component]
   let make = (~measurable: Types.measurable) => {
-    <MeasurementShow measurable measurement={measurable.recentMeasurement} />;
+    <MeasurementShow
+      measurement={
+        switch (measurable.recentMeasurement) {
+        | Some(measurement) =>
+          switch (Primary.Measurement.valueSuggestsJudgement(measurement)) {
+          | Some(true) => None
+          | _ => Some(measurement)
+          }
+        | _ => None
+        }
+      }
+    />;
   };
 };

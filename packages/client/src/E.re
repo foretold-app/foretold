@@ -23,6 +23,7 @@ module O = {
   let isSome = Rationale.Option.isSome;
   let toExn = Rationale.Option.toExn;
   let some = Rationale.Option.some;
+  let firstSome = Rationale.Option.firstSome;
   let flatApply = (fn, b) =>
     Rationale.Option.apply(fn, Some(b)) |> Rationale.Option.flatten;
 

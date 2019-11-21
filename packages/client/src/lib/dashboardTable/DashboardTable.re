@@ -44,7 +44,7 @@ module Table = {
   };
   let make = (columns, rows) => {columns, rows};
   let allMeasurableIds = (t: t) =>
-    t.rows |> E.A.fmap(Row.measurableIds) |> E.A.concatMany;
+    t.rows |> E.A.fmap(Row.measurableIds) |> E.A.uniq |>  E.A.concatMany;
 };
 
 let rows: Row.ts = [|[|String("sdf")|]|];

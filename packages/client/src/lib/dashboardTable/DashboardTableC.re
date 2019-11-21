@@ -80,7 +80,6 @@ let make = (~tableJson=tableJson, ~editor: DashboardTableEditor.editor) => {
       ~measurableIds=Some(DashboardTable.Table.allMeasurableIds(table)),
       ~pageLimit=Js.Json.number(500 |> float_of_int),
       ~direction=None,
-      ~pollInterval=20 * 1000,
       ~innerComponentFn=
         e =>
           e

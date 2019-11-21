@@ -13,7 +13,7 @@ const notebook = new graphql.GraphQLObjectType({
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     ownerId: { type: graphql.GraphQLNonNull(scalars.agentId) },
     channelId: { type: graphql.GraphQLNonNull(scalars.channelId) },
-    body: { type: graphql.GraphQLNonNull(scalars.string3to16K) },
+    body: { type: graphql.GraphQLNonNull(scalars.string3to128K) },
     owner: {
       type: graphql.GraphQLNonNull(require('./agents').agent),
       resolve: resolver(models.Notebook.Agent),
@@ -30,7 +30,7 @@ const notebookCreateInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     channelId: { type: graphql.GraphQLNonNull(scalars.channelId) },
     name: { type: graphql.GraphQLNonNull(scalars.string3to255) },
-    body: { type: graphql.GraphQLNonNull(scalars.string3to16K) },
+    body: { type: graphql.GraphQLNonNull(scalars.string3to128K) },
   }),
 });
 
@@ -38,7 +38,7 @@ const notebookUpdateInput = new graphql.GraphQLInputObjectType({
   name: 'NotebookUpdateInput',
   fields: () => ({
     name: { type: graphql.GraphQLNonNull(scalars.string3to255) },
-    body: { type: graphql.GraphQLNonNull(scalars.string3to16K) },
+    body: { type: graphql.GraphQLNonNull(scalars.string3to128K) },
   }),
 });
 

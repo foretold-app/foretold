@@ -434,6 +434,17 @@ module Measurement = {
 
   let isJudgement = (m: t) => m.competitorType == `OBJECTIVE;
 
+  let valueSuggestsJudgement = (m: t) =>
+    switch (m.value) {
+    | Ok(`FloatPoint(_)) => Some(true)
+    | Ok(`UnresolvableResolution(_)) => Some(true)
+    | Ok(`Binary(_)) => Some(true)
+    | Ok(`Percentage(_)) => Some(false)
+    | Ok(`Comment(_)) => Some(false)
+    | Ok(`FloatCdf(_)) => Some(false)
+    | Error(_) => None
+    };
+
   let make =
       (
         ~id,

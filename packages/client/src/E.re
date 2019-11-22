@@ -23,6 +23,7 @@ module O = {
   let isSome = Rationale.Option.isSome;
   let toExn = Rationale.Option.toExn;
   let some = Rationale.Option.some;
+  let firstSome = Rationale.Option.firstSome;
   let flatApply = (fn, b) =>
     Rationale.Option.apply(fn, Some(b)) |> Rationale.Option.flatten;
 
@@ -201,7 +202,11 @@ module A = {
   let concatMany = Belt.Array.concatMany;
   let keepMap = Belt.Array.keepMap;
   let stableSortBy = Belt.SortArray.stableSortBy;
+
+  let asList = (f: list('a) => list('a), r: array('a)) =>
+    r |> to_list |> f |> of_list;
   /* TODO: Is there a better way of doing this? */
+  let uniq = r => asList(L.uniq, r);
 
   /* TODO: Is -1 still the indicator that this is false (as is true with js findIndex)? Wasn't sure. */
   let findIndex = (e, i) =>

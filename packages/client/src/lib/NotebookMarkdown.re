@@ -1,5 +1,4 @@
 [@bs.config {jsx: 3}];
-open MarkdownEditorActions;
 open Style.Grid;
 
 type code = {
@@ -11,7 +10,7 @@ type code = {
 type renderers = {. "code": code => ReasonReact.reactElement};
 
 let reducerToEditor =
-    (notebookReducer: notebookReducer): DashboardTableEditor.editor => {
+    (notebookReducer: NotebookRedux.t): DashboardTableEditor.editor => {
   onSelect: r => notebookReducer.dispatch(SelectMeasurableId(r)),
   selectedId: notebookReducer.state.selectedMeasurableId,
 };
@@ -37,24 +36,8 @@ let markdownToBlocks = (str: string): blocks => {
   |> E.A.O.concatSome;
 };
 
-module Styles = {
-  open Css;
-  let sidebarOutside =
-    style([background(`hex("f0f2f5")), paddingLeft(`em(1.0))]);
-  let sidebar = style([position(`sticky), top(`em(2.0))]);
-};
 [@react.component]
-let make = (~blocks: blocks) => {
-  let (state, dispatch) =
-    React.useReducer(
-      (state, action) =>
-        switch (action) {
-        | SelectMeasurableId(id) => {selectedMeasurableId: Some(id)}
-        | DeselectMeasurableId => {selectedMeasurableId: None}
-        },
-      {selectedMeasurableId: None},
-    );
-
+let make = (~blocks: blocks, ~notebookRedux: NotebookRedux.t) => {
   let head = (~channelId: option(string), ~paginationPage, ()) => ReasonReact.null;
 
   <Div flexDirection=`row>
@@ -76,7 +59,7 @@ let make = (~blocks: blocks) => {
                   )>
                   <DashboardTableC
                     tableJson=json
-                    editor={reducerToEditor({state, dispatch})}
+                    editor={reducerToEditor(notebookRedux)}
                   />
                 </div>
               }
@@ -84,41 +67,5 @@ let make = (~blocks: blocks) => {
          |> ReasonReact.array}
       </div>
     </Div>
-    {state.selectedMeasurableId
-     |> E.O.React.fmapOrNull(id =>
-          <Div flex={`num(3.)} styles=[Styles.sidebarOutside]>
-            {MeasurableGet.component(~id)
-             |> E.F.apply((measurable: Types.measurable) => {
-                  let defaultValueText =
-                    measurable.recentMeasurement
-                    |> E.O.bind(_, (r: Types.measurement) => r.valueText)
-                    |> E.O.default("");
-                  <div className=Styles.sidebar>
-                    <SLayout
-                      head={head(
-                        ~channelId=None,
-                        ~paginationPage=E.React2.null,
-                        (),
-                      )}
-                      isFluid=true>
-                      <FC.PageCard.Body>
-                        <MeasurementForm
-                          measurable
-                          measurableId={measurable.id}
-                          isCreator=false
-                          defaultValueText
-                          key={measurable.id}
-                        />
-                      </FC.PageCard.Body>
-                    </SLayout>
-                    <MeasurableBottomSection
-                      measurableId={measurable.id}
-                      channelId=None
-                      key={measurable.id}
-                    />
-                  </div>;
-                })}
-          </Div>
-        )}
   </Div>;
 };

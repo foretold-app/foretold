@@ -17,7 +17,7 @@ module Styles = {
     style([
       fontSize(`em(1.9)),
       color(`hex("192D44")),
-      marginBottom(`em(0.3)),
+      marginBottom(`em(0.5)),
       FC__Settings.FontWeights.heavy,
     ]);
   let hr =
@@ -30,11 +30,10 @@ module Styles = {
 [@react.component]
 let make = (~notebook: Types.notebook) => {
   <div className=Styles.main>
-    <FC__Div flexDirection=`row>
-      <FC__Div flex={`num(5.)}>
+    <FC__Div flexDirection=`column>
+      <FC__Div flex={`num(1.)}>
         <h1 className=Styles.h1> {notebook.name |> Utils.ste} </h1>
       </FC__Div>
-      <FC__Div flex={`num(3.)} />
       <FC__Div flex={`num(1.)}>
         <AgentLink agent={notebook.owner} />
       </FC__Div>

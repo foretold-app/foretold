@@ -62,69 +62,80 @@ let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) =>
   |> E.React2.el;
 };
 
-let formFields = (state: Form.state, send, getFieldState) => {
-  let onSubmit = () => send(Form.Submit);
+module FormFields = {
+  [@react.component]
+  let make = (~state: Form.state, ~send, ~getFieldState) => {
+    let onSubmit = () => send(Form.Submit);
 
-  let stateName = getFieldState(Form.Field(Name));
-  let stateBody = getFieldState(Form.Field(Body));
+    let notebookRedux = NotebookRedux.reducer();
+    let stateName = getFieldState(Form.Field(Name));
+    let stateBody = getFieldState(Form.Field(Body));
 
-  let stateForm = state.formState;
+    let stateForm = state.formState;
 
-  let error = state =>
-    switch (state) {
-    | Form.Error(s) => <AntdAlert message=s type_="warning" />
-    | _ => <Null />
-    };
+    let error = state =>
+      switch (state) {
+      | Form.Error(s) => <AntdAlert message=s type_="warning" />
+      | _ => <Null />
+      };
 
-  let isFormValid =
-    switch (stateName, stateBody) {
-    | (Form.Error(_), _) => false
-    | (_, Form.Error(_)) => false
-    | _ => true
-    };
+    let isFormValid =
+      switch (stateName, stateBody) {
+      | (Form.Error(_), _) => false
+      | (_, Form.Error(_)) => false
+      | _ => true
+      };
 
-  let isFormDirty =
-    switch (stateForm) {
-    | Form.Dirty => true
-    | _ => false
-    };
+    let isFormDirty =
+      switch (stateForm) {
+      | Form.Dirty => true
+      | _ => false
+      };
 
-  let isEnabled = isFormValid && isFormDirty;
+    let isEnabled = isFormValid && isFormDirty;
 
-  <FC__PageCard.BodyPadding>
-    <Antd.Form.Item label={"Name" |> Utils.ste}>
-      <Antd.Input
-        value={state.values.name}
-        onChange={ReForm.Helpers.handleDomFormChange(e =>
-          send(Form.FieldChangeValue(Name, e))
-        )}
-      />
-      {error(stateName)}
-    </Antd.Form.Item>
-    <Div flexDirection=`row>
-      <Div flex={`num(1.)}>
-        <Antd.Input.TextArea
-          style={ReactDOMRe.Style.make(~minHeight="80em", ())}
-          value={state.values.body}
-          onChange={e =>
-            send(
-              Form.FieldChangeValue(Body, ReactEvent.Form.target(e)##value),
-            )
-          }
+    <FC__PageCard.BodyPadding>
+      <Antd.Form.Item label={"Name" |> Utils.ste}>
+        <Antd.Input
+          value={state.values.name}
+          onChange={ReForm.Helpers.handleDomFormChange(e =>
+            send(Form.FieldChangeValue(Name, e))
+          )}
         />
-        {error(stateBody)}
-        <Antd.Form.Item>
-          <Antd.Button
-            _type=`primary onClick={_ => onSubmit()} disabled={!isEnabled}>
-            {"Submit" |> Utils.ste}
-          </Antd.Button>
-        </Antd.Form.Item>
+        {error(stateName)}
+      </Antd.Form.Item>
+      <Div flexDirection=`row>
+        <Div flex={`num(1.)}>
+          <Antd.Input.TextArea
+            style={ReactDOMRe.Style.make(~minHeight="80em", ())}
+            value={state.values.body}
+            onChange={e =>
+              send(
+                Form.FieldChangeValue(
+                  Body,
+                  ReactEvent.Form.target(e)##value,
+                ),
+              )
+            }
+          />
+          {error(stateBody)}
+          <Antd.Form.Item>
+            <Antd.Button
+              _type=`primary onClick={_ => onSubmit()} disabled={!isEnabled}>
+              {"Submit" |> Utils.ste}
+            </Antd.Button>
+          </Antd.Form.Item>
+        </Div>
+        <Div flex={`num(1.)}>
+          <NotebookMarkdown
+            blocks={NotebookMarkdown.markdownToBlocks(state.values.body)}
+            notebookRedux
+          />
+        </Div>
       </Div>
-      <Div flex={`num(1.)}>
-        <NotebookMarkdown
-          blocks={NotebookMarkdown.markdownToBlocks(state.values.body)}
-        />
-      </Div>
-    </Div>
-  </FC__PageCard.BodyPadding>;
+    </FC__PageCard.BodyPadding>;
+  };
 };
+
+let formFields = (state: Form.state, send, getFieldState) =>
+  <FormFields state send getFieldState />;

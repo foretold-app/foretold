@@ -30,6 +30,7 @@ module DashboardTableToTable = {
                         borderRadius(`px(4)),
                         marginLeft(`px(3)),
                         padding(`px(5)),
+                        height(`percent(100.)),
                         backgroundColor(
                           Some(measurable.id) == editor.selectedId
                             ? `hex("eff3f5") : `hex("fff"),

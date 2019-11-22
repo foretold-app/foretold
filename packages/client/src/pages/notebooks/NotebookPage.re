@@ -68,6 +68,7 @@ module Tabs = {
 let make = (~channelId: string, ~notebookId: string) => {
   let (tab, setTab) = React.useState(() => Show);
   let switchTab = tabToSwitch => setTab(_ => tabToSwitch);
+  let notebookRedux = NotebookRedux.reducer();
 
   NotebookGet.component(~id=notebookId, notebook =>
     switch (notebook) {
@@ -86,6 +87,7 @@ let make = (~channelId: string, ~notebookId: string) => {
                    <NotebookHeader notebook />
                    <NotebookMarkdown
                      blocks={NotebookMarkdown.markdownToBlocks(notebook.body)}
+                     notebookRedux
                    />
                  </div>
                | Details =>

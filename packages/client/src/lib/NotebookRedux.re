@@ -1,16 +1,23 @@
-open MarkdownEditorActions;
+type state = {selectedMeasurableId: option(string)};
 
-[@react.component]
-let make = () => {
+type action =
+  | SelectMeasurableId(string)
+  | DeselectMeasurableId;
+
+type t = {
+  state,
+  dispatch: action => unit,
+};
+
+let reducer = () => {
   let (state, dispatch) =
     React.useReducer(
-      (state, action) =>
+      (_, action) =>
         switch (action) {
         | SelectMeasurableId(id) => {selectedMeasurableId: Some(id)}
         | DeselectMeasurableId => {selectedMeasurableId: None}
         },
       {selectedMeasurableId: None},
     );
-
-  <div> {ReasonReact.string("sdf")} </div>;
+  {state, dispatch};
 };

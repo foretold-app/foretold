@@ -2,6 +2,14 @@
 
 open Style.Grid;
 
+module Styles = {
+  open Css;
+  let full = style([float(`left), width(`percent(100.))]);
+  let sidebarOutside =
+    style([background(`hex("f0f2f5")), paddingLeft(`em(1.0))]);
+  let sidebar = style([position(`sticky), top(`em(2.0)), float(`left)]);
+};
+
 type tab =
   | Show
   | Edit
@@ -67,43 +75,62 @@ module Tabs = {
 [@react.component]
 let make = (~channelId: string, ~notebookId: string) => {
   let (tab, setTab) = React.useState(() => Show);
-  let switchTab = tabToSwitch => setTab(_ => tabToSwitch);
   let notebookRedux = NotebookRedux.reducer();
+  let switchTab = tabToSwitch => {
+    setTab(_ => tabToSwitch);
+    notebookRedux.dispatch(DeselectMeasurableId);
+  };
 
   NotebookGet.component(~id=notebookId, notebook =>
     switch (notebook) {
     | Some(notebook) =>
-      <>
-        <SLayout isFluid=true>
-          <Div flexDirection=`column>
-            <Div flex={`num(1.)}> <Tabs switchTab tab notebook /> </Div>
-            <Div flex={`num(1.)}>
-              {switch (tab) {
-               | Show =>
-                 <div
-                   className=Css.(
-                     style([marginTop(`em(2.0)), marginBottom(`em(2.0))])
-                   )>
-                   <NotebookHeader notebook />
-                   <NotebookMarkdown
-                     blocks={NotebookMarkdown.markdownToBlocks(notebook.body)}
-                     notebookRedux
+      <Div flexDirection=`row styles=[Styles.full]>
+        <Div flex={`num(5.)}>
+          <SLayout isFluid=true>
+            <Div flexDirection=`column>
+              <Div flex={`num(1.)}> <Tabs switchTab tab notebook /> </Div>
+              <Div flex={`num(1.)}>
+                {switch (tab) {
+                 | Show =>
+                   <div
+                     className=Css.(
+                       style([
+                         marginTop(`em(2.0)),
+                         marginBottom(`em(2.0)),
+                       ])
+                     )>
+                     <NotebookHeader notebook />
+                     <NotebookMarkdown
+                       blocks={NotebookMarkdown.markdownToBlocks(
+                         notebook.body,
+                       )}
+                       notebookRedux
+                     />
+                   </div>
+                 | Details =>
+                   <FC__PageCard.BodyPadding>
+                     <Antd.Input.TextArea
+                       style={ReactDOMRe.Style.make(~minHeight="80em", ())}
+                       value={notebook.body}
+                     />
+                   </FC__PageCard.BodyPadding>
+                 | Edit =>
+                   <NotebookUpdate
+                     notebook
+                     onSuccess={_ => switchTab(Show)}
                    />
-                 </div>
-               | Details =>
-                 <FC__PageCard.BodyPadding>
-                   <Antd.Input.TextArea
-                     style={ReactDOMRe.Style.make(~minHeight="80em", ())}
-                     value={notebook.body}
-                   />
-                 </FC__PageCard.BodyPadding>
-               | Edit =>
-                 <NotebookUpdate notebook onSuccess={_ => switchTab(Show)} />
-               }}
+                 }}
+              </Div>
             </Div>
-          </Div>
-        </SLayout>
-      </>
+          </SLayout>
+        </Div>
+        {NotebookSidebar.make(~notebookRedux)
+         |> E.O.React.fmapOrNull(sidebar =>
+              <Div flex={`num(3.)} styles=[Styles.sidebarOutside]>
+                <div className=Styles.sidebar> sidebar </div>
+              </Div>
+            )}
+      </Div>
     | _ => <NotFoundPage />
     }
   );

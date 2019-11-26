@@ -2,11 +2,14 @@ const _ = require('lodash');
 const assert = require('assert');
 
 const { InvitationsData, ChannelMembershipsData } = require('../../data');
+const logger = require('../../lib/log');
 
 const { INVITATION_STATUS } = require('../../enums/invitation-status');
 const {
   CHANNEL_MEMBERSHIP_TYPE,
 } = require('../../enums/channel-membership-type');
+
+const log = logger.module('sync/actions/user-updater');
 
 class Invitations {
   constructor() {
@@ -23,8 +26,8 @@ class Invitations {
   async transition(user) {
     try {
       /** @type {string} */
-      const email = _.get(user, 'email');
-      const agentId = _.get(user, 'agentId');
+      const email = _.get(user, 'email', null);
+      const agentId = _.get(user, 'agentId', null);
 
       assert(_.isString(email), 'Email should be a string.');
       assert(_.isString(agentId), 'Agent ID is required.');
@@ -38,8 +41,9 @@ class Invitations {
 
       for (let i = 0, max = invitations.length; i < max; i++) {
         const invitation = invitations[i];
-        const channelId = _.get(invitation, 'channelId');
-        const inviterAgentId = _.get(invitation, 'inviterAgentId');
+
+        const channelId = _.get(invitation, 'channelId', null);
+        const inviterAgentId = _.get(invitation, 'inviterAgentId', null);
 
         await this.invitations.updateOne({
           id: invitation.id,
@@ -60,7 +64,7 @@ class Invitations {
 
       return true;
     } catch (e) {
-      console.error('Transition Err', e);
+      log.trace('Transition Err', e.message);
     }
     return false;
   }

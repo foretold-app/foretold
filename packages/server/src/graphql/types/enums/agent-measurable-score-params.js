@@ -30,17 +30,19 @@ const startAt = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
   },
 }));
 
-const finalComparisonMeasurement = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
-  name: 'finalComparisonMeasurement',
-  values: {
-    [FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT]: {
-      value: FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT,
+const finalComparisonMeasurement = graphql.GraphQLNonNull(
+  new graphql.GraphQLEnumType({
+    name: 'finalComparisonMeasurement',
+    values: {
+      [FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT]: {
+        value: FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT,
+      },
+      [FINAL_COMPARISON_MEASUREMENT.LAST_AGGREGATE_MEASUREMENT]: {
+        value: FINAL_COMPARISON_MEASUREMENT.LAST_AGGREGATE_MEASUREMENT,
+      },
     },
-    [FINAL_COMPARISON_MEASUREMENT.LAST_AGGREGATE_MEASUREMENT]: {
-      value: FINAL_COMPARISON_MEASUREMENT.LAST_AGGREGATE_MEASUREMENT,
-    },
-  },
-}));
+  })
+);
 
 module.exports = {
   marketScoreType,

@@ -94,7 +94,9 @@ const measurableCreateInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     labelCustom: { type: graphql.GraphQLString },
-    valueType: { type: require('./enums/measurable-value-type').measurableValueType },
+    valueType: {
+      type: require('./enums/measurable-value-type').measurableValueType,
+    },
     expectedResolutionDate: { type: DateType.default },
     resolutionEndpoint: { type: graphql.GraphQLString },
     labelSubject: { type: graphql.GraphQLString },
@@ -112,7 +114,9 @@ const measurableUpdateInput = new graphql.GraphQLInputObjectType({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     labelCustom: { type: graphql.GraphQLString },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    valueType: { type: require('./enums/measurable-value-type').measurableValueType },
+    valueType: {
+      type: require('./enums/measurable-value-type').measurableValueType,
+    },
     expectedResolutionDate: { type: DateType.default },
     resolutionEndpoint: { type: graphql.GraphQLString },
     labelSubject: { type: graphql.GraphQLString },
@@ -135,8 +139,12 @@ const measurablesConnection = new graphql.GraphQLObjectType({
   name: 'MeasurablesConnection',
   fields: () => ({
     total: { type: graphql.GraphQLInt },
-    pageInfo: { type: graphql.GraphQLNonNull(require('./common').pageInfoConnection) },
-    edges: { type: graphql.GraphQLList(require('./measurables').measurablesEdge) },
+    pageInfo: {
+      type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
+    },
+    edges: {
+      type: graphql.GraphQLList(require('./measurables').measurablesEdge),
+    },
   }),
 });
 

@@ -14,16 +14,28 @@ const { measurementCommentType } = require('./enums/measurement-comment-type');
 const measurementValueInputFloatCdf = new graphql.GraphQLInputObjectType({
   name: 'MeasurementValueInputFloatCdf',
   fields: () => ({
-    xs: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLFloat)) },
-    ys: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLFloat)) },
+    xs: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLFloat)),
+    },
+    ys: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLFloat)),
+    },
   }),
 });
 
 const measurementValueFloatCdf = new graphql.GraphQLObjectType({
   name: 'MeasurementValueFloatCdf',
   fields: () => ({
-    xs: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLNonNull(graphql.GraphQLFloat))) },
-    ys: { type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLNonNull(graphql.GraphQLFloat))) },
+    xs: {
+      type: graphql.GraphQLNonNull(
+        graphql.GraphQLList(graphql.GraphQLNonNull(graphql.GraphQLFloat)),
+      ),
+    },
+    ys: {
+      type: graphql.GraphQLNonNull(
+        graphql.GraphQLList(graphql.GraphQLNonNull(graphql.GraphQLFloat)),
+      ),
+    },
   }),
 });
 
@@ -34,7 +46,9 @@ const measurementValueInput = new graphql.GraphQLInputObjectType({
     [MEASUREMENT_VALUE.floatPoint]: { type: graphql.GraphQLFloat },
     [MEASUREMENT_VALUE.percentage]: { type: graphql.GraphQLFloat },
     [MEASUREMENT_VALUE.binary]: { type: graphql.GraphQLBoolean },
-    [MEASUREMENT_VALUE.unresolvableResolution]: { type: measurementUnresolvableResolution },
+    [MEASUREMENT_VALUE.unresolvableResolution]: {
+      type: measurementUnresolvableResolution,
+    },
     [MEASUREMENT_VALUE.comment]: { type: measurementCommentType },
   }),
 });
@@ -53,7 +67,9 @@ const measurementValue = new graphql.GraphQLObjectType({
     [MEASUREMENT_VALUE.floatPoint]: { type: graphql.GraphQLFloat },
     [MEASUREMENT_VALUE.percentage]: { type: graphql.GraphQLFloat },
     [MEASUREMENT_VALUE.binary]: { type: graphql.GraphQLBoolean },
-    [MEASUREMENT_VALUE.unresolvableResolution]: { type: measurementUnresolvableResolution },
+    [MEASUREMENT_VALUE.unresolvableResolution]: {
+      type: measurementUnresolvableResolution,
+    },
     [MEASUREMENT_VALUE.comment]: { type: measurementCommentType },
   }),
 });
@@ -63,7 +79,10 @@ const measurementCreateInput = new graphql.GraphQLInputObjectType({
   fields: () => ({
     value: { type: measurementValueInput },
     valueText: { type: graphql.GraphQLString },
-    competitorType: { type: require('./enums/measurement-competitor-type').measurementCompetitorType },
+    competitorType: {
+      type: require('./enums/measurement-competitor-type')
+        .measurementCompetitorType,
+    },
     measurableId: { type: graphql.GraphQLString },
     agentId: { type: graphql.GraphQLString },
     description: { type: graphql.GraphQLString },
@@ -86,7 +105,10 @@ const measurement = new graphql.GraphQLObjectType({
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     value: { type: graphql.GraphQLNonNull(measurementValue) },
-    competitorType: { type: require('./enums/measurement-competitor-type').measurementCompetitorType },
+    competitorType: {
+      type: require('./enums/measurement-competitor-type')
+        .measurementCompetitorType,
+    },
     description: { type: graphql.GraphQLString },
     measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     agentId: { type: graphql.GraphQLString },
@@ -136,8 +158,12 @@ const measurementsConnection = new graphql.GraphQLObjectType({
   name: 'MeasurementsConnection',
   fields: () => ({
     total: { type: graphql.GraphQLInt },
-    pageInfo: { type: graphql.GraphQLNonNull(require('./common').pageInfoConnection) },
-    edges: { type: graphql.GraphQLList(require('./measurements').measurementsEdge) },
+    pageInfo: {
+      type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
+    },
+    edges: {
+      type: graphql.GraphQLList(require('./measurements').measurementsEdge),
+    },
   }),
 });
 
@@ -153,8 +179,14 @@ const agentMeasurementsConnection = new graphql.GraphQLObjectType({
   name: 'AgentMeasurementsConnection',
   fields: () => ({
     total: { type: graphql.GraphQLInt },
-    pageInfo: { type: graphql.GraphQLNonNull(require('./common').pageInfoConnection) },
-    edges: { type: graphql.GraphQLList(require('./measurements').agentMeasurementsEdge) },
+    pageInfo: {
+      type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
+    },
+    edges: {
+      type: graphql.GraphQLList(
+        require('./measurements').agentMeasurementsEdge,
+      ),
+    },
   }),
 });
 

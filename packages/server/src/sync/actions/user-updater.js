@@ -1,8 +1,10 @@
 const { UsersData } = require('../../data');
 const { Auth0 } = require('../../lib/auth0');
+const logger = require('../../lib/log');
 
 const { Filter } = require('../../data/classes');
-const logger = require('../../lib/log');
+const { Params } = require('../../data/classes');
+const { Data } = require('../../data/classes');
 
 const log = logger.module('sync/actions/user-updater');
 
@@ -23,10 +25,17 @@ class UserUpdater {
     }
 
     try {
-      const userInfo = await this.auth0.getUserInfo(user.auth0AccessToken);
-      await this.users.updateUserInfoFromAuth0(user.id, userInfo);
+
+      try {
+        const userInfo = await this.auth0.getUserInfo(user.auth0AccessToken);
+        await this.users.updateUserInfoFromAuth0(user.id, userInfo);
+      } catch (e) {
+        log.trace('An access token is expired.', e.message);
+        await this.setAuth0AccessTokenAsNull(user.id);
+      }
+
     } catch (e) {
-      log.trace('Saving user info is failed.', e);
+      log.trace('Saving user info is failed.', e.message);
       return false;
     }
 
@@ -57,6 +66,16 @@ class UserUpdater {
       notAuth0AccessToken: true,
     });
     return this.users.getAll(filter);
+  }
+
+  /**
+   * @public
+   * @returns {Promise<Models.User[]>}
+   */
+  async setAuth0AccessTokenAsNull(userId) {
+    const params = new Params({ id: userId });
+    const data = new Data({ auth0AccessToken: null });
+    return this.users.updateOne(params, data);
   }
 }
 

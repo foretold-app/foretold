@@ -110,7 +110,10 @@ class AgentMeasurablesData extends DataBase {
     // Checks
     if (agentPredictions.length === 0) return undefined;
     if (allAggregations.length === 0) return undefined;
-    if (params.finalComparisonMeasurement === FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT && !recentResult) return undefined;
+    if (
+      params.finalComparisonMeasurement === FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT
+      && !recentResult
+    ) return undefined;
     if (!measurable) return undefined;
 
     // Use of Parameters
@@ -138,7 +141,11 @@ class AgentMeasurablesData extends DataBase {
       startTime,
     });
 
-    if (!scoreCalculator || !scoreCalculator.score || !scoreCalculator.distribution) return undefined;
+    if (
+      !scoreCalculator ||
+      !scoreCalculator.score ||
+      !scoreCalculator.distribution
+    ) return undefined;
 
     const { score, distribution } = scoreCalculator;
 

@@ -28,6 +28,7 @@ describe('Measurables Resolvers', () => {
             seriesId: 'seriesId2',
             states: ['states1'],
             withinJoinedChannels: null,
+            measurableIds: null,
           },
           {
             after: 2,

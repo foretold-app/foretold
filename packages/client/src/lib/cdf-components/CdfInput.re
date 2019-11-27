@@ -302,7 +302,106 @@ module ValueInput = {
     </Antd.Select>;
 };
 
-module MainBlock = {
+module ValueInput2 = {
+  open Style.Grid;
+
+  [@react.component]
+  let make = (~state, ~measurable, ~send, ~loggedUser) =>
+    switch (state.dataType) {
+    | "FLOAT_CDF"
+    | "FLOAT_POINT" =>
+      <>
+        <h4 className=Styles.label>
+          {(
+             state.competitorType == "OBJECTIVE"
+               ? "Result" : "Prediction (Distribution)"
+           )
+           |> ste}
+        </h4>
+        {Primary.Measurable.toMinMaxDescription(measurable)
+         |> E.O.React.fmapOrNull(r => <p> {r |> ste} </p>)}
+        {state.hasLimitError
+           ? <FC__Alert type_=`warning>
+               {"Warning: Foretold does not currently support ranges of this width, due to smoothing limitations."
+                |> ste}
+             </FC__Alert>
+           : <Null />}
+        <Div>
+          <Div
+            float=`left
+            styles=[
+              Css.(style([width(Css.Calc.(`percent(100.0) - `em(2.2)))])),
+            ]>
+            {ValueInput.floatPoint(measurable, send)}
+          </Div>
+          <Div float=`left styles=[Css.(style([width(`em(2.2))]))]>
+            <span
+              className=Css.(style([float(`right), fontSize(`em(1.6))]))>
+              <FC.HelpDropdown
+                content=FC.HelpDropdown.{
+                  headerContent: "Distribution Editor" |> ste,
+                  bodyContent: <ReactMarkdown source=tutorialSource />,
+                }
+              />
+            </span>
+          </Div>
+        </Div>
+        <div className=Styles.inputBox>
+          <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
+        </div>
+      </>
+
+    | "BINARY_BOOL" =>
+      <>
+        <h4 className=Styles.label> {"Result" |> ste} </h4>
+        {ValueInput.boolean(state.binary, send)}
+        <div className=Styles.inputBox>
+          <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
+        </div>
+      </>
+    | "PERCENTAGE_FLOAT" =>
+      <>
+        <h4 className=Styles.label>
+          {"Predicted Percentage Chance" |> ste}
+        </h4>
+        {ValueInput.percentage(state.percentage, send)}
+        <div className=Styles.inputBox>
+          <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
+        </div>
+      </>
+
+    | "UNRESOLVABLE_RESOLUTION" =>
+      <>
+        <div className=Styles.inputBox>
+          <h4 className=Styles.label> {"Reason for closing" |> ste} </h4>
+        </div>
+        {ValueInput.unresolvable(state.unresolvableResolution, send)}
+        <div className=Styles.inputBox>
+          <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
+        </div>
+      </>
+
+    | "COMMENT" =>
+      <>
+        {Primary.User.show(
+           loggedUser,
+           <>
+             <div className=Styles.inputBox>
+               <h4 className=Styles.label> {"Comment Type" |> ste} </h4>
+             </div>
+             {ValueInput.comment(state.comment, send)}
+           </>,
+         )}
+        <div className=Styles.inputBox>
+          <h4 className=Styles.label> {"Comment" |> ste} </h4>
+        </div>
+      </>
+
+    | _ => <Null />
+    };
+};
+
+module Main = {
   [@react.component]
   let make =
       (
@@ -329,103 +428,6 @@ module MainBlock = {
       | None => <Null />
       | Some(bots) => <BotsSelect state send bots loggedUser />
       };
-    open Style.Grid;
-
-    let valueInput =
-      switch (state.dataType) {
-      | "FLOAT_CDF"
-      | "FLOAT_POINT" =>
-        <>
-          <h4 className=Styles.label>
-            {(
-               state.competitorType == "OBJECTIVE"
-                 ? "Result" : "Prediction (Distribution)"
-             )
-             |> ste}
-          </h4>
-          {Primary.Measurable.toMinMaxDescription(measurable)
-           |> E.O.React.fmapOrNull(r => <p> {r |> ste} </p>)}
-          {state.hasLimitError
-             ? <FC__Alert type_=`warning>
-                 {"Warning: Foretold does not currently support ranges of this width, due to smoothing limitations."
-                  |> ste}
-               </FC__Alert>
-             : <Null />}
-          <Div>
-            <Div
-              float=`left
-              styles=[
-                Css.(
-                  style([width(Css.Calc.(`percent(100.0) - `em(2.2)))])
-                ),
-              ]>
-              {ValueInput.floatPoint(measurable, send)}
-            </Div>
-            <Div float=`left styles=[Css.(style([width(`em(2.2))]))]>
-              <span
-                className=Css.(style([float(`right), fontSize(`em(1.6))]))>
-                <FC.HelpDropdown
-                  content=FC.HelpDropdown.{
-                    headerContent: "Distribution Editor" |> ste,
-                    bodyContent: <ReactMarkdown source=tutorialSource />,
-                  }
-                />
-              </span>
-            </Div>
-          </Div>
-          <div className=Styles.inputBox>
-            <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
-          </div>
-        </>
-
-      | "BINARY_BOOL" =>
-        <>
-          <h4 className=Styles.label> {"Result" |> ste} </h4>
-          {ValueInput.boolean(state.binary, send)}
-          <div className=Styles.inputBox>
-            <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
-          </div>
-        </>
-      | "PERCENTAGE_FLOAT" =>
-        <>
-          <h4 className=Styles.label>
-            {"Predicted Percentage Chance" |> ste}
-          </h4>
-          {ValueInput.percentage(state.percentage, send)}
-          <div className=Styles.inputBox>
-            <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
-          </div>
-        </>
-
-      | "UNRESOLVABLE_RESOLUTION" =>
-        <>
-          <div className=Styles.inputBox>
-            <h4 className=Styles.label> {"Reason for closing" |> ste} </h4>
-          </div>
-          {ValueInput.unresolvable(state.unresolvableResolution, send)}
-          <div className=Styles.inputBox>
-            <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
-          </div>
-        </>
-
-      | "COMMENT" =>
-        <>
-          {Primary.User.show(
-             loggedUser,
-             <>
-               <div className=Styles.inputBox>
-                 <h4 className=Styles.label> {"Comment Type" |> ste} </h4>
-               </div>
-               {ValueInput.comment(state.comment, send)}
-             </>,
-           )}
-          <div className=Styles.inputBox>
-            <h4 className=Styles.label> {"Comment" |> ste} </h4>
-          </div>
-        </>
-
-      | _ => <Null />
-      };
 
     <div className=Styles.form>
       <div className=Styles.chartSection>
@@ -446,7 +448,7 @@ module MainBlock = {
           <CompetitorTypeSelect isOwner=isCreator state send measurable />
         </div>
         getDataTypeSelect
-        valueInput
+        <ValueInput2 state measurable send loggedUser />
         <Antd.Input.TextArea
           value={state.description}
           style={ReactDOMRe.Style.make(~minHeight="9em", ())}
@@ -580,7 +582,7 @@ let make =
   };
 
   let block =
-    <MainBlock state isCreator send onSubmit measurable bots loggedUser />;
+    <Main state isCreator send onSubmit measurable bots loggedUser />;
 
   <Style.BorderedBox>
     {switch (data.result) {

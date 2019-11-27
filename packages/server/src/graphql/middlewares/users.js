@@ -15,12 +15,9 @@ const log = logger.module('middlewares/users');
  * @return {Promise<void>}
  */
 async function setContextUser(root, args, context, info) {
-  const id = _.get(args, 'id');
+  const id = _.get(args, 'id', null);
 
-  log.trace(
-    '\x1b[36m ---> \x1b[0m Middleware (setContextUser)',
-    { id },
-  );
+  log.trace('\x1b[36m ---> \x1b[0m Middleware (setContextUser)', { id });
 
   // @todo: Don't understand what this means.
   context.userAsObject = !!id

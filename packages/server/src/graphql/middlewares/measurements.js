@@ -24,7 +24,7 @@ const lang = require('../../lang');
  * @return {Promise<boolean>}
  */
 async function measurementValueValidation(root, args, context, info) {
-  const value = _.get(args, ['input', 'value']);
+  const value = _.get(args, ['input', 'value'], null);
   return MeasurementValue.factory(value).validate();
 }
 
@@ -36,7 +36,7 @@ async function measurementValueValidation(root, args, context, info) {
  * @return {Promise<boolean>}
  */
 async function measurableStateValidation(root, args, context, info) {
-  const measurementType = _.get(args, 'input.competitorType');
+  const measurementType = _.get(args, 'input.competitorType', null);
   const isCompetitive
     = MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE === measurementType;
 
@@ -62,17 +62,18 @@ async function measurableStateValidation(root, args, context, info) {
  * @return {Promise<boolean>}
  */
 async function measurementTypeValidation(root, args, context, info) {
-  const inputValue = _.get(args, ['input', 'value']);
+  const inputValue = _.get(args, ['input', 'value'], null);
   const type = _.get(context, 'measurable.valueType', '');
-
   if (!type) throw new Error(lang.measurableValueType());
 
   const value = MeasurementValue.factory(inputValue);
+
   if (type === MEASURABLE_VALUE_TYPE.FLOAT) {
     if (value instanceof FloatCdf) return true;
     if (value instanceof FloatPoint) return true;
   }
   if (type === MEASURABLE_VALUE_TYPE.PERCENTAGE) {
+    if (value instanceof FloatCdf) return true;
     if (value instanceof Binary) return true;
     if (value instanceof Percentage) return true;
   }

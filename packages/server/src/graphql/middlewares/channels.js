@@ -13,12 +13,12 @@ const log = logger.module('middlewares/channels');
  * @return {Promise<void>}
  */
 async function setContextChannel(root, args, context, info) {
-  const channelId = _.get(args, 'channelId')
-    || _.get(args, 'input.channelId')
-    || _.get(root, 'channelId')
-    || _.get(context, 'channelId')
-    || _.get(context, 'measurable.channelId')
-    || _.get(args, 'id');
+  const channelId = _.get(args, 'channelId', null)
+    || _.get(args, 'input.channelId', null)
+    || _.get(root, 'channelId', null)
+    || _.get(context, 'channelId', null)
+    || _.get(context, 'measurable.channelId', null)
+    || _.get(args, 'id', null);
 
   log.trace(
     '\x1b[36m ---> \x1b[0m Middleware (setContextChannel)',

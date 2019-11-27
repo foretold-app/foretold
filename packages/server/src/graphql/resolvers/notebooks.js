@@ -34,8 +34,8 @@ async function create(_root, args, context, _info) {
  * @param {object} args
  * @param {Models.ObjectID} args.id
  * @param {object} args.input
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
 async function update(root, args, _context, _info) {

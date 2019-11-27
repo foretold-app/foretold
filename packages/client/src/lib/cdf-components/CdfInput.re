@@ -61,7 +61,7 @@ module Styles = {
 
 let competitorTypeSelect =
     (~isOwner: bool, ~state: state, ~send, ~measurable: Types.measurable)
-    : ReasonReact.reactElement => {
+     => {
   let options =
     Primary.CompetitorType.availableSelections(
       ~isOwner,
@@ -76,7 +76,7 @@ let competitorTypeSelect =
   </Antd.Select>;
 };
 
-let dataTypeSelect = (~state, ~send): ReasonReact.reactElement =>
+let dataTypeSelect = (~state, ~send) =>
   <Antd.Select
     value={state.dataType}
     onChange={e => send(UpdateDataType(e))}
@@ -150,7 +150,7 @@ let getCompetitorTypeFromString = (str: string): Types.competitorType =>
 
 let botsSelect =
     (~state, ~send, ~bots: array(Types.bot), ~loggedUser: Types.user)
-    : ReasonReact.reactElement => {
+     => {
   let name =
     loggedUser.agent
     |> E.O.fmap((agent: Types.agent) => agent.name |> E.O.default("Me"))
@@ -303,25 +303,26 @@ let mainBlock =
       ~measurable: Types.measurable,
       ~bots: option(array(Types.bot)),
       ~loggedUser: Types.user,
-    )
-    : ReasonReact.reactElement => {
+    ) => {
   let isValid = getIsValid(state);
 
-  let getDataTypeSelect: ReasonReact.reactElement =
+  let getDataTypeSelect=
     switch (state.competitorType, measurable.valueType) {
     | ("OBJECTIVE", `FLOAT | `DATE) =>
       <div className=Styles.select> {dataTypeSelect(~state, ~send)} </div>
     | _ => <Null />
     };
 
-  let getBotSelect: ReasonReact.reactElement =
+  let getBotSelect =
     switch (bots) {
     | Some([||])
     | None => <Null />
     | Some(bots) => botsSelect(~state, ~send, ~bots, ~loggedUser)
     };
+
   open Style.Grid;
-  let valueInput: ReasonReact.reactElement =
+
+  let valueInput =
     switch (state.dataType) {
     | "FLOAT_CDF"
     | "FLOAT_POINT" =>

@@ -1,6 +1,6 @@
 const { AgentsData } = require('../../data');
 const { MeasurablesData } = require('../../data');
-const { ChannelMembership } = require('../../data');
+const { ChannelMembershipsData } = require('../../data');
 const { Data } = require('../../data/classes');
 
 const { MEASURABLE_VALUE_TYPE } = require('../../enums');
@@ -9,10 +9,9 @@ const { AGENT_TYPE } = require('../../enums');
 
 class Creators {
   constructor() {
-    this.data = data;
     this.agents = new AgentsData();
     this.measurables = new MeasurablesData();
-    this.channelMemberships = new ChannelMembership();
+    this.channelMemberships = new ChannelMembershipsData();
   }
 
   /**

@@ -45,6 +45,7 @@ export namespace Models {
   export interface Bot extends Model {
     id: BotID;
     name: string;
+    agentId: AgentID;
 
     getAgent(): Models.Agent;
   }
@@ -95,6 +96,7 @@ export namespace Models {
     getChannel(): Models.Channel;
 
     judged(): void;
+    set(name: string, value: any): Promise<any>;
   }
 
   export interface Measurement extends Model {
@@ -103,7 +105,7 @@ export namespace Models {
     competitorType: string;
     measurableId: MeasurableID;
     agentId: AgentID;
-    relevantAt: string;
+    relevantAt: number;
     taggedMeasurementId: MeasurementID;
     description: string;
     valueText: string;

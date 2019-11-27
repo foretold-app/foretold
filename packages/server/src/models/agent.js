@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const Sequelize = require('sequelize');
 
-const { AGENT_TYPE } = require('../enums/agent-type');
+const { AGENT_TYPE } = require('../enums');
 
 module.exports = (sequelize, DataTypes) => {
   const Agent = sequelize.define('Agent', {
@@ -69,9 +69,18 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'creatorId',
     });
 
-    // await (await models.Agent.findByPk('4897a0f7-6b30-4ad3-a3d1-21c487a435ce')).getChannels()
+    //
+    // await (
+    //  await models.Agent.findByPk('4897a0f7-6b30-4ad3-a3d1-21c487a435ce')
+    // ).getChannels()
+    //
     // models.Agent.findAll({ include: [models.Channel] })
-    // await (await models.Agent.find({where: { id: '4897a0f7-6b30-4ad3-a3d1-21c487a435ce' } } )).getChannels();
+    //
+    // await (
+    //  await models.Agent.find({
+    //    where: { id: '4897a0f7-6b30-4ad3-a3d1-21c487a435ce' }
+    //  })).getChannels();
+    //
     Agent.Channels = Agent.belongsToMany(models.Channel, {
       through: models.ChannelMemberships,
       foreignKey: 'agentId',

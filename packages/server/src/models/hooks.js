@@ -1,8 +1,5 @@
 const events = require('../sync/events');
 const emitter = require('../sync/emitter');
-
-const { AGENT_TYPE } = require('../enums/agent-type');
-const { MEASURABLE_STATE } = require('../enums/measurable-state');
 const logger = require('../lib/log');
 
 const log = logger.module('data/agent-measurables-data');
@@ -24,13 +21,10 @@ const log = logger.module('data/agent-measurables-data');
  * are defined and placed (either DB or JS files). The main purpose
  * is to give to developers to read this base definitions without
  * duplications and keep in a mind only a small part of this.
- *
  */
 
 function addHooks(db) {
-  /**
-   * afterUpdate
-   */
+  /** afterUpdate */
   db.Measurable.addHook('afterUpdate', (instance) => {
     try {
       emitter.emit(events.MEASURABLE_CHANGED, instance);
@@ -46,9 +40,7 @@ function addHooks(db) {
     }
   });
 
-  /**
-   * afterCreate
-   */
+  /** afterCreate */
   db.Measurement.addHook('afterCreate', (instance) => {
     try {
       emitter.emit(events.NEW_MEASUREMENT, instance);
@@ -99,56 +91,35 @@ function addHooks(db) {
     }
   });
 
-  /**
-   * @todo: move this logic into "sync"
-   * beforeCreate
-   */
+  /** beforeCreate */
   db.Bot.addHook('beforeCreate', async (instance) => {
     try {
-      const agent = await db.sequelize.models.Agent.create({
-        type: AGENT_TYPE.BOT,
-      });
-      instance.agentId = agent.id;
+      await emitter.emitAsync(events.CREATING_BOT, instance);
     } catch (e) {
-      log.trace('Hook Bot beforeCreate', e);
+      log.trace('Hook CREATING_BOT', e);
     }
   });
   db.User.addHook('beforeCreate', async (instance) => {
     try {
-      const agent = await db.sequelize.models.Agent.create({
-        type: AGENT_TYPE.USER,
-      });
-      instance.agentId = agent.id;
+      await emitter.emitAsync(events.CREATING_USER, instance);
     } catch (e) {
-      log.trace('Hook User beforeCreate', e);
+      log.trace('Hook CREATING_USER', e);
     }
   });
 
-  /**
-   * @todo: move this logic into "sync"
-   * beforeUpdate
-   */
+  /** beforeUpdate */
   db.Measurable.addHook('beforeUpdate', async (instance) => {
     try {
-      if (instance.changed('expectedResolutionDate')) {
-        if (instance.expectedResolutionDate >= new Date()) {
-          await instance.set('state', MEASURABLE_STATE.OPEN);
-        }
-      }
+      await emitter.emitAsync(events.UPDATING_MEASURABLE, instance);
     } catch (e) {
       log.trace('Hook Measurable beforeUpdate', e);
     }
   });
 
-  /**
-   * @todo: move this logic into "sync"
-   * beforeValidate
-   */
+  /** beforeValidate */
   db.Measurement.addHook('beforeValidate', async (instance) => {
     try {
-      if (instance.relevantAt == null) {
-        instance.relevantAt = Date.now();
-      }
+      await emitter.emitAsync(events.VALIDATING_MEASUREMENT, instance);
     } catch (e) {
       log.trace('Hook Measurement beforeValidate', e);
     }

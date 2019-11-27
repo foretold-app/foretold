@@ -1,10 +1,7 @@
 const assert = require('assert');
 
 const models = require('../models');
-const {
-  MEASUREMENT_COMPETITOR_TYPE,
-} = require('../enums/measurement-competitor-type');
-const { MEASURABLE_STATE } = require('../enums/measurable-state');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums');
 
 const { ModelPostgres } = require('./model-postgres');
 

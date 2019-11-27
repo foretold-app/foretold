@@ -16,9 +16,7 @@ const { Options } = require('../../data/classes');
 const { Params } = require('../../data/classes');
 const { Query } = require('../../data/classes');
 
-const {
-  MEASUREMENT_COMPETITOR_TYPE,
-} = require('../../enums/measurement-competitor-type');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
 const logger = require('../../lib/log');
 
 const log = logger.module('resolvers/measurements');

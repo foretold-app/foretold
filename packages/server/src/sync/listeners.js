@@ -81,6 +81,82 @@ async function createChannelMembership(channel) {
 }
 
 /**
+ * @param {Models.Bot} bot
+ * @returns {Promise<boolean>}
+ */
+async function createBotAgent(bot) {
+  const name = 'Job::createBotAgent';
+  log.trace(name);
+
+  try {
+    const creators = new actions.Creators();
+    const result = await creators.createBotAgent(bot);
+    log.trace(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
+/**
+ * @param {Models.User} user
+ * @returns {Promise<boolean>}
+ */
+async function createUserAgent(user) {
+  const name = 'Job::createUserAgent';
+  log.trace(name);
+
+  try {
+    const creators = new actions.Creators();
+    const result = await creators.createUserAgent(user);
+    log.trace(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
+/**
+ * @param {Models.Measurable} measurable
+ * @returns {Promise<boolean>}
+ */
+async function checkMeasurable(measurable) {
+  const name = 'Job::checkMeasurable';
+  log.trace(name);
+
+  try {
+    const creators = new actions.Creators();
+    const result = await creators.checkMeasurableState(measurable);
+    log.trace(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
+/**
+ * @param {Models.Measurement} measurement
+ * @returns {Promise<boolean>}
+ */
+async function checkMeasurement(measurement) {
+  const name = 'Job::checkMeasurement';
+  log.trace(name);
+
+  try {
+    const creators = new actions.Creators();
+    const result = await creators.checkMeasurement(measurement);
+    log.trace(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
+/**
  * @param {Models.Measurement} measurement
  * @returns {Promise<boolean>}
  */
@@ -301,12 +377,19 @@ module.exports = {
   mailer,
   listenFor,
   addGitHubWebHook,
+  measurableStateTransition,
+
   newMeasurementSlackNotification,
   newMeasurableSlackNotification,
   updateMeasurableSlackNotification,
+
   createNewMeasurables,
-  measurableStateTransition,
   createChannelMembership,
+  createBotAgent,
+  createUserAgent,
+  checkMeasurable,
+  checkMeasurement,
+
   invitations,
   updateUser,
   updateUsers,

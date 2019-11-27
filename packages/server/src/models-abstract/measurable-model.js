@@ -4,12 +4,10 @@ const {
 
 
 const models = require('../models');
-const { MEASURABLE_STATE } = require('../enums/measurable-state');
+const { MEASURABLE_STATE } = require('../enums');
 
 const { ModelPostgres } = require('./model-postgres');
-const {
-  MEASUREMENT_COMPETITOR_TYPE,
-} = require('../enums/measurement-competitor-type');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums');
 
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}

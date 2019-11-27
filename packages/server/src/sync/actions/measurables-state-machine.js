@@ -1,9 +1,7 @@
 const _ = require('lodash');
 
 const data = require('../../data');
-const {
-  MEASUREMENT_COMPETITOR_TYPE,
-} = require('../../enums/measurement-competitor-type');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
 
 class MeasurablesStateMachine {
   constructor() {

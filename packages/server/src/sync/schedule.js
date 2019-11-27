@@ -78,6 +78,14 @@ function runListeners() {
      */
     emitter.on(events.NEW_SERIES,
       listeners.createNewMeasurables);
+    emitter.on(events.CREATING_BOT,
+      listeners.createBotAgent);
+    emitter.on(events.CREATING_USER,
+      listeners.createUserAgent);
+    emitter.on(events.UPDATING_MEASURABLE,
+      listeners.checkMeasurable);
+    emitter.on(events.VALIDATING_MEASUREMENT,
+      listeners.checkMeasurement);
     emitter.on(events.NEW_INVITATION,
       listenFor(producers.notifications.Invitation));
     emitter.on(events.NEW_USER,

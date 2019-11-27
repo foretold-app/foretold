@@ -1,5 +1,5 @@
 const models = require('../models');
-const { TOKEN_TYPE } = require('../enums/token-type');
+const { TOKEN_TYPE } = require('../enums');
 
 const { ModelPostgres } = require('./model-postgres');
 

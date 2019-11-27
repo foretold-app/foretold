@@ -2,9 +2,7 @@ const _ = require('lodash');
 const { rule } = require('graphql-shield');
 
 const models = require('../../models');
-const {
-  CHANNEL_MEMBERSHIP_ROLES,
-} = require('../../enums/channel-membership-roles');
+const { CHANNEL_MEMBERSHIP_ROLES } = require('../../enums');
 const logger = require('../../lib/log');
 
 const log = logger.module('authorizers/channel-memberships');

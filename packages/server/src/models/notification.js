@@ -1,4 +1,4 @@
-const { NOTIFICATION_TYPE } = require('../enums/notification-type');
+const { NOTIFICATION_TYPE } = require('../enums');
 
 module.exports = (sequelize, DataTypes) => {
   const Notification = sequelize.define('Notification', {

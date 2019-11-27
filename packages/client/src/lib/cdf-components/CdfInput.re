@@ -122,6 +122,15 @@ let getDataTypeAsString =
   };
 };
 
+let getCompetitorTypeFromString = (str: string): Types.competitorType =>
+  switch (str) {
+  | "COMPETITIVE" => `COMPETITIVE
+  | "OBJECTIVE" => `OBJECTIVE
+  | "UNRESOLVED" => `UNRESOLVED
+  | "COMMENT" => `COMMENT
+  | _ => `OBJECTIVE
+  };
+
 let getValueFromState = (state: state): MeasurementValue.t =>
   switch (state.dataType) {
   | "FLOAT_CDF" =>
@@ -142,15 +151,6 @@ let getValueFromState = (state: state): MeasurementValue.t =>
     )
   | "COMMENT" =>
     `Comment(state.comment |> MeasurementValue.Comment.fromString)
-  };
-
-let getCompetitorTypeFromString = (str: string): Types.competitorType =>
-  switch (str) {
-  | "COMPETITIVE" => `COMPETITIVE
-  | "OBJECTIVE" => `OBJECTIVE
-  | "UNRESOLVED" => `UNRESOLVED
-  | "COMMENT" => `COMMENT
-  | _ => `OBJECTIVE
   };
 
 module BotsSelect = {

@@ -302,7 +302,7 @@ module ValueInput = {
     </Antd.Select>;
 };
 
-module ValueInput2 = {
+module ValueInputMapper = {
   open Style.Grid;
 
   [@react.component]
@@ -448,7 +448,7 @@ module Main = {
           <CompetitorTypeSelect isOwner=isCreator state send measurable />
         </div>
         getDataTypeSelect
-        <ValueInput2 state measurable send loggedUser />
+        <ValueInputMapper state measurable send loggedUser />
         <Antd.Input.TextArea
           value={state.description}
           style={ReactDOMRe.Style.make(~minHeight="9em", ())}

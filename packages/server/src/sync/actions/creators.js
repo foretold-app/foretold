@@ -95,6 +95,17 @@ class Creators {
     }
     return true;
   }
+
+  /**
+   * @param {Models.Measurement} instance
+   * @returns {Promise<boolean>}
+   */
+  async checkMeasurement(instance) {
+    if (instance.relevantAt == null) {
+      instance.relevantAt = Date.now(); // Number?
+    }
+    return true;
+  }
 }
 
 module.exports = {

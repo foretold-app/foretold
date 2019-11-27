@@ -59,35 +59,40 @@ module Styles = {
   let fullWidth = style([minWidth(`percent(100.))]);
 };
 
-let competitorTypeSelect =
-    (~isOwner: bool, ~state: state, ~send, ~measurable: Types.measurable)
-     => {
-  let options =
-    Primary.CompetitorType.availableSelections(
-      ~isOwner,
-      ~state=measurable.state,
-    );
+module CompetitorTypeSelect = {
+  [@react.component]
+  let make =
+      (~isOwner: bool, ~state: state, ~send, ~measurable: Types.measurable) => {
+    let options =
+      Primary.CompetitorType.availableSelections(
+        ~isOwner,
+        ~state=measurable.state,
+      );
 
-  <Antd.Select
-    value={state.competitorType}
-    className=Styles.fullWidth
-    onChange={e => send(UpdateCompetitorType(e))}>
-    {options |> ReasonReact.array}
-  </Antd.Select>;
+    <Antd.Select
+      value={state.competitorType}
+      className=Styles.fullWidth
+      onChange={e => send(UpdateCompetitorType(e))}>
+      {options |> ReasonReact.array}
+    </Antd.Select>;
+  };
 };
 
-let dataTypeSelect = (~state, ~send) =>
-  <Antd.Select
-    value={state.dataType}
-    onChange={e => send(UpdateDataType(e))}
-    className=Styles.fullWidth>
-    <Antd.Select.Option value="FLOAT_CDF">
-      {"Distribution" |> ste}
-    </Antd.Select.Option>
-    <Antd.Select.Option value="FLOAT_POINT">
-      {"Exact Value" |> ste}
-    </Antd.Select.Option>
-  </Antd.Select>;
+module DataTypeSelect = {
+  [@react.component]
+  let make = (~state, ~send) =>
+    <Antd.Select
+      value={state.dataType}
+      onChange={e => send(UpdateDataType(e))}
+      className=Styles.fullWidth>
+      <Antd.Select.Option value="FLOAT_CDF">
+        {"Distribution" |> ste}
+      </Antd.Select.Option>
+      <Antd.Select.Option value="FLOAT_POINT">
+        {"Exact Value" |> ste}
+      </Antd.Select.Option>
+    </Antd.Select>;
+};
 
 let getIsValid = (state: state): bool => {
   switch (state.dataType) {
@@ -148,36 +153,39 @@ let getCompetitorTypeFromString = (str: string): Types.competitorType =>
   | _ => `OBJECTIVE
   };
 
-let botsSelect =
-    (~state, ~send, ~bots: array(Types.bot), ~loggedUser: Types.user)
-     => {
-  let name =
-    loggedUser.agent
-    |> E.O.fmap((agent: Types.agent) => agent.name |> E.O.default("Me"))
-    |> E.O.default("Me");
-  <>
-    <div className=Styles.inputBox>
-      <h4 className=Styles.label> {"Do this as:" |> ste} </h4>
-    </div>
-    <Antd.Select
-      value={state.asAgent}
-      onChange={e => send(UpdateAsAgent(e))}
-      className=Styles.fullWidth>
-      <Antd.Select.Option value=""> {name |> ste} </Antd.Select.Option>
-      {bots
-       |> Array.map((bot: Types.bot) =>
-            <Antd.Select.Option
-              value={
-                bot.agent
-                |> E.O.fmap((agent: Types.agent) => agent.id)
-                |> E.O.default("")
-              }>
-              {bot.name |> E.O.default(bot.id) |> ste}
-            </Antd.Select.Option>
-          )
-       |> ReasonReact.array}
-    </Antd.Select>
-  </>;
+module BotsSelect = {
+  [@react.component]
+  let make =
+      (~state, ~send, ~bots: array(Types.bot), ~loggedUser: Types.user) => {
+    let name =
+      loggedUser.agent
+      |> E.O.fmap((agent: Types.agent) => agent.name |> E.O.default("Me"))
+      |> E.O.default("Me");
+
+    <>
+      <div className=Styles.inputBox>
+        <h4 className=Styles.label> {"Do this as:" |> ste} </h4>
+      </div>
+      <Antd.Select
+        value={state.asAgent}
+        onChange={e => send(UpdateAsAgent(e))}
+        className=Styles.fullWidth>
+        <Antd.Select.Option value=""> {name |> ste} </Antd.Select.Option>
+        {bots
+         |> Array.map((bot: Types.bot) =>
+              <Antd.Select.Option
+                value={
+                  bot.agent
+                  |> E.O.fmap((agent: Types.agent) => agent.id)
+                  |> E.O.default("")
+                }>
+                {bot.name |> E.O.default(bot.id) |> ste}
+              </Antd.Select.Option>
+            )
+         |> ReasonReact.array}
+      </Antd.Select>
+    </>;
+  };
 };
 
 module ValueInput = {
@@ -294,165 +302,169 @@ module ValueInput = {
     </Antd.Select>;
 };
 
-let mainBlock =
-    (
-      ~state: state,
-      ~isCreator: bool,
-      ~send,
-      ~onSubmit,
-      ~measurable: Types.measurable,
-      ~bots: option(array(Types.bot)),
-      ~loggedUser: Types.user,
-    ) => {
-  let isValid = getIsValid(state);
+module MainBlock = {
+  [@react.component]
+  let make =
+      (
+        ~state: state,
+        ~isCreator: bool,
+        ~send,
+        ~onSubmit,
+        ~measurable: Types.measurable,
+        ~bots: option(array(Types.bot)),
+        ~loggedUser: Types.user,
+      ) => {
+    let isValid = getIsValid(state);
 
-  let getDataTypeSelect=
-    switch (state.competitorType, measurable.valueType) {
-    | ("OBJECTIVE", `FLOAT | `DATE) =>
-      <div className=Styles.select> {dataTypeSelect(~state, ~send)} </div>
-    | _ => <Null />
-    };
+    let getDataTypeSelect =
+      switch (state.competitorType, measurable.valueType) {
+      | ("OBJECTIVE", `FLOAT | `DATE) =>
+        <div className=Styles.select> <DataTypeSelect state send /> </div>
+      | _ => <Null />
+      };
 
-  let getBotSelect =
-    switch (bots) {
-    | Some([||])
-    | None => <Null />
-    | Some(bots) => botsSelect(~state, ~send, ~bots, ~loggedUser)
-    };
+    let getBotSelect =
+      switch (bots) {
+      | Some([||])
+      | None => <Null />
+      | Some(bots) => <BotsSelect state send bots loggedUser />
+      };
+    open Style.Grid;
 
-  open Style.Grid;
-
-  let valueInput =
-    switch (state.dataType) {
-    | "FLOAT_CDF"
-    | "FLOAT_POINT" =>
-      <>
-        <h4 className=Styles.label>
-          {(
-             state.competitorType == "OBJECTIVE"
-               ? "Result" : "Prediction (Distribution)"
-           )
-           |> ste}
-        </h4>
-        {Primary.Measurable.toMinMaxDescription(measurable)
-         |> E.O.React.fmapOrNull(r => <p> {r |> ste} </p>)}
-        {state.hasLimitError
-           ? <FC__Alert type_=`warning>
-               {"Warning: Foretold does not currently support ranges of this width, due to smoothing limitations."
-                |> ste}
-             </FC__Alert>
-           : <Null />}
-        <Div>
-          <Div
-            float=`left
-            styles=[
-              Css.(style([width(Css.Calc.(`percent(100.0) - `em(2.2)))])),
-            ]>
-            {ValueInput.floatPoint(measurable, send)}
+    let valueInput =
+      switch (state.dataType) {
+      | "FLOAT_CDF"
+      | "FLOAT_POINT" =>
+        <>
+          <h4 className=Styles.label>
+            {(
+               state.competitorType == "OBJECTIVE"
+                 ? "Result" : "Prediction (Distribution)"
+             )
+             |> ste}
+          </h4>
+          {Primary.Measurable.toMinMaxDescription(measurable)
+           |> E.O.React.fmapOrNull(r => <p> {r |> ste} </p>)}
+          {state.hasLimitError
+             ? <FC__Alert type_=`warning>
+                 {"Warning: Foretold does not currently support ranges of this width, due to smoothing limitations."
+                  |> ste}
+               </FC__Alert>
+             : <Null />}
+          <Div>
+            <Div
+              float=`left
+              styles=[
+                Css.(
+                  style([width(Css.Calc.(`percent(100.0) - `em(2.2)))])
+                ),
+              ]>
+              {ValueInput.floatPoint(measurable, send)}
+            </Div>
+            <Div float=`left styles=[Css.(style([width(`em(2.2))]))]>
+              <span
+                className=Css.(style([float(`right), fontSize(`em(1.6))]))>
+                <FC.HelpDropdown
+                  content=FC.HelpDropdown.{
+                    headerContent: "Distribution Editor" |> ste,
+                    bodyContent: <ReactMarkdown source=tutorialSource />,
+                  }
+                />
+              </span>
+            </Div>
           </Div>
-          <Div float=`left styles=[Css.(style([width(`em(2.2))]))]>
-            <span
-              className=Css.(style([float(`right), fontSize(`em(1.6))]))>
-              <FC.HelpDropdown
-                content=FC.HelpDropdown.{
-                  headerContent: "Distribution Editor" |> ste,
-                  bodyContent: <ReactMarkdown source=tutorialSource />,
-                }
-              />
-            </span>
-          </Div>
-        </Div>
-        <div className=Styles.inputBox>
-          <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
-        </div>
-      </>
+          <div className=Styles.inputBox>
+            <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
+          </div>
+        </>
 
-    | "BINARY_BOOL" =>
-      <>
-        <h4 className=Styles.label> {"Result" |> ste} </h4>
-        {ValueInput.boolean(state.binary, send)}
-        <div className=Styles.inputBox>
-          <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
-        </div>
-      </>
-    | "PERCENTAGE_FLOAT" =>
-      <>
-        <h4 className=Styles.label>
-          {"Predicted Percentage Chance" |> ste}
-        </h4>
-        {ValueInput.percentage(state.percentage, send)}
-        <div className=Styles.inputBox>
-          <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
-        </div>
-      </>
+      | "BINARY_BOOL" =>
+        <>
+          <h4 className=Styles.label> {"Result" |> ste} </h4>
+          {ValueInput.boolean(state.binary, send)}
+          <div className=Styles.inputBox>
+            <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
+          </div>
+        </>
+      | "PERCENTAGE_FLOAT" =>
+        <>
+          <h4 className=Styles.label>
+            {"Predicted Percentage Chance" |> ste}
+          </h4>
+          {ValueInput.percentage(state.percentage, send)}
+          <div className=Styles.inputBox>
+            <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
+          </div>
+        </>
 
-    | "UNRESOLVABLE_RESOLUTION" =>
-      <>
-        <div className=Styles.inputBox>
-          <h4 className=Styles.label> {"Reason for closing" |> ste} </h4>
-        </div>
-        {ValueInput.unresolvable(state.unresolvableResolution, send)}
-        <div className=Styles.inputBox>
-          <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
-        </div>
-      </>
+      | "UNRESOLVABLE_RESOLUTION" =>
+        <>
+          <div className=Styles.inputBox>
+            <h4 className=Styles.label> {"Reason for closing" |> ste} </h4>
+          </div>
+          {ValueInput.unresolvable(state.unresolvableResolution, send)}
+          <div className=Styles.inputBox>
+            <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
+          </div>
+        </>
 
-    | "COMMENT" =>
-      <>
-        {Primary.User.show(
-           loggedUser,
-           <>
-             <div className=Styles.inputBox>
-               <h4 className=Styles.label> {"Comment Type" |> ste} </h4>
-             </div>
-             {ValueInput.comment(state.comment, send)}
-           </>,
-         )}
-        <div className=Styles.inputBox>
-          <h4 className=Styles.label> {"Comment" |> ste} </h4>
-        </div>
-      </>
+      | "COMMENT" =>
+        <>
+          {Primary.User.show(
+             loggedUser,
+             <>
+               <div className=Styles.inputBox>
+                 <h4 className=Styles.label> {"Comment Type" |> ste} </h4>
+               </div>
+               {ValueInput.comment(state.comment, send)}
+             </>,
+           )}
+          <div className=Styles.inputBox>
+            <h4 className=Styles.label> {"Comment" |> ste} </h4>
+          </div>
+        </>
 
-    | _ => <Null />
-    };
+      | _ => <Null />
+      };
 
-  <div className=Styles.form>
-    <div className=Styles.chartSection>
-      {E.A.length(state.floatCdf.xs) > 1
-         ? <LargeCdfChart
-             data={
-               state.floatCdf
-               |> (e => (e.xs, e.ys))
-               |> MeasurementValue.FloatCdf.fromArrays
-               |> MeasurementValue.toPdf
-               |> MeasurementValue.FloatCdf.toJs
-             }
-           />
-         : <div />}
-    </div>
-    <div className=Styles.inputSection>
-      <div className=Styles.select>
-        {competitorTypeSelect(~isOwner=isCreator, ~state, ~send, ~measurable)}
+    <div className=Styles.form>
+      <div className=Styles.chartSection>
+        {E.A.length(state.floatCdf.xs) > 1
+           ? <LargeCdfChart
+               data={
+                 state.floatCdf
+                 |> (e => (e.xs, e.ys))
+                 |> MeasurementValue.FloatCdf.fromArrays
+                 |> MeasurementValue.toPdf
+                 |> MeasurementValue.FloatCdf.toJs
+               }
+             />
+           : <div />}
       </div>
-      getDataTypeSelect
-      valueInput
-      <Antd.Input.TextArea
-        value={state.description}
-        style={ReactDOMRe.Style.make(~minHeight="9em", ())}
-        onChange={event => {
-          let value = ReactEvent.Form.target(event)##value;
-          send(UpdateDescription(value));
-        }}
-      />
-      {Primary.User.show(loggedUser, getBotSelect)}
-      <div className=Styles.submitButton>
-        <Antd.Button
-          _type=`primary onClick={_ => onSubmit()} disabled={!isValid}>
-          {"Submit" |> ste}
-        </Antd.Button>
+      <div className=Styles.inputSection>
+        <div className=Styles.select>
+          <CompetitorTypeSelect isOwner=isCreator state send measurable />
+        </div>
+        getDataTypeSelect
+        valueInput
+        <Antd.Input.TextArea
+          value={state.description}
+          style={ReactDOMRe.Style.make(~minHeight="9em", ())}
+          onChange={event => {
+            let value = ReactEvent.Form.target(event)##value;
+            send(UpdateDescription(value));
+          }}
+        />
+        {Primary.User.show(loggedUser, getBotSelect)}
+        <div className=Styles.submitButton>
+          <Antd.Button
+            _type=`primary onClick={_ => onSubmit()} disabled={!isValid}>
+            {"Submit" |> ste}
+          </Antd.Button>
+        </div>
       </div>
-    </div>
-  </div>;
+    </div>;
+  };
 };
 
 [@react.component]
@@ -568,15 +580,7 @@ let make =
   };
 
   let block =
-    mainBlock(
-      ~state,
-      ~isCreator,
-      ~send,
-      ~onSubmit,
-      ~measurable,
-      ~bots,
-      ~loggedUser,
-    );
+    <MainBlock state isCreator send onSubmit measurable bots loggedUser />;
 
   <Style.BorderedBox>
     {switch (data.result) {

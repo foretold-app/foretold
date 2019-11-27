@@ -4,15 +4,18 @@ open E;
 open Utils;
 
 type state = {
-  // -> Measurement.value
+  // -> Measurement
+  // 1
+  competitorType: string,
+  // --> 2
+  dataType: string,
+  // ---> 3, Measurement.value
   floatCdf: FloatCdf.t,
   percentage: float,
   binary: bool,
-  dataType: string,
   unresolvableResolution: string,
   comment: string,
-  // -> Measurement
-  competitorType: string,
+  // another
   description: string,
   valueText: string,
   hasLimitError: bool,
@@ -359,6 +362,7 @@ module ValueInputMapper = {
           <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
         </div>
       </>
+
     | "PERCENTAGE_FLOAT" =>
       <>
         <h4 className=Styles.label>
@@ -428,6 +432,11 @@ module Main = {
       | None => <Null />
       | Some(bots) => <BotsSelect state send bots loggedUser />
       };
+
+    // CompetitorTypeSelect --> CompetitorType
+    // DataTypeSelect --> DataType
+    // ValueInputMapper --> [ FloatPoint, Binary, Percentage,
+    //                        UnresolvableResolution, Comment ]
 
     <div className=Styles.form>
       <div className=Styles.chartSection>

@@ -1,13 +1,12 @@
 const _ = require('lodash');
 const assert = require('assert');
 
-const { InvitationsData, ChannelMembershipsData } = require('../../data');
+const { InvitationsData } = require('../../data');
+const { ChannelMembershipsData } = require('../../data');
 const logger = require('../../lib/log');
 
-const { INVITATION_STATUS } = require('../../enums/invitation-status');
-const {
-  CHANNEL_MEMBERSHIP_TYPE,
-} = require('../../enums/channel-membership-type');
+const { INVITATION_STATUS } = require('../../enums');
+const { CHANNEL_MEMBERSHIP_TYPE } = require('../../enums');
 
 const log = logger.module('sync/actions/user-updater');
 

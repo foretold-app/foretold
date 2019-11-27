@@ -10,14 +10,12 @@ const {
 // The first level of dependencies (..)
 const logger = require('../lib/log');
 const { AgentMeasurableModel } = require('../models-abstract');
-const {
-  MEASUREMENT_COMPETITOR_TYPE,
-} = require('../enums/measurement-competitor-type');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums');
 const {
   MARKET_TYPE,
   START_AT,
   FINAL_COMPARISON_MEASUREMENT,
-} = require('../enums/agent-measurable-score-type');
+} = require('../enums');
 
 // The second level (.)
 const { DataBase } = require('./data-base');

@@ -6,7 +6,7 @@ const {
   MARKET_TYPE,
   START_AT,
   FINAL_COMPARISON_MEASUREMENT,
-} = require('../../enums/agent-measurable-score-type');
+} = require('../../enums');
 
 const {
   Pagination,

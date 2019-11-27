@@ -45,6 +45,7 @@ export namespace Models {
   export interface Bot extends Model {
     id: BotID;
     name: string;
+    agentId: AgentID;
 
     getAgent(): Models.Agent;
   }

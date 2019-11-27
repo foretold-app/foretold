@@ -4,7 +4,7 @@ const assert = require('assert');
 const { DataBase } = require('./data-base');
 
 const { ChannelMembershipModel } = require('../models-abstract');
-const { CHANNEL_MEMBERSHIP_TYPE } = require('../enums/channel-membership-type');
+const { CHANNEL_MEMBERSHIP_TYPE } = require('../enums');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

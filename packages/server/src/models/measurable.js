@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
-const { MEASURABLE_STATE } = require('../enums/measurable-state');
-const { MEASURABLE_VALUE_TYPE } = require('../enums/measurable-value-type');
+const { MEASURABLE_STATE } = require('../enums');
+const { MEASURABLE_VALUE_TYPE } = require('../enums');
 const moment = require('moment');
 
 module.exports = (sequelize, DataTypes) => {

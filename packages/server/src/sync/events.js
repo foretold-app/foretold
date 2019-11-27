@@ -11,7 +11,7 @@ module.exports = {
   // Encapsulated Events Flow
   MAIL: 'MAIL',
 
-  // System Events
+  // System Events (after)
   NEW_MEASUREMENT: 'NEW_MEASUREMENT',
   NEW_MEASURABLE: 'NEW_MEASURABLE',
   NEW_MEMBERSHIP: 'NEW_MEMBERSHIP',
@@ -20,6 +20,11 @@ module.exports = {
   NEW_INVITATION: 'NEW_INVITATION',
   NEW_USER: 'NEW_USER',
 
+  // (after)
   MEASURABLE_CHANGED: 'MEASURABLE_CHANGED',
   USER_CHANGED: 'USER_CHANGED',
+
+  //
+  CREATING_BOT: 'CREATING_BOT',
+  CREATING_USER: 'CREATING_USER',
 };

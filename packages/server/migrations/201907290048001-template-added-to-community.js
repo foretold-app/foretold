@@ -1,4 +1,4 @@
-const { TEMPLATE_NAME } = require('../src/enums/template-name');
+const { TEMPLATE_NAME } = require('../src/enums');
 const { EmailEnvelopeTemplate } = require('../src/models/classes/templates');
 
 module.exports = {
@@ -9,9 +9,9 @@ module.exports = {
       const envelopeTemplate = new EmailEnvelopeTemplate({
         subject: 'You are added to the Foretold community',
         body:
-          '<a href="{{{ inviterAgent.link }}}">{{{ inviterAgent.name }}}</a> has ' +
-          'added you to the Foretold community, ' +
-          '[<a href="{{{ channel.link }}}">{{{ channel.name }}}</a>]'
+          '<a href="{{{ inviterAgent.link }}}">{{{ inviterAgent.name }}}</a> '
+          + 'has added you to the Foretold community, '
+          + '[<a href="{{{ channel.link }}}">{{{ channel.name }}}</a>]'
       });
 
       await queryInterface.bulkInsert('Templates', [{

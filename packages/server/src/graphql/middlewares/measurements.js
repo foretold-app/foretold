@@ -1,17 +1,14 @@
 const _ = require('lodash');
+
 const { MeasurementValue } = require('@foretold/measurement-value');
 const { FloatPoint, FloatCdf } = require('@foretold/measurement-value');
 const { Binary, Percentage } = require('@foretold/measurement-value');
 const { UnresolvableResolution } = require('@foretold/measurement-value');
 const { Comment } = require('@foretold/measurement-value');
 
-const { MEASURABLE_STATE } = require('../../enums/measurable-state');
-const {
-  MEASUREMENT_COMPETITOR_TYPE,
-} = require('../../enums/measurement-competitor-type');
-const {
-  MEASURABLE_VALUE_TYPE,
-} = require('../../enums/measurable-value-type');
+const { MEASURABLE_STATE } = require('../../enums');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
+const { MEASURABLE_VALUE_TYPE } = require('../../enums');
 const lang = require('../../lang');
 
 /**

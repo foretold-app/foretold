@@ -1,6 +1,6 @@
 const { NewMeasurable } = require('./new-measurable');
 const { Producer } = require('../producer');
-const { MEASURABLE_STATE } = require('../../../enums/measurable-state');
+const { MEASURABLE_STATE } = require('../../../enums');
 
 class NewMeasurableReachedResolution extends NewMeasurable {
   /**

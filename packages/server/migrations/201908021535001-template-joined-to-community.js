@@ -1,4 +1,4 @@
-const { TEMPLATE_NAME } = require('../src/enums/template-name');
+const { TEMPLATE_NAME } = require('../src/enums');
 const { FeedItem } = require('../src/models/classes');
 
 module.exports = {

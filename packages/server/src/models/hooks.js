@@ -1,8 +1,7 @@
 const events = require('../sync/events');
 const emitter = require('../sync/emitter');
 
-const { AGENT_TYPE } = require('../enums/agent-type');
-const { MEASURABLE_STATE } = require('../enums/measurable-state');
+const { MEASURABLE_STATE } = require('../enums');
 const logger = require('../lib/log');
 
 const log = logger.module('data/agent-measurables-data');
@@ -100,27 +99,20 @@ function addHooks(db) {
   });
 
   /**
-   * @todo: move this logic into "sync"
    * beforeCreate
    */
   db.Bot.addHook('beforeCreate', async (instance) => {
     try {
-      const agent = await db.sequelize.models.Agent.create({
-        type: AGENT_TYPE.BOT,
-      });
-      instance.agentId = agent.id;
+      await emitter.emitAsync(events.CREATING_BOT, instance);
     } catch (e) {
-      log.trace('Hook Bot beforeCreate', e);
+      log.trace('Hook CREATING_BOT', e);
     }
   });
   db.User.addHook('beforeCreate', async (instance) => {
     try {
-      const agent = await db.sequelize.models.Agent.create({
-        type: AGENT_TYPE.USER,
-      });
-      instance.agentId = agent.id;
+      await emitter.emitAsync(events.CREATING_USER, instance);
     } catch (e) {
-      log.trace('Hook User beforeCreate', e);
+      log.trace('Hook CREATING_USER', e);
     }
   });
 

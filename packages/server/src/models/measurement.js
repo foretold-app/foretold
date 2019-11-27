@@ -4,9 +4,7 @@ const {
   MEASUREMENT_VALUE,
 } = require('@foretold/measurement-value/enums/measurement-value');
 
-const {
-  MEASUREMENT_COMPETITOR_TYPE,
-} = require('../enums/measurement-competitor-type');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums');
 
 module.exports = (sequelize, DataTypes) => {
   const Measurement = sequelize.define('Measurement', {

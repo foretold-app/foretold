@@ -64,8 +64,7 @@ module Styles = {
 
 module CompetitorTypeSelect = {
   [@react.component]
-  let make =
-      (~isOwner: bool, ~state: state, ~send, ~measurable: Types.measurable) => {
+  let make = (~isOwner, ~state, ~send, ~measurable: Types.measurable) => {
     let options =
       Primary.CompetitorType.availableSelections(
         ~isOwner,
@@ -83,6 +82,20 @@ module CompetitorTypeSelect = {
 
 module DataTypeSelect = {
   [@react.component]
+  let short = (~state, ~send) =>
+    <Antd.Select
+      value={state.dataType}
+      onChange={e => send(UpdateDataType(e))}
+      className=Styles.fullWidth>
+      <Antd.Select.Option value="BINARY_BOOL">
+        {"Binary" |> ste}
+      </Antd.Select.Option>
+      <Antd.Select.Option value="FLOAT_CDF">
+        {"Distribution" |> ste}
+      </Antd.Select.Option>
+    </Antd.Select>;
+
+  [@react.component]
   let make = (~state, ~send) =>
     <Antd.Select
       value={state.dataType}
@@ -97,7 +110,7 @@ module DataTypeSelect = {
     </Antd.Select>;
 };
 
-let getIsValid = (state: state): bool => {
+let getIsValid = (state): bool => {
   switch (state.dataType) {
   | "FLOAT_CDF" => E.A.length(state.floatCdf.xs) > 1
   | "FLOAT_POINT" => E.A.length(state.floatCdf.xs) == 1
@@ -109,23 +122,17 @@ let getIsValid = (state: state): bool => {
   };
 };
 
-let getDataTypeAsString =
-    (
-      competitorType: string,
-      measurable: Types.measurable,
-      dataType: option(string),
-    )
-    : string => {
-  switch (competitorType, measurable.valueType, dataType) {
-  | ("COMMENT", _, _) => "COMMENT"
-  | ("UNRESOLVED", _, _) => "UNRESOLVABLE_RESOLUTION"
-  | ("OBJECTIVE", `PERCENTAGE, _) => "BINARY_BOOL"
-  | ("COMPETITIVE", `PERCENTAGE, _) => "PERCENTAGE_FLOAT"
+let getDataTypeAsString = (competitorType, measurable: Types.measurable) => {
+  switch (competitorType, measurable.valueType) {
+  | ("COMMENT", _) => "COMMENT"
+  | ("UNRESOLVED", _) => "UNRESOLVABLE_RESOLUTION"
+  | ("OBJECTIVE", `PERCENTAGE) => "BINARY_BOOL"
+  | ("COMPETITIVE", `PERCENTAGE) => "PERCENTAGE_FLOAT"
   | _ => "FLOAT_CDF"
   };
 };
 
-let getCompetitorTypeFromString = (str: string): Types.competitorType =>
+let getCompetitorTypeFromString = (str): Types.competitorType =>
   switch (str) {
   | "COMPETITIVE" => `COMPETITIVE
   | "OBJECTIVE" => `OBJECTIVE
@@ -134,7 +141,7 @@ let getCompetitorTypeFromString = (str: string): Types.competitorType =>
   | _ => `OBJECTIVE
   };
 
-let getValueFromState = (state: state): MeasurementValue.t =>
+let getValueFromState = (state): MeasurementValue.t =>
   switch (state.dataType) {
   | "FLOAT_CDF" =>
     `FloatCdf(
@@ -423,6 +430,10 @@ module Main = {
       switch (state.competitorType, measurable.valueType) {
       | ("OBJECTIVE", `FLOAT | `DATE) =>
         <div className=Styles.select> <DataTypeSelect state send /> </div>
+      | ("OBJECTIVE", `PERCENTAGE) =>
+        <div className=Styles.select>
+          <DataTypeSelect.short state send />
+        </div>
       | _ => <Null />
       };
 
@@ -506,7 +517,7 @@ let make =
     React.useState(() => competitorTypeInitValue);
   let (dataType, setDataType) =
     React.useState(() =>
-      getDataTypeAsString(competitorTypeInitValue, measurable, None)
+      getDataTypeAsString(competitorTypeInitValue, measurable)
     );
   let (description, setDescription) = React.useState(() => "");
   let (valueText, setValueText) = React.useState(() => defaultValueText);
@@ -545,12 +556,7 @@ let make =
       setHasLimitError(_ => hasLimitError)
 
     | UpdateCompetitorType(competitorType) =>
-      let dataType =
-        getDataTypeAsString(
-          competitorType,
-          measurable,
-          Some(state.dataType),
-        );
+      let dataType = getDataTypeAsString(competitorType, measurable);
       setCompetitorType(_ => competitorType);
       setDataType(_ => dataType);
 

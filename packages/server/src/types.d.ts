@@ -96,6 +96,7 @@ export namespace Models {
     getChannel(): Models.Channel;
 
     judged(): void;
+    set(name: string, value: any): Promise<any>;
   }
 
   export interface Measurement extends Model {

@@ -6,6 +6,7 @@ const { Data } = require('../../data/classes');
 const { MEASURABLE_VALUE_TYPE } = require('../../enums');
 const { CHANNEL_MEMBERSHIP_ROLES } = require('../../enums');
 const { AGENT_TYPE } = require('../../enums');
+const { MEASURABLE_STATE } = require('../../enums');
 
 class Creators {
   constructor() {
@@ -79,6 +80,19 @@ class Creators {
     const data = new Data({ type: AGENT_TYPE.USER });
     const agent = await this.agents.createOne(data);
     instance.agentId = agent.id;
+    return true;
+  }
+
+  /**
+   * @param {Models.Measurable} instance
+   * @returns {Promise<boolean>}
+   */
+  async checkMeasurableState(instance) {
+    if (instance.changed('expectedResolutionDate')) {
+      if (instance.expectedResolutionDate >= new Date()) {
+        await instance.set('state', MEASURABLE_STATE.OPEN);
+      }
+    }
     return true;
   }
 }

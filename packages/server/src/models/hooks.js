@@ -1,7 +1,6 @@
 const events = require('../sync/events');
 const emitter = require('../sync/emitter');
 
-const { MEASURABLE_STATE } = require('../enums');
 const logger = require('../lib/log');
 
 const log = logger.module('data/agent-measurables-data');
@@ -117,16 +116,11 @@ function addHooks(db) {
   });
 
   /**
-   * @todo: move this logic into "sync"
    * beforeUpdate
    */
   db.Measurable.addHook('beforeUpdate', async (instance) => {
     try {
-      if (instance.changed('expectedResolutionDate')) {
-        if (instance.expectedResolutionDate >= new Date()) {
-          await instance.set('state', MEASURABLE_STATE.OPEN);
-        }
-      }
+      await emitter.emitAsync(events.UPDATING_MEASURABLE, instance);
     } catch (e) {
       log.trace('Hook Measurable beforeUpdate', e);
     }

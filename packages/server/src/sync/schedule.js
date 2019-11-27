@@ -82,6 +82,8 @@ function runListeners() {
       listeners.createBotAgent);
     emitter.on(events.CREATING_USER,
       listeners.createUserAgent);
+    emitter.on(events.UPDATING_MEASURABLE,
+      listeners.checkMeasurableState);
     emitter.on(events.NEW_INVITATION,
       listenFor(producers.notifications.Invitation));
     emitter.on(events.NEW_USER,

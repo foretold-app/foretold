@@ -119,6 +119,25 @@ async function createUserAgent(user) {
 }
 
 /**
+ * @param {Models.Measurable} measurable
+ * @returns {Promise<boolean>}
+ */
+async function checkMeasurableState(measurable) {
+  const name = 'Job::checkMeasurableState';
+  log.trace(name);
+
+  try {
+    const creators = new actions.Creators();
+    const result = await creators.checkMeasurableState(measurable);
+    log.trace(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
+/**
  * @param {Models.Measurement} measurement
  * @returns {Promise<boolean>}
  */
@@ -349,6 +368,7 @@ module.exports = {
   createChannelMembership,
   createBotAgent,
   createUserAgent,
+  checkMeasurableState,
 
   invitations,
   updateUser,

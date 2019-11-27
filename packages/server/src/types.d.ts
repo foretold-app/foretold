@@ -105,7 +105,7 @@ export namespace Models {
     competitorType: string;
     measurableId: MeasurableID;
     agentId: AgentID;
-    relevantAt: string;
+    relevantAt: number;
     taggedMeasurementId: MeasurementID;
     description: string;
     valueText: string;

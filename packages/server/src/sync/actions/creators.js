@@ -102,7 +102,7 @@ class Creators {
    */
   async checkMeasurement(instance) {
     if (instance.relevantAt == null) {
-      instance.relevantAt = Date.now(); // Number?
+      instance.relevantAt = Date.now();
     }
     return true;
   }

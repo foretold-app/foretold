@@ -1,8 +1,13 @@
 [@bs.config {jsx: 3}];
 
+type domain = {
+  xMin: option(float),
+  xMax: option(float),
+};
+
 type columnType =
   | String
-  | MeasurableId
+  | MeasurableId(domain)
   | MeasurementValue;
 
 module Column = {
@@ -13,8 +18,15 @@ module Column = {
     columnType,
   };
   type ts = array(t);
+
   let indexColumnType = (ts: ts, index) =>
     ts |> E.A.get(_, index) |> E.O.fmap(r => r.columnType);
+
+  let domain = (t: t) =>
+    switch (t.columnType) {
+    | MeasurableId(d) => d
+    | _ => {xMin: None, xMax: None}
+    };
 };
 
 type cell =
@@ -52,26 +64,28 @@ let rows: Row.ts = [|[|String("sdf")|]|];
 
 module Json = {
   let decode = (j: Js.Json.t): Belt.Result.t(Table.t, string) => {
-    let decodeField = (fieldName, json) =>
-      Json.Decode.(json |> optional(field(fieldName, string)));
-
-    let decodeInt = (fieldName, json) =>
-      Json.Decode.(json |> optional(field(fieldName, int)));
+    let decodeField = (tt, fieldName, json) =>
+      Json.Decode.(json |> optional(field(fieldName, tt)));
 
     let columnDecode = (json): Belt.Result.t(Column.t, string) =>
       switch (
-        decodeField("id", json),
-        decodeField("name", json),
-        decodeField("columnType", json),
+        decodeField(Json.Decode.string, "id", json),
+        decodeField(Json.Decode.string, "name", json),
+        decodeField(Json.Decode.string, "columnType", json),
       ) {
       | (Some(id), Some(name), Some(columnType)) =>
         Belt.Result.Ok({
           id,
           name,
-          width: decodeInt("width", json) |> E.O.default(1),
+          width:
+            decodeField(Json.Decode.int, "width", json) |> E.O.default(1),
           columnType:
             switch (columnType) {
-            | "MeasurableId" => MeasurableId
+            | "MeasurableId" =>
+              MeasurableId({
+                xMin: decodeField(Json.Decode.float, "xMin", json),
+                xMax: decodeField(Json.Decode.float, "xMax", json),
+              })
             | "MeasurementValue" => MeasurementValue
             | _ => String
             },
@@ -111,7 +125,7 @@ module Json = {
              | Some(Error(_)) => Empty
              | _ => Empty
              }
-           | MeasurableId =>
+           | MeasurableId(_) =>
              json
              |> Json.Decode.(optional(field(column.id, string)))
              |> E.O.fmap(r => MeasurableId(r))

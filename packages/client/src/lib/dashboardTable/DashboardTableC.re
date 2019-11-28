@@ -24,6 +24,7 @@ module DashboardTableToTable = {
               r =>
                 switch (r) {
                 | Some(measurable) =>
+                  let domain = DashboardTable.Column.domain(column);
                   <div
                     onClick={_ => editor.onSelect(measurable.id)}
                     className=Css.(
@@ -43,10 +44,16 @@ module DashboardTableToTable = {
                       ])
                     )>
                     <MeasurementItems.ResolutionOrRecentAggregation
+                      xMin={domain.xMin}
+                      xMax={domain.xMax}
                       measurable
                     />
-                    <MeasurementItems.AgentPrediction measurable />
-                  </div>
+                    <MeasurementItems.AgentPrediction
+                      measurable
+                      xMin={domain.xMin}
+                      xMax={domain.xMax}
+                    />
+                  </div>;
                 | None =>
                   <FC__Alert type_=`warning>
                     {"Not loaded" |> Utils.ste}

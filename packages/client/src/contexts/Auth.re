@@ -1,8 +1,6 @@
 [@bs.config {jsx: 3}];
 
 module UrlToAuth0Tokens = {
-  open Utils;
-
   // Always use fresh RegExp objects
   let matchAccessToken = () => [%re "/access_token=([^\$&]+)/g"];
   let matchIdToken = () => [%re "/id_token=([^\$&]+)/g"];
@@ -16,8 +14,8 @@ module UrlToAuth0Tokens = {
   };
 
   let make = (url: ReasonReact.Router.url) => {
-    let accessToken = url.hash |> resolveRegex(matchAccessToken());
-    let idToken = url.hash |> resolveRegex(matchIdToken());
+    let accessToken = url.hash |> Utils.resolveRegex(matchAccessToken());
+    let idToken = url.hash |> Utils.resolveRegex(matchIdToken());
 
     switch (accessToken, idToken) {
     | ("", _) => None

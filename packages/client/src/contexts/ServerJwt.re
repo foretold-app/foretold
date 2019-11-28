@@ -5,9 +5,12 @@ type error = string;
 type jwt = string;
 type t = jwt;
 
-let set = (t: t) => {
+let set = (t: option(t)) => {
   open Dom.Storage;
-  localStorage |> setItem("server_jwt", t);
+  switch (t) {
+  | Some(t) => localStorage |> setItem("server_jwt", t)
+  | _ => ()
+  };
   ();
 };
 

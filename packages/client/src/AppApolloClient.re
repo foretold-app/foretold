@@ -50,8 +50,8 @@ let errorLink = _ =>
     };
   });
 
-let link = () =>
-  switch (ServerJwt.make_from_storage()) {
+let link = serverJwt =>
+  switch (serverJwt) {
   | Some(s) => ApolloLinks.from([|contextLink(s), errorLink(), httpLink()|])
   | None => ApolloLinks.from([|errorLink(), httpLink()|])
   };
@@ -63,9 +63,9 @@ let connectToDevTools = _ => {
   };
 };
 
-let instance = () =>
+let instance = serverJwt =>
   ReasonApollo.createApolloClient(
-    ~link=link(),
+    ~link=link(serverJwt),
     ~cache=inMemoryCache(),
     ~connectToDevTools=connectToDevTools(),
     (),

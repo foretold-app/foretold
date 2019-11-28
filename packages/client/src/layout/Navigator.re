@@ -3,10 +3,9 @@
 [@react.component]
 let make = () => {
   let (route, setRoute) =
-    React.useState(() => {
-      let url = ReasonReact.Router.dangerouslyGetInitialUrl();
-      url |> Routing.Route.fromUrl;
-    });
+    React.useState(() =>
+      ReasonReact.Router.dangerouslyGetInitialUrl() |> Routing.Route.fromUrl
+    );
 
   ReasonReact.Router.watchUrl(url => {
     setRoute(_ => url |> Routing.Route.fromUrl);
@@ -35,7 +34,7 @@ let make = () => {
 
         | (Preferences, Some(loggedUser)) =>
           <FillWithSidebar> <Preferences loggedUser /> </FillWithSidebar>
-        | (MeasurableEdit(id), Some(loggedUser)) =>
+        | (MeasurableEdit(id), Some(_)) =>
           <FillWithSidebar>
             <MeasurableEdit pageParams={id: id} />
           </FillWithSidebar>

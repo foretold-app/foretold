@@ -121,6 +121,7 @@ module Route = {
     | NotFound;
 
   let fromUrl = (url: ReasonReact.Router.url) => {
+    // @todo: Repair it, we need to move logic from here.
     let showChannel = channelId =>
       Channel({
         channelId: getChannelId(channelId),
@@ -135,11 +136,7 @@ module Route = {
     | ["privacy_policy"] => Privacy
     | ["terms_and_conditions"] => Terms
     | ["login"] => Login
-    | ["callback"] =>
-      Auth.UrlToAuth0Tokens.make(url)
-      |> E.O.fmap(Auth0Tokens.set)
-      |> E.O.default();
-      showChannel("");
+    | ["callback"] => showChannel("")
     | ["agents"] => AgentIndex
     | ["profile"] => Profile
     | ["preferences"] => Preferences
@@ -186,6 +183,7 @@ module Route = {
         channelId: getChannelId(channelId),
         subPage: Series(seriesId),
       })
+
     // Notebooks
     | ["c", channelId, "n", notebookId, "details"] =>
       Channel({

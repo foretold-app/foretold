@@ -30,6 +30,7 @@ let make = () => {
       "token_type",
       "state",
       "token",
+      "id_token",
     |];
     KeyValuePairs.clearHash(url, remove) |> ReasonReact.Router.replace;
   };

@@ -20,14 +20,26 @@ module Main = {
 
 [@react.component]
 let make = () => {
-  let saveAuth0Info = _ => {
-    let url = ReasonReact.Router.dangerouslyGetInitialUrl();
+  let url = ReasonReact.Router.dangerouslyGetInitialUrl();
+
+  let clearUrl = url => {
+    let remove = [|
+      "access_token",
+      "scope",
+      "expires_in",
+      "token_type",
+      "state",
+      "token",
+    |];
+    KeyValuePairs.clearHash(url, remove) |> ReasonReact.Router.replace;
+  };
+
+  let saveAuth0Info = url => {
     let auth0TokensFromUrl = url |> Auth.UrlToAuth0Tokens.make;
     auth0TokensFromUrl |> E.O.fmap(Auth0Tokens.set) |> E.O.default();
   };
 
-  let getServerJwt = fn => {
-    let url = ReasonReact.Router.dangerouslyGetInitialUrl();
+  let getServerJwt = (url, fn) => {
     let auth0Tokens = url |> Auth.UrlToAuth0Tokens.make;
     let foretoldAuthToken = url |> Auth.UrlToTokens.make;
     <ReasonApollo.Provider client={appApolloClient(None)}>
@@ -37,13 +49,18 @@ let make = () => {
 
   let serverJwt = ServerJwt.make_from_storage();
 
+  clearUrl(url);
+  saveAuth0Info(url);
+
   switch (serverJwt) {
   | Some(_) => <Main serverJwt />
   | None =>
-    saveAuth0Info();
-    getServerJwt(serverJwt => {
-      ServerJwt.set(serverJwt);
-      <Main serverJwt />;
-    });
+    getServerJwt(
+      url,
+      serverJwt => {
+        ServerJwt.set(serverJwt);
+        <Main serverJwt />;
+      },
+    )
   };
 };

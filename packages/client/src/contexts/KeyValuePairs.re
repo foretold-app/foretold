@@ -34,15 +34,20 @@ let toUrlParams = (ts: ts) =>
 let toUrlHash = (ts: ts) =>
   ts |> E.A.fmap(r => r.key ++ "=" ++ r.value) |> Js.Array.joinWith("&");
 
-let clearHash = (url: ReasonReact.Router.url, removeItem: string) => {
+let clearHash = (url: ReasonReact.Router.url, removeItem: array(string)) => {
   let path = url.path |> Array.of_list |> Js.Array.joinWith("/");
+
   let hashes =
     url.hash
     |> fromSearchParam
-    |> Js.Array.filter((item: t) => item.key != removeItem)
+    |> Js.Array.filter((item: t) =>
+         !Js.Array.includes(item.key, removeItem)
+       )
     |> toUrlHash;
+
   let hashes' = hashes == "" ? "" : "#" ++ hashes;
   let search = url.search == "" ? "" : "?" ++ url.search;
+
   path ++ search ++ hashes';
 };
 

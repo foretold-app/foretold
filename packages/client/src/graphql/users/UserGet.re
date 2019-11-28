@@ -102,16 +102,10 @@ let inner = fn => {
   <QueryComponent pollInterval={60 * 1000}>
     ...{({result}) =>
       result
-      |> HttpResponse.fromApollo
-      |> HttpResponse.fmap(e => e##authenticated##user |> E.O.fmap(toUser))
-      |> HttpResponse.optionalToMissing
-      |> (
-        e =>
-          switch (e) {
-          | Success(user) => fn(Some(user))
-          | _ => fn(None)
-          }
-      )
+      |> ApolloUtils.apolloResponseToResult
+      |> E.R.fmap(e => e##authenticated##user |> E.O.fmap(toUser))
+      |> E.R.fmap(fn)
+      |> E.R.id
     }
   </QueryComponent>;
 };

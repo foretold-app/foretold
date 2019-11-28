@@ -16,14 +16,14 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let inner = innerComponentFn => {
+let inner = fn => {
   let query = Query.make(~name="main", ());
   <QueryComponent variables=query##variables>
     ...{({result}) =>
       result
       |> ApolloUtils.apolloResponseToResult
       |> E.R.fmap(e => e##globalSetting |> E.O.fmap(toGlobalSetting))
-      |> E.R.fmap(innerComponentFn)
+      |> E.R.fmap(fn)
       |> E.R.id
     }
   </QueryComponent>;

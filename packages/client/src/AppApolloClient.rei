@@ -1,1 +1,1 @@
-let instance: unit => ApolloClient.generatedApolloClient;
+let instance: option(ServerJwt.t) => ApolloClient.generatedApolloClient;

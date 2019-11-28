@@ -98,20 +98,14 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let inner = innerComponentFn => {
+let inner = fn => {
   <QueryComponent pollInterval={60 * 1000}>
     ...{({result}) =>
       result
-      |> HttpResponse.fromApollo
-      |> HttpResponse.fmap(e => e##authenticated##user |> E.O.fmap(toUser))
-      |> HttpResponse.optionalToMissing
-      |> (
-        e =>
-          switch (e) {
-          | Success(user) => innerComponentFn(Some(user))
-          | _ => innerComponentFn(None)
-          }
-      )
+      |> ApolloUtils.apolloResponseToResult
+      |> E.R.fmap(e => e##authenticated##user |> E.O.fmap(toUser))
+      |> E.R.fmap(fn)
+      |> E.R.id
     }
   </QueryComponent>;
 };

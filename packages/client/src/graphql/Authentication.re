@@ -26,8 +26,7 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 let redirectingMessage =
   <h3> {"You are being redirected..." |> Utils.ste} </h3>;
 
-let component =
-    (auth0Tokens: option(Auth0Tokens.t), authToken: option(string)) => {
+let component = (auth0Tokens, authToken, fn) => {
   let auth0jwt =
     auth0Tokens
     |> E.O.fmap((r: Auth0Tokens.t) => Some(Js.Json.string(r.id_token)))
@@ -38,27 +37,24 @@ let component =
     |> E.O.fmap((r: Auth0Tokens.t) => Some(r.access_token))
     |> E.O.default(None);
 
-  let query = Query.make(~auth0jwt?, ~auth0accessToken?, ~authToken?, ());
-
-  <QueryComponent variables=query##variables>
-    ...{({result}) =>
-      result
-      |> HttpResponse.fromApollo
-      |> HttpResponse.fmap(e => e##authentication##jwt)
-      |> (
-        e =>
-          switch (e) {
-          | Success(c) =>
-            // @todo: rapir this hard logic
-            ServerJwt.set(c);
-            reload();
-            <Null />;
-          | Error(_) =>
-            Routing.Url.push(Login);
-            <Null />;
-          | _ => redirectingMessage
-          }
-      )
-    }
-  </QueryComponent>;
+  switch (auth0Tokens, authToken) {
+  | (None, None) => fn(None)
+  | (_, _) =>
+    let query = Query.make(~auth0jwt?, ~auth0accessToken?, ~authToken?, ());
+    <QueryComponent variables=query##variables>
+      ...{({result}) =>
+        result
+        |> HttpResponse.fromApollo
+        |> HttpResponse.fmap(e => e##authentication##jwt)
+        |> (
+          e =>
+            switch (e) {
+            | Success(c) => fn(Some(c))
+            | Error(_) => fn(None)
+            | _ => redirectingMessage
+            }
+        )
+      }
+    </QueryComponent>;
+  };
 };

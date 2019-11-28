@@ -11,6 +11,7 @@ module DashboardTableToTable = {
       : Table.column(DashboardTable.Row.t) =>
     Table.Column.make(
       ~name=column.name |> Utils.ste,
+      ~flex=column.width,
       ~render=
         (c: DashboardTable.Row.t) =>
           switch (Belt.Array.get(c, index)) {

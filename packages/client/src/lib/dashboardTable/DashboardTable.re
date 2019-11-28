@@ -9,6 +9,7 @@ module Column = {
   type t = {
     id: string,
     name: string,
+    width: int,
     columnType,
   };
   type ts = array(t);
@@ -44,7 +45,7 @@ module Table = {
   };
   let make = (columns, rows) => {columns, rows};
   let allMeasurableIds = (t: t) =>
-    t.rows |> E.A.fmap(Row.measurableIds) |> E.A.uniq |>  E.A.concatMany;
+    t.rows |> E.A.fmap(Row.measurableIds) |> E.A.uniq |> E.A.concatMany;
 };
 
 let rows: Row.ts = [|[|String("sdf")|]|];
@@ -53,6 +54,9 @@ module Json = {
   let decode = (j: Js.Json.t): Belt.Result.t(Table.t, string) => {
     let decodeField = (fieldName, json) =>
       Json.Decode.(json |> optional(field(fieldName, string)));
+
+    let decodeInt = (fieldName, json) =>
+      Json.Decode.(json |> optional(field(fieldName, int)));
 
     let columnDecode = (json): Belt.Result.t(Column.t, string) =>
       switch (
@@ -64,6 +68,7 @@ module Json = {
         Belt.Result.Ok({
           id,
           name,
+          width: decodeInt("width", json) |> E.O.default(1),
           columnType:
             switch (columnType) {
             | "MeasurableId" => MeasurableId

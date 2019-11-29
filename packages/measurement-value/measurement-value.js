@@ -7,6 +7,10 @@ class MeasurementValue {
     this.input = input;
   }
 
+  /**
+   * @param input
+   * @returns {*}
+   */
   static factory(input) {
     const { Binary } = require('./binary');
     const { Comment } = require('./comment');
@@ -46,6 +50,9 @@ class MeasurementValue {
     return arr[0] !== undefined ? arr[0] : new Null(input);
   }
 
+  /**
+   * @returns {boolean}
+   */
   validate() {
     return true;
   }

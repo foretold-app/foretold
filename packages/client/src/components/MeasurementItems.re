@@ -32,6 +32,8 @@ module FloatCdf = {
         ~valueText=None,
         ~width=150,
         ~height=30,
+        ~xMin: option(float),
+        ~xMax: option(float),
       ) => {
     let color =
       competitorType == `AGGREGATION ? `hex("b1b9c6") : `hex("487192");
@@ -40,7 +42,9 @@ module FloatCdf = {
       value
       |> MeasurementValue.toPdf
       |> MeasurementValue.FloatCdf.toJs
-      |> (data => <SmallCdfChart data width height color />);
+      |> (
+        data => <SmallCdfChart data width height color minX=xMin maxX=xMax />
+      );
 
     let stat =
       value
@@ -123,13 +127,20 @@ module Percentage = {
 
 module MeasurementShow = {
   [@react.component]
-  let make = (~measurement: option(Types.measurement)) => {
+  let make =
+      (
+        ~measurement: option(Types.measurement),
+        ~xMin: option(float),
+        ~xMax: option(float),
+      ) => {
     switch (measurement) {
     | Some(measurement) =>
       switch (measurement.value) {
       | Ok(`FloatPoint(r)) => <FloatPoint value=r />
       | Ok(`FloatCdf(r)) =>
         <FloatCdf
+          xMin
+          xMax
           value=r
           valueText={measurement.valueText}
           competitorType={measurement.competitorType}
@@ -145,8 +156,15 @@ module MeasurementShow = {
 
 module ResolutionOrRecentAggregation = {
   [@react.component]
-  let make = (~measurable: Types.measurable) => {
+  let make =
+      (
+        ~measurable: Types.measurable,
+        ~xMin: option(float),
+        ~xMax: option(float),
+      ) => {
     <MeasurementShow
+      xMin
+      xMax
       measurement={E.O.firstSome(
         measurable.outcome,
         measurable.previousAggregate,
@@ -157,8 +175,15 @@ module ResolutionOrRecentAggregation = {
 
 module AgentPrediction = {
   [@react.component]
-  let make = (~measurable: Types.measurable) => {
+  let make =
+      (
+        ~measurable: Types.measurable,
+        ~xMin: option(float),
+        ~xMax: option(float),
+      ) => {
     <MeasurementShow
+      xMin
+      xMax
       measurement={
         switch (measurable.recentMeasurement) {
         | Some(measurement) =>

@@ -60,6 +60,8 @@ let make =
                   className=Css.(style([paddingTop(`em(0.5))]))>
                   <MeasurementItems.ResolutionOrRecentAggregation
                     measurable=m
+                    xMin=None
+                    xMax=None
                   />
                 </FC.Table.Cell>
                 <FC.Table.Cell

@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../../data');
+const { UsersData } = require('../../data');
 const logger = require('../../lib/log');
 
 const log = logger.module('middlewares/users');
@@ -24,7 +24,7 @@ async function setContextUser(root, args, context, info) {
 
   // @todo: Don't understand what this means.
   context.userAsObject = !!id
-    ? await data.users.getOne({ id })
+    ? await new UsersData().getOne({ id })
     : null;
 }
 

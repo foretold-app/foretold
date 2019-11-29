@@ -54,7 +54,7 @@ class MeasurableState extends ProducerNotifications {
       competitorType: MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
     };
     const options = await this._getOptions();
-    return Producer.data.measurements.getOne(params, options);
+    return this.measurements.getOne(params, options);
   }
 }
 

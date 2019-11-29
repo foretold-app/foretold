@@ -2,6 +2,12 @@ const assert = require('assert');
 const _ = require('lodash');
 
 const data = require('../../data');
+const { MeasurementsData } = require('../../data');
+const { UsersData } = require('../../data');
+const { AgentsData } = require('../../data');
+const { ChannelsData } = require('../../data');
+const { NotificationsData } = require('../../data');
+const { NotificationStatusesData } = require('../../data');
 
 const { TEMPLATE_NAME } = require('../../enums');
 const { NOTIFICATION_TYPE } = require('../../enums');
@@ -17,6 +23,13 @@ const { FeedItemMeasurable } = require('../../models/classes');
 class Producer {
   constructor(options = {}) {
     assert(_.isObject(options), 'Options is not an object');
+
+    this.measurements = new MeasurementsData();
+    this.users = new UsersData();
+    this.agents = new AgentsData();
+    this.channels = new ChannelsData();
+    this.notifications = new NotificationsData();
+    this.notificationStatuses = new NotificationStatusesData();
 
     this.options = options;
     this.templateName = undefined;

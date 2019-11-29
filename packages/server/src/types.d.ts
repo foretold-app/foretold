@@ -140,6 +140,7 @@ export namespace Models {
     id: ChannelMembershipID;
     agentId: AgentID;
     channelId: ChannelID;
+    inviterAgentId: AgentID;
     role: ChannelMembershipRole;
     methodCreatedBy:
       | "ADDED_IN_APP_BY_ADMIN"

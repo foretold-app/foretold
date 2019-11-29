@@ -41,7 +41,7 @@ class ProducerFeedItems extends Producer {
 
     try {
       /** @type {Models.Agent} */
-      const agent = await Producer.data.agents.getOne({ id: this.agentId });
+      const agent = await this.agents.getOne({ id: this.agentId });
       assert(!!_.get(agent, 'id'), 'Agent ID is required.');
 
       const replacements = await this._getReplacements(agent);

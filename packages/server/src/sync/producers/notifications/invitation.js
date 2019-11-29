@@ -37,11 +37,11 @@ class Invitation extends ProducerNotifications {
   async main() {
     try {
       /** @type {Models.Channel} */
-      const channel = await Producer.data.channels.getOne({
+      const channel = await this.channels.getOne({
         id: this.invitation.channelId,
       });
       /** @type {Models.Agent} */
-      const inviter = await Producer.data.agents.getOne({
+      const inviter = await this.agents.getOne({
         id: this.invitation.inviterAgentId,
       });
 

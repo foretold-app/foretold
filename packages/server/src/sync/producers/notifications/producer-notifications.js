@@ -51,7 +51,7 @@ class ProducerNotifications extends Producer {
     );
     const data = { type, envelope };
     const options = await this._getOptions();
-    return Producer.data.notifications.createOne(data, options);
+    return this.notifications.createOne(data, options);
   }
 
   /**
@@ -69,7 +69,7 @@ class ProducerNotifications extends Producer {
     };
 
     const options = await this._getOptions();
-    return Producer.data.notificationStatuses.createOne(
+    return this.notificationStatuses.createOne(
       data,
       options,
     );

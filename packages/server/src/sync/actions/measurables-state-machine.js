@@ -30,7 +30,7 @@ class MeasurablesStateMachine {
     const measurables = await this.measurables.needsResolutionResponse();
 
     _.each(measurables, (measurable) => {
-      this.data.measurables.processResolution(measurable);
+      this.measurables.processResolution(measurable);
     });
 
     return true;

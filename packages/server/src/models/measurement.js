@@ -1,8 +1,5 @@
 const _ = require('lodash');
-const Sequelize = require('sequelize');
-const {
-  MEASUREMENT_VALUE,
-} = require('@foretold/measurement-value/enums/measurement-value');
+const { MEASUREMENT_VALUE } = require('@foretold/measurement-value/enums');
 
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums');
 
@@ -50,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     relevantAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
+      defaultValue: sequelize.fn('statement_timestamp'),
     },
     taggedMeasurementId: {
       type: DataTypes.UUID(),
@@ -58,11 +55,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     createdAt: {
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
+      defaultValue: sequelize.fn('statement_timestamp'),
     },
     updatedAt: {
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
+      defaultValue: sequelize.fn('statement_timestamp'),
     },
   });
 

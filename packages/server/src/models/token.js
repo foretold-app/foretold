@@ -34,15 +34,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     expiresAt: {
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
+      defaultValue: sequelize.fn('statement_timestamp'),
     },
     createdAt: {
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
+      defaultValue: sequelize.fn('statement_timestamp'),
     },
     updatedAt: {
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
+      defaultValue: sequelize.fn('statement_timestamp'),
     },
   });
 

@@ -47,7 +47,10 @@ class MeasurementModel extends ModelPostgres {
    * @private
    */
   _getOrder() {
-    return [['relevantAt', 'DESC']];
+    return [
+      ['relevantAt', 'DESC'],
+      ['createdAt', 'ASC'],
+    ];
   }
 
   /**

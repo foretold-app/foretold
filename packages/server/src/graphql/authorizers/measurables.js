@@ -12,8 +12,8 @@ const log = logger.module('authorizers/measurables');
  * @return {boolean}
  */
 function measurableIsOwnedByCurrentAgentRule(root, args, context, info) {
-  const creatorId = _.get(context, 'measurable.creatorId');
-  const agentId = _.get(context, 'agent.id');
+  const creatorId = _.get(context, 'measurable.creatorId', null);
+  const agentId = _.get(context, 'agent.id', null);
 
   const result = (!!creatorId && !!agentId)
     && (creatorId === agentId);
@@ -38,7 +38,7 @@ function measurableIsOwnedByCurrentAgentRule(root, args, context, info) {
  * @return {boolean}
  */
 function measurableIsArchivedRule(root, args, context, info) {
-  const result = !!_.get(context, 'measurable.isArchived');
+  const result = !!_.get(context, 'measurable.isArchived', null);
 
   log.trace(
     '\x1b[33m Rule Measurables '

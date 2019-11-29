@@ -14,12 +14,9 @@ const log = logger.module('middlewares/preferences');
  * @return {Promise<void>}
  */
 async function setContextPreference(root, args, context, info) {
-  const id = _.get(args, 'id');
+  const id = _.get(args, 'id', null);
 
-  log.trace(
-    '\x1b[36m ---> \x1b[0m Middleware (setContextPreference)',
-    { id },
-  );
+  log.trace('\x1b[36m ---> \x1b[0m Middleware (setContextPreference)', { id });
 
   context.preference = !!id
     ? await data.preferences.getOne({ id })

@@ -4,15 +4,18 @@ open E;
 open Utils;
 
 type state = {
-  // -> Measurement.value
+  // -> Measurement
+  // 1
+  competitorType: string,
+  // --> 2
+  dataType: string,
+  // ---> 3, Measurement.value
   floatCdf: FloatCdf.t,
   percentage: float,
   binary: bool,
-  dataType: string,
   unresolvableResolution: string,
   comment: string,
-  // -> Measurement
-  competitorType: string,
+  // another
   description: string,
   valueText: string,
   hasLimitError: bool,
@@ -59,37 +62,55 @@ module Styles = {
   let fullWidth = style([minWidth(`percent(100.))]);
 };
 
-let competitorTypeSelect =
-    (~isOwner: bool, ~state: state, ~send, ~measurable: Types.measurable)
-    : ReasonReact.reactElement => {
-  let options =
-    Primary.CompetitorType.availableSelections(
-      ~isOwner,
-      ~state=measurable.state,
-    );
+module CompetitorTypeSelect = {
+  [@react.component]
+  let make = (~isOwner, ~state, ~send, ~measurable: Types.measurable) => {
+    let options =
+      Primary.CompetitorType.availableSelections(
+        ~isOwner,
+        ~state=measurable.state,
+      );
 
-  <Antd.Select
-    value={state.competitorType}
-    className=Styles.fullWidth
-    onChange={e => send(UpdateCompetitorType(e))}>
-    {options |> ReasonReact.array}
-  </Antd.Select>;
+    <Antd.Select
+      value={state.competitorType}
+      className=Styles.fullWidth
+      onChange={e => send(UpdateCompetitorType(e))}>
+      {options |> ReasonReact.array}
+    </Antd.Select>;
+  };
 };
 
-let dataTypeSelect = (~state, ~send): ReasonReact.reactElement =>
-  <Antd.Select
-    value={state.dataType}
-    onChange={e => send(UpdateDataType(e))}
-    className=Styles.fullWidth>
-    <Antd.Select.Option value="FLOAT_CDF">
-      {"Distribution" |> ste}
-    </Antd.Select.Option>
-    <Antd.Select.Option value="FLOAT_POINT">
-      {"Exact Value" |> ste}
-    </Antd.Select.Option>
-  </Antd.Select>;
+module DataTypeSelect = {
+  [@react.component]
+  let short = (~state, ~send) =>
+    <Antd.Select
+      value={state.dataType}
+      onChange={e => send(UpdateDataType(e))}
+      className=Styles.fullWidth>
+      <Antd.Select.Option value="BINARY_BOOL">
+        {"Binary" |> ste}
+      </Antd.Select.Option>
+      <Antd.Select.Option value="FLOAT_CDF">
+        {"Distribution" |> ste}
+      </Antd.Select.Option>
+    </Antd.Select>;
 
-let getIsValid = (state: state): bool => {
+  [@react.component]
+  let make = (~state, ~send) =>
+    <Antd.Select
+      value={state.dataType}
+      onChange={e => send(UpdateDataType(e))}
+      className=Styles.fullWidth>
+      <Antd.Select.Option value="FLOAT_CDF">
+        {"Distribution" |> ste}
+      </Antd.Select.Option>
+      <Antd.Select.Option value="FLOAT_POINT">
+        {"Exact Value" |> ste}
+      </Antd.Select.Option>
+    </Antd.Select>;
+};
+
+let getIsValid = (state): bool => {
   switch (state.dataType) {
   | "FLOAT_CDF" => E.A.length(state.floatCdf.xs) > 1
   | "FLOAT_POINT" => E.A.length(state.floatCdf.xs) == 1
@@ -101,23 +122,26 @@ let getIsValid = (state: state): bool => {
   };
 };
 
-let getDataTypeAsString =
-    (
-      competitorType: string,
-      measurable: Types.measurable,
-      dataType: option(string),
-    )
-    : string => {
-  switch (competitorType, measurable.valueType, dataType) {
-  | ("COMMENT", _, _) => "COMMENT"
-  | ("UNRESOLVED", _, _) => "UNRESOLVABLE_RESOLUTION"
-  | ("OBJECTIVE", `PERCENTAGE, _) => "BINARY_BOOL"
-  | ("COMPETITIVE", `PERCENTAGE, _) => "PERCENTAGE_FLOAT"
+let getDataTypeAsString = (competitorType, measurable: Types.measurable) => {
+  switch (competitorType, measurable.valueType) {
+  | ("COMMENT", _) => "COMMENT"
+  | ("UNRESOLVED", _) => "UNRESOLVABLE_RESOLUTION"
+  | ("OBJECTIVE", `PERCENTAGE) => "BINARY_BOOL"
+  | ("COMPETITIVE", `PERCENTAGE) => "PERCENTAGE_FLOAT"
   | _ => "FLOAT_CDF"
   };
 };
 
-let getValueFromState = (state: state): MeasurementValue.t =>
+let getCompetitorTypeFromString = (str): Types.competitorType =>
+  switch (str) {
+  | "COMPETITIVE" => `COMPETITIVE
+  | "OBJECTIVE" => `OBJECTIVE
+  | "UNRESOLVED" => `UNRESOLVED
+  | "COMMENT" => `COMMENT
+  | _ => `OBJECTIVE
+  };
+
+let getValueFromState = (state): MeasurementValue.t =>
   switch (state.dataType) {
   | "FLOAT_CDF" =>
     `FloatCdf(
@@ -139,45 +163,39 @@ let getValueFromState = (state: state): MeasurementValue.t =>
     `Comment(state.comment |> MeasurementValue.Comment.fromString)
   };
 
-let getCompetitorTypeFromString = (str: string): Types.competitorType =>
-  switch (str) {
-  | "COMPETITIVE" => `COMPETITIVE
-  | "OBJECTIVE" => `OBJECTIVE
-  | "UNRESOLVED" => `UNRESOLVED
-  | "COMMENT" => `COMMENT
-  | _ => `OBJECTIVE
-  };
+module BotsSelect = {
+  [@react.component]
+  let make =
+      (~state, ~send, ~bots: array(Types.bot), ~loggedUser: Types.user) => {
+    let name =
+      loggedUser.agent
+      |> E.O.fmap((agent: Types.agent) => agent.name |> E.O.default("Me"))
+      |> E.O.default("Me");
 
-let botsSelect =
-    (~state, ~send, ~bots: array(Types.bot), ~loggedUser: Types.user)
-    : ReasonReact.reactElement => {
-  let name =
-    loggedUser.agent
-    |> E.O.fmap((agent: Types.agent) => agent.name |> E.O.default("Me"))
-    |> E.O.default("Me");
-  <>
-    <div className=Styles.inputBox>
-      <h4 className=Styles.label> {"Do this as:" |> ste} </h4>
-    </div>
-    <Antd.Select
-      value={state.asAgent}
-      onChange={e => send(UpdateAsAgent(e))}
-      className=Styles.fullWidth>
-      <Antd.Select.Option value=""> {name |> ste} </Antd.Select.Option>
-      {bots
-       |> Array.map((bot: Types.bot) =>
-            <Antd.Select.Option
-              value={
-                bot.agent
-                |> E.O.fmap((agent: Types.agent) => agent.id)
-                |> E.O.default("")
-              }>
-              {bot.name |> E.O.default(bot.id) |> ste}
-            </Antd.Select.Option>
-          )
-       |> ReasonReact.array}
-    </Antd.Select>
-  </>;
+    <>
+      <div className=Styles.inputBox>
+        <h4 className=Styles.label> {"Do this as:" |> ste} </h4>
+      </div>
+      <Antd.Select
+        value={state.asAgent}
+        onChange={e => send(UpdateAsAgent(e))}
+        className=Styles.fullWidth>
+        <Antd.Select.Option value=""> {name |> ste} </Antd.Select.Option>
+        {bots
+         |> Array.map((bot: Types.bot) =>
+              <Antd.Select.Option
+                value={
+                  bot.agent
+                  |> E.O.fmap((agent: Types.agent) => agent.id)
+                  |> E.O.default("")
+                }>
+                {bot.name |> E.O.default(bot.id) |> ste}
+              </Antd.Select.Option>
+            )
+         |> ReasonReact.array}
+      </Antd.Select>
+    </>;
+  };
 };
 
 module ValueInput = {
@@ -294,34 +312,11 @@ module ValueInput = {
     </Antd.Select>;
 };
 
-let mainBlock =
-    (
-      ~state: state,
-      ~isCreator: bool,
-      ~send,
-      ~onSubmit,
-      ~measurable: Types.measurable,
-      ~bots: option(array(Types.bot)),
-      ~loggedUser: Types.user,
-    )
-    : ReasonReact.reactElement => {
-  let isValid = getIsValid(state);
-
-  let getDataTypeSelect: ReasonReact.reactElement =
-    switch (state.competitorType, measurable.valueType) {
-    | ("OBJECTIVE", `FLOAT | `DATE) =>
-      <div className=Styles.select> {dataTypeSelect(~state, ~send)} </div>
-    | _ => <Null />
-    };
-
-  let getBotSelect: ReasonReact.reactElement =
-    switch (bots) {
-    | Some([||])
-    | None => <Null />
-    | Some(bots) => botsSelect(~state, ~send, ~bots, ~loggedUser)
-    };
+module ValueInputMapper = {
   open Style.Grid;
-  let valueInput: ReasonReact.reactElement =
+
+  [@react.component]
+  let make = (~state, ~measurable, ~send, ~loggedUser) =>
     switch (state.dataType) {
     | "FLOAT_CDF"
     | "FLOAT_POINT" =>
@@ -374,6 +369,7 @@ let mainBlock =
           <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
         </div>
       </>
+
     | "PERCENTAGE_FLOAT" =>
       <>
         <h4 className=Styles.label>
@@ -414,44 +410,83 @@ let mainBlock =
 
     | _ => <Null />
     };
+};
 
-  <div className=Styles.form>
-    <div className=Styles.chartSection>
-      {E.A.length(state.floatCdf.xs) > 1
-         ? <LargeCdfChart
-             data={
-               state.floatCdf
-               |> (e => (e.xs, e.ys))
-               |> MeasurementValue.FloatCdf.fromArrays
-               |> MeasurementValue.toPdf
-               |> MeasurementValue.FloatCdf.toJs
-             }
-           />
-         : <div />}
-    </div>
-    <div className=Styles.inputSection>
-      <div className=Styles.select>
-        {competitorTypeSelect(~isOwner=isCreator, ~state, ~send, ~measurable)}
+module Main = {
+  [@react.component]
+  let make =
+      (
+        ~state: state,
+        ~isCreator: bool,
+        ~send,
+        ~onSubmit,
+        ~measurable: Types.measurable,
+        ~bots: option(array(Types.bot)),
+        ~loggedUser: Types.user,
+      ) => {
+    let isValid = getIsValid(state);
+
+    let getDataTypeSelect =
+      switch (state.competitorType, measurable.valueType) {
+      | ("OBJECTIVE", `FLOAT | `DATE) =>
+        <div className=Styles.select> <DataTypeSelect state send /> </div>
+      | ("OBJECTIVE", `PERCENTAGE) =>
+        <div className=Styles.select>
+          <DataTypeSelect.short state send />
+        </div>
+      | _ => <Null />
+      };
+
+    let getBotSelect =
+      switch (bots) {
+      | Some([||])
+      | None => <Null />
+      | Some(bots) => <BotsSelect state send bots loggedUser />
+      };
+
+    // CompetitorTypeSelect --> CompetitorType
+    // DataTypeSelect --> DataType
+    // ValueInputMapper --> [ FloatPoint, Binary, Percentage,
+    //                        UnresolvableResolution, Comment ]
+
+    <div className=Styles.form>
+      <div className=Styles.chartSection>
+        {E.A.length(state.floatCdf.xs) > 1
+           ? <LargeCdfChart
+               data={
+                 state.floatCdf
+                 |> (e => (e.xs, e.ys))
+                 |> MeasurementValue.FloatCdf.fromArrays
+                 |> MeasurementValue.toPdf
+                 |> MeasurementValue.FloatCdf.toJs
+               }
+             />
+           : <div />}
       </div>
-      getDataTypeSelect
-      valueInput
-      <Antd.Input.TextArea
-        value={state.description}
-        style={ReactDOMRe.Style.make(~minHeight="9em", ())}
-        onChange={event => {
-          let value = ReactEvent.Form.target(event)##value;
-          send(UpdateDescription(value));
-        }}
-      />
-      {Primary.User.show(loggedUser, getBotSelect)}
-      <div className=Styles.submitButton>
-        <Antd.Button
-          _type=`primary onClick={_ => onSubmit()} disabled={!isValid}>
-          {"Submit" |> ste}
-        </Antd.Button>
+      <div className=Styles.inputSection>
+        <div className=Styles.select>
+          <CompetitorTypeSelect isOwner=isCreator state send measurable />
+        </div>
+        getDataTypeSelect
+        <ValueInputMapper state measurable send loggedUser />
+        <Antd.Input.TextArea
+          value={state.description}
+          style={ReactDOMRe.Style.make(~minHeight="9em", ())}
+          onChange={event => {
+            let value = ReactEvent.Form.target(event)##value;
+            send(UpdateDescription(value));
+          }}
+        />
+        {Primary.User.show(loggedUser, getBotSelect)}
+        <div className=Styles.submitButton>
+          <Antd.Button
+            _type=`primary onClick={_ => onSubmit()} disabled={!isValid}>
+            {"Submit" |> ste}
+          </Antd.Button>
+        </div>
       </div>
-    </div>
-  </div>;
+    </div>;
+  };
 };
 
 [@react.component]
@@ -482,7 +517,7 @@ let make =
     React.useState(() => competitorTypeInitValue);
   let (dataType, setDataType) =
     React.useState(() =>
-      getDataTypeAsString(competitorTypeInitValue, measurable, None)
+      getDataTypeAsString(competitorTypeInitValue, measurable)
     );
   let (description, setDescription) = React.useState(() => "");
   let (valueText, setValueText) = React.useState(() => defaultValueText);
@@ -521,12 +556,7 @@ let make =
       setHasLimitError(_ => hasLimitError)
 
     | UpdateCompetitorType(competitorType) =>
-      let dataType =
-        getDataTypeAsString(
-          competitorType,
-          measurable,
-          Some(state.dataType),
-        );
+      let dataType = getDataTypeAsString(competitorType, measurable);
       setCompetitorType(_ => competitorType);
       setDataType(_ => dataType);
 
@@ -567,15 +597,7 @@ let make =
   };
 
   let block =
-    mainBlock(
-      ~state,
-      ~isCreator,
-      ~send,
-      ~onSubmit,
-      ~measurable,
-      ~bots,
-      ~loggedUser,
-    );
+    <Main state isCreator send onSubmit measurable bots loggedUser />;
 
   <Style.BorderedBox>
     {switch (data.result) {

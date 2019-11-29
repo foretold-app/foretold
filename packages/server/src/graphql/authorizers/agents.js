@@ -12,7 +12,7 @@ const log = logger.module('authorizers/agents');
  * @return {boolean}
  */
 function currentAgentIsAuthenticatedRule(_root, args, context, _info) {
-  const agentId = _.get(context, 'agent.id');
+  const agentId = _.get(context, 'agent.id', null);
   const result = !!agentId;
 
   log.trace(

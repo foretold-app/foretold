@@ -2,35 +2,35 @@ const _ = require('lodash');
 
 /**
  * @param {*} root
- * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @return {string | undefined}
  */
-const agentIdFromRootId = (root, args, context, info) => {
-  return _.get(root, 'id');
+const agentIdFromRootId = (root, _args, _context, _info) => {
+  return _.get(root, 'id', null);
+};
+
+/**
+ * @param {*} _root
+ * @param {object} _args
+ * @param {Schema.Context} context
+ * @param {object} _info
+ * @return {string | undefined}
+ */
+const agentIdFromContext = (_root, _args, context, _info) => {
+  return _.get(context, 'userAsObject.agentId', null);
 };
 
 /**
  * @param {*} root
- * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @return {string | undefined}
  */
-const agentIdFromContext = (root, args, context, info) => {
-  return _.get(context, 'userAsObject.agentId');
-};
-
-/**
- * @param {*} root
- * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
- * @return {string | undefined}
- */
-const agentIdFromRootAgentId = (root, args, context, info) => {
-  return _.get(root, 'agentId');
+const agentIdFromRootAgentId = (root, _args, _context, _info) => {
+  return _.get(root, 'agentId', null);
 };
 
 module.exports = {

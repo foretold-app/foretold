@@ -5,15 +5,15 @@ const logger = require('../../lib/log');
 const log = logger.module('authorizers/preferences');
 
 /**
- * @param {*} root
- * @param {object} args
+ * @param {*} _root
+ * @param {object} _args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {boolean}
  */
-function preferenceIsOwnedByCurrentAgentRule(root, args, context, info) {
-  const agentIdIn = _.get(context, 'preference.agentId');
-  const contextAgentIdIn = _.get(context, 'agent.id');
+function preferenceIsOwnedByCurrentAgentRule(_root, _args, context, _info) {
+  const agentIdIn = _.get(context, 'preference.agentId', null);
+  const contextAgentIdIn = _.get(context, 'agent.id', null);
 
   const agentId = _.toString(agentIdIn);
   const contextAgentId = _.toString(contextAgentIdIn);

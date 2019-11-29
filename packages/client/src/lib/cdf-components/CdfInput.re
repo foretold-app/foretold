@@ -473,7 +473,7 @@ let make =
     };
 
   let (floatCdf, setFloatPdf) = React.useState(() => FloatCdf.empty);
-  let (percentage, setPercentage) = React.useState(() => 0.);
+  let (percentage, setPercentage) = React.useState(() => 50.);
   let (binary, setBinary) = React.useState(() => true);
   let (unresolvableResolution, setUnresolvableResolution) =
     React.useState(() => "AMBIGUOUS");

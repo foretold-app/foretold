@@ -90,8 +90,8 @@ module DataTypeSelect = {
       <Antd.Select.Option value="BINARY_BOOL">
         {"Binary" |> ste}
       </Antd.Select.Option>
-      <Antd.Select.Option value="FLOAT_CDF">
-        {"Distribution" |> ste}
+      <Antd.Select.Option value="PERCENTAGE_FLOAT">
+        {"Predicted Percentage Chance" |> ste}
       </Antd.Select.Option>
     </Antd.Select>;
 

@@ -70,7 +70,6 @@ async function measurementTypeValidation(root, args, context, info) {
     if (value instanceof FloatPoint) return true;
   }
   if (type === MEASURABLE_VALUE_TYPE.PERCENTAGE) {
-    if (value instanceof FloatCdf) return true;
     if (value instanceof Binary) return true;
     if (value instanceof Percentage) return true;
   }

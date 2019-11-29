@@ -48,7 +48,7 @@ let clearHash = (url: ReasonReact.Router.url, removeItem: array(string)) => {
   let hashes' = hashes == "" ? "" : "#" ++ hashes;
   let search = url.search == "" ? "" : "?" ++ url.search;
 
-  path ++ search ++ hashes';
+  "/" ++ path ++ search ++ hashes';
 };
 
 let make = (key, value) => {key, value};

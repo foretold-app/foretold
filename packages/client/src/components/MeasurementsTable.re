@@ -216,22 +216,9 @@ module Helpers = {
 
 let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
 
-let sort = (a: measurement, b: measurement) =>
-  switch (a.relevantAt, b.relevantAt, a.competitorType, b.competitorType) {
-  | (Some(c), Some(d), _, _) when Moment.toUnix(c) < Moment.toUnix(d) => 1
-  | (Some(c), Some(d), `AGGREGATION, `COMPETITIVE)
-      when Moment.toUnix(c) == Moment.toUnix(d) => (-1)
-  | (Some(c), Some(d), `COMPETITIVE, `AGGREGATION)
-      when Moment.toUnix(c) == Moment.toUnix(d) => 1
-  | (Some(c), Some(d), _, _) when Moment.toUnix(c) == Moment.toUnix(d) => 0
-  | (Some(c), Some(d), _, _) when Moment.toUnix(c) > Moment.toUnix(d) => (-1)
-  | _ => 0
-  };
-
 let getItems = (measurementsList: list(measurement), ~makeItem) => {
   let _bounds = Helpers.bounds(measurementsList |> E.A.of_list);
   measurementsList
-  |> E.L.sort(sort)
   |> E.L.fmap((m: measurement) => {
        let inside = makeItem(m, _bounds);
 
@@ -254,7 +241,6 @@ let getItemsSorted = (measurementsList: list(measurement), ~makeItem) => {
   let _bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
   measurementsList
-  |> E.L.sort(sort)
   |> E.L.fmap((measurement: measurement) => makeItem(measurement, _bounds))
   |> E.A.of_list
   |> ReasonReact.array;
@@ -417,7 +403,7 @@ let make =
     | `DATE => Js.Exn.raiseError("Date not supported ")
     };
 
-  let measurementsList' = measurementsList |> E.L.sort(sort);
+  let measurementsList' = measurementsList;
 
   measurementsList' |> E.L.length > 0
     ? <FC.PageCard.Body>
@@ -461,7 +447,7 @@ let makeExtended =
     | `DATE => Js.Exn.raiseError("Date not supported ")
     };
 
-  let measurementsList' = measurementsList |> E.L.sort(sort);
+  let measurementsList' = measurementsList;
 
   measurementsList' |> E.L.length > 0
     ? <FC.PageCard.Body>

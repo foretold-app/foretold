@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../../data');
+const { GlobalSettingsData } = require('../../data');
 
 const { Params } = require('../../data/classes');
 const { Options } = require('../../data/classes');
@@ -22,7 +22,7 @@ async function one(_root, args, context, _info) {
   const query = new Query();
   const options = new Options();
 
-  return data.globalSettings.getOne(
+  return new GlobalSettingsData().getOne(
     params,
     query,
     options,
@@ -47,7 +47,7 @@ async function update(_root, args, _context, _info) {
   const datas = new Data(input);
   const options = new Options();
 
-  return data.globalSettings.updateOne(params, datas, options);
+  return new GlobalSettingsData().updateOne(params, datas, options);
 }
 
 module.exports = {

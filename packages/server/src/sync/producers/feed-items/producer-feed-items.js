@@ -128,7 +128,7 @@ class ProducerFeedItems extends Producer {
     const body = { [feedItemBodyName]: feedItem };
     const data = { body, channelId, agentId };
     const options = await this._getOptions();
-    return Producer.data.feedItems.createOne(data, options);
+    return this.feedItems.createOne(data, options);
   }
 }
 

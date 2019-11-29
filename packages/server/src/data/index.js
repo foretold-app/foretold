@@ -1,3 +1,5 @@
+const logger = require('../lib/log');
+
 const { MeasurablesData } = require('./measurables-data');
 const { MeasurementsData } = require('./measurements-data');
 const { UsersData } = require('./users-data');
@@ -19,7 +21,9 @@ const { AgentChannelsData } = require('./agent-channels-data');
 const { MutexesData } = require('./mutexes-data');
 const { NotebooksData } = require('./notebooks-data');
 
-module.exports = {
+const log = logger.module('data');
+
+const exportingNew = {
   MeasurablesData,
   MeasurementsData,
   UsersData,
@@ -40,8 +44,10 @@ module.exports = {
   AgentChannelsData,
   MutexesData,
   NotebooksData,
+};
 
-  // @todo: Repair it, do not provide instances.
+// @todo: Repair it, do not provide instances.
+const exportingLegacy = {
   measurables: new MeasurablesData(),
   measurements: new MeasurementsData(),
   users: new UsersData(),
@@ -61,3 +67,20 @@ module.exports = {
   agentMeasurables: new AgentMeasurablesData(),
   agentChannels: new AgentChannelsData(),
 };
+
+const handler = {
+  get: (target, name) => {
+    if (name in exportingNew) {
+      return exportingNew[name];
+    }
+    if (name in exportingLegacy) {
+      log.warn(`Using objects instead of classes is deprecated (${name}).`);
+      return exportingLegacy[name];
+    }
+    return undefined;
+  },
+};
+
+const exporting = {};
+const proxy = new Proxy(exporting, handler);
+module.exports = proxy;

@@ -1,11 +1,11 @@
 const _ = require('lodash');
 
-const data = require('../../data');
+const { MeasurablesData } = require('../../data');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
 
 class MeasurablesStateMachine {
   constructor() {
-    this.data = data;
+    this.measurables = new MeasurablesData();
   }
 
   /**
@@ -13,7 +13,7 @@ class MeasurablesStateMachine {
    * @return {Promise<boolean>}
    */
   async toJudgementPending() {
-    const measurables = await this.data.measurables.needsToBePending();
+    const measurables = await this.measurables.needsToBePending();
 
     _.each(measurables, (measurable) => {
       measurable.judgementPending();
@@ -27,7 +27,7 @@ class MeasurablesStateMachine {
    * @return {Promise<boolean>}
    */
   async toResolving() {
-    const measurables = await this.data.measurables.needsResolutionResponse();
+    const measurables = await this.measurables.needsResolutionResponse();
 
     _.each(measurables, (measurable) => {
       this.data.measurables.processResolution(measurable);

@@ -103,6 +103,11 @@ module.exports = (sequelize, DataTypes) => {
     return value;
   }
 
+  /**
+   * @todo: fix it, remove it.
+   * @deprecated
+   * @param models
+   */
   Measurement.associate = function associate(models) {
     Measurement.Measurable = Measurement.belongsTo(models.Measurable, {
       foreignKey: 'measurableId',

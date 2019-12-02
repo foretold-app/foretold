@@ -49,6 +49,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  /**
+   * @todo: fix it, remove it.
+   * @deprecated
+   * @param models
+   */
   Channel.associate = function associate(models) {
     // Usage:
     //

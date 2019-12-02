@@ -47,6 +47,11 @@ module.exports = (sequelize, DataTypes) => {
 
   ChannelMemberships.ROLE = CHANNEL_MEMBERSHIP_ROLES;
 
+  /**
+   * @todo: fix it, remove it.
+   * @deprecated
+   * @param models
+   */
   ChannelMemberships.associate = function associate(models) {
     models.Agent.belongsToMany(models.Channel, {
       through: ChannelMemberships,

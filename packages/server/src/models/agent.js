@@ -47,6 +47,11 @@ module.exports = (sequelize, DataTypes) => {
     return _.get(bot, 'name');
   }
 
+  /**
+   * @todo: fix it, remove it.
+   * @deprecated
+   * @param models
+   */
   Agent.associate = function associate(models) {
     Agent.User = Agent.hasOne(models.User, {
       foreignKey: 'agentId',

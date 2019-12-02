@@ -55,6 +55,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  /**
+   * @todo: fix it, remove it.
+   * @deprecated
+   * @param models
+   */
   User.associate = function associate(models) {
     User.Agent = User.belongsTo(models.Agent, {
       foreignKey: 'agentId',

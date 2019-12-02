@@ -182,6 +182,11 @@ module.exports = (sequelize, DataTypes) => {
     await this.update({ state, stateUpdatedAt: Sequelize.fn('now') });
   };
 
+  /**
+   * @todo: fix it, remove it.
+   * @deprecated
+   * @param models
+   */
   Measurable.associate = function associate(models) {
     Measurable.Measurements = Measurable.hasMany(models.Measurement, {
       foreignKey: 'measurableId',

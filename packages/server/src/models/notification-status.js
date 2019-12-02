@@ -49,6 +49,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  /**
+   * @todo: fix it, remove it.
+   * @deprecated
+   * @param models
+   */
   NotificationStatus.associate = function associate(models) {
     NotificationStatus.Agent = NotificationStatus.belongsTo(models.Agent, {
       foreignKey: 'agentId',

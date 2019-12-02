@@ -224,6 +224,11 @@ export namespace Models {
     name: string;
   }
 
+  export interface Mutex extends Model {
+    name: string;
+    agentId: AgentID;
+  }
+
   export type Creator = Models.User | Models.Bot;
 }
 

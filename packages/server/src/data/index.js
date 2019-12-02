@@ -19,7 +19,11 @@ const { AgentChannelsData } = require('./agent-channels-data');
 const { MutexesData } = require('./mutexes-data');
 const { NotebooksData } = require('./notebooks-data');
 
+// @todo: fix, do not use instance
+const globalSetting = new GlobalSettingsData();
+
 module.exports = {
+  globalSetting,
   MeasurablesData,
   MeasurementsData,
   UsersData,

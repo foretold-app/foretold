@@ -7,29 +7,17 @@ const { KenFacade } = require('../lib/ken-facade');
 
 const { Params } = require('./classes');
 const { Data } = require('./classes');
-const logger = require('../lib/log');
-
-const log = logger.module('data/global-settings-data');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
  * @property {FeedItemModel} model
  */
 class GlobalSettingsData extends DataBase {
+
   constructor() {
     super();
     this.model = new GlobalSettingModel();
-    this.kenFacade = null;
-
-    /**
-     * @todo: Please, fix later!
-     */
-    this.initKen()
-      .then((kenFacade) => {
-        this.kenFacade = kenFacade;
-      }, (err) => {
-        log.trace('GlobalSettingsData Ken Init Err', err);
-      });
+    this.kenFacade = this.initKen();
   }
 
   /**
@@ -63,6 +51,7 @@ class GlobalSettingsData extends DataBase {
   }
 
   /**
+   * @protected
    * @returns {Promise<KenFacade>}
    */
   async initKen() {

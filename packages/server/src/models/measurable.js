@@ -111,6 +111,7 @@ module.exports = (sequelize, DataTypes) => {
 
   /**
    * @todo: To fix, remove this code from this layer.
+   * @todo: It leads the architecture of the app to circular dependency
    * @returns {string}
    */
   async function getName() {

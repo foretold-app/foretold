@@ -17,7 +17,6 @@ class GlobalSettingsData extends DataBase {
   constructor() {
     super();
     this.model = new GlobalSettingModel();
-    this.kenFacade = this.initKen();
   }
 
   /**
@@ -51,21 +50,12 @@ class GlobalSettingsData extends DataBase {
   }
 
   /**
-   * @protected
+   * @public
    * @returns {Promise<KenFacade>}
    */
-  async initKen() {
+  async getKen() {
     const { entityGraph } = await this.getMain();
     return new KenFacade(entityGraph);
-  }
-
-  /**
-   * @todo: Never do like this.
-   * @todo: These are shadowed promises.
-   * @returns {Promise<KenFacade>}
-   */
-  getKenFacadeCached() {
-    return this.kenFacade;
   }
 }
 

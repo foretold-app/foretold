@@ -73,7 +73,7 @@ export namespace Models {
 
   export interface Measurable extends Model {
     id: MeasurableID;
-    name: string;
+    name: Promise<string>;
     labelCustom: string;
     valueType: string;
     expectedResolutionDate: string;
@@ -119,7 +119,7 @@ export namespace Models {
     id: AgentID;
     isAdmin: boolean;
     type: "BOT" | "USER";
-    name: string;
+    name: Promise<string>;
     measurementCount: number;
 
     getBot(): Models.Bot;

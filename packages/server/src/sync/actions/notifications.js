@@ -85,7 +85,7 @@ class Notifications {
     return {
       attachments: [{
         pretext: 'New Measurement Created',
-        title: measurable.name,
+        title: await measurable.name,
         title_link: `${clientUrl}/c/${measurable.channelId}`,
         author_name: await agent.name,
         author_link: `${clientUrl}/agents/${agent.id}`,
@@ -112,7 +112,7 @@ class Notifications {
     return {
       attachments: [{
         pretext: 'New Measurable Created',
-        title: measurable.name,
+        title: await measurable.name,
         title_link: `${clientUrl}/c/${measurable.channelId}`,
         author_name: await agent.name,
         author_link: `${clientUrl}/agents/${agent.id}`,
@@ -141,7 +141,7 @@ class Notifications {
     return {
       attachments: [{
         pretext: 'Measurable Updated',
-        title: measurable.name,
+        title: await measurable.name,
         title_link: `${clientUrl}/c/${measurable.channelId}`,
         author_name: await agent.name,
         author_link: `${clientUrl}/agents/${agent.id}`,

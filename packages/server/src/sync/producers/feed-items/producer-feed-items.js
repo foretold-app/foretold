@@ -69,9 +69,9 @@ class ProducerFeedItems extends Producer {
    * @return {Promise<boolean>}
    */
   async _preload() {
-    this.agentId = _.get(this.input, 'agentId')
-      || _.get(this.input, 'creatorId');
-    this.channelId = _.get(this.input, 'channelId');
+    this.agentId = _.get(this.input, 'agentId', null)
+      || _.get(this.input, 'creatorId', null);
+    this.channelId = _.get(this.input, 'channelId', null);
     return true;
   }
 

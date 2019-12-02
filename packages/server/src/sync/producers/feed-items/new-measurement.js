@@ -58,7 +58,7 @@ class NewMeasurement extends ProducerFeedItems {
         name: (await _.get(agent, 'name')) || 'Somebody',
       },
       measurable: {
-        name: _.get(this.measurable, 'name', 'Question'),
+        name: (await _.get(this.measurable, 'name')) || 'Question',
         id: _.get(this.measurable, 'id'),
       },
     };

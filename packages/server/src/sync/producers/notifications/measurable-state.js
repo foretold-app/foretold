@@ -33,10 +33,10 @@ class MeasurableState extends ProducerNotifications {
    * @return {{measurable: {name: string, link: string}}}
    * @protected
    */
-  static _getReplacements(channel, measurable) {
+  async _getReplacements(channel, measurable) {
     return {
       measurable: {
-        name: _.get(measurable, 'name'),
+        name: (await _.get(measurable, 'name') || 'Question'),
         link: getMeasurableLinkWithToken(channel, measurable),
       },
     };

@@ -10,6 +10,7 @@ const {
 } = require('./new-measurable-reached-resolution');
 const { NewMeasurable } = require('./new-measurable');
 const { NewChannel } = require('./new-channel');
+const { NewNotebook } = require('./new-notebook');
 
 module.exports = {
   MemberJoinedCommunity,
@@ -20,4 +21,5 @@ module.exports = {
   NewMeasurableReachedResolution,
   NewMeasurable,
   NewChannel,
+  NewNotebook,
 };

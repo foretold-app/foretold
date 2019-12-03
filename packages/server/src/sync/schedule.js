@@ -94,6 +94,9 @@ function runListeners() {
       listeners.invitations);
     emitter.on(events.USER_CHANGED,
       listeners.updateUser);
+
+    emitter.on(events.NEW_NOTEBOOK,
+      listenFor(producers.feedItems.NewNotebook));
   } catch (e) {
     console.error('Listener error', e);
   }

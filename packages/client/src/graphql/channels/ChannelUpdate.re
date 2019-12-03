@@ -26,7 +26,7 @@ let mutate =
       ~id,
       ~input={
         "name": name |> E.J.fromString,
-        "description": description |> E.J.fromString |> E.O.some,
+        "description": description |> E.J.O.fromString,
         "isPublic": isPublic,
         "isArchived": isArchived,
       },

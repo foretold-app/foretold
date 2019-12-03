@@ -24,7 +24,7 @@ let toMeasurable = m => {
     |> E.O.fmap(channel =>
          Primary.Channel.make(
            ~id=channel##id,
-           ~name=channel##name,
+           ~name=channel##name |> E.J.toString,
            ~isArchived=channel##isArchived,
            ~isPublic=channel##isPublic,
            (),

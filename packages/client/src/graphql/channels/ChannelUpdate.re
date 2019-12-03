@@ -25,8 +25,8 @@ let mutate =
     Query.make(
       ~id,
       ~input={
-        "name": name,
-        "description": description,
+        "name": name |> E.J.fromString,
+        "description": description |> E.J.fromString |> E.O.some,
         "isPublic": isPublic,
         "isArchived": isArchived,
       },

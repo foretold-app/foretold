@@ -34,8 +34,8 @@ let toChannel = channel => {
 
   Primary.Channel.make(
     ~id=channel##id,
-    ~name=channel##name,
-    ~description=channel##description,
+    ~name=channel##name |> E.J.toString,
+    ~description=channel##description |> E.J.O.toString,
     ~isArchived=channel##isArchived,
     ~isPublic=channel##isPublic,
     ~notebooksCount=Some(channel##notebooksCount),

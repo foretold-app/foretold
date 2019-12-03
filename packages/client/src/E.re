@@ -133,6 +133,12 @@ module J = {
       | Some(str) => Some(Js.Json.string(str))
       | _ => Some(Js.Json.string(""))
       };
+
+    let toString = (str: option('a)) =>
+      switch (str) {
+      | Some(str) => Some(str |> (Js.Json.decodeString ||> O.default("")))
+      | _ => None
+      };
   };
 };
 

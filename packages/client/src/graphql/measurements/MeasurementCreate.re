@@ -30,7 +30,6 @@ let mutate =
         "description": Some(description),
         "competitorType": competitorType,
         "relevantAt": None,
-        "createdAt": None,
         "taggedMeasurementId": None,
         "agentId": agentId == "" ? None : Some(agentId),
         "valueText": Some(valueText),

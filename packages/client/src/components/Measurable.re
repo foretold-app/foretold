@@ -32,14 +32,11 @@ let make = (~id: string) => {
              measurable.creator |> E.O.fmap((r: Types.agent) => r.id);
 
            let form =
-             userAgentId == Some(creatorId)
-             || Primary.Measurable.toStatus(measurable) !== `JUDGED
-               ? <MeasurementForm
-                   measurable
-                   measurableId=id
-                   isCreator={userAgentId == Some(creatorId)}
-                 />
-               : E.React2.null;
+             <MeasurementForm
+               measurable
+               measurableId=id
+               isCreator={userAgentId == Some(creatorId)}
+             />;
 
            <>
              <Div styles=[Styles.header]>

@@ -41,7 +41,7 @@ const finalComparisonMeasurement = graphql.GraphQLNonNull(
         value: FINAL_COMPARISON_MEASUREMENT.LAST_AGGREGATE_MEASUREMENT,
       },
     },
-  })
+  }),
 );
 
 module.exports = {

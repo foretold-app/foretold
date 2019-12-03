@@ -25,7 +25,6 @@ class UserUpdater {
     }
 
     try {
-
       try {
         const userInfo = await this.auth0.getUserInfo(user.auth0AccessToken);
         await this.users.updateUserInfoFromAuth0(user.id, userInfo);
@@ -33,7 +32,6 @@ class UserUpdater {
         log.trace('An access token is expired.', e.message);
         await this.setAuth0AccessTokenAsNull(user.id);
       }
-
     } catch (e) {
       log.trace('Saving user info is failed.', e.message);
       return false;

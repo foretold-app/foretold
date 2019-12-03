@@ -9,11 +9,11 @@ const ERR_1 = () => 'Either Auth0 JWT and Auth0 Access Token should be not '
  * @param {string} args.auth0jwt
  * @param {string} args.auth0accessToken
  * @param {string} args.authToken
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @return {Promise<boolean>}
  */
-async function authenticationInputValidation(root, args, context, info) {
+async function authenticationInputValidation(root, args, _context, _info) {
   const auth0jwt = _.get(args, 'auth0jwt', null);
   const auth0accessToken = _.get(args, 'auth0accessToken', null);
   const authToken = _.get(args, 'authToken', null);

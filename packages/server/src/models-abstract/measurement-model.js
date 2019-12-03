@@ -17,7 +17,7 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @param {Models.ObjectID} agentId
+   * @param {Models.AgentID} agentId
    * @param {string} [name]
    * @return {string}
    */
@@ -27,7 +27,7 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @protected
-   * @param {Models.ObjectID} agentId
+   * @param {Models.AgentID} agentId
    * @param {string} name
    * @return {string}
    */
@@ -55,7 +55,7 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @public
-   * @param {Models.ObjectID | null} measurableId
+   * @param {Models.MeasurableID | null} measurableId
    * @returns {Promise<Model>}
    */
   async getOutcome(measurableId) {
@@ -79,8 +79,8 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @public
-   * @param {Models.ObjectID | null} measurableId
-   * @param {Models.ObjectID | null} agentId
+   * @param {Models.MeasurableID | null} measurableId
+   * @param {Models.AgentID | null} agentId
    * @param {Date} relevantAt
    * @returns {Promise<Model>}
    */
@@ -103,8 +103,8 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @public
-   * @param {Models.ObjectID | null} measurableId
-   * @param {Models.ObjectID | null} agentId
+   * @param {Models.MeasurableID | null} measurableId
+   * @param {Models.AgentID | null} agentId
    * @returns {Promise<Model>}
    */
   async getLatestAggregate(measurableId, agentId) {
@@ -125,7 +125,7 @@ class MeasurementModel extends ModelPostgres {
   /**
    * @public
    * @param {Models.Measurable} measurable
-   * @param {Models.ObjectID | null} agentId
+   * @param {Models.AgentID | null} agentId
    * @return {Promise<Models.Model>}
    */
   async getLatest({ measurable, agentId } = {}) {

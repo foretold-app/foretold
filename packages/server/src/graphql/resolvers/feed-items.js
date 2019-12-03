@@ -18,8 +18,8 @@ const { HOME_CHANNEL_ID } = require('../../well-known');
  *
  * @param {*} _root
  * @param {object} args
- * @param {Models.ObjectID} args.channelId
- * @param {Models.ObjectID} args.agentId
+ * @param {Models.ChannelID} args.channelId
+ * @param {Models.AgentID} args.agentId
  * @param {string} args.after
  * @param {string} args.before
  * @param {number} args.last

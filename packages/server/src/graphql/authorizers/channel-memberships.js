@@ -125,10 +125,10 @@ function membershipBelongsToCurrentAgentRule(root, args, context, _info) {
  * @param {*} root
  * @param {object} args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {boolean}
  */
-function membershipHasAdminRoleRule(root, args, context, info) {
+function membershipHasAdminRoleRule(root, args, context, _info) {
   const role = _.get(args, 'input.role')
     || _.get(root, 'role')
     || _.get(context, 'channelMembershipsRole');

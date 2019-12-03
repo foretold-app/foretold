@@ -9,10 +9,10 @@ const log = logger.module('middlewares/channel-memberships');
  * @param {object | null} root
  * @param {object} args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {Promise<void>}
  */
-async function setContextChannelMemberships(root, args, context, info) {
+async function setContextChannelMemberships(root, args, context, _info) {
   const channelId = _.get(args, 'channelId', null)
     || _.get(args, 'input.channelId', null)
     || _.get(root, 'channelId', null)
@@ -40,10 +40,10 @@ async function setContextChannelMemberships(root, args, context, info) {
  * @param {object | null} root
  * @param {object} args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {Promise<void>}
  */
-async function setContextChannelMembershipsAdmins(root, args, context, info) {
+async function setContextChannelMembershipsAdmins(root, args, context, _info) {
   const channelId = _.get(args, 'channelId', null)
     || _.get(args, 'input.channelId', null)
     || _.get(root, 'channelId', null)

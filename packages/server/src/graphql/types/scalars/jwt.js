@@ -1,5 +1,6 @@
 const graphql = require('graphql');
 
+// eslint-disable-next-line no-useless-escape
 const JWT_PATTERN = '^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$';
 
 module.exports = new graphql.GraphQLScalarType({

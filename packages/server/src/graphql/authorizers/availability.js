@@ -8,10 +8,10 @@ const { rulesMeasurables } = require('./permissions');
 const { rulesBots } = require('./permissions');
 
 /**
- * @param {object} rules
+ * @param {object} _rules
  * @return {function(*=, *=, *=, *=): {allow: Array, deny: Array}}
  */
-function getList(rules) {
+function getList(_rules) {
   return async (root, args, context, info) => {
     const allow = [];
     const deny = [];

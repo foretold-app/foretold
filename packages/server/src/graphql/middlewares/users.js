@@ -11,10 +11,10 @@ const log = logger.module('middlewares/users');
  * @param {object} args
  * @param {object} args.id
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {Promise<void>}
  */
-async function setContextUser(root, args, context, info) {
+async function setContextUser(root, args, context, _info) {
   const id = _.get(args, 'id', null);
 
   log.trace('\x1b[36m ---> \x1b[0m Middleware (setContextUser)', { id });

@@ -1,3 +1,6 @@
+const bunyan = require('bunyan');
+const PrettyStream = require('bunyan-prettystream');
+
 const config = require('../../../config/log');
 
 const logger = process.env.NODE_ENV === 'development'
@@ -9,8 +12,6 @@ const logger = process.env.NODE_ENV === 'development'
   : require('bunyan-buddy')(config);
 
 if (process.env.NODE_ENV === 'development') {
-  const bunyan = require('bunyan');
-  const PrettyStream = require('bunyan-prettystream');
 
   const prettyStdOut = new PrettyStream();
   prettyStdOut.pipe(process.stdout);
@@ -40,4 +41,3 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 module.exports = logger;
-

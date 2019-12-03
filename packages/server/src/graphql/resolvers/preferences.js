@@ -27,13 +27,13 @@ async function getOne(root, args, context, info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.ObjectID} args.id
+ * @param {Models.PreferenceID} args.id
  * @param {object} args.input
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<Models.User>}
  */
-async function update(root, args, context, info) {
+async function update(root, args, _context, _info) {
   const id = _.get(args, 'id', null);
 
   const params = new Params({ id });

@@ -10,10 +10,10 @@ const log = logger.module('middlewares/bots');
  * @param {object} args
  * @param {object} args.id
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {Promise<void>}
  */
-async function setContextBot(root, args, context, info) {
+async function setContextBot(root, args, context, _info) {
   const id = _.get(args, 'id', null);
   log.trace('\x1b[36m ---> \x1b[0m Middleware (setContextBot)', { id });
   context.bot = id ? await new BotsData().getOne({ id }) : null;

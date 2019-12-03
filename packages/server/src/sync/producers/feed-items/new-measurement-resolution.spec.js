@@ -1,7 +1,7 @@
-const { NewNotebook } = require('./new-notebook');
+const { NewMeasurementResolution } = require('./new-measurement-resolution');
 
-describe('New Notebook Feed Item Producer', () => {
+describe('New Measurement Resolution Feed Item Producer', () => {
   it('returns an constructor', () => {
-    expect(NewNotebook).toBeInstanceOf(Function);
+    expect(NewMeasurementResolution).toBeInstanceOf(Function);
   });
 });

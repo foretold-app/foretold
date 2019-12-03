@@ -502,10 +502,10 @@ let make =
       ~defaultValueText="sdfsdf",
     ) => {
   let competitorTypeInitValue =
-    switch (measurable.state) {
-    | Some(`JUDGED) => "OBJECTIVE"
-    | _ => "COMPETITIVE"
-    };
+    Primary.CompetitorType.competitorTypeInitValue(
+      ~isOwner=isCreator,
+      ~state=measurable.state,
+    );
 
   let (floatCdf, setFloatPdf) = React.useState(() => FloatCdf.empty);
   let (percentage, setPercentage) = React.useState(() => 50.);

@@ -652,6 +652,14 @@ module CompetitorType = {
     };
   };
 
+  let competitorTypeInitValue =
+      (~isOwner: bool, ~state: option(Types.measurableState)) =>
+    switch (isOwner, state) {
+    | (true, Some(`JUDGED)) => "OBJECTIVE"
+    | (false, Some(`JUDGED)) => "COMMENT"
+    | _ => "COMPETITIVE"
+    };
+
   let toSelection = (t: t) =>
     switch (t) {
     | `COMPETITIVE =>

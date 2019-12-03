@@ -49,7 +49,7 @@ class MeasurementModel extends ModelPostgres {
   _getOrder() {
     return [
       ['relevantAt', 'DESC'],
-      ['createdAt', 'ASC'],
+      ['createdAt', 'DESC'],
     ];
   }
 

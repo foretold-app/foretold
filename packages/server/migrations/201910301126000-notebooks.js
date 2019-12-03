@@ -1,7 +1,7 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
 
       await queryInterface.createTable('Notebooks', {
         id: {
@@ -48,26 +48,26 @@ module.exports = {
         unique: true,
       });
 
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error('Migration Up Error', e);
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
   },
 
   down: async function (queryInterface) {
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
       await queryInterface.removeIndex(
         'Notebooks',
         'Notebooks_name_ownerId_unique',
       );
       await queryInterface.dropTable('Notebooks');
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error('Migration Down Error', e);
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
   }

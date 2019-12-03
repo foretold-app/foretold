@@ -1,16 +1,17 @@
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../src/enums');
+
 module.exports = {
-  up: async function (queryInterface, Sequelize) {
+  up: async function (queryInterface) {
     try {
       await queryInterface.sequelize.query('BEGIN');
 
-      await queryInterface.addColumn('GlobalSettings', 'botAgentId', {
-        type: Sequelize.UUID,
-        allowNull: true,
-        references: {
-          model: 'Agents',
-          key: 'id',
-        },
-      });
+      const { COMPETITIVE, OBJECTIVE } = MEASUREMENT_COMPETITOR_TYPE;
+
+      await queryInterface.sequelize.query(
+        'UPDATE "Measurements" SET "relevantAt" = "createdAt" ' +
+        `WHERE "competitorType" = '${COMPETITIVE}' ` +
+        `OR "competitorType" = '${OBJECTIVE}'`,
+      );
 
       await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
@@ -23,7 +24,9 @@ module.exports = {
   down: async function (queryInterface) {
     try {
       await queryInterface.sequelize.query('BEGIN');
-      await queryInterface.removeColumn('GlobalSettings', 'botAgentId');
+
+      // No Way Back
+
       await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error('Migration Down Error', e);

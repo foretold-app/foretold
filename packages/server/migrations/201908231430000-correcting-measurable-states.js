@@ -18,24 +18,24 @@ const sql = (state) => `
 module.exports = {
   up: async function (queryInterface) {
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
       await queryInterface.sequelize.query(sql('CLOSED_AS_UNRESOLVED'));
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error('Migration up error', e);
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
   },
 
   down: async function (queryInterface) {
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
       await queryInterface.sequelize.query(sql('UNRESOLVED'));
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error('Migration down error', e);
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
   }

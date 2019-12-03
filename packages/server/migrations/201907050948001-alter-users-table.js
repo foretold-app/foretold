@@ -1,7 +1,7 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
 
       // Columns
       await queryInterface.addColumn('Users', 'email', {
@@ -24,17 +24,17 @@ module.exports = {
         },
       });
 
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error(e);
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
   },
 
   down: async function (queryInterface) {
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
 
       // Columns
       await queryInterface.removeColumn('Users', 'email');
@@ -43,10 +43,10 @@ module.exports = {
       // Indexes
       await queryInterface.removeIndex('Users', 'Users_email_unique');
 
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error(e);
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
   }

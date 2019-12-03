@@ -3,7 +3,7 @@ const _ = require('lodash');
 module.exports = {
   up: async function (queryInterface) {
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
 
       // Get bunch of duplicated names of users
       const [bunch] = await queryInterface.sequelize.query(
@@ -31,10 +31,10 @@ module.exports = {
         }
       }
 
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error(e);
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
   },

@@ -1,7 +1,7 @@
 module.exports = {
   up: async function (queryInterface) {
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
       await queryInterface.renameColumn(
         'Measurables',
         'descriptionEntity',
@@ -22,17 +22,17 @@ module.exports = {
         'description',
         'labelCustom',
       );
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error(e);
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
   },
 
   down: async function (queryInterface) {
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
       await queryInterface.renameColumn(
         'Measurables',
         'labelSubject',
@@ -53,10 +53,10 @@ module.exports = {
         'labelCustom',
         'description',
       );
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error(e);
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
   }

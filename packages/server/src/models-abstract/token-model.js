@@ -15,7 +15,7 @@ class TokenModel extends ModelPostgres {
   }
 
   /**
-   * @param {Models.ObjectID} [agentId]
+   * @param {Models.AgentID} [agentId]
    * @param {string} [token]
    * @param {string} [type]
    * @param {number} [usageCount]

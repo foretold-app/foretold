@@ -26,10 +26,10 @@ const log = logger.module('resolvers/measurements');
  * @param {object} args
  * @param {number} args.last
  * @param {number} args.first
- * @param {Models.ObjectID} args.measurableId
- * @param {Models.ObjectID} args.agentId
- * @param {Models.ObjectID} args.notTaggedByAgent
- * @param {Models.ObjectID} args.channelId
+ * @param {Models.MeasurableID} args.measurableId
+ * @param {Models.AgentID} args.agentId
+ * @param {Models.AgentID} args.notTaggedByAgent
+ * @param {Models.ChannelID} args.channelId
  *
  * @param {object} args.findInDateRange
  * @param {string} args.findInDateRange.startDate
@@ -39,10 +39,10 @@ const log = logger.module('resolvers/measurements');
  * @param {string[]} args.competitorType
  * @param {string[]} args.measurableState
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*>}
  */
-async function all(root, args, context, info) {
+async function all(root, args, context, _info) {
   const measurableState = _.get(args, 'measurableState', null);
   const channelId = _.get(args, 'channelId', null);
 
@@ -70,10 +70,10 @@ async function all(root, args, context, info) {
  * @param {number} args.first
  * @param {string[]} args.competitorType
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*>}
  */
-async function measurableMeasurement(root, args, context, info) {
+async function measurableMeasurement(root, args, context, _info) {
   const measurableId = _.get(root, 'measurableId', null);
   const competitorType = _.get(args, 'competitorType', null);
 
@@ -96,13 +96,13 @@ async function measurableMeasurement(root, args, context, info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.ObjectID} args.id
+ * @param {Models.MeasurementID} args.id
  * @param {string[]} args.competitorType
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function one(root, args, context, info) {
+async function one(root, args, context, _info) {
   const id = _.get(args, 'id', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
@@ -121,10 +121,10 @@ async function one(root, args, context, info) {
  * @param {object} args
  * @param {object} args.input
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function create(root, args, context, info) {
+async function create(root, args, context, _info) {
   const agentId = _.get(args, 'input.agentId', null)
     || _.get(context, 'agent.id', null);
 
@@ -137,10 +137,10 @@ async function create(root, args, context, info) {
  * @param {*} root
  * @param {object} args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function latest(root, args, context, info) {
+async function latest(root, args, context, _info) {
   const measurable = root;
   const agentId = _.get(args, 'input.agentId', null)
     || _.get(context, 'agent.id', null);
@@ -158,12 +158,12 @@ async function latest(root, args, context, info) {
  * I feel something strange doing it.
  * The time will show.
  * @param {*} root
- * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function scoreSet(root, args, context, info) {
+async function scoreSet(root, _args, _context, _info) {
   return root;
 }
 
@@ -172,13 +172,13 @@ async function scoreSet(root, args, context, info) {
  * Do not return "root".
  * @todo: rename to "predictionByRootId"
  * @param {object} root
- * @param {Models.ObjectID} root.id
- * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Models.MeasurementID} root.id
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function prediction(root, args, context, info) {
+async function prediction(root, _args, _context, _info) {
   const id = _.get(root, 'id', null);
   const params = new Params({ id });
   return new MeasurementsData().getOne(params);
@@ -187,20 +187,20 @@ async function prediction(root, args, context, info) {
 /**
  * @todo: rename to "outcomeByRootMeasurableId"
  * @param {object} root
- * @param {Models.ObjectID} root.measurableId
- * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Models.MeasurableID} root.measurableId
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function outcome(root, args, context, info) {
+async function outcome(root, _args, _context, _info) {
   const measurableId = _.get(root, 'measurableId', null);
   return new MeasurementsData().getOutcome(measurableId);
 }
 
 /**
  * @param {object} root
- * @param {Models.ObjectID} root.id
+ * @param {Models.MeasurementID} root.id
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info
@@ -213,14 +213,14 @@ async function outcomeByRootId(root, _args, _context, _info) {
 
 /**
  * @param {object} root
- * @param {Models.ObjectID} root.measurableId
+ * @param {Models.MeasurableID} root.measurableId
  * @param {Date} root.createdAt
  * @param {object} args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function previousAggregate(root, args, context, info) {
+async function previousAggregate(root, args, context, _info) {
   const measurableId = _.get(root, 'measurableId', null);
   const createdAt = _.get(root, 'createdAt', null);
   const agentId = _.get(context, 'botAgentId', null);
@@ -234,7 +234,7 @@ async function previousAggregate(root, args, context, info) {
 
 /**
  * @param {object} root
- * @param {Models.ObjectID} root.id
+ * @param {Models.MeasurementID} root.id
  * @param {object} _args
  * @param {Schema.Context} context
  * @param {object} _info
@@ -360,11 +360,11 @@ async function nonMarketLogScore(root, args, context, info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*>}
  */
-async function truncateCdf(root, args, context, info) {
+async function truncateCdf(root, args, _context, _info) {
   if (!_.get(root, 'floatCdf')) return null;
 
   const truncate = _.get(args, 'truncate');
@@ -389,7 +389,7 @@ async function truncateCdf(root, args, context, info) {
 
 /**
  * @param {object} root
- * @param {Models.ObjectID} root.id
+ * @param {Models.MeasurementID} root.id
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info
@@ -402,7 +402,7 @@ async function measurementCountByAgentId(root, _args, _context, _info) {
 
 /**
  * @param {object} root
- * @param {Models.ObjectID} root.id
+ * @param {Models.MeasurementID} root.id
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info
@@ -426,7 +426,7 @@ async function count(_root, _args, _context, _info) {
 
 /**
  * @param {object} root
- * @param {Models.ObjectID} root.id
+ * @param {Models.MeasurementID} root.id
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info

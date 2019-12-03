@@ -6,7 +6,7 @@ const assert = require('assert');
  */
 
 /**
- * @param {Models.ObjectID} agentId
+ * @param {Models.AgentID} agentId
  * @return {Layers.withinJoinedChannels}
  */
 module.exports.withinJoinedChannelsByChannelId = (agentId) => {
@@ -15,7 +15,7 @@ module.exports.withinJoinedChannelsByChannelId = (agentId) => {
 };
 
 /**
- * @param {Models.ObjectID} agentId
+ * @param {Models.AgentID} agentId
  * @return {Layers.withinJoinedChannels}
  */
 module.exports.withinJoinedChannelsById = (agentId) => {
@@ -24,7 +24,7 @@ module.exports.withinJoinedChannelsById = (agentId) => {
 };
 
 /**
- * @param {Models.ObjectID} agentId
+ * @param {Models.AgentID} agentId
  * @return {Layers.withinPublicAndJoinedChannels}
  */
 module.exports.withinPublicAndJoinedChannelsByChannelId = (agentId) => {
@@ -33,7 +33,7 @@ module.exports.withinPublicAndJoinedChannelsByChannelId = (agentId) => {
 };
 
 /**
- * @param {Models.ObjectID} agentId
+ * @param {Models.AgentID} agentId
  * @return {Layers.withinPublicAndJoinedChannels}
  */
 module.exports.withinPublicAndJoinedChannelsById = (agentId) => {

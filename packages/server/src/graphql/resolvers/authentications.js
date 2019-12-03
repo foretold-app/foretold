@@ -6,9 +6,9 @@ const { AuthenticationPrimary } = require('../../lib/authentication');
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {Models.ObjectID} args.auth0jwt
- * @param {Models.ObjectID} args.auth0accessToken
- * @param {Models.ObjectID} args.authToken
+ * @param {string} args.auth0jwt
+ * @param {string} args.auth0accessToken
+ * @param {string} args.authToken
  * @param {Schema.Context} context
  * @param {object} info
  * @returns {Promise<{jwt: string}>}
@@ -27,8 +27,8 @@ async function exchangeToken(root, args, context, info) {
 /**
  * @param {object | null} _root
  * @param {object} args
- * @param {Models.ObjectID} args.auth0jwt
- * @param {Models.ObjectID} args.auth0accessToken
+ * @param {string} args.auth0jwt
+ * @param {string} args.auth0accessToken
  * @param {Schema.Context} _context
  * @param {object} _info
  * @returns {Promise<{jwt: string}>}
@@ -48,7 +48,7 @@ async function _exchangeAuthComToken(_root, args, _context, _info) {
 /**
  * @param {object | null} _root
  * @param {object} args
- * @param {Models.ObjectID} args.authToken
+ * @param {string} args.authToken
  * @param {Schema.Context} _context
  * @param {object} _info
  * @returns {Promise<{jwt: string}>}
@@ -61,7 +61,7 @@ async function _exchangeAuthToken(_root, args, _context, _info) {
 
 /**
  * @param {object | null} root
- * @param {Models.ObjectID} root.agentId
+ * @param {Models.AgentID} root.agentId
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info

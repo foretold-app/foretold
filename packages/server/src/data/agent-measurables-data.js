@@ -286,7 +286,7 @@ class AgentMeasurablesData extends DataBase {
 
   /**
    * Should return sorted measurements by the createdAt field.
-   * @param {Models.ObjectID} measurableId
+   * @param {Models.MeasurableID} measurableId
    * @returns {Promise<*>}
    */
   async _getMeasurements(measurableId) {
@@ -296,7 +296,7 @@ class AgentMeasurablesData extends DataBase {
   }
 
   /**
-   * @param {Models.ObjectID} measurableId
+   * @param {Models.MeasurableID} measurableId
    * @returns {Promise<*>}
    */
   async _getMeasurable(measurableId) {

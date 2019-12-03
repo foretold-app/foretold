@@ -32,7 +32,7 @@ async function create(_root, args, context, _info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.ObjectID} args.id
+ * @param {Models.NotebookID} args.id
  * @param {object} args.input
  * @param {Schema.Context} _context
  * @param {object} _info

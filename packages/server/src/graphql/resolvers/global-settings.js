@@ -32,8 +32,8 @@ async function one(_root, args, context, _info) {
 /**
  * @param {*} _root
  * @param {object} args
- * @param {Models.ObjectID} args.name
- * @param {Models.ObjectID} args.input
+ * @param {string} args.name
+ * @param {Object} args.input
  * @param {object} args.input
  * @param {Schema.Context} _context
  * @param {object} _info

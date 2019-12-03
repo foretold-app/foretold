@@ -4,7 +4,7 @@ const { EmailEnvelopeTemplate } = require('../src/models/classes/templates');
 module.exports = {
   up: async function (queryInterface, Sequelize) {
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
 
       const envelopeTemplate = new EmailEnvelopeTemplate({
         subject: 'You are added to the Foretold community',
@@ -22,10 +22,10 @@ module.exports = {
         updatedAt: new Date(),
       }]);
 
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error('Migration Up Error', e);
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
   },
@@ -33,16 +33,16 @@ module.exports = {
   down: async function (queryInterface) {
 
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
 
       await queryInterface.bulkDelete('Templates', {
         name: TEMPLATE_NAME.MEMBER_ADDED_TO_COMMUNITY,
       });
 
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error('Migration Down Error', e);
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
   }

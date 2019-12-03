@@ -1,7 +1,7 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
 
       await queryInterface.createTable('Tokens', {
         id: {
@@ -37,9 +37,9 @@ module.exports = {
         },
       });
 
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       console.error(e);
       throw e;
     }
@@ -47,13 +47,13 @@ module.exports = {
 
   down: async function (queryInterface) {
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
 
       await queryInterface.dropTable('Tokens');
 
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       console.error(e);
       throw e;
     }

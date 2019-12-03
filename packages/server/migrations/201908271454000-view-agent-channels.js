@@ -1,7 +1,7 @@
 module.exports = {
   up: async function (queryInterface) {
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
 
       await queryInterface.sequelize.query(`
       CREATE OR REPLACE VIEW "AgentChannels" AS
@@ -18,7 +18,7 @@ module.exports = {
                "Measurables"."id" = "Measurements"."measurableId"
              WHERE "Measurables"."channelId" = "ChannelMemberships"."channelId"
                AND "Measurements"."agentId" = "ChannelMemberships"."agentId"
-               AND "Measurements"."competitorType" IN 
+               AND "Measurements"."competitorType" IN
                  ('OBJECTIVE', 'COMPETITIVE')
           ) AS "numberOfPredictions",
           (
@@ -28,28 +28,28 @@ module.exports = {
                "Measurables"."id" = "Measurements"."measurableId"
              WHERE "Measurables"."channelId" = "ChannelMemberships"."channelId"
                AND "Measurements"."agentId" = "ChannelMemberships"."agentId"
-               AND "Measurements"."competitorType" IN 
+               AND "Measurements"."competitorType" IN
                  ('OBJECTIVE', 'COMPETITIVE')
                AND "Measurables"."state" = 'JUDGED'
           ) AS "numberOfQuestionsScored"
           FROM "ChannelMemberships"
       `);
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error('Migration Up Error', e);
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
   },
 
   down: async function (queryInterface) {
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
       await queryInterface.sequelize.query('DROP VIEW "AgentChannels"');
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error('Migration Down Error', e);
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
   }

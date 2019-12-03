@@ -1,7 +1,7 @@
 module.exports = {
   up: async function (queryInterface, Sequelize) {
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
 
       var ID_TYPE = Sequelize.UUID;
 
@@ -125,24 +125,24 @@ module.exports = {
           type: Sequelize.DATE
         },
       });
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error(e);
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
   },
 
   down: async function (queryInterface) {
     try {
-      await queryInterface.sequelize.query(`BEGIN`);
+      await queryInterface.sequelize.query('BEGIN');
       await queryInterface.dropTable('Measurements');
       await queryInterface.dropTable('Measureables');
       await queryInterface.dropTable('Users');
-      await queryInterface.sequelize.query(`COMMIT`);
+      await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error(e);
-      await queryInterface.sequelize.query(`ROLLBACK`);
+      await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
   }

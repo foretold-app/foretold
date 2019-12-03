@@ -11,12 +11,12 @@ const { Query } = require('../../data/classes');
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.ObjectID} args.id
+ * @param {Models.SeriesID} args.id
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function one(root, args, context, info) {
+async function one(root, args, context, _info) {
   const id = _.get(args, 'id', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
@@ -33,12 +33,12 @@ async function one(root, args, context, info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.ObjectID} args.channelId
+ * @param {Models.ChannelID} args.channelId
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function all(root, args, context, info) {
+async function all(root, args, context, _info) {
   const channelId = _.get(args, 'channelId', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
@@ -58,10 +58,10 @@ async function all(root, args, context, info) {
  * @param {object} args
  * @param {object} args.input
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function create(root, args, context, info) {
+async function create(root, args, context, _info) {
   const agentId = _.get(context, 'agent.id', null);
   const datas = {
     ...args.input,

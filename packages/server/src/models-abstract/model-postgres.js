@@ -47,7 +47,7 @@ class ModelPostgres extends Model {
   /**
    * @protected
    * @todo: see this._publicAndJoinedChannels()
-   * @param {Models.ObjectID} [agentId]
+   * @param {Models.AgentID} [agentId]
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
@@ -57,7 +57,7 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @param {Models.ObjectID} [agentId]
+   * @param {Models.AgentID} [agentId]
    * @param {string} [name]
    * @return {string}
    */
@@ -101,7 +101,7 @@ class ModelPostgres extends Model {
   /**
    * @todo: Rename to "withinJoinedChannels" + "Literal"?
    * @protected
-   * @param {Models.ObjectID} [agentId]
+   * @param {Models.AgentID} [agentId]
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
@@ -112,7 +112,7 @@ class ModelPostgres extends Model {
   /**
    * @todo: Rename to "withinJoinedChannels"?
    * @protected
-   * @param {Models.ObjectID} [agentId]
+   * @param {Models.AgentID} [agentId]
    * @param {string} [name]
    * @return {string}
    */
@@ -132,7 +132,7 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @param {Models.ObjectID} [agentId]
+   * @param {Models.AgentID} [agentId]
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
@@ -144,7 +144,7 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @param {Models.ObjectID} [agentId]
+   * @param {Models.AgentID} [agentId]
    * @param {string} [name]
    * @return {string}
    */
@@ -186,7 +186,7 @@ class ModelPostgres extends Model {
   /**
    * @protected
    * @param {string[]} statesIn
-   * @param {Models.ObjectID} channelIdIn
+   * @param {Models.ChannelID} channelIdIn
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
@@ -199,7 +199,7 @@ class ModelPostgres extends Model {
   /**
    * @protected
    * @param {string[] | null} statesIn
-   * @param {Models.ObjectID | null} channelIdIn
+   * @param {Models.ChannelID | null} channelIdIn
    * @param {string} [name]
    * @return {string}
    */
@@ -342,7 +342,7 @@ class ModelPostgres extends Model {
    * Extend this method in child classes.
    * @param {object} [where]
    * @param {Layers.AbstractModelsLayer.filter} [filter]
-   * @param {Models.ObjectID} [filter.userId]
+   * @param {Models.AgentID} [filter.userId]
    */
   applyFilter(where = {}, filter = {}) {
     if (!where) where = {};

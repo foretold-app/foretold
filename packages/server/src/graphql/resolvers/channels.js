@@ -31,7 +31,7 @@ async function channelCreator(channel) {
  * @param {object} args
  * @param {number} args.offset
  * @param {number} args.limit
- * @param {Models.ObjectID} args.channelMemberId
+ * @param {Models.AgentID} args.channelMemberId
  * @param {string[]} args.isArchived
  * @param {Schema.Context} context
  * @param {object} _info
@@ -39,8 +39,8 @@ async function channelCreator(channel) {
  */
 async function all(root, args, context, _info) {
   const agentId = _.get(context, 'agent.id', null);
-  const channelMemberId =
-    _.get(args, 'channelMemberId', null) || _.get(root, 'id', null);
+  const channelMemberId = _.get(args, 'channelMemberId', null)
+    || _.get(root, 'id', null);
   const isArchived = _.get(args, 'isArchived', null);
 
   const withinJoinedChannels = _.isEmpty(channelMemberId)
@@ -59,7 +59,7 @@ async function all(root, args, context, _info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {Models.ObjectID} args.id
+ * @param {Models.ChannelID} args.id
  * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<Models.Channel>}
@@ -78,13 +78,13 @@ async function one(root, args, context, _info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {Models.ObjectID} args.id
+ * @param {Models.ChannelID} args.id
  * @param {object} args.input
- * @param {Schema.Context} context
+ * @param {Schema.Context} _context
  * @param {object} _info
  * @returns {Promise<Models.Channel>}
  */
-async function update(root, args, context, _info) {
+async function update(root, args, _context, _info) {
   const id = _.get(args, 'id', null);
 
   const params = new Params({ id });

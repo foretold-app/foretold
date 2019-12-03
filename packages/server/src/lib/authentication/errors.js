@@ -1,6 +1,6 @@
+/* eslint-disable max-classes-per-file */
 const { AuthenticationError } = require('apollo-server');
 
-/* eslint-disable max-classes-per-file */
 
 class NoUserIdError extends AuthenticationError {
   constructor() {

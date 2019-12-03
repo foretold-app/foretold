@@ -17,7 +17,7 @@ class AgentModel extends ModelPostgres {
   /**
    * @todo: see this._publicAndJoinedChannels()
    * @protected
-   * @param {Models.ObjectID} channelId
+   * @param {Models.ChannelID} channelId
    * @return {Sequelize.literal}
    */
   _agentsIdsLiteral(channelId) {
@@ -27,7 +27,7 @@ class AgentModel extends ModelPostgres {
   /**
    * @todo: Use ORM opportunities to join tables.
    * @protected
-   * @param {Models.ObjectID} channelId
+   * @param {Models.ChannelID} channelId
    * @return {string}
    */
   _agentsIds(channelId) {

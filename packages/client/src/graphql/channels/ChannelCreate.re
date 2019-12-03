@@ -23,8 +23,8 @@ let mutate =
   let m =
     Query.make(
       ~input={
-        "name": name,
-        "description": description,
+        "name": name |> E.J.fromString,
+        "description": description |> E.J.O.fromString,
         "isPublic": isPublic,
         "isArchived": isArchived,
       },

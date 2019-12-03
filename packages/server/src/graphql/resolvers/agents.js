@@ -8,7 +8,7 @@ const { Filter } = require('../../data/classes');
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {Models.ObjectID} args.id
+ * @param {Models.AgentID} args.id
  * @param {Schema.Context} _context
  * @param {object} _info
  * @returns {Promise<Models.Agent>}

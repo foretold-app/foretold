@@ -9,8 +9,8 @@ const { Options } = require('../../data/classes');
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.ObjectID} args.channelId
- * @param {Models.ObjectID} args.agentId
+ * @param {Models.ChannelID} args.channelId
+ * @param {Models.AgentID} args.agentId
  * @param {number} args.minNumberOfPredictions
  * @param {number} args.minNumberOfQuestionsScored
  * @param {string} args.after
@@ -26,8 +26,11 @@ async function all(root, args, context, _info) {
   const agentId = _.get(args, 'agentId', null);
   const currentAgentId = _.get(context, 'agent.id', null);
   const minNumberOfPredictions = _.get(args, 'minNumberOfPredictions', null);
-  const minNumberOfQuestionsScored =
-    _.get(args, 'minNumberOfQuestionsScored', null);
+  const minNumberOfQuestionsScored = _.get(
+    args,
+    'minNumberOfQuestionsScored',
+    null,
+  );
 
   const filter = new Filter({
     channelId,

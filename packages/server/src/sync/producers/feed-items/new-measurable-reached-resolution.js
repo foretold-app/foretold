@@ -2,6 +2,9 @@ const { NewMeasurable } = require('./new-measurable');
 const { Producer } = require('../producer');
 const { MEASURABLE_STATE } = require('../../../enums');
 
+/**
+ * @todo: To rename somehow like "Measurable Reached Resolution".
+ */
 class NewMeasurableReachedResolution extends NewMeasurable {
   /**
    * @param {Models.Measurable} measurable

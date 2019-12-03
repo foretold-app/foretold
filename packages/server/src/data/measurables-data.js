@@ -68,7 +68,7 @@ class MeasurablesData extends DataBase {
   }
 
   /**
-   * @param {Models.ObjectID} channelId
+   * @param {Models.ChannelID} channelId
    * @return {Promise<*>}
    */
   async getOpenedCount(channelId) {

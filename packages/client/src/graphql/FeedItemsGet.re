@@ -132,7 +132,7 @@ module Query = [%graphql
               }
               channel @bsRecord {
                 id
-                name
+                name @bsDecoder(fn: "E.J.toString")
                 isArchived
                 isPublic
               }

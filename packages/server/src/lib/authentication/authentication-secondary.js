@@ -35,11 +35,11 @@ class AuthenticationSecondary {
    */
   async authenticate(token = '') {
     if (this.tokens.validate(token)) {
-      return await this._byToken(token);
+      return this._byToken(token);
     }
 
     if (this.Jwt.validate(token)) {
-      return await this._byJwt(token);
+      return this._byJwt(token);
     }
 
     throw new TokenIsInvalidError();
@@ -58,7 +58,7 @@ class AuthenticationSecondary {
   async _byJwt(token) {
     const decoded = this.Jwt.decodeJwtToken(token);
     const agentId = decoded.sub;
-    return await this._getContext(agentId);
+    return this._getContext(agentId);
   }
 
   /**
@@ -73,12 +73,12 @@ class AuthenticationSecondary {
    */
   async _byToken(token) {
     const agentId = await this.tokens.getAgentId(token);
-    return await this._getContext(agentId);
+    return this._getContext(agentId);
   }
 
   /**
    * @protected
-   * @param {Models.ObjectID} agentId
+   * @param {Models.AgentID} agentId
    * @return {Promise<{
    *  agent: Models.Agent,
    *  creator: Models.Creator,
@@ -100,9 +100,10 @@ class AuthenticationSecondary {
     const user = await agent.getUser();
     const creator = bot || user;
 
-    return { agent, bot, user, creator };
+    return {
+      agent, bot, user, creator,
+    };
   }
-
 }
 
 module.exports = {

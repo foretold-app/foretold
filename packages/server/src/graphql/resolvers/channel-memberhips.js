@@ -9,8 +9,8 @@ const { Filter } = require('../../data/classes');
 /**
  * @param {*} _root
  * @param {{input: {
- * channelId: Models.ObjectID,
- * agentId: Models.ObjectID,
+ * channelId: Models.ChannelID,
+ * agentId: Models.AgentID,
  * role: string,
  * }}} args
  * @param {*} context
@@ -34,8 +34,8 @@ async function create(_root, args, context) {
 /**
  * @param {*} _root
  * @param {{input: {
- * channelId: Models.ObjectID,
- * agentId: Models.ObjectID,
+ * channelId: Models.ChannelID,
+ * agentId: Models.AgentID,
  * role: string,
  * }}} args
  * @returns {Promise<Models.ChannelMemberships>}
@@ -56,8 +56,8 @@ async function update(_root, args) {
 /**
  * @param _root
  * @param {{input: {
- * channelId: Models.ObjectID,
- * agentId: Models.ObjectID,
+ * channelId: Models.ChannelID,
+ * agentId: Models.AgentID,
  * }}} args
  * @returns {Promise<Models.ChannelMemberships | null>}
  */
@@ -109,7 +109,6 @@ async function allByChannelId(root, _args, context, _info) {
 /**
  * @param {object | null} _root
  * @param {object} args
- * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<Models.ChannelMemberships>}
@@ -127,7 +126,6 @@ async function join(_root, args, context, _info) {
 /**
  * @param {object | null} _root
  * @param {object} args
- * @param {Models.ObjectID} args.id
  * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<Models.ChannelMemberships>}

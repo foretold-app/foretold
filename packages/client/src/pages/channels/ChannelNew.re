@@ -16,7 +16,7 @@ let make = () => {
           ChannelCreate.mutate(
             mutation,
             values.state.values.name,
-            Some(values.state.values.description),
+            values.state.values.description,
             values.state.values.isPublic == "TRUE" ? true : false,
             values.state.values.isArchived == "TRUE" ? true : false,
           ),

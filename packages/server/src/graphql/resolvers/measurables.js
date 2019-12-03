@@ -18,10 +18,10 @@ const { structures } = require('../../data/classes');
  * @todo: update input of getAll
  * @param {*} root
  * @param {object} args
- * @param {Models.ObjectID} args.creatorId
- * @param {Models.ObjectID} args.seriesId
- * @param {Models.ObjectID} args.channelId
- * @param {Models.ObjectID} args.measuredByAgentId
+ * @param {Models.AgentID} args.creatorId
+ * @param {Models.SeriesID} args.seriesId
+ * @param {Models.ChannelID} args.channelId
+ * @param {Models.AgentID} args.measuredByAgentId
  * @param {string[]} args.states
  * @param {string[]} args.isArchived
  * @param {string} args.after
@@ -29,15 +29,15 @@ const { structures } = require('../../data/classes');
  * @param {number} args.last
  * @param {number} args.first
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*>}
  */
-async function all(root, args, context, info) {
+async function all(root, args, context, _info) {
   const channelId = _.get(args, 'channelId', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
-  const withinJoinedChannels
-    = _.isEmpty(channelId) && !_.isEmpty(currentAgentId)
+  const withinJoinedChannels =
+    (_.isEmpty(channelId) && !_.isEmpty(currentAgentId))
     ? structures.withinJoinedChannelsByChannelId(currentAgentId) : null;
 
   const filter = new Filter({
@@ -65,10 +65,10 @@ async function all(root, args, context, info) {
  * @param {*} root
  * @param {object} args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function one(root, args, context, info) {
+async function one(root, args, context, _info) {
   const id = _.get(args, 'id', null)
     || _.get(root, 'measurableId', null);
   const currentAgentId = _.get(context, 'agent.id', null);
@@ -88,10 +88,10 @@ async function one(root, args, context, info) {
  * @param {object} args
  * @param {object} args.input
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function create(root, args, context, info) {
+async function create(root, args, context, _info) {
   const agentId = _.get(context, 'agent.id', null);
   const input = _.get(args, 'input', null);
   const data = {
@@ -104,12 +104,12 @@ async function create(root, args, context, info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.ObjectID} args.id
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Models.MeasurableID} args.id
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function archive(root, args, context, info) {
+async function archive(root, args, _context, _info) {
   const id = _.get(args, 'id', null);
   return new MeasurablesData().archive(id);
 }
@@ -117,12 +117,12 @@ async function archive(root, args, context, info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.ObjectID} args.id
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Models.MeasurableID} args.id
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function unarchive(root, args, context, info) {
+async function unarchive(root, args, _context, _info) {
   const id = _.get(args, 'id', null);
   return new MeasurablesData().unArchive(id);
 }
@@ -130,13 +130,13 @@ async function unarchive(root, args, context, info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.ObjectID} args.id
+ * @param {Models.MeasurableID} args.id
  * @param {object} args.input
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function update(root, args, context, info) {
+async function update(root, args, _context, _info) {
   const id = _.get(args, 'id', null);
   const input = _.get(args, 'input') || {};
   return new MeasurablesData().updateOne({ id }, input);
@@ -144,7 +144,7 @@ async function update(root, args, context, info) {
 
 /**
  * @param {*} root
- * @param {Models.ObjectID} root.id
+ * @param {Models.MeasurableID} root.id
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info

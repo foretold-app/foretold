@@ -31,8 +31,8 @@ module Query = [%graphql
            description
            channel @bsRecord {
              id
-             name
-             description
+             name @bsDecoder(fn: "E.J.toString")
+             description @bsDecoder(fn: "E.J.O.toString")
            }
            measurableCount
            creator @bsRecord {

@@ -53,7 +53,7 @@ let make = (~channelId: string) => {
             mutation,
             channelId,
             values.state.values.name,
-            Some(values.state.values.description),
+            values.state.values.description,
             values.state.values.isPublic |> E.Bool.fromString,
             values.state.values.isArchived |> E.Bool.fromString,
           ),

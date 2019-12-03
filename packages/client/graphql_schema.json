@@ -408,16 +408,6 @@
                     }
                   },
                   "defaultValue": null
-                },
-                {
-                  "name": "resultOrLatestMeasurementForAgentId",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
                 }
               ],
               "type": {
@@ -3895,7 +3885,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "String3to255",
                   "ofType": null
                 }
               },
@@ -3908,7 +3898,7 @@
               "args": [],
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "String3to4096",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -4081,6 +4071,26 @@
           ],
           "inputFields": null,
           "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "String3to255",
+          "description": "A special custom scalar type for a String3to255",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "String3to4096",
+          "description": "A special custom scalar type for a String3to4096",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -5654,7 +5664,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String3to16384",
+                  "name": "String3to131072",
                   "ofType": null
                 }
               },
@@ -5701,16 +5711,6 @@
         },
         {
           "kind": "SCALAR",
-          "name": "String3to255",
-          "description": "A special custom scalar type for a String3to255",
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "SCALAR",
           "name": "AgentId",
           "description": "A special custom scalar type for a AgentId",
           "fields": null,
@@ -5731,8 +5731,8 @@
         },
         {
           "kind": "SCALAR",
-          "name": "String3to16384",
-          "description": "A special custom scalar type for a String3to16384",
+          "name": "String3to131072",
+          "description": "A special custom scalar type for a String3to131072",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -8031,7 +8031,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "String3to255",
                   "ofType": null
                 }
               },
@@ -8070,7 +8070,7 @@
               "description": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "String3to4096",
                 "ofType": null
               },
               "defaultValue": null
@@ -8305,7 +8305,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String3to16384",
+                  "name": "String3to131072",
                   "ofType": null
                 }
               },
@@ -8344,7 +8344,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String3to16384",
+                  "name": "String3to131072",
                   "ofType": null
                 }
               },

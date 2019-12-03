@@ -4,7 +4,6 @@ const { sendNotificationToSlack } = require('../../lib/slack');
 const { clientUrl } = require('../../lib/urls');
 
 class Notifications {
-
   /**
    * @public
    * @param {Models.Measurement} measurement
@@ -184,8 +183,8 @@ class Notifications {
         title: r,
         short: false,
         value:
-          `*From*: ${measurable.previous(r)} \n` +
-          `*To*:  ${measurable.get(r)}`,
+          `*From*: ${measurable.previous(r)} \n`
+          + `*To*:  ${measurable.get(r)}`,
       }));
   }
 }

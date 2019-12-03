@@ -22,15 +22,15 @@ class GitHubApi {
       && !!this.token && !!this.webhookSecret;
 
     this.hookUrl = `${this.serverURL}/hooks`;
-    this.gitHubRepoUrl =
-      `${this.apiURL}/repos/${this.repoOwner}/${this.repoName}`;
+    this.gitHubRepoUrl
+      = `${this.apiURL}/repos/${this.repoOwner}/${this.repoName}`;
     this.gitHubHooksUrl = `${this.gitHubRepoUrl}/hooks`;
 
     if (!this.repoOwner) console.warn('GitHub repo owner is not set.');
     if (!this.repoName) console.warn('GitHub repo name is not set.');
     if (!this.token) {
       console.warn('GitHub personal access token is not set, '
-      + 'see https://github.com/settings/tokens.');
+        + 'see https://github.com/settings/tokens.');
     }
     if (!this.webhookSecret) console.warn('GitHub webhook secret is not set.');
   }
@@ -78,21 +78,21 @@ class GitHubApi {
       return false;
     }
 
-    const contents_url = _.get(file, 'contents_url');
-    console.log('GitHub contents_url', contents_url);
-    const contents = await this._query(contents_url);
+    const contentsUrl = _.get(file, 'contents_url');
+    console.log('GitHub contents_url', contentsUrl);
+    const contents = await this._query(contentsUrl);
     if (!contents) {
       console.warn('GitHub "data.json" content file is not found.');
       return false;
     }
 
-    const download_url = _.get(contents, 'download_url');
-    console.log('GitHub download_url', download_url);
-    if (!download_url) {
+    const downloadUrl = _.get(contents, 'download_url');
+    console.log('GitHub download_url', downloadUrl);
+    if (!downloadUrl) {
       console.warn('GitHub download url is not found.');
       return false;
     }
-    return await this._query(download_url);
+    return this._query(downloadUrl);
   }
 
   /**
@@ -135,7 +135,7 @@ class GitHubApi {
     return new Promise((resolve, reject) => {
       request(options, (error, response, responseBody) => {
         if (!!error) return reject(error);
-        resolve(responseBody);
+        return resolve(responseBody);
       });
     });
   }

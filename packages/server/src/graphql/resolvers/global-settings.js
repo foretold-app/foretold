@@ -11,11 +11,11 @@ const { Data } = require('../../data/classes');
  * @param {*} _root
  * @param {object} args
  * @param {string} args.name
- * @param {Schema.Context} context
+ * @param {Schema.Context} _context
  * @param {object} _info
  * @returns {Promise<Models.Model>}
  */
-async function one(_root, args, context, _info) {
+async function one(_root, args, _context, _info) {
   const name = _.get(args, 'name', null);
 
   const params = new Params({ name });

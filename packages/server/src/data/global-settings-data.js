@@ -13,7 +13,6 @@ const { Data } = require('./classes');
  * @property {FeedItemModel} model
  */
 class GlobalSettingsData extends DataBase {
-
   constructor() {
     super();
     this.model = new GlobalSettingModel();

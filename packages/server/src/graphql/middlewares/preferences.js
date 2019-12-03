@@ -10,10 +10,10 @@ const log = logger.module('middlewares/preferences');
  * @param {object} args
  * @param {object} args.id
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {Promise<void>}
  */
-async function setContextPreference(root, args, context, info) {
+async function setContextPreference(root, args, context, _info) {
   const id = _.get(args, 'id', null);
 
   log.trace('\x1b[36m ---> \x1b[0m Middleware (setContextPreference)', { id });

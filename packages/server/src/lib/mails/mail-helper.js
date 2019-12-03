@@ -72,7 +72,7 @@ class MailHelper {
           return reject(error);
         }
         log.trace(`send email result: ${JSON.stringify(response)}`);
-        resolve(response);
+        return resolve(response);
       });
     });
   }

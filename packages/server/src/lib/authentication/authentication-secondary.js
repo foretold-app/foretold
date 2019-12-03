@@ -100,9 +100,10 @@ class AuthenticationSecondary {
     const user = await agent.getUser();
     const creator = bot || user;
 
-    return { agent, bot, user, creator };
+    return {
+      agent, bot, user, creator,
+    };
   }
-
 }
 
 module.exports = {

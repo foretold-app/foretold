@@ -8,10 +8,10 @@ const log = logger.module('authorizers/channels');
  * @param {object} root
  * @param {object} args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {boolean}
  */
-function channelIsPublicRule(root, args, context, info) {
+function channelIsPublicRule(root, args, context, _info) {
   const result = !!_.get(context, 'channel.isPublic', null);
 
   log.trace(

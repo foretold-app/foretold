@@ -16,11 +16,11 @@ const lang = require('../../lang');
  * @param {object} args
  * @param {object} args.input
  * @param {object} args.input.value
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @return {Promise<boolean>}
  */
-async function measurementValueValidation(root, args, context, info) {
+async function measurementValueValidation(root, args, _context, _info) {
   const value = _.get(args, ['input', 'value'], null);
   return MeasurementValue.factory(value).validate();
 }
@@ -29,10 +29,10 @@ async function measurementValueValidation(root, args, context, info) {
  * @param {*} root
  * @param {object} args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {Promise<boolean>}
  */
-async function measurableStateValidation(root, args, context, info) {
+async function measurableStateValidation(root, args, context, _info) {
   const measurementType = _.get(args, 'input.competitorType', null);
   const isCompetitive
     = MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE === measurementType;
@@ -55,10 +55,10 @@ async function measurableStateValidation(root, args, context, info) {
  * @param {object} args.input
  * @param {object} args.input.value
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {Promise<boolean>}
  */
-async function measurementTypeValidation(root, args, context, info) {
+async function measurementTypeValidation(root, args, context, _info) {
   const inputValue = _.get(args, ['input', 'value'], null);
   const type = _.get(context, 'measurable.valueType', '');
   if (!type) throw new Error(lang.measurableValueType());

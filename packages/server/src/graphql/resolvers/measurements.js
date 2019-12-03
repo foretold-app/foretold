@@ -253,7 +253,8 @@ async function latestAggregateByRootId(root, _args, context, _info) {
  * @returns {{data: *, dataType: *}}
  */
 function translateValue(r) {
-  let { data, dataType } = r.dataValues.value;
+  let { data } = r.dataValues.value;
+  const { dataType } = r.dataValues.value;
   if (dataType === 'percentage') {
     data /= 100;
   }

@@ -11,10 +11,10 @@ const log = logger.module('middlewares/measurables');
  * @param {object | null} root
  * @param {object} args
  * @param {object} context
- * @param {object} info
+ * @param {object} _info
  * @return {Promise<void>}
  */
-async function setContextMeasurable(root, args, context, info) {
+async function setContextMeasurable(root, args, context, _info) {
   const measurableId = _.get(args, 'measurableId', null)
     || _.get(args, 'input.measurableId', null)
     || _.get(root, 'measurableId', null)
@@ -38,10 +38,10 @@ async function setContextMeasurable(root, args, context, info) {
  * @param {object | null} root
  * @param {object} args
  * @param {object} context
- * @param {object} info
+ * @param {object} _info
  * @return {Promise<void>}
  */
-async function setContextMeasurableByRoot(root, args, context, info) {
+async function setContextMeasurableByRoot(root, args, context, _info) {
   log.trace('\x1b[36m ---> \x1b[0m Middleware (setContextMeasurableByRoot)');
   context.measurable = root || null;
 }
@@ -49,11 +49,11 @@ async function setContextMeasurableByRoot(root, args, context, info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @return {Promise<boolean>}
  */
-async function measurableNameValidation(root, args, context, info) {
+async function measurableNameValidation(root, args, _context, _info) {
   const name = _.get(args, 'input.name', null);
   const labelSubject = _.get(args, 'input.labelSubject', null);
   const isName = !!name || !!labelSubject;

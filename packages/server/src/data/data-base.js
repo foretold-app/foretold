@@ -201,10 +201,10 @@ class DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.options} [options]
+   * @param {Layers.DataSourceLayer.options} [_options]
    * @return {Layers.AbstractModelsLayer.restrictions}
    */
-  _getDefaultRestrictions(options = {}) {
+  _getDefaultRestrictions(_options = {}) {
     return {};
   }
 

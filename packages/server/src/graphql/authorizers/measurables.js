@@ -8,10 +8,10 @@ const log = logger.module('authorizers/measurables');
  * @param {object} root
  * @param {object} args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {boolean}
  */
-function measurableIsOwnedByCurrentAgentRule(root, args, context, info) {
+function measurableIsOwnedByCurrentAgentRule(root, args, context, _info) {
   const creatorId = _.get(context, 'measurable.creatorId', null);
   const agentId = _.get(context, 'agent.id', null);
 
@@ -34,10 +34,10 @@ function measurableIsOwnedByCurrentAgentRule(root, args, context, info) {
  * @param {object} root
  * @param {object} args
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @return {boolean}
  */
-function measurableIsArchivedRule(root, args, context, info) {
+function measurableIsArchivedRule(root, args, context, _info) {
   const result = !!_.get(context, 'measurable.isArchived', null);
 
   log.trace(

@@ -27,14 +27,14 @@ function transportFactory(confIn) {
 
 /**
  * @tested
- * @param {SmtpGateway} confIn
+ * @param {SmtpGateway} _confIn
  * @return {{close(), sendMail(*, *): void}}
  */
-function transportFakeFactory(confIn) {
+function transportFakeFactory(_confIn) {
   log.trace('Transporter is ready for development version');
 
   return new class {
-    sendMail(options) {
+    sendMail(_options) {
     }
 
     close() {

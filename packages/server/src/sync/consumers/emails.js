@@ -61,7 +61,6 @@ class Emails extends Consumer {
             + `Agent ID = "${_.get(agent, 'id')}", `
             + `Result = "${result}".\x1b[0m`,
           );
-
         } catch (err) {
           log.trace('Emails Consumer, pass sending due to', err.message);
           await this._notificationError(status, err, transaction);

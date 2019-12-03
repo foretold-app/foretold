@@ -9,7 +9,7 @@ const log = logger.module('authorizers/rate-limit');
 const rateLimiter = getGraphQLRateLimiter({
   identifyContext: (context) => {
     return _.get(context, 'ip');
-  }
+  },
 });
 
 /**
@@ -21,10 +21,15 @@ const rateLimiter = getGraphQLRateLimiter({
  * @return {Promise<boolean>}
  */
 async function rateLimitRule(root, args, context, info) {
-  const errorMessage = await rateLimiter(
-    { parent: root, args, context, info },
-    { max: 50, window: '1s' }
-  );
+  const errorMessage = await rateLimiter({
+    parent: root,
+    args,
+    context,
+    info,
+  }, {
+    max: 50,
+    window: '1s',
+  });
 
   const result = !!!errorMessage;
 

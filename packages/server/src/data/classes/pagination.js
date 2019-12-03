@@ -63,7 +63,7 @@ class Pagination {
   }
 
   /**
-    * @returns {boolean}
+   * @returns {boolean}
    */
   isOrderSet() {
     return !!this.order && this.order.length > 0;
@@ -83,11 +83,12 @@ class Pagination {
   getPagination2() {
     if (this.first) {
       const limit = this.first;
-      const offset = this.after ? this.after * 1 + 1 : null;
+      const offset = this.after ? this.after + 1 : null;
       return { limit, offset };
-    } else if (this.last) {
+    }
+    if (this.last) {
       const limit = this.last;
-      const offset = this.before ? this.before * 1 - this.last : null;
+      const offset = this.before ? this.before - this.last : null;
       return { limit, offset };
     }
     return { limit: 10, offset: null };

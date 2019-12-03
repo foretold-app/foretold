@@ -4,7 +4,6 @@ const _ = require('lodash');
 const { getMeasurableLinkWithToken } = require('../../../lib/urls');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../../../enums');
 
-const { Producer } = require('../producer');
 const { ProducerNotifications } = require('./producer-notifications');
 
 /**

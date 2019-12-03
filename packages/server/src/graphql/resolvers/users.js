@@ -46,10 +46,10 @@ async function accessTokenUpdate(root, args, _context) {
  * @param {*} root
  * @param {object} args
  * @param {Models.UserID} args.id
- * @param {Schema.Context} context
+ * @param {Schema.Context} _context
  * @returns {Promise<Models.User>}
  */
-async function one(root, args, context) {
+async function one(root, args, _context) {
   const id = _.get(args, 'id', null);
 
   return new UsersData().getOne({ id });

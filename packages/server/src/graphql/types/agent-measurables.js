@@ -52,14 +52,15 @@ const agentMeasurable = new graphql.GraphQLObjectType({
       resolve: require('../resolvers').agentMeasurables.timeAverageScore,
       args: {
         marketType: {
-          type: require('./enums/agent-measurable-score-params').marketScoreType
+          type: require('./enums/agent-measurable-score-params')
+            .marketScoreType,
         },
         startAt: {
-          type: require('./enums/agent-measurable-score-params').startAt
+          type: require('./enums/agent-measurable-score-params').startAt,
         },
         finalComparisonMeasurement: {
           type: require('./enums/agent-measurable-score-params')
-            .finalComparisonMeasurement
+            .finalComparisonMeasurement,
         },
       },
     },

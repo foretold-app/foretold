@@ -36,7 +36,7 @@ class MeasurementsData extends DataBase {
 
   /**
    * @public
-   * @param {Models.ObjectID | null} measurableId
+   * @param {Models.MeasurableID | null} measurableId
    * @returns {Promise<Model>}
    */
   async getOutcome(measurableId) {
@@ -45,8 +45,8 @@ class MeasurementsData extends DataBase {
 
   /**
    * @public
-   * @param {Models.ObjectID | null} measurableId
-   * @param {Models.ObjectID | null} agentId
+   * @param {Models.MeasurableID | null} measurableId
+   * @param {Models.AgentID | null} agentId
    * @param {Date} relevantAt
    * @returns {Promise<Model>}
    */
@@ -60,8 +60,8 @@ class MeasurementsData extends DataBase {
 
   /**
    * @public
-   * @param {Models.ObjectID | null} measurableId
-   * @param {Models.ObjectID | null} agentId
+   * @param {Models.MeasurableID | null} measurableId
+   * @param {Models.AgentID | null} agentId
    * @returns {Promise<Model>}
    */
   async getLatestAggregate(measurableId, agentId) {

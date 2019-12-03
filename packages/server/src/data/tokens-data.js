@@ -103,7 +103,7 @@ class TokensData extends DataBase {
 
   /**
    * @protected
-   * @param {Models.ObjectID} [agentId]
+   * @param {Models.AgentID} [agentId]
    * @param {string} [token]
    * @param {string} [type]
    * @param {number} [usageCount]
@@ -119,7 +119,7 @@ class TokensData extends DataBase {
 
   /**
    * @protected
-   * @param {Models.ObjectID} agentId
+   * @param {Models.AgentID} agentId
    * @param {string} [type]
    * @param {Date | null} [expiresAt]
    * @param {number | null} [usageCount]

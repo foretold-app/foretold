@@ -1,6 +1,7 @@
 const graphql = require('graphql');
 const { UserInputError } = require('apollo-server');
 
+// eslint-disable-next-line max-len
 const PATTERN = '^/[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}/$';
 
 function createObjectId(name) {
@@ -27,7 +28,7 @@ function createObjectId(name) {
 
       return ast.value;
     },
-  })
+  });
 }
 
 

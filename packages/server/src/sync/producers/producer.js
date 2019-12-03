@@ -1,7 +1,6 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const data = require('../../data');
 const { MeasurementsData } = require('../../data');
 const { UsersData } = require('../../data');
 const { AgentsData } = require('../../data');
@@ -104,7 +103,6 @@ class Producer {
   }
 }
 
-Producer.data = data;
 Producer.TEMPLATE_NAME = TEMPLATE_NAME;
 Producer.NOTIFICATION_TYPE = NOTIFICATION_TYPE;
 Producer.EmailEnvelope = EmailEnvelope;

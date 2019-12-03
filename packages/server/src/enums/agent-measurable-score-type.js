@@ -1,4 +1,3 @@
-
 const MARKET_TYPE = {
   MARKET: 'MARKET',
   NON_MARKET: 'NON_MARKET',

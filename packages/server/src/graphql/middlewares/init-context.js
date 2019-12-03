@@ -33,7 +33,7 @@ async function initContext({ req }) {
   log.trace(' ✓ Context Identity Creator Name',
     _.get(initContext, 'creator.constructor.name'));
   log.trace(' ✓ Context Settings Bot Agent Id',
-    _.get(initContext, 'botAgentId'))
+    _.get(initContext, 'botAgentId'));
   log.trace(' ✓ Context IP',
     _.get(initContext, 'ip'));
   log.trace(' --- ');

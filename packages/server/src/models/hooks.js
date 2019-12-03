@@ -90,6 +90,13 @@ function addHooks(db) {
       log.trace('Hook NEW_USER', e);
     }
   });
+  db.Notebook.addHook('afterCreate', (instance) => {
+    try {
+      emitter.emit(events.NEW_NOTEBOOK, instance);
+    } catch (e) {
+      log.trace('Hook NEW_NOTEBOOK', e);
+    }
+  });
 
   /** beforeCreate */
   db.Bot.addHook('beforeCreate', async (instance) => {

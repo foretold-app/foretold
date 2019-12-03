@@ -9,10 +9,10 @@ const log = logger.module('middlewares/channels');
  * @param {object | null} root
  * @param {{ channelId: string }} args
  * @param {object} context
- * @param {object} info
+ * @param {object} _info
  * @return {Promise<void>}
  */
-async function setContextChannel(root, args, context, info) {
+async function setContextChannel(root, args, context, _info) {
   const channelId = _.get(args, 'channelId', null)
     || _.get(args, 'input.channelId', null)
     || _.get(root, 'channelId', null)
@@ -36,10 +36,10 @@ async function setContextChannel(root, args, context, info) {
  * @param {object | null} root
  * @param {object} args
  * @param {object} context
- * @param {object} info
+ * @param {object} _info
  * @return {Promise<void>}
  */
-async function setContextChannelByRoot(root, args, context, info) {
+async function setContextChannelByRoot(root, args, context, _info) {
   log.trace('\x1b[36m ---> \x1b[0m Middleware (setContextChannelByRoot)');
   context.channel = !!root ? root : null;
 }

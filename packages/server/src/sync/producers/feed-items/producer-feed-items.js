@@ -10,13 +10,20 @@ const log = logger.module('sync/producers/feed-items');
  * @abstract
  */
 class ProducerFeedItems extends Producer {
+  /**
+   * @param {*} input
+   */
   constructor(input) {
     super({});
 
     assert(_.isObject(input), 'Input should be an object.');
 
     this.input = input;
+
+    /** @type {Models.AgentID} */
     this.agentId = null;
+
+    /** @type {Models.ChannelID} */
     this.channelId = null;
 
     this.FeedItem = Producer.FeedItemGeneric;
@@ -70,7 +77,8 @@ class ProducerFeedItems extends Producer {
    */
   async _preload() {
     this.agentId = _.get(this.input, 'agentId', null)
-      || _.get(this.input, 'creatorId', null);
+      || _.get(this.input, 'creatorId', null)
+      || _.get(this.input, 'ownerId', null);
     this.channelId = _.get(this.input, 'channelId', null);
     return true;
   }
@@ -100,8 +108,8 @@ class ProducerFeedItems extends Producer {
 
   /**
    * @param {object} replacements
-   * @param {Models.ObjectID} channelId
-   * @param {Models.ObjectID | null} agentId
+   * @param {Models.ChannelID} channelId
+   * @param {Models.AgentID | null} agentId
    * @return {Promise<Models.FeedItem>}
    * @protected
    */
@@ -114,8 +122,8 @@ class ProducerFeedItems extends Producer {
 
   /**
    * @param {FeedItem} feedItem
-   * @param {Models.ObjectID} channelId
-   * @param {Models.ObjectID | null} agentId
+   * @param {Models.ChannelID} channelId
+   * @param {Models.AgentID | null} agentId
    * @return {Promise<Models.FeedItem>}
    * @protected
    */

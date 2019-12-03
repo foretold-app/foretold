@@ -13,8 +13,8 @@ const string0to255 = createLimitedString(0, 255);
 const string3to255 = createLimitedString(3, 255);
 const string0to512 = createLimitedString(0, 512);
 const string3to512 = createLimitedString(3, 512);
-const string0to128K = createLimitedString(0, 128*1024);
-const string3to128K = createLimitedString(3, 128*1024);
+const string0to128K = createLimitedString(0, 128 * 1024);
+const string3to128K = createLimitedString(3, 128 * 1024);
 
 module.exports = {
   cursor,

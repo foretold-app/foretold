@@ -25,6 +25,8 @@ const { Filter } = require('./classes');
 
 const log = logger.module('data/agent-measurables-data');
 
+const { LAST_OBJECTIVE_MEASUREMENT } = FINAL_COMPARISON_MEASUREMENT;
+
 /**
  * @param r
  * @returns {number}
@@ -95,8 +97,7 @@ class AgentMeasurablesData extends DataBase {
   async primaryPointScore(agentId, measurableId, params = {
     marketType: MARKET_TYPE.MARKET,
     startAt: START_AT.QUESTION_CREATION_TIME,
-    finalComparisonMeasurement:
-      FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT,
+    finalComparisonMeasurement: LAST_OBJECTIVE_MEASUREMENT,
   }) {
     const {
       agentPredictions,
@@ -109,17 +110,16 @@ class AgentMeasurablesData extends DataBase {
     if (agentPredictions.length === 0) return undefined;
     if (allAggregations.length === 0) return undefined;
     if (
-      params.finalComparisonMeasurement === FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT
+      params.finalComparisonMeasurement === LAST_OBJECTIVE_MEASUREMENT
       && !recentResult
     ) return undefined;
     if (!measurable) return undefined;
 
     // Use of Parameters
-    const resolutionMeasurement =
-      (params.finalComparisonMeasurement ===
-        FINAL_COMPARISON_MEASUREMENT.LAST_OBJECTIVE_MEASUREMENT)
-        ? recentResult
-        : _.last(_.sortBy(allAggregations, r => r.relevantAt));
+    const resolutionMeasurement
+      = (params.finalComparisonMeasurement === LAST_OBJECTIVE_MEASUREMENT)
+      ? recentResult
+      : _.last(_.sortBy(allAggregations, r => r.relevantAt));
 
     if (!resolutionMeasurement) return undefined;
 
@@ -140,9 +140,9 @@ class AgentMeasurablesData extends DataBase {
     });
 
     if (
-      !scoreCalculator ||
-      !scoreCalculator.score ||
-      !scoreCalculator.distribution
+      !scoreCalculator
+      || !scoreCalculator.score
+      || !scoreCalculator.distribution
     ) return undefined;
 
     const { score, distribution } = scoreCalculator;
@@ -186,14 +186,15 @@ class AgentMeasurablesData extends DataBase {
       resolutionMeasurement,
       marketScoreType,
       startTime,
-    }
+    },
   ) {
     /**
      * @param v
      * @returns {{data: *, dataType: *}}
      */
     function translateValue(v) {
-      let { data, dataType } = v;
+      let { data } = v;
+      const { dataType } = v;
       if (dataType === 'percentage') {
         data /= 100;
       }
@@ -242,7 +243,7 @@ class AgentMeasurablesData extends DataBase {
     if (!_.isFinite(timeScore.data)) {
       log.error(
         'Error: PrimaryPointScore score, '
-        + '${timeScore.data} is not finite',
+        + `${timeScore.data} is not finite`,
       );
       return undefined;
     }
@@ -286,7 +287,7 @@ class AgentMeasurablesData extends DataBase {
 
   /**
    * Should return sorted measurements by the createdAt field.
-   * @param {Models.ObjectID} measurableId
+   * @param {Models.MeasurableID} measurableId
    * @returns {Promise<*>}
    */
   async _getMeasurements(measurableId) {
@@ -296,7 +297,7 @@ class AgentMeasurablesData extends DataBase {
   }
 
   /**
-   * @param {Models.ObjectID} measurableId
+   * @param {Models.MeasurableID} measurableId
    * @returns {Promise<*>}
    */
   async _getMeasurable(measurableId) {

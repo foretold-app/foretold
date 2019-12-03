@@ -41,11 +41,11 @@ function createLimitedString(min, max) {
   const name = `String${min}to${max}`;
   const validate = validateFactory(name, min, max);
   return new graphql.GraphQLScalarType({
-    name: name,
+    name,
     description: `A special custom scalar type for a ${name}`,
 
     serialize: function serialize(value) {
-      return value;
+      return validate(value);
     },
 
     parseValue: function parseValue(value) {

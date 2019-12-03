@@ -88,7 +88,6 @@ const measurementCreateInput = new graphql.GraphQLInputObjectType({
     description: { type: graphql.GraphQLString },
     taggedMeasurementId: { type: graphql.GraphQLString },
     relevantAt: { type: DateType.default },
-    createdAt: { type: DateType.default },
   }),
 });
 

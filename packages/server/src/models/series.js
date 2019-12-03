@@ -44,6 +44,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  /**
+   * @todo: fix it, remove it.
+   * @deprecated
+   * @param models
+   */
   Series.associate = function associate(models) {
     Series.Creator = Series.belongsTo(models.Agent, {
       foreignKey: 'creatorId',

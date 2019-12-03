@@ -1,7 +1,7 @@
 const { DataBase } = require('./data-base');
+const { Params, Query, Data } = require('./classes');
 
 const { PreferenceModel } = require('../models-abstract');
-const { Params, Query, Data } = require('./classes');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

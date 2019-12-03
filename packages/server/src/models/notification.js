@@ -1,5 +1,10 @@
 const { NOTIFICATION_TYPE } = require('../enums');
 
+/**
+ * KISS
+ * @param sequelize
+ * @param DataTypes
+ */
 module.exports = (sequelize, DataTypes) => {
   const Notification = sequelize.define('Notification', {
     id: {

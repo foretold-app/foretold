@@ -1,13 +1,13 @@
 const moment = require('moment');
+
 const { DataBase } = require('./data-base');
+const { Params, Query, Data, Options } = require('./classes');
 
 const { MutexModel } = require('../models-abstract');
 
-const { Params, Query, Data, Options } = require('./classes');
-
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {MutexesModel} model
+ * @property {MutexModel} model
  */
 class MutexesData extends DataBase {
   constructor() {

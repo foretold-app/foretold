@@ -2,6 +2,14 @@ const assert = require('assert');
 const _ = require('lodash');
 
 const data = require('../../data');
+const { MeasurementsData } = require('../../data');
+const { UsersData } = require('../../data');
+const { AgentsData } = require('../../data');
+const { ChannelsData } = require('../../data');
+const { NotificationsData } = require('../../data');
+const { NotificationStatusesData } = require('../../data');
+const { TemplatesData } = require('../../data');
+const { FeedItemsData } = require('../../data');
 
 const { TEMPLATE_NAME } = require('../../enums');
 const { NOTIFICATION_TYPE } = require('../../enums');
@@ -17,6 +25,15 @@ const { FeedItemMeasurable } = require('../../models/classes');
 class Producer {
   constructor(options = {}) {
     assert(_.isObject(options), 'Options is not an object');
+
+    this.measurements = new MeasurementsData();
+    this.users = new UsersData();
+    this.agents = new AgentsData();
+    this.channels = new ChannelsData();
+    this.notifications = new NotificationsData();
+    this.notificationStatuses = new NotificationStatusesData();
+    this.templates = new TemplatesData();
+    this.feedItems = new FeedItemsData();
 
     this.options = options;
     this.templateName = undefined;
@@ -37,7 +54,7 @@ class Producer {
    */
   async _getTransaction() {
     if (!!this.transaction) return this.transaction;
-    this.transaction = await Producer.data.notifications.getTransaction();
+    this.transaction = await this.notifications.getTransaction();
     return this.transaction;
   }
 
@@ -47,7 +64,7 @@ class Producer {
    */
   async _commit() {
     const transaction = await this._getTransaction();
-    return Producer.data.notifications.commit(transaction);
+    return this.notifications.commit(transaction);
   }
 
   /**
@@ -56,7 +73,7 @@ class Producer {
    */
   async _rollback() {
     const transaction = await this._getTransaction();
-    return Producer.data.notifications.rollback(transaction);
+    return this.notifications.rollback(transaction);
   }
 
   /**
@@ -66,7 +83,7 @@ class Producer {
   async _getTemplate() {
     assert(!!this.templateName, 'Template Name is required');
     const params = { name: this.templateName };
-    const template = await Producer.data.templates.getOne(params);
+    const template = await this.templates.getOne(params);
 
     assert(!!_.get(template, 'name'), 'Template name is required');
     assert(

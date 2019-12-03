@@ -3,10 +3,9 @@ const _ = require('lodash');
 
 const { DataBase } = require('./data-base');
 const { MeasurementsData } = require('./measurements-data');
+const { Params, Query, Data } = require('./classes');
 
 const { UserModel } = require('../models-abstract');
-
-const { Params, Query, Data } = require('./classes');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

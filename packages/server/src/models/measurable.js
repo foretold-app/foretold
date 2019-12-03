@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
+const moment = require('moment');
 
 const { MEASURABLE_STATE } = require('../enums');
 const { MEASURABLE_VALUE_TYPE } = require('../enums');
-const moment = require('moment');
 
 module.exports = (sequelize, DataTypes) => {
   const Measurable = sequelize.define('Measurable', {
@@ -111,12 +111,14 @@ module.exports = (sequelize, DataTypes) => {
 
   /**
    * @todo: To fix, remove this code from this layer.
+   * @todo: It leads the architecture of the app to circular dependency
    * @returns {string}
    */
-  function getName() {
+  async function getName() {
     if (this.labelSubject && this.labelProperty) {
-      const { globalSettings } = require('../data');
-      const kenFacade = globalSettings.getKenFacadeCached();
+      const { GlobalSettingsData } = require('../data');
+      const globalSettings = new GlobalSettingsData();
+      const kenFacade = await globalSettings.getKen();
       const names = kenFacade.names(
         this.labelSubject,
         this.labelProperty,
@@ -181,6 +183,11 @@ module.exports = (sequelize, DataTypes) => {
     await this.update({ state, stateUpdatedAt: Sequelize.fn('now') });
   };
 
+  /**
+   * @todo: fix it, remove it.
+   * @deprecated
+   * @param models
+   */
   Measurable.associate = function associate(models) {
     Measurable.Measurements = Measurable.hasMany(models.Measurement, {
       foreignKey: 'measurableId',

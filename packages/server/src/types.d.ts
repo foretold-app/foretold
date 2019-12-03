@@ -73,7 +73,7 @@ export namespace Models {
 
   export interface Measurable extends Model {
     id: MeasurableID;
-    name: string;
+    name: Promise<string>;
     labelCustom: string;
     valueType: string;
     expectedResolutionDate: string;
@@ -119,7 +119,7 @@ export namespace Models {
     id: AgentID;
     isAdmin: boolean;
     type: "BOT" | "USER";
-    name: string;
+    name: Promise<string>;
     measurementCount: number;
 
     getBot(): Models.Bot;
@@ -140,6 +140,7 @@ export namespace Models {
     id: ChannelMembershipID;
     agentId: AgentID;
     channelId: ChannelID;
+    inviterAgentId: AgentID;
     role: ChannelMembershipRole;
     methodCreatedBy:
       | "ADDED_IN_APP_BY_ADMIN"
@@ -221,6 +222,11 @@ export namespace Models {
     channelId: ChannelID;
     body: string;
     name: string;
+  }
+
+  export interface Mutex extends Model {
+    name: string;
+    agentId: AgentID;
   }
 
   export type Creator = Models.User | Models.Bot;

@@ -1,10 +1,9 @@
-const _ = require('lodash');
 const fetch = require('node-fetch');
 
-const { MeasurableModel } = require('../models-abstract');
 const { Params } = require('./classes');
-
 const { DataBase } = require('./data-base');
+
+const { MeasurableModel } = require('../models-abstract');
 const logger = require('../lib/log');
 
 const log = logger.module('data/measurables-data');
@@ -16,7 +15,7 @@ const log = logger.module('data/measurables-data');
 class MeasurablesData extends DataBase {
   constructor() {
     super();
-    this.model =  new MeasurableModel();
+    this.model = new MeasurableModel();
   }
 
   /**

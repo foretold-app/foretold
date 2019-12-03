@@ -33,10 +33,10 @@ class MeasurableState extends ProducerNotifications {
    * @return {{measurable: {name: string, link: string}}}
    * @protected
    */
-  static _getReplacements(channel, measurable) {
+  async _getReplacements(channel, measurable) {
     return {
       measurable: {
-        name: _.get(measurable, 'name'),
+        name: (await _.get(measurable, 'name') || 'Question'),
         link: getMeasurableLinkWithToken(channel, measurable),
       },
     };
@@ -54,7 +54,7 @@ class MeasurableState extends ProducerNotifications {
       competitorType: MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
     };
     const options = await this._getOptions();
-    return Producer.data.measurements.getOne(params, options);
+    return this.measurements.getOne(params, options);
   }
 }
 

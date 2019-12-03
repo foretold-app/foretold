@@ -45,6 +45,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  /**
+   * @todo: fix it, remove it.
+   * @deprecated
+   * @param models
+   */
   Bot.associate = function associate(models) {
     Bot.User = Bot.belongsTo(models.User, {
       foreignKey: 'userId',

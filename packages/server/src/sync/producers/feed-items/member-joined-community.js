@@ -17,8 +17,8 @@ class MemberJoinedCommunity extends ProducerFeedItems {
       'Channel Membership "Method Created By" is required',
     );
 
-    this.templateName =
-      Producer.TEMPLATE_NAME.MEMBER_JOINED_COMMUNITY_FEED_ITEM;
+    this.templateName = Producer.TEMPLATE_NAME
+      .MEMBER_JOINED_COMMUNITY_FEED_ITEM;
   }
 
   /**

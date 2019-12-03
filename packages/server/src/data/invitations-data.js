@@ -2,13 +2,11 @@ const _ = require('lodash');
 const assert = require('assert');
 
 const { DataBase } = require('./data-base');
-
 const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { UsersData } = require('./users-data');
+const { Data, Params, Query } = require('./classes');
 
 const { InvitationModel } = require('../models-abstract');
-
-const { Data, Params, Query } = require('./classes');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

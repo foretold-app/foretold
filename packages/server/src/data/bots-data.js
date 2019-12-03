@@ -1,7 +1,7 @@
 const { DataBase } = require('./data-base');
+const { TokensData } = require('./tokens-data');
 
 const { BotModel } = require('../models-abstract');
-const { TokensData } = require('./tokens-data');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

@@ -8,8 +8,8 @@ class NewMeasurementNotAvailable extends NewMeasurement {
    */
   constructor(measurement) {
     super(measurement);
-    this.templateName =
-      Producer.TEMPLATE_NAME.NEW_MEASUREMENT_RESOLUTION_NOT_AVAILABLE_FEED_ITEM;
+    this.templateName = Producer.TEMPLATE_NAME
+      .NEW_MEASUREMENT_RESOLUTION_NOT_AVAILABLE_FEED_ITEM;
   }
 
   /**

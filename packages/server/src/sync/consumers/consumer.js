@@ -2,6 +2,12 @@ const assert = require('assert');
 const _ = require('lodash');
 
 const data = require('../../data');
+const { NotificationsData } = require('../../data');
+const { NotificationStatusesData } = require('../../data');
+const { AgentsData } = require('../../data');
+const { PreferencesData } = require('../../data');
+const { UsersData } = require('../../data');
+const { TokensData } = require('../../data');
 
 /**
  * Here "consumer" class is a parent class of all another "consumers",
@@ -14,12 +20,12 @@ class Consumer {
 
     this.options = options;
     this.data = data;
-    this.notifications = data.notifications;
-    this.notificationStatuses = data.notificationStatuses;
-    this.agents = data.agents;
-    this.preferences = data.preferences;
-    this.users = data.users;
-    this.tokens = data.tokens;
+    this.notifications = new NotificationsData();
+    this.notificationStatuses = new NotificationStatusesData();
+    this.agents = new AgentsData();
+    this.preferences = new PreferencesData();
+    this.users = new UsersData();
+    this.tokens = new TokensData();
   }
 }
 

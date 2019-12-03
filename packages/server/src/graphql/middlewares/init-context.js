@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const { authentication } = require('../authentication');
-const { globalSettings } = require('../../data');
+const { GlobalSettingsData } = require('../../data');
 const logger = require('../../lib/log');
 
 const log = logger.module('middlewares/init-context');
@@ -12,7 +12,7 @@ const log = logger.module('middlewares/init-context');
  */
 async function initContext({ req }) {
   const identity = await authentication(req);
-  const botAgentId = await globalSettings.getBotAgentId();
+  const botAgentId = await new GlobalSettingsData().getBotAgentId();
   const ip = req.ip;
 
   const initContext = {

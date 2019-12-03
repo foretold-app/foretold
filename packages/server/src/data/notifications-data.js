@@ -1,5 +1,4 @@
 const { DataBase } = require('./data-base');
-
 const { NotificationModel } = require('../models-abstract');
 
 /**

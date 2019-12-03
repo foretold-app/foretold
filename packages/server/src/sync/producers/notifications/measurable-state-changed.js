@@ -43,7 +43,7 @@ class MeasurableStateChanged extends MeasurableState {
     }
 
     try {
-      /** @type {Models.Measurable} */
+      /** @type {Models.Agent} */
       const creator = await this.measurable.getCreator();
       assert(!!_.get(creator, 'id'), 'Creator ID is required.');
 
@@ -51,7 +51,7 @@ class MeasurableStateChanged extends MeasurableState {
       const channel = await this.measurable.getChannel();
       assert(!!_.get(channel, 'id'), 'Channel ID is required.');
 
-      const replacements = MeasurableState._getReplacements(
+      const replacements = await this._getReplacements(
         channel,
         this.measurable,
       );

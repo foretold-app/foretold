@@ -43,15 +43,15 @@ class MemberToCommunity extends ProducerNotifications {
 
     try {
       /** @type {Models.Channel} */
-      const channel = await Producer.data.channels.getOne({
+      const channel = await this.channels.getOne({
         id: this.channelMembership.channelId,
       });
       /** @type {Models.Agent} */
-      const agent = await Producer.data.agents.getOne({
+      const agent = await this.agents.getOne({
         id: this.channelMembership.agentId,
       });
       /** @type {Models.Agent} */
-      const inviter = await Producer.data.users.getOne({
+      const inviter = await this.users.getOne({
         agentId: this.channelMembership.inviterAgentId,
       });
 

@@ -41,7 +41,7 @@ class ProducerFeedItems extends Producer {
 
     try {
       /** @type {Models.Agent} */
-      const agent = await Producer.data.agents.getOne({ id: this.agentId });
+      const agent = await this.agents.getOne({ id: this.agentId });
       assert(!!_.get(agent, 'id'), 'Agent ID is required.');
 
       const replacements = await this._getReplacements(agent);
@@ -69,9 +69,9 @@ class ProducerFeedItems extends Producer {
    * @return {Promise<boolean>}
    */
   async _preload() {
-    this.agentId = _.get(this.input, 'agentId')
-      || _.get(this.input, 'creatorId');
-    this.channelId = _.get(this.input, 'channelId');
+    this.agentId = _.get(this.input, 'agentId', null)
+      || _.get(this.input, 'creatorId', null);
+    this.channelId = _.get(this.input, 'channelId', null);
     return true;
   }
 
@@ -128,7 +128,7 @@ class ProducerFeedItems extends Producer {
     const body = { [feedItemBodyName]: feedItem };
     const data = { body, channelId, agentId };
     const options = await this._getOptions();
-    return Producer.data.feedItems.createOne(data, options);
+    return this.feedItems.createOne(data, options);
   }
 }
 

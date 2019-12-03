@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const data = require('../../data');
+const { PreferencesData } = require('../../data');
 const logger = require('../../lib/log');
 
 const log = logger.module('middlewares/preferences');
@@ -22,7 +22,7 @@ async function setContextPreference(root, args, context, info) {
   );
 
   context.preference = !!id
-    ? await data.preferences.getOne({ id })
+    ? await new PreferencesData().getOne({ id })
     : null;
 }
 

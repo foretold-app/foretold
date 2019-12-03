@@ -8,8 +8,8 @@ class NewMeasurementPrediction extends NewMeasurement {
    */
   constructor(measurement) {
     super(measurement);
-    this.templateName
-      = Producer.TEMPLATE_NAME.NEW_MEASUREMENT_PREDICTION_FEED_ITEM;
+    this.templateName = Producer.TEMPLATE_NAME
+      .NEW_MEASUREMENT_PREDICTION_FEED_ITEM;
   }
 
   /**

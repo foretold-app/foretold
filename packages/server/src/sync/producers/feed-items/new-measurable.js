@@ -28,7 +28,7 @@ class NewMeasurable extends ProducerFeedItems {
         name: (await _.get(agent, 'name')) || 'Somebody',
       },
       measurable: {
-        name: this.input.name || 'Question',
+        name: (await _.get(this.input, 'name')) || 'Question',
         id: this.input.id,
       },
     };

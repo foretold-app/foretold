@@ -4,7 +4,7 @@ const moment = require('moment');
 const {
   PredictionResolutionOverTime,
   marketScore,
-  nonMarketScore
+  nonMarketScore,
 } = require('@foretold/prediction-analysis');
 
 // The first level of dependencies (..)

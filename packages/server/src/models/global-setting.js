@@ -1,3 +1,8 @@
+/**
+ * KISS
+ * @param sequelize
+ * @param DataTypes
+ */
 module.exports = (sequelize, DataTypes) => {
   const GlobalSetting = sequelize.define('GlobalSetting', {
     id: {

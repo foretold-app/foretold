@@ -5,11 +5,12 @@ module.exports = {
     try {
       await queryInterface.sequelize.query('BEGIN');
 
-      const { COMPETITIVE } = MEASUREMENT_COMPETITOR_TYPE;
+      const { COMPETITIVE, OBJECTIVE } = MEASUREMENT_COMPETITOR_TYPE;
 
       await queryInterface.sequelize.query(
         'UPDATE "Measurements" SET "relevantAt" = "createdAt" ' +
-        `WHERE "competitorType" = '${COMPETITIVE}'`,
+        `WHERE "competitorType" = '${COMPETITIVE}' ` +
+        `OR "competitorType" = '${OBJECTIVE}'`,
       );
 
       await queryInterface.sequelize.query('COMMIT');

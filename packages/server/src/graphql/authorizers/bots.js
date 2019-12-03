@@ -13,9 +13,9 @@ const log = logger.module('authorizers/bots');
  * @return {boolean}
  */
 function botBelongsToCurrentUserRule(root, args, context, _info) {
-  const botUserId = _.get(root, 'userId')
-    || _.get(context, 'bot.userId');
-  const userId = _.get(context, 'user.id');
+  const botUserId = _.get(root, 'userId', null)
+    || _.get(context, 'bot.userId', null);
+  const userId = _.get(context, 'user.id', null);
   const result = !!botUserId && botUserId === userId;
 
   log.trace(

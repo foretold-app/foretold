@@ -12,7 +12,7 @@ const log = logger.module('authorizers/channels');
  * @return {boolean}
  */
 function channelIsPublicRule(root, args, context, info) {
-  const result = !!_.get(context, 'channel.isPublic');
+  const result = !!_.get(context, 'channel.isPublic', null);
 
   log.trace(
     '\x1b[33m Rule Channels (channelIsPublic) '

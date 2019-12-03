@@ -15,11 +15,11 @@ const log = logger.module('middlewares/measurables');
  * @return {Promise<void>}
  */
 async function setContextMeasurable(root, args, context, info) {
-  const measurableId = _.get(args, 'measurableId')
-    || _.get(args, 'input.measurableId')
-    || _.get(root, 'measurableId')
-    || _.get(context, 'measurableId')
-    || _.get(args, 'id');
+  const measurableId = _.get(args, 'measurableId', null)
+    || _.get(args, 'input.measurableId', null)
+    || _.get(root, 'measurableId', null)
+    || _.get(context, 'measurableId', null)
+    || _.get(args, 'id', null);
 
   log.trace(
     '\x1b[36m ---> \x1b[0m Middleware (setContextMeasurable)',
@@ -54,8 +54,8 @@ async function setContextMeasurableByRoot(root, args, context, info) {
  * @return {Promise<boolean>}
  */
 async function measurableNameValidation(root, args, context, info) {
-  const name = _.get(args, 'input.name');
-  const labelSubject = _.get(args, 'input.labelSubject');
+  const name = _.get(args, 'input.name', null);
+  const labelSubject = _.get(args, 'input.labelSubject', null);
   const isName = !!name || !!labelSubject;
 
   if (!isName) throw new Error(measurableEmptyName());

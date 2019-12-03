@@ -18,7 +18,7 @@ function userIsOwnedByCurrentAgentRule$(predicateAgentId) {
    */
   return function userIsOwnedByCurrentAgentRule(root, args, context, info) {
     const agentIdIn = predicateAgentId(root, args, context, info);
-    const contextAgentIdIn = _.get(context, 'agent.id');
+    const contextAgentIdIn = _.get(context, 'agent.id', null);
 
     const agentId = _.toString(agentIdIn);
     const contextAgentId = _.toString(contextAgentIdIn);

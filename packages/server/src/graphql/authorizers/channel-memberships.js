@@ -15,7 +15,7 @@ const log = logger.module('authorizers/channel-memberships');
  */
 function currentAgentIsChannelAdminRule(_root, args, context) {
   const roleName = models.ChannelMemberships.ROLE.ADMIN;
-  const role = _.get(context, 'channelMembershipsRole');
+  const role = _.get(context, 'channelMembershipsRole', null);
 
   const result = (!!role && !!roleName)
     && (role === roleName);
@@ -36,7 +36,7 @@ function currentAgentIsChannelAdminRule(_root, args, context) {
  */
 function currentAgentIsChannelViewerRule(_root, args, context) {
   const roleName = models.ChannelMemberships.ROLE.VIEWER;
-  const role = _.get(context, 'channelMembershipsRole');
+  const role = _.get(context, 'channelMembershipsRole', null);
 
   const result = (!!role && !!roleName)
     && (role === roleName);
@@ -62,8 +62,8 @@ function channelHasMembershipWithCurrentAgentRule(
   context,
   _info,
 ) {
-  const channelMembership = _.get(context, 'channelMembership');
-  const agentId = _.get(context, 'agent.id');
+  const channelMembership = _.get(context, 'channelMembership', null);
+  const agentId = _.get(context, 'agent.id', null);
 
   const result = !!channelMembership;
 

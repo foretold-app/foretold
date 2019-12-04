@@ -42,14 +42,16 @@ module StylesDropdown = {
       padding2(~v=`em(0.5), ~h=`em(0.)),
       borderRadius(`px(5)),
       background(`hex("fff")),
-      boxShadow(
-        ~x=`px(1),
-        ~y=`px(1),
-        ~blur=`px(5),
-        ~spread=`px(1),
-        ~inset=false,
-        `hex("dfd7d7"),
-      ),
+      boxShadows([
+        Shadow.box(
+          ~x=px(1),
+          ~y=px(1),
+          ~blur=px(5),
+          ~spread=px(1),
+          ~inset=false,
+          hex("dfd7d7"),
+        ),
+      ]),
       maxWidth(`em(17.)),
     ]);
 

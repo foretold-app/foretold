@@ -138,14 +138,6 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@foretold/cdf@1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@foretold/cdf/-/cdf-1.0.11.tgz#7aab15c239a3b6050a48fcc62304b82ad5245fdc"
-  integrity sha512-Hv/AtzbZgwIRif8zajZ9+bK9a7b8iHl4QqrRm2S2s3s+bsbs/b7rzixtb7OClSzUSvvpqUymwVuve19MqVGQJQ==
-  dependencies:
-    lodash "4.17.15"
-    pdfast "0.2.0"
-
 "@google-cloud/common-grpc@^0.10.0":
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/@google-cloud/common-grpc/-/common-grpc-0.10.1.tgz#ac50bc4b50cb50ba4c7ec335074b631900301fee"
@@ -3446,7 +3438,7 @@ lodash@4.17.11:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
 
-lodash@4.17.15, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15:
+lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -4202,11 +4194,6 @@ path-type@^3.0.0:
   integrity sha512-T2ZUsdZFHgA3u4e5PfPbjd7HDDpxPnQb5jN0SrDsjNSuVXHJqtwTnWqG0B1jZrgmJ/7lj1EmVIByWt1gxGkWvg==
   dependencies:
     pify "^3.0.0"
-
-pdfast@0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/pdfast/-/pdfast-0.2.0.tgz#8cbc556e1bf2522177787c0de2e0d4373ba885c9"
-  integrity sha1-jLxVbhvyUiF3eHwN4uDUNzuohck=
 
 performance-now@^2.1.0:
   version "2.1.0"

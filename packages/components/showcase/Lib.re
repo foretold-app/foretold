@@ -59,12 +59,14 @@ module Styles = {
       flexBasis(`px(200)),
       flexShrink(0.),
       backgroundColor(`hex("eaeff3")),
-      boxShadow(
-        ~x=`px(-1),
-        ~blur=`px(1),
-        ~inset=true,
-        `rgba((0, 0, 0, 0.1)),
-      ),
+      boxShadows([
+        Shadow.box(
+          ~x=px(-1),
+          ~blur=px(1),
+          ~inset=true,
+          rgba(0, 0, 0, 0.1),
+        ),
+      ]),
     ]);
 
   let folderNav =

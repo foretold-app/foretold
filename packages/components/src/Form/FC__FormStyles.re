@@ -8,7 +8,15 @@ let widthStyle = (~fullWidth=false, ()) => {
       border(`px(1), `solid, FC__Settings.border),
       borderRadius(`px(4)),
       padding(`em(0.6)),
-      boxShadows([`shadow("inset 0 1px 2px rgba(0,0,0.7,0.08)")]),
+      boxShadows([
+        Shadow.box(
+          ~x=zero,
+          ~y=px(1),
+          ~blur=px(2),
+          ~inset=true,
+          rgba(0, 0, 1, 0.08),
+        ),
+      ]),
       fontSize(`em(1.0)),
     ]);
 

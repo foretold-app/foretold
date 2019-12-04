@@ -8,16 +8,16 @@ const { rulesMeasurables } = require('./permissions');
 const { rulesBots } = require('./permissions');
 
 /**
- * @param {object} _rules
+ * @param {object} rulesIn
  * @return {function(*=, *=, *=, *=): {allow: Array, deny: Array}}
  */
-function getList(_rules) {
+function getList(rulesIn) {
   return async (root, args, context, info) => {
     const allow = [];
     const deny = [];
 
-    for (const ruleName in rules) {
-      const rule = rules[ruleName];
+    for (const ruleName in rulesIn) {
+      const rule = rulesIn[ruleName];
       const resolving = await rule.resolve(root, args, context, info);
 
       const ruleNameUpperCase = changeCase.constantCase(ruleName);

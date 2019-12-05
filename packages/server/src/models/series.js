@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID(),
       allowNull: false,
     },
+    // @entity: creator-link
     creatorId: {
       type: DataTypes.UUID(),
       allowNull: false,
